@@ -7,3 +7,6 @@ application you can
 	b) put Qt dlls under release/ and double-click douml.exe or
 	c) put the folder that Qt is installed under your PATH variable or
 	d) figure out how to link with qt static libraries.
+
+It is importat that you have to run the application inside release/ for it to
+find the plugouts and DLLs.
