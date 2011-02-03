@@ -1,0 +1,37 @@
+######  Notes from qt4port tree ######
+Previously, bouml would install itself into /usr. I changed it
+to install under /tmp, since its a place that is acessible and
+it is suitable for volatile testing purposes. Calling make install
+under this folder will compile and install bouml-ng and put the
+results under /tmp. To execute, use /tmp/bin/bouml.
+
+Thanks.
+
+Leonardo [lgfreitas]
+
+###### Notes for DoUML tree ######
+
+NOTE: Installing to /tmp/... will not allow plugouts and tools to
+work from within the bouml executable UNLESS you add those locations
+to your PATH variable!
+
+In this source tree I have retained the original /usr/bin and /usr/lib
+install paths, but you should NOT run make install for testing.
+
+Source the included setpath.sh shell script to configure your PATH
+variable to allow you to run the application from this directory.
+
+See the notes for use in the setpath.sh file.
+
+Basic test sequence ---
+(All performed from top of source tree)
+
+make	 	(build app)
+. setpath.sh 	(add paths to PATH)
+./src/douml 	(run application)
+
+Note that the PATH changes are effective ONLY within the open shell,
+temporary, and do not affect your global PATH variable. You must
+source setpath.sh once for any shell you want to test within.
+
+Robert [rageek]
