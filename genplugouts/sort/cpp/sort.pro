@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= browsersort
-CONFIG		+= release warn_on qt
+CONFIG		+= debug warn_on qt
 HEADERS		= ./UmlActivityPin.h \
 		  ./TransitionBehavior.h \
 		  ./UmlBaseFinalState.h \

@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on release
+CONFIG	      += qt warn_on debug
 SOURCES	      = main.cpp Statistic.cpp \
 		../CppReverse/UmlClassItem.cpp \
 		../CppReverse/UmlAttribute.cpp \

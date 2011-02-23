@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= usecasewizard
-CONFIG		+= release warn_on qt
+CONFIG		+= debug warn_on qt
 HEADERS		= ./UmlFinalState.h \
 		  ./UmlBaseCollaborationDiagram.h \
 		  ./UmlBaseClassView.h \

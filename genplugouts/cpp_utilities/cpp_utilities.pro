@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= cpp_util
-CONFIG		+= release warn_on qt
+CONFIG		+= debug warn_on qt
 DEFINES		= WITHCPP
 HEADERS		= ./UmlBasePackage.h \
 		  ./UmlFragmentCompartment.h \

@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= uml_proj
-CONFIG		+= release warn_on qt
+CONFIG		+= debug warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
 HEADERS		= ./UmlBaseExpansionNode.h \
 		  ./UmlChoicePseudoState.h \

@@ -277,6 +277,7 @@ void Package::set_step(int s, int n)
   }
 }
 
+
 #ifdef ROUNDTRIP
 enum ReverseRootCases { DontKnow, ReverseRoot, DontReverseRoot };
 
@@ -365,12 +366,14 @@ void Package::scan_dir() {
       ((Package *) child)->scan_dir();
 }
 #else
+/* lgfreitas: Reversing top-level method. It starts in package-level */
 void Package::scan_dirs(int & n) {
   n = 0;
   
   QStringList dirs;
   QString path = QDir::currentDirPath();
 
+  /* lgfreitas: This is the loop that keeps asking for dirs to reverse. */
   // get input C++ source dirs
   while (!(path = Q3FileDialog::getExistingDirectory(path, 0, 0,
 						   "select a directory to reverse, press cancel to finish"))
@@ -413,7 +416,8 @@ void Package::scan_dirs(int & n) {
       s.sprintf("<font face=helvetica>%dth directory to reverse : <b>", (int) dirs.count());
       s += Q3CString(path.toAscii().constData()) + "</b><br></font>\n";
       UmlCom::trace(s);
-
+	
+	  /* lgfreitas: Append the root path as a root package */
       Choozen.append(new Package(Root, path, d.dirName()));
       
       d.cdUp();
@@ -424,6 +428,7 @@ void Package::scan_dirs(int & n) {
     // file dialog appears to not have it under the trace windows
     UmlBasePackage::getProject();
   }
+  
   
   if (dirs.isEmpty())
     return;
@@ -441,7 +446,8 @@ void Package::scan_dirs(int & n) {
   UmlCom::message("count files ...");
   
   Package * p;
-
+  
+  /* lgfreitas: This just counts the packages */
   for (p = Choozen.first(); p != 0; p = Choozen.next()) {
     n += file_number(p->h_path, TRUE, 
 		     CppSettings::headerExtension())
@@ -452,6 +458,9 @@ void Package::scan_dirs(int & n) {
   // scanning phase
   set_step(1, n);
 
+  /* lgfreitas: This is where the reversing magic happens. It iterates
+     through each package, asking for it to do the reversing on the
+     given path */
   for (p = Choozen.first(); p != 0; p = Choozen.next()) {
     p->reverse_directory(p->h_path, TRUE, CppSettings::headerExtension(), TRUE);
     p->reverse_directory(p->src_path, TRUE, CppSettings::sourceExtension(), FALSE);
@@ -611,6 +620,8 @@ QString my_baseName(QFileInfo * fi)
     : fn.left(index);
 }
 
+/*	lgfreitas: this steps through files in the directory
+	and reverse them one by one */
 void Package::reverse_directory(QString path, bool rec,
 				QString ext, bool h) {
 #ifdef ROUNDTRIP
@@ -669,7 +680,8 @@ void Package::reverse_directory(QString path, bool rec,
     QFileInfoList list =
     d.entryInfoList("*." + ext, QDir::Files | QDir::Readable);
   
-  if (!list.isEmpty()) {
+  /* lgfreitas: If the package/path has files step thru them */
+  if (list.isEmpty() == false) {
     QFileInfoList::iterator it = list.begin();
 	while (it != list.end())
       if (allowed(FileFilter, (*it).fileName())) {
@@ -755,7 +767,7 @@ void Package::reverse_file(Q3CString f
     art->set_considered(h, Scan);
   }
 #endif
-
+  /* lgfreitas: Tries to open the lexical analyzer */
   if (! Lex::open(f)) {
 #ifdef ROUNDTRIP
     if (art != 0) {
@@ -804,10 +816,12 @@ void Package::reverse_file(Q3CString f
   }
 }
 
+
 void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
   Q3CString pretype;
   Q3CString s;
   
+  /* lgfreitas: Read each word from the file and analyzes it */
   while (! (s = Lex::read_word()).isEmpty()) {
     if (s == "template") {
       FormalParameterList fmt;
@@ -818,9 +832,10 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
     else {
       if ((s == "class") || (s == "struct") || (s == "union")) {
 	Lex::mark();
-	
+	/* lgfreitas: We are building a class here, so get the class name */
 	Q3CString s2 = Lex::read_word();
 	
+	/* lgfreitas: This seems to have the purpose of ignoring these parameters (personal use?) */
 	if ((strncmp(s2, "Q_EXPORT", 8) == 0) ||
 	    (strncmp(s2, "QM_EXPORT", 9) == 0) ||
 	    (strncmp(s2, "Q_PNGEXPORT", 11) == 0))

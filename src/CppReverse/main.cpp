@@ -53,7 +53,9 @@ int main(int argc, char ** argv)
 	char * argv = 0;
 	int argc = 0;
 	QApplication * app = new QApplication(argc, &argv);
-				 
+	
+	/* lgfreitas: This initiates the root package as well, using the item provided by the
+	 connection above */
 	Package::init((UmlPackage *) item, app);
 	
 	Q3CString f;
@@ -65,6 +67,7 @@ int main(int argc, char ** argv)
 	
 	int n;
 	
+	/* lgfreitas: This is where the reversing happens */
 	Package::scan_dirs(n);
 	
 	if (n != 0) {

@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= stmgen
-CONFIG		+= release warn_on qt
+CONFIG		+= debug warn_on qt
 DEFINES		= WITHCPP
 HEADERS		= ./UmlBaseRelation.h \
 		  ./UmlStateAction.h \
