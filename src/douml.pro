@@ -1,6 +1,6 @@
 TEMPLATE	= app
 INCLUDEPATH	= browser data diagram dialog misc tool xpm
-CONFIG		+= qt warn_on release
+CONFIG		+= qt warn_on debug
 HEADERS		= data/ActualParamData.h \
 		  data/BasicData.h \
 		  data/SimpleData.h \

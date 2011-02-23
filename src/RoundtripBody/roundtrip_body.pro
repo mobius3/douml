@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on release
+CONFIG	      += qt warn_on debug
 SOURCES	      = main.cpp util.cpp \
 		UmlClassItem.cpp UmlAttribute.cpp \
 		UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \

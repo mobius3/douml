@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on release
+CONFIG	      += qt warn_on debug
 SOURCES	      = util.cpp activity.cpp state.cpp instance.cpp \
 		insertbase.cpp php.cpp python.cpp diagdef.cpp \
 		UmlClassItem.cpp UmlAttribute.cpp \

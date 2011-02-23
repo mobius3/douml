@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= ixmi2
-CONFIG		+= release warn_on qt
+CONFIG		+= debug warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
 HEADERS		= ./UmlActivityPartition.h \
 		  ./UmlBaseNode.h \

@@ -43,6 +43,7 @@ class QRegExp;
 class UmlPackage;
 class QApplication;
 
+/* lgfreitas: Represents a UML package */
 class Package : public BrowserNode, public ClassContainer {
   public:
 #ifndef REVERSE
@@ -115,7 +116,7 @@ class Package : public BrowserNode, public ClassContainer {
     Q3CString src_path;	// empty or finish by a /
     
     static QApplication * app;
-    static Q3PtrList<Package> Choozen;
+    static Q3PtrList<Package> Choozen; /* List of chosen "packages" to reverse */
     static int Nfiles;
     static bool Scan;
     static Package * Root;
@@ -132,13 +133,17 @@ class Package : public BrowserNode, public ClassContainer {
 #ifdef ROUNDTRIP
     static UmlArtifact * artfct; // currently roundtriped artifact
 #endif
-    
+    /* lgfreitas: Reverse directories.
+		I suspect that parameter h means "ITS A HEADER"
+	*/
     void reverse_directory(QString path, bool rec, QString ext, bool h);
 #ifdef ROUNDTRIP
     void reverse_file(Q3CString f, UmlArtifact * art, bool h);
 #else
+	/* lgfreitas: This does the reversing of files */
     void reverse_file(Q3CString f);
 #endif    
+	/* lgfreitas: This seems to be where the reversing is finally done, word by word. */
     void reverse_toplevel_forms(Q3CString f, bool sub_block);
     void reverse_toplevel_form(Q3CString f, Q3CString s);
         

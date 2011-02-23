@@ -97,8 +97,7 @@ Class * ClassContainer::define(const Q3CString & name,
     Class * cl = declared[name];
     
     if (cl != 0) {
-      if (! cl->set_stereotype(stereotype))
-	return 0;
+      if (! cl->set_stereotype(stereotype)) return 0;
       defined.insert(name, cl);
       declared.remove(name);
       return cl;
@@ -125,7 +124,7 @@ Class * ClassContainer::define(const Q3CString & name,
 	return cl;
 #endif
       Lex::warn("<font color =\"red\"> " + Lex::quote(name) +
-		"</font> multiply defined");  
+		"</font> multiply defined (class container)");  
       return 0;    
     }
   }

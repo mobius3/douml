@@ -1259,7 +1259,7 @@ Class * Class::reverse_enum(ClassContainer * container,
       
       if (it == 0) {
 	Lex::warn("<font color =\"red\"> " + Lex::quote(s) +
-		  "</font> multiply defined");
+		  "</font> multiply defined (class)");
 	UmlOperation::skip_body(1);
 	return 0;
       }
