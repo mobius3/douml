@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= gxmi
-CONFIG		+= release warn_on qt
+CONFIG		+= debug warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL
 HEADERS		= ./UmlBaseFinalState.h \
 		  ./UmlBaseAttribute.h \

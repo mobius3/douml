@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= gxmi2
-CONFIG		+= release warn_on qt
+CONFIG		+= debug warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
 HEADERS		= ./UmlBaseClassDiagram.h \
 		  ./UmlBaseDeepHistoryPseudoState.h \
