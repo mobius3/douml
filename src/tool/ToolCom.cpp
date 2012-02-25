@@ -41,7 +41,7 @@ using namespace std;
 #endif
 
 #include <qtimer.h>
-
+#include <QProcess>
 #include "ToolCom.h"
 #include "Socket.h"
 #include "BrowserNode.h"
@@ -156,44 +156,14 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
 
 
 
+  QString commandString = cmd;
+  static QProcess *myProcess = new QProcess();
+  myProcess->start(commandString, QStringList() << QString::number(port));
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  QString s = cmd;
-  
-  s += ' ';
-  s += QString::number(port);
-  s += '&';
-  
   errno = 0;
-  (void) system(s);
-  
+
+
   if (errno != 0) {
     msg_critical("Bouml",
 		 "error while executing '" + QString(cmd) +"'\n"
