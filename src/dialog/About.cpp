@@ -63,12 +63,12 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE) {
   const char htmltext[] = "<p>DoUML</p>\n"
 		  	"<p>This project is a fork of\n"
 			"Bruno Pages's work, BoUML:\n"
-			"<i>http://bouml.sourceforge.net/</i></p>\n"
+            "<i>http://bouml.free.fr/</i></p>\n"
 			"<p>DoUML focus is to port BoUML to Qt4\n"
 			"and to maintain it as a community</p>\n"
 			"<p>Join us at:<br>\n"
-			"https://sourceforge.net/projects/bouml-ng/<br>\n"
-			"#bouml-ng@irc.freenode.net</p>\n\n\n";
+            "https://github.com/leonardo2d/douml/<br>\n"
+            "#bdouml@irc.freenode.net</p>\n\n\n";
 
 /*
   const char * htmltext = ("BOUML release <b>4.22.2</b><br>\n"
