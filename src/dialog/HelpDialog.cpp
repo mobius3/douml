@@ -160,25 +160,6 @@ void HelpDialog::show(QString topic)
 	  topic.replace(index, 1, "%20");
 	
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	QString s = NavigatorPath + " file://" + topic + "&";
 	
 	errno = 0;
@@ -186,7 +167,7 @@ void HelpDialog::show(QString topic)
 	
 	if (errno != 0)
 	  QMessageBox::critical(0, "Bouml",
-				TR("error while executing '%1'\n"
+				TR("HelpDialog : error while executing '%1'\n"
 				   "perhaps you must specify its absolute path"
 				   "or set the environment variable PATH ?", NavigatorPath));
 
