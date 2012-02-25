@@ -35,7 +35,7 @@
 #include <q3multilineedit.h>
 #include <qstatusbar.h>
 #include <qpixmap.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
 #include <q3popupmenu.h>
 #include <qmenubar.h>
@@ -153,7 +153,18 @@ static QString prevText() { return TR("To select the previously selected element
 static QString nextText() { return TR("To select the next selected element in the <i>browser</i>."); }
 static QString completionText() { return TR("To ask or not for an auto completion (non case sensitive) in choice list (<i>combo box</i>)"); }
 
-UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClose) {
+QToolButton* CreateToolButton(QPixmap icon, QString name, QString nothing, QWidget* receiver, const char* boundslot, QToolBar* parent, QString shown)
+{
+    QToolButton* newButton = new QToolButton();
+    QObject::connect(newButton, SIGNAL(clicked()), receiver, boundslot);
+    newButton->setIcon(icon);
+    newButton->setText(shown);
+    newButton->setMinimumSize(30,30);
+    parent->addWidget(newButton);
+    return newButton;
+}
+
+UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose) {
   setCaption("DoUML");
   
   the = this;
@@ -167,17 +178,19 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   QPixmap openIcon, saveIcon;
   
   /* This part defines the buttons on the toolbar */
-  projectTools = new Q3ToolBar(this, "project operations");
-  addToolBar(projectTools, TR("Toolbar"), Qt::DockTop, TRUE);
+  projectTools = new QToolBar("project operations",this);
+  projectTools->setMinimumHeight(20);
+  projectTools->setOrientation(Qt::Horizontal);
+  addToolBar(Qt::TopToolBarArea,projectTools);
   
   openIcon = QPixmap(fileopen);
   QToolButton * projectOpen
-    = new QToolButton(openIcon, TR("Open Project"), QString::null,
-		      this, SLOT(load()), projectTools, "open project");
+   = CreateToolButton(openIcon, TR("Open Project"), QString::null,
+              this, SLOT(load()), projectTools, "open project");
   
   saveIcon = QPixmap(filesave);
   QToolButton * projectSave
-    = new QToolButton(saveIcon, TR("Save Project"), QString::null,
+   = CreateToolButton(saveIcon, TR("Save Project"), QString::null,
 		      this, SLOT(save()), projectTools, "save project");
   
 #ifndef QT_NO_PRINTER
@@ -185,26 +198,28 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   
   printIcon = QPixmap(fileprint);
   QToolButton * diagramPrint
-    = new QToolButton(printIcon, TR("Print diagram"), QString::null,
+   = CreateToolButton(printIcon, TR("Print diagram"), QString::null,
 		      this, SLOT(print()), projectTools, "print diagram");
   Q3WhatsThis::add(diagramPrint, diagramPrintText());
 #endif
   
   QPixmap searchIcon = QPixmap(browsersearch);
   QToolButton * browserSearch
-    = new QToolButton(searchIcon, TR("Browser search"), QString::null,
+   = CreateToolButton(searchIcon, TR("Browser search"), QString::null,
 		      this, SLOT(browser_search()), projectTools, "browser search");
   Q3WhatsThis::add(browserSearch, browserSearchText());
   
-  prev = new QToolButton(*leftPixmap, TR("previous selected"), QString::null,
+  prev= CreateToolButton(*leftPixmap, TR("previous selected"), QString::null,
 			 this, SLOT(prev_select()), projectTools, "previous selected");
   Q3WhatsThis::add(prev, prevText());
   
-  next = new QToolButton(*rightPixmap, TR("next selected"), QString::null,
+  next= CreateToolButton(*rightPixmap, TR("next selected"), QString::null,
 			 this, SLOT(next_select()), projectTools, "next selected");
   Q3WhatsThis::add(next, nextText());
   
-  (void)Q3WhatsThis::whatsThisButton(projectTools);
+  //todo
+  //removed for testing purposes
+  //(void)Q3WhatsThis::whatsThisButton(projectTools);
 
   Q3WhatsThis::add(projectOpen, projectOpenText());
   Q3WhatsThis::add(projectSave, projectSaveText());
@@ -368,6 +383,9 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   spl1->moveToFirst(browser);
   spl2->moveToFirst(ws);
   
+  //spl1->hide();
+  //spl2->hide();
+
   int w = (UmlDesktop::width() * 15)/16;
   
   resize(w, (UmlDesktop::height() * 7)/8);
@@ -1202,8 +1220,9 @@ void UmlWindow::read_session() {
 	read_keyword(st, "window_sizes");
 	
 	int w = read_unsigned(st);
-	
-	resize(w, read_unsigned(st));
+	int h = read_unsigned(st);
+
+	resize(w, h);
 	{
 	  extern QApplication * theApp;
 	  theApp->processEvents(/*500*/);
@@ -1951,7 +1970,7 @@ void UmlWindow::keyPressEvent(QKeyEvent * e) {
       UmlWindow::load_it();
   }
   else
-    Q3MainWindow::keyPressEvent(e);
+    QMainWindow::keyPressEvent(e);
 }
 
 //

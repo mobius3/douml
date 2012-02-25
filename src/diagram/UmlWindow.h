@@ -26,17 +26,18 @@
 #ifndef UMLWINDOW_H
 #define UMLWINDOW_H
 
-#include <q3mainwindow.h>
+///#include <q3mainwindow.h>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <Q3ValueList>
 #include <Q3PopupMenu>
 #include <QKeyEvent>
+#include <QMainWindow>
 
 class Q3CanvasView;
 class QWorkspace;
-class Q3ToolBar;
+class QToolBar;
 class Q3PopupMenu;
 class QSplitter;
 class QToolButton;
@@ -51,7 +52,7 @@ class MultiLineEdit;
 
 /* This class seems to be responsible for the main Project, with Open, 
  * Save, Close, etc... It is the main window */
-class UmlWindow : public Q3MainWindow {
+class UmlWindow : public QMainWindow {
   Q_OBJECT
     
   protected:
@@ -61,7 +62,7 @@ class UmlWindow : public Q3MainWindow {
     BrowserView * browser;
     MultiLineEdit * comment;
     BrowserNode * commented;	// the commented object
-    Q3ToolBar * projectTools;
+    QToolBar * projectTools;
     Q3PopupMenu * projectMenu;
     Q3PopupMenu * windowsMenu;
     Q3PopupMenu * toolMenu;
