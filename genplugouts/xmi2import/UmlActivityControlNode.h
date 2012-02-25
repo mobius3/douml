@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseActivityControlNode.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileIn;
 class Token;
@@ -12,7 +12,7 @@ class UmlItem;
 class UmlActivityControlNode : public UmlBaseActivityControlNode {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityControlNode(void * id, const Q3CString & s) : UmlBaseActivityControlNode(id, s) {
+     UmlActivityControlNode(void * id, const QCString & s) : UmlBaseActivityControlNode(id, s) {
     }
 
 

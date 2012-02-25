@@ -26,19 +26,13 @@
 #ifndef BROWSERNODE_H
 #define BROWSERNODE_H
 
-#include <q3listview.h>
-//Added by qt3to4:
-#include <QKeyEvent>
-#include <Q3PtrCollection>
-#include <QPixmap>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qlistview.h>
 
 class QDir;
 class QKeyEvent;
 class BrowserView;
 
-class BrowserNode : public Q3ListViewItem {
+class BrowserNode : public QListViewItem {
   public:
     BrowserNode(BrowserView * parent, QString fn);
     BrowserNode(BrowserNode * parent, QString fn);
@@ -70,12 +64,12 @@ class BrowserNode : public Q3ListViewItem {
 
 // a sortable list of BrowserNode
 
-#include <q3ptrlist.h>
+#include <qlist.h>
 
-class BrowserNodeList : public Q3PtrList<BrowserNode> {
+class BrowserNodeList : public QList<BrowserNode> {
   public:
     void search(BrowserNode * bn, const QString & s, bool cs);
-    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
+    virtual int compareItems(QCollection::Item item1, QCollection::Item item2);
 };
 
 #endif

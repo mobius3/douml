@@ -27,8 +27,6 @@
 #define HUBCANVAS_H
 
 #include "DiagramCanvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #define HUB_SIZE 6
 
@@ -48,7 +46,7 @@ class HubCanvas : public DiagramCanvas {
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static HubCanvas * read(char * & st, UmlCanvas * canvas, char * k);
 };
 

@@ -28,12 +28,6 @@
 
 #include "BrowserNode.h"
 #include "Labeled.h"
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QDragMoveEvent>
 
 class QPixmap;
 class ActivityData;
@@ -61,7 +55,7 @@ class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity> {
     BrowserActivity(const BrowserActivity * model, BrowserNode * p);
     virtual ~BrowserActivity();
   
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
+    virtual bool may_contains_them(const QList<BrowserNode> & l,
 				   BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
 				    QString name = QString::null);
@@ -69,7 +63,7 @@ class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity> {
     static BrowserActivity * add_activity(BrowserNode * future_parent);
     static BrowserActivity * add_activity(BrowserNode * future_parent, const char * name);
     static BrowserActivity * get_activity(BrowserNode * parent);
-    Q3ValueList<BrowserParameter *> get_params() const;
+    QValueList<BrowserParameter *> get_params() const;
     void add_activity_diagram();
     BrowserNode * add_parameter(BrowserParameter * p);
     QString may_connect(const BrowserNode * dest) const;
@@ -91,7 +85,7 @@ class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity> {
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserActivityDiagram *, bool on_read = FALSE);
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserActivity * read(char * &, char *, BrowserNode *);
     static BrowserActivity * read_ref(char * & st);
     static BrowserNode * read_any_ref(char * &, char *);
@@ -105,13 +99,13 @@ class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity> {
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual bool api_compatible(unsigned v) const;
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserOperation *);
+    virtual void referenced_by(QList<BrowserNode> &, bool ondelete = FALSE);
+    static void compute_referenced_by(QList<BrowserNode> &, BrowserOperation *);
     
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);

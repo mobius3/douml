@@ -26,9 +26,7 @@
 #ifndef ARTIFACTDATA_H
 #define ARTIFACTDATA_H
 
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qptrdict.h>
 
 #include "SimpleData.h"
 
@@ -41,7 +39,7 @@ class ArtifactData : public SimpleData {
   
   protected:
     // for the non <<source>>:
-    Q3PtrDict<BrowserArtifact> * associated;
+    QPtrDict<BrowserArtifact> * associated;
     
     // for the <<sources>> (the majority of artifacts) :
     
@@ -69,7 +67,7 @@ class ArtifactData : public SimpleData {
     virtual void send_python_def(ToolCom * com);
     virtual void send_idl_def(ToolCom * com);
     
-    void update_associated(Q3PtrDict<BrowserArtifact> & d);
+    void update_associated(QPtrDict<BrowserArtifact> & d);
     
   public:
     ArtifactData();
@@ -93,7 +91,7 @@ class ArtifactData : public SimpleData {
     const char * get_idl_src() const { return idl_src; };
     void use_default_idl_src();
     
-    const Q3PtrDict<BrowserArtifact> * get_associated() { return associated; };
+    const QPtrDict<BrowserArtifact> * get_associated() { return associated; };
     void associate(BrowserArtifact *);
     void unassociate(BrowserArtifact *);
     
@@ -104,7 +102,7 @@ class ArtifactData : public SimpleData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
     
     void convert_add_include_artifact();

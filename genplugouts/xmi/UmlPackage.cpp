@@ -1,8 +1,6 @@
 
 #include <stdio.h>
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "UmlCom.h"
 #include "Dialog.h"
@@ -19,10 +17,10 @@ void UmlPackage::xmi(int argc, char ** argv) {
   // the project
 
   bool noarg = (argc == 0);
-  Q3CString path;
-  Q3CString genviews;
-  Q3CString encoding;
-  Q3CString taggedvalue;
+  QCString path;
+  QCString genviews;
+  QCString encoding;
+  QCString taggedvalue;
 
   if (noarg) {
     propertyValue("gxmi path", path);
@@ -89,7 +87,7 @@ void UmlPackage::xmi(int argc, char ** argv) {
     // note : QTextStream(FILE *) bugged under windows
     QFile fp(path);
     
-    if (! fp.open(QIODevice::WriteOnly))
+    if (! fp.open(IO_WriteOnly))
       UmlCom::trace("cannot open " + path);
     else {
       if (noarg) {
@@ -127,7 +125,7 @@ void UmlPackage::xmi(int argc, char ** argv) {
 	
 	// write children
 	
-	const Q3PtrVector<UmlItem> ch = children();
+	const QVector<UmlItem> ch = children();
 	unsigned n = ch.size();
   
 	for (unsigned i = 0; i != n; i += 1)
@@ -174,7 +172,7 @@ bool UmlPackage::write_if_needed(FileOut & out) {
   write_stereotype(out); 
   write_description_properties(out);   
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   bool used = FALSE;
   

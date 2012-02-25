@@ -27,17 +27,14 @@
 #define UMLATTRIBUTE_H
 
 #include "UmlBaseAttribute.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 
 class UmlAttribute : public UmlBaseAttribute {
   public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const QCString & n)
       :  UmlBaseAttribute(id, n) {};
 
-    virtual void generate_decl(QTextOStream & f, const Q3CString & cl_stereotype,
-			       Q3CString indent, bool = FALSE);
+    virtual void generate_decl(QTextOStream & f, const QCString & cl_stereotype,
+			       QCString indent, bool = FALSE);
 };
 
 #endif

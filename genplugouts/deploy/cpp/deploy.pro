@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= deplcl
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHPHP WITHPYTHON WITHIDL
 HEADERS		= ./UmlBaseExpansionRegion.h \
 		  ./UmlBaseUseCaseDiagramDefinition.h \
@@ -396,5 +396,3 @@ SOURCES		= ./UmlBaseExpansionRegion.cpp \
 		  ./UmlBaseDiagram.cpp \
 		  ./UmlDeepHistoryPseudoState.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

@@ -31,16 +31,13 @@
 
 #include "UmlDrag.h"
 #include "BrowserNode.h"
-//Added by qt3to4:
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 const QString UmlDrag::Key = "Bouml/";
 QString UmlDrag::postfix;
 bool UmlDrag::ro;
 
 UmlDrag::UmlDrag(BrowserNode * bn, QWidget * parent, const char * name)
-    : Q3StoredDrag(UmlDrag::Key + bn->drag_key(), parent, name) {
+    : QStoredDrag(UmlDrag::Key + bn->drag_key(), parent, name) {
   // stay in the same application : can use address directly
   QByteArray a(sizeof(bn));
   

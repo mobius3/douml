@@ -41,7 +41,7 @@ class MLEDialog : public QDialog {
     
   public:
     MLEDialog(QString t, bool buttons);
-virtual ~MLEDialog();
+    ~MLEDialog();
     
     QString text();
   

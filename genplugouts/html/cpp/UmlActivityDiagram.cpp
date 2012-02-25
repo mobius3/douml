@@ -1,14 +1,12 @@
 
 #include "UmlActivityDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlActivityDiagram::memo_ref() {
   diagrams.addElement(this);
   UmlDiagram::memo_ref();
 }
 
-Q3CString UmlActivityDiagram::sKind() {
+QCString UmlActivityDiagram::sKind() {
   return "activity diagram";
 }
 

@@ -29,8 +29,6 @@
 
 #include <stdlib.h>
 #include <qtextcodec.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "strutil.h"
 
@@ -245,7 +243,7 @@ QString quote(QString s)
   }
 }
 
-void remove_comments(Q3CString & s)
+void remove_comments(QCString & s)
 {
   int index1 = 0;
   
@@ -297,7 +295,7 @@ void remove_comments(QString & s)
   }
 }
 
-void remove_python_comments(Q3CString & s)
+void remove_python_comments(QCString & s)
 {
   int index1 = 0;
   
@@ -325,7 +323,7 @@ void remove_python_comments(QString & s)
   }
 }
 
-void remove_preprocessor(Q3CString & s)
+void remove_preprocessor(QCString & s)
 {
   int index = 0;
   
@@ -481,13 +479,13 @@ void latinize(QString & s)
   }
 }
 
-Q3CString fromUnicode(const QString & s)
+QCString fromUnicode(const QString & s)
 {
   if (Codec == 0) {
     QString str = s;
 
     latinize(str);
-    return Q3CString(str.toAscii().data()); //[lgfreitas] that nasty trick
+    return QCString(str);
   }
   else if (s.isEmpty())	// fromUnicode crash if null string
     return "";

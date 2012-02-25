@@ -29,10 +29,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3PointArray>
+#include <qpopupmenu.h> 
 
 #include "SdMsgCanvas.h"
 #include "SdDurationCanvas.h"
@@ -118,9 +115,9 @@ void SdMsgCanvas::set_z(double newz) {
 void SdMsgCanvas::draw(QPainter & p) {
   const QRect r = rect();
   const int v = r.center().y();
-  Q3PointArray poly(3);
+  QPointArray poly(3);
   FILE * fp = svg();
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   if (itsType == UmlReturnMsg)
     p.setPen(::Qt::DotLine);
   
@@ -152,7 +149,7 @@ void SdMsgCanvas::draw(QPainter & p) {
     {
       QBrush brsh = p.brush();
       
-      p.setBrush(Qt::black);
+      p.setBrush(black);
       p.drawPolygon(poly/*, TRUE*/);
       p.setBrush(brsh);
 
@@ -215,7 +212,7 @@ int SdMsgCanvas::overlap_dir(SdDurationCanvas * d) const {
 }
 
 void SdMsgCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Message"), m.font()), -1);
   m.insertSeparator();
@@ -372,7 +369,7 @@ bool SdMsgCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void SdMsgCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void SdMsgCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(3);
     DrawingLanguage drawing_language;
@@ -387,7 +384,7 @@ void SdMsgCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -407,8 +404,8 @@ void SdMsgCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void SdMsgCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void SdMsgCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   SdMsgCanvas * x = (SdMsgCanvas *) it.current();
   
@@ -437,7 +434,7 @@ bool SdMsgCanvas::copyable() const {
   return start->selected() && SdMsgBaseCanvas::copyable();
 }
 
-void SdMsgCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdMsgCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "msg_ref " << get_ident()
       << " // " << get_msg(FALSE);

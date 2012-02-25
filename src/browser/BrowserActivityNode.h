@@ -1,8 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <QDragMoveEvent>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -82,7 +77,7 @@ class BrowserActivityNode : public BrowserNode, public Labeled<BrowserActivityNo
     virtual BasicData * get_data() const;
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserActivityNode * read(char * &, char *, BrowserNode *);
     static BrowserActivityNode * read_ref(char * & st);
     static BrowserNode * get_it(const char * k, int id);
@@ -95,7 +90,7 @@ class BrowserActivityNode : public BrowserNode, public Labeled<BrowserActivityNo
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual bool api_compatible(unsigned v) const;
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
+    virtual void referenced_by(QList<BrowserNode> &, bool ondelete = FALSE);
     bool target_of_flow() const;
     
     virtual bool allow_empty() const;
@@ -103,7 +98,7 @@ class BrowserActivityNode : public BrowserNode, public Labeled<BrowserActivityNo
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;

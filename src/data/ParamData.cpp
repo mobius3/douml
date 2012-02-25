@@ -31,8 +31,6 @@
 #include "BrowserClass.h"
 #include "myio.h"
 #include "ToolCom.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 ParamData::ParamData() : dir(UmlInOut) {
 }
@@ -91,7 +89,7 @@ void ParamData::send_uml_def(ToolCom * com) {
   com->write_string(default_value);
 }
 
-void ParamData::save(Q3TextStream & st, QString & warning) const {
+void ParamData::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   st << "  param " << stringify(dir) << " name ";
   save_string(name, st);

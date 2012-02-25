@@ -3,20 +3,20 @@
 
 
 #include "UmlActivityNode.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlDiagram;
 
 class UmlBaseActivityAction : public UmlActivityNode {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityAction(void * id, const Q3CString & s) : UmlActivityNode(id, s) {
+     UmlBaseActivityAction(void * id, const QCString & s) : UmlActivityNode(id, s) {
     }
 
 
   public:
     // return the pre condition
-    const Q3CString & preCondition();
+    const QCString & preCondition();
 
     // set the pre condition
     //
@@ -24,7 +24,7 @@ class UmlBaseActivityAction : public UmlActivityNode {
     bool set_PreCondition(const char * v);
 
     // return the post condition
-    const Q3CString & postCondition();
+    const QCString & postCondition();
 
     // set the post condition
     //
@@ -33,7 +33,7 @@ class UmlBaseActivityAction : public UmlActivityNode {
 
 #ifdef WITHCPP
     // return the pre condition in C++
-    const Q3CString & cppPreCondition();
+    const QCString & cppPreCondition();
 
     // set the pre condition in C++
     //
@@ -41,7 +41,7 @@ class UmlBaseActivityAction : public UmlActivityNode {
     bool set_CppPreCondition(const char * v);
 
     // return the post condition in C++
-    const Q3CString & cppPostCondition();
+    const QCString & cppPostCondition();
 
     // set the post condition in C++
     //
@@ -51,7 +51,7 @@ class UmlBaseActivityAction : public UmlActivityNode {
 
 #ifdef WITHJAVA
     // return the pre condition in Java
-    const Q3CString & javaPreCondition();
+    const QCString & javaPreCondition();
 
     // set the pre condition in Java
     //
@@ -59,7 +59,7 @@ class UmlBaseActivityAction : public UmlActivityNode {
     bool set_JavaPreCondition(const char * v);
 
     // return the post condition in Java
-    const Q3CString & javaPostCondition();
+    const QCString & javaPostCondition();
 
     // set the post condition in Java
     //
@@ -68,7 +68,7 @@ class UmlBaseActivityAction : public UmlActivityNode {
 #endif
 
     // return the constraint
-    const Q3CString & constraint();
+    const QCString & constraint();
 
     // set the constraint
     //
@@ -93,23 +93,23 @@ class UmlBaseActivityAction : public UmlActivityNode {
 
 
   private:
-    Q3CString _pre_condition;
+    QCString _pre_condition;
 
-    Q3CString _post_condition;
+    QCString _post_condition;
 
 #ifdef WITHCPP
-    Q3CString _cpp_pre_condition;
+    QCString _cpp_pre_condition;
 
-    Q3CString _cpp_post_condition;
+    QCString _cpp_post_condition;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_pre_condition;
+    QCString _java_pre_condition;
 
-    Q3CString _java_post_condition;
+    QCString _java_post_condition;
 #endif
 
-    Q3CString _constraint;
+    QCString _constraint;
 
     UmlDiagram * _assoc_diagram;
 

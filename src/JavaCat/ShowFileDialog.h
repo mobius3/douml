@@ -27,20 +27,18 @@
 #define SHOWFILEDIALOG_H
  
 #include <qdialog.h>
-//Added by qt3to4:
-#include <Q3CString>
  
-class Q3MultiLineEdit;
+class QMultiLineEdit;
  
 class ShowFileDialog : public QDialog {
   Q_OBJECT
  
   protected:
-    Q3MultiLineEdit * e;
+    QMultiLineEdit * e;
  
   public:
-    ShowFileDialog(const Q3CString & fn);
-virtual ~ShowFileDialog();
+    ShowFileDialog(const QCString & fn);
+    ~ShowFileDialog();
 
   protected slots:
     virtual void polish();

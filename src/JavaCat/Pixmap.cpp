@@ -24,8 +24,6 @@
 // *************************************************************************
 
 #include "Pixmap.h"
-//Added by qt3to4:
-#include <QPixmap>
 
 QPixmap * ClassIcon;
 QPixmap * InterfaceIcon;

@@ -31,9 +31,7 @@
 
 
 #include <qobject.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qvaluelist.h>
 
 #include "ActivityContainerCanvas.h"
 
@@ -83,13 +81,13 @@ class ActivityPartitionCanvas : public QObject, public ActivityContainerCanvas {
     virtual void change_scale();
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     void edit_drawing_settings();
     
     virtual void apply_shortcut(QString s);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ActivityPartitionCanvas * read(char * &, UmlCanvas *, char *);
     
     virtual void history_save(QBuffer &) const;

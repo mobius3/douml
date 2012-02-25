@@ -28,28 +28,23 @@
 #include <qcheckbox.h> 
 #include <qpushbutton.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "SynchroDialog.h"
 #include "BrowserView.h"
 
-SynchroDialog::SynchroDialog(Q3PtrList<BrowserView> & b)
+SynchroDialog::SynchroDialog(QList<BrowserView> & b)
     : QDialog(0, "Synchronize", TRUE), browsers(b) {
   setCaption("Synchronize");
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBoxLayout * hbox;
   
   vbox->setMargin(5);
   
   bool has_ro = FALSE;
   bool has_ro_need_update = FALSE;
   bool has_need_update = FALSE;
-  Q3PtrListIterator<BrowserView> it(browsers);
+  QListIterator<BrowserView> it(browsers);
   
   for (; it.current(); ++it) {
     if (it.current()->is_need_update()) {
@@ -115,7 +110,7 @@ SynchroDialog::SynchroDialog(Q3PtrList<BrowserView> & b)
   
   //
   
-  hbox = new Q3HBoxLayout(vbox);
+  hbox = new QHBoxLayout(vbox);
   hbox->setMargin(5);
 
   if (has_need_update) {
@@ -138,8 +133,8 @@ SynchroDialog::~SynchroDialog() {
 }
 
 void SynchroDialog::accept() {
-  Q3PtrListIterator<BrowserView> itprj(browsers);
-  Q3PtrListIterator<QCheckBox> itcb(checks);
+  QListIterator<BrowserView> itprj(browsers);
+  QListIterator<QCheckBox> itcb(checks);
   bool work = FALSE;
     
   QApplication::setOverrideCursor(Qt::waitCursor);

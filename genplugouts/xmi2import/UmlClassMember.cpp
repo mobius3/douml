@@ -1,9 +1,7 @@
 
 #include "UmlClassMember.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-void UmlClassMember::setVisibility(Q3CString v) {
+void UmlClassMember::setVisibility(QCString v) {
   if ((v == "public") || (v == "vis_public"))
     set_Visibility(PublicVisibility);
   else if ((v == "protected") || (v == "vis_protected"))

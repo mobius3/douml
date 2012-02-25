@@ -3,9 +3,7 @@
 #include "FileOut.h"
 
 #include "UmlActivityObject.h"
-//Added by qt3to4:
-#include <Q3CString>
-void UmlActivityAction::write_begin(FileOut & out, Q3CString k) {
+void UmlActivityAction::write_begin(FileOut & out, QCString k) {
   out.indent();
   out << ((parent()->kind() == anActivity) ? "<node" : "<containedNode")
     << " xmi:type=\"uml:" << k << '"';
@@ -21,7 +19,7 @@ void UmlActivityAction::write_end(FileOut & out, bool dontclose) {
   out << ">\n";
   out.indent(+1);
   
-  Q3CString s = constraint();
+  QCString s = constraint();
   
   if (! s.isEmpty()) {
     out.indent();
@@ -60,7 +58,7 @@ void UmlActivityAction::write_end(FileOut & out, bool dontclose) {
     write_condition(out, javaPostCondition(), FALSE);
   }
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)
@@ -80,7 +78,7 @@ void UmlActivityAction::write_close(FileOut & out) {
   unload();
 }
 
-void UmlActivityAction::write_condition(FileOut & out, Q3CString cond, bool pre) {
+void UmlActivityAction::write_condition(FileOut & out, QCString cond, bool pre) {
   if (! cond.isEmpty()) {
     const char * k;
     const char * K;
@@ -113,7 +111,7 @@ void UmlActivityAction::write_condition(FileOut & out, Q3CString cond, bool pre)
 }
 
 void UmlActivityAction::solve_output_flows() {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1) {

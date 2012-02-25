@@ -3,14 +3,14 @@
 
 
 #include "UmlActivityObject.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "aDirection.h"
 #include "aParameterEffectKind.h"
 
 class UmlBasePinParameter : public UmlActivityObject {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBasePinParameter(void * id, const Q3CString & s) : UmlActivityObject(id, s) {
+     UmlBasePinParameter(void * id, const QCString & s) : UmlActivityObject(id, s) {
     }
 
 

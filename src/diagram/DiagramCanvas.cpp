@@ -29,8 +29,6 @@
 
 #include <math.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "DiagramCanvas.h"
 #include "BrowserDiagram.h"
@@ -50,7 +48,7 @@
 
 DiagramCanvas::DiagramCanvas(BrowserNode * bn, UmlCanvas * canvas,
 			     int x, int y, int wi, int he, int id)
-    : Q3CanvasRectangle(canvas), DiagramItem(id, canvas), 
+    : QCanvasRectangle(canvas), DiagramItem(id, canvas), 
       browser_node(bn), label(0), stereotypeproperties(0) {
   double zoom = canvas->zoom();
   
@@ -97,7 +95,7 @@ DiagramCanvas::DiagramCanvas(BrowserNode * bn, UmlCanvas * canvas,
 }
 
 DiagramCanvas::DiagramCanvas(UmlCanvas * canvas, int id)
-  : Q3CanvasRectangle(canvas), DiagramItem(id, canvas),
+  : QCanvasRectangle(canvas), DiagramItem(id, canvas),
     browser_node(0), label(0), stereotypeproperties(0) {
   
   if (canvas->paste())
@@ -129,7 +127,7 @@ UmlCanvas * DiagramCanvas::the_canvas() const {
 }
 
 void DiagramCanvas::setVisible(bool yes) {
-  Q3CanvasRectangle::setVisible(yes);
+  QCanvasRectangle::setVisible(yes);
   if (label)
     label->setVisible(yes);
   if (stereotypeproperties)
@@ -139,17 +137,17 @@ void DiagramCanvas::setVisible(bool yes) {
 void DiagramCanvas::change_scale() {
   double scale = the_canvas()->zoom();
   
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   setSize((int) (width_scale100*scale + 0.5), (int) (height_scale100*scale + 0.5));
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void DiagramCanvas::recenter() {
   double scale = the_canvas()->zoom();
   QPoint c = center();
   
-  Q3CanvasRectangle::moveBy(center_x_scale100 * scale - c.x(),
+  QCanvasRectangle::moveBy(center_x_scale100 * scale - c.x(),
 			   center_y_scale100 * scale - c.y());
 }
 
@@ -164,7 +162,7 @@ void DiagramCanvas::set_center100() {
 void DiagramCanvas::moveBy(double dx, double dy) {
   hide_lines();
 
-  Q3CanvasRectangle::moveBy(dx, dy);
+  QCanvasRectangle::moveBy(dx, dy);
 
   if (! ((UmlCanvas *) canvas())->do_zoom())
     set_center100();
@@ -179,7 +177,7 @@ void DiagramCanvas::moveBy(double dx, double dy) {
 }
 
 void DiagramCanvas::moveSelfRelsBy(double dx, double dy) {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
   
   while (it.current()) {
     if (it.current()->get_start() == it.current()->get_end())
@@ -197,7 +195,7 @@ void DiagramCanvas::setSelected(bool yes) {
     else
       UmlWindow::set_commented(0);
   }
-  Q3CanvasRectangle::setSelected(yes);
+  QCanvasRectangle::setSelected(yes);
 }
 
 void DiagramCanvas::select_associated() {
@@ -217,7 +215,7 @@ QPoint DiagramCanvas::center() const {
 }
 
 QRect DiagramCanvas::rect() const {
-  return Q3CanvasRectangle::rect();
+  return QCanvasRectangle::rect();
 }
 
 bool DiagramCanvas::isSelected() const {
@@ -262,36 +260,36 @@ void DiagramCanvas::resize(aCorner c, int dx, int dy, QPoint & o,
   
   switch (c) {
   case UmlTopLeft:
-    Q3CanvasRectangle::moveBy(dx, dy);
+    QCanvasRectangle::moveBy(dx, dy);
     moveSelfRelsBy(dx, dy);
     dx = -dx;
     dy = -dy;
     break;
   case UmlTopRight:
     if (stay_centered) {
-      Q3CanvasRectangle::moveBy(-dx, dy);
+      QCanvasRectangle::moveBy(-dx, dy);
       moveSelfRelsBy(-dx, dy);
     }
     else {
-      Q3CanvasRectangle::moveBy(0, dy);
+      QCanvasRectangle::moveBy(0, dy);
       moveSelfRelsBy(0, dy);
     }
     dy = -dy;
     break;
   case UmlBottomLeft:
     if (stay_centered) {
-      Q3CanvasRectangle::moveBy(dx, -dy);
+      QCanvasRectangle::moveBy(dx, -dy);
       moveSelfRelsBy(dx, -dy);
     }
     else {
-      Q3CanvasRectangle::moveBy(dx, 0);
+      QCanvasRectangle::moveBy(dx, 0);
       moveSelfRelsBy(dx, 0);
     }
     dx = -dx;
     break;
   default:
     if (stay_centered) {
-      Q3CanvasRectangle::moveBy(-dx, -dy);
+      QCanvasRectangle::moveBy(-dx, -dy);
       moveSelfRelsBy(-dx, -dy);
     }
     break;
@@ -389,7 +387,7 @@ bool DiagramCanvas::resize(const QSize & sz, bool w, bool h,
 void DiagramCanvas::prepare_for_move(bool on_resize) {
   if (! on_resize) {
     // select self relations
-    Q3PtrListIterator<ArrowCanvas> it(lines);
+    QListIterator<ArrowCanvas> it(lines);
     
     while (it.current()) {
       if (it.current()->get_start() == it.current()->get_end())
@@ -411,7 +409,7 @@ bool DiagramCanvas::move_with(UmlCode k) const {
 }
 
 void DiagramCanvas::force_self_rel_visible() {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
   QRect r = rect();
   
   // add a marging
@@ -431,8 +429,8 @@ void DiagramCanvas::force_self_rel_visible() {
 
 void DiagramCanvas::upper() {
   double max_z = 0;
-  Q3CanvasItemList l = collisions(FALSE);
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList l = collisions(FALSE);
+  QCanvasItemList::Iterator it;
   
   for (it = l.begin(); it != l.end(); it++)
     if (!isa_alien(*it) &&
@@ -448,7 +446,7 @@ void DiagramCanvas::upper() {
     
     nz += 1;
       
-    Q3PtrListIterator<ArrowCanvas> it(lines);
+    QListIterator<ArrowCanvas> it(lines);
     
     while (it.current()) {
       it.current()->go_up(nz);
@@ -458,8 +456,8 @@ void DiagramCanvas::upper() {
 }
 
 void DiagramCanvas::lower() {
-  Q3CanvasItemList l = collisions(FALSE);
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList l = collisions(FALSE);
+  QCanvasItemList::Iterator it;
   double min_z = 1e100;
   
   for (it = l.begin(); it != l.end(); it++)
@@ -489,8 +487,8 @@ void DiagramCanvas::lower() {
 
 void DiagramCanvas::z_up() {
   double next_z = 2e100;
-  Q3CanvasItemList l = collisions(FALSE);
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList l = collisions(FALSE);
+  QCanvasItemList::Iterator it;
 
   // search for the lowest z > this->z
   for (it = l.begin(); it != l.end(); it++) {
@@ -520,7 +518,7 @@ void DiagramCanvas::z_up() {
     
     set_z(next_z);
       
-    Q3PtrListIterator<ArrowCanvas> it(lines);
+    QListIterator<ArrowCanvas> it(lines);
     
     while (it.current()) {
       it.current()->go_up(next_z);
@@ -531,8 +529,8 @@ void DiagramCanvas::z_up() {
 
 void DiagramCanvas::z_down() {
   double next_z = 0;
-  Q3CanvasItemList l = collisions(FALSE);
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList l = collisions(FALSE);
+  QCanvasItemList::Iterator it;
 
   // search for the highest z < this->z
   for (it = l.begin(); it != l.end(); it++) {
@@ -786,7 +784,7 @@ double DiagramCanvas::compute_angle(double delta_x, double delta_y)
 }
 
 bool DiagramCanvas::has_simple_relation(BasicData * def) const {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if (IsaSimpleRelation(it.current()->type()) &&
@@ -799,9 +797,9 @@ bool DiagramCanvas::has_simple_relation(BasicData * def) const {
 }
 
 void DiagramCanvas::draw_all_simple_relations(DiagramCanvas * end) {
-  Q3ListViewItem * child;
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QListViewItem * child;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   
   for (child = browser_node->firstChild(); child; child = child->nextSibling()) {
     if (IsaSimpleRelation(((BrowserNode *) child)->get_type()) &&
@@ -859,7 +857,7 @@ void DiagramCanvas::draw_all_simple_relations(DiagramCanvas * end) {
 }
 
 bool DiagramCanvas::has_flow(BasicData * def) const {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if ((it.current()->type() == UmlFlow) &&
@@ -872,9 +870,9 @@ bool DiagramCanvas::has_flow(BasicData * def) const {
 }
 
 void DiagramCanvas::draw_all_flows(DiagramCanvas * end) {
-  Q3ListViewItem * child;
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QListViewItem * child;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   
   for (child = browser_node->firstChild(); child; child = child->nextSibling()) {
     if ((((BrowserNode *) child)->get_type() == UmlFlow) &&
@@ -931,7 +929,7 @@ void DiagramCanvas::draw_all_flows(DiagramCanvas * end) {
 }
 
 bool DiagramCanvas::has_transition(BasicData * def) const {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if ((it.current()->type() == UmlTransition) &&
@@ -944,9 +942,9 @@ bool DiagramCanvas::has_transition(BasicData * def) const {
 }
 
 void DiagramCanvas::draw_all_transitions(DiagramCanvas * end) {
-  Q3ListViewItem * child;
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QListViewItem * child;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   
   for (child = browser_node->firstChild(); child; child = child->nextSibling()) {
     if ((((BrowserNode *) child)->get_type() == UmlTransition) &&
@@ -1024,7 +1022,7 @@ void DiagramCanvas::check_stereotypeproperties() {
   }
 }
 
-void DiagramCanvas::save_stereotype_property(Q3TextStream & st, QString & warning) const {
+void DiagramCanvas::save_stereotype_property(QTextStream & st, QString & warning) const {
   if (stereotypeproperties != 0)
     stereotypeproperties->save(st, FALSE, warning);
 }
@@ -1054,13 +1052,13 @@ void DiagramCanvas::history_load(QBuffer & b) {
   
   double dx = load_double(b) - x();
 
-  Q3CanvasRectangle::moveBy(dx, load_double(b) - y());
-  Q3CanvasRectangle::setZ(load_double(b));
+  QCanvasRectangle::moveBy(dx, load_double(b) - y());
+  QCanvasRectangle::setZ(load_double(b));
   
-  Q3CanvasItem::setSelected(FALSE);
-  Q3CanvasItem::setVisible(TRUE);
+  QCanvasItem::setSelected(FALSE);
+  QCanvasItem::setVisible(TRUE);
 }
 
 void DiagramCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
 }

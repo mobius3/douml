@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
 
 #include "BrowserClassDiagram.h"
 #include "SimpleData.h"
@@ -52,8 +48,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserClassDiagram> BrowserClassDiagram::imported;
-Q3ValueList<int> BrowserClassDiagram::imported_ids;
+QList<BrowserClassDiagram> BrowserClassDiagram::imported;
+QValueList<int> BrowserClassDiagram::imported_ids;
 QStringList BrowserClassDiagram::its_default_stereotypes;	// unicode
 
 BrowserClassDiagram::BrowserClassDiagram(QString s, BrowserNode * p, int id)
@@ -104,8 +100,6 @@ BrowserClassDiagram::~BrowserClassDiagram() {
     
     QFile::remove(d.absFilePath(fn));
   }
-  if (window != 0) window->close();
-  window = 0;
   all.remove(get_ident());
   delete def;
 }
@@ -138,7 +132,7 @@ void BrowserClassDiagram::set_name(const char * s) {
 
 void BrowserClassDiagram::import()
 {
-  Q3ValueList<int>::Iterator it = imported_ids.begin();
+  QValueList<int>::Iterator it = imported_ids.begin();
   
   while (!imported.isEmpty()) {
     QString warning;
@@ -194,8 +188,8 @@ void BrowserClassDiagram::draw_svg() const {
 }
 
 void BrowserClassDiagram::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -305,13 +299,11 @@ void BrowserClassDiagram::apply_shortcut(QString s) {
   exec_menu_choice(choice);
 }
 
-/* This will open a class diagram window */
 void BrowserClassDiagram::open(bool) {
   if (window == 0)
     window = new ClassDiagramWindow(full_name(TRUE), this);
   else
     window->raise();
-	
   
   window->setFocus();
 }
@@ -464,7 +456,7 @@ bool BrowserClassDiagram::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-void BrowserClassDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserClassDiagram::compute_referenced_by(QList<BrowserNode> & l,
 						BrowserNode * bn,
 						char const * kc,
 						char const * kr)
@@ -486,7 +478,7 @@ void BrowserClassDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserClassDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserClassDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "classdiagram_stereotypes ";
@@ -501,7 +493,7 @@ void BrowserClassDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserClassDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserClassDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classdiagram_ref " << get_ident() << " // " << get_name();
   else {

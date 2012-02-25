@@ -27,8 +27,6 @@
 #define ICONCANVAS_H
 
 #include "DiagramCanvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #define ICON_CANVAS_MIN_SIZE 16
 
@@ -55,7 +53,7 @@ class IconCanvas : public QObject, public DiagramCanvas {
     virtual void apply_shortcut(QString s);
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static IconCanvas * read(char * &, UmlCanvas *, char *);
     
   private slots:

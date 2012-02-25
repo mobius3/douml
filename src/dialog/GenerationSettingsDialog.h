@@ -26,13 +26,13 @@
 #ifndef GENERATIONSETTINGSDIALOG_H
 #define GENERATIONSETTINGSDIALOG_H
 
-#include <q3tabdialog.h>
+#include <qtabdialog.h>
 
 #include "VisibilityGroup.h"
 #include "StringTable.h"
 #include "GenerationSettings.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QRadioButton;
 
@@ -43,7 +43,7 @@ class StereotypesTable;
 class RelationTable;
 class IncludeTable;
 
-class GenerationSettingsDialog : public Q3TabDialog {
+class GenerationSettingsDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
@@ -57,9 +57,9 @@ class GenerationSettingsDialog : public Q3TabDialog {
     // C++ specific
     MultiLineEdit * edcpp_h_content;
     MultiLineEdit * edcpp_src_content;
-    Q3ComboBox * edcpp_h_extension;
-    Q3ComboBox * edcpp_src_extension;
-    Q3ComboBox * cpp_include_with_path_cb;
+    QComboBox * edcpp_h_extension;
+    QComboBox * edcpp_src_extension;
+    QComboBox * cpp_include_with_path_cb;
     QCheckBox * cpp_force_namespace_gen_cb;
     QCheckBox * cpp_inline_force_incl_in_h_cb;
     QCheckBox * cpp_javadoc_cb;
@@ -96,11 +96,11 @@ class GenerationSettingsDialog : public Q3TabDialog {
     MultiLineEdit * edcpp_oper_def;
     QCheckBox * cpp_force_throw_cb;
     IncludeTable * cpp_include_table;
-    Q3ComboBox * indentvisi_cb;
+    QComboBox * indentvisi_cb;
   
     // Java specific
     MultiLineEdit * edjava_src_content;
-    Q3ComboBox * edjava_extension;
+    QComboBox * edjava_extension;
     QCheckBox * java_javadoc_cb;
     QCheckBox * java_force_package_gen_cb;
     MultiLineEdit * edjava_class_decl;
@@ -127,9 +127,9 @@ class GenerationSettingsDialog : public Q3TabDialog {
   
     // Php specific
     MultiLineEdit * edphp_src_content;
-    Q3ComboBox * edphp_extension;
+    QComboBox * edphp_extension;
     QCheckBox * php_javadoc_cb;
-    Q3ComboBox * php_require_with_path_cb;
+    QComboBox * php_require_with_path_cb;
     QCheckBox * php_force_namespace_gen_cb;
     MultiLineEdit * edphp_class_decl;
     LineEdit * edphp_external_class_decl;
@@ -149,9 +149,9 @@ class GenerationSettingsDialog : public Q3TabDialog {
     QCheckBox * php_set_final_cb;
   
     // Python specific
-    Q3ComboBox * indentstep_cb;
+    QComboBox * indentstep_cb;
     MultiLineEdit * edpython_src_content;
-    Q3ComboBox * edpython_extension;
+    QComboBox * edpython_extension;
     QCheckBox * python_2_2_cb;
     QCheckBox * python_3_operation_cb;
     MultiLineEdit * edpython_class_decl;
@@ -172,7 +172,7 @@ class GenerationSettingsDialog : public Q3TabDialog {
   
     // Idl specific
     MultiLineEdit * edidl_src_content;
-    Q3ComboBox * edidl_extension;
+    QComboBox * edidl_extension;
     MultiLineEdit * edidl_external_class_decl;
     MultiLineEdit * edidl_interface_decl;
     MultiLineEdit * edidl_valuetype_decl;

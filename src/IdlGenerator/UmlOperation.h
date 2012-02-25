@@ -27,19 +27,16 @@
 #define UMLOPERATION_H
 
 #include "UmlBaseOperation.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 
 class UmlOperation : public UmlBaseOperation {
   public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const QCString & n)
       : UmlBaseOperation(id, n) {};
   
-    virtual void generate_decl(QTextOStream & f, const Q3CString & cl_stereotype,
-			       Q3CString indent, bool = FALSE);
+    virtual void generate_decl(QTextOStream & f, const QCString & cl_stereotype,
+			       QCString indent, bool = FALSE);
     
-    Q3CString compute_name();
+    QCString compute_name();
 };
 
 #endif

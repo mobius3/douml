@@ -28,8 +28,6 @@
 
 #include "SdMsgSupport.h"
 #include "SdDurationSupport.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #define DURATION_WIDTH 11
 
@@ -43,20 +41,20 @@ class SdDurationCanvas : public QObject, public SdMsgSupport, public SdDurationS
     
   protected:
     SdDurationSupport * support;
-    Q3PtrList<SdDurationCanvas> durations;
-    Q3PtrList<SdMsgBaseCanvas> msgs;
+    QList<SdDurationCanvas> durations;
+    QList<SdMsgBaseCanvas> msgs;
     UmlColor itscolor;
     bool coregion;
   
     SdDurationCanvas(UmlCanvas * canvas, SdDurationSupport * sp,
 		     int x, int y, int w, int h, int id, bool coreg);
 
-    void save_sub(Q3TextStream &) const;
-    void save_internal(Q3TextStream &) const;
+    void save_sub(QTextStream &) const;
+    void save_internal(QTextStream &) const;
     void cut_internal(int py);
     void update_self();
     void cut(const QPoint & p);
-    void merge(Q3PtrList<SdDurationCanvas> &);
+    void merge(QList<SdDurationCanvas> &);
     void collapse(SdDurationCanvas *);
     void toOverlapping(SdMsgBaseCanvas **, SdDurationCanvas * orig,
 				    unsigned & index, unsigned sz);
@@ -116,21 +114,21 @@ class SdDurationCanvas : public QObject, public SdMsgSupport, public SdDurationS
     virtual void history_hide();
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
   
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
   
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static SdDurationCanvas * read(char * & st, UmlCanvas * canvas, char *);
     static SdDurationCanvas * read(char * & st, UmlCanvas * canvas, bool ref);
     
     unsigned count_msg(int api_format) const;
     void send(ToolCom * com, int id) const;
     
-    static void propag_visible(Q3PtrList<SdDurationCanvas> &, bool y);
-    static void propag_dz(Q3PtrList<SdDurationCanvas> &, double dz);
+    static void propag_visible(QList<SdDurationCanvas> &, bool y);
+    static void propag_dz(QList<SdDurationCanvas> &, double dz);
     
   private slots:
     void modified();

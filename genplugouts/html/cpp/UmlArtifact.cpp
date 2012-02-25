@@ -4,9 +4,7 @@
 #include "UmlCom.h"
 #include "UmlClass.h"
 #include "UmlDeploymentDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
-void UmlArtifact::html(Q3CString, unsigned int, unsigned int) {
+void UmlArtifact::html(QCString, unsigned int, unsigned int) {
   UmlCom::message(name());
 
   UmlItem::html("Artifact", (UmlDiagram *) associatedDiagram());
@@ -16,7 +14,7 @@ void UmlArtifact::html(Q3CString, unsigned int, unsigned int) {
   if (stereotype() == "source") {
     fw.write("<p>Artifact <i>source</i>");
     
-    const Q3PtrVector<UmlClass> l = associatedClasses();
+    const QVector<UmlClass> l = associatedClasses();
 
     for (unsigned i = 0; i != l.size(); i += 1) {
       fw.write(sep);
@@ -29,7 +27,7 @@ void UmlArtifact::html(Q3CString, unsigned int, unsigned int) {
     writeq(stereotype());
     fw.write("</i>");
     
-    const Q3PtrVector<UmlArtifact> l = associatedArtifacts();
+    const QVector<UmlArtifact> l = associatedArtifacts();
     
     for (unsigned i = 0; i != l.size(); i += 1) {
       fw.write(sep);
@@ -43,7 +41,7 @@ void UmlArtifact::html(Q3CString, unsigned int, unsigned int) {
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlArtifact::sKind() {
+QCString UmlArtifact::sKind() {
   return "artifact";
 }
 

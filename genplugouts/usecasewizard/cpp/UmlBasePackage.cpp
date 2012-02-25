@@ -6,8 +6,6 @@
 #include "UmlCom.h"
 #include "PackageGlobalCmd.h"
 #include "MiscGlobalCmd.h"
-//Added by qt3to4:
-#include <Q3CString>
 UmlPackage * UmlBasePackage::create(UmlPackage * parent, const char * name)
 {
   return (UmlPackage *) parent->create_(aPackage, name);
@@ -34,37 +32,37 @@ bool UmlBasePackage::set_AssociatedDiagram(UmlClassDiagram * d) {
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBasePackage::cppSrcDir() {
+const QCString & UmlBasePackage::cppSrcDir() {
   read_if_needed_();
   
   return _cpp_src_dir;
 }
 
-bool UmlBasePackage::set_CppSrcDir(const Q3CString & s) {
+bool UmlBasePackage::set_CppSrcDir(const QCString & s) {
   return set_it_(_cpp_src_dir, s, setCppSrcDirCmd);
 }
 
-const Q3CString & UmlBasePackage::cppHDir() {
+const QCString & UmlBasePackage::cppHDir() {
   read_if_needed_();
   
   return _cpp_h_dir;
 }
 
-bool UmlBasePackage::set_CppHDir(const Q3CString & s) {
+bool UmlBasePackage::set_CppHDir(const QCString & s) {
   return set_it_(_cpp_h_dir, s, setCppHDirCmd);
 }
 
-Q3CString UmlBasePackage::cppNamespace() {
+QCString UmlBasePackage::cppNamespace() {
   read_if_needed_();
   
   return _cpp_namespace;
 }
 
-bool UmlBasePackage::set_CppNamespace(const Q3CString & s) {
+bool UmlBasePackage::set_CppNamespace(const QCString & s) {
   return set_it_(_cpp_namespace, s, setCppNamespaceCmd);
 }
 
-UmlPackage * UmlBasePackage::findNamespace(const Q3CString & n) const {
+UmlPackage * UmlBasePackage::findNamespace(const QCString & n) const {
   UmlCom::send_cmd(packageGlobalCmd, findNamespaceCmd, _identifier, n);
   
   return (UmlPackage *) UmlBaseItem::read_();  
@@ -72,27 +70,27 @@ UmlPackage * UmlBasePackage::findNamespace(const Q3CString & n) const {
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBasePackage::javaDir() {
+const QCString & UmlBasePackage::javaDir() {
   read_if_needed_();
   
   return _java_dir;
 }
 
-bool UmlBasePackage::set_JavaDir(const Q3CString & s) {
+bool UmlBasePackage::set_JavaDir(const QCString & s) {
   return set_it_(_java_dir, s, setJavaDirCmd);
 }
 
-Q3CString UmlBasePackage::javaPackage() {
+QCString UmlBasePackage::javaPackage() {
   read_if_needed_();
   
   return _java_package;
 }
 
-bool UmlBasePackage::set_JavaPackage(const Q3CString & s) {
+bool UmlBasePackage::set_JavaPackage(const QCString & s) {
   return set_it_(_java_package, s, setJavaPackageCmd);
 }
 
-UmlPackage * UmlBasePackage::findPackage(const Q3CString & n) const {
+UmlPackage * UmlBasePackage::findPackage(const QCString & n) const {
   UmlCom::send_cmd(packageGlobalCmd, findPackageCmd, _identifier, n);
   
   return (UmlPackage *) UmlBaseItem::read_();  
@@ -100,27 +98,27 @@ UmlPackage * UmlBasePackage::findPackage(const Q3CString & n) const {
 #endif
 
 #ifdef WITHIDL
-const Q3CString & UmlBasePackage::idlDir() {
+const QCString & UmlBasePackage::idlDir() {
   read_if_needed_();
   
   return _idl_dir;
 }
 
-bool UmlBasePackage::set_IdlDir(const Q3CString & s) {
+bool UmlBasePackage::set_IdlDir(const QCString & s) {
   return set_it_(_idl_dir, s, setIdlDirCmd);
 }
 
-Q3CString UmlBasePackage::idlModule() {
+QCString UmlBasePackage::idlModule() {
   read_if_needed_();
   
   return _idl_module;
 }
 
-bool UmlBasePackage::set_IdlModule(const Q3CString & s) {
+bool UmlBasePackage::set_IdlModule(const QCString & s) {
   return set_it_(_idl_module, s, setIdlModuleCmd);
 }
 
-UmlPackage * UmlBasePackage::findModule(const Q3CString & n) const {
+UmlPackage * UmlBasePackage::findModule(const QCString & n) const {
   UmlCom::send_cmd(packageGlobalCmd, findModuleCmd, _identifier, n);
   
   return (UmlPackage *) UmlBaseItem::read_();  
@@ -146,7 +144,7 @@ void UmlBasePackage::saveProject()
   UmlCom::send_cmd(packageGlobalCmd, saveProjectCmd);
 }
 
-void UmlBasePackage::loadProject(Q3CString p)
+void UmlBasePackage::loadProject(QCString p)
 {
   UmlCom::send_cmd(miscGlobalCmd, loadCmd, (const char *) p);
 }

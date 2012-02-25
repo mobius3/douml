@@ -29,7 +29,7 @@ void UmlActualParameter::write(FileOut & out, UmlClass * cl, int actualrank) con
     out << "\t<ownedActual xmi:type=\"uml:OpaqueExpression\"";
     out.id_prefix(cl, "OPAQUE_ACTUAL", actualrank);
     out << " body=\"";
-    out.quote((const char*)value().explicit_type);//[jasa] ambiguous call
+    out.quote(value().explicit_type);
     out << "\"/>\n";
   }
 

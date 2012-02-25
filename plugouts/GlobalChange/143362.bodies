@@ -233,10 +233,10 @@ return c;
   // width = height
   resize(sz.height(), sz.height());
   
-  // try to read .doumlrc
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // try to read .boumlrc
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
+  QString s = QDir::home().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
 
 #ifdef WIN32
@@ -245,7 +245,7 @@ return c;
     
     if (! hd.isEmpty()) {
       QDir d(hd);
-      QString s2 = d.absFilePath(".doumlrc");
+      QString s2 = d.absFilePath(".boumlrc");
       
       fp = fopen((const char *) s2, "r");
     }

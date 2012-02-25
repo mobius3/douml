@@ -26,18 +26,13 @@
 #ifndef UMLWINDOW_H
 #define UMLWINDOW_H
 
-#include <q3mainwindow.h>
+#include <qmainwindow.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <QCloseEvent>
-#include <Q3ValueList>
-#include <Q3PopupMenu>
-#include <QKeyEvent>
 
-class Q3CanvasView;
+class QCanvasView;
 class QWorkspace;
-class Q3ToolBar;
-class Q3PopupMenu;
+class QToolBar;
+class QPopupMenu;
 class QSplitter;
 class QToolButton;
 
@@ -49,9 +44,7 @@ class MultiLineEdit;
 
 // singleton
 
-/* This class seems to be responsible for the main Project, with Open, 
- * Save, Close, etc... It is the main window */
-class UmlWindow : public Q3MainWindow {
+class UmlWindow : public QMainWindow {
   Q_OBJECT
     
   protected:
@@ -61,15 +54,15 @@ class UmlWindow : public Q3MainWindow {
     BrowserView * browser;
     MultiLineEdit * comment;
     BrowserNode * commented;	// the commented object
-    Q3ToolBar * projectTools;
-    Q3PopupMenu * projectMenu;
-    Q3PopupMenu * windowsMenu;
-    Q3PopupMenu * toolMenu;
-    Q3PopupMenu * langMenu;
-    Q3PopupMenu * miscMenu;
-    Q3PopupMenu * fontSizeMenu;
-    Q3PopupMenu * formatMenu;
-    Q3PopupMenu * formatLandscapeMenu;
+    QToolBar * projectTools;
+    QPopupMenu * projectMenu;
+    QPopupMenu * windowsMenu;
+    QPopupMenu * toolMenu;
+    QPopupMenu * langMenu;
+    QPopupMenu * miscMenu;
+    QPopupMenu * fontSizeMenu;
+    QPopupMenu * formatMenu;
+    QPopupMenu * formatLandscapeMenu;
     int use_cpp_id;
     int use_java_id;
     int use_php_id;
@@ -90,11 +83,11 @@ class UmlWindow : public Q3MainWindow {
     char style;	// '?' unknown, 'm' = motif, '+' = motif+, 'w' = windows
     QToolButton * prev;
     QToolButton * next;
-    Q3ValueList<BrowserNode *> select_historic;
+    QValueList<BrowserNode *> select_historic;
 
   public:
     UmlWindow(bool batch);
-virtual ~UmlWindow();
+    ~UmlWindow();
   
     void load(QString fn, bool forcesaveas = FALSE);
     bool can_close();
@@ -124,7 +117,7 @@ virtual ~UmlWindow();
     static void print_it();
     
   protected:
-    void init_format_menu(Q3PopupMenu * m, Q3PopupMenu * lm);
+    void init_format_menu(QPopupMenu * m, QPopupMenu * lm);
     void is_selected(BrowserNode *);
     virtual void closeEvent(QCloseEvent *);
     void save_session();

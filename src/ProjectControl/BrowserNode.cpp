@@ -30,12 +30,8 @@
 #include <stdlib.h>
 
 #include <qapplication.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3PtrCollection>
-#include <QKeyEvent>
 
 #include "BrowserNode.h"
 #include "BrowserView.h"
@@ -48,7 +44,6 @@
 #define REVISION_COL 3
 #define MODIFIEDBY_COL 4
 
-// why the hell Qt::CTRL ?!
 #ifdef __APPLE__
 #define CTRL "Apple"
 #else
@@ -56,13 +51,13 @@
 #endif
 
 BrowserNode::BrowserNode(BrowserView * parent, QString fn)
-    : Q3ListViewItem(parent), filename(fn) {
+    : QListViewItem(parent), filename(fn) {
 }
 
 BrowserNode::BrowserNode(BrowserNode * parent, QString fn)
-    : Q3ListViewItem(parent), filename(fn) {
+    : QListViewItem(parent), filename(fn) {
   // move it at end
-  Q3ListViewItem * child = parent->firstChild();
+  QListViewItem * child = parent->firstChild();
   
   while (child->nextSibling())
     child = child->nextSibling();
@@ -178,7 +173,7 @@ bool BrowserNode::load(QDir & dir) {
 void BrowserNode::key_event(QKeyEvent * e) {
   // control or alt is pressed with p, u or a
   QApplication::setOverrideCursor(Qt::waitCursor);
-  if (e->state() == ::Qt::ControlModifier) {
+  if (e->state() == ::Qt::ControlButton) {
     switch (e->key()) {
     case ::Qt::Key_A:
       assign(user_id());
@@ -213,7 +208,7 @@ void BrowserNode::menu() {
   if (who.isEmpty())
     who = "<" + QString::number(user_id()) + ">";
   
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem("Package " + text(0), -1);
 
@@ -357,7 +352,7 @@ void BrowserNode::assign_mine(int w) {
   if (owner == user_id())
     assign(w);
   
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling())
     ((BrowserNode *) child)->assign_mine(w);
@@ -367,7 +362,7 @@ void BrowserNode::assign_unassigned(int w) {
   if (owner == -1)
     assign(w);
   
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling())
     ((BrowserNode *) child)->assign_unassigned(w);
@@ -376,7 +371,7 @@ void BrowserNode::assign_unassigned(int w) {
 void BrowserNode::assign_all(int w) {
   assign(w);
   
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling())
     ((BrowserNode *) child)->assign_all(w);
@@ -386,7 +381,7 @@ void BrowserNode::assign_all(int w) {
 
 void BrowserNodeList::search(BrowserNode * bn, const QString & s, bool cs)
 {
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = bn->firstChild(); child != 0; child = child->nextSibling()) {
     if (child->text(TREE_COL).find(s, 0, cs) != -1)
@@ -396,7 +391,7 @@ void BrowserNodeList::search(BrowserNode * bn, const QString & s, bool cs)
   }
 }
 
-int BrowserNodeList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
+int BrowserNodeList::compareItems(QCollection::Item item1, QCollection::Item item2)
 {
   return ((BrowserNode *) item1)->text(TREE_COL)
     .compare(((BrowserNode *) item2)->text(TREE_COL));

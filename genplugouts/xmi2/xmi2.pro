@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= gxmi2
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
 HEADERS		= ./UmlBaseClassDiagram.h \
 		  ./UmlBaseDeepHistoryPseudoState.h \
@@ -412,5 +412,3 @@ SOURCES		= ./UmlBaseClassDiagram.cpp \
 		  ./UmlBaseJunctionPseudoState.cpp \
 		  ./UmlClassMember.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

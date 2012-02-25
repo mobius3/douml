@@ -28,10 +28,8 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 
 #include "ObjectLinkCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -239,7 +237,7 @@ void ObjectLinkCanvas::open() {
     last = (ObjectLinkCanvas *) ((ArrowPointCanvas *) last->end)->get_other(last);
   
   // compute all compatible relations in the two directions
-  Q3PtrList<RelationData> l;
+  QList<RelationData> l;
   int nfirstdir;
   
   ((BrowserClass *) ((OdClassInstCanvas *) first->begin)->get_type())
@@ -406,8 +404,8 @@ void ObjectLinkCanvas::menu(const QPoint & lpos) {
   bool prefer_start = 
     (lpos - first->beginp).manhattanLength() >
       (lpos - last->endp).manhattanLength();
-  Q3PopupMenu m(0);
-  Q3PopupMenu geo(0);
+  QPopupMenu m(0);
+  QPopupMenu geo(0);
   //QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(TR("Object link"), m.font()), -1);
@@ -806,7 +804,7 @@ bool ObjectLinkCanvas::represents(BrowserNode * bn) {
   return (data == bn->get_data());
 }
 
-void ObjectLinkCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ObjectLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "objectlinkcanvas_ref " << get_ident()
        << " // " << data->get_name();
@@ -1099,6 +1097,6 @@ void ObjectLinkCanvas::history_load(QBuffer & b) {
 }
 
 void ObjectLinkCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   unconnect();
 }

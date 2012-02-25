@@ -28,10 +28,8 @@
 
 #include <qdialog.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
-class Q3ComboBox;
+class QComboBox;
 class QRadioButton;
 
 class MultiLineEdit;
@@ -46,9 +44,9 @@ class SdMsgDialog : public QDialog {
     SdMsgBaseCanvas * mc;
     BrowserClass * cl;
     QStringList list;
-    Q3ValueList<const OperationData *> opers;
-    Q3ComboBox * edoper;
-    Q3ComboBox * edst;
+    QValueList<const OperationData *> opers;
+    QComboBox * edoper;
+    QComboBox * edst;
     MultiLineEdit * edargs;
     QRadioButton * synchronous_rb;
     QRadioButton * asynchronous_rb;

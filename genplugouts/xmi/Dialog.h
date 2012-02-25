@@ -2,7 +2,7 @@
 #define _DIALOG_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "Language.h"
 
 #include <qdialog.h>
@@ -16,15 +16,15 @@ class QRadioButton;
 class Dialog : public QDialog {
   Q_OBJECT
   public:
-    Dialog(Q3CString & path, Q3CString & encoding, Q3CString & genview, int & taggedvalue, Language & lang);
+    Dialog(QCString & path, QCString & encoding, QCString & genview, int & taggedvalue, Language & lang);
 
 
   protected:
-    Q3CString & _path;
+    QCString & _path;
 
-    Q3CString & _encoding;
+    QCString & _encoding;
 
-    Q3CString & _genview;
+    QCString & _genview;
 
     int & _taggedvalue;
 

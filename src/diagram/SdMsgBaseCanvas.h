@@ -30,8 +30,6 @@
 #include "DiagramCanvas.h"
 #include "mystr.h"
 #include "../Tools/aMessageKind.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 class SdMsgSupport;
 class SdDurationCanvas;
@@ -102,7 +100,7 @@ class SdMsgBaseCanvas : public QObject, public DiagramCanvas {
     
     virtual bool represents(BrowserNode *);
     
-    void save(Q3TextStream & st, QString & warning) const;
+    void save(QTextStream & st, QString & warning) const;
     void read(char * &);
     
     void send(ToolCom * com, int fromid) const;

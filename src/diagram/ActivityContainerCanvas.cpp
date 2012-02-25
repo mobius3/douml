@@ -35,7 +35,7 @@
 #include "ExpansionNodeCanvas.h"
 #include "ArrowPointCanvas.h"
 
-void ActivityContainerCanvas::force_inside(DiagramItem * di, Q3CanvasItem * ci,
+void ActivityContainerCanvas::force_inside(DiagramItem * di, QCanvasItem * ci,
 					   BooL & need_sub_upper) {
   QRect r = rect();
   QRect sr = di->rect();
@@ -63,9 +63,9 @@ void ActivityContainerCanvas::force_inside(DiagramItem * di, Q3CanvasItem * ci,
 }
 
 // resize this to contain its sub elements
-void ActivityContainerCanvas::resize_to_contain(Q3CanvasItemList & all,
+void ActivityContainerCanvas::resize_to_contain(QCanvasItemList & all,
 						BooL & need_sub_upper) {
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList::Iterator cit;
   BrowserNode * browser_node = get_bn();
   QRect r = rect();
   int resize_left = 0;
@@ -165,9 +165,9 @@ void ActivityContainerCanvas::resize_to_contain(Q3CanvasItemList & all,
 }
 
 // update sub nodes position to be inside this
-void ActivityContainerCanvas::force_sub_inside(Q3CanvasItemList & all,
+void ActivityContainerCanvas::force_sub_inside(QCanvasItemList & all,
 					       BooL & need_sub_upper) {
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList::Iterator cit;
   BrowserNode * browser_node = get_bn();
   
   for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -203,8 +203,8 @@ void ActivityContainerCanvas::force_sub_inside(Q3CanvasItemList & all,
 }
 
 // update sub nodes to be upper this, recursively
-void ActivityContainerCanvas::force_sub_upper(Q3CanvasItemList & all) {
-  Q3CanvasItemList::Iterator cit;
+void ActivityContainerCanvas::force_sub_upper(QCanvasItemList & all) {
+  QCanvasItemList::Iterator cit;
   BrowserNode * browser_node = get_bn();
   QRect r = rect();
   
@@ -253,8 +253,8 @@ void ActivityContainerCanvas::force_sub_upper(Q3CanvasItemList & all) {
 bool ActivityContainerCanvas::force_inside(DiagramCanvas * elt, bool part)
 {
   // if its parent is present, force inside it  
-  Q3CanvasItemList all = elt->the_canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = elt->the_canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   BrowserNode * parent = (BrowserNode *) elt->get_bn()->parent();
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -298,8 +298,8 @@ static bool indirectly_selected(DiagramItem * di)
 void ActivityContainerCanvas::prepare_for_move(bool on_resize) {
   if (! on_resize) {
     // select all sub nodes
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QCanvasItemList all = canvas()->allItems();
+    QCanvasItemList::Iterator cit;
     UmlCanvas * canvas = the_canvas();
     
     for (cit = all.begin(); cit != all.end(); ++cit) {

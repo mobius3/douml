@@ -28,10 +28,8 @@
 
 
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpainter.h>
+#include <qpopupmenu.h> 
 
 #include "StereotypePropertiesCanvas.h"
 #include "Settings.h"
@@ -105,8 +103,8 @@ void StereotypePropertiesCanvas::open() {
 }
 
 void StereotypePropertiesCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu fontsubm(0);
+  QPopupMenu m(0);
+  QPopupMenu fontsubm(0);
   
   m.insertItem(new MenuTitle(TR("Stereotype Properties"), m.font()), -1);
   m.insertSeparator();
@@ -200,7 +198,7 @@ bool StereotypePropertiesCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void StereotypePropertiesCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void StereotypePropertiesCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -211,7 +209,7 @@ void StereotypePropertiesCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & 
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((StereotypePropertiesCanvas *) it.current())->itscolor = itscolor;
@@ -223,8 +221,8 @@ void StereotypePropertiesCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & 
   }
 }
 
-void StereotypePropertiesCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void StereotypePropertiesCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   StereotypePropertiesCanvas * x = (StereotypePropertiesCanvas *) it.current();
   
@@ -256,7 +254,7 @@ void StereotypePropertiesCanvas::update() {
   di->check_stereotypeproperties();
 }
 
-void StereotypePropertiesCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void StereotypePropertiesCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "stereotypeproperties_ref " << get_ident();
   }

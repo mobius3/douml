@@ -3,8 +3,6 @@
 #include "FileIn.h"
 #include "Token.h"
 #include "UmlItem.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void Trigger::init()
 {
@@ -23,21 +21,21 @@ void Trigger::importIt(FileIn & in, Token & token, UmlItem *)
     in.finish(token.what());
 }
 
-Q3CString Trigger::get(Q3CString idref)
+QCString Trigger::get(QCString idref)
 {
-  QMap<Q3CString, Q3CString>::Iterator iter = All.find(idref);
-  static Q3CString null_str;
+  QMap<QCString, QCString>::Iterator iter = All.find(idref);
+  static QCString null_str;
   
   return (iter == All.end()) ? null_str : *iter;
 }
 
-void Trigger::add(FileIn & in, Token & token, Q3CString & name, Q3CString & idref)
+void Trigger::add(FileIn & in, Token & token, QCString & name, QCString & idref)
 {
   // token is <trigger ...>
-  Q3CString t = token.xmiIdref();
+  QCString t = token.xmiIdref();
   
   if (! t.isEmpty()) {
-    QMap<Q3CString, Q3CString>::Iterator iter = All.find(t);
+    QMap<QCString, QCString>::Iterator iter = All.find(t);
     
     if (iter == All.end()) {
       idref = t;
@@ -59,5 +57,5 @@ void Trigger::add(FileIn & in, Token & token, Q3CString & name, Q3CString & idre
 
 }
 
-QMap<Q3CString, Q3CString> Trigger::All;
+QMap<QCString, QCString> Trigger::All;
 

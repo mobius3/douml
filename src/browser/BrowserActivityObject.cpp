@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserActivityObject.h"
 #include "ActivityObjectData.h"
@@ -107,20 +102,20 @@ void BrowserActivityObject::update_idmax_for_root()
 void BrowserActivityObject::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
     
-void BrowserActivityObject::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserActivityObject::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserFlow::compute_referenced_by(l, this);
   if (! ondelete)
     BrowserActivityDiagram::compute_referenced_by(l, this, "activityobjectcanvas", "activityobject_ref");
 }
 
-void BrowserActivityObject::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserActivityObject::compute_referenced_by(QList<BrowserNode> & l,
 						  BrowserNode * target)
 {
   IdIterator<BrowserActivityObject> it(all);
@@ -242,7 +237,7 @@ bool BrowserActivityObject::same_name(const QString &, UmlCode) const {
 BrowserActivityObject * BrowserActivityObject::get_activityobject(BrowserNode * future_parent)
 {
   BrowserNodeList l;
-  Q3ListViewItem * child;
+  QListViewItem * child;
       
   for (child = future_parent->firstChild(); child != 0; child = child->nextSibling())
     if (!((BrowserNode *) child)->deletedp() &&
@@ -270,8 +265,8 @@ BrowserActivityObject * BrowserActivityObject::get_activityobject(BrowserNode * 
 }
 
 void BrowserActivityObject::menu() {
-  Q3PopupMenu m(0, "Activity object");
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, "Activity object");
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -303,7 +298,7 @@ through a flow or dependency"));
     m.setWhatsThis(m.insertItem(TR("Undelete"), 5),
 		   TR("to undelete the <i>activity object</i>"));
    
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -380,7 +375,7 @@ void BrowserActivityObject::apply_shortcut(QString s) {
     if (s == "Undelete")
       choice = 5;
    
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -550,9 +545,9 @@ bool BrowserActivityObject::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-bool BrowserActivityObject::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserActivityObject::may_contains_them(const QList<BrowserNode> & l,
 					      BooL & duplicable) const {
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -631,7 +626,7 @@ QString BrowserActivityObject::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
 }
 
-void BrowserActivityObject::save_stereotypes(Q3TextStream & st)
+void BrowserActivityObject::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "activityobject_stereotypes ";
@@ -648,7 +643,7 @@ void BrowserActivityObject::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserActivityObject::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserActivityObject::save(QTextStream & st, bool ref, QString & warning) {
   if (ref) {
     st << "activityobject_ref " << get_ident()
       << " // activity object " << get_name();
@@ -670,7 +665,7 @@ void BrowserActivityObject::save(Q3TextStream & st, bool ref, QString & warning)
     
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

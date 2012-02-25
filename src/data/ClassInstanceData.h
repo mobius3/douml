@@ -26,12 +26,7 @@
 #ifndef CLASSINSTANCEDATA_H
 #define CLASSINSTANCEDATA_H
 
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qptrdict.h>
 
 #include "SimpleData.h"
 
@@ -70,9 +65,9 @@ class ClassInstanceData : public SimpleData {
   
   private:
     BrowserClass * cl;	// type of instance
-    Q3ValueList<SlotAttr> attributes;
-    Q3ValueList<SlotRel> relations;
-    Q3PtrList<BasicData> connect_list;	// ClassData and ClassInstanceData
+    QValueList<SlotAttr> attributes;
+    QValueList<SlotRel> relations;
+    QList<BasicData> connect_list;	// ClassData and ClassInstanceData
     
   protected:
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
@@ -95,15 +90,15 @@ class ClassInstanceData : public SimpleData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
     void read_attributes(char *& st, char *& k);
     
     BrowserClass * get_class() const { return cl; }
     void set_class(BrowserClass * t);
 
-    const Q3ValueList<SlotAttr> & get_attributes() const { return attributes; }
-    const Q3ValueList<SlotRel> & get_relations() const { return relations; }
+    const QValueList<SlotAttr> & get_attributes() const { return attributes; }
+    const QValueList<SlotRel> & get_relations() const { return relations; }
 
     bool exist(BrowserClassInstance * other, RelationData *) const;
     void add(BrowserClassInstance * other, RelationData * rd);

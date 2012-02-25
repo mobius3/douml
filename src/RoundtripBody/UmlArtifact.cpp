@@ -24,9 +24,7 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
+#include <qtextstream.h> 
 
 #include "UmlArtifact.h"
 #include "UmlPackage.h"
@@ -42,19 +40,19 @@ void UmlArtifact::roundtrip_cpp() {
     if (stereotype() != "source")
       return;
     
-    const Q3CString hdef = cppHeader();
-    const Q3CString srcdef = cppSource();
+    const QCString hdef = cppHeader();
+    const QCString srcdef = cppSource();
     
     if (hdef.isEmpty() && srcdef.isEmpty())
       return;
     
-    const Q3CString & name = UmlArtifact::name();    
+    const QCString & name = UmlArtifact::name();    
     UmlPackage * pack = package();
-    Q3CString h_path = pack->header_path(name);
-    Q3CString src_path = pack->source_path(name);
+    QCString h_path = pack->header_path(name);
+    QCString src_path = pack->source_path(name);
     
     {
-      Q3CString s;
+      QCString s;
     
       if (!hdef.isEmpty())
 	s = "<i> " + h_path + "</i>";
@@ -68,10 +66,10 @@ void UmlArtifact::roundtrip_cpp() {
       
       UmlCom::message(name);
       if (verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
+	UmlCom::trace(QCString("<hr><font face=helvetica>roundtrip body from")
 		      + s + "</font><br>");
       else
-	set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
+	set_trace_header(QCString("<font face=helvetica>roundtrip body from")
 			 + s + "</font><br>");
     }
 
@@ -87,24 +85,24 @@ void UmlArtifact::roundtrip_java() {
     if (stereotype() != "source")
       return;
     
-    const Q3CString srcdef = javaSource();
+    const QCString srcdef = javaSource();
     
     if (srcdef.isEmpty())
       return;
     
-    const Q3CString & name = UmlArtifact::name();    
+    const QCString & name = UmlArtifact::name();    
     UmlPackage * pack = package();
-    Q3CString src_path = pack->java_path(name);
+    QCString src_path = pack->java_path(name);
     
     {
-      Q3CString s = " <i> " + src_path + "</i>";
+      QCString s = " <i> " + src_path + "</i>";
       
       UmlCom::message(name);
       if (verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
+	UmlCom::trace(QCString("<hr><font face=helvetica>roundtrip body from")
 		      + s + "</font><br>");
       else
-	set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
+	set_trace_header(QCString("<font face=helvetica>roundtrip body from")
 			 + s + "</font><br>");
     }
 
@@ -119,24 +117,24 @@ void UmlArtifact::roundtrip_php() {
     if (stereotype() != "source")
       return;
     
-    const Q3CString srcdef = phpSource();
+    const QCString srcdef = phpSource();
     
     if (srcdef.isEmpty())
       return;
     
-    const Q3CString & name = UmlArtifact::name();    
+    const QCString & name = UmlArtifact::name();    
     UmlPackage * pack = package();
-    Q3CString src_path = pack->php_path(name);
+    QCString src_path = pack->php_path(name);
     
     {
-      Q3CString s = " <i> " + src_path + "</i>";
+      QCString s = " <i> " + src_path + "</i>";
       
       UmlCom::message(name);
       if (verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
+	UmlCom::trace(QCString("<hr><font face=helvetica>roundtrip body from")
 		      + s + "</font><br>");
       else
-	set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
+	set_trace_header(QCString("<font face=helvetica>roundtrip body from")
 			 + s + "</font><br>");
     }
 
@@ -151,24 +149,24 @@ void UmlArtifact::roundtrip_python() {
     if (stereotype() != "source")
       return;
     
-    const Q3CString srcdef = pythonSource();
+    const QCString srcdef = pythonSource();
     
     if (srcdef.isEmpty())
       return;
     
-    const Q3CString & name = UmlArtifact::name();    
+    const QCString & name = UmlArtifact::name();    
     UmlPackage * pack = package();
-    Q3CString src_path = pack->python_path(name);
+    QCString src_path = pack->python_path(name);
     
     {
-      Q3CString s = " <i> " + src_path + "</i>";
+      QCString s = " <i> " + src_path + "</i>";
       
       UmlCom::message(name);
       if (verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
+	UmlCom::trace(QCString("<hr><font face=helvetica>roundtrip body from")
 		      + s + "</font><br>");
       else
-	set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
+	set_trace_header(QCString("<font face=helvetica>roundtrip body from")
 			 + s + "</font><br>");
     }
 

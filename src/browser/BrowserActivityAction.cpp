@@ -27,15 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserActivityAction.h"
 #include "ActivityActionData.h"
@@ -122,20 +116,20 @@ void BrowserActivityAction::update_idmax_for_root()
 void BrowserActivityAction::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
     
-void BrowserActivityAction::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserActivityAction::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserFlow::compute_referenced_by(l, this);
   if (! ondelete)
     BrowserActivityDiagram::compute_referenced_by(l, this, "activityactioncanvas", "activityaction_ref");
 }
 
-void BrowserActivityAction::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserActivityAction::compute_referenced_by(QList<BrowserNode> & l,
 						  BrowserNode * target)
 {
   IdIterator<BrowserActivityAction> it(all);
@@ -300,7 +294,7 @@ BrowserActivityAction::add_activityaction(BrowserNode * future_parent,
 BrowserActivityAction * BrowserActivityAction::get_activityaction(BrowserNode * future_parent)
 {
   BrowserNodeList l;
-  Q3ListViewItem * child;
+  QListViewItem * child;
       
   for (child = future_parent->firstChild(); child != 0; child = child->nextSibling())
     if (!((BrowserNode *) child)->deletedp() &&
@@ -495,8 +489,8 @@ void BrowserActivityAction::menu() {
   while ((index = kind.find("_")) != -1)
     kind.replace(index, 1, " ");
 
-  Q3PopupMenu m(0, "Activity action");
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, "Activity action");
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -546,7 +540,7 @@ through a flow or dependency"));
     m.setWhatsThis(m.insertItem(TR("Undelete"), 5),
 		   TR("to undelete the <i>" + kind + "</i>"));
    
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -641,7 +635,7 @@ void BrowserActivityAction::apply_shortcut(QString s) {
     if (s == "Undelete")
       choice = 5;
   
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -754,9 +748,9 @@ bool BrowserActivityAction::api_compatible(unsigned v) const {
 	   (def->get_action_kind() <= UmlValueSpecificationAction)));
 }
 
-Q3ValueList<BrowserPin *> BrowserActivityAction::get_pins() const {
-  Q3ValueList<BrowserPin *> l;
-  Q3ListViewItem * child = firstChild();
+QValueList<BrowserPin *> BrowserActivityAction::get_pins() const {
+  QValueList<BrowserPin *> l;
+  QListViewItem * child = firstChild();
   
   while (child != 0) {
     if (!((BrowserNode *) child)->deletedp() &&
@@ -770,7 +764,7 @@ Q3ValueList<BrowserPin *> BrowserActivityAction::get_pins() const {
 }
 
 void BrowserActivityAction::remove_pins() {
-  Q3ListViewItem * child = firstChild();
+  QListViewItem * child = firstChild();
   
   while (child != 0) {
     if (!((BrowserNode *) child)->deletedp() &&
@@ -784,8 +778,8 @@ void BrowserActivityAction::remove_pins() {
 void BrowserActivityAction::set_pins() {
   remove_pins();
 
-  Q3ValueList<PinDescr> l = def->get_action()->pins();
-  Q3ValueList<PinDescr>::ConstIterator iter;
+  QValueList<PinDescr> l = def->get_action()->pins();
+  QValueList<PinDescr>::ConstIterator iter;
 
   for (iter = l.begin(); iter != l.end(); ++iter) {
     const PinDescr & pd = *iter;
@@ -794,9 +788,9 @@ void BrowserActivityAction::set_pins() {
   }
 }
 
-Q3ValueList<BrowserParameterSet *> BrowserActivityAction::get_parametersets() const {
-  Q3ValueList<BrowserParameterSet *> l;
-  Q3ListViewItem * child = firstChild();
+QValueList<BrowserParameterSet *> BrowserActivityAction::get_parametersets() const {
+  QValueList<BrowserParameterSet *> l;
+  QListViewItem * child = firstChild();
   
   while (child != 0) {
     if (!((BrowserNode *) child)->deletedp() &&
@@ -885,9 +879,9 @@ bool BrowserActivityAction::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-bool BrowserActivityAction::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserActivityAction::may_contains_them(const QList<BrowserNode> & l,
 					      BooL & duplicable) const {
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -976,7 +970,7 @@ QString BrowserActivityAction::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
 }
 
-void BrowserActivityAction::save_stereotypes(Q3TextStream & st)
+void BrowserActivityAction::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "activityaction_stereotypes ";
@@ -993,7 +987,7 @@ void BrowserActivityAction::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserActivityAction::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserActivityAction::save(QTextStream & st, bool ref, QString & warning) {
   if (ref) {
     st << "activityaction_ref " << get_ident()
       << " // activity action " << get_name();
@@ -1015,7 +1009,7 @@ void BrowserActivityAction::save(Q3TextStream & st, bool ref, QString & warning)
     
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

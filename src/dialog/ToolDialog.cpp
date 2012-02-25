@@ -133,7 +133,7 @@ static Tbl Tables[] = {
 
 QSize ToolDialog::previous_size;
 
-ToolDialog::ToolDialog() : Q3TabDialog(0, "ToolDialog", TRUE, 0) {
+ToolDialog::ToolDialog() : QTabDialog(0, "ToolDialog", TRUE, 0) {
   setCaption(TR("Tools dialog"));
   setOkButton(TR("OK"));
   setCancelButton(TR("Cancel"));
@@ -149,7 +149,7 @@ ToolDialog::~ToolDialog() {
 }
 
 void ToolDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.9, 0.9);
 }
 
@@ -167,7 +167,7 @@ void ToolDialog::accept() {
   for (i = 0; i != sizeof(Tables)/sizeof(Tbl); i += 1)
     n = Tables[i].tbl->update(n);
   
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }
 
 // ToolTable
@@ -203,7 +203,7 @@ ToolTable::ToolTable(QWidget * parent,
       adjustColumn(col + 2);
     }
     else
-      horizontalHeader()->setLabel(col + 2, QIcon(**(cd[col].pixmap)), "", 24);
+      horizontalHeader()->setLabel(col + 2, QIconSet(**(cd[col].pixmap)), "", 24);
     setColumnStretchable(col, FALSE);
   }
   
@@ -245,7 +245,7 @@ void ToolTable::init_row(int row) {
   
   for (index = 2; index != n; index += 1)
     setItem(row, index,
-	    new TableItem(this, Q3TableItem::Never, ""));
+	    new TableItem(this, QTableItem::Never, ""));
 }
 
 void ToolTable::button_pressed(int row, int col, int b, const QPoint & p) {

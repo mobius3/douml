@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseItem.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "Language.h"
 
 class FileOut;
@@ -15,7 +15,7 @@ class FileOut;
 // You can modify it as you want (except the constructor)
 class UmlItem : public UmlBaseItem {
   public:
-    UmlItem(void * id, const Q3CString & n)
+    UmlItem(void * id, const QCString & n)
       : UmlBaseItem(id, n), _written(FALSE) {};
 
     virtual ~UmlItem();

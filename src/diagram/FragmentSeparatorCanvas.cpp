@@ -29,9 +29,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpopupmenu.h> 
 
 #include "FragmentSeparatorCanvas.h"
 #include "FragmentCanvas.h"
@@ -77,7 +75,7 @@ void FragmentSeparatorCanvas::compute_position() {
   
   setZ(fragment->z() + 1);
   setSize(fragment->width(), (int) (LIFE_LINE_HEIGHT*zoom));
-  Q3CanvasRectangle::moveBy(new_x - x(), new_y - offset - y());
+  QCanvasRectangle::moveBy(new_x - x(), new_y - offset - y());
 }
 
 void FragmentSeparatorCanvas::update() {
@@ -93,7 +91,7 @@ void FragmentSeparatorCanvas::change_scale() {
 
 void FragmentSeparatorCanvas::drawShape(QPainter & p) {
   p.setBackgroundMode(::Qt::TransparentMode);
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   p.setPen(::Qt::DashLine);
   
   int m = (int) (fragment->y() + fragment->height() * vpos);
@@ -131,7 +129,7 @@ void FragmentSeparatorCanvas::moveBy(double, double dy) {
       new_y = fy + fh - 2;
   
     vpos = (new_y - fy) / fh;
-    Q3CanvasRectangle::moveBy(0, new_y - offset - y());
+    QCanvasRectangle::moveBy(0, new_y - offset - y());
   }
 }
 
@@ -164,7 +162,7 @@ void FragmentSeparatorCanvas::open() {
 }
 
 void FragmentSeparatorCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Separator"), m.font()), -1);
   m.insertSeparator();
@@ -176,7 +174,7 @@ void FragmentSeparatorCanvas::menu(const QPoint&) {
   }
 }
 
-void FragmentSeparatorCanvas::save(Q3TextStream & st, bool, QString &) const {
+void FragmentSeparatorCanvas::save(QTextStream & st, bool, QString &) const {
   nl_indent(st);
   st << "separator " << (int) (vpos * 10000);
 }

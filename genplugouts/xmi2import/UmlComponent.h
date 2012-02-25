@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseComponent.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "anItemKind.h"
 
 class FileIn;
@@ -15,7 +15,7 @@ class UmlItem;
 // You can modify it as you want (except the constructor)
 class UmlComponent : public UmlBaseComponent {
   public:
-    UmlComponent(void * id, const Q3CString & n) : UmlBaseComponent(id, n) { NumberOf += 1; };
+    UmlComponent(void * id, const QCString & n) : UmlBaseComponent(id, n) { NumberOf += 1; };
 
     static void init();
 
@@ -28,15 +28,15 @@ class UmlComponent : public UmlBaseComponent {
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);
 
     //  call at end of import : try to solve interfaces
-    virtual void solve(int context, Q3CString idref);
+    virtual void solve(int context, QCString idref);
 
     //  call at end of import : try to solve generalization dependencies and realization
     //  not from a class
-    virtual void generalizeDependRealize(UmlItem * target, FileIn & in, int context, Q3CString label, Q3CString constraint);
+    virtual void generalizeDependRealize(UmlItem * target, FileIn & in, int context, QCString label, QCString constraint);
 
     //  call at end of import : try to solve generalization dependencies and realization,
     //  not from a class
-    virtual void solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString constraint);
+    virtual void solveGeneralizationDependencyRealization(int context, QCString idref, QCString label, QCString constraint);
 
     static int numberOf() { return NumberOf; };
 

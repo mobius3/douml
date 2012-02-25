@@ -31,7 +31,7 @@
 #if QT_VERSION == 230
 class MLEDialog;
 #else
-class Q3MultiLineEdit;
+class QMultiLineEdit;
 #endif
 
 class MLinesItem : public TableItem {
@@ -39,11 +39,11 @@ class MLinesItem : public TableItem {
 #if QT_VERSION == 230
     MLEDialog * mle;
 #else
-    Q3MultiLineEdit * mle;
+    QMultiLineEdit * mle;
 #endif
   
   public:
-    MLinesItem(Q3Table * t, const QString & s);
+    MLinesItem(QTable * t, const QString & s);
   
     virtual QWidget * createEditor() const;
     virtual void setContentFromEditor(QWidget * w);

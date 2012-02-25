@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
-#include <QDropEvent>
 
 #include "BrowserActivityDiagram.h"
 #include "SimpleData.h"
@@ -53,8 +48,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserActivityDiagram> BrowserActivityDiagram::imported;
-Q3ValueList<int> BrowserActivityDiagram::imported_ids;
+QList<BrowserActivityDiagram> BrowserActivityDiagram::imported;
+QValueList<int> BrowserActivityDiagram::imported_ids;
 QStringList BrowserActivityDiagram::its_default_stereotypes;	// unicode
 
 BrowserActivityDiagram::BrowserActivityDiagram(QString s, BrowserNode * p, int id)
@@ -154,7 +149,7 @@ void BrowserActivityDiagram::set_name(const char * s) {
 
 void BrowserActivityDiagram::import()
 {
-  Q3ValueList<int>::Iterator it = imported_ids.begin();
+  QValueList<int>::Iterator it = imported_ids.begin();
   
   while (!imported.isEmpty()) {
     QString warning;
@@ -210,8 +205,8 @@ void BrowserActivityDiagram::draw_svg() const {
 }
 
 void BrowserActivityDiagram::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -540,7 +535,7 @@ const QStringList & BrowserActivityDiagram::default_stereotypes() {
   return its_default_stereotypes;
 }
 
-void BrowserActivityDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserActivityDiagram::compute_referenced_by(QList<BrowserNode> & l,
 						   BrowserNode * bn,
 						   char const * kc,
 						   char const * kr)
@@ -560,7 +555,7 @@ void BrowserActivityDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserActivityDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserActivityDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "activitydiagram_stereotypes ";
@@ -575,7 +570,7 @@ void BrowserActivityDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserActivityDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserActivityDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "activitydiagram_ref " << get_ident() << " // " << get_name();
   else {

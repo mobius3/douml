@@ -2,13 +2,11 @@
 #include "UmlActivityActionClasses.h"
 
 #include "UmlOperation.h"
-//Added by qt3to4:
-#include <Q3CString>
-Q3CString UmlSendObjectAction::sKind() {
+QCString UmlSendObjectAction::sKind() {
   return "send object activity action";
 }
 
-void UmlSendObjectAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlSendObjectAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   write_children(pfix, rank, level);
@@ -16,11 +14,11 @@ void UmlSendObjectAction::html(Q3CString pfix, unsigned int rank, unsigned int l
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlUnmarshallAction::sKind() {
+QCString UmlUnmarshallAction::sKind() {
   return "unmarshall activity action";
 }
 
-void UmlUnmarshallAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlUnmarshallAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   write_children(pfix, rank, level);
@@ -28,24 +26,24 @@ void UmlUnmarshallAction::html(Q3CString pfix, unsigned int rank, unsigned int l
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlSendSignalAction::sKind() {
+QCString UmlSendSignalAction::sKind() {
   return "send signal activity action";
 }
 
-Q3CString UmlBroadcastSignalAction::sKind() {
+QCString UmlBroadcastSignalAction::sKind() {
   return "broadcast signal activity action";
 }
 
-Q3CString UmlValueSpecificationAction::sKind() {
+QCString UmlValueSpecificationAction::sKind() {
   return "value specification activity action";
 }
 
-void UmlValueSpecificationAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlValueSpecificationAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
-  Q3CString s = value();
-  Q3CString scpp = cppValue();
-  Q3CString sjava = javaValue();
+  QCString s = value();
+  QCString scpp = cppValue();
+  QCString sjava = javaValue();
 
   if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
     fw.write("<p>Value :</p><ul>");
@@ -76,16 +74,16 @@ void UmlValueSpecificationAction::html(Q3CString pfix, unsigned int rank, unsign
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlOpaqueAction::sKind() {
+QCString UmlOpaqueAction::sKind() {
   return "opaque activity action";
 }
 
-void UmlOpaqueAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlOpaqueAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
-  Q3CString s = behavior();
-  Q3CString scpp = cppBehavior();
-  Q3CString sjava = javaBehavior();
+  QCString s = behavior();
+  QCString scpp = cppBehavior();
+  QCString sjava = javaBehavior();
 
   if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
     fw.write("<p>Behavior :</p><ul>");
@@ -116,11 +114,11 @@ void UmlOpaqueAction::html(Q3CString pfix, unsigned int rank, unsigned int level
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlAcceptEventAction::sKind() {
+QCString UmlAcceptEventAction::sKind() {
   return "accept event activity action";
 }
 
-void UmlAcceptEventAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlAcceptEventAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   if (isUnmarshall()) {
@@ -132,9 +130,9 @@ void UmlAcceptEventAction::html(Q3CString pfix, unsigned int rank, unsigned int 
   else if (isTimeEvent())
     fw.write("<p>Event is a time event</p>");
   
-  Q3CString s = trigger();
-  Q3CString scpp = cppTrigger();
-  Q3CString sjava = javaTrigger();
+  QCString s = trigger();
+  QCString scpp = cppTrigger();
+  QCString sjava = javaTrigger();
 
   if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
     fw.write("<p>Trigger :</p><ul>");
@@ -165,11 +163,11 @@ void UmlAcceptEventAction::html(Q3CString pfix, unsigned int rank, unsigned int 
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlCallOperationAction::sKind() {
+QCString UmlCallOperationAction::sKind() {
   return "call operation activity action";
 }
 
-void UmlCallOperationAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlCallOperationAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   if (isSynchronous())
@@ -186,11 +184,11 @@ void UmlCallOperationAction::html(Q3CString pfix, unsigned int rank, unsigned in
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlCallBehaviorAction::sKind() {
+QCString UmlCallBehaviorAction::sKind() {
   return "call behavior activity action";
 }
 
-void UmlCallBehaviorAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlCallBehaviorAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   if (isSynchronous())
@@ -207,23 +205,23 @@ void UmlCallBehaviorAction::html(Q3CString pfix, unsigned int rank, unsigned int
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlClearVariableValueAction::sKind() {
+QCString UmlClearVariableValueAction::sKind() {
   return "clear variable value activity action";
 }
 
-Q3CString UmlReadVariableValueAction::sKind() {
+QCString UmlReadVariableValueAction::sKind() {
   return "read variable value activity action";
 }
 
-Q3CString UmlWriteVariableValueAction::sKind() {
+QCString UmlWriteVariableValueAction::sKind() {
   return "write variable value activity action";
 }
 
-Q3CString UmlAddVariableValueAction::sKind() {
+QCString UmlAddVariableValueAction::sKind() {
   return "add variable value activity action";
 }
 
-void UmlAddVariableValueAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlAddVariableValueAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   if (isReplaceAll())
@@ -240,11 +238,11 @@ void UmlAddVariableValueAction::html(Q3CString pfix, unsigned int rank, unsigned
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlRemoveVariableValueAction::sKind() {
+QCString UmlRemoveVariableValueAction::sKind() {
   return "remove variable value activity action";
 }
 
-void UmlRemoveVariableValueAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlRemoveVariableValueAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   if (isRemoveDuplicates())
@@ -261,16 +259,16 @@ void UmlRemoveVariableValueAction::html(Q3CString pfix, unsigned int rank, unsig
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlAcceptCallAction::sKind() {
+QCString UmlAcceptCallAction::sKind() {
   return "accept call activity action";
 }
 
-void UmlAcceptCallAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlAcceptCallAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
   
-  Q3CString s = trigger();
-  Q3CString scpp = cppTrigger();
-  Q3CString sjava = javaTrigger();
+  QCString s = trigger();
+  QCString scpp = cppTrigger();
+  QCString sjava = javaTrigger();
 
   if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
     fw.write("<p>Trigger :</p><ul>");
@@ -301,16 +299,16 @@ void UmlAcceptCallAction::html(Q3CString pfix, unsigned int rank, unsigned int l
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlReplyAction::sKind() {
+QCString UmlReplyAction::sKind() {
   return "reply activity action";
 }
 
-void UmlReplyAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlReplyAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
-  Q3CString s = replyToCall();
-  Q3CString scpp = cppReplyToCall();
-  Q3CString sjava = javaReplyToCall();
+  QCString s = replyToCall();
+  QCString scpp = cppReplyToCall();
+  QCString sjava = javaReplyToCall();
 
   if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
     fw.write("<p>replyToCall :</p><ul>");
@@ -341,11 +339,11 @@ void UmlReplyAction::html(Q3CString pfix, unsigned int rank, unsigned int level)
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlCreateObjectAction::sKind() {
+QCString UmlCreateObjectAction::sKind() {
   return "create object activity action";
 }
 
-void UmlCreateObjectAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlCreateObjectAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   if (!classifier().isEmpty()){
@@ -359,11 +357,11 @@ void UmlCreateObjectAction::html(Q3CString pfix, unsigned int rank, unsigned int
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlDestroyObjectAction::sKind() {
+QCString UmlDestroyObjectAction::sKind() {
   return "destroy object activity action";
 }
 
-void UmlDestroyObjectAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlDestroyObjectAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   if (isDestroyLinks()) {
@@ -380,11 +378,11 @@ void UmlDestroyObjectAction::html(Q3CString pfix, unsigned int rank, unsigned in
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlTestIdentityAction::sKind() {
+QCString UmlTestIdentityAction::sKind() {
   return "test identity activity action";
 }
 
-void UmlTestIdentityAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlTestIdentityAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   write_children(pfix, rank, level);
@@ -392,11 +390,11 @@ void UmlTestIdentityAction::html(Q3CString pfix, unsigned int rank, unsigned int
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlRaiseExceptionAction::sKind() {
+QCString UmlRaiseExceptionAction::sKind() {
   return "raise exception activity action";
 }
 
-void UmlRaiseExceptionAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlRaiseExceptionAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   write_children(pfix, rank, level);
@@ -404,11 +402,11 @@ void UmlRaiseExceptionAction::html(Q3CString pfix, unsigned int rank, unsigned i
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlReduceAction::sKind() {
+QCString UmlReduceAction::sKind() {
   return "reduce activity action";
 }
 
-void UmlReduceAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlReduceAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   if (isOrdered())

@@ -30,28 +30,26 @@
 
 
 
-#include <q3table.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <qtable.h>
 
-class TableItem : public Q3TableItem {
+class TableItem : public QTableItem {
   public:
-    TableItem(Q3Table * table, EditType et, const QString & text)
-      : Q3TableItem(table, et, text) {};
-    TableItem(Q3Table * table, EditType et, const QString & text, const QPixmap & p)
-      : Q3TableItem(table, et, text, p) {};
+    TableItem(QTable * table, EditType et, const QString & text)
+      : QTableItem(table, et, text) {};
+    TableItem(QTable * table, EditType et, const QString & text, const QPixmap & p)
+      : QTableItem(table, et, text, p) {};
   
     virtual int alignment() const;
 };
 
-class MyTable : public Q3Table {
+class MyTable : public QTable {
   Q_OBJECT
     
   public:
     MyTable(QWidget * parent = 0, const char * name = 0) 
-      : Q3Table(parent, name) {};
+      : QTable(parent, name) {};
     MyTable(int numRows, int numCols, QWidget * parent = 0, const char * name = 0)
-      : Q3Table(numRows, numCols, parent, name) {};
+      : QTable(numRows, numCols, parent, name) {};
 
     virtual void setText(int row, int col, const QString & text);
     

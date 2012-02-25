@@ -3,9 +3,7 @@
 
 #include <qdir.h>
 #include <qmessagebox.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <qtextstream.h>
 
 #include "CppSettings.h"
 #include "UmlPackage.h"
@@ -13,9 +11,9 @@
 #include "UmlClass.h"
 #include "Dialog.h"
 
-static Q3CString root_dir()
+static QCString root_dir()
 {
-  static Q3CString RootDir;
+  static QCString RootDir;
 
   if (RootDir.isEmpty()) {
     RootDir = CppSettings::rootDir();
@@ -40,7 +38,7 @@ static Q3CString root_dir()
 void UmlArtifact::genpro() {
   UmlPackage * pack = (UmlPackage *) parent()->parent();
   
-  Q3CString path;
+  QCString path;
 
   if (! propertyValue("genpro path", path)) {
 
@@ -63,9 +61,9 @@ void UmlArtifact::genpro() {
     UmlCom::trace(stereotype() + " : not managed");
 }
 
-void UmlArtifact::gen_app(const Q3CString & path) {
-  Q3CString target;
-  Q3CString pro;
+void UmlArtifact::gen_app(const QCString & path) {
+  QCString target;
+  QCString pro;
 
   propertyValue("genpro target", target);
   propertyValue("genpro pro", pro);
@@ -90,13 +88,13 @@ void UmlArtifact::gen_app(const Q3CString & path) {
     pro = d.absFilePath(pro + ".pro");
   }
 
-  Q3CString tmplt;
-  Q3CString config;
-  Q3CString defines;
-  Q3CString includepath;
-  Q3CString dependpath;
-  Q3CString objectsdir;
-  Q3CString footer;
+  QCString tmplt;
+  QCString config;
+  QCString defines;
+  QCString includepath;
+  QCString dependpath;
+  QCString objectsdir;
+  QCString footer;
 
   if (!propertyValue("genpro tmplt", tmplt))
     tmplt = "app";
@@ -162,10 +160,10 @@ void UmlArtifact::gen_app(const Q3CString & path) {
 
     QFile f(pro);
     
-    if (! f.open(QIODevice::WriteOnly))
+    if (! f.open(IO_WriteOnly))
       QMessageBox::critical((QWidget *) 0, "Error", "Cannot open " + QString(pro));
     else {
-      Q3TextStream t(&f);
+      QTextStream t(&f);
       QFileInfo tfi(target);
       QFileInfo pfi(pro);
       
@@ -186,10 +184,10 @@ void UmlArtifact::gen_app(const Q3CString & path) {
 	t << "DEFINES\t\t= " << defines << '\n';
       
       QString prodir = pfi.dirPath(TRUE);
-      const Q3PtrVector<UmlArtifact> & arts = associatedArtifacts();
+      const QVector<UmlArtifact> & arts = associatedArtifacts();
       unsigned index;
       const char * sep;
-      Q3CString ext;
+      QCString ext;
       
       ext = CppSettings::headerExtension();
       sep = "HEADERS\t\t= ";

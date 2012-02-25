@@ -31,11 +31,11 @@
 #include <qstring.h>
 #include <qdialog.h>
 
-class Q3ComboBox;
+class QComboBox;
 
 class CharSetDialog : public QDialog {
   protected:
-    Q3ComboBox * cb;
+    QComboBox * cb;
   
     static QSize previous_size;  
   

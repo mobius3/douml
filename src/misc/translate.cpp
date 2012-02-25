@@ -24,12 +24,12 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3dict.h>
+#include <qdict.h>
 #include <qmessagebox.h>
 
 #include "translate.h"
 
-static Q3Dict<QString> * CurrentTranslation = 0;
+static QDict<QString> * CurrentTranslation = 0;
 static QString CurrentLang;
 
 QString current_lang()
@@ -61,7 +61,7 @@ void set_lang(QString l)
       CurrentLang = l;
       
       if (CurrentTranslation == 0) {
-	CurrentTranslation = new Q3Dict<QString>(997);
+	CurrentTranslation = new QDict<QString>(997);
 	CurrentTranslation->setAutoDelete(TRUE);
       }
       else
@@ -84,12 +84,12 @@ void set_lang(QString l)
 	len += (fgetc(fp) << 8);
 	
 	if (len != 0) {
-	  QString * s = new QString((QChar *) 0, (unsigned) len); //[lgfreitas] why the const was here?
+	  QString * s = new QString((const QChar *) 0, (unsigned) len);
 	  
 	  for (i = 0; i != len; i += 1) {
 	    c = fgetc(fp);
-	    s->replace(i, 1, QChar(fgetc(fp), c));
-	    //s->at(i) = QChar(fgetc(fp), c); //[lgfreitas] at() now returns const 
+	    
+	    s->at(i) = QChar(fgetc(fp), c);
 	  }
 	  
 	  CurrentTranslation->insert(en, s);
@@ -115,7 +115,7 @@ static void translate(QString & s)
   int index1 = 0;
   
   while (index1 != ln) {
-    const QChar c = s.at(index1);
+    QCharRef c = s.at(index1);
     
     if ((c != c1) && (c != c2) && (c != c3))
       break;
@@ -125,7 +125,7 @@ static void translate(QString & s)
   int index2 = ln;
   
   while (--index2 > index1) {
-    const QChar c = s.at(index2);
+    QCharRef c = s.at(index2);
     
     if ((c != c1) && (c != c2) && (c != c3))
       break;

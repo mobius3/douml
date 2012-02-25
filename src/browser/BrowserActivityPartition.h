@@ -1,8 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <QDragMoveEvent>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -59,7 +54,7 @@ class BrowserActivityPartition : public BrowserNode, public Labeled<BrowserActiv
     BrowserActivityPartition(const BrowserActivityPartition * model, BrowserNode * p);
     virtual ~BrowserActivityPartition();
   
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
+    virtual bool may_contains_them(const QList<BrowserNode> & l,
 				   BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
 				    QString name = QString::null);
@@ -85,13 +80,13 @@ class BrowserActivityPartition : public BrowserNode, public Labeled<BrowserActiv
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserActivityDiagram *, bool on_read = FALSE);
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserActivityPartition * read(char * &, char *, BrowserNode *);
     static BrowserActivityPartition * read_ref(char * & st);
     static BrowserNode * get_it(const char * k, int id);
     static void post_load();
 
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
+    virtual void referenced_by(QList<BrowserNode> & l, bool ondelete);
     
     static void clear(bool old);
     static void update_idmax_for_root();
@@ -104,7 +99,7 @@ class BrowserActivityPartition : public BrowserNode, public Labeled<BrowserActiv
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;

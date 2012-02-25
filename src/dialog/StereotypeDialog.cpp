@@ -29,11 +29,8 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include "StereotypeDialog.h"
 #include "DialogUtil.h"
@@ -52,23 +49,23 @@ StereotypeDialog::StereotypeDialog(const QStringList &defaults,
     // removes << and >>
     ste = ste.mid(2, ste.length() - 4);
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   QLabel * label1;
   QLabel * label2;
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(label1 = new QLabel(lbl, this));
   ed = new LineEdit(la, this);
   hbox->addWidget(ed);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(label2 = new QLabel(TR("stereotype : "), this));
-  cb = new Q3ComboBox(TRUE, this);
+  cb = new QComboBox(TRUE, this);
   cb->insertItem(ste);
   cb->setCurrentItem(0);
   cb->insertStringList(defaults);
@@ -82,7 +79,7 @@ StereotypeDialog::StereotypeDialog(const QStringList &defaults,
   
   same_width(label1, label2);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * accept = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);

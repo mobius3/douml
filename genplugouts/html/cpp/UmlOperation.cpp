@@ -6,11 +6,8 @@
 #include "PhpSettings.h"
 #include "PythonSettings.h"
 #include "UmlRelation.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
-Q3CString UmlOperation::sKind() {
+QCString UmlOperation::sKind() {
   return "operation";
 }
 
@@ -20,14 +17,14 @@ void UmlOperation::memo_ref() {
   UmlItem::memo_ref();
 }
 
-void UmlOperation::html(Q3CString, unsigned int, unsigned int) {
+void UmlOperation::html(QCString, unsigned int, unsigned int) {
   define();
 
   fw.write("<table><tr><td><div class=\"element\">Operation <b>");
   writeq(name());
   fw.write("</b></div></td></tr></table>");
 
-  Q3CString s = description();
+  QCString s = description();
   
   if (! s.isEmpty()) {
     fw.write("<p>");
@@ -132,7 +129,7 @@ void UmlOperation::gen_uml_decl() {
   write(visibility());
   writeq(name());
   
-  const Q3ValueList<UmlParameter> & pa = params();
+  const QValueList<UmlParameter> & pa = params();
   unsigned npa = pa.count();
   unsigned rank;
   const char * sep = "(";
@@ -158,7 +155,7 @@ void UmlOperation::gen_uml_decl() {
     fw.write(" : ");
     write(p.type);
     
-    Q3CString s = p.default_value;
+    QCString s = p.default_value;
     
     if (!s.isEmpty()) {
       if (s[0] != '=')
@@ -172,7 +169,7 @@ void UmlOperation::gen_uml_decl() {
   
   sep = ",  exceptions : ";
   
-  const Q3ValueList<UmlTypeSpec> e = exceptions();
+  const QValueList<UmlTypeSpec> e = exceptions();
   unsigned n = e.count();
   
   for (unsigned index2 = 0; index2 != n; index2 += 1) {
@@ -182,7 +179,7 @@ void UmlOperation::gen_uml_decl() {
   }
 }
 
-void UmlOperation::gen_cpp_decl(Q3CString s, bool descr) {
+void UmlOperation::gen_cpp_decl(QCString s, bool descr) {
   const char * p = bypass_comment(s);
   
   if (! descr) {
@@ -195,7 +192,7 @@ void UmlOperation::gen_cpp_decl(Q3CString s, bool descr) {
   else
     p = s;
 
-  const Q3ValueList<UmlParameter> & pa = params();
+  const QValueList<UmlParameter> & pa = params();
   unsigned npa = pa.count();
   unsigned rank;
 
@@ -254,7 +251,7 @@ void UmlOperation::gen_cpp_decl(Q3CString s, bool descr) {
       p += 8;
       
       const char * sep = " throw (";
-      Q3ValueList<UmlTypeSpec> e = exceptions();
+      QValueList<UmlTypeSpec> e = exceptions();
       unsigned n = e.count();
       unsigned index2;
       
@@ -344,9 +341,9 @@ void UmlOperation::gen_cpp_decl(Q3CString s, bool descr) {
   }
 }
 
-void UmlOperation::gen_java_decl(Q3CString s, bool descr) {
+void UmlOperation::gen_java_decl(QCString s, bool descr) {
   const char * p = bypass_comment(s);
-  const Q3ValueList<UmlParameter> & pa = params();
+  const QValueList<UmlParameter> & pa = params();
   unsigned npa = pa.count();
   unsigned rank;
 
@@ -400,7 +397,7 @@ void UmlOperation::gen_java_decl(Q3CString s, bool descr) {
       p += 9;
       
       const char * sep = " throws ";
-      const Q3ValueList<UmlTypeSpec> e = exceptions();
+      const QValueList<UmlTypeSpec> e = exceptions();
       unsigned n = e.count();
       
       for (unsigned index2 = 0; index2 != n; index2 += 1) {
@@ -474,11 +471,11 @@ void UmlOperation::gen_java_decl(Q3CString s, bool descr) {
   }
 }
 
-void UmlOperation::gen_php_decl(Q3CString s, bool descr) {
-  Q3CString cl_stereotype = 
+void UmlOperation::gen_php_decl(QCString s, bool descr) {
+  QCString cl_stereotype = 
      PhpSettings::classStereotype(parent()->stereotype());
   const char * p = bypass_comment(s);
-  const Q3ValueList<UmlParameter> & pa = params();
+  const QValueList<UmlParameter> & pa = params();
   unsigned npa = pa.count();
   unsigned rank;
 
@@ -577,11 +574,11 @@ void UmlOperation::gen_php_decl(Q3CString s, bool descr) {
   }
 }
 
-void UmlOperation::gen_python_decl(Q3CString s, bool descr) {
-  Q3CString cl_stereotype = 
+void UmlOperation::gen_python_decl(QCString s, bool descr) {
+  QCString cl_stereotype = 
      PythonSettings::classStereotype(parent()->stereotype());
   const char * p = bypass_comment(s);
-  const Q3ValueList<UmlParameter> & pa = params();
+  const QValueList<UmlParameter> & pa = params();
   unsigned npa = pa.count();
   bool in_params = FALSE;
   unsigned rank;
@@ -685,12 +682,12 @@ void UmlOperation::gen_python_decl(Q3CString s, bool descr) {
   }
 }
 
-Q3CString UmlOperation::compute_name(Q3CString s) {
+QCString UmlOperation::compute_name(QCString s) {
   if (!s.isEmpty()) {
     UmlClassMember * m = getOf();
     
     if ((m != 0) || ((m = setOf()) != 0)) {
-      Q3CString n = (m->kind() == aRelation)
+      QCString n = (m->kind() == aRelation)
 	? ((UmlRelation *) m)->roleName()
 	: m->name();
       int index;

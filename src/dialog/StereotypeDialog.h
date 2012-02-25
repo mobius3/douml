@@ -29,7 +29,7 @@
 #include <qdialog.h>
 #include <qstringlist.h>
 
-class Q3ComboBox;
+class QComboBox;
 
 class LineEdit;
 
@@ -39,7 +39,7 @@ class StereotypeDialog : public QDialog {
   protected:
     QString & ste;
     QString & lab;
-    Q3ComboBox * cb;
+    QComboBox * cb;
     LineEdit * ed;
     
     static QSize previous_size;

@@ -30,12 +30,9 @@
 #include <qcursor.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <qpopupmenu.h> 
 
 #include "FragmentDialog.h"
 #include "BrowserDiagram.h"
@@ -51,8 +48,8 @@ FragmentDialog::FragmentDialog(const QStringList &defaults, QString & s,
     : QDialog(0, "Fragment dialog", TRUE), name(s), form(fo), refer(d) {
   setCaption(TR("Fragment dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   QLabel * lbl1;
   QLabel * lbl2;
   SmallPushButton * refer_bt;
@@ -60,10 +57,10 @@ FragmentDialog::FragmentDialog(const QStringList &defaults, QString & s,
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(lbl1 = new QLabel(TR("name : "), this));
-  name_cb = new Q3ComboBox(TRUE, this);
+  name_cb = new QComboBox(TRUE, this);
   name_cb->insertItem(name);
   name_cb->setCurrentItem(0);
   name_cb->insertStringList(defaults);
@@ -75,11 +72,11 @@ FragmentDialog::FragmentDialog(const QStringList &defaults, QString & s,
   sp.setHorData(QSizePolicy::Expanding);
   name_cb->setSizePolicy(sp);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(refer_bt = new SmallPushButton(TR("refer to : "), this));
   connect(refer_bt, SIGNAL(clicked()), this, SLOT(menu_refer()));
-  diag_cb = new Q3ComboBox(FALSE, this); 
+  diag_cb = new QComboBox(FALSE, this); 
   BrowserDiagram::instances(nodes, TRUE);
   diag_cb->insertItem("");
   for (bn = nodes.first(); bn != 0; bn = nodes.next())
@@ -90,7 +87,7 @@ FragmentDialog::FragmentDialog(const QStringList &defaults, QString & s,
   diag_cb->setSizePolicy(sp);
   hbox->addWidget(diag_cb);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(lbl2 = new QLabel(TR("arguments \n/ value : "), this));
   hbox->addWidget(ed_form = new LineEdit(this));
@@ -98,7 +95,7 @@ FragmentDialog::FragmentDialog(const QStringList &defaults, QString & s,
   
   same_width(lbl1, lbl2, refer_bt);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * accept = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -125,7 +122,7 @@ FragmentDialog::~FragmentDialog() {
 }
 
 void FragmentDialog::menu_refer() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   bool used = FALSE;
 
   m.insertItem(TR("Choose"), -1);

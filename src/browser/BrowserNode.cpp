@@ -31,17 +31,12 @@
 
 
 
-#include <q3dragobject.h>
+#include <qdragobject.h>
 #include <qcursor.h>
-#include <q3ptrdict.h>
+#include <qptrdict.h>
 #include <qpainter.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qapplication.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <Q3PtrCollection>
 
 #include "BrowserView.h"
 #include "BrowserNode.h"
@@ -79,7 +74,7 @@
 
 
 
-Q3PtrList<BrowserNode> BrowserNode::marked_list;
+QList<BrowserNode> BrowserNode::marked_list;
 
 static BrowserPackage * UndefinedNodePackage;
 
@@ -95,7 +90,7 @@ int BrowserNode::must_be_saved_counter;
 int BrowserNode::already_saved;
 
 // to accelerate sorting
-Q3PtrDict<QString> SynonymousPath(259);
+QPtrDict<QString> SynonymousPath(259);
 
 // to accelerate full_name
 QString BrowserNode::FullPathPrefix = "   [";
@@ -103,20 +98,20 @@ QString BrowserNode::FullPathPostfix = "]";
 QString BrowserNode::FullPathDotDot = "::";
 
 BrowserNode::BrowserNode(QString s, BrowserView * parent)
-    : Q3ListViewItem(parent, s),
+    : QListViewItem(parent, s),
       name(s), original_id(0), is_new(TRUE), is_deleted(FALSE),
       is_modified(FALSE), is_read_only(FALSE), is_edited(FALSE),
       is_marked(FALSE), is_defined(FALSE) {
 }
 
 BrowserNode::BrowserNode(QString s, BrowserNode * parent)
-    : Q3ListViewItem(parent, s),
+    : QListViewItem(parent, s),
       name(s), original_id(0), is_new(TRUE), is_deleted(FALSE),
       is_modified(FALSE), is_read_only(FALSE), is_edited(FALSE),
       is_marked(FALSE), is_defined(FALSE) {
   
   // move it at end
-  Q3ListViewItem * child = parent->firstChild();
+  QListViewItem * child = parent->firstChild();
   
   while (child->nextSibling())
     child = child->nextSibling();
@@ -126,7 +121,7 @@ BrowserNode::BrowserNode(QString s, BrowserNode * parent)
 }
 
 BrowserNode::BrowserNode()
-    : Q3ListViewItem(UndefinedNodePackage, "<not yet read>"),
+    : QListViewItem(UndefinedNodePackage, "<not yet read>"),
       original_id(0), is_new(TRUE), is_deleted(FALSE),
       is_modified(FALSE), is_read_only(FALSE), is_edited(FALSE),
       is_marked(FALSE), is_defined(FALSE) {
@@ -178,7 +173,7 @@ void BrowserNode::delete_it() {
 	get_data()->delete_it();
       
       // delete the sub elts
-      Q3ListViewItem * child;
+      QListViewItem * child;
       
       for (child = firstChild(); child != 0; child = child->nextSibling())
 	if (! ((BrowserNode *) child)->deletedp())
@@ -199,7 +194,7 @@ bool BrowserNode::delete_internal(QString & warning) {
     return FALSE;
   }
   
-  static Q3PtrList<BrowserNode> targetof;
+  static QList<BrowserNode> targetof;
   static bool made = FALSE;
   bool made_here;
   
@@ -214,7 +209,7 @@ bool BrowserNode::delete_internal(QString & warning) {
   bool ro = FALSE;
   
   if (!root_permission()) {
-    Q3PtrListIterator<BrowserNode> it(targetof);
+    QListIterator<BrowserNode> it(targetof);
     BrowserNode * r;
     
     while ((r = it.current()) != 0) {
@@ -247,7 +242,7 @@ bool BrowserNode::delete_internal(QString & warning) {
     return FALSE;
   
   // sub elts
-  Q3ListViewItem * child;
+  QListViewItem * child;
   bool ok = TRUE;
   
   for (child = firstChild(); child != 0; child = child->nextSibling())
@@ -275,7 +270,7 @@ void BrowserNode::set_comment(const char * c) {
   comment = c;
 }
 
-void BrowserNode::referenced_by(Q3PtrList<BrowserNode> & l, bool) {
+void BrowserNode::referenced_by(QList<BrowserNode> & l, bool) {
   BrowserSimpleRelation::compute_referenced_by(l, this);
 }
 
@@ -353,7 +348,7 @@ bool BrowserNode::undelete(bool rec, QString & warning, QString & renamed) {
     
   if (rec) {
     // undelete the sub elts
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = firstChild(); child != 0; child = child->nextSibling())
       result |= ((BrowserNode *) child)->undelete(rec, warning, renamed);
@@ -416,7 +411,7 @@ void BrowserNode::update_stereotype(bool rec) {
   }
   
   if (rec) {
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = firstChild(); child != 0; child = child->nextSibling())
       ((BrowserNode *) child)->update_stereotype(TRUE);
@@ -489,7 +484,7 @@ void BrowserNode::paintCell(QPainter * p, const QColorGroup & cg, int column,
   }
     
   p->setFont((is_writable()) ? BoldFont : NormalFont);
-  Q3ListViewItem::paintCell(p, cg, column, width, alignment);
+  QListViewItem::paintCell(p, cg, column, width, alignment);
   
   if (is_marked) {
     p->setBackgroundMode(::Qt::TransparentMode);
@@ -517,7 +512,7 @@ void BrowserNode::post_load(bool light)
     BrowserClassInstance::post_load();
     BrowserActivityPartition::post_load(); // must be call after other ones
   
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     redo = FALSE;
     
@@ -553,12 +548,12 @@ void BrowserNode::must_be_deleted() {
   }
 }
 
-void BrowserNode::set_parent(Q3ListViewItem * p) {
+void BrowserNode::set_parent(QListViewItem * p) {
   parent()->takeItem(this);
   p->insertItem(this);
   
   // move it at end
-  Q3ListViewItem * child = p->firstChild();
+  QListViewItem * child = p->firstChild();
   
   while (child->nextSibling())
     child = child->nextSibling();
@@ -707,9 +702,9 @@ void BrowserNode::edit(const char * s, const QStringList & default_stereotypes) 
 //
 
 // returns all parents for NON class
-Q3PtrList<BrowserNode> BrowserNode::parents() const {
-  Q3PtrList<BrowserNode> l;
-  Q3ListViewItem * child;
+QList<BrowserNode> BrowserNode::parents() const {
+  QList<BrowserNode> l;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling()) {
     BrowserNode * ch = ((BrowserNode *) child);
@@ -729,8 +724,8 @@ Q3PtrList<BrowserNode> BrowserNode::parents() const {
 
 // check inheritance
 QString BrowserNode::check_inherit(const BrowserNode * new_parent) const {
-  Q3PtrList<BrowserNode> all_parents;
-  Q3PtrList<BrowserNode> notyet = parents();
+  QList<BrowserNode> all_parents;
+  QList<BrowserNode> notyet = parents();
 
   if (notyet.findRef(new_parent) != -1)
     return TR("already generalize / realize");
@@ -746,7 +741,7 @@ QString BrowserNode::check_inherit(const BrowserNode * new_parent) const {
     if (all_parents.findRef(cl) == -1) {
       all_parents.append(cl);
       
-      Q3PtrList<BrowserNode> grand_parents = cl->parents();
+      QList<BrowserNode> grand_parents = cl->parents();
       
       for (cl = grand_parents.first(); cl; cl = grand_parents.next())
 	if (notyet.findRef(cl) == -1)
@@ -757,7 +752,7 @@ QString BrowserNode::check_inherit(const BrowserNode * new_parent) const {
   return 0;
 }
 
-bool BrowserNode::may_contains_them(const Q3PtrList<BrowserNode> &,
+bool BrowserNode::may_contains_them(const QList<BrowserNode> &,
 				    BooL &) const {
   return FALSE;
 }
@@ -767,7 +762,7 @@ bool BrowserNode::may_contains_it(BrowserNode * bn) const {
   UmlCode type = bn->get_type();
   QString s = (const char *) bn->name;
   
-  for (Q3ListViewItem * child = firstChild(); child; child = child->nextSibling()) {
+  for (QListViewItem * child = firstChild(); child; child = child->nextSibling()) {
     if (!((BrowserNode *) child)->deletedp() &&
 	((BrowserNode *) child)->same_name(s, type))
       return FALSE;
@@ -782,7 +777,7 @@ bool BrowserNode::may_contains_it(BrowserNode * bn) const {
 // recurssively :
 #define SIMPLE_DUPLICATION
 
-void BrowserNode::mark_menu(Q3PopupMenu & m, const char * s, int bias) const {
+void BrowserNode::mark_menu(QPopupMenu & m, const char * s, int bias) const {
   if (! is_marked) {
     m.insertSeparator();
     m.setWhatsThis(m.insertItem(TR("Mark"), bias),
@@ -804,7 +799,7 @@ void BrowserNode::mark_menu(Q3PopupMenu & m, const char * s, int bias) const {
 #ifndef SIMPLE_DUPLICATION
       bool rec = FALSE;
 #endif
-      Q3PtrListIterator<BrowserNode> it(marked_list);
+      QListIterator<BrowserNode> it(marked_list);
       
       for (; (bn = it.current()) != 0; ++it) {
 	if ((bn == BrowserView::get_project()) ||
@@ -1002,7 +997,7 @@ bool BrowserNode::may_contains(BrowserNode * bn, bool rec) const {
   if (! s.isEmpty()) {
     UmlCode type = bn->get_type();
     
-    for (Q3ListViewItem * child = firstChild(); child; child = child->nextSibling()) {
+    for (QListViewItem * child = firstChild(); child; child = child->nextSibling()) {
       if (!((BrowserNode *) child)->deletedp() &&
 	  // case already check : (child != bn) &&
 	  ((BrowserNode *) child)->same_name(s, type))
@@ -1030,7 +1025,7 @@ bool BrowserNode::may_contains(BrowserNode * bn, bool rec) const {
 
 void BrowserNode::children(BrowserNodeList & nodes,
 			   UmlCode kind1, UmlCode kind2) const {
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = firstChild(); child; child = child->nextSibling())
     if (!((BrowserNode *) child)->is_deleted &&
@@ -1150,7 +1145,7 @@ bool BrowserNode::wrong_child_name(const QString & s, UmlCode type,
   
   // check unicity
   
-  for (Q3ListViewItem * child = firstChild(); child; child = child->nextSibling())
+  for (QListViewItem * child = firstChild(); child; child = child->nextSibling())
     if (!((BrowserNode *) child)->deletedp() &&
 	((BrowserNode *) child)->same_name(s, type))
       return TRUE;
@@ -1213,7 +1208,7 @@ bool BrowserNode::tool_cmd(ToolCom * com, const char * args) {
     {
       unsigned v = com->api_format();
       unsigned n = 0;
-      Q3ListViewItem * child;
+      QListViewItem * child;
       
       for (child = firstChild(); child != 0; child = child->nextSibling())
 	if (!((BrowserNode *) child)->deletedp() &&
@@ -1415,7 +1410,7 @@ void BrowserNode::init_save_counter() {
   if (! deletedp()) {
     must_be_saved_counter += 1;
     
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     while (child != 0) {
       ((BrowserNode *) child)->init_save_counter();
@@ -1424,13 +1419,13 @@ void BrowserNode::init_save_counter() {
   }
 }
 
-bool BrowserNode::save_open_list(Q3TextStream & st) {
+bool BrowserNode::save_open_list(QTextStream & st) {
   if (!isOpen())
     return FALSE;
   
   bool have_open_child = FALSE;
   
-  for (Q3ListViewItem * child = firstChild(); child != 0; child = child->nextSibling()) {
+  for (QListViewItem * child = firstChild(); child != 0; child = child->nextSibling()) {
     BrowserNode * ch = ((BrowserNode *) child);
     
     if (!ch->deletedp())
@@ -1453,7 +1448,7 @@ void BrowserNode::save_progress_closed()
   save_progress = 0;
 }
 
-void BrowserNode::save(Q3TextStream & st) const {
+void BrowserNode::save(QTextStream & st) const {
   if (save_progress != 0)
     save_progress->setProgress(already_saved++);
   
@@ -1516,7 +1511,7 @@ BrowserNode * BrowserNode::read_any_ref(char * & st, char * k) {
   return r;
 }
 
-void BrowserNode::save_stereotypes(Q3TextStream & st, 
+void BrowserNode::save_stereotypes(QTextStream & st, 
 				   QStringList relations_stereotypes[])
 {
   int r;
@@ -1555,14 +1550,14 @@ void BrowserNode::read_stereotypes(char * & st,
 }
 
 void BrowserNode::renumber(int phase) {
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->renumber(phase);
 }
 
-void BrowserNode::support_file(Q3Dict<char> & files, bool add) const {
-  for (Q3ListViewItem * child = firstChild();
+void BrowserNode::support_file(QDict<char> & files, bool add) const {
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->support_file(files, add);
@@ -1572,7 +1567,7 @@ void BrowserNode::support_file(Q3Dict<char> & files, bool add) const {
 
 static QString UnconsistencyDeletedMsg;
 static QString UnconsistencyFixedMsg;
-static Q3PtrList<BrowserNode> ModifiedPackages;
+static QList<BrowserNode> ModifiedPackages;
 
 void BrowserNode::signal_unconsistencies()
 {
@@ -1653,7 +1648,7 @@ void BrowserNodeList::search(BrowserNode * bn, UmlCode k, const QString & s,
 			     bool cs, bool even_deleted, bool for_name,
 			     bool for_stereotype)
 {
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = bn->firstChild(); child != 0; child = child->nextSibling()) {
     if (even_deleted || !((BrowserNode *) child)->deletedp()) {
@@ -1680,7 +1675,7 @@ void BrowserNodeList::search(BrowserNode * bn, UmlCode k, const QString & s,
 void BrowserNodeList::search_ddb(BrowserNode * bn, UmlCode k, const QString & s,
 				 bool cs, bool even_deleted)
 {
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = bn->firstChild(); child != 0; child = child->nextSibling()) {
     if (even_deleted || !((BrowserNode *) child)->deletedp()) {
@@ -1699,7 +1694,7 @@ void BrowserNodeList::search_ddb(BrowserNode * bn, UmlCode k, const QString & s,
   }
 }
 
-int BrowserNodeList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
+int BrowserNodeList::compareItems(QCollection::Item item1, QCollection::Item item2)
 {
   QString s1 = ((BrowserNode *) item1)->get_name();
   QString s2 = ((BrowserNode *) item2)->get_name();
@@ -1737,7 +1732,7 @@ int BrowserNodeList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::
 void BrowserNodeList::names(QStringList & list) const {
   list.clear();
   
-  Q3PtrListIterator<BrowserNode> it(*this);
+  QListIterator<BrowserNode> it(*this);
   
   while (it.current() != 0) {
     const char * s = it.current()->get_name();
@@ -1750,7 +1745,7 @@ void BrowserNodeList::names(QStringList & list) const {
 void BrowserNodeList::full_names(QStringList & list) const {
   list.clear();
   
-  Q3PtrListIterator<BrowserNode> it(*this);
+  QListIterator<BrowserNode> it(*this);
   
   while (it.current() != 0) {
     list.append(it.current()->full_name(TRUE));
@@ -1761,7 +1756,7 @@ void BrowserNodeList::full_names(QStringList & list) const {
 void BrowserNodeList::full_defs(QStringList & list) const {
   list.clear();
   
-  Q3PtrListIterator<BrowserNode> it(*this);
+  QListIterator<BrowserNode> it(*this);
   
   while (it.current() != 0) {
     list.append(it.current()->get_data()->definition(TRUE, FALSE));

@@ -23,10 +23,7 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h> 
 
 #include "UmlItem.h"
 
@@ -34,7 +31,7 @@ UmlItem::~UmlItem() {
 }
 
 void UmlItem::manage_comment(const char *& p, const char *& pp) {
-  static Q3CString the_comment;
+  static QCString the_comment;
   
   p += 10;
   
@@ -65,7 +62,7 @@ void UmlItem::manage_comment(const char *& p, const char *& pp) {
 }
 
 void UmlItem::manage_description(const char *& p, const char *& pp) {
-  static Q3CString the_comment;
+  static QCString the_comment;
   
   p += 14;
   
@@ -80,9 +77,9 @@ void UmlItem::manage_description(const char *& p, const char *& pp) {
 }
 
 void UmlItem::manage_docstring(const char *& p, const char *& pp, BooL & indent_needed,
-			       Q3CString & indent, Q3CString & saved_indent)
+			       QCString & indent, QCString & saved_indent)
 {
-  static Q3CString the_comment;
+  static QCString the_comment;
   
   p += 12;
   
@@ -105,7 +102,7 @@ void UmlItem::manage_docstring(const char *& p, const char *& pp, BooL & indent_
     index = 0;
     
     while ((index = the_comment.find('\n', index)) != -1) {
-      the_comment.insert(index + 1, (const char*)indent);
+      the_comment.insert(index + 1, indent);
       index += len;
     }
   }
@@ -124,7 +121,7 @@ void UmlItem::manage_docstring(const char *& p, const char *& pp, BooL & indent_
 }
 
 void UmlItem::manage_alias(const char *& p, QTextOStream & ts,
-			   Q3CString indent, BooL & indent_needed) {
+			   QCString indent, BooL & indent_needed) {
   if (indent_needed) {
     indent_needed = FALSE;
     ts << indent;
@@ -134,8 +131,8 @@ void UmlItem::manage_alias(const char *& p, QTextOStream & ts,
   const char * pclosed;
   
   if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
-    Q3CString key(p + 2, pclosed - p - 1);
-    Q3CString value;
+    QCString key(p + 2, pclosed - p - 1);
+    QCString value;
     UmlItem * node = this;
 
     do {

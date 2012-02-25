@@ -33,11 +33,8 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
-#include <q3buttongroup.h>
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <qbuttongroup.h>
+#include <qptrdict.h>
 
 #include "RelatedElementsDialog.h"
 #include "DialogUtil.h"
@@ -56,12 +53,12 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
     : QDialog(0, "Related elements dialog", TRUE), elt(e), elts(l) {
   setCaption(TR("Related elements dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);  
   hbox->addWidget(new QLabel(TR("Search for : "), this));
   referenced_rb = new QCheckBox(TR("referenced elements  "), this);
@@ -70,7 +67,7 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
   referencing_rb = new QCheckBox(TR("referencing elements  "), this);
   hbox->addWidget(referencing_rb);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);  
   hbox->addWidget(new QLabel(TR("Through relations : "), this));
   if (inh) {
@@ -92,7 +89,7 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
     assoc_rb = 0;
   hbox->addWidget(new QLabel(this), 1000);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);  
   sametype_rb = new QCheckBox(TR("Search only for %1", what), this);
   sametype_rb->setChecked(TRUE);
@@ -104,7 +101,7 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
   hbox->addWidget(sb_level);
   hbox->addWidget(new QLabel(TR("levels"), this));
 
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * accept = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -143,7 +140,7 @@ void RelatedElementsDialog::accept() {
   
   elts.clear();
 
-  Q3PtrDict<BrowserNode> d(71);
+  QPtrDict<BrowserNode> d(71);
   BrowserNodeList added;
   int lvl = sb_level->value();
     
@@ -152,7 +149,7 @@ void RelatedElementsDialog::accept() {
     
   do {
     BrowserNodeList newones;
-    Q3PtrListIterator<BrowserNode> it(added);
+    QListIterator<BrowserNode> it(added);
     
     for (; it.current() != 0; ++it) {
       BrowserNode * e = (BrowserNode *) it.current();
@@ -217,7 +214,7 @@ void RelatedElementsDialog::accept() {
   
   d.remove(elt);
   
-  Q3PtrDictIterator<BrowserNode> it(d);
+  QPtrDictIterator<BrowserNode> it(d);
   
   while (it.current()) {
     elts.append(it.current());

@@ -28,10 +28,8 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 
 #include "SimpleRelationCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -181,9 +179,9 @@ void SimpleRelationCanvas::menu(const QPoint &) {
       pstereotype = (SimpleRelationCanvas *) apstereotype;
     }
     
-    Q3PopupMenu m(0);
-    Q3PopupMenu geo(0);
-    Q3PopupMenu toolm(0);
+    QPopupMenu m(0);
+    QPopupMenu geo(0);
+    QPopupMenu toolm(0);
     
     m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()), -1);
     m.insertSeparator();
@@ -333,7 +331,7 @@ void SimpleRelationCanvas::modified() {
 void SimpleRelationCanvas::setSelected(bool yes) {
   UmlWindow::set_commented((yes) ? data->get_start() : 0);
 
-  Q3CanvasPolygon::setSelected(yes);
+  QCanvasPolygon::setSelected(yes);
 }
 
 void SimpleRelationCanvas::update(bool updatepos) {
@@ -403,8 +401,8 @@ void SimpleRelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
   BrowserNode * to = def->get_end_node();
   DiagramItem * ccfrom = 0;
   DiagramItem * ccto = 0;
-  Q3CanvasItemList all = canvas->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas->allItems();
+  QCanvasItemList::Iterator cit;
 
   // the two classes are drawn ?
   for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -442,7 +440,7 @@ void SimpleRelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
 
 // the relation is not yet drawn, 
 void SimpleRelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas,
-				Q3PtrDict<DiagramItem> & drawn)
+				QPtrDict<DiagramItem> & drawn)
 {
   SimpleRelationData * def = (SimpleRelationData *) bn->get_data();
   BrowserNode * from = def->get_start_node();
@@ -513,7 +511,7 @@ bool SimpleRelationCanvas::represents(BrowserNode * bn) {
 
 //
 
-void SimpleRelationCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SimpleRelationCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "simplerelationcanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {
@@ -714,7 +712,7 @@ SimpleRelationCanvas * SimpleRelationCanvas::read(char * & st, UmlCanvas * canva
 }
 
 void SimpleRelationCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   unconnect();
 }
 

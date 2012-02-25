@@ -31,9 +31,6 @@
 
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
 
 #include "DiagramCanvas.h"
 #include "MultipleDependency.h"
@@ -60,8 +57,8 @@ class CdClassCanvas : public QObject, public DiagramCanvas,
     int width_min;
     int height_min;
     QString full_name;
-    Q3ValueList<BrowserNode *> hidden_visible_attributes;
-    Q3ValueList<BrowserNode *> hidden_visible_operations;
+    QValueList<BrowserNode *> hidden_visible_attributes;
+    QValueList<BrowserNode *> hidden_visible_operations;
     ConstraintCanvas * constraint;
     
   protected:
@@ -107,14 +104,14 @@ class CdClassCanvas : public QObject, public DiagramCanvas,
     virtual void history_hide();
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
     
     virtual void apply_shortcut(QString s);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static CdClassCanvas * read(char * &, UmlCanvas *, char *);
     virtual void post_loaded();
     

@@ -28,8 +28,6 @@
 #ifdef ROUNDTRIP
 #include "UmlPackage.h"
 #include "Package.h"
-//Added by qt3to4:
-#include <Q3PtrList>
 
 bool UmlArtifact::has_roundtrip_expected;
 
@@ -37,7 +35,7 @@ bool UmlArtifact::set_roundtrip_expected() {
   if ((stereotype() != "source") || javaSource().isEmpty())
     return TRUE;
   
-  const Q3PtrVector<UmlClass> & cls = associatedClasses();
+  const QVector<UmlClass> & cls = associatedClasses();
   
   if (cls.isEmpty())
     return TRUE;
@@ -78,7 +76,7 @@ bool UmlArtifact::is_roundtrip_usefull()
   return has_roundtrip_expected;
 }
 
-void UmlArtifact::mark_useless(Q3PtrList<UmlItem> & l) {
+void UmlArtifact::mark_useless(QList<UmlItem> & l) {
   if (useless) {
     set_isMarked(TRUE);
     parent()->set_childrenVisible(TRUE);

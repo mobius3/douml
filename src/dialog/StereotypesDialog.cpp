@@ -29,8 +29,8 @@
 
 #include <stdio.h>
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
 
 #include "StereotypesDialog.h"
@@ -80,18 +80,18 @@
 QSize StereotypesDialog::previous_size;
 
 StereotypesDialog::StereotypesDialog()
-    : Q3TabDialog(0, "Default stereotypes dialog", TRUE, 0) {
+    : QTabDialog(0, "Default stereotypes dialog", TRUE, 0) {
   setCaption(TR("Default stereotypes dialog"));
   
   setOkButton(TR("OK"));
   setCancelButton(TR("Cancel"));
   
   const QString space(" ");
-  Q3Grid * grid;
+  QGrid * grid;
   
   // package tab
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -102,7 +102,7 @@ StereotypesDialog::StereotypesDialog()
   new QLabel(TR("relations\nstereotypes : "), grid);
   packagetable = new MyTable(1, 1, grid);
   packagetable->horizontalHeader()->setLabel(0, TR("Stereotypes"));
-  packagetable->verticalHeader()->setLabel(0, QIcon(*dependencyButton), "");
+  packagetable->verticalHeader()->setLabel(0, QIconSet(*dependencyButton), "");
   packagetable->setText(0, 0, BrowserPackage::relation_default_stereotypes.join(space));
   packagetable->setColumnStretchable (0, TRUE);
   packagetable->setRowStretchable (0, TRUE);
@@ -111,7 +111,7 @@ StereotypesDialog::StereotypesDialog()
   
   // class tab
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -130,23 +130,23 @@ StereotypesDialog::StereotypesDialog()
   new QLabel(TR("relations\nstereotypes : "), grid);
   classtable = new MyTable(9, 1, grid);
   classtable->horizontalHeader()->setLabel(0, TR("Stereotypes"));
-  classtable->verticalHeader()->setLabel(0, QIcon(*generalisationButton), "");
+  classtable->verticalHeader()->setLabel(0, QIconSet(*generalisationButton), "");
   classtable->setText(0, 0, BrowserClass::relations_default_stereotypes[UmlGeneralisation].join(space));
-  classtable->verticalHeader()->setLabel(1, QIcon(*directionalAssociationButton), "");
+  classtable->verticalHeader()->setLabel(1, QIconSet(*directionalAssociationButton), "");
   classtable->setText(1, 0, BrowserClass::relations_default_stereotypes[UmlDirectionalAssociation].join(space));
-  classtable->verticalHeader()->setLabel(2, QIcon(*associationButton), "");
+  classtable->verticalHeader()->setLabel(2, QIconSet(*associationButton), "");
   classtable->setText(2, 0, BrowserClass::relations_default_stereotypes[UmlAssociation].join(space));
-  classtable->verticalHeader()->setLabel(3, QIcon(*aggregationButton), "");
+  classtable->verticalHeader()->setLabel(3, QIconSet(*aggregationButton), "");
   classtable->setText(3, 0, BrowserClass::relations_default_stereotypes[UmlAggregation].join(space));
-  classtable->verticalHeader()->setLabel(4, QIcon(*aggregationByValueButton), "");
+  classtable->verticalHeader()->setLabel(4, QIconSet(*aggregationByValueButton), "");
   classtable->setText(4, 0, BrowserClass::relations_default_stereotypes[UmlAggregationByValue].join(space));
-  classtable->verticalHeader()->setLabel(5, QIcon(*directionalAggregationButton), "");
+  classtable->verticalHeader()->setLabel(5, QIconSet(*directionalAggregationButton), "");
   classtable->setText(5, 0, BrowserClass::relations_default_stereotypes[UmlDirectionalAggregation].join(space));
-  classtable->verticalHeader()->setLabel(6, QIcon(*directionalAggregationByValueButton), "");
+  classtable->verticalHeader()->setLabel(6, QIconSet(*directionalAggregationByValueButton), "");
   classtable->setText(6, 0, BrowserClass::relations_default_stereotypes[UmlDirectionalAggregationByValue].join(space));
-  classtable->verticalHeader()->setLabel(7, QIcon(*dependencyButton), "");
+  classtable->verticalHeader()->setLabel(7, QIconSet(*dependencyButton), "");
   classtable->setText(7, 0, BrowserClass::relations_default_stereotypes[UmlDependency].join(space));
-  classtable->verticalHeader()->setLabel(8, QIcon(*realizeButton), "");
+  classtable->verticalHeader()->setLabel(8, QIconSet(*realizeButton), "");
   classtable->setText(8, 0, BrowserClass::relations_default_stereotypes[UmlRealize].join(space));
   classtable->setColumnStretchable (0, TRUE);
   
@@ -154,7 +154,7 @@ StereotypesDialog::StereotypesDialog()
   
   // Use case
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -165,11 +165,11 @@ StereotypesDialog::StereotypesDialog()
   (void) new QLabel(TR("relations\nstereotypes : "), grid);
   usecasetable = new MyTable(3, 1, grid);
   usecasetable->horizontalHeader()->setLabel(0, TR("Stereotypes"));
-  usecasetable->verticalHeader()->setLabel(0, QIcon(*generalisationButton), "");
+  usecasetable->verticalHeader()->setLabel(0, QIconSet(*generalisationButton), "");
   usecasetable->setText(0, 0, BrowserUseCase::relations_default_stereotypes[UmlGeneralisation].join(space));
-  usecasetable->verticalHeader()->setLabel(1, QIcon(*associationButton), "");
+  usecasetable->verticalHeader()->setLabel(1, QIconSet(*associationButton), "");
   usecasetable->setText(1, 0, BrowserUseCase::relations_default_stereotypes[UmlAssociation].join(space));
-  usecasetable->verticalHeader()->setLabel(2, QIcon(*dependencyButton), "");
+  usecasetable->verticalHeader()->setLabel(2, QIconSet(*dependencyButton), "");
   usecasetable->setText(2, 0, BrowserUseCase::relations_default_stereotypes[UmlDependency].join(space));
   usecasetable->setColumnStretchable (0, TRUE);
   usecasetable->setRowStretchable (0, TRUE);
@@ -180,7 +180,7 @@ StereotypesDialog::StereotypesDialog()
   
   // artifact tab
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -191,7 +191,7 @@ StereotypesDialog::StereotypesDialog()
   new QLabel(TR("relations\nstereotypes : "), grid);
   artifacttable = new MyTable(1, 1, grid);
   artifacttable->horizontalHeader()->setLabel(0, TR("Stereotypes"));
-  artifacttable->verticalHeader()->setLabel(0, QIcon(*dependencyButton), "");
+  artifacttable->verticalHeader()->setLabel(0, QIconSet(*dependencyButton), "");
   artifacttable->setText(0, 0, BrowserArtifact::relation_default_stereotypes.join(space));
   artifacttable->setColumnStretchable (0, TRUE);
   artifacttable->setRowStretchable (0, TRUE);
@@ -200,7 +200,7 @@ StereotypesDialog::StereotypesDialog()
   
   // view
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -224,7 +224,7 @@ StereotypesDialog::StereotypesDialog()
   
   // diagrams
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -268,7 +268,7 @@ StereotypesDialog::StereotypesDialog()
   
   // activities
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -324,7 +324,7 @@ StereotypesDialog::StereotypesDialog()
   
   // others
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -360,7 +360,7 @@ StereotypesDialog::~StereotypesDialog() {
 }
 
 void StereotypesDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -515,5 +515,5 @@ void StereotypesDialog::accept() {
   BrowserDeploymentDiagram::its_default_stereotypes =
     QStringList::split(space, deploymentdiagram_list->theText());
   
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }

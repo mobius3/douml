@@ -31,8 +31,6 @@
 #include "BrowserClass.h"
 #include "myio.h"
 #include "ToolCom.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 void ExceptionData::set_type(const AType & t) {
   type = t;
@@ -42,7 +40,7 @@ void ExceptionData::send_uml_def(ToolCom * com) {
   type.send_def(com);
 }
 
-void ExceptionData::save(Q3TextStream & st, QString & warning) const {
+void ExceptionData::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   type.save(st, warning, "  exception ", "  explicit_exception ");
 }

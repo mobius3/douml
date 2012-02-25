@@ -28,19 +28,17 @@
 #include "UmlArtifact.h"
 
 #include "util.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void defGetField_(UmlClass * base, const char * where, const char * oper,
 		  const char * field, UmlTypeSpec type,
 		  const char * if_def, const char * end_if, 
 		  const char * descr, UmlOperation *& op)
 {
-  Q3CString body = "  read_if_needed_();\n"
-    "  return " + Q3CString(where) + "."  + Q3CString(field) + ";\n";
+  QCString body = "  read_if_needed_();\n"
+    "  return " + QCString(where) + "."  + QCString(field) + ";\n";
   
   op = base->add_op(oper, PublicVisibility, type);
-  op->set_Description(" return the " + Q3CString(descr));
+  op->set_Description(" return the " + QCString(descr));
   op->set_cpp("const ${type} &", "", body , FALSE, if_def, end_if);
   op->set_java("${type}", "", body, FALSE);
 }
@@ -51,21 +49,21 @@ void defSetField_(UmlClass * base, const char * where, const char * oper,
 		  const char * descr, UmlOperation *& op)
 {
   op = base->add_op(oper, PublicVisibility, "bool", TRUE);
-  op->set_Description(" set the " + Q3CString(descr) + "\n"
+  op->set_Description(" set the " + QCString(descr) + "\n"
 		      "\n"
 		      " On error return FALSE in C++, produce a RuntimeException in Java");
   op->add_param(0, InputDirection, "v", type);
   
-  Q3CString body;
+  QCString body;
   
-  body = "  return set_it_(" + Q3CString(where) + "." + Q3CString(field) + ", v, " + Q3CString(cmd) + ");\n";
+  body = "  return set_it_(" + QCString(where) + "." + QCString(field) + ", v, " + QCString(cmd) + ");\n";
   op->set_cpp("${type}", "const ${t0} ${p0}", body, FALSE, if_def, end_if);
   
   body = "\
-  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + Q3CString(cmd) + ", v);\n\
+  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + QCString(cmd) + ", v);\n\
   UmlCom.check();\n\
 \n\
-  " + Q3CString(where) + "." + Q3CString(field) + " = v;\n";
+  " + QCString(where) + "." + QCString(field) + " = v;\n";
   op->set_java("void", "${t0} ${p0}", body, FALSE);
 }
 
@@ -74,12 +72,12 @@ void defGet_(UmlClass * base, const char * where, const char * oper,
 	    const char * descr, UmlOperation *& op)
 {
   op = base->add_op(oper, PublicVisibility, type);
-  op->set_Description(" return the " + Q3CString(descr));
+  op->set_Description(" return the " + QCString(descr));
   
-  Q3CString body;
+  QCString body;
   
   body = "  read_if_needed_();\n"
-    "  return " + Q3CString(where) + ";\n";
+    "  return " + QCString(where) + ";\n";
   
   op->set_cpp("const ${type} &", "", body, FALSE, if_def, end_if);
   op->set_java("${type}", "", body, FALSE);
@@ -90,21 +88,21 @@ void defSet_(UmlClass * base, const char * where, const char * oper,
 	    const char * end_if, const char * descr, UmlOperation *& op) 
 {
   op = base->add_op(oper, PublicVisibility, "bool", TRUE);
-  op->set_Description(" set the " + Q3CString(descr) + "\n"
+  op->set_Description(" set the " + QCString(descr) + "\n"
 		      "\n"
 		      " On error return FALSE in C++, produce a RuntimeException in Java");
   op->add_param(0, InputDirection, "v", type);
   
-  Q3CString body;
+  QCString body;
   
-  body = "  return set_it_(" + Q3CString(where) + ", v, " + Q3CString(cmd) + ");\n";
+  body = "  return set_it_(" + QCString(where) + ", v, " + QCString(cmd) + ");\n";
   op->set_cpp("${type}", "const ${t0} ${p0}", body, FALSE, if_def, end_if);
   
   body = "\
-  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + Q3CString(cmd) + ", v);\n\
+  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + QCString(cmd) + ", v);\n\
   UmlCom.check();\n\
 \n\
-  " + Q3CString(where) + " = v;\n";
+  " + QCString(where) + " = v;\n";
   op->set_java("void", "${t0} ${p0}", body, FALSE);
 }
 	      
@@ -113,10 +111,10 @@ void defGetPtr_(UmlClass * base, const char * where, const char * oper,
 		const char * descr, UmlOperation *& op)
 {
   op = base->add_op(oper, PublicVisibility, type);
-  op->set_Description(" return the " + Q3CString(descr));
+  op->set_Description(" return the " + QCString(descr));
   
-  Q3CString body = "  read_if_needed_();\n"
-    "  return " + Q3CString(where) + ";\n";
+  QCString body = "  read_if_needed_();\n"
+    "  return " + QCString(where) + ";\n";
       
   op->set_cpp("${type} *", "", body, FALSE, if_def, end_if);
   op->set_java("${type}", "", body, FALSE);
@@ -127,17 +125,17 @@ void defSetPtr_(UmlClass * base, const char * where, const char * oper,
 		const char * end_if, const char * descr, UmlOperation *& op) 
 {
   op = base->add_op(oper, PublicVisibility, "bool", TRUE);
-  op->set_Description(" set the "  + Q3CString(descr) + "\n"
+  op->set_Description(" set the "  + QCString(descr) + "\n"
 		      "\n"
 		      " On error return FALSE in C++, produce a RuntimeException in Java");
   op->add_param(0, InputDirection, "v", type);
   
-  Q3CString body;
+  QCString body;
   
   body = "\
-  UmlCom::send_cmd(_identifier, " + Q3CString(cmd) + ", (v == 0) ? (void *) v : ((UmlBaseItem *) v)->_identifier);\n\
+  UmlCom::send_cmd(_identifier, " + QCString(cmd) + ", (v == 0) ? (void *) v : ((UmlBaseItem *) v)->_identifier);\n\
   if (UmlCom::read_bool()) {\n\
-    " + Q3CString(where) + " = v;\n\
+    " + QCString(where) + " = v;\n\
     return TRUE;\n\
   }\n\
   else\n\
@@ -145,10 +143,10 @@ void defSetPtr_(UmlClass * base, const char * where, const char * oper,
   op->set_cpp("${type}", "${t0} * ${p0}", body, FALSE, if_def, end_if);
   
   body = "\
-  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + Q3CString(cmd) + ", (v == null) ? (long) 0 : v.identifier_());\n\
+  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + QCString(cmd) + ", (v == null) ? (long) 0 : v.identifier_());\n\
   UmlCom.check();\n\
 \n\
-  " + Q3CString(where) + " = v;\n";
+  " + QCString(where) + " = v;\n";
   op->set_java("void", "${t0} ${p0}", body, FALSE);
 }
 
@@ -157,21 +155,21 @@ void defSetRefType_(UmlClass * base, const char * where, const char * oper,
 		    const char * end_if, const char * descr, UmlOperation *& op)
 {
   op = base->add_op(oper, PublicVisibility, "bool", TRUE);
-  op->set_Description(" set the "  + Q3CString(descr) +  "\n"
+  op->set_Description(" set the "  + QCString(descr) +  "\n"
 		      "\n"
 		      " On error return FALSE in C++, produce a RuntimeException in Java");
   op->add_param(0, InputDirection, "v", type);
   
-  Q3CString body;
+  QCString body;
   
-  body = "  return set_it_(" + Q3CString(where) + ", v, " + Q3CString(cmd) + ");\n";
+  body = "  return set_it_(" + QCString(where) + ", v, " + QCString(cmd) + ");\n";
   op->set_cpp("${type}", "const ${t0} & ${p0}", body, FALSE, if_def, end_if);
   
   body = "\
-  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + Q3CString(cmd) + ", v);\n\
+  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + QCString(cmd) + ", v);\n\
   UmlCom.check();\n\
 \n\
-  " + Q3CString(where) + " = v;\n";
+  " + QCString(where) + " = v;\n";
   op->set_java("void", "${t0} ${p0}", body, FALSE);
 }
 
@@ -180,12 +178,12 @@ void defGetValue_(UmlClass * base, const char * where, const char * oper,
 	    const char * descr, UmlOperation *& op)
 {
   op = base->add_op(oper, PublicVisibility, type);
-  op->set_Description(" return the " + Q3CString(descr));
+  op->set_Description(" return the " + QCString(descr));
   
-  Q3CString body;
+  QCString body;
   
   body = "  read_if_needed_();\n"
-    "  return " + Q3CString(where) + ";\n";
+    "  return " + QCString(where) + ";\n";
   
   op->set_cpp("${type}", "", body, FALSE, if_def, end_if);
   op->set_java("${type}", "", body, FALSE);
@@ -196,21 +194,21 @@ void defSetBool_(UmlClass * base, const char * where, const char * oper,
 		 const char * descr, UmlOperation *& op)
 {
   op = base->add_op(oper, PublicVisibility, "bool", TRUE);
-  op->set_Description(Q3CString(descr) + "\n"
+  op->set_Description(QCString(descr) + "\n"
 		      "\n"
 		      " On error return FALSE in C++, produce a RuntimeException in Java");
   op->add_param(0, InputDirection, "v", "bool");
   
-  Q3CString body;
+  QCString body;
   
-  body = "  return set_it_(" + Q3CString(where) + ", v, " + Q3CString(cmd) + ");\n";
+  body = "  return set_it_(" + QCString(where) + ", v, " + QCString(cmd) + ");\n";
   op->set_cpp("${type}", "${t0} ${p0}", body, FALSE, if_def, end_if);
   
   body = "\
-  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + Q3CString(cmd) + ", (v) ? (byte) 1 : (byte) 0);\n\
+  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + QCString(cmd) + ", (v) ? (byte) 1 : (byte) 0);\n\
   UmlCom.check();\n\
 \n\
-  " + Q3CString(where) + " = v;\n";
+  " + QCString(where) + " = v;\n";
   op->set_java("void", "${t0} ${p0}", body, FALSE);
 }
 
@@ -219,17 +217,17 @@ void defSetEnum_(UmlClass * base, const char * where, const char * oper,
 		 const char * end_if, const char * descr, UmlOperation *& op)
 {
   op = base->add_op(oper, PublicVisibility, "bool", TRUE);
-  op->set_Description(" set the " + Q3CString(descr) + "\n"
+  op->set_Description(" set the " + QCString(descr) + "\n"
 		      "\n"
 		      " On error return FALSE in C++, produce a RuntimeException in Java");
   op->add_param(0, InputDirection, "v", type);
   
-  Q3CString body;
+  QCString body;
   
   body = "\
-  UmlCom::send_cmd(_identifier, " + Q3CString(cmd) + ", (char) v);\n\
+  UmlCom::send_cmd(_identifier, " + QCString(cmd) + ", (char) v);\n\
   if (UmlCom::read_bool()) {\n\
-    " + Q3CString(where) + " = v;\n\
+    " + QCString(where) + " = v;\n\
     return TRUE;\n\
   }\n\
   else\n\
@@ -237,10 +235,10 @@ void defSetEnum_(UmlClass * base, const char * where, const char * oper,
   op->set_cpp("${type}", "${t0} ${p0}", body, FALSE, if_def, end_if);
   
   body = "\
-  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + Q3CString(cmd) + ", (byte) v.value());\n\
+  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + QCString(cmd) + ", (byte) v.value());\n\
   UmlCom.check();\n\
 \n\
-  " + Q3CString(where) + " = v;\n";
+  " + QCString(where) + " = v;\n";
   op->set_java("void", "${t0} ${p0}", body, FALSE);
 }
 
@@ -249,17 +247,17 @@ void defSetBoolBitField_(UmlClass * base, const char * where, const char * oper,
 			 const char * descr, UmlOperation *& op)
 {
   op = base->add_op(oper, PublicVisibility, "bool", TRUE);
-  op->set_Description(Q3CString(descr) + "\n"
+  op->set_Description(QCString(descr) + "\n"
 		      "\n"
 		      " On error return FALSE in C++, produce a RuntimeException in Java");
   op->add_param(0, InputDirection, "v", "bool");
   
-  Q3CString body;
+  QCString body;
   
   body = "\
-  UmlCom::send_cmd(_identifier, " + Q3CString(cmd) + ", (char) v);\n\
+  UmlCom::send_cmd(_identifier, " + QCString(cmd) + ", (char) v);\n\
   if (UmlCom::read_bool()) {\n\
-    " + Q3CString(where) + " = v;\n\
+    " + QCString(where) + " = v;\n\
     return TRUE;\n\
   }\n\
   else\n\
@@ -267,10 +265,10 @@ void defSetBoolBitField_(UmlClass * base, const char * where, const char * oper,
   op->set_cpp("${type}", "${t0} ${p0}", body, FALSE, if_def, end_if);
   
   body = "\
-  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + Q3CString(cmd) + ", (v) ? 1 : 0);\n\
+  UmlCom.send_cmd(identifier_(), OnInstanceCmd." + QCString(cmd) + ", (v) ? 1 : 0);\n\
   UmlCom.check();\n\
 \n\
-  " + Q3CString(where) + " = v;\n";
+  " + QCString(where) + " = v;\n";
   op->set_java("void", "${t0} ${p0}", body, FALSE);
 }
 
@@ -279,7 +277,7 @@ void defSetBoolBitField_(UmlClass * base, const char * where, const char * oper,
 void include_umlcom(UmlClass * cl)
 {
   UmlArtifact * art = cl->associatedArtifact();
-  Q3CString s = art->cppSource();
+  QCString s = art->cppSource();
   
   s.insert(s.find("${includes}"), "#include \"UmlCom.h\"\n");
   art->set_CppSource(s);
@@ -287,7 +285,7 @@ void include_umlcom(UmlClass * cl)
 
 void include_umlcom(UmlArtifact * art)
 {
-  Q3CString s = art->cppSource();
+  QCString s = art->cppSource();
   
   s.insert(s.find("${includes}"), "#include \"UmlCom.h\"\n");
   art->set_CppSource(s);
@@ -335,7 +333,7 @@ void add_assoc_diag_ops(UmlClass * base, UmlClass * diag)
 }
 //
 
-void conditional(Q3CString & s, const char * if_def, const char * end_if)
+void conditional(QCString & s, const char * if_def, const char * end_if)
 {
   if (if_def != 0) {
     const char * p = s;
@@ -344,7 +342,7 @@ void conditional(Q3CString & s, const char * if_def, const char * end_if)
     while ((*p2 == ' ') || (*p2 == '\t'))
       p2 += 1;
     
-    s.insert(p2 - p,(const char*) (Q3CString("#ifdef ") + if_def + "\n"));
+    s.insert(p2 - p, QCString("#ifdef ") + if_def + "\n");
   }
   
   if (end_if != 0)
@@ -355,7 +353,7 @@ void conditional(Q3CString & s, const char * if_def, const char * end_if)
 
 //
 
-Q3CString java2Php(Q3CString s)
+QCString java2Php(QCString s)
 {
   int index;
   
@@ -374,7 +372,7 @@ Q3CString java2Php(Q3CString s)
   return s;
 }
 
-Q3CString java2Python(Q3CString s)
+QCString java2Python(QCString s)
 {
   int index;
   
@@ -393,7 +391,7 @@ Q3CString java2Python(Q3CString s)
   return s;
 }
 
-Q3CString cpp2Python(Q3CString s)
+QCString cpp2Python(QCString s)
 {
   int index;
   

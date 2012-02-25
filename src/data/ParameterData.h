@@ -26,7 +26,7 @@
 #ifndef PARAMETERDATA_H
 #define PARAMETERDATA_H
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "PinParamData.h"
 
@@ -56,7 +56,7 @@ class ParameterData : public SimpleData, public PinParamData {
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * &, char * &);
     
   protected slots:

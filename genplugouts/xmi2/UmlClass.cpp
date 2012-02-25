@@ -4,11 +4,8 @@
 
 #include "UmlRelation.h"
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 void UmlClass::write(FileOut & out) {
-  Q3CString st = stereotype();
+  QCString st = stereotype();
   
   if (st == "metaclass")
     return;
@@ -53,7 +50,7 @@ void UmlClass::write(FileOut & out) {
 		 ?"Enumeration"
 		 : ((is_stereotype) ? "Stereotype" : "Class")))))
     << "\" name=\"";
-  out.quote((const char*)name());//[jasa] ambiguous call
+  out.quote(name());
   out << '"';
   out.id(this);
   write_visibility(out);
@@ -93,7 +90,7 @@ void UmlClass::write(FileOut & out) {
   write_formals(out);
   write_actuals(out);
   
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   unsigned i;
   
@@ -101,7 +98,7 @@ void UmlClass::write(FileOut & out) {
     ch[i]->write(out);
   
   if (is_stereotype) {
-    Q3CString path;
+    QCString path;
     
     if (propertyValue("stereotypeIconPath", path) && !path.isEmpty()) {
       out.indent();
@@ -124,7 +121,7 @@ void UmlClass::write(FileOut & out) {
 }
 
 void UmlClass::write_formals(FileOut & out) {
-  Q3ValueList<UmlFormalParameter> formal_params = formals();
+  QValueList<UmlFormalParameter> formal_params = formals();
     
   if (!formal_params.isEmpty()) {
     out.indent();
@@ -137,7 +134,7 @@ void UmlClass::write_formals(FileOut & out) {
     out.indent(+1);
 
     int rank;
-    Q3ValueList<UmlFormalParameter>::ConstIterator iter;
+    QValueList<UmlFormalParameter>::ConstIterator iter;
 
     for (iter = formal_params.begin(), rank = 0;
 	 iter != formal_params.end();
@@ -151,8 +148,8 @@ void UmlClass::write_formals(FileOut & out) {
 }
 
 void UmlClass::write_actuals(FileOut & out) {
-  Q3ValueList<UmlActualParameter> actual_params = actuals();
-  Q3ValueList<UmlActualParameter>::ConstIterator iter;
+  QValueList<UmlActualParameter> actual_params = actuals();
+  QValueList<UmlActualParameter>::ConstIterator iter;
   int rank;
   UmlClass * super = 0;
 
@@ -197,7 +194,7 @@ void UmlClass::write_actuals(FileOut & out) {
 }
 
 void UmlClass::search_class_assoc() {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)
@@ -210,7 +207,7 @@ UmlClass * UmlClass::set_assoc(UmlRelation * rel) {
     return this;
   }
   else {
-    Q3CString msg = "warning : class '" +  name() +
+    QCString msg = "warning : class '" +  name() +
       "' is an association class associated with several relations<br>";
     
     UmlCom::trace(msg);
@@ -218,10 +215,10 @@ UmlClass * UmlClass::set_assoc(UmlRelation * rel) {
   }
 }
 
-void UmlClass::get_extended(Q3ValueList<Q3CString> & r) {
+void UmlClass::get_extended(QValueList<QCString> & r) {
   r.clear();
   
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   unsigned i;
   

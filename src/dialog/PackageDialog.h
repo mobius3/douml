@@ -26,12 +26,10 @@
 #ifndef PACKAGEDIALOG_H
 #define  PACKAGEDIALOG_H
 
-#include <q3table.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtable.h>
+#include <qtabdialog.h>
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QPushButton;
 
@@ -42,16 +40,16 @@ class BrowserNode;
 class KeyValuesTable;
 class BodyDialog;
 
-class PackageDialog : public Q3TabDialog {
+class PackageDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     QWidget * umltab;
     PackageData * pa;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     // C++
     QWidget * cpptab;

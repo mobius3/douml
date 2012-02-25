@@ -23,10 +23,7 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h> 
 
 #include "UmlRelation.h"
 #include "UmlClass.h"
@@ -38,12 +35,12 @@
 #include "UmlCom.h"
 
 
-void UmlRelation::generate_imports(QTextOStream & f, Q3CString & made) {
+void UmlRelation::generate_imports(QTextOStream & f, QCString & made) {
   if (!pythonDecl().isEmpty()) {
     bool from;
     
     if (relationKind() == aDependency) {
-      Q3CString s = stereotype();
+      QCString s = stereotype();
       
       if (s == "import")
 	from = FALSE;
@@ -80,7 +77,7 @@ void UmlRelation::generate_inherit(const char *& sep, QTextOStream & f) {
 	p += 7;
       }
       else if (*p == '@') {
-	Q3CString indent;
+	QCString indent;
 	BooL indent_needed = FALSE;
 	
 	manage_alias(p, f, indent, indent_needed);
@@ -91,9 +88,9 @@ void UmlRelation::generate_inherit(const char *& sep, QTextOStream & f) {
   }
 }
 
-void UmlRelation::generate(QTextOStream & f, const Q3CString &,
-			   Q3CString indent, BooL & indent_needed,
-			   int &, const Q3CString & self) {
+void UmlRelation::generate(QTextOStream & f, const QCString &,
+			   QCString indent, BooL & indent_needed,
+			   int &, const QCString & self) {
   switch (relationKind()) {
   case aDependency:
   case aGeneralisation:
@@ -169,7 +166,7 @@ void UmlRelation::generate(QTextOStream & f, const Q3CString &,
 	f << indent;
       }
       
-      const Q3CString & v = defaultValue();
+      const QCString & v = defaultValue();
       
       if (!v.isEmpty()) {
 	if (need_equal(p, v))

@@ -29,8 +29,6 @@
 #include "UmlCanvas.h"
 #include "UmlEnum.h"
 #include "DiagramItem.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #define DIAGRAMCANVAS_Z 2000
 
@@ -38,7 +36,7 @@ class BrowserNode;
 class LabelCanvas;
 class StereotypePropertiesCanvas;
 
-class DiagramCanvas : public Q3CanvasRectangle, public DiagramItem {
+class DiagramCanvas : public QCanvasRectangle, public DiagramItem {
   protected:
     BrowserNode * browser_node;
     LabelCanvas * label;
@@ -110,7 +108,7 @@ class DiagramCanvas : public Q3CanvasRectangle, public DiagramItem {
     
     virtual void check_stereotypeproperties();
     virtual bool get_show_stereotype_properties() const;
-    void save_stereotype_property(Q3TextStream & st, QString &) const;
+    void save_stereotype_property(QTextStream & st, QString &) const;
     void read_stereotype_property(char * & st, char *& k);
     
     static void draw_actor(QPainter * p, QRect r);

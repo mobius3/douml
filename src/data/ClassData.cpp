@@ -28,11 +28,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "BrowserClass.h"
 #include "ClassData.h"
@@ -93,7 +88,7 @@ ClassData::ClassData(const ClassData * model, BrowserNode * bn)
       formals[index] = mformals[index];
   }
 
-  Q3PtrListIterator<ActualParamData> it(model->actuals);
+  QListIterator<ActualParamData> it(model->actuals);
   BrowserClass * cl = 0;
   
   for (; it.current(); ++it) {
@@ -170,8 +165,8 @@ void ClassData::inherit_or_instantiate(BrowserClass *) {
 }
 
 void ClassData::update_actuals(BrowserClass * parent,
-			       Q3PtrList<ActualParamData> & new_actuals,
-			       Q3PtrList<ActualParamData> & managed) {
+			       QList<ActualParamData> & new_actuals,
+			       QList<ActualParamData> & managed) {
   if (((BrowserNode *) parent->parent())->get_type() == UmlClass)
     update_actuals((BrowserClass * ) parent->parent(), new_actuals, managed);
   
@@ -221,9 +216,9 @@ void ClassData::update_actuals() {
     return;
   
   // an inherited parent was modified/deleted, updates all actuals
-  Q3PtrList<BrowserNode> parents = browser_node->parents();
-  Q3PtrList<ActualParamData> new_actuals;
-  Q3PtrList<ActualParamData> managed;
+  QList<BrowserNode> parents = browser_node->parents();
+  QList<ActualParamData> new_actuals;
+  QList<ActualParamData> managed;
   BrowserClass * parent;
   
   for (parent = (BrowserClass *) parents.first();
@@ -247,7 +242,7 @@ void ClassData::update_actuals() {
   emit actuals_changed();
 }
 
-void ClassData::get_actuals(Q3PtrList<ActualParamData> & l, BrowserClass * parent) {
+void ClassData::get_actuals(QList<ActualParamData> & l, BrowserClass * parent) {
   if (((BrowserNode *) parent->parent())->get_type() == UmlClass)
     get_actuals(l, (BrowserClass * ) parent->parent());
   
@@ -278,11 +273,11 @@ void ClassData::get_actuals(Q3PtrList<ActualParamData> & l, BrowserClass * paren
 
 // returns the actuals forms associated to inheritence of 'parent'
 QString ClassData::get_actuals(BrowserClass * parent) {
-  Q3PtrList<ActualParamData> l;
+  QList<ActualParamData> l;
   
   get_actuals(l, parent);
   
-  Q3PtrList<BrowserNode> parents = parent->parents();
+  QList<BrowserNode> parents = parent->parents();
 
   for (parent = (BrowserClass *) parents.first();
        parent != 0;
@@ -483,7 +478,7 @@ bool ClassData::reference(BrowserClass * target) const {
 	(formals[i].get_extends().type == target))
       return TRUE;
   
-  Q3PtrListIterator<ActualParamData> ita(actuals);
+  QListIterator<ActualParamData> ita(actuals);
 
   for (; ita.current(); ++ita)
     if (ita.current()->get_value().type == target)
@@ -589,7 +584,7 @@ bool ClassData::tool_cmd(ToolCom * com, const char * args,
 	break;
       case setJavaAnnotationCmd:
 	{
-	  Q3CString s = args;
+	  QCString s = args;
 	  
 	  s = s.stripWhiteSpace();
 	  if (! s.isEmpty())
@@ -892,7 +887,7 @@ void ClassData::send_idl_def(ToolCom * com) {
 
 //
 
-void ClassData::save(Q3TextStream & st, QString & warning) const {
+void ClassData::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   
   if (is_abstract)
@@ -921,7 +916,7 @@ void ClassData::save(Q3TextStream & st, QString & warning) const {
   
   if (actuals.count() != 0) {
     st << "nactuals " << actuals.count();
-    Q3PtrListIterator<ActualParamData> ita(actuals);
+    QListIterator<ActualParamData> ita(actuals);
     for (; ita.current(); ++ita)
       ita.current()->save(st, warning);
     nl_indent(st);  

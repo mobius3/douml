@@ -10,9 +10,6 @@
 #include "UmlCom.h"
 #include "ClassGlobalCmd.h"
 #include "PackageGlobalCmd.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 UmlClass * UmlBaseClass::create(UmlItem * parent, const char * s)
 {
   return (UmlClass *) parent->create_(aClass, s);
@@ -57,10 +54,10 @@ bool UmlBaseClass::set_BaseType(const UmlTypeSpec & t) {
   return set_it_(_base_type, t, setBaseTypeCmd);
 }
 
-Q3ValueList<UmlFormalParameter> UmlBaseClass::formals() {
+QValueList<UmlFormalParameter> UmlBaseClass::formals() {
   UmlCom::send_cmd(_identifier, formalsCmd);
   
-  Q3ValueList<UmlFormalParameter> formals;
+  QValueList<UmlFormalParameter> formals;
   
   for (unsigned n = UmlCom::read_unsigned(); n; n -= 1) {
     UmlFormalParameter f;
@@ -89,10 +86,10 @@ bool UmlBaseClass::replaceFormal(unsigned int rank, const UmlFormalParameter & f
   return UmlCom::read_bool();
 }
 
-Q3ValueList<UmlActualParameter> UmlBaseClass::actuals() {
+QValueList<UmlActualParameter> UmlBaseClass::actuals() {
   UmlCom::send_cmd(_identifier, actualsCmd);
   
-  Q3ValueList<UmlActualParameter> actuals;
+  QValueList<UmlActualParameter> actuals;
   
   for (unsigned n = UmlCom::read_unsigned(); n; n -= 1) {
     UmlActualParameter a;
@@ -132,10 +129,10 @@ UmlArtifact * UmlBaseClass::associatedArtifact() {
   return (UmlArtifact *) UmlBaseItem::read_();
 }
 
-const Q3PtrVector<UmlComponent> UmlBaseClass::associatedComponents() {
+const QVector<UmlComponent> UmlBaseClass::associatedComponents() {
   UmlCom::send_cmd(_identifier, assocComponentCmd);
 
-  Q3PtrVector<UmlComponent> result;
+  QVector<UmlComponent> result;
   unsigned n = UmlCom::read_unsigned();
 
   result.resize(n);
@@ -344,7 +341,7 @@ bool UmlBaseClass::set_isIdlCustom(bool y) {
 }
 #endif
 
-UmlClass * UmlBaseClass::get(const Q3CString & n, const UmlPackage * p)
+UmlClass * UmlBaseClass::get(const QCString & n, const UmlPackage * p)
 {
   if (p == 0) {
     UmlClass * x = classes[n];
@@ -359,7 +356,7 @@ UmlClass * UmlBaseClass::get(const Q3CString & n, const UmlPackage * p)
   return (UmlClass *) UmlBaseItem::read_();
 }
 
-UmlClass * UmlBaseClass::findStereotype(Q3CString s, bool caseSensitive)
+UmlClass * UmlBaseClass::findStereotype(QCString s, bool caseSensitive)
 {
   UmlCom::send_cmd(packageGlobalCmd, findStereotypeCmd,
                    (caseSensitive) ? "y" : "n", (const char *) s);
@@ -377,9 +374,9 @@ void UmlBaseClass::unload(bool rec, bool del) {
 }
 
 //key includes package/class-container
-Q3Dict<UmlClass> UmlBaseClass::classes(1001);
+QDict<UmlClass> UmlBaseClass::classes(1001);
 
- UmlBaseClass::UmlBaseClass(void * id, const Q3CString & n) 
+ UmlBaseClass::UmlBaseClass(void * id, const QCString & n) 
     : UmlClassMember(id, n) {
   _assoc_diagram = 0;
   
@@ -452,12 +449,12 @@ void UmlBaseClass::reread_if_needed_() {
   }
 }
 
-bool UmlBaseClass::set_Name(const Q3CString & s) {
+bool UmlBaseClass::set_Name(const QCString & s) {
   if (!UmlBaseItem::set_Name(s))
     return FALSE;
 
-  const Q3PtrVector<UmlItem> ch = children();
-  Q3CString destr = "~" + name();
+  const QVector<UmlItem> ch = children();
+  QCString destr = "~" + name();
 
   for (unsigned i = 0; i != ch.size(); i += 1) {
     if (ch[i]->kind() == anOperation) {

@@ -28,8 +28,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "BrowserExpansionRegion.h"
 #include "ExpansionRegionData.h"
@@ -98,7 +96,7 @@ bool ExpansionRegionData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void ExpansionRegionData::save(Q3TextStream & st, QString & warning) const {
+void ExpansionRegionData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   nl_indent(st);
 

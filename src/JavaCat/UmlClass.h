@@ -27,9 +27,6 @@
 #define UMLCLASS_H
 
 #include "UmlBaseClass.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
 
 #ifdef ROUNDTRIP
 class Class;
@@ -48,27 +45,27 @@ class UmlClass : public UmlBaseClass {
 #endif
   
   public:
-    UmlClass(void * id, const Q3CString & n);
+    UmlClass(void * id, const QCString & n);
 #ifdef REVERSE
     void need_artifact(const QStringList & imports, bool remove_java_lang,
 		       const QStringList & static_imports,
-		       const Q3CString & path, UmlArtifact *& cp);
+		       const QCString & path, UmlArtifact *& cp);
     
 # ifdef ROUNDTRIP
     virtual void upload(ClassContainer * cnt);
     virtual bool set_roundtrip_expected();
-    virtual void mark_useless(Q3PtrList<UmlItem> & l);
+    virtual void mark_useless(QList<UmlItem> & l);
     virtual void scan_it(int & n);
     virtual void send_it(int n);
     bool is_created() const { return created; }
     void set_created() { created = TRUE; }
     Class * get_class() const { return the_class; }
-    UmlItem * search_for_att_rel(const Q3CString & name);
-    void reorder(Q3PtrList<UmlItem> & expected_order);
+    UmlItem * search_for_att_rel(const QCString & name);
+    void reorder(QList<UmlItem> & expected_order);
 # endif
 #endif
-    static void manage_generic(Q3CString & form, UmlTypeSpec & typespec,
-			       Q3CString str_actuals, const char * k);
+    static void manage_generic(QCString & form, UmlTypeSpec & typespec,
+			       QCString str_actuals, const char * k);
 };
 
 #endif

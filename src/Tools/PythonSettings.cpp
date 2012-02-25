@@ -8,8 +8,6 @@
 #include "PythonSettingsCmd.h"
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 bool PythonSettings::isPython_2_2()
 {
@@ -29,7 +27,7 @@ bool PythonSettings::set_IsPython_2_2(bool y)
       return FALSE;
 }
 
-Q3CString PythonSettings::indentStep()
+QCString PythonSettings::indentStep()
 {
     read_if_needed_();
   
@@ -59,7 +57,7 @@ bool PythonSettings::set_UseDefaults(bool y)
   return UmlCom::read_bool();
 }
 
-Q3CString PythonSettings::relationAttributeStereotype(const Q3CString & s)
+QCString PythonSettings::relationAttributeStereotype(const QCString & s)
 {
   read_if_needed_();
   
@@ -68,7 +66,7 @@ Q3CString PythonSettings::relationAttributeStereotype(const Q3CString & s)
   return (b) ? b->python : s;
 }
 
-bool PythonSettings::set_RelationAttributeStereotype(Q3CString s, Q3CString v)
+bool PythonSettings::set_RelationAttributeStereotype(QCString s, QCString v)
 {
   read_if_needed_();
   UmlCom::send_cmd(pythonSettingsCmd, setPythonRelationAttributeStereotypeCmd, s, v);
@@ -85,14 +83,14 @@ bool PythonSettings::set_RelationAttributeStereotype(Q3CString s, Q3CString v)
     return FALSE;
 }
 
-Q3CString PythonSettings::relationAttributeUmlStereotype(const Q3CString & s)
+QCString PythonSettings::relationAttributeUmlStereotype(const QCString & s)
 {
   read_if_needed_();
   
   return UmlSettings::uml_rel_attr_stereotype(s, &UmlStereotype::python);
 }
 
-Q3CString PythonSettings::classStereotype(const Q3CString & s)
+QCString PythonSettings::classStereotype(const QCString & s)
 {
   read_if_needed_();
   
@@ -101,7 +99,7 @@ Q3CString PythonSettings::classStereotype(const Q3CString & s)
   return (b) ? b->python : s;
 }
 
-bool PythonSettings::set_ClassStereotype(Q3CString s, Q3CString v)
+bool PythonSettings::set_ClassStereotype(QCString s, QCString v)
 {
   read_if_needed_();
   UmlCom::send_cmd(pythonSettingsCmd, setPythonClassStereotypeCmd, s, v);
@@ -118,31 +116,31 @@ bool PythonSettings::set_ClassStereotype(Q3CString s, Q3CString v)
     return FALSE;
 }
 
-Q3CString PythonSettings::classUmlStereotype(const Q3CString & s)
+QCString PythonSettings::classUmlStereotype(const QCString & s)
 {
   read_if_needed_();
   
   return UmlSettings::uml_class_stereotype(s, &UmlStereotype::python);
 }
 
-Q3CString PythonSettings::get_import(const Q3CString & s)
+QCString PythonSettings::get_import(const QCString & s)
 {
   read_if_needed_();
   
-  Q3CString * r = _map_imports[s];
+  QCString * r = _map_imports[s];
   
-  return (r) ? *r : Q3CString(0);
+  return (r) ? *r : QCString(0);
 }
 
-bool PythonSettings::set_Import(Q3CString s, Q3CString v)
+bool PythonSettings::set_Import(QCString s, QCString v)
 {
   read_if_needed_();
   UmlCom::send_cmd(pythonSettingsCmd, setPythonImportCmd, s, v);
   if (UmlCom::read_bool()) {
-    Q3CString * r = _map_imports.take(s);
+    QCString * r = _map_imports.take(s);
     
     if (!v.isEmpty())
-      _map_imports.insert(s, new Q3CString(v));
+      _map_imports.insert(s, new QCString(v));
     if (r)
       delete r;
     return TRUE;
@@ -151,14 +149,14 @@ bool PythonSettings::set_Import(Q3CString s, Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PythonSettings::rootDir()
+const QCString & PythonSettings::rootDir()
 {
   read_if_needed_();
   
   return _root;
 }
 
-bool PythonSettings::set_RootDir(Q3CString v)
+bool PythonSettings::set_RootDir(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonRootdirCmd, v);
   if (UmlCom::read_bool()) {
@@ -169,14 +167,14 @@ bool PythonSettings::set_RootDir(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PythonSettings::sourceContent()
+const QCString & PythonSettings::sourceContent()
 {
   read_if_needed_();
   
   return _src_content;
 }
 
-bool PythonSettings::set_SourceContent(Q3CString v)
+bool PythonSettings::set_SourceContent(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonSourceContentCmd, v);
   if (UmlCom::read_bool()) {
@@ -187,14 +185,14 @@ bool PythonSettings::set_SourceContent(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PythonSettings::sourceExtension()
+const QCString & PythonSettings::sourceExtension()
 {
   read_if_needed_();
   
   return _ext; 
 }
 
-bool PythonSettings::set_SourceExtension(Q3CString v)
+bool PythonSettings::set_SourceExtension(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonSourceExtensionCmd, v);
   if (UmlCom::read_bool()) {
@@ -205,14 +203,14 @@ bool PythonSettings::set_SourceExtension(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PythonSettings::classDecl()
+const QCString & PythonSettings::classDecl()
 {
   read_if_needed_();
   
   return _class_decl;
 }
 
-bool PythonSettings::set_ClassDecl(Q3CString v)
+bool PythonSettings::set_ClassDecl(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonClassDeclCmd, v);
   if (UmlCom::read_bool()) {
@@ -223,14 +221,14 @@ bool PythonSettings::set_ClassDecl(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PythonSettings::externalClassDecl()
+const QCString & PythonSettings::externalClassDecl()
 {
   read_if_needed_();
   
   return _external_class_decl;
 }
 
-bool PythonSettings::set_ExternalClassDecl(Q3CString v)
+bool PythonSettings::set_ExternalClassDecl(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonExternalClassDeclCmd, v);
   if (UmlCom::read_bool()) {
@@ -241,14 +239,14 @@ bool PythonSettings::set_ExternalClassDecl(Q3CString v)
     return FALSE;
 }
 
-Q3CString PythonSettings::enumDecl()
+QCString PythonSettings::enumDecl()
 {
   read_if_needed_();
   
   return _enum_decl;
 }
 
-bool PythonSettings::set_EnumDecl(Q3CString v)
+bool PythonSettings::set_EnumDecl(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonEnumDeclCmd, v);
   if (UmlCom::read_bool()) {
@@ -259,19 +257,19 @@ bool PythonSettings::set_EnumDecl(Q3CString v)
     return FALSE;
 }
 
-unsigned PythonSettings::mult_column(const Q3CString & mult)
+unsigned PythonSettings::mult_column(const QCString & mult)
 {
   return (mult.isEmpty() || (mult == "1")) ? 0 : 1;
 }
 
-const Q3CString & PythonSettings::attributeDecl(const char * multiplicity)
+const QCString & PythonSettings::attributeDecl(const char * multiplicity)
 {
   read_if_needed_();
 
   return _attr_decl[mult_column(multiplicity)];
 }
 
-bool PythonSettings::set_AttributeDecl(const char * multiplicity, Q3CString v)
+bool PythonSettings::set_AttributeDecl(const char * multiplicity, QCString v)
 {
   read_if_needed_();
   UmlCom::send_cmd(pythonSettingsCmd, setPythonAttributeDeclCmd, multiplicity, v);
@@ -283,14 +281,14 @@ bool PythonSettings::set_AttributeDecl(const char * multiplicity, Q3CString v)
     return FALSE;
 }
 
-Q3CString PythonSettings::enumItemDecl()
+QCString PythonSettings::enumItemDecl()
 {
   read_if_needed_();
   
   return _enum_item_decl;
 }
 
-bool PythonSettings::set_EnumItemDecl(Q3CString v)
+bool PythonSettings::set_EnumItemDecl(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonEnumItemDeclCmd, v);
   if (UmlCom::read_bool()) {
@@ -301,14 +299,14 @@ bool PythonSettings::set_EnumItemDecl(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PythonSettings::relationDecl(bool composition, const char * multiplicity)
+const QCString & PythonSettings::relationDecl(bool composition, const char * multiplicity)
 {
   read_if_needed_();
   
   return _rel_decl[(composition) ? 1 : 0][mult_column(multiplicity)];
 }
 
-bool PythonSettings::set_RelationDecl(bool composition, const char * multiplicity, Q3CString v)
+bool PythonSettings::set_RelationDecl(bool composition, const char * multiplicity, QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonRelationDeclCmd, composition, multiplicity, v);
   if (UmlCom::read_bool()) {
@@ -319,14 +317,14 @@ bool PythonSettings::set_RelationDecl(bool composition, const char * multiplicit
     return FALSE;
 }
 
-const Q3CString & PythonSettings::operationDef()
+const QCString & PythonSettings::operationDef()
 {
   read_if_needed_();
   
   return _oper_def;
 }
 
-bool PythonSettings::set_OperationDef(Q3CString v)
+bool PythonSettings::set_OperationDef(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonOperationDefCmd, v);
   if (UmlCom::read_bool()) {
@@ -337,14 +335,14 @@ bool PythonSettings::set_OperationDef(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PythonSettings::getName()
+const QCString & PythonSettings::getName()
 {
   read_if_needed_();
   
   return _get_name;
 }
 
-bool PythonSettings::set_GetName(Q3CString v)
+bool PythonSettings::set_GetName(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonGetNameCmd, v);
   if (UmlCom::read_bool()) {
@@ -355,14 +353,14 @@ bool PythonSettings::set_GetName(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PythonSettings::setName()
+const QCString & PythonSettings::setName()
 {
   read_if_needed_();
   
   return _set_name;
 }
 
-bool PythonSettings::set_SetName(Q3CString v)
+bool PythonSettings::set_SetName(QCString v)
 {
   UmlCom::send_cmd(pythonSettingsCmd, setPythonSetNameCmd, v);
   if (UmlCom::read_bool()) {
@@ -379,33 +377,33 @@ bool PythonSettings::_2_2;
 
 bool PythonSettings::_operation_3;
 
-Q3CString PythonSettings::_indent_step;
+QCString PythonSettings::_indent_step;
 
-Q3CString PythonSettings::_root;
+QCString PythonSettings::_root;
 
-Q3CString PythonSettings::_class_decl;
+QCString PythonSettings::_class_decl;
 
-Q3CString PythonSettings::_external_class_decl;
+QCString PythonSettings::_external_class_decl;
 
-Q3CString PythonSettings::_enum_decl;
+QCString PythonSettings::_enum_decl;
 
-Q3CString PythonSettings::_attr_decl[2/*multiplicity*/];
+QCString PythonSettings::_attr_decl[2/*multiplicity*/];
 
-Q3CString PythonSettings::_enum_item_decl;
+QCString PythonSettings::_enum_item_decl;
 
-Q3CString PythonSettings::_rel_decl[2/*relation kind*/][2/*multiplicity*/];
+QCString PythonSettings::_rel_decl[2/*relation kind*/][2/*multiplicity*/];
 
-Q3CString PythonSettings::_oper_def;
+QCString PythonSettings::_oper_def;
 
-Q3CString PythonSettings::_get_name;
+QCString PythonSettings::_get_name;
 
-Q3CString PythonSettings::_set_name;
+QCString PythonSettings::_set_name;
 
-Q3CString PythonSettings::_src_content;
+QCString PythonSettings::_src_content;
 
-Q3CString PythonSettings::_ext;
+QCString PythonSettings::_ext;
 
-Q3Dict<Q3CString> PythonSettings::_map_imports;
+QDict<QCString> PythonSettings::_map_imports;
 
 void PythonSettings::read_()
 {
@@ -434,10 +432,10 @@ void PythonSettings::read_()
       _map_imports.resize(n);
     
     for (index = 0; index != n; index += 1) {
-      Q3CString t = UmlCom::read_string();
-      Q3CString i = UmlCom::read_string();
+      QCString t = UmlCom::read_string();
+      QCString i = UmlCom::read_string();
       
-      _map_imports.insert(t, new Q3CString(i));
+      _map_imports.insert(t, new QCString(i));
     }
     
     _src_content = UmlCom::read_string();

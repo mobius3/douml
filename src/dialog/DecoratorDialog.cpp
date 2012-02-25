@@ -30,10 +30,7 @@
 #include <qlabel.h> 
 #include <qlayout.h> 
 #include <qpushbutton.h>
-#include <q3combobox.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <qcombobox.h>
 
 #include "DecoratorDialog.h"
 #include "UmlDesktop.h"
@@ -50,7 +47,7 @@ DecoratorDialog::DecoratorDialog(QWidget * parent, QString & s, bool visit)
     : QDialog(parent, "decorator editor", TRUE), value(s) {
   setCaption(TR("decorator dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+  QVBoxLayout * vbox = new QVBoxLayout(this);
 
   vbox->setMargin(5);
 
@@ -74,7 +71,7 @@ DecoratorDialog::DecoratorDialog(QWidget * parent, QString & s, bool visit)
     label->setAlignment(Qt::AlignCenter);
     vbox->addWidget(label);
     
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout(vbox);
     QPushButton * add_button;
     
     hbox->setMargin(5);
@@ -82,7 +79,7 @@ DecoratorDialog::DecoratorDialog(QWidget * parent, QString & s, bool visit)
     hbox->addWidget(add_button);  
     connect(add_button, SIGNAL(clicked()), this, SLOT(add_decorator()));
     
-    cb = new Q3ComboBox(FALSE, this);
+    cb = new QComboBox(FALSE, this);
     
     QSizePolicy sp = cb->sizePolicy();
     
@@ -109,7 +106,7 @@ DecoratorDialog::DecoratorDialog(QWidget * parent, QString & s, bool visit)
     
     vbox->addWidget(new QLabel("", this));
     
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout(vbox);
     hbox->setMargin(5);
     QPushButton * accept = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -132,7 +129,7 @@ DecoratorDialog::DecoratorDialog(QWidget * parent, QString & s, bool visit)
     
     vbox->addWidget(new QLabel("", this));
     
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout(vbox);
     
     hbox->setMargin(5);
     QPushButton * close = new QPushButton(TR("&Close"), this);

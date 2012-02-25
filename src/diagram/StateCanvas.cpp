@@ -27,11 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "StateCanvas.h"
 #include "TransitionCanvas.h"
@@ -240,8 +238,8 @@ void StateCanvas::prepare_for_move(bool on_resize) {
     DiagramCanvas::prepare_for_move(on_resize);
     
     // select sub nodes
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QCanvasItemList all = canvas()->allItems();
+    QCanvasItemList::Iterator cit;
     UmlCanvas * canvas = the_canvas();
     
     for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -310,13 +308,13 @@ void StateCanvas::prepare_for_move(bool on_resize) {
 }
 
 void StateCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   double scale = the_canvas()->zoom();
     
   setSize((int) (width_scale100*scale), (int) (height_scale100*scale));
   compute_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void StateCanvas::modified() {
@@ -379,8 +377,8 @@ void StateCanvas::force_sub_inside(bool resize_it) {
   // inside of the state / region
   // or resize state to contains sub elts if resize_it
   
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   int resize_left = 0;
   int resize_right = 0;
   int resize_top = 0;
@@ -588,7 +586,7 @@ void StateCanvas::force_sub_inside(bool resize_it) {
 }
 
 int StateCanvas::resize_to_show_regions() {
-  Q3ListViewItem * child = browser_node->firstChild();
+  QListViewItem * child = browser_node->firstChild();
   int nr = 0;
   
   while (child != 0) {
@@ -607,8 +605,8 @@ int StateCanvas::resize_to_show_regions() {
     DiagramCanvas::resize(width() + d, height());
   
   // to recompute regions rect
-  Q3CanvasRectangle::setVisible(FALSE);
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(TRUE);
   canvas()->update();	
   if (! was_drawn)
     compute_regions();
@@ -645,8 +643,8 @@ void StateCanvas::force_inside(DiagramCanvas * elt, bool resize_it)
   }
 
   if (container_state != 0) {
-    Q3CanvasItemList all = elt->the_canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QCanvasItemList all = elt->the_canvas()->allItems();
+    QCanvasItemList::Iterator cit;
     
     for (cit = all.begin(); cit != all.end(); ++cit) {
       if ((*cit)->visible()) {
@@ -734,8 +732,8 @@ void StateCanvas::force_inside(DiagramCanvas * elt, bool resize_it)
 }
 
 void StateCanvas::force_sub_upper() {
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   
   for (cit = all.begin(); cit != all.end(); ++cit) {
     if ((*cit)->visible()) {
@@ -784,7 +782,7 @@ void StateCanvas::draw(QPainter & p) {
   was_drawn = TRUE; // to know compute_regions() will not have to be called
   
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QRect re = r;    
   QBrush brsh = p.brush();
@@ -807,7 +805,7 @@ void StateCanvas::draw(QPainter & p) {
       if (fp != 0)
 	fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		" x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"10\" />\n",
-		QColor(::Qt::darkGray).rgb()&0xffffff,
+		::Qt::darkGray.rgb()&0xffffff,
 		r.left() + shadow, r.top() + shadow, r.width() - 1, r.height() - 1);
 
       p.setPen(::Qt::SolidLine);
@@ -926,7 +924,7 @@ void StateCanvas::draw(QPainter & p) {
   int nregion = 0;
   
   if (ref == 0) {
-    Q3ListViewItem * child = browser_node->firstChild();
+    QListViewItem * child = browser_node->firstChild();
     
     while (child != 0) {
       if (!((BrowserNode *) child)->deletedp() &&
@@ -952,7 +950,7 @@ void StateCanvas::draw(QPainter & p) {
 
       p.setPen(::Qt::DashLine);
       
-      Q3ListViewItem * child = browser_node->firstChild();
+      QListViewItem * child = browser_node->firstChild();
       
       for (;;) {
 	while (((BrowserNode *) child)->deletedp() ||
@@ -1073,7 +1071,7 @@ void StateCanvas::compute_regions() {
     } 
     
     
-    Q3ListViewItem * child = browser_node->firstChild();
+    QListViewItem * child = browser_node->firstChild();
     
     while (child != 0) {
       if (!((BrowserNode *) child)->deletedp() &&
@@ -1091,7 +1089,7 @@ void StateCanvas::compute_regions() {
       regions.resize(nregion);
       regions_rect.resize(nregion);
       
-      Q3ListViewItem * child = browser_node->firstChild();
+      QListViewItem * child = browser_node->firstChild();
       
       for (;;) {
 	while (((BrowserNode *) child)->deletedp() ||
@@ -1179,8 +1177,8 @@ void StateCanvas::open() {
 }
 
 void StateCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
   const StateData * data = (StateData *) browser_node->get_data();
   BrowserState * ref = data->get_reference();
@@ -1337,7 +1335,7 @@ bool StateCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void StateCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void StateCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(3);
     ColorSpecVector co(1);
@@ -1356,7 +1354,7 @@ void StateCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -1378,8 +1376,8 @@ void StateCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void StateCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void StateCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   StateCanvas * x = (StateCanvas *) it.current();
   
@@ -1430,13 +1428,13 @@ QString StateCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
   case ChoicePS:
   case ForkPS:
   case JoinPS:
-    return (l == UmlTransition) ? QString() : TR("illegal");
+    return (l == UmlTransition) ? 0 : TR("illegal");
   default:
     return TR("illegal");
   }
 }
 
-void StateCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void StateCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "statecanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -1544,7 +1542,7 @@ void StateCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   QRect * r = regions_rect.data();
   
@@ -1565,7 +1563,7 @@ void StateCanvas::history_load(QBuffer & b) {
 }
 
 void StateCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()),
 	     this, SLOT(modified()));
   disconnect(browser_node->get_data(), 0, this, 0);

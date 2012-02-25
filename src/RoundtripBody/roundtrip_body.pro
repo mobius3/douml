@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on debug
+CONFIG	      += qt warn_on release
 SOURCES	      = main.cpp util.cpp \
 		UmlClassItem.cpp UmlAttribute.cpp \
 		UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
@@ -96,5 +96,3 @@ SOURCES	      = main.cpp util.cpp \
 TARGET	      = roundtrip_body
 DEFINES	      = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON
 INCLUDEPATH   = ../Tools ../RoundtripBody
-#The following line was inserted by qt3to4
-QT += network  qt3support 

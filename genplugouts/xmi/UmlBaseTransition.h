@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "TransitionBehavior.h"
 
 class UmlTransition;
@@ -25,7 +25,7 @@ class UmlBaseTransition : public UmlItem {
     virtual UmlItem * target();
 
     // return the trigger in OCL
-    const Q3CString & trigger();
+    const QCString & trigger();
 
     // set the trigger in OCL
     //
@@ -33,7 +33,7 @@ class UmlBaseTransition : public UmlItem {
     bool set_Trigger(const char * s);
 
     // return the guard in OCL
-    const Q3CString & guard();
+    const QCString & guard();
 
     // set the guard in OCL
     //
@@ -41,7 +41,7 @@ class UmlBaseTransition : public UmlItem {
     bool set_Guard(const char * s);
 
     // return the activity in OCL
-    const Q3CString & activity();
+    const QCString & activity();
 
     // set the activity in OCL
     //
@@ -50,7 +50,7 @@ class UmlBaseTransition : public UmlItem {
 
 #ifdef WITHCPP
     // return the trigger in C++
-    const Q3CString & cppTrigger();
+    const QCString & cppTrigger();
 
     // set the trigger in C++
     //
@@ -58,7 +58,7 @@ class UmlBaseTransition : public UmlItem {
     bool set_CppTrigger(const char * s);
 
     // return the guard in C++
-    const Q3CString & cppGuard();
+    const QCString & cppGuard();
 
     // set the guard in C++
     //
@@ -66,7 +66,7 @@ class UmlBaseTransition : public UmlItem {
     bool set_CppGuard(const char * s);
 
     // return the activity in C++
-    const Q3CString & cppActivity();
+    const QCString & cppActivity();
 
     // set the activity in C++
     //
@@ -76,7 +76,7 @@ class UmlBaseTransition : public UmlItem {
 
 #ifdef WITHJAVA
     // return the trigger in Java
-    const Q3CString & javaTrigger();
+    const QCString & javaTrigger();
 
     // set the trigger in Java
     //
@@ -84,7 +84,7 @@ class UmlBaseTransition : public UmlItem {
     bool set_JavaTrigger(const char * s);
 
     // return the guard in Java
-    const Q3CString & javaGuard();
+    const QCString & javaGuard();
 
     // set the guard in Java
     //
@@ -92,7 +92,7 @@ class UmlBaseTransition : public UmlItem {
     bool set_JavaGuard(const char * s);
 
     // return the activity in Java
-    const Q3CString & javaActivity();
+    const QCString & javaActivity();
 
     // set the activity in Java
     //
@@ -135,7 +135,7 @@ class UmlBaseTransition : public UmlItem {
 #endif
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseTransition(void * id, const Q3CString n) : UmlItem(id, n) {
+     UmlBaseTransition(void * id, const QCString n) : UmlItem(id, n) {
     }
 
 };

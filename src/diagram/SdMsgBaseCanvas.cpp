@@ -29,8 +29,6 @@
 
 #include <qcursor.h>
 #include <qinputdialog.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "SdMsgBaseCanvas.h"
 #include "SdDurationCanvas.h"
@@ -203,7 +201,7 @@ void SdMsgBaseCanvas::set_synchronous(bool yes) {
 }
 
 QString SdMsgBaseCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString SdMsgBaseCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -351,12 +349,12 @@ void SdMsgBaseCanvas::change_scale() {
   // Just update the vertical position, the horizontal size
   // and position are update by the durations.
   // The label is also moved independently
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   
-  Q3CanvasRectangle::moveBy(0,
+  QCanvasRectangle::moveBy(0,
 			   ((int) (center_y_scale100 * the_canvas()->zoom() + 0.5))
 			   - center().y());
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 bool SdMsgBaseCanvas::copyable() const {
@@ -368,7 +366,7 @@ bool SdMsgBaseCanvas::represents(BrowserNode * bn) {
   return ((BasicData *) msg == bn->get_data());
 }
 
-void SdMsgBaseCanvas::save(Q3TextStream & st, QString & warning) const {
+void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   st << "to ";
   dest->save(st, TRUE, warning);

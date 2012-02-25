@@ -28,10 +28,8 @@
 
 #include "SimpleData.h"
 #include "UmlEnum.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
-class Q3TextStream;
+class QTextStream;
 
 class BrowserState;
 class StateDialog;
@@ -42,7 +40,7 @@ struct StateBehavior {
   MyStr on_exit;
   MyStr do_activity;
   
-  void save(Q3TextStream &, const char * lang) const;
+  void save(QTextStream &, const char * lang) const;
   void read(char * & st, char * & k, const char * lang);
   
   void send_def(ToolCom * com);
@@ -83,7 +81,7 @@ class StateData : public SimpleData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
     
   protected slots:

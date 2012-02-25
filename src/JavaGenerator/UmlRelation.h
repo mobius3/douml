@@ -28,33 +28,29 @@
 
 #include "UmlBaseRelation.h"
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
-#include <Q3ValueList>
 
 class QTextOStream;
 
 class UmlRelation : public UmlBaseRelation {
   public:
-    UmlRelation(void * id, const Q3CString & n)
+    UmlRelation(void * id, const QCString & n)
       : UmlBaseRelation(id, n) {
     };
   
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent);
+    virtual void generate(QTextOStream & f, const QCString & cl_stereotype,
+			  QCString indent);
     virtual void generate_enum_pattern_item(QTextOStream &, int &,
-					    const Q3CString &, Q3CString);
-    virtual void generate_enum_pattern_case(QTextOStream &, Q3CString);
-    virtual void generate_enum_member(QTextOStream &, Q3CString);
-    virtual void generate_import(QTextOStream & f, const Q3CString & indent);
+					    const QCString &, QCString);
+    virtual void generate_enum_pattern_case(QTextOStream &, QCString);
+    virtual void generate_enum_member(QTextOStream &, QCString);
+    virtual void generate_import(QTextOStream & f, const QCString & indent);
     
     void generate_extends(const char *& sep, QTextOStream & f,
-			  const Q3ValueList<UmlActualParameter> & actuals,
-			  const Q3CString & stereotype);
+			  const QValueList<UmlActualParameter> & actuals,
+			  const QCString & stereotype);
     void generate_implements(const char *& sep, QTextOStream & f,
-			     const Q3ValueList<UmlActualParameter> & actuals,
-			     const Q3CString & stereotype);
+			     const QValueList<UmlActualParameter> & actuals,
+			     const QCString & stereotype);
 };
 
 #endif

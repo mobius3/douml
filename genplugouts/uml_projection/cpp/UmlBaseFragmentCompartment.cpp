@@ -2,20 +2,18 @@
 #include "UmlCom.h"
 #include "UmlBaseFragmentCompartment.h"
 #include "UmlBaseFragment.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlBaseFragmentCompartment::add_contained_(UmlFragment * x) {
   _contained.resize(_contained.size() + 1);
   _contained.insert(_contained.size() - 1, x);
 }
 
-void UmlBaseFragmentCompartment::add_text_(Q3CString x) {
+void UmlBaseFragmentCompartment::add_text_(QCString x) {
   _texts.resize(_texts.size() + 1);
   _texts.insert(_texts.size() - 1, strdup(x));
 }
 
-void UmlBaseFragmentCompartment::add_cont_(Q3CString s, int cy) {
+void UmlBaseFragmentCompartment::add_cont_(QCString s, int cy) {
   if (cy < _fragment->vcenter_(_rank))
     _start_continuation = s;
   else

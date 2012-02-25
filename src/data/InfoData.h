@@ -27,17 +27,15 @@
 #define INFODATA_H
 
 #include "mystr.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
-class Q3TextStream;
+class QTextStream;
 class ToolCom;
 
 struct InfoData {
   MyStr first;
   MyStr second;
   
-  void save(Q3TextStream & st, const char * s1, const char * s2) const;
+  void save(QTextStream & st, const char * s1, const char * s2) const;
   void read(char * & st, char * & k, const char * s1, const char * s2);
   void send_def(ToolCom * com);
 };

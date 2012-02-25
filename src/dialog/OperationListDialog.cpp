@@ -29,13 +29,8 @@
 
 #include <qcursor.h>
 #include <qlayout.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "OperationListDialog.h"
 #include "BrowserOperation.h"
@@ -46,17 +41,17 @@
 QSize OperationListDialog::previous_size;
 
 OperationListDialog::OperationListDialog(const char * m,
-					 Q3PtrList<BrowserOperation> & l)
+					 QList<BrowserOperation> & l)
     : QDialog(0, m, TRUE) {
   setCaption(m);
   move(QCursor::pos());
  
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBoxLayout * hbox;
  
   vbox->setMargin(5);
  
-  cb = new Q3ComboBox(FALSE, this);
+  cb = new QComboBox(FALSE, this);
   vbox->addWidget(cb);
   
   for (BrowserOperation * oper = l.first(); oper; oper = l.next()) {
@@ -69,7 +64,7 @@ OperationListDialog::OperationListDialog(const char * m,
       cb->insertItem(s);
   }
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * ok = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);

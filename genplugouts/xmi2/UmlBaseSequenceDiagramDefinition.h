@@ -8,7 +8,7 @@
 #include "UmlClassInstanceReference.h"
 #include "UmlSequenceMessage.h"
 
-#include <q3ptrvector.h>
+#include <qvector.h>
 
 class UmlClassInstanceReference;
 class UmlSequenceMessage;
@@ -18,28 +18,28 @@ class UmlFragment;
 class UmlBaseSequenceDiagramDefinition {
   public:
     // return the instances present in the diagram
-    const Q3PtrVector<UmlClassInstanceReference> & instances() const {
+    const QVector<UmlClassInstanceReference> & instances() const {
         return _instances;
     }
 
     // return the messages present in the diagram,
     // ordonned following the sending time
-    const Q3PtrVector<UmlSequenceMessage> & messages() const {
+    const QVector<UmlSequenceMessage> & messages() const {
         return _messages;
     }
 
     // return the fragments present in the diagram
-    const Q3PtrVector<UmlFragment> & fragments() const {
+    const QVector<UmlFragment> & fragments() const {
         return _fragments;
     }
 
 
   private:
-    Q3PtrVector<UmlClassInstanceReference> _instances;
+    QVector<UmlClassInstanceReference> _instances;
 
-    Q3PtrVector<UmlSequenceMessage> _messages;
+    QVector<UmlSequenceMessage> _messages;
 
-    Q3PtrVector<UmlFragment> _fragments;
+    QVector<UmlFragment> _fragments;
 
     // internal, don't call it
     void read_();

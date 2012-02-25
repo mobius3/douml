@@ -60,7 +60,7 @@ class SeqDiagramWindow : public DiagramWindow {
   
   public:
     SeqDiagramWindow(const QString & s, BrowserSeqDiagram *, int id = -1);
-virtual ~SeqDiagramWindow();
+    ~SeqDiagramWindow();
 
     virtual DiagramView * get_view() const;
     

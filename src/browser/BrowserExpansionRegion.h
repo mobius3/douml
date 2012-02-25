@@ -28,12 +28,6 @@
 
 #include "BrowserNode.h"
 #include "Labeled.h"
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QDragMoveEvent>
 
 class QPixmap;
 class ExpansionRegionData;
@@ -60,14 +54,14 @@ class BrowserExpansionRegion : public BrowserNode, public Labeled<BrowserExpansi
     BrowserExpansionRegion(const BrowserExpansionRegion * model, BrowserNode * p);
     virtual ~BrowserExpansionRegion();
   
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
+    virtual bool may_contains_them(const QList<BrowserNode> & l,
 				   BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
 				    QString name = QString::null);
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent);
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent, const char * name);
     static BrowserExpansionRegion * get_expansionregion(BrowserNode * parent);
-    Q3ValueList<BrowserExpansionNode *> get_nodes() const;
+    QValueList<BrowserExpansionNode *> get_nodes() const;
     BrowserNode * add_expansionnode();
     
     virtual const QPixmap* pixmap (int) const;
@@ -88,7 +82,7 @@ class BrowserExpansionRegion : public BrowserNode, public Labeled<BrowserExpansi
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserActivityDiagram *, bool on_read = FALSE);
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserExpansionRegion * read(char * &, char *, BrowserNode *);
     static BrowserExpansionRegion * read_ref(char * & st);
     static BrowserNode * get_it(const char * k, int id);
@@ -98,7 +92,7 @@ class BrowserExpansionRegion : public BrowserNode, public Labeled<BrowserExpansi
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
+    virtual void referenced_by(QList<BrowserNode> & l, bool ondelete);
     
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual bool api_compatible(unsigned v) const;
@@ -106,7 +100,7 @@ class BrowserExpansionRegion : public BrowserNode, public Labeled<BrowserExpansi
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;

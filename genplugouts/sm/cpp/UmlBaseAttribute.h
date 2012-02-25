@@ -4,7 +4,7 @@
 
 #include "UmlClassMember.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlTypeSpec.h"
 
 class UmlAttribute;
@@ -34,7 +34,7 @@ class UmlBaseAttribute : public UmlClassMember {
     bool set_isReadOnly(bool y);
 
     // returns the default attribute value, may be an empty string
-    const Q3CString & defaultValue();
+    const QCString & defaultValue();
 
     // to set the default attribute value ("" allowed)
     // 
@@ -50,7 +50,7 @@ class UmlBaseAttribute : public UmlClassMember {
     bool set_Type(const UmlTypeSpec & t);
 
     // returns the multiplicity (may be an empty string)
-    const Q3CString & multiplicity();
+    const QCString & multiplicity();
 
     // to set the multiplicity
     // 
@@ -96,7 +96,7 @@ class UmlBaseAttribute : public UmlClassMember {
 #ifdef WITHIDL
     // in case the attribute is an IDL union's member returns the
     // corresponding 'case', an empty string in case it is not specified
-    Q3CString idlCase();
+    QCString idlCase();
 
     // to set the 'case' even the attribute is not (already) known as
     // an IDL union's member
@@ -121,7 +121,7 @@ class UmlBaseAttribute : public UmlClassMember {
 
 
   public:
-    Q3CString _multiplicity;
+    QCString _multiplicity;
 
 
   private:
@@ -132,7 +132,7 @@ class UmlBaseAttribute : public UmlClassMember {
     bool _java_transient;
 #endif
 
-    Q3CString _default_value;
+    QCString _default_value;
 
     UmlTypeSpec _type;
 
@@ -144,13 +144,13 @@ class UmlBaseAttribute : public UmlClassMember {
     // exclusive with idl_explicit_case
     UmlAttribute * _idl_case;
 
-    Q3CString _idl_explicit_case;
+    QCString _idl_explicit_case;
 #endif
 
 
   public:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseAttribute(void * id, const Q3CString & n);
+    UmlBaseAttribute(void * id, const QCString & n);
 
 
   protected:
@@ -184,7 +184,7 @@ class UmlBaseAttribute : public UmlClassMember {
 
 };
 
-inline UmlBaseAttribute::UmlBaseAttribute(void * id, const Q3CString & n) : UmlClassMember(id, n) {
+inline UmlBaseAttribute::UmlBaseAttribute(void * id, const QCString & n) : UmlClassMember(id, n) {
   _get_oper = 0;
   _set_oper = 0;
   

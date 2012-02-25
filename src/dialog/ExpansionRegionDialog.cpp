@@ -27,12 +27,12 @@
 
 
 
-#include <q3grid.h> 
+#include <qgrid.h> 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qcheckbox.h> 
-#include <q3vbox.h> 
+#include <qvbox.h> 
 
 #include "ExpansionRegionDialog.h"
 #include "ExpansionRegionData.h"
@@ -49,7 +49,7 @@
 QSize ExpansionRegionDialog::previous_size;
 
 ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), data(nd) {
   nd->browser_node->edit_start();
   
   if (nd->browser_node->is_writable()) {
@@ -68,7 +68,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   // general tab
   
   BrowserNode * bn = data->get_browser_node();
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
 
   umltab = grid;
   grid->setMargin(5);
@@ -79,7 +79,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   edname->setReadOnly(visit);
     
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(BrowserExpansionRegion::default_stereotypes());
@@ -91,11 +91,11 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
 
-  Q3HBox * htab;
+  QHBox * htab;
 
   new QLabel(TR("mode :"), grid);
-  htab = new Q3HBox(grid);
-  edmode = new Q3ComboBox(FALSE, htab);
+  htab = new QHBox(grid);
+  edmode = new QComboBox(FALSE, htab);
   
   UmlExpansionKind m = data->get_mode();
   
@@ -116,7 +116,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   must_isolate_cb->setDisabled(visit);
   new QLabel("", htab);
 
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -134,7 +134,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -150,7 +150,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
 }
 
 void ExpansionRegionDialog::polish() {
-  Q3TabDialog::polish();  
+  QTabDialog::polish();  
   UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -216,5 +216,5 @@ void ExpansionRegionDialog::accept() {
   bn->package_modified();
   data->modified();
     
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }

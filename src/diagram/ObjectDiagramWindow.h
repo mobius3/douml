@@ -51,7 +51,7 @@ class ObjectDiagramWindow : public DiagramWindow {
   
   public:
     ObjectDiagramWindow(const QString & s, BrowserObjectDiagram *, int id = -1);
-virtual ~ObjectDiagramWindow();
+    ~ObjectDiagramWindow();
 
     virtual DiagramView * get_view() const;
     

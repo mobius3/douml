@@ -4,10 +4,10 @@
 #ifdef WITHPHP
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "aVisibility.h"
 #include "UmlSettings.h"
-#include <q3dict.h>
+#include <qdict.h>
 
 // This class manages settings concerning PHP, configured through
 // the 'Generation settings' dialog.
@@ -29,45 +29,45 @@ class PhpSettings : public UmlSettings {
 
     // returns the PHP stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString classStereotype(const Q3CString & s);
+    static QCString classStereotype(const QCString & s);
 
     // set the PHP stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassStereotype(Q3CString s, Q3CString v);
+    static bool set_ClassStereotype(QCString s, QCString v);
 
     // reverse of the ClassStereotype() operation, returns the 'UML' 
     // stereotype corresponding to the PHP one given in argument
-    static Q3CString classUmlStereotype(const Q3CString & s);
+    static QCString classUmlStereotype(const QCString & s);
 
     //  return the 'root' directory
-    static const Q3CString & rootDir();
+    static const QCString & rootDir();
 
     //  set the 'root' directory
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RootDir(Q3CString v);
+    static bool set_RootDir(QCString v);
 
     // returns the default source file content
-    static const Q3CString & sourceContent();
+    static const QCString & sourceContent();
 
     // set the default source file content
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceContent(Q3CString v);
+    static bool set_SourceContent(QCString v);
 
     // returns the extension of the file produced by the PHP code generator
-    static const Q3CString & sourceExtension();
+    static const QCString & sourceExtension();
 
     // set the extension of the file produced by the PHP code generator
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceExtension(Q3CString v);
+    static bool set_SourceExtension(QCString v);
 
     // return the regular expression used to bypass
     // dir s on reverse/roundtrip
-    static Q3CString reverseRoundtripDirRegExp();
+    static QCString reverseRoundtripDirRegExp();
 
     // return if the regular expression used to bypass
     // dir s on reverse/roundtrip is case sensitive
@@ -76,11 +76,11 @@ class PhpSettings : public UmlSettings {
     // set the regular expression used to bypass
     // dir s on reverse/roundtrip
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ReverseRoundtripDirRegExp(Q3CString s, bool cs);
+    static bool set_ReverseRoundtripDirRegExp(QCString s, bool cs);
 
     // return the regular expression used to bypass
     // file s on reverse/roundtrip
-    static Q3CString reverseRoundtripFileRegExp();
+    static QCString reverseRoundtripFileRegExp();
 
     // return if the regular expression used to bypass
     // file s on reverse/roundtrip is case sensitive
@@ -89,7 +89,7 @@ class PhpSettings : public UmlSettings {
     // set the regular expression used to bypass
     // file s on reverse/roundtrip
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ReverseRoundtripFileRegExp(Q3CString s, bool cs);
+    static bool set_ReverseRoundtripFileRegExp(QCString s, bool cs);
 
     // indicates to the code generator if the require_once may specify
     // the path of just the file's name
@@ -139,68 +139,68 @@ class PhpSettings : public UmlSettings {
     static bool set_IsGenerateJavadocStyleComment(bool v);
 
     // returns the default definition of a class
-    static const Q3CString & classDecl();
+    static const QCString & classDecl();
 
     // set the default definition of a class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassDecl(Q3CString v);
+    static bool set_ClassDecl(QCString v);
 
     // returns the default specification for an 'external' class
-    static const Q3CString & externalClassDecl();
+    static const QCString & externalClassDecl();
 
     // set the default specification for an 'external' class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ExternalClassDecl(Q3CString v);
+    static bool set_ExternalClassDecl(QCString v);
 
     // returns the default definition of an enumeration
-    static Q3CString enumDecl();
+    static QCString enumDecl();
 
     // set the default definition of an enumeration
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumDecl(Q3CString v);
+    static bool set_EnumDecl(QCString v);
 
     // returns the default definition of an interface
-    static const Q3CString & interfaceDecl();
+    static const QCString & interfaceDecl();
 
     // set the default definition of an interface
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_InterfaceDecl(Q3CString v);
+    static bool set_InterfaceDecl(QCString v);
 
     // returns the default definition of an attribute
-    static const Q3CString & attributeDecl();
+    static const QCString & attributeDecl();
 
     // set the default definition of an attribute
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_AttributeDecl(Q3CString v);
+    static bool set_AttributeDecl(QCString v);
 
     // returns the default definition of an enumeration item
-    static Q3CString enumItemDecl();
+    static QCString enumItemDecl();
 
     // set the default definition of an enumeration item
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumItemDecl(Q3CString v);
+    static bool set_EnumItemDecl(QCString v);
 
     // returns the default definition of a relation
-    static const Q3CString & relationDecl();
+    static const QCString & relationDecl();
 
     // set the default definition of a relation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationDecl(Q3CString v);
+    static bool set_RelationDecl(QCString v);
 
     // returns the default definition of an operation
-    static const Q3CString & operationDef();
+    static const QCString & operationDef();
 
     // set the default definition of an operation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDef(Q3CString v);
+    static bool set_OperationDef(QCString v);
 
     // returns the default visibility of a 'get' operation generated
     // through the attribute and relation 'add get operation'
@@ -216,23 +216,23 @@ class PhpSettings : public UmlSettings {
 
     // returns the default name of a 'get' operation generated 
     // through the attribute and relation 'add get operation' menu
-    static const Q3CString & getName();
+    static const QCString & getName();
 
     // set the default name of a 'get' operation generated 
     // through the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_GetName(Q3CString v);
+    static bool set_GetName(QCString v);
 
     // returns the default name of a 'set' operation generated 
     // through the attribute and relation 'add set operation' menu
-    static const Q3CString & setName();
+    static const QCString & setName();
 
     // set the default name of a 'set' operation generated 
     // through the attribute and relation 'add set operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SetName(Q3CString v);
+    static bool set_SetName(QCString v);
 
     //  return if a 'get' operation generated through the attribute
     //  and relation 'add get operation' menu is final by default
@@ -272,29 +272,29 @@ class PhpSettings : public UmlSettings {
 
     static bool _defined;
 
-    static Q3CString _root;
+    static QCString _root;
 
-    static Q3CString _class_decl;
+    static QCString _class_decl;
 
-    static Q3CString _external_class_decl;
+    static QCString _external_class_decl;
 
-    static Q3CString _enum_decl;
+    static QCString _enum_decl;
 
-    static Q3CString _interface_decl;
+    static QCString _interface_decl;
 
-    static Q3CString _attr_decl;
+    static QCString _attr_decl;
 
-    static Q3CString _enum_item_decl;
+    static QCString _enum_item_decl;
 
-    static Q3CString _rel_decl;
+    static QCString _rel_decl;
 
-    static Q3CString _oper_def;
+    static QCString _oper_def;
 
 #ifndef WITHJAVA
     static aVisibility _get_visibility;
 #endif
 
-    static Q3CString _get_name;
+    static QCString _get_name;
 
     static bool _is_get_final;
 
@@ -302,19 +302,19 @@ class PhpSettings : public UmlSettings {
     static aVisibility _set_visibility;
 #endif
 
-    static Q3CString _set_name;
+    static QCString _set_name;
 
     static bool _is_set_final;
 
-    static Q3CString _src_content;
+    static QCString _src_content;
 
-    static Q3CString _ext;
+    static QCString _ext;
 
-    static Q3CString _dir_regexp;
+    static QCString _dir_regexp;
 
     static bool _dir_regexp_case_sensitive;
 
-    static Q3CString _file_regexp;
+    static QCString _file_regexp;
 
     static bool _file_regexp_case_sensitive;
 

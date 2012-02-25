@@ -27,11 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "PseudoStateCanvas.h"
 #include "TransitionCanvas.h"
@@ -158,7 +156,7 @@ void PseudoStateCanvas::set_xpm() {
 }
 
 void PseudoStateCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   
   if (manual_size) {
     double scale = the_canvas()->zoom();
@@ -187,7 +185,7 @@ void PseudoStateCanvas::change_scale() {
     set_xpm();
   
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 aCorner PseudoStateCanvas::on_resize_point(const QPoint & p) {
@@ -278,7 +276,7 @@ void PseudoStateCanvas::connexion(UmlCode action, DiagramItem * dest,
 
 void PseudoStateCanvas::draw(QPainter & p) {
   if (!visible() || ((xpm == 0) && !manual_size)) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+
   QRect r = rect();
   QRect intern_r;
   
@@ -526,8 +524,8 @@ void PseudoStateCanvas::open() {
 }
 
 void PseudoStateCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
     
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -678,7 +676,7 @@ QString PseudoStateCanvas::may_connect(UmlCode & l, const DiagramItem * dest) co
   }
 }
 
-void PseudoStateCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void PseudoStateCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "pseudostatecanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -770,7 +768,7 @@ PseudoStateCanvas * PseudoStateCanvas::read(char * & st, UmlCanvas * canvas,
 }
 
 void PseudoStateCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(browser_node->get_data(), 0, this, 0);
 }
 
@@ -801,7 +799,7 @@ void PseudoStateCanvas::history_load(QBuffer & b) {
     
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QCanvasRectangle::setSize(w, h);
   }
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));

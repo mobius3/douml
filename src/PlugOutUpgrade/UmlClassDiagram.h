@@ -2,8 +2,6 @@
 #define UMLCLASSDIAGRAM_H
 
 #include "UmlBaseClassDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 // This class manages 'class diagrams', notes that the class 'UmlDiagram'
 // is a mother class of all the diagrams, allowing to generalize their
@@ -12,7 +10,7 @@
 
 class UmlClassDiagram : public UmlBaseClassDiagram {
   public:
-    UmlClassDiagram(void * id, const Q3CString & n) 
+    UmlClassDiagram(void * id, const QCString & n) 
       : UmlBaseClassDiagram(id, n) {};
 };
 

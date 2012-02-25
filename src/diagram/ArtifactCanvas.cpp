@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3PointArray>
-#include <QPixmap>
 
 #include "ArtifactCanvas.h"
 #include "AssocContainCanvas.h"
@@ -163,10 +159,10 @@ void ArtifactCanvas::compute_size() {
 }
 
 void ArtifactCanvas::change_scale() {  
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   compute_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void ArtifactCanvas::modified() {
@@ -233,7 +229,7 @@ void ArtifactCanvas::draw_all_relations() {
   else if (!DrawingSettings::just_modified() &&
 	   !on_load_diagram()) {
     // remove all association starting from 'this'
-    Q3PtrListIterator<ArrowCanvas> it(lines);
+    QListIterator<ArrowCanvas> it(lines);
     
     while (it.current()) {
       if ((it.current()->type() == UmlContain) &&
@@ -244,8 +240,8 @@ void ArtifactCanvas::draw_all_relations() {
     }
     
     // update non source artifact vis a vis 'this'
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QCanvasItemList all = canvas()->allItems();
+    QCanvasItemList::Iterator cit;
     
     for (cit = all.begin(); cit != all.end(); ++cit) {
       if ((*cit)->visible()) {
@@ -262,12 +258,12 @@ void ArtifactCanvas::draw_all_relations() {
 
 void ArtifactCanvas::update_relations(ArtifactCanvas * other) {
   // 'this' is a non source, check association with 'other'
-  const Q3PtrDict<BrowserArtifact> * associated = 
+  const QPtrDict<BrowserArtifact> * associated = 
     ((ArtifactData *) browser_node->get_data())->get_associated();
   bool association_must_exist = 
     ((associated != 0) &&
      (associated->find((BrowserArtifact *) other->browser_node) != 0));
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
     
   while (it.current()) {
     if ((it.current()->type() == UmlContain) &&
@@ -288,10 +284,10 @@ void ArtifactCanvas::update_relations(ArtifactCanvas * other) {
 
 void ArtifactCanvas::update_relations() {
   // 'this' is a non source, check its associations
-  const Q3PtrDict<BrowserArtifact> * associated = 
+  const QPtrDict<BrowserArtifact> * associated = 
     ((ArtifactData *) browser_node->get_data())->get_associated();
-  Q3PtrDict<BrowserArtifact> associations;
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QPtrDict<BrowserArtifact> associations;
+  QListIterator<ArrowCanvas> it(lines);
     
   while (it.current()) {
     if ((it.current()->type() == UmlContain) &&
@@ -318,15 +314,15 @@ void ArtifactCanvas::update_relations() {
   }
   
   if (associated != 0) {
-    Q3PtrDictIterator<BrowserArtifact> it(*associated);
+    QPtrDictIterator<BrowserArtifact> it(*associated);
     
     while (it.current()) {
       if (associations.find(it.current()) == 0) {
 	// the association to 'it.current()' is not yet drawn
 	
 	// search 'it.current()' cancas
-	Q3CanvasItemList all = canvas()->allItems();
-	Q3CanvasItemList::Iterator cit;
+	QCanvasItemList all = canvas()->allItems();
+	QCanvasItemList::Iterator cit;
 	
 	for (cit = all.begin(); cit != all.end(); ++cit) {
 	  if ((*cit)->visible()) {
@@ -350,7 +346,7 @@ void ArtifactCanvas::update_relations() {
 
 void ArtifactCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   const BasicData * data = browser_node->get_data();
   FILE * fp = svg();
@@ -415,12 +411,12 @@ void ArtifactCanvas::draw(QPainter & p) {
 	if (fp != 0) {
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff,
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 	  
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff,
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
 	}
       }
@@ -476,7 +472,7 @@ void ArtifactCanvas::draw(QPainter & p) {
     re.setTop(re.top() + four);
     re.setHeight(2*(he - four));
     
-    Q3PointArray a(7);
+    QPointArray a(7);
     const int corner_size = re.width()/3;
     
     a.setPoint(0, re.left(), re.top());
@@ -487,9 +483,8 @@ void ArtifactCanvas::draw(QPainter & p) {
     a.setPoint(5, re.left(), re.bottom());
     a.setPoint(6, re.left(), re.top());
     p.drawPolyline(a);
-    //p.moveTo(re.right() - corner_size, re.top());
-    //p.lineTo(re.right(), re.top() + corner_size);
-    p.drawLine(re.right() - corner_size, re.top(), re.right(), re.top() + corner_size);
+    p.moveTo(re.right() - corner_size, re.top());
+    p.lineTo(re.right(), re.top() + corner_size);
     
     if (fp != 0) {
       draw_poly(fp, a, UmlTransparent);
@@ -528,9 +523,9 @@ void ArtifactCanvas::open() {
 }
 
 void ArtifactCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu gensubm(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu gensubm(0);
+  QPopupMenu toolm(0);
   int index;
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -714,7 +709,7 @@ bool ArtifactCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ArtifactCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ArtifactCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -725,7 +720,7 @@ void ArtifactCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((ArtifactCanvas *) it.current())->itscolor = itscolor;
@@ -737,8 +732,8 @@ void ArtifactCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ArtifactCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ArtifactCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ArtifactCanvas * x = (ArtifactCanvas *) it.current();
   
@@ -761,10 +756,10 @@ QString ArtifactCanvas::may_start(UmlCode & l) const {
       return 0;
   case UmlDependency:
     l = UmlDependOn;
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   case UmlGeneralisation:
     l = UmlInherit;
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   case UmlAnchor:
     return 0;
   default:
@@ -781,7 +776,7 @@ QString ArtifactCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
     switch (l) {
     case UmlContain:
     case UmlDependOn:
-      return (dest == this) ? TR("illegal") : QString();
+      return (dest == this) ? TR("illegal") : 0;
     case UmlInherit:
       return browser_node->check_inherit(dest->get_bn());;
     default:
@@ -790,7 +785,7 @@ QString ArtifactCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
   case UmlPackage:
   case UmlComponent:
   case UmlDeploymentNode:
-    return (l == UmlDependOn) ? QString() : TR("illegal");
+    return (l == UmlDependOn) ? 0 : TR("illegal");
   default:
     return TR("illegal");
   }
@@ -800,7 +795,7 @@ bool ArtifactCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void ArtifactCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ArtifactCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "artifactcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

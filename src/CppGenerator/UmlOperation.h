@@ -26,11 +26,7 @@
 #ifndef UMLOPERATION_H
 #define UMLOPERATION_H
 
-#include <q3intdict.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
-#include <Q3PtrList>
+#include <qintdict.h>
 
 #include "UmlBaseOperation.h"
 
@@ -38,29 +34,29 @@ class QTextOStream;
 
 class UmlOperation : public UmlBaseOperation {
   private:
-    static Q3IntDict<char> bodies;
+    static QIntDict<char> bodies;
 
   public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const QCString & n)
       : UmlBaseOperation(id, n) {};
   
-    virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-				    const Q3CString & cl_stereotype,
+    virtual void compute_dependency(QList<CppRefType> & dependency,
+				    const QCString & cl_stereotype,
 				    bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility, QTextOStream & f_h,
-			       const Q3CString & cl_stereotype, Q3CString indent,
+			       const QCString & cl_stereotype, QCString indent,
 			       BooL & first, bool last);
-    virtual void generate_def(QTextOStream &, Q3CString indent, bool h,
-			      Q3CString templates, Q3CString cl_names,
-			      Q3CString templates_tmplop, Q3CString cl_names_tmplop);
+    virtual void generate_def(QTextOStream &, QCString indent, bool h,
+			      QCString templates, QCString cl_names,
+			      QCString templates_tmplop, QCString cl_names_tmplop);
     
-    Q3CString compute_name();
+    QCString compute_name();
     bool is_template_operation();
     
     static void read_bodies(const char * h_path, const char * src_path);
     
   private:
-    const char * generate_body(QTextOStream & fs, Q3CString indent, const char * p);
+    const char * generate_body(QTextOStream & fs, QCString indent, const char * p);
     void generate_throw(QTextOStream & f_h);
 };
 

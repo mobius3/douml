@@ -28,16 +28,16 @@
 
 #include "MyTable.h"
 
-class Q3ComboBox;
+class QComboBox;
 
 class ComboItem : public TableItem {
   protected:
     bool editable;
-    Q3ComboBox * cb;
+    QComboBox * cb;
     const QStringList & types;
     
   public:
-    ComboItem(Q3Table * t, const QString & s,
+    ComboItem(QTable * t, const QString & s,
 	      const QStringList & list, bool edit = TRUE);
   
     virtual QWidget * createEditor() const;

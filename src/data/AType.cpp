@@ -27,7 +27,7 @@
 
 
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "AType.h"
 #include "BrowserClass.h"
@@ -64,7 +64,7 @@ void AType::send_def(ToolCom * com) const {
 
 // returns FALSE on error
 
-void AType::save(Q3TextStream & st, QString & warning,
+void AType::save(QTextStream & st, QString & warning,
 		 const char * t, const char * ex) const {
   if (type != 0) {
     if (type->deletedp()) {

@@ -5,8 +5,6 @@
 #include "UmlActivityObject.h"
 #include "UmlFlow.h"
 #include "FileOut.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlFlow::write(FileOut & out) {
   out.indent();
@@ -52,16 +50,16 @@ void UmlFlow::write_it(FileOut & out) {
   out.id(this);
   if (!name().isEmpty() && (name() != "<flow>")) {
     out << " name=\"";
-    out.quote((const char*)name());//[jasa] ambiguous call
+    out.quote(name());
     out << '"';
   }
   out.ref(parent(), "source");
   out.ref(target(), "target");
   
-  Q3CString w;
-  Q3CString g;
-  Q3CString s;
-  Q3CString t;
+  QCString w;
+  QCString g;
+  QCString s;
+  QCString t;
   
   switch (_lang) {
   case Uml:

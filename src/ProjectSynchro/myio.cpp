@@ -138,7 +138,7 @@ static int open_file(QFile & fp, BooL & ro)
 {
   QString filename = fp.name();
   
-  while (! fp.open(QIODevice::ReadOnly)) {
+  while (! fp.open(IO_ReadOnly)) {
     if (QMessageBox::critical(0, "Uml",
 			      filename + "\ncannot be opened for read, retry ?\n",
 			      "yes", "no", 0, 0, 0) != 0)
@@ -281,13 +281,13 @@ void copy_if_needed(QDir & fromdir, QDir & todir, QString fn)
   }
 }
 
-void purge(QDir & dir, Q3Dict<void> & useful)
+void purge(QDir & dir, QDict<void> & useful)
 {
   const QFileInfoList * l;
     
   // remove bak and useless diagrams and bodies
   if ((l = dir.entryInfoList("*.diagram *.bodies *.bak")) != 0) {
-    Q3PtrListIterator<QFileInfo> it(*l);
+    QListIterator<QFileInfo> it(*l);
     QFileInfo *fi;
     
     while ((fi = it.current()) != 0) {
@@ -302,7 +302,7 @@ void purge(QDir & dir, Q3Dict<void> & useful)
   
   // remove deleted packages
   if ((l = dir.entryInfoList("*")) != 0) {
-    Q3PtrListIterator<QFileInfo> it(*l);
+    QListIterator<QFileInfo> it(*l);
     QFileInfo *fi;
     
     while ((fi = it.current()) != 0) {

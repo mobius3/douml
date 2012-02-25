@@ -24,13 +24,11 @@
 // *************************************************************************
 
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "util.h"
 #include "UmlCom.h"
 
-Q3CString capitalize(const Q3CString & s)
+QCString capitalize(const QCString & s)
 {
   return (s.isEmpty())
     ? s
@@ -69,7 +67,7 @@ bool need_equal(const char * p, const char * v)
 
 //
 
-static Q3CString TraceHeader;
+static QCString TraceHeader;
 static bool Verbose = FALSE;
 static bool Preserve = FALSE;
 
@@ -93,12 +91,12 @@ bool preserve()
   return Preserve;
 }
 
-void set_trace_header(Q3CString s)
+void set_trace_header(QCString s)
 {
   TraceHeader = s;
 }
 
-Q3CString get_trace_header()
+QCString get_trace_header()
 {
   return TraceHeader;
 }

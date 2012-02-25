@@ -26,9 +26,9 @@
 #ifndef DIAGRAMWINDOW_H
 #define DIAGRAMWINDOW_H
 
-#include <q3canvas.h>
-#include <q3mainwindow.h>
-#include <q3textstream.h>
+#include <qcanvas.h>
+#include <qmainwindow.h>
+#include <qtextstream.h>
 
 #include "UmlEnum.h"
 
@@ -36,7 +36,7 @@ class QPrinter;
 class QToolButton;
 class QSpinBox;
 class QComboBox;
-class Q3ToolBar;
+class QToolBar;
 
 class BrowserDiagram;
 class UmlCanvas;
@@ -45,14 +45,12 @@ class DiagramView;
 #define SCALE_MIN 30
 #define SCALE_MAX 200
 
-/* This represents a window that is a diagram, have a canvas and a toolbox */
-class DiagramWindow : public Q3MainWindow {
+class DiagramWindow : public QMainWindow {
   Q_OBJECT
     
   protected:
     bool no_save;
     UmlCanvas * canvas;
-	/* This links us to the diagram in the browser */
     BrowserDiagram * browser_node;
     UmlCode current_button;
   
@@ -69,7 +67,7 @@ class DiagramWindow : public Q3MainWindow {
 
   public:
     DiagramWindow(BrowserDiagram * br, const QString & s);
-virtual ~DiagramWindow();
+    ~DiagramWindow();
   
     virtual DiagramView * get_view() const = 0;
     
@@ -79,8 +77,8 @@ virtual ~DiagramWindow();
     void selectOn();
     UmlCode & buttonOn() { return current_button; };
     
-    void add_edit_button(Q3ToolBar *);
-    void add_scale_cmd(Q3ToolBar *);
+    void add_edit_button(QToolBar *);
+    void add_scale_cmd(QToolBar *);
     void change_zoom(int);
     
     BrowserDiagram * browser_diagram() const { return browser_node; };
@@ -93,7 +91,7 @@ virtual ~DiagramWindow();
 
     void dont_save() { no_save = TRUE; };
     
-    void save_session(Q3TextStream & st);
+    void save_session(QTextStream & st);
     void read_session(char * & st);
         
   public slots:

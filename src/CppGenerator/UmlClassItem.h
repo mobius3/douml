@@ -26,11 +26,7 @@
 #ifndef UMLCLASSITEM_H
 #define UMLCLASSITEM_H
 
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
-#include <Q3PtrList>
+#include <qlist.h>
 
 #include "UmlBaseClassItem.h"
 
@@ -40,24 +36,24 @@ class CppRefType;
 
 class UmlClassItem : public UmlBaseClassItem {
   public:
-    UmlClassItem(void * id, const Q3CString & n)
+    UmlClassItem(void * id, const QCString & n)
       : UmlBaseClassItem(id, n) {
     };
   
-    virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-				    const Q3CString & cl_stereotype,
+    virtual void compute_dependency(QList<CppRefType> & dependency,
+				    const QCString & cl_stereotype,
 				    bool all_in_h) = 0;
 				     
     virtual void generate_decl(aVisibility & current_visibility,
 			       QTextOStream & f_h,
-			       const Q3CString & cl_stereotype,
-			       Q3CString indent,
+			       const QCString & cl_stereotype,
+			       QCString indent,
 			       BooL & first, bool last) = 0;
     
-    virtual void generate_def(QTextOStream & f, Q3CString indent, bool h,
-			      Q3CString templates, Q3CString cl_names,
-			      Q3CString templates_tmplop, 
-			      Q3CString cl_names_tmplop) = 0;
+    virtual void generate_def(QTextOStream & f, QCString indent, bool h,
+			      QCString templates, QCString cl_names,
+			      QCString templates_tmplop, 
+			      QCString cl_names_tmplop) = 0;
 };
 
 #endif

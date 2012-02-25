@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QPixmap>
 
 #include "BrowserStateAction.h"
 #include "BrowserTransition.h"
@@ -105,13 +100,13 @@ void BrowserStateAction::update_idmax_for_root()
 void BrowserStateAction::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
     
-void BrowserStateAction::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserStateAction::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserTransition::compute_referenced_by(l, this);
   if (! ondelete)
@@ -197,8 +192,8 @@ void BrowserStateAction::menu() {
   else
     s = "action";
   
-  Q3PopupMenu m(0, "action");
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, "action");
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -462,7 +457,7 @@ QString BrowserStateAction::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) BrowserState::get_machine(p));
 }
 
-void BrowserStateAction::save_stereotypes(Q3TextStream & st)
+void BrowserStateAction::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "stateaction_stereotypes ";
@@ -479,7 +474,7 @@ void BrowserStateAction::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserStateAction::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserStateAction::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "stateaction_ref " << get_ident();
   else {
@@ -491,7 +486,7 @@ void BrowserStateAction::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

@@ -4,8 +4,6 @@
 
 #include "UmlState.h"
 #include "UmlTransition.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlActivityObject::write(FileOut & out) {
   const char * k = (parent()->kind() == anActivity)
     ? "node" : "containedNode";
@@ -13,7 +11,7 @@ void UmlActivityObject::write(FileOut & out) {
   out.indent();
   out << '<' << k << " xmi:type=\"uml:";
   
-  Q3CString st = stereotype();
+  QCString st = stereotype();
   
   if (st == "datastore")
     out << "DataStoreNode";
@@ -39,7 +37,7 @@ void UmlActivityObject::write(FileOut & out) {
   write_multiplicity(out, multiplicity(), this);
   UmlItem::write_type(out, type());
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)
@@ -57,7 +55,7 @@ void UmlActivityObject::write(FileOut & out) {
 
 void UmlActivityObject::solve_output_flows() {
   ControlOrData v = (isControlType()) ? IsControl : IsData;
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1) {
@@ -67,7 +65,7 @@ void UmlActivityObject::solve_output_flows() {
       f->set_control_or_data(v);
   }
 
-  Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+  QListIterator<UmlFlow> it(_incoming_flows);
   
   while (it.current() != 0) {
     if (it.current()->control_or_data() == Unset)
@@ -98,7 +96,7 @@ void UmlActivityObject::write_ordering(FileOut & out) {
 }
 
 void UmlActivityObject::write_in_state(FileOut & out) {
-  Q3CString s = inState();
+  QCString s = inState();
   
   if (!s.isEmpty()) {
     UmlState * st = UmlState::find(s);

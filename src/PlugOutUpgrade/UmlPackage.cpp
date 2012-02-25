@@ -24,9 +24,6 @@
 // *************************************************************************
 
 #include <qmessagebox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
 
 #include "UmlPackage.h"
 #include "UmlClassView.h"
@@ -84,8 +81,8 @@ void upgrade_rename_class(UmlClass * base_item,
   if (!UmlBaseItem::set_Name(s))\n\
     return FALSE;\n\
 \n\
-  const Q3PtrVector<UmlItem> ch = children();\n\
-  Q3CString destr = \"~\" + name();\n\
+  const QVector<UmlItem> ch = children();\n\
+  QCString destr = \"~\" + name();\n\
 \n\
   for (unsigned i = 0; i != ch.size(); i += 1) {\n\
     if (ch[i]->kind() == anOperation) {\n\
@@ -236,7 +233,7 @@ void upgrade_UmlSettings()
 
   for (i = 0; i != sizeof(s)/sizeof(s[0]); i += 1) {
     // add attribute
-    const Q3PtrVector<UmlItem> ch = cl->children();
+    const QVector<UmlItem> ch = cl->children();
     UmlAttribute * at =
       cl->add_attribute(s[i].att, ProtectedVisibility, "string", 0, 0);
     at->set_isClassMember(TRUE);
@@ -261,9 +258,9 @@ void upgrade_UmlSettings()
  On error : return FALSE in C++, produce a RuntimeException in Java");
     op->add_param(0, InputDirection, "v", "string"); 
     op->set_cpp("${type}", "${t0} ${p0}",
-		"  UmlCom::send_cmd(umlSettingsCmd, " + Q3CString(s[i].cmd) + ", v);\n"
+		"  UmlCom::send_cmd(umlSettingsCmd, " + QCString(s[i].cmd) + ", v);\n"
 		"  if (UmlCom::read_bool()) {\n"
-		"    " + Q3CString(s[i].att) + " = v;\n"
+		"    " + QCString(s[i].att) + " = v;\n"
 		"    return TRUE;\n"
 		"  }\n"
 		"  else\n"
@@ -271,9 +268,9 @@ void upgrade_UmlSettings()
 		FALSE, 0, 0);
     op->set_java("void", "${t0} ${p0}",
 		 "  UmlCom.send_cmd(CmdFamily.umlSettingsCmd, UmlSettingsCmd._"
-		 + Q3CString(s[i].cmd) + ", v);\n"
+		 + QCString(s[i].cmd) + ", v);\n"
 		 "  UmlCom.check();\n"
-		 "  " + Q3CString(s[i].att) + " = v;\n",
+		 "  " + QCString(s[i].att) + " = v;\n",
 		 FALSE);
     
     // add get
@@ -286,12 +283,12 @@ void upgrade_UmlSettings()
     op->set_cpp("${type}", "",
 		"  read_if_needed_();\n"
 		"\n"
-		"  return " + Q3CString(s[i].att) + ";\n",
+		"  return " + QCString(s[i].att) + ";\n",
 		FALSE, 0, 0);
     op->set_java("${type}", "",
 		 "  read_if_needed_();\n"
 		"\n"
-		"  return " + Q3CString(s[i].att) + ";\n",
+		"  return " + QCString(s[i].att) + ";\n",
 		 FALSE);
   }
   
@@ -300,7 +297,7 @@ void upgrade_UmlSettings()
   UmlOperation * op = cl->get_operation("read_");
 
   if (op != 0) {
-    Q3CString body;
+    QCString body;
     
     body = op->cppBody();
     body.append("\n\
@@ -346,7 +343,7 @@ void upgrade_CppSettings()
       cl->add_attribute(s[i].att, PrivateVisibility, "string", 0, 0);
     at->set_isClassMember(TRUE);
     
-    const Q3PtrVector<UmlItem> ch = cl->children();
+    const QVector<UmlItem> ch = cl->children();
   
     for (j = 0; j != ch.size(); j += 1) {
       if (ch[j]->name() == s[i].after_att) {
@@ -364,9 +361,9 @@ void upgrade_CppSettings()
  On error : return FALSE in C++, produce a RuntimeException in Java");
     op->add_param(0, InputDirection, "v", "string"); 
     op->set_cpp("${type}", "${t0} ${p0}",
-		"  UmlCom::send_cmd(cppSettingsCmd, " + Q3CString(s[i].cmd) + ", v);\n"
+		"  UmlCom::send_cmd(cppSettingsCmd, " + QCString(s[i].cmd) + ", v);\n"
 		"  if (UmlCom::read_bool()) {\n"
-		"    " + Q3CString(s[i].att) + " = v;\n"
+		"    " + QCString(s[i].att) + " = v;\n"
 		"    return TRUE;\n"
 		"  }\n"
 		"  else\n"
@@ -374,9 +371,9 @@ void upgrade_CppSettings()
 		FALSE, 0, 0);
     op->set_java("void", "${t0} ${p0}",
 		 "  UmlCom.send_cmd(CmdFamily.cppSettingsCmd, CppSettingsCmd._"
-		 + Q3CString(s[i].cmd) + ", v);\n"
+		 + QCString(s[i].cmd) + ", v);\n"
 		 "  UmlCom.check();\n"
-		 "  " + Q3CString(s[i].att) + " = v;\n",
+		 "  " + QCString(s[i].att) + " = v;\n",
 		 FALSE);
     
     // add get
@@ -387,12 +384,12 @@ void upgrade_CppSettings()
     op2->set_cpp("${type}", "",
 		 "  read_if_needed_();\n"
 		 "\n"
-		 "  return " + Q3CString(s[i].att) + ";\n",
+		 "  return " + QCString(s[i].att) + ";\n",
 		 FALSE, 0, 0);
     op2->set_java("${type}", "",
 		  "  read_if_needed_();\n"
 		  "\n"
-		  "  return " + Q3CString(s[i].att) + ";\n",
+		  "  return " + QCString(s[i].att) + ";\n",
 		  FALSE);
     
     for (j = 0; j != ch.size(); j += 1) {
@@ -409,7 +406,7 @@ void upgrade_CppSettings()
   UmlOperation * op = cl->get_operation("read_");
   
   if (op != 0) {
-    Q3CString body;
+    QCString body;
     int index;
     
     body = op->cppBody();
@@ -477,22 +474,22 @@ void several_components_per_class(UmlClass * uml_base_class)
 		      " To set them refer to the UmlBaseComponent's operation"
 		      " setAssociatedClasses()");
       
-  Q3CString s;
+  QCString s;
   int index;
   
   s = op->cppDecl();
   index = s.find("${type} *");
   if (index != -1)
-    op->set_CppDecl(s.replace(index, 9, "const Q3PtrVector<${type}>"));
+    op->set_CppDecl(s.replace(index, 9, "const QVector<${type}>"));
   
   s = op->cppDef();
   index = s.find("${type} *");
   if (index != -1)
-    op->set_CppDef(s.replace(index, 9, "const Q3PtrVector<${type}>"));
+    op->set_CppDef(s.replace(index, 9, "const QVector<${type}>"));
   
   op->set_CppBody("  UmlCom::send_cmd(_identifier, assocComponentCmd);\n"
 		  "\n"
-		  "  Q3PtrVector<UmlComponent> result;\n"
+		  "  QVector<UmlComponent> result;\n"
 		  "  unsigned n = UmlCom::read_unsigned();\n"
 		  "\n"
 		  "  result.resize(n);\n"
@@ -543,7 +540,7 @@ void upgrade_jdk5(UmlClass * javasettings)
   
   UmlPackage::getProject()->rename_jdk5();
   
-  Q3PtrVector<UmlItem> ch = javasettings->children();
+  QVector<UmlItem> ch = javasettings->children();
   UmlOperation * set_EnumPatternDecl = 0;
   UmlOperation * set_EnumPatternItemCase = 0;
   UmlAttribute * _enum_pattern_decl = 0;
@@ -557,7 +554,7 @@ void upgrade_jdk5(UmlClass * javasettings)
     switch (ch[i]->kind()) {
     case anOperation:
       {
-	Q3CString s = ch[i]->name();
+	QCString s = ch[i]->name();
 	
 	if (s == "enumDecl") {
 	  UmlCom::trace("rename JavaSettings::enumDecl to enumPatternDecl<br>\n");
@@ -615,10 +612,10 @@ void upgrade_jdk5(UmlClass * javasettings)
 			"    _map_imports.resize(n);\n"
 			"  \n"
 			"  for (index = 0; index != n; index += 1) {\n"
-			"    Q3CString t = UmlCom::read_string();\n"
-			"    Q3CString i = UmlCom::read_string();\n"
+			"    QCString t = UmlCom::read_string();\n"
+			"    QCString i = UmlCom::read_string();\n"
 			"    \n"
-			"    _map_imports.insert(t, new Q3CString(i));\n"
+			"    _map_imports.insert(t, new QCString(i));\n"
 			"  }\n"
 			"    \n"
 			"  _src_content = UmlCom::read_string();\n"
@@ -706,7 +703,7 @@ void upgrade_jdk5(UmlClass * javasettings)
       break;
     case anAttribute:
       {
-	Q3CString s = ch[i]->name();
+	QCString s = ch[i]->name();
 	
 	if (s == "_enum_decl") {
 	  UmlCom::trace("rename JavaSettings::_enum_decl to _enum_pattern_decl<br>\n");
@@ -929,7 +926,7 @@ void upgrade_jdk5(UmlClass * javasettings)
 	(ch[i]->name() == "send_cmd")) {
       op1 = (UmlOperation *) ch[i];
       
-      Q3ValueList<UmlParameter> params = op1->params();
+      QValueList<UmlParameter> params = op1->params();
       
       if (params.count() == 6) {
 	UmlParameter p = params.last();
@@ -1157,7 +1154,7 @@ void fixe_package_diagram()
   
   // replace _assoc_diagram
   
-  const Q3PtrVector<UmlItem> ch = basepackage->children();
+  const QVector<UmlItem> ch = basepackage->children();
   unsigned i;
   
   for (i = 0; i != ch.size(); i += 1) {
@@ -1377,7 +1374,7 @@ void add_object_activity_diagram_item_kind()
   UmlAttribute * anObjectDiagram = itkind->add_enum_item("anObjectDiagram");
   UmlAttribute * anActivityDiagram = itkind->add_enum_item("anActivityDiagram");
   
-  const Q3PtrVector<UmlItem> ch = itkind->children();
+  const QVector<UmlItem> ch = itkind->children();
     
   for (unsigned i = 0; i != ch.size(); i += 1) {
     if (ch[i]->name() == "aDeploymentDiagram") {
@@ -1393,7 +1390,7 @@ void baseitem_read_objectdiagram(UmlClass * base_item) {
   UmlOperation * op = base_item->get_operation("read_");
   
   if (op != 0) {
-    Q3CString body;
+    QCString body;
     
     body = op->cppBody();
     body.insert(body.findRev("default:"),
@@ -1416,7 +1413,7 @@ void baseitem_read_objectdiagram(UmlClass * base_item) {
   
   // update BaseUmlItem artifact
   UmlArtifact * art = base_item->associatedArtifact();
-  Q3CString s;
+  QCString s;
   
   s = art->cppSource();
   s.insert(s.find("#include \"UmlDeploymentDiagram.h\""),
@@ -1601,7 +1598,7 @@ void add_cpp_set_param_ref(UmlClass * cppsetting)
   //
 
   UmlOperation * op = cppsetting->get_operation("read_");
-  Q3CString s;
+  QCString s;
   
   s = op->cppBody() + "  _is_set_param_ref = UmlCom::read_bool();\n";
   op->set_CppBody(s);
@@ -1678,7 +1675,7 @@ void upgrade_setter_getter()
   UmlClass * baseoper = UmlClass::get("UmlBaseOperation", 0);
   UmlAttribute * att;
   UmlAttribute * att2;
-  Q3CString s;
+  QCString s;
   
   att = baseoper->add_attribute("_cpp_get_set_frozen", PrivateVisibility, "bool", "WITHCPP", "endif", " : 1");  
   att->moveAfter(baseoper->get_attribute("_idl_oneway"));
@@ -1761,7 +1758,7 @@ void add_cpp_relative_path_force_namespace(UmlClass * cppsetting)
   //
 
   UmlOperation * op = cppsetting->get_operation("read_");
-  Q3CString s;
+  QCString s;
   
   s = op->cppBody() + 
     "  _is_relative_path = UmlCom::read_bool();\n"
@@ -1961,7 +1958,7 @@ void add_getter_setter_rules(UmlClass * umlsetting)
   //
 
   UmlOperation * op = umlsetting->get_operation("read_");
-  Q3CString s;
+  QCString s;
   
   s = op->cppBody() + 
     "  _uml_get_name = (aLanguage) UmlCom::read_char();\n"
@@ -2091,7 +2088,7 @@ void add_extension_points()
   
   UmlClass * base_usecase = UmlClass::get("UmlBaseUseCase", 0);
   UmlOperation * op;
-  Q3CString s;
+  QCString s;
   
   op = base_usecase->get_operation("read_uml_");
   s = op->cppBody() + "  _extension_points = UmlCom::read_string();\n";
@@ -2148,7 +2145,7 @@ void remove_java_public(UmlClass * uml_base_class)
   op->set_CppBody("  return set_Visibility((y) ? PublicVisibility : PackageVisibility);\n");
   op->set_JavaBody("  set_Visibility((y) ? aVisibility.PublicVisibility : aVisibility.PackageVisibility);\n");
   
-  Q3CString s;
+  QCString s;
   
   op = uml_base_class->get_operation("read_java_");
   
@@ -2266,7 +2263,7 @@ void add_cpp_root_relative_path(UmlClass * cppsetting)
   
   op = cppsetting->get_operation("read_");
 
-  Q3CString s;
+  QCString s;
   
   s = op->cppBody() + "  _is_root_relative_path = UmlCom::read_bool();\n";
   op->set_CppBody(s);
@@ -2354,7 +2351,7 @@ void add_cpp_generate_javadoc_comment(UmlClass * cppsetting)
   
   op = cppsetting->get_operation("read_");
 
-  Q3CString s;
+  QCString s;
   
   s = op->cppBody() + "  _is_generate_javadoc_comment = UmlCom::read_bool();\n";
   op->set_CppBody(s);
@@ -2438,7 +2435,7 @@ void add_java_generate_javadoc_comment(UmlClass * javasetting)
   
   op = javasetting->get_operation("read_");
 
-  Q3CString s;
+  QCString s;
   
   s = op->cppBody() + "  _is_generate_javadoc_comment = UmlCom::read_bool();\n";
   op->set_CppBody(s);
@@ -2481,7 +2478,7 @@ void add_constraint(UmlClass * baseclassmember)
   
   op = baseclassmember->get_operation("read_uml_");
   
-  Q3CString s;
+  QCString s;
   
   s = op->cppBody() + "  _constraint = UmlCom::read_string();\n";
   op->set_CppBody(s);
@@ -2577,7 +2574,7 @@ void add_get_id(UmlClass * uml_base_item)
   op = uml_base_item->get_operation("read_uml_");
   
   if (op != 0) {
-    Q3CString body;
+    QCString body;
     
     body = op->cppBody();
     body += "  _modeler_id = (int) UmlCom::read_unsigned();\n";
@@ -2621,13 +2618,13 @@ void fixe_parameterset_read_uml()
 // add multiplicity on attributes
 //
 
-void add_multiplicity(UmlClass * settings, Q3CString attr,
-			     Q3CString get, Q3CString set,
-			     Q3CString who, Q3CString Who, Q3CString what)
+void add_multiplicity(UmlClass * settings, QCString attr,
+			     QCString get, QCString set,
+			     QCString who, QCString Who, QCString what)
 {
   
   UmlOperation * op;
-  Q3CString s;
+  QCString s;
   
   // upgrade get
   
@@ -2694,7 +2691,7 @@ void add_multiplicity(UmlClass * settings, Q3CString attr,
 			     "    " + attr + "[index] ="));
 }
 
-void add_attribute_multiplicity(UmlClass * settings, Q3CString who, Q3CString Who)
+void add_attribute_multiplicity(UmlClass * settings, QCString who, QCString Who)
 {  
   UmlCom::trace("<b>upgrade " + Who + "Settings</b><br>");
   
@@ -2706,7 +2703,7 @@ void add_attribute_multiplicity(UmlClass * settings, Q3CString who, Q3CString Wh
 		   who, Who, "Attribute");
 }
 
-void rename_in(Q3CString & s, Q3CString from, Q3CString to)
+void rename_in(QCString & s, QCString from, QCString to)
 {
   int index = 0;
   
@@ -2716,7 +2713,7 @@ void rename_in(Q3CString & s, Q3CString from, Q3CString to)
   }
 }
 
-Q3CString rename_in(Q3CString s)
+QCString rename_in(QCString s)
 {
   rename_in(s, "elationStereotype", "elationAttributeStereotype");
   rename_in(s, "relationUmlStereotype", "relationAttributeUmlStereotype");
@@ -2785,7 +2782,7 @@ void add_attribute_multiplicity(UmlClass * umlsettings, UmlClass * cppsettings,
   
   // modify read_uml_()
   
-  Q3CString s;
+  QCString s;
   
   op1 = attribute->get_operation("read_uml_");
   s = op1->cppBody();
@@ -2924,7 +2921,7 @@ void add_external(UmlClass * transition)
 	     " only a self transition may be set internal");
   op->moveAfter(get);
     
-  Q3CString body;
+  QCString body;
     
   op = transition->get_operation("read_uml_");
   body = op->cppBody();
@@ -2973,7 +2970,7 @@ void add_force_body_gen()
 		     " to set if the body is generated even if preserve body is set");
   op->moveAfter(get);
   
-  Q3CString body;
+  QCString body;
   int index;
     
   op = base_oper->get_operation("read_uml_");
@@ -3016,7 +3013,7 @@ void fixe_java_alloc()
   
   UmlClass * cl;
   UmlOperation * op;
-  Q3CString s;
+  QCString s;
   
   cl = UmlClass::get("CppSettings", 0);
   op = cl->get_operation("read_");
@@ -3228,10 +3225,10 @@ void add_missing_opers()
     
     op = baseitem->add_op("markedItems", PublicVisibility, UmlClass::get("UmlItem", 0));
     op->set_isClassMember(TRUE);
-    op->set_cpp("const Q3PtrVector<${type}>", "",
+    op->set_cpp("const QVector<${type}>", "",
 		"  UmlCom::send_cmd(miscGlobalCmd, allMarkedCmd);\n"
 		"  \n"
-		"  Q3PtrVector<UmlItem> result;\n"
+		"  QVector<UmlItem> result;\n"
 		"  \n"
 		"  UmlCom::read_item_list(result);\n"
 		"  return result;\n",
@@ -3249,10 +3246,10 @@ void add_missing_opers()
 			"  The result may contains UmlAttribute, UmlRelations, UmlNcRelations,\n"
 			"  UmlOperation (their bodies are not taken into account) , UmlClass\n"
 			"  and UmlComponents.");
-    op->set_cpp("const Q3PtrVector<${type}>", "",
+    op->set_cpp("const QVector<${type}>", "",
 		"  UmlCom::send_cmd(_identifier, referencedByCmd);\n"
 		"  \n"
-		"  Q3PtrVector<UmlItem> result;\n"
+		"  QVector<UmlItem> result;\n"
 		"  \n"
 		"  UmlCom::read_item_list(result);\n"
 		"  return result;\n",
@@ -3342,7 +3339,7 @@ void add_missing_opers()
     op->moveAfter(op1);
     
     UmlArtifact * art = basepack->associatedArtifact();
-    Q3CString s;
+    QCString s;
   
     s = art->cppSource();
     if (s.find("#include \"MiscGlobalCmd.h\"") == -1) {
@@ -3411,7 +3408,7 @@ void replacefriend()
 }
 
 void UmlPackage::replace_friend() {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned i;
   
   for (i = 0; i != ch.size(); i += 1)
@@ -3430,7 +3427,7 @@ void update_pack_global(UmlClass * uml_base_package)
   UmlCom::trace("<b>update UmlBasePackage : find namespace/module/namespace</b><br>\n");
 
   UmlOperation * op;
-  Q3CString body;
+  QCString body;
   int index;
   
   if ((op = uml_base_package->get_operation("findNamespace")) != 0) {
@@ -3541,7 +3538,7 @@ void add_contextual_body_indent()
 
   //
 
-  Q3CString s;
+  QCString s;
   
   op = baseoper->get_operation("read_cpp_");
   s = op->cppBody() + "  _cpp_contextual_body_indent = UmlCom::read_bool();\n";
@@ -3625,7 +3622,7 @@ void add_profile()
   op->moveAfter(base_class->get_operation("get"));
   
   UmlArtifact * art = base_class->associatedArtifact();
-  Q3CString s = art->cppSource();
+  QCString s = art->cppSource();
   
   art->set_CppSource(s.insert(s.find("${namespace_start}"),
 			      "#include \"PackageGlobalCmd.h\"\n"));
@@ -3692,7 +3689,7 @@ void modify_texts()
   UmlClass * base_frc = UmlClass::get("UmlBaseFragmentCompartment", 0);
   UmlOperation * op = base_frc->get_operation("texts");
   
-  op->set_cpp("const Q3PtrVector<char> &", "", "  return _texts;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<char> &", "", "  return _texts;\n", TRUE, 0, 0);
   
   // stay root
 }
@@ -3738,10 +3735,10 @@ void fixe_idlsetting_read()
     _map_includes.resize(n);\n\
   \n\
   for (index = 0; index != n; index += 1) {\n\
-    Q3CString t = UmlCom::read_string();\n\
-    Q3CString i = UmlCom::read_string();\n\
+    QCString t = UmlCom::read_string();\n\
+    QCString i = UmlCom::read_string();\n\
     \n\
-    _map_includes.insert(t, new Q3CString(i));\n\
+    _map_includes.insert(t, new QCString(i));\n\
   }\n\
   \n\
   _src_content = UmlCom::read_string();\n\
@@ -3846,13 +3843,13 @@ void fixe_idlsetting_read()
 
 UmlOperation * wrong_umlcom_send_cmd(UmlClass * uml_com)
 {
-  const Q3PtrVector<UmlItem> ch = uml_com->children();
+  const QVector<UmlItem> ch = uml_com->children();
   UmlOperation * r = 0;
 
   for (unsigned i = 0; i != ch.size(); i += 1) {
     if ((ch[i]->kind() == anOperation)  && (ch[i]->name() == "send_cmd")) {
       UmlOperation * op = (UmlOperation *) ch[i];
-      const Q3ValueList<UmlParameter> p = op->params();
+      const QValueList<UmlParameter> p = op->params();
       
       if ((p.count() == 3) && 
 	  ((p[0].type.type == UmlClass::get("CmdFamily", 0)) ||
@@ -3896,7 +3893,7 @@ void fixe_umlcom_send_cmd(UmlOperation * op0)
 	      "  flush();\n",
 	      FALSE, 0, 0);
   
-  Q3CString s = op->cppDef();
+  QCString s = op->cppDef();
   
   s.remove(s.find(" ${p3}"), 6);
   op->set_CppDef(s);
@@ -3936,7 +3933,7 @@ void add_javasettings_forcepackageprefixgeneration(UmlClass * javasettings)
   UmlAttribute * att;
   UmlOperation * op;
   UmlOperation * op2;
-  Q3CString s;
+  QCString s;
   
   //
   
@@ -4018,7 +4015,7 @@ void add_cppsettings_builtindir()
 \n\
   UmlBuiltin * b = UmlSettings::_map_builtins.find(s);\n\
 \n\
-  return (b) ? b->cpp_in : Q3CString("");\n",
+  return (b) ? b->cpp_in : QCString("");\n",
 	      FALSE, 0, 0);
     op->set_java("${type}", "${t0} ${p0}", "\
   read_if_needed_();\n\
@@ -4080,7 +4077,7 @@ void add_cppsettings_builtindir()
 \n\
   UmlBuiltin * b = UmlSettings::_map_builtins.find(s);\n\
 \n\
-  return (b) ? b->cpp_out : Q3CString("");\n",
+  return (b) ? b->cpp_out : QCString("");\n",
 	      FALSE, 0, 0);
     op->set_java("${type}", "${t0} ${p0}", "\
   read_if_needed_();\n\
@@ -4142,7 +4139,7 @@ void add_cppsettings_builtindir()
 \n\
   UmlBuiltin * b = UmlSettings::_map_builtins.find(s);\n\
 \n\
-  return (b) ? b->cpp_inout : Q3CString("");\n",
+  return (b) ? b->cpp_inout : QCString("");\n",
 	      FALSE, 0, 0);
     op->set_java("${type}", "${t0} ${p0}", "\
   read_if_needed_();\n\
@@ -4204,7 +4201,7 @@ void add_cppsettings_builtindir()
 \n\
   UmlBuiltin * b = UmlSettings::_map_builtins.find(s);\n\
 \n\
-  return (b) ? b->cpp_return : Q3CString("");\n",
+  return (b) ? b->cpp_return : QCString("");\n",
 	      FALSE, 0, 0);
     op->set_java("${type}", "${t0} ${p0}", "\
   read_if_needed_();\n\
@@ -4256,7 +4253,7 @@ void add_cppsettings_builtindir()
 
   //
  
-  Q3CString s;
+  QCString s;
   
   op = cppsettings->get_operation("set_In");
   s = op->cppBody();
@@ -4336,11 +4333,11 @@ void update_uml_com2()
 //
 //
 
-void oneBit(UmlClass * cl, Q3CString attname, const char * opname,
-	    Q3CString cmd, const char * end_if)
+void oneBit(UmlClass * cl, QCString attname, const char * opname,
+	    QCString cmd, const char * end_if)
 {
   UmlAttribute * att = cl->get_attribute(attname);
-  Q3CString s;
+  QCString s;
   int index;
   
   s = att->cppDecl();
@@ -4351,7 +4348,7 @@ void oneBit(UmlClass * cl, Q3CString attname, const char * opname,
   }
 
   UmlOperation * op = cl->get_operation(opname);
-  Q3CString v = op->params()[0].name;
+  QCString v = op->params()[0].name;
   
   s = "  UmlCom::send_cmd(_identifier, " + cmd + ", (char) " + v + ");\n"
       "  if (UmlCom::read_bool()) {\n"
@@ -4441,7 +4438,7 @@ void add_property_modifiers(UmlClass * cl)
   
   op = cl->get_operation("read_uml_");
   
-  Q3CString s;
+  QCString s;
   
   s = op->cppBody();
   s.insert(s.find("_get_oper = "),
@@ -4507,7 +4504,7 @@ void add_property_modifiers()
 void add_read(UmlClass * cl, const char * opname)
 {
   UmlOperation * op = cl->get_operation(opname);
-  Q3CString s;
+  QCString s;
   
   s = "  read_if_needed_();\n" + op->cppBody();
   op->set_CppBody(s);
@@ -4683,17 +4680,17 @@ void fixe_set_associateddiagram(UmlItem * v)
   
   UmlCom::trace("<b>fixe operations <i>set_AssociatedDiagram</i></b><br>");
   
-  const Q3PtrVector<UmlItem> ch1 = v->children();
+  const QVector<UmlItem> ch1 = v->children();
 
   for (unsigned i1 = 0; i1 != ch1.size(); i1 += 1) {
     if (ch1[i1]->kind() == aClass) {
-      const Q3PtrVector<UmlItem> ch2 = ch1[i1]->children();
+      const QVector<UmlItem> ch2 = ch1[i1]->children();
       
       for (unsigned i2 = 0; i2 != ch2.size(); i2 += 1) {
 	if ((ch2[i2]->kind() == anOperation) &&
 	    (ch2[i2]->name() == "set_AssociatedDiagram")) {
 	  UmlOperation * op = (UmlOperation *) ch2[i2];
-	  Q3CString b;
+	  QCString b;
 	  
 	  b = op->cppBody();
 	  if (b.find("(d == 0) ? (void *) 0 : ") == -1) {
@@ -4720,7 +4717,7 @@ void fixe_set_associateddiagram(UmlItem * v)
 //
 //
 
-void bypass_q3ptrvector_bug()
+void bypass_qvector_bug()
 {
   unsigned uid = UmlCom::user_id();
   
@@ -4728,7 +4725,7 @@ void bypass_q3ptrvector_bug()
   
   //
   
-  UmlCom::trace("<b>bypass Qt 2.3 bug concerning Q3PtrVector assignment</b><br>");
+  UmlCom::trace("<b>bypass Qt 2.3 bug concerning QVector assignment</b><br>");
   UmlOperation * op;
   
   op = UmlClass::get("UmlBaseComponent", 0)
@@ -4751,7 +4748,7 @@ void bypass_q3ptrvector_bug()
   
   UmlClass::get("UmlBaseArtifact", 0)
     ->get_operation("set_AssociatedClasses")
-      ->set_CppBody("  UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const Q3PtrVector<UmlItem> &) l);\n"
+      ->set_CppBody("  UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const QVector<UmlItem> &) l);\n"
 		    "  if (UmlCom::read_bool()) {\n"
 		  "      // tests != to bypass Qt 2.3 bug\n"
 		    "    if (_defined && (&_assoc_classes != &l))\n"
@@ -4763,7 +4760,7 @@ void bypass_q3ptrvector_bug()
   
   UmlClass::get("UmlBaseParameterSet", 0)
     ->get_operation("set_Pins")
-      ->set_CppBody("  UmlCom::send_cmd(_identifier, replaceParameterCmd, (const Q3PtrVector<UmlItem> &) v);\n"
+      ->set_CppBody("  UmlCom::send_cmd(_identifier, replaceParameterCmd, (const QVector<UmlItem> &) v);\n"
 		    "  if (UmlCom::read_bool()) {\n"
 		  "      // tests != to bypass Qt 2.3 bug\n"
 		    "    if (_defined && (&_pins != &v)) _pins = v;\n"
@@ -4792,8 +4789,8 @@ void add_methods(UmlClass * opercl, UmlClass * uml_item)
     opercl->add_op("methods", PublicVisibility, uml_item);
   
   op->set_isCppConst(TRUE);
-  op->set_cpp("const Q3PtrVector<${type}>", "",
-	      "  Q3PtrVector<UmlItem> l;\n"
+  op->set_cpp("const QVector<${type}>", "",
+	      "  QVector<UmlItem> l;\n"
 	      "\n"
 	      "  UmlCom::send_cmd(_identifier, sideCmd);\n"
 	      "  UmlCom::read_item_list(l);\n"
@@ -4867,7 +4864,7 @@ void add_is_active(UmlClass * uml_base_class)
     
   UmlOperation * op;
   UmlOperation * pos;
-  Q3CString body;
+  QCString body;
   
   uml_base_class->add_attribute("_active", PrivateVisibility, "bool", 0, 0, " : 1")
     ->moveAfter(uml_base_class->get_attribute("_abstract"));
@@ -4964,7 +4961,7 @@ void add_cpp_inline_oper_force_incl_in_h(UmlClass * cppsetting)
   //
 
   UmlOperation * op = cppsetting->get_operation("read_");
-  Q3CString s;
+  QCString s;
   
   s = op->cppBody() + "  _is_inline_force_header_in_h = UmlCom::read_bool();\n";
   op->set_CppBody(s);
@@ -5044,7 +5041,7 @@ void add_constraint2(UmlClass * basecl, const char *afterop, const char * aftera
   
   UmlCom::set_user_id(0);
   
-  Q3CString s = "<b>Add constraint on " + basecl->name() + "</b><br>\n";
+  QCString s = "<b>Add constraint on " + basecl->name() + "</b><br>\n";
   
   UmlCom::trace(s);
   
@@ -5100,13 +5097,13 @@ void add_rev_filter()
   unsigned i;
   
   for (i = 0; i != sizeof(langs) / sizeof(langs[0]); i += 1) {
-    Q3CString pfix = langs[i];
+    QCString pfix = langs[i];
     UmlClass * settings = UmlClass::get(pfix + "Settings", 0);
     UmlClass * settingscmd = UmlClass::get(settings->name() + "Cmd", 0);
     UmlAttribute * at2 = settings->get_attribute((langs[i][0] == 'C') ? "_src_ext" : "_ext");
     UmlOperation * op2 = settings->get_operation("set_SourceExtension");
-    Q3CString what = "Dir";
-    Q3CString cmd, rg, cs, s;
+    QCString what = "Dir";
+    QCString cmd, rg, cs, s;
     UmlAttribute * at;
     UmlOperation * op;
     
@@ -5233,7 +5230,7 @@ void add_cppvisi_indent(UmlClass * cppsetting)
   //
 
   UmlOperation * op = cppsetting->get_operation("read_");
-  Q3CString s;
+  QCString s;
 
   s = op->cppBody() + "\n  _visibility_indent = UmlCom::read_string();\n";
   op->set_CppBody(s);
@@ -5323,14 +5320,14 @@ bool ask_for_upgrade()
 void update_api_version(const char * v)
 {
   UmlClass * com = UmlClass::get("UmlCom", 0);
-  const Q3PtrVector<UmlItem> ch = com->children();
+  const QVector<UmlItem> ch = com->children();
   
   for (unsigned i = 0; i != ch.size(); i += 1){
     if ((ch[i]->kind() == anOperation) &&
 	(ch[i]->name() == "connect")) {
       unsigned uid = UmlCom::user_id();
       UmlOperation * op = (UmlOperation *) ch[i];
-      Q3CString body;
+      QCString body;
       int index1;
       int index2;
       
@@ -5576,7 +5573,7 @@ bool UmlPackage::upgrade() {
     
     UmlClass * bci = UmlClass::get("UmlBaseClassInstance", 0);
     UmlOperation * op = bci->get_operation("add_Relation");
-    const Q3ValueList<UmlParameter> params = op->params();
+    const QValueList<UmlParameter> params = op->params();
 
     if (params.first().type.type->name() == "UmlAttribute") {
       if (!work && !ask_for_upgrade())
@@ -5653,7 +5650,7 @@ bool UmlPackage::upgrade() {
     
     op = base_frg->get_operation("read_");
     
-    Q3CString s = op->cppBody();
+    QCString s = op->cppBody();
     
     if (s.find("_container = 0;") == -1) {
       if (!work && !ask_for_upgrade())
@@ -5759,7 +5756,7 @@ bool UmlPackage::upgrade() {
       if (!work && !ask_for_upgrade())
 	return FALSE;
       
-      bypass_q3ptrvector_bug();
+      bypass_qvector_bug();
       add_additionalactions(uml_base_item, uml_item);
 
       work = TRUE;

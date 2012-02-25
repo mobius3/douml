@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseActivity.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "anItemKind.h"
 
 class UmlItem;
@@ -13,7 +13,7 @@ class FileIn;
 class UmlActivity : public UmlBaseActivity {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivity(void * id, const Q3CString & s) : UmlBaseActivity(id, s) {
+     UmlActivity(void * id, const QCString & s) : UmlBaseActivity(id, s) {
        NumberOf += 1; 
     }
 
@@ -22,7 +22,7 @@ class UmlActivity : public UmlBaseActivity {
 
     //  call at end of import : try to solve reference to operation
     
-    virtual void solve(Q3CString idref);
+    virtual void solve(QCString idref);
 
     static void init();
 

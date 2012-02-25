@@ -10,7 +10,7 @@
 #include "UmlUseCaseReference.h"
 #include "UmlUseCaseAssociation.h"
 
-#include <q3ptrvector.h>
+#include <qvector.h>
 
 class UmlUseCaseReference;
 class UmlClass;
@@ -22,41 +22,41 @@ class UmlSubject;
 class UmlBaseUseCaseDiagramDefinition {
   public:
     // return the use cases present in the diagram
-    const Q3PtrVector<UmlUseCaseReference> & useCases() const {
+    const QVector<UmlUseCaseReference> & useCases() const {
         return _use_cases;
     }
 
     // return the actors present in the diagram
-    const Q3PtrVector<UmlClass> & actors() const {
+    const QVector<UmlClass> & actors() const {
         return _actors;
     }
 
     // return the associations between actor and use case present in the diagram
-    const Q3PtrVector<UmlUseCaseAssociation> & associations() const {
+    const QVector<UmlUseCaseAssociation> & associations() const {
         return _rels;
     }
 
     // return the fragments present in the diagram
-    const Q3PtrVector<UmlFragment> & fragments() const {
+    const QVector<UmlFragment> & fragments() const {
         return _fragments;
     }
 
     // return the subjects present in the diagram
-    const Q3PtrVector<UmlSubject> & subjects() const {
+    const QVector<UmlSubject> & subjects() const {
         return _subjects;
     }
 
 
   private:
-    Q3PtrVector<UmlUseCaseReference> _use_cases;
+    QVector<UmlUseCaseReference> _use_cases;
 
-    Q3PtrVector<UmlClass> _actors;
+    QVector<UmlClass> _actors;
 
-    Q3PtrVector<UmlUseCaseAssociation> _rels;
+    QVector<UmlUseCaseAssociation> _rels;
 
-    Q3PtrVector<UmlFragment> _fragments;
+    QVector<UmlFragment> _fragments;
 
-    Q3PtrVector<UmlSubject> _subjects;
+    QVector<UmlSubject> _subjects;
 
     // internal, don't call it
     void read_();

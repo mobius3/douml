@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -42,7 +39,7 @@ class QTextOStream;
 class UmlFormalParameter : public UmlBaseFormalParameter {
   public:
     UmlFormalParameter() {};
-    UmlFormalParameter(Q3CString t, Q3CString n, Q3CString v);
+    UmlFormalParameter(QCString t, QCString n, QCString v);
 
 };
 

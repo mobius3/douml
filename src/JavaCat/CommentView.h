@@ -27,9 +27,9 @@
 #define COMMENTVIEW_H
 
 //#include <qtextview.h>
-#include <q3textbrowser.h>
+#include <qtextbrowser.h>
 
-class CommentView : public Q3TextBrowser/*QTextView*/ {
+class CommentView : public QTextBrowser/*QTextView*/ {
   Q_OBJECT
     
   public:

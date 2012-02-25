@@ -27,14 +27,10 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDropEvent>
+#include <qptrdict.h>
 
 #include "BrowserRelation.h"
 #include "BrowserClassDiagram.h"
@@ -59,7 +55,7 @@
 #include "translate.h"
 
 IdDict<BrowserRelation> BrowserRelation::all(1021, __FILE__);
-static Q3PtrList<BrowserRelation> Unconsistent;
+static QList<BrowserRelation> Unconsistent;
 
 BrowserRelation::BrowserRelation(BrowserNode * p, RelationData * d, int id)
     : BrowserNode(d->get_name(), p), Labeled<BrowserRelation>(all, id),
@@ -190,7 +186,7 @@ void BrowserRelation::set_comment(const char * c) {
     def->set_comment_b(c);
 }
 
-void BrowserRelation::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserRelation::compute_referenced_by(QList<BrowserNode> & l,
 					    BrowserClass * target)
 {
   IdIterator<BrowserRelation> it(all);
@@ -207,7 +203,7 @@ void BrowserRelation::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserRelation::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserRelation::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserClassInstance::compute_referenced_by(l, this);
   if (! ondelete) {
@@ -429,24 +425,24 @@ void BrowserRelation::paintCell(QPainter * p, const QColorGroup & cg, int column
   const QColor & bg = p->backgroundColor();
   
   if (is_marked) {
-    p->setBackgroundMode(Qt::OpaqueMode);
+    p->setBackgroundMode(OpaqueMode);
     p->setBackgroundColor(UmlRedColor);
   }
     
   p->setFont((class_relation)
 	     ? ((is_writable()) ? BoldUnderlineFont : UnderlineFont)
 	     : ((is_writable()) ? BoldFont : NormalFont));
-  Q3ListViewItem::paintCell(p, cg, column, width, alignment);
+  QListViewItem::paintCell(p, cg, column, width, alignment);
   
   if (is_marked) {
-    p->setBackgroundMode(Qt::TransparentMode);
+    p->setBackgroundMode(TransparentMode);
     p->setBackgroundColor(bg);
   }
 }
 
 void BrowserRelation::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -792,7 +788,7 @@ BrowserRelation * BrowserRelation::reinsert(BrowserNode * p, RelationData * d)
   return new BrowserRelation(p, d);
 }
 
-void BrowserRelation::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserRelation::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classrelation_ref " << get_ident() << " // " << get_name();
   else {
@@ -1006,7 +1002,7 @@ BrowserNode * BrowserRelation::get_it(const char * k, int id)
 }
 
 //elt isa class
-void BrowserRelation::get_relating(BrowserNode * elt, Q3PtrDict<BrowserNode> & d,
+void BrowserRelation::get_relating(BrowserNode * elt, QPtrDict<BrowserNode> & d,
 				   BrowserNodeList & newones, 
 				   bool inh, bool dep, bool assoc)
 {

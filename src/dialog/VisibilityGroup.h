@@ -31,11 +31,11 @@
 #include "UmlEnum.h"
 
 class QRadioButton;
-class Q3ButtonGroup;
+class QButtonGroup;
 
 class VisibilityGroup {
   protected:
-    Q3ButtonGroup * bgroup;
+    QButtonGroup * bgroup;
     QRadioButton * public_rb;
     QRadioButton * protected_rb;
     QRadioButton * private_rb;
@@ -47,7 +47,7 @@ class VisibilityGroup {
   public:
     VisibilityGroup() {};
   
-    Q3ButtonGroup * init(QWidget * parent, UmlVisibility v,
+    QButtonGroup * init(QWidget * parent, UmlVisibility v,
 			bool pack_allowed,
 			const char * title = 0,
 			const char * default_string = 0);

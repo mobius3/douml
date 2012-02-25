@@ -32,11 +32,6 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "mu.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3TextStream>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 BasicParent BasicParent::the;
 
@@ -50,7 +45,7 @@ void BasicParent::removeChild(QObject *){
 
 //
 
-Q3PtrList<BasicData> BasicData::removed;
+QList<BasicData> BasicData::removed;
 
 BasicData::BasicData(const BasicData * model) 
     : QObject(&BasicParent::the), browser_node(0) {
@@ -112,7 +107,7 @@ bool BasicData::set_stereotype(const QString & s) {
   return result;
 }
 
-bool BasicData::set_stereotype(const Q3CString & s) {
+bool BasicData::set_stereotype(const QCString & s) {
   bool result = ((const char *) stereotype != s);
   
   stereotype = s;
@@ -148,7 +143,7 @@ bool BasicData::decldefbody_contain(const QString &, bool,
   return FALSE;
 }
 
-void BasicData::save(Q3TextStream & st, QString &) const {
+void BasicData::save(QTextStream & st, QString &) const {
   if (! stereotype.isEmpty()) {
     nl_indent(st);
     st << "stereotype ";

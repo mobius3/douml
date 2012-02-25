@@ -26,9 +26,7 @@
 #ifndef PSEUDOSTATEDATA_H
 #define PSEUDOSTATEDATA_H
 
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qptrdict.h>
 
 #include "SimpleData.h"
 
@@ -57,7 +55,7 @@ class PseudoStateData : public SimpleData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
     
   protected slots:

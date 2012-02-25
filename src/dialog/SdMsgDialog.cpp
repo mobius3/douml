@@ -31,16 +31,13 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <q3hbox.h>
+#include <qcombobox.h> 
+#include <qhbox.h>
 #include <qpushbutton.h>
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qradiobutton.h> 
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include "SdMsgDialog.h"
 #include "SdMsgBaseCanvas.h"
@@ -61,12 +58,12 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
     : QDialog(0, "Message editor", TRUE), mc(a) {
   setCaption(TR("Message dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   
   SmallPushButton * b = new SmallPushButton(TR("message :"), this);
@@ -74,7 +71,7 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
   hbox->addWidget(b);
   connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
   
-  edoper = new Q3ComboBox(TRUE, this);
+  edoper = new QComboBox(TRUE, this);
   if (a->msg == 0)
     edoper->insertItem(a->explicit_msg);
   else
@@ -104,10 +101,10 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
   
   //
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(new QLabel(TR("stereotype : "), this));
-  edst = new Q3ComboBox(TRUE, this);
+  edst = new QComboBox(TRUE, this);
   if (a->stereotype != 0) {
     QString s = a->stereotype->get_name();
     
@@ -124,14 +121,14 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
   
   //
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   
-  Q3HBox * htab = new Q3HBox(this);
+  QHBox * htab = new QHBox(this);
   
   htab->setMargin(5);
   
-  Q3ButtonGroup * bg = new Q3ButtonGroup(2, Qt::Horizontal, TR("Message type"), htab);
+  QButtonGroup * bg = new QButtonGroup(2, Qt::Horizontal, TR("Message type"), htab);
   
   bg->setExclusive(TRUE);
   synchronous_rb = new QRadioButton(TR("synchronous"), bg);
@@ -148,7 +145,7 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
 operation's parameter(s) without any check"),
 			     this));
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(new QLabel(TR("arguments : "), this));
   edargs = new MultiLineEdit(this);
@@ -156,7 +153,7 @@ operation's parameter(s) without any check"),
   hbox->addWidget(edargs);  
   edargs->setFocus();
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * ok = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -183,7 +180,7 @@ SdMsgDialog::~SdMsgDialog() {
 }
 
 void SdMsgDialog::menu_op() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();

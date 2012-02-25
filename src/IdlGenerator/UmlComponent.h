@@ -27,8 +27,6 @@
 #define UMLCOMPONENT_H
 
 #include "UmlBaseComponent.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlPackage;
 
@@ -37,7 +35,7 @@ class UmlPackage;
 
 class UmlComponent : public UmlBaseComponent {
   public:
-    UmlComponent(void * id, const Q3CString & n)
+    UmlComponent(void * id, const QCString & n)
       : UmlBaseComponent(id, n) { };
 };
 

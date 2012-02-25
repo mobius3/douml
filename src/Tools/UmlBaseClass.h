@@ -5,10 +5,10 @@
 #include "UmlClassMember.h"
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
-#include <q3valuelist.h>
-#include <q3ptrvector.h>
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <qvaluelist.h>
+#include <qvector.h>
+#include <qcstring.h>
+#include <qdict.h>
 
 #include "UmlFormalParameter.h"
 #include "UmlActualParameter.h"
@@ -53,7 +53,7 @@ class UmlBaseClass : public UmlClassMember {
     bool set_BaseType(const UmlTypeSpec & t);
 
     // returns (a copy of) the formals list
-    Q3ValueList<UmlFormalParameter> formals();
+    QValueList<UmlFormalParameter> formals();
 
     // remove the formal of the given rank (0...), returns 0 on error
     //
@@ -76,7 +76,7 @@ class UmlBaseClass : public UmlClassMember {
     bool replaceFormal(unsigned int rank, const UmlFormalParameter & formal);
 
     // returns (a copy of) the actuals list
-    Q3ValueList<UmlActualParameter> actuals();
+    QValueList<UmlActualParameter> actuals();
 
     // replace the actual value at the given rank (0...)
     //
@@ -99,7 +99,7 @@ class UmlBaseClass : public UmlClassMember {
 
     // returns the components realizing or providing the class.
     // To set them refer to the UmlBaseComponent's operation setAssociatedClasses()
-    const Q3PtrVector<UmlComponent> associatedComponents();
+    const QVector<UmlComponent> associatedComponents();
 
 #ifdef WITHCPP
     // returns TRUE if the class is external, its definition
@@ -220,10 +220,10 @@ class UmlBaseClass : public UmlClassMember {
     //exist, else 0/null. In case the package is specified (not 0/null), 
     //the returned class will be defined in a sub-level of the package.
     
-    static UmlClass * get(const Q3CString & n, const UmlPackage * p);
+    static UmlClass * get(const QCString & n, const UmlPackage * p);
     
     //returns all the classes
-    static void getAll(Q3PtrVector<UmlClass> & v);
+    static void getAll(QVector<UmlClass> & v);
 
     // to unload the object to free memory, it will be reloaded automatically
     // if needed. Recursively done for the sub items if 'rec' is TRUE. 
@@ -236,13 +236,13 @@ class UmlBaseClass : public UmlClassMember {
     // to set the name
     // 
     // On error return FALSE in C++, produce a RuntimeException in Java
-    virtual bool set_Name(const Q3CString & s);
+    virtual bool set_Name(const QCString & s);
 
   friend class UmlBaseRelation;
   friend class UmlBaseArtifact;
 
   private:
-    static Q3Dict<UmlClass> _classes;
+    static QDict<UmlClass> _classes;
 
     bool _abstract;
 
@@ -288,7 +288,7 @@ class UmlBaseClass : public UmlClassMember {
 
   protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseClass(void * id, const Q3CString & n);
+    UmlBaseClass(void * id, const QCString & n);
 
     //internal, do NOT use it
     

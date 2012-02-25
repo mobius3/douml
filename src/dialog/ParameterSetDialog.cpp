@@ -28,13 +28,11 @@
 
 
 #include <qsplitter.h> 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h> 
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <qcombobox.h> 
 
 #include "ParameterSetDialog.h"
 #include "UmlDesktop.h"
@@ -55,7 +53,7 @@
 QSize ParameterSetDialog::previous_size;
 
 ParameterSetDialog::ParameterSetDialog(ParameterSetData * nd)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), data(nd) {
   nd->browser_node->edit_start();
   
   if (nd->browser_node->is_writable()) {
@@ -74,7 +72,7 @@ ParameterSetDialog::ParameterSetDialog(ParameterSetData * nd)
   
   // USER : list key - value
   
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
 
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -107,7 +105,7 @@ void ParameterSetDialog::change_tabs(QWidget * w) {
 }
 
 void ParameterSetDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
     
@@ -116,8 +114,8 @@ void ParameterSetDialog::init_uml_tab() {
   
   BrowserParameterSet * bn = 
     (BrowserParameterSet *) data->get_browser_node();
-  Q3VBox * vbox;
-  Q3Grid * grid = new Q3Grid(2, this);
+  QVBox * vbox;
+  QGrid * grid = new QGrid(2, this);
   
   umltab = grid;
   grid->setMargin(5);
@@ -128,7 +126,7 @@ void ParameterSetDialog::init_uml_tab() {
   edname->setReadOnly(visit);
     
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(TRUE, grid);
+  edstereotype = new QComboBox(TRUE, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(BrowserParameterSet::default_stereotypes());
@@ -140,7 +138,7 @@ void ParameterSetDialog::init_uml_tab() {
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
     
-  vbox = new Q3VBox(grid);
+  vbox = new QVBox(grid);
   new QLabel(TR("description :"), vbox);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
@@ -160,24 +158,24 @@ void ParameterSetDialog::init_uml_tab() {
 
 void ParameterSetDialog::init_pins_tab() {
   bool visit = !hasOkButton();  
-  Q3HBox * hbox;
+  QHBox * hbox;
   QPushButton * button;
-  Q3VBox * vbox = new Q3VBox(this);
-  Q3VBox * page = vbox;
-  const Q3ValueList<BrowserPin *> & inpins = data->pins;
-  Q3ValueList<BrowserPin *>::ConstIterator it;
+  QVBox * vbox = new QVBox(this);
+  QVBox * page = vbox;
+  const QValueList<BrowserPin *> & inpins = data->pins;
+  QValueList<BrowserPin *>::ConstIterator it;
   
   if (!visit) {
-    hbox = new Q3HBox(vbox);
-    vbox = new Q3VBox(hbox);
+    hbox = new QHBox(vbox);
+    vbox = new QVBox(hbox);
     vbox->setMargin(5);
-    (new QLabel(TR("Parameters out of Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
-    lb_available = new Q3ListBox(vbox);
-    lb_available->setSelectionMode(Q3ListBox::Multi);
+    (new QLabel(TR("Parameters out of Parameter Set"), vbox))->setAlignment(AlignCenter);
+    lb_available = new QListBox(vbox);
+    lb_available->setSelectionMode(QListBox::Multi);
     
     BrowserParameterSet * bn = 
       (BrowserParameterSet *) data->get_browser_node();
-    Q3ValueList<BrowserPin *> allpins =
+    QValueList<BrowserPin *> allpins =
       ((BrowserActivityAction *) bn->parent())->get_pins();
     
     for (it = allpins.begin(); it != allpins.end(); it++)
@@ -186,7 +184,7 @@ void ParameterSetDialog::init_pins_tab() {
     
     lb_available->sort();
     
-    vbox = new Q3VBox(hbox);
+    vbox = new QVBox(hbox);
     vbox->setMargin(5);
     (new QLabel("", vbox))->setScaledContents(TRUE);
     button = new QPushButton(vbox);
@@ -197,14 +195,14 @@ void ParameterSetDialog::init_pins_tab() {
     button->setPixmap(*leftPixmap);
     connect(button, SIGNAL(clicked()), this, SLOT(unassociate_cls()));
     (new QLabel("", vbox))->setScaledContents(TRUE);
-    vbox = new Q3VBox(hbox);
+    vbox = new QVBox(hbox);
   }
   
   vbox->setMargin(5);
-  (new QLabel(TR("Parameters in Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
-  lb_member = new Q3ListBox(vbox);
-  lb_member->setSelectionMode((visit) ? Q3ListBox::NoSelection
-					     : Q3ListBox::Multi);
+  (new QLabel(TR("Parameters in Parameter Set"), vbox))->setAlignment(AlignCenter);
+  lb_member = new QListBox(vbox);
+  lb_member->setSelectionMode((visit) ? QListBox::NoSelection
+					     : QListBox::Multi);
   for (it = inpins.begin(); it != inpins.end(); ++it)
     lb_member->insertItem(new ListBoxBrowserNode(*it, (*it)->full_name(TRUE)));
   
@@ -224,7 +222,7 @@ void ParameterSetDialog::associate_cls() {
   unsigned int i = 0;
   
   while (i < lb_available->count()) {
-    Q3ListBoxItem * item = lb_available->item(i);
+    QListBoxItem * item = lb_available->item(i);
     
     if (item->selected()) {
       lb_available->takeItem(item);
@@ -241,7 +239,7 @@ void ParameterSetDialog::unassociate_cls() {
   unsigned int i = 0;
   
   while (i < lb_member->count()) {
-    Q3ListBoxItem * item = lb_member->item(i);
+    QListBoxItem * item = lb_member->item(i);
     
     if (item->selected()) {
       lb_member->takeItem(item);
@@ -275,7 +273,7 @@ void ParameterSetDialog::accept() {
     QString stereotype = 
       fromUnicode(edstereotype->currentText().stripWhiteSpace());
     bool newst = data->set_stereotype(stereotype);
-    Q3ValueList<BrowserPin *> l;
+    QValueList<BrowserPin *> l;
     unsigned n = lb_member->count();
 
     for (unsigned i = 0; i != n; i += 1)
@@ -293,6 +291,6 @@ void ParameterSetDialog::accept() {
     bn->package_modified();
     data->modified();
     
-    Q3TabDialog::accept();
+    QTabDialog::accept();
   }
 }

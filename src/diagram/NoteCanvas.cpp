@@ -29,10 +29,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3PointArray>
+#include <qpopupmenu.h> 
 
 #include "NoteCanvas.h"
 #include "MLEDialog.h"
@@ -66,12 +63,12 @@ void NoteCanvas::delete_it() {
 
 void NoteCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QBrush brsh = p.brush();
   QColor bckgrnd = p.backgroundColor();
   QPen fgcolor = p.pen();
-  Q3PointArray a(7);
+  QPointArray a(7);
   
   used_color = (itscolor == UmlDefaultColor)
     ? the_canvas()->browser_diagram()->get_color(UmlNote)
@@ -127,13 +124,13 @@ void NoteCanvas::draw(QPainter & p) {
   
   p.drawText (r.left() + corner_size, r.top() + corner_size,
 	      r.width() - 2*corner_size, r.height() - 2*corner_size, 
-	      ::Qt::AlignLeft + ::Qt::AlignTop + ::Qt::TextWordWrap,
+	      ::Qt::AlignLeft + ::Qt::AlignTop + ::Qt::WordBreak,
 	      note);
 
   if (fp != 0) {
     draw_text(r.left() + corner_size, r.top() + corner_size,
 	      r.width() - 2*corner_size, r.height() - 2*corner_size, 
-	      ::Qt::AlignLeft + ::Qt::AlignTop + ::Qt::TextWordWrap,
+	      ::Qt::AlignLeft + ::Qt::AlignTop + ::Qt::WordBreak,
 	      note, p.font(), fp, fg_c);
     fputs("</g>\n", fp);
   }
@@ -186,8 +183,8 @@ void NoteCanvas::modified() {
 }
 
 void NoteCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu fontsubm(0);
+  QPopupMenu m(0);
+  QPopupMenu fontsubm(0);
   
   m.insertItem(new MenuTitle(TR("Note"), m.font()), -1);
   m.insertSeparator();
@@ -321,7 +318,7 @@ bool NoteCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void NoteCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void NoteCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -332,7 +329,7 @@ void NoteCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((NoteCanvas *) it.current())->itscolor = itscolor;
@@ -344,8 +341,8 @@ void NoteCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void NoteCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void NoteCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   NoteCanvas * x = (NoteCanvas *) it.current();
   
@@ -358,7 +355,7 @@ void NoteCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
 }
 
 QString NoteCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString NoteCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -381,7 +378,7 @@ void NoteCanvas::resize(const QSize & sz, bool w, bool h) {
   DiagramCanvas::resize(sz, w, h, min, min, TRUE);
 }
 
-void NoteCanvas::save_internal(Q3TextStream & st) const {
+void NoteCanvas::save_internal(QTextStream & st) const {
   save_string(fromUnicode(note), st);
   nl_indent(st);
   if (itscolor != UmlDefaultColor)
@@ -393,7 +390,7 @@ void NoteCanvas::save_internal(Q3TextStream & st) const {
   save_xyzwh(st, this, "  xyzwh");
 }
 
-void NoteCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void NoteCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "note_ref " << get_ident();
   }
@@ -439,7 +436,7 @@ NoteCanvas * NoteCanvas::read(char * & st, UmlCanvas * canvas, char * k)
 }
 
 void NoteCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
 
@@ -460,7 +457,7 @@ void NoteCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }

@@ -26,7 +26,7 @@
 #ifndef PINPARAMDATA_H
 #define PINPARAMDATA_H
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "SimpleData.h"
 #include "ObjectData.h"
@@ -51,7 +51,7 @@ struct PinParamData : public ObjectData {
   void send_uml_def(ToolCom * com);
   bool tool_cmd(ToolCom * com, const char * args, BooL & ack);
   
-  void save(Q3TextStream &, QString & warning) const;
+  void save(QTextStream &, QString & warning) const;
   void read(char * &, char * &);
 };
 

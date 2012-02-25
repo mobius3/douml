@@ -27,8 +27,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "ParameterData.h"
 #include "ParameterDialog.h"
@@ -114,7 +112,7 @@ bool ParameterData::tool_cmd(ToolCom * com, const char * args,
   return TRUE;
 }
 
-void ParameterData::save(Q3TextStream & st, QString & warning) const {
+void ParameterData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   PinParamData::save(st, warning);
 

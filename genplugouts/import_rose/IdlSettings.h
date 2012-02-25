@@ -4,9 +4,9 @@
 #ifdef WITHIDL
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlSettings.h"
-#include <q3dict.h>
+#include <qdict.h>
 
 // This class manages settings concerning IDL, configured through
 // the 'Generation settings' dialog.
@@ -30,244 +30,244 @@ class IdlSettings : public UmlSettings {
     // returns the IDL type corresponding to the 'UML' type given in
     // argument, as it is configured in the first 'Generation settings'
     // dialog's tab
-    static Q3CString type(Q3CString s);
+    static QCString type(QCString s);
 
     // set the IDL type corresponding to the 'UML' type given in
     // argument, as it is configured in the first 'Generation settings'
     // dialog's tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Type(Q3CString s, Q3CString v);
+    static bool set_Type(QCString s, QCString v);
 
     // reverse of the Type() operation, returns the 'UML' type corresponding
     // to the IDL type given in argument
-    static Q3CString umlType(Q3CString s);
+    static QCString umlType(QCString s);
 
     // returns the IDL stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString relationStereotype(const Q3CString & s);
+    static QCString relationStereotype(const QCString & s);
 
     // set the IDL stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationStereotype(Q3CString s, Q3CString v);
+    static bool set_RelationStereotype(QCString s, QCString v);
 
     // reverse of the RelationStereotype() operation, returns the 'UML' 
     // stereotype corresponding to the IDL one given in argument
-    static Q3CString relationUmlStereotype(Q3CString s);
+    static QCString relationUmlStereotype(QCString s);
 
     // returns the IDL stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString classStereotype(Q3CString s);
+    static QCString classStereotype(QCString s);
 
     // set the IDL stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassStereotype(Q3CString s, Q3CString v);
+    static bool set_ClassStereotype(QCString s, QCString v);
 
     // reverse of the ClassStereotype() operation, returns the 'UML' 
     // stereotype corresponding to the IDL one given in argument
-    static Q3CString classUmlStereotype(Q3CString s);
+    static QCString classUmlStereotype(QCString s);
 
     // returns the #include or other form specified in the last 
     // 'Generation settings' tab for the Idl type given in argument.
-    static Q3CString include(Q3CString s);
+    static QCString include(QCString s);
 
     // set the #include or other form specified in the last 
     // 'Generation settings' tab for the Idl type given in argument.
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Include(Q3CString s, Q3CString v);
+    static bool set_Include(QCString s, QCString v);
 
     // returns the 'root' directory 
-    static const Q3CString & rootDir();
+    static const QCString & rootDir();
 
     // set the 'root' directory 
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RootDir(Q3CString v);
+    static bool set_RootDir(QCString v);
 
     // returns the default source file content
-    static const Q3CString & sourceContent();
+    static const QCString & sourceContent();
 
     // set the default source file content
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceContent(Q3CString v);
+    static bool set_SourceContent(QCString v);
 
     // returns the extension of the files produced by the Idl code generator
-    static const Q3CString & sourceExtension();
+    static const QCString & sourceExtension();
 
     // set the extension of the files produced by the Idl code generator
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceExtension(Q3CString v);
+    static bool set_SourceExtension(QCString v);
 
     // returns the default definition of an interface
-    static const Q3CString & interfaceDecl();
+    static const QCString & interfaceDecl();
 
     // set the default definition of an interface
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_InterfaceDecl(Q3CString v);
+    static bool set_InterfaceDecl(QCString v);
 
     // returns the default definition of a valuetype
-    static const Q3CString & valuetypeDecl();
+    static const QCString & valuetypeDecl();
 
     // set the default definition of a valuetype
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ValuetypeDecl(Q3CString v);
+    static bool set_ValuetypeDecl(QCString v);
 
     // returns the default specification for an 'external' class
-    static const Q3CString & externalClassDecl();
+    static const QCString & externalClassDecl();
 
     // set the default specification for an 'external' class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ExternalClassDecl(Q3CString v);
+    static bool set_ExternalClassDecl(QCString v);
 
     // returns the default definition of a struct
-    static const Q3CString & structDecl();
+    static const QCString & structDecl();
 
     // set the default definition of a struct
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_StructDecl(Q3CString v);
+    static bool set_StructDecl(QCString v);
 
     // returns the default definition of a typedef
-    static const Q3CString & typedefDecl();
+    static const QCString & typedefDecl();
 
     // set the default definition of a typedef
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_TypedefDecl(Q3CString v);
+    static bool set_TypedefDecl(QCString v);
 
     // returns the default definition of an exception
-    static const Q3CString & exceptionDecl();
+    static const QCString & exceptionDecl();
 
     // set the default definition of an exception
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ExceptionDecl(Q3CString v);
+    static bool set_ExceptionDecl(QCString v);
 
     // returns the default definition of an union
-    static const Q3CString & unionDecl();
+    static const QCString & unionDecl();
 
     // set the default definition of an union
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_UnionDecl(Q3CString v);
+    static bool set_UnionDecl(QCString v);
 
     // returns the default definition of an enum
-    static const Q3CString & enumDecl();
+    static const QCString & enumDecl();
 
     // set the default definition of an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumDecl(Q3CString v);
+    static bool set_EnumDecl(QCString v);
 
     // returns the default definition of an attribute
-    static const Q3CString & attributeDecl();
+    static const QCString & attributeDecl();
 
     // set the default definition of an attribute
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_AttributeDecl(Q3CString v);
+    static bool set_AttributeDecl(QCString v);
 
     // returns the default definition of an attribute
     // placed in a valuetype
-    static const Q3CString & valuetypeAttributeDecl();
+    static const QCString & valuetypeAttributeDecl();
 
     // set the default definition of an attribute
     // placed in a valuetype
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ValuetypeAttributeDecl(Q3CString v);
+    static bool set_ValuetypeAttributeDecl(QCString v);
 
     // returns the default definition of an union item
-    static const Q3CString & unionItemDecl();
+    static const QCString & unionItemDecl();
 
     // set the default definition of an union item
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_UnionItemDecl(Q3CString v);
+    static bool set_UnionItemDecl(QCString v);
 
     // returns the default definition of an enumeration item
-    static const Q3CString & enumItemDecl();
+    static const QCString & enumItemDecl();
 
     // set the default definition of an enumeration item
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumItemDecl(Q3CString v);
+    static bool set_EnumItemDecl(QCString v);
 
     // returns the default definition of a constant attribute
-    static const Q3CString & constDecl();
+    static const QCString & constDecl();
 
     // set the default definition of a constant attribute
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ConstDecl(Q3CString v);
+    static bool set_ConstDecl(QCString v);
 
     // returns the default definition of a relation depending on the
     // multiplicity given in argument.
-    static const Q3CString & relationDecl(const char * multiplicity);
+    static const QCString & relationDecl(const char * multiplicity);
 
     // set the default definition of a relation depending on the
     // multiplicity given in argument.
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationDecl(const char * multiplicity, Q3CString v);
+    static bool set_RelationDecl(const char * multiplicity, QCString v);
 
     // returns the default definition of a relation in a valuetype
     // depending on the multiplicity given in argument.
-    static const Q3CString & valuetypeRelationDecl(const char * multiplicity);
+    static const QCString & valuetypeRelationDecl(const char * multiplicity);
 
     // set the default definition of a relation in a valuetype
     // depending on the multiplicity given in argument.
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ValuetypeRelationDecl(const char * multiplicity, Q3CString v);
+    static bool set_ValuetypeRelationDecl(const char * multiplicity, QCString v);
 
     // returns the default definition of a relation in an union
     // depending on the multiplicity given in argument.
-    static const Q3CString & unionRelationDecl(const char * multiplicity);
+    static const QCString & unionRelationDecl(const char * multiplicity);
 
     // set the default definition of a relation in an union
     // depending on the multiplicity given in argument.
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_UnionRelationDecl(const char * multiplicity, Q3CString v);
+    static bool set_UnionRelationDecl(const char * multiplicity, QCString v);
 
     // returns the default declaration of an operation
-    static const Q3CString & operationDecl();
+    static const QCString & operationDecl();
 
     // set the default declaration of an operation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDecl(Q3CString v);
+    static bool set_OperationDecl(QCString v);
 
     // returns the default name of a 'get' operation generated through
     // the attribute and relation 'add get operation' menu
-    static const Q3CString & getName();
+    static const QCString & getName();
 
     // set the default name of a 'get' operation generated through
     // the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_GetName(Q3CString v);
+    static bool set_GetName(QCString v);
 
     // returns the default name of a 'set' operation generated 
     // through the attribute and relation 'add set operation' menu
-    static const Q3CString & setName();
+    static const QCString & setName();
 
     // set the default name of a 'set' operation generated 
     // through the attribute and relation 'add set operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SetName(Q3CString v);
+    static bool set_SetName(QCString v);
 
     // returns if a 'set' operation generated through the attribute
     // and relation 'add set operation' menu is oneway by default
@@ -286,53 +286,53 @@ class IdlSettings : public UmlSettings {
 
     static bool _defined;
 
-    static Q3CString _root;
+    static QCString _root;
 
-    static Q3CString _interface_decl;
+    static QCString _interface_decl;
 
-    static Q3CString _valuetype_decl;
+    static QCString _valuetype_decl;
 
-    static Q3CString _struct_decl;
+    static QCString _struct_decl;
 
-    static Q3CString _typedef_decl;
+    static QCString _typedef_decl;
 
-    static Q3CString _exception_decl;
+    static QCString _exception_decl;
 
-    static Q3CString _union_decl;
+    static QCString _union_decl;
 
-    static Q3CString _enum_decl;
+    static QCString _enum_decl;
 
-    static Q3CString _external_class_decl;
+    static QCString _external_class_decl;
 
-    static Q3CString _attr_decl;
+    static QCString _attr_decl;
 
-    static Q3CString _valuetype_attr_decl;
+    static QCString _valuetype_attr_decl;
 
-    static Q3CString _union_item_decl;
+    static QCString _union_item_decl;
 
-    static Q3CString _enum_item_decl;
+    static QCString _enum_item_decl;
 
-    static Q3CString _const_decl;
+    static QCString _const_decl;
 
-    static Q3CString _rel_decl[3/*multiplicity*/];
+    static QCString _rel_decl[3/*multiplicity*/];
 
-    static Q3CString _valuetype_rel_decl[3/*multiplicity*/];
+    static QCString _valuetype_rel_decl[3/*multiplicity*/];
 
-    static Q3CString _union_rel_decl[3/*multiplicity*/];
+    static QCString _union_rel_decl[3/*multiplicity*/];
 
-    static Q3CString _oper_decl;
+    static QCString _oper_decl;
 
-    static Q3CString _get_name;
+    static QCString _get_name;
 
-    static Q3CString _set_name;
+    static QCString _set_name;
 
     static bool _is_set_oneway;
 
-    static Q3CString _src_content;
+    static QCString _src_content;
 
-    static Q3CString _ext;
+    static QCString _ext;
 
-    static Q3Dict<Q3CString> _map_includes;
+    static QDict<QCString> _map_includes;
 
 
   protected:

@@ -4,8 +4,6 @@
 #include "UmlActivityObject.h"
 #include "UmlItem.h"
 #include "UmlActivityDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 UmlActivityObject * UmlBaseActivityObject::create(UmlItem * parent, const char * s)
 {
@@ -25,7 +23,7 @@ bool UmlBaseActivityObject::set_Type(const UmlTypeSpec & v) {
     return set_it_(_type, v, setTypeCmd);
 }
 
-const Q3CString & UmlBaseActivityObject::multiplicity() {
+const QCString & UmlBaseActivityObject::multiplicity() {
     read_if_needed_();
     return _multiplicity;
 }
@@ -34,7 +32,7 @@ bool UmlBaseActivityObject::set_Multiplicity(const char * v) {
     return set_it_(_multiplicity, v, setMultiplicityCmd);
 }
 
-const Q3CString & UmlBaseActivityObject::inState() {
+const QCString & UmlBaseActivityObject::inState() {
     read_if_needed_();
     return _in_state;
 }
@@ -43,7 +41,7 @@ bool UmlBaseActivityObject::set_InState(const char * v) {
     return set_it_(_in_state, v, setInStateCmd);
 }
 
-const Q3CString & UmlBaseActivityObject::selection() {
+const QCString & UmlBaseActivityObject::selection() {
     read_if_needed_();
     return _selection;
 }
@@ -53,7 +51,7 @@ bool UmlBaseActivityObject::set_Selection(const char * v) {
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseActivityObject::cppSelection() {
+const QCString & UmlBaseActivityObject::cppSelection() {
     read_if_needed_();
     return _cpp_selection;
 }
@@ -64,7 +62,7 @@ bool UmlBaseActivityObject::set_CppSelection(const char * v) {
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseActivityObject::javaSelection() {
+const QCString & UmlBaseActivityObject::javaSelection() {
     read_if_needed_();
     return _java_selection;
 }

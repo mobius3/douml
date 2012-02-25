@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseNcRelation.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 
@@ -12,7 +12,7 @@ class FileOut;
 // You can modify it as you want (except the constructor)
 class UmlNcRelation : public UmlBaseNcRelation {
   public:
-    UmlNcRelation(void * id, const Q3CString & n) : UmlBaseNcRelation(id, n) {};
+    UmlNcRelation(void * id, const QCString & n) : UmlBaseNcRelation(id, n) {};
 
     virtual bool write_if_needed(FileOut & out);
 

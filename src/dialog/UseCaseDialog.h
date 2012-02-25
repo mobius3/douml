@@ -29,28 +29,28 @@
 
 
 
-#include <q3ptrlist.h>
-#include <q3ptrlist.h>
-#include <q3tabdialog.h>
 
-class Q3ComboBox;
+#include <qlist.h>
+#include <qtabdialog.h>
+
+class QComboBox;
 class LineEdit;
 class MultiLineEdit;
 class UseCaseData;
 class KeyValuesTable;
 class BodyDialog;
 
-class UseCaseDialog : public Q3TabDialog {
+class UseCaseDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     UseCaseData * uc;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * extension_points;
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     static QSize previous_size;
     

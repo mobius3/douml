@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -35,7 +33,7 @@
 
 #else
 
-#include <q3mainwindow.h>
+#include <qmainwindow.h>
 
 class QSplitter;
 class BrowserView;
@@ -44,14 +42,14 @@ class CommentView;
  
 // singleton
 
-class CppCatWindow : public Q3MainWindow {
+class CppCatWindow : public QMainWindow {
   Q_OBJECT
     
   public:
     CppCatWindow();
   
     static void trace(QString);
-    static void trace(Q3CString);
+    static void trace(QCString);
     static void clear_trace();
   
   protected:

@@ -27,12 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
 
 #include "OdClassInstCanvas.h"
 #include "ObjectLinkCanvas.h"
@@ -163,10 +160,10 @@ void OdClassInstCanvas::compute_size() {
       wi = w;
   }
   
-  const Q3ValueList<SlotAttr> & attributes = data->get_attributes();
+  const QValueList<SlotAttr> & attributes = data->get_attributes();
 
   if (! attributes.isEmpty()) {
-    Q3ValueList<SlotAttr>::ConstIterator it = attributes.begin();
+    QValueList<SlotAttr>::ConstIterator it = attributes.begin();
     QString egal = " = ";
 
     do {
@@ -216,7 +213,7 @@ void OdClassInstCanvas::modified() {
     if (the_canvas()->must_draw_all_relations())
       draw_all_relations();
     
-    Q3PtrListIterator<ArrowCanvas> it(lines);
+    QListIterator<ArrowCanvas> it(lines);
     
     for (; it.current(); ++it)
       if (IsaRelation(it.current()->type()))
@@ -234,7 +231,7 @@ void OdClassInstCanvas::post_loaded() {
 }
 
 bool OdClassInstCanvas::has_relation(const SlotRel & slot_rel) const {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if (IsaRelation(it.current()->type()) &&
@@ -251,7 +248,7 @@ bool OdClassInstCanvas::has_relation(const SlotRel & slot_rel) const {
 bool OdClassInstCanvas::is_duplicated(ObjectLinkCanvas * lnk, 
 				      OdClassInstCanvas * other) const {
   RelationData * rel = lnk->get_rel();
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
   ArrowCanvas * ar;
   
   while ((ar = it.current()) != 0) {
@@ -267,11 +264,11 @@ bool OdClassInstCanvas::is_duplicated(ObjectLinkCanvas * lnk,
 }
 
 void OdClassInstCanvas::draw_all_relations(OdClassInstCanvas * end) {
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   ClassInstanceData * d = (ClassInstanceData *) browser_node->get_data();
-  const Q3ValueList<SlotRel> & rels = d->get_relations();
-  Q3ValueList<SlotRel>::ConstIterator it_rel;
+  const QValueList<SlotRel> & rels = d->get_relations();
+  QValueList<SlotRel>::ConstIterator it_rel;
   
   for (it_rel = rels.begin(); it_rel != rels.end(); it_rel++) {
     const SlotRel & slot_rel = *it_rel;
@@ -329,10 +326,10 @@ void OdClassInstCanvas::draw_all_relations(OdClassInstCanvas * end) {
 }
 
 void OdClassInstCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   compute_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void OdClassInstCanvas::draw(QPainter & p) {
@@ -341,7 +338,7 @@ void OdClassInstCanvas::draw(QPainter & p) {
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
     QColor bckgrnd = p.backgroundColor();
     double zoom = the_canvas()->zoom();
-	p.setRenderHint(QPainter::Antialiasing, true);
+
     p.setBackgroundMode((used_color == UmlTransparent) ? ::Qt::TransparentMode : ::Qt::OpaqueMode);
     
     QColor co = color(used_color);
@@ -367,12 +364,12 @@ void OdClassInstCanvas::draw(QPainter & p) {
 	if (fp != 0) {
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff,
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff,
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
 	}
       }
@@ -446,7 +443,7 @@ void OdClassInstCanvas::draw(QPainter & p) {
     
     p.setFont(the_canvas()->get_font(UmlNormalFont));
 
-    const Q3ValueList<SlotAttr> & attributes = 
+    const QValueList<SlotAttr> & attributes = 
       ((ClassInstanceData *) browser_node->get_data())->get_attributes();
 
     if (!attributes.isEmpty()) {
@@ -460,7 +457,7 @@ void OdClassInstCanvas::draw(QPainter & p) {
       r.setTop(r.top() + two);
       r.setLeft(r.left() + (int) (4 * zoom));
       
-      Q3ValueList<SlotAttr>::ConstIterator it = attributes.begin();
+      QValueList<SlotAttr>::ConstIterator it = attributes.begin();
       QString egal = " = ";
 
       do {
@@ -519,7 +516,7 @@ void OdClassInstCanvas::open() {
 }
 
 void OdClassInstCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(full_name(), m.font()), -1);
   m.insertSeparator();
@@ -641,7 +638,7 @@ bool OdClassInstCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void OdClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void OdClassInstCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(2);
     ColorSpecVector co(1);
@@ -657,7 +654,7 @@ void OdClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -676,8 +673,8 @@ void OdClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void OdClassInstCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void OdClassInstCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   OdClassInstCanvas * x = (OdClassInstCanvas *) it.current();
   
@@ -726,7 +723,7 @@ QString OdClassInstCanvas::may_connect(UmlCode & l, const DiagramItem * dest) co
   return ((dest->type() == UmlClassInstance)
 	  ? ((l == UmlObjectLink) || (l == UmlAnchor) || IsaRelation(l))
 	  : (l == UmlAnchor))
-    ? QString() : TR("illegal");
+    ? 0 : TR("illegal");
 }
 
 void OdClassInstCanvas::connexion(UmlCode t, DiagramItem * dest, const QPoint &, const QPoint &) {
@@ -745,7 +742,7 @@ bool OdClassInstCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void OdClassInstCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void OdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -871,7 +868,7 @@ OdClassInstCanvas * OdClassInstCanvas::read(char * & st, UmlCanvas * canvas,
 }
 
 void OdClassInstCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   
   BasicData * d = browser_node->get_data();

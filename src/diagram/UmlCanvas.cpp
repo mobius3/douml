@@ -35,7 +35,7 @@
 #include "ArrowPointCanvas.h"
 #include "BrowserDiagram.h"
 
-static Q3PtrList<UmlCanvas> All;
+static QList<UmlCanvas> All;
 
 static const struct {
   int w;
@@ -73,7 +73,7 @@ static const struct {
 };
 
 UmlCanvas::UmlCanvas(CanvasFormat f, BrowserDiagram * br_diag)
-    : Q3Canvas(formatSize[f].w, formatSize[f].h),
+    : QCanvas(formatSize[f].w, formatSize[f].h),
       br_diagram(br_diag), view(0), all_items((const char *) 0) {
   width100percent = width();
   height100percent = height();
@@ -97,8 +97,8 @@ void UmlCanvas::set_view(DiagramView * v) {
   view = v;
   
   // add limits
-  vlimit = new Q3CanvasLine(this);
-  hlimit = new Q3CanvasLine(this);
+  vlimit = new QCanvasLine(this);
+  hlimit = new QCanvasLine(this);
   vlimit->setZ(TOP_Z);	// alien
   hlimit->setZ(TOP_Z);	// alien
   vlimit->setPen(::Qt::DotLine);
@@ -116,7 +116,7 @@ void UmlCanvas::update_limits() {
 }
 
 void UmlCanvas::resize(CanvasFormat f) {
-  Q3Canvas::resize((int) (formatSize[f].w * zoom_value),
+  QCanvas::resize((int) (formatSize[f].w * zoom_value),
 		  (int) (formatSize[f].h * zoom_value));
   width100percent = formatSize[f].w;
   height100percent = formatSize[f].h;
@@ -137,10 +137,10 @@ static bool small_element(const QRect & r)
   return (r.width() < l) && (r.height() < l);
 }
 
-Q3CanvasItem * UmlCanvas::collision(const QPoint & p) const {
-  Q3CanvasItemList l = collisions(p);
-  Q3CanvasItemList::ConstIterator it;
-  Q3CanvasItemList::ConstIterator end = l.end();
+QCanvasItem * UmlCanvas::collision(const QPoint & p) const {
+  QCanvasItemList l = collisions(p);
+  QCanvasItemList::ConstIterator it;
+  QCanvasItemList::ConstIterator end = l.end();
   ArrowCanvas * arrow = 0;
   
   for (it = l.begin(); it != end; ++it)
@@ -166,10 +166,10 @@ Q3CanvasItem * UmlCanvas::collision(const QPoint & p) const {
   return arrow;
 }
 
-Q3CanvasItem * UmlCanvas::collision(const QPoint & p, int except) const {
-  Q3CanvasItemList l = collisions(p);
-  Q3CanvasItemList::ConstIterator it;
-  Q3CanvasItemList::ConstIterator end = l.end();
+QCanvasItem * UmlCanvas::collision(const QPoint & p, int except) const {
+  QCanvasItemList l = collisions(p);
+  QCanvasItemList::ConstIterator it;
+  QCanvasItemList::ConstIterator end = l.end();
   ArrowCanvas * arrow = 0;
   
   for (it = l.begin(); it != end; ++it)
@@ -199,7 +199,7 @@ Q3CanvasItem * UmlCanvas::collision(const QPoint & p, int except) const {
   return arrow;
 }
 
-void UmlCanvas::del(Q3CanvasItem * i) {
+void UmlCanvas::del(QCanvasItem * i) {
   // do not delete, just hide because of a Qt's bug (?)
   i->hide();
   selected.remove(i);
@@ -210,18 +210,18 @@ void UmlCanvas::del(Q3CanvasItem * i) {
     all_items.remove(it->get_ident());
 }
 
-void UmlCanvas::select(Q3CanvasItem * i) {
+void UmlCanvas::select(QCanvasItem * i) {
   i->setSelected(TRUE);
   selected.append(i);
 }
 
-void UmlCanvas::unselect(Q3CanvasItem * i) {
+void UmlCanvas::unselect(QCanvasItem * i) {
   i->setSelected(FALSE);
   selected.remove(i);
 }
 
 void UmlCanvas::unselect_all() {
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList::Iterator it;
   
   for (it = selected.begin(); it != selected.end(); ++it)
     (*it)->setSelected(FALSE);
@@ -267,7 +267,7 @@ void UmlCanvas::set_zoom(double zm) {
   the_fonts[UmlLargeBoldItalicFont] = BoldItalicFont;
   the_fonts[UmlLargeBoldItalicFont].setPointSizeFloat(ps_large);
   
-  Q3Canvas::resize((int) (width100percent * zm),
+  QCanvas::resize((int) (width100percent * zm),
 		  (int) (height100percent * zm));
   
   update_limits();
@@ -306,12 +306,12 @@ int UmlCanvas::shadow() const {
 void UmlCanvas::update() {
   if (view != 0)
     view->update_history();
-  Q3Canvas::update();
+  QCanvas::update();
 }
 
 bool UmlCanvas::already_drawn(BrowserNode * bn) {
-  Q3CanvasItemList all = allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = allItems();
+  QCanvasItemList::Iterator cit;
   UmlCode k = bn->get_type();
 
   for (cit = all.begin(); cit != all.end(); ++cit) {

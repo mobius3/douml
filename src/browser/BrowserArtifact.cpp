@@ -27,15 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserArtifact.h"
 #include "ArtifactData.h"
@@ -107,7 +101,7 @@ BrowserArtifact::~BrowserArtifact() {
 void BrowserArtifact::delete_it() {
   BrowserNode::delete_it();
   
-  Q3ValueList<BrowserClass *>::Iterator it;
+  QValueList<BrowserClass *>::Iterator it;
   
   for (it = associated_classes.begin(); it != associated_classes.end(); ++it)
     (*it)->set_associated_artifact(0, FALSE);
@@ -137,13 +131,13 @@ void BrowserArtifact::update_idmax_for_root()
 void BrowserArtifact::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
     
-void BrowserArtifact::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserArtifact::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   compute_referenced_by(l, this);
   
@@ -151,7 +145,7 @@ void BrowserArtifact::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
     BrowserDeploymentDiagram::compute_referenced_by(l, this, "artifactcanvas", "artifact_ref");
 }
 
-void BrowserArtifact::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserArtifact::compute_referenced_by(QList<BrowserNode> & l,
 					    BrowserClass * target)
 {
   IdIterator<BrowserArtifact> it(all);
@@ -165,7 +159,7 @@ void BrowserArtifact::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserArtifact::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserArtifact::compute_referenced_by(QList<BrowserNode> & l,
 					    BrowserArtifact * target)
 {
   IdIterator<BrowserArtifact> it(all);
@@ -267,7 +261,7 @@ void BrowserArtifact::get_paths(QString & cpp_h_path, QString & cpp_src_path,
 
 // just check if the inheritance already exist
 QString BrowserArtifact::check_inherit(const BrowserNode * new_parent) const {
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling()) {
     BrowserNode * ch = ((BrowserNode *) child);
@@ -278,17 +272,17 @@ QString BrowserArtifact::check_inherit(const BrowserNode * new_parent) const {
       return TR("already exist");
   }
   
-  return (new_parent != this) ? QString() : TR("circular inheritance");
+  return (new_parent != this) ? 0 : TR("circular inheritance");
 }
 
 void BrowserArtifact::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu clsubm(0);
-  Q3PopupMenu gensubm(0);
-  Q3PopupMenu editsubm(0);
-  Q3PopupMenu roundtripbodysubm(0);
-  Q3PopupMenu roundtripsubm(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu clsubm(0);
+  QPopupMenu gensubm(0);
+  QPopupMenu editsubm(0);
+  QPopupMenu roundtripbodysubm(0);
+  QPopupMenu roundtripsubm(0);
+  QPopupMenu toolm(0);
   QString cpp_h_path;
   QString cpp_src_path;
   QString java_path;
@@ -393,8 +387,8 @@ through a relation"));
 		   TR("to undelete the <i>artifact</i>"));
   
   int n = 0;
-  Q3ValueList<BrowserClass *>::ConstIterator end = associated_classes.end();
-  Q3ValueList<BrowserClass *>::ConstIterator it;
+  QValueList<BrowserClass *>::ConstIterator end = associated_classes.end();
+  QValueList<BrowserClass *>::ConstIterator it;
   
   for (it = associated_classes.begin(); it != end; ++it)
     if (!(*it)->deletedp())
@@ -554,7 +548,7 @@ void BrowserArtifact::exec_menu_choice(int rank,
       ProfiledStereotypes::choiceManagement(this, rank - 99990);
     else if (rank >= 10000) {
       int n;
-      Q3ValueList<BrowserClass *>::ConstIterator it;
+      QValueList<BrowserClass *>::ConstIterator it;
       
       for (it = associated_classes.begin(), n = 10000;
 	   (*it)->deletedp() || (n++ != rank);
@@ -877,7 +871,7 @@ void BrowserArtifact::on_delete() {
   */
 }
 
-const Q3ValueList<BrowserClass *> & BrowserArtifact::get_associated_classes() const {
+const QValueList<BrowserClass *> & BrowserArtifact::get_associated_classes() const {
   return associated_classes;
 }
 
@@ -928,7 +922,7 @@ bool BrowserArtifact::add_associated_class(BrowserClass * c, bool on_read) {
 }
 
 bool BrowserArtifact::remove_associated_class(BrowserClass * c, bool on_read) {
-  Q3ValueList<BrowserClass *>::Iterator it = associated_classes.find(c);
+  QValueList<BrowserClass *>::Iterator it = associated_classes.find(c);
   
   if (it != associated_classes.end()) {
     associated_classes.remove(it);
@@ -946,10 +940,10 @@ bool BrowserArtifact::remove_associated_class(BrowserClass * c, bool on_read) {
   return FALSE;
 }
 
-void BrowserArtifact::set_associated_classes(const Q3ValueList<BrowserClass *> & l,
+void BrowserArtifact::set_associated_classes(const QValueList<BrowserClass *> & l,
 					      bool on_read) {
   // manage removed classes
-  Q3ValueList<BrowserClass *>::Iterator it = associated_classes.begin();
+  QValueList<BrowserClass *>::Iterator it = associated_classes.begin();
   
   while (it != associated_classes.end()) {
     if (l.findIndex(*it) == -1) {
@@ -963,9 +957,9 @@ void BrowserArtifact::set_associated_classes(const Q3ValueList<BrowserClass *> &
   }
   
   // manage added classes
-  Q3ValueList<BrowserClass *> old = associated_classes;
+  QValueList<BrowserClass *> old = associated_classes;
   associated_classes = l;	// to follow order
-  Q3ValueList<BrowserClass *>::Iterator end = associated_classes.end();
+  QValueList<BrowserClass *>::Iterator end = associated_classes.end();
   
   for (it = associated_classes.begin(); it != end; ++it)
     if (old.findIndex(*it) == -1)
@@ -1023,14 +1017,14 @@ bool BrowserArtifact::tool_cmd(ToolCom * com, const char * args) {
       case setAssocClassesCmd:
 	{
 	  // check redondency
-	  Q3ValueList<BrowserClass *> l;
+	  QValueList<BrowserClass *> l;
 	  unsigned n = com->get_unsigned(args);
 	  
 	  while (n--)
 	    l.append((BrowserClass *) com->get_id(args));
 	  
-	  Q3ValueList<BrowserClass *>::ConstIterator it = l.begin();
-	  Q3ValueList<BrowserClass *>::ConstIterator end = l.end();
+	  QValueList<BrowserClass *>::ConstIterator it = l.begin();
+	  QValueList<BrowserClass *>::ConstIterator end = l.end();
 	  
 	  while (it != end) {
 	    BrowserClass * cl = *it;
@@ -1117,7 +1111,7 @@ bool BrowserArtifact::tool_cmd(ToolCom * com, const char * args) {
   return TRUE;
 }
 
-void BrowserArtifact::save_stereotypes(Q3TextStream & st)
+void BrowserArtifact::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "artifact_stereotypes ";
@@ -1148,7 +1142,7 @@ void BrowserArtifact::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserArtifact::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserArtifact::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "artifact_ref " << get_ident() << " // " << get_name();
   else {
@@ -1169,8 +1163,8 @@ void BrowserArtifact::save(Q3TextStream & st, bool ref, QString & warning) {
       st << "associated_classes";
       indent(+1);
       
-      Q3ValueList<BrowserClass *>::ConstIterator it;
-      Q3ValueList<BrowserClass *>::ConstIterator end = associated_classes.end();
+      QValueList<BrowserClass *>::ConstIterator it;
+      QValueList<BrowserClass *>::ConstIterator end = associated_classes.end();
       
       for (it = associated_classes.begin(); it != end; ++it) {
 	nl_indent(st);
@@ -1185,7 +1179,7 @@ void BrowserArtifact::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
     
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {
@@ -1284,7 +1278,7 @@ BrowserArtifact * BrowserArtifact::read(char * & st, char * k,
     
     if ((read_file_format() < 20) && !strcmp(k, "associated_class")) {
       // old format from component definition (component -> artifact)
-      Q3ValueList<BrowserClass *> l;
+      QValueList<BrowserClass *> l;
       
       if (read_file_format() < 3)
 	// very old format
@@ -1296,7 +1290,7 @@ BrowserArtifact * BrowserArtifact::read(char * & st, char * k,
       k = read_keyword(st);
     }
     else if (!strcmp(k, "associated_classes")) {
-      Q3ValueList<BrowserClass *> l;
+      QValueList<BrowserClass *> l;
       
       while (strcmp((k = read_keyword(st)), "end"))
 	l.append(BrowserClass::read_ref(st, k));

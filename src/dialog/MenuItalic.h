@@ -28,7 +28,7 @@
 
 #include <qmenudata.h> 
 
-class MenuItalic : public QMenuItem {
+class MenuItalic : public QCustomMenuItem {
   protected:
     QString str;
     QFont font;

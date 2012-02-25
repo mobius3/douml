@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <Q3PointArray>
 
 #include "ActivityActionCanvas.h"
 #include "ActivityActionData.h"
@@ -109,13 +105,13 @@ void ActivityActionCanvas::delete_it() {
   
   DiagramCanvas::delete_it();
   
-  Q3ValueList<PinCanvas *>::Iterator iter;
+  QValueList<PinCanvas *>::Iterator iter;
   
   for (iter = pins.begin(); iter != pins.end(); ++iter)
     // don't empty pins to manage undo
     (*iter)->delete_it();
 
-  Q3ValueList<ParameterSetCanvas *>::Iterator iterps = paramsets.begin();
+  QValueList<ParameterSetCanvas *>::Iterator iterps = paramsets.begin();
   
   while (! paramsets.isEmpty()) {
     (*iterps)->delete_it();
@@ -177,12 +173,12 @@ void ActivityActionCanvas::update() {
 	
   if (!st.isEmpty() && !opaquedef) {
     s += "\n<<" + st + ">>";
-    align = (int) ::Qt::AlignCenter | ::Qt::TextWordWrap;
+    align = (int) ::Qt::AlignCenter | ::Qt::WordBreak;
   }
   else
     align = (s.find('\n') != -1)
       ? (int) ::Qt::AlignLeft | ::Qt::AlignVCenter
-      : (int) ::Qt::AlignCenter | ::Qt::TextWordWrap;
+      : (int) ::Qt::AlignCenter | ::Qt::WordBreak;
   
   force_pins_arround();
   check_parameter_sets_position();
@@ -191,8 +187,8 @@ void ActivityActionCanvas::update() {
 bool ActivityActionCanvas::force_inside() {
   // if its parent is present, force inside it
   
-  Q3CanvasItemList all = the_canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = the_canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   BrowserNode * parent = (BrowserNode *) browser_node->parent();
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -215,13 +211,13 @@ void ActivityActionCanvas::moveBy(double dx, double dy) {
   DiagramCanvas::moveBy(dx, dy);
   
   // update pins position
-  Q3ValueList<PinCanvas *>::Iterator iter;
+  QValueList<PinCanvas *>::Iterator iter;
   
   for (iter = pins.begin(); iter != pins.end(); ++iter)
     (*iter)->do_moveBy(dx, dy);
 
   // update parameter sets position
-  Q3ValueList<ParameterSetCanvas *>::Iterator iterps;
+  QValueList<ParameterSetCanvas *>::Iterator iterps;
   
   for (iterps = paramsets.begin(); iterps != paramsets.end(); ++iterps)
     (*iterps)->do_moveBy(dx, dy);
@@ -236,23 +232,23 @@ void ActivityActionCanvas::moveBy(double dx, double dy) {
 }
 
 void ActivityActionCanvas::check_parameter_sets_position() {
-  Q3ValueList<ParameterSetCanvas *>::Iterator iterps;
+  QValueList<ParameterSetCanvas *>::Iterator iterps;
   
   for (iterps = paramsets.begin(); iterps != paramsets.end(); ++iterps)
     (*iterps)->check_position();
 }
 
 void ActivityActionCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   double scale = the_canvas()->zoom();
     
   setSize((int) (width_scale100*scale) | 1,
 	  (int) (height_scale100*scale) | 1);
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
   
   // update pins position
-  Q3ValueList<PinCanvas *>::Iterator iter;
+  QValueList<PinCanvas *>::Iterator iter;
   
   for (iter = pins.begin(); iter != pins.end(); ++iter)
     (*iter)->do_change_scale();
@@ -318,7 +314,7 @@ bool ActivityActionCanvas::move_with_its_package() const {
 void ActivityActionCanvas::set_z(double z) {
   setZ(z);
   
-  Q3ValueList<ParameterSetCanvas *>::Iterator iterps;
+  QValueList<ParameterSetCanvas *>::Iterator iterps;
   
   for (iterps = paramsets.begin(); iterps != paramsets.end(); ++iterps)
     (*iterps)->set_z(z);
@@ -326,14 +322,14 @@ void ActivityActionCanvas::set_z(double z) {
   // pins have z+1 to be upper the parameter sets
   z += 1;
 
-  Q3ValueList<PinCanvas *>::Iterator iter;
+  QValueList<PinCanvas *>::Iterator iter;
   
   for (iter = pins.begin(); iter != pins.end(); ++iter)
     (*iter)->set_z(z);
 }
 
 void ActivityActionCanvas::force_pins_arround() {
-  Q3ValueList<PinCanvas *>::Iterator iter;
+  QValueList<PinCanvas *>::Iterator iter;
   
   for (iter = pins.begin(); iter != pins.end(); ++iter)
     (*iter)->check_position();
@@ -341,12 +337,12 @@ void ActivityActionCanvas::force_pins_arround() {
 
 void ActivityActionCanvas::check_parametersets() {
   // add missing parameter sets
-  const Q3ValueList<BrowserParameterSet *> brps =
+  const QValueList<BrowserParameterSet *> brps =
     ((BrowserActivityAction *) browser_node)->get_parametersets();
-  Q3ValueList<BrowserParameterSet *>::ConstIterator iter;
+  QValueList<BrowserParameterSet *>::ConstIterator iter;
   
   for (iter = brps.begin(); iter != brps.end(); ++iter) {
-    Q3ValueList<ParameterSetCanvas *>::ConstIterator itershown;
+    QValueList<ParameterSetCanvas *>::ConstIterator itershown;
     
     for (itershown = paramsets.begin(); itershown != paramsets.end(); ++itershown)
       if ((*itershown)->get_bn() == *iter)
@@ -366,9 +362,9 @@ void ActivityActionCanvas::check_parametersets() {
 
 void ActivityActionCanvas::check_pins() {
   // add missing pins
-  const Q3ValueList<BrowserPin *> brpins =
+  const QValueList<BrowserPin *> brpins =
     ((BrowserActivityAction *) browser_node)->get_pins();
-  Q3ValueList<BrowserPin *>::ConstIterator iter;
+  QValueList<BrowserPin *>::ConstIterator iter;
   double zoom = the_canvas()->zoom();
   int sz = (int) (zoom * PIN_SIZE);
   int six = (int) (zoom * 6);
@@ -382,7 +378,7 @@ void ActivityActionCanvas::check_pins() {
   sz += six;
   
   for (iter = brpins.begin(); iter != brpins.end(); ++iter) {
-    Q3ValueList<PinCanvas *>::ConstIterator itershown;
+    QValueList<PinCanvas *>::ConstIterator itershown;
     
     for (itershown = pins.begin(); itershown != pins.end(); ++itershown)
       if ((*itershown)->get_bn() == *iter)
@@ -514,7 +510,7 @@ int ActivityActionCanvas::shadow_margin() const {
 
 void ActivityActionCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QBrush brsh = p.brush();
   QColor bckgrnd = p.backgroundColor();
@@ -547,12 +543,9 @@ void ActivityActionCanvas::draw(QPainter & p) {
       p.setPen(::Qt::SolidLine);
       p.setBackgroundMode(::Qt::TransparentMode);
       p.drawLine(r.right() - margin, t, r.right() - 1, t);
-      //p.lineTo(r.right() - margin - 1, t + margin);
-	  p.drawLine( r.right() - 1, t, r.right() - margin - 1, t + margin);
-      //p.lineTo(r.right() - 1, t + margin);
-	  p.drawLine(r.right() - margin - 1, t + margin, r.right() - 1, t + margin);
-      //p.lineTo(r.right() - margin - 1, t);
-	  p.drawLine(r.right() - 1, t + margin, r.right() - margin - 1, t);
+      p.lineTo(r.right() - margin - 1, t + margin);
+      p.lineTo(r.right() - 1, t + margin);
+      p.lineTo(r.right() - margin - 1, t);
 
       if (fp != 0) {
 	fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
@@ -580,7 +573,7 @@ void ActivityActionCanvas::draw(QPainter & p) {
       
       margin = ((r.height() < r.width()) ? r.height() : r.width()) / 4;
       
-      Q3PointArray a(6);
+      QPointArray a(6);
       
       a.setPoint(0, r.x(), r.y());
       a.setPoint(1, r.right(), r.y());
@@ -597,7 +590,7 @@ void ActivityActionCanvas::draw(QPainter & p) {
       }
       else {
 	if (shadow != 0) {
-	  Q3PointArray b(6);
+	  QPointArray b(6);
 	  
 	  b.setPoint(0, r.x() + shadow, r.y() + shadow);
 	  b.setPoint(1, r.right() + shadow, r.y() + shadow);
@@ -634,7 +627,7 @@ void ActivityActionCanvas::draw(QPainter & p) {
       
       margin = ((r.height() < r.width()) ? r.height() : r.width()) / 4;
       
-      Q3PointArray a(6);
+      QPointArray a(6);
       
       a.setPoint(0, r.x(), r.y());
       a.setPoint(1, r.right() - margin, r.y());
@@ -650,7 +643,7 @@ void ActivityActionCanvas::draw(QPainter & p) {
       }
       else {
 	if (shadow != 0) {
-	  Q3PointArray b(6);
+	  QPointArray b(6);
 	  
 	  b.setPoint(0, r.x() + shadow, r.y() + shadow);
 	  b.setPoint(1, r.right() - margin + shadow, r.y() + shadow);
@@ -690,7 +683,7 @@ void ActivityActionCanvas::draw(QPainter & p) {
       if (fp != 0)
 	fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		" x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"10\" />\n",
-		QColor(::Qt::darkGray).rgb()&0xffffff,
+		::Qt::darkGray.rgb()&0xffffff,
 		r.left() + shadow, r.top() + shadow, r.width() - 1, r.height() - 1);
 
       p.setPen(::Qt::SolidLine);
@@ -788,8 +781,8 @@ void ActivityActionCanvas::open() {
 
 void ActivityActionCanvas::menu(const QPoint&) {
   ActivityActionData * data = (ActivityActionData *) browser_node->get_data();
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -960,7 +953,7 @@ bool ActivityActionCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ActivityActionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ActivityActionCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(1);
     ColorSpecVector co(1);
@@ -977,7 +970,7 @@ void ActivityActionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -994,8 +987,8 @@ void ActivityActionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ActivityActionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ActivityActionCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ActivityActionCanvas * x = (ActivityActionCanvas *) it.current();
   
@@ -1023,7 +1016,7 @@ bool ActivityActionCanvas::get_show_stereotype_properties() const {
 QString ActivityActionCanvas::may_start(UmlCode & l) const {
   return (l == UmlFlow)
     ? ((BrowserActivityAction *) browser_node)->may_start()
-    : QString();
+    : 0;
 }
 
 QString ActivityActionCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -1050,7 +1043,7 @@ void ActivityActionCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ActivityActionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityActionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "activityactioncanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -1075,7 +1068,7 @@ void ActivityActionCanvas::save(Q3TextStream & st, bool ref, QString & warning) 
       st << "pins";
       indent(+1);
     
-      Q3ValueList<PinCanvas *>::ConstIterator iter;
+      QValueList<PinCanvas *>::ConstIterator iter;
   
       for (iter = pins.begin(); iter != pins.end(); ++iter)
 	(*iter)->save(st, FALSE, warning);
@@ -1090,7 +1083,7 @@ void ActivityActionCanvas::save(Q3TextStream & st, bool ref, QString & warning) 
       st << "parameter_sets";
       indent(+1);
     
-      Q3ValueList<ParameterSetCanvas *>::ConstIterator iterps;
+      QValueList<ParameterSetCanvas *>::ConstIterator iterps;
   
       for (iterps = paramsets.begin(); iterps != paramsets.end(); ++iterps)
 	(*iterps)->save(st, FALSE, warning);
@@ -1224,7 +1217,7 @@ void ActivityActionCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
@@ -1232,7 +1225,7 @@ void ActivityActionCanvas::history_load(QBuffer & b) {
 }
 
 void ActivityActionCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
 
   disconnect(DrawingSettings::instance(), SIGNAL(changed()),
 	     this, SLOT(modified()));

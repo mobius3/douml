@@ -2,31 +2,31 @@
 #define _UMLBUILTIN_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 
 //  Internal class used to memorize the types defined through the first 'generation settings' tab
 
 struct UmlBuiltin {
-    Q3CString uml;
+    QCString uml;
 
 #ifdef WITHCPP
-    Q3CString cpp;
+    QCString cpp;
 
-    Q3CString cpp_in;
+    QCString cpp_in;
 
-    Q3CString cpp_out;
+    QCString cpp_out;
 
-    Q3CString cpp_inout;
+    QCString cpp_inout;
 #endif
 
-    Q3CString cpp_return;
+    QCString cpp_return;
 
 #ifdef WITHJAVA
-    Q3CString java;
+    QCString java;
 #endif
 
 #ifdef WITHIDL
-    Q3CString idl;
+    QCString idl;
 #endif
 
 };

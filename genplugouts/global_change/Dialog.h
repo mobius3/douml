@@ -2,13 +2,11 @@
 #define _DIALOG_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 #include <qstring.h>
 
 #include <qdialog.h>
 #include <qlineedit.h>
-//Added by qt3to4:
-#include <QKeyEvent>
 
 class QLineEdit;
 class QRadioButton;
@@ -84,7 +82,7 @@ Q_OBJECT
   protected slots:
     void do_replace();
 
-    Q3CString digest(const QString s);
+    QCString digest(const QString s);
 
     virtual void polish();
 

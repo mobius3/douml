@@ -28,14 +28,14 @@
 
 #include "qdialog.h"
 
-class Q3TextView;
+class QTextView;
 
 class TraceDialog : public QDialog {
   Q_OBJECT
     
   protected:
     static TraceDialog * the;
-    static Q3TextView * txt;  
+    static QTextView * txt;  
     static bool AutoRaise;
     static QString content;
 

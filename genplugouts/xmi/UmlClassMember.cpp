@@ -4,8 +4,6 @@
 #include "UmlTypeSpec.h"
 
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlClassMember::write_scope(FileOut & out, const char * who) {
   out << " " 
       << who
@@ -51,7 +49,7 @@ void UmlClassMember::write_visibility(FileOut & out, aVisibility v) {
 
 void UmlClassMember::write_annotation(FileOut & out) {
 if (_lang == Java) {
-  Q3CString a = javaAnnotations();
+  QCString a = javaAnnotations();
   
   if (!a.isEmpty()) {
     switch (_taggedvalue_mode) {
@@ -81,8 +79,8 @@ if (_lang == Java) {
 }
 }
 
-Q3CString UmlClassMember::true_name(Q3CString decl) {
-  int index = decl.find("${name}", 0); //[rageek] Removed CS=FALSE param - rethink this, case sensitive
+QCString UmlClassMember::true_name(QCString decl) {
+  int index = decl.find("${name}", 0, FALSE);
   
   if (index == -1)
     // too complicated, return the Uml one
@@ -98,8 +96,8 @@ Q3CString UmlClassMember::true_name(Q3CString decl) {
   while (identChar(decl[sup]))
     sup += 1;
   
-  Q3CString r = decl.mid(begin, index - begin);
-  Q3CString k = decl.mid(index + 2, 4);
+  QCString r = decl.mid(begin, index - begin);
+  QCString k = decl.mid(index + 2, 4);
   
   if (k == "name")
     r += name();
@@ -122,14 +120,14 @@ bool UmlClassMember::identChar(char c)
   	(c == '_'));
 }
 
-void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, Q3CString s, const char * k_name, const char * k_type)
+void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, QCString s, const char * k_name, const char * k_type)
 {
   s = s.simplifyWhiteSpace();
   
   int index;
   
   // remove k_name and all after it except []
-  if (k_name && *k_name && ((index = s.find(k_name, 0)) != -1)) {//[rageek] Removed CS=FALSE - rethink this, case sensitive
+  if (k_name && *k_name && ((index = s.find(k_name, 0, FALSE)) != -1)) {
     //remove name
     s.remove(index, strlen(k_name));
   
@@ -174,7 +172,7 @@ void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, Q3CString 
     out.idref_datatype(t.explicit_type);
 }
 
-void UmlClassMember::remove_comments(Q3CString & s)
+void UmlClassMember::remove_comments(QCString & s)
 {
   int index;
   

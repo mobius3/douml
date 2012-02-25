@@ -28,7 +28,7 @@
 
 
 #include <stdio.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 
 #include "KeyValueTable.h"
 #include "HaveKeyValueData.h"
@@ -55,15 +55,15 @@ KeyValuesTable::KeyValuesTable(HaveKeyValueData * hv, QWidget * parent, bool vis
     for (index = 0; index < sup; index += 1) {
       TableItem * ti;
       
-      ti = new TableItem(this, Q3TableItem::Never,
+      ti = new TableItem(this, QTableItem::Never,
 			 toUnicode(hv->get_key(index)));
       ti->setReplaceable(FALSE);
       setItem(index, 0, ti);
       
       QString s = toUnicode(hv->get_value(index));
-      int n = s.count('\n');
+      int n = s.contains('\n');
     
-      ti = new TableItem(this, Q3TableItem::Never, s);
+      ti = new TableItem(this, QTableItem::Never, s);
       ti->setReplaceable(FALSE);
       setItem(index, 1, ti);
       if (n != 0) {

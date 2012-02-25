@@ -29,13 +29,11 @@
 
 #include "BrowserView.h"
 #include "BrowserNode.h"
-//Added by qt3to4:
-#include <QKeyEvent>
 
 BrowserView * BrowserView::the;
 QDir BrowserView::dir;
 
-BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent) {
+BrowserView::BrowserView(QWidget * parent) : QListView(parent) {
   the = this;
   
   setSorting(-1);		// manual sorting
@@ -55,8 +53,8 @@ BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent) {
   setColumnAlignment(4, ::Qt::AlignHCenter);
   setTreeStepSize(18);
   
-  connect(this, SIGNAL(rightButtonPressed(Q3ListViewItem *, const QPoint &, int)),
-	  this, SLOT(rightPressed(Q3ListViewItem *)));
+  connect(this, SIGNAL(rightButtonPressed(QListViewItem *, const QPoint &, int)),
+	  this, SLOT(rightPressed(QListViewItem *)));
 }
 
 BrowserView::~BrowserView() {
@@ -80,21 +78,21 @@ void BrowserView::set_project(QDir di) {
   setRootIsDecorated(TRUE/*FALSE*/);
 }
 
-void BrowserView::rightPressed(Q3ListViewItem * item) {
+void BrowserView::rightPressed(QListViewItem * item) {
   if (item != 0)
     ((BrowserNode *) item)->menu();
 }
 
 void BrowserView::keyPressEvent(QKeyEvent * e) {
   switch (e->state()) {
-  case ::Qt::ControlModifier:
-  case ::Qt::AltModifier:
+  case ::Qt::ControlButton:
+  case ::Qt::AltButton:
     switch (e->key()) {
     case ::Qt::Key_A:
     case ::Qt::Key_P:
     case ::Qt::Key_U:
       {
-	Q3ListViewItem * t = selectedItem();
+	QListViewItem * t = selectedItem();
 	
 	if (t!= 0) {
 	  ((BrowserNode *) t)->key_event(e);
@@ -107,10 +105,10 @@ void BrowserView::keyPressEvent(QKeyEvent * e) {
     break;
   }
   
-  Q3ListView::keyPressEvent(e);
+  QListView::keyPressEvent(e);
 }
 
-void BrowserView::select(Q3ListViewItem * b)
+void BrowserView::select(QListViewItem * b)
 {
   the->ensureItemVisible(b);
   the->setSelected(b, TRUE);

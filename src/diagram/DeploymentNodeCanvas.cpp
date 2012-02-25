@@ -29,11 +29,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3PointArray>
-#include <QPixmap>
+#include <qpopupmenu.h> 
 
 #include "DeploymentNodeCanvas.h"
 #include "SimpleRelationCanvas.h"
@@ -242,16 +238,16 @@ void DeploymentNodeCanvas::check_size() {
 void DeploymentNodeCanvas::change_scale() {
   double scale = the_canvas()->zoom();
   
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   setSize((int) (width_scale100*scale), (int) (height_scale100*scale));
   check_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);  
+  QCanvasRectangle::setVisible(TRUE);  
 }
 
 void DeploymentNodeCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   FILE * fp = svg();
 
@@ -291,7 +287,7 @@ void DeploymentNodeCanvas::draw(QPainter & p) {
     
     QColor co = color(c);
     const int added = (int) (DEPLOYMENTNODE_CANVAS_ADDED * the_canvas()->zoom());
-    Q3PointArray a(7);
+    QPointArray a(7);
     
     r.setTop(r.top() + added);
     r.setRight(r.right() - added);
@@ -430,8 +426,8 @@ void DeploymentNodeCanvas::modified() {
 }
 
 void DeploymentNodeCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -564,7 +560,7 @@ bool DeploymentNodeCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void DeploymentNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void DeploymentNodeCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(2);
     ColorSpecVector co(1);
@@ -580,7 +576,7 @@ void DeploymentNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -599,8 +595,8 @@ void DeploymentNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void DeploymentNodeCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void DeploymentNodeCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   DeploymentNodeCanvas * x = (DeploymentNodeCanvas *) it.current();
   
@@ -629,7 +625,7 @@ QString DeploymentNodeCanvas::may_start(UmlCode & l) const {
   switch (l) {
   case UmlDependency:
     l = UmlDependOn;
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   case UmlAssociation:
   case UmlAnchor:
     return 0;
@@ -646,7 +642,7 @@ QString DeploymentNodeCanvas::may_connect(UmlCode & l, const DiagramItem * dest)
   case UmlDeploymentNode:
     return 0;
   case UmlHub:
-    return (l == UmlAssociation) ? QString() : TR("illegal");
+    return (l == UmlAssociation) ? 0 : TR("illegal");
   default:
     return TR("illegal");
   }
@@ -685,7 +681,7 @@ bool DeploymentNodeCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void DeploymentNodeCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void DeploymentNodeCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "deploymentnodecanvas_ref " << get_ident() << " // " << browser_node->get_name();
   else {
@@ -775,7 +771,7 @@ DeploymentNodeCanvas * DeploymentNodeCanvas::read(char * & st, UmlCanvas * canva
 }
 
 void DeploymentNodeCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   disconnect(browser_node->get_data(), 0, this, 0);
 }
@@ -797,7 +793,7 @@ void DeploymentNodeCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));

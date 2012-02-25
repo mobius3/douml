@@ -27,9 +27,6 @@
 #define UMLEXTRACLASSMEMBER_H
 
 #include "UmlBaseExtraClassMember.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
 
 #ifdef ROUNDTRIP
 class UmlClass;
@@ -43,12 +40,12 @@ class UmlClass;
 
 class UmlExtraClassMember : public UmlBaseExtraClassMember {
   public:
-    UmlExtraClassMember(void * id, const Q3CString & n)
+    UmlExtraClassMember(void * id, const QCString & n)
       : UmlBaseExtraClassMember(id, n) {};
   
 #ifdef ROUNDTRIP
-    static void add_init(UmlClass * cl, Q3CString def, bool roundtrip,
-			 Q3PtrList<UmlItem> & expected_order);
+    static void add_init(UmlClass * cl, QCString def, bool roundtrip,
+			 QList<UmlItem> & expected_order);
 #endif
 };
 

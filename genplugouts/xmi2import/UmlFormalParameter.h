@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseFormalParameter.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 // This class manages 'formal parameters' of a template class. For instance 'T' in 
 //
@@ -14,11 +14,11 @@ class UmlFormalParameter : public UmlBaseFormalParameter {
   public:
     UmlFormalParameter() {};
 
-    UmlFormalParameter(Q3CString name, Q3CString value);
+    UmlFormalParameter(QCString name, QCString value);
 
 };
 
-inline UmlFormalParameter::UmlFormalParameter(Q3CString name, Q3CString value) {
+inline UmlFormalParameter::UmlFormalParameter(QCString name, QCString value) {
   _name = name;
   _type = "typename";
   _default_value.explicit_type = value;

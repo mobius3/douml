@@ -26,10 +26,7 @@
 #ifndef OPERATIONDATA_H
 #define OPERATIONDATA_H
 
-#include <q3memarray.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
+#include <qarray.h> 
 
 #include "UmlEnum.h"
 #include "AType.h"
@@ -252,7 +249,7 @@ class OperationData : public ClassMemberData,
     void create_modified_body_file();
     void save_body(QFile & qf, QString & filename, bool dobackup,
 		   char * modified_bodies, int who);
-    void save(Q3TextStream &, bool ref, QString & warning) const;
+    void save(QTextStream &, bool ref, QString & warning) const;
     void raz_body();
     static OperationData * read_ref(char * &);
     void read(char * &, char * &);
@@ -268,30 +265,30 @@ class OperationData : public ClassMemberData,
     void replace(BrowserClass * old, BrowserClass * nw);
     
     static void convert(OperationData * comp, OperationData * art);
-    static void update_cpp_get_of(Q3CString & decl, Q3CString & def,
+    static void update_cpp_get_of(QCString & decl, QCString & def,
 				  const QString & attr_name,
 				  QString attcpp_decl, bool attis_const,
 				  QString multiplicity);
-    static void update_java_get_of(Q3CString & def, const QString & attr_name,
+    static void update_java_get_of(QCString & def, const QString & attr_name,
 				   QString attjava_decl, QString multiplicity);
-    static void update_php_get_of(Q3CString & def, const QString & attr_name,
+    static void update_php_get_of(QCString & def, const QString & attr_name,
 				  QString attphp_decl);
-    static void update_python_get_of(Q3CString & def, const QString & attr_name,
+    static void update_python_get_of(QCString & def, const QString & attr_name,
 				     QString attpython_decl, bool attis_class_member);
-    static void update_idl_get_of(Q3CString & decl, QString attidl_decl,
+    static void update_idl_get_of(QCString & decl, QString attidl_decl,
 				  QString multiplicity);
-    void update_cpp_set_of(Q3CString & decl, Q3CString & def,
+    void update_cpp_set_of(QCString & decl, QCString & def,
 			   const QString & attr_name,
 			   QString attcpp_decl, bool attis_const, 
 			   QString multiplicity);
-    static void update_java_set_of(Q3CString & def, const QString & attr_name,
+    static void update_java_set_of(QCString & def, const QString & attr_name,
 				   QString attjava_decl, QString multiplicity);
-    static void update_php_set_of(Q3CString & def,
+    static void update_php_set_of(QCString & def,
 				  const QString & attr_name,
 				  QString attphp_decl);
-    static void update_python_set_of(Q3CString & def, const QString & attr_name,
+    static void update_python_set_of(QCString & def, const QString & attr_name,
 				     QString attpython_decl, bool attis_class_member);
-    static void update_idl_set_of(Q3CString & decl, QString attidl_decl,
+    static void update_idl_set_of(QCString & decl, QString attidl_decl,
 				  QString multiplicity);
     
   protected slots:

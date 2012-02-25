@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= uml_proj
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
 HEADERS		= ./UmlBaseExpansionNode.h \
 		  ./UmlChoicePseudoState.h \
@@ -398,5 +398,3 @@ SOURCES		= ./UmlBaseExpansionNode.cpp \
 		  ./UmlBaseClassDiagram.cpp \
 		  ./StateBehavior.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

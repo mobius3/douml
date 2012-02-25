@@ -3,10 +3,8 @@
 #include "FileOut.h"
 #include "UmlItem.h"
 #include "UmlSequenceMessage.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs) {
+void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, QList< UmlSequenceMessage > & msgs) {
   UmlFragment * fr = fragment();
   
   while (fr->container() != 0)
@@ -15,8 +13,8 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
   fr->write(out, diagram, msgs);
 }
 
-void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs, Q3CString oper) {
-  Q3PtrListIterator<UmlSequenceMessage> it(msgs);
+void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, QList< UmlSequenceMessage > & msgs, QCString oper) {
+  QListIterator<UmlSequenceMessage> it(msgs);
   UmlSequenceMessage * m;
   
   if (!oper.isEmpty()) {
@@ -35,7 +33,7 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
       out.id_prefix(diagram, "GUARD", rank);
       out << ">\n";
 
-      Q3CString txt = texts()[0];
+      QCString txt = texts()[0];
       
       txt.stripWhiteSpace();
       if ((txt.at(0) == '[') && (txt.at(txt.length() - 1) == ']'))
@@ -43,8 +41,8 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
       
       if (oper == "loop") {
 	int index;
-	Q3CString min;
-	Q3CString max;
+	QCString min;
+	QCString max;
 	
 	if ((index = txt.find(',')) != -1) {
 	  min = txt.left(index);
@@ -151,8 +149,8 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
   }
 }
 
-void UmlFragmentCompartment::bypass(Q3PtrList< UmlSequenceMessage > & msgs) {
-  Q3PtrListIterator<UmlSequenceMessage> it(msgs);
+void UmlFragmentCompartment::bypass(QList< UmlSequenceMessage > & msgs) {
+  QListIterator<UmlSequenceMessage> it(msgs);
   UmlSequenceMessage * m;
   
   while ((m = it.current()) != 0) {

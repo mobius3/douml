@@ -1,8 +1,6 @@
 
 #include <stdio.h>
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "UmlCom.h"
 #include "Dialog.h"
@@ -23,18 +21,18 @@ void UmlPackage::xmi(int argc, char ** argv) {
   // the project
 
   bool noarg = (argc == 0);
-  Q3CString path;
-  Q3CString encoding;
-  Q3CString nomodel;
-  Q3CString genviews;
-  Q3CString uml20;
-  Q3CString pkprefix;
-  Q3CString visprefix;
-  Q3CString primitivetype;
-  Q3CString genextension;
-  Q3CString geneclipse;
-  Q3CString commentexporter;
-  Q3CString linefeed;
+  QCString path;
+  QCString encoding;
+  QCString nomodel;
+  QCString genviews;
+  QCString uml20;
+  QCString pkprefix;
+  QCString visprefix;
+  QCString primitivetype;
+  QCString genextension;
+  QCString geneclipse;
+  QCString commentexporter;
+  QCString linefeed;
   
   bool comment_exporter = FALSE;  
   bool no_model = FALSE;
@@ -123,7 +121,7 @@ void UmlPackage::xmi(int argc, char ** argv) {
     // note : QTextStream(FILE *) bugged under windows
     QFile fp(path);
     
-    if (! fp.open(QIODevice::WriteOnly))
+    if (! fp.open(IO_WriteOnly))
       UmlCom::trace("cannot open " + path);
     else {
       if (noarg) {
@@ -165,7 +163,7 @@ void UmlPackage::xmi(int argc, char ** argv) {
 	  utf8 = FALSE;
 	
 	FileOut out(&fp, _linefeed, utf8);
-	Q3PtrList<UmlPackage> profiles;
+	QList<UmlPackage> profiles;
 	UmlPackage * prof;
 	
 	search_profiles(profiles);
@@ -179,9 +177,9 @@ void UmlPackage::xmi(int argc, char ** argv) {
 	
 	for (prof = profiles.first(); prof != 0; prof = profiles.next()) {
 	  out << " xmlns:";
-	  out.quote((const char*)prof->name());//[jasa] ambiguous call
+	  out.quote(prof->name());
 	  out << "=\"http:///schemas/";
-	  out.quote((const char*)prof->name());//[jasa] ambiguous call
+	  out.quote(prof->name());
 	  out << "/1\"";
 	}
 	
@@ -246,11 +244,11 @@ void UmlPackage::write(FileOut & out) {
     << ((is_profile) ? "Profile\"" : "Package\""); 
   out.id(this); 
   out << " name =\"";
-  out.quote((const char*)name());//[jasa] ambiguous call
+  out.quote(name());
   out << '"'; 
   
-  Q3CString mcr;
-  Q3CString mmr;
+  QCString mcr;
+  QCString mmr;
   
   if (is_profile) {
     propertyValue("metaclassreference", mcr);
@@ -294,7 +292,7 @@ void UmlPackage::write(FileOut & out) {
     out << "</packageImport>\n";
   }
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   if (is_profile) {
@@ -338,11 +336,11 @@ void UmlPackage::write(FileOut & out) {
   out << "</" << k << ">\n";
 }
 
-void UmlPackage::search_profiles(Q3PtrList<UmlPackage> & l) {
+void UmlPackage::search_profiles(QList<UmlPackage> & l) {
   if (stereotype() == "profile")
     l.append(this);
     
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)
@@ -351,7 +349,7 @@ void UmlPackage::search_profiles(Q3PtrList<UmlPackage> & l) {
 }
 
 void UmlPackage::search_class_assoc() {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)

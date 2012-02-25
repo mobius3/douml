@@ -3,8 +3,6 @@
 #include "FileOut.h"
 
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlRelation::write(FileOut & out) {
   write(out, TRUE);
 }
@@ -123,7 +121,7 @@ void UmlRelation::write_relation(FileOut & out) {
   out << '<' << k << " xmi:type=\"uml:Association\"";
   out.id_prefix(this, "ASSOC_");
   
-  Q3CString s = name();
+  QCString s = name();
   int i1 = s.find("(");
   int i2 = s.findRev(")");
   
@@ -132,7 +130,7 @@ void UmlRelation::write_relation(FileOut & out) {
     
     if (!s.isEmpty()) {
       out << " name=\"";
-      out.quote((const char*)s);//[jasa] ambiguous call
+      out.quote(s);
       out << '"';
     }
   }
@@ -200,7 +198,7 @@ void UmlRelation::write_ends(FileOut & out) {
 
 void UmlRelation::write_relation_as_attribute(FileOut & out) {
   UmlRelation * first = side(TRUE);
-  Q3CString s;  
+  QCString s;  
   UmlClass * base;
 
   if ((first->parent()->stereotype() == "stereotype") &&
@@ -330,16 +328,16 @@ void UmlRelation::write_extension(FileOut & out) {
     
     out.indent();
     out << "<" << k << " xmi:type=\"uml:Extension\" name=\"A_";
-    out.quote((const char*)roleType()->name());//[jasa] ambiguous call
+    out.quote(roleType()->name());
     out  << '_';
-    out.quote((const char*)parent()->name());//[jasa] ambiguous call
+    out.quote(parent()->name());
     out << '"';
     out.id_prefix(this, "EXT_");
     out.ref(this, "memberEnd", "BASE_");
     out << ">\n";
     out.indent();
     out << "\t<ownedEnd xmi:type=\"uml:ExtensionEnd\" name=\"extension_";
-    out.quote((const char*)parent()->name());//[jasa] ambiguous call
+    out.quote(parent()->name());
     out << '"';
     out.id_prefix(this, "EXTEND_");
     out.ref(this, "type");

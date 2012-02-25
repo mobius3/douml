@@ -25,12 +25,9 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
 #include <qlineedit.h> 
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
 
 #include "UserDialog.h"
 #include "myio.h"
@@ -40,8 +37,8 @@ UserDialog::UserDialog(const QPoint & p)
   setCaption("Choose user");
   move(p);
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBoxLayout * hbox;
   QLabel * lbl1;
   QLabel * lbl2;
   
@@ -54,11 +51,11 @@ UserDialog::UserDialog(const QPoint & p)
   lbl->setAlignment(::Qt::AlignCenter);
   vbox->addWidget(lbl);
   
-  hbox = new Q3HBoxLayout(vbox);
+  hbox = new QHBoxLayout(vbox);
   hbox->setMargin(5);
   lbl1 = new QLabel("User : ", this);
   hbox->addWidget(lbl1);
-  ids = new Q3ComboBox(FALSE, this);
+  ids = new QComboBox(FALSE, this);
   for (int index = 2; index != 128; index += 1) {
     QString s = user_name(index);
     
@@ -75,7 +72,7 @@ UserDialog::UserDialog(const QPoint & p)
 
   hbox->addWidget(ids);
   
-  hbox = new Q3HBoxLayout(vbox);
+  hbox = new QHBoxLayout(vbox);
   hbox->setMargin(5);
   lbl2 = new QLabel("New name : ", this);
   lbl1->setFixedWidth(lbl2->sizeHint().width());
@@ -83,7 +80,7 @@ UserDialog::UserDialog(const QPoint & p)
   edname = new QLineEdit(this);
   hbox->addWidget(edname);
     
-  hbox = new Q3HBoxLayout(vbox);
+  hbox = new QHBoxLayout(vbox);
   hbox->setMargin(5);
 
   QPushButton * ok = new QPushButton("Ok", this);

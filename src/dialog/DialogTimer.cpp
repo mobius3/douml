@@ -33,13 +33,13 @@
 
 
 #include <stdio.h>
-#include <q3textstream.h> 
+#include <qtextstream.h> 
 #include <qfile.h>
-#include <q3tabdialog.h>
+#include <qtabdialog.h>
 
 #include "DialogTimer.h"
 
-DialogTimer::DialogTimer(QString s, QString p, Q3TabDialog * d, post_edit pf)
+DialogTimer::DialogTimer(QString s, QString p, QTabDialog * d, post_edit pf)
     : QTimer(d), current(s), path(p), dlg(d), f(pf) {
   connect(this, SIGNAL(timeout()), this, SLOT(readfile()));
 }
@@ -62,11 +62,11 @@ void DialogTimer::readfile() {
 
     QFile fi;
     
-    fi.open(QIODevice::ReadOnly, fp);
+    fi.open(IO_ReadOnly, fp);
     
-    Q3TextStream ts(&fi);
+    QTextStream ts(&fi);
     
-    ts.setEncoding(Q3TextStream::Latin1);
+    ts.setEncoding(QTextStream::Latin1);
     
     result = ts.read();
     fi.close();

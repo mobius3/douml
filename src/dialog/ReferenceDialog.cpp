@@ -29,14 +29,9 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "ReferenceDialog.h"
 #include "BrowserView.h"
@@ -48,13 +43,13 @@ ReferenceDialog * ReferenceDialog::the;
 QSize ReferenceDialog::previous_size;
 
 ReferenceDialog::ReferenceDialog(BrowserNode * bn)
-    : QDialog(0, "Referenced By dialog", FALSE, Qt::WDestructiveClose) {
+    : QDialog(0, "Referenced By dialog", FALSE, WDestructiveClose) {
   the = this;
   target = bn;
   
   setCaption(TR("Referenced By dialog"));
     
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+  QVBoxLayout * vbox = new QVBoxLayout(this);
  
   vbox->setMargin(5);
  
@@ -64,10 +59,10 @@ ReferenceDialog::ReferenceDialog(BrowserNode * bn)
   
   vbox->addWidget(new QLabel(s, this));
   
-  results = new Q3ComboBox(FALSE, this);
+  results = new QComboBox(FALSE, this);
   vbox->addWidget(results);
   
-  Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox); 
+  QHBoxLayout * hbox = new QHBoxLayout(vbox); 
   QPushButton * search_b = new QPushButton(TR("Recompute"), this);
   QPushButton * close_b = new QPushButton(TR("Close"), this);
   
@@ -109,7 +104,7 @@ void ReferenceDialog::polish() {
 void ReferenceDialog::compute() {
   QApplication::setOverrideCursor(Qt::waitCursor);
 
-  Q3PtrList<BrowserNode> l;
+  QList<BrowserNode> l;
   BrowserNode * bn;
   
   nodes.clear();

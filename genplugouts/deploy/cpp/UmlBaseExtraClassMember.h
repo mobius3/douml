@@ -4,7 +4,7 @@
 
 #include "UmlClassItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlExtraClassMember;
 class UmlClass;
@@ -36,7 +36,7 @@ class UmlBaseExtraClassMember : public UmlClassItem {
 
     // returns the operation's definition in C++, notes that the declaration
     // is returned by the inherited ClassItemBase::CppDecl() operation
-    const Q3CString & cppDef();
+    const QCString & cppDef();
 
     // sets the operation's definition in C++, notes that the declaration
     // is set through the inherited ClassItemBase::set_CppDecl() operation
@@ -55,12 +55,12 @@ class UmlBaseExtraClassMember : public UmlClassItem {
     bool _cpp_inline;
     
 
-    Q3CString _cpp_def;
+    QCString _cpp_def;
 #endif
 
   protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseExtraClassMember(void * id, const Q3CString & n) : UmlClassItem(id, n) {};
+    UmlBaseExtraClassMember(void * id, const QCString & n) : UmlClassItem(id, n) {};
 
 #ifdef WITHCPP
     //internal, do NOT use it

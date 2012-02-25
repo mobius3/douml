@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseOperation.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 
@@ -13,21 +13,21 @@ class FileOut;
 // You can modify it as you want (except the constructor)
 class UmlOperation : public UmlBaseOperation {
   public:
-    UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {};
+    UmlOperation(void * id, const QCString & n) : UmlBaseOperation(id, n) {};
 
     virtual bool write_if_needed(FileOut & out);
 
-    void write_return_type(FileOut & out, Q3CString decl);
+    void write_return_type(FileOut & out, QCString decl);
 
-    void write_cpp_returntype(FileOut & out, Q3CString decl);
+    void write_cpp_returntype(FileOut & out, QCString decl);
 
-    void write_java_returntype(FileOut & out, Q3CString decl);
+    void write_java_returntype(FileOut & out, QCString decl);
 
     void write_uml_params(FileOut & out);
 
-    void write_cpp_java_params(FileOut & out, Q3CString decl);
+    void write_cpp_java_params(FileOut & out, QCString decl);
 
-    bool get_param(Q3CString s, int & index, Q3CString & r, Q3CString & kname, Q3CString & ktype, int & rank);
+    bool get_param(QCString s, int & index, QCString & r, QCString & kname, QCString & ktype, int & rank);
 
 
   protected:

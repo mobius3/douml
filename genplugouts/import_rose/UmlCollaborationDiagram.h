@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseCollaborationDiagram.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class File;
 class UmlItem;
@@ -15,7 +15,7 @@ class UmlItem;
 // You can modify it as you want (except the constructor)
 class UmlCollaborationDiagram : public UmlBaseCollaborationDiagram {
   public:
-    UmlCollaborationDiagram(void * id, const Q3CString & n) : UmlBaseCollaborationDiagram(id, n) {
+    UmlCollaborationDiagram(void * id, const QCString & n) : UmlBaseCollaborationDiagram(id, n) {
       cpt[kind()] += 1;
     };
 

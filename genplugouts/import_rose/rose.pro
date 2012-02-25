@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= irose
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL
 HEADERS		= ./UmlDeploymentView.h \
 		  ./UmlTypeSpec.h \
@@ -159,5 +159,3 @@ SOURCES		= ./UmlDeploymentView.cpp \
 		  ./UmlBaseNode.cpp \
 		  ./UmlExtraClassMember.cpp \
 		  ./UmlBaseActualParameter.cpp
-#The following line was inserted by qt3to4
-QT += network  qt3support 

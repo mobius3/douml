@@ -1,13 +1,11 @@
 
 #include "Context.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-Context::Context(const Q3CString & o, const Q3CString & f)
+Context::Context(const QCString & o, const QCString & f)
   : _old(o), _future(f), _n_match(0), _n_err(0) {
 }
 
-const char * Context::set_filters(const Q3CString & f1, const Q3CString & f2, const Q3CString & f3, bool w1, bool w2, bool w3, bool and12, bool and23) {
+const char * Context::set_filters(const QCString & f1, const QCString & f2, const QCString & f3, bool w1, bool w2, bool w3, bool and12, bool and23) {
 _filter1 = f1;
 _filter2 = f2;
 _filter3 = f3;
@@ -41,7 +39,7 @@ else
 return 0;
 }
 
-bool Context::match_stereotype(const Q3CString & s) {
+bool Context::match_stereotype(const QCString & s) {
   if (_is)
     return (s == _stereotype);
   else if (_isnot)
@@ -50,7 +48,7 @@ bool Context::match_stereotype(const Q3CString & s) {
     return TRUE;
 }
 
-bool Context::match(Q3CString s) {
+bool Context::match(QCString s) {
   int index = 0;
   
   while ((index = s.find("\r", index)) != -1)
@@ -85,7 +83,7 @@ void Context::err() {
   _n_err += 1;
 }
 
-Q3CString Context::replace(Q3CString s) {
+QCString Context::replace(QCString s) {
   int index = 0;
   
   while ((index = s.find("\r", index)) != -1)
@@ -94,7 +92,7 @@ Q3CString Context::replace(Q3CString s) {
   return s.replace(s.find(_old), _old.length(), _future);
 }
 
-bool Context::match(Q3CString s, const Q3CString & filter, bool with) {
+bool Context::match(QCString s, const QCString & filter, bool with) {
 if ((with) ? (s.find(filter) != -1) : (s.find(filter) == -1)) {
   _n_match += 1;
   return TRUE;

@@ -30,19 +30,15 @@
 
 
 
-#include <q3ptrdict.h>
+#include <qptrdict.h>
 #include <qmap.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BrowserComponent.h"
 
-class Q3ComboBox;
-class Q3ListBox;
-class Q3VBox;
+class QComboBox;
+class QListBox;
+class QVBox;
 class LineEdit;
 class MultiLineEdit;
 class SimpleData;
@@ -51,37 +47,37 @@ class FormalParamsTable;
 class ActualParamsTable;
 class BodyDialog;
 
-class ComponentDialog : public Q3TabDialog {
+class ComponentDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     QWidget * umltab;
     SimpleData * data;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
         
     // required classes
-    Q3VBox * rq_page;
-    Q3ComboBox * rq_stereotypefilter;
-    Q3ListBox * lb_rq_available;
-    Q3ListBox * lb_rq;
-    Q3ValueList<BrowserClass *> rqs;
+    QVBox * rq_page;
+    QComboBox * rq_stereotypefilter;
+    QListBox * lb_rq_available;
+    QListBox * lb_rq;
+    QValueList<BrowserClass *> rqs;
         
     // provided classes
-    Q3VBox * pr_page;
-    Q3ComboBox * pr_stereotypefilter;
-    Q3ListBox * lb_pr_available;
-    Q3ListBox * lb_pr;
-    Q3ValueList<BrowserClass *> prs;
+    QVBox * pr_page;
+    QComboBox * pr_stereotypefilter;
+    QListBox * lb_pr_available;
+    QListBox * lb_pr;
+    QValueList<BrowserClass *> prs;
         
     // realization classes
-    Q3VBox * rz_page;
-    Q3ComboBox * rz_stereotypefilter;
-    Q3ListBox * lb_rz_available;
-    Q3ListBox * lb_rz;
-    Q3ValueList<BrowserClass *> rzs;
+    QVBox * rz_page;
+    QComboBox * rz_stereotypefilter;
+    QListBox * lb_rz_available;
+    QListBox * lb_rz;
+    QValueList<BrowserClass *> rzs;
     
     // user
     KeyValuesTable * kvtable;
@@ -89,12 +85,12 @@ class ComponentDialog : public Q3TabDialog {
     static QSize previous_size;
     
     void init_uml_tab();
-    void init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
+    void init_l_tab(QVBox *& page, QComboBox *& stereotypefilter,
 		    void (ComponentDialog::* filteractivated)(const QString & st),
 		    const char * filter_slt,
 		    const char * add_slt, const char * remove_slt,
-		    Q3ListBox *& lb_available, Q3ListBox *& lb,
-		    const Q3ValueList<BrowserClass *> & cls,
+		    QListBox *& lb_available, QListBox *& lb,
+		    const QValueList<BrowserClass *> & cls,
 		    const char * lbl);
     
     static void post_edit_description(ComponentDialog * d, QString s);

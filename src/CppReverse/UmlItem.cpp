@@ -26,8 +26,6 @@
 #include "UmlItem.h"
 #include "UmlCom.h"
 #include "UmlPackage.h"
-//Added by qt3to4:
-#include <Q3PtrList>
 
 UmlItem::~UmlItem() {
 }
@@ -42,7 +40,7 @@ bool UmlItem::set_roundtrip_expected() {
   return TRUE;
 }
 
-void UmlItem::mark_useless(Q3PtrList<UmlItem> &) {
+void UmlItem::mark_useless(QList<UmlItem> &) {
   // does nothing
 }
 

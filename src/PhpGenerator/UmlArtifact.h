@@ -26,9 +26,7 @@
 #ifndef UMLARTIFACT_H
 #define UMLARTIFACT_H
 
-#include <q3asciidict.h> 
-//Added by qt3to4:
-#include <Q3CString>
+#include <qasciidict.h> 
 
 #include "UmlBaseArtifact.h"
 
@@ -49,7 +47,7 @@ class UmlArtifact : public UmlBaseArtifact {
     void generate_text();
 
   public:
-    UmlArtifact(void * id, const Q3CString & n)
+    UmlArtifact(void * id, const QCString & n)
       : UmlBaseArtifact(id, n), managed(FALSE) {};
     
     virtual void generate();

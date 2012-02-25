@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QPixmap>
 
 #include "BrowserExtraMember.h"
 #include "ExtraMemberData.h"
@@ -126,8 +122,8 @@ const QPixmap* BrowserExtraMember::pixmap(int) const {
 }
 
 void BrowserExtraMember::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -292,7 +288,7 @@ void BrowserExtraMember::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
     e->ignore();
 }
 
-void BrowserExtraMember::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserExtraMember::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "extra_member_ref " << get_ident() << " // " << get_name();
   else {

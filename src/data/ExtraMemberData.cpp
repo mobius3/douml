@@ -34,8 +34,6 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "mu.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 ExtraMemberData::ExtraMemberData()
     : is_deleted(FALSE), cpp_inline(FALSE) {
@@ -151,7 +149,7 @@ bool ExtraMemberData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void ExtraMemberData::save(Q3TextStream & st, QString & warning) const {
+void ExtraMemberData::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   BasicData::save(st, warning);
   

@@ -28,26 +28,24 @@
 
 #include "UmlBaseOperation.h"
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class Class;
 
 class UmlOperation : public UmlBaseOperation {
   private:
     static bool read_param(Class * container, unsigned rank,
-			   UmlParameter & param, Q3CString & decl, bool bypass);
+			   UmlParameter & param, QCString & decl, bool bypass);
   
   public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const QCString & n)
       : UmlBaseOperation(id, n) {};
 	
     static bool new_one(Class * container, aVisibility visibility,
 			bool finalp, bool abstractp, bool staticp,
-			Q3CString comment, Q3CString description);
+			QCString comment, QCString description);
 
     static void skip_body(int level = 0);
-    static Q3CString skip_expr(int level = 0);
+    static QCString skip_expr(int level = 0);
 };
 
 #endif

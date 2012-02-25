@@ -29,15 +29,12 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <q3hbox.h>
+#include <qcombobox.h> 
+#include <qhbox.h>
 #include <qpushbutton.h>
-#include <q3grid.h>
-#include <q3popupmenu.h>
+#include <qgrid.h>
+#include <qpopupmenu.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include "CodAddMsgDialog.h"
 #include "ColDiagramView.h"
@@ -60,22 +57,22 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
     : QDialog(0, "add msg dialog", TRUE), in(i), view(v), forward(fo) {
   setCaption(TR("Add message dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(10);
   QLabel * label1 = new QLabel(TR("Add message to %1", to->get_full_name()), this);
-  label1->setAlignment(Qt::AlignCenter);
+  label1->setAlignment(AlignCenter);
   hbox->addWidget(label1);
   
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   
   vbox->addWidget(grid);
   new QLabel(TR("rank : "), grid);
-  cbrank = new Q3ComboBox(FALSE, grid);
+  cbrank = new QComboBox(FALSE, grid);
   
   ColMsgList all_in;
   ColMsgList all_out;
@@ -84,7 +81,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
   
   ColMsg * m;
   QStringList new_ones;
-  Q3PtrListIterator<ColMsg> itout(all_out);
+  QListIterator<ColMsg> itout(all_out);
   
   for (; (m = itout.current()) != 0; ++itout) {
     QString s = m->next_hierarchical_rank();
@@ -95,7 +92,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
     }
   }
     
-  Q3PtrListIterator<ColMsg> itin(all_in);
+  QListIterator<ColMsg> itin(all_in);
   
   for (; (m = itin.current()) != 0; ++itin) {
     QString s = m->get_hierarchical_rank() + ".1";
@@ -128,7 +125,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
   
   connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
   
-  edoper = new Q3ComboBox(TRUE, grid);
+  edoper = new QComboBox(TRUE, grid);
   edoper->setAutoCompletion(completion());
   
   // gets operations
@@ -148,7 +145,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
   
   // ok & cancel
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * ok = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -175,7 +172,7 @@ CodAddMsgDialog::~CodAddMsgDialog() {
 }
 
 void CodAddMsgDialog::menu_op() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();

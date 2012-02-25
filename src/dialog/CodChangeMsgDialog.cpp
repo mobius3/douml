@@ -29,14 +29,11 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <q3hbox.h>
+#include <qcombobox.h> 
+#include <qhbox.h>
 #include <qpushbutton.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include "CodChangeMsgDialog.h"
 #include "ColMsg.h"
@@ -55,12 +52,12 @@ CodChangeMsgDialog::CodChangeMsgDialog(QWidget * parent, ColMsg * m)
     : QDialog(parent, "Communication message dialog", TRUE), msg(m) {
   setCaption(TR("Communicationg message dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   
   SmallPushButton * b = new SmallPushButton(TR("message :"), this);
@@ -68,7 +65,7 @@ CodChangeMsgDialog::CodChangeMsgDialog(QWidget * parent, ColMsg * m)
   hbox->addWidget(b);
   connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
 
-  edoper = new Q3ComboBox(TRUE, this);
+  edoper = new QComboBox(TRUE, this);
   edoper->setAutoCompletion(completion());
   if (msg->operation == 0)
     edoper->insertItem(msg->explicit_operation);
@@ -100,7 +97,7 @@ CodChangeMsgDialog::CodChangeMsgDialog(QWidget * parent, ColMsg * m)
   
   // ok & cancel
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * ok = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -127,7 +124,7 @@ CodChangeMsgDialog::~CodChangeMsgDialog() {
 }
 
 void CodChangeMsgDialog::menu_op() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();

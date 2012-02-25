@@ -27,16 +27,14 @@
 
 
 
-#include <q3grid.h> 
+#include <qgrid.h> 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qcheckbox.h> 
-#include <q3vbox.h> 
-#include <q3popupmenu.h> 
+#include <qvbox.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h> 
-//Added by qt3to4:
-#include <Q3PtrList>
 
 
 #include "ActivityPartitionDialog.h"
@@ -55,7 +53,7 @@
 QSize ActivityPartitionDialog::previous_size;
 
 ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(d) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), data(d) {
   d->browser_node->edit_start();
   
   if (d->browser_node->is_writable()) {
@@ -74,7 +72,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   // general tab
   
   BrowserNode * bn = data->get_browser_node();
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
 
   umltab = grid;
   grid->setMargin(5);
@@ -85,7 +83,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   edname->setReadOnly(visit);
     
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(BrowserActivityPartition::default_stereotypes());
@@ -99,7 +97,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   
   connect(new SmallPushButton(TR("represents :"), grid), SIGNAL(clicked()),
 	  this, SLOT(menu_represents()));
-  edrepresents = new Q3ComboBox(FALSE, grid);
+  edrepresents = new QComboBox(FALSE, grid);
   if ((data->represents != 0) && !data->represents->deletedp()) {
     represented = data->represents;
     edrepresents->insertItem(*(data->represents->pixmap(0)), 
@@ -114,10 +112,10 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   edrepresents->setCurrentItem(0);
   edrepresents->setSizePolicy(sp);
 
-  Q3HBox * htab;
+  QHBox * htab;
 
   new QLabel(grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   new QLabel("  ", htab);
   dimension_cb = new QCheckBox(TR("is dimension"), htab);
   if (data->is_dimension)
@@ -130,7 +128,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   external_cb->setDisabled(visit);
   new QLabel("", htab);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -148,7 +146,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -164,7 +162,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
 }
 
 void ActivityPartitionDialog::polish() {
-  Q3TabDialog::polish();  
+  QTabDialog::polish();  
   UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -221,7 +219,7 @@ void ActivityPartitionDialog::menu_represents() {
   if (!hasOkButton() && (represented == 0))
     return;
   
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -233,7 +231,7 @@ void ActivityPartitionDialog::menu_represents() {
   if ((bn != 0) && allowed(bn))
     m.insertItem(TR("Choose element selected in browser"), 1);
   
-  const Q3PtrList<BrowserNode> & l = BrowserNode::marked_nodes();
+  const QList<BrowserNode> & l = BrowserNode::marked_nodes();
   
   if ((l.count() == 1) && allowed(l.getFirst()))
     m.insertItem(TR("Choose element marked in browser"), 2);
@@ -294,5 +292,5 @@ void ActivityPartitionDialog::accept() {
   bn->package_modified();
   data->modified();
     
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }

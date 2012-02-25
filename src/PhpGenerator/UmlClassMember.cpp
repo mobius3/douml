@@ -23,10 +23,7 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h> 
 
 #include "UmlClassMember.h"
 #include "UmlCom.h"
@@ -34,10 +31,10 @@
 #include "UmlSettings.h"
 #include "PhpSettings.h"
 
-void UmlClassMember::generate_require_onces(QTextOStream &, Q3CString &) {
+void UmlClassMember::generate_require_onces(QTextOStream &, QCString &) {
 }
 
-void UmlClassMember::remove_comments(Q3CString & s)
+void UmlClassMember::remove_comments(QCString & s)
 {
   int index1 = 0;
   
@@ -68,7 +65,7 @@ void UmlClassMember::remove_comments(Q3CString & s)
   }
 }
 
-void UmlClassMember::remove_arrays(Q3CString & s)
+void UmlClassMember::remove_arrays(QCString & s)
 {
   int index1 = 0;
   
@@ -101,8 +98,8 @@ void UmlClassMember::generate_visibility(QTextOStream & f) {
 }
 
 /*
-bool UmlClassMember::compute_dependency(Q3PtrList<PhpRefType> & dependencies,
-					Q3CString decl, const UmlTypeSpec & t)
+bool UmlClassMember::compute_dependency(QList<PhpRefType> & dependencies,
+					QCString decl, const UmlTypeSpec & t)
 {
   remove_comments(decl);
   remove_arrays(decl);
@@ -174,7 +171,7 @@ bool UmlClassMember::compute_dependency(Q3PtrList<PhpRefType> & dependencies,
 	ts.explicit_type = p2 + 1;
       
       if (dontsubstituteuntil == 0) {
-	Q3CString subst = PhpSettings::type(ts.explicit_type);
+	QCString subst = PhpSettings::type(ts.explicit_type);
 	
 	if (subst != ts.explicit_type) {
 	  decl = subst + ' ' + p;

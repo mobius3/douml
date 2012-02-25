@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -113,10 +111,10 @@ extern void defSetBoolBitField_(UmlClass * base, const char * where, const char 
 extern void include_umlcom(UmlClass * cl);
 extern void include_umlcom(UmlArtifact * art);
 extern void add_assoc_diag_ops(UmlClass * base, UmlClass * diag);
-extern void conditional(Q3CString & s, const char * if_def,
+extern void conditional(QCString & s, const char * if_def,
 			const char * end_if);
-extern Q3CString java2Php(Q3CString s);
-extern Q3CString java2Python(Q3CString s);
-extern Q3CString cpp2Python(Q3CString s);
+extern QCString java2Php(QCString s);
+extern QCString java2Python(QCString s);
+extern QCString cpp2Python(QCString s);
 
 #endif

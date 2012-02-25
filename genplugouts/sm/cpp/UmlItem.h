@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseItem.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "anItemKind.h"
 
 class UmlClass;
@@ -15,19 +15,19 @@ class UmlState;
 // You can modify it as you want (except the constructor)
 class UmlItem : public UmlBaseItem {
   public:
-    UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n) {};
+    UmlItem(void * id, const QCString & n) : UmlBaseItem(id, n) {};
 
     virtual ~UmlItem();
 
-    UmlItem * getChild(anItemKind k, Q3CString s);
+    UmlItem * getChild(anItemKind k, QCString s);
 
     //  return name modified to only contains a-ZA-Z0-9_
     
-    Q3CString quotedName();
+    QCString quotedName();
 
     //  initialization, does nothing at this level
     
-    virtual void init(UmlClass * mother, Q3CString path, Q3CString pretty_path, UmlState * state);
+    virtual void init(UmlClass * mother, QCString path, QCString pretty_path, UmlState * state);
 
     //  program entry point, correspond to a wrong Tools configuration
     
@@ -39,11 +39,11 @@ class UmlItem : public UmlBaseItem {
 
     //  if the target of a transition, can't be called
     
-    virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state, Q3CString & body, Q3CString indent);
+    virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state, QCString & body, QCString indent);
 
     //  does nothing at this level
     
-    virtual void setComment(Q3CString s);
+    virtual void setComment(QCString s);
 
     // if the element was produced by a previous use of the plug-out mark it useless to may delete it at end
     // iterate on children

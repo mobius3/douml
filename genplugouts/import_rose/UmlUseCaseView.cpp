@@ -4,28 +4,26 @@
 #include "File.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 UmlItem * UmlUseCaseView::item() {
   return this;
 }
 
-void UmlUseCaseView::readObject(File & f, Q3CString) {
+void UmlUseCaseView::readObject(File & f, QCString) {
   f.skipNextForm();
 }
 
 void UmlUseCaseView::import(UmlItem * parent, File & f)
 {
-  Q3CString s;
+  QCString s;
 
   if (f.read(s) != STRING)
     f.syntaxError(s, " use case view's name expected");
 
-  Q3CString a;
-  Q3CString id;
-  Q3CString ste;
-  Q3CString doc;
-  Q3Dict<Q3CString> prop;
+  QCString a;
+  QCString id;
+  QCString ste;
+  QCString doc;
+  QDict<QCString> prop;
   
   for (;;) {
     int k = f.readDefinitionBeginning(a, id, ste, doc, prop);
@@ -39,9 +37,9 @@ void UmlUseCaseView::import(UmlItem * parent, File & f)
       
       File f2(a, f.name());
       
-      if (! f2.open(QIODevice::ReadOnly))
+      if (! f2.open(IO_ReadOnly))
 	UmlCom::trace("<br>cannot open '" + a + "' referenced in "
-		      + Q3CString(f.name().toAscii()));//[jasa] QString to Q3CString
+		      + QCString(f.name()));
       else {     
         f2.read("(");
         f2.read("object");

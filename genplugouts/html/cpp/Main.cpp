@@ -1,6 +1,4 @@
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "UmlCom.h"
 #include "UmlItem.h"
@@ -29,7 +27,7 @@ int main(int argc, char ** argv)
       UmlCom::message("Indexes ...");
       UmlItem::generate_indexes();
       UmlItem::start_file("index", target->name() + "\nDocumentation", FALSE);
-      target->html(Q3CString(""), 0u, 0u);
+      target->html(QCString(""), 0u, 0u);
       UmlItem::end_file();
       UmlItem::start_file("navig", "", TRUE);
       UmlItem::end_file();

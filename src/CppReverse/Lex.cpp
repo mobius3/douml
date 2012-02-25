@@ -31,8 +31,6 @@
 //#define DEBUG_BOUML
 #ifdef DEBUG_BOUML
 #include <iostream>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace std;
 #endif
@@ -45,17 +43,17 @@ using namespace std;
 #include "Lex.h"
 #include "UmlCom.h"
 
-Q3AsciiDict<char> Lex::_defines;
+QAsciiDict<char> Lex::_defines;
 QString Lex::_filename;
 char * Lex::_buffer;
 LexContext Lex::_context;
 LexContext Lex::_mark;
 
-void Lex::defines(const Q3CString & f)
+void Lex::defines(const QCString & f)
 {
   QFile in(f);
   
-  if (!in.open(QIODevice::ReadOnly)) {
+  if (!in.open(IO_ReadOnly)) {
     UmlCom::trace("cannot open '" + f + "' (#file property value)");
     return;
   }
@@ -117,7 +115,7 @@ void Lex::unget()
     _context.line_number -= 1;
 }
 
-static Q3CString Separators = " \r\t\f\n&~\"#{'(+-|`^)[]=}%*<>?,.;/:!";
+static QCString Separators = " \r\t\f\n&~\"#{'(+-|`^)[]=}%*<>?,.;/:!";
 
 const QString & Lex::filename()
 {
@@ -143,7 +141,7 @@ bool Lex::open(const QString & f)
   QFile in(f);
   unsigned sz;
   
-  if (!in.open(QIODevice::ReadOnly) ||
+  if (!in.open(IO_ReadOnly) ||
       ((_buffer = new char[(sz = in.size()) + 1]) == 0))
     return FALSE;
     
@@ -236,7 +234,7 @@ void Lex::bypass_template()
 
 // the '<' was read, read up to the coresponding '>'
 
-bool Lex::finish_template(Q3CString & s)
+bool Lex::finish_template(QCString & s)
 {
   // template
   unsigned level = 1;
@@ -262,9 +260,9 @@ bool Lex::finish_template(Q3CString & s)
 // an type is an identifier (probably a type)
 // in case it is followed by '::qsd', '::qsd' is read and added to id
 
-Q3CString Lex::complete_template_type(Q3CString id)
+QCString Lex::complete_template_type(QCString id)
 {
-  Q3CString s;
+  QCString s;
 	
   while (!(s = read_word()).isEmpty()) {
     if ((((const char *) s)[0] != ':') || (((const char *) s)[1] != ':')) {
@@ -378,7 +376,7 @@ void Lex::bypass_c_comment()
   }
 }
 
-Q3CString Lex::manage_operator(QString & result, int c, bool oper)
+QCString Lex::manage_operator(QString & result, int c, bool oper)
 {
   // a comment is not correctly managed !
   result += c;
@@ -439,7 +437,7 @@ Q3CString Lex::manage_operator(QString & result, int c, bool oper)
 #ifdef DEBUG_BOUML
   cout << "retourne '" << result << "'\n";
 #endif
-  return Q3CString(result.toAscii().constData());
+  return QCString(result);
 }
 
 char Lex::bypass_operator(int c, bool oper)
@@ -508,7 +506,7 @@ char Lex::bypass_operator(int c, bool oper)
   }
 }
 
-Q3CString Lex::read_string()
+QCString Lex::read_string()
 {
   QString result = "\"";;
   
@@ -524,7 +522,7 @@ Q3CString Lex::read_string()
       result += c;
       break;
     case '"':
-      return Q3CString((result += c).toAscii().constData());
+      return QCString(result += c);
     default:
       result += c;
     }
@@ -548,9 +546,9 @@ void Lex::bypass_string()
   }
 }
 
-Q3CString Lex::read_character()
+QCString Lex::read_character()
 {
-  Q3CString result = "'";
+  QCString result = "'";
   
   for (;;) {
     int c = get();
@@ -587,9 +585,9 @@ void Lex::bypass_character()
   }
 }
 
-Q3CString Lex::read_array_dim() 
+QCString Lex::read_array_dim() 
 {
-  Q3CString result = "[";
+  QCString result = "[";
   char * pointer = _context.pointer;
 	  
   for (;;) {
@@ -632,7 +630,7 @@ void Lex::bypass_array_dim()
 
 
 // remove first and last line in comment if non significant
-Q3CString Lex::simplify_comment(Q3CString & comment)
+QCString Lex::simplify_comment(QCString & comment)
 {
   if (comment.isEmpty())
     return comment;
@@ -724,7 +722,7 @@ void Lex::unread_word()
   _context.line_number = _context.read_word_line_number;
 }
 
-Q3CString Lex::read_word(bool in_expr)
+QCString Lex::read_word(bool in_expr)
 {
   goes_to_word_beginning();
 
@@ -733,7 +731,7 @@ Q3CString Lex::read_word(bool in_expr)
   _context.read_word_description = _context.description;
   _context.read_word_line_number = _context.line_number;
     
-  static Q3CString spaces = " \t\n\r";
+  static QCString spaces = " \t\n\r";
 
   QString result;
   
@@ -774,7 +772,7 @@ Q3CString Lex::read_word(bool in_expr)
 	  result += ' ';
 	  unget();
 	  
-	  Q3CString w;
+	  QCString w;
 	  
 	  while (!(w = read_word()).isEmpty()) {
 	    if (w == "(") {
@@ -841,7 +839,7 @@ Q3CString Lex::read_word(bool in_expr)
       cout << "retourne '" << v << "'\n";
 #endif
       
-      return Q3CString(v);
+      return QCString(v);
     }
   }
   
@@ -849,7 +847,7 @@ Q3CString Lex::read_word(bool in_expr)
   cout << "retourne '" << result << "'\n";
 #endif
   
-  return Q3CString(result.toAscii().constData());
+  return QCString(result);
 }
 
 char Lex::read_word_bis(bool set_context, bool in_expr)
@@ -863,7 +861,7 @@ char Lex::read_word_bis(bool set_context, bool in_expr)
     _context.read_word_line_number = _context.line_number;
   }
     
-  static Q3CString spaces = " \t\n\r";
+  static QCString spaces = " \t\n\r";
 
   char result = 0;
   bool is_template = FALSE;
@@ -998,17 +996,17 @@ void Lex::finish_line()
   }
 }
 
-Q3CString Lex::get_comments() 
+QCString Lex::get_comments() 
 {
-  Q3CString result = Q3CString(_context.comments.toAscii().constData());
+  QCString result = QCString(_context.comments);
   
   _context.comments = QString::null;
   return result;
 }
 
-Q3CString Lex::get_comments(Q3CString & co) 
+QCString Lex::get_comments(QCString & co) 
 {
-  Q3CString result = Q3CString(_context.comments.toAscii().constData());
+  QCString result = QCString(_context.comments);
   
   _context.comments = QString::null;
   
@@ -1017,17 +1015,17 @@ Q3CString Lex::get_comments(Q3CString & co)
     : co += "\n" + result;
 }
 
-Q3CString Lex::get_description() 
+QCString Lex::get_description() 
 {
-  Q3CString result = Q3CString(_context.description.toAscii().constData());
+  QCString result = QCString(_context.description);
   
   _context.description = QString::null;
   return result;
 }
 
-Q3CString Lex::get_description(Q3CString & co) 
+QCString Lex::get_description(QCString & co) 
 {
-  Q3CString result = Q3CString(_context.description.toAscii().constData());
+  QCString result = QCString(_context.description);
   
   _context.description = QString::null;
   
@@ -1107,13 +1105,13 @@ void Lex::come_back()
   _context = _mark;
 }
 
-Q3CString Lex::region()
+QCString Lex::region()
 {
   char c = *_context.pointer;
   
   *_context.pointer = 0;
   
-  Q3CString result = _mark.pointer;
+  QCString result = _mark.pointer;
   
   *_context.pointer = c;
   
@@ -1130,11 +1128,11 @@ void Lex::set_context(const LexContext & context)
   _context = context;
 }
 
-void Lex::syntax_error(Q3CString s)
+void Lex::syntax_error(QCString s)
 {
-  UmlCom::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-		+ Q3CString(_filename.toAscii().constData()) + "</i> line " +
-		Q3CString().setNum(_context.line_number) + " <b>"
+  UmlCom::trace(QCString("<font face=helvetica>syntax error in <i> ")
+		+ QCString(_filename) + "</i> line " +
+		QCString().setNum(_context.line_number) + " <b>"
 		+ s + "</b></font><br>"); 
   
 #ifdef DEBUG_BOUML
@@ -1143,11 +1141,11 @@ void Lex::syntax_error(Q3CString s)
 #endif
 }
 
-void Lex::warn(Q3CString s)
+void Lex::warn(QCString s)
 {
-  UmlCom::trace(Q3CString("<font face=helvetica>in <i> ")
-		+ Q3CString(_filename.toAscii().constData()) + "</i> line " +
-		Q3CString().setNum(_context.line_number) + " <b>"
+  UmlCom::trace(QCString("<font face=helvetica>in <i> ")
+		+ QCString(_filename) + "</i> line " +
+		QCString().setNum(_context.line_number) + " <b>"
 		+ s + "</b></font><br>"); 
   
 #ifdef DEBUG_BOUML
@@ -1158,9 +1156,9 @@ void Lex::warn(Q3CString s)
 
 void Lex::premature_eof()
 {
-  UmlCom::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-		+ Q3CString(_filename.toAscii().constData()) + "</i> line " +
-		Q3CString().setNum(_context.line_number) +
+  UmlCom::trace(QCString("<font face=helvetica>syntax error in <i> ")
+		+ QCString(_filename) + "</i> line " +
+		QCString().setNum(_context.line_number) +
 		" <b>premature eof</b></font><br>"); 
   
 #ifdef DEBUG_BOUML
@@ -1169,11 +1167,11 @@ void Lex::premature_eof()
 #endif
 }
 
-void Lex::error_near(Q3CString s)
+void Lex::error_near(QCString s)
 {
-  UmlCom::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-		+ Q3CString(_filename.toAscii().constData()) + "</i> line " +
-		Q3CString().setNum(_context.line_number) + " <b>near <font color =\"red\">"
+  UmlCom::trace(QCString("<font face=helvetica>syntax error in <i> ")
+		+ QCString(_filename) + "</i> line " +
+		QCString().setNum(_context.line_number) + " <b>near <font color =\"red\">"
 		+ quote(s) + "</font></b></font><br>"); 
   
 #ifdef DEBUG_BOUML
@@ -1184,9 +1182,9 @@ void Lex::error_near(Q3CString s)
 
 // allows a string to be written as it is by an html writer
 
-Q3CString Lex::quote(Q3CString s)
+QCString Lex::quote(QCString s)
 {
-  Q3CString result;
+  QCString result;
   const char * p = s;
   
   if (p == 0)
@@ -1225,14 +1223,14 @@ static bool identifierp(char c)
 	  (c == '_'));
 }
 
-Q3CString Lex::normalize(const Q3CString & s)
+QCString Lex::normalize(const QCString & s)
 {
   int index = s.find('<');
   
   if (index == -1)
     return s;
   
-  Q3CString r;
+  QCString r;
   const char * p = s;
   
   index = 0;
@@ -1327,11 +1325,11 @@ Q3CString Lex::normalize(const Q3CString & s)
   return r;
 }
 
-Q3CString Lex::read_list_elt()
+QCString Lex::read_list_elt()
 {
   const char * p = _context.pointer;  
   int level = 1;
-  Q3CString s;
+  QCString s;
   
   while (!((s = read_word(TRUE)).isEmpty())) {
     int c = *s;
@@ -1362,7 +1360,7 @@ Q3CString Lex::read_list_elt()
 
 // to compare strings bypassing \r
 
-bool neq(const Q3CString & s1, const Q3CString & s2)
+bool neq(const QCString & s1, const QCString & s2)
 {
   const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
   const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
@@ -1387,7 +1385,7 @@ inline bool is_white_space(char c)
   return ((c == ' ') || ((c >= '\t') && (c <= '\r')));
 }
 
-bool nequal(const Q3CString & s1, const Q3CString & s2)
+bool nequal(const QCString & s1, const QCString & s2)
 {
   // don't take into account first and last white spaces (like a stripWhiteSpace())
   const char * p1 = (s1.isNull()) ? "" : (const char *) s1;

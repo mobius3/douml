@@ -23,10 +23,7 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h> 
 
 #include "UmlClassMember.h"
 #include "UmlCom.h"
@@ -35,7 +32,7 @@
 #include "UmlSettings.h"
 #include "JavaSettings.h"
 
-void UmlClassMember::remove_comments(Q3CString & s)
+void UmlClassMember::remove_comments(QCString & s)
 {
   int index1 = 0;
   
@@ -66,7 +63,7 @@ void UmlClassMember::remove_comments(Q3CString & s)
   }
 }
 
-void UmlClassMember::remove_arrays(Q3CString & s)
+void UmlClassMember::remove_arrays(QCString & s)
 {
   int index1 = 0;
   
@@ -103,8 +100,8 @@ void UmlClassMember::generate_visibility(QTextOStream & f, const char * parent_s
 }
 
 /*
-bool UmlClassMember::compute_dependency(Q3PtrList<JavaRefType> & dependencies,
-					Q3CString decl, const UmlTypeSpec & t)
+bool UmlClassMember::compute_dependency(QList<JavaRefType> & dependencies,
+					QCString decl, const UmlTypeSpec & t)
 {
   remove_comments(decl);
   remove_arrays(decl);
@@ -176,7 +173,7 @@ bool UmlClassMember::compute_dependency(Q3PtrList<JavaRefType> & dependencies,
 	ts.explicit_type = p2 + 1;
       
       if (dontsubstituteuntil == 0) {
-	Q3CString subst = JavaSettings::type(ts.explicit_type);
+	QCString subst = JavaSettings::type(ts.explicit_type);
 	
 	if (subst != ts.explicit_type) {
 	  decl = subst + ' ' + p;

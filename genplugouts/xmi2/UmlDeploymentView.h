@@ -3,8 +3,8 @@
 
 
 #include "UmlBaseDeploymentView.h"
-#include <q3cstring.h>
-#include <q3ptrlist.h>
+#include <qcstring.h>
+#include <qlist.h>
 
 class FileOut;
 class UmlItem;
@@ -14,7 +14,7 @@ class UmlItem;
 // You can modify it as you want (except the constructor)
 class UmlDeploymentView : public UmlBaseDeploymentView {
   public:
-    UmlDeploymentView(void * id, const Q3CString & n) : UmlBaseDeploymentView(id, n) {};
+    UmlDeploymentView(void * id, const QCString & n) : UmlBaseDeploymentView(id, n) {};
 
     virtual void write(FileOut & out);
 
@@ -26,7 +26,7 @@ class UmlDeploymentView : public UmlBaseDeploymentView {
 
 
   protected:
-    Q3PtrList<UmlItem> _relations;
+    QList<UmlItem> _relations;
 
 };
 

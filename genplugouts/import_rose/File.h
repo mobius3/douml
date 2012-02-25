@@ -3,10 +3,10 @@
 
 
 #include <qstring.h>
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "aVisibility.h"
 #include "Language.h"
-#include <q3dict.h>
+#include <qdict.h>
 
 #include <qfile.h>
 enum { ATOM = 1, STRING = 2 };
@@ -19,29 +19,29 @@ class File : public QFile {
 
     //// read a token in 's', returns its kind
     
-    int read(Q3CString & s);
+    int read(QCString & s);
 
     //// e is expected, return TRUE if ok
     
     void read(const char * e);
 
-    void unread(int k, const Q3CString & s);
+    void unread(int k, const QCString & s);
 
-    Q3CString context();
+    QCString context();
 
 
   protected:
-    int readString(Q3CString & s);
+    int readString(QCString & s);
 
-    int readMLString(Q3CString & s);
+    int readMLString(QCString & s);
 
-    int readAtom(Q3CString & s);
+    int readAtom(QCString & s);
 
 
   public:
-    void syntaxError(const Q3CString s);
+    void syntaxError(const QCString s);
 
-    void syntaxError(const Q3CString s, const Q3CString e);
+    void syntaxError(const QCString s, const QCString e);
 
     //// skip the end of the current block
     //// '(' already read
@@ -61,9 +61,9 @@ class File : public QFile {
 
     Language readLanguage();
 
-    int readDefinitionBeginning(Q3CString & s, Q3CString & id, Q3CString & ste, Q3CString & doc, Q3Dict<Q3CString> & prop);
+    int readDefinitionBeginning(QCString & s, QCString & id, QCString & ste, QCString & doc, QDict<QCString> & prop);
 
-    void readProperties(Q3Dict<Q3CString> & d);
+    void readProperties(QDict<QCString> & d);
 
 
   protected:
@@ -71,7 +71,7 @@ class File : public QFile {
 
     int unread_k;
 
-    Q3CString unread_s;
+    QCString unread_s;
 
 };
 

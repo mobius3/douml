@@ -26,9 +26,7 @@
 #ifndef COLMSGTABLE_H
 #define COLMSGTABLE_H
 
-#include <q3ptrdict.h> 
-//Added by qt3to4:
-#include <Q3ValueList>
+#include <qptrdict.h> 
 
 #include "MyTable.h"
 
@@ -44,7 +42,7 @@ class ColMsgTable : public MyTable {
     bool rec;
     ColDiagramView * view;
     ColMsgList & msgs;
-    Q3ValueList<ColMsg *> flat_msg_list;
+    QValueList<ColMsg *> flat_msg_list;
     
     void refresh();
     void refresh(ColMsgList & m);
@@ -52,7 +50,7 @@ class ColMsgTable : public MyTable {
     void change_ranks(int row, int col);
     
 #ifdef NEW_METHOD
-    void save_list(ColMsgList & l, Q3PtrDict<ColMsgList> & saved);
+    void save_list(ColMsgList & l, QPtrDict<ColMsgList> & saved);
 #endif
     
   public:

@@ -27,14 +27,14 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qcheckbox.h>
 #include <qpushbutton.h> 
-#include <q3buttongroup.h>
-#include <q3popupmenu.h> 
+#include <qbuttongroup.h>
+#include <qpopupmenu.h> 
 #include <qcursor.h> 
 
 #include "StateDialog.h"
@@ -55,7 +55,7 @@
 QSize StateDialog::previous_size;
 
 StateDialog::StateDialog(StateData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), state(d) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), state(d) {
   d->browser_node->edit_start();
   
   if (d->browser_node->is_writable()) {
@@ -71,13 +71,13 @@ StateDialog::StateDialog(StateData * d)
   visit = !hasOkButton();  
 
   BrowserNode * bn = state->browser_node;
-  Q3Grid * grid;
+  QGrid * grid;
   
   //
   // general tab
   //
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   umltab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -87,7 +87,7 @@ StateDialog::StateDialog(StateData * d)
   edname->setReadOnly(visit);
     
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(state->get_stereotype()));
   if (!visit) {
     edstereotype->insertStringList(BrowserState::default_stereotypes());
@@ -101,7 +101,7 @@ StateDialog::StateDialog(StateData * d)
     
   connect(new SmallPushButton(TR("specification :"), grid), SIGNAL(clicked()),
 	  this, SLOT(menu_specification()));    
-  edspecification = new Q3ComboBox(FALSE, grid);
+  edspecification = new QComboBox(FALSE, grid);
   edspecification->setSizePolicy(sp);
   if (visit) {
     if (state->get_specification() == 0)
@@ -126,7 +126,7 @@ StateDialog::StateDialog(StateData * d)
     if ((state->get_reference() != 0) || (bn->firstChild() == 0)) {
       connect(new SmallPushButton(TR("reference :"), grid), SIGNAL(clicked()),
 	      this, SLOT(menu_reference()));    
-      edreference = new Q3ComboBox(FALSE, grid);
+      edreference = new QComboBox(FALSE, grid);
       edreference->setSizePolicy(sp);
       if (visit) {
 	if (state->get_reference() == 0)
@@ -170,15 +170,15 @@ StateDialog::StateDialog(StateData * d)
   }
 
   new QLabel(grid);
-  Q3ButtonGroup * bg = 
-    new Q3ButtonGroup(1, Qt::Horizontal, QString::null, grid);
+  QButtonGroup * bg = 
+    new QButtonGroup(1, Qt::Horizontal, QString::null, grid);
   
   active_cb = new QCheckBox(TR("active"), bg);
   if (state->is_active)
     active_cb->setChecked(TRUE);
   active_cb->setDisabled(visit);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -205,7 +205,7 @@ StateDialog::StateDialog(StateData * d)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -247,7 +247,7 @@ void StateDialog::change_tabs(QWidget * w) {
 }
 
 void StateDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -265,7 +265,7 @@ void StateDialog::ed_ref_activated(int r) {
 }
 
 void StateDialog::menu_specification() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -319,7 +319,7 @@ void StateDialog::menu_specification() {
 }
 
 void StateDialog::menu_reference() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -379,14 +379,14 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
 			   const char * lbl, const char * sl_enbeh,
 			   const char * sl_exbeh, const char * sl_beh,
 			   bool enabled) {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3VBox * vtab;
+  QGrid * grid = new QGrid(2, this);
+  QVBox * vtab;
 
   tab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("Entry\nbehavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_enbeh);
@@ -402,7 +402,7 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
   if (visit)
     d.edentry->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("Exit\nbehavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_exbeh);
@@ -412,7 +412,7 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
   if (visit)
     d.edexit->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("Do\nbehavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_beh);
@@ -511,7 +511,7 @@ void StateDialog::accept() {
     bn->package_modified();
     state->modified();
     
-    Q3TabDialog::accept();
+    QTabDialog::accept();
   }
 }
 

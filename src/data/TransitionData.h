@@ -28,10 +28,8 @@
 
 #include "SimpleData.h"
 #include "UmlEnum.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
-class Q3TextStream;
+class QTextStream;
 
 class BrowserTransition;
 class BrowserNode;
@@ -42,7 +40,7 @@ struct TransDef {
   MyStr expr;
   
   QString str(bool horiz) const;
-  void save(Q3TextStream & st, const char * lang) const;
+  void save(QTextStream & st, const char * lang) const;
   void read(char * & st, char * & k, const char * lang);
   
   void send_def(ToolCom * com);
@@ -86,7 +84,7 @@ class TransitionData : public SimpleData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     static TransitionData * read(char * &, char * & k);
     
   protected slots:

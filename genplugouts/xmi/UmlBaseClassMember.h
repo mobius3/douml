@@ -4,7 +4,7 @@
 
 #include "UmlClassItem.h"
 #include "aVisibility.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlBaseClassItem.h"
 
 // This class manages 'true' class's items : attributes, relation,
@@ -56,7 +56,7 @@ class UmlBaseClassMember : public UmlClassItem {
 
 #ifdef WITHJAVA
     // returns the Java annotations
-    Q3CString javaAnnotations();
+    QCString javaAnnotations();
 
     // set the Java annotations
     //
@@ -77,12 +77,12 @@ class UmlBaseClassMember : public UmlClassItem {
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_annotation;
+    QCString _java_annotation;
 #endif
 
 
   protected:
-    UmlBaseClassMember(void * id, const Q3CString & n) : UmlClassItem(id, n) {};
+    UmlBaseClassMember(void * id, const QCString & n) : UmlClassItem(id, n) {};
 
     //internal, do NOT use it
     

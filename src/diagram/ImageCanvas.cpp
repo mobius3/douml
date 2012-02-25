@@ -29,10 +29,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
+#include <qpopupmenu.h> 
 
 #include "ImageCanvas.h"
 #include "Images.h"
@@ -59,7 +56,7 @@ ImageCanvas::~ImageCanvas() {
 
 void ImageCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   if (px == 0)
     p.fillRect (rect(), ::Qt::darkGray);
   else
@@ -144,16 +141,16 @@ void ImageCanvas::modified() {
 }
 
 void ImageCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   px = get_pixmap(path, the_canvas()->zoom());
   setSize(px->width(), px->height());
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void ImageCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu fontsubm(0);
+  QPopupMenu m(0);
+  QPopupMenu fontsubm(0);
   
   m.insertItem(new MenuTitle(TR("Image"), m.font()), -1);
   m.insertSeparator();
@@ -225,14 +222,14 @@ void ImageCanvas::apply_shortcut(QString s) {
 }
 
 QString ImageCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString ImageCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
   return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
 }
 
-void ImageCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void ImageCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "image_ref " << get_ident();
   }
@@ -269,7 +266,7 @@ ImageCanvas * ImageCanvas::read(char * & st, UmlCanvas * canvas, char * k)
 }
 
 void ImageCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
 }
 
 void ImageCanvas::history_save(QBuffer & b) const {
@@ -289,5 +286,5 @@ void ImageCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
 }

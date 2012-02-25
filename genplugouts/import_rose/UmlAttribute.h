@@ -3,8 +3,8 @@
 
 
 #include "UmlBaseAttribute.h"
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <qcstring.h>
+#include <qdict.h>
 
 class File;
 class UmlClass;
@@ -15,7 +15,7 @@ class UmlClass;
 // You can modify it as you want (except the constructor)
 class UmlAttribute : public UmlBaseAttribute {
   public:
-    UmlAttribute(void * id, const Q3CString & n) :  UmlBaseAttribute(id, n) {
+    UmlAttribute(void * id, const QCString & n) :  UmlBaseAttribute(id, n) {
       cpt[kind()] += 1;
     };
 
@@ -27,17 +27,17 @@ class UmlAttribute : public UmlBaseAttribute {
   public:
     static void import(File & f, UmlClass * parent);
 
-    static void importIdlConstant(UmlClass * parent, const Q3CString & id, const Q3CString & s, const Q3CString & doc, Q3Dict<Q3CString> & prop);
+    static void importIdlConstant(UmlClass * parent, const QCString & id, const QCString & s, const QCString & doc, QDict<QCString> & prop);
 
 
   private:
-    void cplusplus(Q3Dict<Q3CString> & prop);
+    void cplusplus(QDict<QCString> & prop);
 
-    void oracle8(Q3Dict<Q3CString> & prop);
+    void oracle8(QDict<QCString> & prop);
 
-    void corba(Q3Dict<Q3CString> & prop);
+    void corba(QDict<QCString> & prop);
 
-    void java(Q3Dict<Q3CString> & prop);
+    void java(QDict<QCString> & prop);
 
 };
 

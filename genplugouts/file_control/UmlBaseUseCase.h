@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlUseCase;
 class UmlUseCaseDiagram;
@@ -41,7 +41,7 @@ class UmlBaseUseCase : public UmlItem {
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseUseCase(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseUseCase(void * id, const QCString & n) : UmlItem(id, n) {};
 
 };
 

@@ -27,15 +27,13 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include "ClassInstanceDialog.h"
 #include "BrowserClassInstance.h"
@@ -55,11 +53,11 @@
 
 RelTable::RelTable(QWidget * parent, ClassInstanceData * inst, bool visit)
     : MyTable(parent) {
-  const Q3ValueList<SlotRel> & rels = inst->get_relations();
+  const QValueList<SlotRel> & rels = inst->get_relations();
   
   setNumRows(rels.count());
   setNumCols((visit) ? 5 : 6);
-  setSelectionMode(Q3Table::Single);
+  setSelectionMode(QTable::Single);
   setSorting(FALSE);
   
   horizontalHeader()->setLabel(0, TR("Class Inst."));
@@ -72,7 +70,7 @@ RelTable::RelTable(QWidget * parent, ClassInstanceData * inst, bool visit)
   QString role = inst->get_browser_node()->get_name() + QString(":") +
     inst->get_class()->get_name();
   int row = 0;
-  Q3ValueList<SlotRel>::ConstIterator it;
+  QValueList<SlotRel>::ConstIterator it;
   
   for (it = rels.begin(); it != rels.end(); ++it)
     init_row(*it, row++, role, visit);
@@ -93,21 +91,21 @@ void RelTable::init_row(const SlotRel & sr, int row, QString a, bool visit) {
   QString b = sr.value->get_name() + QString(":") +
     ((ClassInstanceData *) sr.value->get_data())->get_class()->get_name();
   
-  setItem(row, 0, new TableItem(this, Q3TableItem::Never,
+  setItem(row, 0, new TableItem(this, QTableItem::Never,
 				      (sr.is_a) ? a : b));
 
   RelationData * d = sr.rel;
   const char * s;
   
   s = d->get_role_b();
-  setItem(row, 1, new TableItem(this, Q3TableItem::Never, (s == 0) ? "" : s));
+  setItem(row, 1, new TableItem(this, QTableItem::Never, (s == 0) ? "" : s));
   
-  setItem(row, 2, new TableItem(this, Q3TableItem::Never, stringify(d->get_type())));
+  setItem(row, 2, new TableItem(this, QTableItem::Never, stringify(d->get_type())));
   
   s = d->get_role_a();
-  setItem(row, 3, new TableItem(this, Q3TableItem::Never, (s == 0) ? "" : s));
+  setItem(row, 3, new TableItem(this, QTableItem::Never, (s == 0) ? "" : s));
   
-  setItem(row, 4, new TableItem(this, Q3TableItem::Never,
+  setItem(row, 4, new TableItem(this, QTableItem::Never,
 				      (sr.is_a) ? b : a));
   
   if (! visit)
@@ -124,7 +122,7 @@ void RelTable::button_pressed(int row, int col, int, const QPoint &) {
 QSize ClassInstanceDialog::previous_size;
 
 ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
-    : Q3TabDialog(0, "class instance dialog", FALSE, Qt::WDestructiveClose),
+    : QTabDialog(0, "class instance dialog", FALSE, WDestructiveClose),
       inst(i), atbl(0), rtbl(0) {
   setCaption(TR("Class instance dialog"));
   
@@ -142,11 +140,11 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   visit = !hasOkButton();
   
-  Q3Grid * grid;
+  QGrid * grid;
     
   // general tab
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -156,7 +154,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     edname->setReadOnly(TRUE);
   
   new QLabel(TR("stereotype :"), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(bn->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClassInstance));
@@ -166,7 +164,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   connect(b, SIGNAL(clicked()), this, SLOT(menu_class()));
 
-  edtype = new Q3ComboBox(FALSE, grid);
+  edtype = new QComboBox(FALSE, grid);
   if (visit) {
     edtype->insertItem(inst->get_class()->full_name());
     nodes.append(inst->get_class());
@@ -186,7 +184,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
       cl_container = 0;
   }
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   
   new QLabel(TR("description :"), vtab);
   if (! visit) {
@@ -211,7 +209,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   atbl = new MyTable(this);
   atbl->setNumCols(3);
   atbl->setSorting(FALSE);
-  atbl->setSelectionMode(Q3Table::NoSelection);	// single does not work
+  atbl->setSelectionMode(QTable::NoSelection);	// single does not work
   atbl->setRowMovingEnabled(TRUE);
   atbl->horizontalHeader()->setLabel(0, TR(" Attribute "));
   atbl->horizontalHeader()->setLabel(1, TR(" Class "));
@@ -228,7 +226,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -276,7 +274,7 @@ void ClassInstanceDialog::post_edit_description(ClassInstanceDialog * d, QString
 }
 
 void ClassInstanceDialog::menu_class() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -354,15 +352,15 @@ void ClassInstanceDialog::type_changed(int i) {
   
   BrowserNode * at;
   int index;
-  Q3ValueList<SlotAttr> attrs = inst->attributes;
+  QValueList<SlotAttr> attrs = inst->attributes;
   
   for (at = attributes.first(), index = 0;
        at != 0;
        at = attributes.next(), index += 1) {
-    atbl->setItem(index, 0, new TableItem(atbl, Q3TableItem::Never, at->get_name()));
-    atbl->setItem(index, 1, new TableItem(atbl, Q3TableItem::Never, ((BrowserNode *) at->parent())->get_name()));
+    atbl->setItem(index, 0, new TableItem(atbl, QTableItem::Never, at->get_name()));
+    atbl->setItem(index, 1, new TableItem(atbl, QTableItem::Never, ((BrowserNode *) at->parent())->get_name()));
     
-    Q3ValueList<SlotAttr>::Iterator it_attr;
+    QValueList<SlotAttr>::Iterator it_attr;
 
     for (it_attr = attrs.begin(); it_attr != attrs.end(); ++it_attr) {
       if ((*it_attr).att == at) {
@@ -399,8 +397,8 @@ void ClassInstanceDialog::accept() {
   if (new_cl != inst->cl)
     inst->set_class(new_cl);
   else if (rtbl) {
-    Q3ValueList<SlotRel> rels = inst->get_relations(); // copy !
-    Q3ValueList<SlotRel>::Iterator it;
+    QValueList<SlotRel> rels = inst->get_relations(); // copy !
+    QValueList<SlotRel>::Iterator it;
     int row = 0;
     QString yes = TR("Yes");
     

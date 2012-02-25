@@ -25,11 +25,8 @@
 
 #include "UmlNcRelation.h"
 #include "UmlPackage.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 
-void UmlNcRelation::generate_import(QTextOStream & f, const Q3CString & indent) {
+void UmlNcRelation::generate_import(QTextOStream & f, const QCString & indent) {
   if ((relationKind() == aDependency) &&
       (stereotype() == "import") &&
       (target()->kind() == aPackage))

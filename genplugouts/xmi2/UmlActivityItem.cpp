@@ -4,9 +4,7 @@
 #include "UmlActivity.h"
 
 #include "UmlFlow.h"
-//Added by qt3to4:
-#include <Q3CString>
-void UmlActivityItem::write_selection(FileOut & out, Q3CString s) {
+void UmlActivityItem::write_selection(FileOut & out, QCString s) {
   if (! s.isEmpty())
     out.ref(activity()->add_opaque_behavior(s, dynamic_cast<UmlItem *>(this),
 					    "OPAQUE_SELECTION_BEHAVIOR_"),

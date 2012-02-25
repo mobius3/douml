@@ -2,8 +2,8 @@
 #define _UMLSETTINGS_H
 
 
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <qcstring.h>
+#include <qdict.h>
 
 struct UmlBuiltin;
 struct UmlStereotype;
@@ -18,44 +18,44 @@ struct UmlStereotype;
 class UmlSettings {
   public:
     // return the default description
-    static Q3CString artifactDescription();
+    static QCString artifactDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ArtifactDescription(Q3CString v);
+    static bool set_ArtifactDescription(QCString v);
 
     // return the default description
-    static Q3CString classDescription();
+    static QCString classDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassDescription(Q3CString v);
+    static bool set_ClassDescription(QCString v);
 
     // return the default description
-    static Q3CString operationDescription();
+    static QCString operationDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDescription(Q3CString v);
+    static bool set_OperationDescription(QCString v);
 
     // return the default description
-    static Q3CString attributeDescription();
+    static QCString attributeDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_AttributeDescription(Q3CString v);
+    static bool set_AttributeDescription(QCString v);
 
     // return the default description
-    static Q3CString relationDescription();
+    static QCString relationDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationDescription(Q3CString v);
+    static bool set_RelationDescription(QCString v);
 
 
   protected:
@@ -64,25 +64,25 @@ class UmlSettings {
 
     static bool _defined;
 
-    static Q3CString _artifact_default_description;
+    static QCString _artifact_default_description;
 
-    static Q3CString _class_default_description;
+    static QCString _class_default_description;
 
-    static Q3CString _operation_default_description;
+    static QCString _operation_default_description;
 
-    static Q3CString _attribute_default_description;
+    static QCString _attribute_default_description;
 
-    static Q3CString _relation_default_description;
+    static QCString _relation_default_description;
 
-    static Q3Dict<UmlBuiltin> _map_builtins;
+    static QDict<UmlBuiltin> _map_builtins;
 
     static UmlBuiltin * _builtins;
 
-    static Q3Dict<UmlStereotype> _map_relation_stereotypes;
+    static QDict<UmlStereotype> _map_relation_stereotypes;
 
     static UmlStereotype * _relation_stereotypes;
 
-    static Q3Dict<UmlStereotype> _map_class_stereotypes;
+    static QDict<UmlStereotype> _map_class_stereotypes;
 
     static UmlStereotype * _class_stereotypes;
 
@@ -96,31 +96,31 @@ class UmlSettings {
 
     //internal, do NOT use it
     
-    static unsigned multiplicity_column(const Q3CString & mult);
+    static unsigned multiplicity_column(const QCString & mult);
 
     //internal, do NOT use it
     
-    static Q3CString uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f);
+    static QCString uml_type(const QCString & t, QCString UmlBuiltin::* f);
 
     //internal, do NOT use it
     
-    static Q3CString uml_rel_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QCString uml_rel_stereotype(const QCString & t, QCString UmlStereotype::* f);
 
     //internal, do NOT use it
     
-    static Q3CString uml_class_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QCString uml_class_stereotype(const QCString & t, QCString UmlStereotype::* f);
 
     //internal, do NOT use it
     
-    static UmlBuiltin * add_type(const Q3CString & s);
+    static UmlBuiltin * add_type(const QCString & s);
 
     //internal, do NOT use it
     
-    static UmlStereotype * add_rel_stereotype(const Q3CString & s);
+    static UmlStereotype * add_rel_stereotype(const QCString & s);
 
     //internal, do NOT use it
     
-    static UmlStereotype * add_class_stereotype(const Q3CString & s);
+    static UmlStereotype * add_class_stereotype(const QCString & s);
 
 };
 

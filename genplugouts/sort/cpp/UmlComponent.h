@@ -3,14 +3,14 @@
 
 
 #include "UmlBaseComponent.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 // This class manages 'components'
 //
 // You can modify it as you want (except the constructor)
 class UmlComponent : public UmlBaseComponent {
   public:
-    UmlComponent(void * id, const Q3CString & n) : UmlBaseComponent(id, n) {};
+    UmlComponent(void * id, const QCString & n) : UmlBaseComponent(id, n) {};
 
     virtual int orderWeight();
 

@@ -7,8 +7,6 @@
 #include "UmlClassView.h"
 #include "UmlDeploymentView.h"
 #include "UmlArtifact.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlClass::defaultDef() {
   if (cppDecl().isEmpty())
@@ -16,7 +14,7 @@ void UmlClass::defaultDef() {
   setUsed();
 }
 
-UmlOperation * UmlClass::trigger(Q3CString s, UmlClass * machine, UmlClass * anystate) {
+UmlOperation * UmlClass::trigger(QCString s, UmlClass * machine, UmlClass * anystate) {
   UmlOperation * tr;
   bool completion = (s == "_completion");
   bool create = (s == "create");
@@ -107,7 +105,7 @@ UmlOperation * UmlClass::trigger(Q3CString s, UmlClass * machine, UmlClass * any
 }
 
 void UmlClass::addDestructor() {
-  Q3CString s = "~" + name();
+  QCString s = "~" + name();
   UmlOperation * destr = (UmlOperation *) getChild(anOperation, s);
   
   if (destr == 0) {

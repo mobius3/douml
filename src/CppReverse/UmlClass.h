@@ -28,10 +28,6 @@
 
 #include "UmlBaseClass.h"
 #include "UmlFormalParameter.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 class ClassContainer;
 #ifdef ROUNDTRIP
@@ -40,7 +36,7 @@ class UmlRelation;
 class UmlExtraClassMember;
 #endif
 
-typedef Q3ValueList<UmlFormalParameter> FormalParameterList;
+typedef QValueList<UmlFormalParameter> FormalParameterList;
 
 class UmlClass : public UmlBaseClass {
 #ifdef ROUNDTRIP
@@ -50,20 +46,20 @@ class UmlClass : public UmlBaseClass {
 #endif
   
   public:
-    UmlClass(void * id, const Q3CString & n);
+    UmlClass(void * id, const QCString & n);
   
     bool manage_inherit(ClassContainer * pack, 
-			const Q3ValueList<FormalParameterList> & tmplt
+			const QValueList<FormalParameterList> & tmplt
 #ifdef REVERSE
 			, bool libp
 # ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
-			, bool container_roundtrip, Q3PtrList<UmlItem> & container_expected_order
+			, bool roundtrip, QList<UmlItem> & expected_order
+			, bool container_roundtrip, QList<UmlItem> & container_expected_order
 # endif
 #endif
 			);
     bool get_actuals(UmlClass * mother, ClassContainer * container, 
-		     const Q3ValueList<FormalParameterList> & formals
+		     const QValueList<FormalParameterList> & formals
 #ifdef ROUNDTRIP
 		     , bool roundtrip
 #endif
@@ -71,7 +67,7 @@ class UmlClass : public UmlBaseClass {
     
     void set_under_construction(bool y, bool rec = FALSE);
     bool inside_its_definition();
-    bool is_itself(Q3CString t);
+    bool is_itself(QCString t);
     
     static void clear_usings() { Usings.clear(); }
     void using_it() { Usings.replace(name(), this); }
@@ -82,39 +78,39 @@ class UmlClass : public UmlBaseClass {
     static void restore_using_scope();
 
 #ifdef REVERSE
-    void need_artifact(const Q3CString & nmsp);
+    void need_artifact(const QCString & nmsp);
     virtual bool need_source();
     
 # ifdef ROUNDTRIP
     virtual void upload(ClassContainer * cnt);
     virtual bool set_roundtrip_expected();
-    virtual void mark_useless(Q3PtrList<UmlItem> & l);
+    virtual void mark_useless(QList<UmlItem> & l);
     virtual void scan_it(int & n);
     virtual void send_it(int n);
     bool is_created() const { return created; }
     void set_created() { created = TRUE; }
     Class * get_class() const { return the_class; }
-    UmlItem * search_for_att_rel(const Q3CString & name);
-    UmlExtraClassMember * search_for_extra(const Q3CString & name, const Q3CString & decl);
+    UmlItem * search_for_att_rel(const QCString & name);
+    UmlExtraClassMember * search_for_extra(const QCString & name, const QCString & decl);
     UmlRelation * search_for_inherit(UmlClass * mother);
-    void reorder(Q3PtrList<UmlItem> & expected_order);
+    void reorder(QList<UmlItem> & expected_order);
 # endif
 #endif
     
     private:
-      UmlClass * auxilarily_typedef(const Q3CString & base
+      UmlClass * auxilarily_typedef(const QCString & base
 #ifdef REVERSE
 				    , bool libp
 # ifdef ROUNDTRIP
 				    , bool container_roundtrip
-				    , Q3PtrList<UmlItem> & container_expected_order
+				    , QList<UmlItem> & container_expected_order
 # endif
 #endif
 				    );
 
-      static Q3PtrList<UmlClass> UnderConstruction;
-      static Q3Dict<UmlClass> Usings;
-      static Q3ValueList<Q3Dict<UmlClass> > UsingScope;
+      static QList<UmlClass> UnderConstruction;
+      static QDict<UmlClass> Usings;
+      static QValueList<QDict<UmlClass> > UsingScope;
 };
 
 #endif

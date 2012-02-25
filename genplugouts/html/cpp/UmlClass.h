@@ -3,9 +3,9 @@
 
 
 #include "UmlBaseClass.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "Vector.h"
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 
 class UmlActualParameter;
 class UmlFormalParameter;
@@ -16,10 +16,10 @@ class UmlFormalParameter;
 // You can modify it as you want (except the constructor)
 class UmlClass : public UmlBaseClass {
   public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) { inherited_opers = 0; };
+    UmlClass(void * id, const QCString & n) : UmlBaseClass(id, n) { inherited_opers = 0; };
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QCString sKind();
 
     //set he html ref
     //set the classes list
@@ -29,7 +29,7 @@ class UmlClass : public UmlBaseClass {
 
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
+    virtual void html(QCString pfix, unsigned int rank, unsigned int level);
 
     //generate the html definition in an own file
     
@@ -37,13 +37,13 @@ class UmlClass : public UmlBaseClass {
 
     //generate the html definition except header/chapter in the current file
     
-    void gen_html(Q3CString pfix, unsigned int rank, unsigned int level);
+    void gen_html(QCString pfix, unsigned int rank, unsigned int level);
 
     //write a html ref to the class
     virtual void write();
 
     //write a html ref to the class going to an other html file
-    virtual void write(Q3CString target);
+    virtual void write(QCString target);
 
     static void ref_index();
 
@@ -62,20 +62,20 @@ class UmlClass : public UmlBaseClass {
 
   private:
     //produce the definition in C++
-    void gen_cpp_decl(Q3CString s, bool descr);
+    void gen_cpp_decl(QCString s, bool descr);
 
     //produce the definition in Java
-    void gen_java_decl(Q3CString s, bool descr);
+    void gen_java_decl(QCString s, bool descr);
 
     //produce the definition in Php
-    void gen_php_decl(Q3CString s, bool descr);
+    void gen_php_decl(QCString s, bool descr);
 
     //produce the definition in Python
-    void gen_python_decl(Q3CString s, bool descr);
+    void gen_python_decl(QCString s, bool descr);
 
-    void generate(const Q3ValueList<UmlActualParameter> a, UmlClass * mother, bool cpp);
+    void generate(const QValueList<UmlActualParameter> a, UmlClass * mother, bool cpp);
 
-    void generate(const Q3ValueList<UmlFormalParameter> f);
+    void generate(const QValueList<UmlFormalParameter> f);
 
     void generics();
 

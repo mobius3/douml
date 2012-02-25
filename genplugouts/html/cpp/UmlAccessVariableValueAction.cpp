@@ -1,9 +1,7 @@
 
 #include "UmlAccessVariableValueAction.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-void UmlAccessVariableValueAction::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlAccessVariableValueAction::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlActivityAction::html();
 
   if (variable() != 0){

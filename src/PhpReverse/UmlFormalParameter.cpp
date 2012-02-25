@@ -24,10 +24,8 @@
 // *************************************************************************
 
 #include "UmlFormalParameter.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-UmlFormalParameter::UmlFormalParameter(Q3CString n, const UmlTypeSpec & e) {
+UmlFormalParameter::UmlFormalParameter(QCString n, const UmlTypeSpec & e) {
   _name = n;
   _extends = e;
 }

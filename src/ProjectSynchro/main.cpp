@@ -31,7 +31,7 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qdir.h>
 
 #include "SynchroWindow.h"
@@ -43,10 +43,10 @@ int main(int argc, char ** argv)
   QApplication * app = new QApplication(argc, argv);
   
   int uid = -1;
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
   QDir homeDir = QDir::home();
-  QString s = homeDir.absFilePath(".doumlrc");
+  QString s = homeDir.absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
   
 

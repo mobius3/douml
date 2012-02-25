@@ -27,12 +27,10 @@
 #define UMLRELATION_H
 
 #include "UmlBaseRelation.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlRelation : public UmlBaseRelation {
   public:
-    UmlRelation(void * id, const Q3CString & n)
+    UmlRelation(void * id, const QCString & n)
       : UmlBaseRelation(id, n) {
     };
 };

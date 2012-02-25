@@ -25,11 +25,6 @@
 
 #ifdef DEBUG_BOUML
 #include <iostream>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 using namespace std;
 #endif
@@ -56,15 +51,15 @@ using namespace std;
 
 // contains the classes whose definition in currently read
 // may be more than one because of the nested classes
-Q3PtrList<UmlClass> UmlClass::UnderConstruction;
+QList<UmlClass> UmlClass::UnderConstruction;
 
 // used (by using) classes list
-Q3Dict<UmlClass> UmlClass::Usings;
+QDict<UmlClass> UmlClass::Usings;
 
 // to lost usings defined under a namespace/class block
-Q3ValueList<Q3Dict<UmlClass> > UmlClass::UsingScope;
+QValueList<QDict<UmlClass> > UmlClass::UsingScope;
 
-UmlClass::UmlClass(void * id, const Q3CString & n) 
+UmlClass::UmlClass(void * id, const QCString & n) 
     : UmlBaseClass(id, n)
 #ifdef ROUNDTRIP
     , created(FALSE), the_class(0)
@@ -72,12 +67,12 @@ UmlClass::UmlClass(void * id, const Q3CString & n)
 {}
 
 bool UmlClass::manage_inherit(ClassContainer * container, 
-			      const Q3ValueList<FormalParameterList> & tmplts
+			      const QValueList<FormalParameterList> & tmplts
 #ifdef REVERSE
 			      , bool libp
 # ifdef ROUNDTRIP
-			      , bool roundtrip, Q3PtrList<UmlItem> & expected_order
-			      , bool container_roundtrip, Q3PtrList<UmlItem> & container_expected_order
+			      , bool roundtrip, QList<UmlItem> & expected_order
+			      , bool container_roundtrip, QList<UmlItem> & container_expected_order
 # endif
 #endif
 			      ) {
@@ -85,7 +80,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
   cout << name() << "->manage_inherit()\n";
 #endif
   
-  Q3CString s = Lex::read_word(TRUE);
+  QCString s = Lex::read_word(TRUE);
   
   while (s != "{") {
 #ifdef DEBUG_BOUML
@@ -127,9 +122,9 @@ bool UmlClass::manage_inherit(ClassContainer * container,
     cout << "UmlClass::manage_inherit, mother : " << s << '\n';
 #endif
     
-    Q3CString mother_name = s;
+    QCString mother_name = s;
     UmlTypeSpec mother;
-    Q3CString typeform;
+    QCString typeform;
     UmlRelation * rel = 0;
 #ifdef ROUNDTRIP
     bool is_new = TRUE;
@@ -143,7 +138,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
       Lex::mark();
 
       // goes up to the corresponding '>'
-      Q3CString after_gt;
+      QCString after_gt;
       
       Lex::finish_template(after_gt);
 
@@ -275,17 +270,17 @@ bool UmlClass::manage_inherit(ClassContainer * container,
   return TRUE;
 }
 
-UmlClass * UmlClass::auxilarily_typedef(const Q3CString & base
+UmlClass * UmlClass::auxilarily_typedef(const QCString & base
 #ifdef REVERSE
 					, bool libp
 # ifdef ROUNDTRIP
 					, bool container_roundtrip
-					, Q3PtrList<UmlItem> & container_expected_order
+					, QList<UmlItem> & container_expected_order
 # endif
 #endif
 					) {
-  Q3CString typedef_decl = CppSettings::typedefDecl();
-  const Q3PtrVector<UmlItem> & children = parent()->children();
+  QCString typedef_decl = CppSettings::typedefDecl();
+  const QVector<UmlItem> & children = parent()->children();
   unsigned n = children.count();
   unsigned index;
   
@@ -311,7 +306,7 @@ UmlClass * UmlClass::auxilarily_typedef(const Q3CString & base
   for (;;) {
     static unsigned nty;
 
-    Q3CString s;
+    QCString s;
       
     s.sprintf("typedef%u", ++nty);
 
@@ -325,13 +320,13 @@ UmlClass * UmlClass::auxilarily_typedef(const Q3CString & base
       if (cl == 0) {
 #ifdef REVERSE
 	UmlCom::message("");
-	CppCatWindow::trace(Q3CString("<font face=helvetica><b>cannot create class <i>")
+	CppCatWindow::trace(QCString("<font face=helvetica><b>cannot create class <i>")
 			    + s + "</i> under <i>"
 			    + parent()->name() + "</b></font><br>");
 	throw 0;
 #else
 	QMessageBox::critical(0, "Fatal Error", 
-			      Q3CString("<font face=helvetica><b>cannot create class <i>")
+			      QCString("<font face=helvetica><b>cannot create class <i>")
 			      + s + "</i> under <i>"
 			      + parent()->name() + "</b></font><br>");
 	QApplication::exit(1);
@@ -359,14 +354,14 @@ UmlClass * UmlClass::auxilarily_typedef(const Q3CString & base
 }
 
 bool UmlClass::get_actuals(UmlClass * mother, ClassContainer * container, 
-			   const Q3ValueList<FormalParameterList> & tmplts
+			   const QValueList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
 			   , bool roundtrip
 #endif
 			   ) {
   // < read  
-  const Q3ValueList<UmlActualParameter> actuals = this->actuals();
-  Q3ValueList<UmlActualParameter>::ConstIterator it;
+  const QValueList<UmlActualParameter> actuals = this->actuals();
+  QValueList<UmlActualParameter>::ConstIterator it;
   unsigned rank;
   
   for (it = actuals.begin(), rank = 0; (*it).superClass() != mother; ++it, rank += 1)
@@ -393,10 +388,10 @@ bool UmlClass::get_actuals(UmlClass * mother, ClassContainer * container,
       
       Lex::unread_word();
       
-      Q3CString s = Lex::read_list_elt();
+      QCString s = Lex::read_list_elt();
       
       UmlTypeSpec typespec;
-      Q3CString typeform = "${type}";
+      QCString typeform = "${type}";
 	
       container->compute_type(s, typespec, typeform, FALSE, tmplts);
       if (typespec.explicit_type == "<complex type>")
@@ -448,7 +443,7 @@ bool UmlClass::inside_its_definition() {
   return UnderConstruction.findRef(this) != -1;
 }
 
-bool UmlClass::is_itself(Q3CString t) {
+bool UmlClass::is_itself(QCString t) {
   // class is a template class and t is x<...> where x is the class,
   // t is normalized
   // return true if t is the class with its formals
@@ -456,9 +451,9 @@ bool UmlClass::is_itself(Q3CString t) {
   
   t = t.mid(index + 1, t.length() - index - 2);
   
-  Q3ValueList<UmlFormalParameter> l = formals();
-  Q3ValueList<UmlFormalParameter>::ConstIterator it = l.begin();
-  Q3CString t2 = (*it).name();
+  QValueList<UmlFormalParameter> l = formals();
+  QValueList<UmlFormalParameter>::ConstIterator it = l.begin();
+  QCString t2 = (*it).name();
   
   while ((++it) != l.end())
     t2 += ',' + (*it).name();
@@ -474,7 +469,7 @@ void UmlClass::restore_using_scope()
 
 #ifdef REVERSE
 
-void UmlClass::need_artifact(const Q3CString & nmsp) {
+void UmlClass::need_artifact(const QCString & nmsp) {
   if (parent()->kind() == aClassView) {
     UmlArtifact * cp;
     
@@ -487,7 +482,7 @@ void UmlClass::need_artifact(const Q3CString & nmsp) {
       }
 #endif
       
-      Q3CString name = Package::get_fname();
+      QCString name = Package::get_fname();
       int index;
 	
       if (name.isEmpty()) {
@@ -502,7 +497,7 @@ void UmlClass::need_artifact(const Q3CString & nmsp) {
       
       UmlDeploymentView * cpv =
 	((UmlPackage *) parent()->parent())->get_deploymentview(nmsp);
-      const Q3PtrVector<UmlItem> & children = cpv->children();
+      const QVector<UmlItem> & children = cpv->children();
       int n = (int) children.count();
       
       for (index = 0; index != n; index += 1) {
@@ -518,7 +513,7 @@ void UmlClass::need_artifact(const Q3CString & nmsp) {
 	if ((cp = UmlBaseArtifact::create(cpv, name))
 	    == 0) {
 #ifdef REVERSE
-	  UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create artifact <i>")
+	  UmlCom::trace(QCString("<font face=helvetica><b>cannot create artifact <i>")
 			+ Lex::quote(name) + "</i> under <i>"
 			+ Lex::quote(cpv->name()) +
 			"</b></font><br>");
@@ -526,7 +521,7 @@ void UmlClass::need_artifact(const Q3CString & nmsp) {
 	  throw 0;
 #else
 	  QMessageBox::critical(0, "Fatal Error", 
-				Q3CString("<font face=helvetica><b>cannot create artifact <i>")
+				QCString("<font face=helvetica><b>cannot create artifact <i>")
 				+ Lex::quote(name) + "</i> under <i>"
 				+ Lex::quote(cpv->Name()) + "</b></font><br>");
 	  QApplication::exit(1);
@@ -548,10 +543,10 @@ void UmlClass::need_artifact(const Q3CString & nmsp) {
 }
 
 bool UmlClass::need_source() {
-  const Q3CString & stereotype = this->stereotype();
+  const QCString & stereotype = this->stereotype();
     
   if ((stereotype != "enum") && (stereotype != "typedef")) {
-    Q3PtrVector<UmlItem> children = this->children();
+    QVector<UmlItem> children = this->children();
     unsigned u = children.size();
     
     while (u--)
@@ -568,7 +563,7 @@ bool UmlClass::need_source() {
 void UmlClass::upload(ClassContainer * cnt)
 {
   UmlArtifact * art = associatedArtifact();
-  Q3CString na;
+  QCString na;
   
   if (art != 0) {
     na = ((UmlPackage *) art->parent()->parent())->cppNamespace();
@@ -578,7 +573,7 @@ void UmlClass::upload(ClassContainer * cnt)
     
   the_class = cnt->upload_define(this);
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
   
@@ -596,7 +591,7 @@ bool UmlClass::set_roundtrip_expected() {
 	!associatedArtifact()->set_roundtrip_expected_for_class())))
     return TRUE;
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlClassItem ** v = (UmlClassItem **) ch.data();
   UmlClassItem ** const vsup = v + ch.size();
   bool result = UmlClassItem::set_roundtrip_expected();
@@ -608,10 +603,10 @@ bool UmlClass::set_roundtrip_expected() {
   
 }
 
-void UmlClass::mark_useless(Q3PtrList<UmlItem> & l) {
+void UmlClass::mark_useless(QList<UmlItem> & l) {
   UmlClassItem::mark_useless(l);
 
-  Q3PtrVector<UmlItem> ch = UmlItem::children();
+  QVector<UmlItem> ch = UmlItem::children();
   UmlClassItem ** v = (UmlClassItem **) ch.data();
   UmlClassItem ** const vsup = v + ch.size();
     
@@ -629,8 +624,8 @@ void UmlClass::send_it(int n) {
     associatedArtifact()->send_it(n);
 }
 
-UmlItem * UmlClass::search_for_att_rel(const Q3CString & name) {
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+UmlItem * UmlClass::search_for_att_rel(const QCString & name) {
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
   
@@ -653,8 +648,8 @@ UmlItem * UmlClass::search_for_att_rel(const Q3CString & name) {
 }
 
 UmlExtraClassMember *
-  UmlClass::search_for_extra(const Q3CString & name, const Q3CString & decl) {
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  UmlClass::search_for_extra(const QCString & name, const QCString & decl) {
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
   
@@ -669,7 +664,7 @@ UmlExtraClassMember *
 }
 
 UmlRelation * UmlClass::search_for_inherit(UmlClass * mother) {
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
   
@@ -689,18 +684,18 @@ UmlRelation * UmlClass::search_for_inherit(UmlClass * mother) {
   return 0;
 }
 
-void UmlClass::reorder(Q3PtrList<UmlItem> & expected_order) {
+void UmlClass::reorder(QList<UmlItem> & expected_order) {
   if (expected_order.isEmpty())
     return;
   
-  Q3PtrVector<UmlItem> ch = UmlItem::children(); // copy
+  QVector<UmlItem> ch = UmlItem::children(); // copy
   UmlItem ** v = ch.data();
   
   unload(); // to not reload children each time
 
   //bool updated = FALSE;
   UmlItem * expected_previous = 0;
-  Q3PtrListIterator<UmlItem> expected_it(expected_order);
+  QListIterator<UmlItem> expected_it(expected_order);
   UmlItem * expected;
   
   while ((expected = expected_it.current()) != 0) {

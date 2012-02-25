@@ -29,11 +29,9 @@
 #include "DiagramCanvas.h"
 #include "MultipleDependency.h"
 #include "CodMsgSupport.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 class CodLinkCanvas;
-class Q3TextStream;
+class QTextStream;
 
 #define COL_MSG_Z 1000
 #define OLD_COL_MSG_Z 0.2
@@ -80,7 +78,7 @@ class CodDirsCanvas : public QObject, public DiagramCanvas, public CodMsgSupport
     
     virtual bool represents(BrowserNode *);
     
-    virtual void save(Q3TextStream & st, bool, QString & warning) const;
+    virtual void save(QTextStream & st, bool, QString & warning) const;
     static CodDirsCanvas * read(char * & st, UmlCanvas * canvas, char * & k);
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);

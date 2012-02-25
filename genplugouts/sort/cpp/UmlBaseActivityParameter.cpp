@@ -3,8 +3,6 @@
 #include "UmlBaseActivityParameter.h"
 #include "UmlActivityParameter.h"
 #include "UmlActivity.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 UmlActivityParameter * UmlBaseActivityParameter::create(UmlActivity * parent, const char * s)
 {
@@ -15,7 +13,7 @@ anItemKind UmlBaseActivityParameter::kind() {
     return anActivityParameter;
 }
 
-const Q3CString & UmlBaseActivityParameter::defaultValue() {
+const QCString & UmlBaseActivityParameter::defaultValue() {
     read_if_needed_();
     return _default_value;
 }

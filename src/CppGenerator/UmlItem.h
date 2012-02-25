@@ -27,16 +27,13 @@
 #define UMLITEM_H
 
 #include "UmlBaseItem.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 
 class QTextOStream;
 class UmlPackage;
 
 class UmlItem : public UmlBaseItem {
   public:
-    UmlItem(void * id, const Q3CString & n)
+    UmlItem(void * id, const QCString & n)
       : UmlBaseItem(id, n) {
     };
     virtual ~UmlItem();
@@ -45,7 +42,7 @@ class UmlItem : public UmlBaseItem {
     virtual UmlPackage * package();
     bool manage_comment(const char *& p, const char *& pp, bool javadoc);
     bool manage_description(const char *& p, const char *& pp);    
-    void replace_alias(Q3CString & s);
+    void replace_alias(QCString & s);
     void manage_alias(const char *& p, QTextOStream & ts);
 };
 

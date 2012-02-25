@@ -6,7 +6,7 @@
 #include "UmlSubject.h"
 #include "UmlFragment.h"
 
-void UmlBaseUseCaseReference::read_(const Q3PtrVector<UmlFragment> & fragments, const Q3PtrVector<UmlSubject> & subjects) {
+void UmlBaseUseCaseReference::read_(const QVector<UmlFragment> & fragments, const QVector<UmlSubject> & subjects) {
   _use_case = (UmlUseCase *) UmlBaseItem::read_();
   _x = (int) UmlCom::read_unsigned();
   _y = (int) UmlCom::read_unsigned();

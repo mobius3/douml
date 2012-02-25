@@ -25,16 +25,11 @@
 
 #ifdef DEBUG_BOUML
 #include <iostream>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 using namespace std;
 #endif
 
-#include <q3filedialog.h> 
+#include <qfiledialog.h> 
 #include <qapplication.h>
 #include <qmessagebox.h>
 #include <qdir.h>
@@ -66,7 +61,7 @@ QRegExp * Package::DirFilter;
 QRegExp * Package::FileFilter;
 
 // the packages selected by the user to reverse them
-Q3PtrList<Package> Package::Choozen;
+QList<Package> Package::Choozen;
 
 // all the classes presents in the environment, the
 // key is the full name including namespaces
@@ -80,29 +75,29 @@ NDict<Class> Package::Defined(511);
 bool Package::Scan;
 
 // current template forms
-Q3ValueList<FormalParameterList> Package::Formals;
+QValueList<FormalParameterList> Package::Formals;
 
 QApplication * Package::app;
 
 // memorise the name of the header currently reversed
 // to create artifact having the right name and respect
 // the classes defined in a same header file
-Q3CString Package::fname;
+QCString Package::fname;
 
 #ifdef ROUNDTRIP
 // currently roundtriped artifact
 UmlArtifact * Package::artfct;
 
-static Q3Dict<bool> H_Managed(97);
-static Q3Dict<bool> Src_Managed(97);
-static Q3Dict<Package> Pack_From_Path(97);
-static Q3Dict<UmlArtifact> Roundtriped(199);
+static QDict<bool> H_Managed(97);
+static QDict<bool> Src_Managed(97);
+static QDict<Package> Pack_From_Path(97);
+static QDict<UmlArtifact> Roundtriped(199);
 #endif
 
 static QString RootSDir;	// empty or finish by a /
-static Q3CString RootCDir;	// empty or finish by a /
+static QCString RootCDir;	// empty or finish by a /
 
-static Q3CString force_final_slash(Q3CString p)
+static QCString force_final_slash(QCString p)
 {
   int ln = p.length();
   
@@ -114,12 +109,12 @@ static Q3CString force_final_slash(Q3CString p)
     : p;
 }
 
-static inline Q3CString force_final_slash(QString p)
+static inline QCString force_final_slash(QString p)
 {
-  return force_final_slash(Q3CString(p.toAscii().constData()));
+  return force_final_slash(QCString(p));
 }
 
-static Q3CString root_relative_if_possible(Q3CString p)
+static QCString root_relative_if_possible(QCString p)
 {
   unsigned rln = RootCDir.length();
   
@@ -156,7 +151,7 @@ Package::Package(Package * parent, UmlPackage * pk)
     h_path = RootCDir;
   else if (QDir::isRelativePath(h_path)) {
     if (RootCDir.isEmpty()) {
-      Q3CString err = "<font face=helvetica><b>root path not set in <i>generation settings</i>, "
+      QCString err = "<font face=helvetica><b>root path not set in <i>generation settings</i>, "
 	"don't know where is <i>" + h_path + "<i></b></font><br>";
       
       UmlCom::trace(err);
@@ -170,7 +165,7 @@ Package::Package(Package * parent, UmlPackage * pk)
     src_path = RootCDir;
   else if (QDir::isRelativePath(src_path)) {
     if (RootCDir.isEmpty()) {
-      Q3CString err = "<font face=helvetica><b>root path not set in <i>generation settings</i>, "
+      QCString err = "<font face=helvetica><b>root path not set in <i>generation settings</i>, "
 	"don't know where is <i>" + src_path + "<i></b></font><br>";
       
       UmlCom::trace(err);
@@ -277,7 +272,6 @@ void Package::set_step(int s, int n)
   }
 }
 
-
 #ifdef ROUNDTRIP
 enum ReverseRootCases { DontKnow, ReverseRoot, DontReverseRoot };
 
@@ -366,16 +360,14 @@ void Package::scan_dir() {
       ((Package *) child)->scan_dir();
 }
 #else
-/* lgfreitas: Reversing top-level method. It starts in package-level */
 void Package::scan_dirs(int & n) {
   n = 0;
   
   QStringList dirs;
   QString path = QDir::currentDirPath();
 
-  /* lgfreitas: This is the loop that keeps asking for dirs to reverse. */
   // get input C++ source dirs
-  while (!(path = Q3FileDialog::getExistingDirectory(path, 0, 0,
+  while (!(path = QFileDialog::getExistingDirectory(path, 0, 0,
 						   "select a directory to reverse, press cancel to finish"))
 						   .isEmpty()) {
 
@@ -410,14 +402,13 @@ void Package::scan_dirs(int & n) {
 			    err + "Press 'cancel' to reverse selected directories");
     else {
       QDir d(path);
-      Q3CString s;
+      QCString s;
       
       dirs.append(path);
       s.sprintf("<font face=helvetica>%dth directory to reverse : <b>", (int) dirs.count());
-      s += Q3CString(path.toAscii().constData()) + "</b><br></font>\n";
+      s += QCString(path) + "</b><br></font>\n";
       UmlCom::trace(s);
-	
-	  /* lgfreitas: Append the root path as a root package */
+
       Choozen.append(new Package(Root, path, d.dirName()));
       
       d.cdUp();
@@ -428,7 +419,6 @@ void Package::scan_dirs(int & n) {
     // file dialog appears to not have it under the trace windows
     UmlBasePackage::getProject();
   }
-  
   
   if (dirs.isEmpty())
     return;
@@ -446,8 +436,7 @@ void Package::scan_dirs(int & n) {
   UmlCom::message("count files ...");
   
   Package * p;
-  
-  /* lgfreitas: This just counts the packages */
+
   for (p = Choozen.first(); p != 0; p = Choozen.next()) {
     n += file_number(p->h_path, TRUE, 
 		     CppSettings::headerExtension())
@@ -458,9 +447,6 @@ void Package::scan_dirs(int & n) {
   // scanning phase
   set_step(1, n);
 
-  /* lgfreitas: This is where the reversing magic happens. It iterates
-     through each package, asking for it to do the reversing on the
-     given path */
   for (p = Choozen.first(); p != 0; p = Choozen.next()) {
     p->reverse_directory(p->h_path, TRUE, CppSettings::headerExtension(), TRUE);
     p->reverse_directory(p->src_path, TRUE, CppSettings::sourceExtension(), FALSE);
@@ -479,9 +465,9 @@ static bool allowed(QRegExp * rg, QString f)
 {
   if (rg != 0) {
     int matchLen;
-	return rg->exactMatch(f); //[lgfreitas] I do not know if this will work
-    /*return ((rg->match(f, 0, &matchLen) != 0) ||
-	    (matchLen != (int) f.length()));*/
+    
+    return ((rg->match(f, 0, &matchLen) != 0) ||
+	    (matchLen != (int) f.length()));
   }
   else
     return TRUE;
@@ -496,7 +482,7 @@ int Package::file_number(QString path, bool rec, const char * ext)
     
     if (! allowed(DirFilter, d.dirName()))
       return 0;
-    /*
+    
     const QFileInfoList * list = d.entryInfoList(QDir::Files | QDir::Readable);
     
     if (list != 0) {
@@ -508,22 +494,13 @@ int Package::file_number(QString path, bool rec, const char * ext)
 	  result += 1;
 	++it;
       }
-      */
-	QFileInfoList list = d.entryInfoList(QDir::Files | QDir::Readable);
-    
-	if (!list.isEmpty()) {
-		QFileInfoList::iterator it = list.begin();
-		while (it != list.end()) {
-			if ((*it).extension(FALSE) == ext) result += 1;
-			it++;
-		}
     }
     
     if (rec) {
-/*      // sub directories
+      // sub directories
       list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
       
-      if (list) {
+      if (list != 0) {
 	QFileInfoListIterator itd(*list);
 	QFileInfo * di;
 	
@@ -533,21 +510,6 @@ int Package::file_number(QString path, bool rec, const char * ext)
 	  ++itd;
 	}
       }
-    }
-    */
-
-	// sub directories
-		list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
-      
-		if (!list.isEmpty()) {
-			QFileInfoList::iterator it = list.begin();
-			while (it != list.end()) {
-				if ((*it).fileName()[0] != '.') {
-					result += file_number((*it).filePath(), rec, ext);
-				}
-				it++;
-			}
-		}
     }
   }
   
@@ -620,8 +582,6 @@ QString my_baseName(QFileInfo * fi)
     : fn.left(index);
 }
 
-/*	lgfreitas: this steps through files in the directory
-	and reverse them one by one */
 void Package::reverse_directory(QString path, bool rec,
 				QString ext, bool h) {
 #ifdef ROUNDTRIP
@@ -645,8 +605,8 @@ void Package::reverse_directory(QString path, bool rec,
   
   if (! allowed(DirFilter, d.dirName()))
     return;
-  /*
-  const QFileInfoList list =
+  
+  const QFileInfoList * list =
     d.entryInfoList("*." + ext, QDir::Files | QDir::Readable);
   
   if (list != 0) {
@@ -663,54 +623,23 @@ void Package::reverse_directory(QString path, bool rec,
 	
 	if ((art != 0) && (art->parent()->parent() != uml))
 	  // own by an other package
-	  ((UmlPackage *) art->parent()->parent())->get_package()->reverse_file(Q3CString(fn), art, h);
+	  ((UmlPackage *) art->parent()->parent())->get_package()->reverse_file(QCString(fn), art, h);
 	else
-	  reverse_file(Q3CString(fn), art, h);
+	  reverse_file(QCString(fn), art, h);
 #else
 	if (h)
 	  fname = my_baseName(it.current());
-	reverse_file(Q3CString(it.current()->filePath()));
+	reverse_file(QCString(it.current()->filePath()));
 #endif
       }
       Progress::tic_it();
       ++it;
     }
-  }*/
-  
-    QFileInfoList list =
-    d.entryInfoList("*." + ext, QDir::Files | QDir::Readable);
-  
-  /* lgfreitas: If the package/path has files step thru them */
-  if (list.isEmpty() == false) {
-    QFileInfoList::iterator it = list.begin();
-	while (it != list.end())
-      if (allowed(FileFilter, (*it).fileName())) {
-#ifdef ROUNDTRIP
-	QString fn = (*it).absFilePath();
-	UmlArtifact * art = Roundtriped.find(fn);
-	
-	if (h)
-	  fname = my_baseName(&(*it));
-	
-	if ((art != 0) && (art->parent()->parent() != uml))
-	  // own by an other package
-	  ((UmlPackage *) art->parent()->parent())->get_package()->reverse_file(Q3CString(fn.toAscii().constData()), art, h);
-	else
-	  reverse_file(Q3CString(fn.toAscii().constData()), art, h);
-#else
-	if (h)
-	  fname = my_baseName(&(*it));
-	reverse_file(Q3CString((*it).filePath().toAscii().constData()));
-#endif
-      }
-      Progress::tic_it();
-      ++it;
-    }
-
+  }
 
   if (rec) {
     // sub directories
-    /*list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
+    list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
     
     if (list != 0) {
       QFileInfoListIterator itd(*list);
@@ -721,18 +650,6 @@ void Package::reverse_directory(QString path, bool rec,
 	  find(di)->reverse_directory(di->filePath(), TRUE, ext, h);
 	++itd;
       }
-    }*/
-	    // sub directories
-    list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
-    
-    if (!list.isEmpty()) {
-      QFileInfoList::iterator itd = list.begin();
-      while (itd != list.end()) {
-		if ((*itd).fileName()[0] != '.') {
-		  find(&(*itd))->reverse_directory((*itd).filePath(), TRUE, ext, h);
-		}
-		++itd;
-      }
     }
   }
   
@@ -741,7 +658,7 @@ void Package::reverse_directory(QString path, bool rec,
 
 #ifdef ROUNDTRIP
 void Package::reverse(UmlArtifact * art) {
-  Q3CString f;
+  QCString f;
   
   f = h_path + art->name() + "." + CppSettings::headerExtension();
   if (allowed(FileFilter, art->name() + "." + CppSettings::headerExtension()) &&
@@ -755,7 +672,7 @@ void Package::reverse(UmlArtifact * art) {
 }
 #endif
 
-void Package::reverse_file(Q3CString f
+void Package::reverse_file(QCString f
 #ifdef ROUNDTRIP
 			   , UmlArtifact * art, bool h
 #endif
@@ -767,18 +684,18 @@ void Package::reverse_file(Q3CString f
     art->set_considered(h, Scan);
   }
 #endif
-  /* lgfreitas: Tries to open the lexical analyzer */
+
   if (! Lex::open(f)) {
 #ifdef ROUNDTRIP
     if (art != 0) {
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot open <i>")
+      UmlCom::trace(QCString("<font face=helvetica><b>cannot open <i>")
 		    + f + "</i></b></font><br>");
       throw 0;
     }
     else
 #endif
     // very strange !
-    CppCatWindow::trace(Q3CString("<font face=helvetica><b>cannot open <i>")
+    CppCatWindow::trace(QCString("<font face=helvetica><b>cannot open <i>")
 			+ f + "</i></b></font><br><hr><br>"); 
   }
   else {    
@@ -789,7 +706,7 @@ void Package::reverse_file(Q3CString f
 	// #include or decl added by hand
 	art->set_usefull();
 	  
-	Q3PtrVector<UmlClass> empty;
+	QVector<UmlClass> empty;
 	
 	art->set_AssociatedClasses(empty);
       }
@@ -816,12 +733,10 @@ void Package::reverse_file(Q3CString f
   }
 }
 
-
-void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
-  Q3CString pretype;
-  Q3CString s;
+void Package::reverse_toplevel_forms(QCString f, bool sub_block) {
+  QCString pretype;
+  QCString s;
   
-  /* lgfreitas: Read each word from the file and analyzes it */
   while (! (s = Lex::read_word()).isEmpty()) {
     if (s == "template") {
       FormalParameterList fmt;
@@ -832,10 +747,9 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
     else {
       if ((s == "class") || (s == "struct") || (s == "union")) {
 	Lex::mark();
-	/* lgfreitas: We are building a class here, so get the class name */
-	Q3CString s2 = Lex::read_word();
 	
-	/* lgfreitas: This seems to have the purpose of ignoring these parameters (personal use?) */
+	QCString s2 = Lex::read_word();
+	
 	if ((strncmp(s2, "Q_EXPORT", 8) == 0) ||
 	    (strncmp(s2, "QM_EXPORT", 9) == 0) ||
 	    (strncmp(s2, "Q_PNGEXPORT", 11) == 0))
@@ -851,7 +765,7 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
 	  Lex::come_back();
 	  // do not manage 'struct {..} var;' or 'struct {..} f()' ...
 #ifdef ROUNDTRIP
-	  Q3PtrList<UmlItem> dummy;
+	  QList<UmlItem> dummy;
 	  
 	  Class::reverse(this, s, Formals, f, 0, FALSE, dummy);
 #else
@@ -862,7 +776,7 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
       else if (s == "enum") {
 	Lex::mark();
 	
-	Q3CString s2 = Lex::read_word();
+	QCString s2 = Lex::read_word();
 	
 	if (Lex::identifierp(s2, TRUE) && (Lex::read_word() != "{")) {
 	  // form like 'enum X Y'
@@ -873,7 +787,7 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
 	  Lex::come_back();
 	  // do not manage 'enum {..} var;' or 'enum {..} f()' ...
 #ifdef ROUNDTRIP
-	  Q3PtrList<UmlItem> dummy;
+	  QList<UmlItem> dummy;
 	  
 	  Class::reverse_enum(this, f, 0, FALSE, dummy);
 #else
@@ -883,7 +797,7 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
       }
       else if (s == "typedef") {
 #ifdef ROUNDTRIP
-	Q3PtrList<UmlItem> dummy;
+	QList<UmlItem> dummy;
 	
 	Class::reverse_typedef(this, f, Formals, FALSE, dummy);
 #else
@@ -900,7 +814,7 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
 	  Namespace::exit_anonymous();
 	}
 	else {
-	  Q3CString s2 = Lex::read_word();
+	  QCString s2 = Lex::read_word();
 	  
 	  if (s2.isEmpty()) {
 	    if (!Scan)
@@ -995,14 +909,14 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
 #endif
 }
 
-void Package::reverse_toplevel_form(Q3CString f, Q3CString s) {
-  Q3CString comment = Lex::get_comments();
-  Q3CString description = Lex::get_description();
-  Q3CString q_modifier;	// not yet used
+void Package::reverse_toplevel_form(QCString f, QCString s) {
+  QCString comment = Lex::get_comments();
+  QCString description = Lex::get_description();
+  QCString q_modifier;	// not yet used
   bool inlinep = FALSE;
-  Q3CString type;
-  Q3CString name;
-  Q3CString array;
+  QCString type;
+  QCString name;
+  QCString array;
 
 #ifdef DEBUG_BOUML
   cout << "Package::reverse_toplevel_form(" << s << ")\n";
@@ -1116,7 +1030,7 @@ void Package::reverse_toplevel_form(Q3CString f, Q3CString s) {
       break;
     }
     
-    Q3CString s2 = Lex::read_word();
+    QCString s2 = Lex::read_word();
     
     if (s2.isEmpty())
       break;
@@ -1131,7 +1045,7 @@ void Package::reverse_toplevel_form(Q3CString f, Q3CString s) {
   Lex::clear_comments();
 }
 
-void Package::reverse_variable(const Q3CString & name) {
+void Package::reverse_variable(const QCString & name) {
   // '=' or '(' read
   Lex::mark();
   
@@ -1141,7 +1055,7 @@ void Package::reverse_variable(const Q3CString & name) {
     if (c == 0)
       return;
 
-  Q3CString init = Lex::region();
+  QCString init = Lex::region();
   
   if (name.isEmpty()) {
     Lex::syntax_error();
@@ -1153,11 +1067,11 @@ void Package::reverse_variable(const Q3CString & name) {
   
   UmlTypeSpec typespec;
   int index = name.findRev("::");
-  Q3CString varname;
+  QCString varname;
   
   if ((index <= 0) ||
       !find_type(Lex::normalize(name.left(index)), typespec)) {
-    Lex::warn(Q3CString("<font color =\"red\"> ") + Lex::quote(name) +
+    Lex::warn(QCString("<font color =\"red\"> ") + Lex::quote(name) +
 	      "</font> is lost");
 #ifdef DEBUG_BOUML
     cout << "ERROR " << name << " lost";
@@ -1167,10 +1081,10 @@ void Package::reverse_variable(const Q3CString & name) {
   else
     varname = name.mid(index + 2);
   
-  init = Q3CString("=") + init.left(init.length() - 1);
+  init = QCString("=") + init.left(init.length() - 1);
   
   // search the corresponding attribute
-  Q3PtrVector<UmlItem> children = typespec.type->children();
+  QVector<UmlItem> children = typespec.type->children();
   unsigned rank = children.size();
   
   while (rank--) {
@@ -1184,7 +1098,7 @@ void Package::reverse_variable(const Q3CString & name) {
 	if (at->isClassMember()) {
 #ifdef ROUNDTRIP
 	  if (at->is_roundtrip_expected()) {
-	    Q3CString v = at->defaultValue();
+	    QCString v = at->defaultValue();
 	    
 	    if (!v.isEmpty() && (((const char *) v)[0] == '='))
 	      v = v.mid(1);
@@ -1196,7 +1110,7 @@ void Package::reverse_variable(const Q3CString & name) {
 #endif
 	    at->set_DefaultValue(init);
 	  
-	  Q3CString decl = at->cppDecl();
+	  QCString decl = at->cppDecl();
 	  int index = decl.find("${h_value}");
 	  
 	  if (index != -1) {
@@ -1215,7 +1129,7 @@ void Package::reverse_variable(const Q3CString & name) {
 	if (rel->isClassMember()) {
 #ifdef ROUNDTRIP
 	  if (rel->is_roundtrip_expected()) {
-	    Q3CString v = rel->defaultValue();
+	    QCString v = rel->defaultValue();
 	    
 	    if (!v.isEmpty() && (((const char *) v)[0] == '='))
 	      v = v.mid(1);
@@ -1227,7 +1141,7 @@ void Package::reverse_variable(const Q3CString & name) {
 #endif
 	    rel->set_DefaultValue(init);
 	  
-	  Q3CString decl = ((UmlRelation *) it)->cppDecl();
+	  QCString decl = ((UmlRelation *) it)->cppDecl();
 	  int index = decl.find("${h_value}");
 	  
 	  if (index != -1) {
@@ -1244,7 +1158,7 @@ void Package::reverse_variable(const Q3CString & name) {
   }
   
   // no compatible variable
-  Lex::warn(Q3CString("<font color =\"red\"> ") + Lex::quote(name)
+  Lex::warn(QCString("<font color =\"red\"> ") + Lex::quote(name)
 	    + "</font> is not a static attribute of <font color =\"red\"> " +
 	    Lex::quote(typespec.type->name()) + "</font>");
 #ifdef DEBUG_BOUML
@@ -1252,8 +1166,8 @@ void Package::reverse_variable(const Q3CString & name) {
 #endif
 }
 
-Class * Package::new_class(const Q3CString & name,
-			   const Q3CString & stereotype,
+Class * Package::new_class(const QCString & name,
+			   const QCString & stereotype,
 			   bool declaration) {
   Class * cl = new Class(this, name, stereotype);
         
@@ -1263,28 +1177,28 @@ Class * Package::new_class(const Q3CString & name,
   return cl;
 }
 
-bool Package::find_type(Q3CString type, UmlTypeSpec & typespec) {
+bool Package::find_type(QCString type, UmlTypeSpec & typespec) {
   return ClassContainer::find_type(type, typespec, Defined);
 }
 
-Class * Package::declare_if_needed(const Q3CString & name,
-					 Q3CString stereotype) {
+Class * Package::declare_if_needed(const QCString & name,
+					 QCString stereotype) {
   FormalParameterList l;
   
   return ClassContainer::declare_if_needed(name, stereotype, l,
 					   Declared, Defined);
 }
 
-void Package::declare_if_needed(Q3CString name, Class * cl) {
+void Package::declare_if_needed(QCString name, Class * cl) {
   if (Defined[name] == 0)
     Declared.replace(name, cl);
 }
 
-Class * Package::define(const Q3CString & name, Q3CString stereotype) {
+Class * Package::define(const QCString & name, QCString stereotype) {
   return ClassContainer::define(name, stereotype, Declared, Defined);
 }
 
-void Package::define(Q3CString name, Class * cl) {
+void Package::define(QCString name, Class * cl) {
   if (! name.isEmpty()) {
     if (Declared[name] != 0)
       Declared.remove(name);
@@ -1293,10 +1207,10 @@ void Package::define(Q3CString name, Class * cl) {
   }
 }
 
-void Package::declaration(const Q3CString &, const Q3CString &,
-			  const Q3CString &
+void Package::declaration(const QCString &, const QCString &,
+			  const QCString &
 #ifdef ROUNDTRIP
-			  , bool, Q3PtrList<UmlItem> &
+			  , bool, QList<UmlItem> &
 #endif
 			  ) {
   // lost it
@@ -1305,7 +1219,7 @@ void Package::declaration(const Q3CString &, const Q3CString &,
 #ifdef ROUNDTRIP
 Class * Package::upload_define(UmlClass * ucl) {
   Class * cl = new Class(this, ucl);
-  Q3CString s = ucl->name();	// not defined inside an other class
+  QCString s = ucl->name();	// not defined inside an other class
   
   Defined.insert(s, cl);
   
@@ -1320,7 +1234,7 @@ UmlPackage * Package::get_uml(bool mandatory) {
     Package * pa = (Package *) parent();
     UmlPackage * uml_pa = pa->get_uml();	// will end on project
 	
-    Q3PtrVector<UmlItem> ch = uml_pa->children();
+    QVector<UmlItem> ch = uml_pa->children();
     
     for (unsigned index = 0; index != ch.size(); index += 1) {
       UmlItem * it = ch[index];
@@ -1334,7 +1248,7 @@ UmlPackage * Package::get_uml(bool mandatory) {
 	return 0;
       
 #ifdef REVERSE
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create package <i>")
+      UmlCom::trace(QCString("<font face=helvetica><b>cannot create package <i>")
 		    + name + "</i> under package <i>" + uml_pa->name() +
 		    "</b></font><br>");
       UmlCom::message("");
@@ -1375,7 +1289,7 @@ Package * Package::find(QFileInfo * di) {
 	(child->text(0) == s))
       return (Package *) child;
   
-  return new Package(this, Q3CString((di->filePath()).toAscii().constData()), Q3CString(s.toAscii().constData()));
+  return new Package(this, QCString(di->filePath()), QCString(s));
 }
 
 /*

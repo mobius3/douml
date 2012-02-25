@@ -28,13 +28,7 @@
 
 
 #include <qfont.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QDragEnterEvent>
+#include <qpopupmenu.h> 
 
 #include "SeqDiagramWindow.h"
 #include "SeqDiagramView.h"
@@ -68,7 +62,7 @@ SeqDiagramView::SeqDiagramView(QWidget * parent, UmlCanvas * canvas, int id)
 }
 
 void SeqDiagramView::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Sequence diagram menu"), m.font()), -1);
   
@@ -109,8 +103,8 @@ void SeqDiagramView::menu(const QPoint&) {
 }
 
 void SeqDiagramView::toFlat() {
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
     
   for (cit = all.begin(); cit != all.end(); ++cit) {
     DiagramItem * it = QCanvasItemToDiagramItem(*cit);
@@ -123,8 +117,8 @@ void SeqDiagramView::toFlat() {
 }
 
 void SeqDiagramView::toOverlapping() {
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
     
   for (cit = all.begin(); cit != all.end(); ++cit) {
     DiagramItem * it = QCanvasItemToDiagramItem(*cit);
@@ -199,7 +193,7 @@ void SeqDiagramView::contentsMousePressEvent(QMouseEvent * e) {
 	  window()->selectOn();
 	  history_save();
 	  
-	  Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+	  QCanvasItem * ci = the_canvas()->collision(e->pos());
 	  
 	  if (ci != 0) {
 	    DiagramItem * i = QCanvasItemToDiagramItem(ci);
@@ -249,8 +243,8 @@ void SeqDiagramView::contentsMouseMoveEvent(QMouseEvent * e) {
   if (!window()->frozen()) {
     DiagramView::contentsMouseMoveEvent(e);
     
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QCanvasItemList all = canvas()->allItems();
+    QCanvasItemList::Iterator cit;
     
     for (cit = all.begin(); cit != all.end(); ++cit) {
       DiagramItem * it = QCanvasItemToDiagramItem(*cit);
@@ -266,15 +260,15 @@ void SeqDiagramView::keyPressEvent(QKeyEvent * e) {
   if (!window()->frozen()) {
     DiagramView::keyPressEvent(e);
     
-    if (e->state() != ::Qt::ControlModifier) {
+    if (e->state() != ::Qt::ControlButton) {
       switch (e->key()) {
       case ::Qt::Key_Left:
       case ::Qt::Key_Up:
       case ::Qt::Key_Right:
       case ::Qt::Key_Down:
 	{
-	  Q3CanvasItemList all = canvas()->allItems();
-	  Q3CanvasItemList::Iterator cit;
+	  QCanvasItemList all = canvas()->allItems();
+	  QCanvasItemList::Iterator cit;
     
 	  for (cit = all.begin(); cit != all.end(); ++cit) {
 	    DiagramItem * it = QCanvasItemToDiagramItem(*cit);
@@ -363,7 +357,7 @@ void SeqDiagramView::dropEvent(QDropEvent * e) {
   }
 }
 
-void SeqDiagramView::save(Q3TextStream & st, QString & warning,
+void SeqDiagramView::save(QTextStream & st, QString & warning,
 			  bool copy) const {
   DiagramItemList items(canvas()->allItems());
   DiagramItem * di;
@@ -489,9 +483,9 @@ void SeqDiagramView::read(char * st, char * k) {
 // for plug-out
 
 void SeqDiagramView::send(ToolCom * com) {
-  Q3CanvasItemList l = canvas()->allItems();
-  Q3PtrList<FragmentCanvas> fragments;
-  Q3PtrList<FragmentCanvas> refs;
+  QCanvasItemList l = canvas()->allItems();
+  QList<FragmentCanvas> fragments;
+  QList<FragmentCanvas> refs;
   
   FragmentCanvas::send(com, l, fragments, refs);
   SdClassInstCanvas::send(com, l);

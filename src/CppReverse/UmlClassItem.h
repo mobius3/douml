@@ -26,10 +26,7 @@
 #ifndef UMLCLASSITEM_H
 #define UMLCLASSITEM_H
 
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
+#include <qlist.h>
 
 #include "UmlBaseClassItem.h"
 
@@ -40,7 +37,7 @@ class UmlClassItem : public UmlBaseClassItem {
     bool useless;
 #endif
   public:
-    UmlClassItem(void * id, const Q3CString & n)
+    UmlClassItem(void * id, const QCString & n)
       : UmlBaseClassItem(id, n)
 #ifdef ROUNDTRIP
 	, roundtrip_expected(FALSE), useless(FALSE)
@@ -55,7 +52,7 @@ class UmlClassItem : public UmlBaseClassItem {
     bool is_useless() const { return useless; }
     void set_usefull(bool y = TRUE) { useless = !y; }
     virtual bool set_roundtrip_expected();
-    virtual void mark_useless(Q3PtrList<UmlItem> & l);
+    virtual void mark_useless(QList<UmlItem> & l);
 # endif
 #endif
 };

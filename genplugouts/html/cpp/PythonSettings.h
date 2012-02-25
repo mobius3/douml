@@ -4,9 +4,9 @@
 #ifdef WITHPYTHON
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlSettings.h"
-#include <q3dict.h>
+#include <qdict.h>
 
 // This class manages settings concerning PYTHON, configured through
 // the 'Generation settings' dialog.
@@ -33,7 +33,7 @@ class PythonSettings : public UmlSettings {
     static bool set_IsPython_3_operation(bool y);
 
     // return the  default indent step
-    static const Q3CString & indentStep();
+    static const QCString & indentStep();
 
     // set default indent step
     //
@@ -52,109 +52,109 @@ class PythonSettings : public UmlSettings {
 
     // returns the PYTHON stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString relationAttributeStereotype(const Q3CString & s);
+    static QCString relationAttributeStereotype(const QCString & s);
 
     // set the PYTHON stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationAttributeStereotype(Q3CString s, Q3CString v);
+    static bool set_RelationAttributeStereotype(QCString s, QCString v);
 
     // reverse of the RelationAttributeStereotype() operation, returns the 'UML' 
     // stereotype corresponding to the PYTHON one given in argument
-    static Q3CString relationAttributeUmlStereotype(const Q3CString & s);
+    static QCString relationAttributeUmlStereotype(const QCString & s);
 
     // returns the PYTHON stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString classStereotype(const Q3CString & s);
+    static QCString classStereotype(const QCString & s);
 
     // set the PYTHON stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassStereotype(Q3CString s, Q3CString v);
+    static bool set_ClassStereotype(QCString s, QCString v);
 
     // reverse of the ClassStereotype() operation, returns the 'UML' 
     // stereotype corresponding to the PYTHON one given in argument
-    static Q3CString classUmlStereotype(const Q3CString & s);
+    static QCString classUmlStereotype(const QCString & s);
 
     //returns the import or other form specified in the last
     //'Generation settings' tab for the Python type given in argument.
-    static Q3CString get_import(const Q3CString & s);
+    static QCString get_import(const QCString & s);
 
     //  set the import or other form specified in the last
     //  'Generation settings' tab for the Python type given in argument.
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Import(Q3CString s, Q3CString v);
+    static bool set_Import(QCString s, QCString v);
 
     //  return the 'root' directory
-    static const Q3CString & rootDir();
+    static const QCString & rootDir();
 
     //  set the 'root' directory
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RootDir(Q3CString v);
+    static bool set_RootDir(QCString v);
 
     // returns the default source file content
-    static const Q3CString & sourceContent();
+    static const QCString & sourceContent();
 
     // set the default source file content
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceContent(Q3CString v);
+    static bool set_SourceContent(QCString v);
 
     // returns the extension of the file produced by the PYTHON code generator
-    static const Q3CString & sourceExtension();
+    static const QCString & sourceExtension();
 
     // set the extension of the file produced by the PYTHON code generator
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceExtension(Q3CString v);
+    static bool set_SourceExtension(QCString v);
 
     // returns the default definition of a class
-    static const Q3CString & classDecl();
+    static const QCString & classDecl();
 
     // set the default definition of a class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassDecl(Q3CString v);
+    static bool set_ClassDecl(QCString v);
 
     // returns the default specification for an 'external' class
-    static const Q3CString & externalClassDecl();
+    static const QCString & externalClassDecl();
 
     // set the default specification for an 'external' class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ExternalClassDecl(Q3CString v);
+    static bool set_ExternalClassDecl(QCString v);
 
     // returns the default definition of an enumeration
-    static Q3CString enumDecl();
+    static QCString enumDecl();
 
     // set the default definition of an enumeration
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumDecl(Q3CString v);
+    static bool set_EnumDecl(QCString v);
 
     // returns the default definition of an attribute depending on the multiplicity
-    static const Q3CString & attributeDecl(const char * multiplicity);
+    static const QCString & attributeDecl(const char * multiplicity);
 
     // set the default definition of an attribute
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_AttributeDecl(const char * multiplicity, Q3CString v);
+    static bool set_AttributeDecl(const char * multiplicity, QCString v);
 
     // returns the default definition of an enumeration item
-    static Q3CString enumItemDecl();
+    static QCString enumItemDecl();
 
     // set the default definition of an enumeration item
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumItemDecl(Q3CString v);
+    static bool set_EnumItemDecl(QCString v);
 
     // returns the default definition of a relation depending on it is an
     // aggregation by value or not and the multiplicity, given in argument.
-    static const Q3CString & relationDecl(bool by_value, const char * multiplicity);
+    static const QCString & relationDecl(bool by_value, const char * multiplicity);
 
     // set the default definition of a relation depending on it is an
     // aggregation by value or not and the multiplicity, given in argument.
@@ -163,47 +163,47 @@ class PythonSettings : public UmlSettings {
     static bool set_RelationDecl(bool by_value, const char * multiplicity, const char * v);
 
     // returns the default definition of an operation
-    static const Q3CString & operationDef();
+    static const QCString & operationDef();
 
     // set the default definition of an operation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDef(Q3CString v);
+    static bool set_OperationDef(QCString v);
 
     // returns the default definition of __init__
-    static const Q3CString & initOperationDef();
+    static const QCString & initOperationDef();
 
     // set the default definition of __init__
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_InitOperationDef(Q3CString v);
+    static bool set_InitOperationDef(QCString v);
 
     // returns the default name of a 'get' operation generated 
     // through the attribute and relation 'add get operation' menu
-    static const Q3CString & getName();
+    static const QCString & getName();
 
     // set the default name of a 'get' operation generated 
     // through the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_GetName(Q3CString v);
+    static bool set_GetName(QCString v);
 
     // returns the default name of a 'set' operation generated 
     // through the attribute and relation 'add set operation' menu
-    static const Q3CString & setName();
+    static const QCString & setName();
 
     // set the default name of a 'set' operation generated 
     // through the attribute and relation 'add set operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SetName(Q3CString v);
+    static bool set_SetName(QCString v);
 
 
   private:
     // never called !
     PythonSettings() {};
 
-    static unsigned mult_column(const Q3CString & mult);
+    static unsigned mult_column(const QCString & mult);
 
     static bool _defined;
 
@@ -215,39 +215,39 @@ class PythonSettings : public UmlSettings {
 
 
   private:
-    static Q3CString _indent_step;
+    static QCString _indent_step;
 
-    static Q3CString _root;
+    static QCString _root;
 
-    static Q3CString _class_decl;
+    static QCString _class_decl;
 
-    static Q3CString _external_class_decl;
+    static QCString _external_class_decl;
 
-    static Q3CString _enum_decl;
+    static QCString _enum_decl;
 
-    static Q3CString _attr_decl[2/*multiplicity*/];
+    static QCString _attr_decl[2/*multiplicity*/];
 
-    static Q3CString _enum_item_decl;
+    static QCString _enum_item_decl;
 
-    static Q3CString _rel_decl[2/*relation kind*/][2/*multiplicity*/];
+    static QCString _rel_decl[2/*relation kind*/][2/*multiplicity*/];
 
-    static Q3CString _oper_def;
+    static QCString _oper_def;
 
 
   protected:
-    static Q3CString _initoper_def;
+    static QCString _initoper_def;
 
 
   private:
-    static Q3CString _get_name;
+    static QCString _get_name;
 
-    static Q3CString _set_name;
+    static QCString _set_name;
 
-    static Q3CString _src_content;
+    static QCString _src_content;
 
-    static Q3CString _ext;
+    static QCString _ext;
 
-    static Q3Dict<Q3CString> _map_imports;
+    static QDict<QCString> _map_imports;
 
 
   protected:

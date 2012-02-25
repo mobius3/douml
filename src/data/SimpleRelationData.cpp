@@ -27,7 +27,7 @@
 
 
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qcursor.h>
 
 #include "SimpleRelationData.h"
@@ -121,7 +121,7 @@ void SimpleRelationData::send_uml_def(ToolCom * com,
   get_end_node()->write_id(com);
 }
 
-void SimpleRelationData::save(Q3TextStream & st, QString & warning) const {
+void SimpleRelationData::save(QTextStream & st, QString & warning) const {
   st << stringify(type);
   indent(+1);
   

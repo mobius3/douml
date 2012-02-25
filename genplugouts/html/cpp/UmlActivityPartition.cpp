@@ -2,22 +2,20 @@
 #include "UmlActivityPartition.h"
 
 #include "UmlActivityDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 bool UmlActivityPartition::chapterp() {
   return TRUE;
 }
 
-Q3CString UmlActivityPartition::sKind() {
+QCString UmlActivityPartition::sKind() {
   return "activity partition";
 }
 
-void UmlActivityPartition::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlActivityPartition::html(QCString pfix, unsigned int rank, unsigned int level) {
   define();
   
   chapter("Activity partition", pfix, rank, "activitypartition", level);
 
-  Q3CString s = description();
+  QCString s = description();
   
   if (!s.isEmpty()) {
     fw.write("<p>");

@@ -35,14 +35,12 @@
 #include <stdio.h>
 
 #include <qlabel.h>
-#include <q3textstream.h> 
+#include <qtextstream.h> 
 #include <qfontmetrics.h>
-#include <q3popupmenu.h>
-#include <q3tabdialog.h>
+#include <qpopupmenu.h>
+#include <qtabdialog.h>
 #include <qapplication.h>
-#include <qwidget.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qwidgetlist.h>
 
 #include "BrowserClass.h"
 #include "ClassData.h"
@@ -63,7 +61,7 @@ static QString BoumlEditor;
 
 QSize SmallPushButton::sizeHint() const {
   QFontMetrics fm = fontMetrics();
-  QSize sz = fm.size(Qt::TextShowMnemonic, text());
+  QSize sz = fm.size(Qt::ShowPrefix, text());
   
   return QSize(sz.width() + sz.width()/8 + 4,
 	       sz.height() + sz.height()/8 + 4);
@@ -71,18 +69,18 @@ QSize SmallPushButton::sizeHint() const {
 
 // setText() redefinition
 void MultiLineEdit::setText(const QString & s) {
-  Q3MultiLineEdit::setText(toUnicode(s));
+  QMultiLineEdit::setText(toUnicode(s));
 }
 
 // text() redefinition
 QString MultiLineEdit::text() const {
-  QString t = Q3MultiLineEdit::text();
+  QString t = QMultiLineEdit::text();
   
   return fromUnicode(t);
 }
 
 QString MultiLineEdit::stripWhiteSpaceText() const {
-  QString t = Q3MultiLineEdit::text();
+  QString t = QMultiLineEdit::text();
   
   return fromUnicode(t.stripWhiteSpace());
 }
@@ -101,7 +99,7 @@ QString LineEdit::text() const {
 
 //
 
-void init_font_menu(Q3PopupMenu & fontsubm, UmlCanvas * canvas, int index)
+void init_font_menu(QPopupMenu & fontsubm, UmlCanvas * canvas, int index)
 {
   int f;
   
@@ -184,7 +182,7 @@ void same_width(QWidget * l1, QWidget * l2, QWidget * l3,
 }
 
 void edit(const QString & s, QString name, void * id, EditType k,
-	  Q3TabDialog * d, post_edit pf, Q3PtrList<BodyDialog> & edits)
+	  QTabDialog * d, post_edit pf, QList<BodyDialog> & edits)
 {
   QString ed = BoumlEditor;
   
@@ -257,7 +255,7 @@ void edit(const QString & s, QString name, void * id, EditType k,
     (new BodyDialog(s, d, pf, k, name, edits))->show();
 }
 
-bool check_edits(Q3PtrList<BodyDialog> & edits)
+bool check_edits(QList<BodyDialog> & edits)
 {
   if (edits.isEmpty())
     return TRUE;

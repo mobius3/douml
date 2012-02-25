@@ -23,10 +23,7 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h>
 
 #include "UmlItem.h"
 
@@ -92,8 +89,8 @@ void UmlItem::manage_alias(const char *& p, QTextOStream & ts) {
   const char * pclosed;
   
   if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
-    Q3CString key(p + 2, pclosed - p - 1);
-    Q3CString value;
+    QCString key(p + 2, pclosed - p - 1);
+    QCString value;
     UmlItem * node = this;
 
     do {

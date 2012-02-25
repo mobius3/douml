@@ -2,15 +2,15 @@
 #define _FILEOUT_H
 
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qmap.h>
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class QFile;
 class UmlItem;
 
 //QTextOStream + usefull operations
-class FileOut : public Q3TextStream {
+class FileOut : public QTextStream {
   public:
     FileOut(QFile * fp, bool lf, bool utf8);
 
@@ -27,13 +27,13 @@ class FileOut : public Q3TextStream {
     void idref(UmlItem * x);
 
     //for C++/Java types
-    void idref(Q3CString s, UmlItem * x);
+    void idref(QCString s, UmlItem * x);
 
     void idref_prefix(UmlItem * x, const char * pfix);
 
     void idref_prefix(UmlItem * x, const char * pfix, int n);
 
-    void idref_datatype(const Q3CString & t);
+    void idref_datatype(const QCString & t);
 
     //output <space><pfix1>="BOUML_<pfix2><x>"
     void ref(UmlItem * x, const char * pfix1, const char * pfix2 = "");
@@ -46,8 +46,6 @@ class FileOut : public Q3TextStream {
 
     void define_datatypes(bool uml_20, bool primitive_type, bool gen_extension);
 
-    void quote(const Q3CString &s);
-    
     void quote(const char * s);
 
     void quote(char c);
@@ -58,9 +56,9 @@ class FileOut : public Q3TextStream {
 
     int _indent;
 
-    QMap<Q3CString,int> _datatypes;
+    QMap<QCString,int> _datatypes;
 
-    QMap<Q3CString,int> _modifiedtypes;
+    QMap<QCString,int> _modifiedtypes;
 
 };
 

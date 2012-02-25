@@ -28,19 +28,12 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qapplication.h>
 #include <qfile.h>
-#include <q3dict.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3ValueList>
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QDragMoveEvent>
-#include <Q3CString>
+#include <qdict.h>
 
 #include "BrowserClass.h"
 #include "BrowserClassInstance.h"
@@ -85,9 +78,6 @@
 #include "ProfiledStereotypes.h"
 #include "translate.h"
 
-// Added for porting by lgfreitas
-#include <QChar>
-
 IdDict<BrowserClass> BrowserClass::all(257, __FILE__);
 
 QStringList BrowserClass::its_default_stereotypes;	// unicode
@@ -131,7 +121,7 @@ void BrowserClass::delete_it() {
       associated_artifact->is_writable())
     associated_artifact->remove_associated_class(this);
   
-  Q3ValueList<BrowserComponent *>::Iterator it;
+  QValueList<BrowserComponent *>::Iterator it;
   
   for (it = associated_components.begin();
        it != associated_components.end();
@@ -176,7 +166,7 @@ bool BrowserClass::undelete(bool rec, QString & warning, QString & renamed) {
     
   if (rec) {
     // undelete the sub elts
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = firstChild(); child != 0; child = child->nextSibling())
       result |= ((BrowserNode *) child)->undelete(rec, warning, renamed);
@@ -209,13 +199,13 @@ void BrowserClass::update_idmax_for_root()
 void BrowserClass::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
 
-void BrowserClass::support_file(Q3Dict<char> & files, bool add) const {
+void BrowserClass::support_file(QDict<char> & files, bool add) const {
   QString s;
   
   s = s.setNum(get_ident()) + ".bodies";
@@ -225,13 +215,13 @@ void BrowserClass::support_file(Q3Dict<char> & files, bool add) const {
   else
     files.remove(s);
   
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->support_file(files, add);
 }
     
-void BrowserClass::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserClass::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   IdIterator<BrowserClass> it(all);
   BrowserClass * c;
   
@@ -373,7 +363,7 @@ void BrowserClass::update_stereotype(bool rec) {
   }
   
   if (rec) {
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = firstChild(); child != 0; child = child->nextSibling())
       ((BrowserNode *) child)->update_stereotype(TRUE);
@@ -392,7 +382,7 @@ void BrowserClass::paintCell(QPainter * p, const QColorGroup & cg, int column,
   p->setFont((def->get_is_abstract())
 	     ? ((is_writable()) ? BoldItalicFont : ItalicFont)
 	     : ((is_writable()) ? BoldFont : NormalFont));
-  Q3ListViewItem::paintCell(p, cg, column, width, alignment);
+  QListViewItem::paintCell(p, cg, column, width, alignment);
   
   if (is_marked) {
     p->setBackgroundMode(::Qt::TransparentMode);
@@ -471,13 +461,13 @@ void BrowserClass::member_cpp_def(const QString &, const QString &,
 }
 
 void BrowserClass::menu() {
-  Q3PtrList<BrowserOperation> l = inherited_operations(21);
-  Q3PopupMenu m(0);
-  Q3PopupMenu gensubm(0);
-  Q3PopupMenu roundtripm(0);
-  Q3PopupMenu inhopersubm(0);
-  Q3PopupMenu compsubm(0);
-  Q3PopupMenu toolm(0);
+  QList<BrowserOperation> l = inherited_operations(21);
+  QPopupMenu m(0);
+  QPopupMenu gensubm(0);
+  QPopupMenu roundtripm(0);
+  QPopupMenu inhopersubm(0);
+  QPopupMenu compsubm(0);
+  QPopupMenu toolm(0);
   bool isstereotype = (strcmp(def->get_stereotype(), "stereotype") == 0);
   bool ismetaclass = (strcmp(def->get_stereotype(), "metaclass") == 0);
   QString what = (isstereotype) ? "<i>stereotype</i>"
@@ -559,7 +549,7 @@ Note that you can undelete it after"));
 	  BrowserNode * bcv = ((BrowserClassView *) parent())->get_associated();
 	  
 	  if ((bcv != 0) && !bcv->deletedp()) {
-	    Q3ListViewItem * child;
+	    QListViewItem * child;
 	    
 	    for (child = bcv->firstChild(); child; child = child->nextSibling())
 	      if (!((BrowserNode *) child)->deletedp() &&
@@ -616,7 +606,7 @@ a double click with the left mouse button does the same thing"));
 	
 	index = 100000;
 	
-	Q3ValueList<BrowserComponent *>::Iterator it;
+	QValueList<BrowserComponent *>::Iterator it;
 	
 	for (it = associated_components.begin(), index = 100000;
 	     it != associated_components.end();
@@ -673,7 +663,7 @@ a double click with the left mouse button does the same thing"));
 		   TR("undelete the " + what + ". \
 Do not undelete its <i>attributes</i>, <i>operations</i> and <i>relations</i>"));
  
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -690,7 +680,7 @@ nested <i>classes</i>, <i>attributes</i>, <i>operations</i> and \
 }
 
 void BrowserClass::exec_menu_choice(int rank,
-				    Q3PtrList<BrowserOperation> & l) {
+				    QList<BrowserOperation> & l) {
   bool isstereotypemetaclass =
     ((strcmp(def->get_stereotype(), "stereotype") == 0) ||
      (strcmp(def->get_stereotype(), "metaclass") == 0));
@@ -906,7 +896,7 @@ void BrowserClass::apply_shortcut(QString s) {
 	  BrowserNode * bcv = ((BrowserClassView *) parent())->get_associated();
 	  
 	  if ((bcv != 0) && !bcv->deletedp()) {
-	    Q3ListViewItem * child;
+	    QListViewItem * child;
 	    
 	    for (child = bcv->firstChild(); child; child = child->nextSibling())
 	      if (!((BrowserNode *) child)->deletedp() &&
@@ -954,7 +944,7 @@ void BrowserClass::apply_shortcut(QString s) {
     if (s == "Undelete")
       choice = 6;
  
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -965,7 +955,7 @@ void BrowserClass::apply_shortcut(QString s) {
     }
   }
     
-  Q3PtrList<BrowserOperation> l;
+  QList<BrowserOperation> l;
   
   exec_menu_choice(choice, l);
 }
@@ -978,7 +968,7 @@ BrowserNode * BrowserClass::duplicate(BrowserNode * p, QString name) {
   // count the current sub elt to not take into account two time the
   // bi-dir self relations
   unsigned n = 0;
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = firstChild(); child != 0; child = child->nextSibling())
     n += 1;
@@ -1017,7 +1007,7 @@ void BrowserClass::set_name(const char * s) {
     
     if (! firsttime) {
       // rename constructors and destructors
-      Q3ListViewItem * child;
+      QListViewItem * child;
       
       for (child = firstChild(); child != 0; child = child->nextSibling()) {
 	if (!((BrowserNode *) child)->deletedp() &&
@@ -1030,7 +1020,7 @@ void BrowserClass::set_name(const char * s) {
 	  else if ((*((const char *) op_name) == '~') &&
 		   ((((const char *) op_name) + 1) == name)) {
 	    // destructor renamed
-	    Q3CString d = "~";
+	    QCString d = "~";
 			    
 	    d += s;
 	    ((BrowserNode *) child)->set_name(d);
@@ -1146,9 +1136,10 @@ QString BrowserClass::may_start(UmlCode l) const {
 	return TR("read only");
       else {
 	BrowserNodeList inh;
+	
 	children(inh, UmlGeneralisation, UmlRealize);
 	return (inh.count() <= 1)
-	  ? QString()
+	  ? 0
 	  : TR("typedef can't generalize / realize several times");
       }
     case UmlDependency:
@@ -1156,7 +1147,7 @@ QString BrowserClass::may_start(UmlCode l) const {
 	return TR("read only");
       // no break
     case UmlAnchor:
-      return QString();
+      return 0;
     default:
       return TR("a typedef can't have relation");
     }
@@ -1175,7 +1166,7 @@ QString BrowserClass::may_start(UmlCode l) const {
   case UmlDirectionalAggregation:
   case UmlDirectionalAggregationByValue:
   case UmlDependency:
-    return (!is_read_only || root_permission()) ? QString() : TR("read only");
+    return (!is_read_only || root_permission()) ? 0 : TR("read only");
   default:
     return 0;
   }
@@ -1189,7 +1180,7 @@ QString BrowserClass::may_connect(UmlCode l, BrowserClass * other) {
   case UmlAssociation:
   case UmlAggregation:
   case UmlAggregationByValue:
-    return (!other->is_read_only || root_permission()) ? QString() : TR("read only");
+    return (!other->is_read_only || root_permission()) ? 0 : TR("read only");
   default:
     return (l != UmlAnchor) ? QString() : TR("can't have anchor between classes");
   }
@@ -1272,8 +1263,8 @@ bool BrowserClass::allow_spaces() const {
 
 
 // compute all parents, grand parents ...
-void BrowserClass::get_all_parents(Q3PtrList<BrowserClass> & l) const {
-  Q3PtrList<BrowserNode> notyet = parents();
+void BrowserClass::get_all_parents(QList<BrowserClass> & l) const {
+  QList<BrowserNode> notyet = parents();
 
   while (! notyet.isEmpty()) {
     BrowserClass * cl = (BrowserClass *) notyet.getFirst();
@@ -1282,7 +1273,7 @@ void BrowserClass::get_all_parents(Q3PtrList<BrowserClass> & l) const {
     if ((cl != this) && (l.findRef(cl) == -1)) {
       l.append(cl);
       
-      Q3PtrList<BrowserNode> grand_parents = cl->parents();
+      QList<BrowserNode> grand_parents = cl->parents();
       BrowserNode * gp;
       
       for (gp = grand_parents.first(); gp; gp = grand_parents.next())
@@ -1297,15 +1288,15 @@ void BrowserClass::get_all_parents(Q3PtrList<BrowserClass> & l) const {
 void BrowserClass::get_attrs(BrowserNodeList & attributes) const {
   attributes.clear();
   
-  Q3PtrList<BrowserClass> lcl;
+  QList<BrowserClass> lcl;
   
   get_all_parents(lcl);
   lcl.append(this);
   
-  Q3PtrListIterator<BrowserClass> it(lcl);
+  QListIterator<BrowserClass> it(lcl);
   
   for (; it.current(); ++it) {
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = it.current()->firstChild(); child; child = child->nextSibling())
       if (!((BrowserNode *) child)->deletedp() &&
@@ -1317,15 +1308,15 @@ void BrowserClass::get_attrs(BrowserNodeList & attributes) const {
 // returns all operations included the inherited (except the redefined ones
 // and the contructor and destructor of parents)
 
-void BrowserClass::get_opers(Q3ValueList<const OperationData *> & opers,
+void BrowserClass::get_opers(QValueList<const OperationData *> & opers,
 			     QStringList & list) const {
-  Q3PtrList<BrowserClass> all_parents;
+  QList<BrowserClass> all_parents;
   
   get_all_parents(all_parents);
   
   // own operations
-  Q3ListViewItem * child;
-  Q3Dict<void> already(499);
+  QListViewItem * child;
+  QDict<void> already(499);
   
   for (child = firstChild(); child; child = child->nextSibling()) {
     if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
@@ -1367,14 +1358,14 @@ void BrowserClass::get_opers(Q3ValueList<const OperationData *> & opers,
 // search for the relations from classes of 'from' having
 // target in 'to'
 
-static void get_assocs(Q3PtrList<BrowserClass> & from,
-		       Q3PtrList<BrowserClass> & to,
-		       Q3PtrList<RelationData> & rels)
+static void get_assocs(QList<BrowserClass> & from,
+		       QList<BrowserClass> & to,
+		       QList<RelationData> & rels)
 {
-  Q3PtrListIterator<BrowserClass> it(from);
+  QListIterator<BrowserClass> it(from);
   
   for (; it.current(); ++it) {
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = it.current()->firstChild(); child; child = child->nextSibling()) {
       if (!((BrowserNode *) child)->deletedp()) {
@@ -1405,9 +1396,9 @@ static void get_assocs(Q3PtrList<BrowserClass> & from,
 // if 'rev' != 0 search also for relation in opposite direction
 // and set rev to the number of relation in the first direction
 void BrowserClass::get_rels(BrowserClass * target,
-			    Q3PtrList<RelationData> & l, int * rev) const {
-  Q3PtrList<BrowserClass> la;
-  Q3PtrList<BrowserClass> lb;
+			    QList<RelationData> & l, int * rev) const {
+  QList<BrowserClass> la;
+  QList<BrowserClass> lb;
   
   get_all_parents(la);  
   target->get_all_parents(lb);
@@ -1416,7 +1407,7 @@ void BrowserClass::get_rels(BrowserClass * target,
   get_assocs(la, lb, l);
   if (rev != 0) {
     *rev = l.count();
-    Q3PtrList<RelationData> ll;
+    QList<RelationData> ll;
     
     get_assocs(lb, la, ll);
     while (! ll.isEmpty())
@@ -1427,14 +1418,14 @@ void BrowserClass::get_rels(BrowserClass * target,
 // search for the relations from classes of 'from' having
 // target in 'to' (may be the reverse direction of a bidir)
 
-static void get_assocs(Q3PtrList<BrowserClass> & from,
-		       Q3PtrList<BrowserClass> & to,
-		       Q3PtrList<BrowserRelation> & rels)
+static void get_assocs(QList<BrowserClass> & from,
+		       QList<BrowserClass> & to,
+		       QList<BrowserRelation> & rels)
 {
-  Q3PtrListIterator<BrowserClass> it(from);
+  QListIterator<BrowserClass> it(from);
   
   for (; it.current(); ++it) {
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = it.current()->firstChild(); child; child = child->nextSibling()) {
       if (!((BrowserNode *) child)->deletedp()) {
@@ -1465,9 +1456,9 @@ static void get_assocs(Q3PtrList<BrowserClass> & from,
 // returns all relation to target included the inherited
 // (may be the reverse direction of a bidir)
 void BrowserClass::get_rels(BrowserClass * target,
-			    Q3PtrList<BrowserRelation> & l) const {
-  Q3PtrList<BrowserClass> la;
-  Q3PtrList<BrowserClass> lb;
+			    QList<BrowserRelation> & l) const {
+  QList<BrowserClass> la;
+  QList<BrowserClass> lb;
   
   get_all_parents(la);  
   target->get_all_parents(lb);
@@ -1479,7 +1470,7 @@ void BrowserClass::get_rels(BrowserClass * target,
 // get the class and its members, and all parent and their members
 // except deleted
 void BrowserClass::get_tree(BrowserNodeList & l) {
-  Q3PtrList<BrowserClass> all_parents;
+  QList<BrowserClass> all_parents;
   
   all_parents.append(this);
   get_all_parents(all_parents);
@@ -1489,7 +1480,7 @@ void BrowserClass::get_tree(BrowserNodeList & l) {
     if (! cl->deletedp()) {
       l.append(cl);
       
-      for (Q3ListViewItem * child = cl->firstChild(); child; child = child->nextSibling()) {
+      for (QListViewItem * child = cl->firstChild(); child; child = child->nextSibling()) {
 	if (! ((BrowserNode *) child)->deletedp()) {
 	  UmlCode k = ((BrowserNode *) child)->get_type();
 	  
@@ -1543,9 +1534,9 @@ void BrowserClass::DragMoveInsideEvent(QDragMoveEvent * e) {
     e->ignore();
 }
 
-bool BrowserClass::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserClass::may_contains_them(const QList<BrowserNode> & l,
 				     BooL & duplicable) const {
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -1710,7 +1701,7 @@ void BrowserClass::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	  a_class &&
 	  ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
 	// have choice
-	Q3PopupMenu m(0);
+	QPopupMenu m(0);
   
 	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
 				   m.font()), -1);
@@ -1805,9 +1796,9 @@ BrowserClass * BrowserClass::add_class(bool stereotypep,
   return r;
 }
 
-Q3PtrList<BrowserNode> BrowserClass::parents() const {
-  Q3PtrList<BrowserNode> l;
-  Q3ListViewItem * child;
+QList<BrowserNode> BrowserClass::parents() const {
+  QList<BrowserNode> l;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling()) {
     BrowserNode * ch = ((BrowserNode *) child);
@@ -1851,16 +1842,16 @@ QString BrowserClass::check_inherit(const BrowserNode * new_parent) const {
     : BrowserNode::check_inherit(new_parent);
 }
   
-Q3PtrList<BrowserOperation> BrowserClass::inherited_operations(unsigned limit) const {
+QList<BrowserOperation> BrowserClass::inherited_operations(unsigned limit) const {
   QApplication::setOverrideCursor(::Qt::waitCursor);
   
-  Q3PtrList<BrowserClass> all_parents;
+  QList<BrowserClass> all_parents;
   
   get_all_parents(all_parents);
 
   // computes own operations profile list
-  Q3ListViewItem * child;
-  Q3Dict<BrowserOperation> already(499);
+  QListViewItem * child;
+  QDict<BrowserOperation> already(499);
   
   for (child = firstChild(); child; child = child->nextSibling())
     if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
@@ -1869,7 +1860,7 @@ Q3PtrList<BrowserOperation> BrowserClass::inherited_operations(unsigned limit) c
 		     (BrowserOperation *) child);
 	
   // computes undefined inherited operations list
-  Q3PtrList<BrowserOperation> l;
+  QList<BrowserOperation> l;
   BrowserClass * cl;
 
   for (cl = all_parents.first(); cl != 0; cl = all_parents.next()) {
@@ -1916,7 +1907,7 @@ Q3PtrList<BrowserOperation> BrowserClass::inherited_operations(unsigned limit) c
 }
 
 bool BrowserClass::have_abstract_operation() {
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling()) {
     BrowserNode * ch = ((BrowserNode *) child);
@@ -2053,7 +2044,7 @@ void BrowserClass::set_associated_artifact(BrowserArtifact * a,
   }
 }
 
-const Q3ValueList<BrowserComponent *> & BrowserClass::get_associated_components() const {
+const QValueList<BrowserComponent *> & BrowserClass::get_associated_components() const {
   return associated_components;
 }
 
@@ -2066,7 +2057,7 @@ void BrowserClass::add_associated_component(BrowserComponent * c) {
 }
 
 void BrowserClass::remove_associated_component(BrowserComponent * c) {
-  Q3ValueList<BrowserComponent *>::Iterator it = associated_components.find(c);
+  QValueList<BrowserComponent *>::Iterator it = associated_components.find(c);
   
   if (it != associated_components.end()) {
     associated_components.remove(it);
@@ -2079,7 +2070,7 @@ void BrowserClass::on_delete() {
   if (associated_diagram && associated_diagram->deletedp())
     associated_diagram = 0;
 
-  Q3ValueList<BrowserComponent *>::Iterator it = associated_components.begin();
+  QValueList<BrowserComponent *>::Iterator it = associated_components.begin();
   
   while (it != associated_components.end()) {
     if ((*it)->deletedp())
@@ -2264,7 +2255,7 @@ bool BrowserClass::tool_cmd(ToolCom * com, const char * args) {
 	com->write_id(0);
     }
     else {
-      Q3ValueList<BrowserComponent *>::Iterator it;
+      QValueList<BrowserComponent *>::Iterator it;
       
       com->write_unsigned(associated_components.count());
       
@@ -2305,13 +2296,13 @@ bool BrowserClass::tool_global_cmd(ToolCom * com, const char * args)
       BrowserNode * p = (BrowserNode *) com->get_id(args);	// package
       
       if (p != 0) {
-	Q3ListViewItem * child;
+	QListViewItem * child;
 	
 	for (child = p->firstChild(); child != 0; child = child->nextSibling()) {
 	  // search a class view
 	  if (!((BrowserNode *) child)->deletedp() &&
 	      (((BrowserNode *) child)->get_type() == UmlClassView)) {
-	    Q3ListViewItem * ch;
+	    QListViewItem * ch;
 	    
 	    for (ch = child->firstChild(); ch != 0; ch = ch->nextSibling()) {
 	      // search the class
@@ -2346,7 +2337,7 @@ bool BrowserClass::tool_global_cmd(ToolCom * com, const char * args)
   }
 }
 
-void BrowserClass::save_stereotypes(Q3TextStream & st)
+void BrowserClass::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "class_stereotypes ";
@@ -2369,7 +2360,7 @@ void BrowserClass::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserClass::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserClass::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "class_ref " << get_ident() << " // " << get_name();
   else {
@@ -2397,7 +2388,7 @@ void BrowserClass::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts & operations body
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {
@@ -2536,7 +2527,7 @@ static const char * component2artifact(const char * b)
     { "aComponent", "anArtifact" },
     { "Component", "Artifact" }
   };
-  static Q3CString s;
+  static QCString s;
   
   s = b;
   
@@ -2592,8 +2583,8 @@ void BrowserClass::plug_out_conversion()
       ((comArtifact = BrowserArtifact::find("UmlCom")) != 0)) {
     // do conversion
     int uid = user_id();
-    Q3ListViewItem * child;
-    Q3CString s;
+    QListViewItem * child;
+    QCString s;
     int index;
     AType t_deplview;
     AType t_depldiag;
@@ -3137,7 +3128,7 @@ static BrowserClass * add_metaclass(BrowserClass * cl, const char * mclname,
   BrowserNode * p = 0;
   BrowserNode * pack = (BrowserNode *) cl->parent()->parent();
   
-  for (Q3ListViewItem * child = pack->firstChild(); child; child = child->nextSibling()) {
+  for (QListViewItem * child = pack->firstChild(); child; child = child->nextSibling()) {
     if ((((BrowserNode *) child)->get_type() == UmlClassView) &&
 	!strncmp(((BrowserNode *) child)->get_name(), "meta classes", 12) &&
 	!((BrowserNode *) child)->wrong_child_name(mclname, UmlClass, FALSE, FALSE))
@@ -3163,20 +3154,20 @@ static BrowserClass * add_metaclass(BrowserClass * cl, const char * mclname,
   return r;
 }
 
-static void extend(BrowserClass * cl, Q3CString mclpath,
-		   Q3PtrList<BrowserClass> & metaclasses)
+static void extend(BrowserClass * cl, QCString mclpath,
+		   QList<BrowserClass> & metaclasses)
 {
   int index = mclpath.find('#');
   
   if (index != -1) {
     const char * mclname = ((const char *) mclpath) + (index + 1);
-    Q3CString path = mclpath.left(index);
+    QCString path = mclpath.left(index);
     
     const char * defltpath0 = "http://schema.omg.org/spec/UML/2.0/uml.xml";
     const char * defltpath1 = "http://schema.omg.org/spec/UML/2.1/uml.xml";
     bool dflt = ((path == defltpath0) || (path == defltpath1));
     
-    Q3PtrListIterator<BrowserClass> it(metaclasses);
+    QListIterator<BrowserClass> it(metaclasses);
     BrowserClass * mcl;
     
     if (dflt) {
@@ -3201,7 +3192,7 @@ static void extend(BrowserClass * cl, Q3CString mclpath,
     }
     
     if (mcl == 0) {
-      mcl = add_metaclass(cl, mclname, (dflt) ? 0 : path.data());
+      mcl = add_metaclass(cl, mclname, (dflt) ? 0 : path);
       metaclasses.append(mcl);
     }
     
@@ -3218,8 +3209,8 @@ void BrowserClass::post_load()
   BrowserOperation::post_load(); // must be done after rel and attr post_load
   
   if (NeedPostLoad) {
-    Q3PtrList<BrowserClass> stereotypes;
-    Q3PtrList<BrowserClass> metaclasses;
+    QList<BrowserClass> stereotypes;
+    QList<BrowserClass> metaclasses;
     
     IdIterator<BrowserClass> it(all);
     BrowserClass * cl;
@@ -3242,7 +3233,7 @@ void BrowserClass::post_load()
     while (! stereotypes.isEmpty()) {
       cl = stereotypes.take(0);
       
-      Q3CString s = cl->get_value("stereotypeExtension"); // non empty
+      QCString s = cl->get_value("stereotypeExtension"); // non empty
       
       s = s.simplifyWhiteSpace();
       

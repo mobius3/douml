@@ -25,15 +25,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <q3textstream.h> 
+#include <qtextstream.h> 
 #include <qfile.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
-#include <QTextOStream>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "UmlOperation.h"
 #include "UmlSettings.h"
@@ -45,7 +39,7 @@
 #include "util.h"
 
 // to manage preserved bodies, the key is the id under bouml
-Q3IntDict<char> UmlOperation::bodies(127);
+QIntDict<char> UmlOperation::bodies(127);
 const char * BodyPrefix = "// Bouml preserved body begin ";
 const char * BodyPostfix = "// Bouml preserved body end ";
 const int BodyPrefixLength = 30;
@@ -54,14 +48,14 @@ const int BodyPostfixLength = 28;
 // Between template < and > I suppose that a type is not included
 // because I cannot know how the type is used and I do not want to
 // produce circular #include
-void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
-				      const Q3CString & cl_stereotype,
+void UmlOperation::compute_dependency(QList<CppRefType> & dependencies,
+				      const QCString & cl_stereotype,
 				      bool all_in_h) {
   if ((cl_stereotype == "enum") || (cl_stereotype == "typedef"))
     return;
   
   bool templ = !((UmlClass *) parent())->formals().isEmpty();
-  Q3CString decl = cppDecl();
+  QCString decl = cppDecl();
   int index;
     
   if (decl.isEmpty()) {
@@ -132,7 +126,7 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
   int template_level = 0;
   const char * p = decl;
   const char * dontsubstituteuntil = 0;
-  const Q3ValueList<UmlParameter> & params = this->params();
+  const QValueList<UmlParameter> & params = this->params();
   UmlTypeSpec ts;
   
   for (;;) {
@@ -183,8 +177,8 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 	p = strchr(p, '}') + 1;
       else if (!strncmp(p, "${throw}", 8)) {
 	p += 8;
-	const Q3ValueList<UmlTypeSpec> exc = exceptions();
-	Q3ValueList<UmlTypeSpec>::ConstIterator it;
+	const QValueList<UmlTypeSpec> exc = exceptions();
+	QValueList<UmlTypeSpec>::ConstIterator it;
 	
 	for (it = exc.begin(); it != exc.end(); ++it)
 	  UmlClassMember::compute_dependency(dependencies, "${type}", *it, TRUE);
@@ -231,7 +225,7 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 //#warning NAMESPACE
 
       if (dontsubstituteuntil == 0) {
-	Q3CString subst = CppSettings::type(ts.explicit_type);
+	QCString subst = CppSettings::type(ts.explicit_type);
 	
 	if (subst != ts.explicit_type) {
 	  decl = subst + ' ' + p;
@@ -278,7 +272,7 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
   }
 }
 
-static bool generate_type(const Q3ValueList<UmlParameter> & params,
+static bool generate_type(const QValueList<UmlParameter> & params,
 			  unsigned rank, QTextOStream & f_h)
 {
   if (rank >= params.count())
@@ -289,7 +283,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
   return TRUE;
 }
 
-static bool generate_var(const Q3ValueList<UmlParameter> & params, 
+static bool generate_var(const QValueList<UmlParameter> & params, 
 			 unsigned rank, QTextOStream & f_h)
 {
   if (rank >= params.count())
@@ -299,7 +293,7 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
   return TRUE;
 }
 
-static bool generate_init(const Q3ValueList<UmlParameter> & params, 
+static bool generate_init(const QValueList<UmlParameter> & params, 
 			  unsigned rank, QTextOStream & f_h)
 {
   if (rank >= params.count())
@@ -311,19 +305,19 @@ static bool generate_init(const Q3ValueList<UmlParameter> & params,
   return TRUE;
 }
 
-static void param_error(const Q3CString & parent, const Q3CString & name,
+static void param_error(const QCString & parent, const QCString & name,
 			unsigned rank, const char * where)
 {
   write_trace_header();
-  UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>while compiling <i>")
+  UmlCom::trace(QCString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>while compiling <i>")
 		+ parent + "::" + name + "</i> " + where
-		+ ", parameter rank " + Q3CString().setNum(rank)
+		+ ", parameter rank " + QCString().setNum(rank)
 		+ " does not exist</font></b><br>");
   incr_error();
 }
 
-Q3CString UmlOperation::compute_name() {
-  Q3CString get_set_spec = cppNameSpec();
+QCString UmlOperation::compute_name() {
+  QCString get_set_spec = cppNameSpec();
   
   if (! get_set_spec.isEmpty()) {
     UmlClassMember * it;
@@ -332,7 +326,7 @@ Q3CString UmlOperation::compute_name() {
       it = setOf();
     
     int index;
-    Q3CString s = (it->kind() == aRelation)
+    QCString s = (it->kind() == aRelation)
       ? ((UmlRelation *) it)->roleName()
       : it->name();
     
@@ -352,7 +346,7 @@ Q3CString UmlOperation::compute_name() {
 }
 
 void UmlOperation::generate_decl(aVisibility & current_visibility, QTextOStream & f_h,
-				 const Q3CString & cl_stereotype, Q3CString indent,
+				 const QCString & cl_stereotype, QCString indent,
 				 BooL & first, bool) {
   if (!cppDecl().isEmpty()) {
     if (cl_stereotype == "enum") {
@@ -373,7 +367,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextOStream 
     
     const char * p = cppDecl();
     const char * pp = 0;
-    const Q3ValueList<UmlParameter> & params = this->params();
+    const QValueList<UmlParameter> & params = this->params();
     unsigned rank;
     
     while ((*p == ' ') || (*p == '\t'))
@@ -509,10 +503,10 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextOStream 
 }
 
 void UmlOperation::generate_throw(QTextOStream & f) {
-  const Q3ValueList<UmlTypeSpec> exc = exceptions();
+  const QValueList<UmlTypeSpec> exc = exceptions();
 	
   if (!exc.isEmpty()) {
-    Q3ValueList<UmlTypeSpec>::ConstIterator it;
+    QValueList<UmlTypeSpec>::ConstIterator it;
     const char * sep = " throw(";
     
     for (it = exc.begin(); it != exc.end(); ++it) {
@@ -529,10 +523,10 @@ void UmlOperation::generate_throw(QTextOStream & f) {
 // p point to {space/tab}*${body}
 // indent is the one of the operation
 const char * UmlOperation::generate_body(QTextOStream & fs,
-					 Q3CString indent,
+					 QCString indent,
 					 const char * p) {
   const char * body = 0;
-  Q3CString modeler_body;
+  QCString modeler_body;
   bool add_nl = FALSE;
   bool no_indent;
   char s_id[9];
@@ -607,7 +601,7 @@ bool UmlOperation::is_template_operation() {
   if (!cppDecl().isEmpty())
     return FALSE;
   
-  Q3CString def = cppDef();
+  QCString def = cppDef();
   int index1 = def.find("${class}");
   
   if (index1 == -1)
@@ -626,10 +620,10 @@ bool UmlOperation::is_template_operation() {
   return (def.find('>') > index1);
 }
 
-void UmlOperation::generate_def(QTextOStream & fs, Q3CString indent, bool h,
-				Q3CString templates, Q3CString cl_names,
-				Q3CString templates_tmplop, 
-				Q3CString cl_names_tmplop) {
+void UmlOperation::generate_def(QTextOStream & fs, QCString indent, bool h,
+				QCString templates, QCString cl_names,
+				QCString templates_tmplop, 
+				QCString cl_names_tmplop) {
   if (!cppDef().isEmpty() && !isAbstract()) {
     UmlClass * cl = (UmlClass *) parent();
     
@@ -637,7 +631,7 @@ void UmlOperation::generate_def(QTextOStream & fs, Q3CString indent, bool h,
 	? h : !h) {
       const char * p = cppDef();
       const char * pp = 0;
-      const Q3ValueList<UmlParameter> & params = this->params();
+      const QValueList<UmlParameter> & params = this->params();
       unsigned rank;
       const char * body_indent = strstr(p, "${body}");
       bool template_oper = is_template_operation();
@@ -798,7 +792,7 @@ static char * read_file(const char * filename)
 {
   QFile fp(filename);
   
-  if (fp.open(QIODevice::ReadOnly)) {
+  if (fp.open(IO_ReadOnly)) {
     QFileInfo fi(fp);
     int size = fi.size();
     char * s = new char[size + 1];
@@ -817,7 +811,7 @@ static char * read_file(const char * filename)
     return 0;
 }
 
-static void read_bodies(const char * path, Q3IntDict<char> & bodies)
+static void read_bodies(const char * path, QIntDict<char> & bodies)
 {
   char * s = read_file(path);
   
@@ -832,14 +826,14 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
       long id = strtol(p2, &body, 16);
       
       if (body != (p2 + 8)) {
-	UmlCom::trace(Q3CString("<font color =\"red\"> Error in ") + path +
+	UmlCom::trace(QCString("<font color =\"red\"> Error in ") + path +
 		      " : invalid preserve body identifier</font><br>");
 	UmlCom::bye(n_errors() + 1);
 	UmlCom::fatal_error("read_bodies 1");
       }
       
       if (bodies.find(id) != 0) {
-	UmlCom::trace(Q3CString("<font  color =\"red\"> Error in ") + path + 
+	UmlCom::trace(QCString("<font  color =\"red\"> Error in ") + path + 
 	  " : preserve body identifier used twice</font><br>");
 	UmlCom::bye(n_errors() + 1);
 	UmlCom::fatal_error("read_bodies 2");
@@ -850,7 +844,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
       if (*body == '\n')
 	body += 1;
       else {
-	UmlCom::trace(Q3CString("<font  color =\"red\"> Error in ") + path + 
+	UmlCom::trace(QCString("<font  color =\"red\"> Error in ") + path + 
 		      " : invalid preserve body block, end of line expected</font><br>");
 	UmlCom::bye(n_errors() + 1);
 	UmlCom::fatal_error("read_bodies 3");
@@ -858,7 +852,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
       
       if (((p1 = strstr(body, BodyPostfix)) == 0) ||
 	  (strncmp(p1 + BodyPostfixLength, p2, 8) != 0)) {
-	UmlCom::trace(Q3CString("<font  color =\"red\"> Error in ") + path + 
+	UmlCom::trace(QCString("<font  color =\"red\"> Error in ") + path + 
 		      " : invalid preserve body block, wrong balanced</font><br>");
 	UmlCom::bye(n_errors() + 1);
 	UmlCom::fatal_error("read_bodies 4");

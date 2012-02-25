@@ -4,7 +4,7 @@
 
 #include "UmlClassItem.h"
 #include "aVisibility.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlBaseClassItem.h"
 
 // This class manages 'true' class's items : attributes, relation,
@@ -55,7 +55,7 @@ class UmlBaseClassMember : public UmlClassItem {
 #endif
 #ifdef WITHJAVA
     // returns the Java annotations
-    Q3CString javaAnnotations();
+    QCString javaAnnotations();
 
     // set the Java annotations
     //
@@ -64,7 +64,7 @@ class UmlBaseClassMember : public UmlClassItem {
 #endif
 
     // return the constraint
-    const Q3CString & constraint();
+    const QCString & constraint();
 
     // set the constraint
     //
@@ -83,14 +83,14 @@ class UmlBaseClassMember : public UmlClassItem {
     aVisibility _cpp_visibility : 8;
 #endif
 #ifdef WITHJAVA
-    Q3CString _java_annotation;
+    QCString _java_annotation;
 #endif
 
-    Q3CString _constraint;
+    QCString _constraint;
 
 
   protected:
-    UmlBaseClassMember(void * id, const Q3CString & n) : UmlClassItem(id, n) {};
+    UmlBaseClassMember(void * id, const QCString & n) : UmlClassItem(id, n) {};
 
     void read_uml_();
 

@@ -28,11 +28,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "ClassInstanceData.h"
 #include "BrowserClassInstance.h"
@@ -95,7 +90,7 @@ void ClassInstanceData::edit() {
 //
 
 void ClassInstanceData::init_other_side() {
-  Q3ValueList<SlotRel>::Iterator it_rel = relations.begin();
+  QValueList<SlotRel>::Iterator it_rel = relations.begin();
   
   while (it_rel != relations.end()) {
     const SlotRel & slot_rel = *it_rel;
@@ -112,9 +107,9 @@ void ClassInstanceData::init_other_side() {
 	!RelationData::uni_directional(slot_rel.rel->get_type())) {
       ClassInstanceData * other_data = 
 	(ClassInstanceData *) slot_rel.value->get_data();
-      Q3ValueList<SlotRel> & other_rels = 
+      QValueList<SlotRel> & other_rels = 
 	other_data->relations;
-      Q3ValueList<SlotRel>::Iterator it_rel_other;
+      QValueList<SlotRel>::Iterator it_rel_other;
       
       for (it_rel_other = other_rels.begin();
 	   it_rel_other != other_rels.end();
@@ -154,14 +149,14 @@ void ClassInstanceData::check() {
     browser_node->delete_it();
   else if (!attributes.isEmpty() || !relations.isEmpty()) {
     bool modif = FALSE;
-    Q3PtrList<BrowserClass> l;
+    QList<BrowserClass> l;
     
     cl->get_all_parents(l);
     l.append(cl);
     
     // check attributes
     
-    Q3ValueList<SlotAttr>::Iterator it_attr = attributes.begin();
+    QValueList<SlotAttr>::Iterator it_attr = attributes.begin();
 
     while (it_attr != attributes.end()) {
       const SlotAttr & slot_attr = *it_attr;
@@ -188,7 +183,7 @@ void ClassInstanceData::check() {
     
     // check relations (only this side, check also called on other class instance)
     
-    Q3ValueList<SlotRel>::Iterator it_rel = relations.begin();
+    QValueList<SlotRel>::Iterator it_rel = relations.begin();
     
     while (it_rel != relations.end()) {
       const SlotRel & slot_rel = *it_rel;
@@ -210,9 +205,9 @@ void ClassInstanceData::check() {
 	// new instance type, must be removed in both side
 	if (slot_rel.value->get_data() != this) {
 	  // not reflexive
-	  Q3ValueList<SlotRel> & other_rels = 
+	  QValueList<SlotRel> & other_rels = 
 	    ((ClassInstanceData *) slot_rel.value->get_data())->relations;
-	  Q3ValueList<SlotRel>::Iterator it_rel_other;
+	  QValueList<SlotRel>::Iterator it_rel_other;
 	  
 	  for (it_rel_other = other_rels.begin();
 	       it_rel_other != other_rels.end();
@@ -262,7 +257,7 @@ void ClassInstanceData::check() {
 
 void ClassInstanceData::check_rels() {
   bool modif = FALSE;
-  Q3ValueList<SlotRel>::Iterator it_rel = relations.begin();
+  QValueList<SlotRel>::Iterator it_rel = relations.begin();
   
   while (it_rel != relations.end()) {
     const SlotRel & slot_rel = *it_rel;
@@ -281,7 +276,7 @@ void ClassInstanceData::check_rels() {
 	remove = TRUE;
       }
       else if (cl != other) {
-	Q3PtrList<BrowserClass> l;
+	QList<BrowserClass> l;
 	
 	cl->get_all_parents(l);
 	remove |= (l.findRef(other) == -1);
@@ -304,7 +299,7 @@ void ClassInstanceData::check_rels() {
 // this must correspond to is_a
 bool ClassInstanceData::exist(BrowserClassInstance * other,
 			      RelationData * rd) const {
-  Q3ValueList<SlotRel>::ConstIterator it;
+  QValueList<SlotRel>::ConstIterator it;
   
   for (it = relations.begin(); it != relations.end(); ++it) {
     const SlotRel & slot_rel = *it;
@@ -313,7 +308,7 @@ bool ClassInstanceData::exist(BrowserClassInstance * other,
       return TRUE;
   }
   
-  const Q3ValueList<SlotRel> & rels = 
+  const QValueList<SlotRel> & rels = 
     ((ClassInstanceData *) other->get_data())->relations;
   
   for (it = rels.begin(); it != rels.end(); ++it) {
@@ -331,7 +326,7 @@ bool ClassInstanceData::exist(BrowserClassInstance * other,
 void ClassInstanceData::add(BrowserClassInstance * other,
 			    RelationData * rd) {
   // check if already exist
-  Q3ValueList<SlotRel>::Iterator it;
+  QValueList<SlotRel>::Iterator it;
   
   for (it = relations.begin(); it != relations.end(); ++it) {
     SlotRel & slot_rel = *it;
@@ -376,7 +371,7 @@ void ClassInstanceData::replace_internal(BrowserClassInstance * other,
 					 RelationData * future,
 					 bool current_isa,
 					 bool future_isa) {
-  Q3ValueList<SlotRel>::Iterator it;
+  QValueList<SlotRel>::Iterator it;
   
   for (it = relations.begin(); it != relations.end(); ++it) {
     SlotRel & slot_rel = *it;
@@ -424,7 +419,7 @@ void ClassInstanceData::replace_internal(BrowserClassInstance * other,
 void ClassInstanceData::remove_clone(BrowserClassInstance * other,
 				     RelationData * rd, bool isa) {
   bool find = FALSE;
-  Q3ValueList<SlotRel>::Iterator it;
+  QValueList<SlotRel>::Iterator it;
   
   for (it = relations.begin(); it != relations.end(); ++it) {
     SlotRel & slot_rel = *it;
@@ -512,7 +507,7 @@ bool ClassInstanceData::tool_cmd(ToolCom * com, const char * args,
 	{
 	  BrowserAttribute * at = (BrowserAttribute *) com->get_id(args);
 	  bool find = FALSE;
-	  Q3ValueList<SlotAttr>::Iterator it_attr;
+	  QValueList<SlotAttr>::Iterator it_attr;
 	  
 	  for (it_attr = attributes.begin(); it_attr != attributes.end(); ++it_attr) {
 	    SlotAttr & slot_attr = *it_attr;
@@ -531,7 +526,7 @@ bool ClassInstanceData::tool_cmd(ToolCom * com, const char * args,
 	  
 	  if (! find) {
 	    // add it
-	    Q3PtrList<BrowserClass> l;
+	    QList<BrowserClass> l;
 	    
 	    cl->get_all_parents(l);
 	    l.append(cl);
@@ -570,7 +565,7 @@ bool ClassInstanceData::tool_cmd(ToolCom * com, const char * args,
       if (args[0] == 0) {
 	com->write_unsigned(attributes.count());
 	
-	Q3ValueList<SlotAttr>::Iterator it;
+	QValueList<SlotAttr>::Iterator it;
 	
 	for (it = attributes.begin(); it != attributes.end(); ++it) {
 	  const SlotAttr & slot = *it;
@@ -599,7 +594,7 @@ bool ClassInstanceData::tool_cmd(ToolCom * com, const char * args,
 	if (other == 0) {
 	  com->write_unsigned(relations.count());
 	  
-	  Q3ValueList<SlotRel>::Iterator it;
+	  QValueList<SlotRel>::Iterator it;
 	  
 	  for (it = relations.begin(); it != relations.end(); ++it) {
 	    const SlotRel & slot = *it;
@@ -611,7 +606,7 @@ bool ClassInstanceData::tool_cmd(ToolCom * com, const char * args,
 	}
 	else {
 	  // get all available relations
-	  Q3PtrList<BrowserRelation> l;
+	  QList<BrowserRelation> l;
 	  BrowserRelation * r;
   
 	  cl->get_rels(((ClassInstanceData *)other->get_data())->cl, l);
@@ -643,7 +638,7 @@ bool ClassInstanceData::change_rel(ToolCom * com, const char * args,
   }
   
   RelationData * rd = (RelationData *) r->get_data();
-  Q3ValueList<SlotRel>::Iterator it;
+  QValueList<SlotRel>::Iterator it;
   
   for (it = relations.begin(); it != relations.end(); ++it) {
     const SlotRel & slot_rel = *it;
@@ -656,7 +651,7 @@ bool ClassInstanceData::change_rel(ToolCom * com, const char * args,
   if (isadd) {
     if (it == relations.end()) {
       // not yet present
-      Q3PtrList<BrowserRelation> l;
+      QList<BrowserRelation> l;
   
       cl->get_rels(((ClassInstanceData *)other->get_data())->cl, l);
       if ((l.findRef(r) == -1) ||
@@ -688,7 +683,7 @@ bool ClassInstanceData::change_rel(ToolCom * com, const char * args,
 }
 //
 
-void ClassInstanceData::save(Q3TextStream & st, QString & warning) const {
+void ClassInstanceData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   nl_indent(st);
   st << "type ";
@@ -697,7 +692,7 @@ void ClassInstanceData::save(Q3TextStream & st, QString & warning) const {
   nl_indent(st);
   st << "attributes";
 
-  Q3ValueList<SlotAttr>::ConstIterator it_attr = attributes.begin();
+  QValueList<SlotAttr>::ConstIterator it_attr = attributes.begin();
   
   while (it_attr != attributes.end()) {
     const SlotAttr & slot_attr = *it_attr;
@@ -715,7 +710,7 @@ void ClassInstanceData::save(Q3TextStream & st, QString & warning) const {
   nl_indent(st);
   st << "relations";
 
-  Q3ValueList<SlotRel>::ConstIterator it_rel = relations.begin();
+  QValueList<SlotRel>::ConstIterator it_rel = relations.begin();
   
   while (it_rel != relations.end()) {
     const SlotRel & slot_rel = *it_rel;

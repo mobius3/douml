@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= ixmi2
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
 HEADERS		= ./UmlActivityPartition.h \
 		  ./UmlBaseNode.h \
@@ -416,5 +416,3 @@ SOURCES		= ./UmlActivityPartition.cpp \
 		  ./UmlBaseClassItem.cpp \
 		  ./UmlClass.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

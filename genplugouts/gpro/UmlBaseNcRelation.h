@@ -5,7 +5,7 @@
 #include "UmlItem.h"
 #include "aRelationKind.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlNcRelation;
 
@@ -40,11 +40,11 @@ class UmlBaseNcRelation : public UmlItem {
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseNcRelation(void * id, const Q3CString & n);
+    UmlBaseNcRelation(void * id, const QCString & n);
 
 };
 
-inline UmlBaseNcRelation::UmlBaseNcRelation(void * id, const Q3CString & n) : UmlItem(id, n) {
+inline UmlBaseNcRelation::UmlBaseNcRelation(void * id, const QCString & n) : UmlItem(id, n) {
   _target = 0;
 }
 

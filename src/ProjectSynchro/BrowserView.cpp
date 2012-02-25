@@ -28,10 +28,8 @@
 
 
 #include <qlabel.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "BrowserView.h"
 #include "BrowserNode.h"
@@ -40,7 +38,7 @@
 #define DICT_SIZE 101
 
 BrowserView::BrowserView(QWidget * parent)
-    : Q3ListView(parent), lbl(0), need_update(FALSE), cant_update(FALSE) {
+    : QListView(parent), lbl(0), need_update(FALSE), cant_update(FALSE) {
   nodes.resize(DICT_SIZE);
   
   setSorting(-1);		// manual sorting
@@ -54,8 +52,8 @@ BrowserView::BrowserView(QWidget * parent)
   setColumnAlignment(2, ::Qt::AlignHCenter);
   setTreeStepSize(18);
   
-  connect(this, SIGNAL(selectionChanged(Q3ListViewItem *)),
-	  this, SLOT(select(Q3ListViewItem *)));
+  connect(this, SIGNAL(selectionChanged(QListViewItem *)),
+	  this, SLOT(select(QListViewItem *)));
 }
 
 BrowserView::~BrowserView() {
@@ -81,14 +79,14 @@ void BrowserView::set_project(QDir di) {
   setColumnText(0, di.path());
 }
 
-void BrowserView::select(Q3ListViewItem * b) {
+void BrowserView::select(QListViewItem * b) {
   static bool ongoing = FALSE;
   
   if (!ongoing) {
     ongoing = TRUE;
     
-    const Q3PtrList<BrowserView> & l = SynchroWindow::get_browsers();
-    Q3PtrListIterator<BrowserView> it(l);
+    const QList<BrowserView> & l = SynchroWindow::get_browsers();
+    QListIterator<BrowserView> it(l);
     QString fn = ((BrowserNode *) b)->file_name();
     
     for (; it.current(); ++it) {
@@ -98,7 +96,7 @@ void BrowserView::select(Q3ListViewItem * b) {
       
       if (bn != 0) {
 	it.current()->ensureItemVisible(bn);
-	it.current()->Q3ListView::setSelected(bn, TRUE);
+	it.current()->QListView::setSelected(bn, TRUE);
       }
     }
     
@@ -126,17 +124,17 @@ struct Use {
   Use(int rev) : rev_min(rev), rev_max(rev), count(1) {}
 };
 
-void BrowserView::update(const Q3PtrList<BrowserView> & lv)
+void BrowserView::update(const QList<BrowserView> & lv)
 {
-  Q3Dict<Use> all_nodes(DICT_SIZE);
-  Q3PtrListIterator<BrowserView> itv(lv);
+  QDict<Use> all_nodes(DICT_SIZE);
+  QListIterator<BrowserView> itv(lv);
   
   all_nodes.setAutoDelete(TRUE);
   
   // look at the revision in each view
   
   for (; itv.current(); ++itv) {
-    Q3DictIterator<BrowserNode> itd(itv.current()->nodes);
+    QDictIterator<BrowserNode> itd(itv.current()->nodes);
 
     for (; itd.current(); ++itd) {
       BrowserNode * bn = itd.current();
@@ -161,7 +159,7 @@ void BrowserView::update(const Q3PtrList<BrowserView> & lv)
   int nviews = lv.count();
   QStringList deleted_or_new;
   
-  Q3DictIterator<Use> itu(all_nodes);
+  QDictIterator<Use> itu(all_nodes);
   
   for (; itu.current(); ++itu) {
     QString who = itu.currentKey();
@@ -206,7 +204,7 @@ void BrowserView::update(const Q3PtrList<BrowserView> & lv)
   
   for (it = deleted_or_new.begin(); it != deleted_or_new.end(); ++it) {
     QString who = *it;
-    Q3PtrList<BrowserNode> images;
+    QList<BrowserNode> images;
     bool young = FALSE;
     
     // set the state in each view without looking at the others
@@ -241,7 +239,7 @@ void BrowserView::update_it() {
   int nold = 0;
   int ndel = 0;
 
-  Q3DictIterator<BrowserNode> itd(nodes);
+  QDictIterator<BrowserNode> itd(nodes);
 
   for (; itd.current(); ++itd) {
     BrowserNode * bn = itd.current();

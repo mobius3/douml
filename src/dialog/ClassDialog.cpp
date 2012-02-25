@@ -31,18 +31,16 @@
 
 #include <qcursor.h>
 #include <qsplitter.h> 
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <qgrid.h>
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qcheckbox.h>
-#include <q3popupmenu.h> 
-#include <q3groupbox.h> 
-#include <q3buttongroup.h>
+#include <qpopupmenu.h> 
+#include <qgroupbox.h> 
+#include <qbuttongroup.h>
 #include <qpushbutton.h> 
-#include <q3filedialog.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <qfiledialog.h>
 
 #include "ClassDialog.h"
 #include "ClassData.h"
@@ -75,7 +73,7 @@ static QString RelativeRoot;
 static QString RelativePrj;
 static QString Absolute;
 
-ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
+ClassDialog::ClassDialog(ClassData * c) : QTabDialog(0, 0, TRUE), cl(c) {
   // take time in case of many classes and artifacts
   if (c->browser_node->is_writable()) {
     setOkButton(TR("OK"));
@@ -97,11 +95,11 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   BrowserClass * bn = (BrowserClass *) c->get_browser_node();
 
-  Q3HBox * htab;
-  Q3VBox * vtab;
-  Q3Grid * grid;
+  QHBox * htab;
+  QVBox * vtab;
+  QGrid * grid;
   QSplitter * split;
-  Q3GroupBox * bg;
+  QGroupBox * bg;
   QLabel * lbl1;
   QLabel * lbl2;
   QLabel * lbl3;
@@ -110,7 +108,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   // general tab
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   umltab = grid;
   grid->setSpacing(5);
   grid->setMargin(5);
@@ -121,7 +119,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   new QLabel(TR("stereotype : "), grid);
     
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(cl->get_stereotype()));
   if (! visit) {
     BrowserNode * gp = (BrowserNode *) bn->parent()->parent();
@@ -146,8 +144,8 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   edstereotype->setSizePolicy(sp);
     
   new QLabel(grid);
-  htab = new Q3HBox(grid);
-  opt_bg = new Q3GroupBox(2, Qt::Horizontal, QString::null, htab);
+  htab = new QHBox(grid);
+  opt_bg = new QGroupBox(2, Qt::Horizontal, QString::null, htab);
   abstract_cb = new QCheckBox("abstract", opt_bg);
   if (cl->get_is_abstract()) {
     abstract_cb->setChecked(TRUE);
@@ -160,7 +158,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     active_cb->setChecked(TRUE);
   active_cb->setDisabled(visit);
 
-  Q3ButtonGroup * bgv;
+  QButtonGroup * bgv;
   
   bgv = uml_visibility.init(htab, cl->get_uml_visibility(), TRUE);
   if (visit)
@@ -170,7 +168,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   BrowserNodeList inh;
   
   basetypelbl = new QLabel(TR("base type : "), grid);
-  edbasetype = new Q3ComboBox(!visit, grid);
+  edbasetype = new QComboBox(!visit, grid);
   if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize),
       inh.count() != 0) {
     // first inheritance is taken in all cases
@@ -201,7 +199,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     if (visit) {
       if ((bc != 0) && !bc->deletedp()) {
 	new QLabel(TR("artifact : "), grid);
-	artifact = new Q3ComboBox(FALSE, grid);
+	artifact = new QComboBox(FALSE, grid);
 	artifact->insertItem(bc->full_name(TRUE));
       }
       else
@@ -214,7 +212,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	
 	artifacts.full_names(artifact_names);
 	new QLabel(TR("artifact : "), grid);
-	artifact = new Q3ComboBox(FALSE, grid);
+	artifact = new QComboBox(FALSE, grid);
 	artifact->insertItem("");
 	artifact->insertStringList(artifact_names);
 	
@@ -239,7 +237,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     artifact = 0;
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -252,7 +250,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   comment->setText(bn->get_comment());
   comment->setFont(font);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("constraint :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -267,7 +265,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   // parameterized tab
   
-  parametrized_vtab = new Q3VBox(this);
+  parametrized_vtab = new QVBox(this);
   
   parametrized_vtab->setMargin(5);
   
@@ -283,7 +281,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   // instantiate tab
   
   if (cl->get_n_actualparams() != 0) {
-    instantiate_vtab = new Q3VBox(this);
+    instantiate_vtab = new QVBox(this);
   
     instantiate_vtab->setMargin(5);
   
@@ -305,12 +303,12 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   cpptab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(1, Qt::Horizontal, QString::null, htab);
+  bg = new QGroupBox(1, Qt::Horizontal, QString::null, htab);
   cpp_external_cb = new QCheckBox("external", bg);
   if (cl->cpp_is_external())
     cpp_external_cb->setChecked(TRUE);
@@ -328,7 +326,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
       bgv->setEnabled(FALSE);
   }
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl2 = new QLabel(TR("Declaration : "), htab);
   edcppdecl = new MultiLineEdit(htab);
@@ -343,9 +341,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
 
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
   showcppdecl = new MultiLineEdit(htab);
@@ -355,7 +353,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   if (visit)
     same_width(lbl1, lbl2, lbl3);
   else {
-    htab = new Q3HBox(vtab); 
+    htab = new QHBox(vtab); 
     lbl4 = new QLabel(htab);
     connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
 	    this, SLOT(cpp_default_decl()));
@@ -376,12 +374,12 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   javatab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
+  bg = new QGroupBox(3, Qt::Horizontal, QString::null, htab);
   java_final_cb = new QCheckBox("final", bg);
   if (cl->java_is_final())
     java_final_cb->setChecked(TRUE);
@@ -399,7 +397,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	    SLOT(java_default_decl()));
   }
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl2 = new QLabel(TR("Definition : "), htab);
   edjavadecl = new MultiLineEdit(htab);
@@ -410,16 +408,16 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update_decl()));
 
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
   showjavadecl = new MultiLineEdit(htab);
   showjavadecl->setReadOnly(TRUE);
   showjavadecl->setFont(font);
 
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   lbl4 = new QLabel(htab);
 
   if (!visit) {
@@ -449,12 +447,12 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   phptab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
+  bg = new QGroupBox(3, Qt::Horizontal, QString::null, htab);
   php_final_cb = new QCheckBox("final", bg);
   if (cl->php_is_final())
     php_final_cb->setChecked(TRUE);
@@ -472,7 +470,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	    SLOT(php_default_decl()));
   }
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl2 = new QLabel(TR("Definition : "), htab);
   edphpdecl = new MultiLineEdit(htab);
@@ -483,16 +481,16 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update_decl()));
 
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
   showphpdecl = new MultiLineEdit(htab);
   showphpdecl->setReadOnly(TRUE);
   showphpdecl->setFont(font);
 
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   lbl4 = new QLabel(htab);
 
   if (!visit) {
@@ -516,12 +514,12 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   pythontab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
+  bg = new QGroupBox(3, Qt::Horizontal, QString::null, htab);
   python_2_2_cb = new QCheckBox("Python 2.2", bg);
   if (cl->python_is_2_2())
     python_2_2_cb->setChecked(TRUE);
@@ -539,7 +537,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	    SLOT(python_default_decl()));
   }
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl2 = new QLabel(TR("Definition : "), htab);
   edpythondecl = new MultiLineEdit(htab);
@@ -550,16 +548,16 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update_decl()));
 
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
   showpythondecl = new MultiLineEdit(htab);
   showpythondecl->setReadOnly(TRUE);
   showpythondecl->setFont(font);
 
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   lbl4 = new QLabel(htab);
 
   if (!visit) {
@@ -583,19 +581,19 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   idltab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(5);
-  switch_bg = new Q3GroupBox(2, Qt::Horizontal, QString::null, htab);
+  switch_bg = new QGroupBox(2, Qt::Horizontal, QString::null, htab);
   new QLabel(TR("switch type : "), switch_bg);
-  edswitch_type = new Q3ComboBox(!visit, switch_bg);
+  edswitch_type = new QComboBox(!visit, switch_bg);
   if (!visit) {
     edswitch_type->setAutoCompletion(completion());
     edswitch_type->insertItem(cl->get_switch_type().get_full_type());
     edswitch_type->insertStringList(GenerationSettings::basic_types());
     
-    Q3PtrListIterator<BrowserNode> it(nodes);
+    QListIterator<BrowserNode> it(nodes);
     
     while (it.current() != 0) {
       QString st =
@@ -610,10 +608,10 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   edswitch_type->setCurrentItem(0);
   edswitch_type->setSizePolicy(sp);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
+  bg = new QGroupBox(3, Qt::Horizontal, QString::null, htab);
   idl_external_cb = new QCheckBox("external", bg);
   if (cl->idl_is_external())
     idl_external_cb->setChecked(TRUE);
@@ -636,7 +634,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	    SLOT(idl_default_decl()));
   }
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl2 = new QLabel(TR("Declaration : "), htab);
   edidldecl = new MultiLineEdit(htab);
@@ -647,9 +645,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
 
-  vtab = new Q3VBox(split); 
+  vtab = new QVBox(split); 
   
-  htab = new Q3HBox(vtab); 
+  htab = new QHBox(vtab); 
   htab->setMargin(5);  
   lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
   showidldecl = new MultiLineEdit(htab);
@@ -659,7 +657,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   if (visit)
     same_width(lbl1, lbl2, lbl3);
   else {
-   htab = new Q3HBox(vtab); 
+   htab = new QHBox(vtab); 
     lbl4 = new QLabel(htab);
     connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
 	    this, SLOT(idl_default_decl()));
@@ -680,7 +678,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   if ((gp->get_type() == UmlPackage) &&
       !strcmp(gp->get_data()->get_stereotype(), "profile")) {
-    grid = new Q3Grid(2, this);
+    grid = new QGrid(2, this);
     stereotypetab = grid;
     grid->setSpacing(5);
     grid->setMargin(5);
@@ -689,8 +687,8 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     QString s;
     
     new QLabel(TR("Initialization \nplug-out :"), grid);
-    htab = new Q3HBox(grid);
-    stereo_init_cb = new Q3ComboBox(FALSE, htab);
+    htab = new QHBox(grid);
+    stereo_init_cb = new QComboBox(FALSE, htab);
     s = bn->get_value("stereotypeSet");
     stereo_init_cb->insertItem(s);
     if (!visit) {
@@ -705,8 +703,8 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     edinitparam->setReadOnly(visit);
     
     new QLabel(TR("Check \nplug-out :"), grid);
-    htab = new Q3HBox(grid);
-    stereo_check_cb = new Q3ComboBox(FALSE, htab);
+    htab = new QHBox(grid);
+    stereo_check_cb = new QComboBox(FALSE, htab);
     s = bn->get_value("stereotypeCheck");
     stereo_check_cb->insertItem(s);
     if (! visit) {
@@ -723,7 +721,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     QString ip = bn->get_value("stereotypeIconPath");
     
     new QLabel(TR("Icon path :"), grid);
-    htab = new Q3HBox(grid);
+    htab = new QHBox(grid);
     ediconpath = new LineEdit(ip, htab);
     if (visit) {
       ediconpath->setReadOnly(TRUE);
@@ -738,7 +736,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
       connect(new SmallPushButton(TR("Browse"), htab),
 	      SIGNAL(clicked ()), this, SLOT(icon_browse()));
       new QLabel("", htab);
-      vtab = new Q3VBox(htab);
+      vtab = new QVBox(htab);
       iconpathrootbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
 					       ? Absolute : RelativeRoot, vtab);
       connect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
@@ -760,7 +758,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   // USER : list key - value
   
-  vtab = new Q3VBox(this);
+  vtab = new QVBox(this);
   kvtable = new KeyValuesTable(bn, vtab, visit);
   kvtable->remove("stereotypeSet");
   kvtable->remove("stereotypeCheck");
@@ -787,7 +785,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 }
 
 void ClassDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -941,7 +939,7 @@ void ClassDialog::edStereotypeActivated(const QString & s) {
 
 void ClassDialog::icon_browse() {
   QString s = ediconpath->text().simplifyWhiteSpace();
-  const QString ns = Q3FileDialog::getOpenFileName(s, "", this, 0, TR("Select image"));
+  const QString ns = QFileDialog::getOpenFileName(s, "", this, 0, TR("Select image"));
 
   if (! ns.isEmpty()) {
     ediconpath->setText(ns);
@@ -1076,7 +1074,7 @@ static void cpp_generate_inherit(QString & s, ClassData * cl,
   
   cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
   
-  Q3PtrListIterator<BrowserNode> it(inh);
+  QListIterator<BrowserNode> it(inh);
   
   while (it.current() != 0) {
     RelationData * r = (RelationData *) it.current()->get_data();
@@ -1104,7 +1102,7 @@ static void cpp_generate_typedef_type(QString & s, ClassData * cl,
   
   cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
   
-  Q3PtrListIterator<BrowserNode> it(inh);
+  QListIterator<BrowserNode> it(inh);
   
   while (it.current() != 0) {
     RelationData * r = (RelationData *) it.current()->get_data();
@@ -1139,7 +1137,7 @@ static void generate_members(BrowserNode * cl, QString & s, QString indent,
 			     bool except_instance_att_rel = FALSE,
 			     bool only_instance_att_rel = FALSE) 
 {
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = cl->firstChild(); child; child = child->nextSibling()) {
     if (((BrowserNode *) child)->deletedp())
@@ -1291,7 +1289,7 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
   
   QString prefix = '\n' + templates + "..." + names + "::";
   QString prefix_tmplop = '\n' + templates_tmplop + "..." + names_tmplop + "<...>::";
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = cl->firstChild(); child; child = child->nextSibling()) {
     if (((BrowserNode *) child)->deletedp())
@@ -1550,7 +1548,7 @@ void ClassDialog::cpp_generate_members_def(const BrowserNode * cl, QString & s)
   QString prefix = templates + "..." + names + "::";
   QString prefix_tmplop = templates_tmplop + "..." + names_tmplop + "<...>::";
   bool templ = !templates.isEmpty() || (strchr(cl->get_name(), '<') != 0);
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = cl->firstChild(); child; child = child->nextSibling())
     if (!((BrowserNode *) child)->deletedp())
@@ -1565,7 +1563,7 @@ static void java_generate_extends(QString & s, const QString & stereotype,
     
   cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
   
-  Q3PtrListIterator<BrowserNode> it(inh);
+  QListIterator<BrowserNode> it(inh);
   
   while (it.current() != 0) {
     RelationData * r = 
@@ -1615,7 +1613,7 @@ static void java_generate_implements(QString & s, const QString & stereotype,
     
   cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
   
-  Q3PtrListIterator<BrowserNode> it(inh);
+  QListIterator<BrowserNode> it(inh);
   
   while (it.current() != 0) {
     RelationData * r = 
@@ -1843,7 +1841,7 @@ static void php_generate_extends(QString & s, const QString & stereotype,
     
   cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
   
-  Q3PtrListIterator<BrowserNode> it(inh);
+  QListIterator<BrowserNode> it(inh);
   
   while (it.current() != 0) {
     RelationData * r = 
@@ -1889,7 +1887,7 @@ static void php_generate_implements(QString & s, const QString & stereotype,
     
   cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
   
-  Q3PtrListIterator<BrowserNode> it(inh);
+  QListIterator<BrowserNode> it(inh);
   
   while (it.current() != 0) {
     RelationData * r = 
@@ -2060,7 +2058,7 @@ static void python_generate_inherit(QString & s, ClassData * cl, bool object,
   
   cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
   
-  Q3PtrListIterator<BrowserNode> it(inh);
+  QListIterator<BrowserNode> it(inh);
   
   while (it.current() != 0) {
     RelationData * r = (RelationData *) it.current()->get_data();
@@ -2138,7 +2136,7 @@ void ClassDialog::python_generate_decl(QString & s, ClassData * cl, QString def,
 		       &RelationData::get_pythondecl_a, &RelationData::get_pythondecl_b,
 		       &ExtraMemberData::get_python_decl, &ClassData::get_pythondecl,
 		       python_stereotype, FALSE, FALSE, FALSE, TRUE);
-      Q3ListViewItem * child;
+      QListViewItem * child;
       bool has__init__ = FALSE;
   
       for (child = cl->browser_node->firstChild(); child; child = child->nextSibling()) {
@@ -2244,7 +2242,7 @@ static void idl_generate_inherit(QString & s, QString st, ClassData * cl) {
   
   cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
   
-  Q3PtrListIterator<BrowserNode> it(inh);
+  QListIterator<BrowserNode> it(inh);
 
   while (it.current() != 0) {
     RelationData * r = (RelationData *) it.current()->get_data();
@@ -2487,7 +2485,7 @@ void ClassDialog::accept() {
       return;
     }
     else if (stereotypetab != 0) {
-      Q3CString path = fromUnicode(ediconpath->text().simplifyWhiteSpace());
+      QCString path = fromUnicode(ediconpath->text().simplifyWhiteSpace());
       
       if (!path.isEmpty() && (get_pixmap((const char *) path) == 0)) {
 	msg_critical(TR("Error"),
@@ -2571,8 +2569,8 @@ void ClassDialog::accept() {
   if (stereotypetab != 0) {
     if (st == "stereotype") {
       unsigned n = bn->get_n_keys();
-      Q3CString oldiconpath = bn->get_value("stereotypeIconPath");
-      Q3CString newiconpath = fromUnicode(ediconpath->text().simplifyWhiteSpace());
+      QCString oldiconpath = bn->get_value("stereotypeIconPath");
+      QCString newiconpath = fromUnicode(ediconpath->text().simplifyWhiteSpace());
       
       bn->set_n_keys(n + 6);
       bn->set_key(n, "stereotypeSet");
@@ -2603,7 +2601,7 @@ void ClassDialog::accept() {
   bn->package_modified();
   cl->modified();
   
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }
 
 //
@@ -2635,11 +2633,11 @@ FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
   
   if (visit) {
     for (index = 0; index < sup; index += 1) {
-      setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_formalparam_type(index)));
-      setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_formalparam_name(index)));
-      setItem(index, 2, new TableItem(this, Q3TableItem::Never,
+      setItem(index, 0, new TableItem(this, QTableItem::Never, cl->get_formalparam_type(index)));
+      setItem(index, 1, new TableItem(this, QTableItem::Never, cl->get_formalparam_name(index)));
+      setItem(index, 2, new TableItem(this, QTableItem::Never,
 				      cl->get_formalparam_default_value(index, !node_names.isEmpty())));
-      setItem(index, 3, new TableItem(this, Q3TableItem::Never,
+      setItem(index, 3, new TableItem(this, QTableItem::Never,
 				      cl->get_formalparam_extends(index, !node_names.isEmpty())));
     }
   }
@@ -2705,7 +2703,7 @@ void FormalParamsTable::button_pressed(int row, int col, int, const QPoint &) {
     char s[16];
     
     sprintf(s, "%d", row + 1);
-    Q3PopupMenu m;
+    QPopupMenu m;
     m.insertItem(TR("formal param %1", s), -1);
     m.insertSeparator();
     m.insertItem(TR("Insert param before"), 0);
@@ -2718,7 +2716,7 @@ void FormalParamsTable::button_pressed(int row, int col, int, const QPoint &) {
     m.insertItem(TR("Paste param"), 5);
     m.insertSeparator();
 
-    Q3PopupMenu mv;
+    QPopupMenu mv;
     int rank;
     
     for (rank = 0; rank != numRows(); rank += 1)
@@ -2764,7 +2762,7 @@ void FormalParamsTable::insert_row_before(int row) {
     setText(index, 0, text(index - 1, 0));
     setText(index, 1, text(index - 1, 1));
     
-    Q3TableItem * it;
+    QTableItem * it;
     
     it = item(index - 1, 2);
     takeItem(it);
@@ -2792,7 +2790,7 @@ void FormalParamsTable::insert_row_after(int row) {
     setText(index, 0, text(index - 1, 0));
     setText(index, 1, text(index - 1, 1));
     
-    Q3TableItem * it;
+    QTableItem * it;
     
     it = item(index - 1, 2);
     takeItem(it);
@@ -2828,7 +2826,7 @@ void FormalParamsTable::delete_row(int row) {
       setText(index, 0, text(index + 1, 0));
       setText(index, 1, text(index + 1, 1));
 
-      Q3TableItem * it;
+      QTableItem * it;
       
       it = item(index + 1, 2);
       takeItem(it);
@@ -2964,14 +2962,14 @@ void FormalParamsTable::update(ClassData * cl, BrowserNodeList & nodes) {
     rank = types.findIndex(text(index, 2).stripWhiteSpace());
     if (rank != -1) 
       cl->set_formalparam_default_value(index, ((BrowserClass *) nodes.at(rank)),
-					NULL); // [lgfreitas] expected const char *. QString::null does not correspond to old null
+					QString::null);
     else
       cl->set_formalparam_default_value(index, 0, text(index, 2).stripWhiteSpace());
     
     rank = types.findIndex(text(index, 3).stripWhiteSpace());
     if (rank != -1) 
       cl->set_formalparam_extends(index, ((BrowserClass *) nodes.at(rank)),
-				  NULL);
+				  QString::null);
     else
       cl->set_formalparam_extends(index, 0, text(index, 3).stripWhiteSpace());
   }
@@ -2994,9 +2992,9 @@ ActualParamsTable::ActualParamsTable(ClassData * cl, QWidget * parent,
   int sup = cl->get_n_actualparams();
   
   for (index = 0; index < sup; index += 1){
-    setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_name(index)));
+    setItem(index, 0, new TableItem(this, QTableItem::Never, cl->get_actualparam_name(index)));
     if (visit)
-      setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_value(index)));
+      setItem(index, 1, new TableItem(this, QTableItem::Never, cl->get_actualparam_value(index)));
     else
       setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
   }
@@ -3120,10 +3118,10 @@ ApplicableOnTable::ApplicableOnTable(QWidget * parent, QString s, bool visit)
   
   for (it = available.begin(); it != available.end(); ++it) {
     setItem(row, 0,
-	    new TableItem(this, Q3TableItem::Never,
+	    new TableItem(this, QTableItem::Never,
 			  TR(ProfiledStereotypes::pretty(*it))));
     setItem(row, 1, 
-	    new TableItem(this, Q3TableItem::Never,
+	    new TableItem(this, QTableItem::Never,
 			  (l.findIndex(*it) == -1) ? empty : yes));
     row += 1;
   }

@@ -28,9 +28,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
 
 #include "AttributeData.h"
 #include "BrowserClass.h"
@@ -481,7 +478,7 @@ bool AttributeData::tool_cmd(ToolCom * com, const char * args,
 	break;
       case setJavaAnnotationCmd:
 	{
-	  Q3CString s = args;
+	  QCString s = args;
 
 	  s = s.stripWhiteSpace();
 	  if (! s.isEmpty())
@@ -579,7 +576,7 @@ bool AttributeData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void AttributeData::save(Q3TextStream & st, QString & warning) const {
+void AttributeData::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   if (isa_class_attribute)
     st << "class_attribute ";

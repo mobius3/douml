@@ -29,9 +29,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpopupmenu.h> 
 
 #include "UcUseCaseCanvas.h"
 #include "UcClassCanvas.h"
@@ -92,7 +90,7 @@ void UcUseCaseCanvas::draw(QPainter & p) {
   
   QRect r = rect();
   UseCaseData * data = (UseCaseData *) browser_node->get_data();
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   used_color = (itscolor == UmlDefaultColor)
     ? the_canvas()->browser_diagram()->get_color(UmlUseCase)
     : itscolor;
@@ -124,7 +122,7 @@ void UcUseCaseCanvas::draw(QPainter & p) {
 
 	fprintf(fp, "\t<ellipse fill=\"#%06x\" stroke=\"none\""
 		" cx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\" />\n",
-		QColor(::Qt::darkGray).rgb()&0xffffff,
+		::Qt::darkGray.rgb()&0xffffff,
 		r.left() + shadow + rx, r.top() + shadow + ry, rx, ry);
       }
     }
@@ -268,8 +266,8 @@ void UcUseCaseCanvas::post_loaded() {
 }
 
 void UcUseCaseCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -416,7 +414,7 @@ bool UcUseCaseCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void UcUseCaseCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void UcUseCaseCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -427,7 +425,7 @@ void UcUseCaseCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((UcUseCaseCanvas *) it.current())->itscolor = itscolor;
@@ -439,8 +437,8 @@ void UcUseCaseCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void UcUseCaseCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void UcUseCaseCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   UcUseCaseCanvas * x = (UcUseCaseCanvas *) it.current();
   
@@ -456,10 +454,10 @@ QString UcUseCaseCanvas::may_start(UmlCode & l) const {
   switch (l) {
   case UmlDependency:
     l = UmlDependOn;
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   case UmlGeneralisation:
     l = UmlInherit;
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   case UmlAnchor:
   case UmlAssociation:
   case UmlDirectionalAssociation:
@@ -487,7 +485,7 @@ QString UcUseCaseCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
     }
   case UmlClass:
     return ((l == UmlAssociation) || (l == UmlDirectionalAssociation))
-      ? QString() : TR("illegal");
+      ? 0 : TR("illegal");
   default:
     return TR("illegal");
   }
@@ -524,7 +522,7 @@ void UcUseCaseCanvas::resize(const QSize & sz, bool w, bool h) {
 			TRUE);
 }
 
-void UcUseCaseCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void UcUseCaseCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "usecasecanvas_ref " << get_ident() << " // " << browser_node->get_name();
   else {
@@ -604,7 +602,7 @@ UcUseCaseCanvas * UcUseCaseCanvas::read(char * & st, UmlCanvas * canvas, char * 
 }
 
 void UcUseCaseCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   disconnect(browser_node->get_data(), 0, this, 0);
 }
@@ -626,7 +624,7 @@ void UcUseCaseCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
@@ -635,11 +633,11 @@ void UcUseCaseCanvas::history_load(QBuffer & b) {
 
 // for plug outs
 
-void UcUseCaseCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void UcUseCaseCanvas::send(ToolCom * com, QCanvasItemList & all)
 {
-  Q3PtrList<UcUseCaseCanvas> lu;
-  Q3PtrList<UcClassCanvas> la;
-  Q3CanvasItemList::Iterator cit;
+  QList<UcUseCaseCanvas> lu;
+  QList<UcClassCanvas> la;
+  QCanvasItemList::Iterator cit;
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
     DiagramItem *di = QCanvasItemToDiagramItem(*cit);
@@ -662,7 +660,7 @@ void UcUseCaseCanvas::send(ToolCom * com, Q3CanvasItemList & all)
   
   com->write_unsigned(lu.count());
   
-  Q3PtrListIterator<UcUseCaseCanvas> itu(lu);
+  QListIterator<UcUseCaseCanvas> itu(lu);
   
   for (; itu.current(); ++itu) {
     com->write_unsigned((unsigned) itu.current()->get_ident());
@@ -674,17 +672,17 @@ void UcUseCaseCanvas::send(ToolCom * com, Q3CanvasItemList & all)
   
   com->write_unsigned(la.count());
   
-  Q3PtrListIterator<UcClassCanvas> ita(la);
+  QListIterator<UcClassCanvas> ita(la);
   
   for (; ita.current(); ++ita)
     ita.current()->get_bn()->write_id(com);
   
   // send rels
   
-  Q3PtrList<ArrowCanvas> lr;
+  QList<ArrowCanvas> lr;
   
   for (itu.toFirst(); itu.current(); ++itu) {
-    Q3PtrListIterator<ArrowCanvas> itl(itu.current()->lines);
+    QListIterator<ArrowCanvas> itl(itu.current()->lines);
     
     for (; itl.current(); ++itl) {
       ArrowCanvas * r = itl.current();
@@ -700,7 +698,7 @@ void UcUseCaseCanvas::send(ToolCom * com, Q3CanvasItemList & all)
   
   com->write_unsigned(lr.count());
   
-  Q3PtrListIterator<ArrowCanvas> itr(lr);
+  QListIterator<ArrowCanvas> itr(lr);
   
   for (; itr.current(); ++itr)
     itr.current()->write_uc_rel(com);

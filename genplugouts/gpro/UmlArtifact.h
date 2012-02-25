@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseArtifact.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include <qstring.h>
 
 // This class manages 'artifacts'
@@ -11,11 +11,11 @@
 // You can modify it as you want (except the constructor)
 class UmlArtifact : public UmlBaseArtifact {
   public:
-    UmlArtifact(void * id, const Q3CString & n) : UmlBaseArtifact(id, n) {};
+    UmlArtifact(void * id, const QCString & n) : UmlBaseArtifact(id, n) {};
 
     virtual void genpro();
 
-    void gen_app(const Q3CString & path);
+    void gen_app(const QCString & path);
 
     QString way(QString pro_dir, bool header);
 

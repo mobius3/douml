@@ -31,25 +31,25 @@ bool UmlBaseComponent::set_AssociatedDiagram(UmlComponentDiagram * d) {
     return FALSE;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseComponent::realizingClasses() {
+const QVector<UmlClass> & UmlBaseComponent::realizingClasses() {
   read_if_needed_();
   
   return _realizing;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseComponent::providedClasses() {
+const QVector<UmlClass> & UmlBaseComponent::providedClasses() {
   read_if_needed_();
   
   return _provided;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseComponent::requiredClasses() {
+const QVector<UmlClass> & UmlBaseComponent::requiredClasses() {
   read_if_needed_();
   
   return _required;
 }
 
-bool UmlBaseComponent::set_AssociatedClasses(const Q3PtrVector<UmlClass> & realizing, const Q3PtrVector<UmlClass> & provided, const Q3PtrVector<UmlClass> & required) {
+bool UmlBaseComponent::set_AssociatedClasses(const QVector<UmlClass> & realizing, const QVector<UmlClass> & provided, const QVector<UmlClass> & required) {
   UmlCom::send_cmd(_identifier, setAssocClassesCmd,
 		   realizing, provided, required);
   if (UmlCom::read_bool()) {

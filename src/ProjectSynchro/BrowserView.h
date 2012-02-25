@@ -26,30 +26,26 @@
 #ifndef BROWSERVIEW_H
 #define BROWSERVIEW_H
 
-#include <q3listview.h>
+#include <qlistview.h>
 #include <qdir.h>
-#include <q3dict.h>
-//Added by qt3to4:
-#include <QLabel>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qdict.h>
 
 class BrowserNode;
 class QLabel;
 
-class BrowserView : public Q3ListView {
+class BrowserView : public QListView {
   Q_OBJECT
     
   protected:
     QDir dir;
-    Q3Dict<BrowserNode> nodes;
+    QDict<BrowserNode> nodes;
     QLabel * lbl;
     bool need_update;
     bool cant_update;
     
   public:
     BrowserView(QWidget * parent);
-virtual ~BrowserView();
+    ~BrowserView();
   
     void set_project(QDir dir);
     void close();
@@ -66,13 +62,13 @@ virtual ~BrowserView();
     
     void synchronize();
     
-    static void update(const Q3PtrList<BrowserView> &);
+    static void update(const QList<BrowserView> &);
     
   protected:
     void update_it();
     
   protected slots:
-    void select(Q3ListViewItem * b);
+    void select(QListViewItem * b);
 };
 
 #endif

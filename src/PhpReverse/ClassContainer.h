@@ -26,9 +26,7 @@
 #ifndef _CLASS_CONTAINER_H
 #define _CLASS_CONTAINER_H
 
-#include <q3dict.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <qdict.h>
 #include "UmlClass.h"
 
 class Class;
@@ -39,15 +37,15 @@ class ClassContainer {
     ClassContainer() {};
     virtual ~ClassContainer();
     
-    virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
+    virtual void compute_type(QCString type, UmlTypeSpec & typespec,
 			      Class ** need_object = 0) = 0;
-    virtual Class * define(const Q3CString & name, char st) = 0;
+    virtual Class * define(const QCString & name, char st) = 0;
     
     bool read_type(UmlTypeSpec & typespec, Class ** cl);
-    bool bypass_type(Q3CString s);
+    bool bypass_type(QCString s);
 
   protected:
-    Q3Dict<Class> Defined;
+    QDict<Class> Defined;
 };
 
 #endif

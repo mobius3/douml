@@ -3,7 +3,7 @@
 
 #include "UmlFlow.h"
 void UmlActivityRegion::memo_incoming_flow() {
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size();
   unsigned i;
      

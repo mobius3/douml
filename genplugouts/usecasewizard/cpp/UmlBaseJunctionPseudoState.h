@@ -4,7 +4,7 @@
 
 #include "UmlPseudoState.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlJunctionPseudoState;
 class UmlItem;
@@ -24,7 +24,7 @@ class UmlBaseJunctionPseudoState : public UmlPseudoState {
 
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseJunctionPseudoState(void * id, const Q3CString & s) : UmlPseudoState(id, s) {
+     UmlBaseJunctionPseudoState(void * id, const QCString & s) : UmlPseudoState(id, s) {
     }
 
 };

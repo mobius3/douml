@@ -3,21 +3,21 @@
 
 #define APIVERSION 55
 
-#include <q3socketdevice.h>
+#include <qsocketdevice.h>
 #include "CmdFamily.h"
 #include "OnInstanceCmd.h"
 #include "anItemKind.h"
 #include "aRelationKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
-#include <q3ptrvector.h>
+#include <qvector.h>
 #include <qstring.h>
 
 class UmlItem;
 class UmlTypeSpec;
 class UmlClass;
 
-class Q3SocketDevice;
+class QSocketDevice;
 class UmlItem;
 class UmlTypeSpec;
 class UmlClass;
@@ -77,7 +77,7 @@ class UmlCom {
     static void close();
 
   private:
-    static Q3SocketDevice * sock;
+    static QSocketDevice * sock;
 
     static char * buffer_in;
 
@@ -136,18 +136,9 @@ class UmlCom {
     //internal, do NOT use it
     
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s);
-	// [lgfreitas] Wrapper to handle Q3CString
-	static void send_cmd(CmdFamily f, unsigned int cmd, const Q3CString s) {
-		send_cmd(f, cmd, (const char *) s);
-	}
-
     //internal, do NOT use it
     
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, bool b);
-	// [lgfreitas] Wrapper to handle Q3CString
-	static void send_cmd(CmdFamily f, unsigned int cmd, const Q3CString s, bool b) {
-		send_cmd(f, cmd, (const char *) s, b);
-	}
     //internal, do NOT use it
     
     static void send_cmd(CmdFamily f, unsigned int cmd, void * id, const char * n);
@@ -155,17 +146,7 @@ class UmlCom {
     
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, const char * v);
 
-	// [lgfreitas] Wrapper to handle Q3CString
-	static void send_cmd(CmdFamily f, unsigned int cmd, const Q3CString s, Q3CString v) {
-		send_cmd(f, cmd, (const char *) s, (const char) * v);
-	}
-	static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, Q3CString v) {
-		send_cmd(f, cmd, (const char *) s, (const char) * v);
-	}
-	static void send_cmd(CmdFamily f, unsigned int cmd, Q3CString s, const char * v) {
-		send_cmd(f, cmd, (const char *) s, (const char) * v);
-	}
-	   //internal, do NOT use it
+    //internal, do NOT use it
     
     static void send_cmd(CmdFamily f, unsigned int cmd, bool b, const char * s, const char * v);
 
@@ -175,10 +156,6 @@ class UmlCom {
     //internal, do NOT use it
     
     static void send_cmd(const void * id, OnInstanceCmd cmd, const char * arg);
-	// [lgfreitas] Wrapper do handle Q3CString
-	static void send_cmd(const void * id, OnInstanceCmd cmd, Q3CString arg) {
-		send_cmd(id, cmd, (const char *) arg);
-	}
     //internal, do NOT use it
     
     static void send_cmd(const void * id, OnInstanceCmd cmd, char arg);
@@ -191,10 +168,6 @@ class UmlCom {
     //internal, do NOT use it
     
     static void send_cmd(const void * id, OnInstanceCmd cmd, const char * arg1, const char * arg2);
-	// [lgfreitas] Wrapper do handle Q3CString
-	static void send_cmd(const void * id, OnInstanceCmd cmd, Q3CString arg1, Q3CString arg2) {
-		send_cmd(id, cmd, (const char *) arg1, (const char *) arg2);
-	}
     //internal, do NOT use it
     
     static void send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg1, const char * arg2);
@@ -218,8 +191,8 @@ class UmlCom {
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, char arg2, const char * arg3, const char * arg4, const UmlTypeSpec & arg5);
     //internal, do NOT use it
     
-    static void send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlItem> & l);
-    static void send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlClass> & l1, const Q3PtrVector<UmlClass> & l2, const Q3PtrVector<UmlClass> & l3);
+    static void send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlItem> & l);
+    static void send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass> & l1, const QVector<UmlClass> & l2, const QVector<UmlClass> & l3);
 
     //internal, do NOT use it
     
@@ -242,10 +215,10 @@ class UmlCom {
     static unsigned int read_unsigned();
     // internal, do NOT use it
     
-    static void read_item_list(Q3PtrVector<UmlItem> & v);
+    static void read_item_list(QVector<UmlItem> & v);
     //internal, do NOT use it
     
-    static void fatal_error(const Q3CString & msg);
+    static void fatal_error(const QCString & msg);
     //internal, do NOT use it
     
     static void flush();

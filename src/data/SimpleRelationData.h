@@ -28,10 +28,8 @@
 
 #include "SimpleData.h"
 #include "UmlEnum.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
-class Q3TextStream;
+class QTextStream;
 
 class BrowserSimpleRelation;
 class BrowserNode;
@@ -68,7 +66,7 @@ class SimpleRelationData : public SimpleData {
     
     virtual QString definition(bool full, bool with_kind) const;    
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     static SimpleRelationData * read(char * &);
     
   protected slots:

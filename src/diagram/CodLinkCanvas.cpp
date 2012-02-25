@@ -28,9 +28,7 @@
 
 
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpopupmenu.h> 
 
 #include "CodLinkCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -106,8 +104,8 @@ void CodLinkCanvas::menu(const QPoint&) {
   else
     new_dirs = FALSE;
   
-  Q3PopupMenu m;
-  Q3PopupMenu geo;
+  QPopupMenu m;
+  QPopupMenu geo;
   
   m.insertItem(new MenuTitle(TR("Link"), m.font()), -1);
   m.insertSeparator();
@@ -291,7 +289,7 @@ CodDirsCanvas * CodLinkCanvas::find_dirs() const {
   return 0;
 }
 
-void CodLinkCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "linkcanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {

@@ -3,18 +3,18 @@
 
 
 #include "UmlActivityAction.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlBaseOnSignalAction : public UmlActivityAction {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseOnSignalAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+     UmlBaseOnSignalAction(void * id, const QCString & s) : UmlActivityAction(id, s) {
     }
 
 
   public:
     // return the signal
-    const Q3CString & signal();
+    const QCString & signal();
 
     // set the signal
     //
@@ -23,7 +23,7 @@ class UmlBaseOnSignalAction : public UmlActivityAction {
 
 #ifdef WITHCPP
     // return the signal in C++
-    const Q3CString & cppSignal();
+    const QCString & cppSignal();
 
     // set the signal in C++
     //
@@ -33,7 +33,7 @@ class UmlBaseOnSignalAction : public UmlActivityAction {
 
 #ifdef WITHJAVA
     // return the signal in Java
-    const Q3CString & javaSignal();
+    const QCString & javaSignal();
 
     // set the signal in Java
     //
@@ -51,14 +51,14 @@ class UmlBaseOnSignalAction : public UmlActivityAction {
 
 
   private:
-    Q3CString _signal;
+    QCString _signal;
 
 #ifdef WITHCPP
-    Q3CString _cpp_signal;
+    QCString _cpp_signal;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_signal;
+    QCString _java_signal;
 #endif
 
 

@@ -26,10 +26,7 @@
 #ifndef UMLARTIFACT_H
 #define UMLARTIFACT_H
 
-#include <q3asciidict.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qasciidict.h> 
 
 #include "UmlBaseArtifact.h"
 
@@ -45,23 +42,23 @@ class UmlArtifact : public UmlBaseArtifact {
 
     static UmlArtifact * current;
     static UmlPackage * package_of_generated_artifact;
-    static Q3CString imports;
+    static QCString imports;
     
-    void generate_imports(QTextOStream & f, Q3CString & made);
+    void generate_imports(QTextOStream & f, QCString & made);
 
     static bool must_be_saved(const char * path, const char * new_contains);
   
     void generate_text();
 
   public:
-    UmlArtifact(void * id, const Q3CString & n)
+    UmlArtifact(void * id, const QCString & n)
       : UmlBaseArtifact(id, n), managed(FALSE) {};
     
     virtual void generate();
     
     static UmlArtifact * generated_one();
     static UmlPackage * generation_package();
-    static const Q3CString & all_imports();
+    static const QCString & all_imports();
 };
 
 #endif

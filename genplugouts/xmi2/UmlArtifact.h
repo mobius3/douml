@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseArtifact.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 class UmlItem;
@@ -13,7 +13,7 @@ class UmlItem;
 // You can modify it as you want (except the constructor)
 class UmlArtifact : public UmlBaseArtifact {
   public:
-    UmlArtifact(void * id, const Q3CString & n) : UmlBaseArtifact(id, n) {};
+    UmlArtifact(void * id, const QCString & n) : UmlBaseArtifact(id, n) {};
 
     virtual void write(FileOut & out);
 

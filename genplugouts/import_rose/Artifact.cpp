@@ -1,8 +1,6 @@
 
 #include <qdir.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include "CppSettings.h"
 #include "JavaSettings.h"
 #include "IdlSettings.h"
@@ -14,16 +12,16 @@
 #include "File.h"
 #include "UmlPackage.h"
 
-Q3AsciiDict<Artifact> Artifact::all;
+QAsciiDict<Artifact> Artifact::all;
 
-Artifact * Artifact::find(const Q3CString & uid)
+Artifact * Artifact::find(const QCString & uid)
 {
   return all[uid];
 }
 
 void Artifact::import_component_view(File & f)
 {
-  Q3CString s;
+  QCString s;
   
   f.read(s);
   
@@ -64,9 +62,9 @@ void Artifact::import_component_view(File & f)
       
       File f2(s, f.name());
       
-      if (! f2.open(QIODevice::ReadOnly))
+      if (! f2.open(IO_ReadOnly))
 	UmlCom::trace("<br>cannot open '" + s + "' referenced in "
-		      + Q3CString(f.name().toAscii()));//[jasa] QString to Q3CSting conversion
+		      + QCString(f.name()));
       else {     
         f2.read("(");
         f2.read("object");
@@ -90,7 +88,7 @@ void Artifact::import_component_view(File & f)
 void Artifact::import_components(File & f)
 {
   for (;;) {
-    Q3CString s;
+    QCString s;
   
     switch (f.read(s)) {
     case '(':
@@ -131,20 +129,20 @@ void Artifact::import_components(File & f)
 
 void Artifact::import(File & f)
 {
-  Q3CString name;
+  QCString name;
   
   if (f.read(name) != STRING)
     f.syntaxError(name, "artifact's name");
   
-  Q3CString s;
+  QCString s;
   
   f.read(s);
   f.read(s);
     
-  Q3CString id;
-  Q3CString ste;
-  Q3CString doc;
-  Q3Dict<Q3CString> prop;
+  QCString id;
+  QCString ste;
+  QCString doc;
+  QDict<QCString> prop;
   Language lang = None;
   
   while (f.readDefinitionBeginning(s, id, ste, doc, prop) != ')') {
@@ -166,7 +164,7 @@ void Artifact::import(File & f)
   art->description = doc;
   art->language = lang;
   
-  Q3CString * v;
+  QCString * v;
   
   switch (lang) {
   case Cplusplus:
@@ -188,7 +186,7 @@ void Artifact::import(File & f)
   }
 }
 
-void Artifact::add(UmlPackage * pack, UmlClass * cl, Q3CString & art_path) {
+void Artifact::add(UmlPackage * pack, UmlClass * cl, QCString & art_path) {
   //pack, cl
 
   switch (language) {
@@ -198,7 +196,7 @@ void Artifact::add(UmlPackage * pack, UmlClass * cl, Q3CString & art_path) {
       int index = cpp_path.findRev('.');
       
       if (index != -1) {
-	Q3CString s = cpp_path.left(index + 1);
+	QCString s = cpp_path.left(index + 1);
 	
 	add_cpp(pack, cl,
 		s + CppSettings::headerExtension(),
@@ -210,12 +208,12 @@ void Artifact::add(UmlPackage * pack, UmlClass * cl, Q3CString & art_path) {
     // cl's header and body files may contains a path part
     {
       QDir d(cpp_path);
-      Q3CString h = cl->file();
-      Q3CString body = cl->bodyFile();
+      QCString h = cl->file();
+      QCString body = cl->bodyFile();
       
       add_cpp(pack, cl,
-	      (h.isEmpty()) ? h : Q3CString(QDir::cleanDirPath(d.filePath(cl->file())).toAscii()),//[jasa] QString to Q3CString conversion
-	      (body.isEmpty()) ? body : Q3CString(QDir::cleanDirPath(d.filePath(cl->bodyFile())).toAscii()));//[jasa] QString to Q3CString conversion
+	      (h.isEmpty()) ? h : QCString(QDir::cleanDirPath(d.filePath(cl->file()))),
+	      (body.isEmpty()) ? body : QCString(QDir::cleanDirPath(d.filePath(cl->bodyFile()))));
     }
     break;
   case Corba:
@@ -237,10 +235,10 @@ void Artifact::add(UmlPackage * pack, UmlClass * cl, Q3CString & art_path) {
   }
 }
 
-void Artifact::add_cpp(UmlPackage * pack, UmlClass * cl, Q3CString h, Q3CString src) {
-  Q3CString basename;
-  Q3CString hpath;
-  Q3CString srcpath;
+void Artifact::add_cpp(UmlPackage * pack, UmlClass * cl, QCString h, QCString src) {
+  QCString basename;
+  QCString hpath;
+  QCString srcpath;
   
   if (! h.isEmpty()) {
     h = normalize(h, CppSettings::rootDir());
@@ -264,7 +262,7 @@ void Artifact::add_cpp(UmlPackage * pack, UmlClass * cl, Q3CString h, Q3CString 
   if (basename.isEmpty())
     return;
 
-  Q3PtrList<UmlArtifact> artifacts;
+  QList<UmlArtifact> artifacts;
   UmlArtifact * art;
   UmlPackage * p = 0;	// to avoid compiler warning
   
@@ -282,7 +280,7 @@ void Artifact::add_cpp(UmlPackage * pack, UmlClass * cl, Q3CString h, Q3CString 
 
   if (art == 0) {
     // no compatible artifact
-    Q3PtrList<UmlDeploymentView> deplviews;
+    QList<UmlDeploymentView> deplviews;
     UmlDeploymentView * deplview;
     UmlPackage * compatible = 0;
     
@@ -347,14 +345,14 @@ void Artifact::add_cpp(UmlPackage * pack, UmlClass * cl, Q3CString h, Q3CString 
   art->addAssociatedClass(cl);
 }
 
-void Artifact::add_corba(UmlPackage * pack, UmlClass * cl, Q3CString src) {
+void Artifact::add_corba(UmlPackage * pack, UmlClass * cl, QCString src) {
   // src if the filename without path
   QFileInfo fi(src);
-  Q3CString basename;
+  QCString basename;
   
   basename = fi.baseName();
   
-  Q3PtrList<UmlArtifact> artifacts;
+  QList<UmlArtifact> artifacts;
   UmlArtifact * art;
   UmlPackage * p;
   
@@ -365,7 +363,7 @@ void Artifact::add_corba(UmlPackage * pack, UmlClass * cl, Q3CString src) {
     art = artifacts.first();
   }
   else {
-    Q3PtrList<UmlDeploymentView> deplviews;
+    QList<UmlDeploymentView> deplviews;
     UmlDeploymentView * deplview;
     
     pack->subDeplViews(deplviews, name);
@@ -396,9 +394,9 @@ void Artifact::add_corba(UmlPackage * pack, UmlClass * cl, Q3CString src) {
   art->addAssociatedClass(cl);
 }
 
-void Artifact::add_java(UmlPackage * pack, UmlClass * cl, Q3CString art_path, Q3CString src) {
-  Q3CString basename;
-  Q3CString srcpath;
+void Artifact::add_java(UmlPackage * pack, UmlClass * cl, QCString art_path, QCString src) {
+  QCString basename;
+  QCString srcpath;
   
   src = normalize(src, JavaSettings::rootDir());
     
@@ -424,7 +422,7 @@ void Artifact::add_java(UmlPackage * pack, UmlClass * cl, Q3CString art_path, Q3
     }
   }
 
-  Q3PtrList<UmlArtifact> artifacts;
+  QList<UmlArtifact> artifacts;
   UmlArtifact * art;
   UmlPackage * p = 0;	// to avoid compiler warning
   
@@ -442,7 +440,7 @@ void Artifact::add_java(UmlPackage * pack, UmlClass * cl, Q3CString art_path, Q3
 
   if (art == 0) {
     // no compatible artifact
-    Q3PtrList<UmlDeploymentView> deplviews;
+    QList<UmlDeploymentView> deplviews;
     UmlDeploymentView * deplview;
     UmlPackage * compatible = 0;
     
@@ -500,10 +498,10 @@ void Artifact::add_java(UmlPackage * pack, UmlClass * cl, Q3CString art_path, Q3
   art->addAssociatedClass(cl);
 }
 
-Q3CString Artifact::normalize(Q3CString path, Q3CString root) {
+QCString Artifact::normalize(QCString path, QCString root) {
   File f(path, "");	// normalize, replace $var
   
-  path = Q3CString(f.name().toAscii());//[jasa] QString to Q3CString conversion
+  path = QCString(f.name());
   
   int rl = root.length();
   

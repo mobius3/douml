@@ -27,8 +27,6 @@
 #define UMLCOMPONENTDIAGRAM_H
 
 #include "UmlBaseComponentDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 // This class manages 'ccomponent diagrams', notes that the class 'UmlDiagram'
 // is a mother class of all the diagrams, allowing to generalize their
@@ -37,7 +35,7 @@
 
 class UmlComponentDiagram : public UmlBaseComponentDiagram {
   public:
-    UmlComponentDiagram(void * id, const Q3CString & n) 
+    UmlComponentDiagram(void * id, const QCString & n) 
       : UmlBaseComponentDiagram(id, n) {};
 };
 

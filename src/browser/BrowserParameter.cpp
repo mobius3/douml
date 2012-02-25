@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QPixmap>
 
 #include "BrowserParameter.h"
 #include "ParameterData.h"
@@ -108,7 +103,7 @@ void BrowserParameter::update_idmax_for_root()
 void BrowserParameter::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
@@ -174,8 +169,8 @@ QString BrowserParameter::connexion_from(bool control) const {
 }
 
 void BrowserParameter::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -296,14 +291,14 @@ QString BrowserParameter::full_name(bool rev, bool) const {
   return fullname(rev);
 }
 
-void BrowserParameter::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserParameter::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserFlow::compute_referenced_by(l, this);
   if (! ondelete)
     BrowserActivityDiagram::compute_referenced_by(l, this, "parametercanvas", "parameter_ref");
 }
 
-void BrowserParameter::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserParameter::compute_referenced_by(QList<BrowserNode> & l,
 					     BrowserNode * target)
 {
   IdIterator<BrowserParameter> it(all);
@@ -431,7 +426,7 @@ const QStringList & BrowserParameter::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserParameter::save_stereotypes(Q3TextStream & st)
+void BrowserParameter::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "parameter_stereotypes ";
@@ -446,7 +441,7 @@ void BrowserParameter::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserParameter::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserParameter::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "parameter_ref " << get_ident() << " // " << get_name();
   else {
@@ -459,7 +454,7 @@ void BrowserParameter::save(Q3TextStream & st, bool ref, QString & warning) {
 
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

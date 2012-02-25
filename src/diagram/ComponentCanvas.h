@@ -31,8 +31,6 @@
 
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "DiagramCanvas.h"
 #include "MultipleDependency.h"
@@ -88,7 +86,7 @@ class ComponentCanvas : public QObject, public DiagramCanvas,
     virtual void prepare_for_move(bool on_resize);
     virtual bool move_with_its_package() const;
     
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ComponentCanvas * read(char * &, UmlCanvas *, char *);
     virtual void post_loaded();
 
@@ -97,8 +95,8 @@ class ComponentCanvas : public QObject, public DiagramCanvas,
     virtual void history_hide();   
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &); 
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &); 
+    virtual void edit_drawing_settings(QList<DiagramItem> &); 
+    virtual void same_drawing_settings(QList<DiagramItem> &); 
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
     

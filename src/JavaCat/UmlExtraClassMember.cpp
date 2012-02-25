@@ -28,22 +28,18 @@
 #ifdef ROUNDTRIP
 #include "Class.h"
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 // an empty string is != a null string in Qt !
-bool inline neq(const Q3CString & s1, const Q3CString & s2)
+bool inline neq(const QCString & s1, const QCString & s2)
 {
   return (s1.isEmpty()) ? !s2.isEmpty() : (s1 != s2);
 }
 
-void UmlExtraClassMember::add_init(UmlClass * cl, Q3CString def, bool roundtrip,
-				   Q3PtrList<UmlItem> & expected_order)
+void UmlExtraClassMember::add_init(UmlClass * cl, QCString def, bool roundtrip,
+				   QList<UmlItem> & expected_order)
 {
   if (roundtrip) {
-    const Q3PtrVector<UmlItem> & ch = cl->children();
+    const QVector<UmlItem> & ch = cl->children();
     UmlItem ** v = ch.data();
     UmlItem ** const vsup = v + ch.size();
     UmlItem * x;

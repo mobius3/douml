@@ -25,11 +25,6 @@
 
 #ifdef DEBUG_BOUML
 #include <iostream>
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 using namespace std;
 #endif
@@ -52,7 +47,7 @@ using namespace std;
 #include "Statistic.h"
 
 
-Class::Class(BrowserNode * parent, const char * name, const Q3CString & st)
+Class::Class(BrowserNode * parent, const char * name, const QCString & st)
     : BrowserNode(parent, name), uml(0), reversedp(FALSE),
 #ifdef REVERSE
       from_lib(FALSE)
@@ -85,18 +80,18 @@ Class::Class(BrowserNode * p, UmlClass * ucl)
 Class::~Class() {
 }
 
-Class * Class::reverse(ClassContainer * container, Q3CString stereotype, 
-		       const Q3ValueList<FormalParameterList> & tmplts,
-		       const Q3CString & path, Q3CString name
+Class * Class::reverse(ClassContainer * container, QCString stereotype, 
+		       const QValueList<FormalParameterList> & tmplts,
+		       const QCString & path, QCString name
 #ifdef ROUNDTRIP
-		       , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
+		       , bool rndtrp, QList<UmlItem> & expectedorder
 #endif
 		       )
 {
   bool from_typedef = !name.isEmpty();
-  Q3CString comment = Lex::get_comments();
-  Q3CString description = Lex::get_description();
-  Q3CString q_modifier;
+  QCString comment = Lex::get_comments();
+  QCString description = Lex::get_description();
+  QCString q_modifier;
   
   if (!from_typedef)
     if ((name = Lex::read_word()).isEmpty())
@@ -111,7 +106,7 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
       return 0;
   }
   
-  Q3CString s;
+  QCString s;
   
   if ((s = Lex::read_word()).isEmpty()) {
     Lex::premature_eof();
@@ -162,7 +157,7 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
   }
   
   bool roundtrip = FALSE;
-  Q3PtrList<UmlItem> expected_order;
+  QList<UmlItem> expected_order;
 #else
   UmlClass * cl_uml = 0;
 #endif
@@ -200,7 +195,7 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
 # endif
 #endif
     
-    Q3CString d;
+    QCString d;
     
     if (stereotype == "union")
       d = CppSettings::unionDecl();
@@ -214,7 +209,7 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
 	int index = d.find("${name}");
 	
 	if (index != -1)
-	  d.insert(index, (const char*)q_modifier);
+	  d.insert(index, q_modifier);
       }
     }
     
@@ -237,7 +232,7 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
       
       if (stereotype == "class") {
 	if (!cl_uml->stereotype().isEmpty()) {
-	  Q3CString cppst = CppSettings::classStereotype(cl_uml->stereotype());
+	  QCString cppst = CppSettings::classStereotype(cl_uml->stereotype());
 	  
 	  if ((cppst == "union") || (cppst == "struct") || (cppst == "enum")) {
 	    cl_uml->set_Stereotype("");
@@ -525,10 +520,10 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
   return cl;
 }
 
-void Class::declaration(const Q3CString & name, const Q3CString & stereotype,
-			const Q3CString & decl
+void Class::declaration(const QCString & name, const QCString & stereotype,
+			const QCString & decl
 #ifdef ROUNDTRIP
-			, bool rndtrp, Q3PtrList<UmlItem> & expectedorder
+			, bool rndtrp, QList<UmlItem> & expectedorder
 #endif
 			) {
   UmlExtraClassMember * ex;
@@ -560,15 +555,15 @@ void Class::declaration(const Q3CString & name, const Q3CString & stereotype,
   }
 }
 
-void Class::manage_member(Q3CString s, aVisibility visibility,
+void Class::manage_member(QCString s, aVisibility visibility,
 			  ClassContainer * /*container*/,
-			  const Q3CString & path
+			  const QCString & path
 #ifdef ROUNDTRIP
-			  , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+			  , bool roundtrip, QList<UmlItem> & expected_order
 #endif
 			  ) {
-  Q3CString comment = Lex::get_comments();
-  Q3CString description = Lex::get_description();
+  QCString comment = Lex::get_comments();
+  QCString description = Lex::get_description();
   
   if (s == ";")
     return;
@@ -583,16 +578,16 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
   bool inlinep = FALSE;
   bool explicitp = FALSE;
   bool friendp = FALSE;
-  Q3CString q_modifier;	// not yet used
-  Q3CString modifier;
-  Q3CString type;
-  Q3CString name;
-  Q3CString array;
-  Q3CString value;
-  Q3CString bitfield;
-  Q3CString pretype;	// struct/union/class/enum
-  Q3ValueList<FormalParameterList> tmplts;
-  Q3CString friend_template;
+  QCString q_modifier;	// not yet used
+  QCString modifier;
+  QCString type;
+  QCString name;
+  QCString array;
+  QCString value;
+  QCString bitfield;
+  QCString pretype;	// struct/union/class/enum
+  QValueList<FormalParameterList> tmplts;
+  QCString friend_template;
   
 #ifdef DEBUG_BOUML
   cout << "Class::manage_member(" << s << ")\n";
@@ -609,7 +604,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
     }
     else if (s == "const") {
       if (!modifier.isEmpty())
-	modifier += Q3CString(" ") + s;
+	modifier += QCString(" ") + s;
       else {
 	constp = TRUE;
 	Lex::mark();
@@ -617,7 +612,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
     }
     else if (s == "mutable") {
       if (!modifier.isEmpty())
-	modifier += Q3CString(" ") + s;
+	modifier += QCString(" ") + s;
       else {
 	mutablep = TRUE;
 	Lex::mark();
@@ -625,7 +620,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
     }
     else if (s == "volatile") {
       if (!modifier.isEmpty())
-	modifier += Q3CString(" ") + s;
+	modifier += QCString(" ") + s;
       else {
 	volatilep = TRUE;
 	Lex::mark();
@@ -634,7 +629,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
     else if (s == "typename") {
       // note : may have "const typename ...", but not "typename const ..."
       if (!modifier.isEmpty())
-	modifier += Q3CString(" ") + s;
+	modifier += QCString(" ") + s;
       else {
 	typenamep = TRUE;
 	Lex::mark();
@@ -657,7 +652,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
     }
     else if (Lex::star(s) || (s == "&") || (s == "volatile")) {
       if (!modifier.isEmpty())
-	modifier += Q3CString(" ") + s;
+	modifier += QCString(" ") + s;
       else if (!type.isEmpty())
 	modifier = s;
       else {
@@ -681,8 +676,8 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
       }
       
       BooL func = FALSE;
-      Q3CString cl_name = Q3CString(text(0).toAscii().constData());
-      Q3CString cl_full_name = cl_name;
+      QCString cl_name = QCString(text(0));
+      QCString cl_full_name = cl_name;
       int index;
       
       if ((index = cl_name.find('<')) != -1)
@@ -690,12 +685,12 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 	  
       if (name.isEmpty()) {
 	if ((type == cl_full_name) ||
-	    (type == (Q3CString("~") + cl_full_name))) {
+	    (type == (QCString("~") + cl_full_name))) {
 	  name = type;
 	  type = "";
 	}
 	else if ((type == cl_name) ||
-		 (type == (Q3CString("~") + cl_name))) {
+		 (type == (QCString("~") + cl_name))) {
 	  name = type;
 	  type = "";
 	}
@@ -704,12 +699,12 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 	  type = 0;
 	}
 	else {
-	  Q3CString typ;
+	  QCString typ;
 	  
 	  if (((index = type.find('<')) != -1) &&
 	      // wrong tests : not so simple
 	      (((typ = type.left(index)) == cl_name) ||
-	       (typ == (Q3CString("~") + cl_name)))) {
+	       (typ == (QCString("~") + cl_name)))) {
 	    name = type;
 	    type = "";
 	  }
@@ -756,7 +751,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
       }
       
       UmlTypeSpec dest_type;
-      Q3CString typeform = "${type}";
+      QCString typeform = "${type}";
       
       if (CppSettings::umlType(type).isEmpty() &&
 	  (modifier.isEmpty() || (modifier == "*") || (modifier == "&")) &&
@@ -818,7 +813,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 	  s.truncate(index);
 	
 	UmlTypeSpec other;
-	Q3CString typeform;
+	QCString typeform;
 	
 	if (s.isEmpty()) {
 	  Lex::error_near("friend");
@@ -869,7 +864,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 	     (s == "enum")) {
       Lex::mark();
       
-      Q3CString s2 = Lex::read_word();
+      QCString s2 = Lex::read_word();
 	
       if ((strncmp(s2, "Q_EXPORT", 8) == 0) ||
 	  (strncmp(s2, "QM_EXPORT", 9) == 0)||
@@ -954,7 +949,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
     else if (s == "class") {
       Lex::mark();
       
-      Q3CString s2 = Lex::read_word();
+      QCString s2 = Lex::read_word();
 	
       if ((strncmp(s2, "Q_EXPORT", 8) == 0) ||
 	  (strncmp(s2, "QM_EXPORT", 9) == 0)||
@@ -1010,7 +1005,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 #ifdef DEBUG_BOUML
 	cout << "type = '" << s << "'\n";
 #endif
-	type = (destructor) ? Q3CString("~") + s : s;	// will be the name if ~
+	type = (destructor) ? QCString("~") + s : s;	// will be the name if ~
       }
       else if (name.isEmpty()) {
 	name = s;
@@ -1060,16 +1055,16 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 }
 
 Class * Class::reverse_enum(ClassContainer * container, 
-			    const Q3CString & path, Q3CString name
+			    const QCString & path, QCString name
 #ifdef ROUNDTRIP
-			    , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
+			    , bool rndtrp, QList<UmlItem> & expectedorder
 #endif
 			    )
 {
   bool from_typedef = !name.isEmpty();
-  Q3CString comment = Lex::get_comments();
-  Q3CString description = Lex::get_description();
-  Q3CString s;
+  QCString comment = Lex::get_comments();
+  QCString description = Lex::get_description();
+  QCString s;
     
   if (!from_typedef) {
     if ((name = Lex::read_word()).isEmpty()) {
@@ -1114,7 +1109,7 @@ Class * Class::reverse_enum(ClassContainer * container,
   
   if (s != "{") {
     if (!Package::scanning())
-      Lex::syntax_error(Q3CString("font color =\"red\">{</font> expected rather than <font color =\"red\"> ")
+      Lex::syntax_error(QCString("font color =\"red\">{</font> expected rather than <font color =\"red\"> ")
 			+ s + "</font>");
     return 0;
   }
@@ -1165,7 +1160,7 @@ Class * Class::reverse_enum(ClassContainer * container,
     expectedorder.append(cl_uml);
   
   bool roundtrip;
-  Q3PtrList<UmlItem> expected_order;
+  QList<UmlItem> expected_order;
 
   if (cl_uml->is_created()) {
     Statistic::one_class_created_more();
@@ -1241,7 +1236,7 @@ Class * Class::reverse_enum(ClassContainer * container,
       if (s == "}")
 	break;
       
-      Lex::syntax_error(Q3CString("enum item expected rather than <font color =\"red\"> ")
+      Lex::syntax_error(QCString("enum item expected rather than <font color =\"red\"> ")
 			+ s + "</font>");
       UmlOperation::skip_body(1);
       return 0;
@@ -1259,7 +1254,7 @@ Class * Class::reverse_enum(ClassContainer * container,
       
       if (it == 0) {
 	Lex::warn("<font color =\"red\"> " + Lex::quote(s) +
-		  "</font> multiply defined (class)");
+		  "</font> multiply defined");
 	UmlOperation::skip_body(1);
 	return 0;
       }
@@ -1316,7 +1311,7 @@ Class * Class::reverse_enum(ClassContainer * container,
       s = Lex::region();
 #ifdef ROUNDTRIP
       if (roundtrip && !created) {
-	Q3CString v = it->defaultValue();
+	QCString v = it->defaultValue();
 	
 	if (!v.isEmpty() && (((const char *) v)[0] == '='))
 	  v = v.mid(1);
@@ -1367,17 +1362,17 @@ Class * Class::reverse_enum(ClassContainer * container,
   return cl;  
 }
 
-bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
-			    Q3ValueList<FormalParameterList> & tmplts
+bool Class::reverse_typedef(ClassContainer *  container, const QCString & path,
+			    QValueList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
-			    , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
+			    , bool rndtrp, QList<UmlItem> & expectedorder
 #endif
 			   )
 {
   Lex::mark();
   
-  Q3CString s;
-  Q3CString prefix;
+  QCString s;
+  QCString prefix;
   
   if ((s = Lex::read_word(/*TRUE*/)).isEmpty()) {
     if (!Package::scanning())
@@ -1388,8 +1383,8 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
   if ((s == "enum") || (s == "struct") || (s == "union") || (s == "class")) {
     Lex::mark();
   
-    Q3CString name1 = Lex::read_word();
-    Q3CString name2;
+    QCString name1 = Lex::read_word();
+    QCString name2;
     
     UmlOperation::skip_body((name1 == "{") ? 1 : 0);
     
@@ -1492,7 +1487,7 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
 # endif
 #endif
 	
-	Q3CString decl = CppSettings::typedefDecl();
+	QCString decl = CppSettings::typedefDecl();
 	int index = decl.find("${name}");
 	
 	if (index == -1) {
@@ -1552,13 +1547,13 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
     }
   }
   
-  Q3CString comment = Lex::get_comments();
-  Q3CString description = Lex::get_description();
-  //QValueList<Q3CString> actuals;
+  QCString comment = Lex::get_comments();
+  QCString description = Lex::get_description();
+  //QValueList<QCString> actuals;
   //bool tmpl = FALSE;
-  Q3CString type;
+  QCString type;
   UmlTypeSpec base_type;
-  Q3CString typeform = "${type}";
+  QCString typeform = "${type}";
   
   for (;;) {
     if ((s == "unsigned") || (s == "signed") ||
@@ -1619,7 +1614,7 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
     return (ty != 0);
   }
   
-  Q3CString intermediate = Lex::region();
+  QCString intermediate = Lex::region();
   UmlClass * ty_uml;
   
   if ((ty == 0) || ((ty_uml = ty->get_uml()) == 0)) {
@@ -1663,7 +1658,7 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
 #ifdef ROUNDTRIP
     if (roundtrip) {
       UmlRelation * dep = 0;
-      const Q3PtrVector<UmlItem> & ch = ty_uml->children();
+      const QVector<UmlItem> & ch = ty_uml->children();
       UmlItem ** v = ch.data();
       UmlItem ** const vsup = v + ch.size();
       
@@ -1709,10 +1704,10 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
       }
       
       
-      Q3CString typeform;
+      QCString typeform;
       UmlTypeSpec t;
       
-      container->compute_type(Q3CString(*it), t, typeform);
+      container->compute_type(QCString(*it), t, typeform);
       ty_uml->replaceActual(index++, t);
     }
   }*/
@@ -1736,7 +1731,7 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
   s = Lex::region();
   s.truncate(s.length() - 1);	// remove ';', 's' is the code after the typedef name
   
-  Q3CString decl = CppSettings::typedefDecl();
+  QCString decl = CppSettings::typedefDecl();
   int index;
   
   if ((decl.find("${name}") == -1) ||
@@ -1746,18 +1741,18 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
   }
   
   if (!prefix.isEmpty()) {
-    decl.insert(index, (const char*)( prefix + " "));
+    decl.insert(index, prefix + " ");
     index += prefix.length() + 1;
   }
   
   if (!intermediate.isEmpty())
-    decl.insert(index + 7, (const char*)intermediate);
+    decl.insert(index + 7, intermediate);
   
   if ((base_type.type != 0) && (typeform != "${type}"))
     decl.replace(index, 7, typeform);
   
   if (!s.isEmpty())
-    decl.insert(decl.find("${name}") + 7, (const char*) s);	// find cannot return -1
+    decl.insert(decl.find("${name}") + 7, s);	// find cannot return -1
   
 #ifdef ROUNDTRIP
   if (roundtrip) {
@@ -1802,12 +1797,12 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
 
 //
 
-bool Class::set_stereotype(const Q3CString & st) {
+bool Class::set_stereotype(const QCString & st) {
   if (!st.isEmpty()) {
     if (stereotype_declared) {
-      if (st != ((stereotype.isEmpty()) ? Q3CString("class") : stereotype)) {
-	UmlCom::trace(Q3CString("<font face=helvetica><b><i>") +
-		      Q3CString(text(0).toAscii().constData()) +
+      if (st != ((stereotype.isEmpty()) ? QCString("class") : stereotype)) {
+	UmlCom::trace(QCString("<font face=helvetica><b><i>") +
+		      QCString(text(0)) +
 		      "</i> have several stereotypes</b></font><br><hr><br>");
 	return FALSE;
       }
@@ -1819,8 +1814,8 @@ bool Class::set_stereotype(const Q3CString & st) {
   return TRUE;
 }
 
-Class * Class::declare_if_needed(const Q3CString & name,
-				 Q3CString stereotype) {
+Class * Class::declare_if_needed(const QCString & name,
+				 QCString stereotype) {
   Class * result = 
     ClassContainer::declare_if_needed(name, stereotype, formals, 
 				      declared, defined);
@@ -1830,15 +1825,15 @@ Class * Class::declare_if_needed(const Q3CString & name,
   return result;
 }
 
-void Class::declare_if_needed(Q3CString name, Class * cl) {
+void Class::declare_if_needed(QCString name, Class * cl) {
   BrowserNode * p = (BrowserNode *) parent();
   
   ((p->isa_package()) ? ((ClassContainer *) ((Package *) p))
 		      : ((ClassContainer *) ((Class *) p)))
-    ->declare_if_needed(Q3CString(text(0).toAscii().constData()) + "::" + name, cl);
+    ->declare_if_needed(QCString(text(0)) + "::" + name, cl);
 }
 
-Class * Class::define(const Q3CString & name, Q3CString stereotype) {
+Class * Class::define(const QCString & name, QCString stereotype) {
   Class * result = 
     ClassContainer::define(name, stereotype, declared, defined);
   
@@ -1847,13 +1842,13 @@ Class * Class::define(const Q3CString & name, Q3CString stereotype) {
   return result;
 }
 
-void Class::define(Q3CString name, Class * cl) {
+void Class::define(QCString name, Class * cl) {
   if (! name.isEmpty()) {
     BrowserNode * p = (BrowserNode *) parent();
     
     ((p->isa_package()) ? ((ClassContainer *) ((Package *) p))
 			: ((ClassContainer *) ((Class *) p)))
-      ->define(Q3CString(text(0).toAscii().constData()) + "::" + name, cl);
+      ->define(QCString(text(0)) + "::" + name, cl);
   }
 }
 
@@ -1872,7 +1867,7 @@ bool Class::is_roundtrip_expected() const {
 }
 #endif
 
-bool Class::find_type(Q3CString type, UmlTypeSpec & typespec) {
+bool Class::find_type(QCString type, UmlTypeSpec & typespec) {
   if (! formals.isEmpty()) {
     FormalParameterList::ConstIterator it;
     
@@ -1889,8 +1884,8 @@ bool Class::find_type(Q3CString type, UmlTypeSpec & typespec) {
 	  ((BrowserNode *) parent())->find_type(type, typespec));
 }
 
-Class * Class::new_class(const Q3CString & name,
-			 const Q3CString & stereotype,
+Class * Class::new_class(const QCString & name,
+			 const QCString & stereotype,
 			 bool declaration) {
   Class * cl = new Class(this, name, stereotype);
 
@@ -1922,7 +1917,7 @@ UmlClass * Class::get_uml() {
     UmlItem * p = (((BrowserNode *) parent())->isa_package())
       ? (UmlItem *) ((Package *) parent())->get_uml()->get_classview(get_namespace())
       : (UmlItem *) ((Class *) parent())->get_uml();
-    Q3CString str = Q3CString(text(0).toAscii().constData());
+    QCString str = QCString(text(0));
     bool anonymous = str.isEmpty();
     
     for (;;) {
@@ -1936,7 +1931,7 @@ UmlClass * Class::get_uml() {
       
       if (uml == 0) {
 	// probably already exist
-	Q3PtrVector<UmlItem> ch = p->children();
+	QVector<UmlItem> ch = p->children();
 	UmlItem * x;
 	
 	for (unsigned chindex = 0; chindex != ch.size(); chindex += 1) {
@@ -1998,8 +1993,8 @@ UmlClass * Class::get_uml() {
 	
 #ifdef ROUNDTRIP
 	if (roundtrip) {
-	  Q3ValueList<UmlFormalParameter> fs = uml->formals();
-	  Q3ValueList<UmlFormalParameter>::ConstIterator it2;
+	  QValueList<UmlFormalParameter> fs = uml->formals();
+	  QValueList<UmlFormalParameter>::ConstIterator it2;
 	  
 	  for (rank = 0, it = formals.begin(), it2 = fs.begin();
 	       (it != formals_end) && (it2 != fs.end());
@@ -2051,7 +2046,7 @@ UmlClass * Class::get_uml() {
   if (roundtrip) {
     if (stereotype.isEmpty()) {
       if (!uml->stereotype().isEmpty()) {
-	Q3CString cppst = CppSettings::classStereotype(uml->stereotype());
+	QCString cppst = CppSettings::classStereotype(uml->stereotype());
 	
 	if ((cppst == "union") || (cppst == "struct") || (cppst == "enum")) {
 	  uml->set_Stereotype("");
@@ -2078,7 +2073,7 @@ void Class::set_uml(UmlClass * c) {
 
 #ifndef ROUNDTRIP
 bool Class::already_in_bouml() {
-  Q3PtrVector<UmlItem> ch = get_uml()->children();
+  QVector<UmlItem> ch = get_uml()->children();
   
   for (unsigned index = 0; index != ch.size(); index += 1)
     if (ch[index]->kind() != aClass)

@@ -24,11 +24,7 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
-#include <Q3ValueList>
+#include <qtextstream.h>
 
 #include "UmlOperation.h"
 #include "UmlSettings.h"
@@ -38,7 +34,7 @@
 #include "UmlRelation.h"
 #include "util.h"
 
-static bool generate_dir(const Q3ValueList<UmlParameter> & params,
+static bool generate_dir(const QValueList<UmlParameter> & params,
 			 unsigned rank, QTextOStream & f)
 {
   if (rank >= params.count())
@@ -57,7 +53,7 @@ static bool generate_dir(const Q3ValueList<UmlParameter> & params,
   return TRUE;
 }
 
-static bool generate_type(const Q3ValueList<UmlParameter> & params,
+static bool generate_type(const QValueList<UmlParameter> & params,
 			  unsigned rank, QTextOStream & f)
 {
   if (rank >= params.count())
@@ -67,7 +63,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
   return TRUE;
 }
 
-static bool generate_var(const Q3ValueList<UmlParameter> & params, 
+static bool generate_var(const QValueList<UmlParameter> & params, 
 			 unsigned rank, QTextOStream & f)
 {
   if (rank >= params.count())
@@ -77,19 +73,19 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
   return TRUE;
 }
 
-static void param_error(const Q3CString & parent, const Q3CString & name,
+static void param_error(const QCString & parent, const QCString & name,
 			unsigned rank, const char * where)
 {
   write_trace_header();
-  UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>while compiling <i>")
+  UmlCom::trace(QCString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>while compiling <i>")
 		+ parent + "::" + name + "</i> " + where
-		+ ", parameter rank " + Q3CString().setNum(rank)
+		+ ", parameter rank " + QCString().setNum(rank)
 		+ " does not exist</font></b><br>");
   incr_error();
 }
 
-Q3CString UmlOperation::compute_name() {
-  Q3CString get_set_spec = idlNameSpec();
+QCString UmlOperation::compute_name() {
+  QCString get_set_spec = idlNameSpec();
   
   if (! get_set_spec.isEmpty()) {
     UmlClassMember * it;
@@ -98,7 +94,7 @@ Q3CString UmlOperation::compute_name() {
       it = setOf();
     
     int index;
-    Q3CString s = (it->kind() == aRelation)
+    QCString s = (it->kind() == aRelation)
       ? ((UmlRelation *) it)->roleName()
       : it->name();
     
@@ -118,8 +114,8 @@ Q3CString UmlOperation::compute_name() {
 }
 
 void UmlOperation::generate_decl(QTextOStream & f,
-				 const Q3CString & cl_stereotype,
-				 Q3CString indent, bool) {
+				 const QCString & cl_stereotype,
+				 QCString indent, bool) {
   if (!idlDecl().isEmpty()) {
     if ((cl_stereotype != "interface") &&
 	(cl_stereotype != "valuetype")) {
@@ -131,8 +127,8 @@ void UmlOperation::generate_decl(QTextOStream & f,
     
     const char * p = idlDecl();
     const char * pp = 0;
-    const Q3ValueList<UmlParameter> & params = this->params();
-    const Q3ValueList<UmlTypeSpec> & exceptions = this->exceptions();
+    const QValueList<UmlParameter> & params = this->params();
+    const QValueList<UmlTypeSpec> & exceptions = this->exceptions();
     unsigned rank;
     
     while ((*p == ' ') || (*p == '\t'))
@@ -219,7 +215,7 @@ void UmlOperation::generate_decl(QTextOStream & f,
 		
 	if (! exceptions.isEmpty()) {
 	  const char * sep;
-	  Q3ValueList<UmlTypeSpec>::ConstIterator it;
+	  QValueList<UmlTypeSpec>::ConstIterator it;
 	  
 	  for (it = exceptions.begin(), sep = " raises ("; 
 	       it != exceptions.end();

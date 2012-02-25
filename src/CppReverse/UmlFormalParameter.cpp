@@ -23,14 +23,12 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <qtextstream.h>
 
 #include "UmlFormalParameter.h"
 #include "UmlClass.h"
 
-UmlFormalParameter::UmlFormalParameter(Q3CString t, Q3CString n, Q3CString v) {
+UmlFormalParameter::UmlFormalParameter(QCString t, QCString n, QCString v) {
   _type = t;
   _name = n;
   _default_value.explicit_type = v;

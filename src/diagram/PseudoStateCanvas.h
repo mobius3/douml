@@ -31,9 +31,6 @@
 
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3TextStream>
 
 #include "DiagramCanvas.h"
 #include "Settings.h"
@@ -77,7 +74,7 @@ class PseudoStateCanvas : public QObject, public DiagramCanvas {
         
     virtual void apply_shortcut(QString s);
 
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static PseudoStateCanvas * read(char * &, UmlCanvas *, char *);
     virtual void post_loaded();
     

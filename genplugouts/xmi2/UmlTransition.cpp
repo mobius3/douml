@@ -1,8 +1,6 @@
 
 #include "UmlTransition.h"
 #include "FileOut.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlTransition::memo_incoming_trans() {
   (dynamic_cast<UmlStateItem *>(target()))->add_incoming_trans(this);
@@ -39,9 +37,9 @@ void UmlTransition::write_it(FileOut & out) {
   out.indent(+1);
   write_description_properties(out);
   
-  Q3CString trig;
-  Q3CString grd;
-  Q3CString effect;
+  QCString trig;
+  QCString grd;
+  QCString effect;
   
   switch (_lang) {
   case Uml:

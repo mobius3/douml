@@ -27,17 +27,15 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <q3buttongroup.h>
+#include <qcombobox.h> 
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h> 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h> 
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "ActivityActionDialog.h"
 #include "BrowserActivityAction.h"
@@ -71,9 +69,9 @@ static QString pretty_kind(UmlActionKind k)
   return s;
 }
 
-static Q3Grid * mkgrid(Q3TabDialog * d, const char * name = 0)
+static QGrid * mkgrid(QTabDialog * d, const char * name = 0)
 {
-  Q3Grid * grid = new Q3Grid(2, d, name);
+  QGrid * grid = new QGrid(2, d, name);
 
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -82,7 +80,7 @@ static Q3Grid * mkgrid(Q3TabDialog * d, const char * name = 0)
 }
 
 ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), act(a) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), act(a) {
   a->browser_node->edit_start();
   
   if (a->browser_node->is_writable()) {
@@ -101,7 +99,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
 
   BrowserActivityAction * action = 
     (BrowserActivityAction *) a->get_browser_node();
-  Q3Grid * grid;
+  QGrid * grid;
   
   //
   // general tab
@@ -115,7 +113,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   edname->setReadOnly(visit);
     
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(action->get_stereotype()));
   if (!visit) {
     edstereotype->insertStringList(BrowserActivityAction::default_stereotypes());
@@ -128,7 +126,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   edstereotype->setSizePolicy(sp);
 
   new QLabel(TR("kind : "), grid);
-  edtype = new Q3ComboBox(FALSE, grid);
+  edtype = new QComboBox(FALSE, grid);
       
   if (visit) {
     // action kind cannot be changed
@@ -146,7 +144,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     connect(edtype, SIGNAL(activated(int)), this, SLOT(edTypeActivated(int)));
   }
 
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -155,7 +153,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   comment->setReadOnly(visit);
   comment->setText(action->get_comment());
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("constraint :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -238,7 +236,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
 }
 
 void ActivityActionDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -419,13 +417,13 @@ void ActivityActionDialog::accept() {
     bn->modified();   // call action->modified()
     bn->package_modified();
     
-    Q3TabDialog::accept();
+    QTabDialog::accept();
   }
 }
 
 // ActionCondDialog
 
-void ActionCondDialog::init(Q3Grid * grid, ActivityActionData * d,
+void ActionCondDialog::init(QGrid * grid, ActivityActionData * d,
 			    DrawingLanguage lang, bool visit) {
   new QLabel(TR("Pre\ncondition : "), grid);
   edpre = new MultiLineEdit(grid);
@@ -458,7 +456,7 @@ AnyActionDialog::AnyActionDialog()
     : ocl_grid(0), cpp_grid(0), java_grid(0) {
 }
 
-void AnyActionDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void AnyActionDialog::init(QTabDialog * t, ActivityActionData * act,
 			   void * d, bool visit) {
   // just add the pre/post condition
   td = t;
@@ -483,7 +481,7 @@ void AnyActionDialog::init(Q3TabDialog * t, ActivityActionData * act,
   init_java(t, act, d, visit);
 }
 
-void AnyActionDialog::init_cpp(Q3TabDialog * t, ActivityActionData * act,
+void AnyActionDialog::init_cpp(QTabDialog * t, ActivityActionData * act,
 			       void * d, bool visit) {
   // cpp
 
@@ -501,7 +499,7 @@ void AnyActionDialog::init_cpp(Q3TabDialog * t, ActivityActionData * act,
     t->removePage(cpp_grid);
 }
 
-void AnyActionDialog::init_java(Q3TabDialog * t, ActivityActionData * act,
+void AnyActionDialog::init_java(QTabDialog * t, ActivityActionData * act,
 				void * d, bool visit) {
   // java
 
@@ -554,8 +552,8 @@ void AnyActionDialog::get_cond(QString & ocl_pre, QString & ocl_post,
 
 // opaque
 
-void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
-			OpaqueAction * d, Q3PtrList<BodyDialog> & e, bool visit) {
+void OpaqueDialog::init(QTabDialog * t, ActivityActionData * act,
+			OpaqueAction * d, QList<BodyDialog> & e, bool visit) {
   edits = &e;
   td = t;
 
@@ -563,7 +561,7 @@ void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   ocl_grid = mkgrid(t);
 
-  Q3VBox * vtab = new Q3VBox(ocl_grid);
+  QVBox * vtab = new QVBox(ocl_grid);
 
   new QLabel(TR("Behavior : "), vtab);
   if (! visit)
@@ -590,7 +588,7 @@ void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   cpp_grid = mkgrid(t);
 
-  vtab = new Q3VBox(cpp_grid);
+  vtab = new QVBox(cpp_grid);
   new QLabel(TR("Behavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -616,7 +614,7 @@ void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   java_grid = mkgrid(t);
 
-  vtab = new Q3VBox(java_grid);
+  vtab = new QVBox(java_grid);
   new QLabel(TR("Behavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -679,7 +677,7 @@ void OpaqueDialog::post_edit_java(ActivityActionDialog * d, QString s)
 
 // Accept Event
 
-void AcceptEventDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void AcceptEventDialog::init(QTabDialog * t, ActivityActionData * act,
 			     AcceptEventAction * d, bool visit) {
   td = t;
 
@@ -688,8 +686,8 @@ void AcceptEventDialog::init(Q3TabDialog * t, ActivityActionData * act,
   ocl_grid = mkgrid(t, TR("trigger - Ocl"));
 
   new QLabel("", ocl_grid);
-  Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+  QButtonGroup * grp = 
+    new QButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
 
   unmarshall_cb = new QCheckBox(TR("unmarshall"), grp);
   unmarshall_cb->setDisabled(visit);
@@ -765,9 +763,9 @@ bool AcceptEventDialog::update(AcceptEventAction * a) {
 
 // value specification
 
-void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void ValueSpecificationDialog::init(QTabDialog * t, ActivityActionData * act,
 				    ValueSpecificationAction * d,
-				    Q3PtrList<BodyDialog> & e, bool visit) {
+				    QList<BodyDialog> & e, bool visit) {
   edits = &e;
   td = t;
 
@@ -775,7 +773,7 @@ void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   ocl_grid = mkgrid(t, TR("value - Ocl"));
 
-  Q3VBox * vtab = new Q3VBox(ocl_grid);
+  QVBox * vtab = new QVBox(ocl_grid);
 
   new QLabel(TR("Value : "), vtab);
   if (! visit)
@@ -802,7 +800,7 @@ void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   cpp_grid = mkgrid(t, TR("value - C++"));
 
-  vtab = new Q3VBox(cpp_grid);
+  vtab = new QVBox(cpp_grid);
   new QLabel(TR("Value : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -828,7 +826,7 @@ void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   java_grid = mkgrid(t, TR("value - Java"));
 
-  vtab = new Q3VBox(java_grid);
+  vtab = new QVBox(java_grid);
   new QLabel(TR("Value : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -891,7 +889,7 @@ void ValueSpecificationDialog::post_edit_java(ActivityActionDialog * d, QString 
 
 // Send signal
 
-void SendSignalDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void SendSignalDialog::init(QTabDialog * t, ActivityActionData * act,
 			    SendSignalAction * d, bool visit) {
   td = t;
 
@@ -963,7 +961,7 @@ bool SendSignalDialog::update(SendSignalAction * a) {
 
 // access & change variable value working classes
 
-void AccessVariableValueDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void AccessVariableValueDialog::init(QTabDialog * t, ActivityActionData * act,
 				     AccessVariableValueAction * d,
 				     BrowserNodeList & cl,
 				     QStringList & clstr, bool ro) {
@@ -978,11 +976,11 @@ void AccessVariableValueDialog::init(Q3TabDialog * t, ActivityActionData * act,
     ocl_grid = mkgrid(t, TR("variable - Ocl"));
 
   new QLabel(TR("class : "), ocl_grid);
-  class_co = new Q3ComboBox(FALSE, ocl_grid);
+  class_co = new QComboBox(FALSE, ocl_grid);
   
   connect(new SmallPushButton(TR("variable :"), ocl_grid), SIGNAL(clicked()),
 	  this, SLOT(menu_var()));
-  var_co = new Q3ComboBox(FALSE, ocl_grid);
+  var_co = new QComboBox(FALSE, ocl_grid);
   
   ocl_cond.init(ocl_grid, act, UmlView, visit);
 
@@ -1036,7 +1034,7 @@ void AccessVariableValueDialog::insert_vars(BrowserClass * c) {
   vars.clear();
   var_names.clear();
 
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = c->firstChild(); child; child = child->nextSibling()) {
     if (!((BrowserNode *) child)->deletedp()) {
@@ -1071,7 +1069,7 @@ bool AccessVariableValueDialog::update(AccessVariableValueAction * a) {
 }
 
 void AccessVariableValueDialog::menu_var() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -1158,15 +1156,15 @@ void AccessVariableValueDialog::set(BrowserNode * bn) {
   var_co->setCurrentItem(var_names.findIndex(bn->get_name()) + 1);
 }
 
-void ChangeVariableValueDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void ChangeVariableValueDialog::init(QTabDialog * t, ActivityActionData * act,
 				     ChangeVariableValueAction * d,
 				     const char * flg_name, BrowserNodeList & cl,
 				     QStringList & clstr, bool visit) {
   ocl_grid = mkgrid(t, TR("variable - Ocl"));
   
   new QLabel("", ocl_grid);
-  Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+  QButtonGroup * grp = 
+    new QButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
 
   flag_cb = new QCheckBox(flg_name, grp);
   flag_cb->setDisabled(visit);
@@ -1184,7 +1182,7 @@ bool ChangeVariableValueDialog::update(ChangeVariableValueAction * a) {
 
 // add variable value
 
-void AddVariableValueDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void AddVariableValueDialog::init(QTabDialog * t, ActivityActionData * act,
 				  AddVariableValueAction * d, BrowserNodeList & cl,
 				  QStringList & clstr, bool visit) {
   ChangeVariableValueDialog::init(t, act, d, TR("replace all"), cl, clstr, visit);
@@ -1192,7 +1190,7 @@ void AddVariableValueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
 // remove variable value
 
-void RemoveVariableValueDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void RemoveVariableValueDialog::init(QTabDialog * t, ActivityActionData * act,
 				     RemoveVariableValueAction * d, BrowserNodeList & cl,
 				  QStringList & clstr, bool visit) {
   ChangeVariableValueDialog::init(t, act, d, TR("remove duplicates"), cl, clstr, visit);
@@ -1200,7 +1198,7 @@ void RemoveVariableValueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
 // call operation
 
-void CallOperationDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void CallOperationDialog::init(QTabDialog * t, ActivityActionData * act,
 			       CallOperationAction * d, BrowserNodeList & cl,
 			       QStringList & clstr, bool ro) {
   td = t;
@@ -1213,18 +1211,18 @@ void CallOperationDialog::init(Q3TabDialog * t, ActivityActionData * act,
   ocl_grid = mkgrid(t, TR("operation - Ocl"));
 
   new QLabel("", ocl_grid);
-  Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+  QButtonGroup * grp = 
+    new QButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
 
   synchronous_cb = new QCheckBox(TR("synchronous"), grp);
   synchronous_cb->setDisabled(visit);
   
   new QLabel(TR("class : "), ocl_grid);
-  class_co = new Q3ComboBox(FALSE, ocl_grid);
+  class_co = new QComboBox(FALSE, ocl_grid);
 
   connect(new SmallPushButton(TR("operation :"), ocl_grid), SIGNAL(clicked()),
 	  this, SLOT(menu_oper()));
-  oper_co = new Q3ComboBox(FALSE, ocl_grid);
+  oper_co = new QComboBox(FALSE, ocl_grid);
   
   ocl_cond.init(ocl_grid, act, UmlView, visit);
 
@@ -1280,7 +1278,7 @@ void CallOperationDialog::insert_opers(BrowserClass * c) {
   opers.clear();
   oper_names.clear();
 
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = c->firstChild(); child; child = child->nextSibling()) {
     if (!((BrowserNode *) child)->deletedp() &&
@@ -1322,7 +1320,7 @@ void CallOperationDialog::set(BrowserNode * bn) {
 }
 
 void CallOperationDialog::menu_oper() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -1380,7 +1378,7 @@ void WithBehaviorDialog::init(BrowserNode * beh) {
     behavior_co->insertItem("");
     behavior_co->setAutoCompletion(completion());
 
-    Q3PtrListIterator<BrowserNode> iter_node(*nodes);
+    QListIterator<BrowserNode> iter_node(*nodes);
     QStringList::Iterator iter_str = node_names->begin();
     
     for (; iter_node.current(); ++iter_node, ++iter_str)
@@ -1396,7 +1394,7 @@ void WithBehaviorDialog::init(BrowserNode * beh) {
 }
 
 void WithBehaviorDialog::menu_behavior() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -1478,7 +1476,7 @@ void WithBehaviorDialog::menu_behavior() {
 
 //
 
-void CallBehaviorDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void CallBehaviorDialog::init(QTabDialog * t, ActivityActionData * act,
 			      CallBehaviorAction * d, BrowserNodeList & beh,
 			      QStringList & behstr, BrowserNode * v, bool ro) {
   td = t;
@@ -1492,15 +1490,15 @@ void CallBehaviorDialog::init(Q3TabDialog * t, ActivityActionData * act,
   ocl_grid = mkgrid(t, TR("behavior - Ocl"));
 
   new QLabel("", ocl_grid);
-  Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+  QButtonGroup * grp = 
+    new QButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
 
   synchronous_cb = new QCheckBox(TR("synchronous"), grp);
   synchronous_cb->setDisabled(visit);
   
   connect(new SmallPushButton(TR("behavior :"), ocl_grid), SIGNAL(clicked()),
 	  this, SLOT(menu_beh()));
-  behavior_co = new Q3ComboBox(FALSE, ocl_grid);
+  behavior_co = new QComboBox(FALSE, ocl_grid);
   
   ocl_cond.init(ocl_grid, act, UmlView, visit);
 
@@ -1541,7 +1539,7 @@ void CallBehaviorDialog::menu_beh() {
 
 // Accept Call
 
-void AcceptCallDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void AcceptCallDialog::init(QTabDialog * t, ActivityActionData * act,
 			    AcceptCallAction * d, bool visit) {
   td = t;
 
@@ -1613,7 +1611,7 @@ bool AcceptCallDialog::update(AcceptCallAction * a) {
 
 // Reply
 
-void ReplyDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void ReplyDialog::init(QTabDialog * t, ActivityActionData * act,
 		       ReplyAction * d, bool visit) {
   td = t;
 
@@ -1685,7 +1683,7 @@ bool ReplyDialog::update(ReplyAction * a) {
 
 // Create Object
 
-void CreateObjectDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void CreateObjectDialog::init(QTabDialog * t, ActivityActionData * act,
 			      CreateObjectAction * d, bool visit) {
   td = t;
 
@@ -1721,7 +1719,7 @@ bool CreateObjectDialog::update(CreateObjectAction * a) {
 
 // Destroy Object
 
-void DestroyObjectDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void DestroyObjectDialog::init(QTabDialog * t, ActivityActionData * act,
 			       DestroyObjectAction * d, bool visit) {
   td = t;
 
@@ -1730,8 +1728,8 @@ void DestroyObjectDialog::init(Q3TabDialog * t, ActivityActionData * act,
   ocl_grid = mkgrid(t, TR("flags - Ocl"));
 
   new QLabel("", ocl_grid);
-  Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+  QButtonGroup * grp = 
+    new QButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
 
   is_destroy_links_cb = new QCheckBox(TR("links"), grp);
   is_destroy_links_cb->setDisabled(visit);
@@ -1765,7 +1763,7 @@ bool DestroyObjectDialog::update(DestroyObjectAction * a) {
 
 // test identity action
 
-void TestIdentityDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void TestIdentityDialog::init(QTabDialog * t, ActivityActionData * act,
 			      TestIdentityAction * d, bool visit) {
   td = t;
 
@@ -1793,7 +1791,7 @@ bool TestIdentityDialog::update(TestIdentityAction *) {
 
 // raise exception action
 
-void RaiseExceptionDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void RaiseExceptionDialog::init(QTabDialog * t, ActivityActionData * act,
 				RaiseExceptionAction * d, bool visit) {
   td = t;
 
@@ -1821,7 +1819,7 @@ bool RaiseExceptionDialog::update(RaiseExceptionAction *) {
 
 // reduce action
 
-void ReduceDialog::init(Q3TabDialog * t, ActivityActionData * act,
+void ReduceDialog::init(QTabDialog * t, ActivityActionData * act,
 			ReduceAction * d, BrowserNodeList & beh,
 			QStringList & behstr, BrowserNode * v, bool ro) {
   td = t;
@@ -1835,15 +1833,15 @@ void ReduceDialog::init(Q3TabDialog * t, ActivityActionData * act,
   ocl_grid = mkgrid(t, TR("reducer - Ocl"));
 
   new QLabel("", ocl_grid);
-  Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+  QButtonGroup * grp = 
+    new QButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
 
   is_ordered_cb = new QCheckBox(TR("ordered"), grp);
   is_ordered_cb->setDisabled(visit);
   
   connect(new SmallPushButton(TR("reducer :"), ocl_grid), SIGNAL(clicked()),
 	  this, SLOT(menu_beh()));
-  behavior_co = new Q3ComboBox(FALSE, ocl_grid);
+  behavior_co = new QComboBox(FALSE, ocl_grid);
   
   ocl_cond.init(ocl_grid, act, UmlView, visit);
 

@@ -29,11 +29,8 @@
 #include "SimpleData.h"
 #include "InfoData.h"
 #include "UmlEnum.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
 
-class Q3TextStream;
+class QTextStream;
 
 class BrowserFlow;
 class BrowserNode;
@@ -44,8 +41,8 @@ struct FlowDef {
   InfoData sel_trans;
   
   QString str(bool horiz) const;
-  void save(Q3TextStream & st, Q3CString lang) const;
-  void read(char * & st, char * & k, Q3CString lang);
+  void save(QTextStream & st, QCString lang) const;
+  void read(char * & st, char * & k, QCString lang);
   
   void send_def(ToolCom * com);
 };
@@ -87,7 +84,7 @@ class FlowData : public SimpleData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     static FlowData * read(char * &, char * & k);
     
   protected slots:

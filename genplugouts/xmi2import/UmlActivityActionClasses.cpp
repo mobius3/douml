@@ -6,8 +6,6 @@
 
 #include "UmlCom.h"
 #include "Trigger.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlSendObjectAction::init()
 {
   declareFct("node", "uml:SendObjectAction", &importIt);
@@ -19,7 +17,7 @@ void UmlSendObjectAction::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(aSendObjectAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlSendObjectAction * a = create(where, s);
     
     if (a == 0)
@@ -42,7 +40,7 @@ void UmlUnmarshallAction::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(anUnmarshallAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlUnmarshallAction * a = create(where, s);
     
     if (a == 0)
@@ -65,7 +63,7 @@ void UmlSendSignalAction::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(aSendSignalAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlSendSignalAction * a = create(where, s);
     
     if (a == 0)
@@ -88,7 +86,7 @@ void UmlBroadcastSignalAction::importIt(FileIn & in, Token & token, UmlItem * wh
   where = where->container(aBroadcastSignalAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlBroadcastSignalAction * a = create(where, s);
     
     if (a == 0)
@@ -111,7 +109,7 @@ void UmlValueSpecificationAction::importIt(FileIn & in, Token & token, UmlItem *
   where = where->container(aValueSpecificationAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlValueSpecificationAction * a = create(where, s);
     
     if (a == 0)
@@ -120,7 +118,7 @@ void UmlValueSpecificationAction::importIt(FileIn & in, Token & token, UmlItem *
     
     a->addItem(token.xmiId(), in);
     
-    Q3CString v = token.valueOf("value");
+    QCString v = token.valueOf("value");
     
     if (! v.isEmpty())
       a->setValue(v);
@@ -129,8 +127,8 @@ void UmlValueSpecificationAction::importIt(FileIn & in, Token & token, UmlItem *
   }
 }
 
-void UmlValueSpecificationAction::setValue(Q3CString idref) {
-  QMap<Q3CString, Q3CString>::Iterator it = OpaqueDefs.find(idref);
+void UmlValueSpecificationAction::setValue(QCString idref) {
+  QMap<QCString, QCString>::Iterator it = OpaqueDefs.find(idref);
   
   if (it != OpaqueDefs.end())
     set_Value(*it);
@@ -138,8 +136,8 @@ void UmlValueSpecificationAction::setValue(Q3CString idref) {
     Unresolved::addRef(this, idref);
 }
 
-void UmlValueSpecificationAction::solve(Q3CString idref) {
-  QMap<Q3CString, Q3CString>::Iterator it = OpaqueDefs.find(idref);
+void UmlValueSpecificationAction::solve(QCString idref) {
+  QMap<QCString, QCString>::Iterator it = OpaqueDefs.find(idref);
   
   if (it != OpaqueDefs.end())
     set_Value(*it);
@@ -162,7 +160,7 @@ void UmlOpaqueAction::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(anOpaqueAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlOpaqueAction * a = create(where, s);
     
     if (a == 0)
@@ -172,7 +170,7 @@ void UmlOpaqueAction::importIt(FileIn & in, Token & token, UmlItem * where)
     a->addItem(token.xmiId(), in);
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr)) {
@@ -196,7 +194,7 @@ void UmlAcceptEventAction::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(anAcceptEventAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlAcceptEventAction * a = create(where, s);
     
     if (a == 0)
@@ -209,7 +207,7 @@ void UmlAcceptEventAction::importIt(FileIn & in, Token & token, UmlItem * where)
       a->set_isUnmarshall(TRUE);
     
     if (!(s = token.valueOf("trigger")).isEmpty()) {
-      Q3CString tr = Trigger::get(s);
+      QCString tr = Trigger::get(s);
       
       if (!tr.isNull())
 	a->set_Trigger(tr);
@@ -218,13 +216,13 @@ void UmlAcceptEventAction::importIt(FileIn & in, Token & token, UmlItem * where)
     }
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr)) {
 	if (token.what() == "trigger") {
-	  Q3CString tr_name;
-	  Q3CString tr_ref;
+	  QCString tr_name;
+	  QCString tr_ref;
 	  
 	  Trigger::add(in, token, tr_name, tr_ref);
       
@@ -240,8 +238,8 @@ void UmlAcceptEventAction::importIt(FileIn & in, Token & token, UmlItem * where)
   }
 }
 
-void UmlAcceptEventAction::solve(Q3CString idref) {
-  Q3CString tr = Trigger::get(idref);
+void UmlAcceptEventAction::solve(QCString idref) {
+  QCString tr = Trigger::get(idref);
   
   if (tr.isNull()) {
     if (!FileIn::isBypassedId(idref))
@@ -262,7 +260,7 @@ void UmlCallOperationAction::importIt(FileIn & in, Token & token, UmlItem * wher
   where = where->container(aCallOperationAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlCallOperationAction * a = create(where, s);
     
     if (a == 0)
@@ -275,7 +273,7 @@ void UmlCallOperationAction::importIt(FileIn & in, Token & token, UmlItem * wher
       a->setOperation(s);
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr)) {
@@ -293,8 +291,8 @@ void UmlCallOperationAction::importIt(FileIn & in, Token & token, UmlItem * wher
   }
 }
 
-void UmlCallOperationAction::setOperation(Q3CString idref) {
-  QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+void UmlCallOperationAction::setOperation(QCString idref) {
+  QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
   
   if (it == All.end())
     Unresolved::addRef(this, idref);
@@ -302,8 +300,8 @@ void UmlCallOperationAction::setOperation(Q3CString idref) {
     set_Operation((UmlOperation *) *it);
 }
 
-void UmlCallOperationAction::solve(Q3CString idref) {
-  QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+void UmlCallOperationAction::solve(QCString idref) {
+  QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
   
   if (it == All.end()) {
     if (!FileIn::isBypassedId(idref))
@@ -324,7 +322,7 @@ void UmlCallBehaviorAction::importIt(FileIn & in, Token & token, UmlItem * where
   where = where->container(aCallBehaviorAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlCallBehaviorAction * a = create(where, s);
     
     if (a == 0)
@@ -337,7 +335,7 @@ void UmlCallBehaviorAction::importIt(FileIn & in, Token & token, UmlItem * where
       a->setBehavior(s);
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr)) {
@@ -355,8 +353,8 @@ void UmlCallBehaviorAction::importIt(FileIn & in, Token & token, UmlItem * where
   }
 }
 
-void UmlCallBehaviorAction::setBehavior(Q3CString idref) {
-  QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+void UmlCallBehaviorAction::setBehavior(QCString idref) {
+  QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
   
   if (it == All.end())
     Unresolved::addRef(this, idref);
@@ -372,8 +370,8 @@ void UmlCallBehaviorAction::setBehavior(Q3CString idref) {
 
 }
 
-void UmlCallBehaviorAction::solve(Q3CString idref) {
-  QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+void UmlCallBehaviorAction::solve(QCString idref) {
+  QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
   
   if (it == All.end()) {
     if (!FileIn::isBypassedId(idref))
@@ -401,7 +399,7 @@ void UmlClearVariableValueAction::importIt(FileIn & in, Token & token, UmlItem *
   where = where->container(aClearVariableValueAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlClearVariableValueAction * a = create(where, s);
     
     if (a == 0)
@@ -424,7 +422,7 @@ void UmlReadVariableValueAction::importIt(FileIn & in, Token & token, UmlItem * 
   where = where->container(aReadVariableValueAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlReadVariableValueAction * a = create(where, s);
     
     if (a == 0)
@@ -447,7 +445,7 @@ void UmlWriteVariableValueAction::importIt(FileIn & in, Token & token, UmlItem *
   where = where->container(aWriteVariableValueAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlWriteVariableValueAction * a = create(where, s);
     
     if (a == 0)
@@ -470,7 +468,7 @@ void UmlAddVariableValueAction::importIt(FileIn & in, Token & token, UmlItem * w
   where = where->container(anAddVariableValueAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlAddVariableValueAction * a = create(where, s);
     
     if (a == 0)
@@ -493,7 +491,7 @@ void UmlRemoveVariableValueAction::importIt(FileIn & in, Token & token, UmlItem 
   where = where->container(aRemoveVariableValueAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlRemoveVariableValueAction * a = create(where, s);
     
     if (a == 0)
@@ -516,7 +514,7 @@ void UmlAcceptCallAction::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(anAcceptCallAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlAcceptCallAction * a = create(where, s);
     
     if (a == 0)
@@ -526,7 +524,7 @@ void UmlAcceptCallAction::importIt(FileIn & in, Token & token, UmlItem * where)
     a->addItem(token.xmiId(), in);
     
     if (!(s = token.valueOf("trigger")).isEmpty()) {
-      Q3CString tr = Trigger::get(s);
+      QCString tr = Trigger::get(s);
       
       if (!tr.isNull())
 	a->set_Trigger(tr);
@@ -535,13 +533,13 @@ void UmlAcceptCallAction::importIt(FileIn & in, Token & token, UmlItem * where)
     }
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr)) {
 	if (token.what() == "trigger") {
-	  Q3CString tr_name;
-	  Q3CString tr_ref;
+	  QCString tr_name;
+	  QCString tr_ref;
 	  
 	  Trigger::add(in, token, tr_name, tr_ref);
       
@@ -562,8 +560,8 @@ void UmlAcceptCallAction::importIt(FileIn & in, Token & token, UmlItem * where)
   }
 }
 
-void UmlAcceptCallAction::solve(Q3CString idref) {
-  Q3CString tr = Trigger::get(idref);
+void UmlAcceptCallAction::solve(QCString idref) {
+  QCString tr = Trigger::get(idref);
   
   if (tr.isNull()) {
     if (!FileIn::isBypassedId(idref))
@@ -584,7 +582,7 @@ void UmlReplyAction::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(aReplyAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlReplyAction * a = create(where, s);
     
     if (a == 0)
@@ -594,7 +592,7 @@ void UmlReplyAction::importIt(FileIn & in, Token & token, UmlItem * where)
     a->addItem(token.xmiId(), in);
     
     if (!(s = token.valueOf("trigger")).isEmpty()) {
-      Q3CString tr = Trigger::get(s);
+      QCString tr = Trigger::get(s);
       
       if (!tr.isNull())
 	a->set_ReplyToCall(tr);
@@ -603,13 +601,13 @@ void UmlReplyAction::importIt(FileIn & in, Token & token, UmlItem * where)
     }
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr)) {
 	if (token.what() == "trigger") {
-	  Q3CString tr_name;
-	  Q3CString tr_ref;
+	  QCString tr_name;
+	  QCString tr_ref;
 	  
 	  Trigger::add(in, token, tr_name, tr_ref);
       
@@ -625,8 +623,8 @@ void UmlReplyAction::importIt(FileIn & in, Token & token, UmlItem * where)
   }
 }
 
-void UmlReplyAction::solve(Q3CString idref) {
-  Q3CString tr = Trigger::get(idref);
+void UmlReplyAction::solve(QCString idref) {
+  QCString tr = Trigger::get(idref);
   
   if (tr.isNull()) {
     if (!FileIn::isBypassedId(idref))
@@ -647,7 +645,7 @@ void UmlCreateObjectAction::importIt(FileIn & in, Token & token, UmlItem * where
   where = where->container(aCreateObjectAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlCreateObjectAction * a = create(where, s);
     
     if (a == 0)
@@ -659,7 +657,7 @@ void UmlCreateObjectAction::importIt(FileIn & in, Token & token, UmlItem * where
     s = token.valueOf("classifier");
         
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr)) {
@@ -674,7 +672,7 @@ void UmlCreateObjectAction::importIt(FileIn & in, Token & token, UmlItem * where
     }
     
     if (!s.isEmpty()) {
-      QMap<Q3CString, UmlItem *>::Iterator it = All.find(s);
+      QMap<QCString, UmlItem *>::Iterator it = All.find(s);
       
       if (it == All.end())
 	Unresolved::addRef(a, s);
@@ -684,8 +682,8 @@ void UmlCreateObjectAction::importIt(FileIn & in, Token & token, UmlItem * where
   }
 }
 
-void UmlCreateObjectAction::solve(Q3CString idref) {
-  QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+void UmlCreateObjectAction::solve(QCString idref) {
+  QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
       
   if (it != All.end())
     set_Classifier((*it)->name());
@@ -702,7 +700,7 @@ void UmlDestroyObjectAction::importIt(FileIn & in, Token & token, UmlItem * wher
   where = where->container(aDestroyObjectAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlDestroyObjectAction * a = create(where, s);
     
     if (a == 0)
@@ -731,7 +729,7 @@ void UmlTestIdentityAction::importIt(FileIn & in, Token & token, UmlItem * where
   where = where->container(aTestIdentityAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlTestIdentityAction * a = create(where, s);
     
     if (a == 0)
@@ -755,7 +753,7 @@ void UmlRaiseExceptionAction::importIt(FileIn & in, Token & token, UmlItem * whe
   where = where->container(aRaiseExceptionAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlRaiseExceptionAction * a = create(where, s);
     
     if (a == 0)
@@ -779,7 +777,7 @@ void UmlReduceAction::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(aReduceAction, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlReduceAction * a = create(where, s);
     
     if (a == 0)
@@ -794,7 +792,7 @@ void UmlReduceAction::importIt(FileIn & in, Token & token, UmlItem * where)
     s = token.valueOf("reducer");
         
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr)) {
@@ -809,7 +807,7 @@ void UmlReduceAction::importIt(FileIn & in, Token & token, UmlItem * where)
     }
     
     if (!s.isEmpty()) {
-      QMap<Q3CString, UmlItem *>::Iterator it = All.find(s);
+      QMap<QCString, UmlItem *>::Iterator it = All.find(s);
       
       if (it == All.end())
 	Unresolved::addRef(a, s);
@@ -827,8 +825,8 @@ void UmlReduceAction::importIt(FileIn & in, Token & token, UmlItem * where)
   }
 }
 
-void UmlReduceAction::solve(Q3CString idref) {
-  QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+void UmlReduceAction::solve(QCString idref) {
+  QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
       
   if (it != All.end()) {
     switch ((*it)->kind()) {

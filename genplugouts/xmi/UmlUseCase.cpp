@@ -22,7 +22,7 @@ bool UmlUseCase::write_if_needed(FileOut & out) {
   write_stereotype(out); 
   write_description_properties(out); 
      
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size(); 
   bool used = FALSE; 
   bool haveRel= FALSE; 

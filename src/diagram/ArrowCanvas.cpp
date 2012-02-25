@@ -28,13 +28,9 @@
 
 
 #include <math.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
-#include <QPixmap>
 
 #include "ArrowCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -62,7 +58,7 @@
 ArrowCanvas::ArrowCanvas(UmlCanvas * canvas, DiagramItem * b,
 			 DiagramItem * e, UmlCode t,
 			 int id, bool own_brk, float dbegin, float dend)
-      : Q3CanvasPolygon(canvas), DiagramItem(id, canvas), begin(b), end(e),
+      : QCanvasPolygon(canvas), DiagramItem(id, canvas), begin(b), end(e),
         itstype(t), geometry(NoGeometry), fixed_geometry(FALSE),
   	label(0), stereotype(0), decenter_begin(dbegin), decenter_end(dend) {
   boundings.resize(4);
@@ -407,15 +403,15 @@ void ArrowCanvas::change_scale() {
   
   label = 0;
   stereotype = 0;
-  Q3CanvasPolygon::setVisible(FALSE);
+  QCanvasPolygon::setVisible(FALSE);
   update_pos();
-  Q3CanvasPolygon::setVisible(TRUE);
+  QCanvasPolygon::setVisible(TRUE);
   label = lab;
   stereotype = ste;
 }
 
 void ArrowCanvas::setVisible(bool yes) {
-  Q3CanvasPolygon::setVisible(yes);
+  QCanvasPolygon::setVisible(yes);
   if (label != 0)
     label->setVisible(yes);
   if (stereotype != 0)
@@ -468,7 +464,7 @@ void ArrowCanvas::go_up(double nz) {
 	a->label->setZ(nz);
     }
     
-    Q3PtrListIterator<ArrowCanvas> it(a->lines);
+    QListIterator<ArrowCanvas> it(a->lines);
     
     while (it.current()) {
       it.current()->go_up(nz);
@@ -496,7 +492,7 @@ bool ArrowCanvas::copyable() const {
 void ArrowCanvas::drawShape(QPainter & p) {
   if (! visible() || (beginp == endp)) 
     return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   p.setBackgroundMode(::Qt::OpaqueMode);
 
   FILE * fp = svg();
@@ -813,7 +809,7 @@ bool ArrowCanvas::contains(int, int) const {
 }
 
 QString ArrowCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("a relation can't have a relation");
+  return (l == UmlAnchor) ? 0 : TR("a relation can't have a relation");
 }
 
 QString ArrowCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -937,8 +933,8 @@ void ArrowCanvas::default_stereotype_position() const {
 }
 
 void ArrowCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu geo(0);
+  QPopupMenu m(0);
+  QPopupMenu geo(0);
   ArrowCanvas * plabel;
   ArrowCanvas * pstereotype;
     
@@ -1024,7 +1020,7 @@ void ArrowCanvas::menu(const QPoint&) {
   package_modified();
 }
 
-void ArrowCanvas::init_geometry_menu(Q3PopupMenu & m, int first) {
+void ArrowCanvas::init_geometry_menu(QPopupMenu & m, int first) {
   QPixmap hv((const char **) geometry_hv);
   QPixmap vh((const char **) geometry_vh);
   QPixmap hvh((const char **) geometry_hvh);
@@ -1219,7 +1215,7 @@ ArrowCanvas * ArrowCanvas::join(ArrowCanvas * other, ArrowPointCanvas * ap) {
     end->add_line(this);	// add before remove in case end is
     end->remove_line(other, TRUE);	// an arrow junction and not del it
     
-    Q3PtrList<ArrowCanvas> olines = other->lines;
+    QList<ArrowCanvas> olines = other->lines;
     LabelCanvas * olabel = other->label;
     LabelCanvas * ostereotype = other->stereotype;
     
@@ -1379,9 +1375,9 @@ void ArrowCanvas::decenter(QPoint p, bool start, bool horiz) {
   
   propag_decenter(decenter_begin, decenter_end);
   
-  Q3CanvasPolygon::setVisible(FALSE);
+  QCanvasPolygon::setVisible(FALSE);
   update_pos();
-  Q3CanvasPolygon::setVisible(TRUE);
+  QCanvasPolygon::setVisible(TRUE);
 }
 
 void ArrowCanvas::propag_decenter(float db, float de) {
@@ -1408,7 +1404,7 @@ void ArrowCanvas::propag_decenter(float db, float de) {
 void ArrowCanvas::set_decenter(float db, float de) {
   propag_decenter(db, de);
   
-  Q3CanvasPolygon::setVisible(FALSE);
+  QCanvasPolygon::setVisible(FALSE);
   
   ArrowCanvas * a = this;
   
@@ -1427,7 +1423,7 @@ void ArrowCanvas::set_decenter(float db, float de) {
   update_pos();
   update_geometry();
   
-  Q3CanvasPolygon::setVisible(TRUE);
+  QCanvasPolygon::setVisible(TRUE);
   
   canvas()->update();
 }
@@ -1735,7 +1731,7 @@ void ArrowCanvas::drawing_settings_modified() {
   auto_pos = the_canvas()->browser_diagram()->get_auto_label_position();
 }
 
-void ArrowCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ArrowCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "line_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {
@@ -1761,7 +1757,7 @@ void ArrowCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
   }
 }
 
-const ArrowCanvas * ArrowCanvas::save_lines(Q3TextStream & st, bool with_label,
+const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
 					    bool with_stereotype,
 					    QString & warning) const {
   nl_indent(st);
@@ -2005,9 +2001,9 @@ void ArrowCanvas::history_load(QBuffer & b) {
   ::load(arrow[2], b);
   ::load(poly, b);
   setPoints(boundings);
-  Q3CanvasPolygon::setZ(load_double(b));
-  Q3CanvasItem::setSelected(FALSE);
-  Q3CanvasItem::setVisible(TRUE);
+  QCanvasPolygon::setZ(load_double(b));
+  QCanvasItem::setSelected(FALSE);
+  QCanvasItem::setVisible(TRUE);
 
   begin->add_line(this);
   end->add_line(this);
@@ -2016,13 +2012,13 @@ void ArrowCanvas::history_load(QBuffer & b) {
 }
 
 void ArrowCanvas::history_hide() {
-  Q3CanvasPolygon::setVisible(FALSE);
+  QCanvasPolygon::setVisible(FALSE);
   unconnect();
 }
 
 //
 
-Q3PtrList<ArrowCanvas> ArrowCanvas::RelsToDel;
+QList<ArrowCanvas> ArrowCanvas::RelsToDel;
 
 void ArrowCanvas::post_load()
 {
@@ -2035,13 +2031,13 @@ void ArrowCanvas::post_load()
 }
 
 // to remove redondant relation made by release 2.22
-Q3PtrList<ArrowCanvas> ArrowCanvas::RelsToCheck;
+QList<ArrowCanvas> ArrowCanvas::RelsToCheck;
 
 void ArrowCanvas::remove_redondant_rels()
 {
-  Q3PtrListIterator<ArrowCanvas> liter(RelsToCheck);
+  QListIterator<ArrowCanvas> liter(RelsToCheck);
   // the key is <source address>_<browser node address>_<target address>
-  QMap<Q3CString, ArrowCanvas *> arrows;
+  QMap<QCString, ArrowCanvas *> arrows;
   char s[128];
   
   for (;;) {
@@ -2094,7 +2090,7 @@ void ArrowCanvas::write_uc_rel(ToolCom * com) const {
     
   search_supports(plabel, pstereotype);
   
-  Q3CString s;
+  QCString s;
   
   if (plabel == 0)
     com->write_string("");

@@ -16,9 +16,6 @@
 #include "CppSettings.h"
 #include "UmlClassView.h"
 #include "UmlPackage.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 UmlItem * UmlClass::container(anItemKind kind, Token & token, FileIn & in) {
   switch (kind) {
@@ -77,7 +74,7 @@ void UmlClass::importIt(FileIn & in, Token & token, UmlItem * where)
 {
   where = where->container(aClass, token, in);	// can't be null
     
-  Q3CString s = token.valueOf("name");
+  QCString s = token.valueOf("name");
   
   if (s.isEmpty()) {
     static unsigned n = 0;
@@ -130,10 +127,10 @@ void UmlClass::importIt(FileIn & in, Token & token, UmlItem * where)
     cl->set_isActive(TRUE);
 
   if (! token.closed()) {
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
-    Q3CString assocclass_ref1;
-    Q3CString assocclass_ref2;
+    QCString assocclass_ref1;
+    QCString assocclass_ref2;
   
     while (in.read(), !token.close(kstr)) {
       s = token.what();
@@ -163,7 +160,7 @@ void UmlClass::importIt(FileIn & in, Token & token, UmlItem * where)
       else if (stereotype &&
 	       (s == "icon") &&
 	       (token.xmiType() == "uml:Image")) {
-	Q3CString path = token.valueOf("location");
+	QCString path = token.valueOf("location");
 	
 	if (! path.isEmpty())
 	  cl->set_PropertyValue("stereotypeIconPath", path);
@@ -181,7 +178,7 @@ void UmlClass::importIt(FileIn & in, Token & token, UmlItem * where)
 
 void UmlClass::importPrimitiveType(FileIn & in, Token & token, UmlItem *)
 {
-  Q3CString id = token.xmiId();
+  QCString id = token.xmiId();
   UmlTypeSpec t;
   
   t.explicit_type = token.valueOf("name");
@@ -210,7 +207,7 @@ void UmlClass::importPrimitiveType(FileIn & in, Token & token, UmlItem *)
     PrimitiveTypes[id] = t;
 }
 
-void UmlClass::generalizeDependRealize(UmlItem * target, FileIn & in, int context, Q3CString label, Q3CString constraint) {
+void UmlClass::generalizeDependRealize(UmlItem * target, FileIn & in, int context, QCString label, QCString constraint) {
   static const struct {
     aRelationKind rk;
     const char * err;
@@ -238,8 +235,8 @@ void UmlClass::generalizeDependRealize(UmlItem * target, FileIn & in, int contex
   }
 }
 
-void UmlClass::solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString constraint) {
-  QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+void UmlClass::solveGeneralizationDependencyRealization(int context, QCString idref, QCString label, QCString constraint) {
+  QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
   
   if (it != All.end()) {
     static const struct {
@@ -275,14 +272,14 @@ void UmlClass::solveGeneralizationDependencyRealization(int context, Q3CString i
     UmlCom::trace("relation : unknown target reference '" + idref + "'<br>");
 }
 
-UmlClass * UmlClass::signature(Q3CString id)
+UmlClass * UmlClass::signature(QCString id)
 {
-  QMap<Q3CString, UmlClass *>::Iterator iter = signatures.find(id);
+  QMap<QCString, UmlClass *>::Iterator iter = signatures.find(id);
   
   return (iter == signatures.end()) ? 0 : *iter;
 }
 
-int UmlClass::formalRank(Q3CString id) {
+int UmlClass::formalRank(QCString id) {
   int r = formalsId.findIndex(id);
   
   if ((r == -1) && !FileIn::isBypassedId(r))
@@ -292,7 +289,7 @@ int UmlClass::formalRank(Q3CString id) {
 }
 
 bool UmlClass::bind(UmlClass * tmpl) {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned int n = ch.size();
   int i;
   
@@ -326,7 +323,7 @@ bool UmlClass::bind(UmlClass * tmpl) {
   return TRUE;
 }
 
-void UmlClass::extend(Q3CString mcl) {
+void UmlClass::extend(QCString mcl) {
   if (parent()->parent()->kind() != aPackage)
     return;
   
@@ -335,18 +332,18 @@ void UmlClass::extend(Q3CString mcl) {
   if (index == -1)
     return;
   
-  Q3CString path = mcl.left(index);
+  QCString path = mcl.left(index);
   const char * defltpath0 = "http://schema.omg.org/spec/UML/2.0/uml.xml";
   const char * defltpath1 = "http://schema.omg.org/spec/UML/2.1/uml.xml";
   bool dflt = ((path == defltpath0) || (path == defltpath1));
   
   mcl = mcl.mid(index + 1);
   
-  static Q3PtrList<UmlClass> metaclasses;
+  static QList<UmlClass> metaclasses;
   
-  Q3PtrListIterator<UmlClass> it(metaclasses);
+  QListIterator<UmlClass> it(metaclasses);
   UmlClass * metacl = UmlClass::get(mcl, 0);
-  Q3CString s;
+  QCString s;
     
   if ((metacl == 0) ||
       (metacl->stereotype() != "metaclass") ||
@@ -376,7 +373,7 @@ void UmlClass::extend(Q3CString mcl) {
     }
     
     if (metacl == 0) {
-      metacl = addMetaclass(mcl, (dflt) ? 0 : (const char *)path); //[rageek] different types for ? : 
+      metacl = addMetaclass(mcl, (dflt) ? 0 : path);
       metaclasses.append(metacl);
     }
   }
@@ -384,13 +381,13 @@ void UmlClass::extend(Q3CString mcl) {
   UmlRelation::create(aDirectionalAssociation, this, metacl);
 }
 
-bool UmlClass::isAppliedStereotype(Token & tk, Q3CString & prof_st, Q3ValueList<Q3CString> & base_v)
+bool UmlClass::isAppliedStereotype(Token & tk, QCString & prof_st, QValueList<QCString> & base_v)
 {
-  static Q3Dict<Q3CString> stereotypes;
-  static Q3Dict<Q3ValueList<Q3CString> > bases;
+  static QDict<QCString> stereotypes;
+  static QDict<QValueList<QCString> > bases;
   
-  Q3CString s = tk.what();
-  Q3CString * st = stereotypes[s];
+  QCString s = tk.what();
+  QCString * st = stereotypes[s];
   
   if (st != 0) {
     prof_st = *st;
@@ -408,7 +405,7 @@ bool UmlClass::isAppliedStereotype(Token & tk, Q3CString & prof_st, Q3ValueList<
       UmlClass * cl = findStereotype(s, FALSE);
       
       if (cl != 0) {
-	const Q3PtrVector<UmlItem> ch = cl->children();
+	const QVector<UmlItem> ch = cl->children();
 	unsigned n = ch.size();
 	
 	for (unsigned i = 0; i != n; i += 1) {
@@ -424,8 +421,8 @@ bool UmlClass::isAppliedStereotype(Token & tk, Q3CString & prof_st, Q3ValueList<
 	  base_v.append("base_element");
 	
 	prof_st = cl->parent()->parent()->name() + ":" + cl->name();
-	stereotypes.insert(s, new Q3CString(prof_st));
-	bases.insert(s, new Q3ValueList<Q3CString>(base_v));
+	stereotypes.insert(s, new QCString(prof_st));
+	bases.insert(s, new QValueList<QCString>(base_v));
 	return TRUE;
       }
     }
@@ -439,7 +436,7 @@ bool UmlClass::isPrimitiveType(Token & token, UmlTypeSpec & ts)
   if (token.xmiType() != "uml:PrimitiveType")
     return FALSE;
     
-  Q3CString href = token.valueOf("href");
+  QCString href = token.valueOf("href");
   int index;
   
   if (href.isEmpty() || ((index = href.find('#')) == -1))
@@ -469,12 +466,12 @@ void UmlClass::readFormal(FileIn & in, Token & token) {
   if (! token.closed()) {
     signatures[token.xmiId()] = this;
     
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
     unsigned int rank = 0;
     
     while (in.read(), !token.close(kstr)) {
-      Q3CString s = token.what();
+      QCString s = token.what();
       
       if (s == "parameter") {
 	// useless
@@ -483,9 +480,9 @@ void UmlClass::readFormal(FileIn & in, Token & token) {
       }
       else if ((s == "ownedparameter") &&
 	       (token.xmiType() == "uml:ClassifierTemplateParameter")) {
-	Q3CString idparam = token.xmiId();
-	Q3CString pname = token.valueOf("name");	// at least for VP
-	Q3CString value;
+	QCString idparam = token.xmiId();
+	QCString pname = token.valueOf("name");	// at least for VP
+	QCString value;
 	
 	if (! token.closed()) {
 	  while (in.read(), !token.close("ownedparameter")) {
@@ -518,9 +515,9 @@ void UmlClass::readFormal(FileIn & in, Token & token) {
   }
 }
 
-UmlClass * UmlClass::addMetaclass(Q3CString mclname, const char * mclpath) {
+UmlClass * UmlClass::addMetaclass(QCString mclname, const char * mclpath) {
   UmlPackage * pack = (UmlPackage *) parent()->parent();	// is a package
-  const Q3PtrVector<UmlItem> ch = pack->children();
+  const QVector<UmlItem> ch = pack->children();
   unsigned n = ch.size();
   UmlClass * r = 0;
   
@@ -534,7 +531,7 @@ UmlClass * UmlClass::addMetaclass(Q3CString mclname, const char * mclpath) {
   }
   
   if (r == 0) {
-    Q3CString s = "meta classes";
+    QCString s = "meta classes";
     UmlItem * v = 0;
     
     while ((v = UmlClassView::create(pack, s)) == 0)
@@ -556,5 +553,5 @@ int UmlClass::NumberOf;
 int UmlClass::NumberOfStereotype;
 
 //associate the class owning the template signature with the signature id
-QMap<Q3CString, UmlClass *> UmlClass::signatures;
+QMap<QCString, UmlClass *> UmlClass::signatures;
 

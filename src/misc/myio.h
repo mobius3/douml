@@ -28,9 +28,6 @@
 
 #include <stdio.h>
 #include "UmlEnum.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3PointArray>
 
 #define FILEFORMAT 75
 
@@ -38,12 +35,12 @@ class QDir;
 class QFile;
 class QFileInfo;
 class QStringList;
-class Q3CanvasItem;
-class Q3TextStream;
-class Q3CanvasRectangle;
+class QCanvasItem;
+class QTextStream;
+class QCanvasRectangle;
 class QBuffer;
 class QPoint;
-class Q3PointArray;
+class QPointArray;
 class QColor;
 class QRect;
 class QFont;
@@ -95,10 +92,10 @@ char * read_definition(int id, const char * ext, int offset, int len);
 extern void save_definition(int id, const char * ext, const char * def, BooL & is_new);
 extern void delete_definition(int id, const char * ext);
 
-extern void save_string(const char *, Q3TextStream & st);
-extern void save_string_list(QStringList & list, Q3TextStream & st);
-extern void save_unicode_string_list(QStringList & list, Q3TextStream & st);
-extern void nl_indent(Q3TextStream & st);
+extern void save_string(const char *, QTextStream & st);
+extern void save_string_list(QStringList & list, QTextStream & st);
+extern void save_unicode_string_list(QStringList & list, QTextStream & st);
+extern void nl_indent(QTextStream & st);
 extern void indent(int);
 extern int indent();
 extern void indent0();
@@ -123,15 +120,15 @@ extern void unknown_ref(const char * kind, int id);
 
 // ifdef save as int to bypass bug in << float in qt 3.3.3
 #undef FORCE_INT_COORD
-extern void save_xy(Q3TextStream & st, const Q3CanvasItem * c, const char * s);
-extern void save_xyz(Q3TextStream & st, const Q3CanvasItem * c, const char * s);
-extern void save_xyzwh(Q3TextStream & st, const Q3CanvasRectangle * c, const char * s);
-extern void read_xy(char * & st, Q3CanvasItem * c);
-extern void read_xyz(char * & st, Q3CanvasItem * c);
-extern void read_xyzwh(char * & st, Q3CanvasRectangle * c);
-extern void read_zwh(char * & st, Q3CanvasRectangle * c);
+extern void save_xy(QTextStream & st, const QCanvasItem * c, const char * s);
+extern void save_xyz(QTextStream & st, const QCanvasItem * c, const char * s);
+extern void save_xyzwh(QTextStream & st, const QCanvasRectangle * c, const char * s);
+extern void read_xy(char * & st, QCanvasItem * c);
+extern void read_xyz(char * & st, QCanvasItem * c);
+extern void read_xyzwh(char * & st, QCanvasRectangle * c);
+extern void read_zwh(char * & st, QCanvasRectangle * c);
 extern void bypass_xy(char * & st);
-extern void save_color(Q3TextStream & st, const char *, UmlColor, BooL &);
+extern void save_color(QTextStream & st, const char *, UmlColor, BooL &);
 extern void read_color(char *& st, const char *, UmlColor &, char * &);
 
 extern void read_font(char *& st, const char *, UmlFont &, char * &);
@@ -149,8 +146,8 @@ extern void * load_ptr(QBuffer &);
 extern void save(const QPoint & p, QBuffer &);
 extern void load(QPoint & p, QBuffer &);
 
-extern void save(const Q3PointArray & a, QBuffer &);
-extern void load(Q3PointArray & a, QBuffer &);
+extern void save(const QPointArray & a, QBuffer &);
+extern void load(QPointArray & a, QBuffer &);
 
 extern void save(double, QBuffer &);
 extern void load(double &, QBuffer &);
@@ -171,8 +168,8 @@ extern void end_svg();
 extern FILE * svg();
 extern int svg_height();
 extern const char * svg_color(UmlColor);
-extern void draw_shadow(FILE * fp, Q3PointArray & poly);
-extern void draw_poly(FILE * fp, Q3PointArray & poly,
+extern void draw_shadow(FILE * fp, QPointArray & poly);
+extern void draw_poly(FILE * fp, QPointArray & poly,
 		      UmlColor color, bool stroke = TRUE);
 extern void draw_text(const QRect & r, int align, QString s, const QFont &, FILE *);
 extern void draw_text(int x, int y, int w, int h, int align, QString s,

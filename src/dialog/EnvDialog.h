@@ -29,7 +29,7 @@
 #include <qdialog.h>
 
 class QLineEdit;
-class Q3ComboBox;
+class QComboBox;
 
 // singleton
 
@@ -49,7 +49,7 @@ class EnvDialog : public QDialog {
     QLineEdit * ed_template;
     QLineEdit * ed_editor;
     QLineEdit * ed_lang;
-    Q3ComboBox * cb_charset;
+    QComboBox * cb_charset;
     QLineEdit * ed_xmin;
     QLineEdit * ed_xmax;
     QLineEdit * ed_ymin;
@@ -65,6 +65,6 @@ class EnvDialog : public QDialog {
     void lang_browse();
 };
 
-extern int read_doumlrc();
+extern int read_boumlrc();
 
 #endif

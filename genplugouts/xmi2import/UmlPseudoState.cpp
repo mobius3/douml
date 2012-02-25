@@ -14,8 +14,6 @@
 #include "UmlJunctionPseudoState.h"
 #include "UmlShallowHistoryPseudoState.h"
 #include "UmlTerminatePseudoState.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlPseudoState::init()
 {
   declareFct("connectionpoint", "uml:Pseudostate", &importIt);
@@ -27,7 +25,7 @@ void UmlPseudoState::init()
 
 void UmlPseudoState::importIt(FileIn & in, Token & token, UmlItem * where)
 {
-  Q3CString k = token.valueOf("kind");
+  QCString k = token.valueOf("kind");
   
   if (k == "final") {
     // Visual Paradigm 6.1
@@ -39,7 +37,7 @@ void UmlPseudoState::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(anInitialPseudoState, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");    
+    QCString s = token.valueOf("name");    
     UmlPseudoState * ps;
     
     if ((k == "initial") || k.isEmpty())
@@ -76,7 +74,7 @@ void UmlPseudoState::importIt(FileIn & in, Token & token, UmlItem * where)
     ps->addItem(token.xmiId(), in);
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr))
@@ -91,9 +89,9 @@ void UmlPseudoState::importRef(FileIn & in, Token & token, UmlItem * where)
   where = where->container(anInitialPseudoState, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");    
+    QCString s = token.valueOf("name");    
     UmlPseudoState * ps;
-    Q3CString idref;
+    QCString idref;
     
     if (!(idref = token.valueOf("entry")).isEmpty())
       ps = UmlEntryPointPseudoState::create(where, s);
@@ -111,7 +109,7 @@ void UmlPseudoState::importRef(FileIn & in, Token & token, UmlItem * where)
       Unresolved::addRef(ps, idref);
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr))

@@ -26,7 +26,7 @@
 #ifndef LABELED_H
 #define LABELED_H
 
-#include <q3intdict.h> 
+#include <qintdict.h> 
 
 // id 1 user 1
 #define PROJECT_ID (1*128 + 1)
@@ -72,8 +72,8 @@ template <class X> class IdDict {
 #else
   public:
 #endif
-    Q3IntDict<X> dict[2];
-    Q3IntDict<char> dictlib;
+    QIntDict<X> dict[2];
+    QIntDict<char> dictlib;
     int idmax;
     bool old_diagram;
     
@@ -101,7 +101,7 @@ template <class X> class IdDict {
     }
     
     void update_idmax_for_root() {
-      Q3IntDictIterator<X> it(dict[0]); 
+      QIntDictIterator<X> it(dict[0]); 
       
       while (it.current()) {
 	int id = it.currentKey();
@@ -125,9 +125,9 @@ template <class X> class IdDict {
     }
 };
 
-template <class X> class IdIterator : public Q3IntDictIterator<X> {
+template <class X> class IdIterator : public QIntDictIterator<X> {
   public:
-    IdIterator(IdDict<X> & ids) : Q3IntDictIterator<X>(ids.dict[0]) {}
+    IdIterator(IdDict<X> & ids) : QIntDictIterator<X>(ids.dict[0]) {}
 };
 
 template <class X> class Labeled {

@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= file_control
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= BooL=bool
 HEADERS		= ./aVisibility.h \
 		  ./UmlBaseExtraClassMember.h \
@@ -228,5 +228,3 @@ SOURCES		= ./aVisibility.cpp \
 		  ./UmlDeploymentDiagram.cpp \
 		  ./UmlUseCase.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

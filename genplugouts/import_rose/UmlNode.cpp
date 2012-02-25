@@ -4,20 +4,18 @@
 #include "UmlDeploymentView.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
-void UmlNode::import(File & f, UmlDeploymentView * p, const Q3CString & ste)
+void UmlNode::import(File & f, UmlDeploymentView * p, const QCString & ste)
 {
-  Q3CString s;
+  QCString s;
 
   if (f.read(s) != STRING)
     f.syntaxError(s, " deployment node's name expected");
 
-  Q3CString s2;
-  Q3CString id;
-  Q3CString dummy_ste;
-  Q3CString doc;
-  Q3Dict<Q3CString> prop;
+  QCString s2;
+  QCString id;
+  QCString dummy_ste;
+  QCString doc;
+  QDict<QCString> prop;
   int k;
   
   do {

@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on debug
+CONFIG	      += qt warn_on release
 SOURCES	      = main.cpp Statistic.cpp \
 		../CppReverse/UmlClassItem.cpp \
 		../CppReverse/UmlAttribute.cpp \
@@ -148,5 +148,3 @@ TARGET	      = cpp_roundtrip
 DEFINES	      = WITHCPP REVERSE ROUNDTRIP BooL=bool
 INCLUDEPATH   = ../Tools ../CppRoundtrip ../CppReverse
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

@@ -27,15 +27,10 @@
 #define BASICDATA_H
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3TextStream>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "mystr.h"
 
-class Q3TextStream;
+class QTextStream;
 class BrowserNode;
 class HaveKeyValueData;
 class ToolCom;
@@ -63,7 +58,7 @@ class BasicData : public QObject {
   Q_OBJECT
     
   protected:
-    static Q3PtrList<BasicData> removed;
+    static QList<BasicData> removed;
   
     SharedStr stereotype;
     BrowserNode * browser_node;
@@ -84,7 +79,7 @@ class BasicData : public QObject {
     const char * get_stereotype() const { return stereotype; };
     const char * get_short_stereotype() const;
     virtual bool set_stereotype(const QString &);
-    virtual bool set_stereotype(const Q3CString &);
+    virtual bool set_stereotype(const QCString &);
     virtual bool set_stereotype(const char *);
     
     virtual void set_browser_node(BrowserNode * bn);
@@ -95,7 +90,7 @@ class BasicData : public QObject {
     virtual bool decldefbody_contain(const QString & s, bool cs,
 				     BrowserNode *);
         
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
         
     // tools

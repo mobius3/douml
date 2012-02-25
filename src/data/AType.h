@@ -28,10 +28,8 @@
 
 #include "UmlEnum.h"
 #include "mystr.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
-class Q3TextStream;
+class QTextStream;
 class BrowserClass;
 class ToolCom;
 
@@ -47,7 +45,7 @@ class AType {
     QString get_full_type() const;
     
     void send_def(ToolCom * com) const;
-    void save(Q3TextStream & st, QString & warning,
+    void save(QTextStream & st, QString & warning,
 	      const char * t, const char * ex) const;
     void read(char * & st, const char * t, const char * ex);
     void read(char * & st, const char * t, const char * ex, const char * k);

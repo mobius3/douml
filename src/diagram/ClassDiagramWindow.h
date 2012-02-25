@@ -35,7 +35,6 @@ class QComboBox;
 class ClassDiagramView;
 class BrowserClassDiagram;
 
-/* This is the window with the class diagram */
 class ClassDiagramWindow : public DiagramWindow {
   Q_OBJECT
     
@@ -60,7 +59,7 @@ class ClassDiagramWindow : public DiagramWindow {
     
   public:
     ClassDiagramWindow(const QString & s, BrowserClassDiagram *, int id = -1);
-virtual ~ClassDiagramWindow();
+    ~ClassDiagramWindow();
 
     virtual DiagramView * get_view() const;
     

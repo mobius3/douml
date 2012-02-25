@@ -36,12 +36,8 @@
 #include "UmlOperation.h"
 #include "Lex.h"
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
-UmlPackage::UmlPackage(void * id, const Q3CString & n)
+UmlPackage::UmlPackage(void * id, const QCString & n)
     : UmlBasePackage(id, n) {
   class_view = 0;
 #ifdef REVERSE
@@ -53,13 +49,13 @@ UmlPackage::UmlPackage(void * id, const Q3CString & n)
   namespace_fixedp = FALSE;
 }
 
-UmlClassView * UmlPackage::get_classview(const Q3CString & nmsp) {
+UmlClassView * UmlPackage::get_classview(const QCString & nmsp) {
   UmlPackage * pack;
   
   if (nmsp != cppNamespace()) {
     if (namespace_fixedp) {
       if ((pack = findCppNamespace(nmsp)) == 0) {
-	Q3CString s = nmsp;
+	QCString s = nmsp;
 	
 	if (s.isEmpty())
 	  s = name();
@@ -76,14 +72,14 @@ UmlClassView * UmlPackage::get_classview(const Q3CString & nmsp) {
 	    ((pack = UmlBasePackage::create(this, s += "_")) == 0) &&
 	    ((pack = UmlBasePackage::create(this, s += "_")) == 0)) {
 #ifdef REVERSE
-	  UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create package <i>")
+	  UmlCom::trace(QCString("<font face=helvetica><b>cannot create package <i>")
 			+ s + "</i> under package <i>"
 			+ name() + "</b></font><br>");
 	  UmlCom::message("");
 	  throw 0;
 #else
 	  QMessageBox::critical(0, "Fatal Error", 
-				Q3CString("<font face=helvetica><b>cannot create package <i>")
+				QCString("<font face=helvetica><b>cannot create package <i>")
 				+ s + "</i> under package <i>"
 				+ Name() + "</b></font><br>");
 	  QApplication::exit(1);
@@ -106,7 +102,7 @@ UmlClassView * UmlPackage::get_classview(const Q3CString & nmsp) {
     pack = this;
   
   if (pack->class_view == 0) {
-    Q3PtrVector<UmlItem> ch = pack->children();
+    QVector<UmlItem> ch = pack->children();
     
     for (unsigned index = 0; index != ch.size(); index += 1)
       // return the first class view find
@@ -115,14 +111,14 @@ UmlClassView * UmlPackage::get_classview(const Q3CString & nmsp) {
     
     if ((pack->class_view = UmlBaseClassView::create(pack, name())) == 0) {
 #ifdef REVERSE
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create class view <i>")
+      UmlCom::trace(QCString("<font face=helvetica><b>cannot create class view <i>")
 		    + name() + "</i> under package <i>"
 		    + pack->name() + "</b></font><br>");
       UmlCom::message("");
       throw 0;
 #else
       QMessageBox::critical(0, "Fatal Error", 
-			    Q3CString("<font face=helvetica><b>cannot create class view <i>")
+			    QCString("<font face=helvetica><b>cannot create class view <i>")
 			    + name() + "</i> under package <i>"
 			    + pack->name() + "</b></font><br>");
       QApplication::exit(1);
@@ -135,7 +131,7 @@ UmlClassView * UmlPackage::get_classview(const Q3CString & nmsp) {
 
 #ifdef REVERSE
 
-void UmlPackage::reverse_main(const Q3CString & type, Q3CString comment) {
+void UmlPackage::reverse_main(const QCString & type, QCString comment) {
   // do not lost main !
   Lex::mark();
   UmlOperation::skip_body();
@@ -185,13 +181,13 @@ void UmlPackage::reverse_main(const Q3CString & type, Q3CString comment) {
 }
 
 
-UmlDeploymentView * UmlPackage::get_deploymentview(const Q3CString & nmsp) {
+UmlDeploymentView * UmlPackage::get_deploymentview(const QCString & nmsp) {
   UmlPackage * pack;
   
   if (nmsp != cppNamespace()) {
     if (namespace_fixedp) {
       if ((pack = findCppNamespace(nmsp)) == 0) {
-	Q3CString s = nmsp;
+	QCString s = nmsp;
 	
 	if (s.isEmpty())
 	  s = name();
@@ -208,14 +204,14 @@ UmlDeploymentView * UmlPackage::get_deploymentview(const Q3CString & nmsp) {
 	    ((pack = UmlBasePackage::create(this, s += "_")) == 0) &&
 	    ((pack = UmlBasePackage::create(this, s += "_")) == 0)) {
 #ifdef REVERSE
-	  UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create package <i>")
+	  UmlCom::trace(QCString("<font face=helvetica><b>cannot create package <i>")
 			+ s + "</i> under package <i>"
 			+ name() + "</b></font><br>");
 	  UmlCom::message("");
 	  throw 0;
 #else
 	  QMessageBox::critical(0, "Fatal Error", 
-				Q3CString("<font face=helvetica><b>cannot create package <i>")
+				QCString("<font face=helvetica><b>cannot create package <i>")
 				+ s + "</i> under package <i>"
 				+ Name() + "</b></font><br>");
 	  QApplication::exit(1);
@@ -238,7 +234,7 @@ UmlDeploymentView * UmlPackage::get_deploymentview(const Q3CString & nmsp) {
     pack = this;
   
   if (pack->deployment_view == 0) {
-    Q3PtrVector<UmlItem> ch = pack->children();
+    QVector<UmlItem> ch = pack->children();
     
     for (unsigned index = 0; index != ch.size(); index += 1)
       // return the first class view find
@@ -247,14 +243,14 @@ UmlDeploymentView * UmlPackage::get_deploymentview(const Q3CString & nmsp) {
     
     if ((pack->deployment_view = UmlBaseDeploymentView::create(pack, name())) == 0) {
 #ifdef REVERSE
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
+      UmlCom::trace(QCString("<font face=helvetica><b>cannot create deployment view <i>")
 		    + name() + "</i> under package <i>"
 		    + pack->name() + "</b></font><br>");
       UmlCom::message("");
       throw 0;
 #else
       QMessageBox::critical(0, "Fatal Error", 
-			    Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
+			    QCString("<font face=helvetica><b>cannot create deployment view <i>")
 			    + name() + "</i> under package <i>"
 			    + pack->name() + "</b></font><br>");
       QApplication::exit(1);
@@ -271,7 +267,7 @@ UmlDeploymentView * UmlPackage::get_deploymentview(const Q3CString & nmsp) {
 void UmlPackage::init(Package * p) {
   package = p;
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
     
@@ -282,7 +278,7 @@ void UmlPackage::init(Package * p) {
 void UmlPackage::upload(ClassContainer * cnt) {
   package = new Package((Package *) cnt, this);
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
     
@@ -293,7 +289,7 @@ void UmlPackage::upload(ClassContainer * cnt) {
 int UmlPackage::count_roundtriped() {
   int result = 1;
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
     
@@ -312,7 +308,7 @@ bool UmlPackage::set_roundtrip_expected() {
   
   Progress::tic_it();
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
   bool result = isWritable();
@@ -323,8 +319,8 @@ bool UmlPackage::set_roundtrip_expected() {
   return result;
 }
 
-void UmlPackage::mark_useless(Q3PtrList<UmlItem> & l) {
-  Q3PtrVector<UmlItem> ch = UmlItem::children();
+void UmlPackage::mark_useless(QList<UmlItem> & l) {
+  QVector<UmlItem> ch = UmlItem::children();
   UmlClassItem ** v = (UmlClassItem **) ch.data();
   UmlClassItem ** const vsup = v + ch.size();
     

@@ -4,8 +4,8 @@
 
 #include "UmlBaseState.h"
 #include "UmlStateItem.h"
-#include <q3cstring.h>
-#include <q3ptrlist.h>
+#include <qcstring.h>
+#include <qlist.h>
 #include <qmap.h>
 
 class FileOut;
@@ -14,7 +14,7 @@ class UmlTransition;
 class UmlState : public UmlBaseState, public UmlStateItem {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
- UmlState(void * id, const Q3CString & s) : UmlBaseState(id, s) {
+ UmlState(void * id, const QCString & s) : UmlBaseState(id, s) {
   _all.replace(s, this);
 }
 
@@ -34,15 +34,15 @@ class UmlState : public UmlBaseState, public UmlStateItem {
     //Return a state from its name.
     //Doesn't manage namespace/package/module
     
-    static UmlState * find(Q3CString s);
+    static UmlState * find(QCString s);
 
 
   protected:
-    Q3PtrList<UmlTransition> _incoming_trans;
+    QList<UmlTransition> _incoming_trans;
 
-    Q3PtrList<UmlTransition> _trans;
+    QList<UmlTransition> _trans;
 
-    static QMap<Q3CString, UmlState *> _all;
+    static QMap<QCString, UmlState *> _all;
 
 };
 

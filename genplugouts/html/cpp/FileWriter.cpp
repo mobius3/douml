@@ -1,20 +1,18 @@
 
 #include "FileWriter.h"
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qfile.h>
-//Added by qt3to4:
-#include <Q3CString>
 
-bool FileWriter::open(Q3CString s) {
+bool FileWriter::open(QCString s) {
   f = new QFile(s);
   
-  if (! f->open(QIODevice::WriteOnly)) {
+  if (! f->open(IO_WriteOnly)) {
     delete f;
     return FALSE;
   }
     
-  ts = new Q3TextStream(f);
+  ts = new QTextStream(f);
   return TRUE;
 }
 
@@ -27,7 +25,7 @@ void FileWriter::close() {
   ts = 0;
 }
 
-void FileWriter::write(Q3CString s) {
+void FileWriter::write(QCString s) {
   ts->writeRawBytes(s, s.length());
 }
 
@@ -40,7 +38,7 @@ void FileWriter::write(char c) {
 }
 
 void FileWriter::write(unsigned n) {
-  Q3CString s;
+  QCString s;
   
   s.setNum(n);
   

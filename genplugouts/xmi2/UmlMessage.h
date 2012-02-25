@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseMessage.h"
-#include <q3ptrvector.h>
+#include <qvector.h>
 
 class FileOut;
 class UmlItem;
@@ -14,7 +14,7 @@ class UmlMessage : public UmlBaseMessage {
   public:
     UmlMessage() : itsrank(++next_rank) {}
 
-    static void write_connectors(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlMessage> & msgs);
+    static void write_connectors(FileOut & out, UmlItem * diagram, const QVector<UmlMessage> & msgs);
 
 
   protected:

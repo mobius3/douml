@@ -71,7 +71,7 @@ class StateSpecVector {
   public:
     StateSpecVector() : _size(0), _v(0) {}
     StateSpecVector(int s) : _size(s) { _v = new StateSpec[s]; }
-virtual ~StateSpecVector() { if (_v) delete [] _v; }
+    ~StateSpecVector() { if (_v) delete [] _v; }
     int size() const { return _size; }
     void resize(int s);
     StateSpec & operator[] (int i) const { return _v[i]; }

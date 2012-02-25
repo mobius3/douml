@@ -3,12 +3,12 @@
 
 
 #include "UmlBaseView.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlView : public UmlBaseView {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlView(void * id, const Q3CString & s) : UmlBaseView(id, s) {
+     UmlView(void * id, const QCString & s) : UmlBaseView(id, s) {
     }
 
 };

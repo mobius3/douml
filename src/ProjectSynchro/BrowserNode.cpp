@@ -30,8 +30,6 @@
 #include <stdlib.h>
 
 #include <qapplication.h>
-//Added by qt3to4:
-#include <QPixmap>
 
 #include "BrowserNode.h"
 #include "BrowserView.h"
@@ -43,24 +41,24 @@
 #define MODIFIEDBY_COL 2
 
 #ifdef __APPLE__
-#define Qt::CTRL "Apple"
+#define CTRL "Apple"
 #else
-#define Qt::CTRL "Ctrl"
+#define CTRL "Ctrl"
 #endif
 
-Q3Dict<BrowserNode> BrowserNode::Youngs;
+QDict<BrowserNode> BrowserNode::Youngs;
     
 BrowserNode::BrowserNode(BrowserView * parent, QString fn)
-    : Q3ListViewItem(parent), filename(fn), view(parent), state(Unknown) {
+    : QListViewItem(parent), filename(fn), view(parent), state(Unknown) {
   parent->add_node(this);
 }
 
 BrowserNode::BrowserNode(BrowserNode * parent, QString fn, BrowserView * v)
-    : Q3ListViewItem(parent), filename(fn), view(v), state(Unknown) {
+    : QListViewItem(parent), filename(fn), view(v), state(Unknown) {
   v->add_node(this);
      
   // move it at end
-  Q3ListViewItem * child = parent->firstChild();
+  QListViewItem * child = parent->firstChild();
   
   while (child->nextSibling())
     child = child->nextSibling();
@@ -213,14 +211,14 @@ bool BrowserNode::load(QDir & dir) {
 }
 
 // synchronize all in todir, current packages are 'nodes'
-void BrowserNode::synchronize(QDir & todir, Q3Dict<BrowserNode> & nodes)
+void BrowserNode::synchronize(QDir & todir, QDict<BrowserNode> & nodes)
 {
-  static Q3Dict<void> useful(9973);	// all useful files
+  static QDict<void> useful(9973);	// all useful files
   static bool made_useful = TRUE;	// set at the first call
   
   // compare nodes with young packages
   
-  Q3DictIterator<BrowserNode> ity(Youngs);
+  QDictIterator<BrowserNode> ity(Youngs);
   
   for (; ity.current(); ++ity) {
     BrowserNode * from = ity.current();
@@ -282,7 +280,7 @@ void BrowserNode::synchronize(QDir & todir, Q3Dict<BrowserNode> & nodes)
   
   if (made_useful) {
     // memorize up to date packages, diagrams and classes body file
-    Q3DictIterator<BrowserNode> itn(nodes);
+    QDictIterator<BrowserNode> itn(nodes);
     
     for (; itn.current(); ++itn)
       if (itn.current()->state == UpToDate)
@@ -296,7 +294,7 @@ void BrowserNode::synchronize(QDir & todir, Q3Dict<BrowserNode> & nodes)
 }
 
 // this is useful, memorize it and its diagrams and classes body file
-void BrowserNode::memo(Q3Dict<void> & useful) {
+void BrowserNode::memo(QDict<void> & useful) {
   useful.insert(filename, (void *) 1);
   
   QStringList::Iterator its;

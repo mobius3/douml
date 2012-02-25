@@ -25,10 +25,7 @@
 
 #include <stdio.h>// debug
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h> 
 
 #include "UmlClass.h"
 #include "UmlPackage.h"
@@ -41,12 +38,12 @@
 #include "UmlCom.h"
 #include "util.h"
 
-Q3CString UmlClass::php_stereotype()
+QCString UmlClass::php_stereotype()
 {
-  Q3CString s = PhpSettings::classStereotype(stereotype());
+  QCString s = PhpSettings::classStereotype(stereotype());
   
   return ((s == "ignored") || (s == "enum") || (s == "interface"))
-    ? s : Q3CString("class");
+    ? s : QCString("class");
 }
 
 void UmlClass::generate() {
@@ -57,19 +54,19 @@ void UmlClass::generate() {
       if (associatedArtifact() != 0)
 	associatedArtifact()->generate();
       else if ((children().size() != 0) && verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica><i> ") + name() +
+	UmlCom::trace(QCString("<hr><font face=helvetica><i> ") + name() +
 		      " : </i> does not have associated <i>artifact</i></font><br>");
     }
   }
 }
 
-void UmlClass::generate(QTextOStream & f, Q3CString indent) {
-  const Q3CString & stereotype = php_stereotype();
+void UmlClass::generate(QTextOStream & f, QCString indent) {
+  const QCString & stereotype = php_stereotype();
   
   if (stereotype == "ignored")
     return;
   
-  Q3PtrVector<UmlItem> ch = children();
+  QVector<UmlItem> ch = children();
   const unsigned sup = ch.size();
   bool an_enum = (stereotype == "enum");
   int enum_item_rank = 0;
@@ -202,12 +199,12 @@ void UmlClass::generate(QTextOStream & f, Q3CString indent) {
   }
 }
 
-void UmlClass::generate(QTextOStream &, const Q3CString &, Q3CString, int &) {
+void UmlClass::generate(QTextOStream &, const QCString &, QCString, int &) {
 }
 
-void UmlClass::generate_require_onces(QTextOStream & f, Q3CString & made) {
+void UmlClass::generate_require_onces(QTextOStream & f, QCString & made) {
   if (!phpDecl().isEmpty()) {
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem> ch = children();
     unsigned index;
     const unsigned sup = ch.size();
     
@@ -220,9 +217,9 @@ void UmlClass::generate_require_onces(QTextOStream & f, Q3CString & made) {
   }
 }
 
-void UmlClass::generate_require_onces(QTextOStream & f, Q3CString & made,
+void UmlClass::generate_require_onces(QTextOStream & f, QCString & made,
 				      UmlArtifact * using_art) {
-  Q3CString s;
+  QCString s;
   
   if (isPhpExternal()) {
     s = phpDecl();
@@ -257,10 +254,10 @@ void UmlClass::generate_require_onces(QTextOStream & f, Q3CString & made,
     if (PhpSettings::requireOnceWithPath()) {
       UmlPackage * p = art->package();
       UmlPackage * pack = using_art->package();
-      Q3CString dir;
+      QCString dir;
       
       if (PhpSettings::isRelativePath()) {
-	Q3CString empty;
+	QCString empty;
 	
 	dir = pack->file_path(empty);
       }
@@ -290,7 +287,7 @@ void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t)
 }
 
 void UmlClass::write(QTextOStream & f) {
-  Q3CString nasp;
+  QCString nasp;
   UmlArtifact * a = associatedArtifact();
 
   if (a != 0)
@@ -304,7 +301,7 @@ void UmlClass::write(QTextOStream & f) {
       f << nasp << '\\';
   }
   else {
-    const Q3CString & currentNasp =
+    const QCString & currentNasp =
       UmlArtifact::generation_package()->phpNamespace();
     
     if (nasp != currentNasp) {    
@@ -319,7 +316,7 @@ void UmlClass::write(QTextOStream & f) {
   }
 
   if (isPhpExternal()) {
-    Q3CString s = phpDecl().stripWhiteSpace();
+    QCString s = phpDecl().stripWhiteSpace();
     int index;
       
     if ((index = s.find("${name}")) != -1)

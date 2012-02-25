@@ -28,10 +28,6 @@
 
 #include "UmlClass.h"
 #include "Namespace.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 class Class;
 class UmlTypeSpec;
@@ -40,26 +36,26 @@ class ClassContainer {
   public:
     virtual ~ClassContainer();	// just to not have warning
   
-    virtual Class * declare_if_needed(const Q3CString & name,
-				      Q3CString stereotype = 0) = 0;
-    virtual Class * define(const Q3CString & name, Q3CString stereotype = 0) = 0;
-    virtual void declare_if_needed(Q3CString name, Class * cl) = 0;
-    virtual void define(Q3CString name, Class * cl) = 0;
-    virtual Class * new_class(const Q3CString & name,
-			      const Q3CString & stereotype,
+    virtual Class * declare_if_needed(const QCString & name,
+				      QCString stereotype = 0) = 0;
+    virtual Class * define(const QCString & name, QCString stereotype = 0) = 0;
+    virtual void declare_if_needed(QCString name, Class * cl) = 0;
+    virtual void define(QCString name, Class * cl) = 0;
+    virtual Class * new_class(const QCString & name,
+			      const QCString & stereotype,
 			      bool declaration) = 0;
-    virtual bool find_type(Q3CString type, UmlTypeSpec & typespec) = 0;
-    virtual void declaration(const Q3CString & name, const Q3CString & stereotype,
-			     const Q3CString & decl
+    virtual bool find_type(QCString type, UmlTypeSpec & typespec) = 0;
+    virtual void declaration(const QCString & name, const QCString & stereotype,
+			     const QCString & decl
 #ifdef ROUNDTRIP
-			     , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+			     , bool roundtrip, QList<UmlItem> & expected_order
 #endif
 			     ) = 0;
     
-    void compute_type(Q3CString type, UmlTypeSpec & typespec,
-		      Q3CString & typeform, bool get_first_template_actual = FALSE,
-		      const Q3ValueList<FormalParameterList> & tmplts = empty);
-    bool find_type(Q3CString type, UmlTypeSpec & typespec,
+    void compute_type(QCString type, UmlTypeSpec & typespec,
+		      QCString & typeform, bool get_first_template_actual = FALSE,
+		      const QValueList<FormalParameterList> & tmplts = empty);
+    bool find_type(QCString type, UmlTypeSpec & typespec,
 		   NDict<Class> & defined);
 #ifdef ROUNDTRIP
     virtual Class * upload_define(UmlClass *) = 0;
@@ -68,15 +64,15 @@ class ClassContainer {
     static bool get_template(FormalParameterList & tmplt);
     
   protected:
-    Class * declare_if_needed(const Q3CString & name,
-			      const Q3CString & stereotype,
+    Class * declare_if_needed(const QCString & name,
+			      const QCString & stereotype,
 			      const FormalParameterList & formals,
 			      NDict<Class> & declared, 
 			      NDict<Class> & defined);
-    Class * define(const Q3CString & name, const Q3CString & stereotype,
+    Class * define(const QCString & name, const QCString & stereotype,
 		   NDict<Class> & declared, NDict<Class> & defined);
     
-    static Q3ValueList<FormalParameterList> empty;
+    static QValueList<FormalParameterList> empty;
 };
 
 #endif

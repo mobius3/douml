@@ -29,18 +29,16 @@
 #include <qlist.h>
 #include <qstring.h>
 #include <qpoint.h>
-#include <q3textstream.h>
-#include <q3ptrdict.h> 
-//Added by qt3to4:
-#include <Q3PtrCollection>
+#include <qtextstream.h>
+#include <qptrdict.h> 
 
 #include "Labeled.h"
 #include "UmlEnum.h"
 
 #define SELECT_SQUARE_SIZE 6
 
-class Q3CanvasItem;
-class Q3CanvasItemList;
+class QCanvasItem;
+class QCanvasItemList;
 class QBuffer;
 class QPoint;
 
@@ -51,13 +49,12 @@ class BrowserNode;
 class BrowserClass;
 class BasicData;
 class UmlCanvas;
-#include <q3ptrlist.h> // [lgfreitas] added for q3ptrlist
 
 class DiagramItem : public Labeled<DiagramItem> {
   protected:
-    Q3PtrList<ArrowCanvas> lines;
+    QList<ArrowCanvas> lines;
   
-    static Q3PtrList<DiagramItem> Undefined;
+    static QList<DiagramItem> Undefined;
     
   public:
     DiagramItem(int id, UmlCanvas * canvas);
@@ -111,7 +108,7 @@ class DiagramItem : public Labeled<DiagramItem> {
     virtual void select_associated();
     virtual bool isSelected() const = 0;
     virtual void unassociate(DiagramItem *);
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const = 0;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const = 0;
     virtual void post_loaded();
 
     virtual void history_save(QBuffer &)const = 0;
@@ -126,8 +123,8 @@ class DiagramItem : public Labeled<DiagramItem> {
     void post_history_hide() { lines.clear(); }
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     
     virtual void apply_shortcut(QString);
     
@@ -139,11 +136,11 @@ class DiagramItem : public Labeled<DiagramItem> {
     virtual bool represents(BrowserNode *);
 };
 
-class DiagramItemList : public Q3PtrList<DiagramItem> {
+class DiagramItemList : public QList<DiagramItem> {
   public:
-    DiagramItemList(Q3CanvasItemList);
+    DiagramItemList(QCanvasItemList);
     virtual ~DiagramItemList();
-    virtual int compareItems(Q3PtrCollection::Item, Q3PtrCollection::Item);
+    virtual int compareItems(QCollection::Item, QCollection::Item);
 };
 
 
@@ -154,8 +151,8 @@ extern aCorner on_resize_point(const QPoint & p, const QRect & r);
 #define TOP_Z 1e101
 #define isa_alien(x) ((x)->z() == TOP_Z)
 
-extern DiagramItem * QCanvasItemToDiagramItem(Q3CanvasItem * ci);
-extern DiagramCanvas * QCanvasItemToDiagramCanvas(Q3CanvasItem * ci);
+extern DiagramItem * QCanvasItemToDiagramItem(QCanvasItem * ci);
+extern DiagramCanvas * QCanvasItemToDiagramCanvas(QCanvasItem * ci);
 	
 #endif
 

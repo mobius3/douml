@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= singleton
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL
 HEADERS		= ./UmlBaseOperation.h \
 		  ./JavaSettings.h \
@@ -151,5 +151,3 @@ SOURCES		= ./UmlBaseOperation.cpp \
 		  ./UmlBaseUseCaseDiagram.cpp \
 		  ./UmlBaseDeploymentDiagram.cpp \
 		  ./PackageGlobalCmd.cpp
-#The following line was inserted by qt3to4
-QT += network  qt3support 

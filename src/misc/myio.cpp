@@ -27,13 +27,13 @@
 
 
 
-#include <q3textstream.h> 
+#include <qtextstream.h> 
 #include <qdir.h>
 #include <qfile.h>
 #include <qstring.h>
-#include <q3canvas.h>
-#include <q3multilineedit.h>
-#include <q3textview.h> 
+#include <qcanvas.h>
+#include <qmultilineedit.h>
+#include <qtextview.h> 
 #include <qlayout.h> 
 #include <qdialog.h>
 #include <qlabel.h>
@@ -42,10 +42,6 @@
 #include <qstringlist.h>
 #include <qapplication.h>
 #include <qbuffer.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3CString>
-#include <Q3PointArray>
 
 #include "myio.h"
 #include "UmlWindow.h"
@@ -1180,17 +1176,15 @@ void delete_backup(QDir & d)
 
   s.sprintf("*_%u.bak", user_id());
 
-  //[lgfreitas] entryInfoList des not return a pointer anymore
-  QFileInfoList l = d.entryInfoList(s);
+  const QFileInfoList * l = d.entryInfoList(s);
   
-  if (!l.empty()) {
-    //Q3PtrListIterator<QFileInfo> it(l);
-	QFileInfoList::iterator it = l.begin(); //[lgfreitas] above iterator was not working.
-    //QFileInfo fi;
-   
-    while (it != l.end())  {
-      QFile::remove((*it).absFilePath());
-      it++;
+  if (l) {
+    QListIterator<QFileInfo> it(*l);
+    QFileInfo *fi;
+    
+    while ((fi = it.current()) != 0) {
+      QFile::remove(fi->absFilePath());
+      ++it;
     }
   }
 }
@@ -1198,12 +1192,12 @@ void delete_backup(QDir & d)
 int open_file(QFile & fp, int mode, bool silent)
 {
   Context.filename = fp.name();
-
-  while (! fp.open(QFlag(mode))) { //[lgfreitas] it does not accept a int anymore, but a QFlag. Hopefully, this does the trick
+  
+  while (! fp.open(mode)) {
     if (silent ||
 	(msg_critical("Uml",
 		      Context.filename +
-		      ((mode != QIODevice::ReadOnly)
+		      ((mode != IO_ReadOnly)
 		       ? TR("\ncannot be opened for write, retry ?\n")
 		       : TR("\ncannot be opened for read, retry ?\n")),
 		      QMessageBox::Yes, QMessageBox::No)
@@ -1211,7 +1205,7 @@ int open_file(QFile & fp, int mode, bool silent)
       return -1;
   }
   
-  if (mode == QIODevice::ReadOnly) {
+  if (mode == IO_ReadOnly) {
     set_previous_word(EmptyString);
     Context.linenum = 1;
     Context.removed_char = ' ';
@@ -1330,7 +1324,7 @@ char * read_file(QString filename)
   QFile fp(filename);
   int size;
   
-  if ((size = open_file(fp, QIODevice::ReadOnly, TRUE)) != -1) {
+  if ((size = open_file(fp, IO_ReadOnly, TRUE)) != -1) {
     char * s = new char[size + 1];
     
     if (fp.readBlock(s, size) == -1) {
@@ -1391,7 +1385,7 @@ char * read_file(QString filename, int offset, int len)
   
   QFile fp(filename);
   
-  if (open_file(fp, QIODevice::ReadOnly, TRUE) != -1) {
+  if (open_file(fp, IO_ReadOnly, TRUE) != -1) {
     char * s = new char[len + 1];
     
     fp.at(offset);
@@ -1517,7 +1511,7 @@ static QString where()
 
 //
 
-void save_string(const char * p, Q3TextStream & st)
+void save_string(const char * p, QTextStream & st)
 {
   if ((p == 0) || (*p == 0))
     st << "\"\"";
@@ -1549,7 +1543,7 @@ void save_string(const char * p, Q3TextStream & st)
   }
 }
       
-void save_string_list(QStringList & list, Q3TextStream & st)
+void save_string_list(QStringList & list, QTextStream & st)
 {
   st << ' ' << list.count();
   
@@ -1561,7 +1555,7 @@ void save_string_list(QStringList & list, Q3TextStream & st)
   }
 }
 
-void save_unicode_string_list(QStringList & list, Q3TextStream & st)
+void save_unicode_string_list(QStringList & list, QTextStream & st)
 {
   st << ' ' << list.count();
   
@@ -1573,7 +1567,7 @@ void save_unicode_string_list(QStringList & list, Q3TextStream & st)
   }
 }
 
-void nl_indent(Q3TextStream & st) {
+void nl_indent(QTextStream & st) {
   int i = Indent;
   
   st << '\n';
@@ -2013,7 +2007,7 @@ void unknown_ref(const char * kind, int id)
 
 //
 
-void save_xy(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
+void save_xy(QTextStream & st, const QCanvasItem * c, const char * s) {
 #ifdef FORCE_INT_COORD
   st << s << ' ' << (int) c->x() << ' ' << (int) c->y();
 #else
@@ -2023,7 +2017,7 @@ void save_xy(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
 #endif
 }
 
-void save_xyz(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
+void save_xyz(QTextStream & st, const QCanvasItem * c, const char * s) {
 #ifdef FORCE_INT_COORD
   st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z();
 #else
@@ -2033,7 +2027,7 @@ void save_xyz(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
 #endif
 }
 
-void save_xyzwh(Q3TextStream & st, const Q3CanvasRectangle * c, const char * s) {
+void save_xyzwh(QTextStream & st, const QCanvasRectangle * c, const char * s) {
 #ifdef FORCE_INT_COORD
   st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z()
     << ' ' << (int) c->width() << ' ' << (int) c->height();
@@ -2045,7 +2039,7 @@ void save_xyzwh(Q3TextStream & st, const Q3CanvasRectangle * c, const char * s) 
 #endif
 }
 
-void read_xy(char * & st, Q3CanvasItem * c)
+void read_xy(char * & st, QCanvasItem * c)
 {
   double px = read_double(st);
   double py = read_double(st);
@@ -2059,7 +2053,7 @@ void bypass_xy(char * & st)
   read_double(st);
 }
 
-void read_xyz(char * & st, Q3CanvasItem * c)
+void read_xyz(char * & st, QCanvasItem * c)
 {
   double px = read_double(st);
   double py = read_double(st);
@@ -2068,7 +2062,7 @@ void read_xyz(char * & st, Q3CanvasItem * c)
   c->setZ(read_double(st));
 }
 
-void read_xyzwh(char * & st, Q3CanvasRectangle * c)
+void read_xyzwh(char * & st, QCanvasRectangle * c)
 {
   double px = read_double(st);
   double py = read_double(st);
@@ -2081,7 +2075,7 @@ void read_xyzwh(char * & st, Q3CanvasRectangle * c)
   c->setSize((int) w, (int) read_double(st));
 }
 
-void read_zwh(char * & st, Q3CanvasRectangle * c)
+void read_zwh(char * & st, QCanvasRectangle * c)
 {
   c->setZ(read_double(st));
   
@@ -2090,7 +2084,7 @@ void read_zwh(char * & st, Q3CanvasRectangle * c)
   c->setSize((int) w, (int) read_double(st));
 }
 
-void save_color(Q3TextStream & st, const char * s, UmlColor c, BooL & nl)
+void save_color(QTextStream & st, const char * s, UmlColor c, BooL & nl)
 {
   if (c != UmlDefaultColor) {
     if (!nl) {
@@ -2129,10 +2123,10 @@ void warn(const QString & s)
   // not showed dialog to compute needed size
   
   QDialog d_aux;
-  Q3VBoxLayout * vbox_aux = new Q3VBoxLayout(&d_aux);
+  QVBoxLayout * vbox_aux = new QVBoxLayout(&d_aux);
   
   vbox_aux->setMargin(5);
-  Q3MultiLineEdit * e = new Q3MultiLineEdit(&d_aux);
+  QMultiLineEdit * e = new QMultiLineEdit(&d_aux);
   e->setText(s);
   
   // showed dialog
@@ -2141,11 +2135,11 @@ void warn(const QString & s)
   
   d->setCaption("Uml");
 
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(d);  
+  QVBoxLayout * vbox = new QVBoxLayout(d);  
 
   vbox->setMargin(5);
   
-  Q3TextView * t = new Q3TextView(d);
+  QTextView * t = new QTextView(d);
   QFontMetrics fm(QApplication::font());
   //int w = e->maxLineWidth() + e->minimumSizeHint().width();
   int maxw = (UmlWindow::get_workspace()->width() * 4)/5;
@@ -2210,15 +2204,15 @@ void load(QPoint & p, QBuffer & b)
   p.setY(i);
 }
 
-void save(const Q3PointArray & a, QBuffer & b)
+void save(const QPointArray & a, QBuffer & b)
 {
-  const QPoint * p = a.data();
+  QPoint * p = a.data();
   
   for (unsigned i = 0; i != a.size(); i += 1)
     save(*p++, b);
 }
 
-void load(Q3PointArray & a, QBuffer & b)
+void load(QPointArray & a, QBuffer & b)
 {
   QPoint * p = a.data();
   
@@ -2333,7 +2327,7 @@ const char * svg_color(UmlColor c)
   return r;
 }
 
-void draw_poly(FILE * fp, Q3PointArray & poly, UmlColor color, bool stroke)
+void draw_poly(FILE * fp, QPointArray & poly, UmlColor color, bool stroke)
 {
   (void) fprintf(fp, (stroke) ? "\t<polygon fill=\"%s\" stroke=\"black\" stroke-opacity=\"1\""
 			      : "\t<polygon fill=\"%s\" stroke=\"none\"",
@@ -2351,10 +2345,10 @@ void draw_poly(FILE * fp, Q3PointArray & poly, UmlColor color, bool stroke)
   (void) fputs("\" />\n", fp);
 }
 
-void draw_shadow(FILE * fp, Q3PointArray & poly)
+void draw_shadow(FILE * fp, QPointArray & poly)
 {
   (void) fprintf(fp, "\t<polygon fill=\"#%06x\" stroke=\"none\"",
-		 QColor(::Qt::darkGray).rgb()&0xffffff);
+		 ::Qt::darkGray.rgb()&0xffffff);
 
   const char * sep = " points=\"";
   int n = poly.size();
@@ -2376,7 +2370,7 @@ void draw_text(const QRect & r, int align, QString s, const QFont & fn, FILE * f
 
 static void xml_text(FILE * fp, QString s)
 {
-  Q3CString cs = s.utf8();
+  QCString cs = s.utf8();
   const char * p = cs;
   
   for (;;) {
@@ -2440,7 +2434,7 @@ void draw_text(int x, int y, int w, int h, int align,
   if (fn.underline())
     strcat(header, " text-decoration=\"underline\"");
 
-  bool wb = align & ::Qt::TextWordWrap;
+  bool wb = align & ::Qt::WordBreak;
   
   if ((s.find('\n') == -1) && !wb) {
     // one line

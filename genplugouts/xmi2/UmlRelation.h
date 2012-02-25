@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseRelation.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 class UmlClass;
@@ -14,7 +14,7 @@ class UmlClass;
 // You can modify it as you want (except the constructor)
 class UmlRelation : public UmlBaseRelation {
   public:
-    UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n), _assoc_class(0) {};
+    UmlRelation(void * id, const QCString & n) : UmlBaseRelation(id, n), _assoc_class(0) {};
 
     //called inside class definition
     

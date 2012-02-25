@@ -26,14 +26,14 @@
 #ifndef STEREOTYPESDIALOG_H
 #define STEREOTYPESDIALOG_H
 
-#include <q3tabdialog.h>
+#include <qtabdialog.h>
 
 #include <UmlEnum.h>
 
 class LineEdit;
 class MyTable;
 
-class StereotypesDialog : public Q3TabDialog {
+class StereotypesDialog : public QTabDialog {
   Q_OBJECT
     
   protected:

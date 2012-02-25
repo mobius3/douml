@@ -27,11 +27,9 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3textstream.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
-#include <QTextOStream>
+#include <qpopupmenu.h>
+#include <qtextstream.h>
+#include <qfiledialog.h>
 
 #include "Tool.h"
 #include "myio.h"
@@ -148,7 +146,7 @@ void Tool::defaults()
     tools[16].applicable[index] = TRUE;
 }
 
-bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target, 
+bool Tool::menu_insert(QPopupMenu * tool, UmlCode target, 
 		       const QObject * receiver, const char * member)
 {
   unsigned index;
@@ -169,7 +167,7 @@ bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target,
   return !first;
 }
 
-bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target, int first_id)
+bool Tool::menu_insert(QPopupMenu * tool, UmlCode target, int first_id)
 {
   unsigned index;
   bool have = FALSE;
@@ -316,9 +314,9 @@ static const struct{
 void Tool::save() 
 {
   QByteArray newdef;
-  Q3TextStream st(newdef, QIODevice::WriteOnly);
+  QTextOStream st(newdef);
 	
-  st.setEncoding(Q3TextStream::Latin1);
+  st.setEncoding(QTextStream::Latin1);
 
   st << "// 'tool' \"the executable\" \"displayed string\" {target}+";
   
@@ -386,7 +384,7 @@ bool Tool::read(const char * f)
 
 bool Tool::import()
 {
-  QString fn = Q3FileDialog::getOpenFileName(last_used_directory(), "tools");
+  QString fn = QFileDialog::getOpenFileName(last_used_directory(), "tools");
       
   if (!fn.isEmpty()) {
     set_last_used_directory(fn);

@@ -27,9 +27,6 @@
 #include "UmlClass.h"
 #include "Class.h"
 #include "Lex.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 ClassContainer::~ClassContainer() {
 }
@@ -42,11 +39,11 @@ ClassContainer::~ClassContainer() {
 // among actuals, def is genericname<...${type}...>
 
 bool ClassContainer::read_type(UmlTypeSpec & typespec, Class ** cl, 
-			       const Q3ValueList<FormalParameterList> & tmplts,
-			       Q3ValueList<UmlTypeSpec> * actuals,
-			       Q3CString & str_actuals, Q3CString s,
-			       UmlClass ** first_actual_class, Q3CString & def,
-			       Q3CString & genericname) {
+			       const QValueList<FormalParameterList> & tmplts,
+			       QValueList<UmlTypeSpec> * actuals,
+			       QCString & str_actuals, QCString s,
+			       UmlClass ** first_actual_class, QCString & def,
+			       QCString & genericname) {
   str_actuals = 0;
   if (actuals != 0)
     actuals->clear();
@@ -56,8 +53,8 @@ bool ClassContainer::read_type(UmlTypeSpec & typespec, Class ** cl,
     return FALSE;
   }
     
-  Q3CString path; // type without <..>
-  Q3CString type; // real type form
+  QCString path; // type without <..>
+  QCString type; // real type form
   bool internal_template = FALSE;	// true if type is ...<...>...
   int pfixdef_length = 0;		// generic form including first class
   int first_actual_class_length = 0;	// first class's name length
@@ -83,7 +80,7 @@ bool ClassContainer::read_type(UmlTypeSpec & typespec, Class ** cl,
       Lex::mark();
       
       int level = 0;
-      Q3CString firstword;	// first element in current actual
+      QCString firstword;	// first element in current actual
       int pfixlen = 0;		// type length including firstword
       
       for (;;) {
@@ -111,7 +108,7 @@ bool ClassContainer::read_type(UmlTypeSpec & typespec, Class ** cl,
 	}
       }
       
-      Q3CString e = Lex::region();
+      QCString e = Lex::region();
       
       type += e;
       str_actuals += e;

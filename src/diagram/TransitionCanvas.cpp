@@ -28,10 +28,8 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 
 #include "TransitionCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -212,9 +210,9 @@ void TransitionCanvas::menu(const QPoint &) {
       pstereotype = (TransitionCanvas *) apstereotype;
     }
     
-    Q3PopupMenu m(0);
-    Q3PopupMenu geo(0);
-    Q3PopupMenu toolm(0);
+    QPopupMenu m(0);
+    QPopupMenu geo(0);
+    QPopupMenu toolm(0);
     
     m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()),
 		 -1);
@@ -359,7 +357,7 @@ bool TransitionCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void TransitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void TransitionCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(3);
     DrawingLanguage drawing_language;
@@ -375,7 +373,7 @@ void TransitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     dialog.setCaption("Transition Drawing Settings dialog");
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -396,8 +394,8 @@ void TransitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void TransitionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void TransitionCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   TransitionCanvas * x = (TransitionCanvas *) it.current();
   
@@ -591,8 +589,8 @@ void TransitionCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
   BrowserNode * to = def->get_end_node();
   DiagramItem * difrom = 0;
   DiagramItem * dito = 0;
-  Q3CanvasItemList all = canvas->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas->allItems();
+  QCanvasItemList::Iterator cit;
 
   // the two extremities are drawn ?
   for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -675,7 +673,7 @@ bool TransitionCanvas::represents(BrowserNode * bn) {
 }
 
 //
-void TransitionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void TransitionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "transitioncanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {
@@ -896,7 +894,7 @@ TransitionCanvas * TransitionCanvas::read(char * & st, UmlCanvas * canvas, char 
 }
 
 void TransitionCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   unconnect();
 }
 

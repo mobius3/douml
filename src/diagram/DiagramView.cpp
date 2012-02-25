@@ -32,22 +32,14 @@
 #include <qprinter.h>
 #endif
 #include <qcursor.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <q3paintdevicemetrics.h>
-#include <q3filedialog.h>
+#include <qpaintdevicemetrics.h>
+#include <qfiledialog.h>
 #include <qbuffer.h>
 #if defined(WIN32) || (QT_VERSION != 230)
 #include <qtimer.h>
-//Added by qt3to4:
-#include <QWheelEvent>
-#include <QPixmap>
-#include <QMouseEvent>
-#include <Q3ValueList>
-#include <Q3TextStream>
-#include <QKeyEvent>
-#include <Q3CString>
 #endif
 
 #include "DiagramView.h"
@@ -88,11 +80,11 @@
 #include "align_vcenter.xpm"
 #include "align_hcenter.xpm"
 
-Q3CString DiagramView::clipboard;
+QCString DiagramView::clipboard;
 UmlCode DiagramView::copied_from;
 
 DiagramView::DiagramView(QWidget * parent, UmlCanvas * canvas, int i)
-    : Q3CanvasView(canvas, parent), id(i), pressedButton(-1), selectArea(0), start(0),
+    : QCanvasView(canvas, parent), id(i), pressedButton(-1), selectArea(0), start(0),
       line(0), arrowBeginning(0), preferred_zoom(0), draw_line(FALSE),
       do_resize(NoCorner), history_protected(FALSE), history_frozen(FALSE),
       first_move(FALSE), on_arrow_decenter(FALSE), history_index(~0u) {
@@ -104,7 +96,7 @@ DiagramView::DiagramView(QWidget * parent, UmlCanvas * canvas, int i)
   setDragAutoScroll(TRUE);
   setVScrollBarMode(Auto);
   setHScrollBarMode(Auto);
-  setFocusPolicy(Qt::StrongFocus);
+  setFocusPolicy(QWidget::StrongFocus);
   //setFocusPolicy(QWidget::WheelFocus);
   canvas->setBackgroundColor(::Qt::white);
   canvas->setDoubleBuffering(TRUE);
@@ -130,7 +122,7 @@ void DiagramView::contentsMouseDoubleClickEvent(QMouseEvent * e) {
   if (draw_line)
     abort_line_construction();
   else {
-    Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+    QCanvasItem * ci = the_canvas()->collision(e->pos());
     
     if (ci != 0) {
       DiagramItem * di = QCanvasItemToDiagramItem(ci);
@@ -143,9 +135,9 @@ void DiagramView::contentsMouseDoubleClickEvent(QMouseEvent * e) {
 
 bool DiagramView::multiple_selection_for_menu(BooL & in_model, BooL & out_model,
 					      BooL & alignable, int & n_resize,
-					      Q3PtrList<DiagramItem> & l_drawing_settings,
-					      const Q3CanvasItemList & selected) {
-  Q3CanvasItemList::ConstIterator it;
+					      QList<DiagramItem> & l_drawing_settings,
+					      const QCanvasItemList & selected) {
+  QCanvasItemList::ConstIterator it;
   int n_targets = 0;
   UmlCode k = UmlCodeSup;
 
@@ -204,17 +196,17 @@ void DiagramView::contentsMousePressEvent(QMouseEvent * e) {
     QApplication::setOverrideCursor(::Qt::sizeAllCursor);
   }
   else if (!window()->frozen()) {
-    Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+    QCanvasItem * ci = the_canvas()->collision(e->pos());
     
     if (pressedButton == ::Qt::RightButton) {
       // menu on several objects (excluding labels)
   
       if (! draw_line) {
-	const Q3CanvasItemList selected = selection();
+	const QCanvasItemList selected = selection();
 	BooL in_model;
 	BooL out_model;
 	BooL alignable;
-	Q3PtrList<DiagramItem> l_drawing_settings;
+	QList<DiagramItem> l_drawing_settings;
 	int n_resize;
 	
 	if (multiple_selection_for_menu(in_model, out_model, alignable,
@@ -263,10 +255,10 @@ void DiagramView::contentsMousePressEvent(QMouseEvent * e) {
 	  unselect_all();
 	}
 	else {
-	  const Q3CanvasItemList selected = selection();
-	  Q3CanvasItemList::ConstIterator it = selected.find(ci);
+	  const QCanvasItemList selected = selection();
+	  QCanvasItemList::ConstIterator it = selected.find(ci);
 	  
-	  if ((e->state() & ::Qt::ControlModifier) == 0) {
+	  if ((e->state() & ::Qt::ControlButton) == 0) {
 	    if (it == selected.end()) {
 	      // ne designe pas un objet selectionne, vide la selection
 	      unselect_all();
@@ -441,7 +433,7 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e) {
       the_canvas()->del(line);
       line = 0;
       
-      Q3CanvasItem * ci = the_canvas()->collision(e->pos(), RTTI_LABEL);
+      QCanvasItem * ci = the_canvas()->collision(e->pos(), RTTI_LABEL);
       UmlCode action = window()->buttonOn();
       
       if (ci != 0) {
@@ -538,8 +530,8 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e) {
       the_canvas()->del(selectArea);
       selectArea = 0;
       
-      Q3CanvasItemList l = canvas()->collisions(r);
-      Q3CanvasItemList::Iterator it;
+      QCanvasItemList l = canvas()->collisions(r);
+      QCanvasItemList::Iterator it;
       
       for (it = l.begin(); it != l.end(); ++it)
 	if (r.contains((*it)->boundingRect(), TRUE) && // completement inclus
@@ -557,13 +549,13 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e) {
 
 void DiagramView::contentsWheelEvent(QWheelEvent * e) {
   switch (e->state()) {
-  case ::Qt::ShiftModifier:
+  case ::Qt::ShiftButton:
     // note : direction doesn't exist with Qt2.3 and to
     // force direction to horizontal doesn't work with Qt3
     scrollBy(e->delta() / -10, 0);
     e->accept();
     break;
-  case ::Qt::ControlModifier:
+  case ::Qt::ControlButton:
     window()->change_zoom(e->delta() / 12);
     e->accept();
     break;
@@ -616,7 +608,7 @@ void DiagramView::add_point(QMouseEvent * e) {
   draw_line = TRUE;
   mousePressPos = e->pos();
   start = ap;
-  line = new Q3CanvasLine(canvas());
+  line = new QCanvasLine(canvas());
   line->setZ(TOP_Z);
   line->setPoints(e->pos().x(), e->pos().y(), 
 		  e->pos().x(), e->pos().y());
@@ -647,7 +639,7 @@ void DiagramView::contentsMouseMoveEvent(QMouseEvent * e) {
       
       int dx = e->pos().x() - mousePressPos.x();
       int dy = e->pos().y() - mousePressPos.y();
-      Q3CanvasItemList selected = selection();
+      QCanvasItemList selected = selection();
       
       if (! selected.isEmpty()) {
 	// deplace/redimentionne les objets selectionnes
@@ -704,7 +696,7 @@ void DiagramView::contentsMouseMoveEvent(QMouseEvent * e) {
       else if (draw_line) {
 	if (line == 0) {
 	  // premier deplacement : cree la ligne
-	  line = new Q3CanvasLine(canvas());
+	  line = new QCanvasLine(canvas());
 	  line->setZ(TOP_Z);
 	  switch ((arrowBeginning == 0) 
 		  ? DiagramItem::Horizontal
@@ -772,7 +764,7 @@ void DiagramView::abort_line_construction() {
     }
     
     if (! temp.isEmpty()) {
-      Q3CanvasItemList::Iterator it = temp.begin();
+      QCanvasItemList::Iterator it = temp.begin();
       
       // remove the line in the start item
       arrowBeginning->remove_line(((ArrowCanvas *) *it));
@@ -789,7 +781,7 @@ void DiagramView::abort_line_construction() {
 }
 
 void DiagramView::relation_to_simplerelation(UmlCode k) {  
-  Q3CanvasItemList::Iterator it = temp.begin();
+  QCanvasItemList::Iterator it = temp.begin();
 
   // remove the line in the start item
   arrowBeginning->remove_line(((ArrowCanvas *) *it));
@@ -828,12 +820,12 @@ void DiagramView::delete_them(bool in_model) {
     history_save();
   
   for (;;) {
-    const Q3CanvasItemList & selected = selection();
+    const QCanvasItemList & selected = selection();
 
     if (selected.isEmpty())
       break;
 
-    Q3CanvasItemList::ConstIterator it = selected.begin();
+    QCanvasItemList::ConstIterator it = selected.begin();
     DiagramItem * item = QCanvasItemToDiagramItem(*it);
     BooL in = FALSE;
     BooL out = FALSE;
@@ -852,8 +844,8 @@ void DiagramView::delete_them(bool in_model) {
 
 
 void DiagramView::alignLeft() {
-  const Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it = selected.begin();
+  const QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it = selected.begin();
   double ref = (*it)->x();
   
   while ((++it)  != selected.end())
@@ -861,8 +853,8 @@ void DiagramView::alignLeft() {
 }
 
 void DiagramView::alignRight() {
-  const Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it = selected.begin();
+  const QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it = selected.begin();
   double ref = (*it)->boundingRectAdvanced().right();
   
   while ((++it)  != selected.end())
@@ -872,8 +864,8 @@ void DiagramView::alignRight() {
 }
 
 void DiagramView::alignTop() {
-  const Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it = selected.begin();
+  const QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it = selected.begin();
   double ref = (*it)->y();
   
   while ((++it)  != selected.end())
@@ -881,8 +873,8 @@ void DiagramView::alignTop() {
 }
 
 void DiagramView::alignBottom() {
-  const Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it = selected.begin();
+  const QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it = selected.begin();
   double ref = (*it)->boundingRectAdvanced().bottom();
   
   while ((++it)  != selected.end())
@@ -892,8 +884,8 @@ void DiagramView::alignBottom() {
 }
 
 void DiagramView::alignHorizontaly() {
-  const Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it = selected.begin();
+  const QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it = selected.begin();
   QRect r = (*it)->boundingRectAdvanced();
   double ref = (r.top() + r.bottom())/2;
   
@@ -907,8 +899,8 @@ void DiagramView::alignHorizontaly() {
 }
 
 void DiagramView::alignVerticaly() {
-  const Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it = selected.begin();
+  const QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it = selected.begin();
   QRect r = (*it)->boundingRectAdvanced();
   double ref = (r.left() + r.right())/2;
   
@@ -922,8 +914,8 @@ void DiagramView::alignVerticaly() {
 }
 
 void DiagramView::alignCenter() {
-  const Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it = selected.begin();
+  const QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it = selected.begin();
   QRect r = (*it)->boundingRectAdvanced();
   double refx = (r.left() + r.right())/2;
   double refy = (r.top() + r.bottom())/2;
@@ -940,8 +932,8 @@ void DiagramView::alignCenter() {
 
 
 void DiagramView::same_size(bool w, bool h) {
-  const Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it;
+  const QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it;
   bool first = TRUE;
   QSize sz;
 
@@ -966,10 +958,10 @@ void DiagramView::same_size(bool w, bool h) {
 
 void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
 					  bool alignable, int n_resize,
-					  Q3PtrList<DiagramItem> & l_drawing_settings) {
-  const Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it;
-  Q3PopupMenu m(0);
+					  QList<DiagramItem> & l_drawing_settings) {
+  const QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it;
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Multiple selection menu"), m.font()), -1);
   m.insertSeparator();
@@ -981,8 +973,8 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
     }
   }
   
-  Q3PopupMenu al(0);
-  Q3PopupMenu sz(0);
+  QPopupMenu al(0);
+  QPopupMenu sz(0);
   
   if (alignable) {
     QPixmap top((const char **) align_top);
@@ -993,13 +985,13 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
     QPixmap vcenter((const char **) align_vcenter);
     QPixmap hcenter((const char **) align_hcenter);
     
-    al.insertItem(QIcon(top), TR("align top"), 4);
-    al.insertItem(QIcon(bottom), TR("align bottom"), 5);
-    al.insertItem(QIcon(left), TR("align left"), 6);
-    al.insertItem(QIcon(right), TR("align right"), 7);
-    al.insertItem(QIcon(center), TR("align center"), 8);
-    al.insertItem(QIcon(vcenter), TR("align center verticaly"), 9);
-    al.insertItem(QIcon(hcenter), TR("align center horizontaly"), 10);
+    al.insertItem(top, TR("align top"), 4);
+    al.insertItem(bottom, TR("align bottom"), 5);
+    al.insertItem(left, TR("align left"), 6);
+    al.insertItem(right, TR("align right"), 7);
+    al.insertItem(center, TR("align center"), 8);
+    al.insertItem(vcenter, TR("align center verticaly"), 9);
+    al.insertItem(hcenter, TR("align center horizontaly"), 10);
 
     m.insertItem(TR("Align"), &al);
   }
@@ -1108,8 +1100,8 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
 }
 
 void DiagramView::moveSelected(int dx, int dy, bool first) {
-  Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it;
+  QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it;
   
   if (first) {
     for (it = selected.begin(); it != selected.end(); ++it)
@@ -1126,8 +1118,8 @@ void DiagramView::moveSelected(int dx, int dy, bool first) {
 }
 
 void DiagramView::resizeSelected(int dx, int dy) {
-  Q3CanvasItemList selected = selection();
-  Q3CanvasItemList::ConstIterator it;
+  QCanvasItemList selected = selection();
+  QCanvasItemList::ConstIterator it;
   
   if (previousResizeCorrection.isEmpty()) {
     QPoint p(0, 0);
@@ -1136,7 +1128,7 @@ void DiagramView::resizeSelected(int dx, int dy) {
       previousResizeCorrection.append(p);
   }
   
-  Q3ValueList<QPoint>::Iterator it2;
+  QValueList<QPoint>::Iterator it2;
   
   for (it = selected.begin(), it2 = previousResizeCorrection.begin();
        it != selected.end();
@@ -1276,9 +1268,9 @@ void DiagramView::keyPressEvent(QKeyEvent * e) {
       else if (s == "Arrow geometry") {
 	history_protected = TRUE;
 
-	const Q3CanvasItemList selected = selection();
-	Q3CanvasItemList::ConstIterator it;
-	Q3CanvasItemList l;
+	const QCanvasItemList selected = selection();
+	QCanvasItemList::ConstIterator it;
+	QCanvasItemList l;
 	
 	// search for arrow beginning
 	for (it = selected.begin(); it != selected.end(); ++it) {
@@ -1334,7 +1326,7 @@ void DiagramView::keyPressEvent(QKeyEvent * e) {
 	return;
       }
       else {
-	const Q3CanvasItemList selected = selection();
+	const QCanvasItemList selected = selection();
 	int nselected = selected.count();
 
 	if (nselected > 1) {
@@ -1342,16 +1334,16 @@ void DiagramView::keyPressEvent(QKeyEvent * e) {
 	    history_protected = TRUE;
 	    unselect_all();
 	    
-	    Q3CanvasItemList::ConstIterator it;
+	    QCanvasItemList::ConstIterator it;
 	    
 	    for (it = selected.begin(); it != selected.end(); ++it)
 	      QCanvasItemToDiagramItem(*it)->select_associated();
 	  }
 	  else if ((s == "Edit drawing settings") || 
 		   (s == "Same drawing settings")) {
-	    Q3CanvasItemList::ConstIterator it;
+	    QCanvasItemList::ConstIterator it;
 	    UmlCode k = UmlCodeSup;
-	    Q3PtrList<DiagramItem> l;
+	    QList<DiagramItem> l;
 	
 	    for (it = selected.begin(); it != selected.end(); ++it) {
 	      if (! isa_label(*it)) {
@@ -1450,7 +1442,7 @@ void DiagramView::keyPressEvent(QKeyEvent * e) {
 	    BooL in_model;
 	    BooL out_model;
 	    BooL alignable;
-	    Q3PtrList<DiagramItem> l_drawing_settings;
+	    QList<DiagramItem> l_drawing_settings;
 	    int n_resize;
 	    
 	    if (multiple_selection_for_menu(in_model, out_model, alignable,
@@ -1525,8 +1517,8 @@ void DiagramView::keyReleaseEvent(QKeyEvent *) {
 }
 
 void DiagramView::select_all() {
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
     if ((QCanvasItemToDiagramItem(*cit) != 0) && // an uml canvas item
@@ -1547,11 +1539,11 @@ void DiagramView::set_zoom(double zoom) {
   ((UmlCanvas *) canvas())->show_limits(FALSE);
   ((UmlCanvas *) canvas())->set_zoom(zoom);
   
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
 
   // hack to freeze arrow's labels position : select all
-  Q3CanvasItemList selected = selection();
+  QCanvasItemList selected = selection();
   
   for (cit = all.begin(); cit != all.end(); ++cit) {
     if ((QCanvasItemToDiagramItem(*cit) != 0) && // an uml canvas item
@@ -1585,8 +1577,8 @@ void DiagramView::set_zoom(double zoom) {
 
 void DiagramView::needed_width_height(int & maxx, int & maxy) const {
   // search the max used x and y
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   
   maxx = 0;
   maxy = 0;
@@ -1670,7 +1662,7 @@ void DiagramView::set_format(int f) {
   }
 }
 
-static bool find_browser_element(Q3Canvas * canvas, Q3CanvasItemList & r)
+static bool find_browser_element(QCanvas * canvas, QCanvasItemList & r)
 {
   BrowserNode * bn = BrowserView::selected_item();
   
@@ -1679,8 +1671,8 @@ static bool find_browser_element(Q3Canvas * canvas, Q3CanvasItemList & r)
       
   BasicData * d = bn->get_data();
   UmlCode k = bn->get_type();
-  Q3CanvasItemList l = canvas->allItems();
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList l = canvas->allItems();
+  QCanvasItemList::Iterator it;
 
   switch (k) {
   case UmlClassDiagram:
@@ -1717,15 +1709,15 @@ static bool find_browser_element(Q3Canvas * canvas, Q3CanvasItemList & r)
   return !r.isEmpty();
 }
 
-int DiagramView::default_menu(Q3PopupMenu & m, int f) {
+int DiagramView::default_menu(QPopupMenu & m, int f) {
   bool wr = (((UmlCanvas *) canvas())->browser_diagram())->is_writable();
   
   if (draw_line)
     abort_line_construction();
 
-  Q3PopupMenu formatm(0);
-  Q3PopupMenu formatlandscapem(0);
-  Q3CanvasItemList l;
+  QPopupMenu formatm(0);
+  QPopupMenu formatlandscapem(0);
+  QCanvasItemList l;
   
   if (wr) {
     m.insertItem(TR("Edit drawing settings"), EDIT_DRAWING_SETTING_CMD);
@@ -1789,7 +1781,7 @@ int DiagramView::default_menu(Q3PopupMenu & m, int f) {
     unselect_all();
     
     {
-      Q3CanvasItemList::Iterator it;
+      QCanvasItemList::Iterator it;
   
       for (it = l.begin(); it != l.end(); ++it)
 	select(*it);
@@ -1878,7 +1870,7 @@ int DiagramView::default_menu(Q3PopupMenu & m, int f) {
   return choice;
 }
 
-void DiagramView::init_format_menu(Q3PopupMenu & m, Q3PopupMenu & lm,
+void DiagramView::init_format_menu(QPopupMenu & m, QPopupMenu & lm,
 				   int f) const {
   m.setCheckable(TRUE);
   lm.setCheckable(TRUE);
@@ -1920,8 +1912,8 @@ void DiagramView::load(const char * pfix) {
   preferred_zoom = 0;
   set_on_load_diagram(TRUE);
   
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator it;
   DiagramItem * di;
   
   for (it = all.begin(); it != all.end(); ++it)
@@ -2069,8 +2061,8 @@ void DiagramView::paste() {
   
   // to managed deleted items present in the browser
   // compute rect containing all the paste items
-  Q3CanvasItemList l = selection();
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList l = selection();
+  QCanvasItemList::Iterator it;
   DiagramItem * di;
   double minx = 1e10;
   double maxx = 0;
@@ -2129,8 +2121,8 @@ void DiagramView::paste() {
 }
 
 bool DiagramView::is_present(BrowserNode * bn) {
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator it;
   
   for (it = all.begin(); it != all.end(); ++it) {
     if ((*it)->visible()) {
@@ -2362,7 +2354,7 @@ void DiagramView::restore_window_size() {
 
 void DiagramView::save_picture(bool optimal, bool svg) {
   QString filename =
-    Q3FileDialog::getSaveFileName(last_used_directory(), 
+    QFileDialog::getSaveFileName(last_used_directory(), 
 				 (svg) ? TR("SVG file (*.svg)") : TR("PNG file (*.png)"),
 				 this);
 
@@ -2395,7 +2387,7 @@ void DiagramView::print(QPrinter & printer, int div) {
     set_zoom(1);
   
   QPainter paint(&printer);
-  Q3PaintDeviceMetrics m(paint.device());
+  QPaintDeviceMetrics m(paint.device());
   int devw = m.width();
   int devh = m.height();
   double w = contentsWidth();
@@ -2441,7 +2433,7 @@ void DiagramView::renumber(int ident) {
   id = ident;
 }
 
-void DiagramView::save_session(Q3TextStream & st) {
+void DiagramView::save_session(QTextStream & st) {
   st << (int) (((UmlCanvas *) canvas())->zoom() * 100)
      << ' ' << (int) window()->browser_diagram()->get_format() // useless
      << ' ' << verticalScrollBar()->value()
@@ -2481,9 +2473,9 @@ void DiagramView::history_save(bool on_undo) {
   
   // get current state
   QByteArray * ba = new QByteArray();
-  QBuffer b(ba);
+  QBuffer b(*ba);
   
-  b.open(QIODevice::WriteOnly);
+  b.open(IO_WriteOnly);
 
   /*
   double z = the_canvas()->zoom();
@@ -2545,9 +2537,9 @@ void DiagramView::history_load() {
   }
   
   // load history
-  QBuffer b((history.at(history_index))); // [lgfreitas] now qbuffer receives a pointer to a bytearray
+  QBuffer b(*(history.at(history_index)));
   
-  b.open(QIODevice::ReadOnly);
+  b.open(IO_ReadOnly);
   
   while (!b.atEnd())
     load_item(b)->history_load(b);

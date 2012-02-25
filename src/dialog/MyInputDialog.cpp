@@ -30,13 +30,10 @@
 #include <qcursor.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
 #include <qvalidator.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include "MyInputDialog.h"
 #include "DialogUtil.h"
@@ -51,12 +48,12 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
   setCaption(title);
   move(QCursor::pos());
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(new QLabel(msg, this));
   le = new LineEdit(init, this);
@@ -66,7 +63,7 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
 
   le->setMinimumWidth(fm.width("AZERTYUIOPQSDFGHJKLMWXCVBN"));
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * ok = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -92,15 +89,15 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
   setCaption(title);
   move(QCursor::pos());
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(new QLabel(msg, this));
-  cb = new Q3ComboBox(!existing, this);
+  cb = new QComboBox(!existing, this);
   if (! existing)
     cb->insertItem(init);
   cb->insertStringList(list);
@@ -119,7 +116,7 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
 
   cb->setMinimumWidth(fm.width("azertyuiopqsdfghjklm"));
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * ok = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);

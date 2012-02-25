@@ -27,11 +27,11 @@
 
 
 
-#include <q3grid.h> 
+#include <qgrid.h> 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h> 
-#include <q3vbox.h> 
+#include <qcombobox.h> 
+#include <qvbox.h> 
 
 #include "BasicDialog.h"
 #include "BasicData.h"
@@ -48,7 +48,7 @@
 BasicDialog::BasicDialog(BasicData * nd, QString s,
 			 const QStringList & default_stereotypes,
 			 QSize & sz, bool unnamed)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd), previous_size(sz) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), data(nd), previous_size(sz) {
   nd->get_browser_node()->edit_start();
   
   if (nd->get_browser_node()->is_writable()) {
@@ -67,7 +67,7 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
   // general tab
   
   BrowserNode * bn = data->get_browser_node();
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
 
@@ -79,7 +79,7 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
     edname->setReadOnly(visit);
   }    
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(default_stereotypes);
@@ -91,7 +91,7 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -109,7 +109,7 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -120,7 +120,7 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
 }
 
 void BasicDialog::polish() {
-  Q3TabDialog::polish();  
+  QTabDialog::polish();  
   UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -178,5 +178,5 @@ void BasicDialog::accept() {
   bn->package_modified();
   data->modified();
     
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }

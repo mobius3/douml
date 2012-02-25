@@ -2,17 +2,17 @@
 #define _TABDIALOG_H
 
 
-#include <q3tabdialog.h>
+#include <qtabdialog.h>
 #include <qstring.h>
-#include <q3cstring.h>
+#include <qcstring.h>
 
-class Q3MultiLineEdit;
+class QMultiLineEdit;
 class UmlUseCase;
 
 //Only for C++
 //don't colapse the C++ & Java definition in only one class because this is too artificial
 //note : the stereotype doesn't have special meaning for Bouml, I use it just to inform
-class TabDialog : public Q3TabDialog {
+class TabDialog : public QTabDialog {
   Q_OBJECT
 
   public:
@@ -26,17 +26,17 @@ class TabDialog : public Q3TabDialog {
 
 
   public:
-    Q3MultiLineEdit * summary;
+    QMultiLineEdit * summary;
 
-    Q3MultiLineEdit * context;
+    QMultiLineEdit * context;
 
-    Q3MultiLineEdit * precond;
+    QMultiLineEdit * precond;
 
-    Q3MultiLineEdit * description;
+    QMultiLineEdit * description;
 
-    Q3MultiLineEdit * postcond;
+    QMultiLineEdit * postcond;
 
-    Q3MultiLineEdit * exceptions;
+    QMultiLineEdit * exceptions;
 
 
   protected:
@@ -56,7 +56,7 @@ protected slots:    virtual void polish();
 
     void latinize(QString & s);
 
-    Q3CString fromUnicode(const QString & s);
+    QCString fromUnicode(const QString & s);
 
 };
 

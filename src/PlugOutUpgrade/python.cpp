@@ -36,8 +36,6 @@
 
 #include "util.h"
 #include "python.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 
 void add_bypass_python()
@@ -445,7 +443,7 @@ UmlArtifact * add_python_settings()
 			       " 'PythonSettings::instance()->member' or other long sentence like this.");
 
   UmlOperation * op;
-  Q3CString s;
+  QCString s;
   
   defGetBool(pythonsettings, _2_2, isPython_2_2, 0, 0, "");
   op->set_Description(" return if classes follow Python 2.2 by default");
@@ -579,7 +577,7 @@ UmlArtifact * add_python_settings()
   UmlRelation * rel;
   
   if ((rel = UmlBaseRelation::create(aGeneralisation, pythonsettings, umlsettings)) == 0) {
-    Q3CString msg = "PythonSettings can't inherit UmlSettings<br>\n";
+    QCString msg = "PythonSettings can't inherit UmlSettings<br>\n";
     
     UmlCom::trace("<b>" + msg + "</b>");
     throw 0;
@@ -683,10 +681,10 @@ UmlArtifact * add_python_settings()
 	      "    _map_imports.resize(n);\n"
 	      "  \n"
 	      "  for (index = 0; index != n; index += 1) {\n"
-	      "    Q3CString t = UmlCom::read_string();\n"
-	      "    Q3CString i = UmlCom::read_string();\n"
+	      "    QCString t = UmlCom::read_string();\n"
+	      "    QCString i = UmlCom::read_string();\n"
 	      "    \n"
-	      "    _map_imports.insert(t, new Q3CString(i));\n"
+	      "    _map_imports.insert(t, new QCString(i));\n"
 	      "  }\n"
 	      "  \n"
 	      "  _src_content = UmlCom::read_string();\n"
@@ -909,7 +907,7 @@ void operation_add_python()
   UmlClass * cl = UmlClass::get("UmlBaseOperation", 0);
   UmlOperation * prev = cl->get_operation("set_PhpContextualBodyIndent");
   UmlOperation * op;
-  Q3CString s;
+  QCString s;
   int index;
   
   // fixing
@@ -1002,7 +1000,7 @@ void associate_python_artifacts(UmlArtifact * pythonsettingsart,
 {
   UmlDeploymentView * dv = (UmlDeploymentView *)
     UmlClass::get("UmlArtifact", 0)->associatedArtifact()->parent();
-  const Q3PtrVector<UmlItem> ch = dv->children();
+  const QVector<UmlItem> ch = dv->children();
     
   for (unsigned i = 0; i != ch.size(); i += 1) {
     if ((ch[i]->kind() == anArtifact) && (ch[i]->name() == "executable")) {

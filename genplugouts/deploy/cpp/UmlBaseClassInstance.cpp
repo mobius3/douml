@@ -6,8 +6,6 @@
 #include "UmlAttribute.h"
 #include "UmlRelation.h"
 #include "UmlObjectDiagram.h"
-//Added by qt3to4:
-#include <Q3ValueList>
 
 anItemKind UmlBaseClassInstance::kind() {
   return aClassInstance;
@@ -41,7 +39,7 @@ bool UmlBaseClassInstance::set_Type(UmlClass * v) {
     return FALSE;
 }
 
-void UmlBaseClassInstance::attributesValue(Q3ValueList<SlotAttribute> & result) {
+void UmlBaseClassInstance::attributesValue(QValueList<SlotAttribute> & result) {
   UmlCom::send_cmd(_identifier, attributesCmd, (char) 0);
 
   unsigned n = UmlCom::read_unsigned();
@@ -54,7 +52,7 @@ void UmlBaseClassInstance::attributesValue(Q3ValueList<SlotAttribute> & result) 
   }
 }
 
-void UmlBaseClassInstance::relationsValue(Q3ValueList<SlotRelation> & result) {
+void UmlBaseClassInstance::relationsValue(QValueList<SlotRelation> & result) {
   UmlCom::send_cmd(_identifier, relationsCmd, (void *) 0);
 
   unsigned n = UmlCom::read_unsigned();
@@ -67,14 +65,14 @@ void UmlBaseClassInstance::relationsValue(Q3ValueList<SlotRelation> & result) {
   }
 }
 
-void UmlBaseClassInstance::availableAttributes(Q3PtrVector<UmlAttribute> & result) {
+void UmlBaseClassInstance::availableAttributes(QVector<UmlAttribute> & result) {
   UmlCom::send_cmd(_identifier, attributesCmd, (char) 1);
-  UmlCom::read_item_list((Q3PtrVector<UmlItem> &) result);
+  UmlCom::read_item_list((QVector<UmlItem> &) result);
 }
 
-void UmlBaseClassInstance::availableRelations(UmlClassInstance * other, Q3PtrVector<UmlRelation> & result) {
+void UmlBaseClassInstance::availableRelations(UmlClassInstance * other, QVector<UmlRelation> & result) {
   UmlCom::send_cmd(_identifier, relationsCmd, other->_identifier);
-  UmlCom::read_item_list((Q3PtrVector<UmlItem> &) result);
+  UmlCom::read_item_list((QVector<UmlItem> &) result);
 }
 
 bool UmlBaseClassInstance::set_AttributeValue(UmlAttribute * attribute, const char * value) {
@@ -83,7 +81,7 @@ bool UmlBaseClassInstance::set_AttributeValue(UmlAttribute * attribute, const ch
 }
 
 bool UmlBaseClassInstance::add_Relation(UmlRelation * relation, UmlClassInstance * other) {
-  Q3PtrVector<UmlItem> v(2);
+  QVector<UmlItem> v(2);
 
   v.insert(0, relation);
   v.insert(1, other);
@@ -92,7 +90,7 @@ bool UmlBaseClassInstance::add_Relation(UmlRelation * relation, UmlClassInstance
 }
 
 bool UmlBaseClassInstance::remove_Relation(UmlRelation * relation, UmlClassInstance * other) {
-  Q3PtrVector<UmlItem> v(2);
+  QVector<UmlItem> v(2);
 
   v.insert(0, relation);
   v.insert(1, other);

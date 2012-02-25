@@ -25,11 +25,6 @@
 
 #ifdef TRACE
 #include <iostream>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QPixmap>
-//Added by qt3to4:
-#include <Q3PtrList>
 using namespace std;
 #endif
 
@@ -37,7 +32,7 @@ using namespace std;
 #include <qdatastream.h> 
 #ifndef REVERSE
 #include <qapplication.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qmessagebox.h>
@@ -62,7 +57,7 @@ using namespace std;
 #include "Pixmap.h"
 #include "ShowFileDialog.h"
 
-Q3PtrList<Class> Class::Historic;
+QList<Class> Class::Historic;
 #endif
 
 Class::Class(Package * p, const char * n, char st)
@@ -83,13 +78,13 @@ UmlClass * Class::get_uml() {
 
   UmlItem * p = // no nested classe in php
     (UmlItem *) ((Package *) parent())->get_uml()->get_classview(get_namespace());
-  Q3CString str = Q3CString(text(0).toAscii().constData());
+  QCString str = QCString(text(0));
 			  
   uml = UmlBaseClass::create(p, str);
     
   if (uml == 0) {
     // probably already exist
-    Q3PtrVector<UmlItem> ch = p->children();
+    QVector<UmlItem> ch = p->children();
     UmlItem * x;
     
     for (unsigned chindex = 0; chindex != ch.size(); chindex += 1) {
@@ -133,7 +128,7 @@ UmlClass * Class::get_uml() {
 }
 
 bool Class::already_in_bouml() {
-  Q3PtrVector<UmlItem> ch = get_uml()->children();
+  QVector<UmlItem> ch = get_uml()->children();
   
   for (unsigned index = 0; index != ch.size(); index += 1)
     if (ch[index]->kind() != aClass)
@@ -142,13 +137,13 @@ bool Class::already_in_bouml() {
   return FALSE;
 }
 
-bool Class::reverse(Package * container, Q3CString stereotype,
+bool Class::reverse(Package * container, QCString stereotype,
 		    bool abstractp, bool finalp,
-		    Q3CString & path, UmlArtifact * art)
+		    QCString & path, UmlArtifact * art)
 {
-  Q3CString comment = Lex::get_comments();
-  Q3CString description = Lex::get_description();
-  Q3CString name;
+  QCString comment = Lex::get_comments();
+  QCString description = Lex::get_description();
+  QCString name;
   
   if ((name = Lex::read_word()).isEmpty())
     return FALSE;
@@ -191,7 +186,7 @@ bool Class::reverse(Package * container, Q3CString stereotype,
       cl_uml->set_isPhpFinal(finalp);
   }
   
-  Q3CString s = Lex::read_word();
+  QCString s = Lex::read_word();
   
   if (s.isEmpty()) {
     if (! Package::scanning()) {
@@ -311,7 +306,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k) {
     if (!add_inherit(k, typespec))
       return FALSE;
     
-    Q3CString s = Lex::read_word();
+    QCString s = Lex::read_word();
     
     if (s == "{") {
       Lex::unread_word(s);
@@ -357,11 +352,11 @@ bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec) {
 // [<visibility>] 'const' ctename '=' value ';'
 // ['final'] [<visibility>] ['static' | 'abstract'] 'function' ...
 
-bool Class::manage_member(Q3CString s) {
-  Q3CString comment = Lex::get_comments();
-  Q3CString description = Lex::get_description();
+bool Class::manage_member(QCString s) {
+  QCString comment = Lex::get_comments();
+  QCString description = Lex::get_description();
   int index;
-  Q3CString access = value_of(description, "@access", index);
+  QCString access = value_of(description, "@access", index);
   aVisibility visibility;
   
   if (access == "public")
@@ -417,8 +412,8 @@ bool Class::manage_member(Q3CString s) {
   }
 
   for (;;) {
-    Q3CString name = s;  
-    Q3CString value;
+    QCString name = s;  
+    QCString value;
     
     s = Lex::read_word();
     
@@ -468,7 +463,7 @@ bool Class::manage_member(Q3CString s) {
   }
 }
 
-void Class::compute_type(Q3CString name, UmlTypeSpec & typespec,
+void Class::compute_type(QCString name, UmlTypeSpec & typespec,
 			 Class ** need_object) {
    // no nested classe in php
   ((Package *) parent())->compute_type(name, typespec, need_object);
@@ -649,7 +644,7 @@ void Class::historic_forward() {
 }
 
 void Class::menu() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(text(0), -1);
   m.insertSeparator();
@@ -744,7 +739,7 @@ void Class::restore(QDataStream  & dt, char c, Package * parent)
   cl->from_lib = TRUE;
 #endif
   
-  Q3CString name(n);
+  QCString name(n);
   
   parent->declare(n, cl);
   

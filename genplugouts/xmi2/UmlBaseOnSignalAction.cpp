@@ -1,10 +1,8 @@
 
 #include "UmlCom.h"
 #include "UmlBaseOnSignalAction.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-const Q3CString & UmlBaseOnSignalAction::signal() {
+const QCString & UmlBaseOnSignalAction::signal() {
   read_if_needed_();
   return _signal;
 }
@@ -14,7 +12,7 @@ bool UmlBaseOnSignalAction::set_Signal(const char * v) {
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseOnSignalAction::cppSignal() {
+const QCString & UmlBaseOnSignalAction::cppSignal() {
   read_if_needed_();
   return _cpp_signal;
 }
@@ -25,7 +23,7 @@ bool UmlBaseOnSignalAction::set_CppSignal(const char * v) {
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseOnSignalAction::javaSignal() {
+const QCString & UmlBaseOnSignalAction::javaSignal() {
   read_if_needed_();
   return _java_signal;
 }

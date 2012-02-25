@@ -27,11 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "HubCanvas.h"
 #include "ArrowCanvas.h"
@@ -63,14 +61,14 @@ bool HubCanvas::copyable() const {
 
 void HubCanvas::change_scale() {
   // the size is not modified
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void HubCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
 
   p.drawRect(r);
@@ -96,7 +94,7 @@ void HubCanvas::open() {
 }
 
 void HubCanvas::menu(const QPoint&) {
-  Q3PopupMenu m;
+  QPopupMenu m;
   
   m.insertItem(new MenuTitle(TR("Network connexion"), m.font()), -1);
   m.insertSeparator();
@@ -130,13 +128,13 @@ QString HubCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
   switch (dest->type()) {
   case UmlDeploymentNode:
   case UmlHub:
-    return (l == UmlAssociation) ? QString() : TR("illegal"); 
+    return (l == UmlAssociation) ? 0 : TR("illegal");
   default:
     return TR("illegal");
   }
 }
 
-void HubCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void HubCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref)
     st << "hubcanvas_ref " << get_ident();
   else {

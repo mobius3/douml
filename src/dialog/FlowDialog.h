@@ -26,16 +26,14 @@
 #ifndef FLOWDIALOG_H
 #define FLOWDIALOG_H
 
-#include <qwidget.h>
+#include <qwidgetlist.h>
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BrowserNode.h"
 
 class QPushButton;
-class Q3ComboBox;
+class QComboBox;
 
 class LineEdit;
 class MultiLineEdit;
@@ -54,7 +52,7 @@ struct FlDialog {
   void accept(FlowDef &);
 };
 
-class FlowDialog : public Q3TabDialog {
+class FlowDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
@@ -62,9 +60,9 @@ class FlowDialog : public Q3TabDialog {
     bool visit;
     FlowData * flow;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     FlDialog uml;
     FlDialog cpp;

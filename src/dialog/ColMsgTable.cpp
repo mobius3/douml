@@ -27,7 +27,7 @@
 
 
 
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qvalidator.h>
 #include <qcursor.h>
 
@@ -55,11 +55,11 @@ class MsgTableItem : public TableItem {
     int align;
   
   public:
-    MsgTableItem(Q3Table * table, const QString & txt, int al = Qt::AlignLeft)
-      : TableItem(table, Never, txt), align(al | Qt::AlignVCenter) { };
+    MsgTableItem(QTable * table, const QString & txt, int al = AlignLeft)
+      : TableItem(table, Never, txt), align(al | AlignVCenter) { };
   
-    MsgTableItem(Q3Table * table, unsigned u, int al = Qt::AlignLeft)
-      : TableItem(table, Never, QString::number(u)), align(al | Qt::AlignVCenter) { };
+    MsgTableItem(QTable * table, unsigned u, int al = AlignLeft)
+      : TableItem(table, Never, QString::number(u)), align(al | AlignVCenter) { };
 
     virtual int alignment() const { return align; };
 };
@@ -147,7 +147,7 @@ void ColMsgTable::button_pressed(int row, int col, int, const QPoint &) {
   else if (col <= HI_RANK_COL)
     change_ranks(row, col);
   else {
-    Q3PopupMenu m;
+    QPopupMenu m;
 
     m.insertItem(new MenuTitle(QString(TR("rank ")) + text(row, ABS_RANK_COL)
 			       + " : " + text(row, HI_RANK_COL),
@@ -197,7 +197,7 @@ void ColMsgTable::refresh() {
 
 void ColMsgTable::refresh(ColMsgList & m) {
   ColMsg * msg;
-  Q3PtrListIterator<ColMsg> it(m);
+  QListIterator<ColMsg> it(m);
   
   for ( ; (msg = it.current()) != 0; ++it) {
     QString def = msg->def(FALSE, TRUE, UmlView, DefaultShowContextMode);
@@ -214,7 +214,7 @@ void ColMsgTable::refresh(ColMsgList & m) {
     setItem(r, FROM_COL, new MsgTableItem(this, from->get_full_name()));
     setItem(r, MSG_COL, new MsgTableItem(this, def.mid(def.find(' ') + 1)));
     setItem(r, TO_COL, new MsgTableItem(this, to->get_full_name()));
-    setItem(r, CMD_COL, new MsgTableItem(this, TR("do"), Qt::AlignHCenter));
+    setItem(r, CMD_COL, new MsgTableItem(this, TR("do"), AlignHCenter));
     
     flat_msg_list.append(msg);
     
@@ -238,11 +238,11 @@ void ColMsgTable::edit_msg(int row) {
 }
 
 #ifdef NEW_METHOD
-void ColMsgTable::save_list(ColMsgList & l, Q3PtrDict<ColMsgList> & saved) {
+void ColMsgTable::save_list(ColMsgList & l, QPtrDict<ColMsgList> & saved) {
   if (saved.find(&l) == 0) {
     saved.insert(&l, new ColMsgList(l));
     
-    Q3PtrListIterator<ColMsg> it(l);
+    QListIterator<ColMsg> it(l);
     
     for (; it.current(); ++it) {
       ColMsg * m = it.current();
@@ -318,7 +318,7 @@ void ColMsgTable::change_ranks(int row, int col) {
     }
 #else
     // save all the messages
-    Q3PtrDict<ColMsgList> saved;
+    QPtrDict<ColMsgList> saved;
     
     saved.setAutoDelete(TRUE);
     save_list(view->get_msgs(), saved);
@@ -363,7 +363,7 @@ void ColMsgTable::change_ranks(int row, int col) {
       
       // restore saved lists
       
-       Q3PtrDictIterator<ColMsgList> it(saved);
+       QPtrDictIterator<ColMsgList> it(saved);
        
        while (it.current()) {
 	 *((ColMsgList *) it.currentKey()) = *(it.current());

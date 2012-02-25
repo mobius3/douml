@@ -31,8 +31,6 @@
 
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "DiagramCanvas.h"
 #include "Settings.h"
@@ -83,8 +81,8 @@ class ActivityObjectCanvas : public QObject, public DiagramCanvas {
     virtual void remove(bool from_model);
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
@@ -93,7 +91,7 @@ class ActivityObjectCanvas : public QObject, public DiagramCanvas {
     virtual void history_load(QBuffer &);
     virtual void history_hide();
 
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static ActivityObjectCanvas * read(char * &, UmlCanvas * canvas, char *);
     virtual void post_loaded();
     

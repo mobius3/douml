@@ -3,7 +3,7 @@
 
 void UmlPackage::uml2cpp(bool rec) {
   if (rec) {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem> ch = children();
     unsigned n = ch.size();
     
     for (unsigned i = 0; i != n; i += 1)
@@ -13,7 +13,7 @@ void UmlPackage::uml2cpp(bool rec) {
 
 void UmlPackage::uml2java(bool rec) {
   if (rec) {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem> ch = children();
     unsigned n = ch.size();
     
     for (unsigned i = 0; i != n; i += 1)
@@ -23,7 +23,7 @@ void UmlPackage::uml2java(bool rec) {
 
 void UmlPackage::uml2idl(bool rec) {
   if (rec) {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem> ch = children();
     unsigned n = ch.size();
     
     for (unsigned i = 0; i != n; i += 1)
@@ -33,7 +33,7 @@ void UmlPackage::uml2idl(bool rec) {
 
 void UmlPackage::uml2php(bool rec) {
   if (rec) {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem> ch = children();
     unsigned n = ch.size();
     
     for (unsigned i = 0; i != n; i += 1)
@@ -43,7 +43,7 @@ void UmlPackage::uml2php(bool rec) {
 
 void UmlPackage::uml2python(bool rec) {
   if (rec) {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem> ch = children();
     unsigned n = ch.size();
     
     for (unsigned i = 0; i != n; i += 1)

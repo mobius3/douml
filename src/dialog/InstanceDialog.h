@@ -31,7 +31,7 @@
 
 #include "BrowserNode.h"
 
-class Q3ComboBox;
+class QComboBox;
 class LineEdit;
 class Instance;
 
@@ -45,7 +45,7 @@ class InstanceDialog : public QDialog {
     QStringList list;
     BrowserNodeList nodes;
     LineEdit * edname;
-    Q3ComboBox * edtype;
+    QComboBox * edtype;
     
     static QSize previous_size;
   

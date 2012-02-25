@@ -27,12 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
 
 #include "ActivityCanvas.h"
 #include "ActivityData.h"
@@ -92,7 +89,7 @@ void ActivityCanvas::delete_it() {
   
   DiagramCanvas::delete_it();
   
-  Q3ValueList<ParameterCanvas *>::Iterator iter;
+  QValueList<ParameterCanvas *>::Iterator iter;
   
   for (iter = params.begin();  iter != params.end(); ++iter)
     // don't empty params to manage undo
@@ -202,7 +199,7 @@ void ActivityCanvas::compute_size() {
 
   if (! the_canvas()->do_zoom()) {
     // update parameters position
-    Q3ValueList<ParameterCanvas *>::Iterator iter;
+    QValueList<ParameterCanvas *>::Iterator iter;
   
     for (iter = params.begin(); iter != params.end(); ++iter)
       (*iter)->check_position();
@@ -213,7 +210,7 @@ void ActivityCanvas::moveBy(double dx, double dy) {
   DiagramCanvas::moveBy(dx, dy);
   
   // update parameters position
-  Q3ValueList<ParameterCanvas *>::Iterator iter;
+  QValueList<ParameterCanvas *>::Iterator iter;
   
   for (iter = params.begin(); iter != params.end(); ++iter)
     (*iter)->do_moveBy(dx, dy);
@@ -223,16 +220,16 @@ void ActivityCanvas::moveBy(double dx, double dy) {
 }
 
 void ActivityCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   double scale = the_canvas()->zoom();
     
   setSize((int) (width_scale100*scale), (int) (height_scale100*scale));
   compute_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
   
   // update parameters position
-  Q3ValueList<ParameterCanvas *>::Iterator iter;
+  QValueList<ParameterCanvas *>::Iterator iter;
   
   for (iter = params.begin(); iter != params.end(); ++iter)
     (*iter)->do_change_scale();
@@ -276,7 +273,7 @@ void ActivityCanvas::set_z(double z) {
   
   z += 1;
   
-  Q3ValueList<ParameterCanvas *>::Iterator iter;
+  QValueList<ParameterCanvas *>::Iterator iter;
   
   for (iter = params.begin(); iter != params.end(); ++iter)
     (*iter)->set_z(z);
@@ -287,8 +284,8 @@ void ActivityCanvas::force_sub_inside(bool resize_it) {
   // except the parameters whose are in the border
   // and the diagram icon
   // or resize it to contains sub elts if resize_it
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   BooL need_sub_upper = FALSE;
 
   if (resize_it) {
@@ -316,14 +313,14 @@ void ActivityCanvas::force_sub_inside(bool resize_it) {
 
 void ActivityCanvas::check_params() {
   // add missing params
-  const Q3ValueList<BrowserParameter *> brparams =
+  const QValueList<BrowserParameter *> brparams =
     ((BrowserActivity *) browser_node)->get_params();
-  Q3ValueList<BrowserParameter *>::ConstIterator iter;
+  QValueList<BrowserParameter *>::ConstIterator iter;
   int dy = (int) (the_canvas()->zoom() * PARAMETER_CANVAS_MIN_HEIGHT);
   int rank;
   
   for (iter = brparams.begin(), rank = 0; iter != brparams.end(); ++iter, rank += 1) {
-    Q3ValueList<ParameterCanvas *>::ConstIterator itershown;
+    QValueList<ParameterCanvas *>::ConstIterator itershown;
     
     for (itershown = params.begin(); itershown != params.end(); ++itershown)
       if ((*itershown)->get_bn() == *iter)
@@ -413,7 +410,7 @@ void ActivityCanvas::check_constraint() {
 }
 void ActivityCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QBrush brsh = p.brush();
   QColor bckgrnd = p.backgroundColor();
@@ -558,8 +555,8 @@ void ActivityCanvas::open() {
 }
 
 void ActivityCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -705,7 +702,7 @@ bool ActivityCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ActivityCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ActivityCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(2);
     ColorSpecVector co(1);
@@ -722,7 +719,7 @@ void ActivityCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -739,8 +736,8 @@ void ActivityCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ActivityCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ActivityCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ActivityCanvas * x = (ActivityCanvas *) it.current();
   
@@ -764,7 +761,7 @@ bool ActivityCanvas::get_show_stereotype_properties() const {
 }
 
 QString ActivityCanvas::may_start(UmlCode & l) const {
-  return (l == UmlFlow) ? TR("illegal") : QString();
+  return (l == UmlFlow) ? TR("illegal") : 0;
 }
 
 QString ActivityCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -790,7 +787,7 @@ void ActivityCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ActivityCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "activitycanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -813,7 +810,7 @@ void ActivityCanvas::save(Q3TextStream & st, bool ref, QString & warning) const 
       st << "params";
       indent(+1);
     
-      Q3ValueList<ParameterCanvas *>::ConstIterator iter;
+      QValueList<ParameterCanvas *>::ConstIterator iter;
   
       for (iter = params.begin(); iter != params.end(); ++iter)
 	(*iter)->save(st, FALSE, warning);
@@ -919,7 +916,7 @@ void ActivityCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
@@ -927,7 +924,7 @@ void ActivityCanvas::history_load(QBuffer & b) {
 }
 
 void ActivityCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
 
   disconnect(DrawingSettings::instance(), SIGNAL(changed()),
 	     this, SLOT(modified()));

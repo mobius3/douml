@@ -2,8 +2,8 @@
 #define _UMLBASECOLLABORATIONMESSAGE_H
 
 
-#include <q3cstring.h>
-#include <q3ptrdict.h>
+#include <qcstring.h>
+#include <qptrdict.h>
 #include "UmlMessage.h"
 
 class UmlClassInstanceReference;
@@ -17,7 +17,7 @@ class UmlBaseCollaborationMessage : public UmlMessage {
     }
 
     // return the hierarchical rank of the message
-    const Q3CString & hrank() const {
+    const QCString & hrank() const {
         return _hrank;
     }
 
@@ -25,10 +25,10 @@ class UmlBaseCollaborationMessage : public UmlMessage {
   private:
     int _rank;
 
-    Q3CString _hrank;
+    QCString _hrank;
 
     // internal, don't call it
-    void read_(const Q3PtrDict<UmlClassInstanceReference> & instances);
+    void read_(const QPtrDict<UmlClassInstanceReference> & instances);
 
   friend class UmlBaseCollaborationDiagramDefinition;
 };

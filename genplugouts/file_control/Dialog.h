@@ -2,7 +2,7 @@
 #define _DIALOG_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 
 #include <qdialog.h>
 class QLineEdit;
@@ -13,11 +13,11 @@ class Dialog : public QDialog {
   Q_OBJECT
 
   public:
-    Dialog(bool ci, Q3CString & cmd, BooL & rec, BooL & reload);
+    Dialog(bool ci, QCString & cmd, BooL & rec, BooL & reload);
 
 
   protected:
-    Q3CString & _cmd;
+    QCString & _cmd;
 
     BooL & _rec;
 

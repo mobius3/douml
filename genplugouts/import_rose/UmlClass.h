@@ -3,9 +3,9 @@
 
 
 #include "UmlBaseClass.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "Language.h"
-#include <q3dict.h>
+#include <qdict.h>
 
 class File;
 class UmlItem;
@@ -18,15 +18,15 @@ class Artifact;
 // You can modify it as you want (except the constructor)
 class UmlClass : public UmlBaseClass {
   public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {
+    UmlClass(void * id, const QCString & n) : UmlBaseClass(id, n) {
       cpt[kind()] += 1;
     };
 
     Language language() const;
 
-    static UmlClass * import(File & f, UmlItem * parent, const Q3CString & knd);
+    static UmlClass * import(File & f, UmlItem * parent, const QCString & knd);
 
-    static bool replaceType(UmlTypeSpec & t, Q3CString & target_id, const Q3CString & ts);
+    static bool replaceType(UmlTypeSpec & t, QCString & target_id, const QCString & ts);
 
 
   private:
@@ -44,31 +44,31 @@ class UmlClass : public UmlBaseClass {
 
     void importClasses(File & f);
 
-    static void importIdlConstant(UmlItem * parent, const Q3CString & id, const Q3CString & s, const Q3CString & doc, Q3Dict<Q3CString> & prop);
+    static void importIdlConstant(UmlItem * parent, const QCString & id, const QCString & s, const QCString & doc, QDict<QCString> & prop);
 
-    void cplusplus(Q3Dict<Q3CString> & prop);
+    void cplusplus(QDict<QCString> & prop);
 
-    void oracle8(Q3Dict<Q3CString> & prop);
+    void oracle8(QDict<QCString> & prop);
 
-    void corba(Q3Dict<Q3CString> & prop);
+    void corba(QDict<QCString> & prop);
 
-    void java(Q3Dict<Q3CString> & prop);
+    void java(QDict<QCString> & prop);
 
-    void assocArtifact(Artifact * c, Q3CString & art_path);
+    void assocArtifact(Artifact * c, QCString & art_path);
 
 
   public:
-    const Q3CString file() const;
+    const QCString file() const;
 
-    const Q3CString bodyFile() const;
+    const QCString bodyFile() const;
 
 
   protected:
     Language lang;
 
-    Q3CString _file;
+    QCString _file;
 
-    Q3CString _body_file;
+    QCString _body_file;
 
 };
 
@@ -76,11 +76,11 @@ inline Language UmlClass::language() const {
   return lang;
 }
 
-inline const Q3CString UmlClass::file() const {
+inline const QCString UmlClass::file() const {
   return _file;
 }
 
-inline const Q3CString UmlClass::bodyFile() const {
+inline const QCString UmlClass::bodyFile() const {
   return _body_file;
 }
 

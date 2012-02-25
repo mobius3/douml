@@ -26,27 +26,25 @@
 #ifndef SYNCHROWINDOW_H
 #define SYNCHROWINDOW_H
 
-#include <q3mainwindow.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qmainwindow.h>
+#include <qlist.h>
 
-class Q3HBox;
+class QHBox;
 class BrowserView;
 class BrowserNode;
  
 // singleton
 
-class SynchroWindow : public Q3MainWindow {
+class SynchroWindow : public QMainWindow {
   Q_OBJECT
     
   public:
     SynchroWindow();
-virtual ~SynchroWindow();
+    ~SynchroWindow();
     
     void load(int argc, char ** argv);
     
-    static const Q3PtrList<BrowserView> & get_browsers() {
+    static const QList<BrowserView> & get_browsers() {
       return the->browsers;
     }
     static void abort();
@@ -55,8 +53,8 @@ virtual ~SynchroWindow();
     static SynchroWindow * the;
   
     QString project_name;
-    Q3PtrList<BrowserView> browsers;
-    Q3HBox * hbox;
+    QList<BrowserView> browsers;
+    QHBox * hbox;
     
     void load(QString path);
 

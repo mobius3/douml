@@ -2,8 +2,6 @@
 #include "UmlBaseClassMember.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 bool UmlBaseClassMember::isClassMember() {
   read_if_needed_();
   
@@ -61,7 +59,7 @@ bool UmlBaseClassMember::set_CppVisibility(aVisibility v) {
 #endif
 
 #ifdef WITHJAVA
-Q3CString UmlBaseClassMember::javaAnnotations() {
+QCString UmlBaseClassMember::javaAnnotations() {
   read_if_needed_();
   
   return _java_annotation;
@@ -72,7 +70,7 @@ bool UmlBaseClassMember::set_JavaAnnotations(const char * v) {
 }
 #endif
 
-const Q3CString & UmlBaseClassMember::constraint() {
+const QCString & UmlBaseClassMember::constraint() {
   read_if_needed_();
   return _constraint;
 }

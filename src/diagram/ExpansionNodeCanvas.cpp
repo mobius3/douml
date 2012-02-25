@@ -30,10 +30,8 @@
 #include <math.h>
 
 #include <qpainter.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "ExpansionNodeCanvas.h"
 #include "BrowserExpansionNode.h"
@@ -187,7 +185,7 @@ void ExpansionNodeCanvas::change_scale() {
 }
 
 void ExpansionNodeCanvas::do_change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   double scale = the_canvas()->zoom();
     
   setSize((int) (width_scale100*scale) | 1,
@@ -195,7 +193,7 @@ void ExpansionNodeCanvas::do_change_scale() {
   recenter();
   // expansion region already in position, can check
   check_position();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void ExpansionNodeCanvas::moveBy(double dx, double dy) {
@@ -216,7 +214,7 @@ void ExpansionNodeCanvas::do_moveBy(double dx, double dy) {
 
 void ExpansionNodeCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QBrush brsh = p.brush();
   QColor bckgrnd = p.backgroundColor();
   
@@ -285,8 +283,8 @@ void ExpansionNodeCanvas::open() {
 }
 
 void ExpansionNodeCanvas::menu(const QPoint &) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
     
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -399,7 +397,7 @@ bool ExpansionNodeCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ExpansionNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ExpansionNodeCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -410,7 +408,7 @@ void ExpansionNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((ExpansionNodeCanvas *) it.current())->itscolor = itscolor;
@@ -422,8 +420,8 @@ void ExpansionNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ExpansionNodeCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ExpansionNodeCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ExpansionNodeCanvas * x = (ExpansionNodeCanvas *) it.current();
   
@@ -487,7 +485,7 @@ void ExpansionNodeCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ExpansionNodeCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ExpansionNodeCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "expansionnodecanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -561,7 +559,7 @@ ExpansionNodeCanvas * ExpansionNodeCanvas::read(char * & st, UmlCanvas * canvas,
 }
 
 void ExpansionNodeCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   disconnect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
@@ -584,7 +582,7 @@ void ExpansionNodeCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));

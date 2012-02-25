@@ -4,7 +4,7 @@
 
 #include "UmlBaseUseCaseView.h"
 #include "Uc.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlItem;
 class File;
@@ -14,13 +14,13 @@ class File;
 // You can modify it as you want (except the constructor)
 class UmlUseCaseView : public UmlBaseUseCaseView, public Uc {
   public:
-    UmlUseCaseView(void * id, const Q3CString & n) : UmlBaseUseCaseView(id, n) {
+    UmlUseCaseView(void * id, const QCString & n) : UmlBaseUseCaseView(id, n) {
       cpt[kind()] += 1;
     };
 
     virtual UmlItem * item();
 
-    virtual void readObject(File & f, Q3CString s);
+    virtual void readObject(File & f, QCString s);
 
     //read and create a new use case view, its name is the next token
     

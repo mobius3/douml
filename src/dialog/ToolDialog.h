@@ -26,9 +26,7 @@
 #ifndef TOOLDIALOG_H
 #define TOOLDIALOG_H
 
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <qtabdialog.h>
 
 #include "StringTable.h"
 #include "UmlEnum.h"
@@ -40,7 +38,7 @@ struct ToolColumnDef {
   QPixmap ** pixmap;
 };
 
-class ToolDialog : public Q3TabDialog {
+class ToolDialog : public QTabDialog {
   Q_OBJECT
     
   public:

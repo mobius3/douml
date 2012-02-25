@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on debug
+CONFIG	      += qt warn_on release
 SOURCES	      = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
 		UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
 		UmlExtraClassMember.cpp \
@@ -97,5 +97,3 @@ TARGET	      = cpp_reverse
 DEFINES	      = WITHCPP REVERSE BooL=bool
 INCLUDEPATH   = ../Tools ../CppReverse
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

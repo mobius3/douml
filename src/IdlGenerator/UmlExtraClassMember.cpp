@@ -23,15 +23,12 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h>
 
 #include "UmlExtraClassMember.h"
 
-void UmlExtraClassMember::generate_decl(QTextOStream & f, const Q3CString &,
-					Q3CString indent, bool) {
+void UmlExtraClassMember::generate_decl(QTextOStream & f, const QCString &,
+					QCString indent, bool) {
   f << indent << idlDecl();
 }
 

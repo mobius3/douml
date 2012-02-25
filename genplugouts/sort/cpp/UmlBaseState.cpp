@@ -3,8 +3,6 @@
 #include "UmlBaseState.h"
 #include "UmlState.h"
 #include "UmlStateDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 UmlState * UmlBaseState::create(UmlItem * parent, const char * s)
 {
@@ -15,7 +13,7 @@ anItemKind UmlBaseState::kind() {
   return aState;
 }
 
-const Q3CString & UmlBaseState::entryBehavior() {
+const QCString & UmlBaseState::entryBehavior() {
   read_if_needed_();
   return _uml.on_entry;
 }
@@ -24,7 +22,7 @@ bool UmlBaseState::set_EntryBehavior(const char * s) {
   return set_it_(_uml.on_entry, s, setUmlEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseState::exitBehavior() {
+const QCString & UmlBaseState::exitBehavior() {
   read_if_needed_();
   return _uml.on_exit;
 }
@@ -33,7 +31,7 @@ bool UmlBaseState::set_ExitBehavior(const char * s) {
   return set_it_(_uml.on_exit, s, setUmlExitBehaviorCmd);
 }
 
-const Q3CString & UmlBaseState::doActivity() {
+const QCString & UmlBaseState::doActivity() {
   read_if_needed_();
   return _uml.do_activity;
 }
@@ -43,7 +41,7 @@ bool UmlBaseState::set_DoActivity(const char * s) {
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseState::cppEntryBehavior() {
+const QCString & UmlBaseState::cppEntryBehavior() {
   read_if_needed_();
   return _cpp.on_entry;
 }
@@ -52,7 +50,7 @@ bool UmlBaseState::set_CppEntryBehavior(const char * s) {
   return set_it_(_cpp.on_entry, s, setCppEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseState::cppExitBehavior() {
+const QCString & UmlBaseState::cppExitBehavior() {
   read_if_needed_();
   return _cpp.on_exit;
 }
@@ -61,7 +59,7 @@ bool UmlBaseState::set_CppExitBehavior(const char * s) {
   return set_it_(_cpp.on_exit, s, setCppExitBehaviorCmd);
 }
 
-const Q3CString & UmlBaseState::cppDoActivity() {
+const QCString & UmlBaseState::cppDoActivity() {
   read_if_needed_();
   return _cpp.do_activity;
 }
@@ -72,7 +70,7 @@ bool UmlBaseState::set_CppDoActivity(const char * s) {
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseState::javaEntryBehavior() {
+const QCString & UmlBaseState::javaEntryBehavior() {
   read_if_needed_();
   return _java.on_entry;
 }
@@ -81,7 +79,7 @@ bool UmlBaseState::set_JavaEntryBehavior(const char * s) {
   return set_it_(_java.on_entry, s, setJavaEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseState::javaExitBehavior() {
+const QCString & UmlBaseState::javaExitBehavior() {
   read_if_needed_();
   return _java.on_exit;
 }
@@ -90,7 +88,7 @@ bool UmlBaseState::set_JavaExitBehavior(const char * s) {
   return set_it_(_java.on_exit, s, setJavaExitBehaviorCmd);
 }
 
-const Q3CString & UmlBaseState::javaDoActivity() {
+const QCString & UmlBaseState::javaDoActivity() {
   read_if_needed_();
   return _java.do_activity;
 }

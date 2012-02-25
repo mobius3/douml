@@ -27,11 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "ActivityNodeCanvas.h"
 #include "ActivityContainerCanvas.h"
@@ -99,8 +97,8 @@ void ActivityNodeCanvas::remove(bool from_model) {
 bool ActivityNodeCanvas::force_inside() {
   // if its activity is present, force inside it
   
-  Q3CanvasItemList all = the_canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = the_canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   BrowserNode * parent = (BrowserNode *) browser_node->parent();
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -156,7 +154,7 @@ void ActivityNodeCanvas::set_xpm() {
 }
 
 void ActivityNodeCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   
   if (manual_size) {
     double scale = the_canvas()->zoom();
@@ -185,7 +183,7 @@ void ActivityNodeCanvas::change_scale() {
     set_xpm();
   
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 aCorner ActivityNodeCanvas::on_resize_point(const QPoint & p) {
@@ -263,7 +261,7 @@ void ActivityNodeCanvas::post_loaded() {
 
 void ActivityNodeCanvas::draw(QPainter & p) {
   if (!visible() || ((xpm == 0) && !manual_size)) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+
   QRect r = rect();
   QRect intern_r;
   
@@ -410,8 +408,8 @@ void ActivityNodeCanvas::open() {
 }
 
 void ActivityNodeCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -559,7 +557,7 @@ void ActivityNodeCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ActivityNodeCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityNodeCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "activitynodecanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -649,7 +647,7 @@ ActivityNodeCanvas * ActivityNodeCanvas::read(char * & st, UmlCanvas * canvas,
 }
 
 void ActivityNodeCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(browser_node->get_data(), 0, this, 0);
 }
 
@@ -680,7 +678,7 @@ void ActivityNodeCanvas::history_load(QBuffer & b) {
     
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QCanvasRectangle::setSize(w, h);
   }
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));

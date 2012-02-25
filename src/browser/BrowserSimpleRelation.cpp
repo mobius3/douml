@@ -27,14 +27,10 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QPixmap>
+#include <qpainter.h>
+#include <qptrdict.h>
 
 #include "BrowserSimpleRelation.h"
 #include "SimpleRelationData.h"
@@ -139,7 +135,7 @@ bool BrowserSimpleRelation::undelete(bool, QString & warning, QString & renamed)
   return TRUE;
 }
 
-void BrowserSimpleRelation::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserSimpleRelation::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete) {
     BrowserActivityDiagram::compute_referenced_by(l, this, "simplerelationcanvas", "simplerelation_ref");
@@ -154,7 +150,7 @@ void BrowserSimpleRelation::referenced_by(Q3PtrList<BrowserNode> & l, bool ondel
   }
 }
 
-void BrowserSimpleRelation::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserSimpleRelation::compute_referenced_by(QList<BrowserNode> & l,
 						  BrowserNode * target)
 {
   IdIterator<BrowserSimpleRelation> it(all);
@@ -215,8 +211,8 @@ const QPixmap* BrowserSimpleRelation::pixmap(int) const {
 }
 
 void BrowserSimpleRelation::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -384,7 +380,7 @@ QString BrowserSimpleRelation::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p);
 }
 
-void BrowserSimpleRelation::save(Q3TextStream & st, bool ref,
+void BrowserSimpleRelation::save(QTextStream & st, bool ref,
 				 QString & warning) {
   if (ref) {
     // for SimpleRelationCanvas
@@ -481,7 +477,7 @@ BrowserNode * BrowserSimpleRelation::get_it(const char * k, int id)
   return (!strcmp(k, "simplerelation_ref")) ? all[id] : 0;
 }
 
-void BrowserSimpleRelation::get_relating(BrowserNode * elt, Q3PtrDict<BrowserNode> & d,
+void BrowserSimpleRelation::get_relating(BrowserNode * elt, QPtrDict<BrowserNode> & d,
 					 BrowserNodeList & newones, bool inh,
 					 bool dep, bool sametype, UmlCode k)
 {

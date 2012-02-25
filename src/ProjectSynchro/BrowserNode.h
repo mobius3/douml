@@ -26,11 +26,8 @@
 #ifndef BROWSERNODE_H
 #define BROWSERNODE_H
 
-#include <q3listview.h>
-#include <q3dict.h>
-//Added by qt3to4:
-#include <QKeyEvent>
-#include <QPixmap>
+#include <qlistview.h>
+#include <qdict.h>
 
 class QDir;
 class QKeyEvent;
@@ -40,7 +37,7 @@ enum State {
   UpToDate, Young, Old, Deleted, Unknown
 };
 
-class BrowserNode : public Q3ListViewItem {
+class BrowserNode : public QListViewItem {
   public:
     BrowserNode(BrowserView * parent, QString fn);
     BrowserNode(BrowserNode * parent, QString fn, BrowserView * v);
@@ -57,11 +54,11 @@ class BrowserNode : public Q3ListViewItem {
     int get_rev() const;
     
     bool solve();	// solve state and return TRUE if Young
-    static void synchronize(QDir & todir, Q3Dict<BrowserNode> & nodes);
+    static void synchronize(QDir & todir, QDict<BrowserNode> & nodes);
     
   private:
     
-    void memo(Q3Dict<void> & useful);
+    void memo(QDict<void> & useful);
 
     QString filename;
     QString modifier_name;
@@ -71,7 +68,7 @@ class BrowserNode : public Q3ListViewItem {
     QStringList diagrams;
     QStringList classes;
     
-    static Q3Dict<BrowserNode> Youngs;  
+    static QDict<BrowserNode> Youngs;  
 };
 
 #endif

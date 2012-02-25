@@ -27,8 +27,6 @@
 #define TRANSITIONCANVAS_H
 
 #include "ArrowCanvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 class BrowserNode;
 class TransitionData;
@@ -64,14 +62,14 @@ class TransitionCanvas : public ArrowCanvas {
     virtual void default_label_position() const;
     void stereotype_default_position() const;
     
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     
     virtual void history_load(QBuffer &);
     virtual void history_hide();
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();

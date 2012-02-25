@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClassView.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlPackage;
 class File;
@@ -14,7 +14,7 @@ class UmlUseCaseView;
 // You can modify it as you want (except the constructor)
 class UmlClassView : public UmlBaseClassView {
   public:
-    UmlClassView(void * id, const Q3CString & n);
+    UmlClassView(void * id, const QCString & n);
 
     static void import(UmlPackage * parent, File & f);
 

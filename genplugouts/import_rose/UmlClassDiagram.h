@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClassDiagram.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class File;
 class UmlClassView;
@@ -15,7 +15,7 @@ class UmlClassView;
 // You can modify it as you want (except the constructor)
 class UmlClassDiagram : public UmlBaseClassDiagram {
   public:
-    UmlClassDiagram(void * id, const Q3CString & n) : UmlBaseClassDiagram(id, n) {
+    UmlClassDiagram(void * id, const QCString & n) : UmlBaseClassDiagram(id, n) {
       cpt[kind()] += 1;
     };
 

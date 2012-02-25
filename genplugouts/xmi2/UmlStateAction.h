@@ -4,7 +4,7 @@
 
 #include "UmlBaseStateAction.h"
 #include "UmlStateItem.h"
-#include <q3ptrlist.h>
+#include <qlist.h>
 
 class FileOut;
 class UmlTransition;
@@ -23,7 +23,7 @@ class UmlStateAction : public UmlBaseStateAction, public UmlStateItem {
 
 
   protected:
-    Q3PtrList<UmlTransition> _incoming_trans;
+    QList<UmlTransition> _incoming_trans;
 
 };
 

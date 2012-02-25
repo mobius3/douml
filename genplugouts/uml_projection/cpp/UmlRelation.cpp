@@ -7,8 +7,6 @@
 #include "IdlSettings.h"
 #include "PhpSettings.h"
 #include "PythonSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlRelation::uml2cpp(bool) {
   bool composition = FALSE;
   
@@ -31,10 +29,10 @@ void UmlRelation::uml2cpp(bool) {
     // no break
   default:
     {
-      Q3CString st = CppSettings::classStereotype(parent()->stereotype());
+      QCString st = CppSettings::classStereotype(parent()->stereotype());
       
       set_CppDecl(((st == "enum") || (st == "typedef") || (st == "ignored"))
-		  ? Q3CString("")
+		  ? QCString("")
 		  : CppSettings::relationDecl(composition, multiplicity()));
     }
   }
@@ -50,10 +48,10 @@ void UmlRelation::uml2java(bool) {
     break;
   default:
     {
-      Q3CString st = JavaSettings::classStereotype(parent()->stereotype());
+      QCString st = JavaSettings::classStereotype(parent()->stereotype());
       
       set_JavaDecl(((st == "enum") || (st == "ignored"))
-		   ? Q3CString("")
+		   ? QCString("")
 		   : JavaSettings::relationDecl(multiplicity()));
     }
   }
@@ -68,7 +66,7 @@ void UmlRelation::uml2idl(bool) {
     break;
   default:
     {
-      Q3CString st = IdlSettings::classStereotype(parent()->stereotype());
+      QCString st = IdlSettings::classStereotype(parent()->stereotype());
       
       if ((st == "enum") || (st == "typedef") || (st == "ignored"))
 	set_IdlDecl("");
@@ -91,7 +89,7 @@ void UmlRelation::uml2php(bool) {
     break;
   default:
     {
-      Q3CString st = PhpSettings::classStereotype(parent()->stereotype());
+      QCString st = PhpSettings::classStereotype(parent()->stereotype());
       
       if ((st == "enum") || (st == "ignored"))
 	set_PhpDecl("");
@@ -116,7 +114,7 @@ void UmlRelation::uml2Python(bool) {
     // no break
   default:
     {
-      Q3CString st = PythonSettings::classStereotype(parent()->stereotype());
+      QCString st = PythonSettings::classStereotype(parent()->stereotype());
       
       if ((st == "enum") || (st == "ignored"))
 	set_PythonDecl("");

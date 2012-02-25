@@ -36,8 +36,6 @@
 
 #include "util.h"
 #include "php.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 //
 // add php
@@ -122,7 +120,7 @@ UmlArtifact * add_php_settings()
   }
   
   UmlOperation * op;
-  Q3CString s;
+  QCString s;
   
   op = UmlOperation::java2Php(phpsettings, javasettings, "attributeDecl");
   op->set_Description(" returns the default definition of an attribute");
@@ -305,7 +303,7 @@ UmlArtifact * add_php_settings()
   UmlRelation * rel;
   
   if ((rel = UmlBaseRelation::create(aGeneralisation, phpsettings, umlsettings)) == 0) {
-    Q3CString msg = "PhpSettings can't inherit UmlSettings<br>\n";
+    QCString msg = "PhpSettings can't inherit UmlSettings<br>\n";
     
     UmlCom::trace("<b>" + msg + "</b>");
     throw 0;
@@ -554,7 +552,7 @@ void artifact_add_php()
   UmlOperation::java2Php(cl, cl, "read_java_", "read_php_")
     ->moveAfter(cl->get_operation("read_java_"));
   
-  Q3CString s;
+  QCString s;
   
   op = cl->get_operation("unload");
   
@@ -637,7 +635,7 @@ void classitem_add_php()
   UmlOperation::java2Php(cl, cl, "read_java_", "read_php_")
     ->moveAfter(cl->get_operation("read_java_"));
 
-  Q3CString s;
+  QCString s;
   
   op = cl->get_operation("unload");
   
@@ -772,7 +770,7 @@ void operation_add_php()
 		  "  _php_name_spec = UmlCom.read_string();\n"
 		  "  _php_get_set_frozen = UmlCom.read_bool();\n");
 
-  Q3CString s;
+  QCString s;
   
   op = cl->get_operation("unload");
   
@@ -816,7 +814,7 @@ void package_add_php()
   op1->set_CppBody("  _php_dir = UmlCom::read_string();\n");
   op1->set_JavaBody("  _php_dir = UmlCom.read_string();\n");
 
-  Q3CString s;
+  QCString s;
   
   op1 = cl->get_operation("unload");
   
@@ -860,7 +858,7 @@ void associate_php_artifacts(UmlArtifact * phpsettingsart,
 {
   UmlDeploymentView * dv = (UmlDeploymentView *)
     UmlClass::get("UmlArtifact", 0)->associatedArtifact()->parent();
-  const Q3PtrVector<UmlItem> ch = dv->children();
+  const QVector<UmlItem> ch = dv->children();
     
   for (unsigned i = 0; i != ch.size(); i += 1) {
     if ((ch[i]->kind() == anArtifact) && (ch[i]->name() == "executable")) {
@@ -964,7 +962,7 @@ void php_javadocstylecomment()
   
   //
 
-  Q3CString s;
+  QCString s;
   
   op = php_settings->get_operation("read_");
   s = op->cppBody() + "  _is_generate_javadoc_comment = UmlCom::read_bool();\n";
@@ -1162,7 +1160,7 @@ void php_add_require_once()
   
   //
 
-  Q3CString s;
+  QCString s;
   
   op = php_settings->get_operation("read_");
   s = op->cppBody() + 
@@ -1211,7 +1209,7 @@ void add_php_namespace(UmlClass * uml_base_package, UmlClass * phpsettings)
       
   att->moveAfter(att2);
   
-  Q3CString s = att2->cppDecl();
+  QCString s = att2->cppDecl();
   int index = s.find("\n#endif");
   
   if (index != -1)

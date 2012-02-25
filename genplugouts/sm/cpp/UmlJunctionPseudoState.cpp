@@ -6,8 +6,6 @@
 #include "UmlCom.h"
 #include "UmlTransition.h"
 #include "UmlOperation.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlJunctionPseudoState::generate(UmlClass * machine, UmlClass * anystate, UmlState * state) {
   // create an operation because a priori shared
@@ -30,9 +28,9 @@ void UmlJunctionPseudoState::generate(UmlClass * machine, UmlClass * anystate, U
   junction->addParam(0, InputOutputDirection, "stm", machine);
   junction->setParams("${t0} & ${p0}");
   
-  Q3CString body;
-  const Q3PtrVector<UmlItem> ch = children();
-  Q3PtrList<UmlTransition> trs;
+  QCString body;
+  const QVector<UmlItem> ch = children();
+  QList<UmlTransition> trs;
   unsigned index;
   
   for (index = 0; index != ch.count(); index += 1)
@@ -45,7 +43,7 @@ void UmlJunctionPseudoState::generate(UmlClass * machine, UmlClass * anystate, U
   junction->set_CppBody(body);
 }
 
-void UmlJunctionPseudoState::generate(UmlClass *, UmlClass *, UmlState * state, Q3CString & body, Q3CString indent) {
+void UmlJunctionPseudoState::generate(UmlClass *, UmlClass *, UmlState * state, QCString & body, QCString indent) {
   if (_oper.isEmpty())
     _oper.sprintf("_junction%d", ++_rank);
 

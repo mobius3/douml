@@ -10,7 +10,7 @@ void UmlUseCaseDiagram::write(FileOut &) {
 void UmlUseCaseDiagram::write_it(FileOut & out) {
   const char * k = ((_uml_20) ? "ownedMember" : "packagedElement");
   UmlUseCaseDiagramDefinition * def = definition();
-  const Q3PtrVector<UmlUseCaseAssociation> & assocs = def->associations();
+  const QVector<UmlUseCaseAssociation> & assocs = def->associations();
   int n = (int) assocs.size();
   
   for (int rank = 0; rank != n; rank += 1)

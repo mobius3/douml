@@ -4,21 +4,19 @@
 #include "UmlItem.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlUseCaseDiagram::import(File & f, UmlItem * parent)
 {
-  Q3CString s;
+  QCString s;
 
   if (f.read(s) != STRING)
     f.syntaxError(s, "use case diagram's name");
 
-  Q3CString id;
-  Q3CString ste;
-  Q3CString doc;
-  Q3Dict<Q3CString> prop;
-  Q3CString s2;
+  QCString id;
+  QCString ste;
+  QCString doc;
+  QDict<QCString> prop;
+  QCString s2;
   int k;
   
   do {

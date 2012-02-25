@@ -29,9 +29,9 @@
 
 #include <qapplication.h>
 #include <qworkspace.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qspinbox.h>
 
@@ -62,8 +62,8 @@ extern QString imageText();
 // id is an old ident in case of an import
 DeploymentDiagramWindow::DeploymentDiagramWindow(const QString & s, BrowserDeploymentDiagram * b, int id)
     : DiagramWindow(b, s), view(0) {
-  Q3ToolBar * toolbar = new Q3ToolBar(this, "deployment operations");
-  addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
+  QToolBar * toolbar = new QToolBar(this, "deployment operations");
+  addToolBar(toolbar, TR("Toolbar"), Top, TRUE);
   
   add_edit_button(toolbar);
   
@@ -78,85 +78,85 @@ DeploymentDiagramWindow::DeploymentDiagramWindow(const QString & s, BrowserDeplo
     = new QToolButton(*packageButton, TR("Add Package"), QString::null,
 		      this, SLOT(hit_package()), toolbar, "add package");
   addPackage->setToggleButton(TRUE);
-  Q3WhatsThis::add(addPackage, addpackageText());
+  QWhatsThis::add(addPackage, addpackageText());
   
   addFragment
     = new QToolButton(*fragmentButton, TR("Add Fragment"), QString::null,
 		      this, SLOT(hit_fragment()), toolbar, "add fragment");
   addFragment->setToggleButton(TRUE);
-  Q3WhatsThis::add(addFragment, addfragmentText());
+  QWhatsThis::add(addFragment, addfragmentText());
   
   addDeploymentNode =
     new QToolButton(*deploymentNodeButton, TR("Add Deployment Node"), QString::null,
 		    this, SLOT(hit_deploymentnode()), toolbar, "add deployment node");
   addDeploymentNode->setToggleButton(TRUE);
-  Q3WhatsThis::add(addDeploymentNode, adddeploymentnodeText());
+  QWhatsThis::add(addDeploymentNode, adddeploymentnodeText());
   
   addArtifact =
     new QToolButton(*artifactButton, TR("Add Artifact"), QString::null,
 		    this, SLOT(hit_artifact()), toolbar, "add artifact");
   addArtifact->setToggleButton(TRUE);
-  Q3WhatsThis::add(addArtifact, addartifactText());
+  QWhatsThis::add(addArtifact, addartifactText());
   
   addComponent =
     new QToolButton(*componentButton, TR("Add Component"), QString::null,
 		    this, SLOT(hit_component()), toolbar, "add component");
   addComponent->setToggleButton(TRUE);
-  Q3WhatsThis::add(addComponent, addcomponentText());
+  QWhatsThis::add(addComponent, addcomponentText());
   
   hub =
     new QToolButton(*hubButton, TR("Network connexion/ending"), QString::null,
 		    this, SLOT(hit_hub()), toolbar, "network connexion/ending");
   hub->setToggleButton(TRUE);
-  Q3WhatsThis::add(hub, hubText());
+  QWhatsThis::add(hub, hubText());
   
   network =
     new QToolButton(*associationButton, TR("Network"), QString::null,
 		    this, SLOT(hit_network()), toolbar, "network");
   network->setToggleButton(TRUE);
-  Q3WhatsThis::add(network, networkText());
+  QWhatsThis::add(network, networkText());
   
   inherit =
     new QToolButton(*generalisationButton, TR("Inheritance"), QString::null,
 		    this, SLOT(hit_inherit()), toolbar, "inheritance");
   inherit->setToggleButton(TRUE);
-  Q3WhatsThis::add(inherit, inheritText());
+  QWhatsThis::add(inherit, inheritText());
   
   association =
     new QToolButton(*directionalAssociationButton, TR("Association"), QString::null,
 		    this, SLOT(hit_association()), toolbar, "association");
   association->setToggleButton(TRUE);
-  Q3WhatsThis::add(association, associationText());
+  QWhatsThis::add(association, associationText());
   
   dependency =
     new QToolButton(*dependencyButton, TR("Dependency"), QString::null,
 		    this, SLOT(hit_dependency()), toolbar, "dependency");
   dependency->setToggleButton(TRUE);
-  Q3WhatsThis::add(dependency, dependencyText());
+  QWhatsThis::add(dependency, dependencyText());
   
   note =
     new QToolButton(*noteButton, TR("Note"), QString::null,
 		    this, SLOT(hit_note()), toolbar, "note");
   note->setToggleButton(TRUE);
-  Q3WhatsThis::add(note, noteText());
+  QWhatsThis::add(note, noteText());
   
   anchor =
     new QToolButton(*anchorButton, TR("Anchor"), QString::null,
 		    this, SLOT(hit_anchor()), toolbar, "anchor");
   anchor->setToggleButton(TRUE);
-  Q3WhatsThis::add(anchor, anchorText());
+  QWhatsThis::add(anchor, anchorText());
   
   text =
     new QToolButton(*textButton, TR("Text"), QString::null,
 		    this, SLOT(hit_text()), toolbar, "text");
   text->setToggleButton(TRUE);
-  Q3WhatsThis::add(text, textText());
+  QWhatsThis::add(text, textText());
   
   image =
     new QToolButton(*imageButton, TR("Image"), QString::null,
 		    this, SLOT(hit_image()), toolbar, "image");
   image->setToggleButton(TRUE);
-  Q3WhatsThis::add(image, imageText());  
+  QWhatsThis::add(image, imageText());  
   
   toolbar->addSeparator();
   

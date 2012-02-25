@@ -3,8 +3,8 @@
 
 
 #include "UmlBaseUseCaseView.h"
-#include <q3cstring.h>
-#include <q3ptrlist.h>
+#include <qcstring.h>
+#include <qlist.h>
 
 class FileOut;
 class UmlItem;
@@ -15,7 +15,7 @@ class UmlUseCaseDiagram;
 // You can modify it as you want (except the constructor)
 class UmlUseCaseView : public UmlBaseUseCaseView {
   public:
-    UmlUseCaseView(void * id, const Q3CString & n) : UmlBaseUseCaseView(id, n) {};
+    UmlUseCaseView(void * id, const QCString & n) : UmlBaseUseCaseView(id, n) {};
 
     virtual void write(FileOut & out);
 
@@ -33,9 +33,9 @@ class UmlUseCaseView : public UmlBaseUseCaseView {
 
 
   protected:
-    Q3PtrList<UmlItem> _relations;
+    QList<UmlItem> _relations;
 
-    Q3PtrList<UmlUseCaseDiagram> _assocs;
+    QList<UmlUseCaseDiagram> _assocs;
 
 };
 

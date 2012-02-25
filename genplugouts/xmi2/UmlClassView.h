@@ -3,8 +3,8 @@
 
 
 #include "UmlBaseClassView.h"
-#include <q3cstring.h>
-#include <q3ptrlist.h>
+#include <qcstring.h>
+#include <qlist.h>
 
 class FileOut;
 class UmlItem;
@@ -14,7 +14,7 @@ class UmlItem;
 // You can modify it as you want (except the constructor)
 class UmlClassView : public UmlBaseClassView {
   public:
-    UmlClassView(void * id, const Q3CString & n) : UmlBaseClassView(id, n) {};
+    UmlClassView(void * id, const QCString & n) : UmlBaseClassView(id, n) {};
 
     virtual void write(FileOut & out);
 
@@ -28,7 +28,7 @@ class UmlClassView : public UmlBaseClassView {
 
 
   protected:
-    Q3PtrList<UmlItem> _relations;
+    QList<UmlItem> _relations;
 
 };
 

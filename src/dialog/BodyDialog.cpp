@@ -29,11 +29,7 @@
 
 #include <qlabel.h> 
 #include <qlayout.h> 
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BodyDialog.h"
 #include "UmlDesktop.h"
@@ -43,9 +39,9 @@
 
 QSize BodyDialog::previous_size;
 
-BodyDialog::BodyDialog(QString t, Q3TabDialog * d, post_edit pf,
-		       EditType k, QString what, Q3PtrList<BodyDialog> & edits)
-    : QDialog(d, what, d->isModal(), Qt::WDestructiveClose), dlg(d), f(pf), eds(edits) {
+BodyDialog::BodyDialog(QString t, QTabDialog * d, post_edit pf,
+		       EditType k, QString what, QList<BodyDialog> & edits)
+    : QDialog(d, what, d->isModal(), WDestructiveClose), dlg(d), f(pf), eds(edits) {
   eds.append(this);
   what.replace(what.findRev('_'), 1, " ");
   switch (k) {
@@ -65,7 +61,7 @@ BodyDialog::BodyDialog(QString t, Q3TabDialog * d, post_edit pf,
     setCaption(what);
   }
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+  QVBoxLayout * vbox = new QVBoxLayout(this);
 
   vbox->addWidget(new QLabel((f == 0) ? TR("Note : operation bodies preserved")
 				      : TR("You can specify the editor through the environment dialog"),

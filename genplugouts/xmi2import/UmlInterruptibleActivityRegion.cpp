@@ -3,8 +3,6 @@
 #include "UmlItem.h"
 #include "Token.h"
 #include "FileIn.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 UmlItem * UmlInterruptibleActivityRegion::container(anItemKind kind, Token & token, FileIn & in) {
   switch (kind) {
@@ -50,7 +48,7 @@ void UmlInterruptibleActivityRegion::importIt(FileIn & in, Token & token, UmlIte
   where = where->container(anInterruptibleActivityRegion, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlInterruptibleActivityRegion * r = create(where, s);
     
     if (r == 0)
@@ -60,7 +58,7 @@ void UmlInterruptibleActivityRegion::importIt(FileIn & in, Token & token, UmlIte
     r->addItem(token.xmiId(), in);
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr))

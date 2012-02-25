@@ -27,9 +27,6 @@
 #define UMLCLASSMEMBER_H
 
 #include "UmlBaseClassMember.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 
 // This class globaly manages class's operations, relations, attributes
 // and sub-classes
@@ -39,10 +36,10 @@ class QTextOStream;
 
 class UmlClassMember : public UmlBaseClassMember {
   public:
-    UmlClassMember(void * id, const Q3CString & n)
+    UmlClassMember(void * id, const QCString & n)
       : UmlBaseClassMember(id, n) {}
     
-    virtual void generate_imports(QTextOStream & f, Q3CString & made);
+    virtual void generate_imports(QTextOStream & f, QCString & made);
 };
 
 #endif

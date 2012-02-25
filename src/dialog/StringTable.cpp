@@ -27,7 +27,7 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 
 #include "StringTable.h"
@@ -79,7 +79,7 @@ void StringTable::value_changed(int row, int col) {
 void StringTable::button_pressed(int row, int col, int, const QPoint &) {
   if (col == numCols() - 1) {
     QString s;
-    Q3PopupMenu m;
+    QPopupMenu m;
     
     s.sprintf("%d", row + 1);
     m.insertItem(TR("row %1", s), -1);
@@ -94,7 +94,7 @@ void StringTable::button_pressed(int row, int col, int, const QPoint &) {
     m.insertItem(TR("Paste row"), 5);
     m.insertSeparator();
 
-    Q3PopupMenu mv;
+    QPopupMenu mv;
     int rank;
     
     for (rank = 0; rank != numRows(); rank += 1)

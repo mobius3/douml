@@ -1,9 +1,7 @@
 
 #include "UmlCom.h"
 
-#include <q3socketdevice.h> 
-//Added by qt3to4:
-#include <Q3CString>
+#include <qsocketdevice.h> 
 
 #include "UmlCom.h"
 #include "UmlItem.h"
@@ -13,7 +11,7 @@
 #include "MiscGlobalCmd.h"
 bool UmlCom::connect(unsigned int port)
 {
-  sock = new Q3SocketDevice(Q3SocketDevice::Stream);
+  sock = new QSocketDevice(QSocketDevice::Stream);
   sock->setAddressReusable(TRUE);
   
   buffer_in_size = 1024;
@@ -65,7 +63,7 @@ void UmlCom::close()
   sock = 0;
 }
 
-Q3SocketDevice * UmlCom::sock;
+QSocketDevice * UmlCom::sock;
 
 char * UmlCom::buffer_in;
 
@@ -502,10 +500,10 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, cha
   flush();
 }
 
-void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlClass> & l)
+void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass> & l)
 {
 #ifdef TRACE
-  cout << "UmlCom::send_cmd(id, " << cmd << ", const Q3PtrVector<UmlClass> & l)\n";
+  cout << "UmlCom::send_cmd(id, " << cmd << ", const QVector<UmlClass> & l)\n";
 #endif
   
   write_char(onInstanceCmd);
@@ -576,7 +574,7 @@ unsigned int UmlCom::read_unsigned()
 	((unsigned char *) p_buffer_in)[-1];
 }
 
-void UmlCom::read_item_list(Q3PtrVector<UmlItem> & v)
+void UmlCom::read_item_list(QVector<UmlItem> & v)
 {
   unsigned n = read_unsigned();
   
@@ -590,7 +588,7 @@ void UmlCom::read_item_list(Q3PtrVector<UmlItem> & v)
     v.insert(index, UmlBaseItem::read_());
 }
 
-void UmlCom::fatal_error(const Q3CString & 
+void UmlCom::fatal_error(const QCString & 
 #ifdef DEBUG_BOUML
                          msg
 #endif

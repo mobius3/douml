@@ -27,11 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "InterruptibleActivityRegionCanvas.h"
 #include "SimpleData.h"
@@ -144,7 +142,7 @@ bool InterruptibleActivityRegionCanvas::move_with_its_package() const {
 void InterruptibleActivityRegionCanvas::force_sub_inside(bool resize_it) {
   // update sub nodes position to be inside of the activity region
   // or resize it to contains sub elts if resize_it
-  Q3CanvasItemList all = canvas()->allItems();
+  QCanvasItemList all = canvas()->allItems();
   BooL need_sub_upper = FALSE;
   
   if (resize_it)
@@ -158,7 +156,7 @@ void InterruptibleActivityRegionCanvas::force_sub_inside(bool resize_it) {
 
 void InterruptibleActivityRegionCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QBrush brsh = p.brush();
   QColor bckgrnd = p.backgroundColor();
@@ -216,8 +214,8 @@ void InterruptibleActivityRegionCanvas::open() {
 }
 
 void InterruptibleActivityRegionCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -353,7 +351,7 @@ bool InterruptibleActivityRegionCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void InterruptibleActivityRegionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void InterruptibleActivityRegionCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -364,7 +362,7 @@ void InterruptibleActivityRegionCanvas::edit_drawing_settings(Q3PtrList<DiagramI
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((InterruptibleActivityRegionCanvas *) it.current())->itscolor = itscolor;
@@ -376,8 +374,8 @@ void InterruptibleActivityRegionCanvas::edit_drawing_settings(Q3PtrList<DiagramI
   }
 }
 
-void InterruptibleActivityRegionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void InterruptibleActivityRegionCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   InterruptibleActivityRegionCanvas * x = (InterruptibleActivityRegionCanvas *) it.current();
   
@@ -390,7 +388,7 @@ void InterruptibleActivityRegionCanvas::same_drawing_settings(Q3PtrList<DiagramI
 }
 
 QString InterruptibleActivityRegionCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString InterruptibleActivityRegionCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -406,7 +404,7 @@ void InterruptibleActivityRegionCanvas::connexion(UmlCode action, DiagramItem * 
   the_canvas()->select(a);
 }
 
-void InterruptibleActivityRegionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void InterruptibleActivityRegionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "interruptibleactivityregioncanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -495,7 +493,7 @@ void InterruptibleActivityRegionCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
@@ -503,7 +501,7 @@ void InterruptibleActivityRegionCanvas::history_load(QBuffer & b) {
 }
 
 void InterruptibleActivityRegionCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
 
   disconnect(DrawingSettings::instance(), SIGNAL(changed()),
 	     this, SLOT(modified()));

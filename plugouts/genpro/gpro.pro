@@ -1,5 +1,5 @@
 TEMPLATE	= app
-CONFIG		+= qt warn_on debug
+CONFIG		+= qt warn_on release
 TARGET		= gpro
 DEFINES		= WITHCPP
 HEADERS		= Dialog.h
@@ -8,5 +8,3 @@ SOURCES		= ClassGlobalCmd.cpp CmdFamily.cpp CppSettings.cpp CppSettingsCmd.cpp D
 		  UmlBaseClassDiagram.cpp UmlBaseClassItem.cpp UmlBaseClassMember.cpp UmlBaseClassView.cpp UmlBaseCollaborationDiagram.cpp UmlBaseComponent.cpp UmlBaseArtifact.cpp UmlBaseComponentDiagram.cpp UmlBaseComponentView.cpp UmlBaseDeploymentDiagram.cpp UmlBaseDeploymentView.cpp UmlBaseDiagram.cpp UmlBaseExtraClassMember.cpp UmlBaseFormalParameter.cpp UmlBaseItem.cpp UmlBaseNode.cpp UmlBaseOperation.cpp UmlBasePackage.cpp UmlBaseRelation.cpp UmlBaseNcRelation.cpp UmlBaseSequenceDiagram.cpp UmlBaseUseCase.cpp UmlBaseUseCaseDiagram.cpp UmlBaseUseCaseView.cpp UmlBuiltin.cpp \
 		UmlClass.cpp UmlClassInstance.cpp \
 		UmlClassMember.cpp UmlClassView.cpp UmlCollaborationDiagram.cpp UmlCom.cpp UmlComponent.cpp UmlArtifact.cpp UmlComponentView.cpp UmlExtraClassMember.cpp UmlItem.cpp UmlParameter.cpp UmlSettings.cpp UmlSettingsCmd.cpp UmlStereotype.cpp UmlTypeSpec.cpp aDirection.cpp aRelationKind.cpp aVisibility.cpp anItemKind.cpp
-#The following line was inserted by qt3to4
-QT += qt3support 

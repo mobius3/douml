@@ -27,7 +27,7 @@
 #define SETTINGS_H
 
 #include <qobject.h>
-#include <q3textstream.h> 
+#include <qtextstream.h> 
 
 #include "StateSpec.h"
 
@@ -59,7 +59,7 @@ class ClassSettings {
     ClassSettings();
     
     bool edit(UmlCode who);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -102,7 +102,7 @@ class ClassDiagramSettings {
     bool complete(ClassDiagramSettings & result) const;
     void complete(StateSpecVector & a, UmlCode who);
     void set(StateSpecVector & a, int index);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -117,7 +117,7 @@ class SimpleClassDiagramSettings {
     void assign(const class UseCaseDiagramSettings & from);
     void complete(StateSpecVector & a/*, UmlCode who*/);
     void set(StateSpecVector & a, int index);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -139,7 +139,7 @@ class SequenceDiagramSettings {
     void assign_msg(const SequenceDiagramSettings & from);
     bool complete(SequenceDiagramSettings & result) const;
     void complete(StateSpecVector & a, bool local);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -162,8 +162,8 @@ class CollaborationDiagramSettings {
     bool complete(CollaborationDiagramSettings & result) const;
     void complete(StateSpecVector & a, bool local);
     void complete_msg(StateSpecVector & a);
-    void save(Q3TextStream &) const;
-    void save_msg(Q3TextStream &) const;
+    void save(QTextStream &) const;
+    void save_msg(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -182,7 +182,7 @@ class ObjectDiagramSettings {
     void assign(const ObjectDiagramSettings & from);
     bool complete(ObjectDiagramSettings & result) const;
     void complete(StateSpecVector & a, bool local);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -202,7 +202,7 @@ class UseCaseDiagramSettings {
     bool complete(UseCaseDiagramSettings & result) const;
     bool complete(SimpleClassDiagramSettings & result) const;
     void complete(StateSpecVector & a, bool local);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -219,7 +219,7 @@ class ComponentDrawingSettings {
     void assign(const class ComponentDiagramSettings & from);
     bool complete(ComponentDrawingSettings & result) const;
     void complete(StateSpecVector & a, bool local, bool depl);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -237,7 +237,7 @@ class ComponentDiagramSettings {
     void assign(const ComponentDiagramSettings & from);
     bool complete(ComponentDiagramSettings & result) const;
     void complete(StateSpecVector & a, bool local);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -256,7 +256,7 @@ class DeploymentDiagramSettings {
     void assign(const DeploymentDiagramSettings & from);
     bool complete(DeploymentDiagramSettings & result) const;
     void complete(StateSpecVector & a, bool local);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -272,7 +272,7 @@ class StateDrawingSettings {
     void assign(const StateDrawingSettings & from);
     bool complete(StateDrawingSettings & result) const;
     void complete(StateSpecVector & a, bool local);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -292,7 +292,7 @@ class StateDiagramSettings {
     void assign(const StateDiagramSettings & from);
     bool complete(StateDiagramSettings & result) const;
     void complete(StateSpecVector & a, bool local);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -308,7 +308,7 @@ class ActivityDrawingSettings {
     bool complete(ActivityDrawingSettings & result) const;
     void complete(StateSpecVector & a, bool local);
     void set(StateSpecVector & a, int index);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 
@@ -328,7 +328,7 @@ class ActivityDiagramSettings {
     void assign(const ActivityDiagramSettings & from);
     bool complete(ActivityDiagramSettings & result) const;
     void complete(StateSpecVector & a, bool local);
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * &);
 };
 

@@ -3,7 +3,7 @@
 
 
 #include "UmlItem.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 //  Mother class of the all the class's items including the class themself
 class UmlBaseClassItem : public UmlItem {
@@ -11,7 +11,7 @@ class UmlBaseClassItem : public UmlItem {
 #ifdef WITHCPP
     //  return the C++ declaration
     
-    const Q3CString & cppDecl();
+    const QCString & cppDecl();
 
     //  to set the C++ declaration
     //
@@ -22,7 +22,7 @@ class UmlBaseClassItem : public UmlItem {
 #ifdef WITHJAVA
     //  return the Java defininition
     
-    const Q3CString & javaDecl();
+    const QCString & javaDecl();
 
     //  to set the Java definition
     //
@@ -33,7 +33,7 @@ class UmlBaseClassItem : public UmlItem {
 #ifdef WITHIDL
     //  return the IDL declaration
     
-    const Q3CString & idlDecl();
+    const QCString & idlDecl();
 
     //  set the IDL declaration
     //
@@ -49,20 +49,20 @@ class UmlBaseClassItem : public UmlItem {
 
   private:
 #ifdef WITHCPP
-    Q3CString _cpp_decl;
+    QCString _cpp_decl;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_decl;
+    QCString _java_decl;
 #endif
 
 #ifdef WITHIDL
-    Q3CString _idl_decl;
+    QCString _idl_decl;
 #endif
 
 
   protected:
-    UmlBaseClassItem(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseClassItem(void * id, const QCString & n) : UmlItem(id, n) {};
 
 #ifdef WITHCPP
     //internal, do NOT use it

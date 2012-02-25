@@ -2,7 +2,7 @@
 #define _UMLBASECLASSINSTANCEREFERENCE_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlClass;
 class UmlClassInstance;
@@ -19,7 +19,7 @@ class UmlBaseClassInstanceReference {
     }
 
     // return the name of the instance
-    const Q3CString & name() const;
+    const QCString & name() const;
 
 
   private:
@@ -27,7 +27,7 @@ class UmlBaseClassInstanceReference {
 
     UmlClassInstance * _instance;
 
-    Q3CString _name;
+    QCString _name;
 
     // internal, don't call it
     void read_();

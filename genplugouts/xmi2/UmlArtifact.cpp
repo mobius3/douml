@@ -11,13 +11,13 @@ void UmlArtifact::write(FileOut & out) {
   out << "<" << k << " xmi:type=\"uml:Artifact\"";
   out.id(this); 
   out << " name=\"";
-  out.quote((const char*)name());//[jasa] ambiguous call
+  out.quote(name());
   out << "\">\n"; 
   out.indent(+1); 
   
   write_description_properties(out); 
  
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned i;
   unsigned n = ch.size(); 
   unsigned rank = 0;
@@ -34,7 +34,7 @@ void UmlArtifact::write(FileOut & out) {
   }
 
   if (stereotype() == "source") {
-    const Q3PtrVector<UmlClass> & cls = associatedClasses();
+    const QVector<UmlClass> & cls = associatedClasses();
     
     n = cls.size();
     
@@ -42,7 +42,7 @@ void UmlArtifact::write(FileOut & out) {
       write_manifest(out, cls[i], "source", ++rank);
   }
   else {
-    const Q3PtrVector<UmlArtifact> & arts = associatedArtifacts();
+    const QVector<UmlArtifact> & arts = associatedArtifacts();
     
     n = arts.size();
     

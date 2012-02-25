@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserActivityNode.h"
 #include "BrowserActivityDiagram.h"
@@ -107,13 +102,13 @@ void BrowserActivityNode::update_idmax_for_root()
 void BrowserActivityNode::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
     
-void BrowserActivityNode::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserActivityNode::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserFlow::compute_referenced_by(l, this);
   if (! ondelete)
@@ -182,7 +177,7 @@ const QPixmap* BrowserActivityNode::pixmap(int) const {
 }
 
 bool BrowserActivityNode::target_of_flow() const {
-  Q3PtrList<BrowserNode> l;
+  QList<BrowserNode> l;
 
   BrowserFlow::compute_referenced_by(l, this);
   return !l.isEmpty();
@@ -204,7 +199,7 @@ QString BrowserActivityNode::may_start() const {
   case JoinAN:	      // be control/data exclusively
     // only one flow is allowed
     {
-      Q3ListViewItem * child;
+      QListViewItem * child;
       
       for (child = firstChild(); child != 0; child = child->nextSibling())
 	if ((((BrowserNode *) child)->get_type() == UmlFlow) &&
@@ -232,22 +227,22 @@ QString BrowserActivityNode::may_connect(const BrowserNode * dest) const {
   case ForkAN:
     return (((BrowserActivityNode *) dest)->target_of_flow())
       ? TR("fork can't have several incoming flow")
-      : QString();
+      : 0;
   case UmlParameter:
     if (((ParameterData *) data)->get_dir() == UmlIn)
       return TR("an input parameter can't have incoming flows");
     else if (! ((ParameterData *) data)->get_is_control())
       return TR("parameter can't accept control flow (not 'is_control')");
     else
-      return QString();
+      return 0;
   case UmlExpansionNode:
     return (!((ActivityObjectData *) data)->get_is_control())
       ? TR("can't accept control flow (not 'is_control')")
-      : QString();
+      : 0;
   case UmlActivityPin:
     return (!((PinData *) data)->get_is_control())
       ? TR("pin can't accept control flow (not 'is_control')")
-      : QString();
+      : 0;
   case UmlActivityObject:
   case UmlActivityAction:
   case FlowFinalAN:
@@ -312,8 +307,8 @@ void BrowserActivityNode::menu() {
   if (index != -1)
     s.replace(index, 1, " ");
   
-  Q3PopupMenu m(0, "Activity node");
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, "Activity node");
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -576,7 +571,7 @@ QString BrowserActivityNode::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
 }
 
-void BrowserActivityNode::save_stereotypes(Q3TextStream & st)
+void BrowserActivityNode::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "activitynode_stereotypes ";
@@ -593,7 +588,7 @@ void BrowserActivityNode::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserActivityNode::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserActivityNode::save(QTextStream & st, bool ref, QString & warning) {
   if (ref) {
     st << "activitynode_ref " << get_ident() << " // " << stringify(kind);
     if (!allow_spaces())
@@ -609,7 +604,7 @@ void BrowserActivityNode::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

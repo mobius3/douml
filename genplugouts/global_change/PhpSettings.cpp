@@ -7,8 +7,6 @@
 #include "PhpSettingsCmd.h"
 #include "JavaSettingsCmd.h"
 #include "UmlStereotype.h"
-//Added by qt3to4:
-#include <Q3CString>
 #ifdef WITHJAVA
 #include "JavaSettings.h"
 #endif
@@ -24,7 +22,7 @@ bool PhpSettings::set_UseDefaults(bool y)
   return UmlCom::read_bool();
 }
 
-Q3CString PhpSettings::classStereotype(const Q3CString & s)
+QCString PhpSettings::classStereotype(const QCString & s)
 {
   read_if_needed_();
   
@@ -33,10 +31,10 @@ Q3CString PhpSettings::classStereotype(const Q3CString & s)
   return (b) ? b->php : s;
 }
 
-bool PhpSettings::set_ClassStereotype(Q3CString s, Q3CString v)
+bool PhpSettings::set_ClassStereotype(QCString s, QCString v)
 {
   read_if_needed_();
-  UmlCom::send_cmd(phpSettingsCmd, setPhpClassStereotypeCmd, (const char*)s, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpClassStereotypeCmd, s, v);
   if (UmlCom::read_bool()) {
     UmlStereotype * st = UmlSettings::_map_class_stereotypes.find(s);
 
@@ -50,23 +48,23 @@ bool PhpSettings::set_ClassStereotype(Q3CString s, Q3CString v)
     return FALSE;
 }
 
-Q3CString PhpSettings::classUmlStereotype(const Q3CString & s)
+QCString PhpSettings::classUmlStereotype(const QCString & s)
 {
   read_if_needed_();
   
   return UmlSettings::uml_class_stereotype(s, &UmlStereotype::php);
 }
 
-const Q3CString & PhpSettings::rootDir()
+const QCString & PhpSettings::rootDir()
 {
   read_if_needed_();
   
   return _root;
 }
 
-bool PhpSettings::set_RootDir(Q3CString v)
+bool PhpSettings::set_RootDir(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpRootdirCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpRootdirCmd, v);
   if (UmlCom::read_bool()) {
     _root = v;
     return TRUE;
@@ -75,16 +73,16 @@ bool PhpSettings::set_RootDir(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PhpSettings::sourceContent()
+const QCString & PhpSettings::sourceContent()
 {
   read_if_needed_();
   
   return _src_content;
 }
 
-bool PhpSettings::set_SourceContent(Q3CString v)
+bool PhpSettings::set_SourceContent(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpSourceContentCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpSourceContentCmd, v);
   if (UmlCom::read_bool()) {
     _src_content = v;
     return TRUE;
@@ -93,16 +91,16 @@ bool PhpSettings::set_SourceContent(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PhpSettings::sourceExtension()
+const QCString & PhpSettings::sourceExtension()
 {
   read_if_needed_();
   
   return _ext; 
 }
 
-bool PhpSettings::set_SourceExtension(Q3CString v)
+bool PhpSettings::set_SourceExtension(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpSourceExtensionCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpSourceExtensionCmd, v);
   if (UmlCom::read_bool()) {
     _ext = v;
     return TRUE;
@@ -129,16 +127,16 @@ bool PhpSettings::set_IsGenerateJavadocStyleComment(bool v)
     return FALSE;
 }
 
-const Q3CString & PhpSettings::classDecl()
+const QCString & PhpSettings::classDecl()
 {
   read_if_needed_();
   
   return _class_decl;
 }
 
-bool PhpSettings::set_ClassDecl(Q3CString v)
+bool PhpSettings::set_ClassDecl(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpClassDeclCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpClassDeclCmd, v);
   if (UmlCom::read_bool()) {
     _class_decl = v;
     return TRUE;
@@ -147,16 +145,16 @@ bool PhpSettings::set_ClassDecl(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PhpSettings::externalClassDecl()
+const QCString & PhpSettings::externalClassDecl()
 {
   read_if_needed_();
   
   return _external_class_decl;
 }
 
-bool PhpSettings::set_ExternalClassDecl(Q3CString v)
+bool PhpSettings::set_ExternalClassDecl(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpExternalClassDeclCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpExternalClassDeclCmd, v);
   if (UmlCom::read_bool()) {
     _external_class_decl = v;
     return TRUE;
@@ -165,16 +163,16 @@ bool PhpSettings::set_ExternalClassDecl(Q3CString v)
     return FALSE;
 }
 
-Q3CString PhpSettings::enumDecl()
+QCString PhpSettings::enumDecl()
 {
   read_if_needed_();
   
   return _enum_decl;
 }
 
-bool PhpSettings::set_EnumDecl(Q3CString v)
+bool PhpSettings::set_EnumDecl(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpEnumDeclCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpEnumDeclCmd, v);
   if (UmlCom::read_bool()) {
     _enum_decl = v;
     return TRUE;
@@ -183,16 +181,16 @@ bool PhpSettings::set_EnumDecl(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PhpSettings::interfaceDecl()
+const QCString & PhpSettings::interfaceDecl()
 {
   read_if_needed_();
   
   return _interface_decl;
 }
 
-bool PhpSettings::set_InterfaceDecl(Q3CString v)
+bool PhpSettings::set_InterfaceDecl(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpInterfaceDeclCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpInterfaceDeclCmd, v);
   if (UmlCom::read_bool()) {
     _interface_decl = v;
     return TRUE;
@@ -201,16 +199,16 @@ bool PhpSettings::set_InterfaceDecl(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PhpSettings::attributeDecl()
+const QCString & PhpSettings::attributeDecl()
 {
   read_if_needed_();
 
   return _attr_decl;
 }
 
-bool PhpSettings::set_AttributeDecl(Q3CString v)
+bool PhpSettings::set_AttributeDecl(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpAttributeDeclCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpAttributeDeclCmd, v);
   if (UmlCom::read_bool()) {
     _attr_decl = v;
     return TRUE;
@@ -219,16 +217,16 @@ bool PhpSettings::set_AttributeDecl(Q3CString v)
     return FALSE;
 }
 
-Q3CString PhpSettings::enumItemDecl()
+QCString PhpSettings::enumItemDecl()
 {
   read_if_needed_();
   
   return _enum_item_decl;
 }
 
-bool PhpSettings::set_EnumItemDecl(Q3CString v)
+bool PhpSettings::set_EnumItemDecl(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpEnumItemDeclCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpEnumItemDeclCmd, v);
   if (UmlCom::read_bool()) {
     _enum_item_decl = v;
     return TRUE;
@@ -237,16 +235,16 @@ bool PhpSettings::set_EnumItemDecl(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PhpSettings::relationDecl()
+const QCString & PhpSettings::relationDecl()
 {
   read_if_needed_();
 
   return _rel_decl;
 }
 
-bool PhpSettings::set_RelationDecl(Q3CString v)
+bool PhpSettings::set_RelationDecl(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpRelationDeclCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpRelationDeclCmd, v);
   if (UmlCom::read_bool()) {
     _rel_decl = v;
     return TRUE;
@@ -255,16 +253,16 @@ bool PhpSettings::set_RelationDecl(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PhpSettings::operationDef()
+const QCString & PhpSettings::operationDef()
 {
   read_if_needed_();
   
   return _oper_def;
 }
 
-bool PhpSettings::set_OperationDef(Q3CString v)
+bool PhpSettings::set_OperationDef(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpOperationDefCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpOperationDefCmd, v);
   if (UmlCom::read_bool()) {
     _oper_def = v;
     return TRUE;
@@ -299,16 +297,16 @@ bool PhpSettings::set_GetVisibility(aVisibility v)
 #endif
 }
 
-const Q3CString & PhpSettings::getName()
+const QCString & PhpSettings::getName()
 {
   read_if_needed_();
   
   return _get_name;
 }
 
-bool PhpSettings::set_GetName(Q3CString v)
+bool PhpSettings::set_GetName(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpGetNameCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpGetNameCmd, v);
   if (UmlCom::read_bool()) {
     _get_name = v;
     return TRUE;
@@ -317,16 +315,16 @@ bool PhpSettings::set_GetName(Q3CString v)
     return FALSE;
 }
 
-const Q3CString & PhpSettings::setName()
+const QCString & PhpSettings::setName()
 {
   read_if_needed_();
   
   return _set_name;
 }
 
-bool PhpSettings::set_SetName(Q3CString v)
+bool PhpSettings::set_SetName(QCString v)
 {
-  UmlCom::send_cmd(phpSettingsCmd, setPhpSetNameCmd, (const char*)v);//[jasa] handle ambiguous call
+  UmlCom::send_cmd(phpSettingsCmd, setPhpSetNameCmd, v);
   if (UmlCom::read_bool()) {
     _set_name = v;
     return TRUE;
@@ -399,29 +397,29 @@ bool PhpSettings::set_SetVisibility(aVisibility v)
 
 bool PhpSettings::_defined;
 
-Q3CString PhpSettings::_root;
+QCString PhpSettings::_root;
 
-Q3CString PhpSettings::_class_decl;
+QCString PhpSettings::_class_decl;
 
-Q3CString PhpSettings::_external_class_decl;
+QCString PhpSettings::_external_class_decl;
 
-Q3CString PhpSettings::_enum_decl;
+QCString PhpSettings::_enum_decl;
 
-Q3CString PhpSettings::_interface_decl;
+QCString PhpSettings::_interface_decl;
 
-Q3CString PhpSettings::_attr_decl;
+QCString PhpSettings::_attr_decl;
 
-Q3CString PhpSettings::_enum_item_decl;
+QCString PhpSettings::_enum_item_decl;
 
-Q3CString PhpSettings::_rel_decl;
+QCString PhpSettings::_rel_decl;
 
-Q3CString PhpSettings::_oper_def;
+QCString PhpSettings::_oper_def;
 
 #ifndef WITHJAVA
     aVisibility PhpSettings::_get_visibility;
 #endif
 
-Q3CString PhpSettings::_get_name;
+QCString PhpSettings::_get_name;
 
 bool PhpSettings::_is_get_final;
 
@@ -429,13 +427,13 @@ bool PhpSettings::_is_get_final;
     aVisibility PhpSettings::_set_visibility;
 #endif
 
-Q3CString PhpSettings::_set_name;
+QCString PhpSettings::_set_name;
 
 bool PhpSettings::_is_set_final;
 
-Q3CString PhpSettings::_src_content;
+QCString PhpSettings::_src_content;
 
-Q3CString PhpSettings::_ext;
+QCString PhpSettings::_ext;
 
 bool PhpSettings::_is_generate_javadoc_comment;
 

@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QPixmap>
 
 #include "BrowserActivityPartition.h"
 #include "ActivityPartitionData.h"
@@ -109,13 +104,13 @@ void BrowserActivityPartition::update_idmax_for_root()
 void BrowserActivityPartition::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
     
-void BrowserActivityPartition::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserActivityPartition::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete)
     BrowserActivityDiagram::compute_referenced_by(l, this, "activitypartitioncanvas", "activitypartition_ref");
@@ -169,7 +164,7 @@ BrowserActivityPartition *
   BrowserActivityPartition::get_activitypartition(BrowserNode * parent)
 {
   BrowserNodeList l;
-  Q3ListViewItem * child;
+  QListViewItem * child;
       
   for (child = parent->firstChild(); child != 0; child = child->nextSibling())
     if (!((BrowserNode *) child)->deletedp() &&
@@ -197,8 +192,8 @@ BrowserActivityPartition *
 }
 
 void BrowserActivityPartition::menu() {
-  Q3PopupMenu m(0, "activity partition");
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, "activity partition");
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -235,7 +230,7 @@ Note that you can undelete it after"));
     m.setWhatsThis(m.insertItem(TR("Undelete"), 9),
 		   TR("to undelete the <i>activity partition</i>"));
  
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -319,7 +314,7 @@ void BrowserActivityPartition::apply_shortcut(QString s) {
     if (s == "Undelete")
       choice = 9;
  
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -459,10 +454,10 @@ bool BrowserActivityPartition::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-bool BrowserActivityPartition::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserActivityPartition::may_contains_them(const QList<BrowserNode> & l,
 						 BooL & duplicable) const {
   BrowserNode * activity = get_container(UmlActivity);
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -513,7 +508,7 @@ void BrowserActivityPartition::DropAfterEvent(QDropEvent * e, BrowserNode * afte
       if ((after == 0) &&
 	  ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
 	// have choice
-	Q3PopupMenu m(0);
+	QPopupMenu m(0);
   
 	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
 				   m.font()), -1);
@@ -572,7 +567,7 @@ void BrowserActivityPartition::post_load()
   }
 }
 
-void BrowserActivityPartition::save_stereotypes(Q3TextStream & st)
+void BrowserActivityPartition::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "activitypartition_stereotypes ";
@@ -589,7 +584,7 @@ void BrowserActivityPartition::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserActivityPartition::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserActivityPartition::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "activitypartition_ref " << get_ident() << " // " << get_name();
   else {
@@ -609,7 +604,7 @@ void BrowserActivityPartition::save(Q3TextStream & st, bool ref, QString & warni
     
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

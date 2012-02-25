@@ -8,21 +8,19 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3hbox.h>
+#include <qhbox.h>
 #include <qcheckbox.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
 
 Dialog::Dialog(BooL & rec, char & lang) : QDialog(0, 0, TRUE), _rec(rec), _lang(lang) {
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBox * htab;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBox * htab;
   
   vbox->setMargin(5);
   
   // recursive checkbox
   if (rec) {
-    htab = new Q3HBox(this);
+    htab = new QHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
     
@@ -33,7 +31,7 @@ Dialog::Dialog(BooL & rec, char & lang) : QDialog(0, 0, TRUE), _rec(rec), _lang(
 
   // langs + cancel buttons
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -63,7 +61,7 @@ Dialog::Dialog(BooL & rec, char & lang) : QDialog(0, 0, TRUE), _rec(rec), _lang(
 
   // help
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -76,10 +74,10 @@ Dialog::Dialog(BooL & rec, char & lang) : QDialog(0, 0, TRUE), _rec(rec), _lang(
 void Dialog::polish() {
   QDialog::polish();
   
-  // try to read .doumlrc
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // try to read .boumlrc
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
+  QString s = QDir::home().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
 
 #ifdef WIN32
@@ -88,7 +86,7 @@ void Dialog::polish() {
     
     if (! hd.isEmpty()) {
       QDir d(hd);
-      QString s2 = d.absFilePath(".doumlrc");
+      QString s2 = d.absFilePath(".boumlrc");
       
       fp = fopen((const char *) s2, "r");
     }

@@ -28,9 +28,7 @@
 
 
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpopupmenu.h> 
 
 #include "AssocContainCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -68,8 +66,8 @@ void AssocContainCanvas::open() {
 }
 
 void AssocContainCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu geo(0);
+  QPopupMenu m(0);
+  QPopupMenu geo(0);
   ArrowCanvas * aplabel;
   ArrowCanvas * apstereotype;
     
@@ -219,7 +217,7 @@ ArrowPointCanvas * AssocContainCanvas::brk(const QPoint & p) {
   return ap;
 }
 
-void AssocContainCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void AssocContainCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "containcanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {

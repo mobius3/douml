@@ -2,9 +2,9 @@
 #define _CLASSINSTANCE_H
 
 
-#include <q3ptrlist.h>
-#include <q3cstring.h>
-#include <q3valuelist.h>
+#include <qlist.h>
+#include <qcstring.h>
+#include <qvaluelist.h>
 
 class FileIn;
 class Token;
@@ -21,28 +21,28 @@ class ClassInstance {
 
 
   protected:
-    static Q3PtrList<ClassInstance> All;
+    static QList<ClassInstance> All;
 
     struct Slot {
         //import the activity node starting by 'tk' inside 'where'
         void importIt(FileIn & in, Token & token);
 
-        Q3CString featureId;
+        QCString featureId;
 
-        Q3CString value;
+        QCString value;
 
-        Q3CString valueId;
+        QCString valueId;
 
     };
     
     
-    Q3ValueList<Slot> bindings;
+    QValueList<Slot> bindings;
 
-    Q3CString id;
+    QCString id;
 
-    Q3CString name;
+    QCString name;
 
-    Q3CString classifierId;
+    QCString classifierId;
 
     UmlItem * where;
 

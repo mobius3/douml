@@ -24,9 +24,7 @@
 // *************************************************************************
 
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-UmlClass::UmlClass(void * id, const Q3CString & n) 
+UmlClass::UmlClass(void * id, const QCString & n) 
     : UmlBaseClass(id, n) {
 }

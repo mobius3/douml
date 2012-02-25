@@ -3,10 +3,8 @@
 
 
 #include "UmlBaseItem.h"
-#include <q3cstring.h>
-#include <q3ptrvector.h>
-//Added by qt3to4:
-#include <Q3PtrCollection>
+#include <qcstring.h>
+#include <qvector.h>
 
 
 // This class is a mother class for all the other Uml* classes, this
@@ -15,7 +13,7 @@
 // You can modify it as you want (except the constructor)
 class UmlItem : public UmlBaseItem {
   public:
-    UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n) {};
+    UmlItem(void * id, const QCString & n) : UmlBaseItem(id, n) {};
 
     virtual ~UmlItem();
 
@@ -27,9 +25,9 @@ class UmlItem : public UmlBaseItem {
 
 };
 
-class VectorOfUmlItem : public Q3PtrVector<UmlItem> {
+class VectorOfUmlItem : public QVector<UmlItem> {
   public:
-    int compareItems(Q3PtrCollection::Item d1, Q3PtrCollection::Item d2);
+    int compareItems(QCollection::Item d1, QCollection::Item d2);
 
 };
 

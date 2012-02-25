@@ -26,7 +26,7 @@
 #ifndef PINDATA_H
 #define PINDATA_H
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "PinParamData.h"
 
@@ -50,7 +50,7 @@ class PinData : public SimpleData, public PinParamData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * &, char * &);
     
   protected slots:

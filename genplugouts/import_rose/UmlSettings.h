@@ -2,8 +2,8 @@
 #define _UMLSETTINGS_H
 
 
-#include <q3dict.h>
-#include <q3cstring.h>
+#include <qdict.h>
+#include <qcstring.h>
 
 struct UmlBuiltin;
 struct UmlStereotype;
@@ -17,15 +17,15 @@ class UmlSettings {
 
     static bool _defined;
 
-    static Q3Dict<UmlBuiltin> _map_builtins;
+    static QDict<UmlBuiltin> _map_builtins;
 
     static UmlBuiltin * _builtins;
 
-    static Q3Dict<UmlStereotype> _map_relation_stereotypes;
+    static QDict<UmlStereotype> _map_relation_stereotypes;
 
     static UmlStereotype * _relation_stereotypes;
 
-    static Q3Dict<UmlStereotype> _map_class_stereotypes;
+    static QDict<UmlStereotype> _map_class_stereotypes;
 
     static UmlStereotype * _class_stereotypes;
 
@@ -33,19 +33,19 @@ class UmlSettings {
 
     static void read_if_needed_();
 
-    static unsigned multiplicity_column(const Q3CString & mult);
+    static unsigned multiplicity_column(const QCString & mult);
 
-    static Q3CString uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f);
+    static QCString uml_type(const QCString & t, QCString UmlBuiltin::* f);
 
-    static Q3CString uml_rel_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QCString uml_rel_stereotype(const QCString & t, QCString UmlStereotype::* f);
 
-    static Q3CString uml_class_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QCString uml_class_stereotype(const QCString & t, QCString UmlStereotype::* f);
 
-    static UmlBuiltin * add_type(const Q3CString & s);
+    static UmlBuiltin * add_type(const QCString & s);
 
-    static UmlStereotype * add_rel_stereotype(const Q3CString & s);
+    static UmlStereotype * add_rel_stereotype(const QCString & s);
 
-    static UmlStereotype * add_class_stereotype(const Q3CString & s);
+    static UmlStereotype * add_class_stereotype(const QCString & s);
 
 };
 

@@ -2,7 +2,7 @@
 #define _VECTOR_H
 
 
-#include <q3ptrvector.h>
+#include <qvector.h>
 
 class UmlItem;
 
@@ -25,7 +25,7 @@ class Vector {
 
 
   protected:
-    Q3PtrVector<UmlItem> v;
+    QVector<UmlItem> v;
 
 };
 

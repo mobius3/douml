@@ -26,15 +26,8 @@
 #ifndef BROWSERVIEW_H
 #define BROWSERVIEW_H
 
-#include <q3listview.h> 
+#include <qlistview.h> 
 #include <qdir.h>
-//Added by qt3to4:
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QDragMoveEvent>
-#include <QDragLeaveEvent>
-#include <QDropEvent>
-#include <QDragEnterEvent>
 
 class QDragEnterEvent;
 class QDragMoveEvent;
@@ -46,8 +39,8 @@ class BrowserNode;
 class BrowserPackage;
 
 // in fact it is a singleton => static members (except slots !)
-/* [lgfreitas] This class provides the tree view in the left side */
-class BrowserView : public Q3ListView  {
+
+class BrowserView : public QListView  {
   Q_OBJECT
     
   private:
@@ -82,18 +75,18 @@ class BrowserView : public Q3ListView  {
     static QDir get_import_dir() {
       return import_dir;
     }
-    static void select(Q3ListViewItem *);
+    static void select(QListViewItem *);
     static BrowserNode * selected_item();
-    static void force_visible(Q3ListViewItem *);
+    static void force_visible(QListViewItem *);
     static void remove_temporary_files();
       
   protected:
     void keyPressEvent(QKeyEvent * e);
 
   protected slots:
-    void selected(Q3ListViewItem *);
-    void rightPressed(Q3ListViewItem *);
-    void doubleClick(Q3ListViewItem *);
+    void selected(QListViewItem *);
+    void rightPressed(QListViewItem *);
+    void doubleClick(QListViewItem *);
     void menu();
 
     void contentsDragMoveEvent(QDragMoveEvent * e);

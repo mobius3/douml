@@ -27,11 +27,8 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
 
 #include "CodClassInstCanvas.h"
 #include "CodSelfLinkCanvas.h"
@@ -49,7 +46,6 @@
 #include "ColDiagramView.h"
 #include "ToolCom.h"
 #include "translate.h"
-#include <QPainter>
 
 CodClassInstCanvas::CodClassInstCanvas(BrowserNode * bn, UmlCanvas * canvas,
 				       int x, int y, int id)
@@ -125,7 +121,6 @@ void CodClassInstCanvas::modified() {
 
 void CodClassInstCanvas::draw(QPainter & p) {
   if (visible()) {
-	p.setRenderHint(QPainter::Antialiasing, true);
     ClassInstCanvas::draw(p, the_canvas(), rect());
 
     if (selected())
@@ -203,7 +198,7 @@ void CodClassInstCanvas::open() {
 }
 
 void CodClassInstCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   bool modelized = (browser_node->get_type() == UmlClassInstance);
   
   m.insertItem(new MenuTitle(full_name(), m.font()), -1);
@@ -386,7 +381,7 @@ bool CodClassInstCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void CodClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void CodClassInstCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(2);
     ColorSpecVector co(1);
@@ -402,7 +397,7 @@ void CodClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -421,8 +416,8 @@ void CodClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void CodClassInstCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void CodClassInstCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   CodClassInstCanvas * x = (CodClassInstCanvas *) it.current();
   
@@ -448,7 +443,7 @@ bool CodClassInstCanvas::copyable() const {
   return selected();
 }
 
-void CodClassInstCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // "
       << full_name();
@@ -548,7 +543,7 @@ CodClassInstCanvas * CodClassInstCanvas::read(char * & st, UmlCanvas * canvas,
 }
 
 void CodClassInstCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(browser_node->get_data(), 0, this, 0);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
@@ -562,10 +557,10 @@ void CodClassInstCanvas::history_load(QBuffer & b) {
 
 // for plug outs
 
-void CodClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void CodClassInstCanvas::send(ToolCom * com, QCanvasItemList & all)
 {
-  Q3PtrList<CodClassInstCanvas> l;
-  Q3CanvasItemList::Iterator cit;
+  QList<CodClassInstCanvas> l;
+  QCanvasItemList::Iterator cit;
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
     DiagramItem *di = QCanvasItemToDiagramItem(*cit);
@@ -584,7 +579,7 @@ void CodClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 
   com->write_unsigned(l.count());
   
-  Q3PtrListIterator<CodClassInstCanvas> it(l);
+  QListIterator<CodClassInstCanvas> it(l);
   
   for (; it.current(); ++it) {
     CodClassInstCanvas * i = it.current();
@@ -593,7 +588,7 @@ void CodClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
     if (i->browser_node->get_type() == UmlClass) {      
       com->write_id(0);
       
-      Q3CString s = fromUnicode(i->iname);
+      QCString s = fromUnicode(i->iname);
       
       com->write_string((const char *) s);
     }

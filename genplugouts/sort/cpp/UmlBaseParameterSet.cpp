@@ -14,13 +14,13 @@ anItemKind UmlBaseParameterSet::kind() {
     return aParameterSet;
 }
 
-const Q3PtrVector<UmlActivityPin> & UmlBaseParameterSet::pins() {
+const QVector<UmlActivityPin> & UmlBaseParameterSet::pins() {
     read_if_needed_();
     return _pins;
 }
 
-bool UmlBaseParameterSet::set_Pins(const Q3PtrVector<UmlActivityPin> & v) {
-    UmlCom::send_cmd(_identifier, replaceParameterCmd, (const Q3PtrVector<UmlItem> &) v);
+bool UmlBaseParameterSet::set_Pins(const QVector<UmlActivityPin> & v) {
+    UmlCom::send_cmd(_identifier, replaceParameterCmd, (const QVector<UmlItem> &) v);
     if (UmlCom::read_bool()) {
       if (_defined) _pins = v;
       return TRUE;
@@ -36,6 +36,6 @@ void UmlBaseParameterSet::unload(bool rec, bool del) {
 
 void UmlBaseParameterSet::read_uml_() {
     UmlBaseItem::read_uml_();
-    UmlCom::read_item_list((Q3PtrVector<UmlItem> &) _pins);
+    UmlCom::read_item_list((QVector<UmlItem> &) _pins);
 }
 

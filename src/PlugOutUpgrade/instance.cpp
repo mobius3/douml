@@ -36,9 +36,6 @@
 
 #include "util.h"
 #include "instance.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 // 
 // add class instance
@@ -243,9 +240,9 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
   
   op = base_class_instance->add_op("availableAttributes", PublicVisibility, attr);
   op->add_param(0, OutputDirection, "result", attr);
-  op->set_cpp("void", "Q3PtrVector<${t0}> & ${p0}",
+  op->set_cpp("void", "QVector<${t0}> & ${p0}",
 	      "  UmlCom::send_cmd(_identifier, attributesCmd, (char) 1);\n"
-	      "  UmlCom::read_item_list((Q3PtrVector<UmlItem> &) result);\n",
+	      "  UmlCom::read_item_list((QVector<UmlItem> &) result);\n",
 	      FALSE, 0, 0);
   op->set_java("${type}[]", "",
 	       "  UmlCom.send_cmd(identifier_(), OnInstanceCmd.attributesCmd, (byte) 1);\n"
@@ -266,9 +263,9 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
   op->add_param(0, OutputDirection, "other", user_class_instance);
   op->add_param(1, OutputDirection, "result", rel);
   op->set_cpp("void", 
-	      "${t0} * ${p0}, Q3PtrVector<${t1}> & ${p1}",
+	      "${t0} * ${p0}, QVector<${t1}> & ${p1}",
 	      "  UmlCom::send_cmd(_identifier, relationsCmd, other->_identifier);\n"
-	      "  UmlCom::read_item_list((Q3PtrVector<UmlItem> &) result);\n",
+	      "  UmlCom::read_item_list((QVector<UmlItem> &) result);\n",
 	      FALSE, 0, 0);
   op->set_java("${type}[]", "${t0} ${p0}",
 	       "  UmlCom.send_cmd(identifier_(), OnInstanceCmd.relationsCmd, other.identifier_());\n"
@@ -308,7 +305,7 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
   op->add_param(0, InputDirection, "relation", attr);
   op->add_param(1, InputDirection, "other", user_class_instance);
   op->set_cpp("bool", "${t0} * ${p0}, ${t1} * ${p1}",
-	      "  Q3PtrVector<UmlItem> v(2);\n"
+	      "  QVector<UmlItem> v(2);\n"
 	      "\n"
 	      "  v.insert(0, relation);\n"
 	      "  v.insert(1, other);\n"
@@ -333,7 +330,7 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
   op->add_param(0, InputDirection, "relation", attr);
   op->add_param(1, InputDirection, "other", user_class_instance);
   op->set_cpp("bool", "${t0} * ${p0}, ${t1} * ${p1}",
-	      "  Q3PtrVector<UmlItem> v(2);\n"
+	      "  QVector<UmlItem> v(2);\n"
 	      "\n"
 	      "  v.insert(0, relation);\n"
 	      "  v.insert(1, other);\n"
@@ -389,7 +386,7 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
 
   //
   
-  Q3CString s;
+  QCString s;
   
   art = base_class_instance->associatedArtifact();
   s = art->cppHeader();
@@ -421,7 +418,7 @@ void baseitem_read_class_instance(UmlClass * base_item)
   UmlOperation * op = base_item->get_operation("read_");
   
   if (op != 0) {
-    Q3CString body;
+    QCString body;
     
     body = op->cppBody();
     body.insert(body.findRev("default:"),
@@ -440,7 +437,7 @@ void baseitem_read_class_instance(UmlClass * base_item)
   
   // update BaseUmlItem artifact
   UmlArtifact * art = base_item->associatedArtifact();
-  Q3CString s;
+  QCString s;
   
   s = art->cppSource();
   s.insert(s.find("#include \"UmlUseCase.h\""),
@@ -501,7 +498,7 @@ void fixe_classinstance(UmlClass * bci)
   
   UmlClass * rel = UmlClass::get("UmlRelation", 0);
   UmlOperation * op = bci->get_operation("add_Relation");
-  Q3ValueList<UmlParameter> params = op->params();
+  QValueList<UmlParameter> params = op->params();
   UmlParameter param = params.first();
     
   param.type.type = rel;

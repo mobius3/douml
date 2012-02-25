@@ -27,8 +27,6 @@
 #define UMLARTIFACT_H
 
 #include "UmlBaseArtifact.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlPackage;
 
@@ -45,7 +43,7 @@ class UmlArtifact : public UmlBaseArtifact {
     void generate_text();
     
   public:
-    UmlArtifact(void * id, const Q3CString & n)
+    UmlArtifact(void * id, const QCString & n)
       : UmlBaseArtifact(id, n), managed(FALSE) {};
     
     virtual void generate();

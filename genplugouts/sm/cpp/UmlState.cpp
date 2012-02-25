@@ -9,11 +9,9 @@
 #include "CppSettings.h"
 #include "UmlRegion.h"
 #include "UmlAttribute.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 bool UmlState::isLeaf() {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned index;
   
   for (index = 0; index != ch.count(); index += 1) {
@@ -50,10 +48,10 @@ bool UmlState::inside(UmlState * other) {
   }
 }
 
-void UmlState::init(UmlClass * mother, Q3CString path, Q3CString pretty_path, UmlState *) {
+void UmlState::init(UmlClass * mother, QCString path, QCString pretty_path, UmlState *) {
   // create if needed the class implementing the state
 
-  Q3CString qn = quotedName() + "_State";
+  QCString qn = quotedName() + "_State";
     
   if ((_class = (UmlClass*) mother->getChild(aClass, qn)) == 0) {
     if ((_class = UmlBaseClass::create(mother, qn)) == 0) {
@@ -63,7 +61,7 @@ void UmlState::init(UmlClass * mother, Q3CString path, Q3CString pretty_path, Um
     }
   }
   // place the class at the beginning
-  const Q3PtrVector<UmlItem> v = mother->children();
+  const QVector<UmlItem> v = mother->children();
 
   _class->moveAfter(((v.count() == 0) || (v[0]->kind() != aClass))
 		    ? (UmlItem *) 0
@@ -105,7 +103,7 @@ void UmlState::init(UmlClass * mother, Q3CString path, Q3CString pretty_path, Um
 	
   // goes down
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned index;
   
   for (index = 0; index != ch.count(); index += 1)
@@ -133,7 +131,7 @@ void UmlState::generate() {
     {
       // a class having the normalized name of the state machine 
       // implements it in the class view of the state machine
-      Q3CString qn = quotedName();
+      QCString qn = quotedName();
       UmlClass * machine = (UmlClass *) parent()->getChild(aClass, qn);
       
       if ((machine == 0) &&
@@ -334,7 +332,7 @@ return (_current_state != 0);\n");
 
 void UmlState::generate(UmlClass * machine, UmlClass * anystate, UmlState *) {
   // inherits anystate
-  const Q3PtrVector<UmlItem> clch = _class->children();
+  const QVector<UmlItem> clch = _class->children();
   unsigned index;
   
   for (index = 0; index != clch.count(); index += 1)
@@ -356,14 +354,14 @@ void UmlState::generate(UmlClass * machine, UmlClass * anystate, UmlState *) {
 
   // generate children
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   
   for (index = 0; index != ch.count(); index += 1)
     ch[index]->generate(machine, anystate, this);
     
   // additional operations
     
-  Q3CString s;
+  QCString s;
     
   s = cppEntryBehavior();
     
@@ -371,7 +369,7 @@ void UmlState::generate(UmlClass * machine, UmlClass * anystate, UmlState *) {
       (_has_completion || !s.isEmpty())) {
     // add a 'create' to do the entry behavior / completion
     UmlOperation * create = _class->trigger("create", machine, anystate);
-    Q3CString body;
+    QCString body;
     
     if (!s.isEmpty())
       body = "\t_doentry(stm);\n";
@@ -399,9 +397,9 @@ void UmlState::generate(UmlClass * machine, UmlClass * anystate, UmlState *) {
     doen->setComment("perform the 'entry behavior'");
     doen->setType("void", "${type}");
     s.insert(0,
-	     (const char *)("#ifdef VERBOSE_STATE_MACHINE\n" //[rageek] ambiguous
+	     "#ifdef VERBOSE_STATE_MACHINE\n"
 	     "\tputs(\"DEBUG : execute entry behavior of " + _pretty_path + "\");\n"
-	     "#endif\n"));
+	     "#endif\n");
     doen->set_CppBody(s);
   }
 
@@ -425,9 +423,9 @@ void UmlState::generate(UmlClass * machine, UmlClass * anystate, UmlState *) {
     doex->setComment("perform the 'exit behavior'");
     doex->setType("void", "${type}");
     s.insert(0, 
-	     (const char *)("#ifdef VERBOSE_STATE_MACHINE\n" //[rageek] ambiguous
+	     "#ifdef VERBOSE_STATE_MACHINE\n"
 	     "\tputs(\"DEBUG : execute exit behavior of " + _pretty_path + "\");\n"
-	     "#endif\n"));
+	     "#endif\n");
     doex->set_CppBody(s);
   }
 
@@ -451,9 +449,9 @@ void UmlState::generate(UmlClass * machine, UmlClass * anystate, UmlState *) {
     da->setComment("perform the 'do activity'");
     da->setType("void", "${type}");
     s.insert(0, 
-	     (const char *)("#ifdef VERBOSE_STATE_MACHINE\n" //[rageek] ambiguous
+	     "#ifdef VERBOSE_STATE_MACHINE\n"
 	     "\tputs(\"DEBUG : execute do behavior of " + _pretty_path + "\");\n"
-	     "#endif\n"));
+	     "#endif\n");
     da->set_CppBody(s);
     da->set_isCppVirtual(TRUE);
   }
@@ -485,7 +483,7 @@ void UmlState::generate(UmlClass * machine, UmlClass * anystate, UmlState *) {
   }
 
   // adds friend declaration
-  const Q3PtrVector<UmlItem> stmch = machine->children();
+  const QVector<UmlItem> stmch = machine->children();
   
   for (index = 0; index != stmch.count(); index += 1) {
     if ((stmch[index]->kind() == aRelation) &&

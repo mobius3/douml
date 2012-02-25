@@ -26,10 +26,7 @@
 #ifndef UMLCLASS_H
 #define UMLCLASS_H
 
-#include <q3dict.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qdict.h>
 
 #include "UmlBaseClass.h"
 
@@ -40,14 +37,14 @@ class UmlClass : public UmlBaseClass {
     bool managed;
   
   public:
-    UmlClass(void * id, const Q3CString & n)
+    UmlClass(void * id, const QCString & n)
       : UmlBaseClass(id, n) { managed = FALSE; };
   
-    Q3CString idl_stereotype();
+    QCString idl_stereotype();
     void generate();
     virtual void generate(QTextOStream & f);
-    virtual void generate_decl(QTextOStream & f, const Q3CString & cl_stereotype,
-			       Q3CString indent, bool = FALSE);
+    virtual void generate_decl(QTextOStream & f, const QCString & cl_stereotype,
+			       QCString indent, bool = FALSE);
 
     void write(QTextOStream & f);
     static void write(QTextOStream & f, const UmlTypeSpec & t);

@@ -3,7 +3,7 @@
 
 
 #include "UmlBasePackage.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 
@@ -12,7 +12,7 @@ class FileOut;
 // You can modify it as you want (except the constructor)
 class UmlPackage : public UmlBasePackage {
   public:
-    UmlPackage(void * id, const Q3CString & n) : UmlBasePackage(id, n) {};
+    UmlPackage(void * id, const QCString & n) : UmlBasePackage(id, n) {};
 
     virtual void xmi(int argc, char ** argv);
 

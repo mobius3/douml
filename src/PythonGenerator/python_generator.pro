@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on debug
+CONFIG	      += qt warn_on release
 SOURCES	      = UmlClassItem.cpp UmlAttribute.cpp \
 		UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
 		UmlExtraClassMember.cpp UmlArtifact.cpp \
@@ -93,5 +93,3 @@ TARGET	      = python_generator
 DEFINES	      = WITHPYTHON BooL=bool
 INCLUDEPATH   = ../Tools ../PythonGenerator
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

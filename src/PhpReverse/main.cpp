@@ -24,14 +24,12 @@
 // *************************************************************************
 
 #include <qapplication.h>
-#include <q3filedialog.h> 
-//Added by qt3to4:
-#include <Q3CString>
+#include <qfiledialog.h> 
 #include <stdlib.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <qdatastream.h> 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "Class.h"
 #include "UmlClass.h"
@@ -47,7 +45,7 @@ int main(int argc, char ** argv)
   if (argc != 2)
     return 0;
   
-  if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
+  if (UmlCom::connect(QCString(argv[1]).toUInt())) {
     try {
       //UmlCom::with_ack(FALSE);
       

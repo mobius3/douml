@@ -4,7 +4,7 @@
 
 #include "UmlPseudoState.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlEntryPointPseudoState;
 class UmlItem;
@@ -24,7 +24,7 @@ class UmlBaseEntryPointPseudoState : public UmlPseudoState {
 
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseEntryPointPseudoState(void * id, const Q3CString & s) : UmlPseudoState(id, s) {}
+    UmlBaseEntryPointPseudoState(void * id, const QCString & s) : UmlPseudoState(id, s) {}
     virtual void read_uml_();
 };
 

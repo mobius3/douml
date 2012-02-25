@@ -6,8 +6,6 @@
 #include "UmlClass.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 UmlArtifact * UmlBaseArtifact::create(UmlDeploymentView * parent, const char * s)
 {
   return (UmlArtifact *) parent->create_(anArtifact, s);
@@ -33,7 +31,7 @@ bool UmlBaseArtifact::set_AssociatedDiagram(UmlDeploymentDiagram * d) {
     return FALSE;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseArtifact::associatedClasses() {
+const QVector<UmlClass> & UmlBaseArtifact::associatedClasses() {
   read_if_needed_();
   
   return _assoc_classes;
@@ -77,8 +75,8 @@ bool UmlBaseArtifact::removeAssociatedClass(UmlClass * cl) {
     return FALSE;
 }
 
-bool UmlBaseArtifact::set_AssociatedClasses(const Q3PtrVector<UmlClass> & l) {
-  UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const Q3PtrVector<UmlItem> &) l);
+bool UmlBaseArtifact::set_AssociatedClasses(const QVector<UmlClass> & l) {
+  UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const QVector<UmlItem> &) l);
   if (UmlCom::read_bool()) {
     if (_defined)
       _assoc_classes = l;
@@ -88,7 +86,7 @@ bool UmlBaseArtifact::set_AssociatedClasses(const Q3PtrVector<UmlClass> & l) {
     return FALSE;
 }
 
-const Q3PtrVector<UmlArtifact> & UmlBaseArtifact::associatedArtifacts() {
+const QVector<UmlArtifact> & UmlBaseArtifact::associatedArtifacts() {
   read_if_needed_();
   
   return _associated;
@@ -143,71 +141,71 @@ bool UmlBaseArtifact::removeAllAssociatedArtifacts() {
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseArtifact::cppHeader() {
+const QCString & UmlBaseArtifact::cppHeader() {
   read_if_needed_();
   
   return _cpp_h;
 }
 
-bool UmlBaseArtifact::set_CppHeader(const Q3CString & s) {
+bool UmlBaseArtifact::set_CppHeader(const QCString & s) {
   return set_it_(_cpp_h, s, setCppHCmd);
 }
 
-const Q3CString & UmlBaseArtifact::cppSource() {
+const QCString & UmlBaseArtifact::cppSource() {
   read_if_needed_();
   
   return _cpp_src;
 }
 
-bool UmlBaseArtifact::set_CppSource(const Q3CString & s) {
+bool UmlBaseArtifact::set_CppSource(const QCString & s) {
   return set_it_(_cpp_src, s, setCppSrcCmd);
 }
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseArtifact::javaSource() {
+const QCString & UmlBaseArtifact::javaSource() {
   read_if_needed_();
   
   return _java_src;
 }
 
-bool UmlBaseArtifact::set_JavaSource(const Q3CString & s) {
+bool UmlBaseArtifact::set_JavaSource(const QCString & s) {
   return set_it_(_java_src, s, setJavaSrcCmd);
 }
 #endif
 
 #ifdef WITHPHP
-const Q3CString & UmlBaseArtifact::phpSource() {
+const QCString & UmlBaseArtifact::phpSource() {
   read_if_needed_();
   
   return _php_src;
 }
 
-bool UmlBaseArtifact::set_PhpSource(const Q3CString & s) {
+bool UmlBaseArtifact::set_PhpSource(const QCString & s) {
   return set_it_(_php_src, s, setPhpSrcCmd);
 }
 #endif
 
 #ifdef WITHPYTHON
-const Q3CString & UmlBaseArtifact::pythonSource() {
+const QCString & UmlBaseArtifact::pythonSource() {
   read_if_needed_();
   
   return _python_src;
 }
 
-bool UmlBaseArtifact::set_PythonSource(const Q3CString & s) {
+bool UmlBaseArtifact::set_PythonSource(const QCString & s) {
   return set_it_(_python_src, s, setPythonSrcCmd);
 }
 #endif
 
 #ifdef WITHIDL
-const Q3CString & UmlBaseArtifact::idlSource() {
+const QCString & UmlBaseArtifact::idlSource() {
   read_if_needed_();
   
   return _idl_src;
 }
 
-bool UmlBaseArtifact::set_IdlSource(const Q3CString & s) {
+bool UmlBaseArtifact::set_IdlSource(const QCString & s) {
   return set_it_(_idl_src, s, setIdlSrcCmd);
 }
 #endif

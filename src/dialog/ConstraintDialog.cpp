@@ -31,10 +31,6 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-#include <Q3ValueList>
 
 #include "ConstraintDialog.h"
 #include "ConstraintCanvas.h"
@@ -52,7 +48,7 @@ ConstraintDialog::ConstraintDialog(ConstraintCanvas * c)
     : QDialog(0, "ConstraintVisibilityDialog", TRUE, 0), constraint(c) {
   setCaption(TR("Constraints visibility dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
 
   vbox->setMargin(5);
   
@@ -60,9 +56,9 @@ ConstraintDialog::ConstraintDialog(ConstraintCanvas * c)
   vbox->addWidget(table);
   vbox->addWidget(new QLabel(this));
   
-  Q3HBoxLayout * hbox;
+  QHBoxLayout * hbox;
   
-  hbox = new Q3HBoxLayout(vbox);
+  hbox = new QHBoxLayout(vbox);
   
   cb_visible = new QCheckBox(TR("Specify visible elements rather than hidden ones"), this);
   cb_visible->setChecked(constraint->indicate_visible);
@@ -90,7 +86,7 @@ ConstraintDialog::ConstraintDialog(ConstraintCanvas * c)
   connect(hideinherited, SIGNAL(clicked()), this, SLOT(hide_inherited()));
   
   vbox->addWidget(new QLabel(this));
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   
   hbox->setMargin(5);
   QPushButton * ok = new QPushButton(TR("&OK"), this);
@@ -152,7 +148,7 @@ void ConstraintDialog::accept() {
 // v/h, icon, name, constraint
 
 ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
-    : Q3Table(c->elements.count(), 4, parent) {  
+    : QTable(c->elements.count(), 4, parent) {  
   setSorting(FALSE);
   setSelectionMode(NoSelection);
   setRowMovingEnabled(FALSE);
@@ -166,7 +162,7 @@ ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
 
   int row;
   bool v = c->indicate_visible;
-  Q3ValueList<BrowserNode *> & hv = c->hidden_visible;
+  QValueList<BrowserNode *> & hv = c->hidden_visible;
   BrowserNodeList & elts = c->elements;
   BrowserNode * bn;
   QString yes = TR("  yes");
@@ -182,14 +178,14 @@ ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
     
     TableItem * ti;
     
-    ti = new TableItem(this, Q3TableItem::Never, bn->full_name(TRUE));
+    ti = new TableItem(this, QTableItem::Never, bn->full_name(TRUE));
     ti->setReplaceable(FALSE);
     setItem(row, 2, ti);
     
     QString s = toUnicode(bn->constraint());
-    int n = s.count('\n');
+    int n = s.contains('\n');
     
-    ti = new TableItem(this, Q3TableItem::Never, s);
+    ti = new TableItem(this, QTableItem::Never, s);
     ti->setReplaceable(FALSE);
     setItem(row, 3, ti);
     if (n != 0) {
@@ -241,7 +237,7 @@ void ConstraintTable::hide_inherited(ConstraintCanvas * c) {
 }
 
 void ConstraintTable::update(ConstraintCanvas * c) {
-  Q3ValueList<BrowserNode *> & list = c->hidden_visible;  
+  QValueList<BrowserNode *> & list = c->hidden_visible;  
   bool empty_if_visible = !c->indicate_visible;
   BrowserNodeList & elts = c->elements;  
   BrowserNode * bn;

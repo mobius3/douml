@@ -1,7 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
-#include <Q3PtrList>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -36,19 +32,19 @@ class QTextOStream;
 
 class UmlAttribute : public UmlBaseAttribute {
   public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const QCString & n)
       :  UmlBaseAttribute(id, n) {};
 
-    virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-				    const Q3CString & cl_stereotype,
+    virtual void compute_dependency(QList<CppRefType> & dependency,
+				    const QCString & cl_stereotype,
 				    bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility, QTextOStream & f_h,
-			       const Q3CString & cl_stereotype, Q3CString indent,
+			       const QCString & cl_stereotype, QCString indent,
 			       BooL & first, bool last);
-    virtual void generate_def(QTextOStream &f, Q3CString indent, bool h,
-			      Q3CString templates, Q3CString cl_names,
-			      Q3CString templates_tmplop, 
-			      Q3CString cl_names_tmplop);
+    virtual void generate_def(QTextOStream &f, QCString indent, bool h,
+			      QCString templates, QCString cl_names,
+			      QCString templates_tmplop, 
+			      QCString cl_names_tmplop);
 };
 
 #endif

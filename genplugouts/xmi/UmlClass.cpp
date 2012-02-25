@@ -66,7 +66,7 @@ bool UmlClass::write_if_needed(FileOut & out) {
     write_annotation(out);
     write_description_properties(out);
     
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem> ch = children();
     unsigned n = ch.size();
     bool used = FALSE;
     bool haveRel= FALSE;
@@ -121,7 +121,7 @@ void UmlClass::write_actor(FileOut & out) {
   out.indent();     
   out << "</UML:Actor>\n"; 
 
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size(); 
      
   for (unsigned i = 0; i != n; i += 1) 

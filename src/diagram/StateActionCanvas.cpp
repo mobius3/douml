@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3PointArray>
-#include <QPixmap>
 
 #include "StateActionCanvas.h"
 #include "TransitionCanvas.h"
@@ -183,13 +179,13 @@ void StateActionCanvas::compute_size() {
 }
 
 void StateActionCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   double scale = the_canvas()->zoom();
     
   setSize((int) (width_scale100*scale), (int) (height_scale100*scale));
   compute_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void StateActionCanvas::modified() {
@@ -249,7 +245,7 @@ void StateActionCanvas::resize(const QSize & sz, bool w, bool h) {
 
 void StateActionCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   const BasicData * data = browser_node->get_data();
   double zoom = the_canvas()->zoom();
@@ -292,7 +288,7 @@ void StateActionCanvas::draw(QPainter & p) {
     p.setFont(the_canvas()->get_font(UmlNormalFont));
     
     if (!strcmp(st, "send-signal")) {
-      Q3PointArray a(6);
+      QPointArray a(6);
       
       if ((used_color != UmlTransparent) && (shadow != 0)) {
 	r.setRight(r.right() - shadow);
@@ -315,7 +311,7 @@ void StateActionCanvas::draw(QPainter & p) {
       }
       else {
 	if (shadow != 0) {
-	  Q3PointArray b(6);
+	  QPointArray b(6);
 	  
 	  b.setPoint(0, r.left() + shadow, r.top() + shadow);
 	  b.setPoint(1, r.right() - hh + shadow, r.top() + shadow);
@@ -343,7 +339,7 @@ void StateActionCanvas::draw(QPainter & p) {
       mw -= hh;
     }
     else if (!strcmp(st, "receive-signal")) {
-      Q3PointArray a(6);
+      QPointArray a(6);
       
       if ((used_color != UmlTransparent) && (shadow != 0)) {
 	r.setRight(r.right() - shadow);
@@ -367,7 +363,7 @@ void StateActionCanvas::draw(QPainter & p) {
       }
       else {
 	if (shadow != 0) {
-	  Q3PointArray b(6);
+	  QPointArray b(6);
 	  
 	  b.setPoint(0, r.left() + shadow, r.top() + shadow);
 	  b.setPoint(1, r.right() + shadow, r.top() + shadow);
@@ -410,12 +406,12 @@ void StateActionCanvas::draw(QPainter & p) {
 	  if (fp != 0) {
 	    fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		    QColor(::Qt::darkGray).rgb()&0xffffff,
+		    ::Qt::darkGray.rgb()&0xffffff,
 		    r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 	    
 	    fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		    QColor(::Qt::darkGray).rgb()&0xffffff,
+		    ::Qt::darkGray.rgb()&0xffffff,
 		    r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
 	  }
 	}
@@ -478,8 +474,8 @@ void StateActionCanvas::open() {
 }
 
 void StateActionCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
     
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -601,7 +597,7 @@ bool StateActionCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void StateActionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void StateActionCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(2);
     ColorSpecVector co(1);
@@ -617,7 +613,7 @@ void StateActionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -634,8 +630,8 @@ void StateActionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void StateActionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void StateActionCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   StateActionCanvas * x = (StateActionCanvas *) it.current();
   
@@ -687,13 +683,13 @@ QString StateActionCanvas::may_connect(UmlCode & l, const DiagramItem * dest) co
   case ChoicePS:
   case ForkPS:
   case JoinPS:
-    return (l == UmlTransition) ? QString() : TR("illegal");
+    return (l == UmlTransition) ? 0 : TR("illegal");
   default:
     return TR("illegal");
   }
 }
 
-void StateActionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void StateActionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "stateactioncanvas_ref " << get_ident();
   }
@@ -787,7 +783,7 @@ void StateActionCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
@@ -795,7 +791,7 @@ void StateActionCanvas::history_load(QBuffer & b) {
 }
 
 void StateActionCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()),
 	     this, SLOT(modified()));
   disconnect(browser_node->get_data(), 0, this, 0);

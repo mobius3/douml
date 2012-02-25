@@ -3,12 +3,12 @@
 
 
 #include "UmlBaseOnSignalAction.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlOnSignalAction : public UmlBaseOnSignalAction {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlOnSignalAction(void * id, const Q3CString & s) : UmlBaseOnSignalAction(id, s) {
+     UmlOnSignalAction(void * id, const QCString & s) : UmlBaseOnSignalAction(id, s) {
     }
 
 };

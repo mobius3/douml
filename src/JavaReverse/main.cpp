@@ -24,14 +24,12 @@
 // *************************************************************************
 
 #include <qapplication.h>
-#include <q3filedialog.h> 
-//Added by qt3to4:
-#include <Q3CString>
+#include <qfiledialog.h> 
 #include <stdlib.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <qdatastream.h> 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "Class.h"
 #include "UmlClass.h"
@@ -60,7 +58,7 @@ int main(int argc, char ** argv)
   if (argc != 2)
     return 0;
   
-  if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
+  if (UmlCom::connect(QCString(argv[1]).toUInt())) {
     try {
       //UmlCom::with_ack(FALSE);
       UmlCom::trace("<b>Java reverse</b> release 2.18<br><hr>");
@@ -82,7 +80,7 @@ int main(int argc, char ** argv)
 	QString path;
 	// note : QFile fp(QDir::home().absFilePath(".boumlcat")) doesn't work
 	// if the path contains non latin1 characters, for instance cyrillic !
-	QString s = QDir::home().absFilePath(".doumlcat");
+	QString s = QDir::home().absFilePath(".boumlcat");
 	FILE * fp = fopen((const char *) s, "r");
   
 
@@ -112,13 +110,13 @@ int main(int argc, char ** argv)
 	}
 	
 	while (!(path = 
-		 Q3FileDialog::getOpenFileName(path, "*.cat",
+		 QFileDialog::getOpenFileName(path, "*.cat",
 					      0, 0,
 					      "select a java catalog file to read it, or cancel"))
 	       .isEmpty()) {
 	  QFile f(path);
 	  
-	  if (f.open(QIODevice::ReadOnly)) {
+	  if (f.open(IO_ReadOnly)) {
 	    if ((fp = fopen((const char *) s, "w")) != 0) {
 	      fwrite((const char *) path, 1, path.length(), fp);
 	      fputc('\n', fp);

@@ -23,10 +23,7 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h>
 
 #include "UmlFormalParameter.h"
 #include "UmlClass.h"
@@ -35,7 +32,7 @@ void UmlFormalParameter::generate(QTextOStream & f_h, const char *& sep1,
 				  const char *& sep2, BooL & need_space) const {
   f_h << sep1 << type() << ' ' << name();
   
-  Q3CString s = defaultValue().toString();
+  QCString s = defaultValue().toString();
   
   if (! s.isEmpty()) {
     f_h << " = ";

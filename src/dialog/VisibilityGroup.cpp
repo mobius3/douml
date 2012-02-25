@@ -27,17 +27,17 @@
 
 
 
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qradiobutton.h> 
 
 #include "VisibilityGroup.h"
 
-Q3ButtonGroup * VisibilityGroup::init(QWidget * parent, UmlVisibility v, 
+QButtonGroup * VisibilityGroup::init(QWidget * parent, UmlVisibility v, 
 				     bool pack_allowed,
 				     const char * title,
 				     const char * default_prefix) {
    bgroup =
-     new Q3ButtonGroup((default_prefix != 0) ? 5 : 4,
+     new QButtonGroup((default_prefix != 0) ? 5 : 4,
 		      Qt::Horizontal, title, parent);
    bgroup->setExclusive(TRUE);
    if (default_prefix != 0) {

@@ -30,11 +30,8 @@
 #include <math.h>
 
 #include <qpainter.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
 
 #include "ParameterSetCanvas.h"
 #include "BrowserParameterSet.h"
@@ -97,7 +94,7 @@ void ParameterSetCanvas::remove(bool from_model) {
 }
 
 void ParameterSetCanvas::disconnect_pins() {
-  Q3ValueList<PinCanvas *>::Iterator iter;
+  QValueList<PinCanvas *>::Iterator iter;
 
   iter = params.begin();
 
@@ -119,9 +116,9 @@ void ParameterSetCanvas::update() {
 
   disconnect_pins();
 
-  Q3ValueList<PinCanvas *> pincanvas = act->get_pins();
-  Q3ValueList<PinCanvas *>::ConstIterator iter;
-  Q3ValueList<BrowserPin *> pins = ((ParameterSetData *) browser_node->get_data())->get_pins();
+  QValueList<PinCanvas *> pincanvas = act->get_pins();
+  QValueList<PinCanvas *>::ConstIterator iter;
+  QValueList<BrowserPin *> pins = ((ParameterSetData *) browser_node->get_data())->get_pins();
 
   for (iter = pincanvas.begin(); iter != pincanvas.end(); ++iter) {
     if (pins.findIndex((BrowserPin *) (*iter)->get_bn()) != -1) {
@@ -134,7 +131,7 @@ void ParameterSetCanvas::update() {
 }
 
 void ParameterSetCanvas::pin_deleted() {
-  Q3ValueList<PinCanvas *>::Iterator iter = params.begin();
+  QValueList<PinCanvas *>::Iterator iter = params.begin();
 
   while (iter != params.end()) {
     if (!(*iter)->visible()) {
@@ -151,8 +148,8 @@ void ParameterSetCanvas::pin_deleted() {
 void ParameterSetCanvas::check_position() {
   if (params.isEmpty()) {
     // hide it but still visible
-    Q3CanvasRectangle::moveBy(-1 - x(), -1 - y());
-    Q3CanvasRectangle::setSize(0, 0);
+    QCanvasRectangle::moveBy(-1 - x(), -1 - y());
+    QCanvasRectangle::setSize(0, 0);
   }
   else {
     int x_min = the_canvas()->width();
@@ -160,7 +157,7 @@ void ParameterSetCanvas::check_position() {
     int y_min = the_canvas()->height();
     int y_max = 0;
 
-    Q3ValueList<PinCanvas *>::Iterator iter;
+    QValueList<PinCanvas *>::Iterator iter;
 
     for (iter = params.begin(); iter != params.end(); ++iter) {
       int i;
@@ -193,8 +190,8 @@ void ParameterSetCanvas::check_position() {
     if (y_max > r_act.y())
       y_max += margin;
 
-    Q3CanvasRectangle::moveBy(x_min - x(), y_min - y());
-    Q3CanvasRectangle::setSize(x_max - x_min + 1, y_max - y_min + 1);
+    QCanvasRectangle::moveBy(x_min - x(), y_min - y());
+    QCanvasRectangle::setSize(x_max - x_min + 1, y_max - y_min + 1);
   }
 }
 
@@ -224,7 +221,7 @@ bool ParameterSetCanvas::primaryItem() const {
 
 void ParameterSetCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QBrush brsh = p.brush();
   QColor bckgrnd = p.backgroundColor();
   
@@ -271,8 +268,8 @@ void ParameterSetCanvas::open() {
 }
 
 void ParameterSetCanvas::menu(const QPoint &) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
     
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -386,7 +383,7 @@ bool ParameterSetCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ParameterSetCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ParameterSetCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -397,7 +394,7 @@ void ParameterSetCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((ParameterSetCanvas *) it.current())->itscolor = itscolor;
@@ -409,8 +406,8 @@ void ParameterSetCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ParameterSetCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ParameterSetCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ParameterSetCanvas * x = (ParameterSetCanvas *) it.current();
   
@@ -444,7 +441,7 @@ void ParameterSetCanvas::connexion(UmlCode, DiagramItem *,
   // does nothing
 }
 
-void ParameterSetCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ParameterSetCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "parametersetcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -501,7 +498,7 @@ ParameterSetCanvas * ParameterSetCanvas::read(char * & st, UmlCanvas * canvas,
 }
 
 void ParameterSetCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   disconnect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
@@ -523,14 +520,14 @@ void ParameterSetCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 
   // note : pin list unchanged because history raz on item deletion
-  Q3ValueList<PinCanvas *>::Iterator iter;
+  QValueList<PinCanvas *>::Iterator iter;
 
   for (iter = params.begin(); iter != params.end(); ++iter)
     connect((*iter)->get_bn()->get_data(), SIGNAL(deleted()), this, SLOT(pin_deleted()));

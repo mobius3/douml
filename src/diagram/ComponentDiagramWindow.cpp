@@ -29,9 +29,9 @@
 
 #include <qapplication.h>
 #include <qworkspace.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qspinbox.h>
 
@@ -59,8 +59,8 @@ extern QString imageText();
 // id is an old ident in case of an import
 ComponentDiagramWindow::ComponentDiagramWindow(const QString & s, BrowserComponentDiagram * b, int id)
     : DiagramWindow(b, s), view(0) {
-  Q3ToolBar * toolbar = new Q3ToolBar(this, "component operations");
-  addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
+  QToolBar * toolbar = new QToolBar(this, "component operations");
+  addToolBar(toolbar, TR("Toolbar"), Top, TRUE);
   
   add_edit_button(toolbar);
   
@@ -75,67 +75,67 @@ ComponentDiagramWindow::ComponentDiagramWindow(const QString & s, BrowserCompone
     = new QToolButton(*packageButton, TR("Add Package"), QString::null,
 		      this, SLOT(hit_package()), toolbar, "add package");
   addPackage->setToggleButton(TRUE);
-  Q3WhatsThis::add(addPackage, addpackageText());
+  QWhatsThis::add(addPackage, addpackageText());
   
   addFragment
     = new QToolButton(*fragmentButton, TR("Add Fragment"), QString::null,
 		      this, SLOT(hit_fragment()), toolbar, "add fragment");
   addFragment->setToggleButton(TRUE);
-  Q3WhatsThis::add(addFragment, addfragmentText());
+  QWhatsThis::add(addFragment, addfragmentText());
   
   addComponent =
     new QToolButton(*componentButton, TR("Add Component"), QString::null,
 		    this, SLOT(hit_component()), toolbar, "add component");
   addComponent->setToggleButton(TRUE);
-  Q3WhatsThis::add(addComponent, addcomponentText());
+  QWhatsThis::add(addComponent, addcomponentText());
   
   inherit =
     new QToolButton(*generalisationButton, TR("Inheritance"), QString::null,
 		    this, SLOT(hit_inherit()), toolbar, "inheritance");
   inherit->setToggleButton(TRUE);
-  Q3WhatsThis::add(inherit, inheritText());
+  QWhatsThis::add(inherit, inheritText());
   
   dependency =
     new QToolButton(*dependencyButton, TR("Dependency"), QString::null,
 		    this, SLOT(hit_dependency()), toolbar, "dependency");
   dependency->setToggleButton(TRUE);
-  Q3WhatsThis::add(dependency, dependencyText());
+  QWhatsThis::add(dependency, dependencyText());
 
   required =
     new QToolButton(*requiredButton, TR("Required interface"), QString::null,
 		    this, SLOT(hit_required()), toolbar, "required interface");
   required->setToggleButton(TRUE);
-  Q3WhatsThis::add(required, requiredText());
+  QWhatsThis::add(required, requiredText());
 
   provided =
     new QToolButton(*providedButton, TR("Provided interface"), QString::null,
 		    this, SLOT(hit_provided()), toolbar, "provided interface");
   provided->setToggleButton(TRUE);
-  Q3WhatsThis::add(provided, providedText());
+  QWhatsThis::add(provided, providedText());
 
   note =
     new QToolButton(*noteButton, TR("Note"), QString::null,
 		    this, SLOT(hit_note()), toolbar, "note");
   note->setToggleButton(TRUE);
-  Q3WhatsThis::add(note, noteText());
+  QWhatsThis::add(note, noteText());
   
   anchor =
     new QToolButton(*anchorButton, TR("Anchor"), QString::null,
 		    this, SLOT(hit_anchor()), toolbar, "anchor");
   anchor->setToggleButton(TRUE);
-  Q3WhatsThis::add(anchor, anchorText());
+  QWhatsThis::add(anchor, anchorText());
   
   text =
     new QToolButton(*textButton, TR("Text"), QString::null,
 		    this, SLOT(hit_text()), toolbar, "text");
   text->setToggleButton(TRUE);
-  Q3WhatsThis::add(text, textText());
+  QWhatsThis::add(text, textText());
   
   image =
     new QToolButton(*imageButton, TR("Image"), QString::null,
 		    this, SLOT(hit_image()), toolbar, "image");
   image->setToggleButton(TRUE);
-  Q3WhatsThis::add(image, imageText());
+  QWhatsThis::add(image, imageText());
   
   toolbar->addSeparator();
   

@@ -1,11 +1,9 @@
 
 #include "UmlOnSignalAction.h"
 #include "FileOut.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlOnSignalAction::write_signal(FileOut & out) {
-  Q3CString sig;
+  QCString sig;
   
   switch (_lang) {
   case Uml:

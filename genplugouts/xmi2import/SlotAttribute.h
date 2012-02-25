@@ -2,20 +2,20 @@
 #define _SLOTATTRIBUTE_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlAttribute;
 
 struct SlotAttribute {
     UmlAttribute * attribute;
 
-    Q3CString value;
+    QCString value;
 
     // because of QValueList use
      SlotAttribute() : attribute(0) {
     }
 
-     SlotAttribute(UmlAttribute * a, Q3CString v) : attribute(a), value(v) {
+     SlotAttribute(UmlAttribute * a, QCString v) : attribute(a), value(v) {
     }
 
 };

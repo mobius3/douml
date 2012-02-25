@@ -28,10 +28,10 @@
 
 
 
-#include <q3hbox.h>
-#include <q3grid.h>
+#include <qhbox.h>
+#include <qgrid.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
 
 #include "Settings.h"
@@ -51,7 +51,7 @@ void ColorSpecVector::resize(int s) {
   _size = s;
 }
 
-class ComboStates : public Q3ComboBox {
+class ComboStates : public QComboBox {
   public:
     ComboStates(QWidget * parent, Uml3States v, bool nodefault, bool unchanged);
     ComboStates(QWidget * parent, ClassDrawingMode v, bool nodefault, bool unchanged);
@@ -64,7 +64,7 @@ class ComboStates : public Q3ComboBox {
 
 ComboStates::ComboStates(QWidget * parent, Uml3States v,
 			 bool nodefault, bool unchanged) 
-    : Q3ComboBox(FALSE, parent) {
+    : QComboBox(FALSE, parent) {
   insertItem(TR(stringify((Uml3States) 0)));
   insertItem(TR(stringify((Uml3States) 1)));
   // the last value MUST be default
@@ -80,7 +80,7 @@ ComboStates::ComboStates(QWidget * parent, Uml3States v,
 
 ComboStates::ComboStates(QWidget * parent, ClassDrawingMode v,
 			 bool nodefault, bool unchanged) 
-    : Q3ComboBox(FALSE, parent) {
+    : QComboBox(FALSE, parent) {
   int i;
   
   for (i = 0; i != (int) DefaultClassDrawingMode; i += 1)
@@ -98,7 +98,7 @@ ComboStates::ComboStates(QWidget * parent, ClassDrawingMode v,
 
 ComboStates::ComboStates(QWidget * parent, DrawingLanguage v,
 			 bool nodefault, bool unchanged) 
-    : Q3ComboBox(FALSE, parent) {
+    : QComboBox(FALSE, parent) {
   int i;
   
   for (i = 0; i != (int) DefaultDrawingLanguage; i += 1)
@@ -123,7 +123,7 @@ static QString _2space(QString s)
 
 ComboStates::ComboStates(QWidget * parent, ShowContextMode v,
 			 bool nodefault, bool unchanged) 
-    : Q3ComboBox(FALSE, parent) {
+    : QComboBox(FALSE, parent) {
   int i;
   
    for (i = 0; i != (int) DefaultShowContextMode; i += 1)
@@ -142,7 +142,7 @@ ComboStates::ComboStates(QWidget * parent, ShowContextMode v,
 
 ComboStates::ComboStates(QWidget * parent, char v,
 			 bool nodefault, bool unchanged) 
-    : Q3ComboBox(FALSE, parent) {
+    : QComboBox(FALSE, parent) {
   int i;
   
   for (i = MinMemberWidthValue; i != SupMemberWidthValue; i += 1) {
@@ -174,14 +174,14 @@ ComboStates::ComboStates(QWidget * parent, char v,
 }
 
 QSize ComboStates::sizeHint() const {
-  QSize sz = Q3ComboBox::sizeHint();
+  QSize sz = QComboBox::sizeHint();
   
   sz.setHeight(fontMetrics().height() + 4);
   return sz;
 }
 
 
-class ComboColor : public Q3ComboBox {
+class ComboColor : public QComboBox {
   public:
     ComboColor(QWidget * parent, UmlColor v,
 	       bool nodefault, bool unchanged);
@@ -189,7 +189,7 @@ class ComboColor : public Q3ComboBox {
 
 ComboColor::ComboColor(QWidget * parent, UmlColor v,
 		       bool nodefault, bool unchanged) 
-    : Q3ComboBox(FALSE, parent) {
+    : QComboBox(FALSE, parent) {
   QString s_transparent = TR("Transparent");
   QString s_unknown_color = TR("Unknown color");
   
@@ -309,7 +309,7 @@ ComboColor::ComboColor(QWidget * parent, UmlColor v,
 
 
 
-  //setSizeLimit(25);	// yes !, don't set it to count() ! //[lgfreitas] Qt4 complains it does not exists.
+  setSizeLimit(25);	// yes !, don't set it to count() !
 
 }
 
@@ -319,20 +319,20 @@ QString SettingsDialog::previous_active_tab;
 
 SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
 			       bool nodefault, bool unchanged, QString title)
-    : Q3TabDialog(0, title, TRUE),
+    : QTabDialog(0, title, TRUE),
       states(st), colors(co), first_visible_page(0),
       several(unchanged), did_apply(FALSE) {
   setCaption((title.isEmpty()) ? TR("Diagram Drawing Settings dialog") : title);
   
   QString s_diagram = TR("diagram");
-  Q3Grid * grid = 0;
+  QGrid * grid = 0;
   QString tabname;
   unsigned i;
   unsigned n;
   
   if (states != 0) {
     n = states->size();
-    cbstates = new Q3PtrVector<ComboStates>(n);
+    cbstates = new QVector<ComboStates>(n);
     
     for (i = 0; i != n; i += 1) {
       StateSpec & st = states->at(i);
@@ -354,7 +354,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
 	  if (tabname == previous_active_tab)
 	    first_visible_page = grid;
 	}
-	grid = new Q3Grid(5, this);
+	grid = new QGrid(5, this);
 	grid->setMargin(2);
 	grid->setSpacing(2);
 	tabname = tbn;
@@ -362,11 +362,12 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
       
       new QLabel("", grid);
       new QLabel(s + " : ", grid);
-      Q3HBox * hb = new Q3HBox(grid);
+      QHBox * hb = new QHBox(grid);
             
       switch (st.who) {
       case StateSpec::is3states:
-	cbstates->insert(i, new ComboStates(hb, *((Uml3States *) st.state), nodefault, unchanged));
+	cbstates->insert(i, new ComboStates(hb, *((Uml3States *) st.state),
+					    nodefault, unchanged));
 	break;
       case StateSpec::isClassDrawingMode:
 	cbstates->insert(i, new ComboStates(hb, *((ClassDrawingMode *) st.state),
@@ -400,8 +401,8 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
     QString s_default = TR("default ");
     
     n = colors->size();
-    cbcolors = new Q3PtrVector<ComboColor>(n);
-    grid = new Q3Grid(5, this);
+    cbcolors = new QVector<ComboColor>(n);
+    grid = new QGrid(5, this);
     grid->setMargin(2);
     grid->setSpacing(2);
     
@@ -413,7 +414,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
 	if (previous_active_tab == lbl)
 	  first_visible_page = grid;
 	lbl = TR("color [2]");
-	grid = new Q3Grid(5, this);
+	grid = new QGrid(5, this);
 	grid->setMargin(2);
 	grid->setSpacing(2);
       }
@@ -446,7 +447,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
 }
 
 void SettingsDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
   
   if (first_visible_page != 0) {

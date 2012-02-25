@@ -29,9 +29,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpopupmenu.h> 
 
 #include "CodSelfLinkCanvas.h"
 #include "BrowserDiagram.h"
@@ -153,10 +151,9 @@ void CodSelfLinkCanvas::update_msgs() {
     
     the_canvas()->browser_diagram()->get_collaborationdiagramsettings(dflt);
     
-    Q3PtrListIterator<ColMsg> it(msgs);
+    QListIterator<ColMsg> it(msgs);
     QString nl = "\n";
-	QString null;
-    const QString * pfix = &null;
+    const QString * pfix = &QString::null;
     
     for (; it.current() != 0; ++it) {
       const BasicData * oper_data = it.current()->get_operation();
@@ -212,7 +209,7 @@ void CodSelfLinkCanvas::moveBy(double dx, double dy) {
 
 void CodSelfLinkCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QPoint ce = center();
 
   p.save();
@@ -246,7 +243,7 @@ void CodSelfLinkCanvas::open() {
 }
 
 void CodSelfLinkCanvas::menu(const QPoint&) {
-  Q3PopupMenu m;
+  QPopupMenu m;
   
   m.insertItem(new MenuTitle(TR("Self link"), m.font()), -1);
   m.insertSeparator();
@@ -301,7 +298,7 @@ void CodSelfLinkCanvas::menu(const QPoint&) {
 }
 
 QString CodSelfLinkCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString CodSelfLinkCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -316,7 +313,7 @@ bool CodSelfLinkCanvas::represents(BrowserNode * bn) {
   return supports(bn);
 }
 
-void CodSelfLinkCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodSelfLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "selflinkcanvas_ref " << get_ident();
   else {
@@ -413,7 +410,7 @@ void CodSelfLinkCanvas::history_load(QBuffer & b) {
   ::load(delta_y, b);
   ::load(angle, b);
   
-  Q3PtrListIterator<ColMsg> it(msgs);
+  QListIterator<ColMsg> it(msgs);
   
   for (; it.current() != 0; ++it) {
     const BasicData * oper_data = it.current()->get_operation();
@@ -429,7 +426,7 @@ void CodSelfLinkCanvas::history_hide() {
   DiagramCanvas::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   
-  Q3PtrListIterator<ColMsg> it(msgs);
+  QListIterator<ColMsg> it(msgs);
   
   for (; it.current() != 0; ++it) {
     const BasicData * oper_data = it.current()->get_operation();

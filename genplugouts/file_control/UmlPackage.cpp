@@ -3,18 +3,16 @@
 
 #include <stdlib.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "Dialog.h"
 #include "UmlCom.h"
 
 void UmlPackage::fileControl(bool ci) {
   UmlPackage * prj = getProject();
-  Q3CString prjfile = prj->supportFile();
+  QCString prjfile = prj->supportFile();
   BooL rec;
   BooL reload;
-  Q3CString cmd;
+  QCString cmd;
   
   if (! prj->propertyValue((ci) ? "check-in-cmd" : "check-out-cmd", cmd))
     cmd = "specify the command containing %file and %dir or %dironly";
@@ -29,14 +27,14 @@ void UmlPackage::fileControl(bool ci) {
       saveProject();
     
     // get files list
-    Q3Dict<void> files;
+    QDict<void> files;
   
     getFiles(files, (rec) ? ~0u : 1);
     if (this == prj)
       getAuxFiles(files);
   
     // apply the command on each file
-    Q3DictIterator<void> it(files);
+    QDictIterator<void> it(files);
     QFileInfo prjpath(prjfile);
     QString dir = prjpath.dirPath(TRUE);
     QString dironly = dir;
@@ -70,12 +68,12 @@ void UmlPackage::fileControl(bool ci) {
   }
 }
 
-void UmlPackage::getFiles(Q3Dict<void> & files, unsigned rec) {
+void UmlPackage::getFiles(QDict<void> & files, unsigned rec) {
   if (rec != 0)
     UmlItem::getFiles(files, rec - 1);
 }
 
-void UmlPackage::getAuxFiles(Q3Dict<void> & files) {
+void UmlPackage::getAuxFiles(QDict<void> & files) {
   static const char * aux[] = {
     "cpp_includes", "generation_settings", "idl_includes",
     "java_imports", "stereotypes", "tools", 0

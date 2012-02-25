@@ -26,9 +26,7 @@
 #ifndef UMLARTIFACT_H
 #define UMLARTIFACT_H
 
-#include <q3asciidict.h> 
-//Added by qt3to4:
-#include <Q3CString>
+#include <qasciidict.h> 
 
 #include "UmlBaseArtifact.h"
 
@@ -40,7 +38,7 @@ class UmlPackage;
 class UmlArtifact : public UmlBaseArtifact {
   private:
     bool managed;
-    Q3AsciiDict<UmlArtifact> * imports;
+    QAsciiDict<UmlArtifact> * imports;
     
     static UmlArtifact * current;
     static UmlPackage * package_of_generated_artifact;
@@ -50,14 +48,14 @@ class UmlArtifact : public UmlBaseArtifact {
     void generate_text();
 
   public:
-    UmlArtifact(void * id, const Q3CString & n)
+    UmlArtifact(void * id, const QCString & n)
       : UmlBaseArtifact(id, n), managed(FALSE), imports(0) {};
     
     virtual void generate();
     
-    void imported(const Q3CString & s);
-    bool is_imported(const Q3CString & s);
-    bool is_imported(Q3CString path, Q3CString class_name);
+    void imported(const QCString & s);
+    bool is_imported(const QCString & s);
+    bool is_imported(QCString path, QCString class_name);
     
     static UmlArtifact * generated_one();
     static UmlPackage * generation_package();

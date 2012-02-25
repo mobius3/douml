@@ -6,9 +6,9 @@
 #include "SlotRelation.h"
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3valuelist.h>
-#include <q3ptrvector.h>
-#include <q3cstring.h>
+#include <qvaluelist.h>
+#include <qvector.h>
+#include <qcstring.h>
 
 class UmlClassInstance;
 class UmlClass;
@@ -39,17 +39,17 @@ class UmlBaseClassInstance : public UmlItem {
     bool set_Type(UmlClass * v);
 
     // Returns the attributes having a value
-    void attributesValue(Q3ValueList<SlotAttribute> & result);
+    void attributesValue(QValueList<SlotAttribute> & result);
 
     // Returns the attributes having a value
-    void relationsValue(Q3ValueList<SlotRelation> & result);
+    void relationsValue(QValueList<SlotRelation> & result);
 
     // Returns all the attributes of the class instance,
     // including the inherited
-    void availableAttributes(Q3PtrVector<UmlAttribute> & result);
+    void availableAttributes(QVector<UmlAttribute> & result);
 
     // Returns all the possible relations from the current instance to 'other', including the inherited
-    void availableRelations(UmlClassInstance * other, Q3PtrVector<UmlRelation> & result);
+    void availableRelations(UmlClassInstance * other, QVector<UmlRelation> & result);
 
     // Remove the slot if the value is an empty string.
     // Else set the value for the given attribute, replacing it
@@ -86,7 +86,7 @@ class UmlBaseClassInstance : public UmlItem {
     virtual void read_uml_();
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseClassInstance(void * id, const Q3CString & s) : UmlItem(id, s) {
+     UmlBaseClassInstance(void * id, const QCString & s) : UmlItem(id, s) {
     }
 
 };

@@ -2,7 +2,7 @@
 #define _UMLCOMPONENT_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlBaseComponent.h"
 
 // This class manages 'components'
@@ -12,11 +12,11 @@ class UmlComponent : public UmlBaseComponent {
   public:
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
+    virtual void html(QCString pfix, unsigned int rank, unsigned int level);
 
-    virtual Q3CString sKind();
+    virtual QCString sKind();
 
-    UmlComponent(void * id, const Q3CString & n) : UmlBaseComponent(id, n) {};
+    UmlComponent(void * id, const QCString & n) : UmlBaseComponent(id, n) {};
 
 };
 

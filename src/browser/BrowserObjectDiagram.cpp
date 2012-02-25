@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
 
 #include "BrowserObjectDiagram.h"
 #include "SimpleData.h"
@@ -52,8 +48,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserObjectDiagram> BrowserObjectDiagram::imported;
-Q3ValueList<int> BrowserObjectDiagram::imported_ids;
+QList<BrowserObjectDiagram> BrowserObjectDiagram::imported;
+QValueList<int> BrowserObjectDiagram::imported_ids;
 QStringList BrowserObjectDiagram::its_default_stereotypes;	// unicode
 
 BrowserObjectDiagram::BrowserObjectDiagram(QString s, BrowserNode * p, int id)
@@ -141,7 +137,7 @@ void BrowserObjectDiagram::set_name(const char * s) {
 
 void BrowserObjectDiagram::import()
 {
-  Q3ValueList<int>::Iterator it = imported_ids.begin();
+  QValueList<int>::Iterator it = imported_ids.begin();
   
   while (!imported.isEmpty()) {
     QString warning;
@@ -198,8 +194,8 @@ void BrowserObjectDiagram::draw_svg() const {
 }
 
 void BrowserObjectDiagram::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -476,7 +472,7 @@ bool BrowserObjectDiagram::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-void BrowserObjectDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserObjectDiagram::compute_referenced_by(QList<BrowserNode> & l,
 						 BrowserNode * bn,
 						 char const * kc,
 						 char const * kr)
@@ -503,7 +499,7 @@ bool BrowserObjectDiagram::api_compatible(unsigned v) const {
   return v >= 24;
 }
 
-void BrowserObjectDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserObjectDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "objdiagram_stereotypes ";
@@ -518,7 +514,7 @@ void BrowserObjectDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserObjectDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserObjectDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "objectdiagram_ref " << get_ident() << " // " << get_name();
   else {

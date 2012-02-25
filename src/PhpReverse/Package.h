@@ -28,9 +28,6 @@
 
 #include <qstringlist.h> 
 #include <qstack.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3CString>
 
 #include "Namespace.h"
 #include "Class.h"
@@ -60,9 +57,9 @@ class Package : public BrowserNode, public ClassContainer {
   
     virtual bool isa_package() const;
     
-    void reverse_file(Q3CString path, Q3CString f);
+    void reverse_file(QCString path, QCString f);
     
-    const Q3CString & get_path() { return path; }
+    const QCString & get_path() { return path; }
     UmlPackage * get_uml(bool mandatory = TRUE);
 #ifdef REVERSE
     void send_dir(bool rec);
@@ -70,11 +67,11 @@ class Package : public BrowserNode, public ClassContainer {
     
     void new_class(Class *);
     
-    virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
+    virtual void compute_type(QCString type, UmlTypeSpec & typespec,
 			      Class ** need_object = 0);
-    virtual Class * define(const Q3CString & name, char st);
+    virtual Class * define(const QCString & name, char st);
 #ifdef WITH_PHPCAT
-    virtual void declare(const Q3CString &, Class *);
+    virtual void declare(const QCString &, Class *);
     void restore_children(QDataStream & dts);
     static void restore(QDataStream  & dt, Package *);
 #endif
@@ -100,7 +97,7 @@ class Package : public BrowserNode, public ClassContainer {
     
   private:
     UmlPackage * uml;
-    Q3CString path;
+    QCString path;
     NDict<Class> Undefined;
   
     static bool scan;
@@ -117,16 +114,16 @@ class Package : public BrowserNode, public ClassContainer {
     
     static int file_number(QDir & dir, bool rec);
     
-    void reverse_toplevel_form(Q3CString s);
+    void reverse_toplevel_form(QCString s);
     void reverse_directory(QDir & dir, bool rec);
     
-    Package * find(Q3CString s, bool nohack);
+    Package * find(QCString s, bool nohack);
     static Package * package_unknown();
     
-    static void update_class_list(Q3CString pack, UmlItem * container);
+    static void update_class_list(QCString pack, UmlItem * container);
     
-    Class * declare_if_needed(Q3CString name, char st);
-    Class * new_class(const Q3CString & name, char st);
+    Class * declare_if_needed(QCString name, char st);
+    Class * new_class(const QCString & name, char st);
     
     void use();
 };

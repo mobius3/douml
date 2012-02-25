@@ -2,7 +2,7 @@
 #define _CONTEXT_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 
 enum Equation {
   NoFilter,
@@ -17,23 +17,23 @@ enum Equation {
 };
 class Context {
   public:
-    Context(const Q3CString & o, const Q3CString & f);
+    Context(const QCString & o, const QCString & f);
 
-    const char * set_filters(const Q3CString & f1, const Q3CString & f2, const Q3CString & f3, bool w1, bool w2, bool w3, bool and12, bool and23);
+    const char * set_filters(const QCString & f1, const QCString & f2, const QCString & f3, bool w1, bool w2, bool w3, bool and12, bool and23);
 
-    void set_stereotype(const Q3CString & s, bool eq, bool neq);
+    void set_stereotype(const QCString & s, bool eq, bool neq);
 
     void set_targets(bool art, bool cl, bool op, bool att, bool rel);
 
     void set_language(bool c, bool j, bool p, bool y, bool i);
 
-    bool match_stereotype(const Q3CString & s);
+    bool match_stereotype(const QCString & s);
 
-    bool match(Q3CString s);
+    bool match(QCString s);
 
     void err();
 
-    Q3CString replace(Q3CString s);
+    QCString replace(QCString s);
 
     bool onArtifact() const;
 
@@ -61,11 +61,11 @@ class Context {
 
 
   protected:
-    Q3CString _filter1;
+    QCString _filter1;
 
-    Q3CString _filter2;
+    QCString _filter2;
 
-    Q3CString _filter3;
+    QCString _filter3;
 
     bool _with1;
 
@@ -73,7 +73,7 @@ class Context {
 
     bool _with3;
 
-    Q3CString _stereotype;
+    QCString _stereotype;
 
     bool _is;
 
@@ -99,9 +99,9 @@ class Context {
 
     bool _idl;
 
-    Q3CString _old;
+    QCString _old;
 
-    Q3CString _future;
+    QCString _future;
 
     Equation _equation;
 
@@ -109,11 +109,11 @@ class Context {
 
     int _n_err;
 
-    bool match(Q3CString s, const Q3CString & filter, bool with);
+    bool match(QCString s, const QCString & filter, bool with);
 
 };
 
-inline void Context::set_stereotype(const Q3CString & s, bool eq, bool neq) {
+inline void Context::set_stereotype(const QCString & s, bool eq, bool neq) {
   _stereotype = s;
   _is = eq;
   _isnot = neq;

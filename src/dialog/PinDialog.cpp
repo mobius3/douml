@@ -27,15 +27,15 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <q3buttongroup.h>
+#include <qcombobox.h> 
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h> 
 #include <qpushbutton.h> 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h> 
 
 #include "PinDialog.h"
@@ -56,7 +56,7 @@
 QSize PinDialog::previous_size;
 
 PinDialog::PinDialog(PinData * pi)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), pin(pi) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), pin(pi) {
   pi->browser_node->edit_start();
   
   if (pi->browser_node->is_writable()) {
@@ -71,13 +71,13 @@ PinDialog::PinDialog(PinData * pi)
   visit = !hasOkButton();
   setCaption(TR("Pin dialog"));
   
-  Q3Grid * grid;
-  Q3HBox * htab;
+  QGrid * grid;
+  QHBox * htab;
   QString s;
     
   // general tab
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   umltab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -92,7 +92,7 @@ PinDialog::PinDialog(PinData * pi)
   font.setFixedPitch(TRUE);
   
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pi->stereotype));
   if (! visit) {
     edstereotype->insertStringList(BrowserPin::default_stereotypes());
@@ -109,7 +109,7 @@ PinDialog::PinDialog(PinData * pi)
   connect(new SmallPushButton(TR("type :"), grid), SIGNAL(clicked()),
 	  this, SLOT(menu_type()));
   
-  edtype = new Q3ComboBox(!visit, grid);
+  edtype = new QComboBox(!visit, grid);
   edtype->insertItem(pi->get_type().get_full_type());
   if (!visit) {
     BrowserClass::instances(nodes);
@@ -125,8 +125,8 @@ PinDialog::PinDialog(PinData * pi)
   edtype->setSizePolicy(sp);
   
   new QLabel(TR("direction :"), grid);
-  htab = new Q3HBox(grid);
-  eddir = new Q3ComboBox(FALSE, htab);
+  htab = new QHBox(grid);
+  eddir = new QComboBox(FALSE, htab);
   
   UmlParamDirection dir = pi->get_dir();
   
@@ -142,7 +142,7 @@ PinDialog::PinDialog(PinData * pi)
   }
   
   new QLabel(TR("   multiplicity : "), htab);
-  edmultiplicity = new Q3ComboBox(!visit, htab);
+  edmultiplicity = new QComboBox(!visit, htab);
   edmultiplicity->setSizePolicy(sp);
   edmultiplicity->insertItem(pi->get_multiplicity());
   if (!visit) {
@@ -153,7 +153,7 @@ PinDialog::PinDialog(PinData * pi)
   }
   
   new QLabel(TR("   ordering : "), htab);
-  edordering = new Q3ComboBox(FALSE, htab);
+  edordering = new QComboBox(FALSE, htab);
   
   UmlOrderingKind o = pi->get_ordering();
   
@@ -170,7 +170,7 @@ PinDialog::PinDialog(PinData * pi)
   }
     
   new QLabel(TR("   effect : "), htab);
-  edeffect = new Q3ComboBox(FALSE, htab);
+  edeffect = new QComboBox(FALSE, htab);
   
   UmlParamEffect e = pi->get_effect();
   
@@ -193,9 +193,9 @@ PinDialog::PinDialog(PinData * pi)
   edin_state->setReadOnly(visit);
        
   new QLabel(grid);
-  htab = new Q3HBox(grid);
-  Q3ButtonGroup * bg = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, htab);
+  htab = new QHBox(grid);
+  QButtonGroup * bg = 
+    new QButtonGroup(2, Qt::Horizontal, QString::null, htab);
   
   is_control_cb = new QCheckBox(TR("is_control"), bg);
   if (pi->is_control)
@@ -208,7 +208,7 @@ PinDialog::PinDialog(PinData * pi)
   unique_cb->setDisabled(visit);
   
   bg = 
-    new Q3ButtonGroup(3, Qt::Horizontal, QString::null, htab);
+    new QButtonGroup(3, Qt::Horizontal, QString::null, htab);
   bg->setExclusive(TRUE);
   
   standard_rb = new QRadioButton(TR("standard"), bg);
@@ -222,7 +222,7 @@ PinDialog::PinDialog(PinData * pi)
   else
     standard_rb->setChecked(TRUE);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -250,7 +250,7 @@ PinDialog::PinDialog(PinData * pi)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -289,20 +289,20 @@ void PinDialog::change_tabs(QWidget * w) {
 }
 
 void PinDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 void PinDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char * v,
 			 const char * lbl, const char * sl, bool enabled) {
   bool visit = !hasOkButton();
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
 
   tab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   
   new QLabel(TR("selection : "), vtab);
   if (! visit)
@@ -326,7 +326,7 @@ void PinDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char * v,
 }
 
 void PinDialog::menu_type() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -480,7 +480,7 @@ void PinDialog::accept() {
       bn->package_modified();
       pin->modified();
       
-      Q3TabDialog::accept();
+      QTabDialog::accept();
     }
   }
 }

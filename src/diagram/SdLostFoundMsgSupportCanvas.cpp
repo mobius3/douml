@@ -27,11 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "SdLostFoundMsgSupportCanvas.h"
 #include "SdMsgCanvas.h"
@@ -67,11 +65,11 @@ bool SdLostFoundMsgSupportCanvas::copyable() const {
 
 void SdLostFoundMsgSupportCanvas::change_scale() {
   // the size is not modified
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   recenter();
   if (msg != 0)
     msg->update_hpos();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void SdLostFoundMsgSupportCanvas::set_z(double newz) {
@@ -82,7 +80,7 @@ void SdLostFoundMsgSupportCanvas::draw(QPainter & p) {
   if (! visible()) return;
   
   QRect r = rect();
-  p.setRenderHint(QPainter::Antialiasing, true);
+
   if (selected())
     p.fillRect(r, ::Qt::black);
   else {
@@ -116,7 +114,7 @@ void SdLostFoundMsgSupportCanvas::menu(const QPoint&) {
 }
 
 QString SdLostFoundMsgSupportCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString SdLostFoundMsgSupportCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -170,7 +168,7 @@ bool SdLostFoundMsgSupportCanvas::isOverlappingDuration() const {
   return FALSE;
 }
 
-void SdLostFoundMsgSupportCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void SdLostFoundMsgSupportCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref)
     st << "lostfoundmsgsupport_ref " << get_ident();
   else {

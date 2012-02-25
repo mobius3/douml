@@ -26,10 +26,6 @@
 #ifndef REVERSE
 #include <qapplication.h>
 #include <qmessagebox.h>
-//Added by qt3to4:
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 #endif
 
 #include "UmlPackage.h"
@@ -43,7 +39,7 @@
 # endif
 #endif
 
-UmlPackage::UmlPackage(void * id, const Q3CString & n)
+UmlPackage::UmlPackage(void * id, const QCString & n)
     : UmlBasePackage(id, n) {
   classview = 0;
 #ifdef REVERSE
@@ -56,7 +52,7 @@ UmlPackage::UmlPackage(void * id, const Q3CString & n)
 
 UmlClassView * UmlPackage::get_classview() {
   if (classview == 0) {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+    const QVector<UmlItem> & ch = UmlItem::children();
     UmlItem ** v = ch.data();
     UmlItem ** const vsup = v + ch.size();
     
@@ -70,14 +66,14 @@ UmlClassView * UmlPackage::get_classview() {
     
     if ((classview = UmlBaseClassView::create(this, name())) == 0) {
 #ifdef REVERSE
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create class view <i>")
+      UmlCom::trace(QCString("<font face=helvetica><b>cannot create class view <i>")
 		    + name() + "</i> under package <i>"
 		    + name() + "</b></font><br>");
       UmlCom::message("");
       throw 0;
 #else
       QMessageBox::critical(0, "Fatal Error", 
-			    Q3CString("<font face=helvetica><b>cannot create class view <i>")
+			    QCString("<font face=helvetica><b>cannot create class view <i>")
 			    + name() + "</i> under package <i>"
 			    + name() + "</b></font><br>");
       QApplication::exit(1);
@@ -92,7 +88,7 @@ UmlClassView * UmlPackage::get_classview() {
 
 UmlDeploymentView * UmlPackage::get_deploymentview() {
   if (deploymentview == 0) {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+    const QVector<UmlItem> & ch = UmlItem::children();
     UmlItem ** v = ch.data();
     UmlItem ** const vsup = v + ch.size();
     
@@ -106,14 +102,14 @@ UmlDeploymentView * UmlPackage::get_deploymentview() {
     
     if ((deploymentview = UmlBaseDeploymentView::create(this, name())) == 0) {
 #ifdef REVERSE
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
+      UmlCom::trace(QCString("<font face=helvetica><b>cannot create deployment view <i>")
 		    + name() + "</i> under package <i>"
 		    + name() + "</b></font><br>");
       UmlCom::message("");
       throw 0;
 #else
       QMessageBox::critical(0, "Fatal Error", 
-			    Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
+			    QCString("<font face=helvetica><b>cannot create deployment view <i>")
 			    + name() + "</i> under package <i>"
 			    + name() + "</b></font><br>");
       QApplication::exit(1);
@@ -130,7 +126,7 @@ UmlDeploymentView * UmlPackage::get_deploymentview() {
 void UmlPackage::init(Package * p) {
   package = p;
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
     
@@ -141,7 +137,7 @@ void UmlPackage::init(Package * p) {
 void UmlPackage::upload(ClassContainer * cnt) {
   package = new Package((Package *) cnt, this);
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
     
@@ -152,7 +148,7 @@ void UmlPackage::upload(ClassContainer * cnt) {
 int UmlPackage::count_roundtriped() {
   int result = 1;
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
     
@@ -169,7 +165,7 @@ bool UmlPackage::set_roundtrip_expected() {
       
   Progress::tic_it();
   
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+  const QVector<UmlItem> & ch = UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
   bool result = isWritable();
@@ -180,8 +176,8 @@ bool UmlPackage::set_roundtrip_expected() {
   return result;
 }
 
-void UmlPackage::mark_useless(Q3PtrList<UmlItem> & l) {
-  Q3PtrVector<UmlItem> ch = UmlItem::children();
+void UmlPackage::mark_useless(QList<UmlItem> & l) {
+  QVector<UmlItem> ch = UmlItem::children();
   UmlClassItem ** v = (UmlClassItem **) ch.data();
   UmlClassItem ** const vsup = v + ch.size();
     

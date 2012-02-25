@@ -27,11 +27,6 @@
 #define ACTIVITYDIAGRAMVIEW_H
 
 #include "DiagramView.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QMouseEvent>
-#include <QDropEvent>
-#include <QDragEnterEvent>
 
 class ActivityDiagramWindow;
 class DiagramItem;
@@ -47,7 +42,7 @@ class ActivityDiagramView : public DiagramView {
     BrowserNode * container(const QPoint & p, bool part = FALSE);
     virtual void menu(const QPoint&);
     virtual void read(char *, char * k);
-    virtual void save(Q3TextStream & st, QString & warning, bool copy) const;
+    virtual void save(QTextStream & st, QString & warning, bool copy) const;
     
   private:
     ActivityDiagramWindow * window() {

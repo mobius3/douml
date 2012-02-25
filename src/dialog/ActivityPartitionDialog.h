@@ -30,11 +30,10 @@
 
 
 
-#include <q3ptrlist.h>
-#include <q3tabdialog.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
+#include <qtabdialog.h>
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 
 class LineEdit;
@@ -44,21 +43,21 @@ class KeyValuesTable;
 class BodyDialog;
 class BrowserNode;
 
-class ActivityPartitionDialog : public Q3TabDialog {
+class ActivityPartitionDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     QWidget * umltab;
     ActivityPartitionData * data;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * edrepresents;
+    QComboBox * edstereotype;
+    QComboBox * edrepresents;
     BrowserNode * represented;
     QCheckBox * dimension_cb;
     QCheckBox * external_cb;
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
 
     static QSize previous_size;
     

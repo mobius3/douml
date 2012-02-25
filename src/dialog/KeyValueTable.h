@@ -26,7 +26,7 @@
 #ifndef KEYVALUETABLE_H
 #define KEYVALUETABLE_H
 
-#include <q3dict.h>
+#include <qdict.h>
 #include "StringTable.h"
 
 class HaveKeyValueData;
@@ -43,7 +43,7 @@ class KeyValuesTable : public StringTable {
     void remove(const char * key);
 
   private:
-    Q3Dict<QStringList> props;
+    QDict<QStringList> props;
 };
 
 #endif

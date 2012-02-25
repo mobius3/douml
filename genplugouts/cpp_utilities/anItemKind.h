@@ -2,7 +2,7 @@
 #define _ANITEMKIND_H
 
 
-// the kind of any item, returned by UmlBaseItem::Kind()
+// the king of any item, returned by UmlBaseItem::Kind()
 enum anItemKind {
   aRelation,
   anAttribute,

@@ -3,23 +3,21 @@
 
 #include "UmlCom.h"
 #include "util.h"
-//Added by qt3to4:
-#include <Q3CString>
  UmlItem::~UmlItem() {
 }
 
 void UmlItem::roseImport() {
 }
 
-Q3CString UmlItem::fullName() {
+QCString UmlItem::fullName() {
   return parent()->fullName() + "::" + name();
 }
 
-void UmlItem::setProperties(Q3Dict<Q3CString> & d) {
-  Q3DictIterator<Q3CString> it(d);
+void UmlItem::setProperties(QDict<QCString> & d) {
+  QDictIterator<QCString> it(d);
 
   while (it.current()) {
-    set_PropertyValue(Q3CString(it.currentKey().toAscii()), *(it.current()));//[jasa] QString to Q3CString conversion
+    set_PropertyValue(QCString(it.currentKey()), *(it.current()));
     ++it;
   }
 
@@ -28,10 +26,10 @@ void UmlItem::setProperties(Q3Dict<Q3CString> & d) {
 
 void UmlItem::newItem(UmlItem * x, const char * id)
 {
-  Q3AsciiDict<UmlItem> & d = all_items[x->kind()];
+  QAsciiDict<UmlItem> & d = all_items[x->kind()];
 
   if (d[id] != 0) {
-    UmlCom::trace(Q3CString("<br>id '") + id + "' used for several objects");
+    UmlCom::trace(QCString("<br>id '") + id + "' used for several objects");
     throw 0;
   }
 
@@ -50,11 +48,11 @@ UmlItem * UmlItem::findItem(const char * id, anItemKind k)
 
 void UmlItem::statistic()
 {
-  Q3CString msg = "<br>";
+  QCString msg = "<br>";
 
 #define add_nbr(x, str) \
   if (cpt[x] != 0) { \
-    Q3CString s; \
+    QCString s; \
     \
     s.sprintf("%d %s<br>", cpt[x], str); \
     msg += s; \
@@ -86,7 +84,7 @@ void UmlItem::statistic()
 
 bool UmlItem::scanning;
 
-Q3AsciiDict<UmlItem> UmlItem::all_items[aPackage + 1];
+QAsciiDict<UmlItem> UmlItem::all_items[aPackage + 1];
 
 int UmlItem::cpt[128];
 

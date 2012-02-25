@@ -27,12 +27,10 @@
 #define UMLCLASSITEM_H
 
 #include "UmlBaseClassItem.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlClassItem : public UmlBaseClassItem {
   public:
-    UmlClassItem(void * id, const Q3CString & n)
+    UmlClassItem(void * id, const QCString & n)
       : UmlBaseClassItem(id, n) {
     };
 };

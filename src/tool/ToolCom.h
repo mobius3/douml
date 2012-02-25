@@ -27,9 +27,7 @@
 #define TOOLCOM_H
 
 #include <qobject.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qlist.h>
 
 #include "BrowserNode.h"
 #include "../Tools/ApiCmd.h"
@@ -43,8 +41,8 @@ class ToolCom  :public QObject {
   Q_OBJECT
     
   protected:
-    static Q3PtrList<ToolCom> used;
-    static Q3PtrList<ToolCom> unused;
+    static QList<ToolCom> used;
+    static QList<ToolCom> unused;
     static int exitvalue;
   
     bool start;

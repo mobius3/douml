@@ -26,10 +26,8 @@
 #include "UmlClassItem.h"
 #include "UmlCom.h"
 #include "UmlSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-void UmlClassItem::remove_comments(Q3CString & s)
+void UmlClassItem::remove_comments(QCString & s)
 {
   int index1 = 0;
   
@@ -55,7 +53,7 @@ void UmlClassItem::remove_comments(Q3CString & s)
   }
 }
 
-void UmlClassItem::remove_preprocessor(Q3CString & s)
+void UmlClassItem::remove_preprocessor(QCString & s)
 {
   int index = 0;
   
@@ -80,7 +78,7 @@ void UmlClassItem::remove_preprocessor(Q3CString & s)
   }
 }
 
-void UmlClassItem::remove_arrays(Q3CString & s)
+void UmlClassItem::remove_arrays(QCString & s)
 {
   int index1 = 0;
   

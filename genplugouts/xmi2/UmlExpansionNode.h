@@ -3,14 +3,14 @@
 
 
 #include "UmlBaseExpansionNode.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 
 class UmlExpansionNode : public UmlBaseExpansionNode {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlExpansionNode(void * id, const Q3CString & s) : UmlBaseExpansionNode(id, s) {
+     UmlExpansionNode(void * id, const QCString & s) : UmlBaseExpansionNode(id, s) {
     }
 
     //write the definition if it is not empty for the target language

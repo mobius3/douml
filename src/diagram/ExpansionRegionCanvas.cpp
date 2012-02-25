@@ -27,12 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
 
 #include "ExpansionRegionCanvas.h"
 #include "ExpansionRegionData.h"
@@ -87,7 +84,7 @@ void ExpansionRegionCanvas::delete_it() {
   
   DiagramCanvas::delete_it();
   
-  Q3ValueList<ExpansionNodeCanvas *>::Iterator iter;
+  QValueList<ExpansionNodeCanvas *>::Iterator iter;
   
   for (iter = nodes.begin(); iter != nodes.end(); ++iter)
     // don't empty nodes to manage undo
@@ -154,23 +151,23 @@ void ExpansionRegionCanvas::moveBy(double dx, double dy) {
   DiagramCanvas::moveBy(dx, dy);
   
   // update expansion nodes position
-  Q3ValueList<ExpansionNodeCanvas *>::Iterator iter;
+  QValueList<ExpansionNodeCanvas *>::Iterator iter;
   
   for (iter = nodes.begin(); iter != nodes.end(); ++iter)
     (*iter)->do_moveBy(dx, dy);
 }
 
 void ExpansionRegionCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   double scale = the_canvas()->zoom();
     
   setSize((int) (width_scale100*scale), (int) (height_scale100*scale));
   compute_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
   
   // update expansion nodes position
-  Q3ValueList<ExpansionNodeCanvas *>::Iterator iter;
+  QValueList<ExpansionNodeCanvas *>::Iterator iter;
   
   for (iter = nodes.begin(); iter != nodes.end(); ++iter)
     (*iter)->do_change_scale();
@@ -217,7 +214,7 @@ void ExpansionRegionCanvas::set_z(double z) {
   
   z += 1;
   
-  Q3ValueList<ExpansionNodeCanvas *>::Iterator iter;
+  QValueList<ExpansionNodeCanvas *>::Iterator iter;
   
   for (iter = nodes.begin(); iter != nodes.end(); ++iter)
     (*iter)->set_z(z);
@@ -227,7 +224,7 @@ void ExpansionRegionCanvas::force_sub_inside(bool resize_it) {
   // update sub nodes position to be inside of the region
   // except the expansion nodes whose are in the border
   // or resize it to contains sub elts if resize_it
-  Q3CanvasItemList all = canvas()->allItems();
+  QCanvasItemList all = canvas()->allItems();
   BooL need_sub_upper = FALSE;
   
   if (resize_it)
@@ -241,9 +238,9 @@ void ExpansionRegionCanvas::force_sub_inside(bool resize_it) {
 
 void ExpansionRegionCanvas::check_nodes() {
   // add missing nodes
-  const Q3ValueList<BrowserExpansionNode *> brnodes =
+  const QValueList<BrowserExpansionNode *> brnodes =
     ((BrowserExpansionRegion *) browser_node)->get_nodes();
-  Q3ValueList<BrowserExpansionNode *>::ConstIterator iter;
+  QValueList<BrowserExpansionNode *>::ConstIterator iter;
   double zoom = the_canvas()->zoom();
   QRect r = rect();
   int cx = (int) (x() + (width() - zoom * EXPANSIONNODE_WIDTH) / 2);
@@ -256,7 +253,7 @@ void ExpansionRegionCanvas::check_nodes() {
   // are valid, ie not ouside
   
   for (iter = brnodes.begin(), rank = 0; iter != brnodes.end(); ++iter, rank += 1) {
-    Q3ValueList<ExpansionNodeCanvas *>::ConstIterator itershown;
+    QValueList<ExpansionNodeCanvas *>::ConstIterator itershown;
     
     for (itershown = nodes.begin(); itershown != nodes.end(); ++itershown)
       if ((*itershown)->get_bn() == *iter)
@@ -303,7 +300,7 @@ void ExpansionRegionCanvas::check_nodes() {
 }
 
 void ExpansionRegionCanvas::force_nodes_arround() {
-  Q3ValueList<ExpansionNodeCanvas *>::Iterator iter;
+  QValueList<ExpansionNodeCanvas *>::Iterator iter;
   
   for (iter = nodes.begin(); iter != nodes.end(); ++iter)
     (*iter)->check_position();
@@ -311,7 +308,7 @@ void ExpansionRegionCanvas::force_nodes_arround() {
 
 void ExpansionRegionCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QBrush brsh = p.brush();
   QColor bckgrnd = p.backgroundColor();
@@ -397,8 +394,8 @@ void ExpansionRegionCanvas::open() {
 }
 
 void ExpansionRegionCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -542,7 +539,7 @@ bool ExpansionRegionCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ExpansionRegionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ExpansionRegionCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -553,7 +550,7 @@ void ExpansionRegionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((ExpansionRegionCanvas *) it.current())->itscolor = itscolor;
@@ -565,8 +562,8 @@ void ExpansionRegionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ExpansionRegionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ExpansionRegionCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ExpansionRegionCanvas * x = (ExpansionRegionCanvas *) it.current();
   
@@ -579,7 +576,7 @@ void ExpansionRegionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
 }
 
 QString ExpansionRegionCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString ExpansionRegionCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -595,7 +592,7 @@ void ExpansionRegionCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ExpansionRegionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ExpansionRegionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "expansionregioncanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -617,7 +614,7 @@ void ExpansionRegionCanvas::save(Q3TextStream & st, bool ref, QString & warning)
       st << "nodes";
       indent(+1);
     
-      Q3ValueList<ExpansionNodeCanvas *>::ConstIterator iter;
+      QValueList<ExpansionNodeCanvas *>::ConstIterator iter;
   
       for (iter = nodes.begin(); iter != nodes.end(); ++iter)
 	(*iter)->save(st, FALSE, warning);
@@ -710,7 +707,7 @@ void ExpansionRegionCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
@@ -718,7 +715,7 @@ void ExpansionRegionCanvas::history_load(QBuffer & b) {
 }
 
 void ExpansionRegionCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
 
   disconnect(DrawingSettings::instance(), SIGNAL(changed()),
 	     this, SLOT(modified()));

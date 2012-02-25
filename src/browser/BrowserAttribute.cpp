@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDropEvent>
 
 #include "BrowserAttribute.h"
 #include "BrowserOperation.h"
@@ -220,17 +216,17 @@ void BrowserAttribute::paintCell(QPainter * p, const QColorGroup & cg, int colum
   const QColor & bg = p->backgroundColor();
   
   if (is_marked) {
-    p->setBackgroundMode(Qt::OpaqueMode);
+    p->setBackgroundMode(OpaqueMode);
     p->setBackgroundColor(UmlRedColor);
   }
     
   p->setFont((def->get_isa_class_attribute())
 	     ? ((is_writable()) ? BoldUnderlineFont : UnderlineFont)
 	     : ((is_writable()) ? BoldFont : NormalFont));
-  Q3ListViewItem::paintCell(p, cg, column, width, alignment);
+  QListViewItem::paintCell(p, cg, column, width, alignment);
   
   if (is_marked) {
-    p->setBackgroundMode(Qt::TransparentMode);
+    p->setBackgroundMode(TransparentMode);
     p->setBackgroundColor(bg);
   }
 }
@@ -239,8 +235,8 @@ void BrowserAttribute::menu() {
   const char * st = ((BrowserClass *) parent())->get_stereotype();
   bool item = (!strcmp(st, "enum_pattern") || !strcmp(st, "enum")) &&
     strcmp(get_stereotype(), "attribute");
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -445,7 +441,7 @@ void BrowserAttribute::member_cpp_def(const QString & prefix, const QString &,
   }
 }
 
-void BrowserAttribute::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserAttribute::compute_referenced_by(QList<BrowserNode> & l,
 					     BrowserNode * target)
 {
   IdIterator<BrowserAttribute> it(all);
@@ -461,7 +457,7 @@ void BrowserAttribute::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserAttribute::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserAttribute::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   
   if (! ondelete)
@@ -506,7 +502,7 @@ void BrowserAttribute::post_load()
   }
 }
 
-void BrowserAttribute::save_stereotypes(Q3TextStream & st)
+void BrowserAttribute::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "attribute_stereotypes ";
@@ -522,7 +518,7 @@ void BrowserAttribute::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserAttribute::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserAttribute::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "attribute_ref " << get_ident() << " // " << get_name();
   else {

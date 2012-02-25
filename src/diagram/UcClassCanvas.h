@@ -28,8 +28,6 @@
 
 #include "DiagramCanvas.h"
 #include "Settings.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #define ACTOR_CANVAS_SIZE 40
 
@@ -77,8 +75,8 @@ class UcClassCanvas : public QObject, public DiagramCanvas {
     virtual void set_z(double z);	// only called by upper() & lower()
 
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
     
@@ -87,7 +85,7 @@ class UcClassCanvas : public QObject, public DiagramCanvas {
     virtual void history_load(QBuffer &);
     virtual void history_hide();
 
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static UcClassCanvas * read(char * &, UmlCanvas * canvas, char *);
     virtual void post_loaded();
     

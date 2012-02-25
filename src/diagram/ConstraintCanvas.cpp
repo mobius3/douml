@@ -28,11 +28,8 @@
 
 
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
+#include <qpainter.h>
+#include <qpopupmenu.h> 
 
 #include "ConstraintCanvas.h"
 #include "ConstraintDialog.h"
@@ -92,7 +89,7 @@ ConstraintCanvas::~ConstraintCanvas() {
 void ConstraintCanvas::delete_it() {
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(update()));
   
-  Q3ValueList<BasicData *>::Iterator iter;
+  QValueList<BasicData *>::Iterator iter;
   
   for (iter = connect_list.begin(); iter != connect_list.end(); ++iter)
     disconnect(*iter, 0, this, 0);
@@ -124,8 +121,8 @@ void ConstraintCanvas::open() {
 }
 
 void ConstraintCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu fontsubm(0);
+  QPopupMenu m(0);
+  QPopupMenu fontsubm(0);
   
   m.insertItem(new MenuTitle(TR("Constraint"), m.font()), -1);
   m.insertSeparator();
@@ -217,7 +214,7 @@ bool ConstraintCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ConstraintCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ConstraintCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -228,7 +225,7 @@ void ConstraintCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((ConstraintCanvas *) it.current())->itscolor = itscolor;
@@ -240,8 +237,8 @@ void ConstraintCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ConstraintCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ConstraintCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ConstraintCanvas * x = (ConstraintCanvas *) it.current();
   
@@ -260,7 +257,7 @@ ConstraintCanvas *
 			    CdClassCanvas * cl,
 			    ConstraintCanvas * current)
 {
-  Q3ValueList<BasicData *> list;
+  QValueList<BasicData *> list;
   BrowserNodeList elts;
   
   ((BrowserClass *) cl->get_bn())->get_tree(elts);
@@ -282,7 +279,7 @@ ConstraintCanvas *
     }
   }
   else if (current->indicate_visible) {
-    Q3ValueList<BrowserNode *> & visible = current->hidden_visible;
+    QValueList<BrowserNode *> & visible = current->hidden_visible;
     
     for (bn = elts.first(); bn != 0; bn = elts.next()) {
       if (visible.findIndex(bn) != -1) {
@@ -297,7 +294,7 @@ ConstraintCanvas *
     }
   }
   else {
-    Q3ValueList<BrowserNode *> & hidden = current->hidden_visible;
+    QValueList<BrowserNode *> & hidden = current->hidden_visible;
     
     for (bn = elts.first(); bn != 0; bn = elts.next()) {
       if (hidden.findIndex(bn) == -1) {
@@ -323,9 +320,9 @@ ConstraintCanvas *
   
   current->elements = elts;
   
-  Q3ValueList<BasicData *> & old_list = current->connect_list;
+  QValueList<BasicData *> & old_list = current->connect_list;
   
-  for (Q3ValueList<BasicData *>::Iterator iterd = list.begin(); iterd != list.end(); ++iterd) {
+  for (QValueList<BasicData *>::Iterator iterd = list.begin(); iterd != list.end(); ++iterd) {
     if (old_list.findIndex(*iterd) == -1) {
       old_list.append(*iterd);
       connect(*iterd, SIGNAL(changed()), current, SLOT(update()));
@@ -340,7 +337,7 @@ void ConstraintCanvas::update() {
   cl->check_constraint();
 }
 
-void ConstraintCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ConstraintCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "constraint_ref " << get_ident();
   }
@@ -353,7 +350,7 @@ void ConstraintCanvas::save(Q3TextStream & st, bool ref, QString & warning) cons
     st << ((indicate_visible)  ? "visible" : "hidden");
     indent(+1);
     
-    Q3ValueList<BrowserNode *>::ConstIterator iter;
+    QValueList<BrowserNode *>::ConstIterator iter;
     
     for (iter = hidden_visible.begin(); iter != hidden_visible.end(); iter++) {
       nl_indent(st);
@@ -397,10 +394,10 @@ ConstraintCanvas * ConstraintCanvas::read(char * & st, UmlCanvas * canvas,
 }
 
 void ConstraintCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(update()));
   
-  Q3ValueList<BasicData *>::Iterator iter;
+  QValueList<BasicData *>::Iterator iter;
   
   for (iter = connect_list.begin(); iter != connect_list.end(); ++iter)
     disconnect(*iter, 0, this, 0);
@@ -410,7 +407,7 @@ void ConstraintCanvas::history_load(QBuffer & b) {
   NoteCanvas::history_load(b);
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(update()));
   
-  Q3ValueList<BasicData *>::Iterator iter;
+  QValueList<BasicData *>::Iterator iter;
   
   for (iter = connect_list.begin(); iter != connect_list.end(); ++iter) {
     connect(*iter, SIGNAL(changed()), this, SLOT(update()));

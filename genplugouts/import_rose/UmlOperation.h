@@ -3,8 +3,8 @@
 
 
 #include "UmlBaseOperation.h"
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <qcstring.h>
+#include <qdict.h>
 
 class File;
 class UmlClass;
@@ -15,7 +15,7 @@ class UmlClass;
 // You can modify it as you want (except the constructor)
 class UmlOperation : public UmlBaseOperation {
   public:
-    UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {
+    UmlOperation(void * id, const QCString & n) : UmlBaseOperation(id, n) {
       cpt[kind()] += 1;
     };
 
@@ -29,13 +29,13 @@ class UmlOperation : public UmlBaseOperation {
 
     void importExceptions(File & f);
 
-    void cplusplus(Q3Dict<Q3CString> & prop);
+    void cplusplus(QDict<QCString> & prop);
 
-    void oracle8(Q3Dict<Q3CString> & prop);
+    void oracle8(QDict<QCString> & prop);
 
-    void corba(Q3Dict<Q3CString> & prop);
+    void corba(QDict<QCString> & prop);
 
-    void java(Q3Dict<Q3CString> & prop);
+    void java(QDict<QCString> & prop);
 
 };
 

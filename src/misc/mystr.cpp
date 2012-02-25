@@ -28,14 +28,11 @@
 
 
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3StrList>
-#include <Q3CString>
 
 #include "mystr.h"
 
 char SharedStr::Empty[1] = { 0 };
-Q3StrList SharedStr::shared[SHAREDDICTSIZE];
+QStrList SharedStr::shared[SHAREDDICTSIZE];
 
 unsigned int SharedStr::length() const {
   return strlen(p);
@@ -73,7 +70,7 @@ SharedStr & SharedStr::operator=(const QString & s) {
   return *this;
 }
 
-SharedStr & SharedStr::operator=(const Q3CString & s) {
+SharedStr & SharedStr::operator=(const QCString & s) {
   if (s.isEmpty())
     p = Empty;
   else
@@ -83,7 +80,7 @@ SharedStr & SharedStr::operator=(const Q3CString & s) {
 }
 
 char * SharedStr::assign(const char * s, int len) {
-  Q3StrList & l = shared[len & (SHAREDDICTSIZE-1)];
+  QStrList & l = shared[len & (SHAREDDICTSIZE-1)];
   
   if (l.find(s) == -1)
     l.append(s);
@@ -200,7 +197,7 @@ char * MayBeSharedStr::assign(const QString & s, bool share) {
   return assign((const char *) s, s.length(), share);
 }
 
-char * MayBeSharedStr::assign(const Q3CString & s, bool share) {
+char * MayBeSharedStr::assign(const QCString & s, bool share) {
   return assign((const char *) s, s.length(), share);
 }
 
@@ -280,7 +277,7 @@ MyStr & MyStr::operator=(const QString & s) {
   return *this;
 }
 
-MyStr & MyStr::operator=(const Q3CString &s) {
+MyStr & MyStr::operator=(const QCString &s) {
   assign(s, s.length());
   
   return *this;

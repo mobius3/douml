@@ -6,30 +6,27 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
-#include <q3hbox.h>
+#include <qhbox.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
-#include <q3buttongroup.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3VBoxLayout>
+#include <qbuttongroup.h>
 
 #include "SmallPushButton.h"
 
-Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CString & genview, Q3CString & uml20, Q3CString & pk, Q3CString & vis, Q3CString & primitivetype, Q3CString & genextension, Q3CString & geneclipse, Q3CString & commentexporter, Q3CString & linefeed, Language & lang)
+Dialog::Dialog(QCString & path, QCString & encoding, QCString & nomodel, QCString & genview, QCString & uml20, QCString & pk, QCString & vis, QCString & primitivetype, QCString & genextension, QCString & geneclipse, QCString & commentexporter, QCString & linefeed, Language & lang)
   : QDialog(0, 0, TRUE), _path(path), _encoding(encoding), _nomodel(nomodel), _genview(genview), _uml20(uml20), _pk(pk), _vis(vis), _primitivetype(primitivetype), _genextension(genextension), _geneclipse(geneclipse), _commentexporter(commentexporter), _linefeed(linefeed), _lang(lang) {
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBox * htab;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBox * htab;
   
   vbox->setMargin(5);
   
   // get xmi pathname
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -46,7 +43,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
 
   // to choose encoding
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -83,11 +80,11 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
   
   // uml 2.0 or uml2.1
     
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
-  Q3ButtonGroup * bg = new Q3ButtonGroup(2, Qt::Horizontal, "Uml", htab);
+  QButtonGroup * bg = new QButtonGroup(2, Qt::Horizontal, "Uml", htab);
   
   uml20_rb = new QRadioButton("uml 2.0", bg);
   uml21_rb = new QRadioButton("uml 2.1", bg);
@@ -99,7 +96,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
   
   // generate model
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -109,7 +106,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
     
   // generate view checkbox
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -119,7 +116,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
     
   // generate pk_ prefix
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -129,7 +126,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
     
   // generate vis_ prefix
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -139,7 +136,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
     
   // use PrimitiveType rather than DataType
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -149,7 +146,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
   
   // generate extension
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -159,7 +156,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
     
   // generate for Eclipse
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -169,7 +166,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
     
   // comment exporter
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -179,7 +176,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
     
   // generate &#10; rather than linefeed
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -189,7 +186,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
     
   // uml , c++, java, cancel buttons
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -215,7 +212,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
 
   // help
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -228,10 +225,10 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CS
 void Dialog::polish() {
   QDialog::polish();
   
-  // try to read .doumlrc
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // try to read .boumlrc
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
+  QString s = QDir::home().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
 
 #ifdef WIN32
@@ -240,7 +237,7 @@ void Dialog::polish() {
     
     if (! hd.isEmpty()) {
       QDir d(hd);
-      QString s2 = d.absFilePath(".doumlrc");
+      QString s2 = d.absFilePath(".boumlrc");
       
       fp = fopen((const char *) s2, "r");
     }
@@ -275,7 +272,7 @@ void Dialog::polish() {
 }
 
 void Dialog::browse() {
-  QString s = Q3FileDialog::getSaveFileName(_path, "*.xmi", 0);
+  QString s = QFileDialog::getSaveFileName(_path, "*.xmi", 0);
   
   if (! s.isEmpty()) {
     if (s.right(4).lower() != ".xmi")

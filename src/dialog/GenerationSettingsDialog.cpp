@@ -28,20 +28,18 @@
 
 
 #include <qcursor.h>
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qpushbutton.h> 
-#include <q3filedialog.h>
-#include <q3combobox.h>
+#include <qfiledialog.h>
+#include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h> 
-#include <q3buttongroup.h>
+#include <qbuttongroup.h>
 #include <qsplitter.h> 
 #include <qspinbox.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "GenerationSettingsDialog.h"
 #include "BrowserView.h"
@@ -55,7 +53,7 @@
 QSize GenerationSettingsDialog::previous_size;
 
 GenerationSettingsDialog::GenerationSettingsDialog()
-    : Q3TabDialog(0, "Generation Settings dialog", TRUE, 0) {
+    : QTabDialog(0, "Generation Settings dialog", TRUE, 0) {
   setCaption(TR("Generation settings dialog"));
   
   setOkButton(TR("OK"));
@@ -86,7 +84,7 @@ GenerationSettingsDialog::GenerationSettingsDialog()
 }
 
 void GenerationSettingsDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::setsize_center(this, previous_size, 29.0/30, 19.0/29);
 }
 
@@ -95,7 +93,7 @@ GenerationSettingsDialog::~GenerationSettingsDialog() {
 }
 
 void GenerationSettingsDialog::init_types() {
-  Q3Grid * grid = new Q3Grid(1, this);
+  QGrid * grid = new QGrid(1, this);
   
   grid->setMargin(3);
   grid->setSpacing(3);
@@ -108,7 +106,7 @@ void GenerationSettingsDialog::init_types() {
 }
 
 void GenerationSettingsDialog::init_stereotypes() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   
   grid->setMargin(3);
   grid->setSpacing(3);
@@ -129,13 +127,13 @@ void GenerationSettingsDialog::init_stereotypes() {
   addTab(grid, TR("Stereotypes"));
 }  
 
-static void init_indent(Q3ComboBox * cb, const char * v)
+static void init_indent(QComboBox * cb, const char * v)
 {
   cb->insertItem(TR("empty"));
   cb->insertItem(TR("1 space"));
   
-  Q3CString f = "%1 spaces";
-  Q3CString s = "2";
+  QCString f = "%1 spaces";
+  QCString s = "2";
   
   for (char c = '2'; c != '9'; c += 1) {
     s[0] = c;
@@ -154,8 +152,8 @@ static void init_indent(Q3ComboBox * cb, const char * v)
 }
 
 void GenerationSettingsDialog::init_cpp1() {
-  Q3VBox * vtab = new Q3VBox(this);
-  Q3Grid * grid = new Q3Grid(2, vtab);
+  QVBox * vtab = new QVBox(this);
+  QGrid * grid = new QGrid(2, vtab);
   
   grid->setMargin(3);
   grid->setSpacing(3);
@@ -176,11 +174,11 @@ void GenerationSettingsDialog::init_cpp1() {
   
   new QLabel(vtab);
   
-  Q3HBox * htab = new Q3HBox(vtab);
+  QHBox * htab = new QHBox(vtab);
   
   htab->setMargin(3);
   htab->setStretchFactor(new QLabel(TR("generated/reversed \nheader file extension : "), htab), 0);
-  edcpp_h_extension = new Q3ComboBox(TRUE, htab);
+  edcpp_h_extension = new QComboBox(TRUE, htab);
   htab->setStretchFactor(edcpp_h_extension, 100);
   edcpp_h_extension->insertItem(GenerationSettings::cpp_h_extension);
   edcpp_h_extension->setCurrentItem(0);
@@ -188,7 +186,7 @@ void GenerationSettingsDialog::init_cpp1() {
   edcpp_h_extension->insertItem("hh");
   
   htab->setStretchFactor(new QLabel(TR("    generated/reversed \n    source file extension : "), htab), 0);
-  edcpp_src_extension = new Q3ComboBox(TRUE, htab);
+  edcpp_src_extension = new QComboBox(TRUE, htab);
   htab->setStretchFactor(edcpp_src_extension, 100);
   edcpp_src_extension->insertItem(GenerationSettings::cpp_src_extension);
   edcpp_src_extension->setCurrentItem(0);
@@ -196,7 +194,7 @@ void GenerationSettingsDialog::init_cpp1() {
   edcpp_src_extension->insertItem("cc");
 
   htab->setStretchFactor(new QLabel("    #include : ", htab), 0);
-  cpp_include_with_path_cb = new Q3ComboBox(FALSE, htab);
+  cpp_include_with_path_cb = new QComboBox(FALSE, htab);
   cpp_include_with_path_cb->insertItem(TR("without path"));
   cpp_include_with_path_cb->insertItem(TR("with absolute path"));
   cpp_include_with_path_cb->insertItem(TR("with relative path"));
@@ -210,7 +208,7 @@ void GenerationSettingsDialog::init_cpp1() {
   else
     cpp_include_with_path_cb->setCurrentItem(1);
 
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   
   htab->setStretchFactor(new QLabel(TR("force namespace \nprefix generation : "), htab), 0);
@@ -226,7 +224,7 @@ void GenerationSettingsDialog::init_cpp1() {
   cpp_javadoc_cb->setChecked(GenerationSettings::cpp_javadoc_comment);
   
   htab->setStretchFactor(new QLabel(TR("            visibility indent : "), htab), 0);
-  indentvisi_cb = new Q3ComboBox(FALSE, htab);
+  indentvisi_cb = new QComboBox(FALSE, htab);
   init_indent(indentvisi_cb, GenerationSettings::cpp_indent_visibility);
   
   htab->setStretchFactor(new QLabel(htab), 1000);
@@ -238,7 +236,7 @@ void GenerationSettingsDialog::init_cpp1() {
 }
 
 void GenerationSettingsDialog::init_cpp2() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   
   grid->setMargin(3);
   grid->setSpacing(3);
@@ -279,16 +277,16 @@ void GenerationSettingsDialog::init_cpp2() {
 }
 
 void GenerationSettingsDialog::init_cpp3() {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3Grid * grid2;
-  Q3HBox * htab;
+  QGrid * grid = new QGrid(2, this);
+  QGrid * grid2;
+  QHBox * htab;
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid);
 
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   (new QLabel(TR("Multiplicity"), grid2))->setAlignment(Qt::AlignCenter);
   new QLabel(grid2);
   new QLabel(TR("unspecified,\nor 1"), grid2);
@@ -314,9 +312,9 @@ void GenerationSettingsDialog::init_cpp3() {
   new QLabel(grid);
 
   new QLabel(TR("Association\nand\naggregation\ndefault\ndeclaration :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   (new QLabel(TR("Multiplicity"), grid2))->setAlignment(Qt::AlignCenter);
-  htab = new Q3HBox(grid2);
+  htab = new QHBox(grid2);
   htab->setStretchFactor(new QLabel(htab), 1000);
   (new QLabel(TR("Association "), htab))->setAlignment(Qt::AlignCenter);
   (new QLabel(htab))->setPixmap(*associationButton);
@@ -334,9 +332,9 @@ void GenerationSettingsDialog::init_cpp3() {
   new QLabel(grid);
 
   new QLabel(TR("Composition\ndefault\ndeclaration :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   (new QLabel(TR("Multiplicity"), grid2))->setAlignment(Qt::AlignCenter);
-  htab = new Q3HBox(grid2);
+  htab = new QHBox(grid2);
   htab->setStretchFactor(new QLabel(htab), 1000);
   (new QLabel(TR("Composition "), htab))->setAlignment(Qt::AlignCenter);
   (new QLabel(htab))->setPixmap(*aggregationByValueButton);
@@ -362,23 +360,23 @@ void GenerationSettingsDialog::init_cpp3() {
 }
 
 void GenerationSettingsDialog::init_cpp4() {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3VBox * vtab;
-  Q3HBox * htab;
-  Q3ButtonGroup * bg;
+  QGrid * grid = new QGrid(2, this);
+  QVBox * vtab;
+  QHBox * htab;
+  QButtonGroup * bg;
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("Get operation\ndefault definition : "), grid);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   cpp_get_visibility.init(htab, GenerationSettings::cpp_get_visibility,
 			       FALSE, TR("Visibility"));
 
-  bg = new Q3ButtonGroup(3, Qt::Horizontal, TR("Modifiers"), htab);
+  bg = new QButtonGroup(3, Qt::Horizontal, TR("Modifiers"), htab);
   bg->setExclusive(FALSE);
   cpp_get_inline_cb = new QCheckBox("inline", bg);
   cpp_get_value_const_cb = new QCheckBox(TR("const value"), bg);
@@ -405,13 +403,13 @@ void GenerationSettingsDialog::init_cpp4() {
   
   new QLabel(TR("Set operation\ndefault definition : "), grid);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   cpp_set_visibility.init(htab, GenerationSettings::cpp_get_visibility,
 			  FALSE, TR("Visibility"));
   
-  bg = new Q3ButtonGroup(4, Qt::Horizontal, TR("Modifiers"), htab);
+  bg = new QButtonGroup(4, Qt::Horizontal, TR("Modifiers"), htab);
   bg->setExclusive(FALSE);
   cpp_set_inline_cb = new QCheckBox("inline", bg);
   cpp_set_param_const_cb = new QCheckBox(TR("const param"), bg);
@@ -444,7 +442,7 @@ void GenerationSettingsDialog::init_cpp4() {
   //new QLabel(grid);
 
   new QLabel(TR("Default type forms\nfor the enums :"), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   new QLabel(TR("input\nparameter : "), htab);
   cpp_enum_in = new LineEdit(htab);
@@ -464,7 +462,7 @@ void GenerationSettingsDialog::init_cpp4() {
   cpp_enum_return->setFont(font);
   
   new QLabel(TR("Default type forms for\nthe types not given\nin the first tab:"), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   new QLabel(TR("input\nparameter : "), htab);
   cpp_in = new LineEdit(htab);
@@ -492,7 +490,7 @@ void GenerationSettingsDialog::init_cpp4() {
   edcpp_oper_decl->setFont(font);
 
   new QLabel(TR("Operation default \ndefinition :"), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   edcpp_oper_def = new MultiLineEdit(htab);
   edcpp_oper_def->setText(GenerationSettings::cpp_oper_def);
   edcpp_oper_def->setFont(font);
@@ -512,15 +510,15 @@ void GenerationSettingsDialog::init_cpp5() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QHBox * htab;
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("External classes : \nname making\n#include, using"), htab);
   edcpp_external_class_decl = new MultiLineEdit(htab);
   edcpp_external_class_decl->setText(GenerationSettings::cpp_external_class_decl);
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   QLabel * lbl2 = 
     new QLabel(TR("External types :\n#include form(s),\nusing, etc..."), htab);
@@ -537,14 +535,14 @@ void GenerationSettingsDialog::init_cpp5() {
 }
 
 void GenerationSettingsDialog::init_java1() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("file default \ncontent :"), grid);
   
-  Q3HBox * htab = new Q3HBox(grid);
+  QHBox * htab = new QHBox(grid);
 
   htab->setMargin(3);
   
@@ -556,25 +554,25 @@ void GenerationSettingsDialog::init_java1() {
   font.setFixedPitch(TRUE);
   edjava_src_content->setFont(font);
 
-  Q3VBox * vtab = new Q3VBox(htab);
-  Q3HBox * htab2 = new Q3HBox(vtab);
+  QVBox * vtab = new QVBox(htab);
+  QHBox * htab2 = new QHBox(vtab);
 
   vtab->setMargin(3);
   htab2->setMargin(3);
 
   new QLabel(TR("    generated/reversed file extension "), htab2);
-  edjava_extension = new Q3ComboBox(TRUE, htab2);
+  edjava_extension = new QComboBox(TRUE, htab2);
   edjava_extension->insertItem(GenerationSettings::java_extension);
   edjava_extension->setCurrentItem(0);
   edjava_extension->insertItem("java");
 
-  htab2 = new Q3HBox(vtab);
+  htab2 = new QHBox(vtab);
   htab2->setMargin(3);
   new QLabel(TR("    generate Javadoc style comment "), htab2);
   java_javadoc_cb = new QCheckBox(htab2);
   java_javadoc_cb->setChecked(GenerationSettings::java_javadoc_comment);
 
-  htab2 = new Q3HBox(vtab);
+  htab2 = new QHBox(vtab);
   htab2->setMargin(3);
   new QLabel(TR("    force package prefix generation "), htab2);
   java_force_package_gen_cb = new QCheckBox(htab2);
@@ -607,15 +605,15 @@ void GenerationSettingsDialog::init_java1() {
 }
 
 void GenerationSettingsDialog::init_java2() {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3Grid * grid2;
+  QGrid * grid = new QGrid(2, this);
+  QGrid * grid2;
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid);
 
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edjava_attr_decl[0] = new MultiLineEdit(grid2);
   new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2);
@@ -639,7 +637,7 @@ void GenerationSettingsDialog::init_java2() {
   new QLabel(grid);
   
   new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edjava_rel_decl[0] = new MultiLineEdit(grid2);
   new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2);
@@ -658,9 +656,9 @@ void GenerationSettingsDialog::init_java2() {
 }  
 
 void GenerationSettingsDialog::init_java3() {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3HBox * htab;
-  Q3ButtonGroup * bg;
+  QGrid * grid = new QGrid(2, this);
+  QHBox * htab;
+  QButtonGroup * bg;
   
   grid->setMargin(3);
   grid->setSpacing(3);
@@ -687,13 +685,13 @@ void GenerationSettingsDialog::init_java3() {
   edjava_enum_pattern_item_case->setFont(font);
 
   new QLabel(TR("Get operation\ndefault definition : "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   java_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
 			   TRUE, TR("Visibility (shared with Php)"));
   java_get_visibility.connect(SIGNAL(clicked (int)), this, SLOT(java_get_visi_changed(int)));
   
-  bg = new Q3ButtonGroup(1, Qt::Horizontal, TR("Modifiers"), htab);
+  bg = new QButtonGroup(1, Qt::Horizontal, TR("Modifiers"), htab);
   bg->setExclusive(FALSE);
   java_get_final_cb = new QCheckBox("final", bg);
   java_get_final_cb->setChecked(GenerationSettings::java_get_final);
@@ -711,13 +709,13 @@ void GenerationSettingsDialog::init_java3() {
 	  this, SLOT(follow_java_get_name()));
   
   new QLabel(TR("Set operation\ndefault definition : "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   java_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
 			   TRUE, TR("Visibility (shared with Php)"));
   java_set_visibility.connect(SIGNAL(clicked (int)), this, SLOT(java_set_visi_changed(int)));
   
-  bg = new Q3ButtonGroup(2, Qt::Horizontal, TR("Modifiers"), htab);
+  bg = new QButtonGroup(2, Qt::Horizontal, TR("Modifiers"), htab);
   bg->setExclusive(FALSE);
   java_set_final_cb = new QCheckBox("final", bg);
   java_set_param_final_cb = new QCheckBox(TR("final parameter"), bg);
@@ -755,16 +753,16 @@ void GenerationSettingsDialog::init_java4() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QHBox * htab;
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("External classes : \nname making"), htab);
   edjava_external_class_decl = new LineEdit(htab);
   edjava_external_class_decl->setText(GenerationSettings::java_external_class_decl);
 
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   QLabel * lbl2 = 
     new QLabel(TR("External types :\nimport form(s) etc..."), htab);
@@ -780,14 +778,14 @@ void GenerationSettingsDialog::init_java4() {
 }
 
 void GenerationSettingsDialog::init_php1() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("file default \ncontent :"), grid);
   
-  Q3HBox * htab = new Q3HBox(grid);
+  QHBox * htab = new QHBox(grid);
 
   htab->setMargin(3);
   
@@ -799,28 +797,28 @@ void GenerationSettingsDialog::init_php1() {
   font.setFixedPitch(TRUE);
   edphp_src_content->setFont(font);
 
-  Q3VBox * vtab = new Q3VBox(htab);
-  Q3HBox * htab2 = new Q3HBox(vtab);
+  QVBox * vtab = new QVBox(htab);
+  QHBox * htab2 = new QHBox(vtab);
 
   vtab->setMargin(3);
   htab2->setMargin(3);
 
   new QLabel(TR("    generated / reversed file extension : "), htab2);
-  edphp_extension = new Q3ComboBox(TRUE, htab2);
+  edphp_extension = new QComboBox(TRUE, htab2);
   edphp_extension->insertItem(GenerationSettings::php_extension);
   edphp_extension->setCurrentItem(0);
   edphp_extension->insertItem("php");
 
-  htab2 = new Q3HBox(vtab);
+  htab2 = new QHBox(vtab);
   htab2->setMargin(3);
   new QLabel(TR("    generate Javadoc style comment : "), htab2);
   php_javadoc_cb = new QCheckBox(htab2);
   php_javadoc_cb->setChecked(GenerationSettings::php_javadoc_comment);
 
-  htab2 = new Q3HBox(vtab);
+  htab2 = new QHBox(vtab);
   htab2->setMargin(3);
   new QLabel(TR("    require_once : "), htab2);
-  php_require_with_path_cb = new Q3ComboBox(FALSE, htab2);
+  php_require_with_path_cb = new QComboBox(FALSE, htab2);
   php_require_with_path_cb->insertItem(TR("without path"));
   php_require_with_path_cb->insertItem(TR("with absolute path"));
   php_require_with_path_cb->insertItem(TR("with relative path"));
@@ -834,7 +832,7 @@ void GenerationSettingsDialog::init_php1() {
   else
     php_require_with_path_cb->setCurrentItem(1);
   
-  htab2 = new Q3HBox(vtab);
+  htab2 = new QHBox(vtab);
   htab2->setMargin(3);
   new QLabel(TR("    force namespace prefix generation : "), htab2);
   php_force_namespace_gen_cb = new QCheckBox(htab2);
@@ -862,7 +860,7 @@ void GenerationSettingsDialog::init_php1() {
 }
 
 void GenerationSettingsDialog::init_php2() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   
   grid->setMargin(3);
   grid->setSpacing(3);
@@ -884,8 +882,8 @@ void GenerationSettingsDialog::init_php2() {
   edphp_rel_decl->setText(GenerationSettings::php_rel_decl);
   edphp_rel_decl->setFont(font);
 
-  Q3HBox * htab;
-  Q3ButtonGroup * bg;
+  QHBox * htab;
+  QButtonGroup * bg;
   
   new QLabel(TR("Enumeration item \ndefault definition :"), grid);
   edphp_enum_item_decl = new MultiLineEdit(grid);
@@ -897,13 +895,13 @@ void GenerationSettingsDialog::init_php2() {
   edphp_enum_item_decl->setFont(font);
 
   new QLabel(TR("Get operation\ndefault definition : "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   php_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
 			   FALSE, TR("Visibility (shared with Java)"));
   php_get_visibility.connect(SIGNAL(clicked (int)), this, SLOT(php_get_visi_changed(int)));
   
-  bg = new Q3ButtonGroup(1, Qt::Horizontal, TR("Modifiers"), htab);
+  bg = new QButtonGroup(1, Qt::Horizontal, TR("Modifiers"), htab);
   bg->setExclusive(FALSE);
   php_get_final_cb = new QCheckBox("final", bg);
   php_get_final_cb->setChecked(GenerationSettings::php_get_final);
@@ -921,13 +919,13 @@ void GenerationSettingsDialog::init_php2() {
 	  this, SLOT(follow_php_get_name()));
   
   new QLabel(TR("Set operation\ndefault definition : "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   php_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
 			   FALSE, TR("Visibility (shared with Java)"));
   php_set_visibility.connect(SIGNAL(clicked (int)), this, SLOT(php_set_visi_changed(int)));
   
-  bg = new Q3ButtonGroup(2, Qt::Horizontal, TR("Modifiers"), htab);
+  bg = new QButtonGroup(2, Qt::Horizontal, TR("Modifiers"), htab);
   bg->setExclusive(FALSE);
   php_set_final_cb = new QCheckBox("final", bg);
   php_set_final_cb->setChecked(GenerationSettings::php_set_final);
@@ -966,17 +964,17 @@ void GenerationSettingsDialog::init_php2() {
 }  
 
 void GenerationSettingsDialog::init_python1() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("indent step :"), grid);
   
-  Q3HBox * htab = new Q3HBox(grid);
+  QHBox * htab = new QHBox(grid);
 
   htab->setMargin(3);
-  indentstep_cb = new Q3ComboBox(FALSE, htab);
+  indentstep_cb = new QComboBox(FALSE, htab);
   init_indent(indentstep_cb, GenerationSettings::python_indent_step);
   
   QLabel * lbl = new QLabel(htab);
@@ -986,7 +984,7 @@ void GenerationSettingsDialog::init_python1() {
   
   new QLabel(TR("file default \ncontent :"), grid);
   
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   edpython_src_content = new MultiLineEdit(htab);
   edpython_src_content->setText(GenerationSettings::python_src_content);
@@ -997,14 +995,14 @@ void GenerationSettingsDialog::init_python1() {
   edpython_src_content->setFont(font);
 
   new QLabel(TR("    generated /\n    reversed\n    file extension : "), htab);
-  edpython_extension = new Q3ComboBox(TRUE, htab);
+  edpython_extension = new QComboBox(TRUE, htab);
   edpython_extension->insertItem(GenerationSettings::python_extension);
   edpython_extension->setCurrentItem(0);
   edpython_extension->insertItem("py");
 
   new QLabel(TR("Class default \ndeclaration :"), grid);
 
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   edpython_class_decl = new MultiLineEdit(htab);
   edpython_class_decl->setText(GenerationSettings::python_class_decl);
@@ -1026,7 +1024,7 @@ void GenerationSettingsDialog::init_python1() {
 
   new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid);
 
-  Q3Grid * grid2 = new Q3Grid(2, grid);
+  QGrid * grid2 = new QGrid(2, grid);
 
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edpython_attr_decl[0] = new MultiLineEdit(grid2);
@@ -1047,14 +1045,14 @@ void GenerationSettingsDialog::init_python1() {
 }
 
 void GenerationSettingsDialog::init_python2() {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3Grid * grid2;
+  QGrid * grid = new QGrid(2, this);
+  QGrid * grid2;
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edpython_rel_decl[0][0] = new MultiLineEdit(grid2);
 
@@ -1077,7 +1075,7 @@ void GenerationSettingsDialog::init_python2() {
   new QLabel(grid);
   
   new QLabel(TR("Composition\ndefault\ndeclaration :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edpython_rel_decl[1][0] = new MultiLineEdit(grid2);
   new QLabel(TR("other\nmultiplicity"), grid2);
@@ -1087,13 +1085,13 @@ void GenerationSettingsDialog::init_python2() {
     edpython_rel_decl[1][i]->setFont(font);
   }
 
-  Q3HBox * htab;
+  QHBox * htab;
   
   new QLabel(grid);
   new QLabel(grid);
 
   new QLabel(TR("Get operation\ndefault definition : "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   new QLabel(TR("  name : "), htab);
   edpython_get_name = new LineEdit(htab);
@@ -1108,7 +1106,7 @@ void GenerationSettingsDialog::init_python2() {
 	  this, SLOT(follow_python_get_name()));
   
   new QLabel(TR("Set operation\ndefault definition : "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   new QLabel(TR("  name : "), htab);
   edpython_set_name = new LineEdit(htab);
@@ -1126,7 +1124,7 @@ void GenerationSettingsDialog::init_python2() {
   new QLabel(grid);
   
   new QLabel(TR("Operation\ndefault definition :"), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   htab->setMargin(3);
   edpython_oper_def = new MultiLineEdit(htab);
   edpython_oper_def->setText(GenerationSettings::python_oper_def);
@@ -1151,16 +1149,16 @@ void GenerationSettingsDialog::init_python3() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QHBox * htab;
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("External classes : \nname making\nimport"), htab);
   edpython_external_class_decl = new MultiLineEdit(htab);
   edpython_external_class_decl->setText(GenerationSettings::python_external_class_decl);
 
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   QLabel * lbl2 = 
     new QLabel(TR("External types :\nimport form(s)"), htab);
@@ -1180,9 +1178,9 @@ void GenerationSettingsDialog::init_idl1() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QHBox * htab;
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("file default \ncontent :"), htab);
@@ -1195,12 +1193,12 @@ void GenerationSettingsDialog::init_idl1() {
   edidl_src_content->setFont(font);
 
   new QLabel(TR("    file extension : "), htab);
-  edidl_extension = new Q3ComboBox(TRUE, htab);
+  edidl_extension = new QComboBox(TRUE, htab);
   edidl_extension->insertItem(GenerationSettings::idl_extension);
   edidl_extension->setCurrentItem(0);
   edidl_extension->insertItem("Idl");
 
-  Q3Grid * grid = new Q3Grid(2, split);
+  QGrid * grid = new QGrid(2, split);
   
   grid->setMargin(3);
   grid->setSpacing(3);
@@ -1249,14 +1247,14 @@ void GenerationSettingsDialog::init_idl1() {
 }
 
 void GenerationSettingsDialog::init_idl2() {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3Grid * grid2;
+  QGrid * grid = new QGrid(2, this);
+  QGrid * grid2;
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("Attribute default \ndeclaration :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_attr_decl[0] = new MultiLineEdit(grid2);
   new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2);
@@ -1280,7 +1278,7 @@ void GenerationSettingsDialog::init_idl2() {
   new QLabel(grid);
   
   new QLabel(TR("Attribute default \ndeclaration in\nvaluetype :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_valuetype_attr_decl[0] = new MultiLineEdit(grid2);
   new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2);
@@ -1296,7 +1294,7 @@ void GenerationSettingsDialog::init_idl2() {
   new QLabel(grid);
   
   new QLabel(TR("Constant default \ndeclaration :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_const_decl[0] = new MultiLineEdit(grid2);
   new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2);
@@ -1315,15 +1313,15 @@ void GenerationSettingsDialog::init_idl2() {
 }
 
 void GenerationSettingsDialog::init_idl3() {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3Grid * grid2;
+  QGrid * grid = new QGrid(2, this);
+  QGrid * grid2;
   int i;
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_rel_decl[0] = new MultiLineEdit(grid2);
   new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2);
@@ -1343,7 +1341,7 @@ void GenerationSettingsDialog::init_idl3() {
   new QLabel(grid);
   
   new QLabel(TR("Association and\naggregation\ndefault\ndeclaration in\nvaluetype :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_valuetype_rel_decl[0] = new MultiLineEdit(grid2);
   new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2);
@@ -1359,7 +1357,7 @@ void GenerationSettingsDialog::init_idl3() {
   new QLabel(grid);
   
   new QLabel(TR("Association and\naggregation\ndefault\ndeclaration in\nunion:"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_union_rel_decl[0] = new MultiLineEdit(grid2);
   new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2);
@@ -1378,15 +1376,15 @@ void GenerationSettingsDialog::init_idl3() {
 }
 
 void GenerationSettingsDialog::init_idl4() {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3Grid * grid2;
-  Q3HBox * htab;
+  QGrid * grid = new QGrid(2, this);
+  QGrid * grid2;
+  QHBox * htab;
   
   grid->setMargin(3);
   grid->setSpacing(3);
 
   new QLabel(TR("Union item \ndefault \ndeclaration :"), grid);
-  grid2 = new Q3Grid(2, grid);
+  grid2 = new QGrid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_union_item_decl[0] = new MultiLineEdit(grid2);
   new QLabel(TR("multiplicity '*'\nor 'a..b'"), grid2);
@@ -1418,7 +1416,7 @@ void GenerationSettingsDialog::init_idl4() {
   new QLabel(grid);
   
   new QLabel(TR("Get operation\ndefault definition : "), grid);  
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   new QLabel(TR("name : "), htab);
   edidl_get_name = new LineEdit(htab);
   edidl_get_name->setText(GenerationSettings::idl_get_name);
@@ -1432,7 +1430,7 @@ void GenerationSettingsDialog::init_idl4() {
 	  this, SLOT(follow_idl_get_name()));
   
   new QLabel(TR("Set operation\ndefault definition : "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   idl_set_oneway_cb = new QCheckBox("oneway", htab);
   idl_set_oneway_cb->setChecked(GenerationSettings::idl_set_oneway);
   
@@ -1467,15 +1465,15 @@ void GenerationSettingsDialog::init_idl5() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QHBox * htab;
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("External classes : \nname making\n#include"), htab);
   edidl_external_class_decl = new MultiLineEdit(htab);
   edidl_external_class_decl->setText(GenerationSettings::idl_external_class_decl);
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   QLabel * lbl2 = 
     new QLabel(TR("External types :\n#include form(s)\netc..."), htab);
@@ -1496,33 +1494,33 @@ void GenerationSettingsDialog::init_descriptions() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QHBox * htab;
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   new QLabel(TR("Artifact\ndefault\ndescription : "), htab);
   edartifact_default_description = new MultiLineEdit(htab);
   edartifact_default_description->setText(GenerationSettings::artifact_default_description);
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   new QLabel(TR("Class\ndefault\ndescription : "), htab);
   edclass_default_description = new MultiLineEdit(htab);
   edclass_default_description->setText(GenerationSettings::class_default_description);
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   new QLabel(TR("Operation\ndefault\ndescription : "), htab);
   edoperation_default_description = new MultiLineEdit(htab);
   edoperation_default_description->setText(GenerationSettings::operation_default_description);
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   new QLabel(TR("Attribute\ndefault\ndescription : "), htab);
   edattribute_default_description = new MultiLineEdit(htab);
   edattribute_default_description->setText(GenerationSettings::attribute_default_description);
   
-  htab = new Q3HBox(split);
+  htab = new QHBox(split);
   htab->setMargin(3);
   new QLabel(TR("Relation\ndefault\ndescription : "), htab);
   edrelation_default_description = new MultiLineEdit(htab);
@@ -1539,12 +1537,12 @@ void GenerationSettingsDialog::init_dirs() {
   Absolute = TR("Set it absolute");
 
   QPushButton * button;
-  Q3VBox * vtab = new Q3VBox(this);
-  Q3HBox * htab;
+  QVBox * vtab = new QVBox(this);
+  QHBox * htab;
   
   vtab->setMargin(3);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   new QLabel(TR("Defining a project root directory allows to specify \
 packages's generation directory relative to the root directory rather \
@@ -1552,7 +1550,7 @@ than absolute.\n"
 	     "A root directory may itself be relative to the project path"),
 	     htab);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   QLabel * lbl1 = new QLabel(TR("C++ root dir : "), htab);
   edcpproot = new LineEdit(GenerationSettings::cpp_root_dir, htab);
@@ -1566,11 +1564,11 @@ than absolute.\n"
   connect(cpprelbutton, SIGNAL(clicked ()), this, SLOT(cpp_relative()));
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   QLabel * lbl2 = new QLabel(TR("Java root dir : "), htab);
   edjavaroot = new LineEdit(GenerationSettings::java_root_dir, htab);
@@ -1584,11 +1582,11 @@ than absolute.\n"
   connect(javarelbutton, SIGNAL(clicked ()), this, SLOT(java_relative()));
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   QLabel * lbl3 = new QLabel(TR("Php root dir : "), htab);
   edphproot = new LineEdit(GenerationSettings::php_root_dir, htab);
@@ -1602,11 +1600,11 @@ than absolute.\n"
   connect(phprelbutton, SIGNAL(clicked ()), this, SLOT(php_relative()));
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   QLabel * lbl4 = new QLabel(TR("Python root dir : "), htab);
   edpythonroot = new LineEdit(GenerationSettings::python_root_dir, htab);
@@ -1620,11 +1618,11 @@ than absolute.\n"
   connect(pythonrelbutton, SIGNAL(clicked ()), this, SLOT(python_relative()));
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   QLabel * lbl5 = new QLabel(TR("Idl root dir : "), htab);
   edidlroot = new LineEdit(GenerationSettings::idl_root_dir, htab);
@@ -1640,7 +1638,7 @@ than absolute.\n"
   
   same_width(lbl1, lbl2, lbl3, lbl4, lbl5);
   
-  vtab->setStretchFactor(new Q3HBox(vtab), 1000);
+  vtab->setStretchFactor(new QHBox(vtab), 1000);
   
   addTab(vtab, TR("Directory"));
 }
@@ -1752,7 +1750,7 @@ void GenerationSettingsDialog::follow_idl_set_name() {
   }
 }
 
-static const char * get_indent(Q3ComboBox * cb)
+static const char * get_indent(QComboBox * cb)
 {
   int n = cb->currentItem();
   
@@ -2082,7 +2080,7 @@ void GenerationSettingsDialog::accept() {
 
 void GenerationSettingsDialog::cpproot_browse() {
   QString dir =
-    Q3FileDialog::getExistingDirectory(edcpproot->text(), this, 0,
+    QFileDialog::getExistingDirectory(edcpproot->text(), this, 0,
 				      TR("C++ root directory"));
   
   if (! dir.isNull()) {
@@ -2093,7 +2091,7 @@ void GenerationSettingsDialog::cpproot_browse() {
 
 void GenerationSettingsDialog::javaroot_browse() {
   QString dir =
-    Q3FileDialog::getExistingDirectory(edjavaroot->text(), this, 0,
+    QFileDialog::getExistingDirectory(edjavaroot->text(), this, 0,
 				      TR("Java root directory"));
   
   if (! dir.isNull()) {
@@ -2104,7 +2102,7 @@ void GenerationSettingsDialog::javaroot_browse() {
 
 void GenerationSettingsDialog::phproot_browse() {
   QString dir =
-    Q3FileDialog::getExistingDirectory(edphproot->text(), this, 0,
+    QFileDialog::getExistingDirectory(edphproot->text(), this, 0,
 				      TR("Php root directory"));
   
   if (! dir.isNull()) {
@@ -2115,7 +2113,7 @@ void GenerationSettingsDialog::phproot_browse() {
 
 void GenerationSettingsDialog::pythonroot_browse() {
   QString dir =
-    Q3FileDialog::getExistingDirectory(edpythonroot->text(), this, 0,
+    QFileDialog::getExistingDirectory(edpythonroot->text(), this, 0,
 				      TR("Python root directory"));
   
   if (! dir.isNull()) {
@@ -2126,7 +2124,7 @@ void GenerationSettingsDialog::pythonroot_browse() {
 
 void GenerationSettingsDialog::idlroot_browse() {
   QString dir =
-    Q3FileDialog::getExistingDirectory(edidlroot->text(), this, 0,
+    QFileDialog::getExistingDirectory(edidlroot->text(), this, 0,
 				      TR("Idl root directory"));
   
   if (! dir.isNull()) {

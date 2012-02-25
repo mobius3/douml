@@ -4,7 +4,7 @@
 
 #include "UmlPinParameter.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlActivityPin;
 class UmlActivityAction;
@@ -24,7 +24,7 @@ class UmlBaseActivityPin : public UmlPinParameter {
 
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityPin(void * id, const Q3CString & s) : UmlPinParameter(id, s) {
+     UmlBaseActivityPin(void * id, const QCString & s) : UmlPinParameter(id, s) {
     }
 
 };

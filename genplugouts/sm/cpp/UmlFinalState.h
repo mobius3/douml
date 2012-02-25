@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseFinalState.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlClass;
 class UmlState;
@@ -16,7 +16,7 @@ class UmlFinalState : public UmlBaseFinalState {
 
     //  is the target of a transition
     
-    virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state, Q3CString & body, Q3CString indent);
+    virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state, QCString & body, QCString indent);
 
 };
 

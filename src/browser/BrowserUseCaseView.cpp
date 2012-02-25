@@ -27,13 +27,8 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserUseCaseView.h"
 #include "SimpleData.h"
@@ -152,7 +147,7 @@ void BrowserUseCaseView::update_idmax_for_root()
 void BrowserUseCaseView::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
@@ -174,8 +169,8 @@ const QPixmap* BrowserUseCaseView::pixmap(int) const {
 }
 
 void BrowserUseCaseView::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -734,9 +729,9 @@ void BrowserUseCaseView::DragMoveInsideEvent(QDragMoveEvent * e) {
     e->ignore();
 }
 
-bool BrowserUseCaseView::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserUseCaseView::may_contains_them(const QList<BrowserNode> & l,
 					   BooL & duplicable) const {
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -801,7 +796,7 @@ void BrowserUseCaseView::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	  (((BrowserNode *) parent())->get_type() == UmlUseCaseView) &&
 	  ((BrowserNode *) parent())->may_contains(bn, ucv)) {
 	// have choice
-	Q3PopupMenu m(0);
+	QPopupMenu m(0);
   
 	m.insertItem(new MenuTitle(QString("move ") + bn->get_name(),
 				   m.font()), -1);
@@ -848,7 +843,7 @@ void BrowserUseCaseView::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
     e->ignore();
 }
 
-void BrowserUseCaseView::save_stereotypes(Q3TextStream & st)
+void BrowserUseCaseView::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "usecaseview_stereotypes ";
@@ -863,7 +858,7 @@ void BrowserUseCaseView::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserUseCaseView::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserUseCaseView::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "usecaseview_ref " << get_ident() << " // " << get_name();
   else {
@@ -917,7 +912,7 @@ void BrowserUseCaseView::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
     
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

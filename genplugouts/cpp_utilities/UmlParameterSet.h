@@ -3,13 +3,13 @@
 
 
 #include "UmlBaseParameterSet.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlActivityItem.h"
 
 class UmlParameterSet : public UmlBaseParameterSet, public UmlActivityItem {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlParameterSet(void * id, const Q3CString & s) : UmlBaseParameterSet(id, s) {
+     UmlParameterSet(void * id, const QCString & s) : UmlBaseParameterSet(id, s) {
     }
 
 };

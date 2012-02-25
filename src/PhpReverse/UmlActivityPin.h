@@ -3,12 +3,12 @@
 
 
 #include "UmlBaseActivityPin.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlActivityPin : public UmlBaseActivityPin {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityPin(void * id, const Q3CString & s) : UmlBaseActivityPin(id, s) {
+     UmlActivityPin(void * id, const QCString & s) : UmlBaseActivityPin(id, s) {
     }
 
 };

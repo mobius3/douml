@@ -27,13 +27,8 @@
 #define DEPLOYMENTDIAGRAMVIEW_H
 
 #include "DiagramView.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QMouseEvent>
-#include <QDropEvent>
-#include <QDragEnterEvent>
 
-template <class K> class Q3PtrDict;
+template <class K> class QPtrDict;
 
 class DeploymentDiagramWindow;
 class DiagramItem;
@@ -49,14 +44,14 @@ class DeploymentDiagramView : public DiagramView {
     virtual void add_related_elements(DiagramItem *, QString what,
 				      bool inh, bool assoc);
     virtual void read(char *, char * k);
-    virtual void save(Q3TextStream & st, QString & warning, bool copy) const;
+    virtual void save(QTextStream & st, QString & warning, bool copy) const;
     
   private:
     DeploymentDiagramWindow * window() {
       return (DeploymentDiagramWindow *) parent();
     }
     void add_marked_elements(const QPoint& p,
-			     Q3PtrDict<DiagramItem> & drawn);
+			     QPtrDict<DiagramItem> & drawn);
   
   protected:
     virtual void contentsMousePressEvent(QMouseEvent *);

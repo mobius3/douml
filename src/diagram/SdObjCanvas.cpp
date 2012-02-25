@@ -31,8 +31,6 @@
 #include "SdLifeLineCanvas.h"
 #include "myio.h"
 #include "translate.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 SdObjCanvas::SdObjCanvas(BrowserNode * bn, UmlCanvas * canvas,
 			 int x, int we, int he, int id)
@@ -73,7 +71,7 @@ void SdObjCanvas::moveBy(double dx, double dy) {
 }
 
 QString SdObjCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString SdObjCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -90,7 +88,7 @@ bool SdObjCanvas::copyable() const {
   return life_line->copyable();
 }
 
-void SdObjCanvas::save(Q3TextStream & st) const {
+void SdObjCanvas::save(QTextStream & st) const {
   if (mortal)
     st << "  mortal";
   save_xyz(st, this, "  xyz");

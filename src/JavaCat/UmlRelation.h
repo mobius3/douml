@@ -26,10 +26,7 @@
 #ifndef UMLRELATION_H
 #define UMLRELATION_H
 
-#include <q3valuelist.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
+#include <qvaluelist.h> 
 
 #include "UmlBaseRelation.h"
 #include "UmlTypeSpec.h"
@@ -39,31 +36,31 @@ class UmlClass;
 
 class UmlRelation : public UmlBaseRelation {
   public:
-    UmlRelation(void * id, const Q3CString & n)
+    UmlRelation(void * id, const QCString & n)
       : UmlBaseRelation(id, n) {
     };  
   
-    static bool new_one(Class * container, const Q3CString & name,
-			UmlTypeSpec & dest, Q3CString str_actuals,
+    static bool new_one(Class * container, const QCString & name,
+			UmlTypeSpec & dest, QCString str_actuals,
 			aVisibility visibility,	bool staticp,
 			bool constp, bool transientp, bool volatilep,
-			const Q3CString & array,	const Q3CString & value,
-			Q3CString comment, Q3CString description,
-			Q3CString annotation
+			const QCString & array,	const QCString & value,
+			QCString comment, QCString description,
+			QCString annotation
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+			, bool roundtrip, QList<UmlItem> & expected_order
 #endif
 			);
-    static bool new_one(Class * container, const Q3CString & name,
-			UmlClass * type, Q3CString type_def,
-			Q3CString genericname,
+    static bool new_one(Class * container, const QCString & name,
+			UmlClass * type, QCString type_def,
+			QCString genericname,
 			aVisibility visibility, bool staticp,
 			bool constp, bool transientp, bool volatilep,
-			const Q3CString & array, const Q3CString & value,
-			Q3CString comment, Q3CString description,
-			Q3CString annotation
+			const QCString & array, const QCString & value,
+			QCString comment, QCString description,
+			QCString annotation
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+			, bool roundtrip, QList<UmlItem> & expected_order
 #endif
 			);
 #ifdef ROUNDTRIP

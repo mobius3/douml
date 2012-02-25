@@ -10,13 +10,13 @@ void UmlDeploymentView::write(FileOut & out) {
       << " xmi:type=\"uml:Package\""; 
     out.id(this); 
     out << " name =\"deployment view ";
-    out.quote((const char*)name());//[jasa] ambiguous call
+    out.quote(name());
     out << "\">\n"; 
     out.indent(+1); 
     write_description_properties(out);   
   }
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)

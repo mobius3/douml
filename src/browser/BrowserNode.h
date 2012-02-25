@@ -26,16 +26,11 @@
 #ifndef BROWSER_NODE_H
 #define BROWSER_NODE_H
 
-#include <q3textstream.h> 
+#include <qtextstream.h> 
 #include <qlist.h> 
-#include <q3listview.h> 
+#include <qlistview.h> 
 #include <qstringlist.h>
-#include <q3dict.h>
-//Added by qt3to4:
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <Q3PopupMenu>
-#include <Q3PtrCollection>
+#include <qdict.h>
 
 #include "UmlEnum.h"
 #include "HaveKeyValueData.h"
@@ -44,8 +39,8 @@
 #include "AType.h"
 
 class QDragMoveEvent;
-class Q3PopupMenu;
-template <class K> class Q3PtrDict;
+class QPopupMenu;
+template <class K> class QPtrDict;
 
 class BrowserView;
 class BasicData;
@@ -66,8 +61,7 @@ class BrowserNodeList;
 class ToolCom;
 class SaveProgress;
 
-/* This class is the base for every node presented in the tree-view on the left */
-class BrowserNode : public Q3ListViewItem,
+class BrowserNode : public QListViewItem,
   		    public HaveKeyValueData,
   		    public Editable {
   protected:
@@ -85,7 +79,7 @@ class BrowserNode : public Q3ListViewItem,
     
     static bool show_stereotypes;
     static unsigned edition_number;
-    static Q3PtrList<BrowserNode> marked_list;
+    static QList<BrowserNode> marked_list;
     static bool popup_menu_active;
     
     static SaveProgress * save_progress;
@@ -98,7 +92,7 @@ class BrowserNode : public Q3ListViewItem,
 
     BrowserNode();
     
-    void set_parent(Q3ListViewItem * parent);
+    void set_parent(QListViewItem * parent);
     virtual bool delete_internal(QString & warning);
     
   public:
@@ -117,17 +111,17 @@ class BrowserNode : public Q3ListViewItem,
     virtual void edit_end();
     virtual bool in_edition() const;
     
-    void mark_menu(Q3PopupMenu & m, const char *, int bias) const;
+    void mark_menu(QPopupMenu & m, const char *, int bias) const;
     void mark_shortcut(QString s, int & index, int bias);
     void mark_management(int choice);
     void toggle_mark();
     bool markedp() const { return is_marked; }
-    static const Q3PtrList<BrowserNode> & marked_nodes() { return marked_list; }
+    static const QList<BrowserNode> & marked_nodes() { return marked_list; }
     static void unmark_all();
     
     bool is_from_lib() const { return original_id != 0; }
     virtual void prepare_update_lib() const = 0;
-    virtual void support_file(Q3Dict<char> & files, bool add) const;
+    virtual void support_file(QDict<char> & files, bool add) const;
     
     virtual bool is_writable() const;	// file writable & not api base
     virtual void delete_it();
@@ -144,7 +138,7 @@ class BrowserNode : public Q3ListViewItem,
     const char * get_stereotype() const;
     virtual QString stereotypes_properties() const;
     bool may_contains(BrowserNode *, bool rec) const;
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
+    virtual bool may_contains_them(const QList<BrowserNode> &,
 				   BooL & duplicable) const;
     bool may_contains_it(BrowserNode * bn) const;
     virtual void move(BrowserNode *, BrowserNode * after);
@@ -169,7 +163,6 @@ class BrowserNode : public Q3ListViewItem,
     QString fullname(QString & s, bool rev) const;
     virtual void menu() = 0;
     virtual void apply_shortcut(QString s) = 0;
-	/* Open a Diagram Window */
     virtual void open(bool force_edit);
     virtual void on_close();
     virtual UmlCode get_type() const = 0;
@@ -184,7 +177,7 @@ class BrowserNode : public Q3ListViewItem,
     virtual BasicData * get_data() const = 0;
     virtual QString drag_key() const;
     virtual QString drag_postfix() const;
-    virtual void save(Q3TextStream &, bool ref, QString & warning) = 0;
+    virtual void save(QTextStream &, bool ref, QString & warning) = 0;
     virtual void package_modified();
     virtual void get_classdiagramsettings(ClassDiagramSettings &) const;
     virtual void get_usecasediagramsettings(UseCaseDiagramSettings &) const;
@@ -201,7 +194,7 @@ class BrowserNode : public Q3ListViewItem,
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
     virtual BrowserNode * get_associated() const;
     virtual BasicData * add_relation(UmlCode, BrowserNode *);
-    virtual Q3PtrList<BrowserNode> parents() const;
+    virtual QList<BrowserNode> parents() const;
     BrowserNode * get_container(UmlCode) const;
     virtual BrowserNode * container(UmlCode) const; // container for class, state machine and activity
     virtual QString check_inherit(const BrowserNode * parent) const;
@@ -211,17 +204,17 @@ class BrowserNode : public Q3ListViewItem,
     virtual void member_cpp_def(const QString & prefix,
 				const QString & prefix_tmplop, 
 				QString & s, bool templ) const;
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
+    virtual void referenced_by(QList<BrowserNode> &, bool ondelete = FALSE);
     virtual AType class_association() const;
     virtual const char * constraint() const;
     
-    bool save_open_list(Q3TextStream &);
-    void save(Q3TextStream &) const;
+    bool save_open_list(QTextStream &);
+    void save(QTextStream &) const;
     static void save_progress_closed();
     virtual void init_save_counter();
     void read(char * &, char * & k, int id);
     static BrowserNode * read_any_ref(char * &, char *);
-    static void save_stereotypes(Q3TextStream & st, 
+    static void save_stereotypes(QTextStream & st, 
 				 QStringList relations_stereotypes[]);
     static void read_stereotypes(char * &,
 				 QStringList relations_stereotypes[]);
@@ -274,9 +267,9 @@ inline QString BrowserNode::fullname(QString & s, bool rev) const {
 
 // a sortable list of BrowserNode
 
-class BrowserNodeList : public Q3PtrList<BrowserNode> {
+class BrowserNodeList : public QList<BrowserNode> {
   protected:
-    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
+    virtual int compareItems(QCollection::Item item1, QCollection::Item item2);
   
   public:
     void search(BrowserNode * bn, UmlCode k, const QString & s,

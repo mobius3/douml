@@ -4,7 +4,7 @@
 #include "UmlClassInstanceReference.h"
 #include "UmlOperation.h"
 
-void UmlBaseMessage::read_(const Q3PtrDict<UmlClassInstanceReference> & instances) {
+void UmlBaseMessage::read_(const QPtrDict<UmlClassInstanceReference> & instances) {
   _operation = (UmlOperation *) UmlBaseItem::read_();
   if (_operation == 0) _form = UmlCom::read_string();
   _from = instances[(void *) UmlCom::read_unsigned()];

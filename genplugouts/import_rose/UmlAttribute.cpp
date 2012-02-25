@@ -8,15 +8,13 @@
 #include "CppSettings.h"
 #include "JavaSettings.h"
 #include "IdlSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlAttribute::import(File & f) {
   if (scanning) {
     f.skipBlock();
     return;
   }
 
-  Q3CString s;
+  QCString s;
   UmlTypeSpec t;
         
   for (;;) {
@@ -76,16 +74,16 @@ void UmlAttribute::import(File & f) {
 
 void UmlAttribute::import(File & f, UmlClass * parent)
 {
-  Q3CString s;
+  QCString s;
 
   if (f.read(s) != STRING)
     f.syntaxError(s, "attributes's name");
     
-  Q3CString id;
-  Q3CString ste;
-  Q3CString doc;
-  Q3Dict<Q3CString> prop;
-  Q3CString s2;
+  QCString id;
+  QCString ste;
+  QCString doc;
+  QDict<QCString> prop;
+  QCString s2;
   int k;
   
   do {
@@ -141,7 +139,7 @@ void UmlAttribute::import(File & f, UmlClass * parent)
 
 }
 
-void UmlAttribute::importIdlConstant(UmlClass * parent, const Q3CString & id, const Q3CString & s, const Q3CString & doc, Q3Dict<Q3CString> & prop)
+void UmlAttribute::importIdlConstant(UmlClass * parent, const QCString & id, const QCString & s, const QCString & doc, QDict<QCString> & prop)
 {
   UmlAttribute * x;
 
@@ -157,7 +155,7 @@ void UmlAttribute::importIdlConstant(UmlClass * parent, const Q3CString & id, co
 
   x->set_IdlDecl(IdlSettings::constDecl());
   
-  Q3CString * v;
+  QCString * v;
   
   if ((v = prop.find("CORBA/ImplementationType")) != 0) {
     if (!v->isEmpty()) {
@@ -180,18 +178,18 @@ void UmlAttribute::importIdlConstant(UmlClass * parent, const Q3CString & id, co
   x->setProperties(prop);
 }
 
-void UmlAttribute::cplusplus(Q3Dict<Q3CString> &) {
+void UmlAttribute::cplusplus(QDict<QCString> &) {
   set_CppDecl((parent()->stereotype() == "enum")
 	      ? CppSettings::enumItemDecl()
 	      : CppSettings::attributeDecl());
 }
 
-void UmlAttribute::oracle8(Q3Dict<Q3CString> &) {
+void UmlAttribute::oracle8(QDict<QCString> &) {
 }
 
-void UmlAttribute::corba(Q3Dict<Q3CString> & prop) {
-  Q3CString * v;
-  Q3CString decl;
+void UmlAttribute::corba(QDict<QCString> & prop) {
+  QCString * v;
+  QCString decl;
   
   if (parent()->stereotype() == "union")
     decl = IdlSettings::unionItemDecl();
@@ -216,8 +214,7 @@ void UmlAttribute::corba(Q3Dict<Q3CString> & prop) {
       int index;
       
       if ((index = decl.find("${name}")) != -1)
-	//decl.insert(index + 7, "[" + *v + "]");//[jasa] original line
-	decl.insert(index + 7, (const char*)("[" + (*v) + "]"));//[jasa] fix ambiguous call
+	decl.insert(index + 7, "[" + *v + "]");
     }
     
     prop.remove("CORBA/ArrayDimensions");
@@ -226,8 +223,8 @@ void UmlAttribute::corba(Q3Dict<Q3CString> & prop) {
   set_IdlDecl(decl);
 }
 
-void UmlAttribute::java(Q3Dict<Q3CString> & prop) {
-  Q3CString * v;
+void UmlAttribute::java(QDict<QCString> & prop) {
+  QCString * v;
     
   if ((v = prop.find("Java/Final")) != 0) {
     if (*v == "TRUE")

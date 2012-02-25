@@ -28,8 +28,6 @@
 
 
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "ClassInstCanvas.h"
 #include "BrowserClass.h"
@@ -143,7 +141,7 @@ void ClassInstCanvas::draw(QPainter & p, UmlCanvas * canvas, QRect r) {
   QString iname = get_name();
   
   QColor bckgrnd = p.backgroundColor();
-  p.setRenderHint(QPainter::Antialiasing, true);
+
   p.setBackgroundMode((used_color == UmlTransparent)
 		      ? ::Qt::TransparentMode :
 		      ::Qt::OpaqueMode);
@@ -176,12 +174,12 @@ void ClassInstCanvas::draw(QPainter & p, UmlCanvas * canvas, QRect r) {
       if (fp != 0) {
 	fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		" x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		QColor(::Qt::darkGray).rgb()&0xffffff,
+		::Qt::darkGray.rgb()&0xffffff,
 		r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 	
 	fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		" x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		QColor(::Qt::darkGray).rgb()&0xffffff,
+		::Qt::darkGray.rgb()&0xffffff,
 		r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
 	
 	fprintf(fp, "\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
@@ -255,7 +253,7 @@ void ClassInstCanvas::draw(QPainter & p, UmlCanvas * canvas, QRect r) {
     fputs("</g>\n", fp);
 }
 
-void ClassInstCanvas::save(Q3TextStream & st) const {
+void ClassInstCanvas::save(QTextStream & st) const {
   if (itscolor != UmlDefaultColor)
     st << " color " << stringify(itscolor);
   if (write_horizontally != UmlDefaultState)

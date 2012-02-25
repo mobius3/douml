@@ -24,9 +24,6 @@
 // *************************************************************************
 
 #include "Namespace.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 // namespace stack, namespaces.last() = current namespace full name + "::",
 // i.e. A::B...::Z:: in case it is embeded in other one(s)
@@ -39,12 +36,12 @@ QStringList Namespace::Usings;
 int Namespace::AnonymousLevel;
 
 // to lost usings defined under a namespace/class block
-Q3ValueList<QStringList> Namespace::UsingScope;
+QValueList<QStringList> Namespace::UsingScope;
 
 // namespace aliases
-QMap<Q3CString,Q3CString> Namespace::Aliases;
+QMap<QCString,QCString> Namespace::Aliases;
 
-void Namespace::set(const Q3CString & s)
+void Namespace::set(const QCString & s)
 {
   // for upload only
   Stack.append(QString(s) + "::");
@@ -56,7 +53,7 @@ void Namespace::unset()
   Stack.remove(Stack.last());
 }
 
-void Namespace::enter(const Q3CString & s)
+void Namespace::enter(const QCString & s)
 {
   save_using_scope();
   Stack.append((Stack.isEmpty())
@@ -76,7 +73,7 @@ void Namespace::restore_using_scope()
   UsingScope.remove(UsingScope.begin());
 }
 
-QString Namespace::namespacify(Q3CString s, bool local) {
+QString Namespace::namespacify(QCString s, bool local) {
   QString r;
   int index = s.find("::");
   
@@ -84,7 +81,7 @@ QString Namespace::namespacify(Q3CString s, bool local) {
     r = ((const char *) s) + 2;
   else {
     if (index != -1) {
-      QMap<Q3CString,Q3CString>::ConstIterator it = 
+      QMap<QCString,QCString>::ConstIterator it = 
 	Aliases.find(s.left(index));
       
       if (it != Aliases.end())
@@ -101,11 +98,11 @@ QString Namespace::namespacify(Q3CString s, bool local) {
     : r;
 }
 
-Q3CString Namespace::current() {
+QCString Namespace::current() {
   if (Stack.isEmpty())
     return 0;
   
   QString & s = Stack.last();
   
-  return Q3CString((s.left(s.length() - 2)).toAscii().constData());
+  return QCString(s.left(s.length() - 2));
 }

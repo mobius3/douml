@@ -28,19 +28,15 @@
 
 
 #include <qlayout.h>
-#include <q3hbox.h>
+#include <qhbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
-#include <q3groupbox.h> 
-#include <q3buttongroup.h>
+#include <qgroupbox.h> 
+#include <qbuttongroup.h>
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
 
 #include "BrowserSearchDialog.h"
 #include "BrowserView.h"
@@ -110,18 +106,18 @@ static const struct {
 };
 
 BrowserSearchDialog::BrowserSearchDialog()
-    : QDialog(0, "Browser search", FALSE, Qt::WDestructiveClose) {
+    : QDialog(0, "Browser search", FALSE, WDestructiveClose) {
   the = this;
   setCaption(TR("Browser search"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
   
   vbox->setMargin(5);
   
-  Q3GridLayout * gl = new Q3GridLayout(vbox, 4, 2, 5/*space*/);
+  QGridLayout * gl = new QGridLayout(vbox, 4, 2, 5/*space*/);
 
   gl->addWidget(new QLabel(TR("Kind"), this), 0, 0, Qt::AlignLeft);
-  kind = new Q3ComboBox(FALSE, this);
+  kind = new QComboBox(FALSE, this);
   for (int index = 0; index != sizeof(Kinds)/sizeof(*Kinds); index += 1)
     kind->insertItem(TR(Kinds[index].lbl));
   kind->setCurrentItem(saved_kind);
@@ -133,18 +129,18 @@ BrowserSearchDialog::BrowserSearchDialog()
   gl->addWidget(ed, 1, 1);
   ed->setFocus();
   
-  Q3HBox * hb = new Q3HBox(this);
+  QHBox * hb = new QHBox(this);
   
   gl->addWidget(hb, 2, 1);
   
-  Q3GroupBox * gb = new Q3GroupBox(2, Qt::Horizontal, hb);
+  QGroupBox * gb = new QGroupBox(2, Qt::Horizontal, hb);
   
   case_sensitive = new QCheckBox(TR("case sensitive"), gb);
   case_sensitive->setChecked(saved_case_sensitive);
   even_deleted = new QCheckBox(TR("even deleted"), gb);
   even_deleted->setChecked(saved_even_deleted);
 
-  Q3ButtonGroup * bg = new Q3ButtonGroup(4, Qt::Horizontal, hb);
+  QButtonGroup * bg = new QButtonGroup(4, Qt::Horizontal, hb);
   
   bg->setExclusive(TRUE);
   for_name = new QRadioButton(TR("name"), bg);
@@ -157,10 +153,10 @@ BrowserSearchDialog::BrowserSearchDialog()
   for_decldefbody->setChecked(saved_decldefbody);
   
   gl->addWidget(new QLabel(TR("Result"), this), 3, 0, Qt::AlignLeft);
-  results = new Q3ComboBox(FALSE, this);
+  results = new QComboBox(FALSE, this);
   gl->addWidget(results, 3, 1);
 
-  Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox); 
+  QHBoxLayout * hbox = new QHBoxLayout(vbox); 
   QPushButton * search_b = new QPushButton(TR("Search"), this);
   QPushButton * close_b = new QPushButton(TR("Close"), this);
   

@@ -4,8 +4,6 @@
 #include "UmlClass.h"
 
 #include <qstringlist.h> 
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "UmlCom.h"
 #include "util.h"
@@ -14,16 +12,16 @@
 #include "IdlSettings.h"
 void UmlOperation::import(File & f, UmlClass * parent)
 {
-  Q3CString s;
+  QCString s;
 
   if (f.read(s) != STRING)
     f.syntaxError(s, "operations's name");
     
-  Q3CString id;
-  Q3CString ste;
-  Q3CString doc;
-  Q3Dict<Q3CString> prop;
-  Q3CString s2;
+  QCString id;
+  QCString ste;
+  QCString doc;
+  QDict<QCString> prop;
+  QCString s2;
   int k;
   
   do {
@@ -33,7 +31,7 @@ void UmlOperation::import(File & f, UmlClass * parent)
   UmlOperation * x;
 
   if (scanning) {
-    Q3CString name;
+    QCString name;
     
     if (s.left(8) != "operator")
       name = (s.at(0) == '~')
@@ -120,7 +118,7 @@ void UmlOperation::import(File & f) {
     return;
   }
 
-  Q3CString s;
+  QCString s;
   UmlTypeSpec t;
 
   for (;;) {    
@@ -184,10 +182,10 @@ void UmlOperation::import(File & f) {
 }
 
 void UmlOperation::importParameters(File & f) {
-  Q3CString s;
+  QCString s;
   unsigned rank = 0;
   const char * sep = "";
-  Q3CString doc = description();
+  QCString doc = description();
 
   for (;;) {
     switch (f.read(s)) {
@@ -206,17 +204,17 @@ void UmlOperation::importParameters(File & f) {
     f.read("Parameter");
 
     UmlParameter p;
-    Q3CString ti;
+    QCString ti;
 	
     ti.sprintf("${t%u}", rank);
 
     if (f.read(p.name) != STRING)
       f.syntaxError(s, "parameter's name");
 
-    Q3CString id;
-    Q3CString ste;
-    Q3CString p_doc;
-    Q3Dict<Q3CString> prop;
+    QCString id;
+    QCString ste;
+    QCString p_doc;
+    QDict<QCString> prop;
     int k;
 
     for (;;) {
@@ -244,7 +242,7 @@ void UmlOperation::importParameters(File & f) {
 	    s = s.mid(6);
 	  }
 	  else {
-	    Q3CString err =
+	    QCString err =
 	      "<br>'" + s + "' : wrong parameter direction, in " + f.context();
 	  
 	    UmlCom::trace(err);
@@ -269,7 +267,7 @@ void UmlOperation::importParameters(File & f) {
 	f.skipNextForm();
     }
 
-    Q3CString d;
+    QCString d;
     int index;
     
     switch (((UmlClass *) parent())->language()) {
@@ -278,10 +276,9 @@ void UmlOperation::importParameters(File & f) {
     case VCplusplus:
       s.sprintf("%s%s ${p%u}", sep, (const char *) ti, rank);
       if ((index = (d = cppDecl()).find("${)}")) != -1)
-	//set_CppDecl(d.insert(index, s));//[jasa] original line
-	set_CppDecl(d.insert(index, (const char*)s));//[jasa] fix ambiguous call
+	set_CppDecl(d.insert(index, s));
       if ((index = (d = cppDef()).find("${)}")) != -1)
-	set_CppDef(d.insert(index, (const char*)s));//[jasa] fix ambiguous call
+	set_CppDef(d.insert(index, s));
       break;
     case Oracle8:
       break;
@@ -289,13 +286,13 @@ void UmlOperation::importParameters(File & f) {
       if ((index = (d = idlDecl()).find("${)}")) != -1) {
 	s.sprintf("%s${d%u} %s ${p%u}", 
 		  sep, rank, (const char *) ti, rank);
-	set_IdlDecl(d.insert(index, (const char*)s));//[jasa] fix ambiguous call
+	set_IdlDecl(d.insert(index, s));
       }
       break;
     case Java:
       if ((index = (d = javaDecl()).find("${)}")) != -1) {
 	s.sprintf("%s%s ${p%u}", sep, (const char *) ti, rank);
-	set_JavaDecl(d.insert(index, (const char*)s));//[jasa]
+	set_JavaDecl(d.insert(index, s));
       }
       break;
     default:
@@ -308,7 +305,7 @@ void UmlOperation::importParameters(File & f) {
 }
 
 void UmlOperation::importExceptions(File & f) {
-  Q3CString s;
+  QCString s;
   unsigned rank = 0;
   
   if (f.read(s) != STRING)
@@ -328,7 +325,7 @@ void UmlOperation::importExceptions(File & f) {
     if (((index2 = t.explicit_type.find("[")) != -1) &&
 	(((const char *) t.explicit_type)[t.explicit_type.length() - 1]
 	 == ']')) {
-      Q3CString target_id =
+      QCString target_id =
 	t.explicit_type.mid(index2+1, 
 			    t.explicit_type.length() - index2 - 2);
       UmlClass * cl = (UmlClass *) UmlItem::findItem(target_id, aClass);
@@ -345,16 +342,16 @@ void UmlOperation::importExceptions(File & f) {
   }
 }
 
-void UmlOperation::cplusplus(Q3Dict<Q3CString> &) {
+void UmlOperation::cplusplus(QDict<QCString> &) {
   set_CppDecl(CppSettings::operationDecl());
   set_CppDef(CppSettings::operationDef());
 }
 
-void UmlOperation::oracle8(Q3Dict<Q3CString> &) {
+void UmlOperation::oracle8(QDict<QCString> &) {
 }
 
-void UmlOperation::corba(Q3Dict<Q3CString> & prop) {
-  Q3CString * v;
+void UmlOperation::corba(QDict<QCString> & prop) {
+  QCString * v;
     
   if ((v = prop.find("CORBA/OperationIsOneWay")) != 0) {
     if (*v == "TRUE")
@@ -365,9 +362,9 @@ void UmlOperation::corba(Q3Dict<Q3CString> & prop) {
   set_IdlDecl(IdlSettings::operationDecl());
 }
 
-void UmlOperation::java(Q3Dict<Q3CString> & prop) {
-  Q3CString d = JavaSettings::operationDef();
-  Q3CString * v;
+void UmlOperation::java(QDict<QCString> & prop) {
+  QCString d = JavaSettings::operationDef();
+  QCString * v;
     
   if ((v = prop.find("Java/Final")) != 0) {
     if (*v == "TRUE")

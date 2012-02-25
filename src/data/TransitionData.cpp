@@ -27,7 +27,7 @@
 
 
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qcursor.h>
 
 #include "TransitionData.h"
@@ -178,7 +178,7 @@ bool TransitionData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void TransitionData::save(Q3TextStream & st, QString & warning) const {
+void TransitionData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   nl_indent(st);
   st << "on ";
@@ -237,7 +237,7 @@ void TransDef::send_def(ToolCom * com) {
   com->write_string(expr);
 }
 
-void TransDef::save(Q3TextStream & st, const char * lang) const {
+void TransDef::save(QTextStream & st, const char * lang) const {
   indent(+1);
   
   if (!trigger.isEmpty()) {

@@ -11,7 +11,7 @@ void UmlBaseSubject::read_() {
   _h = (int) UmlCom::read_unsigned();
 }
 
-UmlSubject * UmlBaseSubject::get_container_(int x, int y, int w, int h, const Q3PtrVector<UmlSubject> & subjects)
+UmlSubject * UmlBaseSubject::get_container_(int x, int y, int w, int h, const QVector<UmlSubject> & subjects)
 {
   int rank = subjects.count();
 

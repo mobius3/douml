@@ -26,9 +26,9 @@
 #ifndef SAVE_PROGRESS_H
 #define SAVE_PROGRESS_H
 
-#include <q3progressdialog.h> 
+#include <qprogressdialog.h> 
 
-class SaveProgress : public Q3ProgressDialog {
+class SaveProgress : public QProgressDialog {
   public:
     SaveProgress(int);
     virtual ~SaveProgress();

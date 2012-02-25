@@ -4,7 +4,7 @@
 
 #include "UmlBaseRegion.h"
 #include "UmlStateItem.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlClass;
 class UmlState;
@@ -12,12 +12,12 @@ class UmlState;
 class UmlRegion : public UmlBaseRegion, public UmlStateItem {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlRegion(void * id, const Q3CString & s) : UmlBaseRegion(id, s) {
+     UmlRegion(void * id, const QCString & s) : UmlBaseRegion(id, s) {
     }
 
     //  initialization before generation
     
-    virtual void init(UmlClass * mother, Q3CString path, Q3CString pretty_path, UmlState * state);
+    virtual void init(UmlClass * mother, QCString path, QCString pretty_path, UmlState * state);
 
 };
 

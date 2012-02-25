@@ -26,8 +26,6 @@
 #include "UmlCom.h"
 #include "UmlItem.h"
 #include "util.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 int main(int argc, char ** argv)
 {
@@ -50,14 +48,14 @@ int main(int argc, char ** argv)
   else
     return 0;
   
-  if (UmlCom::connect(Q3CString(argv[port_index]).toUInt())) {
+  if (UmlCom::connect(QCString(argv[port_index]).toUInt())) {
     try {
       UmlCom::trace("<b>Java generator</b> release 2.22<br>");
       UmlCom::traceAutoRaise(FALSE);
       
       UmlCom::targetItem()->generate();
       
-      Q3CString s;
+      QCString s;
       
       s.sprintf("<hr><font face=helvetica>Generation done : %d warnings, %d errors</font><br>",
 		n_warnings(), n_errors());

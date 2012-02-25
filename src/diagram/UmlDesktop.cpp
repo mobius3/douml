@@ -33,8 +33,6 @@
 #include <qapplication.h>
 #include <qcursor.h>
 
-#include <QDesktopWidget> //[lgfreitas] compiler complaining of incomplete type
-
 #include "UmlDesktop.h"
 #include "DialogUtil.h"
 

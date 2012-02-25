@@ -26,24 +26,20 @@
 #include <stdlib.h>
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qmenubar.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
 #include <qsplitter.h>
 #include <qwindowsstyle.h> 
 #include <qmotifstyle.h> 
-//#include <qmotifplusstyle.h> 
-#include <q3whatsthis.h>
-#include <q3filedialog.h> 
+#include <qmotifplusstyle.h> 
+#include <qwhatsthis.h>
+#include <qfiledialog.h> 
 #include <qfile.h>
 #include <qdir.h>
 #include <qdatastream.h> 
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
-#include <QPixmap>
+#include <qtextstream.h>
 
 #include "JavaCatWindow.h"
 #include "BrowserView.h"
@@ -57,8 +53,8 @@
 #include "fileopen.xpm"
 #include "browsersearch.xpm"
 #include "scan.xpm"
-#include "left_xpm.xpm"
-#include "right_xpm.xpm"
+#include "left.xpm"
+#include "right.xpm"
 
 JavaCatWindow * JavaCatWindow::the;
 
@@ -71,77 +67,77 @@ const char * UpText = "To select the <i>browser</i> current item's parent.";
 const char * LeftText = "Go to previous selected <i>class</i>";
 const char * RightText = "Go to next selected <i>class</i>";
 
-JavaCatWindow::JavaCatWindow() : Q3MainWindow(0, "Java Catalog", Qt::WDestructiveClose) {
+JavaCatWindow::JavaCatWindow() : QMainWindow(0, "Java Catalog", WDestructiveClose) {
   the = this;
   setCaption("Java Catalog");
   commented = 0;
   
-  Q3PopupMenu * menu;
+  QPopupMenu * menu;
   QPixmap pixmap;
   
-  Q3ToolBar * tools = new Q3ToolBar(this, "operations");
+  QToolBar * tools = new QToolBar(this, "operations");
   
-  addToolBar(tools, "Operations", Qt::DockTop, TRUE);
+  addToolBar(tools, "Operations", Top, TRUE);
   
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("&File", menu);
   
   pixmap = QPixmap(fileopen);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString::null,
+  QWhatsThis::add(new QToolButton(pixmap, "Open", QString::null,
 				  this, SLOT(load()), tools, "open"),
 		  OpenText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Open", this,
-				      SLOT(load()), Qt::CTRL+Qt::Key_O),
+				      SLOT(load()), CTRL+Key_O),
 		     OpenText);
   
   pixmap = QPixmap(filesave);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Save", QString::null,
+  QWhatsThis::add(new QToolButton(pixmap, "Save", QString::null,
 				  this, SLOT(save()), tools, "save"),
 		  SaveText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Save", this,
-				      SLOT(save()), Qt::CTRL+Qt::Key_S),
+				      SLOT(save()), CTRL+Key_S),
 		     SaveText);
   
   menu->insertSeparator();
   pixmap = QPixmap(::scan);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Scan", QString::null,
+  QWhatsThis::add(new QToolButton(pixmap, "Scan", QString::null,
 				  this, SLOT(scan()), tools, "scan"),
 		  ScanText);
   menu->setWhatsThis(menu->insertItem(pixmap, "S&can", this,
-				      SLOT(scan()), Qt::CTRL+Qt::Key_C),
+				      SLOT(scan()), CTRL+Key_C),
 		     ScanText);
   
   menu->insertSeparator();
-  menu->insertItem("&Quit", this, SLOT(quit()), Qt::CTRL+Qt::Key_Q);
+  menu->insertItem("&Quit", this, SLOT(quit()), CTRL+Key_Q);
   
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("&Browse", menu);
   
   pixmap = QPixmap(browsersearch);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString::null,
+  QWhatsThis::add(new QToolButton(pixmap, "Search", QString::null,
 				  this, SLOT(browser_search()), tools, "search"),
 		  SearchText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Search", this,
-				      SLOT(browser_search()), Qt::CTRL+Qt::Key_S),
+				      SLOT(browser_search()), CTRL+Key_S),
 		     SearchText);
   
-  pixmap = QPixmap(left_xpm);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Back", QString::null,
+  pixmap = QPixmap(left);
+  QWhatsThis::add(new QToolButton(pixmap, "Back", QString::null,
 				  this, SLOT(historic_back()),
 				  tools, "back"),
 		  LeftText);
   
-  pixmap = QPixmap(right_xpm);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Forward", QString::null,
+  pixmap = QPixmap(right);
+  QWhatsThis::add(new QToolButton(pixmap, "Forward", QString::null,
 				  this, SLOT(historic_forward()),
 				  tools, "forward"),
 		  RightText);
   
-  (void)Q3WhatsThis::whatsThisButton(tools);
+  (void)QWhatsThis::whatsThisButton(tools);
 
   //
   
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("&Style", menu);
   
 #if !defined(QT_NO_STYLE_MOTIF)
@@ -155,17 +151,17 @@ JavaCatWindow::JavaCatWindow() : Q3MainWindow(0, "Java Catalog", Qt::WDestructiv
   //
   
   menuBar()->insertSeparator();
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("&Help", menu);
   
-  menu->insertItem("&About", this, SLOT(about()), Qt::Key_F1);
+  menu->insertItem("&About", this, SLOT(about()), Key_F1);
   menu->insertItem("About&Qt", this, SLOT(aboutQt()));
   menu->insertSeparator();
-  menu->insertItem("What's This", this, SLOT(whatsThis()), Qt::SHIFT+Qt::Key_F1);
+  menu->insertItem("What's This", this, SLOT(whatsThis()), SHIFT+Key_F1);
     
   //
   
-  spl = new QSplitter(Qt::Vertical, this, "spl");
+  spl = new QSplitter(QSplitter::Vertical, this, "spl");
   
   browser = new BrowserView(spl);
   comment = new CommentView(spl);
@@ -175,7 +171,7 @@ JavaCatWindow::JavaCatWindow() : Q3MainWindow(0, "Java Catalog", Qt::WDestructiv
   
   spl->moveToFirst(browser);
 
-  Q3ValueList<int> lsz = spl->sizes();
+  QValueList<int> lsz = spl->sizes();
   int h = lsz.first() + lsz.last();
   
   lsz.first() = (h*3)/4;
@@ -206,7 +202,7 @@ void JavaCatWindow::load() {
   
   // note : QFile fp(QDir::home().absFilePath(".boumlcat")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlcat");
+  QString s = QDir::home().absFilePath(".boumlcat");
   FILE * fp = fopen((const char *) s, "r");
   
 
@@ -236,14 +232,14 @@ void JavaCatWindow::load() {
   }
 
   QString path =
-    Q3FileDialog::getOpenFileName(start, "*.cat", this);
+    QFileDialog::getOpenFileName(start, "*.cat", this);
   
   if (! path.isEmpty()) {
     QApplication::setOverrideCursor(Qt::waitCursor);
     
     QFile f(path);
     
-    if (f.open(QIODevice::ReadOnly)) {
+    if (f.open(IO_ReadOnly)) {
       if ((fp = fopen((const char *) s, "w")) != 0) {
 	fwrite((const char *) path, 1, path.length(), fp);
 	fputc('\n', fp);
@@ -264,7 +260,7 @@ void JavaCatWindow::load() {
 
 void JavaCatWindow::save() {
   QString path =
-    Q3FileDialog::getSaveFileName(QString::null, "*.cat", this);
+    QFileDialog::getSaveFileName(QString::null, "*.cat", this);
   
   if (! path.isEmpty()) {
     QApplication::setOverrideCursor(Qt::waitCursor);
@@ -274,7 +270,7 @@ void JavaCatWindow::save() {
     
     QFile f(path);
     
-    if (f.open(QIODevice::WriteOnly)) {
+    if (f.open(IO_WriteOnly)) {
       QDataStream dt(&f);
       
       Package::get_root()->backup_children(dt);
@@ -316,8 +312,7 @@ void JavaCatWindow::motif_style() {
 }
 
 void JavaCatWindow::motifplus_style() {
-//#if !defined(QT_NO_STYLE_MOTIFPLUS)
-#if 0
+#if !defined(QT_NO_STYLE_MOTIFPLUS)
   QApplication::setStyle(new QMotifPlusStyle);
 #endif
 }
@@ -344,7 +339,7 @@ void JavaCatWindow::trace(QString s)
   // sometimes the contains/scrollbar does not show all
   // change the split position to force correct updating
   
-  Q3ValueList<int> sz = the->spl->sizes();
+  QValueList<int> sz = the->spl->sizes();
 
   if (sz[1] & 1) {
     sz[0] += 1;
@@ -358,7 +353,7 @@ void JavaCatWindow::trace(QString s)
   the->spl->setSizes(sz);
 }
 
-void JavaCatWindow::trace(Q3CString s)
+void JavaCatWindow::trace(QCString s)
 {
   trace(QString(s));
 }

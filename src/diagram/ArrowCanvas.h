@@ -26,11 +26,7 @@
 #ifndef ARROWCANVAS_H
 #define ARROWCANVAS_H
 
-#include "q3canvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3PointArray>
-#include <Q3PopupMenu>
+#include "qcanvas.h"
 
 #include "DiagramItem.h"
 
@@ -47,9 +43,9 @@ class DiagramCanvas;
 class ArrowPointCanvas;
 class LabelCanvas;
 class UmlCanvas;
-class Q3PopupMenu;
+class QPopupMenu;
 
-class ArrowCanvas : public QObject, public Q3CanvasPolygon, public DiagramItem {
+class ArrowCanvas : public QObject, public QCanvasPolygon, public DiagramItem {
   Q_OBJECT
     
   protected:
@@ -74,17 +70,17 @@ class ArrowCanvas : public QObject, public Q3CanvasPolygon, public DiagramItem {
     LabelCanvas * stereotype;
     QPoint beginp;
     QPoint endp;
-    Q3PointArray boundings;
+    QPointArray boundings;
     QPoint arrow[3];	// les 2 extremites et le point milieu pour inherit
-    Q3PointArray poly;   // aggregations
+    QPointArray poly;   // aggregations
     float decenter_begin;	// not taken into account if
     float decenter_end;		// fixed geometry. < 0 means don't care
     
     // to remove temporary arrows
-    static Q3PtrList<ArrowCanvas> RelsToDel;
+    static QList<ArrowCanvas> RelsToDel;
 
     // to remove redondant relation made by release 2.22
-    static Q3PtrList<ArrowCanvas> RelsToCheck;
+    static QList<ArrowCanvas> RelsToCheck;
     
   public:
     ArrowCanvas(UmlCanvas * canvas, DiagramItem * b, DiagramItem * e,
@@ -145,8 +141,8 @@ class ArrowCanvas : public QObject, public Q3CanvasPolygon, public DiagramItem {
     
     void package_modified() const;
     
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
-    const ArrowCanvas * save_lines(Q3TextStream  & st, bool with_label, bool with_stereotype, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
+    const ArrowCanvas * save_lines(QTextStream  & st, bool with_label, bool with_stereotype, QString & warning) const;
     static ArrowCanvas * read(char * & st, UmlCanvas * canvas, char * k);
     static ArrowCanvas * read_list(char * & st, UmlCanvas * canvas,
 				   UmlCode t, LineGeometry geo,
@@ -172,7 +168,7 @@ class ArrowCanvas : public QObject, public Q3CanvasPolygon, public DiagramItem {
     void propag_decenter(float db, float de);
     void set_decenter(float db, float de);
     ArrowCanvas * set_geometry(LineGeometry geo, bool fixed);
-    void init_geometry_menu(Q3PopupMenu & m, int first);
+    void init_geometry_menu(QPopupMenu & m, int first);
     
     virtual void drawShape(QPainter & p);
     

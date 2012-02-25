@@ -6,8 +6,6 @@
 
 #include "UmlNcRelation.h"
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 UmlItem * UmlUseCase::container(anItemKind kind, Token & token, FileIn & in) {
   switch (kind) {
   case aClass:
@@ -22,8 +20,8 @@ UmlItem * UmlUseCase::container(anItemKind kind, Token & token, FileIn & in) {
 
 }
 
-void UmlUseCase::solve(int context, Q3CString idref) {
-  QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+void UmlUseCase::solve(int context, QCString idref) {
+  QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
       
   if (it == All.end()) {
     if (!FileIn::isBypassedId(idref))
@@ -59,7 +57,7 @@ void UmlUseCase::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(anUseCase, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     
     if (s.isEmpty()) {
       static unsigned n = 0;
@@ -76,7 +74,7 @@ void UmlUseCase::importIt(FileIn & in, Token & token, UmlItem * where)
     uc->addItem(token.xmiId(), in);
     
     if (! token.closed()) {
-      Q3CString k = token.what();
+      QCString k = token.what();
       const char * kstr = k;
       
       while (in.read(), !token.close(kstr))
@@ -91,12 +89,12 @@ void UmlUseCase::importExtendInclude(FileIn & in, Token & token, UmlItem * where
 {
   if (where->kind() == anUseCase) {
     bool extend = (token.what() == "extend");
-    Q3CString other = token.valueOf((extend) ? "extendedcase" : "addition");
+    QCString other = token.valueOf((extend) ? "extendedcase" : "addition");
     
     if (other.isEmpty())
       in.warning((extend) ? "extendedCase is missing" : "addition is missing");
     else {
-      QMap<Q3CString, UmlItem *>::Iterator it = All.find(other);
+      QMap<QCString, UmlItem *>::Iterator it = All.find(other);
       
       if (it != All.end())
 	where->solve(extend, other);
@@ -112,10 +110,10 @@ void UmlUseCase::importExtendInclude(FileIn & in, Token & token, UmlItem * where
 void UmlUseCase::importExtensionPoint(FileIn & in, Token & token, UmlItem * where)
 {
   if (where->kind() == anUseCase) {
-    Q3CString ep = token.valueOf("name");
+    QCString ep = token.valueOf("name");
     
     if (!ep.isEmpty()) {
-      Q3CString eps = ((UmlUseCase *) where)->extensionPoints();
+      QCString eps = ((UmlUseCase *) where)->extensionPoints();
       
       if (! eps.isEmpty())
 	eps += "\n" + ep;

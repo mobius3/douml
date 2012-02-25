@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseComponentView.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 // This class manages 'component view'
 //
@@ -12,7 +12,7 @@ class UmlComponentView : public UmlBaseComponentView {
   public:
     virtual void sort();
 
-    UmlComponentView(void * id, const Q3CString & n) : UmlBaseComponentView(id, n) {};
+    UmlComponentView(void * id, const QCString & n) : UmlBaseComponentView(id, n) {};
 
     virtual int orderWeight();
 

@@ -26,12 +26,7 @@
 #ifndef BROWSER_CLASSVIEW_H
 #define BROWSER_CLASSVIEW_H
 
-#include <q3intdict.h> 
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <QDragMoveEvent>
+#include <qintdict.h> 
 
 class QPixmap;
 class BrowserDeploymentView;
@@ -94,7 +89,7 @@ class BrowserClassView : public BrowserNode, public Labeled<BrowserClassView> {
     virtual QString get_stype() const;
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
+    virtual bool may_contains_them(const QList<BrowserNode> &,
 				   BooL & duplicable) const;
     virtual BrowserNode * container(UmlCode) const; // container for class, state machine and activity
     virtual BasicData * get_data() const;
@@ -108,7 +103,7 @@ class BrowserClassView : public BrowserNode, public Labeled<BrowserClassView> {
     virtual UmlColor get_color(UmlCode) const;
     virtual UmlVisibility get_visibility(UmlCode) const;
     virtual void on_delete();
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     
     static BrowserClassView * add_class_view(BrowserNode * future_parent);
     
@@ -122,7 +117,7 @@ class BrowserClassView : public BrowserNode, public Labeled<BrowserClassView> {
 
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
 
     static BrowserClassView * read(char * &, char *, BrowserNode *, bool);
     static BrowserNode * get_it(const char * k, int id);

@@ -5,8 +5,8 @@
 #include "UmlClassMember.h"
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
-#include <q3valuelist.h>
-#include <q3cstring.h>
+#include <qvaluelist.h>
+#include <qcstring.h>
 
 #include "UmlParameter.h"
 class UmlOperation;
@@ -51,7 +51,7 @@ class UmlBaseOperation : public UmlClassMember {
     bool set_ReturnType(const UmlTypeSpec & t);
 
     // returns (in java a copy of) the parameters list
-    const Q3ValueList<UmlParameter> params();
+    const QValueList<UmlParameter> params();
 
     // adds a parameter at the given rank (0...)
     //
@@ -69,7 +69,7 @@ class UmlBaseOperation : public UmlClassMember {
     bool replaceParameter(unsigned rank, const UmlParameter & p);
 
     // returns the exceptions
-    const Q3ValueList<UmlTypeSpec> exceptions();
+    const QValueList<UmlTypeSpec> exceptions();
 
     // adds the exception at the given rank (0...)
     //
@@ -129,7 +129,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // returns the operation's definition in C++, notes that the declaration
     // is returned by the inherited ClassItemBase::CppDecl() operation
-    const Q3CString & cppDef();
+    const QCString & cppDef();
 
     // sets the operation's definition in C++, notes that the declaration
     // is set through the inherited ClassItemBase::set_CppDecl() operation
@@ -140,7 +140,7 @@ class UmlBaseOperation : public UmlClassMember {
     // returns the operation's body in C++, useless if the def does not
     // contains ${body}. Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString cppBody();
+    QCString cppBody();
 
     // sets the operation's body in C++, useless if the def does not 
     // contains ${body}
@@ -150,7 +150,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's C++ name must be generated
-    const Q3CString & cppNameSpec();
+    const QCString & cppNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's C++ name must be generated
@@ -198,7 +198,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // returns the operation's definition in Java, notes that it is
     // already made by the inherited JavaDecl operation
-    const Q3CString & javaDef();
+    const QCString & javaDef();
 
     // sets the operation's definition in Java, notes that it is
     // already made by the inherited set_JavaDecl operation
@@ -209,7 +209,7 @@ class UmlBaseOperation : public UmlClassMember {
     // returns the operation's body in Java++, useless if the def does
     // not contains ${body} Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString javaBody();
+    QCString javaBody();
 
     // sets the operation's body in Java, useless if the def does not 
     // contains ${body}
@@ -219,7 +219,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's JAVA name must be generated
-    const Q3CString & javaNameSpec();
+    const QCString & javaNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's JAVA name must be generated
@@ -259,7 +259,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // returns the operation's definition in Php, notes that it is
     // already made by the inherited PhpDecl operation
-    const Q3CString & phpDef();
+    const QCString & phpDef();
 
     // sets the operation's definition in Php, notes that it is
     // already made by the inherited set_PhpDecl operation
@@ -270,7 +270,7 @@ class UmlBaseOperation : public UmlClassMember {
     // returns the operation's body in Php++, useless if the def does
     // not contains ${body} Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString phpBody();
+    QCString phpBody();
 
     // sets the operation's body in Php, useless if the def does not 
     // contains ${body}
@@ -280,7 +280,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's PHP name must be generated
-    const Q3CString & phpNameSpec();
+    const QCString & phpNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's PHP name must be generated
@@ -312,7 +312,7 @@ class UmlBaseOperation : public UmlClassMember {
 #ifdef WITHPYTHON
     // returns the operation's definition in Python, notes that it is
     // already made by the inherited PythonDecl operation
-    const Q3CString & pythonDef();
+    const QCString & pythonDef();
 
     // sets the operation's definition in Python, notes that it is
     // already made by the inherited set_PythonDecl operation
@@ -323,7 +323,7 @@ class UmlBaseOperation : public UmlClassMember {
     // returns the operation's body in Python++, useless if the def does
     // not contains ${body} Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString pythonBody();
+    QCString pythonBody();
 
     // sets the operation's body in Python, useless if the def does not 
     // contains ${body}
@@ -333,7 +333,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's PYTHON name must be generated
-    const Q3CString & pythonNameSpec();
+    const QCString & pythonNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's PYTHON name must be generated
@@ -364,7 +364,7 @@ class UmlBaseOperation : public UmlClassMember {
 
 #ifdef WITHPYTHON
     // return the  decorators
-    const Q3CString & pythonDecorators();
+    const QCString & pythonDecorators();
 
     // set the  decorators
     //
@@ -383,7 +383,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's IDL name must be generated
-    const Q3CString & idlNameSpec();
+    const QCString & idlNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's IDL name must be generated
@@ -474,32 +474,32 @@ class UmlBaseOperation : public UmlClassMember {
 
     UmlTypeSpec _return_type;
 
-    Q3ValueList<UmlParameter> _params;
+    QValueList<UmlParameter> _params;
 
-    Q3ValueList<UmlTypeSpec> _exceptions;
+    QValueList<UmlTypeSpec> _exceptions;
 
 #ifdef WITHCPP
-    Q3CString _cpp_def;
+    QCString _cpp_def;
 
-    Q3CString _cpp_name_spec;
+    QCString _cpp_name_spec;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_name_spec;
+    QCString _java_name_spec;
 #endif
 
 #ifdef WITHPHP
-    Q3CString _php_name_spec;
+    QCString _php_name_spec;
 #endif
 
 #ifdef WITHPYTHON
-    Q3CString _python_name_spec;
+    QCString _python_name_spec;
 
-    Q3CString _python_decorators;
+    QCString _python_decorators;
 #endif
 
 #ifdef WITHIDL
-    Q3CString _idl_name_spec;
+    QCString _idl_name_spec;
 #endif
 
     // exclusive with set_of
@@ -511,7 +511,7 @@ class UmlBaseOperation : public UmlClassMember {
 
   protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseOperation(void * id, const Q3CString & n);
+    UmlBaseOperation(void * id, const QCString & n);
 
     //internal, do NOT use it
     
@@ -549,7 +549,7 @@ class UmlBaseOperation : public UmlClassMember {
 
 };
 
-inline UmlBaseOperation::UmlBaseOperation(void * id, const Q3CString & n) : UmlClassMember(id, n) {
+inline UmlBaseOperation::UmlBaseOperation(void * id, const QCString & n) : UmlClassMember(id, n) {
   _get_of = 0;
   _set_of = 0;
 }

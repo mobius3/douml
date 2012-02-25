@@ -4,8 +4,8 @@
 
 #include "UmlBaseRegion.h"
 #include "UmlStateItem.h"
-#include <q3cstring.h>
-#include <q3ptrlist.h>
+#include <qcstring.h>
+#include <qlist.h>
 
 class UmlTransition;
 class FileOut;
@@ -13,7 +13,7 @@ class FileOut;
 class UmlRegion : public UmlBaseRegion, public UmlStateItem {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlRegion(void * id, const Q3CString & s) : UmlBaseRegion(id, s) {
+     UmlRegion(void * id, const QCString & s) : UmlBaseRegion(id, s) {
     }
 
     //goes among tree to memorize incoming transitions
@@ -31,7 +31,7 @@ class UmlRegion : public UmlBaseRegion, public UmlStateItem {
   protected:
 #if 0
     // To bypass Eclipse's bug
-    Q3PtrList<UmlTransition> _trans;
+    QList<UmlTransition> _trans;
 #endif
 
 };

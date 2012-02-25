@@ -12,7 +12,7 @@ void UmlInitialPseudoState::generate(UmlClass * machine, UmlClass * anystate, Um
 
   state->hasInitial();
   
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   
   if (ch.count() != 1) {
     UmlCom::trace("Error : 'initial' pseudo state must have one and only one transition<br>");

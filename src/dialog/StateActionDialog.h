@@ -26,16 +26,14 @@
 #ifndef STATEACTIONDIALOG_H
 #define STATEACTIONDIALOG_H
 
-#include <qwidget.h>
+#include <qwidgetlist.h>
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BrowserNode.h"
 
 class QPushButton;
-class Q3ComboBox;
+class QComboBox;
 
 class LineEdit;
 class MultiLineEdit;
@@ -44,15 +42,15 @@ class BrowserNode;
 class KeyValuesTable;
 class BodyDialog;
 
-class StateActionDialog : public Q3TabDialog {
+class StateActionDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     bool visit;
     StateActionData * action;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     QWidget * umltab;
     QWidget * cpptab;

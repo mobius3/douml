@@ -30,11 +30,10 @@
 
 
 
-#include <q3ptrlist.h>
-#include <q3tabdialog.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
+#include <qtabdialog.h>
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 
 class LineEdit;
@@ -43,19 +42,19 @@ class ExpansionRegionData;
 class KeyValuesTable;
 class BodyDialog;
 
-class ExpansionRegionDialog : public Q3TabDialog {
+class ExpansionRegionDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     QWidget * umltab;
     ExpansionRegionData * data;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * edmode;
+    QComboBox * edstereotype;
+    QComboBox * edmode;
     QCheckBox * must_isolate_cb;
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
 
     static QSize previous_size;
     

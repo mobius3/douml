@@ -3,7 +3,7 @@
 #include "FileOut.h"
 
 void UmlActivityNode::memo_incoming_flow() {
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size();
   unsigned i;
      
@@ -20,7 +20,7 @@ void UmlActivityNode::add_incoming_flow(UmlFlow * flow) {
 }
 
 void UmlActivityNode::write_incoming_flows(FileOut & out) {
-  Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+  QListIterator<UmlFlow> it(_incoming_flows);
   
   while (it.current() != 0) {
     out.indent();

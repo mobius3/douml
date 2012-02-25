@@ -3,7 +3,7 @@
 
 
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlBaseActivityPartition.h"
 #include "UmlActivityItem.h"
 
@@ -17,7 +17,7 @@ class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivity
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);
 
     //  call at end of import : try to solve represented element
-    virtual void solve(Q3CString idref);
+    virtual void solve(QCString idref);
 
     static void init();
 
@@ -25,7 +25,7 @@ class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivity
     static void importIt(FileIn & in, Token & token, UmlItem * where);
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityPartition(void * id, const Q3CString & s) : UmlBaseActivityPartition(id, s) {
+     UmlActivityPartition(void * id, const QCString & s) : UmlBaseActivityPartition(id, s) {
     }
 
 };

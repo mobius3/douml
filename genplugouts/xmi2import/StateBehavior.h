@@ -2,15 +2,15 @@
 #define _STATEBEHAVIOR_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class StateBehavior {
   public:
-    Q3CString on_entry;
+    QCString on_entry;
 
-    Q3CString on_exit;
+    QCString on_exit;
 
-    Q3CString do_activity;
+    QCString do_activity;
 
     void read();
 

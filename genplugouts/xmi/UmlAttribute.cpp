@@ -5,8 +5,6 @@
 #include "UmlClass.h"
 #include "CppSettings.h"
 #include "JavaSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
 bool UmlAttribute::write_if_needed(FileOut & out) {
   switch (_lang) {
   case Uml:
@@ -91,7 +89,7 @@ bool UmlAttribute::write_if_needed(FileOut & out) {
 
 void UmlAttribute::write_cpp_type(FileOut & out) {
   // note : doesn't manage function/operation pointer
-  Q3CString s = cppDecl();
+  QCString s = cppDecl();
   int index;
   
   remove_comments(s);
@@ -121,7 +119,7 @@ void UmlAttribute::write_cpp_type(FileOut & out) {
 }
 
 void UmlAttribute::write_java_type(FileOut & out) {
-  Q3CString s = javaDecl();
+  QCString s = javaDecl();
   int index;
   
   remove_comments(s);

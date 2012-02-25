@@ -31,8 +31,6 @@
 
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "DiagramCanvas.h"
 #include "Settings.h"
@@ -82,14 +80,14 @@ class StateActionCanvas : public QObject, public DiagramCanvas {
     virtual void resize(const QSize & sz, bool w, bool h);
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
     
     virtual void apply_shortcut(QString s);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static StateActionCanvas * read(char * &, UmlCanvas *, char *);
     virtual void post_loaded();
 

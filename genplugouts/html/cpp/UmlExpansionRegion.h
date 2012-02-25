@@ -3,20 +3,20 @@
 
 
 #include "UmlBaseExpansionRegion.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlExpansionRegion : public UmlBaseExpansionRegion {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlExpansionRegion(void * id, const Q3CString & s) : UmlBaseExpansionRegion(id, s) {
+     UmlExpansionRegion(void * id, const QCString & s) : UmlBaseExpansionRegion(id, s) {
     }
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QCString sKind();
 
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
+    virtual void html(QCString pfix, unsigned int rank, unsigned int level);
 
 };
 

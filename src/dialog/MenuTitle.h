@@ -27,9 +27,8 @@
 #define MENUTITLE_H
 
 #include <qmenudata.h> 
-#include <QMenuItem>
 
-class MenuTitle : public QMenuItem {
+class MenuTitle : public QCustomMenuItem {
   protected:
     QString str;
     QFont font;

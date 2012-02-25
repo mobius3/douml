@@ -30,11 +30,8 @@
 #include <math.h>
 
 #include <qpainter.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
 
 #include "ParameterCanvas.h"
 #include "BrowserParameter.h"
@@ -221,7 +218,7 @@ void ParameterCanvas::change_scale() {
 }
 
 void ParameterCanvas::do_change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   double scale = the_canvas()->zoom();
     
   setSize((int) (width_scale100*scale) | 1,
@@ -229,7 +226,7 @@ void ParameterCanvas::do_change_scale() {
   recenter();
   // activity already in position, can check
   check_position();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void ParameterCanvas::moveBy(double dx, double dy) {
@@ -254,7 +251,7 @@ bool ParameterCanvas::primaryItem() const {
 
 void ParameterCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QBrush brsh = p.brush();
   QColor bckgrnd = p.backgroundColor();
   
@@ -285,12 +282,12 @@ void ParameterCanvas::draw(QPainter & p) {
   p.setFont(the_canvas()->get_font(UmlNormalFont));
   p.drawText(r.left() + 2, r.top() + 2,
 	     r.width() - 4, r.height() - 4,
-	     ::Qt::AlignCenter + ::Qt::TextWordWrap,
+	     ::Qt::AlignCenter + ::Qt::WordBreak,
 	     browser_node->get_name());
   if (fp != 0)
     draw_text(r.left() + 2, r.top() + 2,
 	      r.width() - 4, r.height() - 4,
-	      ::Qt::AlignCenter + ::Qt::TextWordWrap,
+	      ::Qt::AlignCenter + ::Qt::WordBreak,
 	      browser_node->get_name(),
 	      p.font(), fp);
       
@@ -321,10 +318,10 @@ void ParameterCanvas::open() {
 }
 
 void ParameterCanvas::menu(const QPoint &) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
-  Q3ValueList<ParameterCanvas *> params = act->get_params();
+  QValueList<ParameterCanvas *> params = act->get_params();
   BrowserClass * cl =
     ((ParameterData *) browser_node->get_data())->get_type().type;
   
@@ -387,7 +384,7 @@ void ParameterCanvas::menu(const QPoint &) {
     {
       int w = width();
       int h = height();
-      Q3ValueList<ParameterCanvas *>::Iterator iter;
+      QValueList<ParameterCanvas *>::Iterator iter;
   
       for (iter = params.begin(); iter != params.end(); ++iter) {
 	if (*iter != this) {
@@ -461,7 +458,7 @@ bool ParameterCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ParameterCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ParameterCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -472,7 +469,7 @@ void ParameterCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((ParameterCanvas *) it.current())->itscolor = itscolor;
@@ -484,8 +481,8 @@ void ParameterCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ParameterCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ParameterCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ParameterCanvas * x = (ParameterCanvas *) it.current();
   
@@ -548,7 +545,7 @@ void ParameterCanvas::post_loaded() {
     draw_all_flows();
 }
 
-void ParameterCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ParameterCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "parametercanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -622,7 +619,7 @@ ParameterCanvas * ParameterCanvas::read(char * & st, UmlCanvas * canvas,
 }
 
 void ParameterCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   disconnect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
@@ -645,7 +642,7 @@ void ParameterCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));

@@ -11,12 +11,12 @@ void UmlComponent::write(FileOut & out) {
   out << "<" << k << " xmi:type=\"uml:Component\"";
   out.id(this); 
   out << " name=\"";
-  out.quote((const char*)name());//[jasa] ambiguous call
+  out.quote(name());
   out << "\">\n";
   out.indent(+1); 
   write_description_properties(out); 
      
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size(); 
   unsigned index;
      
@@ -25,7 +25,7 @@ void UmlComponent::write(FileOut & out) {
   
   // provided
   
-  const Q3PtrVector< UmlClass > & prov = providedClasses();
+  const QVector< UmlClass > & prov = providedClasses();
   
   n = prov.size();
   
@@ -43,7 +43,7 @@ void UmlComponent::write(FileOut & out) {
   
   // realizing
   
-  const Q3PtrVector< UmlClass > & rea = realizingClasses();
+  const QVector< UmlClass > & rea = realizingClasses();
   
   n = rea.size();
   
@@ -64,7 +64,7 @@ void UmlComponent::write(FileOut & out) {
   
   // required
   
-  const Q3PtrVector< UmlClass > & req = requiredClasses();
+  const QVector< UmlClass > & req = requiredClasses();
   
   n = req.size();
   

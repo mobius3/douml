@@ -28,33 +28,33 @@
 
 BrowserView * BrowserView::the;
 
-BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent) {
+BrowserView::BrowserView(QWidget * parent) : QListView(parent) {
   the = this;
   
   setSorting(-1);		// manual sorting
   addColumn("browser          ");
   setTreeStepSize(18);
   
-  connect(this, SIGNAL(selectionChanged(Q3ListViewItem*)),
-	  this, SLOT(selected(Q3ListViewItem*)));
+  connect(this, SIGNAL(selectionChanged(QListViewItem*)),
+	  this, SLOT(selected(QListViewItem*)));
   
-  connect(this, SIGNAL(rightButtonPressed(Q3ListViewItem *, const QPoint &, int)),
-	  this, SLOT(rightPressed(Q3ListViewItem *)));
+  connect(this, SIGNAL(rightButtonPressed(QListViewItem *, const QPoint &, int)),
+	  this, SLOT(rightPressed(QListViewItem *)));
 
 }
 
-void BrowserView::select(Q3ListViewItem * b)
+void BrowserView::select(QListViewItem * b)
 {
   the->ensureItemVisible(b);
   the->setSelected(b, TRUE);
 }
 
-void BrowserView::selected(Q3ListViewItem * b)
+void BrowserView::selected(QListViewItem * b)
 {
   ((BrowserNode *) b)->activated();
 }
 
-void BrowserView::rightPressed(Q3ListViewItem * item) {
+void BrowserView::rightPressed(QListViewItem * item) {
   if (item != 0)
     ((BrowserNode *) item)->menu();
 }

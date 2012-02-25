@@ -2,12 +2,10 @@
 #include "UmlActivityAction.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlActivityAction::html() {
   UmlCom::message(name());
 
-  Q3CString s = sKind();
+  QCString s = sKind();
   
   s.replace(0, 1, s.left(1).upper());
     
@@ -17,7 +15,7 @@ void UmlActivityAction::html() {
   parent()->write();
   fw.write("</p>");
 
-  Q3CString scpp, sjava;
+  QCString scpp, sjava;
   
   s = preCondition();
   scpp = cppPreCondition();

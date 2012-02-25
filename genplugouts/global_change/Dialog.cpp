@@ -9,20 +9,14 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+#include <qhbox.h>
+#include <qvbox.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
-//#include <qhbuttongroup.h> //[jasa] has compiler errors.
-//[jasa] including q3buttongroup.h instead seems to work.
-#include <q3buttongroup.h>
-#include <q3vgroupbox.h> 
-#include <q3grid.h>
+#include <qhbuttongroup.h>
+#include <qvgroupbox.h> 
+#include <qgrid.h>
 #include <qmessagebox.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QKeyEvent>
-#include <Q3VBoxLayout>
 
 #include "UmlCom.h"
 #include "Context.h"
@@ -40,11 +34,11 @@ void LineEdit::keyPressEvent(QKeyEvent * e) {
     QLineEdit::keyPressEvent(e);
   else {
     switch (e->key()) {
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
+    case Key_Return:
+    case Key_Enter:
       insert("\\n");
       break;
-    case Qt::Key_Tab:
+    case Key_Tab:
       insert("\\t");
       break;
     default:
@@ -54,17 +48,17 @@ void LineEdit::keyPressEvent(QKeyEvent * e) {
 }
 
 Dialog::Dialog() : QDialog(0, 0, TRUE) {
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3VGroupBox * gbox;
-  Q3HButtonGroup * bg;
-  Q3HBox * htab;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QVGroupBox * gbox;
+  QHButtonGroup * bg;
+  QHBox * htab;
   
   vbox->setMargin(5);
   
-  gbox = new Q3VGroupBox("Filters" , this);
+  gbox = new QVGroupBox("Filters" , this);
   vbox->addWidget(gbox);
   
-  htab = new Q3HBox(gbox);
+  htab = new QHBox(gbox);
   //htab->setMargin(5);
   
   new QLabel("filter 1 : ", htab);
@@ -72,7 +66,7 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   
   new QLabel("  ", htab);
   
-  bg = new Q3HButtonGroup(htab);
+  bg = new QHButtonGroup(htab);
   bg->setRadioButtonExclusive(TRUE);
   
   with1_rb = new QRadioButton("with", bg);
@@ -81,11 +75,11 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   
   //
   
-  htab = new Q3HBox(gbox);
+  htab = new QHBox(gbox);
   //htab->setMargin(5);
   
   new QLabel("", htab);
-  bg = new Q3HButtonGroup(htab);
+  bg = new QHButtonGroup(htab);
   bg->setRadioButtonExclusive(TRUE);
   
   and12_rb = new QRadioButton("and", bg);
@@ -96,7 +90,7 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   
   //
   
-  htab = new Q3HBox(gbox);
+  htab = new QHBox(gbox);
   //htab->setMargin(5);
   
   new QLabel("filter 2 : ", htab);
@@ -104,7 +98,7 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   
   new QLabel("  ", htab);
   
-  bg = new Q3HButtonGroup(htab);
+  bg = new QHButtonGroup(htab);
   bg->setRadioButtonExclusive(TRUE);
   
   with2_rb = new QRadioButton("with", bg);
@@ -113,11 +107,11 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   
   //
   
-  htab = new Q3HBox(gbox);
+  htab = new QHBox(gbox);
   //htab->setMargin(5);
   
   new QLabel("", htab);
-  bg = new Q3HButtonGroup(htab);
+  bg = new QHButtonGroup(htab);
   bg->setRadioButtonExclusive(TRUE);
   
   and23_rb = new QRadioButton("and", bg);
@@ -128,7 +122,7 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   
   //
   
-  htab = new Q3HBox(gbox);
+  htab = new QHBox(gbox);
   //htab->setMargin(5);
   
   new QLabel("filter 3 : ", htab);
@@ -136,7 +130,7 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   
   new QLabel("  ", htab);
   
-  bg = new Q3HButtonGroup(htab);
+  bg = new QHButtonGroup(htab);
   bg->setRadioButtonExclusive(TRUE);
   
   with3_rb = new QRadioButton("with", bg);
@@ -146,13 +140,13 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   //
   //
   
-  gbox = new Q3VGroupBox("Stereotype" , this);
+  gbox = new QVGroupBox("Stereotype" , this);
   vbox->addWidget(gbox);
   
-  htab = new Q3HBox(gbox);
+  htab = new QHBox(gbox);
   //htab->setMargin(5);
   
-  bg = new Q3HButtonGroup(htab);
+  bg = new QHButtonGroup(htab);
   bg->setRadioButtonExclusive(TRUE);
   
   any_rb = new QRadioButton("any", bg);
@@ -164,10 +158,10 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   //
   //
   
-  gbox = new Q3VGroupBox("Targets" , this);
+  gbox = new QVGroupBox("Targets" , this);
   vbox->addWidget(gbox);
   
-  htab = new Q3HBox(gbox);
+  htab = new QHBox(gbox);
   //htab->setMargin(5);
   
   artifact_cb = new QCheckBox("artifact", htab);
@@ -179,10 +173,10 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   //
   //
   
-  gbox = new Q3VGroupBox("Languages" , this);
+  gbox = new QVGroupBox("Languages" , this);
   vbox->addWidget(gbox);
   
-  htab = new Q3HBox(gbox);
+  htab = new QHBox(gbox);
   //htab->setMargin(5);
   
   cpp_cb = new QCheckBox("C++", htab);
@@ -194,7 +188,7 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   //
   //
   
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   vbox->addWidget(grid);
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -208,7 +202,7 @@ Dialog::Dialog() : QDialog(0, 0, TRUE) {
   //
   //
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -238,8 +232,7 @@ void Dialog::do_replace() {
   if (err != 0)
     QMessageBox::critical(this, "Global change", err);
   else {
-    ctx.set_stereotype(Q3CString(stereotype_le->text().toAscii()),//[jasa] change QString to QByteArray to const char* for Q3CString constructor. 
-		    is_rb->isChecked(), isnot_rb->isChecked());
+    ctx.set_stereotype(QCString(stereotype_le->text()), is_rb->isChecked(), isnot_rb->isChecked());
     ctx.set_targets(artifact_cb->isChecked(), class_cb->isChecked(),
   		  operation_cb->isChecked(), attribute_cb->isChecked(), relation_cb->isChecked());
     ctx.set_language(cpp_cb->isChecked(), java_cb->isChecked(), php_cb->isChecked(),
@@ -263,8 +256,8 @@ void Dialog::do_replace() {
   }
 }
 
-Q3CString Dialog::digest(const QString s) {
-  Q3CString c = (const char *) s;
+QCString Dialog::digest(const QString s) {
+  QCString c = (const char *) s;
   int index;
   
   index = 0;
@@ -294,10 +287,10 @@ void Dialog::polish() {
   // width = height
   resize(sz.height(), sz.height());
   
-  // try to read .doumlrc
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // try to read .boumlrc
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
+  QString s = QDir::home().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
 
 #ifdef WIN32
@@ -306,7 +299,7 @@ void Dialog::polish() {
     
     if (! hd.isEmpty()) {
       QDir d(hd);
-      QString s2 = d.absFilePath(".doumlrc");
+      QString s2 = d.absFilePath(".boumlrc");
       
       fp = fopen((const char *) s2, "r");
     }

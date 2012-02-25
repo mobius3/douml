@@ -28,8 +28,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "Settings.h"
 #include "SettingsDialog.h"
@@ -83,7 +81,7 @@ ClassSettings::ClassSettings() {
   operation_visibility = UmlDefaultVisibility;
 }
  
-void ClassSettings::save(Q3TextStream & st) const {
+void ClassSettings::save(QTextStream & st) const {
   bool nl;
   
   if (attribute_visibility != UmlDefaultVisibility) {
@@ -164,7 +162,7 @@ ClassDiagramSettings::ClassDiagramSettings() {
   show_stereotype_properties = UmlDefaultState;
 }
 
-void ClassDiagramSettings::save(Q3TextStream & st) const {
+void ClassDiagramSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "draw_all_relations " << stringify(draw_all_relations)
     << " hide_attributes " << stringify(hide_attributes)
@@ -570,7 +568,7 @@ SimpleClassDiagramSettings::SimpleClassDiagramSettings() {
   show_stereotype_properties = UmlDefaultState;
 }
 
-void SimpleClassDiagramSettings::save(Q3TextStream & st) const {
+void SimpleClassDiagramSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "class_drawing_mode " << stringify(class_drawing_mode)
     << " show_context_mode " << stringify(show_context_mode)
@@ -634,7 +632,7 @@ SequenceDiagramSettings::SequenceDiagramSettings() {
   show_msg_context_mode = DefaultShowContextMode;
 }
 
-void SequenceDiagramSettings::save(Q3TextStream & st) const {
+void SequenceDiagramSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "show_full_operations_definition " << stringify(show_full_operations_definition)
     << " write_horizontally " << stringify(write_horizontally)
@@ -767,7 +765,7 @@ CollaborationDiagramSettings::CollaborationDiagramSettings() {
   show_stereotype_properties = UmlDefaultState;
 }
 
-void CollaborationDiagramSettings::save(Q3TextStream & st) const {
+void CollaborationDiagramSettings::save(QTextStream & st) const {
     nl_indent(st);
     st << "show_full_operations_definition " << stringify(show_full_operations_definition)
       << " show_hierarchical_rank " << stringify(show_hierarchical_rank)
@@ -781,7 +779,7 @@ void CollaborationDiagramSettings::save(Q3TextStream & st) const {
 		      << " show_stereotype_properties " << stringify(show_stereotype_properties);
 }
 
-void CollaborationDiagramSettings::save_msg(Q3TextStream & st) const {
+void CollaborationDiagramSettings::save_msg(QTextStream & st) const {
     nl_indent(st);
     st << "show_full_operations_definition " << stringify(show_full_operations_definition)
       << " show_hierarchical_rank " << stringify(show_hierarchical_rank)
@@ -926,7 +924,7 @@ ObjectDiagramSettings::ObjectDiagramSettings() {
   show_stereotype_properties = UmlDefaultState;
 }
 
-void ObjectDiagramSettings::save(Q3TextStream & st) const {
+void ObjectDiagramSettings::save(QTextStream & st) const {
     nl_indent(st);
     st << " write_horizontally " << stringify(write_horizontally)
       << " package_name_in_tab " << stringify(package_name_in_tab)
@@ -1031,7 +1029,7 @@ UseCaseDiagramSettings::UseCaseDiagramSettings() {
   show_stereotype_properties = UmlDefaultState;
 }
 
-void UseCaseDiagramSettings::save(Q3TextStream & st) const {
+void UseCaseDiagramSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "package_name_in_tab " << stringify(package_name_in_tab)
     << " show_context " << stringify(show_context_mode)
@@ -1143,7 +1141,7 @@ ComponentDiagramSettings::ComponentDiagramSettings() {
   shadow = UmlDefaultState;
 }
 
-void ComponentDiagramSettings::save(Q3TextStream & st) const {
+void ComponentDiagramSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "package_name_in_tab " << stringify(package_name_in_tab)
     << " show_context " << stringify(show_context_mode)
@@ -1234,7 +1232,7 @@ DeploymentDiagramSettings::DeploymentDiagramSettings() {
   shadow = UmlDefaultState;
 }
 
-void DeploymentDiagramSettings::save(Q3TextStream & st) const {
+void DeploymentDiagramSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "package_name_in_tab " << stringify(package_name_in_tab)
     << " show_context " << stringify(show_context_mode)
@@ -1334,7 +1332,7 @@ ComponentDrawingSettings::ComponentDrawingSettings() {
   show_stereotype_properties = UmlDefaultState;
 }
 
-void ComponentDrawingSettings::save(Q3TextStream & st) const {
+void ComponentDrawingSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "draw_component_as_icon " << stringify(draw_component_as_icon)
     << " show_component_req_prov " << stringify(show_component_req_prov)
@@ -1420,7 +1418,7 @@ StateDiagramSettings::StateDiagramSettings() {
   shadow = UmlDefaultState;
 }
 
-void StateDiagramSettings::save(Q3TextStream & st) const {
+void StateDiagramSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "package_name_in_tab " << stringify(package_name_in_tab)
     << " show_context " << stringify(show_context_mode)
@@ -1527,7 +1525,7 @@ StateDrawingSettings::StateDrawingSettings() {
   show_stereotype_properties = UmlDefaultState;
 }
 
-void StateDrawingSettings::save(Q3TextStream & st) const {
+void StateDrawingSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "show_activities " << stringify(show_activities)
     << " region_horizontally " << stringify(region_horizontally)
@@ -1605,7 +1603,7 @@ ActivityDiagramSettings::ActivityDiagramSettings() {
   shadow = UmlDefaultState;
 }
 
-void ActivityDiagramSettings::save(Q3TextStream & st) const {
+void ActivityDiagramSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "package_name_in_tab " << stringify(package_name_in_tab)
     << " show_context " << stringify(show_context_mode)
@@ -1711,7 +1709,7 @@ ActivityDrawingSettings::ActivityDrawingSettings() {
   show_stereotype_properties = UmlDefaultState;
 }
 
-void ActivityDrawingSettings::save(Q3TextStream & st) const {
+void ActivityDrawingSettings::save(QTextStream & st) const {
   nl_indent(st);
   st << "show_infonote " << stringify(show_infonote)
     << " drawing_language " << stringify(drawing_language)

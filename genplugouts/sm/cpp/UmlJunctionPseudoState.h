@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseJunctionPseudoState.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlClass;
 class UmlState;
@@ -20,13 +20,13 @@ class UmlJunctionPseudoState : public UmlBaseJunctionPseudoState {
 
     //  is the target of a transition
     
-    virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state, Q3CString & body, Q3CString indent);
+    virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state, QCString & body, QCString indent);
 
 
   protected:
     //  the name of the operation implementing the junction
     
-    Q3CString _oper;
+    QCString _oper;
 
     //  to have different name for the operation implementing the junction
     

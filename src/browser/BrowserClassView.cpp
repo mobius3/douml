@@ -27,13 +27,8 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserClassView.h"
 #include "ClassViewDialog.h"
@@ -160,7 +155,7 @@ void BrowserClassView::update_idmax_for_root()
 void BrowserClassView::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
@@ -195,10 +190,10 @@ QString BrowserClassView::full_name(bool rev, bool itself) const {
 }
 
 void BrowserClassView::menu() {
-  Q3PopupMenu m(0);
-  Q3PopupMenu subm(0);
-  Q3PopupMenu roundtripm(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu subm(0);
+  QPopupMenu roundtripm(0);
+  QPopupMenu toolm(0);
   bool isprofile = (strcmp(((BrowserNode *) parent())->get_data()->get_stereotype(),
 			   "profile")
 		    == 0);
@@ -856,9 +851,9 @@ void BrowserClassView::DragMoveInsideEvent(QDragMoveEvent * e) {
     e->ignore();
 }
 
-bool BrowserClassView::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserClassView::may_contains_them(const QList<BrowserNode> & l,
 					 BooL & duplicable) const {
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -944,7 +939,7 @@ void BrowserClassView::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 }
 
 bool BrowserClassView::extract_from_profile() {
-  Q3ListViewItem * bn = firstChild();
+  QListViewItem * bn = firstChild();
   bool has_stereotypes = FALSE;
   
   while (bn != 0) {
@@ -962,7 +957,7 @@ bool BrowserClassView::extract_from_profile() {
 }
 
 void BrowserClassView::insert_in_profile() {
-  Q3ListViewItem * bn = firstChild();
+  QListViewItem * bn = firstChild();
   
   while (bn != 0) {
     if (!((BrowserNode *) bn)->deletedp() &&
@@ -980,7 +975,7 @@ const QStringList & BrowserClassView::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserClassView::save_stereotypes(Q3TextStream & st)
+void BrowserClassView::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "classview_stereotypes ";
@@ -995,7 +990,7 @@ void BrowserClassView::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserClassView::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserClassView::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classview_ref " << get_ident() << " // " << get_name();
   else {
@@ -1053,7 +1048,7 @@ void BrowserClassView::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
     
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

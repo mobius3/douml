@@ -25,10 +25,6 @@
 
 #ifdef TRACE
 #include <iostream>
-//Added by qt3to4:
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 using namespace std;
 #endif
@@ -50,7 +46,7 @@ using namespace std;
 #endif
 
 #ifdef ROUNDTRIP
-static UmlAttribute * search_attr(Class * container, const Q3CString & name)
+static UmlAttribute * search_attr(Class * container, const QCString & name)
 {
   UmlItem * x = container->get_uml()->search_for_att_rel(name);
   
@@ -82,14 +78,14 @@ static UmlAttribute * search_attr(Class * container, const Q3CString & name)
 
 #endif
 
-bool UmlAttribute::new_one(Class * container, const Q3CString & name,
+bool UmlAttribute::new_one(Class * container, const QCString & name,
 			   UmlTypeSpec typespec, aVisibility visibility,
 			   bool staticp, bool finalp, bool transientp,
-			   bool volatilep, const Q3CString & array,
-			   const Q3CString & value, Q3CString comment,
-			   Q3CString description, Q3CString annotation
+			   bool volatilep, const QCString & array,
+			   const QCString & value, QCString comment,
+			   QCString description, QCString annotation
 #ifdef ROUNDTRIP
-			   , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+			   , bool roundtrip, QList<UmlItem> & expected_order
 #endif
 			   )
 {
@@ -118,7 +114,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
 #endif
     at = UmlBaseAttribute::create(cl, name);
     if (at == 0) {
-      JavaCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add attribute <i>")
+      JavaCatWindow::trace(QCString("<font face=helvetica><b>cannot add attribute <i>")
 			   + name + "</i> in <i>" + cl->name() 
 			   + "</i></b></font><br>");  
       return FALSE;
@@ -142,7 +138,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
   comment = Lex::get_comments(comment);
   description = Lex::get_description(description);
   
-  Q3CString decl = JavaSettings::attributeDecl("");
+  QCString decl = JavaSettings::attributeDecl("");
   int index = decl.find("${type}");
   
   if ((index == -1) || (decl.find("${name}") == -1)) {
@@ -191,7 +187,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
       container->set_updated();
     }
     
-    Q3CString v = at->defaultValue();
+    QCString v = at->defaultValue();
     
     if (!v.isEmpty() && (((const char *) v)[0] == '='))
       v = v.mid(1);
@@ -206,7 +202,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
       container->set_updated();
     }
     
-    Q3CString stereotype;
+    QCString stereotype;
     bool force_ste = FALSE;
     
     if (cl->stereotype() == "enum") {
@@ -214,7 +210,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
       force_ste = TRUE;
     }
     else if (typespec.type == 0) {
-      Q3CString t = typespec.explicit_type;
+      QCString t = typespec.explicit_type;
       int index2;
       
       if (!t.isEmpty() &&
@@ -235,7 +231,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
     }
     
     if (neq(at->stereotype(), stereotype)) {
-      Q3CString jst;
+      QCString jst;
       
       if (! at->stereotype().isEmpty())
 	jst = JavaSettings::relationAttributeStereotype(at->stereotype());
@@ -290,7 +286,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
       at->set_JavaAnnotations(annotation);
     
     if ((typespec.type == 0) && (cl->stereotype() != "enum")) {
-      Q3CString t = typespec.explicit_type;
+      QCString t = typespec.explicit_type;
       int index2;
       
       if (!t.isEmpty() &&
@@ -324,15 +320,15 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
   return TRUE;
 }
 
-bool UmlAttribute::manage_enum_item(Q3CString name, UmlClass * cl
+bool UmlAttribute::manage_enum_item(QCString name, UmlClass * cl
 #ifdef ROUNDTRIP
 				    , bool roundtrip,
-				    Q3PtrList<UmlItem> & expected_order
+				    QList<UmlItem> & expected_order
 #endif
 				    )
 {   
-  Q3CString comment = Lex::get_comments();
-  Q3CString description = Lex::get_description();
+  QCString comment = Lex::get_comments();
+  QCString description = Lex::get_description();
   UmlAttribute * item = 0;	// initialize to avoid warning
 #ifdef ROUNDTRIP
   Class * container = 0;	// initialize to avoid warning
@@ -347,7 +343,7 @@ bool UmlAttribute::manage_enum_item(Q3CString name, UmlClass * cl
 	((item = search_attr(container, name)) == 0)) {
 #endif
       if ((item = UmlBaseAttribute::create(cl, name)) == 0) {
-	JavaCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add enum item <i>")
+	JavaCatWindow::trace(QCString("<font face=helvetica><b>cannot add enum item <i>")
 			     + name + "</i> in <i>" + cl->name() 
 			     + "</i></b></font><br>");  
 	return FALSE;
@@ -365,8 +361,8 @@ bool UmlAttribute::manage_enum_item(Q3CString name, UmlClass * cl
   
   Lex::mark();
   
-  Q3CString aux;
-  Q3CString s;
+  QCString aux;
+  QCString s;
   
   if ((s = Lex::read_word()).isEmpty()) {
     if (! Package::scanning())
@@ -403,7 +399,7 @@ bool UmlAttribute::manage_enum_item(Q3CString name, UmlClass * cl
   
   if (!Package::scanning()) {
     // here aux = opt init and body + final character , ; or }
-    Q3CString decl = JavaSettings::enumItemDecl();
+    QCString decl = JavaSettings::enumItemDecl();
     int index;
     
     if ((decl.find("${name}") == -1) ||

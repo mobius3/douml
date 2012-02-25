@@ -1,9 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QDragMoveEvent>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -57,7 +51,7 @@ class BrowserArtifact : public BrowserNode, public Labeled<BrowserArtifact> {
     BooL idl_edited;
     ArtifactData * def;
     BrowserDeploymentDiagram * associated_diagram;
-    Q3ValueList<BrowserClass *> associated_classes;
+    QValueList<BrowserClass *> associated_classes;
     
   protected:
     void exec_menu_choice(int rank,
@@ -75,8 +69,8 @@ class BrowserArtifact : public BrowserNode, public Labeled<BrowserArtifact> {
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserDeploymentDiagram *, bool on_read = FALSE);
     
-    const Q3ValueList<BrowserClass *> & get_associated_classes() const;
-    void set_associated_classes(const Q3ValueList<BrowserClass *> & l,
+    const QValueList<BrowserClass *> & get_associated_classes() const;
+    void set_associated_classes(const QValueList<BrowserClass *> & l,
 				bool on_read = FALSE);
     bool add_associated_class(BrowserClass *, bool on_read = FALSE);
     bool remove_associated_class(BrowserClass *, bool on_read = FALSE);
@@ -97,7 +91,7 @@ class BrowserArtifact : public BrowserNode, public Labeled<BrowserArtifact> {
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
     virtual void on_delete();
     virtual QString check_inherit(const BrowserNode * parent) const;
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserArtifact * read_ref(char * &, const char *);
     static BrowserArtifact * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
@@ -118,14 +112,14 @@ class BrowserArtifact : public BrowserNode, public Labeled<BrowserArtifact> {
     virtual const QPixmap* pixmap (int) const;
     virtual void iconChanged();
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserArtifact *);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserClass *);
+    virtual void referenced_by(QList<BrowserNode> &, bool ondelete = FALSE);
+    static void compute_referenced_by(QList<BrowserNode> &, BrowserArtifact *);
+    static void compute_referenced_by(QList<BrowserNode> &, BrowserClass *);
     
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);

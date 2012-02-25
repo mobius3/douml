@@ -27,15 +27,15 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <q3buttongroup.h>
+#include <qcombobox.h> 
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h> 
 #include <qpushbutton.h> 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h> 
 
 #include "ActivityObjectDialog.h"
@@ -57,7 +57,7 @@ QSize ActivityObjectDialog::previous_size;
 
 ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * what,
 					   QStringList & st)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(d) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), data(d) {
   d->browser_node->edit_start();
   
   if (d->browser_node->is_writable()) {
@@ -72,13 +72,13 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   visit = !hasOkButton();
   setCaption(TR(QString(what) + " dialog"));
   
-  Q3Grid * grid;
-  Q3HBox * htab;
+  QGrid * grid;
+  QHBox * htab;
   QString s;
     
   // general tab
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   umltab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -93,7 +93,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   font.setFixedPitch(TRUE);
   
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->stereotype));
   if (! visit) {
     edstereotype->insertStringList(st);
@@ -110,7 +110,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   connect(new SmallPushButton(TR("type :"), grid), SIGNAL(clicked()),
 	  this, SLOT(menu_type()));
   
-  edtype = new Q3ComboBox(!visit, grid);
+  edtype = new QComboBox(!visit, grid);
   edtype->insertItem(data->get_type().get_full_type());
   if (!visit) {
     BrowserClass::instances(nodes);
@@ -133,8 +133,8 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   edtype->setSizePolicy(sp);
   
   new QLabel(TR("multiplicity : "), grid);
-  htab = new Q3HBox(grid);
-  edmultiplicity = new Q3ComboBox(!visit, htab);
+  htab = new QHBox(grid);
+  edmultiplicity = new QComboBox(!visit, htab);
   edmultiplicity->setSizePolicy(sp);
   edmultiplicity->insertItem(data->get_multiplicity());
   if (!visit) {
@@ -145,7 +145,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   }
   
   new QLabel(TR("   ordering : "), htab);
-  edordering = new Q3ComboBox(FALSE, htab);
+  edordering = new QComboBox(FALSE, htab);
   
   UmlOrderingKind o = data->get_ordering();
   
@@ -162,7 +162,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   }
 
   new QLabel(TR("in state : "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   edin_state = new LineEdit(data->in_state, htab);
   edin_state->setReadOnly(visit);
        
@@ -172,7 +172,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     is_control_cb->setChecked(TRUE);
   is_control_cb->setDisabled(visit);
       
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -201,7 +201,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -217,7 +217,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
 }
 
 void ActivityObjectDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -248,13 +248,13 @@ void ActivityObjectDialog::init_tab(QWidget *& w, MultiLineEdit *& ed,
 				    const char * v, const char * lbl,
 				    const char * sl, bool enabled) {
   bool visit = !hasOkButton();
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
 
   w = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   
   new QLabel(TR("selection : "), vtab);
   if (! visit)
@@ -278,7 +278,7 @@ void ActivityObjectDialog::init_tab(QWidget *& w, MultiLineEdit *& ed,
 }
 
 void ActivityObjectDialog::menu_type() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -408,5 +408,5 @@ void ActivityObjectDialog::accept() {
   bn->package_modified();
   data->modified();
   
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }

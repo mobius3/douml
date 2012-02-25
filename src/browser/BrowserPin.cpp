@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QPixmap>
 
 #include "BrowserPin.h"
 #include "PinData.h"
@@ -104,7 +100,7 @@ void BrowserPin::update_idmax_for_root()
 void BrowserPin::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
@@ -129,13 +125,13 @@ const QPixmap* BrowserPin::pixmap(int) const {
     return PinIcon;
 }
     
-void BrowserPin::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserPin::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete)
     BrowserActivityDiagram::compute_referenced_by(l, this, "pincanvas", "pin_ref");
 }
 
-void BrowserPin::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserPin::compute_referenced_by(QList<BrowserNode> & l,
 				       BrowserNode * target)
 {
   IdIterator<BrowserPin> it(all);
@@ -242,8 +238,8 @@ QString BrowserPin::connexion_from(bool control) const {
 }
 
 void BrowserPin::menu() {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -457,7 +453,7 @@ const QStringList & BrowserPin::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserPin::save_stereotypes(Q3TextStream & st)
+void BrowserPin::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "pin_stereotypes ";
@@ -472,7 +468,7 @@ void BrowserPin::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserPin::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserPin::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "pin_ref " << get_ident() << " // " << get_name();
   else {
@@ -485,7 +481,7 @@ void BrowserPin::save(Q3TextStream & st, bool ref, QString & warning) {
 
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

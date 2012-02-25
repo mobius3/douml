@@ -23,12 +23,7 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtextstream.h> 
 
 #include "UmlClassMember.h"
 
@@ -40,7 +35,7 @@
 
 void UmlClassMember::generate_visibility(aVisibility & current_visibility,
 					 QTextOStream & f_h, bool ahead,
-					 const Q3CString & indent) {
+					 const QCString & indent) {
   aVisibility v = (cppVisibility() == DefaultVisibility)
     ? visibility() : cppVisibility();
   
@@ -66,7 +61,7 @@ void UmlClassMember::generate_visibility(aVisibility & current_visibility,
   }
 }
 
-void UmlClassMember::remove_comments(Q3CString & s)
+void UmlClassMember::remove_comments(QCString & s)
 {
   int index1 = 0;
   
@@ -97,7 +92,7 @@ void UmlClassMember::remove_comments(Q3CString & s)
   }
 }
 
-void UmlClassMember::remove_preprocessor(Q3CString & s)
+void UmlClassMember::remove_preprocessor(QCString & s)
 {
   int index = 0;
   
@@ -122,7 +117,7 @@ void UmlClassMember::remove_preprocessor(Q3CString & s)
   }
 }
 
-void UmlClassMember::remove_arrays(Q3CString & s)
+void UmlClassMember::remove_arrays(QCString & s)
 {
   int index1 = 0;
   
@@ -141,8 +136,8 @@ void UmlClassMember::remove_arrays(Q3CString & s)
 // Between template < and > I suppose that a type is not included
 // because I cannot know how the type is used and I do not want to
 // produce circular #include
-bool UmlClassMember::compute_dependency(Q3PtrList<CppRefType> & dependencies,
-					Q3CString decl, const UmlTypeSpec & t,
+bool UmlClassMember::compute_dependency(QList<CppRefType> & dependencies,
+					QCString decl, const UmlTypeSpec & t,
 					bool force_incl)
 {
   remove_comments(decl);
@@ -225,7 +220,7 @@ bool UmlClassMember::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 //#warning NAMESPACE
       
       if (dontsubstituteuntil == 0) {
-	Q3CString subst = CppSettings::type(ts.explicit_type);
+	QCString subst = CppSettings::type(ts.explicit_type);
 	
 	if (subst != ts.explicit_type) {
 	  decl = subst + ' ' + p;
@@ -273,8 +268,8 @@ bool UmlClassMember::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 
 // return TRUE if stop on comment/description
 bool UmlClassMember::insert_template(const char *& p, QTextOStream & fs,
-				     const Q3CString & indent,
-				     const Q3CString & templ)
+				     const QCString & indent,
+				     const QCString & templ)
 {
   // search the beginning of the definition/declaration in p;
   for (;;) {

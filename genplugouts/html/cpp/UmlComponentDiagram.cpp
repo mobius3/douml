@@ -1,9 +1,7 @@
 
 #include "UmlComponentDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-Q3CString UmlComponentDiagram::sKind() {
+QCString UmlComponentDiagram::sKind() {
   return "component diagram";
 }
 

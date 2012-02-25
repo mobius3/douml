@@ -34,8 +34,6 @@
 
 #ifdef DEBUGCOM
 #include <iostream>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 using namespace std;
 #endif
@@ -58,7 +56,7 @@ using namespace std;
 #include "err.h"
 
 Socket::Socket(ToolCom * c)
-    : Q3SocketDevice(Q3SocketDevice::Stream), com(c) {
+    : QSocketDevice(QSocketDevice::Stream), com(c) {
   setAddressReusable(TRUE);
   notifier = new QSocketNotifier(socket(), QSocketNotifier::Read);
   QObject::connect(notifier, SIGNAL(activated(int)),
@@ -66,7 +64,7 @@ Socket::Socket(ToolCom * c)
 }
 
 Socket::Socket(ToolCom * c, int s)
-    : Q3SocketDevice(s, Q3SocketDevice::Stream), com(c) {
+    : QSocketDevice(s, QSocketDevice::Stream), com(c) {
   setAddressReusable(TRUE);
   notifier = new QSocketNotifier(s, QSocketNotifier::Read);
   QObject::connect(notifier, SIGNAL(activated(int)),
@@ -114,8 +112,8 @@ void Socket::data_received() {
 
 //
 
-Q3PtrList<ToolCom> ToolCom::used;
-Q3PtrList<ToolCom> ToolCom::unused;
+QList<ToolCom> ToolCom::used;
+QList<ToolCom> ToolCom::unused;
 int ToolCom::exitvalue;
 
 ToolCom::ToolCom() {
@@ -231,7 +229,7 @@ int exit_value()
 
 bool ToolCom::is_running(int id)
 {
-  Q3PtrListIterator<ToolCom> it(used);
+  QListIterator<ToolCom> it(used);
   
   for (; it.current(); ++it)
     if (it.current()->id == id)
@@ -580,7 +578,7 @@ void ToolCom::fatal_error(const char *
 
 void ToolCom::connexion_timeout() {
   msg_critical("Bouml", 
-	       QString("connexion timeout for '") + QString(cmd) +QString("'"));
+	       QString("connexion timeout for '") + cmd +"'");
   close();
   
   if (exit_bouml) {
@@ -738,7 +736,7 @@ void ToolCom::data_received(Socket * who) {
 	    break;
 	  case allMarkedCmd:
 	    {
-	      Q3PtrList<BrowserNode> marked = BrowserNode::marked_nodes();
+	      QList<BrowserNode> marked = BrowserNode::marked_nodes();
 	      unsigned n = 0;
 	      BrowserNode * bn;
 	      

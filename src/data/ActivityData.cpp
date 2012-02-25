@@ -28,8 +28,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "BrowserActivity.h"
 #include "ActivityData.h"
@@ -199,7 +197,7 @@ bool ActivityData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void ActivityData::save(Q3TextStream & st, QString & warning) const {
+void ActivityData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   uml_condition.save(st, "pre_uml", "post_uml");
   cpp_condition.save(st, "pre_cpp", "post_cpp");

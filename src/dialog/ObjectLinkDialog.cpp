@@ -30,11 +30,6 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "ObjectLinkDialog.h"
 #include "MyTable.h"
@@ -49,16 +44,16 @@
 QSize ObjectLinkDialog::previous_size;
 
 ObjectLinkDialog::ObjectLinkDialog(BrowserClassInstance * a, BrowserClassInstance * b,
-				   Q3PtrList<RelationData> & l, RelationData * current,
+				   QList<RelationData> & l, RelationData * current,
 				   int nfirstdir)
     : QDialog(0, "object link dialog", TRUE),
       rels(l), nforward(nfirstdir), clia(a), clib(b), choozen(0), reverse(FALSE) {
   setCaption(TR("Object link dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBoxLayout * hbox;
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   
   hbox->addWidget(new QLabel(TR("\n"
@@ -70,7 +65,7 @@ ObjectLinkDialog::ObjectLinkDialog(BrowserClassInstance * a, BrowserClassInstanc
   
   vbox->addWidget(table);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * newrel = 
     (((ClassInstanceData *) clia->get_data())->get_class()->is_writable() ||
@@ -111,19 +106,19 @@ void ObjectLinkDialog::polish() {
 static void add_rel(MyTable * table, RelationData * d, int row,
 		    QString a, QString b)
 {
-  table->setItem(row, 0, new TableItem(table, Q3TableItem::Never, a));
+  table->setItem(row, 0, new TableItem(table, QTableItem::Never, a));
 
   const char * s;
   
   s = d->get_role_b();
-  table->setItem(row, 1, new TableItem(table, Q3TableItem::Never, (s == 0) ? "" : s));
+  table->setItem(row, 1, new TableItem(table, QTableItem::Never, (s == 0) ? "" : s));
   
-  table->setItem(row, 2, new TableItem(table, Q3TableItem::Never, stringify(d->get_type())));
+  table->setItem(row, 2, new TableItem(table, QTableItem::Never, stringify(d->get_type())));
   
   s = d->get_role_a();
-  table->setItem(row, 3, new TableItem(table, Q3TableItem::Never, (s == 0) ? "" : s));
+  table->setItem(row, 3, new TableItem(table, QTableItem::Never, (s == 0) ? "" : s));
   
-  table->setItem(row, 4, new TableItem(table, Q3TableItem::Never, b));
+  table->setItem(row, 4, new TableItem(table, QTableItem::Never, b));
 }
 
 void ObjectLinkDialog::init(RelationData * current) {
@@ -131,7 +126,7 @@ void ObjectLinkDialog::init(RelationData * current) {
   
   table->setNumRows(rels.count());
   table->setNumCols(5);
-  table->setSelectionMode(Q3Table::Single);
+  table->setSelectionMode(QTable::Single);
   table->setSorting(FALSE);
   
   table->horizontalHeader()->setLabel(0, TR("Class Inst."));
@@ -144,7 +139,7 @@ void ObjectLinkDialog::init(RelationData * current) {
     ((ClassInstanceData *) clia->get_data())->get_class()->get_name();
   rb = clib->get_name() + QString(":") +
     ((ClassInstanceData *) clib->get_data())->get_class()->get_name();
-  Q3PtrListIterator<RelationData> iter(rels);
+  QListIterator<RelationData> iter(rels);
   int row;
   
   for (row = 0; (row != nforward) && iter.current(); ++iter, row += 1)
@@ -163,7 +158,7 @@ void ObjectLinkDialog::init(RelationData * current) {
   
   if (current != 0) {
     // select the current relation
-    Q3TableSelection sel;
+    QTableSelection sel;
     int row = rels.findRef(current);
     
     sel.init(row, 0);
@@ -200,7 +195,7 @@ void ObjectLinkDialog::create() {
   while (table->numSelections() != 0)
     table->removeSelection(0);
   
-  Q3TableSelection sel;
+  QTableSelection sel;
   
   sel.init(n, 0);
   sel.expandTo(n, 4);
@@ -209,7 +204,7 @@ void ObjectLinkDialog::create() {
 
 void ObjectLinkDialog::accept() {
   if (table->numSelections() != 0) {
-    Q3TableSelection sel = table->selection(0);
+    QTableSelection sel = table->selection(0);
     
     choozen = rels.at(sel.topRow());
     reverse = (sel.topRow() >= nforward) && (sel.topRow() < ninputrels);

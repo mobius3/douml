@@ -26,10 +26,7 @@
 #ifndef UMLCLASS_H
 #define UMLCLASS_H
 
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qlist.h>
 
 #include "UmlBaseClass.h"
 #include "UmlTypeSpec.h"
@@ -44,17 +41,17 @@ class UmlClass : public UmlBaseClass {
     bool managed;
     
   public:
-    UmlClass(void * id, const Q3CString & n)
+    UmlClass(void * id, const QCString & n)
       : UmlBaseClass(id, n), managed(FALSE) {};
   
-    Q3CString php_stereotype();
-    void generate(QTextOStream &, Q3CString indent);
+    QCString php_stereotype();
+    void generate(QTextOStream &, QCString indent);
     
     virtual void generate();
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, int & enum_item_rank); 
-    void generate_require_onces(QTextOStream & f, Q3CString & made);
-    void generate_require_onces(QTextOStream & f, Q3CString & made, UmlArtifact *);
+    virtual void generate(QTextOStream & f, const QCString & cl_stereotype,
+			  QCString indent, int & enum_item_rank); 
+    void generate_require_onces(QTextOStream & f, QCString & made);
+    void generate_require_onces(QTextOStream & f, QCString & made, UmlArtifact *);
     UmlArtifact * assocArtifact();
     
     void write(QTextOStream &);

@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3ValueList>
-#include <Q3TextStream>
 
 #include "CdClassCanvas.h"
 #include "TemplateCanvas.h"
@@ -162,7 +158,7 @@ void CdClassCanvas::check_size() {
   const ClassData * data = ((ClassData *) browser_node->get_data());
   int wi =
     (data->get_is_abstract()) ? fbim.width(full_name) : fbm.width(full_name);
-  Q3ListViewItem * child;
+  QListViewItem * child;
   int natt = 0;
   int noper = 0;
   bool full_members = (used_settings.show_full_members_definition == UmlYes);
@@ -492,7 +488,7 @@ void CdClassCanvas::post_loaded() {
 }
 
 void CdClassCanvas::check_inner() {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if (it.current()->type() == UmlInner) {
@@ -509,7 +505,7 @@ void CdClassCanvas::check_inner() {
   }  
 }
 bool CdClassCanvas::has_relation(BasicData * def) const {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if (IsaRelation(it.current()->type()) &&
@@ -522,7 +518,7 @@ bool CdClassCanvas::has_relation(BasicData * def) const {
 }
 
 bool CdClassCanvas::has_inner(DiagramItem * end) const {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if ((it.current()->type() == UmlInner) &&
@@ -535,9 +531,9 @@ bool CdClassCanvas::has_inner(DiagramItem * end) const {
 }
 
 void CdClassCanvas::draw_all_relations(CdClassCanvas * end) {
-  Q3ListViewItem * child;
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QListViewItem * child;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   
   for (child = browser_node->firstChild(); child; child = child->nextSibling()) {
     if (!((BrowserNode *) child)->deletedp()) {
@@ -618,8 +614,8 @@ void CdClassCanvas::draw_all_relations(CdClassCanvas * end) {
 // a drawn relation to/from 'this'
 
 void CdClassCanvas::draw_all_class_assoc() {
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
     if ((*cit)->visible() &&
@@ -678,7 +674,7 @@ bool CdClassCanvas::get_show_stereotype_properties() const {
 }
 
 void CdClassCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   if (manual_size) {
     double scale = the_canvas()->zoom();
     
@@ -688,7 +684,7 @@ void CdClassCanvas::change_scale() {
   recenter();
   if (templ != 0)
     templ->update();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void CdClassCanvas::moveBy(double dx, double dy) {
@@ -756,7 +752,7 @@ void write_member_st_prop(QPainter & p, FILE * fp, QRect & r,
 
 void CdClassCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
   QFontMetrics fbm(the_canvas()->get_font(UmlNormalBoldFont));
@@ -791,12 +787,12 @@ void CdClassCanvas::draw(QPainter & p) {
 	if (fp != 0) {
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff,
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff, // [lgfreitas] these became enumerators, so QColor() was added
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
 	}
       }
@@ -932,7 +928,7 @@ void CdClassCanvas::draw(QPainter & p) {
   int left1 = left0 + (int) (4 * zoom);
   int left2 = left1 + fbim.width("#_");
   int space = fm.width("_");
-  Q3ListViewItem * child;
+  QListViewItem * child;
   bool full_members = (used_settings.show_full_members_definition == UmlYes);
   bool show_visibility = (used_settings.show_members_visibility == UmlYes);
   bool show_stereotype = (used_settings.show_members_stereotype == UmlYes);
@@ -1145,8 +1141,8 @@ static CdClassCanvas * container_class_without_inner(CdClassCanvas * cln)
   if (p->get_type() != UmlClass)
     return 0;
 
-  Q3CanvasItemList all = cln->canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = cln->canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   
   for (cit = all.begin(); cit != all.end(); ++cit) {
     if ((*cit)->visible()) {
@@ -1161,14 +1157,14 @@ static CdClassCanvas * container_class_without_inner(CdClassCanvas * cln)
 }
 
 void CdClassCanvas::menu(const QPoint&) {
-  Q3PtrList<BrowserOperation> l = 
+  QList<BrowserOperation> l = 
     ((BrowserClass *) browser_node)->inherited_operations(21);
-  Q3PopupMenu m(0);
-  Q3PopupMenu gensubm(0);
-  Q3PopupMenu attrsubm(0);
-  Q3PopupMenu opersubm(0);
-  Q3PopupMenu inhopersubm(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu gensubm(0);
+  QPopupMenu attrsubm(0);
+  QPopupMenu opersubm(0);
+  QPopupMenu inhopersubm(0);
+  QPopupMenu toolm(0);
   const char * stereotype = browser_node->get_data()->get_stereotype();
   CdClassCanvas * nesting_cl = container_class_without_inner(this);
   BrowserNodeList attributes;
@@ -1416,7 +1412,7 @@ void CdClassCanvas::menu(const QPoint&) {
   case 1999:
     {
       OperationListDialog dialog(TR("Choose operation to edit"), 
-				 (Q3PtrList<BrowserOperation> &) operations);
+				 (QList<BrowserOperation> &) operations);
       
       dialog.raise();
       if (dialog.exec() == QDialog::Accepted)
@@ -1509,7 +1505,7 @@ bool CdClassCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void CdClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void CdClassCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st;
     ColorSpecVector co(1);
@@ -1524,7 +1520,7 @@ void CdClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!co[0].name.isEmpty())
@@ -1539,8 +1535,8 @@ void CdClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void CdClassCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void CdClassCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   CdClassCanvas * x = (CdClassCanvas *) it.current();
   
@@ -1649,15 +1645,15 @@ void CdClassCanvas::resize(const QSize & sz, bool w, bool h) {
 
 //
 
-static void save_hidden_list(BrowserNode * bn, UmlCode c, Q3TextStream & st,
+static void save_hidden_list(BrowserNode * bn, UmlCode c, QTextStream & st,
 			     const char * s,
-			     const Q3ValueList<BrowserNode *> & hidden_visible)
+			     const QValueList<BrowserNode *> & hidden_visible)
 {
   BrowserNodeList l;
   
   bn->children(l, c);
   
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   while (it.current() != 0) {
     QString dummy;
@@ -1682,7 +1678,7 @@ static void save_hidden_list(BrowserNode * bn, UmlCode c, Q3TextStream & st,
   }
 }
 
-void CdClassCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CdClassCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "classcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -1847,7 +1843,7 @@ void CdClassCanvas::history_load(QBuffer & b) {
     
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QCanvasRectangle::setSize(w, h);
   }
   else
     check_size();
@@ -1858,7 +1854,7 @@ void CdClassCanvas::history_load(QBuffer & b) {
 }
 
 void CdClassCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   
   disconnect(DrawingSettings::instance(), SIGNAL(changed()),
 	     this, SLOT(modified()));

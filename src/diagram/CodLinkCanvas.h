@@ -27,8 +27,6 @@
 #define CODLINKCANVAS_H
 
 #include "ArrowCanvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 class BrowserClass;
 class CdClassCanvas;
@@ -65,7 +63,7 @@ class CodLinkCanvas : public ArrowCanvas {
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static CodLinkCanvas * read(char * & st, UmlCanvas * canvas, char * & k);
 };
 

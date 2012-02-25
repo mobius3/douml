@@ -3,12 +3,12 @@
 
 
 #include "UmlBaseEntryPointPseudoState.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlEntryPointPseudoState : public UmlBaseEntryPointPseudoState {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlEntryPointPseudoState(void * id, const Q3CString & s) : UmlBaseEntryPointPseudoState(id, s) {
+     UmlEntryPointPseudoState(void * id, const QCString & s) : UmlBaseEntryPointPseudoState(id, s) {
     }
 
 };

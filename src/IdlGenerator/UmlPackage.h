@@ -27,20 +27,18 @@
 #define UMLPACKAGE_H
 
 #include "UmlBasePackage.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlPackage : public UmlBasePackage {
   public:
-    UmlPackage(void * id, const Q3CString & n);
+    UmlPackage(void * id, const QCString & n);
   
   protected:
-    Q3CString dir;
+    QCString dir;
     bool read;
   
   public:
-    Q3CString path(const Q3CString &);
-    Q3CString text_path(const Q3CString &);
+    QCString path(const QCString &);
+    QCString text_path(const QCString &);
     void generate();
 };
 

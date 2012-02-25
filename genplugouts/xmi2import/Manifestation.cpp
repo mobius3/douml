@@ -3,15 +3,12 @@
 #include "UmlArtifact.h"
 #include "FileIn.h"
 #include "Token.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 void Manifestation::import(FileIn & in, Token & token, UmlArtifact * artifact)
 {
-  Q3CString s;
-  Q3CString name;
-  Q3CString utilized;
+  QCString s;
+  QCString name;
+  QCString utilized;
 
   name = token.valueOf("name");
   
@@ -21,7 +18,7 @@ void Manifestation::import(FileIn & in, Token & token, UmlArtifact * artifact)
     utilized = s;
 
   if (! token.closed()) {
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
       
     while (in.read(), !token.close(kstr)) {
@@ -45,7 +42,7 @@ void Manifestation::import(FileIn & in, Token & token, UmlArtifact * artifact)
 
 void Manifestation::solveThem()
 {
-  Q3ValueList<Manifestation>::Iterator it;
+  QValueList<Manifestation>::Iterator it;
       
   for (it = All.begin(); it != All.end(); ++it)
     (*it).artifact->solveManifestation((*it).name, (*it).utilized);
@@ -53,5 +50,5 @@ void Manifestation::solveThem()
   All.clear();
 }
 
-Q3ValueList<Manifestation> Manifestation::All;
+QValueList<Manifestation> Manifestation::All;
 

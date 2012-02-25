@@ -27,23 +27,20 @@
 #define UMLRELATION_H
 
 #include "UmlBaseRelation.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 
 class QTextOStream;
 class ActualParameter;
 
 class UmlRelation : public UmlBaseRelation {
   public:
-    UmlRelation(void * id, const Q3CString & n)
+    UmlRelation(void * id, const QCString & n)
       : UmlBaseRelation(id, n) {
     };
   
     void generate_inherit(const char *& sep, QTextOStream & f, 
-			  const Q3CString & cl_stereotype, BooL & already);
-    virtual void generate_decl(QTextOStream & f, const Q3CString & cl_stereotype,
-			       Q3CString indent, bool = FALSE);
+			  const QCString & cl_stereotype, BooL & already);
+    virtual void generate_decl(QTextOStream & f, const QCString & cl_stereotype,
+			       QCString indent, bool = FALSE);
 };
 
 #endif

@@ -29,10 +29,8 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-#include <q3ptrdict.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpopupmenu.h> 
+#include <qptrdict.h> 
 
 #include "SdLifeLineCanvas.h"
 #include "SdObjCanvas.h"
@@ -97,7 +95,7 @@ void SdLifeLineCanvas::drawShape(QPainter & p) {
     return;
   
   p.setBackgroundMode(::Qt::OpaqueMode);
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   p.setPen(::Qt::DashLine);
   
   int m = (int) (x()+width()/2);
@@ -147,7 +145,7 @@ void SdLifeLineCanvas::moveBy(double dx, double dy) {
     // not called by update_pos() which is only called by obj->moveBy()
     obj->moveBy(dx, 0);
   
-  Q3PtrListIterator<SdDurationCanvas> it(durations);
+  QListIterator<SdDurationCanvas> it(durations);
   
   for ( ; it.current(); ++it )
     it.current()->update_hpos();
@@ -158,7 +156,7 @@ UmlCode SdLifeLineCanvas::type() const {
 }
 
 double SdLifeLineCanvas::instance_max_y() const {
-  Q3PtrListIterator<SdDurationCanvas> it(durations);
+  QListIterator<SdDurationCanvas> it(durations);
   double miny = 100000;
     
   for ( ; it.current(); ++it )
@@ -173,14 +171,14 @@ DiagramItem::LineDirection SdLifeLineCanvas::allowed_direction(UmlCode) {
 }
 
 QString SdLifeLineCanvas::may_start(UmlCode & l) const {
-  return (l != UmlAnchor) ? QString() : TR("illegal");
+  return (l != UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString SdLifeLineCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
   switch (dest->type()) {
   case UmlActivityDuration:
   case UmlLifeLine:
-    return (l != UmlAnchor) ? QString() : TR("illegal");
+    return (l != UmlAnchor) ? 0 : TR("illegal");
   default:
     return TR("illegal");
   }
@@ -238,14 +236,14 @@ void SdLifeLineCanvas::remove(SdDurationCanvas * d) {
 }
 
 void SdLifeLineCanvas::toFlat() {
-  Q3PtrListIterator<SdDurationCanvas> it(durations);
+  QListIterator<SdDurationCanvas> it(durations);
 
   for (; it.current(); ++it)
     it.current()->toFlat();
 }
 
 void SdLifeLineCanvas::toOverlapping() {
-  Q3PtrListIterator<SdDurationCanvas> it(durations);
+  QListIterator<SdDurationCanvas> it(durations);
 
   for (; it.current(); ++it)
     it.current()->toOverlapping();
@@ -259,7 +257,7 @@ void SdLifeLineCanvas::set_masked(bool y) {
 
 void SdLifeLineCanvas::update_instance_dead() {
   if (obj->is_mortal() && !durations.isEmpty()) {
-    Q3PtrListIterator<SdDurationCanvas> it(durations);
+    QListIterator<SdDurationCanvas> it(durations);
     int new_end = 0;
     
     for (; it.current(); ++it) {
@@ -350,7 +348,7 @@ void SdLifeLineCanvas::exec_menu(int rank) {
 
 void SdLifeLineCanvas::menu(const QPoint&) {
   // delete must call SdObjCanvas->delete_it() NOT the own delete_it !
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Life line"), m.font()), -1);
   m.insertSeparator();
@@ -376,7 +374,7 @@ void SdLifeLineCanvas::apply_shortcut(QString s) {
 }
 
 bool SdLifeLineCanvas::copyable() const {
-  Q3PtrListIterator<SdDurationCanvas> it(durations);
+  QListIterator<SdDurationCanvas> it(durations);
     
   for ( ; it.current(); ++it )
     if (it.current()->copyable())
@@ -385,7 +383,7 @@ bool SdLifeLineCanvas::copyable() const {
   return FALSE;
 }
 
-void SdLifeLineCanvas::save(Q3TextStream & st, bool, QString &) const {
+void SdLifeLineCanvas::save(QTextStream & st, bool, QString &) const {
   st << "\nERROR SdLifeLineCanvas::save must not be called\n";
 }
 
@@ -394,7 +392,7 @@ void SdLifeLineCanvas::history_save(QBuffer & b) const {
   ::save(end, b);
   ::save((int) durations.count(), b);
   
-  Q3PtrListIterator<SdDurationCanvas> it(durations);
+  QListIterator<SdDurationCanvas> it(durations);
   
   for (; it.current(); ++it)
     ::save(it.current(), b);
@@ -413,14 +411,14 @@ void SdLifeLineCanvas::history_load(QBuffer & b) {
     durations.append((SdDurationCanvas *) ::load_item(b));
 }
 
-void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
-			    Q3PtrList<FragmentCanvas> & fragments,
-			    Q3PtrList<FragmentCanvas> & refs)
+void SdLifeLineCanvas::send(ToolCom * com, const QCanvasItemList & l,
+			    QList<FragmentCanvas> & fragments,
+			    QList<FragmentCanvas> & refs)
 {
   int api_format = com->api_format();
-  Q3PtrDict<SdLifeLineCanvas> used_refs; // the key is the fragment ref
-  Q3PtrList<SdLifeLineCanvas> lls;
-  Q3CanvasItemList::ConstIterator cit;
+  QPtrDict<SdLifeLineCanvas> used_refs; // the key is the fragment ref
+  QList<SdLifeLineCanvas> lls;
+  QCanvasItemList::ConstIterator cit;
   unsigned n = 0;
   
   // count msgs
@@ -435,7 +433,7 @@ void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
 
       lls.append(ll);
       
-      Q3PtrListIterator<SdDurationCanvas> iter(ll->durations);
+      QListIterator<SdDurationCanvas> iter(ll->durations);
       
       // standard msgs
       for (; iter.current(); ++iter)
@@ -469,7 +467,7 @@ void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
   
   for (ll = lls.first(); ll != 0; ll = lls.next()) {
     int id = ll->obj->get_ident();
-    Q3PtrListIterator<SdDurationCanvas> iter(ll->durations);
+    QListIterator<SdDurationCanvas> iter(ll->durations);
   
     // write standard messages
     for (; iter.current(); ++iter)
@@ -486,7 +484,7 @@ void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
   
   if (com->api_format() >= 41) {
     // interaction use messages
-    Q3PtrDictIterator<SdLifeLineCanvas>itref(used_refs);
+    QPtrDictIterator<SdLifeLineCanvas>itref(used_refs);
     
     while ((ll = itref.current()) != 0) {
       FragmentCanvas * f = (FragmentCanvas *) itref.currentKey();
@@ -503,7 +501,7 @@ void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
     FragmentCanvas * f;
     
     for (f = fragments.first(); f != 0; f = fragments.next()) {
-      Q3PtrList<SdLifeLineCanvas> covered;
+      QList<SdLifeLineCanvas> covered;
       
       for (ll = lls.first(); ll != 0; ll = lls.next())
 	if (f->collidesWith(ll))

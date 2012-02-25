@@ -2,8 +2,6 @@
 #define UMLSEQUENCEDIAGRAM_H
 
 #include "UmlBaseSequenceDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 // This class manages 'sequence diagrams', notes that the class 'UmlDiagram'
 // is a mother class of all the diagrams, allowing to generalize their
@@ -12,7 +10,7 @@
 
 class UmlSequenceDiagram : public UmlBaseSequenceDiagram {
   public:
-    UmlSequenceDiagram(void * id, const Q3CString & n)
+    UmlSequenceDiagram(void * id, const QCString & n)
       : UmlBaseSequenceDiagram(id, n) {};
   
 };

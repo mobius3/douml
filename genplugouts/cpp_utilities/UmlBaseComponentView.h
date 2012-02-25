@@ -4,7 +4,7 @@
 
 #include "UmlView.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlComponentView;
 class UmlPackage;
@@ -25,7 +25,7 @@ class UmlBaseComponentView : public UmlView {
 
   protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseComponentView(void * id, const Q3CString & n) : UmlView(id, n) {};
+    UmlBaseComponentView(void * id, const QCString & n) : UmlView(id, n) {};
 
 };
 

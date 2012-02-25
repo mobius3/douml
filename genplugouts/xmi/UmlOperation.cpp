@@ -7,11 +7,8 @@
 #include "UmlClass.h"
 #include "CppSettings.h"
 #include "JavaSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 bool UmlOperation::write_if_needed(FileOut & out) {
-  Q3CString decl;
+  QCString decl;
 
   switch (_lang) {
   case Uml:
@@ -95,7 +92,7 @@ bool UmlOperation::write_if_needed(FileOut & out) {
   return TRUE;
 }
 
-void UmlOperation::write_return_type(FileOut & out, Q3CString decl) {
+void UmlOperation::write_return_type(FileOut & out, QCString decl) {
   const UmlTypeSpec & t = returnType();
   static int return_rank = 0;
   
@@ -128,7 +125,7 @@ void UmlOperation::write_return_type(FileOut & out, Q3CString decl) {
   }
 }
 
-void UmlOperation::write_cpp_returntype(FileOut & out, Q3CString decl) {
+void UmlOperation::write_cpp_returntype(FileOut & out, QCString decl) {
   // doesn't manage function pointer
   // manage keywords
   int index;
@@ -157,7 +154,7 @@ void UmlOperation::write_cpp_returntype(FileOut & out, Q3CString decl) {
     write_type(out, t, decl, "${name}", "${type}");
 }
 
-void UmlOperation::write_java_returntype(FileOut & out, Q3CString decl) {
+void UmlOperation::write_java_returntype(FileOut & out, QCString decl) {
 // manage keywords
 int index;
 
@@ -192,8 +189,8 @@ if ((t.type != 0) ||
 }
 
 void UmlOperation::write_uml_params(FileOut & out) {
-  const Q3ValueList<UmlParameter> p = params();
-  Q3ValueList<UmlParameter>::ConstIterator it;
+  const QValueList<UmlParameter> p = params();
+  QValueList<UmlParameter>::ConstIterator it;
   
   for (it = p.begin(); it != p.end(); ++it) {
     out.indent();
@@ -234,7 +231,7 @@ void UmlOperation::write_uml_params(FileOut & out) {
   }
 }
 
-void UmlOperation::write_cpp_java_params(FileOut & out, Q3CString decl) {
+void UmlOperation::write_cpp_java_params(FileOut & out, QCString decl) {
   int index1 = decl.find("${(}");
     
   if (index1 == -1)
@@ -249,10 +246,10 @@ void UmlOperation::write_cpp_java_params(FileOut & out, Q3CString decl) {
     
   index1 = 0;
     
-  const Q3ValueList<UmlParameter> p = params();
-  Q3CString sparam;
-  Q3CString kname;
-  Q3CString ktype;
+  const QValueList<UmlParameter> p = params();
+  QCString sparam;
+  QCString kname;
+  QCString ktype;
   int rank;
     
   if ((name() == "unload") && (parent()->name() == "UmlBasePackage"))
@@ -294,7 +291,7 @@ void UmlOperation::write_cpp_java_params(FileOut & out, Q3CString decl) {
   }
 }
 
-bool UmlOperation::get_param(Q3CString s, int & index, Q3CString & r, Q3CString & kname, Q3CString & ktype, int & rank) {
+bool UmlOperation::get_param(QCString s, int & index, QCString & r, QCString & kname, QCString & ktype, int & rank) {
 int index0 = index;
 int level = 0;
 const char * p = (const char *) s;

@@ -28,8 +28,6 @@
 
 #include "NoteCanvas.h"
 #include "BrowserNode.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 class DiagramItem;
 
@@ -56,10 +54,10 @@ class StereotypePropertiesCanvas : public NoteCanvas {
     
     virtual void apply_shortcut(QString s);
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
 
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static StereotypePropertiesCanvas * read(char * &, UmlCanvas *, char *);
     static StereotypePropertiesCanvas * read(char * &, UmlCanvas *, char *, DiagramItem *);
     

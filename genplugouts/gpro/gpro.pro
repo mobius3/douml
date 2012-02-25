@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= gpro
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL
 HEADERS		= ./PackageGlobalCmd.h \
 		  ./UmlBaseItem.h \
@@ -162,5 +162,3 @@ SOURCES		= ./PackageGlobalCmd.cpp \
 		  ./UmlBaseDeployment.cpp \
 		  ./UmlRelation.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

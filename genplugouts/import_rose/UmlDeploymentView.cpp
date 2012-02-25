@@ -6,10 +6,8 @@
 #include "UmlNode.h"
 #include "UmlDeploymentDiagram.h"
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlDeploymentView::import(File & f) {
-  Q3CString s;
+  QCString s;
   
   for (;;) {
     switch (f.read(s)) {
@@ -35,7 +33,7 @@ void UmlDeploymentView::import(File & f) {
 
 void UmlDeploymentView::readObjects(File & f) {
   for (;;) {
-    Q3CString s;
+    QCString s;
 
     switch (f.read(s)) {
     case ')':
@@ -56,14 +54,13 @@ void UmlDeploymentView::readObjects(File & f) {
     else if (s == "Process_Diagram")
       UmlDeploymentDiagram::import(f, this);
     else {
-      //UmlCom::trace("<br>" + s + " in " + Q3CString(f.name()) + " NOT MANAGED by DeploymentView::readObject()");//[jasa] original line
-      UmlCom::trace("<br>" + s + " in " + Q3CString(f.name().toAscii()) + " NOT MANAGED by DeploymentView::readObject()");//[jasa] go from QFile to QString name to const char* for Q3CString constructor
+      UmlCom::trace("<br>" + s + " in " + QCString(f.name()) + " NOT MANAGED by DeploymentView::readObject()");
       f.skipBlock();
     }
   }
 }
 
-UmlDeploymentView * UmlDeploymentView::create(UmlPackage * parent, const char * s, Q3CString bn)
+UmlDeploymentView * UmlDeploymentView::create(UmlPackage * parent, const char * s, QCString bn)
 {
   UmlDeploymentView * r = UmlBaseDeploymentView::create(parent, s);
   
@@ -75,11 +72,11 @@ UmlDeploymentView * UmlDeploymentView::create(UmlPackage * parent, const char * 
 
 void UmlDeploymentView::import(UmlPackage * parent, File & f)
 {
-  Q3CString s;
-  Q3CString id;
-  Q3CString ste;
-  Q3CString doc;
-  Q3Dict<Q3CString> prop;
+  QCString s;
+  QCString id;
+  QCString ste;
+  QCString doc;
+  QDict<QCString> prop;
   int k;
   
   for (;;) {
@@ -91,9 +88,9 @@ void UmlDeploymentView::import(UmlPackage * parent, File & f)
       
       File f2(s, f.name());
       
-      if (! f2.open(QIODevice::ReadOnly))
+      if (! f2.open(IO_ReadOnly))
 	UmlCom::trace("<br>cannot open '" + s + "' referenced in "
-		      + Q3CString(f.name().toAscii()));//[jasa] QString to Q3CString conversion (.ascii())
+		      + QCString(f.name()));
       else {     
         f2.read("(");
         f2.read("object");

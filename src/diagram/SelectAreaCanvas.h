@@ -26,11 +26,11 @@
 #ifndef SELECTAREACANVAS_H
 #define SELECTAREACANVAS_H
 
-#include <q3canvas.h>
+#include <qcanvas.h>
 
-class SelectAreaCanvas : public Q3CanvasRectangle {
+class SelectAreaCanvas : public QCanvasRectangle {
   public:
-    SelectAreaCanvas(int x, int y, int width, int height, Q3Canvas * canvas);
+    SelectAreaCanvas(int x, int y, int width, int height, QCanvas * canvas);
     
   protected:
     virtual void drawShape(QPainter & p);

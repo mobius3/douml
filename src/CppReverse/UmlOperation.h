@@ -29,10 +29,6 @@
 #include "UmlBaseOperation.h"
 #include "UmlClass.h"
 #include "Namespace.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
-#include <Q3PtrList>
 
 class ClassContainer;
 class Package;
@@ -40,25 +36,25 @@ class Class;
 
 class UmlOperation : public UmlBaseOperation {
   public:
-    UmlOperation(void * id, const Q3CString & n);
+    UmlOperation(void * id, const QCString & n);
     virtual ~UmlOperation();
   
-    static bool new_one(Class * cl, const Q3CString & name,
-			const Q3ValueList<FormalParameterList> & tmplt,
-			Q3CString type, const Q3CString & modifier,
-			const Q3CString & pretype, aVisibility visibility,
+    static bool new_one(Class * cl, const QCString & name,
+			const QValueList<FormalParameterList> & tmplt,
+			QCString type, const QCString & modifier,
+			const QCString & pretype, aVisibility visibility,
 			bool inlinep, bool virtualp, bool staticp, bool constp,
 			bool volatilep, bool typenamep,	bool explicitp,
-			bool friendp, Q3CString friend_template,
-			Q3CString comment, Q3CString description, bool pfunc
+			bool friendp, QCString friend_template,
+			QCString comment, QCString description, bool pfunc
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+			, bool roundtrip, QList<UmlItem> & expected_order
 #endif
 			);
-    static void reverse_definition(Package * pack, Q3CString name, Q3CString type,
-				   Q3ValueList<FormalParameterList> & tmplt,
-				   bool inlinep, const Q3CString & comment,
-				   const Q3CString & description);
+    static void reverse_definition(Package * pack, QCString name, QCString type,
+				   QValueList<FormalParameterList> & tmplt,
+				   bool inlinep, const QCString & comment,
+				   const QCString & description);
 
 #ifdef REVERSE
     virtual bool need_source();
@@ -68,46 +64,46 @@ class UmlOperation : public UmlBaseOperation {
 #endif
   
     static void skip_body(int level = 0);
-    static void skip_expr(Q3CString end, bool allow_templ = FALSE);
-    static bool pfunc(BooL & func, Q3CString & name, Q3CString & type,
+    static void skip_expr(QCString end, bool allow_templ = FALSE);
+    static bool pfunc(BooL & func, QCString & name, QCString & type,
 		      const char * namespec);
   private:
 #ifdef ROUNDTRIP
-    static Q3PtrDict<Q3CString> DefNotYetSet;
+    static QPtrDict<QCString> DefNotYetSet;
 #endif
-    static NDict< Q3PtrList<UmlOperation> > friends;
+    static NDict< QList<UmlOperation> > friends;
     FormalParameterList * formals;
-    Q3CString def0;	// for template operations
+    QCString def0;	// for template operations
   
     static bool read_param(ClassContainer * container, unsigned rank, 
-			   UmlParameter & param, Q3CString & decl,
-			   const Q3ValueList<FormalParameterList> & tmplt,
+			   UmlParameter & param, QCString & decl,
+			   const QValueList<FormalParameterList> & tmplt,
 			   BooL & on_error, bool add_defaultvalue);
-    static void friend_operations(Q3PtrList<UmlOperation> & candidates,
-				  const Q3ValueList<FormalParameterList> & tmplt,
-				  const Q3CString & name);
-    static bool operations(Q3PtrList<UmlOperation> & candidates, UmlClass * cl,
-			   const Q3ValueList<FormalParameterList> & tmplt,
+    static void friend_operations(QList<UmlOperation> & candidates,
+				  const QValueList<FormalParameterList> & tmplt,
+				  const QCString & name);
+    static bool operations(QList<UmlOperation> & candidates, UmlClass * cl,
+			   const QValueList<FormalParameterList> & tmplt,
 			   const FormalParameterList *& oper_tmplt,
-			   const Q3CString & name);
+			   const QCString & name);
     static bool read_throw_elt(ClassContainer * container,
 			       UmlTypeSpec & typespec,
-			       const Q3ValueList<FormalParameterList> & tmplts);
+			       const QValueList<FormalParameterList> & tmplts);
     bool reverse_if_def(Package * pack,
-			Q3ValueList<FormalParameterList> & tmplts,
+			QValueList<FormalParameterList> & tmplts,
 			const FormalParameterList * oper_tmplt,
-			bool inlinep, bool pfct, const Q3CString & comment,
-			const Q3CString & description, BooL & on_error,
-			unsigned & nargs, Q3CString oper_name);
+			bool inlinep, bool pfct, const QCString & comment,
+			const QCString & description, BooL & on_error,
+			unsigned & nargs, QCString oper_name);
 
-    void update_param_names(Q3ValueList<UmlParameter> & params);
+    void update_param_names(QValueList<UmlParameter> & params);
 #ifdef ROUNDTRIP
-    void update_params(Class * cl, Q3ValueList<UmlParameter> & params);
-    void update_exceptions(Class * cl, const Q3ValueList<UmlTypeSpec> & exceptions);
+    void update_params(Class * cl, QValueList<UmlParameter> & params);
+    void update_exceptions(Class * cl, const QValueList<UmlTypeSpec> & exceptions);
     
-    static void clean_body(Q3CString & body);
-    static UmlOperation * already_exist(Class * container, const Q3CString & name,
-					Q3ValueList<UmlParameter> & params,
+    static void clean_body(QCString & body);
+    static UmlOperation * already_exist(Class * container, const QCString & name,
+					QValueList<UmlParameter> & params,
 					bool empty_decl);
 #endif
 };

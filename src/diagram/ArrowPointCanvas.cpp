@@ -27,11 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "ArrowPointCanvas.h"
 #include "ArrowCanvas.h"
@@ -73,9 +71,9 @@ void ArrowPointCanvas::delete_available(BooL &,
 
 void ArrowPointCanvas::change_scale() {
   // the size is not modified
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void ArrowPointCanvas::draw(QPainter & p) {
@@ -176,7 +174,7 @@ void ArrowPointCanvas::open() {
 }
 
 void ArrowPointCanvas::menu(const QPoint&) {
-  Q3PopupMenu m;
+  QPopupMenu m;
   
   m.insertItem(new MenuTitle(TR("Line break"), m.font()), -1);
   m.insertSeparator();
@@ -217,7 +215,7 @@ ArrowCanvas * ArrowPointCanvas::get_other(const ArrowCanvas * l) const {
   return (lines.getFirst() == l) ? lines.getLast() : lines.getFirst();
 }
 
-void ArrowPointCanvas::save(Q3TextStream & st, bool, QString &) const {
+void ArrowPointCanvas::save(QTextStream & st, bool, QString &) const {
   save_xy(st, this, "point");
 }
 

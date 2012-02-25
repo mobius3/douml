@@ -30,21 +30,19 @@
 
 
 
-#include <q3ptrlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qlist.h>
+#include <qtabdialog.h>
 
 #include "BrowserNode.h"
 
-class Q3ComboBox;
+class QComboBox;
 class LineEdit;
 class MultiLineEdit;
 class PseudoStateData;
 class KeyValuesTable;
 class BodyDialog;
 
-class PseudoStateDialog : public Q3TabDialog {
+class PseudoStateDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
@@ -53,11 +51,11 @@ class PseudoStateDialog : public Q3TabDialog {
     QStringList reflist;
     BrowserNodeList pseudostates;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * edreference;
+    QComboBox * edstereotype;
+    QComboBox * edreference;
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     static QSize previous_size;
     

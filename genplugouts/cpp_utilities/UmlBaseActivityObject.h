@@ -4,7 +4,7 @@
 
 #include "UmlActivityNode.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlTypeSpec.h"
 #include "anOrdering.h"
 
@@ -27,7 +27,7 @@ class UmlBaseActivityObject : public UmlActivityNode {
 
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityObject(void * id, const Q3CString & s) : UmlActivityNode(id, s) {
+     UmlBaseActivityObject(void * id, const QCString & s) : UmlActivityNode(id, s) {
     }
 
 
@@ -41,7 +41,7 @@ class UmlBaseActivityObject : public UmlActivityNode {
     bool set_Type(const UmlTypeSpec & v);
 
     // return the multiplicity
-    const Q3CString & multiplicity();
+    const QCString & multiplicity();
 
     // set the multiplicity
     //
@@ -49,7 +49,7 @@ class UmlBaseActivityObject : public UmlActivityNode {
     bool set_Multiplicity(const char * v);
 
     // return the inState attribute
-    const Q3CString & inState();
+    const QCString & inState();
 
     // set the inState attribute
     //
@@ -57,7 +57,7 @@ class UmlBaseActivityObject : public UmlActivityNode {
     bool set_InState(const char * v);
 
     // return the selection in OCL
-    const Q3CString & selection();
+    const QCString & selection();
 
     // set the selection in OCL
     //
@@ -66,7 +66,7 @@ class UmlBaseActivityObject : public UmlActivityNode {
 
 #ifdef WITHCPP
     // return the selection in C++
-    const Q3CString & cppSelection();
+    const QCString & cppSelection();
 
     // set the selection in C++
     //
@@ -76,7 +76,7 @@ class UmlBaseActivityObject : public UmlActivityNode {
 
 #ifdef WITHJAVA
     // return the selection in Java
-    const Q3CString & javaSelection();
+    const QCString & javaSelection();
 
     // set the selection in Java
     //
@@ -122,18 +122,18 @@ class UmlBaseActivityObject : public UmlActivityNode {
 
     UmlTypeSpec _type;
 
-    Q3CString _multiplicity;
+    QCString _multiplicity;
 
-    Q3CString _in_state;
+    QCString _in_state;
 
-    Q3CString _selection;
+    QCString _selection;
 
 #ifdef WITHCPP
-    Q3CString _cpp_selection;
+    QCString _cpp_selection;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_selection;
+    QCString _java_selection;
 #endif
 
     anOrdering _ordering : 8;

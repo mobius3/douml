@@ -4,8 +4,6 @@
 #include "UmlTransition.h"
 
 #include "UmlOperation.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlState::write(FileOut & out) {
   anItemKind pkind = parent()->kind();
   bool mach = (pkind != aState) && (pkind != aRegion);
@@ -25,7 +23,7 @@ void UmlState::write(FileOut & out) {
     << '"';
   out.id(this); 
   out << " name=\"";
-  out.quote((const char*)name());//[jasa] ambiguous call
+  out.quote(name());
   out << '"';
   if (ref != 0)
     out.ref(ref, "submachine");
@@ -41,9 +39,9 @@ void UmlState::write(FileOut & out) {
   write_description_properties(out); 
   
   if (ref == 0) {
-    Q3CString doentry;
-    Q3CString doactivity;
-    Q3CString doexit;
+    QCString doentry;
+    QCString doactivity;
+    QCString doexit;
     
     switch (_lang) {
     case Uml:
@@ -70,7 +68,7 @@ void UmlState::write(FileOut & out) {
       out << ">\n";
       out.indent();
       out << "\t<body>";
-      out.quote((const char*)doentry);//[jasa] ambiguous call
+      out.quote(doentry);
       out << "</body>\n";
       out.indent();
       out << "</entry>\n";
@@ -83,7 +81,7 @@ void UmlState::write(FileOut & out) {
       out << ">\n";
       out.indent();
       out << "\t<body>";
-      out.quote((const char*)doactivity);//[jasa] ambiguous call
+      out.quote(doactivity);
       out << "</body>\n";
       out.indent();
       out << "</doActivity>\n";
@@ -96,7 +94,7 @@ void UmlState::write(FileOut & out) {
       out << ">\n";
       out.indent();
       out << "\t<body>";
-      out.quote((const char*)doexit);//[jasa] ambiguous call
+      out.quote(doexit);
       out << "</body>\n";
       out.indent();
       out << "</exit>\n";
@@ -106,7 +104,7 @@ void UmlState::write(FileOut & out) {
   while (! _incoming_trans.isEmpty())
     _incoming_trans.take(0)->write_in(out);
   
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size();
   unsigned i;
   bool need_region = FALSE;
@@ -164,7 +162,7 @@ void UmlState::write(FileOut & out) {
 }
 
 void UmlState::memo_incoming_trans() {
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size();
   unsigned i;
      
@@ -184,12 +182,12 @@ void UmlState::add_incoming_trans(UmlTransition * tr) {
   _incoming_trans.append(tr);
 }
 
-UmlState * UmlState::find(Q3CString s)
+UmlState * UmlState::find(QCString s)
 {
-  QMap<Q3CString, UmlState *>::Iterator iter = _all.find(s);
+  QMap<QCString, UmlState *>::Iterator iter = _all.find(s);
   
   return (iter == _all.end()) ? 0 : *iter;
 }
 
-QMap<Q3CString, UmlState *> UmlState::_all;
+QMap<QCString, UmlState *> UmlState::_all;
 

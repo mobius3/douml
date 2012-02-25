@@ -30,21 +30,17 @@
 
 
 
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <QLabel>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "MyTable.h"
 #include "BrowserNode.h"
 #include "VisibilityGroup.h"
 
-class Q3VBox;
+class QVBox;
 class QLabel;
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
-class Q3GroupBox;
+class QGroupBox;
 
 class LineEdit;
 class MultiLineEdit;
@@ -56,32 +52,32 @@ class ApplicableOnTable;
 class KeyValuesTable;
 class BodyDialog;
 
-class ClassDialog : public Q3TabDialog {
+class ClassDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     QWidget * umltab;
     ClassData * cl;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     VisibilityGroup uml_visibility;
     QLabel * basetypelbl;
-    Q3ComboBox * edbasetype;
+    QComboBox * edbasetype;
     QCheckBox * abstract_cb;
     QCheckBox * active_cb;
-    Q3GroupBox * opt_bg;
-    Q3ComboBox * artifact;
+    QGroupBox * opt_bg;
+    QComboBox * artifact;
     MultiLineEdit * comment;
     MultiLineEdit * constraint;
     FormalParamsTable * formals_table;
-    Q3VBox * parametrized_vtab;
+    QVBox * parametrized_vtab;
     BrowserNodeList nodes;
     QStringList node_names;
     BrowserNodeList artifacts;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     ActualParamsTable * actuals_table;
-    Q3VBox * instantiate_vtab;
+    QVBox * instantiate_vtab;
     
     // C++
     QWidget * cpptab;
@@ -123,16 +119,16 @@ class ClassDialog : public Q3TabDialog {
     QCheckBox * idl_external_cb;
     MultiLineEdit * edidldecl;
     MultiLineEdit * showidldecl;
-    Q3GroupBox * switch_bg;
-    Q3ComboBox * edswitch_type;
+    QGroupBox * switch_bg;
+    QComboBox * edswitch_type;
     QCheckBox * idl_local_cb;
     QCheckBox * idl_custom_cb;
     
     // profiled stereotype
     QWidget * stereotypetab;
-    Q3ComboBox * stereo_init_cb;
+    QComboBox * stereo_init_cb;
     LineEdit * edinitparam;
-    Q3ComboBox * stereo_check_cb;
+    QComboBox * stereo_check_cb;
     LineEdit * edcheckparam;
     LineEdit * ediconpath;
     QPushButton * iconpathrootbutton;

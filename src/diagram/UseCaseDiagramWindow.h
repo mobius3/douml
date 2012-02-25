@@ -55,7 +55,7 @@ class UseCaseDiagramWindow : public DiagramWindow {
   
   public:
     UseCaseDiagramWindow(const QString & s, BrowserUseCaseDiagram * b, int id = -1);
-virtual ~UseCaseDiagramWindow();
+    ~UseCaseDiagramWindow();
 
     virtual DiagramView * get_view() const;
     

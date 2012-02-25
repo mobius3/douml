@@ -1,13 +1,11 @@
 
 #include "UmlTransition.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-Q3CString UmlTransition::sKind() {
+QCString UmlTransition::sKind() {
   return "transition";
 }
 
-void UmlTransition::html(Q3CString, unsigned int, unsigned int) {
+void UmlTransition::html(QCString, unsigned int, unsigned int) {
   fw.write("<table><tr><td><div class=\"element\">Transition  <b>");
   writeq(name());
   fw.write("</b></div></td></tr></table>");
@@ -25,7 +23,7 @@ void UmlTransition::html(Q3CString, unsigned int, unsigned int) {
     fw.write("</p>");
   }
 
-  Q3CString s = description();
+  QCString s = description();
 
   if (!s.isEmpty()) {
     fw.write("<p>");
@@ -33,7 +31,7 @@ void UmlTransition::html(Q3CString, unsigned int, unsigned int) {
     fw.write("<br /></p>");
   }
 
-  Q3CString scpp, sjava;
+  QCString scpp, sjava;
   
   s = trigger();
   scpp = cppTrigger();

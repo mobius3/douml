@@ -3,8 +3,8 @@
 
 
 #include "UmlBaseSequenceMessage.h"
-#include <q3ptrvector.h>
-#include <q3ptrlist.h>
+#include <qvector.h>
+#include <qlist.h>
 
 class FileOut;
 class UmlItem;
@@ -15,15 +15,15 @@ class UmlSequenceMessage : public UmlBaseSequenceMessage {
   public:
     UmlSequenceMessage();
 
-    static void write(FileOut & out, UmlItem * diagram, const Q3PtrVector< UmlSequenceMessage > & msgs);
+    static void write(FileOut & out, UmlItem * diagram, const QVector< UmlSequenceMessage > & msgs);
 
-    void write_fragment(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs);
+    void write_fragment(FileOut & out, UmlItem * diagram, QList< UmlSequenceMessage > & msgs);
 
-    static void write_them(FileOut & out, UmlItem * diagram, const Q3PtrVector< UmlSequenceMessage > & msgs);
+    static void write_them(FileOut & out, UmlItem * diagram, const QVector< UmlSequenceMessage > & msgs);
 
 
   private:
-    static void set_reverses(const Q3PtrVector<UmlSequenceMessage> & msgs);
+    static void set_reverses(const QVector<UmlSequenceMessage> & msgs);
 
     UmlSequenceMessage * reverse;
 

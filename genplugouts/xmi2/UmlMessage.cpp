@@ -3,15 +3,15 @@
 #include "FileOut.h"
 #include "UmlItem.h"
 
-#include <q3asciidict.h>
+#include <qasciidict.h>
 
 #include "UmlClassInstanceReference.h"
 
-void UmlMessage::write_connectors(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlMessage> & msgs)
+void UmlMessage::write_connectors(FileOut & out, UmlItem * diagram, const QVector<UmlMessage> & msgs)
 {
   unsigned sup = msgs.size();
   unsigned index;
-  Q3AsciiDict<char> connectors;
+  QAsciiDict<char> connectors;
   
   connectors.setAutoDelete(TRUE);
   

@@ -53,7 +53,7 @@ class ComponentDiagramWindow : public DiagramWindow {
   
   public:
     ComponentDiagramWindow(const QString & s, BrowserComponentDiagram * b, int id = -1);
-virtual ~ComponentDiagramWindow();
+    ~ComponentDiagramWindow();
 
     virtual DiagramView * get_view() const;
     

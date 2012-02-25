@@ -52,7 +52,7 @@ class ColDiagramWindow : public DiagramWindow {
   
   public:
     ColDiagramWindow(const QString & s, BrowserColDiagram *, int id = -1);
-virtual ~ColDiagramWindow();
+    ~ColDiagramWindow();
 
     virtual DiagramView * get_view() const;
     

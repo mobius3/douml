@@ -27,7 +27,6 @@
 #define TEMPLATECANVAS_H
 
 #include "DiagramCanvas.h"
-#include <q3textstream.h> //[lgfreitas] needed by q3textstream
 
 class CdClassCanvas;
 
@@ -57,7 +56,7 @@ class TemplateCanvas : public DiagramCanvas {
     virtual void z_down();
     virtual bool primaryItem() const;
     virtual void set_z(double z);	// only called by upper() & lower()
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     
     void update();
 };

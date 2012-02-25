@@ -3,9 +3,7 @@
 
 #include "UmlCom.h"
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
-void UmlComponent::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlComponent::html(QCString pfix, unsigned int rank, unsigned int level) {
   UmlCom::message(name());
 
   UmlItem::html("Component", (UmlDiagram *) associatedDiagram());
@@ -16,7 +14,7 @@ void UmlComponent::html(Q3CString pfix, unsigned int rank, unsigned int level) {
     fw.write("</p>\n");
   }
 
-  const Q3PtrVector<UmlClass> & provided = providedClasses();
+  const QVector<UmlClass> & provided = providedClasses();
 
   if (provided.size() != 0) {
     const char * sep = "<p>provided classes : ";
@@ -29,7 +27,7 @@ void UmlComponent::html(Q3CString pfix, unsigned int rank, unsigned int level) {
     fw.write("</p>\n");
   }
 
-  const Q3PtrVector<UmlClass> & required = requiredClasses();
+  const QVector<UmlClass> & required = requiredClasses();
 
   if (required.size() != 0) {
     const char * sep = "<p>required classes : ";
@@ -42,7 +40,7 @@ void UmlComponent::html(Q3CString pfix, unsigned int rank, unsigned int level) {
     fw.write("</p>\n");
   }
 
-  const Q3PtrVector<UmlClass> & realizing = realizingClasses();
+  const QVector<UmlClass> & realizing = realizingClasses();
 
   if (realizing.size() != 0) {
     const char * sep = "<p>realizing classes : ";
@@ -60,7 +58,7 @@ void UmlComponent::html(Q3CString pfix, unsigned int rank, unsigned int level) {
   unload(FALSE, FALSE);
 }
 
-Q3CString UmlComponent::sKind() {
+QCString UmlComponent::sKind() {
   return "component";
 }
 

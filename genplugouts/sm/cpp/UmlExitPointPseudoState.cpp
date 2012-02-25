@@ -6,12 +6,10 @@
 #include "UmlTransition.h"
 #include "UmlOperation.h"
 #include "UmlState.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-void UmlExitPointPseudoState::init(UmlClass *, Q3CString, Q3CString, UmlState *) {
+void UmlExitPointPseudoState::init(UmlClass *, QCString, QCString, UmlState *) {
   // check transition number
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   
   switch (ch.count()) {
   case 0:
@@ -49,14 +47,14 @@ void UmlExitPointPseudoState::generate(UmlClass * machine, UmlClass * anystate, 
   ex->addParam(0, InputOutputDirection, "stm", machine);
   ex->setParams("${t0} & ${p0}");
   
-  Q3CString body;
+  QCString body;
   
   // the exit behavior is made entering in the exit pseudo state
   if (! state->cppExitBehavior().isEmpty())
     body = "  _doexit(stm);\n";
     
   // transition number <= 1 already checked by init()
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   
   if (ch.count() != 0) {
     if (!((UmlTransition *) ch[0])->cppGuard().isEmpty()) {
@@ -70,7 +68,7 @@ void UmlExitPointPseudoState::generate(UmlClass * machine, UmlClass * anystate, 
   ex->set_CppBody(body);
 }
 
-void UmlExitPointPseudoState::generate(UmlClass *, UmlClass *, UmlState *, Q3CString & body, Q3CString indent) {
+void UmlExitPointPseudoState::generate(UmlClass *, UmlClass *, UmlState *, QCString & body, QCString indent) {
   // generate a call to _exit<n>() because it is a priori shared
   if (_oper.isEmpty())
     _oper.sprintf("_exit%d", ++_rank);

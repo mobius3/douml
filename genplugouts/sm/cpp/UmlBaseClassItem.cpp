@@ -2,10 +2,8 @@
 #include "UmlBaseClassItem.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 #ifdef WITHCPP
-const Q3CString & UmlBaseClassItem::cppDecl() {
+const QCString & UmlBaseClassItem::cppDecl() {
   read_if_needed_();
   
   return _cpp_decl;
@@ -17,7 +15,7 @@ bool UmlBaseClassItem::set_CppDecl(const char * s) {
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseClassItem::javaDecl() {
+const QCString & UmlBaseClassItem::javaDecl() {
   read_if_needed_();
   
   return _java_decl;
@@ -29,7 +27,7 @@ bool UmlBaseClassItem::set_JavaDecl(const char * s) {
 #endif
 
 #ifdef WITHPHP
-const Q3CString & UmlBaseClassItem::phpDecl() {
+const QCString & UmlBaseClassItem::phpDecl() {
   read_if_needed_();
   
   return _php_decl;
@@ -41,7 +39,7 @@ bool UmlBaseClassItem::set_PhpDecl(const char * s) {
 #endif
 
 #ifdef WITHIDL
-const Q3CString & UmlBaseClassItem::idlDecl() {
+const QCString & UmlBaseClassItem::idlDecl() {
   read_if_needed_();
   
   return _idl_decl;

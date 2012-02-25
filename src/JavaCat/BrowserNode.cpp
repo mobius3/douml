@@ -31,8 +31,6 @@
 #include "aVisibility.h"
 #include "anItemKind.h"
 #include "BrowserView.h"
-//Added by qt3to4:
-#include <Q3PtrCollection>
 
 BrowserNode::BrowserNode(BrowserView * parent, const char * n)
     : TreeItem(parent, n) {
@@ -70,14 +68,14 @@ void BrowserNodeList::search(BrowserNode * bn, int k,
 	: (!((BrowserNode *) child)->isa_package() && 
 	   ((k == aClass)
 	    ? (child->text(0).find(s, 0, cs) != -1)
-	    : (QString(((Class *) child)->get_description()).find(s, 0, cs) != -1))))
+	    : (((Class *) child)->get_description().find(s, 0, cs) != -1))))
       append((BrowserNode *) child);
     
     search((BrowserNode *) child, k, s, cs);
   }
 }
 
-int BrowserNodeList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
+int BrowserNodeList::compareItems(QCollection::Item item1, QCollection::Item item2)
 {
   return ((BrowserNode *) item1)->text(0)
     .compare(((BrowserNode *) item2)->text(0));

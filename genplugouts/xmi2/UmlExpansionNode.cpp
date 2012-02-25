@@ -24,7 +24,7 @@ void UmlExpansionNode::write(FileOut & out) {
   write_multiplicity(out, multiplicity(), this);
   UmlItem::write_type(out, type());
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)

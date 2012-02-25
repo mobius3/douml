@@ -2,8 +2,8 @@
 #define _UMLRELATION_H
 
 
-#include <q3dict.h>
-#include <q3cstring.h>
+#include <qdict.h>
+#include <qcstring.h>
 #include "aVisibility.h"
 #include "aRelationKind.h"
 #include "UmlBaseRelation.h"
@@ -18,19 +18,19 @@ class File;
 class UmlRelation : public UmlBaseRelation {
   public:
     struct Role {
-        Q3Dict<Q3CString> prop;
+        QDict<QCString> prop;
 
-        Q3CString doc;
+        QCString doc;
 
-        Q3CString id;
+        QCString id;
 
-        Q3CString name;
+        QCString name;
 
         UmlClass * target;
 
-        Q3CString target_id;
+        QCString target_id;
 
-        Q3CString cardinality;
+        QCString cardinality;
 
         aVisibility visibility;
 
@@ -49,7 +49,7 @@ class UmlRelation : public UmlBaseRelation {
     };
     
     
-    UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n) {
+    UmlRelation(void * id, const QCString & n) : UmlBaseRelation(id, n) {
       cpt[kind()] += 1;
     };
 

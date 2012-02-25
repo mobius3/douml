@@ -3,8 +3,6 @@
 #include "FileOut.h"
 
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
 bool UmlRelation::write_if_needed(FileOut & out) {
   // class already generated
   switch (relationKind()) {
@@ -161,8 +159,8 @@ void UmlRelation::write_relation(FileOut & out, aRelationKind k) {
   out << "\">\n";
 
   if (!multiplicity().isEmpty()) {
-    Q3CString min;
-    Q3CString max;
+    QCString min;
+    QCString max;
     int index = multiplicity().find("..");
 
     if (index != -1) {

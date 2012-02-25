@@ -31,14 +31,12 @@
 
 
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BrowserNode.h"
 #include "VisibilityGroup.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QRadioButton;
 
@@ -50,7 +48,7 @@ class MultiLineEdit;
 class KeyValuesTable;
 class BodyDialog;
 
-class AttributeDialog : public Q3TabDialog {
+class AttributeDialog : public QTabDialog {
   Q_OBJECT
     
   private:
@@ -60,18 +58,18 @@ class AttributeDialog : public Q3TabDialog {
     AttributeData * att;
     QStringList list;
     BrowserNodeList nodes;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     BrowserNode * view;
     int offset;
     
     // uml tab
     QWidget * umltab;
     LineEdit * edname;
-    Q3ComboBox * multiplicity;
+    QComboBox * multiplicity;
     QString previous_multiplicity;
     LineEdit * edinit;
-    Q3ComboBox * edtype;
-    Q3ComboBox * edstereotype;
+    QComboBox * edtype;
+    QComboBox * edstereotype;
     int attribute_st_rank;
     int empty_st_rank;
     VisibilityGroup uml_visibility;
@@ -126,7 +124,7 @@ class AttributeDialog : public Q3TabDialog {
     bool idl_in_struct;
     bool idl_in_union;
     bool idl_in_typedef;
-    Q3ComboBox * edcase;
+    QComboBox * edcase;
     BrowserNodeList enums;
     QStringList enum_names;
     MultiLineEdit * edidldecl;

@@ -26,10 +26,7 @@
 #ifndef UMLCLASS_H
 #define UMLCLASS_H
 
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qlist.h>
 
 #include "UmlBaseClass.h"
 #include "UmlTypeSpec.h"
@@ -44,21 +41,21 @@ class UmlClass : public UmlBaseClass {
     bool managed;
     
   public:
-    UmlClass(void * id, const Q3CString & n)
+    UmlClass(void * id, const QCString & n)
       : UmlBaseClass(id, n), managed(FALSE) {};
   
-    Q3CString python_stereotype();
+    QCString python_stereotype();
     
     virtual void generate();
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, BooL & indent_needed,
-			  int & enum_item_rank, const Q3CString & self);    
+    virtual void generate(QTextOStream & f, const QCString & cl_stereotype,
+			  QCString indent, BooL & indent_needed,
+			  int & enum_item_rank, const QCString & self);    
     
-    void generate_imports(QTextOStream & f, Q3CString & made);
-    void generate_import(QTextOStream & f, UmlArtifact * using_art, bool from, Q3CString & made);
-    void generate(QTextOStream &, Q3CString indent, BooL & indent_needed);
-    void generate_instance_att_rel(QTextOStream & f, Q3CString indent,
-				   BooL & indent_needed, Q3CString self);
+    void generate_imports(QTextOStream & f, QCString & made);
+    void generate_import(QTextOStream & f, UmlArtifact * using_art, bool from, QCString & made);
+    void generate(QTextOStream &, QCString indent, BooL & indent_needed);
+    void generate_instance_att_rel(QTextOStream & f, QCString indent,
+				   BooL & indent_needed, QCString self);
     
     UmlArtifact * assocArtifact();
 

@@ -42,8 +42,6 @@
 #include "Settings.h"
 #include "UmlWindow.h"
 #include "myio.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 // use the same extension for all the diagrams : must share dict
 IdDict<BrowserDiagram> BrowserDiagram::all(257, __FILE__);
@@ -109,7 +107,7 @@ void BrowserDiagram::read_stereotypes(char * & st, char * & k)
   BrowserDeploymentDiagram::read_stereotypes(st, k);	// updates k
 }
 
-void BrowserDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserDiagram::save_stereotypes(QTextStream & st)
 {
   BrowserClassDiagram::save_stereotypes(st);
   BrowserSeqDiagram::save_stereotypes(st);
@@ -146,7 +144,7 @@ void BrowserDiagram::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 }
 
-void BrowserDiagram::support_file(Q3Dict<char> & files, bool add) const {
+void BrowserDiagram::support_file(QDict<char> & files, bool add) const {
   QString s;
   
   s = s.setNum(get_ident()) + ".diagram";
@@ -156,7 +154,7 @@ void BrowserDiagram::support_file(Q3Dict<char> & files, bool add) const {
   else
     files.remove(s);
   
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->support_file(files, add);

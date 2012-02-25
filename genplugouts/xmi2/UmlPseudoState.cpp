@@ -3,7 +3,7 @@
 #include "FileOut.h"
 
 void UmlPseudoState::memo_incoming_trans() {
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size();
   unsigned i;
      
@@ -25,7 +25,7 @@ void UmlPseudoState::write(FileOut & out) {
   out.id(this);
   if (! name().isEmpty()) {
     out << " name=\"";
-    out.quote((const char*)name());//[jasa] ambiguous call
+    out.quote(name());
     out << '"';
   }
   out << " kind=\"" << sKind() << "\">\n";
@@ -37,7 +37,7 @@ void UmlPseudoState::write(FileOut & out) {
   while (! _incoming_trans.isEmpty())
     _incoming_trans.take(0)->write_in(out);
   
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size();
   unsigned i;
      

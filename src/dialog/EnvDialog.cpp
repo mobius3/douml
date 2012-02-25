@@ -27,20 +27,18 @@
 
 #include <qapplication.h>
 #include <qlayout.h>
-#include <q3hbox.h>
+#include <qhbox.h>
 #include <qlabel.h>
-#include <q3grid.h>
+#include <qgrid.h>
 #include <qlineedit.h>
 #include <qpushbutton.h> 
 #include <qmessagebox.h> 
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qtextcodec.h>
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qstringlist.h>
 #include <qdir.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <qfiledialog.h>
 
 #include "EnvDialog.h"
 #include "BrowserView.h"
@@ -66,9 +64,9 @@ EnvDialog::EnvDialog(bool conv, bool noid)
     : QDialog(0, "Environment dialog", TRUE), conversion(conv) {
   setCaption(TR("Environment dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBox * htab;
-  Q3Grid * grid = new Q3Grid(2, this);
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBox * htab;
+  QGrid * grid = new QGrid(2, this);
   QPushButton * button;
   QString s;
   
@@ -82,7 +80,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 	     grid);
   
   new QLabel(TR("Own identifier "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   if (conv)
     s = getenv("BOUML_ID");	// yes !
   else if (! noid)
@@ -101,7 +99,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 	     grid);
 
   new QLabel(TR("Manual path"), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   ed_doc = new QLineEdit(htab);
   if (!conv)
     ed_doc->setText(manual_dir());
@@ -126,7 +124,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to indicate a web navigator program. If it is not defined the reference manual will be shown with an internal simple viewer"),
 	     grid);
   new QLabel(TR("Navigator"), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   ed_navigator = new QLineEdit(htab);
   if (!conv)
     ed_navigator->setText(navigator_path());
@@ -140,7 +138,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to indicate a template project. This allows to create new projects getting all the template project settings"),
 	     grid);
   new QLabel("Template project", grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   if (conv)
     s = getenv("BOUML_TEMPLATE");	// yes !
   else
@@ -156,7 +154,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to indicate a text editor (it must creates an own window). Else Bouml will use an internal editor"),
 	     grid);
   new QLabel(TR("Editor path "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   if (conv)
     s = getenv("BOUML_EDITOR");	// yes !
   else
@@ -172,7 +170,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to choose a language for menus and dialogs (default is English). You may have to select a corresponding character set"),
 	     grid);
   new QLabel(TR("Translation file path "), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   ed_lang = new QLineEdit(current_lang(), htab);
   new QLabel(" ", htab);
   button = new QPushButton(TR("Browse"), htab);
@@ -189,7 +187,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 	     grid);
 
   new QLabel(TR("Character set "), grid);
-  cb_charset = new Q3ComboBox(FALSE, grid);
+  cb_charset = new QComboBox(FALSE, grid);
   cb_charset->setAutoCompletion(completion());
   
   QStringList l;
@@ -250,7 +248,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
     y1.setNum(bottom);
   }
   
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   new QLabel(TR("left: "), htab);
   ed_xmin = new QLineEdit(x0, htab);
   new QLabel(TR("      top: "), htab);
@@ -263,7 +261,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   //
   
   new QLabel(grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   new QLabel(htab);
   connect(new QPushButton(TR("OK"), htab), SIGNAL(clicked()), this, SLOT(accept()));
   new QLabel(htab);
@@ -343,9 +341,9 @@ void EnvDialog::accept() {
     return;
   }
   
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = homeDir().absFilePath(".doumlrc");
+  QString s = homeDir().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "w");
   
 
@@ -414,7 +412,7 @@ void EnvDialog::reject() {
 
 void EnvDialog::doc_browse() {
   QString s =
-    Q3FileDialog::getExistingDirectory(ed_doc->text(), this, 0,
+    QFileDialog::getExistingDirectory(ed_doc->text(), this, 0,
 				      TR("documentation directory"));
   
   if (! s.isNull())
@@ -423,7 +421,7 @@ void EnvDialog::doc_browse() {
 
 void EnvDialog::navigator_browse() {
   QString s =
-    Q3FileDialog::getOpenFileName(ed_navigator->text(),
+    QFileDialog::getOpenFileName(ed_navigator->text(),
 
 
 
@@ -437,7 +435,7 @@ void EnvDialog::navigator_browse() {
 
 void EnvDialog::template_browse() {
   QString s =
-    Q3FileDialog::getOpenFileName(ed_template->text(), "*.prj", this);
+    QFileDialog::getOpenFileName(ed_template->text(), "*.prj", this);
   
   if (! s.isNull())
     ed_template->setText(s);
@@ -445,7 +443,7 @@ void EnvDialog::template_browse() {
 
 void EnvDialog::editor_browse() {
   QString s =
-    Q3FileDialog::getOpenFileName(ed_editor->text(),
+    QFileDialog::getOpenFileName(ed_editor->text(),
 
 
 
@@ -538,7 +536,7 @@ static QString lang_file()
     
 void EnvDialog::lang_browse() {
   QString s =
-    Q3FileDialog::getOpenFileName((ed_lang->text().isEmpty())
+    QFileDialog::getOpenFileName((ed_lang->text().isEmpty())
 				 ? lang_file() : ed_lang->text(),
 				 "*.lang", this);
   
@@ -550,9 +548,9 @@ void EnvDialog::lang_browse() {
 
 static void propose_lang()
 {
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = homeDir().absFilePath(".doumlrc");
+  QString s = homeDir().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "a");
   
   if (fp != 0) {
@@ -577,11 +575,11 @@ static void propose_lang()
   }
 }
 
-int read_doumlrc()
+int read_boumlrc()
 {
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
+  QString s = QDir::home().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
 
 
@@ -660,7 +658,7 @@ int read_doumlrc()
   if (id == -1) {
     QMessageBox::critical(0, "Bouml", TR("Own identifier missing or invalid"));
     EnvDialog::edit(FALSE, TRUE);
-    return read_doumlrc();
+    return read_boumlrc();
   }
     
   return id;

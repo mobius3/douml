@@ -1,8 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <QDragMoveEvent>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -63,7 +58,7 @@ class BrowserActivityObject : public BrowserNode, public Labeled<BrowserActivity
   
     virtual BrowserNode * duplicate(BrowserNode * p,
 				    QString name = QString::null);
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
+    virtual bool may_contains_them(const QList<BrowserNode> & l,
 				   BooL & duplicable) const;
     static BrowserActivityObject * add_activityobject(BrowserNode * future_parent,
 						      const char * s);
@@ -93,7 +88,7 @@ class BrowserActivityObject : public BrowserNode, public Labeled<BrowserActivity
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserActivityDiagram *, bool on_read = FALSE);
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserActivityObject * read(char * &, char *, BrowserNode *);
     static BrowserActivityObject * read_ref(char * & st);
     static BrowserNode * get_it(const char * k, int id);
@@ -106,13 +101,13 @@ class BrowserActivityObject : public BrowserNode, public Labeled<BrowserActivity
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual bool api_compatible(unsigned v) const;
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
+    virtual void referenced_by(QList<BrowserNode> &, bool ondelete = FALSE);
+    static void compute_referenced_by(QList<BrowserNode> &, BrowserNode *);
     
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;

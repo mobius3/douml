@@ -32,15 +32,12 @@
 
 
 #include <qmessagebox.h> 
-#include <q3textbrowser.h> 
-#include <q3textview.h>
+#include <qtextbrowser.h> 
+#include <qtextview.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include "HelpDialog.h"
 #include "UmlDesktop.h"
@@ -77,15 +74,15 @@ void set_navigator_path(QString p)
 HelpDialog * HelpDialog::the;
 
 HelpDialog::HelpDialog()
-    : QDialog(0, "BOUML Help", FALSE, Qt::WDestructiveClose) {
+    : QDialog(0, "BOUML Help", FALSE, WDestructiveClose) {
   setCaption(TR("BOUML Help"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   
   vbox->setMargin(5);
   
-  br = new Q3TextBrowser(this);
+  br = new QTextBrowser(this);
   vbox->addWidget(br);
   
   //vbox->addWidget(new QLabel(this));
@@ -93,7 +90,7 @@ HelpDialog::HelpDialog()
   if (!DocDir.isEmpty()) {
     QDir d(DocDir);
     
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout(vbox);
     hbox->addWidget(new QLabel(this));
     hbox->addWidget(new QLabel(TR("To set the navigator by setting the environment through the menu"
 				  " Miscellaneous allows to see all the documentation in better conditions")
@@ -103,7 +100,7 @@ HelpDialog::HelpDialog()
   else
     vbox->addWidget(new QLabel(this));
   
-  hbox = new Q3HBoxLayout(vbox);
+  hbox = new QHBoxLayout(vbox);
   
   QPushButton * ok = new QPushButton(TR("Close"), this);
   

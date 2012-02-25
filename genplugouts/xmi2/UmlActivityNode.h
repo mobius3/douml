@@ -5,8 +5,8 @@
 #include "UmlFlow.h"
 #include "UmlBaseActivityNode.h"
 #include "UmlActivityItem.h"
-#include <q3cstring.h>
-#include <q3ptrlist.h>
+#include <qcstring.h>
+#include <qlist.h>
 
 class UmlFlow;
 class FileOut;
@@ -14,7 +14,7 @@ class FileOut;
 class UmlActivityNode : public UmlBaseActivityNode, public UmlActivityItem {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityNode(void * id, const Q3CString & s) : UmlBaseActivityNode(id, s) {
+     UmlActivityNode(void * id, const QCString & s) : UmlBaseActivityNode(id, s) {
     }
 
 
@@ -34,7 +34,7 @@ class UmlActivityNode : public UmlBaseActivityNode, public UmlActivityItem {
 
   protected:
     //the flows whose target is the object
-    Q3PtrList<UmlFlow> _incoming_flows;
+    QList<UmlFlow> _incoming_flows;
 
 
   public:

@@ -31,8 +31,6 @@
 
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "CodObjCanvas.h"
 #include "ClassInstCanvas.h"
@@ -76,17 +74,17 @@ class CodClassInstCanvas : public QObject, public CodObjCanvas, public ClassInst
     virtual void history_hide();
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     virtual bool get_show_stereotype_properties() const;
 
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
   
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static CodClassInstCanvas * read(char * &, UmlCanvas * canvas, char *);
     
-    static void send(ToolCom * com, Q3CanvasItemList & all);
+    static void send(ToolCom * com, QCanvasItemList & all);
     
   private slots:
     void modified();	// canvas must be updated

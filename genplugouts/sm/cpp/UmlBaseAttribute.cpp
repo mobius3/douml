@@ -5,8 +5,6 @@
 #include "UmlOperation.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 UmlAttribute * UmlBaseAttribute::create(UmlClass * parent, const char * s)
 {
   return (UmlAttribute *) parent->create_(anAttribute, s);
@@ -26,7 +24,7 @@ bool UmlBaseAttribute::set_isReadOnly(bool y) {
   return set_it_(_read_only, y, setIsReadOnlyCmd);
 }
 
-const Q3CString & UmlBaseAttribute::defaultValue() {
+const QCString & UmlBaseAttribute::defaultValue() {
   read_if_needed_();
   
   return _default_value;
@@ -46,7 +44,7 @@ bool UmlBaseAttribute::set_Type(const UmlTypeSpec & t) {
   return set_it_(_type, t, setTypeCmd);
 }
 
-const Q3CString & UmlBaseAttribute::multiplicity() {
+const QCString & UmlBaseAttribute::multiplicity() {
   read_if_needed_();
   
   return _multiplicity;
@@ -114,7 +112,7 @@ bool UmlBaseAttribute::set_isJavaTransient(bool y) {
 #endif
 
 #ifdef WITHIDL
-Q3CString UmlBaseAttribute::idlCase() {
+QCString UmlBaseAttribute::idlCase() {
   read_if_needed_();
   
   return (_idl_case != 0) ? _idl_case->name() : _idl_explicit_case;

@@ -3,7 +3,7 @@
 #include "UmlBaseUseCaseDiagramDefinition.h"
 
 void UmlBaseUseCaseDiagramDefinition::read_() {
-  Q3PtrDict<UmlUseCaseReference> ucrefs;
+  QPtrDict<UmlUseCaseReference> ucrefs;
   unsigned n;
   unsigned rank;
 

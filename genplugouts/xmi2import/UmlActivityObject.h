@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseActivityObject.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileIn;
 class Token;
@@ -12,7 +12,7 @@ class UmlItem;
 class UmlActivityObject : public UmlBaseActivityObject {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityObject(void * id, const Q3CString & s) : UmlBaseActivityObject(id, s) {
+     UmlActivityObject(void * id, const QCString & s) : UmlBaseActivityObject(id, s) {
     }
 
     static void init();
@@ -22,15 +22,15 @@ class UmlActivityObject : public UmlBaseActivityObject {
 
 
   protected:
-    void setType(Q3CString idref);
+    void setType(QCString idref);
 
     void setType(Token & token);
 
-    void setOrdering(Q3CString s, FileIn & in);
+    void setOrdering(QCString s, FileIn & in);
 
-    void setSelection(Q3CString idref);
+    void setSelection(QCString idref);
 
-    void setInState(Q3CString s);
+    void setInState(QCString s);
 
     //import the lower multiplicity starting by 'tk' inside 'where'
     void importMultiplicity(FileIn & in, Token & token, bool upper);
@@ -42,7 +42,7 @@ class UmlActivityObject : public UmlBaseActivityObject {
 
   public:
     //  call at end of import : try to solve type or state
-    virtual void solve(int context, Q3CString idref);
+    virtual void solve(int context, QCString idref);
 
 };
 

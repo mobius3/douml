@@ -29,8 +29,6 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "CodDirsCanvas.h"
 #include "BrowserDiagram.h"
@@ -129,11 +127,10 @@ void CodDirsCanvas::update_msgs() {
   // cannot be modified in this case
   msgs.sort();
   
-  Q3PtrListIterator<ColMsg> it(msgs);
+  QListIterator<ColMsg> it(msgs);
   QString nl = "\n";
-  QString null;
-  const QString * forward_pfix = &null;
-  const QString * backward_pfix = &null;
+  const QString * forward_pfix = &QString::null;
+  const QString * backward_pfix = &QString::null;
   QString forward;
   QString backward;
   ColMsg * msg;
@@ -253,8 +250,7 @@ void CodDirsCanvas::draw(QPainter & p) {
   
   if (label != 0) {
     p.drawLine(p1, p2);
-    //p.lineTo((int) (p2.x() - five), (int) (p2.y() - five));
-	p.drawLine(p2.x(), p2.y(), (int) (p2.x() - five), (int) (p2.y() - five));
+    p.lineTo((int) (p2.x() - five), (int) (p2.y() - five));
     p.drawLine(p2.x(), p2.y(), (int) (p2.x() - five), (int) (p2.y() + five));
 
     if (fp != 0) {
@@ -274,8 +270,7 @@ void CodDirsCanvas::draw(QPainter & p) {
     p1.setY((int) seven);
     p2.setY((int) seven);
     p.drawLine(p2, p1);
-    //p.lineTo((int) (p1.x() + five), (int) (p1.y() - five));
-	p.drawLine(p1.x(), p1.y(), (int) (p1.x() + five), (int) (p1.y() - five));
+    p.lineTo((int) (p1.x() + five), (int) (p1.y() - five));
     p.drawLine(p1.x(), p1.y(), (int) (p1.x() + five), (int) (p1.y() + five));
 
     if (fp != 0) {
@@ -351,7 +346,7 @@ bool CodDirsCanvas::represents(BrowserNode * bn) {
   return supports(bn);
 }
 
-void CodDirsCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodDirsCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "dirscanvas_ref " << get_ident();
   else {
@@ -451,7 +446,7 @@ void CodDirsCanvas::history_load(QBuffer & b) {
   ::load(angle, b);
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   
-  Q3PtrListIterator<ColMsg> it(msgs);
+  QListIterator<ColMsg> it(msgs);
   ColMsg * msg;
   
   for (; (msg = it.current()) != 0; ++it) {
@@ -465,10 +460,10 @@ void CodDirsCanvas::history_load(QBuffer & b) {
 }
 
 void CodDirsCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   
-  Q3PtrListIterator<ColMsg> it(msgs);
+  QListIterator<ColMsg> it(msgs);
   ColMsg * msg;
   
   for (; (msg = it.current()) != 0; ++it) {

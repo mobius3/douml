@@ -3,11 +3,9 @@
 
 #include "UmlCom.h"
 #include "FileIn.h"
-//Added by qt3to4:
-#include <Q3CString>
-void UmlEntryPointPseudoState::solve(Q3CString idref) {
+void UmlEntryPointPseudoState::solve(QCString idref) {
   // note : parent state already resolved => is a state reference
-  QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+  QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
   
   if (it == All.end()) {
     if (!FileIn::isBypassedId(idref))

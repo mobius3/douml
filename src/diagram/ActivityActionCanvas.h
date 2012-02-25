@@ -31,9 +31,7 @@
 
 
 #include <qobject.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qvaluelist.h>
 
 #include "DiagramCanvas.h"
 #include "Settings.h"
@@ -48,8 +46,8 @@ class ActivityActionCanvas : public QObject, public DiagramCanvas {
   Q_OBJECT
     
   protected:
-    Q3ValueList<PinCanvas *> pins;
-    Q3ValueList<ParameterSetCanvas *> paramsets;
+    QValueList<PinCanvas *> pins;
+    QValueList<ParameterSetCanvas *> paramsets;
     InfoCanvas * pre;
     InfoCanvas * post;
     InfoCanvas * constraint;
@@ -72,7 +70,7 @@ class ActivityActionCanvas : public QObject, public DiagramCanvas {
     ActivityActionCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityActionCanvas();
     
-    Q3ValueList<PinCanvas *> get_pins() { return pins; }
+    QValueList<PinCanvas *> get_pins() { return pins; }
     void add(PinCanvas * p) { pins.append(p); }
     void force_pins_arround();
     
@@ -108,14 +106,14 @@ class ActivityActionCanvas : public QObject, public DiagramCanvas {
     virtual void moveBy(double dx, double dy);
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
     
     virtual void apply_shortcut(QString s);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ActivityActionCanvas * read(char * &, UmlCanvas *, char *);
     virtual void post_loaded();
     

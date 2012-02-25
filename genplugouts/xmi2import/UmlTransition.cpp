@@ -6,9 +6,6 @@
 
 #include "UmlCom.h"
 #include "Trigger.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 void UmlTransition::init()
 {
   declareFct("transition", "uml:Transition", &importIt);
@@ -19,13 +16,13 @@ void UmlTransition::init()
 
 void UmlTransition::solveThem()
 {
-  Q3ValueList<Transition>::Iterator iter;
+  QValueList<Transition>::Iterator iter;
   
   for (iter = All.begin(); iter != All.end(); ++iter) {
     Transition & transition = *iter;
     
-    QMap<Q3CString, UmlItem*>::Iterator isrc = UmlItem::All.find(transition.source);
-    QMap<Q3CString, UmlItem*>::Iterator itgt = UmlItem::All.find(transition.target);
+    QMap<QCString, UmlItem*>::Iterator isrc = UmlItem::All.find(transition.source);
+    QMap<QCString, UmlItem*>::Iterator itgt = UmlItem::All.find(transition.target);
     
     if ((isrc == UmlItem::All.end()) /*&& 
 	((isrc = Outgoings.find(transition.id)) == Outgoings.end())*/) {
@@ -54,7 +51,7 @@ void UmlTransition::solveThem()
 	if (! transition.trigger.isEmpty())
 	  t->set_Trigger(transition.trigger);
 	else if (! transition.triggerRef.isEmpty()) {
-	  Q3CString trig = Trigger::get(transition.triggerRef);
+	  QCString trig = Trigger::get(transition.triggerRef);
 	  
 	  if (!trig.isNull())
 	    t->set_Trigger(trig);
@@ -79,7 +76,7 @@ void UmlTransition::solveThem()
 void UmlTransition::importIt(FileIn & in, Token & token, UmlItem *)
 {
   Transition & transition = *(All.append(Transition()));
-  Q3CString s;
+  QCString s;
   
   transition.id = token.xmiId();
   transition.name = token.valueOf("name");
@@ -89,7 +86,7 @@ void UmlTransition::importIt(FileIn & in, Token & token, UmlItem *)
   transition.kind = token.valueOf("kind");
   
   if (! token.closed()) {
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
       
     while (in.read(), !token.close(kstr)) {
@@ -100,7 +97,7 @@ void UmlTransition::importIt(FileIn & in, Token & token, UmlItem *)
       else if (s == "guard") {
 	if (! token.closed()) {
 	  while (in.read(), !token.close("guard")) {
-	    Q3CString s = token.what();
+	    QCString s = token.what();
 	    
 	    if (s == "specification") {
 	      transition.guard = token.valueOf("body");
@@ -110,7 +107,7 @@ void UmlTransition::importIt(FileIn & in, Token & token, UmlItem *)
 	      
 	      if (! token.closed()) {
 		while (in.read(), !token.close("specification")) {
-		  Q3CString s = token.what();
+		  QCString s = token.what();
 		  
 		  if (s == "body")
 		    transition.guard = in.body("body");
@@ -125,7 +122,7 @@ void UmlTransition::importIt(FileIn & in, Token & token, UmlItem *)
 	}
       }
       else if (s == "effect") {
-	Q3CString b = token.valueOf("body");
+	QCString b = token.valueOf("body");
 	
 	if (! b.isNull()) {
 	  transition.effect = b;
@@ -152,5 +149,5 @@ void UmlTransition::importIt(FileIn & in, Token & token, UmlItem *)
   }
 }
 
-Q3ValueList<UmlTransition::Transition> UmlTransition::All;
+QValueList<UmlTransition::Transition> UmlTransition::All;
 

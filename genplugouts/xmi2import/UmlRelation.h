@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseRelation.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileIn;
 class Token;
@@ -15,7 +15,7 @@ class UmlItem;
 // You can modify it as you want (except the constructor)
 class UmlRelation : public UmlBaseRelation {
   public:
-    UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n) {};
+    UmlRelation(void * id, const QCString & n) : UmlBaseRelation(id, n) {};
 
     //import the relation (as attribute) starting by 'tk' inside 'where'
     static void importAsAttribute(FileIn & in, Token & token, UmlItem * where);

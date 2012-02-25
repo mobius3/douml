@@ -4,8 +4,6 @@
 
 #include "UmlOperation.h"
 #include "UmlActivity.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlSendObjectAction::write(FileOut & out) {
   write_begin(out, "SendObjectAction");
   write_end(out);
@@ -34,7 +32,7 @@ void UmlBroadcastSignalAction::write(FileOut & out) {
 void UmlValueSpecificationAction::write(FileOut & out) {
   write_begin(out, "ValueSpecificationAction");
   
-  Q3CString val;
+  QCString val;
   
   switch (_lang) {
   case Uml:
@@ -58,7 +56,7 @@ void UmlOpaqueAction::write(FileOut & out) {
   write_begin(out, "OpaqueAction");
   write_end(out, TRUE);
   
-  Q3CString body;
+  QCString body;
   
   switch(_lang) {
   case Uml:
@@ -89,7 +87,7 @@ void UmlAcceptEventAction::write(FileOut & out) {
   if (isUnmarshall())
     out << " isUnmarshall=\"true\"";
   
-  Q3CString trig;
+  QCString trig;
   
   switch (_lang) {
   case Uml:
@@ -191,7 +189,7 @@ void UmlAcceptCallAction::write(FileOut & out) {
   write_begin(out, "AcceptCallAction");
   out << " isUnmarshall=\"true\"";
 
-  Q3CString trig;
+  QCString trig;
   
   switch (_lang) {
   case Uml:
@@ -224,7 +222,7 @@ void UmlAcceptCallAction::write(FileOut & out) {
 void UmlReplyAction::write(FileOut & out) {
   write_begin(out, "ReplyAction");
   
-  Q3CString trig;
+  QCString trig;
   
   switch (_lang) {
   case Uml:

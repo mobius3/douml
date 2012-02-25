@@ -1,14 +1,12 @@
 
 #include "UmlStateDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlStateDiagram::memo_ref() {
   diagrams.addElement(this);
   UmlDiagram::memo_ref();
 }
 
-Q3CString UmlStateDiagram::sKind() {
+QCString UmlStateDiagram::sKind() {
   return "state diagram";
 }
 

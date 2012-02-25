@@ -29,21 +29,19 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qmenubar.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
 #include <qstatusbar.h>
 #include <qwindowsstyle.h> 
 #include <qmotifstyle.h> 
-//#include <qmotifplusstyle.h> 
-#include <q3whatsthis.h>
-#include <q3filedialog.h> 
+#include <qmotifplusstyle.h> 
+#include <qwhatsthis.h>
+#include <qfiledialog.h> 
 #include <qfile.h>
 #include <qdir.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <qtextstream.h>
 
 #include "ControlWindow.h"
 #include "BrowserView.h"
@@ -61,61 +59,61 @@ const char * OpenText = "To load a project";
 const char * SearchText = "To search a <i>package</i> in the <i>browser</i>.";
 const char * ChangeUserText = "To be an other user.";
 
-ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control", Qt::WDestructiveClose) {
+ControlWindow::ControlWindow(QDir & homeDir) : QMainWindow(0, "Project control", WDestructiveClose) {
   the = this;
   setCaption("Project control");
   
-  Q3PopupMenu * menu;
+  QPopupMenu * menu;
   QPixmap pixmap;
   
-  Q3ToolBar * tools = new Q3ToolBar(this, "operations");
+  QToolBar * tools = new QToolBar(this, "operations");
   
-  addToolBar(tools, "Operations", Qt::DockTop, TRUE);
+  addToolBar(tools, "Operations", Top, TRUE);
 
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("P&roject", menu);
 
   // open
   
   pixmap = QPixmap(fileopen);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString::null,
+  QWhatsThis::add(new QToolButton(pixmap, "Open", QString::null,
 				  this, SLOT(load()), tools, "open"),
 		  OpenText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Open", this,
-				      SLOT(load()), Qt::CTRL+Qt::Key_O),
+				      SLOT(load()), CTRL+Key_O),
 		     OpenText);
   
   // change user
   
   pixmap = QPixmap(actor);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Who", QString::null,
+  QWhatsThis::add(new QToolButton(pixmap, "Who", QString::null,
 				  this, SLOT(change_user()), tools, "Change user"),
 		  ChangeUserText);
   menu->setWhatsThis(menu->insertItem(pixmap, "Change &user", this,
-				      SLOT(change_user()), Qt::CTRL+Qt::Key_C),
+				      SLOT(change_user()), CTRL+Key_C),
 		     ChangeUserText);
 
   // search
   
   pixmap = QPixmap(browsersearch);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString::null,
+  QWhatsThis::add(new QToolButton(pixmap, "Search", QString::null,
 				  this, SLOT(browser_search()), tools, "search"),
 		  SearchText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Search", this,
-				      SLOT(browser_search()), Qt::CTRL+Qt::Key_S),
+				      SLOT(browser_search()), CTRL+Key_S),
 		     SearchText);
 
   // quit & what
   
-  menu->insertItem("&Quit", this, SLOT(quit()), Qt::CTRL+Qt::Key_Q);
+  menu->insertItem("&Quit", this, SLOT(quit()), CTRL+Key_Q);
 
-  (void)Q3WhatsThis::whatsThisButton(tools);
+  (void)QWhatsThis::whatsThisButton(tools);
   
   // historic
 
   // note : QFile fp(QDir::home().absFilePath(".bouml")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = homeDir.absFilePath(".douml");
+  QString s = homeDir.absFilePath(".bouml");
   FILE * fp = fopen((const char *) s, "r");
   
   if (fp != 0) {
@@ -131,7 +129,7 @@ ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control"
   
   menu->insertSeparator();
   QString whats = QString("to open this project.<br><br>The historic is saved in <i>")
-    + homeDir.absFilePath(".douml") + "</i>";
+    + homeDir.absFilePath(".bouml") + "</i>";
   
   for (int i = 0; i < int(historic.count()); i += 1) {
     int id = menu->insertItem(*historic.at(i),
@@ -142,7 +140,7 @@ ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control"
   
   // style
   
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("&Style", menu);
   
 #if !defined(QT_NO_STYLE_MOTIF)
@@ -156,13 +154,13 @@ ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control"
   // help & about
   
   menuBar()->insertSeparator();
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("&Help", menu);
   
-  menu->insertItem("&About", this, SLOT(about()), Qt::Key_F1);
+  menu->insertItem("&About", this, SLOT(about()), Key_F1);
   menu->insertItem("About&Qt", this, SLOT(aboutQt()));
   menu->insertSeparator();
-  menu->insertItem("What's This", this, SLOT(whatsThis()), Qt::SHIFT+Qt::Key_F1);
+  menu->insertItem("What's This", this, SLOT(whatsThis()), SHIFT+Key_F1);
     
   //
 
@@ -232,7 +230,7 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
     const QFileInfoList * l = dir.entryInfoList("*.lock");
     
     if (l != 0)  {
-      Q3PtrListIterator<QFileInfo> it(*l);
+      QListIterator<QFileInfo> it(*l);
       QFileInfo * fi;
       QString ids;
       
@@ -265,7 +263,7 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
 }
 
 void ControlWindow::load() {
-  QString path = Q3FileDialog::getOpenFileName(QString::null, "*.prj", this);
+  QString path = QFileDialog::getOpenFileName(QString::null, "*.prj", this);
   
   if (! path.isEmpty())
     load(path);

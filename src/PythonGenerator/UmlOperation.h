@@ -26,10 +26,7 @@
 #ifndef UMLOPERATION_H
 #define UMLOPERATION_H
 
-#include <q3intdict.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qintdict.h>
 
 #include "UmlBaseOperation.h"
 
@@ -37,24 +34,24 @@ class QTextOStream;
 
 class UmlOperation : public UmlBaseOperation {
   private:
-    static Q3IntDict<char> bodies;
+    static QIntDict<char> bodies;
 
   public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const QCString & n)
       : UmlBaseOperation(id, n) {};
   
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, BooL & indent_needed,
-			  int &, const Q3CString &);
+    virtual void generate(QTextOStream & f, const QCString & cl_stereotype,
+			  QCString indent, BooL & indent_needed,
+			  int &, const QCString &);
     
-    virtual void generate_imports(QTextOStream & f, Q3CString & made);
+    virtual void generate_imports(QTextOStream & f, QCString & made);
     
-    Q3CString compute_name();
+    QCString compute_name();
     
     static void read_bodies(const char * path);
     
   private:
-    const char * generate_body(QTextOStream & f, Q3CString indent,
+    const char * generate_body(QTextOStream & f, QCString indent,
 			       BooL & indent_needed, const char * p);
 };
 

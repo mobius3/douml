@@ -24,17 +24,15 @@
 // *************************************************************************
 
 #include "Namespace.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 // namespace stack, namespaces.last() = current namespace full name + "\",
 // i.e. "A\B...\Z\"
 QStringList Namespace::Stack;
 
 // namespace and class aliases
-QMap<Q3CString,Q3CString> Namespace::Aliases;
+QMap<QCString,QCString> Namespace::Aliases;
 
-void Namespace::enter(Q3CString s)
+void Namespace::enter(QCString s)
 {
   for (;;) {
     Stack.prepend(s + "\\");
@@ -55,14 +53,14 @@ void Namespace::exit()
   Aliases.clear();
 }
 
-QString Namespace::namespacify(Q3CString s) {
+QString Namespace::namespacify(QCString s) {
   int index = s.find("\\");
   
   if (index == 0)
     // absolute path
     return ((const char *) s) + 1;
   
-  QMap<Q3CString,Q3CString>::ConstIterator it;
+  QMap<QCString,QCString>::ConstIterator it;
   
   if (index == -1) {
     if ((it = Aliases.find(s)) != Aliases.end())
@@ -81,11 +79,11 @@ QString Namespace::namespacify(Q3CString s) {
     : Stack.last() + QString(s);
 }
 
-Q3CString Namespace::current() {
+QCString Namespace::current() {
   if (Stack.isEmpty())
     return 0;
   
   QString & s = Stack.last();
   
-  return Q3CString(s.left(s.length() - 1).toAscii().constData());
+  return QCString(s.left(s.length() - 1));
 }

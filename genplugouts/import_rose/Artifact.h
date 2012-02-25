@@ -3,8 +3,8 @@
 
 
 #include "Language.h"
-#include <q3cstring.h>
-#include <q3asciidict.h>
+#include <qcstring.h>
+#include <qasciidict.h>
 
 class File;
 class UmlPackage;
@@ -14,27 +14,27 @@ class Artifact {
   protected:
     Language language;
 
-    Q3CString name;
+    QCString name;
 
-    Q3CString stereotype;
+    QCString stereotype;
 
-    Q3CString description;
+    QCString description;
 
-    Q3CString cpp_path;
+    QCString cpp_path;
 
-    Q3CString java_path;
+    QCString java_path;
 
-    Q3CString cpp_namespace;
+    QCString cpp_namespace;
 
-    Q3CString java_package;
+    QCString java_package;
 
-    Q3CString idl_module;
+    QCString idl_module;
 
-    static Q3AsciiDict<Artifact> all;
+    static QAsciiDict<Artifact> all;
 
 
   public:
-    static Artifact * find(const Q3CString & uid);
+    static Artifact * find(const QCString & uid);
 
     static void import_component_view(File & f);
 
@@ -45,15 +45,15 @@ class Artifact {
     //'pack' is the package containing the class view where 'cl' is defined
     //'cl' is not nested in an other class
     //'art_path' is the rose path of the artifact
-    void add(UmlPackage * pack, UmlClass * cl, Q3CString & art_path);
+    void add(UmlPackage * pack, UmlClass * cl, QCString & art_path);
 
-    void add_cpp(UmlPackage * pack, UmlClass * cl, Q3CString h, Q3CString src);
+    void add_cpp(UmlPackage * pack, UmlClass * cl, QCString h, QCString src);
 
-    void add_corba(UmlPackage * pack, UmlClass * cl, Q3CString src);
+    void add_corba(UmlPackage * pack, UmlClass * cl, QCString src);
 
-    void add_java(UmlPackage * pack, UmlClass * cl, Q3CString art_path, Q3CString src);
+    void add_java(UmlPackage * pack, UmlClass * cl, QCString art_path, QCString src);
 
-    Q3CString normalize(Q3CString path, Q3CString root);
+    QCString normalize(QCString path, QCString root);
 
 };
 

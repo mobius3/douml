@@ -30,12 +30,8 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3listbox.h>
+#include <qlistbox.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-#include <Q3ValueList>
 
 #include "HideShowDialog.h"
 #include "BrowserNode.h"
@@ -48,28 +44,28 @@
 QSize HideShowDialog::previous_size;
 
 HideShowDialog::HideShowDialog(const BrowserNodeList & a,
-			       Q3ValueList<BrowserNode *> & hv,
+			       QValueList<BrowserNode *> & hv,
 			       BooL & visible)
     : QDialog(0, "hide/show dialog", TRUE), all(a),
       hidden_visible(hv), on_visible(visible) {
   setCaption(TR("Settings dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
-  Q3VBoxLayout * subvbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
+  QVBoxLayout * subvbox;
   QPushButton * button;
 
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox);
-  subvbox = new Q3VBoxLayout(hbox);
+  hbox = new QHBoxLayout(vbox);
+  subvbox = new QVBoxLayout(hbox);
   subvbox->setMargin(5);
-  subvbox->addWidget(new QLabel(TR("Visible"), this), 0, Qt::AlignHCenter);
-  subvbox->addWidget(lb_visible = new Q3ListBox(this));
-  lb_visible->setSelectionMode(Q3ListBox::Multi);
+  subvbox->addWidget(new QLabel(TR("Visible"), this), 0, AlignHCenter);
+  subvbox->addWidget(lb_visible = new QListBox(this));
+  lb_visible->setSelectionMode(QListBox::Multi);
   
-  subvbox = new Q3VBoxLayout(hbox);
-  subvbox->setResizeMode(QLayout::SetMinimumSize);
+  subvbox = new QVBoxLayout(hbox);
+  subvbox->setResizeMode(QLayout::Minimum);
   subvbox->setMargin(5);
   //subvbox->addWidget(new QLabel("", this));
   subvbox->addStretch(100);
@@ -80,13 +76,13 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
   connect(button, SIGNAL(clicked()), this, SLOT(show_them()));
   subvbox->addStretch(100);
   
-  subvbox = new Q3VBoxLayout(hbox);
+  subvbox = new QVBoxLayout(hbox);
   subvbox->setMargin(5);
-  subvbox->addWidget(new QLabel(TR("Hidden"), this), 0, Qt::AlignHCenter);
-  subvbox->addWidget(lb_hidden = new Q3ListBox(this));
-  lb_hidden->setSelectionMode(Q3ListBox::Multi);
+  subvbox->addWidget(new QLabel(TR("Hidden"), this), 0, AlignHCenter);
+  subvbox->addWidget(lb_hidden = new QListBox(this));
+  lb_hidden->setSelectionMode(QListBox::Multi);
   
-  Q3PtrListIterator<BrowserNode> it(all);
+  QListIterator<BrowserNode> it(all);
   
   while (it.current() != 0) {
     QString def = it.current()->get_data()->definition(TRUE, FALSE);
@@ -101,7 +97,7 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
   lb_visible->sort();
   lb_hidden->sort();
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * sh_all = new SmallPushButton(TR("Show all"), this);
   QPushButton * hi_all = new SmallPushButton(TR("Hide all"), this);
@@ -126,7 +122,7 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
   
   //
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
 
   cb_visible = new QCheckBox(TR("Specify visible members rather than hidden ones"), this);
@@ -135,7 +131,7 @@ HideShowDialog::HideShowDialog(const BrowserNodeList & a,
     
   //
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * ok = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -166,7 +162,7 @@ void HideShowDialog::hide_them() {
   unsigned int i = 0;
   
   while (i < lb_visible->count()) {
-    Q3ListBoxItem * item = lb_visible->item(i);
+    QListBoxItem * item = lb_visible->item(i);
     if (item->selected()) {
       lb_visible->takeItem(item);
       lb_hidden->insertItem(item);
@@ -180,7 +176,7 @@ void HideShowDialog::show_them() {
   unsigned int i = 0;
   
   while (i < lb_hidden->count()) {
-    Q3ListBoxItem * item = lb_hidden->item(i);
+    QListBoxItem * item = lb_hidden->item(i);
     
     if (item->selected()) {
       lb_hidden->takeItem(item);
@@ -193,7 +189,7 @@ void HideShowDialog::show_them() {
 
 void HideShowDialog::show_all() {
   while (lb_hidden->count()) {
-    Q3ListBoxItem * item = lb_hidden->firstItem();
+    QListBoxItem * item = lb_hidden->firstItem();
     
     lb_hidden->takeItem(item);
     lb_visible->insertItem(item);
@@ -202,7 +198,7 @@ void HideShowDialog::show_all() {
 
 void HideShowDialog::hide_all() {
   while (lb_visible->count()) {
-    Q3ListBoxItem * item = lb_visible->firstItem();
+    QListBoxItem * item = lb_visible->firstItem();
     
     lb_visible->takeItem(item);
     lb_hidden->insertItem(item);
@@ -213,7 +209,7 @@ void HideShowDialog::hide_private() {
   lb_visible->clear();
   lb_hidden->clear();
   
-  Q3PtrListIterator<BrowserNode> it(all);
+  QListIterator<BrowserNode> it(all);
   
   while (it.current() != 0) {
     BasicData * m = it.current()->get_data();
@@ -234,7 +230,7 @@ void HideShowDialog::hide_private_protected() {
   lb_visible->clear();
   lb_hidden->clear();
   
-  Q3PtrListIterator<BrowserNode> it(all);
+  QListIterator<BrowserNode> it(all);
   
   while (it.current() != 0) {
     BasicData * m = it.current()->get_data();
@@ -257,7 +253,7 @@ void HideShowDialog::accept() {
   hidden_visible.clear();
   on_visible = cb_visible->isChecked();
   
-  Q3ListBox * lb = (on_visible) ? lb_visible : lb_hidden;
+  QListBox * lb = (on_visible) ? lb_visible : lb_hidden;
   
   for (unsigned int i = 0; i != lb->count(); i += 1)
     hidden_visible.append(((ListBoxBrowserNode *) lb->item(i))->browser_node);

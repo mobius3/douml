@@ -31,8 +31,6 @@
 
 #include "UmlEnum.h"
 
-#include <q3textstream.h>
-
 class OperationData;
 class CodObjCanvas;
 class CodMsgSupport;
@@ -41,14 +39,10 @@ class UmlCanvas;
 class ToolCom;
 
 class ColMsg;
-//[lgfreitas] replacing qcollection by q3ptrcollection
-#include <q3ptrcollection.h>
-//[lgfreitas] q3ptrlist needed
-#include <q3ptrlist.h>
 
-class ColMsgList : public Q3PtrList<ColMsg> {
+class ColMsgList : public QList<ColMsg> {
   protected:
-    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
+    virtual int compareItems(QCollection::Item item1, QCollection::Item item2);
 };
 
 
@@ -93,7 +87,7 @@ class ColMsg {
     void place_in(ColMsgList & l);
     bool extract_it(ColMsgList & l);
     
-    static void save(Q3TextStream & st, const ColMsgList & l, bool copy,
+    static void save(QTextStream & st, const ColMsgList & l, bool copy,
 		     QString & warning, const QString & diag_name);
     static void read(char * & st, ColMsgList & l, UmlCanvas * canvas);
     

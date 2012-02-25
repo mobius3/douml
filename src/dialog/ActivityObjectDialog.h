@@ -31,13 +31,11 @@
 
 
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BrowserNode.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QRadioButton;
 
@@ -49,7 +47,7 @@ class MultiLineEdit;
 class KeyValuesTable;
 class BodyDialog;
 
-class ActivityObjectDialog : public Q3TabDialog {
+class ActivityObjectDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
@@ -57,7 +55,7 @@ class ActivityObjectDialog : public Q3TabDialog {
     ActivityObjectData * data;
     QStringList list;
     BrowserNodeList nodes;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     int offset;
     BrowserNode * view;
     
@@ -68,10 +66,10 @@ class ActivityObjectDialog : public Q3TabDialog {
 
     // uml tab
     LineEdit * edname;
-    Q3ComboBox * edtype;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * edordering;
-    Q3ComboBox * edmultiplicity;
+    QComboBox * edtype;
+    QComboBox * edstereotype;
+    QComboBox * edordering;
+    QComboBox * edmultiplicity;
     QCheckBox * is_control_cb;
     LineEdit * edin_state;
     MultiLineEdit * eduml_selection;

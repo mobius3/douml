@@ -31,7 +31,7 @@
 
 #include "BrowserNode.h"
 
-class Q3ComboBox;
+class QComboBox;
 class LineEdit;
 
 class FragmentDialog : public QDialog {
@@ -41,8 +41,8 @@ class FragmentDialog : public QDialog {
     QString & name;
     QString & form;
     BrowserNode *& refer;
-    Q3ComboBox * name_cb;
-    Q3ComboBox * diag_cb;
+    QComboBox * name_cb;
+    QComboBox * diag_cb;
     LineEdit * ed_form;
     BrowserNodeList nodes;
     

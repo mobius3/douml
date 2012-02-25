@@ -4,8 +4,8 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
-#include <q3ptrvector.h>
+#include <qcstring.h>
+#include <qvector.h>
 
 class UmlActivityParameter;
 class UmlActivityAction;
@@ -26,16 +26,16 @@ class UmlBaseParameterSet : public UmlItem {
 
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseParameterSet(void * id, const Q3CString & s) : UmlItem(id, s) {
+     UmlBaseParameterSet(void * id, const QCString & s) : UmlItem(id, s) {
     }
 
 
   public:
     // return the pins part of the parameter set
-    const Q3PtrVector<UmlActivityPin> & pins();
+    const QVector<UmlActivityPin> & pins();
 
     // set the pins
-    bool set_Pins(const Q3PtrVector<UmlActivityPin> & v);
+    bool set_Pins(const QVector<UmlActivityPin> & v);
 
     // to unload the object to free memory, it will be reloaded automatically
     // if needed. Recursively done for the sub items if 'rec' is TRUE. 
@@ -47,7 +47,7 @@ class UmlBaseParameterSet : public UmlItem {
 
 
   private:
-    Q3PtrVector<UmlActivityPin> _pins;
+    QVector<UmlActivityPin> _pins;
 
 
   protected:

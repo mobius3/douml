@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
 
 #include "BrowserSeqDiagram.h"
 #include "SimpleData.h"
@@ -51,8 +47,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserSeqDiagram> BrowserSeqDiagram::imported;
-Q3ValueList<int> BrowserSeqDiagram::imported_ids;
+QList<BrowserSeqDiagram> BrowserSeqDiagram::imported;
+QValueList<int> BrowserSeqDiagram::imported_ids;
 QStringList BrowserSeqDiagram::its_default_stereotypes;	// unicode
 QStringList BrowserSeqDiagram::message_default_stereotypes;	// unicode
 
@@ -146,7 +142,7 @@ void BrowserSeqDiagram::set_name(const char * s) {
 
 void BrowserSeqDiagram::import()
 {
-  Q3ValueList<int>::Iterator it = imported_ids.begin();
+  QValueList<int>::Iterator it = imported_ids.begin();
   
   while (!imported.isEmpty()) {
     QString warning;
@@ -212,8 +208,8 @@ void BrowserSeqDiagram::draw_svg() const {
 }
 
 void BrowserSeqDiagram::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -504,7 +500,7 @@ bool BrowserSeqDiagram::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-void BrowserSeqDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserSeqDiagram::compute_referenced_by(QList<BrowserNode> & l,
 					      BrowserNode * bn,
 					      char const * kc,
 					      char const * kr)
@@ -524,7 +520,7 @@ void BrowserSeqDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserSeqDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserSeqDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "seqdiagram_stereotypes ";
@@ -556,7 +552,7 @@ const QStringList & BrowserSeqDiagram::msg_default_stereotypes()
   return message_default_stereotypes;
 }
 
-void BrowserSeqDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserSeqDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "sequencediagram_ref " << get_ident() << " // " << get_name();
   else {

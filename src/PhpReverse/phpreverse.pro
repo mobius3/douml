@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on debug
+CONFIG	      += qt warn_on release
 HEADERS	      = 
 SOURCES	      = main.cpp \
 		UmlClassItem.cpp UmlArtifact.cpp \
@@ -101,5 +101,3 @@ TARGET	      = php_reverse
 DEFINES	      = WITHPHP REVERSE
 INCLUDEPATH   = ../Tools ../PhpReverse
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

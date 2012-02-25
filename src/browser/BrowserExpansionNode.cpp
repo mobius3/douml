@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QPixmap>
 
 #include "BrowserExpansionNode.h"
 #include "ActivityObjectData.h"
@@ -126,7 +122,7 @@ void BrowserExpansionNode::update_idmax_for_root()
 void BrowserExpansionNode::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
@@ -189,8 +185,8 @@ QString BrowserExpansionNode::connexion_from(bool control) const {
 }
 
 void BrowserExpansionNode::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -326,14 +322,14 @@ QString BrowserExpansionNode::full_name(bool rev, bool) const {
   return fullname(s, rev);
 }
 
-void BrowserExpansionNode::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserExpansionNode::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserFlow::compute_referenced_by(l, this);
   if (! ondelete)
     BrowserActivityDiagram::compute_referenced_by(l, this, "expansionnodecanvas", "expansionnode_ref");
 }
 
-void BrowserExpansionNode::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserExpansionNode::compute_referenced_by(QList<BrowserNode> & l,
 						 BrowserNode * target)
 {
   IdIterator<BrowserExpansionNode> it(all);
@@ -426,7 +422,7 @@ const QStringList & BrowserExpansionNode::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserExpansionNode::save_stereotypes(Q3TextStream & st)
+void BrowserExpansionNode::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "expansionnode_stereotypes ";
@@ -441,7 +437,7 @@ void BrowserExpansionNode::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserExpansionNode::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserExpansionNode::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "expansionnode_ref " << get_ident() << " // " << get_name();
   else {
@@ -454,7 +450,7 @@ void BrowserExpansionNode::save(Q3TextStream & st, bool ref, QString & warning) 
     
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

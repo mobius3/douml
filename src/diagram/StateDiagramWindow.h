@@ -66,7 +66,7 @@ class StateDiagramWindow : public DiagramWindow {
   
   public:
     StateDiagramWindow(const QString & s, BrowserStateDiagram * b, int id = -1);
-virtual ~StateDiagramWindow();
+    ~StateDiagramWindow();
 
     virtual DiagramView * get_view() const;
     

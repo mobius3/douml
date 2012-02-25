@@ -38,9 +38,9 @@ MenuItalic::MenuItalic(const QString & s, QFont f) : str(s), font(f) {
 void MenuItalic::paint(QPainter * p, const QColorGroup& /*cg*/, bool /*act*/,
 		      bool /*enabled*/, int x, int y, int w, int h) {
   p->setFont (font);
-  p->drawText( x, y, w, h, Qt::AlignLeft | Qt::TextShowMnemonic | Qt::TextDontClip, str);
+  p->drawText( x, y, w, h, AlignLeft | ShowPrefix | DontClip, str);
 }
 
 QSize MenuItalic::sizeHint() {
-  return QFontMetrics(font).size(Qt::AlignLeft | Qt::TextShowMnemonic | Qt::TextDontClip, str);
+  return QFontMetrics(font).size(AlignLeft | ShowPrefix | DontClip, str);
 }

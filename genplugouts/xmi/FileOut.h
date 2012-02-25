@@ -2,15 +2,15 @@
 #define _FILEOUT_H
 
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qmap.h>
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class QFile;
 class UmlItem;
 
 //QTextOStream + usefull operations
-class FileOut : public Q3TextStream {
+class FileOut : public QTextStream {
   public:
     FileOut(QFile * fp);
 
@@ -22,11 +22,11 @@ class FileOut : public Q3TextStream {
 
     void idref(const UmlItem * x);
 
-    void idref(Q3CString s, const UmlItem * x);
+    void idref(QCString s, const UmlItem * x);
 
     void ref(const UmlItem * x);
 
-    void idref_datatype(const Q3CString & t);
+    void idref_datatype(const QCString & t);
 
     void define_datatypes(int taggedvalue_mode);
 
@@ -36,9 +36,9 @@ class FileOut : public Q3TextStream {
   protected:
     int _indent;
 
-    QMap<Q3CString,int> _datatypes;
+    QMap<QCString,int> _datatypes;
 
-    QMap<Q3CString,int> _modifiedtypes;
+    QMap<QCString,int> _modifiedtypes;
 
 };
 

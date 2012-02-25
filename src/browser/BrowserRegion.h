@@ -1,8 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <QDragMoveEvent>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -58,7 +53,7 @@ class BrowserRegion : public BrowserNode, public Labeled<BrowserRegion> {
     BrowserRegion(const BrowserRegion * model, BrowserNode * p);
     virtual ~BrowserRegion();
   
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
+    virtual bool may_contains_them(const QList<BrowserNode> & l,
 				   BooL & duplicable) const;
     static BrowserRegion * add_region(BrowserNode * future_parent,
 				      const char * s = "region");
@@ -78,7 +73,7 @@ class BrowserRegion : public BrowserNode, public Labeled<BrowserRegion> {
 				    QString name = QString::null);
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserRegion * read(char * &, char *, BrowserNode *);
     static BrowserRegion * read_ref(char * & st);
     static BrowserNode * get_it(const char * k, int id);
@@ -98,7 +93,7 @@ class BrowserRegion : public BrowserNode, public Labeled<BrowserRegion> {
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;

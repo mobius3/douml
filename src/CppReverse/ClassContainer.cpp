@@ -25,9 +25,6 @@
 
 #ifdef DEBUG_BOUML
 #include <iostream>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 using namespace std;
 #endif
@@ -43,14 +40,14 @@ using namespace std;
 #include "UmlArtifact.h"
 #endif
 
-Q3ValueList<FormalParameterList> ClassContainer::empty;
+QValueList<FormalParameterList> ClassContainer::empty;
 
 // to not have warning
 ClassContainer::~ClassContainer() {
 }
 
-Class * ClassContainer::declare_if_needed(const Q3CString & name,
-					  const Q3CString & stereotype,
+Class * ClassContainer::declare_if_needed(const QCString & name,
+					  const QCString & stereotype,
 					  const FormalParameterList & formals,
 					  NDict<Class> & declared, 
 					  NDict<Class> & defined) {
@@ -64,7 +61,7 @@ Class * ClassContainer::declare_if_needed(const Q3CString & name,
   
   if (! formals.isEmpty()) {
     FormalParameterList::ConstIterator it;
-    Q3CString st = stereotype;
+    QCString st = stereotype;
     
     if (st.isEmpty())
       st = "class";
@@ -89,15 +86,16 @@ Class * ClassContainer::declare_if_needed(const Q3CString & name,
     ? result : 0;
 }
 
-Class * ClassContainer::define(const Q3CString & name,
-			       const Q3CString & stereotype,
+Class * ClassContainer::define(const QCString & name,
+			       const QCString & stereotype,
 			       NDict<Class> & declared, 
 			       NDict<Class> & defined) {
   if (! name.isEmpty()) {
     Class * cl = declared[name];
     
     if (cl != 0) {
-      if (! cl->set_stereotype(stereotype)) return 0;
+      if (! cl->set_stereotype(stereotype))
+	return 0;
       defined.insert(name, cl);
       declared.remove(name);
       return cl;
@@ -124,7 +122,7 @@ Class * ClassContainer::define(const Q3CString & name,
 	return cl;
 #endif
       Lex::warn("<font color =\"red\"> " + Lex::quote(name) +
-		"</font> multiply defined (class container)");  
+		"</font> multiply defined");  
       return 0;    
     }
   }
@@ -132,10 +130,10 @@ Class * ClassContainer::define(const Q3CString & name,
   return new_class(name, stereotype, FALSE);
 }
 
-void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
-				  Q3CString & typeform,
+void ClassContainer::compute_type(QCString type, UmlTypeSpec & typespec,
+				  QCString & typeform,
 				  bool get_first_template_actual,
-				  const Q3ValueList<FormalParameterList> & tmplts) {
+				  const QValueList<FormalParameterList> & tmplts) {
   typespec.type = 0;
   typespec.explicit_type = 0;
   
@@ -161,8 +159,8 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
     // look at each actual in <>
     unsigned level = 1;
     int index2;
-    Q3CString tf1;
-    Q3CString t1;
+    QCString tf1;
+    QCString t1;
     
     for (;;) {
       // earch for the current arg end
@@ -180,14 +178,14 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
       }
       
       if (p[index2]) {
-	Q3CString tf = type.left(index + 1) + typeform + type.mid(index2);
-	Q3CString t = type.mid(index + 1, index2 - index - 1).stripWhiteSpace();
+	QCString tf = type.left(index + 1) + typeform + type.mid(index2);
+	QCString t = type.mid(index + 1, index2 - index - 1).stripWhiteSpace();
 #ifdef DEBUG_BOUML
 	cout << "typeform '" << tf << "' type '" << t << "'\n";
 #endif
 	UmlTypeSpec ts;
 	
-	Q3CString normalized = Lex::normalize(t);
+	QCString normalized = Lex::normalize(t);
   
 	if (!find_type(normalized, ts) &&
 	     (Namespace::current().isEmpty() ||
@@ -222,7 +220,7 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
   }
 
   if (! tmplts.isEmpty()) {
-    Q3ValueList<FormalParameterList>::ConstIterator it1;
+    QValueList<FormalParameterList>::ConstIterator it1;
     
     for (it1 = tmplts.begin(); it1 != tmplts.end(); ++it1) {
       FormalParameterList::ConstIterator it2;
@@ -237,7 +235,7 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
     }
   }
   
-  Q3CString normalized;
+  QCString normalized;
   
   if (typespec.type == 0) {
     normalized = Lex::normalize(type);
@@ -270,7 +268,7 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
 	if (!Lex::identifierp(type, TRUE))
 	  typespec.explicit_type = type;
 	else {
-	  Q3CString t = type;
+	  QCString t = type;
 	  
 	  while ((index = t.find(':')) == 0)
 	    t = t.mid(1);
@@ -309,7 +307,7 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
   }
 }
 
-bool ClassContainer::find_type(Q3CString type, UmlTypeSpec & typespec,
+bool ClassContainer::find_type(QCString type, UmlTypeSpec & typespec,
 			       NDict<Class> & defined) {
   typespec.explicit_type = 0;
   
@@ -339,7 +337,7 @@ bool ClassContainer::find_type(Q3CString type, UmlTypeSpec & typespec,
 	}
       }
       
-      if ((type[index2] != (char)0) && (defined[type.left(index2)] != (char)0))
+      if ((type[index2] != 0) && (defined[type.left(index2)] != 0))
 	// explicit template
 	index = index2;
       else if (defined[type.left(index)] != 0)
@@ -363,7 +361,7 @@ bool ClassContainer::get_template(FormalParameterList & tmplt)
 {
   tmplt.clear();
   
-  Q3CString t = Lex::read_word(TRUE);
+  QCString t = Lex::read_word(TRUE);
   
   if (t != "<") {
     if (!Package::scanning() && (t != "class"))
@@ -380,8 +378,8 @@ bool ClassContainer::get_template(FormalParameterList & tmplt)
       if (t == ">")
 	break;
       
-      Q3CString x;
-      Q3CString s;
+      QCString x;
+      QCString s;
       
       if ((t == "class") || (t == "typename")) {
 	x = Lex::read_word();
@@ -403,10 +401,10 @@ bool ClassContainer::get_template(FormalParameterList & tmplt)
 	return FALSE;
       }
       else {
-	Q3CString pre_pre_region;
-	Q3CString pre_region = Lex::region();
-	Q3CString pre_pre_word;
-	Q3CString pre_word = t;
+	QCString pre_pre_region;
+	QCString pre_region = Lex::region();
+	QCString pre_pre_word;
+	QCString pre_word = t;
 	int level = 0;
 	
 	for (;;) {
@@ -444,7 +442,7 @@ bool ClassContainer::get_template(FormalParameterList & tmplt)
 	}	
       }
       
-      Q3CString v;
+      QCString v;
 		
       if (s == "=") {
 	v = Lex::read_list_elt();

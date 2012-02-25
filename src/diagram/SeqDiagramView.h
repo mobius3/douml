@@ -27,12 +27,6 @@
 #define SEQDIAGRAMVIEW_H
 
 #include "DiagramView.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QMouseEvent>
-#include <QKeyEvent>
-#include <QDropEvent>
-#include <QDragEnterEvent>
 
 class SeqDiagramWindow;
 class DiagramItem;
@@ -45,7 +39,7 @@ class SeqDiagramView : public DiagramView {
 
     virtual void menu(const QPoint&);
     virtual void read(char *, char * k);
-    virtual void save(Q3TextStream & st, QString & warning, bool copy) const;
+    virtual void save(QTextStream & st, QString & warning, bool copy) const;
     
     void send(ToolCom * com);
     

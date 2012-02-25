@@ -27,11 +27,11 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <q3buttongroup.h>
+#include <qcombobox.h> 
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h> 
 #include <qpushbutton.h> 
@@ -52,7 +52,7 @@
 QSize ExtraMemberDialog::previous_size;
 
 ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), emd(ex) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), emd(ex) {
   ex->browser_node->edit_start();
   
   if (ex->browser_node->is_writable()) {
@@ -68,11 +68,11 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
   setCaption(TR("Extra Class Member dialog"));
   
-  Q3Grid * grid;
+  QGrid * grid;
     
   // general tab
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -86,7 +86,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   font.setFixedPitch(TRUE);
   
   new QLabel(TR("stereotype :"), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(ex->get_stereotype()));
   edstereotype->setCurrentItem(0);
   if (! visit) {
@@ -98,7 +98,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   edstereotype->setSizePolicy(sp);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -112,19 +112,19 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // C++
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
   new QLabel(grid);
-  Q3ButtonGroup * gp = 
-    new Q3ButtonGroup(1, Qt::Horizontal, QString::null, grid);
+  QButtonGroup * gp = 
+    new QButtonGroup(1, Qt::Horizontal, QString::null, grid);
   inline_cb = new QCheckBox("inline", gp);
   inline_cb->setDisabled(visit);
   if (ex->cpp_inline)
     inline_cb->setChecked(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("C++ \ndeclaration :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -134,7 +134,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   edcpp_decl->setText(ex->cpp_decl);
   edcpp_decl->setFont(font);
     
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("C++ \ndefinition :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -151,11 +151,11 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Java
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel("Java :", vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -172,11 +172,11 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Php
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel("Php :", vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -193,11 +193,11 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Python
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel("Python :", vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -214,11 +214,11 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // IDL
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel("Idl :", vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -235,7 +235,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -246,7 +246,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 }
 
 void ExtraMemberDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -291,7 +291,7 @@ void ExtraMemberDialog::accept() {
   bn->package_modified();
   emd->modified();
   
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }
 
 void ExtraMemberDialog::edit_description() {

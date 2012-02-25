@@ -27,12 +27,10 @@
 #define UMLUSECASEVIEW_H
 
 #include "UmlBaseUseCaseView.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlUseCaseView : public UmlBaseUseCaseView {
   public:
-    UmlUseCaseView(void * id, const Q3CString & n)
+    UmlUseCaseView(void * id, const QCString & n)
       : UmlBaseUseCaseView(id, n) {};
 	
     virtual void generate();

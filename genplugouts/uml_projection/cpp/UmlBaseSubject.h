@@ -2,8 +2,8 @@
 #define _UMLBASESUBJECT_H
 
 
-#include <q3cstring.h>
-#include <q3ptrvector.h>
+#include <qcstring.h>
+#include <qvector.h>
 
 class UmlSubject;
 
@@ -11,13 +11,13 @@ class UmlSubject;
 class UmlBaseSubject {
   public:
     // return the name
-    const Q3CString & name() const {
+    const QCString & name() const {
         return _name;
     }
 
 
   private:
-    Q3CString _name;
+    QCString _name;
 
     int _x;
 
@@ -33,7 +33,7 @@ class UmlBaseSubject {
 
   public:
     // internal
-    static UmlSubject * get_container_(int x, int y, int w, int h, const Q3PtrVector<UmlSubject> & subjects);
+    static UmlSubject * get_container_(int x, int y, int w, int h, const QVector<UmlSubject> & subjects);
 
   friend class UmlBaseUseCaseDiagramDefinition;
 };

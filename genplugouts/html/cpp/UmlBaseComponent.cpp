@@ -31,19 +31,19 @@ bool UmlBaseComponent::set_AssociatedDiagram(UmlComponentDiagram * d) {
     return FALSE;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseComponent::realizingClasses() {
+const QVector<UmlClass> & UmlBaseComponent::realizingClasses() {
   read_if_needed_();
   
   return _realizing;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseComponent::providedClasses() {
+const QVector<UmlClass> & UmlBaseComponent::providedClasses() {
   read_if_needed_();
   
   return _provided;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseComponent::requiredClasses() {
+const QVector<UmlClass> & UmlBaseComponent::requiredClasses() {
   read_if_needed_();
   
   return _required;

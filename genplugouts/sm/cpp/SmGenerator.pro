@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= stmgen
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP
 HEADERS		= ./UmlBaseRelation.h \
 		  ./UmlStateAction.h \
@@ -342,5 +342,3 @@ SOURCES		= ./UmlBaseRelation.cpp \
 		  ./UmlBaseShallowHistoryPseudoState.cpp \
 		  ./UmlExpansionNode.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

@@ -2,8 +2,6 @@
 #include "UmlCom.h"
 #include "UmlBaseTransition.h"
 #include "UmlTransition.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 anItemKind UmlBaseTransition::kind() {
   return aTransition;
@@ -34,7 +32,7 @@ bool UmlBaseTransition::set_IsExternal(bool v) {
   return set_it_(_is_external, v, setIsCppExternalCmd);
 }
 
-const Q3CString & UmlBaseTransition::trigger() {
+const QCString & UmlBaseTransition::trigger() {
   read_if_needed_();
   return _uml.trigger;
 }
@@ -43,7 +41,7 @@ bool UmlBaseTransition::set_Trigger(const char * s) {
   return set_it_(_uml.trigger, s, setUmlTriggerCmd);
 }
 
-const Q3CString & UmlBaseTransition::guard() {
+const QCString & UmlBaseTransition::guard() {
   read_if_needed_();
   return _uml.guard;
 }
@@ -52,7 +50,7 @@ bool UmlBaseTransition::set_Guard(const char * s) {
   return set_it_(_uml.guard, s, setUmlGuardCmd);
 }
 
-const Q3CString & UmlBaseTransition::activity() {
+const QCString & UmlBaseTransition::activity() {
   read_if_needed_();
   return _uml.activity;
 }
@@ -62,7 +60,7 @@ bool UmlBaseTransition::set_Activity(const char * s) {
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseTransition::cppTrigger() {
+const QCString & UmlBaseTransition::cppTrigger() {
   read_if_needed_();
   return _cpp.trigger;
 }
@@ -71,7 +69,7 @@ bool UmlBaseTransition::set_CppTrigger(const char * s) {
   return set_it_(_cpp.trigger, s, setCppTriggerCmd);
 }
 
-const Q3CString & UmlBaseTransition::cppGuard() {
+const QCString & UmlBaseTransition::cppGuard() {
   read_if_needed_();
   return _cpp.guard;
 }
@@ -80,7 +78,7 @@ bool UmlBaseTransition::set_CppGuard(const char * s) {
   return set_it_(_cpp.guard, s, setCppGuardCmd);
 }
 
-const Q3CString & UmlBaseTransition::cppActivity() {
+const QCString & UmlBaseTransition::cppActivity() {
   read_if_needed_();
   return _cpp.activity;
 }
@@ -91,7 +89,7 @@ bool UmlBaseTransition::set_CppActivity(const char * s) {
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseTransition::javaTrigger() {
+const QCString & UmlBaseTransition::javaTrigger() {
   read_if_needed_();
   return _java.trigger;
 }
@@ -100,7 +98,7 @@ bool UmlBaseTransition::set_JavaTrigger(const char * s) {
   return set_it_(_java.trigger, s, setJavaTriggerCmd);
 }
 
-const Q3CString & UmlBaseTransition::javaGuard() {
+const QCString & UmlBaseTransition::javaGuard() {
   read_if_needed_();
   return _java.guard;
 }
@@ -109,7 +107,7 @@ bool UmlBaseTransition::set_JavaGuard(const char * s) {
   return set_it_(_java.guard, s, setJavaGuardCmd);
 }
 
-const Q3CString & UmlBaseTransition::javaActivity() {
+const QCString & UmlBaseTransition::javaActivity() {
   read_if_needed_();
   return _java.activity;
 }

@@ -27,14 +27,10 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QPixmap>
+#include <qpainter.h>
+#include <qptrdict.h>
 
 #include "BrowserFlow.h"
 #include "FlowData.h"
@@ -119,13 +115,13 @@ bool BrowserFlow::undelete(bool, QString & warning, QString & renamed) {
   return TRUE;
 }
     
-void BrowserFlow::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserFlow::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete)
     BrowserActivityDiagram::compute_referenced_by(l, this, "flowcanvas", "flow_ref");
 }
 
-void BrowserFlow::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserFlow::compute_referenced_by(QList<BrowserNode> & l,
 					const BrowserNode * target)
 {
   IdIterator<BrowserFlow> it(all);
@@ -188,8 +184,8 @@ const QPixmap* BrowserFlow::pixmap(int) const {
 }
 
 void BrowserFlow::menu() {
-  Q3PopupMenu m(0, "flow");
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, "flow");
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -394,7 +390,7 @@ QString BrowserFlow::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p);
 }
 
-void BrowserFlow::save_stereotypes(Q3TextStream & st)
+void BrowserFlow::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "flow_stereotypes ";
@@ -411,7 +407,7 @@ void BrowserFlow::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserFlow::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserFlow::save(QTextStream & st, bool ref, QString & warning) {
   if (ref) {
     // for FlowCanvas
     st << "flow_ref " << get_ident() << " // " << get_name();

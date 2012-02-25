@@ -28,9 +28,7 @@
 
 #include <qfont.h>
 
-#include "q3canvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
+#include "qcanvas.h"
 
 #include "DiagramItem.h"
 #include "UmlCanvas.h"
@@ -40,7 +38,7 @@
 
 #define isa_label(x) ((x)->rtti() == RTTI_LABEL)
 
-class LabelCanvas : public Q3CanvasText, public DiagramItem {
+class LabelCanvas : public QCanvasText, public DiagramItem {
   public:
     static const char * Triangle;
     static const char * Zigzag;
@@ -88,7 +86,7 @@ class LabelCanvas : public Q3CanvasText, public DiagramItem {
     virtual void set_z(double z);	// only called by upper() & lower()
     virtual UmlCanvas * the_canvas() const;
     virtual bool isSelected() const;
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static LabelCanvas * read(char * & st, UmlCanvas * canvas, char *);
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);

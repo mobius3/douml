@@ -1,16 +1,16 @@
-# The directory where all the douml files will be installed, you
+# The directory where all the bouml files will be installed, you
 # can change it for instance because you don't have root permission
-BOUML_LIB = /usr/lib/douml
+BOUML_LIB = /usr/lib/bouml
 
-# The directory where the douml shell script will be installed, you
+# The directory where the bouml shell script will be installed, you
 # can change it for instance because you don't have root permission
 BOUML_DIR = /usr/bin
 
-# The directory containing douml.desktop
+# The directory containing bouml.desktop
 # The copy is not done if you comment the definition
 BOUML_DESKTOP_DIR = /usr/share/applications
 
-# The directories containing the douml icons are
+# The directories containing the bouml icons are
 # <BOUML_ICONS_PREFIX_DIR>/<size>x<size>/apps
 # The copy is not done if you comment the definition
 BOUML_ICONS_PREFIX_DIR = /usr/share/icons/hicolor
@@ -41,11 +41,9 @@ SRC_DIRS = src \
 	src/PythonGenerator \
 	src/IdlGenerator \
 	src/PlugOutUpgrade \
+	src/ProjectControl \
+	src/ProjectSynchro \
 	src/RoundtripBody
-
-# Project control/synchro left pehind
-#	src/ProjectControl \
-#	src/ProjectSynchro 
 
 PLUGOUT_DIRS = genplugouts/html/cpp \
 	genplugouts/gpro \
@@ -63,7 +61,7 @@ PLUGOUT_DIRS = genplugouts/html/cpp \
 	genplugouts/deploy/cpp \
 	genplugouts/global_change
 
-PROGS = src/douml \
+PROGS = src/bouml \
 	src/CppGenerator/cpp_generator \
 	src/CppReverse/cpp_reverse \
 	src/CppRoundtrip/cpp_roundtrip \
@@ -113,41 +111,41 @@ install:
 	then \
 		for i in 16 32 48 64; do \
 			mkdir -p "$(DESTDIR)$(BOUML_ICONS_PREFIX_DIR)/$$i"x"$$i/apps"; \
-			cp -p douml.$$i.png "$(DESTDIR)$(BOUML_ICONS_PREFIX_DIR)/$$i"x"$$i/apps/douml.png"; \
+			cp -p bouml.$$i.png "$(DESTDIR)$(BOUML_ICONS_PREFIX_DIR)/$$i"x"$$i/apps/bouml.png"; \
 			cp -p projectControl.$$i.png "$(DESTDIR)$(BOUML_ICONS_PREFIX_DIR)/$$i"x"$$i/apps/projectControl.png"; \
 			cp -p projectSynchro.$$i.png "$(DESTDIR)$(BOUML_ICONS_PREFIX_DIR)/$$i"x"$$i/apps/projectSynchro.png"; \
 		done; \
 	fi
 	if test -n "$(BOUML_UNIX_PIXMAPS_DIR)"; then \
 		mkdir -p "$(DESTDIR)$(BOUML_UNIX_PIXMAPS_DIR)"; \
-		cp -f douml.48.png "$(DESTDIR)$(BOUML_UNIX_PIXMAPS_DIR)/douml.png"; \
+		cp -f bouml.48.png "$(DESTDIR)$(BOUML_UNIX_PIXMAPS_DIR)/bouml.png"; \
 		cp -f projectControl.48.png "$(DESTDIR)$(BOUML_UNIX_PIXMAPS_DIR)/projectControl.png"; \
 		cp -f projectSynchro.48.png "$(DESTDIR)$(BOUML_UNIX_PIXMAPS_DIR)/projectSynchro.png"; \
 	fi
 	cp -p *.lang "$(DESTDIR)$(BOUML_LIB)"
 	for i in $(PROGS); do cp -p $$i "$(DESTDIR)$(BOUML_LIB)" ; done
 	cd plugouts ; tar cf - empty genpro html rose singleton cpp_utilities xmi xmi2 xmi2import sm_generator usecase_wizard sort uml_projection FileControl deploy GlobalChange | (cd $(DESTDIR)$(BOUML_LIB); tar xf -)
-	echo "#!/bin/sh" >$(DESTDIR)$(BOUML_DIR)/douml
-	echo "PATH=$(BOUML_LIB):$$"PATH >>$(DESTDIR)$(BOUML_DIR)/douml
-	echo "BOUML_LIB_DIR=$(BOUML_LIB)" >>$(DESTDIR)$(BOUML_DIR)/douml
-	echo "export PATH" >>$(DESTDIR)$(BOUML_DIR)/douml
-	echo "export BOUML_LIB_DIR" >>$(DESTDIR)$(BOUML_DIR)/douml
-	echo "exec $(BOUML_LIB)/douml \"$$"@"\"" >>$(DESTDIR)$(BOUML_DIR)/douml
-	chmod +x "$(DESTDIR)$(BOUML_DIR)/douml"
+	echo "#!/bin/sh" >$(DESTDIR)$(BOUML_DIR)/bouml
+	echo "PATH=$(BOUML_LIB):$$"PATH >>$(DESTDIR)$(BOUML_DIR)/bouml
+	echo "BOUML_LIB_DIR=$(BOUML_LIB)" >>$(DESTDIR)$(BOUML_DIR)/bouml
+	echo "export PATH" >>$(DESTDIR)$(BOUML_DIR)/bouml
+	echo "export BOUML_LIB_DIR" >>$(DESTDIR)$(BOUML_DIR)/bouml
+	echo "exec $(BOUML_LIB)/bouml \"$$"@"\"" >>$(DESTDIR)$(BOUML_DIR)/bouml
+	chmod +x "$(DESTDIR)$(BOUML_DIR)/bouml"
 	cd $(DESTDIR)$(BOUML_DIR) ; rm -f projectControl ; ln -s $(BOUML_LIB)/projectControl
 	cd $(DESTDIR)$(BOUML_DIR) ; rm -f projectSynchro ; ln -s $(BOUML_LIB)/projectSynchro
 	if test -n "$(BOUML_DESKTOP_DIR)" ; \
 	then \
 		mkdir -p "$(DESTDIR)$(BOUML_DESKTOP_DIR)" ; \
-		echo "[Desktop Entry]" > "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Encoding=UTF-8" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Name=BOUML" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Type=Application" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Comment=Free UML 2 modeler" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Exec=$(BOUML_DIR)/douml" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "TryExec=douml" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Icon=douml" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Categories=Development;" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
+		echo "[Desktop Entry]" > "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
+		echo "Encoding=UTF-8" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
+		echo "Name=BOUML" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
+		echo "Type=Application" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
+		echo "Comment=Free UML 2 modeler" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
+		echo "Exec=$(BOUML_DIR)/bouml" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
+		echo "TryExec=bouml" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
+		echo "Icon=bouml" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
+		echo "Categories=Development;" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
 		echo "[Desktop Entry]" > "$(DESTDIR)$(BOUML_DESKTOP_DIR)/projectControl.desktop" ; \
 		echo "Encoding=UTF-8" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/projectControl.desktop" ; \
 		echo "Name=Project Control" >> "$(DESTDIR)$(BOUML_DESKTOP_DIR)/projectControl.desktop" ; \
@@ -169,24 +167,24 @@ install:
 	fi
 
 uninstall:
-	rm -rf $(DESTDIR)$(BOUML_LIB) $(DESTDIR)$(BOUML_DIR)/douml
+	rm -rf $(DESTDIR)$(BOUML_LIB) $(DESTDIR)$(BOUML_DIR)/bouml
 	rm -rf $(DESTDIR)$(BOUML_DIR)/projectControl $(DESTDIR)$(BOUML_DIR)/projectSynchro
 	if test -n "$(BOUML_ICONS_PREFIX_DIR)" ; \
 	then \
 		for i in 16 32 48 64; do \
-			rm "$(DESTDIR)$(BOUML_ICONS_PREFIX_DIR)/$$i"x"$$i/apps/douml.png"; \
+			rm "$(DESTDIR)$(BOUML_ICONS_PREFIX_DIR)/$$i"x"$$i/apps/bouml.png"; \
 			rm "$(DESTDIR)$(BOUML_ICONS_PREFIX_DIR)/$$i"x"$$i/apps/projectControl.png"; \
 			rm "$(DESTDIR)$(BOUML_ICONS_PREFIX_DIR)/$$i"x"$$i/apps/projectSynchro.png"; \
 		done; \
 	fi
 	if test -n "$(BOUML_UNIX_PIXMAPS_DIR)"; then \
-		rm "$(DESTDIR)$(BOUML_UNIX_PIXMAPS_DIR)/douml.png"; \
+		rm "$(DESTDIR)$(BOUML_UNIX_PIXMAPS_DIR)/bouml.png"; \
 		rm "$(DESTDIR)$(BOUML_UNIX_PIXMAPS_DIR)/projectControl.png"; \
 		rm "$(DESTDIR)$(BOUML_UNIX_PIXMAPS_DIR)/projectSynchro.png"; \
 	fi
 	if test -n "$(BOUML_DESKTOP_DIR)" ; \
 	then \
-		rm "$(DESTDIR)$(BOUML_DESKTOP_DIR)/douml.desktop" ; \
+		rm "$(DESTDIR)$(BOUML_DESKTOP_DIR)/bouml.desktop" ; \
 		rm "$(DESTDIR)$(BOUML_DESKTOP_DIR)/projectControl.desktop" ; \
 		rm "$(DESTDIR)$(BOUML_DESKTOP_DIR)/projectSynchro.desktop" ; \
 	fi

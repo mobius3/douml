@@ -1,7 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -102,7 +98,7 @@ class BrowserOperation : public BrowserNode, public Labeled<BrowserOperation> {
 				QString & s, bool templ) const;
     virtual const char * constraint() const;
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserOperation * read_ref(char * &);
     static BrowserOperation * read(char * &, char *, BrowserNode *, bool force = TRUE);
     static BrowserNode * get_it(const char * k, int id);
@@ -115,8 +111,8 @@ class BrowserOperation : public BrowserNode, public Labeled<BrowserOperation> {
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserClass *);
+    virtual void referenced_by(QList<BrowserNode> &, bool ondelete = FALSE);
+    static void compute_referenced_by(QList<BrowserNode> &, BrowserClass *);
     
     static QString python_init_self(BrowserNode * cl);
     
@@ -130,7 +126,7 @@ class BrowserOperation : public BrowserNode, public Labeled<BrowserOperation> {
     
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
   protected:
     virtual bool delete_internal(QString & warning);

@@ -24,24 +24,22 @@
 // *************************************************************************
 
 #include <qdir.h>
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
+#include <qtextstream.h> 
 
 #include "UmlPackage.h"
 #include "UmlCom.h"
 #include "PythonSettings.h"
 #include "util.h"
 
-UmlPackage::UmlPackage(void * id, const Q3CString & n)
+UmlPackage::UmlPackage(void * id, const QCString & n)
     : UmlBasePackage(id, n) {
   dir.read = FALSE;
 }
 
 static bool RootDirRead;
-static Q3CString RootDir;
+static QCString RootDir;
 
-Q3CString UmlPackage::file_path(const Q3CString & f) {
+QCString UmlPackage::file_path(const QCString & f) {
   if (!dir.read) {
     dir.file = pythonDir();
     
@@ -66,7 +64,7 @@ Q3CString UmlPackage::file_path(const Q3CString & f) {
       dir.file = d_root.filePath(dir.file);
    
     if (dir.file.isEmpty()) {
-      UmlCom::trace(Q3CString("<font color=\"red\"><b><b> The generation directory "
+      UmlCom::trace(QCString("<font color=\"red\"><b><b> The generation directory "
 			    "must be specified for the package<i> ") + name()
 			    + "</i>, edit the <i> generation settings</i> (tab 'directory') "
 			    "or edit the package (tab 'Python')</b></font><br>");
@@ -81,9 +79,9 @@ Q3CString UmlPackage::file_path(const Q3CString & f) {
   
   if (! d.exists()) {
     // create directory including the intermediates
-    Q3CString s = dir.file;
+    QCString s = dir.file;
     int index = 0;
-    QChar sep = QDir::separator();
+    char sep = QDir::separator();
     
     if (sep != '/') {
       while ((index = s.find(sep, index)) != -1)
@@ -96,12 +94,12 @@ Q3CString UmlPackage::file_path(const Q3CString & f) {
     int index2;
     
     while ((index2 = s.find("/", index + 1)) != -1) {
-      Q3CString s2 = s.left(index2);
+      QCString s2 = s.left(index2);
       QDir sd(s2);
       
       if (!sd.exists()) {
 	if (!sd.mkdir(s2)) {
-	  UmlCom::trace(Q3CString("<font color=\"red\"><b> cannot create directory <i>")
+	  UmlCom::trace(QCString("<font color=\"red\"><b> cannot create directory <i>")
 			+ s2 + "</i></b></font><br>");
 	  UmlCom::bye(n_errors() + 1);
 	  UmlCom::fatal_error("UmlPackage::file_path");
@@ -111,18 +109,18 @@ Q3CString UmlPackage::file_path(const Q3CString & f) {
     }
   }
   
-  return Q3CString(d.filePath(f).toAscii().constData()) + Q3CString(".") + 
+  return QCString(d.filePath(f)) + QCString(".") + 
     PythonSettings::sourceExtension();
 }
 
-Q3CString UmlPackage::text_path(const Q3CString & f) {
-  Q3CString r = file_path(f);
+QCString UmlPackage::text_path(const QCString & f) {
+  QCString r = file_path(f);
   
   return r.left(r.length() - 1 - PythonSettings::sourceExtension().length());
 }
 
 void UmlPackage::generate() {
-  Q3PtrVector<UmlItem> ch = UmlItem::children();
+  QVector<UmlItem> ch = UmlItem::children();
   
   for (unsigned index = 0; index != ch.size(); index += 1)
     ch[index]->generate();

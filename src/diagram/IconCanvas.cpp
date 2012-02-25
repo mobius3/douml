@@ -29,10 +29,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
+#include <qpopupmenu.h> 
 
 #include "IconCanvas.h"
 #include "UmlCanvas.h"
@@ -78,7 +75,7 @@ void IconCanvas::delete_available(BooL &, BooL & out_model) const {
 
 void IconCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   
   p.setBackgroundMode(::Qt::OpaqueMode);
@@ -100,9 +97,9 @@ void IconCanvas::draw(QPainter & p) {
 
 void IconCanvas::change_scale() {
   // defined to not change size
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 UmlCode IconCanvas::type() const {
@@ -115,7 +112,7 @@ void IconCanvas::open() {
 }
 
 void IconCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(browser_node->get_name() + TR("\nshort cut"), m.font()), -1);
   m.insertSeparator();
@@ -210,7 +207,7 @@ void IconCanvas::apply_shortcut(QString s) {
 }
 
 QString IconCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString IconCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -229,7 +226,7 @@ bool IconCanvas::represents(BrowserNode * bn) {
   return (bn == browser_node);
 }
 
-void IconCanvas::save(Q3TextStream & st, bool, QString & warning) const {
+void IconCanvas::save(QTextStream & st, bool, QString & warning) const {
   nl_indent(st);
   st << "iconcanvas " << get_ident() << ' ';
   browser_node->save(st, TRUE, warning);
@@ -256,7 +253,7 @@ IconCanvas * IconCanvas::read(char * & st, UmlCanvas * canvas, char * k)
 }
 
 void IconCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
 }
 

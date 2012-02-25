@@ -28,7 +28,7 @@
 
 #include <qdialog.h>
 
-class Q3TextBrowser;
+class QTextBrowser;
 
 // singleton
 
@@ -44,7 +44,7 @@ class HelpDialog : public QDialog {
     
     static HelpDialog * the;
   
-    Q3TextBrowser * br;
+    QTextBrowser * br;
 };
 
 extern QString manual_dir();

@@ -23,17 +23,14 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h>
 
 #include "UmlExtraClassMember.h"
 
-void UmlExtraClassMember::generate(QTextOStream & f, const Q3CString &,
-				   Q3CString indent, BooL & indent_needed,
-				   int &, const Q3CString &) {
-  const Q3CString & d = pythonDecl();
+void UmlExtraClassMember::generate(QTextOStream & f, const QCString &,
+				   QCString indent, BooL & indent_needed,
+				   int &, const QCString &) {
+  const QCString & d = pythonDecl();
   
   if (! d.isEmpty()) {
     if (indent_needed)

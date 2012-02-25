@@ -25,11 +25,6 @@
 
 #ifdef TRACE
 #include <iostream>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 using namespace std;
 #endif
@@ -53,18 +48,18 @@ using namespace std;
 # endif
 #endif
 
-bool UmlOperation::new_one(Class * container, const Q3CString & name,
-			   const Q3ValueList<FormalParameterList> & tmplts,
-			   const Q3CString & oper_templ,
-			   UmlTypeSpec & type, Q3CString str_actuals,
-			   UmlClass * first_actual_class, Q3CString type_def,
+bool UmlOperation::new_one(Class * container, const QCString & name,
+			   const QValueList<FormalParameterList> & tmplts,
+			   const QCString & oper_templ,
+			   UmlTypeSpec & type, QCString str_actuals,
+			   UmlClass * first_actual_class, QCString type_def,
 			   aVisibility visibility,
 			   bool finalp, bool abstractp, bool staticp,
 			   bool nativep, bool strictfp, bool synchronizedp, 
-			   const Q3CString & array, Q3CString comment,
-			   Q3CString description, Q3CString annotation
+			   const QCString & array, QCString comment,
+			   QCString description, QCString annotation
 #ifdef ROUNDTRIP
-			   , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+			   , bool roundtrip, QList<UmlItem> & expected_order
 #endif
 			   )
 {
@@ -80,9 +75,9 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
   bool may_roundtrip = roundtrip &&
     (!container->from_libp() ||	(visibility != PrivateVisibility));
   UmlTypeSpec return_type;
-  Q3ValueList<UmlParameter> params;
-  Q3ValueList<UmlTypeSpec> exceptions;
-  Q3CString body;
+  QValueList<UmlParameter> params;
+  QValueList<UmlTypeSpec> exceptions;
+  QCString body;
   
   if (may_roundtrip)
 #else
@@ -97,7 +92,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
     op = UmlBaseOperation::create(cl, name);
     
     if (op == 0) {
-      JavaCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add operation <i>")
+      JavaCatWindow::trace(QCString("<font face=helvetica><b>cannot add operation <i>")
 			   + name + "</i> in <i>" + cl->name() 
 			   + "</i></b></font><br>");  
       return FALSE;
@@ -110,7 +105,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
 #endif
   }
     
-  Q3CString def;
+  QCString def;
   
 #ifdef ROUNDTRIP
   if (may_roundtrip || (op != 0)) {
@@ -139,7 +134,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
     }
     
     if (!array.isEmpty())
-      def.insert(index + 7, (const char *)array);
+      def.insert(index + 7, array);
     
     if (nativep) {
       def.insert(index, "native ");
@@ -161,7 +156,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
     }
     
     if (! oper_templ.isEmpty())
-      def.insert(index, (const char *)(oper_templ + " "));
+      def.insert(index, oper_templ + " ");
     
     if (name == cl->name()) {
       // constructor, remove useless ${}
@@ -217,7 +212,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
 #endif
     while (read_param(container, rank, tmplts, param, def, op == 0)) {
       if ((op != 0) && ! op->addParameter(rank, param)) {
-	JavaCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add param <i>")
+	JavaCatWindow::trace(QCString("<font face=helvetica><b>cannot add param <i>")
 			     + name + "</i> in <i>" + cl->name() 
 			   + "</i></b></font><br>");  
 # ifdef TRACE
@@ -228,7 +223,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
     rank += 1;
   }
   
-  Q3CString s = Lex::read_word();
+  QCString s = Lex::read_word();
   
   if (!s.isEmpty() && (*((const char *) s) == '[')) {
 #ifdef ROUNDTRIP
@@ -237,7 +232,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
     if (op != 0)
 #endif
       // do not place it at the same place
-      def.insert(def.find("${type}") + 7, (const char *)s);
+      def.insert(def.find("${type}") + 7, s);
     s = Lex::read_word();
   }
   
@@ -314,7 +309,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
 	s = Lex::region();
       }
 	
-      def.insert(index + 4, (const char *)(" default" + s));
+      def.insert(index + 4, " default" + s);
       s = Lex::read_word();	
     }
     if (s != ";") {
@@ -338,7 +333,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
     // goto the end of the body
     
 #ifndef ROUNDTRIP
-    Q3CString body;
+    QCString body;
 #endif
     int level = 1;	// '{' already read
     char c;
@@ -393,7 +388,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
 
       {
 	// remove \r in case of preserve body
-	Q3CString current_body = op->javaBody();
+	QCString current_body = op->javaBody();
 	int index = 0;
 	
 	while ((index = current_body.find('\r', index)) != -1)
@@ -435,9 +430,9 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
 	op->set_ReturnType(return_type);
       }
       
-      Q3ValueList<UmlParameter>::Iterator itp1;
-      const Q3ValueList<UmlParameter> old_params = op->params();
-      Q3ValueList<UmlParameter>::ConstIterator itp2;
+      QValueList<UmlParameter>::Iterator itp1;
+      const QValueList<UmlParameter> old_params = op->params();
+      QValueList<UmlParameter>::ConstIterator itp2;
       
       for (rank = 0, itp1 = params.begin(), itp2 = old_params.begin();
 	   (itp1 != params.end()) && (itp2 != old_params.end());
@@ -477,9 +472,9 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
 	} while (itp2 != old_params.end());
       }
       
-      Q3ValueList<UmlTypeSpec>::ConstIterator ite1;
-      const Q3ValueList<UmlTypeSpec> old_exceptions = op->exceptions();
-      Q3ValueList<UmlTypeSpec>::ConstIterator ite2;
+      QValueList<UmlTypeSpec>::ConstIterator ite1;
+      const QValueList<UmlTypeSpec> old_exceptions = op->exceptions();
+      QValueList<UmlTypeSpec>::ConstIterator ite2;
       
       for (rank = 0, ite1 = exceptions.begin(), ite2 = old_exceptions.begin();
 	   (ite1 != exceptions.end()) && (ite2 != old_exceptions.end());
@@ -539,7 +534,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
     op = UmlBaseOperation::create(cl, name);
     
     if (op == 0) {
-      JavaCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add operation <i>")
+      JavaCatWindow::trace(QCString("<font face=helvetica><b>cannot add operation <i>")
 			   + name + "</i> in <i>" + cl->name() 
 			   + "</i></b></font><br>");  
       throw 0;
@@ -547,12 +542,12 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
     
     expected_order.append(op);
     
-    Q3ValueList<UmlParameter>::ConstIterator itp;
+    QValueList<UmlParameter>::ConstIterator itp;
     
     for (rank = 0, itp = params.begin(); itp != params.end(); ++itp)
       op->addParameter(rank++, *itp);
     
-    Q3ValueList<UmlTypeSpec>::ConstIterator ite;
+    QValueList<UmlTypeSpec>::ConstIterator ite;
     
     for (rank = 0, ite = exceptions.begin(); ite != exceptions.end(); ++ite)
       op->addException(rank++, *ite);
@@ -587,8 +582,8 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
 }
 
 bool UmlOperation::read_param(Class * container, unsigned rank,
-			      const Q3ValueList<FormalParameterList> & tmplts,
-			      UmlParameter & param, Q3CString & def, bool bypass)
+			      const QValueList<FormalParameterList> & tmplts,
+			      UmlParameter & param, QCString & def, bool bypass)
 {
 #ifdef TRACE
   cout << "UmlOperation::manage_param " << rank << "\n";
@@ -597,15 +592,15 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
   bool finalp = FALSE;
   bool in = FALSE;
   bool ellipsis = FALSE;
-  Q3CString array;
+  QCString array;
   bool type_read = FALSE;
-  Q3ValueList<UmlTypeSpec> actuals;
-  Q3CString str_actuals;
-  Q3CString annotation;
+  QValueList<UmlTypeSpec> actuals;
+  QCString str_actuals;
+  QCString annotation;
   
   param.name = param.default_value = 0;
   
-  Q3CString s = Lex::read_word();
+  QCString s = Lex::read_word();
   
 #ifdef TRACE
   cout << "commence par " << s << '\n';
@@ -645,7 +640,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
 	param.dir = (finalp || in)
 	  ? InputDirection : InputOutputDirection;
 	
-	Q3CString s;
+	QCString s;
 	
 	if (rank != 0)
 	  s = ", ";
@@ -658,17 +653,17 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
 	  s += param.type.explicit_type;
 	else {
 	  s += "${t";
-	  s += Q3CString().setNum(rank);
+	  s += QCString().setNum(rank);
 	  s += "}";
 	  if (param.type.type != 0)
 	    s += str_actuals;
 	}
 	s += array;
 	s += (ellipsis) ? " ... ${p": " ${p";
-	s += Q3CString().setNum(rank);
+	s += QCString().setNum(rank);
 	s += "}";
 	def.insert(def.find("${)}"), 	// cannot be -1
-		   (const char *)s);
+		   s);
       }
       return TRUE;
     }
@@ -676,7 +671,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
       if (!type_read) {
 	while (s.at(s.length() - 1) == '.') {
 	  // type on several lines, managed in this case
-	  Q3CString s2 = Lex::read_word();
+	  QCString s2 = Lex::read_word();
 	  
 	  if (Lex::identifierp(s2))
 	    s += s2;
@@ -689,7 +684,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
 	cout << "type = '" << s << "...'\n";
 #endif
 	if (! bypass) {
-	  Q3CString dummy;
+	  QCString dummy;
 	  
 	  container->read_type(param.type, 0, tmplts, 0, str_actuals, s,
 			       0, dummy, dummy);
@@ -803,7 +798,7 @@ char UmlOperation::skip_expr(int level) {
 }
 
 #ifdef ROUNDTRIP
-UmlOperation *  UmlOperation::already_exist_from_id(Class * container, Q3CString & body)
+UmlOperation *  UmlOperation::already_exist_from_id(Class * container, QCString & body)
 {
   const char * BodyPrefix = "// Bouml preserved body begin ";
   const char * BodyPostfix = "// Bouml preserved body end ";
@@ -879,13 +874,13 @@ UmlOperation *  UmlOperation::already_exist_from_id(Class * container, Q3CString
   return 0;
 }
 
-UmlOperation * UmlOperation::already_exist(Class * container, const Q3CString & name,
-					   Q3ValueList<UmlParameter> & params)
+UmlOperation * UmlOperation::already_exist(Class * container, const QCString & name,
+					   QValueList<UmlParameter> & params)
 {
-  const Q3PtrVector<UmlItem> & ch = container->get_uml()->UmlItem::children();
+  const QVector<UmlItem> & ch = container->get_uml()->UmlItem::children();
   UmlItem ** v = ch.data();
   UmlItem ** const vsup = v + ch.size();
-  Q3PtrList<UmlOperation> opers;
+  QList<UmlOperation> opers;
   
   for (;v != vsup; v += 1)
     if (((*v)->kind() == anOperation) &&
@@ -905,13 +900,13 @@ UmlOperation * UmlOperation::already_exist(Class * container, const Q3CString & 
   }
     
   UmlOperation * op;
-  Q3PtrList<UmlOperation> same_names;
+  QList<UmlOperation> same_names;
 
   // search for operation having the same params name and number
   for (op = opers.first(); op != 0; op = opers.next()) {
-    Q3ValueList<UmlParameter> ps = op->params();
-    Q3ValueList<UmlParameter>::ConstIterator it1;
-    Q3ValueList<UmlParameter>::ConstIterator it2;
+    QValueList<UmlParameter> ps = op->params();
+    QValueList<UmlParameter>::ConstIterator it1;
+    QValueList<UmlParameter>::ConstIterator it2;
     bool same_type = TRUE;
     bool same_name = TRUE;
     

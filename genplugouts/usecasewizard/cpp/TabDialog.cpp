@@ -5,14 +5,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <q3vbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3multilineedit.h>
-#include <q3groupbox.h> 
+#include <qmultilineedit.h>
+#include <qgroupbox.h> 
 #include <qtextcodec.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "UmlCom.h"
 
@@ -22,7 +20,7 @@
 const struct {
   const char * lbl;
   const char * key;
-  Q3MultiLineEdit * (TabDialog::* a);
+  QMultiLineEdit * (TabDialog::* a);
 } Tabs[] = {
   { "The summary of the use case '",
     "Summary", &TabDialog::summary },
@@ -38,16 +36,16 @@ const struct {
     "Exceptions", &TabDialog::exceptions }
 };
   
-TabDialog::TabDialog(UmlUseCase * u) : Q3TabDialog(0, ""), uc(u) {
-  setCaption(Q3CString("Properties of the use case '") + u->name() + "'");
+TabDialog::TabDialog(UmlUseCase * u) : QTabDialog(0, ""), uc(u) {
+  setCaption(QCString("Properties of the use case '") + u->name() + "'");
 
   setCancelButton();
   
   QString cs;
   
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
+  QString s = QDir::home().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
 
 #ifdef WIN32
@@ -56,7 +54,7 @@ TabDialog::TabDialog(UmlUseCase * u) : Q3TabDialog(0, ""), uc(u) {
     
     if (! hd.isEmpty()) {
       QDir d(hd);
-      QString s2 = d.absFilePath(".doumlrc");
+      QString s2 = d.absFilePath(".boumlrc");
       
       fp = fopen((const char *) s2, "r");
     }
@@ -102,26 +100,26 @@ TabDialog::TabDialog(UmlUseCase * u) : Q3TabDialog(0, ""), uc(u) {
   Codec = 0;
   
   if (!cs.isEmpty() && ((Codec = QTextCodec::codecForName(cs)) == 0)) {
-    Q3VBox * vbox = new Q3VBox(this);
+    QVBox * vbox = new QVBox(this);
     
     vbox->setMargin(5);
     (new QLabel("ERROR : No codec for '" + cs + "'", vbox))
-      ->setAlignment(Qt::AlignCenter);
+      ->setAlignment(AlignCenter);
     
     addTab(vbox, "Use case wizard");
     setOkButton(QString::null);
   }
   else {
     for (unsigned i = 0; i != sizeof(Tabs)/sizeof(*Tabs); i += 1) {
-      Q3VBox * vbox = new Q3VBox(this);
+      QVBox * vbox = new QVBox(this);
       
       vbox->setMargin(5);
-      (new QLabel(Q3CString(Tabs[i].lbl) + u->name() + "'",
-		  new Q3GroupBox(1, Qt::Horizontal, vbox)))
-	->setAlignment(Qt::AlignCenter);
-      this->*(Tabs[i]).a = new Q3MultiLineEdit(vbox);
+      (new QLabel(QCString(Tabs[i].lbl) + u->name() + "'",
+		  new QGroupBox(1, Horizontal, vbox)))
+	->setAlignment(AlignCenter);
+      this->*(Tabs[i]).a = new QMultiLineEdit(vbox);
       
-      Q3CString v;
+      QCString v;
       
       if (u->propertyValue(Tabs[i].key, v))
 	(this->*(Tabs[i]).a)->setText(toUnicode(v));
@@ -132,7 +130,7 @@ TabDialog::TabDialog(UmlUseCase * u) : Q3TabDialog(0, ""), uc(u) {
 }
 
 void TabDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   
   if (! desktopCenter.isNull())
     move(x() + desktopCenter.x() - (x() + width() / 2), 
@@ -143,12 +141,12 @@ void TabDialog::accept() {
   for (unsigned i = 0; i != sizeof(Tabs)/sizeof(*Tabs); i += 1)
     uc->set_PropertyValue(Tabs[i].key, fromUnicode((this->*(Tabs[i]).a)->text()));
   UmlCom::bye();
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }
 
 void TabDialog::reject() {
   UmlCom::bye();
-  Q3TabDialog::reject();
+  QTabDialog::reject();
 }
 
 QString TabDialog::toUnicode(const char * str) {
@@ -177,12 +175,12 @@ void TabDialog::latinize(QString & s) {
   }
 }
 
-Q3CString TabDialog::fromUnicode(const QString & s) {
+QCString TabDialog::fromUnicode(const QString & s) {
   if (Codec == 0) {
     QString str = s;
 
     latinize(str);
-    return Q3CString((const char *)str);
+    return QCString(str);
   }
   else if (s.isEmpty())
     return "";

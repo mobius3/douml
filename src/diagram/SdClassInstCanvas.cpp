@@ -28,11 +28,8 @@
 
 
 #include <qcursor.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qpainter.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
 
 #include "SdClassInstCanvas.h"
 #include "BrowserDiagram.h"
@@ -198,7 +195,7 @@ void SdClassInstCanvas::modified() {
 void SdClassInstCanvas::draw(QPainter & p) {
   if (visible()) {
     QRect r = rect();
-    p.setRenderHint(QPainter::Antialiasing, true);
+    
     if (used_drawing_mode == asClass)
       ClassInstCanvas::draw(p, the_canvas(), r);
     else {
@@ -327,7 +324,7 @@ void SdClassInstCanvas::open() {
 }
 
 void SdClassInstCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   bool modelized = (browser_node->get_type() == UmlClassInstance);
   
   m.insertItem(new MenuTitle(full_name(), m.font()), -1);
@@ -523,7 +520,7 @@ bool SdClassInstCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void SdClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void SdClassInstCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(3);
     ColorSpecVector co(1);
@@ -541,7 +538,7 @@ void SdClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -563,8 +560,8 @@ void SdClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void SdClassInstCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void SdClassInstCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   SdClassInstCanvas * x = (SdClassInstCanvas *) it.current();
   
@@ -583,7 +580,7 @@ bool SdClassInstCanvas::get_show_stereotype_properties() const {
   return (browser_node->get_type() != UmlClass) && show_properties;
 }
 
-void SdClassInstCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // "
       << full_name();
@@ -697,7 +694,7 @@ SdClassInstCanvas * SdClassInstCanvas::read(char * & st, UmlCanvas * canvas, cha
 }
 
 void SdClassInstCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   
   BasicData * d = browser_node->get_data();
@@ -718,10 +715,10 @@ void SdClassInstCanvas::history_load(QBuffer & b) {
 
 // for plug outs
 
-void SdClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void SdClassInstCanvas::send(ToolCom * com, QCanvasItemList & all)
 {
-  Q3PtrList<SdClassInstCanvas> l;
-  Q3CanvasItemList::Iterator cit;
+  QList<SdClassInstCanvas> l;
+  QCanvasItemList::Iterator cit;
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
     DiagramItem *di = QCanvasItemToDiagramItem(*cit);
@@ -740,7 +737,7 @@ void SdClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 
   com->write_unsigned(l.count());
   
-  Q3PtrListIterator<SdClassInstCanvas> it(l);
+  QListIterator<SdClassInstCanvas> it(l);
   
   for (; it.current(); ++it) {
     SdClassInstCanvas * i = it.current();
@@ -749,7 +746,7 @@ void SdClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
     if (i->browser_node->get_type() == UmlClass) {      
       com->write_id(0);
       
-      Q3CString s = fromUnicode(i->iname);
+      QCString s = fromUnicode(i->iname);
       
       com->write_string((const char *) s);
     }

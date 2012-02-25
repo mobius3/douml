@@ -3,8 +3,6 @@
 #include "UmlClass.h"
 
 #include "CppSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlOperation::defaultDef() {
   if (cppDecl().isEmpty())
@@ -24,8 +22,8 @@ void UmlOperation::setType(const char * type, const char * s) {
   t.explicit_type = type;
   set_ReturnType(t);
  
-  static const Q3CString sep = " \t\n\r";
-  Q3CString d;
+  static const QCString sep = " \t\n\r";
+  QCString d;
   int typeindex;
   int nameindex;
   
@@ -56,8 +54,8 @@ void UmlOperation::setType(UmlClass * type, const char * s) {
   t.type = type;
   set_ReturnType(t);
  
-  static const Q3CString sep = " \t\n\r";
-  Q3CString d;
+  static const QCString sep = " \t\n\r";
+  QCString d;
   int typeindex;
   int nameindex;
   
@@ -96,7 +94,7 @@ void UmlOperation::addParam(int rank, aDirection dir, const char * name, UmlClas
 }
 
 void UmlOperation::setParams(const char * s) {
-  Q3CString d;
+  QCString d;
   int index;
   
   d = cppDecl();

@@ -27,11 +27,11 @@
 
 
 
-#include <q3grid.h> 
+#include <qgrid.h> 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h> 
-#include <q3vbox.h> 
+#include <qcombobox.h> 
+#include <qvbox.h> 
 
 #include "ClassViewDialog.h"
 #include "BasicData.h"
@@ -49,7 +49,7 @@
 QSize ClassViewDialog::previous_size;
 
 ClassViewDialog::ClassViewDialog(BasicData * nd)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), data(nd) {
   nd->get_browser_node()->edit_start();
   
   if (nd->get_browser_node()->is_writable()) {
@@ -68,7 +68,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   // general tab
   
   BrowserClassView * bn = (BrowserClassView *) data->get_browser_node();
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
 
   umltab = grid;
   grid->setMargin(5);
@@ -79,7 +79,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   edname->setReadOnly(visit);
     
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (!visit) {
     edstereotype->insertStringList(BrowserClassView::default_stereotypes());
@@ -96,7 +96,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   if (visit) {
     if ((bcv != 0) && !bcv->deletedp()) {
       new QLabel(TR("deployment\nview : "), grid);
-      deploymentview = new Q3ComboBox(FALSE, grid);
+      deploymentview = new QComboBox(FALSE, grid);
       
       BrowserNode * bcv = bn->get_associated();
       
@@ -113,7 +113,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
       
       deploymentviews.full_names(deploymentview_names);
       new QLabel(TR("deployment\nview : "), grid);
-      deploymentview = new Q3ComboBox(FALSE, grid);
+      deploymentview = new QComboBox(FALSE, grid);
       deploymentview->insertItem("");
       deploymentview->insertStringList(deploymentview_names);
       
@@ -135,7 +135,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
       deploymentview = 0;
   }
     
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (!visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -153,7 +153,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -169,7 +169,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
 }
 
 void ClassViewDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -232,6 +232,6 @@ void ClassViewDialog::accept() {
     data->modified();
     bn->package_modified();
     
-    Q3TabDialog::accept();
+    QTabDialog::accept();
   }
 }

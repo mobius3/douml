@@ -28,8 +28,6 @@
 
 #include "DiagramCanvas.h"
 #include "Instance.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #define DEPLOYMENTNODE_CANVAS_MIN_SIZE 32
 #define DEPLOYMENTNODE_CANVAS_ADDED 10
@@ -75,7 +73,7 @@ class DeploymentNodeCanvas
     virtual void history_load(QBuffer &);
     virtual void history_hide();
 
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static DeploymentNodeCanvas * read(char * &, UmlCanvas * canvas, char *);
   
     void check_size();
@@ -92,8 +90,8 @@ class DeploymentNodeCanvas
     virtual void set_type(BrowserNode * t);
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
     

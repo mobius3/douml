@@ -16,7 +16,7 @@ void UmlClassView::write(FileOut & out) {
     write_description_properties(out);   
   }
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)
@@ -33,7 +33,7 @@ void UmlClassView::write(FileOut & out) {
 }
 
 void UmlClassView::search_class_assoc() {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)

@@ -6,7 +6,7 @@
 void UmlClassView::deploy() {
   // deployment needed ?
   
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned i;
   bool need = FALSE;
     

@@ -5,29 +5,27 @@
 #include "UmlClass.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 void Binding::import(FileIn & in, Token & token, UmlClass * where)
 {
-  Q3PtrList<Binding> l;
-  Q3CString boundid = token.valueOf("boundelement");
-  Q3CString signatureid = token.valueOf("signature");  
+  QList<Binding> l;
+  QCString boundid = token.valueOf("boundelement");
+  QCString signatureid = token.valueOf("signature");  
     
   if (! token.closed()) {
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
     
     while (in.read(), !token.close(kstr)) {
-      Q3CString s = token.what();
+      QCString s = token.what();
       
       if (s == "boundelement")
 	boundid = token.xmiIdref();
       else if (s == "signature")
 	signatureid = token.xmiIdref();
       else if (s == "parametersubstitution") {
-	Q3CString formalid = token.valueOf("formal");
-	Q3CString actualid = token.valueOf("actual");
-	Q3CString actual;
+	QCString formalid = token.valueOf("formal");
+	QCString actualid = token.valueOf("actual");
+	QCString actual;
 	bool owned = FALSE;
 	
 	if (! token.closed()) {
@@ -40,12 +38,12 @@ void Binding::import(FileIn & in, Token & token, UmlClass * where)
 	      actualid = token.xmiIdref();
 	    else if (s == "ownedactual") {
 	      if (token.xmiType() == "uml:OpaqueExpression") {
-		Q3CString opid = token.xmiId();
+		QCString opid = token.xmiId();
 		
 		UmlItem::importOpaqueDef(in, token, 0);
 		owned = TRUE;
 		
-		QMap<Q3CString, Q3CString>::Iterator it =
+		QMap<QCString, QCString>::Iterator it =
 		  UmlItem::OpaqueDefs.find(opid);
 		
 		if (it != UmlItem::OpaqueDefs.end())
@@ -96,7 +94,7 @@ void Binding::solveThem()
   while (! All.isEmpty()) {
     Binding * b = All.take(0);
     
-    QMap<Q3CString, UmlItem *>::Iterator it = UmlItem::All.find(b->boundId);
+    QMap<QCString, UmlItem *>::Iterator it = UmlItem::All.find(b->boundId);
     UmlClass * tmpl = UmlClass::signature(b->signatureId);
     
     if (it == UmlItem::All.end()) {
@@ -122,7 +120,7 @@ void Binding::solveThem()
 	  cl->replaceActual(rank, typespec);
 	}
 	else {
-	  QMap<Q3CString, Q3CString>::Iterator opit = 
+	  QMap<QCString, QCString>::Iterator opit = 
 	    UmlItem::OpaqueDefs.find(b->actualId);
 	  
 	  if (opit != UmlItem::OpaqueDefs.end())
@@ -145,5 +143,5 @@ void Binding::solveThem()
 
 }
 
-Q3PtrList<Binding> Binding::All;
+QList<Binding> Binding::All;
 

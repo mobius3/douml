@@ -26,9 +26,7 @@
 #ifndef UMLCLASS_H
 #define UMLCLASS_H
 
-#include <q3dict.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <qdict.h>
 
 #include "UmlBaseClass.h"
 #include "aRelationKind.h"
@@ -47,30 +45,30 @@ class UmlRelation;
 
 class UmlClass : public UmlBaseClass {
   public:
-    UmlClass(void * id, const Q3CString & n) 
+    UmlClass(void * id, const QCString & n) 
       : UmlBaseClass(id, n) {};
   
     void made(UmlClassView * base_class_view, UmlClassView * user_class_view,
 	      UmlDeploymentView * base_depl_view, UmlDeploymentView * user_depl_view,
-	      UmlClass * base_item, Q3CString s, UmlClass *& base,
+	      UmlClass * base_item, QCString s, UmlClass *& base,
 	      UmlClass *& user, UmlClass * user_interf = 0);
     
     void made(UmlClassView * base_class_view, UmlClassView * user_class_view,
 	      UmlArtifact * base_art, UmlArtifact * user_art,
-	      UmlClass * base_item, Q3CString s, UmlClass *& base,
+	      UmlClass * base_item, QCString s, UmlClass *& base,
 	      UmlClass *& user, UmlClass * user_interf = 0);
     
     static UmlClass * made(UmlClassView * class_view,
 			   UmlDeploymentView * depl_view,
-			   Q3CString s, bool interf = FALSE);
+			   QCString s, bool interf = FALSE);
     
     static UmlClass * made(UmlClassView * class_view,
 			   UmlArtifact * art,
-			   Q3CString s, bool interf = FALSE);
+			   QCString s, bool interf = FALSE);
     
     void add_kind(const char * k);
     void add_default_base_op(UmlClass * super, UmlClass * user,
-			     UmlClass * parent, Q3CString s,
+			     UmlClass * parent, QCString s,
 			     const char * k, bool unnamed = FALSE);
     UmlOperation * add_constr(UmlClass * super, aVisibility, bool unnamed = FALSE);
     UmlOperation * add_destr(aVisibility, const char * comment = 0);

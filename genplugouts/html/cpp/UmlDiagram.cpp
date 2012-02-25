@@ -2,14 +2,12 @@
 #include "UmlDiagram.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
-void UmlDiagram::html(Q3CString, unsigned int, unsigned int) {
+void UmlDiagram::html(QCString, unsigned int, unsigned int) {
   UmlCom::message(name());
 
   define();
 
-  Q3CString s;
+  QCString s;
   
   s.setNum(getIdentifier());
   s = "fig" + s + ((svg) ? ".svg" : ".png");

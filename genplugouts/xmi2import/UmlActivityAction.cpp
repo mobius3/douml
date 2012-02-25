@@ -3,8 +3,6 @@
 #include "UmlItem.h"
 #include "Token.h"
 #include "FileIn.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 UmlItem * UmlActivityAction::container(anItemKind kind, Token & token, FileIn & in) {
   switch (kind) {
@@ -17,7 +15,7 @@ UmlItem * UmlActivityAction::container(anItemKind kind, Token & token, FileIn & 
 
 void UmlActivityAction::import_it(FileIn & in, Token & token) {
   if (! token.closed()) {
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
     
     while (in.read(), !token.close(kstr))
@@ -26,7 +24,7 @@ void UmlActivityAction::import_it(FileIn & in, Token & token) {
 }
 
 void UmlActivityAction::import(FileIn & in, Token & token) {
-  Q3CString s = token.what();
+  QCString s = token.what();
   
   if ((s == "precondition") || (s == "postcondition") ||
       (s == "localprecondition") || (s == "localpostcondition"))
@@ -40,21 +38,21 @@ void UmlActivityAction::import(FileIn & in, Token & token) {
 
 void UmlActivityAction::readCondition(FileIn & in, Token & token) {
   if (! token.closed()) {
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
       
     while (in.read(), !token.close(kstr)) {
-      Q3CString s = token.what();
+      QCString s = token.what();
       
       if (s == "specification") {
-	Q3CString v = token.valueOf("body");
+	QCString v = token.valueOf("body");
 	
 	if (v.isNull())
 	  v = token.valueOf("value");	// UMODEL
 	
 	if (! token.closed()) {
 	  while (in.read(), !token.close("specification")) {
-	    Q3CString b = token.what();
+	    QCString b = token.what();
 	    
 	    if (b == "body")
 	      v = in.body("body");

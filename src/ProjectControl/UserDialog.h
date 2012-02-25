@@ -28,14 +28,14 @@
 
 #include <qdialog.h>
 
-class Q3ComboBox;
+class QComboBox;
 class QLineEdit;
 
 class UserDialog : public QDialog {
   Q_OBJECT
  
   protected:
-    Q3ComboBox * ids;
+    QComboBox * ids;
     QLineEdit * edname;
       
   public:

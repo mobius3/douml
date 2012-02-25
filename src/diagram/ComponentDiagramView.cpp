@@ -29,12 +29,7 @@
 
 #include <qapplication.h>
 #include <qfont.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QDragEnterEvent>
+#include <qpopupmenu.h> 
 
 #include "ComponentDiagramWindow.h"
 #include "ComponentDiagramView.h"
@@ -63,10 +58,10 @@ ComponentDiagramView::ComponentDiagramView(QWidget * parent, UmlCanvas * canvas,
 }
 
 // have marked elements not yet drawn ?
-static bool marked_not_yet_drawn(Q3PtrDict<DiagramItem> & drawn)
+static bool marked_not_yet_drawn(QPtrDict<DiagramItem> & drawn)
 {
-  const Q3PtrList<BrowserNode> & l = BrowserNode::marked_nodes();
-  Q3PtrListIterator<BrowserNode> it(l);
+  const QList<BrowserNode> & l = BrowserNode::marked_nodes();
+  QListIterator<BrowserNode> it(l);
   BrowserNode * bn;
       
   for (; (bn = it.current()) != 0; ++it) {
@@ -88,7 +83,7 @@ static bool marked_not_yet_drawn(Q3PtrDict<DiagramItem> & drawn)
 }
 
 static void get_drawn(DiagramItemList & items,
-		      Q3PtrDict<DiagramItem> & drawn)
+		      QPtrDict<DiagramItem> & drawn)
 {
   DiagramItem * di;
   
@@ -108,13 +103,13 @@ static void get_drawn(DiagramItemList & items,
 }
 
 void ComponentDiagramView::menu(const QPoint& p) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Component diagram menu"), m.font()), -1);
  
   if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
     DiagramItemList items(canvas()->allItems());
-    Q3PtrDict<DiagramItem> drawn;
+    QPtrDict<DiagramItem> drawn;
     
     get_drawn(items, drawn);
     
@@ -144,7 +139,7 @@ void ComponentDiagramView::menu(const QPoint& p) {
 static const int Diagram_Margin = 20;
 
 void ComponentDiagramView::add_marked_elements(const QPoint& p,
-					       Q3PtrDict<DiagramItem> & drawn) {
+					       QPtrDict<DiagramItem> & drawn) {
   QApplication::setOverrideCursor(Qt::waitCursor);
   
   history_save();
@@ -155,8 +150,8 @@ void ComponentDiagramView::add_marked_elements(const QPoint& p,
   int x = p.x();
   int y = p.y();
   int future_y = y;
-  const Q3PtrList<BrowserNode> & l = BrowserNode::marked_nodes();
-  Q3PtrListIterator<BrowserNode> it(l);
+  const QList<BrowserNode> & l = BrowserNode::marked_nodes();
+  QListIterator<BrowserNode> it(l);
   BrowserNode * bn;
 
   for (; (bn = it.current()) != 0; ++it) {
@@ -225,7 +220,7 @@ void ComponentDiagramView::add_related_elements(DiagramItem *  di, QString what,
     QApplication::setOverrideCursor(Qt::waitCursor);
   
     DiagramItemList items(canvas()->allItems());
-    Q3PtrDict<DiagramItem> drawn;
+    QPtrDict<DiagramItem> drawn;
     
     get_drawn(items, drawn);
     history_save();
@@ -237,7 +232,7 @@ void ComponentDiagramView::add_related_elements(DiagramItem *  di, QString what,
     int x = re.x();
     int y = re.bottom() + Diagram_Margin;
     int future_y = y;
-    Q3PtrListIterator<BrowserNode> it(l);
+    QListIterator<BrowserNode> it(l);
     BrowserNode * bn;
     
     for (; (bn = it.current()) != 0; ++it) {
@@ -400,7 +395,7 @@ void ComponentDiagramView::dropEvent(QDropEvent * e) {
   }
 }
 
-void ComponentDiagramView::save(Q3TextStream & st, QString & warning,
+void ComponentDiagramView::save(QTextStream & st, QString & warning,
 				bool copy) const {
   DiagramItemList items(canvas()->allItems());
   DiagramItem * di;

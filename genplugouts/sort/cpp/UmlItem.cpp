@@ -2,8 +2,6 @@
 #include "UmlItem.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3PtrCollection>
  UmlItem::~UmlItem() {
 }
 
@@ -16,7 +14,7 @@ int UmlItem::orderWeight() {
 }
 
 void UmlItem::sortChildren() {
-  const Q3PtrVector<UmlItem> & qv = children();
+  const QVector<UmlItem> & qv = children();
   
   if (!qv.isEmpty()) {
     unsigned sz = qv.size();
@@ -41,7 +39,7 @@ void UmlItem::sortChildren() {
   }
 }
 
-int VectorOfUmlItem::compareItems(Q3PtrCollection::Item d1, Q3PtrCollection::Item d2) {
+int VectorOfUmlItem::compareItems(QCollection::Item d1, QCollection::Item d2) {
   UmlItem * e1 = (UmlItem *) d1;
   UmlItem * e2 = (UmlItem *) d2;
   int w1 = e1->orderWeight();

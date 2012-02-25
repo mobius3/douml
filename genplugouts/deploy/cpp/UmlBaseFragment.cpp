@@ -34,7 +34,7 @@ int UmlBaseFragment::vcenter_(int rank) const {
   return (t + _compartments[rank]->b())/2;
 }
 
-void UmlBaseFragment::read_covered_(Q3PtrDict<UmlClassInstanceReference> & instances) {
+void UmlBaseFragment::read_covered_(QPtrDict<UmlClassInstanceReference> & instances) {
   unsigned n = UmlCom::read_unsigned();
   unsigned rank;
 
@@ -43,7 +43,7 @@ void UmlBaseFragment::read_covered_(Q3PtrDict<UmlClassInstanceReference> & insta
     _covered.insert(rank, instances[(void *) UmlCom::read_unsigned()]);
 }
 
-UmlFragmentCompartment * UmlBaseFragment::get_container_(int x, int y, int w, int h, const Q3PtrVector<UmlFragment> & fragments)
+UmlFragmentCompartment * UmlBaseFragment::get_container_(int x, int y, int w, int h, const QVector<UmlFragment> & fragments)
 {
   UmlFragmentCompartment * r = 0;
   int nf = fragments.count();
@@ -74,7 +74,7 @@ UmlFragmentCompartment * UmlBaseFragment::get_container_(int x, int y, int w, in
   return r;
 }
 
-void UmlBaseFragment::compute_container_(Q3PtrVector<UmlFragment> & fragments)
+void UmlBaseFragment::compute_container_(QVector<UmlFragment> & fragments)
 {
   int rank = fragments.count();
 

@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseNode.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 
@@ -12,7 +12,7 @@ class FileOut;
 // You can modify it as you want (except the constructor)
 class UmlNode : public UmlBaseNode {
   public:
-    UmlNode(void * id, const Q3CString & n) : UmlBaseNode(id, n) {};
+    UmlNode(void * id, const QCString & n) : UmlBaseNode(id, n) {};
 
     virtual bool write_if_needed(FileOut & out);
 

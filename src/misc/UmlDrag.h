@@ -26,17 +26,14 @@
 #ifndef UMLDRAG_H
 #define UMLGRAG_H
 
-#include <q3dragobject.h>
+#include <qdragobject.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "UmlEnum.h"
 
 class BrowserNode;
 
-class UmlDrag : public Q3StoredDrag {
+class UmlDrag : public QStoredDrag {
   private:
     static QString postfix;
     static bool ro;
@@ -45,7 +42,7 @@ class UmlDrag : public Q3StoredDrag {
     static const QString Key;
 
     UmlDrag(BrowserNode * bn, QWidget * parent = 0, const char * name = 0);
-virtual ~UmlDrag() {};
+    ~UmlDrag() {};
 
     static bool canDecode(QDragMoveEvent * e, UmlCode type,
 			  bool withpostfix = FALSE,

@@ -32,14 +32,14 @@
 #include "SelectAreaCanvas.h"
 
 SelectAreaCanvas::SelectAreaCanvas(int x, int y, int width, int height,
-				   Q3Canvas * canvas)
-    : Q3CanvasRectangle(x, y, width, height,canvas) {
+				   QCanvas * canvas)
+    : QCanvasRectangle(x, y, width, height,canvas) {
 }
   
 void SelectAreaCanvas::drawShape(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   p.setPen(::Qt::DotLine);
-  Q3CanvasRectangle::drawShape(p);
+  QCanvasRectangle::drawShape(p);
   p.setPen(::Qt::SolidLine);
 }

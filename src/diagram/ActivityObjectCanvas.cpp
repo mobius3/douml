@@ -27,12 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
 
 #include "ActivityObjectCanvas.h"
 #include "BrowserActivityObject.h"
@@ -254,8 +251,8 @@ void ActivityObjectCanvas::compute_size() {
 bool ActivityObjectCanvas::force_inside() {
   // if its parent is present, force inside it
   
-  Q3CanvasItemList all = the_canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = the_canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   BrowserNode * parent = (BrowserNode *) browser_node->parent();
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -347,17 +344,17 @@ void ActivityObjectCanvas::moveBy(double dx, double dy) {
 }
 
 void ActivityObjectCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   compute_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void ActivityObjectCanvas::draw(QPainter & p) {
   if (visible()) {
     QRect r = rect();
     FILE * fp = svg();
-	p.setRenderHint(QPainter::Antialiasing, true);
+
     if (fp != 0)
       fputs("<g>\n", fp);
 
@@ -403,12 +400,12 @@ void ActivityObjectCanvas::draw(QPainter & p) {
 	  if (fp != 0) {
 	    fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		    QColor(::Qt::darkGray).rgb()&0xffffff,
+		    ::Qt::darkGray.rgb()&0xffffff,
 		    r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 	    
 	    fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		    QColor(::Qt::darkGray).rgb()&0xffffff,
+		    ::Qt::darkGray.rgb()&0xffffff,
 		    r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
 	  }
 	}
@@ -469,8 +466,8 @@ void ActivityObjectCanvas::menu(const QPoint&) {
   BrowserClass * cl = 
     ((ActivityObjectData *) browser_node->get_data())->get_type().type;
 
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -615,7 +612,7 @@ bool ActivityObjectCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ActivityObjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ActivityObjectCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(1);
     ColorSpecVector co(1);
@@ -632,7 +629,7 @@ void ActivityObjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -649,8 +646,8 @@ void ActivityObjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ActivityObjectCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ActivityObjectCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ActivityObjectCanvas * x = (ActivityObjectCanvas *) it.current();
   
@@ -691,7 +688,7 @@ bool ActivityObjectCanvas::copyable() const {
 QString ActivityObjectCanvas::may_start(UmlCode & l) const {
   return (l == UmlFlow)
     ? ((BrowserActivityObject *) browser_node)->may_start()
-    : QString();
+    : 0;
 }
 
 QString ActivityObjectCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -721,7 +718,7 @@ bool ActivityObjectCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void ActivityObjectCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityObjectCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "activityobjectcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -820,7 +817,7 @@ ActivityObjectCanvas *
 }
 
 void ActivityObjectCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(browser_node->get_data(), 0, this, 0);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }

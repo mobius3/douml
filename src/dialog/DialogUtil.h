@@ -28,18 +28,14 @@
 
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <q3multilineedit.h>
+#include <qmultilineedit.h>
 #include <qmessagebox.h>
-//Added by qt3to4:
-#include <Q3PopupMenu>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "AType.h"
 
 class QWidget;
-class Q3PopupMenu;
-class Q3TabDialog;
+class QPopupMenu;
+class QTabDialog;
 class BrowserNodeList;
 class UmlCanvas;
 class BodyDialog;
@@ -56,9 +52,9 @@ class SmallPushButton : public QPushButton {
 };
 
 // redefine text() to remove non latin1 characters
-class MultiLineEdit : public Q3MultiLineEdit {
+class MultiLineEdit : public QMultiLineEdit {
   public:
-    MultiLineEdit(QWidget * w, const char * name=0) : Q3MultiLineEdit(w, name) { };
+    MultiLineEdit(QWidget * w, const char * name=0) : QMultiLineEdit(w, name) { };
     
     virtual void setText(const QString &);
     virtual QString text() const;
@@ -67,11 +63,11 @@ class MultiLineEdit : public Q3MultiLineEdit {
     
     void setTheText(const QString & s) {
       // no toUnicode
-      Q3MultiLineEdit::setText(s);
+      QMultiLineEdit::setText(s);
     }
     QString theText() const {
       // no fromUnicode
-      return Q3MultiLineEdit::text();
+      return QMultiLineEdit::text();
     }
 };
 
@@ -94,7 +90,7 @@ class LineEdit : public QLineEdit {
     }
 };
 
-extern void init_font_menu(Q3PopupMenu & fontsubm, UmlCanvas * the_canvas, 
+extern void init_font_menu(QPopupMenu & fontsubm, UmlCanvas * the_canvas, 
 			   int index);
 extern void same_width(QWidget *, QWidget *);
 extern void same_width(QWidget *, QWidget *, QWidget *);
@@ -103,11 +99,11 @@ extern void same_width(QWidget *, QWidget *, QWidget *, QWidget *, QWidget *);
 
 enum EditType { CppEdit, JavaEdit, PhpEdit, PythonEdit, TxtEdit };
 
-typedef void (* post_edit)(Q3TabDialog *, QString);
+typedef void (* post_edit)(QTabDialog *, QString);
 
 extern void edit(const QString &, QString name, void * id, EditType k,
-		 Q3TabDialog * tbl, post_edit pf, Q3PtrList<BodyDialog> & edits);
-extern bool check_edits(Q3PtrList<BodyDialog> & edits);
+		 QTabDialog * tbl, post_edit pf, QList<BodyDialog> & edits);
+extern bool check_edits(QList<BodyDialog> & edits);
 
 extern AType the_type(const QString & t, const QStringList & types,
 		      BrowserNodeList & nodes);

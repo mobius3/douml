@@ -27,13 +27,8 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QPixmap>
 
 #include "BrowserDeploymentNode.h"
 #include "BrowserSimpleRelation.h"
@@ -106,13 +101,13 @@ void BrowserDeploymentNode::update_idmax_for_root()
 void BrowserDeploymentNode::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
 
-void BrowserDeploymentNode::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserDeploymentNode::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete)
     BrowserDeploymentDiagram::compute_referenced_by(l, this, "deploymentnodecanvas", "deploymentnode_ref");
@@ -142,8 +137,8 @@ QString BrowserDeploymentNode::full_name(bool rev, bool) const {
 }
 
 void BrowserDeploymentNode::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -467,7 +462,7 @@ bool BrowserDeploymentNode::tool_cmd(ToolCom * com, const char * args) {
   return TRUE;
 }
 
-void BrowserDeploymentNode::save_stereotypes(Q3TextStream & st)
+void BrowserDeploymentNode::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "deploymentnode_stereotypes ";
@@ -484,7 +479,7 @@ void BrowserDeploymentNode::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserDeploymentNode::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserDeploymentNode::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "deploymentnode_ref " << get_ident() << " // " << get_name();
   else {
@@ -503,7 +498,7 @@ void BrowserDeploymentNode::save(Q3TextStream & st, bool ref, QString & warning)
     
     // saves the sub elts
     
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

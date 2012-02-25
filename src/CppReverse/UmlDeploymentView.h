@@ -27,21 +27,18 @@
 #define UMLDEPLOYMENTVIEW_H
 
 #include "UmlBaseDeploymentView.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
 
 // This class manages 'deployment view'
 // You can modify it as you want (except the constructor)
 
 class UmlDeploymentView : public UmlBaseDeploymentView {
   public:
-    UmlDeploymentView(void * id, const Q3CString & n)
+    UmlDeploymentView(void * id, const QCString & n)
       : UmlBaseDeploymentView(id, n) {};
   
 #ifdef ROUNDTRIP
     virtual bool set_roundtrip_expected();
-    virtual void mark_useless(Q3PtrList<UmlItem> & l);
+    virtual void mark_useless(QList<UmlItem> & l);
     virtual void scan_it(int & n);
     virtual void send_it(int n);
 #endif

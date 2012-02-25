@@ -28,11 +28,9 @@
 
 
 #include <math.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "ArrowJunctionCanvas.h"
 #include "ArrowCanvas.h"
@@ -90,9 +88,9 @@ void ArrowJunctionCanvas::deleted() {
 
 void ArrowJunctionCanvas::change_scale() {
   // the size is not modified
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void ArrowJunctionCanvas::draw(QPainter & p) {
@@ -163,7 +161,7 @@ void ArrowJunctionCanvas::open() {
 void ArrowJunctionCanvas::menu(const QPoint&) {
 #if 0
   if (lines.at(0)->may_join()) {
-    Q3PopupMenu m;
+    QPopupMenu m;
     
     m.insertItem(new MenuTitle(TR("Line break"), m.font()), -1);
     m.insertSeparator();
@@ -195,7 +193,7 @@ bool ArrowJunctionCanvas::alignable() const {
   return TRUE;
 }
 
-void ArrowJunctionCanvas::save(Q3TextStream & st, bool, QString & warning) const {
+void ArrowJunctionCanvas::save(QTextStream & st, bool, QString & warning) const {
   nl_indent(st);
   st << "arrowjunctioncanvas " << get_ident() << ' ';
   interface->save(st, TRUE, warning);

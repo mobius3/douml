@@ -26,7 +26,7 @@
 #ifndef OBJECTDATA_H
 #define OBJECTDATA_H
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "AType.h"
 #include "UmlEnum.h"
@@ -67,7 +67,7 @@ public:
   virtual void send_java_def(ToolCom * com);
   bool tool_cmd(ToolCom * com, const char * args);
   
-  void save(Q3TextStream &, QString & warning) const;
+  void save(QTextStream &, QString & warning) const;
   void read(char * &, char * &);
 };
 

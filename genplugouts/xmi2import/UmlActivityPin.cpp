@@ -3,8 +3,6 @@
 #include "FileIn.h"
 #include "Token.h"
 #include "UmlItem.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlActivityPin::init()
 {
@@ -35,7 +33,7 @@ void UmlActivityPin::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(anActivityPin, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     
     if (s.isEmpty()) {
       s = token.what();

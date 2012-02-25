@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -35,21 +32,21 @@ class QTextOStream;
 
 class UmlAttribute : public UmlBaseAttribute {
   public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const QCString & n)
       :  UmlBaseAttribute(id, n) {};
 
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent);
+    virtual void generate(QTextOStream & f, const QCString & cl_stereotype,
+			  QCString indent);
     virtual void generate_enum_pattern_item(QTextOStream & f, int & current_value,
-					    const Q3CString & class_name,
-					    Q3CString indent);
-    virtual void generate_enum_pattern_case(QTextOStream & f, Q3CString indent);
-    virtual void generate_enum_item(QTextOStream & f, Q3CString indent, BooL & first);
-    virtual void generate_enum_member(QTextOStream & f, Q3CString indent);
+					    const QCString & class_name,
+					    QCString indent);
+    virtual void generate_enum_pattern_case(QTextOStream & f, QCString indent);
+    virtual void generate_enum_item(QTextOStream & f, QCString indent, BooL & first);
+    virtual void generate_enum_member(QTextOStream & f, QCString indent);
     
   private:
-    void generate(QTextOStream & f, const Q3CString & cl_stereotype,
-		  Q3CString indent, bool enumitem);
+    void generate(QTextOStream & f, const QCString & cl_stereotype,
+		  QCString indent, bool enumitem);
 
 };
 

@@ -28,11 +28,7 @@
 
 
 #include <qcursor.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
-#include <QTextOStream>
+#include <qfiledialog.h>
 
 #include "GenerationSettings.h"
 #include "GenerationSettingsDialog.h"
@@ -84,7 +80,7 @@ SharedStr GenerationSettings::cpp_set_name;
 bool GenerationSettings::cpp_set_inline;
 bool GenerationSettings::cpp_set_param_const;
 bool GenerationSettings::cpp_set_param_ref;
-Q3CString GenerationSettings::cpp_indent_visibility;
+QCString GenerationSettings::cpp_indent_visibility;
 
 bool GenerationSettings::java_default_defs;
 bool GenerationSettings::java_javadoc_comment;
@@ -2297,9 +2293,9 @@ bool GenerationSettings::tool_global_idl_cmd(ToolCom * com,
 static void save_includes_imports(IncludesSpec & sp, const char * filename)
 {
   QByteArray newdef;
-  Q3TextStream st(newdef, QIODevice::WriteOnly);
+  QTextOStream st(newdef);
 	
-  st.setEncoding(Q3TextStream::Latin1);
+  st.setEncoding(QTextStream::Latin1);
 
   st << "// \"a type\" \"needed " << filename << "\"\n";
     
@@ -2318,7 +2314,7 @@ static void save_includes_imports(IncludesSpec & sp, const char * filename)
   save_if_needed(filename, newdef);
 }
 
-void GenerationSettings::save_dirs(Q3TextStream & st)
+void GenerationSettings::save_dirs(QTextStream & st)
 {
   if (!cpp_root_dir.isEmpty()) {
     nl_indent(st);
@@ -2349,7 +2345,7 @@ void GenerationSettings::save_dirs(Q3TextStream & st)
   st << '\n';
 }
 
-void GenerationSettings::save_descriptions(Q3TextStream & st)
+void GenerationSettings::save_descriptions(QTextStream & st)
 {
   if (! artifact_default_description.isEmpty()) {
     nl_indent(st);
@@ -2383,9 +2379,9 @@ void GenerationSettings::save_descriptions(Q3TextStream & st)
 void GenerationSettings::save()
 {
   QByteArray newdef;
-  Q3TextStream st(newdef, QIODevice::WriteOnly);
+  QTextOStream st(newdef);
 	
-  st.setEncoding(Q3TextStream::Latin1);
+  st.setEncoding(QTextStream::Latin1);
   
   nl_indent(st);
   
@@ -3313,7 +3309,7 @@ void GenerationSettings::read(char * & st, char * & k)
       cpp_h_content = CPP_H_CONTENT;
     if (!strcmp(k, "cpp_default_src_content")) {
       // old -> new version
-      Q3CString s = read_string(st);
+      QCString s = read_string(st);
       int index;
       
       if ((index = s.find("${class_attributes}\n${operations}")) != -1)
@@ -3946,7 +3942,7 @@ static bool read_incl(IncludesSpec & sp, const char * filename)
 
 bool GenerationSettings::import()
 {
-  QString fn = Q3FileDialog::getOpenFileName(last_used_directory(), "generation_settings");
+  QString fn = QFileDialog::getOpenFileName(last_used_directory(), "generation_settings");
       
   if (!fn.isEmpty()) {
     set_last_used_directory(fn);
@@ -4200,7 +4196,7 @@ void ReverseRoundtripFilter::receive_def(const char * args) {
   regexp = args + 1;
 }
 
-void ReverseRoundtripFilter::save(const char * key, Q3TextStream & st) { //[lgfreitas] we are not using the new qtextstream yet
+void ReverseRoundtripFilter::save(const char * key, QTextOStream & st) {
   if (! regexp.isEmpty()) {
     st << key << ' ';
     save_string(regexp, st);

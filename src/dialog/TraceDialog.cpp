@@ -28,14 +28,11 @@
 
 
 #include <stdio.h>
-#include <q3textview.h> 
+#include <qtextview.h> 
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <q3filedialog.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <qfiledialog.h>
+#include <qtextstream.h>
 #include <myio.h>
 
 #include "TraceDialog.h"
@@ -44,22 +41,22 @@
 #include "translate.h"
 
 TraceDialog * TraceDialog::the;
-Q3TextView * TraceDialog::txt;
+QTextView * TraceDialog::txt;
 bool TraceDialog::AutoRaise;
 QString TraceDialog::content;
 
 QSize TraceDialog::previous_size;
 
-TraceDialog::TraceDialog() : QDialog(0, "", FALSE, Qt::WDestructiveClose) {
+TraceDialog::TraceDialog() : QDialog(0, "", FALSE, WDestructiveClose) {
   setCaption(TR("Trace"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
 
-  txt = new Q3TextView(this);
+  txt = new QTextView(this);
   txt->setText(content);
   vbox->add(txt);
   
-  Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox); 
+  QHBoxLayout * hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * cl = new QPushButton(TR("Clear"), this);
   QPushButton * save = new QPushButton(TR("Save"), this);
@@ -99,7 +96,7 @@ void TraceDialog::clr() {
 
 void TraceDialog::save() {
   QString filename =
-    Q3FileDialog::getSaveFileName(last_used_directory(), "*.html", this);
+    QFileDialog::getSaveFileName(last_used_directory(), "*.html", this);
 
   if (!filename.isNull()) {
     if (filename.right(5).lower() != ".html")
@@ -109,8 +106,8 @@ void TraceDialog::save() {
 
     QFile file(filename);
     
-    if (file.open(QIODevice::WriteOnly)) {
-      Q3TextStream stream(&file);
+    if (file.open(IO_WriteOnly)) {
+      QTextStream stream(&file);
       
       stream << "<html>\n" << txt->text() << "\n</html>\n";
       file.close();

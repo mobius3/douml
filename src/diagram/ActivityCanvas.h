@@ -31,9 +31,7 @@
 
 
 #include <qobject.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qvaluelist.h>
 
 #include "ActivityContainerCanvas.h"
 #include "Settings.h"
@@ -60,7 +58,7 @@ class ActivityCanvas : public QObject, public ActivityContainerCanvas {
     QPoint pre_offset;
     QPoint post_offset;
     int post_width;
-    Q3ValueList<ParameterCanvas *> params;
+    QValueList<ParameterCanvas *> params;
     InfoCanvas * constraint;
     
   protected:
@@ -73,7 +71,7 @@ class ActivityCanvas : public QObject, public ActivityContainerCanvas {
     ActivityCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityCanvas();
     
-    Q3ValueList<ParameterCanvas *> get_params() { return params; }
+    QValueList<ParameterCanvas *> get_params() { return params; }
     void force_sub_inside(bool rz);
     
     virtual void delete_it();
@@ -102,14 +100,14 @@ class ActivityCanvas : public QObject, public ActivityContainerCanvas {
     virtual void moveBy(double dx, double dy);
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ActivityCanvas * read(char * &, UmlCanvas *, char *);
     
     virtual void history_save(QBuffer &) const;

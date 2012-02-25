@@ -1,6 +1,3 @@
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -35,14 +32,14 @@ class QTextOStream;
 
 class UmlAttribute : public UmlBaseAttribute {
   public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const QCString & n)
       :  UmlBaseAttribute(id, n) {};
 
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, BooL & indent_needed,
-			  int & enum_item_rank, const Q3CString & self);
+    virtual void generate(QTextOStream & f, const QCString & cl_stereotype,
+			  QCString indent, BooL & indent_needed,
+			  int & enum_item_rank, const QCString & self);
     
-    virtual void generate_imports(QTextOStream & f, Q3CString & made);
+    virtual void generate_imports(QTextOStream & f, QCString & made);
 };
 
 #endif

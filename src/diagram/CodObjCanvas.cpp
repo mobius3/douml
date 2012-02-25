@@ -81,7 +81,7 @@ void CodObjCanvas::set_z(double z) {
 }
 
 QString CodObjCanvas::may_start(UmlCode & l) const {
-  return ((l != UmlSelfLink) || (self_link == 0)) ? QString() : TR("illegal");
+  return ((l != UmlSelfLink) || (self_link == 0)) ? 0 : TR("illegal");
 }
 
 QString CodObjCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -91,7 +91,7 @@ QString CodObjCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
   switch (dest->type()) {
   case UmlClass:
   case UmlClassInstance:
-    return (l == UmlLink) ? QString() : TR("illegal");
+    return (l == UmlLink) ? 0 : TR("illegal");
   default:
     return TR("illegal");
   }
@@ -126,7 +126,7 @@ void CodObjCanvas::get_all_in_all_out(ColMsgList & all_in, ColMsgList & all_out)
     all_out = all_in;
   }
   
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
   
   for (; it.current() != 0; ++it) {
     CodDirsCanvas * dirs;

@@ -29,9 +29,9 @@
 
 #include <qapplication.h>
 #include <qworkspace.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qspinbox.h>
 
@@ -57,8 +57,8 @@ extern QString imageText();
 // id is an old ident in case of an import
 ColDiagramWindow::ColDiagramWindow(const QString & s, BrowserColDiagram * b, int id)
     : DiagramWindow(b, s), view(0) {
-  Q3ToolBar * toolbar = new Q3ToolBar(this, "communication diagram operations");
-  addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
+  QToolBar * toolbar = new QToolBar(this, "communication diagram operations");
+  addToolBar(toolbar, TR("Toolbar"), Top, TRUE);
   
   add_edit_button(toolbar);
   
@@ -73,61 +73,61 @@ ColDiagramWindow::ColDiagramWindow(const QString & s, BrowserColDiagram * b, int
     = new QToolButton(*packageButton, TR("Add Package"), QString::null,
 		      this, SLOT(hit_package()), toolbar, "add package");
   addPackage->setToggleButton(TRUE);
-  Q3WhatsThis::add(addPackage, addpackageText());
+  QWhatsThis::add(addPackage, addpackageText());
   
   addFragment
     = new QToolButton(*fragmentButton, TR("Add Fragment"), QString::null,
 		      this, SLOT(hit_fragment()), toolbar, "add fragment");
   addFragment->setToggleButton(TRUE);
-  Q3WhatsThis::add(addFragment, addfragmentText());
+  QWhatsThis::add(addFragment, addfragmentText());
   
   addClassInstance
     = new QToolButton(*classinstanceButton, TR("Add modeled Class instance"), QString::null,
 		      this, SLOT(hit_classinstance()), toolbar, "add modeled class instance");
   addClassInstance->setToggleButton(TRUE);
-  Q3WhatsThis::add(addClassInstance, addmodeledclassinstanceText());
+  QWhatsThis::add(addClassInstance, addmodeledclassinstanceText());
   
   addClass
     = new QToolButton(*classButton, TR("Add Class instance"), QString::null,
 		      this, SLOT(hit_class()), toolbar, "add class instance");
   addClass->setToggleButton(TRUE);
-  Q3WhatsThis::add(addClass, addclassinstanceText());
+  QWhatsThis::add(addClass, addclassinstanceText());
   
   addLink =
     new QToolButton(*associationButton, TR("Add Link"), QString::null,
 		    this, SLOT(hit_link()), toolbar, "add link");
   addLink->setToggleButton(TRUE);
-  Q3WhatsThis::add(addLink, linkText());
+  QWhatsThis::add(addLink, linkText());
   
   addSelfLink =
     new QToolButton(*selflinkButton, TR("Add Self Link"), QString::null,
 		    this, SLOT(hit_selflink()), toolbar, "add self link");
   addSelfLink->setToggleButton(TRUE);
-  Q3WhatsThis::add(addSelfLink, selflinkText());
+  QWhatsThis::add(addSelfLink, selflinkText());
   
   note =
     new QToolButton(*noteButton, TR("Note"), QString::null,
 		    this, SLOT(hit_note()), toolbar, "note");
   note->setToggleButton(TRUE);
-  Q3WhatsThis::add(note, noteText());
+  QWhatsThis::add(note, noteText());
   
   anchor =
     new QToolButton(*anchorButton, TR("Anchor"), QString::null,
 		    this, SLOT(hit_anchor()), toolbar, "anchor");
   anchor->setToggleButton(TRUE);
-  Q3WhatsThis::add(anchor, anchorText());
+  QWhatsThis::add(anchor, anchorText());
   
   text =
     new QToolButton(*textButton, TR("Text"), QString::null,
 		    this, SLOT(hit_text()), toolbar, "text");
   text->setToggleButton(TRUE);
-  Q3WhatsThis::add(text, textText());
+  QWhatsThis::add(text, textText());
   
   image =
     new QToolButton(*imageButton, TR("Image"), QString::null,
 		    this, SLOT(hit_image()), toolbar, "image");
   image->setToggleButton(TRUE);
-  Q3WhatsThis::add(image, imageText());
+  QWhatsThis::add(image, imageText());
   
   toolbar->addSeparator();
   

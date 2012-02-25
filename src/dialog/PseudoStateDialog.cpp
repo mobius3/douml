@@ -27,13 +27,13 @@
 
 
 
-#include <q3grid.h> 
+#include <qgrid.h> 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h> 
-#include <q3popupmenu.h> 
+#include <qcombobox.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h> 
-#include <q3vbox.h> 
+#include <qvbox.h> 
 
 #include "PseudoStateDialog.h"
 #include "BrowserPseudoState.h"
@@ -53,7 +53,7 @@
 QSize PseudoStateDialog::previous_size;
 
 PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), pst(ps) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), pst(ps) {
   BrowserPseudoState * bn = (BrowserPseudoState *) pst->browser_node;
   BrowserState * refst;
   
@@ -91,7 +91,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   
   // general tab
   
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
 
@@ -100,7 +100,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   edname->setReadOnly(visit);
 
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pst->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(BrowserPseudoState::default_stereotypes());
@@ -115,7 +115,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   if (refst != 0) {
     connect(new SmallPushButton(TR("reference :"), grid), SIGNAL(clicked()),
 	    this, SLOT(menu_reference()));    
-    edreference = new Q3ComboBox(FALSE, grid);
+    edreference = new QComboBox(FALSE, grid);
     edreference->setSizePolicy(sp);
     
     BrowserNode * ref = ((pst->get_reference() == 0) ||
@@ -132,7 +132,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
       edreference->insertItem("");
       edreference->setAutoCompletion(completion());
       
-      Q3ListViewItem * child;
+      QListViewItem * child;
       UmlCode k = bn->get_type();
       
       for (child = refst->firstChild();
@@ -144,7 +144,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
 	  if (kk == k)
 	    pseudostates.append((BrowserNode *) child);
 	  else if (kk == UmlRegion) {
-	    for (Q3ListViewItem * schild = child->firstChild();
+	    for (QListViewItem * schild = child->firstChild();
 		 schild != 0;
 		 schild = schild->nextSibling()) {
 	      if (!((BrowserNode *) schild)->deletedp() &&
@@ -165,7 +165,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   else
     edreference = 0;
 
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -185,7 +185,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -196,7 +196,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
 }
 
 void PseudoStateDialog::polish() {
-  Q3TabDialog::polish();  
+  QTabDialog::polish();  
   UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -211,7 +211,7 @@ PseudoStateDialog::~PseudoStateDialog() {
 }
 
 void PseudoStateDialog::menu_reference() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -323,5 +323,5 @@ void PseudoStateDialog::accept() {
   bn->package_modified();
   pst->modified();
     
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }

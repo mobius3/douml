@@ -30,37 +30,35 @@
 
 
 
-#include <q3ptrdict.h>
+#include <qptrdict.h>
 #include <qmap.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BrowserParameterSet.h"
 
-class Q3ComboBox;
-class Q3ListBox;
-class Q3VBox;
+class QComboBox;
+class QListBox;
+class QVBox;
 class LineEdit;
 class MultiLineEdit;
 class ParameterSetData;
 class KeyValuesTable;
 class BodyDialog;
 
-class ParameterSetDialog : public Q3TabDialog {
+class ParameterSetDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     QWidget * umltab;
     ParameterSetData * data;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     // associated classes
-    Q3ListBox * lb_available;
-    Q3ListBox * lb_member;
+    QListBox * lb_available;
+    QListBox * lb_member;
         
     // user
     KeyValuesTable * kvtable;

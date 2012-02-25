@@ -3,9 +3,9 @@
 
 
 #include "UmlBaseClass.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "anItemKind.h"
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 #include <qmap.h>
 
 class UmlItem;
@@ -19,7 +19,7 @@ class UmlTypeSpec;
 // You can modify it as you want (except the constructor)
 class UmlClass : public UmlBaseClass {
   public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) { NumberOf += 1; };
+    UmlClass(void * id, const QCString & n) : UmlBaseClass(id, n) { NumberOf += 1; };
 
     //returns the first container for a 'kind', going up in the browser tree
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);
@@ -34,12 +34,12 @@ class UmlClass : public UmlBaseClass {
 
     //  call at end of import : try to solve generalization dependencies and realization
     
-    virtual void generalizeDependRealize(UmlItem * target, FileIn & in, int context, Q3CString label, Q3CString constraint);
+    virtual void generalizeDependRealize(UmlItem * target, FileIn & in, int context, QCString label, QCString constraint);
 
     //  call at end of import : try to solve generalization dependencies, realization
     //
     
-    virtual void solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString constraint);
+    virtual void solveGeneralizationDependencyRealization(int context, QCString idref, QCString label, QCString constraint);
 
     static int numberOf() { return NumberOf; };
 
@@ -48,11 +48,11 @@ class UmlClass : public UmlBaseClass {
     //return the class owing the signature whose id is given in parameter,
     //may return 0
     
-    static UmlClass * signature(Q3CString id);
+    static UmlClass * signature(QCString id);
 
     //returns the rank of the formal from its id,
     //return -1 if not found and produce error message
-    int formalRank(Q3CString id);
+    int formalRank(QCString id);
 
     // if this generalize tmpl return true
     // else if this realize tmpl, set stereotype to bind and return true
@@ -62,11 +62,11 @@ class UmlClass : public UmlBaseClass {
     bool bind(UmlClass * tmpl);
 
     // the class is a stereotype extending mcl
-    void extend(Q3CString mcl);
+    void extend(QCString mcl);
 
     //if the token is a stereotype application give prof:st and the names of the attribute
     //specifying the element on which the stereotype is applied and return TRUE
-    static bool isAppliedStereotype(Token & tk, Q3CString & prof_st, Q3ValueList<Q3CString> & base_v);
+    static bool isAppliedStereotype(Token & tk, QCString & prof_st, QValueList<QCString> & base_v);
 
     static bool isPrimitiveType(Token & token, UmlTypeSpec & ts);
 
@@ -74,7 +74,7 @@ class UmlClass : public UmlBaseClass {
   private:
     void readFormal(FileIn & in, Token & token);
 
-    UmlClass * addMetaclass(Q3CString mclname, const char * mclpath);
+    UmlClass * addMetaclass(QCString mclname, const char * mclpath);
 
 
   protected:
@@ -83,10 +83,10 @@ class UmlClass : public UmlBaseClass {
     static int NumberOfStereotype;
 
     //xmiId of the formals following formals order
-    Q3ValueList<Q3CString> formalsId;
+    QValueList<QCString> formalsId;
 
     //associate the class owning the template signature with the signature id
-    static QMap<Q3CString, UmlClass *> signatures;
+    static QMap<QCString, UmlClass *> signatures;
 
 };
 

@@ -2,7 +2,7 @@
 #define _UMLBASEUSECASEREFERENCE_H
 
 
-#include <q3ptrvector.h>
+#include <qvector.h>
 
 class UmlUseCase;
 class UmlFragmentCompartment;
@@ -45,7 +45,7 @@ class UmlBaseUseCaseReference {
     int _h;
 
     // internal, don't call it
-    void read_(const Q3PtrVector<UmlFragment> & fragments, const Q3PtrVector<UmlSubject> & subjects);
+    void read_(const QVector<UmlFragment> & fragments, const QVector<UmlSubject> & subjects);
 
   friend class UmlBaseUseCaseDiagramDefinition;
 };

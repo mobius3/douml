@@ -27,10 +27,10 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qcheckbox.h> 
 #include <qpushbutton.h> 
 
@@ -50,7 +50,7 @@
 QSize TransitionDialog::previous_size;
 
 TransitionDialog::TransitionDialog(TransitionData * r)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), rel(r) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), rel(r) {
   r->browser_node->edit_start();
   
   if (r->browser_node->is_writable()) {
@@ -66,13 +66,13 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   visit = !hasOkButton();  
 
   BrowserNode * bn = rel->browser_node;
-  Q3Grid * grid;
+  QGrid * grid;
   
   //
   // general tab
   //
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   umltab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -82,7 +82,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   edname->setReadOnly(visit);
     
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(rel->get_stereotype()));
   if (!visit) {
     //edstereotype->insertStringList(rel->get_start()->default_stereotypes(type));
@@ -102,7 +102,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
     internal_cb->setChecked(r->internal());
   }
     
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -130,7 +130,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -169,7 +169,7 @@ void TransitionDialog::change_tabs(QWidget * w) {
 }
 
 void TransitionDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -177,14 +177,14 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
 				const char * lbl, const char * sl_trigger,
 				const char * sl_guard, const char * sl_expr,
 				bool enabled) {
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3VBox * vtab;
+  QGrid * grid = new QGrid(2, this);
+  QVBox * vtab;
 
   tab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("trigger : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -201,7 +201,7 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
   if (visit)
     d.edtrigger->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("guard\nconstraint : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -212,7 +212,7 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
   if (visit)
     d.edguard->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("activity\nexpression : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -301,7 +301,7 @@ void TransitionDialog::accept() {
     bn->package_modified();
     rel->modified();
     
-    Q3TabDialog::accept();
+    QTabDialog::accept();
   }
 }
 

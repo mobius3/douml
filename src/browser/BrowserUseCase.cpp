@@ -27,13 +27,8 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserUseCase.h"
 #include "UseCaseData.h"
@@ -159,13 +154,13 @@ void BrowserUseCase::update_idmax_for_root()
 void BrowserUseCase::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
     
-void BrowserUseCase::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserUseCase::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete)
     BrowserUseCaseDiagram::compute_referenced_by(l, this, "usecasecanvas", "usecase_ref");
@@ -191,8 +186,8 @@ QString BrowserUseCase::full_name(bool rev, bool) const {
 }
 
 void BrowserUseCase::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -849,9 +844,9 @@ void BrowserUseCase::DragMoveInsideEvent(QDragMoveEvent * e) {
     e->ignore();
 }
 
-bool BrowserUseCase::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserUseCase::may_contains_them(const QList<BrowserNode> & l,
 				       BooL & duplicable) const {
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -910,7 +905,7 @@ void BrowserUseCase::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	  (((BrowserNode *) parent())->get_type() != UmlPackage) &&
 	  ((BrowserNode *) parent())->may_contains(bn, uc)) {
 	// have choice
-	Q3PopupMenu m(0);
+	QPopupMenu m(0);
   
 	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
 				   m.font()), -1);
@@ -1000,7 +995,7 @@ void BrowserUseCase::init()
   relations_default_stereotypes[UmlGeneralisation].append("{incomplete,overlapping}");
 }
 
-void BrowserUseCase::save_stereotypes(Q3TextStream & st)
+void BrowserUseCase::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "use_case_stereotypes";
@@ -1027,7 +1022,7 @@ void BrowserUseCase::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserUseCase::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserUseCase::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "usecase_ref " << get_ident() << " // " << get_name();
   else {
@@ -1086,7 +1081,7 @@ void BrowserUseCase::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
     
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

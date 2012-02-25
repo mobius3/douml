@@ -8,11 +8,8 @@
 #include "IdlSettings.h"
 #include "PhpSettings.h"
 #include "PythonSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 void UmlOperation::uml2cpp(bool) {
-  Q3CString st = CppSettings::classStereotype(parent()->stereotype());
+  QCString st = CppSettings::classStereotype(parent()->stereotype());
       
   if ((st == "enum") || (st == "typedef") || (st == "ignored")) {
     set_CppDecl("");
@@ -23,13 +20,13 @@ void UmlOperation::uml2cpp(bool) {
   if (getOf() || setOf())
     return;
     
-  Q3CString decl = CppSettings::operationDef();
-  Q3CString def = CppSettings::operationDef();
-  const Q3ValueList<UmlParameter> p = params();
-  Q3CString sparams;
+  QCString decl = CppSettings::operationDef();
+  QCString def = CppSettings::operationDef();
+  const QValueList<UmlParameter> p = params();
+  QCString sparams;
   
   if (!p.isEmpty()) {
-    Q3ValueList<UmlParameter>::ConstIterator it;
+    QValueList<UmlParameter>::ConstIterator it;
     unsigned rank;
     const char * sep = "";
     
@@ -38,7 +35,7 @@ void UmlOperation::uml2cpp(bool) {
   }
 
   UmlTypeSpec t = returnType();
-  Q3CString returntypeform;
+  QCString returntypeform;
 
   if ((name() != parent()->name()) &&
       (name() != "~" + parent()->name())) {
@@ -54,10 +51,10 @@ void UmlOperation::uml2cpp(bool) {
       returntypeform = CppSettings::Return();
   }
     
-  Q3CString d;
+  QCString d;
   
   d = CppSettings::operationDecl();
-  d.insert(d.find("${)}"), (const char *)sparams); //[rageek] ambiguous
+  d.insert(d.find("${)}"), sparams);
   d.replace(d.find("${type}"), 7, returntypeform);
   set_CppDecl(d);
   
@@ -73,14 +70,14 @@ void UmlOperation::uml2cpp(bool) {
     }
     
     d = CppSettings::operationDef();
-    d.insert(d.find("${)}"), (const char *)sparams); //[rageek] ambiguous
+    d.insert(d.find("${)}"), sparams);
     d.replace(d.find("${type}"), 7, returntypeform);
     set_CppDef(d);
   }
 }
 
 void UmlOperation::uml2java(bool) {
-  Q3CString st = JavaSettings::classStereotype(parent()->stereotype());
+  QCString st = JavaSettings::classStereotype(parent()->stereotype());
       
   if ((st == "enum") || (st == "ignored")) {
     set_JavaDef("");
@@ -90,12 +87,12 @@ void UmlOperation::uml2java(bool) {
   if (getOf() || setOf())
     return;
     
-  Q3CString def = JavaSettings::operationDef();
+  QCString def = JavaSettings::operationDef();
   unsigned nparams = params().count();
   
   if (nparams != 0) {
     const char * sep = "";
-    Q3CString sparams;
+    QCString sparams;
     unsigned rank;
     
     for (rank = 0; rank != nparams; rank += 1) {
@@ -106,7 +103,7 @@ void UmlOperation::uml2java(bool) {
       sep = ", ";
     }
     
-    def.insert(def.find("${)}"), (const char *)sparams); //[rageek] ambiguous
+    def.insert(def.find("${)}"), sparams);
   }
   
   if (name() == parent()->name())
@@ -126,7 +123,7 @@ void UmlOperation::uml2java(bool) {
 }
 
 void UmlOperation::uml2idl(bool) {
-  Q3CString st = IdlSettings::classStereotype(parent()->stereotype());
+  QCString st = IdlSettings::classStereotype(parent()->stereotype());
       
   if ((st == "enum") || (st == "typedef") || (st == "ignored")) {
     set_IdlDecl("");
@@ -136,12 +133,12 @@ void UmlOperation::uml2idl(bool) {
   if (getOf() || setOf())
     return;
     
-  Q3CString def = IdlSettings::operationDecl();
+  QCString def = IdlSettings::operationDecl();
   unsigned nparams = params().count();
   
   if (nparams != 0) {
     const char * sep = "";
-    Q3CString sparams;
+    QCString sparams;
     unsigned rank;
     
     for (rank = 0; rank != nparams; rank += 1) {
@@ -152,7 +149,7 @@ void UmlOperation::uml2idl(bool) {
       sep = ", ";
     }
     
-    def.insert(def.find("${)}"), (const char *)sparams); //[rageek] ambiguous
+    def.insert(def.find("${)}"), sparams);
   }
   
   set_IdlDecl(def);
@@ -167,7 +164,7 @@ void UmlOperation::uml2idl(bool) {
 }
 
 void UmlOperation::uml2php(bool) {
-  Q3CString st = PhpSettings::classStereotype(parent()->stereotype());
+  QCString st = PhpSettings::classStereotype(parent()->stereotype());
       
   if ((st == "enum") || (st == "ignored")) {
     set_PhpDef("");
@@ -177,7 +174,7 @@ void UmlOperation::uml2php(bool) {
   if (getOf() || setOf())
     return;
     
-  Q3CString def = PhpSettings::operationDef();
+  QCString def = PhpSettings::operationDef();
   
   if ((name() == parent()->name()) ||
       (name() == "__construct") ||
@@ -200,7 +197,7 @@ void UmlOperation::uml2php(bool) {
   
   if (nparams != 0) {
     const char * sep = "";
-    Q3CString sparams;
+    QCString sparams;
     unsigned rank;
     
     for (rank = 0; rank != nparams; rank += 1) {
@@ -211,7 +208,7 @@ void UmlOperation::uml2php(bool) {
       sep = ", ";
     }
     
-    def.insert(def.find("${)}"), (const char *)sparams); //[rageek] ambiguous
+    def.insert(def.find("${)}"), sparams);
   }
   
   set_PhpDef(def);
@@ -226,7 +223,7 @@ void UmlOperation::uml2php(bool) {
 }
 
 void UmlOperation::uml2python(bool) {
-  Q3CString st = PythonSettings::classStereotype(parent()->stereotype());
+  QCString st = PythonSettings::classStereotype(parent()->stereotype());
       
   if ((st == "enum") || (st == "ignored")) {
     set_PythonDef("");
@@ -236,12 +233,12 @@ void UmlOperation::uml2python(bool) {
   if (getOf() || setOf())
     return;
     
-  Q3CString def = PythonSettings::operationDef();
+  QCString def = PythonSettings::operationDef();
   unsigned nparams = params().count();
   
   if (nparams != 0) {
     const char * sep = "";
-    Q3CString sparams;
+    QCString sparams;
     unsigned rank;
     
     for (rank = 0; rank != nparams; rank += 1) {
@@ -252,7 +249,7 @@ void UmlOperation::uml2python(bool) {
       sep = ", ";
     }
     
-    def.insert(def.find("${)}"), (const char *)sparams); //[rageek] ambiguous
+    def.insert(def.find("${)}"), sparams);
   }
   
   set_PythonDef(def);

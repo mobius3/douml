@@ -38,8 +38,6 @@
   
 #include "util.h"
 #include "diagdef.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 //
 // add access to use case, collaboration and sequence diagram 'machine'
@@ -83,7 +81,7 @@ void add_fragment(UmlClassView * base_class_view, UmlClassView * user_class_view
   op = base_fragment->add_op("compartments", PublicVisibility, user_fragment_compart);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the compartments, at least one compartment exists");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _compartments;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _compartments;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _compartments;\n", TRUE);
   
   op = base_fragment->add_op("container", PublicVisibility, user_fragment_compart);
@@ -110,14 +108,14 @@ void add_fragment(UmlClassView * base_class_view, UmlClassView * user_class_view
   op = base_fragment_compart->add_op("texts", PublicVisibility, "string");
   op->set_isCppConst(TRUE);
   op->set_Description(" the texts placed in the compartment");
-  op->set_cpp("const Q3PtrVector<char> &", "", "  return _texts;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<char> &", "", "  return _texts;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _texts;\n", TRUE);
   
   op = base_fragment_compart->add_op("contained", PublicVisibility, user_fragment);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the fragments contained in the compartment,\n"
 		      " may be none");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _contained;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _contained;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _contained;\n", TRUE);
   
   //
@@ -130,13 +128,13 @@ void add_fragment(UmlClassView * base_class_view, UmlClassView * user_class_view
   base_fragment->add_vect_assoc("_compartments", PrivateVisibility, user_fragment_compart, 0, 0);
   
   UmlAttribute * att;
-  Q3CString s;
+  QCString s;
   
   base_fragment->add_attribute("_name", PrivateVisibility, "string", 0, 0);
   base_fragment_compart->add_attribute("_rank", PrivateVisibility, "int", 0, 0);
   att = base_fragment_compart->add_attribute("_texts", PrivateVisibility, "string", 0, 0);
   s = att->cppDecl();
-  att->set_CppDecl(s.replace(s.find("${type}"), 7, "Q3PtrVector<char>"));
+  att->set_CppDecl(s.replace(s.find("${type}"), 7, "QVector<char>"));
   s = att->javaDecl();
   att->set_JavaDecl(s.insert(s.find("${type}") + 7, "[]"));
   base_fragment->add_attribute("_x", PrivateVisibility, "int", 0, 0);
@@ -193,7 +191,7 @@ void add_fragment(UmlClassView * base_class_view, UmlClassView * user_class_view
   op->add_param(2, InputDirection, "w", "int");
   op->add_param(3, InputDirection, "h", "int");
   op->add_param(4, InputDirection, "fragments", user_fragment);
-  op->set_cpp("${type} *", "${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, const Q3PtrVector<${t4}> & ${p4}",
+  op->set_cpp("${type} *", "${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, const QVector<${t4}> & ${p4}",
 	      "  UmlFragmentCompartment * r = 0;\n"
 	      "  int nf = fragments.count();\n"
 	      "  int frank;\n"
@@ -256,7 +254,7 @@ void add_fragment(UmlClassView * base_class_view, UmlClassView * user_class_view
   op->set_isClassMember(TRUE);
   op->set_Description(" internal");
   op->add_param(0, InputDirection, "fragments", user_fragment);
-  op->set_cpp("${type}", "Q3PtrVector<${t0}> & ${p0}",
+  op->set_cpp("${type}", "QVector<${t0}> & ${p0}",
 	      "  int rank = fragments.count();\n"
 	      "\n"
 	      "  while (rank-- != 0) {\n"
@@ -442,7 +440,7 @@ UmlClass * add_subject(UmlClassView * base_class_view, UmlClassView * user_class
   op->add_param(2, InputDirection, "w", "int");
   op->add_param(3, InputDirection, "h", "int");
   op->add_param(4, InputDirection, "subjects", user_subject);
-  op->set_cpp("${type} *", "${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, const Q3PtrVector<${t4}> & ${p4}",
+  op->set_cpp("${type} *", "${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, const QVector<${t4}> & ${p4}",
 	      "  int rank = subjects.count();\n"
 	      "\n"
 	      "  while (rank-- != 0) {\n"
@@ -534,7 +532,7 @@ UmlClass * add_ucref(UmlClassView * base_class_view, UmlClassView * user_class_v
   op->set_Description(" internal, don't call it");
   op->add_param(0, InputDirection, "fragments", user_fragment);
   op->add_param(1, InputDirection, "subjects", user_subject);
-  op->set_cpp("${type}", "const Q3PtrVector<${t0}> & ${p0}, const Q3PtrVector<${t1}> & ${p1}",
+  op->set_cpp("${type}", "const QVector<${t0}> & ${p0}, const QVector<${t1}> & ${p1}",
 	      "  _use_case = (UmlUseCase *) UmlBaseItem::read_();\n"
 	      "  _x = (int) UmlCom::read_unsigned();\n"
 	      "  _y = (int) UmlCom::read_unsigned();\n"
@@ -662,7 +660,7 @@ UmlClass * add_ucassoc(UmlClassView * base_class_view, UmlClassView * user_class
 void add_ddef(UmlClass * cl, UmlClass * user_ddef)
 {
   UmlOperation * def = cl->add_op("definition", PublicVisibility, user_ddef);
-  Q3CString s;
+  QCString s;
   
   def->set_Description(" return the semantic part of the diagram not present in the model");
   s = 
@@ -739,31 +737,31 @@ void add_ucdiagdef(UmlClassView * base_class_view, UmlClassView * user_class_vie
   op = base_ddef->add_op("useCases", PublicVisibility, user_ucref);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the use cases present in the diagram");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _use_cases;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _use_cases;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _use_cases;\n", TRUE);
 
   op = base_ddef->add_op("actors", PublicVisibility, UmlClass::get("UmlClass", 0));
   op->set_isCppConst(TRUE);
   op->set_Description(" return the actors present in the diagram");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _actors;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _actors;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _actors;\n", TRUE);
 
   op = base_ddef->add_op("associations", PublicVisibility, user_ucassoc);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the associations between actor and use case present in the diagram");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _rels;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _rels;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _rels;\n", TRUE);
   
   op = base_ddef->add_op("fragments", PublicVisibility, user_fragment);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the fragments present in the diagram");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _fragments;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _fragments;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _fragments;\n", TRUE);
 
   op = base_ddef->add_op("subjects", PublicVisibility, user_subject);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the subjects present in the diagram");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _subjects;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _subjects;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _subjects;\n", TRUE);
   
   base_ddef->add_vect_assoc("_use_cases", PrivateVisibility, user_ucref, 0, 0);
@@ -1112,7 +1110,7 @@ UmlClass * add_seqmessage(UmlClassView * base_class_view, UmlClassView * user_cl
   user_seqmessage->set_Description(" this class manages messages in a sequence diagram,\n"
 				   " you can modify it");
 
-  Q3CString s = base_seqmessage->javaDecl();
+  QCString s = base_seqmessage->javaDecl();
   
   s.replace(s.find("${implements}"), 13, " implements java.lang.Comparable");
   base_seqmessage->set_JavaDecl(s);
@@ -1171,7 +1169,7 @@ UmlClass * add_seqmessage(UmlClassView * base_class_view, UmlClassView * user_cl
   op->set_Description(" internal, don't call it");
   op->add_param(0, InputDirection, "instances", user_instances);
   op->add_param(1, InputDirection, "fragments", user_fragment);
-  op->set_cpp("${type}", "const QPtrDict<${t0}> & ${p0}, const Q3PtrVector<${t1}> & ${p1}",
+  op->set_cpp("${type}", "const QPtrDict<${t0}> & ${p0}, const QVector<${t1}> & ${p1}",
 	      "  UmlBaseMessage::read_(instances);\n"
 	      "  _kind = (aMessageKind) UmlCom::read_char();\n"
 	      "  _args = UmlCom::read_string();\n"
@@ -1232,20 +1230,20 @@ void add_seqdiagdef(UmlClassView * base_class_view, UmlClassView * user_class_vi
   op = base_ddef->add_op("instances", PublicVisibility, user_instref);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the instances present in the diagram");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _instances;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _instances;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _instances;\n", TRUE);
 
   op = base_ddef->add_op("messages", PublicVisibility, user_seqmsg);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the messages present in the diagram,\n"
 		      " ordonned following the sending time");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _messages;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _messages;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _messages;\n", TRUE);
 
   op = base_ddef->add_op("fragments", PublicVisibility, user_fragment);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the fragments present in the diagram");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _fragments;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _fragments;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _fragments;\n", TRUE);
 
   base_ddef->add_vect_assoc("_instances", PrivateVisibility, user_instref, 0, 0);
@@ -1329,7 +1327,7 @@ void add_seqdiagdef(UmlClassView * base_class_view, UmlClassView * user_class_vi
 	      "  }\n"
 	      "\n"
 	      "  while (UmlCom::read_bool()) {\n"
-	      "    Q3CString s = UmlCom::read_string();\n"
+	      "    QCString s = UmlCom::read_string();\n"
 	      "    int x = (int) UmlCom::read_unsigned();\n"
 	      "    int y = (int) UmlCom::read_unsigned();\n"
 	      "    int w = (int) UmlCom::read_unsigned();\n"
@@ -1503,14 +1501,14 @@ UmlClass * add_coldiagdef(UmlClassView * base_class_view, UmlClassView * user_cl
   op = base_ddef->add_op("instances", PublicVisibility, user_instref);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the instances present in the diagram");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _instances;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _instances;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _instances;\n", TRUE);
 
   op = base_ddef->add_op("messages", PublicVisibility, user_colmsg);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the messages present in the diagram,\n"
 		      " ordonned following their rank");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _messages;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _messages;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _messages;\n", TRUE);
 
   base_ddef->add_vect_assoc("_instances", PrivateVisibility, user_instref, 0, 0);
@@ -1706,7 +1704,7 @@ void upgrade_interaction()
   op = base_fragment->add_op("covered", PublicVisibility, instref);
   op->set_isCppConst(TRUE);
   op->set_Description(" return the the list of covered instances (life lines)");
-  op->set_cpp("const Q3PtrVector<${type}> &", "", "  return _covered;\n", TRUE, 0, 0);
+  op->set_cpp("const QVector<${type}> &", "", "  return _covered;\n", TRUE, 0, 0);
   op->set_java("${type}[]", "", "  return _covered.clone();\n", TRUE);
   op->moveAfter(op2);
   
@@ -1852,7 +1850,7 @@ void upgrade_interaction()
 	     "\n");
   s += "\n\
   while (UmlCom::read_bool()) {\n\
-    Q3CString s = UmlCom::read_string();\n\
+    QCString s = UmlCom::read_string();\n\
     int x = (int) UmlCom::read_unsigned();\n\
     int y = (int) UmlCom::read_unsigned();\n\
     int w = (int) UmlCom::read_unsigned();\n\

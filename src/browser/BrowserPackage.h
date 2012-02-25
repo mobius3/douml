@@ -26,12 +26,7 @@
 #ifndef BROWSER_PACKAGE_H
 #define BROWSER_PACKAGE_H
 
-#include <q3intdict.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QPixmap>
+#include <qintdict.h> 
 
 #include "BrowserNode.h"
 #include "Labeled.h"
@@ -45,7 +40,7 @@ class BrowserPackage : public BrowserNode, public Labeled<BrowserPackage> {
   friend class StereotypesDialog;
   
   protected:
-    static Q3PtrList<BrowserPackage> removed;
+    static QList<BrowserPackage> removed;
     static IdDict<BrowserPackage> all;
       
     static QStringList its_default_stereotypes;
@@ -112,7 +107,7 @@ class BrowserPackage : public BrowserNode, public Labeled<BrowserPackage> {
     virtual QString get_stype() const;
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
+    virtual bool may_contains_them(const QList<BrowserNode> &,
 				   BooL & duplicable) const;
     virtual BasicData * get_data() const;
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
@@ -131,15 +126,15 @@ class BrowserPackage : public BrowserNode, public Labeled<BrowserPackage> {
     virtual QString check_inherit(const BrowserNode * parent) const;
     QString may_connect(UmlCode & l, const BrowserNode * dest) const;
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
+    virtual void referenced_by(QList<BrowserNode> & l, bool ondelete);
     
     virtual bool tool_cmd(ToolCom * com, const char * args);
     static bool tool_global_cmd(ToolCom * com, const char * args);
     virtual void write_id(ToolCom * com);
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     virtual void package_modified();
     
-    void save_session(Q3TextStream & st);
+    void save_session(QTextStream & st);
     void read_session(char * &, const char * k);
     static BrowserNode * get_it(const char * k, int id);
     
@@ -182,7 +177,7 @@ class BrowserPackage : public BrowserNode, public Labeled<BrowserPackage> {
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    virtual void support_file(Q3Dict<char> & files, bool add) const;
+    virtual void support_file(QDict<char> & files, bool add) const;
     void update_lib();
     
     static void prepare_for_sort();

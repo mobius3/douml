@@ -27,12 +27,10 @@
 #define UMLSEQUENCEDIAGRAM_H
 
 #include "UmlBaseSequenceDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlSequenceDiagram : public UmlBaseSequenceDiagram {
   public:
-    UmlSequenceDiagram(void * id, const Q3CString & n)
+    UmlSequenceDiagram(void * id, const QCString & n)
       : UmlBaseSequenceDiagram(id, n) {};
   
 };

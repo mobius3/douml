@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
-#include <QDropEvent>
 
 #include "BrowserStateDiagram.h"
 #include "SimpleData.h"
@@ -53,8 +48,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserStateDiagram> BrowserStateDiagram::imported;
-Q3ValueList<int> BrowserStateDiagram::imported_ids;
+QList<BrowserStateDiagram> BrowserStateDiagram::imported;
+QValueList<int> BrowserStateDiagram::imported_ids;
 QStringList BrowserStateDiagram::its_default_stereotypes;	// unicode
 
 BrowserStateDiagram::BrowserStateDiagram(QString s, BrowserNode * p, int id)
@@ -139,7 +134,7 @@ void BrowserStateDiagram::set_name(const char * s) {
 
 void BrowserStateDiagram::import()
 {
-  Q3ValueList<int>::Iterator it = imported_ids.begin();
+  QValueList<int>::Iterator it = imported_ids.begin();
   
   while (!imported.isEmpty()) {
     QString warning;
@@ -203,8 +198,8 @@ void BrowserStateDiagram::draw_svg() const {
 }
 
 void BrowserStateDiagram::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -517,7 +512,7 @@ const QStringList & BrowserStateDiagram::default_stereotypes() {
   return its_default_stereotypes;
 }
 
-void BrowserStateDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserStateDiagram::compute_referenced_by(QList<BrowserNode> & l,
 						BrowserNode * bn,
 						char const * kc,
 						char const * kr)
@@ -537,7 +532,7 @@ void BrowserStateDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserStateDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserStateDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "statediagram_stereotypes ";
@@ -552,7 +547,7 @@ void BrowserStateDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserStateDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserStateDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "statediagram_ref " << get_ident() << " // " << get_name();
   else {

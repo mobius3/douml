@@ -23,13 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h> 
 
 #include "UmlClassMember.h"
 
-void UmlClassMember::generate_imports(QTextOStream &, Q3CString &) {
+void UmlClassMember::generate_imports(QTextOStream &, QCString &) {
   // do nothing
 }

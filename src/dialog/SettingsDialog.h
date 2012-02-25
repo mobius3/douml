@@ -26,12 +26,11 @@
 #ifndef DEFAULTSDIALOG_H
 #define DEFAULTSDIALOG_H
 
-#include <q3tabdialog.h>
-#include <q3memarray.h>
-#include <q3ptrvector.h> 
+#include <qtabdialog.h>
+#include <qarray.h> 
+#include <qvector.h> 
 
 #include "StateSpec.h"
-#include <q3ptrvector.h>
 
 class ComboStates;
 class ComboColor;
@@ -47,7 +46,7 @@ class ColorSpec {
 class ColorSpecVector {
   public:
     ColorSpecVector(int s) : _size(s) { _v = new ColorSpec[s]; };
-virtual ~ColorSpecVector() { if (_v) delete [] _v; }
+    ~ColorSpecVector() { if (_v) delete [] _v; }
     int size() const { return _size; }
     void resize(int s);
     ColorSpec & operator[] (int i) const { return _v[i]; }
@@ -58,14 +57,14 @@ virtual ~ColorSpecVector() { if (_v) delete [] _v; }
     ColorSpec * _v;
 };
 
-class SettingsDialog : public Q3TabDialog {
+class SettingsDialog : public QTabDialog {
   Q_OBJECT
  
   protected:
     StateSpecVector * states;
     ColorSpecVector * colors;
-    Q3PtrVector<ComboStates> * cbstates;
-    Q3PtrVector<ComboColor> * cbcolors;
+    QVector<ComboStates> * cbstates;
+    QVector<ComboColor> * cbcolors;
     QWidget * first_visible_page;
     bool several;
     bool did_apply;

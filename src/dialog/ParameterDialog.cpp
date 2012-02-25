@@ -27,15 +27,15 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <q3buttongroup.h>
+#include <qcombobox.h> 
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h> 
 #include <qpushbutton.h> 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h> 
 
 #include "ParameterDialog.h"
@@ -57,7 +57,7 @@
 QSize ParameterDialog::previous_size;
 
 ParameterDialog::ParameterDialog(ParameterData * pa)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), param(pa) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), param(pa) {
   pa->browser_node->edit_start();
   
   if (pa->browser_node->is_writable()) {
@@ -72,13 +72,13 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   visit = !hasOkButton();
   setCaption(TR("Parameter dialog"));
   
-  Q3Grid * grid;
-  Q3HBox * htab;
+  QGrid * grid;
+  QHBox * htab;
   QString s;
     
   // general tab
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   umltab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -93,7 +93,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   font.setFixedPitch(TRUE);
   
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pa->stereotype));
   if (! visit) {
     edstereotype->insertStringList(BrowserParameter::default_stereotypes());
@@ -110,7 +110,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   connect(new SmallPushButton(TR("type :"), grid), SIGNAL(clicked()),
 	  this, SLOT(menu_type()));
   
-  edtype = new Q3ComboBox(!visit, grid);
+  edtype = new QComboBox(!visit, grid);
   edtype->insertItem(pa->get_type().get_full_type());
   if (!visit) {
     BrowserClass::instances(nodes);
@@ -126,8 +126,8 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   edtype->setSizePolicy(sp);
   
   new QLabel(TR("direction :"), grid);
-  htab = new Q3HBox(grid);
-  eddir = new Q3ComboBox(FALSE, htab);
+  htab = new QHBox(grid);
+  eddir = new QComboBox(FALSE, htab);
   
   UmlParamDirection dir = pa->get_dir();
   
@@ -144,7 +144,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   }
   
   new QLabel(TR("   multiplicity : "), htab);
-  edmultiplicity = new Q3ComboBox(!visit, htab);
+  edmultiplicity = new QComboBox(!visit, htab);
   edmultiplicity->setSizePolicy(sp);
   edmultiplicity->insertItem(pa->get_multiplicity());
   if (!visit) {
@@ -155,7 +155,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   }
   
   new QLabel(TR("   ordering : "), htab);
-  edordering = new Q3ComboBox(FALSE, htab);
+  edordering = new QComboBox(FALSE, htab);
   
   UmlOrderingKind o = pa->get_ordering();
   
@@ -172,7 +172,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   }
     
   new QLabel(TR("   effect : "), htab);
-  edeffect = new Q3ComboBox(FALSE, htab);
+  edeffect = new QComboBox(FALSE, htab);
   
   UmlParamEffect e = pa->get_effect();
   
@@ -195,7 +195,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   edin_state->setReadOnly(visit);
        
   new QLabel(TR("default value :"), grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   edinit = new LineEdit(pa->get_default_value(), htab);
   if (visit)
     edinit->setReadOnly(TRUE);
@@ -204,9 +204,9 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
 	    this, SLOT(edit_init()));
   
   new QLabel(grid);
-  htab = new Q3HBox(grid);
-  Q3ButtonGroup * bg = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, htab);
+  htab = new QHBox(grid);
+  QButtonGroup * bg = 
+    new QButtonGroup(2, Qt::Horizontal, QString::null, htab);
   
   is_control_cb = new QCheckBox(TR("is_control"), bg);
   if (pa->is_control)
@@ -219,7 +219,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   unique_cb->setDisabled(visit);
   
   bg = 
-    new Q3ButtonGroup(3, Qt::Horizontal, QString::null, htab);
+    new QButtonGroup(3, Qt::Horizontal, QString::null, htab);
   bg->setExclusive(TRUE);
   
   standard_rb = new QRadioButton(TR("standard"), bg);
@@ -233,7 +233,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   else
     standard_rb->setChecked(TRUE);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -261,7 +261,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -300,20 +300,20 @@ void ParameterDialog::change_tabs(QWidget * w) {
 }
 
 void ParameterDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 void ParameterDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char * v,
 			       const char * lbl, const char * sl, bool enabled) {
   bool visit = !hasOkButton();
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
 
   tab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   
   new QLabel(TR("selection : "), vtab);
   if (! visit)
@@ -337,7 +337,7 @@ void ParameterDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char *
 }
 
 void ParameterDialog::menu_type() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -492,7 +492,7 @@ void ParameterDialog::accept() {
       bn->package_modified();
       param->modified();
       
-      Q3TabDialog::accept();
+      QTabDialog::accept();
     }
   }
 }

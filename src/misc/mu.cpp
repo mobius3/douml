@@ -30,8 +30,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <qdatetime.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "mu.h"
 #include "myio.h"
@@ -70,7 +68,7 @@ under the control of 'Project control' or 'Project merge'\n\
     else
       force_read_only(FALSE);
     
-    int uid = read_doumlrc();
+    int uid = read_boumlrc();
     
     // when loading the project file itself and creating the
     // BrowserPackage for it, BrowserView::get_project() return 0
@@ -120,7 +118,7 @@ int root_permission()
 const char * user_name()
 {
   static bool done = FALSE;
-  static Q3CString name;
+  static QCString name;
   
   if (! done) {
     name = homeDir().dirName();

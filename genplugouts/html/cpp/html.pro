@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= ghtml
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON
 HEADERS		= ./UmlBaseRelation.h \
 		  ./UmlFormalParameter.h \
@@ -404,5 +404,3 @@ SOURCES		= ./UmlBaseRelation.cpp \
 		  ./UmlBaseActivityNode.cpp \
 		  ./UmlTransition.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

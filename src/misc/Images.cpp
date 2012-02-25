@@ -23,12 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3ptrdict.h>
-#include <q3dict.h>
+#include <qptrdict.h>
+#include <qdict.h>
 #include <qdir.h>
 #include <qimage.h>
-//Added by qt3to4:
-#include <QPixmap>
 
 #include "Images.h"
 #include "UmlWindow.h"
@@ -37,11 +35,11 @@
 #include "DialogUtil.h"
 
 // all the pixmap for diagram with scale 100, key = path,
-static Q3Dict<QPixmap> DiagramPixmap;
+static QDict<QPixmap> DiagramPixmap;
 
 // all the pixmap for diagram, key = path,
 // value is QPtrDict with key = width
-static Q3Dict<Q3PtrDict<QPixmap> > DiagramScaledPixmap;
+static QDict<QPtrDict<QPixmap> > DiagramScaledPixmap;
 
 // return pixmap for zoom 100%
 QPixmap * get_pixmap(const char * path)
@@ -68,7 +66,7 @@ QPixmap * get_pixmap(const char * path)
       return 0;
     }
     
-    DiagramScaledPixmap.insert(path, new Q3PtrDict<QPixmap>());
+    DiagramScaledPixmap.insert(path, new QPtrDict<QPixmap>());
   }
 
   return (px->isNull()) ? 0 : px;
@@ -85,7 +83,7 @@ QPixmap * get_pixmap(const char * path, double zoom)
   if (((int) (zoom * 100)) == 100)
     return px;
   
-  Q3PtrDict<QPixmap> * d = DiagramScaledPixmap[path]; // != 0
+  QPtrDict<QPixmap> * d = DiagramScaledPixmap[path]; // != 0
   int scaled_w = (int) (px->width() * zoom);
   void * k = (void *) scaled_w;
   QPixmap * scaled_px = d->find(k);

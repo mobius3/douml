@@ -27,25 +27,23 @@
 #define UMLATTRIBUTE_H
 
 #include "UmlBaseAttribute.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class Class;
 
 class UmlAttribute : public UmlBaseAttribute {
   public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const QCString & n)
       :  UmlBaseAttribute(id, n) {};
   
-    static bool new_one(Class * container, Q3CString name,
+    static bool new_one(Class * container, QCString name,
 			aVisibility visibility, bool constp,
-			bool staticp, const Q3CString & value,
-			Q3CString comment, Q3CString description);
+			bool staticp, const QCString & value,
+			QCString comment, QCString description);
 
 			  
 #ifdef REVERSE
-    static bool new_initialization(Class * container, Q3CString comment,
-				   Q3CString description);
+    static bool new_initialization(Class * container, QCString comment,
+				   QCString description);
 #endif
 };
 

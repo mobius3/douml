@@ -6,8 +6,6 @@
 
 #include "UmlActivityPin.h"
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlActivityObject::init()
 {
   declareFct("node", "uml:ObjectNode", &importIt);
@@ -27,7 +25,7 @@ void UmlActivityObject::importIt(FileIn & in, Token & token, UmlItem * where)
   where = where->container(anActivityObject, token, in);
     
   if (where != 0) {
-    Q3CString s = token.valueOf("name");
+    QCString s = token.valueOf("name");
     UmlActivityObject * a = create(where, s);
     
     if (a == 0)
@@ -36,7 +34,7 @@ void UmlActivityObject::importIt(FileIn & in, Token & token, UmlItem * where)
     
     a->addItem(token.xmiId(), in);
     
-    Q3CString ste;
+    QCString ste;
     
     s = token.xmiType();
     switch (((const char *) s)[0]) {
@@ -58,7 +56,7 @@ void UmlActivityObject::importIt(FileIn & in, Token & token, UmlItem * where)
 
 }
 
-void UmlActivityObject::setType(Q3CString idref) {
+void UmlActivityObject::setType(QCString idref) {
   UmlTypeSpec ts;
   
   if (UmlItem::setType(idref, 0, ts))
@@ -74,7 +72,7 @@ void UmlActivityObject::setType(Token & token) {
 
 }
 
-void UmlActivityObject::setOrdering(Q3CString s, FileIn & in) {
+void UmlActivityObject::setOrdering(QCString s, FileIn & in) {
  if (s == "unordered")
    set_Ordering(unordered);
  else if (s == "ordered")
@@ -87,8 +85,8 @@ void UmlActivityObject::setOrdering(Q3CString s, FileIn & in) {
    in.warning("wrong ordering '" + s + "'");
 }
 
-void UmlActivityObject::setSelection(Q3CString idref) {
-  QMap<Q3CString, Q3CString>::Iterator it = OpaqueDefs.find(idref);
+void UmlActivityObject::setSelection(QCString idref) {
+  QMap<QCString, QCString>::Iterator it = OpaqueDefs.find(idref);
   
   if (it != OpaqueDefs.end())
     set_Selection(*it);
@@ -96,11 +94,11 @@ void UmlActivityObject::setSelection(Q3CString idref) {
     UnresolvedWithContext::add(this, idref, 2);
 }
 
-void UmlActivityObject::setInState(Q3CString s) {
+void UmlActivityObject::setInState(QCString s) {
   if (FromBouml && (s.left(8) != "BOUML_0x"))
     set_InState(s);
   else {
-    QMap<Q3CString, UmlItem *>::Iterator it = All.find(s);
+    QMap<QCString, UmlItem *>::Iterator it = All.find(s);
   
     if (it != All.end()) {
       if ((*it)->kind() == aState)
@@ -112,11 +110,11 @@ void UmlActivityObject::setInState(Q3CString s) {
 }
 
 void UmlActivityObject::importMultiplicity(FileIn & in, Token & token, bool upper) {
-  Q3CString s = token.valueOf("value");
+  QCString s = token.valueOf("value");
   
   if (!s.isEmpty() && 
       (s != "Unspecified")) {	// VP
-    Q3CString m = multiplicity();
+    QCString m = multiplicity();
     
     if (m.isEmpty())
       m = s;
@@ -138,7 +136,7 @@ void UmlActivityObject::import_it(FileIn & in, Token & token) {
   if (token.valueOf("iscontroltype") == "true")
     set_IsControlType(TRUE);
   
-  Q3CString s;
+  QCString s;
     
   if (!(s = token.valueOf("ordering")).isEmpty())
     setOrdering(s, in);
@@ -150,7 +148,7 @@ void UmlActivityObject::import_it(FileIn & in, Token & token) {
     setType(s);
   
   if (! token.closed()) {
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
     
     while (in.read(), !token.close(kstr)) {
@@ -185,7 +183,7 @@ void UmlActivityObject::import_it(FileIn & in, Token & token) {
   }
 }
 
-void UmlActivityObject::solve(int context, Q3CString idref) {
+void UmlActivityObject::solve(int context, QCString idref) {
   switch (context) {
   case 0:
     // type
@@ -201,7 +199,7 @@ void UmlActivityObject::solve(int context, Q3CString idref) {
   case 1:
     // state
     {
-      QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+      QMap<QCString, UmlItem *>::Iterator it = All.find(idref);
       
       if (it != All.end()) {
 	if ((*it)->kind() == aState)
@@ -214,7 +212,7 @@ void UmlActivityObject::solve(int context, Q3CString idref) {
   default:
     // selection
     {
-      QMap<Q3CString, Q3CString>::Iterator it = OpaqueDefs.find(idref);
+      QMap<QCString, QCString>::Iterator it = OpaqueDefs.find(idref);
       
       if (it != OpaqueDefs.end())
 	set_Selection(*it);

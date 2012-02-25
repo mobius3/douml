@@ -3,7 +3,7 @@
 
 
 #include "UmlBasePackage.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include <qstring.h>
 #include "anItemKind.h"
 
@@ -20,7 +20,7 @@ class UmlUseCaseView;
 // You can modify it as you want (except the constructor)
 class UmlPackage : public UmlBasePackage {
   public:
-    UmlPackage(void * id, const Q3CString & n)
+    UmlPackage(void * id, const QCString & n)
       : UmlBasePackage(id, n),
         _classview(0), _compview(0), _deplview(0), _usecaseview(0) {
      NumberOf += 1; 
@@ -51,7 +51,7 @@ class UmlPackage : public UmlBasePackage {
 
     void applyStereotype(FileIn & in, Token & token);
 
-    static UmlPackage * importProfile(FileIn & in, Q3CString href);
+    static UmlPackage * importProfile(FileIn & in, QCString href);
 
 
   private:
@@ -59,7 +59,7 @@ class UmlPackage : public UmlBasePackage {
 
     void solveRefs();
 
-    UmlPackage * findProfile(Q3CString xmiId);
+    UmlPackage * findProfile(QCString xmiId);
 
 
   protected:

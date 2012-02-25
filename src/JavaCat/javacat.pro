@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on debug
+CONFIG	      += qt warn_on release
 HEADERS	      = JavaCatWindow.h BrowserView.h BrowserSearchDialog.h ShowFileDialog.h \
 		CommentView.h
 SOURCES	      = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
@@ -101,5 +101,3 @@ TARGET	      = java_catalog
 DEFINES	      = WITHJAVA
 INCLUDEPATH   = ../Tools ../JavaCat
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

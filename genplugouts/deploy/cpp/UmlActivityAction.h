@@ -3,12 +3,12 @@
 
 
 #include "UmlBaseActivityAction.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlActivityAction : public UmlBaseActivityAction {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityAction(void * id, const Q3CString & s) : UmlBaseActivityAction(id, s) {
+     UmlActivityAction(void * id, const QCString & s) : UmlBaseActivityAction(id, s) {
     }
 
 };

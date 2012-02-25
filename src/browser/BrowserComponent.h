@@ -1,9 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QDragMoveEvent>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -50,15 +44,15 @@ class BrowserComponent : public BrowserNode, public Labeled<BrowserComponent> {
     
     SimpleData * def;
     BrowserNode * associated_diagram;
-    Q3ValueList<BrowserClass *> realizing_classes;
-    Q3ValueList<BrowserClass *> provided_classes;
-    Q3ValueList<BrowserClass *> required_classes;
+    QValueList<BrowserClass *> realizing_classes;
+    QValueList<BrowserClass *> provided_classes;
+    QValueList<BrowserClass *> required_classes;
     
     void associate_class(BrowserClass * c);
     void exec_menu_choice(int rank);
   
-    void get_all_provided_classes(Q3ValueList<BrowserClass *> &) const;
-    void get_all_required_classes(Q3ValueList<BrowserClass *> &) const;
+    void get_all_provided_classes(QValueList<BrowserClass *> &) const;
+    void get_all_required_classes(QValueList<BrowserClass *> &) const;
     
   public:
     BrowserComponent(QString s, BrowserNode * p, int id = 0);
@@ -70,22 +64,22 @@ class BrowserComponent : public BrowserNode, public Labeled<BrowserComponent> {
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserNode *, bool on_read = FALSE);
     
-    void set_associated_classes(const Q3ValueList<BrowserClass *> & rz,
-				const Q3ValueList<BrowserClass *> & pr,
-				const Q3ValueList<BrowserClass *> & rq,
+    void set_associated_classes(const QValueList<BrowserClass *> & rz,
+				const QValueList<BrowserClass *> & pr,
+				const QValueList<BrowserClass *> & rq,
 				bool on_read = FALSE);
     void remove_associated_class(BrowserClass *);
-    const Q3ValueList<BrowserClass *> & get_provided_classes() const {
+    const QValueList<BrowserClass *> & get_provided_classes() const {
       return provided_classes;
     }
-    const Q3ValueList<BrowserClass *> & get_required_classes() const {
+    const QValueList<BrowserClass *> & get_required_classes() const {
       return required_classes;
     }
-    const Q3ValueList<BrowserClass *> & get_realizing_classes() const {
+    const QValueList<BrowserClass *> & get_realizing_classes() const {
       return realizing_classes;
     }
-    void get_all_provided_classes(Q3ValueList<BrowserClass *> &, bool sorted) const;
-    void get_all_required_classes(Q3ValueList<BrowserClass *> &, bool sorted) const;
+    void get_all_provided_classes(QValueList<BrowserClass *> &, bool sorted) const;
+    void get_all_required_classes(QValueList<BrowserClass *> &, bool sorted) const;
     
     virtual BrowserNode * duplicate(BrowserNode * p,
 				    QString name = QString::null);
@@ -101,7 +95,7 @@ class BrowserComponent : public BrowserNode, public Labeled<BrowserComponent> {
     virtual BasicData * get_data() const;
     virtual void on_delete();
     virtual QString check_inherit(const BrowserNode * parent) const;
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserComponent * read_ref(char * &, const char *);
     static BrowserComponent * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
@@ -121,13 +115,13 @@ class BrowserComponent : public BrowserNode, public Labeled<BrowserComponent> {
     virtual const QPixmap* pixmap (int) const;
     virtual void iconChanged();
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserClass *);
+    virtual void referenced_by(QList<BrowserNode> & l, bool ondelete);
+    static void compute_referenced_by(QList<BrowserNode> &, BrowserClass *);
     
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);

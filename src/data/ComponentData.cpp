@@ -29,8 +29,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "ComponentData.h"
 #include "BrowserComponent.h"
@@ -65,7 +63,7 @@ void ComponentData::send_uml_def(ToolCom * com, BrowserNode * bn,
   if (associated == 0)
     com->write_unsigned(0);
   else {    
-    Q3PtrDictIterator<BrowserComponent> itd(*associated);
+    QPtrDictIterator<BrowserComponent> itd(*associated);
     unsigned n = 0;
     
     while (itd.current()) {
@@ -112,7 +110,7 @@ bool ComponentData::tool_cmd(ToolCom * com, const char * args,
 	break;
       case removeAllAssocComponentsCmd:
 	if (associated != 0) {
-	  Q3PtrDictIterator<BrowserComponent> it(*associated);
+	  QPtrDictIterator<BrowserComponent> it(*associated);
 	  
 	  while (it.current()) {
 	    disconnect(it.current()->get_data(), SIGNAL(deleted()),
@@ -147,7 +145,7 @@ void ComponentData::on_delete() {
   if (associated != 0) {
 
     bool modp = FALSE;
-    Q3PtrDictIterator<BrowserComponent> it(*associated);
+    QPtrDictIterator<BrowserComponent> it(*associated);
 
     while (it.current()) {
       if (it.current()->deletedp()) {
@@ -169,7 +167,7 @@ void ComponentData::associate(BrowserComponent * other) {
   if ((associated == 0) || (associated->find(other) == 0)) {
     connect(other->get_data(), SIGNAL(deleted()), this, SLOT(on_delete()));
     if (associated == 0)
-      associated = new Q3PtrDict<BrowserComponent>;
+      associated = new QPtrDict<BrowserComponent>;
     
     associated->insert(other, other);
     browser_node->modified();
@@ -189,10 +187,10 @@ void ComponentData::unassociate(BrowserComponent * other) {
 #endif
 }
 
-void ComponentData::update_associated(Q3PtrDict<BrowserComponent> & d) {
+void ComponentData::update_associated(QPtrDict<BrowserComponent> & d) {
 #if 0
   if (associated != 0) {
-    Q3PtrDictIterator<BrowserComponent> it(*associated);
+    QPtrDictIterator<BrowserComponent> it(*associated);
 
     while (it.current()) {
       if (d.find(it.current()) == 0) {
@@ -205,9 +203,9 @@ void ComponentData::update_associated(Q3PtrDict<BrowserComponent> & d) {
     }
   }
   else
-    associated = new Q3PtrDict<BrowserComponent>((d.count() >> 4) + 1);
+    associated = new QPtrDict<BrowserComponent>((d.count() >> 4) + 1);
   
-  Q3PtrDictIterator<BrowserComponent> it(d);
+  QPtrDictIterator<BrowserComponent> it(d);
   
   while (it.current()) {
     if (associated->find(it.current()) == 0) {
@@ -222,7 +220,7 @@ void ComponentData::update_associated(Q3PtrDict<BrowserComponent> & d) {
 #endif
 }
 
-void ComponentData::save(Q3TextStream & st, QString & warning) const {
+void ComponentData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   
 #if 0
@@ -231,7 +229,7 @@ void ComponentData::save(Q3TextStream & st, QString & warning) const {
     st << "associated_components";
     indent(+1);
     
-    Q3PtrDictIterator<BrowserComponent> it(*associated);
+    QPtrDictIterator<BrowserComponent> it(*associated);
 
     while (it.current()) {
       if (it.current()->deletedp())
@@ -257,7 +255,7 @@ void ComponentData::read(char * & st, char * & k) {
   
 #if 0
   if (!strcmp(k, "associated_components")) {
-    associated = new Q3PtrDict<BrowserComponent>();
+    associated = new QPtrDict<BrowserComponent>();
     
     while (strcmp(k = read_keyword(st), "end")) {
       BrowserComponent * c =

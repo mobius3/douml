@@ -6,11 +6,9 @@
 #include "JavaSettings.h"
 #include "UmlOperation.h"
 #include "UmlRelation.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlClass::singleton() {
   // checking
-  Q3PtrVector<UmlItem> ch = children();
+  QVector<UmlItem> ch = children();
   int index;
   bool ok = TRUE;
   
@@ -25,7 +23,7 @@ void UmlClass::singleton() {
   UmlOperation * op = UmlBaseOperation::create(this, name());
   
   if (op == 0)
-    UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create constructor for <i>")
+    UmlCom::trace(QCString("<font face=helvetica><b>cannot create constructor for <i>")
 		  + name() + "</i></b></font><br><hr><br>");
   else {
     op->set_Visibility(PrivateVisibility);
@@ -35,14 +33,14 @@ void UmlClass::singleton() {
     op = UmlBaseOperation::create(this, "instance");
     
     if (op == 0)
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create operation <i>instance</i> for <i>")
+      UmlCom::trace(QCString("<font face=helvetica><b>cannot create operation <i>instance</i> for <i>")
 		    + name() + "</i></b></font><br><hr><br>");
     else {
       op->set_Visibility(PublicVisibility);
       op->set_isClassMember(TRUE);
       
       UmlTypeSpec t;
-      Q3CString s;
+      QCString s;
       
       t.type = this;
       op->set_ReturnType(t);
@@ -102,7 +100,7 @@ return (the == null) ? the = new ${type}() : the;\n\
 	UmlBaseRelation::create(aDirectionalAssociation, this, this);
       
       if (rel == 0) {
-	UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create relation <i>the</i> for <i>")
+	UmlCom::trace(QCString("<font face=helvetica><b>cannot create relation <i>the</i> for <i>")
 		      + name() + "</i></b></font><br><hr><br>");
 	if (stereotype_changed)
 	  set_Stereotype("");

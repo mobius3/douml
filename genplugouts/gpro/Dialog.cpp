@@ -8,35 +8,32 @@
 #include "SmallPushButton.h"
 
 #include <qlineedit.h>
-#include <q3multilineedit.h>
+#include <qmultilineedit.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qlayout.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
-#include <q3grid.h>
-#include <q3hbox.h>
+#include <qgrid.h>
+#include <qhbox.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3VBoxLayout>
 
-Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q3CString & target, Q3CString & tmplt, Q3CString & config, Q3CString & defines, Q3CString & includepath, Q3CString & dependpath, Q3CString & objectsdir, Q3CString & footer)
+Dialog::Dialog(UmlArtifact * art, const QCString & path_exe, QCString & pro, QCString & target, QCString & tmplt, QCString & config, QCString & defines, QCString & includepath, QCString & dependpath, QCString & objectsdir, QCString & footer)
   : QDialog(0, 0, TRUE), _art(art), _pro(pro), _target(target), _tmplt(tmplt),
     _config(config), _defines(defines), _includepath(includepath), _dependpath(dependpath),
     _objectsdir(objectsdir), _footer(footer) {
   QDir d(path_exe);
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3Grid * grid = new Q3Grid(2, this);
-  Q3HBox * htab;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QGrid * grid = new QGrid(2, this);
+  QHBox * htab;
   int index;
   
   vbox->addWidget(grid);
   vbox->setMargin(5);
   
   new QLabel(".pro file : ", grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   edpro = new QLineEdit(htab);
   edpro->setText(d.absFilePath(pro));
 
@@ -45,7 +42,7 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
   connect(browsepro, SIGNAL(clicked ()), this, SLOT(browse_pro()));
   
   new QLabel("target : ", grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   edtarget = new QLineEdit(htab);
   edtarget->setText(d.absFilePath(target));
   new QLabel(" ", htab);
@@ -53,7 +50,7 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
   connect(browsetarget, SIGNAL(clicked ()), this, SLOT(browse_target()));
 
   new QLabel("template : ", grid);
-  cbtemplate = new Q3ComboBox(TRUE, grid);
+  cbtemplate = new QComboBox(TRUE, grid);
   
   static const char * templates[] = { "app", "lib", "subdirs" };
   bool find = FALSE;
@@ -71,8 +68,8 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
   }
 
   new QLabel("config : ", grid);
-  htab = new Q3HBox(grid);
-  cbconf[0] = new Q3ComboBox(FALSE, htab);
+  htab = new QHBox(grid);
+  cbconf[0] = new QComboBox(FALSE, htab);
   cbconf[0]->insertItem("debug");
   cbconf[0]->insertItem("release");
   
@@ -82,7 +79,7 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
   
   cbconf[0]->setCurrentItem((*it++ == "debug") ? 0 : 1);
 
-  cbconf[1] = new Q3ComboBox(FALSE, htab);
+  cbconf[1] = new QComboBox(FALSE, htab);
   cbconf[1]->insertItem("warn_on");
   cbconf[1]->insertItem("warn_off");
   cbconf[1]->setCurrentItem((*it++ == "warn_on") ? 0 : 1);
@@ -104,13 +101,13 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
   for (index = 2;
        index != sizeof(cbconf)/sizeof(*cbconf) - 1;
        index += 1) {
-    cbconf[index] = new Q3ComboBox(TRUE, htab);
+    cbconf[index] = new QComboBox(TRUE, htab);
     if (it != lcnf.end())
       cbconf[index]->insertItem(*it++);
     cbconf[index]->insertStrList(configs);
     cbconf[index]->setCurrentItem(0);
   }
-  cbconf[index] = new Q3ComboBox(TRUE, htab);
+  cbconf[index] = new QComboBox(TRUE, htab);
   if (it != lcnf.end()) {
     QString s = *it++;
     
@@ -128,7 +125,7 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
   
   ///may be computed
   new QLabel("include paths : ", grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   edincludepath = new QLineEdit(htab);
   edincludepath->setText(includepath);
   new QLabel(" ", htab);
@@ -140,7 +137,7 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
   eddependpath->setText(dependpath);
 
   new QLabel("objects dir : ", grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   edobjectsdir = new QLineEdit(htab);
   edobjectsdir->setText(objectsdir);
   new QLabel(" ", htab);
@@ -148,14 +145,14 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
   connect(browseobjectsdir, SIGNAL(clicked ()), this, SLOT(browse_objectsdir()));
   
   new QLabel("footer : ", grid);
-  edfooter = new Q3MultiLineEdit(grid);
+  edfooter = new QMultiLineEdit(grid);
   edfooter->setText(footer);
   
   new QLabel(grid);
   new QLabel(grid);
   
   new QLabel(grid);
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   new QLabel(htab);
   QPushButton * ok = new QPushButton("&OK", htab);
   new QLabel(htab);
@@ -178,10 +175,10 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
 void Dialog::polish() {
   QDialog::polish();
   
-  // try to read .doumlrc
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // try to read .boumlrc
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
+  QString s = QDir::home().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
 
 #ifdef WIN32
@@ -190,7 +187,7 @@ void Dialog::polish() {
     
     if (! hd.isEmpty()) {
       QDir d(hd);
-      QString s2 = d.absFilePath(".doumlrc");
+      QString s2 = d.absFilePath(".boumlrc");
       
       fp = fopen((const char *) s2, "r");
     }
@@ -251,7 +248,7 @@ void Dialog::accept() {
 }
 
 void Dialog::browse_pro() {
-  QString f = Q3FileDialog::getSaveFileName(edpro->text(), "Pro file (*.pro)", this,
+  QString f = QFileDialog::getSaveFileName(edpro->text(), "Pro file (*.pro)", this,
 					   0, "specify .pro file");
   
   if (! f.isEmpty())
@@ -259,7 +256,7 @@ void Dialog::browse_pro() {
 }
 
 void Dialog::browse_target() {
-  QString f = Q3FileDialog::getSaveFileName(edtarget->text(), "", this,
+  QString f = QFileDialog::getSaveFileName(edtarget->text(), "", this,
 					   0, "specify target file");
   
   if (! f.isEmpty())
@@ -267,7 +264,7 @@ void Dialog::browse_target() {
 }
 
 void Dialog::compute_includepath() {
-  const Q3PtrVector<UmlArtifact> & arts = _art->associatedArtifacts();
+  const QVector<UmlArtifact> & arts = _art->associatedArtifacts();
   QFileInfo fi(edpro->text());
   QString prodir = fi.dirPath(TRUE);
   unsigned index;
@@ -285,7 +282,7 @@ void Dialog::compute_includepath() {
 }
 
 void Dialog::browse_objectsdir() {
-  QString d = Q3FileDialog::getExistingDirectory (edobjectsdir->text(), this, 0,
+  QString d = QFileDialog::getExistingDirectory (edobjectsdir->text(), this, 0,
 						 "select objects dir");
   
   if (! d.isEmpty()) {

@@ -27,12 +27,8 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
 
 #include "BrowserClassInstance.h"
 #include "BrowserClass.h"
@@ -194,7 +190,7 @@ void BrowserClassInstance::update_stereotype(bool) {
   }
 }
 
-void BrowserClassInstance::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserClassInstance::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserClassInstance::compute_referenced_by(l, this);
   if (! ondelete) {
@@ -204,7 +200,7 @@ void BrowserClassInstance::referenced_by(Q3PtrList<BrowserNode> & l, bool ondele
   }  
 }
 
-void BrowserClassInstance::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserClassInstance::compute_referenced_by(QList<BrowserNode> & l,
 						 BrowserNode * target)
 {
   IdIterator<BrowserClassInstance> it(all);
@@ -215,8 +211,8 @@ void BrowserClassInstance::compute_referenced_by(Q3PtrList<BrowserNode> & l,
       bool add = (data->get_class() == target);
       
       if (!add && (target->get_type() == UmlAttribute)) {
-	const Q3ValueList<SlotAttr> & attrs = data->get_attributes();
-	Q3ValueList<SlotAttr>::ConstIterator it_a;
+	const QValueList<SlotAttr> & attrs = data->get_attributes();
+	QValueList<SlotAttr>::ConstIterator it_a;
 	
 	for (it_a = attrs.begin(); it_a != attrs.end(); ++it_a) {
 	  if ((*it_a).att == target) {
@@ -227,8 +223,8 @@ void BrowserClassInstance::compute_referenced_by(Q3PtrList<BrowserNode> & l,
       }
       
       if (!add) {
-	const Q3ValueList<SlotRel> & rels = data->get_relations();
-	Q3ValueList<SlotRel>::ConstIterator it_r;
+	const QValueList<SlotRel> & rels = data->get_relations();
+	QValueList<SlotRel>::ConstIterator it_r;
 	
 	for (it_r = rels.begin(); it_r != rels.end(); ++it_r) {
 	  const SlotRel & slot = *it_r;
@@ -255,8 +251,8 @@ void BrowserClassInstance::compute_referenced_by(Q3PtrList<BrowserNode> & l,
 }
 
 void BrowserClassInstance::menu() {
-  Q3PopupMenu m(0, "class instance");
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, "class instance");
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -456,7 +452,7 @@ BrowserClassInstance * BrowserClassInstance::get_it(QString s, BrowserClass * cl
 						    BrowserNode * parent)
 {
   if (! s.isEmpty()) {
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = parent->firstChild(); child != 0; child = child->nextSibling())
       if (!((BrowserNode *) child)->deletedp() &&
@@ -555,7 +551,7 @@ void BrowserClassInstance::add_from_tool(BrowserNode * parent, ToolCom * com,
   ci->write_id(com);
 }
 
-void BrowserClassInstance::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserClassInstance::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // " << get_name();
   else {

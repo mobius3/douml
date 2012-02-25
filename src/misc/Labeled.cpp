@@ -27,11 +27,10 @@
 
 
 
-#include <q3intdict.h> 
+#include <qintdict.h> 
 #include <qdatetime.h> 
 #include <qmessagebox.h>
-#include <q3ptrlist.h>
-#include <q3ptrlist.h>
+#include <qlist.h>
 
 #include "mu.h"
 #include "Labeled.h"
@@ -182,7 +181,7 @@ struct NeedChange {
   NeedChange(IdDict<void> & d, int & id, void * e) : dict(d), ident(id), elt(e) {}
 };
 
-static Q3PtrList<NeedChange> MustBeRenumered;
+static QList<NeedChange> MustBeRenumered;
 
 void will_change_id(IdDict<void> & d, int & id, void * x)
 {
@@ -203,7 +202,7 @@ void do_change_shared_ids()
 
 //
 
-// don't use for instance a static global Q3PtrList to
+// don't use for instance a static global QList to
 // not be dependent on the initialization order made
 // before 'main' execution
 

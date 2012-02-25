@@ -41,14 +41,14 @@ int TableItem::alignment() const {
 // to use TableItem rather than QTableItem
 
 void MyTable::setText(int row, int col, const QString & text) {
-  Q3TableItem * itm = item(row, col);
+  QTableItem * itm = item(row, col);
   
   if (itm != 0) {
     itm->setText(text);
     updateCell(row, col);
   }
   else
-    setItem(row, col, new TableItem(this, Q3TableItem::OnTyping, text));
+    setItem(row, col, new TableItem(this, QTableItem::OnTyping, text));
 }
 
 // force end of edition

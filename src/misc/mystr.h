@@ -26,12 +26,10 @@
 #ifndef MY_STR_H
 #define MY_STR_H
 
-// I consider that QString and Q3CString are too memory expensive
+// I consider that QString and QCString are too memory expensive
 
-#include <q3strlist.h>
+#include <qstrlist.h>
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 class SharedStr {
   public:
@@ -45,10 +43,10 @@ class SharedStr {
     SharedStr & operator=(const SharedStr & s) { p = s.p; return *this; };
     SharedStr & operator=(const char *);
     SharedStr & operator=(const QString &);
-    SharedStr & operator=(const Q3CString &);
+    SharedStr & operator=(const QCString &);
     operator const char *() const { return p; };
     operator QString() const { return p; };
-    operator Q3CString() const { return p; };
+    operator QCString() const { return p; };
     
     //static void statistics();
     
@@ -56,7 +54,7 @@ class SharedStr {
     char * p;
     static char Empty[1];
 #define SHAREDDICTSIZE 128
-    static Q3StrList shared[SHAREDDICTSIZE];
+    static QStrList shared[SHAREDDICTSIZE];
     
     char * assign(const char *, int len);
 };
@@ -92,7 +90,7 @@ class MayBeSharedStr : public SharedStr {
       extern MayBeSharedStr & illegal_MayBeSharedStr_usage();
       return illegal_MayBeSharedStr_usage();
     };
-    MayBeSharedStr & operator=(const Q3CString &) {
+    MayBeSharedStr & operator=(const QCString &) {
       // must not be used, use assign operation
       extern MayBeSharedStr & illegal_MayBeSharedStr_usage();
       return illegal_MayBeSharedStr_usage();
@@ -101,14 +99,14 @@ class MayBeSharedStr : public SharedStr {
   public:
     MayBeSharedStr() : SharedStr() {};
     MayBeSharedStr(const MayBeSharedStr &);
-virtual ~MayBeSharedStr();
+    ~MayBeSharedStr();
     operator const char *() const { return p; };
     operator QString() const { return p; };
-    operator Q3CString() const { return p; };
+    operator QCString() const { return p; };
     
     char * assign(const char *, bool share);
     char * assign(const QString &, bool share);
-    char * assign(const Q3CString &, bool share);
+    char * assign(const QCString &, bool share);
     
   protected:
     char * assign(const char * s, int len, bool share);
@@ -122,14 +120,14 @@ class MyStr {
     MyStr(const MyStr &);
     MyStr(const QString &);
     MyStr(const char *);
-virtual ~MyStr();
+    ~MyStr();
     MyStr & operator=(const MyStr &);
     MyStr & operator=(const char *);
     MyStr & operator=(const QString &);
-    MyStr & operator=(const Q3CString &);
+    MyStr & operator=(const QCString &);
     operator const char *() const { return (p != 0) ? p : ""; };
     operator QString() const { return p; };
-    operator Q3CString() const { return p; };
+    operator QCString() const { return p; };
     bool isEmpty() const { return p == 0; };
     unsigned int length() const;
     

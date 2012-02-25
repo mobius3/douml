@@ -4,7 +4,7 @@
 
 #include "UmlBaseState.h"
 #include "UmlStateItem.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "anItemKind.h"
 
 class UmlItem;
@@ -14,7 +14,7 @@ class FileIn;
 class UmlState : public UmlBaseState, public UmlStateItem {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlState(void * id, const Q3CString & s) : UmlBaseState(id, s) {
+     UmlState(void * id, const QCString & s) : UmlBaseState(id, s) {
        NumberOf += 1; 
     }
 
@@ -29,7 +29,7 @@ class UmlState : public UmlBaseState, public UmlStateItem {
   public:
     //  call at end of import : try to solve reference to operation
     
-    virtual void solve(int context, Q3CString idref);
+    virtual void solve(int context, QCString idref);
 
     static void init();
 

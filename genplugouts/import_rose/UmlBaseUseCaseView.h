@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlUseCaseView;
 
@@ -24,7 +24,7 @@ class UmlBaseUseCaseView : public UmlItem {
 
   protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseUseCaseView(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseUseCaseView(void * id, const QCString & n) : UmlItem(id, n) {};
 
 };
 

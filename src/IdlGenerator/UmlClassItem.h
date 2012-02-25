@@ -26,10 +26,7 @@
 #ifndef UMLCLASSITEM_H
 #define UMLCLASSITEM_H
 
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qlist.h>
 
 #include "UmlBaseClassItem.h"
 
@@ -38,15 +35,15 @@ class CppRefType;
 
 class UmlClassItem : public UmlBaseClassItem {
   public:
-    UmlClassItem(void * id, const Q3CString & n)
+    UmlClassItem(void * id, const QCString & n)
       : UmlBaseClassItem(id, n) {};
   
-    static void remove_comments(Q3CString & s);
-    static void remove_arrays(Q3CString & s);
-    static void remove_preprocessor(Q3CString & s);
+    static void remove_comments(QCString & s);
+    static void remove_arrays(QCString & s);
+    static void remove_preprocessor(QCString & s);
 
-    virtual void generate_decl(QTextOStream & f, const Q3CString & cl_stereotype,
-			       Q3CString indent, bool = FALSE) = 0;
+    virtual void generate_decl(QTextOStream & f, const QCString & cl_stereotype,
+			       QCString indent, bool = FALSE) = 0;
 };
 
 #endif

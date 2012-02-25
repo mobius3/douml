@@ -27,8 +27,6 @@
 #define ARROWJUNCTIONCANVAS_H
 
 #include "DiagramCanvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #define ARROW_JUNCTION_SIZE 19
 #define PROVIDED_RADIUS 5.5
@@ -62,7 +60,7 @@ class ArrowJunctionCanvas : public QObject, public DiagramCanvas {
     virtual void history_load(QBuffer &);
     virtual void history_hide();
 
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static ArrowJunctionCanvas * read(char * & st, UmlCanvas * canvas, char * k);
     
   private slots:

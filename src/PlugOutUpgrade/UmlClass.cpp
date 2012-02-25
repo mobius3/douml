@@ -35,12 +35,10 @@
 #include "JavaSettings.h"
 #include "UmlExtraClassMember.h"
 #include "util.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_view,
 		    UmlDeploymentView * base_depl_view, UmlDeploymentView * user_depl_view,
-		    UmlClass * base_item, Q3CString s, UmlClass *& base,
+		    UmlClass * base_item, QCString s, UmlClass *& base,
 		    UmlClass *& user, UmlClass * user_interf) {
   unsigned uid = UmlCom::user_id();
   UmlRelation * rel;
@@ -50,7 +48,7 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
   base->set_isAbstract(TRUE);
   
   if ((rel = UmlBaseRelation::create(aGeneralisation, base, this)) == 0) {
-    Q3CString msg = base->name() + " can't inherit " + name() + "<br>\n";
+    QCString msg = base->name() + " can't inherit " + name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -61,7 +59,7 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
   }
   
   if ((rel = UmlBaseRelation::create(aDependency, base_item, base)) == 0) {
-    Q3CString msg = "Cannot add a friend dependency from " + base_item->name() + " to " + base->name() + "<br>\n";
+    QCString msg = "Cannot add a friend dependency from " + base_item->name() + " to " + base->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -76,7 +74,7 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
   
   user = made(user_class_view, user_depl_view, "Uml" + s);
   if ((rel = UmlBaseRelation::create(aGeneralisation, user, base)) == 0) {
-    Q3CString msg = user->name() + " can't inherit " + base->name() + "<br>\n";
+    QCString msg = user->name() + " can't inherit " + base->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -88,7 +86,7 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
   
   if (user_interf) {
     if ((rel = UmlBaseRelation::create(aGeneralisation, user, user_interf)) == 0) {
-      Q3CString msg = user->name() + " can't inherit " + user_interf->name() + "<br>\n";
+      QCString msg = user->name() + " can't inherit " + user_interf->name() + "<br>\n";
       
       UmlCom::trace(msg);
       throw 0;
@@ -102,7 +100,7 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
 
 void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_view,
 		    UmlArtifact * base_art, UmlArtifact * user_art,
-		    UmlClass * base_item, Q3CString s, UmlClass *& base,
+		    UmlClass * base_item, QCString s, UmlClass *& base,
 		    UmlClass *& user, UmlClass * user_interf) {
   unsigned uid = UmlCom::user_id();
   UmlRelation * rel;
@@ -112,7 +110,7 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
   base->set_isAbstract(TRUE);
   
   if ((rel = UmlBaseRelation::create(aGeneralisation, base, this)) == 0) {
-    Q3CString msg = base->name() + " can't inherit " + name() + "<br>\n";
+    QCString msg = base->name() + " can't inherit " + name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -123,7 +121,7 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
   }
   
   if ((rel = UmlBaseRelation::create(aDependency, base_item, base)) == 0) {
-    Q3CString msg = "Cannot add a friend dependency from " + base_item->name() + " to " + base->name() + "<br>\n";
+    QCString msg = "Cannot add a friend dependency from " + base_item->name() + " to " + base->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -138,7 +136,7 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
   
   user = made(user_class_view, user_art, "Uml" + s);
   if ((rel = UmlBaseRelation::create(aGeneralisation, user, base)) == 0) {
-    Q3CString msg = user->name() + " can't inherit " + base->name() + "<br>\n";
+    QCString msg = user->name() + " can't inherit " + base->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -150,7 +148,7 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
   
   if (user_interf) {
     if ((rel = UmlBaseRelation::create(aGeneralisation, user, user_interf)) == 0) {
-      Q3CString msg = user->name() + " can't inherit " + user_interf->name() + "<br>\n";
+      QCString msg = user->name() + " can't inherit " + user_interf->name() + "<br>\n";
       
       UmlCom::trace(msg);
       throw 0;
@@ -164,12 +162,12 @@ void UmlClass::made(UmlClassView * base_class_view, UmlClassView * user_class_vi
 
 UmlClass * UmlClass::made(UmlClassView * class_view,
 			  UmlDeploymentView * depl_view,
-			  Q3CString s, bool interf)
+			  QCString s, bool interf)
 {
   UmlClass * cl = UmlBaseClass::create(class_view, s);
   
   if (cl == 0) {
-    Q3CString msg = "can't create class '" + s + "' in " + class_view->name() + "<br>\n";
+    QCString msg = "can't create class '" + s + "' in " + class_view->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -194,12 +192,12 @@ UmlClass * UmlClass::made(UmlClassView * class_view,
 
 UmlClass * UmlClass::made(UmlClassView * class_view,
 			  UmlArtifact * art,
-			  Q3CString s, bool interf)
+			  QCString s, bool interf)
 {
   UmlClass * cl = UmlBaseClass::create(class_view, s);
   
   if (cl == 0) {
-    Q3CString msg = "can't create class '" + s + "' in " + class_view->name() + "<br>\n";
+    QCString msg = "can't create class '" + s + "' in " + class_view->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -226,7 +224,7 @@ void UmlClass::add_kind(const char * k) {
   UmlOperation * op = UmlOperation::create(this, "kind");
   
   if (op == 0) {
-    Q3CString msg = "can't add operation 'kind' in " + name() + "<br>\n";
+    QCString msg = "can't add operation 'kind' in " + name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -243,14 +241,14 @@ void UmlClass::add_kind(const char * k) {
   op->set_ReturnType(t);
   op->remove_cpp_throw();
   op->set_isCppVirtual(TRUE);
-  op->set_CppBody(Q3CString("  return ") + k + ";");
+  op->set_CppBody(QCString("  return ") + k + ";");
   
   op->set_JavaDef(JavaSettings::operationDef());
-  op->set_JavaBody(Q3CString("  return anItemKind.") + k + ";");
+  op->set_JavaBody(QCString("  return anItemKind.") + k + ";");
 }
 
 void UmlClass::add_default_base_op(UmlClass * super, UmlClass * user,
-				   UmlClass * parent, Q3CString s,
+				   UmlClass * parent, QCString s,
 				   const char * k, bool unnamed) {
   unsigned uid = UmlCom::user_id();
   
@@ -259,7 +257,7 @@ void UmlClass::add_default_base_op(UmlClass * super, UmlClass * user,
   UmlOperation * op = add_op("create", PublicVisibility, user, TRUE);
   
   if (op == 0) {
-    Q3CString msg = "can't add operation 'create' in " + name() + "<br>\n";
+    QCString msg = "can't add operation 'create' in " + name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -305,7 +303,7 @@ UmlOperation * UmlClass::add_constr(UmlClass * super, aVisibility v, bool unname
   UmlOperation * op = UmlOperation::create(this, name());
 
   if (op == 0) {
-    Q3CString msg = "can't add constructor in " + name() + "<br>\n";
+    QCString msg = "can't add constructor in " + name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -342,11 +340,11 @@ UmlOperation * UmlClass::add_constr(UmlClass * super, aVisibility v, bool unname
 }
 
 UmlOperation * UmlClass::add_destr(aVisibility v, const char * comment) {
-  Q3CString s = "~" + name();
+  QCString s = "~" + name();
   UmlOperation * op = UmlOperation::create(this, s);
 
   if (op == 0) {
-    Q3CString msg = "can't add destructor in " + name() + "<br>\n";
+    QCString msg = "can't add destructor in " + name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -386,8 +384,8 @@ UmlOperation * UmlClass::add_op(const char * name, aVisibility v,
   UmlOperation * op = UmlOperation::create(this, name);
 
   if (op == 0) {
-    Q3CString msg =
-      Q3CString("can't add operation '") + name + "' in " + this->name() + "<br>\n";
+    QCString msg =
+      QCString("can't add operation '") + name + "' in " + this->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -433,8 +431,8 @@ UmlAttribute * UmlClass::add_attribute(const char * name, aVisibility v,
   UmlAttribute * ar = UmlAttribute::create(this, name);
 
   if (ar == 0) {
-    Q3CString msg =
-      Q3CString("can't add attribute '") + name + "' in " + this->name() + "<br>\n";
+    QCString msg =
+      QCString("can't add attribute '") + name + "' in " + this->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -445,7 +443,7 @@ UmlAttribute * UmlClass::add_attribute(const char * name, aVisibility v,
   ar->set_Type(type);
   ar->set_Visibility(v);
   
-  Q3CString s = CppSettings::attributeDecl("");
+  QCString s = CppSettings::attributeDecl("");
   
   if (bitfield != 0) {
     int index = s.find("${type} ${name}");
@@ -485,8 +483,8 @@ UmlRelation * UmlClass::add_relation(aRelationKind k, const char * name,
   UmlRelation * rel = UmlRelation::create(k, this, type);
   
   if (rel == 0) {
-    Q3CString msg =
-      Q3CString("can't add relation '") + name + "' in " + this->name() + "<br>\n";
+    QCString msg =
+      QCString("can't add relation '") + name + "' in " + this->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -508,7 +506,7 @@ UmlRelation * UmlClass::add_relation(aRelationKind k, const char * name,
     byValue = FALSE;
   }
   
-  Q3CString s = CppSettings::relationDecl(byValue, "");
+  QCString s = CppSettings::relationDecl(byValue, "");
   
   if (bitfield != 0) {
     int index = s.find("${type} ${name}");
@@ -530,8 +528,8 @@ UmlRelation * UmlClass::add_vect_assoc(const char * name, aVisibility v, UmlClas
   UmlRelation * rel = UmlRelation::create(aDirectionalAggregationByValue, this, type);
   
   if (rel == 0) {
-    Q3CString msg =
-      Q3CString("can't add relation '") + name + "' in " + this->name() + "<br>\n";
+    QCString msg =
+      QCString("can't add relation '") + name + "' in " + this->name() + "<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -544,10 +542,10 @@ UmlRelation * UmlClass::add_vect_assoc(const char * name, aVisibility v, UmlClas
   rel->set_Multiplicity("*");
   rel->set_Stereotype("vector");
   
-  Q3CString s;
+  QCString s;
   
   s = CppSettings::relationDecl(TRUE, "");
-  s.replace(s.find("${type}"), 7, "Q3PtrVector<${type}>");
+  s.replace(s.find("${type}"), 7, "QVector<${type}>");
   conditional(s, if_def, end_if);
   rel->set_CppDecl(s);
   
@@ -559,7 +557,7 @@ UmlRelation * UmlClass::add_vect_assoc(const char * name, aVisibility v, UmlClas
 }
 
 UmlOperation * UmlClass::get_operation(const char * who) {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   
   for (unsigned i = 0; i != ch.size(); i += 1)
     if ((ch[i]->kind() == anOperation) &&
@@ -570,7 +568,7 @@ UmlOperation * UmlClass::get_operation(const char * who) {
 }
 
 UmlAttribute * UmlClass::get_attribute(const char * who) {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   
   for (unsigned i = 0; i != ch.size(); i += 1)
     if ((ch[i]->kind() == anAttribute) &&
@@ -581,7 +579,7 @@ UmlAttribute * UmlClass::get_attribute(const char * who) {
 }
 
 UmlRelation * UmlClass::get_relation(aRelationKind k, const char * who) {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   
   for (unsigned i = 0; i != ch.size(); i += 1) {
     if (ch[i]->kind() == aRelation) {
@@ -597,7 +595,7 @@ UmlRelation * UmlClass::get_relation(aRelationKind k, const char * who) {
 }
 
 UmlRelation * UmlClass::get_relation(const char * who) {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   
   for (unsigned i = 0; i != ch.size(); i += 1) {
     if (ch[i]->kind() == aRelation) {
@@ -612,8 +610,8 @@ UmlRelation * UmlClass::get_relation(const char * who) {
 }
 
 void UmlClass::replace_friend() {
-  Q3CString s;
-  const Q3PtrVector<UmlItem> ch = children();
+  QCString s;
+  const QVector<UmlItem> ch = children();
   unsigned i = ch.size();
   
   while (i--) {
@@ -631,15 +629,15 @@ void UmlClass::replace_friend() {
 }
 
 void UmlClass::add_friend(const char * scl) {
-  Q3CString s = Q3CString("  friend class ") + scl + ";\n";
-  const Q3PtrVector<UmlItem> ch = children();
+  QCString s = QCString("  friend class ") + scl + ";\n";
+  const QVector<UmlItem> ch = children();
   unsigned i = ch.size();
   
   while (i--) {
     if ((ch[i]->kind() == anExtraClassMember) &&
 	(ch[i]->name() == "friend")) {
       UmlExtraClassMember * x = (UmlExtraClassMember *) ch[i];
-      Q3CString f = x->cppDecl() + s;
+      QCString f = x->cppDecl() + s;
       
       x->set_CppDecl(f);
       return;

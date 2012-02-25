@@ -23,20 +23,17 @@
 //
 // *************************************************************************
 
-#include <q3filedialog.h> 
+#include <qfiledialog.h> 
 #include <qapplication.h>
 #ifndef REVERSE
 #include <qmessagebox.h>
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qinputdialog.h> 
 #endif
 #include <qdatastream.h> 
 #include <qdir.h>
 #include <qregexp.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QPixmap>
 
 #include "Package.h"
 #include "Class.h"
@@ -140,7 +137,7 @@ Package * Package::scan_dir()
 {
   // get input php source dir
   
-  QString path = Q3FileDialog::getExistingDirectory(QDir::currentDirPath(), 0, 0,
+  QString path = QFileDialog::getExistingDirectory(QDir::currentDirPath(), 0, 0,
 						   "select the base directory to reverse");
 
   if (! path.isEmpty()) {
@@ -180,9 +177,9 @@ static bool allowed(QRegExp * rg, QString f)
 {
   if (rg != 0) {
     int matchLen;
-    return rg->exactMatch(f);/*
+    
     return ((rg->match(f, 0, &matchLen) != 0) ||
-	    (matchLen != (int) f.length()));*/
+	    (matchLen != (int) f.length()));
   }
   else
     return TRUE;
@@ -194,8 +191,8 @@ int Package::file_number(QDir & d, bool rec)
     return 0;
   
   int result = 0;
-//  const QFileInfoList * list = d.entryInfoList(QDir::Files | QDir::Readable);
- /* 
+  const QFileInfoList * list = d.entryInfoList(QDir::Files | QDir::Readable);
+  
   if (list != 0) {
     QFileInfoListIterator it(*list);
     QFileInfo * fi;
@@ -205,52 +202,28 @@ int Package::file_number(QDir & d, bool rec)
 	result += 1;
       ++it;
     }
-  }*/
- 
-	// Oh lord, Bruno is so used to cut-n-paste, I am getting sick.
-   QFileInfoList list = d.entryInfoList(QDir::Files | QDir::Readable);
-
-    if (!list.isEmpty()) {
-        QFileInfoList::iterator it = list.begin();
-        while (it != list.end()) {
-            if ((*it).extension(FALSE) == Ext) result += 1;
-            it++;
-        }
-    }
+  }
       
-	if (rec) {
-//     // sub directories
-//     list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
-//     
-//     if (list != 0) {
-//       QFileInfoListIterator itd(*list);
-//       QFileInfo * di;
-//       
-//       while ((di = itd.current()) != 0) {
-// 	if (((const char *) di->fileName())[0] != '.') {
-// 	  QDir sd(di->filePath());
-// 	  
-// 	  result += file_number(sd, rec);
-// 	}
-// 	++itd;
-//       }
-//     } 
-//   }
-//   
-        list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
-
-        if (!list.isEmpty()) {
-            QFileInfoList::iterator it = list.begin();
-            while (it != list.end()) {
-                if ((*it).fileName()[0] != '.') {
-                    QDir sd((*it).filePath());
-                    result += file_number(sd, rec);
-                }
-                it++;
-            }
-        }
-    }
-    return result;
+  if (rec) {
+    // sub directories
+    list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
+    
+    if (list != 0) {
+      QFileInfoListIterator itd(*list);
+      QFileInfo * di;
+      
+      while ((di = itd.current()) != 0) {
+	if (((const char *) di->fileName())[0] != '.') {
+	  QDir sd(di->filePath());
+	  
+	  result += file_number(sd, rec);
+	}
+	++itd;
+      }
+    } 
+  }
+  
+  return result;
 }
 
 #ifdef REVERSE
@@ -293,47 +266,36 @@ void Package::reverse_directory(QDir & d, bool rec) {
     return;
 
   // reads files
-  QFileInfoList list = d.entryInfoList(QDir::Files | QDir::Readable);
+  const QFileInfoList * list = d.entryInfoList(QDir::Files | QDir::Readable);
   
-  if (!list.isEmpty()) {
-    QFileInfoList::iterator it = list.begin();
+  if (list != 0) {
+    QFileInfoListIterator it(*list);
+    QFileInfo * fi;
     
-	while (it != list.end()) {
-		if ((*it).extension(FALSE) == Ext) {
-			if (allowed(FileFilter, (*it).fileName())) 
-				reverse_file(Q3CString((*it).filePath().toAscii().constData()),Q3CString(my_baseName(&(*it)).toAscii().constData()));
-			if (progress)
-				progress->tic();
-			app->processEvents();
-		}
-		++it;
-	}
-/*
     while ((fi = it.current()) != 0) {
       if (fi->extension(FALSE) == Ext) {
 	if (allowed(FileFilter, fi->fileName()))
-	  reverse_file(Q3CString(fi->filePath()), Q3CString(my_baseName(fi)));
+	  reverse_file(QCString(fi->filePath()), QCString(my_baseName(fi)));
 	if (progress)
 	  progress->tic();
 	app->processEvents();
       }
       ++it;
-    }*/
+    }
   }
 
   if (rec) {
     // sub directories
     list = d.entryInfoList(QDir::Dirs | QDir::NoSymLinks);
     
-    if (!list.isEmpty()) {
-      QFileInfoList::iterator itd = list.begin();
-
-	  while (itd != list.end()) {
-		  
-    	if ((*itd).fileName()[0] != '.') {
-          QDir sd((*itd).filePath());
-
-	      Package * p = find(Q3CString(sd.dirName().toAscii().constData()), TRUE);
+    if (list != 0) {
+      QFileInfoListIterator itd(*list);
+      QFileInfo * di;
+      
+      while ((di = itd.current()) != 0) {
+	if (((const char *) di->fileName())[0] != '.') {
+	  QDir sd(di->filePath());
+	  Package * p = find(QCString(sd.dirName()), TRUE);
 	  
 	  if (p != 0)
 	    p->reverse_directory(sd, TRUE);
@@ -344,17 +306,17 @@ void Package::reverse_directory(QDir & d, bool rec) {
   }
 }
 
-void Package::reverse_file(Q3CString path, Q3CString name) {
+void Package::reverse_file(QCString path, QCString name) {
   if (! Lex::open(path)) {
     // very strange !
     if (! scan)
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot open <i>")
+      UmlCom::trace(QCString("<font face=helvetica><b>cannot open <i>")
 		    + path + "</i></b></font><br>");
   }
   else {
     UmlArtifact * art = 0;
-    Q3CString file_start;
-    Q3CString file_end;
+    QCString file_start;
+    QCString file_end;
     
     UmlCom::message(((scan) ? "scan " : "reverse ") + path);
     
@@ -368,7 +330,7 @@ void Package::reverse_file(Q3CString path, Q3CString name) {
       redo = FALSE;
       before_class = TRUE;
       
-      Q3CString s;
+      QCString s;
       char c = Lex::read_word_bis();
       
       while (c != 0) {
@@ -400,7 +362,7 @@ void Package::reverse_file(Q3CString path, Q3CString name) {
 	    UmlPackage * pack = get_uml(TRUE);
 	    
 	    if ((art = UmlBaseArtifact::create(pack->get_deploymentview(Namespace::current()), name)) == 0) {
-	      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create<i> artifact ")
+	      UmlCom::trace(QCString("<font face=helvetica><b>cannot create<i> artifact ")
 			    + name + "</i></b></font><br>");
 	      Namespace::exit();
 	      Lex::close(); 
@@ -496,7 +458,7 @@ void Package::reverse_file(Q3CString path, Q3CString name) {
 	UmlPackage * pack = get_uml(TRUE);
 	
 	if ((art = UmlBaseArtifact::create(pack->get_deploymentview(Namespace::current()), name)) == 0) {
-	  UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create<i> artifact ")
+	  UmlCom::trace(QCString("<font face=helvetica><b>cannot create<i> artifact ")
 			+ name + "</i></b></font><br>");
 	  Namespace::exit();
 	  Lex::close(); 
@@ -532,11 +494,11 @@ void Package::reverse_file(Q3CString path, Q3CString name) {
 }
 
 void Package::use() {	  
-  Q3CString s1;
+  QCString s1;
   
   while (!(s1 = Lex::read_word()).isEmpty()) {
-    Q3CString s = Lex::read_word();
-    Q3CString s2;
+    QCString s = Lex::read_word();
+    QCString s2;
     
     if (s == "as") {
       s2 = Lex::read_word();
@@ -546,7 +508,7 @@ void Package::use() {
       int p = s1.findRev('\\');
       
       s2 = (p == -1)
-	? Q3CString() // strange
+	? QCString() // strange
 	: s1.mid(p + 1);
     }
     
@@ -562,9 +524,9 @@ void Package::use() {
   }
 }
 
-void Package::update_class_list(Q3CString pack, UmlItem * container)
+void Package::update_class_list(QCString pack, UmlItem * container)
 {
-  const Q3PtrVector<UmlItem> & ch = container->children();
+  const QVector<UmlItem> & ch = container->children();
   
   for (unsigned i = 0; i != ch.size(); i += 1) {
     UmlItem * it = ch[i];
@@ -582,7 +544,7 @@ void Package::update_class_list(Q3CString pack, UmlItem * container)
   }
 }
 
-Class * Package::define(const Q3CString & name, char st) {
+Class * Package::define(const QCString & name, char st) {
   Class * cl = Defined[name];
   
   if (cl != 0)
@@ -604,7 +566,7 @@ Class * Package::define(const Q3CString & name, char st) {
   return cl;
 }
 
-void Package::compute_type(Q3CString name, UmlTypeSpec & typespec,
+void Package::compute_type(QCString name, UmlTypeSpec & typespec,
 			   Class ** need_object) {
   typespec.type = 0;
   typespec.explicit_type = 0;
@@ -657,7 +619,7 @@ void Package::compute_type(Q3CString name, UmlTypeSpec & typespec,
 // the class is not a builtin, the package is the right,
 // the name doesn't contains '.'
 
-Class * Package::declare_if_needed(Q3CString name, char st) {
+Class * Package::declare_if_needed(QCString name, char st) {
   Class * cl;
   
   // the class already exist ?
@@ -673,12 +635,12 @@ Class * Package::declare_if_needed(Q3CString name, char st) {
 }
 
 #ifdef WITH_PHPCAT
-void Package::declare(const Q3CString & name, Class * cl) {
+void Package::declare(const QCString & name, Class * cl) {
   Undefined.insert(name, cl);
 }
 #endif
 
-Package * Package::find(Q3CString name, bool nohack) {
+Package * Package::find(QCString name, bool nohack) {
   // hack
   if (!nohack && (text(0) == (const char *) name))
     return this;
@@ -724,7 +686,7 @@ UmlPackage * Package::get_uml(bool mandatory) {
     Package * pa = (Package *) parent();
     UmlPackage * uml_pa = pa->get_uml();	// will end on project
 	
-    Q3PtrVector<UmlItem> ch = uml_pa->children();
+    QVector<UmlItem> ch = uml_pa->children();
     
     for (unsigned index = 0; index != ch.size(); index += 1) {
       UmlItem * it = ch[index];
@@ -738,7 +700,7 @@ UmlPackage * Package::get_uml(bool mandatory) {
 	return 0;
       
 #ifdef REVERSE
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create package <i>")
+      UmlCom::trace(QCString("<font face=helvetica><b>cannot create package <i>")
 		    + name + "</i> under package <i>" + uml_pa->name() +
 		    "</b></font><br>");
       UmlCom::message("");
@@ -778,7 +740,7 @@ void Package::menu() {
     // the project
     return;
   
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(text(0), -1);
   m.insertSeparator();
@@ -791,7 +753,7 @@ void Package::menu() {
   bool have_classe = FALSE;
   bool have_package = FALSE;
   
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling()) {
     if (!((BrowserNode *) child)->isa_package()) {
@@ -830,7 +792,7 @@ void Package::menu() {
 	QApplication::restoreOverrideCursor();
       }
       else
-	UmlCom::trace(Q3CString("<font face=helvetica><i>") + path +
+	UmlCom::trace(QCString("<font face=helvetica><i>") + path +
 		      "</i> <b>doesn't exist !</b></font><br>");
 	
     }
@@ -866,7 +828,7 @@ void Package::backup(QDataStream  & dt) const {
 }
 
 void Package::backup_children(QDataStream  & dt) const {
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling())
     ((BrowserNode *) child)->backup(dt);

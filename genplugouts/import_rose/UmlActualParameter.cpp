@@ -4,14 +4,12 @@
 #include "UmlTypeSpec.h"
 
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlActualParameter::import(File & f, UmlTypeSpec & t)
 {
   f.read("object");
   f.read("Parameter");
     
-  Q3CString s;
+  QCString s;
     
   if (f.read(s) != STRING)
     f.syntaxError(s, "actual's name");

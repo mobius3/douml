@@ -1,5 +1,3 @@
-//Added by qt3to4:
-#include <Q3TextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -62,7 +60,7 @@ class SdLostFoundMsgSupportCanvas : public SdMsgSupport {
     virtual void set_z(double);
     virtual bool isaDuration() const;
     virtual bool isOverlappingDuration() const;
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static SdLostFoundMsgSupportCanvas * read(char * & st, UmlCanvas * canvas, char * k);
 };
 

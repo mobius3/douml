@@ -24,10 +24,6 @@
 // *************************************************************************
 #include <qapplication.h>
 #include <qmessagebox.h>
-//Added by qt3to4:
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "UmlCom.h"
 #include "UmlItem.h"
@@ -44,7 +40,7 @@ int main(int argc, char ** argv)
   if (argc != 2)
       return 0;
   
-  if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
+  if (UmlCom::connect(QCString(argv[1]).toUInt())) {
     bool aborted = TRUE;
     
     try {
@@ -109,7 +105,7 @@ int main(int argc, char ** argv)
 	throw 0;
       }
 	
-      Q3CString f;
+      QCString f;
 	
       if (project->propertyValue("#file", f))
 	Lex::defines(f);
@@ -124,7 +120,7 @@ int main(int argc, char ** argv)
       
       // umark all
       {
-	Q3PtrVector<UmlItem> marked = UmlItem::markedItems();
+	QVector<UmlItem> marked = UmlItem::markedItems();
 	UmlItem ** v = marked.data();
 	UmlItem ** const vsup = v + marked.size();
 	
@@ -132,7 +128,7 @@ int main(int argc, char ** argv)
 	  (*v)->set_isMarked(FALSE);
       }
       
-      Q3PtrList<UmlItem> useless;
+      QList<UmlItem> useless;
       
       item->mark_useless(useless);
       
@@ -143,7 +139,7 @@ int main(int argc, char ** argv)
 				"Delete them ?",
 				"Yes", "No", QString::null, 1, 1)
 	   == 0)) {
-	Q3PtrListIterator<UmlItem> iter(useless);
+	QListIterator<UmlItem> iter(useless);
 	
 	do {
 	  if (iter.current()->isMarked())

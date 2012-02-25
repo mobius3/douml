@@ -37,9 +37,6 @@
 
 #include "util.h"
 #include "activity.h"
-//Added by qt3to4:
-#include <Q3ValueList>
-#include <Q3CString>
 
 //
 // add all concerning activities
@@ -172,7 +169,7 @@ void add_activity(UmlClassView * base_class_view, UmlClassView * user_class_view
 	      "#endif\n"
 	      "  UmlBaseItem::unload(rec, del);\n",
 	      FALSE, 0, 0);
-  Q3CString s = op->cppDecl();
+  QCString s = op->cppDecl();
   
   s.replace(s.find("${p0}"), 5, "= FALSE");
   s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -462,7 +459,7 @@ void add_flow(UmlClassView * base_class_view, UmlClassView * user_class_view,
 	      "  UmlBaseItem::unload(rec, del);\n",
 	      FALSE, 0, 0);
 
-  Q3CString s = op->cppDecl();
+  QCString s = op->cppDecl();
   
   s.replace(s.find("${p0}"), 5, "= FALSE");
   s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -725,7 +722,7 @@ void add_activityaction(UmlClassView * base_class_view, UmlClassView * user_clas
 	      "#endif\n"
 	      "  UmlBaseItem::unload(rec, del);\n",
 	      FALSE, 0, 0);
-  Q3CString s = op->cppDecl();
+  QCString s = op->cppDecl();
   
   s.replace(s.find("${p0}"), 5, "= FALSE");
   s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -1757,7 +1754,7 @@ UmlClass * add_activityobject(UmlClassView * base_class_view, UmlClassView * use
 	      "  UmlBaseActivityNode::unload(rec, del);\n",
 	      FALSE, 0, 0);
 
-  Q3CString s = op->cppDecl();
+  QCString s = op->cppDecl();
   
   s.replace(s.find("${p0}"), 5, "= FALSE");
   s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -1927,7 +1924,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
   defSetEnum(base_pinparam, _effect, set_Effect, effect, replaceParameterCmd, 0, 0, "effect");
 
   UmlAttribute * att;
-  Q3CString s;
+  QCString s;
   
   base_pinparam->add_attribute("_unique", PrivateVisibility, "bool", 0, 0, " : 1");    
   base_pinparam->add_attribute("_exception", PrivateVisibility, "bool", 0, 0, " : 1");  
@@ -2066,7 +2063,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
   
   op = base_parameterset->add_op("pins", PublicVisibility, user_activitypin);
   op->set_Description(" return the pins part of the parameter set");
-  op->set_cpp("const Q3PtrVector<${type}> &", "",
+  op->set_cpp("const QVector<${type}> &", "",
 	      "  read_if_needed_();\n"
 	      "  return _pins;\n",
 	      FALSE, 0, 0);
@@ -2077,8 +2074,8 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
   op = base_parameterset->add_op("set_Pins", PublicVisibility, "bool");
   op->set_Description(" set the pins");
   op->add_param(0, InputDirection, "v", user_activitypin);
-  op->set_cpp("${type}", "const Q3PtrVector<${t0}> & ${p0}",
-	      "  UmlCom::send_cmd(_identifier, replaceParameterCmd, (const Q3PtrVector<UmlItem> &) v);\n"
+  op->set_cpp("${type}", "const QVector<${t0}> & ${p0}",
+	      "  UmlCom::send_cmd(_identifier, replaceParameterCmd, (const QVector<UmlItem> &) v);\n"
 	      "  if (UmlCom::read_bool()) {\n"
 	      "    if (_defined) _pins = v;\n"
 	      "    return TRUE;\n"
@@ -2136,7 +2133,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
   op = base_parameterset->add_op("read_uml_", ProtectedVisibility, "void");
   op->set_cpp("${type}", "",
 	      "  UmlBaseItem::read_uml_();\n"
-	      "  UmlCom::read_item_list((Q3PtrVector<UmlItem> &) _pins);\n",
+	      "  UmlCom::read_item_list((QVector<UmlItem> &) _pins);\n",
 	      FALSE, 0, 0);
   op->set_java("${type}", "",
 	       "  super.read_uml_();\n"
@@ -2146,7 +2143,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
   
   // update an UmlCom::send_cmd
 
-  const Q3PtrVector<UmlItem> ch = UmlClass::get("UmlCom", 0)->children();
+  const QVector<UmlItem> ch = UmlClass::get("UmlCom", 0)->children();
   UmlClass * cl = UmlClass::get("UmlClass", 0);
   
   UmlCom::trace("update UmlCom::send_cmd(...)<br>\n");
@@ -2156,7 +2153,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
 	(ch[index]->name() == "send_cmd")) {
       op = (UmlOperation *) ch[index];
       
-      Q3ValueList<UmlParameter> params = op->params();
+      QValueList<UmlParameter> params = op->params();
       
       if (params.count() == 3) {
 	UmlParameter p = params.last();
@@ -2189,7 +2186,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
     UmlCom::trace("update UmlBaseArtifact::set_AssociatedClasses(...)<br>\n");
     s = op->cppBody();
     if ((index = s.find("l);")) != -1) {
-      s.insert(index, "(const Q3PtrVector<UmlItem> &) ");
+      s.insert(index, "(const QVector<UmlItem> &) ");
       op->set_CppBody(s);
     }
   }
@@ -2262,7 +2259,7 @@ void baseitem_read_activities(UmlClass * base_item)
   UmlOperation * op = base_item->get_operation("read_");
   
   if (op != 0) {
-    Q3CString body;
+    QCString body;
     
     body = op->cppBody();
     body.remove(body.findRev("//return new UmlActivityDiagram(id, name);"), 2);
@@ -2403,7 +2400,7 @@ void baseitem_read_activities(UmlClass * base_item)
   
   // update UmlBaseItem artifact
   UmlArtifact * art = base_item->associatedArtifact();
-  Q3CString s;
+  QCString s;
   
   s = art->cppSource();
   s.insert(s.find("#include \"MiscGlobalCmd.h\""),
@@ -2522,7 +2519,7 @@ void fixe_activity(UmlClass * base_pinparam)
  
   // dummy must have 5 bits rather than 4
   UmlAttribute * dummy = base_pinparam->get_attribute("_dummy");
-  Q3CString cppdecl = dummy->cppDecl();
+  QCString cppdecl = dummy->cppDecl();
   int index = cppdecl.find(": 4");
   
   if (index != -1) {
@@ -2566,7 +2563,7 @@ void fixe_activity(UmlClass * base_pinparam)
 			    UmlClass::get("UmlActivityItem", 0));
   
   if (rel == 0) {
-    Q3CString msg = "UmlParameterSet can't inherit UmlActivityItem<br>\n";
+    QCString msg = "UmlParameterSet can't inherit UmlActivityItem<br>\n";
     
     UmlCom::trace(msg);
     throw 0;
@@ -2659,7 +2656,7 @@ void add_partition(UmlClass * base_item, UmlClass * user_item)
   op->set_isCppVirtual(TRUE);
   
   // update read_()'s body  
-  Q3CString s;
+  QCString s;
   
   op = base_item->get_operation("read_");
 
@@ -2701,7 +2698,7 @@ void add_additionalactions(UmlClass * base_item, UmlClass * user_item)
   UmlArtifact * user_art = 
     UmlClass::get("UmlAcceptEventAction", 0)->associatedArtifact();
   UmlOperation * op;
-  Q3CString s;
+  QCString s;
   unsigned uid = UmlCom::user_id();
 
   UmlCom::trace("<b>Add some activity actions</b><br>\n");
@@ -3205,7 +3202,7 @@ void add_additionalactions(UmlClass * base_item, UmlClass * user_item)
   
   // replace friends rels
   
-  const Q3PtrVector<UmlItem> ch = base_item->children();
+  const QVector<UmlItem> ch = base_item->children();
   UmlExtraClassMember * ex = 0;
   
   i = ch.size();
@@ -3268,7 +3265,7 @@ void add_activity_specification()
 			      "_specification", PrivateVisibility,
 			      uml_oper, 0, 0);  
   
-  Q3CString s;
+  QCString s;
   
   op = base_activity->get_operation("read_uml_");
   

@@ -28,8 +28,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "BrowserStateAction.h"
 #include "StateActionData.h"
@@ -119,7 +117,7 @@ bool StateActionData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void StateActionData::save(Q3TextStream & st, QString & warning) const {
+void StateActionData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   if (! uml.isEmpty()) {
     nl_indent(st);

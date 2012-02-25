@@ -33,10 +33,6 @@
 #include "AType.h"
 #include "UmlEnum.h"
 #include "BasicData.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 class ActualParamData;
 class FormalParamData;
@@ -50,7 +46,7 @@ class ClassData : public BasicData {
   protected:
     MyStr constraint;
     FormalParamData * formals;		// remark : do NOT use QArray
-    Q3PtrList<ActualParamData> actuals;
+    QList<ActualParamData> actuals;
     AType base_type;			// typedef
     unsigned char nformals;
     bool is_deleted : 1;
@@ -101,9 +97,9 @@ class ClassData : public BasicData {
     virtual void send_idl_def(ToolCom * com);
     
     void update_actuals(BrowserClass *,
-			Q3PtrList<ActualParamData> & new_actuals,
-			Q3PtrList<ActualParamData> & managed);
-    void get_actuals(Q3PtrList<ActualParamData> & l, BrowserClass * parent);
+			QList<ActualParamData> & new_actuals,
+			QList<ActualParamData> & managed);
+    void get_actuals(QList<ActualParamData> & l, BrowserClass * parent);
     
   public:
     ClassData();
@@ -184,7 +180,7 @@ class ClassData : public BasicData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
     
     bool get_bodies_read() { return bodies_read; }

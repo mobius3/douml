@@ -6,7 +6,7 @@
 #include "UmlCollaborationMessage.h"
 #include "UmlClassInstanceReference.h"
 
-#include <q3ptrvector.h>
+#include <qvector.h>
 
 class UmlClassInstanceReference;
 class UmlCollaborationMessage;
@@ -15,21 +15,21 @@ class UmlCollaborationMessage;
 class UmlBaseCollaborationDiagramDefinition {
   public:
     // return the instances present in the diagram
-    const Q3PtrVector<UmlClassInstanceReference> & instances() const {
+    const QVector<UmlClassInstanceReference> & instances() const {
         return _instances;
     }
 
     // return the messages present in the diagram,
     // ordonned following their rank
-    const Q3PtrVector<UmlCollaborationMessage> & messages() const {
+    const QVector<UmlCollaborationMessage> & messages() const {
         return _messages;
     }
 
 
   private:
-    Q3PtrVector<UmlClassInstanceReference> _instances;
+    QVector<UmlClassInstanceReference> _instances;
 
-    Q3PtrVector<UmlCollaborationMessage> _messages;
+    QVector<UmlCollaborationMessage> _messages;
 
     // internal, don't call it
     void read_();

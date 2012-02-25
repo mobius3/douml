@@ -56,7 +56,7 @@ class DeploymentDiagramWindow : public DiagramWindow {
     
   public:
     DeploymentDiagramWindow(const QString & s, BrowserDeploymentDiagram * b, int id = -1);
-virtual ~DeploymentDiagramWindow();
+    ~DeploymentDiagramWindow();
 
     virtual DiagramView * get_view() const;
     

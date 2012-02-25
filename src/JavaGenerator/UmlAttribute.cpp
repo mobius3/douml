@@ -23,10 +23,7 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h> 
 
 #include "UmlAttribute.h"
 #include "UmlSettings.h"
@@ -35,13 +32,13 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlAttribute::generate(QTextOStream & f, const Q3CString & cl_stereotype,
-			    Q3CString indent) {
+void UmlAttribute::generate(QTextOStream & f, const QCString & cl_stereotype,
+			    QCString indent) {
   generate(f, cl_stereotype, indent, FALSE);
 }
 
-void UmlAttribute::generate(QTextOStream & f, const Q3CString & cl_stereotype,
-			    Q3CString indent, bool enumitem) {
+void UmlAttribute::generate(QTextOStream & f, const QCString & cl_stereotype,
+			    QCString indent, bool enumitem) {
   if (!javaDecl().isEmpty()) {
     const char * p = javaDecl();
     const char * pp = 0;
@@ -116,7 +113,7 @@ void UmlAttribute::generate(QTextOStream & f, const Q3CString & cl_stereotype,
       else if (!strncmp(p, "${multiplicity}", 15)) {
 	p += 15;
 	
-	Q3CString m = multiplicity();
+	QCString m = multiplicity();
 	
 	if (*m != '[')
 	  f << "[]";
@@ -166,8 +163,8 @@ void UmlAttribute::generate(QTextOStream & f, const Q3CString & cl_stereotype,
 }
 
 void UmlAttribute::generate_enum_pattern_item(QTextOStream & f, int & current_value,
-					      const Q3CString & class_name,
-					      Q3CString indent) {
+					      const QCString & class_name,
+					      QCString indent) {
   if (!javaDecl().isEmpty()) {
     const char * p = javaDecl();
     const char * pp = 0;
@@ -205,7 +202,7 @@ void UmlAttribute::generate_enum_pattern_item(QTextOStream & f, int & current_va
       else if (!strncmp(p, "${value}", 8)) {
 	p += 8;
 	if (!defaultValue().isEmpty()) {
-	  Q3CString d = defaultValue().simplifyWhiteSpace();
+	  QCString d = defaultValue().simplifyWhiteSpace();
 	  
 	  if (*((const char *) d) == '=')
 	    d = d.mid(1).simplifyWhiteSpace();
@@ -215,7 +212,7 @@ void UmlAttribute::generate_enum_pattern_item(QTextOStream & f, int & current_va
 	  
 	  v = d.toInt(&ok);
 	  if (! ok) {
-	    UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b><i>") +
+	    UmlCom::trace(QCString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b><i>") +
 			  defaultValue() + "</i> wrong value for <i> "
 			  + name() + "</i></b></font><br>");
 	    incr_error();
@@ -248,7 +245,7 @@ void UmlAttribute::generate_enum_pattern_item(QTextOStream & f, int & current_va
 }
 
 void UmlAttribute::generate_enum_pattern_case(QTextOStream & f,
-					      Q3CString indent) {
+					      QCString indent) {
   if (!javaDecl().isEmpty()) {
     const char * p = JavaSettings::enumPatternItemCase();
     const char * pp = 0;
@@ -293,7 +290,7 @@ void UmlAttribute::generate_enum_pattern_case(QTextOStream & f,
 }
 
 void UmlAttribute::generate_enum_item(QTextOStream & f,
-				      Q3CString indent,
+				      QCString indent,
 				      BooL & first) {
   if (stereotype() != "attribute") {
     if (first)
@@ -306,7 +303,7 @@ void UmlAttribute::generate_enum_item(QTextOStream & f,
 }
 
 void UmlAttribute::generate_enum_member(QTextOStream & f,
-					Q3CString indent) {
+					QCString indent) {
   if (stereotype() == "attribute")
     generate(f, "enum", indent, FALSE);
 }

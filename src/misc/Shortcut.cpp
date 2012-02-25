@@ -33,7 +33,7 @@
 #include <qobject.h>
 #include <qfile.h>
 #include <qdir.h>
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "Shortcut.h"
 #include "strutil.h"
@@ -66,9 +66,9 @@ void Shortcut::init(bool conv)
   MEMOKEY(SysReq, 0x100a);
   MEMOKEY(Home, 0x1010);
   MEMOKEY(End, 0x1011);
-  MEMOKEY(Qt::DockLeft, 0x1012);
+  MEMOKEY(Left, 0x1012);
   MEMOKEY(Up, 0x1013);
-  MEMOKEY(Qt::DockRight, 0x1014);
+  MEMOKEY(Right, 0x1014);
   MEMOKEY(Down, 0x1015);
   MEMOKEY(PageUp, 0x1016);
   MEMOKEY(PageDown, 0x1017);
@@ -300,12 +300,12 @@ QString Shortcut::shortcut(int key, int buttons)
   flags[0] = ' ';
   flags[1] = 0;
   
-  if (buttons & ::Qt::ShiftModifier) flags[0] += 1;
-  if (buttons & ::Qt::ControlModifier) flags[0] += 2;
-  if (buttons & ::Qt::AltModifier) flags[0] += 4;
+  if (buttons & ::Qt::ShiftButton) flags[0] += 1;
+  if (buttons & ::Qt::ControlButton) flags[0] += 2;
+  if (buttons & ::Qt::AltButton) flags[0] += 4;
   
   QMap<QString, QString>::ConstIterator it =
-    Shortcuts.find(QString(flags) + codeToName(key));
+    Shortcuts.find(flags + codeToName(key));
   
   return (it == Shortcuts.end()) ? QString::null : *it;
 }
@@ -326,7 +326,7 @@ void Shortcut::add(QString k, bool shift, bool ctrl, bool alt, QString s)
   if (ctrl) flags[0] += 2;
   if (alt) flags[0] += 4;
 
-  Shortcuts[QString(flags) + k] = s;
+  Shortcuts[flags + k] = s;
 }
 
 //
@@ -335,7 +335,7 @@ void Shortcut::save()
 {
   // note : QFile fp(QDir::home().absFilePath(".bouml_shortcuts")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = homeDir().absFilePath(".douml_shortcuts");
+  QString s = homeDir().absFilePath(".bouml_shortcuts");
   FILE * fp = fopen((const char *) s, "w");
   
   if (fp != 0) {
@@ -365,7 +365,7 @@ void Shortcut::save()
 static QString shortcut_file_path(bool conv)
 {
   if (! conv)
-    return ".douml_shortcuts";
+    return ".bouml_shortcuts";
   
   char * v = getenv("BOUML_ID");	// yes !
   int uid;
@@ -375,7 +375,7 @@ static QString shortcut_file_path(bool conv)
   
   char f[64];
   
-  sprintf(f, ".douml_shortcuts_%d", uid);
+  sprintf(f, ".bouml_shortcuts_%d", uid);
   return f;
 }
 

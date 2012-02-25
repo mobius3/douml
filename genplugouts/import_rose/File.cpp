@@ -3,11 +3,9 @@
 
 #include <stdlib.h>
 #include <qinputdialog.h>
-#include <q3dict.h>
+#include <qdict.h>
 #include <qfileinfo.h> 
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3CString>
 #include "UmlCom.h"
 
 File::File(QString s, QString here) {
@@ -25,7 +23,7 @@ File::File(QString s, QString here) {
     if ((index = s.find('/', index0 + 1)) == -1)
       index = s.length();
 
-    static Q3Dict<char> alias;
+    static QDict<char> alias;
 
     QString var = s.left(index);
     const char * val = alias[var];
@@ -64,12 +62,10 @@ File::File(QString s, QString here) {
 bool File::open(int m) {
   line_number = 1;
 
-  //[jasa] Possible QFile problem here.
-  //return QFile::open(m);//[jasa] original line.
-  return QFile::open((QIODevice::OpenModeFlag)m);//[jasa] fix ambiguous enum/int call 
+  return QFile::open(m);
 }
 
-int File::read(Q3CString & s) {
+int File::read(QCString & s) {
   if (unread_k != -1) {
     s = unread_s;
     
@@ -111,7 +107,7 @@ int File::read(Q3CString & s) {
 }
 
 void File::read(const char * e) {
-  Q3CString s;
+  QCString s;
 
   if (read(s) == -1)
     eof();
@@ -120,18 +116,18 @@ void File::read(const char * e) {
     syntaxError(s, e);
 }
 
-void File::unread(int k, const Q3CString & s) {
+void File::unread(int k, const QCString & s) {
  unread_k = k;
  unread_s = s;
 }
 
-Q3CString File::context() {
-  Q3CString s;
+QCString File::context() {
+  QCString s;
 
-  return Q3CString(name().toAscii()) + " line " + s.setNum(line_number);//[jasa] QString to Q3CString conversion
+  return QCString(name()) + " line " + s.setNum(line_number);
 }
 
-int File::readString(Q3CString & s) {
+int File::readString(QCString & s) {
   int c;
 
   while ((c = getch()) != '"') {
@@ -146,7 +142,7 @@ int File::readString(Q3CString & s) {
   return STRING;
 }
 
-int File::readMLString(Q3CString & s) {
+int File::readMLString(QCString & s) {
   for (;;) {
     int c = getch();
 
@@ -178,7 +174,7 @@ int File::readMLString(Q3CString & s) {
   }
 }
 
-int File::readAtom(Q3CString & s) {
+int File::readAtom(QCString & s) {
   for (;;) {
     int c = getch();
 
@@ -200,13 +196,13 @@ int File::readAtom(Q3CString & s) {
   }
 }
 
-void File::syntaxError(const Q3CString s) {
+void File::syntaxError(const QCString s) {
   UmlCom::trace("<br>syntax error near '" + s + "' in " + context());
   throw 0;
 }
 
-void File::syntaxError(const Q3CString s, const Q3CString e) {
-  Q3CString msg = "<br>'" + e + "' expected rather than '" + s + "' in " + context();
+void File::syntaxError(const QCString s, const QCString e) {
+  QCString msg = "<br>'" + e + "' expected rather than '" + s + "' in " + context();
   
   UmlCom::trace(msg);
   throw 0;
@@ -214,7 +210,7 @@ void File::syntaxError(const Q3CString s, const Q3CString e) {
 
 void File::skipBlock() {
   int lvl = 1;
-  Q3CString s;
+  QCString s;
 
   for(;;) {
     switch (read(s)) {
@@ -234,7 +230,7 @@ void File::skipBlock() {
 }
 
 void File::skipNextForm() {
-  Q3CString s;
+  QCString s;
 
   switch (read(s)) {
   case ')':
@@ -260,7 +256,7 @@ void File::rewind() {
 }
 
 aVisibility File::readVisibility() {
-  Q3CString s;
+  QCString s;
  
   if (read(s) == STRING) {
     if (s == "Private")
@@ -276,7 +272,7 @@ aVisibility File::readVisibility() {
 }
 
 bool File::readBool() {
-  Q3CString s;
+  QCString s;
  
   if (read(s) == ATOM) {
     if (s == "TRUE")
@@ -290,7 +286,7 @@ bool File::readBool() {
 }
 
 Language File::readLanguage() {
-  Q3CString s;
+  QCString s;
   
   if (read(s) != STRING)
     syntaxError(s, "a language");
@@ -311,7 +307,7 @@ Language File::readLanguage() {
   return None;
 }
 
-int File::readDefinitionBeginning(Q3CString & s, Q3CString & id, Q3CString & ste, Q3CString & doc, Q3Dict<Q3CString> & prop) {
+int File::readDefinitionBeginning(QCString & s, QCString & id, QCString & ste, QCString & doc, QDict<QCString> & prop) {
   for (;;) {
     int k = read(s);
     
@@ -350,7 +346,7 @@ int File::readDefinitionBeginning(Q3CString & s, Q3CString & id, Q3CString & ste
   }
 }
 
-void File::readProperties(Q3Dict<Q3CString> & d) {
+void File::readProperties(QDict<QCString> & d) {
   d.setAutoDelete(TRUE);
   
   read("(");
@@ -358,7 +354,7 @@ void File::readProperties(Q3Dict<Q3CString> & d) {
   read("Attribute_Set");
   
   for (;;) {
-    Q3CString s;
+    QCString s;
   
     switch (read(s)) {
     case ')':
@@ -373,7 +369,7 @@ void File::readProperties(Q3Dict<Q3CString> & d) {
       
       read("name");
       {
-	Q3CString s2;
+	QCString s2;
 	
 	if (read(s2) != STRING)
 	  syntaxError(s2, "the name");
@@ -395,7 +391,7 @@ void File::readProperties(Q3Dict<Q3CString> & d) {
 	  // no break !
 	case STRING:
 	case ATOM:
-	  d.insert(s, new Q3CString(s2));
+	  d.insert(s, new QCString(s2));
 	  break;
 	default:
 	  syntaxError(s, "the value");

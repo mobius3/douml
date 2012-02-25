@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= browsersort
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 HEADERS		= ./UmlActivityPin.h \
 		  ./TransitionBehavior.h \
 		  ./UmlBaseFinalState.h \
@@ -318,5 +318,3 @@ SOURCES		= ./UmlActivityPin.cpp \
 		  ./UmlBaseClassView.cpp \
 		  ./UmlBaseDeepHistoryPseudoState.cpp \
 		  ./UmlBaseShallowHistoryPseudoState.cpp
-#The following line was inserted by qt3to4
-QT += network  qt3support 

@@ -31,9 +31,7 @@
 
 
 #include <qobject.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qvaluelist.h>
 
 #include "ActivityContainerCanvas.h"
 
@@ -49,7 +47,7 @@ class ExpansionRegionCanvas : public QObject, public ActivityContainerCanvas {
     UmlColor used_color;
     int min_width;
     int min_height;
-    Q3ValueList<ExpansionNodeCanvas *> nodes;
+    QValueList<ExpansionNodeCanvas *> nodes;
     
   protected:
     ExpansionRegionCanvas(UmlCanvas * canvas, int id);
@@ -60,7 +58,7 @@ class ExpansionRegionCanvas : public QObject, public ActivityContainerCanvas {
     ExpansionRegionCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ExpansionRegionCanvas();
     
-    Q3ValueList<ExpansionNodeCanvas *> get_nodes() { return nodes; }
+    QValueList<ExpansionNodeCanvas *> get_nodes() { return nodes; }
     void add(ExpansionNodeCanvas * p) { nodes.append(p); }
     void force_nodes_arround();
     
@@ -91,7 +89,7 @@ class ExpansionRegionCanvas : public QObject, public ActivityContainerCanvas {
     virtual bool move_with_its_package() const;
     virtual void moveBy(double dx, double dy);
     
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ExpansionRegionCanvas * read(char * &, UmlCanvas *, char *);
     
     virtual void history_save(QBuffer &) const;
@@ -99,8 +97,8 @@ class ExpansionRegionCanvas : public QObject, public ActivityContainerCanvas {
     virtual void history_hide();
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     void edit_drawing_settings();
     
     virtual void apply_shortcut(QString s);

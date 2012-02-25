@@ -26,8 +26,6 @@
 #include "UmlCom.h"
 #include "UmlItem.h"
 #include "util.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 // roundtrip_body [-v] c++/java port
   
@@ -57,7 +55,7 @@ int main(int argc, char ** argv)
   else
     return 0;
   
-  if (UmlCom::connect(Q3CString(argv[port_index]).toUInt())) {
+  if (UmlCom::connect(QCString(argv[port_index]).toUInt())) {
     try {
       UmlCom::trace("<b>Roundtrip body</b> release 1.13<br>");
       UmlCom::traceAutoRaise(FALSE);
@@ -70,7 +68,7 @@ int main(int argc, char ** argv)
       else if (python)
 	UmlCom::targetItem()->roundtrip_python(); 
       
-      Q3CString s;
+      QCString s;
       
       s.sprintf("<hr><font face=helvetica>Roundtrip done : %d errors</font><br>",
 		n_errors());

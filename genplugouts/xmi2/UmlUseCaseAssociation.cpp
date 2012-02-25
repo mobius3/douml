@@ -13,7 +13,7 @@ void UmlUseCaseAssociation::write(FileOut & out, UmlItem * d, int rank, const ch
   out.id_prefix(d, "UCAC", rank);
   if (! name().isEmpty()){
     out << " name=\"";
-    out.quote((const char*)name());//[jasa] ambiguous call
+    out.quote(name());
     out << "\">\n";
   }
   else

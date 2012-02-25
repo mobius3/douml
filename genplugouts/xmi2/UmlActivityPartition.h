@@ -4,7 +4,7 @@
 
 #include "UmlBaseActivityPartition.h"
 #include "UmlActivityItem.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 
@@ -18,7 +18,7 @@ class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivity
     virtual void memo_incoming_flow();
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityPartition(void * id, const Q3CString & s) : UmlBaseActivityPartition(id, s) {
+     UmlActivityPartition(void * id, const QCString & s) : UmlBaseActivityPartition(id, s) {
     }
 
 };

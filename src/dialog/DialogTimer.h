@@ -36,11 +36,11 @@ class DialogTimer : public QTimer {
   protected:
     QString current;
     QString path;
-    Q3TabDialog * dlg;
+    QTabDialog * dlg;
     post_edit f;
     
   public:
-    DialogTimer(QString s, QString p, Q3TabDialog * d, post_edit pf);
+    DialogTimer(QString s, QString p, QTabDialog * d, post_edit pf);
   
   protected slots:
     virtual void readfile();

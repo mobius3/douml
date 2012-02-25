@@ -5,8 +5,6 @@
 #include "UmlItem.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlOperation::init()
 {
   declareFct("ownedoperation", "", &importIt);
@@ -20,7 +18,7 @@ void UmlOperation::importIt(FileIn & in, Token & token, UmlItem * where)
   if (where == 0)
     return;
     
-  Q3CString s = token.valueOf("name");
+  QCString s = token.valueOf("name");
   
   if (s.isEmpty()) {
     static unsigned n = 0;
@@ -48,7 +46,7 @@ void UmlOperation::importIt(FileIn & in, Token & token, UmlItem * where)
     op->set_isCppConst(TRUE);
 
   if (! token.closed()) {
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
     
     while (in.read(), !token.close(kstr)) {
@@ -68,7 +66,7 @@ void UmlOperation::importIt(FileIn & in, Token & token, UmlItem * where)
 }
 
 void UmlOperation::addException(Token & token, FileIn & in) {
-  Q3CString idref = token.xmiIdref();
+  QCString idref = token.xmiIdref();
   
   if (! idref.isEmpty()) {
     int n = exceptions().count();
@@ -84,7 +82,7 @@ void UmlOperation::addException(Token & token, FileIn & in) {
 
 void UmlOperation::addParameter(Token & token, FileIn & in) {
   UmlParameter p;
-  Q3CString s;
+  QCString s;
   
   p.name = token.valueOf("name");
     
@@ -106,7 +104,7 @@ void UmlOperation::addParameter(Token & token, FileIn & in) {
   if (!(s = token.valueOf("defaultvalue")).isEmpty())
     p.default_value = s;
     
-  Q3CString typeref = token.valueOf("type");
+  QCString typeref = token.valueOf("type");
   
   if (! typeref.isEmpty()) {
     if (p.dir == ReturnDirection) {
@@ -120,7 +118,7 @@ void UmlOperation::addParameter(Token & token, FileIn & in) {
   }
     
   if (! token.closed()) {
-    Q3CString k = token.what();
+    QCString k = token.what();
     const char * kstr = k;
     
     while (in.read(), !token.close(kstr)) {
@@ -155,7 +153,7 @@ void UmlOperation::addParameter(Token & token, FileIn & in) {
 
 }
 
-void UmlOperation::solve(int context, Q3CString idref) {
+void UmlOperation::solve(int context, QCString idref) {
   UmlTypeSpec ts;
   
   if (getType(idref, ts)) {

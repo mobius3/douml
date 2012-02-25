@@ -27,16 +27,11 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qfile.h> 
 #include <qcursor.h>
 #include <qapplication.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QDragMoveEvent>
+#include <qfiledialog.h>
 
 #include "BrowserPackage.h"
 #include "PackageData.h"
@@ -99,7 +94,7 @@
 #include "translate.h"
 
 IdDict<BrowserPackage> BrowserPackage::all(__FILE__);
-Q3PtrList<BrowserPackage> BrowserPackage::removed;
+QList<BrowserPackage> BrowserPackage::removed;
 
 QStringList BrowserPackage::its_default_stereotypes;	// unicode
 QStringList BrowserPackage::relation_default_stereotypes;	// unicode
@@ -384,13 +379,13 @@ void BrowserPackage::update_idmax_for_root()
 void BrowserPackage::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
 
-void BrowserPackage::support_file(Q3Dict<char> & files, bool add) const {
+void BrowserPackage::support_file(QDict<char> & files, bool add) const {
   QString s;
   
   s.setNum(get_ident());
@@ -400,13 +395,13 @@ void BrowserPackage::support_file(Q3Dict<char> & files, bool add) const {
   else
     files.remove(s);
   
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->support_file(files, add);
 }
 
-void BrowserPackage::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserPackage::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete) {
     BrowserActivityDiagram::compute_referenced_by(l, this, "packagecanvas", "package_ref");
@@ -462,7 +457,7 @@ void BrowserPackage::update_stereotype(bool rec) {
   }
   
   if (rec) {
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = firstChild(); child != 0; child = child->nextSibling())
       ((BrowserNode *) child)->update_stereotype(TRUE);
@@ -500,7 +495,7 @@ void BrowserPackage::prepare_for_sort()
 
 // just check if the inheritance already exist
 QString BrowserPackage::check_inherit(const BrowserNode * new_parent) const {
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling()) {
     BrowserNode * ch = ((BrowserNode *) child);
@@ -511,19 +506,19 @@ QString BrowserPackage::check_inherit(const BrowserNode * new_parent) const {
       return TR("already exist");
   }
   
-  return (new_parent != this) ? QString() : TR("circular inheritance");
+  return (new_parent != this) ? 0 : TR("circular inheritance");
 }
 
 static int phase_renumerotation = -1;
   
 void BrowserPackage::menu() {
-  Q3PopupMenu m(0);
-  Q3PopupMenu genm(0);
-  Q3PopupMenu revm(0);
-  Q3PopupMenu roundtripm(0);
-  Q3PopupMenu roundtripbodym(0);
-  Q3PopupMenu toolm(0);
-  Q3PopupMenu importm(0);
+  QPopupMenu m(0);
+  QPopupMenu genm(0);
+  QPopupMenu revm(0);
+  QPopupMenu roundtripm(0);
+  QPopupMenu roundtripbodym(0);
+  QPopupMenu toolm(0);
+  QPopupMenu importm(0);
   bool isprofile = (strcmp(def->get_stereotype(), "profile") == 0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
@@ -717,7 +712,7 @@ through a relation"));
 
 static bool contain_profile(BrowserPackage * p)
 {
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = p->firstChild(); child != 0; child = child->nextSibling()) {
     if (!((BrowserNode *) child)->deletedp() &&
@@ -1178,7 +1173,7 @@ BrowserPackage * BrowserPackage::import_project(QString fn, bool aslib, int id) 
   bool manual = fn.isEmpty();
   
   if (manual) {
-    fn = Q3FileDialog::getOpenFileName(last_used_directory(), "*.prj");
+    fn = QFileDialog::getOpenFileName(last_used_directory(), "*.prj");
     if (fn.isEmpty())
       return 0;
   }
@@ -1259,11 +1254,11 @@ void BrowserPackage::update_lib() {
     UmlWindow::save_it();
   }
   
-  Q3Dict<char> files;
+  QDict<char> files;
 
   support_file(files, TRUE);
   
-  Q3DictIterator<char> it(files);
+  QDictIterator<char> it(files);
   QDir d = BrowserView::get_dir();
       
   while (it.current()) {
@@ -1280,7 +1275,7 @@ void BrowserPackage::update_lib() {
       ++it;
   }
   
-  QString fn = Q3FileDialog::getOpenFileName(last_used_directory(), name + ".prj");
+  QString fn = QFileDialog::getOpenFileName(last_used_directory(), name + ".prj");
   
   if (fn.isEmpty())
     return;
@@ -1293,8 +1288,8 @@ void BrowserPackage::update_lib() {
   }
 
   BrowserPackage * container = (BrowserPackage *) parent();
-  Q3ListViewItem * previous = 0;  
-  Q3ListViewItem * child = container->firstChild();
+  QListViewItem * previous = 0;  
+  QListViewItem * child = container->firstChild();
   
   while (this != child) {
     previous = child;
@@ -1766,7 +1761,7 @@ BrowserPackage *
       return this;
     }
     else {
-      for (Q3ListViewItem * child = firstChild();
+      for (QListViewItem * child = firstChild();
 	   child != 0;
 	   child = child->nextSibling()) {
 	if (((BrowserNode *) child)->get_type() == UmlPackage) {
@@ -1818,9 +1813,9 @@ void BrowserPackage::DragMoveInsideEvent(QDragMoveEvent * e) {
     e->ignore();
 }
 
-bool BrowserPackage::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserPackage::may_contains_them(const QList<BrowserNode> & l,
 				       BooL & duplicable) const {
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -1869,7 +1864,7 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	  (parent() != 0) &&
 	  ((BrowserNode *) parent())->may_contains(bn, what == UmlPackage)) {
 	// have choice
-	Q3PopupMenu m(0);
+	QPopupMenu m(0);
   
 	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
 				   m.font()), -1);
@@ -1961,9 +1956,9 @@ void BrowserPackage::init()
 void BrowserPackage::save_stereotypes()
 {
   QByteArray newdef;
-  Q3TextStream st(newdef, QIODevice::WriteOnly);
+  QTextStream st(newdef, IO_WriteOnly);
 	
-  st.setEncoding(Q3TextStream::Latin1);
+  st.setEncoding(QTextStream::Latin1);
   
   nl_indent(st);
   st << "package_stereotypes ";
@@ -2075,7 +2070,7 @@ bool BrowserPackage::read_stereotypes(const char * f)
 
 bool BrowserPackage::import_stereotypes()
 {
-  QString fn = Q3FileDialog::getOpenFileName(last_used_directory(), "stereotypes");
+  QString fn = QFileDialog::getOpenFileName(last_used_directory(), "stereotypes");
       
   if (fn.isEmpty())
     return FALSE;
@@ -2086,7 +2081,7 @@ bool BrowserPackage::import_stereotypes()
 
 // save / restore
 
-void BrowserPackage::save(Q3TextStream & st, bool, QString &) {
+void BrowserPackage::save(QTextStream & st, bool, QString &) {
   // saves just its reference for its father
   nl_indent(st);
   st << "package_ref " << get_ident() << " // " << get_name();
@@ -2148,16 +2143,16 @@ void BrowserPackage::save_all(bool modified_only)
       for (;;) {
 	QFile fp(d.absFilePath(fn));
 	
-	while (!fp.open(QIODevice::WriteOnly))
+	while (!fp.open(IO_WriteOnly))
 	  (void) msg_critical(TR("Error"), TR("Cannot create file\n") + fn,
 			      QMessageBox::Retry);
 	
 	if (prj)
 	  UmlWindow::historic_add(fp.name());
 	
-	Q3TextStream st(&fp);
+	QTextStream st(&fp);
 	
-	st.setEncoding(Q3TextStream::Latin1);
+	st.setEncoding(QTextStream::Latin1);
 	
 	// saves the package own data
 	
@@ -2274,7 +2269,7 @@ void BrowserPackage::save_all(bool modified_only)
 	
 	// saves the package's sub elts
 	
-	Q3ListViewItem * child = pack->firstChild();
+	QListViewItem * child = pack->firstChild();
 	
 	if (child != 0) {
 	  for (;;) {
@@ -2346,14 +2341,14 @@ bool BrowserPackage::must_be_saved()
   return FALSE;
 }
 
-void BrowserPackage::save_session(Q3TextStream & st) {
+void BrowserPackage::save_session(QTextStream & st) {
   if (show_stereotypes)
     st << "show_stereotypes\n";
   
   QString warning;
   
   if (! marked_list.isEmpty()) {    
-    Q3PtrListIterator<BrowserNode> it(marked_list);
+    QListIterator<BrowserNode> it(marked_list);
     
     st << "marked\n";
     for (; it.current() != 0; ++it) {
@@ -2373,7 +2368,7 @@ void BrowserPackage::save_session(Q3TextStream & st) {
   }
   
   if (isOpen()) {
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     st << "open\n";
     
@@ -2393,7 +2388,7 @@ void BrowserPackage::save_session(Q3TextStream & st) {
   st << "end\n";
 }
 
-static void open_it(Q3ListViewItem * bn)
+static void open_it(QListViewItem * bn)
 {
   if (bn && !bn->isOpen()) {
     open_it(bn->parent());
@@ -2519,7 +2514,7 @@ unsigned BrowserPackage::load(bool recursive, int id) {
   
   ReadContext context = current_context();
   
-  if ((sz = open_file(fp, QIODevice::ReadOnly)) != -1) {
+  if ((sz = open_file(fp, IO_ReadOnly)) != -1) {
     char * s = new char[sz + 1];
     int offset = 0;
     int nread;
@@ -2785,14 +2780,14 @@ bool BrowserPackage::load_version(QString fn)
 {
   QFileInfo any_fi(fn);
   QDir d(any_fi.dirPath(TRUE));
-  const QFileInfoList l = d.entryInfoList("*.prj"); // [lgfreitas] entryInfoList does not return a pointer anymore
+  const QFileInfoList * l = d.entryInfoList("*.prj");
   
-  if (!l.empty()) {
-    QListIterator<QFileInfo> it(l);
-    QFileInfo fi = it.next(); // [lgfreitas] there is no it.current anymore to QList. Java-style iterators
+  if (l) {
+    QListIterator<QFileInfo> it(*l);
+    QFileInfo * fi = it.current();
     
-    if (fi.exists()) {
-      fn = fi.absFilePath();
+    if (fi != 0) {
+      fn = fi->absFilePath();
   
       char * s = read_file(fn);
       
@@ -2884,18 +2879,16 @@ void BrowserPackage::renumber(int phase) {
       BrowserNode::renumber(phase);
       
       QDir dir = BrowserView::get_dir();
-      const QFileInfoList l = dir.entryInfoList();
+      const QFileInfoList * l = dir.entryInfoList();
       
-      if (!l.empty()) {
-	QListIterator<QFileInfo> it(l);
-	QFileInfo fi;
+      if (l) {
+	QListIterator<QFileInfo> it(*l);
+	QFileInfo *fi;
 	
-	//[lgfreitas] Qlist changed
-	while (it.hasNext()) {
-		fi = it.next();
-	  if (fi.isFile() && fi.baseName().at(0).isDigit())
-	    dir.rename(fi.fileName(), "_" + fi.fileName());
-	  //++it;
+	while ((fi = it.current()) != 0) {
+	  if (fi->isFile() && fi->baseName().at(0).isDigit())
+	    dir.rename(fi->fileName(), "_" + fi->fileName());
+	  ++it;
 	}
       }
       clear(FALSE);
@@ -2916,17 +2909,15 @@ void BrowserPackage::renumber(int phase) {
     {
       QDir dir = BrowserView::get_dir();
       QString filter = "_*";
-      const QFileInfoList l = dir.entryInfoList(filter); //[lgfreitas] QList has changed...
+      const QFileInfoList * l = dir.entryInfoList(filter);
       
-      if (!l.empty()) {
-	QListIterator<QFileInfo> it(l);
-	QFileInfo fi;
+      if (l) {
+	QListIterator<QFileInfo> it(*l);
+	QFileInfo *fi;
 	
-	// [lgfreitas] QList has changed
-	while (it.hasNext()) {
-		fi = it.next();
-	  QFile::remove(fi.absFilePath());
-	  //++it;
+	while ((fi = it.current()) != 0) {
+	  QFile::remove(fi->absFilePath());
+	  ++it;
 	}
       }
     }

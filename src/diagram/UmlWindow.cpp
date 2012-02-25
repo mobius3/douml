@@ -30,30 +30,25 @@
 #include <qcursor.h>
 #include <qworkspace.h>
 #include <qsplitter.h>
-#include <q3vbox.h>
-#include <q3hbox.h>
-#include <q3multilineedit.h>
+#include <qvbox.h>
+#include <qhbox.h>
+#include <qmultilineedit.h>
 #include <qstatusbar.h>
 #include <qpixmap.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qmenubar.h>
 #ifndef QT_NO_PRINTER
 #include <qprinter.h>
 #endif
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qapplication.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qfileinfo.h> 
 #include <qwindowsstyle.h> 
 #include <qmotifstyle.h> 
-//#include <qmotifplusstyle.h> [lgfreitas] this does not exists anymore
-//Added by qt3to4:
-#include <QCloseEvent>
-#include <Q3ValueList>
-#include <Q3TextStream>
-#include <QKeyEvent>
+#include <qmotifplusstyle.h> 
 //#include <qcdestyle.h> 
 //#include <qsgistyle.h>
 
@@ -153,8 +148,8 @@ static QString prevText() { return TR("To select the previously selected element
 static QString nextText() { return TR("To select the next selected element in the <i>browser</i>."); }
 static QString completionText() { return TR("To ask or not for an auto completion (non case sensitive) in choice list (<i>combo box</i>)"); }
 
-UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClose) {
-  setCaption("DoUML");
+UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "Bouml", WDestructiveClose) {
+  setCaption("Bouml");
   
   the = this;
   commented = 0;
@@ -166,9 +161,8 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   
   QPixmap openIcon, saveIcon;
   
-  /* This part defines the buttons on the toolbar */
-  projectTools = new Q3ToolBar(this, "project operations");
-  addToolBar(projectTools, TR("Toolbar"), Qt::DockTop, TRUE);
+  projectTools = new QToolBar(this, "project operations");
+  addToolBar(projectTools, TR("Toolbar"), Top, TRUE);
   
   openIcon = QPixmap(fileopen);
   QToolButton * projectOpen
@@ -187,44 +181,44 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   QToolButton * diagramPrint
     = new QToolButton(printIcon, TR("Print diagram"), QString::null,
 		      this, SLOT(print()), projectTools, "print diagram");
-  Q3WhatsThis::add(diagramPrint, diagramPrintText());
+  QWhatsThis::add(diagramPrint, diagramPrintText());
 #endif
   
   QPixmap searchIcon = QPixmap(browsersearch);
   QToolButton * browserSearch
     = new QToolButton(searchIcon, TR("Browser search"), QString::null,
 		      this, SLOT(browser_search()), projectTools, "browser search");
-  Q3WhatsThis::add(browserSearch, browserSearchText());
+  QWhatsThis::add(browserSearch, browserSearchText());
   
   prev = new QToolButton(*leftPixmap, TR("previous selected"), QString::null,
 			 this, SLOT(prev_select()), projectTools, "previous selected");
-  Q3WhatsThis::add(prev, prevText());
+  QWhatsThis::add(prev, prevText());
   
   next = new QToolButton(*rightPixmap, TR("next selected"), QString::null,
 			 this, SLOT(next_select()), projectTools, "next selected");
-  Q3WhatsThis::add(next, nextText());
+  QWhatsThis::add(next, nextText());
   
-  (void)Q3WhatsThis::whatsThisButton(projectTools);
+  (void)QWhatsThis::whatsThisButton(projectTools);
 
-  Q3WhatsThis::add(projectOpen, projectOpenText());
-  Q3WhatsThis::add(projectSave, projectSaveText());
+  QWhatsThis::add(projectOpen, projectOpenText());
+  QWhatsThis::add(projectSave, projectSaveText());
   
-  projectMenu = new Q3PopupMenu(this);
+  projectMenu = new QPopupMenu(this);
   menuBar()->insertItem(TR("&Project"), projectMenu);
   connect(projectMenu, SIGNAL(aboutToShow()),
 	  this, SLOT(projectMenuAboutToShow()));
     
-  windowsMenu = new Q3PopupMenu(this);
+  windowsMenu = new QPopupMenu(this);
   windowsMenu->setCheckable(TRUE);
   connect(windowsMenu, SIGNAL(aboutToShow()),
 	  this, SLOT(windowsMenuAboutToShow()));
   menuBar()->insertItem(TR("&Windows"), windowsMenu);
   
-  toolMenu = new Q3PopupMenu(this);
+  toolMenu = new QPopupMenu(this);
   connect(toolMenu, SIGNAL(aboutToShow()), this, SLOT(toolMenuAboutToShow()));
   menuBar()->insertItem(TR("&Tools"), toolMenu);
 
-  langMenu = new Q3PopupMenu(this);
+  langMenu = new QPopupMenu(this);
   menuBar()->insertItem(TR("&Languages"), langMenu);
   langMenu->setCheckable(TRUE);
   connect(langMenu, SIGNAL(aboutToShow()),
@@ -265,7 +259,7 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
 			 SLOT(addoperationprofile()));
   langMenu->setWhatsThis(add_operation_profile_id, add_operation_profileText());
   
-  miscMenu = new Q3PopupMenu(this);
+  miscMenu = new QPopupMenu(this);
   menuBar()->insertItem(TR("&Miscellaneous"), miscMenu);
   miscMenu->setCheckable(TRUE);
   connect(miscMenu, SIGNAL(aboutToShow()),
@@ -283,7 +277,7 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   miscMenu->setItemChecked(completion_id, TRUE);
   miscMenu->setWhatsThis(completion_id, completionText());
   
-  Q3PopupMenu * pmstyle = new Q3PopupMenu(this);
+  QPopupMenu * pmstyle = new QPopupMenu(this);
   bool used = FALSE;
 
 #ifndef QT_NO_STYLE_MOTIF
@@ -305,7 +299,7 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
     miscMenu->insertItem(TR("Style"), pmstyle);
   style = '?';
   
-  fontSizeMenu = new Q3PopupMenu(this);
+  fontSizeMenu = new QPopupMenu(this);
   fontSizeMenu->setCheckable(TRUE);
   connect(fontSizeMenu, SIGNAL(aboutToShow()),
 	  this, SLOT(fontSizeMenuAboutToShow()));
@@ -320,8 +314,8 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   int id = miscMenu->insertItem(TR("Font size"), fontSizeMenu);
   miscMenu->setWhatsThis(id, fontSizeMenuText());
   
-  formatMenu = new Q3PopupMenu(this);
-  formatLandscapeMenu = new Q3PopupMenu(this);  
+  formatMenu = new QPopupMenu(this);
+  formatLandscapeMenu = new QPopupMenu(this);  
   connect(formatMenu, SIGNAL(aboutToShow()),
 	  this, SLOT(formatMenuAboutToShow()));
   init_format_menu(formatMenu, formatLandscapeMenu);
@@ -341,7 +335,7 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   img_root_dir_id = 
     miscMenu->insertItem(TR("Set images root dir"), this, SLOT(edit_image_root_dir()));
   
-  Q3PopupMenu * help = new Q3PopupMenu(this);
+  QPopupMenu * help = new QPopupMenu(this);
   menuBar()->insertItem(TR("&Help"), help);
   
   help->insertItem(TR("&About"), this, SLOT(about()), ::Qt::Key_F2);
@@ -354,8 +348,8 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   // sub windows
   //
   
-  spl1 = new QSplitter(Qt::Horizontal, this, "spl1");
-  spl2 = new QSplitter(Qt::Vertical, spl1, "spl2");
+  spl1 = new QSplitter(QSplitter::Horizontal, this, "spl1");
+  spl2 = new QSplitter(QSplitter::Vertical, spl1, "spl2");
   
   browser = new BrowserView(spl1);
   
@@ -374,7 +368,7 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   UmlDesktop::tocenter(this);
   
   // browser width = total width/4
-  Q3ValueList<int> lsz = spl1->sizes();
+  QValueList<int> lsz = spl1->sizes();
   
   lsz.first() = w/4;
   lsz.last() = w - lsz.first();
@@ -399,7 +393,7 @@ UmlWindow::UmlWindow(bool batch) : Q3MainWindow(0, "DoUML", Qt::WDestructiveClos
   
   // note : QFile fp(QDir::home().absFilePath(".bouml")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = homeDir().absFilePath(".douml");
+  QString s = homeDir().absFilePath(".bouml");
   FILE * fp = fopen((const char *) s, "r");
   
   if (fp != 0) {
@@ -439,7 +433,7 @@ UmlWindow::~UmlWindow() {
   exit(0);
 }
 
-void UmlWindow::init_format_menu(Q3PopupMenu * m, Q3PopupMenu * lm)
+void UmlWindow::init_format_menu(QPopupMenu * m, QPopupMenu * lm)
 {
   m->setCheckable(TRUE);
   lm->setCheckable(TRUE);
@@ -480,7 +474,7 @@ void UmlWindow::projectMenuAboutToShow() {
   projectMenu->clear();
   
   if (!BrowserNode::edition_active()) {
-    (void) user_id(); // force doumlrc read to have TemplateProject
+    (void) user_id(); // force boumlrc read to have TemplateProject
     
     int id;
     bool enabled =  (browser->get_project() != 0);
@@ -520,7 +514,7 @@ void UmlWindow::projectMenuAboutToShow() {
     
     if (enabled) {
       bool writable = browser->get_project()->is_writable();
-      Q3PopupMenu * ed = new Q3PopupMenu(this);
+      QPopupMenu * ed = new QPopupMenu(this);
     
       projectMenu->insertSeparator();
       projectMenu->insertItem(TR("Edit"), ed);
@@ -550,31 +544,31 @@ produced for an attribute etc..., and to set the root directories"));
     
     projectMenu->insertSeparator();
     QString whats = TR("to open this project.<br><br>The historic is saved in <i>%1</i>",
-		       homeDir().absFilePath(".douml"));
+		       homeDir().absFilePath(".bouml"));
     
     for (int i = 0; i < int(historic.count()); i += 1) {
-      id = projectMenu->insertItem(historic.at(i), //[lgfreitas] at now returns the string, not the iterator
+      id = projectMenu->insertItem(*historic.at(i),
 				   this, SLOT(historicActivated(int)));
       projectMenu->setItemParameter(id, i);
       projectMenu->setWhatsThis(id, whats);
     }
   }
   else
-    msg_warning("DoUML",
+    msg_warning("Bouml",
 		TR("Nothing available while a dialog is opened"));
 }
 
 void UmlWindow::historicActivated(int id) {
-  //QString str = historic.at(id); //[lgfreitas] at does not return a iterator anymore
-  // [lgfreitas] Loading from history disabled as it is buggy somewhere
-  /*if (id != historic.size()-1) {
+  QStringList::Iterator it = historic.at(id);
+  
+  if (it != historic.end()) {
     close();
   
     if (browser->get_project() == 0)
-      load(historic.at(id));
+      load(*it);
     else
       statusBar()->message(TR("Loading aborted"), 2000);
-  }*/
+  }
 }
 
 void UmlWindow::clear()
@@ -587,7 +581,7 @@ void UmlWindow::clear()
   }
   
   if (BrowserSearchDialog::get() != 0)
-    BrowserSearchDialog::get()->close();
+    BrowserSearchDialog::get()->close(TRUE);
 }
 
 void UmlWindow::toolMenuAboutToShow() {
@@ -740,7 +734,7 @@ void UmlWindow::newProject() {
     close();
     
     if (browser->get_project() == 0) {
-      QString f = Q3FileDialog::getSaveFileName(last_used_directory(), "*", this,
+      QString f = QFileDialog::getSaveFileName(last_used_directory(), "*", this,
 					       0, TR("Enter a folder name, this folder will be created and will name the new project"));
       
       if (!f.isEmpty()) {
@@ -782,7 +776,7 @@ void UmlWindow::load() {
     close();
     
     if (browser->get_project() == 0) {
-      QString fn = Q3FileDialog::getOpenFileName(last_used_directory(), "*.prj", this);
+      QString fn = QFileDialog::getOpenFileName(last_used_directory(), "*.prj", this);
       
       if (!fn.isEmpty()) {
 	set_last_used_directory(fn);
@@ -805,7 +799,7 @@ void UmlWindow::historic_add(QString fn)
   
   // note : QFile fp(QDir::home().absFilePath(".bouml")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = homeDir().absFilePath(".douml");
+  QString s = homeDir().absFilePath(".bouml");
   FILE * fp = fopen((const char *) s, "w");
   
   if (fp != 0) {
@@ -892,7 +886,7 @@ void UmlWindow::load(QString fn, bool forcesaveas) {
   idmax_add_margin();
   browser->get_project()->setOpen(TRUE);
   QApplication::restoreOverrideCursor();
-  setCaption("DoUML : " + fn);
+  setCaption("Bouml : " + fn);
   
   if (format < 20) {
     BrowserClass::plug_out_conversion();
@@ -902,7 +896,7 @@ void UmlWindow::load(QString fn, bool forcesaveas) {
     BrowserClass::new_java_enums(new_st);
     
     browser->get_project()->package_modified();
-    msg_warning("DoUML",
+    msg_warning("BOUML",
 		"Project conversion done.<br><br>"
 		"A <i>save-as</i> is forced now to save the result "
 		"in a new project, then the project will be closed");
@@ -925,7 +919,7 @@ void UmlWindow::load(QString fn, bool forcesaveas) {
     if (must_save_as)
       m += "A <i>save-as</i> is forced now to save the result in a new project";
     
-    msg_warning("DoUML", m);
+    msg_warning("Bouml", m);
     
     if (must_save_as || forcesaveas) {
       if (! saveas_it())
@@ -964,7 +958,7 @@ void UmlWindow::save() {
       QApplication::restoreOverrideCursor();
     }
     else
-      msg_warning("DoUML",
+      msg_warning("Bouml",
 		  TR("Saving can't be done while a dialog is opened"));
   }
 }
@@ -983,7 +977,7 @@ bool UmlWindow::saveas_it()
 {
   if (the->browser->get_project() && !BrowserNode::edition_active()) {
     for (;;) {
-      QString f = Q3FileDialog::getSaveFileName(last_used_directory(), "*", the,
+      QString f = QFileDialog::getSaveFileName(last_used_directory(), "*", the,
 					       0, TR("Enter a folder name, this folder will be created and will name the new project"));
       
       if (!f.isEmpty()) {
@@ -1013,7 +1007,7 @@ bool UmlWindow::saveas_it()
 	    BrowserPackage::save_all(FALSE);
 	  the->ws->show();
 	  QApplication::restoreOverrideCursor();
-	  the->setCaption("DoUML : " + f);
+	  the->setCaption("Bouml : " + f);
 	  return TRUE;
 	}
       }
@@ -1031,7 +1025,7 @@ bool UmlWindow::saveas_it()
 bool UmlWindow::can_close() {
   if (browser->get_project()) {
     if (BrowserPackage::must_be_saved()) {
-      switch (msg_warning("DoUML",
+      switch (msg_warning("Bouml",
 			  TR("The project is modified, save it ?\n"),
 			  QMessageBox::Yes, QMessageBox::No,
 			  QMessageBox::Cancel)) {
@@ -1085,7 +1079,6 @@ void UmlWindow::close_it()
     
     // close all diagram windows
     // do not hide ws, else a future diagram window opening will crash !
-	// [lgfreitas] browser clearing already delete each window
     the->clear();
     
     // empty the browser
@@ -1096,7 +1089,7 @@ void UmlWindow::close_it()
     the->toolMenu->clear();
     
     QApplication::restoreOverrideCursor();
-    the->setCaption("DoUML");
+    the->setCaption("Bouml");
   }
   
   Tool::init();
@@ -1142,10 +1135,10 @@ void UmlWindow::save_session() {
   
   QFile fp(d.absFilePath(fn));
       
-  if (open_file(fp, QIODevice::WriteOnly, TRUE) != -1) {
-    Q3TextStream st(&fp);
+  if (open_file(fp, IO_WriteOnly, TRUE) != -1) {
+    QTextStream st(&fp);
     
-    st.setEncoding(Q3TextStream::Latin1);
+    st.setEncoding(QTextStream::Latin1);
     
     st << "window_sizes " << width() << " " << height() << " "
        << spl1->sizes().first() << " " << spl1->sizes().last() << " "
@@ -1189,7 +1182,7 @@ void UmlWindow::read_session() {
   QFile fp(d.absFilePath(fn));
   int size;
       
-  if ((size = open_file(fp, QIODevice::ReadOnly, TRUE)) != -1) {
+  if ((size = open_file(fp, IO_ReadOnly, TRUE)) != -1) {
     char * s = new char[size + 1];
     
     if (fp.readBlock(s, size) != -1) {
@@ -1209,7 +1202,7 @@ void UmlWindow::read_session() {
 	  theApp->processEvents(/*500*/);
 	}
 	
-	Q3ValueList<int> lsz = spl1->sizes();
+	QValueList<int> lsz = spl1->sizes();
   
 	lsz.first() = read_unsigned(st);
 	lsz.last() = read_unsigned(st);
@@ -1299,7 +1292,7 @@ void UmlWindow::print() {
       ps = printer.pageSize();
       fp = printer.fullPage();
       
-      Q3PopupMenu m(0);
+      QPopupMenu m(0);
   
       m.insertItem(new MenuTitle(TR("Choose"), m.font()),  -1);
       m.insertSeparator();
@@ -1364,13 +1357,13 @@ void UmlWindow::preserve() {
   
   if (prj != 0) {
     if (!prj->is_writable())
-      msg_critical("DoUML", TR("Unchanged : project is read-only"));
+      msg_critical("Bouml", TR("Unchanged : project is read-only"));
     else {
       toggle_preserve_bodies();
       if (! preserve_bodies())
-	msg_warning("DoUML",
+	msg_warning("Bouml",
 		    TR("Warning : <i>Preserve operations's body</i> set to false.<br><br>"
-		       "If you had modified body of operation outside DoUML without "
+		       "If you had modified body of operation outside Bouml without "
 		       "using <i>roundtrip body</i> after these modifications, you "
 		       "will loose them.<br>"
 		       "If needed, set <i>Preserve operations's body</i> to true, apply "
@@ -1387,15 +1380,15 @@ void UmlWindow::addoperationprofile() {
   
   if (prj != 0) {
     if (!prj->is_writable())
-      msg_critical("DoUML", TR("Unchanged : project is read-only"));
+      msg_critical("Bouml", TR("Unchanged : project is read-only"));
     else {
       toggle_add_operation_profile();
       if (add_operation_profile() && preserve_bodies()) {
 	toggle_preserve_bodies();
-	msg_critical("DoUML",
+	msg_critical("Bouml",
 		     TR("Warning : <i>Preserve operations's body</i> toggle is cleared !<br><br>"
 			"Next code generations will replace operations's body<br><br>"
-			"If you had modified body of operation outside DoUML without "
+			"If you had modified body of operation outside Bouml without "
 			"using <i>roundtrip body</i> after these modifications, you "
 			"will loose them.<br>"
 			"If needed, set <i>Preserve operations's body</i> to true, apply "
@@ -1416,15 +1409,15 @@ void UmlWindow::edit_env() {
   EnvDialog::edit(FALSE);
   
   if (BrowserView::get_project() == 0)
-    // id was set by reading doumlrc
+    // id was set by reading boumlrc
     set_user_id(-1);
   else
-    read_doumlrc();
+    read_boumlrc();
 }
 
 void UmlWindow::edit_image_root_dir() {
   QString s = 
-    Q3FileDialog::getExistingDirectory(img_root_dir, 0, 0,
+    QFileDialog::getExistingDirectory(img_root_dir, 0, 0,
 				      TR("Select images root directory"));
   
   if (! s.isEmpty()) {
@@ -1499,7 +1492,7 @@ void UmlWindow::setFontSize(int i) {
   
   if (prj != 0) {
     if (!prj->is_writable() &&
-	(msg_warning("DoUML",
+	(msg_warning("Bouml",
 		     TR("Project file is read-only, new font "
 			"size will not be saved, continue ?\n"),
 		     QMessageBox::Yes, QMessageBox::No)
@@ -1554,7 +1547,7 @@ void UmlWindow::setFormat(int i) {
   
   if (prj != 0) {
     if (!prj->is_writable() &&
-	(msg_warning("DoUML",
+	(msg_warning("Bouml",
 		     TR("Project file is read-only, default "
 			"format will not be saved, continue ?\n"),
 		     QMessageBox::Yes, QMessageBox::No)
@@ -1607,7 +1600,6 @@ void UmlWindow::motif_style() {
 }
 
 void UmlWindow::motifplus_style() {
-#define QT_NO_STYLE_MOTIFPLUS
 #ifndef QT_NO_STYLE_MOTIFPLUS
   QApplication::setStyle(new QMotifPlusStyle);
   style = '+';
@@ -1805,7 +1797,7 @@ void UmlWindow::import_tool_settings() {
 
 void UmlWindow::help() {
   if (BrowserView::get_project() == 0)
-    read_doumlrc();
+    read_boumlrc();
   
   const char * topic = 
     (browser->get_project() == 0)
@@ -1817,7 +1809,7 @@ void UmlWindow::help() {
   HelpDialog::show(topic);
   
   if (BrowserView::get_project() == 0)
-    // id was set by reading doumlrc
+    // id was set by reading boumlrc
     set_user_id(-1);
 }
 
@@ -1828,7 +1820,7 @@ void UmlWindow::about() {
 }
 
 void UmlWindow::aboutQt() {
-  QMessageBox::aboutQt(this, "DoUML");
+  QMessageBox::aboutQt(this, "Bouml");
 }
 
 void UmlWindow::windowsMenuAboutToShow() {
@@ -1875,30 +1867,22 @@ void UmlWindow::windowsMenuAboutToShow() {
 
 void UmlWindow::preferred_geometry() {
   QWidgetList l = the->ws->windowList();
-  QWidgetList::iterator it = l.begin();
   QWidget * w;
-
-  //for (w = l.first(); w != 0; w = l.next())
-  for (QWidgetList::iterator it = l.begin(); it != l.end(); it++) {
-	  w = *it; // qlist no longer is a iterator itself
-	  ((DiagramWindow *) w)->get_view()->preferred_size_zoom();
-  }
+  
+  for (w = l.first(); w != 0; w = l.next())
+    ((DiagramWindow *) w)->get_view()->preferred_size_zoom();
 }
 
 void UmlWindow::close_all_windows() {
   QWidgetList l = the->ws->windowList();
   QWidget * w;
   
-  for (QWidgetList::iterator it = l.begin(); it != l.end(); it++) {
-	w = *it; // qlist no longer is a iterator itself
+  for (w = l.first(); w != 0; w = l.next())
     ((DiagramWindow *) w)->close();
-  }
   
   l = dialogs();
-  for (QWidgetList::iterator it = l.begin(); it != l.end(); it++) {
-	w = *it; // qlist no longer is a iterator itself
+  for (w = l.first(); w != 0; w = l.next())
     w->close();
-  }
 }
 
 void UmlWindow::windowsMenuActivated(int id) {
@@ -1923,10 +1907,8 @@ void UmlWindow::abort_line_construction() {
   QWidgetList l = the->ws->windowList();
   QWidget * w;
   
-    for (QWidgetList::iterator it = l.begin(); it != l.end(); it++) {
-	  w = *it; // qlist no longer is a iterator itself
-	  ((DiagramWindow *) w)->get_view()->abort_line_construction();
-	}
+  for (w = l.first(); w != 0; w = l.next())
+    ((DiagramWindow *) w)->get_view()->abort_line_construction();
 }
 
 //
@@ -1951,13 +1933,13 @@ void UmlWindow::keyPressEvent(QKeyEvent * e) {
       UmlWindow::load_it();
   }
   else
-    Q3MainWindow::keyPressEvent(e);
+    QMainWindow::keyPressEvent(e);
 }
 
 //
 
 static bool OnHistoric = FALSE;
-static Q3ValueList<BrowserNode *>::Iterator HistoricIterator;
+static QValueList<BrowserNode *>::Iterator HistoricIterator;
 
 void UmlWindow::clear_select_historic()
 {

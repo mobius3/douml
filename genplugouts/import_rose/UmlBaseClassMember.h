@@ -4,7 +4,7 @@
 
 #include "UmlClassItem.h"
 #include "aVisibility.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlBaseClassItem.h"
 
 // This class manages 'true' class's items : attributes, relation,
@@ -69,7 +69,7 @@ class UmlBaseClassMember : public UmlClassItem {
 
 
   protected:
-    UmlBaseClassMember(void * id, const Q3CString & n) : UmlClassItem(id, n) {};
+    UmlBaseClassMember(void * id, const QCString & n) : UmlClassItem(id, n) {};
 
     void read_uml_();
 

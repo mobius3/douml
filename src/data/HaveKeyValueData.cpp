@@ -27,7 +27,7 @@
 
 
 
-#include <q3textstream.h> 
+#include <qtextstream.h> 
 
 #include "HaveKeyValueData.h"
 #include "KeyValueData.h"
@@ -149,7 +149,7 @@ void HaveKeyValueData::set_value(const char * k, const char * v) {
   nkeyvalues += 1;
 }
 
-void HaveKeyValueData::save(Q3TextStream & st) const {
+void HaveKeyValueData::save(QTextStream & st) const {
   if (nkeyvalues) {
     nl_indent(st);
     st << "ncouples " << nkeyvalues;

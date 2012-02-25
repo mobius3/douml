@@ -41,7 +41,7 @@ class ContinuationDialog : public QDialog {
   
   public:
     ContinuationDialog(QString & s);
-virtual ~ContinuationDialog();
+    ~ContinuationDialog();
   
   protected slots:
     virtual void polish();

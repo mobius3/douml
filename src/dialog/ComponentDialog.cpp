@@ -27,14 +27,12 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qcheckbox.h> 
-//Added by qt3to4:
-#include <Q3ValueList>
 
 #include "ComponentDialog.h"
 #include "BrowserComponent.h"
@@ -54,7 +52,7 @@
 QSize ComponentDialog::previous_size;
 
 ComponentDialog::ComponentDialog(SimpleData * nd)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), data(nd) {
   nd->get_browser_node()->edit_start();
   
   if (nd->get_browser_node()->is_writable()) {
@@ -89,7 +87,7 @@ ComponentDialog::ComponentDialog(SimpleData * nd)
 
   // USER : list key - value
   
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -106,7 +104,7 @@ ComponentDialog::ComponentDialog(SimpleData * nd)
 }
 
 void ComponentDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::setsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -129,8 +127,8 @@ void ComponentDialog::init_uml_tab() {
   bool visit = !hasOkButton();  
   
   BrowserComponent * bn = (BrowserComponent *) data->get_browser_node();
-  Q3VBox * vbox;
-  Q3Grid * grid = new Q3Grid(2, this);
+  QVBox * vbox;
+  QGrid * grid = new QGrid(2, this);
   
   umltab = grid;
   grid->setMargin(5);
@@ -141,7 +139,7 @@ void ComponentDialog::init_uml_tab() {
   edname->setReadOnly(visit);
     
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(TRUE, grid);
+  edstereotype = new QComboBox(TRUE, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(BrowserComponent::default_stereotypes());
@@ -153,7 +151,7 @@ void ComponentDialog::init_uml_tab() {
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
     
-  vbox = new Q3VBox(grid);
+  vbox = new QVBox(grid);
   new QLabel(TR("description :"), vbox);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
@@ -170,25 +168,25 @@ void ComponentDialog::init_uml_tab() {
   addTab(grid, "Uml");
 }
 
-void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
+void ComponentDialog::init_l_tab(QVBox *& page, QComboBox *& stereotypefilter,
 				 void (ComponentDialog::* filteractivated)(const QString & st),
 				 const char * slt,
 				 const char * add_slt, const char * remove_slt,
-				 Q3ListBox *& lb_available, Q3ListBox *& lb,
-				 const Q3ValueList<BrowserClass *> & cls,
+				 QListBox *& lb_available, QListBox *& lb,
+				 const QValueList<BrowserClass *> & cls,
 				 const char * lbl) {
   bool visit = !hasOkButton();  
-  Q3HBox * hbox;
-  Q3VBox * vbox;  
+  QHBox * hbox;
+  QVBox * vbox;  
   QPushButton * button;
   
-  page = new Q3VBox(this);
+  page = new QVBox(this);
   
   if (!visit) {
-    hbox = new Q3HBox(page);
+    hbox = new QHBox(page);
     hbox->setMargin(5);
     new QLabel(TR("Stereotype filtering  "), hbox);
-    stereotypefilter = new Q3ComboBox(TRUE, hbox);
+    stereotypefilter = new QComboBox(TRUE, hbox);
     stereotypefilter->setAutoCompletion(completion());
     stereotypefilter->insertItem("");
     stereotypefilter->insertStringList(BrowserClass::default_stereotypes());
@@ -200,14 +198,14 @@ void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
     connect(stereotypefilter, SIGNAL(activated(const QString &)),
 	    this, slt);
     
-    hbox = new Q3HBox(page);
-    vbox = new Q3VBox(hbox);
+    hbox = new QHBox(page);
+    vbox = new QVBox(hbox);
     vbox->setMargin(5);
-    (new QLabel(TR("Available classes"), vbox))->setAlignment(Qt::AlignCenter);
-    lb_available = new Q3ListBox(vbox);
-    lb_available->setSelectionMode(Q3ListBox::Multi);
+    (new QLabel(TR("Available classes"), vbox))->setAlignment(AlignCenter);
+    lb_available = new QListBox(vbox);
+    lb_available->setSelectionMode(QListBox::Multi);
     
-    vbox = new Q3VBox(hbox);
+    vbox = new QVBox(hbox);
     vbox->setMargin(5);
     (new QLabel("", vbox))->setScaledContents(TRUE);
     button = new QPushButton(vbox);
@@ -218,18 +216,18 @@ void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
     button->setPixmap(*leftPixmap);
     connect(button, SIGNAL(clicked()), this, remove_slt);
     (new QLabel("", vbox))->setScaledContents(TRUE);
-    vbox = new Q3VBox(hbox);
+    vbox = new QVBox(hbox);
   }
   else
     vbox = page;
   
   vbox->setMargin(5);
-  (new QLabel(lbl, vbox))->setAlignment(Qt::AlignCenter);
-  lb = new Q3ListBox(vbox);
-  lb->setSelectionMode((visit) ? Q3ListBox::NoSelection
-			       : Q3ListBox::Multi);
+  (new QLabel(lbl, vbox))->setAlignment(AlignCenter);
+  lb = new QListBox(vbox);
+  lb->setSelectionMode((visit) ? QListBox::NoSelection
+			       : QListBox::Multi);
   
-  Q3ValueList<BrowserClass *>::ConstIterator it;
+  QValueList<BrowserClass *>::ConstIterator it;
   
   for (it = cls.begin(); it != cls.end(); ++it)
     if (!(*it)->deletedp())
@@ -292,7 +290,7 @@ void ComponentDialog::require_cls() {
   unsigned int i = 0;
   
   while (i != lb_rq_available->count()) {
-    Q3ListBoxItem * item = lb_rq_available->item(i);
+    QListBoxItem * item = lb_rq_available->item(i);
     
     if (item->selected()) {
       rqs.append((BrowserClass *) ((ListBoxBrowserNode *) item)->browser_node);
@@ -310,7 +308,7 @@ void ComponentDialog::unrequire_cls() {
   unsigned int i = 0;
   
   while (i != lb_rq->count()) {
-    Q3ListBoxItem * item = lb_rq->item(i);
+    QListBoxItem * item = lb_rq->item(i);
     
     if (item->selected()) {
       BrowserNode * c = ((ListBoxBrowserNode *) item)->browser_node;
@@ -334,7 +332,7 @@ void ComponentDialog::provide_cls() {
   unsigned int i = 0;
   
   while (i != lb_pr_available->count()) {
-    Q3ListBoxItem * item = lb_pr_available->item(i);
+    QListBoxItem * item = lb_pr_available->item(i);
     
     if (item->selected()) {
       prs.append((BrowserClass *) ((ListBoxBrowserNode *) item)->browser_node);
@@ -352,7 +350,7 @@ void ComponentDialog::unprovide_cls() {
   unsigned int i = 0;
   
   while (i != lb_pr->count()) {
-    Q3ListBoxItem * item = lb_pr->item(i);
+    QListBoxItem * item = lb_pr->item(i);
     
     if (item->selected()) {
       BrowserNode * c = ((ListBoxBrowserNode *) item)->browser_node;
@@ -376,7 +374,7 @@ void ComponentDialog::realize_cls() {
   unsigned int i = 0;
   
   while (i != lb_rz_available->count()) {
-    Q3ListBoxItem * item = lb_rz_available->item(i);
+    QListBoxItem * item = lb_rz_available->item(i);
     
     if (item->selected()) {
       rzs.append((BrowserClass *) ((ListBoxBrowserNode *) item)->browser_node);
@@ -394,7 +392,7 @@ void ComponentDialog::unrealize_cls() {
   unsigned int i = 0;
   
   while (i != lb_rz->count()) {
-    Q3ListBoxItem * item = lb_rz->item(i);
+    QListBoxItem * item = lb_rz->item(i);
     
     if (item->selected()) {
       BrowserNode * c = ((ListBoxBrowserNode *) item)->browser_node;
@@ -441,9 +439,9 @@ void ComponentDialog::accept() {
     UmlWindow::update_comment_if_needed(bn);
             
     bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
-    Q3ValueList<BrowserClass *> rq;
-    Q3ValueList<BrowserClass *> rz;
-    Q3ValueList<BrowserClass *> pr;
+    QValueList<BrowserClass *> rq;
+    QValueList<BrowserClass *> rz;
+    QValueList<BrowserClass *> pr;
     
     unsigned int i;
     unsigned int n;
@@ -465,6 +463,6 @@ void ComponentDialog::accept() {
     bn->package_modified();
     data->modified();
     
-    Q3TabDialog::accept();
+    QTabDialog::accept();
   }
 }

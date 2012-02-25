@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseInterruptibleActivityRegion.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "anItemKind.h"
 
 class UmlItem;
@@ -13,7 +13,7 @@ class FileIn;
 class UmlInterruptibleActivityRegion : public UmlBaseInterruptibleActivityRegion {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlInterruptibleActivityRegion(void * id, const Q3CString & s) : UmlBaseInterruptibleActivityRegion(id, s) {
+     UmlInterruptibleActivityRegion(void * id, const QCString & s) : UmlBaseInterruptibleActivityRegion(id, s) {
     }
 
     //returns the first container for a 'kind', going up in the browser tree

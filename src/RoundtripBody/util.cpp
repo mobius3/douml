@@ -24,13 +24,11 @@
 // *************************************************************************
 
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "util.h"
 #include "UmlCom.h"
 
-static Q3CString TraceHeader;
+static QCString TraceHeader;
 static bool Verbose = FALSE;
 
 void set_verbose()
@@ -43,12 +41,12 @@ bool verbose()
   return Verbose;
 }
 
-void set_trace_header(Q3CString s)
+void set_trace_header(QCString s)
 {
   TraceHeader = s;
 }
 
-Q3CString get_trace_header()
+QCString get_trace_header()
 {
   return TraceHeader;
 }

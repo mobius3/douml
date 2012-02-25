@@ -27,10 +27,6 @@
 #define UMLCLASSMEMBER_H
 
 #include "UmlBaseClassMember.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
-#include <Q3PtrList>
 
 // This class globaly manages class's operations, relations, attributes
 // and sub-classes
@@ -38,21 +34,21 @@
 
 class UmlClassMember : public UmlBaseClassMember {
   public:
-    UmlClassMember(void * id, const Q3CString & n)
+    UmlClassMember(void * id, const QCString & n)
       : UmlBaseClassMember(id, n) {};
     
-    static void remove_comments(Q3CString & s);
-    static void remove_arrays(Q3CString & s);
-    static void remove_preprocessor(Q3CString & s);
-    static bool compute_dependency(Q3PtrList<CppRefType> & dependency,
-				   Q3CString decl, const UmlTypeSpec &,
+    static void remove_comments(QCString & s);
+    static void remove_arrays(QCString & s);
+    static void remove_preprocessor(QCString & s);
+    static bool compute_dependency(QList<CppRefType> & dependency,
+				   QCString decl, const UmlTypeSpec &,
 				   bool force_incl = FALSE);
 
     void generate_visibility(aVisibility & current_visibility,
 			     QTextOStream & f_h, bool ahead,
-			     const Q3CString & indent);
+			     const QCString & indent);
     bool insert_template(const char *& p, QTextOStream & fs,
-			 const Q3CString & indent, const Q3CString & templ);
+			 const QCString & indent, const QCString & templ);
 };
 
 #endif

@@ -2,7 +2,7 @@
 #define _UMLACTIVITYITEM_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 class UmlActivity;
@@ -13,7 +13,7 @@ class UmlActivityItem {
     
     virtual void memo_incoming_flow() = 0;
 
-    void write_selection(FileOut & out, Q3CString s);
+    void write_selection(FileOut & out, QCString s);
 
     UmlActivity * activity();
 

@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
 
 #include "ComponentCanvas.h"
 #include "ArrowJunctionCanvas.h"
@@ -155,9 +151,9 @@ void ComponentCanvas::compute_size() {
       min_width = w;
     
     BrowserComponent * comp = (BrowserComponent *) browser_node;
-    const Q3ValueList<BrowserClass *> & pr = comp->get_provided_classes();
-    const Q3ValueList<BrowserClass *> & rq = comp->get_required_classes();
-    const Q3ValueList<BrowserClass *> & rz = comp->get_realizing_classes();
+    const QValueList<BrowserClass *> & pr = comp->get_provided_classes();
+    const QValueList<BrowserClass *> & rq = comp->get_required_classes();
+    const QValueList<BrowserClass *> & rz = comp->get_realizing_classes();
     int lh = fm.height() + four;	// line height
     
     if (req_prov && (!pr.isEmpty() || !rq.isEmpty())) {
@@ -170,7 +166,7 @@ void ComponentCanvas::compute_size() {
 	if (min_width < w)
 	  min_width = w;
 	
-	for (Q3ValueList<BrowserClass *>::ConstIterator it = pr.begin();
+	for (QValueList<BrowserClass *>::ConstIterator it = pr.begin();
 	     it != pr.end();
 	     it++) {
 	  // add a left margin of 14, a right of 2
@@ -189,7 +185,7 @@ void ComponentCanvas::compute_size() {
 	if (min_width < w)
 	  min_width = w;
 	
-	for (Q3ValueList<BrowserClass *>::ConstIterator it = rq.begin();
+	for (QValueList<BrowserClass *>::ConstIterator it = rq.begin();
 	     it != rq.end();
 	     it++) {
 	  // add a left margin of 14, a right of 2
@@ -212,7 +208,7 @@ void ComponentCanvas::compute_size() {
       if (min_width < w)
 	min_width = w;
       
-      for (Q3ValueList<BrowserClass *>::ConstIterator it = rz.begin();
+      for (QValueList<BrowserClass *>::ConstIterator it = rz.begin();
 	   it != rz.end();
 	   it++) {
 	// add a left margin of 12
@@ -278,7 +274,7 @@ void ComponentCanvas::compute_size() {
 }
 
 void ComponentCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   if (!as_icon) {
     double scale = the_canvas()->zoom();
     
@@ -286,11 +282,11 @@ void ComponentCanvas::change_scale() {
   }
   compute_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 bool ComponentCanvas::valid(ArrowCanvas * a) const {
-  Q3ValueList<BrowserClass *> l;
+  QValueList<BrowserClass *> l;
   
   switch (a->type()) {
   case UmlRequired:
@@ -347,7 +343,7 @@ void ComponentCanvas::check_line(ArrowCanvas * l) {
 
 bool ComponentCanvas::connexion(UmlCode action, const QPoint &, const QPoint & p) {
   BrowserComponent * comp = (BrowserComponent *) browser_node;
-  Q3ValueList<BrowserClass *> l;
+  QValueList<BrowserClass *> l;
    
   if (action == UmlProvided) 
     comp->get_all_provided_classes(l, TRUE);
@@ -359,7 +355,7 @@ bool ComponentCanvas::connexion(UmlCode action, const QPoint &, const QPoint & p
   if (dialog.exec() != QDialog::Accepted)
     return FALSE;
   
-  Q3ValueList<BrowserClass *>::ConstIterator it = l.at(dialog.choosen());
+  QValueList<BrowserClass *>::ConstIterator it = l.at(dialog.choosen());
   ArrowJunctionCanvas * aj =
     new ArrowJunctionCanvas(the_canvas(), p.x(), p.y(), *it, 0); 
   
@@ -408,9 +404,9 @@ void ComponentCanvas::prepare_for_move(bool on_resize) {
   if (! on_resize) {
     DiagramCanvas::prepare_for_move(on_resize);
     
-    Q3CanvasItemList l = collisions(TRUE);
-    Q3CanvasItemList::ConstIterator it;
-    Q3CanvasItemList::ConstIterator end = l.end();
+    QCanvasItemList l = collisions(TRUE);
+    QCanvasItemList::ConstIterator it;
+    QCanvasItemList::ConstIterator end = l.end();
     DiagramItem * di;
     BrowserNode * p = get_bn();
   
@@ -433,7 +429,7 @@ bool ComponentCanvas::move_with_its_package() const {
 
 void ComponentCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   const BasicData * data = browser_node->get_data();
   QRect r = rect();  
   QColor bckgrnd = p.backgroundColor();
@@ -475,12 +471,12 @@ void ComponentCanvas::draw(QPainter & p) {
 	if (fp != 0) {
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff,
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff,
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
 	}
       }
@@ -565,9 +561,9 @@ void ComponentCanvas::draw(QPainter & p) {
     // compartments
     
     BrowserComponent * comp = (BrowserComponent *) browser_node;
-    const Q3ValueList<BrowserClass *> & pr = comp->get_provided_classes();
-    const Q3ValueList<BrowserClass *> & rq = comp->get_required_classes();
-    const Q3ValueList<BrowserClass *> & rz = comp->get_realizing_classes();
+    const QValueList<BrowserClass *> & pr = comp->get_provided_classes();
+    const QValueList<BrowserClass *> & rq = comp->get_required_classes();
+    const QValueList<BrowserClass *> & rz = comp->get_realizing_classes();
     int lh = fm.height() + four;	// line height
     
     r = re;
@@ -595,7 +591,7 @@ void ComponentCanvas::draw(QPainter & p) {
 	r.setLeft(left2);
 	r.setTop(r.top() + lh);
 	
-	for (Q3ValueList<BrowserClass *>::ConstIterator it = pr.begin();
+	for (QValueList<BrowserClass *>::ConstIterator it = pr.begin();
 	     it != pr.end();
 	     it++) {
 	  p.drawText(r, ::Qt::AlignLeft + ::Qt::AlignTop, (*it)->get_name());
@@ -615,7 +611,7 @@ void ComponentCanvas::draw(QPainter & p) {
 	r.setLeft(left2);
 	r.setTop(r.top() + lh);
 	
-	for (Q3ValueList<BrowserClass *>::ConstIterator it = rq.begin();
+	for (QValueList<BrowserClass *>::ConstIterator it = rq.begin();
 	     it != rq.end();
 	     it++) {
 	  p.drawText(r, ::Qt::AlignLeft + ::Qt::AlignTop, (*it)->get_name());
@@ -645,7 +641,7 @@ void ComponentCanvas::draw(QPainter & p) {
       r.setLeft(left2);
       r.setTop(r.top() + lh);
       
-      for (Q3ValueList<BrowserClass *>::ConstIterator it = rz.begin();
+      for (QValueList<BrowserClass *>::ConstIterator it = rz.begin();
 	   it != rz.end();
 	   it++) {
 	p.drawText(r, ::Qt::AlignLeft + ::Qt::AlignTop, (*it)->get_name());
@@ -770,8 +766,8 @@ void ComponentCanvas::open() {
 }
 
 void ComponentCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -922,7 +918,7 @@ bool ComponentCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ComponentCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ComponentCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(4);
     ColorSpecVector co(1);
@@ -941,7 +937,7 @@ void ComponentCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     SettingsDialog dialog(&st, &co, FALSE, TRUE);
     
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -962,8 +958,8 @@ void ComponentCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void ComponentCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ComponentCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ComponentCanvas * x = (ComponentCanvas *) it.current();
   
@@ -991,24 +987,24 @@ QString ComponentCanvas::may_start(UmlCode & l) const {
   switch (l) {
   case UmlDependency:
     l = UmlDependOn;
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   case UmlGeneralisation:
     l = UmlInherit;
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   case UmlProvided:
     {
-      Q3ValueList<BrowserClass *> ll;
+      QValueList<BrowserClass *> ll;
       
       ((BrowserComponent *) browser_node)->get_all_provided_classes(ll, FALSE);
-      return (!ll.isEmpty()) ? QString() : TR("no provided interfaces");
+      return (!ll.isEmpty()) ? 0 : TR("no provided interfaces");
     }
     break;
   case UmlRequired:
     {
-      Q3ValueList<BrowserClass *> ll;
+      QValueList<BrowserClass *> ll;
       
       ((BrowserComponent *) browser_node)->get_all_required_classes(ll, FALSE);
-      return (!ll.isEmpty()) ? QString() : TR("no required interfaces");
+      return (!ll.isEmpty()) ? 0 : TR("no required interfaces");
     }
     break;
   case UmlAnchor:
@@ -1046,19 +1042,19 @@ QString ComponentCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
     switch (l) {
     case UmlRequired:
     {
-      Q3ValueList<BrowserClass *> ll;
+      QValueList<BrowserClass *> ll;
       
       ((BrowserComponent *) browser_node)->get_all_required_classes(ll, FALSE);
       return (ll.findIndex(((ArrowJunctionCanvas *) dest)->get_interface()) != -1)
-	? QString() : TR("not required");
+	? 0 : TR("not required");
     }
     case UmlProvided:
     {
-      Q3ValueList<BrowserClass *> ll;
+      QValueList<BrowserClass *> ll;
       
       ((BrowserComponent *) browser_node)->get_all_provided_classes(ll, FALSE);
       return (ll.findIndex(((ArrowJunctionCanvas *) dest)->get_interface()) != -1)
-	? QString() : TR("not provided");
+	? 0 : TR("not provided");
     }
     default:
       return TR("illegal");
@@ -1068,7 +1064,7 @@ QString ComponentCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
   }
 }
 
-void ComponentCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ComponentCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "componentcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -1156,7 +1152,7 @@ void ComponentCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));

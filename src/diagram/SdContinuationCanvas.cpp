@@ -29,10 +29,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
+#include <qpopupmenu.h> 
 
 #include "SdContinuationCanvas.h"
 #include "ContinuationDialog.h"
@@ -68,7 +65,7 @@ void SdContinuationCanvas::delete_it() {
 
 void SdContinuationCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QColor bckgrnd = p.backgroundColor();
   QBrush brsh = p.brush();
@@ -158,11 +155,11 @@ void SdContinuationCanvas::check_size() {
 void SdContinuationCanvas::change_scale() {
   double scale = the_canvas()->zoom();
   
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   setSize((int) (width_scale100*scale), (int) (height_scale100*scale));
   check_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);  
+  QCanvasRectangle::setVisible(TRUE);  
 }
 
 void SdContinuationCanvas::modified() {
@@ -175,7 +172,7 @@ void SdContinuationCanvas::modified() {
 }
 
 void SdContinuationCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Continuation"), m.font()), -1);
   m.insertSeparator();
@@ -277,7 +274,7 @@ bool SdContinuationCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void SdContinuationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void SdContinuationCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -288,7 +285,7 @@ void SdContinuationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((SdContinuationCanvas *) it.current())->itscolor = itscolor;
@@ -300,8 +297,8 @@ void SdContinuationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void SdContinuationCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void SdContinuationCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   SdContinuationCanvas * x = (SdContinuationCanvas *) it.current();
   
@@ -314,7 +311,7 @@ void SdContinuationCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
 }
 
 QString SdContinuationCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString SdContinuationCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -333,7 +330,7 @@ void SdContinuationCanvas::resize(const QSize & sz, bool w, bool h) {
   DiagramCanvas::resize(sz, w, h, min_width, min_height);
 }
 
-void SdContinuationCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void SdContinuationCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "continuation_ref " << get_ident();
   }
@@ -398,30 +395,30 @@ void SdContinuationCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
 
 void SdContinuationCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
 
 // for plug-out
 
-void SdContinuationCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void SdContinuationCanvas::send(ToolCom * com, QCanvasItemList & all)
 {
   if (com->api_format() < 41)
     return;
   
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList::Iterator cit;
 
   for (cit = all.begin(); (cit != all.end()); ++cit) {
     DiagramItem *di = QCanvasItemToDiagramItem(*cit);
     
     if ((di != 0) && (*cit)->visible() && (di->type() == UmlContinuation)) {
-      Q3CString s = fromUnicode(((SdContinuationCanvas *) di)->name);
+      QCString s = fromUnicode(((SdContinuationCanvas *) di)->name);
 
       com->write_bool(TRUE);	// one more
       com->write_string((const char *) s);

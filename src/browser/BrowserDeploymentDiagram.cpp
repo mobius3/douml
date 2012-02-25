@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
 
 #include "BrowserDeploymentDiagram.h"
 #include "SimpleData.h"
@@ -52,8 +48,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserDeploymentDiagram> BrowserDeploymentDiagram::imported;
-Q3ValueList<int> BrowserDeploymentDiagram::imported_ids;
+QList<BrowserDeploymentDiagram> BrowserDeploymentDiagram::imported;
+QValueList<int> BrowserDeploymentDiagram::imported_ids;
 QStringList BrowserDeploymentDiagram::its_default_stereotypes;	// unicode
 
 BrowserDeploymentDiagram::BrowserDeploymentDiagram(QString s, BrowserNode * p, int id)
@@ -145,7 +141,7 @@ void BrowserDeploymentDiagram::set_name(const char * s) {
 
 void BrowserDeploymentDiagram::import()
 {
-  Q3ValueList<int>::Iterator it = imported_ids.begin();
+  QValueList<int>::Iterator it = imported_ids.begin();
   
   while (!imported.isEmpty()) {
     QString warning;
@@ -205,8 +201,8 @@ void BrowserDeploymentDiagram::draw_svg() const {
 }
 
 void BrowserDeploymentDiagram::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -486,7 +482,7 @@ bool BrowserDeploymentDiagram::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-void BrowserDeploymentDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserDeploymentDiagram::compute_referenced_by(QList<BrowserNode> & l,
 						     BrowserNode * bn,
 						     char const * kc,
 						     char const * kr)
@@ -506,7 +502,7 @@ void BrowserDeploymentDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserDeploymentDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserDeploymentDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "deploymentdiagram_stereotypes ";
@@ -521,7 +517,7 @@ void BrowserDeploymentDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserDeploymentDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserDeploymentDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "deploymentdiagram_ref " << get_ident() << " // " << get_name();
   else {

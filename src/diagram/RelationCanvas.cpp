@@ -28,10 +28,8 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 
 #include "RelationCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -257,7 +255,7 @@ void RelationCanvas::set_z(double z) {
 void RelationCanvas::setSelected(bool yes) {
   UmlWindow::set_commented((yes) ? data->get_start() : 0);
 
-  Q3CanvasPolygon::setSelected(yes);
+  QCanvasPolygon::setSelected(yes);
 }
 
 void RelationCanvas::select_associated() {
@@ -341,9 +339,9 @@ void RelationCanvas::menu(const QPoint & lpos) {
     bool prefer_start = 
       (lpos - first->beginp).manhattanLength() >
 	(lpos - last->endp).manhattanLength();
-    Q3PopupMenu m(0);
-    Q3PopupMenu geo(0);
-    Q3PopupMenu toolm(0);
+    QPopupMenu m(0);
+    QPopupMenu geo(0);
+    QPopupMenu toolm(0);
     
     m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()),
 		 -1);
@@ -1010,8 +1008,8 @@ void RelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
   BrowserClass * to = def->get_end_class();
   DiagramItem * ccfrom = 0;
   DiagramItem * ccto = 0;
-  Q3CanvasItemList all = canvas->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas->allItems();
+  QCanvasItemList::Iterator cit;
 
   // the two classes are drawn ?
   for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -1059,7 +1057,7 @@ void RelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
 
 // the relation is not yet drawn, 
 void RelationCanvas::drop(BrowserNode * bn, UmlCanvas * canvas,
-			  Q3PtrDict<DiagramItem> & drawn)
+			  QPtrDict<DiagramItem> & drawn)
 {
   RelationData * def = (RelationData *) bn->get_data();
   BrowserClass * from = def->get_start_class();
@@ -1096,8 +1094,8 @@ void RelationCanvas::show_assoc_class(CdClassCanvas * cc) {
     // search for the assoc class drawing
     BrowserNode * assoc = data->get_association().type;
     
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QCanvasItemList all = canvas()->allItems();
+    QCanvasItemList::Iterator cit;
     
     for (cit = all.begin(); cit != all.end(); ++cit) {
       DiagramItem * di = QCanvasItemToDiagramItem(*cit);
@@ -1130,8 +1128,8 @@ void RelationCanvas::show_assoc_class(CdClassCanvas * cc) {
   
   for (;;) {
     // goes throw the line and check / search assoc
-    Q3PtrList<ArrowCanvas> l = rc->lines;
-    Q3PtrListIterator<ArrowCanvas> it(l);
+    QList<ArrowCanvas> l = rc->lines;
+    QListIterator<ArrowCanvas> it(l);
     
     for (; it.current(); ++it) {
       ArrowCanvas * a = it.current();
@@ -1183,7 +1181,7 @@ void RelationCanvas::hide_assoc_class() {
 
   for (;;) {
     // goes through the line to remove existing assoc
-    Q3PtrListIterator<ArrowCanvas> it(rc->lines);
+    QListIterator<ArrowCanvas> it(rc->lines);
     
     for (; it.current(); ++it) {
       ArrowCanvas * a = it.current();
@@ -1213,11 +1211,11 @@ QString RelationCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
       return ((data->get_end())
 	      ? data->is_writable(data->get_end())
 	      : data->is_writable(data->get_start()))
-	? QString() // ok
+	? 0 // ok
 	: TR("read-only relation");
     else
       // ok
-      return QString();
+      return 0;
   }
   else
     return ArrowCanvas::may_connect(l, dest);
@@ -1262,7 +1260,7 @@ bool RelationCanvas::represents(BrowserNode * bn) {
   return (data == bn->get_data());
 }
 
-void RelationCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void RelationCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "relationcanvas_ref " << get_ident()
        << " // " << data->get_name();
@@ -1633,6 +1631,6 @@ void RelationCanvas::history_load(QBuffer & b) {
 }
 
 void RelationCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   unconnect();
 }

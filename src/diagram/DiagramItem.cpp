@@ -28,9 +28,7 @@
 
 
 #include <qpainter.h>
-#include <q3intdict.h>
-//Added by qt3to4:
-#include <Q3PtrCollection>
+#include <qintdict.h>
 
 #include "DiagramItem.h"
 #include "DiagramCanvas.h"
@@ -41,7 +39,7 @@
 #include "myio.h"
 #include "translate.h"
 
-Q3PtrList<DiagramItem> DiagramItem::Undefined;
+QList<DiagramItem> DiagramItem::Undefined;
 
 DiagramItem::DiagramItem(int id, UmlCanvas * canvas)
     : Labeled<DiagramItem>(canvas->get_all_items(), id) {
@@ -62,14 +60,14 @@ void DiagramItem::remove(bool) {
 }
 
 void DiagramItem::hide_lines() {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
   
   for (; it.current(); ++it)
     it.current()->hide();
 }
 
 void DiagramItem::update_show_lines() {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
   
   for (; it.current(); ++it) {
     it.current()->update_pos();
@@ -87,7 +85,7 @@ void DiagramItem::check_line(ArrowCanvas *) {
 }
 
 bool DiagramItem::attached_to(const ArrowCanvas * l) const {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
   
   for (; it.current(); ++it)
     if (it.current() == l)
@@ -180,7 +178,7 @@ BasicData * DiagramItem::add_relation(UmlCode t, DiagramItem * end) {
 
 bool DiagramItem::has_relation(BasicData * def) const {
   // manage only SimpleRelations
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if (IsaSimpleRelation(it.current()->type()) &&
@@ -193,7 +191,7 @@ bool DiagramItem::has_relation(BasicData * def) const {
 }
 
 bool DiagramItem::has_relation(UmlCode t, BasicData * def) const {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if ((it.current()->type() == t) &&
@@ -218,7 +216,7 @@ bool DiagramItem::move_with(UmlCode) const {
 }
 
 void DiagramItem::select_associated() {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
   
   for (; it.current(); ++it)
     it.current()->select_associated();
@@ -260,7 +258,7 @@ aCorner on_resize_point(const QPoint & p, const QRect & r)
   return NoCorner; 
 }
 
-DiagramItem * QCanvasItemToDiagramItem(Q3CanvasItem * ci)
+DiagramItem * QCanvasItemToDiagramItem(QCanvasItem * ci)
 {
   if (isa_arrow(ci))
     return ((ArrowCanvas *) ci);
@@ -272,7 +270,7 @@ DiagramItem * QCanvasItemToDiagramItem(Q3CanvasItem * ci)
       : ((DiagramCanvas *) ci);
 }
 
-DiagramCanvas * QCanvasItemToDiagramCanvas(Q3CanvasItem * ci)
+DiagramCanvas * QCanvasItemToDiagramCanvas(QCanvasItem * ci)
 {
   return (isa_arrow(ci) || isa_label(ci) || isa_alien(ci))
     ? 0
@@ -357,11 +355,11 @@ bool DiagramItem::has_drawing_settings() const {
   return FALSE;
 }
 
-void DiagramItem::edit_drawing_settings(Q3PtrList<DiagramItem> &) {
+void DiagramItem::edit_drawing_settings(QList<DiagramItem> &) {
   // never called
 }
 
-void DiagramItem::same_drawing_settings(Q3PtrList<DiagramItem> &) {
+void DiagramItem::same_drawing_settings(QList<DiagramItem> &) {
   // never called
 }
 
@@ -373,8 +371,8 @@ void DiagramItem::apply_shortcut(QString) {
 
 //
 
-DiagramItemList::DiagramItemList(Q3CanvasItemList l) {
-  Q3CanvasItemList::Iterator it;
+DiagramItemList::DiagramItemList(QCanvasItemList l) {
+  QCanvasItemList::Iterator it;
   
   for (it = l.begin(); it != l.end(); ++it) {
     if ((*it)->visible()) {
@@ -389,8 +387,8 @@ DiagramItemList::DiagramItemList(Q3CanvasItemList l) {
 DiagramItemList::~DiagramItemList() {
 }
 
-int DiagramItemList::compareItems(Q3PtrCollection::Item i1,
-				  Q3PtrCollection::Item i2) {
+int DiagramItemList::compareItems(QCollection::Item i1,
+				  QCollection::Item i2) {
   // i1 <> i2 !
   return (((DiagramItem *) i1)->get_ident() >
 	  ((DiagramItem *) i2)->get_ident())

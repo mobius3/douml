@@ -2,8 +2,8 @@
 #define _UMLBASEMESSAGE_H
 
 
-#include <q3cstring.h>
-#include <q3ptrdict.h>
+#include <qcstring.h>
+#include <qptrdict.h>
 
 class UmlClassInstanceReference;
 class UmlOperation;
@@ -29,7 +29,7 @@ class UmlBaseMessage {
 
     // return message as a string, may be empty/null,
     // exclusive with operation()
-    const Q3CString & form() const {
+    const QCString & form() const {
         return _form;
     }
 
@@ -41,10 +41,10 @@ class UmlBaseMessage {
 
     UmlOperation * _operation;
 
-    Q3CString _form;
+    QCString _form;
 
     // internal, don't call it
-    void read_(const Q3PtrDict<UmlClassInstanceReference> & instances);
+    void read_(const QPtrDict<UmlClassInstanceReference> & instances);
 
   friend class UmlBaseSequenceMessage;
   friend class UmlBaseCollaborationMessage;

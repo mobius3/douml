@@ -29,19 +29,17 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qwindowsstyle.h> 
 #include <qmotifstyle.h> 
 #include <qmotifplusstyle.h> 
-#include <q3filedialog.h> 
+#include <qfiledialog.h> 
 #include <qfile.h>
 #include <qdir.h>
-#include <q3textstream.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <qtextstream.h>
+#include <qhbox.h>
+#include <qvbox.h>
 
 #include "SynchroWindow.h"
 #include "BrowserView.h"
@@ -51,14 +49,14 @@
 
 SynchroWindow * SynchroWindow::the;
 
-SynchroWindow::SynchroWindow() : Q3MainWindow(0, "Project synchro", Qt::WDestructiveClose) {
+SynchroWindow::SynchroWindow() : QMainWindow(0, "Project synchro", WDestructiveClose) {
   the = this;
   setCaption("Project synchro");
   
-  Q3PopupMenu * menu;
+  QPopupMenu * menu;
   QPixmap pixmap;
   
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("&Project", menu);
 
   // open
@@ -66,20 +64,20 @@ SynchroWindow::SynchroWindow() : Q3MainWindow(0, "Project synchro", Qt::WDestruc
 #include "fileopen.xpm"
   pixmap = QPixmap(fileopen);
   menu->insertItem(pixmap, "&Open", this,
-		   SLOT(load()), Qt::CTRL+Qt::Key_O);
+		   SLOT(load()), CTRL+Key_O);
   
   // quit
   
-  menu->insertItem("&Quit", this, SLOT(quit()), Qt::CTRL+Qt::Key_Q);
+  menu->insertItem("&Quit", this, SLOT(quit()), CTRL+Key_Q);
   
   // synchronize
   
   menu->insertSeparator();
-  menu->insertItem("&Synchonize", this, SLOT(synchronize()), Qt::CTRL+Qt::Key_S);
+  menu->insertItem("&Synchonize", this, SLOT(synchronize()), CTRL+Key_S);
   
   // style
   
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("&Style", menu);
   
 #if !defined(QT_NO_STYLE_MOTIF)
@@ -93,15 +91,15 @@ SynchroWindow::SynchroWindow() : Q3MainWindow(0, "Project synchro", Qt::WDestruc
   // help & about
   
   menuBar()->insertSeparator();
-  menu = new Q3PopupMenu(this);
+  menu = new QPopupMenu(this);
   menuBar()->insertItem("&Help", menu);
   
-  menu->insertItem("&About", this, SLOT(about()), Qt::Key_F1);
+  menu->insertItem("&About", this, SLOT(about()), Key_F1);
   menu->insertItem("About&Qt", this, SLOT(aboutQt()));
   
   //
   
-  hbox = new Q3HBox(this);
+  hbox = new QHBox(this);
   setCentralWidget(hbox);
 }
 
@@ -157,7 +155,7 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
     const QFileInfoList * l = dir.entryInfoList("*.lock");
     
     if (l != 0) {
-      Q3PtrListIterator<QFileInfo> it(*l);
+      QListIterator<QFileInfo> it(*l);
       QFileInfo * pfi;
       QString ids;
       
@@ -175,7 +173,7 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
       }
     }
     
-    Q3VBox * vbox = new Q3VBox(hbox);
+    QVBox * vbox = new QVBox(hbox);
     BrowserView * browser = new BrowserView(vbox);
     
     QApplication::setOverrideCursor(Qt::waitCursor);
@@ -201,7 +199,7 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
 
 void SynchroWindow::load() {
   QString path =
-    Q3FileDialog::getOpenFileName(QString::null,
+    QFileDialog::getOpenFileName(QString::null,
 				 (project_name.isEmpty())
 				 ? "*.prj"
 				 : project_name,

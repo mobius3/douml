@@ -38,9 +38,9 @@ MenuTitle::MenuTitle(const QString & s, QFont f) : str(s), font(f) {
 void MenuTitle::paint(QPainter * p, const QColorGroup& /*cg*/, bool /*act*/,
 		      bool /*enabled*/, int x, int y, int w, int h) {
   p->setFont (font);
-  p->drawText( x, y, w, h, Qt::AlignCenter | Qt::TextShowMnemonic | Qt::TextDontClip, str);
+  p->drawText( x, y, w, h, AlignCenter | ShowPrefix | DontClip, str);
 }
 
 QSize MenuTitle::sizeHint() {
-  return QFontMetrics(font).size(Qt::AlignCenter | Qt::TextShowMnemonic | Qt::TextDontClip, str);
+  return QFontMetrics(font).size(AlignCenter | ShowPrefix | DontClip, str);
 }

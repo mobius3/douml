@@ -28,10 +28,8 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+#include <qpopupmenu.h>
 
 #include "FlowCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -216,9 +214,9 @@ void FlowCanvas::menu(const QPoint &) {
       pstereotype = (FlowCanvas *) apstereotype;
     }
     
-    Q3PopupMenu m(0);
-    Q3PopupMenu geo(0);
-    Q3PopupMenu toolm(0);
+    QPopupMenu m(0);
+    QPopupMenu geo(0);
+    QPopupMenu toolm(0);
     
     m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()),
 		 -1);
@@ -373,7 +371,7 @@ bool FlowCanvas::has_drawing_settings() const {
   return ((aplabel != 0) || (apstereotype != 0));
 }
 
-void FlowCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void FlowCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(1);
     Uml3States write_horizontally;
@@ -388,7 +386,7 @@ void FlowCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     dialog.raise();
     
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -404,8 +402,8 @@ void FlowCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void FlowCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void FlowCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   FlowCanvas * x = (FlowCanvas *) it.current();
   
@@ -682,8 +680,8 @@ void FlowCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
   BrowserNode * to = def->get_end_node();
   DiagramItem * difrom = 0;
   DiagramItem * dito = 0;
-  Q3CanvasItemList all = canvas->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = canvas->allItems();
+  QCanvasItemList::Iterator cit;
 
   // the two extremities are drawn ?
   for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -767,7 +765,7 @@ bool FlowCanvas::represents(BrowserNode * bn) {
 
 //
 
-void FlowCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void FlowCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "flowcanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {
@@ -1004,7 +1002,7 @@ FlowCanvas * FlowCanvas::read(char * & st, UmlCanvas * canvas, char * k)
 }
 
 void FlowCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   unconnect();
 }
 

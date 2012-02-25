@@ -29,10 +29,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3PointArray>
+#include <qpopupmenu.h> 
 
 #include "SdSelfMsgCanvas.h"
 #include "SdDurationCanvas.h"
@@ -123,7 +120,7 @@ void SdSelfMsgCanvas::draw(QPainter & p) {
   int ah = (r.height() - 1 - 1 - 2 - 1 - 1)/2;
   int he = r.top() + 1 + 2 + ah + 1;
   FILE * fp = svg();
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   if (itsType == UmlSelfReturnMsg)
     p.setPen(::Qt::DotLine);
   
@@ -131,10 +128,8 @@ void SdSelfMsgCanvas::draw(QPainter & p) {
 
 
 
-  //p.lineTo(r.right() - 1, he);
-  p.drawLine(r.right()-1, r.top() + 1, r.right() - 1, he);
-  //p.lineTo(r.left() + 1, he);
-  p.drawLine(r.right()-1, he, r.left() + 1, he);
+  p.lineTo(r.right() - 1, he);
+  p.lineTo(r.left() + 1, he);
 
   if (fp != 0) {
     fputs("<g>\n\t<path fill=\"none\" stroke=\"black\" stroke-opacity=\"1\"", fp);
@@ -147,10 +142,10 @@ void SdSelfMsgCanvas::draw(QPainter & p) {
   }
   
   if (itsType == UmlSyncSelfMsg) {
-    Q3PointArray poly(3);
+    QPointArray poly(3);
     QBrush brsh = p.brush();
     
-    p.setBrush(Qt::black);
+    p.setBrush(black);
     poly.setPoint(0, r.left() + 1, he);
     poly.setPoint(1, r.left() + 1 + ah, he + ah);
     poly.setPoint(2, r.left() + 1 + ah, he - ah);
@@ -166,8 +161,7 @@ void SdSelfMsgCanvas::draw(QPainter & p) {
     if (itsType == UmlSelfReturnMsg)
       p.setPen(::Qt::SolidLine);
     
-    //p.lineTo(r.left() + 1 + ah, he + ah);
-	p.drawLine(r.left()+1+ah, he - ah, r.left() + 1 + ah, he + ah); // assuming last call poly.setPoint
+    p.lineTo(r.left() + 1 + ah, he + ah);
     p.drawLine(r.left() + 1, he, r.left() + 1 + ah, he - ah);
 
     if (fp != 0)
@@ -217,7 +211,7 @@ int SdSelfMsgCanvas::overlap_dir(SdDurationCanvas *) const {
 }
 
 void SdSelfMsgCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Message"), m.font()), -1);
   m.insertSeparator();
@@ -360,7 +354,7 @@ bool SdSelfMsgCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void SdSelfMsgCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void SdSelfMsgCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(3);
     DrawingLanguage drawing_language;
@@ -375,7 +369,7 @@ void SdSelfMsgCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -395,8 +389,8 @@ void SdSelfMsgCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void SdSelfMsgCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void SdSelfMsgCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   SdSelfMsgCanvas * x = (SdSelfMsgCanvas *) it.current();
   
@@ -417,7 +411,7 @@ void SdSelfMsgCanvas::select_associated() {
     dest->select_associated();
 }
 
-void SdSelfMsgCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdSelfMsgCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << ((itsType == UmlSelfReturnMsg)
 	   ? "selfreflexivemsg_ref "

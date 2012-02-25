@@ -27,8 +27,6 @@
 #define STRUTIL_H
 
 #include "qstring.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 extern bool manage_comment(QString comment, const char *& p,
 			   const char *& pp, bool javadoc);
@@ -46,11 +44,11 @@ extern QString true_name(const QString & name, const QString & decl);
 extern bool is_char_of_name(char c);
 extern QString extract_name(QString s);
 extern QString quote(QString s);
-extern void remove_comments(Q3CString & s);
+extern void remove_comments(QCString & s);
 extern void remove_comments(QString & s);
-extern void remove_python_comments(Q3CString & s);
+extern void remove_python_comments(QCString & s);
 extern void remove_python_comments(QString & s);
-extern void remove_preprocessor(Q3CString & s);
+extern void remove_preprocessor(QCString & s);
 extern QString java_multiplicity(QString m);
 extern bool need_equal(const char * p, QString v, bool cpp);
 extern bool need_equal(const char * p, const char * v, bool cpp);
@@ -58,7 +56,7 @@ extern bool need_equal(const char * p, const char * v, bool cpp);
 extern QString codec();
 extern void set_codec(QString);
 extern QString toUnicode(const char *);
-extern Q3CString fromUnicode(const QString &);
+extern QCString fromUnicode(const QString &);
 extern bool hasCodec();
 
 extern void remove_crlf(char *);

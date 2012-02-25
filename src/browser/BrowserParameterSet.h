@@ -1,7 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -71,14 +67,14 @@ class BrowserParameterSet : public BrowserNode, public Labeled<BrowserParameterS
     virtual bool allow_empty() const;
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserParameterSet * read_ref(char * &);
     static BrowserParameterSet * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
 
     static BrowserParameterSet * new_one(const char *, BrowserNode * p);
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
+    virtual void referenced_by(QList<BrowserNode> & l, bool ondelete);
     
     static void clear(bool old);
     static void update_idmax_for_root();
@@ -95,7 +91,7 @@ class BrowserParameterSet : public BrowserNode, public Labeled<BrowserParameterS
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
 };
 
 #endif

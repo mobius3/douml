@@ -28,8 +28,6 @@
 
 
 #include <qapplication.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "UmlWindow.h"
 #include "UmlPixmap.h"
@@ -62,9 +60,9 @@ int main(int argc, char **argv)
 
   UmlDesktop::init();
   
-  // note : bool conv_env = !QDir::home().exists(".doumlrc") doesn't work
+  // note : bool conv_env = !QDir::home().exists(".boumlrc") doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
+  QString s = QDir::home().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
   bool conv_env = (fp == 0);
   
@@ -90,7 +88,7 @@ int main(int argc, char **argv)
   else
     fclose(fp);
   
-  read_doumlrc();	// for virtual desktop
+  read_boumlrc();	// for virtual desktop
   init_pixmaps();
   init_font();
   Shortcut::init(conv_env);
@@ -148,12 +146,12 @@ int main(int argc, char **argv)
 	  argc -= 1;
 	}
 	
-	Q3CString cmd = argv[3];
-	Q3CString space = " ";
+	QCString cmd = argv[3];
+	QCString space = " ";
 	int index;
 	
 	for (index = 4; index != argc; index += 1)
-	  cmd += space + Q3CString(argv[index]);
+	  cmd += space + argv[index];
 	
 	ToolCom::run((const char *) cmd, BrowserView::get_project(), with_exit);
       }

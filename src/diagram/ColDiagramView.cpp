@@ -28,12 +28,7 @@
 
 
 #include <qfont.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QDragEnterEvent>
+#include <qpopupmenu.h> 
 
 
 #include "ColDiagramWindow.h"
@@ -73,8 +68,8 @@ void ColDiagramView::update_msgs() {
 }
 
 void ColDiagramView::update_msg_supports() {
-  Q3CanvasItemList l = canvas()->allItems();
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList l = canvas()->allItems();
+  QCanvasItemList::Iterator it;
     
   for (it = l.begin(); it != l.end(); ++it) {
     if ((*it)->visible()) { // at least not deleted
@@ -97,7 +92,7 @@ void ColDiagramView::update_msg_supports() {
 }
 
 void ColDiagramView::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Communication diagram menu"), m.font()), -1);
   
@@ -187,7 +182,7 @@ void ColDiagramView::contentsMousePressEvent(QMouseEvent * e) {
 	  window()->selectOn();
 	  history_save();
 	  
-	  Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+	  QCanvasItem * ci = the_canvas()->collision(e->pos());
 	  
 	  if (ci != 0) {
 	    DiagramItem * i = QCanvasItemToDiagramItem(ci);
@@ -301,7 +296,7 @@ void ColDiagramView::dropEvent(QDropEvent * e) {
   }
 }
 
-void ColDiagramView::save(Q3TextStream & st, QString & warning,
+void ColDiagramView::save(QTextStream & st, QString & warning,
 			  bool copy) const {
   DiagramItemList items(canvas()->allItems());
   DiagramItem * di;
@@ -393,8 +388,8 @@ void ColDiagramView::read(char * st, char * k) {
   k = read_keyword(st);
   
   // then show/update msgs
-  Q3CanvasItemList items = canvas->allItems();  
-  Q3CanvasItemList::Iterator it;
+  QCanvasItemList items = canvas->allItems();  
+  QCanvasItemList::Iterator it;
   
   for (it = items.begin(); it != items.end(); ++it) {
     DiagramItem * di = QCanvasItemToDiagramItem(*it);
@@ -431,7 +426,7 @@ void ColDiagramView::read(char * st, char * k) {
 // for plug-out
 
 void ColDiagramView::send(ToolCom * com) {
-  Q3CanvasItemList l = canvas()->allItems();
+  QCanvasItemList l = canvas()->allItems();
   
   //FragmentCanvas::send(com, l);
   CodClassInstCanvas::send(com, l);

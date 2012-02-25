@@ -34,10 +34,6 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
-//Added by qt3to4:
-#include <QEvent>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include "SourceDialog.h"
 #include "UmlDesktop.h"
@@ -65,13 +61,13 @@ bool NumberedMultiLineEdit::event(QEvent * e) {
 QSize SourceDialog::previous_size;
 
 SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
-    : QDialog(0, 0, FALSE, Qt::WDestructiveClose), 
+    : QDialog(0, 0, FALSE, WDestructiveClose), 
       path(p), edited(flg), edition_number(edn) {
   QFileInfo fi(p);
   
   setCaption(fi.fileName());
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+  QVBoxLayout * vbox = new QVBoxLayout(this);
 
   e = new NumberedMultiLineEdit(this);
   QFont font = e->font();
@@ -81,7 +77,7 @@ SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
   e->setFont(font);
   vbox->addWidget(e);
   
-  Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+  QHBoxLayout * hbox = new QHBoxLayout(vbox);
   hbox->setMargin(5);
 
   lineColumn = new QLabel(this);
@@ -94,7 +90,7 @@ SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
   QFile f(p);
   unsigned size = fi.size();
   
-  if (f.open(QIODevice::ReadOnly)) {
+  if (f.open(IO_ReadOnly)) {
    char * s = new char[size + 1];
     
    if (f.readBlock(s, size) != -1) {

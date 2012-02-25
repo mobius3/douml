@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= gxmi
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL
 HEADERS		= ./UmlBaseFinalState.h \
 		  ./UmlBaseAttribute.h \
@@ -233,5 +233,3 @@ SOURCES		= ./UmlBaseFinalState.cpp \
 		  ./Dialog.cpp \
 		  ./UmlBasePackage.cpp \
 		  ./UmlOperation.cpp
-#The following line was inserted by qt3to4
-QT += network  qt3support 

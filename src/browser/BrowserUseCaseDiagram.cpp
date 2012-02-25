@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
 
 #include "BrowserUseCaseDiagram.h"
 #include "RelationData.h"
@@ -53,8 +49,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserUseCaseDiagram> BrowserUseCaseDiagram::imported;
-Q3ValueList<int> BrowserUseCaseDiagram::imported_ids;
+QList<BrowserUseCaseDiagram> BrowserUseCaseDiagram::imported;
+QValueList<int> BrowserUseCaseDiagram::imported_ids;
 QStringList BrowserUseCaseDiagram::its_default_stereotypes;	// unicode
 
 BrowserUseCaseDiagram::BrowserUseCaseDiagram(QString s, BrowserNode * p, int id)
@@ -146,7 +142,7 @@ void BrowserUseCaseDiagram::set_name(const char * s) {
 
 void BrowserUseCaseDiagram::import()
 {
-  Q3ValueList<int>::Iterator it = imported_ids.begin();
+  QValueList<int>::Iterator it = imported_ids.begin();
   
   while (!imported.isEmpty()) {
     QString warning;
@@ -207,8 +203,8 @@ void BrowserUseCaseDiagram::draw_svg() const {
 }
 
 void BrowserUseCaseDiagram::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -498,7 +494,7 @@ bool BrowserUseCaseDiagram::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-void BrowserUseCaseDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserUseCaseDiagram::compute_referenced_by(QList<BrowserNode> & l,
 						  BrowserNode * bn,
 						  char const * kc,
 						  char const * kr)
@@ -520,7 +516,7 @@ void BrowserUseCaseDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserUseCaseDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserUseCaseDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "usecasediagram_stereotypes ";
@@ -535,7 +531,7 @@ void BrowserUseCaseDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserUseCaseDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserUseCaseDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "usecasediagram_ref " << get_ident() << " // " << get_name();
   else {

@@ -28,15 +28,12 @@
 
 
 #include <qlayout.h>
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <qgrid.h>
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
-#include <q3combobox.h>
-#include <q3textview.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <qcombobox.h>
+#include <qtextview.h>
 
 #include "RevSettingsDialog.h"
 #include "HelpRegexpDialog.h"
@@ -52,12 +49,12 @@ RevSettingsDialog::RevSettingsDialog()
     : QDialog(0, "Reverse/Roundtrip Settings dialog", TRUE) {
   setCaption(TR("Reverse/Roundtrip Settings dialog"));
 
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+  QVBoxLayout * vbox = new QVBoxLayout(this);
   
   vbox->setMargin(5);
   
-  Q3Grid * grid = new Q3Grid(3, this);
-  Q3HBox * htab;
+  QGrid * grid = new QGrid(3, this);
+  QHBox * htab;
   
   vbox->addWidget(grid);
   grid->setMargin(5);
@@ -90,12 +87,12 @@ RevSettingsDialog::RevSettingsDialog()
     cpp_file_case_sensitive->setChecked(TRUE);
   
   new QLabel(grid);  
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   new QLabel(grid);
   
   htab->setMargin(3);
   htab->setStretchFactor(new QLabel(TR("generated/reversed \nheader file extension : "), htab), 0);
-  edcpp_h_extension = new Q3ComboBox(TRUE, htab);
+  edcpp_h_extension = new QComboBox(TRUE, htab);
   htab->setStretchFactor(edcpp_h_extension, 100);
   edcpp_h_extension->insertItem(GenerationSettings::cpp_h_extension);
   edcpp_h_extension->setCurrentItem(0);
@@ -103,7 +100,7 @@ RevSettingsDialog::RevSettingsDialog()
   edcpp_h_extension->insertItem("hh");
   
   htab->setStretchFactor(new QLabel(TR("    generated/reversed \n    source file extension : "), htab), 0);
-  edcpp_src_extension = new Q3ComboBox(TRUE, htab);
+  edcpp_src_extension = new QComboBox(TRUE, htab);
   htab->setStretchFactor(edcpp_src_extension, 100);
   edcpp_src_extension->insertItem(GenerationSettings::cpp_src_extension);
   edcpp_src_extension->setCurrentItem(0);
@@ -129,12 +126,12 @@ RevSettingsDialog::RevSettingsDialog()
     java_file_case_sensitive->setChecked(TRUE);
   
   new QLabel(grid);  
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   new QLabel(grid);
   
   htab->setMargin(3);
   htab->setStretchFactor(new QLabel(TR("generated/reversed file extension : "), htab), 0);
-  edjava_extension = new Q3ComboBox(TRUE, htab);
+  edjava_extension = new QComboBox(TRUE, htab);
   htab->setStretchFactor(edjava_extension, 100);
   edjava_extension->insertItem(GenerationSettings::java_extension);
   edjava_extension->setCurrentItem(0);
@@ -159,12 +156,12 @@ RevSettingsDialog::RevSettingsDialog()
     php_file_case_sensitive->setChecked(TRUE);
   
   new QLabel(grid);  
-  htab = new Q3HBox(grid);
+  htab = new QHBox(grid);
   new QLabel(grid);
   
   htab->setMargin(3);
   htab->setStretchFactor(new QLabel(TR("generated / reversed file extension : "), htab), 0);
-  edphp_extension = new Q3ComboBox(TRUE, htab);
+  edphp_extension = new QComboBox(TRUE, htab);
   htab->setStretchFactor(edphp_extension, 100);
   edphp_extension->insertItem(GenerationSettings::php_extension);
   edphp_extension->setCurrentItem(0);
@@ -182,7 +179,7 @@ RevSettingsDialog::RevSettingsDialog()
   accept->setFixedSize(bs);
   cancel->setFixedSize(bs);
   
-  Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox); 
+  QHBoxLayout * hbox = new QHBoxLayout(vbox); 
   
   hbox->addWidget(accept);
   hbox->addWidget(cancel);
@@ -238,9 +235,9 @@ HelpRegexpDialog::HelpRegexpDialog()
     : QDialog(0, "Help, regular expression", TRUE) {
   setCaption(TR("Help regular expression"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
 
-  Q3TextView * txt = new Q3TextView(this);
+  QTextView * txt = new QTextView(this);
   
   txt->setText("<p>Extracted from the QT documentation :</p><hr>"
 	       "<ul>"
@@ -261,7 +258,7 @@ HelpRegexpDialog::HelpRegexpDialog()
 	       "<p>Thus, <i>[a-zA-Z0-9.]</i> matches upper and lower case ASCII letters, digits and dot.</p>");
   vbox->add(txt);
   
-  Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox); 
+  QHBoxLayout * hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
 
   QPushButton * close = new QPushButton(TR("Close"), this);

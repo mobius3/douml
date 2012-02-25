@@ -4,10 +4,10 @@
 #ifdef WITHCPP
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "aVisibility.h"
 #include "UmlSettings.h"
-#include <q3dict.h>
+#include <qdict.h>
 
 // This class manages settings concerning C++, configured through
 // the 'Generation settings' dialog.
@@ -30,104 +30,104 @@ class CppSettings : public UmlSettings {
     // returns the C++ type corresponding to the 'UML' type given in
     // argument, as it is configured in the first 'Generation settings'
     // dialog's tab
-    static Q3CString type(Q3CString s);
+    static QCString type(QCString s);
 
     // set the C++ type corresponding to the 'UML' type given in
     // argument, as it is configured in the first 'Generation settings'
     // dialog's tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Type(Q3CString s, Q3CString v);
+    static bool set_Type(QCString s, QCString v);
 
     // reverse of the Type() operation, returns the 'UML' type corresponding
     // to the C++ type given in argument
-    static Q3CString umlType(Q3CString s);
+    static QCString umlType(QCString s);
 
     // returns the C++ stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString relationAttributeStereotype(Q3CString s);
+    static QCString relationAttributeStereotype(QCString s);
 
     // set the C++ stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationAttributeStereotype(Q3CString s, Q3CString v);
+    static bool set_RelationAttributeStereotype(QCString s, QCString v);
 
     // reverse of the RelationAttributeStereotype() operation, returns the 'UML' 
     // stereotype corresponding to the C++ one given in argument
-    static Q3CString relationAttributeUmlStereotype(Q3CString s);
+    static QCString relationAttributeUmlStereotype(QCString s);
 
     // returns the C++ stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString classStereotype(Q3CString s);
+    static QCString classStereotype(QCString s);
 
     // set the C++ stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassStereotype(Q3CString s, Q3CString v);
+    static bool set_ClassStereotype(QCString s, QCString v);
 
     // reverse of the ClassStereotype() operation, returns the 'UML' 
     // stereotype corresponding to the C++ one given in argument
-    static Q3CString classUmlStereotype(Q3CString s);
+    static QCString classUmlStereotype(QCString s);
 
     // returns the #include or other form specified in the last 
     // 'Generation settings' tab for the C++ type given in argument.
-    static Q3CString include(Q3CString s);
+    static QCString include(QCString s);
 
     // set the #include or other form specified in the last 
     // 'Generation settings' tab for the C++ type given in argument.
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Include(Q3CString s, Q3CString v);
+    static bool set_Include(QCString s, QCString v);
 
     // returns the 'root' directory 
-    static Q3CString rootDir();
+    static QCString rootDir();
 
     // set the 'root' directory 
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RootDir(Q3CString v);
+    static bool set_RootDir(QCString v);
 
     // returns the default header file content
-    static Q3CString headerContent();
+    static QCString headerContent();
 
     // set the default header file content
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_HeaderContent(Q3CString v);
+    static bool set_HeaderContent(QCString v);
 
     // returns the default source file content
-    static Q3CString sourceContent();
+    static QCString sourceContent();
 
     // set the default source file content
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceContent(Q3CString v);
+    static bool set_SourceContent(QCString v);
 
     // returns the extension of the header files produced by the
     // C++ code generator
-    static Q3CString headerExtension();
+    static QCString headerExtension();
 
     // set the extension of the header files produced by the
     // C++ code generator
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_HeaderExtension(Q3CString v);
+    static bool set_HeaderExtension(QCString v);
 
     // returns the extension of the source files produced by the
     // C++ code generator
-    static Q3CString sourceExtension();
+    static QCString sourceExtension();
 
     // set the extension of the source files produced by the
     // C++ code generator
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceExtension(Q3CString v);
+    static bool set_SourceExtension(QCString v);
 
     // return the regular expression used to bypass
     // dir s on reverse/roundtrip
-    static Q3CString reverseRoundtripDirRegExp();
+    static QCString reverseRoundtripDirRegExp();
 
     // return if the regular expression used to bypass
     // dir s on reverse/roundtrip is case sensitive
@@ -136,11 +136,11 @@ class CppSettings : public UmlSettings {
     // set the regular expression used to bypass
     // dir s on reverse/roundtrip
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ReverseRoundtripDirRegExp(Q3CString s, bool cs);
+    static bool set_ReverseRoundtripDirRegExp(QCString s, bool cs);
 
     // return the regular expression used to bypass
     // file s on reverse/roundtrip
-    static Q3CString reverseRoundtripFileRegExp();
+    static QCString reverseRoundtripFileRegExp();
 
     // return if the regular expression used to bypass
     // file s on reverse/roundtrip is case sensitive
@@ -149,7 +149,7 @@ class CppSettings : public UmlSettings {
     // set the regular expression used to bypass
     // file s on reverse/roundtrip
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ReverseRoundtripFileRegExp(Q3CString s, bool cs);
+    static bool set_ReverseRoundtripFileRegExp(QCString s, bool cs);
 
     // indicates to the code generator if the #include may specify
     // the path of just the file's name
@@ -211,56 +211,56 @@ class CppSettings : public UmlSettings {
 
     // return the indent of the visibility specifiers
     
-    static const Q3CString & visibilityIndent();
+    static const QCString & visibilityIndent();
 
     // set visibility specifiers indent
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_VisibilityIndent(Q3CString v);
+    static bool set_VisibilityIndent(QCString v);
 
     // returns the default operation 'in' parameter specification 
     // in case its type is an enum
-    static const Q3CString & enumIn();
+    static const QCString & enumIn();
 
     // set the default operation 'in' parameter specification 
     // in case its type is an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumIn(Q3CString v);
+    static bool set_EnumIn(QCString v);
 
     // returns the default operation 'out' parameter specification 
     // in case its type is an enum
-    static const Q3CString & enumOut();
+    static const QCString & enumOut();
 
     // set the default operation 'out' parameter specification 
     // in case its type is an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumOut(Q3CString v);
+    static bool set_EnumOut(QCString v);
 
     // returns the default operation 'inout' parameter specification 
     // in case its type is an enum
-    static const Q3CString & enumInout();
+    static const QCString & enumInout();
 
     // set the default operation 'inout' parameter specification 
     // in case its type is an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumInout(Q3CString v);
+    static bool set_EnumInout(QCString v);
 
     // return the default operation value type form
-    static Q3CString enumReturn();
+    static QCString enumReturn();
 
     // set the default operation value type form
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumReturn(Q3CString v);
+    static bool set_EnumReturn(QCString v);
 
     // returns the default operation 'in' parameter specification
     // in case its type is specified in the first 'Generation 
     // settings' tab, else an empty string/null
     
-    static Q3CString builtinIn(Q3CString s);
+    static QCString builtinIn(QCString s);
 
     // set the default operation 'in' parameter specification
     // in case its type is specified in the first 'Generation 
@@ -268,13 +268,13 @@ class CppSettings : public UmlSettings {
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     
-    static bool set_BuiltinIn(Q3CString type, Q3CString form);
+    static bool set_BuiltinIn(QCString type, QCString form);
 
     // returns the default operation 'out' parameter specification
     // in case its type is specified in the first 'Generation 
     // settings' tab, else an empty string/null
     
-    static Q3CString builtinOut(Q3CString s);
+    static QCString builtinOut(QCString s);
 
     // set the default operation 'out' parameter specification
     // in case its type is specified in the first 'Generation 
@@ -282,13 +282,13 @@ class CppSettings : public UmlSettings {
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     
-    static bool set_BuiltinOut(Q3CString type, Q3CString form);
+    static bool set_BuiltinOut(QCString type, QCString form);
 
     // returns the default operation 'inout' parameter specification
     // in case its type is specified in the first 'Generation 
     // settings' tab, else an empty string/null
     
-    static Q3CString builtinInOut(Q3CString s);
+    static QCString builtinInOut(QCString s);
 
     // set the default operation 'inout' parameter specification
     // in case its type is specified in the first 'Generation 
@@ -296,13 +296,13 @@ class CppSettings : public UmlSettings {
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     
-    static bool set_BuiltinInOut(Q3CString type, Q3CString form);
+    static bool set_BuiltinInOut(QCString type, QCString form);
 
     // returns the default operation 'return' parameter specification
     // in case its type is specified in the first 'Generation 
     // settings' tab, else an empty string/null
     
-    static Q3CString builtinReturn(Q3CString s);
+    static QCString builtinReturn(QCString s);
 
     // set the default operation 'return' parameter specification
     // in case its type is specified in the first 'Generation 
@@ -310,36 +310,36 @@ class CppSettings : public UmlSettings {
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     
-    static bool set_BuiltinReturn(Q3CString type, Q3CString form);
+    static bool set_BuiltinReturn(QCString type, QCString form);
 
     // returns the default operation 'in' parameter specification 
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
-    static const Q3CString & in();
+    static const QCString & in();
 
     // set the default operation 'in' parameter specification 
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_In(Q3CString v);
+    static bool set_In(QCString v);
 
     // returns the default operation 'out' parameter specification 
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
-    static const Q3CString & out();
+    static const QCString & out();
 
     // set the default operation 'out' parameter specification 
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Out(Q3CString v);
+    static bool set_Out(QCString v);
 
     // returns the default operation 'inout' parameter specification 
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
-    static const Q3CString & inout();
+    static const QCString & inout();
 
     // set the default operation 'inout' parameter specification 
     // in case its type is not an enum or a type specified in the
@@ -347,83 +347,83 @@ class CppSettings : public UmlSettings {
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     
-    static bool set_Inout(Q3CString v);
+    static bool set_Inout(QCString v);
 
     // return the default operation value type form
-    static Q3CString Return();
+    static QCString Return();
 
     // set the default operation value type form
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Return(Q3CString v);
+    static bool set_Return(QCString v);
 
     // returns the default definition of a class
-    static const Q3CString & classDecl();
+    static const QCString & classDecl();
 
     // set the default definition of a class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassDecl(Q3CString v);
+    static bool set_ClassDecl(QCString v);
 
     // returns the default specification for an 'external' class
-    static const Q3CString & externalClassDecl();
+    static const QCString & externalClassDecl();
 
     // set the default specification for an 'external' class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ExternalClassDecl(Q3CString v);
+    static bool set_ExternalClassDecl(QCString v);
 
     // returns the default definition of a struct
-    static const Q3CString & structDecl();
+    static const QCString & structDecl();
 
     // set the default definition of a struct
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_StructDecl(Q3CString v);
+    static bool set_StructDecl(QCString v);
 
     // returns the default definition of an union
-    static const Q3CString & unionDecl();
+    static const QCString & unionDecl();
 
     // set the default definition of an union
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_UnionDecl(Q3CString v);
+    static bool set_UnionDecl(QCString v);
 
     // returns the default definition of an enum
-    static const Q3CString & enumDecl();
+    static const QCString & enumDecl();
 
     // set the default definition of an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumDecl(Q3CString v);
+    static bool set_EnumDecl(QCString v);
 
     // returns the default definition of a typedef
-    static const Q3CString & typedefDecl();
+    static const QCString & typedefDecl();
 
     // set the default definition of a typedef
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_TypedefDecl(Q3CString v);
+    static bool set_TypedefDecl(QCString v);
 
     // returns the default definition of an attribute depending on the multiplicity
-    static const Q3CString & attributeDecl(const char * multiplicity);
+    static const QCString & attributeDecl(const char * multiplicity);
 
     // set the default definition of an attribute
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_AttributeDecl(const char * multiplicity, Q3CString v);
+    static bool set_AttributeDecl(const char * multiplicity, QCString v);
 
     // returns the default definition of an enumeration item
-    static const Q3CString & enumItemDecl();
+    static const QCString & enumItemDecl();
 
     // set the default definition of an enumeration item
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumItemDecl(Q3CString v);
+    static bool set_EnumItemDecl(QCString v);
 
     // returns the default definition of a relation depending on it is an
     // aggregation by value or not and the multiplicity, given in argument.
-    static const Q3CString & relationDecl(bool by_value, const char * multiplicity);
+    static const QCString & relationDecl(bool by_value, const char * multiplicity);
 
     // set the default definition of a relation depending on it is an
     // aggregation by value or not and the multiplicity, given in argument.
@@ -432,20 +432,20 @@ class CppSettings : public UmlSettings {
     static bool set_RelationDecl(bool by_value, const char * multiplicity, const char * v);
 
     // returns the default declaration of an operation
-    static const Q3CString & operationDecl();
+    static const QCString & operationDecl();
 
     // set the default declaration of an operation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDecl(Q3CString v);
+    static bool set_OperationDecl(QCString v);
 
     // returns the default definition of an operation
-    static const Q3CString & operationDef();
+    static const QCString & operationDef();
 
     // set the default definition of an operation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDef(Q3CString v);
+    static bool set_OperationDef(QCString v);
 
     // return TRUE if the operations profile must contain 'throw()'
     // when the operations does not have exception
@@ -469,13 +469,13 @@ class CppSettings : public UmlSettings {
 
     // returns the default name of a 'get' operation generated 
     // through the attribute and relation 'add get operation' menu
-    static const Q3CString & getName();
+    static const QCString & getName();
 
     // set the default name of a 'get' operation generated 
     // through the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_GetName(Q3CString v);
+    static bool set_GetName(QCString v);
 
     // returns if a 'get' operation generated through the attribute
     // and relation 'add get operation' menu is inline by default
@@ -521,14 +521,14 @@ class CppSettings : public UmlSettings {
 
     // returns the default name of a 'set' operation generated 
     // through the attribute and relation 'add set operation' menu
-    static const Q3CString & setName();
+    static const QCString & setName();
 
     // set the default name of a 'set' operation generated 
     // through the attribute and relation 'add set operation' menu
     //
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SetName(Q3CString v);
+    static bool set_SetName(QCString v);
 
     // returns if a 'set' operation generated through the attribute
     // and relation 'add set operation' menu is inline by default
@@ -569,51 +569,51 @@ class CppSettings : public UmlSettings {
 
     static bool _defined;
 
-    static Q3CString _root;
+    static QCString _root;
 
-    static Q3CString _in;
+    static QCString _in;
 
-    static Q3CString _out;
+    static QCString _out;
 
-    static Q3CString _inout;
+    static QCString _inout;
 
-    static Q3CString _return;
+    static QCString _return;
 
-    static Q3CString _enum_in;
+    static QCString _enum_in;
 
-    static Q3CString _enum_out;
+    static QCString _enum_out;
 
-    static Q3CString _enum_inout;
+    static QCString _enum_inout;
 
-    static Q3CString _enum_return;
+    static QCString _enum_return;
 
-    static Q3CString _class_decl;
+    static QCString _class_decl;
 
-    static Q3CString _external_class_decl;
+    static QCString _external_class_decl;
 
-    static Q3CString _struct_decl;
+    static QCString _struct_decl;
 
-    static Q3CString _union_decl;
+    static QCString _union_decl;
 
-    static Q3CString _enum_decl;
+    static QCString _enum_decl;
 
-    static Q3CString _typedef_decl;
+    static QCString _typedef_decl;
 
-    static Q3CString _attr_decl[3/*multiplicity*/];
+    static QCString _attr_decl[3/*multiplicity*/];
 
-    static Q3CString _enum_item_decl;
+    static QCString _enum_item_decl;
 
-    static Q3CString _rel_decl[2/*relation kind*/][3/*multiplicity*/];
+    static QCString _rel_decl[2/*relation kind*/][3/*multiplicity*/];
 
-    static Q3CString _oper_decl;
+    static QCString _oper_decl;
 
-    static Q3CString _oper_def;
+    static QCString _oper_def;
 
     static bool _force_oper_throw;
 
     static aVisibility _get_visibility;
 
-    static Q3CString _get_name;
+    static QCString _get_name;
 
     static bool _is_get_inline;
 
@@ -623,7 +623,7 @@ class CppSettings : public UmlSettings {
 
     static aVisibility _set_visibility;
 
-    static Q3CString _set_name;
+    static QCString _set_name;
 
     static bool _is_set_inline;
 
@@ -631,19 +631,19 @@ class CppSettings : public UmlSettings {
 
     static bool _is_set_param_ref;
 
-    static Q3CString _h_content;
+    static QCString _h_content;
 
-    static Q3CString _src_content;
+    static QCString _src_content;
 
-    static Q3CString _h_ext;
+    static QCString _h_ext;
 
-    static Q3CString _src_ext;
+    static QCString _src_ext;
 
-    static Q3CString _dir_regexp;
+    static QCString _dir_regexp;
 
     static bool _dir_regexp_case_sensitive;
 
-    static Q3CString _file_regexp;
+    static QCString _file_regexp;
 
     static bool _file_regexp_case_sensitive;
 
@@ -659,9 +659,9 @@ class CppSettings : public UmlSettings {
 
     static bool _is_inline_force_header_in_h;
 
-    static Q3CString _visibility_indent;
+    static QCString _visibility_indent;
 
-    static Q3Dict<Q3CString> _map_includes;
+    static QDict<QCString> _map_includes;
 
 
   protected:

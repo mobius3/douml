@@ -5,8 +5,8 @@
 // to avoid compiler warning
 #include "UmlFragment.h"
 
-#include <q3ptrvector.h>
-#include <q3cstring.h>
+#include <qvector.h>
+#include <qcstring.h>
 
 class UmlFragment;
 class UmlBaseFragment;
@@ -26,13 +26,13 @@ class UmlBaseFragmentCompartment {
     }
 
     // the texts placed in the compartment
-    const Q3PtrVector<char> & texts() const {
+    const QVector<char> & texts() const {
         return _texts;
     }
 
     // return the fragments contained in the compartment,
     // may be none
-    const Q3PtrVector<UmlFragment> & contained() const {
+    const QVector<UmlFragment> & contained() const {
         return _contained;
     }
 
@@ -40,27 +40,27 @@ class UmlBaseFragmentCompartment {
   private:
     UmlFragment * _fragment;
 
-    Q3PtrVector<UmlFragment> _contained;
+    QVector<UmlFragment> _contained;
 
     int _rank;
 
-    Q3PtrVector<char> _texts;
+    QVector<char> _texts;
 
     int _y;
 
-    Q3CString _start_continuation;
+    QCString _start_continuation;
 
-    Q3CString _end_continuation;
+    QCString _end_continuation;
 
 
   public:
     void add_contained_(UmlFragment * x);
 
-    void add_text_(Q3CString x);
+    void add_text_(QCString x);
 
     //internal, do NOT use it
     
-    void add_cont_(Q3CString s, int cy);
+    void add_cont_(QCString s, int cy);
 
     int b() const {
         return _y;
@@ -82,12 +82,12 @@ class UmlBaseFragmentCompartment {
   friend class UmlBaseUseCaseDiagramDefinition;
   friend class UmlBaseSequenceDiagramDefinition;
     // return the continuation ('goto' case), or an empty string/null
-    Q3CString endContinuation() const {
+    QCString endContinuation() const {
         return _end_continuation;
     }
 
     // return the continuation ('label' case), or an empty string/null
-    Q3CString startContinuation() const {
+    QCString startContinuation() const {
         return _start_continuation;
     }
 

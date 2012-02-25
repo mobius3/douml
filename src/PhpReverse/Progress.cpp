@@ -31,7 +31,7 @@
 #include "Package.h"
 
 Progress::Progress(int n, const char * lbl)
-    : Q3ProgressDialog(lbl, 0, n, 0, 0, FALSE, Qt::WDestructiveClose), n(0) {
+    : QProgressDialog(lbl, 0, n, 0, 0, FALSE, WDestructiveClose), n(0) {
   setMinimumDuration(1000);
 }
 

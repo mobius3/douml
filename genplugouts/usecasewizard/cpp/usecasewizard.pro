@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= usecasewizard
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 HEADERS		= ./UmlFinalState.h \
 		  ./UmlBaseCollaborationDiagram.h \
 		  ./UmlBaseClassView.h \
@@ -226,5 +226,3 @@ SOURCES		= ./UmlFinalState.cpp \
 		  ./UmlBaseDeepHistoryPseudoState.cpp \
 		  ./UmlBaseDeployment.cpp \
 		  ./UmlExtraClassMember.cpp
-#The following line was inserted by qt3to4
-QT += network  qt3support 

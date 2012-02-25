@@ -26,13 +26,9 @@
 #ifndef PACKAGE_H
 #define PACKAGE_H
 
-#include <q3dict.h>
+#include <qdict.h>
 #include <qstringlist.h> 
 #include <qstack.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3CString>
-#include <Q3ValueList>
 
 #include "Class.h"
 #include "UmlClass.h"
@@ -65,14 +61,14 @@ class Package : public BrowserNode, public ClassContainer {
     virtual Class * localy_defined(QString name) const;
     void own(UmlArtifact *);
     void reverse(UmlArtifact *);
-    void reverse_file(Q3CString f, UmlArtifact * art = 0);
+    void reverse_file(QCString f, UmlArtifact * art = 0);
 #else
-    void reverse_file(Q3CString f);    
+    void reverse_file(QCString f);    
 #endif
   
     virtual bool isa_package() const;
 
-    const Q3CString & get_path() { return path; }
+    const QCString & get_path() { return path; }
     UmlPackage * get_uml(bool mandatory = TRUE);
 #ifdef REVERSE
     void send_dir(int n);
@@ -83,12 +79,12 @@ class Package : public BrowserNode, public ClassContainer {
     
     void new_class(Class *);
     
-    virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
-			      const Q3ValueList<FormalParameterList> & tmplts,
+    virtual void compute_type(QCString type, UmlTypeSpec & typespec,
+			      const QValueList<FormalParameterList> & tmplts,
 			      Class ** need_object = 0);
-    virtual Class * define(const Q3CString & name, char st);
-    virtual void declare(const Q3CString &, Class *);
-    void force_class(Q3CString name, UmlTypeSpec & typespec, Class ** need_object);
+    virtual Class * define(const QCString & name, char st);
+    virtual void declare(const QCString &, Class *);
+    void force_class(QCString name, UmlTypeSpec & typespec, Class ** need_object);
     
 #ifndef REVERSE
     virtual QString get_path() const;
@@ -120,11 +116,11 @@ class Package : public BrowserNode, public ClassContainer {
     
   private:
     UmlPackage * uml;
-    Q3CString package;		// java package may be with '.'
-    Q3CString path;
-    Q3Dict<Class> Undefined;
+    QCString package;		// java package may be with '.'
+    QCString path;
+    QDict<Class> Undefined;
 #ifdef ROUNDTRIP
-    Q3Dict<UmlArtifact> roundtriped;
+    QDict<UmlArtifact> roundtriped;
 #endif
   
     static bool scan;
@@ -133,34 +129,34 @@ class Package : public BrowserNode, public ClassContainer {
     static QRegExp * DirFilter;
     static QRegExp * FileFilter;
     static QString Ext;
-    static Q3Dict<Class> classes;
-    static Q3Dict<Class> java_classes;
-    static Q3Dict<UmlClass> user_classes;
-    static Q3Dict<Package> known_packages;
-    static Q3Dict<UmlPackage> user_packages;
+    static QDict<Class> classes;
+    static QDict<Class> java_classes;
+    static QDict<UmlClass> user_classes;
+    static QDict<Package> known_packages;
+    static QDict<UmlPackage> user_packages;
     static QStringList unknown_packages;
     static QStringList imports;
     static bool java_lang_added;
     static QStringList static_imports;
     static QStack<QStringList> stack;
-    static Q3ValueList<FormalParameterList> Formals;
+    static QValueList<FormalParameterList> Formals;
     static QApplication * app;
     
     static int file_number(QDir & dir, bool rec);
     
     static void manage_import();
-    void reverse_toplevel_form(Q3CString s);
+    void reverse_toplevel_form(QCString s);
     void reverse_directory(QDir & dir, bool rec);
     
-    void set_package(Q3CString s);
-    Package * find(Q3CString s, bool nohack);
+    void set_package(QCString s);
+    Package * find(QCString s, bool nohack);
     static Package * package_unknown();
     
-    static void update_package_list(Q3CString name);
-    static void update_class_list(Q3CString pack, UmlItem * container);
+    static void update_package_list(QCString name);
+    static void update_class_list(QCString pack, UmlItem * container);
     
-    Class * declare_if_needed(Q3CString name, char st);
-    Class * new_class(const Q3CString & name, char st);
+    Class * declare_if_needed(QCString name, char st);
+    Class * new_class(const QCString & name, char st);
 
 #ifdef ROUNDTRIP
     int count_file_number();

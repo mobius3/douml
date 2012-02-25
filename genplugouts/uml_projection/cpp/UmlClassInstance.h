@@ -3,12 +3,12 @@
 
 
 #include "UmlBaseClassInstance.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlClassInstance : public UmlBaseClassInstance {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlClassInstance(void * id, const Q3CString & s) : UmlBaseClassInstance(id, s) {
+     UmlClassInstance(void * id, const QCString & s) : UmlBaseClassInstance(id, s) {
     }
 
 };

@@ -6,7 +6,7 @@ const char * UmlInitialActivityNode::sKind() const {
 }
 
 void UmlInitialActivityNode::solve_output_flows() {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1) {
@@ -23,7 +23,7 @@ const char * UmlFlowFinalActivityNode::sKind() const {
 }
 
 void UmlFlowFinalActivityNode::solve_output_flows() {
-  Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+  QListIterator<UmlFlow> it(_incoming_flows);
   
   while (it.current() != 0) {
     if (it.current()->control_or_data() == Unset)
@@ -38,7 +38,7 @@ const char * UmlActivityFinalActivityNode::sKind() const {
 }
 
 void UmlActivityFinalActivityNode::solve_output_flows() {
-  Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+  QListIterator<UmlFlow> it(_incoming_flows);
   
   while (it.current() != 0) {
     if (it.current()->control_or_data() == Unset)
@@ -59,7 +59,7 @@ void UmlDecisionActivityNode::solve_output_flows() {
   ControlOrData k = Unset;
 
   // look at output flows
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   unsigned i;
   
@@ -78,7 +78,7 @@ void UmlDecisionActivityNode::solve_output_flows() {
       int ndata = 0;
       bool hascontrol = FALSE;
       bool hasunset = FALSE;
-      Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+      QListIterator<UmlFlow> it(_incoming_flows);
 
       while (it.current() != 0) {
 	k = it.current()->control_or_data();
@@ -131,7 +131,7 @@ void UmlDecisionActivityNode::solve_output_flows() {
       f->set_control_or_data(k);
   }
 
-  Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+  QListIterator<UmlFlow> it(_incoming_flows);
 
   while (it.current() != 0) {
     if (it.current()->control_or_data() == Unset)
@@ -151,7 +151,7 @@ void UmlMergeActivityNode::solve_output_flows() {
   ControlOrData k = Unset;
 
   // look at output flows
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   unsigned i;
   
@@ -170,7 +170,7 @@ void UmlMergeActivityNode::solve_output_flows() {
       bool hasdata = FALSE;
       bool hascontrol = FALSE;
       bool hasunset = FALSE;
-      Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+      QListIterator<UmlFlow> it(_incoming_flows);
 
       while (it.current() != 0) {
 	k = it.current()->control_or_data();
@@ -216,7 +216,7 @@ void UmlMergeActivityNode::solve_output_flows() {
       f->set_control_or_data(k);
   }
 
-  Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+  QListIterator<UmlFlow> it(_incoming_flows);
 
   while (it.current() != 0) {
     if (it.current()->control_or_data() == Unset)
@@ -236,7 +236,7 @@ void UmlForkActivityNode::solve_output_flows() {
 
   UmlFlow * f;
   ControlOrData k;
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
 
   if (!_incoming_flows.isEmpty()) {
@@ -293,7 +293,7 @@ const char * UmlJoinActivityNode::sKind() const {
 void UmlJoinActivityNode::solve_output_flows() {
   // output is data if at least one input is data
   ControlOrData k = Unset;
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size(); // theo 1
 
   if (n == 0)
@@ -302,7 +302,7 @@ void UmlJoinActivityNode::solve_output_flows() {
   UmlFlow * f = (UmlFlow *) ch[0];
 
   // look at input flows
-  Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+  QListIterator<UmlFlow> it(_incoming_flows);
 
   while (it.current() != 0) {
     k = it.current()->control_or_data();

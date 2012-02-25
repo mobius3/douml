@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserState.h"
 #include "StateData.h"
@@ -115,13 +110,13 @@ void BrowserState::update_idmax_for_root()
 void BrowserState::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
     
-void BrowserState::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserState::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserTransition::compute_referenced_by(l, this);
   if (! ondelete) {
@@ -140,7 +135,7 @@ void BrowserState::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
 }
 
 // callers suppose this only take specification into acount
-void BrowserState::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserState::compute_referenced_by(QList<BrowserNode> & l,
 					 BrowserOperation * op)
 {
   IdIterator<BrowserState> it(all);
@@ -158,7 +153,7 @@ bool BrowserState::is_ref() const {
 }
 
 bool BrowserState::can_reference() const {
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling()) {
     switch (((BrowserNode *) child)->get_type()) {
@@ -240,7 +235,7 @@ BrowserState * BrowserState::add_state(BrowserNode * future_parent,
 BrowserState * BrowserState::get_state(BrowserNode * parent)
 {
   BrowserNodeList l;
-  Q3ListViewItem * child;
+  QListViewItem * child;
       
   for (child = parent->firstChild(); child != 0; child = child->nextSibling())
     if (!((BrowserNode *) child)->deletedp() &&
@@ -281,8 +276,8 @@ static bool is_machine(const BrowserState * s)
 }
 
 void BrowserState::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   QString what;
   bool ref = is_ref();
   bool mach = is_machine(this);
@@ -344,7 +339,7 @@ through a transition or a reference"));
     m.setWhatsThis(m.insertItem(TR("Undelete"), 8),
 		   TR("to undelete the <i>" + what + "</i>"));
  
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -463,7 +458,7 @@ void BrowserState::apply_shortcut(QString s) {
     if (s == "Undelete")
       choice = 8;
  
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -679,10 +674,10 @@ BrowserState * BrowserState::get_machine(const BrowserNode * bn)
   }
 }
 
-bool BrowserState::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserState::may_contains_them(const QList<BrowserNode> & l,
 				     BooL & duplicable) const {
   BrowserNode * machine = get_machine(this);
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -804,7 +799,7 @@ void BrowserState::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	  free_move &&
 	  ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
 	// have choice
-	Q3PopupMenu m(0);
+	QPopupMenu m(0);
   
 	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
 				   m.font()), -1);
@@ -839,23 +834,23 @@ void BrowserState::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 }
 
 #if 0
-static void get_under(const BrowserNode * bn, Q3PtrList<const BrowserNode> & l)
+static void get_under(const BrowserNode * bn, QList<const BrowserNode> & l)
 {
   l.append(bn);
   
-  for (Q3ListViewItem * child = bn->firstChild(); 
+  for (QListViewItem * child = bn->firstChild(); 
        child != 0;
        child = child->nextSibling())
     if (((BrowserNode *) child)->get_type() != UmlTransition)
       get_under((BrowserNode *) child, l);
 }
 
-static bool check_trans(const BrowserNode * bn, Q3PtrList<const BrowserNode> & l,
+static bool check_trans(const BrowserNode * bn, QList<const BrowserNode> & l,
 			bool under, const BrowserNode * st)
 {  
   under |= (bn == st);
   
-  for (Q3ListViewItem * child = bn->firstChild(); 
+  for (QListViewItem * child = bn->firstChild(); 
        child != 0;
        child = child->nextSibling()) {
     if (((BrowserNode *) child)->get_type() == UmlTransition) {
@@ -877,7 +872,7 @@ bool BrowserState::free_of_move() const {
   if (this == m)
     return TRUE;
   
-  Q3PtrList<const BrowserNode> l;
+  QList<const BrowserNode> l;
   
   get_under(this, l);
   return check_trans(m, l, FALSE, this);
@@ -907,7 +902,7 @@ QString BrowserState::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) get_machine(p));
 }
 
-void BrowserState::save_stereotypes(Q3TextStream & st)
+void BrowserState::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "state_stereotypes ";
@@ -924,7 +919,7 @@ void BrowserState::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserState::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserState::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "state_ref " << get_ident() << " // " << get_name();
   else {
@@ -944,7 +939,7 @@ void BrowserState::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

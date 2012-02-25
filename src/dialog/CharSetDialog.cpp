@@ -32,13 +32,10 @@
 #include <qcursor.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
 #include <qtextcodec.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
 
 #include "CharSetDialog.h"
 #include "UmlDesktop.h"
@@ -50,8 +47,8 @@ CharSetDialog::CharSetDialog(QString cs) : QDialog(0, "charset dialog", TRUE) {
   setCaption(TR("Character set dialog"));
   move(QCursor::pos());
  
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBoxLayout * hbox;
  
   vbox->setMargin(5);
   
@@ -64,7 +61,7 @@ CharSetDialog::CharSetDialog(QString cs) : QDialog(0, "charset dialog", TRUE) {
 				"For this session, choose one of the following else 'ISO_8859-1' will be used"),
 			     this));
   
-  cb = new Q3ComboBox(FALSE, this);
+  cb = new QComboBox(FALSE, this);
   cb->setAutoCompletion(completion());
   vbox->addWidget(cb);
   
@@ -86,7 +83,7 @@ CharSetDialog::CharSetDialog(QString cs) : QDialog(0, "charset dialog", TRUE) {
   l.sort();
   cb->insertStringList(l);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * ok = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);

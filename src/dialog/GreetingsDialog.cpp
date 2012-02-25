@@ -30,13 +30,9 @@
 #include <qapplication.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3textview.h> 
+#include <qtextview.h> 
 #include <qpushbutton.h>
 #include <qtimer.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-#include <QCloseEvent>
 
 #include "GreetingsDialog.h"
 #include "UmlDesktop.h"
@@ -44,48 +40,48 @@
 GreetingsDialog::GreetingsDialog() : QDialog(0, "", TRUE) {
   setCaption("Greetings");
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox; 
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox; 
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
 
   const char * msg = "\
 <br>\n\
-Hello!<br>\n\
+Greetings,<br>\n\
 <br>\n\
-Thank you for using <i>DoUML!</i><br>\n\
+Thank you for using <i>Bouml</i>. I develop and improve this tool for<br>\n\
+several years and wished that it be useful and enjoyable to use.<br>\n\
 <br>\n\
-<br>DoUML is a fork of the original BoUML project,\n\
-<br>with the focus of porting the UI to Qt4 and to\n\
-<br>continue development of the best UML 2.x tool!\n\
+Used in a professional context Bouml allows you to improve and<br>\n\
+accelerate your software developments, and thus reduce their<br>\n\
+costs, without having to buy a UML tool whose licenses are often<br>\n\
+very expensive.<br>\n\
 <br>\n\
-<br>Please be aware that this is a testing version\n\
-<br>and should <i>not</i> be considered ready for production\n\
-<br>projects! We encourage you to use it and report bugs\n\
-<br>to us so that we may reach a stable version soon!\n\
+Bouml is a personal, non-sponsored work, thank you for to help me<br>\n\
+to continue with your donations.<br>\n\
 <br>\n\
-<br>Thank you!\n\
+Best regards and happy modeling<br>\n\
 <br>\n\
-Visit us at <i>http://bouml-ng.sourceforge.net</i>\n\
+Bruno Pages<i> <i>http://bouml.free.fr</i>\n\
 <br>\n<br>\n<br>\n";
 
-  Q3TextView * tx =
-    new Q3TextView(msg, QString::null, this);
+  QTextView * tx =
+    new QTextView(msg, QString::null, this);
   QFont fnt = tx->font();
   
   fnt.setItalic(TRUE);
   
   QFontMetrics fm(fnt);
   
-  tx->setVScrollBarMode(Q3ScrollView::AlwaysOff);
-  tx->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+  tx->setVScrollBarMode(QScrollView::AlwaysOff);
+  tx->setHScrollBarMode(QScrollView::AlwaysOff);
   tx->setMinimumSize(fm.size(0, msg));
   hbox->addWidget(tx);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   
   ok = new QPushButton("&OK", this);

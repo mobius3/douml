@@ -27,14 +27,12 @@
 #define EXTRAMEMBERDIALOG_H
 
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BrowserNode.h"
 #include "VisibilityGroup.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QRadioButton;
 
@@ -45,16 +43,16 @@ class BrowserNode;
 class KeyValuesTable;
 class BodyDialog;
 
-class ExtraMemberDialog : public Q3TabDialog {
+class ExtraMemberDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     ExtraMemberData * emd;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     // uml tab
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
     
     // C++ tab

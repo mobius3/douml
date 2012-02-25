@@ -3,8 +3,8 @@
 
 
 #include "UmlBasePackage.h"
-#include <q3cstring.h>
-#include <q3ptrlist.h>
+#include <qcstring.h>
+#include <qlist.h>
 
 class FileOut;
 class UmlItem;
@@ -15,7 +15,7 @@ class UmlUseCaseDiagram;
 // You can modify it as you want (except the constructor)
 class UmlPackage : public UmlBasePackage {
   public:
-    UmlPackage(void * id, const Q3CString & n) : UmlBasePackage(id, n) {};
+    UmlPackage(void * id, const QCString & n) : UmlBasePackage(id, n) {};
 
     virtual void xmi(int argc, char ** argv);
 
@@ -23,7 +23,7 @@ class UmlPackage : public UmlBasePackage {
 
 
   private:
-    void search_profiles(Q3PtrList<UmlPackage> & l);
+    void search_profiles(QList<UmlPackage> & l);
 
 
   public:
@@ -43,9 +43,9 @@ class UmlPackage : public UmlBasePackage {
 
 
   protected:
-    Q3PtrList<UmlItem> _relations;
+    QList<UmlItem> _relations;
 
-    Q3PtrList<UmlUseCaseDiagram> _assocs;
+    QList<UmlUseCaseDiagram> _assocs;
 
 };
 

@@ -7,8 +7,6 @@
 #include "CppSettings.h"
 #include "JavaSettings.h"
 #include "IdlSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlRelation::Role::import(File & f) {
   f.read("(");
   f.read("object");
@@ -25,8 +23,8 @@ void UmlRelation::Role::import(File & f) {
   is_static = FALSE;
   is_byvalue = FALSE;
   
-  Q3CString ste; 
-  Q3CString s;
+  QCString ste; 
+  QCString s;
   int k; 
      
   do { 
@@ -103,7 +101,7 @@ void UmlRelation::import(File & f)
   if (scanning)
     f.skipBlock();
   else {
-    Q3CString s;
+    QCString s;
     
     if (f.read(s) != STRING)
       f.syntaxError(s, "relation's name");
@@ -111,11 +109,11 @@ void UmlRelation::import(File & f)
       // unnamed
       s = "";
     
-    Q3CString id;
-    Q3CString ste;
-    Q3CString doc;
-    Q3Dict<Q3CString> prop;
-    Q3CString s2;
+    QCString id;
+    QCString ste;
+    QCString doc;
+    QDict<QCString> prop;
+    QCString s2;
     int k;
     
     do {
@@ -192,7 +190,7 @@ void UmlRelation::import(File & f)
       
       if (role2->is_navigable) {
 	if (bidir) {
-	  const Q3PtrVector<UmlItem> ch = role2->target->children();
+	  const QVector<UmlItem> ch = role2->target->children();
 	  
 	  r = (UmlRelation *) ch.at(ch.count() - 1);
 	}
@@ -275,7 +273,7 @@ void UmlRelation::corba(UmlRelation::Role * role) {
 }
 
 void UmlRelation::java(UmlRelation::Role * role) {
-  Q3CString * v;
+  QCString * v;
     
   if ((v = role->prop.find("Java/Final")) != 0) {
     if (*v == "TRUE")

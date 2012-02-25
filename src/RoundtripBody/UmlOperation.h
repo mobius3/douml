@@ -28,15 +28,12 @@
 
 #include "UmlBaseOperation.h"
 #include "aLanguage.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
 
 class QTextOStream;
 
 class UmlOperation : public UmlBaseOperation {
   public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const QCString & n)
       : UmlBaseOperation(id, n) {};
   
   static void roundtrip(const char * path, aLanguage who);

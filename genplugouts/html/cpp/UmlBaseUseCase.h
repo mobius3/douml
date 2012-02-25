@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlUseCase;
 class UmlUseCaseDiagram;
@@ -31,7 +31,7 @@ class UmlBaseUseCase : public UmlItem {
     bool set_AssociatedDiagram(UmlUseCaseDiagram * d);
 
     // return the extension points
-    const Q3CString & extensionPoints();
+    const QCString & extensionPoints();
 
     // set the extension points
     //
@@ -40,7 +40,7 @@ class UmlBaseUseCase : public UmlItem {
 
 
   private:
-    Q3CString _extension_points;
+    QCString _extension_points;
 
     UmlUseCaseDiagram * _assoc_diagram;
 
@@ -49,7 +49,7 @@ class UmlBaseUseCase : public UmlItem {
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseUseCase(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseUseCase(void * id, const QCString & n) : UmlItem(id, n) {};
 
 };
 

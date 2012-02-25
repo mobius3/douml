@@ -29,9 +29,9 @@
 
 #include <qapplication.h>
 #include <qworkspace.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 
 #include "UmlWindow.h"
@@ -64,8 +64,8 @@ extern QString imageText();
 // id is an old ident in case of an import
 ClassDiagramWindow::ClassDiagramWindow(const QString & s, BrowserClassDiagram * b, int id)
     : DiagramWindow(b, s), view(0) {
-  Q3ToolBar * toolbar = new Q3ToolBar(this, "class diagram operations");
-  addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
+  QToolBar * toolbar = new QToolBar(this, "class diagram operations");
+  addToolBar(toolbar, TR("Toolbar"), Top, TRUE);
   
   add_edit_button(toolbar);
   
@@ -80,97 +80,97 @@ ClassDiagramWindow::ClassDiagramWindow(const QString & s, BrowserClassDiagram * 
     = new QToolButton(*classButton, TR("Add Class"), QString::null,
 		      this, SLOT(hit_class()), toolbar, "add class");
   addClass->setToggleButton(TRUE);
-  Q3WhatsThis::add(addClass, addclassText());
+  QWhatsThis::add(addClass, addclassText());
   
   addPackage
     = new QToolButton(*packageButton, TR("Add Package"), QString::null,
 		      this, SLOT(hit_package()), toolbar, "add package");
   addPackage->setToggleButton(TRUE);
-  Q3WhatsThis::add(addPackage, addpackageText());
+  QWhatsThis::add(addPackage, addpackageText());
   
   addFragment
     = new QToolButton(*fragmentButton, TR("Add Fragment"), QString::null,
 		      this, SLOT(hit_fragment()), toolbar, "add fragment");
   addFragment->setToggleButton(TRUE);
-  Q3WhatsThis::add(addFragment, addfragmentText());
+  QWhatsThis::add(addFragment, addfragmentText());
   
   inherit =
     new QToolButton(*generalisationButton, TR("Generalisation"), QString::null,
 		    this, SLOT(hit_inherit()), toolbar, "generalisation");
   inherit->setToggleButton(TRUE);
-  Q3WhatsThis::add(inherit, inheritText());
+  QWhatsThis::add(inherit, inheritText());
   
   realize =
     new QToolButton(*realizeButton, TR("Realize"), QString::null,
 		    this, SLOT(hit_realize()), toolbar, "realize");
   realize->setToggleButton(TRUE);
-  Q3WhatsThis::add(realize, realizeText());
+  QWhatsThis::add(realize, realizeText());
   
   dependency =
     new QToolButton(*dependencyButton, TR("Dependency"), QString::null,
 		    this, SLOT(hit_dependency()), toolbar, "dependency");
   dependency->setToggleButton(TRUE);
-  Q3WhatsThis::add(dependency, dependencyText());
+  QWhatsThis::add(dependency, dependencyText());
   
   association =
     new QToolButton(*associationButton, TR("Association"), QString::null,
 		    this, SLOT(hit_association()), toolbar, "association");
   association->setToggleButton(TRUE);
-  Q3WhatsThis::add(association, associationText());
+  QWhatsThis::add(association, associationText());
   
   directionalassociation =
     new QToolButton(*directionalAssociationExtensionButton, TR("Directional Association / Extension"), QString::null,
 		    this, SLOT(hit_directionalassociation()), toolbar, "directional association");
   directionalassociation->setToggleButton(TRUE);
-  Q3WhatsThis::add(directionalassociation, directionalassociationextensionText());
+  QWhatsThis::add(directionalassociation, directionalassociationextensionText());
   
   aggregation =
     new QToolButton(*aggregationButton, TR("Aggregation"), QString::null,
 		    this, SLOT(hit_aggregation()), toolbar, "aggregation");
   aggregation->setToggleButton(TRUE);
-  Q3WhatsThis::add(aggregation, aggregationText());
+  QWhatsThis::add(aggregation, aggregationText());
 
   aggregationbyvalue =
     new QToolButton(*aggregationByValueButton, TR("Composition"), QString::null,
 		    this, SLOT(hit_aggregationbyvalue()), toolbar, "composition");
   aggregationbyvalue->setToggleButton(TRUE);
-  Q3WhatsThis::add(aggregationbyvalue, aggregationbyvalueText());
+  QWhatsThis::add(aggregationbyvalue, aggregationbyvalueText());
   
   directionalaggregation =
     new QToolButton(*directionalAggregationButton, TR("Directional Aggregation"), QString::null,
 		    this, SLOT(hit_directionalaggregation()), toolbar, "directional aggregation");
   directionalaggregation->setToggleButton(TRUE);
-  Q3WhatsThis::add(directionalaggregation, directionalaggregationText());
+  QWhatsThis::add(directionalaggregation, directionalaggregationText());
   
   directionalaggregationbyvalue =
     new QToolButton(*directionalAggregationByValueButton, TR("Directional Composition"), QString::null,
 		    this, SLOT(hit_directionalaggregationbyvalue()), toolbar, "directional composition");
   directionalaggregationbyvalue->setToggleButton(TRUE);
-  Q3WhatsThis::add(directionalaggregationbyvalue, directionalaggregationbyvalueText());
+  QWhatsThis::add(directionalaggregationbyvalue, directionalaggregationbyvalueText());
   
   note =
     new QToolButton(*noteButton, TR("Note"), QString::null,
 		    this, SLOT(hit_note()), toolbar, "note");
   note->setToggleButton(TRUE);
-  Q3WhatsThis::add(note, noteText());
+  QWhatsThis::add(note, noteText());
   
   anchor =
     new QToolButton(*anchorButton, TR("Anchor / Class association"), QString::null,
 		    this, SLOT(hit_anchor()), toolbar, "anchor");
   anchor->setToggleButton(TRUE);
-  Q3WhatsThis::add(anchor, anchorText());
+  QWhatsThis::add(anchor, anchorText());
   
   text =
     new QToolButton(*textButton, TR("Text"), QString::null,
 		    this, SLOT(hit_text()), toolbar, "text");
   text->setToggleButton(TRUE);
-  Q3WhatsThis::add(text, textText());
+  QWhatsThis::add(text, textText());
   
   image =
     new QToolButton(*imageButton, TR("Image"), QString::null,
 		    this, SLOT(hit_image()), toolbar, "image");
   image->setToggleButton(TRUE);
-  Q3WhatsThis::add(image, imageText());
+  QWhatsThis::add(image, imageText());
   
   toolbar->addSeparator();
   

@@ -24,12 +24,7 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtextstream.h>
 
 #include "UmlArtifact.h"
 #include "IdlSettings.h"
@@ -53,27 +48,27 @@ void UmlArtifact::generate() {
     
     package_of_generated_artifact = package();
     
-    const Q3CString def = idlSource();
+    const QCString def = idlSource();
     
     if (def.isEmpty())
       return;
     
-    const Q3CString & name = this->name();    
+    const QCString & name = this->name();    
     UmlPackage * pack = package();
-    Q3CString path = pack->path(name);
-    Q3CString mod_start;
-    Q3CString mod_end;
-    Q3CString mod = pack->idlModule();
+    QCString path = pack->path(name);
+    QCString mod_start;
+    QCString mod_end;
+    QCString mod = pack->idlModule();
     
     if (! mod.isEmpty()) {
       int index = 0;
       int index2;
-      Q3CString closed = "\n}; // module ";
+      QCString closed = "\n}; // module ";
       
       while ((index2 = mod.find(':', index)) != -1) {
-	Q3CString mo = mod.mid(index, index2 - index);
+	QCString mo = mod.mid(index, index2 - index);
 	
-	mod_start += Q3CString("module ") + mo + " {\n\n";
+	mod_start += QCString("module ") + mo + " {\n\n";
 	closed += mo;
 	mod_end = closed + "\n" + mod_end;
 	closed += "::";
@@ -81,25 +76,25 @@ void UmlArtifact::generate() {
 	index = index2 + 1;
       }
       
-      mod_start += Q3CString("module ") + mod.mid(index) + " {\n\n";
+      mod_start += QCString("module ") + mod.mid(index) + " {\n\n";
       closed += mod.mid(index);
       mod_end = closed + "\n" + mod_end;
     }
     
     UmlCom::message(name);
     if (verbose())
-      UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
+      UmlCom::trace(QCString("<hr><font face=helvetica>Generate code for <i> ")
 		    + name + "</i> in <i>" + path + "</i></font><br>");
     else
-      set_trace_header(Q3CString("<font face=helvetica>Generate code for <i> ")
+      set_trace_header(QCString("<font face=helvetica>Generate code for <i> ")
 		       + name + "</i> in <i>" + path + "</i></font><br>");
     
 #if 0
     // compute dependencies
     
-    Q3PtrList<CppRefType> dependencies;
+    QList<CppRefType> dependencies;
 #endif
-    const Q3PtrVector<UmlClass> & cls = associatedClasses();
+    const QVector<UmlClass> & cls = associatedClasses();
     unsigned n = cls.count();
     unsigned index;
     
@@ -111,7 +106,7 @@ void UmlArtifact::generate() {
     // generate source file
     
     QByteArray file;
-    QTextOStream f(&file);
+    QTextOStream f(file);
     const char * p = def;
     const char * pp = 0;
     
@@ -208,7 +203,7 @@ void UmlArtifact::generate() {
       
       if ((fp = fopen((const char *) path, "wb")) == 0) {
 	write_trace_header();
-	UmlCom::trace(Q3CString("<font color=\"red\"><b><i> ")
+	UmlCom::trace(QCString("<font color=\"red\"><b><i> ")
 		      + name + " : </i> cannot open <i> " 
 		      + path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
 		      + pack->name() + "</i> Idl directory specification</b></font><br>");
@@ -220,33 +215,33 @@ void UmlArtifact::generate() {
       }
     }
     else if (get_trace_header().isEmpty())
-      UmlCom::trace(Q3CString("<font face=helvetica><i> ")
+      UmlCom::trace(QCString("<font face=helvetica><i> ")
 		    + path + "</i> not modified</font><br>");
   }
 }
 
 void UmlArtifact::generate_text() {
-  const Q3CString srcdef = idlSource();
+  const QCString srcdef = idlSource();
   
   if (srcdef.isEmpty()) {
     if (verbose())
-      UmlCom::trace(Q3CString("<hr><font face=helvetica>artifact <i>")
+      UmlCom::trace(QCString("<hr><font face=helvetica>artifact <i>")
 		    + name() + "</i> has an empty IDL definition</font><br>");
     return;
   }
     
   UmlPackage * pack = package();
-  const Q3CString & name = UmlArtifact::name();    
-  Q3CString src_path = pack->text_path(name);
+  const QCString & name = UmlArtifact::name();    
+  QCString src_path = pack->text_path(name);
   
-  Q3CString s = " in <i> " + src_path + "</i>";
+  QCString s = " in <i> " + src_path + "</i>";
       
   UmlCom::message(name);
   if (verbose())
-    UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
+    UmlCom::trace(QCString("<hr><font face=helvetica>Generate code for <i> ")
 		  + name + "</i>" + s + "</font><br>");
   else
-    set_trace_header(Q3CString("<font face=helvetica>Generate code for <i> ")
+    set_trace_header(QCString("<font face=helvetica>Generate code for <i> ")
 		     + name + "</i>" + s + "</font><br>");
       
   if (must_be_saved(src_path, (const char *) srcdef)) {
@@ -256,7 +251,7 @@ void UmlArtifact::generate_text() {
     
     if ((fp_src = fopen((const char *) src_path, "wb")) == 0) {
       write_trace_header();
-      UmlCom::trace(Q3CString("<font color=\"red\"><b><i> ")
+      UmlCom::trace(QCString("<font color=\"red\"><b><i> ")
 		    + name + " : </i> cannot open <i> " 
 		    + src_path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
 		    + pack->name() + "</i> IDL directory specification</b></font><br>");
@@ -268,7 +263,7 @@ void UmlArtifact::generate_text() {
     }
   }
   else if (get_trace_header().isEmpty())
-    UmlCom::trace(Q3CString("<font face=helvetica><i> ")
+    UmlCom::trace(QCString("<font face=helvetica><i> ")
 		  + src_path + "</i> not modified</font><br>");
 }
 

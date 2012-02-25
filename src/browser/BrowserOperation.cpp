@@ -27,15 +27,11 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qfileinfo.h> 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDropEvent>
+#include <qptrdict.h>
 
 #include "BrowserOperation.h"
 #include "BrowserAttribute.h"
@@ -149,7 +145,7 @@ void BrowserOperation::post_duplicate() {
   // search for attribute/relation
   const char * s = x_of->get_name();
   UmlCode k = x_of->get_type();
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = parent()->firstChild(); child != 0; child = child->nextSibling()) {
     if ((((BrowserNode *) child)->get_type() == k) &&
@@ -207,10 +203,10 @@ bool BrowserOperation::delete_internal(QString &) {
 }
 
 void BrowserOperation::renumber(int phase) {
-  static Q3PtrDict<char> cpp;
-  static Q3PtrDict<char> java;
-  static Q3PtrDict<char> php;
-  static Q3PtrDict<char> python;
+  static QPtrDict<char> cpp;
+  static QPtrDict<char> java;
+  static QPtrDict<char> php;
+  static QPtrDict<char> python;
   
   char * b;
   
@@ -473,7 +469,7 @@ void BrowserOperation::paintCell(QPainter * p, const QColorGroup & cg, int colum
   const QColor & bg = p->backgroundColor();
   
   if (is_marked) {
-    p->setBackgroundMode(Qt::OpaqueMode);
+    p->setBackgroundMode(OpaqueMode);
     p->setBackgroundColor(UmlRedColor);
   }
     
@@ -483,20 +479,20 @@ void BrowserOperation::paintCell(QPainter * p, const QColorGroup & cg, int colum
     p->setFont((is_writable()) ? BoldItalicFont : ItalicFont);
   else
     p->setFont((is_writable()) ? BoldFont : NormalFont);
-  Q3ListViewItem::paintCell(p, cg, column, width, alignment);
+  QListViewItem::paintCell(p, cg, column, width, alignment);
   
   if (is_marked) {
-    p->setBackgroundMode(Qt::TransparentMode);
+    p->setBackgroundMode(TransparentMode);
     p->setBackgroundColor(bg);
   }
 }
 
-static Q3PtrList<BrowserNode> ImplBy;
+static QList<BrowserNode> ImplBy;
       
 void BrowserOperation::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu implbym(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu implbym(0);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -768,7 +764,7 @@ void BrowserOperation::member_cpp_def(const QString & prefix,
   }
 }
 
-void BrowserOperation::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserOperation::compute_referenced_by(QList<BrowserNode> & l,
 					     BrowserClass * target)
 {
   IdIterator<BrowserOperation> it(all);
@@ -780,7 +776,7 @@ void BrowserOperation::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserOperation::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserOperation::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   
   if (! ondelete) {
@@ -794,7 +790,7 @@ void BrowserOperation::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) 
 
 QString BrowserOperation::python_init_self(BrowserNode * cl)
 {
-  Q3ListViewItem * child;
+  QListViewItem * child;
   
   for (child = cl->firstChild(); child; child = child->nextSibling()) {
     if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
@@ -818,7 +814,7 @@ bool BrowserOperation::tool_cmd(ToolCom * com, const char * args) {
     return TRUE;
   case sideCmd:
     {
-      Q3PtrList<BrowserNode> l;
+      QList<BrowserNode> l;
       
       BrowserActivity::compute_referenced_by(l, this);
       BrowserState::compute_referenced_by(l, this);
@@ -869,7 +865,7 @@ const QStringList & BrowserOperation::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserOperation::save_stereotypes(Q3TextStream & st)
+void BrowserOperation::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "operation_stereotypes ";
@@ -908,7 +904,7 @@ void BrowserOperation::post_load()
   }
 }
 
-void BrowserOperation::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserOperation::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "operation_ref " << get_ident() << " // " << get_name();
   else {

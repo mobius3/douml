@@ -27,11 +27,6 @@
 #define OBJECTDIAGRAMVIEW_H
 
 #include "DiagramView.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QMouseEvent>
-#include <QDropEvent>
-#include <QDragEnterEvent>
 
 class ObjectDiagramWindow;
 class DiagramItem;
@@ -44,7 +39,7 @@ class ObjectDiagramView : public DiagramView {
 
     virtual void menu(const QPoint&);
     virtual void read(char *, char * k);
-    virtual void save(Q3TextStream & st, QString & warning, bool copy) const;
+    virtual void save(QTextStream & st, QString & warning, bool copy) const;
     
   private:
     ObjectDiagramWindow * window() const {

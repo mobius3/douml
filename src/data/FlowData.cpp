@@ -27,10 +27,8 @@
 
 
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3CString>
 
 #include "FlowData.h"
 #include "BrowserFlow.h"
@@ -198,7 +196,7 @@ bool FlowData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void FlowData::save(Q3TextStream & st, QString & warning) const {
+void FlowData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   nl_indent(st);
   st << "on ";
@@ -257,7 +255,7 @@ void FlowDef::send_def(ToolCom * com) {
   sel_trans.send_def(com);
 }
 
-void FlowDef::save(Q3TextStream & st, Q3CString lang) const {
+void FlowDef::save(QTextStream & st, QCString lang) const {
   indent(+1);
   
   if (!weight.isEmpty()) {
@@ -275,7 +273,7 @@ void FlowDef::save(Q3TextStream & st, Q3CString lang) const {
   indent(-1);
 }
 
-void FlowDef::read(char * & st, char * & k, Q3CString lang)
+void FlowDef::read(char * & st, char * & k, QCString lang)
 {
   int ln = strlen(lang);
   

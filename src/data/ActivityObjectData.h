@@ -26,7 +26,7 @@
 #ifndef ACTIVITYOBJECTDATA_H
 #define ACTIVITYOBJECTDATA_H
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "SimpleData.h"
 #include "ObjectData.h"
@@ -52,7 +52,7 @@ class ActivityObjectData : public SimpleData, public ObjectData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * &, char * &);
     
   protected slots:

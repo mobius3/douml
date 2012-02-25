@@ -29,10 +29,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
+#include <qpopupmenu.h> 
 
 #include "PackageCanvas.h"
 #include "SimpleRelationCanvas.h"
@@ -210,16 +207,16 @@ void PackageCanvas::check_size() {
 void PackageCanvas::change_scale() {
   double scale = the_canvas()->zoom();
   
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   setSize((int) (width_scale100*scale), (int) (height_scale100*scale));
   check_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);  
+  QCanvasRectangle::setVisible(TRUE);  
 }
 
 void PackageCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   const BasicData * data = browser_node->get_data();  
   const QPixmap * px = 
@@ -291,7 +288,7 @@ void PackageCanvas::draw(QPainter & p) {
       if (fp != 0)
 	fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		" x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		QColor(::Qt::darkGray).rgb()&0xffffff,
+		::Qt::darkGray.rgb()&0xffffff,
 		r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - shadow - 1);
     }
     
@@ -333,12 +330,12 @@ void PackageCanvas::draw(QPainter & p) {
       if (fp != 0) {
 	fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		" x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		QColor(::Qt::darkGray).rgb()&0xffffff,
+		::Qt::darkGray.rgb()&0xffffff,
 		r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 	
 	fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		" x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		QColor(::Qt::darkGray).rgb()&0xffffff,
+		::Qt::darkGray.rgb()&0xffffff,
 		r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
       }
     }
@@ -425,8 +422,8 @@ void PackageCanvas::post_loaded() {
 }
 
 void PackageCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -578,7 +575,7 @@ bool PackageCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void PackageCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void PackageCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st(3);
     ColorSpecVector co(1);
@@ -596,7 +593,7 @@ void PackageCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!st[0].name.isEmpty())
@@ -615,8 +612,8 @@ void PackageCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void PackageCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void PackageCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   PackageCanvas * x = (PackageCanvas *) it.current();
   
@@ -647,10 +644,10 @@ QString PackageCanvas::may_start(UmlCode & l) const {
   case UmlDependency:
     l = UmlDependOn;
   case UmlDependOn:
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   case UmlGeneralisation:
     l = UmlInherit;
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   case UmlAnchor:
     return 0;
   default:
@@ -700,9 +697,9 @@ void PackageCanvas::prepare_for_move(bool on_resize) {
   if (! on_resize) {
     DiagramCanvas::prepare_for_move(on_resize);
     
-    Q3CanvasItemList l = collisions(TRUE);
-    Q3CanvasItemList::ConstIterator it;
-    Q3CanvasItemList::ConstIterator end = l.end();
+    QCanvasItemList l = collisions(TRUE);
+    QCanvasItemList::ConstIterator it;
+    QCanvasItemList::ConstIterator end = l.end();
     DiagramItem * di;
     BrowserNode * p = get_bn();
   
@@ -730,7 +727,7 @@ bool PackageCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void PackageCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void PackageCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "packagecanvas_ref " << get_ident() << " // " << browser_node->get_name();
   else {
@@ -817,7 +814,7 @@ PackageCanvas * PackageCanvas::read(char * & st, UmlCanvas * canvas, char * k) {
 }
 
 void PackageCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   disconnect(browser_node->get_data(), 0, this, 0);
 }
@@ -839,7 +836,7 @@ void PackageCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
   connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));

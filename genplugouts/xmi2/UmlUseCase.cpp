@@ -1,8 +1,6 @@
 
 #include "UmlUseCase.h"
 #include "FileOut.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlUseCase::write(FileOut & out) {
   const char * k = (parent()->kind() == anUseCase)
@@ -13,12 +11,12 @@ void UmlUseCase::write(FileOut & out) {
   out << "<" << k << " xmi:type=\"uml:UseCase\"";
   out.id(this); 
   out << " name=\"";
-  out.quote((const char*)name());//[jasa] ambiguous call
+  out.quote(name());
   out << "\">\n";
   out.indent(+1); 
   write_description_properties(out);
   
-  Q3CString eps = extensionPoints().stripWhiteSpace();
+  QCString eps = extensionPoints().stripWhiteSpace();
   
   if (! eps.isEmpty()) {
     int index0 = 0;
@@ -26,14 +24,14 @@ void UmlUseCase::write(FileOut & out) {
     
     for (;;) {
       int index1 = eps.find('\n', index0);
-      Q3CString ep = eps.mid(index0, index1);
+      QCString ep = eps.mid(index0, index1);
       
       if (! ep.isEmpty()) {
 	out.indent();
 	out << "<extensionPoint xmi:type=\"uml:ExtensionPoint\"";
 	out.id_prefix(this, "EXTPOINT", ++rank);
 	out << " name=\"";
-	out.quote((const char*)ep);//[jasa] ambiguous call
+	out.quote(ep);
 	out << "\"/>\n";
       }
       
@@ -44,7 +42,7 @@ void UmlUseCase::write(FileOut & out) {
     }
   }
      
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size(); 
      
   for (unsigned i = 0; i != n; i += 1)

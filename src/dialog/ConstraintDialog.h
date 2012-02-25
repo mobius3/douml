@@ -27,7 +27,7 @@
 #define CONSTRAINTDIALOG_H
 
 #include <qdialog.h>
-#include <q3table.h>
+#include <qtable.h>
 
 #include "StringTable.h"
 #include "UmlEnum.h"
@@ -58,7 +58,7 @@ class ConstraintDialog : public QDialog {
     virtual void polish();
 };
 
-class ConstraintTable : public Q3Table {
+class ConstraintTable : public QTable {
   Q_OBJECT
     
   public:

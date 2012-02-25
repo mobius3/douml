@@ -1,20 +1,18 @@
 
 #include "UmlExtraClassMember.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-Q3CString UmlExtraClassMember::sKind() {
+QCString UmlExtraClassMember::sKind() {
   return "extra class member";
 }
 
-void UmlExtraClassMember::html(Q3CString, unsigned int, unsigned int) {
+void UmlExtraClassMember::html(QCString, unsigned int, unsigned int) {
   define();
 
   fw.write("<table><tr><td><div class=\"element\">Extra Class Member <b>");
   writeq(name());
   fw.write("</b></div></td></tr></table>");
 
-  Q3CString s;
+  QCString s;
   
   if (! cppDecl().isEmpty() || !javaDecl().isEmpty()) {
     fw.write("<p>Definition :</p><ul>");

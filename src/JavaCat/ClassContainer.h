@@ -26,10 +26,7 @@
 #ifndef _CLASS_CONTAINER_H
 #define _CLASS_CONTAINER_H
 
-#include <q3dict.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
+#include <qdict.h>
 #include "UmlClass.h"
 
 class Class;
@@ -40,23 +37,23 @@ class ClassContainer {
     ClassContainer() {};
     virtual ~ClassContainer();
     
-    virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
-			      const Q3ValueList<FormalParameterList> & tmplts,
+    virtual void compute_type(QCString type, UmlTypeSpec & typespec,
+			      const QValueList<FormalParameterList> & tmplts,
 			      Class ** need_object = 0) = 0;
-    virtual Class * define(const Q3CString & name, char st) = 0;
+    virtual Class * define(const QCString & name, char st) = 0;
     
     bool read_type(UmlTypeSpec & typespec, Class ** cl, 
-		   const Q3ValueList<FormalParameterList> & tmplts,
-		   Q3ValueList<UmlTypeSpec> * actuals, 
-		   Q3CString & str_actual, Q3CString s,
-		   UmlClass ** first_actual_class, Q3CString & def,
-		   Q3CString & genericname);
+		   const QValueList<FormalParameterList> & tmplts,
+		   QValueList<UmlTypeSpec> * actuals, 
+		   QCString & str_actual, QCString s,
+		   UmlClass ** first_actual_class, QCString & def,
+		   QCString & genericname);
 #ifdef ROUNDTRIP
     virtual Class * upload_define(UmlClass *) = 0;
 #endif
 
   protected:
-    Q3Dict<Class> Defined;
+    QDict<Class> Defined;
 };
 
 #endif

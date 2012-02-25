@@ -1,8 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <QDragMoveEvent>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -74,7 +69,7 @@ class BrowserDeploymentNode : public BrowserNode, public Labeled<BrowserDeployme
     virtual BasicData * get_data() const;
     virtual void on_delete();
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserDeploymentNode * read_ref(char * &);
     static BrowserDeploymentNode * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
@@ -89,7 +84,7 @@ class BrowserDeploymentNode : public BrowserNode, public Labeled<BrowserDeployme
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;    
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
+    virtual void referenced_by(QList<BrowserNode> & l, bool ondelete);
     
     virtual const QPixmap* pixmap (int) const;
     virtual void iconChanged();
@@ -97,7 +92,7 @@ class BrowserDeploymentNode : public BrowserNode, public Labeled<BrowserDeployme
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);

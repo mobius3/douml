@@ -3,12 +3,12 @@
 
 
 #include "UmlActivityNode.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlBaseActivityControlNode : public UmlActivityNode {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityControlNode(void * id, const Q3CString & s) : UmlActivityNode(id, s) {
+     UmlBaseActivityControlNode(void * id, const QCString & s) : UmlActivityNode(id, s) {
     }
 
 };

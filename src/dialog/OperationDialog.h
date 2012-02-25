@@ -26,15 +26,13 @@
 #ifndef OPERATIONDIALOG_H
 #define  OPERATIONDIALOG_H
 
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "MyTable.h"
 #include "BrowserNode.h"
 #include "VisibilityGroup.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QRadioButton;
 class QPushButton;
@@ -53,7 +51,7 @@ class ExceptionsTable;
 class KeyValuesTable;
 class BodyDialog;
 
-class OperationDialog : public Q3TabDialog {
+class OperationDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
@@ -62,7 +60,7 @@ class OperationDialog : public Q3TabDialog {
     ClassData * cl;
     QStringList list;
     BrowserNodeList nodes;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     BrowserNode * view;
     AttributeData * get_of_attr;
     AttributeData * set_of_attr;
@@ -74,9 +72,9 @@ class OperationDialog : public Q3TabDialog {
     // uml tab
     QWidget * umltab;
     LineEdit * edname;
-    Q3ComboBox * edreturn_type;
+    QComboBox * edreturn_type;
     int edreturn_type_offset;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     VisibilityGroup uml_visibility;
     QCheckBox * classoperation_cb;
     QCheckBox * abstract_cb;
@@ -380,7 +378,7 @@ class CppParamsTable : public MyTable {
     void update_name(int row);
     void update_names();
     
-    virtual void setItem(int row, int col, Q3TableItem * item);
+    virtual void setItem(int row, int col, QTableItem * item);
     
   protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
@@ -433,7 +431,7 @@ class PhpParamsTable : public MyTable {
     void update_name(int row);
     void update_names();
     
-    virtual void setItem(int row, int col, Q3TableItem * item);
+    virtual void setItem(int row, int col, QTableItem * item);
     
   protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
@@ -485,7 +483,7 @@ class PythonParamsTable : public MyTable {
     void update_name(int row);
     void update_names();
     
-    virtual void setItem(int row, int col, Q3TableItem * item);
+    virtual void setItem(int row, int col, QTableItem * item);
     
   protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);

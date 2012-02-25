@@ -28,10 +28,6 @@
 
 
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
-#include <Q3ValueList>
 
 #include "ArtifactData.h"
 #include "BrowserClass.h"
@@ -60,9 +56,9 @@ ArtifactData::ArtifactData(ArtifactData * model, BrowserNode * bn)
   
 #if 0
   if (model->associated != 0) {
-    associated = new Q3PtrDict<BrowserArtifact>();
+    associated = new QPtrDict<BrowserArtifact>();
     
-    Q3PtrDictIterator<BrowserArtifact> it(*(model->associated));
+    QPtrDictIterator<BrowserArtifact> it(*(model->associated));
     
     while (it.current()) {
       associated->insert(it.current(), it.current());
@@ -115,10 +111,10 @@ void ArtifactData::send_uml_def(ToolCom * com, BrowserNode * bn,
 				 const QString & comment) {
   BasicData::send_uml_def(com, bn, comment);
   
-  const Q3ValueList<BrowserClass *> & l =
+  const QValueList<BrowserClass *> & l =
     ((BrowserArtifact *) browser_node)->get_associated_classes();
-  Q3ValueList<BrowserClass *>::ConstIterator itl;
-  Q3ValueList<BrowserClass *>::ConstIterator end = l.end();
+  QValueList<BrowserClass *>::ConstIterator itl;
+  QValueList<BrowserClass *>::ConstIterator end = l.end();
   unsigned n;
   
   n = 0;
@@ -138,7 +134,7 @@ void ArtifactData::send_uml_def(ToolCom * com, BrowserNode * bn,
   if (associated == 0)
     com->write_unsigned(0);
   else {    
-    Q3PtrDictIterator<BrowserArtifact> itd(*associated);
+    QPtrDictIterator<BrowserArtifact> itd(*associated);
     
     n = 0;
     
@@ -223,7 +219,7 @@ bool ArtifactData::tool_cmd(ToolCom * com, const char * args,
 	break;
       case removeAllAssocArtifactsCmd:
 	if (associated != 0) {
-	  Q3PtrDictIterator<BrowserArtifact> it(*associated);
+	  QPtrDictIterator<BrowserArtifact> it(*associated);
 	  
 	  while (it.current()) {
 	    disconnect(it.current()->get_data(), SIGNAL(deleted()),
@@ -255,7 +251,7 @@ bool ArtifactData::tool_cmd(ToolCom * com, const char * args,
 void ArtifactData::on_delete() {
   if (associated != 0) {
     bool modp = FALSE;
-    Q3PtrDictIterator<BrowserArtifact> it(*associated);
+    QPtrDictIterator<BrowserArtifact> it(*associated);
 
     while (it.current()) {
       if (it.current()->deletedp()) {
@@ -286,7 +282,7 @@ void ArtifactData::associate(BrowserArtifact * other) {
   if ((associated == 0) || (associated->find(other) == 0)) {
     connect(other->get_data(), SIGNAL(deleted()), this, SLOT(on_delete()));
     if (associated == 0)
-      associated = new Q3PtrDict<BrowserArtifact>;
+      associated = new QPtrDict<BrowserArtifact>;
     
     associated->insert(other, other);
     browser_node->modified();
@@ -303,9 +299,9 @@ void ArtifactData::unassociate(BrowserArtifact * other) {
   modified();
 }
 
-void ArtifactData::update_associated(Q3PtrDict<BrowserArtifact> & d) {
+void ArtifactData::update_associated(QPtrDict<BrowserArtifact> & d) {
   if (associated != 0) {
-    Q3PtrDictIterator<BrowserArtifact> it(*associated);
+    QPtrDictIterator<BrowserArtifact> it(*associated);
 
     while (it.current()) {
       if (d.find(it.current()) == 0) {
@@ -318,9 +314,9 @@ void ArtifactData::update_associated(Q3PtrDict<BrowserArtifact> & d) {
     }
   }
   else
-    associated = new Q3PtrDict<BrowserArtifact>((d.count() >> 4) + 1);
+    associated = new QPtrDict<BrowserArtifact>((d.count() >> 4) + 1);
   
-  Q3PtrDictIterator<BrowserArtifact> it(d);
+  QPtrDictIterator<BrowserArtifact> it(d);
   
   while (it.current()) {
     if (associated->find(it.current()) == 0) {
@@ -342,7 +338,7 @@ void ArtifactData::convert_add_include_artifact() {
     int index = cpp_src.find("#include \"UmlComponent.h\"");
     
     if (index != -1) {
-      Q3CString s = cpp_src.SharedStr::operator Q3CString();
+      QCString s = cpp_src.SharedStr::operator QCString();
       
       s.insert(index, "#include \"UmlArtifact.h\"\n");
       cpp_src = s;
@@ -352,7 +348,7 @@ void ArtifactData::convert_add_include_artifact() {
 
 //
 
-void ArtifactData::save(Q3TextStream & st, QString & warning) const {
+void ArtifactData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   
   bool a_text = (stereotype == "text");
@@ -394,7 +390,7 @@ void ArtifactData::save(Q3TextStream & st, QString & warning) const {
     st << "associated_artifacts";
     indent(+1);
     
-    Q3PtrDictIterator<BrowserArtifact> it(*associated);
+    QPtrDictIterator<BrowserArtifact> it(*associated);
 
     while (it.current()) {
       nl_indent(st);
@@ -429,7 +425,7 @@ void ArtifactData::read(char * & st, char * & k) {
     
     if (!strcmp(k, "cpp_src")) {
       // old -> new version
-      Q3CString s = read_string(st);
+      QCString s = read_string(st);
       int index;
       
       if ((index = s.find("${class_attributes}\n${operations}")) != -1)
@@ -462,7 +458,7 @@ void ArtifactData::read(char * & st, char * & k) {
   }
   else if (!strcmp(k, "associated_artifacts") ||
 	   ((read_file_format() < 20) && !strcmp(k, "associated_components"))) {
-    associated = new Q3PtrDict<BrowserArtifact>();
+    associated = new QPtrDict<BrowserArtifact>();
     
     while (strcmp(k = read_keyword(st), "end")) {
       BrowserArtifact * c =

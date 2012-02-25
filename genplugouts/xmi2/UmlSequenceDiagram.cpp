@@ -10,7 +10,7 @@ void UmlSequenceDiagram::write(FileOut & out) {
   out << "<" << k << " xmi:type=\"uml:Collaboration\"";
   out.id_prefix(this, "COLLABORATION_");
   out << " name=\"";
-  out.quote((const char*)name());//[jasa] ambiguous call
+  out.quote(name());
   out << "\">\n";
   out.indent(+1);
   write_description_properties(out);
@@ -19,7 +19,7 @@ void UmlSequenceDiagram::write(FileOut & out) {
   out << "<ownedBehavior xmi:type=\"uml:Interaction\"";
   out.id_prefix(this, "INTERACTION_");
   out << " name=\"";
-  out.quote((const char*)name());//[jasa] ambiguous call
+  out.quote(name());
   out << "\">\n";
   out.indent(+1);
   

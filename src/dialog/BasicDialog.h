@@ -30,28 +30,27 @@
 
 
 
-#include <q3ptrlist.h>
-#include <q3tabdialog.h>
-#include <q3ptrlist.h> //[lgfreitas] added 
+#include <qlist.h>
+#include <qtabdialog.h>
 
-class Q3ComboBox;
+class QComboBox;
 class LineEdit;
 class MultiLineEdit;
 class BasicData;
 class KeyValuesTable;
 class BodyDialog;
 
-class BasicDialog : public Q3TabDialog {
+class BasicDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     BasicData * data;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
     QSize & previous_size;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     static void post_edit_description(BasicDialog * d, QString s);
       

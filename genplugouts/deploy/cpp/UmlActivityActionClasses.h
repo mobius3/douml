@@ -3,12 +3,12 @@
 
 
 #include "UmlBaseActivityActionClasses.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlSendObjectAction : public UmlBaseSendObjectAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlSendObjectAction(void * id, const Q3CString & s) : UmlBaseSendObjectAction(id, s) {
+     UmlSendObjectAction(void * id, const QCString & s) : UmlBaseSendObjectAction(id, s) {
     }
 
 };
@@ -16,7 +16,7 @@ class UmlSendObjectAction : public UmlBaseSendObjectAction {
 class UmlUnmarshallAction : public UmlBaseUnmarshallAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlUnmarshallAction(void * id, const Q3CString & s) : UmlBaseUnmarshallAction(id, s) {
+     UmlUnmarshallAction(void * id, const QCString & s) : UmlBaseUnmarshallAction(id, s) {
     }
 
 };
@@ -24,7 +24,7 @@ class UmlUnmarshallAction : public UmlBaseUnmarshallAction {
 class UmlSendSignalAction : public UmlBaseSendSignalAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlSendSignalAction(void * id, const Q3CString & s) : UmlBaseSendSignalAction(id, s) {
+     UmlSendSignalAction(void * id, const QCString & s) : UmlBaseSendSignalAction(id, s) {
     }
 
 };
@@ -32,7 +32,7 @@ class UmlSendSignalAction : public UmlBaseSendSignalAction {
 class UmlBroadcastSignalAction : public UmlBaseBroadcastSignalAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBroadcastSignalAction(void * id, const Q3CString & s) : UmlBaseBroadcastSignalAction(id, s) {
+     UmlBroadcastSignalAction(void * id, const QCString & s) : UmlBaseBroadcastSignalAction(id, s) {
     }
 
 };
@@ -40,7 +40,7 @@ class UmlBroadcastSignalAction : public UmlBaseBroadcastSignalAction {
 class UmlValueSpecificationAction : public UmlBaseValueSpecificationAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlValueSpecificationAction(void * id, const Q3CString & s) : UmlBaseValueSpecificationAction(id, s) {
+     UmlValueSpecificationAction(void * id, const QCString & s) : UmlBaseValueSpecificationAction(id, s) {
     }
 
 };
@@ -48,7 +48,7 @@ class UmlValueSpecificationAction : public UmlBaseValueSpecificationAction {
 class UmlOpaqueAction : public UmlBaseOpaqueAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlOpaqueAction(void * id, const Q3CString & s) : UmlBaseOpaqueAction(id, s) {
+     UmlOpaqueAction(void * id, const QCString & s) : UmlBaseOpaqueAction(id, s) {
     }
 
 };
@@ -56,7 +56,7 @@ class UmlOpaqueAction : public UmlBaseOpaqueAction {
 class UmlAcceptEventAction : public UmlBaseAcceptEventAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlAcceptEventAction(void * id, const Q3CString & s) : UmlBaseAcceptEventAction(id, s) {
+     UmlAcceptEventAction(void * id, const QCString & s) : UmlBaseAcceptEventAction(id, s) {
     }
 
 };
@@ -64,7 +64,7 @@ class UmlAcceptEventAction : public UmlBaseAcceptEventAction {
 class UmlCallOperationAction : public UmlBaseCallOperationAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlCallOperationAction(void * id, const Q3CString & s) : UmlBaseCallOperationAction(id, s) {
+     UmlCallOperationAction(void * id, const QCString & s) : UmlBaseCallOperationAction(id, s) {
     }
 
 };
@@ -72,7 +72,7 @@ class UmlCallOperationAction : public UmlBaseCallOperationAction {
 class UmlCallBehaviorAction : public UmlBaseCallBehaviorAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlCallBehaviorAction(void * id, const Q3CString & s) : UmlBaseCallBehaviorAction(id, s) {
+     UmlCallBehaviorAction(void * id, const QCString & s) : UmlBaseCallBehaviorAction(id, s) {
     }
 
 };
@@ -80,7 +80,7 @@ class UmlCallBehaviorAction : public UmlBaseCallBehaviorAction {
 class UmlClearVariableValueAction : public UmlBaseClearVariableValueAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlClearVariableValueAction(void * id, const Q3CString & s) : UmlBaseClearVariableValueAction(id, s) {
+     UmlClearVariableValueAction(void * id, const QCString & s) : UmlBaseClearVariableValueAction(id, s) {
     }
 
 };
@@ -88,7 +88,7 @@ class UmlClearVariableValueAction : public UmlBaseClearVariableValueAction {
 class UmlReadVariableValueAction : public UmlBaseReadVariableValueAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlReadVariableValueAction(void * id, const Q3CString & s) : UmlBaseReadVariableValueAction(id, s) {
+     UmlReadVariableValueAction(void * id, const QCString & s) : UmlBaseReadVariableValueAction(id, s) {
     }
 
 };
@@ -96,7 +96,7 @@ class UmlReadVariableValueAction : public UmlBaseReadVariableValueAction {
 class UmlWriteVariableValueAction : public UmlBaseWriteVariableValueAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlWriteVariableValueAction(void * id, const Q3CString & s) : UmlBaseWriteVariableValueAction(id, s) {
+     UmlWriteVariableValueAction(void * id, const QCString & s) : UmlBaseWriteVariableValueAction(id, s) {
     }
 
 };
@@ -104,7 +104,7 @@ class UmlWriteVariableValueAction : public UmlBaseWriteVariableValueAction {
 class UmlAddVariableValueAction : public UmlBaseAddVariableValueAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlAddVariableValueAction(void * id, const Q3CString & s) : UmlBaseAddVariableValueAction(id, s) {
+     UmlAddVariableValueAction(void * id, const QCString & s) : UmlBaseAddVariableValueAction(id, s) {
     }
 
 };
@@ -112,7 +112,7 @@ class UmlAddVariableValueAction : public UmlBaseAddVariableValueAction {
 class UmlRemoveVariableValueAction : public UmlBaseRemoveVariableValueAction {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlRemoveVariableValueAction(void * id, const Q3CString & s) : UmlBaseRemoveVariableValueAction(id, s) {
+     UmlRemoveVariableValueAction(void * id, const QCString & s) : UmlBaseRemoveVariableValueAction(id, s) {
     }
 
 };

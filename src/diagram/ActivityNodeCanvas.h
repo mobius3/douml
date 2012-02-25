@@ -31,9 +31,6 @@
 
 
 #include <qobject.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3TextStream>
 
 #include "DiagramCanvas.h"
 #include "Settings.h"
@@ -78,7 +75,7 @@ class ActivityNodeCanvas : public QObject, public DiagramCanvas {
     virtual void history_save(QBuffer & b) const;
     virtual void history_hide();
     
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ActivityNodeCanvas * read(char * &, UmlCanvas *, char *);
     virtual void post_loaded();
     

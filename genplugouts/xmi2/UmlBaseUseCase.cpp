@@ -4,8 +4,6 @@
 #include "UmlUseCaseDiagram.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 UmlUseCase * UmlBaseUseCase::create(UmlItem * parent, const char * s)
 {
   return (UmlUseCase *) parent->create_(anUseCase, s);
@@ -31,7 +29,7 @@ bool UmlBaseUseCase::set_AssociatedDiagram(UmlUseCaseDiagram * d) {
     return FALSE;
 }
 
-const Q3CString & UmlBaseUseCase::extensionPoints() {
+const QCString & UmlBaseUseCase::extensionPoints() {
   read_if_needed_();
   return _extension_points;
 }

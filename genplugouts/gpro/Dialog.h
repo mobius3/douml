@@ -2,7 +2,7 @@
 #define _DIALOG_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 
 #include "qdialog.h"
 
@@ -10,35 +10,35 @@ class UmlArtifact;
 class SmallPushButton;
 
 class QLineEdit;
-class Q3MultiLineEdit;
+class QMultiLineEdit;
 class QPushButton;
-class Q3ComboBox;
+class QComboBox;
 
 class Dialog : public QDialog {
   Q_OBJECT
   public:
-    Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q3CString & target, Q3CString & tmplt, Q3CString & config, Q3CString & defines, Q3CString & includepath, Q3CString & dependpath, Q3CString & objectsdir, Q3CString & footer);
+    Dialog(UmlArtifact * art, const QCString & path_exe, QCString & pro, QCString & target, QCString & tmplt, QCString & config, QCString & defines, QCString & includepath, QCString & dependpath, QCString & objectsdir, QCString & footer);
 
   protected:
     UmlArtifact * _art;
 
-    Q3CString & _pro;
+    QCString & _pro;
 
-    Q3CString & _target;
+    QCString & _target;
 
-    Q3CString & _tmplt;
+    QCString & _tmplt;
 
-    Q3CString & _config;
+    QCString & _config;
 
-    Q3CString & _defines;
+    QCString & _defines;
 
-    Q3CString & _includepath;
+    QCString & _includepath;
 
-    Q3CString & _dependpath;
+    QCString & _dependpath;
 
-    Q3CString & _objectsdir;
+    QCString & _objectsdir;
 
-    Q3CString & _footer;
+    QCString & _footer;
 
     QLineEdit * edpro;
 
@@ -48,9 +48,9 @@ class Dialog : public QDialog {
 
     QPushButton * browsetarget;
 
-    Q3ComboBox * cbtemplate;
+    QComboBox * cbtemplate;
 
-    Q3ComboBox * cbconf[5];
+    QComboBox * cbconf[5];
 
     QLineEdit * eddefines;
 
@@ -64,7 +64,7 @@ class Dialog : public QDialog {
 
     QPushButton * browseobjectsdir;
 
-    Q3MultiLineEdit * edfooter;
+    QMultiLineEdit * edfooter;
 
   protected slots:    virtual void polish();
 

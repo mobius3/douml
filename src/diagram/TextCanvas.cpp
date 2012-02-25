@@ -29,10 +29,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
+#include <qpopupmenu.h> 
 
 #include "TextCanvas.h"
 #include "MLEDialog.h"
@@ -59,7 +56,7 @@ TextCanvas::~TextCanvas() {
 
 void TextCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QColor bgcolor = p.backgroundColor();
   QPen fgcolor = p.pen();
   
@@ -77,13 +74,13 @@ void TextCanvas::draw(QPainter & p) {
   
   p.setFont(the_canvas()->get_font(itsfont));
   p.drawText (r.left(), r.top(), r.width(), r.height(), 
-	      ::Qt::AlignLeft + ::Qt::AlignTop + ::Qt::TextWordWrap, text);
+	      ::Qt::AlignLeft + ::Qt::AlignTop + ::Qt::WordBreak, text);
   
   FILE * fp = svg();
   
   if (fp != 0)
     draw_text (r.left(), r.top(), r.width(), r.height(), 
-	       ::Qt::AlignLeft + ::Qt::AlignTop + ::Qt::TextWordWrap,
+	       ::Qt::AlignLeft + ::Qt::AlignTop + ::Qt::WordBreak,
 	       text, p.font(), fp, fg_c, bg_c);
   
   p.setFont(the_canvas()->get_font(UmlNormalFont));
@@ -133,8 +130,8 @@ void TextCanvas::delete_available(BooL &, BooL & out_model) const {
 }
 
 void TextCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu fontsubm(0);
+  QPopupMenu m(0);
+  QPopupMenu fontsubm(0);
   
   m.insertItem(new MenuTitle(TR("Text"), m.font()), -1);
   m.insertSeparator();
@@ -263,7 +260,7 @@ void TextCanvas::apply_shortcut(QString s) {
 }
 
 QString TextCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString TextCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -298,7 +295,7 @@ void TextCanvas::resize(const QSize & sz, bool w, bool h) {
   DiagramCanvas::resize(sz, w, h, min, min);
 }
 
-void TextCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void TextCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref)
     st << "textcanvas_ref " << get_ident();
   else {
@@ -373,14 +370,14 @@ void TextCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
 }
 
 // for plug outs
 
-void TextCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void TextCanvas::send(ToolCom * com, QCanvasItemList & all)
 {
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList::Iterator cit;
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
     DiagramItem *di = QCanvasItemToDiagramItem(*cit);
@@ -389,7 +386,7 @@ void TextCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 	(*cit)->visible() &&
 	(di->type() == UmlText)) {
       TextCanvas * tx = (TextCanvas *) di;
-      Q3CString s = fromUnicode(tx->text);
+      QCString s = fromUnicode(tx->text);
       
       com->write_bool(TRUE);	// one more
       com->write_string((const char *) s);

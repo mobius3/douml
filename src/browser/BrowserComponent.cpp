@@ -27,15 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserComponent.h"
 #include "SimpleData.h"
@@ -116,13 +110,13 @@ void BrowserComponent::update_idmax_for_root()
 void BrowserComponent::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
 
-void BrowserComponent::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserComponent::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete) {
     BrowserComponentDiagram::compute_referenced_by(l, this, "componentcanvas", "component_ref");
@@ -130,7 +124,7 @@ void BrowserComponent::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) 
   }  
 }
     
-void BrowserComponent::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserComponent::compute_referenced_by(QList<BrowserNode> & l,
 					     BrowserClass * target)
 {
   IdIterator<BrowserComponent> it(all);
@@ -170,7 +164,7 @@ QString BrowserComponent::full_name(bool rev, bool) const {
 
 // just check if the inheritance already exist
 QString BrowserComponent::check_inherit(const BrowserNode * new_parent) const {
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling()) {
     BrowserNode * ch = ((BrowserNode *) child);
@@ -184,12 +178,12 @@ QString BrowserComponent::check_inherit(const BrowserNode * new_parent) const {
   return (new_parent != this) ? QString() : TR("circular inheritance");
 }
 
-static void make_clsubm(Q3PopupMenu & m, Q3PopupMenu & sm,
-			Q3ValueList<BrowserClass *> & l, int bias,
+static void make_clsubm(QPopupMenu & m, QPopupMenu & sm,
+			QValueList<BrowserClass *> & l, int bias,
 			BooL & need_sep, QString s)
 {
   int n = 0;
-  Q3ValueList<BrowserClass *>::ConstIterator it;
+  QValueList<BrowserClass *>::ConstIterator it;
   
   for (it = l.begin(); it != l.end(); ++it)
     if (!(*it)->deletedp())
@@ -229,7 +223,7 @@ static void make_clsubm(Q3PopupMenu & m, Q3PopupMenu & sm,
 }
 
 static bool select_associated(int rank, int bias,
-			      Q3ValueList<BrowserClass *> & l)
+			      QValueList<BrowserClass *> & l)
 {
   if (rank < bias)
     return FALSE;
@@ -243,7 +237,7 @@ static bool select_associated(int rank, int bias,
     rank = dialog.choosen() + bias+1;
   }
 
-  Q3ValueList<BrowserClass *>::ConstIterator it;
+  QValueList<BrowserClass *>::ConstIterator it;
   int n;
   
   for (it = l.begin(), n = bias+1;
@@ -258,11 +252,11 @@ static bool select_associated(int rank, int bias,
 
 				   
 void BrowserComponent::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu rqsubm(0);
-  Q3PopupMenu prsubm(0);
-  Q3PopupMenu rzsubm(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu rqsubm(0);
+  QPopupMenu prsubm(0);
+  QPopupMenu rzsubm(0);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -298,7 +292,7 @@ through a relation"));
     m.setWhatsThis(m.insertItem(TR("Undelete"), 2),
 		   TR("to undelete the <i>component</i>"));
    
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -387,7 +381,7 @@ void BrowserComponent::apply_shortcut(QString s) {
     if (s == "Undelete")
       choice = 2;
    
-    Q3ListViewItem * child;
+    QListViewItem * child;
     
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -475,7 +469,7 @@ void BrowserComponent::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	  a_comp &&
 	  old->may_contains(bn, TRUE)) {
 	// have choice
-	Q3PopupMenu m(0);
+	QPopupMenu m(0);
   
 	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
 				   m.font()), -1);
@@ -615,7 +609,7 @@ void BrowserComponent::on_delete() {
     modif = TRUE;
   }
   
-  Q3ValueList<BrowserClass *>::Iterator it;
+  QValueList<BrowserClass *>::Iterator it;
   
   it = realizing_classes.begin();
   while (it != realizing_classes.end()) {
@@ -653,7 +647,7 @@ void BrowserComponent::on_delete() {
 
 void BrowserComponent::remove_associated_class(BrowserClass * c) {
   bool done = FALSE;
-  Q3ValueList<BrowserClass *>::Iterator it;
+  QValueList<BrowserClass *>::Iterator it;
   
   if ((it = realizing_classes.find(c)) != realizing_classes.end()) {
     realizing_classes.remove(it);
@@ -683,25 +677,25 @@ void BrowserComponent::remove_associated_class(BrowserClass * c) {
   }
 }
 
-void BrowserComponent::get_all_provided_classes(Q3ValueList<BrowserClass *> & r) const {
-  Q3ValueList<BrowserClass *>::ConstIterator it;
+void BrowserComponent::get_all_provided_classes(QValueList<BrowserClass *> & r) const {
+  QValueList<BrowserClass *>::ConstIterator it;
 
   for (it = provided_classes.begin() ; it != provided_classes.end(); it++)
     if (r.findIndex(*it) == -1)
       r.append(*it);
   
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling())
     if (((BrowserNode *) child)->get_type() == UmlComponent)
       ((BrowserComponent *) child)->get_all_provided_classes(r);
 }
 
-void BrowserComponent::get_all_provided_classes(Q3ValueList<BrowserClass *> & r,
+void BrowserComponent::get_all_provided_classes(QValueList<BrowserClass *> & r,
 						bool sorted) const {
   r = provided_classes;
   
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling())
     if (((BrowserNode *) child)->get_type() == UmlComponent)
@@ -709,7 +703,7 @@ void BrowserComponent::get_all_provided_classes(Q3ValueList<BrowserClass *> & r,
 
   if (sorted) {
     BrowserNodeList nl;
-    Q3ValueList<BrowserClass *>::Iterator it;
+    QValueList<BrowserClass *>::Iterator it;
 
     for (it = r.begin() ; it != r.end(); it++)
       nl.append(*it);
@@ -722,25 +716,25 @@ void BrowserComponent::get_all_provided_classes(Q3ValueList<BrowserClass *> & r,
   }
 }
 
-void BrowserComponent::get_all_required_classes(Q3ValueList<BrowserClass *> & r) const {
-  Q3ValueList<BrowserClass *>::ConstIterator it;
+void BrowserComponent::get_all_required_classes(QValueList<BrowserClass *> & r) const {
+  QValueList<BrowserClass *>::ConstIterator it;
 
   for (it = required_classes.begin() ; it != required_classes.end(); it++)
     if (r.findIndex(*it) == -1)
       r.append(*it);
   
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling())
     if (((BrowserNode *) child)->get_type() == UmlComponent)
       ((BrowserComponent *) child)->get_all_required_classes(r);
 }
 
-void BrowserComponent::get_all_required_classes(Q3ValueList<BrowserClass *> & r,
+void BrowserComponent::get_all_required_classes(QValueList<BrowserClass *> & r,
 						bool sorted) const {
   r = required_classes;
   
-  Q3ListViewItem * child;
+  QListViewItem * child;
     
   for (child = firstChild(); child != 0; child = child->nextSibling())
     if (((BrowserNode *) child)->get_type() == UmlComponent)
@@ -748,7 +742,7 @@ void BrowserComponent::get_all_required_classes(Q3ValueList<BrowserClass *> & r,
   
   if (sorted) {
     BrowserNodeList nl;
-    Q3ValueList<BrowserClass *>::Iterator it;
+    QValueList<BrowserClass *>::Iterator it;
 
     for (it = r.begin() ; it != r.end(); it++)
       nl.append(*it);
@@ -761,11 +755,11 @@ void BrowserComponent::get_all_required_classes(Q3ValueList<BrowserClass *> & r,
   }
 }
 
-void BrowserComponent::set_associated_classes(const Q3ValueList<BrowserClass *> & rz,
-					      const Q3ValueList<BrowserClass *> & pr,
-					      const Q3ValueList<BrowserClass *> & rq,
+void BrowserComponent::set_associated_classes(const QValueList<BrowserClass *> & rz,
+					      const QValueList<BrowserClass *> & pr,
+					      const QValueList<BrowserClass *> & rq,
 					      bool on_read) {
-  Q3ValueList<BrowserClass *>::Iterator it;
+  QValueList<BrowserClass *>::Iterator it;
     
   if (! on_read) {
     // manage removed classes
@@ -876,7 +870,7 @@ bool BrowserComponent::tool_cmd(ToolCom * com, const char * args) {
   case getIdlDefCmd:
     BrowserNode::tool_cmd(com, args);
     if (com->api_format() > 13) {
-      Q3ValueList<BrowserClass *>::Iterator it;
+      QValueList<BrowserClass *>::Iterator it;
       
       com->write_unsigned(realizing_classes.count());
       
@@ -962,10 +956,10 @@ bool BrowserComponent::tool_cmd(ToolCom * com, const char * args) {
 	case setAssocClassesCmd:
 	  {
 	    // check redondency
-	    Q3ValueList<BrowserClass *> rz;
-	    Q3ValueList<BrowserClass *> pr;
-	    Q3ValueList<BrowserClass *> rq;
-	    Q3ValueList<BrowserClass *>::ConstIterator it;
+	    QValueList<BrowserClass *> rz;
+	    QValueList<BrowserClass *> pr;
+	    QValueList<BrowserClass *> rq;
+	    QValueList<BrowserClass *>::ConstIterator it;
 	    unsigned n;
 	    
 	    n = com->get_unsigned(args);
@@ -1034,7 +1028,7 @@ bool BrowserComponent::tool_cmd(ToolCom * com, const char * args) {
   return TRUE;
 }
 
-void BrowserComponent::save_stereotypes(Q3TextStream & st)
+void BrowserComponent::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "component_stereotypes ";
@@ -1051,7 +1045,7 @@ void BrowserComponent::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserComponent::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserComponent::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "component_ref " << get_ident() << " // " << get_name();
   else {
@@ -1067,7 +1061,7 @@ void BrowserComponent::save(Q3TextStream & st, bool ref, QString & warning) {
       associated_diagram->save(st, TRUE, warning);
     }
     
-    Q3ValueList<BrowserClass *>::ConstIterator it;
+    QValueList<BrowserClass *>::ConstIterator it;
 
     if (! realizing_classes.isEmpty()) {
       nl_indent(st);
@@ -1115,7 +1109,7 @@ void BrowserComponent::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
     
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {
@@ -1210,9 +1204,9 @@ BrowserComponent * BrowserComponent::read(char * & st, char * k,
       k = read_keyword(st);
     }
     
-    Q3ValueList<BrowserClass *> rz;
-    Q3ValueList<BrowserClass *> pr;
-    Q3ValueList<BrowserClass *> rq;
+    QValueList<BrowserClass *> rz;
+    QValueList<BrowserClass *> pr;
+    QValueList<BrowserClass *> rq;
     
     if (!strcmp(k, "realized_classes") || !strcmp(k, "realizing_classes")) {
       while (strcmp((k = read_keyword(st)), "end"))

@@ -34,7 +34,7 @@
 Progress * Progress::it = 0;
 
 Progress::Progress(int n, const char * lbl, QApplication * a)
-    : Q3ProgressDialog(0, 0, n, 0, 0, FALSE, Qt::WDestructiveClose), n(0), app(a) {
+    : QProgressDialog(0, 0, n, 0, 0, FALSE, WDestructiveClose), n(0), app(a) {
   if (it != 0)
     delete it;
   

@@ -5,11 +5,9 @@
 
 #include "UmlCom.h"
 #include "UmlTransition.h"
-//Added by qt3to4:
-#include <Q3CString>
-void UmlEntryPointPseudoState::generate(UmlClass * machine, UmlClass * anystate, UmlState * state, Q3CString & body, Q3CString indent) {
+void UmlEntryPointPseudoState::generate(UmlClass * machine, UmlClass * anystate, UmlState * state, QCString & body, QCString indent) {
   // check transition number
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   
   switch (ch.count()) {
   case 0:

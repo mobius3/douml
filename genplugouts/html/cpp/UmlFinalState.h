@@ -2,13 +2,13 @@
 #define _UMLFINALSTATE_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "UmlBaseFinalState.h"
 
 class UmlFinalState : public UmlBaseFinalState {
   public:
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QCString sKind();
 
     //  the constructor, do not call it yourself !!!!!!!!!!
      UmlFinalState(void * id) : UmlBaseFinalState(id, "") {

@@ -26,10 +26,10 @@
 #ifndef NAMESPACE_H
 #define NAMESPACE_H
 
-#include <q3valuelist.h>
+#include <qvaluelist.h>
 #include <qstringlist.h>
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <qcstring.h>
+#include <qdict.h>
 #include <qmap.h>
 
 #include "Lex.h"
@@ -39,22 +39,22 @@
 
 class Namespace {
   public:
-    static void enter(Q3CString s);
+    static void enter(QCString s);
     static void exit();
     
     static const QStringList stack() { return Stack; }
         
-    static void add_alias(const Q3CString & a, const Q3CString & s) {
+    static void add_alias(const QCString & a, const QCString & s) {
       Aliases.replace(a, s);
     }
     static void clear_aliases() { Aliases.clear(); }
     
-    static QString namespacify(Q3CString s);
-    static Q3CString current();
+    static QString namespacify(QCString s);
+    static QCString current();
     
   private:
     static QStringList Stack;
-    static QMap<Q3CString,Q3CString> Aliases;
+    static QMap<QCString,QCString> Aliases;
 };
 
 // does not not inherit QDict to not allow to use directly
@@ -67,32 +67,32 @@ class NDict {
     NDict() {}
     NDict(unsigned n) { d.resize(n); }
   
-    void insert(const Q3CString & key, const T * item);
-    void replace(const Q3CString & key, const T * item);
-    bool remove(const Q3CString & key);
-    T * operator[] (const Q3CString & key) const;
+    void insert(const QCString & key, const T * item);
+    void replace(const QCString & key, const T * item);
+    bool remove(const QCString & key);
+    T * operator[] (const QCString & key) const;
       
   private:
-    Q3Dict<T> d;
+    QDict<T> d;
 };
 
 template<class T>
-void NDict<T>::insert(const Q3CString & key, const T * item) {
+void NDict<T>::insert(const QCString & key, const T * item) {
   d.insert(Namespace::namespacify(key), item);
 }
 
 template<class T>
-void NDict<T>::replace(const Q3CString & key, const T * item) {
+void NDict<T>::replace(const QCString & key, const T * item) {
   d.replace(Namespace::namespacify(key), item);
 }
 
 template<class T>
-bool NDict<T>::remove(const Q3CString & key) {
+bool NDict<T>::remove(const QCString & key) {
   return d.remove(Namespace::namespacify(key));
 }
 
 template<class T>
-T * NDict<T>::operator[] (const Q3CString & key) const {
+T * NDict<T>::operator[] (const QCString & key) const {
   QString k = Namespace::namespacify(key);
   T * r = d[k];
   

@@ -3,9 +3,8 @@
 
 
 #include "UmlBasePackage.h"
-#include <q3cstring.h>
-//#include <q3ptrlist.h> //[rageek] incomplete qt3to4
-#include <q3ptrlist.h>
+#include <qcstring.h>
+#include <qlist.h>
 
 #include "UmlDeploymentView.h"
 class UmlArtifact;
@@ -17,21 +16,21 @@ class File;
 // You can modify it as you want (except the constructor)
 class UmlPackage : public UmlBasePackage {
   public:
-    UmlPackage(void * id, const Q3CString & n) : UmlBasePackage(id, n) {
+    UmlPackage(void * id, const QCString & n) : UmlBasePackage(id, n) {
       cpt[kind()] += 1;
     };
 
     virtual void roseImport();
 
-    virtual Q3CString fullName();
+    virtual QCString fullName();
 
-    void subArtifacts(Q3PtrList<UmlArtifact> & l, Q3CString name, Q3CString deplview_name);
+    void subArtifacts(QList<UmlArtifact> & l, QCString name, QCString deplview_name);
 
-    void subDeplViews(Q3PtrList<UmlDeploymentView> & l, Q3CString s);
+    void subDeplViews(QList<UmlDeploymentView> & l, QCString s);
 
-    UmlPackage * addPackage(Q3CString s);
+    UmlPackage * addPackage(QCString s);
 
-    UmlDeploymentView * addDeplView(Q3CString s, UmlPackage * p);
+    UmlDeploymentView * addDeplView(QCString s, UmlPackage * p);
 
 
   private:
@@ -47,7 +46,7 @@ class UmlPackage : public UmlBasePackage {
 
 
   protected:
-    Q3PtrList<UmlDeploymentView> _deplviews;
+    QList<UmlDeploymentView> _deplviews;
 
 };
 

@@ -2,8 +2,8 @@
 #define _BINDING_H
 
 
-#include <q3ptrlist.h>
-#include <q3cstring.h>
+#include <qlist.h>
+#include <qcstring.h>
 
 class FileIn;
 class Token;
@@ -19,23 +19,23 @@ class Binding {
 
 
   protected:
-    static Q3PtrList<Binding> All;
+    static QList<Binding> All;
 
     //xmiId of the class having the binbing
-    Q3CString boundId;
+    QCString boundId;
 
     //xmiId of the formal
-    Q3CString formalId;
+    QCString formalId;
 
     //xmiId of the actual, may be a class, or an opaque expression
-    Q3CString actualId;
+    QCString actualId;
 
     //the actual if actualId is empty
-    Q3CString actual;
+    QCString actual;
 
     //xmiId of the signature
     
-    Q3CString signatureId;
+    QCString signatureId;
 
 };
 

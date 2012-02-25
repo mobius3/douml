@@ -29,9 +29,9 @@
 
 #include <qapplication.h>
 #include <qworkspace.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qspinbox.h>
 
@@ -83,8 +83,8 @@ extern QString imageText();
 // id is an old ident in case of an import
 StateDiagramWindow::StateDiagramWindow(const QString & s, BrowserStateDiagram * b, int id)
     : DiagramWindow(b, s), view(0) {
-  Q3ToolBar * toolbar = new Q3ToolBar(this, "state operations");
-  addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
+  QToolBar * toolbar = new QToolBar(this, "state operations");
+  addToolBar(toolbar, TR("Toolbar"), Top, TRUE);
   
   add_edit_button(toolbar);
   
@@ -99,115 +99,115 @@ StateDiagramWindow::StateDiagramWindow(const QString & s, BrowserStateDiagram * 
     = new QToolButton(*packageButton, TR("Add Package"), QString::null,
 		      this, SLOT(hit_package()), toolbar, "add package");
   addPackage->setToggleButton(TRUE);
-  Q3WhatsThis::add(addPackage, addpackageText());
+  QWhatsThis::add(addPackage, addpackageText());
   
   addFragment
     = new QToolButton(*fragmentButton, TR("Add Fragment"), QString::null,
 		      this, SLOT(hit_fragment()), toolbar, "add fragment");
   addFragment->setToggleButton(TRUE);
-  Q3WhatsThis::add(addFragment, addfragmentText());
+  QWhatsThis::add(addFragment, addfragmentText());
   
   addState =
     new QToolButton(*stateButton, TR("Add State"), QString::null,
 		    this, SLOT(hit_state()), toolbar, "add state");
   addState->setToggleButton(TRUE);
-  Q3WhatsThis::add(addState, addstateText());
+  QWhatsThis::add(addState, addstateText());
   
   addRegion =
     new QToolButton(*regionButton, TR("Add Region"), QString::null,
 		    this, SLOT(hit_region()), toolbar, "add region");
   addRegion->setToggleButton(TRUE);
-  Q3WhatsThis::add(addRegion, addregionText());
+  QWhatsThis::add(addRegion, addregionText());
   
   addInitial =
     new QToolButton(*initialButton, TR("Add Initial pseudo state"), QString::null,
 		    this, SLOT(hit_initial()), toolbar, "add initial");
   addInitial->setToggleButton(TRUE);
-  Q3WhatsThis::add(addInitial, addinitialText());
+  QWhatsThis::add(addInitial, addinitialText());
 
   addEntryPoint =
     new QToolButton(*entrypointButton, TR("Add Entry Point"), QString::null,
 		    this, SLOT(hit_entryPoint()), toolbar, "add entry point");
   addEntryPoint->setToggleButton(TRUE);
-  Q3WhatsThis::add(addEntryPoint, addentrypointText());
+  QWhatsThis::add(addEntryPoint, addentrypointText());
 
   addFinal =
     new QToolButton(*finalButton, TR("Add Final state"), QString::null,
 		    this, SLOT(hit_final()), toolbar, "add final");
   addFinal->setToggleButton(TRUE);
-  Q3WhatsThis::add(addFinal, addfinalText());
+  QWhatsThis::add(addFinal, addfinalText());
 
   addExitPoint =
     new QToolButton(*exitpointButton, TR("Add Exit Point"), QString::null,
 		    this, SLOT(hit_exitPoint()), toolbar, "add exit point");
   addExitPoint->setToggleButton(TRUE);
-  Q3WhatsThis::add(addExitPoint, addexitpointText());
+  QWhatsThis::add(addExitPoint, addexitpointText());
 
   addTerminate =
     new QToolButton(*terminateButton, TR("Add Terminate node"), QString::null,
 		    this, SLOT(hit_terminate()), toolbar, "add terminate");
   addTerminate->setToggleButton(TRUE);
-  Q3WhatsThis::add(addTerminate, addterminateText());
+  QWhatsThis::add(addTerminate, addterminateText());
 
   addDeepHistory =
     new QToolButton(*deephistoryButton, TR("Add Deep History"), QString::null,
 		    this, SLOT(hit_deepHistory()), toolbar, "add deep history");
   addDeepHistory->setToggleButton(TRUE);
-  Q3WhatsThis::add(addDeepHistory, adddeephistoryText());
+  QWhatsThis::add(addDeepHistory, adddeephistoryText());
 
   addShallowHistory =
     new QToolButton(*shallowhistoryButton, TR("Add Shallow History"), QString::null,
 		    this, SLOT(hit_shallowHistory()), toolbar, "add shallow history");
   addShallowHistory->setToggleButton(TRUE);
-  Q3WhatsThis::add(addShallowHistory, addshallowhistoryText());
+  QWhatsThis::add(addShallowHistory, addshallowhistoryText());
 
   addJunction =
     new QToolButton(*junctionButton, TR("Add Junction"), QString::null,
 		    this, SLOT(hit_junction()), toolbar, "add junction");
   addJunction->setToggleButton(TRUE);
-  Q3WhatsThis::add(addJunction, addjunctionText());
+  QWhatsThis::add(addJunction, addjunctionText());
 
   addChoice =
     new QToolButton(*choiceButton, TR("Add Choice"), QString::null,
 		    this, SLOT(hit_choice()), toolbar, "add choice");
   addChoice->setToggleButton(TRUE);
-  Q3WhatsThis::add(addChoice, addchoiceText());
+  QWhatsThis::add(addChoice, addchoiceText());
 
   addFork =
     new QToolButton(*forkButton, TR("Add Fork"), QString::null,
 		    this, SLOT(hit_fork()), toolbar, "add fork");
   addFork->setToggleButton(TRUE);
-  Q3WhatsThis::add(addFork, addforkText());
+  QWhatsThis::add(addFork, addforkText());
 
   addJoin =
     new QToolButton(*joinButton, TR("Add Join"), QString::null,
 		    this, SLOT(hit_join()), toolbar, "add join");
   addJoin->setToggleButton(TRUE);
-  Q3WhatsThis::add(addJoin, addjoinText());
+  QWhatsThis::add(addJoin, addjoinText());
 
   addAction =
     new QToolButton(*actionButton, TR("Add Action"), QString::null,
 		    this, SLOT(hit_action()), toolbar, "add action");
   addAction->setToggleButton(TRUE);
-  Q3WhatsThis::add(addAction, addactionText());
+  QWhatsThis::add(addAction, addactionText());
 
   addSignalIn =
     new QToolButton(*signalinButton, TR("Add receive signal action"), QString::null,
 		    this, SLOT(hit_signalin()), toolbar, "add receive signal action");
   addSignalIn->setToggleButton(TRUE);
-  Q3WhatsThis::add(addSignalIn, addsignalinText());
+  QWhatsThis::add(addSignalIn, addsignalinText());
 
   addSignalOut =
     new QToolButton(*signaloutButton, TR("Add send signal action"), QString::null,
 		    this, SLOT(hit_signalout()), toolbar, "add send signal action");
   addSignalOut->setToggleButton(TRUE);
-  Q3WhatsThis::add(addSignalOut, addsignaloutText());
+  QWhatsThis::add(addSignalOut, addsignaloutText());
 
   addTransition =
     new QToolButton(*directionalAssociationButton, TR("Add Transition"), QString::null,
 		    this, SLOT(hit_transition()), toolbar, "add transition");
   addTransition->setToggleButton(TRUE);
-  Q3WhatsThis::add(addTransition, addtransitionText());
+  QWhatsThis::add(addTransition, addtransitionText());
   
   /*
   dependency =
@@ -221,25 +221,25 @@ StateDiagramWindow::StateDiagramWindow(const QString & s, BrowserStateDiagram * 
     new QToolButton(*noteButton, TR("Note"), QString::null,
 		    this, SLOT(hit_note()), toolbar, "note");
   note->setToggleButton(TRUE);
-  Q3WhatsThis::add(note, noteText());
+  QWhatsThis::add(note, noteText());
   
   anchor =
     new QToolButton(*anchorButton, TR("Anchor"), QString::null,
 		    this, SLOT(hit_anchor()), toolbar, "anchor");
   anchor->setToggleButton(TRUE);
-  Q3WhatsThis::add(anchor, anchorText());
+  QWhatsThis::add(anchor, anchorText());
   
   text =
     new QToolButton(*textButton, TR("Text"), QString::null,
 		    this, SLOT(hit_text()), toolbar, "text");
   text->setToggleButton(TRUE);
-  Q3WhatsThis::add(text, textText());
+  QWhatsThis::add(text, textText());
   
   image =
     new QToolButton(*imageButton, TR("Image"), QString::null,
 		    this, SLOT(hit_image()), toolbar, "image");
   image->setToggleButton(TRUE);
-  Q3WhatsThis::add(image, imageText());
+  QWhatsThis::add(image, imageText());
   
   toolbar->addSeparator();
   

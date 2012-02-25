@@ -8,17 +8,14 @@
 #include "CppSettings.h"
 #include "JavaSettings.h"
 #include "UmlPackage.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 void UmlOperation::write(FileOut & out) {
-  Q3CString decl;
+  QCString decl;
 
   switch (_lang) {
   case Uml:
     out.indent();
     out << "<ownedOperation xmi:type=\"uml:Operation\" name=\"";
-    out.quote((const char*)name());//[jasa] ambiguous call
+    out.quote(name());
     break;
   case Cpp:
     decl = cppDecl();
@@ -28,7 +25,7 @@ void UmlOperation::write(FileOut & out) {
     remove_comments(decl);
     out.indent();
     out << "<ownedOperation xmi:type=\"uml:Operation\" name=\"";
-    out.quote((const char*)true_name(name(), cppDecl()));//[jasa] ambiguous call
+    out.quote(true_name(name(), cppDecl()));
     break;
   default: // Java
     decl = javaDecl();
@@ -38,7 +35,7 @@ void UmlOperation::write(FileOut & out) {
     remove_comments(decl);    
     out.indent();
     out << "<ownedOperation xmi:type=\"uml:Operation\" name=\"";
-    out.quote((const char*)true_name(name(), javaDecl()));//[jasa] ambiguous call
+    out.quote(true_name(name(), javaDecl()));
     break;
   }
   out << '"';
@@ -73,8 +70,8 @@ void UmlOperation::write(FileOut & out) {
 }
 
 void UmlOperation::write_exceptions(FileOut & out) {
-  const Q3ValueList<UmlTypeSpec> excpts = exceptions();
-  Q3ValueList<UmlTypeSpec>::ConstIterator iter;
+  const QValueList<UmlTypeSpec> excpts = exceptions();
+  QValueList<UmlTypeSpec>::ConstIterator iter;
   
   for (iter = excpts.begin(); iter != excpts.end(); ++iter) {
     const UmlTypeSpec & e = *iter;
@@ -94,7 +91,7 @@ void UmlOperation::write_exceptions(FileOut & out) {
   }
 }
 
-void UmlOperation::write_return_type(FileOut & out, Q3CString decl) {
+void UmlOperation::write_return_type(FileOut & out, QCString decl) {
   const UmlTypeSpec & t = returnType();
   static int return_rank = 0;
   
@@ -130,7 +127,7 @@ void UmlOperation::write_return_type(FileOut & out, Q3CString decl) {
   }
 }
 
-void UmlOperation::write_cpp_returntype(FileOut & out, Q3CString decl) {
+void UmlOperation::write_cpp_returntype(FileOut & out, QCString decl) {
   // doesn't manage function pointer
   // manage keywords
   int index;
@@ -159,7 +156,7 @@ void UmlOperation::write_cpp_returntype(FileOut & out, Q3CString decl) {
     write_type(out, t, decl, "${name}", "${type}");
 }
 
-void UmlOperation::write_java_returntype(FileOut & out, Q3CString decl) {
+void UmlOperation::write_java_returntype(FileOut & out, QCString decl) {
 // manage keywords
 int index;
 
@@ -194,8 +191,8 @@ if ((t.type != 0) ||
 }
 
 void UmlOperation::write_uml_params(FileOut & out) {
-  const Q3ValueList<UmlParameter> p = params();
-  Q3ValueList<UmlParameter>::ConstIterator it;
+  const QValueList<UmlParameter> p = params();
+  QValueList<UmlParameter>::ConstIterator it;
   
   for (it = p.begin(); it != p.end(); ++it) {
     out.indent();
@@ -219,7 +216,7 @@ void UmlOperation::write_uml_params(FileOut & out) {
   }
 }
 
-void UmlOperation::write_cpp_java_params(FileOut & out, Q3CString decl) {
+void UmlOperation::write_cpp_java_params(FileOut & out, QCString decl) {
   int index1 = decl.find("${(}");
     
   if (index1 == -1)
@@ -234,10 +231,10 @@ void UmlOperation::write_cpp_java_params(FileOut & out, Q3CString decl) {
     
   index1 = 0;
     
-  const Q3ValueList<UmlParameter> p = params();
-  Q3CString sparam;
-  Q3CString kname;
-  Q3CString ktype;
+  const QValueList<UmlParameter> p = params();
+  QCString sparam;
+  QCString kname;
+  QCString ktype;
   int rank;
         
   while (get_param(decl, index1, sparam, kname, ktype, rank)) {
@@ -273,7 +270,7 @@ void UmlOperation::write_cpp_java_params(FileOut & out, Q3CString decl) {
   }
 }
 
-bool UmlOperation::get_param(Q3CString s, int & index, Q3CString & r, Q3CString & kname, Q3CString & ktype, int & rank) {
+bool UmlOperation::get_param(QCString s, int & index, QCString & r, QCString & kname, QCString & ktype, int & rank) {
 int index0 = index;
 int level = 0;
 //const char * p = (const char *) s;
@@ -360,7 +357,7 @@ const char * UmlOperation::event(bool rec) {
   return s;
 }
 
-const char * UmlOperation::event(const char * pfix, Q3CString msg)
+const char * UmlOperation::event(const char * pfix, QCString msg)
 {
   int index0 = 0;
   int index1;
@@ -390,14 +387,14 @@ void UmlOperation::write_events(FileOut & out)
 {
   const char * k = (_uml_20) ? "ownedMember" : "packagedElement";
   UmlItem * prj = UmlPackage::getProject();
-  Q3PtrDictIterator<char> it_oper(SentReceived);
+  QPtrDictIterator<char> it_oper(SentReceived);
 
   while (it_oper.current()) {
     out.indent();
     out << "<" << k <<" xmi:type=\"uml:SendOperationEvent\"";
     out.id_prefix(prj, "SENDOPEREVT", (int) ((long) it_oper.current()));
     out << " name=\"";
-    out.quote((const char*)((UmlOperation *)it_oper.currentKey())->name());//[jasa] ambiguous call
+    out.quote(((UmlOperation *)it_oper.currentKey())->name());
     out << '"';
     out.ref((UmlOperation *)it_oper.currentKey(), "operation");
     out << "/>\n";
@@ -406,7 +403,7 @@ void UmlOperation::write_events(FileOut & out)
     out << "<" << k <<" xmi:type=\"uml:ReceiveOperationEvent\"";
     out.id_prefix(prj, "RECOPEREVT", (int) ((long) it_oper.current()));
     out << " name=\"";
-    out.quote((const char*)((UmlOperation *)it_oper.currentKey())->name());//[jasa] ambiguous call
+    out.quote(((UmlOperation *)it_oper.currentKey())->name());
     out << '"';
     out.ref((UmlOperation *)it_oper.currentKey(), "operation");
     out << "/>\n";
@@ -414,7 +411,7 @@ void UmlOperation::write_events(FileOut & out)
     ++it_oper;
   }
   
-  Q3AsciiDictIterator<char> it_evt(Events);
+  QAsciiDictIterator<char> it_evt(Events);
 
   while (it_evt.current()) {
     out.indent();
@@ -443,7 +440,7 @@ void UmlOperation::write_events(FileOut & out)
 
 int UmlOperation::param_id;
 
-Q3PtrDict<char> UmlOperation::SentReceived;
+QPtrDict<char> UmlOperation::SentReceived;
 
-Q3AsciiDict<char> UmlOperation::Events;
+QAsciiDict<char> UmlOperation::Events;
 

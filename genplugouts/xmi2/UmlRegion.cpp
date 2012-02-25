@@ -4,7 +4,7 @@
 #include "FileOut.h"
 
 void UmlRegion::memo_incoming_trans() {
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size();
   unsigned i;
      
@@ -30,13 +30,13 @@ void UmlRegion::write(FileOut & out) {
   out << "<region xmi:type=\"uml:Region\"";
   out.id(this); 
   out << " name=\"";
-  out.quote((const char*)name());//[jasa] Q3CString to const char*.
+  out.quote(name());
   out << "\">\n";
   out.indent(+1); 
   
   write_description_properties(out); 
      
-  const Q3PtrVector<UmlItem> ch = children(); 
+  const QVector<UmlItem> ch = children(); 
   unsigned n = ch.size();
   unsigned i;
   

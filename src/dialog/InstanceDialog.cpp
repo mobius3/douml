@@ -29,14 +29,11 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
-#include <q3popupmenu.h>
-#include <q3grid.h>
+#include <qpopupmenu.h>
+#include <qgrid.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include "InstanceDialog.h"
 #include "Instance.h"
@@ -52,11 +49,11 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
       inst(i), what(w), kind(k) {
   setCaption(TR(what + " instance dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
   
   vbox->setMargin(5);
   
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   
   vbox->addWidget(grid);
   new QLabel(TR("name : "), grid);
@@ -71,7 +68,7 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
   
   connect(b, SIGNAL(clicked()), this, SLOT(menu_type()));
   
-  edtype = new Q3ComboBox(FALSE, grid);
+  edtype = new QComboBox(FALSE, grid);
   inst->get_types(nodes);
   nodes.full_names(list);
   edtype->insertStringList(list);
@@ -80,7 +77,7 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
   new QLabel("", grid);
   new QLabel("", grid);
   
-  Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox); 
+  QHBoxLayout * hbox = new QHBoxLayout(vbox); 
   
   hbox->setMargin(5);
   QPushButton * accept = new QPushButton(TR("&OK"), this);
@@ -111,7 +108,7 @@ InstanceDialog::~InstanceDialog() {
 }
 
 void InstanceDialog::menu_type() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();

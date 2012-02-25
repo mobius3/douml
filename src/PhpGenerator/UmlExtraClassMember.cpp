@@ -23,21 +23,18 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h>
 
 #include "UmlExtraClassMember.h"
 
 /*
-void UmlExtraClassMember::compute_dependency(Q3PtrList<PhpRefType> &, Q3CString) {
+void UmlExtraClassMember::compute_dependency(QList<PhpRefType> &, QCString) {
   // does nothing
 }
 */
 
-void UmlExtraClassMember::generate(QTextOStream & f, const Q3CString &,
-				   Q3CString, int &) {
+void UmlExtraClassMember::generate(QTextOStream & f, const QCString &,
+				   QCString, int &) {
   f << phpDecl();
 }
 

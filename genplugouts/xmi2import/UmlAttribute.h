@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseAttribute.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileIn;
 class Token;
@@ -15,7 +15,7 @@ class UmlItem;
 // You can modify it as you want (except the constructor)
 class UmlAttribute : public UmlBaseAttribute {
   public:
-    UmlAttribute(void * id, const Q3CString & n) :  UmlBaseAttribute(id, n) {};
+    UmlAttribute(void * id, const QCString & n) :  UmlBaseAttribute(id, n) {};
 
     static void init();
 
@@ -23,7 +23,7 @@ class UmlAttribute : public UmlBaseAttribute {
     static void importIt(FileIn & in, Token & token, UmlItem * where);
 
     //  call at end of import : try to solve type
-    virtual void solve(Q3CString idref);
+    virtual void solve(QCString idref);
 
 
   protected:

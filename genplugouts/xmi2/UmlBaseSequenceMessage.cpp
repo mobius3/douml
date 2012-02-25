@@ -5,7 +5,7 @@
 #include "UmlClassInstanceReference.h"
 #include "UmlFragment.h"
 
-void UmlBaseSequenceMessage::read_(const Q3PtrDict<UmlClassInstanceReference> & instances, const Q3PtrVector<UmlFragment> & fragments) {
+void UmlBaseSequenceMessage::read_(const QPtrDict<UmlClassInstanceReference> & instances, const QVector<UmlFragment> & fragments) {
   UmlBaseMessage::read_(instances);
   _kind = (aMessageKind) UmlCom::read_char();
   _args = UmlCom::read_string();

@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
-#include <QPixmap>
 
 #include "BrowserColDiagram.h"
 #include "SimpleData.h"
@@ -51,8 +47,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserColDiagram> BrowserColDiagram::imported;
-Q3ValueList<int> BrowserColDiagram::imported_ids;
+QList<BrowserColDiagram> BrowserColDiagram::imported;
+QValueList<int> BrowserColDiagram::imported_ids;
 QStringList BrowserColDiagram::its_default_stereotypes;	// unicode
 
 BrowserColDiagram::BrowserColDiagram(QString s, BrowserNode * p, int id)
@@ -140,7 +136,7 @@ void BrowserColDiagram::set_name(const char * s) {
 
 void BrowserColDiagram::import()
 {
-  Q3ValueList<int>::Iterator it = imported_ids.begin();
+  QValueList<int>::Iterator it = imported_ids.begin();
   
   while (!imported.isEmpty()) {
     QString warning;
@@ -201,8 +197,8 @@ void BrowserColDiagram::draw_svg() const {
 }
 
 void BrowserColDiagram::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -491,7 +487,7 @@ bool BrowserColDiagram::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-void BrowserColDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserColDiagram::compute_referenced_by(QList<BrowserNode> & l,
 					      BrowserNode * bn,
 					      char const * kc,
 					      char const * kr)
@@ -511,7 +507,7 @@ void BrowserColDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserColDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserColDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "coldiagram_stereotypes ";
@@ -526,7 +522,7 @@ void BrowserColDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserColDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserColDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "collaborationdiagram_ref " << get_ident() << " // " << get_name();
   else {

@@ -12,9 +12,7 @@
 #include "UmlUseCaseDiagram.h"
 #include "UmlSequenceDiagram.h"
 #include "UmlCollaborationDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
-UmlClassView::UmlClassView(void * id, const Q3CString & n)  : UmlBaseClassView(id, n){
+UmlClassView::UmlClassView(void * id, const QCString & n)  : UmlBaseClassView(id, n){
  ucv = 0;
  cpt[kind()] += 1;
 
@@ -22,16 +20,16 @@ UmlClassView::UmlClassView(void * id, const Q3CString & n)  : UmlBaseClassView(i
 
 void UmlClassView::import(UmlPackage * parent, File & f)
 {
-  Q3CString s;
+  QCString s;
 
   if (f.read(s) != STRING)
     f.syntaxError(s, " class view's name expected");
 
-  Q3CString a;
-  Q3CString id;
-  Q3CString ste;
-  Q3CString doc;
-  Q3Dict<Q3CString> prop;
+  QCString a;
+  QCString id;
+  QCString ste;
+  QCString doc;
+  QDict<QCString> prop;
   
   for (;;) {
     int k = f.readDefinitionBeginning(a, id, ste, doc, prop);
@@ -45,9 +43,9 @@ void UmlClassView::import(UmlPackage * parent, File & f)
       
       File f2(a, f.name());
       
-      if (! f2.open(QIODevice::ReadOnly))
+      if (! f2.open(IO_ReadOnly))
 	UmlCom::trace("<br>cannot open '" + a + "' referenced in "
-		      + Q3CString(f.name().toAscii()));//[jasa] QString to Q3CString conversion
+		      + QCString(f.name()));
       else {     
         f2.read("(");
         f2.read("object");
@@ -85,7 +83,7 @@ void UmlClassView::import(UmlPackage * parent, File & f)
 	if (!doc.isEmpty())
 	  clv->set_Description(doc);
 	
-	Q3CString * nmsp;
+	QCString * nmsp;
 	
 	if ((nmsp = prop.find("Cplusplus/IsNamespace")) != 0) {
 	  if (*nmsp == "TRUE")
@@ -114,7 +112,7 @@ void UmlClassView::import(UmlPackage * parent, File & f)
 
 void UmlClassView::import(File & f) {
   for (;;) {
-    Q3CString s;
+    QCString s;
 
     switch (f.read(s)) {
     case -1:
@@ -141,7 +139,7 @@ void UmlClassView::import(File & f) {
 
 void UmlClassView::readObjects(File & f) {
   for (;;) {
-    Q3CString s;
+    QCString s;
 
     switch (f.read(s)) {
     case ')':
@@ -182,7 +180,7 @@ void UmlClassView::readObjects(File & f) {
     }
     else {
       if (s != "Mechanism")
-	UmlCom::trace("<br>" + s + " in " + Q3CString(f.name().toAscii()) + " NOT MANAGED by ClassView::readObject()");//[jasa] QString to Q3CString conversion
+	UmlCom::trace("<br>" + s + " in " + QCString(f.name()) + " NOT MANAGED by ClassView::readObject()");
       f.skipBlock();
     }
   }

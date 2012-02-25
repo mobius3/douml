@@ -3,14 +3,14 @@
 
 
 #include "UmlBaseComponentView.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 // This class manages 'component view'
 //
 // You can modify it as you want (except the constructor)
 class UmlComponentView : public UmlBaseComponentView {
   public:
-    UmlComponentView(void * id, const Q3CString & n) : UmlBaseComponentView(id, n) {
+    UmlComponentView(void * id, const QCString & n) : UmlBaseComponentView(id, n) {
       cpt[kind()] += 1;
     };
 

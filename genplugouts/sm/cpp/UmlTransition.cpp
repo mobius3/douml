@@ -2,17 +2,15 @@
 #include "UmlTransition.h"
 #include "UmlClass.h"
 
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <qlist.h>
 
 #include "UmlCom.h"
 #include "UmlState.h"
 #include "UmlOperation.h"
 
-Q3CString UmlTransition::triggerName() {
+QCString UmlTransition::triggerName() {
   // get & check trigger's name
-  Q3CString s = cppTrigger();
+  QCString s = cppTrigger();
   
   if (s.isEmpty()) {
     switch (parent()->kind()) {
@@ -60,7 +58,7 @@ Q3CString UmlTransition::triggerName() {
   return s;
 }
 
-void UmlTransition::init(UmlClass *, Q3CString, Q3CString, UmlState * state) {
+void UmlTransition::init(UmlClass *, QCString, QCString, UmlState * state) {
   if (triggerName() == "_completion")
     state->setHasCompletion();
 }
@@ -69,12 +67,12 @@ void UmlTransition::generate(UmlClass * machine, UmlClass * anystate, UmlState *
   if (_already_managed)
     return;
     
-  Q3CString s = triggerName();
+  QCString s = triggerName();
   
   // group transitions having the same trigger
-  const Q3PtrVector<UmlItem> ch = parent()->children();
+  const QVector<UmlItem> ch = parent()->children();
   unsigned index = ch.findRef(this);
-  Q3PtrList<UmlTransition> trs;
+  QList<UmlTransition> trs;
   UmlTransition * tr_no_guard = 0;
   
   if (cppGuard().isEmpty())
@@ -106,7 +104,7 @@ void UmlTransition::generate(UmlClass * machine, UmlClass * anystate, UmlState *
   // made the trigger
 
   UmlOperation * trg = state->assocClass()->trigger(s, machine, anystate);
-  Q3CString body;
+  QCString body;
   
   if (s == "create") {
     // manage entry
@@ -130,19 +128,19 @@ void UmlTransition::generate(UmlClass * machine, UmlClass * anystate, UmlState *
   trg->set_CppBody(body);
 }
 
-void UmlTransition::generate(UmlClass * machine, UmlClass * anystate, UmlState * state, Q3CString & body, Q3CString indent) {
+void UmlTransition::generate(UmlClass * machine, UmlClass * anystate, UmlState * state, QCString & body, QCString indent) {
   if (!cppTrigger().isEmpty()) {
     UmlCom::trace("Error : transition from a pseudo state can't have trigger<br>");
     throw 0;
   }
 
-  Q3PtrList<UmlTransition> l;
+  QList<UmlTransition> l;
   
   l.append(this);
   generate(l, machine, anystate, state, body, indent, FALSE);
 }
 
-void UmlTransition::generate(Q3PtrList<UmlTransition> trs, UmlClass * machine, UmlClass * anystate, UmlState * state, Q3CString & body, Q3CString indent, bool completion)
+void UmlTransition::generate(QList<UmlTransition> trs, UmlClass * machine, UmlClass * anystate, UmlState * state, QCString & body, QCString indent, bool completion)
 {
   UmlTransition * tr;
   bool guard = FALSE;
@@ -216,7 +214,7 @@ void UmlTransition::generate(Q3PtrList<UmlTransition> trs, UmlClass * machine, U
     }
     else if (tr->target()->kind() != aTerminatePseudoState) {
       if (tg != common) {
-	Q3CString enter;
+	QCString enter;
 	UmlState * tg_parent;
       
 	// the enter behavior of the target state will be managed
@@ -226,7 +224,7 @@ void UmlTransition::generate(Q3PtrList<UmlTransition> trs, UmlClass * machine, U
 	     tg_parent = (UmlState *) tg_parent->parent())
 	  if (!tg_parent->cppEntryBehavior().isEmpty())
 	    enter.insert(0,
-			 (const char *)(indent + "  stm" + tg_parent->path() + "._doentry(stm);\n")); //[rageek] ambiguous
+			 indent + "  stm" + tg_parent->path() + "._doentry(stm);\n");
 	    
 	if (!enter.isEmpty())
 	  body += enter;

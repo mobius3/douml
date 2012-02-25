@@ -26,16 +26,14 @@
 #ifndef STATEDIALOG_H
 #define STATEDIALOG_H
 
-#include <qwidget.h>
+#include <qwidgetlist.h>
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BrowserNode.h"
 
 class QPushButton;
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 
 class LineEdit;
@@ -54,7 +52,7 @@ struct StDialog {
   void accept(StateBehavior &);
 };
 
-class StateDialog : public Q3TabDialog {
+class StateDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
@@ -66,12 +64,12 @@ class StateDialog : public Q3TabDialog {
     QStringList reflist;
     BrowserNodeList states;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * edspecification;
-    Q3ComboBox * edreference;
+    QComboBox * edstereotype;
+    QComboBox * edspecification;
+    QComboBox * edreference;
     QCheckBox * active_cb;
     MultiLineEdit * comment;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     QWidget * ocltab;
     QWidget * cpptab;

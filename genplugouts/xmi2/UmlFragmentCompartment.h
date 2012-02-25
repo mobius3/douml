@@ -3,8 +3,8 @@
 
 
 #include "UmlBaseFragmentCompartment.h"
-#include <q3ptrlist.h>
-#include <q3cstring.h>
+#include <qlist.h>
+#include <qcstring.h>
 
 class FileOut;
 class UmlItem;
@@ -16,15 +16,15 @@ class UmlFragmentCompartment : public UmlBaseFragmentCompartment {
   public:
     // called for the first message of a fragment compartment and its parents recursively
     
-    void write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs);
+    void write(FileOut & out, UmlItem * diagram, QList< UmlSequenceMessage > & msgs);
 
     //
     
-    void write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs, Q3CString oper);
+    void write(FileOut & out, UmlItem * diagram, QList< UmlSequenceMessage > & msgs, QCString oper);
 
     //
     
-    void bypass(Q3PtrList< UmlSequenceMessage > & msgs);
+    void bypass(QList< UmlSequenceMessage > & msgs);
 
 };
 

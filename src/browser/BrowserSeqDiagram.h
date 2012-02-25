@@ -28,10 +28,6 @@
 
 #include "BrowserDiagram.h"
 #include "Settings.h"
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3TextStream>
-#include <Q3ValueList>
 
 class QPixmap;
 class SeqDiagramWindow;
@@ -41,8 +37,8 @@ class BrowserSeqDiagram : public BrowserDiagram {
   friend class StereotypesDialog;
   
   protected:
-    static Q3PtrList<BrowserSeqDiagram> imported;
-    static Q3ValueList<int> imported_ids;
+    static QList<BrowserSeqDiagram> imported;
+    static QValueList<int> imported_ids;
     static QStringList its_default_stereotypes;
     static QStringList message_default_stereotypes;
   
@@ -96,7 +92,7 @@ class BrowserSeqDiagram : public BrowserDiagram {
     virtual bool get_classinstwritehorizontally() const;
     virtual ShowContextMode get_classinstshowmode() const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserSeqDiagram * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
     
@@ -109,13 +105,13 @@ class BrowserSeqDiagram : public BrowserDiagram {
     static const QStringList & default_stereotypes();
     static const QStringList & msg_default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void renumber(int phase);
     static void open_all();
     static void import();
     
-    static void compute_referenced_by(Q3PtrList<BrowserNode> & l, BrowserNode *,
+    static void compute_referenced_by(QList<BrowserNode> & l, BrowserNode *,
 				      const char * kc, char const * kr);
 };
 

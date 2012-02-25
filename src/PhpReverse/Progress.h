@@ -26,9 +26,9 @@
 #ifndef PROGRESS_H
 #define PROGRESS_H
 
-#include <q3progressdialog.h> 
+#include <qprogressdialog.h> 
 
-class Progress : public Q3ProgressDialog {
+class Progress : public QProgressDialog {
   public:
     Progress(int, const char *);
     virtual ~Progress();

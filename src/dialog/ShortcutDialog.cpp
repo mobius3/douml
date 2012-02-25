@@ -30,14 +30,12 @@
 #include <stdio.h>
 
 #include <qcursor.h>
-#include <q3vbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h> 
 #include <qlayout.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
-#include <QPixmap>
+#include <qpopupmenu.h>
 
 #include "ShortcutDialog.h"
 #include "Shortcut.h"
@@ -49,7 +47,7 @@
 
 QSize ShortcutDialog::previous_size;
 
-ShortcutDialog::ShortcutDialog() : Q3TabDialog(0, 0, TRUE) {
+ShortcutDialog::ShortcutDialog() : QTabDialog(0, 0, TRUE) {
   setOkButton(TR("OK"));
   setCancelButton(TR("Cancel"));
   setCaption(TR("Shortcut dialog"));
@@ -71,9 +69,9 @@ ShortcutDialog::ShortcutDialog() : Q3TabDialog(0, 0, TRUE) {
 
   // tab for command
   
-  Q3VBox * vtab;
+  QVBox * vtab;
     
-  vtab = new Q3VBox(this);
+  vtab = new QVBox(this);
   vtab->setSpacing(5);
   vtab->setMargin(5);
   
@@ -91,7 +89,7 @@ ShortcutDialog::ShortcutDialog() : Q3TabDialog(0, 0, TRUE) {
   
   // tab for tool
   
-  vtab = new Q3VBox(this);
+  vtab = new QVBox(this);
   vtab->setSpacing(5);
   vtab->setMargin(5);
   
@@ -113,7 +111,7 @@ ShortcutDialog::~ShortcutDialog() {
 }
 
 void ShortcutDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -125,7 +123,7 @@ void ShortcutDialog::accept() {
     cmd_table->accept();
     tool_table->accept();
     Shortcut::save();
-    Q3TabDialog::accept();
+    QTabDialog::accept();
   }
 }
 
@@ -144,7 +142,7 @@ ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
 #ifdef __APPLE__
 #include "../xpm/pomme_xpm.xpm"
   QPixmap pomme_xpm((const char **) pomme);
-  QIcon ic(pomme_xpm);
+  QIconSet ic(pomme_xpm);
   horizontalHeader()->setLabel(1, ic, "");
 #else
   horizontalHeader()->setLabel(1, TR("Ctrl"));
@@ -223,8 +221,8 @@ void ShortcutTable::button_pressed(int row, int col, int, const QPoint &) {
     
     sprintf(s, "%d", row + 1);
     
-    Q3PopupMenu m;
-    m.insertItem(TR("shortcut ") + QString(s), -1);
+    QPopupMenu m;
+    m.insertItem(TR("shortcut ") + s, -1);
     m.insertSeparator();
     m.insertItem(TR("Insert shortcut before"), 0);
     m.insertItem(TR("Insert shortcut after"), 1);
@@ -268,7 +266,7 @@ void ShortcutTable::insert_row_before(int row) {
   setNumRows(n + 1);
   
   for (index = n; index != row; index -= 1) {
-    Q3TableItem * it;
+    QTableItem * it;
     
     setText(index, 0, text(index - 1, 0));
     setText(index, 1, text(index - 1, 1));
@@ -295,7 +293,7 @@ void ShortcutTable::insert_row_after(int row) {
   setNumRows(n + 1);
   
   for (index = n; index > row + 1; index -= 1) {
-    Q3TableItem * it;
+    QTableItem * it;
     
     setText(index, 0, text(index - 1, 0));
     setText(index, 1, text(index - 1, 1));
@@ -331,7 +329,7 @@ void ShortcutTable::delete_row(int row) {
   }
   else {
     for (index = row; index != n - 1; index += 1) {
-      Q3TableItem * it;
+      QTableItem * it;
       
       setText(index, 0, text(index + 1, 0));
       setText(index, 1, text(index + 1, 1));

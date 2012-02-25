@@ -27,9 +27,6 @@
 #define PARAMSETCANVAS_H
 
 #include "DiagramCanvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3ValueList>
 
 class ActivityActionCanvas;
 class PinCanvas;
@@ -40,7 +37,7 @@ class ParameterSetCanvas : public QObject, public DiagramCanvas {
     
   protected:
     ActivityActionCanvas * act;
-    Q3ValueList<PinCanvas *> params;
+    QValueList<PinCanvas *> params;
     UmlColor itscolor;
     UmlColor used_color;
 
@@ -74,13 +71,13 @@ class ParameterSetCanvas : public QObject, public DiagramCanvas {
     void do_change_scale();
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     void edit_drawing_settings();
     
     virtual void apply_shortcut(QString s);
   
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static ParameterSetCanvas * read(char * &, UmlCanvas *, char *, ActivityActionCanvas *);
     
     virtual void history_save(QBuffer &) const;

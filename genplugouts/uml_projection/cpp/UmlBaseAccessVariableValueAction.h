@@ -3,14 +3,14 @@
 
 
 #include "UmlActivityAction.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlItem;
 
 class UmlBaseAccessVariableValueAction : public UmlActivityAction {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseAccessVariableValueAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+     UmlBaseAccessVariableValueAction(void * id, const QCString & s) : UmlActivityAction(id, s) {
     }
 
 

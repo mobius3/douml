@@ -23,25 +23,20 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtextstream.h> 
 
 #include "UmlExtraClassMember.h"
 #include "UmlClass.h"
 
-void UmlExtraClassMember::compute_dependency(Q3PtrList<CppRefType> &,
-					     const Q3CString &,
+void UmlExtraClassMember::compute_dependency(QList<CppRefType> &,
+					     const QCString &,
 					     bool) {
 }
 
 void UmlExtraClassMember::generate_decl(aVisibility &,
 					QTextOStream & f_h,
-					const Q3CString &,
-					Q3CString indent,
+					const QCString &,
+					QCString indent,
 					BooL & first, bool) {
   first = FALSE;
   
@@ -53,9 +48,9 @@ void UmlExtraClassMember::generate_decl(aVisibility &,
   f_h << p;
 }
 
-void UmlExtraClassMember::generate_def(QTextOStream & f, Q3CString indent,
-				       bool h, Q3CString templates,
-				       Q3CString, Q3CString, Q3CString) {
+void UmlExtraClassMember::generate_def(QTextOStream & f, QCString indent,
+				       bool h, QCString templates,
+				       QCString, QCString, QCString) {
   if (!cppDef().isEmpty() &&
       ((isCppInline() || !templates.isEmpty()) == h)) {
     const char * p = cppDef();

@@ -3,8 +3,8 @@
 
 
 #include <qstring.h>
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <qcstring.h>
+#include <qdict.h>
 
 #include <stdio.h>
 #include <qmap.h>
@@ -20,7 +20,7 @@ class FileIn {
     Token & read(bool any = FALSE);
 
     //return content and the next token which must be a 'what'
-    Q3CString body(Q3CString what);
+    QCString body(QCString what);
 
     //return the next work, may be :
     //<
@@ -38,26 +38,26 @@ class FileIn {
     //Warning : returned value will be changed by next call !
     const char * readWord(bool any, BooL & str);
 
-    void finish(Q3CString what);
+    void finish(QCString what);
 
     void bypass(Token & tk);
 
     void bypassedId(Token & tk);
 
     //doesn't return
-    void error(Q3CString s);
+    void error(QCString s);
 
-    void warning(Q3CString s);
+    void warning(QCString s);
 
-    const Q3CString & path() const { return _path; }
+    const QCString & path() const { return _path; }
 
-    static bool isBypassedId(Q3CString id) {
+    static bool isBypassedId(QCString id) {
       return BypassedIds[QString(id)] != 0;
     }
 
 
   protected:
-    Q3CString _path;
+    QCString _path;
 
     FILE * _fp;
 
@@ -69,9 +69,9 @@ class FileIn {
 
     char * _buffer;
 
-    QMap<Q3CString, char> _special_chars;
+    QMap<QCString, char> _special_chars;
 
-    static Q3Dict<char> BypassedIds;
+    static QDict<char> BypassedIds;
 
 
   private:
@@ -83,7 +83,7 @@ class FileIn {
 
 
   public:
-    void setEncoding(Q3CString s);
+    void setEncoding(QCString s);
 
 };
 

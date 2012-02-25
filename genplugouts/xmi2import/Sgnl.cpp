@@ -3,8 +3,6 @@
 #include "FileIn.h"
 #include "Token.h"
 #include "UmlItem.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void Signal::init()
 {
@@ -22,21 +20,21 @@ void Signal::importIt(FileIn & in, Token & token, UmlItem *)
     in.finish(token.what());
 }
 
-Q3CString Signal::get(Q3CString idref)
+QCString Signal::get(QCString idref)
 {
-  QMap<Q3CString, Q3CString>::Iterator iter = All.find(idref);
-  static Q3CString null_str;
+  QMap<QCString, QCString>::Iterator iter = All.find(idref);
+  static QCString null_str;
   
   return (iter == All.end()) ? null_str : *iter;
 }
 
-void Signal::add(FileIn & in, Token & token, Q3CString & name, Q3CString & idref)
+void Signal::add(FileIn & in, Token & token, QCString & name, QCString & idref)
 {
   // token is <signal ...>
-  Q3CString t = token.xmiIdref();
+  QCString t = token.xmiIdref();
   
   if (! t.isEmpty()) {
-    QMap<Q3CString, Q3CString>::Iterator iter = All.find(t);
+    QMap<QCString, QCString>::Iterator iter = All.find(t);
     
     if (iter == All.end()) {
       idref = t;
@@ -58,5 +56,5 @@ void Signal::add(FileIn & in, Token & token, Q3CString & name, Q3CString & idref
 
 }
 
-QMap<Q3CString, Q3CString> Signal::All;
+QMap<QCString, QCString> Signal::All;
 

@@ -27,11 +27,10 @@
 #define MENUFONT_H
 
 #include <qmenudata.h> 
-#include <QMenuItem> //[lgfreitas] added for QMenuItem
 
 #include "UmlEnum.h"
 
-class MenuFont : public QMenuItem { // QCustomMenuItem does not exists in Qt4. Hopefully QMenuItem will work...
+class MenuFont : public QCustomMenuItem {
   protected:
     QString str;
     QFont font;

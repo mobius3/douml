@@ -27,11 +27,11 @@
 
 
 
-#include <q3grid.h> 
+#include <qgrid.h> 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h> 
-#include <q3vbox.h> 
+#include <qcombobox.h> 
+#include <qvbox.h> 
 
 #include "UseCaseDialog.h"
 #include "BrowserUseCase.h"
@@ -48,7 +48,7 @@
 QSize UseCaseDialog::previous_size;
 
 UseCaseDialog::UseCaseDialog(UseCaseData * u)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), uc(u) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), uc(u) {
   BrowserNode * bn = u->browser_node;
   
   bn->edit_start();
@@ -68,7 +68,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   // general tab
   
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
 
@@ -77,7 +77,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   edname->setReadOnly(visit);
 
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(uc->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(BrowserUseCase::default_stereotypes());
@@ -99,7 +99,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   font.setFixedPitch(TRUE);
   extension_points->setFont(font);
 
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -113,7 +113,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -124,7 +124,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
 }
 
 void UseCaseDialog::polish() {
-  Q3TabDialog::polish();  
+  QTabDialog::polish();  
   UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -181,5 +181,5 @@ void UseCaseDialog::accept() {
   bn->package_modified();
   uc->modified();
     
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }

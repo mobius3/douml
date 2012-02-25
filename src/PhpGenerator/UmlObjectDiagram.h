@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseObjectDiagram.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 // This class manages 'object diagrams', notes that the class 'UmlDiagram'
 // is a mother class of all the diagrams, allowing to generalize their
@@ -13,7 +13,7 @@
 class UmlObjectDiagram : public UmlBaseObjectDiagram {
   public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlObjectDiagram(void * id, const Q3CString & s) : UmlBaseObjectDiagram(id, s) {
+     UmlObjectDiagram(void * id, const QCString & s) : UmlBaseObjectDiagram(id, s) {
     }
 
 };

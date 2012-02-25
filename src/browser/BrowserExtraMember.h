@@ -1,7 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -73,7 +69,7 @@ class BrowserExtraMember : public BrowserNode, public Labeled<BrowserExtraMember
 				QString & s, bool templ) const;
     virtual bool allow_empty() const;
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserExtraMember * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
 

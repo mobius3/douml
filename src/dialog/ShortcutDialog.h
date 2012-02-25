@@ -26,16 +26,16 @@
 #ifndef SHORTCUTDIALOG_H
 #define SHORTCUTDIALOG_H
 
-#include <q3tabdialog.h>
+#include <qtabdialog.h>
 
 #include "MyTable.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QPushButton;
 
 class ShortcutTable;
 
-class ShortcutDialog : public Q3TabDialog {
+class ShortcutDialog : public QTabDialog {
   Q_OBJECT
     
   protected:

@@ -135,7 +135,7 @@ static int open_file(QFile & fp, BooL & ro)
 {
   QString filename = fp.name();
   
-  while (! fp.open(QIODevice::ReadOnly)) {
+  while (! fp.open(IO_ReadOnly)) {
     if (QMessageBox::critical(0, "Uml",
 			      filename + "\ncannot be opened for read, retry ?\n",
 			      "yes", "no", 0, 0, 0) != 0)

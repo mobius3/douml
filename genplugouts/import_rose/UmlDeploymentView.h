@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseDeploymentView.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class File;
 class UmlPackage;
@@ -13,7 +13,7 @@ class UmlPackage;
 // You can modify it as you want (except the constructor)
 class UmlDeploymentView : public UmlBaseDeploymentView {
   public:
-    UmlDeploymentView(void * id, const Q3CString & n) : UmlBaseDeploymentView(id, n) {
+    UmlDeploymentView(void * id, const QCString & n) : UmlBaseDeploymentView(id, n) {
       cpt[kind()] += 1;
     };
 
@@ -21,21 +21,21 @@ class UmlDeploymentView : public UmlBaseDeploymentView {
 
     void readObjects(File & f);
 
-    static UmlDeploymentView * create(UmlPackage * parent, const char * s, Q3CString bn);
+    static UmlDeploymentView * create(UmlPackage * parent, const char * s, QCString bn);
 
     static void import(UmlPackage * parent, File & f);
 
 
   protected:
-    Q3CString _base_name;
+    QCString _base_name;
 
 
   public:
-    const Q3CString baseName() const;
+    const QCString baseName() const;
 
 };
 
-inline const Q3CString UmlDeploymentView::baseName() const {
+inline const QCString UmlDeploymentView::baseName() const {
   return _base_name;
 }
 

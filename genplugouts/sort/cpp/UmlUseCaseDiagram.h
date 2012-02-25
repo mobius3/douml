@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseUseCaseDiagram.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 // This class manages 'use case diagrams', notes that the class 'UmlDiagram'
 // is a mother class of all the diagrams, allowing to generalize their
@@ -12,7 +12,7 @@
 // You can modify it as you want (except the constructor)
 class UmlUseCaseDiagram : public UmlBaseUseCaseDiagram {
   public:
-    UmlUseCaseDiagram(void * id, const Q3CString & n) : UmlBaseUseCaseDiagram(id, n) {};
+    UmlUseCaseDiagram(void * id, const QCString & n) : UmlBaseUseCaseDiagram(id, n) {};
 
     virtual int orderWeight();
 

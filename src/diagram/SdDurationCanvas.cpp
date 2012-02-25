@@ -29,9 +29,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpopupmenu.h> 
 
 #include "SdDurationCanvas.h"
 #include "SdLifeLineCanvas.h"
@@ -110,7 +108,7 @@ void SdDurationCanvas::change_scale() {
 void SdDurationCanvas::update_hpos() {
   move(support->sub_x(width()), 100000);
   
-  Q3PtrListIterator<SdDurationCanvas> itd(durations);
+  QListIterator<SdDurationCanvas> itd(durations);
   
   for (; itd.current(); ++itd)
     itd.current()->update_hpos();
@@ -118,7 +116,6 @@ void SdDurationCanvas::update_hpos() {
 
 void SdDurationCanvas::draw(QPainter & p) {
   const QRect r = rect();
-  p.setRenderHint(QPainter::Antialiasing, true);
   UmlColor used_color = (itscolor != UmlDefaultColor)
     ? itscolor
     : browser_node->get_color(UmlActivityDuration);
@@ -137,10 +134,8 @@ void SdDurationCanvas::draw(QPainter & p) {
 
 
 
-    //p.lineTo(x + w, y);
-	p.drawLine(x, y, x + w, y);
-   //p.lineTo(x + w, y + w);
-   p.drawLine(x + w, y, x + w, y + w);
+    p.lineTo(x + w, y);
+    p.lineTo(x + w, y + w);
     
     int b = r.bottom();
     
@@ -148,10 +143,8 @@ void SdDurationCanvas::draw(QPainter & p) {
 
 
 
-    //p.lineTo(x + w, b);
-	p.drawLine(x, b, x + w, b);
-    //p.lineTo(x + w, b - w);
-	p.drawLine(x+w, b, x + w, b - w);
+    p.lineTo(x + w, b);
+    p.lineTo(x + w, b - w);
   }
   else
     p.drawRect(r);
@@ -190,7 +183,7 @@ void SdDurationCanvas::moveBy(double dx, double dy) {
     DiagramCanvas::moveBy(dx, 0);
     
     // update messages position (even selected, this case is managed by the messages)
-    Q3PtrListIterator<SdMsgBaseCanvas> it(msgs);
+    QListIterator<SdMsgBaseCanvas> it(msgs);
     
     for ( ; it.current(); ++it )
       it.current()->update_hpos();
@@ -205,7 +198,7 @@ void SdDurationCanvas::moveBy(double dx, double dy) {
     DiagramCanvas::moveBy(0, dy);
     
     // move messages (even selected, this case is managed by the messages)
-    Q3PtrListIterator<SdMsgBaseCanvas> it(msgs);
+    QListIterator<SdMsgBaseCanvas> it(msgs);
     
     for ( ; it.current(); ++it )
       it.current()->moveBy(100000, dy);
@@ -219,7 +212,7 @@ void SdDurationCanvas::prepare_for_move(bool on_resize) {
   DiagramCanvas::prepare_for_move(on_resize);
   
   if (! on_resize) {
-    Q3PtrListIterator<SdDurationCanvas> itd(durations);
+    QListIterator<SdDurationCanvas> itd(durations);
     
     for (; itd.current(); ++itd) {
       if (! itd.current()->selected()) {
@@ -250,7 +243,7 @@ void SdDurationCanvas::update_v_to_contain(const QRect re) {
   if (re.top() < r.top()) {
     int dy = re.top() - r.top();
     
-    Q3CanvasItem::moveBy(0, dy);
+    QCanvasItem::moveBy(0, dy);
     resize(r.width(), r.height() - dy);
     update_self();
   }
@@ -269,7 +262,7 @@ void SdDurationCanvas::update_v_to_contain(SdDurationCanvas * d, bool force) {
     int b = (int) y() + height();
     
     if (d->y() < y()){
-      Q3CanvasItem::moveBy(0, d->y() - y());
+      QCanvasItem::moveBy(0, d->y() - y());
       resize(width(), 
 	     ((min_b > b) ? min_b : b) - (int) y());
       update_self();
@@ -285,7 +278,7 @@ void SdDurationCanvas::update_v_to_contain(SdDurationCanvas * d, bool force) {
 }
 
 void SdDurationCanvas::update_self() {
-  Q3PtrListIterator<SdMsgBaseCanvas> it(msgs);
+  QListIterator<SdMsgBaseCanvas> it(msgs);
   QRect r = rect();
     
   for ( ; it.current(); ++it )
@@ -429,7 +422,7 @@ void SdDurationCanvas::remove(SdDurationCanvas * d) {
 }
 
 void SdDurationCanvas::cut_internal(int py) {
-  Q3PtrListIterator<SdDurationCanvas> itd(durations);
+  QListIterator<SdDurationCanvas> itd(durations);
   
   for (; itd.current(); ++itd)
     itd.current()->cut_internal(py);
@@ -438,8 +431,8 @@ void SdDurationCanvas::cut_internal(int py) {
   resize(width(), py - r.top());
   SdDurationCanvas * newone = 0;
   
-  Q3PtrList<SdMsgBaseCanvas> ms(msgs);
-  Q3PtrListIterator<SdMsgBaseCanvas> it(ms);
+  QList<SdMsgBaseCanvas> ms(msgs);
+  QListIterator<SdMsgBaseCanvas> it(ms);
   
   for ( ; it.current(); ++it ) {
     if (it.current()->rect().center().y() > py) {
@@ -459,8 +452,8 @@ void SdDurationCanvas::cut_internal(int py) {
     }
   }
   
-  Q3PtrList<SdDurationCanvas> durs(durations);
-  Q3PtrListIterator<SdDurationCanvas> itdur(durs);
+  QList<SdDurationCanvas> durs(durations);
+  QListIterator<SdDurationCanvas> itdur(durs);
   
   for (itdur.toFirst() ; itdur.current(); ++itdur) {
     if (itdur.current()->rect().center().y() > py) {
@@ -488,7 +481,7 @@ void SdDurationCanvas::cut(const QPoint & p) {
   package_modified();
 }
 
-void SdDurationCanvas::merge(Q3PtrList<SdDurationCanvas> & l) {
+void SdDurationCanvas::merge(QList<SdDurationCanvas> & l) {
   l.removeRef(this);
   
   QRect r = rect();
@@ -508,14 +501,14 @@ void SdDurationCanvas::merge(Q3PtrList<SdDurationCanvas> & l) {
   }
   
   if (vmin < r.top())
-    Q3CanvasItem::moveBy(0, vmin - r.top());
+    QCanvasItem::moveBy(0, vmin - r.top());
 
   resize(r.width(), vmax - vmin + 1);
   update_self();
 }
 
 void SdDurationCanvas::collapse(SdDurationCanvas * d) {
-  Q3PtrList<SdMsgBaseCanvas> & ms = d->msgs;
+  QList<SdMsgBaseCanvas> & ms = d->msgs;
   
   while (! ms.isEmpty()) {
     SdMsgBaseCanvas * m = ms.take(0);
@@ -524,7 +517,7 @@ void SdDurationCanvas::collapse(SdDurationCanvas * d) {
     m->change_duration(d, this);
   }
   
-  Q3PtrList<SdDurationCanvas> & durs = d->durations;
+  QList<SdDurationCanvas> & durs = d->durations;
   
   while (! durs.isEmpty()) {
     SdDurationCanvas * dur = durs.take(0);
@@ -659,12 +652,12 @@ void SdDurationCanvas::toOverlapping(SdMsgBaseCanvas ** v,
 }
 
 void SdDurationCanvas::postToOverlapping() {
-  Q3PtrListIterator<SdDurationCanvas> itd(durations);
+  QListIterator<SdDurationCanvas> itd(durations);
   
   for (; itd.current(); ++itd)
     itd.current()->postToOverlapping();
   
-  Q3PtrListIterator<SdMsgBaseCanvas> it(msgs);
+  QListIterator<SdMsgBaseCanvas> it(msgs);
   
   for ( ; it.current(); ++it ) {
     it.current()->upper();
@@ -686,11 +679,11 @@ void SdDurationCanvas::modified() {
 }
 
 void SdDurationCanvas::menu(const QPoint & p) {
-  Q3PopupMenu m(0);
-  Q3CanvasItemList items = collisions(TRUE);
-  Q3PtrList<SdDurationCanvas> l;
-  Q3CanvasItemList::ConstIterator it;
-  Q3CanvasItemList::ConstIterator end = items.end();
+  QPopupMenu m(0);
+  QCanvasItemList items = collisions(TRUE);
+  QList<SdDurationCanvas> l;
+  QCanvasItemList::ConstIterator it;
+  QCanvasItemList::ConstIterator end = items.end();
   
   for (it = items.begin(); it != end; ++it) {
     if ((*it)->visible()) {
@@ -818,7 +811,7 @@ bool SdDurationCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void SdDurationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void SdDurationCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -829,7 +822,7 @@ void SdDurationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((SdDurationCanvas *) it.current())->itscolor = itscolor;
@@ -841,8 +834,8 @@ void SdDurationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void SdDurationCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void SdDurationCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   SdDurationCanvas * x = (SdDurationCanvas *) it.current();
   
@@ -909,7 +902,7 @@ void SdDurationCanvas::select_associated() {
   if (! selected())
     the_canvas()->select(this);
   
-  Q3PtrListIterator<SdMsgBaseCanvas> it(msgs);
+  QListIterator<SdMsgBaseCanvas> it(msgs);
   
   for ( ; it.current(); ++it )
     if (! it.current()->selected())
@@ -920,7 +913,7 @@ bool SdDurationCanvas::copyable() const {
   if (! selected())
     return FALSE;
   
-  Q3PtrListIterator<SdMsgBaseCanvas> it(msgs);
+  QListIterator<SdMsgBaseCanvas> it(msgs);
   
   for ( ; it.current(); ++it )
     if (it.current()->copyable())
@@ -955,41 +948,41 @@ double SdDurationCanvas::getZ() const {
   return z();
 }
 
-void SdDurationCanvas::propag_visible(Q3PtrList<SdDurationCanvas> & l, bool y)
+void SdDurationCanvas::propag_visible(QList<SdDurationCanvas> & l, bool y)
 {
-  Q3PtrListIterator<SdDurationCanvas> itd(l);
+  QListIterator<SdDurationCanvas> itd(l);
   SdDurationCanvas * d;
   
   for ( ; (d = itd.current()) != 0; ++itd ) {
-    d->Q3CanvasItem::setVisible(y);
+    d->QCanvasItem::setVisible(y);
     
-    Q3PtrListIterator<SdMsgBaseCanvas> itm(d->msgs);
+    QListIterator<SdMsgBaseCanvas> itm(d->msgs);
     
     for ( ; itm.current(); ++itm )
-      itm.current()->Q3CanvasItem::setVisible(y);
+      itm.current()->QCanvasItem::setVisible(y);
     
     propag_visible(d->durations, y);
   }
 }
 
-void SdDurationCanvas::propag_dz(Q3PtrList<SdDurationCanvas> & l, double dz)
+void SdDurationCanvas::propag_dz(QList<SdDurationCanvas> & l, double dz)
 {
-  Q3PtrListIterator<SdDurationCanvas> it(l);
+  QListIterator<SdDurationCanvas> it(l);
   SdDurationCanvas * d;
   
   for ( ; (d = it.current()) != 0; ++it ) {
-    d->Q3CanvasItem::setZ(d->z() + dz);
+    d->QCanvasItem::setZ(d->z() + dz);
     propag_dz(d->durations, dz);
   }
 }
 
-void SdDurationCanvas::save_sub(Q3TextStream & st) const {
+void SdDurationCanvas::save_sub(QTextStream & st) const {
   nl_indent(st);
   st << "overlappingdurationcanvas " << get_ident();
   save_internal(st);
 }
 
-void SdDurationCanvas::save_internal(Q3TextStream & st) const {
+void SdDurationCanvas::save_internal(QTextStream & st) const {
   indent(+1);
   
   if (coregion) {
@@ -1004,7 +997,7 @@ void SdDurationCanvas::save_internal(Q3TextStream & st) const {
   nl_indent(st);
   save_xyzwh(st, this, "xyzwh");
   
-  Q3PtrListIterator<SdDurationCanvas> itd(durations);
+  QListIterator<SdDurationCanvas> itd(durations);
   
   for (; itd.current(); ++itd)
     itd.current()->save_sub(st);
@@ -1014,7 +1007,7 @@ void SdDurationCanvas::save_internal(Q3TextStream & st) const {
   st << "end";
 }
 
-void SdDurationCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdDurationCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "durationcanvas_ref " << get_ident();
   else if (!support->isaDuration()) {
@@ -1101,7 +1094,7 @@ SdDurationCanvas * SdDurationCanvas::read(char * & st, UmlCanvas * canvas, char 
 }
 
 void SdDurationCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
   disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
 
@@ -1113,13 +1106,13 @@ void SdDurationCanvas::history_save(QBuffer & b) const {
   ::save(height(), b);
   ::save_ptr(support, b);
   
-  Q3PtrListIterator<SdMsgBaseCanvas> it(msgs);
+  QListIterator<SdMsgBaseCanvas> it(msgs);
   
   ::save((int) msgs.count(), b);
   for (; it.current(); ++it)
     ::save(it.current(), b);
   
-  Q3PtrListIterator<SdDurationCanvas> itd(durations);
+  QListIterator<SdDurationCanvas> itd(durations);
   
   ::save((int) durations.count(), b);
   for (; itd.current(); ++itd)
@@ -1135,7 +1128,7 @@ void SdDurationCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   support = (SdDurationSupport *) ::load_ptr(b);
   
@@ -1160,7 +1153,7 @@ void SdDurationCanvas::history_load(QBuffer & b) {
 
 unsigned SdDurationCanvas::count_msg(int api_format) const {
   unsigned count = 0;
-  Q3PtrListIterator<SdMsgBaseCanvas> itm(msgs);
+  QListIterator<SdMsgBaseCanvas> itm(msgs);
   double maxy = 0;
   bool isreturn = FALSE;
   
@@ -1194,7 +1187,7 @@ unsigned SdDurationCanvas::count_msg(int api_format) const {
   if (!isreturn)
     count += 1;
   
-  Q3PtrListIterator<SdDurationCanvas> itd(durations);
+  QListIterator<SdDurationCanvas> itd(durations);
   
   for (; itd.current(); ++itd)
     count += itd.current()->count_msg(api_format);
@@ -1203,7 +1196,7 @@ unsigned SdDurationCanvas::count_msg(int api_format) const {
 }
 
 void SdDurationCanvas::send(ToolCom * com, int id) const {
-  Q3PtrListIterator<SdMsgBaseCanvas> itm(msgs);
+  QListIterator<SdMsgBaseCanvas> itm(msgs);
   double maxy = 0;
   bool isreturn = FALSE;
   
@@ -1239,7 +1232,7 @@ void SdDurationCanvas::send(ToolCom * com, int id) const {
 			  (unsigned) y() + height(),
 			  anImplicitReturn, "", "", "");
   
-  Q3PtrListIterator<SdDurationCanvas> itd(durations);
+  QListIterator<SdDurationCanvas> itd(durations);
   
   for (; itd.current(); ++itd)
     itd.current()->send(com, id);

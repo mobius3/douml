@@ -1,14 +1,12 @@
 
 #include "UmlActivityDiagram.h"
 #include "UmlActivityObject.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-Q3CString UmlActivityObject::sKind() {
+QCString UmlActivityObject::sKind() {
   return "activity object";
 }
 
-void UmlActivityObject::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlActivityObject::html(QCString pfix, unsigned int rank, unsigned int level) {
   define();
 
   fw.write("<table><tr><td><div class=\"element\">Activity object <b>");
@@ -20,8 +18,8 @@ void UmlActivityObject::html(Q3CString pfix, unsigned int rank, unsigned int lev
   unload(FALSE, FALSE);
 }
 
-void UmlActivityObject::html_internal(Q3CString pfix, unsigned int rank, unsigned int level) {
-  Q3CString s = description();
+void UmlActivityObject::html_internal(QCString pfix, unsigned int rank, unsigned int level) {
+  QCString s = description();
   
   s = description();
   if (!s.isEmpty()) {
@@ -48,8 +46,8 @@ void UmlActivityObject::html_internal(Q3CString pfix, unsigned int rank, unsigne
 
   s = selection();
   
-  Q3CString scpp = cppSelection();
-  Q3CString sjava = javaSelection();
+  QCString scpp = cppSelection();
+  QCString sjava = javaSelection();
   
   if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
     fw.write("<p>Selection :</p><ul>");

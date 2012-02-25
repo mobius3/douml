@@ -27,10 +27,10 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h> 
 
 #include "StateActionDialog.h"
@@ -49,7 +49,7 @@
 QSize StateActionDialog::previous_size;
 
 StateActionDialog::StateActionDialog(StateActionData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), action(d) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), action(d) {
   d->browser_node->edit_start();
   
   if (d->browser_node->is_writable()) {
@@ -65,18 +65,18 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   visit = !hasOkButton();  
 
   BrowserNode * bn = action->browser_node;
-  Q3Grid * grid;
+  QGrid * grid;
   
   //
   // general tab
   //
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(action->get_stereotype()));
   if (!visit) {
     edstereotype->insertStringList(BrowserStateAction::default_stereotypes());
@@ -88,7 +88,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -101,7 +101,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   addTab(grid, "Uml");
 
   // OCL
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   umltab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -115,7 +115,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   addTab(grid, "Ocl");
 
   // CPP
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   cpptab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -132,7 +132,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     removePage(grid);
   
   // Java
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   javatab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
@@ -150,7 +150,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
 
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -187,7 +187,7 @@ void StateActionDialog::change_tabs(QWidget * w) {
 }
 
 void StateActionDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -223,5 +223,5 @@ void StateActionDialog::accept() {
   bn->package_modified();
   action->modified();
   
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }

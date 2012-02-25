@@ -2,8 +2,6 @@
 #define UMLATTRIBUTE_H
 
 #include "UmlBaseAttribute.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 // This class manages 'attribute', notes that the class 'UmlClassItem'
 // is a mother class of the class's children.
@@ -11,7 +9,7 @@
 
 class UmlAttribute : public UmlBaseAttribute {
   public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const QCString & n)
       :  UmlBaseAttribute(id, n) {};
     
     static UmlAttribute * java2Php(UmlClass * php, UmlClass * java,

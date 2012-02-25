@@ -6,8 +6,6 @@
 
 #include "UmlRelation.h"
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlAttribute::init()
 {
   declareFct("ownedattribute", "uml:Property", &importIt);
@@ -24,7 +22,7 @@ void UmlAttribute::importIt(FileIn & in, Token & token, UmlItem * where)
     where = where->container(anAttribute, token, in);
     
     if (where != 0) {
-      Q3CString s = token.valueOf("name");
+      QCString s = token.valueOf("name");
       
       if (s.isEmpty()) {
 	static unsigned n = 0;
@@ -73,7 +71,7 @@ void UmlAttribute::importIt(FileIn & in, Token & token, UmlItem * where)
 	att->set_isClassMember(TRUE);
 	  
       if (! token.closed()) {
-	Q3CString k = token.what();
+	QCString k = token.what();
 	const char * kstr = k;
 	
 	while (in.read(), !token.close(kstr)) {
@@ -114,7 +112,7 @@ void UmlAttribute::importIt(FileIn & in, Token & token, UmlItem * where)
   }
 }
 
-void UmlAttribute::solve(Q3CString idref) {
+void UmlAttribute::solve(QCString idref) {
   UmlTypeSpec ts;
   
   if (getType(idref, ts))
@@ -124,11 +122,11 @@ void UmlAttribute::solve(Q3CString idref) {
 }
 
 void UmlAttribute::importMultiplicity(FileIn & in, Token & token, bool upper) {
-  Q3CString s = token.valueOf("value");
+  QCString s = token.valueOf("value");
   
   if (!s.isEmpty() && 
       (s != "Unspecified")) {	// VP
-    Q3CString m = multiplicity();
+    QCString m = multiplicity();
     
     if (m.isEmpty())
       m = s;

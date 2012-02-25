@@ -31,7 +31,7 @@ const char * UmlClassInstanceReference::lifeline() {
   return s;
 }
 
-void UmlClassInstanceReference::write_lifelines(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlClassInstanceReference> & insts)
+void UmlClassInstanceReference::write_lifelines(FileOut & out, UmlItem * diagram, const QVector<UmlClassInstanceReference> & insts)
 {
   unsigned sup = insts.size();
   unsigned index;
@@ -43,14 +43,14 @@ void UmlClassInstanceReference::write_lifelines(FileOut & out, UmlItem * diagram
     out << "<lifeline xmi:type=\"uml:Lifeline\"";
     out.id_prefix(diagram, ci->lifeline());
     out << " name=\"";
-    out.quote((const char*)ci->name());//[jasa] ambiguous call
+    out.quote(ci->name());
     out << '"';
     out.ref(diagram, "represents", ci->attribute());
     out << "/>\n";
   }
 }
 
-void UmlClassInstanceReference::write_attributes(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlClassInstanceReference> & insts)
+void UmlClassInstanceReference::write_attributes(FileOut & out, UmlItem * diagram, const QVector<UmlClassInstanceReference> & insts)
 {
   unsigned sup = insts.size();
   unsigned index;
@@ -62,7 +62,7 @@ void UmlClassInstanceReference::write_attributes(FileOut & out, UmlItem * diagra
     out << "<ownedAttribute xmi:type=\"uml:Property\"";
     out.id_prefix(diagram, ci->attribute());
     out << " name=\"";
-    out.quote((const char*)ci->name());//[jasa] ambiguous call
+    out.quote(ci->name());
     out << '"';
     out.ref(ci->type(), "type");
     out << "/>\n";

@@ -27,8 +27,6 @@
 #define CONTINUATIONCANVAS_H
 
 #include "DiagramCanvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 class ToolCom;
 
@@ -68,15 +66,15 @@ class SdContinuationCanvas : public QObject, public DiagramCanvas {
     virtual void change_scale();
     
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem> &);
+    virtual void same_drawing_settings(QList<DiagramItem> &);
     void edit_drawing_settings();
     
     virtual void apply_shortcut(QString s);
     
-    static void send(ToolCom * com, Q3CanvasItemList & all);
+    static void send(ToolCom * com, QCanvasItemList & all);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static SdContinuationCanvas * read(char * &, UmlCanvas *, char *);
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);

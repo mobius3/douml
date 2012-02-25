@@ -26,12 +26,7 @@
 #ifndef BROWSER_USECASEVIEW_H
 #define BROWSER_USECASEVIEW_H
 
-#include <q3intdict.h> 
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <QDragMoveEvent>
+#include <qintdict.h> 
 
 class QPixmap;
 class SimpleData;
@@ -92,7 +87,7 @@ class BrowserUseCaseView : public BrowserNode, public Labeled<BrowserUseCaseView
     virtual QString get_stype() const;
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
+    virtual bool may_contains_them(const QList<BrowserNode> &,
 				   BooL & duplicable) const;
     virtual BrowserNode * container(UmlCode) const; // container for class, state machine and activity
     virtual BasicData * get_data() const;
@@ -105,7 +100,7 @@ class BrowserUseCaseView : public BrowserNode, public Labeled<BrowserUseCaseView
     virtual void get_activitydiagramsettings(ActivityDiagramSettings &) const;
     virtual UmlColor get_color(UmlCode) const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
@@ -116,7 +111,7 @@ class BrowserUseCaseView : public BrowserNode, public Labeled<BrowserUseCaseView
     
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     static BrowserUseCaseView * read(char * &, char *, BrowserNode *, bool);
     static BrowserNode * get_it(const char * k, int id);

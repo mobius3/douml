@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseUseCaseView.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 // This class manages 'use case view'
 //
@@ -12,7 +12,7 @@ class UmlUseCaseView : public UmlBaseUseCaseView {
   public:
     virtual void sort();
 
-    UmlUseCaseView(void * id, const Q3CString & n) : UmlBaseUseCaseView(id, n) {};
+    UmlUseCaseView(void * id, const QCString & n) : UmlBaseUseCaseView(id, n) {};
 
     virtual int orderWeight();
 

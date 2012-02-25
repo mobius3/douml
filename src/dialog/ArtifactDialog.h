@@ -30,18 +30,16 @@
 
 
 
-#include <q3ptrdict.h>
+#include <qptrdict.h>
 #include <qmap.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qtabdialog.h>
 
 #include "BrowserArtifact.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QSplitter;
-class Q3ListBox;
-class Q3VBox;
+class QListBox;
+class QVBox;
 class LineEdit;
 class MultiLineEdit;
 class ArtifactData;
@@ -50,18 +48,18 @@ class FormalParamsTable;
 class ActualParamsTable;
 class BodyDialog;
 
-class ArtifactDialog : public Q3TabDialog {
+class ArtifactDialog : public QTabDialog {
   Q_OBJECT
     
   protected:
     ArtifactData * data;
     QWidget * uml_page;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
     QMap<BrowserClass *, FormalParamsTable *> formals;	// to generate the associated
     QMap<BrowserClass *, ActualParamsTable *> actuals;	// classes definition
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog> edits;
     
     // c++
     unsigned n_cpp;
@@ -97,17 +95,17 @@ class ArtifactDialog : public Q3TabDialog {
     MultiLineEdit * showidl_content;
     
     // associated classes
-    Q3VBox * cl_assoc_page;
-    Q3ListBox * lb_cl_available;
-    Q3ListBox * lb_cl_associated;
+    QVBox * cl_assoc_page;
+    QListBox * lb_cl_available;
+    QListBox * lb_cl_associated;
     
     // associated artifacts
     bool lb_art_initialized;
-    Q3PtrDict<BrowserArtifact> art_associated;
-    Q3VBox * art_assoc_page;
-    Q3ComboBox * stereotypefilter;
-    Q3ListBox * lb_art_available;
-    Q3ListBox * lb_art_associated;
+    QPtrDict<BrowserArtifact> art_associated;
+    QVBox * art_assoc_page;
+    QComboBox * stereotypefilter;
+    QListBox * lb_art_available;
+    QListBox * lb_art_associated;
     
     // user
     KeyValuesTable * kvtable;

@@ -27,12 +27,10 @@
 #define UMLUSECASEDIAGRAM_H
 
 #include "UmlBaseUseCaseDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlUseCaseDiagram : public UmlBaseUseCaseDiagram {
   public:
-    UmlUseCaseDiagram(void * id, const Q3CString & n)
+    UmlUseCaseDiagram(void * id, const QCString & n)
       : UmlBaseUseCaseDiagram(id, n) {};
   
 };

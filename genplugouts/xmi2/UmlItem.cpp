@@ -6,9 +6,6 @@
 
 #include "UmlCom.h"
 #include "UmlClass.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
  UmlItem::~UmlItem() {
 }
@@ -18,7 +15,7 @@ void UmlItem::xmi(int, char **) {
 }
 
 void UmlItem::write(FileOut & out) {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)
@@ -36,15 +33,15 @@ void UmlItem::write_description_properties(FileOut & out) {
     out.indent();
     out << "<ownedComment xmi:type=\"uml:Comment\" xmi:id=\"COMMENT_"
       << ++rank << "\" body=\"";
-    out.quote((const char*)description());//[jasa] ambiguous call
+    out.quote(description());
     out << "\"/>\n";
   }
 
-  Q3CString ste = stereotype();
+  QCString ste = stereotype();
   
   if (_gen_extension) {
-    const Q3Dict<Q3CString> up = properties();    
-    Q3DictIterator<Q3CString> it(up);
+    const QDict<QCString> up = properties();    
+    QDictIterator<QCString> it(up);
     
     if (it.current()) {
       out.indent();
@@ -53,16 +50,16 @@ void UmlItem::write_description_properties(FileOut & out) {
       if (! ste.isEmpty()) {
 	out.indent();
 	out << "\t<stereotype name=\"";
-	out.quote((const char*)ste);//[jasa] ambiguous call
+	out.quote(ste);
 	out << "\"/>\n";
       }
       
       do {
 	out.indent();
 	out << "\t<taggedValue tag=\"";
-	out.quote((const char*)it.currentKey());//[jasa] ambiguous call
+	out.quote(it.currentKey());
 	out << "\" value=\"";
-	out.quote((const char*)*(it.current()));//[jasa] ambiguous call
+	out.quote(*(it.current()));
 	out << "\"/>\n";
 	++it;
       } while (it.current());
@@ -73,7 +70,7 @@ void UmlItem::write_description_properties(FileOut & out) {
     else if (! ste.isEmpty()) {
       out.indent();
       out << "<xmi:Extension extender=\"Bouml\"><stereotype name=\"";
-      out.quote((const char*)ste);//[jasa] ambiguous call
+      out.quote(ste);
       out << "\"/></xmi:Extension>\n";
     }
   } 
@@ -94,11 +91,11 @@ void UmlItem::memo_ac_uc_assoc(UmlUseCaseDiagram * d) {
   parent()->memo_ac_uc_assoc(d);
 }
 
-void UmlItem::write_multiplicity(FileOut & out, Q3CString s, UmlItem * who)
+void UmlItem::write_multiplicity(FileOut & out, QCString s, UmlItem * who)
 {
   if (!s.isEmpty()) {
-    Q3CString min;
-    Q3CString max;
+    QCString min;
+    QCString max;
     int index = s.find("..");
     
     if (index != -1) {
@@ -157,7 +154,7 @@ void UmlItem::write_type(FileOut & out, const UmlTypeSpec & t, const char * tk)
 
 }
 
-void UmlItem::write_default_value(FileOut & out, Q3CString v, UmlItem * who, int rank)
+void UmlItem::write_default_value(FileOut & out, QCString v, UmlItem * who, int rank)
 {
   if (! v.isEmpty()) {
     if (v[0] == '=') {
@@ -173,53 +170,53 @@ void UmlItem::write_default_value(FileOut & out, Q3CString v, UmlItem * who, int
     else
       out.id_prefix(who, "VALUE", rank);
     out << " value=\"";
-    out.quote((const char*)v);//[jasa] ambiguous call
+    out.quote(v);
     out << "\"/>\n";
   }
 }
 
 void UmlItem::write_stereotyped(FileOut & out)
 {
-  QMap<Q3CString, Q3PtrList<UmlItem> >::Iterator it;
+  QMap<QCString, QList<UmlItem> >::Iterator it;
   
   for (it = _stereotypes.begin(); it != _stereotypes.end(); ++it) {
     const char * st = it.key();
     UmlClass * cl = UmlClass::findStereotype(it.key(), TRUE);
 		     
     if (cl != 0) {
-      Q3ValueList<Q3CString> extended;
+      QValueList<QCString> extended;
 
       cl->get_extended(extended);
       
-      Q3PtrList<UmlItem> & l = it.data();
+      QList<UmlItem> & l = it.data();
       UmlItem * elt;
       
       for (elt = l.first(); elt != 0; elt = l.next()) {
 	out << "\t<" << st;
 	out.id_prefix(elt, "STELT_");
 	
-	const Q3Dict<Q3CString> props = elt->properties();
-	Q3DictIterator<Q3CString> itp(props);
+	const QDict<QCString> props = elt->properties();
+	QDictIterator<QCString> itp(props);
 	
 	while (itp.current()) {
 	  QString k = itp.currentKey();
 	  
 	  if (k.contains(':') == 2) {
 	    out << ' ';
-	    out.quote((const char*)k.mid(k.findRev(':') + 1));//[jasa] ambiguous call
+	    out.quote(k.mid(k.findRev(':') + 1));
 	    out << "=\"";
-	    out.quote((const char*)*itp.current());
+	    out.quote(*itp.current());
 	    out << '"';
 	  }
 	  ++itp;
 	}
 	
-	Q3ValueList<Q3CString>::Iterator iter_extended;
+	QValueList<QCString>::Iterator iter_extended;
 	
 	for (iter_extended = extended.begin(); 
 	     iter_extended != extended.end();
 	     ++iter_extended) {
-	  Q3CString vr = "base_" + *iter_extended;
+	  QCString vr = "base_" + *iter_extended;
 	  
 	  out.ref(elt, vr);
 	}
@@ -256,5 +253,5 @@ bool UmlItem::_gen_extension;
 
 bool UmlItem::_gen_eclipse;
 
-QMap<Q3CString, Q3PtrList<UmlItem> > UmlItem::_stereotypes;
+QMap<QCString, QList<UmlItem> > UmlItem::_stereotypes;
 

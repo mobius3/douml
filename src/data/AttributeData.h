@@ -28,8 +28,6 @@
 
 #include "AType.h"
 #include "ClassMemberData.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 class BrowserAttribute;
 
@@ -142,7 +140,7 @@ class AttributeData : public ClassMemberData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
     
     void replace(BrowserClass * old, BrowserClass * nw);

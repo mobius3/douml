@@ -28,13 +28,10 @@
 
 
 #include <qlayout.h>
-#include <q3vbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
 #include <qdir.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <qfiledialog.h>
 
 #include "ImageDialog.h"
 #include "DialogUtil.h"
@@ -53,12 +50,12 @@ ImageDialog::ImageDialog(QString & p)
     : QDialog(0, "Image dialog", TRUE), path(p) {
   setCaption(TR("Image dialog"));
 
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBoxLayout * hbox;
     
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   
   hbox->addWidget(new QLabel(TR("Image path :"), this));
@@ -76,7 +73,7 @@ ImageDialog::ImageDialog(QString & p)
   connect(b, SIGNAL(clicked ()), this, SLOT(browse()));
   hbox->addWidget(new QLabel("", this));
   
-  Q3VBox * vtab = new Q3VBox(this);
+  QVBox * vtab = new QVBox(this);
   
   hbox->addWidget(vtab);
   
@@ -99,7 +96,7 @@ ImageDialog::ImageDialog(QString & p)
   accept->setFixedSize(bs);
   cancel->setFixedSize(bs);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   
   hbox->addWidget(accept);
   hbox->addWidget(cancel);
@@ -116,7 +113,7 @@ ImageDialog::~ImageDialog() {
 
 void ImageDialog::browse() {
   QString s = edpath->text().simplifyWhiteSpace();
-  const QString ns = Q3FileDialog::getOpenFileName(s, "", this, 0, TR("Select image"));
+  const QString ns = QFileDialog::getOpenFileName(s, "", this, 0, TR("Select image"));
 
   if (! ns.isEmpty()) {
     edpath->setText(ns);

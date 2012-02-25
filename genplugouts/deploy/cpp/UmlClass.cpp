@@ -10,8 +10,6 @@
 #include "IdlSettings.h"
 #include "PhpSettings.h"
 #include "PythonSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
 void UmlClass::deploy(UmlDeploymentView * view) {
   int flags = deployable();
   
@@ -59,7 +57,7 @@ void UmlClass::deploy(UmlDeploymentView * view) {
 }
 
 int UmlClass::deployable() {
-  Q3CString st = stereotype();
+  QCString st = stereotype();
   
   if ((st == "metaclass") || (st == "stereotype"))
     return 0;

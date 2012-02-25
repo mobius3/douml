@@ -63,7 +63,7 @@ class ActivityDiagramWindow : public DiagramWindow {
   
   public:
     ActivityDiagramWindow(const QString & s, BrowserActivityDiagram * b, int id = -1);
-virtual ~ActivityDiagramWindow();
+    ~ActivityDiagramWindow();
 
     virtual DiagramView * get_view() const;
     

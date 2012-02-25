@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseOnSignalAction.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileIn;
 class Token;
@@ -11,14 +11,14 @@ class Token;
 class UmlOnSignalAction : public UmlBaseOnSignalAction {
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlOnSignalAction(void * id, const Q3CString & s) : UmlBaseOnSignalAction(id, s) {
+     UmlOnSignalAction(void * id, const QCString & s) : UmlBaseOnSignalAction(id, s) {
     }
 
 
   public:
     //  call at end of import : try to solve signal
     
-    virtual void solve(Q3CString idref);
+    virtual void solve(QCString idref);
 
 
   protected:

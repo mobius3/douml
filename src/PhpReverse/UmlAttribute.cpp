@@ -25,8 +25,6 @@
 
 #ifdef TRACE
 #include <iostream>
-//Added by qt3to4:
-#include <Q3CString>
 
 using namespace std;
 #endif
@@ -44,10 +42,10 @@ using namespace std;
 #include "Statistic.h"
 #endif
 
-bool UmlAttribute::new_one(Class * container, Q3CString name,
+bool UmlAttribute::new_one(Class * container, QCString name,
 			   aVisibility visibility, bool constp,
-			   bool staticp, const Q3CString & value,
-			   Q3CString comment, Q3CString description)
+			   bool staticp, const QCString & value,
+			   QCString comment, QCString description)
 {
 #ifdef TRACE
   cout << "ATTRIBUTE '" << name << "'\n";
@@ -65,7 +63,7 @@ bool UmlAttribute::new_one(Class * container, Q3CString name,
   UmlAttribute * at = UmlBaseAttribute::create(cl, name);
   
   if (at == 0) {
-    PhpCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add attribute <i>")
+    PhpCatWindow::trace(QCString("<font face=helvetica><b>cannot add attribute <i>")
 			 + name + "</i> in <i>" + cl->name() 
 			 + "</i></b></font><br>");  
     return FALSE;
@@ -75,7 +73,7 @@ bool UmlAttribute::new_one(Class * container, Q3CString name,
 #endif
   
   if (!comment.isEmpty()) {
-    Q3CString s = (at->phpDecl().find("${description}") != -1)
+    QCString s = (at->phpDecl().find("${description}") != -1)
       ? description : comment;
     UmlTypeSpec t;
     int index;

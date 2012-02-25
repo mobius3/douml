@@ -1,7 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -30,7 +26,7 @@
 #ifndef BROWSER_RELATION_H
 #define BROWSER_RELATION_H
 
-template <class K> class Q3PtrDict;
+template <class K> class QPtrDict;
 
 class QPixmap;
 class BrowserClass;
@@ -101,7 +97,7 @@ class BrowserRelation : public BrowserNode, public Labeled<BrowserRelation> {
     virtual const char * constraint() const;
     
     virtual void write_id(ToolCom * com);
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserRelation * read(char * &, char *, BrowserNode *, bool force = TRUE);
     static BrowserRelation * read_ref(char * & st);
     static BrowserRelation * read_ref(char * &, char * k);
@@ -115,8 +111,8 @@ class BrowserRelation : public BrowserNode, public Labeled<BrowserRelation> {
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserClass *);
+    virtual void referenced_by(QList<BrowserNode> &, bool ondelete = FALSE);
+    static void compute_referenced_by(QList<BrowserNode> &, BrowserClass *);
     
     virtual bool tool_cmd(ToolCom * com, const char * args);
 
@@ -125,7 +121,7 @@ class BrowserRelation : public BrowserNode, public Labeled<BrowserRelation> {
     virtual QString drag_postfix() const;
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
     
-    static void get_relating(BrowserNode *, Q3PtrDict<BrowserNode> & d,
+    static void get_relating(BrowserNode *, QPtrDict<BrowserNode> & d,
 			     BrowserNodeList & newones,
 			     bool inh, bool dep, bool assoc);
 };

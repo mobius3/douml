@@ -1,8 +1,8 @@
-#include "q3cstring.h"
+#include "qcstring.h"
 
 #include "util.h"
 
-Q3CString legalName(Q3CString s)
+QCString legalName(QCString s)
 {
   for (unsigned index = 0; index != s.length(); index += 1) {
     char c = s.at(index);
@@ -19,7 +19,7 @@ Q3CString legalName(Q3CString s)
   return s;
 }
 
-Q3CString replace(Q3CString f, Q3CString k, Q3CString v)
+QCString replace(QCString f, QCString k, QCString v)
 {
   int index = f.find(k);
 

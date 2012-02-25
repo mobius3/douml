@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QPixmap>
 
 #include "BrowserRegion.h"
 #include "BrowserState.h"
@@ -110,7 +105,7 @@ void BrowserRegion::update_idmax_for_root()
 void BrowserRegion::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
@@ -145,8 +140,8 @@ BrowserRegion * BrowserRegion::add_region(BrowserNode * future_parent,
 }
 
 void BrowserRegion::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -177,7 +172,7 @@ Note that you can undelete it after"));
     m.setWhatsThis(m.insertItem(TR("Undelete"), 8),
 		   TR("to undelete the <i>region</i>"));
  
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -244,7 +239,7 @@ void BrowserRegion::apply_shortcut(QString s) {
     if (s == "Undelete")
       choice = 8;
  
-    Q3ListViewItem * child;
+    QListViewItem * child;
   
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
@@ -366,9 +361,9 @@ bool BrowserRegion::tool_cmd(ToolCom * com, const char * args) {
   }
 }
 
-bool BrowserRegion::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserRegion::may_contains_them(const QList<BrowserNode> & l,
 				     BooL & duplicable) const {
-  Q3PtrListIterator<BrowserNode> it(l);
+  QListIterator<BrowserNode> it(l);
   
   for (; it.current(); ++it) {
     switch (it.current()->get_type()) {
@@ -439,7 +434,7 @@ void BrowserRegion::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
       if ((after == 0) &&
 	  ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
 	// have choice
-	Q3PopupMenu m(0);
+	QPopupMenu m(0);
   
 	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
 				   m.font()), -1);
@@ -486,7 +481,7 @@ QString BrowserRegion::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) BrowserState::get_machine(p));
 }
 
-void BrowserRegion::save_stereotypes(Q3TextStream & st)
+void BrowserRegion::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "state_stereotypes ";
@@ -503,7 +498,7 @@ void BrowserRegion::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserRegion::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserRegion::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "region_ref " << get_ident() << " // " << get_name();
   else {
@@ -517,7 +512,7 @@ void BrowserRegion::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

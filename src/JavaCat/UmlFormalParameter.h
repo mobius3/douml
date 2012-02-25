@@ -26,9 +26,7 @@
 #ifndef _UMLFORMALPARAMETER_H
 #define _UMLFORMALPARAMETER_H
 
-#include <q3valuelist.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <qvaluelist.h>
 
 #include "UmlBaseFormalParameter.h"
 
@@ -41,9 +39,9 @@ class UmlFormalParameter : public UmlBaseFormalParameter {
   public:
     UmlFormalParameter() {};
 
-    UmlFormalParameter(Q3CString n, const UmlTypeSpec & e);
+    UmlFormalParameter(QCString n, const UmlTypeSpec & e);
 };
 
-typedef Q3ValueList<UmlFormalParameter> FormalParameterList;
+typedef QValueList<UmlFormalParameter> FormalParameterList;
 
 #endif

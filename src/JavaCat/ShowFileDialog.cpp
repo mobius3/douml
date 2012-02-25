@@ -27,33 +27,29 @@
 
 
 
-#include <q3multilineedit.h>
+#include <qmultilineedit.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qfile.h>
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qapplication.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3CString>
-#include <QDesktopWidget>
  
 #include "ShowFileDialog.h"
  
-ShowFileDialog::ShowFileDialog(const Q3CString & filename)
+ShowFileDialog::ShowFileDialog(const QCString & filename)
     : QDialog(0, filename) {
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+  QVBoxLayout * vbox = new QVBoxLayout(this);
  
   vbox->addWidget(new QLabel("You can specify the editor through the environment dialog",
                              this));
  
-  e = new Q3MultiLineEdit(this);
+  e = new QMultiLineEdit(this);
   
   QFile f(filename);
   
-  if (f.open(QIODevice::ReadOnly)) {
-    Q3TextStream t(&f);
+  if (f.open(IO_ReadOnly)) {
+    QTextStream t(&f);
     
     e->setText(t.read());
   }
@@ -76,10 +72,10 @@ void ShowFileDialog::polish() {
   int cy = h/2;
   bool virtual_desktop = FALSE;
   
-  // try to read .doumlrc
-  // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
+  // try to read .boumlrc
+  // note : QFile fp(QDir::home().absFilePath(".boumlrc")) doesn't work
   // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
+  QString s = QDir::home().absFilePath(".boumlrc");
   FILE * fp = fopen((const char *) s, "r");
 
 

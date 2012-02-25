@@ -27,14 +27,14 @@
 
 
 
-#include <q3grid.h> 
-#include <q3vbox.h>
+#include <qgrid.h> 
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h> 
 #include <qcheckbox.h> 
-#include <q3buttongroup.h>  
-#include <q3popupmenu.h> 
+#include <qbuttongroup.h>  
+#include <qpopupmenu.h> 
 #include <qcursor.h> 
 
 #include "ActivityDialog.h"
@@ -55,7 +55,7 @@
 QSize ActivityDialog::previous_size;
 
 ActivityDialog::ActivityDialog(ActivityData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), activity(d) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), activity(d) {
   d->browser_node->edit_start();
   
   if (d->browser_node->is_writable()) {
@@ -71,13 +71,13 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   visit = !hasOkButton();  
 
   BrowserNode * bn = activity->browser_node;
-  Q3Grid * grid;
+  QGrid * grid;
   
   //
   // general tab
   //
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -86,7 +86,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   edname->setReadOnly(visit);
     
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(activity->get_stereotype()));
   if (!visit) {
     edstereotype->insertStringList(BrowserActivity::default_stereotypes());
@@ -100,7 +100,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     
   connect(new SmallPushButton(TR("specification :"), grid), SIGNAL(clicked()),
 	  this, SLOT(menu_specification()));    
-  edspecification = new Q3ComboBox(FALSE, grid);
+  edspecification = new QComboBox(FALSE, grid);
   edspecification->setSizePolicy(sp);
   if (visit) {
     if (activity->get_specification() == 0)
@@ -120,8 +120,8 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   }
   
   new QLabel(grid);
-  Q3ButtonGroup * bg = 
-    new Q3ButtonGroup(3, Qt::Horizontal, QString::null, grid);
+  QButtonGroup * bg = 
+    new QButtonGroup(3, Qt::Horizontal, QString::null, grid);
   
   readonly_cb = new QCheckBox(TR("read only"), bg);
   if (activity->read_only)
@@ -138,7 +138,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     active_cb->setChecked(TRUE);
   active_cb->setDisabled(visit);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -148,7 +148,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   comment->setText(bn->get_comment());
   //comment->setFont(font);
   
-  vtab = new Q3VBox(grid);
+  vtab = new QVBox(grid);
   new QLabel(TR("constraint :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -174,7 +174,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -190,12 +190,12 @@ ActivityDialog::ActivityDialog(ActivityData * d)
 }
 
 void ActivityDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 void ActivityDialog::menu_specification() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -265,7 +265,7 @@ void ActivityDialog::change_tabs(QWidget *) {
 
 void ActivityDialog::init_tab(CondDialog & d, InfoData & cd,
 			      const char * lbl, bool enabled) {
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -351,7 +351,7 @@ void ActivityDialog::accept() {
     bn->package_modified();
     activity->modified();
     
-    Q3TabDialog::accept();
+    QTabDialog::accept();
   }
 }
 

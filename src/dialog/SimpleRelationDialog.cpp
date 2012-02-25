@@ -27,11 +27,11 @@
 
 
 
-#include <q3grid.h> 
+#include <qgrid.h> 
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h> 
-#include <q3vbox.h> 
+#include <qcombobox.h> 
+#include <qvbox.h> 
 
 #include "SimpleRelationDialog.h"
 #include "SimpleRelationData.h"
@@ -49,7 +49,7 @@
 QSize SimpleRelationDialog::previous_size;
 
 SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), rel(r) {  
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), rel(r) {  
   r->browser_node->edit_start();
   
   if (r->browser_node->is_writable()) {
@@ -66,7 +66,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
   // general tab
   
   BrowserNode * bn = rel->get_browser_node();
-  Q3Grid * grid = new Q3Grid(2, this);
+  QGrid * grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
 
@@ -88,7 +88,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
   new QLabel(rel->get_end_node()->full_name(TRUE), grid);
   
   new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new QComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(rel->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(rel->get_start_node()
@@ -102,7 +102,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QVBox * vtab = new QVBox(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -120,7 +120,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
+  grid = new QGrid(2, this);
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -131,7 +131,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
 }
 
 void SimpleRelationDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -172,5 +172,5 @@ void SimpleRelationDialog::accept() {
   bn->package_modified();
   rel->modified();
   
-  Q3TabDialog::accept();
+  QTabDialog::accept();
 }

@@ -33,8 +33,6 @@
 #include "UmlArtifact.h"
 
 #include "insertbase.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 //
 // add UmlBaseParameter, move UmlParameter members into it
@@ -107,8 +105,8 @@ void add_umlbaseparameter(UmlClass * uml_base_item, UmlClass * uml_item)
   old->deleteIt();
 
   UmlOperation * op;
-  Q3CString cpp_body;
-  Q3CString java_body;
+  QCString cpp_body;
+  QCString java_body;
   
   op = uml_parameter->get_operation("clone_it");
   cpp_body = op->cppBody();
@@ -135,7 +133,7 @@ void add_umlbaseparameter(UmlClass * uml_base_item, UmlClass * uml_item)
   rel = UmlBaseRelation::create(aGeneralisation, uml_parameter, uml_base_parameter);
 
   if (rel == 0) {
-    Q3CString msg = "UmlParameter can't inherit UmlBaseParameter<br>\n";
+    QCString msg = "UmlParameter can't inherit UmlBaseParameter<br>\n";
     
     UmlCom::trace("<b>" + msg + "</b>");
     throw 0;
@@ -199,8 +197,8 @@ void add_umlbasetypespec(UmlClass * uml_base_item, UmlClass * uml_item)
   old->deleteIt();
 
   UmlOperation * op;
-  Q3CString cpp_body;
-  Q3CString java_body;
+  QCString cpp_body;
+  QCString java_body;
   
   op = uml_typespec->get_operation("clone_it");
   cpp_body = op->cppBody();
@@ -234,7 +232,7 @@ void add_umlbasetypespec(UmlClass * uml_base_item, UmlClass * uml_item)
   rel = UmlBaseRelation::create(aGeneralisation, uml_typespec, uml_base_typespec);
 
   if (rel == 0) {
-    Q3CString msg = "UmlTypeSpec can't inherit UmlBaseTypeSpec<br>\n";
+    QCString msg = "UmlTypeSpec can't inherit UmlBaseTypeSpec<br>\n";
     
     UmlCom::trace("<b>" + msg + "</b>");
     throw 0;
@@ -288,7 +286,7 @@ void add_umlbaseview_umlview(UmlClass * base_item, UmlClass * user_item)
       UmlBaseRelation::create(aGeneralisation, bview, user_view);
     
     if (rel == 0) {
-      Q3CString msg = Q3CString(views[i]) + " can't inherit UmlView<br>\n";
+      QCString msg = QCString(views[i]) + " can't inherit UmlView<br>\n";
       
       UmlCom::trace("<b>" + msg + "</b>");
       throw 0;
@@ -299,7 +297,7 @@ void add_umlbaseview_umlview(UmlClass * base_item, UmlClass * user_item)
     rel->moveAfter(0);	// after old gene del
     
     UmlOperation * op = bview->get_operation(views[i]);
-    Q3CString s = op->cppDecl();
+    QCString s = op->cppDecl();
     
     op->set_CppDecl(s.replace(s.find(": UmlItem"), 9, ": UmlView"));
   }

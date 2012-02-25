@@ -6,28 +6,24 @@
 #include "UmlOperation.h"
 #include "CppSettings.h"
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 void UmlClass::utilities() {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   bool have_constructor = FALSE;
   bool have_destructor = FALSE;
-  Q3CString destr = "~" + name();
+  QCString destr = "~" + name();
   bool have_copy = FALSE;
   bool have_const_copy = FALSE;
   bool have_assignment = FALSE;
   bool have_const_assignment = FALSE;
   
   for (unsigned i = 0; i != ch.size(); i += 1) {
-    if (ch[i]->kind() == anOperation) { //[rageek] literal comparison
-      Q3CString s = ch[i]->name(); //[rageek]
-
+    if (ch[i]->kind() == anOperation) {
+      QCString s = ch[i]->name();
       
       if (s == name()) {
 	// may be a constructor or a copy constructor
-	const Q3ValueList<UmlParameter> params = 
+	const QValueList<UmlParameter> params = 
 	  ((UmlOperation *) ch[i])->params();
 	
 	if (params.count() == 1) {
@@ -48,7 +44,7 @@ void UmlClass::utilities() {
       else if (s == destr)
 	have_destructor = TRUE;
       else if (s == "operator=") {
-	const Q3ValueList<UmlParameter> params = 
+	const QValueList<UmlParameter> params = 
 	  ((UmlOperation *) ch[i])->params();
 	
 	if (params.count() == 1) {
@@ -76,7 +72,7 @@ void UmlClass::addContructor(bool expl) {
   if (op == 0)
     UmlCom::trace("can't add contructor");
   else {
-    Q3CString s;
+    QCString s;
     int index;
     
     // remove the useless "${type} " mainly to remove the space
@@ -108,7 +104,7 @@ void UmlClass::addDestructor(bool virt) {
     if (virt)
       op->set_isCppVirtual(TRUE);
     
-    Q3CString s;
+    QCString s;
     int index;
     
     // remove the useless "${type} " mainly to remove the space
@@ -153,15 +149,15 @@ void UmlClass::addCopy(bool cte) {
     // add the parameter profile, and 
     // remove the useless "${type} " mainly to remove the space
     
-    Q3CString p = (cte) ? "const ${t0} & ${p0}" : "${t0} & ${p0}";
-    Q3CString s;
+    QCString p = (cte) ? "const ${t0} & ${p0}" : "${t0} & ${p0}";
+    QCString s;
     int index;
     
     s = op->cppDecl();
     if (s.isEmpty())
       s = CppSettings::operationDecl();
     if ((index = s.find("${(}")) != -1)
-      s.insert(index + 4, (const char*)p); //[rageek] cast because Q3CString 
+      s.insert(index + 4, p);
     if ((index = s.find("${type} ")) != -1)
       s.remove(index, 8);
     op->set_CppDecl(s);
@@ -170,7 +166,7 @@ void UmlClass::addCopy(bool cte) {
     if (s.isEmpty())
       s = CppSettings::operationDef();
     if ((index = s.find("${(}")) != -1)
-      s.insert(index + 4, (const char*)p); //[rageek] cast because Q3CString 
+      s.insert(index + 4, p);
     if ((index = s.find("${type} ")) != -1)
       s.remove(index, 8);
     op->set_CppDef(s);
@@ -201,16 +197,15 @@ void UmlClass::addAssign(bool cte) {
     
     op->set_ReturnType(t);
     
-    Q3CString p = (cte) ? "const ${t0} & ${p0}" : "${t0} & ${p0}";
-    Q3CString s;
+    QCString p = (cte) ? "const ${t0} & ${p0}" : "${t0} & ${p0}";
+    QCString s;
     int index;
     
     s = op->cppDecl();
     if (s.isEmpty())
       s = CppSettings::operationDecl();
     if ((index = s.find("${(}")) != -1)
-      s.insert(index + 4,(const char*)p); //[rageek] cast because Q3CString 
-
+      s.insert(index + 4, p);
     if ((index = s.find("${type}")) != -1)
       s.insert(index + 7, " &");
     op->set_CppDecl(s);
@@ -219,8 +214,7 @@ void UmlClass::addAssign(bool cte) {
     if (s.isEmpty())
       s = CppSettings::operationDef();
     if ((index = s.find("${(}")) != -1)
-      s.insert(index + 4,(const char*)p); //[rageek] cast because Q3CString 
-
+      s.insert(index + 4, p);
     if ((index = s.find("${type}")) != -1)
       s.insert(index + 7, " &");
     op->set_CppDef(s);

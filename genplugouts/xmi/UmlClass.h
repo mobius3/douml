@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClass.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class FileOut;
 
@@ -14,7 +14,7 @@ class FileOut;
 
 class UmlClass : public UmlBaseClass {
   public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {};
+    UmlClass(void * id, const QCString & n) : UmlBaseClass(id, n) {};
 
     virtual void ref(FileOut & out);
 

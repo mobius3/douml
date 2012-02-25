@@ -30,10 +30,6 @@
 #include "ClassContainer.h"
 #include "UmlClass.h"
 #include "aRelationKind.h"
-//Added by qt3to4:
-#include <QPixmap>
-#include <Q3CString>
-#include <Q3PtrList>
 
 class Package;
 class UmlArtifact;
@@ -45,8 +41,8 @@ class QColorGroup;
 
 class Class : public BrowserNode {
   protected:
-    Q3CString filename;
-    Q3CString its_namespace;
+    QCString filename;
+    QCString its_namespace;
     UmlClass * uml;
     char stereotype;	// 'c' : class, 'i' : interface, '@' @interface, 'e' : enum
     bool abstractp;
@@ -55,15 +51,15 @@ class Class : public BrowserNode {
     bool from_lib;
 #else
     bool description_updatedp;
-    Q3CString description;
+    QCString description;
     
-    static Q3PtrList<Class> Historic;
+    static QList<Class> Historic;
 #endif
     
     bool manage_extends(ClassContainer * container);
     bool manage_implements(ClassContainer * container, aRelationKind k);
     bool add_inherit(aRelationKind k, UmlTypeSpec & typespec);
-    bool manage_member(Q3CString s);
+    bool manage_member(QCString s);
     void set_description(const char * p);
     
 #ifndef REVERSE
@@ -74,15 +70,15 @@ class Class : public BrowserNode {
   public:
     Class(Package * parent, const char * n, char st);
   
-    void compute_type(Q3CString type, UmlTypeSpec & typespec,
+    void compute_type(QCString type, UmlTypeSpec & typespec,
 		      Class ** need_object = 0);
-    const Q3CString & get_namespace() const { return its_namespace; }
+    const QCString & get_namespace() const { return its_namespace; }
     UmlClass * get_uml();
     bool reversed() const { return reversedp; };
     bool already_in_bouml();
     virtual QString get_path() const;
 #ifndef REVERSE
-    const Q3CString & get_description() const { return description; };
+    const QCString & get_description() const { return description; };
     
     virtual void selected();
     virtual void activated();
@@ -101,9 +97,9 @@ class Class : public BrowserNode {
     static void restore(QDataStream & dt, char c, Package * p);
 #endif
     
-    static bool reverse(Package * container, Q3CString stereotype,
+    static bool reverse(Package * container, QCString stereotype,
 			bool abstractp, bool finalp, 
-			Q3CString & f, UmlArtifact * art);
+			QCString & f, UmlArtifact * art);
     
 #ifndef REVERSE
     static void historic_back();

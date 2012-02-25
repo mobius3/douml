@@ -27,10 +27,8 @@
 #define HAVEKEYVALUEDATA_H
 
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
-class Q3TextStream;
+class QTextStream;
 class KeyValueData;
 class ToolCom;
 
@@ -59,7 +57,7 @@ class HaveKeyValueData {
     void send_def(ToolCom * com) const;
     void set_value(const char * k, const char * v);
     
-    void save(Q3TextStream &) const;
+    void save(QTextStream &) const;
     void read(char * &, char * & k);
 };
 

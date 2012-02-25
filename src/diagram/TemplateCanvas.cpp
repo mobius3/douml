@@ -28,9 +28,7 @@
 
 
 #include <qpainter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpopupmenu.h> 
 
 #include "TemplateCanvas.h"
 #include "BrowserClass.h"
@@ -82,7 +80,7 @@ void TemplateCanvas::moveBy(double dx, double dy) {
   }
   else {
     // from update_pos
-    Q3CanvasRectangle::moveBy(dx - 100000, dy);
+    QCanvasRectangle::moveBy(dx - 100000, dy);
     if (!the_canvas()->do_zoom() && !cl->selected())
       set_center100();
   }
@@ -114,7 +112,7 @@ void TemplateCanvas::set_z(double) {
 
 void TemplateCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   p.setBackgroundMode(::Qt::OpaqueMode);
   
   QRect r = rect();
@@ -161,7 +159,7 @@ QString TemplateCanvas::may_connect(UmlCode &, const DiagramItem *) const {
   return TR("illegal");
 }
 
-void TemplateCanvas::save(Q3TextStream &, bool, QString &) const {
+void TemplateCanvas::save(QTextStream &, bool, QString &) const {
   // does nothing
 }
 

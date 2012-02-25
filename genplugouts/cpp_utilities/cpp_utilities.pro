@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= cpp_util
-CONFIG		+= debug warn_on qt
+CONFIG		+= release warn_on qt
 DEFINES		= WITHCPP
 HEADERS		= ./UmlBasePackage.h \
 		  ./UmlFragmentCompartment.h \
@@ -402,5 +402,3 @@ SOURCES		= ./UmlBasePackage.cpp \
 		  ./UmlBaseInitialPseudoState.cpp \
 		  ./UmlBaseTypeSpec.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

@@ -26,12 +26,12 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
-#include <q3socketdevice.h> 
+#include <qsocketdevice.h> 
 #include <qsocketnotifier.h> 
 
 class ToolCom;
 
-class Socket : /* public QObject, */ public Q3SocketDevice {
+class Socket : public QObject, public QSocketDevice {
   Q_OBJECT
     
   protected:
@@ -42,7 +42,7 @@ class Socket : /* public QObject, */ public Q3SocketDevice {
   public:
     Socket(ToolCom * c);
     Socket(ToolCom * c, int s);
-virtual ~Socket();
+    ~Socket();
     
     bool write_block(char * data, unsigned int len);
     

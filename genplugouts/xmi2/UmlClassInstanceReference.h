@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClassInstanceReference.h"
-#include <q3ptrvector.h>
+#include <qvector.h>
 
 class FileOut;
 class UmlItem;
@@ -29,9 +29,9 @@ class UmlClassInstanceReference : public UmlBaseClassInstanceReference {
     
     const char * lifeline();
 
-    static void write_lifelines(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlClassInstanceReference> & insts);
+    static void write_lifelines(FileOut & out, UmlItem * diagram, const QVector<UmlClassInstanceReference> & insts);
 
-    static void write_attributes(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlClassInstanceReference> & insts);
+    static void write_attributes(FileOut & out, UmlItem * diagram, const QVector<UmlClassInstanceReference> & insts);
 
 
   private:

@@ -29,13 +29,8 @@
 #include "ClassMemberData.h"
 #include "Labeled.h"
 #include "AType.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
-class Q3TextStream;
+class QTextStream;
 
 class BrowserRelation;
 class BrowserAttribute;
@@ -89,7 +84,7 @@ class RelationData : public ClassMemberData, public Labeled<RelationData> {
   
   protected:
     static IdDict<RelationData> all;
-    static Q3PtrList<RelationData> Unconsistent;
+    static QList<RelationData> Unconsistent;
   
     // Uml
     bool is_deleted : 8;	// 1 useless here, 8 faster than 1 ?
@@ -143,7 +138,7 @@ class RelationData : public ClassMemberData, public Labeled<RelationData> {
     void set_name(const QString &);
     virtual QString definition(bool full, bool with_kind) const;
     virtual bool set_stereotype(const QString &);
-    virtual bool set_stereotype(const Q3CString &);
+    virtual bool set_stereotype(const QCString &);
     virtual bool set_stereotype(const char *);
     
     virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *);
@@ -218,7 +213,7 @@ class RelationData : public ClassMemberData, public Labeled<RelationData> {
     
     void select_in_browser(bool prefer_start) const;
     
-    void save(Q3TextStream &, bool ref, QString & warning) const;
+    void save(QTextStream &, bool ref, QString & warning) const;
     static RelationData * read_ref(char * &, bool complete = FALSE,
 				   const char * k = 0);
     static RelationData * read(char * &, char * &, BrowserRelation *& unconsistent);

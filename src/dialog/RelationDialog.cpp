@@ -27,18 +27,16 @@
 
 
 
-#include <q3vbox.h>
+#include <qvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <q3buttongroup.h>
+#include <qcombobox.h> 
+#include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h> 
 #include <qpushbutton.h> 
 #include <qsplitter.h> 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h> 
-//Added by qt3to4:
-#include <QPixmap>
 
 #include "RelationDialog.h"
 #include "RelationData.h"
@@ -101,7 +99,7 @@ static const struct {
 };
 
 RelationDialog::RelationDialog(RelationData * r)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), rel(r) {
+    : QTabDialog(0, 0, FALSE, WDestructiveClose), rel(r) {
   setCaption(TR("Relation dialog"));
 
   visit = a.ro = !r->start->is_writable();
@@ -131,24 +129,24 @@ RelationDialog::RelationDialog(RelationData * r)
   // general tab
   //
   
-  Q3VBox * vtab = new Q3VBox(this);
-  Q3HBox * htab;
-  Q3GroupBox *  bg;
+  QVBox * vtab = new QVBox(this);
+  QHBox * htab;
+  QGroupBox *  bg;
 
   umltab = vtab;
   vtab->setMargin(3);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   QLabel * lbl1 = new QLabel(TR("name : "), htab);
   edname = new LineEdit(rel->get_name(), htab);
   edname->setReadOnly(visit);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
   QLabel * lbl2 = new QLabel(TR("type : "), htab);
   
-  edtype = new Q3ComboBox(FALSE, htab);
+  edtype = new QComboBox(FALSE, htab);
   
   int index;
   bool assoc = true;
@@ -196,7 +194,7 @@ RelationDialog::RelationDialog(RelationData * r)
   }
   
   new QLabel(TR("    stereotype : "), htab);
-  edstereotype = new Q3ComboBox(!visit, htab);
+  edstereotype = new QComboBox(!visit, htab);
   edstereotype->insertItem(toUnicode(rel->get_stereotype()));
   if (!visit) {
     edstereotype->insertStringList(rel->get_start_class()
@@ -210,7 +208,7 @@ RelationDialog::RelationDialog(RelationData * r)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  htab = new Q3HBox(vtab);
+  htab = new QHBox(vtab);
   htab->setMargin(3);
     
   SmallPushButton * button_assoc = 
@@ -218,7 +216,7 @@ RelationDialog::RelationDialog(RelationData * r)
   
   connect(button_assoc, SIGNAL(clicked()), this, SLOT(menu_assoc()));
     
-  edassociation = new Q3ComboBox(!visit, htab);
+  edassociation = new QComboBox(!visit, htab);
   edassociation->insertItem(rel->association.get_full_type());
   BrowserClass::instances(nodes);
   nodes.full_names(list);
@@ -242,11 +240,11 @@ RelationDialog::RelationDialog(RelationData * r)
   QString inb = TR("in ") + rel->get_end_class()->full_name(TRUE);
   
   // role A
-  bg = new Q3GroupBox(2, Qt::Horizontal, ina, split);
+  bg = new QGroupBox(2, Qt::Horizontal, ina, split);
   init_uml_role(a, rel->a, bg, rel->get_start_class());
   
   // role B
-  bg = new Q3GroupBox(2, Qt::Horizontal, inb, split);
+  bg = new QGroupBox(2, Qt::Horizontal, inb, split);
   init_uml_role(b, rel->b, bg, rel->get_end_class());
 
   addTab(vtab, "Uml");
@@ -255,12 +253,12 @@ RelationDialog::RelationDialog(RelationData * r)
   // C++
   //
   
-  vtab = new Q3VBox(this);
+  vtab = new QVBox(this);
   cpptab = vtab;
   vtab->setMargin(5);
   
   // A
-  bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab); 
+  bg = new QGroupBox(2, Qt::Horizontal, ina, vtab); 
   new QLabel(bg);
   a.cpp_virtual_inheritance_cb = new QCheckBox("virtual", bg);
   if (rel->a.cpp_virtual_inheritance)
@@ -274,10 +272,10 @@ RelationDialog::RelationDialog(RelationData * r)
 		SLOT(cpp_include_in_header()));
 
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = new QHBox(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
-  cpp_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);  
+  cpp_b = new QGroupBox(2, Qt::Horizontal, inb, vtab);  
   b.cpp_virtual_inheritance_cb = 0;
   init_cpp_role(b, rel->b, cpp_b, SLOT(cpp_update_b()),
 		SLOT(cpp_default_b()), SLOT(cpp_unmapped_b()), 0);
@@ -291,20 +289,20 @@ RelationDialog::RelationDialog(RelationData * r)
   // Java
   //
   
-  vtab = new Q3VBox(this);
+  vtab = new QVBox(this);
   javatab = vtab;
   vtab->setMargin(5);
   
   // A
-  bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab); 
+  bg = new QGroupBox(2, Qt::Horizontal, ina, vtab); 
   init_java_role(a, rel->a, bg, SLOT(java_update_a()), SLOT(java_default_a()),
 		 SLOT(java_unmapped_a()), SLOT(java_edit_annotation_a()));
   
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = new QHBox(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
-  java_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
+  java_b = new QGroupBox(2, Qt::Horizontal, inb, vtab);
   init_java_role(b, rel->b, java_b, SLOT(java_update_b()), SLOT(java_default_b()),
 		 SLOT(java_unmapped_b()), SLOT(java_edit_annotation_b()));
 
@@ -317,20 +315,20 @@ RelationDialog::RelationDialog(RelationData * r)
   // Php
   //
   
-  vtab = new Q3VBox(this);
+  vtab = new QVBox(this);
   phptab = vtab;
   vtab->setMargin(5);
   
   // A
-  bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab); 
+  bg = new QGroupBox(2, Qt::Horizontal, ina, vtab); 
   init_php_role(a, rel->a, bg, SLOT(php_update_a()),
 		SLOT(php_default_a()), SLOT(php_unmapped_a()));
   
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = new QHBox(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
-  php_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
+  php_b = new QGroupBox(2, Qt::Horizontal, inb, vtab);
   init_php_role(b, rel->b, php_b, SLOT(php_update_b()),
 		SLOT(php_default_b()), SLOT(php_unmapped_b()));
 
@@ -343,20 +341,20 @@ RelationDialog::RelationDialog(RelationData * r)
   // Python
   //
   
-  vtab = new Q3VBox(this);
+  vtab = new QVBox(this);
   pythontab = vtab;
   vtab->setMargin(5);
   
   // A
-  bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab); 
+  bg = new QGroupBox(2, Qt::Horizontal, ina, vtab); 
   init_python_role(a, rel->a, rel->get_start_class(), bg, SLOT(python_update_a()),
 		   SLOT(python_default_a()), SLOT(python_unmapped_a()));
   
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = new QHBox(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
-  python_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
+  python_b = new QGroupBox(2, Qt::Horizontal, inb, vtab);
   init_python_role(b, rel->b, rel->get_end_class(),
 		   python_b, SLOT(python_update_b()),
 		   SLOT(python_default_b()), SLOT(python_unmapped_b()));
@@ -369,12 +367,12 @@ RelationDialog::RelationDialog(RelationData * r)
   //
   // IDL
   //
-  vtab = new Q3VBox(this);
+  vtab = new QVBox(this);
   idltab = vtab;
   vtab->setMargin(5);
   
   // A
-  bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab); 
+  bg = new QGroupBox(2, Qt::Horizontal, ina, vtab); 
   
   ClassData * start_data = (ClassData *) rel->get_start_class()->get_data();
   ClassData * end_data = (ClassData *) rel->get_end_class()->get_data();
@@ -399,10 +397,10 @@ RelationDialog::RelationDialog(RelationData * r)
 		SLOT(idl_default_a()), SLOT(idl_unmapped_a()));
 
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = new QHBox(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
-  idl_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);    
+  idl_b = new QGroupBox(2, Qt::Horizontal, inb, vtab);    
   b.idl_truncatable_inheritance_cb = 0;
   init_idl_role(b, rel->b, end_data, idl_b, SLOT(idl_update_b()),
 		SLOT(idl_default_b()), SLOT(idl_unmapped_b()));
@@ -416,11 +414,11 @@ RelationDialog::RelationDialog(RelationData * r)
   // USER : list key - value
   //
   
-  vtab = new Q3VBox(this);
-  bg = new Q3GroupBox(1, Qt::Horizontal, ina, vtab); 
+  vtab = new QVBox(this);
+  bg = new QGroupBox(1, Qt::Horizontal, ina, vtab); 
   a.kvtable = new KeyValuesTable(rel->get_start(), bg, a.ro);
   new QLabel(vtab);
-  bg = new Q3GroupBox(1, Qt::Horizontal, inb, vtab); 
+  bg = new QGroupBox(1, Qt::Horizontal, inb, vtab); 
   b.opt.append(bg);
   b.kvtable = new KeyValuesTable(rel->get_end(), bg, b.ro);
   addTab(vtab, TR("Properties"));
@@ -446,12 +444,12 @@ RelationDialog::~RelationDialog() {
 }
 
 void RelationDialog::polish() {
-  Q3TabDialog::polish();
+  QTabDialog::polish();
   UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
-				   Q3GroupBox * bg, BrowserClass * cl1) {
+				   QGroupBox * bg, BrowserClass * cl1) {
   bool roleb = (&role == &b);
   QString stereotype = ((ClassData *) cl1->get_data())->get_stereotype();
   bool undef = (stereotype == "enum") || (stereotype == "typedef");
@@ -486,13 +484,13 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
     groupb.append(lbl);
   }
   
-  Q3HBox * htab;
+  QHBox * htab;
   QSizePolicy sp;
   
   role.opt.append(new QLabel(TR("multiplicity : "), bg));
-  htab = new Q3HBox(bg);
+  htab = new QHBox(bg);
   htab->setMargin(0);
-  role.multiplicity = new Q3ComboBox(!visit, htab);
+  role.multiplicity = new QComboBox(!visit, htab);
   sp = role.multiplicity->sizePolicy();
   sp.setHorData(QSizePolicy::Expanding);
   role.multiplicity->setSizePolicy(sp);
@@ -526,17 +524,17 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   }
   
   (void) new QLabel(bg);
-  htab = new Q3HBox(bg);
+  htab = new QHBox(bg);
   htab->setMargin(0);
   
-  Q3ButtonGroup * vg = role.uml_visibility.init(htab, rel.uml_visibility, TRUE);
+  QButtonGroup * vg = role.uml_visibility.init(htab, rel.uml_visibility, TRUE);
   
   if (visit)
     vg ->setEnabled(FALSE);
   else if (roleb)
     groupb.append(vg);
   
-  Q3ButtonGroup * bg2 = new Q3ButtonGroup(7, Qt::Horizontal, QString::null, htab);
+  QButtonGroup * bg2 = new QButtonGroup(7, Qt::Horizontal, QString::null, htab);
   
   role.opt.append(bg2);
   if (roleb)
@@ -582,7 +580,7 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   lbl = new QLabel(TR("description : "), bg);
   if (roleb)
     groupb.append(lbl);
-  htab = new Q3HBox(bg);
+  htab = new QHBox(bg);
   role.comment = new MultiLineEdit(htab);
   role.comment->setText(rel.comment);  
   QFont font = role.comment->font();
@@ -593,7 +591,7 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   if (visit)
     role.comment->setReadOnly(TRUE);
   else {
-    Q3VBox * vtab = new Q3VBox(htab);
+    QVBox * vtab = new QVBox(htab);
     SmallPushButton * bt1 = new SmallPushButton(TR("Editor"), vtab);
     
     connect(bt1, SIGNAL(clicked()), this,
@@ -615,14 +613,14 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   lbl = new QLabel(TR("constraint : "), bg);
   if (roleb)
     groupb.append(lbl);
-  htab = new Q3HBox(bg);
+  htab = new QHBox(bg);
   role.constraint = new MultiLineEdit(htab);
   role.constraint->setText(rel.constraint);  
   role.constraint->setFont(font);
   if (visit)
     role.constraint->setReadOnly(TRUE);
   else {
-    Q3VBox * vtab = new Q3VBox(htab);
+    QVBox * vtab = new QVBox(htab);
     SmallPushButton * bt1 = new SmallPushButton(TR("Editor"), vtab);
     
     connect(bt1, SIGNAL(clicked()), this,
@@ -717,15 +715,15 @@ void RelationDialog::derived_changed_b(bool on) {
 }
 
 void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
-				   Q3GroupBox * bg,
+				   QGroupBox * bg,
 				   const char * cpp_update_slot, 
 				   const char * cpp_default_slot,
 				   const char * cpp_unmapped_slot,
 				   const char * cpp_include_in_header_slot) {
-  Q3HBox * htab;
+  QHBox * htab;
   
   new QLabel(TR("Visibility : "), bg);
-  htab = new Q3HBox(bg);
+  htab = new QHBox(bg);
   role.cpp_visibility.init(htab, rel.cpp_visibility, FALSE, 0, TR("follow uml"))
     ->setEnabled(!visit);
 
@@ -761,7 +759,7 @@ void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
 
   if (! visit) {
     new QLabel("", bg);
-    htab = new Q3HBox(bg);
+    htab = new QHBox(bg);
     htab->setMargin(5);
     
     role.cpp_default_decl_bt = new QPushButton(TR("Default declaration"), htab);
@@ -779,7 +777,7 @@ void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
 }
 
 void RelationDialog::init_java_role(RoleDialog & role, const RoleData & rel,
-				    Q3GroupBox * bg,
+				    QGroupBox * bg,
 				    const char * java_update_slot, 
 				    const char * java_default_slot,
 				    const char * java_unmapped_slot,
@@ -817,7 +815,7 @@ void RelationDialog::init_java_role(RoleDialog & role, const RoleData & rel,
   role.showjavadecl->setFont(font);
 
   new QLabel("", bg);
-  Q3HBox * htab = new Q3HBox(bg);
+  QHBox * htab = new QHBox(bg);
   htab->setMargin(5);
   
   if (! visit) {
@@ -838,7 +836,7 @@ void RelationDialog::init_java_role(RoleDialog & role, const RoleData & rel,
 }
 
 void RelationDialog::init_php_role(RoleDialog & role, const RoleData & rel,
-				   Q3GroupBox * bg,
+				   QGroupBox * bg,
 				   const char * php_update_slot, 
 				   const char * php_default_slot,
 				   const char * php_unmapped_slot) {
@@ -863,7 +861,7 @@ void RelationDialog::init_php_role(RoleDialog & role, const RoleData & rel,
   role.showphpdecl->setFont(font);
 
   new QLabel("", bg);
-  Q3HBox * htab = new Q3HBox(bg);
+  QHBox * htab = new QHBox(bg);
   htab->setMargin(5);
   
   if (! visit) {
@@ -877,7 +875,7 @@ void RelationDialog::init_php_role(RoleDialog & role, const RoleData & rel,
 }
 
 void RelationDialog::init_python_role(RoleDialog & role, const RoleData & rel,
-				      BrowserClass * cl, Q3GroupBox * bg,
+				      BrowserClass * cl, QGroupBox * bg,
 				      const char * python_update_slot, 
 				      const char * python_default_slot,
 				      const char * python_unmapped_slot) {
@@ -905,7 +903,7 @@ void RelationDialog::init_python_role(RoleDialog & role, const RoleData & rel,
   role.showpythondecl->setFont(font);
 
   new QLabel("", bg);
-  Q3HBox * htab = new Q3HBox(bg);
+  QHBox * htab = new QHBox(bg);
   htab->setMargin(5);
   
   if (! visit) {
@@ -919,13 +917,13 @@ void RelationDialog::init_python_role(RoleDialog & role, const RoleData & rel,
 }
 
 void RelationDialog::init_idl_role(RoleDialog & role, const RoleData & rel,
-				   ClassData * cld, Q3GroupBox * bg,
+				   ClassData * cld, QGroupBox * bg,
 				   const char * idl_update_slot, 
 				   const char * idl_default_slot,
 				   const char * idl_unmapped_slot) {
   if (role.idl_in_union) {
     role.opt.append(new QLabel("Case : ", bg));
-    role.edcase = new Q3ComboBox(!visit, bg);
+    role.edcase = new QComboBox(!visit, bg);
     role.edcase->insertItem(RelationData::get_idlcase(rel));
     
     if (!visit) {
@@ -971,7 +969,7 @@ void RelationDialog::init_idl_role(RoleDialog & role, const RoleData & rel,
 
   if (! visit) {
     new QLabel("", bg);
-    Q3HBox * htab = new Q3HBox(bg);
+    QHBox * htab = new QHBox(bg);
     htab->setMargin(5);
     role.idl_default_decl_bt = new QPushButton(TR("Default declaration"), htab);
     connect(role.idl_default_decl_bt, SIGNAL(clicked()),
@@ -982,15 +980,12 @@ void RelationDialog::init_idl_role(RoleDialog & role, const RoleData & rel,
   }
 }
 
-static void set_enabled(QWidgetList & l, bool y)
+static void set_enabled(QList<QWidget> & l, bool y)
 {
   QWidget * w;
-  for (QWidgetList::iterator it = l.begin(); it != l.end(); it++)
-	  (*it)->setEnabled(y);
-  /*[lgfreitas] better change here
-	for (w = l.first(); w != 0; w = l.next())
+  
+  for (w = l.first(); w != 0; w = l.next())
     w->setEnabled(y);
-	*/
 }
 
 void RelationDialog::set_inherit_or_dependency(UmlCode type)
@@ -1098,7 +1093,7 @@ void RelationDialog::edTypeActivated(int r)
 
 
 void RelationDialog::menu_assoc() {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
 
   m.insertItem(TR("Choose"), -1);
   m.insertSeparator();
@@ -2496,6 +2491,6 @@ void RelationDialog::accept() {
     if (!a.ro || !b.ro)
       rel->modified();
     
-    Q3TabDialog::accept();
+    QTabDialog::accept();
   }
 }

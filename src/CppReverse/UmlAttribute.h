@@ -27,30 +27,27 @@
 #define UMLATTRIBUTE_H
 
 #include "UmlBaseAttribute.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
 
 class Class;
 
 class UmlAttribute : public UmlBaseAttribute {
   public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const QCString & n)
       :  UmlBaseAttribute(id, n) {};
   
-    static bool new_one(Class * cl, const Q3CString & name, const Q3CString & type,
-			const Q3CString & modifier, const Q3CString & pretype, 
-			const Q3CString & array,	aVisibility visibility,
+    static bool new_one(Class * cl, const QCString & name, const QCString & type,
+			const QCString & modifier, const QCString & pretype, 
+			const QCString & array,	aVisibility visibility,
 			bool staticp, bool constp, bool typenamep, bool mutablep,
-			bool volatilep,	const Q3CString & bitfield,
-			const Q3CString & value,	Q3CString comment,
-			Q3CString description
+			bool volatilep,	const QCString & bitfield,
+			const QCString & value,	QCString comment,
+			QCString description
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+			, bool roundtrip, QList<UmlItem> & expected_order
 #endif
 			);
 #ifdef ROUNDTRIP
-    static UmlAttribute * search_attr(UmlClass * cl, const Q3CString & name);
+    static UmlAttribute * search_attr(UmlClass * cl, const QCString & name);
 #endif
 };
 

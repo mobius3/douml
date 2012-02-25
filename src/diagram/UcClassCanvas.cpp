@@ -29,10 +29,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
+#include <qpopupmenu.h> 
 
 #include "UcClassCanvas.h"
 #include "TemplateCanvas.h"
@@ -290,7 +287,7 @@ void UcClassCanvas::compute_size() {
 
 void UcClassCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
   QFontMetrics fim(the_canvas()->get_font(UmlNormalItalicFont));
@@ -323,12 +320,12 @@ void UcClassCanvas::draw(QPainter & p) {
 	if (fp != 0) {
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff,
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 
 	  fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
 		  " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-		  QColor(::Qt::darkGray).rgb()&0xffffff,
+		  ::Qt::darkGray.rgb()&0xffffff,
 		  r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
 	}
       }
@@ -487,12 +484,12 @@ bool UcClassCanvas::get_show_stereotype_properties() const {
 }
 
 void UcClassCanvas::change_scale() {
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   compute_size();
   recenter();
   if (templ != 0)
     templ->update();
-  Q3CanvasRectangle::setVisible(TRUE);
+  QCanvasRectangle::setVisible(TRUE);
 }
 
 void UcClassCanvas::moveBy(double dx, double dy) {
@@ -537,8 +534,8 @@ void UcClassCanvas::open() {
 }
 
 void UcClassCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -679,7 +676,7 @@ bool UcClassCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void UcClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void UcClassCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     StateSpecVector st;
     ColorSpecVector co(1);
@@ -694,7 +691,7 @@ void UcClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if (dialog.exec() == QDialog::Accepted) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	if (!co[0].name.isEmpty())
@@ -709,8 +706,8 @@ void UcClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void UcClassCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void UcClassCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   UcClassCanvas * x = (UcClassCanvas *) it.current();
   
@@ -732,7 +729,7 @@ QString UcClassCanvas::may_start(UmlCode & c) const {
     return 0;
   case UmlGeneralisation:
   case UmlDependency:
-    return (browser_node->is_writable()) ? QString() : TR("read only");
+    return (browser_node->is_writable()) ? 0 : TR("read only");
   default:
     return TR("illegal");
   }
@@ -745,7 +742,7 @@ QString UcClassCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const 
   switch (dest->type()) {
   case UmlUseCase:
     return ((l == UmlAssociation) || (l == UmlDirectionalAssociation))
-      ? QString() : TR("illegal");
+      ? 0 : TR("illegal");
   case UmlClass:
     return ((l == UmlGeneralisation) || (l == UmlDependency))
       ? ((BrowserClass *) browser_node)
@@ -757,7 +754,7 @@ QString UcClassCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const 
 }
 
 bool UcClassCanvas::has_relation(BasicData * def) const {
-  Q3PtrListIterator<ArrowCanvas> it(lines);
+  QListIterator<ArrowCanvas> it(lines);
 	
   while (it.current()) {
     if (IsaRelation(it.current()->type()) &&
@@ -782,9 +779,9 @@ static bool dependencyOrGeneralization(UmlCode t)
 }
 
 void UcClassCanvas::draw_all_depend_gene(UcClassCanvas * end) {
-  Q3ListViewItem * child;
-  Q3CanvasItemList all = canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QListViewItem * child;
+  QCanvasItemList all = canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   
   for (child = browser_node->firstChild(); child; child = child->nextSibling()) {
     if (dependencyOrGeneralization(((BrowserNode *) child)->get_type()) &&
@@ -860,7 +857,7 @@ bool UcClassCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void UcClassCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void UcClassCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classcanvas_ref " << get_ident() << " // " << browser_node->get_name();
   else {
@@ -901,7 +898,7 @@ UcClassCanvas * UcClassCanvas::read(char * & st, UmlCanvas * canvas, char * k)
       // move the actor in its initial position
       x = ACTOR_CANVAS_SIZE - result->width();
       if (x < 0)
-	result->Q3CanvasRectangle::moveBy(x/2, 0);
+	result->QCanvasRectangle::moveBy(x/2, 0);
     
       k = read_keyword(st);
       read_double(st);
@@ -952,7 +949,7 @@ UcClassCanvas * UcClassCanvas::read(char * & st, UmlCanvas * canvas, char * k)
 }
 
 void UcClassCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
 
   disconnect(DrawingSettings::instance(), SIGNAL(changed()),
 	     this, SLOT(modified()));

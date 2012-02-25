@@ -6,16 +6,14 @@
 #include "UmlPackage.h"
 #include "UmlOperation.h"
 #include "UmlClassInstanceReference.h"
-//Added by qt3to4:
-#include <Q3CString>
-void UmlCollaborationMessage::write(FileOut & out, UmlItem * diagram, const Q3PtrVector< UmlCollaborationMessage > & msgs, unsigned & index)
+void UmlCollaborationMessage::write(FileOut & out, UmlItem * diagram, const QVector< UmlCollaborationMessage > & msgs, unsigned & index)
 {
   unsigned sup = msgs.size();
   UmlPackage * prj = UmlPackage::getProject();
   
   while (index != sup) {
     const UmlCollaborationMessage * msg = msgs[index++];
-    Q3CString pfix = msg->hrank() + ".";
+    QCString pfix = msg->hrank() + ".";
     unsigned pfixlen = pfix.length();
     
 #define MSG  "MSG", msg->itsrank
@@ -38,8 +36,8 @@ void UmlCollaborationMessage::write(FileOut & out, UmlItem * diagram, const Q3Pt
     out << "<message xmi:type=\"uml:Message\"";
     out.id_prefix(diagram, MSG);
     out << " name=\"";
-    out.quote((const char*)((msg->operation() != 0) ? msg->operation()->name()
-				      : msg->form()));//[jasa] ambiguous call
+    out.quote((msg->operation() != 0) ? msg->operation()->name()
+				      : msg->form());
     out << '"';
     out.ref(diagram, "sendEvent", SEND);
     out.ref(diagram, "receiveEvent", REC);
@@ -65,7 +63,7 @@ void UmlCollaborationMessage::write(FileOut & out, UmlItem * diagram, const Q3Pt
     out << "/>\n";
     
     if (index != sup) {
-      Q3CString pfix2 = msgs[index]->hrank() + ".";
+      QCString pfix2 = msgs[index]->hrank() + ".";
       
       if ((pfix2.length() > pfixlen) && !strncmp(pfix, pfix2, pfixlen))
 	write(out, diagram, msgs, index);

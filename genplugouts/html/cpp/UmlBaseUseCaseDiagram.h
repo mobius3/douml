@@ -4,7 +4,7 @@
 
 #include "UmlDiagram.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlUseCaseDiagram;
 class UmlItem;
@@ -26,7 +26,7 @@ class UmlBaseUseCaseDiagram : public UmlDiagram {
 
   protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseUseCaseDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n), _def(0) {};
+    UmlBaseUseCaseDiagram(void * id, const QCString & n) : UmlDiagram(id, n), _def(0) {};
 
 
   public:

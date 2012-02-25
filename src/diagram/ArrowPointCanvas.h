@@ -27,8 +27,6 @@
 #define ARROWPOINTCANVAS_H
 
 #include "DiagramCanvas.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #define ARROW_POINT_SIZE 5
 
@@ -53,7 +51,7 @@ class ArrowPointCanvas : public DiagramCanvas {
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual void prepare_for_move(bool on_resize);
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static ArrowPointCanvas * read(char * & st, UmlCanvas * canvas, char * k);
 };
 

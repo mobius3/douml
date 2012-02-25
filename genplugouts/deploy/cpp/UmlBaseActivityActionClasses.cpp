@@ -4,8 +4,6 @@
 #include "UmlActivityActionClasses.h"
 #include "UmlItem.h"
 #include "UmlOperation.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 UmlSendObjectAction * UmlBaseSendObjectAction::create(UmlItem * parent, const char * s)
 {
@@ -52,7 +50,7 @@ anItemKind UmlBaseValueSpecificationAction::kind() {
   return aValueSpecificationAction;
 }
 
-const Q3CString & UmlBaseValueSpecificationAction::value() {
+const QCString & UmlBaseValueSpecificationAction::value() {
   read_if_needed_();
   return _value;
 }
@@ -62,7 +60,7 @@ bool UmlBaseValueSpecificationAction::set_Value(const char * v) {
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseValueSpecificationAction::cppValue() {
+const QCString & UmlBaseValueSpecificationAction::cppValue() {
   read_if_needed_();
   return _cpp_value;
 }
@@ -73,7 +71,7 @@ bool UmlBaseValueSpecificationAction::set_CppValue(const char * v) {
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseValueSpecificationAction::javaValue() {
+const QCString & UmlBaseValueSpecificationAction::javaValue() {
   read_if_needed_();
   return _java_value;
 }
@@ -122,7 +120,7 @@ anItemKind UmlBaseOpaqueAction::kind() {
   return anOpaqueAction;
 }
 
-const Q3CString & UmlBaseOpaqueAction::behavior() {
+const QCString & UmlBaseOpaqueAction::behavior() {
   read_if_needed_();
   return _behavior;
 }
@@ -132,7 +130,7 @@ bool UmlBaseOpaqueAction::set_Behavior(const char * v) {
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseOpaqueAction::cppBehavior() {
+const QCString & UmlBaseOpaqueAction::cppBehavior() {
   read_if_needed_();
   return _cpp_behavior;
 }
@@ -143,7 +141,7 @@ bool UmlBaseOpaqueAction::set_CppBehavior(const char * v) {
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseOpaqueAction::javaBehavior() {
+const QCString & UmlBaseOpaqueAction::javaBehavior() {
   read_if_needed_();
   return _java_behavior;
 }
@@ -210,7 +208,7 @@ bool UmlBaseAcceptEventAction::set_isTimeEvent(bool v) {
   return set_it_(_timeevent, v, setTimeEventCmd);
 }
 
-const Q3CString & UmlBaseAcceptEventAction::trigger() {
+const QCString & UmlBaseAcceptEventAction::trigger() {
   read_if_needed_();
   return _trigger;
 }
@@ -220,7 +218,7 @@ bool UmlBaseAcceptEventAction::set_Trigger(const char * v) {
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseAcceptEventAction::cppTrigger() {
+const QCString & UmlBaseAcceptEventAction::cppTrigger() {
   read_if_needed_();
   return _cpp_trigger;
 }
@@ -231,7 +229,7 @@ bool UmlBaseAcceptEventAction::set_CppTrigger(const char * v) {
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseAcceptEventAction::javaTrigger() {
+const QCString & UmlBaseAcceptEventAction::javaTrigger() {
   read_if_needed_();
   return _java_trigger;
 }

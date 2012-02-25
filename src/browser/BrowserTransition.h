@@ -1,7 +1,3 @@
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -74,7 +70,7 @@ class BrowserTransition : public BrowserNode, public Labeled<BrowserTransition> 
     virtual void update_stereotype(bool = FALSE);
     QString str(bool horiz, DrawingLanguage lg) const;
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserTransition * read_ref(char * & st);
     static BrowserTransition * read(char * &, char *, BrowserNode *);
     static BrowserTransition * temporary(TransitionData * d);
@@ -85,8 +81,8 @@ class BrowserTransition : public BrowserNode, public Labeled<BrowserTransition> 
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
     
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
+    virtual void referenced_by(QList<BrowserNode> & l, bool ondelete);
+    static void compute_referenced_by(QList<BrowserNode> &, BrowserNode *);
     
     virtual bool tool_cmd(ToolCom * com, const char * args);
 

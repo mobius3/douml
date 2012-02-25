@@ -29,10 +29,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3CString>
+#include <qpopupmenu.h> 
 
 #include "SubjectCanvas.h"
 #include "MyInputDialog.h"
@@ -67,7 +64,7 @@ void SubjectCanvas::delete_it() {
 
 void SubjectCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   QRect r = rect();
   QColor bckgrnd = p.backgroundColor();
 
@@ -165,11 +162,11 @@ void SubjectCanvas::check_size() {
 void SubjectCanvas::change_scale() {
   double scale = the_canvas()->zoom();
   
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   setSize((int) (width_scale100*scale), (int) (height_scale100*scale));
   check_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);  
+  QCanvasRectangle::setVisible(TRUE);  
 }
 
 void SubjectCanvas::modified() {
@@ -182,7 +179,7 @@ void SubjectCanvas::modified() {
 }
 
 void SubjectCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("Subject"), m.font()), -1);
   m.insertSeparator();
@@ -285,7 +282,7 @@ bool SubjectCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void SubjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void SubjectCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -296,7 +293,7 @@ void SubjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((SubjectCanvas *) it.current())->itscolor = itscolor;
@@ -308,8 +305,8 @@ void SubjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void SubjectCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void SubjectCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   SubjectCanvas * x = (SubjectCanvas *) it.current();
   
@@ -322,7 +319,7 @@ void SubjectCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
 }
 
 QString SubjectCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString SubjectCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -346,9 +343,9 @@ void SubjectCanvas::prepare_for_move(bool on_resize) {
     DiagramCanvas::prepare_for_move(on_resize);
     
     QRect r = rect();
-    Q3CanvasItemList l = collisions(TRUE);
-    Q3CanvasItemList::ConstIterator it;
-    Q3CanvasItemList::ConstIterator end = l.end();
+    QCanvasItemList l = collisions(TRUE);
+    QCanvasItemList::ConstIterator it;
+    QCanvasItemList::ConstIterator end = l.end();
     DiagramItem * di;
   
     for (it = l.begin(); it != end; ++it) {
@@ -364,7 +361,7 @@ void SubjectCanvas::prepare_for_move(bool on_resize) {
   }
 }
 
-void SubjectCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void SubjectCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "subject_ref " << get_ident();
   }
@@ -430,7 +427,7 @@ void SubjectCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
@@ -442,10 +439,10 @@ void SubjectCanvas::history_hide() {
 
 // for plug outs
 
-void SubjectCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void SubjectCanvas::send(ToolCom * com, QCanvasItemList & all)
 {
-  Q3PtrList<SubjectCanvas> subjects;
-  Q3CanvasItemList::Iterator cit;
+  QList<SubjectCanvas> subjects;
+  QCanvasItemList::Iterator cit;
 
   for (cit = all.begin(); cit != all.end(); ++cit) {
     DiagramItem *di = QCanvasItemToDiagramItem(*cit);
@@ -461,7 +458,7 @@ void SubjectCanvas::send(ToolCom * com, Q3CanvasItemList & all)
   SubjectCanvas * sc;
   
   for (sc = subjects.first(); sc != 0; sc = subjects.next()) {
-    Q3CString s = fromUnicode(sc->name);
+    QCString s = fromUnicode(sc->name);
     
     com->write_string((const char *) s);
     com->write(sc->rect());

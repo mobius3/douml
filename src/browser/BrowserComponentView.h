@@ -26,12 +26,7 @@
 #ifndef BROWSER_COMPONENTVIEW_H
 #define BROWSER_COMPONENTVIEW_H
 
-#include <q3intdict.h> 
-//Added by qt3to4:
-#include <QPixmap>
-#include <QDropEvent>
-#include <Q3TextStream>
-#include <QDragMoveEvent>
+#include <qintdict.h> 
 
 class QPixmap;
 class SimpleData;
@@ -76,13 +71,13 @@ class BrowserComponentView : public BrowserNode, public Labeled<BrowserComponent
     virtual QString get_stype() const;
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
+    virtual bool may_contains_them(const QList<BrowserNode> &,
 				   BooL & duplicable) const;
     virtual BasicData * get_data() const;
     virtual void get_componentdiagramsettings(ComponentDiagramSettings &) const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual UmlColor get_color(UmlCode) const;
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
         
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
@@ -93,7 +88,7 @@ class BrowserComponentView : public BrowserNode, public Labeled<BrowserComponent
     
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
 
     static BrowserComponentView * read(char * &, char *, BrowserNode *, bool);
     static BrowserComponentView * read_ref(char * &, char *);

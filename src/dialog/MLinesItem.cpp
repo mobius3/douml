@@ -34,19 +34,19 @@
 #include "MLEDialog.h"
 #include "strutil.h"
 #else
-#include <q3multilineedit.h>
+#include <qmultilineedit.h>
 #include "DialogUtil.h"
 #endif
 
-MLinesItem::MLinesItem(Q3Table * ta, const QString & s)
-    : TableItem(ta, Q3TableItem::WhenCurrent, s) {
+MLinesItem::MLinesItem(QTable * ta, const QString & s)
+    : TableItem(ta, QTableItem::WhenCurrent, s) {
 }
 
 QWidget * MLinesItem::createEditor() const {
 #if QT_VERSION == 230
   ((MLinesItem *) this)->mle = new MLEDialog(fromUnicode(text()), FALSE);
 #else
-  ((MLinesItem *) this)->mle = new Q3MultiLineEdit(table()->viewport());
+  ((MLinesItem *) this)->mle = new QMultiLineEdit(table()->viewport());
   mle->setText(text());
 #endif
   return mle;
@@ -61,12 +61,12 @@ void MLinesItem::setContentFromEditor(QWidget * w) {
   }
 #else
   if (w->inherits("QMultiLineEdit")) {
-    QString s = ((Q3MultiLineEdit *) w)->text();
+    QString s = ((QMultiLineEdit *) w)->text();
     
     setText(s);
   }
 #endif
   else
-    Q3TableItem::setContentFromEditor(w);
+    QTableItem::setContentFromEditor(w);
 }
 

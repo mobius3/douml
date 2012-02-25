@@ -40,12 +40,9 @@
 #include "CodDirsCanvas.h"
 #include "myio.h"
 #include "ToolCom.h"
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <Q3PtrCollection>
 
-int ColMsgList::compareItems(Q3PtrCollection::Item item1,
-			     Q3PtrCollection::Item item2) {
+int ColMsgList::compareItems(QCollection::Item item1,
+			     QCollection::Item item2) {
   unsigned r1 = ((ColMsg *) item1)->get_rank();
   unsigned r2 = ((ColMsg *) item2)->get_rank();
   
@@ -97,7 +94,7 @@ void ColMsg::delete_it_internal() {
 // search without considering ranks
 
 bool ColMsg::extract_it(ColMsgList & top) {
-  Q3PtrListIterator<ColMsg> it(top);
+  QListIterator<ColMsg> it(top);
   int index;
   
   for (index = 0; it.current(); ++it, index += 1) {
@@ -152,7 +149,7 @@ void ColMsg::update_ranks(ColMsgList & msgs)
 {
   unsigned rank = 0;
   unsigned hi_rank;
-  Q3PtrListIterator<ColMsg> it(msgs);
+  QListIterator<ColMsg> it(msgs);
   
   for (hi_rank = 1; it.current() != 0; ++it, hi_rank += 1)
     it.current()->update_ranks(rank, QString::number(hi_rank));	// rank is updated
@@ -165,7 +162,7 @@ void ColMsg::update_ranks(unsigned & r, QString hr) {
   hr += '.';
   
   unsigned hi_rank;
-  Q3PtrListIterator<ColMsg> it(msgs);
+  QListIterator<ColMsg> it(msgs);
   
   for (hi_rank = 1; it.current() != 0; ++it, hi_rank += 1)
     it.current()->update_ranks(r, hr + QString::number(hi_rank));
@@ -173,7 +170,7 @@ void ColMsg::update_ranks(unsigned & r, QString hr) {
 
 void ColMsg::update_rank(unsigned & r) {
   absolute_rank = ++r;
-  Q3PtrListIterator<ColMsg> it(msgs);
+  QListIterator<ColMsg> it(msgs);
   
   for (; it.current() != 0; ++it)
     it.current()->update_rank(r);
@@ -191,7 +188,7 @@ ColMsg * ColMsg::new_one(const OperationData * d, const QString & e, bool f,
 
 void ColMsg::place_in_its_support() {
   unsigned index;
-  Q3PtrListIterator<ColMsg> it(in->get_msgs());
+  QListIterator<ColMsg> it(in->get_msgs());
   const char * hr = hierarchical_rank;
   
   for (index = 0; it.current() != 0; ++it, index += 1) {
@@ -210,7 +207,7 @@ void ColMsg::place_in(ColMsgList & l) {
   
   // lazy implementation where all the objects's rank is updated
   unsigned r = 0;
-  Q3PtrListIterator<ColMsg> it(l);
+  QListIterator<ColMsg> it(l);
   
   for (; it.current() != 0; ++it)
     it.current()->update_rank(r);
@@ -218,10 +215,10 @@ void ColMsg::place_in(ColMsgList & l) {
 
 void ColMsg::place_in_internal(ColMsgList & l) {
   ColMsgList * pl = &l;
-  int ndots = hierarchical_rank.count('.'); //[lgfreitas] contains now returns a bool
+  int ndots = hierarchical_rank.contains('.');
   
   for (;;) {
-    Q3PtrListIterator<ColMsg> it(*pl);
+    QListIterator<ColMsg> it(*pl);
     ColMsg * m;
     unsigned index = pl->count();
     
@@ -243,14 +240,14 @@ void ColMsg::place_in_internal(ColMsgList & l) {
 void ColMsg::get_all_in_all_out(ColMsgList & all_in, ColMsgList & all_out, 
 				const ColMsgList & msgs)
 {
-  Q3PtrListIterator<ColMsg> it(msgs);
+  QListIterator<ColMsg> it(msgs);
   
   for (; it.current() != 0; ++it) {
     ColMsgList & l = (it.current()->is_forward) ? all_in : all_out;
     const QString & hi = it.current()->hierarchical_rank;
     
     unsigned index;
-    Q3PtrListIterator<ColMsg> it2(l);
+    QListIterator<ColMsg> it2(l);
     
     for (index = 0; it2.current() != 0; index += 1, ++it2)
       if (lt(hi, it2.current()->hierarchical_rank))
@@ -262,7 +259,7 @@ void ColMsg::get_all_in_all_out(ColMsgList & all_in, ColMsgList & all_out,
 
 ColMsg * ColMsg::find(const QString & hi, ColMsgList & l)
 {
-  Q3PtrListIterator<ColMsg> it(l);
+  QListIterator<ColMsg> it(l);
   
   for (; it.current(); ++it)
     if ((*it)->hierarchical_rank == hi)
@@ -275,7 +272,7 @@ ColMsg * ColMsg::find(const QString & hi, ColMsgList & l)
 
 ColMsg * ColMsg::find_rec(const QString & hr, ColMsgList & top)
 {
-  Q3PtrListIterator<ColMsg> it(top);
+  QListIterator<ColMsg> it(top);
   int index;
   
   for (index = 0; it.current(); ++it, index += 1) {
@@ -353,13 +350,13 @@ bool ColMsg::gt(const char * h1, const char * h2)
 
 //
 
-void ColMsg::save(Q3TextStream & st, const ColMsgList & l, bool copy,
+void ColMsg::save(QTextStream & st, const ColMsgList & l, bool copy,
 		  QString & warning, const QString & diag_name)
 {
   nl_indent(st);
   
   bool first_one = TRUE;
-  Q3PtrListIterator<ColMsg> it(l);
+  QListIterator<ColMsg> it(l);
   ColMsg * msg;
   
   for (; (msg = it.current()) != 0; ++it) {
@@ -479,7 +476,7 @@ void ColMsg::read(char * & st, ColMsgList & l, UmlCanvas * canvas) {
 
 void ColMsg::get_all(const ColMsgList & l, ColMsgList & r)
 {
-  Q3PtrListIterator<ColMsg> it(l);
+  QListIterator<ColMsg> it(l);
   
   for (; it.current(); ++it) {
     r.append(it.current());

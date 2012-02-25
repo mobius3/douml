@@ -27,12 +27,10 @@
 #define UMLCLASSDIAGRAM_H
 
 #include "UmlBaseClassDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlClassDiagram : public UmlBaseClassDiagram {
   public:
-    UmlClassDiagram(void * id, const Q3CString & n) 
+    UmlClassDiagram(void * id, const QCString & n) 
       : UmlBaseClassDiagram(id, n) {};
 };
 

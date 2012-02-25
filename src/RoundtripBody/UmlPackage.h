@@ -28,35 +28,33 @@
 
 #include "UmlBasePackage.h"
 #include "aLanguage.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 struct Dir {
-  Q3CString src;
-  Q3CString h;
+  QCString src;
+  QCString h;
   bool read;
 };
  
 class UmlPackage : public UmlBasePackage {
   public:
-    UmlPackage(void * id, const Q3CString & n);
+    UmlPackage(void * id, const QCString & n);
   
   protected:
     Dir dir;
   
   public:
-    Q3CString source_path(const Q3CString &);
-    Q3CString header_path(const Q3CString &);
-    Q3CString java_path(const Q3CString &);
-    Q3CString php_path(const Q3CString &);
-    Q3CString python_path(const Q3CString &);
+    QCString source_path(const QCString &);
+    QCString header_path(const QCString &);
+    QCString java_path(const QCString &);
+    QCString php_path(const QCString &);
+    QCString python_path(const QCString &);
     virtual void roundtrip_cpp();
     virtual void roundtrip_java();
     virtual void roundtrip_php();
     virtual void roundtrip_python();
     virtual UmlPackage * package();
     
-    static Q3CString rootDir(aLanguage who);
+    static QCString rootDir(aLanguage who);
 };
 
 #endif

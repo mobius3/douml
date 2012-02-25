@@ -27,9 +27,7 @@
 #define SYNCHRODIALOG_H
 
 #include <qdialog.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qlist.h>
 
 class QCheckBox;
 class BrowserView;
@@ -38,11 +36,11 @@ class SynchroDialog : public QDialog {
   Q_OBJECT
  
   protected:
-    Q3PtrList<BrowserView> & browsers;
-    Q3PtrList<QCheckBox> checks;
+    QList<BrowserView> & browsers;
+    QList<QCheckBox> checks;
       
   public:
-    SynchroDialog(Q3PtrList<BrowserView> & b);
+    SynchroDialog(QList<BrowserView> & b);
     virtual ~SynchroDialog();
     
   public slots:

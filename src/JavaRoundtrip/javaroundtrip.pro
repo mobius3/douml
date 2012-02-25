@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on debug
+CONFIG	      += qt warn_on release
 HEADERS	      = 
 SOURCES	      = main.cpp BrowserNode.cpp Statistic.cpp \
 		../JavaCat/UmlClassItem.cpp ../JavaCat/UmlArtifact.cpp \
@@ -101,5 +101,3 @@ TARGET	      = java_roundtrip
 DEFINES	      = WITHJAVA REVERSE ROUNDTRIP
 INCLUDEPATH   = ../Tools ../JavaRoundtrip ../JavaCat
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 

@@ -27,12 +27,8 @@
 
 
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
 
 #include "RelationData.h"
 #include "BrowserRelation.h"
@@ -49,10 +45,10 @@
 #include "translate.h"
 
 IdDict<RelationData> RelationData::all(1023, __FILE__);
-Q3PtrList<RelationData> RelationData::Unconsistent;
+QList<RelationData> RelationData::Unconsistent;
 
 // file format < 56
-static Q3PtrList<RelationData> IncludeToHeaderIfExternal;
+static QList<RelationData> IncludeToHeaderIfExternal;
 
 RelationData::RelationData(UmlCode e, int id)
     : Labeled<RelationData>(all, id), is_deleted(FALSE), is_unconsistent(FALSE), type(e) {
@@ -393,7 +389,7 @@ bool RelationData::set_stereotype(const QString & s) {
   return result;
 }
 
-bool RelationData::set_stereotype(const Q3CString & s) {
+bool RelationData::set_stereotype(const QCString & s) {
   bool result = ((const char *) stereotype != s);
   
   stereotype = s;
@@ -864,7 +860,7 @@ bool RelationData::tool_cmd(ToolCom * com, BrowserRelation * rel,
 	break;
       case setJavaAnnotationCmd:
 	{
-	  Q3CString s = args;
+	  QCString s = args;
 	  
 	  s = s.stripWhiteSpace();
 	  if (! s.isEmpty())
@@ -1050,7 +1046,7 @@ bool RelationData::is_writable(const BrowserRelation * br) const {
 
 //
 
-static void save_role(const RoleData & role, bool assoc, Q3TextStream & st,
+static void save_role(const RoleData & role, bool assoc, QTextStream & st,
 		      QString & warning)
 {
   if (assoc) {
@@ -1153,7 +1149,7 @@ static void save_role(const RoleData & role, bool assoc, Q3TextStream & st,
   nl_indent(st);
 }
 
-void RelationData::save(Q3TextStream & st, bool ref, QString & warning) const {
+void RelationData::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "relation_ref " << get_ident() << " // " << ((const char *) name);
   else {

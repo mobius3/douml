@@ -2,7 +2,7 @@
 #define _UMLBASETYPESPEC_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlClass;
 
@@ -16,10 +16,10 @@ class UmlBaseTypeSpec {
     UmlBaseTypeSpec() : type(0) {};
 
     // returns the type as a string in all cases
-    const Q3CString & toString() const;
+    const QCString & toString() const;
 
     // significant in case type == 0
-    Q3CString explicit_type;
+    QCString explicit_type;
 
     UmlClass * type;
 

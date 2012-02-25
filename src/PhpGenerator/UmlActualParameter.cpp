@@ -24,9 +24,7 @@
 // *************************************************************************
 
 
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <QTextOStream>
+#include <qtextstream.h> 
 
 #include "UmlActualParameter.h"
 #include "UmlClass.h"

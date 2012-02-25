@@ -27,19 +27,16 @@
 #define UMLITEM_H
 
 #include "UmlBaseItem.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3PtrList>
 
 #ifdef ROUNDTRIP
-#include <q3ptrlist.h>
+#include <qlist.h>
 
 class ClassContainer;
 #endif
 
 class UmlItem : public UmlBaseItem {
   public:
-    UmlItem(void * id, const Q3CString & n)
+    UmlItem(void * id, const QCString & n)
       : UmlBaseItem(id, n) {
     };
     virtual ~UmlItem();
@@ -47,7 +44,7 @@ class UmlItem : public UmlBaseItem {
 #ifdef ROUNDTRIP
     virtual void upload(ClassContainer *);
     virtual bool set_roundtrip_expected();
-    virtual void mark_useless(Q3PtrList<UmlItem> & l);
+    virtual void mark_useless(QList<UmlItem> & l);
     virtual void scan_it(int & n);
     virtual void send_it(int n);
 #endif

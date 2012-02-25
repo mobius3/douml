@@ -5,14 +5,12 @@
 
 #include "UmlCom.h"
 #include "UmlRelation.h"
-//Added by qt3to4:
-#include <Q3CString>
 
  UmlItem::~UmlItem() {
 }
 
-UmlItem * UmlItem::getChild(anItemKind k, Q3CString s) {
-  const Q3PtrVector<UmlItem> ch = children();
+UmlItem * UmlItem::getChild(anItemKind k, QCString s) {
+  const QVector<UmlItem> ch = children();
   unsigned index;
   
   if (k == aRelation) {
@@ -30,8 +28,8 @@ UmlItem * UmlItem::getChild(anItemKind k, Q3CString s) {
   return 0;
 }
 
-Q3CString UmlItem::quotedName() {
-  Q3CString r;
+QCString UmlItem::quotedName() {
+  QCString r;
   const char * s = name();
 
   for (;;) {
@@ -50,7 +48,7 @@ Q3CString UmlItem::quotedName() {
 
 }
 
-void UmlItem::init(UmlClass *, Q3CString, Q3CString, UmlState *) {
+void UmlItem::init(UmlClass *, QCString, QCString, UmlState *) {
 }
 
 void UmlItem::generate() {
@@ -60,19 +58,19 @@ void UmlItem::generate() {
 void UmlItem::generate(UmlClass *, UmlClass *, UmlState *) {
 }
 
-void UmlItem::generate(UmlClass *, UmlClass *, UmlState *, Q3CString &, Q3CString) {
+void UmlItem::generate(UmlClass *, UmlClass *, UmlState *, QCString &, QCString) {
 }
 
-void UmlItem::setComment(Q3CString) {
+void UmlItem::setComment(QCString) {
 }
 
 void UmlItem::setUseless() {
- Q3CString dummy;
+ QCString dummy;
  
  if (propertyValue("STM generated", dummy))
    set_PropertyValue("STM generated", "0");
  
- const Q3PtrVector<UmlItem> v = children();
+ const QVector<UmlItem> v = children();
     
  for (unsigned index = v.count(); index != 0; index -= 1)
    v[index - 1]->setUseless();
@@ -83,13 +81,13 @@ void UmlItem::setUsed() {
 }
 
 void UmlItem::deleteUseless() {
-  Q3CString v;
+  QCString v;
   
   if (propertyValue("STM generated", v) && (v == "0"))
     // useless
     deleteIt();
   else {
-    const Q3PtrVector<UmlItem> v = children();
+    const QVector<UmlItem> v = children();
     
     for (unsigned index = v.count(); index != 0; index -= 1)
       v[index - 1]->deleteUseless();

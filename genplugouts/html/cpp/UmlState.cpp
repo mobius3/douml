@@ -2,22 +2,20 @@
 #include "UmlStateDiagram.h"
 #include "UmlOperation.h"
 #include "UmlState.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-Q3CString UmlState::sKind() {
+QCString UmlState::sKind() {
   return (parent()->kind() == aClassView)
     ? "state machine" : "state";
 }
 
-void UmlState::html(Q3CString pfix, unsigned int rank, unsigned int level) {
+void UmlState::html(QCString pfix, unsigned int rank, unsigned int level) {
   define();
 
   chapter((parent()->kind() == aClassView)
 	  ? "StateMachine" : "State",
 	  pfix, rank, "state", level);
 
-  Q3CString s = description();
+  QCString s = description();
   
   if (!s.isEmpty()) {
     fw.write("<p>");
@@ -44,7 +42,7 @@ void UmlState::html(Q3CString pfix, unsigned int rank, unsigned int level) {
       fw.write("</p>");
     }
     
-    Q3CString scpp, sjava;
+    QCString scpp, sjava;
     
     s = entryBehavior();
     scpp = cppEntryBehavior();

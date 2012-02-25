@@ -1,11 +1,9 @@
 
 #include "UmlActivityPin.h"
 #include "FileOut.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 void UmlActivityPin::write(FileOut & out) {
-  Q3CString s = name();
+  QCString s = name();
   const char * k;
   const char * K;
   
@@ -88,7 +86,7 @@ void UmlActivityPin::write(FileOut & out) {
 
   out.indent();
   out << '<' << k << " xmi:type=\"uml:" << K << "Pin\" name=\"";
-  out.quote((const char*)name());//[jasa] ambiguous call
+  out.quote(name());
   out << '"';
   out.id(this);
   write_flags(out);
@@ -105,7 +103,7 @@ void UmlActivityPin::write(FileOut & out) {
   write_multiplicity(out, multiplicity(), this);
   UmlItem::write_type(out, type());
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)

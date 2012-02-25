@@ -1,9 +1,7 @@
 
 #include "UmlCollaborationDiagram.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-Q3CString UmlCollaborationDiagram::sKind() {
+QCString UmlCollaborationDiagram::sKind() {
   return "collaboration diagram";
 }
 

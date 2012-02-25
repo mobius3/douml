@@ -6,30 +6,27 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
-#include <q3hbox.h>
+#include <qhbox.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
-#include <q3buttongroup.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3VBoxLayout>
+#include <qbuttongroup.h>
 
 #include "SmallPushButton.h"
 
-Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & genview, int & taggedvalue, Language & lang)
+Dialog::Dialog(QCString & path, QCString & encoding, QCString & genview, int & taggedvalue, Language & lang)
   : QDialog(0, 0, TRUE), _path(path), _encoding(encoding), _genview(genview), _taggedvalue(taggedvalue), _lang(lang) {
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBox * htab;
+  QVBoxLayout * vbox = new QVBoxLayout(this);
+  QHBox * htab;
   
   vbox->setMargin(5);
   
   // get xmi pathname
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -46,7 +43,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & genview, int 
 
   // to choose encoding
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -78,7 +75,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & genview, int 
   
   // generate view checkbox
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -88,12 +85,12 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & genview, int 
     
   // tagged value generation mode
     
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
-  Q3ButtonGroup * bg =
-    new Q3ButtonGroup(3, Qt::Vertical, "Tagged values generation", htab);
+  QButtonGroup * bg =
+    new QButtonGroup(3, Qt::Vertical, "Tagged values generation", htab);
   
   tg_0 = new QRadioButton("Not generated", bg);
   tg_1 = new QRadioButton("<UML:TaggedValue tag=\"..\" value=\"..\"/>", bg);
@@ -110,7 +107,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & genview, int 
   
   // uml , c++, java, cancel buttons
   
-  htab = new Q3HBox(this);
+  htab = new QHBox(this);
   htab->setMargin(5);
   vbox->addWidget(htab);
   
@@ -136,7 +133,7 @@ Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & genview, int 
 }
 
 void Dialog::browse() {
-  QString s = Q3FileDialog::getSaveFileName(_path, "*.xmi", 0);
+  QString s = QFileDialog::getSaveFileName(_path, "*.xmi", 0);
   
   if (! s.isEmpty()) {
     if (s.right(4).lower() != ".xmi")

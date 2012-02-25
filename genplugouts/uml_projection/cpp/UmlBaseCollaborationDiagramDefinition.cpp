@@ -3,7 +3,7 @@
 #include "UmlBaseCollaborationDiagramDefinition.h"
 
 void UmlBaseCollaborationDiagramDefinition::read_() {
-  Q3PtrDict<UmlClassInstanceReference> instances;
+  QPtrDict<UmlClassInstanceReference> instances;
   unsigned n;
   unsigned rank;
 

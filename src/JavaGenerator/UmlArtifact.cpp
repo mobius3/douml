@@ -24,10 +24,7 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h> 
-//Added by qt3to4:
-#include <Q3CString>
-#include <QTextOStream>
+#include <qtextstream.h> 
 
 #include "UmlArtifact.h"
 #include "UmlPackage.h"
@@ -54,24 +51,24 @@ void UmlArtifact::generate() {
     package_of_generated_artifact = package();
     current = this;
     
-    const Q3CString filedef = javaSource();
+    const QCString filedef = javaSource();
     
     if (filedef.isEmpty())
       return;
     
-    const Q3CString & name = this->name();
-    Q3CString path = package_of_generated_artifact->file_path(name);
+    const QCString & name = this->name();
+    QCString path = package_of_generated_artifact->file_path(name);
     
     UmlCom::message(name);
     if (verbose())
-      UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
+      UmlCom::trace(QCString("<hr><font face=helvetica>Generate code for <i> ")
 		    + name + "</i> in " + path + "</i></font><br>");      
     else
-      set_trace_header(Q3CString("<font face=helvetica>Generate code for <i> ")
+      set_trace_header(QCString("<font face=helvetica>Generate code for <i> ")
 		       + name + "</i> in " + path + "</i></font><br>"); 
     
     // get bodies if preserve
-    const Q3PtrVector<UmlClass> & cls = associatedClasses();
+    const QVector<UmlClass> & cls = associatedClasses();
     
     if (preserve())
       UmlOperation::read_bodies(path);
@@ -80,10 +77,10 @@ void UmlArtifact::generate() {
     
     unsigned n = cls.count();
     unsigned index;
-    Q3CString incl;
+    QCString incl;
     QByteArray file;
     // note : QTextOStream(FILE *) does not work under windows
-    QTextOStream f(&file); // [lgfreitas] it expects a pointer to a byte array...
+    QTextOStream f(file);
     const char * p = filedef;
     const char * pp = 0;
       
@@ -124,7 +121,7 @@ void UmlArtifact::generate() {
 	f << name.lower();
       }
       else if (!strncmp(p, "${imports}", 10)) {
-	Q3CString indent = current_indent(p, filedef);
+	QCString indent = current_indent(p, filedef);
 	
 	for (index = 0; index != n; index += 1)
 	  cls[index]->generate_import(f, indent);
@@ -135,7 +132,7 @@ void UmlArtifact::generate() {
       else if (!strncmp(p, "${package}", 10)) {
 	p += 10;
 	
-	const Q3CString & package = package_of_generated_artifact->javaPackage();
+	const QCString & package = package_of_generated_artifact->javaPackage();
 	
 	if (!package.isEmpty())
 	  f << "package " << package << ";\n\n";
@@ -143,7 +140,7 @@ void UmlArtifact::generate() {
 	  p += 1;
       }
       else if (!strncmp(p, "${definition}", 13)) {
-	Q3CString indent = current_indent(p, filedef);
+	QCString indent = current_indent(p, filedef);
 	
 	for (index = 0; index != n; index += 1)
 	  cls[index]->generate(f, indent);
@@ -165,7 +162,7 @@ void UmlArtifact::generate() {
       
       if ((fp = fopen((const char *) path, "wb")) == 0) {
 	write_trace_header();
-	UmlCom::trace(Q3CString("<font color=\"red\"><b><i> ")
+	UmlCom::trace(QCString("<font color=\"red\"><b><i> ")
 		      + name + "</i> : cannot open <i> "
 		      + path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
 		      + package_of_generated_artifact->name()
@@ -178,7 +175,7 @@ void UmlArtifact::generate() {
       }
     }
     else if (get_trace_header().isEmpty())
-      UmlCom::trace(Q3CString("<font face=helvetica><i> ")
+      UmlCom::trace(QCString("<font face=helvetica><i> ")
 		    + path + "</i> not modified</font><br>");
     
     if (imports != 0) {
@@ -189,27 +186,27 @@ void UmlArtifact::generate() {
 }
 
 void UmlArtifact::generate_text() {
-  const Q3CString srcdef = javaSource();
+  const QCString srcdef = javaSource();
   
   if (srcdef.isEmpty()) {
     if (verbose())
-      UmlCom::trace(Q3CString("<hr><font face=helvetica>artifact <i>")
+      UmlCom::trace(QCString("<hr><font face=helvetica>artifact <i>")
 		    + name() + "</i> has an empty Java definition</font><br>");
     return;
   }
     
   UmlPackage * pack = package();
-  const Q3CString & name = UmlArtifact::name();    
-  Q3CString src_path = pack->text_path(name);
+  const QCString & name = UmlArtifact::name();    
+  QCString src_path = pack->text_path(name);
   
-  Q3CString s = " in <i> " + src_path + "</i>";
+  QCString s = " in <i> " + src_path + "</i>";
       
   UmlCom::message(name);
   if (verbose())
-    UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
+    UmlCom::trace(QCString("<hr><font face=helvetica>Generate code for <i> ")
 		  + name + "</i>" + s + "</font><br>");
   else
-    set_trace_header(Q3CString("<font face=helvetica>Generate code for <i> ")
+    set_trace_header(QCString("<font face=helvetica>Generate code for <i> ")
 		     + name + "</i>" + s + "</font><br>");
       
   if (must_be_saved(src_path, (const char *) srcdef)) {
@@ -219,7 +216,7 @@ void UmlArtifact::generate_text() {
     
     if ((fp_src = fopen((const char *) src_path, "wb")) == 0) {
       write_trace_header();
-      UmlCom::trace(Q3CString("<font color=\"red\"><b><i> ")
+      UmlCom::trace(QCString("<font color=\"red\"><b><i> ")
 		    + name + " : </i> cannot open <i> " 
 		    + src_path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
 		    + pack->name() + "</i> Java directory specification</b></font><br>");
@@ -231,7 +228,7 @@ void UmlArtifact::generate_text() {
     }
   }
   else if (get_trace_header().isEmpty())
-    UmlCom::trace(Q3CString("<font face=helvetica><i> ")
+    UmlCom::trace(QCString("<font face=helvetica><i> ")
 		  + src_path + "</i> not modified</font><br>");
 }
 
@@ -245,7 +242,7 @@ UmlArtifact * UmlArtifact::generated_one()
   return current;
 }
 
-void UmlArtifact::imported(const Q3CString & s) {
+void UmlArtifact::imported(const QCString & s) {
   if (imports == 0)
     // init it
     (void) is_imported("", "");
@@ -253,7 +250,7 @@ void UmlArtifact::imported(const Q3CString & s) {
   imports->insert(s, this);
 }
 
-bool UmlArtifact::is_imported(const Q3CString & s) {
+bool UmlArtifact::is_imported(const QCString & s) {
   if (imports == 0)
     // init it
     (void) is_imported("", "");
@@ -261,11 +258,11 @@ bool UmlArtifact::is_imported(const Q3CString & s) {
   return (imports->find(s) != 0);
 }
 
-bool UmlArtifact::is_imported(Q3CString path, Q3CString class_name) {
+bool UmlArtifact::is_imported(QCString path, QCString class_name) {
   if (imports == 0) {
-    imports = new Q3AsciiDict<UmlArtifact>(17);
+    imports = new QAsciiDict<UmlArtifact>(17);
     
-    Q3CString s = javaSource();
+    QCString s = javaSource();
     int index = 0;
     
     while ((index = s.find("import", index)) != -1) {
@@ -278,7 +275,7 @@ bool UmlArtifact::is_imported(Q3CString path, Q3CString class_name) {
 	if ((index2 != (index + 6)) &&
 	    ((index = s.find(';', index2)) != -1) &&
 	    (index != index2)) {
-	 Q3CString p = s.mid(index2, index - index2);
+	 QCString p = s.mid(index2, index - index2);
 	 
 	 imports->insert(p, this);
 	}

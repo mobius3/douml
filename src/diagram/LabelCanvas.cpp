@@ -29,8 +29,6 @@
 
 #include <math.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "LabelCanvas.h"
 #include "DiagramCanvas.h"
@@ -42,7 +40,7 @@ const char * LabelCanvas::Zigzag = "~~~";
 
 LabelCanvas::LabelCanvas(const QString & n, UmlCanvas * canvas, int x, int y,
 			 bool bold, bool italic, bool underlined, bool mlcentered)
-    : Q3CanvasText(n, canvas), DiagramItem(-1, canvas) {
+    : QCanvasText(n, canvas), DiagramItem(-1, canvas) {
   if (bold)
     setFont((italic) ? ((UmlCanvas *) canvas)->get_font(UmlNormalBoldItalicFont)
 		     : ((UmlCanvas *) canvas)->get_font(UmlNormalBoldFont));
@@ -122,7 +120,7 @@ void LabelCanvas::recenter() {
   double scale = the_canvas()->zoom();
   QPoint c = center();
   
-  Q3CanvasText::moveBy(((int) (center_x_scale100 * scale + 0.5)) - c.x(),
+  QCanvasText::moveBy(((int) (center_x_scale100 * scale + 0.5)) - c.x(),
 		      ((int) (center_y_scale100 * scale + 0.5)) - c.y());
 }
 
@@ -135,7 +133,7 @@ void LabelCanvas::set_center100() {
 }
 
 void LabelCanvas::moveBy(double dx, double dy) {
-  Q3CanvasText::moveBy(dx, dy);
+  QCanvasText::moveBy(dx, dy);
   if (! the_canvas()->do_zoom())
     set_center100();
 }
@@ -168,7 +166,7 @@ void LabelCanvas::move_outside(QRect r, double angle) {
 
 void LabelCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
+  
   p.setBackgroundMode(::Qt::TransparentMode);
   
   QRect r = boundingRect();
@@ -185,10 +183,8 @@ void LabelCanvas::draw(QPainter & p) {
     int cx = (r.left() + r.right()) / 2;
 
     p.drawLine(cx - w, b, cx + w, b);
-    //p.lineTo(cx, (int) y());
-	p.drawLine(cx+w, b, cx, (int) y());
-    //p.lineTo(cx - w, b);
-	p.drawLine(cx, (int)y(), cx-w, b);
+    p.lineTo(cx, (int) y());
+    p.lineTo(cx - w, b);
 
     if (fp != 0)
       fprintf(fp, "\t<polygon fill=\"none\" stroke=\"black\" stroke-opacity=\"1\""
@@ -210,10 +206,8 @@ void LabelCanvas::draw(QPainter & p) {
     int b = r.bottom();
     
     p.drawLine(cx - w, b, cx + w, b);
-    //p.lineTo(cx, cy);
-	p.drawLine(cx+w, b, cx, cy);
-    //p.lineTo(cx - w, b);
-	p.drawLine(cx, cy, cx - w, b);
+    p.lineTo(cx, cy);
+    p.lineTo(cx - w, b);
 
     if (fp != 0)
       fprintf(fp, "\t<polygon fill=\"none\" stroke=\"black\" stroke-opacity=\"1\""
@@ -233,7 +227,7 @@ void LabelCanvas::draw(QPainter & p) {
 		  p.font(), fp);
     }
     else {
-      Q3CanvasText::draw(p);
+      QCanvasText::draw(p);
       if (fp != 0)
 	draw_text(rect(), 0, text(), p.font(), fp);
     }
@@ -246,12 +240,9 @@ void LabelCanvas::draw(QPainter & p) {
     int xr = r.right() - r.width() / 4;
     
     p.drawLine(r.left(), t, r.right(), t);
-    //p.lineTo(r.left(), yb);
-	p.drawLine(r.right(), t, r.left(), yb);
-    //p.lineTo(r.right(), yb);
-	p.drawLine(r.left(), yb, r.right(), yb);
-    //p.lineTo(xr, r.bottom() - h / 2);
-	p.drawLine(r.right(), yb, xr, r.bottom() - h / 2);
+    p.lineTo(r.left(), yb);
+    p.lineTo(r.right(), yb);
+    p.lineTo(xr, r.bottom() - h / 2);
     p.drawLine(r.right(), yb, xr, r.bottom());
 
     if (fp != 0) {
@@ -324,7 +315,7 @@ void LabelCanvas::set_z(double z) {
 
 //
 
-void LabelCanvas::save(Q3TextStream  & st, bool, QString &) const {
+void LabelCanvas::save(QTextStream  & st, bool, QString &) const {
   st << "label ";
   save_string(text(), st);
   if (font().bold())
@@ -390,14 +381,14 @@ void LabelCanvas::history_load(QBuffer & b) {
   ::load(center_y_scale100, b);
   double dx = load_double(b) - x();
 
-  Q3CanvasText::moveBy(dx, load_double(b) - y());
-  Q3CanvasText::setZ(load_double(b));
-  Q3CanvasItem::setSelected(FALSE);
-  Q3CanvasItem::setVisible(TRUE);
+  QCanvasText::moveBy(dx, load_double(b) - y());
+  QCanvasText::setZ(load_double(b));
+  QCanvasItem::setSelected(FALSE);
+  QCanvasItem::setVisible(TRUE);
 }
 
 void LabelCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
 }
 
 void LabelCanvas::check_stereotypeproperties() {

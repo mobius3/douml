@@ -27,14 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QPixmap>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 
 #include "BrowserPseudoState.h"
 #include "PseudoStateData.h"
@@ -108,13 +103,13 @@ void BrowserPseudoState::update_idmax_for_root()
 void BrowserPseudoState::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 	      
-  for (Q3ListViewItem * child = firstChild();
+  for (QListViewItem * child = firstChild();
        child != 0;
        child = child->nextSibling())
     ((BrowserNode *) child)->prepare_update_lib();
 }
     
-void BrowserPseudoState::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserPseudoState::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   BrowserTransition::compute_referenced_by(l, this);
   if (! ondelete)
@@ -238,7 +233,7 @@ QString BrowserPseudoState::may_start() const {
   case JoinPS:
     // only one transition is allowed
     {
-      Q3ListViewItem * child;
+      QListViewItem * child;
       
       for (child = firstChild(); child != 0; child = child->nextSibling())
 	if ((((BrowserNode *) child)->get_type() == UmlTransition) &&
@@ -262,7 +257,7 @@ QString BrowserPseudoState::may_connect(const BrowserNode * dest) const {
   case ForkPS:
     // only one transition is allowed from dest
     {
-      Q3ListViewItem * child;
+      QListViewItem * child;
       
       for (child = dest->firstChild(); child != 0; child = child->nextSibling())
 	if ((((BrowserNode *) child)->get_type() == UmlTransition) &&
@@ -315,7 +310,7 @@ BrowserPseudoState::add_pseudostate(BrowserNode * future_parent,
 
 BrowserPseudoState * BrowserPseudoState::get_pseudostate(BrowserNode * future_parent, UmlCode c) {
   BrowserNodeList l;
-  Q3ListViewItem * child;
+  QListViewItem * child;
       
   for (child = future_parent->firstChild(); child != 0; child = child->nextSibling())
     if (!((BrowserNode *) child)->deletedp() &&
@@ -372,8 +367,8 @@ void BrowserPseudoState::menu() {
   if (index != -1)
     s.replace(index, 1, " ");
   
-  Q3PopupMenu m(0, "pseudo state");
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, "pseudo state");
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -648,7 +643,7 @@ QString BrowserPseudoState::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) BrowserState::get_machine(p));
 }
 
-void BrowserPseudoState::save_stereotypes(Q3TextStream & st)
+void BrowserPseudoState::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "pseudostate_stereotypes ";
@@ -665,7 +660,7 @@ void BrowserPseudoState::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserPseudoState::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserPseudoState::save(QTextStream & st, bool ref, QString & warning) {
   if (ref) {
     st << "pseudostate_ref " << get_ident() << " // " << stringify(kind);
     if (!allow_spaces())
@@ -682,7 +677,7 @@ void BrowserPseudoState::save(Q3TextStream & st, bool ref, QString & warning) {
     
     // saves the sub elts
       
-    Q3ListViewItem * child = firstChild();
+    QListViewItem * child = firstChild();
     
     if (child != 0) {
       for (;;) {

@@ -28,10 +28,8 @@
 
 #include "SimpleData.h"
 #include "UmlEnum.h"
-//Added by qt3to4:
-#include <Q3TextStream>
 
-class Q3TextStream;
+class QTextStream;
 
 class BrowserExpansionRegion;
 class ExpansionRegionDialog;
@@ -59,7 +57,7 @@ class ExpansionRegionData : public SimpleData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
 };
   

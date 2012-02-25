@@ -1,14 +1,12 @@
 
 #include "UmlActivityNode.h"
 #include "UmlFlow.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-Q3CString UmlFlow::sKind() {
+QCString UmlFlow::sKind() {
   return "transition";
 }
 
-void UmlFlow::html(Q3CString, unsigned int, unsigned int) {
+void UmlFlow::html(QCString, unsigned int, unsigned int) {
   fw.write("<table><tr><td><div class=\"element\">Flow  <b>");
   writeq(name());
   fw.write("</b></div></td></tr></table>");
@@ -19,7 +17,7 @@ void UmlFlow::html(Q3CString, unsigned int, unsigned int) {
   target()->write();
   fw.write("</p>");
 
-  Q3CString s = description();
+  QCString s = description();
 
   if (!s.isEmpty()) {
     fw.write("<p>");
@@ -27,7 +25,7 @@ void UmlFlow::html(Q3CString, unsigned int, unsigned int) {
     fw.write("<br /></p>");
   }
   
-  Q3CString scpp, sjava;
+  QCString scpp, sjava;
   
   s = weight();
   scpp = cppWeight();

@@ -26,15 +26,8 @@
 #ifndef DIAGRAMVIEW_H
 #define DIAGRAMVIEW_H
 
-#include <q3canvas.h>
-#include <q3textstream.h>
-//Added by qt3to4:
-#include <Q3CString>
-#include <QWheelEvent>
-#include <Q3ValueList>
-#include <QMouseEvent>
-#include <Q3PopupMenu>
-#include <QKeyEvent>
+#include <qcanvas.h>
+#include <qtextstream.h>
 
 #include "UmlEnum.h"
 #include "UmlCanvas.h"
@@ -43,7 +36,7 @@
 class QPrinter;
 #endif
 class QKeyEvent;
-class Q3PopupMenu;
+class QPopupMenu;
 class QBuffer;
 
 class DiagramItem;
@@ -52,18 +45,18 @@ class DiagramWindow;
 #define EDIT_DRAWING_SETTING_CMD 0
 #define RELOAD_CMD 6
 
-class DiagramView : public Q3CanvasView {
+class DiagramView : public QCanvasView {
   Q_OBJECT
     
   protected:
     int id;
     int pressedButton;
     QPoint mousePressPos;	// mouse position when it is pressed or moved
-    Q3CanvasRectangle * selectArea;
+    QCanvasRectangle * selectArea;
     DiagramItem * start;	// last added line part start
-    Q3CanvasLine * line;
+    QCanvasLine * line;
     DiagramItem * arrowBeginning;// broken line start
-    Q3CanvasItemList temp;
+    QCanvasItemList temp;
     QSize preferred_size;
     double preferred_zoom;
     bool draw_line;
@@ -74,14 +67,14 @@ class DiagramView : public Q3CanvasView {
     bool on_arrow_decenter;
     BooL decenter_start;
     BooL decenter_horiz;
-    Q3ValueList<QPoint> previousResizeCorrection;
-    Q3PtrList<QByteArray> history;
+    QValueList<QPoint> previousResizeCorrection;
+    QList<QByteArray> history;
     unsigned history_index;
 
 
 
 
-    static Q3CString clipboard;
+    static QCString clipboard;
     static UmlCode copied_from;
     
   public:
@@ -89,9 +82,9 @@ class DiagramView : public Q3CanvasView {
   
     void select_all();
     void unselect_all() { the_canvas()->unselect_all(); };
-    const Q3CanvasItemList & selection() { return the_canvas()->selection(); };
-    void select(Q3CanvasItem * i) { the_canvas()->select(i); };
-    void unselect(Q3CanvasItem * i) { the_canvas()->unselect(i); };
+    const QCanvasItemList & selection() { return the_canvas()->selection(); };
+    void select(QCanvasItem * i) { the_canvas()->select(i); };
+    void unselect(QCanvasItem * i) { the_canvas()->unselect(i); };
     void abort_line_construction();
     void relation_to_simplerelation(UmlCode k);
     void set_zoom(double);
@@ -99,7 +92,7 @@ class DiagramView : public Q3CanvasView {
     void preferred_size_zoom();
     bool has_preferred_size_zoom() { return preferred_zoom != 0; }
     void multiple_selection_menu(bool in_model, bool out_model, bool alignable,
-				 int n_resize, Q3PtrList<DiagramItem> & l_drawing_settings);
+				 int n_resize, QList<DiagramItem> & l_drawing_settings);
     bool is_present(BrowserNode * bn);
     virtual void add_related_elements(DiagramItem *, QString what,
 				      bool inh, bool assoc);
@@ -111,7 +104,7 @@ class DiagramView : public Q3CanvasView {
     void read();
     void paste();
     virtual void read(char *, char * k) = 0;
-    virtual void save(Q3TextStream & st, QString & warning, bool copy) const = 0;
+    virtual void save(QTextStream & st, QString & warning, bool copy) const = 0;
     void load(const char *);
     
     void protect_history(bool y) { history_protected = y; }
@@ -124,7 +117,7 @@ class DiagramView : public Q3CanvasView {
     bool available_undo();
     bool available_redo();
       
-    void save_session(Q3TextStream & st);
+    void save_session(QTextStream & st);
     void read_session(char * & st);
     
     static void init();
@@ -158,12 +151,12 @@ class DiagramView : public Q3CanvasView {
     void add_point(QMouseEvent * e);
     bool multiple_selection_for_menu(BooL & in_model, BooL & out_model,
 				     BooL & alignable, int & n_resize,
-				     Q3PtrList<DiagramItem> & l_drawing_settings,
-				     const Q3CanvasItemList & selected);
+				     QList<DiagramItem> & l_drawing_settings,
+				     const QCanvasItemList & selected);
     
     void set_format(int);
-    void init_format_menu(Q3PopupMenu &, Q3PopupMenu &, int) const;
-    int default_menu(Q3PopupMenu & m, int f);
+    void init_format_menu(QPopupMenu &, QPopupMenu &, int) const;
+    int default_menu(QPopupMenu & m, int f);
     void needed_width_height(int & maxx, int & maxy) const;
     
     void save_picture(bool optimal, bool svg);

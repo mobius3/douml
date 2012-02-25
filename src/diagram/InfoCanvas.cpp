@@ -28,10 +28,8 @@
 
 
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
+#include <qpainter.h>
+#include <qpopupmenu.h> 
 
 #include "InfoCanvas.h"
 #include "DiagramCanvas.h"
@@ -105,8 +103,8 @@ void InfoCanvas::set(QString s) {
 }
 
 void InfoCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu fontsubm(0);
+  QPopupMenu m(0);
+  QPopupMenu fontsubm(0);
   
   m.insertItem(new MenuTitle(TR("Information"), m.font()), -1);
   m.insertSeparator();
@@ -198,7 +196,7 @@ bool InfoCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void InfoCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void InfoCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -209,7 +207,7 @@ void InfoCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((InfoCanvas *) it.current())->itscolor = itscolor;
@@ -221,8 +219,8 @@ void InfoCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void InfoCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void InfoCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   InfoCanvas * x = (InfoCanvas *) it.current();
   
@@ -234,7 +232,7 @@ void InfoCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void InfoCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void InfoCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "information_ref " << get_ident();
   }

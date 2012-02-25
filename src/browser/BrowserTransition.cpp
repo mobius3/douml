@@ -27,14 +27,10 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QPixmap>
+#include <qpainter.h>
+#include <qptrdict.h>
 
 #include "BrowserTransition.h"
 #include "TransitionData.h"
@@ -118,13 +114,13 @@ bool BrowserTransition::undelete(bool, QString & warning, QString & renamed) {
   return TRUE;
 }
 
-void BrowserTransition::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserTransition::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete)
     BrowserStateDiagram::compute_referenced_by(l, this, "transitioncanvas", "transition_ref");
 }
 
-void BrowserTransition::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserTransition::compute_referenced_by(QList<BrowserNode> & l,
 					      BrowserNode * target)
 {
   IdIterator<BrowserTransition> it(all);
@@ -191,8 +187,8 @@ QString BrowserTransition::str(bool horiz, DrawingLanguage lg) const {
 }
 
 void BrowserTransition::menu() {
-  Q3PopupMenu m(0, "transition");
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, "transition");
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -372,7 +368,7 @@ QString BrowserTransition::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p);
 }
 
-void BrowserTransition::save(Q3TextStream & st, bool ref,
+void BrowserTransition::save(QTextStream & st, bool ref,
 			     QString & warning) {
   if (ref) {
     // for TransitionCanvas

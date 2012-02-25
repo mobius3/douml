@@ -3,8 +3,6 @@
 #include "FileOut.h"
 
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
  UmlItem::~UmlItem() {
 }
 
@@ -13,7 +11,7 @@ void UmlItem::xmi(int, char **) {
 }
 
 bool UmlItem::write_if_needed(FileOut & out) {
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   bool used = FALSE;
   
@@ -91,8 +89,8 @@ void UmlItem::write_description_properties(FileOut & out) {
       out << "</UML:ModelElement.taggedValue>\n";
     }
       
-    const Q3Dict<Q3CString> up = properties();    
-    Q3DictIterator<Q3CString> it(up);
+    const QDict<QCString> up = properties();    
+    QDictIterator<QCString> it(up);
     
     while (it.current()) {
       out.indent();

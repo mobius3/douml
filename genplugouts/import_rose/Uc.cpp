@@ -10,11 +10,9 @@
 #include "UmlSequenceDiagram.h"
 #include "UmlCollaborationDiagram.h"
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 void Uc::import(File & f) {
   for (;;) {
-    Q3CString s;
+    QCString s;
 
     switch (f.read(s)) {
     case -1:
@@ -41,7 +39,7 @@ void Uc::import(File & f) {
 
 void Uc::readObjects(File & f) {
   for (;;) {
-    Q3CString s;
+    QCString s;
 
     switch (f.read(s)) {
     case ')':
@@ -79,8 +77,7 @@ void Uc::readObjects(File & f) {
     else {
       if ((s != "Association") &&	// actor -----> UC ...
 	  (s != "Mechanism"))		// seq/col diagram
-	//UmlCom::trace("<br>" + s + " in " + Q3CString(f.name()) + " NOT MANAGED by UseCaseView::readObject()");//[jasa] original line
-	UmlCom::trace("<br>" + s + " in " + Q3CString(f.name().toAscii()) + " NOT MANAGED by UseCaseView::readObject()");//[jasa] conversion from QString to Q3CString
+	UmlCom::trace("<br>" + s + " in " + QCString(f.name()) + " NOT MANAGED by UseCaseView::readObject()");
       f.skipBlock();
     }
   }

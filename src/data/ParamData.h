@@ -26,7 +26,7 @@
 #ifndef PARAMDATA_H
 #define PARAMDATA_H
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "UmlEnum.h"
 #include "AType.h"
@@ -55,7 +55,7 @@ class ParamData {
     
     void send_uml_def(ToolCom * com);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * &, char * &);
 };
 

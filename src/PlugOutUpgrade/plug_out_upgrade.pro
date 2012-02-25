@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG	      += qt warn_on debug
+CONFIG	      += qt warn_on release
 SOURCES	      = util.cpp activity.cpp state.cpp instance.cpp \
 		insertbase.cpp php.cpp python.cpp diagdef.cpp \
 		UmlClassItem.cpp UmlAttribute.cpp \
@@ -97,5 +97,3 @@ SOURCES	      = util.cpp activity.cpp state.cpp instance.cpp \
 TARGET	      = plug_out_upgrade
 DEFINES	      = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON
 INCLUDEPATH   = ../Tools ../PlugOutUpgrade
-#The following line was inserted by qt3to4
-QT += network  qt3support 

@@ -27,12 +27,10 @@
 #define UMLUSECASE_H
 
 #include "UmlBaseUseCase.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 class UmlUseCase : public UmlBaseUseCase {
   public:
-    UmlUseCase(void * id, const Q3CString & n)
+    UmlUseCase(void * id, const QCString & n)
       : UmlBaseUseCase(id, n) {};
 };
 

@@ -29,11 +29,8 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <qcombobox.h> 
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
 
 #include "ClassSettingsDialog.h"
 #include "Settings.h"
@@ -41,13 +38,13 @@
 #include "translate.h"
     
 
-class ComboVisibility : public Q3ComboBox {
+class ComboVisibility : public QComboBox {
   public:
     ComboVisibility(QWidget * parent, UmlVisibility v, bool nodefault);
 };
 
 ComboVisibility::ComboVisibility(QWidget * parent, UmlVisibility v, bool nodefault) 
-    : Q3ComboBox(FALSE, parent) {
+    : QComboBox(FALSE, parent) {
   // the last value MUST be default
   for (int i = 0; i != (int) UmlDefaultVisibility; i += 1)
     insertItem(stringify((UmlVisibility) i));
@@ -63,31 +60,31 @@ ClassSettingsDialog::ClassSettingsDialog(ClassSettings * se, bool nodefault)
     : QDialog(0, "Class Settings dialog", TRUE), settings(se) {
   setCaption(TR("Class Settings dialog"));
   
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
+  QVBoxLayout * vbox = new QVBoxLayout(this);  
+  QHBoxLayout * hbox;
   QString s;
   
   vbox->setMargin(5);
   
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(new QLabel(TR("default attributes visibility : "), this), 1000);
   cbattribute = new ComboVisibility(this, settings->attribute_visibility, nodefault);
   hbox->addWidget(cbattribute);
 
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(new QLabel(TR("default relations visibility : "), this), 1000);
   cbrelation = new ComboVisibility(this, settings->relation_visibility, nodefault);
   hbox->addWidget(cbrelation);
 
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   hbox->addWidget(new QLabel(TR("default operations visibility : "), this), 1000);
   cboperation = new ComboVisibility(this, settings->operation_visibility, nodefault);
   hbox->addWidget(cboperation);
 
-  hbox = new Q3HBoxLayout(vbox); 
+  hbox = new QHBoxLayout(vbox); 
   hbox->setMargin(5);
   QPushButton * accept = new QPushButton(TR("&OK"), this);
   QPushButton * cancel = new QPushButton(TR("&Cancel"), this);

@@ -3,11 +3,9 @@
 #include "UmlClass.h"
 
 #include "UmlState.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-void UmlRegion::init(UmlClass * mother, Q3CString path, Q3CString pretty_path, UmlState *) {
-  const Q3PtrVector<UmlItem> ch = children();
+void UmlRegion::init(UmlClass * mother, QCString path, QCString pretty_path, UmlState *) {
+  const QVector<UmlItem> ch = children();
   unsigned index;
   
   pretty_path = pretty_path + "." + name();

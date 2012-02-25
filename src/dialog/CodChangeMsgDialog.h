@@ -28,10 +28,8 @@
 
 #include <qdialog.h>
 #include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3ValueList>
 
-class Q3ComboBox;
+class QComboBox;
 class ColMsg;
 class OperationData;
 class BrowserClass;
@@ -43,8 +41,8 @@ class CodChangeMsgDialog : public QDialog {
     ColMsg * msg;
     BrowserClass * cl;
     QStringList list;
-    Q3ValueList<const OperationData *> opers;
-    Q3ComboBox * edoper;    
+    QValueList<const OperationData *> opers;
+    QComboBox * edoper;    
     
     static QSize previous_size;
   

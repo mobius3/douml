@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseItem.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 #include "aLanguage.h"
 #include "aVisibility.h"
 #include "aDirection.h"
@@ -12,7 +12,7 @@
 #include "Vector.h"
 #include "FileWriter.h"
 
-#include <q3textstream.h>
+#include <qtextstream.h>
 class UmlDiagram;
 class UmlTypeSpec;
 
@@ -22,12 +22,12 @@ class UmlTypeSpec;
 // You can modify it as you want (except the constructor)
 class UmlItem : public UmlBaseItem {
   public:
-    UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n), known(FALSE) { };
+    UmlItem(void * id, const QCString & n) : UmlBaseItem(id, n), known(FALSE) { };
 
     virtual ~UmlItem();
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QCString sKind();
 
     //  Set the directory where the files will be generated
     //  initializing 'directory'.
@@ -40,7 +40,7 @@ class UmlItem : public UmlBaseItem {
 
     void define();
 
-    static void start_file(Q3CString f, Q3CString s, bool withrefs);
+    static void start_file(QCString f, QCString s, bool withrefs);
 
     static void end_file();
 
@@ -52,21 +52,21 @@ class UmlItem : public UmlBaseItem {
 
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level) = 0;
+    virtual void html(QCString pfix, unsigned int rank, unsigned int level) = 0;
 
     virtual bool chapterp();
 
-    void html(Q3CString pfix, unsigned int rank, Q3CString what, unsigned int level, Q3CString kind);
+    void html(QCString pfix, unsigned int rank, QCString what, unsigned int level, QCString kind);
 
     void html(const char * what, UmlDiagram * diagram);
 
-    void write_children(Q3CString pfix, unsigned int rank, unsigned int level);
+    void write_children(QCString pfix, unsigned int rank, unsigned int level);
 
     void write_dependencies();
 
     void write_properties();
 
-    void chapter(Q3CString k, Q3CString pfix, unsigned int rank, Q3CString kind, unsigned int level);
+    void chapter(QCString k, QCString pfix, unsigned int rank, QCString kind, unsigned int level);
 
     //bypass the comments at the beginning of the form
     
@@ -76,9 +76,9 @@ class UmlItem : public UmlBaseItem {
 
     virtual void write();
 
-    virtual void write(Q3CString target);
+    virtual void write(QCString target);
 
-    static void writeq(Q3CString s);
+    static void writeq(QCString s);
 
     static void writeq(char c);
 
@@ -96,7 +96,7 @@ class UmlItem : public UmlBaseItem {
 
     static void write(anOrdering d);
 
-    static void generate_index(Vector & v, Q3CString k, Q3CString r);
+    static void generate_index(Vector & v, QCString k, QCString r);
 
     static void sort(Vector & v);
 
@@ -108,7 +108,7 @@ class UmlItem : public UmlBaseItem {
 
 
   public:
-    virtual Q3CString pretty_name();
+    virtual QCString pretty_name();
 
 
   protected:
@@ -118,11 +118,11 @@ class UmlItem : public UmlBaseItem {
 
     static FileWriter fw;
 
-    static Q3CString directory;
+    static QCString directory;
 
     static unsigned int nrefs;
 
-    static Q3CString letters;
+    static QCString letters;
 
     //true => use SVG picture rather than PNG
     static bool flat;

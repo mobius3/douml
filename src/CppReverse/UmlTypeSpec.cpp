@@ -4,10 +4,8 @@
 #ifdef ROUNDTRIP
 #include "UmlClass.h"
 #include "CppSettings.h"
-//Added by qt3to4:
-#include <Q3CString>
 
-static inline bool eq(const Q3CString & s1, const Q3CString s2)
+static inline bool eq(const QCString & s1, const QCString s2)
 {
   return (s1.isEmpty()) ? s2.isEmpty() : (s1 == s2);
 }

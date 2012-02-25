@@ -27,13 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
-#include <q3painter.h>
+#include <qpopupmenu.h> 
+#include <qpainter.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QPixmap>
 
 #include "BrowserParameterSet.h"
 #include "ParameterSetData.h"
@@ -110,7 +106,7 @@ void BrowserParameterSet::prepare_update_lib() const {
   all.memo_id_oid(get_ident(), original_id);
 }
     
-void BrowserParameterSet::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete) {
+void BrowserParameterSet::referenced_by(QList<BrowserNode> & l, bool ondelete) {
   BrowserNode::referenced_by(l, ondelete);
   if (! ondelete)
     BrowserActivityDiagram::compute_referenced_by(l, this, "parametersetcanvas", "parameterset_ref");
@@ -136,8 +132,8 @@ const QPixmap* BrowserParameterSet::pixmap(int) const {
 }
 
 void BrowserParameterSet::menu() {
-  Q3PopupMenu m(0, name);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0, name);
+  QPopupMenu toolm(0);
   
   m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
   m.insertSeparator();
@@ -303,7 +299,7 @@ void BrowserParameterSet::init()
   return its_default_stereotypes;
 }
 
-void BrowserParameterSet::save_stereotypes(Q3TextStream & st)
+void BrowserParameterSet::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "parameterset_stereotypes ";
@@ -318,7 +314,7 @@ void BrowserParameterSet::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserParameterSet::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserParameterSet::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "parameterset_ref " << get_ident() << " // " << get_name();
   else {

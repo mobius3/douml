@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <qcstring.h>
 
 class UmlActivity;
 class UmlClassView;
@@ -26,13 +26,13 @@ class UmlBaseActivity : public UmlItem {
 
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivity(void * id, const Q3CString & s) : UmlItem(id, s) {
+     UmlBaseActivity(void * id, const QCString & s) : UmlItem(id, s) {
     }
 
 
   public:
     // return the pre condition
-    const Q3CString & preCondition();
+    const QCString & preCondition();
 
     // set the pre condition
     //
@@ -40,7 +40,7 @@ class UmlBaseActivity : public UmlItem {
     bool set_PreCondition(const char * v);
 
     // return the post condition
-    const Q3CString & postCondition();
+    const QCString & postCondition();
 
     // set the post condition
     //
@@ -49,7 +49,7 @@ class UmlBaseActivity : public UmlItem {
 
 #ifdef WITHCPP
     // return the pre condition in C++
-    const Q3CString & cppPreCondition();
+    const QCString & cppPreCondition();
 
     // set the pre condition in C++
     //
@@ -57,7 +57,7 @@ class UmlBaseActivity : public UmlItem {
     bool set_CppPreCondition(const char * v);
 
     // return the post condition in C++
-    const Q3CString & cppPostCondition();
+    const QCString & cppPostCondition();
 
     // set the post condition in C++
     //
@@ -67,7 +67,7 @@ class UmlBaseActivity : public UmlItem {
 
 #ifdef WITHJAVA
     // return the pre condition in Java
-    const Q3CString & javaPreCondition();
+    const QCString & javaPreCondition();
 
     // set the pre condition in Java
     //
@@ -75,7 +75,7 @@ class UmlBaseActivity : public UmlItem {
     bool set_JavaPreCondition(const char * v);
 
     // return the post condition in Java
-    const Q3CString & javaPostCondition();
+    const QCString & javaPostCondition();
 
     // set the post condition in Java
     //
@@ -84,7 +84,7 @@ class UmlBaseActivity : public UmlItem {
 #endif
 
     // return the constraint
-    const Q3CString & constraint();
+    const QCString & constraint();
 
     // set the constraint
     //
@@ -141,23 +141,23 @@ class UmlBaseActivity : public UmlItem {
 
 
   private:
-    Q3CString _pre_condition;
+    QCString _pre_condition;
 
-    Q3CString _post_condition;
+    QCString _post_condition;
 
 #ifdef WITHCPP
-    Q3CString _cpp_pre_condition;
+    QCString _cpp_pre_condition;
 
-    Q3CString _cpp_post_condition;
+    QCString _cpp_post_condition;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_pre_condition;
+    QCString _java_pre_condition;
 
-    Q3CString _java_post_condition;
+    QCString _java_post_condition;
 #endif
 
-    Q3CString _constraint;
+    QCString _constraint;
 
     bool _read_only;
 

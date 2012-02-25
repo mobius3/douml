@@ -25,8 +25,6 @@
 
 #include "Statistic.h"
 #include "UmlCom.h"
-//Added by qt3to4:
-#include <Q3CString>
 
 unsigned Statistic::n_classes;
 unsigned Statistic::n_attributes;
@@ -35,13 +33,13 @@ unsigned Statistic::n_operations;
 
 void Statistic::produce() 
 {
-  UmlCom::trace(Q3CString("<font face=helvetica>C++ reverse done</font><br><br>") +
-		Q3CString("<font face=helvetica>	") +
-		Q3CString().setNum(n_classes) + Q3CString(" classes </font><br>") +
-		Q3CString("<font face=helvetica>	") +
-		Q3CString().setNum(n_attributes) + Q3CString(" attributes </font><br>") +
-		Q3CString("<font face=helvetica>	") +
-		Q3CString().setNum(n_relations) + " relations </font><br>" +
-		Q3CString("<font face=helvetica>	") +
-		Q3CString().setNum(n_operations) + " operations </font><br><hr><br>");
+  UmlCom::trace(QCString("<font face=helvetica>C++ reverse done</font><br><br>") +
+		QCString("<font face=helvetica>	") +
+		QCString().setNum(n_classes) + QCString(" classes </font><br>") +
+		QCString("<font face=helvetica>	") +
+		QCString().setNum(n_attributes) + QCString(" attributes </font><br>") +
+		QCString("<font face=helvetica>	") +
+		QCString().setNum(n_relations) + " relations </font><br>" +
+		QCString("<font face=helvetica>	") +
+		QCString().setNum(n_operations) + " operations </font><br><hr><br>");
 }

@@ -9,7 +9,7 @@ void UmlActivityControlNode::write(FileOut & out) {
   out.id(this);
   if (!name().isEmpty()){
     out << " name=\"";
-    out.quote((const char*)name());//[jasa] ambiguous call
+    out.quote(name());
     out << '"';
   }
   out << ">\n";
@@ -17,7 +17,7 @@ void UmlActivityControlNode::write(FileOut & out) {
   
   write_description_properties(out);
 
-  const Q3PtrVector<UmlItem> ch = children();
+  const QVector<UmlItem> ch = children();
   unsigned n = ch.size();
   
   for (unsigned i = 0; i != n; i += 1)

@@ -1,9 +1,6 @@
 
 #include "Token.h"
 #include "FileIn.h"
-//Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
 
 void Token::read(FileIn & in, bool any) {
   _couples.clear();
@@ -60,7 +57,7 @@ void Token::read(FileIn & in, bool any) {
     _close = FALSE;
   
   if (str)
-    in.error("syntax error \"" + Q3CString(k) + "\" unexpected");
+    in.error("syntax error \"" + QCString(k) + "\" unexpected");
     
   _what = k;
   
@@ -68,14 +65,14 @@ void Token::read(FileIn & in, bool any) {
     if (!str && (*k == last)) {
       k = in.readWord(any, str);
       if (str || (*k != '>'))
-	in.error("syntax error near '" + Q3CString(k)  + "'>' expected");
+	in.error("syntax error near '" + QCString(k)  + "'>' expected");
       _closed = TRUE;
       return;
     }
     
     if (str) {
       if (!any)
-	in.error("syntax error near '" + Q3CString(k) + "'");
+	in.error("syntax error near '" + QCString(k) + "'");
     }
     else {
       Couple cpl;
@@ -88,7 +85,7 @@ void Token::read(FileIn & in, bool any) {
 	
 	if ((*in.readWord(FALSE, str) != '=') || str) {
 	  if (! any)
-	    in.error("syntax error near '" + Q3CString(k) + "', '=' expected");
+	    in.error("syntax error near '" + QCString(k) + "', '=' expected");
 	}
 	else {
 	  cpl.value = in.readWord(FALSE, str);
@@ -108,20 +105,20 @@ bool Token::close(const char * what) const {
   return _close && (_what == what);
 }
 
-const Q3CString & Token::valueOf(Q3CString key) const {
-  Q3ValueList<Couple>::ConstIterator iter;
+const QCString & Token::valueOf(QCString key) const {
+  QValueList<Couple>::ConstIterator iter;
   
   for (iter = _couples.begin(); iter != _couples.end(); ++iter)
     if ((*iter).key == key)
       return (*iter).value;
 			  
-  static Q3CString null;
+  static QCString null;
   
   return null;
 }
 
-bool Token::valueOf(Q3CString key, Q3CString & v) const {
-  Q3ValueList<Couple>::ConstIterator iter;
+bool Token::valueOf(QCString key, QCString & v) const {
+  QValueList<Couple>::ConstIterator iter;
   
   for (iter = _couples.begin(); iter != _couples.end(); ++iter) {
     if ((*iter).key == key) {

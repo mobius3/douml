@@ -2,7 +2,7 @@
 #define _SGNL_H
 
 
-#include <q3cstring.h>
+#include <qcstring.h>
 #include <qmap.h>
 
 class FileIn;
@@ -18,13 +18,13 @@ class Signal {
 
     //the result is null if not find
     
-    static Q3CString get(Q3CString idref);
+    static QCString get(QCString idref);
 
-    static void add(FileIn & in, Token & token, Q3CString & name, Q3CString & idref);
+    static void add(FileIn & in, Token & token, QCString & name, QCString & idref);
 
 
   protected:
-    static QMap<Q3CString, Q3CString> All;
+    static QMap<QCString, QCString> All;
 
 };
 

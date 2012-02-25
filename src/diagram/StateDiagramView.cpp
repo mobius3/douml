@@ -28,12 +28,7 @@
 
 
 #include <qfont.h>
-#include <q3popupmenu.h> 
-//Added by qt3to4:
-#include <Q3TextStream>
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QDragEnterEvent>
+#include <qpopupmenu.h> 
 
 #include "StateDiagramWindow.h"
 #include "StateDiagramView.h"
@@ -66,7 +61,7 @@ StateDiagramView::StateDiagramView(QWidget * parent, UmlCanvas * canvas, int id)
 }
 
 void StateDiagramView::menu(const QPoint&) {
-  Q3PopupMenu m(0);
+  QPopupMenu m(0);
   
   m.insertItem(new MenuTitle(TR("State diagram menu"), m.font()), -1);
  
@@ -96,7 +91,7 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e) {
 	window()->selectOn();
 	history_save();
 	
-	Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+	QCanvasItem * ci = the_canvas()->collision(e->pos());
 	DiagramItem * di;
 	bool specified = ((ci != 0) && 
 			  ((di = QCanvasItemToDiagramItem(ci)) != 0) &&
@@ -141,7 +136,7 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e) {
 	window()->selectOn();
 	history_save();
 	
-	Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+	QCanvasItem * ci = the_canvas()->collision(e->pos());
 	DiagramItem * di;
 	
 	if ((ci != 0) && 
@@ -170,7 +165,7 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e) {
 	window()->selectOn();
 	history_save();
 	
-	Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+	QCanvasItem * ci = the_canvas()->collision(e->pos());
 	DiagramItem * di;
 	bool specified = ((ci != 0) && 
 			  ((di = QCanvasItemToDiagramItem(ci)) != 0) &&
@@ -208,7 +203,7 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e) {
 	window()->selectOn();
 	history_save();
 	
-	Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+	QCanvasItem * ci = the_canvas()->collision(e->pos());
 	DiagramItem * di;
 	bool specified = ((ci != 0) && 
 			  ((di = QCanvasItemToDiagramItem(ci)) != 0) &&
@@ -393,7 +388,7 @@ void StateDiagramView::dropEvent(QDropEvent * e) {
   }
 }
 
-void StateDiagramView::save(Q3TextStream & st, QString & warning,
+void StateDiagramView::save(QTextStream & st, QString & warning,
 				bool copy) const {
   DiagramItemList items(canvas()->allItems());
   DiagramItem * di;

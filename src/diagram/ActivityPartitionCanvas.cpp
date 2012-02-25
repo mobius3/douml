@@ -27,11 +27,9 @@
 
 
 
-#include <q3popupmenu.h> 
+#include <qpopupmenu.h> 
 #include <qcursor.h>
 #include <qpainter.h>
-//Added by qt3to4:
-#include <Q3TextStream>
 
 #include "ActivityPartitionCanvas.h"
 #include "ActivityPartitionData.h"
@@ -60,8 +58,8 @@ ActivityPartitionCanvas::ActivityPartitionCanvas(BrowserNode * bn, UmlCanvas * c
   BrowserNode * parent = (BrowserNode *) browser_node->parent();
   
   if (parent->get_type() == UmlActivityPartition) {
-    Q3CanvasItemList all = the_canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QCanvasItemList all = the_canvas()->allItems();
+    QCanvasItemList::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
       if ((*cit)->visible()) {
@@ -191,11 +189,11 @@ void ActivityPartitionCanvas::check_size() {
 void ActivityPartitionCanvas::change_scale() {
   double scale = the_canvas()->zoom();
   
-  Q3CanvasRectangle::setVisible(FALSE);
+  QCanvasRectangle::setVisible(FALSE);
   setSize((int) (width_scale100*scale), (int) (height_scale100*scale));
   check_size();
   recenter();
-  Q3CanvasRectangle::setVisible(TRUE);  
+  QCanvasRectangle::setVisible(TRUE);  
 }
 
 void ActivityPartitionCanvas::modified() {
@@ -240,7 +238,7 @@ bool ActivityPartitionCanvas::move_with_its_package() const {
 void ActivityPartitionCanvas::force_sub_inside(bool resize_it) {
   // update sub nodes position to be inside of the activity region
   // or resize it to contains sub elts if resize_it
-  Q3CanvasItemList all = canvas()->allItems();
+  QCanvasItemList all = canvas()->allItems();
   BooL need_sub_upper = FALSE;
   
   if (resize_it)
@@ -254,7 +252,6 @@ void ActivityPartitionCanvas::force_sub_inside(bool resize_it) {
 
 void ActivityPartitionCanvas::draw(QPainter & p) {
   if (! visible()) return;
-  p.setRenderHint(QPainter::Antialiasing, true);
   
   QRect r = rect();
   FILE * fp = svg();
@@ -369,8 +366,8 @@ void ActivityPartitionCanvas::open() {
 }
 
 void ActivityPartitionCanvas::menu(const QPoint&) {
-  Q3PopupMenu m(0);
-  Q3PopupMenu toolm(0);
+  QPopupMenu m(0);
+  QPopupMenu toolm(0);
   int index;
   
   m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
@@ -492,8 +489,8 @@ void ActivityPartitionCanvas::turn(int cx100, int cy100)
   recenter();
   DiagramCanvas::resize(width(), height());
   
-  Q3CanvasItemList all = the_canvas()->allItems();
-  Q3CanvasItemList::Iterator cit;
+  QCanvasItemList all = the_canvas()->allItems();
+  QCanvasItemList::Iterator cit;
   
   for (cit = all.begin(); cit != all.end(); ++cit) {
     if ((*cit)->visible()) {
@@ -554,7 +551,7 @@ bool ActivityPartitionCanvas::has_drawing_settings() const {
   return TRUE;
 }
 
-void ActivityPartitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) {
+void ActivityPartitionCanvas::edit_drawing_settings(QList<DiagramItem> & l) {
   for (;;) {
     ColorSpecVector co(1);
     UmlColor itscolor;
@@ -565,7 +562,7 @@ void ActivityPartitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) 
     
     dialog.raise();
     if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-      Q3PtrListIterator<DiagramItem> it(l);
+      QListIterator<DiagramItem> it(l);
       
       for (; it.current(); ++it) {
 	((ActivityPartitionCanvas *) it.current())->itscolor = itscolor;
@@ -577,8 +574,8 @@ void ActivityPartitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l) 
   }
 }
 
-void ActivityPartitionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
-  Q3PtrListIterator<DiagramItem> it(l);
+void ActivityPartitionCanvas::same_drawing_settings(QList<DiagramItem> & l) {
+  QListIterator<DiagramItem> it(l);
   
   ActivityPartitionCanvas * x = (ActivityPartitionCanvas *) it.current();
   
@@ -591,7 +588,7 @@ void ActivityPartitionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) 
 }
 
 QString ActivityPartitionCanvas::may_start(UmlCode & l) const {
-  return (l == UmlAnchor) ? QString() : TR("illegal");
+  return (l == UmlAnchor) ? 0 : TR("illegal");
 }
 
 QString ActivityPartitionCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
@@ -607,7 +604,7 @@ void ActivityPartitionCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ActivityPartitionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityPartitionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "activitypartitioncanvas_ref " << get_ident() << " // "
       << browser_node->full_name();
@@ -707,7 +704,7 @@ void ActivityPartitionCanvas::history_load(QBuffer & b) {
   
   ::load(w, b);
   ::load(h, b);
-  Q3CanvasRectangle::setSize(w, h);
+  QCanvasRectangle::setSize(w, h);
   
   ::load(h, b);
   horiz = (h != 0);
@@ -728,7 +725,7 @@ void ActivityPartitionCanvas::history_load(QBuffer & b) {
 }
 
 void ActivityPartitionCanvas::history_hide() {
-  Q3CanvasItem::setVisible(FALSE);
+  QCanvasItem::setVisible(FALSE);
 
   disconnect(DrawingSettings::instance(), SIGNAL(changed()),
 	     this, SLOT(modified()));
