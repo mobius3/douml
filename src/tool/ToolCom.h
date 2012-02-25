@@ -28,6 +28,7 @@
 
 #include <qobject.h>
 #include <q3ptrlist.h>
+#include <QProcess>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -65,7 +66,8 @@ class ToolCom  :public QObject {
     char * buffer_out;
     char * p_buffer_out;
     unsigned buffer_out_size;
-  
+    bool safeToContinue;
+    QProcess * externalProcess;
     ToolCom();
     
     void check_size_out(unsigned n);
@@ -115,6 +117,7 @@ class ToolCom  :public QObject {
   
   public slots:
     void connexion_timeout();
+    void processFinished();
 };
 
 #endif
