@@ -37,11 +37,12 @@
 //Added by qt3to4:
 #include <Q3PtrList>
 
+
 using namespace std;
 #endif
-
-#include <qtimer.h>
+#include <QCoreApplication>
 #include <QProcess>
+#include <qtimer.h>
 #include "ToolCom.h"
 #include "Socket.h"
 #include "BrowserNode.h"
@@ -129,6 +130,7 @@ ToolCom::ToolCom() {
   p_buffer_out = 0;
   wanted = 0;
   id = 0;
+  safeToContinue = false;
 }
 
 int ToolCom::run(const char * cmd, BrowserNode * bn,
@@ -152,17 +154,37 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
   
   used.append(com);
   
+  com->safeToContinue = false;
+  com->target = bn;
+  com->cont = pf;
+  com->start = TRUE;
+  com->exit_bouml = exit;
+  com->cmd = strdup(cmd);
+  com->timer = new QTimer(com);
+  connect(com->timer, SIGNAL(timeout()), com, SLOT(connexion_timeout()));
+  com->timer->start(30*1000, TRUE );
+
+
   unsigned port = com->bind(1024);
 
-
-
-  QString commandString = cmd;
-  static QProcess *myProcess = new QProcess();
-  myProcess->start(commandString, QStringList() << QString::number(port));
-
+  QString command = cmd;
+  com->externalProcess = new QProcess();
+  connect(com->externalProcess, SIGNAL(finished(int)), com, SLOT(processFinished()));
 
   errno = 0;
+  QStringList arguments;
+  arguments.append(QStringList() << QString::number(port));
+  com->externalProcess->start(command, arguments);
 
+  while(!com->safeToContinue)
+  {
+    QCoreApplication::processEvents();
+  }
+
+  disconnect(com->externalProcess, SIGNAL(finished(int)), com, SLOT(processFinished()));
+  com->externalProcess->kill();
+  delete com->externalProcess;
+  com->externalProcess = 0;
 
   if (errno != 0) {
     msg_critical("Bouml",
@@ -179,18 +201,6 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     else
       return -1;
   }
-
-  
-  com->target = bn;
-  com->cont = pf;
-  com->start = TRUE;
-  //com->with_ack = TRUE;
-  com->exit_bouml = exit;
-  com->cmd = strdup(cmd);
-  com->timer = new QTimer(com);
-  connect(com->timer, SIGNAL(timeout()), com, SLOT(connexion_timeout()));
-  com->timer->start(30*1000, TRUE );
-
   return com->id;
 }
 
@@ -559,6 +569,7 @@ void ToolCom::connexion_timeout() {
 
     THROW_ERROR 0;
   }  
+  safeToContinue = true;
 }
 
 void ToolCom::data_received(Socket * who) {
@@ -892,5 +903,10 @@ void ToolCom::data_received(Socket * who) {
   }
   
   if (pf != 0)
-    pf();
+      pf();
+}
+
+void ToolCom::processFinished()
+{
+    safeToContinue = true;
 }
