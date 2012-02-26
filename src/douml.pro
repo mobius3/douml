@@ -474,3 +474,18 @@ TARGET		= douml
 DEFINES         = BooL=bool
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+
+
+
+Release{
+    MOC_DIR = ../../Douml_builds/douml/MOC_release
+    OBJECTS_DIR = ../../Douml_builds/douml/Obj_release
+}
+
+Debug{
+    MOC_DIR = ../../Douml_builds/douml/MOC_Debug
+    OBJECTS_DIR = ../../Douml_builds/douml/Obj_Debug
+
+}
+    UI_DIR = ../../Douml_builds/douml/UI
+    DESTDIR = ../../Douml_builds
