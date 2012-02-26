@@ -87,12 +87,12 @@ PackageDialog::PackageDialog(PackageData * da)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(pa->name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(pa->name()),grid);
   edname->setReadOnly(!da->browser_node->is_writable() ||
 		      (da->browser_node == BrowserView::get_project()));
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pa->stereotype));
   if (! visit) {
@@ -107,12 +107,12 @@ PackageDialog::PackageDialog(PackageData * da)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(da->browser_node->get_comment());
   QFont font = comment->font();
@@ -125,52 +125,52 @@ PackageDialog::PackageDialog(PackageData * da)
   
   // C++
   
-  vtab = GridController::PlaceVertical(this);
+  vtab = GridConverter::PlaceVertical(this);
   cpptab = vtab;
   vtab->setMargin(5);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   new QLabel(TR("The generation directories may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  QLabel * lbl1 = new QLabel(TR("headers directory : "), htab);
-  edcpphdir = new LineEdit(pa->cpp_h_dir, htab);
+  QLabel * lbl1 = GridConverter::PlaceWidget(new QLabel(TR("headers directory : ")),htab);
+  edcpphdir = GridConverter::PlaceWidget(new LineEdit(pa->cpp_h_dir),htab);
   if (visit)
     edcpphdir->setReadOnly(TRUE);
   else {
-    htab = GridController::PlaceHorizontal(vtab);
-    new QLabel("", htab);
-    button = new QPushButton(TR("Browse"), htab);
+    htab = GridConverter::PlaceHorizontal(vtab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
+    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
     connect(button, SIGNAL(clicked ()), this, SLOT(cpph_browse()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
     cpphbutton = new QPushButton((pa->cpp_h_dir.isEmpty() || 
 				  QDir::isRelativePath(pa->cpp_h_dir))
 				 ? Absolute : Relative, htab);
     if (GenerationSettings::get_cpp_root_dir().isEmpty())
       cpphbutton->setEnabled(FALSE); 
     connect(cpphbutton, SIGNAL(clicked ()), this, SLOT(cpph_relative()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
   }
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  new QLabel("", htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  QLabel * lbl2 = new QLabel(TR("sources directory : "), htab);
-  edcppsrcdir = new LineEdit(pa->cpp_src_dir, htab);
+  QLabel * lbl2 = GridConverter::PlaceWidget(new QLabel(TR("sources directory : ")),htab);
+  edcppsrcdir = GridConverter::PlaceWidget(new LineEdit(pa->cpp_src_dir),htab);
   if (visit)
     edcppsrcdir->setReadOnly(TRUE);
   else {
-    htab = GridController::PlaceHorizontal(vtab);
-    new QLabel("", htab);
-    button = new QPushButton(TR("Browse"), htab);
+    htab = GridConverter::PlaceHorizontal(vtab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
+    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
     connect(button, SIGNAL(clicked ()), this, SLOT(cppsrc_browse()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
     cppsrcbutton =
       new QPushButton((pa->cpp_src_dir.isEmpty() || 
 		       QDir::isRelativePath(pa->cpp_src_dir))
@@ -178,17 +178,17 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
     if (GenerationSettings::get_cpp_root_dir().isEmpty())
       cppsrcbutton->setEnabled(FALSE); 
     connect(cppsrcbutton, SIGNAL(clicked ()), this, SLOT(cppsrc_relative()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
   }
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  new QLabel("", htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  QLabel * lbl3 = new QLabel("namespace : ", htab);
-  edcppnamespace = new LineEdit(pa->cpp_namespace, htab);
+  QLabel * lbl3 = GridConverter::PlaceWidget(new QLabel("namespace : "),htab);
+  edcppnamespace = GridConverter::PlaceWidget(new LineEdit(pa->cpp_namespace),htab);
   edcppnamespace->setReadOnly(visit);
   
   same_width(lbl1, lbl2, lbl3);
@@ -202,44 +202,44 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   
   // Java
   
-  vtab = GridController::PlaceVertical(this);
+  vtab = GridConverter::PlaceVertical(this);
   javatab = vtab;
   vtab->setMargin(5);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   new QLabel(TR("The generation directory may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl1 = new QLabel(TR("directory : "), htab);
-  edjavadir = new LineEdit(pa->java_dir, htab);
+  lbl1 = GridConverter::PlaceWidget(new QLabel(TR("directory : ")),htab);
+  edjavadir = GridConverter::PlaceWidget(new LineEdit(pa->java_dir),htab);
   if (visit) 
     edjavadir->setReadOnly(TRUE);
   else {
-    htab = GridController::PlaceHorizontal(vtab);
-    new QLabel("", htab);
-    button = new QPushButton(TR("Browse"), htab);
+    htab = GridConverter::PlaceHorizontal(vtab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
+    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
     connect(button, SIGNAL(clicked ()), this, SLOT(java_browse()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
     javabutton = new QPushButton((pa->java_dir.isEmpty() || 
 				  QDir::isRelativePath(pa->java_dir))
 				 ? Absolute : Relative, htab);
     if (GenerationSettings::get_java_root_dir().isEmpty())
       javabutton->setEnabled(FALSE); 
     connect(javabutton, SIGNAL(clicked ()), this, SLOT(java_relative()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
   }
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  new QLabel("", htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl2 = new QLabel("package : ", htab);
-  edjavapackage = new LineEdit(pa->java_package, htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel("package : "),htab);
+  edjavapackage = GridConverter::PlaceWidget(new LineEdit(pa->java_package),htab);
   edjavapackage->setReadOnly(visit);
   
   same_width(lbl1, lbl2);
@@ -253,44 +253,44 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   
   // Php
   
-  vtab = GridController::PlaceVertical(this);
+  vtab = GridConverter::PlaceVertical(this);
   phptab = vtab;
   vtab->setMargin(5);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   new QLabel(TR("The generation directory may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl1 = new QLabel(TR("directory : "), htab);
-  edphpdir = new LineEdit(pa->php_dir, htab);
+  lbl1 = GridConverter::PlaceWidget(new QLabel(TR("directory : ")),htab);
+  edphpdir = GridConverter::PlaceWidget(new LineEdit(pa->php_dir),htab);
   if (visit) 
     edphpdir->setReadOnly(TRUE);
   else {
-    htab = GridController::PlaceHorizontal(vtab);
-    new QLabel("", htab);
-    button = new QPushButton(TR("Browse"), htab);
+    htab = GridConverter::PlaceHorizontal(vtab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
+    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
     connect(button, SIGNAL(clicked ()), this, SLOT(php_browse()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
     phpbutton = new QPushButton((pa->php_dir.isEmpty() || 
 				  QDir::isRelativePath(pa->php_dir))
 				 ? Absolute : Relative, htab);
     if (GenerationSettings::get_php_root_dir().isEmpty())
       phpbutton->setEnabled(FALSE); 
     connect(phpbutton, SIGNAL(clicked ()), this, SLOT(php_relative()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
   }
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  new QLabel("", htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl2 = new QLabel("namespace : ", htab);
-  edphpnamespace = new LineEdit(pa->php_namespace, htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel("namespace : "),htab);
+  edphpnamespace = GridConverter::PlaceWidget(new LineEdit(pa->php_namespace),htab);
   edphpnamespace->setReadOnly(visit);
   
   same_width(lbl1, lbl2);
@@ -304,44 +304,44 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   
   // Python
   
-  vtab = GridController::PlaceVertical(this);
+  vtab = GridConverter::PlaceVertical(this);
   pythontab = vtab;
   vtab->setMargin(5);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   new QLabel(TR("The generation directory may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl1 = new QLabel(TR("directory : "), htab);
-  edpythondir = new LineEdit(pa->python_dir, htab);
+  lbl1 = GridConverter::PlaceWidget(new QLabel(TR("directory : ")),htab);
+  edpythondir = GridConverter::PlaceWidget(new LineEdit(pa->python_dir),htab);
   if (visit) 
     edpythondir->setReadOnly(TRUE);
   else {
-    htab = GridController::PlaceHorizontal(vtab);
-    new QLabel("", htab);
-    button = new QPushButton(TR("Browse"), htab);
+    htab = GridConverter::PlaceHorizontal(vtab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
+    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
     connect(button, SIGNAL(clicked ()), this, SLOT(python_browse()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
     pythonbutton = new QPushButton((pa->python_dir.isEmpty() || 
 				    QDir::isRelativePath(pa->python_dir))
 				   ? Absolute : Relative, htab);
     if (GenerationSettings::get_python_root_dir().isEmpty())
       pythonbutton->setEnabled(FALSE); 
     connect(pythonbutton, SIGNAL(clicked ()), this, SLOT(python_relative()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
   }
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  new QLabel("", htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl2 = new QLabel("package : ", htab);
-  edpythonpackage = new LineEdit(pa->python_package, htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel("package : "),htab);
+  edpythonpackage = GridConverter::PlaceWidget(new LineEdit(pa->python_package),htab);
   edpythonpackage->setReadOnly(visit);
   
   same_width(lbl1, lbl2);
@@ -355,44 +355,44 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   
   // IDL
   
-  vtab = GridController::PlaceVertical(this);
+  vtab = GridConverter::PlaceVertical(this);
   idltab = vtab;
   vtab->setMargin(5);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   new QLabel(TR("The generation directory may be relative in case the root directory\n\
 is specified (through the project menu entry 'edit generation settings')\n\n"), htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl1 = new QLabel(TR("directory : "), htab);
-  edidldir = new LineEdit(pa->idl_dir, htab);
+  lbl1 = GridConverter::PlaceWidget(new QLabel(TR("directory : ")),htab);
+  edidldir = GridConverter::PlaceWidget(new LineEdit(pa->idl_dir),htab);
   if (visit)
     edidldir->setReadOnly(TRUE);
   else {
-    htab = GridController::PlaceHorizontal(vtab);
-    new QLabel("", htab);
-    button = new QPushButton(TR("Browse"), htab);
+    htab = GridConverter::PlaceHorizontal(vtab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
+    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
     connect(button, SIGNAL(clicked ()), this, SLOT(idl_browse()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
     idlbutton = new QPushButton((pa->idl_dir.isEmpty() || 
 				 QDir::isRelativePath(pa->idl_dir))
 				? Absolute : Relative, htab);
     if (GenerationSettings::get_idl_root_dir().isEmpty())
       idlbutton->setEnabled(FALSE); 
     connect(idlbutton, SIGNAL(clicked ()), this, SLOT(idl_relative()));
-    new QLabel("", htab);
+    GridConverter::PlaceWidget(new QLabel(""),htab);
   }
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  new QLabel("", htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl2 = new QLabel("module : ", htab);
-  edidlmodule = new LineEdit(pa->idl_module, htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel("module : "),htab);
+  edidlmodule = GridConverter::PlaceWidget(new LineEdit(pa->idl_module),htab);
   edidlmodule->setReadOnly(visit);
   
   same_width(lbl1, lbl2);
@@ -406,30 +406,30 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   
   // Profile
   
-  vtab = GridController::PlaceVertical(this);
+  vtab = GridConverter::PlaceVertical(this);
   profiletab = vtab;
   vtab->setMargin(5);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  new QLabel("", htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl1 = new QLabel(TR("meta model : \nreference"), htab);
+  lbl1 = GridConverter::PlaceWidget(new QLabel(TR("meta model : \nreference")),htab);
   edmetamodelReference =
-    new LineEdit(pa->browser_node->get_value("metamodelReference"), htab);
+    GridConverter::PlaceWidget(new LineEdit(pa->browser_node->get_value("metamodelReference")),htab);
   edmetamodelReference->setReadOnly(visit);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  new QLabel("", htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
-  lbl2 = new QLabel(TR("meta class : \nreference"), htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel(TR("meta class : \nreference")),htab);
   edmetaclassreference =
-    new LineEdit(pa->browser_node->get_value("metaclassreference"), htab);
+    GridConverter::PlaceWidget(new LineEdit(pa->browser_node->get_value("metaclassreference")),htab);
   edidlmodule->setReadOnly(visit);
   
   same_width(lbl1, lbl2);
@@ -440,7 +440,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
 
   // USER : list key - value
   
-  vtab = GridController::PlaceVertical(this);
+  vtab = GridConverter::PlaceVertical(this);
   kvtable = new KeyValuesTable(da->browser_node, vtab, visit);
   kvtable->remove("metamodelReference");
   kvtable->remove("metaclassreference");

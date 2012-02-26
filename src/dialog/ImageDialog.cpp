@@ -76,7 +76,7 @@ ImageDialog::ImageDialog(QString & p)
   connect(b, SIGNAL(clicked ()), this, SLOT(browse()));
   hbox->addWidget(new QLabel("", this));
   
-  QWidget * vtab = GridController::PlaceVertical(this);
+  QWidget * vtab = GridConverter::PlaceVertical(this);
   
   hbox->addWidget(vtab);
   

@@ -82,12 +82,12 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
     break;
   }
   
-  GridController::PlaceWidget(new QLabel(TR("from : "), grid),grid);
-  GridController::PlaceWidget(new QLabel(rel->get_start_node()->full_name(TRUE), grid),grid);
-  GridController::PlaceWidget(new QLabel(TR("to : "), grid),grid);
-  GridController::PlaceWidget(new QLabel(rel->get_end_node()->full_name(TRUE), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("from : ")),grid);
+  GridConverter::PlaceWidget(new QLabel(rel->get_start_node()->full_name(TRUE)),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("to : ")),grid);
+  GridConverter::PlaceWidget(new QLabel(rel->get_end_node()->full_name(TRUE)),grid);
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(rel->get_stereotype()));
   if (! visit) {
@@ -102,12 +102,12 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   QFont font = comment->font();
@@ -124,7 +124,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   open_dialog(this);

@@ -74,7 +74,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   vbox->addWidget(grid);
-  GridController::PlaceWidget(new QLabel(TR("rank : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("rank : ")),grid);
   cbrank = new Q3ComboBox(FALSE, grid);
   
   ColMsgList all_in;
@@ -119,12 +119,12 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
   sp.setHorData(QSizePolicy::Expanding);
   cbrank->setSizePolicy(sp);
   
-  GridController::PlaceWidget(new QLabel("", grid),grid);
-  GridController::PlaceWidget(new QLabel("", grid),grid);
+  GridConverter::PlaceWidget(new QLabel(""),grid);
+  GridConverter::PlaceWidget(new QLabel(""),grid);
   
   // the operations
   
-  SmallPushButton * b = GridController::PlaceWidget(new SmallPushButton(TR("message :"), grid),grid);
+  SmallPushButton * b = GridConverter::PlaceWidget(new SmallPushButton(TR("message :")),grid);
   
   connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
   
@@ -143,8 +143,8 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
     
   edoper->setSizePolicy(sp);
   
-  GridController::PlaceWidget(new QLabel("", grid),grid);
-  GridController::PlaceWidget(new QLabel("", grid),grid);
+  GridConverter::PlaceWidget(new QLabel(""),grid);
+  GridConverter::PlaceWidget(new QLabel(""),grid);
   
   // ok & cancel
   

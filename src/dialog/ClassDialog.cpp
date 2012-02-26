@@ -115,11 +115,11 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(cl->name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(cl->name()),grid);
   edname->setReadOnly(visit);
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
     
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(cl->get_stereotype()));
@@ -145,8 +145,8 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
     
-  new QLabel(grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   opt_bg = new Q3GroupBox(2, Qt::Horizontal, QString::null, htab);
   abstract_cb = new QCheckBox("abstract", opt_bg);
   if (cl->get_is_abstract()) {
@@ -169,7 +169,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   BrowserNodeList inh;
   
-  basetypelbl = GridController::PlaceWidget(new QLabel(TR("base type : "), grid),grid);
+  basetypelbl = GridConverter::PlaceWidget(new QLabel(TR("base type : ")),grid);
   edbasetype = new Q3ComboBox(!visit, grid);
   if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize),
       inh.count() != 0) {
@@ -200,7 +200,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     
     if (visit) {
       if ((bc != 0) && !bc->deletedp()) {
-	GridController::PlaceWidget(new QLabel(TR("artifact : "), grid),grid);
+	GridConverter::PlaceWidget(new QLabel(TR("artifact : ")),grid);
 	artifact = new Q3ComboBox(FALSE, grid);
 	artifact->insertItem(bc->full_name(TRUE));
       }
@@ -213,7 +213,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	QStringList artifact_names;
 	
 	artifacts.full_names(artifact_names);
-	GridController::PlaceWidget(new QLabel(TR("artifact : "), grid),grid);
+	GridConverter::PlaceWidget(new QLabel(TR("artifact : ")),grid);
 	artifact = new Q3ComboBox(FALSE, grid);
 	artifact->insertItem("");
 	artifact->insertStringList(artifact_names);
@@ -239,26 +239,26 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     artifact = 0;
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
     connect(new SmallPushButton(TR("Default"), vtab), SIGNAL(clicked()),
 	    this, SLOT(default_description()));
   }
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   comment->setFont(font);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("constraint :"), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("constraint :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
-  constraint = new MultiLineEdit(grid);
+  constraint = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   constraint->setReadOnly(visit);
   constraint->setText(c->constraint);
   constraint->setFont(font);
@@ -267,7 +267,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   // parameterized tab
   
-  parametrized_vtab = GridController::PlaceVertical(this);
+  parametrized_vtab = GridConverter::PlaceVertical(this);
   
   parametrized_vtab->setMargin(5);
   
@@ -283,7 +283,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   // instantiate tab
   
   if (cl->get_n_actualparams() != 0) {
-    instantiate_vtab = GridController::PlaceVertical(this);
+    instantiate_vtab = GridConverter::PlaceVertical(this);
   
     instantiate_vtab->setMargin(5);
   
@@ -305,9 +305,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   cpptab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
   bg = new Q3GroupBox(1, Qt::Horizontal, QString::null, htab);
@@ -328,9 +328,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
       bgv->setEnabled(FALSE);
   }
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Declaration : "), htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel(TR("Declaration : ")),htab);
   edcppdecl = new MultiLineEdit(htab);
   edcppdecl->setText(c->cpp_decl);
   font = edcppdecl->font();
@@ -343,11 +343,11 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
 
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
+  lbl3 = GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),htab);
   showcppdecl = new MultiLineEdit(htab);
   showcppdecl->setReadOnly(TRUE);
   showcppdecl->setFont(font);
@@ -355,7 +355,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   if (visit)
     same_width(lbl1, lbl2, lbl3);
   else {
-    htab = GridController::PlaceHorizontal(vtab); 
+    htab = GridConverter::PlaceHorizontal(vtab); 
     lbl4 = new QLabel(htab);
     connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
 	    this, SLOT(cpp_default_decl()));
@@ -376,9 +376,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   javatab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
   bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
@@ -399,9 +399,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	    SLOT(java_default_decl()));
   }
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Definition : "), htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel(TR("Definition : ")),htab);
   edjavadecl = new MultiLineEdit(htab);
   edjavadecl->setText(c->java_decl);
   edjavadecl->setFont(font);
@@ -410,16 +410,16 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update_decl()));
 
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
+  lbl3 = GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),htab);
   showjavadecl = new MultiLineEdit(htab);
   showjavadecl->setReadOnly(TRUE);
   showjavadecl->setFont(font);
 
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   lbl4 = new QLabel(htab);
 
   if (!visit) {
@@ -449,9 +449,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   phptab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
   bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
@@ -472,9 +472,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	    SLOT(php_default_decl()));
   }
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Definition : "), htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel(TR("Definition : ")),htab);
   edphpdecl = new MultiLineEdit(htab);
   edphpdecl->setText(c->php_decl);
   edphpdecl->setFont(font);
@@ -483,16 +483,16 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update_decl()));
 
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
+  lbl3 = GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),htab);
   showphpdecl = new MultiLineEdit(htab);
   showphpdecl->setReadOnly(TRUE);
   showphpdecl->setFont(font);
 
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   lbl4 = new QLabel(htab);
 
   if (!visit) {
@@ -516,9 +516,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   pythontab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
   bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
@@ -539,9 +539,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	    SLOT(python_default_decl()));
   }
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Definition : "), htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel(TR("Definition : ")),htab);
   edpythondecl = new MultiLineEdit(htab);
   edpythondecl->setText(c->python_decl);
   edpythondecl->setFont(font);
@@ -550,16 +550,16 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update_decl()));
 
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
+  lbl3 = GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),htab);
   showpythondecl = new MultiLineEdit(htab);
   showpythondecl->setReadOnly(TRUE);
   showpythondecl->setFont(font);
 
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   lbl4 = new QLabel(htab);
 
   if (!visit) {
@@ -583,9 +583,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   idltab = split;
   split->setOpaqueResize(TRUE);
   
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   switch_bg = new Q3GroupBox(2, Qt::Horizontal, QString::null, htab);
   new QLabel(TR("switch type : "), switch_bg);
@@ -610,7 +610,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   edswitch_type->setCurrentItem(0);
   edswitch_type->setSizePolicy(sp);
   
-  htab = GridController::PlaceHorizontal(vtab);
+  htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
   bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
@@ -636,9 +636,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	    SLOT(idl_default_decl()));
   }
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Declaration : "), htab);
+  lbl2 = GridConverter::PlaceWidget(new QLabel(TR("Declaration : ")),htab);
   edidldecl = new MultiLineEdit(htab);
   edidldecl->setText(c->idl_decl);
   edidldecl->setFont(font);
@@ -647,11 +647,11 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   else
     connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
 
-  vtab = GridController::PlaceVertical(split); 
+  vtab = GridConverter::PlaceVertical(split); 
   
-  htab = GridController::PlaceHorizontal(vtab); 
+  htab = GridConverter::PlaceHorizontal(vtab); 
   htab->setMargin(5);  
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
+  lbl3 = GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),htab);
   showidldecl = new MultiLineEdit(htab);
   showidldecl->setReadOnly(TRUE);
   showidldecl->setFont(font);
@@ -659,7 +659,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   if (visit)
     same_width(lbl1, lbl2, lbl3);
   else {
-   htab = GridController::PlaceHorizontal(vtab); 
+   htab = GridConverter::PlaceHorizontal(vtab); 
     lbl4 = new QLabel(htab);
     connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
 	    this, SLOT(idl_default_decl()));
@@ -688,8 +688,8 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     QStringList tools = Tool::all_display();
     QString s;
     
-    GridController::PlaceWidget(new QLabel(TR("Initialization \nplug-out :"), grid),grid);
-    htab = GridController::PlaceHorizontal(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Initialization \nplug-out :")),grid);
+    htab = GridConverter::PlaceHorizontal(grid);
     stereo_init_cb = new Q3ComboBox(FALSE, htab);
     s = bn->get_value("stereotypeSet");
     stereo_init_cb->insertItem(s);
@@ -700,12 +700,12 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     }
     stereo_init_cb->setCurrentItem(0);
     
-    new QLabel(TR("  parameter(s) : "), htab);
-    edinitparam = new LineEdit(bn->get_value("stereotypeSetParameters"), htab);
+    GridConverter::PlaceWidget(new QLabel(TR("  parameter(s) : ")),htab);
+    edinitparam = GridConverter::PlaceWidget(new LineEdit(bn->get_value("stereotypeSetParameters")),htab);
     edinitparam->setReadOnly(visit);
     
-    GridController::PlaceWidget(new QLabel(TR("Check \nplug-out :"), grid),grid);
-    htab = GridController::PlaceHorizontal(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Check \nplug-out :")),grid);
+    htab = GridConverter::PlaceHorizontal(grid);
     stereo_check_cb = new Q3ComboBox(FALSE, htab);
     s = bn->get_value("stereotypeCheck");
     stereo_check_cb->insertItem(s);
@@ -716,15 +716,15 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     }
     stereo_check_cb->setCurrentItem(0);
     
-    new QLabel(TR("  parameter(s) : "), htab);
-    edcheckparam = new LineEdit(bn->get_value("stereotypeCheckParameters"), htab);
+    GridConverter::PlaceWidget(new QLabel(TR("  parameter(s) : ")),htab);
+    edcheckparam = GridConverter::PlaceWidget(new LineEdit(bn->get_value("stereotypeCheckParameters")),htab);
     edcheckparam->setReadOnly(visit);
     
     QString ip = bn->get_value("stereotypeIconPath");
     
-    GridController::PlaceWidget(new QLabel(TR("Icon path :"), grid),grid);
-    htab = GridController::PlaceHorizontal(grid);
-    ediconpath = new LineEdit(ip, htab);
+    GridConverter::PlaceWidget(new QLabel(TR("Icon path :")),grid);
+    htab = GridConverter::PlaceHorizontal(grid);
+    ediconpath = GridConverter::PlaceWidget(new LineEdit(ip),htab);
     if (visit) {
       ediconpath->setReadOnly(TRUE);
       iconpathrootbutton = iconpathprjbutton = 0;
@@ -734,11 +734,11 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
       RelativePrj = TR("Set it relative to project");
       Absolute = TR("Set it absolute");
 
-      new QLabel("", htab);
+      GridConverter::PlaceWidget(new QLabel(""),htab);
       connect(new SmallPushButton(TR("Browse"), htab),
 	      SIGNAL(clicked ()), this, SLOT(icon_browse()));
-      new QLabel("", htab);
-      vtab = GridController::PlaceVertical(htab);
+      GridConverter::PlaceWidget(new QLabel(""),htab);
+      vtab = GridConverter::PlaceVertical(htab);
       iconpathrootbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
 					       ? Absolute : RelativeRoot, vtab);
       connect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
@@ -746,10 +746,10 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 					      ? Absolute : RelativePrj, vtab);
       connect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
       iconpathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
-      new QLabel("", htab);
+      GridConverter::PlaceWidget(new QLabel(""),htab);
     }
 
-    GridController::PlaceWidget(new QLabel(TR("Apply on : "), grid),grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Apply on : ")),grid);
     applicableon_table =
       new ApplicableOnTable(grid, bn->get_value("stereotypeApplyOn"), visit);
     
@@ -760,7 +760,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   // USER : list key - value
   
-  vtab = GridController::PlaceVertical(this);
+  vtab = GridConverter::PlaceVertical(this);
   kvtable = new KeyValuesTable(bn, vtab, visit);
   kvtable->remove("stereotypeSet");
   kvtable->remove("stereotypeCheck");

@@ -74,11 +74,11 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   
   
 
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
   edname->setReadOnly(visit);
     
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (!visit) {
@@ -95,7 +95,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   
   if (visit) {
     if ((bcv != 0) && !bcv->deletedp()) {
-      GridController::PlaceWidget(new QLabel(TR("deployment\nview : "), grid),grid);
+      GridConverter::PlaceWidget(new QLabel(TR("deployment\nview : ")),grid);
       deploymentview = new Q3ComboBox(FALSE, grid);
       
       BrowserNode * bcv = bn->get_associated();
@@ -112,7 +112,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
       QStringList deploymentview_names;
       
       deploymentviews.full_names(deploymentview_names);
-      GridController::PlaceWidget(new QLabel(TR("deployment\nview : "), grid),grid);
+      GridConverter::PlaceWidget(new QLabel(TR("deployment\nview : ")),grid);
       deploymentview = new Q3ComboBox(FALSE, grid);
       deploymentview->insertItem("");
       deploymentview->insertStringList(deploymentview_names);
@@ -135,12 +135,12 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
       deploymentview = 0;
   }
     
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (!visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   QFont font = comment->font();
@@ -157,7 +157,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //

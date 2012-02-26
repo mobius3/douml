@@ -34,7 +34,6 @@
 #include <Q3PopupMenu>
 //Added by qt3to4:
 #include <Q3PtrList>
-#include <QTextEdit>
 
 #include "AType.h"
 
@@ -52,32 +51,28 @@ class SmallPushButton : public QPushButton {
   public:
     SmallPushButton(const QString & text, QWidget * parent)
       : QPushButton(text, parent) {};
-  
+
     virtual QSize sizeHint() const;
 };
 
 // redefine text() to remove non latin1 characters
-class MultiLineEdit : public QTextEdit {
+class MultiLineEdit : public Q3MultiLineEdit {
   public:
-    MultiLineEdit(QWidget * w, QString _name) : QTextEdit(w)
-    {
-        this->setName(_name);
-    }
-    
+    MultiLineEdit(QWidget * w, const char * name=0) : Q3MultiLineEdit(w, name) { };
+
     virtual void setText(const QString &);
     virtual QString text() const;
-    
+
     QString stripWhiteSpaceText() const;
-    
-//    void setTheText(const QString & s)
-//    {
-//      // no toUnicode
-//      Q3MultiLineEdit::setText(s);
-//    }
-//    QString theText() const {
-//      // no fromUnicode
-//      return Q3MultiLineEdit::text();
-//    }
+
+    void setTheText(const QString & s) {
+      // no toUnicode
+      Q3MultiLineEdit::setText(s);
+    }
+    QString theText() const {
+      // no fromUnicode
+      return Q3MultiLineEdit::text();
+    }
 };
 
 // redefine text() to remove non latin1 characters
@@ -85,10 +80,10 @@ class LineEdit : public QLineEdit {
   public:
     LineEdit(QWidget * w) : QLineEdit(w) { };
     LineEdit(const QString & s, QWidget * parent, const char * name=0) : QLineEdit(s, parent, name) {}
-    
+
     virtual void setText(const QString &);
     virtual QString text() const;
-    
+
     void setTheText(const QString & s) {
       // no toUnicode
       QLineEdit::setText(s);
@@ -99,8 +94,8 @@ class LineEdit : public QLineEdit {
     }
 };
 
-extern void init_font_menu(Q3PopupMenu & fontsubm, UmlCanvas * the_canvas, 
-			   int index);
+extern void init_font_menu(Q3PopupMenu & fontsubm, UmlCanvas * the_canvas,
+               int index);
 extern void same_width(QWidget *, QWidget *);
 extern void same_width(QWidget *, QWidget *, QWidget *);
 extern void same_width(QWidget *, QWidget *, QWidget *, QWidget *);
@@ -115,40 +110,40 @@ extern void edit(const QString &, QString name, void * id, EditType k,
 extern bool check_edits(Q3PtrList<BodyDialog> & edits);
 
 extern AType the_type(const QString & t, const QStringList & types,
-		      BrowserNodeList & nodes);
+			  BrowserNodeList & nodes);
 
 extern QString type(const QString & t, const QStringList & types,
-		    BrowserNodeList & nodes);
+			BrowserNodeList & nodes);
 
 // 'true' name or external name
 extern QString get_cpp_name(const BrowserClass * cl,
-			    ShowContextMode mode = noContext);
+				ShowContextMode mode = noContext);
 extern QString get_java_name(const BrowserClass * cl,
-			    ShowContextMode mode = noContext);
+				ShowContextMode mode = noContext);
 extern QString get_php_name(const BrowserClass * cl,
-			    ShowContextMode mode = noContext);
+				ShowContextMode mode = noContext);
 extern QString get_python_name(const BrowserClass * cl,
-			    ShowContextMode mode = noContext);
+				ShowContextMode mode = noContext);
 extern QString get_idl_name(const BrowserClass * cl,
-			    ShowContextMode mode = noContext);
+				ShowContextMode mode = noContext);
 extern QString get_cpp_name(const AType,
-			    ShowContextMode mode = noContext);
+				ShowContextMode mode = noContext);
 extern QString get_java_name(const AType,
-			    ShowContextMode mode = noContext);
+				ShowContextMode mode = noContext);
 extern QString get_php_name(const AType,
-			    ShowContextMode mode = noContext);
+				ShowContextMode mode = noContext);
 extern QString get_python_name(const AType,
-			    ShowContextMode mode = noContext);
+				ShowContextMode mode = noContext);
 extern QString get_idl_name(const AType,
-			    ShowContextMode mode = noContext);
-    
+                ShowContextMode mode = noContext);
+
 extern void manage_alias(const BrowserNode * node, const char *& p,
-			 QString & s, KeyValuesTable *);
+             QString & s, KeyValuesTable *);
 
 extern int msg_warning(QString caption, QString text,
-		       int button0=QMessageBox::Ok,
-		       int button1=0, int button2=0);
-extern int msg_critical(QString caption, QString text, 
+			   int button0=QMessageBox::Ok,
+			   int button1=0, int button2=0);
+extern int msg_critical(QString caption, QString text,
 			int button0=QMessageBox::Ok,
 			int button1=0, int button2=0);
 extern int msg_information(QString caption, QString text,

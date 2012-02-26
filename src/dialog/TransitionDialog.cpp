@@ -77,11 +77,11 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
   edname->setReadOnly(visit);
     
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(rel->get_stereotype()));
   if (!visit) {
@@ -97,17 +97,17 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   if (r->get_start_node() != r->get_end_node())
     internal_cb = 0;
   else {
-    new QLabel(grid);
-    internal_cb = GridController::PlaceWidget(new QCheckBox(TR("internal"), grid),grid);
+    GridConverter::PlaceWidget(new QLabel(),grid);
+    internal_cb = GridConverter::PlaceWidget(new QCheckBox(TR("internal")),grid);
     internal_cb->setChecked(r->internal());
   }
     
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   //comment->setFont(font);
@@ -134,7 +134,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //
@@ -184,12 +184,12 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
   
   
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("trigger : "), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("trigger : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, sl_trigger);
-  d.edtrigger = new MultiLineEdit(grid);
+  d.edtrigger = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
 
   QFont font = d.edtrigger->font();
 
@@ -201,23 +201,23 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
   if (visit)
     d.edtrigger->setReadOnly(TRUE);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("guard\nconstraint : "), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("guard\nconstraint : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, sl_guard);
-  d.edguard = new MultiLineEdit(grid);
+  d.edguard = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   d.edguard->setFont(font);
   d.edguard->setText(td.guard);
   if (visit)
     d.edguard->setReadOnly(TRUE);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("activity\nexpression : "), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("activity\nexpression : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, sl_expr);
-  d.edexpr = new MultiLineEdit(grid);
+  d.edexpr = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   d.edexpr->setFont(font);
   d.edexpr->setText(td.expr);
   if (visit)

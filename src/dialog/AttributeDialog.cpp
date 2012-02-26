@@ -118,12 +118,12 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("class : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("class : ")),grid);
   new QLabel(((BrowserNode *) a->get_browser_node()->parent())->full_name(TRUE),
 	     grid);
   
-  GridController::PlaceWidget(new QLabel(TR("name :"), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(a->name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name :")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(),a->name(),grid);
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -132,8 +132,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   font.setFixedPitch(TRUE);
   
   if (!java_in_enum_pattern) {
-    GridController::PlaceWidget(new QLabel(TR("stereotype :"), grid),grid);
-    htab = GridController::PlaceHorizontal(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("stereotype :")),grid);
+    htab = GridConverter::PlaceHorizontal(grid);
     edstereotype = new Q3ComboBox(!visit, htab);
     edstereotype->insertItem(toUnicode(a->get_stereotype()));
     if (!visit) {
@@ -167,7 +167,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     sp.setHorData(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
     
-    new QLabel(TR("    multiplicity :  "), htab);
+    GridConverter::PlaceWidget(new QLabel(TR("    multiplicity :  ")),htab);
     multiplicity = new Q3ComboBox(!visit, htab);
     multiplicity->setSizePolicy(sp);
     previous_multiplicity = a->get_multiplicity();
@@ -198,15 +198,15 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     edtype->setCurrentItem(0);
     edtype->setSizePolicy(sp);
 
-    GridController::PlaceWidget(new QLabel(TR("initial value :"), grid),grid);
+    GridConverter::PlaceWidget(new QLabel(TR("initial value :")),grid);
   }
   else {
     multiplicity = 0;
-    GridController::PlaceWidget(new QLabel(TR("value :"), grid),grid);
+    GridConverter::PlaceWidget(new QLabel(TR("value :")),grid);
   }
   
-  htab = GridController::PlaceHorizontal(grid);
-  edinit = new LineEdit(a->get_init_value(), htab);
+  htab = GridConverter::PlaceHorizontal(grid);
+  edinit = GridConverter::PlaceWidget(new LineEdit(a->get_init_value()),htab);
   if (visit)
     edinit->setReadOnly(TRUE);
   else
@@ -216,9 +216,9 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   Q3ButtonGroup * bg;
   
   if (!java_in_enum_pattern) {  
-    new QLabel(grid);
+    GridConverter::PlaceWidget(new QLabel(),grid);
     
-    htab = GridController::PlaceHorizontal(grid);
+    htab = GridConverter::PlaceHorizontal(grid);
     bg = uml_visibility.init(htab, a->get_uml_visibility(), TRUE);
     if (visit)
       bg->setEnabled(FALSE);
@@ -262,9 +262,9 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     unique_cb->setDisabled(visit);
   }
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
   
-  new QLabel(TR("description :"), vtab);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
@@ -276,13 +276,13 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   comment->setText(a->browser_node->get_comment());
   comment->setFont(font);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("constraint :"), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("constraint :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
-  constraint = new MultiLineEdit(grid);
+  constraint = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   constraint->setReadOnly(visit);
   constraint->setText(a->constraint);
   constraint->setFont(font);
@@ -298,8 +298,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     
     if (!cpp_in_enum) {  
-      GridController::PlaceWidget(new QLabel(TR("Visibility :"), grid),grid);
-      htab = GridController::PlaceHorizontal(grid);
+      GridConverter::PlaceWidget(new QLabel(TR("Visibility :")),grid);
+      htab = GridConverter::PlaceHorizontal(grid);
       
       Q3ButtonGroup * bg =
 	cpp_visibility.init(htab, a->get_cpp_visibility(), FALSE, 0, TR("follow uml"));
@@ -307,9 +307,9 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       if (visit)
 	bg->setEnabled(FALSE);
       
-      new QLabel(" ", htab);
+      GridConverter::PlaceWidget(new QLabel(" "),htab);
       
-      mutable_cb = new QCheckBox("mutable", htab);
+      mutable_cb = GridConverter::PlaceWidget(new QCheckBox("mutable"),htab);
       if (a->cpp_mutable)
 	mutable_cb->setChecked(TRUE);
       if (visit)
@@ -318,8 +318,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 	connect(mutable_cb, SIGNAL(toggled(bool)), this, SLOT(cpp_update()));
     }
     
-    GridController::PlaceWidget(new QLabel(TR("Declaration :"), grid),grid);
-    edcppdecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
+    edcppdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edcppdecl->setText(a->get_cppdecl());
     edcppdecl->setFont(font);
     if (visit)
@@ -327,14 +327,14 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     else
       connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update()));
     
-    GridController::PlaceWidget(new QLabel(TR("Result after\nsubstitution :"), grid),grid);
-    showcppdecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
+    showcppdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showcppdecl->setReadOnly(TRUE);
     showcppdecl->setFont(font);
     
     if (! visit) {
-      new QLabel(grid);
-      htab = GridController::PlaceHorizontal(grid);
+      GridConverter::PlaceWidget(new QLabel(),grid);
+      htab = GridConverter::PlaceHorizontal(grid);
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
 	      this, SLOT(cpp_default()));
       connect(new QPushButton(TR("Not generated in C++"), htab), SIGNAL(clicked ()),
@@ -358,8 +358,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     
     if (!java_in_enum && !java_in_enum_pattern) {
-      GridController::PlaceWidget(new QLabel("", grid),grid);
-      transient_cb = GridController::PlaceWidget(new QCheckBox("transient", grid),grid);
+      GridConverter::PlaceWidget(new QLabel(""),grid);
+      transient_cb = GridConverter::PlaceWidget(new QCheckBox("transient"),grid);
       if (a->java_transient)
 	transient_cb->setChecked(TRUE);
       if (visit)
@@ -368,8 +368,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 	connect(transient_cb, SIGNAL(toggled(bool)), this, SLOT(java_update()));
     }
   
-    GridController::PlaceWidget(new QLabel(TR("Declaration :"), grid),grid);
-    edjavadecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
+    edjavadecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edjavadecl->setText(a->get_javadecl());
     edjavadecl->setFont(font);
     if (visit)
@@ -377,13 +377,13 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     else
       connect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update()));
     
-    GridController::PlaceWidget(new QLabel(TR("Result after\nsubstitution :"), grid),grid);
-    showjavadecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
+    showjavadecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showjavadecl->setReadOnly(TRUE);
     showjavadecl->setFont(font);
     
-    new QLabel(grid);
-    htab = GridController::PlaceHorizontal(grid);
+    GridConverter::PlaceWidget(new QLabel(),grid);
+    htab = GridConverter::PlaceHorizontal(grid);
 
     if (! visit) {
       if (java_in_enum) {
@@ -426,8 +426,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     
     
-    GridController::PlaceWidget(new QLabel(TR("Declaration :"), grid),grid);
-    edphpdecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
+    edphpdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edphpdecl->setText(a->get_phpdecl());
     edphpdecl->setFont(font);
     if (visit)
@@ -435,13 +435,13 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     else
       connect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update()));
     
-    GridController::PlaceWidget(new QLabel(TR("Result after\nsubstitution :"), grid),grid);
-    showphpdecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
+    showphpdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showphpdecl->setReadOnly(TRUE);
     showphpdecl->setFont(font);
     
-    new QLabel(grid);
-    htab = GridController::PlaceHorizontal(grid);
+    GridConverter::PlaceWidget(new QLabel(),grid);
+    htab = GridConverter::PlaceHorizontal(grid);
 
     if (! visit) {
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
@@ -466,8 +466,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     
     
-    GridController::PlaceWidget(new QLabel(TR("Declaration :"), grid),grid);
-    edpythondecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
+    edpythondecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edpythondecl->setText(a->get_pythondecl());
     edpythondecl->setFont(font);
     if (visit)
@@ -475,13 +475,13 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     else
       connect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update()));
     
-    GridController::PlaceWidget(new QLabel(TR("Result after\nsubstitution :"), grid),grid);
-    showpythondecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
+    showpythondecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showpythondecl->setReadOnly(TRUE);
     showpythondecl->setFont(font);
     
-    new QLabel(grid);
-    htab = GridController::PlaceHorizontal(grid);
+    GridConverter::PlaceWidget(new QLabel(),grid);
+    htab = GridConverter::PlaceHorizontal(grid);
 
     if (! visit) {
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
@@ -507,7 +507,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     
     if (idl_in_union) {
-      GridController::PlaceWidget(new QLabel("Case :", grid),grid);
+      GridConverter::PlaceWidget(new QLabel("Case :"),grid);
       edcase = new Q3ComboBox(TRUE, grid);
       edcase->insertItem(a->get_idlcase());
       
@@ -531,8 +531,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 	connect(edcase, SIGNAL(activated(int)), this, SLOT(idl_update()));      
     }
     
-    GridController::PlaceWidget(new QLabel(TR("Declaration :"), grid),grid);
-    edidldecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
+    edidldecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edidldecl->setText(a->get_idldecl());
     edidldecl->setFont(font);
     if (visit)
@@ -540,14 +540,14 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     else
       connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update()));
     
-    GridController::PlaceWidget(new QLabel(TR("Result after\nsubstitution :"), grid),grid);
-    showidldecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
+    showidldecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showidldecl->setReadOnly(TRUE);
     showidldecl->setFont(font);
     
     if (! visit) {
-      new QLabel(grid);
-      htab = GridController::PlaceHorizontal(grid);
+      GridConverter::PlaceWidget(new QLabel(),grid);
+      htab = GridConverter::PlaceHorizontal(grid);
       connect(new QPushButton((idl_in_enum) ? TR("Default declaration")
 					    : TR("Default attribute declaration"),
 			      htab),
@@ -577,7 +577,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(a->browser_node, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(a->browser_node, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //

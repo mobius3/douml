@@ -5,8 +5,8 @@
 #include <Q3Grid>
 #include <QGridLayout>
 #include <QLabel>
-#include "data/HaveKeyValueData.h"
-#include "dialog/KeyValueTable.h"
+#include "../data/HaveKeyValueData.h"
+#include "../dialog/KeyValueTable.h"
 struct GridDataStack
 {
     static QGridLayout* layout;
@@ -23,11 +23,15 @@ public:
     GridConverter();
     ~GridConverter();
 
-    static void InitNewGrid(QWidget*, int columns);
-    static void InitNewHBox(QWidget*);
+    static QWidget* InitNewGrid(QWidget*, int columns);
+    static QWidget* InitNewHBox(QWidget*);
 
-    static void PlaceWidget(QWidget* parent, QWidget* grid);
-    static void PlaceWidget(KeyValuesTable* data,  QWidget* grid);
+    static QWidget* PlaceWidget(QWidget* parent, QWidget* grid);
+    static QWidget* PlaceWidget(KeyValuesTable* data,  QWidget* grid);
+    static QWidget* PlaceVertical(QWidget* parent, QWidget* grid);
+    static QWidget* PlaceHorizontal(QWidget* parent, QWidget* grid);
+    static QWidget* PlaceVertical(QWidget* parent);
+    static QWidget* PlaceHorizontal(QWidget* parent);
 
 
 

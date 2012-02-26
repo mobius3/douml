@@ -82,8 +82,8 @@ PinDialog::PinDialog(PinData * pi)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name :"), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(pi->name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name :")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(pi->name()),grid);
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -91,7 +91,7 @@ PinDialog::PinDialog(PinData * pi)
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pi->stereotype));
   if (! visit) {
@@ -124,8 +124,8 @@ PinDialog::PinDialog(PinData * pi)
   edtype->setCurrentItem(0);
   edtype->setSizePolicy(sp);
   
-  GridController::PlaceWidget(new QLabel(TR("direction :"), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("direction :")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   eddir = new Q3ComboBox(FALSE, htab);
   
   UmlParamDirection dir = pi->get_dir();
@@ -141,7 +141,7 @@ PinDialog::PinDialog(PinData * pi)
       eddir->insertItem(stringify(UmlReturn));
   }
   
-  new QLabel(TR("   multiplicity : "), htab);
+  GridConverter::PlaceWidget(new QLabel(TR("   multiplicity : ")),htab);
   edmultiplicity = new Q3ComboBox(!visit, htab);
   edmultiplicity->setSizePolicy(sp);
   edmultiplicity->insertItem(pi->get_multiplicity());
@@ -152,7 +152,7 @@ PinDialog::PinDialog(PinData * pi)
     edmultiplicity->insertItem("1..*");
   }
   
-  new QLabel(TR("   ordering : "), htab);
+  GridConverter::PlaceWidget(new QLabel(TR("   ordering : ")),htab);
   edordering = new Q3ComboBox(FALSE, htab);
   
   UmlOrderingKind o = pi->get_ordering();
@@ -169,7 +169,7 @@ PinDialog::PinDialog(PinData * pi)
       edordering->insertItem(stringify(UmlFifo));
   }
     
-  new QLabel(TR("   effect : "), htab);
+  GridConverter::PlaceWidget(new QLabel(TR("   effect : ")),htab);
   edeffect = new Q3ComboBox(FALSE, htab);
   
   UmlParamEffect e = pi->get_effect();
@@ -188,12 +188,12 @@ PinDialog::PinDialog(PinData * pi)
       edeffect->insertItem(stringify(UmlDelete));
   }
     
-  GridController::PlaceWidget(new QLabel(TR("in state : "), grid),grid);
-  edin_state = GridController::PlaceWidget(new LineEdit(pi->in_state, grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("in state : ")),grid);
+  edin_state = GridConverter::PlaceWidget(new LineEdit(pi->in_state),grid);
   edin_state->setReadOnly(visit);
        
-  new QLabel(grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   Q3ButtonGroup * bg = 
     new Q3ButtonGroup(2, Qt::Horizontal, QString::null, htab);
   
@@ -222,13 +222,13 @@ PinDialog::PinDialog(PinData * pi)
   else
     standard_rb->setChecked(TRUE);
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
   }
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(pi->browser_node->get_comment());
   comment->setFont(font);
@@ -254,7 +254,7 @@ PinDialog::PinDialog(PinData * pi)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(pi->browser_node, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(pi->browser_node, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //
@@ -302,12 +302,12 @@ void PinDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char * v,
   
   
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
   
-  new QLabel(TR("selection : "), vtab);
+  GridConverter::PlaceWidget(new QLabel(TR("selection : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl);
-  ed = new MultiLineEdit(grid);
+  ed = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
 
   QFont font = ed->font();
 

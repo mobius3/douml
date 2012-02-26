@@ -59,15 +59,15 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   vbox->addWidget(grid);
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(inst->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(inst->get_name()),grid);
   edname->setFocus();
   
-  GridController::PlaceWidget(new QLabel("", grid),grid);
-  GridController::PlaceWidget(new QLabel("", grid),grid);
+  GridConverter::PlaceWidget(new QLabel(""),grid);
+  GridConverter::PlaceWidget(new QLabel(""),grid);
   
   SmallPushButton * b =
-    GridController::PlaceWidget(new SmallPushButton(TR(what) + " :", grid),grid);
+    GridConverter::PlaceWidget(new SmallPushButton(TR(what) + " :"),grid);
   
   connect(b, SIGNAL(clicked()), this, SLOT(menu_type()));
   
@@ -77,8 +77,8 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
   edtype->insertStringList(list);
   edtype->setCurrentItem(nodes.find(inst->get_type()));
   
-  GridController::PlaceWidget(new QLabel("", grid),grid);
-  GridController::PlaceWidget(new QLabel("", grid),grid);
+  GridConverter::PlaceWidget(new QLabel(""),grid);
+  GridConverter::PlaceWidget(new QLabel(""),grid);
   
   Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox); 
   

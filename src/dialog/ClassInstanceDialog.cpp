@@ -150,19 +150,19 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
   if (visit)
     edname->setReadOnly(TRUE);
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype :"), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype :")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(bn->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClassInstance));
     edstereotype->setAutoCompletion(completion());
   }
-  SmallPushButton *  b = GridController::PlaceWidget(new SmallPushButton(TR("class :"), grid),grid);
+  SmallPushButton *  b = GridConverter::PlaceWidget(new SmallPushButton(TR("class :")),grid);
   
   connect(b, SIGNAL(clicked()), this, SLOT(menu_class()));
 
@@ -186,14 +186,14 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
       cl_container = 0;
   }
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
   
-  new QLabel(TR("description :"), vtab);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
   }
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   
@@ -232,7 +232,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   type_changed(edtype->currentItem());

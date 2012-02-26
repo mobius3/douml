@@ -76,32 +76,32 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   
   
   
-  new QLabel(grid);  
+  GridConverter::PlaceWidget(new QLabel(),grid);  
   new QLabel(TR("MANDATORY, choose a value between 2 and 127 not used by an other person working at the same time on a project with you.\n"
 	     "To be safe, if possible choose a value not used by an other person even not working on a given project with you"),
 	     grid);
   
-  GridController::PlaceWidget(new QLabel(TR("Own identifier "), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Own identifier ")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   if (conv)
     s = getenv("BOUML_ID");	// yes !
   else if (! noid)
     s.setNum(user_id());
-  ed_id = new QLineEdit(s, htab);
+  ed_id = GridConverter::PlaceWidget(new QLineEdit(s),htab);
   if (BrowserView::get_project() != 0) {
     ed_id->setEnabled(FALSE);
-    new QLabel(TR("   The identifier can't be modified while a project is load"), htab);
+    GridConverter::PlaceWidget(new QLabel(TR("   The identifier can't be modified while a project is load")),htab);
   }
 
   //
   
-  new QLabel(grid);  
+  GridConverter::PlaceWidget(new QLabel(),grid);  
   new QLabel(TR("\nOptional, to indicate where are the HTML pages of the reference manual. Used by the help (called by the F1 key) to show the\n"
 	     "chapter corresponding to the kind of the element selected in the browser"),
 	     grid);
 
-  GridController::PlaceWidget(new QLabel(TR("Manual path"), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Manual path")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   ed_doc = new QLineEdit(htab);
   if (!conv)
     ed_doc->setText(manual_dir());
@@ -116,71 +116,71 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 
 
 
-  new QLabel(" ", htab);
-  button = new QPushButton(TR("Browse"), htab);
+  GridConverter::PlaceWidget(new QLabel(" "),htab);
+  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
   connect(button, SIGNAL(clicked ()), this, SLOT(doc_browse()));
 
   //
   
-  new QLabel(grid);  
+  GridConverter::PlaceWidget(new QLabel(),grid);  
   new QLabel(TR("\nOptional, to indicate a web navigator program. If it is not defined the reference manual will be shown with an internal simple viewer"),
 	     grid);
-  GridController::PlaceWidget(new QLabel(TR("Navigator"), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Navigator")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   ed_navigator = new QLineEdit(htab);
   if (!conv)
     ed_navigator->setText(navigator_path());
-  new QLabel(" ", htab);
-  button = new QPushButton(TR("Browse"), htab);
+  GridConverter::PlaceWidget(new QLabel(" "),htab);
+  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
   connect(button, SIGNAL(clicked ()), this, SLOT(navigator_browse()));
 
   //
   
-  new QLabel(grid);  
+  GridConverter::PlaceWidget(new QLabel(),grid);  
   new QLabel(TR("\nOptional, to indicate a template project. This allows to create new projects getting all the template project settings"),
 	     grid);
-  GridController::PlaceWidget(new QLabel("Template project", grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel("Template project"),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   if (conv)
     s = getenv("BOUML_TEMPLATE");	// yes !
   else
     s = template_project();
-  ed_template = new QLineEdit(s, htab);
-  new QLabel(" ", htab);
-  button = new QPushButton(TR("Browse"), htab);
+  ed_template = GridConverter::PlaceWidget(new QLineEdit(s),htab);
+  GridConverter::PlaceWidget(new QLabel(" "),htab);
+  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
   connect(button, SIGNAL(clicked ()), this, SLOT(template_browse()));
 
   //
   
-  new QLabel(grid);  
+  GridConverter::PlaceWidget(new QLabel(),grid);  
   new QLabel(TR("\nOptional, to indicate a text editor (it must creates an own window). Else Bouml will use an internal editor"),
 	     grid);
-  GridController::PlaceWidget(new QLabel(TR("Editor path "), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Editor path ")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   if (conv)
     s = getenv("BOUML_EDITOR");	// yes !
   else
     s = editor();
-  ed_editor = new QLineEdit(s, htab);
-  new QLabel(" ", htab);
-  button = new QPushButton(TR("Browse"), htab);
+  ed_editor = GridConverter::PlaceWidget(new QLineEdit(s),htab);
+  GridConverter::PlaceWidget(new QLabel(" "),htab);
+  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
   connect(button, SIGNAL(clicked ()), this, SLOT(editor_browse()));
 
   //
   
-  new QLabel(grid);  
+  GridConverter::PlaceWidget(new QLabel(),grid);  
   new QLabel(TR("\nOptional, to choose a language for menus and dialogs (default is English). You may have to select a corresponding character set"),
 	     grid);
-  GridController::PlaceWidget(new QLabel(TR("Translation file path "), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
-  ed_lang = new QLineEdit(current_lang(), htab);
-  new QLabel(" ", htab);
-  button = new QPushButton(TR("Browse"), htab);
+  GridConverter::PlaceWidget(new QLabel(TR("Translation file path ")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
+  ed_lang = GridConverter::PlaceWidget(new QLineEdit(current_lang()),htab);
+  GridConverter::PlaceWidget(new QLabel(" "),htab);
+  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
   connect(button, SIGNAL(clicked ()), this, SLOT(lang_browse()));
 
   //
   
-  new QLabel(grid);  
+  GridConverter::PlaceWidget(new QLabel(),grid);  
 
 
 
@@ -188,7 +188,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to indicate a character set in case you use non ISO_8859-1/latin1 characters. For instance KOI8-R or KOI8-RU for Cyrillic"),
 	     grid);
 
-  GridController::PlaceWidget(new QLabel(TR("Character set "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Character set ")),grid);
   cb_charset = new Q3ComboBox(FALSE, grid);
   cb_charset->setAutoCompletion(completion());
   
@@ -220,11 +220,11 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 
   //
   
-  new QLabel(grid);  
+  GridConverter::PlaceWidget(new QLabel(),grid);  
   new QLabel(TR("\nIn case you have a multiple screens configuration the best for you is to ask Bouml to place by default the dialogs in one of these\n"
 	     "screens giving the area, else the dialogs will be shown on the center of the virtual screen."),
 	     grid);
-  GridController::PlaceWidget(new QLabel(TR("Default screen "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Default screen ")),grid);
   
   QString x0, y0, x1, y1;
   int top, left, bottom, right;
@@ -250,20 +250,20 @@ EnvDialog::EnvDialog(bool conv, bool noid)
     y1.setNum(bottom);
   }
   
-  htab = GridController::PlaceHorizontal(grid);
-  new QLabel(TR("left: "), htab);
-  ed_xmin = new QLineEdit(x0, htab);
-  new QLabel(TR("      top: "), htab);
-  ed_ymin = new QLineEdit(y0, htab);
-  new QLabel(TR("      right: "), htab);
-  ed_xmax = new QLineEdit(x1, htab);
-  new QLabel(TR("      bottom: "), htab);
-  ed_ymax = new QLineEdit(y1, htab);
+  htab = GridConverter::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("left: ")),htab);
+  ed_xmin = GridConverter::PlaceWidget(new QLineEdit(x0),htab);
+  GridConverter::PlaceWidget(new QLabel(TR("      top: ")),htab);
+  ed_ymin = GridConverter::PlaceWidget(new QLineEdit(y0),htab);
+  GridConverter::PlaceWidget(new QLabel(TR("      right: ")),htab);
+  ed_xmax = GridConverter::PlaceWidget(new QLineEdit(x1),htab);
+  GridConverter::PlaceWidget(new QLabel(TR("      bottom: ")),htab);
+  ed_ymax = GridConverter::PlaceWidget(new QLineEdit(y1),htab);
   
   //
   
-  new QLabel(grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   new QLabel(htab);
   connect(new QPushButton(TR("OK"), htab), SIGNAL(clicked()), this, SLOT(accept()));
   new QLabel(htab);

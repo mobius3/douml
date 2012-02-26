@@ -127,7 +127,7 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
   hbox = new Q3HBoxLayout(vbox); 
   hbox->setMargin(5);
   
-  QWidget * htab = GridController::PlaceHorizontal(this);
+  QWidget * htab = GridConverter::PlaceHorizontal(this);
   
   htab->setMargin(5);
   

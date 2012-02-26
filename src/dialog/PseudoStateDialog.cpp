@@ -95,11 +95,11 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   
   
 
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
   edname->setReadOnly(visit);
 
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pst->get_stereotype()));
   if (! visit) {
@@ -165,12 +165,12 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   else
     edreference = 0;
 
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
 
@@ -189,7 +189,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   open_dialog(this);

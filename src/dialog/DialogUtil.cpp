@@ -35,7 +35,7 @@
 #include <stdio.h>
 
 #include <qlabel.h>
-#include <q3textstream.h> 
+#include <q3textstream.h>
 #include <qfontmetrics.h>
 #include <q3popupmenu.h>
 #include <q3tabdialog.h>
@@ -64,9 +64,9 @@ static QString BoumlEditor;
 QSize SmallPushButton::sizeHint() const {
   QFontMetrics fm = fontMetrics();
   QSize sz = fm.size(Qt::TextShowMnemonic, text());
-  
+
   return QSize(sz.width() + sz.width()/8 + 4,
-	       sz.height() + sz.height()/8 + 4);
+           sz.height() + sz.height()/8 + 4);
 }
 
 // setText() redefinition
@@ -77,13 +77,13 @@ void MultiLineEdit::setText(const QString & s) {
 // text() redefinition
 QString MultiLineEdit::text() const {
   QString t = Q3MultiLineEdit::text();
-  
+
   return fromUnicode(t);
 }
 
 QString MultiLineEdit::stripWhiteSpaceText() const {
   QString t = Q3MultiLineEdit::text();
-  
+
   return fromUnicode(t.stripWhiteSpace());
 }
 
@@ -95,7 +95,7 @@ void LineEdit::setText(const QString & s) {
 // text() redefinition
 QString LineEdit::text() const {
   QString t = QLineEdit::text();
-  
+
   return fromUnicode(t);
 }
 
@@ -104,15 +104,15 @@ QString LineEdit::text() const {
 void init_font_menu(Q3PopupMenu & fontsubm, UmlCanvas * canvas, int index)
 {
   int f;
-  
+
   for (f = 0; f != UmlFontNumber; f += 1) {
     QString s = stringify((UmlFont) f);
     int i = 0;
-    
+
     while ((i = s.find('_', i)) != -1)
       s.replace(i, 1, " ");
-  
-    fontsubm.insertItem(new MenuFont(s, canvas->get_font((UmlFont) f)),
+
+	fontsubm.insertItem(new MenuFont(s, canvas->get_font((UmlFont) f)),
 			index++);
   }
 }
@@ -121,7 +121,7 @@ void same_width(QWidget * l1, QWidget * l2)
 {
   int w1 = l1->sizeHint().width();
   int w2 = l2->sizeHint().width();
-  
+
   if (w1 > w2)
     l2-> setFixedWidth(w1);
   else if (w1 != w2)
@@ -131,13 +131,13 @@ void same_width(QWidget * l1, QWidget * l2)
 void same_width(QWidget * l1, QWidget * l2, QWidget * l3)
 {
   int w1, w2;
-  
+
   w1 = l1->sizeHint().width();
   if ((w2 = l2->sizeHint().width()) > w1)
     w1 = w2;
   if ((w2 = l3->sizeHint().width()) > w1)
     w1 = w2;
-  
+
   l1-> setFixedWidth(w1);
   l2-> setFixedWidth(w1);
   l3-> setFixedWidth(w1);
@@ -146,7 +146,7 @@ void same_width(QWidget * l1, QWidget * l2, QWidget * l3)
 void same_width(QWidget * l1, QWidget * l2, QWidget * l3, QWidget * l4)
 {
   int w1, w2;
-  
+
   w1 = l1->sizeHint().width();
   if ((w2 = l2->sizeHint().width()) > w1)
     w1 = w2;
@@ -154,7 +154,7 @@ void same_width(QWidget * l1, QWidget * l2, QWidget * l3, QWidget * l4)
     w1 = w2;
   if ((w2 = l4->sizeHint().width()) > w1)
     w1 = w2;
-  
+
   l1-> setFixedWidth(w1);
   l2-> setFixedWidth(w1);
   l3-> setFixedWidth(w1);
@@ -162,10 +162,10 @@ void same_width(QWidget * l1, QWidget * l2, QWidget * l3, QWidget * l4)
 }
 
 void same_width(QWidget * l1, QWidget * l2, QWidget * l3,
-		QWidget * l4, QWidget * l5)
+        QWidget * l4, QWidget * l5)
 {
   int w1, w2;
-  
+
   w1 = l1->sizeHint().width();
   if ((w2 = l2->sizeHint().width()) > w1)
     w1 = w2;
@@ -175,7 +175,7 @@ void same_width(QWidget * l1, QWidget * l2, QWidget * l3,
     w1 = w2;
   if ((w2 = l5->sizeHint().width()) > w1)
     w1 = w2;
-  
+
   l1-> setFixedWidth(w1);
   l2-> setFixedWidth(w1);
   l3-> setFixedWidth(w1);
@@ -184,30 +184,30 @@ void same_width(QWidget * l1, QWidget * l2, QWidget * l3,
 }
 
 void edit(const QString & s, QString name, void * id, EditType k,
-	  Q3TabDialog * d, post_edit pf, Q3PtrList<BodyDialog> & edits)
+      Q3TabDialog * d, post_edit pf, Q3PtrList<BodyDialog> & edits)
 {
   QString ed = BoumlEditor;
-  
+
   if (!ed.isEmpty() && (pf != 0)) {
     // try to use it
     QString f;
-    
+
     switch (k) {
     case CppEdit:
       f.sprintf("%s_%lx_%d.%s", (const char *) name, (unsigned long) id, user_id(),
-		(const char *) GenerationSettings::get_cpp_src_extension());
+        (const char *) GenerationSettings::get_cpp_src_extension());
       break;
     case JavaEdit:
       f.sprintf("%s_%lx_%d.%s", (const char *) name, (unsigned long) id, user_id(),
-		(const char *) GenerationSettings::get_java_extension());
+        (const char *) GenerationSettings::get_java_extension());
       break;
     case PhpEdit:
       f.sprintf("%s_%lx_%d.%s", (const char *) name, (unsigned long) id, user_id(),
-		(const char *) GenerationSettings::get_php_extension());
+        (const char *) GenerationSettings::get_php_extension());
       break;
     case PythonEdit:
       f.sprintf("%s_%lx_%d.%s", (const char *) name, (unsigned long) id, user_id(),
-		(const char *) GenerationSettings::get_python_extension());
+        (const char *) GenerationSettings::get_python_extension());
       break;
     default: // TxTEdit
       f.sprintf("%s_%lx_%d.txt", (const char *) name, (unsigned long) id, user_id());
@@ -215,15 +215,15 @@ void edit(const QString & s, QString name, void * id, EditType k,
 
     for (int index = 0; index != (int) name.length(); index += 1)
       if (!f[index].isLetterOrNumber())
-	f.replace(index, 1, "_");
-    
+    f.replace(index, 1, "_");
+
     QString path = BrowserView::get_dir().absFilePath(f);
-    
+
     FILE * fp = fopen((const char *) path, "wb");
-    
+
     if (fp != 0) {
       if (!s.isEmpty())
-	fputs((const char *) s, fp);
+    fputs((const char *) s, fp);
       fclose(fp);
 
 
@@ -241,16 +241,16 @@ void edit(const QString & s, QString name, void * id, EditType k,
       ed += " \"" + path + "\"&";
       (void) system(ed);
 
-      if (d->hasOkButton() && (pf != 0))
+	  if (d->hasOkButton() && (pf != 0))
 	(new DialogTimer(s, path, d, pf))->start(1000);
-      return;
-    }
-    else
-      msg_critical("Error", TR("Cannot open '%1'", path));
+	  return;
+	}
+	else
+	  msg_critical("Error", TR("Cannot open '%1'", path));
   }
   else if (d->isModal()) {
     BodyDialog * bd = new BodyDialog(s, d, pf, k, name, edits);
-    
+
     bd->exec();	// will be deleted elsewhere
   }
   else
@@ -261,35 +261,35 @@ bool check_edits(Q3PtrList<BodyDialog> & edits)
 {
   if (edits.isEmpty())
     return TRUE;
-  
+
   return (msg_critical("Bouml",
-		       TR("Sub dialog(s) still opened\n"
-			  "If you choose 'Ok' the dialog will be closed\n"
-			  "without taking into account it content"),
-		       QMessageBox::Ok, QMessageBox::Abort)
-	  == QMessageBox::Ok);
+               TR("Sub dialog(s) still opened\n"
+              "If you choose 'Ok' the dialog will be closed\n"
+              "without taking into account it content"),
+               QMessageBox::Ok, QMessageBox::Abort)
+      == QMessageBox::Ok);
 }
 
 AType the_type(const QString & t, const QStringList & types,
-	       BrowserNodeList & nodes)
+           BrowserNodeList & nodes)
 {
   AType result;
   int rank = types.findIndex(t);
-  
-  if (rank != -1) 
+
+  if (rank != -1)
     result.type = ((BrowserClass *) nodes.at(rank));
   else
     result.explicit_type = t;
-  
+
   return result;
 }
 
 QString type(const QString & t, const QStringList & types,
-	     BrowserNodeList & nodes)
+         BrowserNodeList & nodes)
 {
   int rank = types.findIndex(t);
-  
-  return (rank != -1) 
+
+  return (rank != -1)
     ? QString(((BrowserClass *) nodes.at(rank))->get_name())
     : t;
 }
@@ -297,16 +297,16 @@ QString type(const QString & t, const QStringList & types,
 QString get_cpp_name(const BrowserClass * cl, ShowContextMode mode)
 {
   ClassData * d = (ClassData *) cl->get_data();
-  
+
   if (! d->cpp_is_external())
     return cl->contextual_name(mode);
-  
+
   QString name = cl->get_name();
   QString s = d->get_cppdecl();
   int index = s.find('\n');
-  
+
   s = (index == -1) ? s.stripWhiteSpace()
-		    : s.left(index).stripWhiteSpace();
+            : s.left(index).stripWhiteSpace();
   if ((index = s.find("${name}")) != -1)
     s.replace(index, 7, name);
   else if ((index = s.find("${Name}")) != -1)
@@ -315,23 +315,23 @@ QString get_cpp_name(const BrowserClass * cl, ShowContextMode mode)
     s.replace(index, 7, name.upper());
   else if ((index = s.find("${nAME}")) != -1)
     s.replace(index, 7, name.lower());
-  
+
   return s;
 }
 
 QString get_java_name(const BrowserClass * cl, ShowContextMode mode)
 {
   ClassData * d = (ClassData *) cl->get_data();
-  
+
   if (! d->java_is_external())
     return cl->contextual_name(mode);
-  
+
   QString name = cl->get_name();
   QString s = d->get_javadecl();
   int index = s.find('\n');
-  
+
   s = (index == -1) ? s.stripWhiteSpace()
-		    : s.left(index).stripWhiteSpace();
+            : s.left(index).stripWhiteSpace();
   if ((index = s.find("${name}")) != -1)
     s.replace(index, 7, name);
   else if ((index = s.find("${Name}")) != -1)
@@ -340,23 +340,23 @@ QString get_java_name(const BrowserClass * cl, ShowContextMode mode)
     s.replace(index, 7, name.upper());
   else if ((index = s.find("${nAME}")) != -1)
     s.replace(index, 7, name.lower());
-  
+
   return s;
 }
 
 QString get_php_name(const BrowserClass * cl, ShowContextMode mode)
 {
   ClassData * d = (ClassData *) cl->get_data();
-  
+
   if (! d->php_is_external())
     return cl->contextual_name(mode);
-  
+
   QString name = cl->get_name();
   QString s = d->get_phpdecl();
   int index = s.find('\n');
-  
+
   s = (index == -1) ? s.stripWhiteSpace()
-		    : s.left(index).stripWhiteSpace();
+            : s.left(index).stripWhiteSpace();
   if ((index = s.find("${name}")) != -1)
     s.replace(index, 7, name);
   else if ((index = s.find("${Name}")) != -1)
@@ -365,23 +365,23 @@ QString get_php_name(const BrowserClass * cl, ShowContextMode mode)
     s.replace(index, 7, name.upper());
   else if ((index = s.find("${nAME}")) != -1)
     s.replace(index, 7, name.lower());
-  
+
   return s;
 }
 
 QString get_python_name(const BrowserClass * cl, ShowContextMode mode)
 {
   ClassData * d = (ClassData *) cl->get_data();
-  
+
   if (! d->python_is_external())
     return cl->contextual_name(mode);
-  
+
   QString name = cl->get_name();
   QString s = d->get_pythondecl();
   int index = s.find('\n');
-  
+
   s = (index == -1) ? s.stripWhiteSpace()
-		    : s.left(index).stripWhiteSpace();
+            : s.left(index).stripWhiteSpace();
   if ((index = s.find("${name}")) != -1)
     s.replace(index, 7, name);
   else if ((index = s.find("${Name}")) != -1)
@@ -390,23 +390,23 @@ QString get_python_name(const BrowserClass * cl, ShowContextMode mode)
     s.replace(index, 7, name.upper());
   else if ((index = s.find("${nAME}")) != -1)
     s.replace(index, 7, name.lower());
-  
+
   return s;
 }
 
 QString get_idl_name(const BrowserClass * cl, ShowContextMode mode)
 {
   ClassData * d = (ClassData *) cl->get_data();
-  
+
   if (! d->idl_is_external())
     return cl->contextual_name(mode);
-  
+
   QString name = cl->get_name();
   QString s = d->get_idldecl();
   int index = s.find('\n');
-  
+
   s = (index == -1) ? s.stripWhiteSpace()
-		    : s.left(index).stripWhiteSpace();
+            : s.left(index).stripWhiteSpace();
   if ((index = s.find("${name}")) != -1)
     s.replace(index, 7, name);
   else if ((index = s.find("${Name}")) != -1)
@@ -415,7 +415,7 @@ QString get_idl_name(const BrowserClass * cl, ShowContextMode mode)
     s.replace(index, 7, name.upper());
   else if ((index = s.find("${nAME}")) != -1)
     s.replace(index, 7, name.lower());
-  
+
   return s;
 }
 
@@ -465,13 +465,13 @@ void manage_alias(const BrowserNode * node,
 {
   // p starts by '@'
   const char * pclosed;
-  
+
   if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
     static char st[256];
     char * key = ((pclosed - p) > 255) ? new char[pclosed - p - 1] : st;
     QString qsvalue;
     int keylen = pclosed - p - 2;
-    
+
     strncpy(key, p + 2, keylen);
     key[keylen] = 0;
 
@@ -482,29 +482,29 @@ void manage_alias(const BrowserNode * node,
     else {
       const char * value = 0;
       const BrowserNode * nd = (kvt != 0)
-	? ((const BrowserNode *) node->parent())
-	: node;
-      
-      while (nd != 0) {
+    ? ((const BrowserNode *) node->parent())
+    : node;
+
+	  while (nd != 0) {
 	if ((value = nd->get_value(key)) != 0)
 	  break;
 	nd = (BrowserNode *) nd->parent();
-      }
-      
-      if (value != 0)
+	  }
+
+	  if (value != 0)
 	// find, insert the value
 	s += value;
-      else {
+	  else {
 	// not find, insert the key
 	s += "@{";
 	s += key;
 	s += "}";
-      }
-    }
-    
+	  }
+	}
+
     // bypass the key
     p += keylen + 3;
-      
+
     if (key != st)
       delete [] key;
   }
@@ -520,46 +520,46 @@ static int msg_msg(QMessageBox::Icon icon,
 		   int button0, int button1, int button2)
 {
   QMessageBox mb(caption, text, icon,
-		 button0 | QMessageBox::Default,
-		 button1,
-		 (button2 == 0) ? 0 : button2 | QMessageBox::Escape);
-  
+         button0 | QMessageBox::Default,
+         button1,
+         (button2 == 0) ? 0 : button2 | QMessageBox::Escape);
+
   if (UmlDesktop::fixed())
     UmlDesktop::tocenter(&mb);
-  
+
   return mb.exec();
 }
 
 int msg_warning(QString caption, QString text,
-		int button0, int button1, int button2)
+        int button0, int button1, int button2)
 {
   if (UmlDesktop::nogui() && (button1 == 0)) {
     printf("warning\n%s\n%s\n", (const char *) caption, (const char *) text);
     return 0;
   }
-  
+
   return msg_msg(QMessageBox::Warning, caption, text, button0, button1, button2);
 }
 
-int msg_critical(QString caption, QString text, 
-		 int button0, int button1, int button2)
+int msg_critical(QString caption, QString text,
+         int button0, int button1, int button2)
 {
   if (UmlDesktop::nogui() && (button1 == 0)) {
     printf("critical\n%s\n%s\n", (const char *) caption, (const char *) text);
     return 0;
   }
-  
+
   return msg_msg(QMessageBox::Critical, caption, text, button0, button1, button2);
 }
 
 int msg_information(QString caption, QString text,
-		    int button0, int button1, int button2)
+            int button0, int button1, int button2)
 {
   if (UmlDesktop::nogui() && (button1 == 0)) {
     printf("information\n%s\n%s\n", (const char *) caption, (const char *) text);
     return 0;
   }
-  
+
   return msg_msg(QMessageBox::Information, caption, text, button0, button1, button2);
 }
 

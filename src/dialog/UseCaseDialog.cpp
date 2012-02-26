@@ -72,11 +72,11 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   
 
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
   edname->setReadOnly(visit);
 
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(uc->get_stereotype()));
   if (! visit) {
@@ -89,8 +89,8 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  GridController::PlaceWidget(new QLabel(TR("extension \npoints : "), grid),grid);
-  extension_points = new MultiLineEdit(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("extension \npoints : ")),grid);
+  extension_points = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   extension_points->setReadOnly(visit);
   extension_points->setText(uc->get_extension_points());
   QFont font = extension_points->font();
@@ -99,12 +99,12 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   font.setFixedPitch(TRUE);
   extension_points->setFont(font);
 
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   comment->setFont(font);
@@ -117,7 +117,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   open_dialog(this);

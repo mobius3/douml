@@ -6,7 +6,7 @@ int GridDataStack::columnCounter = 0;
 int GridDataStack::columns = 0;
 int GridDataStack::rowCounter = 0;
 QList<GridDataStack> GridConverter::grids;
-void GridConverter::PlaceWidget(QWidget* parent, QWidget* grid/*swallowed at this point*/)
+QWidget* GridConverter::PlaceWidget(QWidget* parent, QWidget* grid/*swallowed at this point*/)
 {
     if(!grids.last().parent)
         return;
@@ -20,12 +20,21 @@ void GridConverter::PlaceWidget(QWidget* parent, QWidget* grid/*swallowed at thi
     grids.last().columnCounter++;
 }
 
-void GridConverter::PlaceWidget(HaveKeyValueData* data,  QWidget* grid)
+QWidget* GridConverter::PlaceWidget(HaveKeyValueData* data,  QWidget* grid)
 {
 
 }
 
-void GridConverter::InitNewGrid(QWidget * w, int _columns)
+QWidget* GridConverter::PlaceVertical(QWidget* parent, QWidget* grid)
+{}
+QWidget* GridConverter::PlaceHorizontal(QWidget* parent, QWidget* grid)
+{}
+QWidget* GridConverter::PlaceVertical(QWidget* parent)
+{}
+QWidget* GridConverter::PlaceHorizontal(QWidget* parent)
+{}
+
+QWidget* GridConverter::InitNewGrid(QWidget * w, int _columns)
 {
     grids.clear();
     grids.append(GridDataStack());

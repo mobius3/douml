@@ -83,8 +83,8 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name :"), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(data->name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name :")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(data->name()),grid);
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -92,7 +92,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->stereotype));
   if (! visit) {
@@ -132,8 +132,8 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   edtype->setCurrentItem(0);
   edtype->setSizePolicy(sp);
   
-  GridController::PlaceWidget(new QLabel(TR("multiplicity : "), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("multiplicity : ")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   edmultiplicity = new Q3ComboBox(!visit, htab);
   edmultiplicity->setSizePolicy(sp);
   edmultiplicity->insertItem(data->get_multiplicity());
@@ -144,7 +144,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     edmultiplicity->insertItem("1..*");
   }
   
-  new QLabel(TR("   ordering : "), htab);
+  GridConverter::PlaceWidget(new QLabel(TR("   ordering : ")),htab);
   edordering = new Q3ComboBox(FALSE, htab);
   
   UmlOrderingKind o = data->get_ordering();
@@ -161,24 +161,24 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
       edordering->insertItem(stringify(UmlFifo));
   }
 
-  GridController::PlaceWidget(new QLabel(TR("in state : "), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
-  edin_state = new LineEdit(data->in_state, htab);
+  GridConverter::PlaceWidget(new QLabel(TR("in state : ")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
+  edin_state = GridConverter::PlaceWidget(new LineEdit(data->in_state),htab);
   edin_state->setReadOnly(visit);
        
-  new QLabel("  ", htab);  
-  is_control_cb = new QCheckBox(TR("is control"), htab);
+  GridConverter::PlaceWidget(new QLabel("  "),htab);  
+  is_control_cb = GridConverter::PlaceWidget(new QCheckBox(TR("is control")),htab);
   if (data->is_control)
     is_control_cb->setChecked(TRUE);
   is_control_cb->setDisabled(visit);
       
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
   }
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(data->browser_node->get_comment());
   comment->setFont(font);
@@ -205,7 +205,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(data->browser_node, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(data->browser_node, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //
@@ -254,12 +254,12 @@ void ActivityObjectDialog::init_tab(QWidget *& w, MultiLineEdit *& ed,
   
   
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
   
-  new QLabel(TR("selection : "), vtab);
+  GridConverter::PlaceWidget(new QLabel(TR("selection : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl);
-  ed = new MultiLineEdit(grid);
+  ed = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
 
   QFont font = ed->font();
 

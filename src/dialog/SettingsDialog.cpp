@@ -360,9 +360,9 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
 	tabname = tbn;
       }
       
-      GridController::PlaceWidget(new QLabel("", grid),grid);
-      GridController::PlaceWidget(new QLabel(s + " : ", grid),grid);
-      Q3HBox * hb = GridController::PlaceHorizontal(grid);
+      GridConverter::PlaceWidget(new QLabel(""),grid);
+      GridConverter::PlaceWidget(new QLabel(s + " : "),grid);
+      Q3HBox * hb = GridConverter::PlaceHorizontal(grid);
             
       switch (st.who) {
       case StateSpec::is3states:
@@ -384,9 +384,10 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
 	cbstates->insert(i, new ComboStates(hb, *((char *) st.state),
 					    nodefault, unchanged));
       }
-      new QLabel("", hb);
-      GridController::PlaceWidget(new QLabel("", grid),grid);
-      GridController::PlaceWidget(new QLabel("", grid),grid);
+
+      GridConverter::PlaceHorizontal(new QLabel(""),hb);
+      GridConverter::PlaceWidget(new QLabel(""),grid);
+      GridConverter::PlaceWidget(new QLabel(""),grid);
     }
     
     addTab(grid, tabname);
@@ -417,16 +418,16 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
 	
 	
       }
-      GridController::PlaceWidget(new QLabel("", grid),grid);
+      GridConverter::PlaceWidget(new QLabel(""),grid);
       
       QString s = colors->at(i).name;
       
       s += " : ";
-      GridController::PlaceWidget(new QLabel(s, grid),grid);
+      GridConverter::PlaceWidget(new QLabel(s),grid);
       cbcolors->insert(i, new ComboColor(grid, *(colors->at(i).color),
 					 nodefault, unchanged));
-      GridController::PlaceWidget(new QLabel("", grid),grid);
-      GridController::PlaceWidget(new QLabel("", grid),grid);
+      GridConverter::PlaceWidget(new QLabel(""),grid);
+      GridConverter::PlaceWidget(new QLabel(""),grid);
     }
     
     addTab(grid, lbl);

@@ -43,7 +43,7 @@ MLEDialog::MLEDialog(QString t, bool buttons) : QDialog(0, "Uml", TRUE, 0) {
   e = new MultiLineEdit(this);
   vbox->addWidget(e);
   
-  Q3HBox * hbox = GridController::PlaceHorizontal(this);
+  QWidget * hbox = GridConverter::PlaceHorizontal(this);
   
   vbox->addWidget(hbox);
   hbox->setMargin(5);

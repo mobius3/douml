@@ -76,8 +76,8 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name :"), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(ex->name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name :")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(ex->name()),grid);
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -85,7 +85,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype :"), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype :")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(ex->get_stereotype()));
   edstereotype->setCurrentItem(0);
@@ -98,12 +98,12 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   edstereotype->setSizePolicy(sp);
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(ex->get_browser_node()->get_comment());
   comment->setFont(font);
@@ -116,7 +116,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  new QLabel(grid);
+  GridConverter::PlaceWidget(new QLabel(),grid);
   Q3ButtonGroup * gp = 
     new Q3ButtonGroup(1, Qt::Horizontal, QString::null, grid);
   inline_cb = new QCheckBox("inline", gp);
@@ -124,22 +124,22 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   if (ex->cpp_inline)
     inline_cb->setChecked(TRUE);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("C++ \ndeclaration :"), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("C++ \ndeclaration :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_cpp_decl()));
-  edcpp_decl = new MultiLineEdit(grid);
+  edcpp_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   edcpp_decl->setReadOnly(visit);
   edcpp_decl->setText(ex->cpp_decl);
   edcpp_decl->setFont(font);
     
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("C++ \ndefinition :"), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("C++ \ndefinition :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_cpp_def()));
-  edcpp_def = new MultiLineEdit(grid);
+  edcpp_def = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   edcpp_def->setReadOnly(visit);
   edcpp_def->setText(ex->cpp_def);
   edcpp_def->setFont(font);
@@ -155,12 +155,12 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel("Java :", vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel("Java :"),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_java_decl()));
-  edjava_decl = new MultiLineEdit(grid);
+  edjava_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   edjava_decl->setReadOnly(visit);
   edjava_decl->setText(ex->java_decl);
   edjava_decl->setFont(font);
@@ -176,12 +176,12 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel("Php :", vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel("Php :"),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_php_decl()));
-  edphp_decl = new MultiLineEdit(grid);
+  edphp_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   edphp_decl->setReadOnly(visit);
   edphp_decl->setText(ex->php_decl);
   edphp_decl->setFont(font);
@@ -197,12 +197,12 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel("Python :", vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel("Python :"),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_python_decl()));
-  edpython_decl = new MultiLineEdit(grid);
+  edpython_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   edpython_decl->setReadOnly(visit);
   edpython_decl->setText(ex->python_decl);
   edpython_decl->setFont(font);
@@ -218,12 +218,12 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel("Idl :", vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel("Idl :"),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_idl_decl()));
-  edidl_decl = new MultiLineEdit(grid);
+  edidl_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   edidl_decl->setReadOnly(visit);
   edidl_decl->setText(ex->idl_decl);
   edidl_decl->setFont(font);
@@ -239,7 +239,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(ex->get_browser_node(), grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(ex->get_browser_node(), grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   open_dialog(this);

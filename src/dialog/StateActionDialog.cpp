@@ -75,7 +75,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(action->get_stereotype()));
   if (!visit) {
@@ -88,12 +88,12 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   //comment->setFont(font);
@@ -106,8 +106,8 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("behavior"), grid),grid);
-  uml = new MultiLineEdit(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("behavior")),grid);
+  uml = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   uml->setText(action->uml);
   if (visit)
     uml->setReadOnly(TRUE);
@@ -120,8 +120,8 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("behavior"), grid),grid);
-  cpp = new MultiLineEdit(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("behavior")),grid);
+  cpp = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   cpp->setText(action->cpp);
   if (visit)
     cpp->setReadOnly(TRUE);
@@ -137,8 +137,8 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("behavior"), grid),grid);
-  java = new MultiLineEdit(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("behavior")),grid);
+  java = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   java->setText(action->java);
   if (visit)
     java->setReadOnly(TRUE);
@@ -154,7 +154,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //

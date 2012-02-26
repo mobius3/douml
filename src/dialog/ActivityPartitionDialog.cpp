@@ -80,11 +80,11 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   
   
 
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
   edname->setReadOnly(visit);
     
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (! visit) {
@@ -116,26 +116,26 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
 
   QWidget * htab;
 
-  new QLabel(grid);
-  htab = GridController::PlaceHorizontal(grid);
-  new QLabel("  ", htab);
-  dimension_cb = new QCheckBox(TR("is dimension"), htab);
+  GridConverter::PlaceWidget(new QLabel(),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel("  "),htab);
+  dimension_cb = GridConverter::PlaceWidget(new QCheckBox(TR("is dimension")),htab);
   if (data->is_dimension)
     dimension_cb->setChecked(TRUE);
   dimension_cb->setDisabled(visit);
-  new QLabel("", htab);
-  external_cb = new QCheckBox(TR("is external"), htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
+  external_cb = GridConverter::PlaceWidget(new QCheckBox(TR("is external")),htab);
   if (data->is_external)
     external_cb->setChecked(TRUE);
   external_cb->setDisabled(visit);
-  new QLabel("", htab);
+  GridConverter::PlaceWidget(new QLabel(""),htab);
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   QFont font = comment->font();
@@ -152,7 +152,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //

@@ -107,11 +107,11 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   grid = mkgrid(this);
   umltab = grid;
     
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(action->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(action->get_name()),grid);
   edname->setReadOnly(visit);
     
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(action->get_stereotype()));
   if (!visit) {
@@ -124,7 +124,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
 
-  GridController::PlaceWidget(new QLabel(TR("kind : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("kind : ")),grid);
   edtype = new Q3ComboBox(FALSE, grid);
       
   if (visit) {
@@ -143,22 +143,22 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     connect(edtype, SIGNAL(activated(int)), this, SLOT(edTypeActivated(int)));
   }
 
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(action->get_comment());
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("constraint :"), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("constraint :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
-  constraint = new MultiLineEdit(grid);
+  constraint = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   constraint->setReadOnly(visit);
   constraint->setText(act->constraint);
  
@@ -223,7 +223,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   
   grid = mkgrid(this);
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(action, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(action, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //
@@ -424,12 +424,12 @@ void ActivityActionDialog::accept() {
 
 void ActionCondDialog::init(QWidget * grid, ActivityActionData * d,
 			    DrawingLanguage lang, bool visit) {
-  GridController::PlaceWidget(new QLabel(TR("Pre\ncondition : "), grid),grid);
-  edpre = new MultiLineEdit(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Pre\ncondition : ")),grid);
+  edpre = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   edpre->setText(d->get_precond(lang));
 
-  GridController::PlaceWidget(new QLabel(TR("Post\ncondition : "), grid),grid);
-  edpost = new MultiLineEdit(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Post\ncondition : ")),grid);
+  edpost = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   edpost->setText(d->get_postcond(lang));
 
   if (visit) {
@@ -560,9 +560,9 @@ void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   ocl_grid = mkgrid(t);
 
-  QWidget * vtab = GridController::PlaceVertical(ocl_grid);
+  QWidget * vtab = GridConverter::PlaceVertical(ocl_grid);
 
-  new QLabel(TR("Behavior : "), vtab);
+  GridConverter::PlaceWidget(new QLabel(TR("Behavior : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_ocl()));
@@ -587,8 +587,8 @@ void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   cpp_grid = mkgrid(t);
 
-  vtab = GridController::PlaceVertical(cpp_grid);
-  new QLabel(TR("Behavior : "), vtab);
+  vtab = GridConverter::PlaceVertical(cpp_grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Behavior : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_cpp()));
@@ -613,8 +613,8 @@ void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   java_grid = mkgrid(t);
 
-  vtab = GridController::PlaceVertical(java_grid);
-  new QLabel(TR("Behavior : "), vtab);
+  vtab = GridConverter::PlaceVertical(java_grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Behavior : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_java()));
@@ -772,9 +772,9 @@ void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   ocl_grid = mkgrid(t, TR("value - Ocl"));
 
-  QWidget * vtab = GridController::PlaceVertical(ocl_grid);
+  QWidget * vtab = GridConverter::PlaceVertical(ocl_grid);
 
-  new QLabel(TR("Value : "), vtab);
+  GridConverter::PlaceWidget(new QLabel(TR("Value : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_ocl()));
@@ -799,8 +799,8 @@ void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   cpp_grid = mkgrid(t, TR("value - C++"));
 
-  vtab = GridController::PlaceVertical(cpp_grid);
-  new QLabel(TR("Value : "), vtab);
+  vtab = GridConverter::PlaceVertical(cpp_grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Value : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_cpp()));
@@ -825,8 +825,8 @@ void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   java_grid = mkgrid(t, TR("value - Java"));
 
-  vtab = GridController::PlaceVertical(java_grid);
-  new QLabel(TR("Value : "), vtab);
+  vtab = GridConverter::PlaceVertical(java_grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Value : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_java()));

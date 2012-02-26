@@ -83,8 +83,8 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name :"), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(pa->name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name :")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(pa->name()),grid);
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -92,7 +92,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pa->stereotype));
   if (! visit) {
@@ -125,8 +125,8 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   edtype->setCurrentItem(0);
   edtype->setSizePolicy(sp);
   
-  GridController::PlaceWidget(new QLabel(TR("direction :"), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("direction :")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   eddir = new Q3ComboBox(FALSE, htab);
   
   UmlParamDirection dir = pa->get_dir();
@@ -143,7 +143,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
       eddir->insertItem(stringify(UmlReturn));
   }
   
-  new QLabel(TR("   multiplicity : "), htab);
+  GridConverter::PlaceWidget(new QLabel(TR("   multiplicity : ")),htab);
   edmultiplicity = new Q3ComboBox(!visit, htab);
   edmultiplicity->setSizePolicy(sp);
   edmultiplicity->insertItem(pa->get_multiplicity());
@@ -154,7 +154,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
     edmultiplicity->insertItem("1..*");
   }
   
-  new QLabel(TR("   ordering : "), htab);
+  GridConverter::PlaceWidget(new QLabel(TR("   ordering : ")),htab);
   edordering = new Q3ComboBox(FALSE, htab);
   
   UmlOrderingKind o = pa->get_ordering();
@@ -171,7 +171,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
       edordering->insertItem(stringify(UmlFifo));
   }
     
-  new QLabel(TR("   effect : "), htab);
+  GridConverter::PlaceWidget(new QLabel(TR("   effect : ")),htab);
   edeffect = new Q3ComboBox(FALSE, htab);
   
   UmlParamEffect e = pa->get_effect();
@@ -190,21 +190,21 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
       edeffect->insertItem(stringify(UmlDelete));
   }
   
-  GridController::PlaceWidget(new QLabel(TR("in state : "), grid),grid);
-  edin_state = GridController::PlaceWidget(new LineEdit(pa->in_state, grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("in state : ")),grid);
+  edin_state = GridConverter::PlaceWidget(new LineEdit(pa->in_state),grid);
   edin_state->setReadOnly(visit);
        
-  GridController::PlaceWidget(new QLabel(TR("default value :"), grid),grid);
-  htab = GridController::PlaceHorizontal(grid);
-  edinit = new LineEdit(pa->get_default_value(), htab);
+  GridConverter::PlaceWidget(new QLabel(TR("default value :")),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
+  edinit = GridConverter::PlaceWidget(new LineEdit(pa->get_default_value()),htab);
   if (visit)
     edinit->setReadOnly(TRUE);
   else
     connect(new SmallPushButton(TR("Editor"), htab), SIGNAL(clicked()),
 	    this, SLOT(edit_init()));
   
-  new QLabel(grid);
-  htab = GridController::PlaceHorizontal(grid);
+  GridConverter::PlaceWidget(new QLabel(),grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   Q3ButtonGroup * bg = 
     new Q3ButtonGroup(2, Qt::Horizontal, QString::null, htab);
   
@@ -233,13 +233,13 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   else
     standard_rb->setChecked(TRUE);
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
   }
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(pa->browser_node->get_comment());
   comment->setFont(font);
@@ -265,7 +265,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(pa->browser_node, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(pa->browser_node, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //
@@ -313,12 +313,12 @@ void ParameterDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char *
   
   
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
   
-  new QLabel(TR("selection : "), vtab);
+  GridConverter::PlaceWidget(new QLabel(TR("selection : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl);
-  ed = new MultiLineEdit(grid);
+  ed = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
 
   QFont font = ed->font();
 

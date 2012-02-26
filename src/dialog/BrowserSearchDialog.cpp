@@ -133,18 +133,19 @@ BrowserSearchDialog::BrowserSearchDialog()
   gl->addWidget(ed, 1, 1);
   ed->setFocus();
   
-  Q3HBox * hb = GridController::PlaceHorizontal(this);
+  QWidget * hb = GridConverter::PlaceHorizontal(this);
   
   gl->addWidget(hb, 2, 1);
   
-  Q3GroupBox * gb = new Q3GroupBox(2, Qt::Horizontal, hb);
+  //Q3GroupBox * gb = new Q3GroupBox(2, Qt::Horizontal, hb);
+  Q3GroupBox * gb = GridConverter::PlaceHorizontal(new Q3GroupBox(2, Qt::Horizontal),hb);
   
   case_sensitive = new QCheckBox(TR("case sensitive"), gb);
   case_sensitive->setChecked(saved_case_sensitive);
   even_deleted = new QCheckBox(TR("even deleted"), gb);
   even_deleted->setChecked(saved_even_deleted);
 
-  Q3ButtonGroup * bg = new Q3ButtonGroup(4, Qt::Horizontal, hb);
+    Q3ButtonGroup * bg = GridConverter::PlaceHorizontal(new Q3ButtonGroup(2, Qt::Horizontal),hb);
   
   bg->setExclusive(TRUE);
   for_name = new QRadioButton(TR("name"), bg);

@@ -81,11 +81,11 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
   edname->setReadOnly(visit);
     
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(activity->get_stereotype()));
   if (!visit) {
@@ -119,7 +119,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
 				    : opers.findRef(activity->get_specification()) + 1);
   }
   
-  new QLabel(grid);
+  GridConverter::PlaceWidget(new QLabel(),grid);
   Q3ButtonGroup * bg = 
     new Q3ButtonGroup(3, Qt::Horizontal, QString::null, grid);
   
@@ -138,23 +138,23 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     active_cb->setChecked(TRUE);
   active_cb->setDisabled(visit);
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   //comment->setFont(font);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("constraint :"), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("constraint :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
-  constraint = new MultiLineEdit(grid);
+  constraint = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   constraint->setReadOnly(visit);
   constraint->setText(activity->constraint);
   //constraint->setFont(font);
@@ -178,7 +178,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //
@@ -269,14 +269,14 @@ void ActivityDialog::init_tab(CondDialog & d, InfoData & cd,
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("Pre\ncondition : "), grid),grid);
-  d.edpre = new MultiLineEdit(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Pre\ncondition : ")),grid);
+  d.edpre = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   d.edpre->setText(cd.first);
   if (visit)
     d.edpre->setReadOnly(TRUE);
   
-  GridController::PlaceWidget(new QLabel(TR("Post\ncondition : "), grid),grid);
-  d.edpost = new MultiLineEdit(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Post\ncondition : ")),grid);
+  d.edpost = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   d.edpost->setText(cd.second);
   if (visit)
     d.edpost->setReadOnly(TRUE);

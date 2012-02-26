@@ -93,7 +93,7 @@ ComponentDialog::ComponentDialog(SimpleData * nd)
   
   
   
-  kvtable = GridController::PlaceWidget(new KeyValuesTable((BrowserComponent *) data->get_browser_node(),
+  kvtable = GridConverter::PlaceWidget(new KeyValuesTable((BrowserComponent *) data->get_browser_node(),
                    grid, !hasOkButton()),grid);
   addTab(grid, TR("Properties"));
   
@@ -136,11 +136,11 @@ void ComponentDialog::init_uml_tab() {
   
   
 
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
   edname->setReadOnly(visit);
     
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(TRUE, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (! visit) {
@@ -153,12 +153,12 @@ void ComponentDialog::init_uml_tab() {
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
     
-  vbox = GridController::PlaceVertical(grid);
+  vbox = GridConverter::PlaceVertical(grid);
   new QLabel(TR("description :"), vbox);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   QFont font = comment->font();
@@ -178,14 +178,14 @@ void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
 				 const Q3ValueList<BrowserClass *> & cls,
 				 const char * lbl) {
   bool visit = !hasOkButton();  
-  Q3HBox * hbox;
-  Q3VBox * vbox;  
+  QWidget * hbox;
+  QWidget * vbox;
   QPushButton * button;
   
-  page = GridController::PlaceVertical(this);
+  page = GridConverter::PlaceVertical(this);
   
   if (!visit) {
-    hbox = GridController::PlaceHorizontal(page);
+    hbox = GridConverter::PlaceHorizontal(page);
     hbox->setMargin(5);
     new QLabel(TR("Stereotype filtering  "), hbox);
     stereotypefilter = new Q3ComboBox(TRUE, hbox);
@@ -200,14 +200,14 @@ void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
     connect(stereotypefilter, SIGNAL(activated(const QString &)),
 	    this, slt);
     
-    hbox = GridController::PlaceHorizontal(page);
-    vbox = GridController::PlaceVertical(hbox);
+    hbox = GridConverter::PlaceHorizontal(page);
+    vbox = GridConverter::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel(TR("Available classes"), vbox))->setAlignment(Qt::AlignCenter);
     lb_available = new Q3ListBox(vbox);
     lb_available->setSelectionMode(Q3ListBox::Multi);
     
-    vbox = GridController::PlaceVertical(hbox);
+    vbox = GridConverter::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel("", vbox))->setScaledContents(TRUE);
     button = new QPushButton(vbox);
@@ -218,7 +218,7 @@ void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
     button->setPixmap(*leftPixmap);
     connect(button, SIGNAL(clicked()), this, remove_slt);
     (new QLabel("", vbox))->setScaledContents(TRUE);
-    vbox = GridController::PlaceVertical(hbox);
+    vbox = GridConverter::PlaceVertical(hbox);
   }
   else
     vbox = page;

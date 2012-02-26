@@ -82,11 +82,11 @@ StateDialog::StateDialog(StateData * d)
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
   edname->setReadOnly(visit);
     
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(state->get_stereotype()));
   if (!visit) {
@@ -169,7 +169,7 @@ StateDialog::StateDialog(StateData * d)
     edreference = 0;
   }
 
-  new QLabel(grid);
+  GridConverter::PlaceWidget(new QLabel(),grid);
   Q3ButtonGroup * bg = 
     new Q3ButtonGroup(1, Qt::Horizontal, QString::null, grid);
   
@@ -178,12 +178,12 @@ StateDialog::StateDialog(StateData * d)
     active_cb->setChecked(TRUE);
   active_cb->setDisabled(visit);
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("description :"), vtab);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   
@@ -209,7 +209,7 @@ StateDialog::StateDialog(StateData * d)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //
@@ -386,11 +386,11 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
   
   
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("Entry\nbehavior : "), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Entry\nbehavior : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_enbeh);
-  d.edentry = new MultiLineEdit(grid);
+  d.edentry = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
 
   QFont font = d.edentry->font();
 
@@ -402,21 +402,21 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
   if (visit)
     d.edentry->setReadOnly(TRUE);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("Exit\nbehavior : "), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Exit\nbehavior : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_exbeh);
-  d.edexit = new MultiLineEdit(grid);
+  d.edexit = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   d.edexit->setFont(font);
   d.edexit->setText(st.on_exit);
   if (visit)
     d.edexit->setReadOnly(TRUE);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("Do\nbehavior : "), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("Do\nbehavior : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_beh);
-  d.edactivity = new MultiLineEdit(grid);
+  d.edactivity = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   d.edactivity->setFont(font);
   d.edactivity->setText(st.do_activity);
   if (visit)

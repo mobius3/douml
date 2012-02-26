@@ -127,7 +127,7 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
   
   
   
-  kvtable =	GridController::PlaceWidget(new KeyValuesTable(o->get_browser_node(), grid, visit), grid);
+  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(o->get_browser_node(), grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //
@@ -261,15 +261,15 @@ void OperationDialog::init_uml() {
   
   
   
-  GridController::PlaceWidget(new QLabel(TR("class : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("class : ")),grid);
   new QLabel(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE),
 	     grid);
   
-  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
-  edname = GridController::PlaceWidget(new LineEdit(oper->name(), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
+  edname = GridConverter::PlaceWidget(new LineEdit(oper->name()),grid);
   edname->setReadOnly(visit);
   
-  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(oper->stereotype));
   if (oper->is_get_or_set)
@@ -287,7 +287,7 @@ void OperationDialog::init_uml() {
   edstereotype->setSizePolicy(sp);
 
   if (oper->is_get_or_set)
-    GridController::PlaceWidget(new QLabel(TR("value type : "), grid),grid);
+    GridConverter::PlaceWidget(new QLabel(TR("value type : ")),grid);
   else
     connect(new SmallPushButton(TR("value type :"), grid), SIGNAL(clicked()),
 	    this, SLOT(menu_returntype()));
@@ -313,9 +313,9 @@ void OperationDialog::init_uml() {
   
   edreturn_type->setSizePolicy(sp);
 
-  new QLabel(grid);
+  GridConverter::PlaceWidget(new QLabel(),grid);
   
-  htab = GridController::PlaceHorizontal(grid);
+  htab = GridConverter::PlaceHorizontal(grid);
   bg = uml_visibility.init(htab, oper->get_uml_visibility(), TRUE);
   if (visit)
     bg->setEnabled(FALSE);
@@ -354,24 +354,24 @@ void OperationDialog::init_uml() {
     connect(forcegenbody_cb, SIGNAL(toggled(bool)),
 	    SLOT(forcegenbody_toggled(bool)));
   
-  GridController::PlaceWidget(new QLabel(TR("parameters : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("parameters : ")),grid);
   table = new ParamsTable(oper, grid, list, this, visit);
   if (oper->is_get_or_set)
     table->setEnabled(FALSE);
   
-  GridController::PlaceWidget(new QLabel(TR("exceptions : "), grid),grid);
+  GridConverter::PlaceWidget(new QLabel(TR("exceptions : ")),grid);
   etable = new ExceptionsTable(oper, grid, list, visit);
   
-  QWidget * vtab = GridController::PlaceVertical(grid);
+  QWidget * vtab = GridConverter::PlaceVertical(grid);
   
-  new QLabel(TR("description :"), vtab);
+  GridConverter::PlaceWidget(new QLabel(TR("description :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
     connect(new SmallPushButton(TR("Default"), vtab), SIGNAL(clicked()),
 	    this, SLOT(default_description()));
   }
-  comment = new MultiLineEdit(grid);
+  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   comment->setText(oper->get_browser_node()->get_comment());
   QFont font = comment->font();
   if (! hasCodec())
@@ -380,13 +380,13 @@ void OperationDialog::init_uml() {
   comment->setFont(font);
   comment->setReadOnly(visit);
   
-  vtab = GridController::PlaceVertical(grid);
-  new QLabel(TR("constraint :"), vtab);
+  vtab = GridConverter::PlaceVertical(grid);
+  GridConverter::PlaceWidget(new QLabel(TR("constraint :")),vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
-  constraint = new MultiLineEdit(grid);
+  constraint = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
   constraint->setReadOnly(visit);
   constraint->setText(oper->constraint);
   constraint->setFont(font);
@@ -408,14 +408,14 @@ void OperationDialog::init_cpp() {
     
 
     if (visit || !oper->is_get_or_set)
-      new QLabel(grid);
+      GridConverter::PlaceWidget(new QLabel(),grid);
     else {
-      cppfrozen_cb = GridController::PlaceWidget(new QCheckBox(TR("frozen"), grid),grid);
+      cppfrozen_cb = GridConverter::PlaceWidget(new QCheckBox(TR("frozen")),grid);
       if (oper->cpp_get_set_frozen)
 	cppfrozen_cb->setChecked(TRUE);
     }
 
-    htab = GridController::PlaceHorizontal(grid);
+    htab = GridConverter::PlaceHorizontal(grid);
     
     bg = cpp_visibility.init(htab, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml"));
     if (visit)
@@ -460,8 +460,8 @@ void OperationDialog::init_cpp() {
     }
     
     if (oper->is_get_or_set) {
-      GridController::PlaceWidget(new QLabel(TR("Name form : "), grid),grid);
-      edcppnamespec = new LineEdit(grid);
+      GridConverter::PlaceWidget(new QLabel(TR("Name form : ")),grid);
+      edcppnamespec = GridConverter::PlaceWidget(new LineEdit(),grid);
       edcppnamespec->setText(oper->cpp_name_spec);
       if (visit)
 	edcppnamespec->setReadOnly(TRUE);
@@ -473,8 +473,8 @@ void OperationDialog::init_cpp() {
     else
       edcppnamespec = 0;
     
-    GridController::PlaceWidget(new QLabel(TR("Declaration : "), grid),grid);
-    edcppdecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Declaration : ")),grid);
+    edcppdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edcppdecl->setText(oper->get_cppdecl());
     edcppdecl->setFont(comment->font());
     if (visit)
@@ -482,14 +482,14 @@ void OperationDialog::init_cpp() {
     else
       connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
     
-    GridController::PlaceWidget(new QLabel(TR("Result after\nsubstitution : "), grid),grid);
-    showcppdecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),grid);
+    showcppdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showcppdecl->setReadOnly(TRUE);
     showcppdecl->setFont(comment->font());
     
     if (! visit) {
-      new QLabel(grid);
-      htab = GridController::PlaceHorizontal(grid);  
+      GridConverter::PlaceWidget(new QLabel(),grid);
+      htab = GridConverter::PlaceHorizontal(grid);  
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
 	      this, SLOT(cpp_default_decl()));
       if (!oper->is_get_or_set)
@@ -501,8 +501,8 @@ void OperationDialog::init_cpp() {
 	      this, SLOT(cpp_edit_param_decl()));
     }
     
-    GridController::PlaceWidget(new QLabel(TR("Definition :"), grid),grid);
-    edcppdef = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Definition :")),grid);
+    edcppdef = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edcppdef->setText(oper->get_cppdef());
     edcppdef->setFont(comment->font());
     if (visit)
@@ -510,18 +510,18 @@ void OperationDialog::init_cpp() {
     else
       connect(edcppdef, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
     
-    QWidget * vtab = GridController::PlaceVertical(grid);
+    QWidget * vtab = GridConverter::PlaceVertical(grid);
 
-    new QLabel(TR("Result after\nsubstitution : "), vtab);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),vtab);
     if (!visit && !oper->is_get_or_set) {
-      indentcppbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
+      indentcppbody_cb = GridConverter::PlaceWidget(new QCheckBox(TR("contextual\nbody indent")),vtab);
       if (preserve_bodies() && !forcegenbody_cb->isChecked())
 	indentcppbody_cb->setEnabled(FALSE);
       else
 	indentcppbody_cb->setChecked(oper->cpp_indent_body);
     }
     
-    showcppdef = new MultiLineEdit(grid);
+    showcppdef = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showcppdef->setReadOnly(TRUE);
     showcppdef->setFont(comment->font());
     
@@ -539,7 +539,7 @@ void OperationDialog::init_cpp() {
     }
         
     if (! visit) {
-      htab = GridController::PlaceHorizontal(grid);  
+      htab = GridConverter::PlaceHorizontal(grid);  
       connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
 	      this, SLOT(cpp_default_def()));
       if (!oper->is_get_or_set)
@@ -578,9 +578,9 @@ void OperationDialog::init_java() {
     
     
     if (visit || !oper->is_get_or_set)
-      new QLabel(grid);
+      GridConverter::PlaceWidget(new QLabel(),grid);
     else {
-      javafrozen_cb = GridController::PlaceWidget(new QCheckBox(TR("frozen"), grid),grid);
+      javafrozen_cb = GridConverter::PlaceWidget(new QCheckBox(TR("frozen")),grid);
       if (oper->java_get_set_frozen)
 	javafrozen_cb->setChecked(TRUE);
     }
@@ -605,8 +605,8 @@ void OperationDialog::init_java() {
 	      SLOT(java_finalsynchronized_toggled(bool)));
     
     if (oper->is_get_or_set) {
-      GridController::PlaceWidget(new QLabel(TR("Name form : "), grid),grid);
-      htab = GridController::PlaceHorizontal(grid);
+      GridConverter::PlaceWidget(new QLabel(TR("Name form : ")),grid);
+      htab = GridConverter::PlaceHorizontal(grid);
       edjavanamespec = new LineEdit(htab);
       edjavanamespec->setText(oper->java_name_spec);
       if (visit)
@@ -618,8 +618,8 @@ void OperationDialog::init_java() {
     else
       edjavanamespec = 0;
     
-    GridController::PlaceWidget(new QLabel(TR("Definition :"), grid),grid);
-    edjavadef = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Definition :")),grid);
+    edjavadef = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edjavadef->setText(oper->get_javadef());
     edjavadef->setFont(comment->font());
     if (visit)
@@ -627,18 +627,18 @@ void OperationDialog::init_java() {
     else
       connect(edjavadef, SIGNAL(textChanged()), this, SLOT(java_update_def()));
     
-    QWidget * vtab = GridController::PlaceVertical(grid);
+    QWidget * vtab = GridConverter::PlaceVertical(grid);
 
-    new QLabel(TR("Result after\nsubstitution : "), vtab);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),vtab);
     if (!visit && !oper->is_get_or_set) {
-      indentjavabody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
+      indentjavabody_cb = GridConverter::PlaceWidget(new QCheckBox(TR("contextual\nbody indent")),vtab);
       if (preserve_bodies() && !forcegenbody_cb->isChecked())
 	indentjavabody_cb->setEnabled(FALSE);
       else
 	indentjavabody_cb->setChecked(oper->java_indent_body);
     }
     
-    showjavadef = new MultiLineEdit(grid);
+    showjavadef = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showjavadef->setReadOnly(TRUE);
     showjavadef->setFont(comment->font());
     
@@ -655,7 +655,7 @@ void OperationDialog::init_java() {
       delete [] b;
     }
         
-    htab = GridController::PlaceHorizontal(grid);  
+    htab = GridConverter::PlaceHorizontal(grid);  
 
     if (! visit) {
       connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
@@ -694,9 +694,9 @@ void OperationDialog::init_php() {
     
     
     if (visit || !oper->is_get_or_set)
-      new QLabel(grid);
+      GridConverter::PlaceWidget(new QLabel(),grid);
     else {
-      phpfrozen_cb = GridController::PlaceWidget(new QCheckBox(TR("frozen"), grid),grid);
+      phpfrozen_cb = GridConverter::PlaceWidget(new QCheckBox(TR("frozen")),grid);
       if (oper->php_get_set_frozen)
 	phpfrozen_cb->setChecked(TRUE);
     }
@@ -712,8 +712,8 @@ void OperationDialog::init_php() {
 	      SLOT(php_final_toggled(bool)));
 
     if (oper->is_get_or_set) {
-      GridController::PlaceWidget(new QLabel(TR("Name form : "), grid),grid);
-      htab = GridController::PlaceHorizontal(grid);
+      GridConverter::PlaceWidget(new QLabel(TR("Name form : ")),grid);
+      htab = GridConverter::PlaceHorizontal(grid);
       edphpnamespec = new LineEdit(htab);
       edphpnamespec->setText(oper->php_name_spec);
       if (visit)
@@ -725,8 +725,8 @@ void OperationDialog::init_php() {
     else
       edphpnamespec = 0;
     
-    GridController::PlaceWidget(new QLabel(TR("Definition :"), grid),grid);
-    edphpdef = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Definition :")),grid);
+    edphpdef = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edphpdef->setText(oper->get_phpdef());
     edphpdef->setFont(comment->font());
     if (visit)
@@ -734,18 +734,18 @@ void OperationDialog::init_php() {
     else
       connect(edphpdef, SIGNAL(textChanged()), this, SLOT(php_update_def()));
     
-    QWidget * vtab = GridController::PlaceVertical(grid);
+    QWidget * vtab = GridConverter::PlaceVertical(grid);
 
-    new QLabel(TR("Result after\nsubstitution : "), vtab);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),vtab);
     if (!visit && !oper->is_get_or_set) {
-      indentphpbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
+      indentphpbody_cb = GridConverter::PlaceWidget(new QCheckBox(TR("contextual\nbody indent")),vtab);
       if (preserve_bodies() && !forcegenbody_cb->isChecked())
 	indentphpbody_cb->setEnabled(FALSE);
       else
 	indentphpbody_cb->setChecked(oper->php_indent_body);
     }
     
-    showphpdef = new MultiLineEdit(grid);
+    showphpdef = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showphpdef->setReadOnly(TRUE);
     showphpdef->setFont(comment->font());
     
@@ -762,7 +762,7 @@ void OperationDialog::init_php() {
       delete [] b;
     }
         
-    htab = GridController::PlaceHorizontal(grid);  
+    htab = GridConverter::PlaceHorizontal(grid);  
 
     if (! visit) {
       connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
@@ -794,15 +794,15 @@ void OperationDialog::init_python() {
     
     
     if (!visit && oper->is_get_or_set) {
-      pythonfrozen_cb = GridController::PlaceWidget(new QCheckBox(TR("frozen"), grid),grid);
+      pythonfrozen_cb = GridConverter::PlaceWidget(new QCheckBox(TR("frozen")),grid);
       if (oper->python_get_set_frozen)
 	pythonfrozen_cb->setChecked(TRUE);
-      new QLabel(grid);
+      GridConverter::PlaceWidget(new QLabel(),grid);
     }
 
     if (oper->is_get_or_set) {
-      GridController::PlaceWidget(new QLabel(TR("Name form : "), grid),grid);
-      htab = GridController::PlaceHorizontal(grid);
+      GridConverter::PlaceWidget(new QLabel(TR("Name form : ")),grid);
+      htab = GridConverter::PlaceHorizontal(grid);
       edpythonnamespec = new LineEdit(htab);
       edpythonnamespec->setText(oper->python_name_spec);
       if (visit)
@@ -814,8 +814,8 @@ void OperationDialog::init_python() {
     else
       edpythonnamespec = 0;
     
-    GridController::PlaceWidget(new QLabel(TR("Definition :"), grid),grid);
-    edpythondef = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Definition :")),grid);
+    edpythondef = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edpythondef->setText(oper->get_pythondef());
     edpythondef->setFont(comment->font());
     if (visit)
@@ -823,17 +823,17 @@ void OperationDialog::init_python() {
     else
       connect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
     
-    QWidget * vtab = GridController::PlaceVertical(grid);
+    QWidget * vtab = GridConverter::PlaceVertical(grid);
 
-    new QLabel(TR("Result after\nsubstitution : "), vtab);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),vtab);
     if (!visit && !oper->is_get_or_set) {
-      indentpythonbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
+      indentpythonbody_cb = GridConverter::PlaceWidget(new QCheckBox(TR("contextual\nbody indent")),vtab);
       if (preserve_bodies() && !forcegenbody_cb->isChecked())
 	indentpythonbody_cb->setEnabled(FALSE);
       else
 	indentpythonbody_cb->setChecked(oper->python_indent_body);
     }
-    showpythondef = new MultiLineEdit(grid);
+    showpythondef = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showpythondef->setReadOnly(TRUE);
     showpythondef->setFont(comment->font());
     
@@ -850,7 +850,7 @@ void OperationDialog::init_python() {
       delete [] b;
     }
         
-    htab = GridController::PlaceHorizontal(grid);  
+    htab = GridConverter::PlaceHorizontal(grid);  
 
     if (! visit) {
       connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
@@ -890,9 +890,9 @@ void OperationDialog::init_idl() {
     
     
     if (visit || !oper->is_get_or_set)
-      new QLabel(grid);
+      GridConverter::PlaceWidget(new QLabel(),grid);
     else {
-      idlfrozen_cb = GridController::PlaceWidget(new QCheckBox(TR("frozen"), grid),grid);
+      idlfrozen_cb = GridConverter::PlaceWidget(new QCheckBox(TR("frozen")),grid);
       if (oper->idl_get_set_frozen)
 	idlfrozen_cb->setChecked(TRUE);
     }
@@ -908,8 +908,8 @@ void OperationDialog::init_idl() {
 	      SLOT(oneway_toggled(bool)));
     
     if (oper->is_get_or_set) {
-      GridController::PlaceWidget(new QLabel(TR("Name form : "), grid),grid);
-      htab = GridController::PlaceHorizontal(grid);
+      GridConverter::PlaceWidget(new QLabel(TR("Name form : ")),grid);
+      htab = GridConverter::PlaceHorizontal(grid);
       edidlnamespec = new LineEdit(htab);
       edidlnamespec->setText(oper->idl_name_spec);
       if (visit)
@@ -921,8 +921,8 @@ void OperationDialog::init_idl() {
     else
       edidlnamespec = 0;
     
-    GridController::PlaceWidget(new QLabel(TR("Declaration :"), grid),grid);
-    edidldecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
+    edidldecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     edidldecl->setText(oper->get_idldecl());
     edidldecl->setFont(comment->font());
     if (visit)
@@ -930,14 +930,14 @@ void OperationDialog::init_idl() {
     else
       connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
     
-    GridController::PlaceWidget(new QLabel(TR("Result after\nsubstitution : "), grid),grid);
-    showidldecl = new MultiLineEdit(grid);
+    GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution : ")),grid);
+    showidldecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
     showidldecl->setReadOnly(TRUE);
     showidldecl->setFont(comment->font());
     
     if (! visit) {
-      new QLabel(grid);
-      htab = GridController::PlaceHorizontal(grid);  
+      GridConverter::PlaceWidget(new QLabel(),grid);
+      htab = GridConverter::PlaceHorizontal(grid);  
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
 	      this, SLOT(idl_default_def()));
       connect(new QPushButton(TR("Not generated in Idl"), htab), SIGNAL(clicked ()),
