@@ -75,7 +75,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   
   
   
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(action->get_stereotype()));
   if (!visit) {
@@ -106,7 +106,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   
   
   
-  new QLabel(TR("behavior"), grid);
+  GridController::PlaceWidget(new QLabel(TR("behavior"), grid),grid);
   uml = new MultiLineEdit(grid);
   uml->setText(action->uml);
   if (visit)
@@ -120,7 +120,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   
   
   
-  new QLabel(TR("behavior"), grid);
+  GridController::PlaceWidget(new QLabel(TR("behavior"), grid),grid);
   cpp = new MultiLineEdit(grid);
   cpp->setText(action->cpp);
   if (visit)
@@ -137,7 +137,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   
   
   
-  new QLabel(TR("behavior"), grid);
+  GridController::PlaceWidget(new QLabel(TR("behavior"), grid),grid);
   java = new MultiLineEdit(grid);
   java->setText(action->java);
   if (visit)

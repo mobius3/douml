@@ -24,6 +24,7 @@ public:
     ~GridConverter();
 
     static void InitNewGrid(QWidget*, int columns);
+    static void InitNewHBox(QWidget*);
 
     static void PlaceWidget(QWidget* parent, QWidget* grid);
     static void PlaceWidget(KeyValuesTable* data,  QWidget* grid);

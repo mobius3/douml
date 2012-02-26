@@ -76,8 +76,8 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  new QLabel(TR("name :"), grid);
-  edname = new LineEdit(ex->name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name :"), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(ex->name(), grid),grid);
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -85,7 +85,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   
-  new QLabel(TR("stereotype :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype :"), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(ex->get_stereotype()));
   edstereotype->setCurrentItem(0);

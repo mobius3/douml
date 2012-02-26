@@ -87,12 +87,12 @@ PackageDialog::PackageDialog(PackageData * da)
   
   
   
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(pa->name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(pa->name(), grid),grid);
   edname->setReadOnly(!da->browser_node->is_writable() ||
 		      (da->browser_node == BrowserView::get_project()));
   
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pa->stereotype));
   if (! visit) {

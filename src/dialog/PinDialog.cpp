@@ -82,8 +82,8 @@ PinDialog::PinDialog(PinData * pi)
   
   
   
-  new QLabel(TR("name :"), grid);
-  edname = new LineEdit(pi->name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name :"), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(pi->name(), grid),grid);
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -91,7 +91,7 @@ PinDialog::PinDialog(PinData * pi)
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pi->stereotype));
   if (! visit) {
@@ -124,7 +124,7 @@ PinDialog::PinDialog(PinData * pi)
   edtype->setCurrentItem(0);
   edtype->setSizePolicy(sp);
   
-  new QLabel(TR("direction :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("direction :"), grid),grid);
   htab = new Q3HBox(grid);
   eddir = new Q3ComboBox(FALSE, htab);
   
@@ -188,8 +188,8 @@ PinDialog::PinDialog(PinData * pi)
       edeffect->insertItem(stringify(UmlDelete));
   }
     
-  new QLabel(TR("in state : "), grid);
-  edin_state = new LineEdit(pi->in_state, grid);
+  GridController::PlaceWidget(new QLabel(TR("in state : "), grid),grid);
+  edin_state = GridController::PlaceWidget(new LineEdit(pi->in_state, grid),grid);
   edin_state->setReadOnly(visit);
        
   new QLabel(grid);

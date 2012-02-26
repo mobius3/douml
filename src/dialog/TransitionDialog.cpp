@@ -77,11 +77,11 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   
   
   
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(bn->get_name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
   edname->setReadOnly(visit);
     
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(rel->get_stereotype()));
   if (!visit) {
@@ -98,7 +98,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
     internal_cb = 0;
   else {
     new QLabel(grid);
-    internal_cb = new QCheckBox(TR("internal"), grid);
+    internal_cb = GridController::PlaceWidget(new QCheckBox(TR("internal"), grid),grid);
     internal_cb->setChecked(r->internal());
   }
     

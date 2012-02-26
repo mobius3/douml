@@ -81,7 +81,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 	     "To be safe, if possible choose a value not used by an other person even not working on a given project with you"),
 	     grid);
   
-  new QLabel(TR("Own identifier "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Own identifier "), grid),grid);
   htab = new Q3HBox(grid);
   if (conv)
     s = getenv("BOUML_ID");	// yes !
@@ -100,7 +100,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 	     "chapter corresponding to the kind of the element selected in the browser"),
 	     grid);
 
-  new QLabel(TR("Manual path"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Manual path"), grid),grid);
   htab = new Q3HBox(grid);
   ed_doc = new QLineEdit(htab);
   if (!conv)
@@ -125,7 +125,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(grid);  
   new QLabel(TR("\nOptional, to indicate a web navigator program. If it is not defined the reference manual will be shown with an internal simple viewer"),
 	     grid);
-  new QLabel(TR("Navigator"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Navigator"), grid),grid);
   htab = new Q3HBox(grid);
   ed_navigator = new QLineEdit(htab);
   if (!conv)
@@ -139,7 +139,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(grid);  
   new QLabel(TR("\nOptional, to indicate a template project. This allows to create new projects getting all the template project settings"),
 	     grid);
-  new QLabel("Template project", grid);
+  GridController::PlaceWidget(new QLabel("Template project", grid),grid);
   htab = new Q3HBox(grid);
   if (conv)
     s = getenv("BOUML_TEMPLATE");	// yes !
@@ -155,7 +155,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(grid);  
   new QLabel(TR("\nOptional, to indicate a text editor (it must creates an own window). Else Bouml will use an internal editor"),
 	     grid);
-  new QLabel(TR("Editor path "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Editor path "), grid),grid);
   htab = new Q3HBox(grid);
   if (conv)
     s = getenv("BOUML_EDITOR");	// yes !
@@ -171,7 +171,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(grid);  
   new QLabel(TR("\nOptional, to choose a language for menus and dialogs (default is English). You may have to select a corresponding character set"),
 	     grid);
-  new QLabel(TR("Translation file path "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Translation file path "), grid),grid);
   htab = new Q3HBox(grid);
   ed_lang = new QLineEdit(current_lang(), htab);
   new QLabel(" ", htab);
@@ -188,7 +188,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to indicate a character set in case you use non ISO_8859-1/latin1 characters. For instance KOI8-R or KOI8-RU for Cyrillic"),
 	     grid);
 
-  new QLabel(TR("Character set "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Character set "), grid),grid);
   cb_charset = new Q3ComboBox(FALSE, grid);
   cb_charset->setAutoCompletion(completion());
   
@@ -224,7 +224,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nIn case you have a multiple screens configuration the best for you is to ask Bouml to place by default the dialogs in one of these\n"
 	     "screens giving the area, else the dialogs will be shown on the center of the virtual screen."),
 	     grid);
-  new QLabel(TR("Default screen "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Default screen "), grid),grid);
   
   QString x0, y0, x1, y1;
   int top, left, bottom, right;

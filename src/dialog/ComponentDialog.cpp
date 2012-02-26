@@ -136,11 +136,11 @@ void ComponentDialog::init_uml_tab() {
   
   
 
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(bn->get_name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
   edname->setReadOnly(visit);
     
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(TRUE, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (! visit) {

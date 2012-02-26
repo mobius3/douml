@@ -150,19 +150,19 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   
   
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(bn->get_name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
   if (visit)
     edname->setReadOnly(TRUE);
   
-  new QLabel(TR("stereotype :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype :"), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(bn->get_stereotype()));
   if (! visit) {
     edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClassInstance));
     edstereotype->setAutoCompletion(completion());
   }
-  SmallPushButton *  b = new SmallPushButton(TR("class :"), grid);
+  SmallPushButton *  b = GridController::PlaceWidget(new SmallPushButton(TR("class :"), grid),grid);
   
   connect(b, SIGNAL(clicked()), this, SLOT(menu_class()));
 

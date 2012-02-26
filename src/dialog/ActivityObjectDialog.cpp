@@ -83,8 +83,8 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   
   
   
-  new QLabel(TR("name :"), grid);
-  edname = new LineEdit(data->name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name :"), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(data->name(), grid),grid);
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -92,7 +92,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->stereotype));
   if (! visit) {
@@ -132,7 +132,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   edtype->setCurrentItem(0);
   edtype->setSizePolicy(sp);
   
-  new QLabel(TR("multiplicity : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("multiplicity : "), grid),grid);
   htab = new Q3HBox(grid);
   edmultiplicity = new Q3ComboBox(!visit, htab);
   edmultiplicity->setSizePolicy(sp);
@@ -161,7 +161,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
       edordering->insertItem(stringify(UmlFifo));
   }
 
-  new QLabel(TR("in state : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("in state : "), grid),grid);
   htab = new Q3HBox(grid);
   edin_state = new LineEdit(data->in_state, htab);
   edin_state->setReadOnly(visit);

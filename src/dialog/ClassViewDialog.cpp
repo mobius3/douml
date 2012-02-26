@@ -74,11 +74,11 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   
   
 
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(bn->get_name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
   edname->setReadOnly(visit);
     
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(data->get_stereotype()));
   if (!visit) {
@@ -95,7 +95,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   
   if (visit) {
     if ((bcv != 0) && !bcv->deletedp()) {
-      new QLabel(TR("deployment\nview : "), grid);
+      GridController::PlaceWidget(new QLabel(TR("deployment\nview : "), grid),grid);
       deploymentview = new Q3ComboBox(FALSE, grid);
       
       BrowserNode * bcv = bn->get_associated();
@@ -112,7 +112,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
       QStringList deploymentview_names;
       
       deploymentviews.full_names(deploymentview_names);
-      new QLabel(TR("deployment\nview : "), grid);
+      GridController::PlaceWidget(new QLabel(TR("deployment\nview : "), grid),grid);
       deploymentview = new Q3ComboBox(FALSE, grid);
       deploymentview->insertItem("");
       deploymentview->insertStringList(deploymentview_names);

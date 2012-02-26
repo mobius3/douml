@@ -67,7 +67,7 @@ RevSettingsDialog::RevSettingsDialog()
   new QLabel(TR("To specify through regular expression the directories\n"
 		"and/or files to bypass during reverse and roundtrip"), grid);
   
-  SmallPushButton * help = new SmallPushButton(TR("Help regexp"), grid);
+  SmallPushButton * help = GridController::PlaceWidget(new SmallPushButton(TR("Help regexp"), grid),grid);
   
   connect(help, SIGNAL(clicked()), this, SLOT(show_regexp_help()));
   
@@ -75,17 +75,17 @@ RevSettingsDialog::RevSettingsDialog()
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("C++ directory : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("C++ directory : "), grid),grid);
   cpp_dir = new LineEdit(grid);
   cpp_dir->setText(GenerationSettings::cpp_dir_filter.regexp);
-  cpp_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+  cpp_dir_case_sensitive = GridController::PlaceWidget(new QCheckBox(TR("case sensitive"), grid),grid);
   if (GenerationSettings::cpp_dir_filter.case_sensitive)
     cpp_dir_case_sensitive->setChecked(TRUE);
   
-  new QLabel(TR("C++ file : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("C++ file : "), grid),grid);
   cpp_file = new LineEdit(grid);
   cpp_file->setText(GenerationSettings::cpp_file_filter.regexp);
-  cpp_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+  cpp_file_case_sensitive = GridController::PlaceWidget(new QCheckBox(TR("case sensitive"), grid),grid);
   if (GenerationSettings::cpp_file_filter.case_sensitive)
     cpp_file_case_sensitive->setChecked(TRUE);
   
@@ -114,17 +114,17 @@ RevSettingsDialog::RevSettingsDialog()
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Java directory : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Java directory : "), grid),grid);
   java_dir = new LineEdit(grid);
   java_dir->setText(GenerationSettings::java_dir_filter.regexp);
-  java_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+  java_dir_case_sensitive = GridController::PlaceWidget(new QCheckBox(TR("case sensitive"), grid),grid);
   if (GenerationSettings::java_dir_filter.case_sensitive)
     java_dir_case_sensitive->setChecked(TRUE);
   
-  new QLabel(TR("Java file : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Java file : "), grid),grid);
   java_file = new LineEdit(grid);
   java_file->setText(GenerationSettings::java_file_filter.regexp);
-  java_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+  java_file_case_sensitive = GridController::PlaceWidget(new QCheckBox(TR("case sensitive"), grid),grid);
   if (GenerationSettings::java_file_filter.case_sensitive)
     java_file_case_sensitive->setChecked(TRUE);
   
@@ -144,17 +144,17 @@ RevSettingsDialog::RevSettingsDialog()
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Php directory : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Php directory : "), grid),grid);
   php_dir = new LineEdit(grid);
   php_dir->setText(GenerationSettings::php_dir_filter.regexp);
-  php_dir_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+  php_dir_case_sensitive = GridController::PlaceWidget(new QCheckBox(TR("case sensitive"), grid),grid);
   if (GenerationSettings::php_dir_filter.case_sensitive)
     php_dir_case_sensitive->setChecked(TRUE);
   
-  new QLabel(TR("Php file : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Php file : "), grid),grid);
   php_file = new LineEdit(grid);
   php_file->setText(GenerationSettings::php_file_filter.regexp);
-  php_file_case_sensitive = new QCheckBox(TR("case sensitive"), grid);
+  php_file_case_sensitive = GridController::PlaceWidget(new QCheckBox(TR("case sensitive"), grid),grid);
   if (GenerationSettings::php_file_filter.case_sensitive)
     php_file_case_sensitive->setChecked(TRUE);
   

@@ -115,11 +115,11 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   
   
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(cl->name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(cl->name(), grid),grid);
   edname->setReadOnly(visit);
   
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
     
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(cl->get_stereotype()));
@@ -169,7 +169,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   BrowserNodeList inh;
   
-  basetypelbl = new QLabel(TR("base type : "), grid);
+  basetypelbl = GridController::PlaceWidget(new QLabel(TR("base type : "), grid),grid);
   edbasetype = new Q3ComboBox(!visit, grid);
   if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize),
       inh.count() != 0) {
@@ -200,7 +200,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     
     if (visit) {
       if ((bc != 0) && !bc->deletedp()) {
-	new QLabel(TR("artifact : "), grid);
+	GridController::PlaceWidget(new QLabel(TR("artifact : "), grid),grid);
 	artifact = new Q3ComboBox(FALSE, grid);
 	artifact->insertItem(bc->full_name(TRUE));
       }
@@ -213,7 +213,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 	QStringList artifact_names;
 	
 	artifacts.full_names(artifact_names);
-	new QLabel(TR("artifact : "), grid);
+	GridController::PlaceWidget(new QLabel(TR("artifact : "), grid),grid);
 	artifact = new Q3ComboBox(FALSE, grid);
 	artifact->insertItem("");
 	artifact->insertStringList(artifact_names);
@@ -688,7 +688,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     QStringList tools = Tool::all_display();
     QString s;
     
-    new QLabel(TR("Initialization \nplug-out :"), grid);
+    GridController::PlaceWidget(new QLabel(TR("Initialization \nplug-out :"), grid),grid);
     htab = new Q3HBox(grid);
     stereo_init_cb = new Q3ComboBox(FALSE, htab);
     s = bn->get_value("stereotypeSet");
@@ -704,7 +704,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     edinitparam = new LineEdit(bn->get_value("stereotypeSetParameters"), htab);
     edinitparam->setReadOnly(visit);
     
-    new QLabel(TR("Check \nplug-out :"), grid);
+    GridController::PlaceWidget(new QLabel(TR("Check \nplug-out :"), grid),grid);
     htab = new Q3HBox(grid);
     stereo_check_cb = new Q3ComboBox(FALSE, htab);
     s = bn->get_value("stereotypeCheck");
@@ -722,7 +722,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     
     QString ip = bn->get_value("stereotypeIconPath");
     
-    new QLabel(TR("Icon path :"), grid);
+    GridController::PlaceWidget(new QLabel(TR("Icon path :"), grid),grid);
     htab = new Q3HBox(grid);
     ediconpath = new LineEdit(ip, htab);
     if (visit) {
@@ -749,7 +749,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
       new QLabel("", htab);
     }
 
-    new QLabel(TR("Apply on : "), grid);
+    GridController::PlaceWidget(new QLabel(TR("Apply on : "), grid),grid);
     applicableon_table =
       new ApplicableOnTable(grid, bn->get_value("stereotypeApplyOn"), visit);
     

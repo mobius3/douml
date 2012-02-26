@@ -113,7 +113,7 @@ void GenerationSettingsDialog::init_stereotypes() {
   
   
 
-  new QLabel(TR("Attributes and \nRelations\nstereotypes \ncorrespondence : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Attributes and \nRelations\nstereotypes \ncorrespondence : "), grid),grid);
   relation_stereotypes_table = 
     new StereotypesTable(grid, GenerationSettings::nrelattrstereotypes,
 			 GenerationSettings::relattr_stereotypes, FALSE);
@@ -121,7 +121,7 @@ void GenerationSettingsDialog::init_stereotypes() {
   //new QLabel(grid);
   //new QLabel(grid);
   
-  new QLabel(TR("Classes's \nstereotypes \ncorrespondence : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Classes's \nstereotypes \ncorrespondence : "), grid),grid);
   class_stereotypes_table =
     new StereotypesTable(grid, GenerationSettings::nclassstereotypes,
 			 GenerationSettings::class_stereotypes, TRUE);
@@ -157,7 +157,7 @@ void GenerationSettingsDialog::init_cpp1() {
   Q3VBox * vtab = new Q3VBox(this);
   QWidget * grid = GridConverter::InitNewGrid(vtab, 2);
 
-  new QLabel(TR("Header file\ndefault content :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Header file\ndefault content :"), grid),grid);
   edcpp_h_content = new MultiLineEdit(grid);
   edcpp_h_content->setText(GenerationSettings::cpp_h_content);
   QFont font = edcpp_h_content->font();
@@ -166,7 +166,7 @@ void GenerationSettingsDialog::init_cpp1() {
   font.setFixedPitch(TRUE);
   edcpp_h_content->setFont(font);
     
-  new QLabel(TR("Source file\ndefault content :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Source file\ndefault content :"), grid),grid);
   edcpp_src_content = new MultiLineEdit(grid);
   edcpp_src_content->setText(GenerationSettings::cpp_src_content);
   edcpp_src_content->setFont(font);
@@ -240,7 +240,7 @@ void GenerationSettingsDialog::init_cpp2() {
   
   
 
-  new QLabel(TR("Class default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Class default \ndeclaration :"), grid),grid);
   edcpp_class_decl = new MultiLineEdit(grid);
   edcpp_class_decl->setText(GenerationSettings::cpp_class_decl);
   QFont font = edcpp_class_decl->font();
@@ -249,22 +249,22 @@ void GenerationSettingsDialog::init_cpp2() {
   font.setFixedPitch(TRUE);
   edcpp_class_decl->setFont(font);
 
-  new QLabel(TR("Struct default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Struct default \ndeclaration :"), grid),grid);
   edcpp_struct_decl = new MultiLineEdit(grid);
   edcpp_struct_decl->setText(GenerationSettings::cpp_struct_decl);
   edcpp_struct_decl->setFont(font);
 
-  new QLabel(TR("Union default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Union default \ndeclaration :"), grid),grid);
   edcpp_union_decl = new MultiLineEdit(grid);
   edcpp_union_decl->setText(GenerationSettings::cpp_union_decl);
   edcpp_union_decl->setFont(font);
 
-  new QLabel(TR("Enum default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enum default \ndeclaration :"), grid),grid);
   edcpp_enum_decl = new MultiLineEdit(grid);
   edcpp_enum_decl->setText(GenerationSettings::cpp_enum_decl);
   edcpp_enum_decl->setFont(font);
 
-  new QLabel(TR("Typedef default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Typedef default \ndeclaration :"), grid),grid);
   edcpp_typedef_decl = new MultiLineEdit(grid);
   edcpp_typedef_decl->setText(GenerationSettings::cpp_typedef_decl);
   edcpp_typedef_decl->setFont(font);
@@ -283,7 +283,7 @@ void GenerationSettingsDialog::init_cpp3() {
   
   
 
-  new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid),grid);
 
   grid2 = new Q3Grid(2, grid);
   (new QLabel(TR("Multiplicity"), grid2))->setAlignment(Qt::AlignCenter);
@@ -310,7 +310,7 @@ void GenerationSettingsDialog::init_cpp3() {
   new QLabel(grid);
   new QLabel(grid);
 
-  new QLabel(TR("Association\nand\naggregation\ndefault\ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Association\nand\naggregation\ndefault\ndeclaration :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   (new QLabel(TR("Multiplicity"), grid2))->setAlignment(Qt::AlignCenter);
   htab = new Q3HBox(grid2);
@@ -330,7 +330,7 @@ void GenerationSettingsDialog::init_cpp3() {
   new QLabel(grid);
   new QLabel(grid);
 
-  new QLabel(TR("Composition\ndefault\ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Composition\ndefault\ndeclaration :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   (new QLabel(TR("Multiplicity"), grid2))->setAlignment(Qt::AlignCenter);
   htab = new Q3HBox(grid2);
@@ -367,7 +367,7 @@ void GenerationSettingsDialog::init_cpp4() {
   
   
 
-  new QLabel(TR("Get operation\ndefault definition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);
   
   vtab = new Q3VBox(grid);
   
@@ -400,7 +400,7 @@ void GenerationSettingsDialog::init_cpp4() {
   connect(uml_follow_cpp_get_name, SIGNAL(toggled(bool)),
 	  this, SLOT(follow_cpp_get_name()));
   
-  new QLabel(TR("Set operation\ndefault definition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
   
   vtab = new Q3VBox(grid);
   
@@ -432,7 +432,7 @@ void GenerationSettingsDialog::init_cpp4() {
   //new QLabel(grid);
   //new QLabel(grid);
   
-  new QLabel(TR("Enumeration item \ndefault definition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enumeration item \ndefault definition :"), grid),grid);
   edcpp_enum_item_decl = new MultiLineEdit(grid);
   edcpp_enum_item_decl->setText(GenerationSettings::cpp_enum_item_decl);
   edcpp_enum_item_decl->setFont(font);
@@ -440,7 +440,7 @@ void GenerationSettingsDialog::init_cpp4() {
   //new QLabel(grid);
   //new QLabel(grid);
 
-  new QLabel(TR("Default type forms\nfor the enums :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Default type forms\nfor the enums :"), grid),grid);
   htab = new Q3HBox(grid);
   htab->setMargin(3);
   new QLabel(TR("input\nparameter : "), htab);
@@ -460,7 +460,7 @@ void GenerationSettingsDialog::init_cpp4() {
   cpp_enum_return->setText(GenerationSettings::cpp_enum_return);
   cpp_enum_return->setFont(font);
   
-  new QLabel(TR("Default type forms for\nthe types not given\nin the first tab:"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Default type forms for\nthe types not given\nin the first tab:"), grid),grid);
   htab = new Q3HBox(grid);
   htab->setMargin(3);
   new QLabel(TR("input\nparameter : "), htab);
@@ -483,12 +483,12 @@ void GenerationSettingsDialog::init_cpp4() {
   //new QLabel(grid);
   //new QLabel(grid);
   
-  new QLabel(TR("Operation default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Operation default \ndeclaration :"), grid),grid);
   edcpp_oper_decl = new MultiLineEdit(grid);
   edcpp_oper_decl->setText(GenerationSettings::cpp_oper_decl);
   edcpp_oper_decl->setFont(font);
 
-  new QLabel(TR("Operation default \ndefinition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Operation default \ndefinition :"), grid),grid);
   htab = new Q3HBox(grid);
   edcpp_oper_def = new MultiLineEdit(htab);
   edcpp_oper_def->setText(GenerationSettings::cpp_oper_def);
@@ -539,7 +539,7 @@ void GenerationSettingsDialog::init_java1() {
   
   
 
-  new QLabel(TR("file default \ncontent :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("file default \ncontent :"), grid),grid);
   
   Q3HBox * htab = new Q3HBox(grid);
 
@@ -577,22 +577,22 @@ void GenerationSettingsDialog::init_java1() {
   java_force_package_gen_cb = new QCheckBox(htab2);
   java_force_package_gen_cb->setChecked(GenerationSettings::java_force_package_gen);
   
-  new QLabel(TR("Class default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Class default \ndeclaration :"), grid),grid);
   edjava_class_decl = new MultiLineEdit(grid);
   edjava_class_decl->setText(GenerationSettings::java_class_decl);
   edjava_class_decl->setFont(font);
 
-  new QLabel(TR("Interface default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Interface default \ndeclaration :"), grid),grid);
   edjava_interface_decl = new MultiLineEdit(grid);
   edjava_interface_decl->setText(GenerationSettings::java_interface_decl);
   edjava_interface_decl->setFont(font);
 
-  new QLabel(TR("Enum default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enum default \ndeclaration :"), grid),grid);
   edjava_enum_decl = new MultiLineEdit(grid);
   edjava_enum_decl->setText(GenerationSettings::java_enum_decl);
   edjava_enum_decl->setFont(font);
 
-  new QLabel(TR("Enum pattern \ndefault declaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enum pattern \ndefault declaration :"), grid),grid);
   edjava_enum_pattern_decl = new MultiLineEdit(grid);
   edjava_enum_pattern_decl->setText(GenerationSettings::java_enum_pattern_decl);
   edjava_enum_pattern_decl->setFont(font);
@@ -610,7 +610,7 @@ void GenerationSettingsDialog::init_java2() {
   
   
 
-  new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid),grid);
 
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
@@ -635,7 +635,7 @@ void GenerationSettingsDialog::init_java2() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edjava_rel_decl[0] = new MultiLineEdit(grid2);
@@ -662,7 +662,7 @@ void GenerationSettingsDialog::init_java3() {
   
   
 
-  new QLabel(TR("Enumeration item \ndefault definition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enumeration item \ndefault definition :"), grid),grid);
   edjava_enum_item_decl = new MultiLineEdit(grid);
   edjava_enum_item_decl->setText(GenerationSettings::java_enum_item_decl);
   
@@ -673,17 +673,17 @@ void GenerationSettingsDialog::init_java3() {
   font.setFixedPitch(TRUE);
   edjava_enum_item_decl->setFont(font);
 
-  new QLabel(TR("Enum pattern item \ndefault definition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enum pattern item \ndefault definition :"), grid),grid);
   edjava_enum_pattern_item_decl = new MultiLineEdit(grid);
   edjava_enum_pattern_item_decl->setText(GenerationSettings::java_enum_pattern_item_decl);
   edjava_enum_pattern_item_decl->setFont(font);
 
-  new QLabel(TR("Enum pattern item \n'case' in 'from_int' :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enum pattern item \n'case' in 'from_int' :"), grid),grid);
   edjava_enum_pattern_item_case = new MultiLineEdit(grid);
   edjava_enum_pattern_item_case->setText(GenerationSettings::java_enum_pattern_item_case);
   edjava_enum_pattern_item_case->setFont(font);
 
-  new QLabel(TR("Get operation\ndefault definition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);
   htab = new Q3HBox(grid);
   htab->setMargin(3);
   java_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
@@ -707,7 +707,7 @@ void GenerationSettingsDialog::init_java3() {
   connect(uml_follow_java_get_name, SIGNAL(toggled(bool)),
 	  this, SLOT(follow_java_get_name()));
   
-  new QLabel(TR("Set operation\ndefault definition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
   htab = new Q3HBox(grid);
   htab->setMargin(3);
   java_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
@@ -736,7 +736,7 @@ void GenerationSettingsDialog::init_java3() {
   //new QLabel(grid);
   //new QLabel(grid);
   
-  new QLabel(TR("Operation\ndefault definition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Operation\ndefault definition :"), grid),grid);
   edjava_oper_def = new MultiLineEdit(grid);
   edjava_oper_def->setText(GenerationSettings::java_oper_def);
   edjava_oper_def->setFont(font);
@@ -782,7 +782,7 @@ void GenerationSettingsDialog::init_php1() {
   
   
 
-  new QLabel(TR("file default \ncontent :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("file default \ncontent :"), grid),grid);
   
   Q3HBox * htab = new Q3HBox(grid);
 
@@ -837,17 +837,17 @@ void GenerationSettingsDialog::init_php1() {
   php_force_namespace_gen_cb = new QCheckBox(htab2);
   php_force_namespace_gen_cb->setChecked(GenerationSettings::php_force_namespace_gen);
 
-  new QLabel(TR("Class default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Class default \ndeclaration :"), grid),grid);
   edphp_class_decl = new MultiLineEdit(grid);
   edphp_class_decl->setText(GenerationSettings::php_class_decl);
   edphp_class_decl->setFont(font);
 
-  new QLabel(TR("Interface default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Interface default \ndeclaration :"), grid),grid);
   edphp_interface_decl = new MultiLineEdit(grid);
   edphp_interface_decl->setText(GenerationSettings::php_interface_decl);
   edphp_interface_decl->setFont(font);
 
-  new QLabel(TR("Enum default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enum default \ndeclaration :"), grid),grid);
   edphp_enum_decl = new MultiLineEdit(grid);
   edphp_enum_decl->setText(GenerationSettings::php_enum_decl);
   edphp_enum_decl->setFont(font);
@@ -864,7 +864,7 @@ void GenerationSettingsDialog::init_php2() {
   
   
 
-  new QLabel(TR("Attribute default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Attribute default \ndeclaration :"), grid),grid);
   edphp_attr_decl = new MultiLineEdit(grid);
 
   QFont font = edphp_attr_decl->font();
@@ -876,7 +876,7 @@ void GenerationSettingsDialog::init_php2() {
   edphp_attr_decl->setText(GenerationSettings::php_attr_decl);
   edphp_attr_decl->setFont(font);
 
-  new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid),grid);
   edphp_rel_decl = new MultiLineEdit(grid);
   edphp_rel_decl->setText(GenerationSettings::php_rel_decl);
   edphp_rel_decl->setFont(font);
@@ -884,7 +884,7 @@ void GenerationSettingsDialog::init_php2() {
   Q3HBox * htab;
   Q3ButtonGroup * bg;
   
-  new QLabel(TR("Enumeration item \ndefault definition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enumeration item \ndefault definition :"), grid),grid);
   edphp_enum_item_decl = new MultiLineEdit(grid);
   edphp_enum_item_decl->setText(GenerationSettings::php_enum_item_decl);
   
@@ -893,7 +893,7 @@ void GenerationSettingsDialog::init_php2() {
   font.setFixedPitch(TRUE);
   edphp_enum_item_decl->setFont(font);
 
-  new QLabel(TR("Get operation\ndefault definition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);
   htab = new Q3HBox(grid);
   htab->setMargin(3);
   php_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
@@ -917,7 +917,7 @@ void GenerationSettingsDialog::init_php2() {
   connect(uml_follow_php_get_name, SIGNAL(toggled(bool)),
 	  this, SLOT(follow_php_get_name()));
   
-  new QLabel(TR("Set operation\ndefault definition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
   htab = new Q3HBox(grid);
   htab->setMargin(3);
   php_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
@@ -944,7 +944,7 @@ void GenerationSettingsDialog::init_php2() {
   //new QLabel(grid);
   //new QLabel(grid);
   
-  new QLabel(TR("Operation\ndefault definition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Operation\ndefault definition :"), grid),grid);
   edphp_oper_def = new MultiLineEdit(grid);
   edphp_oper_def->setText(GenerationSettings::php_oper_def);
   edphp_oper_def->setFont(font);
@@ -952,7 +952,7 @@ void GenerationSettingsDialog::init_php2() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("External classes : \nname making"), grid);
+  GridController::PlaceWidget(new QLabel(TR("External classes : \nname making"), grid),grid);
   edphp_external_class_decl = new LineEdit(grid);
   edphp_external_class_decl->setText(GenerationSettings::php_external_class_decl);
   
@@ -968,7 +968,7 @@ void GenerationSettingsDialog::init_python1() {
   
   
 
-  new QLabel(TR("indent step :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("indent step :"), grid),grid);
   
   Q3HBox * htab = new Q3HBox(grid);
 
@@ -981,7 +981,7 @@ void GenerationSettingsDialog::init_python1() {
   sp.setHorData(QSizePolicy::Expanding);
   lbl->setSizePolicy(sp);
   
-  new QLabel(TR("file default \ncontent :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("file default \ncontent :"), grid),grid);
   
   htab = new Q3HBox(grid);
   htab->setMargin(3);
@@ -999,7 +999,7 @@ void GenerationSettingsDialog::init_python1() {
   edpython_extension->setCurrentItem(0);
   edpython_extension->insertItem("py");
 
-  new QLabel(TR("Class default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Class default \ndeclaration :"), grid),grid);
 
   htab = new Q3HBox(grid);
   htab->setMargin(3);
@@ -1011,17 +1011,17 @@ void GenerationSettingsDialog::init_python1() {
   python_2_2_cb = new QCheckBox(htab);
   python_2_2_cb->setChecked(GenerationSettings::python_2_2);
 
-  new QLabel(TR("Enum default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enum default \ndeclaration :"), grid),grid);
   edpython_enum_decl = new MultiLineEdit(grid);
   edpython_enum_decl->setText(GenerationSettings::python_enum_decl);
   edpython_enum_decl->setFont(font);
 
-  new QLabel(TR("Enumeration item \ndefault definition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enumeration item \ndefault definition :"), grid),grid);
   edpython_enum_item_decl = new MultiLineEdit(grid);
   edpython_enum_item_decl->setText(GenerationSettings::python_enum_item_decl);
   edpython_enum_item_decl->setFont(font);
 
-  new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid),grid);
 
   QWidget * grid2 = GridConverter::InitNewGrid(grid, 2);
 
@@ -1050,7 +1050,7 @@ void GenerationSettingsDialog::init_python2() {
   
   
 
-  new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edpython_rel_decl[0][0] = new MultiLineEdit(grid2);
@@ -1073,7 +1073,7 @@ void GenerationSettingsDialog::init_python2() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Composition\ndefault\ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Composition\ndefault\ndeclaration :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edpython_rel_decl[1][0] = new MultiLineEdit(grid2);
@@ -1089,7 +1089,7 @@ void GenerationSettingsDialog::init_python2() {
   new QLabel(grid);
   new QLabel(grid);
 
-  new QLabel(TR("Get operation\ndefault definition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);
   htab = new Q3HBox(grid);
   htab->setMargin(3);
   new QLabel(TR("  name : "), htab);
@@ -1104,7 +1104,7 @@ void GenerationSettingsDialog::init_python2() {
   connect(uml_follow_python_get_name, SIGNAL(toggled(bool)),
 	  this, SLOT(follow_python_get_name()));
   
-  new QLabel(TR("Set operation\ndefault definition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
   htab = new Q3HBox(grid);
   htab->setMargin(3);
   new QLabel(TR("  name : "), htab);
@@ -1122,7 +1122,7 @@ void GenerationSettingsDialog::init_python2() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Operation\ndefault definition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Operation\ndefault definition :"), grid),grid);
   htab = new Q3HBox(grid);
   htab->setMargin(3);
   edpython_oper_def = new MultiLineEdit(htab);
@@ -1132,7 +1132,7 @@ void GenerationSettingsDialog::init_python2() {
   python_3_operation_cb = new QCheckBox(htab);
   python_3_operation_cb->setChecked(GenerationSettings::python_3_operation);  
   
-  new QLabel(TR("Operation __init__\ndefault definition :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Operation __init__\ndefault definition :"), grid),grid);
   edpython_initoper_def = new MultiLineEdit(grid);
   edpython_initoper_def->setText(GenerationSettings::python_initoper_def);
   edpython_initoper_def->setFont(font);
@@ -1200,39 +1200,39 @@ void GenerationSettingsDialog::init_idl1() {
   QWidget * grid = GridConverter::InitNewGrid(split, 2);
 
 
-  new QLabel(TR("Interface default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Interface default \ndeclaration :"), grid),grid);
   edidl_interface_decl = new MultiLineEdit(grid);
   edidl_interface_decl->setText(GenerationSettings::idl_interface_decl);
   edidl_interface_decl->setFont(font);
 
   QLabel * lbl2 = 
-    new QLabel(TR("Valuetype default \ndeclaration :"), grid);
+    GridController::PlaceWidget(new QLabel(TR("Valuetype default \ndeclaration :"), grid),grid);
   same_width(lbl1, lbl2);
   edidl_valuetype_decl = new MultiLineEdit(grid);
   edidl_valuetype_decl->setText(GenerationSettings::idl_valuetype_decl);
   edidl_valuetype_decl->setFont(font);
 
-  new QLabel(TR("Struct default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Struct default \ndeclaration :"), grid),grid);
   edidl_struct_decl = new MultiLineEdit(grid);
   edidl_struct_decl->setText(GenerationSettings::idl_struct_decl);
   edidl_struct_decl->setFont(font);
 
-  new QLabel(TR("Union default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Union default \ndeclaration :"), grid),grid);
   edidl_union_decl = new MultiLineEdit(grid);
   edidl_union_decl->setText(GenerationSettings::idl_union_decl);
   edidl_union_decl->setFont(font);
 
-  new QLabel(TR("Enum default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enum default \ndeclaration :"), grid),grid);
   edidl_enum_decl = new MultiLineEdit(grid);
   edidl_enum_decl->setText(GenerationSettings::idl_enum_decl);
   edidl_enum_decl->setFont(font);
 
-  new QLabel(TR("Typedef default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Typedef default \ndeclaration :"), grid),grid);
   edidl_typedef_decl = new MultiLineEdit(grid);
   edidl_typedef_decl->setText(GenerationSettings::idl_typedef_decl);
   edidl_typedef_decl->setFont(font);
 
-  new QLabel(TR("Exception default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Exception default \ndeclaration :"), grid),grid);
   edidl_exception_decl = new MultiLineEdit(grid);
   edidl_exception_decl->setText(GenerationSettings::idl_exception_decl);
   edidl_exception_decl->setFont(font);
@@ -1250,7 +1250,7 @@ void GenerationSettingsDialog::init_idl2() {
   
   
 
-  new QLabel(TR("Attribute default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Attribute default \ndeclaration :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_attr_decl[0] = new MultiLineEdit(grid2);
@@ -1274,7 +1274,7 @@ void GenerationSettingsDialog::init_idl2() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Attribute default \ndeclaration in\nvaluetype :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Attribute default \ndeclaration in\nvaluetype :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_valuetype_attr_decl[0] = new MultiLineEdit(grid2);
@@ -1290,7 +1290,7 @@ void GenerationSettingsDialog::init_idl2() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Constant default \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Constant default \ndeclaration :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_const_decl[0] = new MultiLineEdit(grid2);
@@ -1317,7 +1317,7 @@ void GenerationSettingsDialog::init_idl3() {
   
   
 
-  new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_rel_decl[0] = new MultiLineEdit(grid2);
@@ -1337,7 +1337,7 @@ void GenerationSettingsDialog::init_idl3() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Association and\naggregation\ndefault\ndeclaration in\nvaluetype :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration in\nvaluetype :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_valuetype_rel_decl[0] = new MultiLineEdit(grid2);
@@ -1353,7 +1353,7 @@ void GenerationSettingsDialog::init_idl3() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Association and\naggregation\ndefault\ndeclaration in\nunion:"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Association and\naggregation\ndefault\ndeclaration in\nunion:"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_union_rel_decl[0] = new MultiLineEdit(grid2);
@@ -1380,7 +1380,7 @@ void GenerationSettingsDialog::init_idl4() {
   
   
 
-  new QLabel(TR("Union item \ndefault \ndeclaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Union item \ndefault \ndeclaration :"), grid),grid);
   grid2 = new Q3Grid(2, grid);
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edidl_union_item_decl[0] = new MultiLineEdit(grid2);
@@ -1404,7 +1404,7 @@ void GenerationSettingsDialog::init_idl4() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Enumeration item \ndefault declaration :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("Enumeration item \ndefault declaration :"), grid),grid);
   edidl_enum_item_decl = new MultiLineEdit(grid);
   edidl_enum_item_decl->setText(GenerationSettings::idl_enum_item_decl);
   edidl_enum_item_decl->setFont(font);
@@ -1412,7 +1412,7 @@ void GenerationSettingsDialog::init_idl4() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Get operation\ndefault definition : "), grid);  
+  GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);  
   htab = new Q3HBox(grid);
   new QLabel(TR("name : "), htab);
   edidl_get_name = new LineEdit(htab);
@@ -1426,7 +1426,7 @@ void GenerationSettingsDialog::init_idl4() {
   connect(uml_follow_idl_get_name, SIGNAL(toggled(bool)),
 	  this, SLOT(follow_idl_get_name()));
   
-  new QLabel(TR("Set operation\ndefault definition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
   htab = new Q3HBox(grid);
   idl_set_oneway_cb = new QCheckBox("oneway", htab);
   idl_set_oneway_cb->setChecked(GenerationSettings::idl_set_oneway);
@@ -1446,7 +1446,7 @@ void GenerationSettingsDialog::init_idl4() {
   new QLabel(grid);
   new QLabel(grid);
   
-  new QLabel(TR("Operation default \ndeclaration : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Operation default \ndeclaration : "), grid),grid);
   edidl_oper_decl = new MultiLineEdit(grid);
   edidl_oper_decl->setText(GenerationSettings::idl_oper_decl);
   edidl_oper_decl->setFont(font);

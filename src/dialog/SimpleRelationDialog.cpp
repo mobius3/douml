@@ -82,12 +82,12 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
     break;
   }
   
-  new QLabel(TR("from : "), grid);
-  new QLabel(rel->get_start_node()->full_name(TRUE), grid);
-  new QLabel(TR("to : "), grid);
-  new QLabel(rel->get_end_node()->full_name(TRUE), grid);
+  GridController::PlaceWidget(new QLabel(TR("from : "), grid),grid);
+  GridController::PlaceWidget(new QLabel(rel->get_start_node()->full_name(TRUE), grid),grid);
+  GridController::PlaceWidget(new QLabel(TR("to : "), grid),grid);
+  GridController::PlaceWidget(new QLabel(rel->get_end_node()->full_name(TRUE), grid),grid);
   
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(rel->get_stereotype()));
   if (! visit) {

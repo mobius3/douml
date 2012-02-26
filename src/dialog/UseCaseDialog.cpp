@@ -72,11 +72,11 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   
 
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(bn->get_name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
   edname->setReadOnly(visit);
 
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(uc->get_stereotype()));
   if (! visit) {
@@ -89,7 +89,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  new QLabel(TR("extension \npoints : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("extension \npoints : "), grid),grid);
   extension_points = new MultiLineEdit(grid);
   extension_points->setReadOnly(visit);
   extension_points->setText(uc->get_extension_points());

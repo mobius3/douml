@@ -107,11 +107,11 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   grid = mkgrid(this);
   umltab = grid;
     
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(action->get_name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(action->get_name(), grid),grid);
   edname->setReadOnly(visit);
     
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(action->get_stereotype()));
   if (!visit) {
@@ -124,7 +124,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
 
-  new QLabel(TR("kind : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("kind : "), grid),grid);
   edtype = new Q3ComboBox(FALSE, grid);
       
   if (visit) {
@@ -424,11 +424,11 @@ void ActivityActionDialog::accept() {
 
 void ActionCondDialog::init(QWidget * grid, ActivityActionData * d,
 			    DrawingLanguage lang, bool visit) {
-  new QLabel(TR("Pre\ncondition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Pre\ncondition : "), grid),grid);
   edpre = new MultiLineEdit(grid);
   edpre->setText(d->get_precond(lang));
 
-  new QLabel(TR("Post\ncondition : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("Post\ncondition : "), grid),grid);
   edpost = new MultiLineEdit(grid);
   edpost->setText(d->get_postcond(lang));
 

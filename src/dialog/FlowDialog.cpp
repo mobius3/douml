@@ -76,11 +76,11 @@ FlowDialog::FlowDialog(FlowData * d)
   
   
   
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(bn->get_name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name : "), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(bn->get_name(), grid),grid);
   edname->setReadOnly(visit);
     
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(flow->get_stereotype()));
   if (!visit) {
@@ -165,7 +165,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
   
   
   
-  new QLabel(TR("weight : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("weight : "), grid),grid);
   d.edweight = new LineEdit(grid);
 
   QFont font = d.edweight->font();

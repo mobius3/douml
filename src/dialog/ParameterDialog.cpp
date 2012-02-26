@@ -83,8 +83,8 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   
   
   
-  new QLabel(TR("name :"), grid);
-  edname = new LineEdit(pa->name(), grid);
+  GridController::PlaceWidget(new QLabel(TR("name :"), grid),grid);
+  edname = GridController::PlaceWidget(new LineEdit(pa->name(), grid),grid);
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -92,7 +92,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   
-  new QLabel(TR("stereotype : "), grid);
+  GridController::PlaceWidget(new QLabel(TR("stereotype : "), grid),grid);
   edstereotype = new Q3ComboBox(!visit, grid);
   edstereotype->insertItem(toUnicode(pa->stereotype));
   if (! visit) {
@@ -125,7 +125,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   edtype->setCurrentItem(0);
   edtype->setSizePolicy(sp);
   
-  new QLabel(TR("direction :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("direction :"), grid),grid);
   htab = new Q3HBox(grid);
   eddir = new Q3ComboBox(FALSE, htab);
   
@@ -190,11 +190,11 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
       edeffect->insertItem(stringify(UmlDelete));
   }
   
-  new QLabel(TR("in state : "), grid);
-  edin_state = new LineEdit(pa->in_state, grid);
+  GridController::PlaceWidget(new QLabel(TR("in state : "), grid),grid);
+  edin_state = GridController::PlaceWidget(new LineEdit(pa->in_state, grid),grid);
   edin_state->setReadOnly(visit);
        
-  new QLabel(TR("default value :"), grid);
+  GridController::PlaceWidget(new QLabel(TR("default value :"), grid),grid);
   htab = new Q3HBox(grid);
   edinit = new LineEdit(pa->get_default_value(), htab);
   if (visit)
