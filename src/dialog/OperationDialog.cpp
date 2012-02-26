@@ -253,7 +253,7 @@ void OperationDialog::init_get_set() {
 // general tab
 void OperationDialog::init_uml() {  
   
-  Q3HBox * htab;
+  QWidget * htab;
   Q3ButtonGroup * bg;
     
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
@@ -315,7 +315,7 @@ void OperationDialog::init_uml() {
 
   new QLabel(grid);
   
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   bg = uml_visibility.init(htab, oper->get_uml_visibility(), TRUE);
   if (visit)
     bg->setEnabled(FALSE);
@@ -362,7 +362,7 @@ void OperationDialog::init_uml() {
   GridController::PlaceWidget(new QLabel(TR("exceptions : "), grid),grid);
   etable = new ExceptionsTable(oper, grid, list, visit);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   
   new QLabel(TR("description :"), vtab);
   if (! visit) {
@@ -380,7 +380,7 @@ void OperationDialog::init_uml() {
   comment->setFont(font);
   comment->setReadOnly(visit);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("constraint :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -399,7 +399,7 @@ void OperationDialog::init_uml() {
 void OperationDialog::init_cpp() {  
   if (! cpp_undef) {
     
-    Q3HBox * htab;
+    QWidget * htab;
     Q3ButtonGroup * bg;
     
     QWidget * grid = GridConverter::InitNewGrid(this, 2);
@@ -415,7 +415,7 @@ void OperationDialog::init_cpp() {
 	cppfrozen_cb->setChecked(TRUE);
     }
 
-    htab = new Q3HBox(grid);
+    htab = GridController::PlaceHorizontal(grid);
     
     bg = cpp_visibility.init(htab, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml"));
     if (visit)
@@ -489,7 +489,7 @@ void OperationDialog::init_cpp() {
     
     if (! visit) {
       new QLabel(grid);
-      htab = new Q3HBox(grid);  
+      htab = GridController::PlaceHorizontal(grid);  
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
 	      this, SLOT(cpp_default_decl()));
       if (!oper->is_get_or_set)
@@ -510,7 +510,7 @@ void OperationDialog::init_cpp() {
     else
       connect(edcppdef, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
     
-    Q3VBox * vtab = new Q3VBox(grid);
+    QWidget * vtab = GridController::PlaceVertical(grid);
 
     new QLabel(TR("Result after\nsubstitution : "), vtab);
     if (!visit && !oper->is_get_or_set) {
@@ -539,7 +539,7 @@ void OperationDialog::init_cpp() {
     }
         
     if (! visit) {
-      htab = new Q3HBox(grid);  
+      htab = GridController::PlaceHorizontal(grid);  
       connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
 	      this, SLOT(cpp_default_def()));
       if (!oper->is_get_or_set)
@@ -569,7 +569,7 @@ void OperationDialog::init_cpp() {
 void OperationDialog::init_java() {  
   if (! java_undef) {
     
-    Q3HBox * htab;
+    QWidget * htab;
     Q3ButtonGroup * bg;
 
     QWidget * grid = GridConverter::InitNewGrid(this, 2);
@@ -606,7 +606,7 @@ void OperationDialog::init_java() {
     
     if (oper->is_get_or_set) {
       GridController::PlaceWidget(new QLabel(TR("Name form : "), grid),grid);
-      htab = new Q3HBox(grid);
+      htab = GridController::PlaceHorizontal(grid);
       edjavanamespec = new LineEdit(htab);
       edjavanamespec->setText(oper->java_name_spec);
       if (visit)
@@ -627,7 +627,7 @@ void OperationDialog::init_java() {
     else
       connect(edjavadef, SIGNAL(textChanged()), this, SLOT(java_update_def()));
     
-    Q3VBox * vtab = new Q3VBox(grid);
+    QWidget * vtab = GridController::PlaceVertical(grid);
 
     new QLabel(TR("Result after\nsubstitution : "), vtab);
     if (!visit && !oper->is_get_or_set) {
@@ -655,7 +655,7 @@ void OperationDialog::init_java() {
       delete [] b;
     }
         
-    htab = new Q3HBox(grid);  
+    htab = GridController::PlaceHorizontal(grid);  
 
     if (! visit) {
       connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
@@ -685,7 +685,7 @@ void OperationDialog::init_java() {
 void OperationDialog::init_php() {  
   if (! php_undef) {
     
-    Q3HBox * htab;
+    QWidget * htab;
     Q3ButtonGroup * bg;
 
     QWidget * grid = GridConverter::InitNewGrid(this, 2);
@@ -713,7 +713,7 @@ void OperationDialog::init_php() {
 
     if (oper->is_get_or_set) {
       GridController::PlaceWidget(new QLabel(TR("Name form : "), grid),grid);
-      htab = new Q3HBox(grid);
+      htab = GridController::PlaceHorizontal(grid);
       edphpnamespec = new LineEdit(htab);
       edphpnamespec->setText(oper->php_name_spec);
       if (visit)
@@ -734,7 +734,7 @@ void OperationDialog::init_php() {
     else
       connect(edphpdef, SIGNAL(textChanged()), this, SLOT(php_update_def()));
     
-    Q3VBox * vtab = new Q3VBox(grid);
+    QWidget * vtab = GridController::PlaceVertical(grid);
 
     new QLabel(TR("Result after\nsubstitution : "), vtab);
     if (!visit && !oper->is_get_or_set) {
@@ -762,7 +762,7 @@ void OperationDialog::init_php() {
       delete [] b;
     }
         
-    htab = new Q3HBox(grid);  
+    htab = GridController::PlaceHorizontal(grid);  
 
     if (! visit) {
       connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
@@ -786,7 +786,7 @@ void OperationDialog::init_php() {
 void OperationDialog::init_python() {  
   if (! python_undef) {
     
-    Q3HBox * htab;
+    QWidget * htab;
 
     QWidget * grid = GridConverter::InitNewGrid(this, 2);
     pythontab = grid;
@@ -802,7 +802,7 @@ void OperationDialog::init_python() {
 
     if (oper->is_get_or_set) {
       GridController::PlaceWidget(new QLabel(TR("Name form : "), grid),grid);
-      htab = new Q3HBox(grid);
+      htab = GridController::PlaceHorizontal(grid);
       edpythonnamespec = new LineEdit(htab);
       edpythonnamespec->setText(oper->python_name_spec);
       if (visit)
@@ -823,7 +823,7 @@ void OperationDialog::init_python() {
     else
       connect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
     
-    Q3VBox * vtab = new Q3VBox(grid);
+    QWidget * vtab = GridController::PlaceVertical(grid);
 
     new QLabel(TR("Result after\nsubstitution : "), vtab);
     if (!visit && !oper->is_get_or_set) {
@@ -850,7 +850,7 @@ void OperationDialog::init_python() {
       delete [] b;
     }
         
-    htab = new Q3HBox(grid);  
+    htab = GridController::PlaceHorizontal(grid);  
 
     if (! visit) {
       connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
@@ -881,7 +881,7 @@ void OperationDialog::init_python() {
 void OperationDialog::init_idl() {  
   if (! idl_undef) {
     
-    Q3HBox * htab;
+    QWidget * htab;
     Q3ButtonGroup * bg;
 
     QWidget * grid = GridConverter::InitNewGrid(this, 2);
@@ -909,7 +909,7 @@ void OperationDialog::init_idl() {
     
     if (oper->is_get_or_set) {
       GridController::PlaceWidget(new QLabel(TR("Name form : "), grid),grid);
-      htab = new Q3HBox(grid);
+      htab = GridController::PlaceHorizontal(grid);
       edidlnamespec = new LineEdit(htab);
       edidlnamespec->setText(oper->idl_name_spec);
       if (visit)
@@ -937,7 +937,7 @@ void OperationDialog::init_idl() {
     
     if (! visit) {
       new QLabel(grid);
-      htab = new Q3HBox(grid);  
+      htab = GridController::PlaceHorizontal(grid);  
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
 	      this, SLOT(idl_default_def()));
       connect(new QPushButton(TR("Not generated in Idl"), htab), SIGNAL(clicked ()),

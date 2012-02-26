@@ -72,7 +72,7 @@ PinDialog::PinDialog(PinData * pi)
   setCaption(TR("Pin dialog"));
   
   
-  Q3HBox * htab;
+  QWidget * htab;
   QString s;
     
   // general tab
@@ -125,7 +125,7 @@ PinDialog::PinDialog(PinData * pi)
   edtype->setSizePolicy(sp);
   
   GridController::PlaceWidget(new QLabel(TR("direction :"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   eddir = new Q3ComboBox(FALSE, htab);
   
   UmlParamDirection dir = pi->get_dir();
@@ -193,7 +193,7 @@ PinDialog::PinDialog(PinData * pi)
   edin_state->setReadOnly(visit);
        
   new QLabel(grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   Q3ButtonGroup * bg = 
     new Q3ButtonGroup(2, Qt::Horizontal, QString::null, htab);
   
@@ -222,7 +222,7 @@ PinDialog::PinDialog(PinData * pi)
   else
     standard_rb->setChecked(TRUE);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -302,7 +302,7 @@ void PinDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char * v,
   
   
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   
   new QLabel(TR("selection : "), vtab);
   if (! visit)

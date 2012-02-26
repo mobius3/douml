@@ -151,7 +151,7 @@ void ArtifactDialog::init_uml_tab() {
     connect(edstereotype, SIGNAL(activated(const QString &)),
 	    this, SLOT(edStereotypeActivated(const QString &)));
     
-  vbox = new Q3VBox(grid);
+  vbox = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vbox);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
@@ -184,9 +184,9 @@ void ArtifactDialog::init_cpp_tab() {
   cpp_h_content_page = new QSplitter(Qt::Vertical, this);
   cpp_h_content_page->setOpaqueResize(TRUE);
   
-  vbox = new Q3VBox(cpp_h_content_page); 
+  vbox = GridController::PlaceVertical(cpp_h_content_page); 
   
-  hbox = new Q3HBox(vbox); 
+  hbox = GridController::PlaceHorizontal(vbox); 
   hbox->setMargin(5);  
   lbl1 = new QLabel(TR("Header file \ndefinition : "), hbox);
   edcpp_h_content = new MultiLineEdit(hbox);
@@ -201,7 +201,7 @@ void ArtifactDialog::init_cpp_tab() {
   else {
     connect(edcpp_h_content, SIGNAL(textChanged()), this, SLOT(cpp_update_h()));
   
-    hbox = new Q3HBox(vbox); 
+    hbox = GridController::PlaceHorizontal(vbox); 
     edit = new SmallPushButton(TR("Editor"), hbox);
     connect(edit, SIGNAL(clicked()), this, SLOT(cpp_edit_h()));
     connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked ()),
@@ -232,9 +232,9 @@ void ArtifactDialog::init_cpp_tab() {
   cpp_src_content_page = new QSplitter(Qt::Vertical, this);
   cpp_src_content_page->setOpaqueResize(TRUE);
   
-  vbox = new Q3VBox(cpp_src_content_page); 
+  vbox = GridController::PlaceVertical(cpp_src_content_page); 
   
-  hbox = new Q3HBox(vbox); 
+  hbox = GridController::PlaceHorizontal(vbox); 
   hbox->setMargin(5);  
   lbl1 = new QLabel(TR("Source file \ndefinition : "), hbox);
   edcpp_src_content = new MultiLineEdit(hbox);
@@ -245,7 +245,7 @@ void ArtifactDialog::init_cpp_tab() {
   else {
     connect(edcpp_src_content, SIGNAL(textChanged()), this, SLOT(cpp_update_src()));
 
-    hbox = new Q3HBox(vbox); 
+    hbox = GridController::PlaceHorizontal(vbox); 
     edit = new SmallPushButton(TR("Editor"), hbox);
     connect(edit, SIGNAL(clicked()), this, SLOT(cpp_edit_src()));
     connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked ()),
@@ -283,9 +283,9 @@ void ArtifactDialog::init_java_tab() {
   java_content_page = new QSplitter(Qt::Vertical, this);
   java_content_page->setOpaqueResize(TRUE);
   
-  vbox = new Q3VBox(java_content_page); 
+  vbox = GridController::PlaceVertical(java_content_page); 
   
-  hbox = new Q3HBox(vbox); 
+  hbox = GridController::PlaceHorizontal(vbox); 
   hbox->setMargin(5);  
   lbl1 = new QLabel(TR("File \ndefinition : "), hbox);
   edjava_content = new MultiLineEdit(hbox);
@@ -300,7 +300,7 @@ void ArtifactDialog::init_java_tab() {
   else {
     connect(edjava_content, SIGNAL(textChanged()), this, SLOT(java_update_src()));
 
-    hbox = new Q3HBox(vbox); 
+    hbox = GridController::PlaceHorizontal(vbox); 
     edit = new SmallPushButton(TR("Editor"), hbox);
     connect(edit, SIGNAL(clicked()), this, SLOT(java_edit()));
     connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked ()),
@@ -338,9 +338,9 @@ void ArtifactDialog::init_php_tab() {
   php_content_page = new QSplitter(Qt::Vertical, this);
   php_content_page->setOpaqueResize(TRUE);
   
-  vbox = new Q3VBox(php_content_page); 
+  vbox = GridController::PlaceVertical(php_content_page); 
   
-  hbox = new Q3HBox(vbox); 
+  hbox = GridController::PlaceHorizontal(vbox); 
   hbox->setMargin(5);  
   lbl1 = new QLabel(TR("File \ndefinition : "), hbox);
   edphp_content = new MultiLineEdit(hbox);
@@ -355,7 +355,7 @@ void ArtifactDialog::init_php_tab() {
   else {
     connect(edphp_content, SIGNAL(textChanged()), this, SLOT(php_update_src()));
 
-    hbox = new Q3HBox(vbox); 
+    hbox = GridController::PlaceHorizontal(vbox); 
     edit = new SmallPushButton(TR("Editor"), hbox);
     connect(edit, SIGNAL(clicked()), this, SLOT(php_edit()));
     connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked ()),
@@ -393,9 +393,9 @@ void ArtifactDialog::init_python_tab() {
   python_content_page = new QSplitter(Qt::Vertical, this);
   python_content_page->setOpaqueResize(TRUE);
   
-  vbox = new Q3VBox(python_content_page); 
+  vbox = GridController::PlaceVertical(python_content_page); 
   
-  hbox = new Q3HBox(vbox); 
+  hbox = GridController::PlaceHorizontal(vbox); 
   hbox->setMargin(5);  
   lbl1 = new QLabel(TR("File \ndefinition : "), hbox);
   edpython_content = new MultiLineEdit(hbox);
@@ -410,7 +410,7 @@ void ArtifactDialog::init_python_tab() {
   else {
     connect(edpython_content, SIGNAL(textChanged()), this, SLOT(python_update_src()));
 
-    hbox = new Q3HBox(vbox); 
+    hbox = GridController::PlaceHorizontal(vbox); 
     edit = new SmallPushButton(TR("Editor"), hbox);
     connect(edit, SIGNAL(clicked()), this, SLOT(python_edit()));
     connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked ()),
@@ -448,9 +448,9 @@ void ArtifactDialog::init_idl_tab() {
   idl_content_page = new QSplitter(Qt::Vertical, this);
   idl_content_page->setOpaqueResize(TRUE);
   
-  vbox = new Q3VBox(idl_content_page); 
+  vbox = GridController::PlaceVertical(idl_content_page); 
   
-  hbox = new Q3HBox(vbox); 
+  hbox = GridController::PlaceHorizontal(vbox); 
   hbox->setMargin(5);  
   lbl1 = new QLabel(TR("File \ndefinition : "), hbox);
   edidl_content = new MultiLineEdit(hbox);
@@ -465,7 +465,7 @@ void ArtifactDialog::init_idl_tab() {
   else {
     connect(edidl_content, SIGNAL(textChanged()), this, SLOT(idl_update_src()));
     
-    hbox = new Q3HBox(vbox); 
+    hbox = GridController::PlaceHorizontal(vbox); 
     edit = new SmallPushButton(TR("Editor"), hbox);
     connect(edit, SIGNAL(clicked()), this, SLOT(idl_edit()));
     connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked ()),
@@ -502,11 +502,11 @@ void ArtifactDialog::init_assoc_classes_tab() {
   Q3ValueList<BrowserClass *>::ConstIterator it;
   Q3ValueList<BrowserClass *>::ConstIterator end = l.end();
   
-  cl_assoc_page = new Q3VBox(this);
+  cl_assoc_page = GridController::PlaceVertical(this);
   
   if (!visit) {
-    hbox = new Q3HBox(cl_assoc_page);
-    vbox = new Q3VBox(hbox);
+    hbox = GridController::PlaceHorizontal(cl_assoc_page);
+    vbox = GridController::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel(TR("Classes without artifact"), vbox))->setAlignment(Qt::AlignCenter);
     lb_cl_available = new Q3ListBox(vbox);
@@ -529,7 +529,7 @@ void ArtifactDialog::init_assoc_classes_tab() {
     
     lb_cl_available->sort();
     
-    vbox = new Q3VBox(hbox);
+    vbox = GridController::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel("", vbox))->setScaledContents(TRUE);
     button = new QPushButton(vbox);
@@ -540,7 +540,7 @@ void ArtifactDialog::init_assoc_classes_tab() {
     button->setPixmap(*leftPixmap);
     connect(button, SIGNAL(clicked()), this, SLOT(unassociate_cls()));
     (new QLabel("", vbox))->setScaledContents(TRUE);
-    vbox = new Q3VBox(hbox);
+    vbox = GridController::PlaceVertical(hbox);
   }
   else
     vbox = cl_assoc_page;
@@ -573,7 +573,7 @@ void ArtifactDialog::init_assoc_classes_tab() {
   }
   
   if (!visit) {
-    hbox = new Q3HBox(vbox); 
+    hbox = GridController::PlaceHorizontal(vbox); 
     hbox->setMargin(5);
     (new QLabel("", hbox))->setScaledContents(TRUE);
     button = new QPushButton(TR("go up"), hbox);
@@ -592,10 +592,10 @@ void ArtifactDialog::init_assoc_artifacts_tab() {
   Q3VBox * vbox;  
   QPushButton * button;
   
-  art_assoc_page = new Q3VBox(this);
+  art_assoc_page = GridController::PlaceVertical(this);
   
   if (!visit) {
-    hbox = new Q3HBox(art_assoc_page); 
+    hbox = GridController::PlaceHorizontal(art_assoc_page); 
     hbox->setMargin(5);
     new QLabel(TR("Stereotype filtering  "), hbox);
     stereotypefilter = new Q3ComboBox(TRUE, hbox);
@@ -610,14 +610,14 @@ void ArtifactDialog::init_assoc_artifacts_tab() {
     connect(stereotypefilter, SIGNAL(activated(const QString &)),
 	    this, SLOT(stereotypeFilterActivated(const QString &)));
     
-    hbox = new Q3HBox(art_assoc_page);
-    vbox = new Q3VBox(hbox);
+    hbox = GridController::PlaceHorizontal(art_assoc_page);
+    vbox = GridController::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel(TR("Unassociated artifacts"), vbox))->setAlignment(Qt::AlignCenter);
     lb_art_available = new Q3ListBox(vbox);
     lb_art_available->setSelectionMode(Q3ListBox::Multi);
     
-    vbox = new Q3VBox(hbox);
+    vbox = GridController::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel("", vbox))->setScaledContents(TRUE);
     button = new QPushButton(vbox);
@@ -628,7 +628,7 @@ void ArtifactDialog::init_assoc_artifacts_tab() {
     button->setPixmap(*leftPixmap);
     connect(button, SIGNAL(clicked()), this, SLOT(unassociate_arts()));
     (new QLabel("", vbox))->setScaledContents(TRUE);
-    vbox = new Q3VBox(hbox);
+    vbox = GridController::PlaceVertical(hbox);
   }
   else
     vbox = art_assoc_page;

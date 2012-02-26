@@ -186,7 +186,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
       cl_container = 0;
   }
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   
   new QLabel(TR("description :"), vtab);
   if (! visit) {

@@ -73,7 +73,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   setCaption(TR(QString(what) + " dialog"));
   
   
-  Q3HBox * htab;
+  QWidget * htab;
   QString s;
     
   // general tab
@@ -133,7 +133,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   edtype->setSizePolicy(sp);
   
   GridController::PlaceWidget(new QLabel(TR("multiplicity : "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   edmultiplicity = new Q3ComboBox(!visit, htab);
   edmultiplicity->setSizePolicy(sp);
   edmultiplicity->insertItem(data->get_multiplicity());
@@ -162,7 +162,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   }
 
   GridController::PlaceWidget(new QLabel(TR("in state : "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   edin_state = new LineEdit(data->in_state, htab);
   edin_state->setReadOnly(visit);
        
@@ -172,7 +172,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     is_control_cb->setChecked(TRUE);
   is_control_cb->setDisabled(visit);
       
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -254,7 +254,7 @@ void ActivityObjectDialog::init_tab(QWidget *& w, MultiLineEdit *& ed,
   
   
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   
   new QLabel(TR("selection : "), vtab);
   if (! visit)

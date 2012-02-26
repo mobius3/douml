@@ -153,7 +153,7 @@ void ComponentDialog::init_uml_tab() {
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
     
-  vbox = new Q3VBox(grid);
+  vbox = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vbox);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
@@ -182,10 +182,10 @@ void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
   Q3VBox * vbox;  
   QPushButton * button;
   
-  page = new Q3VBox(this);
+  page = GridController::PlaceVertical(this);
   
   if (!visit) {
-    hbox = new Q3HBox(page);
+    hbox = GridController::PlaceHorizontal(page);
     hbox->setMargin(5);
     new QLabel(TR("Stereotype filtering  "), hbox);
     stereotypefilter = new Q3ComboBox(TRUE, hbox);
@@ -200,14 +200,14 @@ void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
     connect(stereotypefilter, SIGNAL(activated(const QString &)),
 	    this, slt);
     
-    hbox = new Q3HBox(page);
-    vbox = new Q3VBox(hbox);
+    hbox = GridController::PlaceHorizontal(page);
+    vbox = GridController::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel(TR("Available classes"), vbox))->setAlignment(Qt::AlignCenter);
     lb_available = new Q3ListBox(vbox);
     lb_available->setSelectionMode(Q3ListBox::Multi);
     
-    vbox = new Q3VBox(hbox);
+    vbox = GridController::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel("", vbox))->setScaledContents(TRUE);
     button = new QPushButton(vbox);
@@ -218,7 +218,7 @@ void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
     button->setPixmap(*leftPixmap);
     connect(button, SIGNAL(clicked()), this, remove_slt);
     (new QLabel("", vbox))->setScaledContents(TRUE);
-    vbox = new Q3VBox(hbox);
+    vbox = GridController::PlaceVertical(hbox);
   }
   else
     vbox = page;

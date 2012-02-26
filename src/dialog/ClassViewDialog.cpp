@@ -135,7 +135,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
       deploymentview = 0;
   }
     
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (!visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),

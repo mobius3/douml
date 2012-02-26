@@ -114,10 +114,10 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   edrepresents->setCurrentItem(0);
   edrepresents->setSizePolicy(sp);
 
-  Q3HBox * htab;
+  QWidget * htab;
 
   new QLabel(grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   new QLabel("  ", htab);
   dimension_cb = new QCheckBox(TR("is dimension"), htab);
   if (data->is_dimension)
@@ -130,7 +130,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   external_cb->setDisabled(visit);
   new QLabel("", htab);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),

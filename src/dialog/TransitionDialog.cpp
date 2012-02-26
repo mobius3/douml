@@ -102,7 +102,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
     internal_cb->setChecked(r->internal());
   }
     
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -178,13 +178,13 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
 				const char * sl_guard, const char * sl_expr,
 				bool enabled) {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3VBox * vtab;
+  QWidget * vtab;
 
   tab = grid;
   
   
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("trigger : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -201,7 +201,7 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
   if (visit)
     d.edtrigger->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("guard\nconstraint : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -212,7 +212,7 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
   if (visit)
     d.edguard->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("activity\nexpression : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),

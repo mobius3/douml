@@ -71,9 +71,9 @@ ShortcutDialog::ShortcutDialog() : Q3TabDialog(0, 0, TRUE) {
 
   // tab for command
   
-  Q3VBox * vtab;
+  QWidget * vtab;
     
-  vtab = new Q3VBox(this);
+  vtab = GridController::PlaceVertical(this);
   vtab->setSpacing(5);
   vtab->setMargin(5);
   
@@ -91,7 +91,7 @@ ShortcutDialog::ShortcutDialog() : Q3TabDialog(0, 0, TRUE) {
   
   // tab for tool
   
-  vtab = new Q3VBox(this);
+  vtab = GridController::PlaceVertical(this);
   vtab->setSpacing(5);
   vtab->setMargin(5);
   

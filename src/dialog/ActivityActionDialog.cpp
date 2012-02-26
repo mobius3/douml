@@ -143,7 +143,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     connect(edtype, SIGNAL(activated(int)), this, SLOT(edTypeActivated(int)));
   }
 
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -152,7 +152,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   comment->setReadOnly(visit);
   comment->setText(action->get_comment());
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("constraint :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -560,7 +560,7 @@ void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   ocl_grid = mkgrid(t);
 
-  Q3VBox * vtab = new Q3VBox(ocl_grid);
+  QWidget * vtab = GridController::PlaceVertical(ocl_grid);
 
   new QLabel(TR("Behavior : "), vtab);
   if (! visit)
@@ -587,7 +587,7 @@ void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   cpp_grid = mkgrid(t);
 
-  vtab = new Q3VBox(cpp_grid);
+  vtab = GridController::PlaceVertical(cpp_grid);
   new QLabel(TR("Behavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -613,7 +613,7 @@ void OpaqueDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   java_grid = mkgrid(t);
 
-  vtab = new Q3VBox(java_grid);
+  vtab = GridController::PlaceVertical(java_grid);
   new QLabel(TR("Behavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -772,7 +772,7 @@ void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   ocl_grid = mkgrid(t, TR("value - Ocl"));
 
-  Q3VBox * vtab = new Q3VBox(ocl_grid);
+  QWidget * vtab = GridController::PlaceVertical(ocl_grid);
 
   new QLabel(TR("Value : "), vtab);
   if (! visit)
@@ -799,7 +799,7 @@ void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   cpp_grid = mkgrid(t, TR("value - C++"));
 
-  vtab = new Q3VBox(cpp_grid);
+  vtab = GridController::PlaceVertical(cpp_grid);
   new QLabel(TR("Value : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -825,7 +825,7 @@ void ValueSpecificationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   java_grid = mkgrid(t, TR("value - Java"));
 
-  vtab = new Q3VBox(java_grid);
+  vtab = GridController::PlaceVertical(java_grid);
   new QLabel(TR("Value : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),

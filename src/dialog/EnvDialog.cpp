@@ -67,7 +67,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   setCaption(TR("Environment dialog"));
   
   Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBox * htab;
+  QWidget * htab;
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
   QPushButton * button;
   QString s;
@@ -82,7 +82,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 	     grid);
   
   GridController::PlaceWidget(new QLabel(TR("Own identifier "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   if (conv)
     s = getenv("BOUML_ID");	// yes !
   else if (! noid)
@@ -101,7 +101,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 	     grid);
 
   GridController::PlaceWidget(new QLabel(TR("Manual path"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   ed_doc = new QLineEdit(htab);
   if (!conv)
     ed_doc->setText(manual_dir());
@@ -126,7 +126,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to indicate a web navigator program. If it is not defined the reference manual will be shown with an internal simple viewer"),
 	     grid);
   GridController::PlaceWidget(new QLabel(TR("Navigator"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   ed_navigator = new QLineEdit(htab);
   if (!conv)
     ed_navigator->setText(navigator_path());
@@ -140,7 +140,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to indicate a template project. This allows to create new projects getting all the template project settings"),
 	     grid);
   GridController::PlaceWidget(new QLabel("Template project", grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   if (conv)
     s = getenv("BOUML_TEMPLATE");	// yes !
   else
@@ -156,7 +156,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to indicate a text editor (it must creates an own window). Else Bouml will use an internal editor"),
 	     grid);
   GridController::PlaceWidget(new QLabel(TR("Editor path "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   if (conv)
     s = getenv("BOUML_EDITOR");	// yes !
   else
@@ -172,7 +172,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   new QLabel(TR("\nOptional, to choose a language for menus and dialogs (default is English). You may have to select a corresponding character set"),
 	     grid);
   GridController::PlaceWidget(new QLabel(TR("Translation file path "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   ed_lang = new QLineEdit(current_lang(), htab);
   new QLabel(" ", htab);
   button = new QPushButton(TR("Browse"), htab);
@@ -250,7 +250,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
     y1.setNum(bottom);
   }
   
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   new QLabel(TR("left: "), htab);
   ed_xmin = new QLineEdit(x0, htab);
   new QLabel(TR("      top: "), htab);
@@ -263,7 +263,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   //
   
   new QLabel(grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   new QLabel(htab);
   connect(new QPushButton(TR("OK"), htab), SIGNAL(clicked()), this, SLOT(accept()));
   new QLabel(htab);

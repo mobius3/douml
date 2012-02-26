@@ -133,7 +133,7 @@ BrowserSearchDialog::BrowserSearchDialog()
   gl->addWidget(ed, 1, 1);
   ed->setFocus();
   
-  Q3HBox * hb = new Q3HBox(this);
+  Q3HBox * hb = GridController::PlaceHorizontal(this);
   
   gl->addWidget(hb, 2, 1);
   

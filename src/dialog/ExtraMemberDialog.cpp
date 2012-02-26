@@ -98,7 +98,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   edstereotype->setSizePolicy(sp);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -124,7 +124,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   if (ex->cpp_inline)
     inline_cb->setChecked(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("C++ \ndeclaration :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -134,7 +134,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   edcpp_decl->setText(ex->cpp_decl);
   edcpp_decl->setFont(font);
     
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("C++ \ndefinition :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -155,7 +155,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel("Java :", vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -176,7 +176,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel("Php :", vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -197,7 +197,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel("Python :", vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -218,7 +218,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel("Idl :", vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),

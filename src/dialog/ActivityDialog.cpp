@@ -138,7 +138,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     active_cb->setChecked(TRUE);
   active_cb->setDisabled(visit);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -148,7 +148,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   comment->setText(bn->get_comment());
   //comment->setFont(font);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("constraint :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),

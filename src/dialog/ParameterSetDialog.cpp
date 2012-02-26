@@ -140,7 +140,7 @@ void ParameterSetDialog::init_uml_tab() {
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
     
-  vbox = new Q3VBox(grid);
+  vbox = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vbox);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
@@ -162,14 +162,14 @@ void ParameterSetDialog::init_pins_tab() {
   bool visit = !hasOkButton();  
   Q3HBox * hbox;
   QPushButton * button;
-  Q3VBox * vbox = new Q3VBox(this);
+  Q3VBox * vbox = GridController::PlaceVertical(this);
   Q3VBox * page = vbox;
   const Q3ValueList<BrowserPin *> & inpins = data->pins;
   Q3ValueList<BrowserPin *>::ConstIterator it;
   
   if (!visit) {
-    hbox = new Q3HBox(vbox);
-    vbox = new Q3VBox(hbox);
+    hbox = GridController::PlaceHorizontal(vbox);
+    vbox = GridController::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel(TR("Parameters out of Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
     lb_available = new Q3ListBox(vbox);
@@ -186,7 +186,7 @@ void ParameterSetDialog::init_pins_tab() {
     
     lb_available->sort();
     
-    vbox = new Q3VBox(hbox);
+    vbox = GridController::PlaceVertical(hbox);
     vbox->setMargin(5);
     (new QLabel("", vbox))->setScaledContents(TRUE);
     button = new QPushButton(vbox);
@@ -197,7 +197,7 @@ void ParameterSetDialog::init_pins_tab() {
     button->setPixmap(*leftPixmap);
     connect(button, SIGNAL(clicked()), this, SLOT(unassociate_cls()));
     (new QLabel("", vbox))->setScaledContents(TRUE);
-    vbox = new Q3VBox(hbox);
+    vbox = GridController::PlaceVertical(hbox);
   }
   
   vbox->setMargin(5);

@@ -131,20 +131,20 @@ RelationDialog::RelationDialog(RelationData * r)
   // general tab
   //
   
-  Q3VBox * vtab = new Q3VBox(this);
-  Q3HBox * htab;
+  QWidget * vtab = GridController::PlaceVertical(this);
+  QWidget * htab;
   Q3GroupBox *  bg;
 
   umltab = vtab;
   vtab->setMargin(3);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   QLabel * lbl1 = new QLabel(TR("name : "), htab);
   edname = new LineEdit(rel->get_name(), htab);
   edname->setReadOnly(visit);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   QLabel * lbl2 = new QLabel(TR("type : "), htab);
   
@@ -210,7 +210,7 @@ RelationDialog::RelationDialog(RelationData * r)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
     
   SmallPushButton * button_assoc = 
@@ -255,7 +255,7 @@ RelationDialog::RelationDialog(RelationData * r)
   // C++
   //
   
-  vtab = new Q3VBox(this);
+  vtab = GridController::PlaceVertical(this);
   cpptab = vtab;
   vtab->setMargin(5);
   
@@ -274,7 +274,7 @@ RelationDialog::RelationDialog(RelationData * r)
 		SLOT(cpp_include_in_header()));
 
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = GridController::PlaceHorizontal(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
   cpp_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);  
@@ -291,7 +291,7 @@ RelationDialog::RelationDialog(RelationData * r)
   // Java
   //
   
-  vtab = new Q3VBox(this);
+  vtab = GridController::PlaceVertical(this);
   javatab = vtab;
   vtab->setMargin(5);
   
@@ -301,7 +301,7 @@ RelationDialog::RelationDialog(RelationData * r)
 		 SLOT(java_unmapped_a()), SLOT(java_edit_annotation_a()));
   
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = GridController::PlaceHorizontal(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
   java_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
@@ -317,7 +317,7 @@ RelationDialog::RelationDialog(RelationData * r)
   // Php
   //
   
-  vtab = new Q3VBox(this);
+  vtab = GridController::PlaceVertical(this);
   phptab = vtab;
   vtab->setMargin(5);
   
@@ -327,7 +327,7 @@ RelationDialog::RelationDialog(RelationData * r)
 		SLOT(php_default_a()), SLOT(php_unmapped_a()));
   
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = GridController::PlaceHorizontal(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
   php_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
@@ -343,7 +343,7 @@ RelationDialog::RelationDialog(RelationData * r)
   // Python
   //
   
-  vtab = new Q3VBox(this);
+  vtab = GridController::PlaceVertical(this);
   pythontab = vtab;
   vtab->setMargin(5);
   
@@ -353,7 +353,7 @@ RelationDialog::RelationDialog(RelationData * r)
 		   SLOT(python_default_a()), SLOT(python_unmapped_a()));
   
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = GridController::PlaceHorizontal(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
   python_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
@@ -369,7 +369,7 @@ RelationDialog::RelationDialog(RelationData * r)
   //
   // IDL
   //
-  vtab = new Q3VBox(this);
+  vtab = GridController::PlaceVertical(this);
   idltab = vtab;
   vtab->setMargin(5);
   
@@ -399,7 +399,7 @@ RelationDialog::RelationDialog(RelationData * r)
 		SLOT(idl_default_a()), SLOT(idl_unmapped_a()));
 
   // B
-  htab = new Q3HBox(vtab);	// to have a vertical margin
+  htab = GridController::PlaceHorizontal(vtab);	// to have a vertical margin
   htab->setMargin(5);
   
   idl_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);    
@@ -416,7 +416,7 @@ RelationDialog::RelationDialog(RelationData * r)
   // USER : list key - value
   //
   
-  vtab = new Q3VBox(this);
+  vtab = GridController::PlaceVertical(this);
   bg = new Q3GroupBox(1, Qt::Horizontal, ina, vtab); 
   a.kvtable = new KeyValuesTable(rel->get_start(), bg, a.ro);
   new QLabel(vtab);
@@ -486,11 +486,11 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
     groupb.append(lbl);
   }
   
-  Q3HBox * htab;
+  QWidget * htab;
   QSizePolicy sp;
   
   role.opt.append(new QLabel(TR("multiplicity : "), bg));
-  htab = new Q3HBox(bg);
+  htab = GridController::PlaceHorizontal(bg);
   htab->setMargin(0);
   role.multiplicity = new Q3ComboBox(!visit, htab);
   sp = role.multiplicity->sizePolicy();
@@ -526,7 +526,7 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   }
   
   (void) new QLabel(bg);
-  htab = new Q3HBox(bg);
+  htab = GridController::PlaceHorizontal(bg);
   htab->setMargin(0);
   
   Q3ButtonGroup * vg = role.uml_visibility.init(htab, rel.uml_visibility, TRUE);
@@ -582,7 +582,7 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   lbl = new QLabel(TR("description : "), bg);
   if (roleb)
     groupb.append(lbl);
-  htab = new Q3HBox(bg);
+  htab = GridController::PlaceHorizontal(bg);
   role.comment = new MultiLineEdit(htab);
   role.comment->setText(rel.comment);  
   QFont font = role.comment->font();
@@ -593,7 +593,7 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   if (visit)
     role.comment->setReadOnly(TRUE);
   else {
-    Q3VBox * vtab = new Q3VBox(htab);
+    QWidget * vtab = GridController::PlaceVertical(htab);
     SmallPushButton * bt1 = new SmallPushButton(TR("Editor"), vtab);
     
     connect(bt1, SIGNAL(clicked()), this,
@@ -615,14 +615,14 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   lbl = new QLabel(TR("constraint : "), bg);
   if (roleb)
     groupb.append(lbl);
-  htab = new Q3HBox(bg);
+  htab = GridController::PlaceHorizontal(bg);
   role.constraint = new MultiLineEdit(htab);
   role.constraint->setText(rel.constraint);  
   role.constraint->setFont(font);
   if (visit)
     role.constraint->setReadOnly(TRUE);
   else {
-    Q3VBox * vtab = new Q3VBox(htab);
+    QWidget * vtab = GridController::PlaceVertical(htab);
     SmallPushButton * bt1 = new SmallPushButton(TR("Editor"), vtab);
     
     connect(bt1, SIGNAL(clicked()), this,
@@ -722,10 +722,10 @@ void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
 				   const char * cpp_default_slot,
 				   const char * cpp_unmapped_slot,
 				   const char * cpp_include_in_header_slot) {
-  Q3HBox * htab;
+  QWidget * htab;
   
   new QLabel(TR("Visibility : "), bg);
-  htab = new Q3HBox(bg);
+  htab = GridController::PlaceHorizontal(bg);
   role.cpp_visibility.init(htab, rel.cpp_visibility, FALSE, 0, TR("follow uml"))
     ->setEnabled(!visit);
 
@@ -761,7 +761,7 @@ void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
 
   if (! visit) {
     new QLabel("", bg);
-    htab = new Q3HBox(bg);
+    htab = GridController::PlaceHorizontal(bg);
     htab->setMargin(5);
     
     role.cpp_default_decl_bt = new QPushButton(TR("Default declaration"), htab);
@@ -817,7 +817,7 @@ void RelationDialog::init_java_role(RoleDialog & role, const RoleData & rel,
   role.showjavadecl->setFont(font);
 
   new QLabel("", bg);
-  Q3HBox * htab = new Q3HBox(bg);
+  QWidget * htab = GridController::PlaceHorizontal(bg);
   htab->setMargin(5);
   
   if (! visit) {
@@ -863,7 +863,7 @@ void RelationDialog::init_php_role(RoleDialog & role, const RoleData & rel,
   role.showphpdecl->setFont(font);
 
   new QLabel("", bg);
-  Q3HBox * htab = new Q3HBox(bg);
+  QWidget * htab = GridController::PlaceHorizontal(bg);
   htab->setMargin(5);
   
   if (! visit) {
@@ -905,7 +905,7 @@ void RelationDialog::init_python_role(RoleDialog & role, const RoleData & rel,
   role.showpythondecl->setFont(font);
 
   new QLabel("", bg);
-  Q3HBox * htab = new Q3HBox(bg);
+  QWidget * htab = GridController::PlaceHorizontal(bg);
   htab->setMargin(5);
   
   if (! visit) {
@@ -971,7 +971,7 @@ void RelationDialog::init_idl_role(RoleDialog & role, const RoleData & rel,
 
   if (! visit) {
     new QLabel("", bg);
-    Q3HBox * htab = new Q3HBox(bg);
+    QWidget * htab = GridController::PlaceHorizontal(bg);
     htab->setMargin(5);
     role.idl_default_decl_bt = new QPushButton(TR("Default declaration"), htab);
     connect(role.idl_default_decl_bt, SIGNAL(clicked()),

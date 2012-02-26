@@ -57,7 +57,7 @@ RevSettingsDialog::RevSettingsDialog()
   vbox->setMargin(5);
   
   QWidget * grid = GridConverter::InitNewGrid(this, 3);
-  Q3HBox * htab;
+  QWidget * htab;
   
   vbox->addWidget(grid);
   
@@ -90,7 +90,7 @@ RevSettingsDialog::RevSettingsDialog()
     cpp_file_case_sensitive->setChecked(TRUE);
   
   new QLabel(grid);  
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   new QLabel(grid);
   
   htab->setMargin(3);
@@ -129,7 +129,7 @@ RevSettingsDialog::RevSettingsDialog()
     java_file_case_sensitive->setChecked(TRUE);
   
   new QLabel(grid);  
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   new QLabel(grid);
   
   htab->setMargin(3);
@@ -159,7 +159,7 @@ RevSettingsDialog::RevSettingsDialog()
     php_file_case_sensitive->setChecked(TRUE);
   
   new QLabel(grid);  
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   new QLabel(grid);
   
   htab->setMargin(3);

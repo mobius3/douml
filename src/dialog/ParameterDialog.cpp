@@ -73,7 +73,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   setCaption(TR("Parameter dialog"));
   
   
-  Q3HBox * htab;
+  QWidget * htab;
   QString s;
     
   // general tab
@@ -126,7 +126,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   edtype->setSizePolicy(sp);
   
   GridController::PlaceWidget(new QLabel(TR("direction :"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   eddir = new Q3ComboBox(FALSE, htab);
   
   UmlParamDirection dir = pa->get_dir();
@@ -195,7 +195,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   edin_state->setReadOnly(visit);
        
   GridController::PlaceWidget(new QLabel(TR("default value :"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   edinit = new LineEdit(pa->get_default_value(), htab);
   if (visit)
     edinit->setReadOnly(TRUE);
@@ -204,7 +204,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
 	    this, SLOT(edit_init()));
   
   new QLabel(grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   Q3ButtonGroup * bg = 
     new Q3ButtonGroup(2, Qt::Horizontal, QString::null, htab);
   
@@ -233,7 +233,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   else
     standard_rb->setChecked(TRUE);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -313,7 +313,7 @@ void ParameterDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char *
   
   
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   
   new QLabel(TR("selection : "), vtab);
   if (! visit)

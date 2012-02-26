@@ -178,7 +178,7 @@ StateDialog::StateDialog(StateData * d)
     active_cb->setChecked(TRUE);
   active_cb->setDisabled(visit);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -380,13 +380,13 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
 			   const char * sl_exbeh, const char * sl_beh,
 			   bool enabled) {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3VBox * vtab;
+  QWidget * vtab;
 
   tab = grid;
   
   
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("Entry\nbehavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_enbeh);
@@ -402,7 +402,7 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
   if (visit)
     d.edentry->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("Exit\nbehavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_exbeh);
@@ -412,7 +412,7 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
   if (visit)
     d.edexit->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("Do\nbehavior : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_beh);

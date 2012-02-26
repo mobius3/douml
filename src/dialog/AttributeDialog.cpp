@@ -108,7 +108,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   setCaption((in_enum || java_in_enum_pattern) ? TR("Enum item dialog") : TR("Attribute dialog"));
   
   
-  Q3HBox * htab;
+  QWidget * htab;
   QString s;
     
   // general tab
@@ -133,7 +133,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   
   if (!java_in_enum_pattern) {
     GridController::PlaceWidget(new QLabel(TR("stereotype :"), grid),grid);
-    htab = new Q3HBox(grid);
+    htab = GridController::PlaceHorizontal(grid);
     edstereotype = new Q3ComboBox(!visit, htab);
     edstereotype->insertItem(toUnicode(a->get_stereotype()));
     if (!visit) {
@@ -205,7 +205,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     GridController::PlaceWidget(new QLabel(TR("value :"), grid),grid);
   }
   
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   edinit = new LineEdit(a->get_init_value(), htab);
   if (visit)
     edinit->setReadOnly(TRUE);
@@ -218,7 +218,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   if (!java_in_enum_pattern) {  
     new QLabel(grid);
     
-    htab = new Q3HBox(grid);
+    htab = GridController::PlaceHorizontal(grid);
     bg = uml_visibility.init(htab, a->get_uml_visibility(), TRUE);
     if (visit)
       bg->setEnabled(FALSE);
@@ -262,7 +262,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     unique_cb->setDisabled(visit);
   }
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   
   new QLabel(TR("description :"), vtab);
   if (! visit) {
@@ -276,7 +276,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   comment->setText(a->browser_node->get_comment());
   comment->setFont(font);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("constraint :"), vtab);
   if (! visit) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -299,7 +299,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     if (!cpp_in_enum) {  
       GridController::PlaceWidget(new QLabel(TR("Visibility :"), grid),grid);
-      htab = new Q3HBox(grid);
+      htab = GridController::PlaceHorizontal(grid);
       
       Q3ButtonGroup * bg =
 	cpp_visibility.init(htab, a->get_cpp_visibility(), FALSE, 0, TR("follow uml"));
@@ -334,7 +334,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     if (! visit) {
       new QLabel(grid);
-      htab = new Q3HBox(grid);
+      htab = GridController::PlaceHorizontal(grid);
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
 	      this, SLOT(cpp_default()));
       connect(new QPushButton(TR("Not generated in C++"), htab), SIGNAL(clicked ()),
@@ -383,7 +383,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     showjavadecl->setFont(font);
     
     new QLabel(grid);
-    htab = new Q3HBox(grid);
+    htab = GridController::PlaceHorizontal(grid);
 
     if (! visit) {
       if (java_in_enum) {
@@ -441,7 +441,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     showphpdecl->setFont(font);
     
     new QLabel(grid);
-    htab = new Q3HBox(grid);
+    htab = GridController::PlaceHorizontal(grid);
 
     if (! visit) {
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
@@ -481,7 +481,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     showpythondecl->setFont(font);
     
     new QLabel(grid);
-    htab = new Q3HBox(grid);
+    htab = GridController::PlaceHorizontal(grid);
 
     if (! visit) {
       connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
@@ -547,7 +547,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     if (! visit) {
       new QLabel(grid);
-      htab = new Q3HBox(grid);
+      htab = GridController::PlaceHorizontal(grid);
       connect(new QPushButton((idl_in_enum) ? TR("Default declaration")
 					    : TR("Default attribute declaration"),
 			      htab),

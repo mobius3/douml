@@ -362,7 +362,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
       
       GridController::PlaceWidget(new QLabel("", grid),grid);
       GridController::PlaceWidget(new QLabel(s + " : ", grid),grid);
-      Q3HBox * hb = new Q3HBox(grid);
+      Q3HBox * hb = GridController::PlaceHorizontal(grid);
             
       switch (st.who) {
       case StateSpec::is3states:

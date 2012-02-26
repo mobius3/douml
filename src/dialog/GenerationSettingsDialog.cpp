@@ -154,7 +154,7 @@ static void init_indent(Q3ComboBox * cb, const char * v)
 }
 
 void GenerationSettingsDialog::init_cpp1() {
-  Q3VBox * vtab = new Q3VBox(this);
+  QWidget * vtab = GridController::PlaceVertical(this);
   QWidget * grid = GridConverter::InitNewGrid(vtab, 2);
 
   GridController::PlaceWidget(new QLabel(TR("Header file\ndefault content :"), grid),grid);
@@ -173,7 +173,7 @@ void GenerationSettingsDialog::init_cpp1() {
   
   new QLabel(vtab);
   
-  Q3HBox * htab = new Q3HBox(vtab);
+  QWidget * htab = GridController::PlaceHorizontal(vtab);
   
   htab->setMargin(3);
   htab->setStretchFactor(new QLabel(TR("generated/reversed \nheader file extension : "), htab), 0);
@@ -207,7 +207,7 @@ void GenerationSettingsDialog::init_cpp1() {
   else
     cpp_include_with_path_cb->setCurrentItem(1);
 
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   
   htab->setStretchFactor(new QLabel(TR("force namespace \nprefix generation : "), htab), 0);
@@ -278,7 +278,7 @@ void GenerationSettingsDialog::init_cpp2() {
 void GenerationSettingsDialog::init_cpp3() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
   QWidget * grid2;
-  Q3HBox * htab;
+  QWidget * htab;
   
   
   
@@ -360,8 +360,8 @@ void GenerationSettingsDialog::init_cpp3() {
 
 void GenerationSettingsDialog::init_cpp4() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3VBox * vtab;
-  Q3HBox * htab;
+  QWidget * vtab;
+  QWidget * htab;
   Q3ButtonGroup * bg;
   
   
@@ -369,9 +369,9 @@ void GenerationSettingsDialog::init_cpp4() {
 
   GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   cpp_get_visibility.init(htab, GenerationSettings::cpp_get_visibility,
 			       FALSE, TR("Visibility"));
 
@@ -402,9 +402,9 @@ void GenerationSettingsDialog::init_cpp4() {
   
   GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   cpp_set_visibility.init(htab, GenerationSettings::cpp_get_visibility,
 			  FALSE, TR("Visibility"));
   
@@ -441,7 +441,7 @@ void GenerationSettingsDialog::init_cpp4() {
   //new QLabel(grid);
 
   GridController::PlaceWidget(new QLabel(TR("Default type forms\nfor the enums :"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   new QLabel(TR("input\nparameter : "), htab);
   cpp_enum_in = new LineEdit(htab);
@@ -461,7 +461,7 @@ void GenerationSettingsDialog::init_cpp4() {
   cpp_enum_return->setFont(font);
   
   GridController::PlaceWidget(new QLabel(TR("Default type forms for\nthe types not given\nin the first tab:"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   new QLabel(TR("input\nparameter : "), htab);
   cpp_in = new LineEdit(htab);
@@ -489,7 +489,7 @@ void GenerationSettingsDialog::init_cpp4() {
   edcpp_oper_decl->setFont(font);
 
   GridController::PlaceWidget(new QLabel(TR("Operation default \ndefinition :"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   edcpp_oper_def = new MultiLineEdit(htab);
   edcpp_oper_def->setText(GenerationSettings::cpp_oper_def);
   edcpp_oper_def->setFont(font);
@@ -509,15 +509,15 @@ void GenerationSettingsDialog::init_cpp5() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QWidget * htab;
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("External classes : \nname making\n#include, using"), htab);
   edcpp_external_class_decl = new MultiLineEdit(htab);
   edcpp_external_class_decl->setText(GenerationSettings::cpp_external_class_decl);
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   QLabel * lbl2 = 
     new QLabel(TR("External types :\n#include form(s),\nusing, etc..."), htab);
@@ -541,7 +541,7 @@ void GenerationSettingsDialog::init_java1() {
 
   GridController::PlaceWidget(new QLabel(TR("file default \ncontent :"), grid),grid);
   
-  Q3HBox * htab = new Q3HBox(grid);
+  QWidget * htab = GridController::PlaceHorizontal(grid);
 
   htab->setMargin(3);
   
@@ -553,8 +553,8 @@ void GenerationSettingsDialog::init_java1() {
   font.setFixedPitch(TRUE);
   edjava_src_content->setFont(font);
 
-  Q3VBox * vtab = new Q3VBox(htab);
-  Q3HBox * htab2 = new Q3HBox(vtab);
+  QWidget * vtab = GridController::PlaceVertical(htab);
+  QWidget * htab2 = new Q3HBox(vtab);
 
   vtab->setMargin(3);
   htab2->setMargin(3);
@@ -656,7 +656,7 @@ void GenerationSettingsDialog::init_java2() {
 
 void GenerationSettingsDialog::init_java3() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3HBox * htab;
+  QWidget * htab;
   Q3ButtonGroup * bg;
   
   
@@ -684,7 +684,7 @@ void GenerationSettingsDialog::init_java3() {
   edjava_enum_pattern_item_case->setFont(font);
 
   GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   java_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
 			   TRUE, TR("Visibility (shared with Php)"));
@@ -708,7 +708,7 @@ void GenerationSettingsDialog::init_java3() {
 	  this, SLOT(follow_java_get_name()));
   
   GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   java_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
 			   TRUE, TR("Visibility (shared with Php)"));
@@ -752,16 +752,16 @@ void GenerationSettingsDialog::init_java4() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QWidget * htab;
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("External classes : \nname making"), htab);
   edjava_external_class_decl = new LineEdit(htab);
   edjava_external_class_decl->setText(GenerationSettings::java_external_class_decl);
 
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   QLabel * lbl2 = 
     new QLabel(TR("External types :\nimport form(s) etc..."), htab);
@@ -784,7 +784,7 @@ void GenerationSettingsDialog::init_php1() {
 
   GridController::PlaceWidget(new QLabel(TR("file default \ncontent :"), grid),grid);
   
-  Q3HBox * htab = new Q3HBox(grid);
+  QWidget * htab = GridController::PlaceHorizontal(grid);
 
   htab->setMargin(3);
   
@@ -796,8 +796,8 @@ void GenerationSettingsDialog::init_php1() {
   font.setFixedPitch(TRUE);
   edphp_src_content->setFont(font);
 
-  Q3VBox * vtab = new Q3VBox(htab);
-  Q3HBox * htab2 = new Q3HBox(vtab);
+  QWidget * vtab = GridController::PlaceVertical(htab);
+  QWidget * htab2 = new Q3HBox(vtab);
 
   vtab->setMargin(3);
   htab2->setMargin(3);
@@ -881,7 +881,7 @@ void GenerationSettingsDialog::init_php2() {
   edphp_rel_decl->setText(GenerationSettings::php_rel_decl);
   edphp_rel_decl->setFont(font);
 
-  Q3HBox * htab;
+  QWidget * htab;
   Q3ButtonGroup * bg;
   
   GridController::PlaceWidget(new QLabel(TR("Enumeration item \ndefault definition :"), grid),grid);
@@ -894,7 +894,7 @@ void GenerationSettingsDialog::init_php2() {
   edphp_enum_item_decl->setFont(font);
 
   GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   php_get_visibility.init(htab, GenerationSettings::noncpp_get_visibility,
 			   FALSE, TR("Visibility (shared with Java)"));
@@ -918,7 +918,7 @@ void GenerationSettingsDialog::init_php2() {
 	  this, SLOT(follow_php_get_name()));
   
   GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   php_set_visibility.init(htab, GenerationSettings::noncpp_set_visibility,
 			   FALSE, TR("Visibility (shared with Java)"));
@@ -970,7 +970,7 @@ void GenerationSettingsDialog::init_python1() {
 
   GridController::PlaceWidget(new QLabel(TR("indent step :"), grid),grid);
   
-  Q3HBox * htab = new Q3HBox(grid);
+  QWidget * htab = GridController::PlaceHorizontal(grid);
 
   htab->setMargin(3);
   indentstep_cb = new Q3ComboBox(FALSE, htab);
@@ -983,7 +983,7 @@ void GenerationSettingsDialog::init_python1() {
   
   GridController::PlaceWidget(new QLabel(TR("file default \ncontent :"), grid),grid);
   
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   edpython_src_content = new MultiLineEdit(htab);
   edpython_src_content->setText(GenerationSettings::python_src_content);
@@ -1001,7 +1001,7 @@ void GenerationSettingsDialog::init_python1() {
 
   GridController::PlaceWidget(new QLabel(TR("Class default \ndeclaration :"), grid),grid);
 
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   edpython_class_decl = new MultiLineEdit(htab);
   edpython_class_decl->setText(GenerationSettings::python_class_decl);
@@ -1084,13 +1084,13 @@ void GenerationSettingsDialog::init_python2() {
     edpython_rel_decl[1][i]->setFont(font);
   }
 
-  Q3HBox * htab;
+  QWidget * htab;
   
   new QLabel(grid);
   new QLabel(grid);
 
   GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   new QLabel(TR("  name : "), htab);
   edpython_get_name = new LineEdit(htab);
@@ -1105,7 +1105,7 @@ void GenerationSettingsDialog::init_python2() {
 	  this, SLOT(follow_python_get_name()));
   
   GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   new QLabel(TR("  name : "), htab);
   edpython_set_name = new LineEdit(htab);
@@ -1123,7 +1123,7 @@ void GenerationSettingsDialog::init_python2() {
   new QLabel(grid);
   
   GridController::PlaceWidget(new QLabel(TR("Operation\ndefault definition :"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   htab->setMargin(3);
   edpython_oper_def = new MultiLineEdit(htab);
   edpython_oper_def->setText(GenerationSettings::python_oper_def);
@@ -1148,16 +1148,16 @@ void GenerationSettingsDialog::init_python3() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QWidget * htab;
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("External classes : \nname making\nimport"), htab);
   edpython_external_class_decl = new MultiLineEdit(htab);
   edpython_external_class_decl->setText(GenerationSettings::python_external_class_decl);
 
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   QLabel * lbl2 = 
     new QLabel(TR("External types :\nimport form(s)"), htab);
@@ -1177,9 +1177,9 @@ void GenerationSettingsDialog::init_idl1() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QWidget * htab;
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("file default \ncontent :"), htab);
@@ -1375,7 +1375,7 @@ void GenerationSettingsDialog::init_idl3() {
 void GenerationSettingsDialog::init_idl4() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
   QWidget * grid2;
-  Q3HBox * htab;
+  QWidget * htab;
   
   
   
@@ -1413,7 +1413,7 @@ void GenerationSettingsDialog::init_idl4() {
   new QLabel(grid);
   
   GridController::PlaceWidget(new QLabel(TR("Get operation\ndefault definition : "), grid),grid);  
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   new QLabel(TR("name : "), htab);
   edidl_get_name = new LineEdit(htab);
   edidl_get_name->setText(GenerationSettings::idl_get_name);
@@ -1427,7 +1427,7 @@ void GenerationSettingsDialog::init_idl4() {
 	  this, SLOT(follow_idl_get_name()));
   
   GridController::PlaceWidget(new QLabel(TR("Set operation\ndefault definition : "), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   idl_set_oneway_cb = new QCheckBox("oneway", htab);
   idl_set_oneway_cb->setChecked(GenerationSettings::idl_set_oneway);
   
@@ -1462,15 +1462,15 @@ void GenerationSettingsDialog::init_idl5() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QWidget * htab;
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   QLabel * lbl1 = 
     new QLabel(TR("External classes : \nname making\n#include"), htab);
   edidl_external_class_decl = new MultiLineEdit(htab);
   edidl_external_class_decl->setText(GenerationSettings::idl_external_class_decl);
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   QLabel * lbl2 = 
     new QLabel(TR("External types :\n#include form(s)\netc..."), htab);
@@ -1491,33 +1491,33 @@ void GenerationSettingsDialog::init_descriptions() {
   
   split->setOpaqueResize(TRUE);
   
-  Q3HBox * htab;
+  QWidget * htab;
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   new QLabel(TR("Artifact\ndefault\ndescription : "), htab);
   edartifact_default_description = new MultiLineEdit(htab);
   edartifact_default_description->setText(GenerationSettings::artifact_default_description);
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   new QLabel(TR("Class\ndefault\ndescription : "), htab);
   edclass_default_description = new MultiLineEdit(htab);
   edclass_default_description->setText(GenerationSettings::class_default_description);
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   new QLabel(TR("Operation\ndefault\ndescription : "), htab);
   edoperation_default_description = new MultiLineEdit(htab);
   edoperation_default_description->setText(GenerationSettings::operation_default_description);
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   new QLabel(TR("Attribute\ndefault\ndescription : "), htab);
   edattribute_default_description = new MultiLineEdit(htab);
   edattribute_default_description->setText(GenerationSettings::attribute_default_description);
   
-  htab = new Q3HBox(split);
+  htab = GridController::PlaceHorizontal(split);
   htab->setMargin(3);
   new QLabel(TR("Relation\ndefault\ndescription : "), htab);
   edrelation_default_description = new MultiLineEdit(htab);
@@ -1534,12 +1534,12 @@ void GenerationSettingsDialog::init_dirs() {
   Absolute = TR("Set it absolute");
 
   QPushButton * button;
-  Q3VBox * vtab = new Q3VBox(this);
-  Q3HBox * htab;
+  QWidget * vtab = GridController::PlaceVertical(this);
+  QWidget * htab;
   
   vtab->setMargin(3);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   new QLabel(TR("Defining a project root directory allows to specify \
 packages's generation directory relative to the root directory rather \
@@ -1547,7 +1547,7 @@ than absolute.\n"
 	     "A root directory may itself be relative to the project path"),
 	     htab);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   QLabel * lbl1 = new QLabel(TR("C++ root dir : "), htab);
   edcpproot = new LineEdit(GenerationSettings::cpp_root_dir, htab);
@@ -1561,11 +1561,11 @@ than absolute.\n"
   connect(cpprelbutton, SIGNAL(clicked ()), this, SLOT(cpp_relative()));
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   QLabel * lbl2 = new QLabel(TR("Java root dir : "), htab);
   edjavaroot = new LineEdit(GenerationSettings::java_root_dir, htab);
@@ -1579,11 +1579,11 @@ than absolute.\n"
   connect(javarelbutton, SIGNAL(clicked ()), this, SLOT(java_relative()));
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   QLabel * lbl3 = new QLabel(TR("Php root dir : "), htab);
   edphproot = new LineEdit(GenerationSettings::php_root_dir, htab);
@@ -1597,11 +1597,11 @@ than absolute.\n"
   connect(phprelbutton, SIGNAL(clicked ()), this, SLOT(php_relative()));
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   QLabel * lbl4 = new QLabel(TR("Python root dir : "), htab);
   edpythonroot = new LineEdit(GenerationSettings::python_root_dir, htab);
@@ -1615,11 +1615,11 @@ than absolute.\n"
   connect(pythonrelbutton, SIGNAL(clicked ()), this, SLOT(python_relative()));
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   new QLabel("", htab);
   
-  htab = new Q3HBox(vtab);
+  htab = GridController::PlaceHorizontal(vtab);
   htab->setMargin(3);
   QLabel * lbl5 = new QLabel(TR("Idl root dir : "), htab);
   edidlroot = new LineEdit(GenerationSettings::idl_root_dir, htab);

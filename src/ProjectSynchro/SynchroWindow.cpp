@@ -101,7 +101,7 @@ SynchroWindow::SynchroWindow() : Q3MainWindow(0, "Project synchro", Qt::WDestruc
   
   //
   
-  hbox = new Q3HBox(this);
+  hbox = GridController::PlaceHorizontal(this);
   setCentralWidget(hbox);
 }
 
@@ -175,7 +175,7 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
       }
     }
     
-    Q3VBox * vbox = new Q3VBox(hbox);
+    Q3VBox * vbox = GridController::PlaceVertical(hbox);
     BrowserView * browser = new BrowserView(vbox);
     
     QApplication::setOverrideCursor(Qt::waitCursor);

@@ -91,10 +91,10 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
 
-  Q3HBox * htab;
+  QWidget * htab;
 
   GridController::PlaceWidget(new QLabel(TR("mode :"), grid),grid);
-  htab = new Q3HBox(grid);
+  htab = GridController::PlaceHorizontal(grid);
   edmode = new Q3ComboBox(FALSE, htab);
   
   UmlExpansionKind m = data->get_mode();
@@ -116,7 +116,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   must_isolate_cb->setDisabled(visit);
   new QLabel("", htab);
 
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),

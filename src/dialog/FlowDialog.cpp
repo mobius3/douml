@@ -93,7 +93,7 @@ FlowDialog::FlowDialog(FlowData * d)
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
   
-  Q3VBox * vtab = new Q3VBox(grid);
+  QWidget * vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("description :"), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
@@ -160,7 +160,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
 			  const char * sl_guard, const char * sl_selection,
 			  const char * sl_transformation, bool enabled) {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3VBox * vtab;
+  QWidget * vtab;
 
   
   
@@ -178,7 +178,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
   if (visit)
     d.edweight->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("guard : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_guard);
@@ -188,7 +188,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
   if (visit)
     d.edguard->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("selection : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_selection);
@@ -198,7 +198,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
   if (visit)
     d.edselection->setReadOnly(TRUE);
   
-  vtab = new Q3VBox(grid);
+  vtab = GridController::PlaceVertical(grid);
   new QLabel(TR("transformation : "), vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_transformation);
