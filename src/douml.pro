@@ -1,5 +1,6 @@
 TEMPLATE	= app
 INCLUDEPATH	= browser data diagram dialog misc tool xpm
+PRECOMPILED_HEADER = PortingHelpers/GridConverter.h
 CONFIG		+= qt warn_on debug
 HEADERS		= data/ActualParamData.h \
 		  data/BasicData.h \
@@ -207,7 +208,8 @@ HEADERS		= data/ActualParamData.h \
 		  tool/Tool.h \
 		  tool/Socket.h \
 		  tool/ToolCom.h \
-		  xpm/UmlPixmap.h
+		  xpm/UmlPixmap.h \
+    PortingHelpers/GridConverter.h
 SOURCES		= browser/BrowserAttribute.cpp \
 		  browser/BrowserExtraMember.cpp \
 		  browser/BrowserClass.cpp \
@@ -468,7 +470,8 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  misc/translate.cpp \
 		  tool/Tool.cpp \
 		  tool/ToolCom.cpp \
-		  xpm/UmlPixmap.cpp
+		  xpm/UmlPixmap.cpp \
+    PortingHelpers/GridConverter.cpp
 INTERFACES	= 
 TARGET		= douml
 DEFINES         = BooL=bool
