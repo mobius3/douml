@@ -127,7 +127,7 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
   
   
   
-  kvtable = new KeyValuesTable(o->get_browser_node(), grid, visit);
+  kvtable =	GridController::PlaceWidget(new KeyValuesTable(o->get_browser_node(), grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //

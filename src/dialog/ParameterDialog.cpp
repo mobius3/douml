@@ -265,7 +265,7 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
   
   
   
-  kvtable = new KeyValuesTable(pa->browser_node, grid, visit);
+  kvtable =	GridController::PlaceWidget(new KeyValuesTable(pa->browser_node, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //

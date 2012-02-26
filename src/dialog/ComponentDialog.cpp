@@ -93,8 +93,8 @@ ComponentDialog::ComponentDialog(SimpleData * nd)
   
   
   
-  kvtable = new KeyValuesTable((BrowserComponent *) data->get_browser_node(),
-			       grid, !hasOkButton());
+  kvtable = GridController::PlaceWidget(new KeyValuesTable((BrowserComponent *) data->get_browser_node(),
+                   grid, !hasOkButton()),grid);
   addTab(grid, TR("Properties"));
   
   //

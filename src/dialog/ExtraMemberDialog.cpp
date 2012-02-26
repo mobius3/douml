@@ -239,7 +239,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  kvtable = new KeyValuesTable(ex->get_browser_node(), grid, visit);
+  kvtable =	GridController::PlaceWidget(new KeyValuesTable(ex->get_browser_node(), grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   open_dialog(this);

@@ -6,6 +6,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include "data/HaveKeyValueData.h"
+#include "dialog/KeyValueTable.h"
 struct GridDataStack
 {
     static QGridLayout* layout;
@@ -25,6 +26,7 @@ public:
     static void InitNewGrid(QWidget*, int columns);
 
     static void PlaceWidget(QWidget* parent, QWidget* grid);
+    static void PlaceWidget(KeyValuesTable* data,  QWidget* grid);
 
 
 

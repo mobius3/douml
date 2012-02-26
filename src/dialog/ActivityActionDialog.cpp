@@ -226,7 +226,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   
   grid = mkgrid(this);
   
-  kvtable = new KeyValuesTable(action, grid, visit);
+  kvtable =	GridController::PlaceWidget(new KeyValuesTable(action, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //

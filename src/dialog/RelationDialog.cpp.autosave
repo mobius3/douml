@@ -418,11 +418,11 @@ RelationDialog::RelationDialog(RelationData * r)
   
   vtab = new Q3VBox(this);
   bg = new Q3GroupBox(1, Qt::Horizontal, ina, vtab); 
-  a.kvtable = GridController::PlaceWidget(new KeyValuesTable(rel->get_start(), bg, a.ro),grid);
+  a.kvtable = new KeyValuesTable(rel->get_start(), bg, a.ro);
   new QLabel(vtab);
   bg = new Q3GroupBox(1, Qt::Horizontal, inb, vtab); 
   b.opt.append(bg);
-  b.kvtable = GridController::PlaceWidget(new KeyValuesTable(rel->get_end(), bg, b.ro),grid);
+  b.kvtable = new KeyValuesTable(rel->get_end(), bg, b.ro);
   addTab(vtab, TR("Properties"));
   
   //

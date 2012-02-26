@@ -124,7 +124,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
   
   
   
-  kvtable = new KeyValuesTable(bn, grid, visit);
+  kvtable =	GridController::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   open_dialog(this);

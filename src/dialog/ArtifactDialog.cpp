@@ -87,8 +87,8 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
   
   
   
-  kvtable = new KeyValuesTable((BrowserArtifact *) data->get_browser_node(),
-			       grid, !hasOkButton());
+  kvtable = GridController::PlaceWidget(new KeyValuesTable((BrowserArtifact *) data->get_browser_node(),
+                   grid, !hasOkButton()),grid);
   addTab(grid, TR("Properties"));
   
   //

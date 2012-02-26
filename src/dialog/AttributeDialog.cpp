@@ -577,7 +577,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   
   
   
-  kvtable = new KeyValuesTable(a->browser_node, grid, visit);
+  kvtable =	GridController::PlaceWidget(new KeyValuesTable(a->browser_node, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //

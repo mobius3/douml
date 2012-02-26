@@ -254,7 +254,7 @@ PinDialog::PinDialog(PinData * pi)
   
   
   
-  kvtable = new KeyValuesTable(pi->browser_node, grid, visit);
+  kvtable =	GridController::PlaceWidget(new KeyValuesTable(pi->browser_node, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //

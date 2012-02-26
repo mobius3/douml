@@ -205,7 +205,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   
   
   
-  kvtable = new KeyValuesTable(data->browser_node, grid, visit);
+  kvtable =	GridController::PlaceWidget(new KeyValuesTable(data->browser_node, grid, visit), grid);
   addTab(grid, TR("Properties"));
   
   //
