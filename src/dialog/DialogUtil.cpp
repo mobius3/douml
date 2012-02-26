@@ -71,18 +71,18 @@ QSize SmallPushButton::sizeHint() const {
 
 // setText() redefinition
 void MultiLineEdit::setText(const QString & s) {
-  Q3MultiLineEdit::setText(toUnicode(s));
+  Q3TextEdit::setText(toUnicode(s));
 }
 
 // text() redefinition
 QString MultiLineEdit::text() const {
-  QString t = Q3MultiLineEdit::text();
+  QString t = Q3TextEdit::text();
   
   return fromUnicode(t);
 }
 
 QString MultiLineEdit::stripWhiteSpaceText() const {
-  QString t = Q3MultiLineEdit::text();
+  QString t = Q3TextEdit::text();
   
   return fromUnicode(t.stripWhiteSpace());
 }
