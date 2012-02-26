@@ -178,6 +178,10 @@ class ArtifactDialog : public Q3TabDialog {
     void associate_arts();
     void unassociate_arts();
     void stereotypeFilterActivated(const QString &);
+
+    //! starts creation of project-wide user Key-Value artifact list
+    //! used to minimize window reopening to copy KV pairs between artifacts
+    void createCompleteKVList();
 };
 
 #endif
