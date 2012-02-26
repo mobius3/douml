@@ -71,13 +71,10 @@ static QString pretty_kind(UmlActionKind k)
   return s;
 }
 
-static Q3Grid * mkgrid(Q3TabDialog * d, const char * name = 0)
+static QWidget * mkgrid(Q3TabDialog * d, const char * name = 0)
 {
-  Q3Grid * grid = new Q3Grid(2, d, name);
-
-  
-  
-
+  QWidget * grid = GridConverter::InitNewGrid(d, 2);
+  grid->setName(name);
   return grid;
 }
 
@@ -425,7 +422,7 @@ void ActivityActionDialog::accept() {
 
 // ActionCondDialog
 
-void ActionCondDialog::init(Q3Grid * grid, ActivityActionData * d,
+void ActionCondDialog::init(QWidget * grid, ActivityActionData * d,
 			    DrawingLanguage lang, bool visit) {
   new QLabel(TR("Pre\ncondition : "), grid);
   edpre = new MultiLineEdit(grid);

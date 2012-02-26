@@ -50,7 +50,7 @@ struct ActionCondDialog {
   MultiLineEdit * edpre;
   MultiLineEdit * edpost;
   
-  void init(Q3Grid *, ActivityActionData *, DrawingLanguage, bool visit);
+  void init(QWidget *, ActivityActionData *, DrawingLanguage, bool visit);
   void get(QString & pre, QString & post) const;
   void set(QString pre, QString post);
 };
@@ -58,9 +58,9 @@ struct ActionCondDialog {
 class AnyActionDialog {
   protected:
     Q3TabDialog * td;
-    Q3Grid * ocl_grid;
-    Q3Grid * cpp_grid;
-    Q3Grid * java_grid;
+    QWidget * ocl_grid;
+    QWidget * cpp_grid;
+    QWidget * java_grid;
     ActionCondDialog ocl_cond;
     ActionCondDialog cpp_cond;
     ActionCondDialog java_cond;

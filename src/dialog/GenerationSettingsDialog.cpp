@@ -155,10 +155,7 @@ static void init_indent(Q3ComboBox * cb, const char * v)
 
 void GenerationSettingsDialog::init_cpp1() {
   Q3VBox * vtab = new Q3VBox(this);
-  Q3Grid * grid = new Q3Grid(2, vtab);
-  
-  
-  
+  QWidget * grid = GridConverter::InitNewGrid(vtab, 2);
 
   new QLabel(TR("Header file\ndefault content :"), grid);
   edcpp_h_content = new MultiLineEdit(grid);
@@ -280,7 +277,7 @@ void GenerationSettingsDialog::init_cpp2() {
 
 void GenerationSettingsDialog::init_cpp3() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3Grid * grid2;
+  QWidget * grid2;
   Q3HBox * htab;
   
   
@@ -608,7 +605,7 @@ void GenerationSettingsDialog::init_java1() {
 
 void GenerationSettingsDialog::init_java2() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3Grid * grid2;
+  QWidget * grid2;
   
   
   
@@ -1026,7 +1023,7 @@ void GenerationSettingsDialog::init_python1() {
 
   new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid);
 
-  Q3Grid * grid2 = new Q3Grid(2, grid);
+  QWidget * grid2 = GridConverter::InitNewGrid(grid, 2);
 
   new QLabel(TR("multiplicity '1'\nor unspecified"), grid2);
   edpython_attr_decl[0] = new MultiLineEdit(grid2);
@@ -1048,7 +1045,7 @@ void GenerationSettingsDialog::init_python1() {
 
 void GenerationSettingsDialog::init_python2() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3Grid * grid2;
+  QWidget * grid2;
   
   
   
@@ -1200,10 +1197,8 @@ void GenerationSettingsDialog::init_idl1() {
   edidl_extension->setCurrentItem(0);
   edidl_extension->insertItem("Idl");
 
-  Q3Grid * grid = new Q3Grid(2, split);
-  
-  
-  
+  QWidget * grid = GridConverter::InitNewGrid(split, 2);
+
 
   new QLabel(TR("Interface default \ndeclaration :"), grid);
   edidl_interface_decl = new MultiLineEdit(grid);
@@ -1250,7 +1245,7 @@ void GenerationSettingsDialog::init_idl1() {
 
 void GenerationSettingsDialog::init_idl2() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3Grid * grid2;
+  QWidget * grid2;
   
   
   
@@ -1316,7 +1311,7 @@ void GenerationSettingsDialog::init_idl2() {
 
 void GenerationSettingsDialog::init_idl3() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3Grid * grid2;
+  QWidget * grid2;
   int i;
   
   
@@ -1379,7 +1374,7 @@ void GenerationSettingsDialog::init_idl3() {
 
 void GenerationSettingsDialog::init_idl4() {
   QWidget * grid = GridConverter::InitNewGrid(this, 2);
-  Q3Grid * grid2;
+  QWidget * grid2;
   Q3HBox * htab;
   
   

@@ -122,7 +122,7 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
   
   // USER : list key - value
   
-  Q3Grid *   QWidget * grid = GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
 
   
   

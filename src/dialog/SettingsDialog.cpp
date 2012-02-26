@@ -325,7 +325,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
   setCaption((title.isEmpty()) ? TR("Diagram Drawing Settings dialog") : title);
   
   QString s_diagram = TR("diagram");
-  Q3Grid * grid = 0;
+  QWidget * grid = 0;
   QString tabname;
   unsigned i;
   unsigned n;
