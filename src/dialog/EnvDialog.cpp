@@ -68,7 +68,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   
   Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
   Q3HBox * htab;
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   QPushButton * button;
   QString s;
   

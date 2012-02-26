@@ -354,7 +354,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
 	  if (tabname == previous_active_tab)
 	    first_visible_page = grid;
 	}
-	GridConverter::InitNewGrid(this, 5);
+	QWidget * grid = GridConverter::InitNewGrid(this, 5);
 	
 	
 	tabname = tbn;
@@ -401,7 +401,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
     
     n = colors->size();
     cbcolors = new Q3PtrVector<ComboColor>(n);
-    GridConverter::InitNewGrid(this, 5);
+    QWidget * grid = GridConverter::InitNewGrid(this, 5);
     
     
     
@@ -413,7 +413,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
 	if (previous_active_tab == lbl)
 	  first_visible_page = grid;
 	lbl = TR("color [2]");
-	GridConverter::InitNewGrid(this, 5);
+	QWidget * grid = GridConverter::InitNewGrid(this, 5);
 	
 	
       }

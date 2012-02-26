@@ -72,13 +72,13 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   visit = !hasOkButton();
   setCaption(TR(QString(what) + " dialog"));
   
-  Q3Grid * grid;
+  
   Q3HBox * htab;
   QString s;
     
   // general tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   
@@ -201,7 +201,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -248,7 +248,7 @@ void ActivityObjectDialog::init_tab(QWidget *& w, MultiLineEdit *& ed,
 				    const char * v, const char * lbl,
 				    const char * sl, bool enabled) {
   bool visit = !hasOkButton();
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
 
   w = grid;
   

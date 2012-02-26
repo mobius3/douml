@@ -91,7 +91,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   
   // general tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
 
@@ -185,7 +185,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

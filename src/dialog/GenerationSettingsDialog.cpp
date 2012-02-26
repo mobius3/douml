@@ -95,7 +95,7 @@ GenerationSettingsDialog::~GenerationSettingsDialog() {
 }
 
 void GenerationSettingsDialog::init_types() {
-  GridConverter::InitNewGrid(this, 1);
+  QWidget * grid = GridConverter::InitNewGrid(this, 1);
   
   
   
@@ -108,7 +108,7 @@ void GenerationSettingsDialog::init_types() {
 }
 
 void GenerationSettingsDialog::init_stereotypes() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -238,7 +238,7 @@ void GenerationSettingsDialog::init_cpp1() {
 }
 
 void GenerationSettingsDialog::init_cpp2() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -279,7 +279,7 @@ void GenerationSettingsDialog::init_cpp2() {
 }
 
 void GenerationSettingsDialog::init_cpp3() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   Q3HBox * htab;
   
@@ -362,7 +362,7 @@ void GenerationSettingsDialog::init_cpp3() {
 }
 
 void GenerationSettingsDialog::init_cpp4() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3VBox * vtab;
   Q3HBox * htab;
   Q3ButtonGroup * bg;
@@ -537,7 +537,7 @@ void GenerationSettingsDialog::init_cpp5() {
 }
 
 void GenerationSettingsDialog::init_java1() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -607,7 +607,7 @@ void GenerationSettingsDialog::init_java1() {
 }
 
 void GenerationSettingsDialog::init_java2() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   
   
@@ -658,7 +658,7 @@ void GenerationSettingsDialog::init_java2() {
 }  
 
 void GenerationSettingsDialog::init_java3() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3HBox * htab;
   Q3ButtonGroup * bg;
   
@@ -780,7 +780,7 @@ void GenerationSettingsDialog::init_java4() {
 }
 
 void GenerationSettingsDialog::init_php1() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -862,7 +862,7 @@ void GenerationSettingsDialog::init_php1() {
 }
 
 void GenerationSettingsDialog::init_php2() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -966,7 +966,7 @@ void GenerationSettingsDialog::init_php2() {
 }  
 
 void GenerationSettingsDialog::init_python1() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -1047,7 +1047,7 @@ void GenerationSettingsDialog::init_python1() {
 }
 
 void GenerationSettingsDialog::init_python2() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   
   
@@ -1249,7 +1249,7 @@ void GenerationSettingsDialog::init_idl1() {
 }
 
 void GenerationSettingsDialog::init_idl2() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   
   
@@ -1315,7 +1315,7 @@ void GenerationSettingsDialog::init_idl2() {
 }
 
 void GenerationSettingsDialog::init_idl3() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   int i;
   
@@ -1378,7 +1378,7 @@ void GenerationSettingsDialog::init_idl3() {
 }
 
 void GenerationSettingsDialog::init_idl4() {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   Q3HBox * htab;
   

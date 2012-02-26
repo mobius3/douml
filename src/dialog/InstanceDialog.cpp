@@ -56,7 +56,7 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
   
   vbox->setMargin(5);
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   vbox->addWidget(grid);
   new QLabel(TR("name : "), grid);

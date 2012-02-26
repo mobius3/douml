@@ -75,14 +75,14 @@ PackageDialog::PackageDialog(PackageData * da)
 
   setCaption(TR("Package dialog"));
     
-  Q3Grid * grid;
+  
   Q3VBox * vtab;
   Q3HBox * htab;
   QPushButton * button;
   
   // general tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   

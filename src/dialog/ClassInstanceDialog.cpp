@@ -142,11 +142,11 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   visit = !hasOkButton();
   
-  Q3Grid * grid;
+  
     
   // general tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -228,7 +228,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

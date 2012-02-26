@@ -87,11 +87,11 @@ StereotypesDialog::StereotypesDialog()
   setCancelButton(TR("Cancel"));
   
   const QString space(" ");
-  Q3Grid * grid;
+  
   
   // package tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -111,7 +111,7 @@ StereotypesDialog::StereotypesDialog()
   
   // class tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -154,7 +154,7 @@ StereotypesDialog::StereotypesDialog()
   
   // Use case
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -180,7 +180,7 @@ StereotypesDialog::StereotypesDialog()
   
   // artifact tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -200,7 +200,7 @@ StereotypesDialog::StereotypesDialog()
   
   // view
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -224,7 +224,7 @@ StereotypesDialog::StereotypesDialog()
   
   // diagrams
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -268,7 +268,7 @@ StereotypesDialog::StereotypesDialog()
   
   // activities
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -324,7 +324,7 @@ StereotypesDialog::StereotypesDialog()
   
   // others
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

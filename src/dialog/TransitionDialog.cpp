@@ -66,13 +66,13 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   visit = !hasOkButton();  
 
   BrowserNode * bn = rel->browser_node;
-  Q3Grid * grid;
+  
   
   //
   // general tab
   //
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   
@@ -130,7 +130,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -177,7 +177,7 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
 				const char * lbl, const char * sl_trigger,
 				const char * sl_guard, const char * sl_expr,
 				bool enabled) {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3VBox * vtab;
 
   tab = grid;

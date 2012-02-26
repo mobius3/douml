@@ -74,7 +74,7 @@ ParameterSetDialog::ParameterSetDialog(ParameterSetData * nd)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
 
   
   
@@ -117,7 +117,7 @@ void ParameterSetDialog::init_uml_tab() {
   BrowserParameterSet * bn = 
     (BrowserParameterSet *) data->get_browser_node();
   Q3VBox * vbox;
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   umltab = grid;
   

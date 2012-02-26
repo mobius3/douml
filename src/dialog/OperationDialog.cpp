@@ -122,7 +122,7 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
   
   // USER : list key - value
   
-  Q3Grid *   GridConverter::InitNewGrid(this, 2);
+  Q3Grid *   QWidget * grid = GridConverter::InitNewGrid(this, 2);
 
   
   
@@ -252,11 +252,11 @@ void OperationDialog::init_get_set() {
 
 // general tab
 void OperationDialog::init_uml() {  
-  Q3Grid * grid;
+  
   Q3HBox * htab;
   Q3ButtonGroup * bg;
     
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   
@@ -398,11 +398,11 @@ void OperationDialog::init_uml() {
 // C++
 void OperationDialog::init_cpp() {  
   if (! cpp_undef) {
-    Q3Grid * grid;
+    
     Q3HBox * htab;
     Q3ButtonGroup * bg;
     
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     cpptab = grid;
     
     
@@ -568,11 +568,11 @@ void OperationDialog::init_cpp() {
 // Java
 void OperationDialog::init_java() {  
   if (! java_undef) {
-    Q3Grid * grid;
+    
     Q3HBox * htab;
     Q3ButtonGroup * bg;
 
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     javatab = grid;
     
     
@@ -684,11 +684,11 @@ void OperationDialog::init_java() {
 // Php
 void OperationDialog::init_php() {  
   if (! php_undef) {
-    Q3Grid * grid;
+    
     Q3HBox * htab;
     Q3ButtonGroup * bg;
 
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     phptab = grid;
     
     
@@ -785,10 +785,10 @@ void OperationDialog::init_php() {
 // Python
 void OperationDialog::init_python() {  
   if (! python_undef) {
-    Q3Grid * grid;
+    
     Q3HBox * htab;
 
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     pythontab = grid;
     
     
@@ -880,11 +880,11 @@ void OperationDialog::init_python() {
 // IDL
 void OperationDialog::init_idl() {  
   if (! idl_undef) {
-    Q3Grid * grid;
+    
     Q3HBox * htab;
     Q3ButtonGroup * bg;
 
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     idltab = grid;
     
     

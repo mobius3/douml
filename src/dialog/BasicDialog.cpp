@@ -67,7 +67,7 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
   // general tab
   
   BrowserNode * bn = data->get_browser_node();
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
 
@@ -109,7 +109,7 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

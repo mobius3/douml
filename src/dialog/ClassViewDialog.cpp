@@ -68,7 +68,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   // general tab
   
   BrowserClassView * bn = (BrowserClassView *) data->get_browser_node();
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
 
   umltab = grid;
   
@@ -153,7 +153,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

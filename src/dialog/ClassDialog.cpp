@@ -99,7 +99,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 
   Q3HBox * htab;
   Q3VBox * vtab;
-  Q3Grid * grid;
+  
   QSplitter * split;
   Q3GroupBox * bg;
   QLabel * lbl1;
@@ -110,7 +110,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   // general tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   
@@ -680,7 +680,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   if ((gp->get_type() == UmlPackage) &&
       !strcmp(gp->get_data()->get_stereotype(), "profile")) {
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     stereotypetab = grid;
     
     

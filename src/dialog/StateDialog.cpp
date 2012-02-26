@@ -71,13 +71,13 @@ StateDialog::StateDialog(StateData * d)
   visit = !hasOkButton();  
 
   BrowserNode * bn = state->browser_node;
-  Q3Grid * grid;
+  
   
   //
   // general tab
   //
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   
@@ -205,7 +205,7 @@ StateDialog::StateDialog(StateData * d)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -379,7 +379,7 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
 			   const char * lbl, const char * sl_enbeh,
 			   const char * sl_exbeh, const char * sl_beh,
 			   bool enabled) {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3VBox * vtab;
 
   tab = grid;

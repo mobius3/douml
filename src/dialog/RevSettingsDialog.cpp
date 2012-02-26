@@ -56,7 +56,7 @@ RevSettingsDialog::RevSettingsDialog()
   
   vbox->setMargin(5);
   
-  GridConverter::InitNewGrid(this, 3);
+  QWidget * grid = GridConverter::InitNewGrid(this, 3);
   Q3HBox * htab;
   
   vbox->addWidget(grid);

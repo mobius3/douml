@@ -71,13 +71,13 @@ PinDialog::PinDialog(PinData * pi)
   visit = !hasOkButton();
   setCaption(TR("Pin dialog"));
   
-  Q3Grid * grid;
+  
   Q3HBox * htab;
   QString s;
     
   // general tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   
@@ -250,7 +250,7 @@ PinDialog::PinDialog(PinData * pi)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -296,7 +296,7 @@ void PinDialog::polish() {
 void PinDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char * v,
 			 const char * lbl, const char * sl, bool enabled) {
   bool visit = !hasOkButton();
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
 
   tab = grid;
   

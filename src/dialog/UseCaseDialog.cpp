@@ -68,7 +68,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   // general tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
 
@@ -113,7 +113,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

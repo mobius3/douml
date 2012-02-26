@@ -65,13 +65,13 @@ FlowDialog::FlowDialog(FlowData * d)
   visit = !hasOkButton();  
 
   BrowserNode * bn = flow->browser_node;
-  Q3Grid * grid;
+  
   
   //
   // general tab
   //
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   
@@ -121,7 +121,7 @@ FlowDialog::FlowDialog(FlowData * d)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -159,7 +159,7 @@ void FlowDialog::change_tabs(QWidget * w) {
 void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
 			  const char * sl_guard, const char * sl_selection,
 			  const char * sl_transformation, bool enabled) {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   Q3VBox * vtab;
 
   

@@ -89,7 +89,7 @@ ComponentDialog::ComponentDialog(SimpleData * nd)
 
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -130,7 +130,7 @@ void ComponentDialog::init_uml_tab() {
   
   BrowserComponent * bn = (BrowserComponent *) data->get_browser_node();
   Q3VBox * vbox;
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   umltab = grid;
   

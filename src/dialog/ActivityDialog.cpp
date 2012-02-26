@@ -71,13 +71,13 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   visit = !hasOkButton();  
 
   BrowserNode * bn = activity->browser_node;
-  Q3Grid * grid;
+  
   
   //
   // general tab
   //
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -174,7 +174,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -265,7 +265,7 @@ void ActivityDialog::change_tabs(QWidget *) {
 
 void ActivityDialog::init_tab(CondDialog & d, InfoData & cd,
 			      const char * lbl, bool enabled) {
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

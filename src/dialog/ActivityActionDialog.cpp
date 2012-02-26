@@ -101,7 +101,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
 
   BrowserActivityAction * action = 
     (BrowserActivityAction *) a->get_browser_node();
-  Q3Grid * grid;
+  
   
   //
   // general tab

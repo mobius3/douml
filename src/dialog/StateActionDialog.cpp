@@ -65,13 +65,13 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   visit = !hasOkButton();  
 
   BrowserNode * bn = action->browser_node;
-  Q3Grid * grid;
+  
   
   //
   // general tab
   //
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -101,7 +101,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   addTab(grid, "Uml");
 
   // OCL
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   
@@ -115,7 +115,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   addTab(grid, "Ocl");
 
   // CPP
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   cpptab = grid;
   
   
@@ -132,7 +132,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     removePage(grid);
   
   // Java
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   javatab = grid;
   
   
@@ -150,7 +150,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
 
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

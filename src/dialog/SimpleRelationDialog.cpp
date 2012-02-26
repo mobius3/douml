@@ -66,7 +66,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
   // general tab
   
   BrowserNode * bn = rel->get_browser_node();
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
 
@@ -120,7 +120,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

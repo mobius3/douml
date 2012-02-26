@@ -83,7 +83,7 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -125,7 +125,7 @@ void ArtifactDialog::init_uml_tab() {
   
   BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
   Q3VBox * vbox;
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   uml_page = grid;
   

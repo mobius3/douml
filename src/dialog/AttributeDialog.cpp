@@ -107,13 +107,13 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   
   setCaption((in_enum || java_in_enum_pattern) ? TR("Enum item dialog") : TR("Attribute dialog"));
   
-  Q3Grid * grid;
+  
   Q3HBox * htab;
   QString s;
     
   // general tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   umltab = grid;
   
   
@@ -292,7 +292,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   // C++
   
   if (! cpp_ignored) {
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     cpptab = grid;
     
     
@@ -352,7 +352,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   // Java
   
   if (! java_ignored) {
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     javatab = grid;
     
     
@@ -421,7 +421,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       BrowserOperation::python_init_self((BrowserNode *) a->browser_node->parent())
 	+ ".";
     
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     phptab = grid;
     
     
@@ -461,7 +461,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   // Python
   
   if (! python_ignored) {
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     pythontab = grid;
     
     
@@ -501,7 +501,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   // IDL
   
   if (! idl_in_typedef) {
-    GridConverter::InitNewGrid(this, 2);
+    QWidget * grid = GridConverter::InitNewGrid(this, 2);
     idltab = grid;
     
     
@@ -573,7 +573,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   

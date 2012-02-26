@@ -71,7 +71,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
   label1->setAlignment(Qt::AlignCenter);
   hbox->addWidget(label1);
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   vbox->addWidget(grid);
   new QLabel(TR("rank : "), grid);

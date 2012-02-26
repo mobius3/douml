@@ -68,11 +68,11 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
   setCaption(TR("Extra Class Member dialog"));
   
-  Q3Grid * grid;
+  
     
   // general tab
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -112,7 +112,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // C++
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -151,7 +151,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Java
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -172,7 +172,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Php
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -193,7 +193,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Python
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -214,7 +214,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // IDL
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -235,7 +235,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // USER : list key - value
   
-  GridConverter::InitNewGrid(this, 2);
+  QWidget * grid = GridConverter::InitNewGrid(this, 2);
   
   
   
