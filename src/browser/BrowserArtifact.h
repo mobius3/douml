@@ -33,7 +33,9 @@
 #define BROWSER_ARTIFACT_H
 
 class QPixmap;
-
+#include <QMultiHash>
+#include <QHash>
+#include <QStringList>
 #include "BrowserNode.h"
 #include "Labeled.h"
 
@@ -131,6 +133,8 @@ class BrowserArtifact : public BrowserNode, public Labeled<BrowserArtifact> {
     virtual void DropEvent(QDropEvent * e);
     virtual void DragMoveInsideEvent(QDragMoveEvent * e);
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
+    static QMultiHash<QString, QString> GetAllUserKVPairs();
+    static QStringList GetAllUserKeys();
     
   protected:
     void associate_class(BrowserClass * c, bool on_read);
