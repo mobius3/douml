@@ -25,6 +25,7 @@ public:
     static void InitNewGrid(QWidget*, int columns);
 
     static void PlaceWidget(QWidget* parent, QWidget* grid);
+    static void PlaceWidget(HaveKeyValueData* data,  QWidget* grid);
 
 
 

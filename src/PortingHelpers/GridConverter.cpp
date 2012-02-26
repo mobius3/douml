@@ -6,18 +6,23 @@ int GridDataStack::columnCounter = 0;
 int GridDataStack::columns = 0;
 int GridDataStack::rowCounter = 0;
 QList<GridDataStack> GridConverter::grids;
-void GridConverter::operator()(QWidget* widget, int columns, Q3Grid* grid/*swallowed*/)
+void GridConverter::PlaceWidget(QWidget* parent, QWidget* grid/*swallowed at this point*/)
 {
-    if(!parent)
+    if(!grids.last().parent)
         return;
-    bool columLimitReached = columnCounter==1;
+    bool columLimitReached = grids.last().columnCounter==1;
     if(columLimitReached)
     {
-        row++;
-        columnCounter = 0;
+        grids.last().row++;
+        grids.last().columnCounter = 0;
     }
-    layout->addWidget(widget,columnCounter, row);
-    columnCounter++;
+    grids.last().layout->addWidget(grids.last().widget,grids.last().columnCounter, grids.last().row);
+    grids.last().columnCounter++;
+}
+
+void GridConverter::PlaceWidget(HaveKeyValueData* data,  QWidget* grid)
+{
+
 }
 
 void GridConverter::InitNewGrid(QWidget * w, int _columns)
