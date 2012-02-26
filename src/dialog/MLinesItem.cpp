@@ -60,8 +60,8 @@ void MLinesItem::setContentFromEditor(QWidget * w) {
     setText(s);
   }
 #else
-  if (w->inherits("QMultiLineEdit")) {
-    QString s = ((Q3MultiLineEdit *) w)->text();
+  if (w->inherits("Q3TextEdit")) {
+    QString s = ((Q3TextEdit *) w)->text();
     
     setText(s);
   }
