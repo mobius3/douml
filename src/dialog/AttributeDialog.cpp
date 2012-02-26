@@ -123,7 +123,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 	     grid);
   
   GridConverter::PlaceWidget(new QLabel(TR("name :")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(),a->name(),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(grid),a->name(),grid));
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -206,7 +206,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   }
   
   htab = GridConverter::PlaceHorizontal(grid);
-  edinit = GridConverter::PlaceWidget(new LineEdit(a->get_init_value()),htab);
+  edinit = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(a->get_init_value()),htab));
   if (visit)
     edinit->setReadOnly(TRUE);
   else
@@ -282,7 +282,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
-  constraint = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  constraint = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   constraint->setReadOnly(visit);
   constraint->setText(a->constraint);
   constraint->setFont(font);
@@ -309,7 +309,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       
       GridConverter::PlaceWidget(new QLabel(" "),htab);
       
-      mutable_cb = GridConverter::PlaceWidget(new QCheckBox("mutable"),htab);
+      mutable_cb = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox("mutable"),htab));
       if (a->cpp_mutable)
 	mutable_cb->setChecked(TRUE);
       if (visit)
@@ -319,7 +319,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     }
     
     GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
-    edcppdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    edcppdecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     edcppdecl->setText(a->get_cppdecl());
     edcppdecl->setFont(font);
     if (visit)
@@ -328,7 +328,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update()));
     
     GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
-    showcppdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    showcppdecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     showcppdecl->setReadOnly(TRUE);
     showcppdecl->setFont(font);
     
@@ -359,7 +359,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     if (!java_in_enum && !java_in_enum_pattern) {
       GridConverter::PlaceWidget(new QLabel(""),grid);
-      transient_cb = GridConverter::PlaceWidget(new QCheckBox("transient"),grid);
+      transient_cb = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox("transient"),grid));
       if (a->java_transient)
 	transient_cb->setChecked(TRUE);
       if (visit)
@@ -369,7 +369,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     }
   
     GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
-    edjavadecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    edjavadecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     edjavadecl->setText(a->get_javadecl());
     edjavadecl->setFont(font);
     if (visit)
@@ -378,7 +378,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       connect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update()));
     
     GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
-    showjavadecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    showjavadecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     showjavadecl->setReadOnly(TRUE);
     showjavadecl->setFont(font);
     
@@ -427,7 +427,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     
     GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
-    edphpdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    edphpdecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     edphpdecl->setText(a->get_phpdecl());
     edphpdecl->setFont(font);
     if (visit)
@@ -436,7 +436,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       connect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update()));
     
     GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
-    showphpdecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    showphpdecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     showphpdecl->setReadOnly(TRUE);
     showphpdecl->setFont(font);
     
@@ -467,7 +467,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
     
     GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
-    edpythondecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    edpythondecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     edpythondecl->setText(a->get_pythondecl());
     edpythondecl->setFont(font);
     if (visit)
@@ -476,7 +476,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       connect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update()));
     
     GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
-    showpythondecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    showpythondecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     showpythondecl->setReadOnly(TRUE);
     showpythondecl->setFont(font);
     
@@ -532,7 +532,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     }
     
     GridConverter::PlaceWidget(new QLabel(TR("Declaration :")),grid);
-    edidldecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    edidldecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     edidldecl->setText(a->get_idldecl());
     edidldecl->setFont(font);
     if (visit)
@@ -541,7 +541,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update()));
     
     GridConverter::PlaceWidget(new QLabel(TR("Result after\nsubstitution :")),grid);
-    showidldecl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+    showidldecl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
     showidldecl->setReadOnly(TRUE);
     showidldecl->setFont(font);
     
@@ -573,11 +573,11 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   
   // USER : list key - value
   
-  QWidget * grid = GridConverter::InitNewGrid(this, 2);
+  grid = GridConverter::InitNewGrid(this, 2);
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(a->browser_node, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(a->browser_node, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   //

@@ -96,7 +96,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   
 
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid));
   edname->setReadOnly(visit);
 
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -170,7 +170,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
 
@@ -189,7 +189,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   open_dialog(this);

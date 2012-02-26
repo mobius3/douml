@@ -82,7 +82,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   
   
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid));
   edname->setReadOnly(visit);
     
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -143,7 +143,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   //comment->setFont(font);
@@ -154,7 +154,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
-  constraint = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  constraint = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   constraint->setReadOnly(visit);
   constraint->setText(activity->constraint);
   //constraint->setFont(font);
@@ -178,7 +178,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   //
@@ -270,13 +270,13 @@ void ActivityDialog::init_tab(CondDialog & d, InfoData & cd,
   
   
   GridConverter::PlaceWidget(new QLabel(TR("Pre\ncondition : ")),grid);
-  d.edpre = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  d.edpre = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   d.edpre->setText(cd.first);
   if (visit)
     d.edpre->setReadOnly(TRUE);
   
   GridConverter::PlaceWidget(new QLabel(TR("Post\ncondition : ")),grid);
-  d.edpost = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  d.edpost = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   d.edpost->setText(cd.second);
   if (visit)
     d.edpost->setReadOnly(TRUE);

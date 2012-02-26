@@ -78,7 +78,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   
   
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid));
   edname->setReadOnly(visit);
     
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -98,7 +98,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
     internal_cb = 0;
   else {
     GridConverter::PlaceWidget(new QLabel(),grid);
-    internal_cb = GridConverter::PlaceWidget(new QCheckBox(TR("internal")),grid);
+    internal_cb = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("internal")),grid));
     internal_cb->setChecked(r->internal());
   }
     
@@ -107,7 +107,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   //comment->setFont(font);
@@ -134,7 +134,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   //
@@ -189,7 +189,7 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, sl_trigger);
-  d.edtrigger = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  d.edtrigger = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
 
   QFont font = d.edtrigger->font();
 
@@ -206,7 +206,7 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, sl_guard);
-  d.edguard = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  d.edguard = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   d.edguard->setFont(font);
   d.edguard->setText(td.guard);
   if (visit)
@@ -217,7 +217,7 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, sl_expr);
-  d.edexpr = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  d.edexpr = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   d.edexpr->setFont(font);
   d.edexpr->setText(td.expr);
   if (visit)

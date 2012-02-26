@@ -72,12 +72,12 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     
   // general tab
   
-  QWidget * grid = GridConverter::InitNewGrid(this, 2);
+  grid = GridConverter::InitNewGrid(this, 2);
   
   
   
   GridConverter::PlaceWidget(new QLabel(TR("name :")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(ex->name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(ex->name()),grid));
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -103,7 +103,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(ex->get_browser_node()->get_comment());
   comment->setFont(font);
@@ -129,7 +129,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_cpp_decl()));
-  edcpp_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  edcpp_decl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   edcpp_decl->setReadOnly(visit);
   edcpp_decl->setText(ex->cpp_decl);
   edcpp_decl->setFont(font);
@@ -139,7 +139,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_cpp_def()));
-  edcpp_def = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  edcpp_def = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   edcpp_def->setReadOnly(visit);
   edcpp_def->setText(ex->cpp_def);
   edcpp_def->setFont(font);
@@ -160,7 +160,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_java_decl()));
-  edjava_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  edjava_decl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   edjava_decl->setReadOnly(visit);
   edjava_decl->setText(ex->java_decl);
   edjava_decl->setFont(font);
@@ -172,7 +172,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Php
   
-  QWidget * grid = GridConverter::InitNewGrid(this, 2);
+  grid = GridConverter::InitNewGrid(this, 2);
   
   
   
@@ -181,7 +181,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_php_decl()));
-  edphp_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  edphp_decl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   edphp_decl->setReadOnly(visit);
   edphp_decl->setText(ex->php_decl);
   edphp_decl->setFont(font);
@@ -202,7 +202,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_python_decl()));
-  edpython_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  edpython_decl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   edpython_decl->setReadOnly(visit);
   edpython_decl->setText(ex->python_decl);
   edpython_decl->setFont(font);
@@ -223,7 +223,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_idl_decl()));
-  edidl_decl = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  edidl_decl = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   edidl_decl->setReadOnly(visit);
   edidl_decl->setText(ex->idl_decl);
   edidl_decl->setFont(font);
@@ -239,7 +239,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(ex->get_browser_node(), grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(ex->get_browser_node(), grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   open_dialog(this);

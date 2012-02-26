@@ -27,6 +27,7 @@ public:
     static QWidget* InitNewHBox(QWidget*);
 
     static QWidget* PlaceWidget(QWidget* parent, QWidget* grid);
+    static QWidget* PlaceWidget(QWidget* parent,const char*, QWidget* grid);
     static QWidget* PlaceWidget(KeyValuesTable* data,  QWidget* grid);
     static QWidget* PlaceVertical(QWidget* parent, QWidget* grid);
     static QWidget* PlaceHorizontal(QWidget* parent, QWidget* grid);

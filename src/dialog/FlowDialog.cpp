@@ -77,7 +77,7 @@ FlowDialog::FlowDialog(FlowData * d)
   
   
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid));
   edname->setReadOnly(visit);
     
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -98,7 +98,7 @@ FlowDialog::FlowDialog(FlowData * d)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   
@@ -125,7 +125,7 @@ FlowDialog::FlowDialog(FlowData * d)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   //
@@ -166,7 +166,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
   
   
   GridConverter::PlaceWidget(new QLabel(TR("weight : ")),grid);
-  d.edweight = GridConverter::PlaceWidget(new LineEdit(),grid);
+  d.edweight = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(),grid));
 
   QFont font = d.edweight->font();
 
@@ -182,7 +182,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
   GridConverter::PlaceWidget(new QLabel(TR("guard : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_guard);
-  d.edguard = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  d.edguard = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   d.edguard->setFont(font);
   d.edguard->setText(st.guard);
   if (visit)
@@ -192,7 +192,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
   GridConverter::PlaceWidget(new QLabel(TR("selection : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_selection);
-  d.edselection = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  d.edselection = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   d.edselection->setFont(font);
   d.edselection->setText(st.sel_trans.first);
   if (visit)
@@ -202,7 +202,7 @@ void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
   GridConverter::PlaceWidget(new QLabel(TR("transformation : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_transformation);
-  d.edtransformation = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  d.edtransformation = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   d.edtransformation->setFont(font);
   d.edtransformation->setText(st.sel_trans.second);
   if (visit)

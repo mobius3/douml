@@ -87,7 +87,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
     s = getenv("BOUML_ID");	// yes !
   else if (! noid)
     s.setNum(user_id());
-  ed_id = GridConverter::PlaceWidget(new QLineEdit(s),htab);
+  ed_id = dynamic_cast<QLineEdit*>(GridConverter::PlaceWidget(new QLineEdit(s),htab));
   if (BrowserView::get_project() != 0) {
     ed_id->setEnabled(FALSE);
     GridConverter::PlaceWidget(new QLabel(TR("   The identifier can't be modified while a project is load")),htab);
@@ -117,7 +117,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 
 
   GridConverter::PlaceWidget(new QLabel(" "),htab);
-  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+  button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
   connect(button, SIGNAL(clicked ()), this, SLOT(doc_browse()));
 
   //
@@ -131,7 +131,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   if (!conv)
     ed_navigator->setText(navigator_path());
   GridConverter::PlaceWidget(new QLabel(" "),htab);
-  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+  button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
   connect(button, SIGNAL(clicked ()), this, SLOT(navigator_browse()));
 
   //
@@ -145,9 +145,9 @@ EnvDialog::EnvDialog(bool conv, bool noid)
     s = getenv("BOUML_TEMPLATE");	// yes !
   else
     s = template_project();
-  ed_template = GridConverter::PlaceWidget(new QLineEdit(s),htab);
+  ed_template = dynamic_cast<QLineEdit*>(GridConverter::PlaceWidget(new QLineEdit(s),htab));
   GridConverter::PlaceWidget(new QLabel(" "),htab);
-  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+  button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
   connect(button, SIGNAL(clicked ()), this, SLOT(template_browse()));
 
   //
@@ -161,9 +161,9 @@ EnvDialog::EnvDialog(bool conv, bool noid)
     s = getenv("BOUML_EDITOR");	// yes !
   else
     s = editor();
-  ed_editor = GridConverter::PlaceWidget(new QLineEdit(s),htab);
+  ed_editor = dynamic_cast<QLineEdit*>(GridConverter::PlaceWidget(new QLineEdit(s),htab));
   GridConverter::PlaceWidget(new QLabel(" "),htab);
-  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+  button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
   connect(button, SIGNAL(clicked ()), this, SLOT(editor_browse()));
 
   //
@@ -173,9 +173,9 @@ EnvDialog::EnvDialog(bool conv, bool noid)
 	     grid);
   GridConverter::PlaceWidget(new QLabel(TR("Translation file path ")),grid);
   htab = GridConverter::PlaceHorizontal(grid);
-  ed_lang = GridConverter::PlaceWidget(new QLineEdit(current_lang()),htab);
+  ed_lang = dynamic_cast<QLineEdit*>(GridConverter::PlaceWidget(new QLineEdit(current_lang()),htab));
   GridConverter::PlaceWidget(new QLabel(" "),htab);
-  button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+  button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
   connect(button, SIGNAL(clicked ()), this, SLOT(lang_browse()));
 
   //
@@ -252,13 +252,13 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   
   htab = GridConverter::PlaceHorizontal(grid);
   GridConverter::PlaceWidget(new QLabel(TR("left: ")),htab);
-  ed_xmin = GridConverter::PlaceWidget(new QLineEdit(x0),htab);
+  ed_xmin = dynamic_cast<QLineEdit*>(GridConverter::PlaceWidget(new QLineEdit(x0),htab));
   GridConverter::PlaceWidget(new QLabel(TR("      top: ")),htab);
-  ed_ymin = GridConverter::PlaceWidget(new QLineEdit(y0),htab);
+  ed_ymin = dynamic_cast<QLineEdit*>(GridConverter::PlaceWidget(new QLineEdit(y0),htab));
   GridConverter::PlaceWidget(new QLabel(TR("      right: ")),htab);
-  ed_xmax = GridConverter::PlaceWidget(new QLineEdit(x1),htab);
+  ed_xmax = dynamic_cast<QLineEdit*>(GridConverter::PlaceWidget(new QLineEdit(x1),htab));
   GridConverter::PlaceWidget(new QLabel(TR("      bottom: ")),htab);
-  ed_ymax = GridConverter::PlaceWidget(new QLineEdit(y1),htab);
+  ed_ymax = dynamic_cast<QLineEdit*>(GridConverter::PlaceWidget(new QLineEdit(y1),htab));
   
   //
   

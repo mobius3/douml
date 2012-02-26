@@ -151,7 +151,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid));
   if (visit)
     edname->setReadOnly(TRUE);
   
@@ -162,7 +162,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClassInstance));
     edstereotype->setAutoCompletion(completion());
   }
-  SmallPushButton *  b = GridConverter::PlaceWidget(new SmallPushButton(TR("class :")),grid);
+  SmallPushButton *  b = dynamic_cast<SmallPushButton*>(GridConverter::PlaceWidget(new SmallPushButton(TR("class :")),grid));
   
   connect(b, SIGNAL(clicked()), this, SLOT(menu_class()));
 
@@ -193,7 +193,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
   }
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   
@@ -232,7 +232,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   type_changed(edtype->currentItem());

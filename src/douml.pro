@@ -123,6 +123,21 @@ HEADERS		= data/ActualParamData.h \
 		  diagram/FragmentSeparatorCanvas.h \
 		  diagram/ConstraintCanvas.h \
 		  diagram/StereotypePropertiesCanvas.h \
+		  misc/Settings.h \
+		  misc/UmlDrag.h \
+		  misc/UmlEnum.h \
+		  misc/UmlGlobal.h \
+		  misc/Labeled.h \
+		  misc/myio.h \
+		  misc/mu.h \
+		  misc/ProfiledStereotypes.h \
+		  misc/Images.h \
+		  tool/Tool.h \
+		  tool/Socket.h \
+		  tool/ToolCom.h \
+		  xpm/UmlPixmap.h
+
+SOURCES		= browser/BrowserAttribute.cpp \
 		  dialog/AttributeDialog.h \
 		  dialog/ExtraMemberDialog.h \
 		  dialog/BasicDialog.h \
@@ -196,21 +211,6 @@ HEADERS		= data/ActualParamData.h \
 		  dialog/GreetingsDialog.h \
 		  dialog/RelatedElementsDialog.h \
 		  dialog/ImageDialog.h \
-		  misc/Settings.h \
-		  misc/UmlDrag.h \
-		  misc/UmlEnum.h \
-		  misc/UmlGlobal.h \
-		  misc/Labeled.h \
-		  misc/myio.h \
-		  misc/mu.h \
-		  misc/ProfiledStereotypes.h \
-		  misc/Images.h \
-		  tool/Tool.h \
-		  tool/Socket.h \
-		  tool/ToolCom.h \
-		  xpm/UmlPixmap.h \
-    PortingHelpers/GridConverter.h
-SOURCES		= browser/BrowserAttribute.cpp \
 		  browser/BrowserExtraMember.cpp \
 		  browser/BrowserClass.cpp \
 		  browser/BrowserClassDiagram.cpp \

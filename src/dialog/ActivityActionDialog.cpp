@@ -108,7 +108,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   umltab = grid;
     
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(action->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(action->get_name()),grid));
   edname->setReadOnly(visit);
     
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -148,7 +148,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(action->get_comment());
   
@@ -158,7 +158,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
-  constraint = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  constraint = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   constraint->setReadOnly(visit);
   constraint->setText(act->constraint);
  
@@ -223,7 +223,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
   
   grid = mkgrid(this);
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(action, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(action, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   //
@@ -425,11 +425,11 @@ void ActivityActionDialog::accept() {
 void ActionCondDialog::init(QWidget * grid, ActivityActionData * d,
 			    DrawingLanguage lang, bool visit) {
   GridConverter::PlaceWidget(new QLabel(TR("Pre\ncondition : ")),grid);
-  edpre = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  edpre = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   edpre->setText(d->get_precond(lang));
 
   GridConverter::PlaceWidget(new QLabel(TR("Post\ncondition : ")),grid);
-  edpost = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  edpost = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   edpost->setText(d->get_postcond(lang));
 
   if (visit) {

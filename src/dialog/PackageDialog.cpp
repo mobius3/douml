@@ -88,7 +88,7 @@ PackageDialog::PackageDialog(PackageData * da)
   
   
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(pa->name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->name()),grid));
   edname->setReadOnly(!da->browser_node->is_writable() ||
 		      (da->browser_node == BrowserView::get_project()));
   
@@ -112,7 +112,7 @@ PackageDialog::PackageDialog(PackageData * da)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(da->browser_node->get_comment());
   QFont font = comment->font();
@@ -137,13 +137,13 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   QLabel * lbl1 = GridConverter::PlaceWidget(new QLabel(TR("headers directory : ")),htab);
-  edcpphdir = GridConverter::PlaceWidget(new LineEdit(pa->cpp_h_dir),htab);
+  edcpphdir = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->cpp_h_dir),htab));
   if (visit)
     edcpphdir->setReadOnly(TRUE);
   else {
     htab = GridConverter::PlaceHorizontal(vtab);
     GridConverter::PlaceWidget(new QLabel(""),htab);
-    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+    button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
     connect(button, SIGNAL(clicked ()), this, SLOT(cpph_browse()));
     GridConverter::PlaceWidget(new QLabel(""),htab);
     cpphbutton = new QPushButton((pa->cpp_h_dir.isEmpty() || 
@@ -162,13 +162,13 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   QLabel * lbl2 = GridConverter::PlaceWidget(new QLabel(TR("sources directory : ")),htab);
-  edcppsrcdir = GridConverter::PlaceWidget(new LineEdit(pa->cpp_src_dir),htab);
+  edcppsrcdir = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->cpp_src_dir),htab));
   if (visit)
     edcppsrcdir->setReadOnly(TRUE);
   else {
     htab = GridConverter::PlaceHorizontal(vtab);
     GridConverter::PlaceWidget(new QLabel(""),htab);
-    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+    button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
     connect(button, SIGNAL(clicked ()), this, SLOT(cppsrc_browse()));
     GridConverter::PlaceWidget(new QLabel(""),htab);
     cppsrcbutton =
@@ -188,7 +188,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   QLabel * lbl3 = GridConverter::PlaceWidget(new QLabel("namespace : "),htab);
-  edcppnamespace = GridConverter::PlaceWidget(new LineEdit(pa->cpp_namespace),htab);
+  edcppnamespace = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->cpp_namespace),htab));
   edcppnamespace->setReadOnly(visit);
   
   same_width(lbl1, lbl2, lbl3);
@@ -214,13 +214,13 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl1 = GridConverter::PlaceWidget(new QLabel(TR("directory : ")),htab);
-  edjavadir = GridConverter::PlaceWidget(new LineEdit(pa->java_dir),htab);
+  edjavadir = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->java_dir),htab));
   if (visit) 
     edjavadir->setReadOnly(TRUE);
   else {
     htab = GridConverter::PlaceHorizontal(vtab);
     GridConverter::PlaceWidget(new QLabel(""),htab);
-    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+    button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
     connect(button, SIGNAL(clicked ()), this, SLOT(java_browse()));
     GridConverter::PlaceWidget(new QLabel(""),htab);
     javabutton = new QPushButton((pa->java_dir.isEmpty() || 
@@ -239,7 +239,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl2 = GridConverter::PlaceWidget(new QLabel("package : "),htab);
-  edjavapackage = GridConverter::PlaceWidget(new LineEdit(pa->java_package),htab);
+  edjavapackage = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->java_package),htab));
   edjavapackage->setReadOnly(visit);
   
   same_width(lbl1, lbl2);
@@ -265,13 +265,13 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl1 = GridConverter::PlaceWidget(new QLabel(TR("directory : ")),htab);
-  edphpdir = GridConverter::PlaceWidget(new LineEdit(pa->php_dir),htab);
+  edphpdir = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->php_dir),htab));
   if (visit) 
     edphpdir->setReadOnly(TRUE);
   else {
     htab = GridConverter::PlaceHorizontal(vtab);
     GridConverter::PlaceWidget(new QLabel(""),htab);
-    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+    button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
     connect(button, SIGNAL(clicked ()), this, SLOT(php_browse()));
     GridConverter::PlaceWidget(new QLabel(""),htab);
     phpbutton = new QPushButton((pa->php_dir.isEmpty() || 
@@ -290,7 +290,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl2 = GridConverter::PlaceWidget(new QLabel("namespace : "),htab);
-  edphpnamespace = GridConverter::PlaceWidget(new LineEdit(pa->php_namespace),htab);
+  edphpnamespace = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->php_namespace),htab));
   edphpnamespace->setReadOnly(visit);
   
   same_width(lbl1, lbl2);
@@ -316,13 +316,13 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl1 = GridConverter::PlaceWidget(new QLabel(TR("directory : ")),htab);
-  edpythondir = GridConverter::PlaceWidget(new LineEdit(pa->python_dir),htab);
+  edpythondir = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->python_dir),htab));
   if (visit) 
     edpythondir->setReadOnly(TRUE);
   else {
     htab = GridConverter::PlaceHorizontal(vtab);
     GridConverter::PlaceWidget(new QLabel(""),htab);
-    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+    button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
     connect(button, SIGNAL(clicked ()), this, SLOT(python_browse()));
     GridConverter::PlaceWidget(new QLabel(""),htab);
     pythonbutton = new QPushButton((pa->python_dir.isEmpty() || 
@@ -341,7 +341,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl2 = GridConverter::PlaceWidget(new QLabel("package : "),htab);
-  edpythonpackage = GridConverter::PlaceWidget(new LineEdit(pa->python_package),htab);
+  edpythonpackage = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->python_package),htab));
   edpythonpackage->setReadOnly(visit);
   
   same_width(lbl1, lbl2);
@@ -367,13 +367,13 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl1 = GridConverter::PlaceWidget(new QLabel(TR("directory : ")),htab);
-  edidldir = GridConverter::PlaceWidget(new LineEdit(pa->idl_dir),htab);
+  edidldir = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->idl_dir),htab));
   if (visit)
     edidldir->setReadOnly(TRUE);
   else {
     htab = GridConverter::PlaceHorizontal(vtab);
     GridConverter::PlaceWidget(new QLabel(""),htab);
-    button = GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab);
+    button = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Browse")),htab));
     connect(button, SIGNAL(clicked ()), this, SLOT(idl_browse()));
     GridConverter::PlaceWidget(new QLabel(""),htab);
     idlbutton = new QPushButton((pa->idl_dir.isEmpty() || 
@@ -392,7 +392,7 @@ is specified (through the project menu entry 'edit generation settings')\n\n"), 
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(5);
   lbl2 = GridConverter::PlaceWidget(new QLabel("module : "),htab);
-  edidlmodule = GridConverter::PlaceWidget(new LineEdit(pa->idl_module),htab);
+  edidlmodule = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pa->idl_module),htab));
   edidlmodule->setReadOnly(visit);
   
   same_width(lbl1, lbl2);

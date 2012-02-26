@@ -116,7 +116,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(cl->name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(cl->name()),grid));
   edname->setReadOnly(visit);
   
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -169,7 +169,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   BrowserNodeList inh;
   
-  basetypelbl = GridConverter::PlaceWidget(new QLabel(TR("base type : ")),grid);
+  basetypelbl = dynamic_cast<QLabel*>(GridConverter::PlaceWidget(new QLabel(TR("base type : ")),grid));
   edbasetype = new Q3ComboBox(!visit, grid);
   if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize),
       inh.count() != 0) {
@@ -247,7 +247,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     connect(new SmallPushButton(TR("Default"), vtab), SIGNAL(clicked()),
 	    this, SLOT(default_description()));
   }
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   comment->setFont(font);
@@ -258,7 +258,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
-  constraint = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  constraint = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   constraint->setReadOnly(visit);
   constraint->setText(c->constraint);
   constraint->setFont(font);
@@ -701,7 +701,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     stereo_init_cb->setCurrentItem(0);
     
     GridConverter::PlaceWidget(new QLabel(TR("  parameter(s) : ")),htab);
-    edinitparam = GridConverter::PlaceWidget(new LineEdit(bn->get_value("stereotypeSetParameters")),htab);
+    edinitparam = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_value("stereotypeSetParameters")),htab));
     edinitparam->setReadOnly(visit);
     
     GridConverter::PlaceWidget(new QLabel(TR("Check \nplug-out :")),grid);
@@ -717,14 +717,14 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     stereo_check_cb->setCurrentItem(0);
     
     GridConverter::PlaceWidget(new QLabel(TR("  parameter(s) : ")),htab);
-    edcheckparam = GridConverter::PlaceWidget(new LineEdit(bn->get_value("stereotypeCheckParameters")),htab);
+    edcheckparam = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_value("stereotypeCheckParameters")),htab));
     edcheckparam->setReadOnly(visit);
     
     QString ip = bn->get_value("stereotypeIconPath");
     
     GridConverter::PlaceWidget(new QLabel(TR("Icon path :")),grid);
     htab = GridConverter::PlaceHorizontal(grid);
-    ediconpath = GridConverter::PlaceWidget(new LineEdit(ip),htab);
+    ediconpath = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(ip),htab));
     if (visit) {
       ediconpath->setReadOnly(TRUE);
       iconpathrootbutton = iconpathprjbutton = 0;

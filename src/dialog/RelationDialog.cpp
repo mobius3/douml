@@ -141,7 +141,7 @@ RelationDialog::RelationDialog(RelationData * r)
   htab = GridConverter::PlaceHorizontal(vtab);
   htab->setMargin(3);
   QLabel * lbl1 = GridConverter::PlaceWidget(new QLabel(TR("name : ")),htab);
-  edname = GridConverter::PlaceWidget(new LineEdit(rel->get_name()),htab);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(rel->get_name()),htab));
   edname->setReadOnly(visit);
   
   htab = GridConverter::PlaceHorizontal(vtab);
@@ -234,7 +234,7 @@ RelationDialog::RelationDialog(RelationData * r)
   
   same_width(lbl1, lbl2, button_assoc);
     
-  QSplitter * split = GridConverter::PlaceWidget(new QSplitter(Qt::Vertical),vtab);
+  QSplitter * split = dynamic_cast<QSplitter*>(GridConverter::PlaceWidget(new QSplitter(Qt::Vertical),vtab));
   
   split->setOpaqueResize(TRUE);
     
@@ -506,9 +506,9 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   }
   role.opt.append(role.multiplicity);  
   
-  lbl = GridConverter::PlaceWidget(new QLabel(TR("   initial value : ")),htab);
+  lbl = dynamic_cast<QLabel*>(GridConverter::PlaceWidget(new QLabel(TR("   initial value : ")),htab));
   role.opt.append(lbl);
-  role.edinit = GridConverter::PlaceWidget(new LineEdit(rel.init_value),htab);
+  role.edinit = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(rel.init_value),htab));
   role.opt.append(role.edinit);  
   if (roleb) {
     groupb.append(role.edinit);
@@ -517,7 +517,7 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   if (visit)
     role.edinit->setReadOnly(TRUE);
   else {
-    SmallPushButton * bt = GridConverter::PlaceWidget(new SmallPushButton(TR("Editor")),htab);
+    SmallPushButton * bt = dynamic_cast<SmallPushButton*>(GridConverter::PlaceWidget(new SmallPushButton(TR("Editor")),htab));
     
     connect(bt, SIGNAL(clicked()),
 	    this, (roleb) ? SLOT(edit_init_b()) : SLOT(edit_init_a()));
@@ -731,7 +731,7 @@ void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
 
   GridConverter::PlaceWidget(new QLabel(" "),htab);
   
-  role.mutable_cb = GridConverter::PlaceWidget(new QCheckBox("mutable"),htab);
+  role.mutable_cb = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox("mutable"),htab));
   role.opt.append(role.mutable_cb);
   if (rel.cpp_mutable)
     role.mutable_cb->setChecked(TRUE);
@@ -764,15 +764,15 @@ void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
     htab = GridConverter::PlaceHorizontal(bg);
     htab->setMargin(5);
     
-    role.cpp_default_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab);
+    role.cpp_default_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab));
     connect(role.cpp_default_decl_bt, SIGNAL(clicked()),
 	    this, cpp_default_slot);
     if (cpp_include_in_header_slot != 0) {
-      role.cpp_include_in_header = GridConverter::PlaceWidget(new QPushButton(TR("#include in header")),htab);
+      role.cpp_include_in_header = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("#include in header")),htab));
       connect(role.cpp_include_in_header , SIGNAL(clicked()),
 	      this, cpp_include_in_header_slot);
     }
-    role.cpp_unmapped_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Not generated in C++")),htab);
+    role.cpp_unmapped_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Not generated in C++")),htab));
     connect(role.cpp_unmapped_decl_bt, SIGNAL(clicked()),
 	    this, cpp_unmapped_slot);
   }
@@ -821,10 +821,10 @@ void RelationDialog::init_java_role(RoleDialog & role, const RoleData & rel,
   htab->setMargin(5);
   
   if (! visit) {
-    role.java_default_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab);
+    role.java_default_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab));
     connect(role.java_default_decl_bt, SIGNAL(clicked()),
 	    this, java_default_slot);
-    role.java_unmapped_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Not generated in Java")),htab);
+    role.java_unmapped_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Not generated in Java")),htab));
     connect(role.java_unmapped_decl_bt, SIGNAL(clicked()),
 	    this, java_unmapped_slot);
   }
@@ -867,10 +867,10 @@ void RelationDialog::init_php_role(RoleDialog & role, const RoleData & rel,
   htab->setMargin(5);
   
   if (! visit) {
-    role.php_default_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab);
+    role.php_default_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab));
     connect(role.php_default_decl_bt, SIGNAL(clicked()),
 	    this, php_default_slot);
-    role.php_unmapped_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Not generated in Php")),htab);
+    role.php_unmapped_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Not generated in Php")),htab));
     connect(role.php_unmapped_decl_bt, SIGNAL(clicked()),
 	    this, php_unmapped_slot);
   }
@@ -909,10 +909,10 @@ void RelationDialog::init_python_role(RoleDialog & role, const RoleData & rel,
   htab->setMargin(5);
   
   if (! visit) {
-    role.python_default_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab);
+    role.python_default_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab));
     connect(role.python_default_decl_bt, SIGNAL(clicked()),
 	    this, python_default_slot);
-    role.python_unmapped_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Not generated in Python")),htab);
+    role.python_unmapped_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Not generated in Python")),htab));
     connect(role.python_unmapped_decl_bt, SIGNAL(clicked()),
 	    this, python_unmapped_slot);
   }
@@ -973,10 +973,10 @@ void RelationDialog::init_idl_role(RoleDialog & role, const RoleData & rel,
     new QLabel("", bg);
     QWidget * htab = GridConverter::PlaceHorizontal(bg);
     htab->setMargin(5);
-    role.idl_default_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab);
+    role.idl_default_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Default declaration")),htab));
     connect(role.idl_default_decl_bt, SIGNAL(clicked()),
 	    this, idl_default_slot);
-    role.idl_unmapped_decl_bt = GridConverter::PlaceWidget(new QPushButton(TR("Not generated in Idl")),htab);
+    role.idl_unmapped_decl_bt = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(TR("Not generated in Idl")),htab));
     connect(role.idl_unmapped_decl_bt, SIGNAL(clicked()),
 	    this, idl_unmapped_slot);
   }

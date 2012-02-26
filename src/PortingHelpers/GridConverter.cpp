@@ -33,7 +33,8 @@ QWidget* GridConverter::PlaceVertical(QWidget* parent)
 {}
 QWidget* GridConverter::PlaceHorizontal(QWidget* parent)
 {}
-
+QWidget* GridConverter::PlaceWidget(QWidget* parent,const char*, QWidget* grid)
+{}
 QWidget* GridConverter::InitNewGrid(QWidget * w, int _columns)
 {
     grids.clear();

@@ -73,7 +73,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
 
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid));
   edname->setReadOnly(visit);
 
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -90,7 +90,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   edstereotype->setSizePolicy(sp);
   
   GridConverter::PlaceWidget(new QLabel(TR("extension \npoints : ")),grid);
-  extension_points = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  extension_points = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   extension_points->setReadOnly(visit);
   extension_points->setText(uc->get_extension_points());
   QFont font = extension_points->font();
@@ -104,7 +104,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   comment->setFont(font);
@@ -117,7 +117,7 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   open_dialog(this);

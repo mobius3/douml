@@ -124,7 +124,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
   
   // the operations
   
-  SmallPushButton * b = GridConverter::PlaceWidget(new SmallPushButton(TR("message :")),grid);
+  SmallPushButton * b = dynamic_cast<SmallPushButton*>(GridConverter::PlaceWidget(new SmallPushButton(TR("message :")),grid));
   
   connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
   

@@ -60,7 +60,7 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
   
   vbox->addWidget(grid);
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(inst->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(inst->get_name()),grid));
   edname->setFocus();
   
   GridConverter::PlaceWidget(new QLabel(""),grid);

@@ -98,7 +98,7 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
   connect(this, SIGNAL(currentChanged(QWidget *)),
 	  this, SLOT(update_tab(QWidget *)));
   
-  QPushButton* btnCreateKVList = GridConverter::PlaceWidget(new QPushButton(),grid);
+  QPushButton* btnCreateKVList = dynamic_cast<QPushButton*>(GridConverter::PlaceWidget(new QPushButton(),grid));
   btnCreateKVList->setText("Keys");
   connect(btnCreateKVList, SIGNAL(clicked()), this, SLOT(createCompleteKVList()));
 
@@ -132,7 +132,7 @@ void ArtifactDialog::init_uml_tab() {
   
 
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid));
   edname->setReadOnly(visit);
     
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -159,7 +159,7 @@ void ArtifactDialog::init_uml_tab() {
     connect(new SmallPushButton(TR("Default"), vbox), SIGNAL(clicked()),
 	    this, SLOT(default_description()));
   }
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   QFont font = comment->font();

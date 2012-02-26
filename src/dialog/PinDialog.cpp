@@ -83,7 +83,7 @@ PinDialog::PinDialog(PinData * pi)
   
   
   GridConverter::PlaceWidget(new QLabel(TR("name :")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(pi->name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pi->name()),grid));
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -189,7 +189,7 @@ PinDialog::PinDialog(PinData * pi)
   }
     
   GridConverter::PlaceWidget(new QLabel(TR("in state : ")),grid);
-  edin_state = GridConverter::PlaceWidget(new LineEdit(pi->in_state),grid);
+  edin_state = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(pi->in_state),grid));
   edin_state->setReadOnly(visit);
        
   GridConverter::PlaceWidget(new QLabel(),grid);
@@ -228,7 +228,7 @@ PinDialog::PinDialog(PinData * pi)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
   }
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(pi->browser_node->get_comment());
   comment->setFont(font);
@@ -254,7 +254,7 @@ PinDialog::PinDialog(PinData * pi)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(pi->browser_node, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(pi->browser_node, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   //
@@ -307,7 +307,7 @@ void PinDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char * v,
   GridConverter::PlaceWidget(new QLabel(TR("selection : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl);
-  ed = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  ed = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
 
   QFont font = ed->font();
 

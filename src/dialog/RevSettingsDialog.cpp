@@ -67,7 +67,7 @@ RevSettingsDialog::RevSettingsDialog()
   new QLabel(TR("To specify through regular expression the directories\n"
 		"and/or files to bypass during reverse and roundtrip"), grid);
   
-  SmallPushButton * help = GridConverter::PlaceWidget(new SmallPushButton(TR("Help regexp")),grid);
+  SmallPushButton * help = dynamic_cast<SmallPushButton*>(GridConverter::PlaceWidget(new SmallPushButton(TR("Help regexp")),grid));
   
   connect(help, SIGNAL(clicked()), this, SLOT(show_regexp_help()));
   
@@ -76,16 +76,16 @@ RevSettingsDialog::RevSettingsDialog()
   GridConverter::PlaceWidget(new QLabel(),grid);
   
   GridConverter::PlaceWidget(new QLabel(TR("C++ directory : ")),grid);
-  cpp_dir = GridConverter::PlaceWidget(new LineEdit(),grid);
+  cpp_dir = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(),grid));
   cpp_dir->setText(GenerationSettings::cpp_dir_filter.regexp);
-  cpp_dir_case_sensitive = GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid);
+  cpp_dir_case_sensitive = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid));
   if (GenerationSettings::cpp_dir_filter.case_sensitive)
     cpp_dir_case_sensitive->setChecked(TRUE);
   
   GridConverter::PlaceWidget(new QLabel(TR("C++ file : ")),grid);
-  cpp_file = GridConverter::PlaceWidget(new LineEdit(),grid);
+  cpp_file = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(),grid));
   cpp_file->setText(GenerationSettings::cpp_file_filter.regexp);
-  cpp_file_case_sensitive = GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid);
+  cpp_file_case_sensitive = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid));
   if (GenerationSettings::cpp_file_filter.case_sensitive)
     cpp_file_case_sensitive->setChecked(TRUE);
   
@@ -115,16 +115,16 @@ RevSettingsDialog::RevSettingsDialog()
   GridConverter::PlaceWidget(new QLabel(),grid);
   
   GridConverter::PlaceWidget(new QLabel(TR("Java directory : ")),grid);
-  java_dir = GridConverter::PlaceWidget(new LineEdit(),grid);
+  java_dir = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(),grid));
   java_dir->setText(GenerationSettings::java_dir_filter.regexp);
-  java_dir_case_sensitive = GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid);
+  java_dir_case_sensitive = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid));
   if (GenerationSettings::java_dir_filter.case_sensitive)
     java_dir_case_sensitive->setChecked(TRUE);
   
   GridConverter::PlaceWidget(new QLabel(TR("Java file : ")),grid);
-  java_file = GridConverter::PlaceWidget(new LineEdit(),grid);
+  java_file = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(),grid));
   java_file->setText(GenerationSettings::java_file_filter.regexp);
-  java_file_case_sensitive = GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid);
+  java_file_case_sensitive = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid));
   if (GenerationSettings::java_file_filter.case_sensitive)
     java_file_case_sensitive->setChecked(TRUE);
   
@@ -145,16 +145,16 @@ RevSettingsDialog::RevSettingsDialog()
   GridConverter::PlaceWidget(new QLabel(),grid);
   
   GridConverter::PlaceWidget(new QLabel(TR("Php directory : ")),grid);
-  php_dir = GridConverter::PlaceWidget(new LineEdit(),grid);
+  php_dir = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(),grid));
   php_dir->setText(GenerationSettings::php_dir_filter.regexp);
-  php_dir_case_sensitive = GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid);
+  php_dir_case_sensitive = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid));
   if (GenerationSettings::php_dir_filter.case_sensitive)
     php_dir_case_sensitive->setChecked(TRUE);
   
   GridConverter::PlaceWidget(new QLabel(TR("Php file : ")),grid);
-  php_file = GridConverter::PlaceWidget(new LineEdit(),grid);
+  php_file = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(),grid));
   php_file->setText(GenerationSettings::php_file_filter.regexp);
-  php_file_case_sensitive = GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid);
+  php_file_case_sensitive = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("case sensitive")),grid));
   if (GenerationSettings::php_file_filter.case_sensitive)
     php_file_case_sensitive->setChecked(TRUE);
   

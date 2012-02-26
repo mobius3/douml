@@ -81,7 +81,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   
 
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid));
   edname->setReadOnly(visit);
     
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -119,12 +119,12 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   GridConverter::PlaceWidget(new QLabel(),grid);
   htab = GridConverter::PlaceHorizontal(grid);
   GridConverter::PlaceWidget(new QLabel("  "),htab);
-  dimension_cb = GridConverter::PlaceWidget(new QCheckBox(TR("is dimension")),htab);
+  dimension_cb = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("is dimension")),htab));
   if (data->is_dimension)
     dimension_cb->setChecked(TRUE);
   dimension_cb->setDisabled(visit);
   GridConverter::PlaceWidget(new QLabel(""),htab);
-  external_cb = GridConverter::PlaceWidget(new QCheckBox(TR("is external")),htab);
+  external_cb = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("is external")),htab));
   if (data->is_external)
     external_cb->setChecked(TRUE);
   external_cb->setDisabled(visit);
@@ -135,7 +135,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   QFont font = comment->font();
@@ -152,7 +152,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   //

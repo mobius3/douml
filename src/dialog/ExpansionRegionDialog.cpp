@@ -75,7 +75,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   
 
   GridConverter::PlaceWidget(new QLabel(TR("name : ")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(bn->get_name()),grid));
   edname->setReadOnly(visit);
     
   GridConverter::PlaceWidget(new QLabel(TR("stereotype : ")),grid);
@@ -110,7 +110,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   }
   
   GridConverter::PlaceWidget(new QLabel("  "),htab);
-  must_isolate_cb = GridConverter::PlaceWidget(new QCheckBox(TR("must isolate")),htab);
+  must_isolate_cb = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("must isolate")),htab));
   if (data->must_isolate)
     must_isolate_cb->setChecked(TRUE);
   must_isolate_cb->setDisabled(visit);
@@ -121,7 +121,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(bn->get_comment());
   QFont font = comment->font();
@@ -138,7 +138,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(bn, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   //

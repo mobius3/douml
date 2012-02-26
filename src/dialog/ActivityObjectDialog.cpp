@@ -84,7 +84,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   
   
   GridConverter::PlaceWidget(new QLabel(TR("name :")),grid);
-  edname = GridConverter::PlaceWidget(new LineEdit(data->name()),grid);
+  edname = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(data->name()),grid));
   edname->setReadOnly(visit);
 
   QFont font = edname->font();
@@ -163,11 +163,11 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
 
   GridConverter::PlaceWidget(new QLabel(TR("in state : ")),grid);
   htab = GridConverter::PlaceHorizontal(grid);
-  edin_state = GridConverter::PlaceWidget(new LineEdit(data->in_state),htab);
+  edin_state = dynamic_cast<LineEdit*>(GridConverter::PlaceWidget(new LineEdit(data->in_state),htab));
   edin_state->setReadOnly(visit);
        
   GridConverter::PlaceWidget(new QLabel("  "),htab);  
-  is_control_cb = GridConverter::PlaceWidget(new QCheckBox(TR("is control")),htab);
+  is_control_cb = dynamic_cast<QCheckBox*>(GridConverter::PlaceWidget(new QCheckBox(TR("is control")),htab));
   if (data->is_control)
     is_control_cb->setChecked(TRUE);
   is_control_cb->setDisabled(visit);
@@ -178,7 +178,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
   }
-  comment = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  comment = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
   comment->setReadOnly(visit);
   comment->setText(data->browser_node->get_comment());
   comment->setFont(font);
@@ -205,7 +205,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   
   
   
-  kvtable =	GridConverter::PlaceWidget(new KeyValuesTable(data->browser_node, grid, visit), grid);
+  kvtable = dynamic_cast<KeyValuesTable*>(GridConverter::PlaceWidget(new KeyValuesTable(data->browser_node, grid, visit), grid));
   addTab(grid, TR("Properties"));
   
   //
@@ -259,7 +259,7 @@ void ActivityObjectDialog::init_tab(QWidget *& w, MultiLineEdit *& ed,
   GridConverter::PlaceWidget(new QLabel(TR("selection : ")),vtab);
   if (! visit)
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl);
-  ed = GridConverter::PlaceWidget(new MultiLineEdit(grid),grid);
+  ed = dynamic_cast<MultiLineEdit*>(GridConverter::PlaceWidget(new MultiLineEdit(grid),grid));
 
   QFont font = ed->font();
 
