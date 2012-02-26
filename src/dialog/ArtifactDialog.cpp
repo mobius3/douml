@@ -83,9 +83,9 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
   
   // USER : list key - value
   
-  Q3Grid * grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable((BrowserArtifact *) data->get_browser_node(),
 			       grid, !hasOkButton());
@@ -125,11 +125,11 @@ void ArtifactDialog::init_uml_tab() {
   
   BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
   Q3VBox * vbox;
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   
   uml_page = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
 
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(bn->get_name(), grid);

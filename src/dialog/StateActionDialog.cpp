@@ -71,9 +71,9 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   // general tab
   //
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("stereotype : "), grid);
   edstereotype = new Q3ComboBox(!visit, grid);
@@ -101,10 +101,10 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   addTab(grid, "Uml");
 
   // OCL
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   umltab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(TR("behavior"), grid);
   uml = new MultiLineEdit(grid);
@@ -115,10 +115,10 @@ StateActionDialog::StateActionDialog(StateActionData * d)
   addTab(grid, "Ocl");
 
   // CPP
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   cpptab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(TR("behavior"), grid);
   cpp = new MultiLineEdit(grid);
@@ -132,10 +132,10 @@ StateActionDialog::StateActionDialog(StateActionData * d)
     removePage(grid);
   
   // Java
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   javatab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(TR("behavior"), grid);
   java = new MultiLineEdit(grid);
@@ -150,9 +150,9 @@ StateActionDialog::StateActionDialog(StateActionData * d)
 
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(bn, grid, visit);
   addTab(grid, TR("Properties"));

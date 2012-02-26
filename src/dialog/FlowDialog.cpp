@@ -71,10 +71,10 @@ FlowDialog::FlowDialog(FlowData * d)
   // general tab
   //
   
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   umltab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(bn->get_name(), grid);
@@ -121,9 +121,9 @@ FlowDialog::FlowDialog(FlowData * d)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(bn, grid, visit);
   addTab(grid, TR("Properties"));
@@ -159,11 +159,11 @@ void FlowDialog::change_tabs(QWidget * w) {
 void FlowDialog::init_tab(FlDialog & d, FlowDef & st, const char * lbl,
 			  const char * sl_guard, const char * sl_selection,
 			  const char * sl_transformation, bool enabled) {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3VBox * vtab;
 
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(TR("weight : "), grid);
   d.edweight = new LineEdit(grid);

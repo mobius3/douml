@@ -77,9 +77,9 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   // general tab
   //
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(bn->get_name(), grid);
@@ -174,9 +174,9 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(bn, grid, visit);
   addTab(grid, TR("Properties"));
@@ -265,9 +265,9 @@ void ActivityDialog::change_tabs(QWidget *) {
 
 void ActivityDialog::init_tab(CondDialog & d, InfoData & cd,
 			      const char * lbl, bool enabled) {
-  Q3Grid * grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("Pre\ncondition : "), grid);
   d.edpre = new MultiLineEdit(grid);

@@ -67,9 +67,9 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
   // general tab
   
   BrowserNode * bn = data->get_browser_node();
-  Q3Grid * grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
 
   if (unnamed)
     edname = 0;
@@ -109,9 +109,9 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(bn, grid, visit);
   addTab(grid, TR("Properties"));

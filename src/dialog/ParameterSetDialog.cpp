@@ -74,10 +74,10 @@ ParameterSetDialog::ParameterSetDialog(ParameterSetData * nd)
   
   // USER : list key - value
   
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
 
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   kvtable = new KeyValuesTable((BrowserParameterSet *) data->get_browser_node(),
 			       grid, !hasOkButton());
@@ -117,11 +117,11 @@ void ParameterSetDialog::init_uml_tab() {
   BrowserParameterSet * bn = 
     (BrowserParameterSet *) data->get_browser_node();
   Q3VBox * vbox;
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   
   umltab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
 
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(bn->get_name(), grid);

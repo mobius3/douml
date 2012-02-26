@@ -68,9 +68,9 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   // general tab
   
-  Q3Grid * grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
 
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(bn->get_name(), grid);
@@ -113,9 +113,9 @@ UseCaseDialog::UseCaseDialog(UseCaseData * u)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(bn, grid, visit);
   addTab(grid, TR("Properties"));

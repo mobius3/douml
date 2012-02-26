@@ -72,9 +72,9 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     
   // general tab
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("name :"), grid);
   edname = new LineEdit(ex->name(), grid);
@@ -112,9 +112,9 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // C++
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(grid);
   Q3ButtonGroup * gp = 
@@ -151,9 +151,9 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Java
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   vtab = new Q3VBox(grid);
   new QLabel("Java :", vtab);
@@ -172,9 +172,9 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Php
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   vtab = new Q3VBox(grid);
   new QLabel("Php :", vtab);
@@ -193,9 +193,9 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // Python
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   vtab = new Q3VBox(grid);
   new QLabel("Python :", vtab);
@@ -214,9 +214,9 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // IDL
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   vtab = new Q3VBox(grid);
   new QLabel("Idl :", vtab);
@@ -235,9 +235,9 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(ex->get_browser_node(), grid, visit);
   addTab(grid, TR("Properties"));

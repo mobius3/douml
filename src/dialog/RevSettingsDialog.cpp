@@ -56,12 +56,12 @@ RevSettingsDialog::RevSettingsDialog()
   
   vbox->setMargin(5);
   
-  Q3Grid * grid = new Q3Grid(3, this);
+  GridConverter::InitNewGrid(this, 3);
   Q3HBox * htab;
   
   vbox->addWidget(grid);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(grid);
   new QLabel(TR("To specify through regular expression the directories\n"

@@ -68,11 +68,11 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   // general tab
   
   BrowserNode * bn = data->get_browser_node();
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
 
   umltab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
 
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(bn->get_name(), grid);
@@ -134,9 +134,9 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(bn, grid, visit);
   addTab(grid, TR("Properties"));

@@ -75,8 +75,8 @@ static Q3Grid * mkgrid(Q3TabDialog * d, const char * name = 0)
 {
   Q3Grid * grid = new Q3Grid(2, d, name);
 
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
 
   return grid;
 }

@@ -122,10 +122,10 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
   
   // USER : list key - value
   
-  Q3Grid *   grid = new Q3Grid(2, this);
+  Q3Grid *   GridConverter::InitNewGrid(this, 2);
 
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   kvtable = new KeyValuesTable(o->get_browser_node(), grid, visit);
   addTab(grid, TR("Properties"));
@@ -256,10 +256,10 @@ void OperationDialog::init_uml() {
   Q3HBox * htab;
   Q3ButtonGroup * bg;
     
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   umltab = grid;
-  grid->setSpacing(5);
-  grid->setMargin(5);
+  
+  
   
   new QLabel(TR("class : "), grid);
   new QLabel(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE),
@@ -402,10 +402,10 @@ void OperationDialog::init_cpp() {
     Q3HBox * htab;
     Q3ButtonGroup * bg;
     
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     cpptab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
 
     if (visit || !oper->is_get_or_set)
       new QLabel(grid);
@@ -572,10 +572,10 @@ void OperationDialog::init_java() {
     Q3HBox * htab;
     Q3ButtonGroup * bg;
 
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     javatab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
     
     if (visit || !oper->is_get_or_set)
       new QLabel(grid);
@@ -688,10 +688,10 @@ void OperationDialog::init_php() {
     Q3HBox * htab;
     Q3ButtonGroup * bg;
 
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     phptab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
     
     if (visit || !oper->is_get_or_set)
       new QLabel(grid);
@@ -788,10 +788,10 @@ void OperationDialog::init_python() {
     Q3Grid * grid;
     Q3HBox * htab;
 
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     pythontab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
     
     if (!visit && oper->is_get_or_set) {
       pythonfrozen_cb = new QCheckBox(TR("frozen"), grid);
@@ -884,10 +884,10 @@ void OperationDialog::init_idl() {
     Q3HBox * htab;
     Q3ButtonGroup * bg;
 
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     idltab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
     
     if (visit || !oper->is_get_or_set)
       new QLabel(grid);

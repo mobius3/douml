@@ -82,10 +82,10 @@ PackageDialog::PackageDialog(PackageData * da)
   
   // general tab
   
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   umltab = grid;
-  grid->setSpacing(5);
-  grid->setMargin(5);
+  
+  
   
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(pa->name(), grid);

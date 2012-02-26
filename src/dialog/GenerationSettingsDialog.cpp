@@ -95,10 +95,10 @@ GenerationSettingsDialog::~GenerationSettingsDialog() {
 }
 
 void GenerationSettingsDialog::init_types() {
-  Q3Grid * grid = new Q3Grid(1, this);
+  GridConverter::InitNewGrid(this, 1);
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Types correspondence, and C++ operation argument default passing for them :"), grid);
 
@@ -108,10 +108,10 @@ void GenerationSettingsDialog::init_types() {
 }
 
 void GenerationSettingsDialog::init_stereotypes() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Attributes and \nRelations\nstereotypes \ncorrespondence : "), grid);
   relation_stereotypes_table = 
@@ -157,8 +157,8 @@ void GenerationSettingsDialog::init_cpp1() {
   Q3VBox * vtab = new Q3VBox(this);
   Q3Grid * grid = new Q3Grid(2, vtab);
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Header file\ndefault content :"), grid);
   edcpp_h_content = new MultiLineEdit(grid);
@@ -238,10 +238,10 @@ void GenerationSettingsDialog::init_cpp1() {
 }
 
 void GenerationSettingsDialog::init_cpp2() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Class default \ndeclaration :"), grid);
   edcpp_class_decl = new MultiLineEdit(grid);
@@ -279,12 +279,12 @@ void GenerationSettingsDialog::init_cpp2() {
 }
 
 void GenerationSettingsDialog::init_cpp3() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   Q3HBox * htab;
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid);
 
@@ -362,13 +362,13 @@ void GenerationSettingsDialog::init_cpp3() {
 }
 
 void GenerationSettingsDialog::init_cpp4() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3VBox * vtab;
   Q3HBox * htab;
   Q3ButtonGroup * bg;
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Get operation\ndefault definition : "), grid);
   
@@ -537,10 +537,10 @@ void GenerationSettingsDialog::init_cpp5() {
 }
 
 void GenerationSettingsDialog::init_java1() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("file default \ncontent :"), grid);
   
@@ -607,11 +607,11 @@ void GenerationSettingsDialog::init_java1() {
 }
 
 void GenerationSettingsDialog::init_java2() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Attribute \ndefault \ndeclaration :"), grid);
 
@@ -658,12 +658,12 @@ void GenerationSettingsDialog::init_java2() {
 }  
 
 void GenerationSettingsDialog::init_java3() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3HBox * htab;
   Q3ButtonGroup * bg;
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Enumeration item \ndefault definition :"), grid);
   edjava_enum_item_decl = new MultiLineEdit(grid);
@@ -780,10 +780,10 @@ void GenerationSettingsDialog::init_java4() {
 }
 
 void GenerationSettingsDialog::init_php1() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("file default \ncontent :"), grid);
   
@@ -862,10 +862,10 @@ void GenerationSettingsDialog::init_php1() {
 }
 
 void GenerationSettingsDialog::init_php2() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Attribute default \ndeclaration :"), grid);
   edphp_attr_decl = new MultiLineEdit(grid);
@@ -966,10 +966,10 @@ void GenerationSettingsDialog::init_php2() {
 }  
 
 void GenerationSettingsDialog::init_python1() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("indent step :"), grid);
   
@@ -1047,11 +1047,11 @@ void GenerationSettingsDialog::init_python1() {
 }
 
 void GenerationSettingsDialog::init_python2() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid);
   grid2 = new Q3Grid(2, grid);
@@ -1202,8 +1202,8 @@ void GenerationSettingsDialog::init_idl1() {
 
   Q3Grid * grid = new Q3Grid(2, split);
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Interface default \ndeclaration :"), grid);
   edidl_interface_decl = new MultiLineEdit(grid);
@@ -1249,11 +1249,11 @@ void GenerationSettingsDialog::init_idl1() {
 }
 
 void GenerationSettingsDialog::init_idl2() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Attribute default \ndeclaration :"), grid);
   grid2 = new Q3Grid(2, grid);
@@ -1315,12 +1315,12 @@ void GenerationSettingsDialog::init_idl2() {
 }
 
 void GenerationSettingsDialog::init_idl3() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   int i;
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Association and\naggregation\ndefault\ndeclaration :"), grid);
   grid2 = new Q3Grid(2, grid);
@@ -1378,12 +1378,12 @@ void GenerationSettingsDialog::init_idl3() {
 }
 
 void GenerationSettingsDialog::init_idl4() {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3Grid * grid2;
   Q3HBox * htab;
   
-  grid->setMargin(3);
-  grid->setSpacing(3);
+  
+  
 
   new QLabel(TR("Union item \ndefault \ndeclaration :"), grid);
   grid2 = new Q3Grid(2, grid);

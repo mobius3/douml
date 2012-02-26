@@ -77,10 +77,10 @@ StateDialog::StateDialog(StateData * d)
   // general tab
   //
   
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   umltab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(bn->get_name(), grid);
@@ -205,9 +205,9 @@ StateDialog::StateDialog(StateData * d)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(bn, grid, visit);
   addTab(grid, TR("Properties"));
@@ -379,12 +379,12 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
 			   const char * lbl, const char * sl_enbeh,
 			   const char * sl_exbeh, const char * sl_beh,
 			   bool enabled) {
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   Q3VBox * vtab;
 
   tab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   vtab = new Q3VBox(grid);
   new QLabel(TR("Entry\nbehavior : "), vtab);

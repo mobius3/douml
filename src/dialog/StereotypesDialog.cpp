@@ -91,9 +91,9 @@ StereotypesDialog::StereotypesDialog()
   
   // package tab
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("package\nstereotypes : "), grid);
   package_list = new LineEdit(grid);
@@ -111,9 +111,9 @@ StereotypesDialog::StereotypesDialog()
   
   // class tab
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("class\nstereotypes : "), grid);
   class_list = new LineEdit(grid);
@@ -154,9 +154,9 @@ StereotypesDialog::StereotypesDialog()
   
   // Use case
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("use case\nstereotypes : "), grid);
   usecase_list = new LineEdit(grid);
@@ -180,9 +180,9 @@ StereotypesDialog::StereotypesDialog()
   
   // artifact tab
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("artifact\nstereotypes : "), grid);
   artifact_list = new LineEdit(grid);
@@ -200,9 +200,9 @@ StereotypesDialog::StereotypesDialog()
   
   // view
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("class view\nstereotypes : "), grid);
   classview_list = new LineEdit(grid);
@@ -224,9 +224,9 @@ StereotypesDialog::StereotypesDialog()
   
   // diagrams
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("class diagram\nstereotypes : "), grid);
   classdiagram_list = new LineEdit(grid);
@@ -268,9 +268,9 @@ StereotypesDialog::StereotypesDialog()
   
   // activities
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("activity\nstereotypes : "), grid);
   activity_list = new LineEdit(grid);
@@ -324,9 +324,9 @@ StereotypesDialog::StereotypesDialog()
   
   // others
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   new QLabel(TR("state\nstereotypes : "), grid);
   state_list = new LineEdit(grid);

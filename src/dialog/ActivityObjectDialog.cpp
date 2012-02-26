@@ -78,10 +78,10 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
     
   // general tab
   
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   umltab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(TR("name :"), grid);
   edname = new LineEdit(data->name(), grid);
@@ -201,9 +201,9 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(data->browser_node, grid, visit);
   addTab(grid, TR("Properties"));
@@ -248,11 +248,11 @@ void ActivityObjectDialog::init_tab(QWidget *& w, MultiLineEdit *& ed,
 				    const char * v, const char * lbl,
 				    const char * sl, bool enabled) {
   bool visit = !hasOkButton();
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
 
   w = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   Q3VBox * vtab = new Q3VBox(grid);
   

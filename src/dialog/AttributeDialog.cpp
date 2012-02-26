@@ -113,10 +113,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     
   // general tab
   
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   umltab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(TR("class : "), grid);
   new QLabel(((BrowserNode *) a->get_browser_node()->parent())->full_name(TRUE),
@@ -292,10 +292,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   // C++
   
   if (! cpp_ignored) {
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     cpptab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
     
     if (!cpp_in_enum) {  
       new QLabel(TR("Visibility :"), grid);
@@ -352,10 +352,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   // Java
   
   if (! java_ignored) {
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     javatab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
     
     if (!java_in_enum && !java_in_enum_pattern) {
       new QLabel("", grid);
@@ -421,10 +421,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       BrowserOperation::python_init_self((BrowserNode *) a->browser_node->parent())
 	+ ".";
     
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     phptab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
     
     new QLabel(TR("Declaration :"), grid);
     edphpdecl = new MultiLineEdit(grid);
@@ -461,10 +461,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   // Python
   
   if (! python_ignored) {
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     pythontab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
     
     new QLabel(TR("Declaration :"), grid);
     edpythondecl = new MultiLineEdit(grid);
@@ -501,10 +501,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   // IDL
   
   if (! idl_in_typedef) {
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     idltab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    
+    
     
     if (idl_in_union) {
       new QLabel("Case :", grid);
@@ -573,9 +573,9 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   
   // USER : list key - value
   
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  GridConverter::InitNewGrid(this, 2);
+  
+  
   
   kvtable = new KeyValuesTable(a->browser_node, grid, visit);
   addTab(grid, TR("Properties"));

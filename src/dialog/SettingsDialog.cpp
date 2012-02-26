@@ -350,13 +350,13 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
       if ((grid == 0) || (tabname != tbn)) {
 	if (grid != 0) {
 	  addTab(grid, tabname);
-	  grid->setName(tabname);
+	  //grid->setName(tabname);
 	  if (tabname == previous_active_tab)
 	    first_visible_page = grid;
 	}
-	grid = new Q3Grid(5, this);
-	grid->setMargin(2);
-	grid->setSpacing(2);
+	GridConverter::InitNewGrid(this, 5);
+	
+	
 	tabname = tbn;
       }
       
@@ -390,7 +390,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
     }
     
     addTab(grid, tabname);
-    grid->setName(tabname);
+    //grid->setName(tabname);
     if (tabname == previous_active_tab)
       first_visible_page = grid;
   }
@@ -401,21 +401,21 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
     
     n = colors->size();
     cbcolors = new Q3PtrVector<ComboColor>(n);
-    grid = new Q3Grid(5, this);
-    grid->setMargin(2);
-    grid->setSpacing(2);
+    GridConverter::InitNewGrid(this, 5);
+    
+    
     
     for (i = 0; i != n; i += 1) {
       if (i == 11) {
 	lbl = TR("color [1]");
 	addTab(grid, lbl);
-	grid->setName(lbl);
+	//grid->setName(lbl);
 	if (previous_active_tab == lbl)
 	  first_visible_page = grid;
 	lbl = TR("color [2]");
-	grid = new Q3Grid(5, this);
-	grid->setMargin(2);
-	grid->setSpacing(2);
+	GridConverter::InitNewGrid(this, 5);
+	
+	
       }
       new QLabel("", grid);
       
@@ -430,7 +430,7 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
     }
     
     addTab(grid, lbl);
-    grid->setName(lbl);
+    //grid->setName(lbl);
     if (previous_active_tab == lbl)
       first_visible_page = grid;
   }

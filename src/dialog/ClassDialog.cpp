@@ -110,10 +110,10 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   // general tab
   
-  grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   umltab = grid;
-  grid->setSpacing(5);
-  grid->setMargin(5);
+  
+  
   
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(cl->name(), grid);
@@ -680,10 +680,10 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   if ((gp->get_type() == UmlPackage) &&
       !strcmp(gp->get_data()->get_stereotype(), "profile")) {
-    grid = new Q3Grid(2, this);
+    GridConverter::InitNewGrid(this, 2);
     stereotypetab = grid;
-    grid->setSpacing(5);
-    grid->setMargin(5);
+    
+    
     
     QStringList tools = Tool::all_display();
     QString s;

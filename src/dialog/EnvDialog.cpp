@@ -68,13 +68,13 @@ EnvDialog::EnvDialog(bool conv, bool noid)
   
   Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
   Q3HBox * htab;
-  Q3Grid * grid = new Q3Grid(2, this);
+  GridConverter::InitNewGrid(this, 2);
   QPushButton * button;
   QString s;
   
   vbox->addWidget(grid);
-  grid->setMargin(5);
-  grid->setSpacing(5);
+  
+  
   
   new QLabel(grid);  
   new QLabel(TR("MANDATORY, choose a value between 2 and 127 not used by an other person working at the same time on a project with you.\n"
