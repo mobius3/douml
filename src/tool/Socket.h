@@ -27,7 +27,7 @@
 #define SOCKET_H
 
 #include <q3socketdevice.h> 
-#include <qsocketnotifier.h> 
+#include <qsocketnotifier.h>
 
 class ToolCom;
 
