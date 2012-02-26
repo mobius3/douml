@@ -271,7 +271,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     connect(new SmallPushButton(TR("Default"), vtab), SIGNAL(clicked()),
 	    this, SLOT(default_description()));
   }
-  comment = new MultiLineEdit(grid);
+  comment = new MultiLineEdit(this);
   comment->setReadOnly(visit);
   comment->setText(a->browser_node->get_comment());
   comment->setFont(font);

@@ -34,6 +34,7 @@
 #include <Q3PopupMenu>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <QTextEdit>
 
 #include "AType.h"
 
@@ -56,23 +57,27 @@ class SmallPushButton : public QPushButton {
 };
 
 // redefine text() to remove non latin1 characters
-class MultiLineEdit : public Q3MultiLineEdit {
+class MultiLineEdit : public QTextEdit {
   public:
-    MultiLineEdit(QWidget * w, const char * name=0) : Q3MultiLineEdit(w, name) { };
+    MultiLineEdit(QWidget * w, QString _name) : QTextEdit(w)
+    {
+        this->setName(_name);
+    }
     
     virtual void setText(const QString &);
     virtual QString text() const;
     
     QString stripWhiteSpaceText() const;
     
-    void setTheText(const QString & s) {
-      // no toUnicode
-      Q3MultiLineEdit::setText(s);
-    }
-    QString theText() const {
-      // no fromUnicode
-      return Q3MultiLineEdit::text();
-    }
+//    void setTheText(const QString & s)
+//    {
+//      // no toUnicode
+//      Q3MultiLineEdit::setText(s);
+//    }
+//    QString theText() const {
+//      // no fromUnicode
+//      return Q3MultiLineEdit::text();
+//    }
 };
 
 // redefine text() to remove non latin1 characters
