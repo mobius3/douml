@@ -54,10 +54,10 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE) {
   hbox->setMargin(5);
 
   QPixmap bp((const char **) bp_xpm);
-  QLabel * lbp = new QLabel(this);
+  // QLabel * lbp = new QLabel(this);
   
- // lbp->setPixmap(bp);
-//  hbox->addWidget(lbp);
+  // lbp->setPixmap(bp);
+  //  hbox->addWidget(lbp);
   hbox->addWidget(new QLabel("  ", this));
   // Replacing about to bouml-ng
   const char htmltext[] = "<p>DoUML</p>\n"

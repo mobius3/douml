@@ -339,7 +339,6 @@ void OdClassInstCanvas::draw(QPainter & p) {
   if (visible()) {
     QRect r = rect();
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
-    QColor bckgrnd = p.backgroundColor();
     double zoom = the_canvas()->zoom();
 	p.setRenderHint(QPainter::Antialiasing, true);
     p.setBackgroundMode((used_color == UmlTransparent) ? ::Qt::TransparentMode : ::Qt::OpaqueMode);

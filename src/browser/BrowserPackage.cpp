@@ -2302,7 +2302,7 @@ void BrowserPackage::save_all(bool modified_only)
 	
 	fp.close();
 	
-	if (fp.status() == IO_Ok) {
+        if (static_cast<uint>( fp.status() ) == IO_Ok) {
 	  pack->is_imported = pack->is_modified = FALSE;
 	  
 	  // for saveAs

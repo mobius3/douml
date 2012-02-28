@@ -86,7 +86,7 @@ QPixmap * get_pixmap(const char * path, double zoom)
     return px;
   
   Q3PtrDict<QPixmap> * d = DiagramScaledPixmap[path]; // != 0
-  int scaled_w = (int) (px->width() * zoom);
+  intptr_t scaled_w = static_cast<intptr_t>( px->width() * zoom );
   void * k = (void *) scaled_w;
   QPixmap * scaled_px = d->find(k);
   
