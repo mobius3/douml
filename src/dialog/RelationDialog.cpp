@@ -151,7 +151,6 @@ RelationDialog::RelationDialog(RelationData * r)
   edtype = new Q3ComboBox(FALSE, htab);
   
   int index;
-  bool assoc = true;
     
   if (visit) {
     // relation kind cannot be changed
@@ -159,7 +158,6 @@ RelationDialog::RelationDialog(RelationData * r)
       if (RelTypes[index].type == type) {
 	edtype->insertItem(**RelTypes[index].pix, RelTypes[index].lbl);
 	edtype->setCurrentItem(0);
-	assoc = RelationData::isa_association(type);
 	break;
       }
     }
@@ -984,7 +982,7 @@ void RelationDialog::init_idl_role(RoleDialog & role, const RoleData & rel,
 
 static void set_enabled(QWidgetList & l, bool y)
 {
-  QWidget * w;
+  // QWidget * w;
   for (QWidgetList::iterator it = l.begin(); it != l.end(); it++)
 	  (*it)->setEnabled(y);
   /*[lgfreitas] better change here
@@ -2198,7 +2196,7 @@ void RelationDialog::idl_update(RoleDialog & role, BrowserClass * cl, BrowserNod
 	  p += 13;
 	  switch (role.uml_visibility.value()) {
 	  case UmlPublic:
-	  case UmlPackage:
+          // case UmlPackage: // [SciBoy] This is probably an error, I have uncommented for now. UmlPackage is a UmlCode value, not a UmlVisibility value.
 	    s += "public ";
 	  default:
 	    s += "private ";

@@ -2436,7 +2436,7 @@ void BrowserClass::save(Q3TextStream & st, bool ref, QString & warning) {
       if (!bodyfn.isEmpty()) {
 	qf.close();
 	
-	if (qf.status() != IO_Ok) {
+        if (static_cast<uint>( qf.status() ) != IO_Ok) {
 	  // error, redo
 	  for (;;) {	    
 	    (void) msg_critical(TR("Error"),
@@ -2460,7 +2460,7 @@ void BrowserClass::save(Q3TextStream & st, bool ref, QString & warning) {
 	    
 	    qf2.close();
 	    
-	    if (qf2.status() == IO_Ok)
+            if (static_cast<uint>( qf2.status() ) == IO_Ok)
 	      // all is ok
 	      break;
 	  }

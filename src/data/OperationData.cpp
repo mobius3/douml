@@ -2628,7 +2628,7 @@ void OperationData::create_modified_body_file() {
       
       fp.close();
       
-      if (fp.status() == IO_Ok)
+      if (static_cast<uint>( fp.status() ) == IO_Ok)
 	// all is ok
 	return;
       
@@ -2737,7 +2737,7 @@ void OperationData::new_body(QString s, int who) {
     else
       body_info->length = 0;
    
-    if (fp.status() == IO_Ok)
+    if (static_cast<uint>( fp.status() ) == IO_Ok)
       // all is ok
       return;
     
@@ -2845,7 +2845,7 @@ void OperationData::import(BrowserClass * cl, int id)
     
     qf.close();
     
-    if (qf.status() == IO_Ok)
+    if (static_cast<uint>( qf.status() ) == IO_Ok)
       // all is ok
       break;
     

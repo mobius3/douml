@@ -153,7 +153,13 @@ static QString prevText() { return TR("To select the previously selected element
 static QString nextText() { return TR("To select the next selected element in the <i>browser</i>."); }
 static QString completionText() { return TR("To ask or not for an auto completion (non case sensitive) in choice list (<i>combo box</i>)"); }
 
-QToolButton* CreateToolButton(QPixmap icon, QString name, QString nothing, QWidget* receiver, const char* boundslot, QToolBar* parent, QString shown)
+QToolButton*
+    CreateToolButton(
+        QPixmap icon,
+        QWidget* receiver,
+        const char* boundslot,
+        QToolBar* parent,
+        QString shown)
 {
     QToolButton* newButton = new QToolButton();
     QObject::connect(newButton, SIGNAL(clicked()), receiver, boundslot);
@@ -185,12 +191,12 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
   
   openIcon = QPixmap(fileopen);
   QToolButton * projectOpen
-   = CreateToolButton(openIcon, TR("Open Project"), QString::null,
+   = CreateToolButton(openIcon,
               this, SLOT(load()), projectTools, "open project");
   
   saveIcon = QPixmap(filesave);
   QToolButton * projectSave
-   = CreateToolButton(saveIcon, TR("Save Project"), QString::null,
+   = CreateToolButton(saveIcon,
 		      this, SLOT(save()), projectTools, "save project");
   
 #ifndef QT_NO_PRINTER
@@ -198,22 +204,22 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
   
   printIcon = QPixmap(fileprint);
   QToolButton * diagramPrint
-   = CreateToolButton(printIcon, TR("Print diagram"), QString::null,
+   = CreateToolButton(printIcon,
 		      this, SLOT(print()), projectTools, "print diagram");
   Q3WhatsThis::add(diagramPrint, diagramPrintText());
 #endif
   
   QPixmap searchIcon = QPixmap(browsersearch);
   QToolButton * browserSearch
-   = CreateToolButton(searchIcon, TR("Browser search"), QString::null,
+   = CreateToolButton(searchIcon,
 		      this, SLOT(browser_search()), projectTools, "browser search");
   Q3WhatsThis::add(browserSearch, browserSearchText());
   
-  prev= CreateToolButton(*leftPixmap, TR("previous selected"), QString::null,
+  prev= CreateToolButton(*leftPixmap,
 			 this, SLOT(prev_select()), projectTools, "previous selected");
   Q3WhatsThis::add(prev, prevText());
   
-  next= CreateToolButton(*rightPixmap, TR("next selected"), QString::null,
+  next= CreateToolButton(*rightPixmap,
 			 this, SLOT(next_select()), projectTools, "next selected");
   Q3WhatsThis::add(next, nextText());
   
@@ -1180,7 +1186,7 @@ void UmlWindow::save_session() {
     
     if (! windows.isEmpty()) {
       st << "diagrams\n";    
-      for (unsigned i = 0; i != windows.count(); i += 1) {
+      for (int i = 0; i != windows.count(); i += 1) {
 	if (ws->activeWindow() == windows.at(i))
 	  st << "  active";
 	((DiagramWindow *) windows.at(i))->save_session(st);
@@ -1894,7 +1900,6 @@ void UmlWindow::windowsMenuAboutToShow() {
 
 void UmlWindow::preferred_geometry() {
   QWidgetList l = the->ws->windowList();
-  QWidgetList::iterator it = l.begin();
   QWidget * w;
 
   //for (w = l.first(); w != 0; w = l.next())
