@@ -139,7 +139,7 @@ void ImageDialog::root_relative() {
     root += '/';
     
   if (pathrootbutton->text() == RelativeRoot) {
-    unsigned len = root.length();
+    int len = root.length();
       
     if (
 
@@ -168,7 +168,7 @@ void ImageDialog::prj_relative() {
     root += '/';
     
   if (pathprjbutton->text() == RelativePrj) {
-    unsigned len = root.length();
+    int len = root.length();
       
     if (
 
