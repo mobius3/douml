@@ -39,6 +39,7 @@
 #include "CppSettings.h"
 #include "UmlCom.h"
 #include "util.h"
+#include <QSharedPointer>
 
 UmlPackage * UmlArtifact::package_of_generated_artifact;
 
@@ -142,8 +143,8 @@ void UmlArtifact::generate() {
     bool incl_computed = FALSE;
 	    
     if (!hdef.isEmpty()) {      
-      QByteArray file;
-      QTextOStream f_h(&file); //[lgfreitas] Now QTextOStream receives a pointer to a byte array...
+      QSharedPointer<QByteArray> file(new QByteArray);
+      QTextOStream f_h(file.data()); //[lgfreitas] Now QTextOStream receives a pointer to a byte array...
       const char * p = hdef;
       const char * pp = 0;
       
@@ -248,7 +249,7 @@ void UmlArtifact::generate() {
       
       f_h << '\000';
 
-      if (must_be_saved(h_path, file)) {
+	  if (must_be_saved(h_path, *file.data())) {
 	write_trace_header();
 	
 	FILE * fp_h;
@@ -261,7 +262,7 @@ void UmlArtifact::generate() {
 	  incr_error();
 	}
 	else {
-	  fputs((const char *) file, fp_h);
+	  fputs((const char *) file.data(), fp_h);
 	  fclose(fp_h);
 	}
       }

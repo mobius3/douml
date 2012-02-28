@@ -59,7 +59,8 @@
 #include "MiscGlobalCmd.h"
 //Added by qt3to4:
 #include <Q3CString>
-
+#include <iostream>
+using namespace std;
 int UmlBaseItem::getIdentifier() {
   read_if_needed_();
 
@@ -456,7 +457,7 @@ UmlItem * UmlBaseItem::read_()
   const char * name = UmlCom::read_string();
   
 
-  //cout << "UmlBaseItem::read id " << id << " kind " << kind << " name " << name << '\n';
+  cout << "UmlBaseItem::read id " << id << " kind " << kind << " name " << name << '\n';
 
   
   UmlItem * result = _all[id];

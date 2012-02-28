@@ -471,9 +471,9 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  xpm/UmlPixmap.cpp
 INTERFACES	= 
 TARGET		= douml
-DEFINES         = BooL=bool
+DEFINES         = BooL=bool DEBUGCOM
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network  qt3support
 
 
 
