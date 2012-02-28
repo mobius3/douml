@@ -92,9 +92,22 @@ SOURCES	      = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
 		../Tools/UmlBaseClassInstance.cpp
 		
 TARGET	      = cpp_generator
-DEFINES	      = WITHCPP BooL=bool
+DEFINES	      = WITHCPP BooL=bool TRACE
 INCLUDEPATH   = ../Tools ../CppGenerator
 
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network  qt3support testlib console
+
+Release{
+    MOC_DIR = ../../../Douml_builds/gen/MOC_release
+    OBJECTS_DIR = ../../../Douml_builds/gen/Obj_release
+}
+
+Debug{
+    MOC_DIR = ../../../Douml_builds/gen/MOC_Debug
+    OBJECTS_DIR = ../../../Douml_builds/gen/Obj_Debug
+
+}
+    UI_DIR = ../../../Douml_builds/gen/UI
+    DESTDIR = ../../../Douml_builds
