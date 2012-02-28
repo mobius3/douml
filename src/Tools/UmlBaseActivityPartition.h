@@ -24,8 +24,13 @@ class UmlBaseActivityPartition : public UmlItem {
 
   protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityPartition(void * id, const Q3CString & s) : UmlItem(id, s) {
-    }
+     UmlBaseActivityPartition(void * id, const Q3CString & s) : UmlItem(id, s) 
+	 {
+		_assoc_diagram = 0;
+		_dimension = false;
+        _external = false;
+		_represents = 0;
+	 }
 
 
   public:

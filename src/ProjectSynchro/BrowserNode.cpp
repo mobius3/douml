@@ -145,7 +145,7 @@ bool BrowserNode::load(QDir & dir) {
       
       k = read_string(p);
       
-      if ((n >= 2) || (n <= 127)) {
+      if ((n >= 2) && (n <= 127)) {
 	modifier_name = k;
 	modifier_id = n;
 	setText(MODIFIEDBY_COL, modifier_name + " [" + QString::number(n) + "]");

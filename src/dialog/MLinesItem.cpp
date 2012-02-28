@@ -39,8 +39,10 @@
 #endif
 
 MLinesItem::MLinesItem(Q3Table * ta, const QString & s)
-    : TableItem(ta, Q3TableItem::WhenCurrent, s) {
-}
+    : TableItem(ta, Q3TableItem::WhenCurrent, s) 
+	{
+		mle = 0;
+	}
 
 QWidget * MLinesItem::createEditor() const {
 #if QT_VERSION == 230

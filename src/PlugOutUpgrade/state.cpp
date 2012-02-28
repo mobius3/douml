@@ -898,7 +898,7 @@ void update_uml_com()
   op->set_java("${type}",
 	       "${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}",
 	       "\
-  //cout << \"UmlCom.send_cmd(id, \" << cmd << \", \" << arg << \", \" << id2 << \")\\n\";\n\
+  cout << \"UmlCom.send_cmd(id, \" << cmd << \", \" << arg << \", \" << id2 << \")\\n\";\n\
   \n\
   write_char((byte) CmdFamily._onInstanceCmd);\n\
   write_id(id);\n\
