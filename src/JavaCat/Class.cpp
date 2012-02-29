@@ -1660,7 +1660,9 @@ void Class::menu() {
       
       while (!(b = (BrowserNode *) cl->parent())->isa_package())
 	if(b == 0)
-		Q_ASSERT("PORTING ERROR - NULL POINTER DEREFERENCE");
+	{
+		Q_ASSERT(0);
+	}
 	cl = (Class *) b;
       
       JavaSettings::set_UseDefaults(TRUE);
