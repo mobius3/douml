@@ -137,6 +137,11 @@ ToolCom::ToolCom() {
     externalProcess = 0;
 }
 
+ToolCom::~ToolCom()
+{
+    DisconnectExternalProcess();
+}
+
 int ToolCom::run(const char * cmd, BrowserNode * bn,
                  bool exit, bool clr, void (*pf)())
 {
@@ -151,6 +156,8 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     ToolCom * com = (unused.isEmpty())
             ? new ToolCom
             : unused.take(0);
+
+    com->DisconnectExternalProcess();
 
     static int rank = 0;
 
@@ -888,11 +895,7 @@ void ToolCom::data_received(Socket * who) {
 
 void ToolCom::processFinished()
 {
-
-    disconnect(this->externalProcess, SIGNAL(finished(int)), this, SLOT(processFinished()));
-    this->externalProcess->kill();
-    delete this->externalProcess;
-    this->externalProcess = 0;
+    QLOG_TRACE() << "Disconnecting external process signals";
 
     if (errno != 0) {
         msg_critical("Bouml",
@@ -907,6 +910,19 @@ void ToolCom::processFinished()
             THROW_ERROR 0;
         }
         //else
+    }
+
+
+}
+
+void ToolCom::DisconnectExternalProcess()
+{
+    if(this->externalProcess)
+    {
+        disconnect(this->externalProcess, SIGNAL(finished(int)), this, SLOT(processFinished()));
+        this->externalProcess->kill();
+        delete this->externalProcess;
+        this->externalProcess = 0;
     }
 }
 
