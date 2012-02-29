@@ -117,7 +117,7 @@ void UmlCom::check_size_out(unsigned int len)
 void UmlCom::read_if_needed()
 {
 #ifdef TRACE
-  //cout << "UmlCom::read_if_needed " << buffer_in_end - p_buffer_in << '\n';
+  cout << "UmlCom::read_if_needed " << buffer_in_end - p_buffer_in << '\n';
 #endif
   
   if (p_buffer_in == buffer_in_end) {
@@ -135,7 +135,7 @@ void UmlCom::read_if_needed()
 void UmlCom::read_buffer(unsigned int len)
 {
 #ifdef TRACE
-  //cout << "enter UmlCom::read_buffer(" << len << ")\n";
+  cout << "enter UmlCom::read_buffer(" << len << ")\n";
 #endif
   
   if (buffer_in_size < len) {
@@ -162,7 +162,7 @@ void UmlCom::read_buffer(unsigned int len)
     }
     
 #ifdef TRACE
-    //cout << "UmlCom a lu " << nread << '\n';
+    cout << "UmlCom a lu " << nread << '\n';
 #endif
     if ((remainder -= nread) == 0)
       break;
@@ -170,7 +170,7 @@ void UmlCom::read_buffer(unsigned int len)
     sock->waitForMore(100);
   }
 #ifdef TRACE
-  //cout << "exit UmlCom::read_buffer()\n";
+  cout << "exit UmlCom::read_buffer()\n";
 #endif
   
   p_buffer_in = buffer_in;

@@ -30,13 +30,13 @@
 //Added by qt3to4:
 #include <Q3CString>
  
-class Q3MultiLineEdit;
+class Q3TextEdit;
  
 class ShowFileDialog : public QDialog {
   Q_OBJECT
  
   protected:
-    Q3MultiLineEdit * e;
+    Q3TextEdit * e;
  
   public:
     ShowFileDialog(const Q3CString & fn);

@@ -56,9 +56,10 @@ QWidget * ComboItem::createEditor() const {
 }
 
 void ComboItem::setContentFromEditor(QWidget *w) {
-  if (w->inherits("Q3ComboBox"))
-    setText(((Q3ComboBox *) w)->currentText());
-  else
-    Q3TableItem::setContentFromEditor(w);
+    Q3ComboBox* editor = qobject_cast<Q3ComboBox*>(w);
+    if (editor)
+        setText(editor->currentText());
+    else
+        Q3TableItem::setContentFromEditor(w);
 }
 

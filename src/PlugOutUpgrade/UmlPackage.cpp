@@ -3902,7 +3902,7 @@ void fixe_umlcom_send_cmd(UmlOperation * op0)
   op->set_CppDef(s);
   
   op->set_java("${type}", "${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}",
-	       "  //cout << \"UmlCom.send_cmd((CmdFamily) \" << f << \", \" << cmd << \", \" << arg << \", dummy)\\n\";\n"
+	       "  cout << \"UmlCom.send_cmd((CmdFamily) \" << f << \", \" << cmd << \", \" << arg << \", dummy)\\n\";\n"
 	       "  \n"
 	       "  write_char((byte) f.value());\n"
 	       "  write_char((byte) cmd);\n"

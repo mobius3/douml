@@ -32,7 +32,7 @@
 #include <qsplitter.h>
 #include <q3vbox.h>
 #include <q3hbox.h>
-#include <q3multilineedit.h>
+#include <Q3TextEdit.h>
 #include <qstatusbar.h>
 #include <qpixmap.h>
 #include <qtoolbar.h>
@@ -389,8 +389,6 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
   spl1->moveToFirst(browser);
   spl2->moveToFirst(ws);
   
-  //spl1->hide();
-  //spl2->hide();
 
   int w = (UmlDesktop::width() * 15)/16;
   
