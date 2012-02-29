@@ -56,7 +56,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "ReferenceDialog.h"
 #include "ProfiledStereotypes.h"
@@ -498,7 +498,7 @@ void BrowserOperation::menu() {
   Q3PopupMenu implbym(0);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_edited) {
@@ -543,7 +543,7 @@ a double click with the left mouse button does the same thing"));
 	m.setWhatsThis(m.insertItem(TR("Select implementing behavior"), &implbym),
 		       TR("to select a <i>state</i> or <i>activity</i> implementing the <i>operation</i>"));
 	
-	implbym.insertItem(new MenuTitle(TR("Choose behavior"), m.font()), -1);
+        MenuFactory::createTitle(implbym, TR("Choose behavior"));
 	implbym.insertSeparator();
 	
 	BrowserNode * beh;

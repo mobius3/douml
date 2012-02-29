@@ -35,7 +35,7 @@
 #include "ColDiagramView.h"
 #include "CodMsgSupport.h"
 #include "CodObjCanvas.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "CodChangeMsgDialog.h"
 #include "MyInputDialog.h"
 #include "DialogUtil.h"
@@ -149,10 +149,8 @@ void ColMsgTable::button_pressed(int row, int col, int, const QPoint &) {
   else {
     Q3PopupMenu m;
 
-    m.insertItem(new MenuTitle(QString(TR("rank ")) + text(row, ABS_RANK_COL)
-			       + " : " + text(row, HI_RANK_COL),
-			       m.font()),
-		 -1);
+    MenuFactory::createTitle(m, QString(TR("rank ")) + text(row, ABS_RANK_COL)
+                               + " : " + text(row, HI_RANK_COL));
     m.insertSeparator();
     m.insertItem(TR("Edit message"), 1);
     m.insertItem(TR("Change ranks"), 2);

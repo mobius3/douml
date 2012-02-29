@@ -45,7 +45,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "ToolCom.h"
 #include "strutil.h"
@@ -319,7 +319,7 @@ void FragmentCanvas::modified() {
 void FragmentCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Fragment"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Fragment"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
