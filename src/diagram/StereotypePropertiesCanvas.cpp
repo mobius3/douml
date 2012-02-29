@@ -36,7 +36,7 @@
 #include "StereotypePropertiesCanvas.h"
 #include "Settings.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "SettingsDialog.h"
 #include "ArrowCanvas.h"
@@ -108,7 +108,7 @@ void StereotypePropertiesCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu fontsubm(0);
   
-  m.insertItem(new MenuTitle(TR("Stereotype Properties"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Stereotype Properties"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

@@ -964,7 +964,7 @@ void ClassDialog::icon_root_relative() {
     root += '/';
     
   if (iconpathrootbutton->text() == RelativeRoot) {
-    unsigned len = root.length();
+    int len = root.length();
       
     if (
 
@@ -993,7 +993,7 @@ void ClassDialog::icon_prj_relative() {
     root += '/';
     
   if (iconpathprjbutton->text() == RelativePrj) {
-    unsigned len = root.length();
+    int len = root.length();
       
     if (
 

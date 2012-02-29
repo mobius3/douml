@@ -166,7 +166,6 @@ HEADERS		= data/ActualParamData.h \
 		  dialog/VisibilityGroup.h \
 		  dialog/CodAddMsgDialog.h \
 		  dialog/CodEditMsgDialog.h \
-		  dialog/MenuTitle.h \
 		  dialog/MenuItalic.h \
 		  dialog/MenuFont.h \
 		  dialog/ColMsgTable.h \
@@ -207,7 +206,8 @@ HEADERS		= data/ActualParamData.h \
 		  tool/Tool.h \
 		  tool/Socket.h \
 		  tool/ToolCom.h \
-		  xpm/UmlPixmap.h
+		  xpm/UmlPixmap.h \
+    ui/menufactory.h
 SOURCES		= browser/BrowserAttribute.cpp \
 		  browser/BrowserExtraMember.cpp \
 		  browser/BrowserClass.cpp \
@@ -422,7 +422,6 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  dialog/VisibilityGroup.cpp \
 		  dialog/CodAddMsgDialog.cpp \
 		  dialog/CodEditMsgDialog.cpp \
-		  dialog/MenuTitle.cpp \
 		  dialog/MenuItalic.cpp \
 		  dialog/MenuFont.cpp \
 		  dialog/ColMsgTable.cpp \
@@ -468,8 +467,8 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  misc/translate.cpp \
 		  tool/Tool.cpp \
 		  tool/ToolCom.cpp \
-		  xpm/UmlPixmap.cpp
-INTERFACES	= 
+		  xpm/UmlPixmap.cpp \
+    ui/menufactory.cpp
 TARGET		= douml
 DEFINES         = BooL=bool
 #The following line was inserted by qt3to4

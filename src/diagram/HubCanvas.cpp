@@ -38,7 +38,7 @@
 #include "UmlCanvas.h"
 #include "myio.h"
 #include "BrowserDiagram.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 HubCanvas::HubCanvas(UmlCanvas * canvas, int x, int y, int id) 
@@ -98,7 +98,7 @@ void HubCanvas::open() {
 void HubCanvas::menu(const QPoint&) {
   Q3PopupMenu m;
   
-  m.insertItem(new MenuTitle(TR("Network connexion"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Network connexion"));
   m.insertSeparator();
   m.insertItem(TR("Remove from diagram"), 0);
   

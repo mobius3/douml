@@ -38,7 +38,7 @@
 #include "Images.h"
 #include "ImageDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "translate.h"
 
@@ -155,7 +155,7 @@ void ImageCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu fontsubm(0);
   
-  m.insertItem(new MenuTitle(TR("Image"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Image"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

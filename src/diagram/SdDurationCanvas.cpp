@@ -45,7 +45,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "ToolCom.h"
 #include "translate.h"
 
@@ -703,7 +703,7 @@ void SdDurationCanvas::menu(const QPoint & p) {
     }
   }
   
-  m.insertItem(new MenuTitle(TR("Activity bar"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Activity bar"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

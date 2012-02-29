@@ -39,7 +39,7 @@
 #include "UmlGlobal.h"
 #include "UmlCanvas.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "BrowserDiagram.h"
 #include "strutil.h"
 #include "DialogUtil.h"
@@ -136,7 +136,7 @@ void TextCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu fontsubm(0);
   
-  m.insertItem(new MenuTitle(TR("Text"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Text"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

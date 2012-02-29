@@ -74,7 +74,7 @@
 #include "BrowserDiagram.h"
 #include "UmlWindow.h"
 #include "Shortcut.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "myio.h"
 #include "err.h"
@@ -971,7 +971,7 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
   Q3CanvasItemList::ConstIterator it;
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Multiple selection menu"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Multiple selection menu"));
   m.insertSeparator();
   for (it = selected.begin(); it != selected.end(); ++it) {
     if (QCanvasItemToDiagramItem(*it)->linked()) {
