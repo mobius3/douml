@@ -4,3 +4,4 @@
 *.pro.user
 *.cppcheck
 *.autosave
+*.blameresult

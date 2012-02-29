@@ -49,12 +49,10 @@ QWidget * MLinesItem::createEditor() const {
 
 void MLinesItem::setContentFromEditor(QWidget * w) {
 
-  if (w->inherits("Q3TextEdit")) {
-    QString s = ((Q3TextEdit *) w)->text();
-    setText(s);
-  }
-
-  else
-    Q3TableItem::setContentFromEditor(w);
+    Q3TextEdit* editor = qobject_cast<Q3TextEdit*>(w);
+    if (editor)
+        setText(editor->text());
+    else
+        Q3TableItem::setContentFromEditor(w);
 }
 
