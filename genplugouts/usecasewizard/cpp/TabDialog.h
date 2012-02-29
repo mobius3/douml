@@ -6,7 +6,7 @@
 #include <qstring.h>
 #include <q3cstring.h>
 
-class Q3MultiLineEdit;
+class Q3TextEdit;
 class UmlUseCase;
 
 //Only for C++
@@ -26,17 +26,17 @@ class TabDialog : public Q3TabDialog {
 
 
   public:
-    Q3MultiLineEdit * summary;
+    Q3TextEdit * summary;
 
-    Q3MultiLineEdit * context;
+    Q3TextEdit * context;
 
-    Q3MultiLineEdit * precond;
+    Q3TextEdit * precond;
 
-    Q3MultiLineEdit * description;
+    Q3TextEdit * description;
 
-    Q3MultiLineEdit * postcond;
+    Q3TextEdit * postcond;
 
-    Q3MultiLineEdit * exceptions;
+    Q3TextEdit * exceptions;
 
 
   protected:

@@ -30,7 +30,7 @@
 #include <qwidget.h>
 
 #include "MLinesItem.h"
-#include <q3multilineedit.h>
+#include <Q3TextEdit.h>
 #include "DialogUtil.h"
 
 
@@ -42,7 +42,7 @@ MLinesItem::MLinesItem(Q3Table * ta, const QString & s)
 
 QWidget * MLinesItem::createEditor() const {
 
-  ((MLinesItem *) this)->mle = new Q3MultiLineEdit(table()->viewport());
+  ((MLinesItem *) this)->mle = new Q3TextEdit(table()->viewport());
   mle->setText(text());
   return mle;
 }
