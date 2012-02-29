@@ -30,43 +30,29 @@
 #include <qwidget.h>
 
 #include "MLinesItem.h"
-#if QT_VERSION == 230
-#include "MLEDialog.h"
-#include "strutil.h"
-#else
-#include <q3multilineedit.h>
+#include <Q3TextEdit.h>
 #include "DialogUtil.h"
-#endif
+
 
 MLinesItem::MLinesItem(Q3Table * ta, const QString & s)
-    : TableItem(ta, Q3TableItem::WhenCurrent, s) {
-}
+    : TableItem(ta, Q3TableItem::WhenCurrent, s) 
+	{
+		mle = 0;
+	}
 
 QWidget * MLinesItem::createEditor() const {
-#if QT_VERSION == 230
-  ((MLinesItem *) this)->mle = new MLEDialog(fromUnicode(text()), FALSE);
-#else
-  ((MLinesItem *) this)->mle = new Q3MultiLineEdit(table()->viewport());
+
+  ((MLinesItem *) this)->mle = new Q3TextEdit(table()->viewport());
   mle->setText(text());
-#endif
   return mle;
 }
 
 void MLinesItem::setContentFromEditor(QWidget * w) {
-#if QT_VERSION == 230
-  if (w->inherits("MLEDialog")) {
-    QString s = toUnicode(((MLEDialog *) w)->text());
-    
-    setText(s);
-  }
-#else
-  if (w->inherits("QMultiLineEdit")) {
-    QString s = ((Q3MultiLineEdit *) w)->text();
-    
-    setText(s);
-  }
-#endif
-  else
-    Q3TableItem::setContentFromEditor(w);
+
+    Q3TextEdit* editor = qobject_cast<Q3TextEdit*>(w);
+    if (editor)
+        setText(editor->text());
+    else
+        Q3TableItem::setContentFromEditor(w);
 }
 

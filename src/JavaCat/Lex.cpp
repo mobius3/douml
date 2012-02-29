@@ -630,7 +630,7 @@ Q3CString Lex::read_word(bool in_templ)
       int c = get();
       
 #ifdef TRACE
-      //cout << "deja \"" << result << "\", '" << ((char) c) << "'\n";
+      cout << "deja \"" << result << "\", '" << ((char) c) << "'\n";
 #endif
       if (c == EOF)
 	break;
@@ -722,7 +722,7 @@ char Lex::read_word_bis(bool in_templ)
       int c = get();
       
 #ifdef TRACE
-      //cout << "deja \"" << result << "\", '" << ((char) c) << "'\n";
+      cout << "deja \"" << result << "\", '" << ((char) c) << "'\n";
 #endif
       if (c == EOF)
 	break;
