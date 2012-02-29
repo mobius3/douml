@@ -248,20 +248,15 @@ void BrowserActivity::menu() {
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_read_only) {
-      m.setWhatsThis(m.insertItem(TR("New activity diagram"), 0),
-		     TR("to add a <i>activity diagram</i>"));
-      m.setWhatsThis(m.insertItem(TR("New parameter"), 1),
-		     TR("to add a <i>Parameter</i> to the <i>activity</i>"));
-      m.setWhatsThis(m.insertItem(TR("New interruptible activity region"), 2),
-		     TR("to add an <i>Interruptible Activity Region</i> to the <i>activity</i>"));
-      m.setWhatsThis(m.insertItem(TR("New expansion region"), 3),
-		     TR("to add a nested <i>expansion region</i>"));
-      m.setWhatsThis(m.insertItem(TR("New partition"), 4),
-		     TR("to add a <i>Partition</i> to the <i>activity</i>"));
-      m.setWhatsThis(m.insertItem(TR("New activity action"), 7),
-		     TR("to add an <i>activity action</i> to the <i>activity</i>"));
-      m.setWhatsThis(m.insertItem(TR("New object node"), 8),
-		     TR("to add an <i>activity object node</i> to the <i>activity</i>"));
+      MenuFactory::Item items[] = {
+        { "New activity diagram", 0, "to add a <i>activity diagram</i>" },
+        { "New parameter", 1, "to add a <i>Parameter</i> to the <i>activity</i>" } ,
+        { "New interruptible activity region", 2, "to add an <i>Interruptible Activity Region</i> to the <i>activity</i>" },
+        { "New expansion region", 3, "to add a nested <i>expansion region</i>" },
+        { "New partition", 4, "to add a <i>Partition</i> to the <i>activity</i>" },
+        { "New activity action", 7, "to add an <i>activity action</i> to the <i>activity</i>" },
+        { "New object node", 8, "to add an <i>activity object node</i> to the <i>activity</i>" } };
+      MenuFactory::addItems( m, items, sizeof( items ) / sizeof( MenuFactory::Item ) );
       m.insertSeparator();
     }
     m.setWhatsThis(m.insertItem(TR("Edit"), 5),
