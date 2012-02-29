@@ -53,6 +53,7 @@ using namespace std;
 #include "DialogUtil.h"
 #include "mu.h"
 #include "err.h"
+#include "Logging/QsLog.h"
 
 Socket::Socket(ToolCom * c)
     : Q3SocketDevice(Q3SocketDevice::Stream), com(c) {
@@ -127,10 +128,7 @@ ToolCom::ToolCom() {
     wanted = 0;
     id = 0;
     safeToContinue = false;
-
-
     start = true;
-
     exit_bouml = false;
     target = 0;
     cont = 0;
@@ -143,6 +141,7 @@ ToolCom::ToolCom() {
 int ToolCom::run(const char * cmd, BrowserNode * bn,
                  bool exit, bool clr, void (*pf)())
 {
+    QLOG_TRACE() << Q_FUNC_INFO << " called";
     if (exit)
         exitvalue = -1;
 
