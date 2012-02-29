@@ -44,6 +44,8 @@
 #include "mu.h"
 #include "err.h"
 #include "EnvDialog.h"
+#include "Logging/QsLogDest.h"
+#include "Logging/QsLog.h"
 
 
 
@@ -57,6 +59,17 @@ QApplication * theApp;
 int main(int argc, char **argv)
 {
   ExitOnError = FALSE;
+
+
+
+  QsLogging::Logger& logger = QsLogging::Logger::instance();
+  logger.setLoggingLevel(QsLogging::TraceLevel);
+
+  const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString("log") + QString(".txt")));
+  QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath) );
+  QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
+  logger.addDestination(debugDestination.get());
+  logger.addDestination(fileDestination.get());
 
   theApp = new QApplication (argc, argv);
 
