@@ -67,7 +67,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "MenuItalic.h"
 #include "ClassDialog.h"
 #include "OperationListDialog.h"
@@ -485,7 +485,7 @@ void BrowserClass::menu() {
 						 : "<i>class</i>");
   int index;
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   if (!deletedp()) {
     if (!is_read_only) {
       if (edition_number == 0) {
@@ -510,7 +510,7 @@ void BrowserClass::menu() {
 	    else {
 	      BrowserOperation * oper;
 	      
-	      inhopersubm.insertItem(new MenuTitle(TR("Choose operation to add it"), m.font()), -1);
+              MenuFactory::createTitle(inhopersubm, TR("Choose operation to add it"));
 	      inhopersubm.insertSeparator();
 	      
 	      for (oper = l.first(), index = 10000;
@@ -608,7 +608,7 @@ a double click with the left mouse button does the same thing"));
 	m.setWhatsThis(m.insertItem(TR("Select associated component"), 100000),
 		       TR("to select the <i>component</i> providing the <i>class</i>"));
       else {
-	compsubm.insertItem(new MenuTitle(TR("Choose component"), m.font()), -1);
+        MenuFactory::createTitle(compsubm, TR("Choose component"));
 	compsubm.insertSeparator();
 	
 	m.setWhatsThis(m.insertItem(TR("Select an associated component"), &compsubm),
@@ -1712,8 +1712,7 @@ void BrowserClass::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	// have choice
 	Q3PopupMenu m(0);
   
-	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
-				   m.font()), -1);
+        MenuFactory::createTitle(m, TR("move ") + bn->get_name());
 	m.insertSeparator();
 	m.insertItem(TR("In ") + QString(get_name()), 1);
 	m.insertItem(TR("After ") + QString(get_name()), 2);

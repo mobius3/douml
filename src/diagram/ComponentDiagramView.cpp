@@ -51,7 +51,7 @@
 #include "UmlPixmap.h"
 #include "UmlDrag.h"
 #include "BrowserComponent.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "myio.h"
 #include "BrowserView.h"
 #include "RelatedElementsDialog.h"
@@ -110,7 +110,7 @@ static void get_drawn(DiagramItemList & items,
 void ComponentDiagramView::menu(const QPoint& p) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Component diagram menu"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Component diagram menu"));
  
   if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
     DiagramItemList items(canvas()->allItems());

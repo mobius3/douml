@@ -45,7 +45,7 @@
 #include "SettingsDialog.h"
 #include "myio.h"
 #include "strutil.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "ColDiagramView.h"
 #include "ToolCom.h"
 #include "translate.h"
@@ -206,7 +206,7 @@ void CodClassInstCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   bool modelized = (browser_node->get_type() == UmlClassInstance);
   
-  m.insertItem(new MenuTitle(full_name(), m.font()), -1);
+  MenuFactory::createTitle(m, full_name());
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

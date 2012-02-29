@@ -49,7 +49,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Settings.h"
 #include "strutil.h"
 #include "translate.h"
@@ -350,7 +350,7 @@ void PinCanvas::menu(const QPoint &) {
   BrowserClass * cl = 
     ((PinData *) browser_node->get_data())->get_type().type;
     
-  m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

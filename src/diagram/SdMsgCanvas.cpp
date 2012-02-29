@@ -44,7 +44,7 @@
 #include "SettingsDialog.h"
 #include "BrowserSeqDiagram.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 SdMsgCanvas::SdMsgCanvas(UmlCanvas * canvas, SdMsgSupport * s,
@@ -217,7 +217,7 @@ int SdMsgCanvas::overlap_dir(SdDurationCanvas * d) const {
 void SdMsgCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Message"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Message"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

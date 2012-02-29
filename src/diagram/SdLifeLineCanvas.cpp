@@ -39,7 +39,7 @@
 #include "SdDurationCanvas.h"
 #include "SdMsgBaseCanvas.h"
 #include "FragmentCanvas.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "ToolCom.h"
 #include "myio.h"
 #include "translate.h"
@@ -352,7 +352,7 @@ void SdLifeLineCanvas::menu(const QPoint&) {
   // delete must call SdObjCanvas->delete_it() NOT the own delete_it !
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Life line"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Life line"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

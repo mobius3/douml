@@ -56,7 +56,7 @@
 #include "ImageCanvas.h"
 #include "UmlPixmap.h"
 #include "UmlDrag.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "myio.h"
 #include "BrowserView.h"
 #include "RelatedElementsDialog.h"
@@ -119,7 +119,7 @@ static void get_drawn(DiagramItemList & items,
 void DeploymentDiagramView::menu(const QPoint& p) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Deployment diagram menu"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Deployment diagram menu"));
  
   if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
     DiagramItemList items(canvas()->allItems());

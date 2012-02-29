@@ -48,7 +48,7 @@
 #include "LabelCanvas.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Settings.h"
 #include "UmlGlobal.h"
 #include "strutil.h"
@@ -472,7 +472,7 @@ void ActivityObjectCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
