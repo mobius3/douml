@@ -28,20 +28,12 @@
 
 #include "MyTable.h"
 
-#if QT_VERSION == 230
-class MLEDialog;
-#else
 class Q3MultiLineEdit;
-#endif
 
 class MLinesItem : public TableItem {
   protected:
-#if QT_VERSION == 230
-    MLEDialog * mle;
-#else
     Q3MultiLineEdit * mle;
-#endif
-  
+
   public:
     MLinesItem(Q3Table * t, const QString & s);
   
