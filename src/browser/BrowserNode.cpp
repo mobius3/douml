@@ -1197,6 +1197,7 @@ bool BrowserNode::api_compatible(unsigned) const {
 bool BrowserNode::tool_cmd(ToolCom * com, const char * args) {
   switch ((unsigned char) args[-1]) {
   case applyCmd:
+    QLOG_TRACE() << Q_FUNC_INFO << " called as command is being applied";
     com->write_unsigned(ToolCom::run(args, this, FALSE, FALSE));
     break;
   case createCmd:

@@ -468,7 +468,10 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  misc/translate.cpp \
 		  tool/Tool.cpp \
 		  tool/ToolCom.cpp \
-		  xpm/UmlPixmap.cpp
+		  xpm/UmlPixmap.cpp \
+    Logging/QsLogDest.cpp \
+    Logging/QsLog.cpp \
+    Logging/QsDebugOutput.cpp
 INTERFACES	= 
 TARGET		= douml
 DEFINES         = BooL=bool DEBUGCOM

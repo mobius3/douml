@@ -2,3 +2,4 @@
 *.kdev
 *~
 *.pro.user
+*.cppcheck
