@@ -53,7 +53,7 @@ using namespace std;
 #include "DialogUtil.h"
 #include "mu.h"
 #include "err.h"
-#include "Logging/QsLog.h"
+#include "../Logging/QsLog.h"
 
 Socket::Socket(ToolCom * c)
     : Q3SocketDevice(Q3SocketDevice::Stream), com(c) {
