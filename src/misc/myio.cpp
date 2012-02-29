@@ -32,7 +32,7 @@
 #include <qfile.h>
 #include <qstring.h>
 #include <q3canvas.h>
-#include <q3multilineedit.h>
+#include <Q3TextEdit.h>
 #include <q3textview.h> 
 #include <qlayout.h> 
 #include <qdialog.h>
@@ -2132,7 +2132,7 @@ void warn(const QString & s)
   Q3VBoxLayout * vbox_aux = new Q3VBoxLayout(&d_aux);
   
   vbox_aux->setMargin(5);
-  Q3MultiLineEdit * e = new Q3MultiLineEdit(&d_aux);
+  Q3TextEdit * e = new Q3TextEdit(&d_aux);
   e->setText(s);
   
   // showed dialog
@@ -2150,7 +2150,7 @@ void warn(const QString & s)
   //int w = e->maxLineWidth() + e->minimumSizeHint().width();
   int maxw = (UmlWindow::get_workspace()->width() * 4)/5;
   int maxh = (UmlWindow::get_workspace()->height() * 4)/5;
-  int he = (e->numLines() + 5) * fm.height();
+  int he = (e->lines() + 5) * fm.height();
   
   t->setText(s);
   t->setMinimumSize(maxw, //(w > maxw) ? maxw : w,

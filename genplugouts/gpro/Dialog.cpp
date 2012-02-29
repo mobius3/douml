@@ -8,7 +8,7 @@
 #include "SmallPushButton.h"
 
 #include <qlineedit.h>
-#include <q3multilineedit.h>
+#include <Q3TextEdit.h>
 #include <qpushbutton.h>
 #include <q3combobox.h>
 #include <qlayout.h>
@@ -148,7 +148,7 @@ Dialog::Dialog(UmlArtifact * art, const Q3CString & path_exe, Q3CString & pro, Q
   connect(browseobjectsdir, SIGNAL(clicked ()), this, SLOT(browse_objectsdir()));
   
   new QLabel("footer : ", grid);
-  edfooter = new Q3MultiLineEdit(grid);
+  edfooter = new Q3TextEdit(grid);
   edfooter->setText(footer);
   
   new QLabel(grid);

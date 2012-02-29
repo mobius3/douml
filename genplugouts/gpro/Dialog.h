@@ -10,7 +10,7 @@ class UmlArtifact;
 class SmallPushButton;
 
 class QLineEdit;
-class Q3MultiLineEdit;
+class Q3TextEdit;
 class QPushButton;
 class Q3ComboBox;
 
@@ -64,7 +64,7 @@ class Dialog : public QDialog {
 
     QPushButton * browseobjectsdir;
 
-    Q3MultiLineEdit * edfooter;
+    Q3TextEdit * edfooter;
 
   protected slots:    virtual void polish();
 

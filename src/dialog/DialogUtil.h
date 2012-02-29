@@ -28,7 +28,7 @@
 
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <q3multilineedit.h>
+#include <Q3TextEdit.h>
 #include <qmessagebox.h>
 //Added by qt3to4:
 #include <Q3PopupMenu>
