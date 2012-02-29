@@ -127,7 +127,6 @@ ToolCom::ToolCom() {
     p_buffer_out = 0;
     wanted = 0;
     id = 0;
-    safeToContinue = false;
     start = true;
     exit_bouml = false;
     target = 0;
@@ -159,9 +158,6 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     com->wanted = 0;
 
     used.append(com);
-
-    com->safeToContinue = false;
-
 
     com->target = bn;
     com->cont = pf;
@@ -554,7 +550,6 @@ void ToolCom::connexion_timeout() {
 
 		THROW_ERROR 0;
 	}
-	safeToContinue = true;
 }
 
 void ToolCom::data_received(Socket * who) {
@@ -894,24 +889,24 @@ void ToolCom::data_received(Socket * who) {
 void ToolCom::processFinished()
 {
 
-    disconnect(com->externalProcess, SIGNAL(finished(int)), com, SLOT(processFinished()));
-    com->externalProcess->kill();
-    delete com->externalProcess;
-    com->externalProcess = 0;
+    disconnect(this->externalProcess, SIGNAL(finished(int)), this, SLOT(processFinished()));
+    this->externalProcess->kill();
+    delete this->externalProcess;
+    this->externalProcess = 0;
 
     if (errno != 0) {
         msg_critical("Bouml",
                      "error while executing '" + QString(cmd) +"'\n"
                      "perhaps you must specify its absolute path"
                      "or set the environment variable PATH ?");
-        com->close();
+        this->close();
         if (exit) {
             BrowserView::remove_temporary_files();
             set_user_id(-1);    // delete lock
 
             THROW_ERROR 0;
         }
-        else
-            return -1;
+        //else
     }
 }
+

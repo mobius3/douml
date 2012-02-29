@@ -28,11 +28,11 @@
 
 #include "MyTable.h"
 
-class Q3MultiLineEdit;
+class Q3TextEdit;
 
 class MLinesItem : public TableItem {
   protected:
-    Q3MultiLineEdit * mle;
+    Q3TextEdit * mle;
 
   public:
     MLinesItem(Q3Table * t, const QString & s);

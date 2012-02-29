@@ -27,7 +27,7 @@
 
 
 
-#include <q3multilineedit.h>
+#include <Q3TextEdit.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qfile.h>
@@ -48,7 +48,7 @@ ShowFileDialog::ShowFileDialog(const Q3CString & filename)
   vbox->addWidget(new QLabel("You can specify the editor through the environment dialog",
                              this));
  
-  e = new Q3MultiLineEdit(this);
+  e = new Q3TextEdit(this);
   
   QFile f(filename);
   

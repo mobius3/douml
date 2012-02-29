@@ -37,7 +37,8 @@ namespace QsLogging
 {
 typedef QList<Destination*> DestinationList;
 
-static const char TrivialString[] = "TRACE";
+
+static const char TrivialString[] = "TRIVIAL";
 static const char TraceString[] = "TRACE";
 static const char DebugString[] = "DEBUG";
 static const char InfoString[]  = "INFO";
