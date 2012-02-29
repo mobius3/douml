@@ -41,7 +41,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "translate.h"
 
@@ -78,7 +78,7 @@ void AssocContainCanvas::menu(const QPoint&) {
   AssocContainCanvas * plabel = (AssocContainCanvas *) aplabel;
   AssocContainCanvas * pstereotype = (AssocContainCanvas *) apstereotype;
   
-  m.insertItem(new MenuTitle(TR("Association"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Association"));
   m.insertSeparator();
   m.insertItem(TR("Edit"),1);
   

@@ -42,7 +42,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "translate.h"
@@ -189,7 +189,7 @@ void NoteCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu fontsubm(0);
   
-  m.insertItem(new MenuTitle(TR("Note"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Note"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

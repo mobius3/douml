@@ -56,7 +56,7 @@
 #include "UmlPixmap.h"
 #include "UmlDrag.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "CodEditMsgDialog.h"
 #include "translate.h"
@@ -99,7 +99,7 @@ void ColDiagramView::update_msg_supports() {
 void ColDiagramView::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Communication diagram menu"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Communication diagram menu"));
   
   if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
     m.insertSeparator();

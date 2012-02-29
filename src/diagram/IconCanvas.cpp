@@ -39,7 +39,7 @@
 #include "BrowserDiagram.h"
 #include "BasicData.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 IconCanvas::IconCanvas(BrowserNode * bn, UmlCanvas * canvas,
@@ -117,7 +117,7 @@ void IconCanvas::open() {
 void IconCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(browser_node->get_name() + TR("\nshort cut"), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_name() + TR("\nshort cut"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

@@ -46,7 +46,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Settings.h"
 #include "ArrowPointCanvas.h"
 #include "strutil.h"
@@ -1185,7 +1185,7 @@ void StateCanvas::menu(const QPoint&) {
   const StateData * data = (StateData *) browser_node->get_data();
   BrowserState * ref = data->get_reference();
   
-  m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

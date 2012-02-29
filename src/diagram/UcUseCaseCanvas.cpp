@@ -47,7 +47,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 UcUseCaseCanvas::UcUseCaseCanvas(BrowserNode * bn, UmlCanvas * canvas,
@@ -271,7 +271,7 @@ void UcUseCaseCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
   m.insertSeparator();
   m.insertItem("Upper", 0);
   m.insertItem("Lower", 1);
