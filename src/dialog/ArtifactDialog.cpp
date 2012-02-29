@@ -91,18 +91,13 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
 			       grid, !hasOkButton());
   addTab(grid, TR("Properties"));
   
-  QPushButton* btnCreateKVList = new QPushButton(grid);
-  btnCreateKVList->setText("Keys");
-  connect(btnCreateKVList, SIGNAL(clicked()), this, SLOT(createCompleteKVList()));
-
+  //
+  
   edStereotypeActivated(data->get_stereotype());
 
   connect(this, SIGNAL(currentChanged(QWidget *)),
 	  this, SLOT(update_tab(QWidget *)));
-
-
-
-
+  
   open_dialog(this);
 }
 
@@ -1851,11 +1846,4 @@ void ArtifactDialog::accept() {
     
     Q3TabDialog::accept();
   }
-}
-
-void ArtifactDialog::createCompleteKVList()
-{
-    QMultiHash<QString, QString> test = dynamic_cast<BrowserArtifact*>(data->browser_node)->GetAllUserKVPairs();
-    QStringList testList = dynamic_cast<BrowserArtifact*>(data->browser_node)->GetAllUserKeys();
-    test.insert("1","1");
 }
