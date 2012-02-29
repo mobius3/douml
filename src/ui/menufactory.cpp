@@ -1,8 +1,8 @@
 // *************************************************************************
 //
-// Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012 Daniel Hellsson
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DoUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,29 +18,20 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : douml@hellsson.com
+// home   : http://github.com/leonardo2d/douml/
 //
 // *************************************************************************
 
+#include "menufactory.h"
 
-
-
-
-#include <qpainter.h>
-
-#include "MenuTitle.h"
-
-MenuTitle::MenuTitle(const QString & s, QFont f) : str(s), font(f) {
-  font.setBold(TRUE);
-}
-
-void MenuTitle::paint(QPainter * p, const QColorGroup& /*cg*/, bool /*act*/,
-		      bool /*enabled*/, int x, int y, int w, int h) {
-  p->setFont (font);
-  p->drawText( x, y, w, h, Qt::AlignCenter | Qt::TextShowMnemonic | Qt::TextDontClip, str);
-}
-
-QSize MenuTitle::sizeHint() {
-  return QFontMetrics(font).size(Qt::AlignCenter | Qt::TextShowMnemonic | Qt::TextDontClip, str);
+void MenuFactory::createTitle(
+    QMenu& menu,
+    const QString& title )
+{
+    QAction* pItem = menu.addAction( title );
+    QFont font = menu.font();
+    font.setBold( true );
+    pItem->setFont( font );
+    pItem->setEnabled( false );
 }
