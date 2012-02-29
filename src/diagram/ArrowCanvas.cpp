@@ -47,7 +47,7 @@
 #include "StereotypeDialog.h"
 #include "DialogUtil.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DiagramView.h"
 #include "UmlPixmap.h"
 #include "ToolCom.h"
@@ -944,10 +944,9 @@ void ArrowCanvas::menu(const QPoint&) {
     
   search_supports(plabel, pstereotype);
     
-  m.insertItem(new MenuTitle(((plabel == 0) ||
+  MenuFactory::createTitle(m, ((plabel == 0) ||
 			      plabel->label->get_name().isEmpty())
-			     ? QString(TR("line")) : plabel->label->get_name(),
-			     m.font()), -1);
+                             ? QString(TR("line")) : plabel->label->get_name());
   if (IsaRelation(itstype)) {
     m.insertSeparator();
     m.insertItem(TR("Edit"),1);

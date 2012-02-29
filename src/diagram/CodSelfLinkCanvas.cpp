@@ -46,7 +46,7 @@
 #include "SettingsDialog.h"
 #include "OperationData.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 CodSelfLinkCanvas::CodSelfLinkCanvas(UmlCanvas * canvas, CodObjCanvas * o,
@@ -248,7 +248,7 @@ void CodSelfLinkCanvas::open() {
 void CodSelfLinkCanvas::menu(const QPoint&) {
   Q3PopupMenu m;
   
-  m.insertItem(new MenuTitle(TR("Self link"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Self link"));
   m.insertSeparator();
   m.insertItem(TR("Add messages"), 1);
   m.insertSeparator();

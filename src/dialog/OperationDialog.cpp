@@ -2723,7 +2723,6 @@ void OperationDialog::php_update_def() {
   bool nobody = (abstract_cb->isChecked() || interf);
   const char * p = def;
   const char * pp = 0;
-  const char * afterparam = 0;
   QString indent = "";
   QString s;
   unsigned rank;
@@ -2781,7 +2780,7 @@ void OperationDialog::php_update_def() {
     }
     else if (!strncmp(p, "${)}", 4)) {
       p += 4;
-      afterparam = p;
+      // afterparam = p;
       s += ')';
     }
     else if (!strncmp(p, "${staticnl}", 11)) {
@@ -3124,7 +3123,6 @@ void OperationDialog::python_update_def() {
   
   bool nobody = abstract_cb->isChecked();
   const char * pp = 0;
-  const char * afterparam = 0;
   BooL indent_needed = FALSE;
   bool in_params = FALSE;
   QString indent;
@@ -3196,7 +3194,7 @@ void OperationDialog::python_update_def() {
     }
     else if (!strncmp(p, "${)}", 4)) {
       p += 4;
-      afterparam = p;
+      // afterparam = p;
       s += ')';
       in_params = FALSE;
     }

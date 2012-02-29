@@ -42,7 +42,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "ToolCom.h"
 #include "translate.h"
@@ -184,7 +184,7 @@ void SubjectCanvas::modified() {
 void SubjectCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Subject"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Subject"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);

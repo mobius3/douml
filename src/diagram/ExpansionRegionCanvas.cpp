@@ -47,7 +47,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Settings.h"
 #include "strutil.h"
 #include "translate.h"
@@ -401,7 +401,7 @@ void ExpansionRegionCanvas::menu(const QPoint&) {
   Q3PopupMenu toolm(0);
   int index;
   
-  m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
   m.insertSeparator();
   if (browser_node->is_writable()) {
     m.insertItem(TR("Add expansion node"), 9);

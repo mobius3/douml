@@ -2214,7 +2214,7 @@ void save(const Q3PointArray & a, QBuffer & b)
 {
   const QPoint * p = a.data();
   
-  for (unsigned i = 0; i != a.size(); i += 1)
+  for (int i = 0; i != a.size(); i += 1)
     save(*p++, b);
 }
 
@@ -2222,7 +2222,7 @@ void load(Q3PointArray & a, QBuffer & b)
 {
   QPoint * p = a.data();
   
-  for (unsigned i = 0; i != a.size(); i += 1)
+  for (int i = 0; i != a.size(); i += 1)
     load(*p++, b);
 }
 

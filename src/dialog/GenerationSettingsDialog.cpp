@@ -2143,7 +2143,7 @@ void GenerationSettingsDialog::relative(LineEdit * ed, QPushButton * button) {
     root += '/';
     
   if (button->text() == Relative) {
-    unsigned len = root.length();
+    int len = root.length();
       
     if (
 

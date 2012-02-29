@@ -55,7 +55,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Settings.h"
 #include "strutil.h"
 #include "translate.h"
@@ -791,7 +791,7 @@ void ActivityActionCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
   m.insertSeparator();
   if (browser_node->is_writable() && data->may_add_pin()) {
     m.insertItem(TR("Add pin"), 7);
