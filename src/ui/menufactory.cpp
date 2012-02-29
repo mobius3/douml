@@ -24,6 +24,7 @@
 // *************************************************************************
 
 #include "menufactory.h"
+#include <translate.h>
 
 void MenuFactory::createTitle(
     QMenu& menu,
@@ -34,4 +35,18 @@ void MenuFactory::createTitle(
     font.setBold( true );
     pItem->setFont( font );
     pItem->setEnabled( false );
+}
+
+void MenuFactory::addItems(
+    Q3PopupMenu& menu,
+    const Item items[],
+    const int nofItems )
+{
+    for ( int i = 0; i < nofItems; i++ )
+    {
+      const int itemId = menu.insertItem(
+            TR(items[i].name),
+            items[i].id );
+      menu.setWhatsThis( itemId, TR(items[i].whatsThis ) );
+    }
 }

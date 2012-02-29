@@ -28,13 +28,25 @@
 
 #include <QMenu>
 #include <QMenuItem>
+#include <Q3PopupMenu>
 
 class MenuFactory
 {
 public:
+    typedef struct _Item {
+        const char* const name;
+        const int id;
+        const char* const whatsThis;
+    } Item;
+
     static void createTitle(
         QMenu& menu,
         const QString& title );
+    static void addItems(
+        Q3PopupMenu& menu,
+        const Item items[],
+        const int nofItems );
+
 };
 
 #endif // MENUFACTORY_H
