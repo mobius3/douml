@@ -86,7 +86,7 @@
 #include "UmlGlobal.h"
 #include "UmlPixmap.h"
 #include "DialogUtil.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Shortcut.h"
 #include "myio.h"
 #include "strutil.h"
@@ -1326,7 +1326,7 @@ void UmlWindow::print() {
       
       Q3PopupMenu m(0);
   
-      m.insertItem(new MenuTitle(TR("Choose"), m.font()),  -1);
+      MenuFactory::createTitle(m, TR("Choose"));
       m.insertSeparator();
       m.insertItem(TR("Print on 1 page"), 1);
       m.insertItem(TR("Print on 4 pages"), 2);

@@ -44,7 +44,7 @@
 #include "AssocContainCanvas.h"
 #include "UmlCanvas.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "BrowserDiagram.h"
 #include "DiagramView.h"
 #include "translate.h"
@@ -178,7 +178,7 @@ void ArrowPointCanvas::open() {
 void ArrowPointCanvas::menu(const QPoint&) {
   Q3PopupMenu m;
   
-  m.insertItem(new MenuTitle(TR("Line break"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Line break"));
   m.insertSeparator();
   m.insertItem(TR("Remove from diagram"), 0);
   m.setItemEnabled(0, lines.at(0)->may_join());

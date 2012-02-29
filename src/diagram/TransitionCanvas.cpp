@@ -45,7 +45,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "DialogUtil.h"
@@ -216,8 +216,7 @@ void TransitionCanvas::menu(const QPoint &) {
     Q3PopupMenu geo(0);
     Q3PopupMenu toolm(0);
     
-    m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()),
-		 -1);
+    MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
     m.insertSeparator();
     m.insertItem("Edit", 0);
     m.insertSeparator();

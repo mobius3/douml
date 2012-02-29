@@ -42,7 +42,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "ToolCom.h"
 #include "strutil.h"
@@ -177,7 +177,7 @@ void SdContinuationCanvas::modified() {
 void SdContinuationCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Continuation"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Continuation"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
