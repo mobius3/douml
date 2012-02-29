@@ -49,7 +49,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "ClassListDialog.h"
 #include "GenerationSettings.h"
 #include "ReferenceDialog.h"
@@ -216,7 +216,7 @@ static void make_clsubm(Q3PopupMenu & m, Q3PopupMenu & sm,
       m.insertSeparator();
       need_sep = FALSE;
     }
-    sm.insertItem(new MenuTitle(TR("Choose class"), m.font()), -1);
+    MenuFactory::createTitle(sm, TR("Choose class"));
     sm.insertSeparator();
 
     for (it = l.begin(), n = bias+1; it != l.end(); ++it)
@@ -264,7 +264,7 @@ void BrowserComponent::menu() {
   Q3PopupMenu rzsubm(0);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_edited) {
@@ -477,8 +477,7 @@ void BrowserComponent::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	// have choice
 	Q3PopupMenu m(0);
   
-	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
-				   m.font()), -1);
+        MenuFactory::createTitle(m, TR("move ") + bn->get_name());
 	m.insertSeparator();
 	m.insertItem(TR("In ") + QString(get_name()), 1);
 	m.insertItem(TR("After ") + QString(get_name()), 2);

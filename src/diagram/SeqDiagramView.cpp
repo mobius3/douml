@@ -58,7 +58,7 @@
 #include "UmlPixmap.h"
 #include "UmlDrag.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "translate.h"
 
@@ -70,7 +70,7 @@ SeqDiagramView::SeqDiagramView(QWidget * parent, UmlCanvas * canvas, int id)
 void SeqDiagramView::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Sequence diagram menu"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Sequence diagram menu"));
   
   if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
     BrowserSeqDiagram * sd = (BrowserSeqDiagram *) window()->browser_diagram();

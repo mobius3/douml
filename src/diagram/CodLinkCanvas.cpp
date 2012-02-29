@@ -44,7 +44,7 @@
 #include "CodAddMsgDialog.h"
 #include "CodEditMsgDialog.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 CodLinkCanvas::CodLinkCanvas(UmlCanvas * canvas, DiagramItem * b,
@@ -109,7 +109,7 @@ void CodLinkCanvas::menu(const QPoint&) {
   Q3PopupMenu m;
   Q3PopupMenu geo;
   
-  m.insertItem(new MenuTitle(TR("Link"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Link"));
   m.insertSeparator();
   m.insertItem(TR("add messages to ") + from->get_full_name(), 1);
   m.insertItem(TR("add messages to ") + to->get_full_name(), 2);

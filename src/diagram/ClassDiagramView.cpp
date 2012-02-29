@@ -54,7 +54,7 @@
 #include "UmlPixmap.h"
 #include "UmlDrag.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "BrowserView.h"
 #include "RelatedElementsDialog.h"
 #include "translate.h"
@@ -129,7 +129,7 @@ static void get_drawn(DiagramItemList & items,
 void ClassDiagramView::menu(const QPoint& p) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Class diagram menu"), m.font()),  -1);
+  MenuFactory::createTitle(m, TR("Class diagram menu"));
 
   if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
     BrowserNode * bn = BrowserView::selected_item();

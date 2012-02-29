@@ -35,7 +35,7 @@
 
 #include "FragmentSeparatorCanvas.h"
 #include "FragmentCanvas.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "myio.h"
 #include "translate.h"
 
@@ -166,7 +166,7 @@ void FragmentSeparatorCanvas::open() {
 void FragmentSeparatorCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Separator"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Separator"));
   m.insertSeparator();
   m.insertItem(TR("Remove from diagram"), 1);
   

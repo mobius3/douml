@@ -50,7 +50,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "translate.h"
@@ -410,7 +410,7 @@ void ObjectLinkCanvas::menu(const QPoint & lpos) {
   Q3PopupMenu geo(0);
   //QPopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(TR("Object link"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Object link"));
   m.insertSeparator();
   m.insertItem(TR("Edit"), 0);
   m.insertSeparator();

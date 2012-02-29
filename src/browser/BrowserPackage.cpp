@@ -86,7 +86,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "UmlWindow.h"
 #include "ReferenceDialog.h"
 #include "UmlGlobal.h"
@@ -526,7 +526,7 @@ void BrowserPackage::menu() {
   Q3PopupMenu importm(0);
   bool isprofile = (strcmp(def->get_stereotype(), "profile") == 0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_read_only && (edition_number == 0)) {
@@ -1871,8 +1871,7 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	// have choice
 	Q3PopupMenu m(0);
   
-	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
-				   m.font()), -1);
+        MenuFactory::createTitle(m, TR("move ") + bn->get_name());
 	m.insertSeparator();
 	if (!is_read_only)
 	  m.insertItem(TR("In ") + QString(get_name()), 1);
@@ -2302,7 +2301,7 @@ void BrowserPackage::save_all(bool modified_only)
 	
 	fp.close();
 	
-	if (fp.status() == IO_Ok) {
+        if (static_cast<uint>( fp.status() ) == IO_Ok) {
 	  pack->is_imported = pack->is_modified = FALSE;
 	  
 	  // for saveAs
