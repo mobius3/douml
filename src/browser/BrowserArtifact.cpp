@@ -1325,38 +1325,3 @@ BrowserNode * BrowserArtifact::get_it(const char * k, int id)
 {
   return (!strcmp(k, "artifact_ref")) ? all[id] : 0;
 }
-
-
-
-#include "KeyValueData.h"
-#include <QMultiHash>
-QMultiHash<QString, QString> BrowserArtifact::GetAllUserKVPairs()
-{
-    QMultiHash<QString, QString> result;
-
-    IdIterator<BrowserArtifact> it(all);
-
-    while (it.current())
-    {
-        BrowserArtifact* current = &(*it);
-        KeyValueData* endofKVArray = current->keyvalues + current->nkeyvalues;
-        KeyValueData* kvIterator = current->keyvalues;
-        while(kvIterator != endofKVArray)
-        {
-            QString key = MyStr(kvIterator->get_key()).operator QString();
-            QString value = MyStr(kvIterator->get_value()).operator QString();
-            if(!result.contains(key,value))
-            {
-                result.insert(key,value);
-            }
-            ++kvIterator;
-        }
-        ++it;
-    }
-    return result;
-}
-
-QStringList BrowserArtifact::GetAllUserKeys()
-{
-    return GetAllUserKVPairs().keys();
-}
