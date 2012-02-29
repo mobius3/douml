@@ -40,10 +40,12 @@
 #include "BrowserPackage.h"
 #include "Shortcut.h"
 //#include "strutil.h"
-#include "DialogUtil.h"
+#include "DialogUtil.h"b
 #include "mu.h"
 #include "err.h"
 #include "EnvDialog.h"
+#include "../Logging/QsLogDest.h"
+#include "../Logging/QsLog.h"
 
 
 
@@ -58,6 +60,17 @@ int main(int argc, char **argv)
 {
   ExitOnError = FALSE;
 
+
+
+  QsLogging::Logger& logger = QsLogging::Logger::instance();
+  logger.setLoggingLevel(QsLogging::TraceLevel);
+
+  const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString("log") + QString(".txt")));
+  QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath) );
+  QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
+  logger.addDestination(debugDestination.get());
+  logger.addDestination(fileDestination.get());
+
   theApp = new QApplication (argc, argv);
 
   UmlDesktop::init();
@@ -67,22 +80,6 @@ int main(int argc, char **argv)
   QString s = QDir::home().absFilePath(".doumlrc");
   FILE * fp = fopen((const char *) s, "r");
   bool conv_env = (fp == 0);
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   
   if (conv_env)

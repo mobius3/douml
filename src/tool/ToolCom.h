@@ -42,8 +42,8 @@ class QTimer;
 
 class ToolCom  :public QObject {
   Q_OBJECT
-    
-  protected:
+
+    protected:
     static Q3PtrList<ToolCom> used;
     static Q3PtrList<ToolCom> unused;
     static int exitvalue;
@@ -66,10 +66,11 @@ class ToolCom  :public QObject {
     char * buffer_out;
     char * p_buffer_out;
     unsigned buffer_out_size;
-    bool safeToContinue;
     QProcess * externalProcess;
     ToolCom();
-    
+
+
+    void DisconnectExternalProcess();
     void check_size_out(unsigned n);
     const char * read_buffer();
 
@@ -80,6 +81,7 @@ class ToolCom  :public QObject {
     
   public:
     unsigned api_format() const { return api_version; }
+    virtual ~ToolCom();
   
     static int run(const char * cmd, BrowserNode *,
 		   bool exit = FALSE, bool clr = TRUE,

@@ -78,8 +78,8 @@ template <class X> class IdDict {
     bool old_diagram;
     
   public:
-    IdDict(const char * who) { idmax = 0; memo_idmax_loc(idmax, who); }
-    IdDict(int sz, const char * who) { idmax = 0; dict[0].resize(sz); memo_idmax_loc(idmax, who); }
+    IdDict(const char * who) {old_diagram = false; idmax = 0; memo_idmax_loc(idmax, who); }
+    IdDict(int sz, const char * who) {old_diagram = false; idmax = 0; dict[0].resize(sz); memo_idmax_loc(idmax, who); }
   
     X * operator[](int k) {
       return dict[(old_diagram || in_import()) ? 1 : 0][k];

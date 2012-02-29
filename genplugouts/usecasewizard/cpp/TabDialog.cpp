@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <q3vbox.h>
 #include <qlabel.h>
-#include <q3multilineedit.h>
+#include <Q3TextEdit.h>
 #include <q3groupbox.h> 
 #include <qtextcodec.h>
 #include <qdir.h>
@@ -22,7 +22,7 @@
 const struct {
   const char * lbl;
   const char * key;
-  Q3MultiLineEdit * (TabDialog::* a);
+  Q3TextEdit * (TabDialog::* a);
 } Tabs[] = {
   { "The summary of the use case '",
     "Summary", &TabDialog::summary },
@@ -119,7 +119,7 @@ TabDialog::TabDialog(UmlUseCase * u) : Q3TabDialog(0, ""), uc(u) {
       (new QLabel(Q3CString(Tabs[i].lbl) + u->name() + "'",
 		  new Q3GroupBox(1, Qt::Horizontal, vbox)))
 	->setAlignment(Qt::AlignCenter);
-      this->*(Tabs[i]).a = new Q3MultiLineEdit(vbox);
+      this->*(Tabs[i]).a = new Q3TextEdit(vbox);
       
       Q3CString v;
       

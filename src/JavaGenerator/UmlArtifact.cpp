@@ -249,7 +249,8 @@ void UmlArtifact::imported(const Q3CString & s) {
   if (imports == 0)
     // init it
     (void) is_imported("", "");
-  
+ 	if(imports == 0)
+		Q_ASSERT_X(0, "Null Pointer Dereference", "Javagenerator/UmlArtifact.cpp");
   imports->insert(s, this);
 }
 
@@ -257,7 +258,8 @@ bool UmlArtifact::is_imported(const Q3CString & s) {
   if (imports == 0)
     // init it
     (void) is_imported("", "");
-
+ 	if(imports == 0)
+		Q_ASSERT_X(0, "Null Pointer Dereference", "Javagenerator/UmlArtifact.cpp");
   return (imports->find(s) != 0);
 }
 

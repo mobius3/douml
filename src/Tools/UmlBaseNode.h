@@ -37,7 +37,7 @@ class UmlBaseNode : public UmlItem {
 
   protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseNode(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseNode(void * id, const Q3CString & n) : UmlItem(id, n) {_assoc_diagram=0;}
 
     //internal, do NOT use it
     

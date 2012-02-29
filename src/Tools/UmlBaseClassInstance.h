@@ -86,7 +86,7 @@ class UmlBaseClassInstance : public UmlItem {
     virtual void read_uml_();
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseClassInstance(void * id, const Q3CString & s) : UmlItem(id, s) {
+     UmlBaseClassInstance(void * id, const Q3CString & s) : UmlItem(id, s) { _type = 0; _assoc_diagram = 0;
     }
 
 };

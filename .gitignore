@@ -2,6 +2,7 @@
 *.kdev
 *~
 *.pro.user
+<<<<<<< HEAD
 *.o
 *moc_*
 genplugouts/cpp_utilities/Makefile
@@ -61,3 +62,6 @@ src/PythonGenerator/Makefile
 src/PythonGenerator/python_generator
 src/RoundtripBody/Makefile
 src/RoundtripBody/roundtrip_body
+*.cppcheck
+*.autosave
+*.blameresult

@@ -28,7 +28,7 @@
 
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <q3multilineedit.h>
+#include <Q3TextEdit.h>
 #include <qmessagebox.h>
 //Added by qt3to4:
 #include <Q3PopupMenu>
@@ -56,9 +56,12 @@ class SmallPushButton : public QPushButton {
 };
 
 // redefine text() to remove non latin1 characters
-class MultiLineEdit : public Q3MultiLineEdit {
+class MultiLineEdit : public Q3TextEdit {
   public:
-    MultiLineEdit(QWidget * w, const char * name=0) : Q3MultiLineEdit(w, name) { };
+    MultiLineEdit(QWidget * w, const char * name=0) : Q3TextEdit(w, name)
+    {
+        Q3TextEdit::setTextFormat(Qt::PlainText);
+    }
     
     virtual void setText(const QString &);
     virtual QString text() const;
@@ -67,11 +70,11 @@ class MultiLineEdit : public Q3MultiLineEdit {
     
     void setTheText(const QString & s) {
       // no toUnicode
-      Q3MultiLineEdit::setText(s);
+      Q3TextEdit::setText(s);
     }
     QString theText() const {
       // no fromUnicode
-      return Q3MultiLineEdit::text();
+      return Q3TextEdit::text();
     }
 };
 

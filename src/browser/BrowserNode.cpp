@@ -74,6 +74,7 @@
 #include "BrowserSearchDialog.h"
 #include "ReferenceDialog.h"
 #include "translate.h"
+#include "../Logging/QsLog.h"
 
 
 
@@ -1197,8 +1198,13 @@ bool BrowserNode::api_compatible(unsigned) const {
 bool BrowserNode::tool_cmd(ToolCom * com, const char * args) {
   switch ((unsigned char) args[-1]) {
   case applyCmd:
-    com->write_unsigned(ToolCom::run(args, this, FALSE, FALSE));
-    break;
+  {
+      QLOG_FATAL() << Q_FUNC_INFO << "If this got called then we have a logic flaw going on and BrowserNode needs to have Q_OBJECT in it to properly catch ToolCom::Run execution result";
+      Q_ASSERT_X(0, "applyCmd happened", "very bad");
+      int runResult = ToolCom::run(args, this, FALSE, FALSE);
+      com->write_unsigned(runResult);
+      break;
+  }
   case createCmd:
     // invalid creation
     com->write_id(0);
