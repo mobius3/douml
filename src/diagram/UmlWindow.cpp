@@ -383,8 +383,6 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
   spl1->moveToFirst(browser);
   spl2->moveToFirst(ws);
   
-  //spl1->hide();
-  //spl2->hide();
 
   int w = (UmlDesktop::width() * 15)/16;
   

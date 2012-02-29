@@ -66,7 +66,6 @@ class ToolCom  :public QObject {
     char * buffer_out;
     char * p_buffer_out;
     unsigned buffer_out_size;
-    bool safeToContinue;
     QProcess * externalProcess;
     ToolCom();
     

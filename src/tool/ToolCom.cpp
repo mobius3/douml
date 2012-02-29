@@ -186,32 +186,6 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     arguments.append(commandList << QString::number(port));
     com->externalProcess->start(command, arguments);
     com->start = TRUE;
-
-    while(!com->safeToContinue)
-    {
-        QCoreApplication::processEvents();
-    }
-
-    disconnect(com->externalProcess, SIGNAL(finished(int)), com, SLOT(processFinished()));
-    com->externalProcess->kill();
-    delete com->externalProcess;
-    com->externalProcess = 0;
-
-    if (errno != 0) {
-        msg_critical("Bouml",
-                     "error while executing '" + QString(cmd) +"'\n"
-                     "perhaps you must specify its absolute path"
-                     "or set the environment variable PATH ?");
-        com->close();
-        if (exit) {
-            BrowserView::remove_temporary_files();
-            set_user_id(-1);    // delete lock
-
-            THROW_ERROR 0;
-        }
-        else
-            return -1;
-    }
     return com->id;
 }
 
@@ -919,5 +893,25 @@ void ToolCom::data_received(Socket * who) {
 
 void ToolCom::processFinished()
 {
-	safeToContinue = true;
+
+    disconnect(com->externalProcess, SIGNAL(finished(int)), com, SLOT(processFinished()));
+    com->externalProcess->kill();
+    delete com->externalProcess;
+    com->externalProcess = 0;
+
+    if (errno != 0) {
+        msg_critical("Bouml",
+                     "error while executing '" + QString(cmd) +"'\n"
+                     "perhaps you must specify its absolute path"
+                     "or set the environment variable PATH ?");
+        com->close();
+        if (exit) {
+            BrowserView::remove_temporary_files();
+            set_user_id(-1);    // delete lock
+
+            THROW_ERROR 0;
+        }
+        else
+            return -1;
+    }
 }
