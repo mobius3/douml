@@ -23,8 +23,8 @@
 // OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "../../include/Logging/QsLogDest.h"
-#include "../../include/Logging/QsDebugOutput.h"
+#include "QsLogDest.h"
+#include "QsDebugOutput.h"
 #include <QFile>
 #include <QTextStream>
 #include <QString>

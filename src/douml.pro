@@ -456,7 +456,6 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  misc/UmlDrag.cpp \
 		  misc/UmlGlobal.cpp \
 		  misc/GenerationSettings.cpp \
-		  misc/main.cpp \
 		  misc/myio.cpp \
 		  misc/mu.cpp \
 		  misc/Labeled.cpp \
@@ -471,8 +470,9 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  xpm/UmlPixmap.cpp \
     Logging/QsLogDest.cpp \
     Logging/QsLog.cpp \
-    Logging/QsDebugOutput.cpp
-INTERFACES	= 
+    Logging/QsDebugOutput.cpp \
+    main.cpp
+
 TARGET		= douml
 DEFINES         = BooL=bool DEBUGCOM
 #The following line was inserted by qt3to4

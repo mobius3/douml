@@ -74,6 +74,7 @@
 #include "BrowserSearchDialog.h"
 #include "ReferenceDialog.h"
 #include "translate.h"
+#include "../Logging/QsLog.h"
 
 
 

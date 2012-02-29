@@ -40,12 +40,12 @@
 #include "BrowserPackage.h"
 #include "Shortcut.h"
 //#include "strutil.h"
-#include "DialogUtil.h"
+#include "DialogUtil.h"b
 #include "mu.h"
 #include "err.h"
 #include "EnvDialog.h"
-#include "Logging/QsLogDest.h"
-#include "Logging/QsLog.h"
+#include "../Logging/QsLogDest.h"
+#include "../Logging/QsLog.h"
 
 
 
@@ -80,22 +80,6 @@ int main(int argc, char **argv)
   QString s = QDir::home().absFilePath(".doumlrc");
   FILE * fp = fopen((const char *) s, "r");
   bool conv_env = (fp == 0);
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   
   if (conv_env)
