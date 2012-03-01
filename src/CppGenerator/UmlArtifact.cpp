@@ -24,10 +24,10 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -148,9 +148,14 @@ void UmlArtifact::generate() {
 
         if (!hdef.isEmpty())
         {
-            QSharedPointer<QByteArray> file(new QByteArray);
-            //      /QLOG_INFO() << "openign file for writing: " <<
-            QTextOStream f_h(file.data()); //[lgfreitas] Now QTextOStream receives a pointer to a byte array...
+
+
+            //headerFile->append("Test DAta");
+
+            QLOG_INFO() << "openign file for writing: ";
+            //QTextStream f_h(file.data()); //[lgfreitas] Now QTextStream receives a pointer to a byte array...
+            QSharedPointer<QByteArray> headerFile(new QByteArray());
+            QTextStream f_h(headerFile.data(), QIODevice::WriteOnly);
             const char * p = hdef;
             const char * pp = 0;
 
@@ -271,11 +276,11 @@ void UmlArtifact::generate() {
             }
 
             f_h << '\000';
+            f_h.flush();
 
-
-            if (must_be_saved(h_path, *file.data()))
+            if (must_be_saved(h_path, headerFile->data()))
             {
-                QLOG_INFO() << "this is essentially what goes to the file: " << file->constData();
+                QLOG_INFO() << "this is essentially what goes to the header file: " << headerFile->size();
                 write_trace_header();
 
                 FILE * fp_h;
@@ -289,8 +294,8 @@ void UmlArtifact::generate() {
                 }
                 else
                 {
-                    QLOG_INFO() << "this is essentially what goes to the file: " << file->constData();
-                    fputs((const char *) file.data(), fp_h);
+                    QLOG_INFO() << "this is essentially what goes to the file: " << headerFile->constData();
+                    fputs((const char *) headerFile->data(), fp_h);
                     fclose(fp_h);
                 }
             }
@@ -308,9 +313,10 @@ void UmlArtifact::generate() {
 
         // generate source file
 
-        if (!srcdef.isEmpty()) {
-            QByteArray file;
-            QTextOStream f_src(&file);
+        if (!srcdef.isEmpty())
+        {
+            QSharedPointer<QByteArray> file(new QByteArray());
+            QTextStream f_src(file.data(), QIODevice::WriteOnly);
             const char * p = srcdef;
             const char * pp = 0;
 
@@ -380,8 +386,10 @@ void UmlArtifact::generate() {
             }
 
             f_src << '\000';
+            f_src.flush();
 
-            if (must_be_saved(src_path, file)) {
+            if (must_be_saved(src_path, file->data()))
+            {
                 write_trace_header();
 
                 FILE * fp_src;
@@ -395,7 +403,7 @@ void UmlArtifact::generate() {
                     incr_error();
                 }
                 else {
-                    fputs((const char *) file, fp_src);
+                    fputs((const char *) file->data(), fp_src);
                     fclose(fp_src);
                 }
             }

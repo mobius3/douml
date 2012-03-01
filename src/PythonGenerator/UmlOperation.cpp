@@ -25,13 +25,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 #include <qfile.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlOperation.h"
 #include "UmlSettings.h"
@@ -48,7 +48,7 @@ const char * BodyPostfix = "## Bouml preserved body end ";
 const int BodyPrefixLength = 30;
 const int BodyPostfixLength = 28;
 
-void UmlOperation::generate_imports(QTextOStream & f, Q3CString & made) {
+void UmlOperation::generate_imports(QTextStream & f, Q3CString & made) {
   Q3CString s = pythonDecl();
   
   if (!s.isEmpty()) {
@@ -88,7 +88,7 @@ void UmlOperation::generate_imports(QTextOStream & f, Q3CString & made) {
 }
 
 static bool generate_type(const Q3ValueList<UmlParameter> & params,
-			  unsigned rank, QTextOStream & f, bool in_params)
+			  unsigned rank, QTextStream & f, bool in_params)
 {
   if (rank >= params.count())
     return FALSE;
@@ -103,7 +103,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
 }
 
 static bool generate_var(const Q3ValueList<UmlParameter> & params, 
-			 unsigned rank, QTextOStream & f)
+			 unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -113,7 +113,7 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
 }
 
 static bool generate_init(const Q3ValueList<UmlParameter> & params, 
-			  unsigned rank, QTextOStream & f)
+			  unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -163,7 +163,7 @@ Q3CString UmlOperation::compute_name() {
 }
 
 // p point to ${body}
-const char * UmlOperation::generate_body(QTextOStream & f,
+const char * UmlOperation::generate_body(QTextStream & f,
 					 Q3CString indent,
 					 BooL & indent_needed,
 					 const char * p)
@@ -237,7 +237,7 @@ const char * UmlOperation::generate_body(QTextOStream & f,
 }
 
 
-static void manage_decorators(QTextOStream & f, const Q3CString & decorators,
+static void manage_decorators(QTextStream & f, const Q3CString & decorators,
 			      QString indent, BooL & indent_needed)
 {
   if (! decorators.isEmpty()) {
@@ -263,7 +263,7 @@ static void manage_decorators(QTextOStream & f, const Q3CString & decorators,
   }
 }
 
-void UmlOperation::generate(QTextOStream & f, const Q3CString &,
+void UmlOperation::generate(QTextStream & f, const Q3CString &,
 			    Q3CString indent, BooL & indent_needed,
 			    int &, const Q3CString &) {
   const char * p = pythonDecl();

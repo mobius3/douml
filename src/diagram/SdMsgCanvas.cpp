@@ -31,7 +31,7 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PointArray>
 
 #include "SdMsgCanvas.h"
@@ -437,7 +437,7 @@ bool SdMsgCanvas::copyable() const {
   return start->selected() && SdMsgBaseCanvas::copyable();
 }
 
-void SdMsgCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdMsgCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "msg_ref " << get_ident()
       << " // " << get_msg(FALSE);

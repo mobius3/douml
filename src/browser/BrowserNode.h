@@ -26,7 +26,7 @@
 #ifndef BROWSER_NODE_H
 #define BROWSER_NODE_H
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 #include <qlist.h> 
 #include <q3listview.h> 
 #include <qstringlist.h>
@@ -184,7 +184,7 @@ class BrowserNode : public Q3ListViewItem,
     virtual BasicData * get_data() const = 0;
     virtual QString drag_key() const;
     virtual QString drag_postfix() const;
-    virtual void save(Q3TextStream &, bool ref, QString & warning) = 0;
+    virtual void save(QTextStream &, bool ref, QString & warning) = 0;
     virtual void package_modified();
     virtual void get_classdiagramsettings(ClassDiagramSettings &) const;
     virtual void get_usecasediagramsettings(UseCaseDiagramSettings &) const;
@@ -215,13 +215,13 @@ class BrowserNode : public Q3ListViewItem,
     virtual AType class_association() const;
     virtual const char * constraint() const;
     
-    bool save_open_list(Q3TextStream &);
-    void save(Q3TextStream &) const;
+    bool save_open_list(QTextStream &);
+    void save(QTextStream &) const;
     static void save_progress_closed();
     virtual void init_save_counter();
     void read(char * &, char * & k, int id);
     static BrowserNode * read_any_ref(char * &, char *);
-    static void save_stereotypes(Q3TextStream & st, 
+    static void save_stereotypes(QTextStream & st, 
 				 QStringList relations_stereotypes[]);
     static void read_stereotypes(char * &,
 				 QStringList relations_stereotypes[]);

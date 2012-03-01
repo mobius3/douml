@@ -1,7 +1,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 // *************************************************************************
 //
@@ -81,7 +81,7 @@ class BrowserPseudoState : public BrowserNode, public Labeled<BrowserPseudoState
     virtual BasicData * get_data() const;
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserPseudoState * read(char * &, char *, BrowserNode *);
     static BrowserPseudoState * read_ref(char * & st);
     static BrowserNode * get_it(const char * k, int id);
@@ -104,7 +104,7 @@ class BrowserPseudoState : public BrowserNode, public Labeled<BrowserPseudoState
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;

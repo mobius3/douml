@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -39,7 +39,7 @@
 #include "CppSettings.h"
 
 void UmlClassMember::generate_visibility(aVisibility & current_visibility,
-					 QTextOStream & f_h, bool ahead,
+					 QTextStream & f_h, bool ahead,
 					 const Q3CString & indent) {
   aVisibility v = (cppVisibility() == DefaultVisibility)
     ? visibility() : cppVisibility();
@@ -272,7 +272,7 @@ bool UmlClassMember::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 }
 
 // return TRUE if stop on comment/description
-bool UmlClassMember::insert_template(const char *& p, QTextOStream & fs,
+bool UmlClassMember::insert_template(const char *& p, QTextStream & fs,
 				     const Q3CString & indent,
 				     const Q3CString & templ)
 {

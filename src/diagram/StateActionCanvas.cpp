@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PointArray>
 #include <QPixmap>
 
@@ -693,7 +693,7 @@ QString StateActionCanvas::may_connect(UmlCode & l, const DiagramItem * dest) co
   }
 }
 
-void StateActionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void StateActionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "stateactioncanvas_ref " << get_ident();
   }

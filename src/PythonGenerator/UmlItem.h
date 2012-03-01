@@ -29,9 +29,9 @@
 #include "UmlBaseItem.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
-class QTextOStream;
+class QTextStream;
 class UmlPackage;
 
 class UmlItem : public UmlBaseItem {
@@ -47,7 +47,7 @@ class UmlItem : public UmlBaseItem {
     void manage_description(const char *& p, const char *& pp);  
     void manage_docstring(const char *& p, const char *& pp, BooL & indent_needed,
 			  Q3CString & indent, Q3CString & saved_indent);  
-    void manage_alias(const char *& p, QTextOStream & ts,
+    void manage_alias(const char *& p, QTextStream & ts,
 		      Q3CString indent, BooL & indent_needed);
 };
 

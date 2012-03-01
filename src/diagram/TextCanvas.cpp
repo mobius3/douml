@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "TextCanvas.h"
@@ -298,7 +298,7 @@ void TextCanvas::resize(const QSize & sz, bool w, bool h) {
   DiagramCanvas::resize(sz, w, h, min, min);
 }
 
-void TextCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void TextCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref)
     st << "textcanvas_ref " << get_ident();
   else {

@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -980,7 +980,7 @@ const QStringList & BrowserClassView::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserClassView::save_stereotypes(Q3TextStream & st)
+void BrowserClassView::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "classview_stereotypes ";
@@ -995,7 +995,7 @@ void BrowserClassView::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserClassView::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserClassView::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classview_ref " << get_ident() << " // " << get_name();
   else {

@@ -28,7 +28,7 @@
 
 #include "ArrowCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class BrowserClass;
 class RelationData;
@@ -78,7 +78,7 @@ class RelationCanvas : public ArrowCanvas {
     virtual ArrowPointCanvas * brk(const QPoint &);
     virtual ArrowCanvas * join(ArrowCanvas * other, ArrowPointCanvas * ap);
     
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static RelationCanvas * read(char * & st, UmlCanvas * canvas, char *);
     
     BasicData * get_data() const;

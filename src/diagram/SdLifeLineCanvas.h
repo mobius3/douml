@@ -29,7 +29,7 @@
 #include "DiagramCanvas.h"
 #include "SdDurationSupport.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #define LIFE_LINE_TOPOFFSET 41
 
@@ -89,7 +89,7 @@ class SdLifeLineCanvas : public DiagramCanvas, public SdDurationSupport {
     virtual bool copyable() const;
     virtual void apply_shortcut(QString s);
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     

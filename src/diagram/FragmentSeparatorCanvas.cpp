@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "FragmentSeparatorCanvas.h"
 #include "FragmentCanvas.h"
@@ -176,7 +176,7 @@ void FragmentSeparatorCanvas::menu(const QPoint&) {
   }
 }
 
-void FragmentSeparatorCanvas::save(Q3TextStream & st, bool, QString &) const {
+void FragmentSeparatorCanvas::save(QTextStream & st, bool, QString &) const {
   nl_indent(st);
   st << "separator " << (int) (vpos * 10000);
 }

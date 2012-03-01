@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "StereotypePropertiesCanvas.h"
 #include "Settings.h"
@@ -256,7 +256,7 @@ void StereotypePropertiesCanvas::update() {
   di->check_stereotypeproperties();
 }
 
-void StereotypePropertiesCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void StereotypePropertiesCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "stereotypeproperties_ref " << get_ident();
   }

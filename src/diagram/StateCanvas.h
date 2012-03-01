@@ -32,7 +32,7 @@
 
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3MemArray>
 #include "DiagramCanvas.h"
 #include "MultipleDependency.h"
@@ -103,7 +103,7 @@ class StateCanvas : public QObject, public DiagramCanvas, public MultipleDepende
     
     virtual void apply_shortcut(QString s);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static StateCanvas * read(char * &, UmlCanvas *, char *);
     virtual void post_loaded();
 

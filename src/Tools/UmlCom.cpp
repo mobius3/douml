@@ -169,6 +169,7 @@ void UmlCom::read_buffer(unsigned int len)
     
 #ifdef TRACE
     QLOG_INFO() <<"UmlCom a lu " << nread << '\n';
+    QLOG_INFO() << "Data read :" << QString::fromLatin1(buffer_in, nread);
 #endif
     if ((remainder -= nread) == 0)
       break;

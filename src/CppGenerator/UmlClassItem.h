@@ -29,12 +29,12 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3PtrList>
 
 #include "UmlBaseClassItem.h"
 
-class QTextOStream;
+class QTextStream;
 class UmlTypeSpec;
 class CppRefType;
 
@@ -49,12 +49,12 @@ class UmlClassItem : public UmlBaseClassItem {
 				    bool all_in_h) = 0;
 				     
     virtual void generate_decl(aVisibility & current_visibility,
-			       QTextOStream & f_h,
+			       QTextStream & f_h,
 			       const Q3CString & cl_stereotype,
 			       Q3CString indent,
 			       BooL & first, bool last) = 0;
     
-    virtual void generate_def(QTextOStream & f, Q3CString indent, bool h,
+    virtual void generate_def(QTextStream & f, Q3CString indent, bool h,
 			      Q3CString templates, Q3CString cl_names,
 			      Q3CString templates_tmplop, 
 			      Q3CString cl_names_tmplop) = 0;

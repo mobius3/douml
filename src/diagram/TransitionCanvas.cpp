@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <math.h>
 #include <q3popupmenu.h>
 
@@ -674,7 +674,7 @@ bool TransitionCanvas::represents(BrowserNode * bn) {
 }
 
 //
-void TransitionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void TransitionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "transitioncanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {

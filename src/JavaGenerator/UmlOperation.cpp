@@ -25,13 +25,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 #include <qfile.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlOperation.h"
 #include "UmlSettings.h"
@@ -49,7 +49,7 @@ const int BodyPrefixLength = 30;
 const int BodyPostfixLength = 28;
 
 static bool generate_type(const Q3ValueList<UmlParameter> & params,
-			  unsigned rank, QTextOStream & f)
+			  unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -59,7 +59,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
 }
 
 static bool generate_var(const Q3ValueList<UmlParameter> & params, 
-			 unsigned rank, QTextOStream & f)
+			 unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -109,7 +109,7 @@ Q3CString UmlOperation::compute_name() {
 // p0 is the beginning of the operation's def
 // p point to ${body}
 // indent is the one of the operation
-const char * UmlOperation::generate_body(QTextOStream & f,
+const char * UmlOperation::generate_body(QTextStream & f,
 					 Q3CString indent,
 					 const char * p)
 {
@@ -192,7 +192,7 @@ static const char * bypass_body(const char * p)
   return p;
 }
 
-void UmlOperation::generate(QTextOStream & f, const Q3CString & cl_stereotype,
+void UmlOperation::generate(QTextStream & f, const Q3CString & cl_stereotype,
 			    Q3CString indent) {
   if (!javaDecl().isEmpty()) {
     const char * p = javaDecl();
@@ -378,18 +378,18 @@ void UmlOperation::generate(QTextOStream & f, const Q3CString & cl_stereotype,
   }
 }
 
-void UmlOperation::generate_enum_pattern_item(QTextOStream &, int &,
+void UmlOperation::generate_enum_pattern_item(QTextStream &, int &,
 					      const Q3CString &, Q3CString) {
   write_trace_header();
   UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>enum</i> cannot have operation</b></font><br>");
   incr_warning();
 }
 
-void UmlOperation::generate_enum_pattern_case(QTextOStream &, Q3CString) {
+void UmlOperation::generate_enum_pattern_case(QTextStream &, Q3CString) {
   // error already signaled
 }
 
-void UmlOperation::generate_enum_member(QTextOStream & f, Q3CString indent) {
+void UmlOperation::generate_enum_member(QTextStream & f, Q3CString indent) {
   generate(f, "enum", indent);
 }
 

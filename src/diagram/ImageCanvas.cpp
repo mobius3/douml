@@ -31,7 +31,7 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 
 #include "ImageCanvas.h"
@@ -232,7 +232,7 @@ QString ImageCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
   return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
 }
 
-void ImageCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void ImageCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "image_ref " << get_ident();
   }

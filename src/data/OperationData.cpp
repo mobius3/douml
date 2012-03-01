@@ -30,7 +30,7 @@
 #include <qcursor.h>
 #include <qfile.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "OperationData.h"
@@ -2858,7 +2858,7 @@ void OperationData::import(BrowserClass * cl, int id)
   delete [] s;  
 }
 
-void OperationData::save(Q3TextStream & st, bool ref, QString & warning) const {
+void OperationData::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "operation_ref " << get_ident() << " // ";
     save_string(definition(TRUE, FALSE), st);

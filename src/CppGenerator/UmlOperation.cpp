@@ -25,13 +25,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 #include <qfile.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
-#include <QTextOStream>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -280,7 +280,7 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 }
 
 static bool generate_type(const Q3ValueList<UmlParameter> & params,
-			  unsigned rank, QTextOStream & f_h)
+			  unsigned rank, QTextStream & f_h)
 {
   if (rank >= params.count())
     return FALSE;
@@ -291,7 +291,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
 }
 
 static bool generate_var(const Q3ValueList<UmlParameter> & params, 
-			 unsigned rank, QTextOStream & f_h)
+			 unsigned rank, QTextStream & f_h)
 {
   if (rank >= params.count())
     return FALSE;
@@ -301,7 +301,7 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
 }
 
 static bool generate_init(const Q3ValueList<UmlParameter> & params, 
-			  unsigned rank, QTextOStream & f_h)
+			  unsigned rank, QTextStream & f_h)
 {
   if (rank >= params.count())
     return FALSE;
@@ -352,7 +352,7 @@ Q3CString UmlOperation::compute_name() {
     return name();
 }
 
-void UmlOperation::generate_decl(aVisibility & current_visibility, QTextOStream & f_h,
+void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream & f_h,
 				 const Q3CString & cl_stereotype, Q3CString indent,
 				 BooL & first, bool) {
   if (!cppDecl().isEmpty()) {
@@ -509,7 +509,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextOStream 
   }
 }
 
-void UmlOperation::generate_throw(QTextOStream & f) {
+void UmlOperation::generate_throw(QTextStream & f) {
   const Q3ValueList<UmlTypeSpec> exc = exceptions();
 	
   if (!exc.isEmpty()) {
@@ -529,7 +529,7 @@ void UmlOperation::generate_throw(QTextOStream & f) {
 
 // p point to {space/tab}*${body}
 // indent is the one of the operation
-const char * UmlOperation::generate_body(QTextOStream & fs,
+const char * UmlOperation::generate_body(QTextStream & fs,
 					 Q3CString indent,
 					 const char * p) {
   const char * body = 0;
@@ -627,7 +627,7 @@ bool UmlOperation::is_template_operation() {
   return (def.find('>') > index1);
 }
 
-void UmlOperation::generate_def(QTextOStream & fs, Q3CString indent, bool h,
+void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
 				Q3CString templates, Q3CString cl_names,
 				Q3CString templates_tmplop, 
 				Q3CString cl_names_tmplop) {

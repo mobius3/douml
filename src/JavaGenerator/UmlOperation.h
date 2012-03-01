@@ -29,11 +29,11 @@
 #include <q3intdict.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlBaseOperation.h"
 
-class QTextOStream;
+class QTextStream;
 
 class UmlOperation : public UmlBaseOperation {
   private:
@@ -43,19 +43,19 @@ class UmlOperation : public UmlBaseOperation {
     UmlOperation(void * id, const Q3CString & n)
       : UmlBaseOperation(id, n) {};
   
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
+    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
 			  Q3CString indent);
-    virtual void generate_enum_pattern_item(QTextOStream &, int &,
+    virtual void generate_enum_pattern_item(QTextStream &, int &,
 					    const Q3CString &, Q3CString);
-    virtual void generate_enum_pattern_case(QTextOStream &, Q3CString);
-    virtual void generate_enum_member(QTextOStream &, Q3CString);
+    virtual void generate_enum_pattern_case(QTextStream &, Q3CString);
+    virtual void generate_enum_member(QTextStream &, Q3CString);
     
     Q3CString compute_name();
     
     static void read_bodies(const char * path);
     
   private:
-    const char * generate_body(QTextOStream & f, Q3CString indent, const char * p);
+    const char * generate_body(QTextStream & f, Q3CString indent, const char * p);
 };
 
 #endif

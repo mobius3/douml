@@ -28,7 +28,7 @@
 
 #include "q3canvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PointArray>
 #include <Q3PopupMenu>
 
@@ -145,8 +145,8 @@ class ArrowCanvas : public QObject, public Q3CanvasPolygon, public DiagramItem {
     
     void package_modified() const;
     
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
-    const ArrowCanvas * save_lines(Q3TextStream  & st, bool with_label, bool with_stereotype, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
+    const ArrowCanvas * save_lines(QTextStream  & st, bool with_label, bool with_stereotype, QString & warning) const;
     static ArrowCanvas * read(char * & st, UmlCanvas * canvas, char * k);
     static ArrowCanvas * read_list(char * & st, UmlCanvas * canvas,
 				   UmlCode t, LineGeometry geo,

@@ -23,7 +23,7 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 
 #include "UmlItem.h"
 

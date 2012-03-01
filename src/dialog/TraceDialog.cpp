@@ -32,7 +32,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <q3filedialog.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>
@@ -110,7 +110,7 @@ void TraceDialog::save() {
     QFile file(filename);
     
     if (file.open(QIODevice::WriteOnly)) {
-      Q3TextStream stream(&file);
+      QTextStream stream(&file);
       
       stream << "<html>\n" << txt->text() << "\n</html>\n";
       file.close();

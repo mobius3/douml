@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -847,7 +847,7 @@ void BrowserUseCaseView::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
     e->ignore();
 }
 
-void BrowserUseCaseView::save_stereotypes(Q3TextStream & st)
+void BrowserUseCaseView::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "usecaseview_stereotypes ";
@@ -862,7 +862,7 @@ void BrowserUseCaseView::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserUseCaseView::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserUseCaseView::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "usecaseview_ref " << get_ident() << " // " << get_name();
   else {

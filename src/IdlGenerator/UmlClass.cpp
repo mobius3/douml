@@ -24,10 +24,10 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "UmlClass.h"
@@ -62,7 +62,7 @@ void UmlClass::generate() {
   }
 }
 
-void UmlClass::generate(QTextOStream & f) {
+void UmlClass::generate(QTextStream & f) {
   if (idlDecl().isEmpty())
     return;
   
@@ -218,7 +218,7 @@ void UmlClass::generate(QTextOStream & f) {
   }
 }
 
-void UmlClass::generate_decl(QTextOStream &, const Q3CString &, 
+void UmlClass::generate_decl(QTextStream &, const Q3CString &, 
 			     Q3CString, bool) {
   write_trace_header();
   UmlCom::trace(Q3CString("<font color=\"red\"><b>Embedded class <it>")
@@ -226,7 +226,7 @@ void UmlClass::generate_decl(QTextOStream &, const Q3CString &,
   incr_warning();
 }
 
-void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t)
+void UmlClass::write(QTextStream & f, const UmlTypeSpec & t)
 {
   if (t.type != 0)
     t.type->write(f);
@@ -234,7 +234,7 @@ void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t)
     f << IdlSettings::type(t.explicit_type);
 }
 
-void UmlClass::write(QTextOStream & f) {
+void UmlClass::write(QTextStream & f) {
   UmlItem * p = associatedArtifact();
   
   if (p == 0)

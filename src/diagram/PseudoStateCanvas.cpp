@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "PseudoStateCanvas.h"
 #include "TransitionCanvas.h"
@@ -678,7 +678,7 @@ QString PseudoStateCanvas::may_connect(UmlCode & l, const DiagramItem * dest) co
   }
 }
 
-void PseudoStateCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void PseudoStateCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "pseudostatecanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

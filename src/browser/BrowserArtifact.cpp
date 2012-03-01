@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qdir.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 #include <QDragMoveEvent>
@@ -1117,7 +1117,7 @@ bool BrowserArtifact::tool_cmd(ToolCom * com, const char * args) {
   return TRUE;
 }
 
-void BrowserArtifact::save_stereotypes(Q3TextStream & st)
+void BrowserArtifact::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "artifact_stereotypes ";
@@ -1148,7 +1148,7 @@ void BrowserArtifact::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserArtifact::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserArtifact::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "artifact_ref " << get_ident() << " // " << get_name();
   else {

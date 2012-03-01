@@ -4,9 +4,9 @@
 
 #include "UmlBaseActualParameter.h"
 //Added by qt3to4:
-#include <QTextOStream>
+#include <QTextStream>
 
-class QTextOStream;
+class QTextStream;
 
 // This class manages 'actual parameters' of a template class. For instance T in
 //
@@ -17,7 +17,7 @@ class UmlActualParameter : public UmlBaseActualParameter {
   public:
     UmlActualParameter() {};
 
-    void generate(QTextOStream & f) const;
+    void generate(QTextStream & f) const;
 };
 
 #endif

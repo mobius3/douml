@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 
@@ -486,7 +486,7 @@ void BrowserClassDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserClassDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserClassDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "classdiagram_stereotypes ";
@@ -501,7 +501,7 @@ void BrowserClassDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserClassDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserClassDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classdiagram_ref " << get_ident() << " // " << get_name();
   else {

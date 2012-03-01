@@ -29,7 +29,7 @@
 #include "UmlBasePackage.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 struct Dir {
   Q3CString file;
@@ -48,7 +48,7 @@ class UmlPackage : public UmlBasePackage {
     Q3CString text_path(const Q3CString &);
     virtual void generate();
     virtual UmlPackage * package();
-    void import(QTextOStream & f, const Q3CString & indent);
+    void import(QTextStream & f, const Q3CString & indent);
 };
 
 #endif

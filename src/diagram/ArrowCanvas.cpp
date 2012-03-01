@@ -32,7 +32,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 #include <QPixmap>
 
@@ -1734,7 +1734,7 @@ void ArrowCanvas::drawing_settings_modified() {
   auto_pos = the_canvas()->browser_diagram()->get_auto_label_position();
 }
 
-void ArrowCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ArrowCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "line_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {
@@ -1760,7 +1760,7 @@ void ArrowCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
   }
 }
 
-const ArrowCanvas * ArrowCanvas::save_lines(Q3TextStream & st, bool with_label,
+const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
 					    bool with_stereotype,
 					    QString & warning) const {
   nl_indent(st);

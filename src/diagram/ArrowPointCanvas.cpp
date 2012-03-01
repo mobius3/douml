@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ArrowPointCanvas.h"
 #include "ArrowCanvas.h"
@@ -217,7 +217,7 @@ ArrowCanvas * ArrowPointCanvas::get_other(const ArrowCanvas * l) const {
   return (lines.getFirst() == l) ? lines.getLast() : lines.getFirst();
 }
 
-void ArrowPointCanvas::save(Q3TextStream & st, bool, QString &) const {
+void ArrowPointCanvas::save(QTextStream & st, bool, QString &) const {
   save_xy(st, this, "point");
 }
 

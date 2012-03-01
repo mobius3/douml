@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 
 class QPixmap;
@@ -83,7 +83,7 @@ class BrowserDeploymentView : public BrowserNode, public Labeled<BrowserDeployme
     virtual void get_deploymentdiagramsettings(DeploymentDiagramSettings &) const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual UmlColor get_color(UmlCode) const;
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
@@ -94,7 +94,7 @@ class BrowserDeploymentView : public BrowserNode, public Labeled<BrowserDeployme
     
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
 
     static BrowserDeploymentView * read(char * &, char *, BrowserNode *, bool);
     static BrowserDeploymentView * read_ref(char * &, const char *);

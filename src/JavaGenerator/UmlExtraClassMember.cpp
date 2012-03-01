@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlExtraClassMember.h"
 
@@ -36,22 +36,22 @@ void UmlExtraClassMember::compute_dependency(Q3PtrList<JavaRefType> &, Q3CString
 }
 */
 
-void UmlExtraClassMember::generate(QTextOStream & f, const Q3CString &,
+void UmlExtraClassMember::generate(QTextStream & f, const Q3CString &,
 				   Q3CString) {
   f << javaDecl();
 }
 
-void UmlExtraClassMember::generate_enum_pattern_item(QTextOStream & f, int &,
+void UmlExtraClassMember::generate_enum_pattern_item(QTextStream & f, int &,
 						     const Q3CString &,
 						     Q3CString) {
   f << javaDecl();
 }
 
-void UmlExtraClassMember::generate_enum_pattern_case(QTextOStream & f,
+void UmlExtraClassMember::generate_enum_pattern_case(QTextStream & f,
 						     Q3CString) {
   f << javaDecl();
 }
 
-void UmlExtraClassMember::generate_enum_member(QTextOStream & f, Q3CString) {
+void UmlExtraClassMember::generate_enum_member(QTextStream & f, Q3CString) {
   f << javaDecl();
 }

@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 
@@ -1068,7 +1068,7 @@ QString ComponentCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
   }
 }
 
-void ComponentCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ComponentCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "componentcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

@@ -34,7 +34,7 @@
 #include "UmlEnum.h"
 #include "BasicData.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -184,7 +184,7 @@ class ClassData : public BasicData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
     
     bool get_bodies_read() { return bodies_read; }

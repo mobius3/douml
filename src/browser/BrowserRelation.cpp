@@ -32,7 +32,7 @@
 #include <qpainter.h>
 #include <q3ptrdict.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDropEvent>
 
@@ -792,7 +792,7 @@ BrowserRelation * BrowserRelation::reinsert(BrowserNode * p, RelationData * d)
   return new BrowserRelation(p, d);
 }
 
-void BrowserRelation::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserRelation::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classrelation_ref " << get_ident() << " // " << get_name();
   else {

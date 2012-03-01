@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "OdClassInstCanvas.h"
@@ -744,7 +744,7 @@ bool OdClassInstCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void OdClassInstCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void OdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // "
       << browser_node->full_name();

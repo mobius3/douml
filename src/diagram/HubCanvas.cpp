@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "HubCanvas.h"
 #include "ArrowCanvas.h"
@@ -136,7 +136,7 @@ QString HubCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
   }
 }
 
-void HubCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void HubCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref)
     st << "hubcanvas_ref " << get_ident();
   else {

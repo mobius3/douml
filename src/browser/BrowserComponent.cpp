@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qdir.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 #include <QDragMoveEvent>
@@ -1033,7 +1033,7 @@ bool BrowserComponent::tool_cmd(ToolCom * com, const char * args) {
   return TRUE;
 }
 
-void BrowserComponent::save_stereotypes(Q3TextStream & st)
+void BrowserComponent::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "component_stereotypes ";
@@ -1050,7 +1050,7 @@ void BrowserComponent::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserComponent::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserComponent::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "component_ref " << get_ident() << " // " << get_name();
   else {

@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "SdDurationCanvas.h"
 #include "SdLifeLineCanvas.h"
@@ -983,13 +983,13 @@ void SdDurationCanvas::propag_dz(Q3PtrList<SdDurationCanvas> & l, double dz)
   }
 }
 
-void SdDurationCanvas::save_sub(Q3TextStream & st) const {
+void SdDurationCanvas::save_sub(QTextStream & st) const {
   nl_indent(st);
   st << "overlappingdurationcanvas " << get_ident();
   save_internal(st);
 }
 
-void SdDurationCanvas::save_internal(Q3TextStream & st) const {
+void SdDurationCanvas::save_internal(QTextStream & st) const {
   indent(+1);
   
   if (coregion) {
@@ -1014,7 +1014,7 @@ void SdDurationCanvas::save_internal(Q3TextStream & st) const {
   st << "end";
 }
 
-void SdDurationCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdDurationCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "durationcanvas_ref " << get_ident();
   else if (!support->isaDuration()) {

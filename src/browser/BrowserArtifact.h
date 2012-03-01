@@ -1,7 +1,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QDragMoveEvent>
 // *************************************************************************
@@ -97,7 +97,7 @@ class BrowserArtifact : public BrowserNode, public Labeled<BrowserArtifact> {
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
     virtual void on_delete();
     virtual QString check_inherit(const BrowserNode * parent) const;
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserArtifact * read_ref(char * &, const char *);
     static BrowserArtifact * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
@@ -125,7 +125,7 @@ class BrowserArtifact : public BrowserNode, public Labeled<BrowserArtifact> {
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);

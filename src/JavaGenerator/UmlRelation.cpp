@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "UmlRelation.h"
@@ -36,7 +36,7 @@
 #include "util.h"
 #include "UmlCom.h"
 
-void UmlRelation::generate_extends(const char *& sep, QTextOStream & f,
+void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
 				   const Q3ValueList<UmlActualParameter> & actuals,
 				   const Q3CString & cl_stereotype) {
   switch (relationKind()) {
@@ -121,7 +121,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextOStream & f,
   }
 }
 
-void UmlRelation::generate_implements(const char *& sep, QTextOStream & f,
+void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
 				      const Q3ValueList<UmlActualParameter> & actuals,
 				      const Q3CString & cl_stereotype) {
   switch (relationKind()) {
@@ -179,7 +179,7 @@ void UmlRelation::generate_implements(const char *& sep, QTextOStream & f,
   }
 }
 
-void UmlRelation::generate(QTextOStream & f, const Q3CString & cl_stereotype,
+void UmlRelation::generate(QTextStream & f, const Q3CString & cl_stereotype,
 			   Q3CString indent) {
   switch (relationKind()) {
   case aDependency:
@@ -329,22 +329,22 @@ void UmlRelation::generate(QTextOStream & f, const Q3CString & cl_stereotype,
   }
 }
 
-void UmlRelation::generate_enum_pattern_item(QTextOStream &, int &,
+void UmlRelation::generate_enum_pattern_item(QTextStream &, int &,
 					     const Q3CString &, Q3CString) {
   write_trace_header();
   UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>enum_pattern</i> cannot have relation</b></font><br>");
   incr_warning();
 }
 
-void UmlRelation::generate_enum_pattern_case(QTextOStream &, Q3CString) {
+void UmlRelation::generate_enum_pattern_case(QTextStream &, Q3CString) {
   // error already signaled
 }
 
-void UmlRelation::generate_enum_member(QTextOStream & f, Q3CString indent) {
+void UmlRelation::generate_enum_member(QTextStream & f, Q3CString indent) {
   generate(f, "enum", indent);
 }
 
-void UmlRelation::generate_import(QTextOStream & f, const Q3CString & indent) {
+void UmlRelation::generate_import(QTextStream & f, const Q3CString & indent) {
   if ((relationKind() == aDependency) &&
       (stereotype() == "import"))
     roleType()->import(f, indent);

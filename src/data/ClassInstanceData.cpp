@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -688,7 +688,7 @@ bool ClassInstanceData::change_rel(ToolCom * com, const char * args,
 }
 //
 
-void ClassInstanceData::save(Q3TextStream & st, QString & warning) const {
+void ClassInstanceData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   nl_indent(st);
   st << "type ";
