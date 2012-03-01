@@ -94,7 +94,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
 			   )
 {
 #ifdef TRACE
-  cout << "ATTRIBUTE '" << name << "'\n";
+  QLOG_INFO() <<"ATTRIBUTE '" << name << "'\n";
 #endif
   
   if (

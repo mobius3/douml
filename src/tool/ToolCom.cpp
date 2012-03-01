@@ -53,7 +53,7 @@ using namespace std;
 #include "DialogUtil.h"
 #include "mu.h"
 #include "err.h"
-#include "../Logging/QsLog.h"
+#include "Logging/QsLog.h"
 
 Socket::Socket(ToolCom * c)
     : Q3SocketDevice(Q3SocketDevice::Stream), com(c) {
@@ -85,7 +85,7 @@ bool Socket::write_block(char * data, unsigned int len) {
     data[3] = len;
 
 #ifdef DEBUGCOM
-    cerr << "ToolCom write " << len << "bytes\n";
+    QLOG_INFO() <<"ToolCom write " << len << "bytes\n";
 #endif
 
     len += 4;
@@ -444,7 +444,7 @@ void ToolCom::write_bool(bool b)
 
     *p_buffer_out++ = (b) ? 1 : 0;
 #ifdef DEBUGCOM
-    cout << "ToolCom::write_bool(" << ((b) ? 1 : 0) << ")\n";
+    QLOG_INFO() <<"ToolCom::write_bool(" << ((b) ? 1 : 0) << ")\n";
 #endif
 }
 
@@ -456,7 +456,7 @@ void ToolCom::write_id(void * id)
     memcpy(p_buffer_out + 1, (char *) &id, sizeof(void *));
     p_buffer_out += sizeof(void *) + 1;
 #ifdef DEBUGCOM
-    cout << "ToolCom::write_id(" << (void *) id << ")\n";
+    QLOG_INFO() <<"ToolCom::write_id(" << (void *) id << ")\n";
 #endif
 }
 
@@ -481,9 +481,9 @@ void ToolCom::write_id(BrowserNode * bn, char k, const char * s)
 
     ToolCom::p_buffer_out += ln + 2 + sizeof(void *);
 #ifdef DEBUGCOM
-    cout << "ToolCom::write_id(" << (void *) bn << ")\n";
-    cout << "ToolCom::write_char(" << (unsigned) k << ")\n";
-    cout << "ToolCom::write_string(\"" << s << "\")\n";
+    QLOG_INFO() <<"ToolCom::write_id(" << (void *) bn << ")\n";
+    QLOG_INFO() <<"ToolCom::write_char(" << (unsigned) k << ")\n";
+    QLOG_INFO() <<"ToolCom::write_string(\"" << s << "\")\n";
 #endif
 }
 
@@ -499,7 +499,7 @@ void ToolCom::write_string(const char * p)
     memcpy(p_buffer_out, p, len);
     p_buffer_out += len;
 #ifdef DEBUGCOM
-    cout << "ToolCom::write_string(\"" << p << "\")\n";
+    QLOG_INFO() <<"ToolCom::write_string(\"" << p << "\")\n";
 #endif
 }
 
@@ -509,7 +509,7 @@ void ToolCom::write_char(char c)
 
     *p_buffer_out++ = c;
 #ifdef DEBUGCOM
-    cout << "ToolCom::write_char(" << (unsigned) c << ")\n";
+    QLOG_INFO() <<"ToolCom::write_char(" << (unsigned) c << ")\n";
 #endif
 }
 
@@ -527,7 +527,7 @@ void ToolCom::write_ack(bool b)
 
         *p_buffer_out++ = (b) ? 1 : 0;
 #ifdef DEBUGCOM
-        cout << "ToolCom::write_ack(" << ((b) ? 1 : 0) << ")\n";
+        QLOG_INFO() <<"ToolCom::write_ack(" << ((b) ? 1 : 0) << ")\n";
 #endif
     }
 }
@@ -539,7 +539,7 @@ void ToolCom::fatal_error(const char *
 						  )
 {
 #ifdef DEBUGCOM
-	cerr << "ToolCom::fatal_error " << msg << '\n';
+	QLOG_INFO() <<"ToolCom::fatal_error " << msg << '\n';
 #endif
 
     close();
@@ -568,7 +568,7 @@ void ToolCom::data_received(Socket * who) {
             int s = listen_sock->accept();
 
 #ifdef DEBUGCOM
-            cerr << "ToolCom::connexion() accept ok " << s << '\n';
+            QLOG_INFO() <<"ToolCom::connexion() accept ok " << s << '\n';
 #endif
 
             if (s != -1) {
@@ -628,13 +628,13 @@ void ToolCom::data_received(Socket * who) {
                     BrowserNode * bn = (BrowserNode *) get_id(p);
 
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() cmd " << (unsigned) p[0]
+					QLOG_INFO() <<"ToolCom::data_received() cmd " << (unsigned) p[0]
 						 << " for " << bn->get_name() << '\n';
 #endif
 
 					if (!bn->tool_cmd(this, p+1)) {
 #ifdef DEBUGCOM
-						cerr << "unknown cmd : " << (unsigned) p[0]
+						QLOG_INFO() <<"unknown cmd : " << (unsigned) p[0]
 							 << " for " << bn->get_name() << '\n';
 #endif
 						close();
@@ -643,37 +643,37 @@ void ToolCom::data_received(Socket * who) {
 					break;
 				case classGlobalCmd:
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() ClassGlobalCmd "
+					QLOG_INFO() <<"ToolCom::data_received() ClassGlobalCmd "
 						 << (unsigned) p[0] << '\n';
 #endif
 					if (!BrowserClass::tool_global_cmd(this, p+1)) {
 #ifdef DEBUGCOM
-						cerr << "unknown ClassGlobalCmd : " << p[0] << "\n";
+						QLOG_INFO() <<"unknown ClassGlobalCmd : " << p[0] << "\n";
 #endif
 						throw 0;
 					}
 					break;
 				case packageGlobalCmd:
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() PackageGlobalCmd "
+					QLOG_INFO() <<"ToolCom::data_received() PackageGlobalCmd "
 						 << (unsigned) p[0] << '\n';
 #endif
 					if (!BrowserPackage::tool_global_cmd(this, p+1)) {
 #ifdef DEBUGCOM
-						cerr << "unknown PackageGlobalCmd : <" << p[0] << ">\n";
+						QLOG_INFO() <<"unknown PackageGlobalCmd : <" << p[0] << ">\n";
 #endif
 						throw 0;
 					}
 					break;
 				case miscGlobalCmd:
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() MiscGlobalCmd "
+					QLOG_INFO() <<"ToolCom::data_received() MiscGlobalCmd "
 						 << (unsigned) p[0] << '\n';
 #endif
 					switch (p[0]) {
 					case byeCmd:
 #ifdef DEBUGCOM
-						cerr << "bye\n";
+						QLOG_INFO() <<"bye\n";
 #endif
 						if (exit_bouml) {
 							do_exit = true;
@@ -783,86 +783,86 @@ void ToolCom::data_received(Socket * who) {
 						break;
 					default:
 #ifdef DEBUGCOM
-						cerr << "unknown MiscGlobalCmd : " << (unsigned) p[0] << "\n";
+						QLOG_INFO() <<"unknown MiscGlobalCmd : " << (unsigned) p[0] << "\n";
 #endif
 						throw 0;
 					}
 					break;
 				case umlSettingsCmd:
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() UmlSettingsCmd "
+					QLOG_INFO() <<"ToolCom::data_received() UmlSettingsCmd "
 						 << (unsigned) p[0] << '\n';
 #endif
 					if (!GenerationSettings::tool_global_uml_cmd(this, p+1)) {
 #ifdef DEBUGCOM
-						cerr << "unknown UmlSettingsCmd : " << (unsigned) p[0] << "\n";
+						QLOG_INFO() <<"unknown UmlSettingsCmd : " << (unsigned) p[0] << "\n";
 #endif
 						throw 0;
 					}
 					break;
 				case cppSettingsCmd:
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() CppSettingsCmd "
+					QLOG_INFO() <<"ToolCom::data_received() CppSettingsCmd "
 						 << (unsigned) p[0] << '\n';
 #endif
 					if (!GenerationSettings::tool_global_cpp_cmd(this, p+1)) {
 #ifdef DEBUGCOM
-						cerr << "unknown CppSettingsCmd : " << (unsigned) p[0] << "\n";
+						QLOG_INFO() <<"unknown CppSettingsCmd : " << (unsigned) p[0] << "\n";
 #endif
 						throw 0;
 					}
 					break;
 				case javaSettingsCmd:
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() JavaSettingsCmd "
+					QLOG_INFO() <<"ToolCom::data_received() JavaSettingsCmd "
 						 << (unsigned) p[0] << '\n';
 #endif
 					if (!GenerationSettings::tool_global_java_cmd(this, p+1)) {
 #ifdef DEBUGCOM
-						cerr << "unknown JavaSettingsCmd : " << (unsigned) p[0] << "\n";
+						QLOG_INFO() <<"unknown JavaSettingsCmd : " << (unsigned) p[0] << "\n";
 #endif
 						throw 0;
 					}
 					break;
 				case phpSettingsCmd:
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() PhpSettingsCmd "
+					QLOG_INFO() <<"ToolCom::data_received() PhpSettingsCmd "
 						 << (unsigned) p[0] << '\n';
 #endif
 					if (!GenerationSettings::tool_global_php_cmd(this, p+1)) {
 #ifdef DEBUGCOM
-						cerr << "unknown PhpSettingsCmd : " << (unsigned) p[0] << "\n";
+						QLOG_INFO() <<"unknown PhpSettingsCmd : " << (unsigned) p[0] << "\n";
 #endif
 						throw 0;
 					}
 					break;
 				case idlSettingsCmd:
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() IdlSettingsCmd "
+					QLOG_INFO() <<"ToolCom::data_received() IdlSettingsCmd "
 						 << (unsigned) p[0] << '\n';
 #endif
 					if (!GenerationSettings::tool_global_idl_cmd(this, p+1)) {
 #ifdef DEBUGCOM
-						cerr << "unknown IdlSettingsCmd : " << p[0] << "\n";
+						QLOG_INFO() <<"unknown IdlSettingsCmd : " << p[0] << "\n";
 #endif
 						throw 0;
 					}
 					break;
 				case pythonSettingsCmd:
 #ifdef DEBUGCOM
-					cerr << "ToolCom::data_received() PythonSettingsCmd "
+					QLOG_INFO() <<"ToolCom::data_received() PythonSettingsCmd "
 						 << (unsigned) p[0] << '\n';
 #endif
 					if (!GenerationSettings::tool_global_python_cmd(this, p+1)) {
 #ifdef DEBUGCOM
-						cerr << "unknown PythonSettingsCmd : " << (unsigned) p[0] << "\n";
+						QLOG_INFO() <<"unknown PythonSettingsCmd : " << (unsigned) p[0] << "\n";
 #endif
 						throw 0;
 					}
 					break;
 				default:
 #ifdef DEBUGCOM
-					cerr << "unknown CmdFamily : " << (unsigned) p[-1] << "\n";
+					QLOG_INFO() <<"unknown CmdFamily : " << (unsigned) p[-1] << "\n";
 #endif
 					throw 0;
 				}

@@ -99,7 +99,7 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
 			  )
 {
 #ifdef DEBUG_BOUML
-  cout << "RELATION '" << name << "' from '" << cl->name() << "' to '" << dest->name()
+  QLOG_INFO() <<"RELATION '" << name << "' from '" << cl->name() << "' to '" << dest->name()
     << "' modifier '" << modifier << "' array '" << array
       << "' typeform '" << typeform << "'\n";
 #endif
@@ -313,7 +313,7 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
 bool UmlRelation::new_friend(UmlClass * from, UmlClass * to)
 {
 #ifdef DEBUG_BOUML
-  cout << "FRIEND from '" << from->name() << "' to '" << to->name() << "'\n";
+  QLOG_INFO() <<"FRIEND from '" << from->name() << "' to '" << to->name() << "'\n";
 #endif
   
   UmlRelation * rel = UmlBaseRelation::create(aDependency, from, to);
@@ -342,7 +342,7 @@ bool UmlRelation::new_friend(Class * container, UmlClass * to,
   UmlClass * from = container->get_uml();
   
 #ifdef DEBUG_BOUML
-  cout << "FRIEND from '" << from->name() << "' to '" << to->name() << "'\n";
+  QLOG_INFO() <<"FRIEND from '" << from->name() << "' to '" << to->name() << "'\n";
 #endif
   
   const Q3PtrVector<UmlItem> & ch = from->children();

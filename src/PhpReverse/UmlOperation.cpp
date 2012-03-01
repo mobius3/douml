@@ -72,7 +72,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
   Q3CString name = s;
   
 #ifdef TRACE
-  cout << "OPERATION '" << name << "'\n";
+  QLOG_INFO() <<"OPERATION '" << name << "'\n";
 #endif
   
   s = Lex::read_word();
@@ -155,7 +155,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
 			   + name + "</i> in <i>" + cl->name() 
 			   + "</i></b></font><br>");  
 #ifdef TRACE
-      cout << "ERROR cannot add param '" << param.name << '\n';
+      QLOG_INFO() <<"ERROR cannot add param '" << param.name << '\n';
 #endif
       return FALSE;
     }
@@ -293,7 +293,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
 			      UmlParameter & param, Q3CString & def, bool bypass)
 {
 #ifdef TRACE
-  cout << "UmlOperation::manage_param " << rank << "\n";
+  QLOG_INFO() <<"UmlOperation::manage_param " << rank << "\n";
 #endif
   
   Q3CString s = Lex::read_word();
@@ -306,7 +306,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
     return FALSE;
   
 #ifdef TRACE
-  cout << "commence par " << s << '\n';
+  QLOG_INFO() <<"commence par " << s << '\n';
 #endif
 
   param.type.type = 0;

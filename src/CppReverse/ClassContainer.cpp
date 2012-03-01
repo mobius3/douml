@@ -183,7 +183,7 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
 	Q3CString tf = type.left(index + 1) + typeform + type.mid(index2);
 	Q3CString t = type.mid(index + 1, index2 - index - 1).stripWhiteSpace();
 #ifdef DEBUG_BOUML
-	cout << "typeform '" << tf << "' type '" << t << "'\n";
+	QLOG_INFO() <<"typeform '" << tf << "' type '" << t << "'\n";
 #endif
 	UmlTypeSpec ts;
 	

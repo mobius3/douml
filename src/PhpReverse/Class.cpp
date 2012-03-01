@@ -246,7 +246,7 @@ bool Class::reverse(Package * container, Q3CString stereotype,
       return FALSE;
     }
 #ifdef TRACE
-    cout << "in class def a lu '" << s << "'\n";
+    QLOG_INFO() <<"in class def a lu '" << s << "'\n";
 #endif
     if (s == ";")
       ;
@@ -269,7 +269,7 @@ bool Class::reverse(Package * container, Q3CString stereotype,
 bool Class::manage_extends(ClassContainer * container) {
   // out of scanning
 #ifdef TRACE
-  cout << text(0) << "->manage_extends()\n";
+  QLOG_INFO() <<text(0) << "->manage_extends()\n";
 #endif
   
   UmlTypeSpec typespec;
@@ -280,7 +280,7 @@ bool Class::manage_extends(ClassContainer * container) {
   
   if (typespec.type == 0) {
 #ifdef TRACE
-    cout << "cannot create mother\n";
+    QLOG_INFO() <<"cannot create mother\n";
 #endif
     return FALSE;
   }
@@ -291,7 +291,7 @@ bool Class::manage_extends(ClassContainer * container) {
 bool Class::manage_implements(ClassContainer * container, aRelationKind k) {
   // out of scanning
 #ifdef TRACE
-  cout << text(0) << "->manage_implements()\n";
+  QLOG_INFO() <<text(0) << "->manage_implements()\n";
 #endif
   
   for (;;) {
@@ -303,7 +303,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k) {
     
     if (typespec.type == 0) {
 #ifdef TRACE
-      cout << "cannot create mother\n";
+      QLOG_INFO() <<"cannot create mother\n";
 #endif
       return FALSE;
     }
@@ -331,7 +331,7 @@ bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec) {
   
   if (rel == 0) {
 #ifdef TRACE
-    cout << "cannot create <|---\n";
+    QLOG_INFO() <<"cannot create <|---\n";
 #endif
     return FALSE;
   }
@@ -386,7 +386,7 @@ bool Class::manage_member(Q3CString s) {
   bool m_finalp = FALSE;
   
 #ifdef TRACE
-  cout << "Class::manage_member(" << s << ")\n";
+  QLOG_INFO() <<"Class::manage_member(" << s << ")\n";
 #endif
   
   for (;;) {
@@ -423,7 +423,7 @@ bool Class::manage_member(Q3CString s) {
     s = Lex::read_word();
     
 #ifdef TRACE
-    cout << "define var '" << ((const char *) name) << "' followed by '" << ((const char *) s) << "'\n";
+    QLOG_INFO() <<"define var '" << ((const char *) name) << "' followed by '" << ((const char *) s) << "'\n";
 #endif
     
     if (s == "=") {
@@ -434,7 +434,7 @@ bool Class::manage_member(Q3CString s) {
       value = Lex::region();
       
 #ifdef TRACE
-    cout << "value form is '" << ((const char *) value) << "'\n";
+    QLOG_INFO() <<"value form is '" << ((const char *) value) << "'\n";
 #endif
       char c = ((const char *) value)[value.length() - 1];
       

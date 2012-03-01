@@ -43,6 +43,7 @@
 #include "UmlCom.h"
 #include "CppRefType.h"
 #include "util.h"
+#include "Logging/QsLog.h"
 
 // the eventual class list where we are, used by write() to not generate
 // parent classes and template in the class declaration of the class
@@ -399,8 +400,11 @@ void UmlClass::generate_def(QTextOStream & f, Q3CString indent, bool h) {
 
 void UmlClass::generate_def(QTextOStream & f, Q3CString indent, bool h,
 			    Q3CString templates, Q3CString cl_names,
-			    Q3CString, Q3CString) {
-  if (! cppDecl().isEmpty()) {
+				Q3CString, Q3CString)
+{
+    QLOG_INFO() << "generating definition";
+    //QsLogging::Logger::instance().
+    if (! cppDecl().isEmpty()) {
     Q3CString template1;
     Q3CString template2;
     Q3CString templates_tmplop;
