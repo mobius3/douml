@@ -29,23 +29,58 @@
 #include <QMenu>
 #include <QMenuItem>
 #include <Q3PopupMenu>
+#include "mystr.h"
 
 class MenuFactory
 {
-public:
-    typedef struct _Item {
-        const char* const name;
-        const int id;
-        const char* const whatsThis;
-    } Item;
+private:
+  Q3PopupMenu m_menu;
 
-    static void createTitle(
-        QMenu& menu,
-        const QString& title );
-    static void addItems(
-        Q3PopupMenu& menu,
-        const Item items[],
-        const int nofItems );
+public:
+  typedef struct _Item {
+    const char* const name;
+    const int id;
+    const char* const whatsThis;
+  } Item;
+
+  MenuFactory(
+      const MyStr& menuName );
+  virtual ~MenuFactory();
+
+  static void createTitle(
+      QMenu&          menu,
+      const QString&  title );
+
+  static void addItems(
+      Q3PopupMenu&  menu,
+      const Item    items[],
+      const int     nofItems );
+
+  static void addItem(
+      Q3PopupMenu&      menu,
+      const char *const name,
+      const int         id,
+      const char *const whatsThis = NULL );
+
+  virtual void createTitle(
+      const QString title );
+
+  virtual void addItems(
+      const Item    items[],
+      const int     nofItems );
+
+  virtual void addItem(
+      const char* const name,
+      const int         id,
+      const char* const whatsThis = NULL );
+
+  virtual void addItem(
+      const char* const name,
+      QMenu* const      subMenu );
+
+  virtual Q3PopupMenu& menu();
+
+  virtual void insertSeparator();
 
 };
 
