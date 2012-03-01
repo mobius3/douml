@@ -28,7 +28,7 @@
 
 #include <qpushbutton.h>
 #include <qlineedit.h>
-#include <Q3TextEdit.h>
+#include <Q3TextEdit>
 #include <qmessagebox.h>
 //Added by qt3to4:
 #include <Q3PopupMenu>
@@ -49,8 +49,7 @@ class KeyValuesTable;
 // a push button without magin
 class SmallPushButton : public QPushButton {
   public:
-    SmallPushButton(const QString & text, QWidget * parent)
-      : QPushButton(text, parent) {};
+    SmallPushButton(const QString & text, QWidget * parent);
   
     virtual QSize sizeHint() const;
 };
@@ -58,43 +57,30 @@ class SmallPushButton : public QPushButton {
 // redefine text() to remove non latin1 characters
 class MultiLineEdit : public Q3TextEdit {
   public:
-    MultiLineEdit(QWidget * w, const char * name=0) : Q3TextEdit(w, name)
-    {
-        Q3TextEdit::setTextFormat(Qt::PlainText);
-    }
+    MultiLineEdit(QWidget * w, const char * name=0);
     
     virtual void setText(const QString &);
     virtual QString text() const;
     
     QString stripWhiteSpaceText() const;
     
-    void setTheText(const QString & s) {
-      // no toUnicode
-      Q3TextEdit::setText(s);
-    }
-    QString theText() const {
-      // no fromUnicode
-      return Q3TextEdit::text();
-    }
+    void setTheText(const QString & s);
+
+    QString theText() const;
 };
 
 // redefine text() to remove non latin1 characters
 class LineEdit : public QLineEdit {
   public:
-    LineEdit(QWidget * w) : QLineEdit(w) { };
-    LineEdit(const QString & s, QWidget * parent, const char * name=0) : QLineEdit(s, parent, name) {}
+    LineEdit(QWidget * w);
+    LineEdit(const QString & s, QWidget * parent, const char * name=0);
     
     virtual void setText(const QString &);
     virtual QString text() const;
     
-    void setTheText(const QString & s) {
-      // no toUnicode
-      QLineEdit::setText(s);
-    }
-    QString theText() const {
-      // no fromUnicode
-      return QLineEdit::text();
-    }
+    void setTheText(const QString & s);
+
+    QString theText() const;
 };
 
 extern void init_font_menu(Q3PopupMenu & fontsubm, UmlCanvas * the_canvas, 

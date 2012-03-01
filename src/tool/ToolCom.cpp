@@ -902,14 +902,12 @@ void ToolCom::processFinished()
                      "error while executing '" + QString(cmd) +"'\n"
                      "perhaps you must specify its absolute path"
                      "or set the environment variable PATH ?");
-        this->close();
-        if (exit) {
-            BrowserView::remove_temporary_files();
-            set_user_id(-1);    // delete lock
 
-            THROW_ERROR 0;
-        }
-        //else
+        this->close(); // [SciBoy] Removed if statement, since "exit" was a function pointer and always != 0, this was probably an error that marchenko introduced.
+        BrowserView::remove_temporary_files();
+        set_user_id(-1);    // delete lock
+
+        THROW_ERROR 0;
     }
 
 

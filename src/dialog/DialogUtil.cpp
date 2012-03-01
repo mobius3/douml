@@ -40,7 +40,8 @@
 #include <q3popupmenu.h>
 #include <q3tabdialog.h>
 #include <qapplication.h>
-#include <qwidget.h>
+#include <QWidget>
+
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -61,6 +62,10 @@
 
 static QString BoumlEditor;
 
+SmallPushButton::SmallPushButton(const QString & text, QWidget * parent)
+  : QPushButton(text, parent) {
+}
+
 QSize SmallPushButton::sizeHint() const {
   QFontMetrics fm = fontMetrics();
   QSize sz = fm.size(Qt::TextShowMnemonic, text());
@@ -69,9 +74,25 @@ QSize SmallPushButton::sizeHint() const {
 	       sz.height() + sz.height()/8 + 4);
 }
 
+MultiLineEdit::MultiLineEdit(QWidget * w, const char * name)
+  : Q3TextEdit(w, name)
+{
+    Q3TextEdit::setTextFormat(Qt::PlainText);
+}
+
 // setText() redefinition
 void MultiLineEdit::setText(const QString & s) {
   Q3TextEdit::setText(toUnicode(s));
+}
+
+QString MultiLineEdit::theText() const {
+  // no fromUnicode
+  return Q3TextEdit::text();
+}
+
+void MultiLineEdit::setTheText(const QString & s) {
+  // no toUnicode
+  Q3TextEdit::setText(s);
 }
 
 // text() redefinition
@@ -87,6 +108,14 @@ QString MultiLineEdit::stripWhiteSpaceText() const {
   return fromUnicode(t.stripWhiteSpace());
 }
 
+LineEdit::LineEdit(QWidget * w)
+  : QLineEdit(w) {
+}
+
+LineEdit::LineEdit(const QString & s, QWidget * parent, const char * name)
+  : QLineEdit(s, parent, name) {
+}
+
 // setText() redefinition
 void LineEdit::setText(const QString & s) {
   QLineEdit::setText(toUnicode(s));
@@ -97,6 +126,16 @@ QString LineEdit::text() const {
   QString t = QLineEdit::text();
   
   return fromUnicode(t);
+}
+
+void LineEdit::setTheText(const QString & s) {
+  // no toUnicode
+  QLineEdit::setText(s);
+}
+
+QString LineEdit::theText() const {
+  // no fromUnicode
+  return QLineEdit::text();
 }
 
 //
