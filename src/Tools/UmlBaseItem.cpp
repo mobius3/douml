@@ -57,6 +57,7 @@
 #include "UmlActivityControlNodeClasses.h"
 #include "UmlActivityPartition.h"
 #include "MiscGlobalCmd.h"
+#include "Logging/QsLog.h"
 //Added by qt3to4:
 #include <Q3CString>
 #include <iostream>
@@ -457,7 +458,7 @@ UmlItem * UmlBaseItem::read_()
   const char * name = UmlCom::read_string();
   
 
-  cout << "UmlBaseItem::read id " << id << " kind " << kind << " name " << name << '\n';
+  QLOG_INFO() <<"UmlBaseItem::read id " << id << " kind " << kind << " name " << name << '\n';
 
   
   UmlItem * result = _all[id];

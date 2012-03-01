@@ -101,7 +101,7 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
 			  )
 {
 #ifdef TRACE
-  cout << "RELATION '" << name << "' from '" << cl->Name() << "' to '" << dest.type->Name()
+  QLOG_INFO() <<"RELATION '" << name << "' from '" << cl->Name() << "' to '" << dest.type->Name()
     << "' array '" << array << "'\n";
 #endif
   
@@ -279,7 +279,7 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
 			)
 {
 #ifdef TRACE
-  cout << "RELATION '" << name << "' from '" << cl->Name() << "' to '" << type->Name()
+  QLOG_INFO() <<"RELATION '" << name << "' from '" << cl->Name() << "' to '" << type->Name()
     << "' array '" << array << "'\n";
 #endif
   
