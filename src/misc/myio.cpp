@@ -32,7 +32,7 @@
 #include <qfile.h>
 #include <qstring.h>
 #include <q3canvas.h>
-#include <Q3TextEdit.h>
+#include <Q3TextEdit>
 #include <q3textview.h> 
 #include <qlayout.h> 
 #include <qdialog.h>

@@ -467,7 +467,7 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  tool/Tool.cpp \
 		  tool/ToolCom.cpp \
 		  xpm/UmlPixmap.cpp \
-		  ui/menufactory.cpp
+                  ui/menufactory.cpp \
 		  Logging/QsLogDest.cpp \
 		  Logging/QsLog.cpp \
 		  Logging/QsDebugOutput.cpp \
