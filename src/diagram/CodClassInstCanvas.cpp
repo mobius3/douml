@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "CodClassInstCanvas.h"
@@ -448,7 +448,7 @@ bool CodClassInstCanvas::copyable() const {
   return selected();
 }
 
-void CodClassInstCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // "
       << full_name();

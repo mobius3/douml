@@ -31,7 +31,7 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PointArray>
 #include <Q3CString>
 
@@ -527,7 +527,7 @@ void FragmentCanvas::prepare_for_move(bool on_resize) {
   }
 }
 
-void FragmentCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void FragmentCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "fragment_ref " << get_ident();
   }

@@ -29,11 +29,11 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlBaseClassItem.h"
 
-class QTextOStream;
+class QTextStream;
 class UmlTypeSpec;
 
 class UmlClassItem : public UmlBaseClassItem {
@@ -42,13 +42,13 @@ class UmlClassItem : public UmlBaseClassItem {
       : UmlBaseClassItem(id, n) {
     };
   
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
+    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
 			  Q3CString indent) = 0;
-    virtual void generate_enum_pattern_item(QTextOStream & f, int & current_value,
+    virtual void generate_enum_pattern_item(QTextStream & f, int & current_value,
 					    const Q3CString & class_name, Q3CString indent) = 0;
-    virtual void generate_enum_pattern_case(QTextOStream & f, Q3CString indent) = 0;
-    virtual void generate_enum_item(QTextOStream & f, Q3CString indent, BooL & first);
-    virtual void generate_enum_member(QTextOStream & f, Q3CString indent) = 0;
+    virtual void generate_enum_pattern_case(QTextStream & f, Q3CString indent) = 0;
+    virtual void generate_enum_item(QTextStream & f, Q3CString indent, BooL & first);
+    virtual void generate_enum_member(QTextStream & f, Q3CString indent) = 0;
 };
 
 #endif

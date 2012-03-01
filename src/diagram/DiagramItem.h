@@ -29,7 +29,7 @@
 #include <qlist.h>
 #include <qstring.h>
 #include <qpoint.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <q3ptrdict.h> 
 //Added by qt3to4:
 #include <Q3PtrCollection>
@@ -111,7 +111,7 @@ class DiagramItem : public Labeled<DiagramItem> {
     virtual void select_associated();
     virtual bool isSelected() const = 0;
     virtual void unassociate(DiagramItem *);
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const = 0;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const = 0;
     virtual void post_loaded();
 
     virtual void history_save(QBuffer &)const = 0;

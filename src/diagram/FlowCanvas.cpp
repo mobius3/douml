@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <math.h>
 #include <q3popupmenu.h>
 
@@ -766,7 +766,7 @@ bool FlowCanvas::represents(BrowserNode * bn) {
 
 //
 
-void FlowCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void FlowCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "flowcanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {

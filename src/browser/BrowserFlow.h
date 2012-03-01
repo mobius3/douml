@@ -1,7 +1,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
-#include <Q3TextStream>
+#include <QTextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -77,7 +77,7 @@ class BrowserFlow : public BrowserNode, public Labeled<BrowserFlow> {
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void update_stereotype(bool = FALSE);
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserFlow * read_ref(char * & st);
     static BrowserFlow * read(char * &, char *, BrowserNode *);
     static BrowserFlow * temporary(FlowData * d);
@@ -97,7 +97,7 @@ class BrowserFlow : public BrowserNode, public Labeled<BrowserFlow> {
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;

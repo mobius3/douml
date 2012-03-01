@@ -31,7 +31,7 @@
 #include <q3popupmenu.h> 
 #include <qpainter.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "SdClassInstCanvas.h"
@@ -583,7 +583,7 @@ bool SdClassInstCanvas::get_show_stereotype_properties() const {
   return (browser_node->get_type() != UmlClass) && show_properties;
 }
 
-void SdClassInstCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // "
       << full_name();

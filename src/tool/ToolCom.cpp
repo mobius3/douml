@@ -100,7 +100,7 @@ bool Socket::write_block(char * data, unsigned int len) {
             return TRUE;
         }
         else {
-            waitForMore(150);
+            waitForMore(100);
             data += sent;
         }
     }
@@ -499,6 +499,7 @@ void ToolCom::write_string(const char * p)
     memcpy(p_buffer_out, p, len);
     p_buffer_out += len;
 #ifdef DEBUGCOM
+    QLOG_INFO() << "Writing string of length: " << len;
     QLOG_INFO() <<"ToolCom::write_string(\"" << p << "\")\n";
 #endif
 }

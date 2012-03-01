@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 
@@ -524,7 +524,7 @@ void BrowserSeqDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserSeqDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserSeqDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "seqdiagram_stereotypes ";
@@ -556,7 +556,7 @@ const QStringList & BrowserSeqDiagram::msg_default_stereotypes()
   return message_default_stereotypes;
 }
 
-void BrowserSeqDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserSeqDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "sequencediagram_ref " << get_ident() << " // " << get_name();
   else {

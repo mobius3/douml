@@ -30,9 +30,9 @@
 #include "DiagramItem.h"
 #include "Labeled.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
-class Q3TextStream;
+class QTextStream;
 class ComponentDrawingSettings;
 
 class BrowserDiagram : public BrowserNode, public Labeled<BrowserDiagram> {
@@ -68,7 +68,7 @@ class BrowserDiagram : public BrowserNode, public Labeled<BrowserDiagram> {
     
     void save();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     static void clear(bool old);
     static void update_idmax_for_root();

@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "ExpansionRegionCanvas.h"
@@ -595,7 +595,7 @@ void ExpansionRegionCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ExpansionRegionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ExpansionRegionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "expansionregioncanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

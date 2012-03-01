@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -999,7 +999,7 @@ void BrowserUseCase::init()
   relations_default_stereotypes[UmlGeneralisation].append("{incomplete,overlapping}");
 }
 
-void BrowserUseCase::save_stereotypes(Q3TextStream & st)
+void BrowserUseCase::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "use_case_stereotypes";
@@ -1026,7 +1026,7 @@ void BrowserUseCase::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserUseCase::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserUseCase::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "usecase_ref " << get_ident() << " // " << get_name();
   else {

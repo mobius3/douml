@@ -30,7 +30,7 @@
 #include "UmlBaseNcRelation.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 //This class manages 'relations' between non class objects
 //
@@ -39,7 +39,7 @@ class UmlNcRelation : public UmlBaseNcRelation {
   public:
     UmlNcRelation(void * id, const Q3CString & n) : UmlBaseNcRelation(id, n) {};
   
-    virtual void generate_import(QTextOStream & f, const Q3CString & indent);
+    virtual void generate_import(QTextStream & f, const Q3CString & indent);
 };
 
 #endif

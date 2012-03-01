@@ -29,11 +29,11 @@
 #include <q3asciidict.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlBaseArtifact.h"
 
-class QTextOStream;
+class QTextStream;
 class UmlPackage;
 
 // This class manages 'artifacts'
@@ -47,7 +47,7 @@ class UmlArtifact : public UmlBaseArtifact {
     static UmlPackage * package_of_generated_artifact;
     static Q3CString imports;
     
-    void generate_imports(QTextOStream & f, Q3CString & made);
+    void generate_imports(QTextStream & f, Q3CString & made);
 
     static bool must_be_saved(const char * path, const char * new_contains);
   

@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlAttribute.h"
 #include "UmlSettings.h"
@@ -35,7 +35,7 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlAttribute::generate_decl(QTextOStream & f, const Q3CString & cl_stereotype,
+void UmlAttribute::generate_decl(QTextStream & f, const Q3CString & cl_stereotype,
 				 Q3CString indent, bool islast) {
   if (!idlDecl().isEmpty()) {
     if (cl_stereotype == "typedef") {

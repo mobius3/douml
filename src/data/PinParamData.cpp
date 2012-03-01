@@ -31,7 +31,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 PinParamData::PinParamData()
     : unique(FALSE), exception(FALSE), stream(FALSE),
@@ -88,7 +88,7 @@ bool PinParamData::tool_cmd(ToolCom * com, const char * args, BooL & ack) {
   return TRUE;
 }
 
-void PinParamData::save(Q3TextStream & st, QString & warning) const {
+void PinParamData::save(QTextStream & st, QString & warning) const {
   ObjectData::save(st, warning);
   
   nl_indent(st);

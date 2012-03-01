@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 
@@ -555,7 +555,7 @@ void BrowserClassInstance::add_from_tool(BrowserNode * parent, ToolCom * com,
   ci->write_id(com);
 }
 
-void BrowserClassInstance::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserClassInstance::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // " << get_name();
   else {

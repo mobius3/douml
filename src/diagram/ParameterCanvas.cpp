@@ -33,7 +33,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "ParameterCanvas.h"
@@ -548,7 +548,7 @@ void ParameterCanvas::post_loaded() {
     draw_all_flows();
 }
 
-void ParameterCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ParameterCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "parametercanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

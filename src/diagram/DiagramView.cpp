@@ -45,7 +45,7 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <Q3ValueList>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QKeyEvent>
 #include <Q3CString>
 #endif
@@ -2441,7 +2441,7 @@ void DiagramView::renumber(int ident) {
   id = ident;
 }
 
-void DiagramView::save_session(Q3TextStream & st) {
+void DiagramView::save_session(QTextStream & st) {
   st << (int) (((UmlCanvas *) canvas())->zoom() * 100)
      << ' ' << (int) window()->browser_diagram()->get_format() // useless
      << ' ' << verticalScrollBar()->value()

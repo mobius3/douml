@@ -33,7 +33,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ExpansionNodeCanvas.h"
 #include "BrowserExpansionNode.h"
@@ -487,7 +487,7 @@ void ExpansionNodeCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ExpansionNodeCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ExpansionNodeCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "expansionnodecanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

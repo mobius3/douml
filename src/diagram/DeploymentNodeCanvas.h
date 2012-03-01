@@ -29,7 +29,7 @@
 #include "DiagramCanvas.h"
 #include "Instance.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #define DEPLOYMENTNODE_CANVAS_MIN_SIZE 32
 #define DEPLOYMENTNODE_CANVAS_ADDED 10
@@ -75,7 +75,7 @@ class DeploymentNodeCanvas
     virtual void history_load(QBuffer &);
     virtual void history_hide();
 
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static DeploymentNodeCanvas * read(char * &, UmlCanvas * canvas, char *);
   
     void check_size();

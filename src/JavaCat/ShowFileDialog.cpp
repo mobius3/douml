@@ -31,7 +31,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qfile.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qapplication.h>
 #include <qdir.h>
 //Added by qt3to4:
@@ -53,7 +53,7 @@ ShowFileDialog::ShowFileDialog(const Q3CString & filename)
   QFile f(filename);
   
   if (f.open(QIODevice::ReadOnly)) {
-    Q3TextStream t(&f);
+    QTextStream t(&f);
     
     e->setText(t.read());
   }

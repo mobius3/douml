@@ -28,7 +28,7 @@
 
 #include "DiagramCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class ToolCom;
 
@@ -62,7 +62,7 @@ class TextCanvas : public DiagramCanvas {
     virtual void apply_shortcut(QString s);
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static TextCanvas * read(char * &, UmlCanvas *, char *);
     
     static void send(ToolCom * com, Q3CanvasItemList & all);

@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "ConstraintCanvas.h"
@@ -340,7 +340,7 @@ void ConstraintCanvas::update() {
   cl->check_constraint();
 }
 
-void ConstraintCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ConstraintCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "constraint_ref " << get_ident();
   }

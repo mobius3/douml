@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QPixmap>
@@ -571,7 +571,7 @@ void BrowserActivityPartition::post_load()
   }
 }
 
-void BrowserActivityPartition::save_stereotypes(Q3TextStream & st)
+void BrowserActivityPartition::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "activitypartition_stereotypes ";
@@ -588,7 +588,7 @@ void BrowserActivityPartition::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserActivityPartition::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserActivityPartition::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "activitypartition_ref " << get_ident() << " // " << get_name();
   else {

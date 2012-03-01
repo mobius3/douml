@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "UcUseCaseCanvas.h"
 #include "UcClassCanvas.h"
@@ -524,7 +524,7 @@ void UcUseCaseCanvas::resize(const QSize & sz, bool w, bool h) {
 			TRUE);
 }
 
-void UcUseCaseCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void UcUseCaseCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "usecasecanvas_ref " << get_ident() << " // " << browser_node->get_name();
   else {

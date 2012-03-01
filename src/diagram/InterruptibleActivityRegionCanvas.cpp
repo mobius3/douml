@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "InterruptibleActivityRegionCanvas.h"
 #include "SimpleData.h"
@@ -406,7 +406,7 @@ void InterruptibleActivityRegionCanvas::connexion(UmlCode action, DiagramItem * 
   the_canvas()->select(a);
 }
 
-void InterruptibleActivityRegionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void InterruptibleActivityRegionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "interruptibleactivityregioncanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

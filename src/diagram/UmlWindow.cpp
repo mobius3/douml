@@ -52,7 +52,7 @@
 //Added by qt3to4:
 #include <QCloseEvent>
 #include <Q3ValueList>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QKeyEvent>
 //#include <qcdestyle.h> 
 //#include <qsgistyle.h>
@@ -1174,9 +1174,9 @@ void UmlWindow::save_session() {
     QFile fp(d.absFilePath(fn));
 
     if (open_file(fp, QIODevice::WriteOnly, TRUE) != -1) {
-        Q3TextStream st(&fp);
+        QTextStream st(&fp);
 
-        st.setEncoding(Q3TextStream::Latin1);
+        st.setEncoding(QTextStream::Latin1);
 
         st << "window_sizes " << width() << " " << height() << " "
            << spl1->sizes().first() << " " << spl1->sizes().last() << " "

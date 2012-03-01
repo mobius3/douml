@@ -25,10 +25,10 @@
 
 #include <stdio.h>// debug
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "UmlClass.h"
@@ -68,7 +68,7 @@ void UmlClass::generate() {
   }
 }
 
-void UmlClass::generate(QTextOStream & f, Q3CString indent) {
+void UmlClass::generate(QTextStream & f, Q3CString indent) {
   Q3PtrVector<UmlItem> ch = children();
   const Q3ValueList<UmlActualParameter> actuals = this->actuals();
   const unsigned sup = ch.size();
@@ -265,12 +265,12 @@ void UmlClass::generate(QTextOStream & f, Q3CString indent) {
   }
 }
 
-void UmlClass::generate(QTextOStream & f, const Q3CString &,
+void UmlClass::generate(QTextStream & f, const Q3CString &,
 			Q3CString indent) {
   generate(f, indent);
 }
 
-void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t)
+void UmlClass::write(QTextStream & f, const UmlTypeSpec & t)
 {
   if (t.type != 0)
     t.type->write(f);
@@ -278,7 +278,7 @@ void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t)
     f << JavaSettings::type(t.explicit_type);
 }
 
-void UmlClass::write(QTextOStream & f) {
+void UmlClass::write(QTextStream & f) {
   if (isJavaExternal()) {
     Q3CString s = javaDecl().stripWhiteSpace();
     int index;
@@ -326,7 +326,7 @@ void UmlClass::write(QTextOStream & f) {
   }
 }
 
-void UmlClass::import(QTextOStream & f, const Q3CString & indent) {
+void UmlClass::import(QTextStream & f, const Q3CString & indent) {
   Q3CString s;
   
   if (!isJavaExternal()) {
@@ -356,23 +356,23 @@ void UmlClass::import(QTextOStream & f, const Q3CString & indent) {
   }
 }
 
-void UmlClass::generate_enum_pattern_item(QTextOStream &, int &,
+void UmlClass::generate_enum_pattern_item(QTextStream &, int &,
 					  const Q3CString &, Q3CString) {
   write_trace_header();
   UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>enum pattern</i> cannot have sub-class</b></font><br>");
   incr_warning();
 }
 
-void UmlClass::generate_enum_pattern_case(QTextOStream &, Q3CString) {
+void UmlClass::generate_enum_pattern_case(QTextStream &, Q3CString) {
   // error already signaled
 }
 
-void UmlClass::generate_enum_member(QTextOStream & f, Q3CString indent) {
+void UmlClass::generate_enum_member(QTextStream & f, Q3CString indent) {
   generate(f, indent + "  ");
   f << '\n';
 }
 
-void UmlClass::generate_formals(QTextOStream & f) {
+void UmlClass::generate_formals(QTextStream & f) {
   Q3ValueList<UmlFormalParameter> fs = formals();
   
   if (! fs.isEmpty()) {
@@ -400,7 +400,7 @@ void UmlClass::generate_formals(QTextOStream & f) {
   }
 }
 
-void UmlClass::generate_import(QTextOStream & f, const Q3CString & indent) {
+void UmlClass::generate_import(QTextStream & f, const Q3CString & indent) {
   Q3PtrVector<UmlItem> ch = children();
   const unsigned sup = ch.size();
   unsigned index;

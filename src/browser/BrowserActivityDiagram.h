@@ -31,7 +31,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 class QPixmap;
@@ -101,7 +101,7 @@ class BrowserActivityDiagram : public BrowserDiagram {
     virtual void package_settings(BooL & name_in_tab, ShowContextMode & show_context) const;
     virtual DrawingLanguage get_language() const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserActivityDiagram * read(char * &, char *, BrowserNode *);
     static BrowserActivityDiagram * read_ref(char * &, char *);
     static BrowserNode * get_it(const char * k, int id);
@@ -110,7 +110,7 @@ class BrowserActivityDiagram : public BrowserDiagram {
     
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void renumber(int phase);
     static void open_all();

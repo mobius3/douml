@@ -33,7 +33,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "PinCanvas.h"
 #include "BrowserPin.h"
@@ -553,7 +553,7 @@ void PinCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void PinCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void PinCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "pincanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

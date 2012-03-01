@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "PseudoStateData.h"
 #include "BrowserClass.h"
@@ -141,7 +141,7 @@ bool PseudoStateData::tool_cmd(ToolCom * com, const char * args,
       
 //
 
-void PseudoStateData::save(Q3TextStream & st, QString & warning) const {
+void PseudoStateData::save(QTextStream & st, QString & warning) const {
   if ((reference != 0) &&
       ((BrowserPseudoState *) browser_node)->can_reference(reference)) {
     nl_indent(st);

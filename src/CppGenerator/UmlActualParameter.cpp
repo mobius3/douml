@@ -23,15 +23,15 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlActualParameter.h"
 #include "UmlClass.h"
 
-bool UmlActualParameter::generate(QTextOStream & f_h, BooL & need_space) const {
+bool UmlActualParameter::generate(QTextStream & f_h, BooL & need_space) const {
   Q3CString s = value().toString();
   
   if (s.isEmpty()) {

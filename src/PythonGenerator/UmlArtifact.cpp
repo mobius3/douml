@@ -24,10 +24,10 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlArtifact.h"
 #include "UmlPackage.h"
@@ -42,7 +42,7 @@ UmlPackage * UmlArtifact::package_of_generated_artifact;
 UmlArtifact * UmlArtifact::current;
 Q3CString UmlArtifact::imports;
 
-void UmlArtifact::generate_imports(QTextOStream & f, Q3CString & made) {
+void UmlArtifact::generate_imports(QTextStream & f, Q3CString & made) {
   Q3PtrVector<UmlItem> ch = children();
   unsigned index;
   const unsigned sup = ch.size();
@@ -122,8 +122,8 @@ void UmlArtifact::generate() {
     unsigned n = cls.count();
     unsigned index;
     QByteArray file;
-    // note : QTextOStream(FILE *) does not work under windows
-    QTextOStream f(&file);
+    // note : QTextStream(FILE *) does not work under windows
+    QTextStream f(&file);
     const char * p = filedef;
     const char * pp = 0;
       

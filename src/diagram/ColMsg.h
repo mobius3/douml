@@ -31,7 +31,7 @@
 
 #include "UmlEnum.h"
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 
 class OperationData;
 class CodObjCanvas;
@@ -93,7 +93,7 @@ class ColMsg {
     void place_in(ColMsgList & l);
     bool extract_it(ColMsgList & l);
     
-    static void save(Q3TextStream & st, const ColMsgList & l, bool copy,
+    static void save(QTextStream & st, const ColMsgList & l, bool copy,
 		     QString & warning, const QString & diag_name);
     static void read(char * & st, ColMsgList & l, UmlCanvas * canvas);
     

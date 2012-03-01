@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -689,7 +689,7 @@ void BrowserDeploymentView::DropAfterEvent(QDropEvent * e, BrowserNode * after) 
     e->ignore();
 }
 
-void BrowserDeploymentView::save_stereotypes(Q3TextStream & st)
+void BrowserDeploymentView::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "deploymentview_stereotypes ";
@@ -704,7 +704,7 @@ void BrowserDeploymentView::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserDeploymentView::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserDeploymentView::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "deploymentview_ref " << get_ident() << " // " << get_name();
   else {

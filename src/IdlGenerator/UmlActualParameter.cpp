@@ -23,14 +23,14 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlActualParameter.h"
 #include "IdlSettings.h"
 
-void UmlActualParameter::generate(QTextOStream & f) const {
+void UmlActualParameter::generate(QTextStream & f) const {
   f << ((rank() == 0) ? "<" : ", ")
     << IdlSettings::type(value().toString());
 }

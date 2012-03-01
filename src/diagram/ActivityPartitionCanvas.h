@@ -33,7 +33,7 @@
 #include <qobject.h>
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ActivityContainerCanvas.h"
 
@@ -89,7 +89,7 @@ class ActivityPartitionCanvas : public QObject, public ActivityContainerCanvas {
     
     virtual void apply_shortcut(QString s);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ActivityPartitionCanvas * read(char * &, UmlCanvas *, char *);
     
     virtual void history_save(QBuffer &) const;

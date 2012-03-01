@@ -32,7 +32,7 @@
 #include <q3painter.h>
 #include <q3ptrdict.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QPixmap>
 
@@ -394,7 +394,7 @@ QString BrowserFlow::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p);
 }
 
-void BrowserFlow::save_stereotypes(Q3TextStream & st)
+void BrowserFlow::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "flow_stereotypes ";
@@ -411,7 +411,7 @@ void BrowserFlow::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserFlow::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserFlow::save(QTextStream & st, bool ref, QString & warning) {
   if (ref) {
     // for FlowCanvas
     st << "flow_ref " << get_ident() << " // " << get_name();

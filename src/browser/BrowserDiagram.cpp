@@ -43,7 +43,7 @@
 #include "UmlWindow.h"
 #include "myio.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 // use the same extension for all the diagrams : must share dict
 IdDict<BrowserDiagram> BrowserDiagram::all(257, __FILE__);
@@ -109,7 +109,7 @@ void BrowserDiagram::read_stereotypes(char * & st, char * & k)
   BrowserDeploymentDiagram::read_stereotypes(st, k);	// updates k
 }
 
-void BrowserDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserDiagram::save_stereotypes(QTextStream & st)
 {
   BrowserClassDiagram::save_stereotypes(st);
   BrowserSeqDiagram::save_stereotypes(st);

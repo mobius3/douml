@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <math.h>
 #include <q3popupmenu.h>
 
@@ -513,7 +513,7 @@ bool SimpleRelationCanvas::represents(BrowserNode * bn) {
 
 //
 
-void SimpleRelationCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SimpleRelationCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "simplerelationcanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {

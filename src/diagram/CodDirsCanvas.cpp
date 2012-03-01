@@ -30,7 +30,7 @@
 #include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "CodDirsCanvas.h"
 #include "BrowserDiagram.h"
@@ -351,7 +351,7 @@ bool CodDirsCanvas::represents(BrowserNode * bn) {
   return supports(bn);
 }
 
-void CodDirsCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodDirsCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "dirscanvas_ref " << get_ident();
   else {

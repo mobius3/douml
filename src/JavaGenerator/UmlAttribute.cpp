@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlAttribute.h"
 #include "UmlSettings.h"
@@ -35,12 +35,12 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlAttribute::generate(QTextOStream & f, const Q3CString & cl_stereotype,
+void UmlAttribute::generate(QTextStream & f, const Q3CString & cl_stereotype,
 			    Q3CString indent) {
   generate(f, cl_stereotype, indent, FALSE);
 }
 
-void UmlAttribute::generate(QTextOStream & f, const Q3CString & cl_stereotype,
+void UmlAttribute::generate(QTextStream & f, const Q3CString & cl_stereotype,
 			    Q3CString indent, bool enumitem) {
   if (!javaDecl().isEmpty()) {
     const char * p = javaDecl();
@@ -165,7 +165,7 @@ void UmlAttribute::generate(QTextOStream & f, const Q3CString & cl_stereotype,
   }
 }
 
-void UmlAttribute::generate_enum_pattern_item(QTextOStream & f, int & current_value,
+void UmlAttribute::generate_enum_pattern_item(QTextStream & f, int & current_value,
 					      const Q3CString & class_name,
 					      Q3CString indent) {
   if (!javaDecl().isEmpty()) {
@@ -247,7 +247,7 @@ void UmlAttribute::generate_enum_pattern_item(QTextOStream & f, int & current_va
   }
 }
 
-void UmlAttribute::generate_enum_pattern_case(QTextOStream & f,
+void UmlAttribute::generate_enum_pattern_case(QTextStream & f,
 					      Q3CString indent) {
   if (!javaDecl().isEmpty()) {
     const char * p = JavaSettings::enumPatternItemCase();
@@ -292,7 +292,7 @@ void UmlAttribute::generate_enum_pattern_case(QTextOStream & f,
   }
 }
 
-void UmlAttribute::generate_enum_item(QTextOStream & f,
+void UmlAttribute::generate_enum_item(QTextStream & f,
 				      Q3CString indent,
 				      BooL & first) {
   if (stereotype() != "attribute") {
@@ -305,7 +305,7 @@ void UmlAttribute::generate_enum_item(QTextOStream & f,
   }
 }
 
-void UmlAttribute::generate_enum_member(QTextOStream & f,
+void UmlAttribute::generate_enum_member(QTextStream & f,
 					Q3CString indent) {
   if (stereotype() == "attribute")
     generate(f, "enum", indent, FALSE);

@@ -28,7 +28,7 @@
 
 #include "ArrowCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class AssocContainCanvas : public ArrowCanvas {
   public:
@@ -43,7 +43,7 @@ class AssocContainCanvas : public ArrowCanvas {
     virtual void remove(bool from_model);
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static AssocContainCanvas * read(char * & st, UmlCanvas * canvas, char * k);
 };
 

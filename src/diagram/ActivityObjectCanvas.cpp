@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 
 #include "ActivityObjectCanvas.h"
@@ -721,7 +721,7 @@ bool ActivityObjectCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void ActivityObjectCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityObjectCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "activityobjectcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

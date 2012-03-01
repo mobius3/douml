@@ -30,7 +30,7 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "TemplateCanvas.h"
 #include "BrowserClass.h"
@@ -161,7 +161,7 @@ QString TemplateCanvas::may_connect(UmlCode &, const DiagramItem *) const {
   return TR("illegal");
 }
 
-void TemplateCanvas::save(Q3TextStream &, bool, QString &) const {
+void TemplateCanvas::save(QTextStream &, bool, QString &) const {
   // does nothing
 }
 
