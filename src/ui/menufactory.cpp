@@ -44,9 +44,76 @@ void MenuFactory::addItems(
 {
     for ( int i = 0; i < nofItems; i++ )
     {
-      const int itemId = menu.insertItem(
-            TR(items[i].name),
-            items[i].id );
-      menu.setWhatsThis( itemId, TR(items[i].whatsThis ) );
+      addItem(
+            menu,
+            items[i].name,
+            items[i].id,
+            items[i].whatsThis );
     }
+}
+
+void MenuFactory::addItem(
+    Q3PopupMenu&      menu,
+    const char *const name,
+    const int         id,
+    const char *const whatsThis)
+{
+  const int itemId = menu.insertItem(
+        TR(name),
+        id );
+  if ( NULL != whatsThis )
+  {
+    menu.setWhatsThis( itemId, TR( whatsThis ) );
+  }
+}
+
+MenuFactory::MenuFactory(
+    const MyStr& menuName )
+  : m_menu( 0, menuName )
+{
+
+}
+
+MenuFactory::~MenuFactory()
+{
+
+}
+
+Q3PopupMenu& MenuFactory::menu()
+{
+  return m_menu;
+}
+
+void MenuFactory::createTitle(
+    const QString title )
+{
+  createTitle( m_menu, title );
+}
+
+void MenuFactory::addItems(
+    const Item    items[],
+    const int     nofItems )
+{
+  addItems( m_menu, items, nofItems );
+}
+
+void MenuFactory::addItem(
+    const char* const name,
+    const int         id,
+    const char* const whatsThis )
+{
+  addItem( m_menu, name, id, whatsThis );
+}
+
+void MenuFactory::addItem(
+    const char* const name,
+    QMenu* const      subMenu )
+{
+  m_menu.insertItem( name, subMenu );
+}
+
+
+void MenuFactory::insertSeparator()
+{
+  m_menu.insertSeparator();
 }
