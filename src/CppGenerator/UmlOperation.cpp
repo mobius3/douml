@@ -43,6 +43,7 @@
 #include "UmlClass.h"
 #include "UmlRelation.h"
 #include "util.h"
+#include "Logging/QsLog.h"
 
 // to manage preserved bodies, the key is the id under bouml
 Q3IntDict<char> UmlOperation::bodies(127);
@@ -796,7 +797,9 @@ void UmlOperation::generate_def(QTextOStream & fs, Q3CString indent, bool h,
 
 static char * read_file(const char * filename)
 {
-  QFile fp(filename);
+
+    QLOG_INFO() << "Reading the file: " << filename;
+    QFile fp(filename);
   
   if (fp.open(QIODevice::ReadOnly)) {
     QFileInfo fi(fp);
@@ -819,6 +822,12 @@ static char * read_file(const char * filename)
 
 static void read_bodies(const char * path, Q3IntDict<char> & bodies)
 {
+  QLOG_INFO() << "Reading bodies from file: " << path;
+  int bodiesSize = bodies.size();
+  for(int i(0); i < bodiesSize; ++i)
+  {
+      QLOG_INFO() << bodies[i];
+  }
   char * s = read_file(path);
   
   if (s != 0) {

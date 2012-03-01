@@ -50,7 +50,7 @@ bool UmlAttribute::new_one(Class * container, Q3CString name,
 			   Q3CString comment, Q3CString description)
 {
 #ifdef TRACE
-  cout << "ATTRIBUTE '" << name << "'\n";
+  QLOG_INFO() <<"ATTRIBUTE '" << name << "'\n";
 #endif
   
 #ifndef REVERSE

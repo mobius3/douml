@@ -93,7 +93,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
 			   )
 {
 #ifdef DEBUG_BOUML
-  cout << "ATTRIBUTE '" << name << "' type '" << type << "' modifier '" << modifier << "' array '" << array << "'\n";
+  QLOG_INFO() <<"ATTRIBUTE '" << name << "' type '" << type << "' modifier '" << modifier << "' array '" << array << "'\n";
 #endif
   
   if (

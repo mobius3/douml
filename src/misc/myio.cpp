@@ -57,6 +57,7 @@
 #include "UmlGlobal.h"
 #include "err.h"
 #include "translate.h"
+#include "Logging/QsLog.h"
 
 // QFile::baseName() return string before the first '.' rather than the last
 
@@ -113,7 +114,9 @@ void set_on_load_diagram(bool y)
 }
 
 
-const char * stringify(UmlVisibility v) {
+const char * stringify(UmlVisibility v)
+{
+    QLOG_INFO() << "Call to stringigy detected";
   switch(v) {
   case UmlPublic:
     return "public";

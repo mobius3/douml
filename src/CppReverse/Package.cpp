@@ -980,7 +980,7 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
 	; // lost
       else if (Scan && (s != "extern") && (s != "typename")) {
 #ifdef DEBUG_BOUML
-	cout << "reverse_toplevel_forms skip_body sur '" << s << "'\n";
+	QLOG_INFO() <<"reverse_toplevel_forms skip_body sur '" << s << "'\n";
 #endif
 	UmlOperation::skip_body();
       }
@@ -991,7 +991,7 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block) {
     }
   }
 #ifdef DEBUG_BOUML
-  cout << "exit Package::reverse_toplevel_forms avec '" << s << "'\n";
+  QLOG_INFO() <<"exit Package::reverse_toplevel_forms avec '" << s << "'\n";
 #endif
 }
 
@@ -1005,7 +1005,7 @@ void Package::reverse_toplevel_form(Q3CString f, Q3CString s) {
   Q3CString array;
 
 #ifdef DEBUG_BOUML
-  cout << "Package::reverse_toplevel_form(" << s << ")\n";
+  QLOG_INFO() <<"Package::reverse_toplevel_form(" << s << ")\n";
 #endif
   
   for (;;) {
@@ -1082,27 +1082,27 @@ void Package::reverse_toplevel_form(Q3CString f, Q3CString s) {
 	type = s = Lex::complete_template_type(s);
 
 #ifdef DEBUG_BOUML
-	cout << "type = '" << type << "'\n";
+	QLOG_INFO() <<"type = '" << type << "'\n";
 #endif
       }
       else if (name.isEmpty()) {
 	if (type.right(3) == "::~") {
 	  type += s;
 #ifdef DEBUG_BOUML
-	  cout << "type => '" << type << "'\n";
+	  QLOG_INFO() <<"type => '" << type << "'\n";
 #endif
 	}
 	else {
 	  name = Lex::complete_template_type(s);
 
 #ifdef DEBUG_BOUML
-	  cout << "name = '" << name << "'\n";
+	  QLOG_INFO() <<"name = '" << name << "'\n";
 #endif
 	}
       }
       else {
 #ifdef DEBUG_BOUML
-	cout << "ERROR '" << s << "' alors qu a deja le type '" << type << "' et le nom '" << name << "'\n";
+	QLOG_INFO() <<"ERROR '" << s << "' alors qu a deja le type '" << type << "' et le nom '" << name << "'\n";
 #endif
 	break;
       }
@@ -1111,7 +1111,7 @@ void Package::reverse_toplevel_form(Q3CString f, Q3CString s) {
       array += s;
     else {
 #ifdef DEBUG_BOUML
-      cout << "ERROR : '" << s << "'\n";
+      QLOG_INFO() <<"ERROR : '" << s << "'\n";
 #endif
       break;
     }
@@ -1146,7 +1146,7 @@ void Package::reverse_variable(const Q3CString & name) {
   if (name.isEmpty()) {
     Lex::syntax_error();
 #ifdef DEBUG_BOUML
-    cout << "ERROR ';' et name.isEmpty() || type.isEmpty()\n";
+    QLOG_INFO() <<"ERROR ';' et name.isEmpty() || type.isEmpty()\n";
 #endif
     return;
   }
@@ -1160,7 +1160,7 @@ void Package::reverse_variable(const Q3CString & name) {
     Lex::warn(Q3CString("<font color =\"red\"> ") + Lex::quote(name) +
 	      "</font> is lost");
 #ifdef DEBUG_BOUML
-    cout << "ERROR " << name << " lost";
+    QLOG_INFO() <<"ERROR " << name << " lost";
 #endif
     return;
   }
@@ -1248,7 +1248,7 @@ void Package::reverse_variable(const Q3CString & name) {
 	    + "</font> is not a static attribute of <font color =\"red\"> " +
 	    Lex::quote(typespec.type->name()) + "</font>");
 #ifdef DEBUG_BOUML
-  cout << "ERROR " << name << " undeclared static attribute\n";
+  QLOG_INFO() <<"ERROR " << name << " undeclared static attribute\n";
 #endif
 }
 
