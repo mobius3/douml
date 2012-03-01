@@ -28,7 +28,7 @@
 
 #include "DiagramCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class ToolCom;
 
@@ -76,7 +76,7 @@ class SdContinuationCanvas : public QObject, public DiagramCanvas {
     
     static void send(ToolCom * com, Q3CanvasItemList & all);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static SdContinuationCanvas * read(char * &, UmlCanvas *, char *);
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);

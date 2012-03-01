@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <Q3ValueList>
@@ -123,7 +123,7 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
     virtual const char * constraint() const;
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserClass * read_ref(char * &, const char * k = 0);
     static BrowserClass * read(char * &, char *, BrowserNode *, bool force = TRUE);
     static BrowserNode * read_any_ref(char * &, char *);
@@ -157,7 +157,7 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
     
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * &);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
     

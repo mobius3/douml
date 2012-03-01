@@ -30,7 +30,7 @@
 #include <math.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "LabelCanvas.h"
 #include "DiagramCanvas.h"
@@ -324,7 +324,7 @@ void LabelCanvas::set_z(double z) {
 
 //
 
-void LabelCanvas::save(Q3TextStream  & st, bool, QString &) const {
+void LabelCanvas::save(QTextStream  & st, bool, QString &) const {
   st << "label ";
   save_string(text(), st);
   if (font().bold())

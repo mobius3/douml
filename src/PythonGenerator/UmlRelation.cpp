@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlRelation.h"
 #include "UmlClass.h"
@@ -38,7 +38,7 @@
 #include "UmlCom.h"
 
 
-void UmlRelation::generate_imports(QTextOStream & f, Q3CString & made) {
+void UmlRelation::generate_imports(QTextStream & f, Q3CString & made) {
   if (!pythonDecl().isEmpty()) {
     bool from;
     
@@ -60,7 +60,7 @@ void UmlRelation::generate_imports(QTextOStream & f, Q3CString & made) {
   }
 }
 
-void UmlRelation::generate_inherit(const char *& sep, QTextOStream & f) {
+void UmlRelation::generate_inherit(const char *& sep, QTextStream & f) {
   switch (relationKind()) {
   default:
     return;
@@ -91,7 +91,7 @@ void UmlRelation::generate_inherit(const char *& sep, QTextOStream & f) {
   }
 }
 
-void UmlRelation::generate(QTextOStream & f, const Q3CString &,
+void UmlRelation::generate(QTextStream & f, const Q3CString &,
 			   Q3CString indent, BooL & indent_needed,
 			   int &, const Q3CString & self) {
   switch (relationKind()) {

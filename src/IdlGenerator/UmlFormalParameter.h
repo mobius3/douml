@@ -5,9 +5,9 @@
 #include "UmlBaseFormalParameter.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
-class QTextOStream;
+class QTextStream;
 
 // This class manages 'formal parameters' of a template class. For instance 'T' in 
 //
@@ -18,7 +18,7 @@ class UmlFormalParameter : public UmlBaseFormalParameter {
   public:
     UmlFormalParameter() {};
 
-    void generate(QTextOStream & f, Q3CString & s, const char *& sep) const;
+    void generate(QTextStream & f, Q3CString & s, const char *& sep) const;
 };
 
 #endif

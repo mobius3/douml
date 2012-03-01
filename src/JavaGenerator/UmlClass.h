@@ -29,12 +29,12 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlBaseClass.h"
 #include "UmlTypeSpec.h"
 
-class QTextOStream;
+class QTextStream;
 
 class UmlPackage;
 class UmlClass;
@@ -48,20 +48,20 @@ class UmlClass : public UmlBaseClass {
       : UmlBaseClass(id, n), managed(FALSE) {};
   
     Q3CString java_stereotype();
-    void generate(QTextOStream &, Q3CString indent);
+    void generate(QTextStream &, Q3CString indent);
     
     virtual void generate();
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
+    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
 			  Q3CString indent);    
-    virtual void generate_enum_pattern_item(QTextOStream &, int &, const Q3CString &, Q3CString);
-    virtual void generate_enum_pattern_case(QTextOStream &, Q3CString);
-    virtual void generate_enum_member(QTextOStream &, Q3CString);
-    virtual void generate_import(QTextOStream & f, const Q3CString & indent);    
-    void generate_formals(QTextOStream & f);
-    void import(QTextOStream & f, const Q3CString & indent);
+    virtual void generate_enum_pattern_item(QTextStream &, int &, const Q3CString &, Q3CString);
+    virtual void generate_enum_pattern_case(QTextStream &, Q3CString);
+    virtual void generate_enum_member(QTextStream &, Q3CString);
+    virtual void generate_import(QTextStream & f, const Q3CString & indent);    
+    void generate_formals(QTextStream & f);
+    void import(QTextStream & f, const Q3CString & indent);
     
-    void write(QTextOStream &);
-    static void write(QTextOStream &, const UmlTypeSpec &);
+    void write(QTextStream &);
+    static void write(QTextStream &, const UmlTypeSpec &);
 };
 
 #endif

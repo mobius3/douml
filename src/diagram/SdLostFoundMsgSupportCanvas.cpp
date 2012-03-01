@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "SdLostFoundMsgSupportCanvas.h"
 #include "SdMsgCanvas.h"
@@ -170,7 +170,7 @@ bool SdLostFoundMsgSupportCanvas::isOverlappingDuration() const {
   return FALSE;
 }
 
-void SdLostFoundMsgSupportCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void SdLostFoundMsgSupportCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref)
     st << "lostfoundmsgsupport_ref " << get_ident();
   else {

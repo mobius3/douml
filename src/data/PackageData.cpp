@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "BrowserPackage.h"
 #include "PackageData.h"
@@ -156,7 +156,7 @@ bool PackageData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void PackageData::save(Q3TextStream & st, QString & warning) const {
+void PackageData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
 
   if (!cpp_h_dir.isEmpty()) {

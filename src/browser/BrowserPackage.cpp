@@ -34,7 +34,7 @@
 #include <q3filedialog.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QDragMoveEvent>
 
@@ -1960,9 +1960,9 @@ void BrowserPackage::init()
 void BrowserPackage::save_stereotypes()
 {
   QByteArray newdef;
-  Q3TextStream st(newdef, QIODevice::WriteOnly);
+  QTextStream st(newdef, QIODevice::WriteOnly);
 	
-  st.setEncoding(Q3TextStream::Latin1);
+  st.setEncoding(QTextStream::Latin1);
   
   nl_indent(st);
   st << "package_stereotypes ";
@@ -2085,7 +2085,7 @@ bool BrowserPackage::import_stereotypes()
 
 // save / restore
 
-void BrowserPackage::save(Q3TextStream & st, bool, QString &) {
+void BrowserPackage::save(QTextStream & st, bool, QString &) {
   // saves just its reference for its father
   nl_indent(st);
   st << "package_ref " << get_ident() << " // " << get_name();
@@ -2154,9 +2154,9 @@ void BrowserPackage::save_all(bool modified_only)
 	if (prj)
 	  UmlWindow::historic_add(fp.name());
 	
-	Q3TextStream st(&fp);
+	QTextStream st(&fp);
 	
-	st.setEncoding(Q3TextStream::Latin1);
+	st.setEncoding(QTextStream::Latin1);
 	
 	// saves the package own data
 	
@@ -2345,7 +2345,7 @@ bool BrowserPackage::must_be_saved()
   return FALSE;
 }
 
-void BrowserPackage::save_session(Q3TextStream & st) {
+void BrowserPackage::save_session(QTextStream & st) {
   if (show_stereotypes)
     st << "show_stereotypes\n";
   

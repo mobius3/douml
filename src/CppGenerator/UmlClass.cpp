@@ -24,11 +24,11 @@
 // *************************************************************************
 
 #include <stdlib.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
-#include <QTextOStream>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -152,15 +152,18 @@ void UmlClass::compute_dependency(Q3PtrList<CppRefType> & dependencies,
         CppRefType::force_ref(this, dependencies);
 }
 
-void UmlClass::generate_decl(QTextOStream & f_h, Q3CString indent) {
+void UmlClass::generate_decl(QTextStream & f_h, Q3CString indent) {
     context.append(this);
 
     bool removed = FALSE;
     Q3PtrVector<UmlItem> ch = children();
     const unsigned sup = ch.size();
+    QLOG_INFO() << "children.size() is: " << sup;
     const Q3CString & stereotype = cpp_stereotype();
     bool a_typedef = (stereotype == "typedef");
+
     bool an_enum = (stereotype == "enum");
+    QLOG_INFO() << "the class is an enum: " << an_enum;
     const Q3ValueList<UmlFormalParameter> formals = this->formals();
     const Q3ValueList<UmlActualParameter> actuals = this->actuals();
     unsigned index;
@@ -178,7 +181,8 @@ void UmlClass::generate_decl(QTextOStream & f_h, Q3CString indent) {
     if (*p != '#')
         f_h << indent;
     
-    for (;;) {
+    for (;;)
+    {
         if (*p == 0)
         {
             if (pp == 0)
@@ -200,7 +204,7 @@ void UmlClass::generate_decl(QTextOStream & f_h, Q3CString indent) {
             bool isNotGrid = *p != '#';
             bool isMembers = strncmp(p, "${members}", 10);
             bool isItems = strncmp(p, "${items}", 8);
-            if (isNotNull && isNotGrid && isMembers && isItems)
+            if (isNotNull && isNotGrid && (isMembers || isItems))
                 f_h << indent;
         }
         else if (*p == '@')
@@ -247,7 +251,8 @@ void UmlClass::generate_decl(QTextOStream & f_h, Q3CString indent) {
         }
         else if (an_enum)
         {
-            if (!strncmp(p, "${items}", 8)) {
+            if (!strncmp(p, "${items}", 8))
+            {
                 p += 8;
 
                 // items declaration
@@ -255,20 +260,23 @@ void UmlClass::generate_decl(QTextOStream & f_h, Q3CString indent) {
                 aVisibility current_visibility = DefaultVisibility;
                 unsigned max = sup - 1;
                 BooL first = TRUE;
-
+                QLOG_INFO() << "Found enum";
                 for (index = 0; index < sup; index += 1)
                 {
                     UmlItem * it = ch[index];
-
-                    switch (it->kind()) {
+                    QLOG_INFO() << "The item is of kind: " <<  it->kind();
+                    switch (it->kind())
+                    {
                     case aClass:
                     case aNcRelation:
                         break;
                     default:
                         if (! ((UmlClassItem *) it)->cppDecl().isEmpty())
+                        {
                             ((UmlClassItem *) it)->generate_decl(current_visibility,
                                                                  f_h, stereotype, indent,
                                                                  first, index == max);
+                        }
                     }
                 }
 
@@ -388,7 +396,7 @@ void UmlClass::generate_decl(QTextOStream & f_h, Q3CString indent) {
         context.removeLast();
 }
 
-void UmlClass::generate_decl(aVisibility & current_visibility, QTextOStream & f_h,
+void UmlClass::generate_decl(aVisibility & current_visibility, QTextStream & f_h,
 							 const Q3CString &, Q3CString indent,
 							 BooL & first, bool) {
 	generate_visibility(current_visibility, f_h, first, indent);
@@ -398,7 +406,7 @@ void UmlClass::generate_decl(aVisibility & current_visibility, QTextOStream & f_
 	f_h << '\n';
 }
 
-void UmlClass::generate_def(QTextOStream & f, Q3CString indent, bool h) {
+void UmlClass::generate_def(QTextStream & f, Q3CString indent, bool h) {
     if (! cppDecl().isEmpty()) {
         Q3PtrVector<UmlItem> ch = children();
         Q3CString templates;
@@ -416,7 +424,7 @@ void UmlClass::generate_def(QTextOStream & f, Q3CString indent, bool h) {
     }
 }
 
-void UmlClass::generate_def(QTextOStream & f, Q3CString indent, bool h,
+void UmlClass::generate_def(QTextStream & f, Q3CString indent, bool h,
 							Q3CString templates, Q3CString cl_names,
 							Q3CString, Q3CString)
 {
@@ -530,7 +538,7 @@ Q3CString UmlClass::decl() {
     return result + name() + ';' + close_template + '\n';
 }
 
-void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t,
+void UmlClass::write(QTextStream & f, const UmlTypeSpec & t,
                      bool with_formals, BooL * is_template)
 {
     if (t.type != 0)
@@ -546,7 +554,7 @@ void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t,
 
 }
 
-void UmlClass::write(QTextOStream & f, bool with_formals, BooL * is_template,
+void UmlClass::write(QTextStream & f, bool with_formals, BooL * is_template,
                      const Q3ValueList<UmlActualParameter> & actuals) {
     if (context.findRef(this) == -1) {
         if (parent()->kind() == aClass) {

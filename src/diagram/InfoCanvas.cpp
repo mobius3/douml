@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "InfoCanvas.h"
 #include "DiagramCanvas.h"
@@ -234,7 +234,7 @@ void InfoCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void InfoCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void InfoCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "information_ref " << get_ident();
   }

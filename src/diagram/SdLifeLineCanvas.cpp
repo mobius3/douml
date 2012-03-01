@@ -32,7 +32,7 @@
 #include <q3popupmenu.h> 
 #include <q3ptrdict.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "SdLifeLineCanvas.h"
 #include "SdObjCanvas.h"
@@ -385,7 +385,7 @@ bool SdLifeLineCanvas::copyable() const {
   return FALSE;
 }
 
-void SdLifeLineCanvas::save(Q3TextStream & st, bool, QString &) const {
+void SdLifeLineCanvas::save(QTextStream & st, bool, QString &) const {
   st << "\nERROR SdLifeLineCanvas::save must not be called\n";
 }
 

@@ -33,7 +33,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "ParameterSetCanvas.h"
@@ -444,7 +444,7 @@ void ParameterSetCanvas::connexion(UmlCode, DiagramItem *,
   // does nothing
 }
 
-void ParameterSetCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ParameterSetCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "parametersetcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

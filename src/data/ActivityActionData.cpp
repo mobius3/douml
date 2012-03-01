@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "BrowserActivityAction.h"
@@ -278,7 +278,7 @@ void ActivityActionData::depend_deleted() {
   action->on_delete();
 }
 
-void ActivityActionData::save(Q3TextStream & st, QString & warning) const {
+void ActivityActionData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   uml_condition.save(st, "pre_uml", "post_uml");
   cpp_condition.save(st, "pre_cpp", "post_cpp");
@@ -479,7 +479,7 @@ QString OpaqueAction::str(DrawingLanguage lang, QString name) const {
     : toUnicode(s);
 }
 
-void OpaqueAction::save(Q3TextStream & st, QString &) const {
+void OpaqueAction::save(QTextStream & st, QString &) const {
   if (! uml_behavior.isEmpty()) {
     nl_indent(st);
     st << "uml_behavior ";
@@ -574,7 +574,7 @@ UmlActionKind AcceptEventAction::kind() const {
   return UmlAcceptEventAction;
 }
 
-void AcceptEventAction::save(Q3TextStream & st, QString &) const {
+void AcceptEventAction::save(QTextStream & st, QString &) const {
   if (unmarshall) {
     nl_indent(st);
     st << "unmarshall";
@@ -733,7 +733,7 @@ BrowserNode * AccessVariableValueAction::referenced(const char *& s) const {
   return variable;
 }
 
-void AccessVariableValueAction::save(Q3TextStream & st, QString & warning) const {
+void AccessVariableValueAction::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   
   if (variable == 0)
@@ -831,7 +831,7 @@ Q3ValueList<PinDescr> ChangeVariableValueAction::pins(const char * str) const {
   return r;
 }
 
-void ChangeVariableValueAction::save(Q3TextStream & st, QString & warning,
+void ChangeVariableValueAction::save(QTextStream & st, QString & warning,
 				     const char * str) const {
   if (flag) {
     nl_indent(st);
@@ -948,7 +948,7 @@ Q3ValueList<PinDescr> AddVariableValueAction::pins() const {
   return ChangeVariableValueAction::pins("insertAt");
 }
 
-void AddVariableValueAction::save(Q3TextStream & st, QString & warning) const {
+void AddVariableValueAction::save(QTextStream & st, QString & warning) const {
   ChangeVariableValueAction::save(st, warning, "replace_all");
 }
 
@@ -976,7 +976,7 @@ Q3ValueList<PinDescr> RemoveVariableValueAction::pins() const {
   return ChangeVariableValueAction::pins("removeAt");
 }
 
-void RemoveVariableValueAction::save(Q3TextStream & st, QString & warning) const {
+void RemoveVariableValueAction::save(QTextStream & st, QString & warning) const {
   ChangeVariableValueAction::save(st, warning, "remove_duplicates");
 }
 
@@ -1062,7 +1062,7 @@ BrowserNode * CallBehaviorAction::referenced(const char *& s) const {
   return behavior;
 }
 
-void CallBehaviorAction::save(Q3TextStream & st, QString & warning) const {
+void CallBehaviorAction::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   
   if (synchronous)
@@ -1240,7 +1240,7 @@ void CallOperationAction::on_delete() {
   operation = 0;
 }
 
-void CallOperationAction::save(Q3TextStream & st, QString & warning) const {
+void CallOperationAction::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   
   if (synchronous)
@@ -1328,7 +1328,7 @@ Q3ValueList<PinDescr> SendObjectAction::pins() const {
   return r;
 }
   
-void SendObjectAction::save(Q3TextStream &, QString &) const {
+void SendObjectAction::save(QTextStream &, QString &) const {
   // does nothing
 }
 
@@ -1375,7 +1375,7 @@ Q3ValueList<PinDescr> SendSignalAction::pins() const {
   return r;
 }
   
-void SendSignalAction::save(Q3TextStream & st, QString &) const {
+void SendSignalAction::save(QTextStream & st, QString &) const {
   if (! ocl_signal.isEmpty()) {
     nl_indent(st);
     st << "uml ";
@@ -1503,7 +1503,7 @@ Q3ValueList<PinDescr> UnmarshallAction::pins() const {
   return r;
 }
   
-void UnmarshallAction::save(Q3TextStream &, QString &) const {
+void UnmarshallAction::save(QTextStream &, QString &) const {
   // does nothing
 }
 
@@ -1552,7 +1552,7 @@ bool ValueSpecificationAction::may_add_pin() const {
   return FALSE;
 }
 
-void ValueSpecificationAction::save(Q3TextStream & st, QString &) const {
+void ValueSpecificationAction::save(QTextStream & st, QString &) const {
   if (! uml_value.isEmpty()) {
     nl_indent(st);
     st << "uml_value ";
@@ -1656,7 +1656,7 @@ Q3ValueList<PinDescr> AcceptCallAction::pins() const {
   return r;
 }
 
-void AcceptCallAction::save(Q3TextStream & st, QString &) const {
+void AcceptCallAction::save(QTextStream & st, QString &) const {
   if (! uml_trigger.isEmpty()) {
     nl_indent(st);
     st << "uml_trigger ";
@@ -1762,7 +1762,7 @@ Q3ValueList<PinDescr> ReplyAction::pins() const {
   return r;
 }
 
-void ReplyAction::save(Q3TextStream & st, QString &) const {
+void ReplyAction::save(QTextStream & st, QString &) const {
   if (! uml_trigger.isEmpty()) {
     nl_indent(st);
     st << "uml_trigger ";
@@ -1866,7 +1866,7 @@ Q3ValueList<PinDescr> CreateObjectAction::pins() const {
   return r;
 }
 
-void CreateObjectAction::save(Q3TextStream & st, QString &) const {
+void CreateObjectAction::save(QTextStream & st, QString &) const {
   if (! classifier.isEmpty()) {
     nl_indent(st);
     st << "classifier ";
@@ -1940,7 +1940,7 @@ bool DestroyObjectAction::may_add_pin() const {
   return FALSE;
 }
 
-void DestroyObjectAction::save(Q3TextStream & st, QString &) const {  
+void DestroyObjectAction::save(QTextStream & st, QString &) const {  
   if (is_destroy_links) {
     nl_indent(st);
     st << "is_destroy_links ";
@@ -2031,7 +2031,7 @@ bool TestIdentityAction::may_add_pin() const {
   return FALSE;
 }
 
-void TestIdentityAction::save(Q3TextStream &, QString &) const {
+void TestIdentityAction::save(QTextStream &, QString &) const {
   // does nothing
 }
 
@@ -2075,7 +2075,7 @@ bool RaiseExceptionAction::may_add_pin() const {
   return FALSE;
 }
 
-void RaiseExceptionAction::save(Q3TextStream &, QString &) const {
+void RaiseExceptionAction::save(QTextStream &, QString &) const {
   // does nothing
 }
 
@@ -2144,7 +2144,7 @@ BrowserNode * ReduceAction::referenced(const char *& s) const {
   return reducer;
 }
 
-void ReduceAction::save(Q3TextStream & st, QString & warning) const {
+void ReduceAction::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   
   if (is_ordered)

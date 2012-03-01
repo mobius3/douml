@@ -28,7 +28,7 @@
 
 #include <q3canvas.h>
 #include <q3mainwindow.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 
 #include "UmlEnum.h"
 
@@ -93,7 +93,7 @@ virtual ~DiagramWindow();
 
     void dont_save() { no_save = TRUE; };
     
-    void save_session(Q3TextStream & st);
+    void save_session(QTextStream & st);
     void read_session(char * & st);
         
   public slots:

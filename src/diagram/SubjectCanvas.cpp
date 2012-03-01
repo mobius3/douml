@@ -31,7 +31,7 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "SubjectCanvas.h"
@@ -364,7 +364,7 @@ void SubjectCanvas::prepare_for_move(bool on_resize) {
   }
 }
 
-void SubjectCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void SubjectCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "subject_ref " << get_ident();
   }

@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -631,7 +631,7 @@ QString BrowserActivityObject::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
 }
 
-void BrowserActivityObject::save_stereotypes(Q3TextStream & st)
+void BrowserActivityObject::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "activityobject_stereotypes ";
@@ -648,7 +648,7 @@ void BrowserActivityObject::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserActivityObject::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserActivityObject::save(QTextStream & st, bool ref, QString & warning) {
   if (ref) {
     st << "activityobject_ref " << get_ident()
       << " // activity object " << get_name();

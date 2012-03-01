@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QPixmap>
@@ -431,7 +431,7 @@ const QStringList & BrowserParameter::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserParameter::save_stereotypes(Q3TextStream & st)
+void BrowserParameter::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "parameter_stereotypes ";
@@ -446,7 +446,7 @@ void BrowserParameter::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserParameter::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserParameter::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "parameter_ref " << get_ident() << " // " << get_name();
   else {

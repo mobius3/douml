@@ -33,7 +33,7 @@
 #include <qobject.h>
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ActivityContainerCanvas.h"
 #include "Settings.h"
@@ -109,7 +109,7 @@ class ActivityCanvas : public QObject, public ActivityContainerCanvas {
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ActivityCanvas * read(char * &, UmlCanvas *, char *);
     
     virtual void history_save(QBuffer &) const;

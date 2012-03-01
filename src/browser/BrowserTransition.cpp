@@ -32,7 +32,7 @@
 #include <q3painter.h>
 #include <q3ptrdict.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QPixmap>
 
@@ -372,7 +372,7 @@ QString BrowserTransition::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p);
 }
 
-void BrowserTransition::save(Q3TextStream & st, bool ref,
+void BrowserTransition::save(QTextStream & st, bool ref,
 			     QString & warning) {
   if (ref) {
     // for TransitionCanvas

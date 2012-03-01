@@ -37,7 +37,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3ValueList>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QDragMoveEvent>
 #include <Q3CString>
@@ -2345,7 +2345,7 @@ bool BrowserClass::tool_global_cmd(ToolCom * com, const char * args)
   }
 }
 
-void BrowserClass::save_stereotypes(Q3TextStream & st)
+void BrowserClass::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "class_stereotypes ";
@@ -2368,7 +2368,7 @@ void BrowserClass::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserClass::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserClass::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "class_ref " << get_ident() << " // " << get_name();
   else {

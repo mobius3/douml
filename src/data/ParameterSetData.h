@@ -26,7 +26,7 @@
 #ifndef PARAMETERSETDATA_H
 #define PARAMETERSETDATA_H
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <q3valuelist.h>
 
 #include "SimpleData.h"
@@ -56,7 +56,7 @@ class ParameterSetData : public SimpleData {
     bool tool_cmd(ToolCom * com, const char * args,
 		  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * &, char * &);
 
   protected:

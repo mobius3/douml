@@ -28,10 +28,10 @@
 
 
 #include <q3popupmenu.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <q3filedialog.h>
 //Added by qt3to4:
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "Tool.h"
 #include "myio.h"
@@ -316,9 +316,9 @@ static const struct{
 void Tool::save() 
 {
   QByteArray newdef;
-  Q3TextStream st(newdef, QIODevice::WriteOnly);
+  QTextStream st(newdef, QIODevice::WriteOnly);
 	
-  st.setEncoding(Q3TextStream::Latin1);
+  st.setEncoding(QTextStream::Latin1);
 
   st << "// 'tool' \"the executable\" \"displayed string\" {target}+";
   

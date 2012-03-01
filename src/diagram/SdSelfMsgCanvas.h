@@ -28,7 +28,7 @@
 
 #include "SdMsgBaseCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class SdSelfMsgCanvas : public SdMsgBaseCanvas {
   public:
@@ -56,7 +56,7 @@ class SdSelfMsgCanvas : public SdMsgBaseCanvas {
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
   
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static SdSelfMsgCanvas * read(char * &, UmlCanvas *, char *);
 };
 

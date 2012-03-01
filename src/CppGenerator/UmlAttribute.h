@@ -1,6 +1,6 @@
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3PtrList>
 // *************************************************************************
 //
@@ -30,7 +30,7 @@
 #ifndef UMLATTRIBUTE_H
 #define UMLATTRIBUTE_H
 
-class QTextOStream;
+class QTextStream;
 
 #include "UmlBaseAttribute.h"
 
@@ -42,10 +42,10 @@ class UmlAttribute : public UmlBaseAttribute {
     virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
 				    const Q3CString & cl_stereotype,
 				    bool all_in_h);
-    virtual void generate_decl(aVisibility & current_visibility, QTextOStream & f_h,
+    virtual void generate_decl(aVisibility & current_visibility, QTextStream & f_h,
 			       const Q3CString & cl_stereotype, Q3CString indent,
 			       BooL & first, bool last);
-    virtual void generate_def(QTextOStream &f, Q3CString indent, bool h,
+    virtual void generate_def(QTextStream &f, Q3CString indent, bool h,
 			      Q3CString templates, Q3CString cl_names,
 			      Q3CString templates_tmplop, 
 			      Q3CString cl_names_tmplop);

@@ -27,7 +27,7 @@
 #define DIAGRAMVIEW_H
 
 #include <q3canvas.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QWheelEvent>
@@ -111,7 +111,7 @@ class DiagramView : public Q3CanvasView {
     void read();
     void paste();
     virtual void read(char *, char * k) = 0;
-    virtual void save(Q3TextStream & st, QString & warning, bool copy) const = 0;
+    virtual void save(QTextStream & st, QString & warning, bool copy) const = 0;
     void load(const char *);
     
     void protect_history(bool y) { history_protected = y; }
@@ -124,7 +124,7 @@ class DiagramView : public Q3CanvasView {
     bool available_undo();
     bool available_redo();
       
-    void save_session(Q3TextStream & st);
+    void save_session(QTextStream & st);
     void read_session(char * & st);
     
     static void init();

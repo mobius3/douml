@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 
 #include "IconCanvas.h"
@@ -229,7 +229,7 @@ bool IconCanvas::represents(BrowserNode * bn) {
   return (bn == browser_node);
 }
 
-void IconCanvas::save(Q3TextStream & st, bool, QString & warning) const {
+void IconCanvas::save(QTextStream & st, bool, QString & warning) const {
   nl_indent(st);
   st << "iconcanvas " << get_ident() << ' ';
   browser_node->save(st, TRUE, warning);

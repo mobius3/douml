@@ -27,7 +27,7 @@
 
 
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 #include <qdir.h>
 #include <qfile.h>
 #include <qstring.h>
@@ -1520,7 +1520,7 @@ static QString where()
 
 //
 
-void save_string(const char * p, Q3TextStream & st)
+void save_string(const char * p, QTextStream & st)
 {
   if ((p == 0) || (*p == 0))
     st << "\"\"";
@@ -1552,7 +1552,7 @@ void save_string(const char * p, Q3TextStream & st)
   }
 }
       
-void save_string_list(QStringList & list, Q3TextStream & st)
+void save_string_list(QStringList & list, QTextStream & st)
 {
   st << ' ' << list.count();
   
@@ -1564,7 +1564,7 @@ void save_string_list(QStringList & list, Q3TextStream & st)
   }
 }
 
-void save_unicode_string_list(QStringList & list, Q3TextStream & st)
+void save_unicode_string_list(QStringList & list, QTextStream & st)
 {
   st << ' ' << list.count();
   
@@ -1576,7 +1576,7 @@ void save_unicode_string_list(QStringList & list, Q3TextStream & st)
   }
 }
 
-void nl_indent(Q3TextStream & st) {
+void nl_indent(QTextStream & st) {
   int i = Indent;
   
   st << '\n';
@@ -2016,7 +2016,7 @@ void unknown_ref(const char * kind, int id)
 
 //
 
-void save_xy(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
+void save_xy(QTextStream & st, const Q3CanvasItem * c, const char * s) {
 #ifdef FORCE_INT_COORD
   st << s << ' ' << (int) c->x() << ' ' << (int) c->y();
 #else
@@ -2026,7 +2026,7 @@ void save_xy(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
 #endif
 }
 
-void save_xyz(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
+void save_xyz(QTextStream & st, const Q3CanvasItem * c, const char * s) {
 #ifdef FORCE_INT_COORD
   st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z();
 #else
@@ -2036,7 +2036,7 @@ void save_xyz(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
 #endif
 }
 
-void save_xyzwh(Q3TextStream & st, const Q3CanvasRectangle * c, const char * s) {
+void save_xyzwh(QTextStream & st, const Q3CanvasRectangle * c, const char * s) {
 #ifdef FORCE_INT_COORD
   st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z()
     << ' ' << (int) c->width() << ' ' << (int) c->height();
@@ -2093,7 +2093,7 @@ void read_zwh(char * & st, Q3CanvasRectangle * c)
   c->setSize((int) w, (int) read_double(st));
 }
 
-void save_color(Q3TextStream & st, const char * s, UmlColor c, BooL & nl)
+void save_color(QTextStream & st, const char * s, UmlColor c, BooL & nl)
 {
   if (c != UmlDefaultColor) {
     if (!nl) {

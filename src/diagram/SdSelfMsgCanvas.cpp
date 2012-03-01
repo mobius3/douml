@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PointArray>
 
 #include "SdSelfMsgCanvas.h"
@@ -417,7 +417,7 @@ void SdSelfMsgCanvas::select_associated() {
     dest->select_associated();
 }
 
-void SdSelfMsgCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdSelfMsgCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << ((itsType == UmlSelfReturnMsg)
 	   ? "selfreflexivemsg_ref "

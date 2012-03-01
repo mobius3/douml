@@ -4,8 +4,11 @@
 #include "UmlCom.h"
 //Added by qt3to4:
 #include <Q3CString>
+#include "Logging/QsLog.h"
 #ifdef WITHCPP
-const Q3CString & UmlBaseClassItem::cppDecl() {
+const Q3CString & UmlBaseClassItem::cppDecl()
+{
+    QLOG_INFO() << "Reading CPP delaration";
   read_if_needed_();
   
   return _cpp_decl;
@@ -84,7 +87,9 @@ void UmlBaseClassItem::unload(bool rec, bool del) {
 }
 
 #ifdef WITHCPP
-void UmlBaseClassItem::read_cpp_() {
+void UmlBaseClassItem::read_cpp_()
+{
+  QLOG_INFO() << "Reading int _cpp_decl";
   _cpp_decl = UmlCom::read_string();
 }
 #endif

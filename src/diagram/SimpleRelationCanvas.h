@@ -28,7 +28,7 @@
 
 #include "ArrowCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class BrowserNode;
 class SimpleRelationData;
@@ -67,7 +67,7 @@ class SimpleRelationCanvas : public ArrowCanvas {
 
     virtual void apply_shortcut(QString s);
     
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static SimpleRelationCanvas * read(char * & st, UmlCanvas * canvas, char *);
     
     virtual BasicData * get_data() const;

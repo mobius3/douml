@@ -30,7 +30,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "CodLinkCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -291,7 +291,7 @@ CodDirsCanvas * CodLinkCanvas::find_dirs() const {
   return 0;
 }
 
-void CodLinkCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "linkcanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {

@@ -33,7 +33,7 @@
 #include <qcursor.h>
 #include <q3ptrdict.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDropEvent>
 
@@ -869,7 +869,7 @@ const QStringList & BrowserOperation::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserOperation::save_stereotypes(Q3TextStream & st)
+void BrowserOperation::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "operation_stereotypes ";
@@ -908,7 +908,7 @@ void BrowserOperation::post_load()
   }
 }
 
-void BrowserOperation::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserOperation::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "operation_ref " << get_ident() << " // " << get_name();
   else {

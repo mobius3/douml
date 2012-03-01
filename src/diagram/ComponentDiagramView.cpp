@@ -31,7 +31,7 @@
 #include <qfont.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
@@ -400,7 +400,7 @@ void ComponentDiagramView::dropEvent(QDropEvent * e) {
   }
 }
 
-void ComponentDiagramView::save(Q3TextStream & st, QString & warning,
+void ComponentDiagramView::save(QTextStream & st, QString & warning,
 				bool copy) const {
   DiagramItemList items(canvas()->allItems());
   DiagramItem * di;

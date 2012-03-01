@@ -1,7 +1,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
-#include <Q3TextStream>
+#include <QTextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -72,7 +72,7 @@ class BrowserSimpleRelation : public BrowserNode, public Labeled<BrowserSimpleRe
     virtual void update_stereotype(bool = FALSE);
     
     virtual void write_id(ToolCom * com);
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserSimpleRelation * read_ref(char * & st);
     static BrowserSimpleRelation * read(char * &, char *, BrowserNode *);
     static BrowserSimpleRelation * temporary(SimpleRelationData * d);

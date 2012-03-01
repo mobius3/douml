@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3ValueList>
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "CdClassCanvas.h"
 #include "TemplateCanvas.h"
@@ -1649,7 +1649,7 @@ void CdClassCanvas::resize(const QSize & sz, bool w, bool h) {
 
 //
 
-static void save_hidden_list(BrowserNode * bn, UmlCode c, Q3TextStream & st,
+static void save_hidden_list(BrowserNode * bn, UmlCode c, QTextStream & st,
 			     const char * s,
 			     const Q3ValueList<BrowserNode *> & hidden_visible)
 {
@@ -1682,7 +1682,7 @@ static void save_hidden_list(BrowserNode * bn, UmlCode c, Q3TextStream & st,
   }
 }
 
-void CdClassCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CdClassCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "classcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

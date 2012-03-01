@@ -31,7 +31,7 @@
 #include <qfont.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
@@ -510,7 +510,7 @@ void DeploymentDiagramView::dropEvent(QDropEvent * e) {
   }
 }
 
-void DeploymentDiagramView::save(Q3TextStream & st, QString & warning,
+void DeploymentDiagramView::save(QTextStream & st, QString & warning,
 				 bool copy) const {
   DiagramItemList items(canvas()->allItems());
   DiagramItem * di;

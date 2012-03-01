@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "CodSelfLinkCanvas.h"
 #include "BrowserDiagram.h"
@@ -316,7 +316,7 @@ bool CodSelfLinkCanvas::represents(BrowserNode * bn) {
   return supports(bn);
 }
 
-void CodSelfLinkCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodSelfLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "selflinkcanvas_ref " << get_ident();
   else {

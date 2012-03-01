@@ -28,7 +28,7 @@
 
 #include <q3memarray.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "UmlEnum.h"
@@ -252,7 +252,7 @@ class OperationData : public ClassMemberData,
     void create_modified_body_file();
     void save_body(QFile & qf, QString & filename, bool dobackup,
 		   char * modified_bodies, int who);
-    void save(Q3TextStream &, bool ref, QString & warning) const;
+    void save(QTextStream &, bool ref, QString & warning) const;
     void raz_body();
     static OperationData * read_ref(char * &);
     void read(char * &, char * &);

@@ -28,7 +28,7 @@
 
 #include "DiagramCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class FragmentCanvas;
 
@@ -59,7 +59,7 @@ class FragmentSeparatorCanvas : public DiagramCanvas {
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode &, const DiagramItem *) const;
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static FragmentSeparatorCanvas * read(char * &, UmlCanvas *,
 					  char * k, FragmentCanvas * f);
     

@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QPixmap>
 
@@ -292,7 +292,7 @@ void BrowserExtraMember::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
     e->ignore();
 }
 
-void BrowserExtraMember::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserExtraMember::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "extra_member_ref " << get_ident() << " // " << get_name();
   else {

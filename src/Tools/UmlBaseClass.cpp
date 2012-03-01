@@ -31,7 +31,8 @@ bool UmlBaseClass::set_isAbstract(bool y) {
   return set_it_(_abstract, y, setIsAbstractCmd);
 }
 
-const UmlTypeSpec & UmlBaseClass::baseType() {
+const UmlTypeSpec & UmlBaseClass::baseType()
+{
   read_if_needed_();
   
   return _base_type;

@@ -32,7 +32,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ArrowJunctionCanvas.h"
 #include "ArrowCanvas.h"
@@ -195,7 +195,7 @@ bool ArrowJunctionCanvas::alignable() const {
   return TRUE;
 }
 
-void ArrowJunctionCanvas::save(Q3TextStream & st, bool, QString & warning) const {
+void ArrowJunctionCanvas::save(QTextStream & st, bool, QString & warning) const {
   nl_indent(st);
   st << "arrowjunctioncanvas " << get_ident() << ' ';
   interface->save(st, TRUE, warning);

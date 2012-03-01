@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ActivityPartitionCanvas.h"
 #include "ActivityPartitionData.h"
@@ -607,7 +607,7 @@ void ActivityPartitionCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ActivityPartitionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityPartitionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "activitypartitioncanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

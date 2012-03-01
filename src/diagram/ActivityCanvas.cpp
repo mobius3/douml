@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "ActivityCanvas.h"
@@ -790,7 +790,7 @@ void ActivityCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ActivityCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "activitycanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

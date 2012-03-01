@@ -25,13 +25,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 #include <qfile.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlOperation.h"
 #include "UmlSettings.h"
@@ -49,7 +49,7 @@ const int BodyPrefixLength = 30;
 const int BodyPostfixLength = 28;
 
 static bool generate_type(const Q3ValueList<UmlParameter> & params,
-			  unsigned rank, QTextOStream & f)
+			  unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -59,7 +59,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
 }
 
 static bool generate_var(const Q3ValueList<UmlParameter> & params, 
-			 unsigned rank, QTextOStream & f)
+			 unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -69,7 +69,7 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
 }
 
 static bool generate_init(const Q3ValueList<UmlParameter> & params, 
-			  unsigned rank, QTextOStream & f)
+			  unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -121,7 +121,7 @@ Q3CString UmlOperation::compute_name() {
 // p0 is the beginning of the operation's def
 // p point to ${body}
 // indent is the one of the operation
-const char * UmlOperation::generate_body(QTextOStream & f,
+const char * UmlOperation::generate_body(QTextStream & f,
 					 Q3CString indent,
 					 const char * p)
 {
@@ -186,7 +186,7 @@ const char * UmlOperation::generate_body(QTextOStream & f,
   return p + 7;
 }
 
-void UmlOperation::generate(QTextOStream & f, const Q3CString & cl_stereotype,
+void UmlOperation::generate(QTextStream & f, const Q3CString & cl_stereotype,
 			    Q3CString indent, int &) {
   if (!phpDecl().isEmpty()) {
     const char * p = phpDecl();
@@ -322,7 +322,7 @@ void UmlOperation::generate(QTextOStream & f, const Q3CString & cl_stereotype,
   }
 }
 
-void UmlOperation::generate_require_onces(QTextOStream & f, Q3CString & made) {
+void UmlOperation::generate_require_onces(QTextStream & f, Q3CString & made) {
   Q3CString s = phpDecl();
   
   if (!s.isEmpty()) {

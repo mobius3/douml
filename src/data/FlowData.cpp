@@ -27,7 +27,7 @@
 
 
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -198,7 +198,7 @@ bool FlowData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void FlowData::save(Q3TextStream & st, QString & warning) const {
+void FlowData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   nl_indent(st);
   st << "on ";
@@ -257,7 +257,7 @@ void FlowDef::send_def(ToolCom * com) {
   sel_trans.send_def(com);
 }
 
-void FlowDef::save(Q3TextStream & st, Q3CString lang) const {
+void FlowDef::save(QTextStream & st, Q3CString lang) const {
   indent(+1);
   
   if (!weight.isEmpty()) {

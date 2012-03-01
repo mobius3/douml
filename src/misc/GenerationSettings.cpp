@@ -30,9 +30,9 @@
 #include <qcursor.h>
 #include <q3filedialog.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "GenerationSettings.h"
 #include "GenerationSettingsDialog.h"
@@ -2297,9 +2297,9 @@ bool GenerationSettings::tool_global_idl_cmd(ToolCom * com,
 static void save_includes_imports(IncludesSpec & sp, const char * filename)
 {
   QByteArray newdef;
-  Q3TextStream st(newdef, QIODevice::WriteOnly);
+  QTextStream st(newdef, QIODevice::WriteOnly);
 	
-  st.setEncoding(Q3TextStream::Latin1);
+  st.setEncoding(QTextStream::Latin1);
 
   st << "// \"a type\" \"needed " << filename << "\"\n";
     
@@ -2318,7 +2318,7 @@ static void save_includes_imports(IncludesSpec & sp, const char * filename)
   save_if_needed(filename, newdef);
 }
 
-void GenerationSettings::save_dirs(Q3TextStream & st)
+void GenerationSettings::save_dirs(QTextStream & st)
 {
   if (!cpp_root_dir.isEmpty()) {
     nl_indent(st);
@@ -2349,7 +2349,7 @@ void GenerationSettings::save_dirs(Q3TextStream & st)
   st << '\n';
 }
 
-void GenerationSettings::save_descriptions(Q3TextStream & st)
+void GenerationSettings::save_descriptions(QTextStream & st)
 {
   if (! artifact_default_description.isEmpty()) {
     nl_indent(st);
@@ -2383,9 +2383,9 @@ void GenerationSettings::save_descriptions(Q3TextStream & st)
 void GenerationSettings::save()
 {
   QByteArray newdef;
-  Q3TextStream st(newdef, QIODevice::WriteOnly);
+  QTextStream st(newdef, QIODevice::WriteOnly);
 	
-  st.setEncoding(Q3TextStream::Latin1);
+  st.setEncoding(QTextStream::Latin1);
   
   nl_indent(st);
   
@@ -4200,7 +4200,7 @@ void ReverseRoundtripFilter::receive_def(const char * args) {
   regexp = args + 1;
 }
 
-void ReverseRoundtripFilter::save(const char * key, Q3TextStream & st) { //[lgfreitas] we are not using the new qtextstream yet
+void ReverseRoundtripFilter::save(const char * key, QTextStream & st) { //[lgfreitas] we are not using the new qtextstream yet
   if (! regexp.isEmpty()) {
     st << key << ' ';
     save_string(regexp, st);
