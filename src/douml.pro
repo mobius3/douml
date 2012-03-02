@@ -1,5 +1,6 @@
 TEMPLATE	= app
 INCLUDEPATH	= browser data diagram dialog misc tool xpm
+INCLUDEPATH += ../src
 CONFIG		+= qt warn_on debug
 HEADERS		= data/ActualParamData.h \
 		  data/BasicData.h \
@@ -166,7 +167,6 @@ HEADERS		= data/ActualParamData.h \
 		  dialog/VisibilityGroup.h \
 		  dialog/CodAddMsgDialog.h \
 		  dialog/CodEditMsgDialog.h \
-		  dialog/MenuTitle.h \
 		  dialog/MenuItalic.h \
 		  dialog/MenuFont.h \
 		  dialog/ColMsgTable.h \
@@ -207,7 +207,8 @@ HEADERS		= data/ActualParamData.h \
 		  tool/Tool.h \
 		  tool/Socket.h \
 		  tool/ToolCom.h \
-		  xpm/UmlPixmap.h
+		  xpm/UmlPixmap.h \
+    ui/menufactory.h
 SOURCES		= browser/BrowserAttribute.cpp \
 		  browser/BrowserExtraMember.cpp \
 		  browser/BrowserClass.cpp \
@@ -422,7 +423,6 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  dialog/VisibilityGroup.cpp \
 		  dialog/CodAddMsgDialog.cpp \
 		  dialog/CodEditMsgDialog.cpp \
-		  dialog/MenuTitle.cpp \
 		  dialog/MenuItalic.cpp \
 		  dialog/MenuFont.cpp \
 		  dialog/ColMsgTable.cpp \
@@ -468,10 +468,11 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  tool/Tool.cpp \
 		  tool/ToolCom.cpp \
 		  xpm/UmlPixmap.cpp \
-    Logging/QsLogDest.cpp \
-    Logging/QsLog.cpp \
-    Logging/QsDebugOutput.cpp \
-    main.cpp
+		  ui/menufactory.cpp \
+		  Logging/QsLogDest.cpp \
+		  Logging/QsLog.cpp \
+		  Logging/QsDebugOutput.cpp \
+		  main.cpp
 
 TARGET		= douml
 DEFINES         = BooL=bool DEBUGCOM
@@ -481,14 +482,14 @@ QT += network  qt3support
 
 
 Release{
-    MOC_DIR = ../../Douml_builds/douml/MOC_release
-    OBJECTS_DIR = ../../Douml_builds/douml/Obj_release
+    MOC_DIR = ../bin/douml/MOC_release
+    OBJECTS_DIR = ../bin/douml/Obj_release
 }
 
 Debug{
-    MOC_DIR = ../../Douml_builds/douml/MOC_Debug
-    OBJECTS_DIR = ../../Douml_builds/douml/Obj_Debug
+    MOC_DIR = ../bin/douml/MOC_Debug
+    OBJECTS_DIR = ../bin/douml/Obj_Debug
 
 }
-    UI_DIR = ../../Douml_builds/douml/UI
-    DESTDIR = ../../Douml_builds
+    UI_DIR = ../bin/douml/UI
+    DESTDIR = ../bin

@@ -25,10 +25,10 @@
 
 #include <stdio.h>// debug
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlClass.h"
 #include "UmlPackage.h"
@@ -49,7 +49,7 @@ Q3CString UmlClass::python_stereotype()
     ? s : Q3CString("class");
 }
 
-void UmlClass::generate_imports(QTextOStream & f, Q3CString & made) {
+void UmlClass::generate_imports(QTextStream & f, Q3CString & made) {
   if (! pythonDecl().isEmpty()) {
     Q3PtrVector<UmlItem> ch = children();
     unsigned index;
@@ -64,7 +64,7 @@ void UmlClass::generate_imports(QTextOStream & f, Q3CString & made) {
   }
 }
   
-void UmlClass::generate_import(QTextOStream & f, UmlArtifact * using_art,
+void UmlClass::generate_import(QTextStream & f, UmlArtifact * using_art,
 			       bool from, Q3CString & made) {
   Q3CString s;
   
@@ -122,7 +122,7 @@ void UmlClass::generate() {
   }
 }
 
-void UmlClass::generate(QTextOStream & f, Q3CString indent,
+void UmlClass::generate(QTextStream & f, Q3CString indent,
 			BooL & indent_needed) {
   const Q3CString & stereotype = python_stereotype();
   
@@ -254,13 +254,13 @@ void UmlClass::generate(QTextOStream & f, Q3CString indent,
   }
 }
 
-void UmlClass::generate(QTextOStream & f, const Q3CString &,
+void UmlClass::generate(QTextStream & f, const Q3CString &,
 			Q3CString indent, BooL & indent_needed,
 			int &, const Q3CString &) {
   generate(f, indent, indent_needed);
 }
 
-void UmlClass::generate_instance_att_rel(QTextOStream & f, Q3CString indent,
+void UmlClass::generate_instance_att_rel(QTextStream & f, Q3CString indent,
 					 BooL & indent_needed, Q3CString self) {
   const Q3CString & stereotype = python_stereotype();
   int enum_item_rank = 0;
@@ -291,7 +291,7 @@ UmlArtifact * UmlClass::assocArtifact() {
   return cl->associatedArtifact();
 }
 
-void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t)
+void UmlClass::write(QTextStream & f, const UmlTypeSpec & t)
 {
   if (t.type != 0)
     t.type->write(f);
@@ -299,7 +299,7 @@ void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t)
     f << t.explicit_type;
 }
 
-void UmlClass::write(QTextOStream & f) {
+void UmlClass::write(QTextStream & f) {
   if (isPythonExternal()) {
     Q3CString s = pythonDecl().stripWhiteSpace();
     int index = s.find('\n');

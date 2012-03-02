@@ -1290,7 +1290,7 @@ QString AttributeDialog::java_decl(const BrowserAttribute * at, bool init,
       if (*m != '[')
 	s += "[]";
       else {
-	for (unsigned index = 0; index != m.length(); index += 1) {
+        for (int index = 0; index != m.length(); index += 1) {
 	  switch (m.at(index).latin1()) {
 	  case '[':
 	    s += '[';

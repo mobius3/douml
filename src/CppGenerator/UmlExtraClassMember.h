@@ -29,7 +29,7 @@
 #include "UmlBaseExtraClassMember.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3PtrList>
 
 // This class allows to manage extra class member, mainly defined for C++
@@ -47,11 +47,11 @@ class UmlExtraClassMember : public UmlBaseExtraClassMember {
 				    const Q3CString & cl_stereotype,
 				    bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility,
-			       QTextOStream & f_h,
+			       QTextStream & f_h,
 			       const Q3CString & cl_stereotype,
 			       Q3CString indent,
 			       BooL & first, bool last);
-    virtual void generate_def(QTextOStream &f, Q3CString indent, bool h,
+    virtual void generate_def(QTextStream &f, Q3CString indent, bool h,
 			      Q3CString templates, Q3CString cl_names,
 			      Q3CString templates_tmplop, 
 			      Q3CString cl_names_tmplop);

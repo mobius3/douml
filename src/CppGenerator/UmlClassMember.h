@@ -29,7 +29,7 @@
 #include "UmlBaseClassMember.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3PtrList>
 
 // This class globaly manages class's operations, relations, attributes
@@ -49,9 +49,9 @@ class UmlClassMember : public UmlBaseClassMember {
 				   bool force_incl = FALSE);
 
     void generate_visibility(aVisibility & current_visibility,
-			     QTextOStream & f_h, bool ahead,
+			     QTextStream & f_h, bool ahead,
 			     const Q3CString & indent);
-    bool insert_template(const char *& p, QTextOStream & fs,
+    bool insert_template(const char *& p, QTextStream & fs,
 			 const Q3CString & indent, const Q3CString & templ);
 };
 

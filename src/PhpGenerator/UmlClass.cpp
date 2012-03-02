@@ -25,10 +25,10 @@
 
 #include <stdio.h>// debug
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlClass.h"
 #include "UmlPackage.h"
@@ -63,7 +63,7 @@ void UmlClass::generate() {
   }
 }
 
-void UmlClass::generate(QTextOStream & f, Q3CString indent) {
+void UmlClass::generate(QTextStream & f, Q3CString indent) {
   const Q3CString & stereotype = php_stereotype();
   
   if (stereotype == "ignored")
@@ -202,10 +202,10 @@ void UmlClass::generate(QTextOStream & f, Q3CString indent) {
   }
 }
 
-void UmlClass::generate(QTextOStream &, const Q3CString &, Q3CString, int &) {
+void UmlClass::generate(QTextStream &, const Q3CString &, Q3CString, int &) {
 }
 
-void UmlClass::generate_require_onces(QTextOStream & f, Q3CString & made) {
+void UmlClass::generate_require_onces(QTextStream & f, Q3CString & made) {
   if (!phpDecl().isEmpty()) {
     Q3PtrVector<UmlItem> ch = children();
     unsigned index;
@@ -220,7 +220,7 @@ void UmlClass::generate_require_onces(QTextOStream & f, Q3CString & made) {
   }
 }
 
-void UmlClass::generate_require_onces(QTextOStream & f, Q3CString & made,
+void UmlClass::generate_require_onces(QTextStream & f, Q3CString & made,
 				      UmlArtifact * using_art) {
   Q3CString s;
   
@@ -281,7 +281,7 @@ void UmlClass::generate_require_onces(QTextOStream & f, Q3CString & made,
   }
 }
 
-void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t)
+void UmlClass::write(QTextStream & f, const UmlTypeSpec & t)
 {
   if (t.type != 0)
     t.type->write(f);
@@ -289,7 +289,7 @@ void UmlClass::write(QTextOStream & f, const UmlTypeSpec & t)
     f << t.explicit_type;
 }
 
-void UmlClass::write(QTextOStream & f) {
+void UmlClass::write(QTextStream & f) {
   Q3CString nasp;
   UmlArtifact * a = associatedArtifact();
 

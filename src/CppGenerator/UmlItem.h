@@ -29,9 +29,9 @@
 #include "UmlBaseItem.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
-class QTextOStream;
+class QTextStream;
 class UmlPackage;
 
 class UmlItem : public UmlBaseItem {
@@ -46,7 +46,7 @@ class UmlItem : public UmlBaseItem {
     bool manage_comment(const char *& p, const char *& pp, bool javadoc);
     bool manage_description(const char *& p, const char *& pp);    
     void replace_alias(Q3CString & s);
-    void manage_alias(const char *& p, QTextOStream & ts);
+    void manage_alias(const char *& p, QTextStream & ts);
 };
 
 #endif

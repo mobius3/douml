@@ -31,7 +31,7 @@
 #include <qfont.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
@@ -51,7 +51,7 @@
 #include "UmlPixmap.h"
 #include "UmlDrag.h"
 #include "BrowserComponent.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "myio.h"
 #include "BrowserView.h"
 #include "RelatedElementsDialog.h"
@@ -110,7 +110,7 @@ static void get_drawn(DiagramItemList & items,
 void ComponentDiagramView::menu(const QPoint& p) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Component diagram menu"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Component diagram menu"));
  
   if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
     DiagramItemList items(canvas()->allItems());
@@ -400,7 +400,7 @@ void ComponentDiagramView::dropEvent(QDropEvent * e) {
   }
 }
 
-void ComponentDiagramView::save(Q3TextStream & st, QString & warning,
+void ComponentDiagramView::save(QTextStream & st, QString & warning,
 				bool copy) const {
   DiagramItemList items(canvas()->allItems());
   DiagramItem * di;

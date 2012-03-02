@@ -31,7 +31,7 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "SubjectCanvas.h"
@@ -42,7 +42,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "ToolCom.h"
 #include "translate.h"
@@ -184,7 +184,7 @@ void SubjectCanvas::modified() {
 void SubjectCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Subject"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Subject"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -364,7 +364,7 @@ void SubjectCanvas::prepare_for_move(bool on_resize) {
   }
 }
 
-void SubjectCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void SubjectCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "subject_ref " << get_ident();
   }

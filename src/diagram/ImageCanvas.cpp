@@ -31,14 +31,14 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 
 #include "ImageCanvas.h"
 #include "Images.h"
 #include "ImageDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "translate.h"
 
@@ -155,7 +155,7 @@ void ImageCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu fontsubm(0);
   
-  m.insertItem(new MenuTitle(TR("Image"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Image"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -232,7 +232,7 @@ QString ImageCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
   return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
 }
 
-void ImageCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void ImageCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "image_ref " << get_ident();
   }

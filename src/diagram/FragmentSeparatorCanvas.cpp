@@ -31,11 +31,11 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "FragmentSeparatorCanvas.h"
 #include "FragmentCanvas.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "myio.h"
 #include "translate.h"
 
@@ -166,7 +166,7 @@ void FragmentSeparatorCanvas::open() {
 void FragmentSeparatorCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Separator"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Separator"));
   m.insertSeparator();
   m.insertItem(TR("Remove from diagram"), 1);
   
@@ -176,7 +176,7 @@ void FragmentSeparatorCanvas::menu(const QPoint&) {
   }
 }
 
-void FragmentSeparatorCanvas::save(Q3TextStream & st, bool, QString &) const {
+void FragmentSeparatorCanvas::save(QTextStream & st, bool, QString &) const {
   nl_indent(st);
   st << "separator " << (int) (vpos * 10000);
 }

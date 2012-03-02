@@ -32,7 +32,7 @@
 #include "myio.h"
 #include "translate.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 SdObjCanvas::SdObjCanvas(BrowserNode * bn, UmlCanvas * canvas,
 			 int x, int we, int he, int id)
@@ -90,7 +90,7 @@ bool SdObjCanvas::copyable() const {
   return life_line->copyable();
 }
 
-void SdObjCanvas::save(Q3TextStream & st) const {
+void SdObjCanvas::save(QTextStream & st) const {
   if (mortal)
     st << "  mortal";
   save_xyz(st, this, "  xyz");

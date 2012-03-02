@@ -31,7 +31,7 @@
 #include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDropEvent>
 
@@ -46,7 +46,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "ReferenceDialog.h"
 #include "DialogUtil.h"
@@ -242,7 +242,7 @@ void BrowserAttribute::menu() {
   Q3PopupMenu m(0, name);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_edited)
@@ -506,7 +506,7 @@ void BrowserAttribute::post_load()
   }
 }
 
-void BrowserAttribute::save_stereotypes(Q3TextStream & st)
+void BrowserAttribute::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "attribute_stereotypes ";
@@ -522,7 +522,7 @@ void BrowserAttribute::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserAttribute::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserAttribute::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "attribute_ref " << get_ident() << " // " << get_name();
   else {

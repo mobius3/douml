@@ -31,13 +31,13 @@
 #include <qstring.h>
 #include <qrect.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "UmlEnum.h"
 #include "Instance.h"
 
 class QPainter;
-class Q3TextStream;
+class QTextStream;
 
 class BrowserClass;
 class UmlCanvas;
@@ -67,7 +67,7 @@ class ClassInstCanvas : public Instance {
     void compute_size(int & w, int & h, UmlCanvas *);
     void draw(QPainter & p, UmlCanvas * canvas, QRect r);
     
-    void save(Q3TextStream & st) const;
+    void save(QTextStream & st) const;
     void read(char *& st, char *& k);
 };
 

@@ -32,14 +32,14 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ArrowJunctionCanvas.h"
 #include "ArrowCanvas.h"
 #include "UmlCanvas.h"
 #include "BrowserClass.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "BrowserDiagram.h"
 #include "UmlPixmap.h"
 #include "LabelCanvas.h"
@@ -165,7 +165,7 @@ void ArrowJunctionCanvas::menu(const QPoint&) {
   if (lines.at(0)->may_join()) {
     Q3PopupMenu m;
     
-    m.insertItem(new MenuTitle(TR("Line break"), m.font()), -1);
+    MenuFactory::createTitle(m, TR("Line break");
     m.insertSeparator();
     m.insertItem(TR("Remove from diagram"), 0);
     
@@ -195,7 +195,7 @@ bool ArrowJunctionCanvas::alignable() const {
   return TRUE;
 }
 
-void ArrowJunctionCanvas::save(Q3TextStream & st, bool, QString & warning) const {
+void ArrowJunctionCanvas::save(QTextStream & st, bool, QString & warning) const {
   nl_indent(st);
   st << "arrowjunctioncanvas " << get_ident() << ' ';
   interface->save(st, TRUE, warning);

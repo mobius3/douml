@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QPixmap>
@@ -45,7 +45,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "ProfiledStereotypes.h"
 #include "mu.h"
@@ -169,7 +169,7 @@ void BrowserComponentView::menu() {
   Q3PopupMenu subm(0);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_read_only && (edition_number == 0)) {
@@ -514,7 +514,7 @@ void BrowserComponentView::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
     e->ignore();
 }
 
-void BrowserComponentView::save_stereotypes(Q3TextStream & st)
+void BrowserComponentView::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "componentview_stereotypes ";
@@ -529,7 +529,7 @@ void BrowserComponentView::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserComponentView::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserComponentView::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "componentview_ref " << get_ident() << " // " << get_name();
   else {

@@ -30,7 +30,7 @@
 #include <qcursor.h>
 #include <qinputdialog.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "SdMsgBaseCanvas.h"
 #include "SdDurationCanvas.h"
@@ -368,7 +368,7 @@ bool SdMsgBaseCanvas::represents(BrowserNode * bn) {
   return ((BasicData *) msg == bn->get_data());
 }
 
-void SdMsgBaseCanvas::save(Q3TextStream & st, QString & warning) const {
+void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   st << "to ";
   dest->save(st, TRUE, warning);

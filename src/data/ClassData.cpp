@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -892,7 +892,7 @@ void ClassData::send_idl_def(ToolCom * com) {
 
 //
 
-void ClassData::save(Q3TextStream & st, QString & warning) const {
+void ClassData::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   
   if (is_abstract)

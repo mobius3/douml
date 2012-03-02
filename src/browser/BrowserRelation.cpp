@@ -32,7 +32,7 @@
 #include <qpainter.h>
 #include <q3ptrdict.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDropEvent>
 
@@ -52,7 +52,7 @@
 #include "ToolCom.h"
 #include "Tool.h"
 #include "AType.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
 #include "mu.h"
@@ -448,7 +448,7 @@ void BrowserRelation::menu() {
   Q3PopupMenu m(0, name);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!in_edition()) {
@@ -792,7 +792,7 @@ BrowserRelation * BrowserRelation::reinsert(BrowserNode * p, RelationData * d)
   return new BrowserRelation(p, d);
 }
 
-void BrowserRelation::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserRelation::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classrelation_ref " << get_ident() << " // " << get_name();
   else {

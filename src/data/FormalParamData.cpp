@@ -33,7 +33,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 FormalParamData::FormalParamData(const FormalParamData& f)
     : QObject(0) {
@@ -123,7 +123,7 @@ void FormalParamData::skip(ToolCom * com, const char *& args)
     com->skip_type(args);
 }
 
-void FormalParamData::save(Q3TextStream & st, QString & warning) const {
+void FormalParamData::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   st << "formal name ";
   save_string(name, st);

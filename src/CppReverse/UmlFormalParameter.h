@@ -1,6 +1,6 @@
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -29,7 +29,7 @@
 #ifndef _UMLFORMALPARAMETER_H
 #define _UMLFORMALPARAMETER_H
 
-class QTextOStream;
+class QTextStream;
 
 
 #include "UmlBaseFormalParameter.h"

@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 #include <Q3ValueList>
 
@@ -352,7 +352,7 @@ void ArtifactData::convert_add_include_artifact() {
 
 //
 
-void ArtifactData::save(Q3TextStream & st, QString & warning) const {
+void ArtifactData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   
   bool a_text = (stereotype == "text");

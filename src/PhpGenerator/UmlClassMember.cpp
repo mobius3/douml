@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlClassMember.h"
 #include "UmlCom.h"
@@ -34,7 +34,7 @@
 #include "UmlSettings.h"
 #include "PhpSettings.h"
 
-void UmlClassMember::generate_require_onces(QTextOStream &, Q3CString &) {
+void UmlClassMember::generate_require_onces(QTextStream &, Q3CString &) {
 }
 
 void UmlClassMember::remove_comments(Q3CString & s)
@@ -84,7 +84,7 @@ void UmlClassMember::remove_arrays(Q3CString & s)
   }
 }
 
-void UmlClassMember::generate_visibility(QTextOStream & f) {
+void UmlClassMember::generate_visibility(QTextStream & f) {
   switch (visibility()) {
   case PublicVisibility:
     f << "public ";

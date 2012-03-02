@@ -31,14 +31,14 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "HubCanvas.h"
 #include "ArrowCanvas.h"
 #include "UmlCanvas.h"
 #include "myio.h"
 #include "BrowserDiagram.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 HubCanvas::HubCanvas(UmlCanvas * canvas, int x, int y, int id) 
@@ -98,7 +98,7 @@ void HubCanvas::open() {
 void HubCanvas::menu(const QPoint&) {
   Q3PopupMenu m;
   
-  m.insertItem(new MenuTitle(TR("Network connexion"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Network connexion"));
   m.insertSeparator();
   m.insertItem(TR("Remove from diagram"), 0);
   
@@ -136,7 +136,7 @@ QString HubCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const {
   }
 }
 
-void HubCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void HubCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref)
     st << "hubcanvas_ref " << get_ident();
   else {

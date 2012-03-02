@@ -34,7 +34,7 @@
 #include "mu.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <Q3TextStream>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -148,7 +148,7 @@ bool BasicData::decldefbody_contain(const QString &, bool,
   return FALSE;
 }
 
-void BasicData::save(Q3TextStream & st, QString &) const {
+void BasicData::save(QTextStream & st, QString &) const {
   if (! stereotype.isEmpty()) {
     nl_indent(st);
     st << "stereotype ";

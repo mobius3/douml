@@ -33,7 +33,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 ActualParamData::ActualParamData(BrowserClass * p, unsigned r)
     : super(p), rank(r) {
@@ -76,7 +76,7 @@ void ActualParamData::send_uml_def(ToolCom * com) {
   value.send_def(com);
 }
 
-void ActualParamData::save(Q3TextStream & st, QString & warning) const {
+void ActualParamData::save(QTextStream & st, QString & warning) const {
   nl_indent(st);
   st << "actual class ";
   super->save(st, TRUE, warning);

@@ -91,7 +91,7 @@ unsigned Lex::line_number()
 bool Lex::open(const QString & f)
 {
 #ifdef TRACE
-  cout << "Lex::open(" << f << ")\n";
+  QLOG_INFO() <<"Lex::open(" << f << ")\n";
 #endif
   
   context.filename = f;
@@ -122,7 +122,7 @@ bool Lex::open(const QString & f)
 void Lex::close()
 {
 #ifdef TRACE
-  cout << "Lex::close()\n";
+  QLOG_INFO() <<"Lex::close()\n";
 #endif
   delete [] context.buffer;
 }
@@ -271,7 +271,7 @@ Q3CString Lex::manage_operator(QString & result, int c)
   }
   
 #ifdef TRACE
-  cout << "retourne '" << result << "'\n";
+  QLOG_INFO() <<"retourne '" << result << "'\n";
 #endif
   return Q3CString(result.toAscii().constData());
 }
@@ -416,7 +416,7 @@ Q3CString Lex::read_array_dim()
 	result += pointer;
 	*context.pointer = c;
 #ifdef TRACE
-	cout << "retourne '" << result << "'\n";
+	QLOG_INFO() <<"retourne '" << result << "'\n";
 #endif
 	return result;
       }
@@ -452,7 +452,7 @@ Q3CString Lex::read_word()
       int c = get();
       
 #ifdef TRACE
-      cout << "deja \"" << result << "\", '" << ((char) c) << "'\n";
+      QLOG_INFO() <<"deja \"" << result << "\", '" << ((char) c) << "'\n";
 #endif
       if (c == EOF)
 	break;
@@ -485,12 +485,12 @@ Q3CString Lex::read_word()
 	  case '=':
 	    get();
 #ifdef TRACE
-	    cout << "retourne '/='\n";
+	    QLOG_INFO() <<"retourne '/='\n";
 #endif
 	    return "/=";
 	  default:
 #ifdef TRACE
-	    cout << "retourne '/'\n";
+	    QLOG_INFO() <<"retourne '/'\n";
 #endif
 	    return "/";
 	  }
@@ -508,9 +508,9 @@ Q3CString Lex::read_word()
   }
 #ifdef TRACE
   if (result.isEmpty())
-    cout << "EOF\n";
+    QLOG_INFO() <<"EOF\n";
   else
-    cout << "retourne '" << result << "'\n";
+    QLOG_INFO() <<"retourne '" << result << "'\n";
 #endif
   return Q3CString(result.toAscii().constData());
 }
@@ -531,7 +531,7 @@ char Lex::read_word_bis()
       c = get();
       
 #ifdef TRACE
-      cout << "deja \"" << result << "\", '" << ((char) c) << "'\n";
+      QLOG_INFO() <<"deja \"" << result << "\", '" << ((char) c) << "'\n";
 #endif
       if (c == EOF)
 	return result;
@@ -694,7 +694,7 @@ void Lex::syntax_error(Q3CString s)
 			+ s + "</b></font><br>"); 
   
 #ifdef TRACE
-  cout << "ERROR IN " << context.filename
+  QLOG_INFO() <<"ERROR IN " << context.filename
     << " LINE " << context.line_number << " : " << s << '\n';
 #endif
 }
@@ -707,7 +707,7 @@ void Lex::premature_eof()
 		       " <b>premature eof</b></font><br>"); 
   
 #ifdef TRACE
-  cout << "SYNTAX ERROR IN " << context.filename 
+  QLOG_INFO() <<"SYNTAX ERROR IN " << context.filename 
     << " LINE " << context.line_number << " : premature eof\n";
 #endif
 }
@@ -720,7 +720,7 @@ void Lex::error_near(Q3CString s)
 		       + quote(s) + "</font></b></font><br>"); 
   
 #ifdef TRACE
-  cout << "SYNTAX ERROR IN " << context.filename
+  QLOG_INFO() <<"SYNTAX ERROR IN " << context.filename
     << " LINE " << context.line_number << " : near '" << s << "'\n";
 #endif
 }

@@ -1,7 +1,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 // *************************************************************************
 //
@@ -74,7 +74,7 @@ class BrowserDeploymentNode : public BrowserNode, public Labeled<BrowserDeployme
     virtual BasicData * get_data() const;
     virtual void on_delete();
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserDeploymentNode * read_ref(char * &);
     static BrowserDeploymentNode * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
@@ -97,7 +97,7 @@ class BrowserDeploymentNode : public BrowserNode, public Labeled<BrowserDeployme
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);

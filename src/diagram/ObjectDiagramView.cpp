@@ -30,7 +30,7 @@
 #include <qfont.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
@@ -53,7 +53,7 @@
 #include "UmlPixmap.h"
 #include "UmlDrag.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 ObjectDiagramView::ObjectDiagramView(QWidget * parent, UmlCanvas * canvas, int id)
@@ -64,7 +64,7 @@ ObjectDiagramView::ObjectDiagramView(QWidget * parent, UmlCanvas * canvas, int i
 void ObjectDiagramView::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Object diagram menu"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Object diagram menu"));
  
   switch (default_menu(m, 30)) {
   case EDIT_DRAWING_SETTING_CMD:
@@ -233,7 +233,7 @@ void ObjectDiagramView::dropEvent(QDropEvent * e) {
   }
 }
 
-void ObjectDiagramView::save(Q3TextStream & st, QString & warning,
+void ObjectDiagramView::save(QTextStream & st, QString & warning,
 			  bool copy) const {
   DiagramItemList items(canvas()->allItems());
   DiagramItem * di;

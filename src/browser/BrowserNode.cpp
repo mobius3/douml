@@ -38,7 +38,7 @@
 #include <q3popupmenu.h> 
 #include <qapplication.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <Q3PtrCollection>
@@ -1430,7 +1430,7 @@ void BrowserNode::init_save_counter() {
   }
 }
 
-bool BrowserNode::save_open_list(Q3TextStream & st) {
+bool BrowserNode::save_open_list(QTextStream & st) {
   if (!isOpen())
     return FALSE;
   
@@ -1459,7 +1459,7 @@ void BrowserNode::save_progress_closed()
   save_progress = 0;
 }
 
-void BrowserNode::save(Q3TextStream & st) const {
+void BrowserNode::save(QTextStream & st) const {
   if (save_progress != 0)
     save_progress->setProgress(already_saved++);
   
@@ -1522,7 +1522,7 @@ BrowserNode * BrowserNode::read_any_ref(char * & st, char * k) {
   return r;
 }
 
-void BrowserNode::save_stereotypes(Q3TextStream & st, 
+void BrowserNode::save_stereotypes(QTextStream & st, 
 				   QStringList relations_stereotypes[])
 {
   int r;

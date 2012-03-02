@@ -28,7 +28,7 @@
 
 #include "DiagramCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class ExpansionRegionCanvas;
 
@@ -70,7 +70,7 @@ class ExpansionNodeCanvas : public QObject, public DiagramCanvas {
     
     bool region_selected() const;
 
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static ExpansionNodeCanvas * read(char * &, UmlCanvas *, char *, ExpansionRegionCanvas *);
     virtual void post_loaded();
     

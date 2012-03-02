@@ -940,7 +940,7 @@ void upgrade_jdk5(UmlClass * javasettings)
 	op1->set_CppDef("${inline}${type} ${class}::${name}${(}const ${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, const ${t3} ${p3}, const ${t4} ${p4}, const ${t5} & ${p5}, const ${t6} & ${p6}${)}${const}${volatile}${staticnl}{\n${body}}");
 	op1->set_JavaDef("  ${comment}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}, ${t6} ${p6}${)}${throws}${staticnl}{\n${body}}");
 	op1->set_CppBody("#ifdef DEBUGBOUML\n"
-			 "  cout << \"UmlCom::send_cmd(id, \" << cmd << \", \" << arg1 << \\\", \\\"\" << arg2 << \"\\\", \\\"\" << arg3 << \"\\\", \" << \", UmlTypeSpec, UmlTypeSpec)\\n\";\n"
+			 "  QLOG_INFO() <<\"UmlCom::send_cmd(id, \" << cmd << \", \" << arg1 << \\\", \\\"\" << arg2 << \"\\\", \\\"\" << arg3 << \"\\\", \" << \", UmlTypeSpec, UmlTypeSpec)\\n\";\n"
 			 "#endif\n"
 			 "  \n"
 			 "  write_char(onInstanceCmd);\n"
@@ -3887,7 +3887,7 @@ void fixe_umlcom_send_cmd(UmlOperation * op0)
   op->add_param(3, InputDirection, "dummy", "str");
   op->set_cpp("${type}", "${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, const ${t3} ${p3}",
 	      "#ifdef TRACE\n"
-	      "  cout << \"UmlCom::send_cmd((CmdFamily) \" << f << \", \" << cmd << \", \" << arg << \", dummy)\\n\";\n"
+	      "  QLOG_INFO() <<\"UmlCom::send_cmd((CmdFamily) \" << f << \", \" << cmd << \", \" << arg << \", dummy)\\n\";\n"
 	      "#endif\n"
 	      "  \n"
 	      "  write_char(f);\n"
@@ -3902,7 +3902,7 @@ void fixe_umlcom_send_cmd(UmlOperation * op0)
   op->set_CppDef(s);
   
   op->set_java("${type}", "${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}",
-	       "  cout << \"UmlCom.send_cmd((CmdFamily) \" << f << \", \" << cmd << \", \" << arg << \", dummy)\\n\";\n"
+	       "  QLOG_INFO() <<\"UmlCom.send_cmd((CmdFamily) \" << f << \", \" << cmd << \", \" << arg << \", dummy)\\n\";\n"
 	       "  \n"
 	       "  write_char((byte) f.value());\n"
 	       "  write_char((byte) cmd);\n"
@@ -4309,7 +4309,7 @@ void update_uml_com2()
 	      "${t0} ${p0}, ${t1} ${p1}, const ${t2} ${p2}, ${t3} ${p3}",
 	      "\
 #ifdef TRACE\n\
-  cout << \"UmlCom::send_cmd((CmdFamily) \" << f << \", \" << cmd << \", \" << ((s) ? s : \"\") << b << \")\\n\";\n\
+  QLOG_INFO() <<\"UmlCom::send_cmd((CmdFamily) \" << f << \", \" << cmd << \", \" << ((s) ? s : \"\") << b << \")\\n\";\n\
 #endif\n\
   \n\
   write_char(f);\n\

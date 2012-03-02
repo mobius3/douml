@@ -33,7 +33,7 @@
 #include <qcursor.h>
 #include <q3ptrdict.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDropEvent>
 
@@ -56,7 +56,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "ReferenceDialog.h"
 #include "ProfiledStereotypes.h"
@@ -498,7 +498,7 @@ void BrowserOperation::menu() {
   Q3PopupMenu implbym(0);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_edited) {
@@ -543,7 +543,7 @@ a double click with the left mouse button does the same thing"));
 	m.setWhatsThis(m.insertItem(TR("Select implementing behavior"), &implbym),
 		       TR("to select a <i>state</i> or <i>activity</i> implementing the <i>operation</i>"));
 	
-	implbym.insertItem(new MenuTitle(TR("Choose behavior"), m.font()), -1);
+        MenuFactory::createTitle(implbym, TR("Choose behavior"));
 	implbym.insertSeparator();
 	
 	BrowserNode * beh;
@@ -869,7 +869,7 @@ const QStringList & BrowserOperation::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserOperation::save_stereotypes(Q3TextStream & st)
+void BrowserOperation::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "operation_stereotypes ";
@@ -908,7 +908,7 @@ void BrowserOperation::post_load()
   }
 }
 
-void BrowserOperation::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserOperation::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "operation_ref " << get_ident() << " // " << get_name();
   else {

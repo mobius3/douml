@@ -29,12 +29,12 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlBaseClass.h"
 #include "UmlTypeSpec.h"
 
-class QTextOStream;
+class QTextStream;
 
 class UmlPackage;
 class UmlClass;
@@ -50,20 +50,20 @@ class UmlClass : public UmlBaseClass {
     Q3CString python_stereotype();
     
     virtual void generate();
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
+    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
 			  Q3CString indent, BooL & indent_needed,
 			  int & enum_item_rank, const Q3CString & self);    
     
-    void generate_imports(QTextOStream & f, Q3CString & made);
-    void generate_import(QTextOStream & f, UmlArtifact * using_art, bool from, Q3CString & made);
-    void generate(QTextOStream &, Q3CString indent, BooL & indent_needed);
-    void generate_instance_att_rel(QTextOStream & f, Q3CString indent,
+    void generate_imports(QTextStream & f, Q3CString & made);
+    void generate_import(QTextStream & f, UmlArtifact * using_art, bool from, Q3CString & made);
+    void generate(QTextStream &, Q3CString indent, BooL & indent_needed);
+    void generate_instance_att_rel(QTextStream & f, Q3CString indent,
 				   BooL & indent_needed, Q3CString self);
     
     UmlArtifact * assocArtifact();
 
-    void write(QTextOStream &);
-    static void write(QTextOStream &, const UmlTypeSpec &);
+    void write(QTextStream &);
+    static void write(QTextStream &, const UmlTypeSpec &);
 };
 
 #endif

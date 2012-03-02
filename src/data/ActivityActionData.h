@@ -31,10 +31,10 @@
 #include "PinParamData.h"
 #include "UmlEnum.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
-class Q3TextStream;
+class QTextStream;
 
 class BrowserActivityAction;
 class ActivityActionDialog;
@@ -62,7 +62,7 @@ struct AnyAction {
   virtual void on_delete();
   virtual BrowserNode * referenced(const char *&) const;
 
-  virtual void save(Q3TextStream & st, QString & warning) const = 0;
+  virtual void save(QTextStream & st, QString & warning) const = 0;
   virtual void read(char * & st, char * & k) = 0;
   virtual void send_def(ToolCom * com, DrawingLanguage) = 0;
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -81,7 +81,7 @@ struct OpaqueAction : public AnyAction {
   virtual UmlActionKind kind() const;
   virtual QString str(DrawingLanguage lang, QString name) const;
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -101,7 +101,7 @@ struct AcceptEventAction : public AnyAction {
   virtual AnyAction * duplicate() const;
   virtual UmlActionKind kind() const;
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -121,7 +121,7 @@ struct AccessVariableValueAction : public AnyAction {
   virtual void on_delete();
   virtual BrowserNode * referenced(const char *&) const;
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -172,7 +172,7 @@ struct ChangeVariableValueAction : public AccessVariableValueAction {
   	// [in] "value" : le type de la variable
   	// [in] <str>: UnlimitedNatural / uint
   
-  void save(Q3TextStream & st, QString & warning, const char * str) const;
+  void save(QTextStream & st, QString & warning, const char * str) const;
   void read(char * & st, char * & k, const char * str);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -189,7 +189,7 @@ struct AddVariableValueAction : public ChangeVariableValueAction {
   	// [in] "value" : le type de la variable
   	// [in] "insertAt" : UnlimitedNatural / uint
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
 };
 
@@ -204,7 +204,7 @@ struct RemoveVariableValueAction : public ChangeVariableValueAction {
   	// [in] "value" : le type de la variable
   	// [in] "removeAt" : UnlimitedNatural / uint
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
 };
 
@@ -224,7 +224,7 @@ struct CallBehaviorAction : public AnyAction {
   virtual void on_delete();
   virtual BrowserNode * referenced(const char *&) const;
 
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -250,7 +250,7 @@ struct CallOperationAction : public AnyAction {
   virtual void on_delete();
   virtual BrowserNode * referenced(const char *&) const;
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -270,7 +270,7 @@ struct SendObjectAction : public AnyAction {
   	// [in] "target" : target object,
   	// [in]* : arguments (pin addable et removables)
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
 };
@@ -290,7 +290,7 @@ struct SendSignalAction : public AnyAction {
   	// [in] "target"
   	// [*] depend on signal parameters
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -317,7 +317,7 @@ struct UnmarshallAction : public AnyAction {
   	// [in] "object" : the unmashalled object
   	// [out]* : the objects (pin addable et removables)
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
 };
@@ -337,7 +337,7 @@ struct ValueSpecificationAction : public AnyAction {
   	// [out] : the value
   virtual bool may_add_pin() const;
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -357,7 +357,7 @@ struct AcceptCallAction : public AnyAction {
   virtual Q3ValueList<PinDescr> pins() const;
   	// [out] : returnInformation
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -377,7 +377,7 @@ struct ReplyAction : public AnyAction {
   virtual Q3ValueList<PinDescr> pins() const;
   	// [in] : returnInformation
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -395,7 +395,7 @@ struct CreateObjectAction : public AnyAction {
   virtual Q3ValueList<PinDescr> pins() const;
   	// [out] : result
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -415,7 +415,7 @@ struct DestroyObjectAction : public AnyAction {
   	// [in] : result
   virtual bool may_add_pin() const;
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -434,7 +434,7 @@ struct TestIdentityAction : public AnyAction {
   	// [out] : result
   virtual bool may_add_pin() const;
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
 };
@@ -450,7 +450,7 @@ struct RaiseExceptionAction : public AnyAction {
   	// [in] : exception
   virtual bool may_add_pin() const;
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
 };
@@ -473,7 +473,7 @@ struct ReduceAction : public AnyAction {
   virtual void on_delete();
   virtual BrowserNode * referenced(const char *&) const;
   
-  void save(Q3TextStream & st, QString & warning) const;
+  void save(QTextStream & st, QString & warning) const;
   void read(char * & st, char * & k);
   void send_def(ToolCom * com, DrawingLanguage);
   virtual bool tool_cmd(ToolCom * com, const char * args);
@@ -521,7 +521,7 @@ class ActivityActionData : public SimpleData {
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
 
   private slots:

@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "InfoCanvas.h"
 #include "DiagramCanvas.h"
@@ -41,7 +41,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "translate.h"
@@ -108,7 +108,7 @@ void InfoCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu fontsubm(0);
   
-  m.insertItem(new MenuTitle(TR("Information"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Information"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -234,7 +234,7 @@ void InfoCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l) {
   }
 }
 
-void InfoCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void InfoCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "information_ref " << get_ident();
   }

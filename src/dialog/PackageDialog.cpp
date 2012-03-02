@@ -615,7 +615,7 @@ void PackageDialog::browse(LineEdit * ed, QPushButton * button,
 
   
   if (! ns.isNull()) {
-    unsigned len = root.length();
+    int len = root.length();
     
     if (rel && 
         (ns.find(root) == 0) &&
@@ -665,7 +665,7 @@ void PackageDialog::relative(LineEdit * ed, QPushButton * button,
     root = BrowserView::get_dir().filePath(root);
   
   if (button->text() == Relative) {
-    unsigned len = root.length();
+    int len = root.length();
       
     if (
 

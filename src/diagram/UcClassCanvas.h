@@ -29,7 +29,7 @@
 #include "DiagramCanvas.h"
 #include "Settings.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #define ACTOR_CANVAS_SIZE 40
 
@@ -87,7 +87,7 @@ class UcClassCanvas : public QObject, public DiagramCanvas {
     virtual void history_load(QBuffer &);
     virtual void history_hide();
 
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static UcClassCanvas * read(char * &, UmlCanvas * canvas, char *);
     virtual void post_loaded();
     

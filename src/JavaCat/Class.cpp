@@ -562,7 +562,7 @@ bool Class::reverse(ClassContainer * container, Q3CString stereotype,
       return FALSE;
     }
 #ifdef TRACE
-    cout << "in class def a lu '" << s << "'\n";
+    QLOG_INFO() <<"in class def a lu '" << s << "'\n";
 #endif
     if (s == ";")
       ;
@@ -656,7 +656,7 @@ bool Class::manage_extends(ClassContainer * container,
 			   ) {
   // out of scanning
 #ifdef TRACE
-  cout << name() << "->manage_extends()\n";
+  QLOG_INFO() <<name() << "->manage_extends()\n";
 #endif
   
   UmlTypeSpec typespec;
@@ -671,7 +671,7 @@ bool Class::manage_extends(ClassContainer * container,
   
   if (typespec.type == 0) {
 #ifdef TRACE
-    cout << "cannot create mother\n";
+    QLOG_INFO() <<"cannot create mother\n";
 #endif
     return FALSE;
   }
@@ -696,7 +696,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k,
 			      ) {
   // out of scanning
 #ifdef TRACE
-  cout << name() << "->manage_implements()\n";
+  QLOG_INFO() <<name() << "->manage_implements()\n";
 #endif
   
   for (;;) {
@@ -712,7 +712,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k,
     
     if (typespec.type == 0) {
 #ifdef TRACE
-      cout << "cannot create mother\n";
+      QLOG_INFO() <<"cannot create mother\n";
 #endif
       return FALSE;
     }
@@ -837,7 +837,7 @@ bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec,
   
   if (rel == 0) {
 #ifdef TRACE
-    cout << "cannot create <|---\n";
+    QLOG_INFO() <<"cannot create <|---\n";
 #endif
     return FALSE;
   }
@@ -1055,7 +1055,7 @@ bool Class::manage_member(Q3CString s, Q3CString & path
   Q3CString genericname;
   
 #ifdef TRACE
-  cout << "Class::manage_member(" << s << ")\n";
+  QLOG_INFO() <<"Class::manage_member(" << s << ")\n";
 #endif
   
   for (;;) {
@@ -1153,7 +1153,7 @@ bool Class::manage_member(Q3CString s, Q3CString & path
       if (!type_read) {
 	  Lex::error_near("(", " type missing");
 #ifdef TRACE
-	  cout << "ERROR '(' and type not yet read\n";
+	  QLOG_INFO() <<"ERROR '(' and type not yet read\n";
 #endif
 	  return FALSE;
       }
@@ -1166,7 +1166,7 @@ bool Class::manage_member(Q3CString s, Q3CString & path
 	else {
 	  Lex::error_near("(");
 #ifdef TRACE
-	  cout << "ERROR '(' no name not constructor\n";
+	  QLOG_INFO() <<"ERROR '(' no name not constructor\n";
 #endif
 	  return FALSE;
 	}
@@ -1210,7 +1210,7 @@ bool Class::manage_member(Q3CString s, Q3CString & path
       if (name.isEmpty() || !type_read || !oper_templ.isEmpty()) {
 	Lex::error_near(s);
 #ifdef TRACE
-	cout << "ERROR ';' et name.isEmpty() || type not yet read\n";
+	QLOG_INFO() <<"ERROR ';' et name.isEmpty() || type not yet read\n";
 #endif
 	return FALSE;
       }
@@ -1277,7 +1277,7 @@ bool Class::manage_member(Q3CString s, Q3CString & path
 	  return FALSE;
 	
 #ifdef TRACE
-	cout << "type = '" << s << "...'\n";
+	QLOG_INFO() <<"type = '" << s << "...'\n";
 #endif
 	type_read = TRUE;
       }
@@ -1288,14 +1288,14 @@ bool Class::manage_member(Q3CString s, Q3CString & path
 	  array_before_name = array;
 	}
 #ifdef TRACE
-	cout << "name = '" << name << "'\n";
+	QLOG_INFO() <<"name = '" << name << "'\n";
 #endif
       }
       else {
 	if (! Package::scanning())
 	  Lex::error_near(s);
 #ifdef TRACE
-	cout << "ERROR '" << s << "' alors qu a deja le type et le nom '" << name << "'\n";
+	QLOG_INFO() <<"ERROR '" << s << "' alors qu a deja le type et le nom '" << name << "'\n";
 #endif
 	return FALSE;
       }
@@ -1316,7 +1316,7 @@ bool Class::manage_member(Q3CString s, Q3CString & path
       if (! Package::scanning())
 	Lex::error_near(s);
 #ifdef TRACE
-      cout << "ERROR : '" << s << "'\n";
+      QLOG_INFO() <<"ERROR : '" << s << "'\n";
 #endif
       UmlOperation::skip_expr(*((const char *) s) == '{');
       return TRUE;

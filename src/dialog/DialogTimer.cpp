@@ -33,7 +33,7 @@
 
 
 #include <stdio.h>
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 #include <qfile.h>
 #include <q3tabdialog.h>
 
@@ -64,9 +64,9 @@ void DialogTimer::readfile() {
     
     fi.open(QIODevice::ReadOnly, fp);
     
-    Q3TextStream ts(&fi);
+    QTextStream ts(&fi);
     
-    ts.setEncoding(Q3TextStream::Latin1);
+    ts.setEncoding(QTextStream::Latin1);
     
     result = ts.read();
     fi.close();

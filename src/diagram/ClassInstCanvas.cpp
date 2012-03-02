@@ -29,7 +29,7 @@
 
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ClassInstCanvas.h"
 #include "BrowserClass.h"
@@ -255,7 +255,7 @@ void ClassInstCanvas::draw(QPainter & p, UmlCanvas * canvas, QRect r) {
     fputs("</g>\n", fp);
 }
 
-void ClassInstCanvas::save(Q3TextStream & st) const {
+void ClassInstCanvas::save(QTextStream & st) const {
   if (itscolor != UmlDefaultColor)
     st << " color " << stringify(itscolor);
   if (write_horizontally != UmlDefaultState)

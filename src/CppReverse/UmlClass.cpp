@@ -82,14 +82,14 @@ bool UmlClass::manage_inherit(ClassContainer * container,
 #endif
 			      ) {
 #ifdef DEBUG_BOUML
-  cout << name() << "->manage_inherit()\n";
+  QLOG_INFO() <<name() << "->manage_inherit()\n";
 #endif
   
   Q3CString s = Lex::read_word(TRUE);
   
   while (s != "{") {
 #ifdef DEBUG_BOUML
-    cout << "Class::manage_inherit, visibility : " << s << '\n';
+    QLOG_INFO() <<"Class::manage_inherit, visibility : " << s << '\n';
 #endif
     
     bool is_virtual;
@@ -124,7 +124,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
     }
     
 #ifdef DEBUG_BOUML
-    cout << "UmlClass::manage_inherit, mother : " << s << '\n';
+    QLOG_INFO() <<"UmlClass::manage_inherit, mother : " << s << '\n';
 #endif
     
     Q3CString mother_name = s;
@@ -178,7 +178,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
 	  Lex::warn("cannot inherit <font color =\"red\">" +
 		    Lex::quote(mother_name) +" </font>");
 #ifdef DEBUG_BOUML
-	  cout << "cannot create <|---\n";
+	  QLOG_INFO() <<"cannot create <|---\n";
 #endif
 	  return FALSE;
 	}
@@ -228,7 +228,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
       Lex::warn("cannot inherit <font color =\"red\">" +
 		Lex::quote(mother_name) +" </font>");
 #ifdef DEBUG_BOUML
-      cout << "cannot create <|---\n";
+      QLOG_INFO() <<"cannot create <|---\n";
 #endif
       return FALSE;
     }

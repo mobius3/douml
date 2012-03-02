@@ -328,7 +328,7 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
     }
     
 #ifdef DEBUG_BOUML
-    cout << "in class def a lu '" << s << "'\n";
+    QLOG_INFO() <<"in class def a lu '" << s << "'\n";
 #endif
     
     if (s == "public")
@@ -447,7 +447,7 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
     }
     
 #ifdef DEBUG_BOUML
-    cout << "visi = " << s << '\n';
+    QLOG_INFO() <<"visi = " << s << '\n';
 #endif
     
     s = Lex::read_word();
@@ -595,7 +595,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
   Q3CString friend_template;
   
 #ifdef DEBUG_BOUML
-  cout << "Class::manage_member(" << s << ")\n";
+  QLOG_INFO() <<"Class::manage_member(" << s << ")\n";
 #endif
   
   for (;;) {
@@ -662,7 +662,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 	modifier = s;
       else {
 #ifdef DEBUG_BOUML
-	cout << "ERROR modifier " << s << " et type empty\n";
+	QLOG_INFO() <<"ERROR modifier " << s << " et type empty\n";
 #endif
 	if (!Package::scanning())
 	  Lex::error_near(s);
@@ -830,7 +830,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 	if (s.isEmpty() || (s != ";")) {
 	  Lex::error_near("friend");
 #ifdef DEBUG_BOUML
-	  cout << "ERROR ';' doit terminer un 'friend'\n";
+	  QLOG_INFO() <<"ERROR ';' doit terminer un 'friend'\n";
 #endif
 	  break;
 	}
@@ -887,7 +887,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 	  if (! Package::scanning())
 	    Lex::error_near(s);
 #ifdef DEBUG_BOUML
-	  cout << "ERROR '" << s << " {' alors qu a deja le type '" << type << "' et le nom '" << name << "'\n";
+	  QLOG_INFO() <<"ERROR '" << s << " {' alors qu a deja le type '" << type << "' et le nom '" << name << "'\n";
 #endif
 	  return;
 	}
@@ -1008,21 +1008,21 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
       if (type.isEmpty()) {
 	s = Lex::complete_template_type(s);
 #ifdef DEBUG_BOUML
-	cout << "type = '" << s << "'\n";
+	QLOG_INFO() <<"type = '" << s << "'\n";
 #endif
 	type = (destructor) ? Q3CString("~") + s : s;	// will be the name if ~
       }
       else if (name.isEmpty()) {
 	name = s;
 #ifdef DEBUG_BOUML
-	cout << "name = '" << name << "'\n";
+	QLOG_INFO() <<"name = '" << name << "'\n";
 #endif
       }
       else {
 	if (!Package::scanning())
 	  Lex::error_near(s);
 #ifdef DEBUG_BOUML
-	cout << "ERROR '" << s << "' alors qu a deja le type '" << type << "' et le nom '" << name << "'\n";
+	QLOG_INFO() <<"ERROR '" << s << "' alors qu a deja le type '" << type << "' et le nom '" << name << "'\n";
 #endif
 	break;
       }
@@ -1046,7 +1046,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
       if (!Package::scanning())
 	Lex::error_near(s);
 #ifdef DEBUG_BOUML
-      cout << "ERROR : '" << s << "'\n";
+      QLOG_INFO() <<"ERROR : '" << s << "'\n";
 #endif
       break;
     }
@@ -1608,7 +1608,7 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
   // 'type' up to 's' (including 's', may be except template actuals)
   
 #ifdef DEBUG_BOUML
-  cout << "typedef " << s << "...\n";
+  QLOG_INFO() <<"typedef " << s << "...\n";
 #endif    
   Class * ty = container->define(s, "typedef");
 
@@ -1624,7 +1624,7 @@ bool Class::reverse_typedef(ClassContainer *  container, const Q3CString & path,
   
   if ((ty == 0) || ((ty_uml = ty->get_uml()) == 0)) {
 #ifdef DEBUG_BOUML
-    cout << ((ty == 0) ? "typedef ty\n" : "typedef ty_uml\n");
+    QLOG_INFO() <<((ty == 0) ? "typedef ty\n" : "typedef ty_uml\n");
 #endif    
     UmlOperation::skip_body();
     return FALSE;

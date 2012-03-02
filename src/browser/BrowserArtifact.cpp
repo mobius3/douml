@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qdir.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 #include <QDragMoveEvent>
@@ -49,7 +49,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "ClassListDialog.h"
 #include "GenerationSettings.h"
 #include "SourceDialog.h"
@@ -296,7 +296,7 @@ void BrowserArtifact::menu() {
   QString python_path;
   QString idl_path;
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_edited) {
@@ -412,7 +412,7 @@ through a relation"));
   }
   else if (n != 0) {
     m.insertSeparator();    
-    clsubm.insertItem(new MenuTitle(TR("Choose class"), m.font()), -1);
+    MenuFactory::createTitle(clsubm, TR("Choose class"));
     clsubm.insertSeparator();
 	    
     for (it = associated_classes.begin(), n = 10000; it != end; ++it)
@@ -1117,7 +1117,7 @@ bool BrowserArtifact::tool_cmd(ToolCom * com, const char * args) {
   return TRUE;
 }
 
-void BrowserArtifact::save_stereotypes(Q3TextStream & st)
+void BrowserArtifact::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "artifact_stereotypes ";
@@ -1148,7 +1148,7 @@ void BrowserArtifact::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserArtifact::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserArtifact::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "artifact_ref " << get_ident() << " // " << get_name();
   else {

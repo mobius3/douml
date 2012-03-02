@@ -30,12 +30,12 @@
 #include "Labeled.h"
 #include "AType.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 //Added by qt3to4:
 #include <Q3PtrList>
 
-class Q3TextStream;
+class QTextStream;
 
 class BrowserRelation;
 class BrowserAttribute;
@@ -218,7 +218,7 @@ class RelationData : public ClassMemberData, public Labeled<RelationData> {
     
     void select_in_browser(bool prefer_start) const;
     
-    void save(Q3TextStream &, bool ref, QString & warning) const;
+    void save(QTextStream &, bool ref, QString & warning) const;
     static RelationData * read_ref(char * &, bool complete = FALSE,
 				   const char * k = 0);
     static RelationData * read(char * &, char * &, BrowserRelation *& unconsistent);

@@ -31,9 +31,9 @@
 #include "myio.h"
 #include "ToolCom.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
-void InfoData::save(Q3TextStream & st, const char * s1, const char * s2) const {
+void InfoData::save(QTextStream & st, const char * s1, const char * s2) const {
   indent(+1);
   
   if (!first.isEmpty()) {
