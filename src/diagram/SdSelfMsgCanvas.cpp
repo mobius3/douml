@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PointArray>
 
 #include "SdSelfMsgCanvas.h"
@@ -43,7 +43,7 @@
 #include "SettingsDialog.h"
 #include "BrowserSeqDiagram.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 #define SELF_MSG_WIDTH  20
@@ -219,7 +219,7 @@ int SdSelfMsgCanvas::overlap_dir(SdDurationCanvas *) const {
 void SdSelfMsgCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Message"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Message"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -417,7 +417,7 @@ void SdSelfMsgCanvas::select_associated() {
     dest->select_associated();
 }
 
-void SdSelfMsgCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdSelfMsgCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << ((itsType == UmlSelfReturnMsg)
 	   ? "selfreflexivemsg_ref "

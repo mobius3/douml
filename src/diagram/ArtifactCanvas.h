@@ -32,7 +32,7 @@
 
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "DiagramCanvas.h"
 #include "Settings.h"
@@ -88,7 +88,7 @@ class ArtifactCanvas : public QObject, public DiagramCanvas {
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ArtifactCanvas * read(char * &, UmlCanvas *, char *);
     virtual void post_loaded();
     

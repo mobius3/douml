@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "OdClassInstCanvas.h"
@@ -47,7 +47,7 @@
 #include "ClassData.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "ObjectDiagramView.h"
 #include "Settings.h"
 #include "UmlGlobal.h"
@@ -339,7 +339,6 @@ void OdClassInstCanvas::draw(QPainter & p) {
   if (visible()) {
     QRect r = rect();
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
-    QColor bckgrnd = p.backgroundColor();
     double zoom = the_canvas()->zoom();
 	p.setRenderHint(QPainter::Antialiasing, true);
     p.setBackgroundMode((used_color == UmlTransparent) ? ::Qt::TransparentMode : ::Qt::OpaqueMode);
@@ -521,7 +520,7 @@ void OdClassInstCanvas::open() {
 void OdClassInstCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(full_name(), m.font()), -1);
+  MenuFactory::createTitle(m, full_name());
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -745,7 +744,7 @@ bool OdClassInstCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void OdClassInstCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void OdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // "
       << browser_node->full_name();

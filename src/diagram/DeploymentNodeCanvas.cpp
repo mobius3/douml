@@ -31,7 +31,7 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PointArray>
 #include <QPixmap>
 
@@ -48,7 +48,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
@@ -433,7 +433,7 @@ void DeploymentNodeCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -685,7 +685,7 @@ bool DeploymentNodeCanvas::move_with_its_package() const {
   return TRUE;
 }
 
-void DeploymentNodeCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void DeploymentNodeCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "deploymentnodecanvas_ref " << get_ident() << " // " << browser_node->get_name();
   else {

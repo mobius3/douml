@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -51,7 +51,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "ProfiledStereotypes.h"
@@ -273,7 +273,7 @@ void BrowserActivityObject::menu() {
   Q3PopupMenu m(0, "Activity object");
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     m.setWhatsThis(m.insertItem(TR("Edit"), 1),
@@ -631,7 +631,7 @@ QString BrowserActivityObject::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
 }
 
-void BrowserActivityObject::save_stereotypes(Q3TextStream & st)
+void BrowserActivityObject::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "activityobject_stereotypes ";
@@ -648,7 +648,7 @@ void BrowserActivityObject::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserActivityObject::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserActivityObject::save(QTextStream & st, bool ref, QString & warning) {
   if (ref) {
     st << "activityobject_ref " << get_ident()
       << " // activity object " << get_name();

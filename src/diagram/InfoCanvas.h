@@ -28,7 +28,7 @@
 
 #include "NoteCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class DiagramItem;
 
@@ -52,7 +52,7 @@ class InfoCanvas : public NoteCanvas {
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
 
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static InfoCanvas * read(char * &, UmlCanvas *, char *, DiagramItem *);
 
     void set(QString s);

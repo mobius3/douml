@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <math.h>
 #include <q3popupmenu.h>
 
@@ -49,7 +49,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
@@ -345,8 +345,7 @@ void RelationCanvas::menu(const QPoint & lpos) {
     Q3PopupMenu geo(0);
     Q3PopupMenu toolm(0);
     
-    m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()),
-		 -1);
+    MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
     m.insertSeparator();
     m.insertItem(TR("Edit"), 0);
     m.insertSeparator();
@@ -1262,7 +1261,7 @@ bool RelationCanvas::represents(BrowserNode * bn) {
   return (data == bn->get_data());
 }
 
-void RelationCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void RelationCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "relationcanvas_ref " << get_ident()
        << " // " << data->get_name();

@@ -27,7 +27,7 @@
 
 
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 #include <qdir.h>
 #include <qfile.h>
 #include <qstring.h>
@@ -57,6 +57,7 @@
 #include "UmlGlobal.h"
 #include "err.h"
 #include "translate.h"
+#include "Logging/QsLog.h"
 
 // QFile::baseName() return string before the first '.' rather than the last
 
@@ -113,7 +114,9 @@ void set_on_load_diagram(bool y)
 }
 
 
-const char * stringify(UmlVisibility v) {
+const char * stringify(UmlVisibility v)
+{
+    QLOG_INFO() << "Call to stringigy detected";
   switch(v) {
   case UmlPublic:
     return "public";
@@ -1517,7 +1520,7 @@ static QString where()
 
 //
 
-void save_string(const char * p, Q3TextStream & st)
+void save_string(const char * p, QTextStream & st)
 {
   if ((p == 0) || (*p == 0))
     st << "\"\"";
@@ -1549,7 +1552,7 @@ void save_string(const char * p, Q3TextStream & st)
   }
 }
       
-void save_string_list(QStringList & list, Q3TextStream & st)
+void save_string_list(QStringList & list, QTextStream & st)
 {
   st << ' ' << list.count();
   
@@ -1561,7 +1564,7 @@ void save_string_list(QStringList & list, Q3TextStream & st)
   }
 }
 
-void save_unicode_string_list(QStringList & list, Q3TextStream & st)
+void save_unicode_string_list(QStringList & list, QTextStream & st)
 {
   st << ' ' << list.count();
   
@@ -1573,7 +1576,7 @@ void save_unicode_string_list(QStringList & list, Q3TextStream & st)
   }
 }
 
-void nl_indent(Q3TextStream & st) {
+void nl_indent(QTextStream & st) {
   int i = Indent;
   
   st << '\n';
@@ -2013,7 +2016,7 @@ void unknown_ref(const char * kind, int id)
 
 //
 
-void save_xy(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
+void save_xy(QTextStream & st, const Q3CanvasItem * c, const char * s) {
 #ifdef FORCE_INT_COORD
   st << s << ' ' << (int) c->x() << ' ' << (int) c->y();
 #else
@@ -2023,7 +2026,7 @@ void save_xy(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
 #endif
 }
 
-void save_xyz(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
+void save_xyz(QTextStream & st, const Q3CanvasItem * c, const char * s) {
 #ifdef FORCE_INT_COORD
   st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z();
 #else
@@ -2033,7 +2036,7 @@ void save_xyz(Q3TextStream & st, const Q3CanvasItem * c, const char * s) {
 #endif
 }
 
-void save_xyzwh(Q3TextStream & st, const Q3CanvasRectangle * c, const char * s) {
+void save_xyzwh(QTextStream & st, const Q3CanvasRectangle * c, const char * s) {
 #ifdef FORCE_INT_COORD
   st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z()
     << ' ' << (int) c->width() << ' ' << (int) c->height();
@@ -2090,7 +2093,7 @@ void read_zwh(char * & st, Q3CanvasRectangle * c)
   c->setSize((int) w, (int) read_double(st));
 }
 
-void save_color(Q3TextStream & st, const char * s, UmlColor c, BooL & nl)
+void save_color(QTextStream & st, const char * s, UmlColor c, BooL & nl)
 {
   if (c != UmlDefaultColor) {
     if (!nl) {
@@ -2214,7 +2217,7 @@ void save(const Q3PointArray & a, QBuffer & b)
 {
   const QPoint * p = a.data();
   
-  for (unsigned i = 0; i != a.size(); i += 1)
+  for (int i = 0; i != a.size(); i += 1)
     save(*p++, b);
 }
 
@@ -2222,7 +2225,7 @@ void load(Q3PointArray & a, QBuffer & b)
 {
   QPoint * p = a.data();
   
-  for (unsigned i = 0; i != a.size(); i += 1)
+  for (int i = 0; i != a.size(); i += 1)
     load(*p++, b);
 }
 

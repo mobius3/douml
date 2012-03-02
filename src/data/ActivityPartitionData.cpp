@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "BrowserActivityPartition.h"
 #include "ActivityPartitionData.h"
@@ -105,7 +105,7 @@ void ActivityPartitionData::post_load() {
     represents = 0;
 }
 
-void ActivityPartitionData::save(Q3TextStream & st, QString & warning) const {
+void ActivityPartitionData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
 
   bool nl = FALSE;

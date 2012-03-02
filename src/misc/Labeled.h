@@ -116,12 +116,14 @@ template <class X> class IdDict {
     
     void read_old_diagram(bool y) { old_diagram = y; }
     
-    void memo_id_oid(int id, int oid) { 
-      dict[0].remove(id);
-      dictlib.replace(oid, (char *) id);
+    void memo_id_oid(intptr_t id, int oid) {
+      dict[0].remove( static_cast<long>( id ) );
+      dictlib.replace( static_cast<long>( oid ), reinterpret_cast<char *>( id ) );
       
       if ((dictlib.count() / 2) >= dictlib.size())
+      {
 	dictlib.resize(dictlib.size() * 2 - 1);
+      }
     }
 };
 

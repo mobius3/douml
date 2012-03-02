@@ -1,8 +1,8 @@
 // *************************************************************************
 //
-// Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012 Daniel Hellsson
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DoUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,29 +18,35 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : douml@hellsson.com
+// home   : http://github.com/leonardo2d/douml/
 //
 // *************************************************************************
 
-#ifndef MENUTITLE_H
-#define MENUTITLE_H
+#ifndef MENUFACTORY_H
+#define MENUFACTORY_H
 
-#include <qmenudata.h> 
+#include <QMenu>
 #include <QMenuItem>
+#include <Q3PopupMenu>
 
-class MenuTitle : public QMenuItem {
-  protected:
-    QString str;
-    QFont font;
-  
-  public:
-    MenuTitle(const QString & s, QFont f);
-    virtual ~MenuTitle(){};
+class MenuFactory
+{
+public:
+    typedef struct _Item {
+        const char* const name;
+        const int id;
+        const char* const whatsThis;
+    } Item;
 
-    virtual void paint(QPainter * p, const QColorGroup & /*cg*/, bool /*act*/,
-		       bool /*enabled*/, int x, int y, int w, int h);
-    virtual QSize sizeHint();
+    static void createTitle(
+        QMenu& menu,
+        const QString& title );
+    static void addItems(
+        Q3PopupMenu& menu,
+        const Item items[],
+        const int nofItems );
+
 };
 
-#endif
+#endif // MENUFACTORY_H

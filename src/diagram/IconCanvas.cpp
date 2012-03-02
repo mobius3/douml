@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 
 #include "IconCanvas.h"
@@ -39,7 +39,7 @@
 #include "BrowserDiagram.h"
 #include "BasicData.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 IconCanvas::IconCanvas(BrowserNode * bn, UmlCanvas * canvas,
@@ -117,7 +117,7 @@ void IconCanvas::open() {
 void IconCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(browser_node->get_name() + TR("\nshort cut"), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_name() + TR("\nshort cut"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -229,7 +229,7 @@ bool IconCanvas::represents(BrowserNode * bn) {
   return (bn == browser_node);
 }
 
-void IconCanvas::save(Q3TextStream & st, bool, QString & warning) const {
+void IconCanvas::save(QTextStream & st, bool, QString & warning) const {
   nl_indent(st);
   st << "iconcanvas " << get_ident() << ' ';
   browser_node->save(st, TRUE, warning);

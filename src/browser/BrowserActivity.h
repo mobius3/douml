@@ -31,7 +31,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QDragMoveEvent>
 
@@ -91,7 +91,7 @@ class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity> {
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserActivityDiagram *, bool on_read = FALSE);
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserActivity * read(char * &, char *, BrowserNode *);
     static BrowserActivity * read_ref(char * & st);
     static BrowserNode * read_any_ref(char * &, char *);
@@ -111,7 +111,7 @@ class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity> {
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);

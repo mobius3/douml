@@ -32,14 +32,14 @@
 #include <q3popupmenu.h> 
 #include <q3ptrdict.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "SdLifeLineCanvas.h"
 #include "SdObjCanvas.h"
 #include "SdDurationCanvas.h"
 #include "SdMsgBaseCanvas.h"
 #include "FragmentCanvas.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "ToolCom.h"
 #include "myio.h"
 #include "translate.h"
@@ -352,7 +352,7 @@ void SdLifeLineCanvas::menu(const QPoint&) {
   // delete must call SdObjCanvas->delete_it() NOT the own delete_it !
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Life line"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Life line"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -385,7 +385,7 @@ bool SdLifeLineCanvas::copyable() const {
   return FALSE;
 }
 
-void SdLifeLineCanvas::save(Q3TextStream & st, bool, QString &) const {
+void SdLifeLineCanvas::save(QTextStream & st, bool, QString &) const {
   st << "\nERROR SdLifeLineCanvas::save must not be called\n";
 }
 

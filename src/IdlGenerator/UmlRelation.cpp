@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlRelation.h"
 #include "UmlClass.h"
@@ -35,7 +35,7 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlRelation::generate_inherit(const char *& sep, QTextOStream & f, 
+void UmlRelation::generate_inherit(const char *& sep, QTextStream & f, 
 				   const Q3CString & cl_stereotype,
 				   BooL & already) {
   if ((relationKind() == aGeneralisation) || (relationKind() == aRealization)) {
@@ -101,7 +101,7 @@ void UmlRelation::generate_inherit(const char *& sep, QTextOStream & f,
   }
 }
 
-void UmlRelation::generate_decl(QTextOStream & f,
+void UmlRelation::generate_decl(QTextStream & f,
 				const Q3CString & cl_stereotype,
 				Q3CString indent, bool) {
   if ((relationKind() != aGeneralisation) && 

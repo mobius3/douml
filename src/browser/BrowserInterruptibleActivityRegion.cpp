@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -51,7 +51,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "ProfiledStereotypes.h"
@@ -199,7 +199,7 @@ void BrowserInterruptibleActivityRegion::menu() {
   Q3PopupMenu m(0, "interruptible activity region");
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_read_only) {
@@ -587,8 +587,7 @@ void BrowserInterruptibleActivityRegion::DropAfterEvent(QDropEvent * e, BrowserN
 	// have choice
 	Q3PopupMenu m(0);
   
-	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
-				   m.font()), -1);
+        MenuFactory::createTitle(m, TR("move ") + bn->get_name());
 	m.insertSeparator();
 	m.insertItem(TR("In ") + QString(get_name()), 1);
 	m.insertItem(TR("After ") + QString(get_name()), 2);
@@ -632,7 +631,7 @@ QString BrowserInterruptibleActivityRegion::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
 }
 
-void BrowserInterruptibleActivityRegion::save_stereotypes(Q3TextStream & st)
+void BrowserInterruptibleActivityRegion::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "interruptibleactivityregion_stereotypes ";
@@ -649,7 +648,7 @@ void BrowserInterruptibleActivityRegion::read_stereotypes(char * & st, char * & 
     init();
 }
 
-void BrowserInterruptibleActivityRegion::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserInterruptibleActivityRegion::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "interruptibleactivityregion_ref " << get_ident() << " // " << get_name();
   else {

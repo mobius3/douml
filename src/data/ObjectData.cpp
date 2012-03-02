@@ -31,7 +31,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 ObjectData::ObjectData()
     : ordering(UmlUnordered), is_control(FALSE) {
@@ -143,7 +143,7 @@ bool ObjectData::tool_cmd(ToolCom * com, const char * args) {
   return TRUE;
 }
 
-void ObjectData::save(Q3TextStream & st, QString & warning) const {
+void ObjectData::save(QTextStream & st, QString & warning) const {
   type.save(st, warning, " type ", " explicit_type ");
   nl_indent(st);
   

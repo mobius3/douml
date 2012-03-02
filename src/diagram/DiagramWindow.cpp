@@ -38,8 +38,8 @@
 #include <qlabel.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <QTextOStream>
-#include <Q3TextStream>
+#include <QTextStream>
+#include <QTextStream>
 
 
 
@@ -159,7 +159,7 @@ bool DiagramWindow::frozen() const {
 	  !browser_node->is_writable());
 }
 
-void DiagramWindow::save_session(Q3TextStream & st) {
+void DiagramWindow::save_session(QTextStream & st) {
   // can't access to the window position, even through geometry
   QString warning;
   
@@ -198,7 +198,7 @@ void DiagramWindow::save(const char * ext, QString & warning,
     get_view()->set_zoom(1);
 
   QString diagram_def;
-  Q3TextStream st(&diagram_def, IO_WriteOnly);
+  QTextStream st(&diagram_def, IO_WriteOnly);
   int current_indent = indent();
   
   indent0();
@@ -218,7 +218,7 @@ void DiagramWindow::duplicate(int dest_id, const char * ext) const {
     get_view()->set_zoom(1);
 
   QString diagram_def;
-  Q3TextStream st(&diagram_def, IO_WriteOnly); //[lgfreitas] it was nothing but some inlines to do this
+  QTextStream st(&diagram_def, IO_WriteOnly); //[lgfreitas] it was nothing but some inlines to do this
   int current_indent = indent();
   BooL is_new = TRUE;
   
@@ -239,7 +239,7 @@ QString DiagramWindow::copy_selected() const {
     get_view()->set_zoom(1);
 
   QString diagram_def;
-  Q3TextStream st(&diagram_def, IO_WriteOnly);
+  QTextStream st(&diagram_def, IO_WriteOnly);
   
   indent0();
   get_view()->save(st, warning, TRUE);

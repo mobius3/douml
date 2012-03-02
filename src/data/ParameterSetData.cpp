@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "ParameterSetData.h"
@@ -126,7 +126,7 @@ bool ParameterSetData::tool_cmd(ToolCom * com, const char * args,
   return TRUE;
 }
 
-void ParameterSetData::save(Q3TextStream & st, QString & warning) const {
+void ParameterSetData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   nl_indent(st);
   st << "pins";

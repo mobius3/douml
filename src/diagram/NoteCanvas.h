@@ -28,7 +28,7 @@
 
 #include "DiagramCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #define NOTE_CANVAS_MIN_SIZE 35
 #define NOTE_MARGIN 10
@@ -43,7 +43,7 @@ class NoteCanvas : public QObject, public DiagramCanvas {
     UmlColor fg_c;
     QString note;
   
-    void save_internal(Q3TextStream & st) const;
+    void save_internal(QTextStream & st) const;
     void read_internal(char * & st);
 
   public:
@@ -76,7 +76,7 @@ class NoteCanvas : public QObject, public DiagramCanvas {
 
     virtual void apply_shortcut(QString s);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static NoteCanvas * read(char * &, UmlCanvas *, char *);
     
   protected slots:

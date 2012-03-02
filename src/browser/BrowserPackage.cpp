@@ -34,7 +34,7 @@
 #include <q3filedialog.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QDragMoveEvent>
 
@@ -86,7 +86,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "UmlWindow.h"
 #include "ReferenceDialog.h"
 #include "UmlGlobal.h"
@@ -526,7 +526,7 @@ void BrowserPackage::menu() {
   Q3PopupMenu importm(0);
   bool isprofile = (strcmp(def->get_stereotype(), "profile") == 0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_read_only && (edition_number == 0)) {
@@ -1871,8 +1871,7 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	// have choice
 	Q3PopupMenu m(0);
   
-	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
-				   m.font()), -1);
+        MenuFactory::createTitle(m, TR("move ") + bn->get_name());
 	m.insertSeparator();
 	if (!is_read_only)
 	  m.insertItem(TR("In ") + QString(get_name()), 1);
@@ -1961,9 +1960,9 @@ void BrowserPackage::init()
 void BrowserPackage::save_stereotypes()
 {
   QByteArray newdef;
-  Q3TextStream st(newdef, QIODevice::WriteOnly);
+  QTextStream st(newdef, QIODevice::WriteOnly);
 	
-  st.setEncoding(Q3TextStream::Latin1);
+  st.setEncoding(QTextStream::Latin1);
   
   nl_indent(st);
   st << "package_stereotypes ";
@@ -2086,7 +2085,7 @@ bool BrowserPackage::import_stereotypes()
 
 // save / restore
 
-void BrowserPackage::save(Q3TextStream & st, bool, QString &) {
+void BrowserPackage::save(QTextStream & st, bool, QString &) {
   // saves just its reference for its father
   nl_indent(st);
   st << "package_ref " << get_ident() << " // " << get_name();
@@ -2155,9 +2154,9 @@ void BrowserPackage::save_all(bool modified_only)
 	if (prj)
 	  UmlWindow::historic_add(fp.name());
 	
-	Q3TextStream st(&fp);
+	QTextStream st(&fp);
 	
-	st.setEncoding(Q3TextStream::Latin1);
+	st.setEncoding(QTextStream::Latin1);
 	
 	// saves the package own data
 	
@@ -2302,7 +2301,7 @@ void BrowserPackage::save_all(bool modified_only)
 	
 	fp.close();
 	
-	if (fp.status() == IO_Ok) {
+        if (static_cast<uint>( fp.status() ) == IO_Ok) {
 	  pack->is_imported = pack->is_modified = FALSE;
 	  
 	  // for saveAs
@@ -2346,7 +2345,7 @@ bool BrowserPackage::must_be_saved()
   return FALSE;
 }
 
-void BrowserPackage::save_session(Q3TextStream & st) {
+void BrowserPackage::save_session(QTextStream & st) {
   if (show_stereotypes)
     st << "show_stereotypes\n";
   

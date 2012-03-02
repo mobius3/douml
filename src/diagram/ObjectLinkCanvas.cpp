@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <math.h>
 #include <q3popupmenu.h>
 
@@ -50,7 +50,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "translate.h"
@@ -410,7 +410,7 @@ void ObjectLinkCanvas::menu(const QPoint & lpos) {
   Q3PopupMenu geo(0);
   //QPopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(TR("Object link"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Object link"));
   m.insertSeparator();
   m.insertItem(TR("Edit"), 0);
   m.insertSeparator();
@@ -806,7 +806,7 @@ bool ObjectLinkCanvas::represents(BrowserNode * bn) {
   return (data == bn->get_data());
 }
 
-void ObjectLinkCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ObjectLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "objectlinkcanvas_ref " << get_ident()
        << " // " << data->get_name();

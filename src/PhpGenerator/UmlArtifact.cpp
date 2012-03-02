@@ -24,10 +24,10 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlArtifact.h"
 #include "UmlPackage.h"
@@ -82,8 +82,8 @@ void UmlArtifact::generate() {
     unsigned index;
     Q3CString incl;
     QByteArray file;
-    // note : QTextOStream(FILE *) does not work under windows
-    QTextOStream f(&file);
+    // note : QTextStream(FILE *) does not work under windows
+    QTextStream f(&file);
     const char * p = filedef;
     const char * pp = 0;
       

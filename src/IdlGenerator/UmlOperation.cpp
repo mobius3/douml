@@ -24,10 +24,10 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "UmlOperation.h"
@@ -39,7 +39,7 @@
 #include "util.h"
 
 static bool generate_dir(const Q3ValueList<UmlParameter> & params,
-			 unsigned rank, QTextOStream & f)
+			 unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -58,7 +58,7 @@ static bool generate_dir(const Q3ValueList<UmlParameter> & params,
 }
 
 static bool generate_type(const Q3ValueList<UmlParameter> & params,
-			  unsigned rank, QTextOStream & f)
+			  unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -68,7 +68,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
 }
 
 static bool generate_var(const Q3ValueList<UmlParameter> & params, 
-			 unsigned rank, QTextOStream & f)
+			 unsigned rank, QTextStream & f)
 {
   if (rank >= params.count())
     return FALSE;
@@ -117,7 +117,7 @@ Q3CString UmlOperation::compute_name() {
     return name();
 }
 
-void UmlOperation::generate_decl(QTextOStream & f,
+void UmlOperation::generate_decl(QTextStream & f,
 				 const Q3CString & cl_stereotype,
 				 Q3CString indent, bool) {
   if (!idlDecl().isEmpty()) {

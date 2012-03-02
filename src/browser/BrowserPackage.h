@@ -28,7 +28,7 @@
 
 #include <q3intdict.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QPixmap>
@@ -136,10 +136,10 @@ class BrowserPackage : public BrowserNode, public Labeled<BrowserPackage> {
     virtual bool tool_cmd(ToolCom * com, const char * args);
     static bool tool_global_cmd(ToolCom * com, const char * args);
     virtual void write_id(ToolCom * com);
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     virtual void package_modified();
     
-    void save_session(Q3TextStream & st);
+    void save_session(QTextStream & st);
     void read_session(char * &, const char * k);
     static BrowserNode * get_it(const char * k, int id);
     

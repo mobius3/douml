@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlAttribute.h"
 #include "UmlSettings.h"
@@ -35,7 +35,7 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlAttribute::generate(QTextOStream & f, const Q3CString & st,
+void UmlAttribute::generate(QTextStream & f, const Q3CString & st,
 			    Q3CString indent, int & enum_item_rank) {
   if (!phpDecl().isEmpty()) {
     const char * p = phpDecl();
@@ -124,7 +124,7 @@ void UmlAttribute::generate(QTextOStream & f, const Q3CString & st,
   enum_item_rank += 1;
 }
 
-void UmlAttribute::generate_require_onces(QTextOStream & f, Q3CString & made) {
+void UmlAttribute::generate_require_onces(QTextStream & f, Q3CString & made) {
   if (!phpDecl().isEmpty())
     type().generate_require_onces(f, made, ((UmlClass *) parent())->assocArtifact());
 }

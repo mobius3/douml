@@ -29,7 +29,7 @@
 #include "SdMsgSupport.h"
 #include "SdDurationSupport.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #define DURATION_WIDTH 11
 
@@ -51,8 +51,8 @@ class SdDurationCanvas : public QObject, public SdMsgSupport, public SdDurationS
     SdDurationCanvas(UmlCanvas * canvas, SdDurationSupport * sp,
 		     int x, int y, int w, int h, int id, bool coreg);
 
-    void save_sub(Q3TextStream &) const;
-    void save_internal(Q3TextStream &) const;
+    void save_sub(QTextStream &) const;
+    void save_internal(QTextStream &) const;
     void cut_internal(int py);
     void update_self();
     void cut(const QPoint & p);
@@ -122,7 +122,7 @@ class SdDurationCanvas : public QObject, public SdMsgSupport, public SdDurationS
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
   
-    virtual void save(Q3TextStream &, bool ref, QString & warning) const;
+    virtual void save(QTextStream &, bool ref, QString & warning) const;
     static SdDurationCanvas * read(char * & st, UmlCanvas * canvas, char *);
     static SdDurationCanvas * read(char * & st, UmlCanvas * canvas, bool ref);
     

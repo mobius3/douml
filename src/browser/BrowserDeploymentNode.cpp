@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QPixmap>
@@ -43,7 +43,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "UmlDrag.h"
 #include "ReferenceDialog.h"
 #include "DialogUtil.h"
@@ -145,7 +145,7 @@ void BrowserDeploymentNode::menu() {
   Q3PopupMenu m(0, name);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_edited) {
@@ -467,7 +467,7 @@ bool BrowserDeploymentNode::tool_cmd(ToolCom * com, const char * args) {
   return TRUE;
 }
 
-void BrowserDeploymentNode::save_stereotypes(Q3TextStream & st)
+void BrowserDeploymentNode::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "deploymentnode_stereotypes ";
@@ -484,7 +484,7 @@ void BrowserDeploymentNode::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserDeploymentNode::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserDeploymentNode::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "deploymentnode_ref " << get_ident() << " // " << get_name();
   else {

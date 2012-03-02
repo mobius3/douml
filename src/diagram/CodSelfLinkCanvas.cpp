@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "CodSelfLinkCanvas.h"
 #include "BrowserDiagram.h"
@@ -46,7 +46,7 @@
 #include "SettingsDialog.h"
 #include "OperationData.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "translate.h"
 
 CodSelfLinkCanvas::CodSelfLinkCanvas(UmlCanvas * canvas, CodObjCanvas * o,
@@ -248,7 +248,7 @@ void CodSelfLinkCanvas::open() {
 void CodSelfLinkCanvas::menu(const QPoint&) {
   Q3PopupMenu m;
   
-  m.insertItem(new MenuTitle(TR("Self link"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Self link"));
   m.insertSeparator();
   m.insertItem(TR("Add messages"), 1);
   m.insertSeparator();
@@ -316,7 +316,7 @@ bool CodSelfLinkCanvas::represents(BrowserNode * bn) {
   return supports(bn);
 }
 
-void CodSelfLinkCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodSelfLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "selflinkcanvas_ref " << get_ident();
   else {

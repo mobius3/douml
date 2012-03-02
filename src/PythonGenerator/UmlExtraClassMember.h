@@ -29,7 +29,7 @@
 #include "UmlBaseExtraClassMember.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 // This class allows to manage extra class member, mainly defined for C++
 // it allows to insert C++ pre-processor directive (even they may be placed
@@ -42,7 +42,7 @@ class UmlExtraClassMember : public UmlBaseExtraClassMember {
     UmlExtraClassMember(void * id, const Q3CString & n)
       : UmlBaseExtraClassMember(id, n) {};
   
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
+    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
 			  Q3CString indent, BooL & indent_needed,
 			  int &, const Q3CString &);
 };

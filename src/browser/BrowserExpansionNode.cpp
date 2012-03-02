@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QPixmap>
 
@@ -50,7 +50,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
 #include "mu.h"
@@ -192,7 +192,7 @@ void BrowserExpansionNode::menu() {
   Q3PopupMenu m(0, name);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_edited)
@@ -426,7 +426,7 @@ const QStringList & BrowserExpansionNode::default_stereotypes()
   return its_default_stereotypes;
 }
 
-void BrowserExpansionNode::save_stereotypes(Q3TextStream & st)
+void BrowserExpansionNode::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "expansionnode_stereotypes ";
@@ -441,7 +441,7 @@ void BrowserExpansionNode::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserExpansionNode::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserExpansionNode::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "expansionnode_ref " << get_ident() << " // " << get_name();
   else {

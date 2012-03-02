@@ -28,9 +28,9 @@
 
 #include "AType.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
-class Q3TextStream;
+class QTextStream;
 
 class ExceptionData {
   protected:
@@ -43,7 +43,7 @@ class ExceptionData {
 
     void send_uml_def(ToolCom * com);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * &, char * &);
 };
 

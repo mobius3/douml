@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3ValueList>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -94,7 +94,7 @@ void UmlRelation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
   }
 }
 
-void UmlRelation::generate_inherit(const char *& sep, QTextOStream & f_h, 
+void UmlRelation::generate_inherit(const char *& sep, QTextStream & f_h, 
 				   const Q3ValueList<UmlActualParameter> & actuals,
 				   const Q3CString & cl_stereotype) {
   switch (relationKind()) {
@@ -164,7 +164,7 @@ void UmlRelation::generate_inherit(const char *& sep, QTextOStream & f_h,
   }
 }
 
-void UmlRelation::generate_decl(aVisibility & current_visibility, QTextOStream & f_h,
+void UmlRelation::generate_decl(aVisibility & current_visibility, QTextStream & f_h,
 				const Q3CString & cl_stereotype, Q3CString indent,
 				BooL & first, bool) {
   switch (relationKind()) {
@@ -326,7 +326,7 @@ void UmlRelation::generate_decl(aVisibility & current_visibility, QTextOStream &
   }
 }
 
-void UmlRelation::generate_def(QTextOStream & f, Q3CString indent, bool h,
+void UmlRelation::generate_def(QTextStream & f, Q3CString indent, bool h,
 			       Q3CString templates, Q3CString cl_names,
 			       Q3CString, Q3CString) {
   if (isClassMember() && !cppDecl().isEmpty()) {

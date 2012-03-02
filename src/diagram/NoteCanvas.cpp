@@ -31,7 +31,7 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PointArray>
 
 #include "NoteCanvas.h"
@@ -42,7 +42,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "translate.h"
@@ -189,7 +189,7 @@ void NoteCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu fontsubm(0);
   
-  m.insertItem(new MenuTitle(TR("Note"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Note"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -381,7 +381,7 @@ void NoteCanvas::resize(const QSize & sz, bool w, bool h) {
   DiagramCanvas::resize(sz, w, h, min, min, TRUE);
 }
 
-void NoteCanvas::save_internal(Q3TextStream & st) const {
+void NoteCanvas::save_internal(QTextStream & st) const {
   save_string(fromUnicode(note), st);
   nl_indent(st);
   if (itscolor != UmlDefaultColor)
@@ -393,7 +393,7 @@ void NoteCanvas::save_internal(Q3TextStream & st) const {
   save_xyzwh(st, this, "  xyzwh");
 }
 
-void NoteCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void NoteCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "note_ref " << get_ident();
   }

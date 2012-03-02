@@ -1,6 +1,6 @@
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3TextStream>
+#include <QTextStream>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -78,7 +78,7 @@ class BrowserClassInstance : public BrowserNode, public Labeled<BrowserClassInst
     virtual void on_delete();
     static void post_load();
     
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserClassInstance * read_ref(char * &);
     static BrowserClassInstance * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);

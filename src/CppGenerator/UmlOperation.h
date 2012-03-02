@@ -29,12 +29,12 @@
 #include <q3intdict.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3PtrList>
 
 #include "UmlBaseOperation.h"
 
-class QTextOStream;
+class QTextStream;
 
 class UmlOperation : public UmlBaseOperation {
   private:
@@ -47,10 +47,10 @@ class UmlOperation : public UmlBaseOperation {
     virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
 				    const Q3CString & cl_stereotype,
 				    bool all_in_h);
-    virtual void generate_decl(aVisibility & current_visibility, QTextOStream & f_h,
+    virtual void generate_decl(aVisibility & current_visibility, QTextStream & f_h,
 			       const Q3CString & cl_stereotype, Q3CString indent,
 			       BooL & first, bool last);
-    virtual void generate_def(QTextOStream &, Q3CString indent, bool h,
+    virtual void generate_def(QTextStream &, Q3CString indent, bool h,
 			      Q3CString templates, Q3CString cl_names,
 			      Q3CString templates_tmplop, Q3CString cl_names_tmplop);
     
@@ -60,8 +60,8 @@ class UmlOperation : public UmlBaseOperation {
     static void read_bodies(const char * h_path, const char * src_path);
     
   private:
-    const char * generate_body(QTextOStream & fs, Q3CString indent, const char * p);
-    void generate_throw(QTextOStream & f_h);
+    const char * generate_body(QTextStream & fs, Q3CString indent, const char * p);
+    void generate_throw(QTextStream & f_h);
 };
 
 #endif

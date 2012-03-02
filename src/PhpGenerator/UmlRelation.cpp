@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlRelation.h"
 #include "UmlClass.h"
@@ -35,7 +35,7 @@
 #include "util.h"
 #include "UmlCom.h"
 
-void UmlRelation::generate_extends(const char *& sep, QTextOStream & f,
+void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
 				   const Q3CString & cl_stereotype) {
   switch (relationKind()) {
   default:
@@ -102,7 +102,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextOStream & f,
   }
 }
 
-void UmlRelation::generate_implements(const char *& sep, QTextOStream & f,
+void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
 				      const Q3CString & cl_stereotype) {
   switch (relationKind()) {
   default:
@@ -143,7 +143,7 @@ void UmlRelation::generate_implements(const char *& sep, QTextOStream & f,
   }
 }
 
-void UmlRelation::generate(QTextOStream & f, const Q3CString &,
+void UmlRelation::generate(QTextStream & f, const Q3CString &,
 			   Q3CString indent, int &) {
   switch (relationKind()) {
   case aDependency:
@@ -252,7 +252,7 @@ void UmlRelation::generate(QTextOStream & f, const Q3CString &,
   }
 }
 
-void UmlRelation::generate_require_onces(QTextOStream & f, Q3CString & made) {
+void UmlRelation::generate_require_onces(QTextStream & f, Q3CString & made) {
   if (!phpDecl().isEmpty())
     roleType()->generate_require_onces(f, made, ((UmlClass *) parent())->assocArtifact());
 }

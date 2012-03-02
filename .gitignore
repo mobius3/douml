@@ -64,3 +64,4 @@ src/RoundtripBody/roundtrip_body
 *.cppcheck
 *.autosave
 *.blameresult
+bin/*

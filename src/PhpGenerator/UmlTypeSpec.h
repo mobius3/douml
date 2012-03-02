@@ -5,9 +5,9 @@
 #include "UmlBaseTypeSpec.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
-class QTextOStream;
+class QTextStream;
 class UmlArtifact;
 
 // this class memorize a type specification, which may be
@@ -17,7 +17,7 @@ class UmlArtifact;
 // - an explicit type
 class UmlTypeSpec : public UmlBaseTypeSpec {
   public:
-    void generate_require_onces(QTextOStream & f,
+    void generate_require_onces(QTextStream & f,
 				Q3CString & made,
 				UmlArtifact * using_art) const;
 };

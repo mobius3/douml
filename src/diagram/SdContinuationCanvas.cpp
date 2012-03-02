@@ -31,7 +31,7 @@
 #include <qpainter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "SdContinuationCanvas.h"
@@ -42,7 +42,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "ToolCom.h"
 #include "strutil.h"
@@ -177,7 +177,7 @@ void SdContinuationCanvas::modified() {
 void SdContinuationCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Continuation"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Continuation"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -333,7 +333,7 @@ void SdContinuationCanvas::resize(const QSize & sz, bool w, bool h) {
   DiagramCanvas::resize(sz, w, h, min_width, min_height);
 }
 
-void SdContinuationCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void SdContinuationCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref) {
     st << "continuation_ref " << get_ident();
   }

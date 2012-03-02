@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 
@@ -46,7 +46,7 @@
 #include "strutil.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "BrowserView.h"
 #include "ProfiledStereotypes.h"
 #include "mu.h"
@@ -201,7 +201,7 @@ void BrowserObjectDiagram::menu() {
   Q3PopupMenu m(0, name);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     m.setWhatsThis(m.insertItem(TR("Show"), 0),
@@ -503,7 +503,7 @@ bool BrowserObjectDiagram::api_compatible(unsigned v) const {
   return v >= 24;
 }
 
-void BrowserObjectDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserObjectDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "objdiagram_stereotypes ";
@@ -518,7 +518,7 @@ void BrowserObjectDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserObjectDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserObjectDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "objectdiagram_ref " << get_ident() << " // " << get_name();
   else {

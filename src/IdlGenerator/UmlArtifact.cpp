@@ -24,10 +24,10 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -111,7 +111,7 @@ void UmlArtifact::generate() {
     // generate source file
     
     QByteArray file;
-    QTextOStream f(&file);
+    QTextStream f(&file);
     const char * p = def;
     const char * pp = 0;
     

@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ArrowPointCanvas.h"
 #include "ArrowCanvas.h"
@@ -44,7 +44,7 @@
 #include "AssocContainCanvas.h"
 #include "UmlCanvas.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "BrowserDiagram.h"
 #include "DiagramView.h"
 #include "translate.h"
@@ -178,7 +178,7 @@ void ArrowPointCanvas::open() {
 void ArrowPointCanvas::menu(const QPoint&) {
   Q3PopupMenu m;
   
-  m.insertItem(new MenuTitle(TR("Line break"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Line break"));
   m.insertSeparator();
   m.insertItem(TR("Remove from diagram"), 0);
   m.setItemEnabled(0, lines.at(0)->may_join());
@@ -217,7 +217,7 @@ ArrowCanvas * ArrowPointCanvas::get_other(const ArrowCanvas * l) const {
   return (lines.getFirst() == l) ? lines.getLast() : lines.getFirst();
 }
 
-void ArrowPointCanvas::save(Q3TextStream & st, bool, QString &) const {
+void ArrowPointCanvas::save(QTextStream & st, bool, QString &) const {
   save_xy(st, this, "point");
 }
 

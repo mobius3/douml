@@ -29,7 +29,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "BrowserState.h"
 #include "StateData.h"
@@ -255,7 +255,7 @@ bool StateData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void StateData::save(Q3TextStream & st, QString & warning) const {
+void StateData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   uml.save(st, "uml");
   cpp.save(st, "cpp");
@@ -320,7 +320,7 @@ void StateBehavior::send_def(ToolCom * com) {
   com->write_string(do_activity);
 }
 
-void StateBehavior::save(Q3TextStream & st, const char * lang) const {
+void StateBehavior::save(QTextStream & st, const char * lang) const {
   indent(+1);
   
   if (!on_entry.isEmpty()) {

@@ -71,7 +71,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
   // the "(" was read
   
 #ifdef TRACE
-  cout << "OPERATION '" << name << "'\n";
+  QLOG_INFO() <<"OPERATION '" << name << "'\n";
 #endif
   
   UmlClass * cl = container->get_uml();
@@ -221,7 +221,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
 			     + name + "</i> in <i>" + cl->name() 
 			   + "</i></b></font><br>");  
 # ifdef TRACE
-      cout << "ERROR cannot add param '" << param.name << "' type '" << param.type.Type() << '\n';
+      QLOG_INFO() <<"ERROR cannot add param '" << param.name << "' type '" << param.type.Type() << '\n';
 # endif
       return FALSE;
     }
@@ -273,7 +273,7 @@ bool UmlOperation::new_one(Class * container, const Q3CString & name,
 	container->compute_type(s, typespec, tmplts);
 	if (! op->addException(rank++, typespec)) {
 # ifdef TRACE
-	  cout << "cannot add exception " << s << '\n';
+	  QLOG_INFO() <<"cannot add exception " << s << '\n';
 # endif
 	  return FALSE;
 	}
@@ -591,7 +591,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
 			      UmlParameter & param, Q3CString & def, bool bypass)
 {
 #ifdef TRACE
-  cout << "UmlOperation::manage_param " << rank << "\n";
+  QLOG_INFO() <<"UmlOperation::manage_param " << rank << "\n";
 #endif
   
   bool finalp = FALSE;
@@ -608,7 +608,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
   Q3CString s = Lex::read_word();
   
 #ifdef TRACE
-  cout << "commence par " << s << '\n';
+  QLOG_INFO() <<"commence par " << s << '\n';
 #endif
   
   if (s == ")")
@@ -686,7 +686,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
 	  }
 	}
 #ifdef TRACE
-	cout << "type = '" << s << "...'\n";
+	QLOG_INFO() <<"type = '" << s << "...'\n";
 #endif
 	if (! bypass) {
 	  Q3CString dummy;
@@ -709,14 +709,14 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
 	else {
 	  param.name = s;
 #ifdef TRACE
-	  cout << "name = '" << param.name << "'\n";
+	  QLOG_INFO() <<"name = '" << param.name << "'\n";
 #endif
 	}
       }
       else {
 	Lex::error_near(s);
 #ifdef TRACE
-	cout << "ERROR '" << s << "' alors qu a deja le type et le nom '" << param.name << "'\n";
+	QLOG_INFO() <<"ERROR '" << s << "' alors qu a deja le type et le nom '" << param.name << "'\n";
 #endif
 	return FALSE;
       }
@@ -730,7 +730,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
     else {
       Lex::error_near(s);
 #ifdef TRACE
-      cout << "ERROR : '" << s << "'\n";
+      QLOG_INFO() <<"ERROR : '" << s << "'\n";
 #endif
       return FALSE;
     }

@@ -33,7 +33,7 @@
 #include <qobject.h>
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ActivityContainerCanvas.h"
 
@@ -91,7 +91,7 @@ class ExpansionRegionCanvas : public QObject, public ActivityContainerCanvas {
     virtual bool move_with_its_package() const;
     virtual void moveBy(double dx, double dy);
     
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ExpansionRegionCanvas * read(char * &, UmlCanvas *, char *);
     
     virtual void history_save(QBuffer &) const;

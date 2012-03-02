@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "TextCanvas.h"
@@ -39,7 +39,7 @@
 #include "UmlGlobal.h"
 #include "UmlCanvas.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "BrowserDiagram.h"
 #include "strutil.h"
 #include "DialogUtil.h"
@@ -136,7 +136,7 @@ void TextCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu fontsubm(0);
   
-  m.insertItem(new MenuTitle(TR("Text"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Text"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -298,7 +298,7 @@ void TextCanvas::resize(const QSize & sz, bool w, bool h) {
   DiagramCanvas::resize(sz, w, h, min, min);
 }
 
-void TextCanvas::save(Q3TextStream & st, bool ref, QString &) const {
+void TextCanvas::save(QTextStream & st, bool ref, QString &) const {
   if (ref)
     st << "textcanvas_ref " << get_ident();
   else {

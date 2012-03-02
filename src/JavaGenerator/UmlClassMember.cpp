@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlClassMember.h"
 #include "UmlCom.h"
@@ -82,7 +82,7 @@ void UmlClassMember::remove_arrays(Q3CString & s)
   }
 }
 
-void UmlClassMember::generate_visibility(QTextOStream & f, const char * parent_st) {
+void UmlClassMember::generate_visibility(QTextStream & f, const char * parent_st) {
   switch (visibility()) {
   case PublicVisibility:
     if ((parent()->kind() != aClass) ||

@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlItem.h"
 
@@ -104,7 +104,7 @@ void UmlItem::manage_description(const char *& p, const char *& pp) {
   p = the_comment;
 }
 
-void UmlItem::manage_alias(const char *& p, QTextOStream & ts) {
+void UmlItem::manage_alias(const char *& p, QTextStream & ts) {
   // p starts by '@'
   const char * pclosed;
   

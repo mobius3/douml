@@ -31,7 +31,7 @@
 #include <q3popupmenu.h> 
 #include <qpainter.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "SdClassInstCanvas.h"
@@ -47,7 +47,7 @@
 #include "Settings.h"
 #include "myio.h"
 #include "strutil.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "ToolCom.h"
 #include "translate.h"
 
@@ -330,7 +330,7 @@ void SdClassInstCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   bool modelized = (browser_node->get_type() == UmlClassInstance);
   
-  m.insertItem(new MenuTitle(full_name(), m.font()), -1);
+  MenuFactory::createTitle(m, full_name());
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -583,7 +583,7 @@ bool SdClassInstCanvas::get_show_stereotype_properties() const {
   return (browser_node->get_type() != UmlClass) && show_properties;
 }
 
-void SdClassInstCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void SdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // "
       << full_name();

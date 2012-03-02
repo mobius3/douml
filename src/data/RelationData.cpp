@@ -27,7 +27,7 @@
 
 
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <Q3CString>
@@ -1050,7 +1050,7 @@ bool RelationData::is_writable(const BrowserRelation * br) const {
 
 //
 
-static void save_role(const RoleData & role, bool assoc, Q3TextStream & st,
+static void save_role(const RoleData & role, bool assoc, QTextStream & st,
 		      QString & warning)
 {
   if (assoc) {
@@ -1153,7 +1153,7 @@ static void save_role(const RoleData & role, bool assoc, Q3TextStream & st,
   nl_indent(st);
 }
 
-void RelationData::save(Q3TextStream & st, bool ref, QString & warning) const {
+void RelationData::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "relation_ref " << get_ident() << " // " << ((const char *) name);
   else {

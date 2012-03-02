@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -39,7 +39,7 @@ void UmlExtraClassMember::compute_dependency(Q3PtrList<CppRefType> &,
 }
 
 void UmlExtraClassMember::generate_decl(aVisibility &,
-					QTextOStream & f_h,
+					QTextStream & f_h,
 					const Q3CString &,
 					Q3CString indent,
 					BooL & first, bool) {
@@ -53,7 +53,7 @@ void UmlExtraClassMember::generate_decl(aVisibility &,
   f_h << p;
 }
 
-void UmlExtraClassMember::generate_def(QTextOStream & f, Q3CString indent,
+void UmlExtraClassMember::generate_def(QTextStream & f, Q3CString indent,
 				       bool h, Q3CString templates,
 				       Q3CString, Q3CString, Q3CString) {
   if (!cppDef().isEmpty() &&

@@ -41,7 +41,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PtrCollection>
 
 int ColMsgList::compareItems(Q3PtrCollection::Item item1,
@@ -353,7 +353,7 @@ bool ColMsg::gt(const char * h1, const char * h2)
 
 //
 
-void ColMsg::save(Q3TextStream & st, const ColMsgList & l, bool copy,
+void ColMsg::save(QTextStream & st, const ColMsgList & l, bool copy,
 		  QString & warning, const QString & diag_name)
 {
   nl_indent(st);

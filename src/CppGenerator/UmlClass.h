@@ -30,7 +30,7 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <Q3PtrList>
 
@@ -39,7 +39,7 @@
 #include "UmlFormalParameter.h"
 #include "UmlActualParameter.h"
 
-class QTextOStream;
+class QTextStream;
 
 class UmlPackage;
 class UmlClass;
@@ -65,28 +65,28 @@ class UmlClass : public UmlBaseClass {
 				    const Q3CString & cl_stereotype,
 				    bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility,
-			       QTextOStream & f_h,
+                   QTextStream & f_h,
 			       const Q3CString & cl_stereotype,
 			       Q3CString indent,
 			       BooL & first, bool last);
-    void generate_def(QTextOStream & f, Q3CString indent, bool h);
-    virtual void generate_def(QTextOStream & f, Q3CString indent, bool h,
+	void generate_def(QTextStream & f, Q3CString indent, bool h);
+	virtual void generate_def(QTextStream & f, Q3CString indent, bool h,
 			      Q3CString templates, Q3CString cl_names,
 			      Q3CString templates_tmplop, 
 			      Q3CString cl_names_tmplop);
 				         
     virtual void generate();
-    void generate_decl(QTextOStream &, Q3CString indent);
+    void generate_decl(QTextStream &, Q3CString indent);
     
     void get_template_prefixes(Q3CString & template1, Q3CString & template2);
     void spec(Q3CString & templates, Q3CString & names,
 	      Q3CString & templates_tmplop, Q3CString & names_tmplop);
     Q3CString decl();
     
-    void write(QTextOStream &, bool with_formals = TRUE,
+    void write(QTextStream &, bool with_formals = TRUE,
 	       BooL * is_template = 0,
 	       const Q3ValueList<UmlActualParameter> & actuals = noactuals);
-    static void write(QTextOStream &, const UmlTypeSpec &,
+	static void write(QTextStream &, const UmlTypeSpec &,
 		      bool with_formals = TRUE,
 		      BooL * is_template = 0);
 };
