@@ -33,7 +33,7 @@
 #include <qobject.h>
 #include <qfile.h>
 #include <qdir.h>
-#include <QTextStream.h>
+#include <QTextStream>
 
 #include "Shortcut.h"
 #include "strutil.h"

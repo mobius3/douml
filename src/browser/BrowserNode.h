@@ -26,7 +26,7 @@
 #ifndef BROWSER_NODE_H
 #define BROWSER_NODE_H
 
-#include <QTextStream.h> 
+#include <QTextStream> 
 #include <qlist.h> 
 #include <q3listview.h> 
 #include <qstringlist.h>

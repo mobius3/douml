@@ -26,7 +26,7 @@
 #ifndef OBJECTDATA_H
 #define OBJECTDATA_H
 
-#include <QTextStream.h>
+#include <QTextStream>
 
 #include "AType.h"
 #include "UmlEnum.h"

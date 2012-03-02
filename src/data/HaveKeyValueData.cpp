@@ -27,7 +27,7 @@
 
 
 
-#include <QTextStream.h> 
+#include <QTextStream> 
 
 #include "HaveKeyValueData.h"
 #include "KeyValueData.h"

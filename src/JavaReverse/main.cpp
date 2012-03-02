@@ -31,7 +31,7 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qdatastream.h> 
-#include <QTextStream.h>
+#include <QTextStream>
 
 #include "Class.h"
 #include "UmlClass.h"

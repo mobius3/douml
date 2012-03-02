@@ -25,7 +25,7 @@
 
 #include <stdio.h>// debug
 
-#include <QTextStream.h> 
+#include <QTextStream> 
 //Added by qt3to4:
 #include <Q3CString>
 #include <QTextStream>

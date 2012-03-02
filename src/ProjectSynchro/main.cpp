@@ -31,7 +31,7 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <QTextStream.h>
+#include <QTextStream>
 #include <qdir.h>
 
 #include "SynchroWindow.h"

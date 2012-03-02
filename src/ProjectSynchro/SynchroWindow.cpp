@@ -37,7 +37,7 @@
 #include <q3filedialog.h> 
 #include <qfile.h>
 #include <qdir.h>
-#include <QTextStream.h>
+#include <QTextStream>
 #include <q3hbox.h>
 #include <q3vbox.h>
 //Added by qt3to4:

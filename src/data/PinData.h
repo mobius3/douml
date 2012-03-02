@@ -26,7 +26,7 @@
 #ifndef PINDATA_H
 #define PINDATA_H
 
-#include <QTextStream.h>
+#include <QTextStream>
 
 #include "PinParamData.h"
 

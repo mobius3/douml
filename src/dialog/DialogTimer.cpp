@@ -33,7 +33,7 @@
 
 
 #include <stdio.h>
-#include <QTextStream.h> 
+#include <QTextStream> 
 #include <qfile.h>
 #include <q3tabdialog.h>
 
