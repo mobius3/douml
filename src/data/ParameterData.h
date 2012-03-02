@@ -26,7 +26,7 @@
 #ifndef PARAMETERDATA_H
 #define PARAMETERDATA_H
 
-#include <QTextStream.h>
+#include <QTextStream>
 
 #include "PinParamData.h"
 

@@ -26,7 +26,7 @@
 #ifndef PINPARAMDATA_H
 #define PINPARAMDATA_H
 
-#include <QTextStream.h>
+#include <QTextStream>
 
 #include "SimpleData.h"
 #include "ObjectData.h"

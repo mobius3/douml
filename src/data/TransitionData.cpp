@@ -27,7 +27,7 @@
 
 
 
-#include <QTextStream.h>
+#include <QTextStream>
 #include <qcursor.h>
 
 #include "TransitionData.h"

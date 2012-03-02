@@ -27,7 +27,7 @@
 #define SETTINGS_H
 
 #include <qobject.h>
-#include <QTextStream.h> 
+#include <QTextStream> 
 
 #include "StateSpec.h"
 

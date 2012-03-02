@@ -27,7 +27,7 @@
 
 
 
-#include <QTextStream.h> 
+#include <QTextStream> 
 #include <qdir.h>
 #include <qfile.h>
 #include <qstring.h>

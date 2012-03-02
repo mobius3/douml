@@ -27,7 +27,7 @@
 #define DIAGRAMVIEW_H
 
 #include <q3canvas.h>
-#include <QTextStream.h>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QWheelEvent>

@@ -28,7 +28,7 @@
 
 #include <q3canvas.h>
 #include <q3mainwindow.h>
-#include <QTextStream.h>
+#include <QTextStream>
 
 #include "UmlEnum.h"
 

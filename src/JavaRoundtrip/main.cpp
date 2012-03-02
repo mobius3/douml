@@ -33,7 +33,7 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qdatastream.h> 
-#include <QTextStream.h>
+#include <QTextStream>
 #include <qmessagebox.h>
 
 #include "UmlCom.h"

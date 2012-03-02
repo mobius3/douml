@@ -32,7 +32,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 #include <q3filedialog.h>
-#include <QTextStream.h>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <Q3VBoxLayout>

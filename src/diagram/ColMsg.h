@@ -31,7 +31,7 @@
 
 #include "UmlEnum.h"
 
-#include <QTextStream.h>
+#include <QTextStream>
 
 class OperationData;
 class CodObjCanvas;

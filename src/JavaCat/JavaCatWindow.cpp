@@ -39,7 +39,7 @@
 #include <qfile.h>
 #include <qdir.h>
 #include <qdatastream.h> 
-#include <QTextStream.h>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>

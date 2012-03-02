@@ -27,7 +27,7 @@
 #define TEMPLATECANVAS_H
 
 #include "DiagramCanvas.h"
-#include <QTextStream.h> //[lgfreitas] needed by QTextStream
+#include <QTextStream> //[lgfreitas] needed by QTextStream
 
 class CdClassCanvas;
 

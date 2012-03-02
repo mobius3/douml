@@ -24,7 +24,7 @@
 // *************************************************************************
 
 
-#include <QTextStream.h> 
+#include <QTextStream> 
 //Added by qt3to4:
 #include <QTextStream>
 
