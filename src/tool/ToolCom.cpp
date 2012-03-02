@@ -135,6 +135,7 @@ ToolCom::ToolCom() {
     api_version = -1;
     already_read = -1;
     externalProcess = 0;
+    exitStaged = false;
 }
 
 ToolCom::~ToolCom()
@@ -187,8 +188,10 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     errno = 0;
     QStringList arguments;
     arguments.append(commandList << QString::number(port));
+    com->exitStaged = exit;
     com->externalProcess->start(command, arguments);
     com->start = TRUE;
+
     return com->id;
 }
 
@@ -904,7 +907,7 @@ void ToolCom::processFinished()
                      "perhaps you must specify its absolute path"
                      "or set the environment variable PATH ?");
         this->close();
-        if (exit) {
+        if (exitStaged) {
             BrowserView::remove_temporary_files();
             set_user_id(-1);    // delete lock
 

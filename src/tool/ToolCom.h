@@ -49,6 +49,10 @@ class ToolCom  :public QObject {
     static int exitvalue;
   
     bool start;
+    //! hols the value that processFinished slot should received
+    //! originally this value was a parameter passed to a fucntion
+    //! but after it got split into func and slot this now needs to be here
+    bool exitStaged;
     //bool with_ack;
     bool exit_bouml;
     BrowserNode * target;
