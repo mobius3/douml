@@ -39,8 +39,7 @@
 #include "BrowserView.h"
 #include "BrowserPackage.h"
 #include "Shortcut.h"
-//#include "strutil.h"
-#include "DialogUtil.h"b
+#include "DialogUtil.h"
 #include "mu.h"
 #include "err.h"
 #include "EnvDialog.h"

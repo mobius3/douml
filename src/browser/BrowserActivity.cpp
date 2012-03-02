@@ -241,63 +241,91 @@ BrowserNode * BrowserActivity::add_parameter(BrowserParameter * param) {
 }
 
 void BrowserActivity::menu() {
-  Q3PopupMenu m(0, name);
+  MenuFactory builder(name);
   Q3PopupMenu toolm(0);
   
-  MenuFactory::createTitle( m, def->definition(FALSE, TRUE) );
-  m.insertSeparator();
+  builder.createTitle( def->definition(FALSE, TRUE) );
+  builder.insertSeparator();
   if (!deletedp()) {
     if (!is_read_only) {
       MenuFactory::Item items[] = {
-        { "New activity diagram", 0, "to add a <i>activity diagram</i>" },
-        { "New parameter", 1, "to add a <i>Parameter</i> to the <i>activity</i>" } ,
-        { "New interruptible activity region", 2, "to add an <i>Interruptible Activity Region</i> to the <i>activity</i>" },
-        { "New expansion region", 3, "to add a nested <i>expansion region</i>" },
-        { "New partition", 4, "to add a <i>Partition</i> to the <i>activity</i>" },
-        { "New activity action", 7, "to add an <i>activity action</i> to the <i>activity</i>" },
-        { "New object node", 8, "to add an <i>activity object node</i> to the <i>activity</i>" } };
-      MenuFactory::addItems( m, items, sizeof( items ) / sizeof( MenuFactory::Item ) );
-      m.insertSeparator();
+        { "New activity diagram",
+          0,
+          "to add a <i>activity diagram</i>" },
+        { "New parameter",
+          1,
+          "to add a <i>Parameter</i> to the <i>activity</i>" } ,
+        { "New interruptible activity region",
+          2,
+          "to add an <i>Interruptible Activity Region</i> to the <i>activity</i>" },
+        { "New expansion region",
+          3,
+          "to add a nested <i>expansion region</i>" },
+        { "New partition",
+          4,
+          "to add a <i>Partition</i> to the <i>activity</i>" },
+        { "New activity action",
+          7,
+          "to add an <i>activity action</i> to the <i>activity</i>" },
+        { "New object node",
+          8,
+          "to add an <i>activity object node</i> to the <i>activity</i>" } };
+      builder.addItems( items, sizeof( items ) / sizeof( MenuFactory::Item ) );
+      builder.insertSeparator();
     }
-    m.setWhatsThis(m.insertItem(TR("Edit"), 5),
-		   TR("to edit the <i>artivity</i>, \
-a double click with the left mouse button does the same thing"));
+    builder.addItem(
+          "Edit",
+          5,
+          "to edit the <i>artivity</i>, \
+a double click with the left mouse button does the same thing" );
     if (!is_read_only) {
-      m.setWhatsThis(m.insertItem(TR("Duplicate"), 6),
-		     TR("to copy the <i>activity</i> in a new one"));
-      m.insertSeparator();
+      builder.addItem(
+        "Duplicate",
+        6,
+        "to copy the <i>activity</i> in a new one" );
+      builder.insertSeparator();
       if (edition_number == 0)
-	m.setWhatsThis(m.insertItem(TR("Delete"), 9),
-		       TR("to delete the <i>activity</i>. \
-Note that you can undelete it after"));
+      {
+        builder.addItem(
+          "Delete",
+          9,
+          "to delete the <i>activity</i>. \
+Note that you can undelete it after" );
+      }
     }
-    m.insertSeparator();
-    m.setWhatsThis(m.insertItem(TR("Referenced by"), 12),
-		   TR("to know who reference the <i>activity</i>"));
-    mark_menu(m, TR("the activity"), 90);
-    ProfiledStereotypes::menu(m, this, 99990);
+    builder.insertSeparator();
+    builder.addItem(
+          "Referenced by",
+          12,
+          "to know who reference the <i>activity</i>" );
+    mark_menu(builder.menu(), TR("the activity"), 90);
+    ProfiledStereotypes::menu(builder.menu(), this, 99990);
     if ((edition_number == 0) &&
-	Tool::menu_insert(&toolm, get_type(), 100)) {
-      m.insertSeparator();
-      m.insertItem(TR("Tool"), &toolm);
+        Tool::menu_insert(&toolm, get_type(), 100)) {
+      builder.insertSeparator();
+      builder.addItem("Tools", &toolm);
     }
   }
   else if (!is_read_only && (edition_number == 0)) {
-    m.setWhatsThis(m.insertItem(TR("Undelete"), 10),
-		   TR("to undelete the <i>activity</i>"));
- 
-    Q3ListViewItem * child;
-  
+    builder.addItem(
+          "Undelete",
+          10,
+          "to undelete the <i>activity</i>");
+
+    Q3ListViewItem* child;
+
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
       if (((BrowserNode *) child)->deletedp()) {
-	m.setWhatsThis(m.insertItem(TR("Undelete recursively"), 11),
-		       TR("undelete the activity and its children"));
-	break;
+        builder.addItem(
+              "Undelete recursively",
+              11,
+              "undelete the activity and its children");
+        break;
       }
     }
   }
-  
-  exec_menu_choice(m.exec(QCursor::pos()));
+
+  exec_menu_choice(builder.menu().exec(QCursor::pos()));
 }
     
 void BrowserActivity::exec_menu_choice(int rank) {

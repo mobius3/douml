@@ -32,7 +32,7 @@
 #include <qsplitter.h>
 #include <q3vbox.h>
 #include <q3hbox.h>
-#include <Q3TextEdit.h>
+#include <Q3TextEdit>
 #include <qstatusbar.h>
 #include <qpixmap.h>
 #include <qtoolbar.h>
