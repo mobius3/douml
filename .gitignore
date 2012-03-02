@@ -2,7 +2,6 @@
 *.kdev
 *~
 *.pro.user
-<<<<<<< HEAD
 *.o
 *moc_*
 genplugouts/cpp_utilities/Makefile
