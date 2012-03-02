@@ -35,7 +35,7 @@
 #include <stdio.h>
 
 #include <qlabel.h>
-#include <QTextStream.h> 
+#include <QTextStream> 
 #include <qfontmetrics.h>
 #include <q3popupmenu.h>
 #include <q3tabdialog.h>

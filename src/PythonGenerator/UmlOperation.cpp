@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <QTextStream.h> 
+#include <QTextStream> 
 #include <qfile.h>
 #include <qfileinfo.h>
 //Added by qt3to4:

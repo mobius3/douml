@@ -27,11 +27,11 @@
 
 
 
-#include <Q3TextEdit.h>
+#include <Q3TextEdit>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qfile.h>
-#include <QTextStream.h>
+#include <QTextStream>
 #include <qapplication.h>
 #include <qdir.h>
 //Added by qt3to4:

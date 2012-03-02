@@ -35,7 +35,7 @@
 #include <qmessagebox.h> 
 #include <q3combobox.h>
 #include <qtextcodec.h>
-#include <QTextStream.h>
+#include <QTextStream>
 #include <qstringlist.h>
 #include <qdir.h>
 #include <q3filedialog.h>

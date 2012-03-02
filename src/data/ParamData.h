@@ -26,7 +26,7 @@
 #ifndef PARAMDATA_H
 #define PARAMDATA_H
 
-#include <QTextStream.h>
+#include <QTextStream>
 
 #include "UmlEnum.h"
 #include "AType.h"

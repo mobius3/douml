@@ -27,7 +27,7 @@
 
 
 
-#include <QTextStream.h>
+#include <QTextStream>
 
 #include "AType.h"
 #include "BrowserClass.h"

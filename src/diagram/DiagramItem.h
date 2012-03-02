@@ -29,7 +29,7 @@
 #include <qlist.h>
 #include <qstring.h>
 #include <qpoint.h>
-#include <QTextStream.h>
+#include <QTextStream>
 #include <q3ptrdict.h> 
 //Added by qt3to4:
 #include <Q3PtrCollection>

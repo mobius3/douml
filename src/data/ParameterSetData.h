@@ -26,7 +26,7 @@
 #ifndef PARAMETERSETDATA_H
 #define PARAMETERSETDATA_H
 
-#include <QTextStream.h>
+#include <QTextStream>
 #include <q3valuelist.h>
 
 #include "SimpleData.h"

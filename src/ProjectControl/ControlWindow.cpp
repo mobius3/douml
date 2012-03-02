@@ -41,7 +41,7 @@
 #include <q3filedialog.h> 
 #include <qfile.h>
 #include <qdir.h>
-#include <QTextStream.h>
+#include <QTextStream>
 //Added by qt3to4:
 #include <QPixmap>
 
