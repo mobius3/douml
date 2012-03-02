@@ -29,12 +29,12 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 #include <Q3PtrList>
 
 #include "UmlTypeSpec.h"
 
-class QTextOStream;
+class QTextStream;
 class UmlArtifact;
 
 class CppRefType {

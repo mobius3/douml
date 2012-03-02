@@ -28,7 +28,7 @@
 
 #include "DiagramCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QPixmap>
 
 class ImageCanvas : public DiagramCanvas {
@@ -61,7 +61,7 @@ class ImageCanvas : public DiagramCanvas {
     
     virtual void apply_shortcut(QString s);
   
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ImageCanvas * read(char * &, UmlCanvas *, char *);
     
     static ImageCanvas * add(UmlCanvas *, int x, int y);

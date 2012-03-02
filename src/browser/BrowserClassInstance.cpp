@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 
@@ -48,7 +48,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "UmlDrag.h"
 #include "ReferenceDialog.h"
 #include "DialogUtil.h"
@@ -258,7 +258,7 @@ void BrowserClassInstance::menu() {
   Q3PopupMenu m(0, "class instance");
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_edited) {
@@ -555,7 +555,7 @@ void BrowserClassInstance::add_from_tool(BrowserNode * parent, ToolCom * com,
   ci->write_id(com);
 }
 
-void BrowserClassInstance::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserClassInstance::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // " << get_name();
   else {

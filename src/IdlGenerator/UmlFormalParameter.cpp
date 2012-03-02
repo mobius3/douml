@@ -23,15 +23,15 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlFormalParameter.h"
 #include "IdlSettings.h"
 
-void UmlFormalParameter::generate(QTextOStream & f, Q3CString & s, const char *& sep) const {
+void UmlFormalParameter::generate(QTextStream & f, Q3CString & s, const char *& sep) const {
   f << sep << type() << ' ' << name();
   
   s += sep;

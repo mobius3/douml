@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <Q3PointArray>
 
@@ -55,7 +55,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Settings.h"
 #include "strutil.h"
 #include "translate.h"
@@ -791,7 +791,7 @@ void ActivityActionCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(data->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
   m.insertSeparator();
   if (browser_node->is_writable() && data->may_add_pin()) {
     m.insertItem(TR("Add pin"), 7);
@@ -1050,7 +1050,7 @@ void ActivityActionCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ActivityActionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityActionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "activityactioncanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

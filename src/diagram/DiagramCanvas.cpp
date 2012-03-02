@@ -30,7 +30,7 @@
 #include <math.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "DiagramCanvas.h"
 #include "BrowserDiagram.h"
@@ -1024,7 +1024,7 @@ void DiagramCanvas::check_stereotypeproperties() {
   }
 }
 
-void DiagramCanvas::save_stereotype_property(Q3TextStream & st, QString & warning) const {
+void DiagramCanvas::save_stereotype_property(QTextStream & st, QString & warning) const {
   if (stereotypeproperties != 0)
     stereotypeproperties->save(st, FALSE, warning);
 }

@@ -212,7 +212,7 @@ bool UmlOperation::new_one(Class * cl, const Q3CString & name,
   // the "(" was read
   
 #ifdef DEBUG_BOUML
-  cout << "OPERATION '" << name << "' type '" << type << "' modifier '" << modifier << "'\n";
+  QLOG_INFO() <<"OPERATION '" << name << "' type '" << type << "' modifier '" << modifier << "'\n";
 #endif
   
   Q3CString cl_name = Q3CString((cl->text(0)).toAscii().constData());
@@ -415,7 +415,7 @@ bool UmlOperation::new_one(Class * cl, const Q3CString & name,
       for (rank = 0, it = params.begin(); it != params.end(); ++it, rank += 1) {
 	if (!op->addParameter(rank, *it)) {
 # ifdef DEBUG_BOUML
-	  cout << "ERROR cannot add param '" << param.name << "' type '" << param.type.toString() << '\n';
+	  QLOG_INFO() <<"ERROR cannot add param '" << param.name << "' type '" << param.type.toString() << '\n';
 # endif
 	  return FALSE;
 	}
@@ -429,7 +429,7 @@ bool UmlOperation::new_one(Class * cl, const Q3CString & name,
     while (read_param(cl, rank, param, decl, tmplts, on_error, TRUE)) {
       if ((op != 0) && !op->addParameter(rank++, param)) {
 # ifdef DEBUG_BOUML
-	cout << "ERROR cannot add param '" << param.name << "' type '" << param.type.toString() << '\n';
+	QLOG_INFO() <<"ERROR cannot add param '" << param.name << "' type '" << param.type.toString() << '\n';
 # endif
 	return FALSE;
       }
@@ -859,7 +859,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
 			      BooL & on_error, bool add_defaultvalue)
 {
 #ifdef DEBUG_BOUML
-  cout << "UmlOperation::manage_param " << rank << "\n";
+  QLOG_INFO() <<"UmlOperation::manage_param " << rank << "\n";
 #endif
  
   on_error = TRUE;
@@ -868,7 +868,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
   Q3CString s = Lex::read_word();
 
 #ifdef DEBUG_BOUML
-  cout << "commence par " << s << '\n';
+  QLOG_INFO() <<"commence par " << s << '\n';
 #endif
   
   if (s == "...") {
@@ -940,7 +940,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
       else {
 	Lex::error_near(s);
 #ifdef DEBUG_BOUML
-	cout << "ERROR modifier " << s << " et type empty\n";
+	QLOG_INFO() <<"ERROR modifier " << s << " et type empty\n";
 #endif
 	return FALSE;
       }
@@ -1023,7 +1023,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
       if (! pretype.isEmpty()) {
 	Lex::error_near(s);
 #ifdef DEBUG_BOUML
-	cout << "ERROR '" << s << "' alors qu a deja le pre-type '" << pretype << "'\n";
+	QLOG_INFO() <<"ERROR '" << s << "' alors qu a deja le pre-type '" << pretype << "'\n";
 #endif
 	return FALSE;
       }
@@ -1037,19 +1037,19 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
 	type = Lex::complete_template_type(s);
 	
 #ifdef DEBUG_BOUML
-	cout << "type = '" << type << "'\n";
+	QLOG_INFO() <<"type = '" << type << "'\n";
 #endif
       }
       else if (param.name.isEmpty()) {
 	param.name = s;
 #ifdef DEBUG_BOUML
-	cout << "name = '" << param.name << "'\n";
+	QLOG_INFO() <<"name = '" << param.name << "'\n";
 #endif
       }
       else {
 	Lex::error_near(s);
 #ifdef DEBUG_BOUML
-	cout << "ERROR '" << s << "' alors qu a deja le type '" << type << "' et le nom '" << param.name << "'\n";
+	QLOG_INFO() <<"ERROR '" << s << "' alors qu a deja le type '" << type << "' et le nom '" << param.name << "'\n";
 #endif
 	return FALSE;
       }
@@ -1066,7 +1066,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
       else {
 	Lex::error_near(s);
 #ifdef DEBUG_BOUML
-	cout << "ERROR : '" << s << "'\n";
+	QLOG_INFO() <<"ERROR : '" << s << "'\n";
 #endif
 	return FALSE;
       }
@@ -1158,7 +1158,7 @@ static bool compare_templates(const FormalParameterList & t1,
     Lex::warn("wrong template specification " + w + " <font color =\"red\">" +
 	      Lex::quote(s) + "</font>");
 #ifdef DEBUG_BOUML
-    cout << "ERROR wrong template specification " << w << s << '\n';
+    QLOG_INFO() <<"ERROR wrong template specification " << w << s << '\n';
 #endif
     return FALSE;
   }
@@ -1171,7 +1171,7 @@ static bool compare_templates(const FormalParameterList & t1,
 		+ Lex::quote(s)
 		+ "</font>'s declaration, template are already enough complicated !");
 #ifdef DEBUG_BOUML
-      cout << "ERROR change template names !";
+      QLOG_INFO() <<"ERROR change template names !";
 #endif
       return TRUE;	// just a warning
     }
@@ -1398,7 +1398,7 @@ void UmlOperation::reverse_definition(Package * pack, Q3CString name,
   }
   
 #ifdef DEBUG_BOUML
-  cout << candidates.count() << " compatible operations for " << name << '\n';
+  QLOG_INFO() <<candidates.count() << " compatible operations for " << name << '\n';
 #endif
 
   if (candidates.isEmpty()) {

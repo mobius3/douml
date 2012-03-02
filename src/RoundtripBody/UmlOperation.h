@@ -30,9 +30,9 @@
 #include "aLanguage.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
-class QTextOStream;
+class QTextStream;
 
 class UmlOperation : public UmlBaseOperation {
   public:

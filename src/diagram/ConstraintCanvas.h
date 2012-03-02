@@ -29,7 +29,7 @@
 #include "NoteCanvas.h"
 #include "BrowserNode.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 class CdClassCanvas;
@@ -67,7 +67,7 @@ class ConstraintCanvas : public NoteCanvas {
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
 
-    virtual void save(Q3TextStream  & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static ConstraintCanvas * read(char * &, UmlCanvas *, char *, CdClassCanvas *);
     
     static ConstraintCanvas * compute(UmlCanvas * canvas,

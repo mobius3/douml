@@ -30,7 +30,7 @@
 #include "MultipleDependency.h"
 #include "CodMsgSupport.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class CodObjCanvas;
 class LabelCanvas;
@@ -74,7 +74,7 @@ class CodSelfLinkCanvas : public QObject, public DiagramCanvas, public CodMsgSup
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;    
     virtual bool represents(BrowserNode *);
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     static CodSelfLinkCanvas * read(char * & st, UmlCanvas * canvas, char * & k);
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);

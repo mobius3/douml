@@ -32,7 +32,7 @@
 #include <q3painter.h>
 #include <q3ptrdict.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDropEvent>
 #include <QPixmap>
 
@@ -55,7 +55,7 @@
 #include "ToolCom.h"
 #include "Tool.h"
 #include "AType.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
 #include "mu.h"
@@ -218,7 +218,7 @@ void BrowserSimpleRelation::menu() {
   Q3PopupMenu m(0, name);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!in_edition()) {
@@ -384,7 +384,7 @@ QString BrowserSimpleRelation::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) p);
 }
 
-void BrowserSimpleRelation::save(Q3TextStream & st, bool ref,
+void BrowserSimpleRelation::save(QTextStream & st, bool ref,
 				 QString & warning) {
   if (ref) {
     // for SimpleRelationCanvas

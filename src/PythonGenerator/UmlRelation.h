@@ -30,9 +30,9 @@
 #include "UmlClass.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
-class QTextOStream;
+class QTextStream;
 
 class UmlRelation : public UmlBaseRelation {
   public:
@@ -40,12 +40,12 @@ class UmlRelation : public UmlBaseRelation {
       : UmlBaseRelation(id, n) {
     };
   
-    virtual void generate_imports(QTextOStream & f, Q3CString & made);
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
+    virtual void generate_imports(QTextStream & f, Q3CString & made);
+    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
 			  Q3CString indent, BooL & indent_needed,
 			  int & enum_item_rank, const Q3CString & self);
     
-    void generate_inherit(const char *& sep, QTextOStream & f);
+    void generate_inherit(const char *& sep, QTextStream & f);
 };
 
 #endif

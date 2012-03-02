@@ -359,7 +359,7 @@ QString java_multiplicity(QString m)
     if (*m != '[')
       r += "[]";
     else {
-      for (unsigned index = 0; index != m.length(); index += 1) {
+      for (int index = 0; index != m.length(); index += 1) {
 	switch (m.at(index).latin1()) {
 	case '[':
 	  r += '[';

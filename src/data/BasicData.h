@@ -29,13 +29,13 @@
 #include <qobject.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <Q3TextStream>
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
 
 #include "mystr.h"
 
-class Q3TextStream;
+class QTextStream;
 class BrowserNode;
 class HaveKeyValueData;
 class ToolCom;
@@ -95,7 +95,7 @@ class BasicData : public QObject {
     virtual bool decldefbody_contain(const QString & s, bool cs,
 				     BrowserNode *);
         
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * & st, char * & k);
         
     // tools

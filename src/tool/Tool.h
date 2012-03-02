@@ -28,14 +28,14 @@
 
 #include <qstring.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PopupMenu>
 
 #include "UmlEnum.h"
 
 class Q3PopupMenu;
 class QObject;
-class Q3TextStream;
+class QTextStream;
 
 class ATool {
   public:

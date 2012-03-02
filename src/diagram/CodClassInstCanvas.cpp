@@ -30,7 +30,7 @@
 #include <q3popupmenu.h> 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 
 #include "CodClassInstCanvas.h"
@@ -45,7 +45,7 @@
 #include "SettingsDialog.h"
 #include "myio.h"
 #include "strutil.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "ColDiagramView.h"
 #include "ToolCom.h"
 #include "translate.h"
@@ -206,7 +206,7 @@ void CodClassInstCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   bool modelized = (browser_node->get_type() == UmlClassInstance);
   
-  m.insertItem(new MenuTitle(full_name(), m.font()), -1);
+  MenuFactory::createTitle(m, full_name());
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -448,7 +448,7 @@ bool CodClassInstCanvas::copyable() const {
   return selected();
 }
 
-void CodClassInstCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CodClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "classinstance_ref " << get_ident() << " // "
       << full_name();

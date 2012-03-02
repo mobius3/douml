@@ -30,7 +30,7 @@
 
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ComponentData.h"
 #include "BrowserComponent.h"
@@ -222,7 +222,7 @@ void ComponentData::update_associated(Q3PtrDict<BrowserComponent> & d) {
 #endif
 }
 
-void ComponentData::save(Q3TextStream & st, QString & warning) const {
+void ComponentData::save(QTextStream & st, QString & warning) const {
   BasicData::save(st, warning);
   
 #if 0

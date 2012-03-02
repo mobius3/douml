@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <Q3ValueList>
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "CdClassCanvas.h"
 #include "TemplateCanvas.h"
@@ -57,7 +57,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "MenuItalic.h"
 #include "OperationListDialog.h"
 #include "BrowserClassDiagram.h"
@@ -1180,7 +1180,7 @@ void CdClassCanvas::menu(const QPoint&) {
   browser_node->children(attributes, UmlAttribute);
   browser_node->children(operations, UmlOperation);
   
-  m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -1230,7 +1230,7 @@ void CdClassCanvas::menu(const QPoint&) {
       else {
 	BrowserOperation * oper;
 	
-	inhopersubm.insertItem(new MenuTitle(TR("Choose operation"), m.font()), -1);
+        MenuFactory::createTitle(inhopersubm, TR("Choose operation"));
 	inhopersubm.insertSeparator();
 	
 	for (oper = l.first(), index = 3000;
@@ -1649,7 +1649,7 @@ void CdClassCanvas::resize(const QSize & sz, bool w, bool h) {
 
 //
 
-static void save_hidden_list(BrowserNode * bn, UmlCode c, Q3TextStream & st,
+static void save_hidden_list(BrowserNode * bn, UmlCode c, QTextStream & st,
 			     const char * s,
 			     const Q3ValueList<BrowserNode *> & hidden_visible)
 {
@@ -1682,7 +1682,7 @@ static void save_hidden_list(BrowserNode * bn, UmlCode c, Q3TextStream & st,
   }
 }
 
-void CdClassCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void CdClassCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "classcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

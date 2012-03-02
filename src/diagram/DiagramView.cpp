@@ -45,7 +45,7 @@
 #include <QPixmap>
 #include <QMouseEvent>
 #include <Q3ValueList>
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QKeyEvent>
 #include <Q3CString>
 #endif
@@ -74,7 +74,7 @@
 #include "BrowserDiagram.h"
 #include "UmlWindow.h"
 #include "Shortcut.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "myio.h"
 #include "err.h"
@@ -971,7 +971,7 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
   Q3CanvasItemList::ConstIterator it;
   Q3PopupMenu m(0);
   
-  m.insertItem(new MenuTitle(TR("Multiple selection menu"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Multiple selection menu"));
   m.insertSeparator();
   for (it = selected.begin(); it != selected.end(); ++it) {
     if (QCanvasItemToDiagramItem(*it)->linked()) {
@@ -2441,7 +2441,7 @@ void DiagramView::renumber(int ident) {
   id = ident;
 }
 
-void DiagramView::save_session(Q3TextStream & st) {
+void DiagramView::save_session(QTextStream & st) {
   st << (int) (((UmlCanvas *) canvas())->zoom() * 100)
      << ' ' << (int) window()->browser_diagram()->get_format() // useless
      << ' ' << verticalScrollBar()->value()

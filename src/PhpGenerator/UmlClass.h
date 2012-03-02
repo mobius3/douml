@@ -29,12 +29,12 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlBaseClass.h"
 #include "UmlTypeSpec.h"
 
-class QTextOStream;
+class QTextStream;
 
 class UmlPackage;
 class UmlClass;
@@ -48,17 +48,17 @@ class UmlClass : public UmlBaseClass {
       : UmlBaseClass(id, n), managed(FALSE) {};
   
     Q3CString php_stereotype();
-    void generate(QTextOStream &, Q3CString indent);
+    void generate(QTextStream &, Q3CString indent);
     
     virtual void generate();
-    virtual void generate(QTextOStream & f, const Q3CString & cl_stereotype,
+    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
 			  Q3CString indent, int & enum_item_rank); 
-    void generate_require_onces(QTextOStream & f, Q3CString & made);
-    void generate_require_onces(QTextOStream & f, Q3CString & made, UmlArtifact *);
+    void generate_require_onces(QTextStream & f, Q3CString & made);
+    void generate_require_onces(QTextStream & f, Q3CString & made, UmlArtifact *);
     UmlArtifact * assocArtifact();
     
-    void write(QTextOStream &);
-    static void write(QTextOStream &, const UmlTypeSpec &);
+    void write(QTextStream &);
+    static void write(QTextStream &, const UmlTypeSpec &);
 };
 
 #endif

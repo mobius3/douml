@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 
@@ -49,7 +49,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Settings.h"
 #include "ClassListDialog.h"
 #include "strutil.h"
@@ -774,7 +774,7 @@ void ComponentCanvas::menu(const QPoint&) {
   Q3PopupMenu toolm(0);
   int index;
   
-  m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -1068,7 +1068,7 @@ QString ComponentCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
   }
 }
 
-void ComponentCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ComponentCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "componentcanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

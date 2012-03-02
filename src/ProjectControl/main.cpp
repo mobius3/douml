@@ -31,7 +31,7 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qdir.h>
 
 #include "ControlWindow.h"

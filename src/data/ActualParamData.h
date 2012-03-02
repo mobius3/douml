@@ -28,7 +28,7 @@
 
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "AType.h"
 
@@ -54,7 +54,7 @@ class ActualParamData : public QObject {
     
     void send_uml_def(ToolCom * com);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     static ActualParamData * read(char * &);
     
   protected slots:

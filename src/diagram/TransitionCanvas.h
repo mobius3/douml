@@ -28,7 +28,7 @@
 
 #include "ArrowCanvas.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 class BrowserNode;
 class TransitionData;
@@ -64,7 +64,7 @@ class TransitionCanvas : public ArrowCanvas {
     virtual void default_label_position() const;
     void stereotype_default_position() const;
     
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const;
     
     virtual void history_load(QBuffer &);
     virtual void history_hide();

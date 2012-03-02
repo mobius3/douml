@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 
 #include "ConstraintCanvas.h"
@@ -48,7 +48,7 @@
 #include "Settings.h"
 #include "SettingsDialog.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "translate.h"
@@ -127,7 +127,7 @@ void ConstraintCanvas::menu(const QPoint&) {
   Q3PopupMenu m(0);
   Q3PopupMenu fontsubm(0);
   
-  m.insertItem(new MenuTitle(TR("Constraint"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Constraint"));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -340,7 +340,7 @@ void ConstraintCanvas::update() {
   cl->check_constraint();
 }
 
-void ConstraintCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ConstraintCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "constraint_ref " << get_ident();
   }

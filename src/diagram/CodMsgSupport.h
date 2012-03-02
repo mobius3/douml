@@ -50,7 +50,7 @@ class CodMsgSupport {
     
     void delete_it(ColMsgList & top);
     virtual void remove_it(ColMsg * msg) = 0;
-    virtual void save(Q3TextStream & st, bool ref, QString & warning) const = 0;
+    virtual void save(QTextStream & st, bool ref, QString & warning) const = 0;
     virtual void get_from_to(CodObjCanvas *& from, CodObjCanvas *& to,
 			     bool forward) = 0;
     virtual void update_msgs() = 0;

@@ -30,7 +30,7 @@
 #include <qcursor.h>
 #include <q3popupmenu.h> 
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "AssocContainCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -41,7 +41,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DialogUtil.h"
 #include "translate.h"
 
@@ -78,7 +78,7 @@ void AssocContainCanvas::menu(const QPoint&) {
   AssocContainCanvas * plabel = (AssocContainCanvas *) aplabel;
   AssocContainCanvas * pstereotype = (AssocContainCanvas *) apstereotype;
   
-  m.insertItem(new MenuTitle(TR("Association"), m.font()), -1);
+  MenuFactory::createTitle(m, TR("Association"));
   m.insertSeparator();
   m.insertItem(TR("Edit"),1);
   
@@ -219,7 +219,7 @@ ArrowPointCanvas * AssocContainCanvas::brk(const QPoint & p) {
   return ap;
 }
 
-void AssocContainCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void AssocContainCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "containcanvas_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {

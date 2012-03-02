@@ -32,7 +32,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3CString>
 #include <QPixmap>
 
@@ -47,7 +47,7 @@
 #include "StereotypeDialog.h"
 #include "DialogUtil.h"
 #include "myio.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "DiagramView.h"
 #include "UmlPixmap.h"
 #include "ToolCom.h"
@@ -944,10 +944,9 @@ void ArrowCanvas::menu(const QPoint&) {
     
   search_supports(plabel, pstereotype);
     
-  m.insertItem(new MenuTitle(((plabel == 0) ||
+  MenuFactory::createTitle(m, ((plabel == 0) ||
 			      plabel->label->get_name().isEmpty())
-			     ? QString(TR("line")) : plabel->label->get_name(),
-			     m.font()), -1);
+                             ? QString(TR("line")) : plabel->label->get_name());
   if (IsaRelation(itstype)) {
     m.insertSeparator();
     m.insertItem(TR("Edit"),1);
@@ -1735,7 +1734,7 @@ void ArrowCanvas::drawing_settings_modified() {
   auto_pos = the_canvas()->browser_diagram()->get_auto_label_position();
 }
 
-void ArrowCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ArrowCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref)
     st << "line_ref " << get_ident();
   else if (begin->type() != UmlArrowPoint) {
@@ -1761,7 +1760,7 @@ void ArrowCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
   }
 }
 
-const ArrowCanvas * ArrowCanvas::save_lines(Q3TextStream & st, bool with_label,
+const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
 					    bool with_stereotype,
 					    QString & warning) const {
   nl_indent(st);

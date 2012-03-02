@@ -884,7 +884,7 @@ void update_uml_com()
 	      "const ${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, const ${t3} ${p3}",
 	      "\
 #ifdef TRACE\n\
-  cout << \"UmlCom::send_cmd(id, \" << cmd << \", \" << arg << \", \" << id2 << \")\\n\";\n\
+  QLOG_INFO() <<\"UmlCom::send_cmd(id, \" << cmd << \", \" << arg << \", \" << id2 << \")\\n\";\n\
 #endif\n\
   \n\
   write_char(onInstanceCmd);\n\
@@ -898,7 +898,7 @@ void update_uml_com()
   op->set_java("${type}",
 	       "${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}",
 	       "\
-  cout << \"UmlCom.send_cmd(id, \" << cmd << \", \" << arg << \", \" << id2 << \")\\n\";\n\
+  QLOG_INFO() <<\"UmlCom.send_cmd(id, \" << cmd << \", \" << arg << \", \" << id2 << \")\\n\";\n\
   \n\
   write_char((byte) CmdFamily._onInstanceCmd);\n\
   write_id(id);\n\

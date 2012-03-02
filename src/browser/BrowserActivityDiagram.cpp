@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 #include <QDropEvent>
@@ -47,7 +47,7 @@
 #include "strutil.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "BrowserView.h"
 #include "ProfiledStereotypes.h"
 #include "mu.h"
@@ -213,7 +213,7 @@ void BrowserActivityDiagram::menu() {
   Q3PopupMenu m(0, name);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     m.setWhatsThis(m.insertItem(TR("Show"), 0),
@@ -560,7 +560,7 @@ void BrowserActivityDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserActivityDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserActivityDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "activitydiagram_stereotypes ";
@@ -575,7 +575,7 @@ void BrowserActivityDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserActivityDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserActivityDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "activitydiagram_ref " << get_ident() << " // " << get_name();
   else {

@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QPixmap>
@@ -112,7 +112,7 @@ class BrowserUseCase : public BrowserNode, public Labeled<BrowserUseCase> {
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
     virtual void on_delete();
     virtual bool tool_cmd(ToolCom * com, const char * args);
-    virtual void save(Q3TextStream &, bool ref, QString & warning);
+    virtual void save(QTextStream &, bool ref, QString & warning);
     static BrowserUseCase * read_ref(char * &);
     static BrowserUseCase * read(char * &, char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
@@ -124,7 +124,7 @@ class BrowserUseCase : public BrowserNode, public Labeled<BrowserUseCase> {
     static void init();
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char * &, char * & k);
-    static void save_stereotypes(Q3TextStream &);
+    static void save_stereotypes(QTextStream &);
     
     virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
     

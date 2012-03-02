@@ -24,10 +24,10 @@
 // *************************************************************************
 
 #include <qdir.h>
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlPackage.h"
 #include "UmlCom.h"
@@ -134,7 +134,7 @@ UmlPackage * UmlPackage::package() {
   return this;
 }
 
-void UmlPackage::import(QTextOStream & f, const Q3CString & indent) {
+void UmlPackage::import(QTextStream & f, const Q3CString & indent) {
   Q3CString s = javaPackage();
   
   if (!s.isEmpty()) {

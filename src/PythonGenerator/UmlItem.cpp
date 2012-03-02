@@ -23,10 +23,10 @@
 //
 // *************************************************************************
 
-#include <q3textstream.h> 
+#include <QTextStream.h> 
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlItem.h"
 
@@ -123,7 +123,7 @@ void UmlItem::manage_docstring(const char *& p, const char *& pp, BooL & indent_
   indent = "";
 }
 
-void UmlItem::manage_alias(const char *& p, QTextOStream & ts,
+void UmlItem::manage_alias(const char *& p, QTextStream & ts,
 			   Q3CString indent, BooL & indent_needed) {
   if (indent_needed) {
     indent_needed = FALSE;

@@ -31,7 +31,7 @@
 #include <q3painter.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QPixmap>
@@ -46,7 +46,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "ProfiledStereotypes.h"
@@ -148,7 +148,7 @@ void BrowserRegion::menu() {
   Q3PopupMenu m(0, name);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     if (!is_read_only) {
@@ -441,8 +441,7 @@ void BrowserRegion::DropAfterEvent(QDropEvent * e, BrowserNode * after) {
 	// have choice
 	Q3PopupMenu m(0);
   
-	m.insertItem(new MenuTitle(TR("move ") + bn->get_name(),
-				   m.font()), -1);
+        MenuFactory::createTitle(m, TR("move ") + bn->get_name());
 	m.insertSeparator();
 	m.insertItem(TR("In ") + QString(get_name()), 1);
 	m.insertItem(TR("After ") + QString(get_name()), 2);
@@ -486,7 +485,7 @@ QString BrowserRegion::drag_key(BrowserNode * p)
     + "#" + QString::number((unsigned long) BrowserState::get_machine(p));
 }
 
-void BrowserRegion::save_stereotypes(Q3TextStream & st)
+void BrowserRegion::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "state_stereotypes ";
@@ -503,7 +502,7 @@ void BrowserRegion::read_stereotypes(char * & st, char * & k)
     init();
 }
 
-void BrowserRegion::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserRegion::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "region_ref " << get_ident() << " // " << get_name();
   else {

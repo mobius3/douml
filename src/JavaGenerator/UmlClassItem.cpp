@@ -26,9 +26,9 @@
 #include "UmlClassItem.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
-void UmlClassItem::generate_enum_item(QTextOStream &, Q3CString, BooL &) {
+void UmlClassItem::generate_enum_item(QTextStream &, Q3CString, BooL &) {
   // produce nothing
 }
 

@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "ActivityPartitionCanvas.h"
 #include "ActivityPartitionData.h"
@@ -44,7 +44,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "Settings.h"
 #include "strutil.h"
 #include "translate.h"
@@ -373,7 +373,7 @@ void ActivityPartitionCanvas::menu(const QPoint&) {
   Q3PopupMenu toolm(0);
   int index;
   
-  m.insertItem(new MenuTitle(browser_node->get_data()->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
   m.insertSeparator();
   m.insertItem(TR("Upper"), 0);
   m.insertItem(TR("Lower"), 1);
@@ -607,7 +607,7 @@ void ActivityPartitionCanvas::connexion(UmlCode action, DiagramItem * dest,
   the_canvas()->select(a);
 }
 
-void ActivityPartitionCanvas::save(Q3TextStream & st, bool ref, QString & warning) const {
+void ActivityPartitionCanvas::save(QTextStream & st, bool ref, QString & warning) const {
   if (ref) {
     st << "activitypartitioncanvas_ref " << get_ident() << " // "
       << browser_node->full_name();

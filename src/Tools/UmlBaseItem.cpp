@@ -57,6 +57,7 @@
 #include "UmlActivityControlNodeClasses.h"
 #include "UmlActivityPartition.h"
 #include "MiscGlobalCmd.h"
+#include "Logging/QsLog.h"
 //Added by qt3to4:
 #include <Q3CString>
 #include <iostream>
@@ -99,11 +100,13 @@ bool UmlBaseItem::set_Description(const Q3CString & s) {
   return set_it_(_description, s, setDescriptionCmd);
 }
 
-UmlItem * UmlBaseItem::parent() {
-  if (_parent == 0) {
-    UmlCom::send_cmd(_identifier, parentCmd);
-    
-    _parent = UmlBaseItem::read_();
+UmlItem * UmlBaseItem::parent()
+{
+    QLOG_INFO() << "Querying DOUML for parent of an item";
+    if (_parent == 0)
+    {
+        UmlCom::send_cmd(_identifier, parentCmd);
+        _parent = UmlBaseItem::read_();
   }
   
   return _parent;
@@ -457,12 +460,13 @@ UmlItem * UmlBaseItem::read_()
   const char * name = UmlCom::read_string();
   
 
-  cout << "UmlBaseItem::read id " << id << " kind " << kind << " name " << name << '\n';
+  QLOG_INFO() <<"UmlBaseItem::read id " << id << " kind " << kind << " name " << name << '\n';
 
   
   UmlItem * result = _all[id];
   
-  if (result == 0) {
+  if (result == 0)
+  {
     switch (kind) {
     case aRelation:
       return new UmlRelation(id, name);

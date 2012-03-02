@@ -132,7 +132,7 @@ unsigned Lex::line_number()
 bool Lex::open(const QString & f)
 {
 #ifdef DEBUG_BOUML
-  cout << "Lex::open(" << f << ")\n";
+  QLOG_INFO() <<"Lex::open(" << f << ")\n";
 #endif
   
   _filename = f;
@@ -161,7 +161,7 @@ bool Lex::open(const QString & f)
 void Lex::close()
 {
 #ifdef DEBUG_BOUML
-  cout << "Lex::close()\n";
+  QLOG_INFO() <<"Lex::close()\n";
 #endif
   delete [] _buffer;
 }
@@ -437,7 +437,7 @@ Q3CString Lex::manage_operator(QString & result, int c, bool oper)
   }
   
 #ifdef DEBUG_BOUML
-  cout << "retourne '" << result << "'\n";
+  QLOG_INFO() <<"retourne '" << result << "'\n";
 #endif
   return Q3CString(result.toAscii().constData());
 }
@@ -606,7 +606,7 @@ Q3CString Lex::read_array_dim()
 	*_context.pointer = c;
 	
 #ifdef DEBUG_BOUML
-	cout << "retourne '" << result << "'\n";
+	QLOG_INFO() <<"retourne '" << result << "'\n";
 #endif
 	return result;
       }
@@ -811,12 +811,12 @@ Q3CString Lex::read_word(bool in_expr)
 	case '=':
 	  get();
 #ifdef DEBUG_BOUML
-	  cout << "retourne '/='\n";
+	  QLOG_INFO() <<"retourne '/='\n";
 #endif
 	  return "/=";
 	default:
 #ifdef DEBUG_BOUML
-	  cout << "retourne '/'\n";
+	  QLOG_INFO() <<"retourne '/'\n";
 #endif
 	  return "/";
 	}
@@ -838,7 +838,7 @@ Q3CString Lex::read_word(bool in_expr)
 	return read_word(in_expr);
       
 #ifdef DEBUG_BOUML
-      cout << "retourne '" << v << "'\n";
+      QLOG_INFO() <<"retourne '" << v << "'\n";
 #endif
       
       return Q3CString(v);
@@ -846,7 +846,7 @@ Q3CString Lex::read_word(bool in_expr)
   }
   
 #ifdef DEBUG_BOUML
-  cout << "retourne '" << result << "'\n";
+  QLOG_INFO() <<"retourne '" << result << "'\n";
 #endif
   
   return Q3CString(result.toAscii().constData());
@@ -1138,7 +1138,7 @@ void Lex::syntax_error(Q3CString s)
 		+ s + "</b></font><br>"); 
   
 #ifdef DEBUG_BOUML
-  cout << "SYNTAX ERROR IN " << _filename
+  QLOG_INFO() <<"SYNTAX ERROR IN " << _filename
     << " LINE " << _context.line_number << " : " << s << '\n';
 #endif
 }
@@ -1151,7 +1151,7 @@ void Lex::warn(Q3CString s)
 		+ s + "</b></font><br>"); 
   
 #ifdef DEBUG_BOUML
-  cout << "ERROR IN " << _filename
+  QLOG_INFO() <<"ERROR IN " << _filename
     << " LINE " << _context.line_number << " : " << s << '\n';
 #endif
 }
@@ -1164,7 +1164,7 @@ void Lex::premature_eof()
 		" <b>premature eof</b></font><br>"); 
   
 #ifdef DEBUG_BOUML
-  cout << "SYNTAX ERROR IN " << _filename 
+  QLOG_INFO() <<"SYNTAX ERROR IN " << _filename 
     << " LINE " << _context.line_number << " : premature eof\n";
 #endif
 }
@@ -1177,7 +1177,7 @@ void Lex::error_near(Q3CString s)
 		+ quote(s) + "</font></b></font><br>"); 
   
 #ifdef DEBUG_BOUML
-  cout << "SYNTAX ERROR IN " << _filename
+  QLOG_INFO() <<"SYNTAX ERROR IN " << _filename
     << " LINE " << _context.line_number << " : near '" << s << "'\n";
 #endif
 }

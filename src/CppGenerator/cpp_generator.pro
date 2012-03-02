@@ -89,7 +89,10 @@ SOURCES	      = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
 		../Tools/UmlBaseTypeSpec.cpp \
 		../Tools/UmlBaseParameter.cpp \
 		../Tools/UmlBaseView.cpp \
-		../Tools/UmlBaseClassInstance.cpp
+		../Tools/UmlBaseClassInstance.cpp \
+    Logging/QsLogDest.cpp \
+    Logging/QsLog.cpp \
+    Logging/QsDebugOutput.cpp
 		
 TARGET	      = cpp_generator
 DEFINES	      = WITHCPP BooL=bool TRACE
@@ -100,14 +103,14 @@ INCLUDEPATH   = ../Tools ../CppGenerator
 QT += network  qt3support testlib console
 
 Release{
-    MOC_DIR = ../../../Douml_builds/gen/MOC_release
-    OBJECTS_DIR = ../../../Douml_builds/gen/Obj_release
+    MOC_DIR = ../../bin/MOC_release/gen/
+    OBJECTS_DIR = ../../bin/Obj_release/gen
 }
 
 Debug{
-    MOC_DIR = ../../../Douml_builds/gen/MOC_Debug
-    OBJECTS_DIR = ../../../Douml_builds/gen/Obj_Debug
+    MOC_DIR = ../../bin/MOC_debug/gen/
+    OBJECTS_DIR = ../../bin/Obj_debug/gen
 
 }
-    UI_DIR = ../../../Douml_builds/gen/UI
-    DESTDIR = ../../../Douml_builds
+
+    DESTDIR = ../../bin

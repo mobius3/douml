@@ -26,11 +26,11 @@
 #ifndef GENERATIONSETTINGS_H
 #define GENERATIONSETTINGS_H
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
 #include "UmlEnum.h"
 #include "mystr.h"
@@ -79,7 +79,7 @@ struct ReverseRoundtripFilter {
   
   void send_def(ToolCom * com);
   void receive_def(const char * args);
-  void save(const char * key, Q3TextStream & st); //[lgfreitas] we are using q3textstream
+  void save(const char * key, QTextStream & st); //[lgfreitas] we are using QTextStream
   void read(const char * key, char * & st, char * & k);
 };
 
@@ -432,8 +432,8 @@ class GenerationSettings {
     static bool tool_global_python_cmd(ToolCom * com, const char * args);
     static bool tool_global_idl_cmd(ToolCom * com, const char * args);
 
-    static void save_dirs(Q3TextStream & st);
-    static void save_descriptions(Q3TextStream & st);
+    static void save_dirs(QTextStream & st);
+    static void save_descriptions(QTextStream & st);
     static void save();
     static void read_dirs(char * & st, char * & k);
     static void read_descriptions(char * & st, char * & k);

@@ -28,7 +28,7 @@
 
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 
 #include "mystr.h"
 
@@ -66,7 +66,7 @@ class FormalParamData : public QObject {
     void read(ToolCom * com, const char *& args);
     static void skip(ToolCom * com, const char *& args);
     
-    void save(Q3TextStream &, QString & warning) const;
+    void save(QTextStream &, QString & warning) const;
     void read(char * &);
     
   protected slots:

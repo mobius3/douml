@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include "UmlEnum.h"
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3PointArray>
 
 #define FILEFORMAT 75
@@ -39,7 +39,7 @@ class QFile;
 class QFileInfo;
 class QStringList;
 class Q3CanvasItem;
-class Q3TextStream;
+class QTextStream;
 class Q3CanvasRectangle;
 class QBuffer;
 class QPoint;
@@ -95,10 +95,10 @@ char * read_definition(int id, const char * ext, int offset, int len);
 extern void save_definition(int id, const char * ext, const char * def, BooL & is_new);
 extern void delete_definition(int id, const char * ext);
 
-extern void save_string(const char *, Q3TextStream & st);
-extern void save_string_list(QStringList & list, Q3TextStream & st);
-extern void save_unicode_string_list(QStringList & list, Q3TextStream & st);
-extern void nl_indent(Q3TextStream & st);
+extern void save_string(const char *, QTextStream & st);
+extern void save_string_list(QStringList & list, QTextStream & st);
+extern void save_unicode_string_list(QStringList & list, QTextStream & st);
+extern void nl_indent(QTextStream & st);
 extern void indent(int);
 extern int indent();
 extern void indent0();
@@ -123,15 +123,15 @@ extern void unknown_ref(const char * kind, int id);
 
 // ifdef save as int to bypass bug in << float in qt 3.3.3
 #undef FORCE_INT_COORD
-extern void save_xy(Q3TextStream & st, const Q3CanvasItem * c, const char * s);
-extern void save_xyz(Q3TextStream & st, const Q3CanvasItem * c, const char * s);
-extern void save_xyzwh(Q3TextStream & st, const Q3CanvasRectangle * c, const char * s);
+extern void save_xy(QTextStream & st, const Q3CanvasItem * c, const char * s);
+extern void save_xyz(QTextStream & st, const Q3CanvasItem * c, const char * s);
+extern void save_xyzwh(QTextStream & st, const Q3CanvasRectangle * c, const char * s);
 extern void read_xy(char * & st, Q3CanvasItem * c);
 extern void read_xyz(char * & st, Q3CanvasItem * c);
 extern void read_xyzwh(char * & st, Q3CanvasRectangle * c);
 extern void read_zwh(char * & st, Q3CanvasRectangle * c);
 extern void bypass_xy(char * & st);
-extern void save_color(Q3TextStream & st, const char *, UmlColor, BooL &);
+extern void save_color(QTextStream & st, const char *, UmlColor, BooL &);
 extern void read_color(char *& st, const char *, UmlColor &, char * &);
 
 extern void read_font(char *& st, const char *, UmlFont &, char * &);

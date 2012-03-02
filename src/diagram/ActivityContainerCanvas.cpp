@@ -206,7 +206,6 @@ void ActivityContainerCanvas::force_sub_inside(Q3CanvasItemList & all,
 void ActivityContainerCanvas::force_sub_upper(Q3CanvasItemList & all) {
   Q3CanvasItemList::Iterator cit;
   BrowserNode * browser_node = get_bn();
-  QRect r = rect();
   
   for (cit = all.begin(); cit != all.end(); ++cit) {
     if ((*cit)->visible()) {

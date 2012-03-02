@@ -29,9 +29,9 @@
 #include "UmlBaseRelation.h"
 //Added by qt3to4:
 #include <Q3CString>
-#include <QTextOStream>
+#include <QTextStream>
 
-class QTextOStream;
+class QTextStream;
 class ActualParameter;
 
 class UmlRelation : public UmlBaseRelation {
@@ -40,9 +40,9 @@ class UmlRelation : public UmlBaseRelation {
       : UmlBaseRelation(id, n) {
     };
   
-    void generate_inherit(const char *& sep, QTextOStream & f, 
+    void generate_inherit(const char *& sep, QTextStream & f, 
 			  const Q3CString & cl_stereotype, BooL & already);
-    virtual void generate_decl(QTextOStream & f, const Q3CString & cl_stereotype,
+    virtual void generate_decl(QTextStream & f, const Q3CString & cl_stereotype,
 			       Q3CString indent, bool = FALSE);
 };
 

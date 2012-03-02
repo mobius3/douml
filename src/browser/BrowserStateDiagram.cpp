@@ -31,7 +31,7 @@
 #include <qcursor.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
-#include <Q3TextStream>
+#include <QTextStream>
 #include <Q3ValueList>
 #include <QPixmap>
 #include <QDropEvent>
@@ -47,7 +47,7 @@
 #include "strutil.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "MenuTitle.h"
+#include "ui/menufactory.h"
 #include "BrowserView.h"
 #include "ProfiledStereotypes.h"
 #include "mu.h"
@@ -206,7 +206,7 @@ void BrowserStateDiagram::menu() {
   Q3PopupMenu m(0, name);
   Q3PopupMenu toolm(0);
   
-  m.insertItem(new MenuTitle(def->definition(FALSE, TRUE), m.font()), -1);
+  MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
   m.insertSeparator();
   if (!deletedp()) {
     m.setWhatsThis(m.insertItem(TR("Show"), 0),
@@ -537,7 +537,7 @@ void BrowserStateDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
   }
 }
 
-void BrowserStateDiagram::save_stereotypes(Q3TextStream & st)
+void BrowserStateDiagram::save_stereotypes(QTextStream & st)
 {
   nl_indent(st);
   st << "statediagram_stereotypes ";
@@ -552,7 +552,7 @@ void BrowserStateDiagram::read_stereotypes(char * & st, char * & k)
   }
 }
 
-void BrowserStateDiagram::save(Q3TextStream & st, bool ref, QString & warning) {
+void BrowserStateDiagram::save(QTextStream & st, bool ref, QString & warning) {
   if (ref)
     st << "statediagram_ref " << get_ident() << " // " << get_name();
   else {
