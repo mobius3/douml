@@ -30,7 +30,7 @@
 #include <qwidget.h>
 
 #include "MLinesItem.h"
-#include <Q3TextEdit.h>
+#include <Q3TextEdit>
 #include "DialogUtil.h"
 
 
