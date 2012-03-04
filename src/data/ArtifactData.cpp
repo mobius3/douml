@@ -342,7 +342,7 @@ void ArtifactData::convert_add_include_artifact() {
     int index = cpp_src.find("#include \"UmlComponent.h\"");
     
     if (index != -1) {
-      Q3CString s = cpp_src.SharedStr::operator Q3CString();
+      Q3CString s = cpp_src.WrapperStr::operator Q3CString();
       
       s.insert(index, "#include \"UmlArtifact.h\"\n");
       cpp_src = s;
@@ -411,12 +411,12 @@ void ArtifactData::save(QTextStream & st, QString & warning) const {
 void ArtifactData::read(char * & st, char * & k) {
   BasicData::read(st, k);	// updates k
 
-  cpp_h = QString::null;
-  cpp_src = QString::null;
-  java_src = QString::null;
-  php_src = QString::null;
-  python_src = QString::null;
-  idl_src = QString::null;
+  cpp_h = QString();
+  cpp_src = QString();
+  java_src = QString();
+  php_src = QString();
+  python_src = QString();
+  idl_src = QString();
   
   if ((stereotype == "text") && (read_file_format() < 42))
     stereotype = "_text";

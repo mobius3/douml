@@ -88,7 +88,7 @@ class BrowserUseCase : public BrowserNode, public Labeled<BrowserUseCase> {
     void set_associated_diagram(BrowserUseCaseDiagram *, bool on_read = FALSE);
     
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
     virtual void apply_shortcut(QString s);

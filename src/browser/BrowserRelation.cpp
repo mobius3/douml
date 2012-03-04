@@ -326,13 +326,13 @@ void BrowserRelation::update_set_oper() {
 }
 
 void BrowserRelation::add_get_oper() {
-  set_get_oper(BrowserOperation::new_one(QString::null, (BrowserNode *) parent()));
+  set_get_oper(BrowserOperation::new_one(QString(), (BrowserNode *) parent()));
   update_get_oper();
   ((BrowserNode *) parent())->modified();
 }
 
 void BrowserRelation::add_set_oper() {
-  set_set_oper(BrowserOperation::new_one(QString::null, (BrowserNode *) parent()));
+  set_set_oper(BrowserOperation::new_one(QString(), (BrowserNode *) parent()));
   update_set_oper();
   ((BrowserNode *) parent())->modified();
 }
@@ -386,7 +386,7 @@ QString BrowserRelation::stereotypes_properties() const {
     return QString("<<") + def->get_short_stereotype() +
       QString(">>\n") + stb;
   else
-    return QString::null;
+    return QString();
 }
 
 AType BrowserRelation::class_association() const {

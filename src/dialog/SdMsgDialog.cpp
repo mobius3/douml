@@ -243,12 +243,12 @@ void SdMsgDialog::accept() {
     int index = list.findIndex(s);
     
     if (index >= 0)
-      mc->set_msg(opers[index], QString::null, edargs->text().stripWhiteSpace());
+      mc->set_msg(opers[index], QString(), edargs->text().stripWhiteSpace());
     else
       mc->set_msg(0, s, edargs->text().stripWhiteSpace());
   }
   else
-    mc->set_msg(0, QString::null, QString::null);
+    mc->set_msg(0, QString(), QString());
   
   mc->set_synchronous(synchronous_rb->isChecked());
   

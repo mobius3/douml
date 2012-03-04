@@ -63,7 +63,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 
@@ -121,7 +121,7 @@ ActivityDialog::ActivityDialog(ActivityData * d)
   
   new QLabel(grid);
   Q3ButtonGroup * bg = 
-    new Q3ButtonGroup(3, Qt::Horizontal, QString::null, grid);
+    new Q3ButtonGroup(3, Qt::Horizontal, QString(), grid);
   
   readonly_cb = new QCheckBox(TR("read only"), bg);
   if (activity->read_only)

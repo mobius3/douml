@@ -65,7 +65,7 @@ class BasicData : public QObject {
   protected:
     static Q3PtrList<BasicData> removed;
   
-    SharedStr stereotype;
+    WrapperStr stereotype;
     BrowserNode * browser_node;
 
     void redelete_it() { emit deleted(); };

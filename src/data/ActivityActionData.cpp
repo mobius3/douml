@@ -461,13 +461,13 @@ QString OpaqueAction::str(DrawingLanguage lang, QString name) const {
   
   switch (lang) {
   case UmlView:
-    s = uml_behavior.MyStr::operator QString();
+    s = uml_behavior.WrapperStr::operator QString();
     break;
   case CppView:
-    s = cpp_behavior.MyStr::operator QString();
+    s = cpp_behavior.WrapperStr::operator QString();
     break;
   case JavaView:
-    s = java_behavior.MyStr::operator QString();
+    s = java_behavior.WrapperStr::operator QString();
     break;
   default:
     // means : don t write definition

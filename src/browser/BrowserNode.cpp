@@ -304,7 +304,7 @@ void BrowserNode::undelete(bool rec) {
     // Redo it because now all classes are undeleted but it is
     // possible that some relations was not undeleted because
     // at least one of the two extremities was not undeleted
-    warning = QString::null;
+    warning = QString();
     undelete(rec, warning, renamed);
   }
       
@@ -404,13 +404,13 @@ void BrowserNode::update_stereotype(bool rec) {
   if (data != 0) {
     const char * stereotype = data->get_stereotype();
     
-    if (show_stereotypes && stereotype[0]) {
+    if (show_stereotypes && stereotype[0])
+    {
       QString s = toUnicode(stereotype);
       int index = s.find(':');
       
-      setText(0,
-	      "<<" + ((index == -1) ? s : s.mid(index + 1))
-	      + ">> " + name);
+      QString str = ((index == -1) ? s : s.mid(index + 1));
+      setText(0, "<<" + str + ">> " + name);
     }
     else
       setText(0, (const char *) name);
@@ -477,7 +477,7 @@ QString BrowserNode::stereotypes_properties() const {
 	QString(">>") + result;
   }
 
-  return QString::null;
+  return QString();
 }
 
 void BrowserNode::paintCell(QPainter * p, const QColorGroup & cg, int column,
@@ -658,7 +658,7 @@ QString BrowserNode::drag_key() const {
 }
 
 QString BrowserNode::drag_postfix() const {
-  return QString::null;
+  return QString();
 }
 
 void BrowserNode::DragMoveEvent(QDragMoveEvent * e) {
@@ -1044,7 +1044,7 @@ bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode typ
 				   bool allow_spaces, bool allow_empty) {
   for (;;) {
     BooL ok = FALSE;
-    r = MyInputDialog::getText("Uml", msg, QString::null, ok);
+    r = MyInputDialog::getText("Uml", msg, QString(), ok);
     
     if (ok) {
       if (wrong_child_name(r, type, allow_spaces, allow_empty))
@@ -1070,7 +1070,7 @@ bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode typ
   QStringList list;
   
   nodes.full_names(list);
-  list.prepend(QString::null);
+  list.prepend(QString());
   
   *old = 0;
   
@@ -1078,8 +1078,8 @@ bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode typ
     BooL ok = FALSE;
     
     r = (list.count() == 1)
-      ? MyInputDialog::getText("Uml", msg, QString::null, ok)
-      : MyInputDialog::getText("Uml", msg, list, QString::null, existing, ok);
+      ? MyInputDialog::getText("Uml", msg, QString(), ok)
+      : MyInputDialog::getText("Uml", msg, list, QString(), existing, ok);
     
     if (! ok)
       return FALSE;
@@ -1611,7 +1611,7 @@ void BrowserNode::signal_unconsistencies()
   }
   
   if (! msg.isEmpty()) {
-    UnconsistencyDeletedMsg = UnconsistencyFixedMsg = QString::null;
+    UnconsistencyDeletedMsg = UnconsistencyFixedMsg = QString();
     warn(msg);
   }
 }

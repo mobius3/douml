@@ -95,13 +95,13 @@ KeyValuesTable::KeyValuesTable(HaveKeyValueData * hv, QWidget * parent, bool vis
       else
 	setItem(index, 1, new MLinesItem(this, v));
 
-      setText(index, 2, QString::null);
+      setText(index, 2, QString());
       setRowStretchable(index, TRUE);
     }
     
-    setText(index, 0, QString::null);
-    setItem(index, 1, new MLinesItem(this, QString::null));
-    setText(index, 2, QString::null);
+    setText(index, 0, QString());
+    setItem(index, 1, new MLinesItem(this, QString()));
+    setText(index, 2, QString());
     setRowStretchable(index, TRUE);
   }
   
@@ -114,9 +114,9 @@ KeyValuesTable::KeyValuesTable(HaveKeyValueData * hv, QWidget * parent, bool vis
 }
 
 void KeyValuesTable::init_row(int index) {
-  setText(index, 0, QString::null);
-  setItem(index, 1, new MLinesItem(this, QString::null));
-  setText(index, 2, QString::null);
+  setText(index, 0, QString());
+  setItem(index, 1, new MLinesItem(this, QString()));
+  setText(index, 2, QString());
   setRowStretchable(index, TRUE);
 }
 

@@ -39,18 +39,18 @@ class PackageData : public SimpleData {
   friend class PackageDialog;
     
   protected:
-    MyStr cpp_src_dir;
-    MyStr cpp_h_dir;
-    MyStr java_dir;
-    MyStr php_dir;
-    MyStr python_dir;
-    MyStr idl_dir;
+    WrapperStr cpp_src_dir;
+    WrapperStr cpp_h_dir;
+    WrapperStr java_dir;
+    WrapperStr php_dir;
+    WrapperStr python_dir;
+    WrapperStr idl_dir;
     
-    MyStr cpp_namespace;
-    MyStr java_package;
-    MyStr php_namespace;
-    MyStr python_package;
-    MyStr idl_module;
+    WrapperStr cpp_namespace;
+    WrapperStr java_package;
+    WrapperStr php_namespace;
+    WrapperStr python_package;
+    WrapperStr idl_module;
     
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
@@ -65,18 +65,18 @@ class PackageData : public SimpleData {
     
     void edit();
     
-    const MyStr & get_cpp_src_dir() const { return cpp_src_dir; };
-    const MyStr & get_cpp_h_dir() const { return cpp_h_dir; };
-    const MyStr & get_java_dir() const { return java_dir; };
-    const MyStr & get_php_dir() const { return php_dir; };
-    const MyStr & get_python_dir() const { return python_dir; };
-    const MyStr & get_idl_dir() const { return idl_dir; };
+    const WrapperStr & get_cpp_src_dir() const { return cpp_src_dir; };
+    const WrapperStr & get_cpp_h_dir() const { return cpp_h_dir; };
+    const WrapperStr & get_java_dir() const { return java_dir; };
+    const WrapperStr & get_php_dir() const { return php_dir; };
+    const WrapperStr & get_python_dir() const { return python_dir; };
+    const WrapperStr & get_idl_dir() const { return idl_dir; };
     
-    const MyStr & get_cpp_namespace() const { return cpp_namespace; };
-    const MyStr & get_java_package() const { return java_package; };
-    const MyStr & get_php_namespace() const { return php_namespace; };
-    const MyStr & get_python_package() const { return python_package; };
-    const MyStr & get_idl_module() const { return idl_module; };
+    const WrapperStr & get_cpp_namespace() const { return cpp_namespace; };
+    const WrapperStr & get_java_package() const { return java_package; };
+    const WrapperStr & get_php_namespace() const { return php_namespace; };
+    const WrapperStr & get_python_package() const { return python_package; };
+    const WrapperStr & get_idl_module() const { return idl_module; };
     
     virtual bool tool_cmd(ToolCom * com, const char * args,
 			  BrowserNode * bn, const QString & comment);

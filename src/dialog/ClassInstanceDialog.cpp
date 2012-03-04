@@ -136,7 +136,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
   
@@ -372,7 +372,7 @@ void ClassInstanceDialog::type_changed(int i) {
     }
     
     if (it_attr == attrs.end())
-      atbl->setText(index, 2, QString::null);
+      atbl->setText(index, 2, QString());
   }
   
   atbl->setColumnStretchable (2, TRUE);

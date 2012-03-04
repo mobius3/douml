@@ -5302,7 +5302,7 @@ bool ask_for_upgrade()
 			   "the message indicating that all is done never appears,\n"
 			   "you MUST close the project WITHOUT saving it\n\n\n"
 			   "Upgrade the plug-out ?",
-			   "Yes", "No", QString::null, 1, 1)
+			   "Yes", "No", QString(), 1, 1)
 	  != 0)
     return FALSE;
   

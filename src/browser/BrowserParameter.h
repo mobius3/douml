@@ -58,7 +58,7 @@ class BrowserParameter : public BrowserNode, public Labeled<BrowserParameter>, p
     virtual ~BrowserParameter();
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     
     virtual BasicData * add_relation(UmlCode, BrowserNode * end);
     QString may_start() const;

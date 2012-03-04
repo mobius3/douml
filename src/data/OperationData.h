@@ -93,34 +93,34 @@ class OperationData : public ClassMemberData,
     AType return_type;
     ParamData * params;			// remark : do NOT use QArray
     ExceptionData * exceptions;
-    MyStr constraint;
+    WrapperStr constraint;
     
     // c++
     OperationBody cpp_body;
-    SharedStr cpp_decl;
-    MayBeSharedStr cpp_def;
-    SharedStr cpp_name_spec;	// get_${name}
+    WrapperStr cpp_decl;
+    WrapperStr cpp_def;
+    WrapperStr cpp_name_spec;	// get_${name}
 
     // java
     OperationBody java_body;
-    MayBeSharedStr java_def;
-    SharedStr java_name_spec;	// get${Name}
-    SharedStr java_annotation;
+    WrapperStr java_def;
+    WrapperStr java_name_spec;	// get${Name}
+    WrapperStr java_annotation;
 
     // php
     OperationBody php_body;
-    MayBeSharedStr php_def;
-    SharedStr php_name_spec;	// get${Name}
+    WrapperStr php_def;
+    WrapperStr php_name_spec;	// get${Name}
     
     // python
     OperationBody python_body;
-    MayBeSharedStr python_def;
-    SharedStr python_name_spec;	// get${Name}
-    SharedStr python_decorator;
+    WrapperStr python_def;
+    WrapperStr python_name_spec;	// get${Name}
+    WrapperStr python_decorator;
     
     // idl
-    SharedStr idl_decl;
-    SharedStr idl_name_spec;	// get_${name}
+    WrapperStr idl_decl;
+    WrapperStr idl_name_spec;	// get_${name}
     
     void depend_on(BrowserClass * cl);
     

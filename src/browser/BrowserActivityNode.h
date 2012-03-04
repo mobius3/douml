@@ -60,7 +60,7 @@ class BrowserActivityNode : public BrowserNode, public Labeled<BrowserActivityNo
     virtual ~BrowserActivityNode();
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     static BrowserActivityNode * add_activitynode(BrowserNode * future_parent,
 						  UmlCode c, const char * name);
     static BrowserActivityNode * get_activitynode(BrowserNode * future_parent, UmlCode c);

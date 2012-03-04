@@ -63,7 +63,7 @@ StateDialog::StateDialog(StateData * d)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 
@@ -171,7 +171,7 @@ StateDialog::StateDialog(StateData * d)
 
   new QLabel(grid);
   Q3ButtonGroup * bg = 
-    new Q3ButtonGroup(1, Qt::Horizontal, QString::null, grid);
+    new Q3ButtonGroup(1, Qt::Horizontal, QString(), grid);
   
   active_cb = new QCheckBox(TR("active"), bg);
   if (state->is_active)

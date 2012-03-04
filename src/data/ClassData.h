@@ -48,7 +48,7 @@ class ClassData : public BasicData {
   friend class ActualParamsTable;
     
   protected:
-    MyStr constraint;
+    WrapperStr constraint;
     FormalParamData * formals;		// remark : do NOT use QArray
     Q3PtrList<ActualParamData> actuals;
     AType base_type;			// typedef
@@ -72,21 +72,21 @@ class ClassData : public BasicData {
     
     // C++
     UmlVisibility cpp_visibility : 4;
-    SharedStr cpp_decl;
+    WrapperStr cpp_decl;
     
     // Java
-    SharedStr java_decl;
-    SharedStr java_annotation;
+    WrapperStr java_decl;
+    WrapperStr java_annotation;
     
     // Php
-    SharedStr php_decl;
+    WrapperStr php_decl;
     
     // Python
-    SharedStr python_decl;
+    WrapperStr python_decl;
     
     // IDL
     AType switch_type;			// union
-    SharedStr idl_decl;
+    WrapperStr idl_decl;
     
     static bool DontUpdateActuals;
 

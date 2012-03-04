@@ -75,7 +75,7 @@ class BrowserRegion : public BrowserNode, public Labeled<BrowserRegion> {
     virtual void modified();
     virtual BasicData * get_data() const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     
     virtual void save(QTextStream &, bool ref, QString & warning);

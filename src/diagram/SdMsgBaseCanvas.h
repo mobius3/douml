@@ -46,9 +46,9 @@ class SdMsgBaseCanvas : public QObject, public DiagramCanvas {
     
   protected:
     SdMsgSupport * dest;
-    MyStr explicit_msg;
+    WrapperStr explicit_msg;
     const OperationData * msg;
-    MyStr args;
+    WrapperStr args;
     LabelCanvas * stereotype;
     UmlCode itsType;
     bool already_moved;

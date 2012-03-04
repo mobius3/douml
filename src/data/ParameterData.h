@@ -36,7 +36,7 @@ class ParameterData : public SimpleData, public PinParamData {
   friend class ParameterDialog;
   
   protected:
-    MyStr default_value;
+    WrapperStr default_value;
 
   public:
     ParameterData();

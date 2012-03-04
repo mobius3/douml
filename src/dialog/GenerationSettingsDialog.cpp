@@ -2231,7 +2231,7 @@ TypesTable::TypesTable(QWidget * parent)
     setText(index, 5, b.cpp_out);
     setText(index, 6, b.cpp_inout);
     setText(index, 7, b.cpp_return);
-    setText(index, 8, QString::null);
+    setText(index, 8, QString());
   }
   
   init_row(index);
@@ -2243,10 +2243,10 @@ TypesTable::TypesTable(QWidget * parent)
 }
 
 void TypesTable::init_row(int index) {
-  setText(index, 0, QString::null);
-  setText(index, 1, QString::null);
-  setText(index, 2, QString::null);
-  setText(index, 3, QString::null);
+  setText(index, 0, QString());
+  setText(index, 1, QString());
+  setText(index, 2, QString());
+  setText(index, 3, QString());
   setText(index, 4, "${type}");
   setText(index, 5, "${type} &");
   setText(index, 6, "${type} &");
@@ -2346,7 +2346,7 @@ StereotypesTable::StereotypesTable(QWidget * parent, int nst,
       setText(index, 3, s.php);
       setText(index, 4, s.python);
       setText(index, 5, s.idl);
-      setText(index, 6, QString::null);
+      setText(index, 6, QString());
     }
     
     init_row(index);
@@ -2371,7 +2371,7 @@ StereotypesTable::StereotypesTable(QWidget * parent, int nst,
       setText(index, 2, s.java);
       setText(index, 3, s.python);
       setText(index, 4, s.idl);
-      setText(index, 5, QString::null);
+      setText(index, 5, QString());
     }
     
     init_row(index);
@@ -2384,14 +2384,14 @@ StereotypesTable::StereotypesTable(QWidget * parent, int nst,
 }
 
 void StereotypesTable::init_row(int index) {
-  setText(index, 0, QString::null);
-  setText(index, 1, QString::null);
-  setText(index, 2, QString::null);
-  setText(index, 3, QString::null);
-  setText(index, 4, QString::null);
-  setText(index, 5, QString::null);
+  setText(index, 0, QString());
+  setText(index, 1, QString());
+  setText(index, 2, QString());
+  setText(index, 3, QString());
+  setText(index, 4, QString());
+  setText(index, 5, QString());
   if (with_php)
-    setText(index, 6, QString::null);
+    setText(index, 6, QString());
 }
 
 void StereotypesTable::update(int & nst, Stereotype *& st) {
@@ -2450,14 +2450,14 @@ IncludeTable::IncludeTable(QWidget * parent, IncludesSpec & spc,
   for (index = 0; index < sup; index += 1, it_type++, it_incl++) {
     setText(index, 0, *it_type);
     setItem(index, 1, new MLinesItem(this, *it_incl));
-    setText(index, 2, QString::null);
+    setText(index, 2, QString());
     setRowStretchable(index, TRUE);
     adjustRow(index);
   }
   
-  setText(index, 0, QString::null);
+  setText(index, 0, QString());
   setItem(index, 1, new MLinesItem(this, dflt));
-  setText(index, 2, QString::null);
+  setText(index, 2, QString());
   setRowStretchable(index, TRUE);
   
   adjustColumn(0);
@@ -2472,9 +2472,9 @@ IncludeTable::IncludeTable(QWidget * parent, IncludesSpec & spc,
 }
 
 void IncludeTable::init_row(int index) {
-  setText(index, 0, QString::null);
-  setItem(index, 1, new MLinesItem(this, QString::null));
-  setText(index, 2, QString::null);
+  setText(index, 0, QString());
+  setItem(index, 1, new MLinesItem(this, QString()));
+  setText(index, 2, QString());
   setRowStretchable(index, TRUE);
 }
 

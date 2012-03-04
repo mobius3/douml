@@ -252,7 +252,7 @@ QString codeToName(int c)
 
   return ((c >= 0) && (c < 256))
     ? CodeToName[c]
-    : QString::null;	// unexpected char code
+    : QString();	// unexpected char code
 }
 
 int nameToCode(QString s)
@@ -307,7 +307,7 @@ QString Shortcut::shortcut(int key, int buttons)
   QMap<QString, QString>::ConstIterator it =
     Shortcuts.find(QString(flags) + codeToName(key));
   
-  return (it == Shortcuts.end()) ? QString::null : *it;
+  return (it == Shortcuts.end()) ? QString() : *it;
 }
 
 void Shortcut::raz()

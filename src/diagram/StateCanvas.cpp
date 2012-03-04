@@ -154,7 +154,7 @@ void StateCanvas::compute_size() {
     min_height += fm.height();
   }
     
-  activities = QString::null;
+  activities = QString();
   if ((ref == 0) && (st.show_activities == UmlYes)) {
     const StateBehavior & behavior = 
       ((StateData *) browser_node->get_data())

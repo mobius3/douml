@@ -305,7 +305,7 @@ QString OperationData::default_java_def(const QString & name) {
 	 cpponly += 1) {
       if (name.find(*cpponly) != -1) {
 	// operator or destructor
-	return QString::null;
+	return QString();
       }
     }
   }
@@ -386,7 +386,7 @@ QString OperationData::default_idl_decl(const QString & name) {
 	 cpponly += 1) {
       if (name.find(*cpponly) != -1) {
 	// operator or destructor
-	return QString::null;
+	return QString();
       }
     }
   }
@@ -442,10 +442,12 @@ void OperationData::set_browser_node(BrowserOperation * o, bool update) {
   }
 }
 
-QString OperationData::definition(bool full, bool with_kind) const {
-  return (with_kind)
-    ? "["+ browser_node->get_stype() +"] " + definition(full, TRUE, TRUE, DefaultShowContextMode)
-    : definition(full, TRUE, TRUE, DefaultShowContextMode);
+QString OperationData::definition(bool full, bool with_kind) const
+{
+    QString stereot = browser_node->get_stype();
+    QString definit1 =  definition(full, TRUE, TRUE, DefaultShowContextMode);
+    QString definit2 =  definition(full, TRUE, TRUE, DefaultShowContextMode);
+    return (with_kind) ? "["+ stereotype +"] " + definit1 : definit2;
 }
 
 QString OperationData::definition(bool full, bool withdir,
@@ -454,9 +456,16 @@ QString OperationData::definition(bool full, bool withdir,
   
   if (full) {
     if (nparams == 0)
-      result = browser_node->get_name() + QString("()");
-    else {
-      result = browser_node->get_name();
+    {
+
+        QString namePart = browser_node->get_name();
+        QString bracePart = QString("()");
+        result = namePart + bracePart;
+    }
+    else
+    {
+        QString namePart = browser_node->get_name();
+        result = namePart;
       const char * sep = "(";
       unsigned index;
       
@@ -473,7 +482,11 @@ QString OperationData::definition(bool full, bool withdir,
     return (rt.isEmpty()) ? result : result + " : " + rt;
   }
   else
-    return browser_node->get_name() + QString("()");
+  {
+      QString namePart = browser_node->get_name();
+      QString bracePart = QString("()");
+      return  namePart + bracePart;
+  }
 }
 
 QString OperationData::definition(bool full, DrawingLanguage language,
@@ -489,7 +502,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!cpp_decl.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   case JavaView:
     if (full)
       return OperationDialog::java_decl((BrowserOperation *) browser_node,
@@ -497,7 +510,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!java_def.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   case PhpView:
     if (full)
       return OperationDialog::php_decl((BrowserOperation *) browser_node,
@@ -505,7 +518,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!php_def.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   case PythonView:
     if (full)
       return OperationDialog::python_decl((BrowserOperation *) browser_node,
@@ -513,7 +526,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!python_def.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   default:
     if (full)
       return OperationDialog::idl_decl((BrowserOperation *) browser_node,
@@ -521,7 +534,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!idl_decl.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   }
 }
 

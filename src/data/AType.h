@@ -37,7 +37,7 @@ class ToolCom;
 
 class AType {
   public:
-    SharedStr explicit_type;
+    WrapperStr explicit_type;
     BrowserClass * type;
     
   public:

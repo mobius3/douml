@@ -64,7 +64,7 @@ PinDialog::PinDialog(PinData * pi)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 
@@ -195,7 +195,7 @@ PinDialog::PinDialog(PinData * pi)
   new QLabel(grid);
   htab = new Q3HBox(grid);
   Q3ButtonGroup * bg = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, htab);
+    new Q3ButtonGroup(2, Qt::Horizontal, QString(), htab);
   
   is_control_cb = new QCheckBox(TR("is_control"), bg);
   if (pi->is_control)
@@ -208,7 +208,7 @@ PinDialog::PinDialog(PinData * pi)
   unique_cb->setDisabled(visit);
   
   bg = 
-    new Q3ButtonGroup(3, Qt::Horizontal, QString::null, htab);
+    new Q3ButtonGroup(3, Qt::Horizontal, QString(), htab);
   bg->setExclusive(TRUE);
   
   standard_rb = new QRadioButton(TR("standard"), bg);

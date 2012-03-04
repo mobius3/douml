@@ -88,7 +88,7 @@ class BrowserPackage : public BrowserNode, public Labeled<BrowserPackage> {
     
   protected:
     BrowserPackage(int id);
-    BrowserPackage * find_it(const char * s, const MyStr & (PackageData::* pf)() const);
+    BrowserPackage * find_it(const char * s, const WrapperStr & (PackageData::* pf)() const);
     void make();
     void exec_menu_choice(int rank);
       
@@ -102,7 +102,7 @@ class BrowserPackage : public BrowserNode, public Labeled<BrowserPackage> {
     void set_associated_diagram(BrowserNode *, bool on_read = FALSE);
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
     virtual void apply_shortcut(QString s);
