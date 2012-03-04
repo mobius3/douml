@@ -48,7 +48,7 @@ class FormalParamData : public QObject {
     FormalParamData(const FormalParamData& p);
     FormalParamData& operator=(const FormalParamData&);
   
-    const char * get_name() const { return name; };
+    const char * get_name() const { return toUnicode(name); };
     void set_name(const QString & s) { name = s; };
     void set_name(const char * s) { name = s; };
     

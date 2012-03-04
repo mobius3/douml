@@ -58,10 +58,10 @@ bool ExitOnError = FALSE;
 
 int main(int argc, char **argv)
 {
-  QSharedPointer<QApplication> theApp;
+  //QSharedPointer<QApplication> theApp;
     ExitOnError = FALSE;
 
-
+  QApplication a(argc, argv);
 
   QsLogging::Logger& logger = QsLogging::Logger::instance();
   logger.setLoggingLevel(QsLogging::TraceLevel);
@@ -75,7 +75,8 @@ int main(int argc, char **argv)
   logger.addDestination(fileDestination.get());
   QLOG_INFO() << "Starting the log";
 
-  theApp = QSharedPointer<QApplication>(new QApplication (argc, argv));
+  //theApp = QSharedPointer<QApplication>(new QApplication (argc, argv));
+
   //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("Windows-1251"));
   UmlDesktop::init();
   
@@ -138,7 +139,7 @@ int main(int argc, char **argv)
     }
   }
   
-  theApp->connect(theApp.data(), SIGNAL(lastWindowClosed()), theApp.data(), SLOT(quit()) );
+  QObject::connect(&a, SIGNAL(lastWindowClosed()), &a, SLOT(quit()) );
     
   try {
     if (argc > 2) {
@@ -165,7 +166,7 @@ int main(int argc, char **argv)
     
 
     ExitOnError = TRUE;
-    theApp->exec();
+    a.exec();
   }
   catch (...) {
     ;

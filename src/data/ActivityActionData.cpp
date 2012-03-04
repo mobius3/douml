@@ -413,7 +413,7 @@ QString AnyAction::str(DrawingLanguage, QString name) const {
       name.replace(index, 1, " ");
   }
 
-  return name;
+  return toUnicode(name);
 }
 
 BasicData * AnyAction::depend_on() {
@@ -1223,7 +1223,7 @@ QString CallOperationAction::str(DrawingLanguage lang, QString name) const {
   else if (name.isEmpty())
     return operation->get_name();
   else
-    return name;
+    return toUnicode(name);
 }
 
 BasicData * CallOperationAction::depend_on() {

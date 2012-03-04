@@ -68,7 +68,7 @@ QString ExtraMemberData::definition(bool, bool with_kind) const {
   if (with_kind)
     return "[" + browser_node->get_stype() + "] " + name;
   else if (! name.isEmpty())
-    return name;
+    return toUnicode(name);
   else
     return browser_node->get_stype();
 }
