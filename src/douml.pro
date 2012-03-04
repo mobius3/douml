@@ -474,7 +474,7 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  Logging/QsDebugOutput.cpp \
 		  main.cpp
 
-TARGET		= douml
+TARGET		= Douml
 DEFINES         = BooL=bool DEBUGCOM
 #The following line was inserted by qt3to4
 QT += network  qt3support

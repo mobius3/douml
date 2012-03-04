@@ -33,6 +33,30 @@
 //Added by qt3to4:
 #include <Q3CString>
 
+
+class WrapperStr
+{
+  public:
+    WrapperStr(){}
+    WrapperStr(const WrapperStr & other) {this->s = other.s;}
+    bool isEmpty() const { return this->s.isEmpty();}
+    unsigned int length() const {return this->s.length();}
+    int find(const char * toFind, int index = 0) const {return s.indexOf(toFind , index);}
+    int find(int c, int index = 0) const {return s.indexOf(QString::number(c) , index);}
+
+    WrapperStr & operator=(const WrapperStr & other) { this->s = other.s; return *this; }
+    WrapperStr & operator=(const char * c) {this->s = QString(c);return *this;}
+    WrapperStr & operator=(const QString &s ){this->s = s; return *this;}
+    WrapperStr & operator=(const Q3CString &s){this->s = QString::fromLocal8Bit(s.data());}
+    operator const char *() const { return this->s.toLocal8Bit().data(); }
+    operator QString() const { return this->s; }
+    operator Q3CString() const { return this->s.toLocal8Bit(); }
+
+  protected:
+  char * assign(const char *c, int len){this->s = QString::fromLocal8Bit(c);}
+  QString s;
+};
+
 class SharedStr {
   public:
     SharedStr() { p = Empty; };
