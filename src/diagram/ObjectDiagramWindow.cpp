@@ -62,63 +62,63 @@ ObjectDiagramWindow::ObjectDiagramWindow(const QString & s, BrowserObjectDiagram
   add_edit_button(toolbar);
   
   select =
-    new QToolButton(*selectButton, TR("Select"), QString::null,
+    new QToolButton(*selectButton, TR("Select"), QString(),
 		    this, SLOT(hit_select()), toolbar, "select");
   select->setToggleButton(TRUE);
   select->setOn(TRUE);
   current_button = UmlSelect;
   
   addPackage
-    = new QToolButton(*packageButton, TR("Add Package"), QString::null,
+    = new QToolButton(*packageButton, TR("Add Package"), QString(),
 		      this, SLOT(hit_package()), toolbar, "add package");
   addPackage->setToggleButton(TRUE);
   Q3WhatsThis::add(addPackage, addpackageText());
   
   addFragment
-    = new QToolButton(*fragmentButton, TR("Add Fragment"), QString::null,
+    = new QToolButton(*fragmentButton, TR("Add Fragment"), QString(),
 		      this, SLOT(hit_fragment()), toolbar, "add fragment");
   addFragment->setToggleButton(TRUE);
   Q3WhatsThis::add(addFragment, addfragmentText());
   
   addClassInstance
-    = new QToolButton(*classinstanceButton, TR("Add modeled Class instance"), QString::null,
+    = new QToolButton(*classinstanceButton, TR("Add modeled Class instance"), QString(),
 		      this, SLOT(hit_classinstance()), toolbar,
 		      "add modeled class instance");
   addClassInstance->setToggleButton(TRUE);
   Q3WhatsThis::add(addClassInstance, addmodeledclassinstanceText());
   
   addClass
-    = new QToolButton(*classButton, TR("Add Class instance"), QString::null,
+    = new QToolButton(*classButton, TR("Add Class instance"), QString(),
 		      this, SLOT(hit_class()), toolbar, "add class instance");
   addClass->setToggleButton(TRUE);
   Q3WhatsThis::add(addClass, addclassinstanceText());
   
   addLink =
-    new QToolButton(*associationButton, TR("Add Link between instances"), QString::null,
+    new QToolButton(*associationButton, TR("Add Link between instances"), QString(),
 		    this, SLOT(hit_link()), toolbar, "add link between instances");
   addLink->setToggleButton(TRUE);
   Q3WhatsThis::add(addLink, linkText());
   
   note =
-    new QToolButton(*noteButton, TR("Note"), QString::null,
+    new QToolButton(*noteButton, TR("Note"), QString(),
 		    this, SLOT(hit_note()), toolbar, "note");
   note->setToggleButton(TRUE);
   Q3WhatsThis::add(note, noteText());
   
   anchor =
-    new QToolButton(*anchorButton, TR("Anchor"), QString::null,
+    new QToolButton(*anchorButton, TR("Anchor"), QString(),
 		    this, SLOT(hit_anchor()), toolbar, "anchor");
   anchor->setToggleButton(TRUE);
   Q3WhatsThis::add(anchor, anchorText());
   
   text =
-    new QToolButton(*textButton, TR("Text"), QString::null,
+    new QToolButton(*textButton, TR("Text"), QString(),
 		    this, SLOT(hit_text()), toolbar, "text");
   text->setToggleButton(TRUE);
   Q3WhatsThis::add(text, textText());
   
   image =
-    new QToolButton(*imageButton, TR("Image"), QString::null,
+    new QToolButton(*imageButton, TR("Image"), QString(),
 		    this, SLOT(hit_image()), toolbar, "image");
   image->setToggleButton(TRUE);
   Q3WhatsThis::add(image, imageText());

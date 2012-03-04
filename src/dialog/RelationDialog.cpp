@@ -113,7 +113,7 @@ RelationDialog::RelationDialog(RelationData * r)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
   
@@ -534,7 +534,7 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
   else if (roleb)
     groupb.append(vg);
   
-  Q3ButtonGroup * bg2 = new Q3ButtonGroup(7, Qt::Horizontal, QString::null, htab);
+  Q3ButtonGroup * bg2 = new Q3ButtonGroup(7, Qt::Horizontal, QString(), htab);
   
   role.opt.append(bg2);
   if (roleb)
@@ -1414,7 +1414,7 @@ void RelationDialog::cpp_update_b() {
 
 void RelationDialog::cpp_default_a() {
   if (a.cpp_undef)
-    a.edcppdecl->setText(QString::null);
+    a.edcppdecl->setText(QString());
   else if (RelationData::isa_association(current_type))
     a.edcppdecl->setText(GenerationSettings::cpp_default_rel_decl(current_type,
 								  a.multiplicity->currentText().stripWhiteSpace()));
@@ -1461,8 +1461,8 @@ void RelationDialog::cpp_include_in_header() {
 }
 
 void RelationDialog::cpp_unmapped_a() {
-  a.edcppdecl->setText(QString::null);
-  a.showcppdecl->setText(QString::null);
+  a.edcppdecl->setText(QString());
+  a.showcppdecl->setText(QString());
   
   if (!RelationData::isa_association(current_type) && !visit)
     a.cpp_default_decl_bt->setOn(FALSE);
@@ -1470,7 +1470,7 @@ void RelationDialog::cpp_unmapped_a() {
 
 void RelationDialog::cpp_default_b() {
   if (b.cpp_undef)
-    b.edcppdecl->setText(QString::null);
+    b.edcppdecl->setText(QString());
   else 
     b.edcppdecl->setText(GenerationSettings::cpp_default_rel_decl(UmlAssociation,
 								  b.multiplicity->currentText().stripWhiteSpace()));
@@ -1489,8 +1489,8 @@ void RelationDialog::default_b_cpp_if_needed(UmlCode prev_type,
 }
 
 void RelationDialog::cpp_unmapped_b() {
-  b.edcppdecl->setText(QString::null);
-  b.showcppdecl->setText(QString::null);
+  b.edcppdecl->setText(QString());
+  b.showcppdecl->setText(QString());
 }
 
 // Java management
@@ -1657,7 +1657,7 @@ void RelationDialog::java_update_b() {
 
 void RelationDialog::java_default_a() {
   if (a.java_undef)
-    a.edjavadecl->setText(QString::null);
+    a.edjavadecl->setText(QString());
   else if (RelationData::isa_association(current_type))
     a.edjavadecl->setText(GenerationSettings::java_default_rel_decl(a.multiplicity->currentText().stripWhiteSpace()));
   else {
@@ -1686,8 +1686,8 @@ void RelationDialog::default_a_java_if_needed(UmlCode prev_type,
 }
 
 void RelationDialog::java_unmapped_a() {
-  a.edjavadecl->setText(QString::null);
-  a.showjavadecl->setText(QString::null);
+  a.edjavadecl->setText(QString());
+  a.showjavadecl->setText(QString());
   
   if (!RelationData::isa_association(current_type))
     a.java_default_decl_bt->setOn(FALSE);
@@ -1695,7 +1695,7 @@ void RelationDialog::java_unmapped_a() {
 
 void RelationDialog::java_default_b() {
   if (b.java_undef)
-    b.edjavadecl->setText(QString::null);
+    b.edjavadecl->setText(QString());
   else 
     b.edjavadecl->setText(GenerationSettings::java_default_rel_decl(b.multiplicity->currentText().stripWhiteSpace()));
   java_update_b();
@@ -1713,8 +1713,8 @@ void RelationDialog::default_b_java_if_needed(UmlCode,
 }
 
 void RelationDialog::java_unmapped_b() {
-  b.edjavadecl->setText(QString::null);
-  b.showjavadecl->setText(QString::null);
+  b.edjavadecl->setText(QString());
+  b.showjavadecl->setText(QString());
 }
 
 void RelationDialog::java_edit_annotation_a() {
@@ -1873,7 +1873,7 @@ void RelationDialog::php_update_b() {
 
 void RelationDialog::php_default_a() {
   if (a.php_undef)
-    a.edphpdecl->setText(QString::null);
+    a.edphpdecl->setText(QString());
   else if (RelationData::isa_association(current_type))
     a.edphpdecl->setText(GenerationSettings::php_default_rel_decl());
   else {
@@ -1897,8 +1897,8 @@ void RelationDialog::default_a_php_if_needed(UmlCode prev_type,
 }
 
 void RelationDialog::php_unmapped_a() {
-  a.edphpdecl->setText(QString::null);
-  a.showphpdecl->setText(QString::null);
+  a.edphpdecl->setText(QString());
+  a.showphpdecl->setText(QString());
   
   if (!RelationData::isa_association(current_type))
     a.php_default_decl_bt->setOn(FALSE);
@@ -1906,7 +1906,7 @@ void RelationDialog::php_unmapped_a() {
 
 void RelationDialog::php_default_b() {
   if (b.php_undef)
-    b.edphpdecl->setText(QString::null);
+    b.edphpdecl->setText(QString());
   else 
     b.edphpdecl->setText(GenerationSettings::php_default_rel_decl());
   php_update_b();
@@ -1919,8 +1919,8 @@ void RelationDialog::default_b_php_if_needed(UmlCode,
 }
 
 void RelationDialog::php_unmapped_b() {
-  b.edphpdecl->setText(QString::null);
-  b.showphpdecl->setText(QString::null);
+  b.edphpdecl->setText(QString());
+  b.showphpdecl->setText(QString());
 }
 
 // Python management
@@ -2044,7 +2044,7 @@ void RelationDialog::python_update_b() {
 
 void RelationDialog::python_default_a() {
   if (a.python_undef)
-    a.edpythondecl->setText(QString::null);
+    a.edpythondecl->setText(QString());
   else if (RelationData::isa_association(current_type))
     a.edpythondecl->setText(GenerationSettings::python_default_rel_decl(current_type,
 									a.multiplicity->currentText().stripWhiteSpace()));
@@ -2074,8 +2074,8 @@ void RelationDialog::default_a_python_if_needed(UmlCode prev_type,
 }
 
 void RelationDialog::python_unmapped_a() {
-  a.edpythondecl->setText(QString::null);
-  a.showpythondecl->setText(QString::null);
+  a.edpythondecl->setText(QString());
+  a.showpythondecl->setText(QString());
   
   if (!RelationData::isa_association(current_type))
     a.python_default_decl_bt->setOn(FALSE);
@@ -2083,7 +2083,7 @@ void RelationDialog::python_unmapped_a() {
 
 void RelationDialog::python_default_b() {
   if (b.python_undef)
-    b.edpythondecl->setText(QString::null);
+    b.edpythondecl->setText(QString());
   else 
     b.edpythondecl->setText(GenerationSettings::python_default_rel_decl(UmlAssociation,
 									b.multiplicity->currentText().stripWhiteSpace()));
@@ -2102,8 +2102,8 @@ void RelationDialog::default_b_python_if_needed(UmlCode prev_type,
 }
 
 void RelationDialog::python_unmapped_b() {
-  b.edpythondecl->setText(QString::null);
-  b.showpythondecl->setText(QString::null);
+  b.edpythondecl->setText(QString());
+  b.showpythondecl->setText(QString());
 }
 
 // Idl management
@@ -2255,7 +2255,7 @@ void RelationDialog::idl_update_b() {
 
 void RelationDialog::idl_default_a() {
   if (a.idl_undef)
-    a.edidldecl->setText(QString::null);
+    a.edidldecl->setText(QString());
   else if (RelationData::isa_association(current_type)) {
     QString mult = a.multiplicity->currentText().stripWhiteSpace();
     
@@ -2305,8 +2305,8 @@ void RelationDialog::default_a_idl_if_needed(UmlCode prev_type,
 }
 
 void RelationDialog::idl_unmapped_a() {
-  a.edidldecl->setText(QString::null);
-  a.showidldecl->setText(QString::null);
+  a.edidldecl->setText(QString());
+  a.showidldecl->setText(QString());
   
   if (!RelationData::isa_association(current_type))
     a.idl_default_decl_bt->setOn(FALSE);
@@ -2314,7 +2314,7 @@ void RelationDialog::idl_unmapped_a() {
 
 void RelationDialog::idl_default_b() {
   if (b.idl_undef)
-    b.edidldecl->setText(QString::null);
+    b.edidldecl->setText(QString());
   else {
     QString mult = b.multiplicity->currentText().stripWhiteSpace();
     
@@ -2353,8 +2353,8 @@ void RelationDialog::default_b_idl_if_needed(UmlCode,
 }
 
 void RelationDialog::idl_unmapped_b() {
-  b.edidldecl->setText(QString::null);
-  b.showidldecl->setText(QString::null);
+  b.edidldecl->setText(QString());
+  b.showidldecl->setText(QString());
 }
 
 //

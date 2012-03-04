@@ -58,7 +58,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 

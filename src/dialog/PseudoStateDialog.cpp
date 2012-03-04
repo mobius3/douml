@@ -76,7 +76,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
   

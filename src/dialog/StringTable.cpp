@@ -63,7 +63,7 @@ void StringTable::activateNextCell() {
       // adds a new line
       setNumRows(row + 1);
       init_row(row);
-      setText(row, numCols() - 1, QString::null);
+      setText(row, numCols() - 1, QString());
     }
     setCurrentCell(row, 0);
   }
@@ -144,7 +144,7 @@ void StringTable::insert_row_before(int row) {
   }
   
   init_row(row);
-  setText(row, numCols() - 1, QString::null);
+  setText(row, numCols() - 1, QString());
  }
 
 void StringTable::insert_row_after(int row) {
@@ -161,7 +161,7 @@ void StringTable::insert_row_after(int row) {
   }
   
   init_row(row + 1);
-  setText(row + 1, numCols() - 1, QString::null);
+  setText(row + 1, numCols() - 1, QString());
  }
 
 void StringTable::delete_row(int row) {
@@ -173,7 +173,7 @@ void StringTable::delete_row(int row) {
   if (n == 1) {
     // the alone line : empty it
     init_row(0);
-    setText(0, numCols() - 1, QString::null);
+    setText(0, numCols() - 1, QString());
   }
   else {
     for (index = row; index != n - 1; index += 1) {

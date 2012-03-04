@@ -93,7 +93,7 @@ int main(int argc, char ** argv)
 	  (QMessageBox::warning(0, "Roundtrip",
 				"Some elements to roundtrip are read-only and will not be updated\n\n"
 				"Roundtrip anyway ?",
-				"Yes", "No", QString::null, 1, 1)
+				"Yes", "No", QString(), 1, 1)
 	   != 0)) {
 	aborted = FALSE;
 	throw 0;
@@ -141,7 +141,7 @@ int main(int argc, char ** argv)
 				"The marked elements are useless because they don't\n"
 				"correspond to something in the roundtriped files\n\n\n"
 				"Delete them ?",
-				"Yes", "No", QString::null, 1, 1)
+				"Yes", "No", QString(), 1, 1)
 	   == 0)) {
 	Q3PtrListIterator<UmlItem> iter(useless);
 	

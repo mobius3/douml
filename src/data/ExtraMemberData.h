@@ -42,20 +42,20 @@ class ExtraMemberData : public BasicData {
     
     // C++
     bool cpp_inline;
-    MyStr cpp_decl;
-    MyStr cpp_def;
+    WrapperStr cpp_decl;
+    WrapperStr cpp_def;
     
     // Java
-    MyStr java_decl;
+    WrapperStr java_decl;
     
     // Php
-    MyStr php_decl;
+    WrapperStr php_decl;
     
     // Python
-    MyStr python_decl;
+    WrapperStr python_decl;
     
     // Idl
-    MyStr idl_decl;
+    WrapperStr idl_decl;
     
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);

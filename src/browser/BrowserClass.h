@@ -104,7 +104,7 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
 				   BooL & duplicable) const;
     virtual void move(BrowserNode *, BrowserNode * after);
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     QString contextual_name(ShowContextMode) const;
     virtual void set_name(const char * s);
@@ -145,7 +145,7 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
 				    const char * stereotype = 0);
     static BrowserClass * add_class(bool stereotypep,
 				    BrowserNode * future_parent,
-				    QString name = QString::null);
+				    QString name = QString());
     static BrowserClass * find(const char * s);
 
     static void init();

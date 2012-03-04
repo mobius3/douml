@@ -190,7 +190,7 @@ void CodChangeMsgDialog::accept() {
   
   if (index >= 0) {
     msg->operation = opers[index];
-    msg->explicit_operation = QString::null;
+    msg->explicit_operation = QString();
   }
   else {
     msg->operation = 0;

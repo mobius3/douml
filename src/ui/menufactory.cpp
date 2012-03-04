@@ -68,7 +68,7 @@ void MenuFactory::addItem(
 }
 
 MenuFactory::MenuFactory(
-    const MyStr& menuName )
+    const WrapperStr& menuName )
   : m_menu( 0, menuName )
 {
 

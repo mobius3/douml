@@ -47,7 +47,7 @@ class ActivityData : public SimpleData {
     InfoData uml_condition;
     InfoData cpp_condition;
     InfoData java_condition;
-    MyStr constraint;
+    WrapperStr constraint;
     bool read_only;
     bool single_execution;
     bool is_active;

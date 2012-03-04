@@ -407,7 +407,7 @@ QString BrowserOperation::get_of_name() const {
   else if (set_of)
     result = set_of->get_name();
   else
-    return QString::null;
+    return QString();
   
   int index;
   
@@ -494,7 +494,7 @@ void BrowserOperation::paintCell(QPainter * p, const QColorGroup & cg, int colum
 static Q3PtrList<BrowserNode> ImplBy;
       
 void BrowserOperation::menu() {
-  Q3PopupMenu m(0, name);
+    Q3PopupMenu m(0, name);
   Q3PopupMenu implbym(0);
   Q3PopupMenu toolm(0);
   

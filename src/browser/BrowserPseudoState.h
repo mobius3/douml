@@ -59,7 +59,7 @@ class BrowserPseudoState : public BrowserNode, public Labeled<BrowserPseudoState
     virtual ~BrowserPseudoState();
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     static BrowserPseudoState * add_pseudostate(BrowserNode * future_parent, UmlCode c);
     static BrowserPseudoState * add_pseudostate(BrowserNode * future_parent,
 						UmlCode c, const char * name);

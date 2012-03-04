@@ -85,7 +85,7 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE) {
 			   "Bruno Pages (bouml@free.fr)\n\n");
 			   */
   Q3TextView * tx =
-    new Q3TextView(htmltext, QString::null, this);
+    new Q3TextView(htmltext, QString(), this);
   QFont fnt = tx->font();
   
   fnt.setItalic(TRUE);

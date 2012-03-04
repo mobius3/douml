@@ -82,7 +82,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
   
@@ -147,7 +147,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     
   new QLabel(grid);
   htab = new Q3HBox(grid);
-  opt_bg = new Q3GroupBox(2, Qt::Horizontal, QString::null, htab);
+  opt_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htab);
   abstract_cb = new QCheckBox("abstract", opt_bg);
   if (cl->get_is_abstract()) {
     abstract_cb->setChecked(TRUE);
@@ -310,7 +310,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   htab = new Q3HBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(1, Qt::Horizontal, QString::null, htab);
+  bg = new Q3GroupBox(1, Qt::Horizontal, QString(), htab);
   cpp_external_cb = new QCheckBox("external", bg);
   if (cl->cpp_is_external())
     cpp_external_cb->setChecked(TRUE);
@@ -381,7 +381,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   htab = new Q3HBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
+  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
   java_final_cb = new QCheckBox("final", bg);
   if (cl->java_is_final())
     java_final_cb->setChecked(TRUE);
@@ -454,7 +454,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   htab = new Q3HBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
+  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
   php_final_cb = new QCheckBox("final", bg);
   if (cl->php_is_final())
     php_final_cb->setChecked(TRUE);
@@ -521,7 +521,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   htab = new Q3HBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
+  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
   python_2_2_cb = new QCheckBox("Python 2.2", bg);
   if (cl->python_is_2_2())
     python_2_2_cb->setChecked(TRUE);
@@ -587,7 +587,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   htab = new Q3HBox(vtab);
   htab->setMargin(5);
-  switch_bg = new Q3GroupBox(2, Qt::Horizontal, QString::null, htab);
+  switch_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htab);
   new QLabel(TR("switch type : "), switch_bg);
   edswitch_type = new Q3ComboBox(!visit, switch_bg);
   if (!visit) {
@@ -613,7 +613,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   htab = new Q3HBox(vtab);
   htab->setMargin(5);
   lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString::null, htab);
+  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
   idl_external_cb = new QCheckBox("external", bg);
   if (cl->idl_is_external())
     idl_external_cb->setChecked(TRUE);
@@ -1524,7 +1524,7 @@ void ClassDialog::cpp_default_decl() {
       edcppdecl->setText(GenerationSettings::cpp_default_typedef_decl());
     else if ((current_cpp_stereotype == "ignored") || 
 	     (current_cpp_stereotype == "metaclass"))
-      edcppdecl->setText(QString::null);
+      edcppdecl->setText(QString());
     else
       edcppdecl->setText(GenerationSettings::cpp_default_class_decl());
     
@@ -1533,8 +1533,8 @@ void ClassDialog::cpp_default_decl() {
 }
 
 void ClassDialog::cpp_unmapped_decl() {
-  edcppdecl->setText(QString::null);
-  showcppdecl->setText(QString::null);
+  edcppdecl->setText(QString());
+  showcppdecl->setText(QString());
 }
 
 void ClassDialog::cpp_generate_members_def(const BrowserNode * cl, QString & s) 
@@ -1816,7 +1816,7 @@ void ClassDialog::java_default_decl() {
     }
     else if ((current_java_stereotype == "ignored") || 
 	     (current_java_stereotype == "metaclass"))
-      edjavadecl->setText(QString::null);
+      edjavadecl->setText(QString());
     else
       edjavadecl->setText(GenerationSettings::java_default_class_decl());
   
@@ -1825,8 +1825,8 @@ void ClassDialog::java_default_decl() {
 }
 
 void ClassDialog::java_unmapped_decl() {
-  edjavadecl->setText(QString::null);
-  showjavadecl->setText(QString::null);
+  edjavadecl->setText(QString());
+  showjavadecl->setText(QString());
 }
 
 void ClassDialog::java_edit_annotation() {
@@ -2039,7 +2039,7 @@ void ClassDialog::php_default_decl() {
       edphpdecl->setText(GenerationSettings::php_default_interface_decl());
     else if ((current_php_stereotype == "ignored") || 
 	     (current_php_stereotype == "metaclass"))
-      edphpdecl->setText(QString::null);
+      edphpdecl->setText(QString());
     else
       edphpdecl->setText(GenerationSettings::php_default_class_decl());
   
@@ -2048,8 +2048,8 @@ void ClassDialog::php_default_decl() {
 }
 
 void ClassDialog::php_unmapped_decl() {
-  edphpdecl->setText(QString::null);
-  showphpdecl->setText(QString::null);
+  edphpdecl->setText(QString());
+  showphpdecl->setText(QString());
 }
 
 static void python_generate_inherit(QString & s, ClassData * cl, bool object,
@@ -2206,7 +2206,7 @@ void ClassDialog::python_default_decl() {
       edpythondecl->setText(GenerationSettings::python_default_enum_decl());
     else if ((current_python_stereotype == "ignored") || 
 	     (current_python_stereotype == "metaclass"))
-      edpythondecl->setText(QString::null);
+      edpythondecl->setText(QString());
     else
       edpythondecl->setText(GenerationSettings::python_default_class_decl());
   
@@ -2215,8 +2215,8 @@ void ClassDialog::python_default_decl() {
 }
 
 void ClassDialog::python_unmapped_decl() {
-  edpythondecl->setText(QString::null);
-  showpythondecl->setText(QString::null);
+  edpythondecl->setText(QString());
+  showpythondecl->setText(QString());
 }
 
 QString ClassDialog::python_instance_att_rel(BrowserNode * cl)
@@ -2439,7 +2439,7 @@ void ClassDialog::idl_default_decl() {
       edidldecl->setText(GenerationSettings::idl_default_interface_decl());
     else if ((current_idl_stereotype == "ignored") ||
 	     (current_idl_stereotype == "metaclass"))
-      edidldecl->setText(QString::null);
+      edidldecl->setText(QString());
     else
       edidldecl->setText(GenerationSettings::idl_default_valuetype_decl());
     
@@ -2448,8 +2448,8 @@ void ClassDialog::idl_default_decl() {
 }
 
 void ClassDialog::idl_unmapped_decl() {
-  edidldecl->setText(QString::null);
-  showidldecl->setText(QString::null);
+  edidldecl->setText(QString());
+  showidldecl->setText(QString());
 }
 
 void ClassDialog::accept() {
@@ -2649,14 +2649,14 @@ FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
       setText(index, 1, cl->get_formalparam_name(index));
       setItem(index, 2, new ComboItem(this, cl->get_formalparam_default_value(index, TRUE), types));
       setItem(index, 3, new ComboItem(this, cl->get_formalparam_extends(index, TRUE), types));
-      setText(index, 4, QString::null);
+      setText(index, 4, QString());
     }
     
     setText(index, 0, "class");
-    setText(index, 1, QString::null);
-    setItem(index, 2, new ComboItem(this, QString::null, types));
-    setItem(index, 3, new ComboItem(this, QString::null, types));
-    setText(index, 4, QString::null);
+    setText(index, 1, QString());
+    setItem(index, 2, new ComboItem(this, QString(), types));
+    setItem(index, 3, new ComboItem(this, QString(), types));
+    setText(index, 4, QString());
   }
   
   setColumnStretchable (0, TRUE);
@@ -2684,10 +2684,10 @@ void FormalParamsTable::activateNextCell() {
       // adds a new line
       setNumRows(row + 1);
       setText(row, 0, "class");
-      setText(row, 1, QString::null);
-      setItem(row, 2, new ComboItem(this, QString::null, types));
-      setItem(row, 3, new ComboItem(this, QString::null, types));
-      setText(row, 4, QString::null);
+      setText(row, 1, QString());
+      setItem(row, 2, new ComboItem(this, QString(), types));
+      setItem(row, 3, new ComboItem(this, QString(), types));
+      setText(row, 4, QString());
     }
     setCurrentCell(row, 0);
   }
@@ -2776,10 +2776,10 @@ void FormalParamsTable::insert_row_before(int row) {
   }
   
   setText(row, 0, "class");
-  setText(row, 1, QString::null);
-  setItem(row, 2, new ComboItem(this, QString::null, types));
-  setItem(row, 3, new ComboItem(this, QString::null, types));
-  setText(row, 4, QString::null);
+  setText(row, 1, QString());
+  setItem(row, 2, new ComboItem(this, QString(), types));
+  setItem(row, 3, new ComboItem(this, QString(), types));
+  setText(row, 4, QString());
  }
 
 void FormalParamsTable::insert_row_after(int row) {
@@ -2804,10 +2804,10 @@ void FormalParamsTable::insert_row_after(int row) {
   }
   
   setText(row + 1, 0, "class");
-  setText(row + 1, 1, QString::null);
-  setItem(row + 1, 2, new ComboItem(this, QString::null, types));
-  setItem(row + 1, 3, new ComboItem(this, QString::null, types));
-  setText(row + 1, 4, QString::null);
+  setText(row + 1, 1, QString());
+  setItem(row + 1, 2, new ComboItem(this, QString(), types));
+  setItem(row + 1, 3, new ComboItem(this, QString(), types));
+  setText(row + 1, 4, QString());
  }
 
 void FormalParamsTable::delete_row(int row) {
@@ -2819,9 +2819,9 @@ void FormalParamsTable::delete_row(int row) {
   if (n == 1) {
     // the alone line : empty it
     setText(0, 0, "class");
-    setText(0, 1, QString::null);
-    setItem(0, 2, new ComboItem(this, QString::null, types));
-    setItem(0, 3, new ComboItem(this, QString::null, types));
+    setText(0, 1, QString());
+    setItem(0, 2, new ComboItem(this, QString(), types));
+    setItem(0, 3, new ComboItem(this, QString(), types));
   }
   else {
     for (index = row; index != n - 1; index += 1) {
@@ -2964,7 +2964,7 @@ void FormalParamsTable::update(ClassData * cl, BrowserNodeList & nodes) {
     rank = types.findIndex(text(index, 2).stripWhiteSpace());
     if (rank != -1) 
       cl->set_formalparam_default_value(index, ((BrowserClass *) nodes.at(rank)),
-					NULL); // [lgfreitas] expected const char *. QString::null does not correspond to old null
+					NULL); // [lgfreitas] expected const char *. QString() does not correspond to old null
     else
       cl->set_formalparam_default_value(index, 0, text(index, 2).stripWhiteSpace());
     

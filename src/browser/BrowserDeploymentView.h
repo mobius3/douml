@@ -68,7 +68,7 @@ class BrowserDeploymentView : public BrowserNode, public Labeled<BrowserDeployme
     virtual const QPixmap* pixmap (int) const;
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
     virtual void apply_shortcut(QString s);

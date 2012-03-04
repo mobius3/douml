@@ -84,7 +84,7 @@ class BrowserUseCaseView : public BrowserNode, public Labeled<BrowserUseCaseView
     virtual const QPixmap* pixmap (int) const;
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     virtual void menu();
     virtual void apply_shortcut(QString s);
     virtual void open(bool);

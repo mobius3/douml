@@ -172,7 +172,7 @@ QString MyInputDialog::getText(const char * title, const QString & msg,
   
   return (ok)
     ? d.le->text()
-    : QString::null;
+    : QString();
 }
 
 QString MyInputDialog::getText(const char * title, const QString & msg,
@@ -185,5 +185,5 @@ QString MyInputDialog::getText(const char * title, const QString & msg,
   
   return (ok)
     ? d.cb->currentText()
-    : QString::null;
+    : QString();
 }

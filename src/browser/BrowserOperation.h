@@ -61,7 +61,7 @@ class BrowserOperation : public BrowserNode, public Labeled<BrowserOperation> {
   
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     void post_duplicate();
     
     BrowserNode * get_get_of() { return get_of; };

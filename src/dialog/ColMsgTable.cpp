@@ -287,7 +287,7 @@ void ColMsgTable::change_ranks(int row, int col) {
 	
 	if (upper == 0)
 	  // error
-	  new_hr = QString::null;
+	  new_hr = QString();
 	else {
 	  CodObjCanvas * from;
 	  CodObjCanvas * from_bis;
@@ -298,7 +298,7 @@ void ColMsgTable::change_ranks(int row, int col) {
  
 	  if (to != from)
 	    // error
-	    new_hr = QString::null;
+	    new_hr = QString();
 	}
       }
       if (msg->hierarchical_rank != new_hr) {
@@ -339,7 +339,7 @@ void ColMsgTable::change_ranks(int row, int col) {
       
       if (upper == 0)
 	// error
-	new_hr = QString::null;
+	new_hr = QString();
       else {
 	CodObjCanvas * from;
 	CodObjCanvas * from_bis;
@@ -350,7 +350,7 @@ void ColMsgTable::change_ranks(int row, int col) {
 	
 	if (to != from)
 	  // error
-	  new_hr = QString::null;
+	  new_hr = QString();
       }
     }
     

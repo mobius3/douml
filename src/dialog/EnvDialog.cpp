@@ -584,23 +584,6 @@ int read_doumlrc()
   QString s = QDir::home().absFilePath(".doumlrc");
   FILE * fp = fopen((const char *) s, "r");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
   if (fp == 0) {
     QMessageBox::critical(0, "Bouml", TR("cannot read '%1'", s));
     exit(-1);
@@ -610,7 +593,7 @@ int read_doumlrc()
   set_navigator_path("");
   set_template_project("");
   set_editor("");
-  set_codec("");
+  set_codec("UTF-8");
   UmlDesktop::set_limits(0, 0, 0, 0);
         
   int id = -1;

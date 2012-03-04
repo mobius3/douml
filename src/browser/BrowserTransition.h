@@ -54,7 +54,7 @@ class BrowserTransition : public BrowserNode, public Labeled<BrowserTransition> 
   
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
         
     virtual const QPixmap* pixmap (int) const;
 

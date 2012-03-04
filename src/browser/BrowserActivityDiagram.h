@@ -70,7 +70,7 @@ class BrowserActivityDiagram : public BrowserDiagram {
       
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
   
     virtual const QPixmap* pixmap (int) const;
     virtual void draw_svg() const;

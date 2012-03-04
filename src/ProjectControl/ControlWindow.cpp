@@ -78,7 +78,7 @@ ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control"
   // open
   
   pixmap = QPixmap(fileopen);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString::null,
+  Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString(),
 				  this, SLOT(load()), tools, "open"),
 		  OpenText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Open", this,
@@ -88,7 +88,7 @@ ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control"
   // change user
   
   pixmap = QPixmap(actor);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Who", QString::null,
+  Q3WhatsThis::add(new QToolButton(pixmap, "Who", QString(),
 				  this, SLOT(change_user()), tools, "Change user"),
 		  ChangeUserText);
   menu->setWhatsThis(menu->insertItem(pixmap, "Change &user", this,
@@ -98,7 +98,7 @@ ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control"
   // search
   
   pixmap = QPixmap(browsersearch);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString::null,
+  Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString(),
 				  this, SLOT(browser_search()), tools, "search"),
 		  SearchText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Search", this,
@@ -265,7 +265,7 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
 }
 
 void ControlWindow::load() {
-  QString path = Q3FileDialog::getOpenFileName(QString::null, "*.prj", this);
+  QString path = Q3FileDialog::getOpenFileName(QString(), "*.prj", this);
   
   if (! path.isEmpty())
     load(path);

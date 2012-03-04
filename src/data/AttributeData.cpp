@@ -230,7 +230,7 @@ QString AttributeData::definition(bool full, bool mult, bool init,
     else if (!cpp_decl.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   case JavaView:
     if (full)
       return AttributeDialog::java_decl((BrowserAttribute *) browser_node,
@@ -238,7 +238,7 @@ QString AttributeData::definition(bool full, bool mult, bool init,
     else if (!java_decl.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   case PhpView:
     if (full)
       return AttributeDialog::php_decl((BrowserAttribute *) browser_node,
@@ -246,7 +246,7 @@ QString AttributeData::definition(bool full, bool mult, bool init,
     else if (!php_decl.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   case PythonView:
     if (full)
       return AttributeDialog::python_decl((BrowserAttribute *) browser_node,
@@ -254,14 +254,14 @@ QString AttributeData::definition(bool full, bool mult, bool init,
     else if (!python_decl.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   default:
     if (full)
       return AttributeDialog::idl_decl((BrowserAttribute *) browser_node, mode);
     else if (!idl_decl.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   }	
 }
 
@@ -729,14 +729,14 @@ void AttributeData::read(char * & st, char * & k) {
     k = read_keyword(st);
   }
   else
-    init_value = QString::null;
+    init_value = QString();
   
   if (!strcmp(k, "constraint")) {
     constraint = read_string(st);
     k = read_keyword(st);
   }
   else
-    constraint = QString::null;
+    constraint = QString();
   
   BasicData::read(st, k);	// updates k
   
@@ -765,7 +765,7 @@ void AttributeData::read(char * & st, char * & k) {
     k = read_keyword(st);
   }
   else
-    cpp_decl = QString::null;
+    cpp_decl = QString();
   
   if (!strcmp(k, "transient")) {
     java_transient = TRUE;
@@ -779,28 +779,28 @@ void AttributeData::read(char * & st, char * & k) {
     k = read_keyword(st);
   }
   else
-    java_decl = QString::null;
+    java_decl = QString();
   
   if (!strcmp(k, "java_annotation")) {
     java_annotation = read_string(st);
     k = read_keyword(st);
   }
   else
-    java_annotation = QString::null;
+    java_annotation = QString();
     
   if (!strcmp(k, "php_decl")) {
     php_decl = read_string(st);
     k = read_keyword(st);
   }
   else
-    php_decl = QString::null;
+    php_decl = QString();
     
   if (!strcmp(k, "python_decl")) {
     python_decl = read_string(st);
     k = read_keyword(st);
   }
   else
-    python_decl = QString::null;
+    python_decl = QString();
     
   if (!strcmp(k, "idl_case")) {
     set_idlcase(BrowserAttribute::read_ref(st), "");
@@ -818,5 +818,5 @@ void AttributeData::read(char * & st, char * & k) {
     k = read_keyword(st);
   }
   else
-    idl_decl = QString::null;
+    idl_decl = QString();
 }

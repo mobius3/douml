@@ -405,7 +405,7 @@ QString BrowserClass::full_name(bool rev, bool) const {
 }
 
 QString BrowserClass::contextual_name(ShowContextMode mode) const {
-  const MyStr & (PackageData::*f)() const;
+  const WrapperStr & (PackageData::*f)() const;
   QString sep;
   
   switch (mode) {
@@ -1081,7 +1081,7 @@ BrowserNode * BrowserClass::add_attribute(BrowserAttribute * attr,
 }
 
 BrowserNode * BrowserClass::add_extra_member(BrowserExtraMember * em) {
-  em = (em == 0) ? BrowserExtraMember::new_one(QString::null, this)
+  em = (em == 0) ? BrowserExtraMember::new_one(QString(), this)
 		 : (BrowserExtraMember *) em->duplicate(this, name);
   
   setOpen(TRUE);

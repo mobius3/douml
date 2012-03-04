@@ -95,7 +95,7 @@ void DiagramWindow::hit_select() {
 }
 
 void DiagramWindow::add_edit_button(Q3ToolBar *toolbar) {
-  edit = new QToolButton(*editButton, TR("edit"), QString::null,
+  edit = new QToolButton(*editButton, TR("edit"), QString(),
 			 this, SLOT(call_menu()), toolbar, "edit");
   Q3WhatsThis::add(edit, editText());
   
@@ -111,13 +111,13 @@ void DiagramWindow::add_scale_cmd(Q3ToolBar * toolbar) {
   Q3WhatsThis::add(sb_zoom, zoomText());
   
   QToolButton * fitscale =
-    new QToolButton(*fitscaleButton, TR("optimal scale"), QString::null,
+    new QToolButton(*fitscaleButton, TR("optimal scale"), QString(),
 		    this, SLOT(fit_scale()), toolbar, "optimal scale");
   Q3WhatsThis::add(fitscale, fitzoomText());
   
   //
   
-  optwinsize = new QToolButton(*optwindowsizeButton, TR("optimal window size"), QString::null,
+  optwinsize = new QToolButton(*optwindowsizeButton, TR("optimal window size"), QString(),
 			 this, SLOT(optimal_window_size()), toolbar, "optimal window size");
   Q3WhatsThis::add(optwinsize, optwinsizeText());
   
