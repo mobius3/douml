@@ -450,7 +450,7 @@ void BrowserPackage::update_stereotype(bool rec) {
     if (show_stereotypes &&
 	stereotype[0] &&
 	(strcmp(stereotype, "profile") != 0)) {
-      QString s = toUnicode(stereotype);
+	  QString s = QString(QLatin1String(stereotype));
       int index = s.find(':');
       
       setText(0,
@@ -2507,7 +2507,13 @@ unsigned BrowserPackage::load(bool recursive, int id) {
     (this == BrowserView::get_imported_project());
   
   if (prj)
-    fn.sprintf("%s.prj", (const char *) name);
+  {
+      //const char * tName = name.operator Q3CString();
+      ///QByteArray ba = QString("test").toLatin1();
+      const char *tName = this->name;
+      fn.sprintf("%s.prj", tName);
+      QLOG_INFO() << fn;
+  }
   else
     fn.setNum((id == -1) ? get_ident() : id);
   

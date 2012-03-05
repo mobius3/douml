@@ -345,18 +345,26 @@ void BrowserRelation::update_stereotype(bool) {
     case UmlGeneralisation:
     case UmlDependency:
     case UmlRealize:
-      n = def->get_name(this) + " " +
-	((def->is_a(this)) ? def->get_end_class()
-			   : def->get_start_class())->get_name();
-      break;
+    {
+      bool is_aVar = def->is_a(this);
+      QString latterPart;
+      if(is_aVar)
+        latterPart = def->get_end_class()->get_name();
+      else
+          latterPart = def->get_start_class()->get_name();
+
+      n = def->get_name(this) + " " + latterPart;
+
+    }
+        break;
     default:
-      n = (const char *) name;
+      n = this->get_name();
     }
     
     const char * stereotype = def->get_stereotype();
     
     if (show_stereotypes && stereotype[0]) {
-      QString s = toUnicode(stereotype);
+      QString s = stereotype;
       int index = s.find(':');
       
       setText(0,
