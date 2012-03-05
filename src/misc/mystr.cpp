@@ -34,68 +34,70 @@
 #include "Logging/QsLog.h"
 
 #include "mystr.h"
+char WrapperStr::returnableNullPtr[1] = { 0 };
+QByteArray WrapperStr::ba;
 bool operator==(const WrapperStr & s1, const char * s2)
 {
-    return s1.s == QString::fromLatin1(s2);
+    return s1.wrappedString == QString(QLatin1String(s2));
 }
 bool operator==(const char * s1, const WrapperStr & s2)
 {
-    return s2.s == QString::fromLatin1(s1);
+    return s2.wrappedString == QString(QLatin1String(s2));
 }
 bool operator==(const WrapperStr & s1, const QString & s2)
 {
-    return s1.s == s2;
+    return s1.wrappedString == s2;
 }
 
 bool operator==(const QString & s1, const WrapperStr & s2)
 {
-    return s1 == s2.s;
+    return s1 == s2.wrappedString ;
 }
 
 bool operator!=(const WrapperStr & s1, const char * s2)
 {
-    return s1.s != QString::fromLatin1(s2);
+    return s1.wrappedString != QString(QLatin1String(s2));
 }
 bool operator!=(const char * s1, const WrapperStr & s2)
 {
-    return QString::fromLatin1(s1) != s2.s;
+    return QString(QLatin1String(s1)) != s2.wrappedString ;
 }
 bool operator!=(const WrapperStr & s1, const QString & s2)
 {
-    return s1.s == s2;
+    return s1.wrappedString == s2;
 }
 
 bool operator!=(const QString & s1, const WrapperStr & s2)
 {
-    return s1 == s2.s;
+    return s1 == s2.wrappedString ;
 }
 
 
 QString operator+(const WrapperStr & s1, const char * s2)
 {
     QLOG_INFO() << Q_FUNC_INFO;
-    QLOG_INFO() << s1.s << " " << QString::fromLatin1(s2)<< Q_FUNC_INFO;
-    return s1.s + QString::fromLatin1(s2);
+    QLOG_INFO() << s1.wrappedString << " " << QString(QLatin1String(s2))<< Q_FUNC_INFO;
+    return s1.wrappedString + QString(QLatin1String(s2));
 }
 
 QString operator+(const char * s1, const WrapperStr & s2)
 {
 
     QLOG_INFO() << Q_FUNC_INFO;
-    QLOG_INFO() << s2.s << " " << QString::fromLatin1(s1);
-    return s2.s + QString::fromLatin1(s1);
+    QLOG_INFO() << s2.wrappedString << " " << QString(QLatin1String(s1));
+    return QString(QLatin1String(s1)) + s2.wrappedString ;
 }
 QString operator+(const WrapperStr & s1, const QString & s2)
 {
     QLOG_INFO() << Q_FUNC_INFO;
-    QLOG_INFO() << s1.s << " " << s2 << Q_FUNC_INFO;
-    return s1.s + s2;
+    QLOG_INFO() << s1.wrappedString << " " << s2 << Q_FUNC_INFO;
+    return s1.wrappedString + s2;
 }
 QString operator+(const QString & s1, const WrapperStr & s2)
 {
     QLOG_INFO() << Q_FUNC_INFO;
-    QLOG_INFO() << s1 << " " << s2.s << Q_FUNC_INFO;
-    return s1 + s2.s;
+    QLOG_INFO() << s1 << " " << s2.wrappedString << Q_FUNC_INFO;
+    return s1 + s2.wrappedString ;
 }
 
 #if 0

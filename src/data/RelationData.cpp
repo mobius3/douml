@@ -47,6 +47,7 @@
 #include "GenerationSettings.h"
 #include "mu.h"
 #include "translate.h"
+#include "Logging/QsLog.h"
 
 IdDict<RelationData> RelationData::all(1023, __FILE__);
 Q3PtrList<RelationData> RelationData::Unconsistent;
@@ -321,19 +322,24 @@ BrowserRelation * RelationData::set_start_end(BrowserRelation * s, BrowserClass 
   return end;
 }
 
-QString RelationData::get_name(BrowserRelation * cl) const {
-  if (cl == start) {
+QString RelationData::get_name(BrowserRelation * cl) const
+{
+  if (cl == start)
+  {
     if (! a.role.isEmpty())
-      return QString((const char *) a.role) + " (" + get_name() + ")";
+       QLOG_INFO() << "Returning name for relation: " << QString((const char *) a.role) + " (" + get_name() + ")";
+       return QString((const char *) a.role) + " (" + get_name() + ")";
   }
-  else if (cl == end) {
+  else if (cl == end)
+  {
     if (! b.role.isEmpty())
-      return QString((const char *) b.role) + " (" + get_name() + ")";
+        QLOG_INFO() << "Returning name for relation: " << QString((const char *) b.role) + " (" + get_name() + ")";
+        return QString((const char *) b.role) + " (" + get_name() + ")";
   }
   
-  return (name != default_name(type))
-    ? "(" + name + ")"
-    : QString((const char *) name);
+  QString relationName = (name != default_name(type))? "(" + name + ")" : QString((const char *) name);
+  QLOG_INFO() << "Returning name for relation: " << relationName;
+  return relationName;
 }
 
 QString RelationData::definition(bool, bool with_kind) const {
