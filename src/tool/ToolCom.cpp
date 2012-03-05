@@ -493,7 +493,7 @@ void ToolCom::write_id(BrowserNode * bn, char k, const char * s)
 void ToolCom::write_string(const char * p)
 {
     if (p == 0)
-        // from a QString::null
+        // from a QString()
         p = "";
 
     int len = strlen(p) + 1;

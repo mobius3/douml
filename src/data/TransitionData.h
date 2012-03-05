@@ -37,9 +37,9 @@ class BrowserTransition;
 class BrowserNode;
 
 struct TransDef {
-  MyStr trigger;
-  MyStr guard;
-  MyStr expr;
+  WrapperStr trigger;
+  WrapperStr guard;
+  WrapperStr expr;
   
   QString str(bool horiz) const;
   void save(QTextStream & st, const char * lang) const;

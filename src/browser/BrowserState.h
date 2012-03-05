@@ -65,7 +65,7 @@ class BrowserState : public BrowserNode, public Labeled<BrowserState> {
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
 				   BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     static BrowserNodeList & instances(BrowserNodeList &, bool sort);
     static BrowserState * add_state(BrowserNode * future_parent, bool machine);
     static BrowserState * add_state(BrowserNode * future_parent, QString name);

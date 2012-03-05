@@ -87,7 +87,7 @@ JavaCatWindow::JavaCatWindow() : Q3MainWindow(0, "Java Catalog", Qt::WDestructiv
   menuBar()->insertItem("&File", menu);
   
   pixmap = QPixmap(fileopen);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString::null,
+  Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString(),
 				  this, SLOT(load()), tools, "open"),
 		  OpenText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Open", this,
@@ -95,7 +95,7 @@ JavaCatWindow::JavaCatWindow() : Q3MainWindow(0, "Java Catalog", Qt::WDestructiv
 		     OpenText);
   
   pixmap = QPixmap(filesave);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Save", QString::null,
+  Q3WhatsThis::add(new QToolButton(pixmap, "Save", QString(),
 				  this, SLOT(save()), tools, "save"),
 		  SaveText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Save", this,
@@ -104,7 +104,7 @@ JavaCatWindow::JavaCatWindow() : Q3MainWindow(0, "Java Catalog", Qt::WDestructiv
   
   menu->insertSeparator();
   pixmap = QPixmap(::scan);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Scan", QString::null,
+  Q3WhatsThis::add(new QToolButton(pixmap, "Scan", QString(),
 				  this, SLOT(scan()), tools, "scan"),
 		  ScanText);
   menu->setWhatsThis(menu->insertItem(pixmap, "S&can", this,
@@ -118,7 +118,7 @@ JavaCatWindow::JavaCatWindow() : Q3MainWindow(0, "Java Catalog", Qt::WDestructiv
   menuBar()->insertItem("&Browse", menu);
   
   pixmap = QPixmap(browsersearch);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString::null,
+  Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString(),
 				  this, SLOT(browser_search()), tools, "search"),
 		  SearchText);
   menu->setWhatsThis(menu->insertItem(pixmap, "&Search", this,
@@ -126,13 +126,13 @@ JavaCatWindow::JavaCatWindow() : Q3MainWindow(0, "Java Catalog", Qt::WDestructiv
 		     SearchText);
   
   pixmap = QPixmap(left_xpm);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Back", QString::null,
+  Q3WhatsThis::add(new QToolButton(pixmap, "Back", QString(),
 				  this, SLOT(historic_back()),
 				  tools, "back"),
 		  LeftText);
   
   pixmap = QPixmap(right_xpm);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Forward", QString::null,
+  Q3WhatsThis::add(new QToolButton(pixmap, "Forward", QString(),
 				  this, SLOT(historic_forward()),
 				  tools, "forward"),
 		  RightText);
@@ -264,7 +264,7 @@ void JavaCatWindow::load() {
 
 void JavaCatWindow::save() {
   QString path =
-    Q3FileDialog::getSaveFileName(QString::null, "*.cat", this);
+    Q3FileDialog::getSaveFileName(QString(), "*.cat", this);
   
   if (! path.isEmpty()) {
     QApplication::setOverrideCursor(Qt::waitCursor);
@@ -365,5 +365,5 @@ void JavaCatWindow::trace(Q3CString s)
 
 void JavaCatWindow::clear_trace()
 {
-  the->comment->setText(QString::null);
+  the->comment->setText(QString());
 }

@@ -88,7 +88,7 @@ void AType::read(char * & st, const char * t, const char * ex) {
   
   if (!strcmp(k, t)) {
     type = BrowserClass::read_ref(st);
-    explicit_type = QString::null;
+    explicit_type = QString();
   }
   else if (!strcmp(k, ex)) {
     type = 0;
@@ -101,7 +101,7 @@ void AType::read(char * & st, const char * t, const char * ex) {
 void AType::read(char * & st, const char * t, const char * ex, const char * k) {
   if (!strcmp(k, t)) {
     type = BrowserClass::read_ref(st);
-    explicit_type = QString::null;
+    explicit_type = QString();
   }
   else if (!strcmp(k, ex)) {
     type = 0;

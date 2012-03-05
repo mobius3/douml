@@ -534,7 +534,7 @@ void TransitionCanvas::update(bool updatepos) {
       s = toUnicode(s);
     }
     else if ((s = data->get_start()->get_name()) == "<transition>")
-      s = QString::null;
+      s = QString();
     
     if (s.isEmpty()) {
       // relation does not have name

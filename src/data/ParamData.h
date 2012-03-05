@@ -33,10 +33,10 @@
 
 class ParamData {
   protected:
-    MyStr name;
+    WrapperStr name;
     UmlParamDirection dir;
     AType type;
-    MyStr default_value;
+    WrapperStr default_value;
 
   public:
     ParamData();

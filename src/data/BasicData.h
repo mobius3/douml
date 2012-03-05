@@ -65,7 +65,7 @@ class BasicData : public QObject {
   protected:
     static Q3PtrList<BasicData> removed;
   
-    SharedStr stereotype;
+    WrapperStr stereotype;
     BrowserNode * browser_node;
 
     void redelete_it() { emit deleted(); };
@@ -81,7 +81,7 @@ class BasicData : public QObject {
     virtual void undelete(QString & warning, QString & renamed);
     static void resignal_deleted();
         
-    const char * get_stereotype() const { return stereotype; };
+    const char * get_stereotype() const { return stereotype;}
     const char * get_short_stereotype() const;
     virtual bool set_stereotype(const QString &);
     virtual bool set_stereotype(const Q3CString &);

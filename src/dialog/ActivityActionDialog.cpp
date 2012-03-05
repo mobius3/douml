@@ -90,7 +90,7 @@ ActivityActionDialog::ActivityActionDialog(ActivityActionData * a)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 
@@ -689,7 +689,7 @@ void AcceptEventDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   new QLabel("", ocl_grid);
   Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+    new Q3ButtonGroup(2, Qt::Horizontal, QString(), ocl_grid);
 
   unmarshall_cb = new QCheckBox(TR("unmarshall"), grp);
   unmarshall_cb->setDisabled(visit);
@@ -1166,7 +1166,7 @@ void ChangeVariableValueDialog::init(Q3TabDialog * t, ActivityActionData * act,
   
   new QLabel("", ocl_grid);
   Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+    new Q3ButtonGroup(2, Qt::Horizontal, QString(), ocl_grid);
 
   flag_cb = new QCheckBox(flg_name, grp);
   flag_cb->setDisabled(visit);
@@ -1214,7 +1214,7 @@ void CallOperationDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   new QLabel("", ocl_grid);
   Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+    new Q3ButtonGroup(2, Qt::Horizontal, QString(), ocl_grid);
 
   synchronous_cb = new QCheckBox(TR("synchronous"), grp);
   synchronous_cb->setDisabled(visit);
@@ -1493,7 +1493,7 @@ void CallBehaviorDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   new QLabel("", ocl_grid);
   Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+    new Q3ButtonGroup(2, Qt::Horizontal, QString(), ocl_grid);
 
   synchronous_cb = new QCheckBox(TR("synchronous"), grp);
   synchronous_cb->setDisabled(visit);
@@ -1731,7 +1731,7 @@ void DestroyObjectDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   new QLabel("", ocl_grid);
   Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+    new Q3ButtonGroup(2, Qt::Horizontal, QString(), ocl_grid);
 
   is_destroy_links_cb = new QCheckBox(TR("links"), grp);
   is_destroy_links_cb->setDisabled(visit);
@@ -1836,7 +1836,7 @@ void ReduceDialog::init(Q3TabDialog * t, ActivityActionData * act,
 
   new QLabel("", ocl_grid);
   Q3ButtonGroup * grp = 
-    new Q3ButtonGroup(2, Qt::Horizontal, QString::null, ocl_grid);
+    new Q3ButtonGroup(2, Qt::Horizontal, QString(), ocl_grid);
 
   is_ordered_cb = new QCheckBox(TR("ordered"), grp);
   is_ordered_cb->setDisabled(visit);

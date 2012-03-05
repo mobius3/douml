@@ -57,7 +57,7 @@ FlowDialog::FlowDialog(FlowData * d)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 

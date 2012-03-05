@@ -73,7 +73,7 @@ Visit us at <i>http://bouml-ng.sourceforge.net</i>\n\
 <br>\n<br>\n<br>\n";
 
   Q3TextView * tx =
-    new Q3TextView(msg, QString::null, this);
+    new Q3TextView(msg, QString(), this);
   QFont fnt = tx->font();
   
   fnt.setItalic(TRUE);

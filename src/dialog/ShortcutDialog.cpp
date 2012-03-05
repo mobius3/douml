@@ -191,8 +191,8 @@ ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
   }
   sortColumn(3, TRUE, TRUE);
   
-  setItem(row, 3, new ComboItem(this, QString::null, Shortcut::keys(), FALSE));
-  setItem(row, 4, new ComboItem(this, QString::null, values, FALSE));
+  setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
+  setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
 
   adjustColumn(0);
   adjustColumn(1);
@@ -281,11 +281,11 @@ void ShortcutTable::insert_row_before(int row) {
     setItem(index, 4, it);
   }
   
-  setText(row, 0, QString::null);
-  setText(row, 1, QString::null);
-  setText(row, 2, QString::null);
-  setItem(row, 3, new ComboItem(this, QString::null, Shortcut::keys(), FALSE));
-  setItem(row, 4, new ComboItem(this, QString::null, values, FALSE));
+  setText(row, 0, QString());
+  setText(row, 1, QString());
+  setText(row, 2, QString());
+  setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
+  setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
 }
 
 void ShortcutTable::insert_row_after(int row) {
@@ -308,11 +308,11 @@ void ShortcutTable::insert_row_after(int row) {
     setItem(index, 4, it);
   }
   
-  setText(row + 1, 0, QString::null);
-  setText(row + 1, 1, QString::null);
-  setText(row + 1, 2, QString::null);
-  setItem(row + 1, 3, new ComboItem(this, QString::null, Shortcut::keys(), FALSE));
-  setItem(row + 1, 4, new ComboItem(this, QString::null, values, FALSE));
+  setText(row + 1, 0, QString());
+  setText(row + 1, 1, QString());
+  setText(row + 1, 2, QString());
+  setItem(row + 1, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
+  setItem(row + 1, 4, new ComboItem(this, QString(), values, FALSE));
 }
 
 void ShortcutTable::delete_row(int row) {
@@ -323,11 +323,11 @@ void ShortcutTable::delete_row(int row) {
     
   if (row == (n - 1)) {
     // the last line : empty it
-    setText(row, 0, QString::null);
-    setText(row, 1, QString::null);
-    setText(row, 2, QString::null);
-    setItem(row, 3, new ComboItem(this, QString::null, Shortcut::keys(), FALSE));
-    setItem(row, 4, new ComboItem(this, QString::null, values, FALSE));
+    setText(row, 0, QString());
+    setText(row, 1, QString());
+    setText(row, 2, QString());
+    setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
+    setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
   }
   else {
     for (index = row; index != n - 1; index += 1) {

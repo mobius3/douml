@@ -181,7 +181,7 @@ QString extract_name(QString s)
   
   if (index == -1)
     // !!
-    return QString::null;
+    return QString();
   
   const char * p = s;
 
@@ -455,12 +455,13 @@ void set_codec(QString s)
 
 QString toUnicode(const char * str)
 {
-  if (Codec == 0)
-    return str;
-  else if ((str == 0) || (*str == 0))
-    return QString::null;
-  else
-    return Codec->toUnicode(str);
+//  if (Codec == 0)
+//    return str;
+//  else if ((str == 0) || (*str == 0))
+//    return QString();
+//  else
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    return codec->toUnicode(str);
 }
 
 void latinize(QString & s)

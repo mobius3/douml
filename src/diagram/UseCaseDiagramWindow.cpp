@@ -69,86 +69,86 @@ UseCaseDiagramWindow::UseCaseDiagramWindow(const QString & s, BrowserUseCaseDiag
   add_edit_button(toolbar);
   
   select =
-    new QToolButton(*selectButton, TR("Select"), QString::null,
+    new QToolButton(*selectButton, TR("Select"), QString(),
 		    this, SLOT(hit_select()), toolbar, "select");
   select->setToggleButton(TRUE);
   select->setOn(TRUE);
   current_button = UmlSelect;
   
   addClass =
-    new QToolButton(*actorButton, TR("Actor"), QString::null,
+    new QToolButton(*actorButton, TR("Actor"), QString(),
 		    this, SLOT(hit_class()), toolbar, "actor");
   addClass->setToggleButton(TRUE);
   Q3WhatsThis::add(addClass, addactorText());
   
   addUseCase =
-    new QToolButton(*usecaseButton, TR("Use Case"), QString::null,
+    new QToolButton(*usecaseButton, TR("Use Case"), QString(),
 		    this, SLOT(hit_usecase()), toolbar, "use case");
   addUseCase->setToggleButton(TRUE);
   Q3WhatsThis::add(addUseCase, addusecaseText());
   
   addSubject
-    = new QToolButton(*subjectButton, TR("Add Subject"), QString::null,
+    = new QToolButton(*subjectButton, TR("Add Subject"), QString(),
 		      this, SLOT(hit_subject()), toolbar, "add subject");
   addSubject->setToggleButton(TRUE);
   Q3WhatsThis::add(addSubject, addsubjectText());
   
   addPackage
-    = new QToolButton(*packageButton, TR("Add Package"), QString::null,
+    = new QToolButton(*packageButton, TR("Add Package"), QString(),
 		      this, SLOT(hit_package()), toolbar, "add package");
   addPackage->setToggleButton(TRUE);
   Q3WhatsThis::add(addPackage, addpackageText());
   
   addFragment
-    = new QToolButton(*fragmentButton, TR("Add Fragment"), QString::null,
+    = new QToolButton(*fragmentButton, TR("Add Fragment"), QString(),
 		      this, SLOT(hit_fragment()), toolbar, "add fragment");
   addFragment->setToggleButton(TRUE);
   Q3WhatsThis::add(addFragment, addfragmentText());
   
   association =
-    new QToolButton(*associationButton, TR("Association"), QString::null,
+    new QToolButton(*associationButton, TR("Association"), QString(),
 		    this, SLOT(hit_association()), toolbar, "association");
   association->setToggleButton(TRUE);
   Q3WhatsThis::add(association, associationText());
   
   directionalassociation =
-    new QToolButton(*directionalAssociationButton, TR("Association"), QString::null,
+    new QToolButton(*directionalAssociationButton, TR("Association"), QString(),
 		    this, SLOT(hit_directionalassociation()), toolbar, "association");
   directionalassociation->setToggleButton(TRUE);
   Q3WhatsThis::add(directionalassociation, associationText());
   
   dependency =
-    new QToolButton(*dependencyButton, TR("Dependency"), QString::null,
+    new QToolButton(*dependencyButton, TR("Dependency"), QString(),
 		    this, SLOT(hit_dependency()), toolbar, "dependency");
   dependency->setToggleButton(TRUE);
   Q3WhatsThis::add(dependency, dependencyText());
   
   inherit =
-    new QToolButton(*generalisationButton, TR("Generalisation"), QString::null,
+    new QToolButton(*generalisationButton, TR("Generalisation"), QString(),
 		    this, SLOT(hit_inherit()), toolbar, "generalisation");
   inherit->setToggleButton(TRUE);
   Q3WhatsThis::add(inherit, inheritText());
   
   note =
-    new QToolButton(*noteButton, TR("Note"), QString::null,
+    new QToolButton(*noteButton, TR("Note"), QString(),
 		    this, SLOT(hit_note()), toolbar, "note");
   note->setToggleButton(TRUE);
   Q3WhatsThis::add(note, noteText());
   
   anchor =
-    new QToolButton(*anchorButton, TR("Anchor"), QString::null,
+    new QToolButton(*anchorButton, TR("Anchor"), QString(),
 		    this, SLOT(hit_anchor()), toolbar, "anchor");
   anchor->setToggleButton(TRUE);
   Q3WhatsThis::add(anchor, anchorText());
   
   text =
-    new QToolButton(*textButton, TR("Text"), QString::null,
+    new QToolButton(*textButton, TR("Text"), QString(),
 		    this, SLOT(hit_text()), toolbar, "text");
   text->setToggleButton(TRUE);
   Q3WhatsThis::add(text, textText());
   
   image =
-    new QToolButton(*imageButton, TR("Image"), QString::null,
+    new QToolButton(*imageButton, TR("Image"), QString(),
 		    this, SLOT(hit_image()), toolbar, "image");
   image->setToggleButton(TRUE);
   Q3WhatsThis::add(image, imageText());

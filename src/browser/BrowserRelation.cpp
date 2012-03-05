@@ -326,13 +326,13 @@ void BrowserRelation::update_set_oper() {
 }
 
 void BrowserRelation::add_get_oper() {
-  set_get_oper(BrowserOperation::new_one(QString::null, (BrowserNode *) parent()));
+  set_get_oper(BrowserOperation::new_one(QString(), (BrowserNode *) parent()));
   update_get_oper();
   ((BrowserNode *) parent())->modified();
 }
 
 void BrowserRelation::add_set_oper() {
-  set_set_oper(BrowserOperation::new_one(QString::null, (BrowserNode *) parent()));
+  set_set_oper(BrowserOperation::new_one(QString(), (BrowserNode *) parent()));
   update_set_oper();
   ((BrowserNode *) parent())->modified();
 }
@@ -345,18 +345,26 @@ void BrowserRelation::update_stereotype(bool) {
     case UmlGeneralisation:
     case UmlDependency:
     case UmlRealize:
-      n = def->get_name(this) + " " +
-	((def->is_a(this)) ? def->get_end_class()
-			   : def->get_start_class())->get_name();
-      break;
+    {
+      bool is_aVar = def->is_a(this);
+      QString latterPart;
+      if(is_aVar)
+        latterPart = def->get_end_class()->get_name();
+      else
+          latterPart = def->get_start_class()->get_name();
+
+      n = def->get_name(this) + " " + latterPart;
+
+    }
+        break;
     default:
-      n = (const char *) name;
+      n = this->get_name();
     }
     
     const char * stereotype = def->get_stereotype();
     
     if (show_stereotypes && stereotype[0]) {
-      QString s = toUnicode(stereotype);
+      QString s = stereotype;
       int index = s.find(':');
       
       setText(0,
@@ -386,7 +394,7 @@ QString BrowserRelation::stereotypes_properties() const {
     return QString("<<") + def->get_short_stereotype() +
       QString(">>\n") + stb;
   else
-    return QString::null;
+    return QString();
 }
 
 AType BrowserRelation::class_association() const {

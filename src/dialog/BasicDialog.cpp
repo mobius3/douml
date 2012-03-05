@@ -56,7 +56,7 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 

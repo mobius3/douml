@@ -29,129 +29,148 @@
 // I consider that QString and Q3CString are too memory expensive
 
 #include <q3strlist.h>
-#include <qstring.h>
+#include <QString>
 //Added by qt3to4:
 #include <Q3CString>
+#include "Logging/QsLog.h"
+#include "myio.h"
+#include "strutil.h"
 
-class SharedStr {
+
+class WrapperStr
+{
   public:
-    SharedStr() { p = Empty; };
-    SharedStr(const SharedStr & s) { p = s.p; };
-    bool isEmpty() const { return *p == 0; };
-    unsigned int length() const;
-    int find(const char *, int index = 0) const;
-    int find(int c, int index = 0) const;
-    
-    SharedStr & operator=(const SharedStr & s) { p = s.p; return *this; };
-    SharedStr & operator=(const char *);
-    SharedStr & operator=(const QString &);
-    SharedStr & operator=(const Q3CString &);
-    operator const char *() const { return p; };
-    operator QString() const { return p; };
-    operator Q3CString() const { return p; };
-    
-    //static void statistics();
-    
+    static QByteArray ba;
+    WrapperStr(){}
+    ~WrapperStr(){}
+    WrapperStr(const WrapperStr & other)
+    {
+        //QLOG_INFO()() << Q_FUNC_INFO;
+        *this = other;
+    }
+    WrapperStr(const QString & other)
+    {
+        //QLOG_INFO()() << Q_FUNC_INFO;
+        this->wrappedString = other;
+    }
+    //QString get(){return s;}
+    bool isEmpty() const
+    {
+        return this->wrappedString.isEmpty();
+    }
+    unsigned int length() const
+    {
+        return this->wrappedString.length();
+    }
+    int find(const char * toFind, int index = 0) const
+    {
+        return wrappedString.indexOf(QString(QLatin1String(toFind)), index);
+    }
+    int find(int c, int index = 0) const
+    {
+        return wrappedString.indexOf(QString::number(c) , index);
+    }
+
+    WrapperStr & operator=(const WrapperStr & other)
+    {
+        //QLOG_INFO()() << Q_FUNC_INFO;
+        //QLOG_INFO()() << "Otheris " << other.wrappedString << "this is" << this->wrappedString;
+        this->wrappedString = other.wrappedString; return *this;
+        //QLOG_INFO()() << "Otheris " << other.wrappedString << "this is" << this->wrappedString;
+    }
+    WrapperStr & operator=(const char * c)
+    {
+        //QLOG_INFO()() << Q_FUNC_INFO;
+        //QLOG_INFO()() << "Otheris " << c << "this is" << this->wrappedString;
+        this->wrappedString = QString(QLatin1String(c));
+        return *this;
+        //QLOG_INFO()() << "Otheris " << c << "this is" << this->wrappedString;
+    }
+    WrapperStr & operator=(const QString &other )
+    {
+        //QLOG_INFO()() << Q_FUNC_INFO;
+        //QLOG_INFO()() << "Otheris " << other << "this is" << this->wrappedString;
+        this->wrappedString = other; return *this;
+        //QLOG_INFO()() << "Otheris " << other << "this is" << this->wrappedString;
+
+    }
+    WrapperStr & operator=(const Q3CString &cstr)
+    {
+        //QLOG_INFO()() << Q_FUNC_INFO;
+        //QLOG_INFO()() << cstr.data()<< Q_FUNC_INFO;
+        this->wrappedString = QByteArray(cstr); return *this;
+    }
+    operator const char *() const
+    {
+        ////QLOG_INFO()() << Q_FUNC_INFO;
+        ////QLOG_INFO()() << wrappedString;
+        if(wrappedString.length()>0)
+        {
+            ba = wrappedString.toLatin1();
+            ////QLOG_INFO()() << ba;
+            const char* retVal = ba.data();
+            return retVal;
+        }
+        int k = 0;
+        k++;
+        return returnableNullPtr;
+    }
+
+    operator QString() const
+    {
+        //QLOG_INFO()() << Q_FUNC_INFO;
+        //QLOG_INFO()() << this->wrappedString;
+        return this->wrappedString;
+    }
+    operator Q3CString() const
+    {
+        //QLOG_INFO()() << Q_FUNC_INFO;
+        //QLOG_INFO()() << this->wrappedString.toLatin1();
+        return this->wrappedString.toLatin1();
+    }
+
+    friend bool operator==(const WrapperStr & s1, const char * s2);
+    friend bool operator==(const char * s1, const WrapperStr & s2);
+    friend bool operator==(const WrapperStr & s1, const QString & s2);
+    friend bool operator==(const QString & s1, const WrapperStr & s2);
+
+    friend bool operator!=(const WrapperStr & s1, const char * s2);
+    friend bool operator!=(const char * s1, const WrapperStr & s2);
+    friend bool operator!=(const WrapperStr & s1, const QString & s2);
+    friend bool operator!=(const QString & s1, const WrapperStr & s2);
+
+    friend QString operator+(const WrapperStr & s1, const char * s2);
+    friend QString operator+(const char * s1, const WrapperStr & s2);
+    friend QString operator+(const WrapperStr & s1, const QString & s2);
+    friend QString operator+(const QString & s1, const WrapperStr & s2);
+
+    void assign(const char *c, int len)
+    {
+        //QLOG_INFO()() << Q_FUNC_INFO;
+        //QLOG_INFO()() << QString(QLatin1String(c));
+        Q_UNUSED(len); this->wrappedString = QString(QLatin1String(c));
+    }
+    //void assign(QString(), int len){this->s = QString();}
+
   protected:
-    char * p;
-    static char Empty[1];
-#define SHAREDDICTSIZE 128
-    static Q3StrList shared[SHAREDDICTSIZE];
-    
-    char * assign(const char *, int len);
+    static char returnableNullPtr[1];
+
+  QString wrappedString;
 };
 
-bool operator==(const SharedStr & s1, const SharedStr & s2);
-bool operator==(const SharedStr & s1, const char * s2);
-bool operator==(const char * s1, const SharedStr & s2);
-bool operator==(const SharedStr & s1, const QString & s2);
-bool operator==(const QString & s1, const SharedStr & s2);
+bool operator==(const WrapperStr & s1, const char * s2);
+bool operator==(const char * s1, const WrapperStr & s2);
+bool operator==(const WrapperStr & s1, const QString & s2);
+bool operator==(const QString & s1, const WrapperStr & s2);
+bool operator!=(const WrapperStr & s1, const char * s2);
+bool operator!=(const char * s1, const WrapperStr & s2);
+bool operator!=(const WrapperStr & s1, const QString & s2);
+bool operator!=(const QString & s1, const WrapperStr & s2);
+QString operator+(const WrapperStr & s1, const char * s2);
+QString operator+(const char * s1, const WrapperStr & s2);
+QString operator+(const WrapperStr & s1, const QString & s2);
+QString operator+(const QString & s1, const WrapperStr & s2);
 
-bool operator!=(const SharedStr & s1, const SharedStr & s2);
-bool operator!=(const SharedStr & s1, const char * s2);
-bool operator!=(const char * s1, const SharedStr & s2);
-bool operator!=(const SharedStr & s1, const QString & s2);
-bool operator!=(const QString & s1, const SharedStr & s2);
 
-// may be shared
-
-class MayBeSharedStr : public SharedStr {
-  private:
-    MayBeSharedStr & operator=(const MayBeSharedStr &) {
-      // must not be used, use assign operation
-      extern MayBeSharedStr & illegal_MayBeSharedStr_usage();
-      return illegal_MayBeSharedStr_usage();
-    };
-    MayBeSharedStr & operator=(const char *) {
-      // must not be used, use assign operation
-      extern MayBeSharedStr & illegal_MayBeSharedStr_usage();
-      return illegal_MayBeSharedStr_usage();
-    };
-    MayBeSharedStr & operator=(const QString &) {
-      // must not be used, use assign operation
-      extern MayBeSharedStr & illegal_MayBeSharedStr_usage();
-      return illegal_MayBeSharedStr_usage();
-    };
-    MayBeSharedStr & operator=(const Q3CString &) {
-      // must not be used, use assign operation
-      extern MayBeSharedStr & illegal_MayBeSharedStr_usage();
-      return illegal_MayBeSharedStr_usage();
-    };
-    
-  public:
-    MayBeSharedStr() : SharedStr() {};
-    MayBeSharedStr(const MayBeSharedStr &);
-virtual ~MayBeSharedStr();
-    operator const char *() const { return p; };
-    operator QString() const { return p; };
-    operator Q3CString() const { return p; };
-    
-    char * assign(const char *, bool share);
-    char * assign(const QString &, bool share);
-    char * assign(const Q3CString &, bool share);
-    
-  protected:
-    char * assign(const char * s, int len, bool share);
-};
-
-// never shared
-
-class MyStr {    
-  public:
-    MyStr() { p = 0; };
-    MyStr(const MyStr &);
-    MyStr(const QString &);
-    MyStr(const char *);
-virtual ~MyStr();
-    MyStr & operator=(const MyStr &);
-    MyStr & operator=(const char *);
-    MyStr & operator=(const QString &);
-    MyStr & operator=(const Q3CString &);
-    operator const char *() const { return (p != 0) ? p : ""; };
-    operator QString() const { return p; };
-    operator Q3CString() const { return p; };
-    bool isEmpty() const { return p == 0; };
-    unsigned int length() const;
-    
-  protected:
-    char * p;
-    
-    void assign(const char *, int len);
-};
-
-bool operator==(const MyStr & s1, const char * s2);
-bool operator==(const char * s1, const MyStr & s2);
-bool operator==(const MyStr & s1, const QString & s2);
-bool operator==(const QString & s1, const MyStr & s2);
-
-bool operator!=(const MyStr & s1, const char * s2);
-bool operator!=(const char * s1, const MyStr & s2);
-bool operator!=(const MyStr & s1, const QString & s2);
-bool operator!=(const QString & s1, const MyStr & s2);
-
-QString operator+(const MyStr & s1, const char * s2);
-QString operator+(const char * s1, const MyStr & s2);
-QString operator+(const MyStr & s1, const QString & s2);
-QString operator+(const QString & s1, const MyStr & s2);
 
 #endif

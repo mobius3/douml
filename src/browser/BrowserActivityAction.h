@@ -66,7 +66,7 @@ class BrowserActivityAction : public BrowserNode, public Labeled<BrowserActivity
     virtual ~BrowserActivityAction();
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
 				   BooL & duplicable) const;
     static BrowserActivityAction * add_activityaction(BrowserNode * future_parent,

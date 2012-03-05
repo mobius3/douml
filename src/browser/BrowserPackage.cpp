@@ -450,7 +450,7 @@ void BrowserPackage::update_stereotype(bool rec) {
     if (show_stereotypes &&
 	stereotype[0] &&
 	(strcmp(stereotype, "profile") != 0)) {
-      QString s = toUnicode(stereotype);
+	  QString s = QString(QLatin1String(stereotype));
       int index = s.find(':');
       
       setText(0,
@@ -474,7 +474,7 @@ QString BrowserPackage::full_name(bool rev, bool) const {
     return full_path;
   
   if (this == BrowserView::get_project())
-    return QString::null;
+    return QString();
   
   QString p = ((BrowserNode *) parent())->full_name(FALSE, FALSE);
 
@@ -493,7 +493,7 @@ void BrowserPackage::prepare_for_sort()
   IdIterator<BrowserPackage> it(all);
   
   while (it.current() != 0) {
-    it.current()->full_path = QString::null;
+    it.current()->full_path = QString();
     ++it;
   } 
 }
@@ -831,13 +831,13 @@ void BrowserPackage::exec_menu_choice(int rank) {
     ReferenceDialog::show(this);
     return;
   case 14:
-    import_project(QString::null);
+    import_project(QString());
     return;
   case 15:
     add_package(TRUE);
     break;
   case 16:
-    import_project(QString::null, TRUE);
+    import_project(QString(), TRUE);
     break;
   case 17:
     update_lib();
@@ -1124,7 +1124,7 @@ BrowserNodeList & BrowserPackage::instances(BrowserNodeList & result) {
   
   while (it.current() != 0) {
     if (!it.current()->deletedp()) {
-      it.current()->full_path = QString::null;
+      it.current()->full_path = QString();
       result.append(it.current());
     }
     ++it;
@@ -1682,7 +1682,7 @@ bool BrowserPackage::tool_cmd(ToolCom * com, const char * args) {
 
 bool BrowserPackage::tool_global_cmd(ToolCom * com, const char * args)
 {
-  const MyStr & (PackageData::* pf)() const;
+  const WrapperStr & (PackageData::* pf)() const;
   
   switch ((unsigned char) args[-1]) {
   case findCppNamespaceCmd:
@@ -1759,7 +1759,7 @@ bool BrowserPackage::tool_global_cmd(ToolCom * com, const char * args)
 
 BrowserPackage *
   BrowserPackage::find_it(const char * s,
-			  const MyStr & (PackageData::* pf)() const) {
+			  const WrapperStr & (PackageData::* pf)() const) {
   if (!deletedp()) {
     if ((def->*pf)() == s) {
       // find !
@@ -2507,7 +2507,13 @@ unsigned BrowserPackage::load(bool recursive, int id) {
     (this == BrowserView::get_imported_project());
   
   if (prj)
-    fn.sprintf("%s.prj", (const char *) name);
+  {
+      //const char * tName = name.operator Q3CString();
+      ///QByteArray ba = QString("test").toLatin1();
+      const char *tName = this->name;
+      fn.sprintf("%s.prj", tName);
+      QLOG_INFO() << fn;
+  }
   else
     fn.setNum((id == -1) ? get_ident() : id);
   

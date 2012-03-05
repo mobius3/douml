@@ -63,7 +63,7 @@ class BrowserExpansionRegion : public BrowserNode, public Labeled<BrowserExpansi
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
 				   BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent);
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent, const char * name);
     static BrowserExpansionRegion * get_expansionregion(BrowserNode * parent);

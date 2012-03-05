@@ -286,8 +286,8 @@ void Lex::bypass_pp()
     switch (c) {
     case '\n':
     case EOF:
-      _context.comments = QString::null;
-      _context.description = QString::null;
+      _context.comments = QString();
+      _context.description = QString();
       return;
     case '\\':
       get();
@@ -1002,7 +1002,7 @@ Q3CString Lex::get_comments()
 {
   Q3CString result = Q3CString(_context.comments.toAscii().constData());
   
-  _context.comments = QString::null;
+  _context.comments = QString();
   return result;
 }
 
@@ -1010,7 +1010,7 @@ Q3CString Lex::get_comments(Q3CString & co)
 {
   Q3CString result = Q3CString(_context.comments.toAscii().constData());
   
-  _context.comments = QString::null;
+  _context.comments = QString();
   
   return (co.isEmpty())
     ? result
@@ -1021,7 +1021,7 @@ Q3CString Lex::get_description()
 {
   Q3CString result = Q3CString(_context.description.toAscii().constData());
   
-  _context.description = QString::null;
+  _context.description = QString();
   return result;
 }
 
@@ -1029,7 +1029,7 @@ Q3CString Lex::get_description(Q3CString & co)
 {
   Q3CString result = Q3CString(_context.description.toAscii().constData());
   
-  _context.description = QString::null;
+  _context.description = QString();
   
   return (co.isEmpty())
     ? result
@@ -1038,8 +1038,8 @@ Q3CString Lex::get_description(Q3CString & co)
 
 void Lex::clear_comments()
 {
-  _context.comments = QString::null;
-  _context.description = QString::null;
+  _context.comments = QString();
+  _context.description = QString();
 }
 
 bool Lex::identifierp(const char * s, bool strictp)

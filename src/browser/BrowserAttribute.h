@@ -61,7 +61,7 @@ class BrowserAttribute : public BrowserNode, public Labeled<BrowserAttribute> {
   
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     
     BrowserOperation * get_get_oper() { return get_oper; };
     BrowserOperation * get_set_oper() { return set_oper; };

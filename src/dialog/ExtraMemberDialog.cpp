@@ -60,7 +60,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 
@@ -118,7 +118,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
   
   new QLabel(grid);
   Q3ButtonGroup * gp = 
-    new Q3ButtonGroup(1, Qt::Horizontal, QString::null, grid);
+    new Q3ButtonGroup(1, Qt::Horizontal, QString(), grid);
   inline_cb = new QCheckBox("inline", gp);
   inline_cb->setDisabled(visit);
   if (ex->cpp_inline)

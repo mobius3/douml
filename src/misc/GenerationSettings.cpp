@@ -51,8 +51,8 @@ QStringList GenerationSettings::umltypes;
 
 bool GenerationSettings::cpp_default_defs;
 bool GenerationSettings::cpp_javadoc_comment;
-SharedStr GenerationSettings::cpp_h_content;
-SharedStr GenerationSettings::cpp_src_content;
+WrapperStr GenerationSettings::cpp_h_content;
+WrapperStr GenerationSettings::cpp_src_content;
 QString GenerationSettings::cpp_in;
 QString GenerationSettings::cpp_out;
 QString GenerationSettings::cpp_inout;
@@ -61,26 +61,26 @@ QString GenerationSettings::cpp_enum_in;
 QString GenerationSettings::cpp_enum_out;
 QString GenerationSettings::cpp_enum_inout;
 QString GenerationSettings::cpp_enum_return;
-SharedStr GenerationSettings::cpp_class_decl;
-SharedStr GenerationSettings::cpp_external_class_decl;
-SharedStr GenerationSettings::cpp_struct_decl;
-SharedStr GenerationSettings::cpp_union_decl;
-SharedStr GenerationSettings::cpp_enum_decl;
-SharedStr GenerationSettings::cpp_typedef_decl;
-SharedStr GenerationSettings::cpp_attr_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::cpp_enum_item_decl;
-SharedStr GenerationSettings::cpp_rel_decl[/*relation kind*/2][/*multiplicity*/3];
-SharedStr GenerationSettings::cpp_oper_decl;
-SharedStr GenerationSettings::cpp_oper_def;
+WrapperStr GenerationSettings::cpp_class_decl;
+WrapperStr GenerationSettings::cpp_external_class_decl;
+WrapperStr GenerationSettings::cpp_struct_decl;
+WrapperStr GenerationSettings::cpp_union_decl;
+WrapperStr GenerationSettings::cpp_enum_decl;
+WrapperStr GenerationSettings::cpp_typedef_decl;
+WrapperStr GenerationSettings::cpp_attr_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::cpp_enum_item_decl;
+WrapperStr GenerationSettings::cpp_rel_decl[/*relation kind*/2][/*multiplicity*/3];
+WrapperStr GenerationSettings::cpp_oper_decl;
+WrapperStr GenerationSettings::cpp_oper_def;
 bool GenerationSettings::cpp_force_throw;
 IncludesSpec GenerationSettings::cpp_includes;
 UmlVisibility GenerationSettings::cpp_get_visibility;
-SharedStr GenerationSettings::cpp_get_name;
+WrapperStr GenerationSettings::cpp_get_name;
 bool GenerationSettings::cpp_get_inline;
 bool GenerationSettings::cpp_get_const;
 bool GenerationSettings::cpp_get_value_const;
 UmlVisibility GenerationSettings::cpp_set_visibility;
-SharedStr GenerationSettings::cpp_set_name;
+WrapperStr GenerationSettings::cpp_set_name;
 bool GenerationSettings::cpp_set_inline;
 bool GenerationSettings::cpp_set_param_const;
 bool GenerationSettings::cpp_set_param_ref;
@@ -88,82 +88,82 @@ Q3CString GenerationSettings::cpp_indent_visibility;
 
 bool GenerationSettings::java_default_defs;
 bool GenerationSettings::java_javadoc_comment;
-SharedStr GenerationSettings::java_src_content;
-SharedStr GenerationSettings::java_class_decl;
-SharedStr GenerationSettings::java_external_class_decl;
-SharedStr GenerationSettings::java_interface_decl;
-SharedStr GenerationSettings::java_enum_decl;
-SharedStr GenerationSettings::java_enum_pattern_decl;
-SharedStr GenerationSettings::java_attr_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::java_enum_item_decl;
-SharedStr GenerationSettings::java_enum_pattern_item_decl;
-SharedStr GenerationSettings::java_enum_pattern_item_case;
-SharedStr GenerationSettings::java_rel_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::java_oper_def;
+WrapperStr GenerationSettings::java_src_content;
+WrapperStr GenerationSettings::java_class_decl;
+WrapperStr GenerationSettings::java_external_class_decl;
+WrapperStr GenerationSettings::java_interface_decl;
+WrapperStr GenerationSettings::java_enum_decl;
+WrapperStr GenerationSettings::java_enum_pattern_decl;
+WrapperStr GenerationSettings::java_attr_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::java_enum_item_decl;
+WrapperStr GenerationSettings::java_enum_pattern_item_decl;
+WrapperStr GenerationSettings::java_enum_pattern_item_case;
+WrapperStr GenerationSettings::java_rel_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::java_oper_def;
 IncludesSpec GenerationSettings::java_imports;
 UmlVisibility GenerationSettings::noncpp_get_visibility;
-SharedStr GenerationSettings::java_get_name;
+WrapperStr GenerationSettings::java_get_name;
 bool GenerationSettings::java_get_final;
 UmlVisibility GenerationSettings::noncpp_set_visibility;
-SharedStr GenerationSettings::java_set_name;
+WrapperStr GenerationSettings::java_set_name;
 bool GenerationSettings::java_set_final;
 bool GenerationSettings::java_set_param_final;
 
 bool GenerationSettings::php_default_defs;
 bool GenerationSettings::php_javadoc_comment;
-SharedStr GenerationSettings::php_src_content;
-SharedStr GenerationSettings::php_class_decl;
-SharedStr GenerationSettings::php_external_class_decl;
-SharedStr GenerationSettings::php_enum_decl;
-SharedStr GenerationSettings::php_interface_decl;
-SharedStr GenerationSettings::php_attr_decl;
-SharedStr GenerationSettings::php_enum_item_decl;
-SharedStr GenerationSettings::php_rel_decl;
-SharedStr GenerationSettings::php_oper_def;
-SharedStr GenerationSettings::php_get_name;
+WrapperStr GenerationSettings::php_src_content;
+WrapperStr GenerationSettings::php_class_decl;
+WrapperStr GenerationSettings::php_external_class_decl;
+WrapperStr GenerationSettings::php_enum_decl;
+WrapperStr GenerationSettings::php_interface_decl;
+WrapperStr GenerationSettings::php_attr_decl;
+WrapperStr GenerationSettings::php_enum_item_decl;
+WrapperStr GenerationSettings::php_rel_decl;
+WrapperStr GenerationSettings::php_oper_def;
+WrapperStr GenerationSettings::php_get_name;
 bool GenerationSettings::php_get_final;
-SharedStr GenerationSettings::php_set_name;
+WrapperStr GenerationSettings::php_set_name;
 bool GenerationSettings::php_set_final;
 
 bool GenerationSettings::python_default_defs;
 bool GenerationSettings::python_2_2;
 bool GenerationSettings::python_3_operation;
 QString GenerationSettings::python_indent_step;
-SharedStr GenerationSettings::python_src_content;
-SharedStr GenerationSettings::python_class_decl;
-SharedStr GenerationSettings::python_enum_decl;
-SharedStr GenerationSettings::python_external_class_decl;
-SharedStr GenerationSettings::python_attr_decl[2/*multiplicity*/];
-SharedStr GenerationSettings::python_enum_item_decl;
-SharedStr GenerationSettings::python_rel_decl[2/*relation kind*/][2/*multiplicity*/];
-SharedStr GenerationSettings::python_oper_def;
-SharedStr GenerationSettings::python_initoper_def;
+WrapperStr GenerationSettings::python_src_content;
+WrapperStr GenerationSettings::python_class_decl;
+WrapperStr GenerationSettings::python_enum_decl;
+WrapperStr GenerationSettings::python_external_class_decl;
+WrapperStr GenerationSettings::python_attr_decl[2/*multiplicity*/];
+WrapperStr GenerationSettings::python_enum_item_decl;
+WrapperStr GenerationSettings::python_rel_decl[2/*relation kind*/][2/*multiplicity*/];
+WrapperStr GenerationSettings::python_oper_def;
+WrapperStr GenerationSettings::python_initoper_def;
 IncludesSpec GenerationSettings::python_imports;
-SharedStr GenerationSettings::python_get_name;
-SharedStr GenerationSettings::python_set_name;
+WrapperStr GenerationSettings::python_get_name;
+WrapperStr GenerationSettings::python_set_name;
     
 bool GenerationSettings::idl_default_defs;
-SharedStr GenerationSettings::idl_src_content;
-SharedStr GenerationSettings::idl_interface_decl;
-SharedStr GenerationSettings::idl_valuetype_decl;
-SharedStr GenerationSettings::idl_struct_decl;
-SharedStr GenerationSettings::idl_typedef_decl;
-SharedStr GenerationSettings::idl_exception_decl;
-SharedStr GenerationSettings::idl_union_decl;
-SharedStr GenerationSettings::idl_external_class_decl;
+WrapperStr GenerationSettings::idl_src_content;
+WrapperStr GenerationSettings::idl_interface_decl;
+WrapperStr GenerationSettings::idl_valuetype_decl;
+WrapperStr GenerationSettings::idl_struct_decl;
+WrapperStr GenerationSettings::idl_typedef_decl;
+WrapperStr GenerationSettings::idl_exception_decl;
+WrapperStr GenerationSettings::idl_union_decl;
+WrapperStr GenerationSettings::idl_external_class_decl;
 IncludesSpec GenerationSettings::idl_includes;
-SharedStr GenerationSettings::idl_enum_decl;
-SharedStr GenerationSettings::idl_attr_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::idl_valuetype_attr_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::idl_union_item_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::idl_enum_item_decl;
-SharedStr GenerationSettings::idl_const_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::idl_valuetype_rel_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::idl_rel_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::idl_union_rel_decl[/*multiplicity*/3];
-SharedStr GenerationSettings::idl_oper_decl;
-SharedStr GenerationSettings::idl_get_name;
-SharedStr GenerationSettings::idl_set_name;
+WrapperStr GenerationSettings::idl_enum_decl;
+WrapperStr GenerationSettings::idl_attr_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::idl_valuetype_attr_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::idl_union_item_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::idl_enum_item_decl;
+WrapperStr GenerationSettings::idl_const_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::idl_valuetype_rel_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::idl_rel_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::idl_union_rel_decl[/*multiplicity*/3];
+WrapperStr GenerationSettings::idl_oper_decl;
+WrapperStr GenerationSettings::idl_get_name;
+WrapperStr GenerationSettings::idl_set_name;
 bool GenerationSettings::idl_set_oneway;
 
 DrawingLanguage GenerationSettings::uml_get_name;
@@ -581,17 +581,17 @@ public static final ${class} ${name} = new ${class}(_${name});\n";
   cpp_includes.types.append("string");
   cpp_includes.includes.append("#include <string>\nusing namespace std;");
 
-  artifact_default_description = QString::null;
-  class_default_description = QString::null;
-  operation_default_description = QString::null;
-  attribute_default_description = QString::null;
-  relation_default_description = QString::null;
+  artifact_default_description = QString();
+  class_default_description = QString();
+  operation_default_description = QString();
+  attribute_default_description = QString();
+  relation_default_description = QString();
   
-  cpp_root_dir = QString::null;
-  java_root_dir = QString::null;
-  php_root_dir = QString::null;
-  python_root_dir = QString::null;
-  idl_root_dir = QString::null;
+  cpp_root_dir = QString();
+  java_root_dir = QString();
+  php_root_dir = QString();
+  python_root_dir = QString();
+  idl_root_dir = QString();
   
   cpp_set_default_defs(FALSE);
   java_set_default_defs(FALSE);
@@ -785,7 +785,7 @@ const char *
   switch (rel) {
   default:
     return (const char *) 
-      cpp_rel_decl[0][multiplicity_column((mult == "0..1") ? QString::null : mult)];
+      cpp_rel_decl[0][multiplicity_column((mult == "0..1") ? QString() : mult)];
   case UmlAggregationByValue:
   case UmlDirectionalAggregationByValue:
     return (const char *) 
@@ -818,7 +818,7 @@ const char *
   switch (rel) {
   default:
     return (const char *) 
-      python_rel_decl[0][python_multiplicity_column((mult == "0..1") ? QString::null : mult)];
+      python_rel_decl[0][python_multiplicity_column((mult == "0..1") ? QString() : mult)];
   case UmlAggregationByValue:
   case UmlDirectionalAggregationByValue:
     return (const char *) 

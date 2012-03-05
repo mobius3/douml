@@ -407,7 +407,7 @@ QString BrowserOperation::get_of_name() const {
   else if (set_of)
     result = set_of->get_name();
   else
-    return QString::null;
+    return QString();
   
   int index;
   

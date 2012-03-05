@@ -47,6 +47,7 @@
 #include "GenerationSettings.h"
 #include "mu.h"
 #include "translate.h"
+#include "Logging/QsLog.h"
 
 IdDict<RelationData> RelationData::all(1023, __FILE__);
 Q3PtrList<RelationData> RelationData::Unconsistent;
@@ -235,31 +236,31 @@ static void default_decls(RoleData & r, UmlCode type, QString cl_stereotype)
   if (GenerationSettings::cpp_get_default_defs()) {
     if (ClassDialog::cpp_stereotype(cl_stereotype) != "enum")
       r.cpp_decl = 
-	GenerationSettings::cpp_default_rel_decl(type, QString::null);
+	GenerationSettings::cpp_default_rel_decl(type, QString());
     else
       r.cpp_decl = "";
   }
   
   if (GenerationSettings::java_get_default_defs())
-    r.java_decl = GenerationSettings::java_default_rel_decl(QString::null);
+    r.java_decl = GenerationSettings::java_default_rel_decl(QString());
   
   if (GenerationSettings::php_get_default_defs())
     r.php_decl = GenerationSettings::php_default_rel_decl();
   
   if (GenerationSettings::python_get_default_defs())
-    r.python_decl = GenerationSettings::python_default_rel_decl(type, QString::null);
+    r.python_decl = GenerationSettings::python_default_rel_decl(type, QString());
   
   if (GenerationSettings::idl_get_default_defs()) {
     QString idl_st = ClassDialog::idl_stereotype(cl_stereotype);
     
     if (idl_st == "union")
-      r.idl_decl = GenerationSettings::idl_default_union_rel_decl(QString::null);
+      r.idl_decl = GenerationSettings::idl_default_union_rel_decl(QString());
     else if (idl_st == "valuetype")
-      r.idl_decl = GenerationSettings::idl_default_valuetype_rel_decl(QString::null);
+      r.idl_decl = GenerationSettings::idl_default_valuetype_rel_decl(QString());
     else if (idl_st == "enum")
       r.idl_decl = "";
     else
-      r.idl_decl = GenerationSettings::idl_default_rel_decl(QString::null);
+      r.idl_decl = GenerationSettings::idl_default_rel_decl(QString());
   }
 }
 
@@ -321,25 +322,30 @@ BrowserRelation * RelationData::set_start_end(BrowserRelation * s, BrowserClass 
   return end;
 }
 
-QString RelationData::get_name(BrowserRelation * cl) const {
-  if (cl == start) {
+QString RelationData::get_name(BrowserRelation * cl) const
+{
+  if (cl == start)
+  {
     if (! a.role.isEmpty())
-      return QString((const char *) a.role) + " (" + get_name() + ")";
+       QLOG_INFO() << "Returning name for relation: " << QString((const char *) a.role) + " (" + get_name() + ")";
+       return QString((const char *) a.role) + " (" + get_name() + ")";
   }
-  else if (cl == end) {
+  else if (cl == end)
+  {
     if (! b.role.isEmpty())
-      return QString((const char *) b.role) + " (" + get_name() + ")";
+        QLOG_INFO() << "Returning name for relation: " << QString((const char *) b.role) + " (" + get_name() + ")";
+        return QString((const char *) b.role) + " (" + get_name() + ")";
   }
   
-  return (name != default_name(type))
-    ? "(" + name + ")"
-    : QString((const char *) name);
+  QString relationName = (name != default_name(type))? "(" + name + ")" : QString((const char *) name);
+  QLOG_INFO() << "Returning name for relation: " << relationName;
+  return relationName;
 }
 
 QString RelationData::definition(bool, bool with_kind) const {
   return (with_kind)
     ? "[" + TR("relation") + "] " + name
-    : name.MyStr::operator QString();
+    : name.WrapperStr::operator QString();
 }
 
 UmlVisibility RelationData::get_visibility(BrowserNode * bn) {
@@ -1252,7 +1258,7 @@ static void read_role(RoleData & role, bool assoc,
       k = read_keyword(st);
     }
     else
-      role.init_value = QString::null;
+      role.init_value = QString();
     
     if (!strcmp(k, "class_relation")) {
       role.isa_class_relation = TRUE;
@@ -1318,7 +1324,7 @@ static void read_role(RoleData & role, bool assoc,
     k = read_keyword(st);
   }
   else
-    role.constraint = QString::null;
+    role.constraint = QString();
   
   if (!strcmp(k, "cpp")) {
     k = read_keyword(st);
@@ -1344,7 +1350,7 @@ static void read_role(RoleData & role, bool assoc,
     k = read_keyword(st);
   }
   else
-    role.cpp_decl = QString::null;
+    role.cpp_decl = QString();
   
   if (!strcmp(k, "transient")) {
     role.java_transient = TRUE;
@@ -1358,28 +1364,28 @@ static void read_role(RoleData & role, bool assoc,
     k = read_keyword(st);
   }
   else
-    role.java_decl = QString::null;
+    role.java_decl = QString();
 
   if (!strcmp(k, "java_annotation")) {
     role.java_annotation = read_string(st);
     k = read_keyword(st);
   }
   else
-    role.java_annotation = QString::null;
+    role.java_annotation = QString();
   
   if (!strcmp(k, "php")) {
     role.php_decl = read_string(st);
     k = read_keyword(st);
   }
   else
-    role.php_decl = QString::null;
+    role.php_decl = QString();
 
   if (!strcmp(k, "python")) {
     role.python_decl = read_string(st);
     k = read_keyword(st);
   }
   else
-    role.python_decl = QString::null;
+    role.python_decl = QString();
 
   if (!strcmp(k, "idl_case")) {
     rd->set_idlcase(role, BrowserAttribute::read_ref(st), "");
@@ -1397,7 +1403,7 @@ static void read_role(RoleData & role, bool assoc,
     k = read_keyword(st);
   }
   else
-    role.idl_decl = QString::null;
+    role.idl_decl = QString();
   
   if (!strcmp(k, "truncatable")) {
     role.idl_truncatable_inheritance = TRUE;

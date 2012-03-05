@@ -62,7 +62,7 @@ class BrowserRelation : public BrowserNode, public Labeled<BrowserRelation> {
     virtual void delete_it();
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
         
     virtual const char * get_comment() const;
     virtual void set_comment(const char * c);

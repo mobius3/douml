@@ -44,7 +44,7 @@ public:
   } Item;
 
   MenuFactory(
-      const MyStr& menuName );
+      const WrapperStr& menuName );
   virtual ~MenuFactory();
 
   static void createTitle(

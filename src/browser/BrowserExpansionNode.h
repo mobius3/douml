@@ -57,7 +57,7 @@ class BrowserExpansionNode : public BrowserNode, public Labeled<BrowserExpansion
     virtual ~BrowserExpansionNode();
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     
     virtual const QPixmap* pixmap (int) const;
 

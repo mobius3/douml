@@ -38,9 +38,9 @@ class StateDialog;
 class BrowserOperation;
 
 struct StateBehavior {
-  MyStr on_entry;
-  MyStr on_exit;
-  MyStr do_activity;
+  WrapperStr on_entry;
+  WrapperStr on_exit;
+  WrapperStr do_activity;
   
   void save(QTextStream &, const char * lang) const;
   void read(char * & st, char * & k, const char * lang);

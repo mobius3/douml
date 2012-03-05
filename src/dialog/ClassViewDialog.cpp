@@ -57,7 +57,7 @@ ClassViewDialog::ClassViewDialog(BasicData * nd)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 

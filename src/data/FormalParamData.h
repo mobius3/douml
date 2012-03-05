@@ -38,8 +38,8 @@ class FormalParamData : public QObject {
   Q_OBJECT
     
   protected:
-    MyStr name;
-    SharedStr type;		// "class" ..., C++
+    WrapperStr name;
+    WrapperStr type;		// "class" ..., C++
     AType default_value;	// C++
     AType extends;		// Java
 

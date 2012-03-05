@@ -44,11 +44,11 @@ class BrowserClass;
 
 struct RoleData {
   // UML (except some cases to save memory)
-  MyStr role;
-  SharedStr multiplicity;
-  MyStr init_value;
-  MyStr comment;
-  MyStr constraint;	// 
+  WrapperStr role;
+  WrapperStr multiplicity;
+  WrapperStr init_value;
+  WrapperStr comment;
+  WrapperStr constraint;	// 
   UmlVisibility uml_visibility : 8;	// : 4 useless here, : 8 faster than : 4 ?
   UmlVisibility cpp_visibility : 8;	// : 4 useless here, : 8 faster than : 4 
   bool isa_class_relation : 1;
@@ -64,22 +64,22 @@ struct RoleData {
   // C++
   bool cpp_virtual_inheritance : 1;
   bool cpp_mutable: 1;
-  SharedStr cpp_decl;
+  WrapperStr cpp_decl;
   
   // Java
-  SharedStr java_decl;
-  SharedStr java_annotation;
+  WrapperStr java_decl;
+  WrapperStr java_annotation;
   
   // Php
-  SharedStr php_decl;
+  WrapperStr php_decl;
   
   // Python
-  SharedStr python_decl;
+  WrapperStr python_decl;
   
   // Idl
   BrowserAttribute * idl_case;	// exclusive with idl_explicit_case
-  SharedStr idl_explicit_case;
-  SharedStr idl_decl;
+  WrapperStr idl_explicit_case;
+  WrapperStr idl_decl;
 };
 
 class RelationData : public ClassMemberData, public Labeled<RelationData> {
@@ -95,7 +95,7 @@ class RelationData : public ClassMemberData, public Labeled<RelationData> {
     bool is_deleted : 8;	// 1 useless here, 8 faster than 1 ?
     bool is_unconsistent : 8;	// 1 useless here, 8 faster than 1 ?
     UmlCode type: 8;		// < UmlRelations
-    MyStr name;
+    WrapperStr name;
     RoleData a;
     RoleData b;
     BrowserRelation * start;

@@ -56,7 +56,7 @@ class BrowserParameterSet : public BrowserNode, public Labeled<BrowserParameterS
     virtual ~BrowserParameterSet();
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     
     virtual const QPixmap* pixmap (int) const;
 

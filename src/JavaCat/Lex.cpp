@@ -623,7 +623,7 @@ Q3CString Lex::read_word(bool in_templ)
       result = result.left(1);
     }
     else
-      context.reread = QString::null;
+      context.reread = QString();
   }
   else {
     for (;;) {
@@ -714,7 +714,7 @@ char Lex::read_word_bis(bool in_templ)
     }
     else {
       result = context.reread.latin1()[0];
-      context.reread = QString::null;
+      context.reread = QString();
     }
   }
   else {
@@ -847,7 +847,7 @@ Q3CString Lex::get_comments()
 {
   Q3CString result = Q3CString(context.comments.toAscii().constData());
   
-  context.comments = QString::null;
+  context.comments = QString();
   return result;
 }
 
@@ -855,7 +855,7 @@ Q3CString Lex::get_comments(Q3CString & co)
 {
   Q3CString result = Q3CString(context.comments.toAscii().constData());
   
-  context.comments = QString::null;
+  context.comments = QString();
   
   return (co.isEmpty())
     ? result
@@ -866,7 +866,7 @@ Q3CString Lex::get_description()
 {
   Q3CString result = Q3CString(context.description.toAscii().constData());
   
-  context.description = QString::null;
+  context.description = QString();
   return result;
 }
 
@@ -874,7 +874,7 @@ Q3CString Lex::get_description(Q3CString & co)
 {
   Q3CString result = Q3CString(context.description.toAscii().constData());
   
-  context.description = QString::null;
+  context.description = QString();
   
   return (co.isEmpty())
     ? result
@@ -883,7 +883,7 @@ Q3CString Lex::get_description(Q3CString & co)
 
 void Lex::clear_comments()
 {
-  context.comments = QString::null;
+  context.comments = QString();
 }
 
 bool Lex::identifierp(const char * s)

@@ -39,8 +39,8 @@ class BrowserFlow;
 class BrowserNode;
     
 struct FlowDef {
-  SharedStr weight;
-  MyStr guard;
+  WrapperStr weight;
+  WrapperStr guard;
   InfoData sel_trans;
   
   QString str(bool horiz) const;
