@@ -121,7 +121,7 @@ void UcClassCanvas::compute_size() {
 
   full_name = browser_node->get_name();
   
-  const MyStr & (PackageData::*f)() const = 0;
+  const WrapperStr & (PackageData::*f)() const = 0;
   const char * sep = 0;	// to avoid warning
   
   switch (used_settings.show_context_mode) {

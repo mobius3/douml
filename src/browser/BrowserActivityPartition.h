@@ -62,7 +62,7 @@ class BrowserActivityPartition : public BrowserNode, public Labeled<BrowserActiv
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
 				   BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     static BrowserActivityPartition * add_activitypartition(BrowserNode * future_parent);
     static BrowserActivityPartition * add_activitypartition(BrowserNode * future_parent, const char * name);
     static BrowserActivityPartition * get_activitypartition(BrowserNode * parent);

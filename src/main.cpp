@@ -45,6 +45,7 @@
 #include "EnvDialog.h"
 #include "../Logging/QsLogDest.h"
 #include "../Logging/QsLog.h"
+#include "QTextCodec"
 
 
 
@@ -59,7 +60,8 @@ int main(int argc, char **argv)
 {
   ExitOnError = FALSE;
 
-
+  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+  //QString s.to
 
   QsLogging::Logger& logger = QsLogging::Logger::instance();
   logger.setLoggingLevel(QsLogging::TraceLevel);

@@ -61,7 +61,7 @@ class BrowserClassInstance : public BrowserNode, public Labeled<BrowserClassInst
     
     virtual bool undelete(bool, QString & warning, QString & renamed);
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual bool allow_empty() const;
     virtual void update_stereotype(bool rec = FALSE);

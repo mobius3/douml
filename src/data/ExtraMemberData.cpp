@@ -191,8 +191,8 @@ void ExtraMemberData::read(char * & st, char * & k) {
       cpp_inline = FALSE;
   }
   else {
-    cpp_decl = QString::null;
-    cpp_def = QString::null;
+    cpp_decl = QString();
+    cpp_def = QString();
     cpp_inline = FALSE;
   }
   
@@ -201,26 +201,26 @@ void ExtraMemberData::read(char * & st, char * & k) {
     k = read_keyword(st);
   }
   else
-    java_decl = QString::null;
+    java_decl = QString();
     
   if (!strcmp(k, "php")) {
     php_decl = read_string(st);
     k = read_keyword(st);
   }
   else
-    php_decl = QString::null;
+    php_decl = QString();
     
   if (!strcmp(k, "python")) {
     python_decl = read_string(st);
     k = read_keyword(st);
   }
   else
-    python_decl = QString::null;
+    python_decl = QString();
     
   if (!strcmp(k, "idl")) {
     idl_decl = read_string(st);
     k = read_keyword(st);
   }
   else
-    idl_decl = QString::null;
+    idl_decl = QString();
 }

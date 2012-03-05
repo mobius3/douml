@@ -162,7 +162,7 @@ void BasicData::read(char * & st, char * & k) {
     k = read_keyword(st);
   }
   else
-    set_stereotype(QString::null);
+    set_stereotype(QString());
 }
 
 //

@@ -201,7 +201,7 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
 
 void SynchroWindow::load() {
   QString path =
-    Q3FileDialog::getOpenFileName(QString::null,
+    Q3FileDialog::getOpenFileName(QString(),
 				 (project_name.isEmpty())
 				 ? "*.prj"
 				 : project_name,

@@ -240,8 +240,8 @@ void ToolTable::init_row(int row) {
   int index;
   int n = numCols();
   
-  setText(row, 0, QString::null);
-  setText(row, 1, QString::null);
+  setText(row, 0, QString());
+  setText(row, 1, QString());
   
   for (index = 2; index != n; index += 1)
     setItem(row, index,

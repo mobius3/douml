@@ -46,20 +46,20 @@ class ArtifactData : public SimpleData {
     // for the <<sources>> (the majority of artifacts) :
     
     // C++
-    SharedStr cpp_h;
-    SharedStr cpp_src;
+    WrapperStr cpp_h;
+    WrapperStr cpp_src;
     
     // Java
-    SharedStr java_src;
+    WrapperStr java_src;
     
     // PHP
-    SharedStr php_src;
+    WrapperStr php_src;
     
     // Python
-    SharedStr python_src;
+    WrapperStr python_src;
     
     // Idl
-    SharedStr idl_src;
+    WrapperStr idl_src;
     
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
 			      const QString & comment);

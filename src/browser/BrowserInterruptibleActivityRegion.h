@@ -62,7 +62,7 @@ class BrowserInterruptibleActivityRegion : public BrowserNode, public Labeled<Br
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
 				   BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     static BrowserInterruptibleActivityRegion * add_interruptibleactivityregion(BrowserNode * future_parent);
     static BrowserInterruptibleActivityRegion * add_interruptibleactivityregion(BrowserNode * future_parent, const char * name);
     static BrowserInterruptibleActivityRegion * get_interruptibleactivityregion(BrowserNode * parent);

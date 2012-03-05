@@ -71,8 +71,8 @@ class BrowserNode : public Q3ListViewItem,
   		    public HaveKeyValueData,
   		    public Editable {
   protected:
-    MyStr name;
-    MyStr comment;
+    WrapperStr name;
+    WrapperStr comment;
     int original_id;	// from project library
     BooL is_new;	// backup file useless
     BooL is_deleted;
@@ -136,7 +136,7 @@ class BrowserNode : public Q3ListViewItem,
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     void must_be_deleted(); // deleted after load time
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null) = 0;
+				    QString name = QString()) = 0;
   
     bool nestedp() const { return ((BrowserNode *) parent())->get_type() == get_type(); };
     virtual const char * get_comment() const;

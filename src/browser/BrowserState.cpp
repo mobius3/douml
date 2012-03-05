@@ -896,7 +896,7 @@ QString BrowserState::drag_postfix() const {
   BrowserState * m = get_machine(this);
   
   return (m == this)
-    ? QString::null
+    ? QString()
     : "#" + QString::number((unsigned long) m);
 }
 

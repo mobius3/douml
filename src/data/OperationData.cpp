@@ -305,7 +305,7 @@ QString OperationData::default_java_def(const QString & name) {
 	 cpponly += 1) {
       if (name.find(*cpponly) != -1) {
 	// operator or destructor
-	return QString::null;
+	return QString();
       }
     }
   }
@@ -386,7 +386,7 @@ QString OperationData::default_idl_decl(const QString & name) {
 	 cpponly += 1) {
       if (name.find(*cpponly) != -1) {
 	// operator or destructor
-	return QString::null;
+	return QString();
       }
     }
   }
@@ -489,7 +489,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!cpp_decl.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   case JavaView:
     if (full)
       return OperationDialog::java_decl((BrowserOperation *) browser_node,
@@ -497,7 +497,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!java_def.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   case PhpView:
     if (full)
       return OperationDialog::php_decl((BrowserOperation *) browser_node,
@@ -505,7 +505,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!php_def.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   case PythonView:
     if (full)
       return OperationDialog::python_decl((BrowserOperation *) browser_node,
@@ -513,7 +513,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!python_def.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   default:
     if (full)
       return OperationDialog::idl_decl((BrowserOperation *) browser_node,
@@ -521,7 +521,7 @@ QString OperationData::definition(bool full, DrawingLanguage language,
     else if (!idl_decl.isEmpty())
       return definition(FALSE, FALSE);
     else
-      return QString::null;
+      return QString();
   }
 }
 

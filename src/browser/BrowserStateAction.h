@@ -58,7 +58,7 @@ class BrowserStateAction : public BrowserNode, public Labeled<BrowserStateAction
     virtual ~BrowserStateAction();
   
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString::null);
+				    QString name = QString());
     static BrowserStateAction * add_stateaction(BrowserNode * future_parent);
     virtual BasicData * add_relation(UmlCode, BrowserNode * end);
     BrowserTransition * add_transition(BrowserNode * end);

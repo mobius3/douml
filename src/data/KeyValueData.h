@@ -30,8 +30,8 @@
 
 class KeyValueData {
   protected:
-    MyStr key;
-    MyStr value;
+    WrapperStr key;
+    WrapperStr value;
 
   public:
     KeyValueData() {};

@@ -215,13 +215,13 @@ QString BrowserArtifact::get_path(QString path, QString root,
     path = d_root.filePath(path);
   
   if (path.isEmpty() || QDir::isRelativePath(path))
-    return QString::null;
+    return QString();
   
   QDir d(path);
     
   path = (ext != 0) ? d.filePath(name + "." + ext) : d.filePath(name);
   
-  return (QFile::exists(path)) ? path : QString::null;
+  return (QFile::exists(path)) ? path : QString();
 }
 
 void BrowserArtifact::get_paths(QString & cpp_h_path, QString & cpp_src_path,

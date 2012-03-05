@@ -66,7 +66,7 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 
@@ -670,7 +670,7 @@ void ArtifactDialog::edStereotypeActivated(const QString & ste) {
       lb_art_initialized = TRUE;
       if (data->associated != 0)
 	art_associated = *(data->associated);
-      stereotypeFilterActivated(QString::null);
+      stereotypeFilterActivated(QString());
     }
   }
   else if (lb_cl_associated->count() != 0) {
@@ -851,32 +851,32 @@ void ArtifactDialog::idl_default_src() {
 }
 
 void ArtifactDialog::cpp_unmapped_h() {
-  edcpp_h_content->setText(QString::null);
+  edcpp_h_content->setText(QString());
   cpp_update_h();
 }
 
 void ArtifactDialog::cpp_unmapped_src() {
-  edcpp_src_content->setText(QString::null);
+  edcpp_src_content->setText(QString());
   cpp_update_src();
 }
 
 void ArtifactDialog::java_unmapped_src() {
-  edjava_content->setText(QString::null);
+  edjava_content->setText(QString());
   java_update_src();
 }
 
 void ArtifactDialog::php_unmapped_src() {
-  edphp_content->setText(QString::null);
+  edphp_content->setText(QString());
   php_update_src();
 }
 
 void ArtifactDialog::python_unmapped_src() {
-  edpython_content->setText(QString::null);
+  edpython_content->setText(QString());
   python_update_src();
 }
 
 void ArtifactDialog::idl_unmapped_src() {
-  edidl_content->setText(QString::null);
+  edidl_content->setText(QString());
   idl_update_src();
 }
 
@@ -1801,37 +1801,37 @@ void ArtifactDialog::accept() {
 	data->cpp_h = edcpp_h_content->text();
       }
       else
-	data->cpp_h = QString::null;
+	data->cpp_h = QString();
       
       if (isTabEnabled(cpp_src_content_page)) {
 	data->cpp_src = edcpp_src_content->text();
       }
       else
-	data->cpp_src = QString::null;
+	data->cpp_src = QString();
       
       if (isTabEnabled(java_content_page)) {
 	data->java_src = edjava_content->text();
       }
       else
-	data->java_src = QString::null;
+	data->java_src = QString();
       
       if (isTabEnabled(php_content_page)) {
 	data->php_src = edphp_content->text();
       }
       else
-	data->php_src = QString::null;
+	data->php_src = QString();
       
       if (isTabEnabled(python_content_page)) {
 	data->python_src = edpython_content->text();
       }
       else
-	data->python_src = QString::null;
+	data->python_src = QString();
       
       if (isTabEnabled(idl_content_page)) {
 	data->idl_src = edidl_content->text();
       }
       else
-	data->idl_src = QString::null;
+	data->idl_src = QString();
     }
     else 
       data->update_associated(art_associated);

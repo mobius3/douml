@@ -178,13 +178,13 @@ void BrowserAttribute::update_set_oper() {
 }
 
 void BrowserAttribute::add_get_oper() {
-  set_get_oper(BrowserOperation::new_one(QString::null, (BrowserNode *) parent()));
+  set_get_oper(BrowserOperation::new_one(QString(), (BrowserNode *) parent()));
   update_get_oper();
   ((BrowserNode *) parent())->modified();
 }
 
 void BrowserAttribute::add_set_oper() {
-  set_set_oper(BrowserOperation::new_one(QString::null, (BrowserNode *) parent()));
+  set_set_oper(BrowserOperation::new_one(QString(), (BrowserNode *) parent()));
   update_set_oper();
   ((BrowserNode *) parent())->modified();
 }

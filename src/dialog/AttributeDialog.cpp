@@ -70,7 +70,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
   
@@ -223,7 +223,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     if (visit)
       bg->setEnabled(FALSE);
     
-    bg = new Q3ButtonGroup(7, Qt::Horizontal, QString::null, htab);
+    bg = new Q3ButtonGroup(7, Qt::Horizontal, QString(), htab);
     bg->setExclusive(FALSE);
     classattribute_cb = new QCheckBox("static", bg);
     if (a->get_isa_class_attribute())
@@ -740,7 +740,7 @@ void AttributeDialog::accept() {
     att->init_value = edinit->text();
     
     if (cpp_ignored)
-      att->cpp_decl = QString::null;
+      att->cpp_decl = QString();
     else {
       att->cpp_decl = edcppdecl->text();
       if (!cpp_in_enum)
@@ -754,14 +754,14 @@ void AttributeDialog::accept() {
     att->java_transient = (java_in_enum || java_ignored || java_in_enum_pattern)
       ? FALSE
       : transient_cb->isChecked();
-    att->java_decl = (java_ignored) ? QString::null : edjavadecl->text();
+    att->java_decl = (java_ignored) ? QString() : edjavadecl->text();
     att->java_annotation = javaannotation;
     
-    att->php_decl = (php_ignored) ? QString::null : edphpdecl->text();
+    att->php_decl = (php_ignored) ? QString() : edphpdecl->text();
 
-    att->python_decl = (python_ignored) ? QString::null : edpythondecl->text();
+    att->python_decl = (python_ignored) ? QString() : edpythondecl->text();
     
-    att->idl_decl = (idl_in_typedef) ? QString::null : edidldecl->text();
+    att->idl_decl = (idl_in_typedef) ? QString() : edidldecl->text();
     if (idl_in_union) {
       int index;
       s = edcase->currentText().stripWhiteSpace();
@@ -883,8 +883,8 @@ void AttributeDialog::default_cpp_if_needed(QString prev_mult, QString new_mult)
 }
 
 void AttributeDialog::cpp_unmapped() {
-  edcppdecl->setText(QString::null);
-  showcppdecl->setText(QString::null);
+  edcppdecl->setText(QString());
+  showcppdecl->setText(QString());
 }
 
 void AttributeDialog::cpp_update() {
@@ -1099,8 +1099,8 @@ void AttributeDialog::default_java_if_needed(QString prev_mult, QString new_mult
 }
 
 void AttributeDialog::java_unmapped() {
-  edjavadecl->setText(QString::null);
-  showjavadecl->setText(QString::null);
+  edjavadecl->setText(QString());
+  showjavadecl->setText(QString());
 }
 
 void AttributeDialog::java_update() {
@@ -1347,8 +1347,8 @@ void AttributeDialog::default_php_if_needed(QString, QString) {
 }
 
 void AttributeDialog::php_unmapped() {
-  edphpdecl->setText(QString::null);
-  showphpdecl->setText(QString::null);
+  edphpdecl->setText(QString());
+  showphpdecl->setText(QString());
 }
 
 void AttributeDialog::php_update() {
@@ -1544,8 +1544,8 @@ void AttributeDialog::default_python_if_needed(QString prev_mult, QString new_mu
 }
 
 void AttributeDialog::python_unmapped() {
-  edpythondecl->setText(QString::null);
-  showpythondecl->setText(QString::null);
+  edpythondecl->setText(QString());
+  showpythondecl->setText(QString());
 }
 
 void AttributeDialog::python_update() {
@@ -1726,8 +1726,8 @@ void AttributeDialog::idl_default_constant() {
 }
 
 void AttributeDialog::idl_unmapped() {
-  edidldecl->setText(QString::null);
-  showidldecl->setText(QString::null);
+  edidldecl->setText(QString());
+  showidldecl->setText(QString());
 }
 
 void AttributeDialog::idl_update() {

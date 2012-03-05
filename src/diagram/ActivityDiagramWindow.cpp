@@ -84,33 +84,33 @@ ActivityDiagramWindow::ActivityDiagramWindow(const QString & s, BrowserActivityD
   add_edit_button(toolbar);
   
   select =
-    new QToolButton(*selectButton, TR("Select"), QString::null,
+    new QToolButton(*selectButton, TR("Select"), QString(),
 		    this, SLOT(hit_select()), toolbar, "select");
   select->setToggleButton(TRUE);
   select->setOn(TRUE);
   current_button = UmlSelect;
   
   addPackage
-    = new QToolButton(*packageButton, TR("New Package"), QString::null,
+    = new QToolButton(*packageButton, TR("New Package"), QString(),
 		      this, SLOT(hit_package()), toolbar, "add package");
   addPackage->setToggleButton(TRUE);
   Q3WhatsThis::add(addPackage, addpackageText());
   
   addFragment
-    = new QToolButton(*fragmentButton, TR("New Fragment"), QString::null,
+    = new QToolButton(*fragmentButton, TR("New Fragment"), QString(),
 		      this, SLOT(hit_fragment()), toolbar, "add fragment");
   addFragment->setToggleButton(TRUE);
   Q3WhatsThis::add(addFragment, addfragmentText());
   
   addActivity =
-    new QToolButton(*activityButton, TR("New Activity"), QString::null,
+    new QToolButton(*activityButton, TR("New Activity"), QString(),
 		    this, SLOT(hit_activity()), toolbar, "add activity");
   addActivity->setToggleButton(TRUE);
   Q3WhatsThis::add(addActivity, addactivityText());
   
   addInterruptibleActivityRegion =
     new QToolButton(*interruptibleactivityregionButton,
-		    TR("New Interruptible Activity Region"), QString::null,
+		    TR("New Interruptible Activity Region"), QString(),
 		    this, SLOT(hit_interruptibleactivityregion()),
 		    toolbar, "add interruptible activity region");
   addInterruptibleActivityRegion->setToggleButton(TRUE);
@@ -119,7 +119,7 @@ ActivityDiagramWindow::ActivityDiagramWindow(const QString & s, BrowserActivityD
   
   addExpansionRegion =
     new QToolButton(*expansionregionButton,
-		    TR("New Expansion Region"), QString::null,
+		    TR("New Expansion Region"), QString(),
 		    this, SLOT(hit_expansionregion()),
 		    toolbar, "add expansion region");
   addExpansionRegion->setToggleButton(TRUE);
@@ -128,7 +128,7 @@ ActivityDiagramWindow::ActivityDiagramWindow(const QString & s, BrowserActivityD
     
   addActivityPartition =
     new QToolButton(*activitypartitionButton,
-		    TR("New Activity Partition"), QString::null,
+		    TR("New Activity Partition"), QString(),
 		    this, SLOT(hit_activitypartition()),
 		    toolbar, "add activity partition");
   addActivityPartition->setToggleButton(TRUE);
@@ -136,91 +136,91 @@ ActivityDiagramWindow::ActivityDiagramWindow(const QString & s, BrowserActivityD
 		  addactivitypartitionText());
     
   addAction =
-    new QToolButton(*activityactionButton, TR("New Action"), QString::null,
+    new QToolButton(*activityactionButton, TR("New Action"), QString(),
 		    this, SLOT(hit_action()), toolbar, "add action");
   addAction->setToggleButton(TRUE);
   Q3WhatsThis::add(addAction, addactionText());
 
   addObject =
-    new QToolButton(*actionButton, TR("New Object Node"), QString::null,
+    new QToolButton(*actionButton, TR("New Object Node"), QString(),
 		    this, SLOT(hit_object()), toolbar, "add object node");
   addObject->setToggleButton(TRUE);
   Q3WhatsThis::add(addObject, addobjectText());
 
   addInitial =
-    new QToolButton(*initialButton, TR("New Initial node"), QString::null,
+    new QToolButton(*initialButton, TR("New Initial node"), QString(),
 		    this, SLOT(hit_initial()), toolbar, "add initial");
   addInitial->setToggleButton(TRUE);
   Q3WhatsThis::add(addInitial, addinitialText());
 
   addActivityFinal =
-    new QToolButton(*finalButton, TR("New Activity Final"), QString::null,
+    new QToolButton(*finalButton, TR("New Activity Final"), QString(),
 		    this, SLOT(hit_activityfinal()), toolbar, "add activity final");
   addActivityFinal->setToggleButton(TRUE);
   Q3WhatsThis::add(addActivityFinal, addactivityfinalText());
 
   addFlowFinal =
-    new QToolButton(*exitpointButton, TR("New Flow Final"), QString::null,
+    new QToolButton(*exitpointButton, TR("New Flow Final"), QString(),
 		    this, SLOT(hit_flowfinal()), toolbar, "add flow final");
   addFlowFinal->setToggleButton(TRUE);
   Q3WhatsThis::add(addFlowFinal, addflowfinalText());
 
   addMerge =
-    new QToolButton(*mergeButton, TR("New Merge"), QString::null,
+    new QToolButton(*mergeButton, TR("New Merge"), QString(),
 		    this, SLOT(hit_merge()), toolbar, "add merge");
   addMerge->setToggleButton(TRUE);
   Q3WhatsThis::add(addMerge, addmergeText());
 
   addDecision =
-    new QToolButton(*decisionButton, TR("New Decision"), QString::null,
+    new QToolButton(*decisionButton, TR("New Decision"), QString(),
 		    this, SLOT(hit_decision()), toolbar, "add decision");
   addDecision->setToggleButton(TRUE);
   Q3WhatsThis::add(addDecision, adddecisionText());
 
   addFork =
-    new QToolButton(*forkButton, TR("New Fork"), QString::null,
+    new QToolButton(*forkButton, TR("New Fork"), QString(),
 		    this, SLOT(hit_fork()), toolbar, "add fork");
   addFork->setToggleButton(TRUE);
   Q3WhatsThis::add(addFork, addforkText());
 
   addJoin =
-    new QToolButton(*joinButton, TR("New Join"), QString::null,
+    new QToolButton(*joinButton, TR("New Join"), QString(),
 		    this, SLOT(hit_join()), toolbar, "add join");
   addJoin->setToggleButton(TRUE);
   Q3WhatsThis::add(addJoin, addjoinText());
 
   addFlow =
-    new QToolButton(*directionalAssociationButton, TR("New Flow"), QString::null,
+    new QToolButton(*directionalAssociationButton, TR("New Flow"), QString(),
 		    this, SLOT(hit_flow()), toolbar, "add flow");
   addFlow->setToggleButton(TRUE);
   Q3WhatsThis::add(addFlow, addflowText());
   
   dependency =
-    new QToolButton(*dependencyButton, TR("Dependency"), QString::null,
+    new QToolButton(*dependencyButton, TR("Dependency"), QString(),
 		    this, SLOT(hit_dependency()), toolbar, "dependency");
   dependency->setToggleButton(TRUE);
   Q3WhatsThis::add(dependency, dependencyText());
   
   note =
-    new QToolButton(*noteButton, TR("Note"), QString::null,
+    new QToolButton(*noteButton, TR("Note"), QString(),
 		    this, SLOT(hit_note()), toolbar, "note");
   note->setToggleButton(TRUE);
   Q3WhatsThis::add(note, noteText());
   
   anchor =
-    new QToolButton(*anchorButton, TR("Anchor"), QString::null,
+    new QToolButton(*anchorButton, TR("Anchor"), QString(),
 		    this, SLOT(hit_anchor()), toolbar, "anchor");
   anchor->setToggleButton(TRUE);
   Q3WhatsThis::add(anchor, anchorText());
   
   text =
-    new QToolButton(*textButton, TR("Text"), QString::null,
+    new QToolButton(*textButton, TR("Text"), QString(),
 		    this, SLOT(hit_text()), toolbar, "text");
   text->setToggleButton(TRUE);
   Q3WhatsThis::add(text, textText());
   
   image =
-    new QToolButton(*imageButton, TR("Image"), QString::null,
+    new QToolButton(*imageButton, TR("Image"), QString(),
 		    this, SLOT(hit_image()), toolbar, "image");
   image->setToggleButton(TRUE);
   Q3WhatsThis::add(image, imageText());

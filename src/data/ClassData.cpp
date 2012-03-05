@@ -1065,7 +1065,7 @@ void ClassData::read(char * & st, char * & k) {
     k = read_keyword(st);
   }
   else
-    constraint = QString::null;
+    constraint = QString();
   
   if (!strcmp(k, "cpp_external")) {
     cpp_external = TRUE;
@@ -1129,7 +1129,7 @@ void ClassData::read(char * & st, char * & k) {
     k = read_keyword(st);
   }
   else
-    java_annotation = QString::null;
+    java_annotation = QString();
   
   if (!strcmp(k, "php_external")) {
     php_external = TRUE;

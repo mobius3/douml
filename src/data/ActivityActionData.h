@@ -71,9 +71,9 @@ struct AnyAction {
 struct OpaqueAction : public AnyAction {
   friend class OpaqueDialog;
     
-  MyStr uml_behavior;
-  MyStr cpp_behavior;
-  MyStr java_behavior;
+  WrapperStr uml_behavior;
+  WrapperStr cpp_behavior;
+  WrapperStr java_behavior;
 
   OpaqueAction();
   virtual ~OpaqueAction();
@@ -92,9 +92,9 @@ struct AcceptEventAction : public AnyAction {
     
   bool unmarshall;
   bool timeevent;
-  MyStr uml_trigger;
-  MyStr cpp_trigger;
-  MyStr java_trigger;
+  WrapperStr uml_trigger;
+  WrapperStr cpp_trigger;
+  WrapperStr java_trigger;
 
   AcceptEventAction();
   virtual ~AcceptEventAction();
@@ -278,9 +278,9 @@ struct SendObjectAction : public AnyAction {
 struct SendSignalAction : public AnyAction { 
   friend class SendSignalDialog;
     
-  MyStr ocl_signal;
-  MyStr cpp_signal;
-  MyStr java_signal;
+  WrapperStr ocl_signal;
+  WrapperStr cpp_signal;
+  WrapperStr java_signal;
   
   SendSignalAction();
   virtual ~SendSignalAction();
@@ -325,9 +325,9 @@ struct UnmarshallAction : public AnyAction {
 struct ValueSpecificationAction : public AnyAction { 
   friend class ValueSpecificationDialog;
     
-  MyStr uml_value;
-  MyStr cpp_value;
-  MyStr java_value;
+  WrapperStr uml_value;
+  WrapperStr cpp_value;
+  WrapperStr java_value;
   
   ValueSpecificationAction();
   virtual ~ValueSpecificationAction();
@@ -346,9 +346,9 @@ struct ValueSpecificationAction : public AnyAction {
 struct AcceptCallAction : public AnyAction {
   friend class AcceptCallDialog;
     
-  MyStr uml_trigger;
-  MyStr cpp_trigger;
-  MyStr java_trigger;
+  WrapperStr uml_trigger;
+  WrapperStr cpp_trigger;
+  WrapperStr java_trigger;
 
   AcceptCallAction();
   virtual ~AcceptCallAction();
@@ -366,9 +366,9 @@ struct AcceptCallAction : public AnyAction {
 struct ReplyAction : public AnyAction {
   friend class ReplyDialog;
     
-  MyStr uml_trigger;
-  MyStr cpp_trigger;
-  MyStr java_trigger;
+  WrapperStr uml_trigger;
+  WrapperStr cpp_trigger;
+  WrapperStr java_trigger;
 
   ReplyAction();
   virtual ~ReplyAction();
@@ -386,7 +386,7 @@ struct ReplyAction : public AnyAction {
 struct CreateObjectAction : public AnyAction {
   friend class CreateObjectDialog;
     
-  MyStr classifier;
+  WrapperStr classifier;
 
   CreateObjectAction();
   virtual ~CreateObjectAction();
@@ -488,7 +488,7 @@ class ActivityActionData : public SimpleData {
     InfoData uml_condition;
     InfoData cpp_condition;
     InfoData java_condition;
-    MyStr constraint;
+    WrapperStr constraint;
     AnyAction * action;
     
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,

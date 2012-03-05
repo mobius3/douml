@@ -39,9 +39,9 @@ class StateActionData : public SimpleData {
   friend class StateActionDialog;
     
   protected:
-    MyStr uml;
-    MyStr cpp;
-    MyStr java;
+    WrapperStr uml;
+    WrapperStr cpp;
+    WrapperStr java;
     
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
 			      const QString & comment);

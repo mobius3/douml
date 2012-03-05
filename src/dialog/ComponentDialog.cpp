@@ -62,7 +62,7 @@ ComponentDialog::ComponentDialog(SimpleData * nd)
     setCancelButton(TR("Cancel"));
   }
   else {
-    setOkButton(QString::null);
+    setOkButton(QString());
     setCancelButton(TR("Close"));
   }
 
@@ -238,7 +238,7 @@ void ComponentDialog::init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
   lb->sort();
 
   if (! visit)
-    (this->*filteractivated)(QString::null);
+    (this->*filteractivated)(QString());
     
   addTab(page, lbl);
 }

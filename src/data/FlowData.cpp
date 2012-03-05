@@ -244,11 +244,11 @@ FlowData * FlowData::read(char * & st, char * & k)
 QString FlowDef::str(bool horiz) const {
   return (guard.isEmpty())
     ? ((weight.isEmpty())
-       ? QString::null
-       : weight.SharedStr::operator QString())
+       ? QString()
+       : weight.WrapperStr::operator QString())
     : ((weight.isEmpty())
-       ? "[" + guard.MyStr::operator QString() + "]"
-       : "[" + guard.MyStr::operator QString() + ((horiz) ? "] " : "]\n") + "{weight=" + ((const char *) weight) + '}');
+       ? "[" + guard.WrapperStr::operator QString() + "]"
+       : "[" + guard.WrapperStr::operator QString() + ((horiz) ? "] " : "]\n") + "{weight=" + ((const char *) weight) + '}');
 }
 
 void FlowDef::send_def(ToolCom * com) {

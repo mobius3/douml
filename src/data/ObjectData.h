@@ -38,11 +38,11 @@ private:
   AType type;
 
 public:
-  SharedStr multiplicity;
-  MyStr in_state;
-  MyStr uml_selection;
-  MyStr cpp_selection;
-  MyStr java_selection;
+  WrapperStr multiplicity;
+  WrapperStr in_state;
+  WrapperStr uml_selection;
+  WrapperStr cpp_selection;
+  WrapperStr java_selection;
   UmlOrderingKind ordering : 8;
   bool is_control : 1;
   

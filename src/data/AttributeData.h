@@ -40,9 +40,9 @@ class AttributeData : public ClassMemberData {
   
   protected:
     AType type;
-    SharedStr multiplicity;
-    MyStr init_value;
-    MyStr constraint;
+    WrapperStr multiplicity;
+    WrapperStr init_value;
+    WrapperStr constraint;
     bool is_deleted : 1;
     bool isa_class_attribute : 1;
     bool isa_volatile_attribute : 1;
@@ -58,22 +58,22 @@ class AttributeData : public ClassMemberData {
     
     // C++
     UmlVisibility cpp_visibility : 8;	// : 4 useless here, : 8 faster than : 3 ?
-    SharedStr cpp_decl;
+    WrapperStr cpp_decl;
     
     // Java
-    SharedStr java_decl;
-    SharedStr java_annotation;
+    WrapperStr java_decl;
+    WrapperStr java_annotation;
     
     // Php
-    SharedStr php_decl;
+    WrapperStr php_decl;
     
     // Python
-    SharedStr python_decl;
+    WrapperStr python_decl;
     
     // Idl
     BrowserAttribute * idl_case;	// exclusive with idl_explicit_case
-    MyStr idl_explicit_case;
-    SharedStr idl_decl;
+    WrapperStr idl_explicit_case;
+    WrapperStr idl_decl;
     
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
 			      const QString & comment);
