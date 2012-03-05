@@ -35,7 +35,8 @@
 
 #include "mystr.h"
 char WrapperStr::returnableNullPtr[1] = { 0 };
-QByteArray WrapperStr::ba;
+QByteArray WrapperStr::ba[20];
+int WrapperStr::arrayRotate = 0;
 bool operator==(const WrapperStr & s1, const char * s2)
 {
     return s1.wrappedString == QString(QLatin1String(s2));

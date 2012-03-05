@@ -591,7 +591,7 @@ BrowserNode * BrowserNode::container(UmlCode c) const {
 //
 
 QString BrowserNode::full_name(bool, bool) const {
-  return toUnicode(name);
+  return name;
 }
 
 void BrowserNode::modified() {

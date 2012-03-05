@@ -127,5 +127,5 @@ const char * user_name()
     done = TRUE;
   }
   
-  return toUnicode(name);
+  return name;
 }

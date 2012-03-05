@@ -487,7 +487,9 @@ Q3CString fromUnicode(const QString & s)
     QString str = s;
 
     latinize(str);
-    return Q3CString(str.toAscii().data()); //[lgfreitas] that nasty trick
+    QByteArray ba = str.toLatin1();
+    const char* retTemp = ba.data();
+    return Q3CString(retTemp); //[lgfreitas] that nasty trick
   }
   else if (s.isEmpty())	// fromUnicode crash if null string
     return "";

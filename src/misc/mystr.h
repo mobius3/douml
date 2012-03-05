@@ -40,7 +40,11 @@
 class WrapperStr
 {
   public:
-    static QByteArray ba;
+    // this serves as a keeper for temporary array that got destroyed otherwise
+    // messing the output of operator const char*
+    static  QByteArray ba[20];
+    static int arrayRotate;
+
     WrapperStr(){}
     ~WrapperStr(){}
     WrapperStr(const WrapperStr & other)
@@ -106,9 +110,12 @@ class WrapperStr
         ////QLOG_INFO()() << wrappedString;
         if(wrappedString.length()>0)
         {
-            ba = wrappedString.toLatin1();
+            arrayRotate++;
+            if(arrayRotate == 20)
+                arrayRotate=0;
+            ba[arrayRotate] = wrappedString.toLatin1();
             ////QLOG_INFO()() << ba;
-            const char* retVal = ba.data();
+            const char* retVal = ba[arrayRotate].data();
             return retVal;
         }
         int k = 0;

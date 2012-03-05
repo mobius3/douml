@@ -1438,10 +1438,30 @@ void OperationData::update_cpp_set_of(Q3CString & decl, Q3CString & def,
 	      index = index2;
 	    }
 	  }
+	  QByteArray attr_full_name_array;
+	  attr_full_name_array = attr_full_name.toLatin1();
+	  const char * c_attr_full_name = attr_full_name_array.data();
+
+	  QByteArray multiplicity_array;
+	  multiplicity_array = multiplicity.toLatin1();
+	  const char * c_multiplicity = multiplicity_array.data();
+
+	  QByteArray elt_type_array;
+	  elt_type_array = elt_type.toLatin1();
+	  const char * c_elt_type = elt_type_array.data();
+
+
+	  QByteArray indent_array;
+	  indent_array = indent.toLatin1();
+	  const char * c_indent = indent_array.data();
+
 	  d.replace(index, 7,
-		    cpp_copy(Q3CString((const char*)attr_full_name.toAscii().data()), params[0].get_name(), //[lgfreitas] Q3CString no longer has QString constructor
-			     Q3CString((const char*)multiplicity.toAscii().data()), Q3CString((const char*)elt_type.toAscii().data()), //[lgfreitas] Q3CString no longer has QString constructor
-			     Q3CString((const char*)indent.toAscii().data())));
+			cpp_copy(
+					Q3CString(c_attr_full_name),
+					params[0].get_name(),
+					Q3CString(c_multiplicity),
+					Q3CString(c_elt_type),
+					Q3CString(c_indent)));
 	}
 	else {
 	  if (d[index - 1] == '\n')

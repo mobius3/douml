@@ -43,8 +43,8 @@
 #include "mu.h"
 #include "err.h"
 #include "EnvDialog.h"
-#include "../Logging/QsLogDest.h"
-#include "../Logging/QsLog.h"
+#include "Logging/QsLogDest.h"
+#include "Logging/QsLog.h"
 #include <QTextCodec>
 
 
@@ -52,13 +52,9 @@
 #include "translate.h"
 
 bool ExitOnError = FALSE;
-//QApplication * theApp;
-
-//
-
 int main(int argc, char **argv)
 {
-  //QSharedPointer<QApplication> theApp;
+
     ExitOnError = FALSE;
 
   QApplication a(argc, argv);
@@ -74,10 +70,6 @@ int main(int argc, char **argv)
   logger.addDestination(debugDestination.get());
   logger.addDestination(fileDestination.get());
   QLOG_INFO() << "Starting the log";
-
-  //theApp = QSharedPointer<QApplication>(new QApplication (argc, argv));
-
-  //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("Windows-1251"));
   UmlDesktop::init();
   
   // note : bool conv_env = !QDir::home().exists(".doumlrc") doesn't work

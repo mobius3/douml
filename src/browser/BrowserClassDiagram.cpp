@@ -99,7 +99,7 @@ BrowserClassDiagram::~BrowserClassDiagram() {
     QString fn;
     
     fn.sprintf("%d.diagram", get_ident());
-    
+
     QDir d = BrowserView::get_dir();
     
     QFile::remove(d.absFilePath(fn));
