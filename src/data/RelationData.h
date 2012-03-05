@@ -138,7 +138,7 @@ class RelationData : public ClassMemberData, public Labeled<RelationData> {
     UmlCode get_type() const { return type; }
     void set_type(UmlCode e);
     
-    const char * get_name() const { return toUnicode(name); }
+    const char * get_name() const { return name; }
     QString get_name(BrowserRelation *) const;
     void set_name(const QString &);
     virtual QString definition(bool full, bool with_kind) const;

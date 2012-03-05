@@ -1059,13 +1059,17 @@ bool UmlWindow::saveas_it()
 }
 
 
-bool UmlWindow::can_close() {
-    if (browser->get_project()) {
-        if (BrowserPackage::must_be_saved()) {
-            switch (msg_warning("DoUML",
-                                TR("The project is modified, save it ?\n"),
-                                QMessageBox::Yes, QMessageBox::No,
-                                QMessageBox::Cancel)) {
+bool UmlWindow::can_close()
+{
+    BrowserPackage* packagePtr = browser->get_project();
+    if(packagePtr)
+    {
+        bool mustBeSaved = BrowserPackage::must_be_saved();
+        if (mustBeSaved)
+        {
+            int result = msg_warning("DoUML", TR("The project is modified, save it ?\n"),
+                                                             QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+            switch (result) {
             case QMessageBox::Yes:
                 ws->hide();
                 BrowserPackage::save_all(TRUE);
@@ -1083,7 +1087,9 @@ bool UmlWindow::can_close() {
 
 void UmlWindow::close() {
     abort_line_construction();
-    if (!BrowserNode::edition_active() && can_close())
+    bool editionActive = !BrowserNode::edition_active();
+    bool canClose = can_close();
+    if (editionActive && canClose)
         close_it();
 }
 

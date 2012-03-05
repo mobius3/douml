@@ -42,7 +42,7 @@ class ParamData {
     ParamData();
   
     void set_name(const char *);
-    const char * get_name() const { return toUnicode(name); };
+    const char * get_name() const { return name; };
     UmlParamDirection get_dir() const { return dir; };
     void set_dir(UmlParamDirection d);
     const AType & get_type() const { return type; };

@@ -210,8 +210,8 @@ ClassDiagramWindow::~ClassDiagramWindow() {
     if (!warning.isEmpty())
       warn(warning);
   }
-  
-  browser_node->on_close();
+//  if(browser_node)
+//    browser_node->on_close();
 }
 
 DiagramView * ClassDiagramWindow::get_view() const {

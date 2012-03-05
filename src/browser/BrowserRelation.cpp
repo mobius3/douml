@@ -353,7 +353,8 @@ void BrowserRelation::update_stereotype(bool) {
       else
           latterPart = def->get_start_class()->get_name();
 
-      n = def->get_name(this) + " " + latterPart;
+      const char * tName = def->get_name(this);
+      n = tName + QString(" ") + latterPart;
 
     }
         break;
@@ -622,7 +623,8 @@ void BrowserRelation::open(bool) {
 }
 
 void BrowserRelation::modified() {
-  set_name(def->get_name(this));
+  const char * newName = def->get_name(this);
+  set_name(newName);
   update_stereotype(FALSE);
   repaint();
   

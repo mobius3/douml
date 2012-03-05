@@ -324,28 +324,42 @@ BrowserRelation * RelationData::set_start_end(BrowserRelation * s, BrowserClass 
 
 QString RelationData::get_name(BrowserRelation * cl) const
 {
+  static QString result;
   if (cl == start)
   {
-    if (! a.role.isEmpty())
-       QLOG_INFO() << "Returning name for relation: " << QString((const char *) a.role) + " (" + get_name() + ")";
-       return QString((const char *) a.role) + " (" + get_name() + ")";
+    if (!a.role.isEmpty())
+    {
+        const char* role = a.role;
+        const char* tName = get_name();
+        result = QString(role + QString(" (") + tName + ")");
+        return result;
+    }
   }
   else if (cl == end)
   {
-    if (! b.role.isEmpty())
-        QLOG_INFO() << "Returning name for relation: " << QString((const char *) b.role) + " (" + get_name() + ")";
-        return QString((const char *) b.role) + " (" + get_name() + ")";
+    if (!b.role.isEmpty())
+    {
+//        QLOG_INFO() << "Returning name for relation: " << QString((const char *) b.role) + " (" + get_name() + ")";
+        const char* role = b.role;
+        const char* tName = get_name();
+        result = QString(role + QString(" (") + tName + ")");
+        return QString(role + QString(" (") + tName + ")");
+    }
   }
   
-  QString relationName = (name != default_name(type))? "(" + name + ")" : QString((const char *) name);
-  QLOG_INFO() << "Returning name for relation: " << relationName;
-  return relationName;
+  bool nameIsNotADefaultType = this->name != default_name(type);
+  if(nameIsNotADefaultType)
+      result = "(" + this->name + ")";
+  else
+      result = this->name.operator QString();
+  //QLOG_INFO() << "Returning name for relation: " << relationName;
+  return result;
 }
 
 QString RelationData::definition(bool, bool with_kind) const {
   return (with_kind)
-    ? "[" + TR("relation") + "] " + name
-    : name.WrapperStr::operator QString();
+    ? "[" + TR("relation") + "] " + this->name
+    : this->name.WrapperStr::operator QString();
 }
 
 UmlVisibility RelationData::get_visibility(BrowserNode * bn) {
