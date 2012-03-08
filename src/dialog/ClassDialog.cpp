@@ -199,9 +199,9 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 	vtab = new Q3VBox(split); 
 
 	htab = new Q3HBox(vtab);
-	htab->setMargin(5);
-	lbl1 = new QLabel(htab);
-	bg = new Q3GroupBox(1, Qt::Horizontal, QString(), htab);
+    htab->setMargin(5);
+    lbl1 = new QLabel(htab);
+    bg = new Q3GroupBox(1, Qt::Horizontal, QString(), htab);
 	cpp_external_cb = new QCheckBox("external", bg);
 	
 
@@ -223,11 +223,11 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
   lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
   showcppdecl = new MultiLineEdit(htab);
     
-	htab = new Q3HBox(vtab); 
-    lbl4 = new QLabel(htab);
+    htabcpp = new Q3HBox(vtab);
+    lbl4 = new QLabel(htabcpp);
   
-   pbCppDefaultDeclaration = new QPushButton(TR("Default declaration"), htab);
-   pbNotGeneratedInCPP = new QPushButton(TR("Not generated in C++"), htab);
+   pbCppDefaultDeclaration = new QPushButton(TR("Default declaration"), htabcpp);
+   pbNotGeneratedInCPP = new QPushButton(TR("Not generated in C++"), htabcpp);
   
     addTab(cpptab, "C++");
   
@@ -399,10 +399,10 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
   showidldecl->setFont(font);
 
   
-     htab = new Q3HBox(vtab); 
-    lbl4 = new QLabel(htab);
-	pbIdlDefaultDeclaration = new QPushButton(TR("Default declaration"), htab); 
-	pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htab);
+    htabidl = new Q3HBox(vtab);
+    lbl4 = new QLabel(htabidl);
+    pbIdlDefaultDeclaration = new QPushButton(TR("Default declaration"), htabidl);
+    pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htabidl);
   
   
   // Profiled stereotype
@@ -465,6 +465,11 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
     BrowserClass::instances(nodes);
     nodes.full_names(node_names);
   }
+  else
+  {
+	nodes.clear();
+	node_names.clear();
+  }
   
   // general tab
   
@@ -491,6 +496,10 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
     edstereotype->setAutoCompletion(completion());
     connect(edstereotype, SIGNAL(activated(const QString &)),
 	    this, SLOT(edStereotypeActivated(const QString &)));
+  }
+  else
+  {
+	edstereotype->clear();
   }
   edstereotype->setCurrentItem(0);
 
@@ -551,6 +560,10 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
       edbasetype->insertStringList(node_names);
       edbasetype->setAutoCompletion(completion());
     }
+	else
+	{
+	edbasetype->clear();
+	}
   }
   edbasetype->setCurrentItem(0);
   edbasetype->setSizePolicy(sp);
@@ -610,6 +623,9 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 	    this, SLOT(default_description()));
 	connect(pbEditorForConstrant, SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
+	pbEditorForDescription->show();
+	pbDefaultForDescription->show();
+	pbEditorForConstrant->show();
   }
   else
   {
@@ -637,18 +653,26 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
   if (cl->cpp_is_external())
     cpp_external_cb->setChecked(TRUE);
   if (!isWritable)
+  {
     cpp_external_cb->setDisabled(TRUE);
-  else
-    connect(cpp_external_cb, SIGNAL(toggled(bool)),
+    disconnect(cpp_external_cb, SIGNAL(toggled(bool)), this,
 	    SLOT(cpp_default_decl()));
-  
+  }
+  else
+  {
+	cpp_external_cb->setDisabled(false);
+    connect(cpp_external_cb, SIGNAL(toggled(bool)), this,
+	    SLOT(cpp_default_decl()));
+  }
   if (currentNode->nestedp()) 
   {
-    bgvCpp = cpp_visibility.init(htab, cl->get_cpp_visibility(),
+    bgvCpp = cpp_visibility.init(htabcpp, cl->get_cpp_visibility(),
 			      FALSE, 0, TR("follow uml"));
     
     if (!isWritable)
       bgvCpp->setEnabled(FALSE);
+	  else
+	  bgvCpp->setEnabled(true);
   }
   edcppdecl->setText(c->cpp_decl);
   font = edcppdecl->font();
@@ -672,9 +696,9 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 
   if (!isWritable)
   {
-    same_width(lbl1, lbl2, lbl3);
-	lbl4->hide();
-	htab->hide();
+    same_width(lbl1cpp, lbl2cpp, lbl3cpp);
+    lbl4cpp->hide();
+    htabcpp->hide();
     disconnect(pbCppDefaultDeclaration, SIGNAL(clicked ()),
 	    this, SLOT(cpp_default_decl()));
     disconnect(pbNotGeneratedInCPP, SIGNAL(clicked ()),
@@ -687,8 +711,9 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 	    this, SLOT(cpp_default_decl()));
     connect(pbNotGeneratedInCPP, SIGNAL(clicked ()),
 	    this, SLOT(cpp_unmapped_decl()));
-  
-    same_width(lbl1, lbl2, lbl3, lbl4);
+    lbl4cpp->show();
+    hhtabcpptab->show();
+    same_width(lbl1cpp, lbl2cpp, lbl3cpp, lbl4cpp);
   }
   
 
@@ -928,6 +953,10 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
       ++it;
     }
   }
+  else
+  {
+	edswitch_type->clear();
+  }
   
   edswitch_type->setCurrentItem(0);
   
@@ -1000,6 +1029,7 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 	    this, SLOT(idl_unmapped_decl()));
     
     same_width(lbl1, lbl2, lbl3, lbl4);
+	htab->show();	
   }
   
   addTab(idltab, "IDL");
@@ -1023,6 +1053,10 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 		stereo_init_cb->insertItem("");
       stereo_init_cb->insertStringList(tools);
     }
+	else
+	{
+		stereo_init_cb->clear();
+	}
     stereo_init_cb->setCurrentItem(0);
     
     edinitparam->setReadOnly(!isWritable);
@@ -1036,6 +1070,10 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 		stereo_check_cb->insertItem("");
       stereo_check_cb->insertStringList(tools);
     }
+	else
+	{
+		stereo_check_cb->clear();
+	}
     stereo_check_cb->setCurrentItem(0);
     
     edcheckparam->setReadOnly(!isWritable);
@@ -3501,7 +3539,7 @@ uint ClassDialog::TypeID()
     return TypeIdentifier<ClassDialog>::id();
 }
 
-void ClassDialog::InitGui()
+void ClassDialog::InitGui(ClassData *c)
 {
 }
 
