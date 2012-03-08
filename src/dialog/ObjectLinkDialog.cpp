@@ -132,7 +132,7 @@ void ObjectLinkDialog::init(RelationData * current) {
   table->setNumRows(rels.count());
   table->setNumCols(5);
   table->setSelectionMode(Q3Table::Single);
-  table->setSorting(FALSE);
+  table->setSorting(true);
   
   table->horizontalHeader()->setLabel(0, TR("Class Inst."));
   table->horizontalHeader()->setLabel(1, TR("Role"));

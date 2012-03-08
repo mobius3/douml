@@ -137,7 +137,7 @@ void ShortcutDialog::accept() {
 
 ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
     : MyTable(n + 1, 6, parent), for_tool(tool) {
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(TRUE);
   horizontalHeader()->setLabel(0, TR("Shift"));

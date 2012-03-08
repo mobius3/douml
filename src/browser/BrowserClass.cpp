@@ -829,16 +829,7 @@ void BrowserClass::exec_menu_choice(int rank,
   case 15:
     ReferenceDialog::show(this);
     return;
-#if 0
-  case 16:
-    {
-      AssocComponentDialog dialog(associated_components);
-      
-      dialog.raise();
-      dialog.exec();
-    }
-    return;
-#endif
+
   case 9999:
     {
       l = inherited_operations(~0u);

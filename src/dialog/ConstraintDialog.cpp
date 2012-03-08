@@ -153,7 +153,7 @@ void ConstraintDialog::accept() {
 
 ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
     : Q3Table(c->elements.count(), 4, parent) {  
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);
   setRowMovingEnabled(FALSE);
   
