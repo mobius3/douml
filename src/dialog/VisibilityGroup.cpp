@@ -32,27 +32,30 @@
 
 #include "VisibilityGroup.h"
 
-Q3ButtonGroup * VisibilityGroup::init(QWidget * parent, UmlVisibility v, 
-				     bool pack_allowed,
-				     const char * title,
-				     const char * default_prefix) {
-   bgroup =
-     new Q3ButtonGroup((default_prefix != 0) ? 5 : 4,
-		      Qt::Horizontal, title, parent);
+Q3ButtonGroup * VisibilityGroup::init(QWidget *parent,UmlVisibility v, bool pack_allowed,
+                     const char *title,
+                     const char * default_prefix)
+{
+    if(!bgroup)
+    {
+    bgroup = new Q3ButtonGroup((default_prefix != 0) ? 5 : 4, Qt::Horizontal, title, parent);
+    public_rb = new QRadioButton("public", bgroup);
+    protected_rb = new QRadioButton("protected", bgroup);
+    private_rb = new QRadioButton("private", bgroup);
+    package_rb = (pack_allowed) ? new QRadioButton("package", bgroup) : 0;
+    default_visibility_rb =
+      new QRadioButton(default_pfix + " (protected)", bgroup);
+    }
+
    bgroup->setExclusive(TRUE);
    if (default_prefix != 0) {
      default_pfix = default_prefix;
-     default_visibility_rb =
-       new QRadioButton(default_pfix + " (protected)", bgroup);
+     default_visibility_rb->setText(default_pfix + " (protected)");
    }
    else
-     default_visibility_rb = 0;
-   
-   public_rb = new QRadioButton("public", bgroup);
-   protected_rb = new QRadioButton("protected", bgroup);
-   private_rb = new QRadioButton("private", bgroup);
-   package_rb = (pack_allowed) ? new QRadioButton("package", bgroup) : 0;
-  
+     default_visibility_rb->hide();
+
+
    switch (v) {
     case UmlPublic:
       public_rb->setChecked(TRUE);
@@ -67,7 +70,7 @@ Q3ButtonGroup * VisibilityGroup::init(QWidget * parent, UmlVisibility v,
       ((pack_allowed) ? package_rb : public_rb)->setChecked(TRUE);
       break;
     default:
-      if (default_visibility_rb != 0)
+      if (!default_visibility_rb->isHidden())
 	default_visibility_rb->setChecked(TRUE);
    }
    

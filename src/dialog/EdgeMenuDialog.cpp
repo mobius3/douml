@@ -1,6 +1,6 @@
 #include "EdgeMenuDialog.h"
 
-unsigned int ClosestEdge(QWidget*, QCursor)
+unsigned int ClosestEdge(QWidget*, QPoint)
 {
     return 0;
 }
@@ -22,13 +22,13 @@ void EdgeMenuDialog::SetDialogMode(bool _isWritable)
     isWritable = _isWritable;
     if (isWritable)
     {
-        setOkButton(TR("OK"));
-        setCancelButton(TR("Cancel"));
+        setOkButton(QObject::tr("OK"));
+        setCancelButton(QObject::tr("Cancel"));
     }
     else
     {
         setOkButton(QString());
-        setCancelButton(TR("Close"));
+        setCancelButton(QObject::tr("Close"));
     }
 
 }

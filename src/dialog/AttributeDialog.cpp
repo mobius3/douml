@@ -302,7 +302,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       htab = new Q3HBox(grid);
       
       Q3ButtonGroup * bg =
-	cpp_visibility.init(htab, a->get_cpp_visibility(), FALSE, 0, TR("follow uml"));
+    cpp_visibility.init(htab, a->get_cpp_visibility(), FALSE, 0, TR("follow uml"));
       
       if (visit)
 	bg->setEnabled(FALSE);
