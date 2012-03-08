@@ -19,7 +19,7 @@ void EdgeMenuDialog::leaveEvent(QEvent *event)
 
 void EdgeMenuDialog::SetDialogMode(bool _isWritable)
 {
-    isWritable = _isWritable;
+
     if (isWritable)
     {
         setOkButton(QObject::tr("OK"));

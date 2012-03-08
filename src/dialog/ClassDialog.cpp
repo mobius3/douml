@@ -76,7 +76,8 @@ static QString RelativeRoot;
 static QString RelativePrj;
 static QString Absolute;
 
-ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
+ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c)
+{
   // take time in case of many classes and artifacts
 
     bgvUml = 0;
@@ -85,381 +86,11 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
     bgvPython = 0;
     bgvPhp = 0;
     bgvIDL = 0;
+    isWritable = c->browser_node->is_writable();
+    applicableon_table = 0;
+    InitGui(c);
 
-    SetDialogMode(c->browser_node->is_writable());
-    setCaption(TR("Class dialog"));
-
-    if (isWritable)
-    {
-      BrowserClass::instances(nodes);
-      nodes.full_names(node_names);
-    }
-
-
-  Q3HBox * htab;
-  Q3VBox * vtab;
-  Q3Grid * grid;
-  QSplitter * split;
-  Q3GroupBox * bg;
-  QLabel * lbl1;
-  QLabel * lbl2;
-  QLabel * lbl3;
-  QLabel * lbl4;
-  QFont font;
-
-  BrowserClass * currentNode = (BrowserClass *) c->get_browser_node();
-  BrowserNode * grandParent = (BrowserNode *) currentNode->parent()->parent();
-
-  //!!!!! general tab elements
-  grid = new Q3Grid(2, this);
-  umltab = grid;
-  grid->setSpacing(5);
-  grid->setMargin(5);
-  
-  new QLabel(TR("name : "), grid);
-  edname = new LineEdit(cl->name(), grid); //toadd
-  
-  new QLabel(TR("stereotype : "), grid);
-  
-  edstereotype = new Q3ComboBox(isWritable, grid); // toadd
-    
-  // setting up checkboxes for active and abstract
-  new QLabel(grid);
-  htab = new Q3HBox(grid);
-  opt_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htab);
-  abstract_cb = new QCheckBox("abstract", opt_bg);
-  active_cb = new QCheckBox("active", opt_bg);
-  
-    // setting up radiobutton group for accessibility
-  //todo make external
-  // ASSUMING INSTANTIATE ON NULL
-
-  uml_visibility.init(htab, cl->get_uml_visibility(), TRUE); //toAdd
-  
-  basetypelbl = new QLabel(TR("base type : "), grid);
-  edbasetype = new Q3ComboBox(isWritable, grid);
-
-  new QLabel(TR("artifact : "), grid);
-
-  artifact = new Q3ComboBox(FALSE, grid);
-
-  
-  vtab = new Q3VBox(grid);
-  new QLabel(TR("description :"), vtab);
-  
-  pbEditorForDescription = new SmallPushButton(TR("Editor"), vtab);
-  pbDefaultForDescription = new SmallPushButton(TR("Default"), vtab);
-
-  
-  comment = new MultiLineEdit(grid);
-  comment->setReadOnly(!isWritable);
-  comment->setFont(font);
-  
-  vtab = new Q3VBox(grid);
-  new QLabel(TR("constraint :"), vtab);
-  pbEditorForConstrant = new SmallPushButton(TR("Editor"), vtab);
-
-  constraint = new MultiLineEdit(grid);
-  constraint->setReadOnly(!isWritable);
-  constraint->setFont(font);
-  
-  addTab(grid, "Uml");
- 
- 
-   // parameterized tab
-  
-  parametrized_vtab = new Q3VBox(this);
-  
-  parametrized_vtab->setMargin(5);
- 
- 
-  (new QLabel(TR("\nEnter formals in case the class is parameterized\n"), 
-	      parametrized_vtab))
-    ->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-
- 
- formals_table = new FormalParamsTable(c, parametrized_vtab, node_names, isWritable); //todo VISIT NOT FIXED
-	addTab(parametrized_vtab, TR("Parameterized"));
-	
-	
-  //!!! parameters for a class
-    instantiate_vtab = new Q3VBox(this);
-	instantiate_vtab->setMargin(5);
-	instantiateNotice = new QLabel(TR("\nSpecify actuals else formals default value will be used\n"),
-		instantiate_vtab);
-    instantiateNotice->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    actuals_table = new ActualParamsTable(c, instantiate_vtab, node_names, isWritable); //todo VISIT NOT FIXED
-	addTab(instantiate_vtab, TR("Instantiate"));
-	
-	//!!! C++
-	split = new QSplitter(Qt::Vertical, this);
-	cpptab = split;
-	split->setOpaqueResize(TRUE);
-
-	vtab = new Q3VBox(split); 
-
-	htab = new Q3HBox(vtab);
-    htab->setMargin(5);
-    lbl1 = new QLabel(htab);
-    bg = new Q3GroupBox(1, Qt::Horizontal, QString(), htab);
-	cpp_external_cb = new QCheckBox("external", bg);
-	
-
-    cpp_visibility.init(htab, cl->get_cpp_visibility(),
-			      FALSE, 0, TR("follow uml"));
-	
-	
-	
-	
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Declaration : "), htab);
-  edcppdecl = new MultiLineEdit(htab);
-  
-  vtab = new Q3VBox(split); 
-  
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
-  showcppdecl = new MultiLineEdit(htab);
-    
-    htabcpp = new Q3HBox(vtab);
-    lbl4 = new QLabel(htabcpp);
-  
-   pbCppDefaultDeclaration = new QPushButton(TR("Default declaration"), htabcpp);
-   pbNotGeneratedInCPP = new QPushButton(TR("Not generated in C++"), htabcpp);
-  
-    addTab(cpptab, "C++");
-  
-	//!!! JAVA
-	
-	split = new QSplitter(Qt::Vertical, this);
-  javatab = split;
-  split->setOpaqueResize(TRUE);
-  
-  vtab = new Q3VBox(split); 
-  
-  htab = new Q3HBox(vtab);
-  htab->setMargin(5);
-  lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
-  java_final_cb = new QCheckBox("final", bg);
-  java_external_cb = new QCheckBox("external", bg);
-  
-  
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Definition : "), htab);
-  edjavadecl = new MultiLineEdit(htab);
-  
-  
-  vtab = new Q3VBox(split); 
-  
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
-  showjavadecl = new MultiLineEdit(htab);
-  
-  htab = new Q3HBox(vtab); 
-  lbl4 = new QLabel(htab);
-	pbJavaDefaultDefinition = new QPushButton(TR("Default definition"), htab);
-	pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab);
-  
-  pbJavaAnnotation = new QPushButton("",htab);
-  
-  connect(pbJavaAnnotation, SIGNAL(clicked ()),
-	  this, SLOT(java_edit_annotation()));
-
-  addTab(split, "Java");
-  
-  
-  //!!! PHP
-  split = new QSplitter(Qt::Vertical, this);
-  phptab = split;
-  split->setOpaqueResize(TRUE);
-  
-  vtab = new Q3VBox(split); 
-  
-  htab = new Q3HBox(vtab);
-  htab->setMargin(5);
-  lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
-  php_final_cb = new QCheckBox("final", bg);
-  php_external_cb = new QCheckBox("external", bg);
-  
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Definition : "), htab);
-  edphpdecl = new MultiLineEdit(htab);
-  edphpdecl->setFont(font);
-  
-  
-  vtab = new Q3VBox(split); 
-  
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  pbPhpDefaultDefinition =  new QPushButton(TR("Default definition"), htab);
-  pbNotGeneratedInPhp =  new QPushButton(TR("Not generated in Php"), htab);
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
-  showphpdecl = new MultiLineEdit(htab);
-  showphpdecl->setReadOnly(TRUE);
-  showphpdecl->setFont(font);
-
-  htab = new Q3HBox(vtab); 
-  lbl4 = new QLabel(htab);
-
-  
-  addTab(phptab, "Php");
-  
-  
-  
-  // PYTHON
-  
-  split = new QSplitter(Qt::Vertical, this);
-  pythontab = split;
-  split->setOpaqueResize(TRUE);
-  
-  vtab = new Q3VBox(split); 
-  
-  htab = new Q3HBox(vtab);
-  htab->setMargin(5);
-  lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
-  python_2_2_cb = new QCheckBox("Python 2.2", bg);
-  python_external_cb = new QCheckBox("external", bg);
-  
-  
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Definition : "), htab);
-  edpythondecl = new MultiLineEdit(htab);
-  
-  vtab = new Q3VBox(split); 
-  
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
-  showpythondecl = new MultiLineEdit(htab);
-  showpythondecl->setReadOnly(TRUE);
-  showpythondecl->setFont(font);
-  
-  htab = new Q3HBox(vtab); 
-  lbl4 = new QLabel(htab);
-
-  pbPythonDefaultDefinition = new QPushButton(TR("Default definition"), htab);
-  pbNotGeneratedInPython = new QPushButton(TR("Not generated in Python"), htab);
-  
-  addTab(pythontab, "Python");
-
-  
-  
-  //IDL
-  
-  
-  split = new QSplitter(Qt::Vertical, this);
-  idltab = split;
-  split->setOpaqueResize(TRUE);
-  
-  vtab = new Q3VBox(split); 
-  
-  htab = new Q3HBox(vtab);
-  htab->setMargin(5);
-  switch_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htab);
-  new QLabel(TR("switch type : "), switch_bg);
-  edswitch_type = new Q3ComboBox(isWritable, switch_bg);
-  // !!!
-  QSizePolicy sp = edstereotype->sizePolicy();
-  sp.setHorData(QSizePolicy::Expanding);
-
-  edswitch_type->setSizePolicy(sp);
-  
-  htab = new Q3HBox(vtab);
-  htab->setMargin(5);
-  lbl1 = new QLabel(htab);
-  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
-  idl_external_cb = new QCheckBox("external", bg);
-  idl_local_cb = new QCheckBox("local", bg);
-  idl_custom_cb = new QCheckBox("custom", bg);
-  
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  lbl2 = new QLabel(TR("Declaration : "), htab);
-  edidldecl = new MultiLineEdit(htab);
-  edidldecl->setFont(font);
-  
-  
-  
-  vtab = new Q3VBox(split); 
-  
-  htab = new Q3HBox(vtab); 
-  htab->setMargin(5);  
-  lbl3 = new QLabel(TR("Result after\nsubstitution : "), htab);
-  showidldecl = new MultiLineEdit(htab);
-  showidldecl->setReadOnly(TRUE);
-  showidldecl->setFont(font);
-
-  
-    htabidl = new Q3HBox(vtab);
-    lbl4 = new QLabel(htabidl);
-    pbIdlDefaultDeclaration = new QPushButton(TR("Default declaration"), htabidl);
-    pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htabidl);
-  
-  
-  // Profiled stereotype
-  
-  
-	grid = new Q3Grid(2, this);
-    stereotypetab = grid;
-    grid->setSpacing(5);
-    grid->setMargin(5);
-    
-    QStringList tools = Tool::all_display();
-    QString s;
-    
-    new QLabel(TR("Initialization \nplug-out :"), grid);
-    htab = new Q3HBox(grid);
-    stereo_init_cb = new Q3ComboBox(FALSE, htab);
-  
-    new QLabel(TR("  parameter(s) : "), htab);
-    edinitparam = new LineEdit(currentNode->get_value("stereotypeSetParameters"), htab);
-
-      new QLabel(TR("Check \nplug-out :"), grid);
-    htab = new Q3HBox(grid);
-    stereo_check_cb = new Q3ComboBox(FALSE, htab);
-
-      new QLabel(TR("  parameter(s) : "), htab);
-    edcheckparam = new LineEdit(currentNode->get_value("stereotypeCheckParameters"), htab);
-
-      new QLabel(TR("Icon path :"), grid);
-    htab = new Q3HBox(grid);
-	ediconpath = new LineEdit("", htab);
-  
-	lblProfiledEmpty = new QLabel("", htab);
-	pbProfiledSteretypeBrowse = new SmallPushButton(TR("Browse"), htab);
-	lblProfiledEmpty2 = new QLabel("", htab);
-	vtabProfiled = new Q3VBox(htab);
-    QString ip = currentNode->get_value("stereotypeIconPath");
-    iconpathrootbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
-					       ? Absolute : RelativeRoot, vtab);
-    iconpathprjbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
-					      ? Absolute : RelativePrj, vtab);
-
-	lblProfiledEmpty3 = new QLabel("", htab);
-	new QLabel(TR("Apply on : "), grid);
-	applicableon_table =
-      new ApplicableOnTable(grid, "", !isWritable); // todo!! important !!! turned off parameter
-	  
-	addTab(stereotypetab, TR("Stereotype"));
-  
-  // USER : list key - value
-  
-	vtab = new Q3VBox(this);
-	kvtable = new KeyValuesTable(currentNode, vtab, !isWritable);
-	kvtable->remove("stereotypeSet");
-	
-	addTab(vtab, TR("Properties"));
-
-  
+  SetDialogMode(isWritable);
   if (isWritable)
   {
     BrowserClass::instances(nodes);
@@ -502,18 +133,13 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 	edstereotype->clear();
   }
   edstereotype->setCurrentItem(0);
-
+  QSizePolicy sp = edstereotype->sizePolicy();
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
 
 
 
 
-  // setting up checkboxes for active and abstract
-
-  new QLabel(grid);
-  htab = new Q3HBox(grid);
-  opt_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htab);
 
   if (cl->get_is_abstract())
   {
@@ -530,10 +156,10 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 
   // setting up radiobutton group for accessibility
 
-  bgvUml = uml_visibility.init(htab, cl->get_uml_visibility(), TRUE);
+  bgvUml = uml_visibility.init(htabUml, cl->get_uml_visibility(), TRUE);
   if (!isWritable)
     bgvUml->setEnabled(FALSE);
-  htab->setStretchFactor(bgvUml, 1000);
+  htabUml->setStretchFactor(bgvUml, 1000);
   
   BrowserNodeList inh;
   
@@ -712,7 +338,7 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
     connect(pbNotGeneratedInCPP, SIGNAL(clicked ()),
 	    this, SLOT(cpp_unmapped_decl()));
     lbl4cpp->show();
-    hhtabcpptab->show();
+    htabcpp->show();
     same_width(lbl1cpp, lbl2cpp, lbl3cpp, lbl4cpp);
   }
   
@@ -785,7 +411,7 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 	    this, SLOT(java_unmapped_decl()));
   }
   
-  same_width(lbl1, lbl2, lbl3, lbl4);
+  same_width(lbl1java, lbl2java, lbl3java, lbl4java);
   javaannotation = (const char *) c->java_annotation;
   pbJavaAnnotation->setText( !isWritable ? TR("Show annotation") : TR("Edit annotation"));
   
@@ -856,7 +482,7 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
           
   }
   
-  same_width(lbl1, lbl2, lbl3, lbl4);
+  same_width(lbl1php, lbl2php, lbl3php, lbl4php);
 
   if (!GenerationSettings::php_get_default_defs())
     setTabEnabled(phptab, false);
@@ -925,7 +551,7 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 	    this, SLOT(python_unmapped_decl()));
   }
   
-  same_width(lbl1, lbl2, lbl3, lbl4);
+  same_width(lbl1python, lbl2python, lbl3python, lbl4python);
   
   if (!GenerationSettings::python_get_default_defs())
     setTabEnabled(pythontab, false);
@@ -1013,12 +639,12 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 	
   if (!isWritable)
     {
-		same_width(lbl1, lbl2, lbl3);
+        same_width(lbl1idl, lbl2idl, lbl3idl);
 	    disconnect(pbIdlDefaultDeclaration, SIGNAL(clicked ()),
 	    this, SLOT(idl_default_decl()));
     disconnect(pbINotGeneratedInIdl, SIGNAL(clicked ()),
 	    this, SLOT(idl_unmapped_decl()));	
-		htab->hide();	
+        htabidl->hide();
 	}
 	
   else 
@@ -1028,8 +654,8 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
     connect(pbINotGeneratedInIdl, SIGNAL(clicked ()),
 	    this, SLOT(idl_unmapped_decl()));
     
-    same_width(lbl1, lbl2, lbl3, lbl4);
-	htab->show();	
+    same_width(lbl1idl, lbl2idl, lbl3idl, lbl4idl);
+    htabidl->show();
   }
   
   addTab(idltab, "IDL");
@@ -1045,9 +671,11 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
     if (grannyIsUmlPackage && grannyIsProfiled)
 	{
     stereo_init_cb->clear();
+    QString s;
     s = currentNode->get_value("stereotypeSet");
     stereo_init_cb->insertItem(s);
-    if (isWritable) 
+    QStringList tools = Tool::all_display();
+    if (isWritable)
 	{
       if (!s.isEmpty())
 		stereo_init_cb->insertItem("");
@@ -1062,6 +690,7 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
     edinitparam->setReadOnly(!isWritable);
     
     s = currentNode->get_value("stereotypeCheck");
+
     stereo_check_cb->clear();
 	stereo_check_cb->insertItem(s);
     if (isWritable) 
@@ -1120,14 +749,15 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
       connect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
       iconpathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
       lblProfiledEmpty3->show();
-	  new QLabel("", htab);
+
     }
 
-    new QLabel(TR("Apply on : "), grid);
-    applicableon_table =
-      new ApplicableOnTable(grid, currentNode->get_value("stereotypeApplyOn"), !isWritable);
+
+    if(applicableon_table)
+        delete applicableon_table;
+      applicableon_table = new ApplicableOnTable(stereotypeGrid, currentNode->get_value("stereotypeApplyOn"), !isWritable);
     
-    addTab(grid, TR("Stereotype"));
+    addTab(stereotypeGrid, TR("Stereotype"));
   }
   else
     setTabEnabled(stereotypetab, false);
@@ -1142,9 +772,9 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
 	  kvtable->remove("stereotypeApplyOn");
 	  kvtable->remove("stereotypeIconPath");
 
-  
-  addTab(vtab, TR("Properties"));
-  
+
+
+
   //
   
   QString stereotype = fromUnicode(edstereotype->currentText());
@@ -3541,6 +3171,380 @@ uint ClassDialog::TypeID()
 
 void ClassDialog::InitGui(ClassData *c)
 {
+
+    setCaption(TR("Class dialog"));
+
+    currentNode = (BrowserClass *) c->get_browser_node();
+    grandParent = (BrowserNode *) currentNode->parent()->parent();
+
+
+    if (isWritable)
+    {
+      BrowserClass::instances(nodes);
+      nodes.full_names(node_names);
+    }
+
+  Q3HBox * htab;
+  Q3VBox * vtab;
+  Q3Grid * grid;
+  QSplitter * split;
+  Q3GroupBox * bg;
+  QLabel * lbl1;
+  QLabel * lbl2;
+  QLabel * lbl3;
+  QLabel * lbl4;
+  currentNode = (BrowserClass *) c->get_browser_node();
+  grandParent = (BrowserNode *) currentNode->parent()->parent();
+
+  //!!!!! general tab elements
+  grid = new Q3Grid(2, this);
+  umltab = grid;
+  grid->setSpacing(5);
+  grid->setMargin(5);
+
+  new QLabel(TR("name : "), grid);
+  edname = new LineEdit(cl->name(), grid); //toadd
+
+  new QLabel(TR("stereotype : "), grid);
+
+  edstereotype = new Q3ComboBox(isWritable, grid); // toadd
+
+  // setting up checkboxes for active and abstract
+  new QLabel(grid);
+  htabUml = new Q3HBox(grid);
+  opt_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htabUml);
+  abstract_cb = new QCheckBox("abstract", opt_bg);
+  active_cb = new QCheckBox("active", opt_bg);
+
+    // setting up radiobutton group for accessibility
+  //todo make external
+  // ASSUMING INSTANTIATE ON NULL
+
+  uml_visibility.init(htabUml, cl->get_uml_visibility(), TRUE); //toAdd
+
+  basetypelbl = new QLabel(TR("base type : "), grid);
+  edbasetype = new Q3ComboBox(isWritable, grid);
+
+  new QLabel(TR("artifact : "), grid);
+
+  artifact = new Q3ComboBox(FALSE, grid);
+
+
+  vtab = new Q3VBox(grid);
+  new QLabel(TR("description :"), vtab);
+
+  pbEditorForDescription = new SmallPushButton(TR("Editor"), vtab);
+  pbDefaultForDescription = new SmallPushButton(TR("Default"), vtab);
+
+
+  comment = new MultiLineEdit(grid);
+  comment->setReadOnly(!isWritable);
+  comment->setFont(font);
+
+  vtab = new Q3VBox(grid);
+  new QLabel(TR("constraint :"), vtab);
+  pbEditorForConstrant = new SmallPushButton(TR("Editor"), vtab);
+
+  constraint = new MultiLineEdit(grid);
+  constraint->setReadOnly(!isWritable);
+  constraint->setFont(font);
+
+  addTab(grid, "Uml");
+
+
+   // parameterized tab
+
+  parametrized_vtab = new Q3VBox(this);
+
+  parametrized_vtab->setMargin(5);
+
+
+  (new QLabel(TR("\nEnter formals in case the class is parameterized\n"),
+          parametrized_vtab))
+    ->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+
+
+ formals_table = new FormalParamsTable(c, parametrized_vtab, node_names, isWritable); //todo VISIT NOT FIXED
+    addTab(parametrized_vtab, TR("Parameterized"));
+
+
+  //!!! parameters for a class
+    instantiate_vtab = new Q3VBox(this);
+    instantiate_vtab->setMargin(5);
+    instantiateNotice = new QLabel(TR("\nSpecify actuals else formals default value will be used\n"),
+        instantiate_vtab);
+    instantiateNotice->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    actuals_table = new ActualParamsTable(c, instantiate_vtab, node_names, isWritable); //todo VISIT NOT FIXED
+    addTab(instantiate_vtab, TR("Instantiate"));
+
+    //!!! C++
+    split = new QSplitter(Qt::Vertical, this);
+    cpptab = split;
+    split->setOpaqueResize(TRUE);
+
+    vtab = new Q3VBox(split);
+
+    htab = new Q3HBox(vtab);
+    htab->setMargin(5);
+    lbl1cpp = new QLabel(htab);
+    bg = new Q3GroupBox(1, Qt::Horizontal, QString(), htab);
+    cpp_external_cb = new QCheckBox("external", bg);
+
+
+    cpp_visibility.init(htab, cl->get_cpp_visibility(),
+                  FALSE, 0, TR("follow uml"));
+
+
+
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl2cpp = new QLabel(TR("Declaration : "), htab);
+  edcppdecl = new MultiLineEdit(htab);
+
+  vtab = new Q3VBox(split);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl3cpp = new QLabel(TR("Result after\nsubstitution : "), htab);
+  showcppdecl = new MultiLineEdit(htab);
+
+    htabcpp = new Q3HBox(vtab);
+    lbl4cpp = new QLabel(htabcpp);
+
+   pbCppDefaultDeclaration = new QPushButton(TR("Default declaration"), htabcpp);
+   pbNotGeneratedInCPP = new QPushButton(TR("Not generated in C++"), htabcpp);
+
+    addTab(cpptab, "C++");
+
+    //!!! JAVA
+
+    split = new QSplitter(Qt::Vertical, this);
+  javatab = split;
+  split->setOpaqueResize(TRUE);
+
+  vtab = new Q3VBox(split);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl1java = new QLabel(htab);
+  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
+  java_final_cb = new QCheckBox("final", bg);
+  java_external_cb = new QCheckBox("external", bg);
+
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl2java = new QLabel(TR("Definition : "), htab);
+  edjavadecl = new MultiLineEdit(htab);
+
+
+  vtab = new Q3VBox(split);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl3java = new QLabel(TR("Result after\nsubstitution : "), htab);
+  showjavadecl = new MultiLineEdit(htab);
+
+  htab = new Q3HBox(vtab);
+  lbl4java = new QLabel(htab);
+    pbJavaDefaultDefinition = new QPushButton(TR("Default definition"), htab);
+    pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab);
+
+  pbJavaAnnotation = new QPushButton("",htab);
+
+  connect(pbJavaAnnotation, SIGNAL(clicked ()),
+      this, SLOT(java_edit_annotation()));
+
+  addTab(split, "Java");
+
+
+  //!!! PHP
+  split = new QSplitter(Qt::Vertical, this);
+  phptab = split;
+  split->setOpaqueResize(TRUE);
+
+  vtab = new Q3VBox(split);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl1php = new QLabel(htab);
+  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
+  php_final_cb = new QCheckBox("final", bg);
+  php_external_cb = new QCheckBox("external", bg);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl2php = new QLabel(TR("Definition : "), htab);
+  edphpdecl = new MultiLineEdit(htab);
+  edphpdecl->setFont(font);
+
+
+  vtab = new Q3VBox(split);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  pbPhpDefaultDefinition =  new QPushButton(TR("Default definition"), htab);
+  pbNotGeneratedInPhp =  new QPushButton(TR("Not generated in Php"), htab);
+  lbl3php = new QLabel(TR("Result after\nsubstitution : "), htab);
+  showphpdecl = new MultiLineEdit(htab);
+  showphpdecl->setReadOnly(TRUE);
+  showphpdecl->setFont(font);
+
+  htab = new Q3HBox(vtab);
+  lbl4php = new QLabel(htab);
+
+
+  addTab(phptab, "Php");
+
+
+
+  // PYTHON
+
+  split = new QSplitter(Qt::Vertical, this);
+  pythontab = split;
+  split->setOpaqueResize(TRUE);
+
+  vtab = new Q3VBox(split);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl1python = new QLabel(htab);
+  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
+  python_2_2_cb = new QCheckBox("Python 2.2", bg);
+  python_external_cb = new QCheckBox("external", bg);
+
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl2python = new QLabel(TR("Definition : "), htab);
+  edpythondecl = new MultiLineEdit(htab);
+
+  vtab = new Q3VBox(split);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl3python = new QLabel(TR("Result after\nsubstitution : "), htab);
+  showpythondecl = new MultiLineEdit(htab);
+  showpythondecl->setReadOnly(TRUE);
+  showpythondecl->setFont(font);
+
+  htab = new Q3HBox(vtab);
+  lbl4python = new QLabel(htab);
+
+  pbPythonDefaultDefinition = new QPushButton(TR("Default definition"), htab);
+  pbNotGeneratedInPython = new QPushButton(TR("Not generated in Python"), htab);
+
+  addTab(pythontab, "Python");
+
+
+
+  //IDL
+
+
+  split = new QSplitter(Qt::Vertical, this);
+  idltab = split;
+  split->setOpaqueResize(TRUE);
+
+  vtab = new Q3VBox(split);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  switch_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htab);
+  new QLabel(TR("switch type : "), switch_bg);
+  edswitch_type = new Q3ComboBox(isWritable, switch_bg);
+  // !!!
+  QSizePolicy sp = edstereotype->sizePolicy();
+  sp.setHorData(QSizePolicy::Expanding);
+
+  edswitch_type->setSizePolicy(sp);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl1idl = new QLabel(htab);
+  bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
+  idl_external_cb = new QCheckBox("external", bg);
+  idl_local_cb = new QCheckBox("local", bg);
+  idl_custom_cb = new QCheckBox("custom", bg);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl2idl = new QLabel(TR("Declaration : "), htab);
+  edidldecl = new MultiLineEdit(htab);
+  edidldecl->setFont(font);
+
+
+
+  vtab = new Q3VBox(split);
+
+  htab = new Q3HBox(vtab);
+  htab->setMargin(5);
+  lbl3idl = new QLabel(TR("Result after\nsubstitution : "), htab);
+  showidldecl = new MultiLineEdit(htab);
+  showidldecl->setReadOnly(TRUE);
+  showidldecl->setFont(font);
+
+
+    htabidl = new Q3HBox(vtab);
+    lbl4idl = new QLabel(htabidl);
+    pbIdlDefaultDeclaration = new QPushButton(TR("Default declaration"), htabidl);
+    pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htabidl);
+
+
+  // Profiled stereotype
+
+
+    stereotypeGrid = new Q3Grid(2, this);
+    stereotypetab = stereotypeGrid;
+    stereotypeGrid->setSpacing(5);
+    stereotypeGrid->setMargin(5);
+
+    QStringList tools = Tool::all_display();
+    QString s;
+
+    new QLabel(TR("Initialization \nplug-out :"), stereotypeGrid);
+    htab = new Q3HBox(stereotypeGrid);
+    stereo_init_cb = new Q3ComboBox(FALSE, htab);
+
+    new QLabel(TR("  parameter(s) : "), htab);
+    edinitparam = new LineEdit(currentNode->get_value("stereotypeSetParameters"), htab);
+
+      new QLabel(TR("Check \nplug-out :"), stereotypeGrid);
+    htab = new Q3HBox(stereotypeGrid);
+    stereo_check_cb = new Q3ComboBox(FALSE, htab);
+
+      new QLabel(TR("  parameter(s) : "), htab);
+    edcheckparam = new LineEdit(currentNode->get_value("stereotypeCheckParameters"), htab);
+
+      new QLabel(TR("Icon path :"), stereotypeGrid);
+    htab = new Q3HBox(stereotypeGrid);
+    ediconpath = new LineEdit("", htab);
+
+    lblProfiledEmpty = new QLabel("", htab);
+    pbProfiledSteretypeBrowse = new SmallPushButton(TR("Browse"), htab);
+    lblProfiledEmpty2 = new QLabel("", htab);
+    vtabProfiled = new Q3VBox(htab);
+    QString ip = currentNode->get_value("stereotypeIconPath");
+    iconpathrootbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
+                           ? Absolute : RelativeRoot, vtab);
+    iconpathprjbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
+                          ? Absolute : RelativePrj, vtab);
+
+    lblProfiledEmpty3 = new QLabel("", htab);
+    new QLabel(TR("Apply on : "), stereotypeGrid);
+    applicableon_table =
+      new ApplicableOnTable(stereotypeGrid, "", !isWritable); // todo!! important !!! turned off parameter
+
+    addTab(stereotypetab, TR("Stereotype"));
+
+  // USER : list key - value
+
+    keyValueTab = new Q3VBox(this);
+    kvtable = new KeyValuesTable(currentNode, keyValueTab, !isWritable);
+    kvtable->remove("stereotypeSet");
+
+    addTab(keyValueTab, TR("Properties"));
+
 }
 
 void ClassDialog::FillGuiElements(BrowserNode *)
