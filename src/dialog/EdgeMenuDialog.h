@@ -3,7 +3,7 @@
 #include <Q3TabDialog>
 #include <QWidget>
 
-unsigned int ClosestEdge(QWidget*, QCursor);
+unsigned int ClosestEdge(QWidget*, QPoint);
 
 class EdgeMenuDialog : public Q3TabDialog
 {
@@ -13,7 +13,7 @@ public:
     virtual ~EdgeMenuDialog();
 
     virtual void InitGui() = 0;
-    void FillGuiElements(BrowserNode*) = 0;
+//    void FillGuiElements(BrowserNode*) = 0;
 //    template <typename T>
 //    void FillGuiElements(T *)
 //    {
@@ -35,7 +35,7 @@ protected:
 
 
 signals:
-    void edgeMenuRequested(uint, uint);
+    void edgeMenuRequested(uint);
 
 };
 

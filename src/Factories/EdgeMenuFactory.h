@@ -5,6 +5,7 @@
 
 #include "boost/functional/factory.hpp"
 #include <functional>
+#include <map>
 #include <QMap>
 
 //#include <pair>
@@ -16,6 +17,8 @@ struct Orientationvariables
     std::map<std::pair<int,QString>, QString> iconNames;
 };
 
+typedef std::function<QToolBar*(uint)>  ToolbarFactory;
+
 
 class EdgeMenuFactory : public QObject
 {
@@ -23,12 +26,13 @@ class EdgeMenuFactory : public QObject
 public:
     EdgeMenuFactory();
     virtual ~EdgeMenuFactory();
-    CreateEdgeMenu(uint, uint);
+    void CreateEdgeMenu(uint, uint _orientation);
 
 public slots:
     void OnEdgeMenuRequested(uint classID, uint orientation);
 
-    QMap<uint,boost::function<QToolBar*(uint)> > factories;
+private :
+    QMap<uint,ToolbarFactory > factories;
     QMap<uint, QToolBar*> createdToolbars;
     QMap<uint, QToolBar*> menus;
     QMap<int, Orientationvariables> orientationSwitch;

@@ -99,7 +99,7 @@ class ClassDialog : public EdgeMenuDialog {
     QCheckBox * java_final_cb;
     MultiLineEdit * edjavadecl;
     MultiLineEdit * showjavadecl;
-    QPushButton * editjavaannotation;
+    //QPushButton * editjavaannotation;
     QString javaannotation;
     
     // Php
@@ -146,6 +146,35 @@ class ClassDialog : public EdgeMenuDialog {
     
     static QSize previous_size;
 
+    // added buttons
+    QPushButton * pbEditorForDescription;
+    QPushButton * pbDefaultForDescription;
+    QPushButton * pbEditorForConstrant;
+    QPushButton * pbCppDefaultDeclaration;
+    QPushButton * pbNotGeneratedInCPP;
+    QPushButton * pbJavaDefaultDefinition;
+    QPushButton * pbNotGeneratedInJava;
+    QPushButton * pbJavaAnnotation;
+    QPushButton * pbPhpDefaultDefinition;
+    QPushButton * pbNotGeneratedInPhp;
+    QPushButton * pbPythonDefaultDefinition;
+    QPushButton * pbNotGeneratedInPython;
+    QPushButton * pbIdlDefaultDeclaration;
+    QPushButton * pbINotGeneratedInIdl;
+    QLabel* instantiateNotice;
+    QLabel* lblProfiledEmpty;
+    QPushButton* pbProfiledSteretypeBrowse;
+    QLabel* lblProfiledEmpty2;
+    QLabel* lblProfiledEmpty3;
+    Q3VBox* vtabProfiled;
+    Q3ButtonGroup* bgvUml;
+    Q3ButtonGroup* bgvCpp;
+    Q3ButtonGroup* bgvJava;
+    Q3ButtonGroup* bgvPython;
+    Q3ButtonGroup* bgvPhp;
+    Q3ButtonGroup* bgvIDL;
+
+
 
     virtual uint TypeID();
 
@@ -154,7 +183,7 @@ class ClassDialog : public EdgeMenuDialog {
     void FillGuiElements(ClassData*);
 
     //refactoring changes
-    bool isWritable;
+
 
   public:
     ClassDialog(ClassData * c);
