@@ -216,7 +216,7 @@ class ClassDialog : public EdgeMenuDialog {
     virtual void InitGui(ClassData * c);
     void FillGuiElements(BrowserNode*);
     void FillGuiElements(ClassData*);
-
+    void NullPointers();
     //refactoring changes
 
 

@@ -80,17 +80,11 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c)
 {
   // take time in case of many classes and artifacts
 
-    bgvUml = 0;
-    bgvCpp = 0;
-    bgvJava = 0;
-    bgvPython = 0;
-    bgvPhp = 0;
-    bgvIDL = 0;
     isWritable = c->browser_node->is_writable();
-    applicableon_table = 0;
+    NullPointers();
+    SetDialogMode(isWritable);
     InitGui(c);
 
-  SetDialogMode(isWritable);
   if (isWritable)
   {
     BrowserClass::instances(nodes);
@@ -3499,9 +3493,6 @@ void ClassDialog::InitGui(ClassData *c)
     stereotypeGrid->setSpacing(5);
     stereotypeGrid->setMargin(5);
 
-    QStringList tools = Tool::all_display();
-    QString s;
-
     new QLabel(TR("Initialization \nplug-out :"), stereotypeGrid);
     htab = new Q3HBox(stereotypeGrid);
     stereo_init_cb = new Q3ComboBox(FALSE, htab);
@@ -3553,4 +3544,63 @@ void ClassDialog::FillGuiElements(BrowserNode *)
 
 void ClassDialog::FillGuiElements(ClassData *)
 {
+}
+
+void ClassDialog::NullPointers()
+{
+    instantiateNotice = 0;
+    lblProfiledEmpty = 0;
+    pbProfiledSteretypeBrowse = 0;
+    lblProfiledEmpty2 = 0;
+    lblProfiledEmpty3 = 0;
+    vtabProfiled = 0;
+    bgvUml = 0;
+    bgvCpp = 0;
+    bgvJava = 0;
+    bgvPython = 0;
+    bgvPhp = 0;
+    bgvIDL = 0;
+    htabcpp = 0;
+    htabidl = 0;
+    lbl1cpp = 0;
+    lbl2cpp = 0;
+    lbl3cpp = 0;
+    lbl4cpp = 0;
+
+
+    lbl1php = 0;
+    lbl2php = 0;
+    lbl3php = 0;
+    lbl4php = 0;
+
+    lbl1python = 0;
+    lbl2python = 0;
+    lbl3python = 0;
+    lbl4python = 0;
+
+    lbl1idl = 0;
+    lbl2idl = 0;
+    lbl3idl = 0;
+    lbl4idl = 0;
+
+    lbl1java = 0;
+    lbl2java = 0;
+    lbl3java = 0;
+    lbl4java = 0;
+    stereotypeGrid = 0;
+    htabUml = 0;
+
+
+    currentNode = 0;
+    grandParent = 0;
+
+    keyValueTab = 0;
+
+    bgvUml = 0;
+    bgvCpp = 0;
+    bgvJava = 0;
+    bgvPython = 0;
+    bgvPhp = 0;
+    bgvIDL = 0;
+    applicableon_table = 0;
 }
