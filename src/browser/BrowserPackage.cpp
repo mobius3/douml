@@ -650,10 +650,7 @@ through a relation"));
 
 #warning reverse python
 
-#if 0
-	  if (python)
-	    revm.insertItem("Python", 35);
-#endif
+
 	  if (java || cpp) {
 	    m.insertItem(TR("Roundtrip"), &roundtripm);
 	    
@@ -914,11 +911,7 @@ void BrowserPackage::exec_menu_choice(int rank) {
     if (phase_renumerotation == 2) {
 
       renumber(2);
-#if 0
-      ???
-      all.insert(BrowserView::get_project()->get_ident(), 
-		 BrowserView::get_project());
-#endif
+
       save_all(FALSE);
       QApplication::exit();
     }

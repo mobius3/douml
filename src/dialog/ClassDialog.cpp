@@ -68,6 +68,7 @@
 #include "Tool.h"
 #include "Images.h"
 #include "translate.h"
+#include "misc/TypeIdentifier.h"
 
 QSize ClassDialog::previous_size;
 
@@ -75,27 +76,21 @@ static QString RelativeRoot;
 static QString RelativePrj;
 static QString Absolute;
 
-ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
+ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c) {
   // take time in case of many classes and artifacts
-  if (c->browser_node->is_writable()) {
-    setOkButton(TR("OK"));
-    setCancelButton(TR("Cancel"));
-  }
-  else {
-    setOkButton(QString());
-    setCancelButton(TR("Close"));
-  }
-  
-  setCaption(TR("Class dialog"));
 
-  bool visit = !hasOkButton();
+    SetDialogMode(c->browser_node->is_writable());
+    setCaption(TR("Class dialog"));
+
+
   
-  if (! visit) {
+  if (isWritable)
+  {
     BrowserClass::instances(nodes);
     nodes.full_names(node_names);
   }
   
-  BrowserClass * bn = (BrowserClass *) c->get_browser_node();
+  BrowserClass * currentNode = (BrowserClass *) c->get_browser_node();
 
   Q3HBox * htab;
   Q3VBox * vtab;
@@ -117,23 +112,27 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(cl->name(), grid);
-  edname->setReadOnly(visit);
+  edname->setReadOnly(!isWritable);
   
+  // filling stereotypes edit element
+
   new QLabel(TR("stereotype : "), grid);
     
-  edstereotype = new Q3ComboBox(!visit, grid);
+  edstereotype = new Q3ComboBox(isWritable, grid);
   edstereotype->insertItem(toUnicode(cl->get_stereotype()));
-  if (! visit) {
-    BrowserNode * gp = (BrowserNode *) bn->parent()->parent();
+  if (isWritable) {
+    BrowserNode * grandParent = (BrowserNode *) currentNode->parent()->parent();
     
-    if ((gp->get_type() == UmlPackage) &&
-	!strcmp(gp->get_data()->get_stereotype(), "profile"))
+    bool grannyIsUmlPackage = grandParent->get_type() == UmlPackage;
+    bool grannyIsProfiled = !strcmp(grandParent->get_data()->get_stereotype(), "profile");
+    if (grannyIsUmlPackage && grannyIsProfiled)
       edstereotype->insertStringList(BrowserClass::default_stereotypes());
-    else {
-      QStringList l = BrowserClass::default_stereotypes();
+    else
+    {
+      QStringList stereotypesList = BrowserClass::default_stereotypes();
       
-      l.remove("stereotype");
-      edstereotype->insertStringList(l);
+      stereotypesList.remove("stereotype");
+      edstereotype->insertStringList(stereotypesList);
     }
     edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClass));
     edstereotype->setAutoCompletion(completion());
@@ -144,40 +143,48 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   QSizePolicy sp = edstereotype->sizePolicy();
   sp.setHorData(QSizePolicy::Expanding);
   edstereotype->setSizePolicy(sp);
-    
+
+
+
+
+  // setting up checkboxes for active and abstract
+
   new QLabel(grid);
   htab = new Q3HBox(grid);
   opt_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htab);
   abstract_cb = new QCheckBox("abstract", opt_bg);
   if (cl->get_is_abstract()) {
     abstract_cb->setChecked(TRUE);
-    if (bn->have_abstract_operation())
+    if (currentNode->have_abstract_operation())
       abstract_cb->setEnabled(FALSE);
   }
-  abstract_cb->setDisabled(visit);
+  abstract_cb->setDisabled(!isWritable);
   active_cb = new QCheckBox("active", opt_bg);
   if (cl->get_is_active())
     active_cb->setChecked(TRUE);
-  active_cb->setDisabled(visit);
+  active_cb->setDisabled(!isWritable);
 
+
+  // setting up radiobutton group for accessibility
   Q3ButtonGroup * bgv;
   
   bgv = uml_visibility.init(htab, cl->get_uml_visibility(), TRUE);
-  if (visit)
+  if (!isWritable)
     bgv->setEnabled(FALSE);
   htab->setStretchFactor(bgv, 1000);  
   
   BrowserNodeList inh;
   
   basetypelbl = new QLabel(TR("base type : "), grid);
-  edbasetype = new Q3ComboBox(!visit, grid);
-  if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize),
-      inh.count() != 0) {
+  edbasetype = new Q3ComboBox(isWritable, grid);
+  if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize),inh.count() != 0)
+  {
     // first inheritance is taken in all cases
     edbasetype->insertItem(((RelationData *) inh.at(0)->get_data())->get_end_class()->full_name(TRUE));
     edbasetype->setEnabled(FALSE);
   }
-  else {
+  else
+  {
     QString bt = cl->get_base_type().get_full_type();
     
     if (bt.isEmpty() &&		// no base_type, try with a dependency
@@ -186,7 +193,8 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     
     edbasetype->insertItem(bt);
     
-    if (!visit) {
+    if (isWritable)
+    {
       edbasetype->insertStringList(GenerationSettings::basic_types());
       edbasetype->insertStringList(node_names);
       edbasetype->setAutoCompletion(completion());
@@ -195,10 +203,10 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   edbasetype->setCurrentItem(0);
   edbasetype->setSizePolicy(sp);
   
-  if (!bn->nestedp()) {
-    BrowserNode * bc = bn->get_associated_artifact();
+  if (!currentNode->nestedp()) {
+    BrowserNode * bc = currentNode->get_associated_artifact();
     
-    if (visit) {
+    if (!isWritable) {
       if ((bc != 0) && !bc->deletedp()) {
 	new QLabel(TR("artifact : "), grid);
 	artifact = new Q3ComboBox(FALSE, grid);
@@ -241,25 +249,25 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   vtab = new Q3VBox(grid);
   new QLabel(TR("description :"), vtab);
-  if (! visit) {
+  if (isWritable) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_description()));
     connect(new SmallPushButton(TR("Default"), vtab), SIGNAL(clicked()),
 	    this, SLOT(default_description()));
   }
   comment = new MultiLineEdit(grid);
-  comment->setReadOnly(visit);
-  comment->setText(bn->get_comment());
+  comment->setReadOnly(!isWritable);
+  comment->setText(currentNode->get_comment());
   comment->setFont(font);
   
   vtab = new Q3VBox(grid);
   new QLabel(TR("constraint :"), vtab);
-  if (! visit) {
+  if (isWritable) {
     connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
 	    this, SLOT(edit_constraint()));
   }
   constraint = new MultiLineEdit(grid);
-  constraint->setReadOnly(visit);
+  constraint->setReadOnly(!isWritable);
   constraint->setText(c->constraint);
   constraint->setFont(font);
   
@@ -276,7 +284,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     ->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
   
   formals_table =
-    new FormalParamsTable(c, parametrized_vtab, node_names, visit);
+    new FormalParamsTable(c, parametrized_vtab, node_names, !isWritable);
   
   addTab(parametrized_vtab, TR("Parameterized"));
   
@@ -292,7 +300,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
       ->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
   
     actuals_table =
-      new ActualParamsTable(c, instantiate_vtab, node_names, visit);
+      new ActualParamsTable(c, instantiate_vtab, node_names, !isWritable);
   
     addTab(instantiate_vtab, TR("Instantiate"));
   }
@@ -314,17 +322,17 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   cpp_external_cb = new QCheckBox("external", bg);
   if (cl->cpp_is_external())
     cpp_external_cb->setChecked(TRUE);
-  if (visit)
+  if (!isWritable)
     cpp_external_cb->setDisabled(TRUE);
   else
     connect(cpp_external_cb, SIGNAL(toggled(bool)),
 	    SLOT(cpp_default_decl()));
   
-  if (bn->nestedp()) {
+  if (currentNode->nestedp()) {
     bgv = cpp_visibility.init(htab, cl->get_cpp_visibility(),
 			      FALSE, 0, TR("follow uml"));
     
-    if (visit)
+    if (!isWritable)
       bgv->setEnabled(FALSE);
   }
   
@@ -338,7 +346,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   edcppdecl->setFont(font);
-  if (visit)
+  if (!isWritable)
     edcppdecl->setReadOnly(TRUE);
   else
     connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
@@ -352,7 +360,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   showcppdecl->setReadOnly(TRUE);
   showcppdecl->setFont(font);
 
-  if (visit)
+  if (!isWritable)
     same_width(lbl1, lbl2, lbl3);
   else {
     htab = new Q3HBox(vtab); 
@@ -388,7 +396,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   java_external_cb = new QCheckBox("external", bg);
   if (cl->java_is_external())
     java_external_cb->setChecked(TRUE);
-  if (visit) {
+  if (!isWritable) {
     java_final_cb->setDisabled(TRUE);
     java_external_cb->setDisabled(TRUE);
   }
@@ -405,7 +413,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   edjavadecl = new MultiLineEdit(htab);
   edjavadecl->setText(c->java_decl);
   edjavadecl->setFont(font);
-  if (visit)
+  if (!isWritable)
     edjavadecl->setReadOnly(TRUE);
   else
     connect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update_decl()));
@@ -422,7 +430,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   htab = new Q3HBox(vtab); 
   lbl4 = new QLabel(htab);
 
-  if (!visit) {
+  if (isWritable) {
     connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
 	    this, SLOT(java_default_decl()));
     connect(new QPushButton(TR("Not generated in Java"), htab), SIGNAL(clicked ()),
@@ -433,7 +441,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   same_width(lbl1, lbl2, lbl3, lbl4);
   javaannotation = (const char *) c->java_annotation;
   editjavaannotation =
-    new QPushButton((visit) ? TR("Show annotation") : TR("Edit annotation"),
+    new QPushButton((!isWritable) ? TR("Show annotation") : TR("Edit annotation"),
 		    htab);
   connect(editjavaannotation, SIGNAL(clicked ()),
 	  this, SLOT(java_edit_annotation()));
@@ -461,7 +469,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   php_external_cb = new QCheckBox("external", bg);
   if (cl->php_is_external())
     php_external_cb->setChecked(TRUE);
-  if (visit) {
+  if (!isWritable) {
     php_final_cb->setDisabled(TRUE);
     php_external_cb->setDisabled(TRUE);
   }
@@ -478,7 +486,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   edphpdecl = new MultiLineEdit(htab);
   edphpdecl->setText(c->php_decl);
   edphpdecl->setFont(font);
-  if (visit)
+  if (!isWritable)
     edphpdecl->setReadOnly(TRUE);
   else
     connect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update_decl()));
@@ -495,7 +503,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   htab = new Q3HBox(vtab); 
   lbl4 = new QLabel(htab);
 
-  if (!visit) {
+  if (isWritable) {
     connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
 	    this, SLOT(php_default_decl()));
     connect(new QPushButton(TR("Not generated in Php"), htab), SIGNAL(clicked ()),
@@ -528,7 +536,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   python_external_cb = new QCheckBox("external", bg);
   if (cl->python_is_external())
     python_external_cb->setChecked(TRUE);
-  if (visit) {
+  if (!isWritable) {
     python_2_2_cb->setDisabled(TRUE);
     python_external_cb->setDisabled(TRUE);
   }
@@ -545,7 +553,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   edpythondecl = new MultiLineEdit(htab);
   edpythondecl->setText(c->python_decl);
   edpythondecl->setFont(font);
-  if (visit)
+  if (!isWritable)
     edpythondecl->setReadOnly(TRUE);
   else
     connect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update_decl()));
@@ -562,7 +570,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   htab = new Q3HBox(vtab); 
   lbl4 = new QLabel(htab);
 
-  if (!visit) {
+  if (isWritable) {
     connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
 	    this, SLOT(python_default_decl()));
     connect(new QPushButton(TR("Not generated in Python"), htab), SIGNAL(clicked ()),
@@ -589,8 +597,8 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   htab->setMargin(5);
   switch_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htab);
   new QLabel(TR("switch type : "), switch_bg);
-  edswitch_type = new Q3ComboBox(!visit, switch_bg);
-  if (!visit) {
+  edswitch_type = new Q3ComboBox(isWritable, switch_bg);
+  if (isWritable) {
     edswitch_type->setAutoCompletion(completion());
     edswitch_type->insertItem(cl->get_switch_type().get_full_type());
     edswitch_type->insertStringList(GenerationSettings::basic_types());
@@ -623,7 +631,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     idl_local_cb->setChecked(TRUE);
   if (cl->idl_is_custom())
     idl_custom_cb->setChecked(TRUE);
-  if (visit) {
+  if (!isWritable) {
     idl_local_cb->setDisabled(TRUE);
     idl_external_cb->setDisabled(TRUE);
   }
@@ -642,7 +650,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   edidldecl = new MultiLineEdit(htab);
   edidldecl->setText(c->idl_decl);
   edidldecl->setFont(font);
-  if (visit)
+  if (!isWritable)
     edidldecl->setReadOnly(TRUE);
   else
     connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
@@ -656,7 +664,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   showidldecl->setReadOnly(TRUE);
   showidldecl->setFont(font);
 
-  if (visit)
+  if (!isWritable)
     same_width(lbl1, lbl2, lbl3);
   else {
    htab = new Q3HBox(vtab); 
@@ -676,7 +684,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   
   // profiled stereotype
   
-  BrowserNode * gp = (BrowserNode *) (bn->parent()->parent());
+  BrowserNode * gp = (BrowserNode *) (currentNode->parent()->parent());
   
   if ((gp->get_type() == UmlPackage) &&
       !strcmp(gp->get_data()->get_stereotype(), "profile")) {
@@ -691,9 +699,9 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     new QLabel(TR("Initialization \nplug-out :"), grid);
     htab = new Q3HBox(grid);
     stereo_init_cb = new Q3ComboBox(FALSE, htab);
-    s = bn->get_value("stereotypeSet");
+    s = currentNode->get_value("stereotypeSet");
     stereo_init_cb->insertItem(s);
-    if (!visit) {
+    if (isWritable) {
       if (! s.isEmpty())
 	stereo_init_cb->insertItem("");
       stereo_init_cb->insertStringList(tools);
@@ -701,15 +709,15 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     stereo_init_cb->setCurrentItem(0);
     
     new QLabel(TR("  parameter(s) : "), htab);
-    edinitparam = new LineEdit(bn->get_value("stereotypeSetParameters"), htab);
-    edinitparam->setReadOnly(visit);
+    edinitparam = new LineEdit(currentNode->get_value("stereotypeSetParameters"), htab);
+    edinitparam->setReadOnly(!isWritable);
     
     new QLabel(TR("Check \nplug-out :"), grid);
     htab = new Q3HBox(grid);
     stereo_check_cb = new Q3ComboBox(FALSE, htab);
-    s = bn->get_value("stereotypeCheck");
+    s = currentNode->get_value("stereotypeCheck");
     stereo_check_cb->insertItem(s);
-    if (! visit) {
+    if (isWritable) {
       if (! s.isEmpty())
 	stereo_check_cb->insertItem("");
       stereo_check_cb->insertStringList(tools);
@@ -717,15 +725,15 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
     stereo_check_cb->setCurrentItem(0);
     
     new QLabel(TR("  parameter(s) : "), htab);
-    edcheckparam = new LineEdit(bn->get_value("stereotypeCheckParameters"), htab);
-    edcheckparam->setReadOnly(visit);
+    edcheckparam = new LineEdit(currentNode->get_value("stereotypeCheckParameters"), htab);
+    edcheckparam->setReadOnly(!isWritable);
     
-    QString ip = bn->get_value("stereotypeIconPath");
+    QString ip = currentNode->get_value("stereotypeIconPath");
     
     new QLabel(TR("Icon path :"), grid);
     htab = new Q3HBox(grid);
     ediconpath = new LineEdit(ip, htab);
-    if (visit) {
+    if (!isWritable) {
       ediconpath->setReadOnly(TRUE);
       iconpathrootbutton = iconpathprjbutton = 0;
     }
@@ -751,7 +759,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
 
     new QLabel(TR("Apply on : "), grid);
     applicableon_table =
-      new ApplicableOnTable(grid, bn->get_value("stereotypeApplyOn"), visit);
+      new ApplicableOnTable(grid, currentNode->get_value("stereotypeApplyOn"), !isWritable);
     
     addTab(grid, TR("Stereotype"));
   }
@@ -761,7 +769,7 @@ ClassDialog::ClassDialog(ClassData * c) : Q3TabDialog(0, 0, TRUE), cl(c) {
   // USER : list key - value
   
   vtab = new Q3VBox(this);
-  kvtable = new KeyValuesTable(bn, vtab, visit);
+  kvtable = new KeyValuesTable(currentNode, vtab, !isWritable);
   kvtable->remove("stereotypeSet");
   kvtable->remove("stereotypeCheck");
   kvtable->remove("stereotypeSetParameters");
@@ -1537,7 +1545,7 @@ void ClassDialog::cpp_unmapped_decl() {
   showcppdecl->setText(QString());
 }
 
-void ClassDialog::cpp_generate_members_def(const BrowserNode * cl, QString & s) 
+void ClassDialog::cpp_generate_members_def(const BrowserNode * cl, QString & s)
 {
   ClassData * cd = (ClassData *) cl->get_data();
   QString templates;
@@ -2620,7 +2628,7 @@ FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
 				     const QStringList & node_names, bool visit)
     : MyTable(cl->get_n_formalparams() + 1, (visit) ? 4 : 5, parent),
       types(node_names) {
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(TRUE);
   horizontalHeader()->setLabel(0, TR("Type (C++)"));
@@ -2984,7 +2992,7 @@ void FormalParamsTable::update(ClassData * cl, BrowserNodeList & nodes) {
 ActualParamsTable::ActualParamsTable(ClassData * cl, QWidget * parent,
 				     const QStringList & node_names, bool visit)
     : MyTable(cl->get_n_actualparams(), 2, parent), types(node_names) {
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(FALSE);
   horizontalHeader()->setLabel(0, TR("inherited class formal"));
@@ -3105,7 +3113,7 @@ void ActualParamsTable::generate(QString & s, ClassData * cl,
 ApplicableOnTable::ApplicableOnTable(QWidget * parent, QString s, bool visit)
     : MyTable(ProfiledStereotypes::availableTargets().count(), 2, parent),
       ro(visit) {
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(FALSE);
   horizontalHeader()->setLabel(0, TR("element kind"));
@@ -3156,4 +3164,9 @@ QString ApplicableOnTable::targets() {
     s.truncate(s.length() - 1);
   
   return s;
+}
+
+uint ClassDialog::TypeID()
+{
+    return TypeIdentifier<ClassDialog>::id();
 }

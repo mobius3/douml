@@ -118,7 +118,7 @@ QValidator::State HierarchicalRankValidator::validate(QString & s, int &) const 
 
 ColMsgTable::ColMsgTable(QWidget * parent, ColDiagramView * v, ColMsgList & m)
     : MyTable(parent), rec(v->get_msgs() == m), view(v), msgs(m) {
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   
   setNumCols(6);

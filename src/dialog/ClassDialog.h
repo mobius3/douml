@@ -39,6 +39,7 @@
 #include "MyTable.h"
 #include "BrowserNode.h"
 #include "VisibilityGroup.h"
+#include "dialog/EdgeMenuDialog.h"
 
 class Q3VBox;
 class QLabel;
@@ -56,7 +57,7 @@ class ApplicableOnTable;
 class KeyValuesTable;
 class BodyDialog;
 
-class ClassDialog : public Q3TabDialog {
+class ClassDialog : public EdgeMenuDialog {
   Q_OBJECT
     
   protected:
@@ -144,7 +145,17 @@ class ClassDialog : public Q3TabDialog {
     KeyValuesTable * kvtable;
     
     static QSize previous_size;
-  
+
+
+    virtual uint TypeID();
+
+    virtual void InitGui();
+    void FillGuiElements(BrowserNode*);
+    void FillGuiElements(ClassData*);
+
+    //refactoring changes
+    bool isWritable;
+
   public:
     ClassDialog(ClassData * c);
     virtual ~ClassDialog();
@@ -201,7 +212,8 @@ class ClassDialog : public Q3TabDialog {
     static QString python_stereotype(const QString & stereotype);
     static QString idl_stereotype(const QString & stereotype);
 
-  protected slots:
+
+protected slots:
     virtual void polish();
     void accept();
     void default_description();
@@ -228,6 +240,7 @@ class ClassDialog : public Q3TabDialog {
     void idl_update_decl();
     void idl_default_decl();
     void idl_unmapped_decl();
+
 };
 
 class FormalParamsTable : public MyTable {

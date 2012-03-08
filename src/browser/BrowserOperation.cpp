@@ -162,15 +162,7 @@ void BrowserOperation::post_duplicate() {
 }
 
 BrowserOperation::~BrowserOperation() {
-#if 0
-  if (deletedp()) {
-    delete_definition(get_ident(), "cpp");
-    delete_definition(get_ident(), "java");
-    delete_definition(get_ident(), "php");
-    delete_definition(get_ident(), "python");
-  }
-#endif
-  
+
   all.remove(get_ident());
   delete def;
 }

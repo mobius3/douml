@@ -106,11 +106,6 @@ BrowserDeploymentDiagram::~BrowserDeploymentDiagram() {
     
     QFile::remove(d.absFilePath(fn));
   }
-#if 0
-  // already done before browser->clear
-  if (window)
-    delete window;
-#endif
   all.remove(get_ident());
   delete def;
 }

@@ -60,7 +60,7 @@ RelTable::RelTable(QWidget * parent, ClassInstanceData * inst, bool visit)
   setNumRows(rels.count());
   setNumCols((visit) ? 5 : 6);
   setSelectionMode(Q3Table::Single);
-  setSorting(FALSE);
+  setSorting(true);
   
   horizontalHeader()->setLabel(0, TR("Class Inst."));
   horizontalHeader()->setLabel(1, TR("Role"));
@@ -210,7 +210,7 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
   
   atbl = new MyTable(this);
   atbl->setNumCols(3);
-  atbl->setSorting(FALSE);
+  atbl->setSorting(true);
   atbl->setSelectionMode(Q3Table::NoSelection);	// single does not work
   atbl->setRowMovingEnabled(TRUE);
   atbl->horizontalHeader()->setLabel(0, TR(" Attribute "));

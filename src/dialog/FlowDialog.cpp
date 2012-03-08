@@ -49,7 +49,8 @@
 QSize FlowDialog::previous_size;
 
 FlowDialog::FlowDialog(FlowData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), flow(d) {
+    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), flow(d)
+{
   d->browser_node->edit_start();
   
   if (d->browser_node->is_writable()) {

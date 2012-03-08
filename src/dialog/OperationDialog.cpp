@@ -4262,7 +4262,7 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
   int index;
   int sup = o->get_n_params();
     
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(TRUE);
   horizontalHeader()->setLabel(0, TR("Direction"));
@@ -4627,7 +4627,7 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
   int index;
   int sup = o->get_n_exceptions();
   
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(TRUE);
   horizontalHeader()->setLabel(0, TR("Type"));
@@ -4880,7 +4880,7 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
 			       QWidget * parent, bool decl)
     : MyTable(0, (decl) ? 8 : 7, parent), params(p), edform(f), dcl(decl) {
     
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(TRUE);
   horizontalHeader()->setLabel(0, TR("Name"));
@@ -5470,7 +5470,7 @@ static QStringList PhpValueRankList;
 PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit * f)
     : MyTable(0, 6, parent), params(p), edform(f) {
     
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(TRUE);
   horizontalHeader()->setLabel(0, TR("Name"));
@@ -5981,7 +5981,7 @@ static QStringList PythonValueRankList;
 PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit * f)
     : MyTable(0, 6, parent), params(p), edform(f) {
     
-  setSorting(FALSE);
+  setSorting(true);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(TRUE);
   horizontalHeader()->setLabel(0, TR("Name"));

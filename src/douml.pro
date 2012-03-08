@@ -208,7 +208,9 @@ HEADERS		= data/ActualParamData.h \
 		  tool/Socket.h \
 		  tool/ToolCom.h \
 		  xpm/UmlPixmap.h \
-    ui/menufactory.h
+    ui/menufactory.h \
+    Factories/EdgeMenuFactory.h \
+    dialog/EdgeMenuDialog.h
 SOURCES		= browser/BrowserAttribute.cpp \
 		  browser/BrowserExtraMember.cpp \
 		  browser/BrowserClass.cpp \
@@ -472,7 +474,10 @@ SOURCES		= browser/BrowserAttribute.cpp \
 		  Logging/QsLogDest.cpp \
 		  Logging/QsLog.cpp \
 		  Logging/QsDebugOutput.cpp \
-		  main.cpp
+		  main.cpp \
+    Factories/EdgeMenuFactory.cpp \
+    dialog/EdgeMenuDialog.cpp \
+    misc/GenerateTypeId.cpp
 
 TARGET		= Douml
 DEFINES         = BooL=bool DEBUGCOM
@@ -495,3 +500,5 @@ Debug{
 }
     UI_DIR = ../bin/douml/UI
     DESTDIR = ../bin
+
+QMAKE_CXXFLAGS += -std=gnu++0x
