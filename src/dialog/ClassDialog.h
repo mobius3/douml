@@ -36,6 +36,7 @@
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <Q3HBox>
+#include <Q3Grid>
 
 #include "MyTable.h"
 #include "BrowserNode.h"
@@ -175,17 +176,44 @@ class ClassDialog : public EdgeMenuDialog {
     Q3ButtonGroup* bgvPhp;
     Q3ButtonGroup* bgvIDL;
     Q3HBox * htabcpp;
+    Q3HBox * htabidl;
     QLabel * lbl1cpp;
     QLabel * lbl2cpp;
     QLabel * lbl3cpp;
     QLabel * lbl4cpp;
 
-    Q3HBox * htabidl;
 
+    QLabel * lbl1php;
+    QLabel * lbl2php;
+    QLabel * lbl3php;
+    QLabel * lbl4php;
+
+    QLabel * lbl1python;
+    QLabel * lbl2python;
+    QLabel * lbl3python;
+    QLabel * lbl4python;
+
+    QLabel * lbl1idl;
+    QLabel * lbl2idl;
+    QLabel * lbl3idl;
+    QLabel * lbl4idl;
+
+    QLabel * lbl1java;
+    QLabel * lbl2java;
+    QLabel * lbl3java;
+    QLabel * lbl4java;
+    Q3Grid * stereotypeGrid;
+    Q3HBox * htabUml;
+    QFont font;
+
+    BrowserClass * currentNode;
+    BrowserNode * grandParent;
+
+    Q3VBox* keyValueTab;
 
     virtual uint TypeID();
 
-    virtual void InitGui(ClassData *);
+    virtual void InitGui(ClassData * c);
     void FillGuiElements(BrowserNode*);
     void FillGuiElements(ClassData*);
 
