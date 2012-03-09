@@ -2364,6 +2364,7 @@ void ClassDialog::InitGui()
   //!!!!! general tab elements
   grid = new Q3Grid(2, this);
   umltab = grid;
+  RegisterTab("UML", umltab);
   grid->setSpacing(5);
   grid->setMargin(5);
 
@@ -2419,6 +2420,7 @@ void ClassDialog::InitGui()
 
    // parameterized tab
 
+  RegisterTab("Parametrized", parametrized_vtab);
   parametrized_vtab = new Q3VBox(this);
 
   parametrized_vtab->setMargin(5);
@@ -2434,6 +2436,7 @@ void ClassDialog::InitGui()
 
 
   //!!! parameters for a class
+    RegisterTab("Instantiate", instantiate_vtab);
     instantiate_vtab = new Q3VBox(this);
     instantiate_vtab->setMargin(5);
     instantiateNotice = new QLabel(TR("\nSpecify actuals else formals default value will be used\n"),
@@ -2445,6 +2448,7 @@ void ClassDialog::InitGui()
     //!!! C++
     split = new QSplitter(Qt::Vertical, this);
     cpptab = split;
+    RegisterTab("Cpp", cpptab);
     split->setOpaqueResize(TRUE);
 
     vtab = new Q3VBox(split);
@@ -2486,6 +2490,7 @@ void ClassDialog::InitGui()
 
     split = new QSplitter(Qt::Vertical, this);
   javatab = split;
+  RegisterTab("Java", javatab);
   split->setOpaqueResize(TRUE);
 
   vtab = new Q3VBox(split);
@@ -2527,6 +2532,7 @@ void ClassDialog::InitGui()
   //!!! PHP
   split = new QSplitter(Qt::Vertical, this);
   phptab = split;
+  RegisterTab("Php", phptab);
   split->setOpaqueResize(TRUE);
 
   vtab = new Q3VBox(split);
@@ -2568,6 +2574,7 @@ void ClassDialog::InitGui()
 
   split = new QSplitter(Qt::Vertical, this);
   pythontab = split;
+  RegisterTab("Python", pythontab);
   split->setOpaqueResize(TRUE);
 
   vtab = new Q3VBox(split);
@@ -2609,6 +2616,7 @@ void ClassDialog::InitGui()
 
   split = new QSplitter(Qt::Vertical, this);
   idltab = split;
+  RegisterTab("Idl", idltab);
   split->setOpaqueResize(TRUE);
 
   vtab = new Q3VBox(split);
@@ -2655,12 +2663,13 @@ void ClassDialog::InitGui()
     pbIdlDefaultDeclaration = new QPushButton(TR("Default declaration"), htabidl);
     pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htabidl);
 
-
+    addTab(idltab, "IDL");
   // Profiled stereotype
 
 
     stereotypeGrid = new Q3Grid(2, this);
     stereotypetab = stereotypeGrid;
+    RegisterTab("Stereotype", stereotypetab);
     stereotypeGrid->setSpacing(5);
     stereotypeGrid->setMargin(5);
 
@@ -2702,6 +2711,7 @@ void ClassDialog::InitGui()
   // USER : list key - value
 
     keyValueTab = new Q3VBox(this);
+    RegisterTab("KeyValue", keyValueTab);
     kvtable = new KeyValuesTable(currentNode, keyValueTab, !isWritable);
     kvtable->remove("stereotypeSet");
 
@@ -2902,9 +2912,11 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     // instantiate tab
       actuals_table->update(cl, inh);
     if (cl->get_n_actualparams() != 0)
-      setTabEnabled(instantiate_vtab, true);
+      //setTabEnabled(instantiate_vtab, true);
+        ShowTab("Instantiate");
     else
-      setTabEnabled(instantiate_vtab, false);
+        HideTab("Instantiate");
+        //setTabEnabled(instantiate_vtab, false);
 
     // C++
     if (cl->cpp_is_external())
@@ -2978,9 +2990,9 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
 
     if (!GenerationSettings::cpp_get_default_defs())
-      setTabEnabled(cpptab, false);
+        HideTab("Cpp");
       else
-      setTabEnabled(cpptab, true);
+        ShowTab("Cpp");
     // Java
 
 
@@ -3049,9 +3061,9 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     pbJavaAnnotation->setText( !isWritable ? TR("Show annotation") : TR("Edit annotation"));
 
     if (!GenerationSettings::java_get_default_defs())
-      setTabEnabled(javatab, false);
-      else
-      setTabEnabled(javatab, true);
+        HideTab("Java");
+    else
+        ShowTab("Java");
 
     // Php
 
@@ -3118,9 +3130,9 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     same_width(lbl1php, lbl2php, lbl3php, lbl4php);
 
     if (!GenerationSettings::php_get_default_defs())
-      setTabEnabled(phptab, false);
+        HideTab("Php");
       else
-      setTabEnabled(phptab, true);
+        ShowTab("Php");
 
 
     // Python
@@ -3188,9 +3200,9 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     same_width(lbl1python, lbl2python, lbl3python, lbl4python);
 
     if (!GenerationSettings::python_get_default_defs())
-      setTabEnabled(pythontab, false);
+        HideTab("Python");
       else
-      setTabEnabled(pythontab, true);
+        ShowTab("Python");
 
     // IDL
     edswitch_type->clear();
@@ -3290,12 +3302,12 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
       htabidl->show();
     }
 
-    addTab(idltab, "IDL");
+
 
     if (!GenerationSettings::idl_get_default_defs())
-      setTabEnabled(idltab, false);
+        HideTab("Idl");
       else
-      setTabEnabled(idltab, true);
+        ShowTab("Idl");
     // profiled stereotype
 
       stereo_init_cb->clear();
@@ -3388,14 +3400,15 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
           delete applicableon_table;
         applicableon_table = new ApplicableOnTable(stereotypeGrid, currentNode->get_value("stereotypeApplyOn"), !isWritable);
 
-      addTab(stereotypeGrid, TR("Stereotype"));
+        ShowTab("Stereotype");
     }
     else
-      setTabEnabled(stereotypetab, false);
+      HideTab("Stereotype");
 
 
 
     // USER : list key - value
+      ShowTab("KeyValue");
         kvtable->update(currentNode);
         kvtable->remove("stereotypeCheck");
         kvtable->remove("stereotypeSetParameters");

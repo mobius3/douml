@@ -2,6 +2,8 @@
 #define EDGEMENUDIALOG_H
 #include <Q3TabDialog>
 #include <QWidget>
+#include <QList>
+#include <QHash>
 
 unsigned int ClosestEdge(QWidget*, QPoint);
 class BrowserNode;
@@ -15,19 +17,30 @@ public:
 
     virtual void InitGui() = 0;
 
+    bool IsConnectedToToolBar();
+    void ConnectionToToolBarEstablished();
+    void BreakConnectionToToolBar();
+
 protected:
     virtual uint TypeID() = 0;
 
     virtual void leaveEvent ( QEvent * event );
     void showEvent ( QShowEvent * event );
+    void wheelEvent ( QWheelEvent * event );
+
+    virtual void RegisterTab(QString, QWidget*);
+    virtual void HideTab(QString);
+    virtual void ShowTab(QString);
+
     virtual void SetDialogMode(bool _isWritable);
-
-    bool isWritable;
-
     virtual BrowserNode * GetCurrentNode() = 0;
     virtual void SaveData() = 0;
     virtual void FillGuiElements(BrowserNode *) = 0;
 
+    bool isWritable;
+    QHash<QString, QWidget*> tabs;
+    int currentTab;
+    bool isConnectedToToolBar;
 
 
 signals:

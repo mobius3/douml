@@ -26,6 +26,7 @@ void ConnectToClassDialog(EdgeMenuDialog* dialog, QToolBar* toolbar)
     QObject::connect(pageButton, SIGNAL(clicked()), toolbar, SLOT(close()));
     pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("CancelElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), toolbar, SLOT(close()));
+    dialog->ConnectionToToolBarEstablished();
 
 }
 
@@ -127,7 +128,9 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* senderWidget)
     }
     toolbar->move(point);
 
-    ConnectToClassDialog(senderWidget, toolbar);
+    if(!senderWidget->IsConnectedToToolBar())
+        ConnectToClassDialog(senderWidget, toolbar);
+
     toolbar->setWindowFlags(Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
     toolbar->resize(toolbar->sizeHint());
     toolbar->show();

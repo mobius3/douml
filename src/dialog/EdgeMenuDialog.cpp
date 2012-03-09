@@ -1,3 +1,4 @@
+#include <QTabBar>
 #include "EdgeMenuDialog.h"
 #include "browser/BrowserNode.h"
 #include "Logging/QsLog.h"
@@ -32,6 +33,8 @@ unsigned int ClosestEdge(QWidget* widget, QPoint position)
 
 EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal , Qt::WindowFlags f): Q3TabDialog(parent, name, modal, f)
 {
+    currentTab = 0;
+    isConnectedToToolBar = false;
     An<EdgeMenuFactory> factory;
     QObject::connect(this, SIGNAL(edgeMenuRequested(uint)),factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
@@ -39,6 +42,21 @@ EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal ,
 
 EdgeMenuDialog::~EdgeMenuDialog()
 {}
+
+bool EdgeMenuDialog::IsConnectedToToolBar()
+{
+    return isConnectedToToolBar;
+}
+
+void EdgeMenuDialog::ConnectionToToolBarEstablished()
+{
+    isConnectedToToolBar = true;
+}
+
+void EdgeMenuDialog::BreakConnectionToToolBar()
+{
+    isConnectedToToolBar = false;
+}
 
 void EdgeMenuDialog::leaveEvent(QEvent *event)
 {
@@ -51,6 +69,33 @@ void EdgeMenuDialog::showEvent(QShowEvent *event)
     this->move(QCursor::pos().x() + 15, QCursor::pos().y());
     factory->SpawnEdgeMenu(this->TypeID(), this, QCursor::pos());
     this->setFocus();
+}
+
+void EdgeMenuDialog::wheelEvent(QWheelEvent *event)
+{
+    currentTab += event->delta()/event->delta();
+    if(currentTab > tabBar()->count())
+        currentTab = 0;
+    if(currentTab < 0)
+        currentTab = tabBar()->count() - 1;
+    tabBar()->setCurrentIndex(currentTab);
+    //tabBar()->
+}
+
+void EdgeMenuDialog::RegisterTab(QString name, QWidget * widget)
+{
+    if(!tabs.contains(name))
+        tabs.insert(name,widget);
+}
+
+void EdgeMenuDialog::HideTab(QString name)
+{
+    removePage(tabs[name]);
+}
+
+void EdgeMenuDialog::ShowTab(QString name)
+{
+    addTab(tabs[name],name);
 }
 
 void EdgeMenuDialog::SetDialogMode(bool _isWritable)
