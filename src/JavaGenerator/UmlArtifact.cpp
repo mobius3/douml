@@ -28,6 +28,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 #include <QTextStream>
+#include  <QSharedPointer>
 
 #include "UmlArtifact.h"
 #include "UmlPackage.h"
@@ -81,9 +82,8 @@ void UmlArtifact::generate() {
     unsigned n = cls.count();
     unsigned index;
     Q3CString incl;
-    QByteArray file;
-    // note : QTextStream(FILE *) does not work under windows
-    QTextStream f(&file); // [lgfreitas] it expects a pointer to a byte array...
+    QSharedPointer<QByteArray> headerFile(new QByteArray());
+    QTextStream f(headerFile.data(), QIODevice::WriteOnly);
     const char * p = filedef;
     const char * pp = 0;
       
@@ -157,8 +157,9 @@ void UmlArtifact::generate() {
     }
       
     f << '\000';
+    f.flush();
     
-    if (must_be_saved(path, file)) {
+    if (must_be_saved(path, headerFile->data())) {
       write_trace_header();
 	
       FILE * fp;
@@ -173,7 +174,7 @@ void UmlArtifact::generate() {
 	incr_error();
       }
       else {
-	fputs((const char *) file, fp);
+    fputs((const char *) headerFile->data(), fp);
 	fclose(fp);
       }
     }
