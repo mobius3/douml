@@ -2296,8 +2296,8 @@ bool GenerationSettings::tool_global_idl_cmd(ToolCom * com,
 
 static void save_includes_imports(IncludesSpec & sp, const char * filename)
 {
-  QByteArray newdef;
-  QTextStream st(newdef, QIODevice::WriteOnly);
+  QSharedPointer<QByteArray> newdef(new QByteArray());
+  QTextStream st(newdef.data(), QIODevice::WriteOnly);
 	
   st.setEncoding(QTextStream::Latin1);
 
@@ -2315,6 +2315,7 @@ static void save_includes_imports(IncludesSpec & sp, const char * filename)
   }
 
   st << '\000';
+  st.flush();
   save_if_needed(filename, newdef);
 }
 
@@ -2382,8 +2383,8 @@ void GenerationSettings::save_descriptions(QTextStream & st)
 
 void GenerationSettings::save()
 {
-  QByteArray newdef;
-  QTextStream st(newdef, QIODevice::WriteOnly);
+  QSharedPointer<QByteArray> newdef(new QByteArray());
+  QTextStream st(newdef.data(), QIODevice::WriteOnly);
 	
   st.setEncoding(QTextStream::Latin1);
   
@@ -2955,6 +2956,7 @@ void GenerationSettings::save()
   save_includes_imports(idl_includes, "idl_includes");
   
   st << '\000';
+  st.flush();
   save_if_needed("generation_settings", newdef);
 }
 

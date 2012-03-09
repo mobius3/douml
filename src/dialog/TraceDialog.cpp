@@ -113,6 +113,7 @@ void TraceDialog::save() {
       QTextStream stream(&file);
       
       stream << "<html>\n" << txt->text() << "\n</html>\n";
+      stream.flush();
       file.close();
     }
   }

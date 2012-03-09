@@ -2724,17 +2724,69 @@ void ClassDialog::FillGuiElements(BrowserNode * bn)
 
 void ClassDialog::FillGuiElements(ClassData * _cl)
 {
+    disconnect(this, SIGNAL(currentChanged(QWidget *)),
+        this, SLOT(update_all_tabs(QWidget *)));
     cl = _cl;
+	
+	// edstereotype->blockSignals(true);
+	// edbasetype->blockSignals(true);
+	// artifact->blockSignals(true);
+	// pbEditorForDescription->blockSignals(true);
+	// pbDefaultForDescription->blockSignals(true);
+	// pbEditorForConstrant->blockSignals(true);
+	// cpp_external_cb->blockSignals(true);
+	// edcppdecl->blockSignals(true);
+	// showcppdecl->blockSignals(true);
+	// pbCppDefaultDeclaration->blockSignals(true);
+	// pbNotGeneratedInCPP->blockSignals(true);
+	// java_final_cb->blockSignals(true);
+	// java_external_cb->blockSignals(true);
+	// edjavadecl->blockSignals(true);
+	// showjavadecl->blockSignals(true);
+	// pbJavaDefaultDefinition->blockSignals(true);
+	// pbNotGeneratedInJava->blockSignals(true);
+	// php_final_cb->blockSignals(true);
+	// php_external_cb->blockSignals(true);
+	// edphpdecl->blockSignals(true);
+	// edphpdecl->blockSignals(true);
+	// pbPhpDefaultDefinition->blockSignals(true);
+	// pbNotGeneratedInPhp->blockSignals(true);
+	// python_2_2_cb->blockSignals(true);
+	// python_external_cb->blockSignals(true);
+	// edpythondecl->blockSignals(true);
+	// pbPythonDefaultDefinition->blockSignals(true);
+	// pbNotGeneratedInPython->blockSignals(true);
+	// edswitch_type->blockSignals(true);
+	// idl_external_cb->blockSignals(true);
+	// idl_local_cb->blockSignals(true);
+	// idl_custom_cb->blockSignals(true);
+	// edidldecl->blockSignals(true);
+	// pbIdlDefaultDeclaration->blockSignals(true);
+	// pbINotGeneratedInIdl->blockSignals(true);
+	// stereo_init_cb->blockSignals(true);
+	// edinitparam->blockSignals(true);
+	// stereo_check_cb->blockSignals(true);
+	// edcheckparam->blockSignals(true);
+	// ediconpath->blockSignals(true);
+	// ediconpath->blockSignals(true);
+	// pbProfiledSteretypeBrowse->blockSignals(true);
+	// iconpathrootbutton->blockSignals(true);
+	// iconpathprjbutton->blockSignals(true);
+	
+	
+	
+	
+	
+	isWritable = cl->browser_node->is_writable();
+    SetDialogMode(isWritable);
+
+    nodes.clear();
+    node_names.clear();
 
     if (isWritable)
     {
       BrowserClass::instances(nodes);
       nodes.full_names(node_names);
-    }
-    else
-    {
-      nodes.clear();
-      node_names.clear();
     }
 
     // general tab
@@ -2742,7 +2794,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     edname->setReadOnly(!isWritable);
 
     // filling stereotypes edit element
-
+    edstereotype->clear();
     edstereotype->insertItem(toUnicode(cl->get_stereotype()));
     if (isWritable)
     {
@@ -2765,15 +2817,13 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     }
     else
     {
-      edstereotype->clear();
+      disconnect(edstereotype, SIGNAL(activated(const QString &)),
+          this, SLOT(edStereotypeActivated(const QString &)));edstereotype->clear();
     }
     edstereotype->setCurrentItem(0);
     QSizePolicy sp = edstereotype->sizePolicy();
     sp.setHorData(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
-
-
-
 
 
     if (cl->get_is_abstract())
@@ -2797,8 +2847,8 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     htabUml->setStretchFactor(bgvUml, 1000);
 
     BrowserNodeList inh;
-
     // setting base type combobox
+	edbasetype->clear();
     if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize),inh.count() != 0)
     {
       // first inheritance is taken in all cases
@@ -2821,14 +2871,11 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
         edbasetype->insertStringList(node_names);
         edbasetype->setAutoCompletion(completion());
       }
-      else
-      {
-      edbasetype->clear();
-      }
     }
     edbasetype->setCurrentItem(0);
     edbasetype->setSizePolicy(sp);
-
+	artifact->clear();
+	artifact->show();
     if (!currentNode->nestedp())
     {
       BrowserNode * bc = currentNode->get_associated_artifact();
@@ -2840,7 +2887,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
           artifact->insertItem(bc->full_name(TRUE));
         }
         else
-          artifact = 0;
+          artifact->hide();
       }
       else
       {
@@ -2869,11 +2916,11 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
             artifact->setCurrentItem(0);
         }
         else
-      artifact = 0;
+      artifact->hide();
       }
     }
     else
-      artifact = 0;
+      artifact->hide();
 
 
     if (isWritable)
@@ -2898,21 +2945,21 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     comment->setText(currentNode->get_comment());
     constraint->setText(cl->constraint);
 
-
     // parameterized tab
     formals_table->update(cl, inh);
 
     // instantiate tab
       actuals_table->update(cl, inh);
-      if (cl->get_n_actualparams() != 0)
+    if (cl->get_n_actualparams() != 0)
       setTabEnabled(instantiate_vtab, true);
     else
       setTabEnabled(instantiate_vtab, false);
 
     // C++
-
     if (cl->cpp_is_external())
-      cpp_external_cb->setChecked(TRUE);
+		cpp_external_cb->setChecked(TRUE);
+	else
+		cpp_external_cb->setChecked(false);
     if (!isWritable)
     {
       cpp_external_cb->setDisabled(TRUE);
@@ -2932,12 +2979,12 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
       if (!isWritable)
         bgvCpp->setEnabled(FALSE);
-        else
+      else
         bgvCpp->setEnabled(true);
     }
     edcppdecl->setText(cl->cpp_decl);
     font = edcppdecl->font();
-    if (! hasCodec())
+    if (!hasCodec())
       font.setFamily("Courier");
     font.setFixedPitch(TRUE);
     edcppdecl->setFont(font);
@@ -3091,13 +3138,13 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     if (!isWritable)
       {
-      edphpdecl->setReadOnly(TRUE);
       disconnect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update_decl()));
+	  edphpdecl->setReadOnly(TRUE);
       }
     else
       {
-      edphpdecl->setReadOnly(false);
       connect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update_decl()));
+	  edphpdecl->setReadOnly(false);
       }
 
     if (isWritable)
@@ -3148,12 +3195,13 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     }
     else
     {
-      python_2_2_cb->setDisabled(false);
-      python_external_cb->setDisabled(false);
-      connect(python_2_2_cb, SIGNAL(toggled(bool)),this,
+		connect(python_2_2_cb, SIGNAL(toggled(bool)),this,
           SLOT(python_update_decl()));
-      connect(python_external_cb, SIGNAL(toggled(bool)),this,
+		connect(python_external_cb, SIGNAL(toggled(bool)),this,
           SLOT(python_default_decl()));
+
+		python_2_2_cb->setDisabled(false);
+		python_external_cb->setDisabled(false);
     }
 
 
@@ -3161,13 +3209,13 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     edpythondecl->setFont(font);
     if (!isWritable)
     {
-      edpythondecl->setReadOnly(TRUE);
       disconnect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update_decl()));
+	  edpythondecl->setReadOnly(TRUE);
     }
     else
     {
-      edpythondecl->setReadOnly(false);
       connect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update_decl()));
+	  edpythondecl->setReadOnly(false);
     }
 
 
@@ -3214,11 +3262,6 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
         ++it;
       }
     }
-    else
-    {
-      edswitch_type->clear();
-    }
-
     edswitch_type->setCurrentItem(0);
 
     if (cl->idl_is_external())
@@ -3236,25 +3279,27 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
       idl_custom_cb->setChecked(false);
     if (!isWritable)
     {
-      idl_local_cb->setDisabled(TRUE);
-      idl_external_cb->setDisabled(TRUE);
       disconnect(idl_local_cb, SIGNAL(toggled(bool)),this,
           SLOT(idl_update_decl()));
       disconnect(idl_custom_cb, SIGNAL(toggled(bool)),this,
           SLOT(idl_update_decl()));
       disconnect(idl_external_cb, SIGNAL(toggled(bool)),this,
           SLOT(idl_default_decl()));
+
+	  idl_local_cb->setDisabled(TRUE);
+      idl_external_cb->setDisabled(TRUE);
     }
     else
     {
-      idl_local_cb->setDisabled(false);
-      idl_external_cb->setDisabled(false);
       connect(idl_local_cb, SIGNAL(toggled(bool)),this,
           SLOT(idl_update_decl()));
       connect(idl_custom_cb, SIGNAL(toggled(bool)),this,
           SLOT(idl_update_decl()));
       connect(idl_external_cb, SIGNAL(toggled(bool)),this,
           SLOT(idl_default_decl()));
+
+	  idl_local_cb->setDisabled(false);
+      idl_external_cb->setDisabled(false);
     }
 
 
@@ -3262,14 +3307,15 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     if (!isWritable)
       {
-      edidldecl->setReadOnly(TRUE);
       disconnect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
+	  edidldecl->setReadOnly(TRUE);
+      
       }
     else
     {
-      edidldecl->setReadOnly(false);
       connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
-      }
+	  edidldecl->setReadOnly(false);
+    }
 
 
     if (!isWritable)
@@ -3301,11 +3347,12 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
       setTabEnabled(idltab, true);
     // profiled stereotype
 
-      bool grannyIsUmlPackage = grandParent->get_type() == UmlPackage;
+      stereo_init_cb->clear();
+	  bool grannyIsUmlPackage = grandParent->get_type() == UmlPackage;
       bool grannyIsProfiled = !strcmp(grandParent->get_data()->get_stereotype(), "profile");
       if (grannyIsUmlPackage && grannyIsProfiled)
       {
-      stereo_init_cb->clear();
+      
       QString s;
       s = currentNode->get_value("stereotypeSet");
       stereo_init_cb->insertItem(s);
@@ -3334,10 +3381,6 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
           stereo_check_cb->insertItem("");
         stereo_check_cb->insertStringList(tools);
       }
-      else
-      {
-          stereo_check_cb->clear();
-      }
       stereo_check_cb->setCurrentItem(0);
 
       edcheckparam->setReadOnly(!isWritable);
@@ -3348,9 +3391,12 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
       if (!isWritable)
       {
-        ediconpath->setReadOnly(TRUE);
-        iconpathrootbutton = iconpathprjbutton = 0;
+		disconnect(pbProfiledSteretypeBrowse,SIGNAL(clicked ()), this, SLOT(icon_browse()));
+        disconnect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
+        disconnect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
 
+		ediconpath->setReadOnly(TRUE);
+        iconpathrootbutton = iconpathprjbutton = 0;
 
         RelativeRoot = TR("");
         RelativePrj = TR("");
@@ -3359,20 +3405,21 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
         lblProfiledEmpty2->hide();
         lblProfiledEmpty3->hide();
         vtabProfiled->hide();
-        disconnect(pbProfiledSteretypeBrowse,SIGNAL(clicked ()), this, SLOT(icon_browse()));
-        pbProfiledSteretypeBrowse->hide();
-        disconnect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
-        disconnect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
+		pbProfiledSteretypeBrowse->hide();
       }
       else
       {
-        RelativeRoot = TR("Set it relative to image root");
+        connect(pbProfiledSteretypeBrowse,SIGNAL(clicked ()), this, SLOT(icon_browse()));
+        connect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
+        connect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
+
+	  RelativeRoot = TR("Set it relative to image root");
         RelativePrj = TR("Set it relative to project");
         Absolute = TR("Set it absolute");
 
         lblProfiledEmpty->show();
         pbProfiledSteretypeBrowse->show();
-        connect(pbProfiledSteretypeBrowse,SIGNAL(clicked ()), this, SLOT(icon_browse()));
+
         lblProfiledEmpty2->show();
         vtabProfiled->show();
         iconpathrootbutton->setText((ip.isEmpty() || QDir::isRelativePath(ip))
@@ -3380,8 +3427,6 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
         iconpathprjbutton->setText((ip.isEmpty() || QDir::isRelativePath(ip))
                             ? Absolute : RelativePrj);
 
-        connect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
-        connect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
         iconpathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
         lblProfiledEmpty3->show();
 
@@ -3400,7 +3445,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
 
     // USER : list key - value
-          kvtable->update(currentNode);
+        kvtable->update(currentNode);
         kvtable->remove("stereotypeCheck");
         kvtable->remove("stereotypeSetParameters");
         kvtable->remove("stereotypeCheckParameters");

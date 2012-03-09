@@ -31,6 +31,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3PointArray>
+#include <QSharedPointer>
 
 #define FILEFORMAT 75
 
@@ -78,7 +79,7 @@ extern void delete_backup(QDir & d);
 extern int open_file(QFile & fp, int mode, bool silent = FALSE);
 extern void read_in(const QString &);
 extern bool copy_file(QFileInfo * src, const QDir & dest);
-extern void save_if_needed(const char * filename, const char * newdef);
+extern void save_if_needed(const char * filename, QSharedPointer<QByteArray>);
 
 extern char * read_file(QString filename);
 extern char * read_file(QString filename, int offset, int len);

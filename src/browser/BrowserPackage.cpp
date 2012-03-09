@@ -1952,13 +1952,15 @@ void BrowserPackage::init()
 
 void BrowserPackage::save_stereotypes()
 {
-  QByteArray newdef;
-  QTextStream st(newdef, QIODevice::WriteOnly);
-	
+    QSharedPointer<QByteArray> newdef(new QByteArray());
+  QTextStream st(newdef.data(), QIODevice::WriteOnly);
+  //  QLOG_INFO() << newdef->data();
   st.setEncoding(QTextStream::Latin1);
-  
+//  QLOG_INFO() << newdef->data();
   nl_indent(st);
   st << "package_stereotypes ";
+  st.flush();
+  //QLOG_INFO() << newdef->data();
   save_unicode_string_list(its_default_stereotypes, st);
   nl_indent(st);
   st << "  " << stringify(UmlDependency);
@@ -1996,6 +1998,8 @@ void BrowserPackage::save_stereotypes()
   st << "\nend\n";
   
   st << '\000';
+  st.flush();
+  //QLOG_INFO() << newdef->data();
   save_if_needed("stereotypes", newdef);
 }
 
@@ -2291,6 +2295,7 @@ void BrowserPackage::save_all(bool modified_only)
 	}
 
 	st << "\nend\n";
+    st.flush();
 	
 	fp.close();
 	

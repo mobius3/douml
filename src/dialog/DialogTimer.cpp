@@ -69,6 +69,7 @@ void DialogTimer::readfile() {
     ts.setEncoding(QTextStream::Latin1);
     
     result = ts.read();
+    ts.flush();
     fi.close();
 
     fclose(fp);
