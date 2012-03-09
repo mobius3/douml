@@ -28,6 +28,7 @@
 
 
 #include <qapplication.h>
+#include <QTextCodec>
 //Added by qt3to4:
 #include <Q3CString>
 
@@ -45,7 +46,10 @@
 #include "EnvDialog.h"
 #include "Logging/QsLogDest.h"
 #include "Logging/QsLog.h"
-#include <QTextCodec>
+#include "Factories/EdgeMenuFactory.h"
+#include "dialog/ClassDialog.h"
+#include "misc/TypeIdentifier.h"
+
 
 
 
@@ -70,6 +74,10 @@ int main(int argc, char **argv)
   logger.addDestination(debugDestination.get());
   logger.addDestination(fileDestination.get());
   QLOG_INFO() << "Starting the log";
+
+  An<EdgeMenuFactory> factory;
+  factory->AddFactory(TypeIdentifier<ClassDialog>::id(), CreateClassDialogMenu);
+
   UmlDesktop::init();
   
   // note : bool conv_env = !QDir::home().exists(".doumlrc") doesn't work

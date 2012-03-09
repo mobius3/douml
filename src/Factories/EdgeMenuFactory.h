@@ -2,11 +2,14 @@
 #define EDGEMENUFACTORY_H
 #include <QObject>
 #include <QToolBar>
-
-#include "boost/functional/factory.hpp"
 #include <functional>
 #include <map>
 #include <QMap>
+
+
+#include "boost/functional/factory.hpp"
+#include "misc/SingletonHolder.h"
+
 
 //#include <pair>
 
@@ -17,8 +20,9 @@ struct Orientationvariables
     std::map<std::pair<int,QString>, QString> iconNames;
 };
 
-typedef std::function<QToolBar*(uint)>  ToolbarFactory;
+typedef std::function<QToolBar*()>  ToolbarFactory;
 
+QToolBar* CreateClassDialogMenu();
 
 class EdgeMenuFactory : public QObject
 {
@@ -26,20 +30,19 @@ class EdgeMenuFactory : public QObject
 public:
     EdgeMenuFactory();
     virtual ~EdgeMenuFactory();
-    void CreateEdgeMenu(uint, uint _orientation);
+    void SpawnEdgeMenu(uint);
+    void AddFactory(uint, ToolbarFactory);
 
 public slots:
-    void OnEdgeMenuRequested(uint classID, uint orientation);
+    void OnEdgeMenuRequested(uint classID);
 
 private :
-    QMap<uint,ToolbarFactory > factories;
+    QMap<uint, ToolbarFactory > factories;
     QMap<uint, QToolBar*> createdToolbars;
-    QMap<uint, QToolBar*> menus;
     QMap<int, Orientationvariables> orientationSwitch;
 
 };
-
-
+BIND_TO_SELF_SINGLE(EdgeMenuFactory);
 
 
 #endif // EDGEMENUFACTORY_H

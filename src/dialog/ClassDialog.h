@@ -37,6 +37,7 @@
 #include <Q3PtrList>
 #include <Q3HBox>
 #include <Q3Grid>
+#include <QSharedPointer>
 
 #include "MyTable.h"
 #include "BrowserNode.h"
@@ -213,17 +214,22 @@ class ClassDialog : public EdgeMenuDialog {
 
     virtual uint TypeID();
 
-    virtual void InitGui(ClassData * c);
+    virtual void InitGui();
     void FillGuiElements(BrowserNode*);
-    void FillGuiElements(ClassData*);
+    void FillGuiElements(ClassData* _cl);
     void NullPointers();
+    void SaveData();
     //refactoring changes
+
+    static QSharedPointer<ClassDialog> instance;
 
 
   public:
     ClassDialog(ClassData * c);
     virtual ~ClassDialog();
   
+    static QSharedPointer<ClassDialog> Instance(ClassData*);
+
     static void cpp_generate_decl(QString & s, ClassData * cl,
 				  QString def, QString name,
 				  QString stereotype,
@@ -304,6 +310,8 @@ protected slots:
     void idl_update_decl();
     void idl_default_decl();
     void idl_unmapped_decl();
+
+    void OnPickNextSibling();
 
 };
 

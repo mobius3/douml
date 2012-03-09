@@ -75,714 +75,15 @@ QSize ClassDialog::previous_size;
 static QString RelativeRoot;
 static QString RelativePrj;
 static QString Absolute;
-
+QSharedPointer<ClassDialog> ClassDialog::instance;
 ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c)
 {
   // take time in case of many classes and artifacts
-
     isWritable = c->browser_node->is_writable();
     NullPointers();
     SetDialogMode(isWritable);
-    InitGui(c);
-
-  if (isWritable)
-  {
-    BrowserClass::instances(nodes);
-    nodes.full_names(node_names);
-  }
-  else
-  {
-	nodes.clear();
-	node_names.clear();
-  }
-  
-  // general tab
-  
-  edname->setReadOnly(!isWritable);
-  
-  // filling stereotypes edit element
-  
-  edstereotype->insertItem(toUnicode(cl->get_stereotype()));
-  if (isWritable) 
-  {
-
-    bool grannyIsUmlPackage = grandParent->get_type() == UmlPackage;
-    bool grannyIsProfiled = !strcmp(grandParent->get_data()->get_stereotype(), "profile");
-    if (grannyIsUmlPackage && grannyIsProfiled)
-      edstereotype->insertStringList(BrowserClass::default_stereotypes());
-    else
-    {
-      QStringList stereotypesList = BrowserClass::default_stereotypes();
-      
-      stereotypesList.remove("stereotype");
-      edstereotype->insertStringList(stereotypesList);
-    }
-    edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClass));
-    edstereotype->setAutoCompletion(completion());
-    connect(edstereotype, SIGNAL(activated(const QString &)),
-	    this, SLOT(edStereotypeActivated(const QString &)));
-  }
-  else
-  {
-	edstereotype->clear();
-  }
-  edstereotype->setCurrentItem(0);
-  QSizePolicy sp = edstereotype->sizePolicy();
-  sp.setHorData(QSizePolicy::Expanding);
-  edstereotype->setSizePolicy(sp);
-
-
-
-
-
-  if (cl->get_is_abstract())
-  {
-    abstract_cb->setChecked(TRUE);
-    if (currentNode->have_abstract_operation())
-      abstract_cb->setEnabled(FALSE);
-  }
-  abstract_cb->setDisabled(!isWritable);
-
-  if (cl->get_is_active())
-    active_cb->setChecked(TRUE);
-  active_cb->setDisabled(!isWritable);
-
-
-  // setting up radiobutton group for accessibility
-
-  bgvUml = uml_visibility.init(htabUml, cl->get_uml_visibility(), TRUE);
-  if (!isWritable)
-    bgvUml->setEnabled(FALSE);
-  htabUml->setStretchFactor(bgvUml, 1000);
-  
-  BrowserNodeList inh;
-  
-  // setting base type combobox
-  if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize),inh.count() != 0)
-  {
-    // first inheritance is taken in all cases
-    edbasetype->insertItem(((RelationData *) inh.at(0)->get_data())->get_end_class()->full_name(TRUE));
-    edbasetype->setEnabled(FALSE);
-  }
-  else
-  {
-    QString bt = cl->get_base_type().get_full_type();
-    
-    if (bt.isEmpty() &&		// no base_type, try with a dependency
-	(cl->browser_node->children(inh, UmlDependency), inh.count() != 0))
-      bt = ((RelationData *) inh.at(0)->get_data())->get_end_class()->full_name(TRUE);
-    
-    edbasetype->insertItem(bt);
-    
-    if (isWritable)
-    {
-      edbasetype->insertStringList(GenerationSettings::basic_types());
-      edbasetype->insertStringList(node_names);
-      edbasetype->setAutoCompletion(completion());
-    }
-	else
-	{
-	edbasetype->clear();
-	}
-  }
-  edbasetype->setCurrentItem(0);
-  edbasetype->setSizePolicy(sp);
-  
-  if (!currentNode->nestedp()) 
-  {
-    BrowserNode * bc = currentNode->get_associated_artifact();
-    
-    if (!isWritable) 
-	{
-      if ((bc != 0) && !bc->deletedp()) 
-	  {
-		artifact->insertItem(bc->full_name(TRUE));
-      }
-      else
-		artifact = 0;
-    }
-    else 
-	{      
-      BrowserArtifact::instances(artifacts, TR("source"));
-      if (!artifacts.isEmpty()) 
-	  {
-		QStringList artifact_names;
-		artifacts.full_names(artifact_names);
-		artifact->insertItem("");
-		artifact->insertStringList(artifact_names);
-		
-		if (bc != 0) 
-		{
-		  if (bc->deletedp()) 
-		  {
-			QString fn = bc->full_name(TRUE);
-			
-			artifact->insertItem(fn);
-			artifacts.append(bc);
-			artifact->setCurrentItem(artifacts.count());
-		  }
-		  else
-			artifact->setCurrentItem(artifacts.find(bc) + 1);
-		}
-		else
-		  artifact->setCurrentItem(0);
-      }
-      else
-	artifact = 0;
-    }
-  }
-  else
-    artifact = 0;
-  
-  
-  if (isWritable) 
-  {
-    connect(pbEditorForDescription, SIGNAL(clicked()),
-	    this, SLOT(edit_description()));
-    connect(pbDefaultForDescription, SIGNAL(clicked()),
-	    this, SLOT(default_description()));
-	connect(pbEditorForConstrant, SIGNAL(clicked()),
-	    this, SLOT(edit_constraint()));
-	pbEditorForDescription->show();
-	pbDefaultForDescription->show();
-	pbEditorForConstrant->show();
-  }
-  else
-  {
-	pbEditorForDescription->hide();
-	pbDefaultForDescription->hide();
-	pbEditorForConstrant->hide();
-  }
-  
-  comment->setText(currentNode->get_comment());
-  constraint->setText(c->constraint);
-  
-  
-  // parameterized tab
-  formals_table->update(c, inh);
-  
-  // instantiate tab
-    actuals_table->update(c, inh);
-	if (cl->get_n_actualparams() != 0) 
-    setTabEnabled(instantiate_vtab, true);
-  else
-    setTabEnabled(instantiate_vtab, false);
-  
-  // C++
-  
-  if (cl->cpp_is_external())
-    cpp_external_cb->setChecked(TRUE);
-  if (!isWritable)
-  {
-    cpp_external_cb->setDisabled(TRUE);
-    disconnect(cpp_external_cb, SIGNAL(toggled(bool)), this,
-	    SLOT(cpp_default_decl()));
-  }
-  else
-  {
-	cpp_external_cb->setDisabled(false);
-    connect(cpp_external_cb, SIGNAL(toggled(bool)), this,
-	    SLOT(cpp_default_decl()));
-  }
-  if (currentNode->nestedp()) 
-  {
-    bgvCpp = cpp_visibility.init(htabcpp, cl->get_cpp_visibility(),
-			      FALSE, 0, TR("follow uml"));
-    
-    if (!isWritable)
-      bgvCpp->setEnabled(FALSE);
-	  else
-	  bgvCpp->setEnabled(true);
-  }
-  edcppdecl->setText(c->cpp_decl);
-  font = edcppdecl->font();
-  if (! hasCodec())
-    font.setFamily("Courier");
-  font.setFixedPitch(TRUE);
-  edcppdecl->setFont(font);
-  if (!isWritable)
-  {
-    edcppdecl->setReadOnly(TRUE);
-	disconnect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
-  }
-  else
-    {
-	edcppdecl->setReadOnly(FALSE);
-	connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
-	}
-
-  showcppdecl->setReadOnly(TRUE);
-  showcppdecl->setFont(font);
-
-  if (!isWritable)
-  {
-    same_width(lbl1cpp, lbl2cpp, lbl3cpp);
-    lbl4cpp->hide();
-    htabcpp->hide();
-    disconnect(pbCppDefaultDeclaration, SIGNAL(clicked ()),
-	    this, SLOT(cpp_default_decl()));
-    disconnect(pbNotGeneratedInCPP, SIGNAL(clicked ()),
-	    this, SLOT(cpp_unmapped_decl()));
-
-	}
-  else 
-  {
-    connect(pbCppDefaultDeclaration, SIGNAL(clicked ()),
-	    this, SLOT(cpp_default_decl()));
-    connect(pbNotGeneratedInCPP, SIGNAL(clicked ()),
-	    this, SLOT(cpp_unmapped_decl()));
-    lbl4cpp->show();
-    htabcpp->show();
-    same_width(lbl1cpp, lbl2cpp, lbl3cpp, lbl4cpp);
-  }
-  
-
-  
-  if (!GenerationSettings::cpp_get_default_defs())
-    setTabEnabled(cpptab, false);
-	else
-	setTabEnabled(cpptab, true);
-  // Java
-  
-  
-  if (cl->java_is_final())
-    java_final_cb->setChecked(TRUE);
-	else
-	java_final_cb->setChecked(false);
-  if (cl->java_is_external())
-    java_external_cb->setChecked(TRUE);
-	else
-	java_external_cb->setChecked(false);
-  if (!isWritable) 
-  {
-    java_final_cb->setDisabled(TRUE);
-    java_external_cb->setDisabled(TRUE);
-    disconnect(java_final_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(java_update_decl()));
-    disconnect(java_external_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(java_default_decl()));
-  }
-  else 
-  {
-    java_final_cb->setDisabled(false);
-    java_external_cb->setDisabled(false);
-    connect(java_final_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(java_update_decl()));
-    connect(java_external_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(java_default_decl()));
-  }
-  
-  
-  edjavadecl->setText(c->java_decl);
-  edjavadecl->setFont(font);
-  if (!isWritable)
-  {
-    edjavadecl->setReadOnly(TRUE);
-	disconnect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update_decl()));
-	}
-  else
-  {
-	edjavadecl->setReadOnly(false);
-	connect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update_decl()));
-  }
-  
-  showjavadecl->setReadOnly(TRUE);
-  showjavadecl->setFont(font);
-
-
-  if (isWritable) 
-  {
-    connect(pbJavaDefaultDefinition, SIGNAL(clicked ()),
-	    this, SLOT(java_default_decl()));
-    connect(pbNotGeneratedInJava, SIGNAL(clicked ()),
-	    this, SLOT(java_unmapped_decl()));
-  }
-  else
-  {
-  disconnect(pbJavaDefaultDefinition, SIGNAL(clicked ()),
-	    this, SLOT(java_default_decl()));
-    disconnect(pbNotGeneratedInJava, SIGNAL(clicked ()),
-	    this, SLOT(java_unmapped_decl()));
-  }
-  
-  same_width(lbl1java, lbl2java, lbl3java, lbl4java);
-  javaannotation = (const char *) c->java_annotation;
-  pbJavaAnnotation->setText( !isWritable ? TR("Show annotation") : TR("Edit annotation"));
-  
-  if (!GenerationSettings::java_get_default_defs())
-    setTabEnabled(javatab, false);
-	else
-	setTabEnabled(javatab, true);
-  
-  // Php
-  
-  
-  if (cl->php_is_final())
-    php_final_cb->setChecked(TRUE);
-	else
-	php_final_cb->setChecked(false);
-  
-  if (cl->php_is_external())
-    php_external_cb->setChecked(TRUE);
-	else
-	php_external_cb->setChecked(false);
-  if (!isWritable) 
-  {
-    php_final_cb->setDisabled(TRUE);
-    php_external_cb->setDisabled(TRUE);
-    disconnect(php_final_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(php_update_decl()));
-    disconnect(php_external_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(php_default_decl()));
-  }
-  else 
-  {
-	php_final_cb->setDisabled(false);
-	php_external_cb->setDisabled(false);
-    connect(php_final_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(php_update_decl()));
-    connect(php_external_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(php_default_decl()));
-  }
-  
-  
-  edphpdecl->setText(c->php_decl);
-  
-  if (!isWritable)
-    {
-	edphpdecl->setReadOnly(TRUE);
-	disconnect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update_decl()));
-	}
-  else
-    {
-	edphpdecl->setReadOnly(false);
-	connect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update_decl()));
-	}
-
-  if (isWritable) 
-  {
-    connect(pbPhpDefaultDefinition, SIGNAL(clicked ()),
-	    this, SLOT(php_default_decl()));
-    connect(pbNotGeneratedInPhp, SIGNAL(clicked ()),
-	    this, SLOT(php_unmapped_decl()));
-          
-  }
-  else
-  {
-      disconnect(pbPhpDefaultDefinition, SIGNAL(clicked ()),
-	    this, SLOT(php_default_decl()));
-    disconnect(pbNotGeneratedInPhp, SIGNAL(clicked ()),
-	    this, SLOT(php_unmapped_decl()));
-          
-  }
-  
-  same_width(lbl1php, lbl2php, lbl3php, lbl4php);
-
-  if (!GenerationSettings::php_get_default_defs())
-    setTabEnabled(phptab, false);
-	else
-	setTabEnabled(phptab, true);
-  
-  
-  // Python
-  
-  if (cl->python_is_2_2())
-    python_2_2_cb->setChecked(TRUE);
-	else
-	python_2_2_cb->setChecked(false);
-  
-  if (cl->python_is_external())
-    python_external_cb->setChecked(TRUE);
-	else
-	python_external_cb->setChecked(false);
-  
-  if (!isWritable) 
-  {
-    disconnect(python_2_2_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(python_update_decl()));
-    disconnect(python_external_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(python_default_decl()));
-    python_2_2_cb->setDisabled(TRUE);
-    python_external_cb->setDisabled(TRUE);
-  }
-  else
-  {
-    python_2_2_cb->setDisabled(false);
-    python_external_cb->setDisabled(false);
-    connect(python_2_2_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(python_update_decl()));
-    connect(python_external_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(python_default_decl()));
-  }
-  
-  
-  edpythondecl->setText(c->python_decl);
-  edpythondecl->setFont(font);
-  if (!isWritable)
-  {
-	edpythondecl->setReadOnly(TRUE);
-	disconnect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update_decl()));
-  }
-  else
-  {
-    edpythondecl->setReadOnly(false);
-	connect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update_decl()));
-  }
- 
-
-  if (isWritable) 
-  {
-    connect(pbPythonDefaultDefinition, SIGNAL(clicked ()),
-	    this, SLOT(python_default_decl()));
-    connect(pbNotGeneratedInPython, SIGNAL(clicked ()),
-	    this, SLOT(python_unmapped_decl()));
-  }
-  else
-  {
-    disconnect(pbPythonDefaultDefinition, SIGNAL(clicked ()),
-	    this, SLOT(python_default_decl()));
-    disconnect(pbNotGeneratedInPython, SIGNAL(clicked ()),
-	    this, SLOT(python_unmapped_decl()));
-  }
-  
-  same_width(lbl1python, lbl2python, lbl3python, lbl4python);
-  
-  if (!GenerationSettings::python_get_default_defs())
-    setTabEnabled(pythontab, false);
-	else
-	setTabEnabled(pythontab, true);
-  
-  // IDL
-  edswitch_type->clear();
-  if (isWritable) 
-  {
-    edswitch_type->setAutoCompletion(completion());
-    edswitch_type->insertItem(cl->get_switch_type().get_full_type());
-    edswitch_type->insertStringList(GenerationSettings::basic_types());
-    
-    Q3PtrListIterator<BrowserNode> it(nodes);
-    
-    while (it.current() != 0) 
-	{
-      QString st =
-	idl_stereotype(((ClassData *) (it.current()->get_data()))->get_stereotype());
-      
-      if (st == "enum")
-	edswitch_type->insertItem(it.current()->full_name(TRUE));
-      
-      ++it;
-    }
-  }
-  else
-  {
-	edswitch_type->clear();
-  }
-  
-  edswitch_type->setCurrentItem(0);
-  
-  if (cl->idl_is_external())
-    idl_external_cb->setChecked(TRUE);
-	else
-	idl_external_cb->setChecked(false);
-  
-  if (cl->idl_is_local())
-    idl_local_cb->setChecked(TRUE);
-	else
-	idl_local_cb->setChecked(false);
-  if (cl->idl_is_custom())
-    idl_custom_cb->setChecked(TRUE);
-	else
-	idl_custom_cb->setChecked(false);
-  if (!isWritable) 
-  {
-    idl_local_cb->setDisabled(TRUE);
-    idl_external_cb->setDisabled(TRUE);
-    disconnect(idl_local_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(idl_update_decl()));
-    disconnect(idl_custom_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(idl_update_decl()));
-    disconnect(idl_external_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(idl_default_decl()));
-  }
-  else 
-  {
-    idl_local_cb->setDisabled(false);
-    idl_external_cb->setDisabled(false);
-    connect(idl_local_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(idl_update_decl()));
-    connect(idl_custom_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(idl_update_decl()));
-    connect(idl_external_cb, SIGNAL(toggled(bool)),this,
-	    SLOT(idl_default_decl()));
-  }
-  
-  
-  edidldecl->setText(c->idl_decl);
-  
-  if (!isWritable)
-    {
-	edidldecl->setReadOnly(TRUE);
-	disconnect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
-	}
-  else
-  {
-    edidldecl->setReadOnly(false);
-	connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
-	}
-
-	
-  if (!isWritable)
-    {
-        same_width(lbl1idl, lbl2idl, lbl3idl);
-	    disconnect(pbIdlDefaultDeclaration, SIGNAL(clicked ()),
-	    this, SLOT(idl_default_decl()));
-    disconnect(pbINotGeneratedInIdl, SIGNAL(clicked ()),
-	    this, SLOT(idl_unmapped_decl()));	
-        htabidl->hide();
-	}
-	
-  else 
-  {
-    connect(pbIdlDefaultDeclaration, SIGNAL(clicked ()),
-	    this, SLOT(idl_default_decl()));
-    connect(pbINotGeneratedInIdl, SIGNAL(clicked ()),
-	    this, SLOT(idl_unmapped_decl()));
-    
-    same_width(lbl1idl, lbl2idl, lbl3idl, lbl4idl);
-    htabidl->show();
-  }
-  
-  addTab(idltab, "IDL");
-  
-  if (!GenerationSettings::idl_get_default_defs())
-    setTabEnabled(idltab, false);
-	else
-	setTabEnabled(idltab, true);
-  // profiled stereotype
-    
-    bool grannyIsUmlPackage = grandParent->get_type() == UmlPackage;
-    bool grannyIsProfiled = !strcmp(grandParent->get_data()->get_stereotype(), "profile");
-    if (grannyIsUmlPackage && grannyIsProfiled)
-	{
-    stereo_init_cb->clear();
-    QString s;
-    s = currentNode->get_value("stereotypeSet");
-    stereo_init_cb->insertItem(s);
-    QStringList tools = Tool::all_display();
-    if (isWritable)
-	{
-      if (!s.isEmpty())
-		stereo_init_cb->insertItem("");
-      stereo_init_cb->insertStringList(tools);
-    }
-	else
-	{
-		stereo_init_cb->clear();
-	}
-    stereo_init_cb->setCurrentItem(0);
-    
-    edinitparam->setReadOnly(!isWritable);
-    
-    s = currentNode->get_value("stereotypeCheck");
-
-    stereo_check_cb->clear();
-	stereo_check_cb->insertItem(s);
-    if (isWritable) 
-	{
-      if (! s.isEmpty())
-		stereo_check_cb->insertItem("");
-      stereo_check_cb->insertStringList(tools);
-    }
-	else
-	{
-		stereo_check_cb->clear();
-	}
-    stereo_check_cb->setCurrentItem(0);
-    
-    edcheckparam->setReadOnly(!isWritable);
-    
-    QString ip = currentNode->get_value("stereotypeIconPath");
-    
-    ediconpath->setText(ip);
-	
-    if (!isWritable) 
-	{
-      ediconpath->setReadOnly(TRUE);
-      iconpathrootbutton = iconpathprjbutton = 0;
-	  
-	  
-	  RelativeRoot = TR("");
-      RelativePrj = TR("");
-      Absolute = TR("");
-	  lblProfiledEmpty->hide();
-	  lblProfiledEmpty2->hide();
-	  lblProfiledEmpty3->hide();
-	  vtabProfiled->hide();
-	  disconnect(pbProfiledSteretypeBrowse,SIGNAL(clicked ()), this, SLOT(icon_browse()));
-	  pbProfiledSteretypeBrowse->hide();
-	  disconnect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
-      disconnect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
-    }
-    else 
-	{
-      RelativeRoot = TR("Set it relative to image root");
-      RelativePrj = TR("Set it relative to project");
-      Absolute = TR("Set it absolute");
-
-      lblProfiledEmpty->show();
-      pbProfiledSteretypeBrowse->show();
-	  connect(pbProfiledSteretypeBrowse,SIGNAL(clicked ()), this, SLOT(icon_browse()));
-      lblProfiledEmpty2->show();
-      vtabProfiled->show();
-      iconpathrootbutton->setText((ip.isEmpty() || QDir::isRelativePath(ip))
-					       ? Absolute : RelativeRoot);
-	  iconpathprjbutton->setText((ip.isEmpty() || QDir::isRelativePath(ip))
-					      ? Absolute : RelativePrj);
-						  
-      connect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
-      connect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
-      iconpathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
-      lblProfiledEmpty3->show();
-
-    }
-
-
-    if(applicableon_table)
-        delete applicableon_table;
-      applicableon_table = new ApplicableOnTable(stereotypeGrid, currentNode->get_value("stereotypeApplyOn"), !isWritable);
-    
-    addTab(stereotypeGrid, TR("Stereotype"));
-  }
-  else
-    setTabEnabled(stereotypetab, false);
-	
-	
-  
-  // USER : list key - value
-		kvtable->update(currentNode);
-	  kvtable->remove("stereotypeCheck");
-	  kvtable->remove("stereotypeSetParameters");
-	  kvtable->remove("stereotypeCheckParameters");
-	  kvtable->remove("stereotypeApplyOn");
-	  kvtable->remove("stereotypeIconPath");
-
-
-
-
-  //
-  
-  QString stereotype = fromUnicode(edstereotype->currentText());
-  
-  current_cpp_stereotype = cpp_stereotype(stereotype);
-  current_java_stereotype = java_stereotype(stereotype);
-  current_php_stereotype = php_stereotype(stereotype);
-  current_python_stereotype = python_stereotype(stereotype);
-  current_idl_stereotype = idl_stereotype(stereotype);
-  
-  edStereotypeActivated(stereotype);
-
-  connect(this, SIGNAL(currentChanged(QWidget *)),
-	  this, SLOT(update_all_tabs(QWidget *)));
+    InitGui();
+    FillGuiElements(c);
 }
 
 void ClassDialog::polish() {
@@ -794,7 +95,16 @@ ClassDialog::~ClassDialog() {
   previous_size = size();
   
   while (!edits.isEmpty())
-    edits.take(0)->close();
+      edits.take(0)->close();
+}
+
+QSharedPointer<ClassDialog> ClassDialog::Instance(ClassData * cl)
+{
+    if(instance.isNull())
+        instance = QSharedPointer<ClassDialog>(new ClassDialog(cl));
+    else
+        instance->FillGuiElements(cl);
+    return instance;
 }
 
 QString ClassDialog::cpp_stereotype(const QString & stereotype)
@@ -1014,13 +324,21 @@ void ClassDialog::icon_prj_relative() {
   iconpathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
 }
 
-void ClassDialog::update_all_tabs(QWidget * w) {
+void ClassDialog::update_all_tabs(QWidget * w)
+{
   formals_table->forceUpdateCells();
   if (cl->get_n_actualparams() != 0)
     actuals_table->forceUpdateCells();
 
   bool visit = !hasOkButton();
-  
+  if(w == 0)
+  {
+    cpp_update_decl();
+    java_update_decl();
+    php_update_decl();
+    python_update_decl();
+    idl_update_decl();
+  }
   if (w == umltab) {
     if (!visit)
       edname->setFocus();
@@ -1485,7 +803,8 @@ void ClassDialog::cpp_generate_decl(QString & s, ClassData * cl,
   }
 }
 				    
-void ClassDialog::cpp_update_decl() {
+void ClassDialog::cpp_update_decl()
+{
   QString s;
   
   if (cl->browser_node->nestedp())
@@ -2451,157 +1770,17 @@ void ClassDialog::idl_unmapped_decl() {
   showidldecl->setText(QString());
 }
 
-void ClassDialog::accept() {
-  if (!check_edits(edits) || !kvtable->check_unique())
-    return;
-    
-  BrowserClass * bn = (BrowserClass *) cl->get_browser_node();
-  QString oldname = cl->name();
-  bool was_st = !strcmp(cl->get_stereotype(), "stereotype");
-  QString st = fromUnicode(edstereotype->currentText().stripWhiteSpace());
-  QString err;
-  QString s;
-  
-  s = edname->text().stripWhiteSpace();
-  if (s != oldname) {
-    if (((BrowserNode *) bn->parent())->wrong_child_name(s, UmlClass,
-							 bn->allow_spaces(),
-							 bn->allow_empty())) {
-      msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
-      return;
-    }
-    
-    if ((st == "stereotype") && 
-	(!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
-      msg_critical(TR("Error"), s + " " + err);
-      return;
-    }
-    
-    bn->set_name(s);
-  }
-  else if (st == "stereotype") {
-    if (!was_st &&
-	(!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
-      msg_critical(TR("Error"), oldname + " " + err);
-      return;
-    }
-    else if (stereotypetab != 0) {
-      Q3CString path = fromUnicode(ediconpath->text().simplifyWhiteSpace());
-      
-      if (!path.isEmpty() && (get_pixmap((const char *) path) == 0)) {
-	msg_critical(TR("Error"),
-		     ((const char *) path) +
-		     TR("\ndoesn't exist or is not a know image format"));
-	return;
-      }
-    }
-  }
-  
-  bool newst = cl->set_stereotype(st);
-  
-  if (st == "typedef")
-    cl->set_base_type(the_type(edbasetype->currentText().stripWhiteSpace(),
-			       node_names, nodes));
-  
-  cl->is_abstract = abstract_cb->isChecked();
-  cl->is_active = active_cb->isChecked();
-  
-  cl->uml_visibility = uml_visibility.value();
-  
-  if (artifact != 0) {
-    int index = artifact->currentItem();
-    
-    bn->set_associated_artifact((index == 0)
-				 ? 0 // "" : no artifact
-				 : ((BrowserArtifact *) artifacts.at(index - 1)));
-  }
-  
-  formals_table->update(cl, nodes);
-  
-  if (cl->get_n_actualparams() != 0)
-    actuals_table->update(cl, nodes);
-  
-  bn->set_comment(comment->text());
-  UmlWindow::update_comment_if_needed(bn);
-  
-  cl->constraint = constraint->stripWhiteSpaceText();
-  
-  cl->cpp_external = cpp_external_cb->isChecked();
-  cl->cpp_decl = edcppdecl->text();
-  if (bn->nestedp())
-    cl->cpp_visibility = cpp_visibility.value();
-  
-  cl->java_decl = edjavadecl->text();
-  cl->java_final = java_final_cb->isChecked();
-  cl->java_external = java_external_cb->isChecked();
-  cl->java_annotation = javaannotation;
-  
-  cl->php_decl = edphpdecl->text();
-  cl->php_final = php_final_cb->isChecked();
-  cl->php_external = php_external_cb->isChecked();
-  
-  cl->python_decl = edpythondecl->text();
-  cl->python_2_2 = python_2_2_cb->isChecked();
-  cl->python_external = python_external_cb->isChecked();
-  
-  cl->idl_decl = edidldecl->text();  
-  cl->idl_local = idl_local_cb->isChecked();
-  cl->idl_custom = idl_custom_cb->isChecked();
-  cl->idl_external = idl_external_cb->isChecked();
-  if (switch_bg->isEnabled()) {
-    AType swt;
-    
-    s = edswitch_type->currentText().stripWhiteSpace();
-    
-    if (! s.isEmpty()) {
-      int index = node_names.findIndex(s);
-      
-      if (index >= 0)
-	swt.type = (BrowserClass *) nodes.at(index);
-      else
-	swt.explicit_type = s;
-    }
-    
-    cl->set_switch_type(swt);
-  }
-  
-  kvtable->update(bn);
-  
-  if (stereotypetab != 0) {
-    if (st == "stereotype") {
-      unsigned n = bn->get_n_keys();
-      Q3CString oldiconpath = bn->get_value("stereotypeIconPath");
-      Q3CString newiconpath = fromUnicode(ediconpath->text().simplifyWhiteSpace());
-      
-      bn->set_n_keys(n + 6);
-      bn->set_key(n, "stereotypeSet");
-      bn->set_value(n, stereo_init_cb->currentText());
-      bn->set_key(++n, "stereotypeCheck");
-      bn->set_value(n, stereo_check_cb->currentText());
-      bn->set_key(++n, "stereotypeSetParameters");
-      bn->set_value(n, fromUnicode(edinitparam->text().simplifyWhiteSpace()));
-      bn->set_key(++n, "stereotypeCheckParameters");
-      bn->set_value(n, fromUnicode(edcheckparam->text().simplifyWhiteSpace()));
-      bn->set_key(++n, "stereotypeApplyOn");
-      bn->set_value(n, applicableon_table->targets());
-      bn->set_key(++n, "stereotypeIconPath");
-      bn->set_value(n, newiconpath);
-      
-      if (newst)
-	ProfiledStereotypes::added(bn);
-      else
-	ProfiledStereotypes::changed(bn, oldname, oldiconpath != newiconpath);
-    }
-    else if (was_st)
-      ProfiledStereotypes::deleted(bn);
-  }
-  
-  ProfiledStereotypes::modified(bn, newst);
-  
-  bn->modified();
-  bn->package_modified();
-  cl->modified();
-  
+void ClassDialog::OnPickNextSibling()
+{
+    SaveData();
+    BrowserNode* nextNode = dynamic_cast<BrowserNode*>(cl->browser_node->nextSibling());
+    FillGuiElements(nextNode);
+
+}
+
+void ClassDialog::accept()
+{
+  SaveData();
   Q3TabDialog::accept();
 }
 
@@ -3163,12 +2342,12 @@ uint ClassDialog::TypeID()
     return TypeIdentifier<ClassDialog>::id();
 }
 
-void ClassDialog::InitGui(ClassData *c)
+void ClassDialog::InitGui()
 {
 
     setCaption(TR("Class dialog"));
 
-    currentNode = (BrowserClass *) c->get_browser_node();
+    currentNode = (BrowserClass *) cl->get_browser_node();
     grandParent = (BrowserNode *) currentNode->parent()->parent();
 
 
@@ -3187,7 +2366,7 @@ void ClassDialog::InitGui(ClassData *c)
   QLabel * lbl2;
   QLabel * lbl3;
   QLabel * lbl4;
-  currentNode = (BrowserClass *) c->get_browser_node();
+  currentNode = (BrowserClass *) cl->get_browser_node();
   grandParent = (BrowserNode *) currentNode->parent()->parent();
 
   //!!!!! general tab elements
@@ -3258,7 +2437,7 @@ void ClassDialog::InitGui(ClassData *c)
     ->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
 
- formals_table = new FormalParamsTable(c, parametrized_vtab, node_names, isWritable); //todo VISIT NOT FIXED
+ formals_table = new FormalParamsTable(cl, parametrized_vtab, node_names, isWritable); //todo VISIT NOT FIXED
     addTab(parametrized_vtab, TR("Parameterized"));
 
 
@@ -3268,7 +2447,7 @@ void ClassDialog::InitGui(ClassData *c)
     instantiateNotice = new QLabel(TR("\nSpecify actuals else formals default value will be used\n"),
         instantiate_vtab);
     instantiateNotice->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    actuals_table = new ActualParamsTable(c, instantiate_vtab, node_names, isWritable); //todo VISIT NOT FIXED
+    actuals_table = new ActualParamsTable(cl, instantiate_vtab, node_names, isWritable); //todo VISIT NOT FIXED
     addTab(instantiate_vtab, TR("Instantiate"));
 
     //!!! C++
@@ -3538,12 +2717,711 @@ void ClassDialog::InitGui(ClassData *c)
 
 }
 
-void ClassDialog::FillGuiElements(BrowserNode *)
+void ClassDialog::FillGuiElements(BrowserNode * bn)
 {
+    FillGuiElements(dynamic_cast<ClassData*>(bn->get_data()));
 }
 
-void ClassDialog::FillGuiElements(ClassData *)
+void ClassDialog::FillGuiElements(ClassData * _cl)
 {
+    cl = _cl;
+
+    if (isWritable)
+    {
+      BrowserClass::instances(nodes);
+      nodes.full_names(node_names);
+    }
+    else
+    {
+      nodes.clear();
+      node_names.clear();
+    }
+
+    // general tab
+
+    edname->setReadOnly(!isWritable);
+
+    // filling stereotypes edit element
+
+    edstereotype->insertItem(toUnicode(cl->get_stereotype()));
+    if (isWritable)
+    {
+
+      bool grannyIsUmlPackage = grandParent->get_type() == UmlPackage;
+      bool grannyIsProfiled = !strcmp(grandParent->get_data()->get_stereotype(), "profile");
+      if (grannyIsUmlPackage && grannyIsProfiled)
+        edstereotype->insertStringList(BrowserClass::default_stereotypes());
+      else
+      {
+        QStringList stereotypesList = BrowserClass::default_stereotypes();
+
+        stereotypesList.remove("stereotype");
+        edstereotype->insertStringList(stereotypesList);
+      }
+      edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClass));
+      edstereotype->setAutoCompletion(completion());
+      connect(edstereotype, SIGNAL(activated(const QString &)),
+          this, SLOT(edStereotypeActivated(const QString &)));
+    }
+    else
+    {
+      edstereotype->clear();
+    }
+    edstereotype->setCurrentItem(0);
+    QSizePolicy sp = edstereotype->sizePolicy();
+    sp.setHorData(QSizePolicy::Expanding);
+    edstereotype->setSizePolicy(sp);
+
+
+
+
+
+    if (cl->get_is_abstract())
+    {
+      abstract_cb->setChecked(TRUE);
+      if (currentNode->have_abstract_operation())
+        abstract_cb->setEnabled(FALSE);
+    }
+    abstract_cb->setDisabled(!isWritable);
+
+    if (cl->get_is_active())
+      active_cb->setChecked(TRUE);
+    active_cb->setDisabled(!isWritable);
+
+
+    // setting up radiobutton group for accessibility
+
+    bgvUml = uml_visibility.init(htabUml, cl->get_uml_visibility(), TRUE);
+    if (!isWritable)
+      bgvUml->setEnabled(FALSE);
+    htabUml->setStretchFactor(bgvUml, 1000);
+
+    BrowserNodeList inh;
+
+    // setting base type combobox
+    if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize),inh.count() != 0)
+    {
+      // first inheritance is taken in all cases
+      edbasetype->insertItem(((RelationData *) inh.at(0)->get_data())->get_end_class()->full_name(TRUE));
+      edbasetype->setEnabled(FALSE);
+    }
+    else
+    {
+      QString bt = cl->get_base_type().get_full_type();
+
+      if (bt.isEmpty() &&		// no base_type, try with a dependency
+      (cl->browser_node->children(inh, UmlDependency), inh.count() != 0))
+        bt = ((RelationData *) inh.at(0)->get_data())->get_end_class()->full_name(TRUE);
+
+      edbasetype->insertItem(bt);
+
+      if (isWritable)
+      {
+        edbasetype->insertStringList(GenerationSettings::basic_types());
+        edbasetype->insertStringList(node_names);
+        edbasetype->setAutoCompletion(completion());
+      }
+      else
+      {
+      edbasetype->clear();
+      }
+    }
+    edbasetype->setCurrentItem(0);
+    edbasetype->setSizePolicy(sp);
+
+    if (!currentNode->nestedp())
+    {
+      BrowserNode * bc = currentNode->get_associated_artifact();
+
+      if (!isWritable)
+      {
+        if ((bc != 0) && !bc->deletedp())
+        {
+          artifact->insertItem(bc->full_name(TRUE));
+        }
+        else
+          artifact = 0;
+      }
+      else
+      {
+        BrowserArtifact::instances(artifacts, TR("source"));
+        if (!artifacts.isEmpty())
+        {
+          QStringList artifact_names;
+          artifacts.full_names(artifact_names);
+          artifact->insertItem("");
+          artifact->insertStringList(artifact_names);
+
+          if (bc != 0)
+          {
+            if (bc->deletedp())
+            {
+              QString fn = bc->full_name(TRUE);
+
+              artifact->insertItem(fn);
+              artifacts.append(bc);
+              artifact->setCurrentItem(artifacts.count());
+            }
+            else
+              artifact->setCurrentItem(artifacts.find(bc) + 1);
+          }
+          else
+            artifact->setCurrentItem(0);
+        }
+        else
+      artifact = 0;
+      }
+    }
+    else
+      artifact = 0;
+
+
+    if (isWritable)
+    {
+      connect(pbEditorForDescription, SIGNAL(clicked()),
+          this, SLOT(edit_description()));
+      connect(pbDefaultForDescription, SIGNAL(clicked()),
+          this, SLOT(default_description()));
+      connect(pbEditorForConstrant, SIGNAL(clicked()),
+          this, SLOT(edit_constraint()));
+      pbEditorForDescription->show();
+      pbDefaultForDescription->show();
+      pbEditorForConstrant->show();
+    }
+    else
+    {
+      pbEditorForDescription->hide();
+      pbDefaultForDescription->hide();
+      pbEditorForConstrant->hide();
+    }
+
+    comment->setText(currentNode->get_comment());
+    constraint->setText(cl->constraint);
+
+
+    // parameterized tab
+    formals_table->update(cl, inh);
+
+    // instantiate tab
+      actuals_table->update(cl, inh);
+      if (cl->get_n_actualparams() != 0)
+      setTabEnabled(instantiate_vtab, true);
+    else
+      setTabEnabled(instantiate_vtab, false);
+
+    // C++
+
+    if (cl->cpp_is_external())
+      cpp_external_cb->setChecked(TRUE);
+    if (!isWritable)
+    {
+      cpp_external_cb->setDisabled(TRUE);
+      disconnect(cpp_external_cb, SIGNAL(toggled(bool)), this,
+          SLOT(cpp_default_decl()));
+    }
+    else
+    {
+      cpp_external_cb->setDisabled(false);
+      connect(cpp_external_cb, SIGNAL(toggled(bool)), this,
+          SLOT(cpp_default_decl()));
+    }
+    if (currentNode->nestedp())
+    {
+      bgvCpp = cpp_visibility.init(htabcpp, cl->get_cpp_visibility(),
+                    FALSE, 0, TR("follow uml"));
+
+      if (!isWritable)
+        bgvCpp->setEnabled(FALSE);
+        else
+        bgvCpp->setEnabled(true);
+    }
+    edcppdecl->setText(cl->cpp_decl);
+    font = edcppdecl->font();
+    if (! hasCodec())
+      font.setFamily("Courier");
+    font.setFixedPitch(TRUE);
+    edcppdecl->setFont(font);
+    if (!isWritable)
+    {
+      edcppdecl->setReadOnly(TRUE);
+      disconnect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
+    }
+    else
+      {
+      edcppdecl->setReadOnly(FALSE);
+      connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
+      }
+
+    showcppdecl->setReadOnly(TRUE);
+    showcppdecl->setFont(font);
+
+    if (!isWritable)
+    {
+      same_width(lbl1cpp, lbl2cpp, lbl3cpp);
+      lbl4cpp->hide();
+      htabcpp->hide();
+      disconnect(pbCppDefaultDeclaration, SIGNAL(clicked ()),
+          this, SLOT(cpp_default_decl()));
+      disconnect(pbNotGeneratedInCPP, SIGNAL(clicked ()),
+          this, SLOT(cpp_unmapped_decl()));
+
+      }
+    else
+    {
+      connect(pbCppDefaultDeclaration, SIGNAL(clicked ()),
+          this, SLOT(cpp_default_decl()));
+      connect(pbNotGeneratedInCPP, SIGNAL(clicked ()),
+          this, SLOT(cpp_unmapped_decl()));
+      lbl4cpp->show();
+      htabcpp->show();
+      same_width(lbl1cpp, lbl2cpp, lbl3cpp, lbl4cpp);
+    }
+
+
+
+    if (!GenerationSettings::cpp_get_default_defs())
+      setTabEnabled(cpptab, false);
+      else
+      setTabEnabled(cpptab, true);
+    // Java
+
+
+    if (cl->java_is_final())
+      java_final_cb->setChecked(TRUE);
+      else
+      java_final_cb->setChecked(false);
+    if (cl->java_is_external())
+      java_external_cb->setChecked(TRUE);
+      else
+      java_external_cb->setChecked(false);
+    if (!isWritable)
+    {
+      java_final_cb->setDisabled(TRUE);
+      java_external_cb->setDisabled(TRUE);
+      disconnect(java_final_cb, SIGNAL(toggled(bool)),this,
+          SLOT(java_update_decl()));
+      disconnect(java_external_cb, SIGNAL(toggled(bool)),this,
+          SLOT(java_default_decl()));
+    }
+    else
+    {
+      java_final_cb->setDisabled(false);
+      java_external_cb->setDisabled(false);
+      connect(java_final_cb, SIGNAL(toggled(bool)),this,
+          SLOT(java_update_decl()));
+      connect(java_external_cb, SIGNAL(toggled(bool)),this,
+          SLOT(java_default_decl()));
+    }
+
+
+    edjavadecl->setText(cl->java_decl);
+    edjavadecl->setFont(font);
+    if (!isWritable)
+    {
+      edjavadecl->setReadOnly(TRUE);
+      disconnect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update_decl()));
+      }
+    else
+    {
+      edjavadecl->setReadOnly(false);
+      connect(edjavadecl, SIGNAL(textChanged()), this, SLOT(java_update_decl()));
+    }
+
+    showjavadecl->setReadOnly(TRUE);
+    showjavadecl->setFont(font);
+
+
+    if (isWritable)
+    {
+      connect(pbJavaDefaultDefinition, SIGNAL(clicked ()),
+          this, SLOT(java_default_decl()));
+      connect(pbNotGeneratedInJava, SIGNAL(clicked ()),
+          this, SLOT(java_unmapped_decl()));
+    }
+    else
+    {
+    disconnect(pbJavaDefaultDefinition, SIGNAL(clicked ()),
+          this, SLOT(java_default_decl()));
+      disconnect(pbNotGeneratedInJava, SIGNAL(clicked ()),
+          this, SLOT(java_unmapped_decl()));
+    }
+
+    same_width(lbl1java, lbl2java, lbl3java, lbl4java);
+    javaannotation = (const char *) cl->java_annotation;
+    pbJavaAnnotation->setText( !isWritable ? TR("Show annotation") : TR("Edit annotation"));
+
+    if (!GenerationSettings::java_get_default_defs())
+      setTabEnabled(javatab, false);
+      else
+      setTabEnabled(javatab, true);
+
+    // Php
+
+
+    if (cl->php_is_final())
+      php_final_cb->setChecked(TRUE);
+      else
+      php_final_cb->setChecked(false);
+
+    if (cl->php_is_external())
+      php_external_cb->setChecked(TRUE);
+      else
+      php_external_cb->setChecked(false);
+    if (!isWritable)
+    {
+      php_final_cb->setDisabled(TRUE);
+      php_external_cb->setDisabled(TRUE);
+      disconnect(php_final_cb, SIGNAL(toggled(bool)),this,
+          SLOT(php_update_decl()));
+      disconnect(php_external_cb, SIGNAL(toggled(bool)),this,
+          SLOT(php_default_decl()));
+    }
+    else
+    {
+      php_final_cb->setDisabled(false);
+      php_external_cb->setDisabled(false);
+      connect(php_final_cb, SIGNAL(toggled(bool)),this,
+          SLOT(php_update_decl()));
+      connect(php_external_cb, SIGNAL(toggled(bool)),this,
+          SLOT(php_default_decl()));
+    }
+
+
+    edphpdecl->setText(cl->php_decl);
+
+    if (!isWritable)
+      {
+      edphpdecl->setReadOnly(TRUE);
+      disconnect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update_decl()));
+      }
+    else
+      {
+      edphpdecl->setReadOnly(false);
+      connect(edphpdecl, SIGNAL(textChanged()), this, SLOT(php_update_decl()));
+      }
+
+    if (isWritable)
+    {
+      connect(pbPhpDefaultDefinition, SIGNAL(clicked ()),
+          this, SLOT(php_default_decl()));
+      connect(pbNotGeneratedInPhp, SIGNAL(clicked ()),
+          this, SLOT(php_unmapped_decl()));
+
+    }
+    else
+    {
+        disconnect(pbPhpDefaultDefinition, SIGNAL(clicked ()),
+          this, SLOT(php_default_decl()));
+      disconnect(pbNotGeneratedInPhp, SIGNAL(clicked ()),
+          this, SLOT(php_unmapped_decl()));
+
+    }
+
+    same_width(lbl1php, lbl2php, lbl3php, lbl4php);
+
+    if (!GenerationSettings::php_get_default_defs())
+      setTabEnabled(phptab, false);
+      else
+      setTabEnabled(phptab, true);
+
+
+    // Python
+
+    if (cl->python_is_2_2())
+      python_2_2_cb->setChecked(TRUE);
+      else
+      python_2_2_cb->setChecked(false);
+
+    if (cl->python_is_external())
+      python_external_cb->setChecked(TRUE);
+      else
+      python_external_cb->setChecked(false);
+
+    if (!isWritable)
+    {
+      disconnect(python_2_2_cb, SIGNAL(toggled(bool)),this,
+          SLOT(python_update_decl()));
+      disconnect(python_external_cb, SIGNAL(toggled(bool)),this,
+          SLOT(python_default_decl()));
+      python_2_2_cb->setDisabled(TRUE);
+      python_external_cb->setDisabled(TRUE);
+    }
+    else
+    {
+      python_2_2_cb->setDisabled(false);
+      python_external_cb->setDisabled(false);
+      connect(python_2_2_cb, SIGNAL(toggled(bool)),this,
+          SLOT(python_update_decl()));
+      connect(python_external_cb, SIGNAL(toggled(bool)),this,
+          SLOT(python_default_decl()));
+    }
+
+
+    edpythondecl->setText(cl->python_decl);
+    edpythondecl->setFont(font);
+    if (!isWritable)
+    {
+      edpythondecl->setReadOnly(TRUE);
+      disconnect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update_decl()));
+    }
+    else
+    {
+      edpythondecl->setReadOnly(false);
+      connect(edpythondecl, SIGNAL(textChanged()), this, SLOT(python_update_decl()));
+    }
+
+
+    if (isWritable)
+    {
+      connect(pbPythonDefaultDefinition, SIGNAL(clicked ()),
+          this, SLOT(python_default_decl()));
+      connect(pbNotGeneratedInPython, SIGNAL(clicked ()),
+          this, SLOT(python_unmapped_decl()));
+    }
+    else
+    {
+      disconnect(pbPythonDefaultDefinition, SIGNAL(clicked ()),
+          this, SLOT(python_default_decl()));
+      disconnect(pbNotGeneratedInPython, SIGNAL(clicked ()),
+          this, SLOT(python_unmapped_decl()));
+    }
+
+    same_width(lbl1python, lbl2python, lbl3python, lbl4python);
+
+    if (!GenerationSettings::python_get_default_defs())
+      setTabEnabled(pythontab, false);
+      else
+      setTabEnabled(pythontab, true);
+
+    // IDL
+    edswitch_type->clear();
+    if (isWritable)
+    {
+      edswitch_type->setAutoCompletion(completion());
+      edswitch_type->insertItem(cl->get_switch_type().get_full_type());
+      edswitch_type->insertStringList(GenerationSettings::basic_types());
+
+      Q3PtrListIterator<BrowserNode> it(nodes);
+
+      while (it.current() != 0)
+      {
+        QString st =
+      idl_stereotype(((ClassData *) (it.current()->get_data()))->get_stereotype());
+
+        if (st == "enum")
+      edswitch_type->insertItem(it.current()->full_name(TRUE));
+
+        ++it;
+      }
+    }
+    else
+    {
+      edswitch_type->clear();
+    }
+
+    edswitch_type->setCurrentItem(0);
+
+    if (cl->idl_is_external())
+      idl_external_cb->setChecked(TRUE);
+      else
+      idl_external_cb->setChecked(false);
+
+    if (cl->idl_is_local())
+      idl_local_cb->setChecked(TRUE);
+      else
+      idl_local_cb->setChecked(false);
+    if (cl->idl_is_custom())
+      idl_custom_cb->setChecked(TRUE);
+      else
+      idl_custom_cb->setChecked(false);
+    if (!isWritable)
+    {
+      idl_local_cb->setDisabled(TRUE);
+      idl_external_cb->setDisabled(TRUE);
+      disconnect(idl_local_cb, SIGNAL(toggled(bool)),this,
+          SLOT(idl_update_decl()));
+      disconnect(idl_custom_cb, SIGNAL(toggled(bool)),this,
+          SLOT(idl_update_decl()));
+      disconnect(idl_external_cb, SIGNAL(toggled(bool)),this,
+          SLOT(idl_default_decl()));
+    }
+    else
+    {
+      idl_local_cb->setDisabled(false);
+      idl_external_cb->setDisabled(false);
+      connect(idl_local_cb, SIGNAL(toggled(bool)),this,
+          SLOT(idl_update_decl()));
+      connect(idl_custom_cb, SIGNAL(toggled(bool)),this,
+          SLOT(idl_update_decl()));
+      connect(idl_external_cb, SIGNAL(toggled(bool)),this,
+          SLOT(idl_default_decl()));
+    }
+
+
+    edidldecl->setText(cl->idl_decl);
+
+    if (!isWritable)
+      {
+      edidldecl->setReadOnly(TRUE);
+      disconnect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
+      }
+    else
+    {
+      edidldecl->setReadOnly(false);
+      connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
+      }
+
+
+    if (!isWritable)
+      {
+          same_width(lbl1idl, lbl2idl, lbl3idl);
+          disconnect(pbIdlDefaultDeclaration, SIGNAL(clicked ()),
+          this, SLOT(idl_default_decl()));
+      disconnect(pbINotGeneratedInIdl, SIGNAL(clicked ()),
+          this, SLOT(idl_unmapped_decl()));
+          htabidl->hide();
+      }
+
+    else
+    {
+      connect(pbIdlDefaultDeclaration, SIGNAL(clicked ()),
+          this, SLOT(idl_default_decl()));
+      connect(pbINotGeneratedInIdl, SIGNAL(clicked ()),
+          this, SLOT(idl_unmapped_decl()));
+
+      same_width(lbl1idl, lbl2idl, lbl3idl, lbl4idl);
+      htabidl->show();
+    }
+
+    addTab(idltab, "IDL");
+
+    if (!GenerationSettings::idl_get_default_defs())
+      setTabEnabled(idltab, false);
+      else
+      setTabEnabled(idltab, true);
+    // profiled stereotype
+
+      bool grannyIsUmlPackage = grandParent->get_type() == UmlPackage;
+      bool grannyIsProfiled = !strcmp(grandParent->get_data()->get_stereotype(), "profile");
+      if (grannyIsUmlPackage && grannyIsProfiled)
+      {
+      stereo_init_cb->clear();
+      QString s;
+      s = currentNode->get_value("stereotypeSet");
+      stereo_init_cb->insertItem(s);
+      QStringList tools = Tool::all_display();
+      if (isWritable)
+      {
+        if (!s.isEmpty())
+          stereo_init_cb->insertItem("");
+        stereo_init_cb->insertStringList(tools);
+      }
+      else
+      {
+          stereo_init_cb->clear();
+      }
+      stereo_init_cb->setCurrentItem(0);
+
+      edinitparam->setReadOnly(!isWritable);
+
+      s = currentNode->get_value("stereotypeCheck");
+
+      stereo_check_cb->clear();
+      stereo_check_cb->insertItem(s);
+      if (isWritable)
+      {
+        if (! s.isEmpty())
+          stereo_check_cb->insertItem("");
+        stereo_check_cb->insertStringList(tools);
+      }
+      else
+      {
+          stereo_check_cb->clear();
+      }
+      stereo_check_cb->setCurrentItem(0);
+
+      edcheckparam->setReadOnly(!isWritable);
+
+      QString ip = currentNode->get_value("stereotypeIconPath");
+
+      ediconpath->setText(ip);
+
+      if (!isWritable)
+      {
+        ediconpath->setReadOnly(TRUE);
+        iconpathrootbutton = iconpathprjbutton = 0;
+
+
+        RelativeRoot = TR("");
+        RelativePrj = TR("");
+        Absolute = TR("");
+        lblProfiledEmpty->hide();
+        lblProfiledEmpty2->hide();
+        lblProfiledEmpty3->hide();
+        vtabProfiled->hide();
+        disconnect(pbProfiledSteretypeBrowse,SIGNAL(clicked ()), this, SLOT(icon_browse()));
+        pbProfiledSteretypeBrowse->hide();
+        disconnect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
+        disconnect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
+      }
+      else
+      {
+        RelativeRoot = TR("Set it relative to image root");
+        RelativePrj = TR("Set it relative to project");
+        Absolute = TR("Set it absolute");
+
+        lblProfiledEmpty->show();
+        pbProfiledSteretypeBrowse->show();
+        connect(pbProfiledSteretypeBrowse,SIGNAL(clicked ()), this, SLOT(icon_browse()));
+        lblProfiledEmpty2->show();
+        vtabProfiled->show();
+        iconpathrootbutton->setText((ip.isEmpty() || QDir::isRelativePath(ip))
+                             ? Absolute : RelativeRoot);
+        iconpathprjbutton->setText((ip.isEmpty() || QDir::isRelativePath(ip))
+                            ? Absolute : RelativePrj);
+
+        connect(iconpathrootbutton, SIGNAL(clicked ()), this, SLOT(icon_root_relative()));
+        connect(iconpathprjbutton, SIGNAL(clicked ()), this, SLOT(icon_prj_relative()));
+        iconpathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
+        lblProfiledEmpty3->show();
+
+      }
+
+
+      if(applicableon_table)
+          delete applicableon_table;
+        applicableon_table = new ApplicableOnTable(stereotypeGrid, currentNode->get_value("stereotypeApplyOn"), !isWritable);
+
+      addTab(stereotypeGrid, TR("Stereotype"));
+    }
+    else
+      setTabEnabled(stereotypetab, false);
+
+
+
+    // USER : list key - value
+          kvtable->update(currentNode);
+        kvtable->remove("stereotypeCheck");
+        kvtable->remove("stereotypeSetParameters");
+        kvtable->remove("stereotypeCheckParameters");
+        kvtable->remove("stereotypeApplyOn");
+        kvtable->remove("stereotypeIconPath");
+    //
+
+    QString stereotype = fromUnicode(edstereotype->currentText());
+
+    current_cpp_stereotype = cpp_stereotype(stereotype);
+    current_java_stereotype = java_stereotype(stereotype);
+    current_php_stereotype = php_stereotype(stereotype);
+    current_python_stereotype = python_stereotype(stereotype);
+    current_idl_stereotype = idl_stereotype(stereotype);
+
+    edStereotypeActivated(stereotype);
+
+    connect(this, SIGNAL(currentChanged(QWidget *)),
+        this, SLOT(update_all_tabs(QWidget *)));
+
+    update_all_tabs(0);
 }
 
 void ClassDialog::NullPointers()
@@ -3603,4 +3481,157 @@ void ClassDialog::NullPointers()
     bgvPhp = 0;
     bgvIDL = 0;
     applicableon_table = 0;
+}
+
+void ClassDialog::SaveData()
+{
+    if (!check_edits(edits) || !kvtable->check_unique())
+      return;
+
+    BrowserClass * bn = (BrowserClass *) cl->get_browser_node();
+    QString oldname = cl->name();
+    bool was_st = !strcmp(cl->get_stereotype(), "stereotype");
+    QString st = fromUnicode(edstereotype->currentText().stripWhiteSpace());
+    QString err;
+    QString s;
+
+    s = edname->text().stripWhiteSpace();
+    if (s != oldname) {
+      if (((BrowserNode *) bn->parent())->wrong_child_name(s, UmlClass,
+                               bn->allow_spaces(),
+                               bn->allow_empty())) {
+        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+        return;
+      }
+
+      if ((st == "stereotype") &&
+      (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
+        msg_critical(TR("Error"), s + " " + err);
+        return;
+      }
+
+      bn->set_name(s);
+    }
+    else if (st == "stereotype") {
+      if (!was_st &&
+      (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
+        msg_critical(TR("Error"), oldname + " " + err);
+        return;
+      }
+      else if (stereotypetab != 0) {
+        Q3CString path = fromUnicode(ediconpath->text().simplifyWhiteSpace());
+
+        if (!path.isEmpty() && (get_pixmap((const char *) path) == 0)) {
+      msg_critical(TR("Error"),
+               ((const char *) path) +
+               TR("\ndoesn't exist or is not a know image format"));
+      return;
+        }
+      }
+    }
+
+    bool newst = cl->set_stereotype(st);
+
+    if (st == "typedef")
+      cl->set_base_type(the_type(edbasetype->currentText().stripWhiteSpace(),
+                     node_names, nodes));
+
+    cl->is_abstract = abstract_cb->isChecked();
+    cl->is_active = active_cb->isChecked();
+
+    cl->uml_visibility = uml_visibility.value();
+
+    if (artifact != 0) {
+      int index = artifact->currentItem();
+
+      bn->set_associated_artifact((index == 0)
+                   ? 0 // "" : no artifact
+                   : ((BrowserArtifact *) artifacts.at(index - 1)));
+    }
+
+    formals_table->update(cl, nodes);
+
+    if (cl->get_n_actualparams() != 0)
+      actuals_table->update(cl, nodes);
+
+    bn->set_comment(comment->text());
+    UmlWindow::update_comment_if_needed(bn);
+
+    cl->constraint = constraint->stripWhiteSpaceText();
+
+    cl->cpp_external = cpp_external_cb->isChecked();
+    cl->cpp_decl = edcppdecl->text();
+    if (bn->nestedp())
+      cl->cpp_visibility = cpp_visibility.value();
+
+    cl->java_decl = edjavadecl->text();
+    cl->java_final = java_final_cb->isChecked();
+    cl->java_external = java_external_cb->isChecked();
+    cl->java_annotation = javaannotation;
+
+    cl->php_decl = edphpdecl->text();
+    cl->php_final = php_final_cb->isChecked();
+    cl->php_external = php_external_cb->isChecked();
+
+    cl->python_decl = edpythondecl->text();
+    cl->python_2_2 = python_2_2_cb->isChecked();
+    cl->python_external = python_external_cb->isChecked();
+
+    cl->idl_decl = edidldecl->text();
+    cl->idl_local = idl_local_cb->isChecked();
+    cl->idl_custom = idl_custom_cb->isChecked();
+    cl->idl_external = idl_external_cb->isChecked();
+    if (switch_bg->isEnabled()) {
+      AType swt;
+
+      s = edswitch_type->currentText().stripWhiteSpace();
+
+      if (! s.isEmpty()) {
+        int index = node_names.findIndex(s);
+
+        if (index >= 0)
+      swt.type = (BrowserClass *) nodes.at(index);
+        else
+      swt.explicit_type = s;
+      }
+
+      cl->set_switch_type(swt);
+    }
+
+    kvtable->update(bn);
+
+    if (stereotypetab != 0) {
+      if (st == "stereotype") {
+        unsigned n = bn->get_n_keys();
+        Q3CString oldiconpath = bn->get_value("stereotypeIconPath");
+        Q3CString newiconpath = fromUnicode(ediconpath->text().simplifyWhiteSpace());
+
+        bn->set_n_keys(n + 6);
+        bn->set_key(n, "stereotypeSet");
+        bn->set_value(n, stereo_init_cb->currentText());
+        bn->set_key(++n, "stereotypeCheck");
+        bn->set_value(n, stereo_check_cb->currentText());
+        bn->set_key(++n, "stereotypeSetParameters");
+        bn->set_value(n, fromUnicode(edinitparam->text().simplifyWhiteSpace()));
+        bn->set_key(++n, "stereotypeCheckParameters");
+        bn->set_value(n, fromUnicode(edcheckparam->text().simplifyWhiteSpace()));
+        bn->set_key(++n, "stereotypeApplyOn");
+        bn->set_value(n, applicableon_table->targets());
+        bn->set_key(++n, "stereotypeIconPath");
+        bn->set_value(n, newiconpath);
+
+        if (newst)
+      ProfiledStereotypes::added(bn);
+        else
+      ProfiledStereotypes::changed(bn, oldname, oldiconpath != newiconpath);
+      }
+      else if (was_st)
+        ProfiledStereotypes::deleted(bn);
+    }
+
+    ProfiledStereotypes::modified(bn, newst);
+
+    bn->modified();
+    bn->package_modified();
+    cl->modified();
 }
