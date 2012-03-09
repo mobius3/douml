@@ -6,8 +6,6 @@
 #include <map>
 #include <QMap>
 
-
-#include "boost/functional/factory.hpp"
 #include "misc/SingletonHolder.h"
 
 
