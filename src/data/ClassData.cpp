@@ -48,6 +48,7 @@
 #include "strutil.h"
 #include "mu.h"
 #include "Factories/EdgeMenuFactory.h"
+#include "misc/TypeIdentifier.h"
 
 bool ClassData::DontUpdateActuals = FALSE;
   
@@ -778,11 +779,15 @@ void ClassData::edit() {
   setName(browser_node->get_name());
     
   // edition must be modal
-  An<EdgeMenuFactory> factory;
-  QSharedPointer<ClassDialog> dialog =  ClassDialog::Instance(this);
-  dialog->setModal(false);
-  QObject::connect(dialog.data(), SIGNAL(edgeMenuRequested(uint)),factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
-  dialog->show();
+  //An<EdgeMenuFactory> factory;
+  ClassDialog::Instance(this)->show();
+  //dialog->setModal(false);
+  //QObject::connect(dialog.data(), SIGNAL(edgeMenuRequested(uint)),factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
+  //dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+  //dialog->move(QCursor::pos().x() + 15, QCursor::pos().y());
+  //factory->SpawnEdgeMenu(TypeIdentifier<ClassDialog>::id());
+  //dialog->show();
+
 }
 
 //

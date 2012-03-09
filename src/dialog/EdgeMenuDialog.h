@@ -4,6 +4,7 @@
 #include <QWidget>
 
 unsigned int ClosestEdge(QWidget*, QPoint);
+class BrowserNode;
 
 class EdgeMenuDialog : public Q3TabDialog
 {
@@ -13,26 +14,19 @@ public:
     virtual ~EdgeMenuDialog();
 
     virtual void InitGui() = 0;
-//    void FillGuiElements(BrowserNode*) = 0;
-//    template <typename T>
-//    void FillGuiElements(T *)
-//    {
-//        Q_ASSERT_X(0, "InitElements", "Attempt to use default function."
-//                   "You must create an overload in inheriting class");
-//    }
-
-
 
 protected:
     virtual uint TypeID() = 0;
 
     virtual void leaveEvent ( QEvent * event );
-
+    void showEvent ( QShowEvent * event );
     virtual void SetDialogMode(bool _isWritable);
 
-
-
     bool isWritable;
+
+    virtual BrowserNode * GetCurrentNode() = 0;
+    virtual void SaveData() = 0;
+    virtual void FillGuiElements(BrowserNode *) = 0;
 
 
 
@@ -40,7 +34,8 @@ signals:
     void edgeMenuRequested(uint);
 
 public slots:
-    virtual void OnPickNextSibling() = 0;
+    virtual void OnPickNextSibling();
+    virtual void OnPickPreviousSibling();
 
 
 };

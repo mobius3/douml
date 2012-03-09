@@ -210,7 +210,8 @@ HEADERS		= data/ActualParamData.h \
 		  xpm/UmlPixmap.h \
     ui/menufactory.h \
     Factories/EdgeMenuFactory.h \
-    dialog/EdgeMenuDialog.h
+    dialog/EdgeMenuDialog.h \
+    CustomWidgets/EdgeMenuToolBar.h
 SOURCES		= browser/BrowserAttribute.cpp \
 		  browser/BrowserExtraMember.cpp \
 		  browser/BrowserClass.cpp \
@@ -502,3 +503,6 @@ Debug{
     DESTDIR = ../bin
 
 QMAKE_CXXFLAGS += -std=gnu++0x
+
+RESOURCES += \
+    icons.qrc
