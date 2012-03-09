@@ -12,12 +12,12 @@
 
 
 //#include <pair>
-
+class EdgeMenuDialog;
 
 struct Orientationvariables
 {
     int orientation;
-    std::map<std::pair<int,QString>, QString> iconNames;
+    //std::map<std::pair<int,QString>, QString> iconNames;
 };
 
 typedef std::function<QToolBar*()>  ToolbarFactory;
@@ -30,9 +30,9 @@ class EdgeMenuFactory : public QObject
 public:
     EdgeMenuFactory();
     virtual ~EdgeMenuFactory();
-    void SpawnEdgeMenu(uint);
-    void AddFactory(uint, ToolbarFactory);
 
+    void AddFactory(uint, ToolbarFactory);
+    void SpawnEdgeMenu(uint, EdgeMenuDialog*,  QPoint);
 public slots:
     void OnEdgeMenuRequested(uint classID);
 
@@ -40,6 +40,7 @@ private :
     QMap<uint, ToolbarFactory > factories;
     QMap<uint, QToolBar*> createdToolbars;
     QMap<int, Orientationvariables> orientationSwitch;
+    void SpawnEdgeMenu(uint, EdgeMenuDialog*);
 
 };
 BIND_TO_SELF_SINGLE(EdgeMenuFactory);

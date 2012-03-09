@@ -1770,14 +1770,6 @@ void ClassDialog::idl_unmapped_decl() {
   showidldecl->setText(QString());
 }
 
-void ClassDialog::OnPickNextSibling()
-{
-    SaveData();
-    BrowserNode* nextNode = dynamic_cast<BrowserNode*>(cl->browser_node->nextSibling());
-    FillGuiElements(nextNode);
-
-}
-
 void ClassDialog::accept()
 {
   SaveData();
@@ -2719,7 +2711,8 @@ void ClassDialog::InitGui()
 
 void ClassDialog::FillGuiElements(BrowserNode * bn)
 {
-    FillGuiElements(dynamic_cast<ClassData*>(bn->get_data()));
+    if(dynamic_cast<ClassData*>(bn->get_data()))
+        FillGuiElements(dynamic_cast<ClassData*>(bn->get_data()));
 }
 
 void ClassDialog::FillGuiElements(ClassData * _cl)
@@ -2728,58 +2721,10 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
         this, SLOT(update_all_tabs(QWidget *)));
     cl = _cl;
 	
-	// edstereotype->blockSignals(true);
-	// edbasetype->blockSignals(true);
-	// artifact->blockSignals(true);
-	// pbEditorForDescription->blockSignals(true);
-	// pbDefaultForDescription->blockSignals(true);
-	// pbEditorForConstrant->blockSignals(true);
-	// cpp_external_cb->blockSignals(true);
-	// edcppdecl->blockSignals(true);
-	// showcppdecl->blockSignals(true);
-	// pbCppDefaultDeclaration->blockSignals(true);
-	// pbNotGeneratedInCPP->blockSignals(true);
-	// java_final_cb->blockSignals(true);
-	// java_external_cb->blockSignals(true);
-	// edjavadecl->blockSignals(true);
-	// showjavadecl->blockSignals(true);
-	// pbJavaDefaultDefinition->blockSignals(true);
-	// pbNotGeneratedInJava->blockSignals(true);
-	// php_final_cb->blockSignals(true);
-	// php_external_cb->blockSignals(true);
-	// edphpdecl->blockSignals(true);
-	// edphpdecl->blockSignals(true);
-	// pbPhpDefaultDefinition->blockSignals(true);
-	// pbNotGeneratedInPhp->blockSignals(true);
-	// python_2_2_cb->blockSignals(true);
-	// python_external_cb->blockSignals(true);
-	// edpythondecl->blockSignals(true);
-	// pbPythonDefaultDefinition->blockSignals(true);
-	// pbNotGeneratedInPython->blockSignals(true);
-	// edswitch_type->blockSignals(true);
-	// idl_external_cb->blockSignals(true);
-	// idl_local_cb->blockSignals(true);
-	// idl_custom_cb->blockSignals(true);
-	// edidldecl->blockSignals(true);
-	// pbIdlDefaultDeclaration->blockSignals(true);
-	// pbINotGeneratedInIdl->blockSignals(true);
-	// stereo_init_cb->blockSignals(true);
-	// edinitparam->blockSignals(true);
-	// stereo_check_cb->blockSignals(true);
-	// edcheckparam->blockSignals(true);
-	// ediconpath->blockSignals(true);
-	// ediconpath->blockSignals(true);
-	// pbProfiledSteretypeBrowse->blockSignals(true);
-	// iconpathrootbutton->blockSignals(true);
-	// iconpathprjbutton->blockSignals(true);
-	
-	
-	
-	
-	
+
 	isWritable = cl->browser_node->is_writable();
     SetDialogMode(isWritable);
-
+	
     nodes.clear();
     node_names.clear();
 
@@ -2790,9 +2735,12 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     }
 
     // general tab
-
+    currentNode = (BrowserClass *) cl->get_browser_node();
+    grandParent = (BrowserNode *) currentNode->parent()->parent();
+    edname->setText(cl->get_browser_node()->get_name());
     edname->setReadOnly(!isWritable);
-
+	edinitparam->setText(currentNode->get_value("stereotypeSetParameters"));
+	edcheckparam->setText(currentNode->get_value("stereotypeCheckParameters"));
     // filling stereotypes edit element
     edstereotype->clear();
     edstereotype->insertItem(toUnicode(cl->get_stereotype()));
@@ -2825,7 +2773,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     sp.setHorData(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-
+    abstract_cb->setChecked(false);
     if (cl->get_is_abstract())
     {
       abstract_cb->setChecked(TRUE);
@@ -2834,6 +2782,8 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     }
     abstract_cb->setDisabled(!isWritable);
 
+
+    active_cb->setChecked(false);
     if (cl->get_is_active())
       active_cb->setChecked(TRUE);
     active_cb->setDisabled(!isWritable);
@@ -2876,6 +2826,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     edbasetype->setSizePolicy(sp);
 	artifact->clear();
 	artifact->show();
+    artifacts.clear();
     if (!currentNode->nestedp())
     {
       BrowserNode * bc = currentNode->get_associated_artifact();
@@ -3534,7 +3485,7 @@ void ClassDialog::SaveData()
       return;
 
     BrowserClass * bn = (BrowserClass *) cl->get_browser_node();
-    QString oldname = cl->name();
+    QString oldname = cl->browser_node->get_name();
     bool was_st = !strcmp(cl->get_stereotype(), "stereotype");
     QString st = fromUnicode(edstereotype->currentText().stripWhiteSpace());
     QString err;
@@ -3679,4 +3630,9 @@ void ClassDialog::SaveData()
     bn->modified();
     bn->package_modified();
     cl->modified();
+}
+
+BrowserNode *ClassDialog::GetCurrentNode()
+{
+    return cl->browser_node;
 }

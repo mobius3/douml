@@ -219,6 +219,7 @@ class ClassDialog : public EdgeMenuDialog {
     void FillGuiElements(ClassData* _cl);
     void NullPointers();
     void SaveData();
+    BrowserNode * GetCurrentNode();
     //refactoring changes
 
     static QSharedPointer<ClassDialog> instance;
@@ -311,7 +312,8 @@ protected slots:
     void idl_default_decl();
     void idl_unmapped_decl();
 
-    void OnPickNextSibling();
+//    void OnPickNextSibling();
+//    void OnPickPreviousSibling();
 
 };
 
