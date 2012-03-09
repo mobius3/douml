@@ -47,6 +47,7 @@
 #include "ToolCom.h"
 #include "strutil.h"
 #include "mu.h"
+#include "Factories/EdgeMenuFactory.h"
 
 bool ClassData::DontUpdateActuals = FALSE;
   
@@ -777,10 +778,11 @@ void ClassData::edit() {
   setName(browser_node->get_name());
     
   // edition must be modal
-  ClassDialog dialog(this);
-  
-  dialog.raise();
-  dialog.exec();
+  An<EdgeMenuFactory> factory;
+  QSharedPointer<ClassDialog> dialog =  ClassDialog::Instance(this);
+  dialog->setModal(false);
+  QObject::connect(dialog.data(), SIGNAL(edgeMenuRequested(uint)),factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
+  dialog->show();
 }
 
 //

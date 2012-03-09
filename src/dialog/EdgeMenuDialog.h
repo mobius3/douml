@@ -30,12 +30,18 @@ protected:
 
     virtual void SetDialogMode(bool _isWritable);
 
+
+
     bool isWritable;
 
 
 
 signals:
     void edgeMenuRequested(uint);
+
+public slots:
+    virtual void OnPickNextSibling() = 0;
+
 
 };
 

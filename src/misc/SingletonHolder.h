@@ -1,45 +1,55 @@
-#ifndef TREEFILTER_SINGLETONHOLDER_H
-#define TREEFILTER_SINGLETONHOLDER_H
-
-
-#include "include/ArmCommonClasses_global.h"
-
-
-namespace TreeFilter {
+#ifndef DOUML_SINGLETONHOLDER_H
+#define DOUML_SINGLETONHOLDER_H
+#include <exception>
+#include <stdexcept>
 
 template<typename T>
-struct An 
+struct An
 {
-    inline An() { clear(); };
+    An()                                { clear(); }
 
-    inline T * operator ->() { return get0(); };
+    T* operator->()                     { return get0(); }
+    const T* operator->() const         { return get0(); }
+    void operator=(T* t)                { data = t; }
 
-    inline const T * operator ->() const { return get0(); };
+    bool isEmpty() const                { return data == 0; }
+    void clear()                        { data = 0; }
+    void init()                         { if (isEmpty()) reinit(); }
+    void reinit()                       { anFill(*this); }
+    T* getData()
+    {
+        const_cast<An*>(this)->init();
+        return data;
+    }
+private:
+    T* get0() const
+    {
+        const_cast<An*>(this)->init();
+        return data;
+    }
 
-    inline void operator =(T * t) { data = t; };
-
-    inline bool isEmpty() const { return data == 0; };
-
-    inline void clear() { data = 0; };
-
-    inline void init() { if (isEmpty()) reinit(); };
-
-    inline void reinit() { anFill(*this); };
-
-    inline T * getData() {
-            const_cast<An*>(this)->init();
-            return data;
-        };
-
-
-  private:
-    inline T * get0() const {
-            const_cast<An*>(this)->init();
-            return data;
-        };
-
-     T * data;
+    T* data;
 };
 
-} // namespace TreeFilter
+template<typename T>
+inline void anFill(An<T>& a)
+{
+    throw std::runtime_error(std::string("Cannot find implementation for interface: ")
+            + typeid(T).name());
+}
+
+template<typename T>
+inline T& single()
+{
+    static T t;
+    return t;
+}
+#define PROTO_IFACE(D_iface) template<> inline void anFill<D_iface>(An<D_iface>& a)
+
+#define DECLARE_IMPL(D_iface) PROTO_IFACE(D_iface);
+
+#define BIND_TO_IMPL_SINGLE(D_iface, D_impl) PROTO_IFACE(D_iface) { a = &single<D_impl>(); }
+
+#define BIND_TO_SELF_SINGLE(D_impl) BIND_TO_IMPL_SINGLE(D_impl, D_impl)
+
 #endif
