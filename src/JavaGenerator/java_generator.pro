@@ -89,10 +89,15 @@ SOURCES	      = UmlClassItem.cpp UmlAttribute.cpp \
 		../Tools/UmlBaseTypeSpec.cpp \
 		../Tools/UmlBaseParameter.cpp \
 		../Tools/UmlBaseView.cpp \
-		../Tools/UmlBaseClassInstance.cpp
+		../Tools/UmlBaseClassInstance.cpp \
+    ../Logging/QsLogDest.cpp \
+    ../Logging/QsLog.cpp \
+    ../Logging/QsDebugOutput.cpp
 TARGET	      = java_generator
 DEFINES	      = WITHJAVA BooL=bool
-INCLUDEPATH   = ../Tools ../JavaGenerator
+INCLUDEPATH   = ../Tools ../JavaGenerator ../
+
+DESTDIR = ../../bin
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 

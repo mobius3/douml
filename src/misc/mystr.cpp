@@ -76,28 +76,28 @@ bool operator!=(const QString & s1, const WrapperStr & s2)
 
 QString operator+(const WrapperStr & s1, const char * s2)
 {
-    QLOG_INFO() << Q_FUNC_INFO;
-    QLOG_INFO() << s1.wrappedString << " " << QString(QLatin1String(s2))<< Q_FUNC_INFO;
+//    QLOG_INFO() << Q_FUNC_INFO;
+//    QLOG_INFO() << s1.wrappedString << " " << QString(QLatin1String(s2))<< Q_FUNC_INFO;
     return s1.wrappedString + QString(QLatin1String(s2));
 }
 
 QString operator+(const char * s1, const WrapperStr & s2)
 {
 
-    QLOG_INFO() << Q_FUNC_INFO;
-    QLOG_INFO() << s2.wrappedString << " " << QString(QLatin1String(s1));
+//    QLOG_INFO() << Q_FUNC_INFO;
+//    QLOG_INFO() << s2.wrappedString << " " << QString(QLatin1String(s1));
     return QString(QLatin1String(s1)) + s2.wrappedString ;
 }
 QString operator+(const WrapperStr & s1, const QString & s2)
 {
-    QLOG_INFO() << Q_FUNC_INFO;
-    QLOG_INFO() << s1.wrappedString << " " << s2 << Q_FUNC_INFO;
+//    QLOG_INFO() << Q_FUNC_INFO;
+//    QLOG_INFO() << s1.wrappedString << " " << s2 << Q_FUNC_INFO;
     return s1.wrappedString + s2;
 }
 QString operator+(const QString & s1, const WrapperStr & s2)
 {
-    QLOG_INFO() << Q_FUNC_INFO;
-    QLOG_INFO() << s1 << " " << s2.wrappedString << Q_FUNC_INFO;
+//    QLOG_INFO() << Q_FUNC_INFO;
+//    QLOG_INFO() << s1 << " " << s2.wrappedString << Q_FUNC_INFO;
     return s1 + s2.wrappedString ;
 }
 

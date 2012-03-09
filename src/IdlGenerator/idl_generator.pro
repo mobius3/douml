@@ -1,5 +1,6 @@
 TEMPLATE      = app
 CONFIG	      += qt warn_on debug
+
 SOURCES	      = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
 		UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
 		UmlExtraClassMember.cpp \
@@ -89,12 +90,15 @@ SOURCES	      = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
 		../Tools/UmlBaseTypeSpec.cpp \
 		../Tools/UmlBaseParameter.cpp \
 		../Tools/UmlBaseView.cpp \
-		../Tools/UmlBaseClassInstance.cpp
+		../Tools/UmlBaseClassInstance.cpp \
+    ../Logging/QsLogDest.cpp \
+    ../Logging/QsLog.cpp \
+    ../Logging/QsDebugOutput.cpp
 
 
 TARGET	      = idl_generator
 DEFINES	      = WITHIDL BooL=bool
-INCLUDEPATH   = ../Tools ../IdlGenerator
-
+INCLUDEPATH   = ../Tools ../IdlGenerator ../
+DESTDIR = ../../bin
 #The following line was inserted by qt3to4
 QT += network  qt3support 

@@ -154,6 +154,7 @@ void UmlArtifact::generate() {
     }
       
     f << '\000';
+    f.flush();
     
     if (must_be_saved(path, file)) {
       write_trace_header();
