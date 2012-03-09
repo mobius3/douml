@@ -1211,6 +1211,9 @@ void UmlWindow::save_session() {
 
         if (verbose_generation())
             st << "verbose\n";
+        st.flush();
+        fp.close();
+
     }
 }
 
