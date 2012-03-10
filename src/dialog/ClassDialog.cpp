@@ -82,6 +82,7 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0,0,FALSE), cl(c)
     isWritable = c->browser_node->is_writable();
     NullPointers();
     SetDialogMode(isWritable);
+    SetCurrentNode(c->browser_node);
     InitGui();
     FillGuiElements(c);
 }
@@ -2364,7 +2365,7 @@ void ClassDialog::InitGui()
   //!!!!! general tab elements
   grid = new Q3Grid(2, this);
   umltab = grid;
-  RegisterTab("UML", umltab);
+  RegisterTab("Uml", umltab);
   grid->setSpacing(5);
   grid->setMargin(5);
 
@@ -2436,8 +2437,9 @@ void ClassDialog::InitGui()
 
 
   //!!! parameters for a class
-    RegisterTab("Instantiate", instantiate_vtab);
+
     instantiate_vtab = new Q3VBox(this);
+    RegisterTab("Instantiate", instantiate_vtab);
     instantiate_vtab->setMargin(5);
     instantiateNotice = new QLabel(TR("\nSpecify actuals else formals default value will be used\n"),
         instantiate_vtab);
@@ -2484,7 +2486,7 @@ void ClassDialog::InitGui()
    pbCppDefaultDeclaration = new QPushButton(TR("Default declaration"), htabcpp);
    pbNotGeneratedInCPP = new QPushButton(TR("Not generated in C++"), htabcpp);
 
-    addTab(cpptab, "C++");
+    addTab(cpptab, "Cpp");
 
     //!!! JAVA
 
@@ -2663,7 +2665,7 @@ void ClassDialog::InitGui()
     pbIdlDefaultDeclaration = new QPushButton(TR("Default declaration"), htabidl);
     pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htabidl);
 
-    addTab(idltab, "IDL");
+    addTab(idltab, "Idl");
   // Profiled stereotype
 
 
@@ -2711,7 +2713,7 @@ void ClassDialog::InitGui()
   // USER : list key - value
 
     keyValueTab = new Q3VBox(this);
-    RegisterTab("KeyValue", keyValueTab);
+    RegisterTab("Properties", keyValueTab);
     kvtable = new KeyValuesTable(currentNode, keyValueTab, !isWritable);
     kvtable->remove("stereotypeSet");
 
@@ -2730,7 +2732,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     disconnect(this, SIGNAL(currentChanged(QWidget *)),
         this, SLOT(update_all_tabs(QWidget *)));
     cl = _cl;
-	
+    SetCurrentNode(cl->browser_node);
 
 	isWritable = cl->browser_node->is_writable();
     SetDialogMode(isWritable);
@@ -3408,7 +3410,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
 
     // USER : list key - value
-      ShowTab("KeyValue");
+      ShowTab("Properties");
         kvtable->update(currentNode);
         kvtable->remove("stereotypeCheck");
         kvtable->remove("stereotypeSetParameters");
@@ -3643,9 +3645,4 @@ void ClassDialog::SaveData()
     bn->modified();
     bn->package_modified();
     cl->modified();
-}
-
-BrowserNode *ClassDialog::GetCurrentNode()
-{
-    return cl->browser_node;
 }

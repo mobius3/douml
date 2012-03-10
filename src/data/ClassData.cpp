@@ -775,7 +775,8 @@ bool ClassData::tool_cmd(ToolCom * com, const char * args,
 
 //
 
-void ClassData::edit() {
+void ClassData::edit()
+{
   setName(browser_node->get_name());
     
   // edition must be modal

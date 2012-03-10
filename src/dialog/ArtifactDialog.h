@@ -35,7 +35,8 @@
 #include <q3tabdialog.h>
 //Added by qt3to4:
 #include <Q3PtrList>
-
+#include <QSharedPointer>
+#include "dialog/EdgeMenuDialog.h"
 #include "BrowserArtifact.h"
 
 class Q3ComboBox;
@@ -50,7 +51,8 @@ class FormalParamsTable;
 class ActualParamsTable;
 class BodyDialog;
 
-class ArtifactDialog : public Q3TabDialog {
+class ArtifactDialog : public EdgeMenuDialog
+{
   Q_OBJECT
     
   protected:
@@ -135,11 +137,15 @@ class ArtifactDialog : public Q3TabDialog {
     static void post_php_edit(ArtifactDialog * d, QString s);
     static void post_python_edit(ArtifactDialog * d, QString s);
     static void post_idl_edit(ArtifactDialog * d, QString s);
+
+    virtual uint TypeID();
+
     
   public:
     ArtifactDialog(ArtifactData * nd);
     virtual ~ArtifactDialog();
-  
+    static QSharedPointer<ArtifactDialog> Instance(ArtifactData*);
+
   protected slots:
     virtual void polish();
     virtual void accept();

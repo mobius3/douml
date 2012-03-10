@@ -1,72 +1,36 @@
-
+// *************************************************************************
+//
+// Copyright 2012-2012 Nikolai Marchenko.
+//
+// This file is part of the BreezeUML Uml Toolkit.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// e-mail : enmarantispam@gmail.com
+//
+// *************************************************************************
 #include "EdgeMenuFactory.h"
 #include "dialog/EdgeMenuDialog.h"
 #include "dialog/ClassDialog.h" //< todo Temporary
+#include "Factories/DialogConnections.h"
+#include "Factories/EdgeToolBarCreation.h"
 #include <QToolBar>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QCursor>
 #include <QPushButton>
-
-
-void ConnectToClassDialog(EdgeMenuDialog* dialog, QToolBar* toolbar)
-{
-    QPushButton* pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("NextElement"));
-    QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(OnPickNextSibling()));
-
-    pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("PreviousElement"));
-    QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(OnPickPreviousSibling()));
-
-    pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("OkayElement"));
-    QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(accept()));
-    pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("CancelElement"));
-    QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(reject()));
-
-    pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("OkayElement"));
-    QObject::connect(pageButton, SIGNAL(clicked()), toolbar, SLOT(close()));
-    pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("CancelElement"));
-    QObject::connect(pageButton, SIGNAL(clicked()), toolbar, SLOT(close()));
-    dialog->ConnectionToToolBarEstablished();
-
-}
-
-QToolBar* CreateClassDialogMenu()
-{
-    QToolBar* toolbar = new QToolBar();
-
-
-    QPushButton* okayElement = new QPushButton();
-    okayElement->setIcon(QIcon(":\\root\\icons\\accept.png"));
-    okayElement->setName("OkayElement");
-    okayElement->setBaseSize(30,30);
-
-    QPushButton* nextElement = new QPushButton();
-    nextElement->setIcon(QIcon(":\\root\\icons\\up.png"));
-    nextElement->setName("NextElement");
-    nextElement->setBaseSize(30,30);
-
-    QPushButton* previousElement = new QPushButton();
-    previousElement->setIcon(QIcon(":\\root\\icons\\down.png"));
-    previousElement->setName("PreviousElement");
-    previousElement->setBaseSize(30,30);
-
-    QPushButton* cancelElement = new QPushButton();
-    cancelElement->setIcon(QIcon(":\\root\\icons\\reject.png"));
-    cancelElement->setName("CancelElement");
-    cancelElement->setBaseSize(30,30);
-
-    toolbar->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
-    toolbar->setMinimumHeight(30);
-    toolbar->setMinimumWidth(30);
-    toolbar->resize(toolbar->sizeHint());
-    toolbar->setWindowFlags(Qt::FramelessWindowHint);
-
-    toolbar->addWidget(cancelElement);
-    toolbar->addWidget(nextElement);
-    toolbar->addWidget(previousElement);
-    toolbar->addWidget(okayElement);
-    return toolbar;
-}
 
 void EdgeMenuFactory::OnEdgeMenuRequested(uint classID)
 {
@@ -129,7 +93,7 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* senderWidget)
     toolbar->move(point);
 
     if(!senderWidget->IsConnectedToToolBar())
-        ConnectToClassDialog(senderWidget, toolbar);
+        signalFunctors[classID](senderWidget, toolbar);
 
     toolbar->setWindowFlags(Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
     toolbar->resize(toolbar->sizeHint());
@@ -141,6 +105,14 @@ void EdgeMenuFactory::AddFactory(uint id, ToolbarFactory factory)
     if(!factories.contains(id))
     {
         factories.insert(id,factory);
+    }
+}
+
+void EdgeMenuFactory::AddConnectionFunctor(uint classID, ConnectionFunctor functor)
+{
+    if(!signalFunctors.contains(classID))
+    {
+        signalFunctors.insert(classID,functor);
     }
 }
 

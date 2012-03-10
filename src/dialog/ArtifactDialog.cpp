@@ -54,11 +54,12 @@
 #include "BodyDialog.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
+#include "misc/TypeIdentifier.h"
 
 QSize ArtifactDialog::previous_size;
-
+static QSharedPointer<ArtifactDialog> instance;
 ArtifactDialog::ArtifactDialog(ArtifactData * nd)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd) {
+    : EdgeMenuDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd) {
   nd->browser_node->edit_start();
   
   if (nd->browser_node->is_writable()) {
@@ -98,7 +99,7 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
   connect(this, SIGNAL(currentChanged(QWidget *)),
 	  this, SLOT(update_tab(QWidget *)));
   
-  open_dialog(this);
+//  open_dialog(this);
 }
 
 void ArtifactDialog::polish() {
@@ -800,7 +801,12 @@ void ArtifactDialog::idl_edit() {
 
 void ArtifactDialog::post_idl_edit(ArtifactDialog * d, QString s)
 {
-  d->edidl_content->setText(s);
+    d->edidl_content->setText(s);
+}
+
+uint ArtifactDialog::TypeID()
+{
+    return TypeIdentifier<ArtifactDialog>::id();
 }
 
 void ArtifactDialog::cpp_default_h() {
@@ -1761,7 +1767,8 @@ void ArtifactDialog::stereotypeFilterActivated(const QString & st) {
   }
 }
 
-void ArtifactDialog::accept() {
+void ArtifactDialog::accept()
+{
   if (!check_edits(edits) || !kvtable->check_unique())
     return;
     
@@ -1846,4 +1853,13 @@ void ArtifactDialog::accept() {
     
     Q3TabDialog::accept();
   }
+}
+QSharedPointer<ArtifactDialog> ArtifactDialog::Instance(ArtifactData * nd)
+{
+    //since the dialog is not yet fixed to be called multiple times we do recreation
+    //if(instance.isNull())
+        instance = QSharedPointer<ArtifactDialog>(new ArtifactDialog(nd));
+    //else
+        //instance->FillGuiElements(cl);
+    return instance;
 }

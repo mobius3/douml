@@ -47,7 +47,10 @@
 #include "Logging/QsLogDest.h"
 #include "Logging/QsLog.h"
 #include "Factories/EdgeMenuFactory.h"
+#include "Factories/DialogConnections.h"
+#include "Factories/EdgeToolBarCreation.h"
 #include "dialog/ClassDialog.h"
+#include "dialog/ArtifactDialog.h"
 #include "misc/TypeIdentifier.h"
 
 
@@ -75,8 +78,13 @@ int main(int argc, char **argv)
   logger.addDestination(fileDestination.get());
   QLOG_INFO() << "Starting the log";
 
+
   An<EdgeMenuFactory> factory;
   factory->AddFactory(TypeIdentifier<ClassDialog>::id(), CreateClassDialogMenu);
+  factory->AddConnectionFunctor(TypeIdentifier<ClassDialog>::id(), ConnectToClassDialog);
+  factory->AddFactory(TypeIdentifier<ArtifactDialog>::id(), CreateLimitedDialogMenu);
+  factory->AddConnectionFunctor(TypeIdentifier<ArtifactDialog>::id(), ConnectToLimitedtDialog);
+
 
   UmlDesktop::init();
   

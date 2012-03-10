@@ -219,7 +219,7 @@ class ClassDialog : public EdgeMenuDialog {
     void FillGuiElements(ClassData* _cl);
     void NullPointers();
     void SaveData();
-    BrowserNode * GetCurrentNode();
+
     //refactoring changes
 
     static QSharedPointer<ClassDialog> instance;
