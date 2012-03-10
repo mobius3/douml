@@ -213,7 +213,8 @@ HEADERS		= data/ActualParamData.h \
     dialog/EdgeMenuDialog.h \
     CustomWidgets/EdgeMenuToolBar.h \
     Factories/DialogConnections.h \
-    Factories/EdgeToolBarCreation.h
+    Factories/EdgeToolBarCreation.h \
+    CustomWidgets/MultiPurposeDragArea.h
 SOURCES		= browser/BrowserAttribute.cpp \
 		  browser/BrowserExtraMember.cpp \
 		  browser/BrowserClass.cpp \
@@ -482,7 +483,9 @@ SOURCES		= browser/BrowserAttribute.cpp \
     dialog/EdgeMenuDialog.cpp \
     misc/GenerateTypeId.cpp \
     Factories/DialogConnections.cpp \
-    Factories/EdgeToolBarCreation.cpp
+    Factories/EdgeToolBarCreation.cpp \
+    CustomWidgets/MultiPurposeDragArea.cpp \
+    CustomWidgets/EdgeMenuToolBar.cpp
 
 TARGET		= Douml
 DEFINES         = BooL=bool DEBUGCOM

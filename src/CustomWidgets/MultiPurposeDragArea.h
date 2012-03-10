@@ -21,10 +21,40 @@
 // e-mail : enmarantispam@gmail.com
 //
 // *************************************************************************
-#ifndef EDGETOOLBARCREATION_H
-#define EDGETOOLBARCREATION_H
-#include <QToolBar>
-class EdgeMenuToolBar;
-EdgeMenuToolBar* CreateLimitedDialogMenu();
-EdgeMenuToolBar* CreateClassDialogMenu();
-#endif // EDGETOOLBARCREATION_H
+#ifndef MULTIPURPOSEDRAGAREA_H
+#define MULTIPURPOSEDRAGAREA_H
+
+#include <QWidget>
+
+enum EWidgetModificationMode
+{
+    wmm_none = 0,
+    wmm_drag = 1,
+    wmm_resize = 2
+};
+
+class MultiPurposeDragArea : public QWidget
+{
+    Q_OBJECT
+public:
+    MultiPurposeDragArea(QWidget* _parent = 0);
+    ~MultiPurposeDragArea();
+protected:
+    //! called when user srolls with mouse wheel
+    void wheelEvent ( QWheelEvent * event );
+    void mouseMoveEvent ( QMouseEvent * event );
+    void mousePressEvent ( QMouseEvent * event );
+    void mouseReleaseEvent ( QMouseEvent * event ) ;
+    EWidgetModificationMode modificationMode;
+
+signals:
+    void initiateMove(QPoint);
+    void initiateResize(QPoint);
+    void endResize();
+    void endMove();
+    void newCoordinates(QPoint);
+    void changeTab(int);
+};
+
+
+#endif // MULTIPURPOSEDRAGAREA_H
