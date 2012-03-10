@@ -1,3 +1,26 @@
+// *************************************************************************
+//
+// Copyright 2012-2012 Nikolai Marchenko  .
+//
+// This file is part of the BreezeUML Uml Toolkit.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 2 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// e-mail : enmarantispam@gmail.com
+//
+// *************************************************************************
 #include <QTabBar>
 #include "EdgeMenuDialog.h"
 #include "browser/BrowserNode.h"
@@ -34,6 +57,7 @@ unsigned int ClosestEdge(QWidget* widget, QPoint position)
 EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal , Qt::WindowFlags f): Q3TabDialog(parent, name, modal, f)
 {
     currentTab = 0;
+    currentNode = 0;
     isConnectedToToolBar = false;
     An<EdgeMenuFactory> factory;
     QObject::connect(this, SIGNAL(edgeMenuRequested(uint)),factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
@@ -63,6 +87,11 @@ void EdgeMenuDialog::leaveEvent(QEvent *event)
     emit edgeMenuRequested(this->TypeID());
 }
 
+void EdgeMenuDialog::enterEvent(QEvent *event)
+{
+    emit edgeMenuRequested(this->TypeID());
+}
+
 void EdgeMenuDialog::showEvent(QShowEvent *event)
 {
     An<EdgeMenuFactory> factory;
@@ -79,7 +108,6 @@ void EdgeMenuDialog::wheelEvent(QWheelEvent *event)
     if(currentTab < 0)
         currentTab = tabBar()->count() - 1;
     tabBar()->setCurrentIndex(currentTab);
-    //tabBar()->
 }
 
 void EdgeMenuDialog::RegisterTab(QString name, QWidget * widget)
@@ -170,4 +198,35 @@ void EdgeMenuDialog::OnPickPreviousSibling()
         return;
     SaveData();
     FillGuiElements(previousNode);
+}
+
+void EdgeMenuDialog::InitGui()
+{
+}
+
+void EdgeMenuDialog::FillGuiElements(BrowserNode *)
+{
+}
+
+bool EdgeMenuDialog::ContainsUnsavedChanges()
+{
+    false;
+}
+
+void EdgeMenuDialog::SaveData()
+{
+}
+
+void EdgeMenuDialog::RejectData()
+{
+}
+
+void EdgeMenuDialog::SetCurrentNode(BrowserNode * node)
+{
+    currentNode = node;
+}
+
+BrowserNode * EdgeMenuDialog::GetCurrentNode()
+{
+    return currentNode;
 }

@@ -79,10 +79,14 @@ ArtifactData::~ArtifactData() {
     delete associated;
 }
 
-void ArtifactData::edit() {
+void ArtifactData::edit()
+{
   setName(browser_node->get_name());
   
-  (new ArtifactDialog(this))->show();
+  ArtifactDialog::Instance(this)->show();
+  //dialog->setModal(true);
+  //dialog->show();
+  //(new ArtifactDialog(this))->show();
 }
 
 void ArtifactData::use_default_cpp_h() {
