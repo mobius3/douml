@@ -40,6 +40,7 @@ void ConnectToClassDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar)
     QObject::connect(dragArea, SIGNAL(initiateResize(QPoint)), toolbar, SLOT(OnInitiateResize(QPoint)));
     QObject::connect(dragArea, SIGNAL(newCoordinates(QPoint)), toolbar, SLOT(OnNewCoordinatesReceived(QPoint)));
     QObject::connect(dragArea, SIGNAL(endResize()), toolbar, SLOT(OnEndResize()));
+    QObject::connect(dragArea, SIGNAL(endMove()), toolbar, SLOT(OnEndMove()));
 
 
     QPushButton* pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("NextElement"));

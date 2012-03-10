@@ -84,12 +84,22 @@ void EdgeMenuDialog::BreakConnectionToToolBar()
 
 void EdgeMenuDialog::leaveEvent(QEvent *event)
 {
-    emit edgeMenuRequested(this->TypeID());
+    QPoint cursorPosition = mapFromGlobal(QCursor::pos());
+    bool isWithinX = cursorPosition.x() > 0 && cursorPosition.x() < size().width();
+    bool isWithinY = cursorPosition.y() > 0 && cursorPosition.y() < size().height();
+    bool isOutside = !isWithinX || !isWithinY;
+    if(isOutside)
+        emit edgeMenuRequested(this->TypeID());
 }
 
 void EdgeMenuDialog::enterEvent(QEvent *event)
 {
-    emit edgeMenuRequested(this->TypeID());
+    QPoint cursorPosition = mapFromGlobal(QCursor::pos());
+    bool isWithinX = cursorPosition.x() > 0 && cursorPosition.x() < size().width();
+    bool isWithinY = cursorPosition.y() > 0 && cursorPosition.y() < size().height();
+    bool isOutside = !isWithinX || !isWithinY;
+    if(isOutside)
+        emit edgeMenuRequested(this->TypeID());
 }
 
 void EdgeMenuDialog::showEvent(QShowEvent *event)

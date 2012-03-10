@@ -55,6 +55,7 @@ public slots:
     virtual void OnInitiateResize(QPoint);
     virtual void OnNewCoordinatesReceived(QPoint);
     virtual void OnEndResize();
+    virtual void OnEndMove();
 };
 
 
