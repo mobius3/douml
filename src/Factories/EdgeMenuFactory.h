@@ -34,6 +34,7 @@
 
 //#include <pair>
 class EdgeMenuDialog;
+class EdgeMenuToolBar;
 
 struct Orientationvariables
 {
@@ -41,14 +42,11 @@ struct Orientationvariables
     //std::map<std::pair<int,QString>, QString> iconNames;
 };
 
-typedef std::function<QToolBar*()>  ToolbarFactory;
-typedef std::function<void(EdgeMenuDialog*,QToolBar*)>  ConnectionFunctor;
+typedef std::function<EdgeMenuToolBar*()>  ToolbarFactory;
+typedef std::function<void(EdgeMenuDialog*,EdgeMenuToolBar*)>  ConnectionFunctor;
 
-void ConnectToLimitedtDialog(EdgeMenuDialog* dialog, QToolBar* toolbar);
-void ConnectToClassDialog(EdgeMenuDialog* dialog, QToolBar* toolbar);
-
-QToolBar* CreateClassDialogMenu();
-QToolBar* CreateLimitedDialogMenu();
+void ConnectToLimitedtDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar);
+void ConnectToClassDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar);
 
 class EdgeMenuFactory : public QObject
 {
@@ -66,7 +64,7 @@ public slots:
 private :
     QMap<uint, ToolbarFactory > factories;
     QMap<uint, ConnectionFunctor > signalFunctors;
-    QMap<uint, QToolBar*> createdToolbars;
+    QMap<uint, EdgeMenuToolBar*> createdToolbars;
     QMap<int, Orientationvariables> orientationSwitch;
     void SpawnEdgeMenu(uint, EdgeMenuDialog*);
 

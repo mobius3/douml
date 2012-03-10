@@ -200,12 +200,37 @@ void EdgeMenuDialog::OnPickPreviousSibling()
     FillGuiElements(previousNode);
 }
 
+void EdgeMenuDialog::OnInitiateMove(QPoint origin)
+{
+    IntitiateMove(origin);
+}
+
+void EdgeMenuDialog::OnInitiateResize(QPoint origin)
+{
+    InitiateResize(origin);
+}
+
+void EdgeMenuDialog::OnNewCoordinatesReceived(QPoint newPoint)
+{
+    if(modificationMode == wmm_drag)
+        MoveThis(modificationOrigin, newPoint);
+    if(modificationMode == wmm_resize)
+        ResizeThis(modificationOrigin, newPoint);
+}
+
+void EdgeMenuDialog::OnChangeTab(int delta)
+{
+    ChangeTab(delta);
+}
+
 void EdgeMenuDialog::InitGui()
 {
+    //this is just a stub for dialogs that still do not have this function themselves
 }
 
 void EdgeMenuDialog::FillGuiElements(BrowserNode *)
 {
+    //this is just a stub for dialogs that still do not have this function themselves
 }
 
 bool EdgeMenuDialog::ContainsUnsavedChanges()
@@ -215,10 +240,12 @@ bool EdgeMenuDialog::ContainsUnsavedChanges()
 
 void EdgeMenuDialog::SaveData()
 {
+    //todo implement
 }
 
 void EdgeMenuDialog::RejectData()
 {
+    //todo implement
 }
 
 void EdgeMenuDialog::SetCurrentNode(BrowserNode * node)
@@ -229,4 +256,36 @@ void EdgeMenuDialog::SetCurrentNode(BrowserNode * node)
 BrowserNode * EdgeMenuDialog::GetCurrentNode()
 {
     return currentNode;
+}
+
+void EdgeMenuDialog::IntitiateMove(QPoint origin)
+{
+    modificationOrigin = origin;
+    dialogOrigin = mapToGlobal(QPoint());
+    modificationMode = wmm_drag;
+}
+
+void EdgeMenuDialog::InitiateResize(QPoint origin)
+{
+    modificationOrigin = origin;
+    //dialogOrigin = mapToGlobal(QPoint());
+    originalSize = size();
+    modificationMode = wmm_resize;
+}
+
+void EdgeMenuDialog::ResizeThis(QPoint origin, QPoint newPoint)
+{
+    int newWidth = originalSize.width() + (newPoint.x() - origin.x());
+    int newHeight = originalSize.height() + (newPoint.y() - origin.y());
+    this->resize(newWidth, newHeight);
+}
+
+void EdgeMenuDialog::MoveThis(QPoint origin, QPoint newPoint)
+{
+    this->move(newPoint - origin + dialogOrigin);
+}
+
+void EdgeMenuDialog::ChangeTab(int)
+{
+    //todo to implement
 }

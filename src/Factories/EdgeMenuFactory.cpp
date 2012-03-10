@@ -26,6 +26,7 @@
 #include "dialog/ClassDialog.h" //< todo Temporary
 #include "Factories/DialogConnections.h"
 #include "Factories/EdgeToolBarCreation.h"
+#include "CustomWidgets/EdgeMenuToolBar.h"
 #include <QToolBar>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -40,7 +41,7 @@ void EdgeMenuFactory::OnEdgeMenuRequested(uint classID)
 
 void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* senderWidget)
 {
-    QToolBar* toolbar;
+    EdgeMenuToolBar* toolbar;
     if(!createdToolbars.contains(classID))
     {
         toolbar = (factories[classID])();
@@ -59,45 +60,48 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* senderWidget)
     else
         orientation = 2;
 
-    toolbar->setOrientation(static_cast<Qt::Orientation>(orientation));
-    QPoint point = QCursor::pos();
-    //now we need to position toolbar correctly
-
-    int toolBarIconHeight = 30;
-    int toolBarIconWidth = 30;
-
-    // if we are near the top
-    if(trueOrientation == 0)
-    {
-        point.setY(point.y() - toolBarIconHeight);
-        point.setX(point.x() - toolBarIconWidth/2);
-    }
-    // if we are near the top
-    if(trueOrientation == 1)
-    {
-        point.setY(point.y());
-        point.setX(point.x() - toolBarIconWidth/2);
-    }
-    // if we are near the left edge
-    if(trueOrientation == 2)
-    {
-        point.setX(point.x() - toolBarIconWidth);
-        point.setY(point.y() - toolBarIconHeight/2);
-    }
-    // if we are near the right edge
-    if(trueOrientation == 3)
-    {
-        point.setX(point.x());
-        point.setY(point.y() - toolBarIconHeight/2);
-    }
-    toolbar->move(point);
-
     if(!senderWidget->IsConnectedToToolBar())
         signalFunctors[classID](senderWidget, toolbar);
 
-    toolbar->setWindowFlags(Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
-    toolbar->resize(toolbar->sizeHint());
-    toolbar->show();
+    if(!toolbar->isVisible())
+    {
+        toolbar->setOrientation(static_cast<Qt::Orientation>(orientation));
+        QPoint point = QCursor::pos();
+        //now we need to position toolbar correctly
+
+        int toolBarIconHeight = 30;
+        int toolBarIconWidth = 30;
+
+        // if we are near the top
+        if(trueOrientation == 0)
+        {
+            point.setY(point.y() - toolBarIconHeight);
+            point.setX(point.x() - toolBarIconWidth/2);
+        }
+        // if we are near the top
+        if(trueOrientation == 1)
+        {
+            point.setY(point.y());
+            point.setX(point.x() - toolBarIconWidth/2);
+        }
+        // if we are near the left edge
+        if(trueOrientation == 2)
+        {
+            point.setX(point.x() - toolBarIconWidth);
+            point.setY(point.y() - toolBarIconHeight/2);
+        }
+        // if we are near the right edge
+        if(trueOrientation == 3)
+        {
+            point.setX(point.x());
+            point.setY(point.y() - toolBarIconHeight/2);
+        }
+        toolbar->move(point);
+
+        toolbar->setWindowFlags(Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
+        toolbar->resize(toolbar->sizeHint());
+        toolbar->show();
+    }
 }
 
 void EdgeMenuFactory::AddFactory(uint id, ToolbarFactory factory)

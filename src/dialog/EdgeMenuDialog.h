@@ -28,6 +28,7 @@
 #include <QWidget>
 #include <QList>
 #include <QHash>
+#include "CustomWidgets/MultiPurposeDragArea.h"
 
 unsigned int ClosestEdge(QWidget*, QPoint);
 class BrowserNode;
@@ -61,7 +62,7 @@ protected:
 
     //! called on window show()
     void showEvent ( QShowEvent * event );
-    //! called when user srolls with nouse wheel
+    //! called when user srolls with mouse wheel
     void wheelEvent ( QWheelEvent * event );
 
     //! registers tab for later use
@@ -78,6 +79,12 @@ protected:
 
     //! if data contains unsaved changes this shoould pop up to warn the user
     void ShowSaveDataWarning();
+
+    void IntitiateMove(QPoint);
+    void InitiateResize(QPoint);
+    void ResizeThis(QPoint,QPoint);
+    void MoveThis(QPoint,QPoint);
+    void ChangeTab(int);
 
 
     //! return unique TypeId associated with each classs
@@ -107,6 +114,10 @@ protected:
 
     QHash<QString, QWidget*> tabs;
     BrowserNode * currentNode;
+    EWidgetModificationMode modificationMode;
+    QPoint modificationOrigin;
+    QPoint dialogOrigin;
+    QSize originalSize;
 
 signals:
     void edgeMenuRequested(uint);
@@ -114,8 +125,10 @@ signals:
 public slots:
     virtual void OnPickNextSibling();
     virtual void OnPickPreviousSibling();
-
-
+    virtual void OnInitiateMove(QPoint);
+    virtual void OnInitiateResize(QPoint);
+    virtual void OnNewCoordinatesReceived(QPoint);
+    virtual void OnChangeTab(int);
 };
 
 #endif // EDGEMENUDIALOG_H

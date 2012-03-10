@@ -1,6 +1,7 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2012 Nikolai Marchenko.
 //
 // This file is part of the BOUML Uml Toolkit.
 //
@@ -19,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 // e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
 //
 // *************************************************************************
 
