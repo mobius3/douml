@@ -33,8 +33,8 @@ MultiPurposeDragArea::~MultiPurposeDragArea()
 
 void MultiPurposeDragArea::wheelEvent(QWheelEvent *event)
 {
-    int delta = event->delta()/event->delta();
-    emit changeTab(delta);
+    int sign = event->delta() > 0 ? 1 : -1;
+    emit changeTab(sign);
 }
 
 void MultiPurposeDragArea::mouseMoveEvent(QMouseEvent *event)
