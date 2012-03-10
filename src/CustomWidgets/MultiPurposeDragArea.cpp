@@ -67,8 +67,11 @@ void MultiPurposeDragArea::mouseReleaseEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton || event->button() == Qt::RightButton)
     {
+        if(modificationMode == wmm_resize)
+            emit endResize();
+        if(modificationMode == wmm_drag)
+            emit endMove();
         modificationMode = wmm_none;
-        emit endResize();
         releaseMouse();
     }
 }

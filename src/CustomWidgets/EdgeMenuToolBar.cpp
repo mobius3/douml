@@ -34,6 +34,7 @@ EdgeMenuToolBar::~EdgeMenuToolBar()
 
 void EdgeMenuToolBar::leaveEvent(QEvent *event)
 {
+
     decayTimer.start(500);
 }
 
@@ -48,6 +49,7 @@ void EdgeMenuToolBar::mouseMoveEvent(QMouseEvent *event)
 
 void EdgeMenuToolBar::IntitiateMove(QPoint origin)
 {
+    decayTimer.stop();
     modificationMode = wmm_drag;
     modificationOrigin = origin;
     toolbarOrigin = mapToGlobal(QPoint());
@@ -55,6 +57,7 @@ void EdgeMenuToolBar::IntitiateMove(QPoint origin)
 
 void EdgeMenuToolBar::IntitiateResize(QPoint)
 {
+    decayTimer.stop();
     modificationMode = wmm_resize;
 }
 
@@ -82,4 +85,10 @@ void EdgeMenuToolBar::OnNewCoordinatesReceived(QPoint newPoint)
 void EdgeMenuToolBar::OnEndResize()
 {
     this->hide();
+}
+
+void EdgeMenuToolBar::OnEndMove()
+{
+    this->show();
+    //todo to implement
 }
