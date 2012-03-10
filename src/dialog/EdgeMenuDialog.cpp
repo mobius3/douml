@@ -285,7 +285,12 @@ void EdgeMenuDialog::MoveThis(QPoint origin, QPoint newPoint)
     this->move(newPoint - origin + dialogOrigin);
 }
 
-void EdgeMenuDialog::ChangeTab(int)
+void EdgeMenuDialog::ChangeTab(int delta)
 {
-    //todo to implement
+    currentTab += delta;
+    if(currentTab > tabBar()->count())
+        currentTab = 0;
+    if(currentTab < 0)
+        currentTab = tabBar()->count() - 1;
+    tabBar()->setCurrentIndex(currentTab);
 }

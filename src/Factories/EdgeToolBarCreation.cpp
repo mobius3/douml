@@ -29,7 +29,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 
-static int defaultButtonSize = 20;
+static int defaultButtonSize = 15;
 EdgeMenuToolBar* CreateLimitedDialogMenu()
 {
     EdgeMenuToolBar* toolbar = new EdgeMenuToolBar();
@@ -37,14 +37,16 @@ EdgeMenuToolBar* CreateLimitedDialogMenu()
     QPushButton* okayElement = new QPushButton();
     okayElement->setIcon(QIcon(":\\root\\icons\\accept.png"));
     okayElement->setName("OkayElement");
+    okayElement->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     okayElement->setBaseSize(defaultButtonSize,defaultButtonSize);
 
     QPushButton* cancelElement = new QPushButton();
     cancelElement->setIcon(QIcon(":\\root\\icons\\reject.png"));
     cancelElement->setName("CancelElement");
+    okayElement->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
     cancelElement->setBaseSize(defaultButtonSize,defaultButtonSize);
 
-    toolbar->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+    toolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     toolbar->setMinimumHeight(defaultButtonSize);
     toolbar->setMinimumWidth(defaultButtonSize);
     toolbar->resize(toolbar->sizeHint());
