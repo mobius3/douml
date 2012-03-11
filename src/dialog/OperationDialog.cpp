@@ -112,25 +112,6 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
   st = GenerationSettings::idl_class_stereotype(stereotype);
   idl_undef = (st == "enum") || (st == "typedef") || (st == "ignored");
   
-  init_get_set();
-  init_uml();
-  init_cpp();
-  init_java();
-  init_php();
-  init_python();
-  init_idl();
-  
-  // USER : list key - value
-  
-  Q3Grid *   grid = new Q3Grid(2, this);
-
-  grid->setMargin(5);
-  grid->setSpacing(5);
-  
-  kvtable = new KeyValuesTable(o->get_browser_node(), grid, visit);
-  addTab(grid, TR("Properties"));
-  
-  //
   
   unique = (GenerationSettings::cpp_get_default_defs())
     ? ((cpptab != 0) ? CppView : DefaultDrawingLanguage)
@@ -155,10 +136,7 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
     unique = UmlView;
   
   //
-  
-  connect(this, SIGNAL(currentChanged(QWidget *)),
-	  this, SLOT(update_all_tabs(QWidget *)));
-  
+
   switch (l) {
   case CppView:
     if (! cpp_undef) {
@@ -187,8 +165,32 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
   default:
     break;
   }
+    
   
-  open_dialog(this);
+  
+  init_get_set();
+  init_uml();
+  init_cpp();
+  init_java();
+  init_php();
+  init_python();
+  init_idl();
+  
+  // USER : list key - value
+  
+  Q3Grid *   grid = new Q3Grid(2, this);
+
+  grid->setMargin(5);
+  grid->setSpacing(5);
+  
+  kvtable = new KeyValuesTable(o->get_browser_node(), grid, visit); //update this table
+  addTab(grid, TR("Properties"));
+  
+  //
+  
+  connect(this, SIGNAL(currentChanged(QWidget *)),
+	  this, SLOT(update_all_tabs(QWidget *)));
+  //open_dialog(this);
 }
 
 OperationDialog::~OperationDialog()
@@ -1049,86 +1051,6 @@ void FillPythonTab()
         HideTab("Python");
 }
 
-// IDL
-void OperationDialog::init_idl() 
-{  
-  if (! idl_undef) 
-  {
-    Q3Grid * grid;
-    Q3HBox * htab;
-    Q3ButtonGroup * bg;
-
-    grid = new Q3Grid(2, this);
-    idltab = grid;
-    grid->setMargin(5);
-    grid->setSpacing(5);
-    
-    if (visit || !oper->is_get_or_set)
-      new QLabel(grid);
-    else {
-      idlfrozen_cb = new QCheckBox(TR("frozen"), grid);
-      if (oper->idl_get_set_frozen)
-	idlfrozen_cb->setChecked(TRUE);
-    }
-
-    bg = new Q3ButtonGroup(1, Qt::Horizontal, QString(), grid);
-    oneway_cb = new QCheckBox("oneway", bg);
-    if (oper->get_idl_oneway())
-      oneway_cb->setChecked(TRUE);
-    if (visit)
-      oneway_cb->setDisabled(TRUE);
-    else
-      connect(oneway_cb, SIGNAL(toggled(bool)),
-	      SLOT(oneway_toggled(bool)));
-    
-    if (oper->is_get_or_set) {
-      new QLabel(TR("Name form : "), grid);
-      htab = new Q3HBox(grid);
-      edidlnamespec = new LineEdit(htab);
-      edidlnamespec->setText(oper->idl_name_spec);
-      if (visit)
-	edidlnamespec->setReadOnly(TRUE);
-      else {
-	connect(edidlnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(idl_update_decl()));
-      }
-    }
-    else
-      edidlnamespec = 0;
-    
-    new QLabel(TR("Declaration :"), grid);
-    edidldecl = new MultiLineEdit(grid);
-    edidldecl->setText(oper->get_idldecl());
-    edidldecl->setFont(comment->font());
-    if (visit)
-      edidldecl->setReadOnly(TRUE);
-    else
-      connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
-    
-    new QLabel(TR("Result after\nsubstitution : "), grid);
-    showidldecl = new MultiLineEdit(grid);
-    showidldecl->setReadOnly(TRUE);
-    showidldecl->setFont(comment->font());
-    
-    if (! visit) {
-      new QLabel(grid);
-      htab = new Q3HBox(grid);  
-      connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
-	      this, SLOT(idl_default_def()));
-      connect(new QPushButton(TR("Not generated in Idl"), htab), SIGNAL(clicked ()),
-	      this, SLOT(idl_unmapped_def()));
-    }
-    
-    addTab(grid, "Idl");
-  
-    if (!GenerationSettings::idl_get_default_defs())
-      removePage(grid);
-  }
-  else
-    idltab = 0;
-}
-
-
-
 // idl
 void OperationDialog::init_idl()
 {
@@ -1193,34 +1115,31 @@ void FillIdlTab
     idlfrozen_cb->setChecked(oper->idl_get_set_frozen);
     idlfrozen_cb->SetEnabled(!(visit || !oper->is_get_or_set));
 
-    idlfinal_cb->setChecked(oper->get_idl_final());
-    idlfinal_cb->setDisabled(visit);
+    oneway_cb->setChecked(oper->get_idl_oneway());
+    oneway_cb->setDisabled(visit);
 
-	lblNameForm->setVisible(oper->is_get_or_set);
-	namespecTab->setVisible(oper->is_get_or_set);
+	lblNameFormIdl->setVisible(oper->is_get_or_set);
+	namespecTabIdl->setVisible(oper->is_get_or_set);
 
       if (visit)
-        disconnect(edidlnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(idl_update_def()));
+        disconnect(edidlnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(idl_update_decl()));
       else 
-        connect(edidlnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(idl_update_def()));
+        connect(edidlnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(idl_update_decl()));
       
     edidlnamespec->setDisabled(visit);
     edidlnamespec->setText(oper->idl_name_spec);
 	
 	
-    edidldef->setText(oper->get_idldef());
-    edidldef->setFont(comment->font());
-    edidldef->setReadOnly(visit);
+    edidldecl->setText(oper->get_idldecl());
+    edidldecl->setFont(comment->font());
+    edidldecl->setReadOnly(visit);
 	
-    showidldef->setReadOnly(TRUE);
-    showidldef->setFont(comment->font());
+    showidldecl->setReadOnly(TRUE);
+    showidldecl->setFont(comment->font());
 	
-	bool bodyEditable = (visit || (preserve_bodies() && !forcegenbody_cb->isChecked()));
-	QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
-    editidlbody->setText(buttonText);
 	
     pbDefaultDeclarationIdl->setEnabled(! visit);
-    pbNotGeneratedInidl->setEnabled(! visit);
+    pbNotGeneratedInIdl->setEnabled(! visit);
 	
     if (!GenerationSettings::idl_get_default_defs())
         HideTab("Idl");
@@ -1229,10 +1148,6 @@ void FillIdlTab
 	
     if(idl_undef)
         HideTab("Idl");
-
-
-
-
 }
 
 void OperationDialog::menu_returntype() {
