@@ -71,7 +71,6 @@ EdgeMenuToolBar* CreateClassDialogMenu()
     layout->setContentsMargins(0,0,0,0);
     QLabel* label = new QLabel();
     label->setPixmap(QIcon(":\\root\\icons\\mouse_control.png").pixmap());
-            //setIcon(QIcon(":\\root\\icons\\mouse_control.png"));
     layout->addWidget(label);
     dragArea->setLayout(layout);
 

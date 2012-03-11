@@ -191,7 +191,8 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
   open_dialog(this);
 }
 
-OperationDialog::~OperationDialog() {
+OperationDialog::~OperationDialog()
+{
   oper->browser_node->edit_end();
   previous_size = size();
   
