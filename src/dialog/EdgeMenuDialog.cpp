@@ -1,6 +1,6 @@
 // *************************************************************************
 //
-// Copyright 2012-2012 Nikolai Marchenko  .
+// Copyright 2012-2012 Nikolai Marchenko.
 //
 // This file is part of the BreezeUML Uml Toolkit.
 //
