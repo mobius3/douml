@@ -208,39 +208,49 @@ void OperationDialog::polish() {
 }
 
 // to manage get_ set_, search corresp attr/rel
-void OperationDialog::init_get_set() {  
+void OperationDialog::init_get_set() 
+{  
   get_of_attr = 0;
   set_of_attr = 0;
   get_of_rel = 0;
   set_of_rel = 0;
   
-  if (oper->is_get_or_set) {
+  if (oper->is_get_or_set) 
+  {
     BrowserOperation * br_op = (BrowserOperation *) oper->browser_node;
     Q3ListViewItem * child;
     
     for (child = br_op->parent()->firstChild();
 	 child != 0;
-	 child = child->nextSibling()) {
+	 child = child->nextSibling()) 
+	 {
       BrowserNode * br = (BrowserNode *) child;
       
-      if (!br->deletedp()) {
-	if (br->get_type() == UmlAttribute) {
-	  if (((BrowserAttribute *) br)->get_get_oper() == br_op) {
+      if (!br->deletedp()) 
+	  {
+	if (br->get_type() == UmlAttribute) 
+	{
+	  if (((BrowserAttribute *) br)->get_get_oper() == br_op) 
+	  {
 	    get_of_attr = (AttributeData *) br->get_data();
 	    break;
 	  }
-	  if (((BrowserAttribute *) br)->get_set_oper() == br_op) {
+	  if (((BrowserAttribute *) br)->get_set_oper() == br_op) 
+	  {
 	    set_of_attr = (AttributeData *) br->get_data();
 	    break;
 	  }
 	}
-	else if (IsaRelation(br->get_type())) {
-	  if (((BrowserRelation *) br)->get_get_oper() == br_op) {
+	else if (IsaRelation(br->get_type())) 
+	{
+	  if (((BrowserRelation *) br)->get_get_oper() == br_op) 
+	  {
 	    get_of_rel = (RelationData *) br->get_data();
 	    is_rel_a = get_of_rel->is_a((BrowserRelation *) br);
 	    break;
 	  }
-	  if (((BrowserRelation *) br)->get_set_oper() == br_op) {
+	  if (((BrowserRelation *) br)->get_set_oper() == br_op) 
+		{
 	    set_of_rel = (RelationData *) br->get_data();
 	    is_rel_a = set_of_rel->is_a((BrowserRelation *) br);
 	    break;
@@ -252,55 +262,129 @@ void OperationDialog::init_get_set() {
 }
 
 // general tab
-void OperationDialog::init_uml() {  
+void OperationDialog::init_uml() 
+{  
   Q3Grid * grid;
   Q3HBox * htab;
   Q3ButtonGroup * bg;
     
   grid = new Q3Grid(2, this);
   umltab = grid;
+  RegisterTab("Uml", umltab);
   grid->setSpacing(5);
   grid->setMargin(5);
   
   new QLabel(TR("class : "), grid);
-  new QLabel(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE),
-	     grid);
+  lblFullClassName = new QLabel(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE),
+	     grid); //todo
   
   new QLabel(TR("name : "), grid);
   edname = new LineEdit(oper->name(), grid);
-  edname->setReadOnly(visit);
+  
   
   new QLabel(TR("stereotype : "), grid);
   edstereotype = new Q3ComboBox(!visit, grid);
-  edstereotype->insertItem(toUnicode(oper->stereotype));
-  if (oper->is_get_or_set)
-    edstereotype->setEnabled(FALSE);
-  else if (! visit) {
-    edstereotype->insertStringList(BrowserOperation::default_stereotypes());
-    edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlOperation));
-    edstereotype->setAutoCompletion(completion());
-  }
-  edstereotype->setCurrentItem(0);
-  
-  QSizePolicy sp = edstereotype->sizePolicy();
-  
-  sp.setHorData(QSizePolicy::Expanding);
-  edstereotype->setSizePolicy(sp);
-
-  if (oper->is_get_or_set)
-    new QLabel(TR("value type : "), grid);
-  else
-    connect(new SmallPushButton(TR("value type :"), grid), SIGNAL(clicked()),
-	    this, SLOT(menu_returntype()));
-  
+   
+  pbValueType = new SmallPushButton(TR("value type :"), grid);
+  connect(pbValueType, SIGNAL(clicked()), this, SLOT(menu_returntype()));
+		  
   BrowserClass::instances(nodes);
   nodes.full_names(list);
 
   edreturn_type = new Q3ComboBox(!visit, grid);
-  edreturn_type->insertItem(oper->get_return_type().get_full_type());
+  
+  new QLabel(grid);
+  
+  htab = new Q3HBox(grid);
+  bg = uml_visibility.init(htab, oper->get_uml_visibility(), TRUE);
+
+  htab->setStretchFactor(bg, 1000);
+  
+  htab->setStretchFactor(new QLabel("  ", htab), 0);
+  
+  bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), htab);
+    
+  htab->setStretchFactor(bg, 1000);
+  classoperation_cb = new QCheckBox(TR("static"), bg);
+  abstract_cb = new QCheckBox(TR("abstract"), bg);
+  
+  connect(classoperation_cb, SIGNAL(toggled(bool)), SLOT(classoper_toggled(bool)));
+  connect(abstract_cb, SIGNAL(toggled(bool)), SLOT(abstract_toggled(bool)));
+  
+  htab->setStretchFactor(new QLabel("  ", htab), 0);
+  
+  bg = new Q3ButtonGroup(1, Qt::Horizontal, QString(), htab);
+  htab->setStretchFactor(bg, 1000);
+  forcegenbody_cb = new QCheckBox(TR("force body generation"), bg);
+  
+  
+  connect(forcegenbody_cb, SIGNAL(toggled(bool)),SLOT(forcegenbody_toggled(bool)));
+  
+  new QLabel(TR("parameters : "), grid);
+  table = new ParamsTable(oper, grid, list, this, visit); //todo update the table
+    
+  new QLabel(TR("exceptions : "), grid);
+  etable = new ExceptionsTable(oper, grid, list, visit); //todo update the table
+  
+  Q3VBox * vtab = new Q3VBox(grid);
+  
+  new QLabel(TR("description :"), vtab);
+  pbEditor = new SmallPushButton(TR("Editor"), vtab);
+  pbDefault = new SmallPushButton(TR("Default"), vtab)
+  
+  connect(pbEditor, SIGNAL(clicked()), this, SLOT(edit_description()));
+  connect(pbDefault, SIGNAL(clicked()), this, SLOT(default_description()));
+  
+  comment = new MultiLineEdit(grid);
+    
+  vtab = new Q3VBox(grid);
+  new QLabel(TR("constraint :"), vtab);
+  pbConstraintEditor = new SmallPushButton(TR("Editor"), vtab);
+  connect(pbConstraintEditor, SIGNAL(clicked()), this, SLOT(edit_constraint()));
+
+  constraint = new MultiLineEdit(grid);
+  
+  addTab(grid, "Uml");
+}
+
+  
+void FillUml()
+  {
+  
+	lblFullClassName->setText(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE));
+	edname->setText(oper->name());
+	edname->setReadOnly(visit);
+	edstereotype->clear();
+	edstereotype->insertItem(toUnicode(oper->stereotype));
+    if (oper->is_get_or_set)
+		{
+		edstereotype->setEnabled(FALSE);
+		}
+  else if (! visit) 
+  {
+  edstereotype->setEnabled(true);
+  edstereotype->insertStringList(BrowserOperation::default_stereotypes());
+    edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlOperation));
+    edstereotype->setAutoCompletion(completion());
+  }
+  edstereotype->setCurrentItem(0);
+  QSizePolicy sp = edstereotype->sizePolicy();
+  sp.setHorData(QSizePolicy::Expanding);
+edstereotype->setSizePolicy(sp);
+
+if (oper->is_get_or_set)
+    pbValueType->setEnabled(false);
+  else
+    pbValueType->setEnabled(true);
+
+
+edreturn_type->clear();
+edreturn_type->insertItem(oper->get_return_type().get_full_type());
   if (oper->is_get_or_set)
     edreturn_type->setEnabled(FALSE);
-  else if (! visit) {
+  else if (! visit) 
+  {
+	edreturn_type->setEnabled(true);
     QStringList l = GenerationSettings::basic_types();
     
     cl->addFormals(l);
@@ -314,339 +398,306 @@ void OperationDialog::init_uml() {
   
   edreturn_type->setSizePolicy(sp);
 
-  new QLabel(grid);
-  
-  htab = new Q3HBox(grid);
   bg = uml_visibility.init(htab, oper->get_uml_visibility(), TRUE);
-  if (visit)
-    bg->setEnabled(FALSE);
-  htab->setStretchFactor(bg, 1000);
+  bg->setEnabled(!visit);
   
-  htab->setStretchFactor(new QLabel("  ", htab), 0);
-  
-  bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), htab);
-  htab->setStretchFactor(bg, 1000);
-  classoperation_cb = new QCheckBox(TR("static"), bg);
-  classoperation_cb->setDisabled(visit);
-  abstract_cb = new QCheckBox(TR("abstract"), bg);
-  abstract_cb->setDisabled(visit);
+	classoperation_cb->setDisabled(visit);
+	classoperation_cb->setChecked(false);
+	abstract_cb->setDisabled(visit);
+	abstract_cb->setChecked(false);
+	
+	  
   if (oper->get_isa_class_operation())
-    classoperation_cb->setChecked(TRUE);
-  else if (oper->get_is_abstract())
+		classoperation_cb->setChecked(TRUE);
+	else
+		classoperation_cb->setChecked(false);
+  if (oper->get_is_abstract())
     abstract_cb->setChecked(TRUE);
+	else
+	abstract_cb->setChecked(false);
   if (oper->is_get_or_set)
     bg->setEnabled(FALSE);
-  else if (! visit) {
-    connect(classoperation_cb, SIGNAL(toggled(bool)),
-	    SLOT(classoper_toggled(bool)));
-    connect(abstract_cb, SIGNAL(toggled(bool)),
-	    SLOT(abstract_toggled(bool)));
-  }
-  
-  htab->setStretchFactor(new QLabel("  ", htab), 0);
-  
-  bg = new Q3ButtonGroup(1, Qt::Horizontal, QString(), htab);
-  htab->setStretchFactor(bg, 1000);
-  forcegenbody_cb = new QCheckBox(TR("force body generation"), bg);
-  forcegenbody_cb->setDisabled(visit);
-  if (oper->body_generation_forced())
+	else
+	bg->setEnabled(true);
+forcegenbody_cb->setDisabled(visit);
+if (oper->body_generation_forced())
     forcegenbody_cb->setChecked(TRUE);
-  else if (! visit)
-    connect(forcegenbody_cb, SIGNAL(toggled(bool)),
-	    SLOT(forcegenbody_toggled(bool)));
-  
-  new QLabel(TR("parameters : "), grid);
-  table = new ParamsTable(oper, grid, list, this, visit);
-  if (oper->is_get_or_set)
+	else
+	forcegenbody_cb->setChecked(false);
+  ///!!! table = new ParamsTable(oper, grid, list, this, visit); //todo update the table
+	if (oper->is_get_or_set)
     table->setEnabled(FALSE);
-  
-  new QLabel(TR("exceptions : "), grid);
-  etable = new ExceptionsTable(oper, grid, list, visit);
-  
-  Q3VBox * vtab = new Q3VBox(grid);
-  
-  new QLabel(TR("description :"), vtab);
-  if (! visit) {
-    connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
-	    this, SLOT(edit_description()));
-    connect(new SmallPushButton(TR("Default"), vtab), SIGNAL(clicked()),
-	    this, SLOT(default_description()));
-  }
-  comment = new MultiLineEdit(grid);
-  comment->setText(oper->get_browser_node()->get_comment());
-  QFont font = comment->font();
+	else
+	table->setEnabled(true);
+	///!!! etable = new ExceptionsTable(oper, grid, list, visit); //todo update the table
+    pbEditor->setEnabled(!visit);
+    pbDefault->setEnabled(!visit);
+	comment->setText(oper->get_browser_node()->get_comment());
+	QFont font = comment->font();
   if (! hasCodec())
     font.setFamily("Courier");
   font.setFixedPitch(TRUE);
   comment->setFont(font);
   comment->setReadOnly(visit);
   
-  vtab = new Q3VBox(grid);
-  new QLabel(TR("constraint :"), vtab);
-  if (! visit) {
-    connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
-	    this, SLOT(edit_constraint()));
-  }
-  constraint = new MultiLineEdit(grid);
-  constraint->setReadOnly(visit);
+  pbConstraintEditor->setEnabled(!visit);
+    constraint->setReadOnly(visit);
   constraint->setText(oper->constraint);
   constraint->setFont(font);
-  
-  addTab(grid, "Uml");
-}
 
+  }
+  
   
 // C++
-void OperationDialog::init_cpp() {  
-  if (! cpp_undef) {
+void OperationDialog::init_cpp() 
+{  
+
     Q3Grid * grid;
     Q3HBox * htab;
     Q3ButtonGroup * bg;
     
     grid = new Q3Grid(2, this);
     cpptab = grid;
+	
+	RegisterTab("Cpp", cpptab );
+	
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    if (visit || !oper->is_get_or_set)
-      new QLabel(grid);
-    else {
-      cppfrozen_cb = new QCheckBox(TR("frozen"), grid);
-      if (oper->cpp_get_set_frozen)
-	cppfrozen_cb->setChecked(TRUE);
-    }
+	cppfrozen_cb = new QCheckBox(TR("frozen"), grid);
 
     htab = new Q3HBox(grid);
     
-    bg = cpp_visibility.init(htab, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml"));
-    if (visit)
-      bg->setEnabled(FALSE);
+    notableBg = cpp_visibility.init(htab, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
     
     htab->setStretchFactor(new QLabel("      ", htab), 0);
-    
     bg = new Q3ButtonGroup(5, Qt::Horizontal, QString(), htab);
+	
     const_cb = new QCheckBox("const", bg);
     volatile_cb = new QCheckBox("volatile", bg);
     friend_cb = new QCheckBox("friend", bg);
     virtual_cb = new QCheckBox("virtual", bg);
     inline_cb = new QCheckBox("inline", bg);
-    if (oper->get_cpp_const())
-      const_cb->setChecked(TRUE);
-    if (oper->get_is_volatile())
-      volatile_cb->setChecked(TRUE);
-    if (oper->get_cpp_friend())
-      friend_cb->setChecked(TRUE);
-    if (oper->get_cpp_virtual())
-      virtual_cb->setChecked(TRUE);
-    if (oper->get_cpp_inline())
-      inline_cb->setChecked(TRUE);
-    if (visit) {
-      const_cb->setDisabled(TRUE);
-      volatile_cb->setDisabled(TRUE);
-      virtual_cb->setDisabled(TRUE);
-      friend_cb->setDisabled(TRUE);
-      inline_cb->setDisabled(TRUE);
-    }
-    else {
-      connect(const_cb, SIGNAL(toggled(bool)),
-	      SLOT(const_volatile_toggled(bool)));
-      connect(volatile_cb, SIGNAL(toggled(bool)),
-	      SLOT(const_volatile_toggled(bool)));
-      connect(friend_cb, SIGNAL(toggled(bool)),
-	      SLOT(friend_toggled(bool)));
-      connect(virtual_cb, SIGNAL(toggled(bool)),
-	      SLOT(virtual_toggled(bool)));
-      connect(inline_cb, SIGNAL(toggled(bool)),
-	      SLOT(inline_toggled(bool)));
-    }
     
-    if (oper->is_get_or_set) {
-      new QLabel(TR("Name form : "), grid);
-      edcppnamespec = new LineEdit(grid);
-      edcppnamespec->setText(oper->cpp_name_spec);
-      if (visit)
-	edcppnamespec->setReadOnly(TRUE);
-      else {
-	connect(edcppnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_decl()));
-	connect(edcppnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_def()));
-      }
-    }
-    else
-      edcppnamespec = 0;
+	
+      connect(const_cb, SIGNAL(toggled(bool)),     SLOT(const_volatile_toggled(bool)));
+      connect(volatile_cb, SIGNAL(toggled(bool)),  SLOT(const_volatile_toggled(bool)));
+      connect(friend_cb, SIGNAL(toggled(bool)),    SLOT(friend_toggled(bool)));
+      connect(virtual_cb, SIGNAL(toggled(bool)),   SLOT(virtual_toggled(bool)));
+      connect(inline_cb, SIGNAL(toggled(bool)),    SLOT(inline_toggled(bool)));
+
+    lblNameForm = new QLabel(TR("Name form : "), grid);
+    edcppnamespec = new LineEdit(grid);
+		connect(edcppnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_decl()));
+		connect(edcppnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_def()));
+
     
     new QLabel(TR("Declaration : "), grid);
-    edcppdecl = new MultiLineEdit(grid);
-    edcppdecl->setText(oper->get_cppdecl());
-    edcppdecl->setFont(comment->font());
-    if (visit)
-      edcppdecl->setReadOnly(TRUE);
-    else
-      connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
+    
+	edcppdecl = new MultiLineEdit(grid);
     
     new QLabel(TR("Result after\nsubstitution : "), grid);
     showcppdecl = new MultiLineEdit(grid);
-    showcppdecl->setReadOnly(TRUE);
-    showcppdecl->setFont(comment->font());
     
-    if (! visit) {
-      new QLabel(grid);
-      htab = new Q3HBox(grid);  
-      connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
-	      this, SLOT(cpp_default_decl()));
-      if (!oper->is_get_or_set)
-	connect(new QPushButton(TR("From definition"), htab), SIGNAL(clicked()),
-		this, SLOT(cpp_decl_from_def()));
-      connect(new QPushButton(TR("Not generated in C++"), htab), SIGNAL(clicked()),
-	      this, SLOT(cpp_unmapped_decl()));
-      connect(new QPushButton(TR("Edit parameters"), htab), SIGNAL(clicked()),
-	      this, SLOT(cpp_edit_param_decl()));
-    }
-    
+    new QLabel(grid);
+    htab = new Q3HBox(grid);  
+	pbDefaultDeclaration = new QPushButton(TR("Default declaration"), htab);
+	pbFromDefinition = new QPushButton(TR("From definition"), htab);
+	pbNotGeneratedInCpp = new QPushButton(TR("Not generated in C++"), htab);
+	pbEditParameters = new QPushButton(TR("Edit parameters"), htab);
+	
+	connect(pbDefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
+	connect(pbFromDefinition, SIGNAL(clicked()),this, SLOT(cpp_decl_from_def()));
+	connect(pbNotGeneratedInCpp, SIGNAL(clicked()), this, SLOT(cpp_unmapped_decl()));
+	connect(pbEditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_decl()));
+        
     new QLabel(TR("Definition :"), grid);
     edcppdef = new MultiLineEdit(grid);
-    edcppdef->setText(oper->get_cppdef());
-    edcppdef->setFont(comment->font());
-    if (visit)
-      edcppdef->setReadOnly(TRUE);
-    else
-      connect(edcppdef, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
-    
+        
     Q3VBox * vtab = new Q3VBox(grid);
 
     new QLabel(TR("Result after\nsubstitution : "), vtab);
-    if (!visit && !oper->is_get_or_set) {
-      indentcppbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
-      if (preserve_bodies() && !forcegenbody_cb->isChecked())
-	indentcppbody_cb->setEnabled(FALSE);
-      else
-	indentcppbody_cb->setChecked(oper->cpp_indent_body);
-    }
+    indentcppbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
     
     showcppdef = new MultiLineEdit(grid);
-    showcppdef->setReadOnly(TRUE);
-    showcppdef->setFont(comment->font());
     
-    editcppbody = new QPushButton((visit ||
-				   (preserve_bodies() && !forcegenbody_cb->isChecked()))
-				  ? TR("Show body") : TR("Edit body"),
-				  grid);
+    editcppbody = new QPushButton("", grid);
     connect(editcppbody, SIGNAL(clicked()), this, SLOT(cpp_edit_body()));
     
     char * b = oper->get_body('c');
     
-    if (b != 0) {
+    if (b != 0) 
+	{
       cppbody = oldcppbody = b;
       delete [] b;
     }
-        
-    if (! visit) {
-      htab = new Q3HBox(grid);  
-      connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
-	      this, SLOT(cpp_default_def()));
-      if (!oper->is_get_or_set)
-	connect(new QPushButton(TR("From declaration"), htab), SIGNAL(clicked ()),
-		this, SLOT(cpp_def_from_decl()));
-      connect(new QPushButton(TR("Not generated in C++"), htab), SIGNAL(clicked ()),
-	      this, SLOT(cpp_unmapped_def()));
-      connect(new QPushButton(TR("Edit parameters"), htab), SIGNAL(clicked()),
-	      this, SLOT(cpp_edit_param_def()));
-    }
+	
+	htab = new Q3HBox(grid);  
+	pb2DefaultDeclaration = new QPushButton(TR("Default declaration"), htab);
+	pb2FromDefinition = new QPushButton(TR("From definition"), htab);
+	pb2NotGeneratedInCpp = new QPushButton(TR("Not generated in C++"), htab);
+	pb2EditParameters = new QPushButton(TR("Edit parameters"), htab);
+	
+	connect(pb2DefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
+	connect(pb2FromDefinition, SIGNAL(clicked()),this, SLOT(cpp_decl_from_def()));
+	connect(pb2NotGeneratedInCpp, SIGNAL(clicked()), this, SLOT(cpp_unmapped_decl()));
+	connect(pb2EditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_decl()));        
     
-    addTab(grid, "C++");
+	
+    connect(pb2DefaultDeclaration, SIGNAL(clicked ()), this, SLOT(cpp_default_def()));
+	connect(pb2FromDefinition, SIGNAL(clicked ()), this, SLOT(cpp_def_from_decl()));
+    connect(pb2NotGeneratedInCpp, SIGNAL(clicked ()),this, SLOT(cpp_unmapped_def()));
+    connect(pb2EditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_def()));
+    
+    addTab(grid, "Cpp");
   
-    if (!GenerationSettings::cpp_get_default_defs())
-      removePage(grid);
+}
+
+
+
+void FillCpp()
+{
+    cppfrozen_cb->setChecked(false);
+	if (visit || !oper->is_get_or_set)
+		cppfrozen_cb->hide();
+    else 
+	{
+      if (oper->cpp_get_set_frozen)
+		cppfrozen_cb->setChecked(TRUE);
+    }
+	notableBg = cpp_visibility.init(htab, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
+	notableBg->setEnabled(!visit);
+
+    const_cb->setChecked(oper->get_cpp_const());
+    volatile_cb->setChecked(oper->get_is_volatile());
+    friend_cb->setChecked(oper->get_cpp_friend());
+    virtual_cb->setChecked(oper->get_cpp_virtual());
+    inline_cb->setChecked(oper->get_cpp_inline());
+	
+	  const_cb->setDisabled(visit);
+      volatile_cb->setDisabled(visit);
+      virtual_cb->setDisabled(visit);
+      friend_cb->setDisabled(visit);
+      inline_cb->setDisabled(visit);
+	
+	
+	if (oper->is_get_or_set) 
+	{
+	  edcppnamespec->setText(oper->cpp_name_spec);
+      edcppnamespec->setReadOnly(visit);
+    }
+    else
+      {
+	  lblNameForm->hide();
+		edcppnamespec->hide();
+		}
+
+    if(!visit)
+		{
+			connect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
+			connect(edcppdef, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
+		}
+	else
+		{
+			disconnect(edcppdecl, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
+			disconnect(edcppdef, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
+		}
+	edcppdecl->setText(oper->get_cppdecl());
+    edcppdecl->setFont(comment->font());
+    edcppdecl->setReadOnly(visit);
+
+    showcppdecl->setReadOnly(TRUE);
+    showcppdecl->setFont(comment->font());
+	
+	pbDefaultDeclaration->setEnabled(! visit);
+	pbFromDefinition->setEnabled(! visit);
+	pbNotGeneratedInCpp->setEnabled(! visit && !oper->is_get_or_set);
+	pbEditParameters->setEnabled(! visit);
+
+    edcppdef->setText(oper->get_cppdef());
+    edcppdef->setFont(comment->font());
+	edcppdef->setReadOnly(visit);
+	
+	indentcppbody_cb->setVisible(!visit && !oper->is_get_or_set);
+	indentcppbody_cb->setEnabled(!(preserve_bodies() && !forcegenbody_cb->isChecked()));
+	indentcppbody_cb->setChecked((preserve_bodies() && !forcegenbody_cb->isChecked()) && oper->cpp_indent_body);
+
+    showcppdef->setReadOnly(TRUE);
+    showcppdef->setFont(comment->font());
+
+	bool bodyEditable = (visit || (preserve_bodies() && !forcegenbody_cb->isChecked()));
+	QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
+	editcppbody->setText(buttonText);
+	
+    char * b = oper->get_body('c');
     
-    cl->get_class_spec(templates, cl_names, templates_tmplop, cl_names_tmplop);
-    
-    if (!templates.isEmpty())
-      inline_cb->setDisabled(TRUE);
-  }
-  else
-    cpptab = 0;
+    if (b != 0) 
+	{
+      cppbody = oldcppbody = b;
+      delete [] b;
+    }
+	
+	pb2DefaultDeclaration->setEnabled(! visit);
+	pb2FromDefinition->setEnabled(! visit);
+	pb2NotGeneratedInCpp->setEnabled(! visit && !oper->is_get_or_set);
+	pb2EditParameters->setEnabled(! visit);
+	
+	if (!GenerationSettings::cpp_get_default_defs())
+		HideTab("Cpp");
+	else
+		ShowTab("Cpp");
+		
+	cl->get_class_spec(templates, cl_names, templates_tmplop, cl_names_tmplop);
+	
+    inline_cb->setDisabled(!templates.isEmpty());
+	  
+	
+	if(cpp_undef)
+		HideTab("Cpp");
 }
   
 // Java
-void OperationDialog::init_java() {  
-  if (! java_undef) {
+void OperationDialog::init_java()
+ {  
+
     Q3Grid * grid;
     Q3HBox * htab;
     Q3ButtonGroup * bg;
 
     grid = new Q3Grid(2, this);
     javatab = grid;
-    grid->setMargin(5);
+    RegisterTab("Java",javatab);
+	grid->setMargin(5);
     grid->setSpacing(5);
     
-    if (visit || !oper->is_get_or_set)
-      new QLabel(grid);
-    else {
-      javafrozen_cb = new QCheckBox(TR("frozen"), grid);
-      if (oper->java_get_set_frozen)
-	javafrozen_cb->setChecked(TRUE);
-    }
-
     bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
+	
     javafinal_cb = new QCheckBox("final", bg);
-    if (oper->get_java_final())
-      javafinal_cb->setChecked(TRUE);
-    if (visit)
-      javafinal_cb->setDisabled(TRUE);
-    else
-      connect(javafinal_cb, SIGNAL(toggled(bool)),
-	      SLOT(java_finalsynchronized_toggled(bool)));
+    
+	connect(javafinal_cb, SIGNAL(toggled(bool)), SLOT(java_finalsynchronized_toggled(bool)));
 
     synchronized_cb = new QCheckBox("synchronized", bg);
-    if (oper->get_java_synchronized())
-      synchronized_cb->setChecked(TRUE);
-    if (visit)
-      synchronized_cb->setDisabled(TRUE);
-    else
-      connect(synchronized_cb, SIGNAL(toggled(bool)),
-	      SLOT(java_finalsynchronized_toggled(bool)));
     
-    if (oper->is_get_or_set) {
-      new QLabel(TR("Name form : "), grid);
-      htab = new Q3HBox(grid);
-      edjavanamespec = new LineEdit(htab);
-      edjavanamespec->setText(oper->java_name_spec);
-      if (visit)
-	edjavanamespec->setDisabled(TRUE);
-      else {
-	connect(edjavanamespec, SIGNAL(textChanged(const QString &)), this, SLOT(java_update_def()));
-      }
-    }
-    else
-      edjavanamespec = 0;
+    connect(synchronized_cb, SIGNAL(toggled(bool)), SLOT(java_finalsynchronized_toggled(bool)));
     
+    lblNameForm = new QLabel(TR("Name form : "), grid);
+    namespecTab = new Q3HBox(grid);
+    edjavanamespec = new LineEdit(htab);
+
+   
     new QLabel(TR("Definition :"), grid);
     edjavadef = new MultiLineEdit(grid);
-    edjavadef->setText(oper->get_javadef());
-    edjavadef->setFont(comment->font());
-    if (visit)
-      edjavadef->setReadOnly(TRUE);
-    else
-      connect(edjavadef, SIGNAL(textChanged()), this, SLOT(java_update_def()));
-    
+    connect(edjavadef, SIGNAL(textChanged()), this, SLOT(java_update_def()));
+	
     Q3VBox * vtab = new Q3VBox(grid);
 
     new QLabel(TR("Result after\nsubstitution : "), vtab);
-    if (!visit && !oper->is_get_or_set) {
-      indentjavabody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
-      if (preserve_bodies() && !forcegenbody_cb->isChecked())
-	indentjavabody_cb->setEnabled(FALSE);
-      else
-	indentjavabody_cb->setChecked(oper->java_indent_body);
-    }
+    
+	indentjavabody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
     
     showjavadef = new MultiLineEdit(grid);
-    showjavadef->setReadOnly(TRUE);
-    showjavadef->setFont(comment->font());
     
-    editjavabody = new QPushButton((visit ||
-				    (preserve_bodies() && !forcegenbody_cb->isChecked()))
-				   ? TR("Show body") : TR("Edit body"),
-				   grid);
+    editjavabody = new QPushButton("",  grid);
     connect(editjavabody, SIGNAL(clicked()), this, SLOT(java_edit_body()));
     
     char * b = oper->get_body('j');
@@ -657,230 +708,352 @@ void OperationDialog::init_java() {
     }
         
     htab = new Q3HBox(grid);  
-
-    if (! visit) {
-      connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
-	      this, SLOT(java_default_def()));
-      connect(new QPushButton(TR("Not generated in Java"), htab), SIGNAL(clicked ()),
-	      this, SLOT(java_unmapped_def()));
-      
-    }
-    
-    javaannotation = (const char *) oper->java_annotation;
-    editjavaannotation =
-      new QPushButton((visit) ? TR("Show annotation") : TR("Edit annotation"),
-		      htab);
-    connect(editjavaannotation, SIGNAL(clicked ()),
-	    this, SLOT(java_edit_annotation()));
+	
+	pbDefaultDeclaration = new QPushButton(TR("Default declaration"), htab);
+	pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab);
+    connect(pbDefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
+	connect(pbNotGeneratedInJava, SIGNAL(clicked()), this, SLOT(cpp_unmapped_decl()));
+	
+    editjavaannotation = new QPushButton(" ", htab);
+    connect(editjavaannotation, SIGNAL(clicked ()), this, SLOT(java_edit_annotation()));
     
     addTab(grid, "Java");
   
-    if (!GenerationSettings::java_get_default_defs())
-      removePage(grid);
-  }
-  else
-    javatab = 0;
+}
+
+
+void FillJavaTab()
+{
+	lblJavaPlaceholder1->setVisible();
+	javafrozen_cb->setChecked(oper->java_get_set_frozen);
+	javafrozen_cb->SetEnabled(!(visit || !oper->is_get_or_set));
+
+    javafinal_cb->setChecked(oper->get_java_final());
+    javafinal_cb->setDisabled(visit);
+
+    synchronized_cb->setChecked(oper->get_java_synchronized());
+    synchronized_cb->setDisabled(visit);
+
+	lblNameForm->setVisible(oper->is_get_or_set);
+	namespecTab->setVisible(oper->is_get_or_set);
+
+      if (visit)
+		disconnect(edjavanamespec, SIGNAL(textChanged(const QString &)), this, SLOT(java_update_def()));		
+      else 
+		connect(edjavanamespec, SIGNAL(textChanged(const QString &)), this, SLOT(java_update_def()));
+      
+	edjavanamespec->setDisabled(visit);
+	edjavanamespec->setText(oper->java_name_spec);
+	
+	
+	edjavadef->setText(oper->get_javadef());
+    edjavadef->setFont(comment->font());
+    edjavadef->setReadOnly(visit);
+      
+	indentjavabody_cb->setChecked(false);
+	indentjavabody_cb->setVisible(!visit && !oper->is_get_or_set);
+	indentjavabody_cb->setEnabled(!(preserve_bodies() && !forcegenbody_cb->isChecked()));
+	indentjavabody_cb->setChecked((preserve_bodies() && !forcegenbody_cb->isChecked()) && oper->java_indent_body);
+	
+	showjavadef->setReadOnly(TRUE);
+    showjavadef->setFont(comment->font());
+	
+	bool bodyEditable = (visit || (preserve_bodies() && !forcegenbody_cb->isChecked()));
+	QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
+	editjavabody->setText(buttonText);
+	
+	char * b = oper->get_body('j');
+    
+    if (b != 0) {
+      javabody = oldjavabody = b;
+      delete [] b;
+    }
+    
+	pbDefaultDeclaration->setEnabled(! visit);
+	pbNotGeneratedInJava->setEnabled(! visit);
+	
+    javaannotation = (const char *) oper->java_annotation;
+
+	editjavaannotation->setText((visit) ? TR("Show annotation") : TR("Edit annotation"));
+
+	if (!GenerationSettings::java_get_default_defs())
+		HideTab("Java");
+	else
+		ShowTab("Java");
+	
+	if(java_undef)
+		HideTab("Java");
 }
     
 // Php
-void OperationDialog::init_php() {  
-  if (! php_undef) {
+void OperationDialog::init_php()
+{
     Q3Grid * grid;
     Q3HBox * htab;
     Q3ButtonGroup * bg;
 
     grid = new Q3Grid(2, this);
     phptab = grid;
+    RegisterTab("Php", phptab);
     grid->setMargin(5);
     grid->setSpacing(5);
+	
+	phpfrozen_cb = new QCheckBox(TR("frozen"), grid);
     
-    if (visit || !oper->is_get_or_set)
-      new QLabel(grid);
-    else {
-      phpfrozen_cb = new QCheckBox(TR("frozen"), grid);
-      if (oper->php_get_set_frozen)
-	phpfrozen_cb->setChecked(TRUE);
-    }
+	bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
 
-    bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
     phpfinal_cb = new QCheckBox("final", bg);
-    if (oper->get_php_final())
-      phpfinal_cb->setChecked(TRUE);
-    if (visit)
-      phpfinal_cb->setDisabled(TRUE);
-    else
-      connect(phpfinal_cb, SIGNAL(toggled(bool)),
-	      SLOT(php_final_toggled(bool)));
 
-    if (oper->is_get_or_set) {
-      new QLabel(TR("Name form : "), grid);
-      htab = new Q3HBox(grid);
-      edphpnamespec = new LineEdit(htab);
-      edphpnamespec->setText(oper->php_name_spec);
-      if (visit)
-	edphpnamespec->setDisabled(TRUE);
-      else {
-	connect(edphpnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(php_update_def()));
-      }
-    }
-    else
-      edphpnamespec = 0;
-    
+    connect(phpfinal_cb, SIGNAL(toggled(bool)), SLOT(php_final_toggled(bool)));
+
+    lblNameForm = new QLabel(TR("Name form : "), grid);
+    namespecTab = new Q3HBox(grid);
+    edphpnamespec = new LineEdit(htab);
+
+
     new QLabel(TR("Definition :"), grid);
     edphpdef = new MultiLineEdit(grid);
-    edphpdef->setText(oper->get_phpdef());
-    edphpdef->setFont(comment->font());
-    if (visit)
-      edphpdef->setReadOnly(TRUE);
-    else
-      connect(edphpdef, SIGNAL(textChanged()), this, SLOT(php_update_def()));
-    
+    connect(edphpdef, SIGNAL(textChanged()), this, SLOT(php_update_def()));
+
     Q3VBox * vtab = new Q3VBox(grid);
 
     new QLabel(TR("Result after\nsubstitution : "), vtab);
-    if (!visit && !oper->is_get_or_set) {
-      indentphpbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
-      if (preserve_bodies() && !forcegenbody_cb->isChecked())
-	indentphpbody_cb->setEnabled(FALSE);
-      else
-	indentphpbody_cb->setChecked(oper->php_indent_body);
-    }
-    
+
+    indentphpbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
+
     showphpdef = new MultiLineEdit(grid);
+
+    editphpbody = new QPushButton("",  grid);
+    connect(editphpbody, SIGNAL(clicked()), this, SLOT(php_edit_body()));
+
+    char * b = oper->get_body('p');
+
+    if (b != 0) {
+      phpbody = oldphpbody = b;
+      delete [] b;
+    }
+
+    htab = new Q3HBox(grid);
+
+    pbDefaultDeclaration = new QPushButton(TR("Default declaration"), htab);
+    pbNotGeneratedInPhp = new QPushButton(TR("Not generated in Php"), htab);
+	pbEditParameters = new QPushButton(TR("Edit parameters"), htab);
+    connect(pbDefaultDeclaration, SIGNAL(clicked()), this, SLOT(php_default_def()));
+    connect(pbNotGeneratedInPhp, SIGNAL(clicked()), this, SLOT(php_unmapped_def()));
+	connect(pbEditParameters, SIGNAL(clicked()), this, SLOT(php_edit_param()));
+    addTab(grid, "Php");
+}
+
+void FillPhpTab()
+{
+    phpfrozen_cb->setChecked(false);
+	if (visit || !oper->is_get_or_set)
+		phpfrozen_cb->hide();
+    else 
+	{
+      if (oper->php_get_set_frozen)
+		phpfrozen_cb->setChecked(TRUE);
+    }
+	
+	lblPhpPlaceholder1->setVisible();
+    phpfrozen_cb->setChecked(oper->php_get_set_frozen);
+    phpfrozen_cb->SetEnabled(!(visit || !oper->is_get_or_set));
+
+    phpfinal_cb->setChecked(oper->get_php_final());
+    phpfinal_cb->setDisabled(visit);
+
+	lblNameForm->setVisible(oper->is_get_or_set);
+	namespecTab->setVisible(oper->is_get_or_set);
+
+      if (visit)
+        disconnect(edphpnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(php_update_def()));
+      else 
+        connect(edphpnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(php_update_def()));
+      
+    edphpnamespec->setDisabled(visit);
+    edphpnamespec->setText(oper->php_name_spec);
+	
+	
+    edphpdef->setText(oper->get_phpdef());
+    edphpdef->setFont(comment->font());
+    edphpdef->setReadOnly(visit);
+      
+    indentphpbody_cb->setChecked(false);
+    indentphpbody_cb->setVisible(!visit && !oper->is_get_or_set);
+    indentphpbody_cb->setEnabled(!(preserve_bodies() && !forcegenbody_cb->isChecked()));
+    indentphpbody_cb->setChecked((preserve_bodies() && !forcegenbody_cb->isChecked()) && oper->php_indent_body);
+	
     showphpdef->setReadOnly(TRUE);
     showphpdef->setFont(comment->font());
-    
-    editphpbody = new QPushButton((visit ||
-				   (preserve_bodies() && !forcegenbody_cb->isChecked()))
-				  ? TR("Show body") : TR("Edit body"),
-				  grid);
-    connect(editphpbody, SIGNAL(clicked()), this, SLOT(php_edit_body()));
-    
+	
+	bool bodyEditable = (visit || (preserve_bodies() && !forcegenbody_cb->isChecked()));
+	QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
+    editphpbody->setText(buttonText);
+	
     char * b = oper->get_body('p');
     
     if (b != 0) {
       phpbody = oldphpbody = b;
       delete [] b;
     }
-        
-    htab = new Q3HBox(grid);  
-
-    if (! visit) {
-      connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
-	      this, SLOT(php_default_def()));
-      connect(new QPushButton(TR("Not generated in Php"), htab), SIGNAL(clicked ()),
-	      this, SLOT(php_unmapped_def()));
-      connect(new QPushButton(TR("Edit parameters"), htab), SIGNAL(clicked()),
-	      this, SLOT(php_edit_param()));      
-    }
     
-    addTab(grid, "Php");
-  
+	pbDefaultDeclaration->setEnabled(! visit);
+    pbNotGeneratedInPhp->setEnabled(! visit);
+	
+    phpannotation = (const char *) oper->php_annotation;
+
+    editphpannotation->setText((visit) ? TR("Show parameters") : TR("Edit parameters"));
+
     if (!GenerationSettings::php_get_default_defs())
-      removePage(grid);
-  }
-  else
-    phptab = 0;
+        HideTab("Php");
+	else
+        ShowTab("Php");
+	
+    if(php_undef)
+        HideTab("Php");
 }
 
-// Python
-void OperationDialog::init_python() {  
-  if (! python_undef) {
+
+// Python_1
+void OperationDialog::init_python()
+{
     Q3Grid * grid;
     Q3HBox * htab;
+    Q3ButtonGroup * bg;
 
     grid = new Q3Grid(2, this);
     pythontab = grid;
+    RegisterTab("Python", pythontab);
     grid->setMargin(5);
     grid->setSpacing(5);
+	
+    pythonfrozen_cb = new QCheckBox(TR("frozen"), grid);
     
-    if (!visit && oper->is_get_or_set) {
-      pythonfrozen_cb = new QCheckBox(TR("frozen"), grid);
-      if (oper->python_get_set_frozen)
-	pythonfrozen_cb->setChecked(TRUE);
-      new QLabel(grid);
-    }
+	bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
 
-    if (oper->is_get_or_set) {
-      new QLabel(TR("Name form : "), grid);
-      htab = new Q3HBox(grid);
-      edpythonnamespec = new LineEdit(htab);
-      edpythonnamespec->setText(oper->python_name_spec);
-      if (visit)
-	edpythonnamespec->setDisabled(TRUE);
-      else {
-	connect(edpythonnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(python_update_def()));
-      }
-    }
-    else
-      edpythonnamespec = 0;
-    
+    lblNameForm = new QLabel(TR("Name form : "), grid);
+    pythonNamespecTab = new Q3HBox(grid);
+    edpythonnamespec = new LineEdit(htab);
+
+
     new QLabel(TR("Definition :"), grid);
     edpythondef = new MultiLineEdit(grid);
-    edpythondef->setText(oper->get_pythondef());
-    edpythondef->setFont(comment->font());
-    if (visit)
-      edpythondef->setReadOnly(TRUE);
-    else
-      connect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
-    
+    connect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
+
     Q3VBox * vtab = new Q3VBox(grid);
 
     new QLabel(TR("Result after\nsubstitution : "), vtab);
-    if (!visit && !oper->is_get_or_set) {
-      indentpythonbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
-      if (preserve_bodies() && !forcegenbody_cb->isChecked())
-	indentpythonbody_cb->setEnabled(FALSE);
-      else
-	indentpythonbody_cb->setChecked(oper->python_indent_body);
-    }
+
+    indentpythonbody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
+
     showpythondef = new MultiLineEdit(grid);
-    showpythondef->setReadOnly(TRUE);
-    showpythondef->setFont(comment->font());
-    
-    editpythonbody = new QPushButton((visit ||
-				   (preserve_bodies() && !forcegenbody_cb->isChecked()))
-				  ? TR("Show body") : TR("Edit body"),
-				  grid);
+
+    editpythonbody = new QPushButton("",  grid);
     connect(editpythonbody, SIGNAL(clicked()), this, SLOT(python_edit_body()));
-    
+
     char * b = oper->get_body('y');
-    
+
     if (b != 0) {
       pythonbody = oldpythonbody = b;
       delete [] b;
     }
-        
-    htab = new Q3HBox(grid);  
 
-    if (! visit) {
-      connect(new QPushButton(TR("Default definition"), htab), SIGNAL(clicked ()),
-	      this, SLOT(python_default_def()));
-      connect(new QPushButton(TR("Not generated in Python"), htab), SIGNAL(clicked ()),
-	      this, SLOT(python_unmapped_def()));
-      connect(new QPushButton(TR("Edit parameters"), htab), SIGNAL(clicked()),
-	      this, SLOT(python_edit_param()));      
+    htab = new Q3HBox(grid);
+
+    pbDefaultDeclaration = new QPushButton(TR("Default declaration"), htab);
+    pbNotGeneratedInPython = new QPushButton(TR("Not generated in Python"), htab);
+	pbEditParamsPython = new QPushButton(TR("Edit parameters"), htab);
+    connect(pbDefaultDeclaration, SIGNAL(clicked()), this, SLOT(python_default_def()));
+    connect(pbNotGeneratedInPython, SIGNAL(clicked()), this, SLOT(python_unmapped_def()));
+    connect(pbEditParamsPython, SIGNAL(clicked()), this, SLOT(python_edit_param()));
+
+    pythondecorator = (const char *) oper->python_decorator;
+    editpythondecorator = new QPushButton("",  htab);
+    connect(editpythondecorator, SIGNAL(clicked ()), this, SLOT(python_edit_decorator()));
+
+    addTab(pythontab, "Python");
+}
+
+void FillPythonTab()
+{
+    pythonfrozen_cb->setChecked(false);
+	if (visit || !oper->is_get_or_set)
+        pythonfrozen_cb->hide();
+    else 
+	{
+      if (oper->python_get_set_frozen)
+        pythonfrozen_cb->setChecked(TRUE);
+    }
+	
+    lblPythonPlaceholder1->setVisible();
+    pythonfrozen_cb->setChecked(oper->python_get_set_frozen);
+    pythonfrozen_cb->SetEnabled(!(visit || !oper->is_get_or_set));
+
+    // pythonfinal_cb->setChecked(oper->get_python_final());
+    // pythonfinal_cb->setDisabled(visit);
+
+	lblNameForm->setVisible(oper->is_get_or_set);
+	pythonNamespecTab->setVisible(oper->is_get_or_set);
+
+      if (visit)
+        {
+		disconnect(edpythonnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(python_update_def()));
+		disconnect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
+		}
+      else 
+        {
+		connect(edpythonnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(python_update_def()));
+		connect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
+		}
+      
+    edpythonnamespec->setDisabled(visit);
+    edpythonnamespec->setText(oper->python_name_spec);
+	
+	
+    edpythondef->setText(oper->get_pythondef());
+    edpythondef->setFont(comment->font());
+    edpythondef->setReadOnly(visit);
+      
+    indentpythonbody_cb->setChecked(false);
+    indentpythonbody_cb->setVisible(!visit && !oper->is_get_or_set);
+    indentpythonbody_cb->setEnabled(!(preserve_bodies() && !forcegenbody_cb->isChecked()));
+    indentpythonbody_cb->setChecked((preserve_bodies() && !forcegenbody_cb->isChecked()) && oper->python_indent_body);
+	
+    showpythondef->setReadOnly(TRUE);
+    showpythondef->setFont(comment->font());
+	
+	bool bodyEditable = (visit || (preserve_bodies() && !forcegenbody_cb->isChecked()));
+	QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
+    editpythonbody->setText(buttonText);
+	
+    char * b = oper->get_body('y');
+    
+    if (b != 0) 
+	{
+      pythonbody = oldpythonbody = b;
+      delete [] b;
     }
     
+	pbDefaultDeclaration->setEnabled(! visit);
+    pbNotGeneratedInPython->setEnabled(! visit);
+	pbEditParamsPython->setEnabled(! visit);
     pythondecorator = (const char *) oper->python_decorator;
-    editpythondecorator =
-      new QPushButton((visit) ? TR("Show decorators") : TR("Edit decorators"),
-		      htab);
-    connect(editpythondecorator, SIGNAL(clicked ()),
-	    this, SLOT(python_edit_decorator()));
-
-    addTab(grid, "Python");
-  
+	editpythondecorator->setText((visit) ? TR("Show decorators") : TR("Edit decorators"));
+	
     if (!GenerationSettings::python_get_default_defs())
-      removePage(grid);
-  }
-  else
-    pythontab = 0;
+        HideTab("Python");
+	else
+        ShowTab("Python");
+	
+    if(python_undef)
+        HideTab("Python");
 }
 
 // IDL
-void OperationDialog::init_idl() {  
-  if (! idl_undef) {
+void OperationDialog::init_idl() 
+{  
+  if (! idl_undef) 
+  {
     Q3Grid * grid;
     Q3HBox * htab;
     Q3ButtonGroup * bg;
@@ -952,6 +1125,114 @@ void OperationDialog::init_idl() {
   }
   else
     idltab = 0;
+}
+
+
+
+// idl
+void OperationDialog::init_idl()
+{
+    Q3Grid * grid;
+    Q3HBox * htab;
+    Q3ButtonGroup * bg;
+
+    grid = new Q3Grid(2, this);
+    idltab = grid;
+    RegisterTab("Idl", idltab);
+    grid->setMargin(5);
+    grid->setSpacing(5);
+	
+    idlfrozen_cb = new QCheckBox(TR("frozen"), grid);
+    
+	bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
+
+    oneway_cb = new QCheckBox("final", bg);
+
+    connect(oneway_cb, SIGNAL(toggled(bool)), SLOT(oneway_toggled(bool)));
+
+    lblNameFormIdl = new QLabel(TR("Name form : "), grid);
+    namespecTabIdl = new Q3HBox(grid);
+    edidlnamespec = new LineEdit(htab);
+
+
+    new QLabel(TR("Definition :"), grid);
+    edidldecl = new MultiLineEdit(grid);
+    connect(edidldecl, SIGNAL(textChanged()), this, SLOT(idl_update_decl()));
+
+    Q3VBox * vtab = new Q3VBox(grid);
+
+    new QLabel(TR("Result after\nsubstitution : "), vtab);
+
+    showidldecl = new MultiLineEdit(grid);
+
+    editidlbody = new QPushButton("",  grid);
+    connect(editidlbody, SIGNAL(clicked()), this, SLOT(idl_edit_body()));
+
+    htab = new Q3HBox(grid);
+
+    pbDefaultDeclaration = new QPushButton(TR("Default declaration"), htab);
+    pbNotGeneratedInIdl = new QPushButton(TR("Not generated in Idl"), htab);
+    connect(pbDefaultDeclaration, SIGNAL(clicked()), this, SLOT(idl_default_def()));
+    connect(pbNotGeneratedInIdl, SIGNAL(clicked()), this, SLOT(idl_unmapped_def()));
+    addTab(grid, "Idl");
+}
+
+
+void FillIdlTab
+{
+    idlfrozen_cb->setChecked(false);
+	if (visit || !oper->is_get_or_set)
+        idlfrozen_cb->hide();
+    else 
+	{
+      if (oper->idl_get_set_frozen)
+        idlfrozen_cb->setChecked(TRUE);
+    }
+	
+    lblIdlPlaceholder1->setVisible();
+    idlfrozen_cb->setChecked(oper->idl_get_set_frozen);
+    idlfrozen_cb->SetEnabled(!(visit || !oper->is_get_or_set));
+
+    idlfinal_cb->setChecked(oper->get_idl_final());
+    idlfinal_cb->setDisabled(visit);
+
+	lblNameForm->setVisible(oper->is_get_or_set);
+	namespecTab->setVisible(oper->is_get_or_set);
+
+      if (visit)
+        disconnect(edidlnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(idl_update_def()));
+      else 
+        connect(edidlnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(idl_update_def()));
+      
+    edidlnamespec->setDisabled(visit);
+    edidlnamespec->setText(oper->idl_name_spec);
+	
+	
+    edidldef->setText(oper->get_idldef());
+    edidldef->setFont(comment->font());
+    edidldef->setReadOnly(visit);
+	
+    showidldef->setReadOnly(TRUE);
+    showidldef->setFont(comment->font());
+	
+	bool bodyEditable = (visit || (preserve_bodies() && !forcegenbody_cb->isChecked()));
+	QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
+    editidlbody->setText(buttonText);
+	
+    pbDefaultDeclarationIdl->setEnabled(! visit);
+    pbNotGeneratedInidl->setEnabled(! visit);
+	
+    if (!GenerationSettings::idl_get_default_defs())
+        HideTab("Idl");
+	else
+        ShowTab("Idl");
+	
+    if(idl_undef)
+        HideTab("Idl");
+
+
+
+
 }
 
 void OperationDialog::menu_returntype() {
