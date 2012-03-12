@@ -52,6 +52,7 @@
 #include "Factories/EdgeToolBarCreation.h"
 #include "dialog/ClassDialog.h"
 #include "dialog/ArtifactDialog.h"
+#include "dialog/OperationDialog.h"
 #include "misc/TypeIdentifier.h"
 
 
@@ -83,6 +84,8 @@ int main(int argc, char **argv)
   An<EdgeMenuFactory> factory;
   factory->AddFactory(TypeIdentifier<ClassDialog>::id(), CreateClassDialogMenu);
   factory->AddConnectionFunctor(TypeIdentifier<ClassDialog>::id(), ConnectToClassDialog);
+  factory->AddFactory(TypeIdentifier<OperationDialog>::id(), CreateClassDialogMenu);
+  factory->AddConnectionFunctor(TypeIdentifier<OperationDialog>::id(), ConnectToClassDialog);
   factory->AddFactory(TypeIdentifier<ArtifactDialog>::id(), CreateLimitedDialogMenu);
   factory->AddConnectionFunctor(TypeIdentifier<ArtifactDialog>::id(), ConnectToLimitedtDialog);
 

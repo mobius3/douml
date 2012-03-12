@@ -669,7 +669,8 @@ void OperationData::set_n_exceptions(unsigned n) {
 void OperationData::edit(DrawingLanguage l) {
   setName(browser_node->get_name());
     
-  (new OperationDialog(this, l))->show();
+  //(new OperationDialog(this, l))->show();
+  OperationDialog::Instance(this,l)->show();
 }
 
 //
