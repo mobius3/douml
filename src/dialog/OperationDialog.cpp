@@ -622,8 +622,8 @@ void OperationDialog::init_java()
 
     pbDefaultDeclarationJava = new QPushButton(TR("Default declaration"), htab);
     pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab);
-    connect(pbDefaultDeclarationJava, SIGNAL(clicked()), this, SLOT(java_default_decl()));
-    connect(pbNotGeneratedInJava, SIGNAL(clicked()), this, SLOT(java_unmapped_decl()));
+    connect(pbDefaultDeclarationJava, SIGNAL(clicked()), this, SLOT(java_default_def()));
+    connect(pbNotGeneratedInJava, SIGNAL(clicked()), this, SLOT(java_unmapped_def()));
 
     editjavaannotation = new QPushButton(" ", htab);
     connect(editjavaannotation, SIGNAL(clicked ()), this, SLOT(java_edit_annotation()));
@@ -996,8 +996,8 @@ void OperationDialog::init_idl()
 
     showidldecl = new MultiLineEdit(grid);
 
-    editidlbody = new QPushButton("",  grid);
-    connect(editidlbody, SIGNAL(clicked()), this, SLOT(idl_edit_body()));
+//    editidlbody = new QPushButton("",  grid);
+//    connect(editidlbody, SIGNAL(clicked()), this, SLOT(idl_edit_body()));
 
     htab = new Q3HBox(grid);
 

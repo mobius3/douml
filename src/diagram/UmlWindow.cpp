@@ -98,6 +98,9 @@
 #include "fileopen.xpm"
 #include "fileprint.xpm"
 #include "browsersearch.xpm"
+#include "misc/ClipboardManager.h"
+#include <QClipboard>
+#include <QApplication>
 
 static QString TemplateProject;
 
@@ -176,6 +179,9 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
     the = this;
     commented = 0;
     format = IsoA4;
+    //Initializing clipboard
+    An<ClipboardManager> clipboard;
+    QObject::connect(QApplication::clipboard(), SIGNAL(dataChanged()), clipboard.getData(), SLOT(OnClipboardUpdate()));
 
     //
     // buttons and menus
