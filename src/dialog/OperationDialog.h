@@ -182,6 +182,9 @@ class OperationDialog : public EdgeMenuDialog {
     QPushButton* pbEditor;
     QPushButton* pbDefault;
     QPushButton* pbConstraintEditor;
+    Q3ButtonGroup * bgUml1;
+    Q3ButtonGroup * bgUml2;
+    Q3ButtonGroup * bgUml3;
     Q3ButtonGroup * cppBg;
     Q3ButtonGroup * cppBg2;
     Q3ButtonGroup * notableBg;
@@ -191,6 +194,7 @@ class OperationDialog : public EdgeMenuDialog {
     Q3ButtonGroup * bgCppModifiers;
     Q3ButtonGroup* visibilityBg;
     Q3HBox * htabBgCpp1;
+    Q3HBox * htabBgUml;
     Q3HBox * namespecTab;
     Q3HBox * namespecTabIdl;
     Q3HBox * pythonNamespecTab;
@@ -220,15 +224,15 @@ class OperationDialog : public EdgeMenuDialog {
     QPushButton* pbDefaultDeclarationIdl;
     QPushButton* pbNotGeneratedInIdl;
 
-    void InitGui();
-    void FillGuiElements(OperationData *);
-    void FillGuiElements(BrowserNode *);
+    virtual void InitGui();
+    virtual void FillGuiElements(OperationData *);
+    virtual void FillGuiElements(BrowserNode *);
     virtual uint TypeID();
 
     DrawingLanguage drawingLanguage;
 
     static QSharedPointer<OperationDialog> instance;
-    static QSharedPointer<OperationDialog> Instance(OperationData* ,DrawingLanguage l);
+
 
   protected:
     void manage_decorators(QString & s, QString indent,
@@ -240,7 +244,7 @@ class OperationDialog : public EdgeMenuDialog {
     void init_php();
     void init_python();
     void init_idl();
-    void InitPropertiesTab(OperationData*);
+    void InitPropertiesTab();
 
     void FillUmlTab(OperationData* );
     void FillCppTab(OperationData* );
@@ -296,6 +300,7 @@ class OperationDialog : public EdgeMenuDialog {
     void insert_param(int rank);
     void delete_param(int rank);
     void move_param(int old_rank, int new_rank);
+    static QSharedPointer<OperationDialog> Instance(OperationData* ,DrawingLanguage l);
   
   protected slots:
     virtual void polish();

@@ -61,7 +61,7 @@ EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal ,
     isConnectedToToolBar = false;
     An<EdgeMenuFactory> factory;
     QObject::connect(this, SIGNAL(edgeMenuRequested(uint)),factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
-    this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    //this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 }
 
 EdgeMenuDialog::~EdgeMenuDialog()

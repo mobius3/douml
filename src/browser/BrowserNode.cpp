@@ -375,7 +375,8 @@ void BrowserNode::edit_start() {
   is_edited = TRUE;
 }
 
-void BrowserNode::edit_end() {
+void BrowserNode::edit_end()
+{
   edition_number -= 1;
   is_edited = FALSE;
 }

@@ -78,25 +78,17 @@
 QSize OperationDialog::previous_size;
 QSharedPointer<OperationDialog> OperationDialog::instance;
 OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
-    : EdgeMenuDialog(0, 0, FALSE, Qt::WDestructiveClose), oper(o),
-      cl((ClassData *) ((BrowserClass *) o->browser_node->parent())->get_data()) {
-    o->browser_node->edit_start();
+    : EdgeMenuDialog(0, 0, FALSE), oper(o),
+      cl((ClassData *) ((BrowserClass *) o->browser_node->parent())->get_data())
+{
+    //o->browser_node->edit_start();
 
     isWritable = hasOkButton();
     SetDialogMode(o->browser_node->is_writable());
     setCaption(TR("Operation dialog"));
 
-
-    QString stereotype = cl->get_stereotype();
-    QString st;
-
+    InitGui();
     FillGuiElements(oper);
-
-
-
-
-
-    //
 
     connect(this, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(update_all_tabs(QWidget *)));
@@ -111,7 +103,7 @@ OperationDialog::~OperationDialog()
     while (!edits.isEmpty())
         edits.take(0)->close();
 
-    close_dialog(this);
+    //close_dialog(this);
 }
 
 void OperationDialog::polish() {
@@ -122,6 +114,13 @@ void OperationDialog::polish() {
 // to manage get_ set_, search corresp attr/rel
 void OperationDialog::init_get_set() 
 {  
+
+    nodes.clear();
+    list.clear();
+
+    BrowserClass::instances(nodes);
+    nodes.full_names(list);
+
     get_of_attr = 0;
     set_of_attr = 0;
     get_of_rel = 0;
@@ -200,34 +199,32 @@ void OperationDialog::init_uml()
     pbValueType = new SmallPushButton(TR("value type :"), grid);
     connect(pbValueType, SIGNAL(clicked()), this, SLOT(menu_returntype()));
 
-    BrowserClass::instances(nodes);
-    nodes.full_names(list);
 
     edreturn_type = new Q3ComboBox(isWritable, grid);
 
     new QLabel(grid);
 
-    htab = new Q3HBox(grid);
-    cppBg = uml_visibility.init(htab, oper->get_uml_visibility(), TRUE);
+    htabBgUml = new Q3HBox(grid);
+    bgUml1 = uml_visibility.init(htabBgUml, oper->get_uml_visibility(), TRUE);
 
-    htab->setStretchFactor(cppBg, 1000);
+    htabBgUml->setStretchFactor(bgUml1, 1000);
 
-    htab->setStretchFactor(new QLabel("  ", htab), 0);
+    htabBgUml->setStretchFactor(new QLabel("  ", htabBgUml), 0);
 
-    cppBg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), htab);
+    bgUml2 = new Q3ButtonGroup(2, Qt::Horizontal, QString(), htabBgUml);
     
-    htabBgCpp1->setStretchFactor(cppBg, 1000);
-    classoperation_cb = new QCheckBox(TR("static"), cppBg);
-    abstract_cb = new QCheckBox(TR("abstract"), cppBg);
+    htabBgUml->setStretchFactor(bgUml2, 1000);
+    classoperation_cb = new QCheckBox(TR("static"), bgUml2);
+    abstract_cb = new QCheckBox(TR("abstract"), bgUml2);
 
     connect(classoperation_cb, SIGNAL(toggled(bool)), SLOT(classoper_toggled(bool)));
     connect(abstract_cb, SIGNAL(toggled(bool)), SLOT(abstract_toggled(bool)));
 
-    htabBgCpp1->setStretchFactor(new QLabel("  ", htab), 0);
+    htabBgUml->setStretchFactor(new QLabel("  ", htabBgUml), 0);
 
-    cppBg2 = new Q3ButtonGroup(1, Qt::Horizontal, QString(), htab);
-    htabBgCpp1->setStretchFactor(cppBg2, 1000);
-    forcegenbody_cb = new QCheckBox(TR("force body generation"), cppBg2);
+    bgUml3 = new Q3ButtonGroup(1, Qt::Horizontal, QString(), htabBgUml);
+    htabBgUml->setStretchFactor(bgUml3, 1000);
+    forcegenbody_cb = new QCheckBox(TR("force body generation"), bgUml3);
 
 
     connect(forcegenbody_cb, SIGNAL(toggled(bool)),SLOT(forcegenbody_toggled(bool)));
@@ -310,9 +307,9 @@ void OperationDialog::FillUmlTab(OperationData* oper)
 
     edreturn_type->setSizePolicy(sp);
 
-    cppBg = uml_visibility.init(htabBgCpp1, oper->get_uml_visibility(), TRUE);
-    cppBg->setEnabled(isWritable);
-    cppBg2->setEnabled(isWritable);
+    bgUml1 = uml_visibility.init(htabBgUml, oper->get_uml_visibility(), TRUE);
+    bgUml1->setEnabled(isWritable);
+    bgUml2->setEnabled(isWritable);
 
     classoperation_cb->setDisabled(!isWritable);
     classoperation_cb->setChecked(false);
@@ -329,9 +326,9 @@ void OperationDialog::FillUmlTab(OperationData* oper)
     else
         abstract_cb->setChecked(false);
     if (oper->is_get_or_set)
-        cppBg2->setEnabled(FALSE);
+        bgUml2->setEnabled(FALSE);
     else
-        cppBg2->setEnabled(true);
+        bgUml2->setEnabled(true);
     forcegenbody_cb->setDisabled(!isWritable);
     if (oper->body_generation_forced())
         forcegenbody_cb->setChecked(TRUE);
@@ -379,11 +376,11 @@ void OperationDialog::init_cpp()
 
     cppfrozen_cb = new QCheckBox(TR("frozen"), grid);
 
-    htab = new Q3HBox(grid);
+    tabBgCppModifiers = new Q3HBox(grid);
     
-    visibilityBg = cpp_visibility.init(htab, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
+    visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
     
-    tabBgCppModifiers->setStretchFactor(new QLabel("      ", htab), 0);
+    tabBgCppModifiers->setStretchFactor(new QLabel("      ", tabBgCppModifiers), 0);
     bgCppModifiers = new Q3ButtonGroup(5, Qt::Horizontal, QString(), tabBgCppModifiers);
 
     const_cb = new QCheckBox("const", bgCppModifiers);
@@ -451,10 +448,10 @@ void OperationDialog::init_cpp()
     pb2NotGeneratedInCpp = new QPushButton(TR("Not generated in C++"), htab);
     pb2EditParameters = new QPushButton(TR("Edit parameters"), htab);
 
-    connect(pb2DefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
-    connect(pb2FromDefinition, SIGNAL(clicked()),this, SLOT(cpp_decl_from_def()));
-    connect(pb2NotGeneratedInCpp, SIGNAL(clicked()), this, SLOT(cpp_unmapped_decl()));
-    connect(pb2EditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_decl()));
+//    connect(pb2DefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
+//    connect(pb2FromDefinition, SIGNAL(clicked()),this, SLOT(cpp_decl_from_def()));
+//    connect(pb2NotGeneratedInCpp, SIGNAL(clicked()), this, SLOT(cpp_unmapped_decl()));
+//    connect(pb2EditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_decl()));
     
 
     connect(pb2DefaultDeclaration, SIGNAL(clicked ()), this, SLOT(cpp_default_def()));
@@ -581,6 +578,8 @@ void OperationDialog::init_java()
     RegisterTab("Java",javatab);
     grid->setMargin(5);
     grid->setSpacing(5);
+
+    javafrozen_cb = new QCheckBox(TR("frozen"), grid);
     
     bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
 
@@ -1710,7 +1709,7 @@ void OperationDialog::manage_var(unsigned rank, QString & s)
 }
 
 QString OperationDialog::compute_name(LineEdit * spec) {
-    if (spec != 0) {
+    if (spec->isVisible()) {
         QString s = spec->text().stripWhiteSpace();
         int index;
 
@@ -2041,7 +2040,8 @@ void OperationDialog::cpp_default_def() {
                                         get_of_rel->get_isa_const_relation_b(),
                                         get_of_rel->get_multiplicity_b());
         }
-        else {
+        else
+        {
             // set_of_rel != 0
             if (is_rel_a)
                 oper->update_cpp_set_of(decl, def, set_of_rel->get_role_a(),
@@ -2054,10 +2054,10 @@ void OperationDialog::cpp_default_def() {
                                         set_of_rel->get_isa_const_relation_b(),
                                         set_of_rel->get_multiplicity_b());
         }
-
         edcppdef->setText(def);
     }
-    else {
+    else
+    {
         QString s = oper->default_cpp_def(edname->text().stripWhiteSpace());
 
         GenerationSettings::set_cpp_return_type(the_type(edreturn_type->currentText()
@@ -2281,82 +2281,99 @@ void OperationDialog::cpp_update_def() {
                     s += indent;
             }
 
-            if (!strncmp(p, "${comment}", 10)) {
+            if (!strncmp(p, "${comment}", 10))
+            {
                 if (!manage_comment(comment->text(), p, pp,
                                     GenerationSettings::cpp_javadoc_style())
                         && re_template)
                     s += templates;
             }
-            else if (!strncmp(p, "${description}", 14)) {
+            else if (!strncmp(p, "${description}", 14))
+            {
                 if (!manage_description(comment->text(), p, pp) && re_template)
                     s += templates;
             }
-            else if (!strncmp(p, "${inline}", 9)) {
+            else if (!strncmp(p, "${inline}", 9))
+            {
                 p += 9;
                 if (inline_cb->isChecked())
                     s += "inline ";
             }
-            else if (!strncmp(p, "${type}", 7)) {
+            else if (!strncmp(p, "${type}", 7))
+            {
                 p += 7;
                 s += get_cpp_name(the_type(edreturn_type->currentText().stripWhiteSpace(),
                                            list, nodes));
             }
-            else if (!strncmp(p, "${class}", 8)) {
+            else if (!strncmp(p, "${class}", 8))
+            {
                 p += 8;
                 if (friend_cb->isChecked() && !strncmp(p, "::", 2))
                     p += 2;
                 else
                     s += ((template_oper) ? cl_names_tmplop : cl_names);
             }
-            else if (!strncmp(p, "${name}", 7)) {
+            else if (!strncmp(p, "${name}", 7))
+            {
                 p += 7;
                 s += compute_name(edcppnamespec);
             }
-            else if (!strncmp(p, "${(}", 4)) {
+            else if (!strncmp(p, "${(}", 4))
+            {
                 p += 4;
                 s += '(';
             }
-            else if (!strncmp(p, "${)}", 4)) {
+            else if (!strncmp(p, "${)}", 4))
+            {
                 p += 4;
                 s += ')';
             }
-            else if (!strncmp(p, "${const}", 8)) {
+            else if (!strncmp(p, "${const}", 8))
+            {
                 p += 8;
                 if (const_cb->isChecked())
                     s += " const";
             }
-            else if (!strncmp(p, "${volatile}", 11)) {
+            else if (!strncmp(p, "${volatile}", 11))
+            {
                 p += 11;
                 if (volatile_cb->isChecked())
                     s += " volatile";
             }
-            else if (!strncmp(p, "${throw}", 8)) {
+            else if (!strncmp(p, "${throw}", 8))
+            {
                 p += 8;
                 manage_cpp_exceptions(s);
             }
-            else if (!strncmp(p, "${staticnl}", 11)) {
+            else if (!strncmp(p, "${staticnl}", 11))
+            {
                 p += 11;
-                if (classoperation_cb->isChecked()) {
+                if (classoperation_cb->isChecked())
+                {
                     s += '\n';
                     s += indent;
                 }
                 else
                     s += ' ';
             }
-            else if (sscanf(p, "${t%u}", &rank) == 1) {
+            else if (sscanf(p, "${t%u}", &rank) == 1)
+            {
                 manage_cpp_type(rank, s);
                 p = strchr(p, '}') + 1;
             }
-            else if (sscanf(p, "${p%u}", &rank) == 1) {
+            else if (sscanf(p, "${p%u}", &rank) == 1)
+            {
                 manage_var(rank, s);
                 p = strchr(p, '}') + 1;
             }
-            else if (oper->is_get_or_set && !strncmp(p, "${stereotype}", 13)) {
+            else if (oper->is_get_or_set && !strncmp(p, "${stereotype}", 13))
+            {
                 p += 13;
                 // get/set with multiplicity > 1
                 s += GenerationSettings::cpp_relationattribute_stereotype(oper->stereotype);
             }
-            else if (oper->is_get_or_set && !strncmp(p, "${association}", 14)) {
+            else if (oper->is_get_or_set && !strncmp(p, "${association}", 14))
+            {
                 p += 14;
                 // get/set with multiplicity > 1
                 s += GenerationSettings::cpp_type(((BrowserOperation *) oper->browser_node)
@@ -6629,6 +6646,7 @@ void OperationDialog::InitGui()
     init_php();
     init_python();
     init_idl();
+    InitPropertiesTab();
 }
 
 void OperationDialog::FillGuiElements(BrowserNode * bn)
@@ -6637,10 +6655,33 @@ void OperationDialog::FillGuiElements(BrowserNode * bn)
         FillGuiElements(dynamic_cast<OperationData*>(bn->get_data()));
 }
 
-void OperationDialog::FillGuiElements(OperationData * oper)
+void OperationDialog::FillGuiElements(OperationData * _oper)
 {
-    QString stereotype = cl->get_stereotype();
+    cppbody = QString();
+    oldcppbody = QString();
+    templates = QString();
+    cl_names = QString();
+    templates_tmplop = QString();
+    cl_names_tmplop = QString();
+    list.clear();
+    //nodes.clear();
+    //edits.clear();
+    get_of_attr = 0;
+    set_of_attr = 0;
+    get_of_rel = 0;
+    set_of_rel = 0;
+    is_rel_a = false;
+    javaannotation = QString();
+    javabody = QString();
+    oldjavabody = QString();
+    phpbody = QString();
+    oldphpbody = QString();
+    pythondecorator = QString();
+    pythonbody = QString();
+    oldpythonbody = QString();
 
+    oper = _oper;
+    cl = ((ClassData *) ((BrowserClass *) _oper->browser_node->parent())->get_data());
     init_get_set();
     FillGeneric(oper);
     FillUmlTab(oper);
@@ -6670,7 +6711,7 @@ QSharedPointer<OperationDialog> OperationDialog::Instance(OperationData * o, Dra
     return instance;
 }
 
-void OperationDialog::InitPropertiesTab(OperationData* o)
+void OperationDialog::InitPropertiesTab()
 {
     // USER : list key - value
 
@@ -6679,7 +6720,7 @@ void OperationDialog::InitPropertiesTab(OperationData* o)
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(o->get_browser_node(), grid, !isWritable); //update this table
+    kvtable = new KeyValuesTable(oper->get_browser_node(), grid, !isWritable); //update this table
     RegisterTab("Properties", grid);
     addTab(grid, TR("Properties"));
 

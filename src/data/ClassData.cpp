@@ -389,9 +389,11 @@ void ClassData::get_class_spec(QString & templates,
 			       QString & names,
 			       QString & templates_tmplop,
 			       QString & names_tmplop) const {
-  if (((BrowserNode *) browser_node->parent())->get_type() == UmlClass) {
-    ((ClassData *) ((BrowserNode *) browser_node->parent())->get_data())
-      ->get_class_spec(templates, names, templates_tmplop, names_tmplop);
+  bool browserNodeIsUMLClass = ((BrowserNode *) browser_node->parent())->get_type() == UmlClass;
+  if (browserNodeIsUMLClass)
+  {
+    ClassData * cd = ((ClassData *) ((BrowserNode *) browser_node->parent())->get_data());
+    cd->get_class_spec(templates, names, templates_tmplop, names_tmplop);
     names += "::";
   }
   
