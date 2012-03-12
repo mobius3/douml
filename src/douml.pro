@@ -214,7 +214,8 @@ HEADERS		= data/ActualParamData.h \
     CustomWidgets/EdgeMenuToolBar.h \
     Factories/DialogConnections.h \
     Factories/EdgeToolBarCreation.h \
-    CustomWidgets/MultiPurposeDragArea.h
+    CustomWidgets/MultiPurposeDragArea.h \
+    misc/ClipboardManager.h
 SOURCES		= browser/BrowserAttribute.cpp \
 		  browser/BrowserExtraMember.cpp \
 		  browser/BrowserClass.cpp \
@@ -485,7 +486,8 @@ SOURCES		= browser/BrowserAttribute.cpp \
     Factories/DialogConnections.cpp \
     Factories/EdgeToolBarCreation.cpp \
     CustomWidgets/MultiPurposeDragArea.cpp \
-    CustomWidgets/EdgeMenuToolBar.cpp
+    CustomWidgets/EdgeMenuToolBar.cpp \
+    misc/ClipboardManager.cpp
 
 TARGET		= Douml
 DEFINES         = BooL=bool DEBUGCOM

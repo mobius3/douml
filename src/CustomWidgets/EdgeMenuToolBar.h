@@ -25,6 +25,7 @@
 #define EDGEMENUTOOLBAR_H
 #include <QToolBar>
 #include <QTimer>
+#include <QMenu>
 #include "CustomWidgets/MultiPurposeDragArea.h"
 
 class EdgeMenuToolBar : public QToolBar
@@ -34,6 +35,7 @@ Q_OBJECT
 public:
     EdgeMenuToolBar(QWidget * _parent = 0);
     ~EdgeMenuToolBar();
+    void SetRelativeOrientation(int);
 protected:
     //! called on window show()
     void leaveEvent ( QEvent * event );
@@ -44,11 +46,15 @@ private:
     void IntitiateMove(QPoint);
     void IntitiateResize(QPoint);
     void MoveThis(QPoint,QPoint);
-
+    void FillClipboardMenu(int);
     QPoint modificationOrigin;
     QPoint toolbarOrigin;
     EWidgetModificationMode modificationMode;
     QTimer decayTimer;
+    int relativeOrientation;
+    QMenu* clipboardMenu;
+    int lastClipboardItemShown;
+    int clipboardListSize;
 
 public slots:
     virtual void OnInitiateMove(QPoint);
@@ -56,6 +62,14 @@ public slots:
     virtual void OnNewCoordinatesReceived(QPoint);
     virtual void OnEndResize();
     virtual void OnEndMove();
+    virtual void OnClipboardRequested();
+    virtual void OnMoreClipboardRequested();
+    virtual void OnLessClipboardRequested();
+    virtual void OnPutIntoClipboardRequested();
+
+signals:
+    void putIntoClipboard(QString);
+
 };
 
 

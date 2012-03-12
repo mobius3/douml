@@ -28,11 +28,28 @@
 #include <QIcon>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QAction>
 
 static int defaultButtonSize = 15;
 EdgeMenuToolBar* CreateLimitedDialogMenu()
 {
     EdgeMenuToolBar* toolbar = new EdgeMenuToolBar();
+
+    QAction* clipboardAction = new QAction(toolbar);
+    clipboardAction->setText("Clip...");
+    clipboardAction->setName("Clipboard");
+
+    MultiPurposeDragArea* dragArea = new MultiPurposeDragArea();
+    dragArea->setName("DragArea");
+    dragArea->setBaseSize(defaultButtonSize,defaultButtonSize);
+    dragArea->setMinimumHeight(defaultButtonSize);
+    dragArea->setMinimumWidth(defaultButtonSize);
+    QHBoxLayout* layout = new QHBoxLayout();
+    layout->setContentsMargins(0,0,0,0);
+    QLabel* label = new QLabel();
+    label->setPixmap(QIcon(":\\root\\icons\\mouse_control.png").pixmap());
+    layout->addWidget(label);
+    dragArea->setLayout(layout);
 
     QPushButton* okayElement = new QPushButton();
     okayElement->setIcon(QIcon(":\\root\\icons\\accept.png"));
@@ -52,8 +69,12 @@ EdgeMenuToolBar* CreateLimitedDialogMenu()
     toolbar->resize(toolbar->sizeHint());
     toolbar->setWindowFlags(Qt::FramelessWindowHint);
 
+    toolbar->addWidget(dragArea);
     toolbar->addWidget(cancelElement);
+    toolbar->addAction(clipboardAction);
     toolbar->addWidget(okayElement);
+
+
     return toolbar;
 }
 
@@ -61,6 +82,9 @@ EdgeMenuToolBar* CreateClassDialogMenu()
 {
     EdgeMenuToolBar* toolbar = new EdgeMenuToolBar();
 
+    QAction* clipboardAction = new QAction(toolbar);
+    clipboardAction->setName("Clipboard");
+    clipboardAction->setText("Clip...");
 
     MultiPurposeDragArea* dragArea = new MultiPurposeDragArea();
     dragArea->setName("DragArea");
@@ -73,7 +97,6 @@ EdgeMenuToolBar* CreateClassDialogMenu()
     label->setPixmap(QIcon(":\\root\\icons\\mouse_control.png").pixmap());
     layout->addWidget(label);
     dragArea->setLayout(layout);
-
 
     QPushButton* okayElement = new QPushButton();
     okayElement->setIcon(QIcon(":\\root\\icons\\accept.png"));
@@ -101,10 +124,12 @@ EdgeMenuToolBar* CreateClassDialogMenu()
     toolbar->resize(toolbar->sizeHint());
     toolbar->setWindowFlags(Qt::FramelessWindowHint);
 
-    toolbar->addWidget(cancelElement);
     toolbar->addWidget(dragArea);
+
+    toolbar->addWidget(cancelElement);
     toolbar->addWidget(nextElement);
     toolbar->addWidget(previousElement);
+    toolbar->addAction(clipboardAction);
     toolbar->addWidget(okayElement);
     return toolbar;
 }

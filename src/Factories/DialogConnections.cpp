@@ -68,4 +68,7 @@ void ConnectToLimitedtDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar)
     QObject::connect(pageButton, SIGNAL(clicked()), toolbar, SLOT(close()));
     dialog->ConnectionToToolBarEstablished();
 
+    QAction* clipAction = qobject_cast<QAction*>(toolbar->findChild<QAction*>("Clipboard"));
+    QObject::connect(clipAction, SIGNAL(triggered()), toolbar, SLOT(OnClipboardRequested()));
+
 }

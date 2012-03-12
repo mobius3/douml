@@ -2,6 +2,7 @@
 #define DOUML_SINGLETONHOLDER_H
 #include <exception>
 #include <stdexcept>
+#include <typeinfo>
 
 template<typename T>
 struct An
