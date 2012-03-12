@@ -29,10 +29,13 @@
 #include <q3tabdialog.h>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <QLabel>
 
 #include "MyTable.h"
 #include "BrowserNode.h"
 #include "VisibilityGroup.h"
+#include "dialog/EdgeMenuDialog.h"
+#include <Q3HBox>
 
 class Q3ComboBox;
 class QCheckBox;
@@ -53,7 +56,7 @@ class ExceptionsTable;
 class KeyValuesTable;
 class BodyDialog;
 
-class OperationDialog : public Q3TabDialog {
+class OperationDialog : public EdgeMenuDialog {
   Q_OBJECT
     
   protected:
@@ -169,6 +172,64 @@ class OperationDialog : public Q3TabDialog {
     
     static QSize previous_size;
   
+    QLabel* lblFullClassName;
+    QLabel* lblNameFormCpp;
+    QLabel* lblNameFormPhp;
+    QLabel* lblNameFormJava;
+    QLabel* lblNameFormPython;
+    QLabel* lblNameFormIdl;
+    QPushButton* pbValueType;
+    QPushButton* pbEditor;
+    QPushButton* pbDefault;
+    QPushButton* pbConstraintEditor;
+    Q3ButtonGroup * cppBg;
+    Q3ButtonGroup * cppBg2;
+    Q3ButtonGroup * notableBg;
+    Q3ButtonGroup * bgPhp;
+    Q3ButtonGroup * bgPython;
+    Q3ButtonGroup * bgIdl;
+    Q3ButtonGroup * bgCppModifiers;
+    Q3ButtonGroup* visibilityBg;
+    Q3HBox * htabBgCpp1;
+    Q3HBox * namespecTab;
+    Q3HBox * namespecTabIdl;
+    Q3HBox * pythonNamespecTab;
+    Q3HBox * tabBgCppModifiers;
+
+    QPushButton* pbDefaultDeclaration;
+    QPushButton* pbFromDefinition;
+    QPushButton* pbNotGeneratedInCpp;
+    QPushButton* pbEditParameters;
+
+    QPushButton* pbDefaultDeclarationPhp;
+    QPushButton* pbNotGeneratedInPhp;
+    QPushButton* pbEditParametersPhp;
+
+    QPushButton* pb2DefaultDeclaration;
+    QPushButton* pb2FromDefinition;
+    QPushButton* pb2NotGeneratedInCpp;
+    QPushButton* pb2EditParameters;
+    QPushButton* pbNotGeneratedInJava;
+    QPushButton* pbDefaultDeclarationJava;
+
+    QPushButton* pbDefaultDeclarationPython;
+    QPushButton* pbNotGeneratedInPython;
+    QPushButton* pbEditParamsPython;
+
+    QPushButton* editidlbody;
+    QPushButton* pbDefaultDeclarationIdl;
+    QPushButton* pbNotGeneratedInIdl;
+
+    void InitGui();
+    void FillGuiElements(OperationData *);
+    void FillGuiElements(BrowserNode *);
+    virtual uint TypeID();
+
+    DrawingLanguage drawingLanguage;
+
+    static QSharedPointer<OperationDialog> instance;
+    static QSharedPointer<OperationDialog> Instance(OperationData* ,DrawingLanguage l);
+
   protected:
     void manage_decorators(QString & s, QString indent,
 			   BooL & indent_needed);
@@ -179,6 +240,16 @@ class OperationDialog : public Q3TabDialog {
     void init_php();
     void init_python();
     void init_idl();
+    void InitPropertiesTab(OperationData*);
+
+    void FillUmlTab(OperationData* );
+    void FillCppTab(OperationData* );
+    void FillJavaTab(OperationData* );
+    void FillPhpTab(OperationData* );
+    void FillPythonTab(OperationData* );
+    void FillIdlTab(OperationData* );
+    void FillPropertiesTab(OperationData*);
+    void FillGeneric(OperationData* oper);
 
     QString compute_name(LineEdit * spec);
     void manage_cpp_type(unsigned rank, QString & s);
