@@ -86,13 +86,14 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
     isWritable = hasOkButton();
     SetDialogMode(o->browser_node->is_writable());
     setCaption(TR("Operation dialog"));
+    SetCurrentNode(o->browser_node);
 
     InitGui();
     FillGuiElements(oper);
 
     connect(this, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(update_all_tabs(QWidget *)));
-    //open_dialog(this);
+    open_dialog(this);
 }
 
 OperationDialog::~OperationDialog()
@@ -103,7 +104,7 @@ OperationDialog::~OperationDialog()
     while (!edits.isEmpty())
         edits.take(0)->close();
 
-    //close_dialog(this);
+    close_dialog(this);
 }
 
 void OperationDialog::polish() {
@@ -369,25 +370,36 @@ void OperationDialog::init_cpp()
     grid = new Q3Grid(2, this);
     cpptab = grid;
 
-    RegisterTab("Cpp", cpptab );
+    RegisterTab("C++", cpptab );
 
     grid->setMargin(5);
     grid->setSpacing(5);
 
     cppfrozen_cb = new QCheckBox(TR("frozen"), grid);
 
+    //vbOperationModifiers = new QVBoxLayout(grid);
     tabBgCppModifiers = new Q3HBox(grid);
-    
+    //tabBgCpp11Modifiers = new Q3HBox(grid);
+
     visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
     
     tabBgCppModifiers->setStretchFactor(new QLabel("      ", tabBgCppModifiers), 0);
+    //tabBgCpp11Modifiers->setStretchFactor(new QLabel("      ", tabBgCppModifiers), 0);
     bgCppModifiers = new Q3ButtonGroup(5, Qt::Horizontal, QString(), tabBgCppModifiers);
+    //bgCpp11Modifiers = new Q3ButtonGroup(5, Qt::Horizontal, QString(), tabBgCpp11Modifiers);
 
     const_cb = new QCheckBox("const", bgCppModifiers);
     volatile_cb = new QCheckBox("volatile", bgCppModifiers);
     friend_cb = new QCheckBox("friend", bgCppModifiers);
     virtual_cb = new QCheckBox("virtual", bgCppModifiers);
     inline_cb = new QCheckBox("inline", bgCppModifiers);
+
+//    override= new QCheckBox("override", bgCpp11Modifiers);
+//    final= new QCheckBox("final", bgCpp11Modifiers);
+//    deleted= new QCheckBox("delete", bgCpp11Modifiers);
+//    defaulted= new QCheckBox("default", bgCpp11Modifiers);
+    //vbOperationModifiers->addWidget(tabBgCppModifiers);
+    //vbOperationModifiers->addWidget(tabBgCppModifiers);
     
 
     connect(const_cb, SIGNAL(toggled(bool)),     SLOT(const_volatile_toggled(bool)));
@@ -459,8 +471,7 @@ void OperationDialog::init_cpp()
     connect(pb2NotGeneratedInCpp, SIGNAL(clicked ()),this, SLOT(cpp_unmapped_def()));
     connect(pb2EditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_def()));
     
-    addTab(grid, "Cpp");
-
+    insertTab(grid, "C++", 1);
 }
 
 
@@ -6641,12 +6652,14 @@ void PythonParamsDialog::accept() {
 void OperationDialog::InitGui()
 {
     init_uml();
+
+    InitPropertiesTab();
     init_cpp();
     init_java();
     init_php();
     init_python();
     init_idl();
-    InitPropertiesTab();
+
 }
 
 void OperationDialog::FillGuiElements(BrowserNode * bn)

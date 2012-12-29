@@ -28,6 +28,7 @@
 #include <QWidget>
 #include <QList>
 #include <QHash>
+#include <QMap>
 #include "CustomWidgets/MultiPurposeDragArea.h"
 
 unsigned int ClosestEdge(QWidget*, QPoint);
@@ -112,7 +113,7 @@ protected:
 
     int currentTab;
 
-    QHash<QString, QWidget*> tabs;
+    QMap<QString, QWidget*> tabs;
     BrowserNode * currentNode;
     EWidgetModificationMode modificationMode;
     QPoint modificationOrigin;

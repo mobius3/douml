@@ -29,6 +29,7 @@
 #include <q3tabdialog.h>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <QVBoxLayout>
 #include <QLabel>
 
 #include "MyTable.h"
@@ -98,6 +99,11 @@ class OperationDialog : public EdgeMenuDialog {
     QCheckBox * volatile_cb;
     QCheckBox * virtual_cb;
     QCheckBox * inline_cb;
+    QCheckBox * override;
+    QCheckBox * final;
+    QCheckBox * deleted;
+    QCheckBox * defaulted;
+
     LineEdit * edcppnamespec;	// get/set
     QCheckBox * cppfrozen_cb;	// get/set
     QCheckBox * indentcppbody_cb;
@@ -192,13 +198,16 @@ class OperationDialog : public EdgeMenuDialog {
     Q3ButtonGroup * bgPython;
     Q3ButtonGroup * bgIdl;
     Q3ButtonGroup * bgCppModifiers;
+    Q3ButtonGroup * bgCpp11Modifiers;
     Q3ButtonGroup* visibilityBg;
     Q3HBox * htabBgCpp1;
     Q3HBox * htabBgUml;
     Q3HBox * namespecTab;
     Q3HBox * namespecTabIdl;
     Q3HBox * pythonNamespecTab;
+    QVBoxLayout* vbOperationModifiers;
     Q3HBox * tabBgCppModifiers;
+    Q3HBox * tabBgCpp11Modifiers;
 
     QPushButton* pbDefaultDeclaration;
     QPushButton* pbFromDefinition;

@@ -121,36 +121,36 @@ static int Counter;
 UmlWindow * UmlWindow::the;
 
 QString projectNewText() { return TR("To create a <i>new project</i>.<br><br>"
-									 "This will ask you to indicate where to create a new directory having the name of the project "
-									 "where all the project files will be placed."); }
+                                     "This will ask you to indicate where to create a new directory having the name of the project "
+                                     "where all the project files will be placed."); }
 QString projectNewFromTemplateText() { return TR("To create a <i>new project</i> from an already existing one.<br><br>"
-												 "This will ask you to indicate where to create a new directory having the name of the project "
-												 "where all the project files will be placed."); }
+                                                 "This will ask you to indicate where to create a new directory having the name of the project "
+                                                 "where all the project files will be placed."); }
 QString projectOpenText() { return TR("To open a <i>project</i>.<br><br>"
-									  "You can also select the <b>Open command</b> from the Project menu."); }
+                                      "You can also select the <b>Open command</b> from the Project menu."); }
 QString projectSaveText() { return TR("To save the project.<br><br>"
-									  "You can also select the Save command from the Project menu."); }
+                                      "You can also select the Save command from the Project menu."); }
 QString projectSaveAsText() { return TR("To save all in a new project."); }
 QString diagramPrintText() { return TR("To print the current diagram."); }
 QString cppText() { return TR("To manage or not C++ and to set or not the C++ definition/declaration "
-							  "to the default value when a class/operation/attribute/relation/artefact is created"); }
+                              "to the default value when a class/operation/attribute/relation/artefact is created"); }
 QString javaText() { return TR("To manage or not Java and to set or not the Java definition "
-							   "to the default value when a class/operation/attribute/relation/artefact is created"); }
+                               "to the default value when a class/operation/attribute/relation/artefact is created"); }
 QString phpText() { return TR("To manage or not Php and to set or not the Php definition "
-							  "to the default value when a class/operation/attribute/relation/artefact is created"); }
+                              "to the default value when a class/operation/attribute/relation/artefact is created"); }
 QString pythonText() { return TR("To manage or not Python and to set or not the Python definition "
-								 "to the default value when a class/operation/attribute/relation/artefact is created"); }
+                                 "to the default value when a class/operation/attribute/relation/artefact is created"); }
 QString idlText() { return TR("To manage or not IDL and to set or not the IDL definition/declaration "
-							  "to the default value when a class/operation/attribute/relation/artefact is created"); }
+                              "to the default value when a class/operation/attribute/relation/artefact is created"); }
 QString verboseText() { return TR("To ask or not for a verbose code generation"); }
 QString preserve_bodiesText() { return TR("To preserve or not the operations's body"); }
 QString add_operation_profileText() { return TR("To write the operation profile at the beginning of the temporary file when you edit an operation's body"); }
 QString viewBrowserStereotypeText() { return TR("To show or hide the <i>stereotypes</i> "
-												"in the <b>Browser</b>."); }
+                                                "in the <b>Browser</b>."); }
 QString browserUpText() { return TR("To select the <i>browser</i> current item's parent."); }
 QString browserSearchText() { return TR("To search an item in the <i>browser</i>."); }
 QString fontSizeMenuText() { return TR("To set the point size of the base font used in the "
-									   "<i>browser</i> and the diagrams."); }
+                                       "<i>browser</i> and the diagrams."); }
 QString formatMenuText() { return TR("To set the default format of the diagrams."); }
 static QString prevText() { return TR("To select the previously selected element in the <i>browser</i>."); }
 static QString nextText() { return TR("To select the next selected element in the <i>browser</i>."); }
@@ -445,12 +445,12 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
 
         fclose(fp);
     }
-    
-    if (!batch && ((Counter++ % 30) == 0)) {
-        GreetingsDialog d;
+    // and do not enable it back
+    //    if (!batch && ((Counter++ % 30) == 0)) {
+    //        GreetingsDialog d;
 
-        d.exec();
-    }
+    //        d.exec();
+    //    }
     
     //
 
@@ -558,10 +558,10 @@ void UmlWindow::projectMenuAboutToShow() {
             ed->setWhatsThis(id, TR("to set how an Uml type is compiled in C++ etc...,"
                                     "to set the default parameter passing, to set the default code"
                                     "produced for an attribute etc..., and to set the root directories"));
-                                    ed->setItemEnabled(id, writable);
+            ed->setItemEnabled(id, writable);
 
-                             id = ed->insertItem(TR("Edit default stereotypes"), this, SLOT(edit_stereotypes()));
-                    ed->setWhatsThis(id, TR("to set the default stereotypes list"));
+            id = ed->insertItem(TR("Edit default stereotypes"), this, SLOT(edit_stereotypes()));
+            ed->setWhatsThis(id, TR("to set the default stereotypes list"));
             ed->setItemEnabled(id, writable);
 
             ed->insertSeparator();
@@ -668,37 +668,37 @@ void UmlWindow::toolMenuAboutToShow() {
 #warning reverse python
 
 #if 0
-				if (python)
-					toolMenu->insertItem(TR("Reverse Python"), this, SLOT(python_reverse()));
+                if (python)
+                    toolMenu->insertItem(TR("Reverse Python"), this, SLOT(python_reverse()));
 #endif
-				if (java) {
-					toolMenu->insertSeparator();
-					toolMenu->insertItem(TR("Java Catalog"), this, SLOT(java_catalog()));
-				}
-				if (preserve_bodies()) {
-					toolMenu->insertSeparator();
-					if (cpp)
-						toolMenu->insertItem(TR("Roundtrip C++ bodies"), this, SLOT(cpp_roundtripbody()));
-					if (java)
-						toolMenu->insertItem(TR("Roundtrip Java bodies"), this, SLOT(java_roundtripbody()));
-					if (php)
-						toolMenu->insertItem(TR("Roundtrip Php bodies"), this, SLOT(php_roundtripbody()));
-					if (python)
-						toolMenu->insertItem(TR("Roundtrip Python bodies"), this, SLOT(python_roundtripbody()));
-				}
-			}
-			if (BrowserClass::find("UmlBaseItem") != 0) {
-				toolMenu->insertSeparator();
-				toolMenu->insertItem(TR("Plug-out upgrade"), this, SLOT(plug_out_upgrade()));
-			}
-			Tool::menu_insert(toolMenu, UmlProject, this, SLOT(run_tool(int)));
-		}
-		if (browser->get_project()->is_writable()) {
-			toolMenu->insertSeparator();
-			toolMenu->insertItem(TR("Tools settings"), this, SLOT(tool_settings()));
-			toolMenu->insertItem(TR("Import settings"), this, SLOT(import_tool_settings()));
-		}
-	}
+                if (java) {
+                    toolMenu->insertSeparator();
+                    toolMenu->insertItem(TR("Java Catalog"), this, SLOT(java_catalog()));
+                }
+                if (preserve_bodies()) {
+                    toolMenu->insertSeparator();
+                    if (cpp)
+                        toolMenu->insertItem(TR("Roundtrip C++ bodies"), this, SLOT(cpp_roundtripbody()));
+                    if (java)
+                        toolMenu->insertItem(TR("Roundtrip Java bodies"), this, SLOT(java_roundtripbody()));
+                    if (php)
+                        toolMenu->insertItem(TR("Roundtrip Php bodies"), this, SLOT(php_roundtripbody()));
+                    if (python)
+                        toolMenu->insertItem(TR("Roundtrip Python bodies"), this, SLOT(python_roundtripbody()));
+                }
+            }
+            if (BrowserClass::find("UmlBaseItem") != 0) {
+                toolMenu->insertSeparator();
+                toolMenu->insertItem(TR("Plug-out upgrade"), this, SLOT(plug_out_upgrade()));
+            }
+            Tool::menu_insert(toolMenu, UmlProject, this, SLOT(run_tool(int)));
+        }
+        if (browser->get_project()->is_writable()) {
+            toolMenu->insertSeparator();
+            toolMenu->insertItem(TR("Tools settings"), this, SLOT(tool_settings()));
+            toolMenu->insertItem(TR("Import settings"), this, SLOT(import_tool_settings()));
+        }
+    }
 }
 
 void UmlWindow::set_commented(BrowserNode * bn)
@@ -1074,7 +1074,7 @@ bool UmlWindow::can_close()
         if (mustBeSaved)
         {
             int result = msg_warning("DoUML", TR("The project is modified, save it ?\n"),
-                                                             QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+                                     QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
             switch (result) {
             case QMessageBox::Yes:
                 ws->hide();
@@ -1635,8 +1635,8 @@ void UmlWindow::browser_search_it() {
 }
 
 void UmlWindow::show_stereotypes() {
-	miscMenu->setItemChecked(show_browser_stereotypes_id,
-							 BrowserNode::toggle_show_stereotypes());
+    miscMenu->setItemChecked(show_browser_stereotypes_id,
+                             BrowserNode::toggle_show_stereotypes());
 }
 
 void UmlWindow::do_completion() {
