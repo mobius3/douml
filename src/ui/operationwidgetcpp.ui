@@ -74,7 +74,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lblNameFormCpp">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -82,7 +82,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Name from</string>
+      <string>Name form:</string>
      </property>
     </widget>
    </item>
@@ -95,12 +95,12 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Declaration</string>
+      <string>Declaration:</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1" colspan="4">
-    <widget class="QTextEdit" name="edCppDeclProto"/>
+    <widget class="MultiLineEdit" name="edCppDeclProto"/>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="label_3">
@@ -111,7 +111,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Result after substitution</string>
+      <string>Result after substitution:</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -119,7 +119,7 @@
     </widget>
    </item>
    <item row="3" column="1" colspan="4">
-    <widget class="QTextEdit" name="edCppDeclActual"/>
+    <widget class="MultiLineEdit" name="edCppDeclActual"/>
    </item>
    <item row="3" column="5" rowspan="6">
     <spacer name="verticalSpacer">
@@ -171,12 +171,12 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Definition</string>
+      <string>Definition:</string>
      </property>
     </widget>
    </item>
    <item row="5" column="1" colspan="4">
-    <widget class="QTextEdit" name="edCppDefProto"/>
+    <widget class="MultiLineEdit" name="edCppDefProto"/>
    </item>
    <item row="6" column="0">
     <widget class="QLabel" name="label_5">
@@ -187,7 +187,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Result after substitution</string>
+      <string>Result after substitution:</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -195,7 +195,7 @@
     </widget>
    </item>
    <item row="6" column="1" rowspan="2" colspan="4">
-    <widget class="QTextEdit" name="edCppDefActual"/>
+    <widget class="MultiLineEdit" name="edCppDefActual"/>
    </item>
    <item row="7" column="0">
     <widget class="QCheckBox" name="cbIndentCppBody">
@@ -207,12 +207,12 @@
      </property>
      <property name="text">
       <string>contextual
-body indent </string>
+body indent :</string>
      </property>
     </widget>
    </item>
    <item row="8" column="0">
-    <widget class="QPushButton" name="pushButton_7">
+    <widget class="QPushButton" name="editcppbody">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -253,10 +253,22 @@ body indent </string>
     </widget>
    </item>
    <item row="1" column="1" colspan="4">
-    <widget class="QLineEdit" name="leCppNamespec"/>
+    <widget class="LineEdit" name="leCppNamespec"/>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MultiLineEdit</class>
+   <extends>QTextEdit</extends>
+   <header location="global">dialog\DialogUtil.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">dialog\DialogUtil.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

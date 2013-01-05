@@ -43,6 +43,7 @@
 #include <qtimer.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <Q3VBoxLayout>
 #include <Q3CString>
 
@@ -89,7 +90,7 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
     SetDialogMode(o->browser_node->is_writable());
     setCaption(TR("Operation dialog"));
     SetCurrentNode(o->browser_node);
-
+    //setWindowFlags(!Qt::WindowTitleHint);
     InitGui();
     FillGuiElements(oper);
 
@@ -367,25 +368,11 @@ void OperationDialog::init_cpp()
 
     cppTab = new OperationWidgetCpp();
 
-
-    Q3HBox * htab;
-    Q3ButtonGroup * bg;
-    
-//    grid = new Q3Grid(3, this);
-//    cppTab = grid;
-
     RegisterTab("C++", cppTab );
 
-    grid->setMargin(5);
-    grid->setSpacing(5);
-
-    cbCppFrozen = new QCheckBox(TR("frozen"), grid);
-
     tabBgCppModifiers = new Q3HBox();
-    
     tabBgCppModifiers->setStretchFactor(new QLabel("      ", tabBgCppModifiers), 0);
     bgCppModifiers = new Q3ButtonGroup(5, Qt::Horizontal, QString(), tabBgCppModifiers);
-    bgCpp11Modifiers = new Q3ButtonGroup(5, Qt::Horizontal, QString(), tabBgCpp11Modifiers);
 
     cbCppConst = new QCheckBox("const", bgCppModifiers);
     cbCppVolatile = new QCheckBox("volatile", bgCppModifiers);
@@ -394,52 +381,29 @@ void OperationDialog::init_cpp()
     cbCppInline = new QCheckBox("inline", bgCppModifiers);
 
     visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
-    
+    QHBoxLayout* layout = new QHBoxLayout();
+    layout->addWidget(tabBgCppModifiers);
+    layout->setContentsMargins(0,0,0,0);
+    cppTab->ui->wdgVisibilityGroup->setLayout(layout);
+
 
     connect(cbCppConst, SIGNAL(toggled(bool)),     SLOT(const_volatile_toggled(bool)));
     connect(cbCppVolatile, SIGNAL(toggled(bool)),  SLOT(const_volatile_toggled(bool)));
     connect(cbCppFriend, SIGNAL(toggled(bool)),    SLOT(friend_toggled(bool)));
     connect(cbCppVirtual, SIGNAL(toggled(bool)),   SLOT(virtual_toggled(bool)));
     connect(cbCppInline, SIGNAL(toggled(bool)),    SLOT(inline_toggled(bool)));
+    connect(cppTab->ui->leCppNamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_decl()));
+    connect(cppTab->ui->leCppNamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_def()));
+    connect(cppTab->ui->pbDefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
+    connect(cppTab->ui->pbFromDefinition, SIGNAL(clicked()),this, SLOT(cpp_decl_from_def()));
+    connect(cppTab->ui->pbNotGeneratedInCpp, SIGNAL(clicked()), this, SLOT(cpp_unmapped_decl()));
+    connect(cppTab->ui->pbEditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_decl()));
+    connect(cppTab->ui->editcppbody, SIGNAL(clicked()), this, SLOT(cpp_edit_body()));
+    connect(cppTab->ui->pbDefaultDefinition, SIGNAL(clicked ()), this, SLOT(cpp_default_def()));
+    connect(cppTab->ui->pbFromDeclaration, SIGNAL(clicked ()), this, SLOT(cpp_def_from_decl()));
+    connect(cppTab->ui->pb2NotGeneratedInCpp, SIGNAL(clicked ()),this, SLOT(cpp_unmapped_def()));
+    connect(cppTab->ui->pb2EditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_def()));
 
-    lblNameFormCpp = new QLabel(TR("Name form : "), grid);
-    leCppNamespec = new LineEdit(grid);
-    connect(leCppNamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_decl()));
-    connect(leCppNamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_def()));
-
-    
-    new QLabel(TR("Declaration : "), grid);
-    
-    edCppDeclProto = new MultiLineEdit(grid);
-    
-    new QLabel(TR("Result after\nsubstitution : "), grid);
-    edCppDeclActual = new MultiLineEdit(grid);
-    
-    new QLabel(grid);
-    htab = new Q3HBox(grid);
-    pbDefaultDeclaration = new QPushButton(TR("Default declaration"), htab);
-    pbFromDefinition = new QPushButton(TR("From definition"), htab);
-    pbNotGeneratedInCpp = new QPushButton(TR("Not generated in C++"), htab);
-    pbEditParameters = new QPushButton(TR("Edit parameters"), htab);
-
-    connect(pbDefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
-    connect(pbFromDefinition, SIGNAL(clicked()),this, SLOT(cpp_decl_from_def()));
-    connect(pbNotGeneratedInCpp, SIGNAL(clicked()), this, SLOT(cpp_unmapped_decl()));
-    connect(pbEditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_decl()));
-
-    new QLabel(TR("Definition :"), grid);
-    edCppDefProto = new MultiLineEdit(grid);
-
-    Q3VBox * vtab = new Q3VBox(grid);
-
-    new QLabel(TR("Result after\nsubstitution : "), vtab);
-    cbIndentCppBody = new QCheckBox(TR("contextual\nbody indent"), vtab);
-    
-    edCppDefActual = new MultiLineEdit(grid);
-    
-    editcppbody = new QPushButton("", grid);
-    connect(editcppbody, SIGNAL(clicked()), this, SLOT(cpp_edit_body()));
-    
     char * b = oper->get_body('c');
     
     if (b != 0)
@@ -447,37 +411,20 @@ void OperationDialog::init_cpp()
         cppbody = oldcppbody = b;
         delete [] b;
     }
-
-    htab = new Q3HBox(grid);
-    pbDefaultDefinition = new QPushButton(TR("Default definition"), htab);
-    pbFromDeclaration = new QPushButton(TR("From declaration"), htab);
-    pb2NotGeneratedInCpp = new QPushButton(TR("Not generated in C++"), htab);
-    pb2EditParameters = new QPushButton(TR("Edit parameters"), htab);
-
-//    connect(pb2DefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
-//    connect(pb2FromDefinition, SIGNAL(clicked()),this, SLOT(cpp_decl_from_def()));
-//    connect(pb2NotGeneratedInCpp, SIGNAL(clicked()), this, SLOT(cpp_unmapped_decl()));
-//    connect(pb2EditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_decl()));
     
-
-    connect(pbDefaultDefinition, SIGNAL(clicked ()), this, SLOT(cpp_default_def()));
-    connect(pbFromDeclaration, SIGNAL(clicked ()), this, SLOT(cpp_def_from_decl()));
-    connect(pb2NotGeneratedInCpp, SIGNAL(clicked ()),this, SLOT(cpp_unmapped_def()));
-    connect(pb2EditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_def()));
-    
-    insertTab(grid, "C++", 1);
+    insertTab(cppTab, "C++", 1);
 }
 
 
 void OperationDialog::FillcppTab(OperationData* )
 {
-    cbCppFrozen->setChecked(false);
+    cppTab->ui->cbCppFrozen->setChecked(false);
     if (!isWritable || !oper->is_get_or_set)
-        cbCppFrozen->hide();
+        cppTab->ui->cbCppFrozen->hide();
     else
     {
         if (oper->cpp_get_set_frozen)
-            cbCppFrozen->setChecked(TRUE);
+            cppTab->ui->cbCppFrozen->setChecked(TRUE);
     }
     visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
     visibilityBg->setEnabled(isWritable);
@@ -497,51 +444,51 @@ void OperationDialog::FillcppTab(OperationData* )
 
     if (oper->is_get_or_set)
     {
-        leCppNamespec->setText(oper->cpp_name_spec);
-        leCppNamespec->setReadOnly(!isWritable);
+        cppTab->ui->leCppNamespec->setText(oper->cpp_name_spec);
+        cppTab->ui->leCppNamespec->setReadOnly(!isWritable);
     }
     else
     {
-        lblNameFormCpp->hide();
-        leCppNamespec->hide();
+        cppTab->ui->lblNameFormCpp->hide();
+        cppTab->ui->leCppNamespec->hide();
     }
 
     if(isWritable)
     {
-        connect(edCppDeclProto, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
-        connect(edCppDefProto, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
+        connect(cppTab->ui->edCppDeclProto, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
+        connect(cppTab->ui->edCppDefProto, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
     }
     else
     {
-        disconnect(edCppDeclProto, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
-        disconnect(edCppDefProto, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
+        disconnect(cppTab->ui->edCppDeclProto, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
+        disconnect(cppTab->ui->edCppDefProto, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
     }
-    edCppDeclProto->setText(oper->get_cppdecl());
-    edCppDeclProto->setFont(comment->font());
-    edCppDeclProto->setReadOnly(!isWritable);
+    cppTab->ui->edCppDeclProto->setText(oper->get_cppdecl());
+    cppTab->ui->edCppDeclProto->setFont(comment->font());
+    cppTab->ui->edCppDeclProto->setReadOnly(!isWritable);
 
-    edCppDeclActual->setReadOnly(TRUE);
-    edCppDeclActual->setFont(comment->font());
+    cppTab->ui->edCppDeclActual->setReadOnly(TRUE);
+    cppTab->ui->edCppDeclActual->setFont(comment->font());
 
-    pbDefaultDeclaration->setEnabled(isWritable);
-    pbFromDefinition->setEnabled(isWritable);
-    pbNotGeneratedInCpp->setEnabled(isWritable && !oper->is_get_or_set);
-    pbEditParameters->setEnabled(isWritable);
+    cppTab->ui->pbDefaultDeclaration->setEnabled(isWritable);
+    cppTab->ui->pbFromDefinition->setEnabled(isWritable);
+    cppTab->ui->pbNotGeneratedInCpp->setEnabled(isWritable && !oper->is_get_or_set);
+    cppTab->ui->pbEditParameters->setEnabled(isWritable);
 
-    edCppDefProto->setText(oper->get_cppdef());
-    edCppDefProto->setFont(comment->font());
-    edCppDefProto->setReadOnly(!isWritable);
+    cppTab->ui->edCppDefProto->setText(oper->get_cppdef());
+    cppTab->ui->edCppDefProto->setFont(comment->font());
+    cppTab->ui->edCppDefProto->setReadOnly(!isWritable);
 
-    cbIndentCppBody->setVisible(isWritable && !oper->is_get_or_set);
-    cbIndentCppBody->setEnabled(!(preserve_bodies() && !forcegenbody_cb->isChecked()));
-    cbIndentCppBody->setChecked((preserve_bodies() && !forcegenbody_cb->isChecked()) && oper->cpp_indent_body);
+    cppTab->ui->cbIndentCppBody->setVisible(isWritable && !oper->is_get_or_set);
+    cppTab->ui->cbIndentCppBody->setEnabled(!(preserve_bodies() && !forcegenbody_cb->isChecked()));
+    cppTab->ui->cbIndentCppBody->setChecked((preserve_bodies() && !forcegenbody_cb->isChecked()) && oper->cpp_indent_body);
 
-    edCppDefActual->setReadOnly(TRUE);
-    edCppDefActual->setFont(comment->font());
+    cppTab->ui->edCppDefActual->setReadOnly(TRUE);
+    cppTab->ui->edCppDefActual->setFont(comment->font());
 
     bool bodyEditable = (!isWritable || (preserve_bodies() && !forcegenbody_cb->isChecked()));
     QString buttonText = bodyEditable ? TR("Show body") : TR("Edit body");
-    editcppbody->setText(buttonText);
+    cppTab->ui->editcppbody->setText(buttonText);
 
     char * b = oper->get_body('c');
     
@@ -551,10 +498,10 @@ void OperationDialog::FillcppTab(OperationData* )
         delete [] b;
     }
 
-    pbDefaultDefinition->setEnabled(isWritable);
-    pbFromDeclaration->setEnabled(isWritable);
-    pb2NotGeneratedInCpp->setEnabled(isWritable && !oper->is_get_or_set);
-    pb2EditParameters->setEnabled(isWritable);
+    cppTab->ui->pbDefaultDefinition->setEnabled(isWritable);
+    cppTab->ui->pbFromDeclaration->setEnabled(isWritable);
+    cppTab->ui->pb2NotGeneratedInCpp->setEnabled(isWritable && !oper->is_get_or_set);
+    cppTab->ui->pb2EditParameters->setEnabled(isWritable);
 
     if (!GenerationSettings::cpp_get_default_defs())
         HideTab("Cpp");
@@ -575,7 +522,7 @@ void OperationDialog::init_java()
 {
 
     Q3Grid * grid;
-    Q3HBox * htab;
+    Q3HBox * htab = 0;
     Q3ButtonGroup * bg;
 
     grid = new Q3Grid(2, this);
@@ -685,7 +632,7 @@ void OperationDialog::FillJavaTab(OperationData* oper)
         delete [] b;
     }
     
-    pbDefaultDeclaration->setEnabled(isWritable);
+    cppTab->ui->pbDefaultDeclaration->setEnabled(isWritable);
     pbNotGeneratedInJava->setEnabled(isWritable);
 
     javaannotation = (const char *) oper->java_annotation;
@@ -705,7 +652,7 @@ void OperationDialog::FillJavaTab(OperationData* oper)
 void OperationDialog::init_php()
 {
     Q3Grid * grid;
-    Q3HBox * htab;
+    Q3HBox * htab = 0;
     Q3ButtonGroup * bg;
 
     grid = new Q3Grid(2, this);
@@ -813,7 +760,7 @@ void OperationDialog::FillPhpTab(OperationData* )
         delete [] b;
     }
     
-    pbDefaultDeclaration->setEnabled(isWritable);
+    cppTab->ui->pbDefaultDeclaration->setEnabled(isWritable);
     pbNotGeneratedInPhp->setEnabled(isWritable);
 
     ///phpannotation = (const char *) oper->php_annotation; todo
@@ -834,7 +781,7 @@ void OperationDialog::FillPhpTab(OperationData* )
 void OperationDialog::init_python()
 {
     Q3Grid * grid;
-    Q3HBox * htab;
+    Q3HBox * htab = 0;
     Q3ButtonGroup * bg;
 
     grid = new Q3Grid(2, this);
@@ -950,7 +897,7 @@ void OperationDialog::FillPythonTab(OperationData* )
         delete [] b;
     }
     
-    pbDefaultDeclaration->setEnabled(isWritable);
+    cppTab->ui->pbDefaultDeclaration->setEnabled(isWritable);
     pbNotGeneratedInPython->setEnabled(isWritable);
     pbEditParamsPython->setEnabled(isWritable);
     pythondecorator = (const char *) oper->python_decorator;
@@ -969,8 +916,7 @@ void OperationDialog::FillPythonTab(OperationData* )
 void OperationDialog::init_idl()
 {
     Q3Grid * grid;
-    Q3HBox * htab;
-    Q3ButtonGroup * bg;
+    Q3HBox * htab = 0;
 
     grid = new Q3Grid(2, this);
     idltab = grid;
@@ -1284,20 +1230,20 @@ void OperationDialog::accept() {
         }
         else {
             if (oper->is_get_or_set) {
-                oper->cpp_name_spec = leCppNamespec->text().stripWhiteSpace();
+                oper->cpp_name_spec = cppTab->ui->leCppNamespec->text().stripWhiteSpace();
                 oper->cpp_body.length = 0;
-                oper->cpp_get_set_frozen = cbCppFrozen->isChecked();
+                oper->cpp_get_set_frozen = cppTab->ui->cbCppFrozen->isChecked();
             }
             else
-                oper->cpp_indent_body = cbIndentCppBody->isChecked();
+                oper->cpp_indent_body = cppTab->ui->cbIndentCppBody->isChecked();
             if (!abstract_cb->isChecked() &&
-                    (edCppDefProto->text().find("${body}") != -1)) {
+                    (cppTab->ui->edCppDefProto->text().find("${body}") != -1)) {
                 if (cppbody != oldcppbody)
                     oper->new_body(cppbody, 'c');
             }
             else if(!oldcppbody.isEmpty())
                 oper->new_body(QString(), 'c');
-            oper->cpp_decl = edCppDeclProto->text();
+            oper->cpp_decl = cppTab->ui->edCppDeclProto->text();
             oper->cpp_visibility = cpp_visibility.value();
 
             oper->cpp_const = cbCppConst->isChecked();
@@ -1305,9 +1251,9 @@ void OperationDialog::accept() {
             oper->cpp_friend = cbCppFriend->isChecked();
             oper->cpp_virtual = cbCppVirtual->isChecked();
             oper->cpp_inline = cbCppInline->isChecked();
-            oper->cpp_def.assign(edCppDefProto->text(),
+            oper->cpp_def.assign(cppTab->ui->edCppDefProto->text(),
                                  abstract_cb->isChecked() ||
-                                 (edCppDefProto->text().find("${body}") != -1));
+                                 (cppTab->ui->edCppDefProto->text().find("${body}") != -1));
         }
 
         // java
@@ -1452,7 +1398,7 @@ void OperationDialog::forcegenbody_toggled(bool on) {
     QString lbl = (ro) ? TR("Show body") : TR("Edit body");
 
     if (!cpp_undef)
-        editcppbody->setText(lbl);
+        cppTab->ui->editcppbody->setText(lbl);
     if (!java_undef)
         editjavabody->setText(lbl);
     if (!php_undef)
@@ -1462,7 +1408,7 @@ void OperationDialog::forcegenbody_toggled(bool on) {
 
     if (isWritable && !oper->is_get_or_set) {
         if (!cpp_undef)
-            cbIndentCppBody->setEnabled(editcppbody->isEnabled() && !ro);
+            cppTab->ui->cbIndentCppBody->setEnabled(cppTab->ui->editcppbody->isEnabled() && !ro);
         if (!java_undef)
             indentjavabody_cb->setEnabled(editjavabody->isEnabled() && !ro);
         if (!php_undef)
@@ -1484,7 +1430,7 @@ void OperationDialog::update_all_tabs(QWidget * w) {
         cpp_update_decl();
         cpp_update_def();
         if (isWritable)
-            edCppDeclProto->setFocus();
+            cppTab->ui->edCppDeclProto->setFocus();
     }
     else if (w == javatab) {
         java_update_def();
@@ -1579,7 +1525,7 @@ void OperationDialog::cpp_default_decl() {
                                         set_of_rel->get_multiplicity_b());
         }
 
-        edCppDeclProto->setText(decl);
+        cppTab->ui->edCppDeclProto->setText(decl);
     }
     else {
         QString s = oper->default_cpp_decl(edname->text().stripWhiteSpace());
@@ -1603,22 +1549,22 @@ void OperationDialog::cpp_default_decl() {
         if ((index = s.find("${)}")) != -1)
             s.insert(index, params);
 
-        edCppDeclProto->setText(s);
+        cppTab->ui->edCppDeclProto->setText(s);
     }
 
     cpp_update_decl();
 }
 
 void OperationDialog::cpp_unmapped_decl() {
-    edCppDeclProto->setText(QString());
-    edCppDeclActual->setText(QString());
+    cppTab->ui->edCppDeclProto->setText(QString());
+    cppTab->ui->edCppDeclActual->setText(QString());
 
     cpp_unmapped_def();
 }
 
 void OperationDialog::cpp_decl_from_def() {
     QString dcl = oper->default_cpp_decl(edname->text().stripWhiteSpace());
-    QString def = edCppDefProto->text();
+    QString def = cppTab->ui->edCppDefProto->text();
     int index1;
     int index2;
     int index3;
@@ -1672,17 +1618,17 @@ void OperationDialog::cpp_decl_from_def() {
     }
 
     // update decl
-    edCppDeclProto->setText(dcl);
+    cppTab->ui->edCppDeclProto->setText(dcl);
     cpp_update_decl();
 }
 
 void OperationDialog::cpp_edit_param_decl() {
-    QString form = edCppDeclProto->text();
+    QString form = cppTab->ui->edCppDeclProto->text();
     int index;
 
     if (((index = form.find("${(}")) != 0) &&
             (form.find("${)}", index + 4) != 0)) {
-        CppParamsDialog d(this, table, edCppDeclProto, TRUE);
+        CppParamsDialog d(this, table, cppTab->ui->edCppDeclProto, TRUE);
 
         if (d.exec() == QDialog::Accepted)
             cpp_update_decl();
@@ -1768,7 +1714,7 @@ void OperationDialog::cpp_update_decl() {
     // do NOT write
     //	const char * p = edcppdecl->text();
     // because the QString is immediatly destroyed !
-    QString def = edCppDeclProto->text();
+    QString def = cppTab->ui->edCppDeclProto->text();
     const char * p = def;
     const char * pp = 0;
     QString indent = "";
@@ -1827,7 +1773,7 @@ void OperationDialog::cpp_update_decl() {
         }
         else if (!strncmp(p, "${name}", 7)) {
             p += 7;
-            s += compute_name(leCppNamespec);
+            s += compute_name(cppTab->ui->leCppNamespec);
         }
         else if (!strncmp(p, "${class}", 8)) {
             // to be placed in the description
@@ -1895,7 +1841,7 @@ void OperationDialog::cpp_update_decl() {
             s += *p++;
     }
 
-    edCppDeclActual->setText(s);
+    cppTab->ui->edCppDeclActual->setText(s);
 }
 
 QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
@@ -2059,7 +2005,7 @@ void OperationDialog::cpp_default_def() {
                                         set_of_rel->get_isa_const_relation_b(),
                                         set_of_rel->get_multiplicity_b());
         }
-        edCppDefProto->setText(def);
+        cppTab->ui->edCppDefProto->setText(def);
     }
     else
     {
@@ -2083,19 +2029,19 @@ void OperationDialog::cpp_default_def() {
         if ((index = s.find("${)}")) != -1)
             s.insert(index, params);
 
-        edCppDefProto->setText(s);
+        cppTab->ui->edCppDefProto->setText(s);
     }
     cpp_update_def();
 }
 
 void OperationDialog::cpp_unmapped_def() {
-    edCppDefProto->setText(QString());
-    edCppDefActual->setText(QString());
+    cppTab->ui->edCppDefProto->setText(QString());
+    cppTab->ui->edCppDefActual->setText(QString());
 }
 
 void OperationDialog::cpp_def_from_decl() {
 
-    QString dcl = edCppDeclProto->text();
+    QString dcl = cppTab->ui->edCppDeclProto->text();
     QString def;
 
     // manage abstract
@@ -2161,17 +2107,17 @@ void OperationDialog::cpp_def_from_decl() {
     }
 
     // update def
-    edCppDefProto->setText(def);
+    cppTab->ui->edCppDefProto->setText(def);
     cpp_update_def();
 }
 
 void OperationDialog::cpp_edit_param_def() {
-    QString form = edCppDefProto->text();
+    QString form = cppTab->ui->edCppDefProto->text();
     int index;
 
     if (((index = form.find("${(}")) != 0) &&
             (form.find("${)}", index + 4) != 0)) {
-        CppParamsDialog d(this, table, edCppDefProto, FALSE);
+        CppParamsDialog d(this, table, cppTab->ui->edCppDefProto, FALSE);
 
         d.raise();
         if (d.exec() == QDialog::Accepted)
@@ -2244,8 +2190,8 @@ bool insert_template(const QString & tm, const char *& p,
 }
 
 void OperationDialog::cpp_update_def() {
-    QString def = edCppDefProto->text();
-    bool template_oper = edCppDeclProto->text().isEmpty()
+    QString def = cppTab->ui->edCppDefProto->text();
+    bool template_oper = cppTab->ui->edCppDeclProto->text().isEmpty()
             && oper->is_template_operation(def);
     QString s;
 
@@ -2321,7 +2267,7 @@ void OperationDialog::cpp_update_def() {
             else if (!strncmp(p, "${name}", 7))
             {
                 p += 7;
-                s += compute_name(leCppNamespec);
+                s += compute_name(cppTab->ui->leCppNamespec);
             }
             else if (!strncmp(p, "${(}", 4))
             {
@@ -2395,12 +2341,12 @@ void OperationDialog::cpp_update_def() {
                 s += *p++;
         }
 
-        editcppbody->setEnabled(def.find("${body}") != -1);
+        cppTab->ui->editcppbody->setEnabled(def.find("${body}") != -1);
     }
     else
-        editcppbody->setEnabled(FALSE);
+        cppTab->ui->editcppbody->setEnabled(FALSE);
 
-    edCppDefActual->setText(s);
+    cppTab->ui->edCppDefActual->setText(s);
 
     forcegenbody_toggled(forcegenbody_cb->isChecked());	// update indent*body_cb
 }
@@ -2425,7 +2371,7 @@ void OperationDialog::cpp_edit_body() {
     QString b;
 
     if (add_operation_profile())
-        b = add_profile(edCppDefActual->text()) + cppbody;
+        b = add_profile(cppTab->ui->edCppDefActual->text()) + cppbody;
     else
         b = cppbody;
 
@@ -4172,24 +4118,24 @@ void OperationDialog::force_param(int rank, bool recompute) {
                 GenerationSettings::cpp(the_type(table->type(rank), list, nodes),
                                         table->dir(rank), rank);
 
-        s = edCppDeclProto->text();
+        s = cppTab->ui->edCppDeclProto->text();
         if ((s.find(t) == -1) && (s.find(p) == -1)) {
             add_param(s, rank, theo+QString(v));
-            edCppDeclProto->setText(s);
+            cppTab->ui->edCppDeclProto->setText(s);
         }
         else if (recompute) {
             replace_param(s, rank, theo);
-            edCppDeclProto->setText(s);
+            cppTab->ui->edCppDeclProto->setText(s);
         }
 
-        s = edCppDefProto->text();
+        s = cppTab->ui->edCppDefProto->text();
         if ((s.find(t) == -1) && (s.find(p) == -1)) {
             add_param(s, rank, theo);
-            edCppDefProto->setText(s);
+            cppTab->ui->edCppDefProto->setText(s);
         }
         else if (recompute) {
             replace_param(s, rank, theo);
-            edCppDefProto->setText(s);
+            cppTab->ui->edCppDefProto->setText(s);
         }
     }
         break;
@@ -4288,8 +4234,8 @@ void OperationDialog::insert_param(int rank) {
     // just renumber
     switch (unique) {
     case CppView:
-        insert_param(rank, edCppDeclProto);
-        insert_param(rank, edCppDefProto);
+        insert_param(rank, cppTab->ui->edCppDeclProto);
+        insert_param(rank, cppTab->ui->edCppDefProto);
         break;
     case JavaView:
         insert_param(rank, edjavadef);
@@ -4320,8 +4266,8 @@ void OperationDialog::delete_param(int rank) {
     // remove and renumber
     switch (unique) {
     case CppView:
-        delete_param(rank, edCppDeclProto);
-        delete_param(rank, edCppDefProto);
+        delete_param(rank, cppTab->ui->edCppDeclProto);
+        delete_param(rank, cppTab->ui->edCppDefProto);
         break;
     case JavaView:
         delete_param(rank, edjavadef);
@@ -4410,8 +4356,8 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed) {
 void OperationDialog::move_param(int old_rank, int new_rank) {
     switch (unique) {
     case CppView:
-        move_param(old_rank, new_rank, edCppDeclProto);
-        move_param(old_rank, new_rank, edCppDefProto);
+        move_param(old_rank, new_rank, cppTab->ui->edCppDeclProto);
+        move_param(old_rank, new_rank, cppTab->ui->edCppDefProto);
         break;
     case JavaView:
         move_param(old_rank, new_rank, edjavadef);

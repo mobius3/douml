@@ -33,6 +33,7 @@
 #include <QTextStream>
 #include <Q3CString>
 #include <QTextStream>
+#include <QSettings>
 
 #include "GenerationSettings.h"
 #include "GenerationSettingsDialog.h"
@@ -43,6 +44,7 @@
 #include "AType.h"
 #include "myio.h"
 #include "ToolCom.h"
+#include "Logging/QsLog.h"
 #include "err.h"
 
 int GenerationSettings::nbuiltins;
@@ -128,7 +130,7 @@ bool GenerationSettings::php_set_final;
 bool GenerationSettings::python_default_defs;
 bool GenerationSettings::python_2_2;
 bool GenerationSettings::python_3_operation;
-QString GenerationSettings::python_indent_step;
+WrapperStr GenerationSettings::python_indent_step;
 WrapperStr GenerationSettings::python_src_content;
 WrapperStr GenerationSettings::python_class_decl;
 WrapperStr GenerationSettings::python_enum_decl;
@@ -237,10 +239,133 @@ inline void Stereotype::set(const char * u, const char * c,
   idl = i;
 }
 
+static WrapperStr CPP_H_CONTENT;
+static WrapperStr CPP_SRC_CONTENT;
+static WrapperStr JAVA_SRC_CONTENT;
+static WrapperStr PHP_SRC_CONTENT;
+static WrapperStr PYTHON_SRC_CONTENT;
+static WrapperStr IDL_SRC_CONTENT;
+static WrapperStr CPP_ATTR_DECL1;
+static WrapperStr CPP_ATTR_DECL2;
+static WrapperStr CPP_ATTR_DESCR1;
+static WrapperStr CPP_ATTR_DESCR2;
+static WrapperStr CPP_INDENT_VISIBILITY;
+static WrapperStr JAVA_ATTR_DECL1;
+static WrapperStr JAVA_ATTR_DECL2;
+static WrapperStr JAVA_ATTR_DESCR1;
+static WrapperStr JAVA_ATTR_DESCR2;
+static WrapperStr PHP_CLASS;
+static WrapperStr PHP_ENUM;
+static WrapperStr PHP_INTERFACE;
+static WrapperStr PHP_ATTR;
+static WrapperStr PHP_ENUMITEM;
+static WrapperStr PHP_REL;
+static WrapperStr PHP_OPER;
+static WrapperStr PYTHON_INDENT_STEP_;
+static WrapperStr PYTHON_CLASS;
+static WrapperStr PYTHON_ENUM;
+static WrapperStr PYTHON_ATTR1;
+static WrapperStr PYTHON_ATTR2;
+static WrapperStr PYTHON_ENUMITEM;
+static WrapperStr PYTHON_REL1;
+static WrapperStr PYTHON_REL2;
+static WrapperStr PYTHON_REL_COMP;
+static WrapperStr PYTHON_OPER;
+static WrapperStr PYTHON_INITOPER;
+static WrapperStr IDL_EXTERNAL_CLASS_DECL;
+static WrapperStr IDL_VALUETYPE_DECL;
+static WrapperStr IDL_ATTR_DECL1;
+static WrapperStr IDL_ATTR_DECL2;
+static WrapperStr IDL_ATTR_DESCR1;
+static WrapperStr IDL_ATTR_DESCR2;
+static WrapperStr IDL_VALUETYPE_ATTRIBUTE_DECL0;
+static WrapperStr IDL_VALUETYPE_ATTRIBUTE_DECL1;
+static WrapperStr IDL_VALUETYPE_ATTRIBUTE_DECL2;
+static WrapperStr IDL_VALUETYPE_ATTRIBUTE_DESCR1;
+static WrapperStr IDL_VALUETYPE_ATTRIBUTE_DESCR2;
+static WrapperStr IDL_CONST_ATTR_DECL1;
+static WrapperStr IDL_CONST_ATTR_DECL2;
+static WrapperStr IDL_CONST_ATTR_DESCR1;
+static WrapperStr IDL_CONST_ATTR_DESCR2;
+static WrapperStr IDL_UNION_ATTR_DECL1;
+static WrapperStr IDL_UNION_ATTR_DECL2;
+static WrapperStr IDL_UNION_ATTR_DESCR1;
+static WrapperStr IDL_UNION_ATTR_DESCR2;
+static WrapperStr IDL_VALUETYPE_REL_DECL0;
+static WrapperStr IDL_VALUETYPE_REL_DECL1;
+static WrapperStr IDL_VALUETYPE_REL_DECL2;
+static WrapperStr IDL_VALUETYPE_REL_DESCR1;
+static WrapperStr IDL_VALUETYPE_REL_DESCR2;
+
+void GenerationSettings::read_declaration_defaults()
+{
+    QSettings settings("GenerationSettings_PastDefines.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    CPP_H_CONTENT=settings.value("General/CPP_H_CONTENT").toString();
+    CPP_SRC_CONTENT=settings.value("General/CPP_SRC_CONTENT").toString();
+    JAVA_SRC_CONTENT=settings.value("General/JAVA_SRC_CONTENT").toString();
+    PHP_SRC_CONTENT=settings.value("General/PHP_SRC_CONTENT").toString();
+    PYTHON_SRC_CONTENT=settings.value("General/PYTHON_SRC_CONTENT").toString();
+    IDL_SRC_CONTENT=settings.value("General/IDL_SRC_CONTENT").toString();
+    CPP_ATTR_DECL1=settings.value("General/CPP_ATTR_DECL1").toString();
+    CPP_ATTR_DECL2=settings.value("General/CPP_ATTR_DECL2").toString();
+    CPP_ATTR_DESCR1=settings.value("General/CPP_ATTR_DESCR1").toString();
+    CPP_ATTR_DESCR2=settings.value("General/CPP_ATTR_DESCR2").toString();
+    CPP_INDENT_VISIBILITY=settings.value("General/CPP_INDENT_VISIBILITY").toString();
+    JAVA_ATTR_DECL1=settings.value("General/JAVA_ATTR_DECL1").toString();
+    JAVA_ATTR_DECL2=settings.value("General/JAVA_ATTR_DECL2").toString();
+    JAVA_ATTR_DESCR1=settings.value("General/JAVA_ATTR_DESCR1").toString();
+    JAVA_ATTR_DESCR2=settings.value("General/JAVA_ATTR_DESCR2").toString();
+    PHP_CLASS=settings.value("General/PHP_CLASS").toString();
+    PHP_ENUM=settings.value("General/PHP_ENUM").toString();
+    PHP_INTERFACE=settings.value("General/PHP_INTERFACE").toString();
+    PHP_ATTR=settings.value("General/PHP_ATTR").toString();
+    PHP_ENUMITEM=settings.value("General/PHP_ENUMITEM").toString();
+    PHP_REL=settings.value("General/PHP_REL").toString();
+    PHP_OPER=settings.value("General/PHP_OPER").toString();
+    PYTHON_INDENT_STEP_=settings.value("General/PYTHON_INDENT_STEP").toString();
+    PYTHON_CLASS=settings.value("General/PYTHON_CLASS").toString();
+    PYTHON_ENUM=settings.value("General/PYTHON_ENUM").toString();
+    PYTHON_ATTR1=settings.value("General/PYTHON_ATTR1").toString();
+    PYTHON_ATTR2=settings.value("General/PYTHON_ATTR2").toString();
+    PYTHON_ENUMITEM=settings.value("General/PYTHON_ENUMITEM").toString();
+    PYTHON_REL1=settings.value("General/PYTHON_REL1").toString();
+    PYTHON_REL2=settings.value("General/PYTHON_REL2").toString();
+    PYTHON_REL_COMP=settings.value("General/PYTHON_REL_COMP").toString();
+    PYTHON_OPER=settings.value("General/PYTHON_OPER").toString();
+    PYTHON_INITOPER=settings.value("General/PYTHON_INITOPER").toString();
+    IDL_EXTERNAL_CLASS_DECL=settings.value("General/IDL_EXTERNAL_CLASS_DECL").toString();
+    IDL_VALUETYPE_DECL=settings.value("General/IDL_VALUETYPE_DECL").toString();
+    IDL_ATTR_DECL1=settings.value("General/IDL_ATTR_DECL1").toString();
+    IDL_ATTR_DECL2=settings.value("General/IDL_ATTR_DECL2").toString();
+    IDL_ATTR_DESCR1=settings.value("General/IDL_ATTR_DESCR1").toString();
+    IDL_ATTR_DESCR2=settings.value("General/IDL_ATTR_DESCR2").toString();
+    IDL_VALUETYPE_ATTRIBUTE_DECL0=settings.value("General/IDL_VALUETYPE_ATTRIBUTE_DECL0").toString();
+    IDL_VALUETYPE_ATTRIBUTE_DECL1=settings.value("General/IDL_VALUETYPE_ATTRIBUTE_DECL1").toString();
+    IDL_VALUETYPE_ATTRIBUTE_DECL2=settings.value("General/IDL_VALUETYPE_ATTRIBUTE_DECL2").toString();
+    IDL_VALUETYPE_ATTRIBUTE_DESCR1=settings.value("General/IDL_VALUETYPE_ATTRIBUTE_DESCR1").toString();
+    IDL_VALUETYPE_ATTRIBUTE_DESCR2=settings.value("General/IDL_VALUETYPE_ATTRIBUTE_DESCR2").toString();
+    IDL_CONST_ATTR_DECL1=settings.value("General/IDL_CONST_ATTR_DECL1").toString();
+    IDL_CONST_ATTR_DECL2=settings.value("General/IDL_CONST_ATTR_DECL2").toString();
+    IDL_CONST_ATTR_DESCR1=settings.value("General/IDL_CONST_ATTR_DESCR1").toString();
+    IDL_CONST_ATTR_DESCR2=settings.value("General/IDL_CONST_ATTR_DESCR2").toString();
+    IDL_UNION_ATTR_DECL1=settings.value("General/IDL_UNION_ATTR_DECL1").toString();
+    IDL_UNION_ATTR_DECL2=settings.value("General/IDL_UNION_ATTR_DECL2").toString();
+    IDL_UNION_ATTR_DESCR1=settings.value("General/IDL_UNION_ATTR_DESCR1").toString();
+    IDL_UNION_ATTR_DESCR2=settings.value("General/IDL_UNION_ATTR_DESCR2").toString();
+    IDL_VALUETYPE_REL_DECL0=settings.value("General/IDL_VALUETYPE_REL_DECL0").toString();
+    IDL_VALUETYPE_REL_DECL1=settings.value("General/IDL_VALUETYPE_REL_DECL1").toString();
+    IDL_VALUETYPE_REL_DECL2=settings.value("General/IDL_VALUETYPE_REL_DECL2").toString();
+    IDL_VALUETYPE_REL_DESCR1=settings.value("General/IDL_VALUETYPE_REL_DESCR1").toString();
+    IDL_VALUETYPE_REL_DESCR2=settings.value("General/IDL_VALUETYPE_REL_DESCR2").toString();
+}
+
 void GenerationSettings::init()
 {
   if (builtins != 0)
     delete [] builtins;
+
+  read_declaration_defaults();
   
   nbuiltins = 15;
   builtins = new Builtin[nbuiltins];
@@ -263,57 +388,24 @@ void GenerationSettings::init()
   builtins[13].set("double", "double", "double", "double");
   builtins[14].set("string", "string", "String", "string");
   
-#define CPP_H_CONTENT "#ifndef ${NAMESPACE}_${NAME}_H\n\
-#define ${NAMESPACE}_${NAME}_H\n\
-\n\
-${comment}\n\
-${includes}\n\
-${declarations}\n\
-${namespace_start}\n\
-${definition}\n\
-${namespace_end}\n\
-#endif\n"
   cpp_h_content = CPP_H_CONTENT;
-#define CPP_SRC_CONTENT "${comment}\n\
-${includes}\n\
-${namespace_start}\n\
-${members}\n\
-${namespace_end}"
+
   cpp_src_content = CPP_SRC_CONTENT;
   cpp_h_extension = "h";
   cpp_src_extension = "cpp";
   
-#define JAVA_SRC_CONTENT "${comment}\n\
-${package}\n\
-${imports}\n\
-${definition}";
+
   java_src_content = JAVA_SRC_CONTENT;
   java_extension = "java";
 
-#define PHP_SRC_CONTENT "<?php\n\
-${comment}\n\
-${namespace}\n\
-${require_once}\n\
-${definition}\n\
-?>\n";
+
   php_src_content = PHP_SRC_CONTENT;
   php_extension = "php";
-  
-#define PYTHON_SRC_CONTENT "${comment}\n\
-${import}\n\
-${definition}";
+
   python_src_content = PYTHON_SRC_CONTENT;
   python_extension = "py";
   
-#define IDL_SRC_CONTENT "#ifndef ${MODULE}_${NAME}_H\n\
-#define ${MODULE}_${NAME}_H\n\
-\n\
-${comment}\n\
-${includes}\n\
-${module_start}\n\
-${definition}\n\
-${module_end}\n\
-#endif\n"
+
   idl_src_content = IDL_SRC_CONTENT;
   idl_extension = "idl";
   
@@ -366,10 +458,7 @@ ${module_end}\n\
   cpp_union_decl = "${comment}${template}union ${name} {\n${members}};\n${inlines}\n";
   cpp_enum_decl = "${comment}enum ${name} {\n${items}\n};\n";
   cpp_typedef_decl = "${comment}typedef ${type} ${name};\n";
-#define CPP_ATTR_DECL1	"    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n"
-#define CPP_ATTR_DECL2	"    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n"
-#define CPP_ATTR_DESCR1	"    ${description}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n"
-#define CPP_ATTR_DESCR2	"    ${description}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n"
+
   cpp_attr_decl[0] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};\n";
   cpp_attr_decl[1] = CPP_ATTR_DECL1;
   cpp_attr_decl[2] = CPP_ATTR_DECL2;
@@ -399,8 +488,7 @@ ${module_end}\n\
   cpp_force_namespace_gen = FALSE;
   cpp_inline_force_incl_in_h = FALSE;
   cpp_javadoc_comment = FALSE;
-#define CPP_INDENT_VISIBILITY "  "
-  cpp_indent_visibility = CPP_INDENT_VISIBILITY;
+  cpp_indent_visibility = "  ";
   
   java_class_decl = "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {\n${members}}\n";
   java_external_class_decl = "${name}";
@@ -417,10 +505,6 @@ ${cases}    default: throw new Error();\n\
     }\n\n\
   }\n\
   private ${name}(int v) { value = v; };\n}\n";
-#define JAVA_ATTR_DECL1	"  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n"
-#define JAVA_ATTR_DECL2	"  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n"
-#define JAVA_ATTR_DESCR1	"  ${description}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n"
-#define JAVA_ATTR_DESCR2	"  ${description}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n"
   java_attr_decl[0] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};\n";
   java_attr_decl[1] = JAVA_ATTR_DECL1;
   java_attr_decl[2] = JAVA_ATTR_DECL2;
@@ -442,20 +526,20 @@ public static final ${class} ${name} = new ${class}(_${name});\n";
   java_javadoc_comment = TRUE;
   java_force_package_gen = TRUE;
 
-#define PHP_CLASS "${comment}${final}${abstract}class ${name}${extends}${implements} {\n${members}}\n"
+
   php_class_decl = PHP_CLASS;
   php_external_class_decl = "${name}";
-#define PHP_ENUM "${comment}${visibility}final class ${name} {\n${items}}\n"
+
   php_enum_decl = PHP_ENUM;
-#define PHP_INTERFACE "${comment}interface ${name} {\n${members}}\n"
+
   php_interface_decl = PHP_INTERFACE;
-#define PHP_ATTR "  ${comment}${visibility}${const}${static}${var}${name}${value};\n"
+
   php_attr_decl = PHP_ATTR;
-#define PHP_ENUMITEM "  const ${name}${value};${comment}\n"
+
   php_enum_item_decl = PHP_ENUMITEM;
-#define PHP_REL PHP_ATTR
+
   php_rel_decl = PHP_REL;
-#define PHP_OPER "  ${comment}${final}${visibility}${abstract}${static}function ${name}${(}${)}\n{\n  ${body}}\n"
+
   // PHP_OPER known by php reverse
   php_oper_def = PHP_OPER;
   php_get_name = "get${Name}";
@@ -470,69 +554,47 @@ public static final ${class} ${name} = new ${class}(_${name});\n";
 
   python_2_2 = TRUE;
   python_3_operation = FALSE;
-#define PYTHON_INDENT_STEP "    "
-  python_indent_step = PYTHON_INDENT_STEP;
-#define PYTHON_CLASS "class ${name}${inherit}:\n${docstring}${members}\n"
+
+  python_indent_step = PYTHON_INDENT_STEP_;
+
   python_class_decl = PYTHON_CLASS;
   python_external_class_decl = "${name}";
-#define PYTHON_ENUM "class ${name}:\n${docstring}${members}\n"
+
   python_enum_decl = PYTHON_ENUM;
-#define PYTHON_ATTR1 "${comment}${self}${name} = ${value}\n"
-#define PYTHON_ATTR2 "${comment}${self}${name} = ${stereotype}()\n"
   python_attr_decl[0] = PYTHON_ATTR1;
   python_attr_decl[1] = PYTHON_ATTR2;
-#define PYTHON_ENUMITEM PYTHON_ATTR1
+
   python_enum_item_decl = PYTHON_ENUMITEM;
-#define PYTHON_REL1 PYTHON_ATTR1
-#define PYTHON_REL2 PYTHON_ATTR2
-#define PYTHON_REL_COMP "${comment}${self}${name} = ${type}()\n"
   python_rel_decl[0][0] = PYTHON_REL1;
   python_rel_decl[0][1] = PYTHON_REL2;
   python_rel_decl[1][0] = PYTHON_REL_COMP;
   python_rel_decl[1][1] = PYTHON_REL2;
-#define PYTHON_OPER "${@}${static}${abstract}def ${name}${(}${)}:\n${docstring}${body}\n"
+
   python_oper_def = PYTHON_OPER;
-#define PYTHON_INITOPER "${@}${static}${abstract}def ${name}${(}${p0}${v0}${)}:\n${docstring}super(${class}, ${p0}).__init__()\n${body}\n"
+
   python_initoper_def = PYTHON_INITOPER;
   python_get_name = "get${Name}";
   python_set_name = "set${Name}";
 
-#define  IDL_EXTERNAL_CLASS_DECL "${name}\n#include \"${name}.idl\"\n";
+
   idl_external_class_decl = IDL_EXTERNAL_CLASS_DECL;
   idl_interface_decl = "${comment}${abstract}${local}interface ${name}${inherit} {\n${members}};\n";
-#define IDL_VALUETYPE_DECL "${comment}${abstract}${custom}valuetype ${name}${inherit} {\n${members}};\n";
+
   idl_valuetype_decl = IDL_VALUETYPE_DECL;
   idl_struct_decl = "${comment}struct ${name} {\n${members}};\n";
   idl_typedef_decl = "${comment}typedef ${type} ${name};\n";
   idl_exception_decl = "${comment}exception ${name} {\n${members}};\n";
   idl_union_decl = "${comment}union ${name} switch(${switch}) {\n${members}};\n";
   idl_enum_decl = "${comment}enum ${name} {\n${items}};\n";
-#define IDL_ATTR_DECL1	"  ${comment}${readonly}${attribute}${stereotype}<${type}> ${name};\n"
-#define IDL_ATTR_DECL2	"  ${comment}${readonly}${attribute}${stereotype}<${type},${multiplicity}> ${name};\n"
-#define IDL_ATTR_DESCR1	"  ${description}${readonly}${attribute}${stereotype}<${type}> ${name};\n"
-#define IDL_ATTR_DESCR2	"  ${description}${readonly}${attribute}${stereotype}<${type},${multiplicity}> ${name};\n"
   idl_attr_decl[0] = "  ${comment}${readonly}${attribute}${type} ${name};\n";
   idl_attr_decl[1] = IDL_ATTR_DECL1;
   idl_attr_decl[2] = IDL_ATTR_DECL2;
-#define IDL_VALUETYPE_ATTRIBUTE_DECL0 "  ${comment}${visibility}${type} ${name};\n"
-#define IDL_VALUETYPE_ATTRIBUTE_DECL1 "  ${comment}${visibility}${stereotype}<${type}> ${name};\n"
-#define IDL_VALUETYPE_ATTRIBUTE_DECL2 "  ${comment}${visibility}${stereotype}<${type},${multiplicity}> ${name};\n"
-#define IDL_VALUETYPE_ATTRIBUTE_DESCR1 "  ${description}${visibility}${stereotype}<${type}> ${name};\n"
-#define IDL_VALUETYPE_ATTRIBUTE_DESCR2 "  ${description}${visibility}${stereotype}<${type},${multiplicity}> ${name};\n"
   idl_valuetype_attr_decl[0] = IDL_VALUETYPE_ATTRIBUTE_DECL0;
   idl_valuetype_attr_decl[1] = IDL_VALUETYPE_ATTRIBUTE_DECL1;
   idl_valuetype_attr_decl[2] = IDL_VALUETYPE_ATTRIBUTE_DECL2;
-#define IDL_CONST_ATTR_DECL1  "  ${comment}const ${stereotype}<${type}> ${name}${value};\n"
-#define IDL_CONST_ATTR_DECL2  "  ${comment}const ${stereotype}<${type},${multiplicity}> ${name}${value};\n"
-#define IDL_CONST_ATTR_DESCR1  "  ${description}const ${stereotype}<${type}> ${name}${value};\n"
-#define IDL_CONST_ATTR_DESCR2  "  ${description}const ${stereotype}<${type},${multiplicity}> ${name}${value};\n"
   idl_const_decl[0] = "  ${comment}const ${type} ${name}${value};\n";
   idl_const_decl[1] = IDL_CONST_ATTR_DECL1;
   idl_const_decl[2] = IDL_CONST_ATTR_DECL2;
-#define IDL_UNION_ATTR_DECL1  "  ${comment}case ${case} : ${readonly}${stereotype}<${type}> ${name};";
-#define IDL_UNION_ATTR_DECL2  "  ${comment}case ${case} : ${readonly}${stereotype}<${type},${multiplicity}> ${name};";
-#define IDL_UNION_ATTR_DESCR1  "  ${description}case ${case} : ${readonly}${stereotype}<${type}> ${name};";
-#define IDL_UNION_ATTR_DESCR2  "  ${description}case ${case} : ${readonly}${stereotype}<${type},${multiplicity}> ${name};";
   idl_union_item_decl[0] = "  ${comment}case ${case} : ${readonly}${type} ${name};";
   idl_union_item_decl[1] = IDL_UNION_ATTR_DECL1;
   idl_union_item_decl[2] = IDL_UNION_ATTR_DECL2;
@@ -540,11 +602,6 @@ public static final ${class} ${name} = new ${class}(_${name});\n";
   idl_rel_decl[0] = "  ${comment}${readonly}${attribute}${type} ${name};\n";
   idl_rel_decl[1] = "  ${comment}${readonly}${attribute}${stereotype}<${type}> ${name};\n";
   idl_rel_decl[2] = "  ${comment}${readonly}${attribute}${stereotype}<${type},${multiplicity}> ${name};\n";
-#define IDL_VALUETYPE_REL_DECL0 "  ${comment}${visibility}${type} ${name};\n"
-#define IDL_VALUETYPE_REL_DECL1 "  ${comment}${visibility}${stereotype}<${type}> ${name};\n"
-#define IDL_VALUETYPE_REL_DECL2 "  ${comment}${visibility}${stereotype}<${type},${multiplicity}> ${name};\n"
-#define IDL_VALUETYPE_REL_DESCR1 "  ${description}${visibility}${stereotype}<${type}> ${name};\n"
-#define IDL_VALUETYPE_REL_DESCR2 "  ${description}${visibility}${stereotype}<${type},${multiplicity}> ${name};\n"
   idl_valuetype_rel_decl[0] = IDL_VALUETYPE_REL_DECL0;
   idl_valuetype_rel_decl[1] = IDL_VALUETYPE_REL_DECL1;
   idl_valuetype_rel_decl[2] = IDL_VALUETYPE_REL_DECL2;
@@ -1376,6 +1433,8 @@ void GenerationSettings::send_idl_def(ToolCom * com)
   com->write_string(idl_set_name);
   com->write_bool(idl_set_oneway);
 }
+
+
 
 bool GenerationSettings::tool_global_uml_cmd(ToolCom * com, const char * args)
 {
@@ -3434,7 +3493,7 @@ void GenerationSettings::read(char * & st, char * & k)
       k = read_keyword(st);
     }
     else
-      cpp_indent_visibility = CPP_INDENT_VISIBILITY;
+        cpp_indent_visibility = "  ";
     
     if (!strcmp(k, "cpp_includes")) {
       // old version
@@ -3660,7 +3719,7 @@ public static final ${class} ${name} = new ${class}(_${name});\n";
     if (fileformat < 51) {
       python_2_2 = TRUE;
       python_3_operation = FALSE;
-      python_indent_step = PYTHON_INDENT_STEP;
+      python_indent_step = PYTHON_INDENT_STEP_;
       python_src_content = PYTHON_SRC_CONTENT;
       python_extension = "py";
       python_class_decl = PYTHON_CLASS;

@@ -93,7 +93,6 @@ class OperationDialog : public EdgeMenuDialog {
     
     // c++ tab
     OperationWidgetCpp* cppTab;
-    //QWidget * cppTab;
     bool cpp_undef;
     VisibilityGroup cpp_visibility;
     QCheckBox * cbCppFriend;
@@ -101,21 +100,15 @@ class OperationDialog : public EdgeMenuDialog {
     QCheckBox * cbCppVolatile;
     QCheckBox * cbCppVirtual;
     QCheckBox * cbCppInline;
-    QCheckBox * override;
-    QCheckBox * final;
-    QCheckBox * deleted;
-    QCheckBox * defaulted;
+    Q3ButtonGroup * cppBg;
+    Q3ButtonGroup * cppBg2;
 
-    LineEdit * leCppNamespec;	// get/set
-    QCheckBox * cbCppFrozen;	// get/set
-    QCheckBox * cbIndentCppBody;
-    MultiLineEdit * edCppDeclProto;
+    Q3HBox * htabBgCpp1;
+    Q3HBox * tabBgCppModifiers;
+
+
     CppParamsTable * paramcppdecltable;
-    MultiLineEdit * edCppDeclActual;
-    MultiLineEdit * edCppDefProto;
     CppParamsTable * paramcppdeftable;
-    MultiLineEdit * edCppDefActual;
-    QPushButton * editcppbody;
     QString cppbody;
     QString oldcppbody;
     QString templates;
@@ -181,7 +174,7 @@ class OperationDialog : public EdgeMenuDialog {
     static QSize previous_size;
   
     QLabel* lblFullClassName;
-    QLabel* lblNameFormCpp;
+    //QLabel* lblNameFormCpp;
     QLabel* lblNameFormPhp;
     QLabel* lblNameFormJava;
     QLabel* lblNameFormPython;
@@ -193,8 +186,7 @@ class OperationDialog : public EdgeMenuDialog {
     Q3ButtonGroup * bgUml1;
     Q3ButtonGroup * bgUml2;
     Q3ButtonGroup * bgUml3;
-    Q3ButtonGroup * cppBg;
-    Q3ButtonGroup * cppBg2;
+
     Q3ButtonGroup * notableBg;
     Q3ButtonGroup * bgPhp;
     Q3ButtonGroup * bgPython;
@@ -202,27 +194,21 @@ class OperationDialog : public EdgeMenuDialog {
     Q3ButtonGroup * bgCppModifiers;
     Q3ButtonGroup * bgCpp11Modifiers;
     Q3ButtonGroup* visibilityBg;
-    Q3HBox * htabBgCpp1;
+
     Q3HBox * htabBgUml;
     Q3HBox * namespecTab;
     Q3HBox * namespecTabIdl;
     Q3HBox * pythonNamespecTab;
-    Q3HBox * tabBgCppModifiers;
-    Q3HBox * tabBgCpp11Modifiers;
 
-    QPushButton* pbDefaultDeclaration;
-    QPushButton* pbFromDefinition;
-    QPushButton* pbNotGeneratedInCpp;
-    QPushButton* pbEditParameters;
+
+
+
 
     QPushButton* pbDefaultDeclarationPhp;
     QPushButton* pbNotGeneratedInPhp;
     QPushButton* pbEditParametersPhp;
 
-    QPushButton* pbDefaultDefinition;
-    QPushButton* pbFromDeclaration;
-    QPushButton* pb2NotGeneratedInCpp;
-    QPushButton* pb2EditParameters;
+
     QPushButton* pbNotGeneratedInJava;
     QPushButton* pbDefaultDeclarationJava;
 

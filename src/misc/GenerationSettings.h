@@ -171,7 +171,7 @@ class GenerationSettings {
     static bool python_default_defs;
     static bool python_2_2;
     static bool python_3_operation;
-    static QString python_indent_step;
+    static WrapperStr python_indent_step;
     static WrapperStr python_src_content;
     static WrapperStr python_class_decl;
     static WrapperStr python_external_class_decl;
@@ -272,7 +272,9 @@ class GenerationSettings {
     static void send_idl_def(ToolCom * com);
     
   public:
+    static void read_declaration_defaults();
     static void init();
+
   
     static const QStringList & basic_types() { return umltypes; };
     static QString cpp_type(const QString &);
@@ -444,6 +446,10 @@ class GenerationSettings {
     static bool add_class_rel_correspondences(unsigned fileformat);
     
     static QString new_java_enums();
+
+
+
+
 };
 
 #endif
