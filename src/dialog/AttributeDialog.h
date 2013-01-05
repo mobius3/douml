@@ -85,7 +85,7 @@ class AttributeDialog : public Q3TabDialog {
     MultiLineEdit * constraint;
     
     // C++ tab
-    QWidget * cpptab;
+    QWidget * cppTab;
     bool cpp_in_enum;
     bool cpp_ignored;
     VisibilityGroup cpp_visibility;

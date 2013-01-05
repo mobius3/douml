@@ -164,9 +164,7 @@ void EdgeMenuDialog::OnPickNextSibling()
         nextNode = dynamic_cast<BrowserNode*>(currentNode->itemAbove());
         //QLOG_INFO() << "NEXT: " << nextNode->get_name() << " " << nextNode->depth();
         if(!nextNode)
-        {
-            continueSearch = false;
-        }
+            break;
         bool sameLevel = originalNode->depth() == nextNode->depth();
 //        QLOG_INFO() << "NEXT: " << "Origin level : " << originalNode->depth();
 //        QLOG_INFO() << "NEXT: " << "Current level : " << nextNode->depth();
@@ -192,9 +190,7 @@ void EdgeMenuDialog::OnPickPreviousSibling()
         previousNode = dynamic_cast<BrowserNode*>(currentNode->itemBelow());
         //QLOG_INFO() << "Nodename is: " << previousNode->get_name() << " " << previousNode->depth();
         if(!previousNode)
-        {
-            continueSearch = false;
-        }
+            break;
         int previousDepth = previousNode->depth();
         //QLOG_INFO() << "PREVIOUS: " << "Origin level : " << originalDepth;
         //QLOG_INFO() << "PREVIOUS: " << "Current level : " << previousDepth;

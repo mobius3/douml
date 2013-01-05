@@ -1,5 +1,5 @@
 TEMPLATE	= app
-INCLUDEPATH	= browser data diagram dialog misc tool xpm
+INCLUDEPATH	+= src/browser src/data src/diagram src/dialog src/misc src/tool src/xpm
 INCLUDEPATH += src
 CONFIG		+= qt warn_on debug
 HEADERS		=src/data/ActualParamData.h \
@@ -210,12 +210,13 @@ HEADERS		=src/data/ActualParamData.h \
 		  src/xpm/UmlPixmap.h \
     src/ui/menufactory.h \
     src/Factories/EdgeMenuFactory.h \
-   src/dialog/EdgeMenuDialog.h \
+    src/dialog/EdgeMenuDialog.h \
     src/CustomWidgets/EdgeMenuToolBar.h \
     src/Factories/DialogConnections.h \
     src/Factories/EdgeToolBarCreation.h \
     src/CustomWidgets/MultiPurposeDragArea.h \
-    src/misc/ClipboardManager.h
+    src/misc/ClipboardManager.h \
+    src/ui/operationwidgetcpp.h
 SOURCES		=src/browser/BrowserAttribute.cpp \
 		 src/browser/BrowserExtraMember.cpp \
 		 src/browser/BrowserClass.cpp \
@@ -481,13 +482,14 @@ SOURCES		=src/browser/BrowserAttribute.cpp \
 		  src/Logging/QsDebugOutput.cpp \
 		  src/main.cpp \
     src/Factories/EdgeMenuFactory.cpp \
-   src/src/dialog/EdgeMenuDialog.cpp \
+    src/dialog/EdgeMenuDialog.cpp \
     src/misc/GenerateTypeId.cpp \
     src/Factories/DialogConnections.cpp \
     src/Factories/EdgeToolBarCreation.cpp \
     src/CustomWidgets/MultiPurposeDragArea.cpp \
     src/CustomWidgets/EdgeMenuToolBar.cpp \
-    src/misc/ClipboardManager.cpp
+    src/misc/ClipboardManager.cpp \
+    src/ui/operationwidgetcpp.cpp
 
 TARGET		= HeX
 DEFINES         = BooL=bool DEBUGCOM
@@ -508,10 +510,13 @@ Debug{
     OBJECTS_DIR = bin/HeX/Obj_Debug
 
 }
-    UI_DIR = bin/HeX/UI
+    UI_DIR = src/ui
     DESTDIR = bin
 
 QMAKE_CXXFLAGS += -std=gnu++11
 
 RESOURCES += \
-    icons.qrc
+    src/icons.qrc
+
+FORMS += \
+    src/ui/operationwidgetcpp.ui

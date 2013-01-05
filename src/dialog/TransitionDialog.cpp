@@ -119,7 +119,7 @@ TransitionDialog::TransitionDialog(TransitionData * r)
 	   SLOT(edit_uml_guard()), SLOT(edit_uml_expr()), TRUE);
 
   // CPP
-  init_tab(cpptab, cpp, rel->cpp, "C++", SLOT(edit_cpp_trigger()),
+  init_tab(cppTab, cpp, rel->cpp, "C++", SLOT(edit_cpp_trigger()),
 	   SLOT(edit_cpp_guard()), SLOT(edit_cpp_expr()),
 	   GenerationSettings::cpp_get_default_defs());
 
@@ -161,7 +161,7 @@ void TransitionDialog::change_tabs(QWidget * w) {
       edname->setFocus();
     else if (w == ocltab)
       uml.edtrigger->setFocus();
-    else if (w == cpptab)
+    else if (w == cppTab)
       cpp.edtrigger->setFocus();
     else if (w == javatab)
       java.edtrigger->setFocus();

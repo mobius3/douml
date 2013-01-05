@@ -183,7 +183,7 @@ void ClassDialog::edStereotypeActivated(const QString & s) {
   
   if ((stereotype == "stereotype") || (stereotype == "metaclass")) {
     if (GenerationSettings::cpp_get_default_defs())
-      setTabEnabled(cpptab, FALSE);
+      setTabEnabled(cppTab, FALSE);
     if (GenerationSettings::java_get_default_defs())
       setTabEnabled(javatab, FALSE);
     if (GenerationSettings::idl_get_default_defs())
@@ -197,7 +197,7 @@ void ClassDialog::edStereotypeActivated(const QString & s) {
   }
   else {
     if (GenerationSettings::cpp_get_default_defs())
-      setTabEnabled(cpptab, TRUE);
+      setTabEnabled(cppTab, TRUE);
     if (GenerationSettings::java_get_default_defs())
       setTabEnabled(javatab, TRUE);
     if (GenerationSettings::idl_get_default_defs())
@@ -344,7 +344,7 @@ void ClassDialog::update_all_tabs(QWidget * w)
     if (!visit)
       edname->setFocus();
   }
-  else if (w == cpptab) {
+  else if (w == cppTab) {
     cpp_update_decl();
     if (!visit)
       edcppdecl->setFocus();
@@ -2449,8 +2449,8 @@ void ClassDialog::InitGui()
 
     //!!! C++
     split = new QSplitter(Qt::Vertical, this);
-    cpptab = split;
-    RegisterTab("Cpp", cpptab);
+    cppTab = split;
+    RegisterTab("Cpp", cppTab);
     split->setOpaqueResize(TRUE);
 
     vtab = new Q3VBox(split);
@@ -2486,7 +2486,7 @@ void ClassDialog::InitGui()
    pbCppDefaultDeclaration = new QPushButton(TR("Default declaration"), htabcpp);
    pbNotGeneratedInCPP = new QPushButton(TR("Not generated in C++"), htabcpp);
 
-    addTab(cpptab, "Cpp");
+    addTab(cppTab, "Cpp");
 
     //!!! JAVA
 

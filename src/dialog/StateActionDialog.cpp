@@ -116,7 +116,7 @@ StateActionDialog::StateActionDialog(StateActionData * d)
 
   // CPP
   grid = new Q3Grid(2, this);
-  cpptab = grid;
+  cppTab = grid;
   grid->setMargin(5);
   grid->setSpacing(5);
   
@@ -179,7 +179,7 @@ void StateActionDialog::change_tabs(QWidget * w) {
   if (!visit) {
     if (w == umltab)
       uml->setFocus();
-    else if (w == cpptab)
+    else if (w == cppTab)
       cpp->setFocus();
     else if (w == javatab)
       java->setFocus();

@@ -293,7 +293,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
   
   if (! cpp_ignored) {
     grid = new Q3Grid(2, this);
-    cpptab = grid;
+    cppTab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
     
@@ -347,7 +347,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
       removePage(grid);
   }
   else
-    cpptab = 0;
+    cppTab = 0;
   
   // Java
   
@@ -805,7 +805,7 @@ void AttributeDialog::update_all_tabs(QWidget * w) {
     if (!visit)
       edname->setFocus();
   }
-  else if (w == cpptab) {
+  else if (w == cppTab) {
     cpp_update();
     if (!visit)
       edcppdecl->setFocus();

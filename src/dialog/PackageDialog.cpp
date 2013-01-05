@@ -126,7 +126,7 @@ PackageDialog::PackageDialog(PackageData * da)
   // C++
   
   vtab = new Q3VBox(this);
-  cpptab = vtab;
+  cppTab = vtab;
   vtab->setMargin(5);
   
   htab = new Q3HBox(vtab);
@@ -475,7 +475,7 @@ void PackageDialog::edStereotypeActivated(const QString & s) {
   bool np = (s.stripWhiteSpace() != "profile");
   
   if (GenerationSettings::cpp_get_default_defs())
-    setTabEnabled(cpptab, np);
+    setTabEnabled(cppTab, np);
   if (GenerationSettings::java_get_default_defs())
     setTabEnabled(javatab, np);
   if (GenerationSettings::idl_get_default_defs())
@@ -495,7 +495,7 @@ void PackageDialog::change_tabs(QWidget * w) {
   if (hasOkButton()) {
     if (w == umltab)
       edname->setFocus();
-    else if (w == cpptab)
+    else if (w == cppTab)
       edcpphdir->setFocus();
     else if (w == javatab)
       edjavadir->setFocus();

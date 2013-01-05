@@ -55,7 +55,7 @@ class StateActionDialog : public Q3TabDialog {
     Q3PtrList<BodyDialog> edits;
     
     QWidget * umltab;
-    QWidget * cpptab;
+    QWidget * cppTab;
     QWidget * javatab;
     MultiLineEdit * uml;
     MultiLineEdit * cpp;

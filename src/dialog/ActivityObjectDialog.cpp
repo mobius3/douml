@@ -190,7 +190,7 @@ ActivityObjectDialog::ActivityObjectDialog(ActivityObjectData * d, const char * 
 	   SLOT(edit_uml_selection()), TRUE);
 
   // C++
-  init_tab(cpptab, edcpp_selection, data->cpp_selection, "C++",
+  init_tab(cppTab, edcpp_selection, data->cpp_selection, "C++",
 	   SLOT(edit_cpp_selection()),
 	   GenerationSettings::cpp_get_default_defs());
 
@@ -237,7 +237,7 @@ void ActivityObjectDialog::change_tabs(QWidget * w) {
       edname->setFocus();
     else if (w == ocltab)
       eduml_selection->setFocus();
-    else if (w == cpptab)
+    else if (w == cppTab)
       edcpp_selection->setFocus();
     else if (w == javatab)
       edjava_selection->setFocus();

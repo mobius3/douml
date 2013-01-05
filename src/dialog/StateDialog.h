@@ -74,7 +74,7 @@ class StateDialog : public Q3TabDialog {
     Q3PtrList<BodyDialog> edits;
     
     QWidget * ocltab;
-    QWidget * cpptab;
+    QWidget * cppTab;
     QWidget * javatab;
     StDialog uml;
     StDialog cpp;

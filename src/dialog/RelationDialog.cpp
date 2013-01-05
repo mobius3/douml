@@ -254,7 +254,7 @@ RelationDialog::RelationDialog(RelationData * r)
   //
   
   vtab = new Q3VBox(this);
-  cpptab = vtab;
+  cppTab = vtab;
   vtab->setMargin(5);
   
   // A
@@ -1203,7 +1203,7 @@ void RelationDialog::update_all_tabs(QWidget * w) {
     if (! visit)
       a.edrole->setFocus();
   }
-  else if (w == cpptab) {
+  else if (w == cppTab) {
     cpp_update_a();
     cpp_update_b();
     if (! visit)

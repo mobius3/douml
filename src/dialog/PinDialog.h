@@ -77,7 +77,7 @@ class PinDialog : public Q3TabDialog {
     QRadioButton * exception_rb;
     QRadioButton * stream_rb;
     QWidget * ocltab;
-    QWidget * cpptab;
+    QWidget * cppTab;
     QWidget * javatab;
     MultiLineEdit * eduml_selection;
     MultiLineEdit * edcpp_selection;

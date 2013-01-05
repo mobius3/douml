@@ -68,7 +68,7 @@ class TransitionDialog : public Q3TabDialog {
     Q3PtrList<BodyDialog> edits;
     
     QWidget * ocltab;
-    QWidget * cpptab;
+    QWidget * cppTab;
     QWidget * javatab;
 
     TransDialog uml;

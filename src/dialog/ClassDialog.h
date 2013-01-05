@@ -88,7 +88,7 @@ class ClassDialog : public EdgeMenuDialog {
     Q3VBox * instantiate_vtab;
     
     // C++
-    QWidget * cpptab;
+    QWidget * cppTab;
     QString current_cpp_stereotype;
     VisibilityGroup cpp_visibility;
     QCheckBox * cpp_external_cb;

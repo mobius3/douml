@@ -194,7 +194,7 @@ StateDialog::StateDialog(StateData * d)
 	   SLOT(edit_uml_exit()), SLOT(edit_uml_activity()), TRUE);
 
   // CPP
-  init_tab(cpptab, cpp, state->cpp, "C++", SLOT(edit_cpp_entry()),
+  init_tab(cppTab, cpp, state->cpp, "C++", SLOT(edit_cpp_entry()),
 	   SLOT(edit_cpp_exit()), SLOT(edit_cpp_activity()),
 	   GenerationSettings::cpp_get_default_defs());
 
@@ -239,7 +239,7 @@ void StateDialog::change_tabs(QWidget * w) {
       edname->setFocus();
     else if (w == ocltab)
       uml.edentry->setFocus();
-    else if (w == cpptab)
+    else if (w == cppTab)
       cpp.edentry->setFocus();
     else if (w == javatab)
       java.edentry->setFocus();
@@ -258,8 +258,8 @@ void StateDialog::ed_ref_activated(int r) {
   active_cb->setEnabled(enabled);
   if (ocltab != 0)
     ocltab->setEnabled(enabled);
-  if (cpptab != 0)
-    cpptab->setEnabled(enabled);
+  if (cppTab != 0)
+    cppTab->setEnabled(enabled);
   if (javatab != 0)
     javatab->setEnabled(enabled);
 }

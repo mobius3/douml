@@ -29,6 +29,7 @@
 #include <q3tabdialog.h>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <QVBoxLayout>
 #include <QLabel>
 
 #include "MyTable.h"
@@ -55,6 +56,7 @@ class CppParamsTable;
 class ExceptionsTable;
 class KeyValuesTable;
 class BodyDialog;
+class OperationWidgetCpp;
 
 class OperationDialog : public EdgeMenuDialog {
   Q_OBJECT
@@ -90,23 +92,29 @@ class OperationDialog : public EdgeMenuDialog {
     MultiLineEdit * constraint;
     
     // c++ tab
-    QWidget * cpptab;
+    OperationWidgetCpp* cppTab;
+    //QWidget * cppTab;
     bool cpp_undef;
     VisibilityGroup cpp_visibility;
-    QCheckBox * friend_cb;
-    QCheckBox * const_cb;
-    QCheckBox * volatile_cb;
-    QCheckBox * virtual_cb;
-    QCheckBox * inline_cb;
-    LineEdit * edcppnamespec;	// get/set
-    QCheckBox * cppfrozen_cb;	// get/set
-    QCheckBox * indentcppbody_cb;
-    MultiLineEdit * edcppdecl;
+    QCheckBox * cbCppFriend;
+    QCheckBox * cbCppConst;
+    QCheckBox * cbCppVolatile;
+    QCheckBox * cbCppVirtual;
+    QCheckBox * cbCppInline;
+    QCheckBox * override;
+    QCheckBox * final;
+    QCheckBox * deleted;
+    QCheckBox * defaulted;
+
+    LineEdit * leCppNamespec;	// get/set
+    QCheckBox * cbCppFrozen;	// get/set
+    QCheckBox * cbIndentCppBody;
+    MultiLineEdit * edCppDeclProto;
     CppParamsTable * paramcppdecltable;
-    MultiLineEdit * showcppdecl;
-    MultiLineEdit * edcppdef;
+    MultiLineEdit * edCppDeclActual;
+    MultiLineEdit * edCppDefProto;
     CppParamsTable * paramcppdeftable;
-    MultiLineEdit * showcppdef;
+    MultiLineEdit * edCppDefActual;
     QPushButton * editcppbody;
     QString cppbody;
     QString oldcppbody;
@@ -192,6 +200,7 @@ class OperationDialog : public EdgeMenuDialog {
     Q3ButtonGroup * bgPython;
     Q3ButtonGroup * bgIdl;
     Q3ButtonGroup * bgCppModifiers;
+    Q3ButtonGroup * bgCpp11Modifiers;
     Q3ButtonGroup* visibilityBg;
     Q3HBox * htabBgCpp1;
     Q3HBox * htabBgUml;
@@ -199,6 +208,7 @@ class OperationDialog : public EdgeMenuDialog {
     Q3HBox * namespecTabIdl;
     Q3HBox * pythonNamespecTab;
     Q3HBox * tabBgCppModifiers;
+    Q3HBox * tabBgCpp11Modifiers;
 
     QPushButton* pbDefaultDeclaration;
     QPushButton* pbFromDefinition;
@@ -209,8 +219,8 @@ class OperationDialog : public EdgeMenuDialog {
     QPushButton* pbNotGeneratedInPhp;
     QPushButton* pbEditParametersPhp;
 
-    QPushButton* pb2DefaultDeclaration;
-    QPushButton* pb2FromDefinition;
+    QPushButton* pbDefaultDefinition;
+    QPushButton* pbFromDeclaration;
     QPushButton* pb2NotGeneratedInCpp;
     QPushButton* pb2EditParameters;
     QPushButton* pbNotGeneratedInJava;
@@ -247,7 +257,7 @@ class OperationDialog : public EdgeMenuDialog {
     void InitPropertiesTab();
 
     void FillUmlTab(OperationData* );
-    void FillCppTab(OperationData* );
+    void FillcppTab(OperationData* );
     void FillJavaTab(OperationData* );
     void FillPhpTab(OperationData* );
     void FillPythonTab(OperationData* );

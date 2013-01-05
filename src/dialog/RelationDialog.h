@@ -134,7 +134,7 @@ class RelationDialog : public Q3TabDialog {
     bool visit;
     bool onstereotype;
     QWidget * umltab;
-    QWidget * cpptab;
+    QWidget * cppTab;
     QWidget * javatab;
     QWidget * phptab;
     QWidget * pythontab;

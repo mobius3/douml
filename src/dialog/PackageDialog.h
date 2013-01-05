@@ -54,7 +54,7 @@ class PackageDialog : public Q3TabDialog {
     Q3PtrList<BodyDialog> edits;
     
     // C++
-    QWidget * cpptab;
+    QWidget * cppTab;
     LineEdit * edcppsrcdir;
     LineEdit * edcpphdir;
     LineEdit * edcppnamespace;

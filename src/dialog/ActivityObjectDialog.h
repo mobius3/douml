@@ -63,7 +63,7 @@ class ActivityObjectDialog : public Q3TabDialog {
     
     QWidget * umltab;
     QWidget * ocltab;
-    QWidget * cpptab;
+    QWidget * cppTab;
     QWidget * javatab;
 
     // uml tab
