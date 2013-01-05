@@ -1982,6 +1982,11 @@ void OperationData::send_cpp_def(ToolCom * com) {
   com->write_bool(cpp_friend);
   com->write_bool(cpp_virtual);
   com->write_bool(cpp_inline);
+  QLOG_INFO() << "writing defaulted";
+  com->write_bool(cpp_default);
+  com->write_bool(cpp_delete);
+  com->write_bool(cpp_override);
+  com->write_bool(cpp_final);
   com->write_string(cpp_def);
   com->write_string(cpp_name_spec);
   if (com->api_format() >= 26)
@@ -2090,7 +2095,8 @@ bool OperationData::tool_cmd(ToolCom * com, const char * args,
 	bn->package_modified();
 	com->write_ack(TRUE);
 	// useless to say the operation is modified
-	return TRUE;
+    QLOG_DEBUG() << "not modified";
+          return TRUE;
       case setIsClassMemberCmd:
 	isa_class_operation = (*args != 0);
 	break;
@@ -2144,6 +2150,18 @@ bool OperationData::tool_cmd(ToolCom * com, const char * args,
       case setIsCppFriendCmd:
 	cpp_friend = (*args != 0);
 	break;
+      case setIsCppDefaultCmd:
+    cpp_default = (*args != 0);
+    break;
+      case setIsCppDeleteCmd:
+    cpp_delete = (*args != 0);
+    break;
+      case setIsCppOverrideCmd:
+    cpp_override = (*args != 0);
+    break;
+      case setIsCppFinalCmd:
+    cpp_final = (*args != 0);
+    break;
       case setIsCppVirtualCmd:
 	cpp_virtual = (*args != 0);
 	break;
@@ -2916,6 +2934,14 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const {
       st << "cpp_frozen ";   
     if (cpp_const)
       st << "const ";
+    if (cpp_default)
+      st << "default ";
+    if (cpp_delete)
+      st << "delete ";
+    if (cpp_override)
+      st << "override ";
+    if (cpp_final)
+      st << "final ";
     if (cpp_friend)
       st << "friend ";
     if (cpp_virtual)
@@ -3105,6 +3131,30 @@ void OperationData::read(char * & st, char * & k) {
   }
   else
     cpp_const = FALSE;
+  if (!strcmp(k, "default")) {
+    cpp_default = TRUE;
+    k = read_keyword(st);
+  }
+  else
+    cpp_default = FALSE;
+  if (!strcmp(k, "delete")) {
+    cpp_delete = TRUE;
+    k = read_keyword(st);
+  }
+  else
+    cpp_delete = FALSE;
+  if (!strcmp(k, "override")) {
+    cpp_override = TRUE;
+    k = read_keyword(st);
+  }
+  else
+    cpp_override = FALSE;
+  if (!strcmp(k, "final")) {
+    cpp_final = TRUE;
+    k = read_keyword(st);
+  }
+  else
+    cpp_final = FALSE;
   
   if (!strcmp(k, "friend")) {
     cpp_friend = TRUE;

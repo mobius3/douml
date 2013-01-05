@@ -45,87 +45,93 @@ static int RootPermission;	// old Uid or 0
 
 void set_user_id(int i)
 {
-  if ((Uid > 0) && BrowserView::get_project()) {
-    QDir dir = BrowserView::get_dir();
-    
-    dir.rmdir(QString::number(Uid) + ".lock");
-  }
-  
-  Uid = i;
+    if ((Uid > 0) && BrowserView::get_project()) {
+        QDir dir = BrowserView::get_dir();
+
+        dir.rmdir(QString::number(Uid) + ".lock");
+    }
+
+    Uid = i;
 }
 
 int user_id()
 {
-  if (Uid == -1) {
-    QDir dir = BrowserView::get_dir();
-    
-    if (dir.exists("all.lock")) {
-      msg_critical("Bouml", 
-		   TR("\
-The project is open in read-only mode because it is\n\
-under the control of 'Project control' or 'Project merge'\n\
-(the directory '%1' exists", dir.absFilePath("all.lock")));
-      force_read_only(TRUE);
+    if (Uid == -1) {
+        QDir dir = BrowserView::get_dir();
+
+        if (dir.exists("all.lock")) {
+            msg_critical("Bouml",
+                         TR("\
+                            The project is open in read-only mode because it is\n\
+                            under the control of 'Project control' or 'Project merge'\n\
+                            (the directory '%1' exists", dir.absFilePath("all.lock")));
+                             force_read_only(TRUE);
+        }
+        else
+            force_read_only(FALSE);
+
+        int uid = read_doumlrc();
+
+        // when loading the project file itself and creating the
+        // BrowserPackage for it, BrowserView::get_project() return 0
+        if (BrowserView::get_project()) {
+            Uid = uid;
+
+            QString fn = QString::number(Uid) + ".lock";
+
+            if (! dir.mkdir(fn)) {
+                if (!dir.exists(fn)) {
+                    msg_critical(TR("User Own Identifier"),
+                                 TR("Can't create directory '%1',\nthe project is open in read-only mode",
+                                    dir.absFilePath(fn)));
+                    force_read_only(TRUE);
+                }
+                else {
+                    int retCode = msg_critical(TR("User Own Identifier"),
+                                 TR("\It seems that you are already editing the project.\n\n"
+                                    "If you're SURE that this is not the case and\n"
+                                    "another user does not have an identifier equal\n"
+                                    "to yours you can gain ownership of the lock.").arg(dir.absFilePath(fn))
+                                    , QMessageBox::Ok, QMessageBox::Close);
+                    if(retCode == QMessageBox::Ok)
+                    {
+                        dir.rmdir(fn);
+                        return uid;
+
+                    }
+                    else
+                        exit(1);
+                }
+            }
+        }
+
+        return uid;
     }
     else
-      force_read_only(FALSE);
-    
-    int uid = read_doumlrc();
-    
-    // when loading the project file itself and creating the
-    // BrowserPackage for it, BrowserView::get_project() return 0
-    if (BrowserView::get_project()) {
-      Uid = uid;
-      
-      QString fn = QString::number(Uid) + ".lock";
-      
-      if (! dir.mkdir(fn)) {
-	if (!dir.exists(fn)) {
-	  msg_critical(TR("User Own Identifier"),
-		       TR("Can't create directory '%1',\nthe project is open in read-only mode",
-			  dir.absFilePath(fn)));
-	  force_read_only(TRUE);
-	}
-	else {
-	  msg_critical(TR("User Own Identifier"), 
-		       TR("\
-It seems that you are already editing the project.\n\n\
-If you're SURE that this is not the case and\n\
-another user does not have an identifier equal\n\
-to yours, remove the directory\n%1\nan restart BOUML",
-			  dir.absFilePath(fn)));
-	  exit(1);
-	}
-      }
-    }
-    
-    return uid;
-  }
-  else
-    return Uid;
+        return Uid;
 }
 
 void set_root_permission(bool y)
 {
-  RootPermission = (y) ? Uid : 0;
+    RootPermission = (y) ? Uid : 0;
 }
 
 int root_permission()
 {
-  return RootPermission;
+    return RootPermission;
 }
 
 //
 
 const char * user_name()
 {
-  static bool done = FALSE;
-  static Q3CString name;
-  
-  if (! done) {
-    name = homeDir().dirName();
-    done = TRUE;
-  }
-  
-  return name;
+    static bool done = FALSE;
+    static Q3CString name;
+
+    if (! done) {
+        name = homeDir().dirName();
+        done = TRUE;
+    }
+
+    return name;
 }

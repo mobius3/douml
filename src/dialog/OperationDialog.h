@@ -322,6 +322,10 @@ class OperationDialog : public EdgeMenuDialog {
     void friend_toggled(bool on);
     void virtual_toggled(bool on);
     void inline_toggled(bool on);
+    void final_toggled(bool on);
+    void delete_toggled(bool on);
+    void override_toggled(bool on);
+    void default_toggled(bool on);
     void java_default_def();
     void java_unmapped_def();
     void java_update_def();

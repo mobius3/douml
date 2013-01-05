@@ -101,7 +101,7 @@ INCLUDEPATH   = ../Tools ../CppGenerator
 
 #The following line was inserted by qt3to4
 QT += network  qt3support testlib console
-
+QMAKE_CXXFLAGS += -std=gnu++11
 Release{
     MOC_DIR = ../../bin/MOC_release/gen/
     OBJECTS_DIR = ../../bin/Obj_release/gen

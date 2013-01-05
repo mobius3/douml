@@ -127,6 +127,34 @@ class UmlBaseOperation : public UmlClassMember {
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppInline(bool y);
 
+    // returns TRUE if the operation is declared const in C++
+    bool isCppDefault();
+    // returns TRUE if the operation is declared const in C++
+    bool isCppDelete();
+    // returns TRUE if the operation is declared const in C++
+    bool isCppOverride();
+    // returns TRUE if the operation is declared const in C++
+    bool isCppFinal();
+
+    // to set if the operation is declared virtual in C++
+    //
+    // On error return FALSE in C++, produce a RuntimeException in Java
+    bool set_isCppDefault(bool y);
+    // to set if the operation is declared virtual in C++
+    //
+    // On error return FALSE in C++, produce a RuntimeException in Java
+    bool set_isCppDelete(bool y);
+    // to set if the operation is declared virtual in C++
+    //
+    // On error return FALSE in C++, produce a RuntimeException in Java
+    bool set_isCppOverride(bool y);
+    // to set if the operation is declared virtual in C++
+    //
+    // On error return FALSE in C++, produce a RuntimeException in Java
+    bool set_isCppFinal(bool y);
+
+
+
     // returns the operation's definition in C++, notes that the declaration
     // is returned by the inherited ClassItemBase::CppDecl() operation
     const Q3CString & cppDef();
@@ -423,6 +451,15 @@ class UmlBaseOperation : public UmlClassMember {
     bool _cpp_virtual : 1;
 
     bool _cpp_inline : 1;
+
+    bool _cpp_default : 1;
+
+    bool _cpp_delete : 1;
+
+    bool _cpp_override : 1;
+
+    bool _cpp_final : 1;
+
 #endif
 
 #ifdef WITHJAVA

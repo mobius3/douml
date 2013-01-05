@@ -46,6 +46,7 @@
 #include <QHBoxLayout>
 #include <Q3VBoxLayout>
 #include <Q3CString>
+#include <functional>
 
 #include "OperationDialog.h"
 #include "OperationData.h"
@@ -372,15 +373,15 @@ void OperationDialog::init_cpp()
 
     tabBgCppModifiers = new Q3HBox();
     tabBgCppModifiers->setStretchFactor(new QLabel("      ", tabBgCppModifiers), 0);
-    bgCppModifiers = new Q3ButtonGroup(5, Qt::Horizontal, QString(), tabBgCppModifiers);
 
+
+    visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
+    bgCppModifiers = new Q3ButtonGroup(5, Qt::Horizontal, QString(), tabBgCppModifiers);
     cbCppConst = new QCheckBox("const", bgCppModifiers);
     cbCppVolatile = new QCheckBox("volatile", bgCppModifiers);
     cbCppFriend = new QCheckBox("friend", bgCppModifiers);
     cbCppVirtual = new QCheckBox("virtual", bgCppModifiers);
     cbCppInline = new QCheckBox("inline", bgCppModifiers);
-
-    visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
     QHBoxLayout* layout = new QHBoxLayout();
     layout->addWidget(tabBgCppModifiers);
     layout->setContentsMargins(0,0,0,0);
@@ -392,6 +393,10 @@ void OperationDialog::init_cpp()
     connect(cbCppFriend, SIGNAL(toggled(bool)),    SLOT(friend_toggled(bool)));
     connect(cbCppVirtual, SIGNAL(toggled(bool)),   SLOT(virtual_toggled(bool)));
     connect(cbCppInline, SIGNAL(toggled(bool)),    SLOT(inline_toggled(bool)));
+    connect(cppTab->ui->cbCppDefaulted, SIGNAL(toggled(bool)),    SLOT(default_toggled(bool)));
+    connect(cppTab->ui->cbCppDeleted, SIGNAL(toggled(bool)),    SLOT(delete_toggled(bool)));
+    connect(cppTab->ui->cbCppFinal, SIGNAL(toggled(bool)),    SLOT(final_toggled(bool)));
+    connect(cppTab->ui->cbCppOverride, SIGNAL(toggled(bool)),    SLOT(override_toggled(bool)));
     connect(cppTab->ui->leCppNamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_decl()));
     connect(cppTab->ui->leCppNamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_def()));
     connect(cppTab->ui->pbDefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
@@ -1251,6 +1256,10 @@ void OperationDialog::accept() {
             oper->cpp_friend = cbCppFriend->isChecked();
             oper->cpp_virtual = cbCppVirtual->isChecked();
             oper->cpp_inline = cbCppInline->isChecked();
+            oper->cpp_default = cppTab->ui->cbCppDefaulted->isChecked();
+            oper->cpp_delete = cppTab->ui->cbCppDeleted->isChecked();
+            oper->cpp_override = cppTab->ui->cbCppOverride->isChecked();
+            oper->cpp_final = cppTab->ui->cbCppFinal->isChecked();
             oper->cpp_def.assign(cppTab->ui->edCppDefProto->text(),
                                  abstract_cb->isChecked() ||
                                  (cppTab->ui->edCppDefProto->text().find("${body}") != -1));
@@ -1484,6 +1493,56 @@ void OperationDialog::inline_toggled(bool on) {
     cpp_update_def();
 }
 
+void OperationDialog::final_toggled(bool on)
+{
+    if (on)
+    {
+        cppTab->ui->cbCppDefaulted->setChecked(FALSE);
+        cppTab->ui->cbCppDeleted->setChecked(FALSE);
+    }
+
+    cpp_update_decl();
+    cpp_update_def();
+}
+
+void OperationDialog::delete_toggled(bool on)
+{
+    if (on)
+    {
+        cppTab->ui->cbCppFinal->setChecked(FALSE);
+        cppTab->ui->cbCppOverride->setChecked(FALSE);
+        cppTab->ui->cbCppDefaulted->setChecked(FALSE);
+    }
+
+    cpp_update_decl();
+    cpp_update_def();
+}
+
+void OperationDialog::override_toggled(bool on)
+{
+    if (on)
+    {
+        cppTab->ui->cbCppDefaulted->setChecked(FALSE);
+        cppTab->ui->cbCppDeleted->setChecked(FALSE);
+    }
+
+    cpp_update_decl();
+    cpp_update_def();
+}
+
+void OperationDialog::default_toggled(bool on)
+{
+    if (on)
+    {
+        cppTab->ui->cbCppFinal->setChecked(FALSE);
+        cppTab->ui->cbCppOverride->setChecked(FALSE);
+        cppTab->ui->cbCppDeleted->setChecked(FALSE);
+    }
+
+    cpp_update_decl();
+    cpp_update_def();
+}
+
 void OperationDialog::cpp_default_decl() {
     if (oper->is_get_or_set) {
         Q3CString decl;
@@ -1708,6 +1767,15 @@ void OperationDialog::manage_cpp_exceptions(QString & s)
         s += " throw ()";
 }
 
+bool CompareAgainstTag(QString& currentTag, QString tagToCompare, const char * p)
+{
+    currentTag = tagToCompare;
+    tagToCompare = "${" + tagToCompare + "}";
+    if (!strncmp(p, tagToCompare, tagToCompare.length()))
+        return true;
+    return false;
+}
+
 void OperationDialog::cpp_update_decl() {
     cpp_visibility.update_default(uml_visibility);
 
@@ -1726,7 +1794,7 @@ void OperationDialog::cpp_update_decl() {
 
     if (*p != '#')
         s = indent;
-
+    QString currentTag;
     for (;;) {
         if (*p == 0) {
             if (pp == 0)
@@ -1741,6 +1809,7 @@ void OperationDialog::cpp_update_decl() {
                 s += indent;
         }
 
+        std::function<bool(QString)> compareTagToBuffer = std::bind(CompareAgainstTag, std::ref(currentTag), std::placeholders::_1, p);
         if (!strncmp(p, "${comment}", 10))
             manage_comment(comment->text(), p, pp,
                            GenerationSettings::cpp_javadoc_style());
@@ -1837,6 +1906,30 @@ void OperationDialog::cpp_update_decl() {
         }
         else if (*p == '@')
             manage_alias(oper->browser_node, p, s, kvtable);
+        else if (compareTagToBuffer("final"))
+        {
+            p += currentTag.length()+3;
+            if (cppTab->ui->cbCppFinal->isChecked())
+                s += " " + currentTag;
+        }
+        else if (compareTagToBuffer("default"))
+        {
+            p += currentTag.length()+3;
+            if (cppTab->ui->cbCppDefaulted->isChecked())
+                s += " " + currentTag;
+        }
+        else if (compareTagToBuffer("delete"))
+        {
+            p += currentTag.length()+3;
+            if (cppTab->ui->cbCppDeleted->isChecked())
+                s += " " + currentTag;
+        }
+        else if (compareTagToBuffer("override"))
+        {
+            p += currentTag.length()+3;
+            if (cppTab->ui->cbCppOverride->isChecked())
+                s += " " + currentTag;
+        }
         else
             s += *p++;
     }

@@ -222,7 +222,83 @@ bool UmlBaseOperation::set_isCppInline(bool y) {
     return TRUE;
   }
   else
-    return FALSE;
+      return FALSE;
+}
+
+bool UmlBaseOperation::isCppDefault()
+{
+    read_if_needed_();
+
+    return _cpp_default;
+}
+
+bool UmlBaseOperation::isCppDelete()
+{
+    read_if_needed_();
+
+    return _cpp_delete;
+}
+
+bool UmlBaseOperation::isCppOverride()
+{
+    read_if_needed_();
+
+    return _cpp_override;
+}
+
+bool UmlBaseOperation::isCppFinal()
+{
+    read_if_needed_();
+
+    return _cpp_final;
+}
+
+bool UmlBaseOperation::set_isCppDefault(bool y)
+{
+    bool b;
+
+    if (set_it_(b, y, setIsCppDefaultCmd)) {
+      _cpp_default = y;
+      return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+bool UmlBaseOperation::set_isCppDelete(bool y)
+{
+    bool b;
+
+    if (set_it_(b, y, setIsCppDeleteCmd)) {
+      _cpp_delete = y;
+      return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+bool UmlBaseOperation::set_isCppOverride(bool y)
+{
+    bool b;
+
+    if (set_it_(b, y, setIsCppOverrideCmd)) {
+      _cpp_override = y;
+      return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+bool UmlBaseOperation::set_isCppFinal(bool y)
+{
+    bool b;
+
+    if (set_it_(b, y, setIsCppFinalCmd)) {
+      _cpp_final = y;
+      return TRUE;
+    }
+    else
+        return FALSE;
 }
 
 const Q3CString & UmlBaseOperation::cppDef() {
@@ -669,6 +745,10 @@ void UmlBaseOperation::read_cpp_() {
   _cpp_friend = UmlCom::read_bool();
   _cpp_virtual = UmlCom::read_bool();
   _cpp_inline = UmlCom::read_bool();
+  _cpp_default = UmlCom::read_bool();
+  _cpp_delete = UmlCom::read_bool();
+  _cpp_override = UmlCom::read_bool();
+  _cpp_final = UmlCom::read_bool();
   _cpp_def = UmlCom::read_string();
   _cpp_name_spec = UmlCom::read_string();
   _cpp_get_set_frozen = UmlCom::read_bool();

@@ -351,9 +351,12 @@ void UmlClass::generate_decl(QTextStream & f_h, Q3CString indent) {
 
                 if ((it->kind() != aNcRelation) &&
                         ! ((UmlClassItem *) it)->cppDecl().isEmpty())
+                {
+                    QLOG_INFO() << "generating member declarations";
                     ((UmlClassItem *) it)->generate_decl(current_visibility,
                                                          f_h, stereotype, indent,
                                                          first, index == last);
+                }
             }
 
             if (*p == '}')
