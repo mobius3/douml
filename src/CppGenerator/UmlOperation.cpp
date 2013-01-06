@@ -672,7 +672,7 @@ void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
                                 Q3CString templates, Q3CString cl_names,
                                 Q3CString templates_tmplop,
                                 Q3CString cl_names_tmplop) {
-    if (!cppDef().isEmpty() && !isAbstract()) {
+    if (!cppDef().isEmpty() && !isAbstract() && !isCppDelete() && !isCppDefault()) {
         UmlClass * cl = (UmlClass *) parent();
 
         if ((!templates.isEmpty() || isCppInline() || (cl->name().find('<') != -1))

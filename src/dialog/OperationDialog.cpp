@@ -2283,7 +2283,16 @@ bool insert_template(const QString & tm, const char *& p,
 }
 
 void OperationDialog::cpp_update_def() {
+
     QString def = cppTab->ui->edCppDefProto->text();
+    if(cppTab->ui->cbCppDefaulted->isChecked() ||
+       cppTab->ui->cbCppDeleted->isChecked())
+    {
+        cppTab->ui->edCppDefActual->setText("");
+        forcegenbody_toggled(forcegenbody_cb->isChecked());	// update indent*body_cb
+        return;
+    }
+
     bool template_oper = cppTab->ui->edCppDeclProto->text().isEmpty()
             && oper->is_template_operation(def);
     QString s;

@@ -45,28 +45,28 @@
       <item row="0" column="0">
        <widget class="QCheckBox" name="cbCppDefaulted">
         <property name="text">
-         <string>Default</string>
+         <string>default</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="cbCppDeleted">
         <property name="text">
-         <string>Deleted</string>
+         <string>delete</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QCheckBox" name="cbCppOverride">
         <property name="text">
-         <string>Override</string>
+         <string>override</string>
         </property>
        </widget>
       </item>
       <item row="3" column="0">
        <widget class="QCheckBox" name="cbCppFinal">
         <property name="text">
-         <string>Final</string>
+         <string>final</string>
         </property>
        </widget>
       </item>

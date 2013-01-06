@@ -176,9 +176,14 @@ class OperationData : public ClassMemberData,
     bool get_cpp_virtual() const { return cpp_virtual; };
     
     bool get_cpp_inline() const { return cpp_inline; };
+
+    bool get_cpp_default() const { return cpp_default; };
+    bool get_cpp_delete() const { return cpp_delete; };
+    bool get_cpp_override() const { return cpp_override; };
+    bool get_cpp_final() const { return cpp_final; };
     
     bool get_java_final() const { return java_final; };
-    
+
     bool get_java_synchronized() const { return java_synchronized; };
     
     bool get_php_final() const { return php_final; };
