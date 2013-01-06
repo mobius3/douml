@@ -27,7 +27,7 @@
 #include <QTimer>
 #include <QMenu>
 #include "CustomWidgets/MultiPurposeDragArea.h"
-
+class EdgeMenuDialog;
 class EdgeMenuToolBar : public QToolBar
 {
 Q_OBJECT
@@ -36,11 +36,13 @@ public:
     EdgeMenuToolBar(QWidget * _parent = 0);
     ~EdgeMenuToolBar();
     void SetRelativeOrientation(int);
+    void SetDialog(EdgeMenuDialog*);
 protected:
     //! called on window show()
     void leaveEvent ( QEvent * event );
     void enterEvent ( QEvent * event );
     void mouseMoveEvent ( QMouseEvent * event );
+    void focusOutEvent(QFocusEvent *) override;
 private:
 
     void IntitiateMove(QPoint);
@@ -55,6 +57,7 @@ private:
     QMenu* clipboardMenu;
     int lastClipboardItemShown;
     int clipboardListSize;
+    EdgeMenuDialog* linkedDialog = 0;
 
 public slots:
     virtual void OnInitiateMove(QPoint);
@@ -66,6 +69,9 @@ public slots:
     virtual void OnMoreClipboardRequested();
     virtual void OnLessClipboardRequested();
     virtual void OnPutIntoClipboardRequested();
+    virtual void OnDialogLostFocus();
+    virtual void OnMenuHideRequested();
+    virtual void OnMenuRepositionRequested(const QPoint&);
 
 signals:
     void putIntoClipboard(QString);

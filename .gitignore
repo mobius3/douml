@@ -4,7 +4,6 @@
 *.pro.user
 *.o
 *moc_*
-
 *.rar
 debug/*
 release/*
@@ -13,7 +12,7 @@ release
 object_script.*
 minimal.supp
 minimalraw.log
-src/ui/ui_*.h
+
 *moc_*.cpp*
 *.~*
 *.pro.*
@@ -100,4 +99,5 @@ include/Libs*
 *.cppcheck
 *.autosave
 *.blameresult
-
+ui_*.h
+src/ui/ui_*.h

@@ -26,6 +26,7 @@
 #define EDGEMENUDIALOG_H
 #include <Q3TabDialog>
 #include <QWidget>
+#include <QMouseEvent>
 #include <QList>
 #include <QHash>
 #include <QMap>
@@ -60,6 +61,10 @@ protected:
 
     //! called when user enters the window
     virtual void enterEvent ( QEvent * event );
+
+    void moveEvent(QMoveEvent *);
+
+    virtual void focusOutEvent(QFocusEvent *) override;
 
     //! called on window show()
     void showEvent ( QShowEvent * event );
@@ -122,6 +127,9 @@ protected:
 
 signals:
     void edgeMenuRequested(uint);
+    void lostFocus();
+    void hideEdgeMenu();
+    void repositionMenu(const QPoint&);
 
 public slots:
     virtual void OnPickNextSibling();

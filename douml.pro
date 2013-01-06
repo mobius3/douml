@@ -1,5 +1,6 @@
 TEMPLATE	= app
 INCLUDEPATH	+= src/browser src/data src/diagram src/dialog src/misc src/tool src/xpm
+DEPENDPATH += src/browser src/data src/diagram src/dialog src/misc src/tool src/xpm
 INCLUDEPATH += src
 CONFIG		+= qt warn_on debug
 HEADERS		=src/data/ActualParamData.h \

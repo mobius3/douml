@@ -22,6 +22,7 @@
 //
 // *************************************************************************
 #include "CustomWidgets/EdgeMenuToolBar.h"
+#include "dialog/EdgeMenuDialog.h"
 #include "misc/ClipboardManager.h"
 #include <QAction>
 
@@ -44,10 +45,15 @@ void EdgeMenuToolBar::SetRelativeOrientation(int value)
     relativeOrientation = value;
 }
 
+void EdgeMenuToolBar::SetDialog(EdgeMenuDialog * dialog)
+{
+    linkedDialog = dialog;
+}
+
 void EdgeMenuToolBar::leaveEvent(QEvent *event)
 {
 
-    decayTimer.start(500);
+    decayTimer.start(15000);
 }
 
 void EdgeMenuToolBar::enterEvent(QEvent *event)
@@ -57,6 +63,12 @@ void EdgeMenuToolBar::enterEvent(QEvent *event)
 
 void EdgeMenuToolBar::mouseMoveEvent(QMouseEvent *event)
 {
+}
+
+void EdgeMenuToolBar::focusOutEvent(QFocusEvent *)
+{
+    if(!linkedDialog->hasFocus())
+        hide();
 }
 
 void EdgeMenuToolBar::IntitiateMove(QPoint origin)
@@ -167,4 +179,20 @@ void EdgeMenuToolBar::OnPutIntoClipboardRequested()
 {
     QAction* senderAction = qobject_cast<QAction*>(sender());
     emit putIntoClipboard(senderAction->data().toString());
+}
+
+void EdgeMenuToolBar::OnDialogLostFocus()
+{
+    if(!this->underMouse())
+        hide();
+}
+
+void EdgeMenuToolBar::OnMenuRepositionRequested(const QPoint & diff)
+{
+    this->move(this->pos() + diff);
+}
+
+void EdgeMenuToolBar::OnMenuHideRequested()
+{
+    hide();
 }

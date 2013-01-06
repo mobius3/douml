@@ -63,43 +63,44 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* senderWidget)
     if(!senderWidget->IsConnectedToToolBar())
         signalFunctors[classID](senderWidget, toolbar);
 
+    toolbar->setOrientation(static_cast<Qt::Orientation>(orientation));
+    QPoint point = QCursor::pos();
+    //now we need to position toolbar correctly
+
+    int toolBarIconHeight = 30;
+    int toolBarIconWidth = 30;
+
+    // if we are near the top
+    if(trueOrientation == 0)
+    {
+        int yFixup = senderWidget->frameGeometry().height() - senderWidget->height();
+        point.setY(point.y() - toolBarIconHeight - yFixup);
+        point.setX(point.x() - toolBarIconWidth/2);
+    }
+    // if we are near the top
+    if(trueOrientation == 1)
+    {
+        point.setY(point.y());
+        point.setX(point.x() - toolBarIconWidth/2);
+    }
+    // if we are near the left edge
+    if(trueOrientation == 2)
+    {
+        point.setX(point.x() - toolBarIconWidth);
+        point.setY(point.y() - toolBarIconHeight/2);
+    }
+    // if we are near the right edge
+    if(trueOrientation == 3)
+    {
+        point.setX(point.x());
+        point.setY(point.y() - toolBarIconHeight/2);
+    }
+    toolbar->move(point);
+    toolbar->resize(toolbar->sizeHint());
     if(!toolbar->isVisible())
     {
-        toolbar->setOrientation(static_cast<Qt::Orientation>(orientation));
-        QPoint point = QCursor::pos();
-        //now we need to position toolbar correctly
-
-        int toolBarIconHeight = 30;
-        int toolBarIconWidth = 30;
-
-        // if we are near the top
-        if(trueOrientation == 0)
-        {
-            point.setY(point.y() - toolBarIconHeight);
-            point.setX(point.x() - toolBarIconWidth/2);
-        }
-        // if we are near the top
-        if(trueOrientation == 1)
-        {
-            point.setY(point.y());
-            point.setX(point.x() - toolBarIconWidth/2);
-        }
-        // if we are near the left edge
-        if(trueOrientation == 2)
-        {
-            point.setX(point.x() - toolBarIconWidth);
-            point.setY(point.y() - toolBarIconHeight/2);
-        }
-        // if we are near the right edge
-        if(trueOrientation == 3)
-        {
-            point.setX(point.x());
-            point.setY(point.y() - toolBarIconHeight/2);
-        }
-        toolbar->move(point);
-
         toolbar->setWindowFlags(Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
-        toolbar->resize(toolbar->sizeHint());
+        toolbar->setAttribute(Qt::WA_ShowWithoutActivating);
         toolbar->show();
     }
 }

@@ -61,7 +61,9 @@ EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal ,
     isConnectedToToolBar = false;
     An<EdgeMenuFactory> factory;
     QObject::connect(this, SIGNAL(edgeMenuRequested(uint)),factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
-    //this->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+    //setMouseTracking(true);
+    //this->setWindowFlags(Qt::FramelessWindowHint );
+    //installEventFilter(this);
 }
 
 EdgeMenuDialog::~EdgeMenuDialog()
@@ -85,6 +87,7 @@ void EdgeMenuDialog::BreakConnectionToToolBar()
 void EdgeMenuDialog::leaveEvent(QEvent *event)
 {
     QPoint cursorPosition = mapFromGlobal(QCursor::pos());
+    int yFixup = frameGeometry().height() - height();
     bool isWithinX = cursorPosition.x() > 0 && cursorPosition.x() < size().width();
     bool isWithinY = cursorPosition.y() > 0 && cursorPosition.y() < size().height();
     bool isOutside = !isWithinX || !isWithinY;
@@ -102,6 +105,16 @@ void EdgeMenuDialog::enterEvent(QEvent *event)
         emit edgeMenuRequested(this->TypeID());
 }
 
+void EdgeMenuDialog::moveEvent(QMoveEvent * event)
+{
+    emit repositionMenu(event->pos() - event->oldPos());
+}
+
+void EdgeMenuDialog::focusOutEvent(QFocusEvent *)
+{
+    emit lostFocus();
+}
+
 void EdgeMenuDialog::showEvent(QShowEvent *event)
 {
     An<EdgeMenuFactory> factory;
@@ -112,12 +125,12 @@ void EdgeMenuDialog::showEvent(QShowEvent *event)
 
 void EdgeMenuDialog::wheelEvent(QWheelEvent *event)
 {
-    currentTab += event->delta()/event->delta();
-    if(currentTab > tabBar()->count())
-        currentTab = 0;
-    if(currentTab < 0)
-        currentTab = tabBar()->count() - 1;
-    tabBar()->setCurrentIndex(currentTab);
+//    currentTab += event->delta()/event->delta();
+//    if(currentTab > tabBar()->count())
+//        currentTab = 0;
+//    if(currentTab < 0)
+//        currentTab = tabBar()->count() - 1;
+//    tabBar()->setCurrentIndex(currentTab);
 }
 
 void EdgeMenuDialog::RegisterTab(QString name, QWidget * widget)
@@ -277,7 +290,10 @@ BrowserNode * EdgeMenuDialog::GetCurrentNode()
 void EdgeMenuDialog::IntitiateMove(QPoint origin)
 {
     modificationOrigin = origin;
-    dialogOrigin = mapToGlobal(QPoint());
+    dialogOrigin = mapToGlobal(QPoint(
+                                   (frameGeometry().width() - width()) / 2,
+                                   -1*(frameGeometry().height() - height())
+                                   ));
     modificationMode = wmm_drag;
 }
 
@@ -291,14 +307,23 @@ void EdgeMenuDialog::InitiateResize(QPoint origin)
 
 void EdgeMenuDialog::ResizeThis(QPoint origin, QPoint newPoint)
 {
-    int newWidth = originalSize.width() + (newPoint.x() - origin.x());
+    int newWidth;
+    if(origin.x() > newPoint.x())
+    {
+        newWidth = originalSize.width() + (origin.x() - newPoint.x());
+        this->move(origin.x()-1*(origin.x() - newPoint.x()), origin.y());
+    }
+    else
+        newWidth = originalSize.width() + (newPoint.x() - origin.x());
     int newHeight = originalSize.height() + (newPoint.y() - origin.y());
     this->resize(newWidth, newHeight);
 }
 
 void EdgeMenuDialog::MoveThis(QPoint origin, QPoint newPoint)
 {
+    QPoint difference;
     this->move(newPoint - origin + dialogOrigin);
+
 }
 
 void EdgeMenuDialog::ChangeTab(int delta)
