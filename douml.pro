@@ -492,7 +492,7 @@ SOURCES		=src/browser/BrowserAttribute.cpp \
     src/misc/ClipboardManager.cpp \
     src/ui/operationwidgetcpp.cpp
 
-TARGET		= HeX
+TARGET		= douml
 DEFINES         = BooL=bool DEBUGCOM
 #The following line was inserted by qt3to4
 QT += network  qt3support
@@ -502,13 +502,13 @@ QT += network  qt3support
 Release{
 
 
-    MOC_DIR = bin/HeX/MOC_release
-    OBJECTS_DIR = bin/HeX/Obj_release
+    MOC_DIR = bin/douml/MOC_release
+    OBJECTS_DIR = bin/douml/Obj_release
 }
 
 Debug{
-    MOC_DIR = bin/HeX/MOC_Debug
-    OBJECTS_DIR = bin/HeX/Obj_Debug
+    MOC_DIR = bin/douml/MOC_Debug
+    OBJECTS_DIR = bin/douml/Obj_Debug
 
 }
     UI_DIR = src/ui
