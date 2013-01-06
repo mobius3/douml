@@ -181,9 +181,7 @@ void OperationDialog::init_get_set()
 void OperationDialog::init_uml() 
 {  
     Q3Grid * grid;
-    Q3HBox * htab;
 
-    
     grid = new Q3Grid(2, this);
     umltab = grid;
     RegisterTab("Uml", umltab);
@@ -265,8 +263,10 @@ void OperationDialog::init_uml()
 void OperationDialog::FillUmlTab(OperationData* oper)
 {
 
+    BrowserNode * node = (BrowserNode *) oper->get_browser_node();
     lblFullClassName->setText(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE));
-    edname->setText(oper->name());
+    QString operationName = node->get_name();
+    edname->setText(operationName);
     edname->setReadOnly(!isWritable);
     edstereotype->clear();
     edstereotype->insertItem(toUnicode(oper->stereotype));
@@ -421,7 +421,7 @@ void OperationDialog::init_cpp()
 }
 
 
-void OperationDialog::FillcppTab(OperationData* )
+void OperationDialog::FillcppTab(OperationData* oper)
 {
     cppTab->ui->cbCppFrozen->setChecked(false);
     if (!isWritable || !oper->is_get_or_set)
@@ -4507,7 +4507,7 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     int index;
     int sup = o->get_n_params();
     
-    setSorting(true);
+    setSorting(-1);
     setSelectionMode(NoSelection);	// single does not work
     setRowMovingEnabled(TRUE);
     horizontalHeader()->setLabel(0, TR("Direction"));
@@ -4872,7 +4872,7 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
     int index;
     int sup = o->get_n_exceptions();
 
-    setSorting(true);
+    setSorting(-1);
     setSelectionMode(NoSelection);	// single does not work
     setRowMovingEnabled(TRUE);
     horizontalHeader()->setLabel(0, TR("Type"));
@@ -5125,7 +5125,7 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
                                QWidget * parent, bool decl)
     : MyTable(0, (decl) ? 8 : 7, parent), params(p), edform(f), dcl(decl) {
     
-    setSorting(true);
+    setSorting(-1);
     setSelectionMode(NoSelection);	// single does not work
     setRowMovingEnabled(TRUE);
     horizontalHeader()->setLabel(0, TR("Name"));
@@ -5715,7 +5715,7 @@ static QStringList PhpValueRankList;
 PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit * f)
     : MyTable(0, 6, parent), params(p), edform(f) {
     
-    setSorting(true);
+    setSorting(-1);
     setSelectionMode(NoSelection);	// single does not work
     setRowMovingEnabled(TRUE);
     horizontalHeader()->setLabel(0, TR("Name"));
@@ -6226,7 +6226,7 @@ static QStringList PythonValueRankList;
 PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit * f)
     : MyTable(0, 6, parent), params(p), edform(f) {
     
-    setSorting(true);
+    setSorting(-1);
     setSelectionMode(NoSelection);	// single does not work
     setRowMovingEnabled(TRUE);
     horizontalHeader()->setLabel(0, TR("Name"));
@@ -6725,7 +6725,7 @@ void OperationDialog::FillGuiElements(OperationData * _oper)
     pythondecorator = QString();
     pythonbody = QString();
     oldpythonbody = QString();
-
+    currentNode = (BrowserNode *) _oper->get_browser_node();
     oper = _oper;
     cl = ((ClassData *) ((BrowserClass *) _oper->browser_node->parent())->get_data());
     init_get_set();

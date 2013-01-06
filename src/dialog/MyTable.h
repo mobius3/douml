@@ -49,7 +49,7 @@ class MyTable : public Q3Table {
     
   public:
     MyTable(QWidget * parent = 0, const char * name = 0) 
-        : Q3Table(parent, name) {setSorting(true);};
+        : Q3Table(parent, name) {setSorting(-1);};
     MyTable(int numRows, int numCols, QWidget * parent = 0, const char * name = 0)
       : Q3Table(numRows, numCols, parent, name) {};
 

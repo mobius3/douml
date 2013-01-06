@@ -35,7 +35,7 @@
 
 StringTable::StringTable(int numRows, int numCols, QWidget * parent, bool visit)
     : MyTable(numRows, numCols, parent) {
-  setSorting(true);
+  setSorting(-1);
   setSelectionMode(NoSelection);	// single does not work
   setRowMovingEnabled(TRUE);
   
