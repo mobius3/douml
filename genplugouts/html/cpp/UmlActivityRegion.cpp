@@ -1,7 +1,8 @@
 
 #include "UmlActivityRegion.h"
 
-bool UmlActivityRegion::chapterp() {
-  return TRUE;
+bool UmlActivityRegion::chapterp()
+{
+    return TRUE;
 }
 

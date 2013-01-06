@@ -27,14 +27,14 @@
 
 
 
-#include <QTextStream> 
+#include <QTextStream>
 #include <qdir.h>
 #include <qfile.h>
 #include <qstring.h>
 #include <q3canvas.h>
 #include <Q3TextEdit>
-#include <q3textview.h> 
-#include <qlayout.h> 
+#include <q3textview.h>
+#include <qlayout.h>
 #include <qdialog.h>
 #include <qlabel.h>
 #include <qfont.h>
@@ -67,8 +67,8 @@ QString my_baseName(QFileInfo & fi)
     int index = fn.findRev('.');
 
     return (index == -1)
-            ? fn
-            : fn.left(index);
+           ? fn
+           : fn.left(index);
 }
 
 static ReadContext Context;
@@ -117,45 +117,59 @@ void set_on_load_diagram(bool y)
 const char * stringify(UmlVisibility v)
 {
     //QLOG_INFO() << "Call to stringigy detected";
-    switch(v) {
+    switch (v) {
     case UmlPublic:
         return "public";
+
     case UmlProtected:
         return "protected";
+
     case UmlPrivate:
         return "private";
+
     case UmlPackageVisibility:
         return "package";
+
     case UmlDefaultVisibility:
         return "default";
+
     default:
         return "WRONG VISIBILITY";
     }
 }
 
-const char * stringify(UmlParamDirection d) {
-    switch(d) {
+const char * stringify(UmlParamDirection d)
+{
+    switch (d) {
     case UmlInOut:
         return "inout";
+
     case UmlIn:
         return "in";
+
     case UmlOut:
         return "out";
+
     default:
         return "return";
     }
 }
 
-const char * stringify(UmlParamEffect e) {
-    switch(e) {
+const char * stringify(UmlParamEffect e)
+{
+    switch (e) {
     case UmlNoEffect:
         return "none";
+
     case UmlCreate:
         return "create";
+
     case UmlRead:
         return "read";
+
     case UmlUpdate:
         return "update";
+
     case UmlDelete:
         return "delete";
 
@@ -166,47 +180,67 @@ const char * stringify(UmlParamEffect e) {
 
 const char * stringify(UmlActionKind a)
 {
-    switch(a) {
+    switch (a) {
     case UmlOpaqueAction:
         return "opaque_action";
+
     case UmlAcceptEventAction:
         return "accept_event_action";
+
     case UmlReadVariableValueAction:
         return "read_variable_value_action";
+
     case UmlClearVariableValueAction:
         return "clear_variable_value_action";
+
     case UmlWriteVariableValueAction:
         return "write_variable_value_action";
+
     case UmlAddVariableValueAction:
         return "add_variable_value_action";
+
     case UmlRemoveVariableValueAction:
         return "remove_variable_value_action";
+
     case UmlCallBehaviorAction:
         return "call_behavior_action";
+
     case UmlCallOperationAction:
         return "call_operation_action";
+
     case UmlSendObjectAction:
         return "send_object_action";
+
     case UmlSendSignalAction:
         return "send_signal_action";
+
     case UmlBroadcastSignalAction:
         return "broadcast_signal_action";
+
     case UmlUnmarshallAction:
         return "unmarshall_action";
+
     case UmlValueSpecificationAction:
         return "value_specification_action";
+
     case UmlAcceptCallAction:
         return "accept_call_action";
+
     case UmlReplyAction:
         return "reply_action";
+
     case UmlCreateObjectAction:
         return "create_object_action";
+
     case UmlDestroyObjectAction:
         return "destroy_object_action";
+
     case UmlTestIdentityAction:
         return "test_identity_action";
+
     case UmlRaiseExceptionAction:
         return "raise_exception_action";
+
     case UmlReduceAction:
         return "reduce_action";
 
@@ -217,11 +251,13 @@ const char * stringify(UmlActionKind a)
 
 const char * stringify(UmlExpansionKind k)
 {
-    switch(k) {
+    switch (k) {
     case UmlParallel:
         return "parallel";
+
     case UmlIterative:
         return "iterative";
+
     case UmlStream:
         return "stream";
 
@@ -235,10 +271,13 @@ const char * stringify(UmlOrderingKind k)
     switch (k) {
     case UmlUnordered:
         return "unordered";
+
     case UmlOrdered:
         return "ordered";
+
     case UmlLifo:
         return "lifo";
+
     case UmlFifo:
         return "fifo";
 
@@ -248,77 +287,107 @@ const char * stringify(UmlOrderingKind k)
 }
 
 
-const char * stringify(UmlCode c) {
+const char * stringify(UmlCode c)
+{
     switch (c) {
     case UmlAssociation:
         return "----";
+
     case UmlDirectionalAssociation:
         return "--->";
+
     case UmlGeneralisation:
     case UmlInherit:
         return "---|>";
+
     case UmlAggregation:
         return "o---";
+
     case UmlAggregationByValue:
         return "*---";
+
     case UmlDirectionalAggregation:
         return "o-->";
+
     case UmlDirectionalAggregationByValue:
         return "*-->";
+
     case UmlDependency:
     case UmlDependOn:
         return "-_->";
+
     case UmlRealize:
         return "-_-|>";
+
     case UmlAnchor:
         return "-_-_";
+
     case UmlProvided:
         return "---O";
+
     case UmlRequired:
         return "---(";
+
     case UmlInner:
         return "---+";
 
     case InitialPS:
         return "initial";
+
     case EntryPointPS:
         return "entry_point";
+
     case FinalPS:
         return "final";
+
     case TerminatePS:
         return "terminate";
+
     case ExitPointPS:
         return "exit_point";
+
     case DeepHistoryPS:
         return "deep_history";
+
     case ShallowHistoryPS:
         return "shallow_history";
+
     case JunctionPS:
         return "junction";
+
     case ChoicePS:
         return "choice";
+
     case ForkPS:
         return "fork";
+
     case JoinPS:
         return "join";
 
     case InitialAN:
         return "initial_node";
+
     case FlowFinalAN:
         return "flow_final";
+
     case ActivityFinalAN:
         return "activity_final";
+
     case DecisionAN:
         return "decision";
+
     case MergeAN:
         return "merge";
+
     case ForkAN:
         return "fork";
+
     case JoinAN:
         return "join";
 
     case UmlActivityAction:     // for InfoCanvas
         return "activity action";
+
     case UmlFlow:		      // for InfoCanvas
         return "flow";
 
@@ -332,10 +401,13 @@ const char * stringify(Uml3States s)
     switch (s) {
     case UmlYes:
         return "yes";
+
     case UmlNo:
         return "no";
+
     case UmlDefaultState:
         return "default";
+
     default:
         return "WRONG 3STATES";
     }
@@ -346,72 +418,103 @@ const char * stringify(UmlColor c)
     switch (c) {
     case UmlTransparent:
         return "transparent";
+
     case UmlWhite:
         return "white";
+
     case UmlLightYellow:
         return "lightyellow";
+
     case UmlYellow:
         return "yellow";
+
     case UmlMediumYellow:
         return "mediumyellow";
+
     case UmlDarkYellow:
         return "gold";
+
     case UmlLightBlue:
         return "lightblue";
+
     case UmlBlue:
         return "blue";
+
     case UmlLightMediumBlue:
         return "lightmediumblue";
+
     case UmlMediumBlue:
         return "mediumblue";
+
     case UmlDarkBlue:
         return "darkblue";
+
     case UmlLightGreen:
         return "lightgreen";
+
     case UmlGreen:
         return "green";
+
     case UmlLightMediumGreen:
         return "lightmediumgreen";
+
     case UmlMediumGreen:
         return "mediumgreen";
+
     case UmlDarkGreen:
         return "darkgreen";
+
     case UmlRed:
         return "red";
+
     case UmlVeryLightGray:
         return "verylightgray";
+
     case UmlLightGray:
         return "lightgray";
+
     case UmlGray:
         return "gray";
+
     case UmlDarkGray:
         return "darkgray";
+
     case UmlBlack:
         return "black";
 
     case UmlLightRed:
         return "lightred";
+
     case UmlMidRed:
         return "midred";
+
     case UmlVeryLightOrange:
         return "verylightorange";
+
     case UmlLightOrange:
         return "lightorange";
+
     case UmlOrange:
         return "orange";
+
     case UmlDarkOrange:
         return "darkorange";
+
     case UmlLightMagenta:
         return "lightmagenta";
+
     case UmlMagenta:
         return "magenta";
+
     case UmlMidMagenta:
         return "midmagenta";
+
     case UmlDarkMagenta:
         return "darkmagenta";
 
     case UmlDefaultColor:
         return "default";
+
     default:
         return "WRONG COLOR";
     }
@@ -422,32 +525,46 @@ const char * stringify(UmlFont f)
     switch (f) {
     case UmlNormalFont:
         return "normal";
+
     case UmlNormalBoldFont:
         return "bold";
+
     case UmlNormalItalicFont:
         return "italic";
+
     case UmlNormalBoldItalicFont:
         return "bold_italic";
+
     case UmlSmallFont:
         return "small";
+
     case UmlSmallBoldFont:
         return "small_bold";
+
     case UmlSmallItalicFont:
         return "small_italic";
+
     case UmlSmallBoldItalicFont:
         return "small_bold_italic";
+
     case UmlLargeFont:
         return "large";
+
     case UmlLargeBoldFont:
         return "large_bold";
+
     case UmlLargeItalicFont:
         return "large_italic";
+
     case UmlLargeBoldItalicFont:
         return "large_bold_italic";
+
     case UmlNormalUnderlinedFont:
         return "underlined";
+
     case UmlNormalStrikeOutFont:
         return "strikeout";
+
     default:
         return "WRONG FONT";
     }
@@ -458,20 +575,28 @@ const char * stringify(ClassDrawingMode v)
     switch (v) {
     case asClass:
         return "class";
+
     case asInterface:
         return "interface";
+
     case asControl:
         return "control";
+
     case asBoundary:
         return "boundary";
+
     case asEntity:
         return "entity";
+
     case asActor:
         return "actor";
+
     case Natural:
         return "natural";
+
     case DefaultClassDrawingMode:
         return "default";
+
     default:
         return "WRONG CLASSDRAWINGMODE";
     }
@@ -482,18 +607,25 @@ const char * stringify(DrawingLanguage l)
     switch (l) {
     case UmlView:
         return "uml";
+
     case CppView:
         return "c++";
+
     case JavaView:
         return "java";
+
     case PhpView:
         return "php";
+
     case PythonView:
         return "python";
+
     case IdlView:
         return "idl";
+
     case DefaultDrawingLanguage:
         return "default";
+
     default:
         return "WRONG DRAWINGLANGUAGE";
     }
@@ -504,18 +636,25 @@ const char * stringify(ShowContextMode v)
     switch (v) {
     case noContext:
         return "no";
+
     case umlContext:
         return "uml";
+
     case namespaceContext:
         return "namespace";
+
     case javaPackageContext:
         return "java_package";
+
     case pythonPackageContext:
         return "python_package";
+
     case moduleContext:
         return "module";
+
     case DefaultShowContextMode:
         return "default";
+
     default:
         return "WRONG CLASSVIEWMODE";
     }
@@ -526,60 +665,88 @@ const char * stringify(CanvasFormat v)
     switch (v) {
     case IsoA0:
         return "A0";
+
     case IsoA1:
         return "A1";
+
     case IsoA2:
         return "A2";
+
     case IsoA3:
         return "A3";
+
     case IsoA4:
         return "A4";
+
     case IsoA5:
         return "A5";
+
     case UsA:
         return "A";
+
     case UsB:
         return "B";
+
     case UsC:
         return "C";
+
     case UsD:
         return "D";
+
     case UsE:
         return "E";
+
     case UsLetter:
         return "Letter";
+
     case UsLegal:
         return "Legal";
+
     case UsTabloid:
         return "Tabloid";
+
     case IsoA0Landscape:
         return "A0-Landscape";
+
     case IsoA1Landscape:
         return "A1-Landscape";
+
     case IsoA2Landscape:
         return "A2-Landscape";
+
     case IsoA3Landscape:
         return "A3-Landscape";
+
     case IsoA4Landscape:
         return "A4-Landscape";
+
     case IsoA5Landscape:
         return "A5-Landscape";
+
     case UsALandscape:
         return "A-Landscape";
+
     case UsBLandscape:
         return "B-Landscape";
+
     case UsCLandscape:
         return "C-Landscape";
+
     case UsDLandscape:
         return "D-Landscape";
+
     case UsELandscape:
         return "E-Landscape";
+
     case UsLetterLandscape:
         return "Letter-Landscape";
+
     case UsLegalLandscape:
         return "Legal-Landscape";
+
     case UsLedger:
         return "Ledger";
+
     default:
         return "WRONG CanvasFormat";
     }
@@ -590,16 +757,22 @@ const char * stringify(LineGeometry v)
     switch (v) {
     case HVGeometry:
         return "HV";
+
     case HVrGeometry:
         return "HVr";
+
     case VHGeometry:
         return "VH";
+
     case VHrGeometry:
         return "VHr";
+
     case HVHGeometry:
         return "HVH";
+
     case VHVGeometry:
         return "VHV";
+
     default:
         return "WRONG LineGeometry";
     }
@@ -609,18 +782,25 @@ UmlCode arrow_type(const char * s)
 {
     if (!strcmp(s, "---|>"))
         return UmlGeneralisation;
+
     if (!strcmp(s, "----"))
         return UmlAssociation;
+
     if (!strcmp(s, "--->"))
         return UmlDirectionalAssociation;
+
     if (!strcmp(s, "-_->"))
         return UmlDependency;
+
     if (!strcmp(s, "-_-_"))
         return UmlAnchor;
+
     if (!strcmp(s, "---("))
         return UmlRequired;
+
     if (!strcmp(s, "---O"))
         return UmlProvided;
+
     if (!strcmp(s, "---+"))
         return UmlInner;
 
@@ -633,24 +813,32 @@ UmlCode relation_type(const char * s, bool simple_relation)
 {
     if (!strcmp(s, "----"))
         return UmlAssociation;
+
     if (!strcmp(s, "--->"))
         return UmlDirectionalAssociation;
+
     if (!strcmp(s, "---|>"))
         return (simple_relation)
-                ? UmlInherit
-                : UmlGeneralisation;
+               ? UmlInherit
+               : UmlGeneralisation;
+
     if (!strcmp(s, "o---"))
         return UmlAggregation;
+
     if (!strcmp(s, "*---"))
         return UmlAggregationByValue;
+
     if (!strcmp(s, "<>-->") || !strcmp(s, "o-->"))
         return UmlDirectionalAggregation;
+
     if (!strcmp(s, "<#>-->") || !strcmp(s, "*-->"))
         return UmlDirectionalAggregationByValue;
+
     if (!strcmp(s, "-_->"))
         return (simple_relation)
-                ? UmlDependOn
-                : UmlDependency;
+               ? UmlDependOn
+               : UmlDependency;
+
     if (!strcmp(s, "-_-|>"))
         return UmlRealize;
 
@@ -665,6 +853,7 @@ bool IsaSimpleRelation(UmlCode c)
     case UmlDependOn:
     case UmlInherit:
         return TRUE;
+
     default:
         return FALSE;
     }
@@ -692,10 +881,13 @@ UmlParamDirection direction(const char * s)
 {
     if (!strcmp(s, "inout"))
         return UmlInOut;
+
     if (!strcmp(s, "in"))
         return UmlIn;
+
     if (!strcmp(s, "out"))
         return UmlOut;
+
     if (!strcmp(s, "return"))
         return UmlReturn;
 
@@ -708,12 +900,16 @@ UmlParamEffect effect(const char * s)
 {
     if (!strcmp(s, "none"))
         return UmlNoEffect;
+
     if (!strcmp(s, "create"))
         return UmlCreate;
+
     if (!strcmp(s, "read"))
         return UmlRead;
+
     if (!strcmp(s, "update"))
         return UmlUpdate;
+
     if (!strcmp(s, "delete"))
         return UmlDelete;
 
@@ -726,44 +922,64 @@ UmlActionKind activity_action_kind(const char * s)
 {
     if (!strcmp(s, "opaque_action"))
         return UmlOpaqueAction;
+
     if (!strcmp(s, "accept_event_action"))
         return UmlAcceptEventAction;
+
     if (!strcmp(s, "read_variable_value_action"))
         return UmlReadVariableValueAction;
+
     if (!strcmp(s, "clear_variable_value_action"))
         return UmlClearVariableValueAction;
+
     if (!strcmp(s, "write_variable_value_action"))
         return UmlWriteVariableValueAction;
+
     if (!strcmp(s, "add_variable_value_action"))
         return UmlAddVariableValueAction;
+
     if (!strcmp(s, "remove_variable_value_action"))
         return UmlRemoveVariableValueAction;
+
     if (!strcmp(s, "call_behavior_action"))
         return UmlCallBehaviorAction;
+
     if (!strcmp(s, "call_operation_action"))
         return UmlCallOperationAction;
+
     if (!strcmp(s, "send_object_action"))
         return UmlSendObjectAction;
+
     if (!strcmp(s, "send_signal_action"))
         return UmlSendSignalAction;
+
     if (!strcmp(s, "broadcast_signal_action"))
         return UmlBroadcastSignalAction;
+
     if (!strcmp(s, "unmarshall_action"))
         return UmlUnmarshallAction;
+
     if (!strcmp(s, "value_specification_action"))
         return UmlValueSpecificationAction;
+
     if (!strcmp(s, "accept_call_action"))
         return UmlAcceptCallAction;
+
     if (!strcmp(s, "reply_action"))
         return UmlReplyAction;
+
     if (!strcmp(s, "create_object_action"))
         return UmlCreateObjectAction;
+
     if (!strcmp(s, "destroy_object_action"))
         return UmlDestroyObjectAction;
+
     if (!strcmp(s, "test_identity_action"))
         return UmlTestIdentityAction;
+
     if (!strcmp(s, "raise_exception_action"))
         return UmlRaiseExceptionAction;
+
     if (!strcmp(s, "reduce_action"))
         return UmlReduceAction;
 
@@ -776,8 +992,10 @@ UmlExpansionKind expansion_mode_kind(const char * s)
 {
     if (! strcmp(s, "parallel"))
         return UmlParallel;
+
     if (! strcmp(s, "iterative"))
         return UmlIterative;
+
     if (! strcmp(s, "stream"))
         return UmlStream;
 
@@ -790,10 +1008,13 @@ UmlOrderingKind ordering(const char * s)
 {
     if (! strcmp(s, "unordered"))
         return UmlUnordered;
+
     if (! strcmp(s, "ordered"))
         return UmlOrdered;
+
     if (! strcmp(s, "lifo"))
         return UmlLifo;
+
     if (! strcmp(s, "fifo"))
         return UmlFifo;
 
@@ -806,8 +1027,10 @@ Uml3States state(const char * s)
 {
     if (!strcmp(s, "yes"))
         return UmlYes;
+
     if (!strcmp(s, "no"))
         return UmlNo;
+
     if (!strcmp(s, "default"))
         return UmlDefaultState;
 
@@ -820,18 +1043,25 @@ ClassDrawingMode drawing_mode(const char * s)
 {
     if (!strcmp(s, "class"))
         return asClass;
+
     if (!strcmp(s, "interface"))
         return asInterface;
+
     if (!strcmp(s, "control"))
         return asControl;
+
     if (!strcmp(s, "boundary"))
         return asBoundary;
+
     if (!strcmp(s, "entity"))
         return asEntity;
+
     if (!strcmp(s, "actor"))
         return asActor;
+
     if (!strcmp(s, "natural"))
         return Natural;
+
     if (!strcmp(s, "default"))
         return DefaultClassDrawingMode;
 
@@ -844,16 +1074,22 @@ DrawingLanguage drawing_language(const char * s)
 {
     if (!strcmp(s, "uml"))
         return UmlView;
+
     if (!strcmp(s, "c++"))
         return CppView;
+
     if (!strcmp(s, "java"))
         return JavaView;
+
     if (!strcmp(s, "php"))
         return PhpView;
+
     if (!strcmp(s, "python"))
         return PythonView;
+
     if (!strcmp(s, "idl"))
         return IdlView;
+
     if (!strcmp(s, "default"))
         return DefaultDrawingLanguage;
 
@@ -866,16 +1102,22 @@ ShowContextMode context_mode(const char * s)
 {
     if (!strcmp(s, "no"))
         return noContext;
+
     if (!strcmp(s, "uml"))
         return umlContext;
+
     if (!strcmp(s, "namespace"))
         return namespaceContext;
+
     if (!strcmp(s, "package") || !strcmp(s, "java_package"))
         return javaPackageContext;
+
     if (!strcmp(s, "python_package"))
         return pythonPackageContext;
+
     if (!strcmp(s, "module"))
         return moduleContext;
+
     if (!strcmp(s, "default"))
         return DefaultShowContextMode;
 
@@ -888,67 +1130,97 @@ UmlColor color(const char * s)
 {
     if (!strcmp(s, "transparent"))
         return UmlTransparent;
+
     if (!strcmp(s, "white"))
         return UmlWhite;
+
     if (!strcmp(s, "lightyellow"))
         return UmlLightYellow;
+
     if (!strcmp(s, "yellow"))
         return UmlYellow;
+
     if (!strcmp(s, "mediumyellow"))
         return UmlMediumYellow;
+
     if (!strcmp(s, "gold"))
         return UmlDarkYellow;
+
     if (!strcmp(s, "lightblue"))
         return UmlLightBlue;
+
     if (!strcmp(s, "lightmediumblue"))
         return UmlLightMediumBlue;
+
     if (!strcmp(s, "mediumblue"))
         return UmlMediumBlue;
+
     if (!strcmp(s, "blue"))
         return UmlBlue;
+
     if (!strcmp(s, "darkblue"))
         return UmlDarkBlue;
+
     if (!strcmp(s, "lightgreen"))
         return UmlLightGreen;
+
     if (!strcmp(s, "green"))
         return UmlGreen;
+
     if (!strcmp(s, "lightmediumgreen"))
         return UmlLightMediumGreen;
+
     if (!strcmp(s, "mediumgreen"))
         return UmlMediumGreen;
+
     if (!strcmp(s, "darkgreen"))
         return UmlDarkGreen;
+
     if (! strcmp(s, "lightred"))
         return UmlLightRed;
+
     if (! strcmp(s, "midred"))
         return UmlMidRed;
+
     if (!strcmp(s, "red"))
         return UmlRed;
+
     if (!strcmp(s, "verylightgray"))
         return UmlVeryLightGray;
+
     if (!strcmp(s, "lightgray"))
         return UmlLightGray;
+
     if (!strcmp(s, "gray"))
         return UmlGray;
+
     if (!strcmp(s, "darkgray"))
         return UmlDarkGray;
+
     if (!strcmp(s, "black"))
         return UmlBlack;
 
     if (! strcmp(s, "verylightorange"))
         return UmlVeryLightOrange;
+
     if (! strcmp(s, "lightorange"))
         return UmlLightOrange;
+
     if (! strcmp(s, "orange"))
         return UmlOrange;
+
     if (! strcmp(s, "darkorange"))
         return UmlDarkOrange;
+
     if (! strcmp(s, "lightmagenta"))
         return UmlLightMagenta;
+
     if (! strcmp(s, "magenta"))
         return UmlMagenta;
+
     if (! strcmp(s, "midmagenta"))
         return UmlMidMagenta;
+
     if (! strcmp(s, "darkmagenta"))
         return UmlDarkMagenta;
 
@@ -961,30 +1233,43 @@ UmlFont font(const char * s)
 {
     if (!strcmp(s, "normal"))
         return UmlNormalFont;
+
     if (!strcmp(s, "bold"))
         return UmlNormalBoldFont;
+
     if (!strcmp(s, "italic"))
         return UmlNormalItalicFont;
+
     if (!strcmp(s, "bold_italic"))
         return UmlNormalBoldItalicFont;
+
     if (!strcmp(s, "small"))
         return UmlSmallFont;
+
     if (!strcmp(s, "small_bold"))
         return UmlSmallBoldFont;
+
     if (!strcmp(s, "small_italic"))
         return UmlSmallItalicFont;
+
     if (!strcmp(s, "small_bold_italic"))
         return UmlSmallBoldItalicFont;
+
     if (!strcmp(s, "large"))
         return UmlLargeFont;
+
     if (!strcmp(s, "large_bold"))
         return UmlLargeBoldFont;
+
     if (!strcmp(s, "large_italic"))
         return UmlLargeItalicFont;
+
     if (!strcmp(s, "large_bold_italic"))
         return UmlLargeBoldItalicFont;
+
     if (!strcmp(s, "underlined"))
         return UmlNormalUnderlinedFont;
+
     if (!strcmp(s, "strikeout"))
         return UmlNormalStrikeOutFont;
 
@@ -997,59 +1282,85 @@ CanvasFormat canvas_format(const char * s)
 {
     if (! strcmp(s, "A0"))
         return IsoA0;
+
     if (! strcmp(s, "A1"))
         return IsoA1;
+
     if (! strcmp(s, "A2"))
         return IsoA2;
+
     if (! strcmp(s, "A3"))
         return IsoA3;
+
     if (! strcmp(s, "A4"))
         return IsoA4;
+
     if (! strcmp(s, "A5"))
         return IsoA5;
+
     if (! strcmp(s, "A"))
         return UsA;
+
     if (! strcmp(s, "B"))
         return UsB;
+
     if (! strcmp(s, "C"))
         return UsC;
+
     if (! strcmp(s, "D"))
         return UsD;
+
     if (! strcmp(s, "E"))
         return UsE;
+
     if (! strcmp(s, "Letter"))
         return UsLetter;
+
     if (! strcmp(s, "Legal"))
         return UsLegal;
+
     if (! strcmp(s, "Tabloid"))
         return UsTabloid;
 
     if (! strcmp(s, "A0-Landscape"))
         return IsoA0Landscape;
+
     if (! strcmp(s, "A1-Landscape"))
         return IsoA1Landscape;
+
     if (! strcmp(s, "A2-Landscape"))
         return IsoA2Landscape;
+
     if (! strcmp(s, "A3-Landscape"))
         return IsoA3Landscape;
+
     if (! strcmp(s, "A4-Landscape"))
         return IsoA4Landscape;
+
     if (! strcmp(s, "A5-Landscape"))
         return IsoA5Landscape;
+
     if (! strcmp(s, "A-Landscape"))
         return UsALandscape;
+
     if (! strcmp(s, "B-Landscape"))
         return UsBLandscape;
+
     if (! strcmp(s, "C-Landscape"))
         return UsCLandscape;
+
     if (! strcmp(s, "D-Landscape"))
         return UsDLandscape;
+
     if (! strcmp(s, "E-Landscape"))
         return UsELandscape;
+
     if (! strcmp(s, "Letter-Landscape"))
         return UsLetterLandscape;
+
     if (! strcmp(s, "Legal-Landscape"))
         return UsLegalLandscape;
+
     if (! strcmp(s, "Ledger"))
         return UsLedger;
 
@@ -1062,24 +1373,34 @@ UmlCode pseudo_state_kind(const char * s)
 {
     if (! strcmp(s, "initial"))
         return InitialPS;
+
     if (! strcmp(s, "entry_point"))
         return EntryPointPS;
+
     if (! strcmp(s, "final"))
         return FinalPS;
+
     if (! strcmp(s, "terminate"))
         return TerminatePS;
+
     if (! strcmp(s, "exit_point"))
         return ExitPointPS;
+
     if (! strcmp(s, "deep_history"))
         return DeepHistoryPS;
+
     if (! strcmp(s, "shallow_history"))
         return ShallowHistoryPS;
+
     if (! strcmp(s, "junction"))
         return JunctionPS;
+
     if (! strcmp(s, "choice"))
         return ChoicePS;
+
     if (! strcmp(s, "fork"))
         return ForkPS;
+
     if (! strcmp(s, "join"))
         return JoinPS;
 
@@ -1093,18 +1414,25 @@ UmlCode activity_node_kind(const char * s)
     if (! strcmp(s, "initial"))
         // old releases
         return InitialAN;
+
     if (! strcmp(s, "initial_node"))
         return InitialAN;
+
     if (! strcmp(s, "flow_final"))
         return FlowFinalAN;
+
     if (! strcmp(s, "activity_final"))
         return ActivityFinalAN;
+
     if (! strcmp(s, "decision"))
         return DecisionAN;
+
     if (! strcmp(s, "merge"))
         return MergeAN;
+
     if (! strcmp(s, "fork"))
         return ForkAN;
+
     if (! strcmp(s, "join"))
         return JoinAN;
 
@@ -1117,14 +1445,19 @@ LineGeometry line_geometry(const char * s)
 {
     if (! strcmp(s, "HV"))
         return HVGeometry;
+
     if (! strcmp(s, "HVr"))
         return HVrGeometry;
+
     if (! strcmp(s, "VH"))
         return VHGeometry;
+
     if (! strcmp(s, "VHr"))
         return VHrGeometry;
+
     if (! strcmp(s, "HVH"))
         return HVHGeometry;
+
     if (! strcmp(s, "VHV"))
         return VHVGeometry;
 
@@ -1157,10 +1490,11 @@ static void set_previous_word(char * s)
         Context.previous_word_allocated = FALSE;
         delete [] Context.previous_word;
     }
+
     Context.previous_word = s;
 }
 
-void backup(QDir & d, QString fn) 
+void backup(QDir & d, QString fn)
 {
     QString s;
 
@@ -1204,13 +1538,13 @@ int open_file(QFile & fp, int mode, bool silent)
 
     while (! fp.open(QFlag(mode))) { //[lgfreitas] it does not accept a int anymore, but a QFlag. Hopefully, this does the trick
         if (silent ||
-                (msg_critical("Uml",
-                              Context.filename +
-                              ((mode != QIODevice::ReadOnly)
-                               ? TR("\ncannot be opened for write, retry ?\n")
-                               : TR("\ncannot be opened for read, retry ?\n")),
-                              QMessageBox::Yes, QMessageBox::No)
-                 != QMessageBox::Yes))
+            (msg_critical("Uml",
+                          Context.filename +
+                          ((mode != QIODevice::ReadOnly)
+                           ? TR("\ncannot be opened for write, retry ?\n")
+                           : TR("\ncannot be opened for read, retry ?\n")),
+                          QMessageBox::Yes, QMessageBox::No)
+             != QMessageBox::Yes))
             return -1;
     }
 
@@ -1238,7 +1572,7 @@ bool copy_file(QFileInfo * src, const QDir & dest)
 
     QString dest_path = dest.absFilePath(src->fileName());
     FILE * fp_dest;
-    
+
     if ((fp_dest = fopen((const char *) dest_path, "wb")) == 0) {
         msg_critical("Error", TR("cannot create %1", dest_path));
         fclose(fp_src);
@@ -1278,17 +1612,14 @@ void save_if_needed(const char * filename, QSharedPointer<QByteArray> newdef)
 
     if (fp == 0)
         needed = TRUE;
-    else
-    {
+    else {
         int c;
         const char * new_contains = newdef->constData();
 
         needed = FALSE;
 
-        while ((c = fgetc(fp)) != EOF)
-        {
-            if (c != *new_contains++)
-            {
+        while ((c = fgetc(fp)) != EOF) {
+            if (c != *new_contains++) {
                 needed = TRUE;
                 break;
             }
@@ -1306,9 +1637,10 @@ void save_if_needed(const char * filename, QSharedPointer<QByteArray> newdef)
             while ((fp = fopen((const char *) path, "wb")) == 0)
                 (void) msg_critical("Error", TR("Cannot create file\n") + path,
                                     QMessageBox::Retry);
+
             QLOG_INFO() << newdef.data();
-            if (!newdef->isEmpty())
-            {
+
+            if (!newdef->isEmpty()) {
                 if (fputs(newdef->constData(), fp) < 0) {
                     fclose(fp);
                     (void) msg_critical(TR("Error"),
@@ -1331,8 +1663,8 @@ void save_if_needed(const char * filename, QSharedPointer<QByteArray> newdef)
 char * read_file(QString filename)
 {
     filename = (in_import())
-            ? BrowserView::get_import_dir().absFilePath(filename)
-            : BrowserView::get_dir().absFilePath(filename);
+               ? BrowserView::get_import_dir().absFilePath(filename)
+               : BrowserView::get_dir().absFilePath(filename);
 
     QFile fp(filename);
     int size;
@@ -1379,13 +1711,14 @@ char * read_definition(int id, const char * ext)
     s.sprintf("%d_%d.%c", id,
               root_permission() ? root_permission() : user_id(),
               *ext);
+
     if ((r = read_file(s)) != 0)
         return r;
 
     if (ext[1] == 0)
         // want the modified definition
         return 0;
-    
+
     // try to read saved definition
     s.sprintf("%d.%s", id, ext);
 
@@ -1402,6 +1735,7 @@ char * read_file(QString filename, int offset, int len)
         char * s = new char[len + 1];
 
         fp.at(offset);
+
         if (fp.readBlock(s, len) == -1) {
             msg_critical(TR("Error"), TR("%1 cannot be read", filename));
             delete [] s;
@@ -1430,13 +1764,14 @@ char * read_definition(int id, const char * ext, int offset, int len)
     s.sprintf("%d_%d.%c", id,
               root_permission() ? root_permission() : user_id(),
               *ext);
+
     if ((r = read_file(s, offset, len)) != 0)
         return r;
 
     if (ext[1] == 0)
         // want the modified definition
         return 0;
-    
+
     // try to read saved definition
     s.sprintf("%d.%s", id, ext);
 
@@ -1453,6 +1788,7 @@ void save_definition(int id, const char * ext, const char * def,
     if (ext[1] != 0) {
         // saved definition
         s.sprintf("%d.%s", id, ext);
+
         if (is_new)
             is_new = FALSE;
         else
@@ -1538,11 +1874,14 @@ void save_string(const char * p, QTextStream & st)
             if ((p2 != 0) || (p3 != 0)) {
                 if ((p2 == 0) || ((p3 != 0) && (p3 < p2)))
                     p2 = p3;
+
                 // do NOT use writeRawBytes !
                 while (p != p2)
                     st << *p++;
+
                 st << '\\';
                 st << *p++;
+
                 if (*p == 0)
                     break;
             }
@@ -1562,7 +1901,7 @@ void save_string_list(QStringList & list, QTextStream & st)
 
     for (QStringList::Iterator it = list.begin();
          it != list.end();
-         ++it ) {
+         ++it) {
         st << ' ';
         save_string(*it, st);
     }
@@ -1574,13 +1913,14 @@ void save_unicode_string_list(QStringList & list, QTextStream & st)
 
     for (QStringList::Iterator it = list.begin();
          it != list.end();
-         ++it ) {
+         ++it) {
         st << ' ';
         save_string(fromUnicode(*it), st);
     }
 }
 
-void nl_indent(QTextStream & st) {
+void nl_indent(QTextStream & st)
+{
     int i = Indent;
 
     st << '\n';
@@ -1612,7 +1952,7 @@ void indent0()
 
 //
 
-static void skip_whitespace_comment(char * & s)
+static void skip_whitespace_comment(char *& s)
 {
     if (Context.removed_char != ' ')
         *--s = Context.removed_char;
@@ -1621,32 +1961,36 @@ static void skip_whitespace_comment(char * & s)
         switch (*s) {
         case '\n':
             Context.linenum += 1;
+
         case ' ':
         case '\r':
         case '\t':
             s += 1;
             break;
+
         case '/':
             for (s += 2; *s != '\n'; s += 1)
                 if (*s == 0)
                     return;
+
             Context.linenum += 1;
             s += 1;
             break;
+
         default:
             return;
         }
     }
 }
 
-bool at_end(char * & st)
+bool at_end(char *& st)
 {
     skip_whitespace_comment(st);
 
     return (*st == 0);
 }
 
-char * read_string(char * & st)
+char * read_string(char *& st)
 {
     skip_whitespace_comment(st);
 
@@ -1655,7 +1999,7 @@ char * read_string(char * & st)
                      where() + TR("premature end of file, string expected"));
         THROW_ERROR 0;
     }
-    
+
     if (*st != '"') {
         msg_critical(TR("Error"),
                      where() + TR("string expected after '%1'",
@@ -1672,29 +2016,37 @@ char * read_string(char * & st)
             msg_critical(TR("Error"),
                          where() + TR("premature end of file reading a string"));
             THROW_ERROR 0;
+
         case '"':
             Context.removed_char = ' ';
             *st++ = 0;
             *p = 0;
+
             if (Context.previous_word_allocated)
                 delete [] Context.previous_word;
             else
                 Context.previous_word_allocated = TRUE;
+
             Context.previous_word = new char[p - r + 1];
             memcpy(Context.previous_word, r, p - r + 1);
             return r;
+
         case '\\':
             if (*++st  == 0) {
                 msg_critical(TR("Error"),
                              where() + TR("premature end of file reading a string"));
                 THROW_ERROR 0;
             }
+
             *p++ = *st;
             break;
+
         case '\r':
             break;
+
         case '\n':
             Context.linenum += 1;
+
             // no break
         default:
             *p++ = *st;
@@ -1702,7 +2054,7 @@ char * read_string(char * & st)
     }
 }
 
-char * read_keyword(char * & st)
+char * read_keyword(char *& st)
 {
     skip_whitespace_comment(st);
 
@@ -1725,6 +2077,7 @@ char * read_keyword(char * & st)
 
     do
         c = *++st;
+
     while ((c > ' ') && (c != '"'));
 
     Context.removed_char = c;
@@ -1733,7 +2086,7 @@ char * read_keyword(char * & st)
     return r;
 }
 
-char * read_keyword(char * & st, const char * expected)
+char * read_keyword(char *& st, const char * expected)
 {
     skip_whitespace_comment(st);
 
@@ -1758,6 +2111,7 @@ char * read_keyword(char * & st, const char * expected)
 
     do
         c = *++st;
+
     while ((c > ' ') && (c != '"'));
 
     *st++ = 0;
@@ -1777,7 +2131,7 @@ char * read_keyword(char * & st, const char * expected)
 }
 
 // for old versions
-char * read_keyword(char * & st, const char * expected1,
+char * read_keyword(char *& st, const char * expected1,
                     const char * expected2)
 {
     skip_whitespace_comment(st);
@@ -1803,6 +2157,7 @@ char * read_keyword(char * & st, const char * expected1,
 
     do
         c = *++st;
+
     while ((c > ' ') && (c != '"'));
 
     *st++ = 0;
@@ -1821,7 +2176,7 @@ char * read_keyword(char * & st, const char * expected1,
     return r;
 }
 
-void unread_keyword(char * keyword, char * & st)
+void unread_keyword(char * keyword, char *& st)
 {
     // not at the beginning !
     st[-1] = Context.removed_char;
@@ -1832,7 +2187,7 @@ void unread_keyword(char * keyword, char * & st)
 }
 
 
-int read_id(char * & st)
+int read_id(char *& st)
 {
     skip_whitespace_comment(st);
 
@@ -1864,7 +2219,7 @@ int read_id(char * & st)
     return result;
 }
 
-unsigned read_unsigned(char * & st)
+unsigned read_unsigned(char *& st)
 {
     skip_whitespace_comment(st);
 
@@ -1885,9 +2240,9 @@ unsigned read_unsigned(char * & st)
     char c;
 
     while (((c = *st++) >= '0') && (c <= '9'))
-        result = result*10 + c - '0';
+        result = result * 10 + c - '0';
 
-    if (st == r+1) {
+    if (st == r + 1) {
         msg_critical(TR("Error"),
                      where() + TR("unsigned expected after '%1'", Context.previous_word));
         THROW_ERROR 0;
@@ -1900,7 +2255,7 @@ unsigned read_unsigned(char * & st)
     return result;
 }
 
-double read_double(char * & st)
+double read_double(char *& st)
 {
     skip_whitespace_comment(st);
 
@@ -1955,7 +2310,7 @@ double read_double(char * & st)
     return result;
 }
 
-void read_string_list(QStringList & list, char * & st)
+void read_string_list(QStringList & list, char *& st)
 {
     int n = read_unsigned(st);
 
@@ -1965,7 +2320,7 @@ void read_string_list(QStringList & list, char * & st)
         list.append(read_string(st));
 }
 
-void read_unicode_string_list(QStringList & list, char * & st)
+void read_unicode_string_list(QStringList & list, char *& st)
 {
     int n = read_unsigned(st);
 
@@ -1975,7 +2330,7 @@ void read_unicode_string_list(QStringList & list, char * & st)
         list.append(toUnicode(read_string(st)));
 }
 
-char * skip_until(char * & st, const char * expected)
+char * skip_until(char *& st, const char * expected)
 {
     char * k;
 
@@ -2020,7 +2375,8 @@ void unknown_ref(const char * kind, int id)
 
 //
 
-void save_xy(QTextStream & st, const Q3CanvasItem * c, const char * s) {
+void save_xy(QTextStream & st, const Q3CanvasItem * c, const char * s)
+{
 #ifdef FORCE_INT_COORD
     st << s << ' ' << (int) c->x() << ' ' << (int) c->y();
 #else
@@ -2030,7 +2386,8 @@ void save_xy(QTextStream & st, const Q3CanvasItem * c, const char * s) {
 #endif
 }
 
-void save_xyz(QTextStream & st, const Q3CanvasItem * c, const char * s) {
+void save_xyz(QTextStream & st, const Q3CanvasItem * c, const char * s)
+{
 #ifdef FORCE_INT_COORD
     st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z();
 #else
@@ -2040,7 +2397,8 @@ void save_xyz(QTextStream & st, const Q3CanvasItem * c, const char * s) {
 #endif
 }
 
-void save_xyzwh(QTextStream & st, const Q3CanvasRectangle * c, const char * s) {
+void save_xyzwh(QTextStream & st, const Q3CanvasRectangle * c, const char * s)
+{
 #ifdef FORCE_INT_COORD
     st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z()
        << ' ' << (int) c->width() << ' ' << (int) c->height();
@@ -2052,7 +2410,7 @@ void save_xyzwh(QTextStream & st, const Q3CanvasRectangle * c, const char * s) {
 #endif
 }
 
-void read_xy(char * & st, Q3CanvasItem * c)
+void read_xy(char *& st, Q3CanvasItem * c)
 {
     double px = read_double(st);
     double py = read_double(st);
@@ -2060,13 +2418,13 @@ void read_xy(char * & st, Q3CanvasItem * c)
     c->moveBy(px - c->x(), py - c->y());
 }
 
-void bypass_xy(char * & st)
+void bypass_xy(char *& st)
 {
     read_double(st);
     read_double(st);
 }
 
-void read_xyz(char * & st, Q3CanvasItem * c)
+void read_xyz(char *& st, Q3CanvasItem * c)
 {
     double px = read_double(st);
     double py = read_double(st);
@@ -2075,7 +2433,7 @@ void read_xyz(char * & st, Q3CanvasItem * c)
     c->setZ(read_double(st));
 }
 
-void read_xyzwh(char * & st, Q3CanvasRectangle * c)
+void read_xyzwh(char *& st, Q3CanvasRectangle * c)
 {
     double px = read_double(st);
     double py = read_double(st);
@@ -2088,7 +2446,7 @@ void read_xyzwh(char * & st, Q3CanvasRectangle * c)
     c->setSize((int) w, (int) read_double(st));
 }
 
-void read_zwh(char * & st, Q3CanvasRectangle * c)
+void read_zwh(char *& st, Q3CanvasRectangle * c)
 {
     c->setZ(read_double(st));
 
@@ -2104,14 +2462,16 @@ void save_color(QTextStream & st, const char * s, UmlColor c, BooL & nl)
             nl_indent(st);
             nl = TRUE;
         }
+
         st << s << ' ' << stringify(c) << ' ';
     }
 }
 
-void read_color(char *& st, const char * key, UmlColor & c, char * & k)
+void read_color(char *& st, const char * key, UmlColor & c, char *& k)
 {
     if (!strcmp(k, key)) {
         c = color(read_keyword(st));
+
         if ((Context.read_file_format < 23) && (c == UmlWhite))
             c = UmlTransparent;
 
@@ -2119,7 +2479,7 @@ void read_color(char *& st, const char * key, UmlColor & c, char * & k)
     }
 }
 
-void read_font(char *& st, const char * key, UmlFont & f, char * & k)
+void read_font(char *& st, const char * key, UmlFont & f, char *& k)
 {
     if (!strcmp(k, key)) {
         f = font(read_keyword(st));
@@ -2155,8 +2515,8 @@ void warn(const QString & s)
     Q3TextView * t = new Q3TextView(d);
     QFontMetrics fm(QApplication::font());
     //int w = e->maxLineWidth() + e->minimumSizeHint().width();
-    int maxw = (UmlWindow::get_workspace()->width() * 4)/5;
-    int maxh = (UmlWindow::get_workspace()->height() * 4)/5;
+    int maxw = (UmlWindow::get_workspace()->width() * 4) / 5;
+    int maxh = (UmlWindow::get_workspace()->height() * 4) / 5;
     int he = (e->lines() + 5) * fm.height();
 
     t->setText(s);
@@ -2333,7 +2693,7 @@ const char * svg_color(UmlColor c)
             QColor col = color(c);
 
             r = svg[c] = new char[16];
-            sprintf((char *) r, "#%06x", col.rgb()&0xffffff);
+            sprintf((char *) r, "#%06x", col.rgb() & 0xffffff);
         }
     }
 
@@ -2343,7 +2703,7 @@ const char * svg_color(UmlColor c)
 void draw_poly(FILE * fp, Q3PointArray & poly, UmlColor color, bool stroke)
 {
     (void) fprintf(fp, (stroke) ? "\t<polygon fill=\"%s\" stroke=\"black\" stroke-opacity=\"1\""
-                                : "\t<polygon fill=\"%s\" stroke=\"none\"",
+                   : "\t<polygon fill=\"%s\" stroke=\"none\"",
                    svg_color(color));
 
     const char * sep = " points=\"";
@@ -2361,7 +2721,7 @@ void draw_poly(FILE * fp, Q3PointArray & poly, UmlColor color, bool stroke)
 void draw_shadow(FILE * fp, Q3PointArray & poly)
 {
     (void) fprintf(fp, "\t<polygon fill=\"#%06x\" stroke=\"none\"",
-                   QColor(::Qt::darkGray).rgb()&0xffffff);
+                   QColor(::Qt::darkGray).rgb() & 0xffffff);
 
     const char * sep = " points=\"";
     int n = poly.size();
@@ -2390,19 +2750,25 @@ static void xml_text(FILE * fp, QString s)
         char c = *p;
 
         switch (c) {
-        case 0: return;
+        case 0:
+            return;
+
         case '<':
             (void) fputs("&lt;", fp);
             break;
+
         case '>':
             (void) fputs("&gt;", fp);
             break;
+
         case '"':
             (void) fputs("&quot;", fp);
             break;
+
         case '&':
             (void) fputs("&amp;", fp);
             break;
+
         default:
             (void) fputc(c, fp);
         }
@@ -2442,8 +2808,10 @@ void draw_text(int x, int y, int w, int h, int align,
 
     if (fn.bold())
         strcat(header, " font-weight=\"bold\"");
+
     if (fn.italic())
         strcat(header, " font-style=\"italic\"");
+
     if (fn.underline())
         strcat(header, " text-decoration=\"underline\"");
 
@@ -2455,10 +2823,11 @@ void draw_text(int x, int y, int w, int h, int align,
 
         if ((align & ::Qt::AlignHCenter) != 0) {
             (void) fputs(" text-anchor=\"middle\"", fp);
-            x += w/2;
+            x += w / 2;
         }
+
         if ((align & ::Qt::AlignVCenter) != 0)
-            y += (h + ps)/2;
+            y += (h + ps) / 2;
         else
             y += ps;
 
@@ -2509,9 +2878,11 @@ void draw_text(int x, int y, int w, int h, int align,
 
                     if ((c == space) || (c == tab))
                         lastsep = index;
+
                     left += c;
                     index += 1;
-                } while (fm.width(left) <= w);
+                }
+                while (fm.width(left) <= w);
 
                 if ((lastsep == 0) || !wb)
                     // must cut word
@@ -2523,6 +2894,7 @@ void draw_text(int x, int y, int w, int h, int align,
                 *iter = left;
                 ++iter;
                 s = s.mid(lastsep);
+
                 if (! s.isEmpty())
                     // last char is != a space/tab
                     iter = l.insert(iter, s);
@@ -2536,13 +2908,13 @@ void draw_text(int x, int y, int w, int h, int align,
             int dy = h - l.count() * ps;
 
             if (dy > 0)
-                y += dy/2;
+                y += dy / 2;
         }
 
         y -= fm.leading();
 
         if ((align & ::Qt::AlignHCenter) != 0) {
-            x += w/2;
+            x += w / 2;
 
             for (iter = l.begin(); iter != l.end(); ++iter) {
                 y += ps;
@@ -2584,12 +2956,14 @@ void draw_rotate_text(int cx, int cy, int angle, QString s,
         /* Qt3 */
         ps = pts;
 
-    cx += ps/2;
+    cx += ps / 2;
 
     if (fn.bold())
         (void) fputs(" font-weight=\"bold\"", fp);
+
     if (fn.italic())
         (void) fputs(" font-style=\"italic\"", fp);
+
     if (fn.underline())
         (void) fputs(" text-decoration=\"underline\"", fp);
 

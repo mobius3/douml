@@ -8,8 +8,9 @@ class UmlClass;
 class UmlClassInstance;
 
 // this class manages class instance reference
-class UmlBaseClassInstanceReference {
-  public:
+class UmlBaseClassInstanceReference
+{
+public:
     // return the type of the instance
     UmlClass * type() const;
 
@@ -22,7 +23,7 @@ class UmlBaseClassInstanceReference {
     const Q3CString & name() const;
 
 
-  private:
+private:
     UmlClass * _class;
 
     UmlClassInstance * _instance;
@@ -32,8 +33,8 @@ class UmlBaseClassInstanceReference {
     // internal, don't call it
     void read_();
 
-  friend class UmlBaseSequenceDiagramDefinition;
-  friend class UmlBaseCollaborationDiagramDefinition;
+    friend class UmlBaseSequenceDiagramDefinition;
+    friend class UmlBaseCollaborationDiagramDefinition;
 };
 
 #endif

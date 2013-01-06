@@ -13,16 +13,17 @@ class UmlClassView;
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlClassDiagram : public UmlBaseClassDiagram {
-  public:
+class UmlClassDiagram : public UmlBaseClassDiagram
+{
+public:
     UmlClassDiagram(void * id, const Q3CString & n) : UmlBaseClassDiagram(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
     static void import(File & f, UmlClassView * p);
 
 
-  private:
+private:
     void import(File & f);
 
 };

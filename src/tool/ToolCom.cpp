@@ -56,7 +56,8 @@ using namespace std;
 #include "Logging/QsLog.h"
 
 Socket::Socket(ToolCom * c)
-    : Q3SocketDevice(Q3SocketDevice::Stream), com(c) {
+    : Q3SocketDevice(Q3SocketDevice::Stream), com(c)
+{
     setAddressReusable(TRUE);
     notifier = new QSocketNotifier(socket(), QSocketNotifier::Read);
     QObject::connect(notifier, SIGNAL(activated(int)),
@@ -64,18 +65,21 @@ Socket::Socket(ToolCom * c)
 }
 
 Socket::Socket(ToolCom * c, int s)
-    : Q3SocketDevice(s, Q3SocketDevice::Stream), com(c) {
+    : Q3SocketDevice(s, Q3SocketDevice::Stream), com(c)
+{
     setAddressReusable(TRUE);
     notifier = new QSocketNotifier(s, QSocketNotifier::Read);
     QObject::connect(notifier, SIGNAL(activated(int)),
                      this, SLOT(data_received()));
 }
 
-Socket::~Socket() {
+Socket::~Socket()
+{
     delete notifier;
 }
 
-bool Socket::write_block(char * data, unsigned int len) {
+bool Socket::write_block(char * data, unsigned int len)
+{
     /* the four first bytes of data are free to contains the length
      these are taken into account by len */
     len -= 4;
@@ -85,7 +89,7 @@ bool Socket::write_block(char * data, unsigned int len) {
     data[3] = len;
 
 #ifdef DEBUGCOM
-    QLOG_INFO() <<"ToolCom write " << len << "bytes\n";
+    QLOG_INFO() << "ToolCom write " << len << "bytes\n";
 #endif
 
     len += 4;
@@ -106,7 +110,8 @@ bool Socket::write_block(char * data, unsigned int len) {
     }
 }
 
-void Socket::data_received() {
+void Socket::data_received()
+{
     com->data_received(this);
 }
 
@@ -116,7 +121,8 @@ Q3PtrList<ToolCom> ToolCom::used;
 Q3PtrList<ToolCom> ToolCom::unused;
 int ToolCom::exitvalue;
 
-ToolCom::ToolCom() {
+ToolCom::ToolCom()
+{
     listen_sock = 0;
     sock = 0;
     timer = 0;
@@ -147,16 +153,18 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
                  bool exit, bool clr, void (*pf)())
 {
     QLOG_TRACE() << Q_FUNC_INFO << " called";
+
     if (exit)
         exitvalue = -1;
 
     TraceDialog::trace_auto_raise(TRUE);
+
     if (clr)
         TraceDialog::clear();
 
     ToolCom * com = (unused.isEmpty())
-            ? new ToolCom
-            : unused.take(0);
+                    ? new ToolCom
+                    : unused.take(0);
 
     com->DisconnectExternalProcess();
 
@@ -174,7 +182,7 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     com->cmd = strdup(cmd);
     com->timer = new QTimer(com);
     connect(com->timer, SIGNAL(timeout()), com, SLOT(connexion_timeout()));
-    com->timer->start(30*1000, TRUE );
+    com->timer->start(30 * 1000, TRUE);
 
     unsigned port = com->bind(1024);
 
@@ -224,16 +232,17 @@ unsigned ToolCom::bind(unsigned port)
         buffer_out_size = 1024;
         buffer_out = new char[buffer_out_size];
     }
+
     p_buffer_out = buffer_out + 4/*bytes for length*/;
 
     QHostAddress ha;
 
     ha.setAddress("127.0.0.1");
 
-    if (listen_sock->bind (ha, 0))
+    if (listen_sock->bind(ha, 0))
         port = listen_sock->port();
     else
-        while (!listen_sock->bind (ha, port))
+        while (!listen_sock->bind(ha, port))
             port += 1;
 
     listen_sock->listen(1);
@@ -248,6 +257,7 @@ void ToolCom::close()
             delete timer;
             timer = 0;
         }
+
         if (cmd != 0) {
             free(cmd);
             cmd = 0;
@@ -278,7 +288,7 @@ const char * ToolCom::read_buffer()
         // length not yet read, get it
         char s[4];
 
-        while((sock->readBlock(s, 4) != 4));/* {
+        while ((sock->readBlock(s, 4) != 4));/* {
 
 
 
@@ -301,7 +311,7 @@ const char * ToolCom::read_buffer()
     }
 
     int nread = sock->readBlock(buffer_in + already_read, wanted);
-    
+
     if (nread == -1) {
 
 
@@ -322,9 +332,9 @@ unsigned ToolCom::get_unsigned(const char *& p)
     p += 4;
 
     return (((unsigned char *) p)[-4] << 24) +
-            (((unsigned char *) p)[-3] << 16) +
-            (((unsigned char *) p)[-2] << 8) +
-            ((unsigned char *) p)[-1];
+           (((unsigned char *) p)[-3] << 16) +
+           (((unsigned char *) p)[-2] << 8) +
+           ((unsigned char *) p)[-1];
 }
 
 bool ToolCom::get_bool(const char *& p)
@@ -349,7 +359,8 @@ const char * ToolCom::get_string(const char *& p)
     return r;
 }
 
-UmlCode ToolCom::get_kind(const char *& p) {
+UmlCode ToolCom::get_kind(const char *& p)
+{
     int v = *p++;
 
     if ((api_version < 24) && (v >= (UmlObjectDiagram - UmlRelations)))
@@ -360,22 +371,22 @@ UmlCode ToolCom::get_kind(const char *& p) {
         // adds umlAcceptCallAction .. umlReduceAction
         v += 7;
 
-    return (UmlCode) (v + UmlRelations);
+    return (UmlCode)(v + UmlRelations);
 }
 
 bool ToolCom::get_relation_kind(UmlCode & v, const char *& p)
 {
-    v = (UmlCode) *p++;
+    v = (UmlCode) * p++;
 
     return ((unsigned) v) < UmlRelations;
 }
 
 bool ToolCom::get_visibility(UmlVisibility & v, const char *& p)
 {
-    v = (UmlVisibility) *p++;
+    v = (UmlVisibility) * p++;
 
     if ((api_version < 23) &&
-            (v == UmlPackageVisibility))	// UmlDefaultVisibility for plug-out
+        (v == UmlPackageVisibility))	// UmlDefaultVisibility for plug-out
         v = UmlDefaultVisibility;
 
     return ((unsigned) v) != UmlDefaultVisibility;
@@ -383,10 +394,10 @@ bool ToolCom::get_visibility(UmlVisibility & v, const char *& p)
 
 bool ToolCom::get_extended_visibility(UmlVisibility & v, const char *& p)
 {
-    v = (UmlVisibility) *p++;
+    v = (UmlVisibility) * p++;
 
     if ((api_version < 23) &&
-            (v == UmlPackageVisibility))	// UmlDefaultVisibility for plug-out
+        (v == UmlPackageVisibility))	// UmlDefaultVisibility for plug-out
         v = UmlDefaultVisibility;
 
     return ((unsigned) v) <= UmlDefaultVisibility;
@@ -394,7 +405,7 @@ bool ToolCom::get_extended_visibility(UmlVisibility & v, const char *& p)
 
 bool ToolCom::get_direction(UmlParamDirection & v, const char *& p)
 {
-    v = (UmlParamDirection) *p++;
+    v = (UmlParamDirection) * p++;
 
     return ((unsigned) v) <= UmlOut;
 }
@@ -447,7 +458,7 @@ void ToolCom::write_bool(bool b)
 
     *p_buffer_out++ = (b) ? 1 : 0;
 #ifdef DEBUGCOM
-    QLOG_INFO() <<"ToolCom::write_bool(" << ((b) ? 1 : 0) << ")\n";
+    QLOG_INFO() << "ToolCom::write_bool(" << ((b) ? 1 : 0) << ")\n";
 #endif
 }
 
@@ -459,7 +470,7 @@ void ToolCom::write_id(void * id)
     memcpy(p_buffer_out + 1, (char *) &id, sizeof(void *));
     p_buffer_out += sizeof(void *) + 1;
 #ifdef DEBUGCOM
-    QLOG_INFO() <<"ToolCom::write_id(" << (void *) id << ")\n";
+    QLOG_INFO() << "ToolCom::write_id(" << (void *) id << ")\n";
 #endif
 }
 
@@ -471,6 +482,7 @@ void ToolCom::write_id(BrowserNode * bn, char k, const char * s)
 
     *p_buffer_out = sizeof(void *);
     memcpy(p_buffer_out + 1, (char *) &bn, sizeof(void *));
+
     if ((api_version < 24) && (k >= (UmlObjectDiagram - UmlRelations)))
         // removes UmlObjectDiagram & UmlActivityDiagram
         k -= 2;
@@ -484,9 +496,9 @@ void ToolCom::write_id(BrowserNode * bn, char k, const char * s)
 
     ToolCom::p_buffer_out += ln + 2 + sizeof(void *);
 #ifdef DEBUGCOM
-    QLOG_INFO() <<"ToolCom::write_id(" << (void *) bn << ")\n";
-    QLOG_INFO() <<"ToolCom::write_char(" << (unsigned) k << ")\n";
-    QLOG_INFO() <<"ToolCom::write_string(\"" << s << "\")\n";
+    QLOG_INFO() << "ToolCom::write_id(" << (void *) bn << ")\n";
+    QLOG_INFO() << "ToolCom::write_char(" << (unsigned) k << ")\n";
+    QLOG_INFO() << "ToolCom::write_string(\"" << s << "\")\n";
 #endif
 }
 
@@ -503,7 +515,7 @@ void ToolCom::write_string(const char * p)
     p_buffer_out += len;
 #ifdef DEBUGCOM
     QLOG_INFO() << "Writing string of length: " << len;
-    QLOG_INFO() <<"ToolCom::write_string(\"" << p << "\")\n";
+    QLOG_INFO() << "ToolCom::write_string(\"" << p << "\")\n";
 #endif
 }
 
@@ -513,11 +525,12 @@ void ToolCom::write_char(char c)
 
     *p_buffer_out++ = c;
 #ifdef DEBUGCOM
-    QLOG_INFO() <<"ToolCom::write_char(" << (unsigned) c << ")\n";
+    QLOG_INFO() << "ToolCom::write_char(" << (unsigned) c << ")\n";
 #endif
 }
 
-void ToolCom::write(QRect r) {
+void ToolCom::write(QRect r)
+{
     write_unsigned((unsigned) r.x());
     write_unsigned((unsigned) r.y());
     write_unsigned((unsigned) r.width());
@@ -531,39 +544,41 @@ void ToolCom::write_ack(bool b)
 
         *p_buffer_out++ = (b) ? 1 : 0;
 #ifdef DEBUGCOM
-        QLOG_INFO() <<"ToolCom::write_ack(" << ((b) ? 1 : 0) << ")\n";
+        QLOG_INFO() << "ToolCom::write_ack(" << ((b) ? 1 : 0) << ")\n";
 #endif
     }
 }
 
 void ToolCom::fatal_error(const char *
-						  #ifdef DEBUGCOM
-						  msg
-						  #endif
-						  )
+#ifdef DEBUGCOM
+                          msg
+#endif
+                         )
 {
 #ifdef DEBUGCOM
-	QLOG_INFO() <<"ToolCom::fatal_error " << msg << '\n';
+    QLOG_INFO() << "ToolCom::fatal_error " << msg << '\n';
 #endif
 
     close();
     THROW_ERROR 0;
 }
 
-void ToolCom::connexion_timeout() {
-	msg_critical("Bouml",
-				 QString("connexion timeout for '") + QString(cmd) +QString("'"));
-	close();
+void ToolCom::connexion_timeout()
+{
+    msg_critical("Bouml",
+                 QString("connexion timeout for '") + QString(cmd) + QString("'"));
+    close();
 
-	if (exit_bouml) {
-		BrowserView::remove_temporary_files();
-		set_user_id(-1);    // delete lock
+    if (exit_bouml) {
+        BrowserView::remove_temporary_files();
+        set_user_id(-1);    // delete lock
 
-		THROW_ERROR 0;
-	}
+        THROW_ERROR 0;
+    }
 }
 
-void ToolCom::data_received(Socket * who) {
+void ToolCom::data_received(Socket * who)
+{
     bool do_exit = FALSE;
     void (*pf)() = 0;
 
@@ -572,7 +587,7 @@ void ToolCom::data_received(Socket * who) {
             int s = listen_sock->accept();
 
 #ifdef DEBUGCOM
-            QLOG_INFO() <<"ToolCom::connexion() accept ok " << s << '\n';
+            QLOG_INFO() << "ToolCom::connexion() accept ok " << s << '\n';
 #endif
 
             if (s != -1) {
@@ -580,6 +595,7 @@ void ToolCom::data_received(Socket * who) {
                     delete timer;
                     timer = 0;
                 }
+
                 sock = new Socket(this, s);
                 return;
             }
@@ -592,6 +608,7 @@ void ToolCom::data_received(Socket * who) {
     }
     else if (sock != 0) {
         PRE_TRY;
+
         try {
             const char * p = read_buffer();
 
@@ -610,11 +627,11 @@ void ToolCom::data_received(Socket * who) {
                     return;
                 }
                 /*else if (api_version < ??) {
-       TraceDialog::add("<font color =\"red\"><b>the plug-out is too old, update the SYSTEM part and re-compile it<b></font>");
-       TraceDialog::show_it();
-       close();
-       return;
-       }*/
+                TraceDialog::add("<font color =\"red\"><b>the plug-out is too old, update the SYSTEM part and re-compile it<b></font>");
+                TraceDialog::show_it();
+                close();
+                return;
+                }*/
                 else if (api_version > 55) {
                     TraceDialog::add("<font color =\"red\"><b>the plug-out is incompatible with this too old version of BOUML<b></font>");
                     TraceDialog::show_it();
@@ -627,274 +644,321 @@ void ToolCom::data_received(Socket * who) {
                 p += 1;
 
                 switch ((CmdFamily) p[-1]) {
-                case onInstanceCmd:
-                {
+                case onInstanceCmd: {
                     BrowserNode * bn = (BrowserNode *) get_id(p);
 
 #ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() cmd " << (unsigned) p[0]
-						 << " for " << bn->get_name() << '\n';
+                    QLOG_INFO() << "ToolCom::data_received() cmd " << (unsigned) p[0]
+                                << " for " << bn->get_name() << '\n';
 #endif
 
-					if (!bn->tool_cmd(this, p+1)) {
+                    if (!bn->tool_cmd(this, p + 1)) {
 #ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown cmd : " << (unsigned) p[0]
-							 << " for " << bn->get_name() << '\n';
+                        QLOG_INFO() << "unknown cmd : " << (unsigned) p[0]
+                                    << " for " << bn->get_name() << '\n';
 #endif
-						close();
-					}
-				}
-					break;
-				case classGlobalCmd:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() ClassGlobalCmd "
-						 << (unsigned) p[0] << '\n';
-#endif
-					if (!BrowserClass::tool_global_cmd(this, p+1)) {
-#ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown ClassGlobalCmd : " << p[0] << "\n";
-#endif
-						throw 0;
-					}
-					break;
-				case packageGlobalCmd:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() PackageGlobalCmd "
-						 << (unsigned) p[0] << '\n';
-#endif
-					if (!BrowserPackage::tool_global_cmd(this, p+1)) {
-#ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown PackageGlobalCmd : <" << p[0] << ">\n";
-#endif
-						throw 0;
-					}
-					break;
-				case miscGlobalCmd:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() MiscGlobalCmd "
-						 << (unsigned) p[0] << '\n';
-#endif
-					switch (p[0]) {
-					case byeCmd:
-#ifdef DEBUGCOM
-						QLOG_INFO() <<"bye\n";
-#endif
-						if (exit_bouml) {
-							do_exit = true;
-							p += 1;
-							exitvalue = (api_version > 51) ? (int) get_unsigned(p) : 0;
-						}
-						pf = cont;
-						throw 0;
-					case traceCmd:
-						TraceDialog::add(p+1);
-						break;
-					case showTraceCmd:
-						TraceDialog::show_it();
-						break;
-					case traceAutoRaiseCmd:
-						TraceDialog::trace_auto_raise(p[1]);
-						break;
-					case messageCmd:
-						UmlWindow::set_message(p+1);
-						break;
-					case toolRunningCmd:
-						p += 1;
-						write_bool(is_running((int) get_unsigned(p)));
-						break;
-					case targetCmd:
-						if (target->api_compatible(api_version))
-							target->write_id(this);
-						else
-							write_id(0);
-						break;
-					case allMarkedCmd:
-					{
-						Q3PtrList<BrowserNode> marked = BrowserNode::marked_nodes();
-						unsigned n = 0;
-						BrowserNode * bn;
+                        close();
+                    }
+                }
+                break;
 
-						for (bn = marked.first(); bn != 0; bn = marked.next())
-							if (bn->api_compatible(api_version))
-								n += 1;
+                case classGlobalCmd:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "ToolCom::data_received() ClassGlobalCmd "
+                                << (unsigned) p[0] << '\n';
+#endif
 
-						write_unsigned(n);
+                    if (!BrowserClass::tool_global_cmd(this, p + 1)) {
+#ifdef DEBUGCOM
+                        QLOG_INFO() << "unknown ClassGlobalCmd : " << p[0] << "\n";
+#endif
+                        throw 0;
+                    }
 
-						for (bn = marked.first(); bn != 0; bn = marked.next())
-							if (bn->api_compatible(api_version))
-								bn->write_id(this);
-					}
-						break;
-					case loadCmd:
-						if (!BrowserNode::edition_active()) {
-							UmlWindow::load_it(p+1);
-							// com closed
-							return;
-						}
-						break;
-						/*case withAckCmd:
-		with_ack = p[1];
-		break;*/
-					case userIdCmd:
-						write_char(user_id());
-						break;
-					case setUserIdCmd:
-						set_user_id((int) ((unsigned char *) p)[1]);
-						break;
-					case setRootPermissionCmd:
-						if (p[1] != 0) {
-							// enter
-							if (BrowserNode::edition_active())
-								write_bool(FALSE);
-							else {
-								BrowserPackage::update_idmax_for_root();
-								set_root_permission(TRUE);
-								write_bool(TRUE);
-							}
-						}
-						else {
-							// exit
-							set_root_permission(FALSE);
-							UmlWindow::saveas_it();
-							UmlWindow::close_it();	// write access of added items not ok
-							// no respons, all com closed by close_it()
-							return;
-						}
-						break;
-					case fromIdCmd:
-					{
-						p += 1;
+                    break;
 
-						unsigned id = get_unsigned(p);
-						BrowserNode * op;
+                case packageGlobalCmd:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "ToolCom::data_received() PackageGlobalCmd "
+                                << (unsigned) p[0] << '\n';
+#endif
 
-						switch (get_kind(p)) {
-						case UmlOperation:
-							op = BrowserOperation::get_it("operation_ref", id);
-							if ((op == 0) || !op->deletedp())
-								break;
-							// no break
-						default:
-							// error
-							op = 0;
-							break;
-						}
-						if (op == 0)
-							write_id(0);
-						else
-							op->write_id(this);
-					}
-						break;
-					default:
+                    if (!BrowserPackage::tool_global_cmd(this, p + 1)) {
 #ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown MiscGlobalCmd : " << (unsigned) p[0] << "\n";
+                        QLOG_INFO() << "unknown PackageGlobalCmd : <" << p[0] << ">\n";
 #endif
-						throw 0;
-					}
-					break;
-				case umlSettingsCmd:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() UmlSettingsCmd "
-						 << (unsigned) p[0] << '\n';
-#endif
-					if (!GenerationSettings::tool_global_uml_cmd(this, p+1)) {
-#ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown UmlSettingsCmd : " << (unsigned) p[0] << "\n";
-#endif
-						throw 0;
-					}
-					break;
-				case cppSettingsCmd:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() CppSettingsCmd "
-						 << (unsigned) p[0] << '\n';
-#endif
-					if (!GenerationSettings::tool_global_cpp_cmd(this, p+1)) {
-#ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown CppSettingsCmd : " << (unsigned) p[0] << "\n";
-#endif
-						throw 0;
-					}
-					break;
-				case javaSettingsCmd:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() JavaSettingsCmd "
-						 << (unsigned) p[0] << '\n';
-#endif
-					if (!GenerationSettings::tool_global_java_cmd(this, p+1)) {
-#ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown JavaSettingsCmd : " << (unsigned) p[0] << "\n";
-#endif
-						throw 0;
-					}
-					break;
-				case phpSettingsCmd:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() PhpSettingsCmd "
-						 << (unsigned) p[0] << '\n';
-#endif
-					if (!GenerationSettings::tool_global_php_cmd(this, p+1)) {
-#ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown PhpSettingsCmd : " << (unsigned) p[0] << "\n";
-#endif
-						throw 0;
-					}
-					break;
-				case idlSettingsCmd:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() IdlSettingsCmd "
-						 << (unsigned) p[0] << '\n';
-#endif
-					if (!GenerationSettings::tool_global_idl_cmd(this, p+1)) {
-#ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown IdlSettingsCmd : " << p[0] << "\n";
-#endif
-						throw 0;
-					}
-					break;
-				case pythonSettingsCmd:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"ToolCom::data_received() PythonSettingsCmd "
-						 << (unsigned) p[0] << '\n';
-#endif
-					if (!GenerationSettings::tool_global_python_cmd(this, p+1)) {
-#ifdef DEBUGCOM
-						QLOG_INFO() <<"unknown PythonSettingsCmd : " << (unsigned) p[0] << "\n";
-#endif
-						throw 0;
-					}
-					break;
-				default:
-#ifdef DEBUGCOM
-					QLOG_INFO() <<"unknown CmdFamily : " << (unsigned) p[-1] << "\n";
-#endif
-					throw 0;
-				}
+                        throw 0;
+                    }
 
-				if (sock && (p_buffer_out != buffer_out + 4)) {
-					if (!sock->write_block(buffer_out, p_buffer_out - buffer_out))
-						fatal_error("write error");
-					else {
-						p_buffer_out = buffer_out + 4/*bytes for length*/;
-					}
-				}
-			}
-		}
-		catch (...) {
-			close();
-		}
-		POST_TRY;
-	}
+                    break;
 
-	if (do_exit) {
-		BrowserView::remove_temporary_files();
-		set_user_id(-1);    // delete lock
+                case miscGlobalCmd:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "ToolCom::data_received() MiscGlobalCmd "
+                                << (unsigned) p[0] << '\n';
+#endif
 
-		THROW_ERROR 0;
-	}
+                    switch (p[0]) {
+                    case byeCmd:
+#ifdef DEBUGCOM
+                        QLOG_INFO() << "bye\n";
+#endif
 
-	if (pf != 0)
-		pf();
+                        if (exit_bouml) {
+                            do_exit = true;
+                            p += 1;
+                            exitvalue = (api_version > 51) ? (int) get_unsigned(p) : 0;
+                        }
+
+                        pf = cont;
+                        throw 0;
+
+                    case traceCmd:
+                        TraceDialog::add(p + 1);
+                        break;
+
+                    case showTraceCmd:
+                        TraceDialog::show_it();
+                        break;
+
+                    case traceAutoRaiseCmd:
+                        TraceDialog::trace_auto_raise(p[1]);
+                        break;
+
+                    case messageCmd:
+                        UmlWindow::set_message(p + 1);
+                        break;
+
+                    case toolRunningCmd:
+                        p += 1;
+                        write_bool(is_running((int) get_unsigned(p)));
+                        break;
+
+                    case targetCmd:
+                        if (target->api_compatible(api_version))
+                            target->write_id(this);
+                        else
+                            write_id(0);
+
+                        break;
+
+                    case allMarkedCmd: {
+                        Q3PtrList<BrowserNode> marked = BrowserNode::marked_nodes();
+                        unsigned n = 0;
+                        BrowserNode * bn;
+
+                        for (bn = marked.first(); bn != 0; bn = marked.next())
+                            if (bn->api_compatible(api_version))
+                                n += 1;
+
+                        write_unsigned(n);
+
+                        for (bn = marked.first(); bn != 0; bn = marked.next())
+                            if (bn->api_compatible(api_version))
+                                bn->write_id(this);
+                    }
+                    break;
+
+                    case loadCmd:
+                        if (!BrowserNode::edition_active()) {
+                            UmlWindow::load_it(p + 1);
+                            // com closed
+                            return;
+                        }
+
+                        break;
+
+                        /*case withAckCmd:
+                        with_ack = p[1];
+                        break;*/
+                    case userIdCmd:
+                        write_char(user_id());
+                        break;
+
+                    case setUserIdCmd:
+                        set_user_id((int)((unsigned char *) p)[1]);
+                        break;
+
+                    case setRootPermissionCmd:
+                        if (p[1] != 0) {
+                            // enter
+                            if (BrowserNode::edition_active())
+                                write_bool(FALSE);
+                            else {
+                                BrowserPackage::update_idmax_for_root();
+                                set_root_permission(TRUE);
+                                write_bool(TRUE);
+                            }
+                        }
+                        else {
+                            // exit
+                            set_root_permission(FALSE);
+                            UmlWindow::saveas_it();
+                            UmlWindow::close_it();	// write access of added items not ok
+                            // no respons, all com closed by close_it()
+                            return;
+                        }
+
+                        break;
+
+                    case fromIdCmd: {
+                        p += 1;
+
+                        unsigned id = get_unsigned(p);
+                        BrowserNode * op;
+
+                        switch (get_kind(p)) {
+                        case UmlOperation:
+                            op = BrowserOperation::get_it("operation_ref", id);
+
+                            if ((op == 0) || !op->deletedp())
+                                break;
+
+                            // no break
+                        default:
+                            // error
+                            op = 0;
+                            break;
+                        }
+
+                        if (op == 0)
+                            write_id(0);
+                        else
+                            op->write_id(this);
+                    }
+                    break;
+
+                    default:
+#ifdef DEBUGCOM
+                        QLOG_INFO() << "unknown MiscGlobalCmd : " << (unsigned) p[0] << "\n";
+#endif
+                        throw 0;
+                    }
+
+                    break;
+
+                case umlSettingsCmd:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "ToolCom::data_received() UmlSettingsCmd "
+                                << (unsigned) p[0] << '\n';
+#endif
+
+                    if (!GenerationSettings::tool_global_uml_cmd(this, p + 1)) {
+#ifdef DEBUGCOM
+                        QLOG_INFO() << "unknown UmlSettingsCmd : " << (unsigned) p[0] << "\n";
+#endif
+                        throw 0;
+                    }
+
+                    break;
+
+                case cppSettingsCmd:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "ToolCom::data_received() CppSettingsCmd "
+                                << (unsigned) p[0] << '\n';
+#endif
+
+                    if (!GenerationSettings::tool_global_cpp_cmd(this, p + 1)) {
+#ifdef DEBUGCOM
+                        QLOG_INFO() << "unknown CppSettingsCmd : " << (unsigned) p[0] << "\n";
+#endif
+                        throw 0;
+                    }
+
+                    break;
+
+                case javaSettingsCmd:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "ToolCom::data_received() JavaSettingsCmd "
+                                << (unsigned) p[0] << '\n';
+#endif
+
+                    if (!GenerationSettings::tool_global_java_cmd(this, p + 1)) {
+#ifdef DEBUGCOM
+                        QLOG_INFO() << "unknown JavaSettingsCmd : " << (unsigned) p[0] << "\n";
+#endif
+                        throw 0;
+                    }
+
+                    break;
+
+                case phpSettingsCmd:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "ToolCom::data_received() PhpSettingsCmd "
+                                << (unsigned) p[0] << '\n';
+#endif
+
+                    if (!GenerationSettings::tool_global_php_cmd(this, p + 1)) {
+#ifdef DEBUGCOM
+                        QLOG_INFO() << "unknown PhpSettingsCmd : " << (unsigned) p[0] << "\n";
+#endif
+                        throw 0;
+                    }
+
+                    break;
+
+                case idlSettingsCmd:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "ToolCom::data_received() IdlSettingsCmd "
+                                << (unsigned) p[0] << '\n';
+#endif
+
+                    if (!GenerationSettings::tool_global_idl_cmd(this, p + 1)) {
+#ifdef DEBUGCOM
+                        QLOG_INFO() << "unknown IdlSettingsCmd : " << p[0] << "\n";
+#endif
+                        throw 0;
+                    }
+
+                    break;
+
+                case pythonSettingsCmd:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "ToolCom::data_received() PythonSettingsCmd "
+                                << (unsigned) p[0] << '\n';
+#endif
+
+                    if (!GenerationSettings::tool_global_python_cmd(this, p + 1)) {
+#ifdef DEBUGCOM
+                        QLOG_INFO() << "unknown PythonSettingsCmd : " << (unsigned) p[0] << "\n";
+#endif
+                        throw 0;
+                    }
+
+                    break;
+
+                default:
+#ifdef DEBUGCOM
+                    QLOG_INFO() << "unknown CmdFamily : " << (unsigned) p[-1] << "\n";
+#endif
+                    throw 0;
+                }
+
+                if (sock && (p_buffer_out != buffer_out + 4)) {
+                    if (!sock->write_block(buffer_out, p_buffer_out - buffer_out))
+                        fatal_error("write error");
+                    else {
+                        p_buffer_out = buffer_out + 4/*bytes for length*/;
+                    }
+                }
+            }
+        }
+        catch (...) {
+            close();
+        }
+
+        POST_TRY;
+    }
+
+    if (do_exit) {
+        BrowserView::remove_temporary_files();
+        set_user_id(-1);    // delete lock
+
+        THROW_ERROR 0;
+    }
+
+    if (pf != 0)
+        pf();
 }
 
 void ToolCom::processFinished()
@@ -903,16 +967,18 @@ void ToolCom::processFinished()
 
     if (errno != 0) {
         msg_critical("Bouml",
-                     "error while executing '" + QString(cmd) +"'\n"
+                     "error while executing '" + QString(cmd) + "'\n"
                      "perhaps you must specify its absolute path"
                      "or set the environment variable PATH ?");
         this->close();
+
         if (exitStaged) {
             BrowserView::remove_temporary_files();
             set_user_id(-1);    // delete lock
 
             THROW_ERROR 0;
         }
+
         //else
     }
 
@@ -921,8 +987,7 @@ void ToolCom::processFinished()
 
 void ToolCom::DisconnectExternalProcess()
 {
-    if(this->externalProcess)
-    {
+    if (this->externalProcess) {
         disconnect(this->externalProcess, SIGNAL(finished(int)), this, SLOT(processFinished()));
         this->externalProcess->kill();
         delete this->externalProcess;

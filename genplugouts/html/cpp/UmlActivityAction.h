@@ -5,16 +5,17 @@
 #include "UmlBaseActivityAction.h"
 #include <q3cstring.h>
 
-class UmlActivityAction : public UmlBaseActivityAction {
-  public:
+class UmlActivityAction : public UmlBaseActivityAction
+{
+public:
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
     virtual void html();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityAction(void * id, const Q3CString & s) : UmlBaseActivityAction(id, s) {
+    UmlActivityAction(void * id, const Q3CString & s) : UmlBaseActivityAction(id, s) {
     }
 
 };

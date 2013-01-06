@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <QTextStream> 
+#include <QTextStream>
 #include <qfile.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
@@ -58,14 +58,15 @@ const int BodyPostfixLength = 28;
 // produce circular #include
 void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
                                       const Q3CString & cl_stereotype,
-                                      bool all_in_h) {
+                                      bool all_in_h)
+{
     if ((cl_stereotype == "enum") || (cl_stereotype == "typedef"))
         return;
 
     bool templ = !((UmlClass *) parent())->formals().isEmpty();
     Q3CString decl = cppDecl();
     int index;
-    
+
     if (decl.isEmpty()) {
         decl = cppDef();
 
@@ -81,15 +82,19 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 
         if ((index = decl.find("${class}")) != -1)
             decl.remove((unsigned) index, 8);
+
         if ((index = decl.find("::", index)) != -1)
             decl.remove((unsigned) index, 2);
+
         if ((index = decl.find("${staticnl}")) != -1)
             decl.remove((unsigned) index, 11);
+
         if ((index = decl.find("${inline}")) != -1)
             decl.remove((unsigned) index, 9);
+
         if (((index = decl.find('{')) != -1) &&
-                (index != 0) &&
-                (((const char *) decl)[index-1] != '$'))
+            (index != 0) &&
+            (((const char *) decl)[index - 1] != '$'))
             decl.truncate(index);
     }
     else {
@@ -101,23 +106,32 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 
     if ((index = decl.find("${friend}")) != -1)
         decl.remove((unsigned) index, 9);
+
     if ((index = decl.find("${static}")) != -1)
         decl.remove((unsigned) index, 9);
+
     if ((index = decl.find("${inline}")) != -1)
         decl.remove((unsigned) index, 9);
+
     if ((index = decl.find("${virtual}")) != -1)
         decl.remove((unsigned) index, 10);
+
     if ((index = decl.find("${const}")) != -1)
         decl.remove((unsigned) index, 8);
+
     if ((index = decl.find("${volatile}")) != -1)
         decl.remove((unsigned) index, 11);
+
     if ((index = decl.find("${abstract}")) != -1)
         decl.remove((unsigned) index, 11);
+
     if ((index = decl.find("${name}")) != -1)
         decl.remove((unsigned) index, 7);
+
     if ((index = decl.find("${stereotype}")) != -1)
         decl.replace((unsigned) index, 13,
                      CppSettings::relationAttributeStereotype(stereotype()));
+
     if ((index = decl.find("${association}")) != -1)
         // dependency computed for the relation
         decl.remove((unsigned) index, 14);
@@ -125,7 +139,7 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
     int index2;
 
     if (((index = decl.find("${(}")) == -1) ||
-            ((index2 = decl.find("${)}", index)) == -1))
+        ((index2 = decl.find("${)}", index)) == -1))
         return;
 
     decl.replace(index2, 4, ")");
@@ -144,8 +158,8 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
         // search word beginning
         while ((c = *p) != 0) {
             if ((c == '_') ||
-                    ((c >= 'a') && (c <= 'z')) ||
-                    ((c >= 'A') && (c <= 'Z')))
+                ((c >= 'a') && (c <= 'z')) ||
+                ((c >= 'A') && (c <= 'Z')))
                 break;
             else if (dontsubstituteuntil != 0) {
                 if (p >= dontsubstituteuntil)
@@ -156,6 +170,7 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
             else if (!strncmp(p, "${type}", 7)) {
                 p += 7;
                 ts = returnType();
+
                 if (ts.type != 0) {
                     dontsearchend = TRUE;
                     break;
@@ -167,9 +182,11 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
             }
             else if (sscanf(p, "${t%u}", (unsigned *) &index) == 1) {
                 p = strchr(p, '}') + 1;
+
                 if (((unsigned) index) < params.count()) {
                     // else error signaled later
                     ts = params[index].type;
+
                     if (ts.type != 0) {
                         dontsearchend = TRUE;
                         break;
@@ -196,12 +213,15 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
                 case '{':
                     // body
                     return;
+
                 case '<':
                     template_level += 1;
                     break;
+
                 case '>':
                     template_level -= 1;
                 }
+
                 p += 1;
             }
         }
@@ -219,10 +239,10 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 
             while ((c = *p) != 0) {
                 if ((c == '_') ||
-                        (c == ':') ||
-                        ((c >= 'a') && (c <= 'z')) ||
-                        ((c >= 'A') && (c <= 'Z')) ||
-                        ((c >= '0') && (c <= '9')))
+                    (c == ':') ||
+                    ((c >= 'a') && (c <= 'z')) ||
+                    ((c >= 'A') && (c <= 'Z')) ||
+                    ((c >= '0') && (c <= '9')))
                     p += 1;
                 else {
                     ts.explicit_type.truncate(p - p2);
@@ -246,32 +266,34 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 
         // check manually added keyword
         if ((ts.explicit_type == "const") ||
-                (ts.explicit_type == "static"))
+            (ts.explicit_type == "static"))
             continue;
 
         // search for a * or & or < after the typename
         bool incl = (template_level == 0);
 
         if (incl &&
-                (!CppSettings::isInlineOperationForceIncludesInHeader() ||
-                 (!templ && !isCppInline()))) {
+            (!CppSettings::isInlineOperationForceIncludesInHeader() ||
+             (!templ && !isCppInline()))) {
             while ((c = *p) != 0) {
                 if ((c == '*') || (c == '&')) {
                     incl = FALSE;
                     p += 1;
                     break;
                 }
+
                 if ((c == '$') ||	// probably ${p}
-                        (c == '<') ||
-                        (c == '>') ||
-                        (c == '(') ||
-                        (c == ')') ||
-                        (c == ',') ||
-                        (c == '_') ||
-                        ((c >= 'a') && (c <= 'z')) ||
-                        ((c >= 'A') && (c <= 'Z'))) {
+                    (c == '<') ||
+                    (c == '>') ||
+                    (c == '(') ||
+                    (c == ')') ||
+                    (c == ',') ||
+                    (c == '_') ||
+                    ((c >= 'a') && (c <= 'z')) ||
+                    ((c >= 'A') && (c <= 'Z'))) {
                     break;
                 }
+
                 p += 1;
             }
         }
@@ -291,7 +313,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
     return TRUE;
 }
 
-static bool generate_var(const Q3ValueList<UmlParameter> & params, 
+static bool generate_var(const Q3ValueList<UmlParameter> & params,
                          unsigned rank, QTextStream & f_h)
 {
     if (rank >= params.count())
@@ -301,7 +323,7 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
     return TRUE;
 }
 
-static bool generate_init(const Q3ValueList<UmlParameter> & params, 
+static bool generate_init(const Q3ValueList<UmlParameter> & params,
                           unsigned rank, QTextStream & f_h)
 {
     if (rank >= params.count())
@@ -324,7 +346,8 @@ static void param_error(const Q3CString & parent, const Q3CString & name,
     incr_error();
 }
 
-Q3CString UmlOperation::compute_name() {
+Q3CString UmlOperation::compute_name()
+{
     Q3CString get_set_spec = cppNameSpec();
 
     if (! get_set_spec.isEmpty()) {
@@ -335,8 +358,8 @@ Q3CString UmlOperation::compute_name() {
 
         int index;
         Q3CString s = (it->kind() == aRelation)
-                ? ((UmlRelation *) it)->roleName()
-                : it->name();
+                      ? ((UmlRelation *) it)->roleName()
+                      : it->name();
 
         if ((index = get_set_spec.find("${name}")) != -1)
             get_set_spec.replace(index, 7, s);
@@ -353,19 +376,22 @@ Q3CString UmlOperation::compute_name() {
         return name();
 }
 
-bool CompareAgainstTag(QString& currentTag, QString tagToCompare, const char * p)
+bool CompareAgainstTag(QString & currentTag, QString tagToCompare, const char * p)
 {
     QLOG_DEBUG() << "Comparing: " << tagToCompare;
     currentTag = tagToCompare;
     tagToCompare = "${" + tagToCompare + "}";
+
     if (!strncmp(p, tagToCompare, tagToCompare.length()))
         return true;
+
     return false;
 }
 
 void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream & f_h,
                                  const Q3CString & cl_stereotype, Q3CString indent,
-                                 BooL & first, bool) {
+                                 BooL & first, bool)
+{
     if (!cppDecl().isEmpty()) {
         if (cl_stereotype == "enum") {
             write_trace_header();
@@ -373,6 +399,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             incr_warning();
             return;
         }
+
         if (cl_stereotype == "typedef") {
             write_trace_header();
             UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>a <i>typedef</i> cannot have operation</b></font><br>");
@@ -393,7 +420,9 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
 
         if (*p != '#')
             f_h << indent;
+
         QString currentTag;
+
         for (;;) {
             if (*p == 0) {
                 if (pp == 0)
@@ -402,6 +431,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
                 // comment management done
                 p = pp;
                 pp = 0;
+
                 if (*p == 0)
                     break;
 
@@ -410,10 +440,12 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
                 if (*p != '#')
                     f_h << indent;
             }
+
             std::function<bool(QString)> compareTagToBuffer = std::bind(CompareAgainstTag, std::ref(currentTag), std::placeholders::_1, p);
 
             if (*p == '\n') {
                 f_h << *p++;
+
                 if (*p && (*p != '#'))
                     f_h << indent;
             }
@@ -427,21 +459,25 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
                 manage_description(p, pp);
             else if (!strncmp(p, "${static}", 9)) {
                 p += 9;
+
                 if (isClassMember())
                     f_h << "static ";
             }
             else if (!strncmp(p, "${inline}", 9)) {
                 p += 9;
+
                 if (isCppInline())
                     f_h << "inline ";
             }
             else if (!strncmp(p, "${friend}", 9)) {
                 p += 9;
+
                 if (isCppFriend())
                     f_h << "friend ";
             }
             else if (!strncmp(p, "${virtual}", 10)) {
                 p += 10;
+
                 if (isCppVirtual())
                     f_h << "virtual ";
             }
@@ -473,11 +509,13 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             }
             else if (!strncmp(p, "${const}", 8)) {
                 p += 8;
+
                 if (isCppConst())
                     f_h << " const";
             }
             else if (!strncmp(p, "${volatile}", 11)) {
                 p += 11;
+
                 if (isVolatile())
                     f_h << " volatile";
             }
@@ -487,31 +525,32 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             }
             else if (!strncmp(p, "${abstract}", 11)) {
                 p += 11;
+
                 if (isAbstract())
                     f_h << " = 0";
             }
-            else if (compareTagToBuffer("default"))
-            {
+            else if (compareTagToBuffer("default")) {
                 QLOG_DEBUG() << "at default";
                 p += currentTag.length() + 3;
+
                 if (isCppDefault())
                     f_h << " " + currentTag;
             }
-            else if (compareTagToBuffer("delete"))
-            {
+            else if (compareTagToBuffer("delete")) {
                 p += currentTag.length() + 3;
+
                 if (isCppDelete())
                     f_h << " " + currentTag;
             }
-            else if (compareTagToBuffer("override"))
-            {
+            else if (compareTagToBuffer("override")) {
                 p += currentTag.length() + 3;
+
                 if (isCppOverride())
                     f_h << " " + currentTag;
             }
-            else if (compareTagToBuffer("final"))
-            {
+            else if (compareTagToBuffer("final")) {
                 p += currentTag.length() + 3;
+
                 if (isCppFinal())
                     f_h << " " + currentTag;
             }
@@ -519,16 +558,19 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             else if (sscanf(p, "${t%u}", &rank) == 1) {
                 if (!generate_type(params, rank, f_h))
                     param_error(parent()->name(), name(), rank, "declaration");
+
                 p = strchr(p, '}') + 1;
             }
             else if (sscanf(p, "${p%u}", &rank) == 1) {
                 if (!generate_var(params, rank, f_h))
                     param_error(parent()->name(), name(), rank, "declaration");
+
                 p = strchr(p, '}') + 1;
             }
             else if (sscanf(p, "${v%u}", &rank) == 1) {
                 if (!generate_init(params, rank, f_h))
                     param_error(parent()->name(), name(), rank, "declaration");
+
                 p = strchr(p, '}') + 1;
             }
             else if (!strncmp(p, "${association}", 14)) {
@@ -550,7 +592,8 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
     }
 }
 
-void UmlOperation::generate_throw(QTextStream & f) {
+void UmlOperation::generate_throw(QTextStream & f)
+{
     const Q3ValueList<UmlTypeSpec> exc = exceptions();
 
     if (!exc.isEmpty()) {
@@ -562,6 +605,7 @@ void UmlOperation::generate_throw(QTextStream & f) {
             UmlClass::write(f, *it);
             sep = ", ";
         }
+
         f << ')';
     }
     else if (CppSettings::operationForceThrow())
@@ -571,8 +615,9 @@ void UmlOperation::generate_throw(QTextStream & f) {
 // p point to {space/tab}*${body}
 // indent is the one of the operation
 const char * UmlOperation::generate_body(QTextStream & fs,
-                                         Q3CString indent,
-                                         const char * p) {
+        Q3CString indent,
+        const char * p)
+{
     const char * body = 0;
     Q3CString modeler_body;
     bool add_nl = FALSE;
@@ -601,7 +646,7 @@ const char * UmlOperation::generate_body(QTextStream & fs,
 
     if (preserve() && !isBodyGenerationForced())
         fs << indent << BodyPrefix << s_id << '\n';
-    
+
     if ((body != 0) && (*body != 0)) {
         // output body
         if (indent.isEmpty() || no_indent) {
@@ -616,16 +661,23 @@ const char * UmlOperation::generate_body(QTextStream & fs,
                 switch (*body) {
                 case '\\':
                     fs << '\\';
+
                     if (*++body == '\r')
                         fs << *body++;
+
                     if (*body == '\n')
                         fs << *body++;
+
                     break;
+
                 case '\n':
                     fs << '\n';
+
                     if ((*++body != 0) && (*body != '#'))
                         fs << indent;
+
                     break;
+
                 default:
                     fs << *body++;
                 }
@@ -641,11 +693,12 @@ const char * UmlOperation::generate_body(QTextStream & fs,
 
         fs << indent << BodyPostfix << s_id << '\n';
     }
-    
+
     return p + 7;
 }
 
-bool UmlOperation::is_template_operation() {
+bool UmlOperation::is_template_operation()
+{
     if (!cppDecl().isEmpty())
         return FALSE;
 
@@ -671,12 +724,13 @@ bool UmlOperation::is_template_operation() {
 void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
                                 Q3CString templates, Q3CString cl_names,
                                 Q3CString templates_tmplop,
-                                Q3CString cl_names_tmplop) {
+                                Q3CString cl_names_tmplop)
+{
     if (!cppDef().isEmpty() && !isAbstract() && !isCppDelete() && !isCppDefault()) {
         UmlClass * cl = (UmlClass *) parent();
 
         if ((!templates.isEmpty() || isCppInline() || (cl->name().find('<') != -1))
-                ? h : !h) {
+            ? h : !h) {
             const char * p = cppDef();
             const char * pp = 0;
             const Q3ValueList<UmlParameter> & params = this->params();
@@ -695,8 +749,8 @@ void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
                 indent += *p++;
 
             bool re_template = !templates.isEmpty() &&
-                    insert_template(p, fs, indent,
-                                    (template_oper) ? templates_tmplop : templates);
+                               insert_template(p, fs, indent,
+                                               (template_oper) ? templates_tmplop : templates);
 
             if (*p != '#')
                 fs << indent;
@@ -722,6 +776,7 @@ void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
 
                 if (*p == '\n') {
                     fs << *p++;
+
                     if (p == body_indent)
                         p = generate_body(fs, indent, p);
                     else if (*p && (*p != '#'))
@@ -737,7 +792,7 @@ void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
                 }
                 else if (!strncmp(p, "${comment}", 10)) {
                     if (!manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment())
-                            && re_template)
+                        && re_template)
                         fs << ((template_oper) ? templates_tmplop : templates);
                 }
                 else if (!strncmp(p, "${description}", 14)) {
@@ -746,6 +801,7 @@ void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
                 }
                 else if (!strncmp(p, "${inline}", 9)) {
                     p += 9;
+
                     if (isCppInline())
                         fs << "inline ";
                 }
@@ -761,6 +817,7 @@ void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
                 }
                 else if (!strncmp(p, "${class}", 8)) {
                     p += 8;
+
                     if (isCppFriend() && !strncmp(p, "::", 2))
                         p += 2;
                     else
@@ -780,11 +837,13 @@ void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
                 }
                 else if (!strncmp(p, "${const}", 8)) {
                     p += 8;
+
                     if (isCppConst())
                         fs << " const";
                 }
                 else if (!strncmp(p, "${volatile}", 11)) {
                     p += 11;
+
                     if (isVolatile())
                         fs << " volatile";
                 }
@@ -794,8 +853,10 @@ void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
                 }
                 else if (!strncmp(p, "${staticnl}", 11)) {
                     p += 11;
+
                     if (isClassMember()) {
                         fs << '\n';
+
                         if (*p && (*p != '#'))
                             fs << indent;
                     }
@@ -805,11 +866,13 @@ void UmlOperation::generate_def(QTextStream & fs, Q3CString indent, bool h,
                 else if (sscanf(p, "${t%u}", &rank) == 1) {
                     if (!generate_type(params, rank, fs))
                         param_error(cl->name(), name(), rank, "definition");
+
                     p = strchr(p, '}') + 1;
                 }
                 else if (sscanf(p, "${p%u}", &rank) == 1) {
                     if (!generate_var(params, rank, fs))
                         param_error(cl->name(), name(), rank, "definition");
+
                     p = strchr(p, '}') + 1;
                 }
                 else if (!strncmp(p, "${body}", 7) &&
@@ -865,10 +928,11 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
 {
     QLOG_INFO() << "Reading bodies from file: " << path;
     int bodiesSize = bodies.size();
-    for(int i(0); i < bodiesSize; ++i)
-    {
+
+    for (int i(0); i < bodiesSize; ++i) {
         QLOG_INFO() << bodies[i];
     }
+
     char * s = read_file(path);
 
     if (s != 0) {
@@ -881,8 +945,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
             char * body;
             long id = strtol(p2, &body, 16);
 
-            if (body != (p2 + 8))
-            {
+            if (body != (p2 + 8)) {
                 QLOG_ERROR() << "bye happened";
                 UmlCom::trace(Q3CString("<font color =\"red\"> Error in ") + path +
                               " : invalid preserve body identifier</font><br>");
@@ -900,6 +963,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
 
             if (*body == '\r')
                 body += 1;
+
             if (*body == '\n')
                 body += 1;
             else {
@@ -911,7 +975,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
             }
 
             if (((p1 = strstr(body, BodyPostfix)) == 0) ||
-                    (strncmp(p1 + BodyPostfixLength, p2, 8) != 0)) {
+                (strncmp(p1 + BodyPostfixLength, p2, 8) != 0)) {
                 QLOG_ERROR() << "bye happened";
                 UmlCom::trace(Q3CString("<font  color =\"red\"> Error in ") + path +
                               " : invalid preserve body block, wrong balanced</font><br>");
@@ -920,8 +984,10 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
             }
 
             p2 = p1;
+
             while ((p2 != body) && (p2[-1] != '\n'))
                 p2 -= 1;
+
             *p2 = 0;
 
             int len = p2 - body + 1;

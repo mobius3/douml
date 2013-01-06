@@ -10,8 +10,9 @@
 class UmlExpansionRegion;
 class UmlItem;
 
-class UmlBaseExpansionRegion : public UmlActivityRegion {
-  public:
+class UmlBaseExpansionRegion : public UmlActivityRegion
+{
+public:
     //  returns a new expansion region named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -23,13 +24,13 @@ class UmlBaseExpansionRegion : public UmlActivityRegion {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseExpansionRegion(void * id, const Q3CString & s) : UmlActivityRegion(id, s) {
+    UmlBaseExpansionRegion(void * id, const Q3CString & s) : UmlActivityRegion(id, s) {
     }
 
 
-  public:
+public:
     // return the isMustIsolate attribute, if TRUE the actions in the region execute in isolation from actions outside the region.
     bool isMustIsolate();
 
@@ -47,13 +48,13 @@ class UmlBaseExpansionRegion : public UmlActivityRegion {
     bool set_Mode(anExpansionKind v);
 
 
-  private:
+private:
     bool _must_isolate;
 
     anExpansionKind _mode;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

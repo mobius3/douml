@@ -50,148 +50,148 @@ bool UmlDesktop::noguip;
 
 int UmlDesktop::width()
 {
-  return w;
+    return w;
 }
 
 int UmlDesktop::height()
 {
-  return h;
+    return h;
 }
 
 void UmlDesktop::tocenter(QWidget * who)
 {
-  who->move(who->x() + c.x() - (who->x() + who->width() / 2),
-	    who->y() + c.y() - (who->y() + who->height() / 2));
+    who->move(who->x() + c.x() - (who->x() + who->width() / 2),
+              who->y() + c.y() - (who->y() + who->height() / 2));
 }
 
 bool UmlDesktop::fixed()
 {
-  return fixedp;
+    return fixedp;
 }
 
 void UmlDesktop::setsize_center(QWidget * who, QSize & previous,
-				double pw, double ph)
+                                double pw, double ph)
 {
-  if (previous.width() <= 0) {
-    previous.setWidth((int) (w * pw));
-    previous.setHeight((int) (h * ph));
-  }
-  
-  who->resize(previous);
-  
-  if (fixedp)
-    tocenter(who);
+    if (previous.width() <= 0) {
+        previous.setWidth((int)(w * pw));
+        previous.setHeight((int)(h * ph));
+    }
+
+    who->resize(previous);
+
+    if (fixedp)
+        tocenter(who);
 }
 
-void UmlDesktop::limitsize_center(QWidget * who, QSize & previous, 
-				  double max_w, double max_h)
+void UmlDesktop::limitsize_center(QWidget * who, QSize & previous,
+                                  double max_w, double max_h)
 {
-  if (previous.width() > 0)
-    who->resize(previous);
-  else {
-    int wi = (int) (w * max_w);
-    int he = (int) (h * max_h);
-    
-    // warning who->width() or who->height()
-    // may be greater than the reality
-    if ((who->width() > wi) || (who->height() > he)) {
-      previous.setWidth((who->width() > wi) ? wi : who->width());
-      previous.setHeight((who->height() > he) ? he : who->height());
-      who->resize(previous);
+    if (previous.width() > 0)
+        who->resize(previous);
+    else {
+        int wi = (int)(w * max_w);
+        int he = (int)(h * max_h);
+
+        // warning who->width() or who->height()
+        // may be greater than the reality
+        if ((who->width() > wi) || (who->height() > he)) {
+            previous.setWidth((who->width() > wi) ? wi : who->width());
+            previous.setHeight((who->height() > he) ? he : who->height());
+            who->resize(previous);
+        }
     }
-  }
-  
-  if (fixedp)
-    tocenter(who);
+
+    if (fixedp)
+        tocenter(who);
 }
 
 void UmlDesktop::limitsize_move(QWidget * who, QSize & previous,
-				double max_w, double max_h)
+                                double max_w, double max_h)
 {
-  if (previous.width() > 0)
-    who->resize(previous);
-  else {
-    int wi = (int) (w * max_w);
-    int he = (int) (h * max_h);
-    
-    // warning who->width() or who->height()
-    // may be greater than the reality
-    if ((who->width() > wi) || (who->height() > he)) {
-      previous.setWidth((who->width() > wi) ? wi : who->width());
-      previous.setHeight((who->height() > he) ? he : who->height());
-      who->resize(previous);
-    }
-  }
-  
-  if (fixedp)
-    tocenter(who);
+    if (previous.width() > 0)
+        who->resize(previous);
+    else {
+        int wi = (int)(w * max_w);
+        int he = (int)(h * max_h);
 
-  // under Windows the dialog may go out of the screen
-  else
-    who->move(QCursor::pos());
+        // warning who->width() or who->height()
+        // may be greater than the reality
+        if ((who->width() > wi) || (who->height() > he)) {
+            previous.setWidth((who->width() > wi) ? wi : who->width());
+            previous.setHeight((who->height() > he) ? he : who->height());
+            who->resize(previous);
+        }
+    }
+
+    if (fixedp)
+        tocenter(who);
+
+    // under Windows the dialog may go out of the screen
+    else
+        who->move(QCursor::pos());
 
 }
 
 void UmlDesktop::limits(int & l, int & t, int & r, int & b)
 {
-  l = left;
-  t = top;
-  r = right;
-  b = bottom;
+    l = left;
+    t = top;
+    r = right;
+    b = bottom;
 }
 
 void UmlDesktop::set_limits(int l, int t, int r, int b)
 {
-  left = top = right = bottom = 0;
-    
-  if ((r == 0) && (t == 0) && (r == 0) && (b == 0))
-    fixedp = FALSE;
-  else if ((r < 0) || (t < 0) || (r < 0) || (b < 0)) {
-    fixedp = FALSE;
-    QMessageBox::critical(0, "Bouml",
-			  "Invalid DEFAULT SCREEN, values not taken into account\n"
-			  "\n"
-			  "coordinates can't be negative");
-  }
-  else if ((r <= l) || (b <= t)) {
-    fixedp = FALSE;
-    
-    QMessageBox::critical(0, "Bouml",
-			  "Invalid DEFAULT SCREEN, values not taken into account\n"
-			  "\n"
-			  "right must be greater than left, and bottom must be greater than top");
-  }
-  else {
-    left = l;
-    top = t;
-    right = r;
-    bottom = b;
-    
-    w = right - left + 1;
-    h = bottom - top + 1;
-    c.setX((right + left) /2);
-    c.setY((top+bottom) / 2);
-    fixedp = TRUE;
-  }
+    left = top = right = bottom = 0;
+
+    if ((r == 0) && (t == 0) && (r == 0) && (b == 0))
+        fixedp = FALSE;
+    else if ((r < 0) || (t < 0) || (r < 0) || (b < 0)) {
+        fixedp = FALSE;
+        QMessageBox::critical(0, "Bouml",
+                              "Invalid DEFAULT SCREEN, values not taken into account\n"
+                              "\n"
+                              "coordinates can't be negative");
+    }
+    else if ((r <= l) || (b <= t)) {
+        fixedp = FALSE;
+
+        QMessageBox::critical(0, "Bouml",
+                              "Invalid DEFAULT SCREEN, values not taken into account\n"
+                              "\n"
+                              "right must be greater than left, and bottom must be greater than top");
+    }
+    else {
+        left = l;
+        top = t;
+        right = r;
+        bottom = b;
+
+        w = right - left + 1;
+        h = bottom - top + 1;
+        c.setX((right + left) / 2);
+        c.setY((top + bottom) / 2);
+        fixedp = TRUE;
+    }
 }
 
 bool UmlDesktop::nogui()
 {
-  return noguip;
+    return noguip;
 }
 
 void UmlDesktop::set_nogui()
 {
-  noguip = TRUE;
+    noguip = TRUE;
 }
 
-    
+
 void UmlDesktop::init()
 {
-  fixedp = FALSE;
-  noguip = FALSE;
-  w = QApplication::desktop()->width();
-  h = QApplication::desktop()->height();
-  c.setX(w / 2);
-  c.setY(h / 2);
+    fixedp = FALSE;
+    noguip = FALSE;
+    w = QApplication::desktop()->width();
+    h = QApplication::desktop()->height();
+    c.setX(w / 2);
+    c.setY(h / 2);
 }

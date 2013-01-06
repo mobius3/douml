@@ -11,8 +11,9 @@
 //
 // You can modify it as you want (except the constructor)
 
-class UmlExtraClassMember : public UmlBaseExtraClassMember {
-  public:
+class UmlExtraClassMember : public UmlBaseExtraClassMember
+{
+public:
     UmlExtraClassMember(void * id, const Q3CString & n) : UmlBaseExtraClassMember(id, n) {};
 
 };

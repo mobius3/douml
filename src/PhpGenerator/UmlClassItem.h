@@ -36,14 +36,15 @@
 class QTextStream;
 class UmlTypeSpec;
 
-class UmlClassItem : public UmlBaseClassItem {
-  public:
+class UmlClassItem : public UmlBaseClassItem
+{
+public:
     UmlClassItem(void * id, const Q3CString & n)
-      : UmlBaseClassItem(id, n) {
+        : UmlBaseClassItem(id, n) {
     };
-  
+
     virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, int & enum_item_rank) = 0;
+                          Q3CString indent, int & enum_item_rank) = 0;
 };
 
 #endif

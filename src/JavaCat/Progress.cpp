@@ -34,31 +34,36 @@
 Progress * Progress::it = 0;
 
 Progress::Progress(int n, const char * lbl, QApplication * a)
-    : Q3ProgressDialog(0, 0, n, 0, 0, FALSE, Qt::WDestructiveClose), n(0), app(a) {
-  if (it != 0)
-    delete it;
-  
-  it = this;
-  setLabelText(lbl);
-  setMinimumDuration(1000);
+    : Q3ProgressDialog(0, 0, n, 0, 0, FALSE, Qt::WDestructiveClose), n(0), app(a)
+{
+    if (it != 0)
+        delete it;
+
+    it = this;
+    setLabelText(lbl);
+    setMinimumDuration(1000);
 }
 
-Progress::~Progress() {
-  it = 0;
+Progress::~Progress()
+{
+    it = 0;
 }
 
-void Progress::tic() {
-  setProgress(++n);
-  raise();
-  app->processEvents();
+void Progress::tic()
+{
+    setProgress(++n);
+    raise();
+    app->processEvents();
 }
 
-void Progress::delete_it() {
-  if (it != 0)
-    delete it;
+void Progress::delete_it()
+{
+    if (it != 0)
+        delete it;
 }
 
-void Progress::tic_it() {
-  if (it != 0)
-    it->tic();
+void Progress::tic_it()
+{
+    if (it != 0)
+        it->tic();
 }

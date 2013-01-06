@@ -36,27 +36,28 @@ class TransitionData;
 #include "BrowserNode.h"
 #include "Labeled.h"
 
-class BrowserTransition : public BrowserNode, public Labeled<BrowserTransition> {
-  protected:
+class BrowserTransition : public BrowserNode, public Labeled<BrowserTransition>
+{
+protected:
     static IdDict<BrowserTransition> all;
-  
+
     TransitionData * def;
-    
+
     BrowserTransition(BrowserNode * p, TransitionData * d, int id);
     BrowserTransition(int id);
-    
+
     void exec_menu_choice(int rank);
 
-  public:
+public:
     BrowserTransition(BrowserNode * p, BrowserNode * end);
     BrowserTransition(const BrowserTransition * model, BrowserNode * p);
     virtual ~BrowserTransition();
-  
+
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
-        
-    virtual const QPixmap* pixmap (int) const;
+                                    QString name = QString());
+
+    virtual const QPixmap * pixmap(int) const;
 
     virtual bool allow_empty() const;
     virtual bool same_name(const QString & s, UmlCode type) const;
@@ -73,21 +74,21 @@ class BrowserTransition : public BrowserNode, public Labeled<BrowserTransition> 
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void update_stereotype(bool = FALSE);
     QString str(bool horiz, DrawingLanguage lg) const;
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserTransition * read_ref(char * & st);
-    static BrowserTransition * read(char * &, char *, BrowserNode *);
+    static BrowserTransition * read_ref(char *& st);
+    static BrowserTransition * read(char *& , char *, BrowserNode *);
     static BrowserTransition * temporary(TransitionData * d);
     static BrowserNode * get_it(const char * k, int id);
-    
+
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
+
     virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
     static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
 
     static QString drag_key(BrowserNode * p);

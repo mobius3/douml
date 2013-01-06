@@ -26,8 +26,7 @@
 
 #include <QWidget>
 
-enum EWidgetModificationMode
-{
+enum EWidgetModificationMode {
     wmm_none = 0,
     wmm_drag = 1,
     wmm_resize = 2
@@ -37,14 +36,14 @@ class MultiPurposeDragArea : public QWidget
 {
     Q_OBJECT
 public:
-    MultiPurposeDragArea(QWidget* _parent = 0);
+    MultiPurposeDragArea(QWidget * _parent = 0);
     ~MultiPurposeDragArea();
 protected:
     //! called when user srolls with mouse wheel
-    void wheelEvent ( QWheelEvent * event );
-    void mouseMoveEvent ( QMouseEvent * event );
-    void mousePressEvent ( QMouseEvent * event );
-    void mouseReleaseEvent ( QMouseEvent * event ) ;
+    void wheelEvent(QWheelEvent * event);
+    void mouseMoveEvent(QMouseEvent * event);
+    void mousePressEvent(QMouseEvent * event);
+    void mouseReleaseEvent(QMouseEvent * event) ;
     EWidgetModificationMode modificationMode;
 
 signals:

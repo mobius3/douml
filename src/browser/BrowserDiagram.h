@@ -35,20 +35,21 @@
 class QTextStream;
 class ComponentDrawingSettings;
 
-class BrowserDiagram : public BrowserNode, public Labeled<BrowserDiagram> {
-  protected:
+class BrowserDiagram : public BrowserNode, public Labeled<BrowserDiagram>
+{
+protected:
     static IdDict<BrowserDiagram> all;
-  
+
     CanvasFormat canvas_size;
-      
+
     BrowserDiagram(int id);
-  
-  public:
+
+public:
     BrowserDiagram(QString s, BrowserNode * parent, int id);
     virtual ~BrowserDiagram();
-  
+
     virtual void package_modified();
-    
+
     virtual void update_drawing_settings() = 0;
     virtual bool get_auto_label_position() const = 0;
     virtual bool get_shadow() const = 0;
@@ -59,25 +60,29 @@ class BrowserDiagram : public BrowserNode, public Labeled<BrowserDiagram> {
     virtual void get_componentdrawingsettings(ComponentDrawingSettings & r) const;
     virtual bool get_classinstwritehorizontally() const;
     virtual ShowContextMode get_classinstshowmode() const;
-    
-    CanvasFormat get_format() const { return canvas_size; }
-    void set_format(CanvasFormat c) { canvas_size = c; }
-    virtual void read_session(char * & st) = 0;
-    
+
+    CanvasFormat get_format() const {
+        return canvas_size;
+    }
+    void set_format(CanvasFormat c) {
+        canvas_size = c;
+    }
+    virtual void read_session(char *& st) = 0;
+
     static BrowserNodeList & instances(BrowserNodeList &, bool sort);
-    
+
     void save();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     static void clear(bool old);
     static void update_idmax_for_root();
     static void import();
     virtual void prepare_update_lib() const;
     virtual void support_file(Q3Dict<char> & files, bool add) const;
-    
-    static BrowserNode * read_diagram_ref(char * & st);
-    static BrowserNode * read_any_ref(char * & st, char * k);
+
+    static BrowserNode * read_diagram_ref(char *& st);
+    static BrowserNode * read_any_ref(char *& st, char * k);
 };
 
 #endif

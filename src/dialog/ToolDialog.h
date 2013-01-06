@@ -36,40 +36,42 @@
 class QPixmap;
 
 struct ToolColumnDef {
-  UmlCode kind;
-  QPixmap ** pixmap;
+    UmlCode kind;
+    QPixmap ** pixmap;
 };
 
-class ToolDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  public:
-    ToolDialog(); 
-    virtual ~ToolDialog(); 
-    
-  private:
+class ToolDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+public:
+    ToolDialog();
+    virtual ~ToolDialog();
+
+private:
     static QSize previous_size;
-  
-  protected slots:
+
+protected slots:
     virtual void accept();
     virtual void polish();
 };
 
-class ToolTable : public StringTable {
-  Q_OBJECT
-    
-  private:
+class ToolTable : public StringTable
+{
+    Q_OBJECT
+
+private:
     const ToolColumnDef * cd;
-  
-  public:
+
+public:
     ToolTable(QWidget * parent, const ToolColumnDef * tcd, unsigned ncols);
-  
+
     virtual void init_row(int r);
 
     unsigned ntools();
     unsigned update(unsigned rank);
-  
-  protected slots:
+
+protected slots:
     virtual void button_pressed(int row, int col, int button, const QPoint & mousePos);
 };
 

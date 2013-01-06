@@ -27,8 +27,8 @@
 #include <QToolBar>
 class EdgeMenuDialog;
 class EdgeMenuToolBar;
-void ConnectToClassDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar);
-void ConnectToLimitedtDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar);
+void ConnectToClassDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar);
+void ConnectToLimitedtDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar);
 
 
 #endif // DIALOGCONNECTIONS_H

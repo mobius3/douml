@@ -35,209 +35,223 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlRelation::generate_inherit(const char *& sep, QTextStream & f, 
-				   const Q3CString & cl_stereotype,
-				   BooL & already) {
-  if ((relationKind() == aGeneralisation) || (relationKind() == aRealization)) {
-    UmlClass * role_type = roleType();
-    Q3CString other_stereotype = role_type->idl_stereotype();
-    
-    if (other_stereotype == "ignored")
-      return;
-    
-    if ((cl_stereotype == "union") || (cl_stereotype == "enum")) {
-      write_trace_header();
-      UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
-		    + cl_stereotype + "</i> cannot inherits</b></font><br>");
-      incr_warning();
-      return;
+void UmlRelation::generate_inherit(const char *& sep, QTextStream & f,
+                                   const Q3CString & cl_stereotype,
+                                   BooL & already)
+{
+    if ((relationKind() == aGeneralisation) || (relationKind() == aRealization)) {
+        UmlClass * role_type = roleType();
+        Q3CString other_stereotype = role_type->idl_stereotype();
+
+        if (other_stereotype == "ignored")
+            return;
+
+        if ((cl_stereotype == "union") || (cl_stereotype == "enum")) {
+            write_trace_header();
+            UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
+                          + cl_stereotype + "</i> cannot inherits</b></font><br>");
+            incr_warning();
+            return;
+        }
+
+        if ((other_stereotype == "union") ||
+            (other_stereotype == "struct") ||
+            (other_stereotype == "enum") ||
+            (other_stereotype == "typedef")) {
+            write_trace_header();
+            UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot inherits an <i>")
+                          + other_stereotype + "</i></b></font><br>");
+            incr_warning();
+            return;
+        }
+
+        if (cl_stereotype == "valuetype") {
+            if (other_stereotype == "valuetype") {
+                if (isIdlTruncatableInheritance())
+                    f << sep << "truncatable ";
+                else
+                    f << sep;
+            }
+            else {
+                // other_stereotype == "interface"
+                if (!already) {
+                    already = TRUE;
+                    f << " supports ";
+                }
+                else
+                    f << sep;
+            }
+        }
+        else
+            f << sep;
+
+        const char * p = idlDecl();
+
+        while (*p) {
+            if (!strncmp(p, "${type}", 7)) {
+                role_type->write(f);
+                p += 7;
+            }
+            else if (*p == '@')
+                manage_alias(p, f);
+            else
+                f << *p++;
+        }
+
+        sep = ", ";
     }
-    
-    if ((other_stereotype == "union") ||
-	(other_stereotype == "struct") ||
-	(other_stereotype == "enum") ||
-	(other_stereotype == "typedef")) {
-      write_trace_header();
-      UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot inherits an <i>")
-		    + other_stereotype + "</i></b></font><br>");
-      incr_warning();
-      return;
-    }
-    
-    if (cl_stereotype == "valuetype") {
-      if (other_stereotype == "valuetype") {
-	if (isIdlTruncatableInheritance())
-	  f << sep << "truncatable ";
-	else
-	  f << sep;
-      }
-      else {
-	// other_stereotype == "interface"
-	if (!already) {
-	  already = TRUE;
-	  f << " supports ";
-	}
-	else
-	  f << sep;
-      }
-    }
-    else
-      f << sep;
-    
-    const char * p = idlDecl();
-    
-    while (*p) {
-      if (!strncmp(p, "${type}", 7)) {
-	role_type->write(f);
-	p += 7;
-      }
-      else if (*p == '@')
-	manage_alias(p, f);
-      else
-	f << *p++;
-    }
-    
-    sep = ", ";
-  }
 }
 
 void UmlRelation::generate_decl(QTextStream & f,
-				const Q3CString & cl_stereotype,
-				Q3CString indent, bool) {
-  if ((relationKind() != aGeneralisation) && 
-      (relationKind() != aRealization) && 
-      (relationKind() != aDependency)) {
-    if (cl_stereotype == "enum") {
-      write_trace_header();
-      UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>enum</i> cannot have relation</b></font><br>");
-      incr_warning();
-      return;
-    }
-    if (cl_stereotype == "typedef") {
-      write_trace_header();
-      UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>a <i>typedef</i> cannot have relation</b></font><br>");
-      incr_warning();
-      return;
-    }
-    if (!idlDecl().isEmpty()) {
-      const char * p = idlDecl();
-      const char * pp = 0;
-      Q3CString s;
-      
-      while ((*p == ' ') || (*p == '\t'))
-	indent += *p++;
-      
-      if (*p != '#')
-	f << indent;
-      
-      for (;;) {
-	if (*p == 0) {
-	  if (pp == 0)
-	    break;
-	  
-	  // comment management done
-	  p = pp;
-	  pp = 0;
-	  if (*p == 0)
-	    break;
-	  if (*p != '#')
-	    f << indent;
-	}
+                                const Q3CString & cl_stereotype,
+                                Q3CString indent, bool)
+{
+    if ((relationKind() != aGeneralisation) &&
+        (relationKind() != aRealization) &&
+        (relationKind() != aDependency)) {
+        if (cl_stereotype == "enum") {
+            write_trace_header();
+            UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>enum</i> cannot have relation</b></font><br>");
+            incr_warning();
+            return;
+        }
 
-	if (*p == '\n') {
-	  f << *p++;
-	  if (*p && (*p != '#'))
-	    f << indent;
-	}
-	else if (*p == '@')
-	  manage_alias(p, f);
-	else if (*p != '$')
-	  f << *p++;
-	else if (!strncmp(p, "${comment}", 10))
-	  manage_comment(p, pp);
-	else if (!strncmp(p, "${description}", 14))
-	  manage_description(p, pp);
-	else if (!strncmp(p, "${readonly}", 11)) {
-	  p += 11;
-	  if (isReadOnly())
-	    f << "readonly ";
-	}
-	else if (!strncmp(p, "${attribut}", 11)) {
-	  // old version
-	  p += 11;
-	  if (cl_stereotype == "interface")
-	    f << "attribute ";
-	}
-	else if (!strncmp(p, "${attribute}", 12)) {
-	  p += 12;
-	  if (cl_stereotype == "interface")
-	    f << "attribute ";
-	}
-	else if (!strncmp(p, "${visibility}", 13)) {
-	  p += 13;
-	  if (cl_stereotype == "valuetype") {
-	    switch (visibility()) {
-	    case PublicVisibility:
-	    case PackageVisibility:
-	      f << "public ";
-	      break;
-	    default:
-	      f << "private ";
-	    } 
-	  }
-	}
-	else if (!strncmp(p, "${case}", 7)) {
-	  p += 7;
-	  
-	  Q3CString idl_case = idlCase();
-	  
-	  if (idl_case.isEmpty()) {
-	    write_trace_header();
-	    UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>unspecified <i>case</i> for <i>")
-			  + name() + "</b></font><br>");
-	    incr_error();
-	  }
-	  else
-	    f << idlCase();
-	}
-	else if (!strncmp(p, "${type}", 7)) {
-	  p += 7;
-	  roleType()->write(f);
-	}
-	else if (!strncmp(p, "${name}", 7)) {
-	  p += 7;
-	  f << roleName();
-	}
-	else if (!strncmp(p, "${inverse_name}", 15)) {
-	  p += 15;
-	  switch (relationKind()) {
-	  case anAssociation:
-	  case anAggregation:
-	  case anAggregationByValue:
-	    f << side(side(TRUE) != this)->roleName();
-	  default:
-	    break;
-	  }
-	}
-	else if (!strncmp(p, "${stereotype}", 13)) {
-	  p += 13;
-	  f << IdlSettings::relationAttributeStereotype(stereotype());
-	}
-	else if (!strncmp(p, "${multiplicity}", 15)) {
-	  p += 15;
-	  f << multiplicity();
-	}
-	else if (!strncmp(p, "${association}", 14)) {
-	  p += 14;
-	  f << IdlSettings::type(association().toString());
-	}
-	else
-	  // strange
-	  f << *p++;
-      }
-    
-      f << '\n';
+        if (cl_stereotype == "typedef") {
+            write_trace_header();
+            UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>a <i>typedef</i> cannot have relation</b></font><br>");
+            incr_warning();
+            return;
+        }
+
+        if (!idlDecl().isEmpty()) {
+            const char * p = idlDecl();
+            const char * pp = 0;
+            Q3CString s;
+
+            while ((*p == ' ') || (*p == '\t'))
+                indent += *p++;
+
+            if (*p != '#')
+                f << indent;
+
+            for (;;) {
+                if (*p == 0) {
+                    if (pp == 0)
+                        break;
+
+                    // comment management done
+                    p = pp;
+                    pp = 0;
+
+                    if (*p == 0)
+                        break;
+
+                    if (*p != '#')
+                        f << indent;
+                }
+
+                if (*p == '\n') {
+                    f << *p++;
+
+                    if (*p && (*p != '#'))
+                        f << indent;
+                }
+                else if (*p == '@')
+                    manage_alias(p, f);
+                else if (*p != '$')
+                    f << *p++;
+                else if (!strncmp(p, "${comment}", 10))
+                    manage_comment(p, pp);
+                else if (!strncmp(p, "${description}", 14))
+                    manage_description(p, pp);
+                else if (!strncmp(p, "${readonly}", 11)) {
+                    p += 11;
+
+                    if (isReadOnly())
+                        f << "readonly ";
+                }
+                else if (!strncmp(p, "${attribut}", 11)) {
+                    // old version
+                    p += 11;
+
+                    if (cl_stereotype == "interface")
+                        f << "attribute ";
+                }
+                else if (!strncmp(p, "${attribute}", 12)) {
+                    p += 12;
+
+                    if (cl_stereotype == "interface")
+                        f << "attribute ";
+                }
+                else if (!strncmp(p, "${visibility}", 13)) {
+                    p += 13;
+
+                    if (cl_stereotype == "valuetype") {
+                        switch (visibility()) {
+                        case PublicVisibility:
+                        case PackageVisibility:
+                            f << "public ";
+                            break;
+
+                        default:
+                            f << "private ";
+                        }
+                    }
+                }
+                else if (!strncmp(p, "${case}", 7)) {
+                    p += 7;
+
+                    Q3CString idl_case = idlCase();
+
+                    if (idl_case.isEmpty()) {
+                        write_trace_header();
+                        UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>unspecified <i>case</i> for <i>")
+                                      + name() + "</b></font><br>");
+                        incr_error();
+                    }
+                    else
+                        f << idlCase();
+                }
+                else if (!strncmp(p, "${type}", 7)) {
+                    p += 7;
+                    roleType()->write(f);
+                }
+                else if (!strncmp(p, "${name}", 7)) {
+                    p += 7;
+                    f << roleName();
+                }
+                else if (!strncmp(p, "${inverse_name}", 15)) {
+                    p += 15;
+
+                    switch (relationKind()) {
+                    case anAssociation:
+                    case anAggregation:
+                    case anAggregationByValue:
+                        f << side(side(TRUE) != this)->roleName();
+
+                    default:
+                        break;
+                    }
+                }
+                else if (!strncmp(p, "${stereotype}", 13)) {
+                    p += 13;
+                    f << IdlSettings::relationAttributeStereotype(stereotype());
+                }
+                else if (!strncmp(p, "${multiplicity}", 15)) {
+                    p += 15;
+                    f << multiplicity();
+                }
+                else if (!strncmp(p, "${association}", 14)) {
+                    p += 14;
+                    f << IdlSettings::type(association().toString());
+                }
+                else
+                    // strange
+                    f << *p++;
+            }
+
+            f << '\n';
+        }
     }
-  }
 }
 

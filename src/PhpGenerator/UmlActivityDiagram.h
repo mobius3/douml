@@ -11,10 +11,11 @@
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlActivityDiagram : public UmlBaseActivityDiagram, public UmlActivityItem {
-  public:
+class UmlActivityDiagram : public UmlBaseActivityDiagram, public UmlActivityItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityDiagram(void * id, const Q3CString & s) : UmlBaseActivityDiagram(id, s) {
+    UmlActivityDiagram(void * id, const Q3CString & s) : UmlBaseActivityDiagram(id, s) {
     }
 
 };

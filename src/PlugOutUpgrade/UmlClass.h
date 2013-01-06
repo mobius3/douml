@@ -45,65 +45,66 @@ class UmlRelation;
 // This class manages 'classes'
 // You can modify it as you want (except the constructor)
 
-class UmlClass : public UmlBaseClass {
-  public:
-    UmlClass(void * id, const Q3CString & n) 
-      : UmlBaseClass(id, n) {};
-  
+class UmlClass : public UmlBaseClass
+{
+public:
+    UmlClass(void * id, const Q3CString & n)
+        : UmlBaseClass(id, n) {};
+
     void made(UmlClassView * base_class_view, UmlClassView * user_class_view,
-	      UmlDeploymentView * base_depl_view, UmlDeploymentView * user_depl_view,
-	      UmlClass * base_item, Q3CString s, UmlClass *& base,
-	      UmlClass *& user, UmlClass * user_interf = 0);
-    
+              UmlDeploymentView * base_depl_view, UmlDeploymentView * user_depl_view,
+              UmlClass * base_item, Q3CString s, UmlClass *& base,
+              UmlClass *& user, UmlClass * user_interf = 0);
+
     void made(UmlClassView * base_class_view, UmlClassView * user_class_view,
-	      UmlArtifact * base_art, UmlArtifact * user_art,
-	      UmlClass * base_item, Q3CString s, UmlClass *& base,
-	      UmlClass *& user, UmlClass * user_interf = 0);
-    
+              UmlArtifact * base_art, UmlArtifact * user_art,
+              UmlClass * base_item, Q3CString s, UmlClass *& base,
+              UmlClass *& user, UmlClass * user_interf = 0);
+
     static UmlClass * made(UmlClassView * class_view,
-			   UmlDeploymentView * depl_view,
-			   Q3CString s, bool interf = FALSE);
-    
+                           UmlDeploymentView * depl_view,
+                           Q3CString s, bool interf = FALSE);
+
     static UmlClass * made(UmlClassView * class_view,
-			   UmlArtifact * art,
-			   Q3CString s, bool interf = FALSE);
-    
+                           UmlArtifact * art,
+                           Q3CString s, bool interf = FALSE);
+
     void add_kind(const char * k);
     void add_default_base_op(UmlClass * super, UmlClass * user,
-			     UmlClass * parent, Q3CString s,
-			     const char * k, bool unnamed = FALSE);
+                             UmlClass * parent, Q3CString s,
+                             const char * k, bool unnamed = FALSE);
     UmlOperation * add_constr(UmlClass * super, aVisibility, bool unnamed = FALSE);
     UmlOperation * add_destr(aVisibility, const char * comment = 0);
-    UmlOperation * add_op(const char * name, aVisibility, 
-			  UmlClass * return_type, bool excpt = FALSE);
-    UmlOperation * add_op(const char * name, aVisibility, 
-			  const char * return_type, bool excpt = FALSE);
-    UmlOperation * add_op(const char * name, aVisibility, 
-			  UmlTypeSpec & return_type, bool excpt = FALSE);
+    UmlOperation * add_op(const char * name, aVisibility,
+                          UmlClass * return_type, bool excpt = FALSE);
+    UmlOperation * add_op(const char * name, aVisibility,
+                          const char * return_type, bool excpt = FALSE);
+    UmlOperation * add_op(const char * name, aVisibility,
+                          UmlTypeSpec & return_type, bool excpt = FALSE);
     UmlAttribute * add_attribute(const char * name, aVisibility v,
-				 UmlClass * type,
-				 const char * if_def, const char * end_if,
-				 const char * bitfield = 0);
+                                 UmlClass * type,
+                                 const char * if_def, const char * end_if,
+                                 const char * bitfield = 0);
     UmlAttribute * add_attribute(const char * name, aVisibility v,
-				 const char * type,
-				 const char * if_def, const char * end_if,
-				 const char * bitfield = 0);
+                                 const char * type,
+                                 const char * if_def, const char * end_if,
+                                 const char * bitfield = 0);
     UmlAttribute * add_attribute(const char * name, aVisibility v,
-				 UmlTypeSpec & type,
-				 const char * if_def, const char * end_if,
-				 const char * bitfield = 0);
+                                 UmlTypeSpec & type,
+                                 const char * if_def, const char * end_if,
+                                 const char * bitfield = 0);
     UmlAttribute * add_enum_item(const char * name);
     UmlRelation * add_relation(aRelationKind k, const char * name,
-			       aVisibility v, UmlClass * type,
-			       const char * if_def, const char * end_if,
-			       const char * bitfield = 0);
+                               aVisibility v, UmlClass * type,
+                               const char * if_def, const char * end_if,
+                               const char * bitfield = 0);
     UmlRelation * add_vect_assoc(const char * name, aVisibility v, UmlClass * type,
-				 const char * if_def, const char * end_if);
+                                 const char * if_def, const char * end_if);
     UmlOperation * get_operation(const char *);
     UmlAttribute * get_attribute(const char *);
     UmlRelation * get_relation(const char * = 0);
     UmlRelation * get_relation(aRelationKind k, const char * = 0);
-    
+
     virtual void replace_friend();
     void add_friend(const char *);
 };

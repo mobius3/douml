@@ -4,14 +4,14 @@
 
 // Internal enum
 enum CmdFamily {
-  onInstanceCmd,
-  classGlobalCmd,
-  packageGlobalCmd,
-  miscGlobalCmd,
-  umlSettingsCmd,
-  cppSettingsCmd,
-  javaSettingsCmd,
-  idlSettingsCmd
+    onInstanceCmd,
+    classGlobalCmd,
+    packageGlobalCmd,
+    miscGlobalCmd,
+    umlSettingsCmd,
+    cppSettingsCmd,
+    javaSettingsCmd,
+    idlSettingsCmd
 
 };
 #endif

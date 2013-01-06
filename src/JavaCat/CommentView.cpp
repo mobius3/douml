@@ -25,9 +25,11 @@
 
 #include "CommentView.h"
 
-CommentView::CommentView(QWidget * parent) : Q3TextBrowser/*QTextView*/(parent) {
+CommentView::CommentView(QWidget * parent) : Q3TextBrowser/*QTextView*/(parent)
+{
 }
 
-void CommentView::setSource(const QString & name) {
-  emit refer(name);
+void CommentView::setSource(const QString & name)
+{
+    emit refer(name);
 }

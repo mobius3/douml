@@ -33,28 +33,31 @@
 
 class BrowserNode;
 
-class BrowserView : public Q3ListView {
-  Q_OBJECT
-    
-  protected:
+class BrowserView : public Q3ListView
+{
+    Q_OBJECT
+
+protected:
     static BrowserView * the;
     static QDir dir;
-  
-  public:
+
+public:
     BrowserView(QWidget * parent);
-virtual ~BrowserView();
-  
+    virtual ~BrowserView();
+
     void set_project(QDir dir);
     void close();
-    
+
     static void select(Q3ListViewItem * b);
     static BrowserNode * get_project();
-    static QDir & get_dir() { return dir; }
-    
-  protected:
+    static QDir & get_dir() {
+        return dir;
+    }
+
+protected:
     virtual void keyPressEvent(QKeyEvent *);
-    
-  protected slots:
+
+protected slots:
     void rightPressed(Q3ListViewItem *);
 };
 

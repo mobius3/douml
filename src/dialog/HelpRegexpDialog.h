@@ -29,13 +29,14 @@
 
 #include "qdialog.h"
 
-class HelpRegexpDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class HelpRegexpDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     static QSize previous_size;
-  
-  public:
+
+public:
     HelpRegexpDialog();
     virtual ~HelpRegexpDialog();
 };

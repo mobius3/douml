@@ -5,10 +5,11 @@
 #include "UmlBaseStateAction.h"
 #include "UmlStateItem.h"
 
-class UmlStateAction : public UmlBaseStateAction, public UmlStateItem {
-  public:
+class UmlStateAction : public UmlBaseStateAction, public UmlStateItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlStateAction(void * id) : UmlBaseStateAction(id, "") {
+    UmlStateAction(void * id) : UmlBaseStateAction(id, "") {
     }
 
 };

@@ -37,41 +37,43 @@ class Q3PopupMenu;
 class QObject;
 class QTextStream;
 
-class ATool {
-  public:
+class ATool
+{
+public:
     QString display;
     QString cmd;
     bool applicable[UmlCodeSup];
-    
+
     ATool();
 };
 
-class Tool {
-  friend class ToolDialog;
-  friend class ToolTable;
-  protected:
+class Tool
+{
+    friend class ToolDialog;
+    friend class ToolTable;
+protected:
     static unsigned ntools;
     static ATool * tools;
     static bool already_read;
-    
+
     static void set_ntools(unsigned n);
-    static void read(char * & st, char * & k, bool new_format);
-    
-  public:
-    static bool menu_insert(Q3PopupMenu * tool, UmlCode target, 
-			    const QObject * receiver, const char * member);
+    static void read(char *& st, char *& k, bool new_format);
+
+public:
+    static bool menu_insert(Q3PopupMenu * tool, UmlCode target,
+                            const QObject * receiver, const char * member);
     static bool menu_insert(Q3PopupMenu * tool, UmlCode target, int first_id);
     static void shortcut(QString s, int & choice, UmlCode target, int first_id);
     static QStringList all_display();
     static const char * command(int rank);
     static const char * command(const char *);
-    
+
     static void save();
     static bool read(const char * = 0);
-    static void read(char * & st, char * & k);
+    static void read(char *& st, char *& k);
     static bool import();
     static void add();
-    
+
     static void init();
     static void defaults();
 };

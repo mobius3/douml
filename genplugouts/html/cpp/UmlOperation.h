@@ -10,8 +10,9 @@
 // is a mother class of all the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlOperation : public UmlBaseOperation {
-  public:
+class UmlOperation : public UmlBaseOperation
+{
+public:
     UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {};
 
     //returns a string indicating the king of the element
@@ -28,7 +29,7 @@ class UmlOperation : public UmlBaseOperation {
     static void generate_index();
 
 
-  private:
+private:
     //produce the definition in Uml
     void gen_uml_decl();
 
@@ -45,11 +46,11 @@ class UmlOperation : public UmlBaseOperation {
     void gen_python_decl(Q3CString s, bool descr);
 
 
-  public:
+public:
     Q3CString compute_name(Q3CString s);
 
 
-  protected:
+protected:
     static Vector opers;
 
 };

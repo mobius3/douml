@@ -9,10 +9,11 @@
 // its own specialized class.
 // You can modify it as you want (except the constructor)
 
-class UmlDiagram : public UmlBaseDiagram {
-  public:
-    UmlDiagram(void * id, const Q3CString & n) 
-      : UmlBaseDiagram(id, n) {};
+class UmlDiagram : public UmlBaseDiagram
+{
+public:
+    UmlDiagram(void * id, const Q3CString & n)
+        : UmlBaseDiagram(id, n) {};
 };
 
 #endif

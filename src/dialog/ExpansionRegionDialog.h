@@ -43,10 +43,11 @@ class ExpansionRegionData;
 class KeyValuesTable;
 class BodyDialog;
 
-class ExpansionRegionDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ExpansionRegionDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     QWidget * umltab;
     ExpansionRegionData * data;
     LineEdit * edname;
@@ -58,14 +59,14 @@ class ExpansionRegionDialog : public Q3TabDialog {
     Q3PtrList<BodyDialog> edits;
 
     static QSize previous_size;
-    
+
     static void post_edit_description(ExpansionRegionDialog * d, QString s);
-      
-  public:
+
+public:
     ExpansionRegionDialog(ExpansionRegionData * nd);
     virtual ~ExpansionRegionDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void edit_description();

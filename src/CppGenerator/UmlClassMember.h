@@ -36,23 +36,24 @@
 // and sub-classes
 // You can modify it as you want (except the constructor)
 
-class UmlClassMember : public UmlBaseClassMember {
-  public:
+class UmlClassMember : public UmlBaseClassMember
+{
+public:
     UmlClassMember(void * id, const Q3CString & n)
-      : UmlBaseClassMember(id, n) {};
-    
+        : UmlBaseClassMember(id, n) {};
+
     static void remove_comments(Q3CString & s);
     static void remove_arrays(Q3CString & s);
     static void remove_preprocessor(Q3CString & s);
     static bool compute_dependency(Q3PtrList<CppRefType> & dependency,
-				   Q3CString decl, const UmlTypeSpec &,
-				   bool force_incl = FALSE);
+                                   Q3CString decl, const UmlTypeSpec &,
+                                   bool force_incl = FALSE);
 
     void generate_visibility(aVisibility & current_visibility,
-			     QTextStream & f_h, bool ahead,
-			     const Q3CString & indent);
+                             QTextStream & f_h, bool ahead,
+                             const Q3CString & indent);
     bool insert_template(const char *& p, QTextStream & fs,
-			 const Q3CString & indent, const Q3CString & templ);
+                         const Q3CString & indent, const Q3CString & templ);
 };
 
 #endif

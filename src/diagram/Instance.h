@@ -28,12 +28,13 @@
 
 #include "BrowserNode.h"
 
-class Instance {
-  public:
+class Instance
+{
+public:
     virtual ~Instance() { }
     virtual QString get_name() const = 0;
     virtual void set_name(const QString & s) = 0;
-    
+
     virtual BrowserNode * get_type() const = 0;
     virtual BrowserNodeList & get_types(BrowserNodeList &) const = 0;
     virtual void set_type(BrowserNode *) = 0;

@@ -25,7 +25,7 @@
 
 #include <stdio.h>// debug
 
-#include <QTextStream> 
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QTextStream>
@@ -46,365 +46,382 @@ static Q3CString dot(".");
 
 Q3CString UmlClass::java_stereotype()
 {
-  Q3CString s = JavaSettings::classStereotype(stereotype());
-  
-  return ((s == "ignored") || (s == "union") || (s == "enum") ||
-	  (s == "interface") || (s == "@interface") ||
-	  (s == "enum_pattern"))
-    ? s : Q3CString("class");
+    Q3CString s = JavaSettings::classStereotype(stereotype());
+
+    return ((s == "ignored") || (s == "union") || (s == "enum") ||
+            (s == "interface") || (s == "@interface") ||
+            (s == "enum_pattern"))
+           ? s : Q3CString("class");
 }
 
-void UmlClass::generate() {
-  if (! managed) {
-    managed = TRUE;
-    
-    if (!isJavaExternal() && !javaDecl().isEmpty()) {
-      if (associatedArtifact() != 0)
-	associatedArtifact()->generate();
-      else if ((children().size() != 0) && verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica><i> ") + name() +
-		      " : </i> does not have associated <i>artifact</i></font><br>");
+void UmlClass::generate()
+{
+    if (! managed) {
+        managed = TRUE;
+
+        if (!isJavaExternal() && !javaDecl().isEmpty()) {
+            if (associatedArtifact() != 0)
+                associatedArtifact()->generate();
+            else if ((children().size() != 0) && verbose())
+                UmlCom::trace(Q3CString("<hr><font face=helvetica><i> ") + name() +
+                              " : </i> does not have associated <i>artifact</i></font><br>");
+        }
     }
-  }
 }
 
-void UmlClass::generate(QTextStream & f, Q3CString indent) {
-  Q3PtrVector<UmlItem> ch = children();
-  const Q3ValueList<UmlActualParameter> actuals = this->actuals();
-  const unsigned sup = ch.size();
-  const Q3CString & stereotype = java_stereotype();
-  bool an_enum_pattern = (stereotype == "enum_pattern");
-  bool an_enum = (stereotype == "enum");
-  unsigned index;
-  const char * p = javaDecl();
-  const char * pp = 0;
-  const char * sep;
-  
-  while ((*p == ' ') || (*p == '\t'))
-    indent += *p++;
-  
-  f << indent;
-    
-  for (;;) {
-    if (*p == 0) {
-      if (pp == 0)
-	break;
-      
-      // comment management done
-      p = pp;
-      pp = 0;
-      if (*p == 0)
-	break;
-      f << indent;
-    }
+void UmlClass::generate(QTextStream & f, Q3CString indent)
+{
+    Q3PtrVector<UmlItem> ch = children();
+    const Q3ValueList<UmlActualParameter> actuals = this->actuals();
+    const unsigned sup = ch.size();
+    const Q3CString & stereotype = java_stereotype();
+    bool an_enum_pattern = (stereotype == "enum_pattern");
+    bool an_enum = (stereotype == "enum");
+    unsigned index;
+    const char * p = javaDecl();
+    const char * pp = 0;
+    const char * sep;
 
-    if (*p == '\n') {
-      f << *p++;
-      if (*p &&
-	  strncmp(p, "${members}", 10) &&
-	  strncmp(p, "${items}", 8) &&
-	  strncmp(p, "${cases}", 8))
-	f << indent;
-    }
-    else if (*p == '@')
-      manage_alias(p, f);
-    else if (*p != '$')
-      f << *p++;
-    else if (!strncmp(p, "${comment}", 10))
-      manage_comment(p, pp, JavaSettings::isGenerateJavadocStyleComment());
-    else if (!strncmp(p, "${description}", 14))
-      manage_description(p, pp);
-    else if (!strncmp(p, "${public}", 9)) {
-      p += 9;
-      if (visibility() == PublicVisibility)
-	f << "public ";
-    }
-    else if (!strncmp(p, "${visibility}", 13)) {
-      p += 13;
-      generate_visibility(f, "");
-    }
-    else if (!strncmp(p, "${final}", 8)) {
-      p += 8;
-      if (isJavaFinal())
-	f << "final ";
-    }
-    else if (!strncmp(p, "${abstract}", 11)) {
-      p += 11;
-      if (isAbstract())
-	f << "abstract ";
-    }
-    else if (! strncmp(p, "${name}", 7)) {
-      p += 7;
-      f << name();
-      generate_formals(f);
-    }
-    else if (!strncmp(p, "${@}", 4)) {
-      p += 4;
-      if (pp != 0)
-	f << "${@}";
-      else if (! javaAnnotations().isEmpty()) {
-	pp = p;
-	p = javaAnnotations();
-      }
-    }
-    else if (an_enum_pattern) {
-      if (!strncmp(p, "${members}", 10)) {
-	p += 10;
-	
-	int current_value = 0;
-	Q3CString name = this->name();
-	
-	for (index = 0; index != sup; index += 1)
-	  if ((ch[index]->kind() != aNcRelation) &&
-	      !((UmlClassItem *) ch[index])->javaDecl().isEmpty())
-	    ((UmlClassItem *) ch[index])->
-	      generate_enum_pattern_item(f, current_value, name, indent);
-      
-	if (*p == '}')
-	  f << indent;
-      }
-      else if (!strncmp(p, "${cases}", 8)) {
-	p += 8;
-	
-	for (index = 0; index != sup; index += 1)
-	  if ((ch[index]->kind() != aNcRelation) &&
-	      !((UmlClassItem *) ch[index])->javaDecl().isEmpty())
-	    ((UmlClassItem *) ch[index])->generate_enum_pattern_case(f, indent);
-      }
-      else
-	// strange
-	f << *p++;
-    }
-    else if (! strncmp(p, "${extends}", 10)) {
-      p += 10;
+    while ((*p == ' ') || (*p == '\t'))
+        indent += *p++;
 
-      // extends
-	
-      sep = " extends ";
-      
-      for (index = 0; index != sup; index += 1) {
-	UmlItem * x = ch[index];
-	
-	if (x->kind() == aRelation)
-	  ((UmlRelation *) x)->generate_extends(sep, f, actuals, stereotype);
-      }
-    }
-    else if (! strncmp(p, "${implements}", 13)) {
-      p += 13;
+    f << indent;
 
-      if (stereotype != "interface") {
-	
-	// implements
-	
-	sep = " implements ";
-	
-	for (index = 0; index != sup; index += 1) {
-	  UmlItem * x = ch[index];
-	  
-	  if (x->kind() == aRelation)
-	    ((UmlRelation *) x)->generate_implements(sep, f, actuals, stereotype);
-	}
-      }
+    for (;;) {
+        if (*p == 0) {
+            if (pp == 0)
+                break;
+
+            // comment management done
+            p = pp;
+            pp = 0;
+
+            if (*p == 0)
+                break;
+
+            f << indent;
+        }
+
+        if (*p == '\n') {
+            f << *p++;
+
+            if (*p &&
+                strncmp(p, "${members}", 10) &&
+                strncmp(p, "${items}", 8) &&
+                strncmp(p, "${cases}", 8))
+                f << indent;
+        }
+        else if (*p == '@')
+            manage_alias(p, f);
+        else if (*p != '$')
+            f << *p++;
+        else if (!strncmp(p, "${comment}", 10))
+            manage_comment(p, pp, JavaSettings::isGenerateJavadocStyleComment());
+        else if (!strncmp(p, "${description}", 14))
+            manage_description(p, pp);
+        else if (!strncmp(p, "${public}", 9)) {
+            p += 9;
+
+            if (visibility() == PublicVisibility)
+                f << "public ";
+        }
+        else if (!strncmp(p, "${visibility}", 13)) {
+            p += 13;
+            generate_visibility(f, "");
+        }
+        else if (!strncmp(p, "${final}", 8)) {
+            p += 8;
+
+            if (isJavaFinal())
+                f << "final ";
+        }
+        else if (!strncmp(p, "${abstract}", 11)) {
+            p += 11;
+
+            if (isAbstract())
+                f << "abstract ";
+        }
+        else if (! strncmp(p, "${name}", 7)) {
+            p += 7;
+            f << name();
+            generate_formals(f);
+        }
+        else if (!strncmp(p, "${@}", 4)) {
+            p += 4;
+
+            if (pp != 0)
+                f << "${@}";
+            else if (! javaAnnotations().isEmpty()) {
+                pp = p;
+                p = javaAnnotations();
+            }
+        }
+        else if (an_enum_pattern) {
+            if (!strncmp(p, "${members}", 10)) {
+                p += 10;
+
+                int current_value = 0;
+                Q3CString name = this->name();
+
+                for (index = 0; index != sup; index += 1)
+                    if ((ch[index]->kind() != aNcRelation) &&
+                        !((UmlClassItem *) ch[index])->javaDecl().isEmpty())
+                        ((UmlClassItem *) ch[index])->
+                        generate_enum_pattern_item(f, current_value, name, indent);
+
+                if (*p == '}')
+                    f << indent;
+            }
+            else if (!strncmp(p, "${cases}", 8)) {
+                p += 8;
+
+                for (index = 0; index != sup; index += 1)
+                    if ((ch[index]->kind() != aNcRelation) &&
+                        !((UmlClassItem *) ch[index])->javaDecl().isEmpty())
+                        ((UmlClassItem *) ch[index])->generate_enum_pattern_case(f, indent);
+            }
+            else
+                // strange
+                f << *p++;
+        }
+        else if (! strncmp(p, "${extends}", 10)) {
+            p += 10;
+
+            // extends
+
+            sep = " extends ";
+
+            for (index = 0; index != sup; index += 1) {
+                UmlItem * x = ch[index];
+
+                if (x->kind() == aRelation)
+                    ((UmlRelation *) x)->generate_extends(sep, f, actuals, stereotype);
+            }
+        }
+        else if (! strncmp(p, "${implements}", 13)) {
+            p += 13;
+
+            if (stereotype != "interface") {
+
+                // implements
+
+                sep = " implements ";
+
+                for (index = 0; index != sup; index += 1) {
+                    UmlItem * x = ch[index];
+
+                    if (x->kind() == aRelation)
+                        ((UmlRelation *) x)->generate_implements(sep, f, actuals, stereotype);
+                }
+            }
+        }
+        else if (! strncmp(p, "${members}", 10)) {
+            p += 10;
+
+            // members
+
+            if (an_enum) {
+                for (index = 0; index != sup; index += 1) {
+                    if (ch[index]->kind() != aNcRelation) {
+                        UmlClassItem * it = (UmlClassItem *)ch[index];
+
+                        if (! it->javaDecl().isEmpty())
+                            it->generate_enum_member(f, indent);
+                    }
+                }
+            }
+            else {
+                for (index = 0; index != sup; index += 1) {
+                    UmlItem * it = ch[index];
+
+                    if (it->kind() == aClass) {
+                        if (!((UmlClass *) it)->javaDecl().isEmpty()) {
+                            ((UmlClass *) it)->generate(f, indent + "  ");
+                            f << '\n';
+                        }
+                    }
+                    else if ((it->kind() != aNcRelation) &&
+                             !((UmlClassItem *) it)->javaDecl().isEmpty())
+                        ((UmlClassItem *) it)->generate(f, stereotype, indent);
+                }
+            }
+
+            if (*p == '}')
+                f << indent;
+        }
+        else if (an_enum && ! strncmp(p, "${items}", 8)) {
+            p += 8;
+
+            // enums items
+
+            BooL first = TRUE;
+
+            for (index = 0; index != sup; index += 1) {
+                if (ch[index]->kind() != aNcRelation) {
+                    UmlClassItem * it = (UmlClassItem *)ch[index];
+
+                    if (! it->javaDecl().isEmpty())
+                        it->generate_enum_item(f, indent, first);
+                }
+            }
+
+            if (*p == '}')
+                f << indent;
+        }
+        else
+            // strange
+            f << *p++;
     }
-    else if (! strncmp(p, "${members}", 10)) {
-      p += 10;
-  
-      // members
-      
-      if (an_enum) {
-	for (index = 0; index != sup; index += 1) {
-	  if (ch[index]->kind() != aNcRelation) {
-	    UmlClassItem * it = (UmlClassItem *)ch[index];
-	    
-	    if (! it->javaDecl().isEmpty())
-	      it->generate_enum_member(f, indent);
-	  }
-	}
-      }
-      else {
-	for (index = 0; index != sup; index += 1) {
-	  UmlItem * it = ch[index];
-	  
-	  if (it->kind() == aClass) {
-	    if (! ((UmlClass *) it)->javaDecl().isEmpty()) {
-	      ((UmlClass *) it)->generate(f, indent + "  ");
-	      f << '\n';
-	    }
-	  }
-	  else if ((it->kind() != aNcRelation) &&
-		   !((UmlClassItem *) it)->javaDecl().isEmpty())
-	    ((UmlClassItem *) it)->generate(f, stereotype, indent);
-	}
-      }
-      
-      if (*p == '}')
-	f << indent;
-    }
-    else if (an_enum && ! strncmp(p, "${items}", 8)) {
-      p += 8;
-  
-      // enums items
-      
-      BooL first = TRUE;
-      
-      for (index = 0; index != sup; index += 1) {
-	if (ch[index]->kind() != aNcRelation) {
-	  UmlClassItem * it = (UmlClassItem *)ch[index];
-	  
-	  if (! it->javaDecl().isEmpty())
-	    it->generate_enum_item(f, indent, first);
-	}
-      }
-      
-      if (*p == '}')
-	f << indent;
-    }
-    else
-      // strange
-      f << *p++;
-  }
 }
 
 void UmlClass::generate(QTextStream & f, const Q3CString &,
-			Q3CString indent) {
-  generate(f, indent);
+                        Q3CString indent)
+{
+    generate(f, indent);
 }
 
 void UmlClass::write(QTextStream & f, const UmlTypeSpec & t)
 {
-  if (t.type != 0)
-    t.type->write(f);
-  else
-    f << JavaSettings::type(t.explicit_type);
+    if (t.type != 0)
+        t.type->write(f);
+    else
+        f << JavaSettings::type(t.explicit_type);
 }
 
-void UmlClass::write(QTextStream & f) {
-  if (isJavaExternal()) {
-    Q3CString s = javaDecl().stripWhiteSpace();
-    int index;
-      
-    if ((index = s.find("${name}")) != -1)
-      s.replace(index, 7, name());
-    else if ((index = s.find("${Name}")) != -1)
-      s.replace(index, 7, capitalize(name()));
-    else if ((index = s.find("${NAME}")) != -1)
-      s.replace(index, 7, name().upper());
-    else if ((index = s.find("${nAME}")) != -1)
-      s.replace(index, 7, name().lower());
-    
-    f << s;
-  }
-  else {
-    UmlClass * toplevel = this;
-    UmlItem * p;
-    Q3CString s2;
-    
-    while ((p = toplevel->parent())->kind() == aClass) {
-      toplevel = (UmlClass *) p;
-      s2 = dot + p->name() + s2;
-    }
-    
-    UmlArtifact * cp = toplevel->associatedArtifact();
-    UmlPackage * pack = (UmlPackage *)
-      ((cp != 0) ? (UmlItem *) cp : (UmlItem *) toplevel)->package();
-    
-    if (pack != UmlArtifact::generation_package()) {
-      Q3CString s = pack->javaPackage();
+void UmlClass::write(QTextStream & f)
+{
+    if (isJavaExternal()) {
+        Q3CString s = javaDecl().stripWhiteSpace();
+        int index;
 
-      if (! s.isEmpty() && (s != "java.lang") && (s.left(10) != "java.lang.")) {
-	s += s2;
-	
-	if (JavaSettings::isForcePackagePrefixGeneration() ||
-	    !UmlArtifact::generated_one()->is_imported(s, name()))
-	  f << s << '.';
-      }
+        if ((index = s.find("${name}")) != -1)
+            s.replace(index, 7, name());
+        else if ((index = s.find("${Name}")) != -1)
+            s.replace(index, 7, capitalize(name()));
+        else if ((index = s.find("${NAME}")) != -1)
+            s.replace(index, 7, name().upper());
+        else if ((index = s.find("${nAME}")) != -1)
+            s.replace(index, 7, name().lower());
+
+        f << s;
     }
-    else if (! s2.isEmpty())
-      f << s2.mid(1) << '.';
-    
-    f << name();
-  }
+    else {
+        UmlClass * toplevel = this;
+        UmlItem * p;
+        Q3CString s2;
+
+        while ((p = toplevel->parent())->kind() == aClass) {
+            toplevel = (UmlClass *) p;
+            s2 = dot + p->name() + s2;
+        }
+
+        UmlArtifact * cp = toplevel->associatedArtifact();
+        UmlPackage * pack = (UmlPackage *)
+                            ((cp != 0) ? (UmlItem *) cp : (UmlItem *) toplevel)->package();
+
+        if (pack != UmlArtifact::generation_package()) {
+            Q3CString s = pack->javaPackage();
+
+            if (! s.isEmpty() && (s != "java.lang") && (s.left(10) != "java.lang.")) {
+                s += s2;
+
+                if (JavaSettings::isForcePackagePrefixGeneration() ||
+                    !UmlArtifact::generated_one()->is_imported(s, name()))
+                    f << s << '.';
+            }
+        }
+        else if (! s2.isEmpty())
+            f << s2.mid(1) << '.';
+
+        f << name();
+    }
 }
 
-void UmlClass::import(QTextStream & f, const Q3CString & indent) {
-  Q3CString s;
-  
-  if (!isJavaExternal()) {
-    UmlArtifact * cp = associatedArtifact();
-    UmlPackage * pack = (UmlPackage *)
-      ((cp != 0) ? (UmlItem *) cp : (UmlItem *) this)->package();
-    
-    if ((s = pack->javaPackage()).isEmpty())
-      return;
-    
-    Q3CString s2 = name();
-    UmlItem * p = this;
-    
-    while ((p = p->parent())->kind() == aClass)
-      s2 = p->name() + dot + s2;
-    
-    s += dot + s2;
-  }
-  else if ((s = package()->javaPackage()).isEmpty())
-    return;
-  else
-    s += dot + name();
-  
-  if (! UmlArtifact::generated_one()->is_imported(s)) {
-    f << indent << "import " << s << ";\n";
-    UmlArtifact::generated_one()->imported(s);
-  }
+void UmlClass::import(QTextStream & f, const Q3CString & indent)
+{
+    Q3CString s;
+
+    if (!isJavaExternal()) {
+        UmlArtifact * cp = associatedArtifact();
+        UmlPackage * pack = (UmlPackage *)
+                            ((cp != 0) ? (UmlItem *) cp : (UmlItem *) this)->package();
+
+        if ((s = pack->javaPackage()).isEmpty())
+            return;
+
+        Q3CString s2 = name();
+        UmlItem * p = this;
+
+        while ((p = p->parent())->kind() == aClass)
+            s2 = p->name() + dot + s2;
+
+        s += dot + s2;
+    }
+    else if ((s = package()->javaPackage()).isEmpty())
+        return;
+    else
+        s += dot + name();
+
+    if (! UmlArtifact::generated_one()->is_imported(s)) {
+        f << indent << "import " << s << ";\n";
+        UmlArtifact::generated_one()->imported(s);
+    }
 }
 
 void UmlClass::generate_enum_pattern_item(QTextStream &, int &,
-					  const Q3CString &, Q3CString) {
-  write_trace_header();
-  UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>enum pattern</i> cannot have sub-class</b></font><br>");
-  incr_warning();
+        const Q3CString &, Q3CString)
+{
+    write_trace_header();
+    UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>enum pattern</i> cannot have sub-class</b></font><br>");
+    incr_warning();
 }
 
-void UmlClass::generate_enum_pattern_case(QTextStream &, Q3CString) {
-  // error already signaled
+void UmlClass::generate_enum_pattern_case(QTextStream &, Q3CString)
+{
+    // error already signaled
 }
 
-void UmlClass::generate_enum_member(QTextStream & f, Q3CString indent) {
-  generate(f, indent + "  ");
-  f << '\n';
+void UmlClass::generate_enum_member(QTextStream & f, Q3CString indent)
+{
+    generate(f, indent + "  ");
+    f << '\n';
 }
 
-void UmlClass::generate_formals(QTextStream & f) {
-  Q3ValueList<UmlFormalParameter> fs = formals();
-  
-  if (! fs.isEmpty()) {
-    Q3ValueList<UmlFormalParameter>::Iterator it;
-    const char * sep = "<";
-    
-    for (it = fs.begin(); it != fs.end(); it++) {
-      UmlFormalParameter & p = *it;
-      
-      f << sep;
-      sep = ", ";
-      f << p.name();
-      
-      const UmlTypeSpec & t = p.extend();
-      
-      if (t.type != 0) {
-	f << " extends ";
-	t.type->write(f);
-      }
-      else if (! t.explicit_type.isEmpty())
-	f << " extends " << JavaSettings::type(t.explicit_type);
+void UmlClass::generate_formals(QTextStream & f)
+{
+    Q3ValueList<UmlFormalParameter> fs = formals();
+
+    if (! fs.isEmpty()) {
+        Q3ValueList<UmlFormalParameter>::Iterator it;
+        const char * sep = "<";
+
+        for (it = fs.begin(); it != fs.end(); it++) {
+            UmlFormalParameter & p = *it;
+
+            f << sep;
+            sep = ", ";
+            f << p.name();
+
+            const UmlTypeSpec & t = p.extend();
+
+            if (t.type != 0) {
+                f << " extends ";
+                t.type->write(f);
+            }
+            else if (! t.explicit_type.isEmpty())
+                f << " extends " << JavaSettings::type(t.explicit_type);
+        }
+
+        f << ">";
     }
-    
-    f << ">";
-  }
 }
 
-void UmlClass::generate_import(QTextStream & f, const Q3CString & indent) {
-  Q3PtrVector<UmlItem> ch = children();
-  const unsigned sup = ch.size();
-  unsigned index;
-  
-  for (index = 0; index != sup; index += 1)
-    ch[index]->generate_import(f, indent);
+void UmlClass::generate_import(QTextStream & f, const Q3CString & indent)
+{
+    Q3PtrVector<UmlItem> ch = children();
+    const unsigned sup = ch.size();
+    unsigned index;
+
+    for (index = 0; index != sup; index += 1)
+        ch[index]->generate_import(f, indent);
 }

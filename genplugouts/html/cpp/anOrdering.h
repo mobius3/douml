@@ -3,10 +3,10 @@
 
 
 enum anOrdering {
-  unordered,
-  ordered,
-  lifo,
-  fifo
+    unordered,
+    ordered,
+    lifo,
+    fifo
 
 };
 #endif

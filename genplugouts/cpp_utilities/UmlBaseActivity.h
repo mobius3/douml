@@ -11,8 +11,9 @@ class UmlClassView;
 class UmlOperation;
 class UmlActivityDiagram;
 
-class UmlBaseActivity : public UmlItem {
-  public:
+class UmlBaseActivity : public UmlItem
+{
+public:
     //  returns a new activity named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,13 +25,13 @@ class UmlBaseActivity : public UmlItem {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivity(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseActivity(void * id, const Q3CString & s) : UmlItem(id, s) {
     }
 
 
-  public:
+public:
     // return the pre condition
     const Q3CString & preCondition();
 
@@ -124,7 +125,7 @@ class UmlBaseActivity : public UmlItem {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _pre_condition;
 
     Q3CString _post_condition;
@@ -148,7 +149,7 @@ class UmlBaseActivity : public UmlItem {
     UmlActivityDiagram * _assoc_diagram;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -160,7 +161,7 @@ class UmlBaseActivity : public UmlItem {
 #endif
 
 
-  private:
+private:
     UmlOperation * _specification;
 
 };

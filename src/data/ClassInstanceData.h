@@ -41,78 +41,85 @@ class BrowserAttribute;
 class BrowserClassInstance;
 
 struct SlotAttr {
-  BrowserAttribute * att;
-  QString value;	// unicode
-  
-  SlotAttr(BrowserAttribute * a, QString v) 
-    : att(a), value(v) {}
-  
-  SlotAttr() : att(0) {}	// for qvaluelist
+    BrowserAttribute * att;
+    QString value;	// unicode
+
+    SlotAttr(BrowserAttribute * a, QString v)
+        : att(a), value(v) {}
+
+    SlotAttr() : att(0) {}	// for qvaluelist
 };
 
 struct SlotRel {
-  // warning : don't save BrowserRelation because side B 
-  // may be 'really' deleted 
-  bool is_a;
-  RelationData * rel;
-  BrowserClassInstance * value;
-  
-  SlotRel(bool a, RelationData * r, BrowserClassInstance * v) 
-    : is_a(a), rel(r), value(v) {}
-  
-  SlotRel() : is_a(FALSE), rel(0), value(0) {}	// for qvaluelist
+    // warning : don't save BrowserRelation because side B
+    // may be 'really' deleted
+    bool is_a;
+    RelationData * rel;
+    BrowserClassInstance * value;
+
+    SlotRel(bool a, RelationData * r, BrowserClassInstance * v)
+        : is_a(a), rel(r), value(v) {}
+
+    SlotRel() : is_a(FALSE), rel(0), value(0) {}	// for qvaluelist
 };
 
-class ClassInstanceData : public SimpleData {
-  Q_OBJECT
-    
-  friend class ClassInstanceDialog;
-  
-  private:
+class ClassInstanceData : public SimpleData
+{
+    Q_OBJECT
+
+    friend class ClassInstanceDialog;
+
+private:
     BrowserClass * cl;	// type of instance
     Q3ValueList<SlotAttr> attributes;
     Q3ValueList<SlotRel> relations;
     Q3PtrList<BasicData> connect_list;	// ClassData and ClassInstanceData
-    
-  protected:
+
+protected:
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
+                              const QString & comment);
     void replace_internal(BrowserClassInstance * other,
-			  RelationData * current, RelationData * future,
-			  bool current_isa, bool future_isa);
+                          RelationData * current, RelationData * future,
+                          bool current_isa, bool future_isa);
     void remove_clone(BrowserClassInstance * other,
-		      RelationData * rd, bool isa);
+                      RelationData * rd, bool isa);
     bool change_rel(ToolCom * com, const char * args, bool add);
-    
-  public:
+
+public:
     ClassInstanceData(BrowserClass *);
     ClassInstanceData(ClassInstanceData * model);
     virtual ~ClassInstanceData();
-    
+
     void edit();
-    
+
     virtual void delete_it();
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * & st, char * & k);
+    void read(char *& st, char *& k);
     void read_attributes(char *& st, char *& k);
-    
-    BrowserClass * get_class() const { return cl; }
+
+    BrowserClass * get_class() const {
+        return cl;
+    }
     void set_class(BrowserClass * t);
 
-    const Q3ValueList<SlotAttr> & get_attributes() const { return attributes; }
-    const Q3ValueList<SlotRel> & get_relations() const { return relations; }
+    const Q3ValueList<SlotAttr> & get_attributes() const {
+        return attributes;
+    }
+    const Q3ValueList<SlotRel> & get_relations() const {
+        return relations;
+    }
 
     bool exist(BrowserClassInstance * other, RelationData *) const;
     void add(BrowserClassInstance * other, RelationData * rd);
     void replace(BrowserClassInstance * other,
-		 RelationData * current, RelationData * future,
-		 bool current_isa, bool future_isa);
+                 RelationData * current, RelationData * future,
+                 bool current_isa, bool future_isa);
     void init_other_side();
-    
-  public slots:
+
+public slots:
     void check();
     void check_rels();
 };

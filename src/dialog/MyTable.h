@@ -34,27 +34,31 @@
 //Added by qt3to4:
 #include <QPixmap>
 
-class TableItem : public Q3TableItem {
-  public:
+class TableItem : public Q3TableItem
+{
+public:
     TableItem(Q3Table * table, EditType et, const QString & text)
-      : Q3TableItem(table, et, text) {};
+        : Q3TableItem(table, et, text) {};
     TableItem(Q3Table * table, EditType et, const QString & text, const QPixmap & p)
-      : Q3TableItem(table, et, text, p) {};
-  
+        : Q3TableItem(table, et, text, p) {};
+
     virtual int alignment() const;
 };
 
-class MyTable : public Q3Table {
-  Q_OBJECT
-    
-  public:
-    MyTable(QWidget * parent = 0, const char * name = 0) 
-        : Q3Table(parent, name) {setSorting(-1);};
+class MyTable : public Q3Table
+{
+    Q_OBJECT
+
+public:
+    MyTable(QWidget * parent = 0, const char * name = 0)
+        : Q3Table(parent, name) {
+        setSorting(-1);
+    };
     MyTable(int numRows, int numCols, QWidget * parent = 0, const char * name = 0)
-      : Q3Table(numRows, numCols, parent, name) {};
+        : Q3Table(numRows, numCols, parent, name) {};
 
     virtual void setText(int row, int col, const QString & text);
-    
+
     void forceUpdateCells();
 };
 

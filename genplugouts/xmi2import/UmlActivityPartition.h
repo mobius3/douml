@@ -11,8 +11,9 @@ class UmlItem;
 class Token;
 class FileIn;
 
-class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivityItem {
-  public:
+class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivityItem
+{
+public:
     //returns the first container for a 'kind', going up in the browser tree
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);
 
@@ -25,7 +26,7 @@ class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivity
     static void importIt(FileIn & in, Token & token, UmlItem * where);
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityPartition(void * id, const Q3CString & s) : UmlBaseActivityPartition(id, s) {
+    UmlActivityPartition(void * id, const Q3CString & s) : UmlBaseActivityPartition(id, s) {
     }
 
 };

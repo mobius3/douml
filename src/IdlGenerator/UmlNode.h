@@ -33,10 +33,11 @@
 // This class manages 'nodes'
 // You can modify it as you want (except the constructor)
 
-class UmlNode : public UmlBaseNode {
-  public:
+class UmlNode : public UmlBaseNode
+{
+public:
     UmlNode(void * id, const Q3CString & n)
-      : UmlBaseNode(id, n) {};
+        : UmlBaseNode(id, n) {};
 };
 
 #endif

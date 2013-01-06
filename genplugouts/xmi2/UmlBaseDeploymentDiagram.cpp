@@ -5,10 +5,11 @@
 
 UmlDeploymentDiagram * UmlBaseDeploymentDiagram::create(UmlDeploymentView * parent, const char * s)
 {
-  return (UmlDeploymentDiagram *) parent->create_(aDeploymentDiagram, s);
+    return (UmlDeploymentDiagram *) parent->create_(aDeploymentDiagram, s);
 }
 
-anItemKind UmlBaseDeploymentDiagram::kind() {
-  return aDeploymentDiagram;
+anItemKind UmlBaseDeploymentDiagram::kind()
+{
+    return aDeploymentDiagram;
 }
 

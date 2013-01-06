@@ -44,10 +44,11 @@ class RelationData;
 class ConstraintCanvas;
 
 class CdClassCanvas : public QObject, public DiagramCanvas,
-  		      public MultipleDependency<BasicData> {
-  Q_OBJECT
-    
-  protected:
+    public MultipleDependency<BasicData>
+{
+    Q_OBJECT
+
+protected:
     TemplateCanvas * templ;
     ClassDiagramSettings settings;
     ClassDiagramSettings used_settings;
@@ -63,16 +64,16 @@ class CdClassCanvas : public QObject, public DiagramCanvas,
     Q3ValueList<BrowserNode *> hidden_visible_attributes;
     Q3ValueList<BrowserNode *> hidden_visible_operations;
     ConstraintCanvas * constraint;
-    
-  protected:
+
+protected:
     CdClassCanvas(UmlCanvas * canvas, int id);
-  
-  public:
+
+public:
     CdClassCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~CdClassCanvas();
-    
+
     virtual void delete_it();
-    
+
     void check_size();
     virtual bool has_relation(BasicData *) const;
     bool has_inner(DiagramItem * end) const;
@@ -80,18 +81,20 @@ class CdClassCanvas : public QObject, public DiagramCanvas,
     void draw_all_class_assoc();
     void check_constraint();
     void check_inner();
-    const ClassDiagramSettings & get_settings() const { return settings; }
+    const ClassDiagramSettings & get_settings() const {
+        return settings;
+    }
 
     virtual void draw(QPainter & p);
     virtual void change_scale();
-    
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void remove(bool from_model);
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void post_connexion(UmlCode, DiagramItem *);
@@ -105,20 +108,20 @@ class CdClassCanvas : public QObject, public DiagramCanvas,
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
-    
+
     virtual void apply_shortcut(QString s);
-  
+
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
-    static CdClassCanvas * read(char * &, UmlCanvas *, char *);
+    static CdClassCanvas * read(char *& , UmlCanvas *, char *);
     virtual void post_loaded();
-    
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();	// the class is deleted
 };

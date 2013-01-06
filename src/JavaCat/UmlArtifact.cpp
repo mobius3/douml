@@ -33,73 +33,78 @@
 
 bool UmlArtifact::has_roundtrip_expected;
 
-bool UmlArtifact::set_roundtrip_expected() {
-  if ((stereotype() != "source") || javaSource().isEmpty())
-    return TRUE;
-  
-  const Q3PtrVector<UmlClass> & cls = associatedClasses();
-  
-  if (cls.isEmpty())
-    return TRUE;
-  
-  has_roundtrip_expected = TRUE;
-  roundtrip_expected = TRUE;
-  useless = TRUE;
-  fully_updated = TRUE;
-  ((UmlPackage *) parent()->parent())->get_package()->own(this);
-  
-  UmlClass ** v = cls.data();
-  UmlClass ** vsup = v + cls.size();
-  bool result = isWritable();
-    
-  for (; v!= vsup; v += 1)
-    result &= (*v)->set_roundtrip_expected();
-  
-  return result;
+bool UmlArtifact::set_roundtrip_expected()
+{
+    if ((stereotype() != "source") || javaSource().isEmpty())
+        return TRUE;
+
+    const Q3PtrVector<UmlClass> & cls = associatedClasses();
+
+    if (cls.isEmpty())
+        return TRUE;
+
+    has_roundtrip_expected = TRUE;
+    roundtrip_expected = TRUE;
+    useless = TRUE;
+    fully_updated = TRUE;
+    ((UmlPackage *) parent()->parent())->get_package()->own(this);
+
+    UmlClass ** v = cls.data();
+    UmlClass ** vsup = v + cls.size();
+    bool result = isWritable();
+
+    for (; v != vsup; v += 1)
+        result &= (*v)->set_roundtrip_expected();
+
+    return result;
 }
 
-bool UmlArtifact::set_roundtrip_expected_for_class() {
-  if (roundtrip_expected)
-    return TRUE;
-  
-  if ((stereotype() != "source") || javaSource().isEmpty())
-    return FALSE;
-  
-  has_roundtrip_expected = TRUE;
-  roundtrip_expected = TRUE;
-  useless = TRUE;
-  ((UmlPackage *) parent()->parent())->get_package()->own(this);
+bool UmlArtifact::set_roundtrip_expected_for_class()
+{
+    if (roundtrip_expected)
+        return TRUE;
 
-  return TRUE;
+    if ((stereotype() != "source") || javaSource().isEmpty())
+        return FALSE;
+
+    has_roundtrip_expected = TRUE;
+    roundtrip_expected = TRUE;
+    useless = TRUE;
+    ((UmlPackage *) parent()->parent())->get_package()->own(this);
+
+    return TRUE;
 }
 
 bool UmlArtifact::is_roundtrip_usefull()
 {
-  return has_roundtrip_expected;
+    return has_roundtrip_expected;
 }
 
-void UmlArtifact::mark_useless(Q3PtrList<UmlItem> & l) {
-  if (useless) {
-    set_isMarked(TRUE);
-    parent()->set_childrenVisible(TRUE);
-    l.append(this);
-  }
+void UmlArtifact::mark_useless(Q3PtrList<UmlItem> & l)
+{
+    if (useless) {
+        set_isMarked(TRUE);
+        parent()->set_childrenVisible(TRUE);
+        l.append(this);
+    }
 }
 
-void UmlArtifact::scan_it(int &) {
-  if (roundtrip_expected) {
-    Package::set_step(1, 1);
-    ((UmlPackage *) parent()->parent())->get_package()->reverse(this);
-    Package::set_step(1, -1);
-  }
+void UmlArtifact::scan_it(int &)
+{
+    if (roundtrip_expected) {
+        Package::set_step(1, 1);
+        ((UmlPackage *) parent()->parent())->get_package()->reverse(this);
+        Package::set_step(1, -1);
+    }
 }
 
-void UmlArtifact::send_it(int n) {
-  if (roundtrip_expected) {
-    Package::set_step(2, n);
-    ((UmlPackage *) parent()->parent())->get_package()->reverse(this);
-    Package::set_step(2, -1);
-  }
+void UmlArtifact::send_it(int n)
+{
+    if (roundtrip_expected) {
+        Package::set_step(2, n);
+        ((UmlPackage *) parent()->parent())->get_package()->reverse(this);
+        Package::set_step(2, -1);
+    }
 }
 
 #endif

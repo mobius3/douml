@@ -33,42 +33,53 @@
 
 class BrowserClass;
 
-class ObjectData {
+class ObjectData
+{
 private:
-  AType type;
+    AType type;
 
 public:
-  WrapperStr multiplicity;
-  WrapperStr in_state;
-  WrapperStr uml_selection;
-  WrapperStr cpp_selection;
-  WrapperStr java_selection;
-  UmlOrderingKind ordering : 8;
-  bool is_control : 1;
-  
-  ObjectData();
-  ObjectData(ObjectData * model);
-  virtual ~ObjectData();
-  
-  virtual void do_connect(BrowserClass * c) = 0;
-  virtual void do_disconnect(BrowserClass * c) = 0;
-  
-  const AType & get_type() const { return type; };
-  void set_type(BrowserClass * c);
-  void set_type(const AType & t);
-  const char * get_multiplicity() const { return multiplicity; };
-  const char * get_in_state() const { return in_state; };
-  const char * get_selection(DrawingLanguage) const;
-  UmlOrderingKind get_ordering() const { return ordering; }
-  bool get_is_control() const { return is_control; }
-    
-  void send_uml_def(ToolCom * com);
-  virtual void send_cpp_def(ToolCom * com);
-  virtual void send_java_def(ToolCom * com);
-  bool tool_cmd(ToolCom * com, const char * args);
-  
-  void save(QTextStream &, QString & warning) const;
-  void read(char * &, char * &);
+    WrapperStr multiplicity;
+    WrapperStr in_state;
+    WrapperStr uml_selection;
+    WrapperStr cpp_selection;
+    WrapperStr java_selection;
+    UmlOrderingKind ordering : 8;
+    bool is_control : 1;
+
+    ObjectData();
+    ObjectData(ObjectData * model);
+    virtual ~ObjectData();
+
+    virtual void do_connect(BrowserClass * c) = 0;
+    virtual void do_disconnect(BrowserClass * c) = 0;
+
+    const AType & get_type() const {
+        return type;
+    };
+    void set_type(BrowserClass * c);
+    void set_type(const AType & t);
+    const char * get_multiplicity() const {
+        return multiplicity;
+    };
+    const char * get_in_state() const {
+        return in_state;
+    };
+    const char * get_selection(DrawingLanguage) const;
+    UmlOrderingKind get_ordering() const {
+        return ordering;
+    }
+    bool get_is_control() const {
+        return is_control;
+    }
+
+    void send_uml_def(ToolCom * com);
+    virtual void send_cpp_def(ToolCom * com);
+    virtual void send_java_def(ToolCom * com);
+    bool tool_cmd(ToolCom * com, const char * args);
+
+    void save(QTextStream &, QString & warning) const;
+    void read(char *& , char *&);
 };
 
 #endif

@@ -8,9 +8,10 @@
 
 class FileOut;
 
-class UmlTransition : public UmlBaseTransition, public UmlStateItem {
-  public:
-     UmlTransition(void * id, const Q3CString & n) : UmlBaseTransition(id, n) {
+class UmlTransition : public UmlBaseTransition, public UmlStateItem
+{
+public:
+    UmlTransition(void * id, const Q3CString & n) : UmlBaseTransition(id, n) {
     }
 
     //target memorize this transition as incoming

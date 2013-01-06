@@ -44,24 +44,26 @@ class KeyValueData;
 class BrowserClass;
 class BrowserOperation;
 
-class OperationBody {
-  public:
+class OperationBody
+{
+public:
     int offset;	// offset in the file
     int length;	// body length, 0 if empty, -1 if unknown (file not yet read)
-    
+
     OperationBody() : offset(0), length(0) {};
 };
 
 class OperationData : public ClassMemberData,
-  		      public Labeled<OperationData>,
-  		      public MultipleDependency<BasicData> {
-  Q_OBJECT
-    			
-  friend class OperationDialog;
-  
-  protected:
+    public Labeled<OperationData>,
+    public MultipleDependency<BasicData>
+{
+    Q_OBJECT
+
+    friend class OperationDialog;
+
+protected:
     static IdDict<OperationData> all;
-  
+
     // uml
     UmlVisibility uml_visibility : 4;
     UmlVisibility cpp_visibility : 4;
@@ -98,7 +100,7 @@ class OperationData : public ClassMemberData,
     ParamData * params;			// remark : do NOT use QArray
     ExceptionData * exceptions;
     WrapperStr constraint;
-    
+
     // c++
     OperationBody cpp_body;
     WrapperStr cpp_decl;
@@ -115,90 +117,130 @@ class OperationData : public ClassMemberData,
     OperationBody php_body;
     WrapperStr php_def;
     WrapperStr php_name_spec;	// get${Name}
-    
+
     // python
     OperationBody python_body;
     WrapperStr python_def;
     WrapperStr python_name_spec;	// get${Name}
     WrapperStr python_decorator;
-    
+
     // idl
     WrapperStr idl_decl;
     WrapperStr idl_name_spec;	// get_${name}
-    
+
     void depend_on(BrowserClass * cl);
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
+                              const QString & comment);
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
     virtual void send_php_def(ToolCom * com);
     virtual void send_python_def(ToolCom * com);
     virtual void send_idl_def(ToolCom * com);
-    
+
     void set_bodies_info();
     static char * set_bodies_info(BrowserClass * cl, int id);
-    
-  public:
+
+public:
     OperationData(int id = 0);
     OperationData(OperationData * model, BrowserNode *);
     virtual ~OperationData();
-    
+
     virtual bool deletedp() const;
     virtual void set_deletedp(bool y);
-    
+
     void set_browser_node(BrowserOperation *, bool update);
 
     virtual QString definition(bool full, bool with_kind) const;
     QString definition(bool full, bool withdir, bool withname,
-		       ShowContextMode mode = noContext) const;
+                       ShowContextMode mode = noContext) const;
     QString definition(bool full, DrawingLanguage language,
-		       bool withdir, bool withname,
-		       ShowContextMode mode = noContext) const;
-    
+                       bool withdir, bool withname,
+                       ShowContextMode mode = noContext) const;
+
     virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *);
-    
-    const char * get_constraint() const { return constraint; }
-        
-    bool get_isa_class_operation() const { return isa_class_operation; };
-    
-    bool get_is_abstract() const { return is_abstract; };
+
+    const char * get_constraint() const {
+        return constraint;
+    }
+
+    bool get_isa_class_operation() const {
+        return isa_class_operation;
+    };
+
+    bool get_is_abstract() const {
+        return is_abstract;
+    };
     void set_is_abstract(bool yes);
-    
-    bool get_is_volatile() const { return is_volatile; };
-    
-    bool body_generation_forced() const { return force_body_gen; };
-    
-    bool get_cpp_const() const { return cpp_const; };
-    
-    bool get_cpp_friend() const { return cpp_friend; };
-    
-    bool get_cpp_virtual() const { return cpp_virtual; };
-    
-    bool get_cpp_inline() const { return cpp_inline; };
 
-    bool get_cpp_default() const { return cpp_default; };
-    bool get_cpp_delete() const { return cpp_delete; };
-    bool get_cpp_override() const { return cpp_override; };
-    bool get_cpp_final() const { return cpp_final; };
-    
-    bool get_java_final() const { return java_final; };
+    bool get_is_volatile() const {
+        return is_volatile;
+    };
 
-    bool get_java_synchronized() const { return java_synchronized; };
-    
-    bool get_php_final() const { return php_final; };
-        
-    bool get_idl_oneway() const { return idl_oneway; };
-    
-    UmlVisibility get_uml_visibility() const { return uml_visibility; };
+    bool body_generation_forced() const {
+        return force_body_gen;
+    };
+
+    bool get_cpp_const() const {
+        return cpp_const;
+    };
+
+    bool get_cpp_friend() const {
+        return cpp_friend;
+    };
+
+    bool get_cpp_virtual() const {
+        return cpp_virtual;
+    };
+
+    bool get_cpp_inline() const {
+        return cpp_inline;
+    };
+
+    bool get_cpp_default() const {
+        return cpp_default;
+    };
+    bool get_cpp_delete() const {
+        return cpp_delete;
+    };
+    bool get_cpp_override() const {
+        return cpp_override;
+    };
+    bool get_cpp_final() const {
+        return cpp_final;
+    };
+
+    bool get_java_final() const {
+        return java_final;
+    };
+
+    bool get_java_synchronized() const {
+        return java_synchronized;
+    };
+
+    bool get_php_final() const {
+        return php_final;
+    };
+
+    bool get_idl_oneway() const {
+        return idl_oneway;
+    };
+
+    UmlVisibility get_uml_visibility() const {
+        return uml_visibility;
+    };
     virtual UmlVisibility get_visibility(BrowserNode *);
-    UmlVisibility get_cpp_visibility() const { return cpp_visibility; };
+    UmlVisibility get_cpp_visibility() const {
+        return cpp_visibility;
+    };
     void set_uml_visibility(UmlVisibility v);
     void set_cpp_visibility(UmlVisibility v);
-    
-    const AType & get_return_type() const { return return_type; };
+
+    const AType & get_return_type() const {
+        return return_type;
+    };
     void set_return_type(const AType & t);
-    
+
     const char * get_param_name(int rank) const;
     void set_param_name(int rank, const char * s);
     UmlParamDirection get_param_dir(int rank) const;
@@ -207,103 +249,121 @@ class OperationData : public ClassMemberData,
     void set_param_type(int rank, const AType & t);
     const char * get_param_default_value(int rank) const;
     void set_param_default_value(int rank, const char * s);
-    unsigned get_n_params() const { return nparams; };
+    unsigned get_n_params() const {
+        return nparams;
+    };
     void set_n_params(unsigned n);	// the old params are lost
 
     const AType & get_exception(int rank) const;
     void set_exception(int rank, const AType & t);
-    unsigned get_n_exceptions() const { return nexceptions; };
+    unsigned get_n_exceptions() const {
+        return nexceptions;
+    };
     void set_n_exceptions(unsigned n);	// the old exceptions are lost
-    
-    const char * get_cppdecl() const { return cpp_decl; };
-    const char * get_cppdef() const { return cpp_def; };
+
+    const char * get_cppdecl() const {
+        return cpp_decl;
+    };
+    const char * get_cppdef() const {
+        return cpp_def;
+    };
     QString default_cpp_decl(const QString & name);
     QString default_cpp_def(const QString & name);
 
-    const char * get_javadef() const { return java_def; };
+    const char * get_javadef() const {
+        return java_def;
+    };
     QString default_java_def(const QString & name);
 
-    const char * get_phpdef() const { return php_def; };
+    const char * get_phpdef() const {
+        return php_def;
+    };
     QString default_php_def(const QString & name, bool nobody);
 
-    const char * get_pythondef() const { return python_def; };
+    const char * get_pythondef() const {
+        return python_def;
+    };
     QString default_python_def(const QString & name);
 
-    const char * get_idldecl() const { return idl_decl; };
+    const char * get_idldecl() const {
+        return idl_decl;
+    };
     QString default_idl_decl(const QString & name);
 
     void edit(DrawingLanguage);
-    
-    bool get_or_set() const { return is_get_or_set; }
+
+    bool get_or_set() const {
+        return is_get_or_set;
+    }
     void update_get_of(const QString & attr_name,
-		       QString cpp_decl, QString java_decl,
-		       QString php_decl, QString python_decl,
-		       QString idl_decl,
-		       bool cpp_const, bool is_class_member,
-		       const AType & cl, QString multiplicity,
-		       QString stereotype, bool create);
+                       QString cpp_decl, QString java_decl,
+                       QString php_decl, QString python_decl,
+                       QString idl_decl,
+                       bool cpp_const, bool is_class_member,
+                       const AType & cl, QString multiplicity,
+                       QString stereotype, bool create);
     void update_set_of(const QString & attr_name,
-		       QString cpp_decl, QString java_decl,
-		       QString php_decl, QString python_decl,
-		       QString idl_decl,
-		       bool cpp_const, bool is_class_member,
-		       const AType & cl, QString multiplicity,
-		       QString stereotype, bool create);
+                       QString cpp_decl, QString java_decl,
+                       QString php_decl, QString python_decl,
+                       QString idl_decl,
+                       bool cpp_const, bool is_class_member,
+                       const AType & cl, QString multiplicity,
+                       QString stereotype, bool create);
     void copy_getset(const OperationData * model);
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     bool reference(BrowserClass *) const;
-    
+
     void new_body(QString, int who);
     char * get_body(int who);
     void create_modified_body_file();
     void save_body(QFile & qf, QString & filename, bool dobackup,
-		   char * modified_bodies, int who);
+                   char * modified_bodies, int who);
     void save(QTextStream &, bool ref, QString & warning) const;
     void raz_body();
-    static OperationData * read_ref(char * &);
-    void read(char * &, char * &);
+    static OperationData * read_ref(char *&);
+    void read(char *& , char *&);
     static void import(BrowserClass * cl, int id);
-    
+
     static void clear(bool old);
     static void update_idmax_for_root();
     void renumber(int phase);
-    
+
     bool is_template_operation() const;
     bool is_template_operation(QString) const;
-    
+
     void replace(BrowserClass * old, BrowserClass * nw);
-    
+
     static void convert(OperationData * comp, OperationData * art);
     static void update_cpp_get_of(Q3CString & decl, Q3CString & def,
-				  const QString & attr_name,
-				  QString attcpp_decl, bool attis_const,
-				  QString multiplicity);
+                                  const QString & attr_name,
+                                  QString attcpp_decl, bool attis_const,
+                                  QString multiplicity);
     static void update_java_get_of(Q3CString & def, const QString & attr_name,
-				   QString attjava_decl, QString multiplicity);
+                                   QString attjava_decl, QString multiplicity);
     static void update_php_get_of(Q3CString & def, const QString & attr_name,
-				  QString attphp_decl);
+                                  QString attphp_decl);
     static void update_python_get_of(Q3CString & def, const QString & attr_name,
-				     QString attpython_decl, bool attis_class_member);
+                                     QString attpython_decl, bool attis_class_member);
     static void update_idl_get_of(Q3CString & decl, QString attidl_decl,
-				  QString multiplicity);
+                                  QString multiplicity);
     void update_cpp_set_of(Q3CString & decl, Q3CString & def,
-			   const QString & attr_name,
-			   QString attcpp_decl, bool attis_const, 
-			   QString multiplicity);
+                           const QString & attr_name,
+                           QString attcpp_decl, bool attis_const,
+                           QString multiplicity);
     static void update_java_set_of(Q3CString & def, const QString & attr_name,
-				   QString attjava_decl, QString multiplicity);
+                                   QString attjava_decl, QString multiplicity);
     static void update_php_set_of(Q3CString & def,
-				  const QString & attr_name,
-				  QString attphp_decl);
+                                  const QString & attr_name,
+                                  QString attphp_decl);
     static void update_python_set_of(Q3CString & def, const QString & attr_name,
-				     QString attpython_decl, bool attis_class_member);
+                                     QString attpython_decl, bool attis_class_member);
     static void update_idl_set_of(Q3CString & decl, QString attidl_decl,
-				  QString multiplicity);
-    
-  protected slots:
+                                  QString multiplicity);
+
+protected slots:
     void on_delete();
 };
 #endif

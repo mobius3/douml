@@ -36,21 +36,22 @@ class QCheckBox;
 class ConstraintCanvas;
 class ConstraintTable;
 
-class ConstraintDialog : public QDialog {
-  Q_OBJECT
- 
-  private:
+class ConstraintDialog : public QDialog
+{
+    Q_OBJECT
+
+private:
     ConstraintCanvas * constraint;
     ConstraintTable * table;
     QCheckBox * cb_visible;
- 
+
     static QSize previous_size;
-    
-  public:
-    ConstraintDialog(ConstraintCanvas * c); 
-    virtual ~ConstraintDialog(); 
-    
-  protected slots:
+
+public:
+    ConstraintDialog(ConstraintCanvas * c);
+    virtual ~ConstraintDialog();
+
+protected slots:
     void show_all();
     void hide_all();
     void hide_inherited();
@@ -58,17 +59,18 @@ class ConstraintDialog : public QDialog {
     virtual void polish();
 };
 
-class ConstraintTable : public Q3Table {
-  Q_OBJECT
-    
-  public:
+class ConstraintTable : public Q3Table
+{
+    Q_OBJECT
+
+public:
     ConstraintTable(QWidget * parent, ConstraintCanvas * c);
     void show_all();
     void hide_all();
     void hide_inherited(ConstraintCanvas * c);
     void update(ConstraintCanvas * c);
-  
-  protected slots:
+
+protected slots:
     virtual void button_pressed(int row, int col, int button, const QPoint & mousePos);
 };
 

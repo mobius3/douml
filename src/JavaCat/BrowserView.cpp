@@ -28,40 +28,43 @@
 
 BrowserView * BrowserView::the;
 
-BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent) {
-  the = this;
-  
-  setSorting(-1);		// manual sorting
-  addColumn("browser          ");
-  setTreeStepSize(18);
-  
-  connect(this, SIGNAL(selectionChanged(Q3ListViewItem*)),
-	  this, SLOT(selected(Q3ListViewItem*)));
-  
-  connect(this, SIGNAL(rightButtonPressed(Q3ListViewItem *, const QPoint &, int)),
-	  this, SLOT(rightPressed(Q3ListViewItem *)));
+BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent)
+{
+    the = this;
+
+    setSorting(-1);		// manual sorting
+    addColumn("browser          ");
+    setTreeStepSize(18);
+
+    connect(this, SIGNAL(selectionChanged(Q3ListViewItem *)),
+            this, SLOT(selected(Q3ListViewItem *)));
+
+    connect(this, SIGNAL(rightButtonPressed(Q3ListViewItem *, const QPoint &, int)),
+            this, SLOT(rightPressed(Q3ListViewItem *)));
 
 }
 
 void BrowserView::select(Q3ListViewItem * b)
 {
-  the->ensureItemVisible(b);
-  the->setSelected(b, TRUE);
+    the->ensureItemVisible(b);
+    the->setSelected(b, TRUE);
 }
 
 void BrowserView::selected(Q3ListViewItem * b)
 {
-  ((BrowserNode *) b)->activated();
+    ((BrowserNode *) b)->activated();
 }
 
-void BrowserView::rightPressed(Q3ListViewItem * item) {
-  if (item != 0)
-    ((BrowserNode *) item)->menu();
+void BrowserView::rightPressed(Q3ListViewItem * item)
+{
+    if (item != 0)
+        ((BrowserNode *) item)->menu();
 }
 
-void BrowserView::refer(const QString & href) {
-  BrowserNode * bn = (BrowserNode *) selectedItem();
-  
-  if (bn != 0)
-    bn->refer(href);
+void BrowserView::refer(const QString & href)
+{
+    BrowserNode * bn = (BrowserNode *) selectedItem();
+
+    if (bn != 0)
+        bn->refer(href);
 }

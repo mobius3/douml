@@ -39,12 +39,13 @@ class OperationData;
 class LabelCanvas;
 class ToolCom;
 
-class SdMsgBaseCanvas : public QObject, public DiagramCanvas {
-  Q_OBJECT
-    
-  friend class SdMsgDialog;
-    
-  protected:
+class SdMsgBaseCanvas : public QObject, public DiagramCanvas
+{
+    Q_OBJECT
+
+    friend class SdMsgDialog;
+
+protected:
     SdMsgSupport * dest;
     WrapperStr explicit_msg;
     const OperationData * msg;
@@ -55,22 +56,26 @@ class SdMsgBaseCanvas : public QObject, public DiagramCanvas {
     Uml3States show_full_oper;
     DrawingLanguage drawing_language;
     ShowContextMode show_context_mode;
-  
-  protected:
+
+protected:
     SdMsgBaseCanvas(UmlCanvas * canvas, SdMsgSupport * d,
-		    UmlCode l, int v, int id);
-  
+                    UmlCode l, int v, int id);
+
     void update_label();
     void update_st(QString st);
-    
-  public:
+
+public:
     virtual ~SdMsgBaseCanvas();
-  
+
     virtual void delete_it();
-  
-    SdMsgSupport * get_dest()  const { return dest; };
+
+    SdMsgSupport * get_dest()  const {
+        return dest;
+    };
     QString get_msg(bool with_args) const;
-    QString get_args() const { return args; };
+    QString get_args() const {
+        return args;
+    };
     void set_msg(const OperationData * m, const QString & e, const QString & a);
     bool is_synchronous() const;
     void set_synchronous(bool yes);
@@ -81,9 +86,9 @@ class SdMsgBaseCanvas : public QObject, public DiagramCanvas {
     virtual void check_vpos(const QRect &) = 0;
     virtual double min_y() const = 0;
     virtual void change_duration(SdDurationCanvas * oldone,
-				 SdDurationCanvas * newone) = 0;
+                                 SdDurationCanvas * newone) = 0;
     virtual int overlap_dir(SdDurationCanvas *) const = 0;
-    
+
     virtual bool is_decenter(const QPoint &, BooL &) const;
     virtual void setVisible(bool yes);
 
@@ -97,20 +102,20 @@ class SdMsgBaseCanvas : public QObject, public DiagramCanvas {
     virtual bool copyable() const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
+
     virtual void moveBy(double dx, double dy);
-    
+
     virtual bool represents(BrowserNode *);
-    
+
     void save(QTextStream & st, QString & warning) const;
-    void read(char * &);
-    
+    void read(char *&);
+
     void send(ToolCom * com, int fromid) const;
     static void send(ToolCom * com, int fromid, unsigned x, unsigned y,
-		     UmlMessageKind k, const char * m,
-		     const char * s, const char * a);
-  
-  protected slots:
+                     UmlMessageKind k, const char * m,
+                     const char * s, const char * a);
+
+protected slots:
     void modified();	// canvas must be updated
 };
 

@@ -32,10 +32,11 @@
 
 class Q3ComboBox;
 
-class ReferenceDialog : public QDialog {
-  Q_OBJECT
- 
-  protected:
+class ReferenceDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     BrowserNode * target;
     BrowserNodeList nodes;
     Q3ComboBox * results;
@@ -43,20 +44,22 @@ class ReferenceDialog : public QDialog {
     QPushButton * mark_unmark_b;
     QPushButton * mark_them_b;
     QPushButton * unmark_all_b;
-    
+
     static ReferenceDialog * the;
     static QSize previous_size;
-  
-  public:
+
+public:
     ReferenceDialog(BrowserNode * bn);
     virtual ~ReferenceDialog();
-    
-    static ReferenceDialog * get() { return the; }
+
+    static ReferenceDialog * get() {
+        return the;
+    }
     static void show(BrowserNode * target);
-    
+
     void update();
 
-  protected slots:
+protected slots:
     virtual void polish();
     void compute();
     void select();

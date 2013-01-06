@@ -38,18 +38,19 @@ class SdLifeLineCanvas;
 class SdMsgBaseCanvas;
 class ToolCom;
 
-class SdDurationCanvas : public QObject, public SdMsgSupport, public SdDurationSupport {
-  Q_OBJECT
-    
-  protected:
+class SdDurationCanvas : public QObject, public SdMsgSupport, public SdDurationSupport
+{
+    Q_OBJECT
+
+protected:
     SdDurationSupport * support;
     Q3PtrList<SdDurationCanvas> durations;
     Q3PtrList<SdMsgBaseCanvas> msgs;
     UmlColor itscolor;
     bool coregion;
-  
+
     SdDurationCanvas(UmlCanvas * canvas, SdDurationSupport * sp,
-		     int x, int y, int w, int h, int id, bool coreg);
+                     int x, int y, int w, int h, int id, bool coreg);
 
     void save_sub(QTextStream &) const;
     void save_internal(QTextStream &) const;
@@ -59,18 +60,18 @@ class SdDurationCanvas : public QObject, public SdMsgSupport, public SdDurationS
     void merge(Q3PtrList<SdDurationCanvas> &);
     void collapse(SdDurationCanvas *);
     void toOverlapping(SdMsgBaseCanvas **, SdDurationCanvas * orig,
-				    unsigned & index, unsigned sz);
+                       unsigned & index, unsigned sz);
     void postToOverlapping();
 
-    static SdDurationCanvas * read_internal(char * & st, UmlCanvas *, int id, SdDurationSupport *);
-    
-  public:
+    static SdDurationCanvas * read_internal(char *& st, UmlCanvas *, int id, SdDurationSupport *);
+
+public:
     SdDurationCanvas(UmlCanvas * canvas, SdDurationSupport * sp,
-		     int v, bool isdest);
+                     int v, bool isdest);
     virtual ~SdDurationCanvas();
-    
+
     virtual void delete_it();
-    
+
     virtual void add(SdMsgBaseCanvas *);
     virtual void remove(SdMsgBaseCanvas *);
     virtual void add(SdDurationCanvas *);
@@ -89,14 +90,14 @@ class SdDurationCanvas : public QObject, public SdMsgSupport, public SdDurationS
     virtual void update_v_to_contain(const QRect re);
     void toFlat();
     void toOverlapping();
-    
+
     virtual void draw(QPainter & p);
     virtual void moveBy(double dx, double dy);
     virtual void prepare_for_move(bool on_resize);
-    
+
     virtual UmlCode type() const;
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual bool may_connect(UmlCode l) const;
@@ -114,25 +115,25 @@ class SdDurationCanvas : public QObject, public SdMsgSupport, public SdDurationS
     virtual void history_save(QBuffer & b) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
-  
+
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
-  
+
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static SdDurationCanvas * read(char * & st, UmlCanvas * canvas, char *);
-    static SdDurationCanvas * read(char * & st, UmlCanvas * canvas, bool ref);
-    
+    static SdDurationCanvas * read(char *& st, UmlCanvas * canvas, char *);
+    static SdDurationCanvas * read(char *& st, UmlCanvas * canvas, bool ref);
+
     unsigned count_msg(int api_format) const;
     void send(ToolCom * com, int id) const;
-    
+
     static void propag_visible(Q3PtrList<SdDurationCanvas> &, bool y);
     static void propag_dz(Q3PtrList<SdDurationCanvas> &, double dz);
-    
-  private slots:
+
+private slots:
     void modified();
 };
 

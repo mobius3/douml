@@ -6,8 +6,9 @@
 #include "UmlBaseActivityPartition.h"
 #include "UmlActivityItem.h"
 
-class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivityItem {
-  public:
+class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivityItem
+{
+public:
     virtual bool chapterp();
 
     //returns a string indicating the king of the element
@@ -18,7 +19,7 @@ class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivity
     virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityPartition(void * id, const Q3CString & s) : UmlBaseActivityPartition(id, s) {
+    UmlActivityPartition(void * id, const Q3CString & s) : UmlBaseActivityPartition(id, s) {
     }
 
 };

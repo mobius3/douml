@@ -41,26 +41,27 @@ class QSplitter;
 class BrowserView;
 class BrowserNode;
 class CommentView;
- 
+
 // singleton
 
-class JavaCatWindow : public Q3MainWindow {
-  Q_OBJECT
-    
-  public:
+class JavaCatWindow : public Q3MainWindow
+{
+    Q_OBJECT
+
+public:
     JavaCatWindow();
-  
+
     static void trace(QString);
     static void trace(Q3CString);
     static void clear_trace();
-  
-  protected:
+
+protected:
     static JavaCatWindow * the;
-  
+
     QSplitter * spl;
     BrowserView * browser;
     CommentView * comment;
-    BrowserNode * commented;    // the commented object    
+    BrowserNode * commented;    // the commented object
 
 private slots:
     void load();
@@ -70,11 +71,11 @@ private slots:
     void browser_search();
     void historic_back();
     void historic_forward();
-    
+
     void motif_style();
     void motifplus_style();
     void windows_style();
-    
+
     void about();
     void aboutQt();
 };

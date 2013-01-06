@@ -5,10 +5,11 @@
 
 UmlEntryPointPseudoState * UmlBaseEntryPointPseudoState::create(UmlItem * parent, const char * s)
 {
-  return (UmlEntryPointPseudoState *) parent->create_(anEntryPointPseudoState, s);
+    return (UmlEntryPointPseudoState *) parent->create_(anEntryPointPseudoState, s);
 }
 
-anItemKind UmlBaseEntryPointPseudoState::kind() {
-  return anEntryPointPseudoState;
+anItemKind UmlBaseEntryPointPseudoState::kind()
+{
+    return anEntryPointPseudoState;
 }
 

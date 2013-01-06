@@ -45,62 +45,65 @@ using namespace std;
 #endif
 
 bool UmlAttribute::new_one(Class * container, Q3CString name,
-			   aVisibility visibility, bool constp,
-			   bool staticp, const Q3CString & value,
-			   Q3CString comment, Q3CString description)
+                           aVisibility visibility, bool constp,
+                           bool staticp, const Q3CString & value,
+                           Q3CString comment, Q3CString description)
 {
 #ifdef TRACE
-  QLOG_INFO() <<"ATTRIBUTE '" << name << "'\n";
+    QLOG_INFO() << "ATTRIBUTE '" << name << "'\n";
 #endif
-  
+
 #ifndef REVERSE
-  if (visibility == PrivateVisibility)
-    return TRUE;
+
+    if (visibility == PrivateVisibility)
+        return TRUE;
+
 #endif
-  
-  if (((const char *) name)[0] == '$')
-    name = name.mid(1);
-  
-  UmlClass * cl = container->get_uml();
-  UmlAttribute * at = UmlBaseAttribute::create(cl, name);
-  
-  if (at == 0) {
-    PhpCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add attribute <i>")
-			 + name + "</i> in <i>" + cl->name() 
-			 + "</i></b></font><br>");  
-    return FALSE;
-  }
-#ifdef REVERSE
-  Statistic::one_attribute_more();
-#endif
-  
-  if (!comment.isEmpty()) {
-    Q3CString s = (at->phpDecl().find("${description}") != -1)
-      ? description : comment;
-    UmlTypeSpec t;
-    int index;
-    
-    if (! (t.explicit_type = value_of(s, "@var", index)).isEmpty()) {
-      at->set_Type(t);
-      s.replace(index, t.explicit_type.length(), "${type}");
+
+    if (((const char *) name)[0] == '$')
+        name = name.mid(1);
+
+    UmlClass * cl = container->get_uml();
+    UmlAttribute * at = UmlBaseAttribute::create(cl, name);
+
+    if (at == 0) {
+        PhpCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add attribute <i>")
+                            + name + "</i> in <i>" + cl->name()
+                            + "</i></b></font><br>");
+        return FALSE;
     }
-    
-    at->set_Description(s);
-    
-  }
-  
-  if (constp)
-    at->set_isReadOnly(TRUE);
-  
-  if (staticp)
-    at->set_isClassMember(TRUE);
-  
-  if (! value.isEmpty())
-    at->set_DefaultValue(value);
-  
-  at->set_Visibility(visibility);
-  
-  return TRUE;
+
+#ifdef REVERSE
+    Statistic::one_attribute_more();
+#endif
+
+    if (!comment.isEmpty()) {
+        Q3CString s = (at->phpDecl().find("${description}") != -1)
+                      ? description : comment;
+        UmlTypeSpec t;
+        int index;
+
+        if (!(t.explicit_type = value_of(s, "@var", index)).isEmpty()) {
+            at->set_Type(t);
+            s.replace(index, t.explicit_type.length(), "${type}");
+        }
+
+        at->set_Description(s);
+
+    }
+
+    if (constp)
+        at->set_isReadOnly(TRUE);
+
+    if (staticp)
+        at->set_isClassMember(TRUE);
+
+    if (! value.isEmpty())
+        at->set_DefaultValue(value);
+
+    at->set_Visibility(visibility);
+
+    return TRUE;
 }
 
 

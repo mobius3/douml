@@ -44,54 +44,61 @@ class UmlPackage;
 class QApplication;
 
 /* lgfreitas: Represents a UML package */
-class Package : public BrowserNode, public ClassContainer {
-  public:
+class Package : public BrowserNode, public ClassContainer
+{
+public:
 #ifndef REVERSE
     Package(BrowserView * parent, UmlPackage * u);
 #endif
     Package(Package * parent, QString p, QString n);
     virtual ~Package();	// just to not have warning
-    
+
 #ifdef ROUNDTRIP
     Package(Package * parent, UmlPackage * pk);
-    
+
     virtual Class * upload_define(UmlClass *);
     void own(UmlArtifact *);
     void reverse(UmlArtifact *);
 #endif
     void reverse_variable(const Q3CString & name);
-    
+
     Class * declare_if_needed(const Q3CString & name,
-			      Q3CString stereotype = 0);
+                              Q3CString stereotype = 0);
     virtual Class * define(const Q3CString & name, Q3CString stereotype = 0);
     virtual void declare_if_needed(Q3CString name, Class * cl);
     virtual void define(Q3CString name, Class * cl);
     virtual bool find_type(Q3CString type, UmlTypeSpec & typespec);
     virtual void declaration(const Q3CString & name, const Q3CString & stereotype,
-			     const Q3CString & decl
+                             const Q3CString & decl
 #ifdef ROUNDTRIP
-			     , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                             , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			     );
+                            );
 
     virtual bool isa_package() const;
-    const Q3CString & get_h_path() const { return h_path; };
-    const Q3CString & get_src_path() const { return src_path; };
+    const Q3CString & get_h_path() const {
+        return h_path;
+    };
+    const Q3CString & get_src_path() const {
+        return src_path;
+    };
     UmlPackage * get_uml(bool mandatory = TRUE);
 #ifndef REVERSE
     virtual void menu();
     virtual void refer(const QString & name);
-    
+
     const QPixmap * pixmap(int) const;
-    
+
     virtual void backup(QDataStream  & dts) const;
     void backup_children(QDataStream  & ts) const;
 #endif
     void restore_children(QDataStream & dts);
     static void restore(QDataStream  & dt, Package *);
-    
+
     static void init(UmlPackage *, QApplication *);
-    static bool scanning() { return Scan; };
+    static bool scanning() {
+        return Scan;
+    };
     static void set_step(int s, int n);
 #ifdef ROUNDTRIP
     void scan_dir(int & n);
@@ -101,20 +108,24 @@ class Package : public BrowserNode, public ClassContainer {
     static void scan_dirs(int & n);
     static void send_dirs(int n, bool rec);
 #endif
-    
-    static const Q3CString & get_fname() { return fname; }
+
+    static const Q3CString & get_fname() {
+        return fname;
+    }
 #ifdef ROUNDTRIP
-    static UmlArtifact * get_artifact() { return artfct; }
+    static UmlArtifact * get_artifact() {
+        return artfct;
+    }
 #endif
-    
+
     //static Package * unknown();
-    
-  private:
+
+private:
     UmlPackage * uml;
     Q3CString namespace_;
     Q3CString h_path;	// empty or finish by a /
     Q3CString src_path;	// empty or finish by a /
-    
+
     static QApplication * app;
     static Q3PtrList<Package> Choozen; /* List of chosen "packages" to reverse */
     static int Nfiles;
@@ -125,30 +136,30 @@ class Package : public BrowserNode, public ClassContainer {
     //static Package * Unknown;
     static Q3ValueList<FormalParameterList> Formals;
     static Q3PtrList<UmlClass> UsedClasses;
-    
+
     static NDict<Class> Declared;
     static NDict<Class> Defined;
-    
+
     static Q3CString fname;	// without extension, empty for non header file
 #ifdef ROUNDTRIP
     static UmlArtifact * artfct; // currently roundtriped artifact
 #endif
     /* lgfreitas: Reverse directories.
-		I suspect that parameter h means "ITS A HEADER"
-	*/
+    	I suspect that parameter h means "ITS A HEADER"
+    */
     void reverse_directory(QString path, bool rec, QString ext, bool h);
 #ifdef ROUNDTRIP
     void reverse_file(Q3CString f, UmlArtifact * art, bool h);
 #else
-	/* lgfreitas: This does the reversing of files */
+    /* lgfreitas: This does the reversing of files */
     void reverse_file(Q3CString f);
-#endif    
-	/* lgfreitas: This seems to be where the reversing is finally done, word by word. */
+#endif
+    /* lgfreitas: This seems to be where the reversing is finally done, word by word. */
     void reverse_toplevel_forms(Q3CString f, bool sub_block);
     void reverse_toplevel_form(Q3CString f, Q3CString s);
-        
+
     Class * new_class(const Q3CString & name, const Q3CString & stereotype,
-		      bool declaration);
+                      bool declaration);
 
     void set_namespace(Q3CString s);
     Package * find(QFileInfo * di);
@@ -158,7 +169,7 @@ class Package : public BrowserNode, public ClassContainer {
     void scan_dir();
     void send_dir();
 #endif
-    
+
     static int file_number(QString path, bool rec, const char * ext);
 };
 

@@ -33,39 +33,42 @@
 #define ARROW_JUNCTION_SIZE 19
 #define PROVIDED_RADIUS 5.5
 
-class ArrowJunctionCanvas : public QObject, public DiagramCanvas {
-  Q_OBJECT
-    
-  protected:
+class ArrowJunctionCanvas : public QObject, public DiagramCanvas
+{
+    Q_OBJECT
+
+protected:
     BrowserClass * interface;
-  public:
+public:
     ArrowJunctionCanvas(UmlCanvas * canvas, int x, int y,
-			BrowserClass * i, int id = -1);
+                        BrowserClass * i, int id = -1);
     virtual ~ArrowJunctionCanvas();
-    
+
     virtual void delete_it();
     virtual void unconnect();
 
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual void change_scale();
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     //virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
     //virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual void remove_line(ArrowCanvas * l, bool onbrkjoin);
-    BrowserClass * get_interface() const { return interface; }
+    BrowserClass * get_interface() const {
+        return interface;
+    }
     virtual void history_load(QBuffer &);
     virtual void history_hide();
 
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
-    static ArrowJunctionCanvas * read(char * & st, UmlCanvas * canvas, char * k);
-    
-  private slots:
+    static ArrowJunctionCanvas * read(char *& st, UmlCanvas * canvas, char * k);
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();	// interface deleted
 };

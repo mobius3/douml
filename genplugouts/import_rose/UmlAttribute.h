@@ -13,24 +13,25 @@ class UmlClass;
 // is a mother class of the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n) :  UmlBaseAttribute(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
 
-  private:
+private:
     void import(File & f);
 
 
-  public:
+public:
     static void import(File & f, UmlClass * parent);
 
     static void importIdlConstant(UmlClass * parent, const Q3CString & id, const Q3CString & s, const Q3CString & doc, Q3Dict<Q3CString> & prop);
 
 
-  private:
+private:
     void cplusplus(Q3Dict<Q3CString> & prop);
 
     void oracle8(Q3Dict<Q3CString> & prop);

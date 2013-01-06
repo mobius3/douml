@@ -38,38 +38,39 @@ class BrowserTransition;
 #include "BrowserNode.h"
 #include "Labeled.h"
 
-class BrowserPseudoState : public BrowserNode, public Labeled<BrowserPseudoState> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserPseudoState : public BrowserNode, public Labeled<BrowserPseudoState>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserPseudoState> all;
     static QStringList its_default_stereotypes;
-  
+
     UmlCode kind;
     PseudoStateData * def;
-    
-  protected:
+
+protected:
     BrowserPseudoState(int id);
-  
+
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserPseudoState(UmlCode c, QString s, BrowserNode * p, PseudoStateData * d, int id = 0);
     BrowserPseudoState(const BrowserPseudoState * model, BrowserNode * p);
     virtual ~BrowserPseudoState();
-  
+
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     static BrowserPseudoState * add_pseudostate(BrowserNode * future_parent, UmlCode c);
     static BrowserPseudoState * add_pseudostate(BrowserNode * future_parent,
-						UmlCode c, const char * name);
+            UmlCode c, const char * name);
     static BrowserPseudoState * get_pseudostate(BrowserNode * future_parent, UmlCode c);
     virtual BasicData * add_relation(UmlCode, BrowserNode * end);
     BrowserTransition * add_transition(BrowserNode * end);
     QString may_start() const;
     QString may_connect(const BrowserNode * dest) const;
-    
-    virtual const QPixmap* pixmap (int) const;
+
+    virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -80,32 +81,32 @@ class BrowserPseudoState : public BrowserNode, public Labeled<BrowserPseudoState
     virtual void modified();
     virtual BasicData * get_data() const;
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserPseudoState * read(char * &, char *, BrowserNode *);
-    static BrowserPseudoState * read_ref(char * & st);
+    static BrowserPseudoState * read(char *& , char *, BrowserNode *);
+    static BrowserPseudoState * read_ref(char *& st);
     static BrowserNode * get_it(const char * k, int id);
 
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
-    
+
     virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
     static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserPseudoState *);
-    
+
     bool allow_empty() const;
     static bool allow_empty(UmlCode c);
 
     bool can_reference(BrowserNode *) const;
-    
+
     static void init();
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;
     virtual QString drag_postfix() const;

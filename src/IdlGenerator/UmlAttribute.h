@@ -31,13 +31,14 @@
 #include <Q3CString>
 #include <QTextStream>
 
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n)
-      :  UmlBaseAttribute(id, n) {};
+        :  UmlBaseAttribute(id, n) {};
 
     virtual void generate_decl(QTextStream & f, const Q3CString & cl_stereotype,
-			       Q3CString indent, bool = FALSE);
+                               Q3CString indent, bool = FALSE);
 };
 
 #endif

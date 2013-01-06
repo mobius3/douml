@@ -30,10 +30,11 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class UmlClassView : public UmlBaseClassView {
-  public:
+class UmlClassView : public UmlBaseClassView
+{
+public:
     UmlClassView(void * id, const Q3CString & n)
-      : UmlBaseClassView(id, n) {};
+        : UmlBaseClassView(id, n) {};
 
     void generate();
 };

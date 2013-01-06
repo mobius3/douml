@@ -33,16 +33,17 @@
 class UmlClassView;
 class UmlDeploymentView;
 
-class UmlPackage : public UmlBasePackage {
-  public:
+class UmlPackage : public UmlBasePackage
+{
+public:
     UmlPackage(void * id, const Q3CString & n);
-  
+
     UmlClassView * get_classview(const Q3CString & nmsp);
 #ifdef REVERSE
     UmlDeploymentView * get_deploymentview(const Q3CString & nmsp);
 #endif
-  
-  private:
+
+private:
     UmlClassView * classview;
 #ifdef REVERSE
     UmlDeploymentView * deploymentview;

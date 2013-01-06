@@ -4,8 +4,9 @@
 
 #include <q3cstring.h>
 
-class StateBehavior {
-  public:
+class StateBehavior
+{
+public:
     Q3CString on_entry;
 
     Q3CString on_exit;

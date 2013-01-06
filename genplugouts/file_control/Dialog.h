@@ -9,14 +9,15 @@ class QLineEdit;
 class QCheckBox;
 //A dialog to set the check-in/out command and set the recursive flag
 
-class Dialog : public QDialog {
-  Q_OBJECT
+class Dialog : public QDialog
+{
+    Q_OBJECT
 
-  public:
+public:
     Dialog(bool ci, Q3CString & cmd, BooL & rec, BooL & reload);
 
 
-  protected:
+protected:
     Q3CString & _cmd;
 
     BooL & _rec;
@@ -33,7 +34,7 @@ protected slots:
     virtual void polish();
 
 
-  public:
+public:
     virtual void accept();
 
 };

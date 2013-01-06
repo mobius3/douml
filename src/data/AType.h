@@ -35,22 +35,23 @@ class QTextStream;
 class BrowserClass;
 class ToolCom;
 
-class AType {
-  public:
+class AType
+{
+public:
     WrapperStr explicit_type;
     BrowserClass * type;
-    
-  public:
+
+public:
     AType() : type(0) {};
     const char * get_type() const;
     QString get_type(ShowContextMode mode) const;
     QString get_full_type() const;
-    
+
     void send_def(ToolCom * com) const;
     void save(QTextStream & st, QString & warning,
-	      const char * t, const char * ex) const;
-    void read(char * & st, const char * t, const char * ex);
-    void read(char * & st, const char * t, const char * ex, const char * k);
+              const char * t, const char * ex) const;
+    void read(char *& st, const char * t, const char * ex);
+    void read(char *& st, const char * t, const char * ex, const char * k);
 };
 
 #endif

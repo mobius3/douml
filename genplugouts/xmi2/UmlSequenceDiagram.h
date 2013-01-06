@@ -12,8 +12,9 @@ class FileOut;
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlSequenceDiagram : public UmlBaseSequenceDiagram {
-  public:
+class UmlSequenceDiagram : public UmlBaseSequenceDiagram
+{
+public:
     UmlSequenceDiagram(void * id, const Q3CString & n) : UmlBaseSequenceDiagram(id, n) {};
 
     virtual void write(FileOut & out);

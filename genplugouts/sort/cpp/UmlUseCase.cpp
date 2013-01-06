@@ -1,11 +1,13 @@
 
 #include "UmlUseCase.h"
 
-void UmlUseCase::sort() {
-  sortChildren();
+void UmlUseCase::sort()
+{
+    sortChildren();
 }
 
-int UmlUseCase::orderWeight() {
-  return 9;
+int UmlUseCase::orderWeight()
+{
+    return 9;
 }
 

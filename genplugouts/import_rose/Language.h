@@ -3,13 +3,13 @@
 
 
 enum Language {
-  None,
-  Cplusplus,
-  AnsiCplusplus,
-  VCplusplus,
-  Oracle8,
-  Corba,
-  Java
+    None,
+    Cplusplus,
+    AnsiCplusplus,
+    VCplusplus,
+    Oracle8,
+    Corba,
+    Java
 
 };
 #endif

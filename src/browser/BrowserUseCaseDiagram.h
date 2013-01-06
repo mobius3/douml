@@ -37,14 +37,15 @@ class QPixmap;
 class UseCaseDiagramWindow;
 class SimpleData;
 
-class BrowserUseCaseDiagram : public BrowserDiagram {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserUseCaseDiagram : public BrowserDiagram
+{
+    friend class StereotypesDialog;
+
+protected:
     static Q3PtrList<BrowserUseCaseDiagram> imported;
     static Q3ValueList<int> imported_ids;
     static QStringList its_default_stereotypes;
-  
+
     SimpleData * def;
     UseCaseDiagramWindow * window;
     UseCaseDiagramSettings settings;
@@ -55,28 +56,28 @@ class BrowserUseCaseDiagram : public BrowserDiagram {
     UmlColor subject_color;
     UmlColor package_color;
     UmlColor class_color;
-    
+
     BrowserUseCaseDiagram(BrowserUseCaseDiagram * model, BrowserNode * p);
     BrowserUseCaseDiagram(int id);
     void make();
     void exec_menu_choice(int rank);
-  
-  public:
+
+public:
     BrowserUseCaseDiagram(QString s, BrowserNode * p, int id = 0);
     virtual ~BrowserUseCaseDiagram();
-      
+
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
-  
-    virtual const QPixmap* pixmap (int) const;
+                                    QString name = QString());
+
+    virtual const QPixmap * pixmap(int) const;
     virtual void draw_svg() const;
-  
+
     virtual void menu();
     virtual void apply_shortcut(QString s);
     virtual void open(bool);
     virtual void on_close();
-    virtual void read_session(char * & st);
+    virtual void read_session(char *& st);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;
     virtual int get_identifier() const;
@@ -91,28 +92,28 @@ class BrowserUseCaseDiagram : public BrowserDiagram {
     virtual void update_drawing_settings();
     virtual void get_usecasediagramsettings(UseCaseDiagramSettings & r) const;
     virtual void get_simpleclassdiagramsettings(SimpleClassDiagramSettings & r) const;
-    virtual bool get_auto_label_position() const;    
+    virtual bool get_auto_label_position() const;
     virtual void package_settings(BooL & name_in_tab, ShowContextMode & show_context) const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserUseCaseDiagram * read(char * &, char *, BrowserNode *);
-    static BrowserUseCaseDiagram * read_ref(char * & st, const char * k);
+    static BrowserUseCaseDiagram * read(char *& , char *, BrowserNode *);
+    static BrowserUseCaseDiagram * read_ref(char *& st, const char * k);
     static BrowserNode * get_it(const char * k, int id);
-    
+
     void edit_settings();
-    
+
     static BrowserUseCaseDiagram * add_use_case_diagram(BrowserNode * future_parent);
-    
+
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     virtual void renumber(int phase);
     static void open_all();
     static void import();
-    
+
     static void compute_referenced_by(Q3PtrList<BrowserNode> & l, BrowserNode *,
-				      const char * kc, char const * kr);
+                                      const char * kc, char const * kr);
 };
 
 #endif

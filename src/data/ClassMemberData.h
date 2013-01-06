@@ -29,10 +29,11 @@
 #include "BasicData.h"
 #include "UmlEnum.h"
 
-class ClassMemberData : public BasicData {
-  Q_OBJECT
-    
-  public:
+class ClassMemberData : public BasicData
+{
+    Q_OBJECT
+
+public:
     ClassMemberData() : BasicData() {};
     ClassMemberData(const ClassMemberData * model) : BasicData(model) {};
     virtual ~ClassMemberData();

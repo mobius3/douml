@@ -34,22 +34,23 @@ class ToolCom;
 
 #define TEXT_CANVAS_MIN_SIZE 15
 
-class TextCanvas : public DiagramCanvas {
-  protected:
+class TextCanvas : public DiagramCanvas
+{
+protected:
     UmlFont itsfont;
     UmlColor fg_c;
     UmlColor bg_c;
     QString text;
-  
-  public:
+
+public:
     TextCanvas(UmlCanvas * canvas, int x, int y, int id);
     virtual ~TextCanvas();
 
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
@@ -63,8 +64,8 @@ class TextCanvas : public DiagramCanvas {
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static TextCanvas * read(char * &, UmlCanvas *, char *);
-    
+    static TextCanvas * read(char *& , UmlCanvas *, char *);
+
     static void send(ToolCom * com, Q3CanvasItemList & all);
 };
 

@@ -10,8 +10,9 @@ class UmlComponentDiagram;
 class UmlComponentView;
 
 //  Manage the component diagrams
-class UmlBaseComponentDiagram : public UmlDiagram {
-  public:
+class UmlBaseComponentDiagram : public UmlDiagram
+{
+public:
     // returns a new component diagram named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -23,7 +24,7 @@ class UmlBaseComponentDiagram : public UmlDiagram {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseComponentDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n) {};
 

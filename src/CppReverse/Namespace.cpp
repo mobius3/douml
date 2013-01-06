@@ -42,70 +42,72 @@ int Namespace::AnonymousLevel;
 Q3ValueList<QStringList> Namespace::UsingScope;
 
 // namespace aliases
-QMap<Q3CString,Q3CString> Namespace::Aliases;
+QMap<Q3CString, Q3CString> Namespace::Aliases;
 
 void Namespace::set(const Q3CString & s)
 {
-  // for upload only
-  Stack.append(QString(s) + "::");
+    // for upload only
+    Stack.append(QString(s) + "::");
 }
 
 void Namespace::unset()
 {
-  // for upload only
-  Stack.remove(Stack.last());
+    // for upload only
+    Stack.remove(Stack.last());
 }
 
 void Namespace::enter(const Q3CString & s)
 {
-  save_using_scope();
-  Stack.append((Stack.isEmpty())
-	       ? QString(s) + "::"
-	       : Stack.last() + QString(s) + "::");
+    save_using_scope();
+    Stack.append((Stack.isEmpty())
+                 ? QString(s) + "::"
+                 : Stack.last() + QString(s) + "::");
 }
 
 void Namespace::exit()
 {
-  Stack.remove(Stack.last());
-  restore_using_scope();
+    Stack.remove(Stack.last());
+    restore_using_scope();
 }
 
 void Namespace::restore_using_scope()
-{ 
-  Usings = UsingScope.first();
-  UsingScope.remove(UsingScope.begin());
+{
+    Usings = UsingScope.first();
+    UsingScope.remove(UsingScope.begin());
 }
 
-QString Namespace::namespacify(Q3CString s, bool local) {
-  QString r;
-  int index = s.find("::");
-  
-  if (index == 0)
-    r = ((const char *) s) + 2;
-  else {
-    if (index != -1) {
-      QMap<Q3CString,Q3CString>::ConstIterator it = 
-	Aliases.find(s.left(index));
-      
-      if (it != Aliases.end())
-	s.replace(0, index, *it);
+QString Namespace::namespacify(Q3CString s, bool local)
+{
+    QString r;
+    int index = s.find("::");
+
+    if (index == 0)
+        r = ((const char *) s) + 2;
+    else {
+        if (index != -1) {
+            QMap<Q3CString, Q3CString>::ConstIterator it =
+                Aliases.find(s.left(index));
+
+            if (it != Aliases.end())
+                s.replace(0, index, *it);
+        }
+
+        r = (Stack.isEmpty())
+            ? QString(s)
+            : Stack.last() + QString(s);
     }
-    
-    r = (Stack.isEmpty())
-      ? QString(s)
-      : Stack.last() + QString(s);
-  }
-  
-  return (local)
-    ? r + "\n" + Lex::filename()
-    : r;
+
+    return (local)
+           ? r + "\n" + Lex::filename()
+           : r;
 }
 
-Q3CString Namespace::current() {
-  if (Stack.isEmpty())
-    return 0;
-  
-  QString & s = Stack.last();
-  
-  return Q3CString((s.left(s.length() - 2)).toAscii().constData());
+Q3CString Namespace::current()
+{
+    if (Stack.isEmpty())
+        return 0;
+
+    QString & s = Stack.last();
+
+    return Q3CString((s.left(s.length() - 2)).toAscii().constData());
 }

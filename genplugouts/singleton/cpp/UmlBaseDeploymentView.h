@@ -10,8 +10,9 @@ class UmlDeploymentView;
 class UmlPackage;
 
 //  Manage the deployment views
-class UmlBaseDeploymentView : public UmlItem {
-  public:
+class UmlBaseDeploymentView : public UmlItem
+{
+public:
     // returns a new deployment view named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -23,7 +24,7 @@ class UmlBaseDeploymentView : public UmlItem {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseDeploymentView(void * id, const Q3CString & n) : UmlItem(id, n) {};
 

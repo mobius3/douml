@@ -9,8 +9,9 @@
 // This class manages 'use case'
 //
 // You can modify it as you want (except the constructor)
-class UmlUseCase : public UmlBaseUseCase {
-  public:
+class UmlUseCase : public UmlBaseUseCase
+{
+public:
     UmlUseCase(void * id, const Q3CString & n) : UmlBaseUseCase(id, n) {};
 
     //returns a string indicating the king of the element
@@ -31,7 +32,7 @@ class UmlUseCase : public UmlBaseUseCase {
     virtual bool chapterp();
 
 
-  protected:
+protected:
     static Vector usecases;
 
 };

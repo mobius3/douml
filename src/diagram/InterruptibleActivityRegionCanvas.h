@@ -39,35 +39,36 @@
 
 #define INTERRUPTIBLE_ACTIVITY_REGION_CANVAS_MIN_SIZE 40
 
-class InterruptibleActivityRegionCanvas : public QObject, public ActivityContainerCanvas {
-  Q_OBJECT
-    
-  protected:
+class InterruptibleActivityRegionCanvas : public QObject, public ActivityContainerCanvas
+{
+    Q_OBJECT
+
+protected:
     UmlColor itscolor;
     UmlColor used_color;
-    
-  protected:
+
+protected:
     InterruptibleActivityRegionCanvas(UmlCanvas * canvas, int id);
-  
-  public:
+
+public:
     InterruptibleActivityRegionCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~InterruptibleActivityRegionCanvas();
-    
+
     void force_sub_inside(bool rz);
-    
+
     virtual void delete_it();
-    
+
     void update();
-    
+
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void remove(bool from_model);
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
@@ -75,22 +76,22 @@ class InterruptibleActivityRegionCanvas : public QObject, public ActivityContain
     virtual void resize(aCorner c, int dx, int dy, QPoint &);
     virtual void resize(const QSize & sz, bool w, bool h);
     virtual bool move_with_its_package() const;
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
     void edit_drawing_settings();
-    
+
     virtual void apply_shortcut(QString s);
-  
+
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
-    static InterruptibleActivityRegionCanvas * read(char * &, UmlCanvas *, char *);
-    
+    static InterruptibleActivityRegionCanvas * read(char *& , UmlCanvas *, char *);
+
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();
 };

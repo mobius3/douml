@@ -30,21 +30,22 @@
 //Added by qt3to4:
 #include <QTextStream>
 
-class AssocContainCanvas : public ArrowCanvas {
-  public:
+class AssocContainCanvas : public ArrowCanvas
+{
+public:
     AssocContainCanvas(UmlCanvas * canvas, DiagramItem * b,
-		     DiagramItem * e, int id, float d_start, float d_end);
+                       DiagramItem * e, int id, float d_start, float d_end);
     virtual ~AssocContainCanvas();
-    
+
     virtual ArrowPointCanvas * brk(const QPoint &);
-    
+
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual void remove(bool from_model);
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    
+
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
-    static AssocContainCanvas * read(char * & st, UmlCanvas * canvas, char * k);
+    static AssocContainCanvas * read(char *& st, UmlCanvas * canvas, char * k);
 };
 
 #endif

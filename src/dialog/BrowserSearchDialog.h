@@ -36,10 +36,11 @@ class QRadioButton;
 class QPushButton;
 class LineEdit;
 
-class BrowserSearchDialog : public QDialog {
-  Q_OBJECT
- 
-  protected:
+class BrowserSearchDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     BrowserNodeList nodes;
     Q3ComboBox * kind;
     Q3ComboBox * results;
@@ -54,7 +55,7 @@ class BrowserSearchDialog : public QDialog {
     QPushButton * mark_unmark_b;
     QPushButton * mark_them_b;
     QPushButton * unmark_all_b;
-    
+
     static BrowserSearchDialog * the;
     static int saved_kind;
     static QString saved_ed;
@@ -64,18 +65,20 @@ class BrowserSearchDialog : public QDialog {
     static bool saved_stereotype;
     static bool saved_comment;
     static bool saved_decldefbody;
-    
+
     static QSize previous_size;
-        
-  public:
+
+public:
     BrowserSearchDialog();
     virtual ~BrowserSearchDialog();
 
     void update();
-    
-    static BrowserSearchDialog * get() { return the; }
-    
-  protected slots:
+
+    static BrowserSearchDialog * get() {
+        return the;
+    }
+
+protected slots:
     virtual void polish();
     void search();
     void select();

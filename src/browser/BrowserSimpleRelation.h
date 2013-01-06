@@ -38,26 +38,27 @@ class SimpleRelationData;
 #include "BrowserNode.h"
 #include "Labeled.h"
 
-class BrowserSimpleRelation : public BrowserNode, public Labeled<BrowserSimpleRelation> {
-  protected:
+class BrowserSimpleRelation : public BrowserNode, public Labeled<BrowserSimpleRelation>
+{
+protected:
     static IdDict<BrowserSimpleRelation> all;
-  
+
     SimpleRelationData * def;
-    
-  protected:
+
+protected:
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserSimpleRelation(BrowserNode * p, SimpleRelationData * d, int id = 0);
     BrowserSimpleRelation(const BrowserSimpleRelation * model, BrowserNode * p);
     BrowserSimpleRelation(int id);
     virtual ~BrowserSimpleRelation();
-  
+
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
-        
-    virtual const QPixmap* pixmap (int) const;
+                                    QString name = QString());
+
+    virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -70,11 +71,11 @@ class BrowserSimpleRelation : public BrowserNode, public Labeled<BrowserSimpleRe
     virtual BasicData * get_data() const;
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void update_stereotype(bool = FALSE);
-    
+
     virtual void write_id(ToolCom * com);
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserSimpleRelation * read_ref(char * & st);
-    static BrowserSimpleRelation * read(char * &, char *, BrowserNode *);
+    static BrowserSimpleRelation * read_ref(char *& st);
+    static BrowserSimpleRelation * read(char *& , char *, BrowserNode *);
     static BrowserSimpleRelation * temporary(SimpleRelationData * d);
     static BrowserNode * get_it(const char * k, int id);
 
@@ -82,20 +83,20 @@ class BrowserSimpleRelation : public BrowserNode, public Labeled<BrowserSimpleRe
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
+
     virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
     static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
 
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;
     virtual QString drag_postfix() const;
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
-    
+
     static void get_relating(BrowserNode *, Q3PtrDict<BrowserNode> & d,
-			     BrowserNodeList & newones, bool inh,
-			     bool dep, bool sametype, UmlCode k);
+                             BrowserNodeList & newones, bool inh,
+                             bool dep, bool sametype, UmlCode k);
 };
 
 #endif

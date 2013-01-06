@@ -40,21 +40,32 @@
 #include <q3ptrlist.h>
 #include <qstring.h>
 
-class TreeItem {
-  private:
+class TreeItem
+{
+private:
     TreeItem * its_parent;
     Q3PtrList<TreeItem> its_children;
     QString its_name;
-    
-  public:
+
+public:
     TreeItem(TreeItem * parent, const char * n);
-  
-    QString text(int) { return its_name; };
-    void setText(int, QString s) { its_name = s; };
-    TreeItem * parent() { return its_parent; };
-    
-    TreeItem * firstChild() { return its_children.first(); };
-    TreeItem * nextSibling() { return its_parent->its_children.next(); };
+
+    QString text(int) {
+        return its_name;
+    };
+    void setText(int, QString s) {
+        its_name = s;
+    };
+    TreeItem * parent() {
+        return its_parent;
+    };
+
+    TreeItem * firstChild() {
+        return its_children.first();
+    };
+    TreeItem * nextSibling() {
+        return its_parent->its_children.next();
+    };
 };
 
 #endif

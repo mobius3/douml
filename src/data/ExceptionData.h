@@ -32,19 +32,22 @@
 
 class QTextStream;
 
-class ExceptionData {
-  protected:
+class ExceptionData
+{
+protected:
     AType type;
-  public:
-    ExceptionData(){};
-  
-    const AType & get_type() const { return type; };
+public:
+    ExceptionData() {};
+
+    const AType & get_type() const {
+        return type;
+    };
     void set_type(const AType & t);
 
     void send_uml_def(ToolCom * com);
-    
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * &, char * &);
+    void read(char *& , char *&);
 };
 
 #endif

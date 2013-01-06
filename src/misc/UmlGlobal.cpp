@@ -75,117 +75,147 @@ QColor UmlDarkMagentaColor(0x80, 0x00, 0x80);
 
 void init_font()
 {
-  NormalFont = QApplication::font();
-  if (! hasCodec())
-    NormalFont.setFamily("Helvetica");
+    NormalFont = QApplication::font();
 
-  BoldFont = NormalFont;
-  BoldFont.setBold(TRUE);
-  
-  ItalicFont = NormalFont;
-  ItalicFont.setItalic(TRUE);
-  
-  BoldItalicFont = ItalicFont;
-  BoldItalicFont.setBold(TRUE);
-  
-  UnderlineFont = NormalFont;
-  UnderlineFont.setUnderline(TRUE);
-  
-  BoldUnderlineFont = BoldFont;
-  BoldUnderlineFont.setUnderline(TRUE);
-  
-  StrikeOutFont = NormalFont;
-  StrikeOutFont.setStrikeOut(TRUE);
+    if (! hasCodec())
+        NormalFont.setFamily("Helvetica");
+
+    BoldFont = NormalFont;
+    BoldFont.setBold(TRUE);
+
+    ItalicFont = NormalFont;
+    ItalicFont.setItalic(TRUE);
+
+    BoldItalicFont = ItalicFont;
+    BoldItalicFont.setBold(TRUE);
+
+    UnderlineFont = NormalFont;
+    UnderlineFont.setUnderline(TRUE);
+
+    BoldUnderlineFont = BoldFont;
+    BoldUnderlineFont.setUnderline(TRUE);
+
+    StrikeOutFont = NormalFont;
+    StrikeOutFont.setStrikeOut(TRUE);
 }
 
 void resize_font(int i)
 {
-  NormalFont.setPointSizeFloat(i);
-  BoldFont.setPointSizeFloat(i);
-  ItalicFont.setPointSizeFloat(i);
-  BoldItalicFont.setPointSizeFloat(i);
-  UnderlineFont.setPointSizeFloat(i);
-  BoldUnderlineFont.setPointSizeFloat(i);
-  StrikeOutFont.setPointSizeFloat(i);
-  
-  QFont fn = QApplication::font();
-  
-  fn.setPointSizeFloat(i);
-  QApplication::setFont(fn, TRUE);
+    NormalFont.setPointSizeFloat(i);
+    BoldFont.setPointSizeFloat(i);
+    ItalicFont.setPointSizeFloat(i);
+    BoldItalicFont.setPointSizeFloat(i);
+    UnderlineFont.setPointSizeFloat(i);
+    BoldUnderlineFont.setPointSizeFloat(i);
+    StrikeOutFont.setPointSizeFloat(i);
+
+    QFont fn = QApplication::font();
+
+    fn.setPointSizeFloat(i);
+    QApplication::setFont(fn, TRUE);
 }
 
 const QColor & color(UmlColor c)
 {
-  // use a switch to not be linked with the color order
-  
-  switch (c) {
-  case UmlTransparent:
-  case UmlWhite:
-    return UmlWhiteColor;
-  case UmlLightYellow:
-    return UmlLightYellowColor;
-  case UmlYellow:
-    return UmlYellowColor;
-  case UmlMediumYellow:
-    return UmlMediumYellowColor;
-  case UmlDarkYellow:
-    return UmlDarkYellowColor;
-  case UmlLightBlue:
-    return UmlLightBlueColor;
-  case UmlBlue:
-    return UmlBlueColor;
-  case UmlLightMediumBlue:
-    return UmlLightMediumBlueColor;
-  case UmlMediumBlue:
-    return UmlMediumBlueColor;
-  case UmlDarkBlue:
-    return UmlDarkBlueColor;
-  case UmlLightGreen:
-    return UmlLightGreenColor;
-  case UmlGreen:
-    return UmlGreenColor;
-  case UmlLightMediumGreen:
-    return UmlLightMediumGreenColor;
-  case UmlMediumGreen:
-    return UmlMediumGreenColor;
-  case UmlDarkGreen:
-    return UmlDarkGreenColor;
-  case UmlRed:
-    return UmlRedColor;
-  case UmlVeryLightGray:
-    return UmlVeryLightGrayColor;
-  case UmlLightGray:
-    return UmlLightGrayColor;
-  case UmlGray:
-    return UmlGrayColor;
-  case UmlDarkGray:
-    return UmlDarkGrayColor;
-  case UmlBlack:
-    return UmlBlackColor;
-    
-  case UmlLightRed:
-    return UmlLightRedColor;
-  case UmlMidRed:
-    return UmlMidRedColor;
-  case UmlVeryLightOrange:
-    return UmlVeryLightOrangeColor;
-  case UmlLightOrange:
-    return UmlLightOrangeColor;
-  case UmlOrange:
-    return UmlOrangeColor;
-  case UmlDarkOrange:
-    return UmlDarkOrangeColor;
-  case UmlLightMagenta:
-    return UmlLightMagentaColor;
-  case UmlMagenta:
-    return UmlMagentaColor;
-  case UmlMidMagenta:
-    return UmlMidMagentaColor;
-  case UmlDarkMagenta:
-    return UmlDarkMagentaColor;
-    
-  default:	// error
-    return UmlBlackColor;
-  }
+    // use a switch to not be linked with the color order
+
+    switch (c) {
+    case UmlTransparent:
+    case UmlWhite:
+        return UmlWhiteColor;
+
+    case UmlLightYellow:
+        return UmlLightYellowColor;
+
+    case UmlYellow:
+        return UmlYellowColor;
+
+    case UmlMediumYellow:
+        return UmlMediumYellowColor;
+
+    case UmlDarkYellow:
+        return UmlDarkYellowColor;
+
+    case UmlLightBlue:
+        return UmlLightBlueColor;
+
+    case UmlBlue:
+        return UmlBlueColor;
+
+    case UmlLightMediumBlue:
+        return UmlLightMediumBlueColor;
+
+    case UmlMediumBlue:
+        return UmlMediumBlueColor;
+
+    case UmlDarkBlue:
+        return UmlDarkBlueColor;
+
+    case UmlLightGreen:
+        return UmlLightGreenColor;
+
+    case UmlGreen:
+        return UmlGreenColor;
+
+    case UmlLightMediumGreen:
+        return UmlLightMediumGreenColor;
+
+    case UmlMediumGreen:
+        return UmlMediumGreenColor;
+
+    case UmlDarkGreen:
+        return UmlDarkGreenColor;
+
+    case UmlRed:
+        return UmlRedColor;
+
+    case UmlVeryLightGray:
+        return UmlVeryLightGrayColor;
+
+    case UmlLightGray:
+        return UmlLightGrayColor;
+
+    case UmlGray:
+        return UmlGrayColor;
+
+    case UmlDarkGray:
+        return UmlDarkGrayColor;
+
+    case UmlBlack:
+        return UmlBlackColor;
+
+    case UmlLightRed:
+        return UmlLightRedColor;
+
+    case UmlMidRed:
+        return UmlMidRedColor;
+
+    case UmlVeryLightOrange:
+        return UmlVeryLightOrangeColor;
+
+    case UmlLightOrange:
+        return UmlLightOrangeColor;
+
+    case UmlOrange:
+        return UmlOrangeColor;
+
+    case UmlDarkOrange:
+        return UmlDarkOrangeColor;
+
+    case UmlLightMagenta:
+        return UmlLightMagentaColor;
+
+    case UmlMagenta:
+        return UmlMagentaColor;
+
+    case UmlMidMagenta:
+        return UmlMidMagentaColor;
+
+    case UmlDarkMagenta:
+        return UmlDarkMagentaColor;
+
+    default:	// error
+        return UmlBlackColor;
+    }
 }
 

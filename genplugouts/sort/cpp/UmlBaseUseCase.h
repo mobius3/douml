@@ -10,8 +10,9 @@ class UmlUseCase;
 class UmlUseCaseDiagram;
 
 // Manage the use cases
-class UmlBaseUseCase : public UmlItem {
-  public:
+class UmlBaseUseCase : public UmlItem
+{
+public:
     // returns a new use case named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -31,13 +32,13 @@ class UmlBaseUseCase : public UmlItem {
     bool set_AssociatedDiagram(UmlUseCaseDiagram * d);
 
 
-  private:
+private:
     UmlUseCaseDiagram * _assoc_diagram;
 
 
-  protected:
+protected:
     //internal, do NOT use it
-    
+
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!

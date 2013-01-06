@@ -33,18 +33,19 @@
 
 class Class;
 
-class UmlOperation : public UmlBaseOperation {
-  private:
+class UmlOperation : public UmlBaseOperation
+{
+private:
     static bool read_param(Class * container, unsigned rank,
-			   UmlParameter & param, Q3CString & decl, bool bypass);
-  
-  public:
+                           UmlParameter & param, Q3CString & decl, bool bypass);
+
+public:
     UmlOperation(void * id, const Q3CString & n)
-      : UmlBaseOperation(id, n) {};
-	
+        : UmlBaseOperation(id, n) {};
+
     static bool new_one(Class * container, aVisibility visibility,
-			bool finalp, bool abstractp, bool staticp,
-			Q3CString comment, Q3CString description);
+                        bool finalp, bool abstractp, bool staticp,
+                        Q3CString comment, Q3CString description);
 
     static void skip_body(int level = 0);
     static Q3CString skip_expr(int level = 0);

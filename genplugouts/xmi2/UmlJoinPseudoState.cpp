@@ -1,7 +1,8 @@
 
 #include "UmlJoinPseudoState.h"
 
-const char * UmlJoinPseudoState::sKind() const {
-  return "join";
+const char * UmlJoinPseudoState::sKind() const
+{
+    return "join";
 }
 

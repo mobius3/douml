@@ -33,12 +33,12 @@
 #include <q3grid.h>
 #include <q3vbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <q3combobox.h>
 #include <q3buttongroup.h>
 #include <qcheckbox.h>
-#include <qradiobutton.h> 
-#include <q3popupmenu.h> 
-#include <qpushbutton.h> 
+#include <qradiobutton.h>
+#include <q3popupmenu.h>
+#include <qpushbutton.h>
 #include <qlayout.h>
 #include <qtimer.h>
 //Added by qt3to4:
@@ -83,7 +83,7 @@ QSize OperationDialog::previous_size;
 QSharedPointer<OperationDialog> OperationDialog::instance;
 OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
     : EdgeMenuDialog(0, 0, FALSE), oper(o),
-      cl((ClassData *) ((BrowserClass *) o->browser_node->parent())->get_data())
+      cl((ClassData *)((BrowserClass *) o->browser_node->parent())->get_data())
 {
     //o->browser_node->edit_start();
 
@@ -111,14 +111,15 @@ OperationDialog::~OperationDialog()
     close_dialog(this);
 }
 
-void OperationDialog::polish() {
+void OperationDialog::polish()
+{
     Q3TabDialog::polish();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 // to manage get_ set_, search corresp attr/rel
-void OperationDialog::init_get_set() 
-{  
+void OperationDialog::init_get_set()
+{
 
     nodes.clear();
     list.clear();
@@ -131,42 +132,35 @@ void OperationDialog::init_get_set()
     get_of_rel = 0;
     set_of_rel = 0;
 
-    if (oper->is_get_or_set)
-    {
+    if (oper->is_get_or_set) {
         BrowserOperation * br_op = (BrowserOperation *) oper->browser_node;
         Q3ListViewItem * child;
 
         for (child = br_op->parent()->firstChild();
              child != 0;
-             child = child->nextSibling())
-        {
+             child = child->nextSibling()) {
             BrowserNode * br = (BrowserNode *) child;
 
-            if (!br->deletedp())
-            {
-                if (br->get_type() == UmlAttribute)
-                {
-                    if (((BrowserAttribute *) br)->get_get_oper() == br_op)
-                    {
+            if (!br->deletedp()) {
+                if (br->get_type() == UmlAttribute) {
+                    if (((BrowserAttribute *) br)->get_get_oper() == br_op) {
                         get_of_attr = (AttributeData *) br->get_data();
                         break;
                     }
-                    if (((BrowserAttribute *) br)->get_set_oper() == br_op)
-                    {
+
+                    if (((BrowserAttribute *) br)->get_set_oper() == br_op) {
                         set_of_attr = (AttributeData *) br->get_data();
                         break;
                     }
                 }
-                else if (IsaRelation(br->get_type()))
-                {
-                    if (((BrowserRelation *) br)->get_get_oper() == br_op)
-                    {
+                else if (IsaRelation(br->get_type())) {
+                    if (((BrowserRelation *) br)->get_get_oper() == br_op) {
                         get_of_rel = (RelationData *) br->get_data();
                         is_rel_a = get_of_rel->is_a((BrowserRelation *) br);
                         break;
                     }
-                    if (((BrowserRelation *) br)->get_set_oper() == br_op)
-                    {
+
+                    if (((BrowserRelation *) br)->get_set_oper() == br_op) {
                         set_of_rel = (RelationData *) br->get_data();
                         is_rel_a = set_of_rel->is_a((BrowserRelation *) br);
                         break;
@@ -178,8 +172,8 @@ void OperationDialog::init_get_set()
 }
 
 // general tab
-void OperationDialog::init_uml() 
-{  
+void OperationDialog::init_uml()
+{
     Q3Grid * grid;
 
     grid = new Q3Grid(2, this);
@@ -215,7 +209,7 @@ void OperationDialog::init_uml()
     htabBgUml->setStretchFactor(new QLabel("  ", htabBgUml), 0);
 
     bgUml2 = new Q3ButtonGroup(2, Qt::Horizontal, QString(), htabBgUml);
-    
+
     htabBgUml->setStretchFactor(bgUml2, 1000);
     classoperation_cb = new QCheckBox(TR("static"), bgUml2);
     abstract_cb = new QCheckBox(TR("abstract"), bgUml2);
@@ -230,11 +224,11 @@ void OperationDialog::init_uml()
     forcegenbody_cb = new QCheckBox(TR("force body generation"), bgUml3);
 
 
-    connect(forcegenbody_cb, SIGNAL(toggled(bool)),SLOT(forcegenbody_toggled(bool)));
+    connect(forcegenbody_cb, SIGNAL(toggled(bool)), SLOT(forcegenbody_toggled(bool)));
 
     new QLabel(TR("parameters : "), grid);
     table = new ParamsTable(oper, grid, list, this, !isWritable); //todo update the table
-    
+
     new QLabel(TR("exceptions : "), grid);
     etable = new ExceptionsTable(oper, grid, list, !isWritable); //todo update the table
 
@@ -248,7 +242,7 @@ void OperationDialog::init_uml()
     connect(pbDefault, SIGNAL(clicked()), this, SLOT(default_description()));
 
     comment = new MultiLineEdit(grid);
-    
+
     vtab = new Q3VBox(grid);
     new QLabel(TR("constraint :"), vtab);
     pbConstraintEditor = new SmallPushButton(TR("Editor"), vtab);
@@ -260,7 +254,7 @@ void OperationDialog::init_uml()
 }
 
 
-void OperationDialog::FillUmlTab(OperationData* oper)
+void OperationDialog::FillUmlTab(OperationData * oper)
 {
 
     BrowserNode * node = (BrowserNode *) oper->get_browser_node();
@@ -270,17 +264,17 @@ void OperationDialog::FillUmlTab(OperationData* oper)
     edname->setReadOnly(!isWritable);
     edstereotype->clear();
     edstereotype->insertItem(toUnicode(oper->stereotype));
-    if (oper->is_get_or_set)
-    {
+
+    if (oper->is_get_or_set) {
         edstereotype->setEnabled(FALSE);
     }
-    else if (isWritable)
-    {
+    else if (isWritable) {
         edstereotype->setEnabled(true);
         edstereotype->insertStringList(BrowserOperation::default_stereotypes());
         edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlOperation));
         edstereotype->setAutoCompletion(completion());
     }
+
     edstereotype->setCurrentItem(0);
     QSizePolicy sp = edstereotype->sizePolicy();
     sp.setHorData(QSizePolicy::Expanding);
@@ -294,10 +288,10 @@ void OperationDialog::FillUmlTab(OperationData* oper)
 
     edreturn_type->clear();
     edreturn_type->insertItem(oper->get_return_type().get_full_type());
+
     if (oper->is_get_or_set)
         edreturn_type->setEnabled(FALSE);
-    else if (isWritable)
-    {
+    else if (isWritable) {
         edreturn_type->setEnabled(true);
         QStringList l = GenerationSettings::basic_types();
 
@@ -308,6 +302,7 @@ void OperationDialog::FillUmlTab(OperationData* oper)
         edreturn_type->setAutoCompletion(completion());
         view = oper->browser_node->container(UmlClass);
     }
+
     edreturn_type->setCurrentItem(0);
 
     edreturn_type->setSizePolicy(sp);
@@ -326,31 +321,39 @@ void OperationDialog::FillUmlTab(OperationData* oper)
         classoperation_cb->setChecked(TRUE);
     else
         classoperation_cb->setChecked(false);
+
     if (oper->get_is_abstract())
         abstract_cb->setChecked(TRUE);
     else
         abstract_cb->setChecked(false);
+
     if (oper->is_get_or_set)
         bgUml2->setEnabled(FALSE);
     else
         bgUml2->setEnabled(true);
+
     forcegenbody_cb->setDisabled(!isWritable);
+
     if (oper->body_generation_forced())
         forcegenbody_cb->setChecked(TRUE);
     else
         forcegenbody_cb->setChecked(false);
+
     ///!!! table = new ParamsTable(oper, grid, list, this, !isWritable); //todo update the table
     if (oper->is_get_or_set)
         table->setEnabled(FALSE);
     else
         table->setEnabled(true);
+
     ///!!! etable = new ExceptionsTable(oper, grid, list, !isWritable); //todo update the table
     pbEditor->setEnabled(isWritable);
     pbDefault->setEnabled(isWritable);
     comment->setText(oper->get_browser_node()->get_comment());
     QFont font = comment->font();
+
     if (! hasCodec())
         font.setFamily("Courier");
+
     font.setFixedPitch(TRUE);
     comment->setFont(font);
     comment->setReadOnly(!isWritable);
@@ -364,12 +367,12 @@ void OperationDialog::FillUmlTab(OperationData* oper)
 
 
 // C++
-void OperationDialog::init_cpp() 
-{  
+void OperationDialog::init_cpp()
+{
 
     cppTab = new OperationWidgetCpp();
 
-    RegisterTab("C++", cppTab );
+    RegisterTab("C++", cppTab);
 
     tabBgCppModifiers = new Q3HBox();
     tabBgCppModifiers->setStretchFactor(new QLabel("      ", tabBgCppModifiers), 0);
@@ -382,9 +385,9 @@ void OperationDialog::init_cpp()
     cbCppFriend = new QCheckBox("friend", bgCppModifiers);
     cbCppVirtual = new QCheckBox("virtual", bgCppModifiers);
     cbCppInline = new QCheckBox("inline", bgCppModifiers);
-    QHBoxLayout* layout = new QHBoxLayout();
+    QHBoxLayout * layout = new QHBoxLayout();
     layout->addWidget(tabBgCppModifiers);
-    layout->setContentsMargins(0,0,0,0);
+    layout->setContentsMargins(0, 0, 0, 0);
     cppTab->ui->wdgVisibilityGroup->setLayout(layout);
 
 
@@ -400,37 +403,37 @@ void OperationDialog::init_cpp()
     connect(cppTab->ui->leCppNamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_decl()));
     connect(cppTab->ui->leCppNamespec, SIGNAL(textChanged(const QString &)), this, SLOT(cpp_update_def()));
     connect(cppTab->ui->pbDefaultDeclaration, SIGNAL(clicked()), this, SLOT(cpp_default_decl()));
-    connect(cppTab->ui->pbFromDefinition, SIGNAL(clicked()),this, SLOT(cpp_decl_from_def()));
+    connect(cppTab->ui->pbFromDefinition, SIGNAL(clicked()), this, SLOT(cpp_decl_from_def()));
     connect(cppTab->ui->pbNotGeneratedInCpp, SIGNAL(clicked()), this, SLOT(cpp_unmapped_decl()));
     connect(cppTab->ui->pbEditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_decl()));
     connect(cppTab->ui->editcppbody, SIGNAL(clicked()), this, SLOT(cpp_edit_body()));
-    connect(cppTab->ui->pbDefaultDefinition, SIGNAL(clicked ()), this, SLOT(cpp_default_def()));
-    connect(cppTab->ui->pbFromDeclaration, SIGNAL(clicked ()), this, SLOT(cpp_def_from_decl()));
-    connect(cppTab->ui->pb2NotGeneratedInCpp, SIGNAL(clicked ()),this, SLOT(cpp_unmapped_def()));
+    connect(cppTab->ui->pbDefaultDefinition, SIGNAL(clicked()), this, SLOT(cpp_default_def()));
+    connect(cppTab->ui->pbFromDeclaration, SIGNAL(clicked()), this, SLOT(cpp_def_from_decl()));
+    connect(cppTab->ui->pb2NotGeneratedInCpp, SIGNAL(clicked()), this, SLOT(cpp_unmapped_def()));
     connect(cppTab->ui->pb2EditParameters, SIGNAL(clicked()), this, SLOT(cpp_edit_param_def()));
 
     char * b = oper->get_body('c');
-    
-    if (b != 0)
-    {
+
+    if (b != 0) {
         cppbody = oldcppbody = b;
         delete [] b;
     }
-    
+
     insertTab(cppTab, "C++", 1);
 }
 
 
-void OperationDialog::FillcppTab(OperationData* oper)
+void OperationDialog::FillcppTab(OperationData * oper)
 {
     cppTab->ui->cbCppFrozen->setChecked(false);
+
     if (!isWritable || !oper->is_get_or_set)
         cppTab->ui->cbCppFrozen->hide();
-    else
-    {
+    else {
         if (oper->cpp_get_set_frozen)
             cppTab->ui->cbCppFrozen->setChecked(TRUE);
     }
+
     visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
     visibilityBg->setEnabled(isWritable);
 
@@ -447,27 +450,24 @@ void OperationDialog::FillcppTab(OperationData* oper)
     cbCppInline->setDisabled(!isWritable);
 
 
-    if (oper->is_get_or_set)
-    {
+    if (oper->is_get_or_set) {
         cppTab->ui->leCppNamespec->setText(oper->cpp_name_spec);
         cppTab->ui->leCppNamespec->setReadOnly(!isWritable);
     }
-    else
-    {
+    else {
         cppTab->ui->lblNameFormCpp->hide();
         cppTab->ui->leCppNamespec->hide();
     }
 
-    if(isWritable)
-    {
+    if (isWritable) {
         connect(cppTab->ui->edCppDeclProto, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
         connect(cppTab->ui->edCppDefProto, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
     }
-    else
-    {
+    else {
         disconnect(cppTab->ui->edCppDeclProto, SIGNAL(textChanged()), this, SLOT(cpp_update_decl()));
         disconnect(cppTab->ui->edCppDefProto, SIGNAL(textChanged()), this, SLOT(cpp_update_def()));
     }
+
     cppTab->ui->edCppDeclProto->setText(oper->get_cppdecl());
     cppTab->ui->edCppDeclProto->setFont(comment->font());
     cppTab->ui->edCppDeclProto->setReadOnly(!isWritable);
@@ -496,9 +496,8 @@ void OperationDialog::FillcppTab(OperationData* oper)
     cppTab->ui->editcppbody->setText(buttonText);
 
     char * b = oper->get_body('c');
-    
-    if (b != 0)
-    {
+
+    if (b != 0) {
         cppbody = oldcppbody = b;
         delete [] b;
     }
@@ -518,7 +517,7 @@ void OperationDialog::FillcppTab(OperationData* oper)
     cbCppInline->setDisabled(!templates.isEmpty());
 
 
-    if(cpp_undef)
+    if (cpp_undef)
         HideTab("Cpp");
 }
 
@@ -532,22 +531,22 @@ void OperationDialog::init_java()
 
     grid = new Q3Grid(2, this);
     javatab = grid;
-    RegisterTab("Java",javatab);
+    RegisterTab("Java", javatab);
     grid->setMargin(5);
     grid->setSpacing(5);
 
     javafrozen_cb = new QCheckBox(TR("frozen"), grid);
-    
+
     bg = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
 
     javafinal_cb = new QCheckBox("final", bg);
-    
+
     connect(javafinal_cb, SIGNAL(toggled(bool)), SLOT(java_finalsynchronized_toggled(bool)));
 
     synchronized_cb = new QCheckBox("synchronized", bg);
-    
+
     connect(synchronized_cb, SIGNAL(toggled(bool)), SLOT(java_finalsynchronized_toggled(bool)));
-    
+
     lblNameFormJava = new QLabel(TR("Name form : "), grid);
     namespecTab = new Q3HBox(grid);
     edjavanamespec = new LineEdit(htab);
@@ -560,16 +559,16 @@ void OperationDialog::init_java()
     Q3VBox * vtab = new Q3VBox(grid);
 
     new QLabel(TR("Result after\nsubstitution : "), vtab);
-    
+
     indentjavabody_cb = new QCheckBox(TR("contextual\nbody indent"), vtab);
-    
+
     showjavadef = new MultiLineEdit(grid);
-    
+
     editjavabody = new QPushButton("",  grid);
     connect(editjavabody, SIGNAL(clicked()), this, SLOT(java_edit_body()));
-    
+
     char * b = oper->get_body('j');
-    
+
     if (b != 0) {
         javabody = oldjavabody = b;
         delete [] b;
@@ -583,13 +582,13 @@ void OperationDialog::init_java()
     connect(pbNotGeneratedInJava, SIGNAL(clicked()), this, SLOT(java_unmapped_def()));
 
     editjavaannotation = new QPushButton(" ", htab);
-    connect(editjavaannotation, SIGNAL(clicked ()), this, SLOT(java_edit_annotation()));
-    
+    connect(editjavaannotation, SIGNAL(clicked()), this, SLOT(java_edit_annotation()));
+
     addTab(grid, "Java");
 
 }
 
-void OperationDialog::FillJavaTab(OperationData* oper)
+void OperationDialog::FillJavaTab(OperationData * oper)
 {
     //lblNameFormJava->setVisible(isWritable);
     javafrozen_cb->setChecked(oper->java_get_set_frozen);
@@ -631,12 +630,12 @@ void OperationDialog::FillJavaTab(OperationData* oper)
     editjavabody->setText(buttonText);
 
     char * b = oper->get_body('j');
-    
+
     if (b != 0) {
         javabody = oldjavabody = b;
         delete [] b;
     }
-    
+
     cppTab->ui->pbDefaultDeclaration->setEnabled(isWritable);
     pbNotGeneratedInJava->setEnabled(isWritable);
 
@@ -649,7 +648,7 @@ void OperationDialog::FillJavaTab(OperationData* oper)
     else
         ShowTab("Java");
 
-    if(java_undef)
+    if (java_undef)
         HideTab("Java");
 }
 
@@ -667,7 +666,7 @@ void OperationDialog::init_php()
     grid->setSpacing(5);
 
     phpfrozen_cb = new QCheckBox(TR("frozen"), grid);
-    
+
     bgPhp = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
 
     phpfinal_cb = new QCheckBox("final", bg);
@@ -712,13 +711,13 @@ void OperationDialog::init_php()
     addTab(grid, "Php");
 }
 
-void OperationDialog::FillPhpTab(OperationData* )
+void OperationDialog::FillPhpTab(OperationData *)
 {
     phpfrozen_cb->setChecked(false);
+
     if (!isWritable || !oper->is_get_or_set)
         phpfrozen_cb->hide();
-    else
-    {
+    else {
         if (oper->php_get_set_frozen)
             phpfrozen_cb->setChecked(TRUE);
     }
@@ -759,12 +758,12 @@ void OperationDialog::FillPhpTab(OperationData* )
     editphpbody->setText(buttonText);
 
     char * b = oper->get_body('p');
-    
+
     if (b != 0) {
         phpbody = oldphpbody = b;
         delete [] b;
     }
-    
+
     cppTab->ui->pbDefaultDeclaration->setEnabled(isWritable);
     pbNotGeneratedInPhp->setEnabled(isWritable);
 
@@ -777,7 +776,7 @@ void OperationDialog::FillPhpTab(OperationData* )
     else
         ShowTab("Php");
 
-    if(php_undef)
+    if (php_undef)
         HideTab("Php");
 }
 
@@ -796,7 +795,7 @@ void OperationDialog::init_python()
     grid->setSpacing(5);
 
     pythonfrozen_cb = new QCheckBox(TR("frozen"), grid);
-    
+
     bgPython = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
 
     lblNameFormPython = new QLabel(TR("Name form : "), grid);
@@ -837,17 +836,17 @@ void OperationDialog::init_python()
 
     pythondecorator = (const char *) oper->python_decorator;
     editpythondecorator = new QPushButton("",  htab);
-    connect(editpythondecorator, SIGNAL(clicked ()), this, SLOT(python_edit_decorator()));
+    connect(editpythondecorator, SIGNAL(clicked()), this, SLOT(python_edit_decorator()));
 
     addTab(pythontab, "Python");
 }
-void OperationDialog::FillPythonTab(OperationData* )
+void OperationDialog::FillPythonTab(OperationData *)
 {
     pythonfrozen_cb->setChecked(false);
+
     if (!isWritable || !oper->is_get_or_set)
         pythonfrozen_cb->hide();
-    else
-    {
+    else {
         if (oper->python_get_set_frozen)
             pythonfrozen_cb->setChecked(TRUE);
     }
@@ -863,13 +862,11 @@ void OperationDialog::FillPythonTab(OperationData* )
     lblNameFormPython->setVisible(oper->is_get_or_set);
     pythonNamespecTab->setVisible(oper->is_get_or_set);
 
-    if (!isWritable)
-    {
+    if (!isWritable) {
         disconnect(edpythonnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(python_update_def()));
         disconnect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
     }
-    else
-    {
+    else {
         connect(edpythonnamespec, SIGNAL(textChanged(const QString &)), this, SLOT(python_update_def()));
         connect(edpythondef, SIGNAL(textChanged()), this, SLOT(python_update_def()));
     }
@@ -895,13 +892,12 @@ void OperationDialog::FillPythonTab(OperationData* )
     editpythonbody->setText(buttonText);
 
     char * b = oper->get_body('y');
-    
-    if (b != 0)
-    {
+
+    if (b != 0) {
         pythonbody = oldpythonbody = b;
         delete [] b;
     }
-    
+
     cppTab->ui->pbDefaultDeclaration->setEnabled(isWritable);
     pbNotGeneratedInPython->setEnabled(isWritable);
     pbEditParamsPython->setEnabled(isWritable);
@@ -913,7 +909,7 @@ void OperationDialog::FillPythonTab(OperationData* )
     else
         ShowTab("Python");
 
-    if(python_undef)
+    if (python_undef)
         HideTab("Python");
 }
 
@@ -930,7 +926,7 @@ void OperationDialog::init_idl()
     grid->setSpacing(5);
 
     idlfrozen_cb = new QCheckBox(TR("frozen"), grid);
-    
+
     bgIdl = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
 
     oneway_cb = new QCheckBox("final", bgIdl);
@@ -965,13 +961,13 @@ void OperationDialog::init_idl()
 }
 
 
-void OperationDialog::FillIdlTab(OperationData* )
+void OperationDialog::FillIdlTab(OperationData *)
 {
     idlfrozen_cb->setChecked(false);
+
     if (!isWritable || !oper->is_get_or_set)
         idlfrozen_cb->hide();
-    else
-    {
+    else {
         if (oper->idl_get_set_frozen)
             idlfrozen_cb->setChecked(TRUE);
     }
@@ -1011,11 +1007,11 @@ void OperationDialog::FillIdlTab(OperationData* )
     else
         ShowTab("Idl");
 
-    if(idl_undef)
+    if (idl_undef)
         HideTab("Idl");
 }
 
-void OperationDialog::FillGeneric(OperationData* oper)
+void OperationDialog::FillGeneric(OperationData * oper)
 {
     QString stereotype = cl->get_stereotype();
     QString st;
@@ -1037,24 +1033,29 @@ void OperationDialog::FillGeneric(OperationData* oper)
 
 
     unique = (GenerationSettings::cpp_get_default_defs())
-            ? ((cppTab != 0) ? CppView : DefaultDrawingLanguage)
-            : UmlView;
+             ? ((cppTab != 0) ? CppView : DefaultDrawingLanguage)
+                 : UmlView;
+
     if (GenerationSettings::java_get_default_defs())
         unique = ((unique == UmlView) && (javatab != 0))
-                ? JavaView
-                : DefaultDrawingLanguage;
+                 ? JavaView
+                 : DefaultDrawingLanguage;
+
     if (GenerationSettings::php_get_default_defs())
         unique = ((unique == UmlView) && (phptab != 0))
-                ? PhpView
-                : DefaultDrawingLanguage;
+                 ? PhpView
+                 : DefaultDrawingLanguage;
+
     if (GenerationSettings::python_get_default_defs())
         unique = ((unique == UmlView) && (pythontab != 0))
-                ? PythonView
-                : DefaultDrawingLanguage;
+                 ? PythonView
+                 : DefaultDrawingLanguage;
+
     if (GenerationSettings::idl_get_default_defs())
         unique = ((unique == UmlView) && (idltab != 0))
-                ? IdlView
-                : DefaultDrawingLanguage;
+                 ? IdlView
+                 : DefaultDrawingLanguage;
+
     if (unique == DefaultDrawingLanguage)
         unique = UmlView;
 
@@ -1066,32 +1067,41 @@ void OperationDialog::FillGeneric(OperationData* oper)
             cpp_update_def();
             QTimer::singleShot(100, this, SLOT(cpp_edit_body()));
         }
+
         break;
+
     case JavaView:
         if (! java_undef) {
             java_update_def();
             QTimer::singleShot(100, this, SLOT(java_edit_body()));
         }
+
         break;
+
     case PhpView:
         if (! php_undef) {
             php_update_def();
             QTimer::singleShot(100, this, SLOT(php_edit_body()));
         }
+
         break;
+
     case PythonView:
         if (! python_undef) {
             python_update_def();
             QTimer::singleShot(100, this, SLOT(python_edit_body()));
         }
+
         break;
+
     default:
         break;
     }
 }
 
 
-void OperationDialog::menu_returntype() {
+void OperationDialog::menu_returntype()
+{
     Q3PopupMenu m(0);
 
     m.insertItem(TR("Choose"), -1);
@@ -1120,14 +1130,17 @@ void OperationDialog::menu_returntype() {
         case 0:
             nodes.at(index)->select_in_browser();
             break;
+
         case 2:
             bn = BrowserClass::add_class(FALSE, view);
+
             if (bn == 0)
                 return;
+
             bn->select_in_browser();
+
             // no break
-        case 1:
-        {
+        case 1: {
             QString s = bn->full_name(TRUE);
 
             if ((index = list.findIndex(s)) == -1) {
@@ -1140,12 +1153,14 @@ void OperationDialog::menu_returntype() {
                     ++iter;
                     index += 1;
                 }
+
                 nodes.insert((unsigned) index, bn);
                 list.insert(iter, s);
                 edreturn_type->insertItem(s, index + edreturn_type_offset);
             }
         }
-            edreturn_type->setCurrentItem(index + edreturn_type_offset);
+
+        edreturn_type->setCurrentItem(index + edreturn_type_offset);
         }
     }
 }
@@ -1155,7 +1170,8 @@ void OperationDialog::default_description()
     comment->setText(GenerationSettings::default_operation_description());
 }
 
-void OperationDialog::edit_description() {
+void OperationDialog::edit_description()
+{
     edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
          oper, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
@@ -1165,7 +1181,8 @@ void OperationDialog::post_edit_description(OperationDialog * d, QString s)
     d->comment->setText(s);
 }
 
-void OperationDialog::edit_constraint() {
+void OperationDialog::edit_constraint()
+{
     edit(constraint->text(), edname->text().stripWhiteSpace() + "_constraint",
          oper, TxtEdit, this, (post_edit) post_edit_constraint, edits);
 }
@@ -1175,17 +1192,18 @@ void OperationDialog::post_edit_constraint(OperationDialog * d, QString s)
     d->constraint->setText(s);
 }
 
-void OperationDialog::accept() {
+void OperationDialog::accept()
+{
     if (!check_edits(edits) || !kvtable->check_unique())
         return;
-    
+
     BrowserNode * bn = oper->browser_node;
     QString s = edname->text().stripWhiteSpace();
 
     if ((s != oper->name()) &&
-            ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlOperation,
-                                                             bn->allow_spaces(),
-                                                             bn->allow_empty()))
+        ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlOperation,
+                bn->allow_spaces(),
+                bn->allow_empty()))
         msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
@@ -1205,6 +1223,7 @@ void OperationDialog::accept() {
                 else
                     t.explicit_type = s;
             }
+
             oper->set_return_type(t);
 
             newst = oper->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
@@ -1230,6 +1249,7 @@ void OperationDialog::accept() {
         if (cpp_undef) {
             oper->cpp_decl = QString();
             oper->cpp_def.assign(QString(), TRUE);
+
             if (!oldcppbody.isEmpty())
                 oper->new_body(QString(), 'c');
         }
@@ -1241,13 +1261,15 @@ void OperationDialog::accept() {
             }
             else
                 oper->cpp_indent_body = cppTab->ui->cbIndentCppBody->isChecked();
+
             if (!abstract_cb->isChecked() &&
-                    (cppTab->ui->edCppDefProto->text().find("${body}") != -1)) {
+                (cppTab->ui->edCppDefProto->text().find("${body}") != -1)) {
                 if (cppbody != oldcppbody)
                     oper->new_body(cppbody, 'c');
             }
-            else if(!oldcppbody.isEmpty())
+            else if (!oldcppbody.isEmpty())
                 oper->new_body(QString(), 'c');
+
             oper->cpp_decl = cppTab->ui->edCppDeclProto->text();
             oper->cpp_visibility = cpp_visibility.value();
 
@@ -1269,6 +1291,7 @@ void OperationDialog::accept() {
 
         if (java_undef) {
             oper->java_def.assign(QString(), TRUE);
+
             if (!oldjavabody.isEmpty())
                 oper->new_body(QString(), 'j');
         }
@@ -1284,12 +1307,13 @@ void OperationDialog::accept() {
             bool interf = (ste == "interface") || (ste == "@interface");
 
             if (!abstract_cb->isChecked() && !interf &&
-                    (edjavadef->text().find("${body}") != -1)) {
+                (edjavadef->text().find("${body}") != -1)) {
                 if (javabody != oldjavabody)
                     oper->new_body(javabody, 'j');
             }
             else if (!oldjavabody.isEmpty())
                 oper->new_body(QString(), 'j');
+
             oper->java_final = javafinal_cb->isChecked();
             oper->java_synchronized = synchronized_cb->isChecked();
             oper->java_def.assign(edjavadef->text(),
@@ -1303,6 +1327,7 @@ void OperationDialog::accept() {
 
         if (php_undef) {
             oper->php_def.assign(QString(), TRUE);
+
             if (!oldphpbody.isEmpty())
                 oper->new_body(QString(), 'p');
         }
@@ -1318,12 +1343,13 @@ void OperationDialog::accept() {
             bool interf = (ste == "interface");
 
             if (!abstract_cb->isChecked() && !interf &&
-                    (edphpdef->text().find("${body}") != -1)) {
+                (edphpdef->text().find("${body}") != -1)) {
                 if (phpbody != oldphpbody)
                     oper->new_body(phpbody, 'p');
             }
             else if (!oldphpbody.isEmpty())
                 oper->new_body(QString(), 'p');
+
             oper->php_final = phpfinal_cb->isChecked();
             oper->php_def.assign(edphpdef->text(),
                                  abstract_cb->isChecked() || interf ||
@@ -1334,6 +1360,7 @@ void OperationDialog::accept() {
 
         if (python_undef) {
             oper->python_def.assign(QString(), TRUE);
+
             if (!oldpythonbody.isEmpty())
                 oper->new_body(QString(), 'y');
         }
@@ -1344,7 +1371,7 @@ void OperationDialog::accept() {
             }
             else
                 oper->python_indent_body = indentpythonbody_cb->isChecked();
-            
+
             // rmq : abstractmethod have body !
             if (edpythondef->text().find("${body}") != -1) {
                 if (pythonbody != oldpythonbody)
@@ -1352,6 +1379,7 @@ void OperationDialog::accept() {
             }
             else if (!oldpythonbody.isEmpty())
                 oper->new_body(QString(), 'y');
+
             oper->python_def.assign(edpythondef->text(),
                                     // rmq : abstractmethod have body !
                                     (edpythondef->text().find("${body}") != -1));
@@ -1368,6 +1396,7 @@ void OperationDialog::accept() {
                 oper->idl_name_spec = edidlnamespec->text().stripWhiteSpace();
                 oper->idl_get_set_frozen = idlfrozen_cb->isChecked();
             }
+
             oper->idl_oneway = oneway_cb->isChecked();
             oper->idl_decl = edidldecl->text();
         }
@@ -1386,48 +1415,60 @@ void OperationDialog::accept() {
     }
 }
 
-void OperationDialog::classoper_toggled(bool on) {
+void OperationDialog::classoper_toggled(bool on)
+{
     if (on) {
         abstract_cb->setChecked(FALSE);
+
         if (! cpp_undef)
             cbCppVirtual->setChecked(FALSE);
     }
 }
 
-void OperationDialog::abstract_toggled(bool on) {
+void OperationDialog::abstract_toggled(bool on)
+{
     if (on) {
         classoperation_cb->setChecked(FALSE);
+
         if (! cpp_undef)
             cbCppVirtual->setChecked(TRUE);
     }
 }
 
-void OperationDialog::forcegenbody_toggled(bool on) {
+void OperationDialog::forcegenbody_toggled(bool on)
+{
     bool ro = (!isWritable || (preserve_bodies() && !on));
     QString lbl = (ro) ? TR("Show body") : TR("Edit body");
 
     if (!cpp_undef)
         cppTab->ui->editcppbody->setText(lbl);
+
     if (!java_undef)
         editjavabody->setText(lbl);
+
     if (!php_undef)
         editphpbody->setText(lbl);
+
     if (!python_undef)
         editpythonbody->setText(lbl);
 
     if (isWritable && !oper->is_get_or_set) {
         if (!cpp_undef)
             cppTab->ui->cbIndentCppBody->setEnabled(cppTab->ui->editcppbody->isEnabled() && !ro);
+
         if (!java_undef)
             indentjavabody_cb->setEnabled(editjavabody->isEnabled() && !ro);
+
         if (!php_undef)
             indentphpbody_cb->setEnabled(editphpbody->isEnabled() && !ro);
+
         if (!python_undef)
             indentpythonbody_cb->setEnabled(editpythonbody->isEnabled() && !ro);
     }
 }
 
-void OperationDialog::update_all_tabs(QWidget * w) {
+void OperationDialog::update_all_tabs(QWidget * w)
+{
     table->forceUpdateCells();
     etable->forceUpdateCells();
 
@@ -1438,26 +1479,31 @@ void OperationDialog::update_all_tabs(QWidget * w) {
     else if (w == cppTab) {
         cpp_update_decl();
         cpp_update_def();
+
         if (isWritable)
             cppTab->ui->edCppDeclProto->setFocus();
     }
     else if (w == javatab) {
         java_update_def();
+
         if (isWritable)
             edjavadef->setFocus();
     }
     else if (w == phptab) {
         php_update_def();
+
         if (isWritable)
             edphpdef->setFocus();
     }
     else if (w == pythontab) {
         python_update_def();
+
         if (isWritable)
             edpythondef->setFocus();
     }
     else if (w == idltab) {
         idl_update_decl();
+
         if (isWritable)
             edidldecl->setFocus();
     }
@@ -1465,38 +1511,44 @@ void OperationDialog::update_all_tabs(QWidget * w) {
 
 // C++
 
-void OperationDialog::const_volatile_toggled(bool) {
+void OperationDialog::const_volatile_toggled(bool)
+{
     cpp_update_decl();
     cpp_update_def();
 }
 
-void OperationDialog::virtual_toggled(bool on) {
+void OperationDialog::virtual_toggled(bool on)
+{
     if (on)
         cbCppFriend->setChecked(FALSE);
+
     cpp_update_decl();
     cpp_update_def();
 }
 
-void OperationDialog::friend_toggled(bool on) {
+void OperationDialog::friend_toggled(bool on)
+{
     if (on) {
         cbCppInline->setChecked(FALSE);
         cbCppVirtual->setChecked(FALSE);
     }
+
     cpp_update_decl();
     cpp_update_def();
 }
 
-void OperationDialog::inline_toggled(bool on) {
+void OperationDialog::inline_toggled(bool on)
+{
     if (on)
         cbCppFriend->setChecked(FALSE);
+
     cpp_update_decl();
     cpp_update_def();
 }
 
 void OperationDialog::final_toggled(bool on)
 {
-    if (on)
-    {
+    if (on) {
         cppTab->ui->cbCppDefaulted->setChecked(FALSE);
         cppTab->ui->cbCppDeleted->setChecked(FALSE);
     }
@@ -1507,8 +1559,7 @@ void OperationDialog::final_toggled(bool on)
 
 void OperationDialog::delete_toggled(bool on)
 {
-    if (on)
-    {
+    if (on) {
         cppTab->ui->cbCppFinal->setChecked(FALSE);
         cppTab->ui->cbCppOverride->setChecked(FALSE);
         cppTab->ui->cbCppDefaulted->setChecked(FALSE);
@@ -1520,8 +1571,7 @@ void OperationDialog::delete_toggled(bool on)
 
 void OperationDialog::override_toggled(bool on)
 {
-    if (on)
-    {
+    if (on) {
         cppTab->ui->cbCppDefaulted->setChecked(FALSE);
         cppTab->ui->cbCppDeleted->setChecked(FALSE);
     }
@@ -1532,8 +1582,7 @@ void OperationDialog::override_toggled(bool on)
 
 void OperationDialog::default_toggled(bool on)
 {
-    if (on)
-    {
+    if (on) {
         cppTab->ui->cbCppFinal->setChecked(FALSE);
         cppTab->ui->cbCppOverride->setChecked(FALSE);
         cppTab->ui->cbCppDeleted->setChecked(FALSE);
@@ -1543,7 +1592,8 @@ void OperationDialog::default_toggled(bool on)
     cpp_update_def();
 }
 
-void OperationDialog::cpp_default_decl() {
+void OperationDialog::cpp_default_decl()
+{
     if (oper->is_get_or_set) {
         Q3CString decl;
         Q3CString def;
@@ -1590,8 +1640,8 @@ void OperationDialog::cpp_default_decl() {
         QString s = oper->default_cpp_decl(edname->text().stripWhiteSpace());
 
         GenerationSettings::set_cpp_return_type(the_type(edreturn_type->currentText()
-                                                         .stripWhiteSpace(),
-                                                         list, nodes),
+                                                .stripWhiteSpace(),
+                                                list, nodes),
                                                 s);
 
         int index;
@@ -1601,9 +1651,9 @@ void OperationDialog::cpp_default_decl() {
 
         for (index = 0; index != nparams; index += 1, sep = ", ")
             params += sep + GenerationSettings::cpp(the_type(table->type(index),
-                                                             list, nodes),
+                                                    list, nodes),
                                                     table->dir(index), index)
-                    + "${v" + QString().setNum(index) + "}";
+                      + "${v" + QString().setNum(index) + "}";
 
         if ((index = s.find("${)}")) != -1)
             s.insert(index, params);
@@ -1614,14 +1664,16 @@ void OperationDialog::cpp_default_decl() {
     cpp_update_decl();
 }
 
-void OperationDialog::cpp_unmapped_decl() {
+void OperationDialog::cpp_unmapped_decl()
+{
     cppTab->ui->edCppDeclProto->setText(QString());
     cppTab->ui->edCppDeclActual->setText(QString());
 
     cpp_unmapped_def();
 }
 
-void OperationDialog::cpp_decl_from_def() {
+void OperationDialog::cpp_decl_from_def()
+{
     QString dcl = oper->default_cpp_decl(edname->text().stripWhiteSpace());
     QString def = cppTab->ui->edCppDefProto->text();
     int index1;
@@ -1631,45 +1683,49 @@ void OperationDialog::cpp_decl_from_def() {
 
     // copy args
     if (((index1 = def.find("${(}") + 4) == (-1 + 4)) ||
-            ((index2 = def.find("${)}", index1)) == -1) ||
-            ((index3 = dcl.find("${(}") + 4) == (-1 + 4)) ||
-            ((index4 = dcl.find("${)}", index3)) == -1))
+        ((index2 = def.find("${)}", index1)) == -1) ||
+        ((index3 = dcl.find("${(}") + 4) == (-1 + 4)) ||
+        ((index4 = dcl.find("${)}", index3)) == -1))
         // wrong specification(s)
         return;
 
     if (index4 != index3)
         dcl.remove(index3, index4 - index3);
+
     if (index2 != index1)
         dcl.insert(index3, def.mid(index1, index2 - index1));
 
     // copy return type modifications
     if (((index1 = def.find("${type}")) != -1) &&
-            ((index2 = def.find("${class}", index1 + 7)) != -1) &&
-            ((index3 = dcl.find("${type}")) != -1) &&
-            ((index4 = dcl.find("${name}", index3 + 7)) != -1)) {
+        ((index2 = def.find("${class}", index1 + 7)) != -1) &&
+        ((index3 = dcl.find("${type}")) != -1) &&
+        ((index4 = dcl.find("${name}", index3 + 7)) != -1)) {
         // valid specification
         while ((index1 != 0) && (def.at(index1 - 1) != QChar('}')))
             index1 -= 1;
+
         while ((index3 != 0) && (dcl.at(index3 - 1) != QChar('}')))
             index3 -= 1;
+
         dcl.remove(index3, index4 - index3);
         dcl.insert(index3, def.mid(index1, index2 - index1));
     }
 
     // manage const
     if ((def.find("${const}") == -1) && // const removed
-            ((index1 = dcl.find("${const}")) != -1))
+        ((index1 = dcl.find("${const}")) != -1))
         // remove const
         dcl.remove(index1, 8);
 
     // manage throw
     if ((def.find("${throw}") == -1) && // throw removed
-            ((index1 = dcl.find("${throw}")) != -1))
+        ((index1 = dcl.find("${throw}")) != -1))
         // remove throw
         dcl.remove(index1, 8);
 
     //add default param value
     index1 = 0;
+
     while (((index2 = dcl.find("${p", index1)) != -1) &&
            ((index3 = dcl.find('}', index2 + 3)) != -1)) {
         dcl.insert(index3 + 1, "${v" + dcl.mid(index2 + 3, index3 - index2 - 2));
@@ -1681,12 +1737,13 @@ void OperationDialog::cpp_decl_from_def() {
     cpp_update_decl();
 }
 
-void OperationDialog::cpp_edit_param_decl() {
+void OperationDialog::cpp_edit_param_decl()
+{
     QString form = cppTab->ui->edCppDeclProto->text();
     int index;
 
     if (((index = form.find("${(}")) != 0) &&
-            (form.find("${)}", index + 4) != 0)) {
+        (form.find("${)}", index + 4) != 0)) {
         CppParamsDialog d(this, table, cppTab->ui->edCppDeclProto, TRUE);
 
         if (d.exec() == QDialog::Accepted)
@@ -1718,7 +1775,8 @@ void OperationDialog::manage_var(unsigned rank, QString & s)
     }
 }
 
-QString OperationDialog::compute_name(LineEdit * spec) {
+QString OperationDialog::compute_name(LineEdit * spec)
+{
     if (spec->isVisible()) {
         QString s = spec->text().stripWhiteSpace();
         int index;
@@ -1728,6 +1786,7 @@ QString OperationDialog::compute_name(LineEdit * spec) {
         else if ((index = s.find("${Name}")) != -1)
             s.replace(index, 7,
                       capitalize(((BrowserOperation *) oper->browser_node)->get_of_name()));
+
         return s;
     }
     else
@@ -1767,16 +1826,19 @@ void OperationDialog::manage_cpp_exceptions(QString & s)
         s += " throw ()";
 }
 
-bool CompareAgainstTag(QString& currentTag, QString tagToCompare, const char * p)
+bool CompareAgainstTag(QString & currentTag, QString tagToCompare, const char * p)
 {
     currentTag = tagToCompare;
     tagToCompare = "${" + tagToCompare + "}";
+
     if (!strncmp(p, tagToCompare, tagToCompare.length()))
         return true;
+
     return false;
 }
 
-void OperationDialog::cpp_update_decl() {
+void OperationDialog::cpp_update_decl()
+{
     cpp_visibility.update_default(uml_visibility);
 
     // do NOT write
@@ -1794,7 +1856,9 @@ void OperationDialog::cpp_update_decl() {
 
     if (*p != '#')
         s = indent;
+
     QString currentTag;
+
     for (;;) {
         if (*p == 0) {
             if (pp == 0)
@@ -1803,13 +1867,16 @@ void OperationDialog::cpp_update_decl() {
             // comment management done
             p = pp;
             pp = 0;
+
             if (*p == 0)
                 break;
+
             if (*p != '#')
                 s += indent;
         }
 
         std::function<bool(QString)> compareTagToBuffer = std::bind(CompareAgainstTag, std::ref(currentTag), std::placeholders::_1, p);
+
         if (!strncmp(p, "${comment}", 10))
             manage_comment(comment->text(), p, pp,
                            GenerationSettings::cpp_javadoc_style());
@@ -1817,21 +1884,25 @@ void OperationDialog::cpp_update_decl() {
             manage_description(comment->text(), p, pp);
         else if (!strncmp(p, "${friend}", 9)) {
             p += 9;
+
             if (cbCppFriend->isChecked())
                 s += "friend ";
         }
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
+
             if (classoperation_cb->isChecked())
                 s += "static ";
         }
         else if (!strncmp(p, "${inline}", 9)) {
             p += 9;
+
             if (cbCppInline->isChecked())
                 s += "inline ";
         }
         else if (!strncmp(p, "${virtual}", 10)) {
             p += 10;
+
             if (cbCppVirtual->isChecked())
                 s += "virtual ";
         }
@@ -1859,11 +1930,13 @@ void OperationDialog::cpp_update_decl() {
         }
         else if (!strncmp(p, "${const}", 8)) {
             p += 8;
+
             if (cbCppConst->isChecked())
                 s += " const";
         }
         else if (!strncmp(p, "${volatile}", 11)) {
             p += 11;
+
             if (cbCppVolatile->isChecked())
                 s += " volatile";
         }
@@ -1873,6 +1946,7 @@ void OperationDialog::cpp_update_decl() {
         }
         else if (!strncmp(p, "${abstract}", 11)) {
             p += 11;
+
             if (abstract_cb->isChecked())
                 s += " = 0";
         }
@@ -1901,32 +1975,33 @@ void OperationDialog::cpp_update_decl() {
         }
         else if (*p == '\n') {
             s += *p++;
+
             if (*p && (*p != '#'))
                 s += indent;
         }
         else if (*p == '@')
             manage_alias(oper->browser_node, p, s, kvtable);
-        else if (compareTagToBuffer("final"))
-        {
-            p += currentTag.length()+3;
+        else if (compareTagToBuffer("final")) {
+            p += currentTag.length() + 3;
+
             if (cppTab->ui->cbCppFinal->isChecked())
                 s += " " + currentTag;
         }
-        else if (compareTagToBuffer("default"))
-        {
-            p += currentTag.length()+3;
+        else if (compareTagToBuffer("default")) {
+            p += currentTag.length() + 3;
+
             if (cppTab->ui->cbCppDefaulted->isChecked())
                 s += " " + currentTag;
         }
-        else if (compareTagToBuffer("delete"))
-        {
-            p += currentTag.length()+3;
+        else if (compareTagToBuffer("delete")) {
+            p += currentTag.length() + 3;
+
             if (cppTab->ui->cbCppDeleted->isChecked())
                 s += " " + currentTag;
         }
-        else if (compareTagToBuffer("override"))
-        {
-            p += currentTag.length()+3;
+        else if (compareTagToBuffer("override")) {
+            p += currentTag.length() + 3;
+
             if (cppTab->ui->cbCppOverride->isChecked())
                 s += " " + currentTag;
         }
@@ -2000,6 +2075,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
                 s += QString::number(rank);
                 s += '}';
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (sscanf(p, "${p%u}", &rank) == 1) {
@@ -2012,6 +2088,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
                     s += '}';
                 }
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
@@ -2026,6 +2103,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
                 s += QString::number(rank);
                 s += '}';
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (d->is_get_or_set && !strncmp(p, "${stereotype}", 13)) {
@@ -2040,8 +2118,10 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
         }
         else if (*p == '\n') {
             s += ' ';
+
             do
-                p+= 1;
+                p += 1;
+
             while ((*p == ' ') || (*p == '\t'));
         }
         else if ((*p == '{') ||
@@ -2057,7 +2137,8 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
     return s;
 }
 
-void OperationDialog::cpp_default_def() {
+void OperationDialog::cpp_default_def()
+{
     if (oper->is_get_or_set) {
         Q3CString decl;
         Q3CString def;
@@ -2084,8 +2165,7 @@ void OperationDialog::cpp_default_def() {
                                         get_of_rel->get_isa_const_relation_b(),
                                         get_of_rel->get_multiplicity_b());
         }
-        else
-        {
+        else {
             // set_of_rel != 0
             if (is_rel_a)
                 oper->update_cpp_set_of(decl, def, set_of_rel->get_role_a(),
@@ -2098,15 +2178,15 @@ void OperationDialog::cpp_default_def() {
                                         set_of_rel->get_isa_const_relation_b(),
                                         set_of_rel->get_multiplicity_b());
         }
+
         cppTab->ui->edCppDefProto->setText(def);
     }
-    else
-    {
+    else {
         QString s = oper->default_cpp_def(edname->text().stripWhiteSpace());
 
         GenerationSettings::set_cpp_return_type(the_type(edreturn_type->currentText()
-                                                         .stripWhiteSpace(),
-                                                         list, nodes),
+                                                .stripWhiteSpace(),
+                                                list, nodes),
                                                 s);
 
         QString params;
@@ -2116,7 +2196,7 @@ void OperationDialog::cpp_default_def() {
 
         for (index = 0; index != nparams; index += 1, sep = ", ")
             params += sep + GenerationSettings::cpp(the_type(table->type(index),
-                                                             list, nodes),
+                                                    list, nodes),
                                                     table->dir(index), index);
 
         if ((index = s.find("${)}")) != -1)
@@ -2124,22 +2204,25 @@ void OperationDialog::cpp_default_def() {
 
         cppTab->ui->edCppDefProto->setText(s);
     }
+
     cpp_update_def();
 }
 
-void OperationDialog::cpp_unmapped_def() {
+void OperationDialog::cpp_unmapped_def()
+{
     cppTab->ui->edCppDefProto->setText(QString());
     cppTab->ui->edCppDefActual->setText(QString());
 }
 
-void OperationDialog::cpp_def_from_decl() {
+void OperationDialog::cpp_def_from_decl()
+{
 
     QString dcl = cppTab->ui->edCppDeclProto->text();
     QString def;
 
     // manage abstract
     if ((dcl.find("${abstract}") == -1) || // abstract removed
-            !abstract_cb->isChecked()) {
+        !abstract_cb->isChecked()) {
         // probably not abstract
         int index1;
         int index2;
@@ -2150,40 +2233,43 @@ void OperationDialog::cpp_def_from_decl() {
 
         // copy args
         if (((index1 = dcl.find("${(}") + 4) == (-1 + 4)) ||
-                ((index2 = dcl.find("${)}", index1)) == -1) ||
-                ((index3 = def.find("${(}") + 4) == (-1 + 4)) ||
-                ((index4 = def.find("${)}", index3)) == -1))
+            ((index2 = dcl.find("${)}", index1)) == -1) ||
+            ((index3 = def.find("${(}") + 4) == (-1 + 4)) ||
+            ((index4 = def.find("${)}", index3)) == -1))
             // wrong specification(s)
             return;
 
         if (index4 != index3)
             def.remove(index3, index4 - index3);
+
         if (index2 != index1)
             def.insert(index3, dcl.mid(index1, index2 - index1));
 
         // copy return type modifications
         if (((index1 = dcl.find("${type}")) != -1) &&
-                ((index2 = dcl.find("${name}", index1 + 7)) != -1) &&
-                ((index3 = def.find("${type}")) != -1) &&
-                ((index4 = def.find("${class}", index3 + 7)) != -1)) {
+            ((index2 = dcl.find("${name}", index1 + 7)) != -1) &&
+            ((index3 = def.find("${type}")) != -1) &&
+            ((index4 = def.find("${class}", index3 + 7)) != -1)) {
             // valid specifications
             while ((index1 != 0) && (dcl.at(index1 - 1) != QChar('}')))
                 index1 -= 1;
+
             while ((index3 != 0) && (def.at(index3 - 1) != QChar('}')))
                 index3 -= 1;
+
             def.remove(index3, index4 - index3);
             def.insert(index3, dcl.mid(index1, index2 - index1));
         }
 
         // manage const
         if ((dcl.find("${const}") == -1) && // const removed
-                ((index1 = def.find("${const}")) != -1))
+            ((index1 = def.find("${const}")) != -1))
             // remove const
             def.remove(index1, 8);
 
         // manage throw
         if ((dcl.find("${throw}") == -1) && // throws removed
-                ((index1 = def.find("${throw}")) != -1))
+            ((index1 = def.find("${throw}")) != -1))
             // remove throw
             def.remove(index1, 8);
 
@@ -2204,15 +2290,17 @@ void OperationDialog::cpp_def_from_decl() {
     cpp_update_def();
 }
 
-void OperationDialog::cpp_edit_param_def() {
+void OperationDialog::cpp_edit_param_def()
+{
     QString form = cppTab->ui->edCppDefProto->text();
     int index;
 
     if (((index = form.find("${(}")) != 0) &&
-            (form.find("${)}", index + 4) != 0)) {
+        (form.find("${)}", index + 4) != 0)) {
         CppParamsDialog d(this, table, cppTab->ui->edCppDefProto, FALSE);
 
         d.raise();
+
         if (d.exec() == QDialog::Accepted)
             cpp_update_def();
     }
@@ -2221,7 +2309,7 @@ void OperationDialog::cpp_edit_param_def() {
 }
 
 // return TRUE if stop on ${commnt} or ${description}
-bool insert_template(const QString & tm, const char *& p, 
+bool insert_template(const QString & tm, const char *& p,
                      QString & s, const QString & indent)
 {
     // search the beginning of the definition/declaration in p;
@@ -2231,23 +2319,30 @@ bool insert_template(const QString & tm, const char *& p,
 
         if (*p == '\n') {
             s += *p++;
+
             if (*p != '#')
                 s += indent;
         }
+
         if (*p <= ' ')
             s += *p++;
         else if (*p == '/') {
             if (p[1] == '/') {
                 // comment
                 s += *p++;
+
                 do s += *p++;
+
                 while (*p && (*p != '\n'));
             }
             else if (p[1] == '*') {
                 /* comment */
                 s += *p++;
+
                 do s += *p++;
+
                 while (*p && ((*p != '*') || (p[1] != '/')));
+
                 s += "*/";
                 p += 2;
             }
@@ -2257,6 +2352,7 @@ bool insert_template(const QString & tm, const char *& p,
         else if (*p == '#') {
             do {
                 s += *p++;
+
                 if (*p == '\\') {
                     s += *p++;
                     s += *p++;
@@ -2264,12 +2360,16 @@ bool insert_template(const QString & tm, const char *& p,
                 else if ((*p == '/') && (p[1] == '*')) {
                     /* comment */
                     s += *p++;
+
                     do s += *p++;
+
                     while (*p && ((*p != '*') || (p[1] != '/')));
+
                     s += "*/";
                     p += 2;
                 }
-            } while (*p && (*p != '\n'));
+            }
+            while (*p && (*p != '\n'));
         }
         else if ((strncmp(p, "${comment}", 10) == 0) ||
                  (strncmp(p, "${description}", 14) == 0))
@@ -2282,19 +2382,20 @@ bool insert_template(const QString & tm, const char *& p,
     return FALSE;
 }
 
-void OperationDialog::cpp_update_def() {
+void OperationDialog::cpp_update_def()
+{
 
     QString def = cppTab->ui->edCppDefProto->text();
-    if(cppTab->ui->cbCppDefaulted->isChecked() ||
-       cppTab->ui->cbCppDeleted->isChecked())
-    {
+
+    if (cppTab->ui->cbCppDefaulted->isChecked() ||
+        cppTab->ui->cbCppDeleted->isChecked()) {
         cppTab->ui->edCppDefActual->setText("");
         forcegenbody_toggled(forcegenbody_cb->isChecked());	// update indent*body_cb
         return;
     }
 
     bool template_oper = cppTab->ui->edCppDeclProto->text().isEmpty()
-            && oper->is_template_operation(def);
+                         && oper->is_template_operation(def);
     QString s;
 
     if (!abstract_cb->isChecked()) {
@@ -2310,8 +2411,8 @@ void OperationDialog::cpp_update_def() {
             indent += *p++;
 
         bool re_template = !templates.isEmpty() &&
-                insert_template((template_oper) ? templates_tmplop : templates,
-                                p, s, indent);
+                           insert_template((template_oper) ? templates_tmplop : templates,
+                                           p, s, indent);
 
         if (*p != '#')
             s += indent;
@@ -2330,103 +2431,92 @@ void OperationDialog::cpp_update_def() {
 
                 if (*p == 0)
                     break;
+
                 if (*p != '#')
                     s += indent;
             }
 
-            if (!strncmp(p, "${comment}", 10))
-            {
+            if (!strncmp(p, "${comment}", 10)) {
                 if (!manage_comment(comment->text(), p, pp,
                                     GenerationSettings::cpp_javadoc_style())
-                        && re_template)
+                    && re_template)
                     s += templates;
             }
-            else if (!strncmp(p, "${description}", 14))
-            {
+            else if (!strncmp(p, "${description}", 14)) {
                 if (!manage_description(comment->text(), p, pp) && re_template)
                     s += templates;
             }
-            else if (!strncmp(p, "${inline}", 9))
-            {
+            else if (!strncmp(p, "${inline}", 9)) {
                 p += 9;
+
                 if (cbCppInline->isChecked())
                     s += "inline ";
             }
-            else if (!strncmp(p, "${type}", 7))
-            {
+            else if (!strncmp(p, "${type}", 7)) {
                 p += 7;
                 s += get_cpp_name(the_type(edreturn_type->currentText().stripWhiteSpace(),
                                            list, nodes));
             }
-            else if (!strncmp(p, "${class}", 8))
-            {
+            else if (!strncmp(p, "${class}", 8)) {
                 p += 8;
+
                 if (cbCppFriend->isChecked() && !strncmp(p, "::", 2))
                     p += 2;
                 else
                     s += ((template_oper) ? cl_names_tmplop : cl_names);
             }
-            else if (!strncmp(p, "${name}", 7))
-            {
+            else if (!strncmp(p, "${name}", 7)) {
                 p += 7;
                 s += compute_name(cppTab->ui->leCppNamespec);
             }
-            else if (!strncmp(p, "${(}", 4))
-            {
+            else if (!strncmp(p, "${(}", 4)) {
                 p += 4;
                 s += '(';
             }
-            else if (!strncmp(p, "${)}", 4))
-            {
+            else if (!strncmp(p, "${)}", 4)) {
                 p += 4;
                 s += ')';
             }
-            else if (!strncmp(p, "${const}", 8))
-            {
+            else if (!strncmp(p, "${const}", 8)) {
                 p += 8;
+
                 if (cbCppConst->isChecked())
                     s += " const";
             }
-            else if (!strncmp(p, "${volatile}", 11))
-            {
+            else if (!strncmp(p, "${volatile}", 11)) {
                 p += 11;
+
                 if (cbCppVolatile->isChecked())
                     s += " volatile";
             }
-            else if (!strncmp(p, "${throw}", 8))
-            {
+            else if (!strncmp(p, "${throw}", 8)) {
                 p += 8;
                 manage_cpp_exceptions(s);
             }
-            else if (!strncmp(p, "${staticnl}", 11))
-            {
+            else if (!strncmp(p, "${staticnl}", 11)) {
                 p += 11;
-                if (classoperation_cb->isChecked())
-                {
+
+                if (classoperation_cb->isChecked()) {
                     s += '\n';
                     s += indent;
                 }
                 else
                     s += ' ';
             }
-            else if (sscanf(p, "${t%u}", &rank) == 1)
-            {
+            else if (sscanf(p, "${t%u}", &rank) == 1) {
                 manage_cpp_type(rank, s);
                 p = strchr(p, '}') + 1;
             }
-            else if (sscanf(p, "${p%u}", &rank) == 1)
-            {
+            else if (sscanf(p, "${p%u}", &rank) == 1) {
                 manage_var(rank, s);
                 p = strchr(p, '}') + 1;
             }
-            else if (oper->is_get_or_set && !strncmp(p, "${stereotype}", 13))
-            {
+            else if (oper->is_get_or_set && !strncmp(p, "${stereotype}", 13)) {
                 p += 13;
                 // get/set with multiplicity > 1
                 s += GenerationSettings::cpp_relationattribute_stereotype(oper->stereotype);
             }
-            else if (oper->is_get_or_set && !strncmp(p, "${association}", 14))
-            {
+            else if (oper->is_get_or_set && !strncmp(p, "${association}", 14)) {
                 p += 14;
                 // get/set with multiplicity > 1
                 s += GenerationSettings::cpp_type(((BrowserOperation *) oper->browser_node)
@@ -2434,6 +2524,7 @@ void OperationDialog::cpp_update_def() {
             }
             else if (*p == '\n') {
                 s += *p++;
+
                 if (*p && (*p != '#'))
                     s += indent;
             }
@@ -2465,11 +2556,12 @@ static QString remove_profile(QString b)
     int index = b.find(Marker);
 
     return (index == -1)
-            ? b
-            : b.mid(index + Marker.length());
+           ? b
+           : b.mid(index + Marker.length());
 }
 
-void OperationDialog::cpp_edit_body() {
+void OperationDialog::cpp_edit_body()
+{
     QString b;
 
     if (add_operation_profile())
@@ -2492,7 +2584,8 @@ void OperationDialog::post_cpp_edit_body(OperationDialog * d, QString s)
 
 // Java
 
-void OperationDialog::java_finalsynchronized_toggled(bool) {
+void OperationDialog::java_finalsynchronized_toggled(bool)
+{
     java_update_def();
 }
 
@@ -2523,7 +2616,8 @@ void OperationDialog::manage_java_exceptions(QString & s)
         s += ' ';
 }
 
-void OperationDialog::java_default_def() {
+void OperationDialog::java_default_def()
+{
     if (oper->is_get_or_set) {
         Q3CString def;
 
@@ -2582,7 +2676,8 @@ void OperationDialog::java_default_def() {
     java_update_def();
 }
 
-void OperationDialog::java_unmapped_def() {
+void OperationDialog::java_unmapped_def()
+{
     edjavadef->setText(QString());
     showjavadef->setText(QString());
 }
@@ -2597,6 +2692,7 @@ static const char * bypass_body(const char * p)
 
     if (pb != 0) {
         pb += 7;
+
         while (*pb)
             if (*pb++ == '}')
                 return pb;
@@ -2605,7 +2701,8 @@ static const char * bypass_body(const char * p)
     return p;
 }
 
-void OperationDialog::java_update_def() {
+void OperationDialog::java_update_def()
+{
     // do NOT write
     //	const char * p = edjavadef->text();
     // because the QString is immediatly destroyed !
@@ -2633,8 +2730,10 @@ void OperationDialog::java_update_def() {
             // comment management done
             p = pp;
             pp = 0;
+
             if (*p == 0)
                 break;
+
             s += indent;
         }
 
@@ -2645,26 +2744,31 @@ void OperationDialog::java_update_def() {
             manage_description(comment->text(), p, pp);
         else if (!strncmp(p, "${final}", 8)) {
             p += 8;
+
             if (javafinal_cb->isChecked())
                 s += "final ";
         }
         else if (!strncmp(p, "${visibility}", 13)) {
             p += 13;
+
             if (uml_visibility.value() != UmlPackageVisibility)
                 s += uml_visibility.state() + ' ';
         }
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
+
             if (classoperation_cb->isChecked())
                 s += "static ";
         }
         else if (!strncmp(p, "${abstract}", 11)) {
             p += 11;
+
             if (abstract_cb->isChecked() && !interf)
                 s += "abstract ";
         }
         else if (!strncmp(p, "${synchronized}", 15)) {
             p += 15;
+
             if (synchronized_cb->isChecked())
                 s += "synchronized ";
         }
@@ -2692,6 +2796,7 @@ void OperationDialog::java_update_def() {
         }
         else if (!strncmp(p, "${staticnl}", 11)) {
             p += 11;
+
             if (classoperation_cb->isChecked()) {
                 s += '\n';
                 s += indent;
@@ -2720,13 +2825,14 @@ void OperationDialog::java_update_def() {
         }
         else if (*p == '\n') {
             s += *p++;
+
             if (*p)
                 s += indent;
         }
         else if ((*p == '{') && nobody) {
             if (afterparam != 0) {
                 if ((ste == "@interface") &&
-                        (strstr(afterparam, "default") != 0))
+                    (strstr(afterparam, "default") != 0))
                     afterparam = 0;
                 else {
                     s += ';';
@@ -2734,14 +2840,16 @@ void OperationDialog::java_update_def() {
                     continue;
                 }
             }
+
             s += *p++;
         }
         else if (!strncmp(p, "${@}", 4)) {
             p += 4;
+
             if (pp != 0)
                 s += "${@}";
             else if (! javaannotation.isEmpty()) {
-                pp =p;
+                pp = p;
                 p = javaannotation;
             }
         }
@@ -2750,7 +2858,7 @@ void OperationDialog::java_update_def() {
         else
             s += *p++;
     }
-    
+
     editjavabody->setEnabled(!nobody && (def.find("${body}") != -1));
     editjavaannotation->setEnabled(def.find("${@}") != -1);
 
@@ -2819,6 +2927,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
                 s += QString::number(rank);
                 s += '}';
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (sscanf(p, "${p%u}", &rank) == 1) {
@@ -2831,6 +2940,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
                     s += '}';
                 }
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (!strncmp(p, "${@}", 4))
@@ -2847,8 +2957,10 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
         }
         else if (*p == '\n') {
             s += ' ';
+
             do
-                p+= 1;
+                p += 1;
+
             while ((*p == ' ') || (*p == '\t'));
         }
         else if ((*p == '{') || (*p == ';'))
@@ -2862,7 +2974,8 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
     return s;
 }
 
-void OperationDialog::java_edit_body() {
+void OperationDialog::java_edit_body()
+{
     QString b;
 
     if (add_operation_profile())
@@ -2883,7 +2996,8 @@ void OperationDialog::post_java_edit_body(OperationDialog * d, QString s)
     d->javabody = (add_operation_profile()) ? remove_profile(s) : s;
 }
 
-void OperationDialog::java_edit_annotation() {
+void OperationDialog::java_edit_annotation()
+{
     AnnotationDialog dialog(this, javaannotation, !hasOkButton());
 
     if (dialog.exec() == QDialog::Accepted)
@@ -2892,7 +3006,8 @@ void OperationDialog::java_edit_annotation() {
 
 // Php
 
-void OperationDialog::php_final_toggled(bool) {
+void OperationDialog::php_final_toggled(bool)
+{
     php_update_def();
 }
 
@@ -2907,7 +3022,8 @@ void OperationDialog::manage_php_type(unsigned rank, QString & s)
     }
 }
 
-void OperationDialog::php_default_def() {
+void OperationDialog::php_default_def()
+{
     if (oper->is_get_or_set) {
         Q3CString def;
 
@@ -2962,12 +3078,14 @@ void OperationDialog::php_default_def() {
     php_update_def();
 }
 
-void OperationDialog::php_unmapped_def() {
+void OperationDialog::php_unmapped_def()
+{
     edphpdef->setText(QString());
     showphpdef->setText(QString());
 }
 
-void OperationDialog::php_update_def() {
+void OperationDialog::php_update_def()
+{
     // do NOT write
     //	const char * p = edphpdef->text();
     // because the QString is immediatly destroyed !
@@ -2994,8 +3112,10 @@ void OperationDialog::php_update_def() {
             // comment management done
             p = pp;
             pp = 0;
+
             if (*p == 0)
                 break;
+
             s += indent;
         }
 
@@ -3006,21 +3126,25 @@ void OperationDialog::php_update_def() {
             manage_description(comment->text(), p, pp);
         else if (!strncmp(p, "${final}", 8)) {
             p += 8;
+
             if (phpfinal_cb->isChecked())
                 s += "final ";
         }
         else if (!strncmp(p, "${visibility}", 13)) {
             p += 13;
+
             if (uml_visibility.value() != UmlPackageVisibility)
                 s += uml_visibility.state() + ' ';
         }
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
+
             if (classoperation_cb->isChecked())
                 s += "static ";
         }
         else if (!strncmp(p, "${abstract}", 11)) {
             p += 11;
+
             if (abstract_cb->isChecked() && !interf)
                 s += "abstract ";
         }
@@ -3039,6 +3163,7 @@ void OperationDialog::php_update_def() {
         }
         else if (!strncmp(p, "${staticnl}", 11)) {
             p += 11;
+
             if (classoperation_cb->isChecked()) {
                 s += '\n';
                 s += indent;
@@ -3061,6 +3186,7 @@ void OperationDialog::php_update_def() {
         }
         else if (*p == '\n') {
             s += *p++;
+
             if (*p)
                 s += indent;
         }
@@ -3079,7 +3205,7 @@ void OperationDialog::php_update_def() {
         else
             s += *p++;
     }
-    
+
     editphpbody->setEnabled(!nobody && (def.find("${body}") != -1));
 
     showphpdef->setText(s);
@@ -3096,6 +3222,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
     remove_comments(decl);
 
     int index = decl.find("function ");
+
     if (index != -1)
         decl.remove(index, 9);
 
@@ -3143,6 +3270,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
                 s += QString::number(rank);
                 s += '}';
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (sscanf(p, "${p%u}", &rank) == 1) {
@@ -3155,6 +3283,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
                     s += '}';
                 }
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
@@ -3169,12 +3298,15 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
                 s += QString::number(rank);
                 s += '}';
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (*p == '\n') {
             s += ' ';
+
             do
-                p+= 1;
+                p += 1;
+
             while ((*p == ' ') || (*p == '\t'));
         }
         else if ((*p == '{') || (*p == ';'))
@@ -3192,7 +3324,8 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
     return s;
 }
 
-void OperationDialog::php_edit_body() {
+void OperationDialog::php_edit_body()
+{
     QString b;
 
     if (add_operation_profile())
@@ -3213,12 +3346,13 @@ void OperationDialog::post_php_edit_body(OperationDialog * d, QString s)
     d->phpbody = (add_operation_profile()) ? remove_profile(s) : s;
 }
 
-void OperationDialog::php_edit_param() {
+void OperationDialog::php_edit_param()
+{
     QString form = edphpdef->text();
     int index;
 
     if (((index = form.find("${(}")) != 0) &&
-            (form.find("${)}", index + 4) != 0)) {
+        (form.find("${)}", index + 4) != 0)) {
         PhpParamsDialog d(this, table, edphpdef);
 
         if (d.exec() == QDialog::Accepted)
@@ -3249,7 +3383,8 @@ void OperationDialog::manage_python_type(unsigned rank, QString & s, bool in_par
     }
 }
 
-void OperationDialog::python_default_def() {
+void OperationDialog::python_default_def()
+{
     if (oper->is_get_or_set) {
         Q3CString def;
 
@@ -3312,20 +3447,21 @@ void OperationDialog::python_default_def() {
 
         int index2;
 
-        if (((index = s.find("${(}")+4) != (-1+4)) &&
-                ((index2 = s.find("${)}", index)) != -1)) {
-            int index3 = s.find("${type}", index2+4);
-            int index4 = s.find(":", index2+4);
+        if (((index = s.find("${(}") + 4) != (-1 + 4)) &&
+            ((index2 = s.find("${)}", index)) != -1)) {
+            int index3 = s.find("${type}", index2 + 4);
+            int index4 = s.find(":", index2 + 4);
 
             if (GenerationSettings::python_default_operation3()) {
                 if ((index3 == -1) || (index3 > index4))
-                    s.insert(index2+4, "${type}");
+                    s.insert(index2 + 4, "${type}");
             }
             else if ((index3 != -1) && (index3 < index4))
                 s.remove(index3, 7);
 
             if (index2 != index)
-                s.remove(index, index2-index);
+                s.remove(index, index2 - index);
+
             s.insert(index, params);
         }
 
@@ -3335,22 +3471,25 @@ void OperationDialog::python_default_def() {
     python_update_def();
 }
 
-void OperationDialog::python_unmapped_def() {
+void OperationDialog::python_unmapped_def()
+{
     edpythondef->setText(QString());
     showpythondef->setText(QString());
 }
 
 void OperationDialog::manage_decorators(QString & s, QString indent,
-                                        BooL & indent_needed) {
+                                        BooL & indent_needed)
+{
     if (! pythondecorator.isEmpty()) {
         int index = 0;
         int index2;
 
-        while ((index2 = pythondecorator.find("\n", index)) != -1){
+        while ((index2 = pythondecorator.find("\n", index)) != -1) {
             if (indent_needed)
                 s += indent;
             else
                 indent_needed = TRUE;
+
             s += pythondecorator.mid(index, index2 + 1 - index);
             index = index2 + 1;
         }
@@ -3360,12 +3499,14 @@ void OperationDialog::manage_decorators(QString & s, QString indent,
                 s += indent;
                 indent_needed = FALSE;
             }
+
             s += pythondecorator.mid(index);
         }
     }
 }
 
-void OperationDialog::python_update_def() {
+void OperationDialog::python_update_def()
+{
     // do NOT write
     //	const char * p = edpythondef->text();
     // because the QString is immediatly destroyed !
@@ -3382,7 +3523,7 @@ void OperationDialog::python_update_def() {
     QString indent;
     QString saved_indent = indent;
     QString indent_step =
-            GenerationSettings::python_get_indent_step();
+        GenerationSettings::python_get_indent_step();
     QString s;
     unsigned rank;
 
@@ -3393,8 +3534,10 @@ void OperationDialog::python_update_def() {
 
             // comment management done
             p = pp;
+
             if (*p == 0)
                 break;
+
             pp = 0;
             indent = saved_indent;
         }
@@ -3407,21 +3550,25 @@ void OperationDialog::python_update_def() {
             manage_python_docstring(comment->text(), p, pp, indent_needed, indent, saved_indent);
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
+
             if (classoperation_cb->isChecked()) {
                 if (indent_needed)
                     s += "\n";
                 else
                     indent_needed = TRUE;
+
                 s += "@staticmethod\n";
             }
         }
         else if (!strncmp(p, "${abstract}", 11)) {
             p += 11;
+
             if (abstract_cb->isChecked()) {
                 if (indent_needed)
                     s += "\n";
                 else
                     indent_needed = TRUE;
+
                 s += "@abstractmethod\n";
             }
         }
@@ -3430,6 +3577,7 @@ void OperationDialog::python_update_def() {
                 indent_needed = FALSE;
                 s += indent;
             }
+
             p += 7;
             s += compute_name(edpythonnamespec);
         }
@@ -3438,6 +3586,7 @@ void OperationDialog::python_update_def() {
                 indent_needed = FALSE;
                 s += indent;
             }
+
             p += 8;
             s += cl->get_browser_node()->get_name();
         }
@@ -3473,6 +3622,7 @@ void OperationDialog::python_update_def() {
         else if (!strncmp(p, "${body}", 7)) {
             if (edname->text().stripWhiteSpace() == "__init__")
                 s += ClassDialog::python_instance_att_rel(cl->get_browser_node());
+
             s += "${body}";
             p += 7;
             indent_needed = FALSE;
@@ -3488,19 +3638,22 @@ void OperationDialog::python_update_def() {
         }
         else if (oper->is_get_or_set && !strncmp(p, "${association}", 14)) {
             p += 14;
+
             if (indent_needed) {
                 indent_needed = FALSE;
                 s += indent;
             }
+
             // get/set with multiplicity > 1
             s += ((BrowserOperation *) oper->browser_node)
-                    ->get_of_association().get_type();
+                 ->get_of_association().get_type();
         }
         else {
             if (indent_needed) {
                 indent_needed = FALSE;
                 s += indent;
             }
+
             switch (*p) {
             case ':':
                 if (pp == 0) {
@@ -3508,15 +3661,18 @@ void OperationDialog::python_update_def() {
                     saved_indent = indent;
                     indent_step = "";
                 }
+
                 break;
+
             case '\n':
                 indent_needed = TRUE;
                 break;
             }
+
             s += *p++;
         }
     }
-    
+
     editpythonbody->setEnabled(!nobody && (def.find("${body}") != -1));
     editpythondecorator->setEnabled(def.find("${@}") != -1);
 
@@ -3575,6 +3731,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
                 if (!t.isEmpty())
                     s += " -> " + t;
             }
+
             break;
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
@@ -3593,6 +3750,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
                 s += QString::number(rank);
                 s += '}';
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (sscanf(p, "${p%u}", &rank) == 1) {
@@ -3605,6 +3763,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
                     s += '}';
                 }
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
@@ -3619,6 +3778,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
                 s += QString::number(rank);
                 s += '}';
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (d->is_get_or_set && !strncmp(p, "${association}", 14)) {
@@ -3639,7 +3799,8 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
     return s;
 }
 
-void OperationDialog::python_edit_body() {
+void OperationDialog::python_edit_body()
+{
     QString b;
 
     if (add_operation_profile())
@@ -3660,12 +3821,13 @@ void OperationDialog::post_python_edit_body(OperationDialog * d, QString s)
     d->pythonbody = (add_operation_profile()) ? remove_profile(s) : s;
 }
 
-void OperationDialog::python_edit_param() {
+void OperationDialog::python_edit_param()
+{
     QString form = edpythondef->text();
     int index;
 
     if (((index = form.find("${(}")) != 0) &&
-            (form.find("${)}", index + 4) != 0)) {
+        (form.find("${)}", index + 4) != 0)) {
         PythonParamsDialog d(this, table, edpythondef);
 
         if (d.exec() == QDialog::Accepted)
@@ -3675,7 +3837,8 @@ void OperationDialog::python_edit_param() {
         msg_warning("Bouml", TR("wrong specification"));
 }
 
-void OperationDialog::python_edit_decorator() {
+void OperationDialog::python_edit_decorator()
+{
     DecoratorDialog dialog(this, pythondecorator, !hasOkButton());
 
     if (dialog.exec() == QDialog::Accepted)
@@ -3684,7 +3847,8 @@ void OperationDialog::python_edit_decorator() {
 
 // Idl
 
-void OperationDialog::oneway_toggled(bool) {
+void OperationDialog::oneway_toggled(bool)
+{
     idl_update_decl();
 }
 
@@ -3706,9 +3870,11 @@ void OperationDialog::manage_dir(unsigned rank, QString & s)
         case UmlIn:
             s += "in";
             break;
+
         case UmlOut:
             s += "out";
             break;
+
         default:
             // can't be return
             s += "inout";
@@ -3737,7 +3903,8 @@ void OperationDialog::manage_idl_exceptions(QString & s)
         s += ')';
 }
 
-void OperationDialog::idl_default_def() {
+void OperationDialog::idl_default_def()
+{
     if (oper->is_get_or_set) {
         Q3CString decl;
 
@@ -3790,12 +3957,14 @@ void OperationDialog::idl_default_def() {
     idl_update_decl();
 }
 
-void OperationDialog::idl_unmapped_def() {
+void OperationDialog::idl_unmapped_def()
+{
     edidldecl->setText(QString());
     showidldecl->setText(QString());
 }
 
-void OperationDialog::idl_update_decl() {  
+void OperationDialog::idl_update_decl()
+{
     // do NOT write
     //	const char * p = edidldecl->text();
     // because the QString is immediatly destroyed !
@@ -3819,8 +3988,10 @@ void OperationDialog::idl_update_decl() {
             // comment management done
             p = pp;
             pp = 0;
+
             if (*p == 0)
                 break;
+
             s += indent;
         }
 
@@ -3830,6 +4001,7 @@ void OperationDialog::idl_update_decl() {
             manage_description(comment->text(), p, pp);
         else if (!strncmp(p, "${oneway}", 9)) {
             p += 9;
+
             if (oneway_cb->isChecked())
                 s += "oneway ";
         }
@@ -3879,6 +4051,7 @@ void OperationDialog::idl_update_decl() {
                 s += indent;
                 s += "  ";
             }
+
             p += 11;
         }
         else if (!strncmp(p, "${raises}", 9)) {
@@ -3887,6 +4060,7 @@ void OperationDialog::idl_update_decl() {
         }
         else if (*p == '\n') {
             s += *p++;
+
             if (*p)
                 s += indent;
         }
@@ -3944,9 +4118,11 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
                     case UmlIn:
                         s += "in";
                         break;
+
                     case UmlOut:
                         s += "out";
                         break;
+
                     default:
                         // can't be return
                         s += "inout";
@@ -3957,6 +4133,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
                     s += '}';
                 }
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
@@ -3969,6 +4146,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
                     s += '}';
                 }
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (sscanf(p, "${p%u}", &rank) == 1) {
@@ -3979,6 +4157,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
                 s += QString::number(rank);
                 s += '}';
             }
+
             p = strchr(p, '}') + 1;
         }
         else if (d->is_get_or_set && !strncmp(p, "${stereotype}", 13)) {
@@ -3999,8 +4178,10 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
             p += 9;
         else if (*p == '\n') {
             s += ' ';
+
             do
-                p+= 1;
+                p += 1;
+
             while ((*p == ' ') || (*p == '\t'));
         }
         else if (*p == ';')
@@ -4023,13 +4204,17 @@ static int bypass_string(const char * s, int index)
         switch (s[index]) {
         case '"':
             return index + 1;
+
         case '\\':
             if (s[index + 1] == 0)
                 return index + 1;
+
             index += 2;
             break;
+
         case 0:
             return index;
+
         default:
             index += 1;
         }
@@ -4043,13 +4228,17 @@ static int bypass_char(const char * s, int index)
         switch (s[index]) {
         case '\'':
             return index + 1;
+
         case '\\':
             if (s[index + 1] == 0)
                 return index + 1;
+
             index += 2;
             break;
+
         case 0:
             return index;
+
         default:
             index += 1;
         }
@@ -4062,8 +4251,8 @@ static int bypass_cpp_comment(const char * s, int index)
     const char * p = strchr(s, '\n');
 
     return (p == 0)
-            ? index + strlen(s + index)
-            : p - s;
+           ? index + strlen(s + index)
+           : p - s;
 }
 
 static int bypass_c_comment(const char * s, int index)
@@ -4074,10 +4263,13 @@ static int bypass_c_comment(const char * s, int index)
         case '*':
             if (s[index + 1] == '/')
                 return index + 2;
+
             break;
+
         case 0:
             return index;
         }
+
         index += 1;
     }
 }
@@ -4093,44 +4285,56 @@ static int supOf(const char * s, int index)
         case '$':
             if (strncmp(s + index, "${)}", 4) == 0)
                 return index;
+
             index += 1;
             break;
+
         case '(':
         case '[':
         case '{':
             ouvr += 1;
             index += 1;
             break;
+
         case ')':
         case ']':
         case '}':
             ouvr -= 1;
             index += 1;
             break;
+
         case '"':
             index = bypass_string(s, index + 1);
             break;
+
         case '\'':
             index = bypass_char(s, index + 1);
             break;
+
         case '/':
-            switch (s[index+1]) {
+            switch (s[index + 1]) {
             case '/':
                 index = bypass_cpp_comment(s, index + 2);
                 break;
+
             case '*':
                 index = bypass_c_comment(s, index + 2);
                 break;
+
             default:
                 index += 1;
             }
+
             break;
+
         case 0:
             // in case ${)} is in a comment etc ...
             return index;
+
         case ',':
             if (ouvr == 0)
                 return index;
+
             // no break
         default:
             index += 1;
@@ -4145,7 +4349,7 @@ static int param_begin(QString s, int rank)
     const char * p = s;
     const char * b = strstr(p, "${(}");
 
-    if ((b == 0) || (strstr(b+4, "${)}") == 0))
+    if ((b == 0) || (strstr(b + 4, "${)}") == 0))
         return -1;
 
     int index  = (b - p) + 3;	// '}'
@@ -4157,8 +4361,10 @@ static int param_begin(QString s, int rank)
         case ',':
             index = end;
             break;
+
         case '$': // ${)}
             return (rank == 1) ? end : -1;
+
         default:
             return -1;
         }
@@ -4183,6 +4389,7 @@ static void renumber(QString & form, int rank,
 
     while (index < index_sup) {
         index = form.find("${", index);
+
         if (index == -1)
             break;
 
@@ -4203,7 +4410,8 @@ static void renumber(QString & form, int rank,
     }
 }
 
-void OperationDialog::force_param(int rank, bool recompute) {
+void OperationDialog::force_param(int rank, bool recompute)
+{
     char t[16];
     char p[16];
     char v[16];
@@ -4214,15 +4422,15 @@ void OperationDialog::force_param(int rank, bool recompute) {
     sprintf(v, "${v%d}", rank);
 
     switch (unique) {
-    case CppView:
-    {
+    case CppView: {
         QString theo =
-                GenerationSettings::cpp(the_type(table->type(rank), list, nodes),
-                                        table->dir(rank), rank);
+            GenerationSettings::cpp(the_type(table->type(rank), list, nodes),
+                                    table->dir(rank), rank);
 
         s = cppTab->ui->edCppDeclProto->text();
+
         if ((s.find(t) == -1) && (s.find(p) == -1)) {
-            add_param(s, rank, theo+QString(v));
+            add_param(s, rank, theo + QString(v));
             cppTab->ui->edCppDeclProto->setText(s);
         }
         else if (recompute) {
@@ -4231,6 +4439,7 @@ void OperationDialog::force_param(int rank, bool recompute) {
         }
 
         s = cppTab->ui->edCppDefProto->text();
+
         if ((s.find(t) == -1) && (s.find(p) == -1)) {
             add_param(s, rank, theo);
             cppTab->ui->edCppDefProto->setText(s);
@@ -4240,30 +4449,41 @@ void OperationDialog::force_param(int rank, bool recompute) {
             cppTab->ui->edCppDefProto->setText(s);
         }
     }
-        break;
+    break;
+
     case JavaView:
         s = edjavadef->text();
+
         if ((s.find(t) == -1) && (s.find(p) == -1)) {
             add_param(s, rank, QString(t) + QString(" ") + QString(p));
             edjavadef->setText(s);
         }
+
         break;
+
     case PhpView:
         s = edphpdef->text();
+
         if (s.find(p) == -1) {
             add_param(s, rank, QString(p) + QString(v));
             edphpdef->setText(s);
         }
+
         break;
+
     case PythonView:
         s = edpythondef->text();
+
         if (s.find(p) == -1) {
             add_param(s, rank, QString(p) + QString(v));
             edpythondef->setText(s);
         }
+
         break;
+
     case IdlView:
         s = edidldecl->text();
+
         if ((s.find(t) == -1) && (s.find(p) == -1)) {
             char d[16];
 
@@ -4271,13 +4491,16 @@ void OperationDialog::force_param(int rank, bool recompute) {
             add_param(s, rank, QString(d) + QString(" ") + QString(t) + QString(" ") + QString(p));
             edidldecl->setText(s);
         }
+
         break;
+
     default:
         break;
     }
 }
 
-void OperationDialog::add_param(QString & form, int rank, QString s) {
+void OperationDialog::add_param(QString & form, int rank, QString s)
+{
     int index = param_begin(form, rank);
 
     if (index == -1)
@@ -4287,6 +4510,7 @@ void OperationDialog::add_param(QString & form, int rank, QString s) {
         // first param, index point to '}' ending ${(}
         if (table->nparams() != 1)
             s += ", ";
+
         index += 1;
     }
     else
@@ -4296,7 +4520,8 @@ void OperationDialog::add_param(QString & form, int rank, QString s) {
     form.insert(index, s);
 }
 
-void OperationDialog::replace_param(QString & form, int rank, QString s) {
+void OperationDialog::replace_param(QString & form, int rank, QString s)
+{
     int index_start = param_begin(form, rank);
 
     if (index_start == -1)
@@ -4310,9 +4535,11 @@ void OperationDialog::replace_param(QString & form, int rank, QString s) {
         // not possible except if user remove it in language form
         form.insert(index_start, ", " + s);
         return;
+
     case ',':
         index_start += (p[index_start + 1] == ' ') ? 2 : 1;
         break;
+
     default:
         // first param, index point to '}' ending ${(}
         index_start += 1;
@@ -4324,6 +4551,7 @@ void OperationDialog::replace_param(QString & form, int rank, QString s) {
     case ',':
     case '$': // ${)}
         break;
+
     default:
         // error
         return;
@@ -4332,31 +4560,38 @@ void OperationDialog::replace_param(QString & form, int rank, QString s) {
     form.replace(index_start, index_sup - index_start, s);
 }
 
-void OperationDialog::insert_param(int rank) {
+void OperationDialog::insert_param(int rank)
+{
     // just renumber
     switch (unique) {
     case CppView:
         insert_param(rank, cppTab->ui->edCppDeclProto);
         insert_param(rank, cppTab->ui->edCppDefProto);
         break;
+
     case JavaView:
         insert_param(rank, edjavadef);
         break;
+
     case PhpView:
         insert_param(rank, edphpdef);
         break;
+
     case PythonView:
         insert_param(rank, edpythondef);
         break;
+
     case IdlView:
         insert_param(rank, edidldecl);
         break;
+
     default:
         break;
     }
 }
 
-void OperationDialog::insert_param(int rank, MultiLineEdit * ed) {
+void OperationDialog::insert_param(int rank, MultiLineEdit * ed)
+{
     // just renumber
     QString form = ed->text();
 
@@ -4364,31 +4599,38 @@ void OperationDialog::insert_param(int rank, MultiLineEdit * ed) {
     ed->setText(form);
 }
 
-void OperationDialog::delete_param(int rank) {
+void OperationDialog::delete_param(int rank)
+{
     // remove and renumber
     switch (unique) {
     case CppView:
         delete_param(rank, cppTab->ui->edCppDeclProto);
         delete_param(rank, cppTab->ui->edCppDefProto);
         break;
+
     case JavaView:
         delete_param(rank, edjavadef);
         break;
+
     case PhpView:
         delete_param(rank, edphpdef);
         break;
+
     case PythonView:
         delete_param(rank, edpythondef);
         break;
+
     case IdlView:
         delete_param(rank, edidldecl);
         break;
+
     default:
         break;
     }
 }
 
-QString OperationDialog::delete_param(int rank, MultiLineEdit * ed) {
+QString OperationDialog::delete_param(int rank, MultiLineEdit * ed)
+{
     // remove
     QString form = ed->text();
     int index = param_begin(form, rank);
@@ -4404,9 +4646,11 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed) {
         // '$' starting ${)}, param not yet present, not first one,
         // not possible except if user remove it in language form
         return "";
+
     case ',':
         index_sup = supOf(p, index + 1);
         break;
+
     default: // first param, index point to '}' ending ${(}
         index += 1;
         index_sup = supOf(p, index);
@@ -4428,7 +4672,9 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed) {
             result = form.mid(index, index_sup - index);
             index_sup += (p[index_sup + 1] == ' ') ? 2 : 1;
         }
+
         break;
+
     case '$': // ${)}
         if (p[index] == ',') {
             if (p[index + 1] == ' ')
@@ -4440,7 +4686,9 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed) {
             // alone param
             result = form.mid(index, index_sup - index);
         }
+
         break;
+
     default:
         // error
         return "";
@@ -4455,31 +4703,38 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed) {
     return result;
 }
 
-void OperationDialog::move_param(int old_rank, int new_rank) {
+void OperationDialog::move_param(int old_rank, int new_rank)
+{
     switch (unique) {
     case CppView:
         move_param(old_rank, new_rank, cppTab->ui->edCppDeclProto);
         move_param(old_rank, new_rank, cppTab->ui->edCppDefProto);
         break;
+
     case JavaView:
         move_param(old_rank, new_rank, edjavadef);
         break;
+
     case PhpView:
         move_param(old_rank, new_rank, edphpdef);
         break;
+
     case PythonView:
         move_param(old_rank, new_rank, edpythondef);
         break;
+
     case IdlView:
         move_param(old_rank, new_rank, edidldecl);
         break;
+
     default:
         break;
     }
 }
 
 void OperationDialog::move_param(int old_rank, int new_rank,
-                                 MultiLineEdit * ed) {
+                                 MultiLineEdit * ed)
+{
     QString s = delete_param(old_rank, ed);
 
     if (s.isEmpty())
@@ -4512,10 +4767,11 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
                          const QStringList & list,
                          OperationDialog * d, bool visit)
     : MyTable(o->get_n_params() + 1, (visit) ? 4 : 5, parent),
-      dialog(d), types(list) {
+      dialog(d), types(list)
+{
     int index;
     int sup = o->get_n_params();
-    
+
     setSorting(-1);
     setSelectionMode(NoSelection);	// single does not work
     setRowMovingEnabled(TRUE);
@@ -4525,7 +4781,7 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     horizontalHeader()->setLabel(3, TR("Default value"));
 
     if (visit) {
-        for (index = 0; index < sup; index += 1){
+        for (index = 0; index < sup; index += 1) {
             setItem(index, 0, new TableItem(this, Q3TableItem::Never, stringify(o->get_param_dir(index))));
             setItem(index, 1, new TableItem(this, Q3TableItem::Never, o->get_param_name(index)));
             setItem(index, 2, new TableItem(this, Q3TableItem::Never, o->get_param_type(index).get_full_type()));
@@ -4536,8 +4792,9 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
         horizontalHeader()->setLabel(4, TR("do"));
 
         alltypes = GenerationSettings::basic_types();
-        ((ClassData *) ((BrowserNode *) o->get_browser_node()->parent())->get_data())
-                ->addFormals(alltypes);
+        ((ClassData *)((BrowserNode *) o->get_browser_node()->parent())->get_data())
+        ->addFormals(alltypes);
+
         for (QStringList::ConstIterator it = list.begin(); it != list.end(); ++it)
             alltypes.append(*it);
 
@@ -4552,7 +4809,7 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
             // can't be return
         }
 
-        for (index = 0; index < sup; index += 1){
+        for (index = 0; index < sup; index += 1) {
             setItem(index, 0, new ComboItem(this, stringify(o->get_param_dir(index)), DirList, FALSE));
             setText(index, 1, o->get_param_name(index));
             setItem(index, 2, new ComboItem(this, o->get_param_type(index).get_full_type(), alltypes));
@@ -4570,13 +4827,13 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     adjustColumn(0);
     //setColumnStretchable (1, TRUE);
     horizontalHeader()->setResizeEnabled(TRUE, 1);
-    setColumnStretchable (2, TRUE);
+    setColumnStretchable(2, TRUE);
     //setColumnStretchable (3, TRUE);
     horizontalHeader()->setResizeEnabled(TRUE, 3);
 
     if (!visit) {
         adjustColumn(4);
-        setColumnStretchable (4, FALSE);
+        setColumnStretchable(4, FALSE);
 
         connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
                 this, SLOT(button_pressed(int, int, int, const QPoint &)));
@@ -4585,10 +4842,11 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     }
 }
 
-void ParamsTable::activateNextCell() {
+void ParamsTable::activateNextCell()
+{
     int row = currentRow();
     int col = currentColumn();
-    
+
     if (col == 3) {
         // goto next line
         if (++row == numRows()) {
@@ -4600,13 +4858,15 @@ void ParamsTable::activateNextCell() {
             setText(row, 3, QString());
             setText(row, 4, QString());
         }
+
         setCurrentCell(row, 0);
     }
     else
         setCurrentCell(row, col + 1);
 }
 
-void ParamsTable::value_changed(int row, int col) {
+void ParamsTable::value_changed(int row, int col)
+{
     if ((row == (numRows() - 1)) && (col != 0) && !text(row, col).isEmpty())
         insert_row_after(row);
 
@@ -4614,7 +4874,8 @@ void ParamsTable::value_changed(int row, int col) {
         dialog->force_param(row, col != 1);
 }
 
-void ParamsTable::button_pressed(int row, int col, int, const QPoint &) {
+void ParamsTable::button_pressed(int row, int col, int, const QPoint &)
+{
     if (col == 4) {
         int n = nparams();
         char s[16];
@@ -4623,6 +4884,7 @@ void ParamsTable::button_pressed(int row, int col, int, const QPoint &) {
         sprintf(s, "%d", row + 1);
         m.insertItem(TR("param %1", s), -1);
         m.insertSeparator();
+
         if (row < n) {
             m.insertItem(TR("Insert param before"), 0);
             m.insertItem(TR("Insert param after"), 1);
@@ -4632,6 +4894,7 @@ void ParamsTable::button_pressed(int row, int col, int, const QPoint &) {
             m.insertItem(TR("Copy param"), 3);
             m.insertItem(TR("Cut param"), 4);
         }
+
         if (!name_copy.isEmpty() || !type_copy.isEmpty())
             m.insertItem(TR("Paste param"), 5);
 
@@ -4655,37 +4918,45 @@ void ParamsTable::button_pressed(int row, int col, int, const QPoint &) {
             dialog->insert_param(row);
             dialog->force_param(row, TRUE);
             break;
+
         case 1:
             insert_row_after(row);
-            dialog->insert_param(row+1);
-            dialog->force_param(row+1, TRUE);
+            dialog->insert_param(row + 1);
+            dialog->force_param(row + 1, TRUE);
             break;
+
         case 2:
             delete_row(row);
             dialog->delete_param(row);
             break;
+
         case 3:
             copy_row(row);
             break;
+
         case 4:
             cut_row(row);
             dialog->delete_param(row);
             break;
+
         case 5:
             paste_row(row);
             dialog->force_param(row, TRUE);
             break;
+
         default:
             if (rank >= 10) {
                 move_row(row, rank - 10);
                 dialog->move_param(row, rank - 10);
             }
+
             break;
         }
     }
 }
 
-void ParamsTable::insert_row_before(int row) {
+void ParamsTable::insert_row_before(int row)
+{
     int n = numRows();
     int index;
 
@@ -4711,7 +4982,8 @@ void ParamsTable::insert_row_before(int row) {
     setText(row, 4, QString());
 }
 
-void ParamsTable::insert_row_after(int row) {
+void ParamsTable::insert_row_after(int row)
+{
     int n = numRows();
     int index;
 
@@ -4737,12 +5009,13 @@ void ParamsTable::insert_row_after(int row) {
     setText(row + 1, 4, QString());
 }
 
-void ParamsTable::delete_row(int row) {
+void ParamsTable::delete_row(int row)
+{
     int n = numRows();
     int index;
 
     clearCellWidget(row, 1);
-    
+
     if (row == (n - 1)) {
         // the last line : empty it
         setItem(row, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
@@ -4763,46 +5036,53 @@ void ParamsTable::delete_row(int row) {
             setItem(index, 2, it);
             setText(index, 3, text(index + 1, 3));
         }
+
         setNumRows(n - 1);
     }
 }
 
-void ParamsTable::copy_row(int row) {
+void ParamsTable::copy_row(int row)
+{
     dir_copy = text(row, 0);
     name_copy = text(row, 1);
     type_copy = text(row, 2);
     default_value_copy = text(row, 3);
 }
 
-void ParamsTable::cut_row(int row) {
+void ParamsTable::cut_row(int row)
+{
     copy_row(row);
     delete_row(row);
 }
 
-void ParamsTable::paste_row(int row) {
+void ParamsTable::paste_row(int row)
+{
     setText(row, 0, dir_copy);
     setText(row, 1, name_copy);
     setText(row, 2, type_copy);
     setText(row, 3, default_value_copy);
 
     if ((row == (numRows() - 1)) &&
-            (!dir_copy.isEmpty() ||
-             !name_copy.isEmpty() ||
-             !type_copy.isEmpty()))
+        (!dir_copy.isEmpty() ||
+         !name_copy.isEmpty() ||
+         !type_copy.isEmpty()))
         insert_row_after(row);
 }
 
-void ParamsTable::move_row(int from, int to) {
+void ParamsTable::move_row(int from, int to)
+{
     QString save_dir_copy = dir_copy;
     QString save_name_copy = name_copy;
     QString save_type_copy = type_copy;
     QString save_default_value_copy = default_value_copy;
 
     cut_row(from);
+
     if (to > from)
         insert_row_after(to - 1);
     else
         insert_row_before(to);
+
     paste_row(to);
 
     dir_copy = save_dir_copy;
@@ -4812,7 +5092,8 @@ void ParamsTable::move_row(int from, int to) {
 }
 
 void ParamsTable::update(OperationData * oper,
-                         BrowserNodeList & nodes) {
+                         BrowserNodeList & nodes)
+{
     forceUpdateCells();
 
     int n = nparams();
@@ -4843,7 +5124,8 @@ void ParamsTable::update(OperationData * oper,
     }
 }
 
-unsigned ParamsTable::nparams() const {
+unsigned ParamsTable::nparams() const
+{
     int n = numRows();
 
     while (n && text(n - 1, 1).isEmpty() && text(n - 1, 2).isEmpty())
@@ -4852,19 +5134,23 @@ unsigned ParamsTable::nparams() const {
     return n;
 }
 
-QString ParamsTable::name(unsigned rank) const {
+QString ParamsTable::name(unsigned rank) const
+{
     return text(rank, 1);
 }
 
-QString ParamsTable::type(unsigned rank) const {
+QString ParamsTable::type(unsigned rank) const
+{
     return text(rank, 2);
 }
 
-UmlParamDirection ParamsTable::dir(unsigned rank) const {
+UmlParamDirection ParamsTable::dir(unsigned rank) const
+{
     return (UmlParamDirection) DirList.findIndex(text(rank, 0));
 }
 
-QString ParamsTable::value(unsigned rank) const {
+QString ParamsTable::value(unsigned rank) const
+{
     return text(rank, 3);
 }
 
@@ -4877,7 +5163,8 @@ QString ExceptionsTable::type_copy;
 
 ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
                                  const QStringList & list, bool visit)
-    : MyTable(o->get_n_exceptions() + 1, (visit) ? 1 : 2, parent), types(list) {
+    : MyTable(o->get_n_exceptions() + 1, (visit) ? 1 : 2, parent), types(list)
+{
     int index;
     int sup = o->get_n_exceptions();
 
@@ -4893,7 +5180,7 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
     else {
         horizontalHeader()->setLabel(1, TR("do"));
 
-        for (index = 0; index < sup; index += 1){
+        for (index = 0; index < sup; index += 1) {
             setItem(index, 0, new ComboItem(this, o->get_exception(index).get_full_type(), types));
             setText(index, 1, QString());
         }
@@ -4902,11 +5189,11 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
         setText(index, 1, QString());
     }
 
-    setColumnStretchable (0, TRUE);
+    setColumnStretchable(0, TRUE);
 
     if (!visit) {
         adjustColumn(1);
-        setColumnStretchable (1, FALSE);
+        setColumnStretchable(1, FALSE);
 
         connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
                 this, SLOT(button_pressed(int, int, int, const QPoint &)));
@@ -4915,9 +5202,10 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
     }
 }
 
-void ExceptionsTable::activateNextCell() {
+void ExceptionsTable::activateNextCell()
+{
     int row = currentRow();
-    
+
     // goto next line
     if (++row == numRows()) {
         // adds a new line
@@ -4925,15 +5213,18 @@ void ExceptionsTable::activateNextCell() {
         setItem(row, 0, new ComboItem(this, QString(), types));
         setText(row, 1, QString());
     }
+
     setCurrentCell(row, 0);
 }
 
-void ExceptionsTable::value_changed(int row, int col) {
+void ExceptionsTable::value_changed(int row, int col)
+{
     if ((row == (numRows() - 1)) && !text(row, col).isEmpty())
         insert_row_after(row);
 }
 
-void ExceptionsTable::button_pressed(int row, int col, int, const QPoint &) {
+void ExceptionsTable::button_pressed(int row, int col, int, const QPoint &)
+{
     if (col == 1) {
         int n = nexceptions();
         char s[16];
@@ -4942,6 +5233,7 @@ void ExceptionsTable::button_pressed(int row, int col, int, const QPoint &) {
         sprintf(s, "%d", row + 1);
         m.insertItem(TR("exception %1", s), -1);
         m.insertSeparator();
+
         if (row < n) {
             m.insertItem(TR("Insert exception before"), 0);
             m.insertItem(TR("Insert exception after"), 1);
@@ -4951,6 +5243,7 @@ void ExceptionsTable::button_pressed(int row, int col, int, const QPoint &) {
             m.insertItem(TR("Copy exception"), 3);
             m.insertItem(TR("Cut exception"), 4);
         }
+
         if (!type_copy.isEmpty())
             m.insertItem(TR("Paste exception"), 5);
 
@@ -4972,30 +5265,38 @@ void ExceptionsTable::button_pressed(int row, int col, int, const QPoint &) {
         case 0:
             insert_row_before(row);
             break;
+
         case 1:
             insert_row_after(row);
             break;
+
         case 2:
             delete_row(row);
             break;
+
         case 3:
             copy_row(row);
             break;
+
         case 4:
             cut_row(row);
             break;
+
         case 5:
             paste_row(row);
             break;
+
         default:
             if (rank >= 10)
                 move_row(row, rank - 10);
+
             break;
         }
     }
 }
 
-void ExceptionsTable::insert_row_before(int row) {
+void ExceptionsTable::insert_row_before(int row)
+{
     int n = numRows();
     int index;
 
@@ -5012,7 +5313,8 @@ void ExceptionsTable::insert_row_before(int row) {
     setText(row, 1, QString());
 }
 
-void ExceptionsTable::insert_row_after(int row) {
+void ExceptionsTable::insert_row_after(int row)
+{
     int n = numRows();
     int index;
 
@@ -5029,12 +5331,13 @@ void ExceptionsTable::insert_row_after(int row) {
     setText(row + 1, 1, QString());
 }
 
-void ExceptionsTable::delete_row(int row) {
+void ExceptionsTable::delete_row(int row)
+{
     int n = numRows();
     int index;
 
     clearCellWidget(row, 1);
-    
+
     if (row == (n - 1)) {
         // the last line : empty it
         setItem(0, 0, new ComboItem(this, QString(), types));
@@ -5046,41 +5349,49 @@ void ExceptionsTable::delete_row(int row) {
             takeItem(it);
             setItem(index, 0, it);
         }
+
         setNumRows(n - 1);
     }
 }
 
-void ExceptionsTable::copy_row(int row) {
+void ExceptionsTable::copy_row(int row)
+{
     type_copy = text(row, 0);
 }
 
-void ExceptionsTable::cut_row(int row) {
+void ExceptionsTable::cut_row(int row)
+{
     copy_row(row);
     delete_row(row);
 }
 
-void ExceptionsTable::paste_row(int row) {
+void ExceptionsTable::paste_row(int row)
+{
     setText(row, 0, type_copy);
 
     if ((row == (numRows() - 1)) && !type_copy.isEmpty())
         insert_row_after(row);
 }
 
-void ExceptionsTable::move_row(int from, int to) {
+void ExceptionsTable::move_row(int from, int to)
+{
     QString save_type_copy = type_copy;
 
     cut_row(from);
+
     if (to > from)
         insert_row_after(to - 1);
     else
         insert_row_before(to);
+
     paste_row(to);
 
     type_copy = save_type_copy;
 }
 
 void ExceptionsTable::update(OperationData * oper,
-                             BrowserNodeList & nodes) {
+                             BrowserNodeList & nodes)
+{
     forceUpdateCells();
 
     int n = nexceptions();
@@ -5100,11 +5411,13 @@ void ExceptionsTable::update(OperationData * oper,
             else
                 t.explicit_type = s;
         }
+
         oper->set_exception(index, t);
     }
 }
 
-unsigned ExceptionsTable::nexceptions() const {
+unsigned ExceptionsTable::nexceptions() const
+{
     int n = numRows();
 
     while (n && text(n - 1, 0).isEmpty())
@@ -5113,7 +5426,8 @@ unsigned ExceptionsTable::nexceptions() const {
     return n;
 }
 
-QString ExceptionsTable::type(unsigned rank) const {
+QString ExceptionsTable::type(unsigned rank) const
+{
     return text(rank, 0);
 }
 
@@ -5132,8 +5446,9 @@ static QStringList ValueRankList;
 
 CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
                                QWidget * parent, bool decl)
-    : MyTable(0, (decl) ? 8 : 7, parent), params(p), edform(f), dcl(decl) {
-    
+    : MyTable(0, (decl) ? 8 : 7, parent), params(p), edform(f), dcl(decl)
+{
+
     setSorting(-1);
     setSelectionMode(NoSelection);	// single does not work
     setRowMovingEnabled(TRUE);
@@ -5142,6 +5457,7 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
     horizontalHeader()->setLabel(2, "${t<i>}");
     horizontalHeader()->setLabel(3, TR("Pointer"));
     horizontalHeader()->setLabel(4, "${p<i>}");
+
     if (decl) {
         horizontalHeader()->setLabel(5, "${v<i>}");
         horizontalHeader()->setLabel(6, TR("Modifier"));
@@ -5151,27 +5467,29 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
         horizontalHeader()->setLabel(5, TR("Modifier"));
         horizontalHeader()->setLabel(6, TR("do"));
     }
-    setColumnStretchable (0, TRUE);
-    setColumnStretchable (1, TRUE);
-    setColumnStretchable (2, TRUE);
+
+    setColumnStretchable(0, TRUE);
+    setColumnStretchable(1, TRUE);
+    setColumnStretchable(2, TRUE);
     adjustColumn(3);
-    setColumnStretchable (4, TRUE);
-    setColumnStretchable (5, TRUE);
+    setColumnStretchable(4, TRUE);
+    setColumnStretchable(5, TRUE);
+
     if (decl) {
-        setColumnStretchable (6, TRUE);
+        setColumnStretchable(6, TRUE);
         adjustColumn(7);
-        setColumnStretchable (7, FALSE);
+        setColumnStretchable(7, FALSE);
     }
     else {
         adjustColumn(6);
-        setColumnStretchable (6, FALSE);
+        setColumnStretchable(6, FALSE);
     }
 
     QString form = edform->text();
     //the presence of ${(} and ${)} was checked
     int form_index = form.find("${(}") + 4;
     int tbl_index = 0;
-    
+
     while (extract(tbl_index, form_index, form)) {
         setText(tbl_index, (decl) ? 7 : 6, QString());
         tbl_index += 1;
@@ -5179,7 +5497,7 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
 
     if (tbl_index == 0)
         insert_row_before(0);
-    
+
     connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
             this, SLOT(button_pressed(int, int, int, const QPoint &)));
 
@@ -5214,12 +5532,14 @@ CppParamsTable::CppParamsTable(ParamsTable * p, MultiLineEdit * f,
     }
 }
 
-void CppParamsTable::init_row(int row) {
+void CppParamsTable::init_row(int row)
+{
     setItem(row, 0, new Q3TableItem(this, Q3TableItem::Never, QString()));
     setItem(row, 1, new ComboItem(this, QString(), SpecifierList));
     setItem(row, 2, new ComboItem(this, QString(), TypeRankList));
     setItem(row, 3, new ComboItem(this, QString(), PtrList));
     setItem(row, 4, new ComboItem(this, QString(), ParamRankList));
+
     if (dcl) {
         setItem(row, 5, new ComboItem(this, QString(), ValueRankList));
         setText(row, 6, QString());
@@ -5231,7 +5551,8 @@ void CppParamsTable::init_row(int row) {
     }
 }
 
-bool CppParamsTable::extract(int tblindex, int & strindex, QString s) {
+bool CppParamsTable::extract(int tblindex, int & strindex, QString s)
+{
     // s at least contains ${)}
     while (s.at(strindex).isSpace())
         strindex += 1;
@@ -5303,6 +5624,7 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s) {
             modifier = s.mid(strindex, sup - strindex).stripWhiteSpace();
         else {
             ptr = s.mid(strindex, index - strindex).stripWhiteSpace();
+
             if (((strindex = s.find('}', index + 2)) == -1) || (strindex >= sup))
                 return FALSE;
             else {
@@ -5319,6 +5641,7 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s) {
     setItem(tblindex, 2, new ComboItem(this, t_i, TypeRankList));
     setItem(tblindex, 3, new ComboItem(this, ptr, PtrList));
     setItem(tblindex, 4, new ComboItem(this, p_i, ParamRankList));
+
     if (dcl) {
         QString v_i;
 
@@ -5339,23 +5662,26 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s) {
         setText(tblindex, 5, modifier);
 
     strindex = (s.at(sup) == QChar(',')) ? sup + 1 : sup;
-    
+
     return TRUE;
 }
 
-void CppParamsTable::setItem(int row, int col, Q3TableItem * item) {
+void CppParamsTable::setItem(int row, int col, Q3TableItem * item)
+{
     Q3Table::setItem(row, col, item);
 
     if ((col == 2) || (col == 4))
         update_name(row);
 }
 
-void CppParamsTable::setCurrentCell(int row, int col) {
+void CppParamsTable::setCurrentCell(int row, int col)
+{
     Q3Table::setCurrentCell(row, col);
     update_names();
 }
 
-void CppParamsTable::update_names() {
+void CppParamsTable::update_names()
+{
     int n = numRows();
     int row;
 
@@ -5363,20 +5689,21 @@ void CppParamsTable::update_names() {
         update_name(row);
 }
 
-void CppParamsTable::update_name(int row) {
+void CppParamsTable::update_name(int row)
+{
     bool t_set;
     bool p_set;
     unsigned t_i;
     unsigned p_i;
 
     if (!text(row, 2).isEmpty() &&
-            (sscanf((const char *) text(row, 2), "${t%u}", &t_i) == 1))
+        (sscanf((const char *) text(row, 2), "${t%u}", &t_i) == 1))
         t_set = TRUE;
     else
         t_set = FALSE;
 
     if (!text(row, 4).isEmpty() &&
-            (sscanf((const char *) text(row, 4), "${p%u}", &p_i) == 1))
+        (sscanf((const char *) text(row, 4), "${p%u}", &p_i) == 1))
         p_set = TRUE;
     else
         p_set = FALSE;
@@ -5400,7 +5727,8 @@ void CppParamsTable::update_name(int row) {
                                          ? params->name(p_i) : QString()));
 }
 
-void CppParamsTable::button_pressed(int row, int col, int, const QPoint &) {
+void CppParamsTable::button_pressed(int row, int col, int, const QPoint &)
+{
     if (col == ((dcl) ? 7 : 6)) {
         char s[16];
         Q3PopupMenu m;
@@ -5434,19 +5762,21 @@ void CppParamsTable::button_pressed(int row, int col, int, const QPoint &) {
         int v_i;
 
         if (text(row, 2).isEmpty() ||
-                (sscanf((const char *) text(row, 2), "${t%d}", &t_i) != 1))
+            (sscanf((const char *) text(row, 2), "${t%d}", &t_i) != 1))
             t_i = -1;
+
         if (text(row, 4).isEmpty() ||
-                (sscanf((const char *) text(row, 4), "${p%d}", &p_i) != 1))
+            (sscanf((const char *) text(row, 4), "${p%d}", &p_i) != 1))
             p_i = -1;
+
         if (!dcl ||
-                text(row, 5).isEmpty() ||
-                (sscanf((const char *) text(row, 5), "${v%d}", &v_i) != 1))
+            text(row, 5).isEmpty() ||
+            (sscanf((const char *) text(row, 5), "${v%d}", &v_i) != 1))
             v_i = -1;
 
         for (rank = 0; rank != params->numRows(); rank += 1)
             if ((!params->name(rank).isEmpty() || !params->type(rank).isEmpty()) &&
-                    ((rank != t_i) || (rank != p_i)))
+                ((rank != t_i) || (rank != p_i)))
                 rk.insertItem(QString::number(rank), 100 + rank);
 
         m.insertItem(TR("Set rank <i>"), &rk);
@@ -5455,21 +5785,27 @@ void CppParamsTable::button_pressed(int row, int col, int, const QPoint &) {
         case 0:
             insert_row_before(row);
             break;
+
         case 1:
             insert_row_after(row);
             break;
+
         case 2:
             delete_row(row);
             break;
+
         case 3:
             copy_row(row);
             break;
+
         case 4:
             cut_row(row);
             break;
+
         case 5:
             paste_row(row);
             break;
+
         default:
             if (rank >= 100) {
                 char s[32];
@@ -5491,12 +5827,14 @@ void CppParamsTable::button_pressed(int row, int col, int, const QPoint &) {
             }
             else if (rank >= 10)
                 move_row(row, rank - 10);
+
             break;
         }
     }
 }
 
-void CppParamsTable::insert_row_before(int row) {
+void CppParamsTable::insert_row_before(int row)
+{
     int n = numRows();
     int index;
     int col;
@@ -5511,14 +5849,16 @@ void CppParamsTable::insert_row_before(int row) {
             takeItem(it);
             setItem(index, col, it);
         }
+
         setText(index, mcol, text(index - 1, mcol));
-        setText(index, mcol+1, text(index - 1, mcol+1));
+        setText(index, mcol + 1, text(index - 1, mcol + 1));
     }
 
     init_row(row);
 }
 
-void CppParamsTable::insert_row_after(int row) {
+void CppParamsTable::insert_row_after(int row)
+{
     int n = numRows();
     int index;
     int col;
@@ -5533,20 +5873,22 @@ void CppParamsTable::insert_row_after(int row) {
             takeItem(it);
             setItem(index, col, it);
         }
+
         setText(index, mcol, text(index - 1, col));
-        setText(index, mcol+1, text(index - 1, col));
+        setText(index, mcol + 1, text(index - 1, col));
     }
 
     init_row(row + 1);
 }
 
-void CppParamsTable::delete_row(int row) {
+void CppParamsTable::delete_row(int row)
+{
     int n = numRows();
     int index;
     int col;
 
     clearCellWidget(row, 1);
-    
+
     if (row == (n - 1)) {
         // the last line : empty it
         init_row(row);
@@ -5561,15 +5903,17 @@ void CppParamsTable::delete_row(int row) {
                 takeItem(it);
                 setItem(index, col, it);
             }
+
             setText(index, mcol, text(index + 1, col));
-            setText(index, mcol+1, text(index + 1, col));
+            setText(index, mcol + 1, text(index + 1, col));
         }
 
         setNumRows(n - 1);
     }
 }
 
-void CppParamsTable::copy_row(int row) {
+void CppParamsTable::copy_row(int row)
+{
     int col;
     int mcol = ((dcl) ? 8 : 7);
 
@@ -5577,12 +5921,14 @@ void CppParamsTable::copy_row(int row) {
         copied[col] = text(row, col);
 }
 
-void CppParamsTable::cut_row(int row) {
+void CppParamsTable::cut_row(int row)
+{
     copy_row(row);
     delete_row(row);
 }
 
-void CppParamsTable::paste_row(int row) {
+void CppParamsTable::paste_row(int row)
+{
     int col;
     int mcol = ((dcl) ? 8 : 7);
 
@@ -5590,7 +5936,8 @@ void CppParamsTable::paste_row(int row) {
         setText(row, col, copied[col]);
 }
 
-void CppParamsTable::move_row(int from, int to) {
+void CppParamsTable::move_row(int from, int to)
+{
     int col;
     int mcol = ((dcl) ? 8 : 7);
     QString save_copied[8];
@@ -5599,17 +5946,20 @@ void CppParamsTable::move_row(int from, int to) {
         save_copied[col] = copied[col];
 
     cut_row(from);
+
     if (to > from)
         insert_row_after(to - 1);
     else
         insert_row_before(to);
+
     paste_row(to);
 
     for (col = 0; col != mcol; col += 1)
         copied[col] = save_copied[col];
 }
 
-void CppParamsTable::update_edform() {
+void CppParamsTable::update_edform()
+{
     forceUpdateCells();
 
     QString s;
@@ -5630,6 +5980,7 @@ void CppParamsTable::update_edform() {
                 case 5:
                     p += text(index, col);
                     break;
+
                 default:
                     p += " " + text(index, col);
                 }
@@ -5644,6 +5995,7 @@ void CppParamsTable::update_edform() {
         }
 
         p = p.stripWhiteSpace();
+
         if (! p.isEmpty()) {
             s += sep + p;
             sep = ", ";
@@ -5666,7 +6018,8 @@ QSize CppParamsDialog::previous_size;
 
 CppParamsDialog::CppParamsDialog(QWidget * parent, ParamsTable * params,
                                  MultiLineEdit * form, bool decl)
-    : QDialog(parent, "C++ parameters dialog", TRUE) {
+    : QDialog(parent, "C++ parameters dialog", TRUE)
+{
     setCaption(TR("C++ parameters dialog"));
 
     Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
@@ -5688,22 +6041,25 @@ CppParamsDialog::CppParamsDialog(QWidget * parent, ParamsTable * params,
 
     hbox->addWidget(accept);
     hbox->addWidget(cancel);
-    
+
     connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-CppParamsDialog::~CppParamsDialog() {
+CppParamsDialog::~CppParamsDialog()
+{
     previous_size = size();
 }
 
-void CppParamsDialog::polish() {
+void CppParamsDialog::polish()
+{
     QDialog::polish();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 
-void CppParamsDialog::accept() {
+void CppParamsDialog::accept()
+{
     tbl->update_edform();
 
     QDialog::accept();
@@ -5722,8 +6078,9 @@ static QStringList PhpParamRankList;
 static QStringList PhpValueRankList;
 
 PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit * f)
-    : MyTable(0, 6, parent), params(p), edform(f) {
-    
+    : MyTable(0, 6, parent), params(p), edform(f)
+{
+
     setSorting(-1);
     setSelectionMode(NoSelection);	// single does not work
     setRowMovingEnabled(TRUE);
@@ -5733,11 +6090,11 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
     horizontalHeader()->setLabel(3, "${p<i>}");
     horizontalHeader()->setLabel(4, "${v<i>}");
     horizontalHeader()->setLabel(5, TR("do"));
-    setColumnStretchable (0, TRUE);
-    setColumnStretchable (1, TRUE);
+    setColumnStretchable(0, TRUE);
+    setColumnStretchable(1, TRUE);
     adjustColumn(2);
-    setColumnStretchable (3, TRUE);
-    setColumnStretchable (4, TRUE);
+    setColumnStretchable(3, TRUE);
+    setColumnStretchable(4, TRUE);
     adjustColumn(5);
 
 
@@ -5745,7 +6102,7 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
     //the presence of ${(} and ${)} was checked
     int form_index = form.find("${(}") + 4;
     int tbl_index = 0;
-    
+
     while (extract(tbl_index, form_index, form)) {
         setText(tbl_index, 5, QString());
         tbl_index += 1;
@@ -5753,7 +6110,7 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
 
     if (tbl_index == 0)
         insert_row_before(0);
-    
+
     connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
             this, SLOT(button_pressed(int, int, int, const QPoint &)));
 
@@ -5778,10 +6135,12 @@ PhpParamsTable::PhpParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit 
             PhpValueRankList.append(s);
         }
     }
+
     PhpTypeRankList.append(TR("array"));
 }
 
-void PhpParamsTable::init_row(int row) {
+void PhpParamsTable::init_row(int row)
+{
     setItem(row, 0, new Q3TableItem(this, Q3TableItem::Never, QString()));
     setItem(row, 1, new ComboItem(this, QString(), PhpTypeRankList));
     setItem(row, 2, new ComboItem(this, QString(), PhpRefList));
@@ -5790,7 +6149,8 @@ void PhpParamsTable::init_row(int row) {
     setText(row, 5, QString());
 }
 
-bool PhpParamsTable::extract(int tblindex, int & strindex, QString s) {
+bool PhpParamsTable::extract(int tblindex, int & strindex, QString s)
+{
     // s at least contains ${)}
     while (s.at(strindex).isSpace())
         strindex += 1;
@@ -5843,6 +6203,7 @@ bool PhpParamsTable::extract(int tblindex, int & strindex, QString s) {
         if ((index != -1) && (index < sup)) {
             // named
             ptr = s.mid(strindex, index - strindex).stripWhiteSpace();
+
             if (((strindex = s.find('}', index + 2)) == -1) || (strindex >= sup))
                 return FALSE;
             else {
@@ -5870,23 +6231,26 @@ bool PhpParamsTable::extract(int tblindex, int & strindex, QString s) {
     setItem(tblindex, 4, new ComboItem(this, v_i, PhpValueRankList));
 
     strindex = (s.at(sup) == QChar(',')) ? sup + 1 : sup;
-    
+
     return TRUE;
 }
 
-void PhpParamsTable::setItem(int row, int col, Q3TableItem * item) {
+void PhpParamsTable::setItem(int row, int col, Q3TableItem * item)
+{
     Q3Table::setItem(row, col, item);
 
     if ((col == 1) || (col == 3))
         update_name(row);
 }
 
-void PhpParamsTable::setCurrentCell(int row, int col) {
+void PhpParamsTable::setCurrentCell(int row, int col)
+{
     Q3Table::setCurrentCell(row, col);
     update_names();
 }
 
-void PhpParamsTable::update_names() {
+void PhpParamsTable::update_names()
+{
     int n = numRows();
     int row;
 
@@ -5894,20 +6258,21 @@ void PhpParamsTable::update_names() {
         update_name(row);
 }
 
-void PhpParamsTable::update_name(int row) {
+void PhpParamsTable::update_name(int row)
+{
     bool t_set;
     bool p_set;
     unsigned t_i;
     unsigned p_i;
 
     if (!text(row, 1).isEmpty() &&
-            (sscanf((const char *) text(row, 1), "${t%u}", &t_i) == 1))
+        (sscanf((const char *) text(row, 1), "${t%u}", &t_i) == 1))
         t_set = TRUE;
     else
         t_set = FALSE;
 
     if (!text(row, 3).isEmpty() &&
-            (sscanf((const char *) text(row, 3), "${p%u}", &p_i) == 1))
+        (sscanf((const char *) text(row, 3), "${p%u}", &p_i) == 1))
         p_set = TRUE;
     else
         p_set = FALSE;
@@ -5931,7 +6296,8 @@ void PhpParamsTable::update_name(int row) {
                                          ? params->name(p_i) : QString()));
 }
 
-void PhpParamsTable::button_pressed(int row, int col, int, const QPoint &) {
+void PhpParamsTable::button_pressed(int row, int col, int, const QPoint &)
+{
     if (col == 5) {
         char s[16];
         Q3PopupMenu m;
@@ -5965,18 +6331,20 @@ void PhpParamsTable::button_pressed(int row, int col, int, const QPoint &) {
         int v_i;
 
         if (text(row, 1).isEmpty() ||
-                (sscanf((const char *) text(row, 1), "${t%d}", &t_i) != 1))
+            (sscanf((const char *) text(row, 1), "${t%d}", &t_i) != 1))
             t_i = -1;
+
         if (text(row, 3).isEmpty() ||
-                (sscanf((const char *) text(row, 3), "${p%d}", &p_i) != 1))
+            (sscanf((const char *) text(row, 3), "${p%d}", &p_i) != 1))
             p_i = -1;
+
         if (text(row, 4).isEmpty() ||
-                (sscanf((const char *) text(row, 4), "${v%d}", &v_i) != 1))
+            (sscanf((const char *) text(row, 4), "${v%d}", &v_i) != 1))
             v_i = -1;
 
         for (rank = 0; rank != params->numRows(); rank += 1)
             if ((!params->name(rank).isEmpty() || !params->type(rank).isEmpty()) &&
-                    ((rank != t_i) || (rank != p_i)))
+                ((rank != t_i) || (rank != p_i)))
                 rk.insertItem(QString::number(rank), 100 + rank);
 
         m.insertItem(TR("Set rank <i>"), &rk);
@@ -5985,21 +6353,27 @@ void PhpParamsTable::button_pressed(int row, int col, int, const QPoint &) {
         case 0:
             insert_row_before(row);
             break;
+
         case 1:
             insert_row_after(row);
             break;
+
         case 2:
             delete_row(row);
             break;
+
         case 3:
             copy_row(row);
             break;
+
         case 4:
             cut_row(row);
             break;
+
         case 5:
             paste_row(row);
             break;
+
         default:
             if (rank >= 100) {
                 char s[32];
@@ -6021,12 +6395,14 @@ void PhpParamsTable::button_pressed(int row, int col, int, const QPoint &) {
             }
             else if (rank >= 10)
                 move_row(row, rank - 10);
+
             break;
         }
     }
 }
 
-void PhpParamsTable::insert_row_before(int row) {
+void PhpParamsTable::insert_row_before(int row)
+{
     int n = numRows();
     int index;
     int col;
@@ -6040,13 +6416,15 @@ void PhpParamsTable::insert_row_before(int row) {
             takeItem(it);
             setItem(index, col, it);
         }
+
         setText(index, 5, text(index - 1, 5));
     }
 
     init_row(row);
 }
 
-void PhpParamsTable::insert_row_after(int row) {
+void PhpParamsTable::insert_row_after(int row)
+{
     int n = numRows();
     int index;
     int col;
@@ -6060,19 +6438,21 @@ void PhpParamsTable::insert_row_after(int row) {
             takeItem(it);
             setItem(index, col, it);
         }
+
         setText(index, 5, text(index - 1, col));
     }
 
     init_row(row + 1);
 }
 
-void PhpParamsTable::delete_row(int row) {
+void PhpParamsTable::delete_row(int row)
+{
     int n = numRows();
     int index;
     int col;
 
     clearCellWidget(row, 1);
-    
+
     if (row == (n - 1)) {
         // the last line : empty it
         init_row(row);
@@ -6085,6 +6465,7 @@ void PhpParamsTable::delete_row(int row) {
                 takeItem(it);
                 setItem(index, col, it);
             }
+
             setText(index, 5, text(index + 1, col));
         }
 
@@ -6092,26 +6473,30 @@ void PhpParamsTable::delete_row(int row) {
     }
 }
 
-void PhpParamsTable::copy_row(int row) {
+void PhpParamsTable::copy_row(int row)
+{
     int col;
 
     for (col = 0; col != 6; col += 1)
         copied[col] = text(row, col);
 }
 
-void PhpParamsTable::cut_row(int row) {
+void PhpParamsTable::cut_row(int row)
+{
     copy_row(row);
     delete_row(row);
 }
 
-void PhpParamsTable::paste_row(int row) {
+void PhpParamsTable::paste_row(int row)
+{
     int col;
 
     for (col = 0; col != 6; col += 1)
         setText(row, col, copied[col]);
 }
 
-void PhpParamsTable::move_row(int from, int to) {
+void PhpParamsTable::move_row(int from, int to)
+{
     int col;
     QString save_copied[6];
 
@@ -6119,17 +6504,20 @@ void PhpParamsTable::move_row(int from, int to) {
         save_copied[col] = copied[col];
 
     cut_row(from);
+
     if (to > from)
         insert_row_after(to - 1);
     else
         insert_row_before(to);
+
     paste_row(to);
 
     for (col = 0; col != 6; col += 1)
         copied[col] = save_copied[col];
 }
 
-void PhpParamsTable::update_edform() {
+void PhpParamsTable::update_edform()
+{
     forceUpdateCells();
 
     QString s;
@@ -6149,6 +6537,7 @@ void PhpParamsTable::update_edform() {
                 case 4:
                     p += text(index, col);
                     break;
+
                 default:
                     p += " " + text(index, col);
                 }
@@ -6156,6 +6545,7 @@ void PhpParamsTable::update_edform() {
         }
 
         p = p.stripWhiteSpace();
+
         if (! p.isEmpty()) {
             s += sep + p;
             sep = ", ";
@@ -6177,7 +6567,8 @@ void PhpParamsTable::update_edform() {
 QSize PhpParamsDialog::previous_size;
 
 PhpParamsDialog::PhpParamsDialog(QWidget * parent, ParamsTable * params, MultiLineEdit * form)
-    : QDialog(parent, "Php parameters dialog", TRUE) {
+    : QDialog(parent, "Php parameters dialog", TRUE)
+{
     setCaption(TR("Php parameters dialog"));
 
     Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
@@ -6199,22 +6590,25 @@ PhpParamsDialog::PhpParamsDialog(QWidget * parent, ParamsTable * params, MultiLi
 
     hbox->addWidget(accept);
     hbox->addWidget(cancel);
-    
+
     connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-PhpParamsDialog::~PhpParamsDialog() {
+PhpParamsDialog::~PhpParamsDialog()
+{
     previous_size = size();
 }
 
-void PhpParamsDialog::polish() {
+void PhpParamsDialog::polish()
+{
     QDialog::polish();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 
-void PhpParamsDialog::accept() {
+void PhpParamsDialog::accept()
+{
     tbl->update_edform();
 
     QDialog::accept();
@@ -6233,8 +6627,9 @@ static QStringList PythonParamRankList;
 static QStringList PythonValueRankList;
 
 PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit * f)
-    : MyTable(0, 6, parent), params(p), edform(f) {
-    
+    : MyTable(0, 6, parent), params(p), edform(f)
+{
+
     setSorting(-1);
     setSelectionMode(NoSelection);	// single does not work
     setRowMovingEnabled(TRUE);
@@ -6244,11 +6639,11 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
     horizontalHeader()->setLabel(3, "${t<i>}");
     horizontalHeader()->setLabel(4, "${v<i>}");
     horizontalHeader()->setLabel(5, TR("do"));
-    setColumnStretchable (0, TRUE);
+    setColumnStretchable(0, TRUE);
     adjustColumn(1);
-    setColumnStretchable (2, TRUE);
-    setColumnStretchable (3, TRUE);
-    setColumnStretchable (4, TRUE);
+    setColumnStretchable(2, TRUE);
+    setColumnStretchable(3, TRUE);
+    setColumnStretchable(4, TRUE);
     adjustColumn(5);
 
 
@@ -6256,7 +6651,7 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
     //the presence of ${(} and ${)} was checked
     int form_index = form.find("${(}") + 4;
     int tbl_index = 0;
-    
+
     while (extract(tbl_index, form_index, form)) {
         setText(tbl_index, 5, QString());
         tbl_index += 1;
@@ -6264,7 +6659,7 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
 
     if (tbl_index == 0)
         insert_row_before(0);
-    
+
     connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
             this, SLOT(button_pressed(int, int, int, const QPoint &)));
 
@@ -6294,7 +6689,8 @@ PythonParamsTable::PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLin
     }
 }
 
-void PythonParamsTable::init_row(int row) {
+void PythonParamsTable::init_row(int row)
+{
     setItem(row, 0, new Q3TableItem(this, Q3TableItem::Never, QString()));
     setItem(row, 1, new ComboItem(this, QString(), PythonModList));
     setItem(row, 2, new ComboItem(this, QString(), PythonParamRankList));
@@ -6303,7 +6699,8 @@ void PythonParamsTable::init_row(int row) {
     setText(row, 5, QString());
 }
 
-bool PythonParamsTable::extract(int tblindex, int & strindex, QString s) {
+bool PythonParamsTable::extract(int tblindex, int & strindex, QString s)
+{
     // s at least contains ${)}
     while (s.at(strindex).isSpace())
         strindex += 1;
@@ -6319,7 +6716,7 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s) {
     QString ptr;
     QString m_i;
     int index = s.find("${p", strindex);
-    
+
     if ((index != -1) && (index < sup)) {
         // have name
         m_i = s.mid(strindex, index - strindex).stripWhiteSpace();
@@ -6372,23 +6769,26 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s) {
     setItem(tblindex, 4, new ComboItem(this, v_i, PythonValueRankList));
 
     strindex = (s.at(sup) == QChar(',')) ? sup + 1 : sup;
-    
+
     return TRUE;
 }
 
-void PythonParamsTable::setItem(int row, int col, Q3TableItem * item) {
+void PythonParamsTable::setItem(int row, int col, Q3TableItem * item)
+{
     Q3Table::setItem(row, col, item);
 
     if (col == 2)
         update_name(row);
 }
 
-void PythonParamsTable::setCurrentCell(int row, int col) {
+void PythonParamsTable::setCurrentCell(int row, int col)
+{
     Q3Table::setCurrentCell(row, col);
     update_names();
 }
 
-void PythonParamsTable::update_names() {
+void PythonParamsTable::update_names()
+{
     int n = numRows();
     int row;
 
@@ -6396,12 +6796,13 @@ void PythonParamsTable::update_names() {
         update_name(row);
 }
 
-void PythonParamsTable::update_name(int row) {
+void PythonParamsTable::update_name(int row)
+{
     bool p_set;
     unsigned p_i;
 
     if (!text(row, 2).isEmpty() &&
-            (sscanf((const char *) text(row, 2), "${p%u}", &p_i) == 1))
+        (sscanf((const char *) text(row, 2), "${p%u}", &p_i) == 1))
         p_set = TRUE;
     else
         p_set = FALSE;
@@ -6412,7 +6813,8 @@ void PythonParamsTable::update_name(int row) {
                                      ? params->name(p_i) : QString()));
 }
 
-void PythonParamsTable::button_pressed(int row, int col, int, const QPoint &) {
+void PythonParamsTable::button_pressed(int row, int col, int, const QPoint &)
+{
     if (col == 5) {
         char s[16];
         Q3PopupMenu m;
@@ -6446,13 +6848,15 @@ void PythonParamsTable::button_pressed(int row, int col, int, const QPoint &) {
         int t_i;
 
         if (text(row, 2).isEmpty() ||
-                (sscanf((const char *) text(row, 2), "${p%d}", &p_i) != 1))
+            (sscanf((const char *) text(row, 2), "${p%d}", &p_i) != 1))
             p_i = -1;
+
         if (text(row, 3).isEmpty() ||
-                (sscanf((const char *) text(row, 3), "${t%d}", &t_i) != 1))
+            (sscanf((const char *) text(row, 3), "${t%d}", &t_i) != 1))
             t_i = -1;
+
         if (text(row, 4).isEmpty() ||
-                (sscanf((const char *) text(row, 4), "${v%d}", &v_i) != 1))
+            (sscanf((const char *) text(row, 4), "${v%d}", &v_i) != 1))
             v_i = -1;
 
         for (rank = 0; rank != params->numRows(); rank += 1)
@@ -6465,21 +6869,27 @@ void PythonParamsTable::button_pressed(int row, int col, int, const QPoint &) {
         case 0:
             insert_row_before(row);
             break;
+
         case 1:
             insert_row_after(row);
             break;
+
         case 2:
             delete_row(row);
             break;
+
         case 3:
             copy_row(row);
             break;
+
         case 4:
             cut_row(row);
             break;
+
         case 5:
             paste_row(row);
             break;
+
         default:
             if (rank >= 100) {
                 char s[32];
@@ -6501,12 +6911,14 @@ void PythonParamsTable::button_pressed(int row, int col, int, const QPoint &) {
             }
             else if (rank >= 10)
                 move_row(row, rank - 10);
+
             break;
         }
     }
 }
 
-void PythonParamsTable::insert_row_before(int row) {
+void PythonParamsTable::insert_row_before(int row)
+{
     int n = numRows();
     int index;
     int col;
@@ -6520,13 +6932,15 @@ void PythonParamsTable::insert_row_before(int row) {
             takeItem(it);
             setItem(index, col, it);
         }
+
         setText(index, col, text(index - 1, col));
     }
 
     init_row(row);
 }
 
-void PythonParamsTable::insert_row_after(int row) {
+void PythonParamsTable::insert_row_after(int row)
+{
     int n = numRows();
     int index;
     int col;
@@ -6540,19 +6954,21 @@ void PythonParamsTable::insert_row_after(int row) {
             takeItem(it);
             setItem(index, col, it);
         }
+
         setText(index, col, text(index - 1, col));
     }
 
     init_row(row + 1);
 }
 
-void PythonParamsTable::delete_row(int row) {
+void PythonParamsTable::delete_row(int row)
+{
     int n = numRows();
     int index;
     int col;
 
     clearCellWidget(row, 1);
-    
+
     if (row == (n - 1)) {
         // the last line : empty it
         init_row(row);
@@ -6565,6 +6981,7 @@ void PythonParamsTable::delete_row(int row) {
                 takeItem(it);
                 setItem(index, col, it);
             }
+
             setText(index, col, text(index + 1, col));
         }
 
@@ -6572,26 +6989,30 @@ void PythonParamsTable::delete_row(int row) {
     }
 }
 
-void PythonParamsTable::copy_row(int row) {
+void PythonParamsTable::copy_row(int row)
+{
     int col;
 
     for (col = 0; col != 6; col += 1)
         copied[col] = text(row, col);
 }
 
-void PythonParamsTable::cut_row(int row) {
+void PythonParamsTable::cut_row(int row)
+{
     copy_row(row);
     delete_row(row);
 }
 
-void PythonParamsTable::paste_row(int row) {
+void PythonParamsTable::paste_row(int row)
+{
     int col;
 
     for (col = 0; col != 6; col += 1)
         setText(row, col, copied[col]);
 }
 
-void PythonParamsTable::move_row(int from, int to) {
+void PythonParamsTable::move_row(int from, int to)
+{
     int col;
     QString save_copied[6];
 
@@ -6599,17 +7020,20 @@ void PythonParamsTable::move_row(int from, int to) {
         save_copied[col] = copied[col];
 
     cut_row(from);
+
     if (to > from)
         insert_row_after(to - 1);
     else
         insert_row_before(to);
+
     paste_row(to);
 
     for (col = 0; col != 6; col += 1)
         copied[col] = save_copied[col];
 }
 
-void PythonParamsTable::update_edform() {
+void PythonParamsTable::update_edform()
+{
     forceUpdateCells();
 
     QString s;
@@ -6627,6 +7051,7 @@ void PythonParamsTable::update_edform() {
                 p += text(index, col);
 
         p = p.stripWhiteSpace();
+
         if (! p.isEmpty()) {
             s += sep + p;
             sep = ", ";
@@ -6648,7 +7073,8 @@ void PythonParamsTable::update_edform() {
 QSize PythonParamsDialog::previous_size;
 
 PythonParamsDialog::PythonParamsDialog(QWidget * parent, ParamsTable * params, MultiLineEdit * form)
-    : QDialog(parent, "Python parameters dialog", TRUE) {
+    : QDialog(parent, "Python parameters dialog", TRUE)
+{
     setCaption(TR("Python parameters dialog"));
 
     Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
@@ -6670,22 +7096,25 @@ PythonParamsDialog::PythonParamsDialog(QWidget * parent, ParamsTable * params, M
 
     hbox->addWidget(accept);
     hbox->addWidget(cancel);
-    
+
     connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
     connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-PythonParamsDialog::~PythonParamsDialog() {
+PythonParamsDialog::~PythonParamsDialog()
+{
     previous_size = size();
 }
 
-void PythonParamsDialog::polish() {
+void PythonParamsDialog::polish()
+{
     QDialog::polish();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 
-void PythonParamsDialog::accept() {
+void PythonParamsDialog::accept()
+{
     tbl->update_edform();
 
     QDialog::accept();
@@ -6706,8 +7135,8 @@ void OperationDialog::InitGui()
 
 void OperationDialog::FillGuiElements(BrowserNode * bn)
 {
-    if(dynamic_cast<OperationData*>(bn->get_data()))
-        FillGuiElements(dynamic_cast<OperationData*>(bn->get_data()));
+    if (dynamic_cast<OperationData *>(bn->get_data()))
+        FillGuiElements(dynamic_cast<OperationData *>(bn->get_data()));
 }
 
 void OperationDialog::FillGuiElements(OperationData * _oper)
@@ -6736,7 +7165,7 @@ void OperationDialog::FillGuiElements(OperationData * _oper)
     oldpythonbody = QString();
     currentNode = (BrowserNode *) _oper->get_browser_node();
     oper = _oper;
-    cl = ((ClassData *) ((BrowserClass *) _oper->browser_node->parent())->get_data());
+    cl = ((ClassData *)((BrowserClass *) _oper->browser_node->parent())->get_data());
     init_get_set();
     FillGeneric(oper);
     FillUmlTab(oper);
@@ -6755,10 +7184,9 @@ uint OperationDialog::TypeID()
 
 QSharedPointer<OperationDialog> OperationDialog::Instance(OperationData * o, DrawingLanguage l)
 {
-    if(instance.isNull())
-        instance = QSharedPointer<OperationDialog>(new OperationDialog(o,l));
-    else
-    {
+    if (instance.isNull())
+        instance = QSharedPointer<OperationDialog>(new OperationDialog(o, l));
+    else {
         instance->drawingLanguage = l;
         instance->FillGuiElements(o);
     }
@@ -6770,7 +7198,7 @@ void OperationDialog::InitPropertiesTab()
 {
     // USER : list key - value
 
-    Q3Grid *   grid = new Q3Grid(2, this);
+    Q3Grid  *  grid = new Q3Grid(2, this);
 
     grid->setMargin(5);
     grid->setSpacing(5);

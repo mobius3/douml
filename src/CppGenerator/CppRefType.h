@@ -37,10 +37,11 @@
 class QTextStream;
 class UmlArtifact;
 
-class CppRefType {
-  public:
+class CppRefType
+{
+public:
     enum Weight { Low, Medium, High, Strong };
-      
+
     static bool add(UmlClass *, Q3PtrList<CppRefType> &, bool incl, bool hight = FALSE);
     static bool add(const Q3CString &, Q3PtrList<CppRefType> &, bool incl);
     static bool add(const UmlTypeSpec & t, Q3PtrList<CppRefType> & l, bool incl);
@@ -48,20 +49,24 @@ class CppRefType {
     static void remove(const Q3CString &, Q3PtrList<CppRefType> & l);
     static void force_ref(UmlClass * cl, Q3PtrList<CppRefType> & l);
     static void compute(Q3PtrList<CppRefType> & dependencies,
-			const Q3CString & hdef, const Q3CString & srcdef,
-			Q3CString & h_incl,  Q3CString & decl, Q3CString & src_incl,
-			UmlArtifact * who);
-    
-  protected:
+                        const Q3CString & hdef, const Q3CString & srcdef,
+                        Q3CString & h_incl,  Q3CString & decl, Q3CString & src_incl,
+                        UmlArtifact * who);
+
+protected:
     UmlTypeSpec type;
     bool included;
     Weight weight;
-    
+
     CppRefType(UmlClass * cl, bool i, Weight w)
-      : included(i), weight(w) { type.type = cl; };
+        : included(i), weight(w) {
+        type.type = cl;
+    };
     CppRefType(const Q3CString & t, bool i, Weight w)
-      : included(i), weight(w) { type.explicit_type = t; };
-    
+        : included(i), weight(w) {
+        type.explicit_type = t;
+    };
+
 };
 
 #endif

@@ -35,14 +35,15 @@ class UmlPackage;
 // This class manages 'artifacts'
 // You can modify it as you want (except the constructor)
 
-class UmlArtifact : public UmlBaseArtifact {
-  private:
+class UmlArtifact : public UmlBaseArtifact
+{
+private:
     bool managed;
-    
-  public:
+
+public:
     UmlArtifact(void * id, const Q3CString & n)
-      : UmlBaseArtifact(id, n), managed(FALSE) {};
-    
+        : UmlBaseArtifact(id, n), managed(FALSE) {};
+
     virtual void roundtrip_cpp();
     virtual void roundtrip_java();
     virtual void roundtrip_php();

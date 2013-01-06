@@ -35,62 +35,65 @@ class RelationData;
 class DiagramItem;
 struct SlotRel;
 
-class ObjectLinkCanvas : public ArrowCanvas {
-  Q_OBJECT
-    
-  protected:
+class ObjectLinkCanvas : public ArrowCanvas
+{
+    Q_OBJECT
+
+protected:
     RelationData * data;
     LabelCanvas * role_a;
     LabelCanvas * role_b;
-    
-  public:
+
+public:
     ObjectLinkCanvas(UmlCanvas * canvas, DiagramItem * b, DiagramItem * e,
-		     UmlCode t, int id, float d_start, float d_end,
-		     RelationData * d = 0);
+                     UmlCode t, int id, float d_start, float d_end,
+                     RelationData * d = 0);
     virtual ~ObjectLinkCanvas();
-    
+
     virtual void delete_it();
     virtual void unconnect();
-    
+
     virtual void history_save(QBuffer & b) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-   
-    virtual void setVisible( bool yes);
+
+    virtual void setVisible(bool yes);
     virtual void moveBy(double dx, double dy);
     virtual void set_z(double z);
     virtual void select_associated();
-    
+
     virtual void update_pos();
     virtual ArrowPointCanvas * brk(const QPoint &);
     virtual ArrowCanvas * join(ArrowCanvas * other, ArrowPointCanvas * ap);
-    
+
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
-    static ObjectLinkCanvas * read(char * & st, UmlCanvas * canvas, char *);
-    
+    static ObjectLinkCanvas * read(char *& st, UmlCanvas * canvas, char *);
+
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual void remove(bool from_model);
     virtual void open();
-    virtual void menu(const QPoint&);
-    
+    virtual void menu(const QPoint &);
+
     void label_default_position() const;
     void role_a_default_position() const;
     void role_b_default_position() const;
-    
+
     bool reflexive() const;
     void check();
-    
+
     bool is(const SlotRel &, bool isa) const;
-    RelationData * get_rel() const { return data; }
-    
+    RelationData * get_rel() const {
+        return data;
+    }
+
     virtual bool represents(BrowserNode *);
-    
-  protected:
+
+protected:
     void internal_set_relation(RelationData * d);
     void set_relation(RelationData * d);
     void update(bool updatepos);
-    
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();	// the relation is deleted
 };

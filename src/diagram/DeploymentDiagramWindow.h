@@ -34,10 +34,11 @@ class QSpinBox;
 class DeploymentDiagramView;
 class BrowserDeploymentDiagram;
 
-class DeploymentDiagramWindow : public DiagramWindow {
-  Q_OBJECT
-    
-  protected:
+class DeploymentDiagramWindow : public DiagramWindow
+{
+    Q_OBJECT
+
+protected:
     DeploymentDiagramView * view;
     QToolButton * addPackage;
     QToolButton * addFragment;
@@ -53,16 +54,16 @@ class DeploymentDiagramWindow : public DiagramWindow {
     QToolButton * anchor;
     QToolButton * text;
     QToolButton * image;
-    
-  public:
+
+public:
     DeploymentDiagramWindow(const QString & s, BrowserDeploymentDiagram * b, int id = -1);
-virtual ~DeploymentDiagramWindow();
+    virtual ~DeploymentDiagramWindow();
 
     virtual DiagramView * get_view() const;
-    
+
     virtual void hit_button(UmlCode, QToolButton *);
-    
-  protected slots:
+
+protected slots:
     void hit_package();
     void hit_fragment();
     void hit_deploymentnode();

@@ -13,8 +13,9 @@ class UmlItem;
 // is a mother class of the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n) :  UmlBaseAttribute(id, n) {};
 
     static void init();
@@ -26,7 +27,7 @@ class UmlAttribute : public UmlBaseAttribute {
     virtual void solve(Q3CString idref);
 
 
-  protected:
+protected:
     //import the lower multiplicity starting by 'tk' inside 'where'
     void importMultiplicity(FileIn & in, Token & token, bool upper);
 

@@ -37,41 +37,50 @@
 class BrowserNode;
 class QLabel;
 
-class BrowserView : public Q3ListView {
-  Q_OBJECT
-    
-  protected:
+class BrowserView : public Q3ListView
+{
+    Q_OBJECT
+
+protected:
     QDir dir;
     Q3Dict<BrowserNode> nodes;
     QLabel * lbl;
     bool need_update;
     bool cant_update;
-    
-  public:
+
+public:
     BrowserView(QWidget * parent);
-virtual ~BrowserView();
-  
+    virtual ~BrowserView();
+
     void set_project(QDir dir);
     void close();
-    
+
     BrowserNode * get_project() const;
-    QDir & get_dir() { return dir; }
-    
+    QDir & get_dir() {
+        return dir;
+    }
+
     void add_node(BrowserNode *);
     BrowserNode * get_node(QString f) const;
-    
-    bool is_need_update() const { return need_update; }
-    bool is_cant_update() const { return cant_update; }
-    void set_readonly() { cant_update = TRUE; }
-    
+
+    bool is_need_update() const {
+        return need_update;
+    }
+    bool is_cant_update() const {
+        return cant_update;
+    }
+    void set_readonly() {
+        cant_update = TRUE;
+    }
+
     void synchronize();
-    
+
     static void update(const Q3PtrList<BrowserView> &);
-    
-  protected:
+
+protected:
     void update_it();
-    
-  protected slots:
+
+protected slots:
     void select(Q3ListViewItem * b);
 };
 

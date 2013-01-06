@@ -34,22 +34,23 @@ class SdMsgBaseCanvas;
 
 #define LOSTFOUND_SIZE 9
 
-class SdLostFoundMsgSupportCanvas : public SdMsgSupport {
-  private:
+class SdLostFoundMsgSupportCanvas : public SdMsgSupport
+{
+private:
     SdMsgBaseCanvas * msg;
-  
-  public:
+
+public:
     SdLostFoundMsgSupportCanvas(UmlCanvas * canvas, int x, int y, int id);
     virtual ~SdLostFoundMsgSupportCanvas();
-    
+
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL &, BooL & out_model) const;
     virtual void delete_it();
     virtual void change_scale();
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual bool alignable() const;
@@ -63,7 +64,7 @@ class SdLostFoundMsgSupportCanvas : public SdMsgSupport {
     virtual bool isaDuration() const;
     virtual bool isOverlappingDuration() const;
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
-    static SdLostFoundMsgSupportCanvas * read(char * & st, UmlCanvas * canvas, char * k);
+    static SdLostFoundMsgSupportCanvas * read(char *& st, UmlCanvas * canvas, char * k);
 };
 
 #endif

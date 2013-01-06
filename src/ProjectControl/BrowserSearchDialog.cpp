@@ -25,11 +25,11 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <q3combobox.h>
 #include <qpushbutton.h>
-#include <qlineedit.h> 
+#include <qlineedit.h>
 #include <qcheckbox.h>
-#include <q3groupbox.h> 
+#include <q3groupbox.h>
 //Added by qt3to4:
 #include <Q3GridLayout>
 #include <Q3HBoxLayout>
@@ -42,77 +42,81 @@ QString BrowserSearchDialog::saved_ed;
 bool BrowserSearchDialog::saved_case_sensitive;
 
 BrowserSearchDialog::BrowserSearchDialog(const QPoint & p)
-    : QDialog(0, "Browser search", TRUE) {
-  setCaption("Browser search");
-  move(p);
-  
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  
-  vbox->setMargin(5);
-  
-  Q3GridLayout * gl = new Q3GridLayout(vbox, 4, 2, 5/*space*/);
+    : QDialog(0, "Browser search", TRUE)
+{
+    setCaption("Browser search");
+    move(p);
 
-  ed = new QLineEdit(this);
-  ed->setText(saved_ed);
-  gl->addWidget(new QLabel("Containing", this), 1, 0, Qt::AlignLeft);
-  gl->addWidget(ed, 1, 1);
-  
-  Q3GroupBox * gb = new Q3GroupBox(2, Qt::Horizontal, this);
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
 
-  case_sensitive = new QCheckBox("case sensitive", gb);
-  case_sensitive->setChecked(saved_case_sensitive);
-  
-  gl->addWidget(gb, 2, 1);
+    vbox->setMargin(5);
 
-  gl->addWidget(new QLabel("Result", this), 3, 0, Qt::AlignLeft);
-  results = new Q3ComboBox(FALSE, this);
-  gl->addWidget(results, 3, 1);
+    Q3GridLayout * gl = new Q3GridLayout(vbox, 4, 2, 5/*space*/);
 
-  Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  QPushButton * search_b = new QPushButton("Search", this);
-  QPushButton * select_b = new QPushButton("Select", this);
-  QPushButton * close_b = new QPushButton("Close", this);
-  
-  search_b->setDefault(TRUE);
-  
-  hbox->addWidget(search_b);
-  hbox->addWidget(select_b);
-  hbox->addWidget(close_b);
-  
-  connect(search_b, SIGNAL(clicked()), this, SLOT(search()));
-  connect(select_b, SIGNAL(clicked()), this, SLOT(select()));
-  connect(close_b, SIGNAL(clicked()), this, SLOT(reject()));
-  
-  setMaximumHeight(sizeHint().height());
+    ed = new QLineEdit(this);
+    ed->setText(saved_ed);
+    gl->addWidget(new QLabel("Containing", this), 1, 0, Qt::AlignLeft);
+    gl->addWidget(ed, 1, 1);
+
+    Q3GroupBox * gb = new Q3GroupBox(2, Qt::Horizontal, this);
+
+    case_sensitive = new QCheckBox("case sensitive", gb);
+    case_sensitive->setChecked(saved_case_sensitive);
+
+    gl->addWidget(gb, 2, 1);
+
+    gl->addWidget(new QLabel("Result", this), 3, 0, Qt::AlignLeft);
+    results = new Q3ComboBox(FALSE, this);
+    gl->addWidget(results, 3, 1);
+
+    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    QPushButton * search_b = new QPushButton("Search", this);
+    QPushButton * select_b = new QPushButton("Select", this);
+    QPushButton * close_b = new QPushButton("Close", this);
+
+    search_b->setDefault(TRUE);
+
+    hbox->addWidget(search_b);
+    hbox->addWidget(select_b);
+    hbox->addWidget(close_b);
+
+    connect(search_b, SIGNAL(clicked()), this, SLOT(search()));
+    connect(select_b, SIGNAL(clicked()), this, SLOT(select()));
+    connect(close_b, SIGNAL(clicked()), this, SLOT(reject()));
+
+    setMaximumHeight(sizeHint().height());
 }
 
-BrowserSearchDialog::~BrowserSearchDialog() {
-  saved_ed = ed->text();
-  saved_case_sensitive = case_sensitive->isChecked();
+BrowserSearchDialog::~BrowserSearchDialog()
+{
+    saved_ed = ed->text();
+    saved_case_sensitive = case_sensitive->isChecked();
 }
 
-void BrowserSearchDialog::search() {
-  nodes.clear();
-  results->clear();
-  
-  nodes.search(BrowserView::get_project(), ed->text(),
-	       case_sensitive->isChecked());
-  nodes.sort();
-  
-  BrowserNode * bn;
-  
-  for (bn = nodes.first(); bn != 0; bn = nodes.next()) {
-    QString up = ((BrowserNode *) bn->parent())->get_path();
-    
-    results->insertItem((up.isEmpty())
-			? QString(bn->text(0))
-			: bn->text(0) + QString("   [") + up + "]");
-  }
+void BrowserSearchDialog::search()
+{
+    nodes.clear();
+    results->clear();
+
+    nodes.search(BrowserView::get_project(), ed->text(),
+                 case_sensitive->isChecked());
+    nodes.sort();
+
+    BrowserNode * bn;
+
+    for (bn = nodes.first(); bn != 0; bn = nodes.next()) {
+        QString up = ((BrowserNode *) bn->parent())->get_path();
+
+        results->insertItem((up.isEmpty())
+                            ? QString(bn->text(0))
+                            : bn->text(0) + QString("   [") + up + "]");
+    }
 }
 
-void BrowserSearchDialog::select() {
-  if (results->count() != 0)
-    BrowserView::select(nodes.at(results->currentItem()));
+void BrowserSearchDialog::select()
+{
+    if (results->count() != 0)
+        BrowserView::select(nodes.at(results->currentItem()));
 }
 

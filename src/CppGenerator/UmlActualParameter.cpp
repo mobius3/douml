@@ -31,20 +31,21 @@
 #include "UmlActualParameter.h"
 #include "UmlClass.h"
 
-bool UmlActualParameter::generate(QTextStream & f_h, BooL & need_space) const {
-  Q3CString s = value().toString();
-  
-  if (s.isEmpty()) {
-    if (rank() == 0)
-      f_h << '<';
-    
-    need_space = FALSE;
-    
-    return FALSE;
-  }
-  
-  f_h << ((rank() == 0) ? "<" : ", ");
-  UmlClass::write(f_h, value(), TRUE, &need_space);
-  
-  return TRUE;
+bool UmlActualParameter::generate(QTextStream & f_h, BooL & need_space) const
+{
+    Q3CString s = value().toString();
+
+    if (s.isEmpty()) {
+        if (rank() == 0)
+            f_h << '<';
+
+        need_space = FALSE;
+
+        return FALSE;
+    }
+
+    f_h << ((rank() == 0) ? "<" : ", ");
+    UmlClass::write(f_h, value(), TRUE, &need_space);
+
+    return TRUE;
 }

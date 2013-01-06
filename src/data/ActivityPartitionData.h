@@ -36,32 +36,39 @@ class QTextStream;
 class BrowserActivityPartition;
 class ActivityPartitionDialog;
 
-class ActivityPartitionData : public SimpleData {
-  friend class ActivityPartitionDialog;
-    
-  protected:
+class ActivityPartitionData : public SimpleData
+{
+    friend class ActivityPartitionDialog;
+
+protected:
     bool is_dimension;
     bool is_external;
     BrowserNode * represents;
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
-    
-  public:
+                              const QString & comment);
+
+public:
     ActivityPartitionData();
     ActivityPartitionData(ActivityPartitionData * model, BrowserNode * br);
     virtual ~ActivityPartitionData();
-    
-    bool get_is_dimension() const { return is_dimension; }
-    bool get_is_external() const { return is_external; }
-    BrowserNode * get_represents() const { return represents; }
-    
+
+    bool get_is_dimension() const {
+        return is_dimension;
+    }
+    bool get_is_external() const {
+        return is_external;
+    }
+    BrowserNode * get_represents() const {
+        return represents;
+    }
+
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * & st, char * & k);
+    void read(char *& st, char *& k);
     void post_load();
 };
-  
+
 #endif

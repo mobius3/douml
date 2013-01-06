@@ -13,8 +13,9 @@ class QTextStream;
 //	class Cl1 : public Cl2<T> ...
 //
 // You can modify it as you want (except the constructor)
-class UmlActualParameter : public UmlBaseActualParameter {
-  public:
+class UmlActualParameter : public UmlBaseActualParameter
+{
+public:
     UmlActualParameter() {};
 
     void generate(QTextStream & f) const;

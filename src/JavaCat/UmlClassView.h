@@ -33,11 +33,12 @@
 
 class ClassContainer;
 
-class UmlClassView : public UmlBaseClassView {
-  public:
+class UmlClassView : public UmlBaseClassView
+{
+public:
     UmlClassView(void * id, const Q3CString & n)
-      : UmlBaseClassView(id, n) {};
-    
+        : UmlBaseClassView(id, n) {};
+
 #ifdef ROUNDTRIP
     virtual void upload(ClassContainer *);
     virtual bool set_roundtrip_expected();

@@ -27,7 +27,7 @@
 #include "Logging/QsLog.h"
 #include "Factories/EdgeMenuFactory.h"
 
-unsigned int ClosestEdge(QWidget* widget, QPoint position)
+unsigned int ClosestEdge(QWidget * widget, QPoint position)
 {
     QPoint widgetGlobalOrigin = widget->mapToGlobal(QPoint());
     QSize widgetSize = widget->size();
@@ -45,11 +45,11 @@ unsigned int ClosestEdge(QWidget* widget, QPoint position)
     // origial minDistance should be sufficient
     // so that it cannot be less than what can actually happen
     int minDistance = 200000;
-    minDistance = qMin(distances[0],distances[1]);
-    minDistance = qMin(minDistance,distances[2]);
-    minDistance = qMin(minDistance,distances[3]);
+    minDistance = qMin(distances[0], distances[1]);
+    minDistance = qMin(minDistance, distances[2]);
+    minDistance = qMin(minDistance, distances[3]);
 
-    auto it = qFind(distances.begin(),distances.end(), minDistance);
+    auto it = qFind(distances.begin(), distances.end(), minDistance);
 
     return it - distances.begin();
 }
@@ -60,7 +60,7 @@ EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal ,
     currentNode = 0;
     isConnectedToToolBar = false;
     An<EdgeMenuFactory> factory;
-    QObject::connect(this, SIGNAL(edgeMenuRequested(uint)),factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
+    QObject::connect(this, SIGNAL(edgeMenuRequested(uint)), factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
     //setMouseTracking(true);
     //this->setWindowFlags(Qt::FramelessWindowHint );
     //installEventFilter(this);
@@ -84,24 +84,26 @@ void EdgeMenuDialog::BreakConnectionToToolBar()
     isConnectedToToolBar = false;
 }
 
-void EdgeMenuDialog::leaveEvent(QEvent *event)
+void EdgeMenuDialog::leaveEvent(QEvent * event)
 {
     QPoint cursorPosition = mapFromGlobal(QCursor::pos());
     int yFixup = frameGeometry().height() - height();
     bool isWithinX = cursorPosition.x() > 0 && cursorPosition.x() < size().width();
     bool isWithinY = cursorPosition.y() > 0 && cursorPosition.y() < size().height();
     bool isOutside = !isWithinX || !isWithinY;
-    if(isOutside)
+
+    if (isOutside)
         emit edgeMenuRequested(this->TypeID());
 }
 
-void EdgeMenuDialog::enterEvent(QEvent *event)
+void EdgeMenuDialog::enterEvent(QEvent * event)
 {
     QPoint cursorPosition = mapFromGlobal(QCursor::pos());
     bool isWithinX = cursorPosition.x() > 0 && cursorPosition.x() < size().width();
     bool isWithinY = cursorPosition.y() > 0 && cursorPosition.y() < size().height();
     bool isOutside = !isWithinX || !isWithinY;
-    if(isOutside)
+
+    if (isOutside)
         emit edgeMenuRequested(this->TypeID());
 }
 
@@ -115,7 +117,7 @@ void EdgeMenuDialog::focusOutEvent(QFocusEvent *)
     emit lostFocus();
 }
 
-void EdgeMenuDialog::showEvent(QShowEvent *event)
+void EdgeMenuDialog::showEvent(QShowEvent * event)
 {
     An<EdgeMenuFactory> factory;
     this->move(QCursor::pos().x() + 15, QCursor::pos().y());
@@ -123,7 +125,7 @@ void EdgeMenuDialog::showEvent(QShowEvent *event)
     this->setFocus();
 }
 
-void EdgeMenuDialog::wheelEvent(QWheelEvent *event)
+void EdgeMenuDialog::wheelEvent(QWheelEvent * event)
 {
 //    currentTab += event->delta()/event->delta();
 //    if(currentTab > tabBar()->count())
@@ -135,8 +137,8 @@ void EdgeMenuDialog::wheelEvent(QWheelEvent *event)
 
 void EdgeMenuDialog::RegisterTab(QString name, QWidget * widget)
 {
-    if(!tabs.contains(name))
-        tabs.insert(name,widget);
+    if (!tabs.contains(name))
+        tabs.insert(name, widget);
 }
 
 void EdgeMenuDialog::HideTab(QString name)
@@ -146,19 +148,17 @@ void EdgeMenuDialog::HideTab(QString name)
 
 void EdgeMenuDialog::ShowTab(QString name)
 {
-    addTab(tabs[name],name);
+    addTab(tabs[name], name);
 }
 
 void EdgeMenuDialog::SetDialogMode(bool _isWritable)
 {
 
-    if (isWritable)
-    {
+    if (isWritable) {
         setOkButton(QObject::tr("OK"));
         setCancelButton(QObject::tr("Cancel"));
     }
-    else
-    {
+    else {
         setOkButton(QString());
         setCancelButton(QObject::tr("Close"));
     }
@@ -168,32 +168,36 @@ void EdgeMenuDialog::SetDialogMode(bool _isWritable)
 void EdgeMenuDialog::OnPickNextSibling()
 {
     bool continueSearch = true;
-    BrowserNode* nextNode = 0;
-    BrowserNode* originalNode = GetCurrentNode();
-    BrowserNode* currentNode = originalNode;
+    BrowserNode * nextNode = 0;
+    BrowserNode * originalNode = GetCurrentNode();
+    BrowserNode * currentNode = originalNode;
 
-    while(continueSearch)
-    {
-        nextNode = dynamic_cast<BrowserNode*>(currentNode->itemAbove());
+    while (continueSearch) {
+        nextNode = dynamic_cast<BrowserNode *>(currentNode->itemAbove());
         //QLOG_INFO() << "CurrentNode is: "<< currentNode->get_name();
 
         //QLOG_INFO() << "NEXT: " << nextNode->get_name() << " " << nextNode->depth();
-        if(!nextNode)
+        if (!nextNode)
             break;
+
         //QLOG_INFO() << "NextNode is: "<< nextNode->get_name();
         bool sameLevel = originalNode->depth() == nextNode->depth();
 
         bool sameType = originalNode->get_stype() == nextNode->get_stype();
+
         //QLOG_INFO() << originalNode->get_stype();
         //QLOG_INFO() << nextNode->get_stype();
 //        QLOG_INFO() << "NEXT: " << "Origin level : " << originalNode->depth();
 //        QLOG_INFO() << "NEXT: " << "Current level : " << nextNode->depth();
-        if(sameLevel && sameType)
+        if (sameLevel && sameType)
             continueSearch = false;
+
         currentNode = nextNode;
     }
-    if(nextNode == 0)
+
+    if (nextNode == 0)
         return;
+
     SaveData();
     FillGuiElements(nextNode);
 }
@@ -201,17 +205,19 @@ void EdgeMenuDialog::OnPickNextSibling()
 void EdgeMenuDialog::OnPickPreviousSibling()
 {
     bool continueSearch = true;
-    BrowserNode* previousNode = 0;
-    BrowserNode* originalNode = GetCurrentNode();
+    BrowserNode * previousNode = 0;
+    BrowserNode * originalNode = GetCurrentNode();
     int originalDepth = originalNode->depth();
-    BrowserNode* currentNode = originalNode;
-    while(continueSearch)
-    {
+    BrowserNode * currentNode = originalNode;
+
+    while (continueSearch) {
         //QLOG_INFO() << "CurrentNode is: " << currentNode->get_name();
-        previousNode = dynamic_cast<BrowserNode*>(currentNode->itemBelow());
+        previousNode = dynamic_cast<BrowserNode *>(currentNode->itemBelow());
+
         //QLOG_INFO() << "Nodename is: " << previousNode->get_name() << " " << previousNode->depth();
-        if(!previousNode)
+        if (!previousNode)
             break;
+
         //QLOG_INFO() << "Previous Node is: "<< previousNode->get_name();
         int previousDepth = previousNode->depth();
         bool sameType = originalNode->get_stype() == previousNode->get_stype();
@@ -219,12 +225,15 @@ void EdgeMenuDialog::OnPickPreviousSibling()
         //QLOG_INFO() << "PREVIOUS: " << "Current level : " << previousDepth;
         bool sameLevel = originalDepth == previousDepth;
 
-        if(sameLevel && sameType)
+        if (sameLevel && sameType)
             continueSearch = false;
+
         currentNode = previousNode;
     }
-    if(previousNode == 0)
+
+    if (previousNode == 0)
         return;
+
     SaveData();
     FillGuiElements(previousNode);
 }
@@ -241,9 +250,10 @@ void EdgeMenuDialog::OnInitiateResize(QPoint origin)
 
 void EdgeMenuDialog::OnNewCoordinatesReceived(QPoint newPoint)
 {
-    if(modificationMode == wmm_drag)
+    if (modificationMode == wmm_drag)
         MoveThis(modificationOrigin, newPoint);
-    if(modificationMode == wmm_resize)
+
+    if (modificationMode == wmm_resize)
         ResizeThis(modificationOrigin, newPoint);
 }
 
@@ -307,8 +317,8 @@ void EdgeMenuDialog::IntitiateMove(QPoint origin)
     modificationOrigin = origin;
     dialogOrigin = mapToGlobal(QPoint(
                                    (frameGeometry().width() - width()) / 2,
-                                   -1*(frameGeometry().height() - height())
-                                   ));
+                                   -1 * (frameGeometry().height() - height())
+                               ));
     modificationMode = wmm_drag;
 }
 
@@ -323,13 +333,14 @@ void EdgeMenuDialog::InitiateResize(QPoint origin)
 void EdgeMenuDialog::ResizeThis(QPoint origin, QPoint newPoint)
 {
     int newWidth;
-    if(origin.x() > newPoint.x())
-    {
+
+    if (origin.x() > newPoint.x()) {
         newWidth = originalSize.width() + (origin.x() - newPoint.x());
-        this->move(origin.x()-1*(origin.x() - newPoint.x()), origin.y());
+        this->move(origin.x() - 1 * (origin.x() - newPoint.x()), origin.y());
     }
     else
         newWidth = originalSize.width() + (newPoint.x() - origin.x());
+
     int newHeight = originalSize.height() + (newPoint.y() - origin.y());
     this->resize(newWidth, newHeight);
 }
@@ -344,9 +355,12 @@ void EdgeMenuDialog::MoveThis(QPoint origin, QPoint newPoint)
 void EdgeMenuDialog::ChangeTab(int delta)
 {
     currentTab += delta;
-    if(currentTab > tabBar()->count())
+
+    if (currentTab > tabBar()->count())
         currentTab = 0;
-    if(currentTab < 0)
+
+    if (currentTab < 0)
         currentTab = tabBar()->count() - 1;
+
     tabBar()->setCurrentIndex(currentTab);
 }

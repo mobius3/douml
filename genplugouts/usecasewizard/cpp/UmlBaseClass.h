@@ -21,9 +21,10 @@ class UmlComponent;
 class UmlPackage;
 
 //  Manage the classes
-class UmlBaseClass : public UmlClassMember {
-  public:
-    // returns a new class named 's' created under 'parent' 
+class UmlBaseClass : public UmlClassMember
+{
+public:
+    // returns a new class named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
     // invalid, 'parent' cannot contain it etc ...) return 0 in C++
@@ -47,7 +48,7 @@ class UmlBaseClass : public UmlClassMember {
     const UmlTypeSpec & baseType();
 
     // to set the type on which the class (in fact a typedef) is based
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java, does not check that the class is (already) a typedef
     bool set_BaseType(const UmlTypeSpec & t);
 
@@ -64,14 +65,14 @@ class UmlBaseClass : public UmlClassMember {
     //
     //On error return FALSE in C++, produce a RuntimeException in Java,
     //does not check that the class is (already) a typedef
-    
+
     bool addFormal(unsigned int rank, const UmlFormalParameter & formal);
 
     // replace the formal at the given rank (0...)
     //
     // On error return FALSE in C++, produce a RuntimeException in Java,
     // does not check that the class is (already) a typedef
-    
+
     bool replaceFormal(unsigned int rank, const UmlFormalParameter & formal);
 
     // returns (a copy of) the actuals list
@@ -96,7 +97,7 @@ class UmlBaseClass : public UmlClassMember {
     // setAssociatedClasses()
     UmlArtifact * associatedArtifact();
 
-    // returns the optional associated component realizing or 
+    // returns the optional associated component realizing or
     // providing the class. to set it refer to the UmlBaseComponent's
     // operation setAssociatedClasses()
     UmlComponent * associatedComponent();
@@ -109,7 +110,7 @@ class UmlBaseClass : public UmlClassMember {
     bool isCppExternal();
 
     // set if the class is external
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppExternal(bool y);
 #endif
@@ -121,7 +122,7 @@ class UmlBaseClass : public UmlClassMember {
     bool isJavaExternal();
 
     // set if the class is external
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaExternal(bool y);
 
@@ -129,15 +130,15 @@ class UmlBaseClass : public UmlClassMember {
     bool isJavaPublic();
 
     // set if the class is public
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaPublic(bool y);
 
-    // returns TRUE is the class is final   
+    // returns TRUE is the class is final
     bool isJavaFinal();
 
     // set if the class is final
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaFinal(bool y);
 #endif
@@ -180,23 +181,23 @@ class UmlBaseClass : public UmlClassMember {
 #endif
 
     //returns the class having the name given in argument in case it
-    //exist, else 0/null. In case the package is specified (not 0/null), 
+    //exist, else 0/null. In case the package is specified (not 0/null),
     //the returned class will be defined in a sub-level of the package.
-    
+
     static UmlClass * get(const Q3CString & n, const UmlPackage * p);
 
     // to unload the object to free memory, it will be reloaded automatically
-    // if needed. Recursively done for the sub items if 'rec' is TRUE. 
+    // if needed. Recursively done for the sub items if 'rec' is TRUE.
     //
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
     // you will have to call Children() to re-access to them
     virtual void unload(bool rec = FALSE, bool del = FALSE);
 
-  friend class UmlBaseRelation;
-  friend class UmlBaseArtifact;
+    friend class UmlBaseRelation;
+    friend class UmlBaseArtifact;
 
-  private:
+private:
     static Q3Dict<UmlClass> _classes;
 
     bool _abstract;
@@ -220,7 +221,7 @@ class UmlBaseClass : public UmlClassMember {
 
     bool _idl_custom : 1;
 #endif
-    
+
 
     UmlTypeSpec _base_type;
 
@@ -232,34 +233,34 @@ class UmlBaseClass : public UmlClassMember {
 #endif
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseClass(void * id, const Q3CString & n);
 
     //internal, do NOT use it
-    
+
     virtual void read_uml_();
 
 #ifdef WITHCPP
     //internal, do NOT use it
-    
+
     virtual void read_cpp_();
 #endif
 
 #ifdef WITHJAVA
     //internal, do NOT use it
-    
+
     virtual void read_java_();
 #endif
 
 #ifdef WITHIDL
     //internal, do NOT use it
-    
+
     virtual void read_idl_();
 #endif
 
     //internal, do NOT use it
-    
+
     void reread_if_needed_();
 
 };

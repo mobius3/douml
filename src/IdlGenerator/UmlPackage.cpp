@@ -33,108 +33,113 @@
 #include "util.h"
 
 UmlPackage::UmlPackage(void * id, const Q3CString & n)
-    : UmlBasePackage(id, n) {
-  read = FALSE;
+    : UmlBasePackage(id, n)
+{
+    read = FALSE;
 }
 
 static void create_directory(Q3CString s)
 {
-  int index = 0;
-  QChar sep = QDir::separator();
-  
-  if (sep != '/') {
-    while ((index = s.find(sep, index)) != -1)
-      s.replace(index++, 1, "/");
-  }
-  
-  s = QDir::cleanDirPath(s) + "/";
-  index = s.find("/");
-  
-  int index2;
-  
-  while ((index2 = s.find("/", index + 1)) != -1) {
-    Q3CString s2 = s.left(index2);
-    QDir sd(s2);
-    
-    if (!sd.exists()) {
-      if (!sd.mkdir(s2)) {
-	UmlCom::trace(Q3CString("<font color=\"red\"><b> cannot create directory <i>")
-		      + s2 + "</i></b></font><br>");
-	UmlCom::bye(n_errors() + 1);
-	UmlCom::fatal_error("UmlPackage::file_path");
-      }
+    int index = 0;
+    QChar sep = QDir::separator();
+
+    if (sep != '/') {
+        while ((index = s.find(sep, index)) != -1)
+            s.replace(index++, 1, "/");
     }
-    index = index2;
-  }
+
+    s = QDir::cleanDirPath(s) + "/";
+    index = s.find("/");
+
+    int index2;
+
+    while ((index2 = s.find("/", index + 1)) != -1) {
+        Q3CString s2 = s.left(index2);
+        QDir sd(s2);
+
+        if (!sd.exists()) {
+            if (!sd.mkdir(s2)) {
+                UmlCom::trace(Q3CString("<font color=\"red\"><b> cannot create directory <i>")
+                              + s2 + "</i></b></font><br>");
+                UmlCom::bye(n_errors() + 1);
+                UmlCom::fatal_error("UmlPackage::file_path");
+            }
+        }
+
+        index = index2;
+    }
 }
 
 static bool RootDirRead;
 static Q3CString RootDir;
 
-Q3CString UmlPackage::path(const Q3CString & f) {
-  if (!read) {
-    dir = idlDir();
-    
-    if (! RootDirRead) {
-      RootDirRead = TRUE;
-      RootDir = IdlSettings::rootDir();
+Q3CString UmlPackage::path(const Q3CString & f)
+{
+    if (!read) {
+        dir = idlDir();
 
-      if (!RootDir.isEmpty() && // empty -> error
-	  QDir::isRelativePath(RootDir)) {
-	QFileInfo f(getProject()->supportFile());
-	QDir d(f.dirPath());
+        if (! RootDirRead) {
+            RootDirRead = TRUE;
+            RootDir = IdlSettings::rootDir();
 
-	RootDir = d.filePath(RootDir);
-      }
+            if (!RootDir.isEmpty() && // empty -> error
+                QDir::isRelativePath(RootDir)) {
+                QFileInfo f(getProject()->supportFile());
+                QDir d(f.dirPath());
+
+                RootDir = d.filePath(RootDir);
+            }
+        }
+
+        QDir d_root(RootDir);
+
+        if (dir.isEmpty())
+            dir = RootDir;
+        else if (QDir::isRelativePath(dir))
+            dir = d_root.filePath(dir);
+
+        if (dir.isEmpty()) {
+            UmlCom::trace(Q3CString("<font color=\"red\"><b><b> The generation directory "
+                                    "must be specified for the package<i> ") + name()
+                          + "</i>, edit the <i> generation settings</i> (tab 'directory') "
+                          "or edit the package (tab 'Idl')</b></font><br>");
+            UmlCom::bye(n_errors() + 1);
+            UmlCom::fatal_error("UmlPackage::file_path");
+        }
+
+        if (QDir::isRelativePath(dir)) {
+            UmlCom::trace(Q3CString("<font color=\"red\"><b><i>")
+                          + name() + "</i>'s source path <i>(" + dir
+                          + "</i>) is not absolute, edit the <i> generation settings</i> "
+                          "(tab 'directory'), or edit the package (tab 'Idl')</b></font><br>");
+            UmlCom::bye(n_errors() + 1);
+            UmlCom::fatal_error("UmlPackage::file_path");
+        }
+
+        read = TRUE;
     }
 
-    QDir d_root(RootDir);
-    
-    if (dir.isEmpty())
-      dir = RootDir;
-    else if (QDir::isRelativePath(dir))
-      dir = d_root.filePath(dir);
+    QDir d(dir);
 
-    if (dir.isEmpty()) {
-      UmlCom::trace(Q3CString("<font color=\"red\"><b><b> The generation directory "
-			    "must be specified for the package<i> ") + name()
-			    + "</i>, edit the <i> generation settings</i> (tab 'directory') "
-			    "or edit the package (tab 'Idl')</b></font><br>");
-      UmlCom::bye(n_errors() + 1);
-      UmlCom::fatal_error("UmlPackage::file_path");
-    }
-    
-    if (QDir::isRelativePath(dir)) {
-      UmlCom::trace(Q3CString("<font color=\"red\"><b><i>")
-		    + name() + "</i>'s source path <i>(" + dir
-		    + "</i>) is not absolute, edit the <i> generation settings</i> "
-		    "(tab 'directory'), or edit the package (tab 'Idl')</b></font><br>");
-      UmlCom::bye(n_errors() + 1);
-      UmlCom::fatal_error("UmlPackage::file_path");
-    }
+    if (! d.exists())
+        create_directory(dir);	// don't return on error
 
-    read = TRUE;
-  }
-  
-  QDir d(dir);
-  
-  if (! d.exists())
-    create_directory(dir);	// don't return on error
-  
-  return Q3CString(d.filePath(f).toAscii().constData()) + Q3CString(".") + 
-    IdlSettings::sourceExtension();
+    return Q3CString(d.filePath(f).toAscii().constData()) + Q3CString(".") +
+           IdlSettings::sourceExtension();
 }
 
-Q3CString UmlPackage::text_path(const Q3CString & f) {
-  Q3CString r = path(f);
-  
-  return r.left(r.length() - 1 - IdlSettings::sourceExtension().length());
+Q3CString UmlPackage::text_path(const Q3CString & f)
+{
+    Q3CString r = path(f);
+
+    return r.left(r.length() - 1 - IdlSettings::sourceExtension().length());
 }
 
-void UmlPackage::generate() {
-  Q3PtrVector<UmlItem> ch = UmlItem::children();
-  
-  for (unsigned index = 0; index != ch.size(); index += 1)
-    ch[index]->generate();
+void UmlPackage::generate()
+{
+    Q3PtrVector<UmlItem> ch = UmlItem::children();
+
+    for (unsigned index = 0; index != ch.size(); index += 1)
+        ch[index]->generate();
 }
 

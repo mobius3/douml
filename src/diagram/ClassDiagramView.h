@@ -40,28 +40,29 @@ class DiagramItem;
 class UmlCanvas;
 class BrowserNode;
 
-class ClassDiagramView : public DiagramView {
-  public:
+class ClassDiagramView : public DiagramView
+{
+public:
     ClassDiagramView(QWidget * parent, UmlCanvas * canvas, int id);
 
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual void add_related_elements(DiagramItem *, QString what,
-				      bool inh, bool assoc);
+                                      bool inh, bool assoc);
     virtual void read(char *, char * k);
     virtual void save(QTextStream & st, QString & warning, bool copy) const;
-    
-  private:
+
+private:
     ClassDiagramWindow * window() {
-      return (ClassDiagramWindow *) parent();
+        return (ClassDiagramWindow *) parent();
     };
-    void add_classview_classes(BrowserNode *, const QPoint& p,
-			       Q3PtrDict<DiagramItem> & drawn);
+    void add_classview_classes(BrowserNode *, const QPoint & p,
+                               Q3PtrDict<DiagramItem> & drawn);
     void add_classview_classes(BrowserNode *, Q3PtrDict<DiagramItem> & drawn,
-			       int & x, int & y, int & future_y);
-    void add_marked_elements(const QPoint& p,
-			     Q3PtrDict<DiagramItem> & drawn);
-  
-  protected:
+                               int & x, int & y, int & future_y);
+    void add_marked_elements(const QPoint & p,
+                             Q3PtrDict<DiagramItem> & drawn);
+
+protected:
     virtual void contentsMousePressEvent(QMouseEvent *);
     virtual void dragEnterEvent(QDragEnterEvent *);
     virtual void dropEvent(QDropEvent *);

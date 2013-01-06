@@ -7,14 +7,15 @@
 
 class FileOut;
 
-class UmlPinParameter : public UmlBasePinParameter {
-  public:
+class UmlPinParameter : public UmlBasePinParameter
+{
+public:
     virtual void solve_output_flows();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlPinParameter(void * id, const Q3CString & s) : UmlBasePinParameter(id, s) {
+    UmlPinParameter(void * id, const Q3CString & s) : UmlBasePinParameter(id, s) {
     }
 
     void write_dir(FileOut & out);

@@ -32,27 +32,37 @@
 #include "ObjectData.h"
 
 struct PinParamData : public ObjectData {
-  bool unique : 1;
-  bool exception : 1;	// exclusive with stream
-  bool stream : 1;
-  int dummy : 4;
-  UmlParamDirection dir : 8;
-  UmlParamEffect effect : 8;
+    bool unique : 1;
+    bool exception : 1;	// exclusive with stream
+    bool stream : 1;
+    int dummy : 4;
+    UmlParamDirection dir : 8;
+    UmlParamEffect effect : 8;
 
-  PinParamData();
-  PinParamData(PinParamData * model);
-  
-  UmlParamDirection get_dir() const { return dir; };
-  UmlParamEffect get_effect() const { return effect; };
-  bool get_is_unique() const { return unique; }
-  bool get_is_exception() const { return exception; }
-  bool get_is_stream() const { return stream; }
-  
-  void send_uml_def(ToolCom * com);
-  bool tool_cmd(ToolCom * com, const char * args, BooL & ack);
-  
-  void save(QTextStream &, QString & warning) const;
-  void read(char * &, char * &);
+    PinParamData();
+    PinParamData(PinParamData * model);
+
+    UmlParamDirection get_dir() const {
+        return dir;
+    };
+    UmlParamEffect get_effect() const {
+        return effect;
+    };
+    bool get_is_unique() const {
+        return unique;
+    }
+    bool get_is_exception() const {
+        return exception;
+    }
+    bool get_is_stream() const {
+        return stream;
+    }
+
+    void send_uml_def(ToolCom * com);
+    bool tool_cmd(ToolCom * com, const char * args, BooL & ack);
+
+    void save(QTextStream &, QString & warning) const;
+    void read(char *& , char *&);
 };
 
 #endif

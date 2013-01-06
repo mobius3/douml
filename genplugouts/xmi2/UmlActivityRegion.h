@@ -7,16 +7,17 @@
 #include "FlowContainer.h"
 #include <q3cstring.h>
 
-class UmlActivityRegion : public UmlBaseActivityRegion, public UmlActivityItem, public FlowContainer {
-  protected:
+class UmlActivityRegion : public UmlBaseActivityRegion, public UmlActivityItem, public FlowContainer
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityRegion(void * id, const Q3CString & s) : UmlBaseActivityRegion(id, s) {
+    UmlActivityRegion(void * id, const Q3CString & s) : UmlBaseActivityRegion(id, s) {
     }
 
 
-  public:
+public:
     //goes among tree to memorize incoming flow
-    
+
     virtual void memo_incoming_flow();
 
 };

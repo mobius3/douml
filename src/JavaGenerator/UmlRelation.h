@@ -35,26 +35,27 @@
 
 class QTextStream;
 
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n)
-      : UmlBaseRelation(id, n) {
+        : UmlBaseRelation(id, n) {
     };
-  
+
     virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent);
+                          Q3CString indent);
     virtual void generate_enum_pattern_item(QTextStream &, int &,
-					    const Q3CString &, Q3CString);
+                                            const Q3CString &, Q3CString);
     virtual void generate_enum_pattern_case(QTextStream &, Q3CString);
     virtual void generate_enum_member(QTextStream &, Q3CString);
     virtual void generate_import(QTextStream & f, const Q3CString & indent);
-    
+
     void generate_extends(const char *& sep, QTextStream & f,
-			  const Q3ValueList<UmlActualParameter> & actuals,
-			  const Q3CString & stereotype);
+                          const Q3ValueList<UmlActualParameter> & actuals,
+                          const Q3CString & stereotype);
     void generate_implements(const char *& sep, QTextStream & f,
-			     const Q3ValueList<UmlActualParameter> & actuals,
-			     const Q3CString & stereotype);
+                             const Q3ValueList<UmlActualParameter> & actuals,
+                             const Q3CString & stereotype);
 };
 
 #endif

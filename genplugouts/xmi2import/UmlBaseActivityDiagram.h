@@ -9,8 +9,9 @@
 class UmlActivityDiagram;
 class UmlItem;
 
-class UmlBaseActivityDiagram : public UmlDiagram {
-  public:
+class UmlBaseActivityDiagram : public UmlDiagram
+{
+public:
     //  returns a new activity diagram named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -22,9 +23,9 @@ class UmlBaseActivityDiagram : public UmlDiagram {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityDiagram(void * id, const Q3CString & s) : UmlDiagram(id, s) {
+    UmlBaseActivityDiagram(void * id, const Q3CString & s) : UmlDiagram(id, s) {
     }
 
 };

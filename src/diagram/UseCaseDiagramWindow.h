@@ -34,10 +34,11 @@ class QSpinBox;
 class UseCaseDiagramView;
 class BrowserUseCaseDiagram;
 
-class UseCaseDiagramWindow : public DiagramWindow {
-  Q_OBJECT
-    
-  protected:
+class UseCaseDiagramWindow : public DiagramWindow
+{
+    Q_OBJECT
+
+protected:
     UseCaseDiagramView * view;
     QToolButton * addClass;
     QToolButton * addUseCase;
@@ -52,16 +53,16 @@ class UseCaseDiagramWindow : public DiagramWindow {
     QToolButton * anchor;
     QToolButton * text;
     QToolButton * image;
-  
-  public:
+
+public:
     UseCaseDiagramWindow(const QString & s, BrowserUseCaseDiagram * b, int id = -1);
-virtual ~UseCaseDiagramWindow();
+    virtual ~UseCaseDiagramWindow();
 
     virtual DiagramView * get_view() const;
-    
+
     virtual void hit_button(UmlCode, QToolButton *);
-    
-  protected slots:
+
+protected slots:
     void hit_class();
     void hit_usecase();
     void hit_package();

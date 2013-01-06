@@ -36,10 +36,11 @@ class ClassDiagramView;
 class BrowserClassDiagram;
 
 /* This is the window with the class diagram */
-class ClassDiagramWindow : public DiagramWindow {
-  Q_OBJECT
-    
-  protected:
+class ClassDiagramWindow : public DiagramWindow
+{
+    Q_OBJECT
+
+protected:
     ClassDiagramView * view;
     QToolButton * addClass;
     QToolButton * addPackage;
@@ -57,16 +58,16 @@ class ClassDiagramWindow : public DiagramWindow {
     QToolButton * anchor;
     QToolButton * text;
     QToolButton * image;
-    
-  public:
+
+public:
     ClassDiagramWindow(const QString & s, BrowserClassDiagram *, int id = -1);
-virtual ~ClassDiagramWindow();
+    virtual ~ClassDiagramWindow();
 
     virtual DiagramView * get_view() const;
-    
+
     virtual void hit_button(UmlCode, QToolButton *);
 
-  protected slots:
+protected slots:
     void hit_class();
     void hit_package();
     void hit_fragment();

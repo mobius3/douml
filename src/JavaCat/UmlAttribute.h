@@ -33,28 +33,29 @@
 
 class Class;
 
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n)
-      :  UmlBaseAttribute(id, n) {};
-  
+        :  UmlBaseAttribute(id, n) {};
+
     static bool new_one(Class * container, const Q3CString & name,
-			UmlTypeSpec typespec, aVisibility visibility,
-			bool staticp, bool finalp, bool transientp,
-			bool volatilep, const Q3CString & array,
-			const Q3CString & value, Q3CString comment,
-			Q3CString description, Q3CString annotation
+                        UmlTypeSpec typespec, aVisibility visibility,
+                        bool staticp, bool finalp, bool transientp,
+                        bool volatilep, const Q3CString & array,
+                        const Q3CString & value, Q3CString comment,
+                        Q3CString description, Q3CString annotation
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			);
-    
+                       );
+
     static bool manage_enum_item(Q3CString s, UmlClass * cl
 #ifdef ROUNDTRIP
-				 , bool roundtrip,
-				 Q3PtrList<UmlItem> & expected_order
+                                 , bool roundtrip,
+                                 Q3PtrList<UmlItem> & expected_order
 #endif
-				 );
+                                );
 };
 
 #endif

@@ -9,8 +9,9 @@ class UmlItem;
 
 // this class manages sequence diagram definition,
 // you can modify it
-class UmlSequenceDiagramDefinition : public UmlBaseSequenceDiagramDefinition {
-  public:
+class UmlSequenceDiagramDefinition : public UmlBaseSequenceDiagramDefinition
+{
+public:
     virtual ~UmlSequenceDiagramDefinition();
 
     virtual void write(FileOut & out, UmlItem * diag);

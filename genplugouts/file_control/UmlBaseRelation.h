@@ -13,8 +13,9 @@ class UmlOperation;
 class UmlAttribute;
 
 // Manage the relations between classes
-class UmlBaseRelation : public UmlClassMember {
-  public:
+class UmlBaseRelation : public UmlClassMember
+{
+public:
     // returns a new relation of the given 'kind' from 'start' to 'end'
     //
     // In case it cannot be created (the name is already used or
@@ -32,7 +33,7 @@ class UmlBaseRelation : public UmlClassMember {
     bool isReadOnly();
 
     // to set the 'read only' state of the relation
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isReadOnly(bool y);
 
@@ -40,12 +41,12 @@ class UmlBaseRelation : public UmlClassMember {
     const Q3CString & defaultValue();
 
     // to set the default relation value ("" allowed)
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_DefaultValue(const char * s);
 
     // to set the stereotype
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     // redefined in case the relation is bidirectional to set the stereotype
     // of the relation corresponding to the other direction
@@ -58,7 +59,7 @@ class UmlBaseRelation : public UmlClassMember {
     const Q3CString & roleName();
 
     // to set the name of the role
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_RoleName(const char * s);
 
@@ -66,7 +67,7 @@ class UmlBaseRelation : public UmlClassMember {
     const Q3CString & multiplicity();
 
     // to set the multiplicity
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_Multiplicity(const char * s);
 
@@ -74,7 +75,7 @@ class UmlBaseRelation : public UmlClassMember {
     UmlOperation * getOperation();
 
     // to generate an associated 'get' operation
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool addGetOperation();
 
@@ -82,7 +83,7 @@ class UmlBaseRelation : public UmlClassMember {
     UmlOperation * setOperation();
 
     // to generate an associated 'set' operation
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool addSetOperation();
 
@@ -109,7 +110,7 @@ class UmlBaseRelation : public UmlClassMember {
     bool isJavaTransient();
 
     // to set the 'transient' state of the relation
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaTransient(bool y);
 #endif
@@ -120,7 +121,7 @@ class UmlBaseRelation : public UmlClassMember {
     bool isIdlTruncatableInheritance();
 
     // to set if the inheritance is 'truncatable'
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isIdlTruncatableInheritance(bool y);
 
@@ -130,13 +131,13 @@ class UmlBaseRelation : public UmlClassMember {
 
     // to set the 'case' even the relation is not (already) known as
     // an IDL union's member
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_IdlCase(UmlAttribute * a);
 
     // to set the 'case' even the relation is not (already) known as
     // an IDL union's member
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_IdlCase(const char * s);
 #endif
@@ -146,7 +147,7 @@ class UmlBaseRelation : public UmlClassMember {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     bool _read_only;
 
 #ifdef WITHCPP
@@ -185,26 +186,26 @@ class UmlBaseRelation : public UmlClassMember {
 #endif
 
 
-  protected:
+protected:
     //internal, do NOT use it
-    
+
     virtual void read_uml_();
 
 #ifdef WITHCPP
     //internal, do NOT use it
-    
+
     virtual void read_cpp_();
 #endif
 
 #ifdef WITHJAVA
     //internal, do NOT use it
-    
+
     virtual void read_java_();
 #endif
 
 #ifdef WITHIDL
     //internal, do NOT use it
-    
+
     virtual void read_idl_();
 #endif
 
@@ -213,12 +214,13 @@ class UmlBaseRelation : public UmlClassMember {
 
 };
 
-inline UmlBaseRelation::UmlBaseRelation(void * id, const Q3CString & n) : UmlClassMember(id, n) {
-  _role_type = 0;
-  _get_oper = 0;
-  _set_oper = 0;
+inline UmlBaseRelation::UmlBaseRelation(void * id, const Q3CString & n) : UmlClassMember(id, n)
+{
+    _role_type = 0;
+    _get_oper = 0;
+    _set_oper = 0;
 #ifdef WITHIDL
-  _idl_case = 0;
+    _idl_case = 0;
 #endif
 }
 

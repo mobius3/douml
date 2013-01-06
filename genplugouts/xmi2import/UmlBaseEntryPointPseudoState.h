@@ -9,8 +9,9 @@
 class UmlEntryPointPseudoState;
 class UmlItem;
 
-class UmlBaseEntryPointPseudoState : public UmlPseudoState {
-  public:
+class UmlBaseEntryPointPseudoState : public UmlPseudoState
+{
+public:
     //  returns a new entry point pseudo state named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -31,17 +32,17 @@ class UmlBaseEntryPointPseudoState : public UmlPseudoState {
     bool set_Reference(UmlEntryPointPseudoState * v);
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseEntryPointPseudoState(void * id, const Q3CString & s) : UmlPseudoState(id, s) {
+    UmlBaseEntryPointPseudoState(void * id, const Q3CString & s) : UmlPseudoState(id, s) {
     }
 
 
-  private:
+private:
     UmlEntryPointPseudoState * _reference;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

@@ -3,9 +3,9 @@
 
 
 enum anExpansionKind {
-  parallelExecution,
-  iterativeExecution,
-  streamExecution
+    parallelExecution,
+    iterativeExecution,
+    streamExecution
 
 };
 #endif

@@ -35,33 +35,38 @@ class BrowserClass;
 
 #define SDOBJ_VERT_MARGIN 4
 
-class SdObjCanvas : public DiagramCanvas {
-  protected:
+class SdObjCanvas : public DiagramCanvas
+{
+protected:
     SdLifeLineCanvas * life_line;
     bool mortal;
-  
-  public:
+
+public:
     SdObjCanvas(BrowserNode * bn, UmlCanvas * canvas, int x,
-		int w, int h, int id);
+                int w, int h, int id);
     virtual ~SdObjCanvas();
-    
+
     virtual void delete_it();
 
-    SdLifeLineCanvas * get_life_line() const { return life_line; };
-    bool is_mortal() { return mortal; }
+    SdLifeLineCanvas * get_life_line() const {
+        return life_line;
+    };
+    bool is_mortal() {
+        return mortal;
+    }
     void set_mortal(bool y);
-    
+
     virtual BrowserClass * get_class() const = 0;
-    
+
     virtual void moveBy(double dx, double dy);
-    
+
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     void change_scale();
     virtual bool copyable() const;
-    
-  protected:
-    void read(char * & st, const char * k);
+
+protected:
+    void read(char *& st, const char * k);
     void save(QTextStream & st) const;
 };
 

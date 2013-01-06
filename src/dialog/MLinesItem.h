@@ -30,13 +30,14 @@
 
 class Q3TextEdit;
 
-class MLinesItem : public TableItem {
-  protected:
+class MLinesItem : public TableItem
+{
+protected:
     Q3TextEdit * mle;
 
-  public:
+public:
     MLinesItem(Q3Table * t, const QString & s);
-  
+
     virtual QWidget * createEditor() const;
     virtual void setContentFromEditor(QWidget * w);
 };

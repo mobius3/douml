@@ -3,23 +3,27 @@
 #include "UmlBaseActivityRegion.h"
 #include "UmlActivityDiagram.h"
 
-UmlActivityDiagram * UmlBaseActivityRegion::associatedDiagram() {
+UmlActivityDiagram * UmlBaseActivityRegion::associatedDiagram()
+{
     read_if_needed_();
-  
+
     return _assoc_diagram;
 }
 
-bool UmlBaseActivityRegion::set_AssociatedDiagram(UmlActivityDiagram * d) {
+bool UmlBaseActivityRegion::set_AssociatedDiagram(UmlActivityDiagram * d)
+{
     UmlCom::send_cmd(_identifier, setAssocDiagramCmd, ((UmlBaseItem *) d)->_identifier);
+
     if (UmlCom::read_bool()) {
-      _assoc_diagram = d;
-      return TRUE;
+        _assoc_diagram = d;
+        return TRUE;
     }
     else
-      return FALSE;
+        return FALSE;
 }
 
-void UmlBaseActivityRegion::read_uml_() {
+void UmlBaseActivityRegion::read_uml_()
+{
     _assoc_diagram = (UmlActivityDiagram *) UmlBaseItem::read_();
     UmlBaseItem::read_uml_();
 }

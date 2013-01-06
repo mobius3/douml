@@ -8,15 +8,16 @@
 class UmlSubject;
 
 // this class manages subjects
-class UmlBaseSubject {
-  public:
+class UmlBaseSubject
+{
+public:
     // return the name
     const Q3CString & name() const {
         return _name;
     }
 
 
-  private:
+private:
     Q3CString _name;
 
     int _x;
@@ -31,11 +32,11 @@ class UmlBaseSubject {
     void read_();
 
 
-  public:
+public:
     // internal
     static UmlSubject * get_container_(int x, int y, int w, int h, const Q3PtrVector<UmlSubject> & subjects);
 
-  friend class UmlBaseUseCaseDiagramDefinition;
+    friend class UmlBaseUseCaseDiagramDefinition;
 };
 
 #endif

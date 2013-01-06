@@ -31,16 +31,16 @@
 #include <Q3CString>
 
 extern bool manage_comment(QString comment, const char *& p,
-			   const char *& pp, bool javadoc);
+                           const char *& pp, bool javadoc);
 extern bool manage_description(QString comment, const char *& p,
-			       const char *& pp);
+                               const char *& pp);
 extern bool manage_python_comment(QString comment, const char *& p,
-				  const char *& pp);
+                                  const char *& pp);
 extern bool manage_python_description(QString comment, const char *& p,
-				      const char *& pp);
+                                      const char *& pp);
 extern void manage_python_docstring(QString comment, const char *& p, const char *& pp,
-				    BooL & indent_needed, QString & indent,
-				    QString & saved_indent);
+                                    BooL & indent_needed, QString & indent,
+                                    QString & saved_indent);
 extern QString capitalize(const QString & s);
 extern QString true_name(const QString & name, const QString & decl);
 extern bool is_char_of_name(char c);

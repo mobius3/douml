@@ -8,8 +8,9 @@
 // This class manages 'use case view'
 //
 // You can modify it as you want (except the constructor)
-class UmlUseCaseView : public UmlBaseUseCaseView {
-  public:
+class UmlUseCaseView : public UmlBaseUseCaseView
+{
+public:
     UmlUseCaseView(void * id, const Q3CString & n) : UmlBaseUseCaseView(id, n) {};
 
 };

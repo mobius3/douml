@@ -28,22 +28,23 @@
 
 class QApplication;
 
-#include <q3progressdialog.h> 
+#include <q3progressdialog.h>
 
-class Progress : public Q3ProgressDialog {
-  public:
+class Progress : public Q3ProgressDialog
+{
+public:
     Progress(int, const char *, QApplication *);
-    
+
     static void delete_it();
     static void tic_it();
-    
-  private:
+
+private:
     virtual ~Progress();
     void tic();
-      
+
     int n;
     QApplication * app;
-    
+
     static Progress * it;
 };
 

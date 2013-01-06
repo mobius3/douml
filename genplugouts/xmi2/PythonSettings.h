@@ -14,8 +14,9 @@
 // This class may be defined as a 'singleton', but I prefer to use static
 // members allowing to just write 'PythonSettings::member' rather than
 // 'PythonSettings::instance()->member' or other long sentence like this.
-class PythonSettings : public UmlSettings {
-  public:
+class PythonSettings : public UmlSettings
+{
+public:
     // return if classes follow Python 2.2 by default
     static bool isPython_2_2();
 
@@ -60,7 +61,7 @@ class PythonSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_RelationAttributeStereotype(Q3CString s, Q3CString v);
 
-    // reverse of the RelationAttributeStereotype() operation, returns the 'UML' 
+    // reverse of the RelationAttributeStereotype() operation, returns the 'UML'
     // stereotype corresponding to the PYTHON one given in argument
     static Q3CString relationAttributeUmlStereotype(const Q3CString & s);
 
@@ -74,7 +75,7 @@ class PythonSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_ClassStereotype(Q3CString s, Q3CString v);
 
-    // reverse of the ClassStereotype() operation, returns the 'UML' 
+    // reverse of the ClassStereotype() operation, returns the 'UML'
     // stereotype corresponding to the PYTHON one given in argument
     static Q3CString classUmlStereotype(const Q3CString & s);
 
@@ -178,28 +179,28 @@ class PythonSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_InitOperationDef(Q3CString v);
 
-    // returns the default name of a 'get' operation generated 
+    // returns the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     static const Q3CString & getName();
 
-    // set the default name of a 'get' operation generated 
+    // set the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_GetName(Q3CString v);
 
-    // returns the default name of a 'set' operation generated 
+    // returns the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     static const Q3CString & setName();
 
-    // set the default name of a 'set' operation generated 
+    // set the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_SetName(Q3CString v);
 
 
-  private:
+private:
     // never called !
     PythonSettings() {};
 
@@ -242,7 +243,7 @@ class PythonSettings : public UmlSettings {
     static Q3Dict<Q3CString> _map_imports;
 
 
-  protected:
+protected:
     static void read_();
 
     static void read_if_needed_();

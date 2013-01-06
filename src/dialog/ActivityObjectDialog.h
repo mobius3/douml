@@ -49,10 +49,11 @@ class MultiLineEdit;
 class KeyValuesTable;
 class BodyDialog;
 
-class ActivityObjectDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ActivityObjectDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     bool visit;
     ActivityObjectData * data;
     QStringList list;
@@ -60,7 +61,7 @@ class ActivityObjectDialog : public Q3TabDialog {
     Q3PtrList<BodyDialog> edits;
     int offset;
     BrowserNode * view;
-    
+
     QWidget * umltab;
     QWidget * ocltab;
     QWidget * cppTab;
@@ -78,29 +79,29 @@ class ActivityObjectDialog : public Q3TabDialog {
     MultiLineEdit * edcpp_selection;
     MultiLineEdit * edjava_selection;
     MultiLineEdit * comment;
-    
+
     // User tab
     KeyValuesTable * kvtable;
 
     static QSize previous_size;
-  
+
     static void post_edit_description(ActivityObjectDialog *, QString);
     static void post_edit_uml_selection(ActivityObjectDialog * d, QString s);
     static void post_edit_cpp_selection(ActivityObjectDialog * d, QString s);
     static void post_edit_java_selection(ActivityObjectDialog * d, QString s);
-    
+
     void init_tab(QWidget *& w, MultiLineEdit *& ed, const char * v,
-		  const char * lbl, const char * sl, bool enabled);
-    
-  public:
+                  const char * lbl, const char * sl, bool enabled);
+
+public:
     ActivityObjectDialog(ActivityObjectData * a, const char * what,
-			 QStringList & st);
+                         QStringList & st);
     virtual ~ActivityObjectDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
-  
+
     void edit_description();
     void edit_uml_selection();
     void edit_cpp_selection();

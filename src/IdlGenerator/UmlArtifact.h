@@ -35,24 +35,27 @@ class UmlPackage;
 // This class manages 'artifact'
 // You can modify it as you want (except the constructor)
 
-class UmlArtifact : public UmlBaseArtifact {
-  private:
+class UmlArtifact : public UmlBaseArtifact
+{
+private:
     bool managed;
-  
+
     static UmlPackage * package_of_generated_artifact;
-    
+
     static bool must_be_saved(const char * path, const char * new_contains);
-  
+
     void generate_text();
 
-  public:
+public:
     UmlArtifact(void * id, const Q3CString & n)
-      : UmlBaseArtifact(id, n) { managed = FALSE; };
-	
+        : UmlBaseArtifact(id, n) {
+        managed = FALSE;
+    };
+
     virtual void generate();
-    
+
     UmlPackage * package();
-    
+
     static UmlPackage * generation_package();
 };
 

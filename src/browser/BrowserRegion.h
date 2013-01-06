@@ -39,31 +39,32 @@ class BasicData;
 
 class BrowserTransition;
 
-class BrowserRegion : public BrowserNode, public Labeled<BrowserRegion> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserRegion : public BrowserNode, public Labeled<BrowserRegion>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserRegion> all;
     static QStringList its_default_stereotypes;
-  
+
     BasicData * def;
-    
-  protected:
+
+protected:
     BrowserRegion(int id);
-  
+
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserRegion(QString s, BrowserNode * p, BasicData * d, int id = 0);
     BrowserRegion(const BrowserRegion * model, BrowserNode * p);
     virtual ~BrowserRegion();
-  
+
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
-				   BooL & duplicable) const;
+                                   BooL & duplicable) const;
     static BrowserRegion * add_region(BrowserNode * future_parent,
-				      const char * s = "region");
-    
-    virtual const QPixmap* pixmap (int) const;
+                                      const char * s = "region");
+
+    virtual const QPixmap * pixmap(int) const;
 
     virtual void delete_it();
     virtual void menu();
@@ -75,31 +76,31 @@ class BrowserRegion : public BrowserNode, public Labeled<BrowserRegion> {
     virtual void modified();
     virtual BasicData * get_data() const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserRegion * read(char * &, char *, BrowserNode *);
-    static BrowserRegion * read_ref(char * & st);
+    static BrowserRegion * read(char *& , char *, BrowserNode *);
+    static BrowserRegion * read_ref(char *& st);
     static BrowserNode * get_it(const char * k, int id);
 
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual bool api_compatible(unsigned v) const;
-    
+
     virtual bool allow_spaces() const;
     virtual bool allow_empty() const;
     virtual bool same_name(const QString & s, UmlCode type) const;
 
     static void init();
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;
     virtual QString drag_postfix() const;

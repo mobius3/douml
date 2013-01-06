@@ -32,20 +32,21 @@
 
 class Class;
 
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n)
-      :  UmlBaseAttribute(id, n) {};
-  
-    static bool new_one(Class * container, Q3CString name,
-			aVisibility visibility, bool constp,
-			bool staticp, const Q3CString & value,
-			Q3CString comment, Q3CString description);
+        :  UmlBaseAttribute(id, n) {};
 
-			  
+    static bool new_one(Class * container, Q3CString name,
+                        aVisibility visibility, bool constp,
+                        bool staticp, const Q3CString & value,
+                        Q3CString comment, Q3CString description);
+
+
 #ifdef REVERSE
     static bool new_initialization(Class * container, Q3CString comment,
-				   Q3CString description);
+                                   Q3CString description);
 #endif
 };
 

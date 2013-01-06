@@ -11,8 +11,9 @@
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlClassDiagram : public UmlBaseClassDiagram {
-  public:
+class UmlClassDiagram : public UmlBaseClassDiagram
+{
+public:
     UmlClassDiagram(void * id, const Q3CString & n) : UmlBaseClassDiagram(id, n) {};
 
     //returns a string indicating the king of the element
@@ -27,7 +28,7 @@ class UmlClassDiagram : public UmlBaseClassDiagram {
     static void generate_index();
 
 
-  protected:
+protected:
     static Vector diagrams;
 
 };

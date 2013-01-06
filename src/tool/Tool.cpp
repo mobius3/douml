@@ -42,7 +42,8 @@ unsigned Tool::ntools;
 ATool * Tool::tools;
 bool Tool::already_read;
 
-ATool::ATool() {
+ATool::ATool()
+{
     for (int i = 0; i != UmlCodeSup; i += 1)
         applicable[i] = FALSE;
 }
@@ -62,21 +63,25 @@ void Tool::defaults()
 
     tools[0].display = "HTML documentation";
     tools[0].cmd = "ghtml";
+
     for (index = 0; index != UmlCodeSup; index += 1)
         tools[0].applicable[index] = TRUE;
 
     tools[1].display = "HTML doc. (flat)";
     tools[1].cmd = "ghtml -flat";
+
     for (index = 0; index != UmlCodeSup; index += 1)
         tools[1].applicable[index] = TRUE;
 
     tools[2].display = "HTML doc. (svg)";
     tools[2].cmd = "ghtml -svg";
+
     for (index = 0; index != UmlCodeSup; index += 1)
         tools[2].applicable[index] = TRUE;
 
     tools[3].display = "HTML doc. (flat, svg)";
     tools[3].cmd = "ghtml -flat -svg";
+
     for (index = 0; index != UmlCodeSup; index += 1)
         tools[3].applicable[index] = TRUE;
 
@@ -144,11 +149,12 @@ void Tool::defaults()
     tools[16].applicable[UmlClass] = TRUE;
     tools[16].applicable[UmlAttribute] = TRUE;
     tools[16].applicable[UmlOperation] = TRUE;
+
     for (index = UmlAssociation; index != UmlRelations; index += 1)
         tools[16].applicable[index] = TRUE;
 }
 
-bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target, 
+bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target,
                        const QObject * receiver, const char * member)
 {
     unsigned index;
@@ -160,6 +166,7 @@ bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target,
                 tool->insertSeparator();
                 first = FALSE;
             }
+
             tool->setItemParameter(tool->insertItem(tools[index].display,
                                                     receiver, member),
                                    index);
@@ -191,7 +198,7 @@ void Tool::shortcut(QString s, int & choice, UmlCode target,
 
     for (index = 0; index != ntools; index += 1) {
         if (tools[index].applicable[target] &&
-                (tools[index].display == s)) {
+            (tools[index].display == s)) {
             choice = first_id + index;
             return;
         }
@@ -230,14 +237,15 @@ const char * Tool::command(const char * d)
     return 0;
 }
 
-void Tool::set_ntools(unsigned n) {
+void Tool::set_ntools(unsigned n)
+{
     if (tools)
         delete [] tools;
 
     tools = ((ntools = n) == 0) ? 0 : new ATool[n];
 }
 
-static const struct{
+static const struct {
     UmlCode kind;
     const char * key;
 } ToolCase[] = {
@@ -290,7 +298,7 @@ static const struct{
     { JoinAN, "JoinActivityNode" },
     { UmlFlow, "Flow" },
 
-    { UmlProject ,"Project" },
+    { UmlProject , "Project" },
     { UmlPackage, "Package" },
     { UmlUseCaseView, "UseCaseView" },
     { UmlClassView, "ClassView" },
@@ -313,7 +321,7 @@ static const struct{
     { UmlDependOn, "DependOn" },
 };
 
-void Tool::save() 
+void Tool::save()
 {
     QSharedPointer<QByteArray> newdef(new QByteArray());
     QTextStream st(newdef.data(), QIODevice::WriteOnly);
@@ -330,13 +338,13 @@ void Tool::save()
         st << ' ';
         save_string(tools[rank].cmd, st);
 
-        for (int index = 0; index != sizeof(ToolCase) / sizeof(*ToolCase); index += 1)
-        {
+        for (int index = 0; index != sizeof(ToolCase) / sizeof(*ToolCase); index += 1) {
             if (tool.applicable[ToolCase[index].kind]) {
                 st << ' ' << ToolCase[index].key;
             }
         }
     }
+
     st << '\n';
 
     st << '\000';
@@ -346,7 +354,7 @@ void Tool::save()
 
 // try to read tool settings in the prj file
 
-void Tool::read(char * & st, char * & k)
+void Tool::read(char *& st, char *& k)
 {
     if (!strcmp(k, "tools_number")) {
         // old format
@@ -366,6 +374,7 @@ bool Tool::read(const char * f)
 
         if (s != 0) {
             PRE_TRY;
+
             try {
                 char * st = s;
                 char * k;
@@ -375,6 +384,7 @@ bool Tool::read(const char * f)
             catch (int) {
                 ;
             }
+
             POST_TRY;
             delete [] s;
             return TRUE;
@@ -414,6 +424,7 @@ void Tool::add()
         tools = 0;
 
         PRE_TRY;
+
         try {
             char * st = s;
             char * k;
@@ -423,6 +434,7 @@ void Tool::add()
         catch (int) {
             ;
         }
+
         POST_TRY;
         delete [] s;
 
@@ -474,15 +486,15 @@ void Tool::add()
 
 // for all cases
 
-void Tool::read(char * & st, char * & k, bool new_format)
+void Tool::read(char *& st, char *& k, bool new_format)
 {
     if (new_format && at_end(st)) {
         ntools = 0;
         return;
     }
-    
+
     unsigned rank = 0;
-    
+
     k = read_keyword(st);
     already_read = TRUE;
 
@@ -509,6 +521,7 @@ void Tool::read(char * & st, char * & k, bool new_format)
 
             if (tools)
                 delete [] tools;
+
             tools = t;
             ntools += 16;
         }
@@ -538,6 +551,7 @@ void Tool::read(char * & st, char * & k, bool new_format)
                 ntools = rank;
                 return;
             }
+
             k = read_keyword(st);
         }
 
@@ -548,8 +562,8 @@ void Tool::read(char * & st, char * & k, bool new_format)
             if (!strcmp(k, "Attribut"))
                 kc = "Attribute";
             else if (((index = strlen(k)) > 4) &&
-                     !strcmp(k+index-4, "Icon")) {
-                k[index-4] = 0;
+                     !strcmp(k + index - 4, "Icon")) {
+                k[index - 4] = 0;
                 kc = k;
             }
             else
@@ -576,7 +590,7 @@ void Tool::read(char * & st, char * & k, bool new_format)
 }
 
 //
-// 
+//
 //
 
 static int Verbose;
@@ -592,7 +606,7 @@ bool verbose_generation()
 }
 
 //
-// 
+//
 //
 
 static int PreserveBodies;

@@ -29,5 +29,6 @@
 
 #include "ClassMemberData.h"
 
-ClassMemberData::~ClassMemberData() {
+ClassMemberData::~ClassMemberData()
+{
 }

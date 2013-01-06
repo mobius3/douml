@@ -34,11 +34,11 @@
 #include <q3toolbar.h>
 #include <qtoolbutton.h>
 #include <qstatusbar.h>
-#include <qwindowsstyle.h> 
-#include <qmotifstyle.h> 
-//#include <qmotifplusstyle.h> 
+#include <qwindowsstyle.h>
+#include <qmotifstyle.h>
+//#include <qmotifplusstyle.h>
 #include <q3whatsthis.h>
-#include <q3filedialog.h> 
+#include <q3filedialog.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <QTextStream>
@@ -61,249 +61,265 @@ const char * OpenText = "To load a project";
 const char * SearchText = "To search a <i>package</i> in the <i>browser</i>.";
 const char * ChangeUserText = "To be an other user.";
 
-ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control", Qt::WDestructiveClose) {
-  the = this;
-  setCaption("Project control");
-  
-  Q3PopupMenu * menu;
-  QPixmap pixmap;
-  
-  Q3ToolBar * tools = new Q3ToolBar(this, "operations");
-  
-  addToolBar(tools, "Operations", Qt::DockTop, TRUE);
+ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control", Qt::WDestructiveClose)
+{
+    the = this;
+    setCaption("Project control");
 
-  menu = new Q3PopupMenu(this);
-  menuBar()->insertItem("P&roject", menu);
+    Q3PopupMenu * menu;
+    QPixmap pixmap;
 
-  // open
-  
-  pixmap = QPixmap(fileopen);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString(),
-				  this, SLOT(load()), tools, "open"),
-		  OpenText);
-  menu->setWhatsThis(menu->insertItem(pixmap, "&Open", this,
-				      SLOT(load()), Qt::CTRL+Qt::Key_O),
-		     OpenText);
-  
-  // change user
-  
-  pixmap = QPixmap(actor);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Who", QString(),
-				  this, SLOT(change_user()), tools, "Change user"),
-		  ChangeUserText);
-  menu->setWhatsThis(menu->insertItem(pixmap, "Change &user", this,
-				      SLOT(change_user()), Qt::CTRL+Qt::Key_C),
-		     ChangeUserText);
+    Q3ToolBar * tools = new Q3ToolBar(this, "operations");
 
-  // search
-  
-  pixmap = QPixmap(browsersearch);
-  Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString(),
-				  this, SLOT(browser_search()), tools, "search"),
-		  SearchText);
-  menu->setWhatsThis(menu->insertItem(pixmap, "&Search", this,
-				      SLOT(browser_search()), Qt::CTRL+Qt::Key_S),
-		     SearchText);
+    addToolBar(tools, "Operations", Qt::DockTop, TRUE);
 
-  // quit & what
-  
-  menu->insertItem("&Quit", this, SLOT(quit()), Qt::CTRL+Qt::Key_Q);
+    menu = new Q3PopupMenu(this);
+    menuBar()->insertItem("P&roject", menu);
 
-  (void)Q3WhatsThis::whatsThisButton(tools);
-  
-  // historic
+    // open
 
-  // note : QFile fp(QDir::home().absFilePath(".bouml")) doesn't work
-  // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = homeDir.absFilePath(".douml");
-  FILE * fp = fopen((const char *) s, "r");
-  
-  if (fp != 0) {
-    char line[512];
- 
-    while (fgets(line, sizeof(line) - 1, fp) != 0) {
-      remove_crlf(line);
-      historic.append(line);
+    pixmap = QPixmap(fileopen);
+    Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString(),
+                                     this, SLOT(load()), tools, "open"),
+                     OpenText);
+    menu->setWhatsThis(menu->insertItem(pixmap, "&Open", this,
+                                        SLOT(load()), Qt::CTRL + Qt::Key_O),
+                       OpenText);
+
+    // change user
+
+    pixmap = QPixmap(actor);
+    Q3WhatsThis::add(new QToolButton(pixmap, "Who", QString(),
+                                     this, SLOT(change_user()), tools, "Change user"),
+                     ChangeUserText);
+    menu->setWhatsThis(menu->insertItem(pixmap, "Change &user", this,
+                                        SLOT(change_user()), Qt::CTRL + Qt::Key_C),
+                       ChangeUserText);
+
+    // search
+
+    pixmap = QPixmap(browsersearch);
+    Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString(),
+                                     this, SLOT(browser_search()), tools, "search"),
+                     SearchText);
+    menu->setWhatsThis(menu->insertItem(pixmap, "&Search", this,
+                                        SLOT(browser_search()), Qt::CTRL + Qt::Key_S),
+                       SearchText);
+
+    // quit & what
+
+    menu->insertItem("&Quit", this, SLOT(quit()), Qt::CTRL + Qt::Key_Q);
+
+    (void)Q3WhatsThis::whatsThisButton(tools);
+
+    // historic
+
+    // note : QFile fp(QDir::home().absFilePath(".bouml")) doesn't work
+    // if the path contains non latin1 characters, for instance cyrillic !
+    QString s = homeDir.absFilePath(".douml");
+    FILE * fp = fopen((const char *) s, "r");
+
+    if (fp != 0) {
+        char line[512];
+
+        while (fgets(line, sizeof(line) - 1, fp) != 0) {
+            remove_crlf(line);
+            historic.append(line);
+        }
+
+        fclose(fp);
     }
-    
-    fclose(fp);
-  }
-  
-  menu->insertSeparator();
-  QString whats = QString("to open this project.<br><br>The historic is saved in <i>")
-    + homeDir.absFilePath(".douml") + "</i>";
-  
-  for (int i = 0; i < int(historic.count()); i += 1) {
-    int id = menu->insertItem(*historic.at(i),
-			      this, SLOT(historicActivated(int)));
-    menu->setItemParameter(id, i);
-    menu->setWhatsThis(id, whats);
-  }
-  
-  // style
-  
-  menu = new Q3PopupMenu(this);
-  menuBar()->insertItem("&Style", menu);
-  
+
+    menu->insertSeparator();
+    QString whats = QString("to open this project.<br><br>The historic is saved in <i>")
+                    + homeDir.absFilePath(".douml") + "</i>";
+
+    for (int i = 0; i < int(historic.count()); i += 1) {
+        int id = menu->insertItem(*historic.at(i),
+                                  this, SLOT(historicActivated(int)));
+        menu->setItemParameter(id, i);
+        menu->setWhatsThis(id, whats);
+    }
+
+    // style
+
+    menu = new Q3PopupMenu(this);
+    menuBar()->insertItem("&Style", menu);
+
 #if !defined(QT_NO_STYLE_MOTIF)
-  menu->insertItem("Motif", this, SLOT(motif_style()));
+    menu->insertItem("Motif", this, SLOT(motif_style()));
 #endif
 #if !defined(QT_NO_STYLE_MOTIFPLUS)
-  menu->insertItem("MotifPlus", this, SLOT(motifplus_style()));
+    menu->insertItem("MotifPlus", this, SLOT(motifplus_style()));
 #endif
-  menu->insertItem("Windows", this, SLOT(windows_style()));
-  
-  // help & about
-  
-  menuBar()->insertSeparator();
-  menu = new Q3PopupMenu(this);
-  menuBar()->insertItem("&Help", menu);
-  
-  menu->insertItem("&About", this, SLOT(about()), Qt::Key_F1);
-  menu->insertItem("About&Qt", this, SLOT(aboutQt()));
-  menu->insertSeparator();
-  menu->insertItem("What's This", this, SLOT(whatsThis()), Qt::SHIFT+Qt::Key_F1);
-    
-  //
+    menu->insertItem("Windows", this, SLOT(windows_style()));
 
-  browser = new BrowserView(this);
-  setCentralWidget(browser); 
-  
-  //
-  
-  show_identity();
-}
+    // help & about
 
-ControlWindow::~ControlWindow() {
-  browser->close();
-}
+    menuBar()->insertSeparator();
+    menu = new Q3PopupMenu(this);
+    menuBar()->insertItem("&Help", menu);
 
-void ControlWindow::historicActivated(int id) {
-  QStringList::Iterator it = historic.at(id);
-  
-  if (it != historic.end())
-    load(*it);
-}
+    menu->insertItem("&About", this, SLOT(about()), Qt::Key_F1);
+    menu->insertItem("About&Qt", this, SLOT(aboutQt()));
+    menu->insertSeparator();
+    menu->insertItem("What's This", this, SLOT(whatsThis()), Qt::SHIFT + Qt::Key_F1);
 
-void ControlWindow::show_identity() {
-  statusBar()->message("User is " + user_name(user_id()) +
-		       " [id " + QString::number(user_id()) + "]");
-}
+    //
 
-void ControlWindow::change_user() {
-  UserDialog d(QCursor::pos());
-  
-  if (d.exec() == QDialog::Accepted) {
-    set_user_id(d.id(), d.name());
+    browser = new BrowserView(this);
+    setCentralWidget(browser);
+
+    //
+
     show_identity();
-    browser->hide();
-    browser->show();
-  }
+}
+
+ControlWindow::~ControlWindow()
+{
+    browser->close();
+}
+
+void ControlWindow::historicActivated(int id)
+{
+    QStringList::Iterator it = historic.at(id);
+
+    if (it != historic.end())
+        load(*it);
+}
+
+void ControlWindow::show_identity()
+{
+    statusBar()->message("User is " + user_name(user_id()) +
+                         " [id " + QString::number(user_id()) + "]");
+}
+
+void ControlWindow::change_user()
+{
+    UserDialog d(QCursor::pos());
+
+    if (d.exec() == QDialog::Accepted) {
+        set_user_id(d.id(), d.name());
+        show_identity();
+        browser->hide();
+        browser->show();
+    }
 }
 
 QString my_baseName(QFileInfo & fi)
 {
-  QString fn = fi.fileName();
-  int index = fn.findRev('.');
-  
-  return (index == -1)
-    ? fn
-    : fn.left(index);
+    QString fn = fi.fileName();
+    int index = fn.findRev('.');
+
+    return (index == -1)
+           ? fn
+           : fn.left(index);
 }
 
-void ControlWindow::load(QString path) {
-  browser->close();
-  
-  QFileInfo fi(path);
-  
-  if (!fi.exists())
-    return;
- 
-  QDir dir(fi.dirPath(TRUE));
-  
-  if (! dir.mkdir("all.lock"))
-    QMessageBox::critical(0, "Control project", 
-			  (dir.exists("all.lock"))
-			  ? "\
+void ControlWindow::load(QString path)
+{
+    browser->close();
+
+    QFileInfo fi(path);
+
+    if (!fi.exists())
+        return;
+
+    QDir dir(fi.dirPath(TRUE));
+
+    if (! dir.mkdir("all.lock"))
+        QMessageBox::critical(0, "Control project",
+                              (dir.exists("all.lock"))
+                              ? "\
 The project is already locked by 'Project control' or 'Project syncho'\n\
 (the directory 'all.lock' exists)"
-			  : "Can't create directory 'all.lock'");
-  else {
-    const QFileInfoList * l = dir.entryInfoList("*.lock");
-    
-    if (l != 0)  {
-      Q3PtrListIterator<QFileInfo> it(*l);
-      QFileInfo * fi;
-      QString ids;
-      
-      while ((fi = it.current()) != 0) {
-	if (fi->isDir() && (my_baseName(*fi) != "all"))
-	  ids += " " + my_baseName(*fi);
-	++it;
-      }
-    
-      if (! ids.isEmpty()) {
-	QMessageBox::critical(0, "Control project", 
-			      "The project is edited by the users having these IDs :" + ids);
-	dir.rmdir("all.lock");
-	return;
-      }
+                              : "Can't create directory 'all.lock'");
+    else {
+        const QFileInfoList * l = dir.entryInfoList("*.lock");
+
+        if (l != 0)  {
+            Q3PtrListIterator<QFileInfo> it(*l);
+            QFileInfo * fi;
+            QString ids;
+
+            while ((fi = it.current()) != 0) {
+                if (fi->isDir() && (my_baseName(*fi) != "all"))
+                    ids += " " + my_baseName(*fi);
+
+                ++it;
+            }
+
+            if (! ids.isEmpty()) {
+                QMessageBox::critical(0, "Control project",
+                                      "The project is edited by the users having these IDs :" + ids);
+                dir.rmdir("all.lock");
+                return;
+            }
+        }
+
+        QApplication::setOverrideCursor(Qt::waitCursor);
+        browser->set_project(dir);
+        browser->get_project()->setOpen(TRUE);
+
+        bool r = browser->get_project()->load(dir);
+
+        QApplication::restoreOverrideCursor();
+
+        if (! r)
+            browser->close();
+
+        // note : all.lock will be deleted by BrowserView
     }
-
-    QApplication::setOverrideCursor(Qt::waitCursor);
-    browser->set_project(dir);
-    browser->get_project()->setOpen(TRUE);
-    
-    bool r = browser->get_project()->load(dir);
-    
-    QApplication::restoreOverrideCursor();
-    
-    if (! r)
-      browser->close();
-    // note : all.lock will be deleted by BrowserView
-  }
 }
 
-void ControlWindow::load() {
-  QString path = Q3FileDialog::getOpenFileName(QString(), "*.prj", this);
-  
-  if (! path.isEmpty())
-    load(path);
+void ControlWindow::load()
+{
+    QString path = Q3FileDialog::getOpenFileName(QString(), "*.prj", this);
+
+    if (! path.isEmpty())
+        load(path);
 }
 
-void ControlWindow::quit() {
-  browser->close();
-  QApplication::exit(0);
+void ControlWindow::quit()
+{
+    browser->close();
+    QApplication::exit(0);
 }
 
-void ControlWindow::browser_search() {
-  BrowserSearchDialog dialog(QCursor::pos());
-  
-  dialog.exec();
+void ControlWindow::browser_search()
+{
+    BrowserSearchDialog dialog(QCursor::pos());
+
+    dialog.exec();
 }
 
-void ControlWindow::motif_style() {
+void ControlWindow::motif_style()
+{
 #if !defined(QT_NO_STYLE_MOTIF)
-  QApplication::setStyle(new QMotifStyle);
+    QApplication::setStyle(new QMotifStyle);
 #endif
 }
 
-void ControlWindow::motifplus_style() {
+void ControlWindow::motifplus_style()
+{
 #if !defined(QT_NO_STYLE_MOTIFPLUS)
-  QApplication::setStyle(new QMotifPlusStyle);
+    QApplication::setStyle(new QMotifPlusStyle);
 #endif
 }
 
-void ControlWindow::windows_style() {
+void ControlWindow::windows_style()
+{
 #ifndef QT_NO_STYLE_WINDOWS
-  QApplication::setStyle(new QWindowsStyle);
+    QApplication::setStyle(new QWindowsStyle);
 #endif
 }
 
-void ControlWindow::about() {
-  QMessageBox::about(this, "Project control", "<p>Version <b>1.2.5</b></p>" );
+void ControlWindow::about()
+{
+    QMessageBox::about(this, "Project control", "<p>Version <b>1.2.5</b></p>");
 }
 
-void ControlWindow::aboutQt() {
-  QMessageBox::aboutQt(this, "Project control");
+void ControlWindow::aboutQt()
+{
+    QMessageBox::aboutQt(this, "Project control");
 }

@@ -13,8 +13,9 @@ class FileOut;
 // is a mother class of all the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlOperation : public UmlBaseOperation {
-  public:
+class UmlOperation : public UmlBaseOperation
+{
+public:
     UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {};
 
     virtual void write(FileOut & out);
@@ -43,7 +44,7 @@ class UmlOperation : public UmlBaseOperation {
     static void write_events(FileOut & out);
 
 
-  protected:
+protected:
     static int param_id;
 
     static Q3PtrDict<char> SentReceived;

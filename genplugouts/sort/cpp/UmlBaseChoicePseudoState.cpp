@@ -5,10 +5,11 @@
 
 UmlChoicePseudoState * UmlBaseChoicePseudoState::create(UmlItem * parent)
 {
-  return (UmlChoicePseudoState *) parent->create_(aChoicePseudoState, "");
+    return (UmlChoicePseudoState *) parent->create_(aChoicePseudoState, "");
 }
 
-anItemKind UmlBaseChoicePseudoState::kind() {
-  return aChoicePseudoState;
+anItemKind UmlBaseChoicePseudoState::kind()
+{
+    return aChoicePseudoState;
 }
 

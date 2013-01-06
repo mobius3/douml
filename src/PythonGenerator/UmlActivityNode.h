@@ -6,10 +6,11 @@
 #include "UmlActivityItem.h"
 #include <q3cstring.h>
 
-class UmlActivityNode : public UmlBaseActivityNode, public UmlActivityItem {
-  protected:
+class UmlActivityNode : public UmlBaseActivityNode, public UmlActivityItem
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityNode(void * id, const Q3CString & s) : UmlBaseActivityNode(id, s) {
+    UmlActivityNode(void * id, const Q3CString & s) : UmlBaseActivityNode(id, s) {
     }
 
 };

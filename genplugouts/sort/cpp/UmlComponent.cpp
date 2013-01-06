@@ -1,7 +1,8 @@
 
 #include "UmlComponent.h"
 
-int UmlComponent::orderWeight() {
-  return 9;
+int UmlComponent::orderWeight()
+{
+    return 9;
 }
 

@@ -71,7 +71,7 @@ QPixmap * pinButton;
 QPixmap * expansionregionButton;
 QPixmap * expansionnodeButton;
 QPixmap * imageButton;
-  
+
 // browser icons
 
 QPixmap * ActorIcon;
@@ -312,8 +312,8 @@ QPixmap * joinForkHorizBigPixmap;
 
 void init_pixmaps()
 {
-  // toolbar buttons
-  
+    // toolbar buttons
+
 #include "note_button.xpm"
 #include "text_button.xpm"
 #include "actor_button.xpm"
@@ -382,76 +382,76 @@ void init_pixmaps()
 #include "expansionnode_button.xpm"
 #include "image_button.xpm"
 
-  noteButton = new QPixmap((const char **) note_button);
-  textButton = new QPixmap((const char **) text_button);
-  actorButton = new QPixmap((const char **) actor_button);
-  classButton = new QPixmap((const char **) class_button);
-  classinstanceButton = new QPixmap((const char **) classinstance_button);
-  anchorButton = new QPixmap((const char **) anchor_button);
-  selectButton = new QPixmap((const char **) select_button);
-  usecaseButton = new QPixmap((const char **) usecase_button);
-  packageButton = new QPixmap((const char **) package_button);
-  continuationButton = new QPixmap((const char **) continuation_button);
-  fragmentButton = new QPixmap((const char **) fragment_button);
-  subjectButton = new QPixmap((const char **) subject_button);
-  componentButton = new QPixmap((const char **) component_button);
-  artifactButton = new QPixmap((const char **) artifact_button);
-  deploymentNodeButton = new QPixmap((const char **) deploymentnode_button);
-  hubButton = new QPixmap((const char **) hub_button);
-  generalisationButton = new QPixmap((const char **) generalisation_button);
-  directionalAssociationButton = new QPixmap((const char **) directionalassociation_button);
-  directionalAssociationExtensionButton = new QPixmap((const char **) directionalassociationextension_button);
-  associationButton = new QPixmap((const char **) association_button);
-  aggregationButton = new QPixmap((const char **) aggregation_button);
-  aggregationByValueButton = new QPixmap((const char **) aggregationbyvalue_button);
-  directionalAggregationButton = new QPixmap((const char **) directionalaggregation_button);
-  directionalAggregationByValueButton = new QPixmap((const char **) directionalaggregationbyvalue_button);
-  dependencyButton = new QPixmap((const char **) dependency_button);
-  realizeButton = new QPixmap((const char **) realize_button);
-  syncmsgButton = new QPixmap((const char **) syncmsg_button);
-  syncselfmsgButton = new QPixmap((const char **) syncselfmsg_button);
-  asyncselfmsgButton = new QPixmap((const char **) asyncselfmsg_button);
-  lostsyncmsgButton = new QPixmap((const char **) lostsyncmsg_button);
-  foundsyncmsgButton = new QPixmap((const char **) foundsyncmsg_button);
-  lostasyncmsgButton = new QPixmap((const char **) lostasyncmsg_button);
-  foundasyncmsgButton = new QPixmap((const char **) foundasyncmsg_button);
-  returnmsgButton = new QPixmap((const char **) returnmsg_button);
-  selfreturnmsgButton = new QPixmap((const char **) selfreturnmsg_button);
-  selflinkButton = new QPixmap((const char **) selflink_button);
-  fitscaleButton = new QPixmap((const char **) fitscale_button);
-  optwindowsizeButton = new QPixmap((const char **) optwinsize_button);
-  editButton = new QPixmap((const char **) edit_button);
-  providedButton = new QPixmap((const char **) provided_button);
-  requiredButton = new QPixmap((const char **) required_button);
-  stateButton = new QPixmap((const char **) state_button);
-  entrypointButton = new QPixmap((const char **) entrypoint_button);
-  exitpointButton = new QPixmap((const char **) exitpoint_button);
-  initialButton = new QPixmap((const char **) initial_button);
-  finalButton = new QPixmap((const char **) final_button);
-  terminateButton = new QPixmap((const char **) terminate_button);
-  deephistoryButton = new QPixmap((const char **) deephistory_button);
-  shallowhistoryButton = new QPixmap((const char **) shallowhistory_button);
-  junctionButton = new QPixmap((const char **) junction_button);
-  choiceButton = new QPixmap((const char **) choice_button);
-  forkButton = new QPixmap((const char **) fork_button);
-  joinButton = new QPixmap((const char **) join_button);
-  regionButton = new QPixmap((const char **) region_button);
-  actionButton = new QPixmap((const char **) action_button);
-  signalinButton = new QPixmap((const char **) signalin_button);
-  signaloutButton = new QPixmap((const char **) signalout_button);
-  activityButton = new QPixmap((const char **) activity_button);
-  interruptibleactivityregionButton = new QPixmap((const char **) interruptibleactivityregion_button);
-  activityactionButton = new QPixmap((const char **) activityaction_button);
-  activitypartitionButton = new QPixmap((const char **) activitypartition_button);
-  decisionButton = new QPixmap((const char **) decision_button);
-  mergeButton = new QPixmap((const char **) merge_button);
-  pinButton = new QPixmap((const char **) pin_button);
-  expansionregionButton = new QPixmap((const char **) expansionregion_button);
-  expansionnodeButton = new QPixmap((const char **) expansionnode_button);
-  imageButton = new QPixmap((const char **) image_button);
-  
-  // browser icons
-  
+    noteButton = new QPixmap((const char **) note_button);
+    textButton = new QPixmap((const char **) text_button);
+    actorButton = new QPixmap((const char **) actor_button);
+    classButton = new QPixmap((const char **) class_button);
+    classinstanceButton = new QPixmap((const char **) classinstance_button);
+    anchorButton = new QPixmap((const char **) anchor_button);
+    selectButton = new QPixmap((const char **) select_button);
+    usecaseButton = new QPixmap((const char **) usecase_button);
+    packageButton = new QPixmap((const char **) package_button);
+    continuationButton = new QPixmap((const char **) continuation_button);
+    fragmentButton = new QPixmap((const char **) fragment_button);
+    subjectButton = new QPixmap((const char **) subject_button);
+    componentButton = new QPixmap((const char **) component_button);
+    artifactButton = new QPixmap((const char **) artifact_button);
+    deploymentNodeButton = new QPixmap((const char **) deploymentnode_button);
+    hubButton = new QPixmap((const char **) hub_button);
+    generalisationButton = new QPixmap((const char **) generalisation_button);
+    directionalAssociationButton = new QPixmap((const char **) directionalassociation_button);
+    directionalAssociationExtensionButton = new QPixmap((const char **) directionalassociationextension_button);
+    associationButton = new QPixmap((const char **) association_button);
+    aggregationButton = new QPixmap((const char **) aggregation_button);
+    aggregationByValueButton = new QPixmap((const char **) aggregationbyvalue_button);
+    directionalAggregationButton = new QPixmap((const char **) directionalaggregation_button);
+    directionalAggregationByValueButton = new QPixmap((const char **) directionalaggregationbyvalue_button);
+    dependencyButton = new QPixmap((const char **) dependency_button);
+    realizeButton = new QPixmap((const char **) realize_button);
+    syncmsgButton = new QPixmap((const char **) syncmsg_button);
+    syncselfmsgButton = new QPixmap((const char **) syncselfmsg_button);
+    asyncselfmsgButton = new QPixmap((const char **) asyncselfmsg_button);
+    lostsyncmsgButton = new QPixmap((const char **) lostsyncmsg_button);
+    foundsyncmsgButton = new QPixmap((const char **) foundsyncmsg_button);
+    lostasyncmsgButton = new QPixmap((const char **) lostasyncmsg_button);
+    foundasyncmsgButton = new QPixmap((const char **) foundasyncmsg_button);
+    returnmsgButton = new QPixmap((const char **) returnmsg_button);
+    selfreturnmsgButton = new QPixmap((const char **) selfreturnmsg_button);
+    selflinkButton = new QPixmap((const char **) selflink_button);
+    fitscaleButton = new QPixmap((const char **) fitscale_button);
+    optwindowsizeButton = new QPixmap((const char **) optwinsize_button);
+    editButton = new QPixmap((const char **) edit_button);
+    providedButton = new QPixmap((const char **) provided_button);
+    requiredButton = new QPixmap((const char **) required_button);
+    stateButton = new QPixmap((const char **) state_button);
+    entrypointButton = new QPixmap((const char **) entrypoint_button);
+    exitpointButton = new QPixmap((const char **) exitpoint_button);
+    initialButton = new QPixmap((const char **) initial_button);
+    finalButton = new QPixmap((const char **) final_button);
+    terminateButton = new QPixmap((const char **) terminate_button);
+    deephistoryButton = new QPixmap((const char **) deephistory_button);
+    shallowhistoryButton = new QPixmap((const char **) shallowhistory_button);
+    junctionButton = new QPixmap((const char **) junction_button);
+    choiceButton = new QPixmap((const char **) choice_button);
+    forkButton = new QPixmap((const char **) fork_button);
+    joinButton = new QPixmap((const char **) join_button);
+    regionButton = new QPixmap((const char **) region_button);
+    actionButton = new QPixmap((const char **) action_button);
+    signalinButton = new QPixmap((const char **) signalin_button);
+    signaloutButton = new QPixmap((const char **) signalout_button);
+    activityButton = new QPixmap((const char **) activity_button);
+    interruptibleactivityregionButton = new QPixmap((const char **) interruptibleactivityregion_button);
+    activityactionButton = new QPixmap((const char **) activityaction_button);
+    activitypartitionButton = new QPixmap((const char **) activitypartition_button);
+    decisionButton = new QPixmap((const char **) decision_button);
+    mergeButton = new QPixmap((const char **) merge_button);
+    pinButton = new QPixmap((const char **) pin_button);
+    expansionregionButton = new QPixmap((const char **) expansionregion_button);
+    expansionnodeButton = new QPixmap((const char **) expansionnode_button);
+    imageButton = new QPixmap((const char **) image_button);
+
+    // browser icons
+
 #include "actor_xpm.xpm"
 #include "deletedactor_xpm.xpm"
 #include "class_xpm.xpm"
@@ -612,168 +612,168 @@ void init_pixmaps()
 #include "deletedexpansionnode_xpm.xpm"
 #include "expansionnodemarked_xpm.xpm"
 
-  ActorIcon = new QPixmap((const char **) actor_xpm);
-  DeletedActorIcon = new QPixmap((const char **) deletedactor_xpm);
-  ClassIcon = new QPixmap((const char **) class_xpm);
-  DeletedClassIcon = new QPixmap((const char **) deletedclass_xpm);
-  StereotypeIcon = new QPixmap((const char **) stereotype_xpm);
-  DeletedStereotypeIcon = new QPixmap((const char **) deletedstereotype_xpm);
-  ClassInstanceIcon = new QPixmap((const char **) classinstance_xpm);
-  DeletedClassInstanceIcon = new QPixmap((const char **) deletedclassinstance_xpm);
-  PublicEmbeddedClassIcon = new QPixmap((const char **) publicembeddedclass_xpm);
-  ProtectedEmbeddedClassIcon = new QPixmap((const char **) protectedembeddedclass_xpm);
-  PackageEmbeddedClassIcon = new QPixmap((const char **) packageembeddedclass_xpm);
-  PrivateEmbeddedClassIcon = new QPixmap((const char **) privateembeddedclass_xpm);
-  TemplateIcon = new QPixmap((const char **) template_xpm);
-  DeletedTemplateIcon = new QPixmap((const char **) deletedtemplate_xpm);
-  PublicEmbeddedTemplateIcon = new QPixmap((const char **) publicembeddedtemplate_xpm);
-  ProtectedEmbeddedTemplateIcon = new QPixmap((const char **) protectedembeddedtemplate_xpm);
-  PackageEmbeddedTemplateIcon = new QPixmap((const char **) packageembeddedtemplate_xpm);
-  PrivateEmbeddedTemplateIcon = new QPixmap((const char **) privateembeddedtemplate_xpm);
-  PackageIcon = new QPixmap((const char **) package_xpm);
-  DeletedPackageIcon = new QPixmap((const char **) deletedpackage_xpm);
-  ProfileIcon = new QPixmap((const char **) profile_xpm);
-  DeletedProfileIcon = new QPixmap((const char **) deletedprofile_xpm);
-  UseCaseIcon = new QPixmap((const char **) usecase_xpm);
-  DeletedUseCaseIcon = new QPixmap((const char **) deletedusecase_xpm);
-  ClassViewIcon = new QPixmap((const char **) classes_xpm);
-  DeletedClassViewIcon = new QPixmap((const char **) deletedclasses_xpm);
-  UseCaseViewIcon = new QPixmap((const char **) usecases_xpm);
-  DeletedUseCaseViewIcon = new QPixmap((const char **) deletedusecases_xpm);
-  SeqDiagramIcon = new QPixmap((const char **) seqdiagram_xpm);
-  DeletedSeqDiagramIcon = new QPixmap((const char **) deletedseqdiagram_xpm);
-  ColDiagramIcon = new QPixmap((const char **) coldiagram_xpm);
-  DeletedColDiagramIcon = new QPixmap((const char **) deletedcoldiagram_xpm);
-  ObjectDiagramIcon = new QPixmap((const char **) objdiagram_xpm);
-  DeletedObjectDiagramIcon = new QPixmap((const char **) deletedobjdiagram_xpm);
-  ClassDiagramIcon = new QPixmap((const char **) classdiagram_xpm);
-  DeletedClassDiagramIcon = new QPixmap((const char **) deletedclassdiagram_xpm);
-  UseCaseDiagramIcon = new QPixmap((const char **) usecasediagram_xpm);
-  DeletedUseCaseDiagramIcon = new QPixmap((const char **) deletedusecasediagram_xpm);
-  ComponentIcon = new QPixmap((const char **) component_xpm);
-  DeletedComponentIcon = new QPixmap((const char **) deletedcomponent_xpm);  
-  ArtifactIcon = new QPixmap((const char **) artifact_xpm);
-  DeletedArtifactIcon = new QPixmap((const char **) deletedartifact_xpm);  
-  DeploymentNodeIcon = new QPixmap((const char **) deploymentnode_xpm);
-  DeletedDeploymentNodeIcon = new QPixmap((const char **) deleteddeploymentnode_xpm);  
-  ComponentDiagramIcon = new QPixmap((const char **) componentdiagram_xpm);
-  DeletedComponentDiagramIcon = new QPixmap((const char **) deletedcomponentdiagram_xpm);  
-  ComponentViewIcon = new QPixmap((const char **) componentview_xpm);
-  DeletedComponentViewIcon = new QPixmap((const char **) deletedcomponentview_xpm);  
-  DeploymentDiagramIcon = new QPixmap((const char **) deploymentdiagram_xpm);
-  DeletedDeploymentDiagramIcon = new QPixmap((const char **) deleteddeploymentdiagram_xpm);  
-  DeploymentViewIcon = new QPixmap((const char **) deploymentview_xpm);
-  DeletedDeploymentViewIcon = new QPixmap((const char **) deleteddeploymentview_xpm);  
-  PublicAttributeIcon = new QPixmap((const char **) publicattribute_xpm);
-  PrivateAttributeIcon = new QPixmap((const char **) privateattribute_xpm);
-  ProtectedAttributeIcon = new QPixmap((const char **) protectedattribute_xpm);
-  PackageAttributeIcon = new QPixmap((const char **) packageattribute_xpm);
-  DeletedAttributeIcon = new QPixmap((const char **) deletedattribute_xpm);
-  PublicOperationIcon = new QPixmap((const char **) publicoperation_xpm);
-  PrivateOperationIcon = new QPixmap((const char **) privateoperation_xpm);
-  ProtectedOperationIcon = new QPixmap((const char **) protectedoperation_xpm);
-  PackageOperationIcon = new QPixmap((const char **) packageoperation_xpm);
-  DeletedOperationIcon = new QPixmap((const char **) deletedoperation_xpm);
-  PublicRelationIcon = new QPixmap((const char **) publicrelation_xpm);
-  PrivateRelationIcon = new QPixmap((const char **) privaterelation_xpm);
-  ProtectedRelationIcon = new QPixmap((const char **) protectedrelation_xpm);
-  PackageRelationIcon = new QPixmap((const char **) packagerelation_xpm);
-  DeletedRelationIcon = new QPixmap((const char **) deletedrelation_xpm);
-  SimpleRelationIcon = new QPixmap((const char **) simplerelation_xpm);
-  ExtraMemberIcon = new QPixmap((const char **) extramember_xpm);
-  ExtraMemberMarkedIcon = new QPixmap((const char **) extramembermarked_xpm);
-  DeletedExtraMemberIcon = new QPixmap((const char **) deletedextramember_xpm);
-  StateIcon = new QPixmap((const char **) state_xpm);
-  DeletedStateIcon = new QPixmap((const char **) deletedstate_xpm);
-  RegionIcon = new QPixmap((const char **) region_xpm);
-  DeletedRegionIcon = new QPixmap((const char **) deletedregion_xpm);
-  ActionIcon = new QPixmap((const char **) action_xpm);
-  ActionMarkedIcon = new QPixmap((const char **) actionmarked_xpm);
-  DeletedActionIcon = new QPixmap((const char **) deletedaction_xpm);
-  SignalInIcon = new QPixmap((const char **) signalin_xpm);
-  SignalInMarkedIcon = new QPixmap((const char **) signalinmarked_xpm);
-  DeletedSignalInIcon = new QPixmap((const char **) deletedsignalin_xpm);
-  SignalOutIcon = new QPixmap((const char **) signalout_xpm);
-  SignalOutMarkedIcon = new QPixmap((const char **) signaloutmarked_xpm);
-  DeletedSignalOutIcon = new QPixmap((const char **) deletedsignalout_xpm);
-  StateDiagramIcon = new QPixmap((const char **) statediagram_xpm);
-  DeletedStateDiagramIcon = new QPixmap((const char **) deletedstatediagram_xpm);
-  EntryPointIcon = new QPixmap((const char **) entrypoint_xpm);
-  DeletedEntryPointIcon = new QPixmap((const char **) deletedentrypoint_xpm);
-  ExitPointIcon = new QPixmap((const char **) exitpoint_xpm);
-  DeletedExitPointIcon = new QPixmap((const char **) deletedexitpoint_xpm);
-  InitialIcon = new QPixmap((const char **) initial_xpm);
-  InitialMarkedIcon = new QPixmap((const char **) initialmarked_xpm);
-  DeletedInitialIcon = new QPixmap((const char **) deletedinitial_xpm);
-  FinalIcon = new QPixmap((const char **) final_xpm);
-  FinalMarkedIcon = new QPixmap((const char **) finalmarked_xpm);
-  DeletedFinalIcon = new QPixmap((const char **) deletedfinal_xpm);
-  TerminateIcon = new QPixmap((const char **) terminate_xpm);
-  TerminateMarkedIcon = new QPixmap((const char **) terminatemarked_xpm);
-  DeletedTerminateIcon = new QPixmap((const char **) deletedterminate_xpm);
-  DeepHistoryIcon = new QPixmap((const char **) deephistory_xpm);
-  DeepHistoryMarkedIcon = new QPixmap((const char **) deephistorymarked_xpm);
-  DeletedDeepHistoryIcon = new QPixmap((const char **) deleteddeephistory_xpm);
-  ShallowHistoryIcon = new QPixmap((const char **) shallowhistory_xpm);
-  ShallowHistoryMarkedIcon = new QPixmap((const char **) shallowhistorymarked_xpm);
-  DeletedShallowHistoryIcon = new QPixmap((const char **) deletedshallowhistory_xpm);
-  JunctionIcon = new QPixmap((const char **) junction_xpm);
-  JunctionMarkedIcon = new QPixmap((const char **) junctionmarked_xpm);
-  DeletedJunctionIcon = new QPixmap((const char **) deletedjunction_xpm);
-  ChoiceIcon = new QPixmap((const char **) choice_xpm);
-  ChoiceMarkedIcon = new QPixmap((const char **) choicemarked_xpm);
-  DeletedChoiceIcon = new QPixmap((const char **) deletedchoice_xpm);
-  ForkIcon = new QPixmap((const char **) fork_xpm);
-  ForkMarkedIcon = new QPixmap((const char **) forkmarked_xpm);
-  DeletedForkIcon = new QPixmap((const char **) deletedfork_xpm);
-  JoinIcon = new QPixmap((const char **) join_xpm);
-  JoinMarkedIcon = new QPixmap((const char **) joinmarked_xpm);
-  DeletedJoinIcon = new QPixmap((const char **) deletedjoin_xpm);
-  ActivityIcon = new QPixmap((const char **) activity_xpm);
-  DeletedActivityIcon = new QPixmap((const char **) deletedactivity_xpm);
-  ActivityActionIcon = new QPixmap((const char **) activityaction_xpm);
-  ActivityActionMarkedIcon = new QPixmap((const char **) activityactionmarked_xpm);
-  DeletedActivityActionIcon = new QPixmap((const char **) deletedactivityaction_xpm);
-  ActivityPartitionIcon = new QPixmap((const char **) activitypartition_xpm);
-  ActivityPartitionMarkedIcon = new QPixmap((const char **) activitypartitionmarked_xpm);
-  DeletedActivityPartitionIcon = new QPixmap((const char **) deletedactivitypartition_xpm);
-  ActivityDiagramIcon = new QPixmap((const char **) activitydiagram_xpm);
-  DeletedActivityDiagramIcon = new QPixmap((const char **) deletedactivitydiagram_xpm);
-  ParameterIcon = new QPixmap((const char **) parameter_xpm);
-  DeletedParameterIcon = new QPixmap((const char **) deletedparameter_xpm);
-  ParameterSetIcon = new QPixmap((const char **) parameterset_xpm);
-  ParameterSetMarkedIcon = new QPixmap((const char **) parametersetmarked_xpm);
-  DeletedParameterSetIcon = new QPixmap((const char **) deletedparameterset_xpm);
-  PinIcon = new QPixmap((const char **) pin_xpm);
-  PinMarkedIcon = new QPixmap((const char **) pinmarked_xpm);
-  DeletedPinIcon = new QPixmap((const char **) deletedpin_xpm);
-  DecisionIcon = new QPixmap((const char **) decision_xpm);
-  DecisionMarkedIcon = new QPixmap((const char **) decisionmarked_xpm);
-  DeletedDecisionIcon = new QPixmap((const char **) deleteddecision_xpm);
-  MergeIcon = new QPixmap((const char **) merge_xpm);
-  MergeMarkedIcon = new QPixmap((const char **) mergemarked_xpm);
-  DeletedMergeIcon = new QPixmap((const char **) deletedmerge_xpm);
-  ActivitySendSignalIcon = new QPixmap((const char **) activitysendsignal_xpm);
-  ActivitySendSignalMarkedIcon = new QPixmap((const char **) activitysendsignalmarked_xpm);
-  DeletedActivitySendSignalIcon = new QPixmap((const char **) deletedactivitysendsignal_xpm);
-  ActivityAcceptTimeIcon = new QPixmap((const char **) activityaccepttime_xpm);
-  ActivityAcceptTimeMarkedIcon = new QPixmap((const char **) activityaccepttimemarked_xpm);
-  DeletedActivityAcceptTimeIcon = new QPixmap((const char **) deletedactivityaccepttime_xpm);
-  ActivityAcceptEventIcon = new QPixmap((const char **) activityacceptevent_xpm);
-  ActivityAcceptEventMarkedIcon = new QPixmap((const char **) activityaccepteventmarked_xpm);
-  DeletedActivityAcceptEventIcon = new QPixmap((const char **) deletedactivityacceptevent_xpm);
-  InterruptibleActivityRegionIcon = new QPixmap((const char **) interruptibleactivityregion_xpm);
-  InterruptibleActivityRegionMarkedIcon = new QPixmap((const char **) interruptibleactivityregionmarked_xpm);
-  DeletedInterruptibleActivityRegionIcon = new QPixmap((const char **) deletedinterruptibleactivityregion_xpm);
-  ExpansionRegionIcon = new QPixmap((const char **) expansionregion_xpm);
-  ExpansionRegionMarkedIcon = new QPixmap((const char **) expansionregionmarked_xpm);
-  DeletedExpansionRegionIcon = new QPixmap((const char **) deletedexpansionregion_xpm);
-  ExpansionNodeIcon = new QPixmap((const char **) expansionnode_xpm);
-  ExpansionNodeMarkedIcon = new QPixmap((const char **) expansionnodemarked_xpm);
-  DeletedExpansionNodeIcon = new QPixmap((const char **) deletedexpansionnode_xpm);
+    ActorIcon = new QPixmap((const char **) actor_xpm);
+    DeletedActorIcon = new QPixmap((const char **) deletedactor_xpm);
+    ClassIcon = new QPixmap((const char **) class_xpm);
+    DeletedClassIcon = new QPixmap((const char **) deletedclass_xpm);
+    StereotypeIcon = new QPixmap((const char **) stereotype_xpm);
+    DeletedStereotypeIcon = new QPixmap((const char **) deletedstereotype_xpm);
+    ClassInstanceIcon = new QPixmap((const char **) classinstance_xpm);
+    DeletedClassInstanceIcon = new QPixmap((const char **) deletedclassinstance_xpm);
+    PublicEmbeddedClassIcon = new QPixmap((const char **) publicembeddedclass_xpm);
+    ProtectedEmbeddedClassIcon = new QPixmap((const char **) protectedembeddedclass_xpm);
+    PackageEmbeddedClassIcon = new QPixmap((const char **) packageembeddedclass_xpm);
+    PrivateEmbeddedClassIcon = new QPixmap((const char **) privateembeddedclass_xpm);
+    TemplateIcon = new QPixmap((const char **) template_xpm);
+    DeletedTemplateIcon = new QPixmap((const char **) deletedtemplate_xpm);
+    PublicEmbeddedTemplateIcon = new QPixmap((const char **) publicembeddedtemplate_xpm);
+    ProtectedEmbeddedTemplateIcon = new QPixmap((const char **) protectedembeddedtemplate_xpm);
+    PackageEmbeddedTemplateIcon = new QPixmap((const char **) packageembeddedtemplate_xpm);
+    PrivateEmbeddedTemplateIcon = new QPixmap((const char **) privateembeddedtemplate_xpm);
+    PackageIcon = new QPixmap((const char **) package_xpm);
+    DeletedPackageIcon = new QPixmap((const char **) deletedpackage_xpm);
+    ProfileIcon = new QPixmap((const char **) profile_xpm);
+    DeletedProfileIcon = new QPixmap((const char **) deletedprofile_xpm);
+    UseCaseIcon = new QPixmap((const char **) usecase_xpm);
+    DeletedUseCaseIcon = new QPixmap((const char **) deletedusecase_xpm);
+    ClassViewIcon = new QPixmap((const char **) classes_xpm);
+    DeletedClassViewIcon = new QPixmap((const char **) deletedclasses_xpm);
+    UseCaseViewIcon = new QPixmap((const char **) usecases_xpm);
+    DeletedUseCaseViewIcon = new QPixmap((const char **) deletedusecases_xpm);
+    SeqDiagramIcon = new QPixmap((const char **) seqdiagram_xpm);
+    DeletedSeqDiagramIcon = new QPixmap((const char **) deletedseqdiagram_xpm);
+    ColDiagramIcon = new QPixmap((const char **) coldiagram_xpm);
+    DeletedColDiagramIcon = new QPixmap((const char **) deletedcoldiagram_xpm);
+    ObjectDiagramIcon = new QPixmap((const char **) objdiagram_xpm);
+    DeletedObjectDiagramIcon = new QPixmap((const char **) deletedobjdiagram_xpm);
+    ClassDiagramIcon = new QPixmap((const char **) classdiagram_xpm);
+    DeletedClassDiagramIcon = new QPixmap((const char **) deletedclassdiagram_xpm);
+    UseCaseDiagramIcon = new QPixmap((const char **) usecasediagram_xpm);
+    DeletedUseCaseDiagramIcon = new QPixmap((const char **) deletedusecasediagram_xpm);
+    ComponentIcon = new QPixmap((const char **) component_xpm);
+    DeletedComponentIcon = new QPixmap((const char **) deletedcomponent_xpm);
+    ArtifactIcon = new QPixmap((const char **) artifact_xpm);
+    DeletedArtifactIcon = new QPixmap((const char **) deletedartifact_xpm);
+    DeploymentNodeIcon = new QPixmap((const char **) deploymentnode_xpm);
+    DeletedDeploymentNodeIcon = new QPixmap((const char **) deleteddeploymentnode_xpm);
+    ComponentDiagramIcon = new QPixmap((const char **) componentdiagram_xpm);
+    DeletedComponentDiagramIcon = new QPixmap((const char **) deletedcomponentdiagram_xpm);
+    ComponentViewIcon = new QPixmap((const char **) componentview_xpm);
+    DeletedComponentViewIcon = new QPixmap((const char **) deletedcomponentview_xpm);
+    DeploymentDiagramIcon = new QPixmap((const char **) deploymentdiagram_xpm);
+    DeletedDeploymentDiagramIcon = new QPixmap((const char **) deleteddeploymentdiagram_xpm);
+    DeploymentViewIcon = new QPixmap((const char **) deploymentview_xpm);
+    DeletedDeploymentViewIcon = new QPixmap((const char **) deleteddeploymentview_xpm);
+    PublicAttributeIcon = new QPixmap((const char **) publicattribute_xpm);
+    PrivateAttributeIcon = new QPixmap((const char **) privateattribute_xpm);
+    ProtectedAttributeIcon = new QPixmap((const char **) protectedattribute_xpm);
+    PackageAttributeIcon = new QPixmap((const char **) packageattribute_xpm);
+    DeletedAttributeIcon = new QPixmap((const char **) deletedattribute_xpm);
+    PublicOperationIcon = new QPixmap((const char **) publicoperation_xpm);
+    PrivateOperationIcon = new QPixmap((const char **) privateoperation_xpm);
+    ProtectedOperationIcon = new QPixmap((const char **) protectedoperation_xpm);
+    PackageOperationIcon = new QPixmap((const char **) packageoperation_xpm);
+    DeletedOperationIcon = new QPixmap((const char **) deletedoperation_xpm);
+    PublicRelationIcon = new QPixmap((const char **) publicrelation_xpm);
+    PrivateRelationIcon = new QPixmap((const char **) privaterelation_xpm);
+    ProtectedRelationIcon = new QPixmap((const char **) protectedrelation_xpm);
+    PackageRelationIcon = new QPixmap((const char **) packagerelation_xpm);
+    DeletedRelationIcon = new QPixmap((const char **) deletedrelation_xpm);
+    SimpleRelationIcon = new QPixmap((const char **) simplerelation_xpm);
+    ExtraMemberIcon = new QPixmap((const char **) extramember_xpm);
+    ExtraMemberMarkedIcon = new QPixmap((const char **) extramembermarked_xpm);
+    DeletedExtraMemberIcon = new QPixmap((const char **) deletedextramember_xpm);
+    StateIcon = new QPixmap((const char **) state_xpm);
+    DeletedStateIcon = new QPixmap((const char **) deletedstate_xpm);
+    RegionIcon = new QPixmap((const char **) region_xpm);
+    DeletedRegionIcon = new QPixmap((const char **) deletedregion_xpm);
+    ActionIcon = new QPixmap((const char **) action_xpm);
+    ActionMarkedIcon = new QPixmap((const char **) actionmarked_xpm);
+    DeletedActionIcon = new QPixmap((const char **) deletedaction_xpm);
+    SignalInIcon = new QPixmap((const char **) signalin_xpm);
+    SignalInMarkedIcon = new QPixmap((const char **) signalinmarked_xpm);
+    DeletedSignalInIcon = new QPixmap((const char **) deletedsignalin_xpm);
+    SignalOutIcon = new QPixmap((const char **) signalout_xpm);
+    SignalOutMarkedIcon = new QPixmap((const char **) signaloutmarked_xpm);
+    DeletedSignalOutIcon = new QPixmap((const char **) deletedsignalout_xpm);
+    StateDiagramIcon = new QPixmap((const char **) statediagram_xpm);
+    DeletedStateDiagramIcon = new QPixmap((const char **) deletedstatediagram_xpm);
+    EntryPointIcon = new QPixmap((const char **) entrypoint_xpm);
+    DeletedEntryPointIcon = new QPixmap((const char **) deletedentrypoint_xpm);
+    ExitPointIcon = new QPixmap((const char **) exitpoint_xpm);
+    DeletedExitPointIcon = new QPixmap((const char **) deletedexitpoint_xpm);
+    InitialIcon = new QPixmap((const char **) initial_xpm);
+    InitialMarkedIcon = new QPixmap((const char **) initialmarked_xpm);
+    DeletedInitialIcon = new QPixmap((const char **) deletedinitial_xpm);
+    FinalIcon = new QPixmap((const char **) final_xpm);
+    FinalMarkedIcon = new QPixmap((const char **) finalmarked_xpm);
+    DeletedFinalIcon = new QPixmap((const char **) deletedfinal_xpm);
+    TerminateIcon = new QPixmap((const char **) terminate_xpm);
+    TerminateMarkedIcon = new QPixmap((const char **) terminatemarked_xpm);
+    DeletedTerminateIcon = new QPixmap((const char **) deletedterminate_xpm);
+    DeepHistoryIcon = new QPixmap((const char **) deephistory_xpm);
+    DeepHistoryMarkedIcon = new QPixmap((const char **) deephistorymarked_xpm);
+    DeletedDeepHistoryIcon = new QPixmap((const char **) deleteddeephistory_xpm);
+    ShallowHistoryIcon = new QPixmap((const char **) shallowhistory_xpm);
+    ShallowHistoryMarkedIcon = new QPixmap((const char **) shallowhistorymarked_xpm);
+    DeletedShallowHistoryIcon = new QPixmap((const char **) deletedshallowhistory_xpm);
+    JunctionIcon = new QPixmap((const char **) junction_xpm);
+    JunctionMarkedIcon = new QPixmap((const char **) junctionmarked_xpm);
+    DeletedJunctionIcon = new QPixmap((const char **) deletedjunction_xpm);
+    ChoiceIcon = new QPixmap((const char **) choice_xpm);
+    ChoiceMarkedIcon = new QPixmap((const char **) choicemarked_xpm);
+    DeletedChoiceIcon = new QPixmap((const char **) deletedchoice_xpm);
+    ForkIcon = new QPixmap((const char **) fork_xpm);
+    ForkMarkedIcon = new QPixmap((const char **) forkmarked_xpm);
+    DeletedForkIcon = new QPixmap((const char **) deletedfork_xpm);
+    JoinIcon = new QPixmap((const char **) join_xpm);
+    JoinMarkedIcon = new QPixmap((const char **) joinmarked_xpm);
+    DeletedJoinIcon = new QPixmap((const char **) deletedjoin_xpm);
+    ActivityIcon = new QPixmap((const char **) activity_xpm);
+    DeletedActivityIcon = new QPixmap((const char **) deletedactivity_xpm);
+    ActivityActionIcon = new QPixmap((const char **) activityaction_xpm);
+    ActivityActionMarkedIcon = new QPixmap((const char **) activityactionmarked_xpm);
+    DeletedActivityActionIcon = new QPixmap((const char **) deletedactivityaction_xpm);
+    ActivityPartitionIcon = new QPixmap((const char **) activitypartition_xpm);
+    ActivityPartitionMarkedIcon = new QPixmap((const char **) activitypartitionmarked_xpm);
+    DeletedActivityPartitionIcon = new QPixmap((const char **) deletedactivitypartition_xpm);
+    ActivityDiagramIcon = new QPixmap((const char **) activitydiagram_xpm);
+    DeletedActivityDiagramIcon = new QPixmap((const char **) deletedactivitydiagram_xpm);
+    ParameterIcon = new QPixmap((const char **) parameter_xpm);
+    DeletedParameterIcon = new QPixmap((const char **) deletedparameter_xpm);
+    ParameterSetIcon = new QPixmap((const char **) parameterset_xpm);
+    ParameterSetMarkedIcon = new QPixmap((const char **) parametersetmarked_xpm);
+    DeletedParameterSetIcon = new QPixmap((const char **) deletedparameterset_xpm);
+    PinIcon = new QPixmap((const char **) pin_xpm);
+    PinMarkedIcon = new QPixmap((const char **) pinmarked_xpm);
+    DeletedPinIcon = new QPixmap((const char **) deletedpin_xpm);
+    DecisionIcon = new QPixmap((const char **) decision_xpm);
+    DecisionMarkedIcon = new QPixmap((const char **) decisionmarked_xpm);
+    DeletedDecisionIcon = new QPixmap((const char **) deleteddecision_xpm);
+    MergeIcon = new QPixmap((const char **) merge_xpm);
+    MergeMarkedIcon = new QPixmap((const char **) mergemarked_xpm);
+    DeletedMergeIcon = new QPixmap((const char **) deletedmerge_xpm);
+    ActivitySendSignalIcon = new QPixmap((const char **) activitysendsignal_xpm);
+    ActivitySendSignalMarkedIcon = new QPixmap((const char **) activitysendsignalmarked_xpm);
+    DeletedActivitySendSignalIcon = new QPixmap((const char **) deletedactivitysendsignal_xpm);
+    ActivityAcceptTimeIcon = new QPixmap((const char **) activityaccepttime_xpm);
+    ActivityAcceptTimeMarkedIcon = new QPixmap((const char **) activityaccepttimemarked_xpm);
+    DeletedActivityAcceptTimeIcon = new QPixmap((const char **) deletedactivityaccepttime_xpm);
+    ActivityAcceptEventIcon = new QPixmap((const char **) activityacceptevent_xpm);
+    ActivityAcceptEventMarkedIcon = new QPixmap((const char **) activityaccepteventmarked_xpm);
+    DeletedActivityAcceptEventIcon = new QPixmap((const char **) deletedactivityacceptevent_xpm);
+    InterruptibleActivityRegionIcon = new QPixmap((const char **) interruptibleactivityregion_xpm);
+    InterruptibleActivityRegionMarkedIcon = new QPixmap((const char **) interruptibleactivityregionmarked_xpm);
+    DeletedInterruptibleActivityRegionIcon = new QPixmap((const char **) deletedinterruptibleactivityregion_xpm);
+    ExpansionRegionIcon = new QPixmap((const char **) expansionregion_xpm);
+    ExpansionRegionMarkedIcon = new QPixmap((const char **) expansionregionmarked_xpm);
+    DeletedExpansionRegionIcon = new QPixmap((const char **) deletedexpansionregion_xpm);
+    ExpansionNodeIcon = new QPixmap((const char **) expansionnode_xpm);
+    ExpansionNodeMarkedIcon = new QPixmap((const char **) expansionnodemarked_xpm);
+    DeletedExpansionNodeIcon = new QPixmap((const char **) deletedexpansionnode_xpm);
 
-  // color pixmaps
-  
+    // color pixmaps
+
 #include "white_xpm.xpm"
 #include "lightyellow_xpm.xpm"
 #include "yellow_xpm.xpm"
@@ -806,39 +806,39 @@ void init_pixmaps()
 #include "darkgray_xpm.xpm"
 #include "black_xpm.xpm"
 
-  WhitePixmap = new QPixmap((const char **) white_xpm);
-  LightYellowPixmap = new QPixmap((const char **) lightyellow_xpm);
-  YellowPixmap = new QPixmap((const char **) yellow_xpm);
-  MediumYellowPixmap = new QPixmap((const char **) mediumyellow_xpm);
-  DarkYellowPixmap = new QPixmap((const char **) darkyellow_xpm);
-  LightBluePixmap = new QPixmap((const char **) lightblue_xpm);
-  BluePixmap = new QPixmap((const char **) blue_xpm);
-  LightMediumBluePixmap = new QPixmap((const char **) lightmediumblue_xpm);
-  MediumBluePixmap = new QPixmap((const char **) mediumblue_xpm);
-  DarkBluePixmap = new QPixmap((const char **) darkblue_xpm);
-  LightGreenPixmap = new QPixmap((const char **) lightgreen_xpm);
-  GreenPixmap = new QPixmap((const char **) green_xpm);
-  LightMediumGreenPixmap = new QPixmap((const char **) lightmediumgreen_xpm);
-  MediumGreenPixmap = new QPixmap((const char **) mediumgreen_xpm);
-  DarkGreenPixmap = new QPixmap((const char **) darkgreen_xpm);
-  LightRedPixmap = new QPixmap((const char **) lightred_xpm);
-  MidRedPixmap = new QPixmap((const char **) midred_xpm);
-  RedPixmap = new QPixmap((const char **) red_xpm);
-  VeryLightOrangePixmap = new QPixmap((const char **) verylightorange_xpm);
-  LightOrangePixmap = new QPixmap((const char **) lightorange_xpm);
-  OrangePixmap = new QPixmap((const char **) orange_xpm);
-  DarkOrangePixmap = new QPixmap((const char **) darkorange_xpm);
-  LightMagentaPixmap = new QPixmap((const char **) lightmagenta_xpm);
-  MagentaPixmap = new QPixmap((const char **) magenta_xpm);
-  MidMagentaPixmap = new QPixmap((const char **) midmagenta_xpm);
-  DarkMagentaPixmap = new QPixmap((const char **) darkmagenta_xpm);
-  VeryLightGrayPixmap = new QPixmap((const char **) verylightgray_xpm);
-  LightGrayPixmap = new QPixmap((const char **) lightgray_xpm);
-  GrayPixmap = new QPixmap((const char **) gray_xpm);
-  DarkGrayPixmap = new QPixmap((const char **) darkgray_xpm);
-  BlackPixmap = new QPixmap((const char **) black_xpm);
+    WhitePixmap = new QPixmap((const char **) white_xpm);
+    LightYellowPixmap = new QPixmap((const char **) lightyellow_xpm);
+    YellowPixmap = new QPixmap((const char **) yellow_xpm);
+    MediumYellowPixmap = new QPixmap((const char **) mediumyellow_xpm);
+    DarkYellowPixmap = new QPixmap((const char **) darkyellow_xpm);
+    LightBluePixmap = new QPixmap((const char **) lightblue_xpm);
+    BluePixmap = new QPixmap((const char **) blue_xpm);
+    LightMediumBluePixmap = new QPixmap((const char **) lightmediumblue_xpm);
+    MediumBluePixmap = new QPixmap((const char **) mediumblue_xpm);
+    DarkBluePixmap = new QPixmap((const char **) darkblue_xpm);
+    LightGreenPixmap = new QPixmap((const char **) lightgreen_xpm);
+    GreenPixmap = new QPixmap((const char **) green_xpm);
+    LightMediumGreenPixmap = new QPixmap((const char **) lightmediumgreen_xpm);
+    MediumGreenPixmap = new QPixmap((const char **) mediumgreen_xpm);
+    DarkGreenPixmap = new QPixmap((const char **) darkgreen_xpm);
+    LightRedPixmap = new QPixmap((const char **) lightred_xpm);
+    MidRedPixmap = new QPixmap((const char **) midred_xpm);
+    RedPixmap = new QPixmap((const char **) red_xpm);
+    VeryLightOrangePixmap = new QPixmap((const char **) verylightorange_xpm);
+    LightOrangePixmap = new QPixmap((const char **) lightorange_xpm);
+    OrangePixmap = new QPixmap((const char **) orange_xpm);
+    DarkOrangePixmap = new QPixmap((const char **) darkorange_xpm);
+    LightMagentaPixmap = new QPixmap((const char **) lightmagenta_xpm);
+    MagentaPixmap = new QPixmap((const char **) magenta_xpm);
+    MidMagentaPixmap = new QPixmap((const char **) midmagenta_xpm);
+    DarkMagentaPixmap = new QPixmap((const char **) darkmagenta_xpm);
+    VeryLightGrayPixmap = new QPixmap((const char **) verylightgray_xpm);
+    LightGrayPixmap = new QPixmap((const char **) lightgray_xpm);
+    GrayPixmap = new QPixmap((const char **) gray_xpm);
+    DarkGrayPixmap = new QPixmap((const char **) darkgray_xpm);
+    BlackPixmap = new QPixmap((const char **) black_xpm);
 
-  // dialog pixmap
+    // dialog pixmap
 
 #include "left_xpm.xpm"
 #include "right_xpm.xpm"
@@ -846,17 +846,17 @@ void init_pixmaps()
 #include "down_xpm.xpm"
 #include "left_un_xpm.xpm"
 #include "right_un_xpm.xpm"
-  
-  leftPixmap = new QPixmap((const char **) left_xpm);
-  rightPixmap = new QPixmap((const char **) right_xpm);
-  upPixmap = new QPixmap((const char **) up_xpm);
-  downPixmap = new QPixmap((const char **) down_xpm);
-  
-  leftUnavailablePixmap = new QPixmap((const char **) left_un_xpm);
-  rightUnavailablePixmap = new QPixmap((const char **) right_un_xpm);
-  
-  // diagram pixmap
-  
+
+    leftPixmap = new QPixmap((const char **) left_xpm);
+    rightPixmap = new QPixmap((const char **) right_xpm);
+    upPixmap = new QPixmap((const char **) up_xpm);
+    downPixmap = new QPixmap((const char **) down_xpm);
+
+    leftUnavailablePixmap = new QPixmap((const char **) left_un_xpm);
+    rightUnavailablePixmap = new QPixmap((const char **) right_un_xpm);
+
+    // diagram pixmap
+
 #include "inner_xpm.xpm"
 #include "provided_xpm.xpm"
 #include "entrypoint_pixmap.xpm"
@@ -883,31 +883,31 @@ void init_pixmaps()
 #include "choice_shadow_big_pixmap.xpm"
 #include "joinfork_big_pixmap.xpm"
 #include "joinfork_horiz_big_pixmap.xpm"
-  
-  innerPixmap = new QPixmap((const char **) inner_xpm);
-  providedPixmap = new QPixmap((const char **) provided_xpm);
-  entryPointPixmap = new QPixmap((const char **) entrypoint_pixmap);
-  exitPointPixmap = new QPixmap((const char **) exitpoint_pixmap);
-  initialPixmap = new QPixmap((const char **) initial_pixmap);
-  finalPixmap = new QPixmap((const char **) final_pixmap);
-  terminatePixmap = new QPixmap((const char **) terminate_pixmap);
-  deepHistoryPixmap = new QPixmap((const char **) deephistory_pixmap);
-  shallowHistoryPixmap = new QPixmap((const char **) shallowhistory_pixmap);
-  junctionPixmap = new QPixmap((const char **) junction_pixmap);
-  choicePixmap = new QPixmap((const char **) choice_pixmap);
-  choiceShadowPixmap = new QPixmap((const char **) choice_shadow_pixmap);
-  joinForkPixmap = new QPixmap((const char **) joinfork_pixmap);
-  joinForkHorizPixmap = new QPixmap((const char **) joinfork_horiz_pixmap);
-  entryPointBigPixmap = new QPixmap((const char **) entrypoint_big_pixmap);
-  exitPointBigPixmap = new QPixmap((const char **) exitpoint_big_pixmap);
-  initialBigPixmap = new QPixmap((const char **) initial_big_pixmap);
-  finalBigPixmap = new QPixmap((const char **) final_big_pixmap);
-  terminateBigPixmap = new QPixmap((const char **) terminate_big_pixmap);
-  deepHistoryBigPixmap = new QPixmap((const char **) deephistory_big_pixmap);
-  shallowHistoryBigPixmap = new QPixmap((const char **) shallowhistory_big_pixmap);
-  junctionBigPixmap = new QPixmap((const char **) junction_big_pixmap);
-  choiceBigPixmap = new QPixmap((const char **) choice_big_pixmap);
-  choiceShadowBigPixmap = new QPixmap((const char **) choice_shadow_big_pixmap);
-  joinForkBigPixmap = new QPixmap((const char **) joinfork_big_pixmap);
-  joinForkHorizBigPixmap = new QPixmap((const char **) joinfork_horiz_big_pixmap);
+
+    innerPixmap = new QPixmap((const char **) inner_xpm);
+    providedPixmap = new QPixmap((const char **) provided_xpm);
+    entryPointPixmap = new QPixmap((const char **) entrypoint_pixmap);
+    exitPointPixmap = new QPixmap((const char **) exitpoint_pixmap);
+    initialPixmap = new QPixmap((const char **) initial_pixmap);
+    finalPixmap = new QPixmap((const char **) final_pixmap);
+    terminatePixmap = new QPixmap((const char **) terminate_pixmap);
+    deepHistoryPixmap = new QPixmap((const char **) deephistory_pixmap);
+    shallowHistoryPixmap = new QPixmap((const char **) shallowhistory_pixmap);
+    junctionPixmap = new QPixmap((const char **) junction_pixmap);
+    choicePixmap = new QPixmap((const char **) choice_pixmap);
+    choiceShadowPixmap = new QPixmap((const char **) choice_shadow_pixmap);
+    joinForkPixmap = new QPixmap((const char **) joinfork_pixmap);
+    joinForkHorizPixmap = new QPixmap((const char **) joinfork_horiz_pixmap);
+    entryPointBigPixmap = new QPixmap((const char **) entrypoint_big_pixmap);
+    exitPointBigPixmap = new QPixmap((const char **) exitpoint_big_pixmap);
+    initialBigPixmap = new QPixmap((const char **) initial_big_pixmap);
+    finalBigPixmap = new QPixmap((const char **) final_big_pixmap);
+    terminateBigPixmap = new QPixmap((const char **) terminate_big_pixmap);
+    deepHistoryBigPixmap = new QPixmap((const char **) deephistory_big_pixmap);
+    shallowHistoryBigPixmap = new QPixmap((const char **) shallowhistory_big_pixmap);
+    junctionBigPixmap = new QPixmap((const char **) junction_big_pixmap);
+    choiceBigPixmap = new QPixmap((const char **) choice_big_pixmap);
+    choiceShadowBigPixmap = new QPixmap((const char **) choice_shadow_big_pixmap);
+    joinForkBigPixmap = new QPixmap((const char **) joinfork_big_pixmap);
+    joinForkHorizBigPixmap = new QPixmap((const char **) joinfork_horiz_big_pixmap);
 }

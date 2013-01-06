@@ -9,11 +9,16 @@
 // - a class reference
 //
 // - an explicit type
-class UmlTypeSpec : public UmlBaseTypeSpec {
-  public:
+class UmlTypeSpec : public UmlBaseTypeSpec
+{
+public:
     UmlTypeSpec() {}
-    UmlTypeSpec(const char * t) { explicit_type = t; }
-    UmlTypeSpec(UmlClass * t) { type = t; }
+    UmlTypeSpec(const char * t) {
+        explicit_type = t;
+    }
+    UmlTypeSpec(UmlClass * t) {
+        type = t;
+    }
 };
 
 #endif

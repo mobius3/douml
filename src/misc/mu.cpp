@@ -65,7 +65,7 @@ int user_id()
                             The project is open in read-only mode because it is\n\
                             under the control of 'Project control' or 'Project merge'\n\
                             (the directory '%1' exists", dir.absFilePath("all.lock")));
-                             force_read_only(TRUE);
+            force_read_only(TRUE);
         }
         else
             force_read_only(FALSE);
@@ -88,13 +88,13 @@ int user_id()
                 }
                 else {
                     int retCode = msg_critical(TR("User Own Identifier"),
-                                 TR("\It seems that you are already editing the project.\n\n"
-                                    "If you're SURE that this is not the case and\n"
-                                    "another user does not have an identifier equal\n"
-                                    "to yours you can gain ownership of the lock.").arg(dir.absFilePath(fn))
-                                    , QMessageBox::Ok, QMessageBox::Close);
-                    if(retCode == QMessageBox::Ok)
-                    {
+                                               TR("\It seems that you are already editing the project.\n\n"
+                                                  "If you're SURE that this is not the case and\n"
+                                                  "another user does not have an identifier equal\n"
+                                                  "to yours you can gain ownership of the lock.").arg(dir.absFilePath(fn))
+                                               , QMessageBox::Ok, QMessageBox::Close);
+
+                    if (retCode == QMessageBox::Ok) {
                         dir.rmdir(fn);
                         return uid;
 

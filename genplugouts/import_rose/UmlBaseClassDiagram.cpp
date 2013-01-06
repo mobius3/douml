@@ -5,10 +5,11 @@
 
 UmlClassDiagram * UmlBaseClassDiagram::create(UmlClassView * parent, const char * s)
 {
-  return (UmlClassDiagram *) parent->create_(aClassDiagram, s);
+    return (UmlClassDiagram *) parent->create_(aClassDiagram, s);
 }
 
-anItemKind UmlBaseClassDiagram::kind() {
-  return aClassDiagram;
+anItemKind UmlBaseClassDiagram::kind()
+{
+    return aClassDiagram;
 }
 

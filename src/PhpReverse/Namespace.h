@@ -37,24 +37,29 @@
 // it is a singleton but I prefer static members
 // Namespace::instance() is too long to hit
 
-class Namespace {
-  public:
+class Namespace
+{
+public:
     static void enter(Q3CString s);
     static void exit();
-    
-    static const QStringList stack() { return Stack; }
-        
-    static void add_alias(const Q3CString & a, const Q3CString & s) {
-      Aliases.replace(a, s);
+
+    static const QStringList stack() {
+        return Stack;
     }
-    static void clear_aliases() { Aliases.clear(); }
-    
+
+    static void add_alias(const Q3CString & a, const Q3CString & s) {
+        Aliases.replace(a, s);
+    }
+    static void clear_aliases() {
+        Aliases.clear();
+    }
+
     static QString namespacify(Q3CString s);
     static Q3CString current();
-    
-  private:
+
+private:
     static QStringList Stack;
-    static QMap<Q3CString,Q3CString> Aliases;
+    static QMap<Q3CString, Q3CString> Aliases;
 };
 
 // does not not inherit QDict to not allow to use directly
@@ -62,58 +67,65 @@ class Namespace {
 // management
 
 template<class T>
-class NDict {
-  public:
+class NDict
+{
+public:
     NDict() {}
-    NDict(unsigned n) { d.resize(n); }
-  
+    NDict(unsigned n) {
+        d.resize(n);
+    }
+
     void insert(const Q3CString & key, const T * item);
     void replace(const Q3CString & key, const T * item);
     bool remove(const Q3CString & key);
-    T * operator[] (const Q3CString & key) const;
-      
-  private:
+    T * operator[](const Q3CString & key) const;
+
+private:
     Q3Dict<T> d;
 };
 
 template<class T>
-void NDict<T>::insert(const Q3CString & key, const T * item) {
-  d.insert(Namespace::namespacify(key), item);
+void NDict<T>::insert(const Q3CString & key, const T * item)
+{
+    d.insert(Namespace::namespacify(key), item);
 }
 
 template<class T>
-void NDict<T>::replace(const Q3CString & key, const T * item) {
-  d.replace(Namespace::namespacify(key), item);
+void NDict<T>::replace(const Q3CString & key, const T * item)
+{
+    d.replace(Namespace::namespacify(key), item);
 }
 
 template<class T>
-bool NDict<T>::remove(const Q3CString & key) {
-  return d.remove(Namespace::namespacify(key));
+bool NDict<T>::remove(const Q3CString & key)
+{
+    return d.remove(Namespace::namespacify(key));
 }
 
 template<class T>
-T * NDict<T>::operator[] (const Q3CString & key) const {
-  QString k = Namespace::namespacify(key);
-  T * r = d[k];
-  
-  if (r != 0)
+T * NDict<T>::operator[](const Q3CString & key) const
+{
+    QString k = Namespace::namespacify(key);
+    T * r = d[k];
+
+    if (r != 0)
+        return r;
+
+    QString s;
+
+    if (((const char *) key)[0] != '\\') {
+        QStringList::ConstIterator it;
+
+        s = key;
+
+        for (it = Namespace::stack().begin();
+             it != Namespace::stack().end();
+             ++it)
+            if ((r = d[*it + s]) != 0)
+                return r;
+    }
+
     return r;
-  
-  QString s;
-  
-  if (((const char *) key)[0] != '\\') {
-    QStringList::ConstIterator it;
-    
-    s = key;
-    
-    for (it = Namespace::stack().begin();
-	 it != Namespace::stack().end();
-	 ++it)
-      if ((r = d[*it + s]) != 0)
-	return r;
-  }
-  
-  return r;
 }
 
 #endif

@@ -9,8 +9,9 @@
 class UmlExpansionNode;
 class UmlExpansionRegion;
 
-class UmlBaseExpansionNode : public UmlActivityObject {
-  public:
+class UmlBaseExpansionNode : public UmlActivityObject
+{
+public:
     //  returns a new expansion node named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -22,9 +23,9 @@ class UmlBaseExpansionNode : public UmlActivityObject {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseExpansionNode(void * id, const Q3CString & s) : UmlActivityObject(id, s) {
+    UmlBaseExpansionNode(void * id, const Q3CString & s) : UmlActivityObject(id, s) {
     }
 
 };

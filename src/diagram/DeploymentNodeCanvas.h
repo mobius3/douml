@@ -35,10 +35,11 @@
 #define DEPLOYMENTNODE_CANVAS_ADDED 10
 
 class DeploymentNodeCanvas
-  : public QObject, public DiagramCanvas, public Instance {
-  Q_OBJECT
-    
-  protected:
+    : public QObject, public DiagramCanvas, public Instance
+{
+    Q_OBJECT
+
+protected:
     UmlColor itscolor;
     UmlColor used_color;
     Uml3States write_horizontally;
@@ -46,23 +47,23 @@ class DeploymentNodeCanvas
     Uml3States show_stereotype_properties;
     bool show_properties;
     QString iname;
-  
-  public:
+
+public:
     DeploymentNodeCanvas(BrowserNode * bn, UmlCanvas * canvas,
-			 int x, int y, int id);
+                         int x, int y, int id);
     virtual ~DeploymentNodeCanvas();
-    
+
     virtual void delete_it();
 
     virtual void draw(QPainter & p);
-  
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void remove(bool from_model);
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
@@ -76,30 +77,30 @@ class DeploymentNodeCanvas
     virtual void history_hide();
 
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static DeploymentNodeCanvas * read(char * &, UmlCanvas * canvas, char *);
-  
+    static DeploymentNodeCanvas * read(char *& , UmlCanvas * canvas, char *);
+
     void check_size();
     int min_width();
     int min_height();
-    
+
     virtual QString get_name() const;
     virtual void set_name(const QString & s);
-    
+
     virtual BrowserNode * get_type() const;
     virtual BrowserNode * new_type();
     virtual bool new_type_available();
     virtual BrowserNodeList & get_types(BrowserNodeList & r) const;
     virtual void set_type(BrowserNode * t);
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
-    
+
     virtual void apply_shortcut(QString s);
-  
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();	// the node/package is deleted
 };

@@ -60,10 +60,11 @@ class ApplicableOnTable;
 class KeyValuesTable;
 class BodyDialog;
 
-class ClassDialog : public EdgeMenuDialog {
-  Q_OBJECT
-    
-  protected:
+class ClassDialog : public EdgeMenuDialog
+{
+    Q_OBJECT
+
+protected:
     QWidget * umltab;
     ClassData * cl;
     LineEdit * edname;
@@ -83,10 +84,10 @@ class ClassDialog : public EdgeMenuDialog {
     QStringList node_names;
     BrowserNodeList artifacts;
     Q3PtrList<BodyDialog> edits;
-    
+
     ActualParamsTable * actuals_table;
     Q3VBox * instantiate_vtab;
-    
+
     // C++
     QWidget * cppTab;
     QString current_cpp_stereotype;
@@ -94,7 +95,7 @@ class ClassDialog : public EdgeMenuDialog {
     QCheckBox * cpp_external_cb;
     MultiLineEdit * edcppdecl;
     MultiLineEdit * showcppdecl;
-    
+
     // Java
     QWidget * javatab;
     QString current_java_stereotype;
@@ -104,7 +105,7 @@ class ClassDialog : public EdgeMenuDialog {
     MultiLineEdit * showjavadecl;
     //QPushButton * editjavaannotation;
     QString javaannotation;
-    
+
     // Php
     QWidget * phptab;
     QString current_php_stereotype;
@@ -112,7 +113,7 @@ class ClassDialog : public EdgeMenuDialog {
     QCheckBox * php_final_cb;
     MultiLineEdit * edphpdecl;
     MultiLineEdit * showphpdecl;
-    
+
     // Python
     QWidget * pythontab;
     QString current_python_stereotype;
@@ -120,7 +121,7 @@ class ClassDialog : public EdgeMenuDialog {
     QCheckBox * python_2_2_cb;
     MultiLineEdit * edpythondecl;
     MultiLineEdit * showpythondecl;
-    
+
     // Idl
     QWidget * idltab;
     QString current_idl_stereotype;
@@ -131,7 +132,7 @@ class ClassDialog : public EdgeMenuDialog {
     Q3ComboBox * edswitch_type;
     QCheckBox * idl_local_cb;
     QCheckBox * idl_custom_cb;
-    
+
     // profiled stereotype
     QWidget * stereotypetab;
     Q3ComboBox * stereo_init_cb;
@@ -141,12 +142,12 @@ class ClassDialog : public EdgeMenuDialog {
     LineEdit * ediconpath;
     QPushButton * iconpathrootbutton;
     QPushButton * iconpathprjbutton;
-    
+
     ApplicableOnTable * applicableon_table;
-      
+
     // user
     KeyValuesTable * kvtable;
-    
+
     static QSize previous_size;
 
     // added buttons
@@ -164,18 +165,18 @@ class ClassDialog : public EdgeMenuDialog {
     QPushButton * pbNotGeneratedInPython;
     QPushButton * pbIdlDefaultDeclaration;
     QPushButton * pbINotGeneratedInIdl;
-    QLabel* instantiateNotice;
-    QLabel* lblProfiledEmpty;
-    QPushButton* pbProfiledSteretypeBrowse;
-    QLabel* lblProfiledEmpty2;
-    QLabel* lblProfiledEmpty3;
-    Q3VBox* vtabProfiled;
-    Q3ButtonGroup* bgvUml;
-    Q3ButtonGroup* bgvCpp;
-    Q3ButtonGroup* bgvJava;
-    Q3ButtonGroup* bgvPython;
-    Q3ButtonGroup* bgvPhp;
-    Q3ButtonGroup* bgvIDL;
+    QLabel * instantiateNotice;
+    QLabel * lblProfiledEmpty;
+    QPushButton * pbProfiledSteretypeBrowse;
+    QLabel * lblProfiledEmpty2;
+    QLabel * lblProfiledEmpty3;
+    Q3VBox * vtabProfiled;
+    Q3ButtonGroup * bgvUml;
+    Q3ButtonGroup * bgvCpp;
+    Q3ButtonGroup * bgvJava;
+    Q3ButtonGroup * bgvPython;
+    Q3ButtonGroup * bgvPhp;
+    Q3ButtonGroup * bgvIDL;
     Q3HBox * htabcpp;
     Q3HBox * htabidl;
     QLabel * lbl1cpp;
@@ -210,13 +211,13 @@ class ClassDialog : public EdgeMenuDialog {
     BrowserClass * currentNode;
     BrowserNode * grandParent;
 
-    Q3VBox* keyValueTab;
+    Q3VBox * keyValueTab;
 
     virtual uint TypeID();
 
     virtual void InitGui();
-    void FillGuiElements(BrowserNode*);
-    void FillGuiElements(ClassData* _cl);
+    void FillGuiElements(BrowserNode *);
+    void FillGuiElements(ClassData * _cl);
     void NullPointers();
     void SaveData();
 
@@ -225,58 +226,58 @@ class ClassDialog : public EdgeMenuDialog {
     static QSharedPointer<ClassDialog> instance;
 
 
-  public:
+public:
     ClassDialog(ClassData * c);
     virtual ~ClassDialog();
-  
-    static QSharedPointer<ClassDialog> Instance(ClassData*);
+
+    static QSharedPointer<ClassDialog> Instance(ClassData *);
 
     static void cpp_generate_decl(QString & s, ClassData * cl,
-				  QString def, QString name,
-				  QString stereotype,
-				  QString basetype, QString comment,
-				  ActualParamsTable * actuals,
-				  FormalParamsTable * formals,
-				  BrowserNodeList & nodes,
-				  QStringList & node_names,
-				  KeyValuesTable * kvt);
-    
+                                  QString def, QString name,
+                                  QString stereotype,
+                                  QString basetype, QString comment,
+                                  ActualParamsTable * actuals,
+                                  FormalParamsTable * formals,
+                                  BrowserNodeList & nodes,
+                                  QStringList & node_names,
+                                  KeyValuesTable * kvt);
+
     static void java_generate_decl(QString & s, ClassData * cl, QString def,
-				   QString annotation, QString name,
-				   QString stereotype,
-				   QString comment, UmlVisibility visibility,
-				   bool is_final, bool is_abstract,
-				   ActualParamsTable * actuals,
-				   FormalParamsTable * formals,
-				   BrowserNodeList & nodes,
-				   QStringList & node_names,
-				   KeyValuesTable * kvt);
-  
+                                   QString annotation, QString name,
+                                   QString stereotype,
+                                   QString comment, UmlVisibility visibility,
+                                   bool is_final, bool is_abstract,
+                                   ActualParamsTable * actuals,
+                                   FormalParamsTable * formals,
+                                   BrowserNodeList & nodes,
+                                   QStringList & node_names,
+                                   KeyValuesTable * kvt);
+
     static void php_generate_decl(QString & s, ClassData * cl, QString def,
-				  QString name, QString stereotype,
-				  QString comment, bool is_final,
-				  bool is_abstract, KeyValuesTable * kvt);
-  
+                                  QString name, QString stereotype,
+                                  QString comment, bool is_final,
+                                  bool is_abstract, KeyValuesTable * kvt);
+
     static void python_generate_decl(QString & s, ClassData * cl, QString def,
-				     QString name, QString stereotype,
-				     QString comment, bool is_python_2_2,
-				     BrowserNodeList & nodes,
-				     QStringList & node_names,
-				     KeyValuesTable * kvt);
-  
+                                     QString name, QString stereotype,
+                                     QString comment, bool is_python_2_2,
+                                     BrowserNodeList & nodes,
+                                     QStringList & node_names,
+                                     KeyValuesTable * kvt);
+
     static void idl_generate_decl(QString & s, ClassData * cl, QString def,
-				  QString name, QString stereotype,
-				  QString basetype, QString comment,
-				  QString switch_type, bool is_local,
-				  bool is_custom, bool is_abstract,
-				  KeyValuesTable * kvt);
-    
+                                  QString name, QString stereotype,
+                                  QString basetype, QString comment,
+                                  QString switch_type, bool is_local,
+                                  bool is_custom, bool is_abstract,
+                                  KeyValuesTable * kvt);
+
     static void cpp_generate_members_def(const BrowserNode * cl, QString & s);
     static QString python_instance_att_rel(BrowserNode * cl);
-    
+
     static void post_edit_description(ClassDialog * d, QString s);
     static void post_edit_constraint(ClassDialog * d, QString s);
-    
+
     static QString cpp_stereotype(const QString & stereotype);
     static QString java_stereotype(const QString & stereotype);
     static QString php_stereotype(const QString & stereotype);
@@ -317,24 +318,25 @@ protected slots:
 
 };
 
-class FormalParamsTable : public MyTable {
-  Q_OBJECT
+class FormalParamsTable : public MyTable
+{
+    Q_OBJECT
 
-  protected:
+protected:
     const QStringList & types;
 
     static QString type_copy;
     static QString name_copy;		// copy/cut/paste
     static QString default_value_copy;
     static QString extends_copy;
-  
-  public:
+
+public:
     FormalParamsTable(ClassData * a, QWidget * parent,
-		      const QStringList & list, bool visit);
-  
-  protected:
+                      const QStringList & list, bool visit);
+
+protected:
     virtual void activateNextCell();
-  
+
     void insert_row_before(int row);
     void insert_row_after(int row);
     void delete_row(int row);
@@ -342,49 +344,51 @@ class FormalParamsTable : public MyTable {
     void cut_row(int row);
     void paste_row(int row);
     void move_row(int from, int to);
-    
-  public:
+
+public:
     void update(ClassData * c, BrowserNodeList & nodes);
     void generate_cpp(QString & s, BrowserNodeList & nodes,
-		      QStringList & node_names, const QString & cl_name);
+                      QStringList & node_names, const QString & cl_name);
     void generate_java(QString & s, BrowserNodeList & nodes,
-		       QStringList & node_names);
-  
-  protected slots:
+                       QStringList & node_names);
+
+protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
     void value_changed(int row, int col);
 };
 
-class ActualParamsTable : public MyTable {
-  protected:
+class ActualParamsTable : public MyTable
+{
+protected:
     const QStringList & types;
-  
-  public:
+
+public:
     ActualParamsTable(ClassData * a, QWidget * parent,
-		      const QStringList & list, bool visit);
+                      const QStringList & list, bool visit);
     void generate(QString & s, ClassData * cl, BrowserNode * parent, bool cpp,
-		  BrowserNodeList & nodes, QStringList & node_names);
-  
-  protected:
+                  BrowserNodeList & nodes, QStringList & node_names);
+
+protected:
     //virtual void activateNextCell();
-    
-  public:
+
+public:
     void update(ClassData * c, BrowserNodeList & nodes);
 };
 
-class ApplicableOnTable : public MyTable {
-  Q_OBJECT
-  
-  protected:
+class ApplicableOnTable : public MyTable
+{
+    Q_OBJECT
+
+protected:
     bool ro;
-  
-  public:
+
+public:
     ApplicableOnTable(QWidget * parent, QString, bool visit);
-  
-  public:
+
+public:
     QString targets();
-  
-  protected slots:
+
+protected slots:
     void button_pressed(int row, int col, int, const QPoint &);
 };
 

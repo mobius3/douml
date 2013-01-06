@@ -38,10 +38,11 @@ class ColDiagramView;
 class OperationData;
 class BrowserClass;
 
-class CodAddMsgDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class CodAddMsgDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     CodMsgSupport * in;
     ColDiagramView * view;
     bool forward;
@@ -49,16 +50,16 @@ class CodAddMsgDialog : public QDialog {
     Q3ComboBox * cbrank;
     QStringList list;
     Q3ValueList<const OperationData *> opers;
-    Q3ComboBox * edoper;    
-    
+    Q3ComboBox * edoper;
+
     static QSize previous_size;
-  
-  public:
+
+public:
     CodAddMsgDialog(CodObjCanvas * fr, CodObjCanvas * t, CodMsgSupport * i,
-		    ColDiagramView * v, bool f);
+                    ColDiagramView * v, bool f);
     virtual ~CodAddMsgDialog();
-  
-  protected slots:
+
+protected slots:
     void menu_op();
     virtual void polish();
     void accept();

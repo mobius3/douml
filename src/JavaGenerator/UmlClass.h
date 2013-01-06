@@ -39,27 +39,28 @@ class QTextStream;
 class UmlPackage;
 class UmlClass;
 
-class UmlClass : public UmlBaseClass {
-  private:
+class UmlClass : public UmlBaseClass
+{
+private:
     bool managed;
-    
-  public:
+
+public:
     UmlClass(void * id, const Q3CString & n)
-      : UmlBaseClass(id, n), managed(FALSE) {};
-  
+        : UmlBaseClass(id, n), managed(FALSE) {};
+
     Q3CString java_stereotype();
     void generate(QTextStream &, Q3CString indent);
-    
+
     virtual void generate();
     virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent);    
+                          Q3CString indent);
     virtual void generate_enum_pattern_item(QTextStream &, int &, const Q3CString &, Q3CString);
     virtual void generate_enum_pattern_case(QTextStream &, Q3CString);
     virtual void generate_enum_member(QTextStream &, Q3CString);
-    virtual void generate_import(QTextStream & f, const Q3CString & indent);    
+    virtual void generate_import(QTextStream & f, const Q3CString & indent);
     void generate_formals(QTextStream & f);
     void import(QTextStream & f, const Q3CString & indent);
-    
+
     void write(QTextStream &);
     static void write(QTextStream &, const UmlTypeSpec &);
 };

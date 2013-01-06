@@ -31,21 +31,24 @@
 #include "BrowserNode.h"
 #include "OperationData.h"
 
-CodMsgSupport::~CodMsgSupport(){
+CodMsgSupport::~CodMsgSupport()
+{
 }
 
-void CodMsgSupport::delete_it(ColMsgList & top) {
-  while (msgs.getFirst() != 0)
-    msgs.getFirst()->delete_it(FALSE, top);	// remove msg
+void CodMsgSupport::delete_it(ColMsgList & top)
+{
+    while (msgs.getFirst() != 0)
+        msgs.getFirst()->delete_it(FALSE, top);	// remove msg
 }
 
-bool CodMsgSupport::supports(BrowserNode * bn) {
-  BasicData * data = bn->get_data();
-  ColMsg * msg;
-  
-  for (msg = msgs.first(); msg != 0; msg = msgs.next())
-    if ((BasicData *) msg->get_operation() == data)
-      return TRUE;
-  
-  return FALSE;
+bool CodMsgSupport::supports(BrowserNode * bn)
+{
+    BasicData * data = bn->get_data();
+    ColMsg * msg;
+
+    for (msg = msgs.first(); msg != 0; msg = msgs.next())
+        if ((BasicData *) msg->get_operation() == data)
+            return TRUE;
+
+    return FALSE;
 }

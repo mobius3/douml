@@ -35,10 +35,11 @@ class Q3ComboBox;
 class LineEdit;
 class Instance;
 
-class InstanceDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class InstanceDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     Instance * inst;
     QString what;
     UmlCode kind;
@@ -46,14 +47,14 @@ class InstanceDialog : public QDialog {
     BrowserNodeList nodes;
     LineEdit * edname;
     Q3ComboBox * edtype;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     InstanceDialog(Instance * a, QString w, UmlCode k);
     virtual ~InstanceDialog();
-  
-  protected slots:
+
+protected slots:
     void menu_type();
     virtual void polish();
     void accept();

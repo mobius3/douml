@@ -17,9 +17,12 @@ class UmlTypeSpec;
 // is a mother class of the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlClass : public UmlBaseClass {
-  public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) { NumberOf += 1; };
+class UmlClass : public UmlBaseClass
+{
+public:
+    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {
+        NumberOf += 1;
+    };
 
     //returns the first container for a 'kind', going up in the browser tree
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);
@@ -33,21 +36,25 @@ class UmlClass : public UmlBaseClass {
     static void importPrimitiveType(FileIn & in, Token & token, UmlItem * where);
 
     //  call at end of import : try to solve generalization dependencies and realization
-    
+
     virtual void generalizeDependRealize(UmlItem * target, FileIn & in, int context, Q3CString label, Q3CString constraint);
 
     //  call at end of import : try to solve generalization dependencies, realization
     //
-    
+
     virtual void solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString constraint);
 
-    static int numberOf() { return NumberOf; };
+    static int numberOf() {
+        return NumberOf;
+    };
 
-    static int numberOfStereotype() { return NumberOfStereotype; };
+    static int numberOfStereotype() {
+        return NumberOfStereotype;
+    };
 
     //return the class owing the signature whose id is given in parameter,
     //may return 0
-    
+
     static UmlClass * signature(Q3CString id);
 
     //returns the rank of the formal from its id,
@@ -58,7 +65,7 @@ class UmlClass : public UmlBaseClass {
     // else if this realize tmpl, set stereotype to bind and return true
     // else add a realization to tmpl stereotyped bind and return true
     // return FALSE on error
-    
+
     bool bind(UmlClass * tmpl);
 
     // the class is a stereotype extending mcl
@@ -71,13 +78,13 @@ class UmlClass : public UmlBaseClass {
     static bool isPrimitiveType(Token & token, UmlTypeSpec & ts);
 
 
-  private:
+private:
     void readFormal(FileIn & in, Token & token);
 
     UmlClass * addMetaclass(Q3CString mclname, const char * mclpath);
 
 
-  protected:
+protected:
     static int NumberOf;
 
     static int NumberOfStereotype;

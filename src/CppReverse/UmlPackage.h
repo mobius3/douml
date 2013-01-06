@@ -40,14 +40,15 @@ class ClassContainer;
 # endif
 #endif
 
-class UmlPackage : public UmlBasePackage {
-  public:
+class UmlPackage : public UmlBasePackage
+{
+public:
     UmlPackage(void * id, const Q3CString & n);
-  
+
     void reverse_main(const Q3CString & type, Q3CString comment);
     UmlClassView * get_classview(const Q3CString & nmsp);
 #ifdef REVERSE
-    UmlDeploymentView * get_deploymentview(const Q3CString & nmsp);  
+    UmlDeploymentView * get_deploymentview(const Q3CString & nmsp);
 # ifdef ROUNDTRIP
     void init(Package *);
     virtual void upload(ClassContainer *);
@@ -55,12 +56,14 @@ class UmlPackage : public UmlBasePackage {
     virtual void mark_useless(Q3PtrList<UmlItem> & l);
     virtual void scan_it(int & n);
     virtual void send_it(int n);
-    Package * get_package() const { return package; }
+    Package * get_package() const {
+        return package;
+    }
     int count_roundtriped();
 # endif
-#endif  
+#endif
 
-  private:
+private:
     UmlClassView * class_view;
 #ifdef REVERSE
     UmlDeploymentView * deployment_view;

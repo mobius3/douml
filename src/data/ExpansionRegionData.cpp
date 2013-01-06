@@ -39,82 +39,93 @@
 #include "mu.h"
 
 ExpansionRegionData::ExpansionRegionData()
-    : must_isolate(FALSE), mode(UmlIterative) {
+    : must_isolate(FALSE), mode(UmlIterative)
+{
 }
 
 ExpansionRegionData::ExpansionRegionData(ExpansionRegionData * model, BrowserNode * bn)
-    : SimpleData(model) {
-  browser_node = bn;
-  must_isolate = model->must_isolate;
-  mode = model->mode;
+    : SimpleData(model)
+{
+    browser_node = bn;
+    must_isolate = model->must_isolate;
+    mode = model->mode;
 }
 
-ExpansionRegionData::~ExpansionRegionData() {
+ExpansionRegionData::~ExpansionRegionData()
+{
 }
 
-void ExpansionRegionData::edit() {
-  setName(browser_node->get_name());
-    
-  (new ExpansionRegionDialog(this))->show();
+void ExpansionRegionData::edit()
+{
+    setName(browser_node->get_name());
+
+    (new ExpansionRegionDialog(this))->show();
 }
 
 //
-  
+
 void ExpansionRegionData::send_uml_def(ToolCom * com, BrowserNode * bn,
-				       const QString & comment) {
-  SimpleData::send_uml_def(com, bn, comment);
-  com->write_bool(must_isolate);
-  com->write_char(mode);
+                                       const QString & comment)
+{
+    SimpleData::send_uml_def(com, bn, comment);
+    com->write_bool(must_isolate);
+    com->write_char(mode);
 }
 
 bool ExpansionRegionData::tool_cmd(ToolCom * com, const char * args,
-				   BrowserNode * bn, const QString & comment) {
-  if (((unsigned char) args[-1]) >= firstSetCmd) {
-    if (!bn->is_writable() && !root_permission())
-      com->write_ack(FALSE);
-    else {
-      switch ((unsigned char) args[-1]) {
-      case setFlagCmd:
-	must_isolate = *args != 0;
-	break;
-      case setDefCmd:
-	mode = (UmlExpansionKind) *args;
-	break;
-      default:
-	return BasicData::tool_cmd(com, args, bn, comment);
-      }
-      
-      // ok case
-      bn->package_modified();
-      modified();
-      com->write_ack(TRUE);
+                                   BrowserNode * bn, const QString & comment)
+{
+    if (((unsigned char) args[-1]) >= firstSetCmd) {
+        if (!bn->is_writable() && !root_permission())
+            com->write_ack(FALSE);
+        else {
+            switch ((unsigned char) args[-1]) {
+            case setFlagCmd:
+                must_isolate = *args != 0;
+                break;
+
+            case setDefCmd:
+                mode = (UmlExpansionKind) * args;
+                break;
+
+            default:
+                return BasicData::tool_cmd(com, args, bn, comment);
+            }
+
+            // ok case
+            bn->package_modified();
+            modified();
+            com->write_ack(TRUE);
+        }
     }
-  }
-  else
-    return BasicData::tool_cmd(com, args, bn, comment);
-  
-  return TRUE;
+    else
+        return BasicData::tool_cmd(com, args, bn, comment);
+
+    return TRUE;
 }
 
 //
 
-void ExpansionRegionData::save(QTextStream & st, QString & warning) const {
-  BasicData::save(st, warning);
-  nl_indent(st);
+void ExpansionRegionData::save(QTextStream & st, QString & warning) const
+{
+    BasicData::save(st, warning);
+    nl_indent(st);
 
-  if (must_isolate)
-    st << "must_isolate ";
+    if (must_isolate)
+        st << "must_isolate ";
 
-  st << stringify(mode);
+    st << stringify(mode);
 }
 
-void ExpansionRegionData::read(char * & st, char * & k) {
-  BasicData::read(st, k);	// updates k
-  if (! strcmp(k, "must_isolate")) {
-    must_isolate = TRUE;
-    k = read_keyword(st);
-  }
+void ExpansionRegionData::read(char *& st, char *& k)
+{
+    BasicData::read(st, k);	// updates k
 
-  mode = expansion_mode_kind(k);
-  k = read_keyword(st);
+    if (! strcmp(k, "must_isolate")) {
+        must_isolate = TRUE;
+        k = read_keyword(st);
+    }
+
+    mode = expansion_mode_kind(k);
+    k = read_keyword(st);
 }

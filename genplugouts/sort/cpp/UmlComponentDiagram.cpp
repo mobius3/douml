@@ -1,7 +1,8 @@
 
 #include "UmlComponentDiagram.h"
 
-int UmlComponentDiagram::orderWeight() {
-  return 6;
+int UmlComponentDiagram::orderWeight()
+{
+    return 6;
 }
 

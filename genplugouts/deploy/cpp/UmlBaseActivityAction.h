@@ -7,14 +7,15 @@
 
 class UmlDiagram;
 
-class UmlBaseActivityAction : public UmlActivityNode {
-  protected:
+class UmlBaseActivityAction : public UmlActivityNode
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityAction(void * id, const Q3CString & s) : UmlActivityNode(id, s) {
+    UmlBaseActivityAction(void * id, const Q3CString & s) : UmlActivityNode(id, s) {
     }
 
 
-  public:
+public:
     // return the pre condition
     const Q3CString & preCondition();
 
@@ -84,7 +85,7 @@ class UmlBaseActivityAction : public UmlActivityNode {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _pre_condition;
 
     Q3CString _post_condition;
@@ -104,7 +105,7 @@ class UmlBaseActivityAction : public UmlActivityNode {
     UmlDiagram * _assoc_diagram;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP

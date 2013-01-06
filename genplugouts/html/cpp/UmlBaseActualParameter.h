@@ -9,8 +9,9 @@ class UmlClass;
 // This class manages 'actual parameters' of a template class. For instance T in
 //
 //	class Cl1 : public Cl2<T> ...
-class UmlBaseActualParameter {
-  public:
+class UmlBaseActualParameter
+{
+public:
     UmlBaseActualParameter() {};
 
     // returns the class of the corresponding formal
@@ -23,7 +24,7 @@ class UmlBaseActualParameter {
     const UmlTypeSpec & value() const;
 
 
-  protected:
+protected:
     UmlClass * _superClass;
 
     unsigned _rank;
@@ -32,7 +33,7 @@ class UmlBaseActualParameter {
 
     void read_();
 
-  friend class UmlBaseClass;
+    friend class UmlBaseClass;
 };
 
 #endif

@@ -5,7 +5,7 @@
 
 void UmlDeploymentDiagram::import(File & f, UmlDeploymentView *)
 {
-  //!!!!!!!!!!!
-  f.skipBlock();
+    //!!!!!!!!!!!
+    f.skipBlock();
 }
 

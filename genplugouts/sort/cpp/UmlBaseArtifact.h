@@ -15,8 +15,9 @@ class UmlDeploymentDiagram;
 class UmlClass;
 
 //Manage the artifacts
-class UmlBaseArtifact : public UmlItem {
-  public:
+class UmlBaseArtifact : public UmlItem
+{
+public:
     // returns a new artifact named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -86,7 +87,7 @@ class UmlBaseArtifact : public UmlItem {
     const Q3CString & cppHeader();
 
     // to set the C++ header file definition
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_CppHeader(const Q3CString & s);
 
@@ -94,7 +95,7 @@ class UmlBaseArtifact : public UmlItem {
     const Q3CString & cppSource();
 
     // to set the C++ source file definition
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_CppSource(const Q3CString & s);
 #endif
@@ -104,7 +105,7 @@ class UmlBaseArtifact : public UmlItem {
     const Q3CString & javaSource();
 
     // to set the Java file definition
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_JavaSource(const Q3CString & s);
 #endif
@@ -114,7 +115,7 @@ class UmlBaseArtifact : public UmlItem {
     const Q3CString & idlSource();
 
     // to set the Idl file definition
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_IdlSource(const Q3CString & s);
 #endif
@@ -123,9 +124,9 @@ class UmlBaseArtifact : public UmlItem {
     // automatically if needed. args unused
     virtual void unload(bool = FALSE, bool = FALSE);
 
-  friend class UmlBaseClass;
+    friend class UmlBaseClass;
 
-  private:
+private:
     UmlDeploymentDiagram * _assoc_diagram;
 
     Q3PtrVector<UmlClass> _assoc_classes;
@@ -147,26 +148,26 @@ class UmlBaseArtifact : public UmlItem {
 #endif
 
 
-  protected:
+protected:
     //internal, do NOT use it
-    
+
     virtual void read_uml_();
 
 #ifdef WITHCPP
     //internal, do NOT use it
-    
+
     virtual void read_cpp_();
 #endif
 
 #ifdef WITHJAVA
     //internal, do NOT use it
-    
+
     virtual void read_java_();
 #endif
 
 #ifdef WITHIDL
     //internal, do NOT use it
-    
+
     virtual void read_idl_();
 #endif
 
@@ -175,8 +176,9 @@ class UmlBaseArtifact : public UmlItem {
 
 };
 
-inline UmlBaseArtifact::UmlBaseArtifact(void * id, const Q3CString & n) : UmlItem(id, n) {
-  _assoc_diagram = 0;
+inline UmlBaseArtifact::UmlBaseArtifact(void * id, const Q3CString & n) : UmlItem(id, n)
+{
+    _assoc_diagram = 0;
 }
 
 #endif

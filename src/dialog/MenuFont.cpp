@@ -31,15 +31,18 @@
 
 #include "MenuFont.h"
 
-MenuFont::MenuFont(const QString & s, QFont f) : str(s), font(f) {
+MenuFont::MenuFont(const QString & s, QFont f) : str(s), font(f)
+{
 }
 
-void MenuFont::paint(QPainter * p, const QColorGroup& /*cg*/, bool /*act*/,
-		      bool /*enabled*/, int x, int y, int w, int h) {
-  p->setFont(font);
-  p->drawText( x, y, w, h, Qt::TextShowMnemonic | Qt::TextDontClip, str);
+void MenuFont::paint(QPainter * p, const QColorGroup & /*cg*/, bool /*act*/,
+                     bool /*enabled*/, int x, int y, int w, int h)
+{
+    p->setFont(font);
+    p->drawText(x, y, w, h, Qt::TextShowMnemonic | Qt::TextDontClip, str);
 }
 
-QSize MenuFont::sizeHint() {
-  return QFontMetrics(font).size(Qt::TextShowMnemonic | Qt::TextDontClip, str);
+QSize MenuFont::sizeHint()
+{
+    return QFontMetrics(font).size(Qt::TextShowMnemonic | Qt::TextDontClip, str);
 }

@@ -25,6 +25,6 @@
 #define EDGETOOLBARCREATION_H
 #include <QToolBar>
 class EdgeMenuToolBar;
-EdgeMenuToolBar* CreateLimitedDialogMenu();
-EdgeMenuToolBar* CreateClassDialogMenu();
+EdgeMenuToolBar * CreateLimitedDialogMenu();
+EdgeMenuToolBar * CreateClassDialogMenu();
 #endif // EDGETOOLBARCREATION_H

@@ -9,7 +9,8 @@
 // - a class reference
 //
 // - an explicit type
-class UmlTypeSpec : public UmlBaseTypeSpec {
+class UmlTypeSpec : public UmlBaseTypeSpec
+{
 };
 
 #endif

@@ -1,7 +1,8 @@
 
 #include "UmlArtifact.h"
 
-int UmlArtifact::orderWeight() {
-  return 10;
+int UmlArtifact::orderWeight()
+{
+    return 10;
 }
 

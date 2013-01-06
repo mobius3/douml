@@ -35,30 +35,32 @@ class QPushButton;
 
 class ShortcutTable;
 
-class ShortcutDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ShortcutDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     ShortcutTable * cmd_table;
     ShortcutTable * tool_table;
 
     static QSize previous_size;
-  
-  protected:
 
-  public:
+protected:
+
+public:
     ShortcutDialog();
     virtual ~ShortcutDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
 };
 
-class ShortcutTable : public MyTable {
-  Q_OBJECT
+class ShortcutTable : public MyTable
+{
+    Q_OBJECT
 
-  protected:
+protected:
     bool for_tool;
     QString shift_copy;		// copy/cut/paste
     QString control_copy;
@@ -67,11 +69,11 @@ class ShortcutTable : public MyTable {
     QString val_copy;
     QStringList keys;
     QStringList values;
-  
-  public:
+
+public:
     ShortcutTable(QWidget * parent, bool tool, int n);
-  
-  protected:
+
+protected:
     void insert_row_before(int row);
     void insert_row_after(int row);
     void delete_row(int row);
@@ -79,12 +81,12 @@ class ShortcutTable : public MyTable {
     void cut_row(int row);
     void paste_row(int row);
     void move_row(int from, int to);
-    
-  public:
+
+public:
     bool check(QStringList &);
     void accept();
-  
-  protected slots:
+
+protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
     void value_changed(int row, int col);
 };

@@ -25,7 +25,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qcheckbox.h> 
+#include <qcheckbox.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
 //Added by qt3to4:
@@ -38,126 +38,130 @@
 #include "BrowserView.h"
 
 SynchroDialog::SynchroDialog(Q3PtrList<BrowserView> & b)
-    : QDialog(0, "Synchronize", TRUE), browsers(b) {
-  setCaption("Synchronize");
-  
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
-  
-  vbox->setMargin(5);
-  
-  bool has_ro = FALSE;
-  bool has_ro_need_update = FALSE;
-  bool has_need_update = FALSE;
-  Q3PtrListIterator<BrowserView> it(browsers);
-  
-  for (; it.current(); ++it) {
-    if (it.current()->is_need_update()) {
-      if (it.current()->is_cant_update()) {
-	has_ro = TRUE;
-	has_ro_need_update = TRUE;
-      }
-      else
-	has_need_update = TRUE;
-    }
-  }  
+    : QDialog(0, "Synchronize", TRUE), browsers(b)
+{
+    setCaption("Synchronize");
 
-  QLabel * lbl;
-  
-  if (has_need_update) {
-    lbl = 
-      new QLabel("\nChoose the projects to synchronize with the others\n", 
-		 this);
-    
-    lbl->setAlignment(::Qt::AlignCenter);
-    vbox->addWidget(lbl);
-    
-    if (has_ro_need_update) {
-      lbl = 
-	new QLabel("\nWarning : some projects can't be synchronized because of read-only files\n", 
-		   this);
-      
-      lbl->setAlignment(::Qt::AlignCenter);
-      vbox->addWidget(lbl);
-    }
-  }
-  else if (has_ro_need_update) {
-    lbl = 
-      new QLabel("\nSynchronisation not possible because of read-only files\n", 
-		 this);
-    
-    lbl->setAlignment(::Qt::AlignCenter);
-    vbox->addWidget(lbl);
-  }
-  else {
-    lbl = 
-      new QLabel("\nAll the projects are synchronized\n",
-		 this);
-    
-    lbl->setAlignment(::Qt::AlignCenter);
-    vbox->addWidget(lbl);
-  }
-  
-  //
-  
-  for (it.toFirst() ; it.current(); ++it) {
-    if (it.current()->is_need_update()) {
-      QCheckBox * cb = new QCheckBox(it.current()->get_dir().path(), this);
-      
-      vbox->addWidget(cb);
-      
-      if (it.current()->is_cant_update())
-	cb->setEnabled(FALSE);
-      else
-	checks.append(cb);
-    }
-  }
-  
-  //
-  
-  hbox = new Q3HBoxLayout(vbox);
-  hbox->setMargin(5);
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    Q3HBoxLayout * hbox;
 
-  if (has_need_update) {
-    QPushButton * ok = new QPushButton("Synchronize", this);
-  
+    vbox->setMargin(5);
+
+    bool has_ro = FALSE;
+    bool has_ro_need_update = FALSE;
+    bool has_need_update = FALSE;
+    Q3PtrListIterator<BrowserView> it(browsers);
+
+    for (; it.current(); ++it) {
+        if (it.current()->is_need_update()) {
+            if (it.current()->is_cant_update()) {
+                has_ro = TRUE;
+                has_ro_need_update = TRUE;
+            }
+            else
+                has_need_update = TRUE;
+        }
+    }
+
+    QLabel * lbl;
+
+    if (has_need_update) {
+        lbl =
+            new QLabel("\nChoose the projects to synchronize with the others\n",
+                       this);
+
+        lbl->setAlignment(::Qt::AlignCenter);
+        vbox->addWidget(lbl);
+
+        if (has_ro_need_update) {
+            lbl =
+                new QLabel("\nWarning : some projects can't be synchronized because of read-only files\n",
+                           this);
+
+            lbl->setAlignment(::Qt::AlignCenter);
+            vbox->addWidget(lbl);
+        }
+    }
+    else if (has_ro_need_update) {
+        lbl =
+            new QLabel("\nSynchronisation not possible because of read-only files\n",
+                       this);
+
+        lbl->setAlignment(::Qt::AlignCenter);
+        vbox->addWidget(lbl);
+    }
+    else {
+        lbl =
+            new QLabel("\nAll the projects are synchronized\n",
+                       this);
+
+        lbl->setAlignment(::Qt::AlignCenter);
+        vbox->addWidget(lbl);
+    }
+
+    //
+
+    for (it.toFirst() ; it.current(); ++it) {
+        if (it.current()->is_need_update()) {
+            QCheckBox * cb = new QCheckBox(it.current()->get_dir().path(), this);
+
+            vbox->addWidget(cb);
+
+            if (it.current()->is_cant_update())
+                cb->setEnabled(FALSE);
+            else
+                checks.append(cb);
+        }
+    }
+
+    //
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+
+    if (has_need_update) {
+        QPushButton * ok = new QPushButton("Synchronize", this);
+
+        hbox->addWidget(new QLabel(this));
+        hbox->addWidget(ok);
+        connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
+    }
+
+    QPushButton * cancel = new QPushButton("Cancel", this);
+
     hbox->addWidget(new QLabel(this));
-    hbox->addWidget(ok);
-    connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
-  }
-  
-  QPushButton * cancel = new QPushButton("Cancel", this);
-  
-  hbox->addWidget(new QLabel(this));
-  hbox->addWidget(cancel);
-  hbox->addWidget(new QLabel(this));
-  connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    hbox->addWidget(cancel);
+    hbox->addWidget(new QLabel(this));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-SynchroDialog::~SynchroDialog() {
+SynchroDialog::~SynchroDialog()
+{
 }
 
-void SynchroDialog::accept() {
-  Q3PtrListIterator<BrowserView> itprj(browsers);
-  Q3PtrListIterator<QCheckBox> itcb(checks);
-  bool work = FALSE;
-    
-  QApplication::setOverrideCursor(Qt::waitCursor);
-  
-  for (; itprj.current(); ++itprj) {
-    if (itprj.current()->is_need_update() &&
-	!itprj.current()->is_cant_update()) {
-      if (itcb.current()->isChecked()) {
-	itprj.current()->synchronize();
-	work = TRUE;
-      }
-      ++itcb;
+void SynchroDialog::accept()
+{
+    Q3PtrListIterator<BrowserView> itprj(browsers);
+    Q3PtrListIterator<QCheckBox> itcb(checks);
+    bool work = FALSE;
+
+    QApplication::setOverrideCursor(Qt::waitCursor);
+
+    for (; itprj.current(); ++itprj) {
+        if (itprj.current()->is_need_update() &&
+            !itprj.current()->is_cant_update()) {
+            if (itcb.current()->isChecked()) {
+                itprj.current()->synchronize();
+                work = TRUE;
+            }
+
+            ++itcb;
+        }
     }
-  }
-  
-  QApplication::restoreOverrideCursor();
 
-  if (work)
-    QDialog::accept();
+    QApplication::restoreOverrideCursor();
+
+    if (work)
+        QDialog::accept();
 }
 

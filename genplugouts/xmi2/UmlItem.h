@@ -17,10 +17,11 @@ class UmlTypeSpec;
 // allows to generalize their management, declare virtual operations etc ...
 //
 // You can modify it as you want (except the constructor)
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n)
-      : UmlBaseItem(id, n), _written(FALSE) {};
+        : UmlBaseItem(id, n), _written(FALSE) {};
 
     virtual ~UmlItem();
 
@@ -40,13 +41,13 @@ class UmlItem : public UmlBaseItem {
     //Memorize the relation in the package (or the view in case the views
     //are generated as package) containing the current element, to generate
     //the relation at the package/view level
-    
+
     virtual void memo_relation(UmlItem * r);
 
     //Memorize the use case diagram in the package (or the view in case the views
     //are generated as package) containing the current element, to generate
     //the association use case / actor at the package/view level
-    
+
     virtual void memo_ac_uc_assoc(UmlUseCaseDiagram * d);
 
     static void write_multiplicity(FileOut & out, Q3CString s, UmlItem * who);
@@ -62,7 +63,7 @@ class UmlItem : public UmlBaseItem {
     static bool gen_extension();
 
 
-  protected:
+protected:
     bool _written;
 
     static bool _gen_views;

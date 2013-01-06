@@ -35,20 +35,21 @@
 class Q3TabDialog;
 class MultiLineEdit;
 
-class BodyDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class BodyDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     MultiLineEdit * e;
     Q3TabDialog * dlg;
     post_edit f;
     Q3PtrList<BodyDialog> & eds;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     BodyDialog(QString t, Q3TabDialog * d, post_edit pf,
-	       EditType k, QString what, Q3PtrList<BodyDialog> & edits);
+               EditType k, QString what, Q3PtrList<BodyDialog> & edits);
     virtual ~BodyDialog();
 };
 

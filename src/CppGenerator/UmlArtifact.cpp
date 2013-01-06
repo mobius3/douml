@@ -44,7 +44,8 @@
 
 UmlPackage * UmlArtifact::package_of_generated_artifact;
 
-void UmlArtifact::generate() {
+void UmlArtifact::generate()
+{
     if (! managed) {
         managed = TRUE;
 
@@ -64,6 +65,7 @@ void UmlArtifact::generate() {
             if (verbose())
                 UmlCom::trace(Q3CString("<hr><font face=helvetica>artifact <i>")
                               + name() + "</i> has an empty C++ definition</font><br>");
+
             return;
         }
 
@@ -75,16 +77,14 @@ void UmlArtifact::generate() {
         Q3CString nasp_end;
         const char * cnasp = pack->cppNamespace();
         Q3CString nasp = ((cnasp[0] == ':') && (cnasp[1] == ':'))
-                ? cnasp + 2 : cnasp;
+                         ? cnasp + 2 : cnasp;
 
-        if (!nasp.isEmpty())
-        {
+        if (!nasp.isEmpty()) {
             int index = 0;
             int index2;
             Q3CString closed = "\n} // namespace ";
 
-            while ((index2 = nasp.find(':', index)) != -1)
-            {
+            while ((index2 = nasp.find(':', index)) != -1) {
                 Q3CString na = nasp.mid(index, index2 - index);
 
                 nasp_start += Q3CString("namespace ") + na + " {\n\n";
@@ -99,15 +99,13 @@ void UmlArtifact::generate() {
             closed += nasp.mid(index);
             nasp_end = closed + "\n" + nasp_end;
         }
-        else
-        {
+        else {
             Q3CString s;
 
             if (!hdef.isEmpty())
                 s = " in <i> " + h_path + "</i>";
 
-            if (!srcdef.isEmpty())
-            {
+            if (!srcdef.isEmpty()) {
                 if (!hdef.isEmpty())
                     s += " and <i> " + src_path + "</i>";
                 else
@@ -115,6 +113,7 @@ void UmlArtifact::generate() {
             }
 
             UmlCom::message(name);
+
             if (verbose())
                 UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
                               + name + "</i>" + s + "</font><br>");
@@ -146,8 +145,7 @@ void UmlArtifact::generate() {
         Q3CString decl;
         bool incl_computed = FALSE;
 
-        if (!hdef.isEmpty())
-        {
+        if (!hdef.isEmpty()) {
 
 
             //headerFile->append("Test DAta");
@@ -159,16 +157,15 @@ void UmlArtifact::generate() {
             const char * p = hdef;
             const char * pp = 0;
 
-            for (;;)
-            {
-                if (*p == 0)
-                {
+            for (;;) {
+                if (*p == 0) {
                     if (pp == 0)
                         break;
 
                     // comment management done
                     p = pp;
                     pp = 0;
+
                     if (*p == 0)
                         break;
                 }
@@ -181,92 +178,90 @@ void UmlArtifact::generate() {
                     manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
                 else if (!strncmp(p, "${description}", 14))
                     manage_description(p, pp);
-                else if (!strncmp(p, "${name}", 7))
-                {
+                else if (!strncmp(p, "${name}", 7)) {
                     p += 7;
                     f_h << name;
                 }
-                else if (!strncmp(p, "${Name}", 7))
-                {
+                else if (!strncmp(p, "${Name}", 7)) {
                     p += 7;
                     QLOG_INFO() << "Outputting name: " << name;
                     f_h << capitalize(name);
                 }
-                else if (!strncmp(p, "${NAME}", 7))
-                {
+                else if (!strncmp(p, "${NAME}", 7)) {
                     p += 7;
                     f_h << name.upper();
                 }
-                else if (!strncmp(p, "${nAME}", 7))
-                {
+                else if (!strncmp(p, "${nAME}", 7)) {
                     p += 7;
                     f_h << name.lower();
                 }
-                else if (!strncmp(p, "${namespace}", 12))
-                {
+                else if (!strncmp(p, "${namespace}", 12)) {
                     p += 12;
                     f_h << nasp;
                 }
-                else if (!strncmp(p, "${NAMESPACE}", 12))
-                {
+                else if (!strncmp(p, "${NAMESPACE}", 12)) {
                     p += 12;
                     f_h << nasp.upper();
                 }
                 else if (!strncmp(p, "${includes}", 11)
-                         || !strncmp(p, "${all_includes}", 15))
-                {
+                         || !strncmp(p, "${all_includes}", 15)) {
                     p += (p[2] == 'a') ? 15 : 11;
+
                     if (!incl_computed) {
                         incl_computed = TRUE;
                         CppRefType::compute(dependencies, hdef, srcdef, h_incl, decl, src_incl, this);
                     }
-                    if (!h_incl.isEmpty())
-                    {
+
+                    if (!h_incl.isEmpty()) {
                         f_h << h_incl;
+
                         if (*p != '\n')
                             f_h << '\n';
                     }
                     else if (*p == '\n')
                         p += 1;
                 }
-                else if (!strncmp(p, "${declarations}", 15))
-                {
+                else if (!strncmp(p, "${declarations}", 15)) {
                     p += 15;
-                    if (!incl_computed)
-                    {
+
+                    if (!incl_computed) {
                         incl_computed = TRUE;
                         CppRefType::compute(dependencies, hdef, srcdef, h_incl, decl, src_incl, this);
                     }
-                    if (!decl.isEmpty())
-                    {
+
+                    if (!decl.isEmpty()) {
                         f_h << decl;
+
                         if (*p != '\n')
                             f_h << '\n';
                     }
                     else if (*p == '\n')
                         p += 1;
                 }
-                else if (!strncmp(p, "${namespace_start}", 18))
-                {
+                else if (!strncmp(p, "${namespace_start}", 18)) {
                     p += 18;
+
                     if (!nasp_start.isEmpty())
                         f_h << nasp_start;
+
                     if (*p == '\n')
                         p += 1;
                 }
-                else if (!strncmp(p, "${namespace_end}", 16))
-                {
+                else if (!strncmp(p, "${namespace_end}", 16)) {
                     p += 16;
+
                     if (!nasp_end.isEmpty())
                         f_h << nasp_end;
+
                     if (*p == '\n')
                         p += 1;
                 }
-                else if (!strncmp(p, "${definition}", 13))
-                {
+                else if (!strncmp(p, "${definition}", 13)) {
                     p += 13;
+
                     for (index = 0; index != n; index += 1)
                         cls[index]->generate_decl(f_h, current_indent(p, hdef));
+
                     if (*p == '\n')
                         p += 1;
                 }
@@ -278,8 +273,7 @@ void UmlArtifact::generate() {
             f_h << '\000';
             f_h.flush();
 
-            if (must_be_saved(h_path, headerFile->data()))
-            {
+            if (must_be_saved(h_path, headerFile->data())) {
                 QLOG_INFO() << "this is essentially what goes to the header file: " << headerFile->size();
                 write_trace_header();
 
@@ -292,8 +286,7 @@ void UmlArtifact::generate() {
                                   + pack->name() + "</i> C++ directory specification</b></font><br>");
                     incr_error();
                 }
-                else
-                {
+                else {
                     QLOG_INFO() << "this is essentially what goes to the file: " << headerFile->constData();
                     fputs((const char *) headerFile->data(), fp_h);
                     fclose(fp_h);
@@ -313,8 +306,7 @@ void UmlArtifact::generate() {
 
         // generate source file
 
-        if (!srcdef.isEmpty())
-        {
+        if (!srcdef.isEmpty()) {
             QSharedPointer<QByteArray> file(new QByteArray());
             QTextStream f_src(file.data(), QIODevice::WriteOnly);
             const char * p = srcdef;
@@ -328,6 +320,7 @@ void UmlArtifact::generate() {
                     // comment management done
                     p = pp;
                     pp = 0;
+
                     if (*p == 0)
                         break;
                 }
@@ -347,12 +340,15 @@ void UmlArtifact::generate() {
                 }
                 else if (!strncmp(p, "${includes}", 11)) {
                     p += 11;
+
                     if (!incl_computed) {
                         incl_computed = TRUE;
                         CppRefType::compute(dependencies, hdef, srcdef, h_incl, decl, src_incl, this);
                     }
+
                     if (!src_incl.isEmpty()) {
                         f_src << src_incl;
+
                         if (*p != '\n')
                             f_src << '\n';
                     }
@@ -361,22 +357,28 @@ void UmlArtifact::generate() {
                 }
                 else if (!strncmp(p, "${members}", 10)) {
                     p += 10;
+
                     for (index = 0; index != n; index += 1)
                         cls[index]->generate_def(f_src, current_indent(p, srcdef), FALSE);
+
                     if (*p == '\n')
                         p += 1;
                 }
                 else if (!strncmp(p, "${namespace_start}", 18)) {
                     p += 18;
+
                     if (!nasp_start.isEmpty())
                         f_src << nasp_start;
+
                     if (*p == '\n')
                         p += 1;
                 }
                 else if (!strncmp(p, "${namespace_end}", 16)) {
                     p += 16;
+
                     if (!nasp_end.isEmpty())
                         f_src << nasp_end;
+
                     if (*p == '\n')
                         p += 1;
                 }
@@ -388,8 +390,7 @@ void UmlArtifact::generate() {
             f_src << '\000';
             f_src.flush();
 
-            if (must_be_saved(src_path, file->data()))
-            {
+            if (must_be_saved(src_path, file->data())) {
                 write_trace_header();
 
                 FILE * fp_src;
@@ -414,16 +415,18 @@ void UmlArtifact::generate() {
     }
 }
 
-void UmlArtifact::generate_text() {
+void UmlArtifact::generate_text()
+{
     const Q3CString srcdef = cppSource();
 
     if (srcdef.isEmpty()) {
         if (verbose())
             UmlCom::trace(Q3CString("<hr><font face=helvetica>artifact <i>")
                           + name() + "</i> has an empty C++ definition</font><br>");
+
         return;
     }
-    
+
     UmlPackage * pack = package();
     const Q3CString & name = UmlArtifact::name();
     Q3CString src_path = pack->text_path(name);
@@ -431,6 +434,7 @@ void UmlArtifact::generate_text() {
     Q3CString s = " in <i> " + src_path + "</i>";
 
     UmlCom::message(name);
+
     if (verbose())
         UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
                       + name + "</i>" + s + "</font><br>");
@@ -476,7 +480,7 @@ bool UmlArtifact::must_be_saved(const char * path, const char * new_contains)
     int c;
 
     while ((c = fgetc(fp)) != EOF) {
-        if (((char ) c) != *new_contains++) {
+        if (((char) c) != *new_contains++) {
             fclose(fp);
             return TRUE;
         }

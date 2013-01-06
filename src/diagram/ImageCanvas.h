@@ -31,39 +31,40 @@
 #include <QTextStream>
 #include <QPixmap>
 
-class ImageCanvas : public DiagramCanvas {
-  protected:
+class ImageCanvas : public DiagramCanvas
+{
+protected:
     QString path;
     QPixmap * px;
 
     void modified();
-    
-  public:
+
+public:
     ImageCanvas(UmlCanvas * canvas, int x, int y, QString pa, int id);
     virtual ~ImageCanvas();
-    
+
     void set(QPixmap *);
-    
+
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void open();
     virtual void change_scale();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
+
     virtual void apply_shortcut(QString s);
-  
+
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
-    static ImageCanvas * read(char * &, UmlCanvas *, char *);
-    
+    static ImageCanvas * read(char *& , UmlCanvas *, char *);
+
     static ImageCanvas * add(UmlCanvas *, int x, int y);
 };
 

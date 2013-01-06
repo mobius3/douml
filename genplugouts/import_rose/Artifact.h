@@ -10,8 +10,9 @@ class File;
 class UmlPackage;
 class UmlClass;
 
-class Artifact {
-  protected:
+class Artifact
+{
+protected:
     Language language;
 
     Q3CString name;
@@ -33,7 +34,7 @@ class Artifact {
     static Q3AsciiDict<Artifact> all;
 
 
-  public:
+public:
     static Artifact * find(const Q3CString & uid);
 
     static void import_component_view(File & f);

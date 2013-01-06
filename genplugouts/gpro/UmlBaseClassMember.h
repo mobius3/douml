@@ -9,8 +9,9 @@
 
 // This class manages 'true' class's items : attributes, relation,
 // operation and sub-classes
-class UmlBaseClassMember : public UmlClassItem {
-  public:
+class UmlBaseClassMember : public UmlClassItem
+{
+public:
     // Indicate if the member is a 'class member' (static)
     // Always false in case of a class
     bool isClassMember();
@@ -53,7 +54,7 @@ class UmlBaseClassMember : public UmlClassItem {
     bool set_isCppVolatile(bool y);
 #endif
 
-  private:
+private:
     bool _class_member;
 
     aVisibility _visibility : 8;
@@ -65,7 +66,7 @@ class UmlBaseClassMember : public UmlClassItem {
 #endif
 
 
-  protected:
+protected:
     UmlBaseClassMember(void * id, const Q3CString & n) : UmlClassItem(id, n) {};
 
     void read_uml_();
@@ -74,10 +75,10 @@ class UmlBaseClassMember : public UmlClassItem {
     virtual void read_cpp_();
 #endif
 
-  friend class UmlBaseOperation;
-  friend class UmlBaseAttribute;
-  friend class UmlBaseRelation;
-  friend class UmlBaseClass;
+    friend class UmlBaseOperation;
+    friend class UmlBaseAttribute;
+    friend class UmlBaseRelation;
+    friend class UmlBaseClass;
 };
 
 #endif

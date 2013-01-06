@@ -51,59 +51,60 @@ class FormalParamsTable;
 class ActualParamsTable;
 class BodyDialog;
 
-class ComponentDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ComponentDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     QWidget * umltab;
     SimpleData * data;
     LineEdit * edname;
     Q3ComboBox * edstereotype;
     MultiLineEdit * comment;
     Q3PtrList<BodyDialog> edits;
-        
+
     // required classes
     Q3VBox * rq_page;
     Q3ComboBox * rq_stereotypefilter;
     Q3ListBox * lb_rq_available;
     Q3ListBox * lb_rq;
     Q3ValueList<BrowserClass *> rqs;
-        
+
     // provided classes
     Q3VBox * pr_page;
     Q3ComboBox * pr_stereotypefilter;
     Q3ListBox * lb_pr_available;
     Q3ListBox * lb_pr;
     Q3ValueList<BrowserClass *> prs;
-        
+
     // realization classes
     Q3VBox * rz_page;
     Q3ComboBox * rz_stereotypefilter;
     Q3ListBox * lb_rz_available;
     Q3ListBox * lb_rz;
     Q3ValueList<BrowserClass *> rzs;
-    
+
     // user
     KeyValuesTable * kvtable;
-  
+
     static QSize previous_size;
-    
+
     void init_uml_tab();
     void init_l_tab(Q3VBox *& page, Q3ComboBox *& stereotypefilter,
-		    void (ComponentDialog::* filteractivated)(const QString & st),
-		    const char * filter_slt,
-		    const char * add_slt, const char * remove_slt,
-		    Q3ListBox *& lb_available, Q3ListBox *& lb,
-		    const Q3ValueList<BrowserClass *> & cls,
-		    const char * lbl);
-    
+                    void (ComponentDialog::* filteractivated)(const QString & st),
+                    const char * filter_slt,
+                    const char * add_slt, const char * remove_slt,
+                    Q3ListBox *& lb_available, Q3ListBox *& lb,
+                    const Q3ValueList<BrowserClass *> & cls,
+                    const char * lbl);
+
     static void post_edit_description(ComponentDialog * d, QString s);
-    
-  public:
+
+public:
     ComponentDialog(SimpleData * nd);
     virtual ~ComponentDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void edit_description();

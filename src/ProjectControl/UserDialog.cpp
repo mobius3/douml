@@ -25,9 +25,9 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <q3combobox.h>
 #include <qpushbutton.h>
-#include <qlineedit.h> 
+#include <qlineedit.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
@@ -36,79 +36,85 @@
 #include "myio.h"
 
 UserDialog::UserDialog(const QPoint & p)
-    : QDialog(0, "Browser search", TRUE) {
-  setCaption("Choose user");
-  move(p);
-  
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
-  QLabel * lbl1;
-  QLabel * lbl2;
-  
-  vbox->setMargin(5);
+    : QDialog(0, "Browser search", TRUE)
+{
+    setCaption("Choose user");
+    move(p);
 
-  QLabel * lbl = 
-    new QLabel("\nSelect a user to get its identity,\nyou may change or set his name\n", 
-	       this);
-  
-  lbl->setAlignment(::Qt::AlignCenter);
-  vbox->addWidget(lbl);
-  
-  hbox = new Q3HBoxLayout(vbox);
-  hbox->setMargin(5);
-  lbl1 = new QLabel("User : ", this);
-  hbox->addWidget(lbl1);
-  ids = new Q3ComboBox(FALSE, this);
-  for (int index = 2; index != 128; index += 1) {
-    QString s = user_name(index);
-    
-    ids->insertItem((s.isEmpty()) 
-		    ? QString::number(index)
-		    : QString::number(index) + " (" + s + ")");
-  }
-  ids->setCurrentItem(user_id() - 2);
-  
-  QSizePolicy sp = ids->sizePolicy();
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    Q3HBoxLayout * hbox;
+    QLabel * lbl1;
+    QLabel * lbl2;
 
-  sp.setHorData(QSizePolicy::Expanding);
-  ids->setSizePolicy(sp);
+    vbox->setMargin(5);
 
-  hbox->addWidget(ids);
-  
-  hbox = new Q3HBoxLayout(vbox);
-  hbox->setMargin(5);
-  lbl2 = new QLabel("New name : ", this);
-  lbl1->setFixedWidth(lbl2->sizeHint().width());
-  hbox->addWidget(lbl2);
-  edname = new QLineEdit(this);
-  hbox->addWidget(edname);
-    
-  hbox = new Q3HBoxLayout(vbox);
-  hbox->setMargin(5);
+    QLabel * lbl =
+        new QLabel("\nSelect a user to get its identity,\nyou may change or set his name\n",
+                   this);
 
-  QPushButton * ok = new QPushButton("Ok", this);
-  QPushButton * cancel = new QPushButton("Cancel", this);
-  
-  hbox->addWidget(new QLabel(this));
-  hbox->addWidget(ok);
-  hbox->addWidget(new QLabel(this));
-  hbox->addWidget(cancel);
-  hbox->addWidget(new QLabel(this));
-  
-  connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
-  connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    lbl->setAlignment(::Qt::AlignCenter);
+    vbox->addWidget(lbl);
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    lbl1 = new QLabel("User : ", this);
+    hbox->addWidget(lbl1);
+    ids = new Q3ComboBox(FALSE, this);
+
+    for (int index = 2; index != 128; index += 1) {
+        QString s = user_name(index);
+
+        ids->insertItem((s.isEmpty())
+                        ? QString::number(index)
+                        : QString::number(index) + " (" + s + ")");
+    }
+
+    ids->setCurrentItem(user_id() - 2);
+
+    QSizePolicy sp = ids->sizePolicy();
+
+    sp.setHorData(QSizePolicy::Expanding);
+    ids->setSizePolicy(sp);
+
+    hbox->addWidget(ids);
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    lbl2 = new QLabel("New name : ", this);
+    lbl1->setFixedWidth(lbl2->sizeHint().width());
+    hbox->addWidget(lbl2);
+    edname = new QLineEdit(this);
+    hbox->addWidget(edname);
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+
+    QPushButton * ok = new QPushButton("Ok", this);
+    QPushButton * cancel = new QPushButton("Cancel", this);
+
+    hbox->addWidget(new QLabel(this));
+    hbox->addWidget(ok);
+    hbox->addWidget(new QLabel(this));
+    hbox->addWidget(cancel);
+    hbox->addWidget(new QLabel(this));
+
+    connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-UserDialog::~UserDialog() {
+UserDialog::~UserDialog()
+{
 }
 
-int UserDialog::id() {
-  return ids->currentItem() + 2;
+int UserDialog::id()
+{
+    return ids->currentItem() + 2;
 }
 
-QString UserDialog::name() {
-  QString s = edname->text().stripWhiteSpace();
-  
-  return (s.isEmpty()) ? user_name(id()) : s;
+QString UserDialog::name()
+{
+    QString s = edname->text().stripWhiteSpace();
+
+    return (s.isEmpty()) ? user_name(id()) : s;
 }
 

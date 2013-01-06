@@ -4,8 +4,9 @@
 
 #include <q3cstring.h>
 
-class TransitionBehavior {
-  public:
+class TransitionBehavior
+{
+public:
     Q3CString trigger;
 
     Q3CString guard;

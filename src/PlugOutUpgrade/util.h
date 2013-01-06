@@ -29,66 +29,66 @@
 #define UTIL_H
 
 extern void defGetField_(UmlClass * base, const char * where, const char * oper,
-			 const char * field, UmlTypeSpec type,
-			 const char * if_def, const char * end_if, 
-			 const char * descr, UmlOperation *& op);
-    
+                         const char * field, UmlTypeSpec type,
+                         const char * if_def, const char * end_if,
+                         const char * descr, UmlOperation *& op);
+
 extern void defSetField_(UmlClass * base, const char * where, const char * oper,
-			 const char * field, UmlTypeSpec type,
-			 const char * cmd, const char * if_def, const char * end_if,
-			 const char * descr, UmlOperation *& op);
+                         const char * field, UmlTypeSpec type,
+                         const char * cmd, const char * if_def, const char * end_if,
+                         const char * descr, UmlOperation *& op);
 
 extern void defGet_(UmlClass * base, const char * where, const char * oper,
-		    UmlTypeSpec type, const char * if_def, const char * end_if, 
-		    const char * descr, UmlOperation *& op);
-	      
+                    UmlTypeSpec type, const char * if_def, const char * end_if,
+                    const char * descr, UmlOperation *& op);
+
 extern void defSet_(UmlClass * base, const char * where, const char * oper,
-		    UmlTypeSpec type, const char * cmd, const char * if_def, 
-		    const char * end_if, const char * descr, UmlOperation *& op);
-	      
+                    UmlTypeSpec type, const char * cmd, const char * if_def,
+                    const char * end_if, const char * descr, UmlOperation *& op);
+
 extern void defGetPtr_(UmlClass * base, const char * where, const char * oper,
-		       UmlTypeSpec type, const char * if_def, const char * end_if,
-		       const char * descr, UmlOperation *& op);
-	      
+                       UmlTypeSpec type, const char * if_def, const char * end_if,
+                       const char * descr, UmlOperation *& op);
+
 extern void defSetPtr_(UmlClass * base, const char * where, const char * oper,
-		       UmlTypeSpec type, const char * cmd, const char * if_def,
-		       const char * end_if, const char * descr, UmlOperation *& op);
+                       UmlTypeSpec type, const char * cmd, const char * if_def,
+                       const char * end_if, const char * descr, UmlOperation *& op);
 
 extern void defSetRefType_(UmlClass * base, const char * where, const char * oper,
-			   UmlTypeSpec type, const char * cmd, const char * if_def, 
-			   const char * end_if, const char * descr, UmlOperation *& op);
+                           UmlTypeSpec type, const char * cmd, const char * if_def,
+                           const char * end_if, const char * descr, UmlOperation *& op);
 
 extern void defGetValue_(UmlClass * base, const char * where, const char * oper,
-			 UmlTypeSpec type, const char * if_def, const char * end_if, 
-			 const char * descr, UmlOperation *& op);
-	      
-extern void defSetBool_(UmlClass * base, const char * where, const char * oper, 
-			const char * cmd, const char * if_def, const char * end_if, 
-			const char * descr, UmlOperation *& op);
+                         UmlTypeSpec type, const char * if_def, const char * end_if,
+                         const char * descr, UmlOperation *& op);
 
-extern void defSetEnum_(UmlClass * base, const char * where, const char * oper, 
-			UmlTypeSpec type, const char * cmd, const char * if_def,
-			const char * end_if, const char * descr, UmlOperation *& op);
+extern void defSetBool_(UmlClass * base, const char * where, const char * oper,
+                        const char * cmd, const char * if_def, const char * end_if,
+                        const char * descr, UmlOperation *& op);
+
+extern void defSetEnum_(UmlClass * base, const char * where, const char * oper,
+                        UmlTypeSpec type, const char * cmd, const char * if_def,
+                        const char * end_if, const char * descr, UmlOperation *& op);
 
 extern void defSetBoolBitField_(UmlClass * base, const char * where, const char * oper,
-				const char * cmd, const char * if_def, const char * end_if,
-				const char * descr, UmlOperation *& op);
+                                const char * cmd, const char * if_def, const char * end_if,
+                                const char * descr, UmlOperation *& op);
 
 #define defGetField(base, where, oper, field, type, if_def, end_if, descr) \
   defGetField_(base, #where, #oper, #field, type, if_def, end_if, descr, op)
-	      
+
 #define defSetField(base, where, oper, field, type, cmd, if_def, end_if, descr) \
   defSetField_(base, #where, #oper, #field, type, #cmd, if_def, end_if, descr, op)
 
 #define defGet(base, where, oper, type, if_def, end_if, descr) \
   defGet_(base, #where, #oper, type, if_def, end_if, descr, op)
-	      
+
 #define defSet(base, where, oper, type, cmd, if_def, end_if, descr) \
   defSet_(base, #where, #oper, type, #cmd, if_def, end_if, descr, op)
 
 #define defGetPtr(base, where, oper, type, if_def, end_if, descr) \
   defGetPtr_(base, #where, #oper, type, if_def, end_if, descr, op)
-	      
+
 #define defSetPtr(base, where, oper, type, cmd, if_def, end_if, descr) \
   defSetPtr_(base, #where, #oper, type, #cmd, if_def, end_if, descr, op)
 
@@ -97,7 +97,7 @@ extern void defSetBoolBitField_(UmlClass * base, const char * where, const char 
 
 #define defGetBool(base, where, oper, if_def, end_if, descr) \
   defGetValue_(base, #where, #oper, "bool", if_def, end_if, descr, op)
-	      
+
 #define defSetBool(base, where, oper, cmd, if_def, end_if, descr) \
   defSetBool_(base, #where, #oper, #cmd, if_def, end_if, descr, op)
 
@@ -114,7 +114,7 @@ extern void include_umlcom(UmlClass * cl);
 extern void include_umlcom(UmlArtifact * art);
 extern void add_assoc_diag_ops(UmlClass * base, UmlClass * diag);
 extern void conditional(Q3CString & s, const char * if_def,
-			const char * end_if);
+                        const char * end_if);
 extern Q3CString java2Php(Q3CString s);
 extern Q3CString java2Python(Q3CString s);
 extern Q3CString cpp2Python(Q3CString s);

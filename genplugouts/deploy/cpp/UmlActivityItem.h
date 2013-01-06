@@ -2,7 +2,8 @@
 #define _UMLACTIVITYITEM_H
 
 
-class UmlActivityItem {
+class UmlActivityItem
+{
 };
 
 #endif

@@ -15,8 +15,9 @@ class File;
 // is a mother class of all the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     struct Role {
         Q3Dict<Q3CString> prop;
 
@@ -47,16 +48,16 @@ class UmlRelation : public UmlBaseRelation {
         aRelationKind rel_kind(bool bidir);
 
     };
-    
-    
+
+
     UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
     static void import(File & f);
 
 
-  private:
+private:
     void import(Role * role);
 
     void cplusplus(Role * role);

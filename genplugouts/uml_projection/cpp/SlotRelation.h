@@ -11,10 +11,10 @@ struct SlotRelation {
     UmlClassInstance * value;
 
     // because of QValueList use
-     SlotRelation() : relation(0), value(0) {
+    SlotRelation() : relation(0), value(0) {
     }
 
-     SlotRelation(UmlRelation * r, UmlClassInstance * v) : relation(r), value(v) {
+    SlotRelation(UmlRelation * r, UmlClassInstance * v) : relation(r), value(v) {
     }
 
 };

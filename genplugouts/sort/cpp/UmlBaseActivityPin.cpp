@@ -8,7 +8,8 @@ UmlActivityPin * UmlBaseActivityPin::create(UmlActivityAction * parent, const ch
     return (UmlActivityPin *) parent->create_(anActivityPin, s);
 }
 
-anItemKind UmlBaseActivityPin::kind() {
+anItemKind UmlBaseActivityPin::kind()
+{
     return anActivityPin;
 }
 

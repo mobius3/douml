@@ -21,7 +21,7 @@ class UmlTypeSpec;
 class UmlClass;
 // This class manages the communications
 //
-// This class may be defined as a 'singleton', but I prefer to use static 
+// This class may be defined as a 'singleton', but I prefer to use static
 // members allowing to just write 'UmlCom::member' rather than
 // 'UmlCom::instance()->member' or other long sentence like this.
 //
@@ -42,13 +42,14 @@ class UmlClass;
 // - bye()
 //
 // - close()
-// 
+//
 // you must NOT call the others
 
-class UmlCom {
-  public:
+class UmlCom
+{
+public:
     // does the connexion
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     static bool connect(unsigned int port);
     //  returns the item on which the tool is applied
@@ -58,12 +59,12 @@ class UmlCom {
     // use Qt rich text : allows HTML like formatting
     static void trace(const char * s);
     //to show the trace window
-    
+
     static void showTrace();
 
     //to automatically raise the trace window
     //each time trace() is called
-    
+
     static void traceAutoRaise(bool y);
 
     // to write a message in the status bar line
@@ -74,7 +75,7 @@ class UmlCom {
     // disconnexion
     static void close();
 
-  private:
+private:
     static Q3SocketDevice * sock;
 
     static char * buffer_in;
@@ -92,7 +93,7 @@ class UmlCom {
     static unsigned int buffer_out_size;
 
 
-  protected:
+protected:
     static void check_size_out(unsigned int len);
     static void read_if_needed();
     static void read_buffer(unsigned int len);
@@ -102,16 +103,16 @@ class UmlCom {
     static void write_id(const void * id);
     static void write_string(const char * p);
 
-  public:
+public:
     // do NOT call the followings yourself !!!!
     static void send_cmd(CmdFamily f, unsigned int cmd);
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, bool b);
 
     static void send_cmd(CmdFamily f, unsigned int cmd, char arg);
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, int arg, const char * dummy);
 
     static void send_cmd(CmdFamily f, unsigned int cmd, void * id);
@@ -136,7 +137,7 @@ class UmlCom {
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, char arg2, const char * arg3, const char * arg4, const UmlTypeSpec & arg5);
     static void send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlItem> & l);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg, const void * id2);
 
     static void * read_id();

@@ -11,8 +11,9 @@ class UmlActivityParameter;
 class UmlActivityAction;
 class UmlActivityPin;
 
-class UmlBaseParameterSet : public UmlItem {
-  public:
+class UmlBaseParameterSet : public UmlItem
+{
+public:
     //  returns a new parameter set named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,13 +25,13 @@ class UmlBaseParameterSet : public UmlItem {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseParameterSet(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseParameterSet(void * id, const Q3CString & s) : UmlItem(id, s) {
     }
 
 
-  public:
+public:
     // return the pins part of the parameter set
     const Q3PtrVector<UmlActivityPin> & pins();
 
@@ -46,11 +47,11 @@ class UmlBaseParameterSet : public UmlItem {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3PtrVector<UmlActivityPin> _pins;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

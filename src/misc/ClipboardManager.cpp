@@ -28,7 +28,7 @@
 #include <QMimeData>
 
 
-ClipboardManager::ClipboardManager(QObject *_parent):QObject(_parent)
+ClipboardManager::ClipboardManager(QObject * _parent): QObject(_parent)
 {}
 
 QStringList ClipboardManager::GetStrings()
@@ -40,15 +40,16 @@ ClipboardManager::~ClipboardManager()
 
 void ClipboardManager::OnClipboardUpdate()
 {
-    QClipboard* clipboard = QApplication::clipboard();
-    const QMimeData* data = clipboard->mimeData();
-    if(data->hasText())
-        strings+=data->text();
+    QClipboard * clipboard = QApplication::clipboard();
+    const QMimeData * data = clipboard->mimeData();
+
+    if (data->hasText())
+        strings += data->text();
 }
 
 void ClipboardManager::OnPutItemIntoClipboard(QString text)
 {
-    QClipboard* clipboard = QApplication::clipboard();
+    QClipboard * clipboard = QApplication::clipboard();
     clipboard->setText(text);
 }
 

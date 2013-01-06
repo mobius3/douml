@@ -29,15 +29,16 @@
 //#include <qtextview.h>
 #include <q3textbrowser.h>
 
-class CommentView : public Q3TextBrowser/*QTextView*/ {
-  Q_OBJECT
-    
-  public:
+class CommentView : public Q3TextBrowser/*QTextView*/
+{
+    Q_OBJECT
+
+public:
     CommentView(QWidget * parent);
-  
+
     virtual void setSource(const QString & name);
-    
-  signals:
+
+signals:
     void refer(const QString & name);
 };
 

@@ -47,17 +47,18 @@ struct TransDef;
 class BodyDialog;
 
 struct TransDialog {
-  MultiLineEdit * edtrigger;
-  MultiLineEdit * edguard;
-  MultiLineEdit * edexpr;
-  
-  void accept(TransDef &);
+    MultiLineEdit * edtrigger;
+    MultiLineEdit * edguard;
+    MultiLineEdit * edexpr;
+
+    void accept(TransDef &);
 };
 
-class TransitionDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class TransitionDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     bool visit;
     QWidget * umltab;
     TransitionData * rel;
@@ -66,7 +67,7 @@ class TransitionDialog : public Q3TabDialog {
     Q3ComboBox * edstereotype;
     MultiLineEdit * comment;
     Q3PtrList<BodyDialog> edits;
-    
+
     QWidget * ocltab;
     QWidget * cppTab;
     QWidget * javatab;
@@ -74,12 +75,12 @@ class TransitionDialog : public Q3TabDialog {
     TransDialog uml;
     TransDialog cpp;
     TransDialog java;
-        
+
     // User
     KeyValuesTable * kvtable;
-    
+
     static QSize previous_size;
-  
+
     static void post_edit_description(TransitionDialog * d, QString s);
     static void post_edit_uml_trigger(TransitionDialog * d, QString s);
     static void post_edit_uml_guard(TransitionDialog * d, QString s);
@@ -90,19 +91,19 @@ class TransitionDialog : public Q3TabDialog {
     static void post_edit_java_trigger(TransitionDialog * d, QString s);
     static void post_edit_java_guard(TransitionDialog * d, QString s);
     static void post_edit_java_expr(TransitionDialog * d, QString s);
-  
-  public:
+
+public:
     TransitionDialog(TransitionData * r);
     virtual ~TransitionDialog();
-  
-  protected:
-    void init_tab(QWidget *&, TransDialog &, TransDef & td, const char * lbl,
-		  const char * sl_trigger, const char * sl_guard,
-		  const char * sl_expr, bool enabled);
-  protected slots:
+
+protected:
+    void init_tab(QWidget *& , TransDialog &, TransDef & td, const char * lbl,
+                  const char * sl_trigger, const char * sl_guard,
+                  const char * sl_expr, bool enabled);
+protected slots:
     virtual void polish();
     virtual void accept();
-  
+
     void edit_description();
     void edit_uml_trigger();
     void edit_uml_guard();

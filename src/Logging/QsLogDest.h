@@ -35,18 +35,18 @@ namespace QsLogging
 class Destination
 {
 public:
-   virtual ~Destination(){}
-   virtual void write(const QString& message) = 0;
+    virtual ~Destination() {}
+    virtual void write(const QString & message) = 0;
 };
 typedef std::auto_ptr<Destination> DestinationPtr;
 
-//! Creates logging destinations/sinks. The caller will have ownership of 
+//! Creates logging destinations/sinks. The caller will have ownership of
 //! the newly created destinations.
 class DestinationFactory
 {
 public:
-   static DestinationPtr MakeFileDestination(const QString& filePath);
-   static DestinationPtr MakeDebugOutputDestination();
+    static DestinationPtr MakeFileDestination(const QString & filePath);
+    static DestinationPtr MakeDebugOutputDestination();
 };
 
 } // end namespace

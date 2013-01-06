@@ -11,8 +11,9 @@ class UmlClass;
 // - a class reference
 //
 // - an explicit type
-class UmlBaseTypeSpec {
-  public:
+class UmlBaseTypeSpec
+{
+public:
     UmlBaseTypeSpec() : type(0) {};
 
     // returns the type as a string in all cases

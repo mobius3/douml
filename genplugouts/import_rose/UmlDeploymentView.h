@@ -11,10 +11,11 @@ class UmlPackage;
 // This class manages 'deployment view'
 //
 // You can modify it as you want (except the constructor)
-class UmlDeploymentView : public UmlBaseDeploymentView {
-  public:
+class UmlDeploymentView : public UmlBaseDeploymentView
+{
+public:
     UmlDeploymentView(void * id, const Q3CString & n) : UmlBaseDeploymentView(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
     void import(File & f);
@@ -26,17 +27,18 @@ class UmlDeploymentView : public UmlBaseDeploymentView {
     static void import(UmlPackage * parent, File & f);
 
 
-  protected:
+protected:
     Q3CString _base_name;
 
 
-  public:
+public:
     const Q3CString baseName() const;
 
 };
 
-inline const Q3CString UmlDeploymentView::baseName() const {
-  return _base_name;
+inline const Q3CString UmlDeploymentView::baseName() const
+{
+    return _base_name;
 }
 
 #endif

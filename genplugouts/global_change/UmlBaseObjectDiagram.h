@@ -9,8 +9,9 @@
 class UmlObjectDiagram;
 class UmlItem;
 
-class UmlBaseObjectDiagram : public UmlDiagram {
-  public:
+class UmlBaseObjectDiagram : public UmlDiagram
+{
+public:
     //  returns a new object diagram named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -22,9 +23,9 @@ class UmlBaseObjectDiagram : public UmlDiagram {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseObjectDiagram(void * id, const Q3CString & s) : UmlDiagram(id, s) {
+    UmlBaseObjectDiagram(void * id, const Q3CString & s) : UmlDiagram(id, s) {
     }
 
 };

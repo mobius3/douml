@@ -30,9 +30,9 @@
 
 class ClipboardManager : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-    ClipboardManager(QObject* _parent = 0);
+    ClipboardManager(QObject * _parent = 0);
     ~ClipboardManager();
     QStringList GetStrings();
 public slots:

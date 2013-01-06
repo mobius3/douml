@@ -33,34 +33,37 @@ class CodSelfLinkCanvas;
 class BrowserClass;
 class ColMsgList;
 
-class CodObjCanvas : public DiagramCanvas {
-  protected:
+class CodObjCanvas : public DiagramCanvas
+{
+protected:
     CodSelfLinkCanvas * self_link;
-  
-  public:
+
+public:
     CodObjCanvas(BrowserNode * bn, UmlCanvas * canvas,
-		 int x, int y, int w, int h, int id);
+                 int x, int y, int w, int h, int id);
     virtual ~CodObjCanvas();
-    
+
     virtual void delete_it();
-    
+
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
-    
+
     virtual void moveBy(double dx, double dy);
     virtual void set_z(double z);
-    
+
     virtual BrowserClass * get_class() const;
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
     virtual void change_scale();
-    
+
     virtual QString get_full_name() const = 0;
     void get_all_in_all_out(ColMsgList & all_in, ColMsgList & all_out) const;
-    
-    void set_self_link(CodSelfLinkCanvas * l) { self_link = l; };
-    
-    static CodObjCanvas * read(char * & st, UmlCanvas * canvas);
+
+    void set_self_link(CodSelfLinkCanvas * l) {
+        self_link = l;
+    };
+
+    static CodObjCanvas * read(char *& st, UmlCanvas * canvas);
 };
 
 #endif

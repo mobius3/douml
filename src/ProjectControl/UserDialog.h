@@ -31,17 +31,18 @@
 class Q3ComboBox;
 class QLineEdit;
 
-class UserDialog : public QDialog {
-  Q_OBJECT
- 
-  protected:
+class UserDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     Q3ComboBox * ids;
     QLineEdit * edname;
-      
-  public:
+
+public:
     UserDialog(const QPoint & p);
     virtual ~UserDialog();
-    
+
     int id();
     QString name();
 };

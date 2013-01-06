@@ -34,10 +34,11 @@ class QSpinBox;
 class SeqDiagramView;
 class BrowserSeqDiagram;
 
-class SeqDiagramWindow : public DiagramWindow {
-  Q_OBJECT
-    
-  protected:
+class SeqDiagramWindow : public DiagramWindow
+{
+    Q_OBJECT
+
+protected:
     SeqDiagramView * view;
     QToolButton * addClass;
     QToolButton * addClassInstance;
@@ -57,16 +58,16 @@ class SeqDiagramWindow : public DiagramWindow {
     QToolButton * anchor;
     QToolButton * text;
     QToolButton * image;
-  
-  public:
+
+public:
     SeqDiagramWindow(const QString & s, BrowserSeqDiagram *, int id = -1);
-virtual ~SeqDiagramWindow();
+    virtual ~SeqDiagramWindow();
 
     virtual DiagramView * get_view() const;
-    
+
     virtual void hit_button(UmlCode, QToolButton *);
 
-  protected slots:
+protected slots:
     void hit_class();
     void hit_classinstance();
     void hit_continuation();

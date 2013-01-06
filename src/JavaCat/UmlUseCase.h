@@ -30,10 +30,11 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class UmlUseCase : public UmlBaseUseCase {
-  public:
+class UmlUseCase : public UmlBaseUseCase
+{
+public:
     UmlUseCase(void * id, const Q3CString & n)
-      : UmlBaseUseCase(id, n) {};
+        : UmlBaseUseCase(id, n) {};
 };
 
 #endif

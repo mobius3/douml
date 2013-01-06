@@ -35,33 +35,34 @@ class QTextStream;
 class BrowserStateAction;
 class StateActionDialog;
 
-class StateActionData : public SimpleData {
-  friend class StateActionDialog;
-    
-  protected:
+class StateActionData : public SimpleData
+{
+    friend class StateActionDialog;
+
+protected:
     WrapperStr uml;
     WrapperStr cpp;
     WrapperStr java;
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
+                              const QString & comment);
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
-    
-  public:
+
+public:
     StateActionData();
     StateActionData(StateActionData * model, BrowserNode * br);
     virtual ~StateActionData();
-    
+
     const char * get_action(DrawingLanguage) const;
-    
+
     void edit();
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * & st, char * & k);
+    void read(char *& st, char *& k);
 };
-  
+
 #endif

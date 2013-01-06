@@ -8,10 +8,11 @@ class FileIn;
 class Token;
 class UmlItem;
 
-class UmlFinalState : public UmlBaseFinalState {
-  public:
+class UmlFinalState : public UmlBaseFinalState
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlFinalState(void * id) : UmlBaseFinalState(id, "") {
+    UmlFinalState(void * id) : UmlBaseFinalState(id, "") {
     }
 
     static void init();

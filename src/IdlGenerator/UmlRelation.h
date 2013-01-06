@@ -34,16 +34,17 @@
 class QTextStream;
 class ActualParameter;
 
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n)
-      : UmlBaseRelation(id, n) {
+        : UmlBaseRelation(id, n) {
     };
-  
-    void generate_inherit(const char *& sep, QTextStream & f, 
-			  const Q3CString & cl_stereotype, BooL & already);
+
+    void generate_inherit(const char *& sep, QTextStream & f,
+                          const Q3CString & cl_stereotype, BooL & already);
     virtual void generate_decl(QTextStream & f, const Q3CString & cl_stereotype,
-			       Q3CString indent, bool = FALSE);
+                               Q3CString indent, bool = FALSE);
 };
 
 #endif

@@ -9,8 +9,9 @@
 class UmlActivityPartition;
 class UmlActivityDiagram;
 
-class UmlBaseActivityPartition : public UmlItem {
-  public:
+class UmlBaseActivityPartition : public UmlItem
+{
+public:
     //  returns a new activity partition named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -22,13 +23,13 @@ class UmlBaseActivityPartition : public UmlItem {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityPartition(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseActivityPartition(void * id, const Q3CString & s) : UmlItem(id, s) {
     }
 
 
-  public:
+public:
     // returns the optional associated diagram
     UmlActivityDiagram * associatedDiagram();
 
@@ -62,7 +63,7 @@ class UmlBaseActivityPartition : public UmlItem {
     bool set_Represents(UmlItem * v);
 
 
-  private:
+private:
     UmlActivityDiagram * _assoc_diagram;
 
     bool _dimension;
@@ -72,7 +73,7 @@ class UmlBaseActivityPartition : public UmlItem {
     UmlItem * _represents;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

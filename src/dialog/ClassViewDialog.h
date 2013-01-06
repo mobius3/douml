@@ -39,10 +39,11 @@ class BasicData;
 class KeyValuesTable;
 class BodyDialog;
 
-class ClassViewDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ClassViewDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     QWidget * umltab;
     BasicData * data;
     LineEdit * edname;
@@ -52,16 +53,16 @@ class ClassViewDialog : public Q3TabDialog {
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
     Q3PtrList<BodyDialog> edits;
-  
+
     static QSize previous_size;
-    
+
     static void post_edit_description(ClassViewDialog * d, QString s);
-    
-  public:
+
+public:
     ClassViewDialog(BasicData * nd);
     virtual ~ClassViewDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void edit_description();

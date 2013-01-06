@@ -10,8 +10,9 @@ class UmlSubject;
 class UmlFragment;
 
 // this class manages use case references
-class UmlBaseUseCaseReference {
-  public:
+class UmlBaseUseCaseReference
+{
+public:
     // return the use case
     UmlUseCase * useCase() const {
         return _use_case;
@@ -29,7 +30,7 @@ class UmlBaseUseCaseReference {
     }
 
 
-  private:
+private:
     UmlUseCase * _use_case;
 
     UmlFragmentCompartment * _fragment;
@@ -47,7 +48,7 @@ class UmlBaseUseCaseReference {
     // internal, don't call it
     void read_(const Q3PtrVector<UmlFragment> & fragments, const Q3PtrVector<UmlSubject> & subjects);
 
-  friend class UmlBaseUseCaseDiagramDefinition;
+    friend class UmlBaseUseCaseDiagramDefinition;
 };
 
 #endif

@@ -17,17 +17,18 @@ class UmlTypeSpec;
 
 typedef void (*PFunc)(FileIn &, Token &, UmlItem *);
 //  'element' has an unresolved reference
-class Unresolved {
-  public:
+class Unresolved
+{
+public:
     static void addGeneralization(UmlItem * e, Q3CString & id, Q3CString cstr);
 
     static void addRef(UmlItem * e, Q3CString & id);
 
     //  for QValueList
-    Unresolved(){};
+    Unresolved() {};
 
 
-  protected:
+protected:
     Unresolved(UmlItem * e, Q3CString id, Q3CString cstr) : element(e), idref(id), constraint(cstr) {}
 
     UmlItem * element;
@@ -41,23 +42,24 @@ class Unresolved {
     static Q3ValueList<Unresolved> Refs;
 
 
-  public:
+public:
     static void solveThem();
 
 };
 
 //  'element' has an unresolved reference
-class UnresolvedWithContext {
-  public:
+class UnresolvedWithContext
+{
+public:
     static void add(UmlItem * e, Q3CString id, int c);
 
     static void solveThem();
 
     //  for QValueList
-    UnresolvedWithContext(){};
+    UnresolvedWithContext() {};
 
 
-  protected:
+protected:
     UnresolvedWithContext(UmlItem * e, Q3CString id, int c) : element(e), idref(id), context(c) {}
 
     UmlItem * element;
@@ -70,17 +72,18 @@ class UnresolvedWithContext {
 
 };
 
-class UnresolvedRelation {
-  public:
+class UnresolvedRelation
+{
+public:
     static void add(int ctx, Q3CString idFrom, Q3CString idTo, Q3CString label, Q3CString constraint);
 
     //  for QValueList
     UnresolvedRelation();
 
 
-  protected:
+protected:
     UnresolvedRelation(int ctx, Q3CString idFrom, Q3CString idTo, Q3CString label, Q3CString cnst)
-      : context(ctx), from(idFrom), to(idTo), name(label), constraint(cnst) {}
+        : context(ctx), from(idFrom), to(idTo), name(label), constraint(cnst) {}
 
     int context;
 
@@ -95,7 +98,7 @@ class UnresolvedRelation {
     static Q3ValueList<UnresolvedRelation> All;
 
 
-  public:
+public:
     static void solveThem();
 
 };
@@ -104,14 +107,15 @@ class UnresolvedRelation {
 // allows to generalize their management, declare virtual operations etc ...
 //
 // You can modify it as you want (except the constructor)
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n) {};
 
     virtual ~UmlItem();
 
     Q3CString id() const {
-      return _xmi_id;
+        return _xmi_id;
     }
 
     //Import an xmi file, only allowed in a package
@@ -121,7 +125,7 @@ class UmlItem : public UmlBaseItem {
 
     //look at the token kind to call the function managing
     //this case or bypass the token
-    
+
     virtual void import(FileIn & in, Token & tk);
 
     //returns the first container for a 'kind', going up in the browser tree
@@ -144,7 +148,7 @@ class UmlItem : public UmlBaseItem {
     virtual void solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString constraint);
 
 
-  protected:
+protected:
     //  try to solve type, return true is type already known
     //  else memorize unsolved couple if needed and return false
     bool setType(Q3CString idref, UmlTypeSpec & type);
@@ -162,19 +166,19 @@ class UmlItem : public UmlBaseItem {
     bool setType(Token & token, int context, UmlTypeSpec & type);
 
 
-  public:
+public:
     //  element defined in a profile, if xmiId property defined update All
-    
+
     void loadFromProfile();
 
 
-  protected:
+protected:
     //  try to solve type, return true if type already known
     //  and set 'type', else return false
     static bool getType(Q3CString idref, UmlTypeSpec & type);
 
 
-  public:
+public:
     static void declareFct(Q3CString what, Q3CString type, PFunc fct);
 
     static PFunc getFct(const Token & tk);
@@ -198,11 +202,11 @@ class UmlItem : public UmlBaseItem {
     static void importRealization(FileIn & in, Token & token, UmlItem * where);
 
     //
-    
+
     static void incoming(FileIn & in, Token & token, UmlItem * where);
 
     //
-    
+
     static void outgoing(FileIn & in, Token & token, UmlItem * where);
 
     static Q3CString legalName(Q3CString s);
@@ -214,27 +218,27 @@ class UmlItem : public UmlBaseItem {
     static QMap<Q3CString, Q3CString> OpaqueDefs;
 
 
-  protected:
+protected:
     static bool FromBouml;
 
     static bool FromEclipse;
 
 
-  public:
+public:
     static QMap<Q3CString, UmlItem *> All;
 
 
-  protected:
+protected:
     static QMap<Q3CString, PFunc> Functions;
 
     static QMap<Q3CString, UmlTypeSpec> PrimitiveTypes;
 
-    static QMap<Q3CString,UmlItem*> Incomings;
+    static QMap<Q3CString, UmlItem *> Incomings;
 
-    static QMap<Q3CString, UmlItem*> Outgoings;
+    static QMap<Q3CString, UmlItem *> Outgoings;
 
 
-  private:
+private:
     Q3CString _xmi_id;
 
 };

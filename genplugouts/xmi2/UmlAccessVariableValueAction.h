@@ -7,10 +7,11 @@
 
 class FileOut;
 
-class UmlAccessVariableValueAction : public UmlBaseAccessVariableValueAction {
-  protected:
+class UmlAccessVariableValueAction : public UmlBaseAccessVariableValueAction
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlAccessVariableValueAction(void * id, const Q3CString & s) : UmlBaseAccessVariableValueAction(id, s) {
+    UmlAccessVariableValueAction(void * id, const Q3CString & s) : UmlBaseAccessVariableValueAction(id, s) {
     }
 
     void write_var_end(FileOut & out);

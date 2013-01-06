@@ -39,127 +39,138 @@
 #include "ToolCom.h"
 #include "mu.h"
 
-ParameterSetData::ParameterSetData() {
+ParameterSetData::ParameterSetData()
+{
 }
 
 ParameterSetData::ParameterSetData(ParameterSetData * model, BrowserNode * bn)
-    : SimpleData(model) {
-  browser_node = bn;
-  set_pins(model->pins);
+    : SimpleData(model)
+{
+    browser_node = bn;
+    set_pins(model->pins);
 }
 
-void ParameterSetData::set_pins(const Q3ValueList<BrowserPin *> & l) {
-  Q3ValueList<BrowserPin *>::Iterator iter;
+void ParameterSetData::set_pins(const Q3ValueList<BrowserPin *> & l)
+{
+    Q3ValueList<BrowserPin *>::Iterator iter;
 
-  // disconnect old pins
-  for (iter = pins.begin(); iter != pins.end(); iter++)
-    disconnect((*iter)->get_data(), SIGNAL(deleted()), this, SLOT(check()));
+    // disconnect old pins
+    for (iter = pins.begin(); iter != pins.end(); iter++)
+        disconnect((*iter)->get_data(), SIGNAL(deleted()), this, SLOT(check()));
 
-  pins = l;
+    pins = l;
 
-  // connect new pins
-  for (iter = pins.begin(); iter != pins.end(); iter++)
-    connect((*iter)->get_data(), SIGNAL(deleted()), this, SLOT(check()));
+    // connect new pins
+    for (iter = pins.begin(); iter != pins.end(); iter++)
+        connect((*iter)->get_data(), SIGNAL(deleted()), this, SLOT(check()));
 }
 
-void ParameterSetData::check() {
-  // remove deleted items, note : can't disconnect
-  Q3ValueList<BrowserPin *>::Iterator iter = pins.begin();
+void ParameterSetData::check()
+{
+    // remove deleted items, note : can't disconnect
+    Q3ValueList<BrowserPin *>::Iterator iter = pins.begin();
 
-  while (iter != pins.end())
-    if ((*iter)->deletedp())
-      iter = pins.remove(iter);
-    else
-      iter++;
+    while (iter != pins.end())
+        if ((*iter)->deletedp())
+            iter = pins.remove(iter);
+        else
+            iter++;
 }
 
-void ParameterSetData::edit() {
-  setName(browser_node->get_name());
-    
-  (new ParameterSetDialog(this))->show();
+void ParameterSetData::edit()
+{
+    setName(browser_node->get_name());
+
+    (new ParameterSetDialog(this))->show();
 }
 
 void ParameterSetData::send_uml_def(ToolCom * com, BrowserNode * bn,
-				    const QString & comment) {
-  SimpleData::send_uml_def(com, bn, comment);
-  com->write_unsigned(pins.count());
+                                    const QString & comment)
+{
+    SimpleData::send_uml_def(com, bn, comment);
+    com->write_unsigned(pins.count());
 
-  Q3ValueList<BrowserPin *>::ConstIterator iter = pins.begin();
+    Q3ValueList<BrowserPin *>::ConstIterator iter = pins.begin();
 
-  for (iter = pins.begin(); iter != pins.end(); iter++)
-    (*iter)->write_id(com);
+    for (iter = pins.begin(); iter != pins.end(); iter++)
+        (*iter)->write_id(com);
 }
 
 bool ParameterSetData::tool_cmd(ToolCom * com, const char * args,
-				BrowserNode * bn,
-				const QString & comment) {
-  if (((unsigned char) args[-1]) >= firstSetCmd) {
-    if (!bn->is_writable() && !root_permission())
-      com->write_ack(FALSE);
-    else {
-      switch ((unsigned char) args[-1]) {
-      case replaceParameterCmd:
-	// replace all the pins
-	{
-	  unsigned n = com->get_unsigned(args);
-	  Q3ValueList<BrowserPin *> l;
+                                BrowserNode * bn,
+                                const QString & comment)
+{
+    if (((unsigned char) args[-1]) >= firstSetCmd) {
+        if (!bn->is_writable() && !root_permission())
+            com->write_ack(FALSE);
+        else {
+            switch ((unsigned char) args[-1]) {
+            case replaceParameterCmd:
+                // replace all the pins
+            {
+                unsigned n = com->get_unsigned(args);
+                Q3ValueList<BrowserPin *> l;
 
-	  while (n--)
-	    l.append((BrowserPin *) com->get_id(args));
-	  set_pins(l);
-	}
-	break;
-      default:
-	return BasicData::tool_cmd(com, args, bn, comment);
-      }
-  
-      // ok case
-      bn->modified();
-      bn->package_modified();
-      modified();
-      com->write_ack(TRUE);
+                while (n--)
+                    l.append((BrowserPin *) com->get_id(args));
+
+                set_pins(l);
+            }
+            break;
+
+            default:
+                return BasicData::tool_cmd(com, args, bn, comment);
+            }
+
+            // ok case
+            bn->modified();
+            bn->package_modified();
+            modified();
+            com->write_ack(TRUE);
+        }
     }
-  }
-  else 
-    return BasicData::tool_cmd(com, args, bn, comment);
-  
-  return TRUE;
+    else
+        return BasicData::tool_cmd(com, args, bn, comment);
+
+    return TRUE;
 }
 
-void ParameterSetData::save(QTextStream & st, QString & warning) const {
-  BasicData::save(st, warning);
-  nl_indent(st);
-  st << "pins";
-  indent(+1);
-
-  Q3ValueList<BrowserPin *>::ConstIterator iter = pins.begin();
-
-  for (iter = pins.begin(); iter != pins.end(); iter++) {
+void ParameterSetData::save(QTextStream & st, QString & warning) const
+{
+    BasicData::save(st, warning);
     nl_indent(st);
-    (*iter)->save(st, TRUE, warning);
-  }
+    st << "pins";
+    indent(+1);
 
-  indent(-1);
-  nl_indent(st);
-  st << "end";
+    Q3ValueList<BrowserPin *>::ConstIterator iter = pins.begin();
+
+    for (iter = pins.begin(); iter != pins.end(); iter++) {
+        nl_indent(st);
+        (*iter)->save(st, TRUE, warning);
+    }
+
+    indent(-1);
+    nl_indent(st);
+    st << "end";
 }
 
-void ParameterSetData::read(char * & st, char * & k) {
-  BasicData::read(st, k);	// updates k
+void ParameterSetData::read(char *& st, char *& k)
+{
+    BasicData::read(st, k);	// updates k
 
-  if (strcmp(k, "pins"))
-    wrong_keyword(k, "pins");
-  
-  Q3ValueList<BrowserPin *> l;
+    if (strcmp(k, "pins"))
+        wrong_keyword(k, "pins");
 
-  while (strcmp((k = read_keyword(st)), "end")) {
-    BrowserPin * pa = BrowserPin::read(st, k, 0);
+    Q3ValueList<BrowserPin *> l;
 
-    if (pa != 0)
-      l.append(pa);
-  }
+    while (strcmp((k = read_keyword(st)), "end")) {
+        BrowserPin * pa = BrowserPin::read(st, k, 0);
 
-  set_pins(l);
+        if (pa != 0)
+            l.append(pa);
+    }
 
-  k = read_keyword(st);
+    set_pins(l);
+
+    k = read_keyword(st);
 }

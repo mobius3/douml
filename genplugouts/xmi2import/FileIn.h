@@ -11,8 +11,9 @@
 class Token;
 
 //to read in the file and extract 'Token'
-class FileIn {
-  public:
+class FileIn
+{
+public:
     FileIn(const QString & path, FILE * fp);
 
     ~FileIn();
@@ -49,14 +50,16 @@ class FileIn {
 
     void warning(Q3CString s);
 
-    const Q3CString & path() const { return _path; }
+    const Q3CString & path() const {
+        return _path;
+    }
 
     static bool isBypassedId(Q3CString id) {
-      return BypassedIds[QString(id)] != 0;
+        return BypassedIds[QString(id)] != 0;
     }
 
 
-  protected:
+protected:
     Q3CString _path;
 
     FILE * _fp;
@@ -74,7 +77,7 @@ class FileIn {
     static Q3Dict<char> BypassedIds;
 
 
-  private:
+private:
     const char * read_word(int c, bool any);
 
     const char * read_string(int marker);
@@ -82,7 +85,7 @@ class FileIn {
     char read_special_char();
 
 
-  public:
+public:
     void setEncoding(Q3CString s);
 
 };

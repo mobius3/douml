@@ -33,10 +33,11 @@
 class LineEdit;
 class MyTable;
 
-class StereotypesDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class StereotypesDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     LineEdit * package_list;
     MyTable * packagetable;
     LineEdit * class_list;
@@ -78,14 +79,14 @@ class StereotypesDialog : public Q3TabDialog {
     LineEdit * activitydiagram_list;
     LineEdit * componentdiagram_list;
     LineEdit * deploymentdiagram_list;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     StereotypesDialog();
     virtual ~StereotypesDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     void accept();
 };

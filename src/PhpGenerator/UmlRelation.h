@@ -34,20 +34,21 @@
 
 class QTextStream;
 
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n)
-      : UmlBaseRelation(id, n) {
+        : UmlBaseRelation(id, n) {
     };
-  
+
     virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, int & enum_item_rank);
+                          Q3CString indent, int & enum_item_rank);
     virtual void generate_require_onces(QTextStream & f, Q3CString & made);
-    
+
     void generate_extends(const char *& sep, QTextStream & f,
-			  const Q3CString & stereotype);
+                          const Q3CString & stereotype);
     void generate_implements(const char *& sep, QTextStream & f,
-			     const Q3CString & stereotype);
+                             const Q3CString & stereotype);
 };
 
 #endif

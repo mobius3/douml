@@ -11,10 +11,11 @@
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlObjectDiagram : public UmlBaseObjectDiagram {
-  public:
+class UmlObjectDiagram : public UmlBaseObjectDiagram
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlObjectDiagram(void * id, const Q3CString & s) : UmlBaseObjectDiagram(id, s) {
+    UmlObjectDiagram(void * id, const Q3CString & s) : UmlBaseObjectDiagram(id, s) {
     }
 
     //returns a string indicating the king of the element
@@ -29,7 +30,7 @@ class UmlObjectDiagram : public UmlBaseObjectDiagram {
     static void generate_index();
 
 
-  protected:
+protected:
     static Vector diagrams;
 
 };

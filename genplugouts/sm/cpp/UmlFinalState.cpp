@@ -9,13 +9,14 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-void UmlFinalState::generate(UmlClass *, UmlClass *, UmlState *, Q3CString & body, Q3CString indent) {
-  if (parent()->kind() != aRegion)
-    body += indent + "stm._final();\n";
-  else {
+void UmlFinalState::generate(UmlClass *, UmlClass *, UmlState *, Q3CString & body, Q3CString indent)
+{
+    if (parent()->kind() != aRegion)
+        body += indent + "stm._final();\n";
+    else {
 #ifndef WIN32
 #warning A FAIRE
 #endif
-  }
+    }
 }
 

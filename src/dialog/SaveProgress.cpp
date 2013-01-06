@@ -32,12 +32,14 @@
 #include "UmlDesktop.h"
 
 SaveProgress::SaveProgress(int n)
-    : Q3ProgressDialog(0, 0, n, 0, 0, FALSE, Qt::WDestructiveClose) {
-  
-  if (UmlDesktop::fixed())
-    UmlDesktop::tocenter(this);
+    : Q3ProgressDialog(0, 0, n, 0, 0, FALSE, Qt::WDestructiveClose)
+{
+
+    if (UmlDesktop::fixed())
+        UmlDesktop::tocenter(this);
 }
 
-SaveProgress::~SaveProgress() {
-  BrowserNode::save_progress_closed();
+SaveProgress::~SaveProgress()
+{
+    BrowserNode::save_progress_closed();
 }

@@ -32,14 +32,14 @@
 #include <QMap>
 #include "CustomWidgets/MultiPurposeDragArea.h"
 
-unsigned int ClosestEdge(QWidget*, QPoint);
+unsigned int ClosestEdge(QWidget *, QPoint);
 class BrowserNode;
 
 //! class contains some methods that make it possible to change
 //! the behaviour of Bruno's dialogs as non-intrusively as possible
 class EdgeMenuDialog : public Q3TabDialog
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     EdgeMenuDialog(QWidget * parent = 0, const char * name = 0, bool modal = false, Qt::WindowFlags f = 0);
     virtual ~EdgeMenuDialog();
@@ -57,23 +57,23 @@ public:
 protected:
 
     //! called when user leaves the window
-    virtual void leaveEvent ( QEvent * event );
+    virtual void leaveEvent(QEvent * event);
 
     //! called when user enters the window
-    virtual void enterEvent ( QEvent * event );
+    virtual void enterEvent(QEvent * event);
 
     void moveEvent(QMoveEvent *);
 
     virtual void focusOutEvent(QFocusEvent *) override;
 
     //! called on window show()
-    void showEvent ( QShowEvent * event );
+    void showEvent(QShowEvent * event);
     //! called when user srolls with mouse wheel
-    void wheelEvent ( QWheelEvent * event );
+    void wheelEvent(QWheelEvent * event);
 
     //! registers tab for later use
     //! registered tab can be safely removed from tab dialog and then restored
-    virtual void RegisterTab(QString, QWidget*);
+    virtual void RegisterTab(QString, QWidget *);
     //! hides the tabs
     virtual void HideTab(QString);
     //! shows the tab
@@ -88,8 +88,8 @@ protected:
 
     void IntitiateMove(QPoint);
     void InitiateResize(QPoint);
-    void ResizeThis(QPoint,QPoint);
-    void MoveThis(QPoint,QPoint);
+    void ResizeThis(QPoint, QPoint);
+    void MoveThis(QPoint, QPoint);
     void ChangeTab(int);
 
 
@@ -99,7 +99,7 @@ protected:
     //! Returns the current node associated with this dialog
     virtual BrowserNode * GetCurrentNode();
     //! Assigns a browser node(listview node effectively) to this dialog
-    void SetCurrentNode(BrowserNode* );
+    void SetCurrentNode(BrowserNode *);
 
     // these functions should be pure virtual in the end
     //! Initializes GUI elements
@@ -120,7 +120,7 @@ protected:
 
     int currentTab;
 
-    QMap<QString, QWidget*> tabs;
+    QMap<QString, QWidget *> tabs;
     BrowserNode * currentNode;
     EWidgetModificationMode modificationMode;
     QPoint modificationOrigin;
@@ -133,7 +133,7 @@ signals:
     void edgeMenuRequested(uint);
     void lostFocus();
     void hideEdgeMenu();
-    void repositionMenu(const QPoint&);
+    void repositionMenu(const QPoint &);
 
 public slots:
     virtual void OnPickNextSibling();

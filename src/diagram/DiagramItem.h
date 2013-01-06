@@ -30,7 +30,7 @@
 #include <qstring.h>
 #include <qpoint.h>
 #include <QTextStream>
-#include <q3ptrdict.h> 
+#include <q3ptrdict.h>
 //Added by qt3to4:
 #include <Q3PtrCollection>
 
@@ -53,28 +53,29 @@ class BasicData;
 class UmlCanvas;
 #include <q3ptrlist.h> // [lgfreitas] added for q3ptrlist
 
-class DiagramItem : public Labeled<DiagramItem> {
-  protected:
+class DiagramItem : public Labeled<DiagramItem>
+{
+protected:
     Q3PtrList<ArrowCanvas> lines;
-  
+
     static Q3PtrList<DiagramItem> Undefined;
-    
-  public:
+
+public:
     DiagramItem(int id, UmlCanvas * canvas);
     virtual ~DiagramItem();
-    
+
     virtual void delete_it() = 0;
-    
+
     void hide_lines();
     void update_show_lines();
-  
+
     void add_line(ArrowCanvas * l) {
-      lines.append(l);
+        lines.append(l);
     }
     virtual void remove_line(ArrowCanvas * l, bool onbrkjoin = FALSE);
     virtual void check_line(ArrowCanvas * l);
     bool attached_to(const ArrowCanvas *) const;
-    
+
     virtual UmlCode type() const = 0;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual void remove(bool from_model);
@@ -84,16 +85,16 @@ class DiagramItem : public Labeled<DiagramItem> {
     virtual QRect rect() const = 0;
     virtual bool contains(int, int) const = 0;
     virtual void open() = 0;
-    virtual void menu(const QPoint&) = 0;
+    virtual void menu(const QPoint &) = 0;
     virtual QString may_start(UmlCode &) const = 0;
     virtual bool may_connect(UmlCode l) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const = 0;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &) = 0;
     virtual bool connexion(UmlCode, const QPoint &, const QPoint &);
     virtual void post_connexion(UmlCode, DiagramItem *);
-    BasicData * add_relation(UmlCode, DiagramItem *); 
-    virtual bool has_relation(BasicData *) const; 
-    virtual bool has_relation(UmlCode, BasicData *) const; 
+    BasicData * add_relation(UmlCode, DiagramItem *);
+    virtual bool has_relation(BasicData *) const;
+    virtual bool has_relation(UmlCode, BasicData *) const;
     enum LineDirection { Horizontal, Vertical, All };
     virtual LineDirection allowed_direction(UmlCode);
     virtual bool alignable() const;
@@ -117,30 +118,35 @@ class DiagramItem : public Labeled<DiagramItem> {
     virtual void history_save(QBuffer &)const = 0;
     virtual void history_load(QBuffer &) = 0;
     virtual void history_hide() = 0;
-    
+
     static DiagramItem * dict_get(int id, const char *, UmlCanvas *);
-    
+
     void shift(QPoint & p, QPoint other, bool contains_other) const;
-    
-    bool linked() { return !lines.isEmpty(); }
-    void post_history_hide() { lines.clear(); }
-    
+
+    bool linked() {
+        return !lines.isEmpty();
+    }
+    void post_history_hide() {
+        lines.clear();
+    }
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
-    
+
     virtual void apply_shortcut(QString);
-    
+
     virtual void check_stereotypeproperties() = 0;
-    
+
     static void post_load();
     void remove_if_already_present();
-    
+
     virtual bool represents(BrowserNode *);
 };
 
-class DiagramItemList : public Q3PtrList<DiagramItem> {
-  public:
+class DiagramItemList : public Q3PtrList<DiagramItem>
+{
+public:
     DiagramItemList(Q3CanvasItemList);
     virtual ~DiagramItemList();
     virtual int compareItems(Q3PtrCollection::Item, Q3PtrCollection::Item);
@@ -156,6 +162,6 @@ extern aCorner on_resize_point(const QPoint & p, const QRect & r);
 
 extern DiagramItem * QCanvasItemToDiagramItem(Q3CanvasItem * ci);
 extern DiagramCanvas * QCanvasItemToDiagramCanvas(Q3CanvasItem * ci);
-	
+
 #endif
 

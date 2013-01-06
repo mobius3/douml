@@ -33,23 +33,24 @@ class Q3ComboBox;
 
 class LineEdit;
 
-class StereotypeDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class StereotypeDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     QString & ste;
     QString & lab;
     Q3ComboBox * cb;
     LineEdit * ed;
-    
+
     static QSize previous_size;
-  
-  public:
-    StereotypeDialog(const QStringList &defaults, QString & st,
-		     QString & la, QString cap, QString lbl);
+
+public:
+    StereotypeDialog(const QStringList & defaults, QString & st,
+                     QString & la, QString cap, QString lbl);
     virtual ~StereotypeDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     void accept();
 };

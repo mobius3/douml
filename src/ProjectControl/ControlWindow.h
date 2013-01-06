@@ -32,37 +32,38 @@
 class BrowserView;
 class BrowserNode;
 class QDir;
- 
+
 // singleton
 
-class ControlWindow : public Q3MainWindow {
-  Q_OBJECT
-    
-  public:
+class ControlWindow : public Q3MainWindow
+{
+    Q_OBJECT
+
+public:
     ControlWindow(QDir & homeDir);
-virtual ~ControlWindow();
-  
-  protected:
+    virtual ~ControlWindow();
+
+protected:
     static ControlWindow * the;
-  
+
     BrowserView * browser;
     QStringList historic;
-    
+
     void load(QString path);
     void show_identity();
 
-  private slots:
+private slots:
     void load();
     void quit();
     void browser_search();
     void historicActivated(int id);
     void change_user();
 
-    
+
     void motif_style();
     void motifplus_style();
     void windows_style();
-    
+
     void about();
     void aboutQt();
 };

@@ -8,14 +8,15 @@
 class UmlClass;
 class UmlState;
 
-class UmlFinalState : public UmlBaseFinalState {
-  public:
+class UmlFinalState : public UmlBaseFinalState
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlFinalState(void * id) : UmlBaseFinalState(id, "") {
+    UmlFinalState(void * id) : UmlBaseFinalState(id, "") {
     }
 
     //  is the target of a transition
-    
+
     virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state, Q3CString & body, Q3CString indent);
 
 };

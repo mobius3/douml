@@ -35,13 +35,13 @@ QPixmap * PackageIcon;
 
 void init_pixmaps()
 {
-  // browser icons
-  
+    // browser icons
+
 #include "class_xpm.xpm"
 #include "interface_xpm.xpm"
 #include "package_xpm.xpm"
 
-  ClassIcon = new QPixmap((const char **) class_xpm);
-  InterfaceIcon = new QPixmap((const char **) interface_xpm);
-  PackageIcon = new QPixmap((const char **) package_xpm);
+    ClassIcon = new QPixmap((const char **) class_xpm);
+    InterfaceIcon = new QPixmap((const char **) interface_xpm);
+    PackageIcon = new QPixmap((const char **) package_xpm);
 }

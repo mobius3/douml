@@ -34,79 +34,86 @@
 #include "ToolCom.h"
 #include "myio.h"
 
-const char * AType::get_type() const {
-  return (type != 0) ? type->get_name() : explicit_type; 
+const char * AType::get_type() const
+{
+    return (type != 0) ? type->get_name() : explicit_type;
 }
 
-QString AType::get_type(ShowContextMode mode) const {
-  return (type == 0)
-    ? QString((const char *) explicit_type)
-    : type->contextual_name(mode);
+QString AType::get_type(ShowContextMode mode) const
+{
+    return (type == 0)
+           ? QString((const char *) explicit_type)
+           : type->contextual_name(mode);
 }
 
-QString AType::get_full_type() const {
-  return (type != 0) ? type->full_name(TRUE)
-		     : QString((const char *) explicit_type); 
+QString AType::get_full_type() const
+{
+    return (type != 0) ? type->full_name(TRUE)
+           : QString((const char *) explicit_type);
 }
 
-void AType::send_def(ToolCom * com) const {
-  if (type == 0) {
-    com->write_id(0);
-    com->write_string(explicit_type);
-  }
-  else if (type->deletedp()) {
-    com->write_id(0);
-    com->write_string(0);
-  }
-  else
-    type->write_id(com);
+void AType::send_def(ToolCom * com) const
+{
+    if (type == 0) {
+        com->write_id(0);
+        com->write_string(explicit_type);
+    }
+    else if (type->deletedp()) {
+        com->write_id(0);
+        com->write_string(0);
+    }
+    else
+        type->write_id(com);
 }
 
 // returns FALSE on error
 
 void AType::save(QTextStream & st, QString & warning,
-		 const char * t, const char * ex) const {
-  if (type != 0) {
-    if (type->deletedp()) {
-      // theo not possible
-      st << ex;
-      save_string(type->get_name(), st);
+                 const char * t, const char * ex) const
+{
+    if (type != 0) {
+        if (type->deletedp()) {
+            // theo not possible
+            st << ex;
+            save_string(type->get_name(), st);
+        }
+        else {
+            st << t;
+            type->save(st, TRUE, warning);
+        }
     }
-    else{
-      st << t;
-      type->save(st, TRUE, warning);
+    else {
+        st << ex;
+        save_string(explicit_type, st);
     }
-  }
-  else {
-    st << ex;
-    save_string(explicit_type, st);
-  }
 }
 
-void AType::read(char * & st, const char * t, const char * ex) {
-  char * k = read_keyword(st);
-  
-  if (!strcmp(k, t)) {
-    type = BrowserClass::read_ref(st);
-    explicit_type = QString();
-  }
-  else if (!strcmp(k, ex)) {
-    type = 0;
-    explicit_type = read_string(st);
-  }
-  else 
-    wrong_keyword(k, QString(t) + '/' + ex);
+void AType::read(char *& st, const char * t, const char * ex)
+{
+    char * k = read_keyword(st);
+
+    if (!strcmp(k, t)) {
+        type = BrowserClass::read_ref(st);
+        explicit_type = QString();
+    }
+    else if (!strcmp(k, ex)) {
+        type = 0;
+        explicit_type = read_string(st);
+    }
+    else
+        wrong_keyword(k, QString(t) + '/' + ex);
 }
 
-void AType::read(char * & st, const char * t, const char * ex, const char * k) {
-  if (!strcmp(k, t)) {
-    type = BrowserClass::read_ref(st);
-    explicit_type = QString();
-  }
-  else if (!strcmp(k, ex)) {
-    type = 0;
-    explicit_type = read_string(st);
-  }
-  else 
-    wrong_keyword(k, QString(t) + '/' + ex);
+void AType::read(char *& st, const char * t, const char * ex, const char * k)
+{
+    if (!strcmp(k, t)) {
+        type = BrowserClass::read_ref(st);
+        explicit_type = QString();
+    }
+    else if (!strcmp(k, ex)) {
+        type = 0;
+        explicit_type = read_string(st);
+    }
+    else
+        wrong_keyword(k, QString(t) + '/' + ex);
 }

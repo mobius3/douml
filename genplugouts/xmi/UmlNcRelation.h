@@ -10,8 +10,9 @@ class FileOut;
 //This class manages 'relations' between non class objects
 //
 // You can modify it as you want (except the constructor)
-class UmlNcRelation : public UmlBaseNcRelation {
-  public:
+class UmlNcRelation : public UmlBaseNcRelation
+{
+public:
     UmlNcRelation(void * id, const Q3CString & n) : UmlBaseNcRelation(id, n) {};
 
     virtual bool write_if_needed(FileOut & out);

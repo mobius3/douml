@@ -1,7 +1,8 @@
 
 #include "UmlJunctionPseudoState.h"
 
-const char * UmlJunctionPseudoState::sKind() const {
-  return "junction";
+const char * UmlJunctionPseudoState::sKind() const
+{
+    return "junction";
 }
 

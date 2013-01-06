@@ -9,7 +9,8 @@ UmlInitialActivityNode * UmlBaseInitialActivityNode::create(UmlItem * parent, co
     return (UmlInitialActivityNode *) parent->create_(anInitialActivityNode, s);
 }
 
-anItemKind UmlBaseInitialActivityNode::kind() {
+anItemKind UmlBaseInitialActivityNode::kind()
+{
     return anInitialActivityNode;
 }
 
@@ -18,7 +19,8 @@ UmlFlowFinalActivityNode * UmlBaseFlowFinalActivityNode::create(UmlItem * parent
     return (UmlFlowFinalActivityNode *) parent->create_(aFlowFinalActivityNode, s);
 }
 
-anItemKind UmlBaseFlowFinalActivityNode::kind() {
+anItemKind UmlBaseFlowFinalActivityNode::kind()
+{
     return aFlowFinalActivityNode;
 }
 
@@ -27,7 +29,8 @@ UmlActivityFinalActivityNode * UmlBaseActivityFinalActivityNode::create(UmlItem 
     return (UmlActivityFinalActivityNode *) parent->create_(anActivityFinalActivityNode, s);
 }
 
-anItemKind UmlBaseActivityFinalActivityNode::kind() {
+anItemKind UmlBaseActivityFinalActivityNode::kind()
+{
     return anActivityFinalActivityNode;
 }
 
@@ -36,7 +39,8 @@ UmlDecisionActivityNode * UmlBaseDecisionActivityNode::create(UmlItem * parent, 
     return (UmlDecisionActivityNode *) parent->create_(aDecisionActivityNode, s);
 }
 
-anItemKind UmlBaseDecisionActivityNode::kind() {
+anItemKind UmlBaseDecisionActivityNode::kind()
+{
     return aDecisionActivityNode;
 }
 
@@ -45,7 +49,8 @@ UmlMergeActivityNode * UmlBaseMergeActivityNode::create(UmlItem * parent, const 
     return (UmlMergeActivityNode *) parent->create_(aMergeActivityNode, s);
 }
 
-anItemKind UmlBaseMergeActivityNode::kind() {
+anItemKind UmlBaseMergeActivityNode::kind()
+{
     return aMergeActivityNode;
 }
 
@@ -54,7 +59,8 @@ UmlForkActivityNode * UmlBaseForkActivityNode::create(UmlItem * parent, const ch
     return (UmlForkActivityNode *) parent->create_(aForkActivityNode, s);
 }
 
-anItemKind UmlBaseForkActivityNode::kind() {
+anItemKind UmlBaseForkActivityNode::kind()
+{
     return aForkActivityNode;
 }
 
@@ -63,7 +69,8 @@ UmlJoinActivityNode * UmlBaseJoinActivityNode::create(UmlItem * parent, const ch
     return (UmlJoinActivityNode *) parent->create_(aJoinActivityNode, s);
 }
 
-anItemKind UmlBaseJoinActivityNode::kind() {
+anItemKind UmlBaseJoinActivityNode::kind()
+{
     return aJoinActivityNode;
 }
 

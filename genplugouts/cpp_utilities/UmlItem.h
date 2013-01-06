@@ -9,8 +9,9 @@
 // allows to generalize their management, declare virtual operations etc ...
 //
 // You can modify it as you want (except the constructor)
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n) {};
 
     virtual ~UmlItem();
@@ -18,7 +19,7 @@ class UmlItem : public UmlBaseItem {
     //virtual operation doing 'something' depending on the target
     //
     //does nothing by default
-    
+
     virtual void utilities();
 
 };

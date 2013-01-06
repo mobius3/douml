@@ -4,10 +4,10 @@
 
 // Internal enum
 enum PackageGlobalCmd {
-  findNamespaceCmd,
-  findPackageCmd,
-  findModuleCmd,
-  getProjectCmd
+    findNamespaceCmd,
+    findPackageCmd,
+    findModuleCmd,
+    getProjectCmd
 
 };
 #endif

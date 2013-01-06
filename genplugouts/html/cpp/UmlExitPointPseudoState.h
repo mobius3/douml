@@ -5,13 +5,14 @@
 #include <q3cstring.h>
 #include "UmlBaseExitPointPseudoState.h"
 
-class UmlExitPointPseudoState : public UmlBaseExitPointPseudoState {
-  public:
+class UmlExitPointPseudoState : public UmlBaseExitPointPseudoState
+{
+public:
     //returns a string indicating the king of the element
     virtual Q3CString sKind();
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlExitPointPseudoState(void * id, const Q3CString & s) : UmlBaseExitPointPseudoState(id, s) {
+    UmlExitPointPseudoState(void * id, const Q3CString & s) : UmlBaseExitPointPseudoState(id, s) {
     }
 
     //entry to produce the html code receiving chapter number

@@ -26,16 +26,17 @@
 #ifndef PROGRESS_H
 #define PROGRESS_H
 
-#include <q3progressdialog.h> 
+#include <q3progressdialog.h>
 
-class Progress : public Q3ProgressDialog {
-  public:
+class Progress : public Q3ProgressDialog
+{
+public:
     Progress(int, const char *);
     virtual ~Progress();
-    
+
     void tic();
-    
-  private:
+
+private:
     int n;
 };
 

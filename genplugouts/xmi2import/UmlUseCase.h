@@ -13,9 +13,12 @@ class FileIn;
 // This class manages 'use case'
 //
 // You can modify it as you want (except the constructor)
-class UmlUseCase : public UmlBaseUseCase {
-  public:
-    UmlUseCase(void * id, const Q3CString & n) : UmlBaseUseCase(id, n) { NumberOf += 1; };
+class UmlUseCase : public UmlBaseUseCase
+{
+public:
+    UmlUseCase(void * id, const Q3CString & n) : UmlBaseUseCase(id, n) {
+        NumberOf += 1;
+    };
 
     //returns the first container for a 'kind', going up in the browser tree
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);
@@ -32,10 +35,12 @@ class UmlUseCase : public UmlBaseUseCase {
 
     static void importExtensionPoint(FileIn & in, Token & token, UmlItem * where);
 
-    static int numberOf() { return NumberOf; };
+    static int numberOf() {
+        return NumberOf;
+    };
 
 
-  protected:
+protected:
     static int NumberOf;
 
 };

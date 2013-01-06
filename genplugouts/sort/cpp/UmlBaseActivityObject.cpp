@@ -12,110 +12,137 @@ UmlActivityObject * UmlBaseActivityObject::create(UmlItem * parent, const char *
     return (UmlActivityObject *) parent->create_(anActivityObject, s);
 }
 
-anItemKind UmlBaseActivityObject::kind() {
+anItemKind UmlBaseActivityObject::kind()
+{
     return anActivityObject;
 }
 
-const UmlTypeSpec & UmlBaseActivityObject::type() {
+const UmlTypeSpec & UmlBaseActivityObject::type()
+{
     read_if_needed_();
     return _type;
 }
 
-bool UmlBaseActivityObject::set_Type(const UmlTypeSpec & v) {
+bool UmlBaseActivityObject::set_Type(const UmlTypeSpec & v)
+{
     return set_it_(_type, v, setTypeCmd);
 }
 
-const Q3CString & UmlBaseActivityObject::multiplicity() {
+const Q3CString & UmlBaseActivityObject::multiplicity()
+{
     read_if_needed_();
     return _multiplicity;
 }
 
-bool UmlBaseActivityObject::set_Multiplicity(const char * v) {
+bool UmlBaseActivityObject::set_Multiplicity(const char * v)
+{
     return set_it_(_multiplicity, v, setMultiplicityCmd);
 }
 
-const Q3CString & UmlBaseActivityObject::inState() {
+const Q3CString & UmlBaseActivityObject::inState()
+{
     read_if_needed_();
     return _in_state;
 }
 
-bool UmlBaseActivityObject::set_InState(const char * v) {
+bool UmlBaseActivityObject::set_InState(const char * v)
+{
     return set_it_(_in_state, v, setInStateCmd);
 }
 
-const Q3CString & UmlBaseActivityObject::selection() {
+const Q3CString & UmlBaseActivityObject::selection()
+{
     read_if_needed_();
     return _selection;
 }
 
-bool UmlBaseActivityObject::set_Selection(const char * v) {
+bool UmlBaseActivityObject::set_Selection(const char * v)
+{
     return set_it_(_selection, v, setUmlActivityCmd);
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseActivityObject::cppSelection() {
+const Q3CString & UmlBaseActivityObject::cppSelection()
+{
     read_if_needed_();
     return _cpp_selection;
 }
 
-bool UmlBaseActivityObject::set_CppSelection(const char * v) {
+bool UmlBaseActivityObject::set_CppSelection(const char * v)
+{
     return set_it_(_cpp_selection, v, setCppActivityCmd);
 }
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseActivityObject::javaSelection() {
+const Q3CString & UmlBaseActivityObject::javaSelection()
+{
     read_if_needed_();
     return _java_selection;
 }
 
-bool UmlBaseActivityObject::set_JavaSelection(const char * v) {
+bool UmlBaseActivityObject::set_JavaSelection(const char * v)
+{
     return set_it_(_java_selection, v, setJavaActivityCmd);
 }
 #endif
 
-anOrdering UmlBaseActivityObject::ordering() {
+anOrdering UmlBaseActivityObject::ordering()
+{
     read_if_needed_();
     return _ordering;
 }
 
-bool UmlBaseActivityObject::set_Ordering(anOrdering v) {
-    UmlCom::send_cmd(_identifier, setOrderingCmd, (char) v);   if (UmlCom::read_bool()) {     _ordering = v;     return TRUE;   }   else     return FALSE;
+bool UmlBaseActivityObject::set_Ordering(anOrdering v)
+{
+    UmlCom::send_cmd(_identifier, setOrderingCmd, (char) v);
+
+    if (UmlCom::read_bool()) {
+        _ordering = v;
+        return TRUE;
+    }
+    else     return FALSE;
 }
 
-bool UmlBaseActivityObject::isControlType() {
+bool UmlBaseActivityObject::isControlType()
+{
     read_if_needed_();
     return _is_control;
 }
 
-bool UmlBaseActivityObject::set_IsControlType(bool v) {
+bool UmlBaseActivityObject::set_IsControlType(bool v)
+{
     bool vv;
-  
+
     if (set_it_(vv, v, setFlagCmd)) {
-      _is_control = v;
-      return TRUE;
+        _is_control = v;
+        return TRUE;
     }
     else
-      return FALSE;
+        return FALSE;
 }
 
-UmlActivityDiagram * UmlBaseActivityObject::associatedDiagram() {
+UmlActivityDiagram * UmlBaseActivityObject::associatedDiagram()
+{
     read_if_needed_();
-  
+
     return _assoc_diagram;
 }
 
-bool UmlBaseActivityObject::set_AssociatedDiagram(UmlActivityDiagram * d) {
+bool UmlBaseActivityObject::set_AssociatedDiagram(UmlActivityDiagram * d)
+{
     UmlCom::send_cmd(_identifier, setAssocDiagramCmd, ((UmlBaseItem *) d)->_identifier);
+
     if (UmlCom::read_bool()) {
-      _assoc_diagram = d;
-      return TRUE;
+        _assoc_diagram = d;
+        return TRUE;
     }
     else
-      return FALSE;
+        return FALSE;
 }
 
-void UmlBaseActivityObject::unload(bool rec, bool del) {
+void UmlBaseActivityObject::unload(bool rec, bool del)
+{
     _type.explicit_type = 0;
     _multiplicity = 0;
     _in_state = 0;
@@ -129,12 +156,15 @@ void UmlBaseActivityObject::unload(bool rec, bool del) {
     UmlBaseActivityNode::unload(rec, del);
 }
 
-void UmlBaseActivityObject::read_uml_() {
+void UmlBaseActivityObject::read_uml_()
+{
     _assoc_diagram = (kind() == anActivityObject) ? (UmlActivityDiagram *) UmlBaseItem::read_() : (UmlActivityDiagram *) 0;
     UmlBaseActivityNode::read_uml_();
     _type.type = (UmlClass *) UmlBaseItem::read_();
+
     if (_type.type == 0)
-      _type.explicit_type = UmlCom::read_string();
+        _type.explicit_type = UmlCom::read_string();
+
     _multiplicity = UmlCom::read_string();
     _in_state = UmlCom::read_string();
     _selection = UmlCom::read_string();
@@ -143,13 +173,15 @@ void UmlBaseActivityObject::read_uml_() {
 }
 
 #ifdef WITHCPP
-void UmlBaseActivityObject::read_cpp_() {
+void UmlBaseActivityObject::read_cpp_()
+{
     _cpp_selection = UmlCom::read_string();
 }
 #endif
 
 #ifdef WITHJAVA
-void UmlBaseActivityObject::read_java_() {
+void UmlBaseActivityObject::read_java_()
+{
     _java_selection = UmlCom::read_string();
 }
 #endif

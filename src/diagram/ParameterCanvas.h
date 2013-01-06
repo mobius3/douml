@@ -36,31 +36,32 @@ class LabelCanvas;
 #define PARAMETER_CANVAS_MIN_WIDTH 39
 #define PARAMETER_CANVAS_MIN_HEIGHT 25
 
-class ParameterCanvas : public QObject, public DiagramCanvas {
-  Q_OBJECT
-    
-  protected:
+class ParameterCanvas : public QObject, public DiagramCanvas
+{
+    Q_OBJECT
+
+protected:
     ActivityCanvas * act;
     UmlColor itscolor;
     UmlColor used_color;
-        
-  public:
+
+public:
     ParameterCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y,
-		    int id, ActivityCanvas * a);
+                    int id, ActivityCanvas * a);
     virtual ~ParameterCanvas();
-    
+
     virtual void delete_it();
-    
+
     void update();
     void check_position();
 
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual bool copyable() const;
     virtual void remove(bool from_model);
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
@@ -72,25 +73,25 @@ class ParameterCanvas : public QObject, public DiagramCanvas {
     virtual bool primaryItem() const;
     void do_moveBy(double dx, double dy);
     void do_change_scale();
-    
+
     bool activity_selected() const;
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
     void edit_drawing_settings();
-   
+
     virtual void apply_shortcut(QString s);
-  
+
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static ParameterCanvas * read(char * &, UmlCanvas *, char *, ActivityCanvas *);
+    static ParameterCanvas * read(char *& , UmlCanvas *, char *, ActivityCanvas *);
     virtual void post_loaded();
-    
+
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();
 };

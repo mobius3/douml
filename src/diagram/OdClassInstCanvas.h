@@ -43,21 +43,22 @@ struct SlotRel;
 class ObjectLinkCanvas;
 
 class OdClassInstCanvas : public QObject, public DiagramCanvas,
-  			  public ClassInstCanvas {
-  Q_OBJECT
-    
+    public ClassInstCanvas
+{
+    Q_OBJECT
+
     friend class ClassInstanceDialog;
-  
-  public:
+
+public:
     OdClassInstCanvas(BrowserClassInstance * t, UmlCanvas * canvas,
-		       int x, int y, int id);
+                      int x, int y, int id);
     virtual ~OdClassInstCanvas();
-    
+
     virtual void delete_it();
-    
+
     virtual void draw(QPainter & p);
     virtual void change_scale();
-    
+
     void compute_size();
 
     virtual UmlCode type() const;
@@ -65,11 +66,11 @@ class OdClassInstCanvas : public QObject, public DiagramCanvas,
     virtual void set_name(const QString & s);	// out of model case
     virtual BrowserNode * get_type() const;	// return class, all cases
     void set_type(BrowserNode * t);	// out of model case
-    virtual BrowserNodeList& get_types(BrowserNodeList&) const;
+    virtual BrowserNodeList & get_types(BrowserNodeList &) const;
     virtual BrowserNode * container(UmlCode) const;
     virtual BrowserClassInstance * get_instance() const;
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
@@ -81,7 +82,7 @@ class OdClassInstCanvas : public QObject, public DiagramCanvas,
     virtual void remove(bool from_model);
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
@@ -91,15 +92,15 @@ class OdClassInstCanvas : public QObject, public DiagramCanvas,
     virtual void apply_shortcut(QString s);
     void draw_all_relations(OdClassInstCanvas * end = 0);
     bool has_relation(const SlotRel &) const;
-    bool is_duplicated(ObjectLinkCanvas * lnk, 
-		       OdClassInstCanvas * other) const;
+    bool is_duplicated(ObjectLinkCanvas * lnk,
+                       OdClassInstCanvas * other) const;
 
-  
+
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static OdClassInstCanvas * read(char * &, UmlCanvas * canvas, char *);
+    static OdClassInstCanvas * read(char *& , UmlCanvas * canvas, char *);
     virtual void post_loaded();
 
-  private slots:
+private slots:
     void modified();	// canvas must be updated
     void deleted();	// the class is deleted
 };

@@ -1,6 +1,7 @@
 
 #include "UmlActivityDiagram.h"
 
-void UmlActivityDiagram::memo_incoming_flow() {
+void UmlActivityDiagram::memo_incoming_flow()
+{
 }
 

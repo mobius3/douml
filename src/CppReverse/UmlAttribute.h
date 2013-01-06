@@ -33,22 +33,23 @@
 
 class Class;
 
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n)
-      :  UmlBaseAttribute(id, n) {};
-  
+        :  UmlBaseAttribute(id, n) {};
+
     static bool new_one(Class * cl, const Q3CString & name, const Q3CString & type,
-			const Q3CString & modifier, const Q3CString & pretype, 
-			const Q3CString & array,	aVisibility visibility,
-			bool staticp, bool constp, bool typenamep, bool mutablep,
-			bool volatilep,	const Q3CString & bitfield,
-			const Q3CString & value,	Q3CString comment,
-			Q3CString description
+                        const Q3CString & modifier, const Q3CString & pretype,
+                        const Q3CString & array,	aVisibility visibility,
+                        bool staticp, bool constp, bool typenamep, bool mutablep,
+                        bool volatilep,	const Q3CString & bitfield,
+                        const Q3CString & value,	Q3CString comment,
+                        Q3CString description
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			);
+                       );
 #ifdef ROUNDTRIP
     static UmlAttribute * search_attr(UmlClass * cl, const Q3CString & name);
 #endif

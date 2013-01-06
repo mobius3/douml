@@ -1,11 +1,13 @@
 
 #include "UmlClassView.h"
 
-void UmlClassView::sort() {
-  sortChildren();
+void UmlClassView::sort()
+{
+    sortChildren();
 }
 
-int UmlClassView::orderWeight() {
-  return 3;
+int UmlClassView::orderWeight()
+{
+    return 3;
 }
 

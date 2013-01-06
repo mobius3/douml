@@ -27,6 +27,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-UmlClass::UmlClass(void * id, const Q3CString & n) 
-    : UmlBaseClass(id, n) {
+UmlClass::UmlClass(void * id, const Q3CString & n)
+    : UmlBaseClass(id, n)
+{
 }

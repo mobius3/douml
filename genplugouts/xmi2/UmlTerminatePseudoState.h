@@ -4,10 +4,11 @@
 
 #include "UmlBaseTerminatePseudoState.h"
 
-class UmlTerminatePseudoState : public UmlBaseTerminatePseudoState {
-  public:
+class UmlTerminatePseudoState : public UmlBaseTerminatePseudoState
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlTerminatePseudoState(void * id) : UmlBaseTerminatePseudoState(id, "") {
+    UmlTerminatePseudoState(void * id) : UmlBaseTerminatePseudoState(id, "") {
     }
 
     virtual const char * sKind() const;

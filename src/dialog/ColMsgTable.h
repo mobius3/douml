@@ -26,7 +26,7 @@
 #ifndef COLMSGTABLE_H
 #define COLMSGTABLE_H
 
-#include <q3ptrdict.h> 
+#include <q3ptrdict.h>
 //Added by qt3to4:
 #include <Q3ValueList>
 
@@ -37,28 +37,29 @@ class ColMsgList;
 
 class ColDiagramView;
 
-class ColMsgTable : public MyTable {
-  Q_OBJECT
-    
-  protected:
+class ColMsgTable : public MyTable
+{
+    Q_OBJECT
+
+protected:
     bool rec;
     ColDiagramView * view;
     ColMsgList & msgs;
     Q3ValueList<ColMsg *> flat_msg_list;
-    
+
     void refresh();
     void refresh(ColMsgList & m);
     void edit_msg(int row);
     void change_ranks(int row, int col);
-    
+
 #ifdef NEW_METHOD
     void save_list(ColMsgList & l, Q3PtrDict<ColMsgList> & saved);
 #endif
-    
-  public:
+
+public:
     ColMsgTable(QWidget * parent, ColDiagramView * v, ColMsgList & m);
- 
-  protected slots:
+
+protected slots:
     virtual void button_pressed(int row, int col, int button, const QPoint & mousePos);
 };
 

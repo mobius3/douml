@@ -26,7 +26,7 @@
 #ifndef UMLARTIFACT_H
 #define UMLARTIFACT_H
 
-#include <q3asciidict.h> 
+#include <q3asciidict.h>
 //Added by qt3to4:
 #include <Q3CString>
 
@@ -37,23 +37,24 @@ class UmlPackage;
 // This class manages 'artifacts'
 // You can modify it as you want (except the constructor)
 
-class UmlArtifact : public UmlBaseArtifact {
-  private:
+class UmlArtifact : public UmlBaseArtifact
+{
+private:
     bool managed;
-    
+
     static UmlArtifact * current;
     static UmlPackage * package_of_generated_artifact;
-    
+
     static bool must_be_saved(const char * path, const char * new_contains);
-  
+
     void generate_text();
 
-  public:
+public:
     UmlArtifact(void * id, const Q3CString & n)
-      : UmlBaseArtifact(id, n), managed(FALSE) {};
-    
+        : UmlBaseArtifact(id, n), managed(FALSE) {};
+
     virtual void generate();
-    
+
     static UmlArtifact * generated_one();
     static UmlPackage * generation_package();
 };

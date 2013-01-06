@@ -30,9 +30,10 @@
 #include "UmlFormalParameter.h"
 #include "UmlClass.h"
 
-UmlFormalParameter::UmlFormalParameter(Q3CString t, Q3CString n, Q3CString v) {
-  _type = t;
-  _name = n;
-  _default_value.explicit_type = v;
+UmlFormalParameter::UmlFormalParameter(Q3CString t, Q3CString n, Q3CString v)
+{
+    _type = t;
+    _name = n;
+    _default_value.explicit_type = v;
 }
 

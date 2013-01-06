@@ -13,8 +13,9 @@ class UmlItem;
 // is a mother class of all the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n) {};
 
     //import the relation (as attribute) starting by 'tk' inside 'where'

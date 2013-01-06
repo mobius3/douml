@@ -24,53 +24,53 @@
 #include "CustomWidgets/MultiPurposeDragArea.h"
 #include <QMouseEvent>
 
-MultiPurposeDragArea::MultiPurposeDragArea(QWidget* _parent):QWidget(_parent)
+MultiPurposeDragArea::MultiPurposeDragArea(QWidget * _parent): QWidget(_parent)
 {}
 
 MultiPurposeDragArea::~MultiPurposeDragArea()
 {
 }
 
-void MultiPurposeDragArea::wheelEvent(QWheelEvent *event)
+void MultiPurposeDragArea::wheelEvent(QWheelEvent * event)
 {
     int sign = event->delta() > 0 ? 1 : -1;
     emit changeTab(sign);
 }
 
-void MultiPurposeDragArea::mouseMoveEvent(QMouseEvent *event)
+void MultiPurposeDragArea::mouseMoveEvent(QMouseEvent * event)
 {
-    if(modificationMode == wmm_none)
+    if (modificationMode == wmm_none)
         return;
 
     emit newCoordinates(mapToGlobal(event->pos()));
 }
 
-void MultiPurposeDragArea::mousePressEvent(QMouseEvent *event)
+void MultiPurposeDragArea::mousePressEvent(QMouseEvent * event)
 {
-    if(event->button() == Qt::LeftButton || event->button() == Qt::RightButton)
-    {
+    if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
         grabMouse();
-        if(event->button() == Qt::LeftButton )
-        {
+
+        if (event->button() == Qt::LeftButton) {
             modificationMode = wmm_drag;
             emit initiateMove(mapToGlobal(event->pos()));
         }
-        if(event->button() == Qt::RightButton )
-        {
+
+        if (event->button() == Qt::RightButton) {
             modificationMode = wmm_resize;
             emit initiateResize(mapToGlobal(event->pos()));
         }
     }
 }
 
-void MultiPurposeDragArea::mouseReleaseEvent(QMouseEvent *event)
+void MultiPurposeDragArea::mouseReleaseEvent(QMouseEvent * event)
 {
-    if(event->button() == Qt::LeftButton || event->button() == Qt::RightButton)
-    {
-        if(modificationMode == wmm_resize)
+    if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
+        if (modificationMode == wmm_resize)
             emit endResize();
-        if(modificationMode == wmm_drag)
+
+        if (modificationMode == wmm_drag)
             emit endMove();
+
         modificationMode = wmm_none;
         releaseMouse();
     }

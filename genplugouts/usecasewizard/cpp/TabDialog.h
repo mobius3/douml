@@ -12,20 +12,21 @@ class UmlUseCase;
 //Only for C++
 //don't colapse the C++ & Java definition in only one class because this is too artificial
 //note : the stereotype doesn't have special meaning for Bouml, I use it just to inform
-class TabDialog : public Q3TabDialog {
-  Q_OBJECT
+class TabDialog : public Q3TabDialog
+{
+    Q_OBJECT
 
-  public:
+public:
     TabDialog(UmlUseCase * u);
 
 
-  protected:
+protected:
     UmlUseCase * uc;
 
     QTextCodec * Codec;
 
 
-  public:
+public:
     Q3TextEdit * summary;
 
     Q3TextEdit * context;
@@ -39,19 +40,20 @@ class TabDialog : public Q3TabDialog {
     Q3TextEdit * exceptions;
 
 
-  protected:
+protected:
     QPoint desktopCenter;
 
-protected slots:    virtual void polish();
+protected slots:
+    virtual void polish();
 
 
-  public:
+public:
     void accept();
 
     void reject();
 
 
-  private:
+private:
     QString toUnicode(const char * str);
 
     void latinize(QString & s);

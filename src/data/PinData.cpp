@@ -37,82 +37,95 @@
 #include "ToolCom.h"
 #include "mu.h"
 
-PinData::PinData() {
+PinData::PinData()
+{
 }
 
-PinData::PinData(const PinParamData & pd) {
-  *((PinParamData *) this) = pd;
+PinData::PinData(const PinParamData & pd)
+{
+    *((PinParamData *) this) = pd;
 }
 
 PinData::PinData(PinData * model, BrowserNode * bn)
-    : SimpleData(model), PinParamData(model) {
-  browser_node = bn;
+    : SimpleData(model), PinParamData(model)
+{
+    browser_node = bn;
 }
 
-void PinData::edit() {
-  setName(browser_node->get_name());
-    
-  (new PinDialog(this))->show();
+void PinData::edit()
+{
+    setName(browser_node->get_name());
+
+    (new PinDialog(this))->show();
 }
 
-void PinData::do_connect(BrowserClass * c) {
-  connect(c->get_data(), SIGNAL(deleted()), this, SLOT(on_delete()));
+void PinData::do_connect(BrowserClass * c)
+{
+    connect(c->get_data(), SIGNAL(deleted()), this, SLOT(on_delete()));
 }
 
-void PinData::do_disconnect(BrowserClass * c) {
-  disconnect(c->get_data(), 0, this, 0);
+void PinData::do_disconnect(BrowserClass * c)
+{
+    disconnect(c->get_data(), 0, this, 0);
 }
 
-void PinData::on_delete() {
-  BrowserClass * cl = get_type().type;
-  
-  if ((cl != 0) && cl->deletedp())
-    set_type((BrowserClass *) 0);
+void PinData::on_delete()
+{
+    BrowserClass * cl = get_type().type;
+
+    if ((cl != 0) && cl->deletedp())
+        set_type((BrowserClass *) 0);
 }
 
 void PinData::send_uml_def(ToolCom * com, BrowserNode * bn,
-			   const QString & comment) {
-  BasicData::send_uml_def(com, bn, comment);
-  PinParamData::send_uml_def(com);
+                           const QString & comment)
+{
+    BasicData::send_uml_def(com, bn, comment);
+    PinParamData::send_uml_def(com);
 }
 
-void PinData::send_cpp_def(ToolCom * com) {
-  PinParamData::send_cpp_def(com);
+void PinData::send_cpp_def(ToolCom * com)
+{
+    PinParamData::send_cpp_def(com);
 }
 
-void PinData::send_java_def(ToolCom * com) {
-  PinParamData::send_java_def(com);
+void PinData::send_java_def(ToolCom * com)
+{
+    PinParamData::send_java_def(com);
 }
 
 bool PinData::tool_cmd(ToolCom * com, const char * args,
-		       BrowserNode * bn, const QString & comment) {
-  BooL ack;
+                       BrowserNode * bn, const QString & comment)
+{
+    BooL ack;
 
-  if (((unsigned char) args[-1]) >= firstSetCmd) {
-    if (!bn->is_writable() && !root_permission())
-      ack = FALSE;
+    if (((unsigned char) args[-1]) >= firstSetCmd) {
+        if (!bn->is_writable() && !root_permission())
+            ack = FALSE;
+        else if (! PinParamData::tool_cmd(com, args, ack))
+            return BasicData::tool_cmd(com, args, bn, comment);
+    }
     else if (! PinParamData::tool_cmd(com, args, ack))
-      return BasicData::tool_cmd(com, args, bn, comment);
-  }
-  else if (! PinParamData::tool_cmd(com, args, ack))
-    return BasicData::tool_cmd(com, args, bn, comment);
-  
-  if (ack) {
-    // ok case
-    bn->package_modified();
-    modified();
-  }
-  
-  com->write_ack(ack);
-  return TRUE;
+        return BasicData::tool_cmd(com, args, bn, comment);
+
+    if (ack) {
+        // ok case
+        bn->package_modified();
+        modified();
+    }
+
+    com->write_ack(ack);
+    return TRUE;
 }
 
-void PinData::save(QTextStream & st, QString & warning) const {
-  BasicData::save(st, warning);
-  PinParamData::save(st, warning);
+void PinData::save(QTextStream & st, QString & warning) const
+{
+    BasicData::save(st, warning);
+    PinParamData::save(st, warning);
 }
 
-void PinData::read(char * & st, char * & k) {
-  BasicData::read(st, k);	// updates k
-  PinParamData::read(st, k);	// updates k
+void PinData::read(char *& st, char *& k)
+{
+    BasicData::read(st, k);	// updates k
+    PinParamData::read(st, k);	// updates k
 }

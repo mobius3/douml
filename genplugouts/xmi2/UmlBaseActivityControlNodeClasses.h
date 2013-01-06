@@ -15,8 +15,9 @@ class UmlMergeActivityNode;
 class UmlForkActivityNode;
 class UmlJoinActivityNode;
 
-class UmlBaseInitialActivityNode : public UmlActivityControlNode {
-  public:
+class UmlBaseInitialActivityNode : public UmlActivityControlNode
+{
+public:
     //  returns a new initial activity control node named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -28,15 +29,16 @@ class UmlBaseInitialActivityNode : public UmlActivityControlNode {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseInitialActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseInitialActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
     }
 
 };
 
-class UmlBaseFlowFinalActivityNode : public UmlActivityControlNode {
-  public:
+class UmlBaseFlowFinalActivityNode : public UmlActivityControlNode
+{
+public:
     //  returns a new flow final activity control node named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -48,15 +50,16 @@ class UmlBaseFlowFinalActivityNode : public UmlActivityControlNode {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseFlowFinalActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseFlowFinalActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
     }
 
 };
 
-class UmlBaseActivityFinalActivityNode : public UmlActivityControlNode {
-  public:
+class UmlBaseActivityFinalActivityNode : public UmlActivityControlNode
+{
+public:
     //  returns a new activity final activity control node named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -68,15 +71,16 @@ class UmlBaseActivityFinalActivityNode : public UmlActivityControlNode {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityFinalActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseActivityFinalActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
     }
 
 };
 
-class UmlBaseDecisionActivityNode : public UmlActivityControlNode {
-  public:
+class UmlBaseDecisionActivityNode : public UmlActivityControlNode
+{
+public:
     //  returns a new decision activity control node named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -88,15 +92,16 @@ class UmlBaseDecisionActivityNode : public UmlActivityControlNode {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseDecisionActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseDecisionActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
     }
 
 };
 
-class UmlBaseMergeActivityNode : public UmlActivityControlNode {
-  public:
+class UmlBaseMergeActivityNode : public UmlActivityControlNode
+{
+public:
     //  returns a new merge activity control node named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -108,15 +113,16 @@ class UmlBaseMergeActivityNode : public UmlActivityControlNode {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseMergeActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseMergeActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
     }
 
 };
 
-class UmlBaseForkActivityNode : public UmlActivityControlNode {
-  public:
+class UmlBaseForkActivityNode : public UmlActivityControlNode
+{
+public:
     //  returns a new fork activity control node named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -128,15 +134,16 @@ class UmlBaseForkActivityNode : public UmlActivityControlNode {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseForkActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseForkActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
     }
 
 };
 
-class UmlBaseJoinActivityNode : public UmlActivityControlNode {
-  public:
+class UmlBaseJoinActivityNode : public UmlActivityControlNode
+{
+public:
     //  returns a new join activity control node named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -148,9 +155,9 @@ class UmlBaseJoinActivityNode : public UmlActivityControlNode {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseJoinActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseJoinActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
     }
 
 };

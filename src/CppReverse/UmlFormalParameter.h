@@ -34,13 +34,14 @@ class QTextStream;
 
 #include "UmlBaseFormalParameter.h"
 
-// This class manages 'formal parameters' of a template class. For instance 'T' in 
+// This class manages 'formal parameters' of a template class. For instance 'T' in
 //
 //	template class Cl<class T> ...
 //
 // You can modify it as you want (except the constructor)
-class UmlFormalParameter : public UmlBaseFormalParameter {
-  public:
+class UmlFormalParameter : public UmlBaseFormalParameter
+{
+public:
     UmlFormalParameter() {};
     UmlFormalParameter(Q3CString t, Q3CString n, Q3CString v);
 

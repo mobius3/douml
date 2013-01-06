@@ -19,8 +19,9 @@ class UmlFragment;
 class UmlSubject;
 
 // this class manages use case diagram definition
-class UmlBaseUseCaseDiagramDefinition {
-  public:
+class UmlBaseUseCaseDiagramDefinition
+{
+public:
     // return the use cases present in the diagram
     const Q3PtrVector<UmlUseCaseReference> & useCases() const {
         return _use_cases;
@@ -47,7 +48,7 @@ class UmlBaseUseCaseDiagramDefinition {
     }
 
 
-  private:
+private:
     Q3PtrVector<UmlUseCaseReference> _use_cases;
 
     Q3PtrVector<UmlClass> _actors;
@@ -62,11 +63,11 @@ class UmlBaseUseCaseDiagramDefinition {
     void read_();
 
 
-  public:
+public:
     //  to avoid compiler warning, don't call it
-     ~UmlBaseUseCaseDiagramDefinition();
+    ~UmlBaseUseCaseDiagramDefinition();
 
-  friend class UmlBaseUseCaseDiagram;
+    friend class UmlBaseUseCaseDiagram;
 };
 
 #endif

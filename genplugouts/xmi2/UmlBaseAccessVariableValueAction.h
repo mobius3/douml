@@ -7,14 +7,15 @@
 
 class UmlItem;
 
-class UmlBaseAccessVariableValueAction : public UmlActivityAction {
-  protected:
+class UmlBaseAccessVariableValueAction : public UmlActivityAction
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseAccessVariableValueAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseAccessVariableValueAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the variable, may be an attribute or a relation
     UmlItem * variable();
 
@@ -24,11 +25,11 @@ class UmlBaseAccessVariableValueAction : public UmlActivityAction {
     bool set_Variable(UmlItem * v);
 
 
-  private:
+private:
     UmlItem * _variable;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

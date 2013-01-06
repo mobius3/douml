@@ -28,16 +28,17 @@
 
 #include "BasicData.h"
 
-class SimpleData : public BasicData {
-  Q_OBJECT
-    
-  protected:
+class SimpleData : public BasicData
+{
+    Q_OBJECT
+
+protected:
     bool is_deleted;
 
-  public:
+public:
     SimpleData() : BasicData(), is_deleted(FALSE) {};
     SimpleData(BasicData * model) : BasicData(model), is_deleted(FALSE) {};
-    
+
     virtual bool deletedp() const;
     virtual void set_deletedp(bool y);
 };

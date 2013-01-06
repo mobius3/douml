@@ -32,41 +32,44 @@
 
 #define MSG_HEIGHT 11
 
-class SdMsgCanvas : public SdMsgBaseCanvas {
-  protected:
+class SdMsgCanvas : public SdMsgBaseCanvas
+{
+protected:
     SdMsgSupport * start;
-  
-  public:
+
+public:
     SdMsgCanvas(UmlCanvas * canvas, SdMsgSupport * s,
-		SdMsgSupport * d, UmlCode l, int v, int id);
+                SdMsgSupport * d, UmlCode l, int v, int id);
     virtual ~SdMsgCanvas();
-    
+
     virtual void delete_it();
-  
-    SdMsgSupport * get_start()  const { return start; };
-  
+
+    SdMsgSupport * get_start()  const {
+        return start;
+    };
+
     virtual void draw(QPainter & p);
     virtual void set_z(double);
     virtual void update_hpos();
     virtual void check_vpos(const QRect &);
     virtual double min_y() const;
     virtual void change_duration(SdDurationCanvas * oldone,
-				 SdDurationCanvas * newone);
+                                 SdDurationCanvas * newone);
     virtual int overlap_dir(SdDurationCanvas *) const;
     virtual void update();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual void select_associated();
     virtual bool copyable() const;
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
-    
+
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
-  
+
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static SdMsgCanvas * read(char * &, UmlCanvas *, char *);
+    static SdMsgCanvas * read(char *& , UmlCanvas *, char *);
 };
 
 #endif

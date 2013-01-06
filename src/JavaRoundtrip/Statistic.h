@@ -26,15 +26,20 @@
 #ifndef STATISTIC_H
 #define STATISTIC_H
 
-class Statistic {
-  protected:
+class Statistic
+{
+protected:
     static unsigned n_updated;
     static unsigned n_created;
-    
-  public:
-    static void one_class_updated_more() { n_updated += 1; };
-    static void one_class_created_more() { n_created += 1; };
-    
+
+public:
+    static void one_class_updated_more() {
+        n_updated += 1;
+    };
+    static void one_class_created_more() {
+        n_created += 1;
+    };
+
     static void produce();
 };
 

@@ -9,10 +9,11 @@ class UmlArtifact;
 class FileIn;
 class Token;
 
-class Manifestation {
-  public:
+class Manifestation
+{
+public:
     //for QValueList
-    Manifestation(){}
+    Manifestation() {}
 
     Manifestation(Q3CString s, UmlArtifact * art, Q3CString client) : name(s), artifact(art), utilized(client) {}
 
@@ -21,7 +22,7 @@ class Manifestation {
     static void solveThem();
 
 
-  protected:
+protected:
     Q3CString name;
 
     UmlArtifact * artifact;

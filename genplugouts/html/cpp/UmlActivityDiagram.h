@@ -12,8 +12,9 @@
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlActivityDiagram : public UmlBaseActivityDiagram, public UmlActivityItem {
-  public:
+class UmlActivityDiagram : public UmlBaseActivityDiagram, public UmlActivityItem
+{
+public:
     //set he html ref
     //set the diagrams list
     virtual void memo_ref();
@@ -26,13 +27,13 @@ class UmlActivityDiagram : public UmlBaseActivityDiagram, public UmlActivityItem
     static void generate_index();
 
 
-  protected:
+protected:
     static Vector diagrams;
 
 
-  public:
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityDiagram(void * id, const Q3CString & s) : UmlBaseActivityDiagram(id, s) {
+    UmlActivityDiagram(void * id, const Q3CString & s) : UmlBaseActivityDiagram(id, s) {
     }
 
 };

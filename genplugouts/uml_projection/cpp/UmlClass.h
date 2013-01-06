@@ -11,8 +11,9 @@ class UmlArtifact;
 // is a mother class of the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlClass : public UmlBaseClass {
-  public:
+class UmlClass : public UmlBaseClass
+{
+public:
     UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {};
 
     virtual void uml2cpp(bool rec);
@@ -26,7 +27,7 @@ class UmlClass : public UmlBaseClass {
     virtual void uml2python(bool rec);
 
 
-  private:
+private:
     UmlArtifact * artifact();
 
 };

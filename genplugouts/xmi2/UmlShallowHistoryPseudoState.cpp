@@ -1,7 +1,8 @@
 
 #include "UmlShallowHistoryPseudoState.h"
 
-const char * UmlShallowHistoryPseudoState::sKind() const {
-  return "shallowHistory";
+const char * UmlShallowHistoryPseudoState::sKind() const
+{
+    return "shallowHistory";
 }
 

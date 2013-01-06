@@ -12,8 +12,9 @@ class UmlClassInstanceReference;
 class UmlCollaborationMessage;
 
 // this class manages collaboration diagram definition
-class UmlBaseCollaborationDiagramDefinition {
-  public:
+class UmlBaseCollaborationDiagramDefinition
+{
+public:
     // return the instances present in the diagram
     const Q3PtrVector<UmlClassInstanceReference> & instances() const {
         return _instances;
@@ -26,7 +27,7 @@ class UmlBaseCollaborationDiagramDefinition {
     }
 
 
-  private:
+private:
     Q3PtrVector<UmlClassInstanceReference> _instances;
 
     Q3PtrVector<UmlCollaborationMessage> _messages;
@@ -35,11 +36,11 @@ class UmlBaseCollaborationDiagramDefinition {
     void read_();
 
 
-  public:
+public:
     //  to avoid compiler warning, don't call it
-     ~UmlBaseCollaborationDiagramDefinition();
+    ~UmlBaseCollaborationDiagramDefinition();
 
-  friend class UmlBaseCollaborationDiagram;
+    friend class UmlBaseCollaborationDiagram;
 };
 
 #endif

@@ -8,7 +8,8 @@ UmlObjectDiagram * UmlBaseObjectDiagram::create(UmlItem * parent, const char * s
     return (UmlObjectDiagram *) parent->create_(anObjectDiagram, s);
 }
 
-anItemKind UmlBaseObjectDiagram::kind() {
+anItemKind UmlBaseObjectDiagram::kind()
+{
     return anObjectDiagram;
 }
 

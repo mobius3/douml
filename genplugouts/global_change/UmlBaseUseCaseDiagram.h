@@ -11,8 +11,9 @@ class UmlItem;
 class UmlUseCaseDiagramDefinition;
 
 //  Manage the use case diagrams
-class UmlBaseUseCaseDiagram : public UmlDiagram {
-  public:
+class UmlBaseUseCaseDiagram : public UmlDiagram
+{
+public:
     // returns a new use case diagram named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,12 +25,12 @@ class UmlBaseUseCaseDiagram : public UmlDiagram {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseUseCaseDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n), _def(0) {};
 
 
-  public:
+public:
     // return the semantic part of the diagram not present in the model
     UmlUseCaseDiagramDefinition * definition();
 
@@ -38,7 +39,7 @@ class UmlBaseUseCaseDiagram : public UmlDiagram {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     UmlUseCaseDiagramDefinition * _def;
 
 };

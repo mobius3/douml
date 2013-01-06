@@ -32,7 +32,7 @@ extern int exit_value();
 
 // to manage case where Qt is compiled with -fnoexceptions
 extern bool ExitOnError;
-#define THROW_ERROR if (ExitOnError) ::exit(exit_value()); else throw 
+#define THROW_ERROR if (ExitOnError) ::exit(exit_value()); else throw
 #define PRE_TRY bool previous_ExitOnError = ExitOnError; ExitOnError = FALSE
 #define POST_TRY ExitOnError = previous_ExitOnError
 

@@ -31,47 +31,48 @@
 
 int main(int argc, char ** argv)
 {
-  int port_index;
-  
-  if (argc == 2)
-    port_index = 1;
-  else if (argc == 3) {
-    if (argv[1][1] == 'v')
-      set_verbose();
-    else
-      set_preserve();
-    port_index = 2;
-  }
-  else if (argc == 4) {
-    set_verbose();
-    set_preserve();
-    port_index = 3;
-  }
-  else
-    return 0;
-  
-  if (UmlCom::connect(Q3CString(argv[port_index]).toUInt())) {
-    try {
-      UmlCom::trace("<b>Php generator</b> release 1.10.1<br>");
-      UmlCom::traceAutoRaise(FALSE);
-      
-      UmlCom::targetItem()->generate();
-      
-      Q3CString s;
-      
-      s.sprintf("<hr><font face=helvetica>Generation done : %d warnings, %d errors</font><br>",
-		n_warnings(), n_errors());
-      UmlCom::trace(s);
+    int port_index;
 
-      UmlCom::showTrace();
-      UmlCom::message("");
-    
-      UmlCom::bye(n_errors());
+    if (argc == 2)
+        port_index = 1;
+    else if (argc == 3) {
+        if (argv[1][1] == 'v')
+            set_verbose();
+        else
+            set_preserve();
+
+        port_index = 2;
     }
-    catch (...) {
+    else if (argc == 4) {
+        set_verbose();
+        set_preserve();
+        port_index = 3;
     }
-  }
-  
-  UmlCom::close();
-  return 0;
+    else
+        return 0;
+
+    if (UmlCom::connect(Q3CString(argv[port_index]).toUInt())) {
+        try {
+            UmlCom::trace("<b>Php generator</b> release 1.10.1<br>");
+            UmlCom::traceAutoRaise(FALSE);
+
+            UmlCom::targetItem()->generate();
+
+            Q3CString s;
+
+            s.sprintf("<hr><font face=helvetica>Generation done : %d warnings, %d errors</font><br>",
+                      n_warnings(), n_errors());
+            UmlCom::trace(s);
+
+            UmlCom::showTrace();
+            UmlCom::message("");
+
+            UmlCom::bye(n_errors());
+        }
+        catch (...) {
+        }
+    }
+
+    UmlCom::close();
+    return 0;
 }

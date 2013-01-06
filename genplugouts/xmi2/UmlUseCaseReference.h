@@ -5,7 +5,8 @@
 #include "UmlBaseUseCaseReference.h"
 
 // this class manages use case references, you can modify it
-class UmlUseCaseReference : public UmlBaseUseCaseReference {
+class UmlUseCaseReference : public UmlBaseUseCaseReference
+{
 };
 
 #endif

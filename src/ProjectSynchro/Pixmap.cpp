@@ -41,13 +41,13 @@ QPixmap * PackageIcon;
 
 void init_pixmaps()
 {
-  // browser icons
-  
+    // browser icons
+
 #include "package_xpm.xpm"
 
-  UpToDatePackageIcon = new QPixmap((const char **) uptodate_package_xpm);
-  YoungPackageIcon = new QPixmap((const char **) young_package_xpm);
-  OldPackageIcon = new QPixmap((const char **) old_package_xpm);
-  DeletedPackageIcon = new QPixmap((const char **) deleted_package_xpm);
-  PackageIcon = new QPixmap((const char **) package_xpm);
+    UpToDatePackageIcon = new QPixmap((const char **) uptodate_package_xpm);
+    YoungPackageIcon = new QPixmap((const char **) young_package_xpm);
+    OldPackageIcon = new QPixmap((const char **) old_package_xpm);
+    DeletedPackageIcon = new QPixmap((const char **) deleted_package_xpm);
+    PackageIcon = new QPixmap((const char **) package_xpm);
 }

@@ -38,29 +38,30 @@ struct PinParamData;
 #include "Labeled.h"
 #include "BrowserActivityElement.h"
 
-class BrowserPin : public BrowserNode, public Labeled<BrowserPin>, public BrowserActivityElement  {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserPin : public BrowserNode, public Labeled<BrowserPin>, public BrowserActivityElement
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserPin> all;
     static QStringList its_default_stereotypes;
-  
+
     PinData * def;
-    
-  protected:
+
+protected:
     BrowserPin(int id);
-  
+
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserPin(QString s, BrowserNode * p, PinData * d, int id = 0);
     BrowserPin(const BrowserPin * model, BrowserNode * p);
     virtual ~BrowserPin();
-  
+
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
-    
-    virtual const QPixmap* pixmap (int) const;
+                                    QString name = QString());
+
+    virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -72,10 +73,10 @@ class BrowserPin : public BrowserNode, public Labeled<BrowserPin>, public Browse
     virtual BasicData * get_data() const;
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual bool allow_empty() const;
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserPin * read_ref(char * &);
-    static BrowserPin * read(char * &, char *, BrowserNode *);
+    static BrowserPin * read_ref(char *&);
+    static BrowserPin * read(char *& , char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
 
     static void new_one(BrowserNode * future_parent, const char * name, const PinParamData & pd);
@@ -85,26 +86,26 @@ class BrowserPin : public BrowserNode, public Labeled<BrowserPin>, public Browse
     QString may_start() const;
     QString may_connect(const BrowserNode * dest) const;
     virtual QString connexion_from(bool control) const;
-    
+
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual bool api_compatible(unsigned v) const;
-        
+
     virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
     static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
-    
+
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
     QString drag_key() const;
     QString drag_postfix() const;
     static QString drag_key(BrowserNode * p);
-    
+
     static void init();
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
 };
 

@@ -3,12 +3,12 @@
 
 
 enum aLanguage {
-  umlLanguage,
-  cppLanguage,
-  javaLanguage,
-  idlLanguage,
-  phpLanguage,
-  pythonLanguage
+    umlLanguage,
+    cppLanguage,
+    javaLanguage,
+    idlLanguage,
+    phpLanguage,
+    pythonLanguage
 
 };
 #endif

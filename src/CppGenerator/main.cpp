@@ -35,13 +35,13 @@
 int main(int argc, char ** argv)
 {
 
-    QsLogging::Logger& logger = QsLogging::Logger::instance();
+    QsLogging::Logger & logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(QsLogging::TraceLevel);
     QDir dir;
     dir.setPath(qApp->applicationDirPath());
     dir.remove(QString("cpp_generator") + QString(".log"));
     const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString("cpp_generator") + QString(".log")));
-    QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath) );
+    QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath));
     QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
@@ -49,70 +49,65 @@ int main(int argc, char ** argv)
     QLOG_INFO() << " STARTING CPP_GENERATOR";
 
     int port_index;
-  
-  if (argc == 2)
-  {
-      port_index = 1;
-      QLOG_INFO() << "Got two arguments from Douml as argv";
-      QLOG_INFO() << "Using first port index mode";
-  }
-  else if (argc == 3)
-  {
-      QLOG_INFO() << "Got three arguments from Douml as argv";
-      if (argv[1][1] == 'v')
-      {
-          QLOG_INFO() << "Using verbose mode";
-          set_verbose();
-      }
-      else
-      {
-          QLOG_INFO() << "Using preserve mode";
-          set_preserve();
-      }
-      QLOG_INFO() << "Using second port index mode";
-      port_index = 2;
-  }
-  else if (argc == 4)
-  {
-    QLOG_INFO() << "Got four arguments from Douml as argv";
-    QLOG_INFO() << "Using preserve mode";
-    QLOG_INFO() << "Using verbose mode";
-    QLOG_INFO() << "Using third port index mode";
-    set_verbose();
-    set_preserve();
-    port_index = 3;
-  }
-  else
-  {
-      QLOG_INFO() << "Got too little or too much arguments from Douml, exiting";
-      return 0;
-  }
-  
 
-
-  if (UmlCom::connect(QString(argv[port_index]).toUInt())) {
-    try {
-      UmlCom::trace("<b>C++ generator</b> release 2.18<br>");
-      UmlCom::traceAutoRaise(FALSE);
-      UmlCom::targetItem()->generate();      
-      
-      Q3CString s;
-      
-      s.sprintf("<hr><font face=helvetica>Generation done : %d warnings, %d errors</font><br>",
-		n_warnings(), n_errors());
-      UmlCom::trace(s);
-
-      UmlCom::showTrace();
-      UmlCom::message("");
-    
-      UmlCom::bye(n_errors());
+    if (argc == 2) {
+        port_index = 1;
+        QLOG_INFO() << "Got two arguments from Douml as argv";
+        QLOG_INFO() << "Using first port index mode";
     }
-    catch (...)
-      {
-          QLOG_INFO() << "unhandled exception caught";
-      }
-  }
-  
-  UmlCom::close();
-  return 0;
+    else if (argc == 3) {
+        QLOG_INFO() << "Got three arguments from Douml as argv";
+
+        if (argv[1][1] == 'v') {
+            QLOG_INFO() << "Using verbose mode";
+            set_verbose();
+        }
+        else {
+            QLOG_INFO() << "Using preserve mode";
+            set_preserve();
+        }
+
+        QLOG_INFO() << "Using second port index mode";
+        port_index = 2;
+    }
+    else if (argc == 4) {
+        QLOG_INFO() << "Got four arguments from Douml as argv";
+        QLOG_INFO() << "Using preserve mode";
+        QLOG_INFO() << "Using verbose mode";
+        QLOG_INFO() << "Using third port index mode";
+        set_verbose();
+        set_preserve();
+        port_index = 3;
+    }
+    else {
+        QLOG_INFO() << "Got too little or too much arguments from Douml, exiting";
+        return 0;
+    }
+
+
+
+    if (UmlCom::connect(QString(argv[port_index]).toUInt())) {
+        try {
+            UmlCom::trace("<b>C++ generator</b> release 2.18<br>");
+            UmlCom::traceAutoRaise(FALSE);
+            UmlCom::targetItem()->generate();
+
+            Q3CString s;
+
+            s.sprintf("<hr><font face=helvetica>Generation done : %d warnings, %d errors</font><br>",
+                      n_warnings(), n_errors());
+            UmlCom::trace(s);
+
+            UmlCom::showTrace();
+            UmlCom::message("");
+
+            UmlCom::bye(n_errors());
+        }
+        catch (...) {
+            QLOG_INFO() << "unhandled exception caught";
+        }
+    }
+
+    UmlCom::close();
+    return 0;
 }

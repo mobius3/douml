@@ -39,10 +39,11 @@ class SdMsgBaseCanvas;
 class OperationData;
 class BrowserClass;
 
-class SdMsgDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class SdMsgDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     SdMsgBaseCanvas * mc;
     BrowserClass * cl;
     QStringList list;
@@ -52,14 +53,14 @@ class SdMsgDialog : public QDialog {
     MultiLineEdit * edargs;
     QRadioButton * synchronous_rb;
     QRadioButton * asynchronous_rb;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     SdMsgDialog(SdMsgBaseCanvas * m, const QStringList &);
     virtual ~SdMsgDialog();
-  
-  protected slots:
+
+protected slots:
     void menu_op();
     virtual void polish();
     void accept();

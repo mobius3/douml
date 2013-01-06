@@ -23,7 +23,7 @@
 //
 // *************************************************************************
 
-#include <QTextStream> 
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QTextStream>
@@ -36,95 +36,107 @@
 #include "util.h"
 
 void UmlAttribute::generate(QTextStream & f, const Q3CString & st,
-			    Q3CString indent, int & enum_item_rank) {
-  if (!phpDecl().isEmpty()) {
-    const char * p = phpDecl();
-    const char * pp = 0;
-    
-    while ((*p == ' ') || (*p == '\t'))
-      indent += *p++;
+                            Q3CString indent, int & enum_item_rank)
+{
+    if (!phpDecl().isEmpty()) {
+        const char * p = phpDecl();
+        const char * pp = 0;
 
-    f << indent;
-    
-    for (;;) {
-      if (*p == 0) {
-	if (pp == 0)
-	  break;
-	
-	// comment management done
-	p = pp;
-	pp = 0;
-	if (*p == 0)
-	  break;
-	f << indent;
-      }
-      
-      if (*p == '\n') {
-	f << *p++;
-	if (*p)
-	  f << indent;
-      }
-      else if (*p == '@')
-	manage_alias(p, f);
-      else if (*p != '$')
-	f << *p++;
-      else if (!strncmp(p, "${comment}", 10))
-	manage_comment(p, pp, PhpSettings::isGenerateJavadocStyleComment());
-      else if (!strncmp(p, "${description}", 14))
-	manage_description(p, pp);
-      else if (!strncmp(p, "${visibility}", 13)) {
-	p += 13;
-	generate_visibility(f);
-      }
-      else if (!strncmp(p, "${static}", 9)) {
-	p += 9;
-	if (isClassMember())
-	  f << "static ";
-      }
-      else if (!strncmp(p, "${type}", 7)) {
-	p += 7;
-	UmlClass::write(f, type());
-      }
-      else if (!strncmp(p, "${name}", 7)) {
-	p += 7;
-	if ((st != "enum") && !isReadOnly())
-	  f << "$";
-	f << name();
-      }
-      else if (!strncmp(p, "${var}", 6)) {
-	p += 6;
-	if ((st != "enum") &&
-	    !isReadOnly() &&
-	    !isClassMember() &&
-	    (visibility() == PackageVisibility))
-	  f << "var ";
-      }
-      else if (!strncmp(p, "${value}", 8)) {
-	if (!defaultValue().isEmpty()) {
-	  if (need_equal(p, defaultValue()))
-	    f << " = ";
-	  f << defaultValue();
-	}
-	else if (st == "enum")
-	  f << " = " << enum_item_rank;
-	p += 8;
-      }
-      else if (!strncmp(p, "${const}", 8)) {
-	p += 8;
-	if (isReadOnly())
-	  f << "const ";
-      }
-      else
-	f << *p++;
+        while ((*p == ' ') || (*p == '\t'))
+            indent += *p++;
+
+        f << indent;
+
+        for (;;) {
+            if (*p == 0) {
+                if (pp == 0)
+                    break;
+
+                // comment management done
+                p = pp;
+                pp = 0;
+
+                if (*p == 0)
+                    break;
+
+                f << indent;
+            }
+
+            if (*p == '\n') {
+                f << *p++;
+
+                if (*p)
+                    f << indent;
+            }
+            else if (*p == '@')
+                manage_alias(p, f);
+            else if (*p != '$')
+                f << *p++;
+            else if (!strncmp(p, "${comment}", 10))
+                manage_comment(p, pp, PhpSettings::isGenerateJavadocStyleComment());
+            else if (!strncmp(p, "${description}", 14))
+                manage_description(p, pp);
+            else if (!strncmp(p, "${visibility}", 13)) {
+                p += 13;
+                generate_visibility(f);
+            }
+            else if (!strncmp(p, "${static}", 9)) {
+                p += 9;
+
+                if (isClassMember())
+                    f << "static ";
+            }
+            else if (!strncmp(p, "${type}", 7)) {
+                p += 7;
+                UmlClass::write(f, type());
+            }
+            else if (!strncmp(p, "${name}", 7)) {
+                p += 7;
+
+                if ((st != "enum") && !isReadOnly())
+                    f << "$";
+
+                f << name();
+            }
+            else if (!strncmp(p, "${var}", 6)) {
+                p += 6;
+
+                if ((st != "enum") &&
+                    !isReadOnly() &&
+                    !isClassMember() &&
+                    (visibility() == PackageVisibility))
+                    f << "var ";
+            }
+            else if (!strncmp(p, "${value}", 8)) {
+                if (!defaultValue().isEmpty()) {
+                    if (need_equal(p, defaultValue()))
+                        f << " = ";
+
+                    f << defaultValue();
+                }
+                else if (st == "enum")
+                    f << " = " << enum_item_rank;
+
+                p += 8;
+            }
+            else if (!strncmp(p, "${const}", 8)) {
+                p += 8;
+
+                if (isReadOnly())
+                    f << "const ";
+            }
+            else
+                f << *p++;
+        }
+
+        f << '\n';
     }
-      
-    f << '\n';
-  }
-  
-  enum_item_rank += 1;
+
+    enum_item_rank += 1;
 }
 
-void UmlAttribute::generate_require_onces(QTextStream & f, Q3CString & made) {
-  if (!phpDecl().isEmpty())
-    type().generate_require_onces(f, made, ((UmlClass *) parent())->assocArtifact());
+void UmlAttribute::generate_require_onces(QTextStream & f, Q3CString & made)
+{
+    if (!phpDecl().isEmpty())
+        type().generate_require_onces(f, made, ((UmlClass *) parent())->assocArtifact());
 }

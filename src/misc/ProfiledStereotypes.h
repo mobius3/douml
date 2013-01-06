@@ -41,8 +41,9 @@ class BrowserClassView;
 class BrowserAttribute;
 class BrowserNode;
 
-class ProfiledStereotypes {
-  public:
+class ProfiledStereotypes
+{
+public:
     static void init();
     static void post_load();
     static void recompute(bool warm);

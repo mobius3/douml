@@ -32,24 +32,25 @@
 
 #define HUB_SIZE 6
 
-class HubCanvas : public DiagramCanvas {
-  public:
+class HubCanvas : public DiagramCanvas
+{
+public:
     HubCanvas(UmlCanvas * canvas, int x, int y, int id);
     virtual ~HubCanvas();
-    
+
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual void change_scale();
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
-    static HubCanvas * read(char * & st, UmlCanvas * canvas, char * k);
+    static HubCanvas * read(char *& st, UmlCanvas * canvas, char * k);
 };
 
 #endif

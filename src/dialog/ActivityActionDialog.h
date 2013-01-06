@@ -47,16 +47,17 @@ class MultiLineEdit;
 class KeyValuesTable;
 
 struct ActionCondDialog {
-  MultiLineEdit * edpre;
-  MultiLineEdit * edpost;
-  
-  void init(Q3Grid *, ActivityActionData *, DrawingLanguage, bool visit);
-  void get(QString & pre, QString & post) const;
-  void set(QString pre, QString post);
+    MultiLineEdit * edpre;
+    MultiLineEdit * edpost;
+
+    void init(Q3Grid *, ActivityActionData *, DrawingLanguage, bool visit);
+    void get(QString & pre, QString & post) const;
+    void set(QString pre, QString post);
 };
 
-class AnyActionDialog {
-  protected:
+class AnyActionDialog
+{
+protected:
     Q3TabDialog * td;
     Q3Grid * ocl_grid;
     Q3Grid * cpp_grid;
@@ -65,59 +66,62 @@ class AnyActionDialog {
     ActionCondDialog cpp_cond;
     ActionCondDialog java_cond;
 
-  public:
+public:
     AnyActionDialog();
     void init(Q3TabDialog *, ActivityActionData *, void * d, bool visit);
     void init_cpp(Q3TabDialog *, ActivityActionData *, void * d, bool visit);
     void init_java(Q3TabDialog *, ActivityActionData *, void * d, bool visit);
     bool update(void *);
     void goes(AnyActionDialog & previous);
-    void get_cond(QString & ocl_pre, QString & ocl_post, 
-		  QString & cpp_pre, QString & cpp_post, 
-		  QString & java_pre, QString & java_post) const;
+    void get_cond(QString & ocl_pre, QString & ocl_post,
+                  QString & cpp_pre, QString & cpp_post,
+                  QString & java_pre, QString & java_post) const;
 };
 
-class OpaqueDialog : public QObject, public AnyActionDialog {
-  Q_OBJECT
+class OpaqueDialog : public QObject, public AnyActionDialog
+{
+    Q_OBJECT
 
-  private:
+private:
     Q3PtrList<BodyDialog> * edits;
     MultiLineEdit * ocl_beh;
     MultiLineEdit * cpp_beh;
     MultiLineEdit * java_beh;
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *, OpaqueAction *,
-	      Q3PtrList<BodyDialog> & e, bool visit);
+              Q3PtrList<BodyDialog> & e, bool visit);
     bool update(OpaqueAction *);
 
     static void post_edit_ocl(ActivityActionDialog * d, QString s);
     static void post_edit_cpp(ActivityActionDialog * d, QString s);
     static void post_edit_java(ActivityActionDialog * d, QString s);
 
-  protected slots:
+protected slots:
     void edit_ocl();
     void edit_cpp();
     void edit_java();
 };
 
-class AcceptEventDialog : public AnyActionDialog {
-  private:
+class AcceptEventDialog : public AnyActionDialog
+{
+private:
     QCheckBox * unmarshall_cb;
     QCheckBox * timeevent_cb;
     LineEdit * uml_trigger;
     LineEdit * cpp_trigger;
     LineEdit * java_trigger;
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *, AcceptEventAction *, bool visit);
     bool update(AcceptEventAction *);
 };
 
-class AccessVariableValueDialog : public QObject, public AnyActionDialog {
-  Q_OBJECT
+class AccessVariableValueDialog : public QObject, public AnyActionDialog
+{
+    Q_OBJECT
 
-  private:
+private:
     BrowserNodeList * classes;
     QStringList * class_names;
     BrowserNodeList vars;	// attribute or relation
@@ -130,82 +134,91 @@ class AccessVariableValueDialog : public QObject, public AnyActionDialog {
     void insert_vars(BrowserClass * c);
     void set(BrowserNode * bn);
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *,
-	      AccessVariableValueAction *, BrowserNodeList & nodes,
-	      QStringList &, bool visit);
+              AccessVariableValueAction *, BrowserNodeList & nodes,
+              QStringList &, bool visit);
     bool update(AccessVariableValueAction *);
 
-  protected slots:
+protected slots:
     void classChanged(int);
     void menu_var();
 };
 
-class ClearVariableValueDialog : public AccessVariableValueDialog {
+class ClearVariableValueDialog : public AccessVariableValueDialog
+{
 };
 
-class ReadVariableValueDialog : public AccessVariableValueDialog {
+class ReadVariableValueDialog : public AccessVariableValueDialog
+{
 };
 
-class WriteVariableValueDialog : public AccessVariableValueDialog {
+class WriteVariableValueDialog : public AccessVariableValueDialog
+{
 };
 
-class ChangeVariableValueDialog : public AccessVariableValueDialog {
-  private:
+class ChangeVariableValueDialog : public AccessVariableValueDialog
+{
+private:
     QCheckBox * flag_cb;
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *,
-	      ChangeVariableValueAction *, const char * flg_name, 
-	      BrowserNodeList & nodes, QStringList &, bool visit);
+              ChangeVariableValueAction *, const char * flg_name,
+              BrowserNodeList & nodes, QStringList &, bool visit);
     bool update(ChangeVariableValueAction *);
 };
 
-class AddVariableValueDialog : public ChangeVariableValueDialog {
-  public:
+class AddVariableValueDialog : public ChangeVariableValueDialog
+{
+public:
     void init(Q3TabDialog *, ActivityActionData *, AddVariableValueAction *,
-	      BrowserNodeList & nodes, QStringList &, bool visit);
+              BrowserNodeList & nodes, QStringList &, bool visit);
 };
 
-class RemoveVariableValueDialog : public ChangeVariableValueDialog {
-  public:
+class RemoveVariableValueDialog : public ChangeVariableValueDialog
+{
+public:
     void init(Q3TabDialog *, ActivityActionData *, RemoveVariableValueAction *,
-	      BrowserNodeList & nodes, QStringList &, bool visit);
+              BrowserNodeList & nodes, QStringList &, bool visit);
 };
 
-class WithBehaviorDialog : public AnyActionDialog {
-  protected:
+class WithBehaviorDialog : public AnyActionDialog
+{
+protected:
     BrowserNodeList * nodes;
     QStringList * node_names;
     Q3ComboBox * behavior_co;
     BrowserNode * view;
     bool visit;
-    
+
     void menu_behavior();
 
-  public:
+public:
     void init(BrowserNode * beh);
 };
 
-class CallBehaviorDialog : public QObject, public WithBehaviorDialog {
-  Q_OBJECT
-    
-  private:
+class CallBehaviorDialog : public QObject, public WithBehaviorDialog
+{
+    Q_OBJECT
+
+private:
     QCheckBox * synchronous_cb;
 
-  public:
-    void init(Q3TabDialog *, ActivityActionData *, CallBehaviorAction *, 
-	      BrowserNodeList &, QStringList &, BrowserNode * v, bool visit);
+public:
+    void init(Q3TabDialog *, ActivityActionData *, CallBehaviorAction *,
+              BrowserNodeList &, QStringList &, BrowserNode * v, bool visit);
     bool update(CallBehaviorAction *);
-    
-  public slots:
+
+public slots:
     void menu_beh();
 };
 
-class CallOperationDialog :  public QObject, public AnyActionDialog {
-  Q_OBJECT
+class CallOperationDialog :  public QObject, public AnyActionDialog
+{
+    Q_OBJECT
 
-  private:
+private:
     BrowserNodeList * classes;
     QStringList * class_names;
     BrowserNodeList opers;	// attribute or relation
@@ -218,133 +231,146 @@ class CallOperationDialog :  public QObject, public AnyActionDialog {
     void insert_opers(BrowserClass * c);
     void set(BrowserNode * bn);
 
-  public:
-    void init(Q3TabDialog *, ActivityActionData *, CallOperationAction *, 
-	      BrowserNodeList &, QStringList &, bool visit);
+public:
+    void init(Q3TabDialog *, ActivityActionData *, CallOperationAction *,
+              BrowserNodeList &, QStringList &, bool visit);
     bool update(CallOperationAction *);
 
-  protected slots:
+protected slots:
     void classChanged(int);
     void menu_oper();
 };
 
-class SendObjectDialog : public AnyActionDialog {
+class SendObjectDialog : public AnyActionDialog
+{
 };
 
-class SendSignalDialog : public AnyActionDialog {
-  private:
+class SendSignalDialog : public AnyActionDialog
+{
+private:
     LineEdit * ocl_signal;
     LineEdit * cpp_signal;
     LineEdit * java_signal;
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *, SendSignalAction *, bool visit);
     bool update(SendSignalAction *);
 };
 
-class BroadcastSignalDialog : public SendSignalDialog {
+class BroadcastSignalDialog : public SendSignalDialog
+{
 };
 
-class UnmarshallDialog : public AnyActionDialog {
+class UnmarshallDialog : public AnyActionDialog
+{
 };
 
-class ValueSpecificationDialog : public QObject, public AnyActionDialog {
-  Q_OBJECT
+class ValueSpecificationDialog : public QObject, public AnyActionDialog
+{
+    Q_OBJECT
 
-  private:
+private:
     Q3PtrList<BodyDialog> * edits;
     MultiLineEdit * ocl_val;
     MultiLineEdit * cpp_val;
     MultiLineEdit * java_val;
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *,
-	      ValueSpecificationAction *, Q3PtrList<BodyDialog> & e, 
-	      bool visit);
+              ValueSpecificationAction *, Q3PtrList<BodyDialog> & e,
+              bool visit);
     bool update(ValueSpecificationAction *);
 
     static void post_edit_ocl(ActivityActionDialog * d, QString s);
     static void post_edit_cpp(ActivityActionDialog * d, QString s);
     static void post_edit_java(ActivityActionDialog * d, QString s);
 
-  protected slots:
+protected slots:
     void edit_ocl();
     void edit_cpp();
     void edit_java();
 };
 
-class AcceptCallDialog : public AnyActionDialog {
-  private:
+class AcceptCallDialog : public AnyActionDialog
+{
+private:
     LineEdit * uml_trigger;
     LineEdit * cpp_trigger;
     LineEdit * java_trigger;
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *, AcceptCallAction *, bool visit);
     bool update(AcceptCallAction *);
 };
 
-class ReplyDialog : public AnyActionDialog {
-  private:
+class ReplyDialog : public AnyActionDialog
+{
+private:
     LineEdit * uml_trigger;
     LineEdit * cpp_trigger;
     LineEdit * java_trigger;
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *, ReplyAction *, bool visit);
     bool update(ReplyAction *);
 };
 
-class CreateObjectDialog : public AnyActionDialog {
-  private:
+class CreateObjectDialog : public AnyActionDialog
+{
+private:
     LineEdit * classifier;
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *, CreateObjectAction *, bool visit);
     bool update(CreateObjectAction *);
 };
 
-class DestroyObjectDialog : public AnyActionDialog {
-  private:
+class DestroyObjectDialog : public AnyActionDialog
+{
+private:
     QCheckBox * is_destroy_links_cb;
     QCheckBox * is_destroy_owned_objects_cb;
 
-  public:
+public:
     void init(Q3TabDialog *, ActivityActionData *, DestroyObjectAction *, bool visit);
     bool update(DestroyObjectAction *);
 };
 
-class TestIdentityDialog : public AnyActionDialog {
-  public:
+class TestIdentityDialog : public AnyActionDialog
+{
+public:
     void init(Q3TabDialog *, ActivityActionData *, TestIdentityAction *, bool visit);
     bool update(TestIdentityAction *);
 };
 
-class RaiseExceptionDialog : public AnyActionDialog {
-  public:
+class RaiseExceptionDialog : public AnyActionDialog
+{
+public:
     void init(Q3TabDialog *, ActivityActionData *, RaiseExceptionAction *, bool visit);
     bool update(RaiseExceptionAction *);
 };
 
-class ReduceDialog : public QObject, public WithBehaviorDialog {
-  Q_OBJECT
-    
-  private:
+class ReduceDialog : public QObject, public WithBehaviorDialog
+{
+    Q_OBJECT
+
+private:
     QCheckBox * is_ordered_cb;
 
-  public:
-    void init(Q3TabDialog *, ActivityActionData *, ReduceAction *, 
-	      BrowserNodeList &, QStringList &, BrowserNode * v, bool visit);
+public:
+    void init(Q3TabDialog *, ActivityActionData *, ReduceAction *,
+              BrowserNodeList &, QStringList &, BrowserNode * v, bool visit);
     bool update(ReduceAction *);
-    
-  public slots:
+
+public slots:
     void menu_beh();
 };
 
-class ActivityActionDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ActivityActionDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     // Uml
     bool visit;
     QWidget * umltab;
@@ -360,7 +386,7 @@ class ActivityActionDialog : public Q3TabDialog {
     BrowserNodeList behaviors;
     QStringList behavior_names;
     Q3PtrList<BodyDialog> edits;
-        
+
     OpaqueDialog opaque;
     AcceptEventDialog acceptevent;
     ReadVariableValueDialog readvariablevalue;
@@ -385,26 +411,30 @@ class ActivityActionDialog : public Q3TabDialog {
 
     // User
     KeyValuesTable * kvtable;
-        
+
     static QSize previous_size;
-  
-  protected:
+
+protected:
     static void post_edit_description(ActivityActionDialog * d, QString s);
     static void post_edit_constraint(ActivityActionDialog * d, QString s);
     AnyActionDialog & get_dialog(int);
-  
-  public:
+
+public:
     ActivityActionDialog(ActivityActionData * r);
     virtual ~ActivityActionDialog();
 
-    OpaqueDialog & opaque_dialog() { return opaque; }
-    ValueSpecificationDialog & valuespecification_dialog() { return valuespecification; }
-  
-  protected slots:
+    OpaqueDialog & opaque_dialog() {
+        return opaque;
+    }
+    ValueSpecificationDialog & valuespecification_dialog() {
+        return valuespecification;
+    }
+
+protected slots:
     virtual void polish();
     virtual void accept();
-  
-    void edTypeActivated(int);  
+
+    void edTypeActivated(int);
     void edit_description();
     void edit_constraint();
 

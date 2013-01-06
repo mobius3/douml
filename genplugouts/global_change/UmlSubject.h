@@ -5,7 +5,8 @@
 #include "UmlBaseSubject.h"
 
 // this class manages subjects, you can modify it
-class UmlSubject : public UmlBaseSubject {
+class UmlSubject : public UmlBaseSubject
+{
 };
 
 #endif

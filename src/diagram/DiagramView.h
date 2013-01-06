@@ -52,10 +52,11 @@ class DiagramWindow;
 #define EDIT_DRAWING_SETTING_CMD 0
 #define RELOAD_CMD 6
 
-class DiagramView : public Q3CanvasView {
-  Q_OBJECT
-    
-  protected:
+class DiagramView : public Q3CanvasView
+{
+    Q_OBJECT
+
+protected:
     int id;
     int pressedButton;
     QPoint mousePressPos;	// mouse position when it is pressed or moved
@@ -83,39 +84,53 @@ class DiagramView : public Q3CanvasView {
 
     static Q3CString clipboard;
     static UmlCode copied_from;
-    
-  public:
+
+public:
     DiagramView(QWidget * parent, UmlCanvas * canvas, int i);
-  
+
     void select_all();
-    void unselect_all() { the_canvas()->unselect_all(); };
-    const Q3CanvasItemList & selection() { return the_canvas()->selection(); };
-    void select(Q3CanvasItem * i) { the_canvas()->select(i); };
-    void unselect(Q3CanvasItem * i) { the_canvas()->unselect(i); };
+    void unselect_all() {
+        the_canvas()->unselect_all();
+    };
+    const Q3CanvasItemList & selection() {
+        return the_canvas()->selection();
+    };
+    void select(Q3CanvasItem * i) {
+        the_canvas()->select(i);
+    };
+    void unselect(Q3CanvasItem * i) {
+        the_canvas()->unselect(i);
+    };
     void abort_line_construction();
     void relation_to_simplerelation(UmlCode k);
     void set_zoom(double);
     void fit_scale();
     void preferred_size_zoom();
-    bool has_preferred_size_zoom() { return preferred_zoom != 0; }
+    bool has_preferred_size_zoom() {
+        return preferred_zoom != 0;
+    }
     void multiple_selection_menu(bool in_model, bool out_model, bool alignable,
-				 int n_resize, Q3PtrList<DiagramItem> & l_drawing_settings);
+                                 int n_resize, Q3PtrList<DiagramItem> & l_drawing_settings);
     bool is_present(BrowserNode * bn);
     virtual void add_related_elements(DiagramItem *, QString what,
-				      bool inh, bool assoc);
-    
+                                      bool inh, bool assoc);
+
     virtual UmlCanvas * the_canvas() const;
 
-    virtual void menu(const QPoint&) = 0;
-    
+    virtual void menu(const QPoint &) = 0;
+
     void read();
     void paste();
     virtual void read(char *, char * k) = 0;
     virtual void save(QTextStream & st, QString & warning, bool copy) const = 0;
     void load(const char *);
-    
-    void protect_history(bool y) { history_protected = y; }
-    void freeze_history(bool y) { history_frozen = y; }
+
+    void protect_history(bool y) {
+        history_protected = y;
+    }
+    void freeze_history(bool y) {
+        history_frozen = y;
+    }
     void history_save(bool on_undo = FALSE);
     void history_load();
     void update_history();
@@ -123,31 +138,31 @@ class DiagramView : public Q3CanvasView {
     void redo();
     bool available_undo();
     bool available_redo();
-      
+
     void save_session(QTextStream & st);
-    void read_session(char * & st);
-    
+    void read_session(char *& st);
+
     static void init();
-    
+
 #ifndef QT_NO_PRINTER
     void print(QPrinter & p, int div);
 #endif
-    
+
     void copy_in_clipboard(bool optimal, bool temporary);
     bool save_pict(const char * f, bool optimal, bool temporary);
     bool save_in(const char * f, bool optimal, bool temporary);
     bool svg_save_in(const char * f, bool optimal, bool temporary);
-    
+
     void renumber(int ident);
-    
+
     void do_optimal_window_size();
-    
-  private:
+
+private:
     DiagramWindow * window() const {
-      return (DiagramWindow *) parent();
+        return (DiagramWindow *) parent();
     };
 
-  protected:
+protected:
     virtual void contentsMouseDoubleClickEvent(QMouseEvent *);
     virtual void contentsMousePressEvent(QMouseEvent *);
     virtual void contentsMouseReleaseEvent(QMouseEvent *);
@@ -157,17 +172,17 @@ class DiagramView : public Q3CanvasView {
     void resizeSelected(int dx, int dy);
     void add_point(QMouseEvent * e);
     bool multiple_selection_for_menu(BooL & in_model, BooL & out_model,
-				     BooL & alignable, int & n_resize,
-				     Q3PtrList<DiagramItem> & l_drawing_settings,
-				     const Q3CanvasItemList & selected);
-    
+                                     BooL & alignable, int & n_resize,
+                                     Q3PtrList<DiagramItem> & l_drawing_settings,
+                                     const Q3CanvasItemList & selected);
+
     void set_format(int);
     void init_format_menu(Q3PopupMenu &, Q3PopupMenu &, int) const;
     int default_menu(Q3PopupMenu & m, int f);
     void needed_width_height(int & maxx, int & maxy) const;
-    
+
     void save_picture(bool optimal, bool svg);
-    
+
     void alignLeft();
     void alignRight();
     void alignTop();
@@ -176,17 +191,19 @@ class DiagramView : public Q3CanvasView {
     void alignHorizontaly();
     void alignVerticaly();
     void same_size(bool w, bool h);
-    
+
     void delete_them(bool in_model);
-    
-  protected slots:
+
+protected slots:
     virtual void keyPressEvent(QKeyEvent * e);
-  private slots:
+private slots:
     virtual void keyReleaseEvent(QKeyEvent *);
     void optimal_window_size();
     void restore_window_size();
-    
-    void update() { canvas()->update(); };
+
+    void update() {
+        canvas()->update();
+    };
 };
 
 #endif

@@ -9,8 +9,9 @@
 class UmlActivityParameter;
 class UmlActivity;
 
-class UmlBaseActivityParameter : public UmlPinParameter {
-  public:
+class UmlBaseActivityParameter : public UmlPinParameter
+{
+public:
     //  returns a new activity parameter named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -22,13 +23,13 @@ class UmlBaseActivityParameter : public UmlPinParameter {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityParameter(void * id, const Q3CString & s) : UmlPinParameter(id, s) {
+    UmlBaseActivityParameter(void * id, const Q3CString & s) : UmlPinParameter(id, s) {
     }
 
 
-  public:
+public:
     // return the default value
     const Q3CString & defaultValue();
 
@@ -38,7 +39,7 @@ class UmlBaseActivityParameter : public UmlPinParameter {
     bool set_DefaultValue(const char * v);
 
     // to unload the object to free memory, it will be reloaded automatically
-    // if needed. Recursively done for the sub items if 'rec' is TRUE. 
+    // if needed. Recursively done for the sub items if 'rec' is TRUE.
     //
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
@@ -46,11 +47,11 @@ class UmlBaseActivityParameter : public UmlPinParameter {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _default_value;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

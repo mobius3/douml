@@ -34,21 +34,22 @@ class QTextStream;
 
 #include "UmlBaseAttribute.h"
 
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n)
-      :  UmlBaseAttribute(id, n) {};
+        :  UmlBaseAttribute(id, n) {};
 
     virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-				    const Q3CString & cl_stereotype,
-				    bool all_in_h);
+                                    const Q3CString & cl_stereotype,
+                                    bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility, QTextStream & f_h,
-			       const Q3CString & cl_stereotype, Q3CString indent,
-			       BooL & first, bool last);
-    virtual void generate_def(QTextStream &f, Q3CString indent, bool h,
-			      Q3CString templates, Q3CString cl_names,
-			      Q3CString templates_tmplop, 
-			      Q3CString cl_names_tmplop);
+                               const Q3CString & cl_stereotype, Q3CString indent,
+                               BooL & first, bool last);
+    virtual void generate_def(QTextStream & f, Q3CString indent, bool h,
+                              Q3CString templates, Q3CString cl_names,
+                              Q3CString templates_tmplop,
+                              Q3CString cl_names_tmplop);
 };
 
 #endif

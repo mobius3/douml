@@ -44,8 +44,9 @@ class QPainter;
 class QColorGroup;
 #endif
 
-class Class : public BrowserNode, public ClassContainer {
-  protected:
+class Class : public BrowserNode, public ClassContainer
+{
+protected:
     Q3CString filename;
     UmlClass * uml;
     Q3Dict<UmlClass> user_defined;
@@ -62,45 +63,45 @@ class Class : public BrowserNode, public ClassContainer {
 #else
     bool description_updatedp;
     Q3CString description;
-    
+
     static Q3PtrList<Class> Historic;
 #endif
     FormalParameterList formals;
-    
+
     bool get_formals(FormalParameterList & tmplt, bool name_only,
-		     Q3ValueList<FormalParameterList> & tmplts);
+                     Q3ValueList<FormalParameterList> & tmplts);
     bool manage_extends(ClassContainer * container,
-			const Q3ValueList<FormalParameterList> & tmplts
+                        const Q3ValueList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			);
+                       );
     bool manage_implements(ClassContainer * container, aRelationKind k,
-			   const Q3ValueList<FormalParameterList> & tmplts
+                           const Q3ValueList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
-			   , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                           , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			   );
+                          );
     bool add_inherit(aRelationKind k, UmlTypeSpec & typespec,
-		     Q3ValueList<UmlTypeSpec> & actuals, Q3CString & str_actual
+                     Q3ValueList<UmlTypeSpec> & actuals, Q3CString & str_actual
 #ifdef ROUNDTRIP
-		     , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                     , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-		     );
+                    );
     void inherit(Class * cl);
     void inherit(UmlClass * uml_cl, Q3CString header = 0);
     bool manage_member(Q3CString s, Q3CString & path
 #ifdef ROUNDTRIP
-		       , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                       , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-		       );
+                      );
     bool manage_enum_items(
 #ifdef ROUNDTRIP
-			   bool roundtrip, Q3PtrList<UmlItem> & expected_order
+        bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			);
+    );
     void set_description(const char * p);
-    
+
 #ifndef REVERSE
     virtual void activate();
     void manage_historic();
@@ -108,36 +109,48 @@ class Class : public BrowserNode, public ClassContainer {
 #ifndef ROUNDTRIP
     bool already_in_bouml();
 #endif
-    
-  public:
+
+public:
     Class(BrowserNode * parent, const char * n, char st);
 #ifdef ROUNDTRIP
     Class(BrowserNode * parent, UmlClass * ucl);
 #endif
-  
+
     virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
-			      const Q3ValueList<FormalParameterList> & tmplts,
-			      Class ** need_object = 0);
+                              const Q3ValueList<FormalParameterList> & tmplts,
+                              Class ** need_object = 0);
     virtual Class * define(const Q3CString & name, char st);
     virtual void declare(const Q3CString &, Class *);
     virtual bool isa_package() const;
     UmlClass * get_uml();
-    bool reversed() const { return reversedp; };
+    bool reversed() const {
+        return reversedp;
+    };
     virtual QString get_path() const;
 
 #ifdef ROUNDTRIP
     virtual Class * upload_define(UmlClass *);
     virtual Class * localy_defined(QString name) const;
-    void set_updated() { updated = TRUE; }
+    void set_updated() {
+        updated = TRUE;
+    }
 #endif
 
 #ifdef REVERSE
-    static void new_artifact(UmlArtifact * a = 0) { CurrentArtifact = a; }
-    static UmlArtifact * current_artifact() { return CurrentArtifact; }
-    bool from_libp() const { return from_lib; };
+    static void new_artifact(UmlArtifact * a = 0) {
+        CurrentArtifact = a;
+    }
+    static UmlArtifact * current_artifact() {
+        return CurrentArtifact;
+    }
+    bool from_libp() const {
+        return from_lib;
+    };
 #else
-    const Q3CString & get_description() const { return description; };
-    
+    const Q3CString & get_description() const {
+        return description;
+    };
+
     virtual void selected();
     virtual void activated();
     virtual void menu();
@@ -145,24 +158,24 @@ class Class : public BrowserNode, public ClassContainer {
 
     const QPixmap * pixmap(int) const;
     void paintCell(QPainter * p, const QColorGroup & cg, int column,
-		   int width, int alignment);
+                   int width, int alignment);
 
-        
+
     virtual void backup(QDataStream & dt) const;
 #endif
-    
+
     static void restore(QDataStream & dt, char c, BrowserNode * p);
-    
+
     // note tmplts equals its input value on exit
     static bool reverse(ClassContainer * container, Q3CString stereotype,
-			Q3CString annotation, bool abstractp, bool finalp,
-			aVisibility visibility,	Q3CString & f, 
-			Q3ValueList<FormalParameterList> tmplts
+                        Q3CString annotation, bool abstractp, bool finalp,
+                        aVisibility visibility,	Q3CString & f,
+                        Q3ValueList<FormalParameterList> tmplts
 #ifdef ROUNDTRIP
-			, bool rndtrp, Q3PtrList<UmlItem> & expectedorder
+                        , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
 #endif
-			);
-    
+                       );
+
 #ifndef REVERSE
     static void historic_back();
     static void historic_forward();

@@ -8,10 +8,11 @@
 class UmlClass;
 class UmlState;
 
-class UmlChoicePseudoState : public UmlBaseChoicePseudoState {
-  public:
+class UmlChoicePseudoState : public UmlBaseChoicePseudoState
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlChoicePseudoState(void * id) : UmlBaseChoicePseudoState(id, "") {
+    UmlChoicePseudoState(void * id) : UmlBaseChoicePseudoState(id, "") {
     }
 
     //  is the target of a transition

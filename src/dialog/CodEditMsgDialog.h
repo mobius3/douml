@@ -31,8 +31,9 @@
 class ColMsgList;
 class ColDiagramView;
 
-class CodEditMsgDialog {
-  public:
+class CodEditMsgDialog
+{
+public:
     static void exec(ColDiagramView * view, ColMsgList & msgs);
 };
 

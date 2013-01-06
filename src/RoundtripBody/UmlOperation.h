@@ -34,12 +34,13 @@
 
 class QTextStream;
 
-class UmlOperation : public UmlBaseOperation {
-  public:
+class UmlOperation : public UmlBaseOperation
+{
+public:
     UmlOperation(void * id, const Q3CString & n)
-      : UmlBaseOperation(id, n) {};
-  
-  static void roundtrip(const char * path, aLanguage who);
+        : UmlBaseOperation(id, n) {};
+
+    static void roundtrip(const char * path, aLanguage who);
 };
 
 #endif

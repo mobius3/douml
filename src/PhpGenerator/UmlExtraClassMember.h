@@ -37,13 +37,14 @@
 // operation/function etc...
 // You can modify it as you want (except the constructor)
 
-class UmlExtraClassMember : public UmlBaseExtraClassMember {
-  public:
+class UmlExtraClassMember : public UmlBaseExtraClassMember
+{
+public:
     UmlExtraClassMember(void * id, const Q3CString & n)
-      : UmlBaseExtraClassMember(id, n) {};
-  
+        : UmlBaseExtraClassMember(id, n) {};
+
     virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, int &);
+                          Q3CString indent, int &);
 };
 
 #endif

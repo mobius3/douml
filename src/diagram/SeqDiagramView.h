@@ -39,24 +39,25 @@ class DiagramItem;
 class UmlCanvas;
 class ToolCom;
 
-class SeqDiagramView : public DiagramView {
-  public:
+class SeqDiagramView : public DiagramView
+{
+public:
     SeqDiagramView(QWidget * parent, UmlCanvas * canvas, int id);
 
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual void read(char *, char * k);
     virtual void save(QTextStream & st, QString & warning, bool copy) const;
-    
+
     void send(ToolCom * com);
-    
-  private:
+
+private:
     SeqDiagramWindow * window() {
-      return (SeqDiagramWindow *) parent();
+        return (SeqDiagramWindow *) parent();
     }
     void toFlat();
     void toOverlapping();
 
-  protected:
+protected:
     virtual void contentsMousePressEvent(QMouseEvent *);
     virtual void contentsMouseMoveEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent * e);

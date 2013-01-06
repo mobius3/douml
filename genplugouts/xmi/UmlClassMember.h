@@ -9,12 +9,13 @@
 class FileOut;
 class UmlTypeSpec;
 
-// This class globaly manages class's relations, attributes, operations 
+// This class globaly manages class's relations, attributes, operations
 // and sub-classes
 //
 // You can modify it as you want (except the constructor)
-class UmlClassMember : public UmlBaseClassMember {
-  public:
+class UmlClassMember : public UmlBaseClassMember
+{
+public:
     UmlClassMember(void * id, const Q3CString & n) : UmlBaseClassMember(id, n) {};
 
     void write_scope(FileOut & out, const char * who = "owner");
@@ -26,7 +27,7 @@ class UmlClassMember : public UmlBaseClassMember {
     void write_annotation(FileOut & out);
 
     //  return the true name of the item
-    
+
     Q3CString true_name(Q3CString decl);
 
     static bool identChar(char c);

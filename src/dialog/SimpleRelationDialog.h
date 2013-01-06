@@ -38,25 +38,26 @@ class SimpleRelationData;
 class KeyValuesTable;
 class BodyDialog;
 
-class SimpleRelationDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class SimpleRelationDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     SimpleRelationData * rel;
     Q3ComboBox * edstereotype;
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
     Q3PtrList<BodyDialog> edits;
-    
+
     static QSize previous_size;
-  
+
     static void post_edit_description(SimpleRelationDialog * d, QString s);
-      
-  public:
+
+public:
     SimpleRelationDialog(SimpleRelationData * nd);
     virtual ~SimpleRelationDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void edit_description();

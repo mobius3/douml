@@ -36,20 +36,21 @@
 
 class BrowserNode;
 
-class UmlDrag : public Q3StoredDrag {
-  private:
+class UmlDrag : public Q3StoredDrag
+{
+private:
     static QString postfix;
     static bool ro;
-  
-  public:
+
+public:
     static const QString Key;
 
     UmlDrag(BrowserNode * bn, QWidget * parent = 0, const char * name = 0);
-virtual ~UmlDrag() {};
+    virtual ~UmlDrag() {};
 
     static bool canDecode(QDragMoveEvent * e, UmlCode type,
-			  bool withpostfix = FALSE,
-			  bool evenro = FALSE);
+                          bool withpostfix = FALSE,
+                          bool evenro = FALSE);
     static bool canDecode(QDragMoveEvent * e, const QString & type);
     static BrowserNode * decode(QDropEvent * e, UmlCode type, bool withpostfix = FALSE);
     static BrowserNode * decode(QDropEvent * e, const QString & type);

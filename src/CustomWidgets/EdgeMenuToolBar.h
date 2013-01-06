@@ -30,34 +30,34 @@
 class EdgeMenuDialog;
 class EdgeMenuToolBar : public QToolBar
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     EdgeMenuToolBar(QWidget * _parent = 0);
     ~EdgeMenuToolBar();
     void SetRelativeOrientation(int);
-    void SetDialog(EdgeMenuDialog*);
+    void SetDialog(EdgeMenuDialog *);
 protected:
     //! called on window show()
-    void leaveEvent ( QEvent * event );
-    void enterEvent ( QEvent * event );
-    void mouseMoveEvent ( QMouseEvent * event );
+    void leaveEvent(QEvent * event);
+    void enterEvent(QEvent * event);
+    void mouseMoveEvent(QMouseEvent * event);
     void focusOutEvent(QFocusEvent *) override;
 private:
 
     void IntitiateMove(QPoint);
     void IntitiateResize(QPoint);
-    void MoveThis(QPoint,QPoint);
+    void MoveThis(QPoint, QPoint);
     void FillClipboardMenu(int);
     QPoint modificationOrigin;
     QPoint toolbarOrigin;
     EWidgetModificationMode modificationMode;
     QTimer decayTimer;
     int relativeOrientation;
-    QMenu* clipboardMenu;
+    QMenu * clipboardMenu;
     int lastClipboardItemShown;
     int clipboardListSize;
-    EdgeMenuDialog* linkedDialog = 0;
+    EdgeMenuDialog * linkedDialog = 0;
 
 public slots:
     virtual void OnInitiateMove(QPoint);
@@ -71,7 +71,7 @@ public slots:
     virtual void OnPutIntoClipboardRequested();
     virtual void OnDialogLostFocus();
     virtual void OnMenuHideRequested();
-    virtual void OnMenuRepositionRequested(const QPoint&);
+    virtual void OnMenuRepositionRequested(const QPoint &);
 
 signals:
     void putIntoClipboard(QString);

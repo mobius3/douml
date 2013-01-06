@@ -5,9 +5,10 @@
 #include <qstring.h>
 
 #include "qpushbutton.h"
-class SmallPushButton : public QPushButton {
-  public:
-    SmallPushButton(const QString & text, QWidget * parent): QPushButton(text, parent) {} 
+class SmallPushButton : public QPushButton
+{
+public:
+    SmallPushButton(const QString & text, QWidget * parent): QPushButton(text, parent) {}
     virtual QSize sizeHint() const;
 };
 

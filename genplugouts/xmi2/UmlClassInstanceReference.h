@@ -10,23 +10,24 @@ class UmlItem;
 
 // this class manages class instance reference,
 // you can modify it
-class UmlClassInstanceReference : public UmlBaseClassInstanceReference {
-  public:
+class UmlClassInstanceReference : public UmlBaseClassInstanceReference
+{
+public:
     UmlClassInstanceReference() : rank(++next_rank) {}
 
     // return the connector id prefix between the instances
     // warning : a call modify result of a previous one
-    
+
     const char * connector(UmlClassInstanceReference * other);
 
     // return the ownedAttribute property id prefix
     // warning : a call modify result of a previous one
-    
+
     const char * attribute();
 
     // return the lifeline id prefix
     // warning : a call modify result of a previous one
-    
+
     const char * lifeline();
 
     static void write_lifelines(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlClassInstanceReference> & insts);
@@ -34,7 +35,7 @@ class UmlClassInstanceReference : public UmlBaseClassInstanceReference {
     static void write_attributes(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlClassInstanceReference> & insts);
 
 
-  private:
+private:
     int rank;
 
     static int next_rank;

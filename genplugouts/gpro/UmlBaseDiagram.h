@@ -6,8 +6,9 @@
 #include <q3cstring.h>
 
 //  Mother class of all the classes managing the diagrams
-class UmlBaseDiagram : public UmlItem {
-  public:
+class UmlBaseDiagram : public UmlItem
+{
+public:
     // saves the diagram picture in the file whose pathname is given
     // in argument, the produced file is a PNG file.
     // The aspect of the diagram is :
@@ -20,7 +21,7 @@ class UmlBaseDiagram : public UmlItem {
     bool saveIn(const Q3CString & s) const;
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseDiagram(void * id, const Q3CString & n) : UmlItem(id, n) {};
 

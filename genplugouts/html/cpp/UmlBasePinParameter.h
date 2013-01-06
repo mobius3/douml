@@ -7,14 +7,15 @@
 #include "aDirection.h"
 #include "aParameterEffectKind.h"
 
-class UmlBasePinParameter : public UmlActivityObject {
-  protected:
+class UmlBasePinParameter : public UmlActivityObject
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBasePinParameter(void * id, const Q3CString & s) : UmlActivityObject(id, s) {
+    UmlBasePinParameter(void * id, const Q3CString & s) : UmlActivityObject(id, s) {
     }
 
 
-  public:
+public:
     // return the isUnique attribute
     bool isUnique();
 
@@ -56,7 +57,7 @@ class UmlBasePinParameter : public UmlActivityObject {
     bool set_Effect(aParameterEffectKind v);
 
 
-  private:
+private:
     bool _unique : 1;
 
     bool _exception : 1;
@@ -70,7 +71,7 @@ class UmlBasePinParameter : public UmlActivityObject {
     aParameterEffectKind _effect : 8;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

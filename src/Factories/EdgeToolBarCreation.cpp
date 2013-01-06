@@ -31,37 +31,37 @@
 #include <QAction>
 
 static int defaultButtonSize = 15;
-EdgeMenuToolBar* CreateLimitedDialogMenu()
+EdgeMenuToolBar * CreateLimitedDialogMenu()
 {
-    EdgeMenuToolBar* toolbar = new EdgeMenuToolBar();
+    EdgeMenuToolBar * toolbar = new EdgeMenuToolBar();
 
-    QAction* clipboardAction = new QAction(toolbar);
+    QAction * clipboardAction = new QAction(toolbar);
     clipboardAction->setText("Clip...");
     clipboardAction->setName("Clipboard");
 
-    MultiPurposeDragArea* dragArea = new MultiPurposeDragArea();
+    MultiPurposeDragArea * dragArea = new MultiPurposeDragArea();
     dragArea->setName("DragArea");
-    dragArea->setBaseSize(defaultButtonSize,defaultButtonSize);
+    dragArea->setBaseSize(defaultButtonSize, defaultButtonSize);
     dragArea->setMinimumHeight(defaultButtonSize);
     dragArea->setMinimumWidth(defaultButtonSize);
-    QHBoxLayout* layout = new QHBoxLayout();
-    layout->setContentsMargins(0,0,0,0);
-    QLabel* label = new QLabel();
+    QHBoxLayout * layout = new QHBoxLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+    QLabel * label = new QLabel();
     label->setPixmap(QIcon(":\\root\\icons\\mouse_control.png").pixmap());
     layout->addWidget(label);
     dragArea->setLayout(layout);
 
-    QPushButton* okayElement = new QPushButton();
+    QPushButton * okayElement = new QPushButton();
     okayElement->setIcon(QIcon(":\\root\\icons\\accept.png"));
     okayElement->setName("OkayElement");
     okayElement->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    okayElement->setBaseSize(defaultButtonSize,defaultButtonSize);
+    okayElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
-    QPushButton* cancelElement = new QPushButton();
+    QPushButton * cancelElement = new QPushButton();
     cancelElement->setIcon(QIcon(":\\root\\icons\\reject.png"));
     cancelElement->setName("CancelElement");
-    okayElement->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
-    cancelElement->setBaseSize(defaultButtonSize,defaultButtonSize);
+    okayElement->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+    cancelElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
     toolbar->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     toolbar->setMinimumHeight(defaultButtonSize);
@@ -78,45 +78,45 @@ EdgeMenuToolBar* CreateLimitedDialogMenu()
     return toolbar;
 }
 
-EdgeMenuToolBar* CreateClassDialogMenu()
+EdgeMenuToolBar * CreateClassDialogMenu()
 {
-    EdgeMenuToolBar* toolbar = new EdgeMenuToolBar();
+    EdgeMenuToolBar * toolbar = new EdgeMenuToolBar();
 
-    QAction* clipboardAction = new QAction(toolbar);
+    QAction * clipboardAction = new QAction(toolbar);
     clipboardAction->setName("Clipboard");
     clipboardAction->setText("Clip...");
 
-    MultiPurposeDragArea* dragArea = new MultiPurposeDragArea();
+    MultiPurposeDragArea * dragArea = new MultiPurposeDragArea();
     dragArea->setName("DragArea");
-    dragArea->setBaseSize(defaultButtonSize,defaultButtonSize);
+    dragArea->setBaseSize(defaultButtonSize, defaultButtonSize);
     dragArea->setMinimumHeight(defaultButtonSize);
     dragArea->setMinimumWidth(defaultButtonSize);
-    QHBoxLayout* layout = new QHBoxLayout();
-    layout->setContentsMargins(0,0,0,0);
-    QLabel* label = new QLabel();
+    QHBoxLayout * layout = new QHBoxLayout();
+    layout->setContentsMargins(0, 0, 0, 0);
+    QLabel * label = new QLabel();
     label->setPixmap(QIcon(":\\root\\icons\\mouse_control.png").pixmap());
     layout->addWidget(label);
     dragArea->setLayout(layout);
 
-    QPushButton* okayElement = new QPushButton();
+    QPushButton * okayElement = new QPushButton();
     okayElement->setIcon(QIcon(":\\root\\icons\\accept.png"));
     okayElement->setName("OkayElement");
-    okayElement->setBaseSize(defaultButtonSize,defaultButtonSize);
+    okayElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
-    QPushButton* nextElement = new QPushButton();
+    QPushButton * nextElement = new QPushButton();
     nextElement->setIcon(QIcon(":\\root\\icons\\up.png"));
     nextElement->setName("NextElement");
-    nextElement->setBaseSize(defaultButtonSize,defaultButtonSize);
+    nextElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
-    QPushButton* previousElement = new QPushButton();
+    QPushButton * previousElement = new QPushButton();
     previousElement->setIcon(QIcon(":\\root\\icons\\down.png"));
     previousElement->setName("PreviousElement");
-    previousElement->setBaseSize(defaultButtonSize,defaultButtonSize);
+    previousElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
-    QPushButton* cancelElement = new QPushButton();
+    QPushButton * cancelElement = new QPushButton();
     cancelElement->setIcon(QIcon(":\\root\\icons\\reject.png"));
     cancelElement->setName("CancelElement");
-    cancelElement->setBaseSize(defaultButtonSize,defaultButtonSize);
+    cancelElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
     toolbar->setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
     toolbar->setMinimumHeight(defaultButtonSize);

@@ -38,41 +38,46 @@ class BrowserClass;
 #include "BrowserNode.h"
 #include "Labeled.h"
 
-class BrowserAttribute : public BrowserNode, public Labeled<BrowserAttribute> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserAttribute : public BrowserNode, public Labeled<BrowserAttribute>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserAttribute> all;
     static QStringList its_default_stereotypes;
-  
+
     AttributeData * def;
     BrowserOperation * get_oper;
     BrowserOperation * set_oper;
-    
-  protected:
+
+protected:
     BrowserAttribute(int id);
-  
-   void exec_menu_choice(int rank);
-    
-  public:
+
+    void exec_menu_choice(int rank);
+
+public:
     BrowserAttribute(QString s, BrowserNode * p, AttributeData * d, int id = 0);
     BrowserAttribute(const BrowserAttribute * model, BrowserNode * p);
     virtual ~BrowserAttribute();
-  
+
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
-    
-    BrowserOperation * get_get_oper() { return get_oper; };
-    BrowserOperation * get_set_oper() { return set_oper; };
+                                    QString name = QString());
+
+    BrowserOperation * get_get_oper() {
+        return get_oper;
+    };
+    BrowserOperation * get_set_oper() {
+        return set_oper;
+    };
     void set_get_oper(BrowserOperation *);
     void set_set_oper(BrowserOperation *);
     void update_get_oper();
     void update_set_oper();
     void add_get_oper();
     void add_set_oper();
-    
-    virtual const QPixmap* pixmap (int) const;
+
+    virtual const QPixmap * pixmap(int) const;
     virtual void paintCell(QPainter *, const QColorGroup &, int, int, int);
 
     virtual void menu();
@@ -88,33 +93,33 @@ class BrowserAttribute : public BrowserNode, public Labeled<BrowserAttribute> {
     virtual bool allow_spaces() const;
     virtual bool same_name(const QString & s, UmlCode type) const;
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
-    virtual void member_cpp_def(const QString & prefix, const QString &, 
-				QString & s, bool templ) const;
+    virtual void member_cpp_def(const QString & prefix, const QString &,
+                                QString & s, bool templ) const;
     virtual const char * constraint() const;
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserAttribute * read_ref(char * &);
-    static BrowserAttribute * read(char * &, char *, BrowserNode *, bool force = TRUE);
+    static BrowserAttribute * read_ref(char *&);
+    static BrowserAttribute * read(char *& , char *, BrowserNode *, bool force = TRUE);
     static BrowserNode * get_it(const char * k, int id);
     static void post_load();
 
     static BrowserAttribute * new_one(QString s, BrowserNode * p, bool enum_item);
-    
+
     static void init();
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
+
     virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
     static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
-    
+
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
-    
+
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
 };
 

@@ -5,14 +5,15 @@
 #include "UmlActivityAction.h"
 #include <q3cstring.h>
 
-class UmlBaseOnSignalAction : public UmlActivityAction {
-  protected:
+class UmlBaseOnSignalAction : public UmlActivityAction
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseOnSignalAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseOnSignalAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the signal
     const Q3CString & signal();
 
@@ -50,7 +51,7 @@ class UmlBaseOnSignalAction : public UmlActivityAction {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _signal;
 
 #ifdef WITHCPP
@@ -62,7 +63,7 @@ class UmlBaseOnSignalAction : public UmlActivityAction {
 #endif
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP

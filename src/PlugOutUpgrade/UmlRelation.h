@@ -11,11 +11,12 @@ class ActualParameter;
 // is a mother class of the class's children.
 // You can modify it as you want (except the constructor)
 
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n)
-      : UmlBaseRelation(id, n) {};
-    
+        : UmlBaseRelation(id, n) {};
+
     static UmlRelation * java2Php(UmlClass * php, UmlClass * java, const char * name);
 };
 

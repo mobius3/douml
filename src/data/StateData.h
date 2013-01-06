@@ -38,56 +38,63 @@ class StateDialog;
 class BrowserOperation;
 
 struct StateBehavior {
-  WrapperStr on_entry;
-  WrapperStr on_exit;
-  WrapperStr do_activity;
-  
-  void save(QTextStream &, const char * lang) const;
-  void read(char * & st, char * & k, const char * lang);
-  
-  void send_def(ToolCom * com);
+    WrapperStr on_entry;
+    WrapperStr on_exit;
+    WrapperStr do_activity;
+
+    void save(QTextStream &, const char * lang) const;
+    void read(char *& st, char *& k, const char * lang);
+
+    void send_def(ToolCom * com);
 };
 
-class StateData : public SimpleData {
-  Q_OBJECT
-    
-  friend class StateDialog;
-    
-  protected:
+class StateData : public SimpleData
+{
+    Q_OBJECT
+
+    friend class StateDialog;
+
+protected:
     bool is_active;
     StateBehavior uml;
     StateBehavior cpp;
     StateBehavior java;
     BrowserOperation * specification;
     BrowserState * reference;
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
+                              const QString & comment);
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
-    
-  public:
+
+public:
     StateData();
     StateData(StateData * model, BrowserNode * br);
     virtual ~StateData();
-    
+
     const StateBehavior & get_behavior(DrawingLanguage) const;
-    bool get_is_active() const { return is_active; }
-    BrowserOperation * get_specification() const { return specification; }
+    bool get_is_active() const {
+        return is_active;
+    }
+    BrowserOperation * get_specification() const {
+        return specification;
+    }
     void set_specification(BrowserOperation *);
-    BrowserState * get_reference() const { return reference; }
+    BrowserState * get_reference() const {
+        return reference;
+    }
     void set_reference(BrowserState *);
-    
+
     void edit();
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * & st, char * & k);
-    
-  protected slots:
+    void read(char *& st, char *& k);
+
+protected slots:
     void on_delete();
 };
-  
+
 #endif

@@ -32,18 +32,19 @@ class Q3TextBrowser;
 
 // singleton
 
-class HelpDialog : public QDialog {
-  Q_OBJECT
-    
-  public:
+class HelpDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
     static void show(QString);
-    
-  private:
+
+private:
     HelpDialog();
     virtual ~HelpDialog();
-    
+
     static HelpDialog * the;
-  
+
     Q3TextBrowser * br;
 };
 

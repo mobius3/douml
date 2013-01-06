@@ -9,11 +9,12 @@
 class QFile;
 class Q3TextStream;
 
-// The original html generator was written in Java to test the Java 
+// The original html generator was written in Java to test the Java
 // version of the API, this class allows to have a source code similar
 // in C++
-class FileWriter {
-  public:
+class FileWriter
+{
+public:
     bool open(Q3CString s);
 
     void close();
@@ -27,7 +28,7 @@ class FileWriter {
     void write(unsigned n);
 
 
-  protected:
+protected:
     Q3TextStream * ts;
 
     QFile * f;

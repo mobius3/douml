@@ -6,7 +6,8 @@
 
 // this class manages class instance reference,
 // you can modify it
-class UmlClassInstanceReference : public UmlBaseClassInstanceReference {
+class UmlClassInstanceReference : public UmlBaseClassInstanceReference
+{
 };
 
 #endif

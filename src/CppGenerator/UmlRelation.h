@@ -37,25 +37,26 @@
 class QTextStream;
 class UmlActualParameter;
 
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n)
-      : UmlBaseRelation(id, n) {
+        : UmlBaseRelation(id, n) {
     };
-  
+
     virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-				    const Q3CString & cl_stereotype,
-				    bool all_in_h);
-    void generate_inherit(const char *& sep, QTextStream & f_h, 
-			  const Q3ValueList<UmlActualParameter> & actuals,
-			  const Q3CString & cl_stereotype);
+                                    const Q3CString & cl_stereotype,
+                                    bool all_in_h);
+    void generate_inherit(const char *& sep, QTextStream & f_h,
+                          const Q3ValueList<UmlActualParameter> & actuals,
+                          const Q3CString & cl_stereotype);
     virtual void generate_decl(aVisibility & current_visibility, QTextStream & f_h,
-			       const Q3CString & cl_stereotype, Q3CString indent,
-			       BooL & first, bool last);
+                               const Q3CString & cl_stereotype, Q3CString indent,
+                               BooL & first, bool last);
     virtual void generate_def(QTextStream & f, Q3CString indent, bool h,
-			      Q3CString templates, Q3CString cl_names,
-			      Q3CString templates_tmplop, 
-			      Q3CString cl_names_tmplop);
+                              Q3CString templates, Q3CString cl_names,
+                              Q3CString templates_tmplop,
+                              Q3CString cl_names_tmplop);
 };
 
 #endif

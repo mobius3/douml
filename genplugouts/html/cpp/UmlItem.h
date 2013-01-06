@@ -20,8 +20,9 @@ class UmlTypeSpec;
 // allows to generalize their management, declare virtual operations etc ...
 //
 // You can modify it as you want (except the constructor)
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n), known(FALSE) { };
 
     virtual ~UmlItem();
@@ -33,7 +34,7 @@ class UmlItem : public UmlBaseItem {
     //  initializing 'directory'.
     //
     //  May be remove already existing html files and css
-    
+
     void set_dir(int argc, char ** argv);
 
     virtual void memo_ref();
@@ -69,7 +70,7 @@ class UmlItem : public UmlBaseItem {
     void chapter(Q3CString k, Q3CString pfix, unsigned int rank, Q3CString kind, unsigned int level);
 
     //bypass the comments at the beginning of the form
-    
+
     const char * bypass_comment(const char * s);
 
     void manage_alias(const char *& p);
@@ -101,17 +102,17 @@ class UmlItem : public UmlBaseItem {
     static void sort(Vector & v);
 
 
-  private:
+private:
     static void sort(Vector & v, int low, int high);
 
     bool gt(UmlItem * other);
 
 
-  public:
+public:
     virtual Q3CString pretty_name();
 
 
-  protected:
+protected:
     static Vector all;
 
     bool known;

@@ -33,118 +33,118 @@
 
 
 UmlAttribute * UmlAttribute::java2Php(UmlClass * php, UmlClass * java,
-				      const char * javaname,
-				      const char * phpname)
+                                      const char * javaname,
+                                      const char * phpname)
 {
-  if (phpname == 0)
-    phpname = javaname;
-  
-  UmlAttribute * from = java->get_attribute(javaname);
-  
-  if (from == 0) {
-    Q3CString err = Q3CString("cannot find attribute '") + 
-      javaname + Q3CString("' in class '") + java->name()
-	+ Q3CString("'<br>\n");
-    UmlCom::trace(err);
-    throw 0;
-  }
-  
-  UmlAttribute * to = UmlBaseAttribute::create(php, phpname);
-  
-  if (to == 0) {
-    Q3CString err = Q3CString("cannot create attribute '") + 
-      phpname + Q3CString("' in class '") + php->name()
-	+ Q3CString("'<br>\n");
-    UmlCom::trace(err);
-    throw 0;
-  }
-  
-  UmlCom::trace("add attribute " + php->name() + "::" + phpname + "<br>\n");
+    if (phpname == 0)
+        phpname = javaname;
 
-  to->set_Type(from->type());
-  to->set_isClassMember(from->isClassMember());
-  to->set_Visibility(from->visibility());
-  to->set_CppVisibility(from->cppVisibility());
-  to->set_CppDecl(::java2Php(from->cppDecl()));
-  to->set_JavaDecl(from->javaDecl());
-  
-  return to;
+    UmlAttribute * from = java->get_attribute(javaname);
+
+    if (from == 0) {
+        Q3CString err = Q3CString("cannot find attribute '") +
+                        javaname + Q3CString("' in class '") + java->name()
+                        + Q3CString("'<br>\n");
+        UmlCom::trace(err);
+        throw 0;
+    }
+
+    UmlAttribute * to = UmlBaseAttribute::create(php, phpname);
+
+    if (to == 0) {
+        Q3CString err = Q3CString("cannot create attribute '") +
+                        phpname + Q3CString("' in class '") + php->name()
+                        + Q3CString("'<br>\n");
+        UmlCom::trace(err);
+        throw 0;
+    }
+
+    UmlCom::trace("add attribute " + php->name() + "::" + phpname + "<br>\n");
+
+    to->set_Type(from->type());
+    to->set_isClassMember(from->isClassMember());
+    to->set_Visibility(from->visibility());
+    to->set_CppVisibility(from->cppVisibility());
+    to->set_CppDecl(::java2Php(from->cppDecl()));
+    to->set_JavaDecl(from->javaDecl());
+
+    return to;
 }
 
 UmlAttribute * UmlAttribute::java2Python(UmlClass * python, UmlClass * java,
-					 const char * javaname,
-					 const char * pythonname)
+        const char * javaname,
+        const char * pythonname)
 {
-  if (pythonname == 0)
-    pythonname = javaname;
-  
-  UmlAttribute * from = java->get_attribute(javaname);
-  
-  if (from == 0) {
-    Q3CString err = Q3CString("cannot find attribute '") + 
-      javaname + Q3CString("' in class '") + java->name()
-	+ Q3CString("'<br>\n");
-    UmlCom::trace(err);
-    throw 0;
-  }
-  
-  UmlAttribute * to = UmlBaseAttribute::create(python, pythonname);
-  
-  if (to == 0) {
-    Q3CString err = Q3CString("cannot create attribute '") + 
-      pythonname + Q3CString("' in class '") + python->name()
-	+ Q3CString("'<br>\n");
-    UmlCom::trace(err);
-    throw 0;
-  }
-  
-  UmlCom::trace("add attribute " + python->name() + "::" + pythonname + "<br>\n");
+    if (pythonname == 0)
+        pythonname = javaname;
 
-  to->set_Type(from->type());
-  to->set_isClassMember(from->isClassMember());
-  to->set_Visibility(from->visibility());
-  to->set_CppVisibility(from->cppVisibility());
-  to->set_CppDecl(::java2Python(from->cppDecl()));
-  to->set_JavaDecl(from->javaDecl());
-  
-  return to;
+    UmlAttribute * from = java->get_attribute(javaname);
+
+    if (from == 0) {
+        Q3CString err = Q3CString("cannot find attribute '") +
+                        javaname + Q3CString("' in class '") + java->name()
+                        + Q3CString("'<br>\n");
+        UmlCom::trace(err);
+        throw 0;
+    }
+
+    UmlAttribute * to = UmlBaseAttribute::create(python, pythonname);
+
+    if (to == 0) {
+        Q3CString err = Q3CString("cannot create attribute '") +
+                        pythonname + Q3CString("' in class '") + python->name()
+                        + Q3CString("'<br>\n");
+        UmlCom::trace(err);
+        throw 0;
+    }
+
+    UmlCom::trace("add attribute " + python->name() + "::" + pythonname + "<br>\n");
+
+    to->set_Type(from->type());
+    to->set_isClassMember(from->isClassMember());
+    to->set_Visibility(from->visibility());
+    to->set_CppVisibility(from->cppVisibility());
+    to->set_CppDecl(::java2Python(from->cppDecl()));
+    to->set_JavaDecl(from->javaDecl());
+
+    return to;
 }
 
 UmlAttribute * UmlAttribute::cpp2Python(UmlClass * python, UmlClass * cpp,
-					const char * cppname,
-					const char * pythonname)
+                                        const char * cppname,
+                                        const char * pythonname)
 {
-  if (pythonname == 0)
-    pythonname = cppname;
-  
-  UmlAttribute * from = cpp->get_attribute(cppname);
-  
-  if (from == 0) {
-    Q3CString err = Q3CString("cannot find attribute '") + 
-      cppname + Q3CString("' in class '") + cpp->name()
-	+ Q3CString("'<br>\n");
-    UmlCom::trace(err);
-    throw 0;
-  }
-  
-  UmlAttribute * to = UmlBaseAttribute::create(python, pythonname);
-  
-  if (to == 0) {
-    Q3CString err = Q3CString("cannot create attribute '") + 
-      pythonname + Q3CString("' in class '") + python->name()
-	+ Q3CString("'<br>\n");
-    UmlCom::trace(err);
-    throw 0;
-  }
-  
-  UmlCom::trace("add attribute " + python->name() + "::" + pythonname + "<br>\n");
+    if (pythonname == 0)
+        pythonname = cppname;
 
-  to->set_Type(from->type());
-  to->set_isClassMember(from->isClassMember());
-  to->set_Visibility(from->visibility());
-  to->set_CppVisibility(from->cppVisibility());
-  to->set_CppDecl(::cpp2Python(from->cppDecl()));
-  to->set_JavaDecl(from->javaDecl());
-  
-  return to;
+    UmlAttribute * from = cpp->get_attribute(cppname);
+
+    if (from == 0) {
+        Q3CString err = Q3CString("cannot find attribute '") +
+                        cppname + Q3CString("' in class '") + cpp->name()
+                        + Q3CString("'<br>\n");
+        UmlCom::trace(err);
+        throw 0;
+    }
+
+    UmlAttribute * to = UmlBaseAttribute::create(python, pythonname);
+
+    if (to == 0) {
+        Q3CString err = Q3CString("cannot create attribute '") +
+                        pythonname + Q3CString("' in class '") + python->name()
+                        + Q3CString("'<br>\n");
+        UmlCom::trace(err);
+        throw 0;
+    }
+
+    UmlCom::trace("add attribute " + python->name() + "::" + pythonname + "<br>\n");
+
+    to->set_Type(from->type());
+    to->set_isClassMember(from->isClassMember());
+    to->set_Visibility(from->visibility());
+    to->set_CppVisibility(from->cppVisibility());
+    to->set_CppDecl(::cpp2Python(from->cppDecl()));
+    to->set_JavaDecl(from->javaDecl());
+
+    return to;
 }

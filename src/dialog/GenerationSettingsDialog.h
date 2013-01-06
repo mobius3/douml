@@ -43,17 +43,18 @@ class StereotypesTable;
 class RelationTable;
 class IncludeTable;
 
-class GenerationSettingsDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class GenerationSettingsDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     // all
     TypesTable * types_table;
-  
+
     // stereotypes
-    StereotypesTable * relation_stereotypes_table; 
-    StereotypesTable * class_stereotypes_table; 
-  
+    StereotypesTable * relation_stereotypes_table;
+    StereotypesTable * class_stereotypes_table;
+
     // C++ specific
     MultiLineEdit * edcpp_h_content;
     MultiLineEdit * edcpp_src_content;
@@ -97,7 +98,7 @@ class GenerationSettingsDialog : public Q3TabDialog {
     QCheckBox * cpp_force_throw_cb;
     IncludeTable * cpp_include_table;
     Q3ComboBox * indentvisi_cb;
-  
+
     // Java specific
     MultiLineEdit * edjava_src_content;
     Q3ComboBox * edjava_extension;
@@ -124,7 +125,7 @@ class GenerationSettingsDialog : public Q3TabDialog {
     QCheckBox * java_set_final_cb;
     QCheckBox * java_set_param_final_cb;
     IncludeTable * java_import_table;
-  
+
     // Php specific
     MultiLineEdit * edphp_src_content;
     Q3ComboBox * edphp_extension;
@@ -147,7 +148,7 @@ class GenerationSettingsDialog : public Q3TabDialog {
     LineEdit * edphp_set_name;
     QCheckBox * uml_follow_php_set_name;
     QCheckBox * php_set_final_cb;
-  
+
     // Python specific
     Q3ComboBox * indentstep_cb;
     MultiLineEdit * edpython_src_content;
@@ -169,7 +170,7 @@ class GenerationSettingsDialog : public Q3TabDialog {
     LineEdit * edpython_set_name;
     QCheckBox * uml_follow_python_set_name;
     IncludeTable * python_import_table;
-  
+
     // Idl specific
     MultiLineEdit * edidl_src_content;
     Q3ComboBox * edidl_extension;
@@ -196,33 +197,33 @@ class GenerationSettingsDialog : public Q3TabDialog {
     QCheckBox * uml_follow_idl_set_name;
     QCheckBox * idl_set_oneway_cb;
     IncludeTable * idl_include_table;
-    
+
     // descriptions
     MultiLineEdit * edartifact_default_description;
     MultiLineEdit * edclass_default_description;
     MultiLineEdit * edoperation_default_description;
     MultiLineEdit * edattribute_default_description;
     MultiLineEdit * edrelation_default_description;
-    
+
     // directories
     LineEdit * edcpproot;
-    LineEdit * edjavaroot; 
-    LineEdit * edphproot;  
-    LineEdit * edpythonroot;  
+    LineEdit * edjavaroot;
+    LineEdit * edphproot;
+    LineEdit * edpythonroot;
     LineEdit * edidlroot;
     QPushButton * cpprelbutton;
     QPushButton * javarelbutton;
     QPushButton * phprelbutton;
     QPushButton * pythonrelbutton;
     QPushButton * idlrelbutton;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     GenerationSettingsDialog();
     virtual ~GenerationSettingsDialog();
-  
-  protected:
+
+protected:
     void init_types();
     void init_stereotypes();
     void init_cpp1();
@@ -248,8 +249,8 @@ class GenerationSettingsDialog : public Q3TabDialog {
     void init_descriptions();
     void init_dirs();
     void relative(LineEdit * ed, QPushButton * button);
-    
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void cpproot_browse();
@@ -278,39 +279,42 @@ class GenerationSettingsDialog : public Q3TabDialog {
     void follow_idl_set_name();
 };
 
-class TypesTable : public StringTable {
-  public:
+class TypesTable : public StringTable
+{
+public:
     TypesTable(QWidget * parent);
-  
+
     virtual void init_row(int r);
 
     void update();
     bool check();
 };
 
-class StereotypesTable : public StringTable {
-  protected:
+class StereotypesTable : public StringTable
+{
+protected:
     bool with_php;
-  public:
+public:
     StereotypesTable(QWidget * parent, int nst, Stereotype * st, bool php);
-  
+
     virtual void init_row(int r);
-  
+
     void update(int & nst, Stereotype *& st);
 };
 
-class IncludeTable : public StringTable {
-  protected:
+class IncludeTable : public StringTable
+{
+protected:
     IncludesSpec & spec;
     const char * dflt;
-  
-  public:
+
+public:
     IncludeTable(QWidget * parent, IncludesSpec & spc,
-		 const char * title, const char * df);
-  
-  public:
+                 const char * title, const char * df);
+
+public:
     virtual void init_row(int index);
-							   
+
     void update();
 };
 

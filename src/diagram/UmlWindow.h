@@ -50,14 +50,15 @@ class MultiLineEdit;
 
 // singleton
 
-/* This class seems to be responsible for the main Project, with Open, 
+/* This class seems to be responsible for the main Project, with Open,
  * Save, Close, etc... It is the main window */
-class UmlWindow : public QMainWindow {
-  Q_OBJECT
-    
-  protected:
+class UmlWindow : public QMainWindow
+{
+    Q_OBJECT
+
+protected:
     static UmlWindow * the;
-  
+
     QWorkspace * ws;
     BrowserView * browser;
     MultiLineEdit * comment;
@@ -93,13 +94,13 @@ class UmlWindow : public QMainWindow {
     QToolButton * next;
     Q3ValueList<BrowserNode *> select_historic;
 
-  public:
+public:
     UmlWindow(bool batch);
-virtual ~UmlWindow();
-  
+    virtual ~UmlWindow();
+
     void load(QString fn, bool forcesaveas = FALSE);
     bool can_close();
-    
+
     static void set_commented(BrowserNode * bn);
     static void update_comment_if_needed(BrowserNode * bn);
     static void set_message(const QString &);
@@ -123,15 +124,15 @@ virtual ~UmlWindow();
     static void clear_select_historic();
     static void browser_search_it();
     static void print_it();
-    
-  protected:
+
+protected:
     void init_format_menu(Q3PopupMenu * m, Q3PopupMenu * lm);
     void is_selected(BrowserNode *);
     virtual void closeEvent(QCloseEvent *);
     void save_session();
     void read_session();
-  
-  private slots:
+
+private slots:
     void newProject();
     void newFromTemplate();
     void load();
@@ -143,12 +144,12 @@ virtual ~UmlWindow();
     void browser_search();
     void next_select();
     void prev_select();
-    
+
     void edit_gen_settings();
     void edit_stereotypes();
     void edit_class_settings();
     void edit_drawing_settings();
-    
+
     void use_cpp();
     void use_java();
     void use_php();
@@ -160,13 +161,13 @@ virtual ~UmlWindow();
     void edit_shortcuts();
     void edit_env();
     void edit_image_root_dir();
-    
+
     void motif_style();
     void motifplus_style();
     //void sgi_style();
     //void cde_style();
     void windows_style();
-    
+
     void show_stereotypes();
 
     void do_completion();
@@ -174,7 +175,7 @@ virtual ~UmlWindow();
     void about();
     void aboutQt();
     void help();
-    
+
     void show_trace();
     void cpp_generate();
     void java_generate();
@@ -197,7 +198,7 @@ virtual ~UmlWindow();
     void tool_settings();
     void import_tool_settings();
     void plug_out_upgrade();
-    
+
     void comment_changed();
     void preferred_geometry();
     void close_all_windows();
@@ -205,17 +206,17 @@ virtual ~UmlWindow();
     void toolMenuAboutToShow();
     void projectMenuAboutToShow();
     void historicActivated(int id);
-    
+
     void langMenuAboutToShow();
-    
+
     void miscMenuAboutToShow();
-    
+
     void fontSizeMenuAboutToShow();
     void setFontSize(int);
-    
+
     void formatMenuAboutToShow();
     void setFormat(int);
-    
+
     void windowsMenuAboutToShow();
     void windowsMenuActivated(int id);
     void dialogsMenuActivated(int id);

@@ -48,12 +48,13 @@ class BrowserClassDiagram;
 #include "BrowserNode.h"
 #include "Labeled.h"
 
-class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserClass : public BrowserNode, public Labeled<BrowserClass>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserClass> all;
-    
+
     static QStringList its_default_stereotypes;
     static QStringList relations_default_stereotypes[UmlRelations];
 
@@ -61,16 +62,16 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
     BrowserClassDiagram * associated_diagram;
     BrowserArtifact * associated_artifact;	// generate its def
     Q3ValueList<BrowserComponent *> associated_components;	// realize or provide it
-  
-  protected:
+
+protected:
     BrowserClass(int id);
     void exec_menu_choice(int index, Q3PtrList<BrowserOperation> & l);
-  
-  public:
+
+public:
     BrowserClass(QString s, BrowserNode * p, ClassData * d, int id = 0);
     BrowserClass(const BrowserClass * model, BrowserNode * p);
     virtual ~BrowserClass();
-  
+
     BrowserNode * add_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE);
     BrowserNode * add_relation(BrowserRelation * rel);
     BrowserNode * add_operation(BrowserOperation * oper = 0);
@@ -85,7 +86,7 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
     virtual QString check_inherit(const BrowserNode * parent) const;
     bool have_abstract_operation();
     void get_opers(Q3ValueList<const OperationData *> & opers,
-		   QStringList & list) const;
+                   QStringList & list) const;
     void get_attrs(BrowserNodeList &) const;
     void get_rels(BrowserClass *, Q3PtrList<RelationData> &, int * rev = 0) const;
     void get_rels(BrowserClass * target, Q3PtrList<BrowserRelation> & l) const;
@@ -101,10 +102,10 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
     virtual void delete_it();
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
-				   BooL & duplicable) const;
+                                   BooL & duplicable) const;
     virtual void move(BrowserNode *, BrowserNode * after);
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     QString contextual_name(ShowContextMode) const;
     virtual void set_name(const char * s);
@@ -122,14 +123,14 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
     virtual bool allow_spaces() const;
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
     virtual const char * constraint() const;
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserClass * read_ref(char * &, const char * k = 0);
-    static BrowserClass * read(char * &, char *, BrowserNode *, bool force = TRUE);
-    static BrowserNode * read_any_ref(char * &, char *);
+    static BrowserClass * read_ref(char *& , const char * k = 0);
+    static BrowserClass * read(char *& , char *, BrowserNode *, bool force = TRUE);
+    static BrowserNode * read_any_ref(char *& , char *);
     static BrowserNode * get_it(const char * k, int id);
     static void post_load();
-    
+
     static void plug_out_conversion();
     bool get_bodies_read();
     void set_bodies_read(bool y);
@@ -139,13 +140,13 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
 
     virtual bool tool_cmd(ToolCom * com, const char * args);
     static bool tool_global_cmd(ToolCom * com, const char * args);
-    
+
     static BrowserNodeList & instances(BrowserNodeList &, const char * st = 0, bool non_nested = FALSE);
     static BrowserClass * get_class(BrowserNode * future_parent,
-				    const char * stereotype = 0);
+                                    const char * stereotype = 0);
     static BrowserClass * add_class(bool stereotypep,
-				    BrowserNode * future_parent,
-				    QString name = QString());
+                                    BrowserNode * future_parent,
+                                    QString name = QString());
     static BrowserClass * find(const char * s);
 
     static void init();
@@ -154,26 +155,26 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass> {
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
     virtual void support_file(Q3Dict<char> & files, bool add) const;
-    
+
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * &);
+    static void read_stereotypes(char *& , char *&);
     static void save_stereotypes(QTextStream &);
-    
+
     virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
-    
+
     static bool new_java_enums(QString new_st);
 
-    virtual const QPixmap* pixmap (int) const;
+    virtual const QPixmap * pixmap(int) const;
     virtual void update_stereotype(bool rec = FALSE);
     virtual void iconChanged();
     virtual void paintCell(QPainter * p, const QColorGroup & cg, int column,
-			   int width, int alignment);
-    
+                           int width, int alignment);
+
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
     virtual void DragMoveInsideEvent(QDragMoveEvent * e);
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
-    
+
     static BrowserClass * temporary();
 };
 

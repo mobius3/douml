@@ -36,46 +36,47 @@
 class Class;
 class UmlTypeSpec;
 
-class ClassContainer {
-  public:
+class ClassContainer
+{
+public:
     virtual ~ClassContainer();	// just to not have warning
-  
+
     virtual Class * declare_if_needed(const Q3CString & name,
-				      Q3CString stereotype = 0) = 0;
+                                      Q3CString stereotype = 0) = 0;
     virtual Class * define(const Q3CString & name, Q3CString stereotype = 0) = 0;
     virtual void declare_if_needed(Q3CString name, Class * cl) = 0;
     virtual void define(Q3CString name, Class * cl) = 0;
     virtual Class * new_class(const Q3CString & name,
-			      const Q3CString & stereotype,
-			      bool declaration) = 0;
+                              const Q3CString & stereotype,
+                              bool declaration) = 0;
     virtual bool find_type(Q3CString type, UmlTypeSpec & typespec) = 0;
     virtual void declaration(const Q3CString & name, const Q3CString & stereotype,
-			     const Q3CString & decl
+                             const Q3CString & decl
 #ifdef ROUNDTRIP
-			     , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                             , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			     ) = 0;
-    
+                            ) = 0;
+
     void compute_type(Q3CString type, UmlTypeSpec & typespec,
-		      Q3CString & typeform, bool get_first_template_actual = FALSE,
-		      const Q3ValueList<FormalParameterList> & tmplts = empty);
+                      Q3CString & typeform, bool get_first_template_actual = FALSE,
+                      const Q3ValueList<FormalParameterList> & tmplts = empty);
     bool find_type(Q3CString type, UmlTypeSpec & typespec,
-		   NDict<Class> & defined);
+                   NDict<Class> & defined);
 #ifdef ROUNDTRIP
     virtual Class * upload_define(UmlClass *) = 0;
 #endif
-    
+
     static bool get_template(FormalParameterList & tmplt);
-    
-  protected:
+
+protected:
     Class * declare_if_needed(const Q3CString & name,
-			      const Q3CString & stereotype,
-			      const FormalParameterList & formals,
-			      NDict<Class> & declared, 
-			      NDict<Class> & defined);
+                              const Q3CString & stereotype,
+                              const FormalParameterList & formals,
+                              NDict<Class> & declared,
+                              NDict<Class> & defined);
     Class * define(const Q3CString & name, const Q3CString & stereotype,
-		   NDict<Class> & declared, NDict<Class> & defined);
-    
+                   NDict<Class> & declared, NDict<Class> & defined);
+
     static Q3ValueList<FormalParameterList> empty;
 };
 

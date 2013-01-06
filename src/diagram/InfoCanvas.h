@@ -32,28 +32,29 @@
 
 class DiagramItem;
 
-class InfoCanvas : public NoteCanvas {
-  protected:
+class InfoCanvas : public NoteCanvas
+{
+protected:
     DiagramItem * who;
-  
-  public:
+
+public:
     InfoCanvas(UmlCanvas * canvas, DiagramItem *, int x, int y, int id);
     InfoCanvas(UmlCanvas * canvas, DiagramItem *, QString);
     virtual ~InfoCanvas();
-        
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool copyable() const;
     virtual void open();
-    virtual void menu(const QPoint&);
-    
+    virtual void menu(const QPoint &);
+
     virtual void apply_shortcut(QString s);
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
 
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
-    static InfoCanvas * read(char * &, UmlCanvas *, char *, DiagramItem *);
+    static InfoCanvas * read(char *& , UmlCanvas *, char *, DiagramItem *);
 
     void set(QString s);
 };

@@ -7,10 +7,11 @@
 #include <q3cstring.h>
 #include "Vector.h"
 
-class UmlState : public UmlBaseState, public UmlStateItem {
-  public:
+class UmlState : public UmlBaseState, public UmlStateItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlState(void * id, const Q3CString & s) : UmlBaseState(id, s) {
+    UmlState(void * id, const Q3CString & s) : UmlBaseState(id, s) {
     }
 
     //returns a string indicating the king of the element
@@ -31,7 +32,7 @@ class UmlState : public UmlBaseState, public UmlStateItem {
     virtual bool chapterp();
 
 
-  protected:
+protected:
     static Vector states;
 
 };

@@ -50,10 +50,11 @@ class MultiLineEdit;
 class KeyValuesTable;
 class BodyDialog;
 
-class AttributeDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  private:
+class AttributeDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+private:
     bool visit;
     bool in_enum;
     bool new_in_st;
@@ -63,7 +64,7 @@ class AttributeDialog : public Q3TabDialog {
     Q3PtrList<BodyDialog> edits;
     BrowserNode * view;
     int offset;
-    
+
     // uml tab
     QWidget * umltab;
     LineEdit * edname;
@@ -83,7 +84,7 @@ class AttributeDialog : public Q3TabDialog {
     QCheckBox * unique_cb;
     MultiLineEdit * comment;
     MultiLineEdit * constraint;
-    
+
     // C++ tab
     QWidget * cppTab;
     bool cpp_in_enum;
@@ -93,7 +94,7 @@ class AttributeDialog : public Q3TabDialog {
     QCheckBox * volatile_cb;
     MultiLineEdit * edcppdecl;
     MultiLineEdit * showcppdecl;
-    
+
     // java tab
     QWidget * javatab;
     bool java_in_enum;
@@ -104,14 +105,14 @@ class AttributeDialog : public Q3TabDialog {
     MultiLineEdit * showjavadecl;
     QPushButton * editjavaannotation;
     QString javaannotation;
-    
+
     // php tab
     QWidget * phptab;
     bool php_in_enum;
     bool php_ignored;
     MultiLineEdit * edphpdecl;
     MultiLineEdit * showphpdecl;
-    
+
     // python tab
     QWidget * pythontab;
     bool python_in_enum;
@@ -119,7 +120,7 @@ class AttributeDialog : public Q3TabDialog {
     MultiLineEdit * edpythondecl;
     MultiLineEdit * showpythondecl;
     QString python_self;
-    
+
     // IDL tab
     QWidget * idltab;
     bool idl_in_enum;
@@ -131,42 +132,42 @@ class AttributeDialog : public Q3TabDialog {
     QStringList enum_names;
     MultiLineEdit * edidldecl;
     MultiLineEdit * showidldecl;
-    
+
     // User tab
     KeyValuesTable * kvtable;
 
     static QSize previous_size;
-  
+
     void default_defs_if_needed();
     void default_cpp_if_needed(QString prev_mult, QString new_mult);
     void default_java_if_needed(QString prev_mult, QString new_mult);
     void default_idl_if_needed(QString prev_mult, QString new_mult);
     void default_php_if_needed(QString prev_mult, QString new_mult);
     void default_python_if_needed(QString prev_mult, QString new_mult);
-    
+
     static void post_edit_init(AttributeDialog *, QString);
     static void post_edit_description(AttributeDialog *, QString);
     static void post_edit_constraint(AttributeDialog *, QString);
-    
-  public:
+
+public:
     AttributeDialog(AttributeData * a, bool new_st_attr);
     virtual ~AttributeDialog();
-  
+
     static QString cpp_decl(const BrowserAttribute * at, bool init = FALSE,
-			    ShowContextMode mode = noContext);
+                            ShowContextMode mode = noContext);
     static QString java_decl(const BrowserAttribute * at, bool init = FALSE,
-			    ShowContextMode mode = noContext);
+                             ShowContextMode mode = noContext);
     static QString php_decl(const BrowserAttribute * at, bool init = FALSE,
-			    ShowContextMode mode = noContext);
+                            ShowContextMode mode = noContext);
     static QString python_decl(const BrowserAttribute * at, bool init = FALSE,
-			    ShowContextMode mode = noContext);
+                               ShowContextMode mode = noContext);
     static QString idl_decl(const BrowserAttribute * at,
-			    ShowContextMode mode = noContext);
-  
-  protected slots:
+                            ShowContextMode mode = noContext);
+
+protected slots:
     virtual void polish();
     virtual void accept();
-  
+
     void edit_init();
     void default_description();
     void edit_description();

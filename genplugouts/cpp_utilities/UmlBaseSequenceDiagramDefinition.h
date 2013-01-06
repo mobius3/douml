@@ -15,8 +15,9 @@ class UmlSequenceMessage;
 class UmlFragment;
 
 // this class manages sequence diagram definition
-class UmlBaseSequenceDiagramDefinition {
-  public:
+class UmlBaseSequenceDiagramDefinition
+{
+public:
     // return the instances present in the diagram
     const Q3PtrVector<UmlClassInstanceReference> & instances() const {
         return _instances;
@@ -34,7 +35,7 @@ class UmlBaseSequenceDiagramDefinition {
     }
 
 
-  private:
+private:
     Q3PtrVector<UmlClassInstanceReference> _instances;
 
     Q3PtrVector<UmlSequenceMessage> _messages;
@@ -45,11 +46,11 @@ class UmlBaseSequenceDiagramDefinition {
     void read_();
 
 
-  public:
+public:
     //  to avoid compiler warning, don't call it
-     ~UmlBaseSequenceDiagramDefinition();
+    ~UmlBaseSequenceDiagramDefinition();
 
-  friend class UmlBaseSequenceDiagram;
+    friend class UmlBaseSequenceDiagram;
 };
 
 #endif

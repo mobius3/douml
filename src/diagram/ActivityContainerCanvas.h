@@ -32,16 +32,17 @@
 
 #include "DiagramCanvas.h"
 
-class ActivityContainerCanvas : public DiagramCanvas {
-  protected:
+class ActivityContainerCanvas : public DiagramCanvas
+{
+protected:
     ActivityContainerCanvas(UmlCanvas * canvas, int id)
-      : DiagramCanvas(canvas, id) {
+        : DiagramCanvas(canvas, id) {
     }
-  
-  public:
+
+public:
     ActivityContainerCanvas(BrowserNode * bn, UmlCanvas * canvas,
-			    int x, int y, int w, int h, int id) 
-      : DiagramCanvas(bn, canvas, x, y, w, h, id) {
+                            int x, int y, int w, int h, int id)
+        : DiagramCanvas(bn, canvas, x, y, w, h, id) {
     }
 
     void force_inside(DiagramItem * di, Q3CanvasItem * ci, BooL & need_sub_upper);

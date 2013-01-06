@@ -40,10 +40,11 @@ class UseCaseData;
 class KeyValuesTable;
 class BodyDialog;
 
-class UseCaseDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class UseCaseDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     UseCaseData * uc;
     LineEdit * edname;
     Q3ComboBox * edstereotype;
@@ -51,16 +52,16 @@ class UseCaseDialog : public Q3TabDialog {
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
     Q3PtrList<BodyDialog> edits;
-    
+
     static QSize previous_size;
-    
+
     static void post_edit_description(UseCaseDialog * d, QString s);
-      
-  public:
+
+public:
     UseCaseDialog(UseCaseData * u);
     virtual ~UseCaseDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void edit_description();

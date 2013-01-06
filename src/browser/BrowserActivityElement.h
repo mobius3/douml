@@ -26,10 +26,11 @@
 #ifndef BROWSER_ACTIVITYELEMENT_H
 #define BROWSER_ACTIVITYELEMENT_H
 
-class BrowserActivityElement {
-  public:
+class BrowserActivityElement
+{
+public:
     virtual ~BrowserActivityElement() {}
-  virtual QString connexion_from(bool control) const = 0;
+    virtual QString connexion_from(bool control) const = 0;
 };
 
 #endif

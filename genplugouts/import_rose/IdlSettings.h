@@ -11,11 +11,12 @@
 // This class manages settings concerning IDL, configured through
 // the 'Generation settings' dialog.
 //
-// This class may be defined as a 'singleton', but I prefer to use static 
+// This class may be defined as a 'singleton', but I prefer to use static
 // members allowing to just write 'IdlSettings::member' rather than
 // 'IdlSettings::instance()->member' or other long sentence like this.
-class IdlSettings : public UmlSettings {
-  public:
+class IdlSettings : public UmlSettings
+{
+public:
     // returns TRUE when the created Java objects are initialized
     // with the default declaration/definition
     static bool useDefaults();
@@ -24,7 +25,7 @@ class IdlSettings : public UmlSettings {
     // with the default declaration/definition
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    
+
     static bool set_UseDefaults(bool y);
 
     // returns the IDL type corresponding to the 'UML' type given in
@@ -53,7 +54,7 @@ class IdlSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_RelationStereotype(Q3CString s, Q3CString v);
 
-    // reverse of the RelationStereotype() operation, returns the 'UML' 
+    // reverse of the RelationStereotype() operation, returns the 'UML'
     // stereotype corresponding to the IDL one given in argument
     static Q3CString relationUmlStereotype(Q3CString s);
 
@@ -67,24 +68,24 @@ class IdlSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_ClassStereotype(Q3CString s, Q3CString v);
 
-    // reverse of the ClassStereotype() operation, returns the 'UML' 
+    // reverse of the ClassStereotype() operation, returns the 'UML'
     // stereotype corresponding to the IDL one given in argument
     static Q3CString classUmlStereotype(Q3CString s);
 
-    // returns the #include or other form specified in the last 
+    // returns the #include or other form specified in the last
     // 'Generation settings' tab for the Idl type given in argument.
     static Q3CString include(Q3CString s);
 
-    // set the #include or other form specified in the last 
+    // set the #include or other form specified in the last
     // 'Generation settings' tab for the Idl type given in argument.
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_Include(Q3CString s, Q3CString v);
 
-    // returns the 'root' directory 
+    // returns the 'root' directory
     static const Q3CString & rootDir();
 
-    // set the 'root' directory 
+    // set the 'root' directory
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_RootDir(Q3CString v);
@@ -259,11 +260,11 @@ class IdlSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_GetName(Q3CString v);
 
-    // returns the default name of a 'set' operation generated 
+    // returns the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     static const Q3CString & setName();
 
-    // set the default name of a 'set' operation generated 
+    // set the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
@@ -280,7 +281,7 @@ class IdlSettings : public UmlSettings {
     static bool set_IsSetOneway(bool v);
 
 
-  private:
+private:
     // never called !
     IdlSettings() {};
 
@@ -335,7 +336,7 @@ class IdlSettings : public UmlSettings {
     static Q3Dict<Q3CString> _map_includes;
 
 
-  protected:
+protected:
     static void read_();
 
     static void read_if_needed_();

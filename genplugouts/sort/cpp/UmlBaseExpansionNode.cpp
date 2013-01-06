@@ -8,7 +8,8 @@ UmlExpansionNode * UmlBaseExpansionNode::create(UmlExpansionRegion * parent, con
     return (UmlExpansionNode *) parent->create_(anExpansionNode, s);
 }
 
-anItemKind UmlBaseExpansionNode::kind() {
+anItemKind UmlBaseExpansionNode::kind()
+{
     return anExpansionNode;
 }
 

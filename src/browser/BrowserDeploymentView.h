@@ -26,7 +26,7 @@
 #ifndef BROWSER_DEPLOYMENTVIEW_H
 #define BROWSER_DEPLOYMENTVIEW_H
 
-#include <q3intdict.h> 
+#include <q3intdict.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
@@ -40,13 +40,14 @@ class SimpleData;
 #include "Labeled.h"
 #include "Settings.h"
 
-class BrowserDeploymentView : public BrowserNode, public Labeled<BrowserDeploymentView> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserDeploymentView : public BrowserNode, public Labeled<BrowserDeploymentView>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserDeploymentView> all;
     static QStringList its_default_stereotypes;
-  
+
     SimpleData * def;
     DeploymentDiagramSettings deploymentdiagram_settings;
     UmlColor package_color;
@@ -55,20 +56,20 @@ class BrowserDeploymentView : public BrowserNode, public Labeled<BrowserDeployme
     UmlColor artifact_color;
     UmlColor note_color;
     UmlColor fragment_color;
-    
+
     BrowserDeploymentView(int id);
     void make();
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserDeploymentView(QString s, BrowserNode * p, int id = 0);
     BrowserDeploymentView(const BrowserDeploymentView * model, BrowserNode * p);
     virtual ~BrowserDeploymentView();
-    
-    virtual const QPixmap* pixmap (int) const;
-  
+
+    virtual const QPixmap * pixmap(int) const;
+
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -78,30 +79,30 @@ class BrowserDeploymentView : public BrowserNode, public Labeled<BrowserDeployme
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
-				   BooL & duplicable) const;
+                                   BooL & duplicable) const;
     virtual BasicData * get_data() const;
     virtual void get_deploymentdiagramsettings(DeploymentDiagramSettings &) const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual UmlColor get_color(UmlCode) const;
     virtual void save(QTextStream &, bool ref, QString & warning);
-    
+
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
     virtual void DragMoveInsideEvent(QDragMoveEvent * e);
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
-    
+
     static BrowserDeploymentView * add_deployment_view(BrowserNode * future_parent);
-    
+
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
 
-    static BrowserDeploymentView * read(char * &, char *, BrowserNode *, bool);
-    static BrowserDeploymentView * read_ref(char * &, const char *);
+    static BrowserDeploymentView * read(char *& , char *, BrowserNode *, bool);
+    static BrowserDeploymentView * read_ref(char *& , const char *);
     static BrowserNode * get_it(const char * k, int id);
 
     static BrowserNodeList & instances(BrowserNodeList &);
-    
+
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);

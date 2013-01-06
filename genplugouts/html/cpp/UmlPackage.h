@@ -9,8 +9,9 @@
 // This class manages a 'package', notes that the project itself is a package
 //
 // You can modify it as you want (except the constructor)
-class UmlPackage : public UmlBasePackage {
-  public:
+class UmlPackage : public UmlBasePackage
+{
+public:
     UmlPackage(void * id, const Q3CString & n) : UmlBasePackage(id, n) {};
 
     //returns a string indicating the king of the element
@@ -31,7 +32,7 @@ class UmlPackage : public UmlBasePackage {
     virtual bool chapterp();
 
 
-  protected:
+protected:
     static Vector packages;
 
 };

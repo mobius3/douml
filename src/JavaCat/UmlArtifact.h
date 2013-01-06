@@ -34,33 +34,40 @@
 // This class manages 'artifact'
 // You can modify it as you want (except the constructor)
 
-class UmlArtifact : public UmlBaseArtifact {
+class UmlArtifact : public UmlBaseArtifact
+{
 #ifdef ROUNDTRIP
-  private:
+private:
     bool roundtrip_expected;
     bool useless;
     bool fully_updated;
-    
+
     static bool has_roundtrip_expected;
 #endif
-  public:
+public:
     UmlArtifact(void * id, const Q3CString & n)
-      : UmlBaseArtifact(id, n)
+        : UmlBaseArtifact(id, n)
 #ifdef ROUNDTRIP
-	, roundtrip_expected(FALSE), useless(FALSE), fully_updated(FALSE)
+        , roundtrip_expected(FALSE), useless(FALSE), fully_updated(FALSE)
 #endif
-      {}
-  
+    {}
+
 #ifdef ROUNDTRIP
     virtual bool set_roundtrip_expected();
     virtual void scan_it(int & n);
     virtual void send_it(int n);
     virtual void mark_useless(Q3PtrList<UmlItem> & l);
     bool set_roundtrip_expected_for_class();
-    bool is_roundtrip_expected() const { return roundtrip_expected; }
-    bool is_fully_updated() const { return fully_updated; }
-    void set_usefull() { useless = FALSE; }
-    
+    bool is_roundtrip_expected() const {
+        return roundtrip_expected;
+    }
+    bool is_fully_updated() const {
+        return fully_updated;
+    }
+    void set_usefull() {
+        useless = FALSE;
+    }
+
     static bool is_roundtrip_usefull();
 #endif
 

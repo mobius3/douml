@@ -11,8 +11,9 @@ class UmlClass;
 
 // Manage the 'extra' class members to produce any code, for instance a C++ pre-processing form or a Java initialization
 
-class UmlBaseExtraClassMember : public UmlClassItem {
-  public:
+class UmlBaseExtraClassMember : public UmlClassItem
+{
+public:
     // returns a new extra class member named 'name'  (the name may be empty)
     // created under the class 'parent'
     //
@@ -26,11 +27,11 @@ class UmlBaseExtraClassMember : public UmlClassItem {
 
 #ifdef WITHCPP
     // returns TRUE if the extra member is managed as an inline operation in C++
-    
+
     bool isCppInline();
 
     // to set if the extra member is managed as an inline operation in C++
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppInline(bool y);
 
@@ -50,15 +51,15 @@ class UmlBaseExtraClassMember : public UmlClassItem {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
 #ifdef WITHCPP
     bool _cpp_inline;
-    
+
 
     Q3CString _cpp_def;
 #endif
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseExtraClassMember(void * id, const Q3CString & n) : UmlClassItem(id, n) {};
 

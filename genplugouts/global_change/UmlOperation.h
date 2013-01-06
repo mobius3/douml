@@ -11,8 +11,9 @@ class Context;
 // is a mother class of all the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlOperation : public UmlBaseOperation {
-  public:
+class UmlOperation : public UmlBaseOperation
+{
+public:
     UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {};
 
     virtual void change(Context & ctx);

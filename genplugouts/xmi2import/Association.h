@@ -50,21 +50,24 @@ struct Role {
 
 };
 
-class Association {
-  public:
+class Association
+{
+public:
     Association() : is_class_association(FALSE) {}
 
     void import(FileIn & in, Token & token);
 
-    void set_class_association(){ is_class_association = TRUE; }
+    void set_class_association() {
+        is_class_association = TRUE;
+    }
     // search for the association from its id
-    
+
     static Association & get(Q3CString id, Q3CString s = "");
 
     static void solveThem();
 
 
-  protected:
+protected:
     Q3CString name;
 
     Role roles[2];
@@ -74,7 +77,7 @@ class Association {
     bool is_class_association;
 
 
-  private:
+private:
     void solve(Q3CString id);
 
 };

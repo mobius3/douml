@@ -14,9 +14,12 @@ class UmlFormalParameter;
 // is a mother class of the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlClass : public UmlBaseClass {
-  public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) { inherited_opers = 0; };
+class UmlClass : public UmlBaseClass
+{
+public:
+    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {
+        inherited_opers = 0;
+    };
 
     //returns a string indicating the king of the element
     virtual Q3CString sKind();
@@ -32,11 +35,11 @@ class UmlClass : public UmlBaseClass {
     virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
 
     //generate the html definition in an own file
-    
+
     void html();
 
     //generate the html definition except header/chapter in the current file
-    
+
     void gen_html(Q3CString pfix, unsigned int rank, unsigned int level);
 
     //write a html ref to the class
@@ -50,17 +53,17 @@ class UmlClass : public UmlBaseClass {
     static void generate_index();
 
 
-  private:
+private:
     void add_inherited_opers(Vector * ops);
 
 
-  protected:
+protected:
     Vector * inherited_opers;
 
     static Vector classes;
 
 
-  private:
+private:
     //produce the definition in C++
     void gen_cpp_decl(Q3CString s, bool descr);
 
@@ -80,15 +83,15 @@ class UmlClass : public UmlBaseClass {
     void generics();
 
 
-  public:
+public:
     static void generate();
 
 
-  protected:
+protected:
     Vector subClasses;
 
 
-  public:
+public:
     virtual bool chapterp();
 
 };

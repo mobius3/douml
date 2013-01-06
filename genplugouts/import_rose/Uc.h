@@ -7,10 +7,11 @@
 class UmlItem;
 class File;
 
-class Uc {
-  public:
+class Uc
+{
+public:
     //return the UmlItem implementing Uc
-    
+
     virtual UmlItem * item() = 0;
 
     virtual void readObject(File & f, Q3CString s) = 0;

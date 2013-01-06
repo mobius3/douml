@@ -24,7 +24,7 @@
 // *************************************************************************
 
 #include <stdio.h>
-#include <QTextStream> 
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 
@@ -35,143 +35,151 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlArtifact::roundtrip_cpp() {
-  if (! managed) {
-    managed = TRUE;
-    
-    if (stereotype() != "source")
-      return;
-    
-    const Q3CString hdef = cppHeader();
-    const Q3CString srcdef = cppSource();
-    
-    if (hdef.isEmpty() && srcdef.isEmpty())
-      return;
-    
-    const Q3CString & name = UmlArtifact::name();    
-    UmlPackage * pack = package();
-    Q3CString h_path = pack->header_path(name);
-    Q3CString src_path = pack->source_path(name);
-    
-    {
-      Q3CString s;
-    
-      if (!hdef.isEmpty())
-	s = "<i> " + h_path + "</i>";
-      
-      if (!srcdef.isEmpty()) {	
-	if (!hdef.isEmpty())
-	  s += " and <i> " + src_path + "</i>";
-	else
-	  s = "<i> " + src_path + "</i>";
-      }
-      
-      UmlCom::message(name);
-      if (verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
-		      + s + "</font><br>");
-      else
-	set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
-			 + s + "</font><br>");
-    }
+void UmlArtifact::roundtrip_cpp()
+{
+    if (! managed) {
+        managed = TRUE;
 
-    UmlOperation::roundtrip(h_path, cppLanguage);
-    UmlOperation::roundtrip(src_path, cppLanguage);
-  }
+        if (stereotype() != "source")
+            return;
+
+        const Q3CString hdef = cppHeader();
+        const Q3CString srcdef = cppSource();
+
+        if (hdef.isEmpty() && srcdef.isEmpty())
+            return;
+
+        const Q3CString & name = UmlArtifact::name();
+        UmlPackage * pack = package();
+        Q3CString h_path = pack->header_path(name);
+        Q3CString src_path = pack->source_path(name);
+
+        {
+            Q3CString s;
+
+            if (!hdef.isEmpty())
+                s = "<i> " + h_path + "</i>";
+
+            if (!srcdef.isEmpty()) {
+                if (!hdef.isEmpty())
+                    s += " and <i> " + src_path + "</i>";
+                else
+                    s = "<i> " + src_path + "</i>";
+            }
+
+            UmlCom::message(name);
+
+            if (verbose())
+                UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
+                              + s + "</font><br>");
+            else
+                set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
+                                 + s + "</font><br>");
+        }
+
+        UmlOperation::roundtrip(h_path, cppLanguage);
+        UmlOperation::roundtrip(src_path, cppLanguage);
+    }
 }
 
-void UmlArtifact::roundtrip_java() {
-  if (! managed) {
-    managed = TRUE;
-    
-    if (stereotype() != "source")
-      return;
-    
-    const Q3CString srcdef = javaSource();
-    
-    if (srcdef.isEmpty())
-      return;
-    
-    const Q3CString & name = UmlArtifact::name();    
-    UmlPackage * pack = package();
-    Q3CString src_path = pack->java_path(name);
-    
-    {
-      Q3CString s = " <i> " + src_path + "</i>";
-      
-      UmlCom::message(name);
-      if (verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
-		      + s + "</font><br>");
-      else
-	set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
-			 + s + "</font><br>");
-    }
+void UmlArtifact::roundtrip_java()
+{
+    if (! managed) {
+        managed = TRUE;
 
-    UmlOperation::roundtrip(src_path, javaLanguage);
-  }
+        if (stereotype() != "source")
+            return;
+
+        const Q3CString srcdef = javaSource();
+
+        if (srcdef.isEmpty())
+            return;
+
+        const Q3CString & name = UmlArtifact::name();
+        UmlPackage * pack = package();
+        Q3CString src_path = pack->java_path(name);
+
+        {
+            Q3CString s = " <i> " + src_path + "</i>";
+
+            UmlCom::message(name);
+
+            if (verbose())
+                UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
+                              + s + "</font><br>");
+            else
+                set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
+                                 + s + "</font><br>");
+        }
+
+        UmlOperation::roundtrip(src_path, javaLanguage);
+    }
 }
 
-void UmlArtifact::roundtrip_php() {
-  if (! managed) {
-    managed = TRUE;
-    
-    if (stereotype() != "source")
-      return;
-    
-    const Q3CString srcdef = phpSource();
-    
-    if (srcdef.isEmpty())
-      return;
-    
-    const Q3CString & name = UmlArtifact::name();    
-    UmlPackage * pack = package();
-    Q3CString src_path = pack->php_path(name);
-    
-    {
-      Q3CString s = " <i> " + src_path + "</i>";
-      
-      UmlCom::message(name);
-      if (verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
-		      + s + "</font><br>");
-      else
-	set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
-			 + s + "</font><br>");
-    }
+void UmlArtifact::roundtrip_php()
+{
+    if (! managed) {
+        managed = TRUE;
 
-    UmlOperation::roundtrip(src_path, phpLanguage);
-  }
+        if (stereotype() != "source")
+            return;
+
+        const Q3CString srcdef = phpSource();
+
+        if (srcdef.isEmpty())
+            return;
+
+        const Q3CString & name = UmlArtifact::name();
+        UmlPackage * pack = package();
+        Q3CString src_path = pack->php_path(name);
+
+        {
+            Q3CString s = " <i> " + src_path + "</i>";
+
+            UmlCom::message(name);
+
+            if (verbose())
+                UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
+                              + s + "</font><br>");
+            else
+                set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
+                                 + s + "</font><br>");
+        }
+
+        UmlOperation::roundtrip(src_path, phpLanguage);
+    }
 }
 
-void UmlArtifact::roundtrip_python() {
-  if (! managed) {
-    managed = TRUE;
-    
-    if (stereotype() != "source")
-      return;
-    
-    const Q3CString srcdef = pythonSource();
-    
-    if (srcdef.isEmpty())
-      return;
-    
-    const Q3CString & name = UmlArtifact::name();    
-    UmlPackage * pack = package();
-    Q3CString src_path = pack->python_path(name);
-    
-    {
-      Q3CString s = " <i> " + src_path + "</i>";
-      
-      UmlCom::message(name);
-      if (verbose())
-	UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
-		      + s + "</font><br>");
-      else
-	set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
-			 + s + "</font><br>");
-    }
+void UmlArtifact::roundtrip_python()
+{
+    if (! managed) {
+        managed = TRUE;
 
-    UmlOperation::roundtrip(src_path, pythonLanguage);
-  }
+        if (stereotype() != "source")
+            return;
+
+        const Q3CString srcdef = pythonSource();
+
+        if (srcdef.isEmpty())
+            return;
+
+        const Q3CString & name = UmlArtifact::name();
+        UmlPackage * pack = package();
+        Q3CString src_path = pack->python_path(name);
+
+        {
+            Q3CString s = " <i> " + src_path + "</i>";
+
+            UmlCom::message(name);
+
+            if (verbose())
+                UmlCom::trace(Q3CString("<hr><font face=helvetica>roundtrip body from")
+                              + s + "</font><br>");
+            else
+                set_trace_header(Q3CString("<font face=helvetica>roundtrip body from")
+                                 + s + "</font><br>");
+        }
+
+        UmlOperation::roundtrip(src_path, pythonLanguage);
+    }
 }
