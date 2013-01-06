@@ -32,6 +32,7 @@
 #include <QTextCodec>
 //Added by qt3to4:
 #include <Q3CString>
+#include <QTextCodec>
 
 #include "UmlWindow.h"
 #include "UmlPixmap.h"
@@ -67,6 +68,9 @@ int main(int argc, char **argv)
     ExitOnError = FALSE;
 
   QApplication a(argc, argv);
+
+  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
   QsLogging::Logger& logger = QsLogging::Logger::instance();
   logger.setLoggingLevel(QsLogging::TraceLevel);

@@ -124,6 +124,7 @@ class AttributeData : public ClassMemberData {
     void set_type(const AType & t);
     
     const char * get_init_value() const { return init_value; }
+    QString get_init_value_qstring() const { return init_value; }
 
     const char * get_cppdecl() const { return cpp_decl; }
         

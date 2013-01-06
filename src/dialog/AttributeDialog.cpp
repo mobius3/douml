@@ -206,7 +206,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     }
 
     htab = new Q3HBox(grid);
-    edinit = new LineEdit(a->get_init_value(), htab);
+    edinit = new LineEdit(a->get_init_value_qstring(), htab);
     if (visit)
         edinit->setReadOnly(TRUE);
     else
