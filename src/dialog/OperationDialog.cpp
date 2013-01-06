@@ -76,7 +76,7 @@
 #include "ProfiledStereotypes.h"
 #include "translate.h"
 #include "misc/TypeIdentifier.h"
-#include "operationwidgetcpp.h"
+#include "ui/operationwidgetcpp.h"
 #include "ui_operationwidgetcpp.h"
 
 QSize OperationDialog::previous_size;
