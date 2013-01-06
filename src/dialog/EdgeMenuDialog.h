@@ -113,6 +113,8 @@ protected:
     //! Called on reject() and discards gui data
     virtual void RejectData();
 
+
+
     bool isWritable;
     bool isConnectedToToolBar;
 
@@ -124,6 +126,8 @@ protected:
     QPoint modificationOrigin;
     QPoint dialogOrigin;
     QSize originalSize;
+
+
 
 signals:
     void edgeMenuRequested(uint);

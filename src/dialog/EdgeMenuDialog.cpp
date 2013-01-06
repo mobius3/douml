@@ -277,6 +277,21 @@ void EdgeMenuDialog::RejectData()
     //todo implement
 }
 
+//BrowserNode *EdgeMenuDialog::GetUpperLevelNode()
+//{
+//    BrowserNode* previousNode = 0;
+//    int originalDepth = originalNode->depth();
+//    while(true)
+//    {
+//        previousNode = dynamic_cast<BrowserNode*>(this->itemBelow());
+//        if(!previousNode)
+//            return nullptr;
+//        int previousDepth = previousNode->depth();
+//        if(previousDepth < originalDepth)
+//            return previousNode;
+//    }
+//}
+
 void EdgeMenuDialog::SetCurrentNode(BrowserNode * node)
 {
     currentNode = node;

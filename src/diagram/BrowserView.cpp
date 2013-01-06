@@ -181,6 +181,11 @@ void BrowserView::select(Q3ListViewItem * i) {
   the->setSelected(i, TRUE);
 }
 
+void BrowserView::deselect(Q3ListViewItem * i)
+{
+    the->setSelected(i, false);
+}
+
 void BrowserView::force_visible(Q3ListViewItem * i) {
   the->ensureItemVisible(i);
 }

@@ -83,6 +83,7 @@ class BrowserView : public Q3ListView  {
       return import_dir;
     }
     static void select(Q3ListViewItem *);
+    static void deselect(Q3ListViewItem *);
     static BrowserNode * selected_item();
     static void force_visible(Q3ListViewItem *);
     static void remove_temporary_files();
