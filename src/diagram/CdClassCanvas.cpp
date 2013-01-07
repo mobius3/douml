@@ -58,7 +58,6 @@
 #include "ToolCom.h"
 #include "Tool.h"
 #include "ui/menufactory.h"
-#include "MenuItalic.h"
 #include "OperationListDialog.h"
 #include "BrowserClassDiagram.h"
 #include "strutil.h"
@@ -1351,15 +1350,17 @@ void CdClassCanvas::menu(const QPoint &)
                 for (oper = l.first(), index = 3000;
                      oper;
                      oper = l.next(), index += 1) {
+                    QString menuItemText = ((BrowserNode *) oper->parent())->get_name() +
+                            QString("::") + oper->get_data()->definition(TRUE, FALSE);
                     if (((OperationData *) oper->get_data())->get_is_abstract())
-                        inhopersubm.insertItem(new MenuItalic(((BrowserNode *) oper->parent())->get_name() +
-                                                              QString("::") + oper->get_data()->definition(TRUE, FALSE),
-                                                              inhopersubm.font()),
-                                               index);
+                    {
+                        QFont font = inhopersubm.font();
+                        font.setItalic(true);
+                        inhopersubm.insertItem(menuItemText, index);
+                        inhopersubm.actions().last()->setFont(font);
+                    }
                     else
-                        inhopersubm.insertItem(((BrowserNode *) oper->parent())->get_name() +
-                                               QString("::") + oper->get_data()->definition(TRUE, FALSE),
-                                               index);
+                        inhopersubm.insertItem(menuItemText,index);
                 }
 
                 m.insertItem(TR("Add inherited operation"), &inhopersubm);

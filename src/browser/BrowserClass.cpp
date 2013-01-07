@@ -68,7 +68,6 @@
 #include "ToolCom.h"
 #include "Tool.h"
 #include "ui/menufactory.h"
-#include "MenuItalic.h"
 #include "ClassDialog.h"
 #include "OperationListDialog.h"
 #include "BrowserView.h"

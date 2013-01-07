@@ -169,7 +169,6 @@ HEADERS        = \
         src/dialog/VisibilityGroup.h \
         src/dialog/CodAddMsgDialog.h \
         src/dialog/CodEditMsgDialog.h \
-        src/dialog/MenuItalic.h \
         src/dialog/MenuFont.h \
         src/dialog/ColMsgTable.h \
         src/dialog/CodChangeMsgDialog.h \
@@ -437,7 +436,6 @@ SOURCES = \
         src/dialog/VisibilityGroup.cpp \
         src/dialog/CodAddMsgDialog.cpp \
         src/dialog/CodEditMsgDialog.cpp \
-        src/dialog/MenuItalic.cpp \
         src/dialog/MenuFont.cpp \
         src/dialog/ColMsgTable.cpp \
         src/dialog/CodChangeMsgDialog.cpp \
