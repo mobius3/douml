@@ -102,13 +102,14 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
 
 OperationDialog::~OperationDialog()
 {
-    oper->browser_node->edit_end();
+//    if(oper->browser_node)
+//        oper->browser_node->edit_end();
     previous_size = size();
 
     while (!edits.isEmpty())
         edits.take(0)->close();
 
-    close_dialog(this);
+    //close_dialog(this);
 }
 
 void OperationDialog::polish() {
