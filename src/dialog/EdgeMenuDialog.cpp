@@ -171,19 +171,19 @@ void EdgeMenuDialog::OnPickNextSibling()
     while (continueSearch)
     {
         nextNode = dynamic_cast<BrowserNode *>(currentNode->itemAbove());
-        //QLOG_INFO() << "CurrentNode is: "<< currentNode->get_name();
+        QLOG_INFO() << "CurrentNode is: "<< currentNode->get_name();
 
-        //QLOG_INFO() << "NEXT: " << nextNode->get_name() << " " << nextNode->depth();
+        QLOG_INFO() << "NEXT: " << nextNode->get_name() << " " << nextNode->depth();
         if (!nextNode)
             break;
 
-        //QLOG_INFO() << "NextNode is: "<< nextNode->get_name();
+        QLOG_INFO() << "NextNode is: "<< nextNode->get_name();
         bool sameLevel = originalNode->depth() == nextNode->depth();
 
         bool sameType = originalNode->get_stype() == nextNode->get_stype();
 
-        //QLOG_INFO() << originalNode->get_stype();
-        //QLOG_INFO() << nextNode->get_stype();
+        QLOG_INFO() << originalNode->get_stype();
+        QLOG_INFO() << nextNode->get_stype();
         //        QLOG_INFO() << "NEXT: " << "Origin level : " << originalNode->depth();
         //        QLOG_INFO() << "NEXT: " << "Current level : " << nextNode->depth();
         if (sameLevel && sameType)
@@ -209,18 +209,18 @@ void EdgeMenuDialog::OnPickPreviousSibling()
 
     while (continueSearch)
     {
-        //QLOG_INFO() << "CurrentNode is: " << currentNode->get_name();
+        QLOG_INFO() << "CurrentNode is: " << currentNode->get_name();
         previousNode = dynamic_cast<BrowserNode *>(currentNode->itemBelow());
 
-        //QLOG_INFO() << "Nodename is: " << previousNode->get_name() << " " << previousNode->depth();
+        QLOG_INFO() << "Nodename is: " << previousNode->get_name() << " " << previousNode->depth();
         if (!previousNode)
             break;
 
-        //QLOG_INFO() << "Previous Node is: "<< previousNode->get_name();
+        QLOG_INFO() << "Previous Node is: "<< previousNode->get_name();
         int previousDepth = previousNode->depth();
         bool sameType = originalNode->get_stype() == previousNode->get_stype();
-        //QLOG_INFO() << "PREVIOUS: " << "Origin level : " << originalDepth;
-        //QLOG_INFO() << "PREVIOUS: " << "Current level : " << previousDepth;
+        QLOG_INFO() << "PREVIOUS: " << "Origin level : " << originalDepth;
+        QLOG_INFO() << "PREVIOUS: " << "Current level : " << previousDepth;
         bool sameLevel = originalDepth == previousDepth;
 
         if (sameLevel && sameType)

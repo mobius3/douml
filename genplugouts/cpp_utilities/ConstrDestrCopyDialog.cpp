@@ -16,6 +16,25 @@
 #include <qdir.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
+#include "Logging/QsLog.h"
+class FunctionTracer
+{
+public:
+//    FunctionTracer(QString val):traceString(val){qxtLog->debug(QString("   ").repeated(logLevel) + "Entered function " + traceString); logLevel++;}
+//    ~FunctionTracer(){qxtLog->debug(QString("   ").repeated(logLevel) + "Left    function " + traceString);logLevel--;}
+    FunctionTracer(QString val):traceString(val){QLOG_INFO() << "Entered function " + traceString;}
+    ~FunctionTracer(){QLOG_INFO() <<  "Left    function " + traceString;}
+
+    QString traceString;
+    static int logLevel;
+};
+
+#define TRACE_FUNCTION FunctionTracer function_tracer(Q_FUNC_INFO);
+//#define TRACE_FIELD_FUNCTION FunctionTracer function_tracer(Q_FUNC_INFO);
+#define TRACE_FIELD_FUNCTION
+
+
+
 ConstrDestrCopyDialog::ConstrDestrCopyDialog(UmlClass * cl, bool have_constructor,
         bool have_destructor, bool have_copy,
         bool have_const_copy, bool have_assignment,
@@ -239,24 +258,26 @@ void ConstrDestrCopyDialog::polish()
 
 void ConstrDestrCopyDialog::accept()
 {
+    QLOG_INFO() << "Adding constructor";
     if (add_constr->isChecked())
         target->addContructor(constr_explicit->isChecked());
-
+    QLOG_INFO() << "Adding destructor";
     if ((add_destr != 0) && add_destr->isChecked())
         target->addDestructor(virtual_destr->isChecked());
-
+    QLOG_INFO() << "Adding copy constructor";
     if ((add_copy != 0) && add_copy->isChecked())
         target->addCopy(FALSE);
-
+    QLOG_INFO() << "Adding const copy constructor";
     if ((add_const_copy != 0) && add_const_copy->isChecked())
         target->addCopy(TRUE);
-
+    QLOG_INFO() << "Adding assign operator";
     if ((add_assign != 0) && add_assign->isChecked())
         target->addAssign(FALSE);
-
+    QLOG_INFO() << "Adding const assign operator";
     if ((add_const_assign != 0) && add_const_assign->isChecked())
         target->addAssign(TRUE);
 
+    QLOG_INFO() << "Accepting";
     QDialog::accept();
 }
 

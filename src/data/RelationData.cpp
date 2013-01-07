@@ -367,7 +367,7 @@ QString RelationData::get_name(BrowserRelation * cl) const
     }
     else if (cl == end) {
         if (!b.role.isEmpty()) {
-//        QLOG_INFO() << "Returning name for relation: " << QString((const char *) b.role) + " (" + get_name() + ")";
+        QLOG_INFO() << "Returning name for relation: " << QString((const char *) b.role) + " (" + get_name() + ")";
             const char * role = b.role;
             const char * tName = get_name();
             result = QString(role + QString(" (") + tName + ")");

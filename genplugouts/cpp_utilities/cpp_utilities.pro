@@ -1,7 +1,7 @@
 TEMPLATE    = app
 TARGET        = cpp_util
 CONFIG        += debug warn_on qt
-DEFINES        = WITHCPP
+DEFINES        = WITHCPP TRACE
 HEADERS        = ./UmlBasePackage.h \
           ./UmlFragmentCompartment.h \
           ./UmlBaseUseCase.h \

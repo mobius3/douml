@@ -6,12 +6,30 @@
 #include "UmlOperation.h"
 #include "CppSettings.h"
 #include "UmlCom.h"
+
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
+#include "Logging/QsLog.h"
+class FunctionTracer
+{
+public:
+//    FunctionTracer(QString val):traceString(val){qxtLog->debug(QString("   ").repeated(logLevel) + "Entered function " + traceString); logLevel++;}
+//    ~FunctionTracer(){qxtLog->debug(QString("   ").repeated(logLevel) + "Left    function " + traceString);logLevel--;}
+    FunctionTracer(QString val):traceString(val){QLOG_INFO() << "Entered function " + traceString;}
+    ~FunctionTracer(){QLOG_INFO() <<  "Left    function " + traceString;}
+
+    QString traceString;
+    static int logLevel;
+};
+
+#define TRACE_FUNCTION FunctionTracer function_tracer(Q_FUNC_INFO);
+//#define TRACE_FIELD_FUNCTION FunctionTracer function_tracer(Q_FUNC_INFO);
+#define TRACE_FIELD_FUNCTION
 
 void UmlClass::utilities()
 {
+    TRACE_FUNCTION;
     const Q3PtrVector<UmlItem> ch = children();
     bool have_constructor = FALSE;
     bool have_destructor = FALSE;
@@ -73,43 +91,53 @@ void UmlClass::utilities()
 
 void UmlClass::addContructor(bool expl)
 {
+    TRACE_FUNCTION;
+    QLOG_INFO() << "1.1.1";
     UmlOperation * op = UmlOperation::create(this, name());
-
+    QLOG_INFO() << "1.1.2";
     if (op == 0)
         UmlCom::trace("can't add contructor");
     else {
+        QLOG_INFO() << "1.1.3";
         Q3CString s;
         int index;
 
         // remove the useless "${type} " mainly to remove the space
 
         s = op->cppDecl();
-
+        QLOG_INFO() << s;
+        QLOG_INFO() << "1.1.4";
         if (s.isEmpty())
             s = CppSettings::operationDecl();
-
+        QLOG_INFO() << s;
+        QLOG_INFO() << "1.1.5";
         if ((index = s.find("${type} ")) != -1)
             s.remove(index, 8);
-
+        QLOG_INFO() << s;
+        QLOG_INFO() << "1.1.6";
         if (expl && ((index = s.find("${name}")) != -1))
             s.insert(index, "explicit ");
-
+        QLOG_INFO() << s;
+        QLOG_INFO() << "1.1.7";
         op->set_CppDecl(s);
-
+        QLOG_INFO() << s;
+        QLOG_INFO() << "1.1.8";
         s = op->cppDef();
-
+        QLOG_INFO() << s;
+        QLOG_INFO() << "1.1.81";
         if (s.isEmpty())
             s = CppSettings::operationDef();
-
+        QLOG_INFO() << "1.1.9";
         if ((index = s.find("${type} ")) != -1)
             s.remove(index, 8);
-
+        QLOG_INFO() << "1.1.10";
         op->set_CppDef(s);
     }
 }
 
 void UmlClass::addDestructor(bool virt)
 {
+    TRACE_FUNCTION;
     UmlOperation * op = UmlOperation::create(this, "~" + name());
 
     if (op == 0)
@@ -147,6 +175,7 @@ void UmlClass::addDestructor(bool virt)
 
 void UmlClass::addCopy(bool cte)
 {
+    TRACE_FUNCTION;
     UmlOperation * op = UmlOperation::create(this, name());
 
     if (op == 0)
@@ -202,6 +231,7 @@ void UmlClass::addCopy(bool cte)
 
 void UmlClass::addAssign(bool cte)
 {
+    TRACE_FUNCTION;
     UmlOperation * op = UmlOperation::create(this, "operator=");
 
     if (op == 0)

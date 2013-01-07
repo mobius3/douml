@@ -2192,7 +2192,7 @@ void BrowserPackage::save_stereotypes()
     nl_indent(st);
     st << "package_stereotypes ";
     st.flush();
-    //QLOG_INFO() << newdef->data();
+    QLOG_INFO() << newdef->data();
     save_unicode_string_list(its_default_stereotypes, st);
     nl_indent(st);
     st << "  " << stringify(UmlDependency);
@@ -2231,7 +2231,7 @@ void BrowserPackage::save_stereotypes()
 
     st << '\000';
     st.flush();
-    //QLOG_INFO() << newdef->data();
+    QLOG_INFO() << newdef->data();
     save_if_needed("stereotypes", newdef);
 }
 

@@ -92,6 +92,7 @@ bool Socket::write_block(char * data, unsigned int len)
     QLOG_INFO() << "ToolCom write " << len << "bytes\n";
 #endif
 
+    QLOG_INFO() << QByteArray(data, len);
     len += 4;
 
     for (;;) {
@@ -285,16 +286,9 @@ void ToolCom::close_all()
 const char * ToolCom::read_buffer()
 {
     if (wanted == 0) {
-        // length not yet read, get it
         char s[4];
 
-        while ((sock->readBlock(s, 4) != 4));/* {
-
-
-
-            fatal_error("ToolCom read error");
-            return 0;
-        }*/
+        while ((sock->readBlock(s, 4) != 4));
 
         const char * p = s;
 
@@ -313,9 +307,6 @@ const char * ToolCom::read_buffer()
     int nread = sock->readBlock(buffer_in + already_read, wanted);
 
     if (nread == -1) {
-
-
-
         fatal_error("ToolCom read error");
         return 0;
     }
@@ -442,6 +433,7 @@ void ToolCom::check_size_out(unsigned n)
 
 void ToolCom::write_unsigned(unsigned u)
 {
+    QLOG_INFO() << "ToolCom::write_unsigned(" << u << ")\n";
     check_size_out(4);
 
     p_buffer_out[0] = u >> 24;

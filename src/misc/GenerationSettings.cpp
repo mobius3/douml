@@ -1499,13 +1499,16 @@ void GenerationSettings::send_idl_def(ToolCom * com)
 
 bool GenerationSettings::tool_global_uml_cmd(ToolCom * com, const char * args)
 {
+    //QLOG_INFO() << "Command will be: " + QString(stringify(static_cast<UmlSettingsCmd>((unsigned char) args[-1])));
+    QLOG_INFO() << "Command will be: " + (unsigned char) args[-1];
     switch ((unsigned char) args[-1]) {
     case getUmlSettingsCmd:
+        QLOG_INFO() << "Using getUmlSettingsCmd";
         send_uml_def(com);
         break;
 
     default:
-
+        QLOG_INFO() << "Using default";
         // set cmds only
         if (!BrowserView::get_project()->is_writable())
             com->write_bool(FALSE);
@@ -1550,6 +1553,7 @@ bool GenerationSettings::tool_global_uml_cmd(ToolCom * com, const char * args)
                 break;
 
             default:
+                QLOG_INFO() << "Using default again";
                 com->write_bool(FALSE);
                 return TRUE;
             }

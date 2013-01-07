@@ -116,7 +116,7 @@ void set_on_load_diagram(bool y)
 
 const char * stringify(UmlVisibility v)
 {
-    //QLOG_INFO() << "Call to stringigy detected";
+    QLOG_INFO() << "Call to stringigy detected";
     switch (v) {
     case UmlPublic:
         return "public";

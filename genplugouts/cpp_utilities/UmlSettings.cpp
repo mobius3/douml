@@ -5,6 +5,7 @@
 #include "UmlSettingsCmd.h"
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
+#include "Logging/QsLog.h"
 //Added by qt3to4:
 #include <Q3CString>
 Q3CString UmlSettings::artifactDescription()
@@ -170,13 +171,17 @@ UmlStereotype * UmlSettings::_class_stereotypes;
 
 void UmlSettings::read_()
 {
+    QLOG_INFO() << "2.2.4";
     unsigned n;
     unsigned index;
 
     n = UmlCom::read_unsigned();
+    QLOG_INFO() << "2.2.4.1";
+    QLOG_INFO() << "Will create built-ins count: " + QString::number(n);
 
     _builtins = new UmlBuiltin[n];
 
+    QLOG_INFO() << "2.2.5";
     if (n / 2 > _map_builtins.size())
         _map_builtins.resize(_map_builtins.size() * 2 - 1);
 
@@ -188,7 +193,7 @@ void UmlSettings::read_()
     n = UmlCom::read_unsigned();
 
     _relation_attribute_stereotypes = new UmlStereotype[n];
-
+    QLOG_INFO() << "2.2.6";
     if (n / 2 > _map_relation_attribute_stereotypes.size())
         _map_relation_attribute_stereotypes.resize(_map_relation_attribute_stereotypes.size() * 2 - 1);
 
@@ -199,7 +204,7 @@ void UmlSettings::read_()
     }
 
     n = UmlCom::read_unsigned();
-
+    QLOG_INFO() << "2.2.7";
     _class_stereotypes = new UmlStereotype[n];
 
     if (n / 2 > _map_class_stereotypes.size())
@@ -210,7 +215,7 @@ void UmlSettings::read_()
         _map_class_stereotypes.insert(_class_stereotypes[index].uml,
                                       &_class_stereotypes[index]);
     }
-
+    QLOG_INFO() << "2.2.8";
     _artifact_default_description = UmlCom::read_string();
     _class_default_description = UmlCom::read_string();
     _operation_default_description = UmlCom::read_string();
@@ -222,8 +227,11 @@ void UmlSettings::read_()
 
 void UmlSettings::read_if_needed_()
 {
-    if (!_defined) {
+    QLOG_INFO() << "2.2.2";
+    if (!_defined)
+    {
         UmlCom::send_cmd(umlSettingsCmd, getUmlSettingsCmd);
+        QLOG_INFO() << "2.2.3";
         read_();
         _defined = TRUE;
     }

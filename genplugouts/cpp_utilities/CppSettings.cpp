@@ -8,6 +8,7 @@
 #include "CppSettingsCmd.h"
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
+#include "Logging/QsLog.h"
 //Added by qt3to4:
 #include <Q3CString>
 bool CppSettings::useDefaults()
@@ -810,6 +811,7 @@ bool CppSettings::set_OperationDecl(Q3CString v)
 
 const Q3CString & CppSettings::operationDef()
 {
+    QLOG_INFO() << "2.1";
     read_if_needed_();
 
     return _oper_def;
@@ -1213,9 +1215,12 @@ void CppSettings::read_()
 
 void CppSettings::read_if_needed_()
 {
+    QLOG_INFO() << "2.2";
     UmlSettings::read_if_needed_();
+    QLOG_INFO() << "2.3";
 
     if (!_defined) {
+        QLOG_INFO() << "2.4";
         UmlCom::send_cmd(cppSettingsCmd, getCppSettingsCmd);
         read_();
         _defined = TRUE;
