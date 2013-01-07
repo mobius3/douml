@@ -39,7 +39,7 @@ int main(int argc, char ** argv)
     logger.setLoggingLevel(QsLogging::TraceLevel);
     QDir dir;
     dir.setPath(qApp->applicationDirPath());
-    dir.remove(QString("cpp_generator") + QString(".log"));
+    dir.remove(QString("cpp_utils") + QString(".log"));
     const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString("cpp_generator") + QString(".log")));
     QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath));
     QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());

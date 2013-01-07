@@ -11,6 +11,7 @@
 #include "UmlClass.h"
 #include "UmlSettings.h"
 #include "MiscGlobalCmd.h"
+#include "Logging/QsLog.h"
 bool UmlCom::connect(unsigned int port)
 {
     sock = new Q3SocketDevice(Q3SocketDevice::Stream);
@@ -141,7 +142,8 @@ void UmlCom::read_buffer(unsigned int len)
     int nread;
     char * p = buffer_in;
 
-    for (;;) {
+    for (;;)
+    {
         if ((nread = sock->readBlock(p, remainder)) == -1) {
             if (sock->error() != 0) {
 #ifdef TRACE
@@ -707,7 +709,8 @@ void UmlCom::fatal_error(const Q3CString &
 
 void UmlCom::flush()
 {
-    if (sock != 0) {
+    if (sock != 0)
+    {
         int len = p_buffer_out - buffer_out - 4;
         /* the four first bytes of buffer_out are free to contains the length */
         buffer_out[0] = len >> 24;
@@ -718,10 +721,12 @@ void UmlCom::flush()
         len += 4;
         p_buffer_out = buffer_out;
 
-        for (;;) {
+        for (;;)
+        {
             int sent = sock->writeBlock(p_buffer_out, len);
 
-            if (sent == -1) {
+            if (sent == -1)
+            {
                 close();	// to not try to send "bye" !
                 fatal_error("send error");
             }

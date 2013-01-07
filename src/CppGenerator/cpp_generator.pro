@@ -92,6 +92,9 @@ SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
     Logging/QsLogDest.cpp \
     Logging/QsLog.cpp \
+    Logging/QsDebugOutput.cpp \
+    Logging/QsLogDest.cpp \
+    Logging/QsLog.cpp \
     Logging/QsDebugOutput.cpp
         
 TARGET          = cpp_generator
@@ -114,3 +117,8 @@ Debug{
 }
 
     DESTDIR = ../../bin
+
+HEADERS += \
+    Logging/QsLogDest.h \
+    Logging/QsLog.h \
+    Logging/QsDebugOutput.h

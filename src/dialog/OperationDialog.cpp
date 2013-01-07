@@ -46,6 +46,7 @@
 #include <QHBoxLayout>
 #include <Q3VBoxLayout>
 #include <Q3CString>
+#include <QRegExp>
 #include <functional>
 
 #include "OperationDialog.h"
@@ -1531,7 +1532,11 @@ void OperationDialog::cpp_edit_param_decl()
         CppParamsDialog d(this, table, cppTab->ui->edCppDeclProto, TRUE);
 
         if (d.exec() == QDialog::Accepted)
+        {
             cpp_update_decl();
+            cpp_def_from_decl();
+            cpp_update_def();
+        }
     }
     else
         msg_warning("Bouml", TR("wrong specification"));
@@ -1997,12 +2002,34 @@ void OperationDialog::cpp_unmapped_def()
     cppTab->ui->edCppDefProto->setText(QString());
     cppTab->ui->edCppDefActual->setText(QString());
 }
+struct UserTag
+{
+    UserTag(QString _tag, QString _leftContext,QString _rightContext):
+         leftContext(_leftContext),rightContext(_rightContext),tag(_tag)
+    {}
+    QString leftContext;
+    QString rightContext;
+    QString tag;
+};
 
 void OperationDialog::cpp_def_from_decl()
 {
 
     QString dcl = cppTab->ui->edCppDeclProto->text();
     QString def;
+    QString currentActualText = cppTab->ui->edCppDefProto->text();
+    QRegExp rx(tr("[@][{][A-Za-z0-9]+[}]"));
+    int shift = 0;
+    QList<UserTag> tags;
+    while(rx.indexIn(currentActualText, shift) != -1)
+    {
+        int matchEnd = rx.pos()+rx.matchedLength();
+        QString leftContext = currentActualText.mid(rx.pos() - 10, rx.pos() < 10 ? rx.pos() : 10);
+        QString rightContext = currentActualText.mid(matchEnd, currentActualText.length() - matchEnd < 10 ? currentActualText.length() - matchEnd : 10);
+        tags.append(UserTag(rx.cap(),leftContext,rightContext));
+        shift = matchEnd;
+    }
+
 
     // manage abstract
     if ((dcl.find("${abstract}") == -1) || // abstract removed
@@ -2067,6 +2094,36 @@ void OperationDialog::cpp_def_from_decl()
             def.remove(index2, index3 - index2 + 1);
             index1 = index2;
         }
+    }
+    QList<UserTag> failedTags;
+    for(auto tag : tags)
+    {
+        //first we try to find left context in the new definition
+        QRegExp rx(QRegExp::escape(tag.leftContext));
+        int index = rx.indexIn(def);
+        if(index != -1)
+        {
+            def.replace(tag.leftContext, tag.leftContext + tag.tag);
+            continue;
+        }
+        // next we try right context
+        rx.setPattern(QRegExp::escape(tag.leftContext));
+        index = rx.indexIn(def);
+        if(index != -1)
+        {
+            def.replace(tag.rightContext, tag.tag + tag.leftContext);
+            continue;
+        }
+        failedTags.append(tag);
+    }
+    if(failedTags.size() > 0)
+    {
+        QString tagString;
+        for(auto tag : failedTags)
+            tagString.append(tag.tag + tr(","));
+        if(tagString.length() > 0)
+            tagString.chop(1);
+        QMessageBox::critical(0, tr("Warning!"), tr("Could not find correct place for these tags: " + tagString), QMessageBox::Ok);
     }
 
     // update def
@@ -6066,7 +6123,6 @@ void CppParamsDialog::polish()
 void CppParamsDialog::accept()
 {
     tbl->update_edform();
-
     QDialog::accept();
 }
 
