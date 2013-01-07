@@ -27,6 +27,7 @@
 #define MENUITAL_H
 
 #include <qmenudata.h>
+#include <QMenu>
 
 class MenuItalic : public QMenuItem
 {

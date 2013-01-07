@@ -576,7 +576,12 @@ void BrowserClass::menu()
 
 
                                 if (((OperationData *) oper->get_data())->get_is_abstract())
-                                    inhopersubm.insertItem(new MenuItalic(menuItemText,inhopersubm.font()),index);
+                                {
+                                    QFont font = inhopersubm.font();
+                                    font.setItalic(true);
+                                    inhopersubm.insertItem(menuItemText, index);
+                                    inhopersubm.actions().last()->setFont(font);
+                                }
                                 else
                                     inhopersubm.insertItem(menuItemText, index);
                             }
