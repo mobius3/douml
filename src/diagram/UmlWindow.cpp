@@ -54,6 +54,7 @@
 #include <Q3ValueList>
 #include <QTextStream>
 #include <QKeyEvent>
+#include <QStyle>
 //#include <qcdestyle.h>
 //#include <qsgistyle.h>
 
@@ -200,6 +201,11 @@ QString browserSearchText()
 {
     return TR("To search an item in the <i>browser</i>.");
 }
+QString whatsThisText()
+{
+    return TR("To get information about items.");
+}
+
 QString fontSizeMenuText()
 {
     return TR("To set the point size of the base font used in the "
@@ -288,6 +294,9 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
                            this, SLOT(browser_search()), projectTools, "browser search");
     Q3WhatsThis::add(browserSearch, browserSearchText());
 
+
+
+
     prev = CreateToolButton(*leftPixmap,
                             this, SLOT(prev_select()), projectTools, "previous selected");
     Q3WhatsThis::add(prev, prevText());
@@ -302,6 +311,10 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
 
     Q3WhatsThis::add(projectOpen, projectOpenText());
     Q3WhatsThis::add(projectSave, projectSaveText());
+    QToolButton * whatsThisButton
+        = CreateToolButton(QApplication::style()->standardIcon(QStyle::SP_TitleBarContextHelpButton).pixmap(),
+                           this, SLOT(whats_this()), projectTools, "Whats's this?");
+    Q3WhatsThis::add(whatsThisButton, whatsThisText());
 
     projectMenu = new Q3PopupMenu(this);
     menuBar()->insertItem(TR("&Project"), projectMenu);
@@ -443,7 +456,7 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
     help->insertItem(TR("About&Qt"), this, SLOT(aboutQt()));
     help->insertSeparator();
     help->insertItem(TR("&Help"), this, SLOT(help()), ::Qt::Key_F1);
-    help->insertItem(TR("What's This"), this, SLOT(whatsThis()), ::Qt::SHIFT +::Qt::Key_F1);
+    help->insertItem(TR("What's This"), this, SLOT(whats_this()), ::Qt::SHIFT +::Qt::Key_F1);
 
     //
     // sub windows
@@ -2207,6 +2220,11 @@ void UmlWindow::keyPressEvent(QKeyEvent * e)
     }
     else
         QMainWindow::keyPressEvent(e);
+}
+
+void UmlWindow::whats_this() const
+{
+    QWhatsThis::enterWhatsThisMode();
 }
 
 //

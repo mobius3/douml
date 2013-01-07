@@ -223,6 +223,10 @@ private slots:
 
     virtual void keyPressEvent(QKeyEvent * e);
 
+public slots:
+    void whats_this() const;
+
+
 };
 
 extern QString template_project();
