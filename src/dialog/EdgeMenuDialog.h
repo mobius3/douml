@@ -62,6 +62,8 @@ protected:
     //! called when user enters the window
     virtual void enterEvent(QEvent * event);
 
+    virtual void closeEvent(QCloseEvent *) override;
+
     void moveEvent(QMoveEvent *);
 
     virtual void focusOutEvent(QFocusEvent *) override;

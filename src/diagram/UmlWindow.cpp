@@ -387,6 +387,8 @@ UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose
     completion_id =
         miscMenu->insertItem(TR("Completion in dialog"), this,
                              SLOT(do_completion()));
+
+
     miscMenu->setItemChecked(completion_id, TRUE);
     miscMenu->setWhatsThis(completion_id, completionText());
 
