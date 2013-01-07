@@ -84,10 +84,9 @@ void EdgeMenuDialog::BreakConnectionToToolBar()
     isConnectedToToolBar = false;
 }
 
-void EdgeMenuDialog::leaveEvent(QEvent * event)
+void EdgeMenuDialog::leaveEvent(QEvent * )
 {
     QPoint cursorPosition = mapFromGlobal(QCursor::pos());
-    int yFixup = frameGeometry().height() - height();
     bool isWithinX = cursorPosition.x() > 0 && cursorPosition.x() < size().width();
     bool isWithinY = cursorPosition.y() > 0 && cursorPosition.y() < size().height();
     bool isOutside = !isWithinX || !isWithinY;
@@ -96,7 +95,7 @@ void EdgeMenuDialog::leaveEvent(QEvent * event)
         emit edgeMenuRequested(this->TypeID());
 }
 
-void EdgeMenuDialog::enterEvent(QEvent * event)
+void EdgeMenuDialog::enterEvent(QEvent * )
 {
     QPoint cursorPosition = mapFromGlobal(QCursor::pos());
     bool isWithinX = cursorPosition.x() > 0 && cursorPosition.x() < size().width();
@@ -122,22 +121,12 @@ void EdgeMenuDialog::focusOutEvent(QFocusEvent *)
     emit lostFocus();
 }
 
-void EdgeMenuDialog::showEvent(QShowEvent * event)
+void EdgeMenuDialog::showEvent(QShowEvent * )
 {
     An<EdgeMenuFactory> factory;
     this->move(QCursor::pos().x() + 15, QCursor::pos().y());
     factory->SpawnEdgeMenu(this->TypeID(), this, QCursor::pos());
     this->setFocus();
-}
-
-void EdgeMenuDialog::wheelEvent(QWheelEvent * event)
-{
-    //    currentTab += event->delta()/event->delta();
-    //    if(currentTab > tabBar()->count())
-    //        currentTab = 0;
-    //    if(currentTab < 0)
-    //        currentTab = tabBar()->count() - 1;
-    //    tabBar()->setCurrentIndex(currentTab);
 }
 
 void EdgeMenuDialog::RegisterTab(QString name, QWidget * widget)
@@ -156,7 +145,7 @@ void EdgeMenuDialog::ShowTab(QString name)
     addTab(tabs[name], name);
 }
 
-void EdgeMenuDialog::SetDialogMode(bool _isWritable)
+void EdgeMenuDialog::SetDialogMode(bool /*_isWritable*/)
 {
 
     if (isWritable)
@@ -283,7 +272,7 @@ void EdgeMenuDialog::FillGuiElements(BrowserNode *)
 
 bool EdgeMenuDialog::ContainsUnsavedChanges()
 {
-    false;
+    return false;
 }
 
 void EdgeMenuDialog::SaveData()

@@ -71,7 +71,7 @@ protected:
     //! called on window show()
     void showEvent(QShowEvent * event);
     //! called when user srolls with mouse wheel
-    void wheelEvent(QWheelEvent * event);
+
 
     //! registers tab for later use
     //! registered tab can be safely removed from tab dialog and then restored

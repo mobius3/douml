@@ -163,8 +163,8 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
         TraceDialog::clear();
 
     ToolCom * com = (unused.isEmpty())
-                    ? new ToolCom
-                    : unused.take(0);
+            ? new ToolCom
+            : unused.take(0);
 
     com->DisconnectExternalProcess();
 
@@ -332,9 +332,9 @@ unsigned ToolCom::get_unsigned(const char *& p)
     p += 4;
 
     return (((unsigned char *) p)[-4] << 24) +
-           (((unsigned char *) p)[-3] << 16) +
-           (((unsigned char *) p)[-2] << 8) +
-           ((unsigned char *) p)[-1];
+            (((unsigned char *) p)[-3] << 16) +
+            (((unsigned char *) p)[-2] << 8) +
+            ((unsigned char *) p)[-1];
 }
 
 bool ToolCom::get_bool(const char *& p)
@@ -386,7 +386,7 @@ bool ToolCom::get_visibility(UmlVisibility & v, const char *& p)
     v = (UmlVisibility) * p++;
 
     if ((api_version < 23) &&
-        (v == UmlPackageVisibility))	// UmlDefaultVisibility for plug-out
+            (v == UmlPackageVisibility))	// UmlDefaultVisibility for plug-out
         v = UmlDefaultVisibility;
 
     return ((unsigned) v) != UmlDefaultVisibility;
@@ -397,7 +397,7 @@ bool ToolCom::get_extended_visibility(UmlVisibility & v, const char *& p)
     v = (UmlVisibility) * p++;
 
     if ((api_version < 23) &&
-        (v == UmlPackageVisibility))	// UmlDefaultVisibility for plug-out
+            (v == UmlPackageVisibility))	// UmlDefaultVisibility for plug-out
         v = UmlDefaultVisibility;
 
     return ((unsigned) v) <= UmlDefaultVisibility;
@@ -550,10 +550,10 @@ void ToolCom::write_ack(bool b)
 }
 
 void ToolCom::fatal_error(const char *
-#ifdef DEBUGCOM
+                          #ifdef DEBUGCOM
                           msg
-#endif
-                         )
+                          #endif
+                          )
 {
 #ifdef DEBUGCOM
     QLOG_INFO() << "ToolCom::fatal_error " << msg << '\n';
@@ -652,7 +652,8 @@ void ToolCom::data_received(Socket * who)
                                 << " for " << bn->get_name() << '\n';
 #endif
 
-                    if (!bn->tool_cmd(this, p + 1)) {
+                    if (!bn->tool_cmd(this, p + 1))
+                    {
 #ifdef DEBUGCOM
                         QLOG_INFO() << "unknown cmd : " << (unsigned) p[0]
                                     << " for " << bn->get_name() << '\n';
@@ -660,7 +661,7 @@ void ToolCom::data_received(Socket * who)
                         close();
                     }
                 }
-                break;
+                    break;
 
                 case classGlobalCmd:
 #ifdef DEBUGCOM
@@ -757,7 +758,7 @@ void ToolCom::data_received(Socket * who)
                             if (bn->api_compatible(api_version))
                                 bn->write_id(this);
                     }
-                    break;
+                        break;
 
                     case loadCmd:
                         if (!BrowserNode::edition_active()) {
@@ -826,7 +827,7 @@ void ToolCom::data_received(Socket * who)
                         else
                             op->write_id(this);
                     }
-                    break;
+                        break;
 
                     default:
 #ifdef DEBUGCOM

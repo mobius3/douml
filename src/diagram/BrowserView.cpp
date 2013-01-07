@@ -322,7 +322,7 @@ void BrowserView::keyPressEvent(QKeyEvent * e)
         else if (s == "Open project")
             UmlWindow::load_it();
         else {
-            BrowserNode * bn = (BrowserNode *) selectedItem();
+            BrowserNode * bn = (BrowserNode *) currentItem();
 
             if (bn != 0) {
                 if (s == "Menu")

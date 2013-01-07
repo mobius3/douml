@@ -27,10 +27,6 @@
 //
 // *************************************************************************
 
-
-
-
-
 #include <q3dragobject.h>
 #include <qcursor.h>
 #include <q3ptrdict.h>
