@@ -672,7 +672,6 @@ void UmlBaseOperation::read_cpp_() {
   _cpp_friend = UmlCom::read_bool();
   _cpp_virtual = UmlCom::read_bool();
   _cpp_inline = UmlCom::read_bool();
-  QLOG_INFO() << "passed inline";
   _cpp_default = UmlCom::read_bool();
   _cpp_delete = UmlCom::read_bool();
   _cpp_override = UmlCom::read_bool();
