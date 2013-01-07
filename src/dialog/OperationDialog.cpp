@@ -176,34 +176,32 @@ void OperationDialog::init_get_set()
 // general tab
 void OperationDialog::init_uml()
 {
-    Q3Grid * grid;
-
-    grid = new Q3Grid(2, this);
-    umltab = grid;
+    umlGrid = new Q3Grid(2, this);
+    umltab = umlGrid;
     RegisterTab("Uml", umltab);
-    grid->setSpacing(5);
-    grid->setMargin(5);
+    umlGrid->setSpacing(5);
+    umlGrid->setMargin(5);
 
-    new QLabel(TR("class : "), grid);
+    new QLabel(TR("class : "), umlGrid);
     lblFullClassName = new QLabel(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE),
-                                  grid); //todo
+                                  umlGrid); //todo
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(oper->name(), grid);
+    new QLabel(TR("name : "), umlGrid);
+    edname = new LineEdit(oper->name(), umlGrid);
 
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(isWritable, grid);
+    new QLabel(TR("stereotype : "), umlGrid);
+    edstereotype = new Q3ComboBox(isWritable, umlGrid);
 
-    pbValueType = new SmallPushButton(TR("value type :"), grid);
+    pbValueType = new SmallPushButton(TR("value type :"), umlGrid);
     connect(pbValueType, SIGNAL(clicked()), this, SLOT(menu_returntype()));
 
 
-    edreturn_type = new Q3ComboBox(isWritable, grid);
+    edreturn_type = new Q3ComboBox(isWritable, umlGrid);
 
-    new QLabel(grid);
+    new QLabel(umlGrid);
 
-    htabBgUml = new Q3HBox(grid);
+    htabBgUml = new Q3HBox(umlGrid);
     bgUml1 = uml_visibility.init(htabBgUml, oper->get_uml_visibility(), TRUE);
 
     htabBgUml->setStretchFactor(bgUml1, 1000);
@@ -228,13 +226,13 @@ void OperationDialog::init_uml()
 
     connect(forcegenbody_cb, SIGNAL(toggled(bool)), SLOT(forcegenbody_toggled(bool)));
 
-    new QLabel(TR("parameters : "), grid);
-    table = new ParamsTable(oper, grid, list, this, !isWritable); //todo update the table
+    new QLabel(TR("parameters : "), umlGrid);
+    table = new ParamsTable(oper, umlGrid, list, this, !isWritable); //todo update the table
 
-    new QLabel(TR("exceptions : "), grid);
-    etable = new ExceptionsTable(oper, grid, list, !isWritable); //todo update the table
+    new QLabel(TR("exceptions : "), umlGrid);
+    etable = new ExceptionsTable(oper, umlGrid, list, !isWritable); //todo update the table
 
-    Q3VBox * vtab = new Q3VBox(grid);
+    Q3VBox * vtab = new Q3VBox(umlGrid);
 
     new QLabel(TR("description :"), vtab);
     pbEditor = new SmallPushButton(TR("Editor"), vtab);
@@ -243,16 +241,16 @@ void OperationDialog::init_uml()
     connect(pbEditor, SIGNAL(clicked()), this, SLOT(edit_description()));
     connect(pbDefault, SIGNAL(clicked()), this, SLOT(default_description()));
 
-    comment = new MultiLineEdit(grid);
+    comment = new MultiLineEdit(umlGrid);
 
-    vtab = new Q3VBox(grid);
+    vtab = new Q3VBox(umlGrid);
     new QLabel(TR("constraint :"), vtab);
     pbConstraintEditor = new SmallPushButton(TR("Editor"), vtab);
     connect(pbConstraintEditor, SIGNAL(clicked()), this, SLOT(edit_constraint()));
 
-    constraint = new MultiLineEdit(grid);
+    constraint = new MultiLineEdit(umlGrid);
 
-    addTab(grid, "Uml");
+    addTab(umlGrid, "Uml");
 }
 
 
@@ -341,13 +339,15 @@ void OperationDialog::FillUmlTab(OperationData * oper)
     else
         forcegenbody_cb->setChecked(false);
 
-    ///!!! table = new ParamsTable(oper, grid, list, this, !isWritable); //todo update the table
+    init_get_set();
+    table->update(oper, list, this, !isWritable); //todo update the table
     if (oper->is_get_or_set)
         table->setEnabled(FALSE);
     else
         table->setEnabled(true);
 
-    ///!!! etable = new ExceptionsTable(oper, grid, list, !isWritable); //todo update the table
+    //etable->update(oper,oper->browser_node->children(inh, UmlGeneralisation, UmlRealize));
+            //= new ExceptionsTable(oper, umlGrid, list, !isWritable); //todo update the table
     pbEditor->setEnabled(isWritable);
     pbDefault->setEnabled(isWritable);
     comment->setText(oper->get_browser_node()->get_comment());
@@ -3205,7 +3205,8 @@ void OperationDialog::SaveData()
 
         bool newst = FALSE;
 
-        if (!oper->is_get_or_set) {
+        if (!oper->is_get_or_set)
+        {
             AType t;
 
             s = edreturn_type->currentText().stripWhiteSpace();
@@ -4879,6 +4880,92 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
             setText(index, 4, QString());
         }
 
+        setItem(index, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
+        setText(index, 1, QString());
+        setItem(index, 2, new ComboItem(this, QString(), alltypes));
+        setText(index, 3, QString());
+        setText(index, 4, QString());
+    }
+
+    adjustColumn(0);
+    //setColumnStretchable (1, TRUE);
+    horizontalHeader()->setResizeEnabled(TRUE, 1);
+    setColumnStretchable(2, TRUE);
+    //setColumnStretchable (3, TRUE);
+    horizontalHeader()->setResizeEnabled(TRUE, 3);
+
+    if (!visit) {
+        adjustColumn(4);
+        setColumnStretchable(4, FALSE);
+
+        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
+                this, SLOT(button_pressed(int, int, int, const QPoint &)));
+        connect(this, SIGNAL(valueChanged(int, int)),
+                this, SLOT(value_changed(int, int)));
+    }
+}
+
+void ParamsTable::update(OperationData *o, const QStringList &list, OperationDialog *d, bool visit)
+{
+
+    int index;
+    int sup = o->get_n_params();
+
+    setSorting(-1);
+    setSelectionMode(NoSelection);	// single does not work
+    setRowMovingEnabled(TRUE);
+
+    disconnect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
+            this, SLOT(button_pressed(int, int, int, const QPoint &)));
+    disconnect(this, SIGNAL(valueChanged(int, int)),
+            this, SLOT(value_changed(int, int)));
+
+    if (visit) {
+        for (index = 0; index < sup; index += 1) {
+            setItem(index, 0, new TableItem(this, Q3TableItem::Never, stringify(o->get_param_dir(index))));
+            setItem(index, 1, new TableItem(this, Q3TableItem::Never, o->get_param_name(index)));
+            setItem(index, 2, new TableItem(this, Q3TableItem::Never, o->get_param_type(index).get_full_type()));
+            setItem(index, 3, new TableItem(this, Q3TableItem::Never, o->get_param_default_value(index)));
+        }
+    }
+    else {
+        horizontalHeader()->setLabel(4, TR("do"));
+
+        alltypes = GenerationSettings::basic_types();
+        ((ClassData *)((BrowserNode *) o->get_browser_node()->parent())->get_data())
+        ->addFormals(alltypes);
+
+        for (QStringList::ConstIterator it = list.begin(); it != list.end(); ++it)
+            alltypes.append(*it);
+
+        if (DirList.count() == 0) {
+            // Made DirList without be linked with the items order
+            DirList.append(QString());
+            DirList.append(QString());
+            DirList.append(QString());
+            DirList[UmlInOut] = stringify(UmlInOut);
+            DirList[UmlIn] = stringify(UmlIn);
+            DirList[UmlOut] = stringify(UmlOut);
+            // can't be return
+        }
+        int rowCount = numRows();
+        for (index = rowCount - 1; index > sup; index -= 1)
+            removeRow(index);
+
+        for (index = 0; index < sup; index += 1)
+        {
+            if(index == numRows())
+                insertRows(numRows());
+
+            setItem(index, 0, new ComboItem(this, stringify(o->get_param_dir(index)), DirList, FALSE));
+            setText(index, 1, o->get_param_name(index));
+            setItem(index, 2, new ComboItem(this, o->get_param_type(index).get_full_type(), alltypes));
+            setText(index, 3, o->get_param_default_value(index));
+            setText(index, 4, QString());
+        }
+
+        if(index == numRows())
+            insertRows(numRows());
         setItem(index, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
         setText(index, 1, QString());
         setItem(index, 2, new ComboItem(this, QString(), alltypes));

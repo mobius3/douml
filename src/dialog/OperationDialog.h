@@ -29,6 +29,7 @@
 #include <q3tabdialog.h>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <Q3Grid>
 #include <QVBoxLayout>
 #include <QLabel>
 
@@ -79,6 +80,7 @@ protected:
 
     // uml tab
     QWidget * umltab;
+    Q3Grid * umlGrid;
     LineEdit * edname;
     Q3ComboBox * edreturn_type;
     int edreturn_type_offset;
@@ -371,6 +373,10 @@ protected:
 
 public:
     ParamsTable(OperationData * a, QWidget * parent,
+                const QStringList & list,
+                OperationDialog * d, bool visit);
+
+    void update(OperationData * o,
                 const QStringList & list,
                 OperationDialog * d, bool visit);
 
