@@ -127,12 +127,12 @@ void EdgeMenuDialog::showEvent(QShowEvent * event)
 
 void EdgeMenuDialog::wheelEvent(QWheelEvent * event)
 {
-//    currentTab += event->delta()/event->delta();
-//    if(currentTab > tabBar()->count())
-//        currentTab = 0;
-//    if(currentTab < 0)
-//        currentTab = tabBar()->count() - 1;
-//    tabBar()->setCurrentIndex(currentTab);
+    //    currentTab += event->delta()/event->delta();
+    //    if(currentTab > tabBar()->count())
+    //        currentTab = 0;
+    //    if(currentTab < 0)
+    //        currentTab = tabBar()->count() - 1;
+    //    tabBar()->setCurrentIndex(currentTab);
 }
 
 void EdgeMenuDialog::RegisterTab(QString name, QWidget * widget)
@@ -154,11 +154,13 @@ void EdgeMenuDialog::ShowTab(QString name)
 void EdgeMenuDialog::SetDialogMode(bool _isWritable)
 {
 
-    if (isWritable) {
+    if (isWritable)
+    {
         setOkButton(QObject::tr("OK"));
         setCancelButton(QObject::tr("Cancel"));
     }
-    else {
+    else
+    {
         setOkButton(QString());
         setCancelButton(QObject::tr("Close"));
     }
@@ -172,7 +174,8 @@ void EdgeMenuDialog::OnPickNextSibling()
     BrowserNode * originalNode = GetCurrentNode();
     BrowserNode * currentNode = originalNode;
 
-    while (continueSearch) {
+    while (continueSearch)
+    {
         nextNode = dynamic_cast<BrowserNode *>(currentNode->itemAbove());
         //QLOG_INFO() << "CurrentNode is: "<< currentNode->get_name();
 
@@ -187,8 +190,8 @@ void EdgeMenuDialog::OnPickNextSibling()
 
         //QLOG_INFO() << originalNode->get_stype();
         //QLOG_INFO() << nextNode->get_stype();
-//        QLOG_INFO() << "NEXT: " << "Origin level : " << originalNode->depth();
-//        QLOG_INFO() << "NEXT: " << "Current level : " << nextNode->depth();
+        //        QLOG_INFO() << "NEXT: " << "Origin level : " << originalNode->depth();
+        //        QLOG_INFO() << "NEXT: " << "Current level : " << nextNode->depth();
         if (sameLevel && sameType)
             continueSearch = false;
 
@@ -210,7 +213,8 @@ void EdgeMenuDialog::OnPickPreviousSibling()
     int originalDepth = originalNode->depth();
     BrowserNode * currentNode = originalNode;
 
-    while (continueSearch) {
+    while (continueSearch)
+    {
         //QLOG_INFO() << "CurrentNode is: " << currentNode->get_name();
         previousNode = dynamic_cast<BrowserNode *>(currentNode->itemBelow());
 
@@ -279,28 +283,15 @@ bool EdgeMenuDialog::ContainsUnsavedChanges()
 
 void EdgeMenuDialog::SaveData()
 {
-    //todo implement
+    // this is reimplemented to do actual work in subclasses
+    // but since not all subclasses reimplement this as of now
+    // I can't make this pure virtual
+    // Therefore, I provide default implementation that does nothing instead
 }
 
 void EdgeMenuDialog::RejectData()
 {
-    //todo implement
 }
-
-//BrowserNode *EdgeMenuDialog::GetUpperLevelNode()
-//{
-//    BrowserNode* previousNode = 0;
-//    int originalDepth = originalNode->depth();
-//    while(true)
-//    {
-//        previousNode = dynamic_cast<BrowserNode*>(this->itemBelow());
-//        if(!previousNode)
-//            return nullptr;
-//        int previousDepth = previousNode->depth();
-//        if(previousDepth < originalDepth)
-//            return previousNode;
-//    }
-//}
 
 void EdgeMenuDialog::SetCurrentNode(BrowserNode * node)
 {
@@ -318,7 +309,7 @@ void EdgeMenuDialog::IntitiateMove(QPoint origin)
     dialogOrigin = mapToGlobal(QPoint(
                                    (frameGeometry().width() - width()) / 2,
                                    -1 * (frameGeometry().height() - height())
-                               ));
+                                   ));
     modificationMode = wmm_drag;
 }
 
@@ -334,7 +325,8 @@ void EdgeMenuDialog::ResizeThis(QPoint origin, QPoint newPoint)
 {
     int newWidth;
 
-    if (origin.x() > newPoint.x()) {
+    if (origin.x() > newPoint.x())
+    {
         newWidth = originalSize.width() + (origin.x() - newPoint.x());
         this->move(origin.x() - 1 * (origin.x() - newPoint.x()), origin.y());
     }

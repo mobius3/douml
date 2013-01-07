@@ -135,6 +135,7 @@ signals:
     void hideEdgeMenu();
     void repositionMenu(const QPoint &);
 
+
 public slots:
     virtual void OnPickNextSibling();
     virtual void OnPickPreviousSibling();

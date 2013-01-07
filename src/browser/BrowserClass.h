@@ -83,6 +83,9 @@ public:
     virtual BasicData * add_relation(UmlCode, BrowserNode *);
     virtual Q3PtrList<BrowserNode> parents() const;
     void get_all_parents(Q3PtrList<BrowserClass> &) const;
+    // more modern interface to get all parents. Still a lot of qt3 compatibility inside
+    QList<BrowserClass*> get_all_parents();
+    QStringList get_parents_names();
     virtual QString check_inherit(const BrowserNode * parent) const;
     bool have_abstract_operation();
     void get_opers(Q3ValueList<const OperationData *> & opers,
@@ -176,6 +179,8 @@ public:
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
 
     static BrowserClass * temporary();
+
+
 };
 
 #endif

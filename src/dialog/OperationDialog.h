@@ -278,6 +278,8 @@ protected:
     static void post_python_edit_body(OperationDialog * d, QString s);
     static void post_php_edit_body(OperationDialog * d, QString s);
 
+    void SaveData() override;
+
 public:
     OperationDialog(OperationData * a, DrawingLanguage l);
     virtual ~OperationDialog();

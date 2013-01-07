@@ -1195,225 +1195,8 @@ void OperationDialog::post_edit_constraint(OperationDialog * d, QString s)
 
 void OperationDialog::accept()
 {
-    if (!check_edits(edits) || !kvtable->check_unique())
-        return;
-
-    BrowserNode * bn = oper->browser_node;
-    QString s = edname->text().stripWhiteSpace();
-
-    if ((s != oper->name()) &&
-        ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlOperation,
-                bn->allow_spaces(),
-                bn->allow_empty()))
-        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
-    else {
-        bn->set_name(s);
-
-        bool newst = FALSE;
-
-        if (!oper->is_get_or_set) {
-            AType t;
-
-            s = edreturn_type->currentText().stripWhiteSpace();
-
-            if (! s.isEmpty()) {
-                int index = list.findIndex(edreturn_type->currentText());
-
-                if (index >= 0)
-                    t.type = (BrowserClass *) nodes.at(index);
-                else
-                    t.explicit_type = s;
-            }
-
-            oper->set_return_type(t);
-
-            newst = oper->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
-        }
-
-        oper->uml_visibility = uml_visibility.value();
-
-        oper->isa_class_operation = classoperation_cb->isChecked();
-        oper->set_is_abstract(abstract_cb->isChecked());
-
-        oper->force_body_gen = forcegenbody_cb->isChecked();
-
-        table->update(oper, nodes);
-        etable->update(oper, nodes);
-
-        bn->set_comment(comment->text());
-        UmlWindow::update_comment_if_needed(bn);
-
-        oper->constraint = constraint->stripWhiteSpaceText();
-
-        // C++
-
-        if (cpp_undef) {
-            oper->cpp_decl = QString();
-            oper->cpp_def.assign(QString(), TRUE);
-
-            if (!oldcppbody.isEmpty())
-                oper->new_body(QString(), 'c');
-        }
-        else {
-            if (oper->is_get_or_set) {
-                oper->cpp_name_spec = cppTab->ui->leCppNamespec->text().stripWhiteSpace();
-                oper->cpp_body.length = 0;
-                oper->cpp_get_set_frozen = cppTab->ui->cbCppFrozen->isChecked();
-            }
-            else
-                oper->cpp_indent_body = cppTab->ui->cbIndentCppBody->isChecked();
-
-            if (!abstract_cb->isChecked() &&
-                (cppTab->ui->edCppDefProto->text().find("${body}") != -1)) {
-                if (cppbody != oldcppbody)
-                    oper->new_body(cppbody, 'c');
-            }
-            else if (!oldcppbody.isEmpty())
-                oper->new_body(QString(), 'c');
-
-            oper->cpp_decl = cppTab->ui->edCppDeclProto->text();
-            oper->cpp_visibility = cpp_visibility.value();
-
-            oper->cpp_const = cbCppConst->isChecked();
-            oper->is_volatile = cbCppVolatile->isChecked();
-            oper->cpp_friend = cbCppFriend->isChecked();
-            oper->cpp_virtual = cbCppVirtual->isChecked();
-            oper->cpp_inline = cbCppInline->isChecked();
-            oper->cpp_default = cppTab->ui->cbCppDefaulted->isChecked();
-            oper->cpp_delete = cppTab->ui->cbCppDeleted->isChecked();
-            oper->cpp_override = cppTab->ui->cbCppOverride->isChecked();
-            oper->cpp_final = cppTab->ui->cbCppFinal->isChecked();
-            oper->cpp_def.assign(cppTab->ui->edCppDefProto->text(),
-                                 abstract_cb->isChecked() ||
-                                 (cppTab->ui->edCppDefProto->text().find("${body}") != -1));
-        }
-
-        // java
-
-        if (java_undef) {
-            oper->java_def.assign(QString(), TRUE);
-
-            if (!oldjavabody.isEmpty())
-                oper->new_body(QString(), 'j');
-        }
-        else {
-            if (oper->is_get_or_set) {
-                oper->java_name_spec = edjavanamespec->text().stripWhiteSpace();
-                oper->java_get_set_frozen = javafrozen_cb->isChecked();
-            }
-            else
-                oper->java_indent_body = indentjavabody_cb->isChecked();
-
-            QString ste = GenerationSettings::java_class_stereotype(cl->get_stereotype());
-            bool interf = (ste == "interface") || (ste == "@interface");
-
-            if (!abstract_cb->isChecked() && !interf &&
-                (edjavadef->text().find("${body}") != -1)) {
-                if (javabody != oldjavabody)
-                    oper->new_body(javabody, 'j');
-            }
-            else if (!oldjavabody.isEmpty())
-                oper->new_body(QString(), 'j');
-
-            oper->java_final = javafinal_cb->isChecked();
-            oper->java_synchronized = synchronized_cb->isChecked();
-            oper->java_def.assign(edjavadef->text(),
-                                  abstract_cb->isChecked() || interf ||
-                                  (edjavadef->text().find("${body}") != -1));
-
-            oper->java_annotation = javaannotation;
-        }
-
-        // php
-
-        if (php_undef) {
-            oper->php_def.assign(QString(), TRUE);
-
-            if (!oldphpbody.isEmpty())
-                oper->new_body(QString(), 'p');
-        }
-        else {
-            if (oper->is_get_or_set) {
-                oper->php_name_spec = edphpnamespec->text().stripWhiteSpace();
-                oper->php_get_set_frozen = phpfrozen_cb->isChecked();
-            }
-            else
-                oper->php_indent_body = indentphpbody_cb->isChecked();
-
-            QString ste = GenerationSettings::php_class_stereotype(cl->get_stereotype());
-            bool interf = (ste == "interface");
-
-            if (!abstract_cb->isChecked() && !interf &&
-                (edphpdef->text().find("${body}") != -1)) {
-                if (phpbody != oldphpbody)
-                    oper->new_body(phpbody, 'p');
-            }
-            else if (!oldphpbody.isEmpty())
-                oper->new_body(QString(), 'p');
-
-            oper->php_final = phpfinal_cb->isChecked();
-            oper->php_def.assign(edphpdef->text(),
-                                 abstract_cb->isChecked() || interf ||
-                                 (edphpdef->text().find("${body}") != -1));
-        }
-
-        // python
-
-        if (python_undef) {
-            oper->python_def.assign(QString(), TRUE);
-
-            if (!oldpythonbody.isEmpty())
-                oper->new_body(QString(), 'y');
-        }
-        else {
-            if (oper->is_get_or_set) {
-                oper->python_name_spec = edpythonnamespec->text().stripWhiteSpace();
-                oper->python_get_set_frozen = pythonfrozen_cb->isChecked();
-            }
-            else
-                oper->python_indent_body = indentpythonbody_cb->isChecked();
-
-            // rmq : abstractmethod have body !
-            if (edpythondef->text().find("${body}") != -1) {
-                if (pythonbody != oldpythonbody)
-                    oper->new_body(pythonbody, 'y');
-            }
-            else if (!oldpythonbody.isEmpty())
-                oper->new_body(QString(), 'y');
-
-            oper->python_def.assign(edpythondef->text(),
-                                    // rmq : abstractmethod have body !
-                                    (edpythondef->text().find("${body}") != -1));
-
-            oper->python_decorator = pythondecorator;
-        }
-
-        // idl
-
-        if (idl_undef)
-            oper->idl_decl = QString();
-        else {
-            if (oper->is_get_or_set) {
-                oper->idl_name_spec = edidlnamespec->text().stripWhiteSpace();
-                oper->idl_get_set_frozen = idlfrozen_cb->isChecked();
-            }
-
-            oper->idl_oneway = oneway_cb->isChecked();
-            oper->idl_decl = edidldecl->text();
-        }
-
-        // user
-
-        kvtable->update(bn);
-
-        ProfiledStereotypes::modified(bn, newst);
-
-        bn->modified();
-        bn->package_modified();
-        oper->modified();
-
-        Q3TabDialog::accept();
-    }
+    SaveData();
+    Q3TabDialog::accept();
 }
 
 void OperationDialog::classoper_toggled(bool on)
@@ -3345,6 +3128,227 @@ void OperationDialog::php_edit_body()
 void OperationDialog::post_php_edit_body(OperationDialog * d, QString s)
 {
     d->phpbody = (add_operation_profile()) ? remove_profile(s) : s;
+}
+
+void OperationDialog::SaveData()
+{
+    if (!check_edits(edits) || !kvtable->check_unique())
+        return;
+
+    BrowserNode * bn = oper->browser_node;
+    QString s = edname->text().stripWhiteSpace();
+
+    if ((s != oper->name()) &&
+        ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlOperation,
+                bn->allow_spaces(),
+                bn->allow_empty()))
+        msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+    else {
+        bn->set_name(s);
+
+        bool newst = FALSE;
+
+        if (!oper->is_get_or_set) {
+            AType t;
+
+            s = edreturn_type->currentText().stripWhiteSpace();
+
+            if (! s.isEmpty()) {
+                int index = list.findIndex(edreturn_type->currentText());
+
+                if (index >= 0)
+                    t.type = (BrowserClass *) nodes.at(index);
+                else
+                    t.explicit_type = s;
+            }
+
+            oper->set_return_type(t);
+
+            newst = oper->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+        }
+
+        oper->uml_visibility = uml_visibility.value();
+
+        oper->isa_class_operation = classoperation_cb->isChecked();
+        oper->set_is_abstract(abstract_cb->isChecked());
+
+        oper->force_body_gen = forcegenbody_cb->isChecked();
+
+        table->update(oper, nodes);
+        etable->update(oper, nodes);
+
+        bn->set_comment(comment->text());
+        UmlWindow::update_comment_if_needed(bn);
+
+        oper->constraint = constraint->stripWhiteSpaceText();
+
+        // C++
+
+        if (cpp_undef) {
+            oper->cpp_decl = QString();
+            oper->cpp_def.assign(QString(), TRUE);
+
+            if (!oldcppbody.isEmpty())
+                oper->new_body(QString(), 'c');
+        }
+        else {
+            if (oper->is_get_or_set) {
+                oper->cpp_name_spec = cppTab->ui->leCppNamespec->text().stripWhiteSpace();
+                oper->cpp_body.length = 0;
+                oper->cpp_get_set_frozen = cppTab->ui->cbCppFrozen->isChecked();
+            }
+            else
+                oper->cpp_indent_body = cppTab->ui->cbIndentCppBody->isChecked();
+
+            if (!abstract_cb->isChecked() &&
+                (cppTab->ui->edCppDefProto->text().find("${body}") != -1)) {
+                if (cppbody != oldcppbody)
+                    oper->new_body(cppbody, 'c');
+            }
+            else if (!oldcppbody.isEmpty())
+                oper->new_body(QString(), 'c');
+
+            oper->cpp_decl = cppTab->ui->edCppDeclProto->text();
+            oper->cpp_visibility = cpp_visibility.value();
+
+            oper->cpp_const = cbCppConst->isChecked();
+            oper->is_volatile = cbCppVolatile->isChecked();
+            oper->cpp_friend = cbCppFriend->isChecked();
+            oper->cpp_virtual = cbCppVirtual->isChecked();
+            oper->cpp_inline = cbCppInline->isChecked();
+            oper->cpp_default = cppTab->ui->cbCppDefaulted->isChecked();
+            oper->cpp_delete = cppTab->ui->cbCppDeleted->isChecked();
+            oper->cpp_override = cppTab->ui->cbCppOverride->isChecked();
+            oper->cpp_final = cppTab->ui->cbCppFinal->isChecked();
+            oper->cpp_def.assign(cppTab->ui->edCppDefProto->text(),
+                                 abstract_cb->isChecked() ||
+                                 (cppTab->ui->edCppDefProto->text().find("${body}") != -1));
+        }
+
+        // java
+
+        if (java_undef) {
+            oper->java_def.assign(QString(), TRUE);
+
+            if (!oldjavabody.isEmpty())
+                oper->new_body(QString(), 'j');
+        }
+        else {
+            if (oper->is_get_or_set) {
+                oper->java_name_spec = edjavanamespec->text().stripWhiteSpace();
+                oper->java_get_set_frozen = javafrozen_cb->isChecked();
+            }
+            else
+                oper->java_indent_body = indentjavabody_cb->isChecked();
+
+            QString ste = GenerationSettings::java_class_stereotype(cl->get_stereotype());
+            bool interf = (ste == "interface") || (ste == "@interface");
+
+            if (!abstract_cb->isChecked() && !interf &&
+                (edjavadef->text().find("${body}") != -1)) {
+                if (javabody != oldjavabody)
+                    oper->new_body(javabody, 'j');
+            }
+            else if (!oldjavabody.isEmpty())
+                oper->new_body(QString(), 'j');
+
+            oper->java_final = javafinal_cb->isChecked();
+            oper->java_synchronized = synchronized_cb->isChecked();
+            oper->java_def.assign(edjavadef->text(),
+                                  abstract_cb->isChecked() || interf ||
+                                  (edjavadef->text().find("${body}") != -1));
+
+            oper->java_annotation = javaannotation;
+        }
+
+        // php
+
+        if (php_undef) {
+            oper->php_def.assign(QString(), TRUE);
+
+            if (!oldphpbody.isEmpty())
+                oper->new_body(QString(), 'p');
+        }
+        else {
+            if (oper->is_get_or_set) {
+                oper->php_name_spec = edphpnamespec->text().stripWhiteSpace();
+                oper->php_get_set_frozen = phpfrozen_cb->isChecked();
+            }
+            else
+                oper->php_indent_body = indentphpbody_cb->isChecked();
+
+            QString ste = GenerationSettings::php_class_stereotype(cl->get_stereotype());
+            bool interf = (ste == "interface");
+
+            if (!abstract_cb->isChecked() && !interf &&
+                (edphpdef->text().find("${body}") != -1)) {
+                if (phpbody != oldphpbody)
+                    oper->new_body(phpbody, 'p');
+            }
+            else if (!oldphpbody.isEmpty())
+                oper->new_body(QString(), 'p');
+
+            oper->php_final = phpfinal_cb->isChecked();
+            oper->php_def.assign(edphpdef->text(),
+                                 abstract_cb->isChecked() || interf ||
+                                 (edphpdef->text().find("${body}") != -1));
+        }
+
+        // python
+
+        if (python_undef) {
+            oper->python_def.assign(QString(), TRUE);
+
+            if (!oldpythonbody.isEmpty())
+                oper->new_body(QString(), 'y');
+        }
+        else {
+            if (oper->is_get_or_set) {
+                oper->python_name_spec = edpythonnamespec->text().stripWhiteSpace();
+                oper->python_get_set_frozen = pythonfrozen_cb->isChecked();
+            }
+            else
+                oper->python_indent_body = indentpythonbody_cb->isChecked();
+
+            // rmq : abstractmethod have body !
+            if (edpythondef->text().find("${body}") != -1) {
+                if (pythonbody != oldpythonbody)
+                    oper->new_body(pythonbody, 'y');
+            }
+            else if (!oldpythonbody.isEmpty())
+                oper->new_body(QString(), 'y');
+
+            oper->python_def.assign(edpythondef->text(),
+                                    // rmq : abstractmethod have body !
+                                    (edpythondef->text().find("${body}") != -1));
+
+            oper->python_decorator = pythondecorator;
+        }
+
+        // idl
+
+        if (idl_undef)
+            oper->idl_decl = QString();
+        else {
+            if (oper->is_get_or_set) {
+                oper->idl_name_spec = edidlnamespec->text().stripWhiteSpace();
+                oper->idl_get_set_frozen = idlfrozen_cb->isChecked();
+            }
+
+            oper->idl_oneway = oneway_cb->isChecked();
+            oper->idl_decl = edidldecl->text();
+        }
+
+        // user
+
+        kvtable->update(bn);
+
+        ProfiledStereotypes::modified(bn, newst);
+
+        bn->modified();
+        bn->package_modified();
+        oper->modified();
+    }
 }
 
 void OperationDialog::php_edit_param()
