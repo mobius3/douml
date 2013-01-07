@@ -223,14 +223,14 @@ protected:
 
     //refactoring changes
 
-    static ClassDialog * instance;
+    static QSharedPointer<ClassDialog> instance;
 
 
 public:
     ClassDialog(ClassData * c);
     virtual ~ClassDialog();
 
-    static ClassDialog * Instance(ClassData *);
+    static QSharedPointer<ClassDialog> Instance(ClassData *);
 
     static void cpp_generate_decl(QString & s, ClassData * cl,
                                   QString def, QString name,

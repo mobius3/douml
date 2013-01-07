@@ -75,7 +75,7 @@ QSize ClassDialog::previous_size;
 static QString RelativeRoot;
 static QString RelativePrj;
 static QString Absolute;
-ClassDialog * ClassDialog::instance = NULL;
+QSharedPointer<ClassDialog> ClassDialog::instance;
 ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0, 0, FALSE), cl(c)
 {
     // take time in case of many classes and artifacts
@@ -101,12 +101,11 @@ ClassDialog::~ClassDialog()
         edits.take(0)->close();
 }
 
-ClassDialog * ClassDialog::Instance(ClassData * cl)
+QSharedPointer<ClassDialog> ClassDialog::Instance(ClassData * cl)
 {
-    if (instance == NULL) {
-        ClassDialog * cd = new ClassDialog(cl);
-        instance = cd;
-    } else
+    if (instance.isNull())
+        instance = QSharedPointer<ClassDialog>(new ClassDialog(cl));
+    else
         instance->FillGuiElements(cl);
 
     return instance;
