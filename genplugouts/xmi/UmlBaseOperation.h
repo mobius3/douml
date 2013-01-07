@@ -237,8 +237,11 @@ private:
     bool _cpp_virtual : 1;
 
     bool _cpp_inline : 1;
+    bool _cpp_default : 1;
+    bool _cpp_delete : 1;
+    bool _cpp_override : 1;
+    bool _cpp_final : 1;
 #endif
-
 #ifdef WITHJAVA
     bool _java_final : 1;
 
