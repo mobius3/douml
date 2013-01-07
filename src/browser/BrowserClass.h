@@ -77,7 +77,7 @@ public:
     BrowserNode * add_operation(BrowserOperation * oper = 0);
     BrowserNode * add_inherited_operation(BrowserOperation * model);
     BrowserNode * add_extra_member(BrowserExtraMember * em = 0);
-    Q3PtrList<BrowserOperation> inherited_operations(unsigned limit) const;
+    Q3PtrList<BrowserOperation> inherited_operations(unsigned limit, QString parent_name = QString()) const;
     QString may_start(UmlCode l) const;
     QString may_connect(UmlCode l, BrowserClass * other);
     virtual BasicData * add_relation(UmlCode, BrowserNode *);
@@ -86,6 +86,8 @@ public:
     // more modern interface to get all parents. Still a lot of qt3 compatibility inside
     QList<BrowserClass*> get_all_parents();
     QStringList get_parents_names();
+
+
     virtual QString check_inherit(const BrowserNode * parent) const;
     bool have_abstract_operation();
     void get_opers(Q3ValueList<const OperationData *> & opers,
@@ -182,6 +184,7 @@ public:
 private:
     // some helpers
     void InstallParentsMenuItems(Q3PopupMenu &inhopersubm);
+    void AddInheritedOperations(int rank);
 
 };
 

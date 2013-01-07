@@ -502,18 +502,7 @@ void BrowserClass::member_cpp_def(const QString &, const QString &,
     ClassDialog::cpp_generate_members_def(this, s);
 }
 
-void BrowserClass::InstallParentsMenuItems(Q3PopupMenu& inhopersubm)
-{
-    QStringList parents = get_parents_names();
-    for(QList<QString>::Iterator it = parents.begin(); it != parents.end(); it++)
-    {
-        int currentId = 9999 - (parents.begin() - it) -1;
-        inhopersubm.insertItem(TR("Implement whole " + *it), currentId);
-        inhopersubm.setWhatsThis(currentId, QString("to implement whole ") + *it);
-    }
-    if(!parents.isEmpty())
-        inhopersubm.insertSeparator();
-}
+
 static const int add_item_index = 8;
 static const int add_attribute_index = 0;
 static const int add_operation_index = 1;
@@ -534,12 +523,27 @@ static const int roundtrip_java_index = 32;
 static const int generate_php_index = 22;
 static const int generate_python_index = 25;
 static const int generate_idl_index = 12;
+static const int first_inherited_function_index = 10000;
+static const int too_much_inherited_functions_index = 9999;
+static const int sensible_amount_of_visible_entries = 25;
 
 
+void BrowserClass::InstallParentsMenuItems(Q3PopupMenu& inhopersubm)
+{
+    QStringList parents = get_parents_names();
+    for(QList<QString>::Iterator it = parents.begin(); it != parents.end(); it++)
+    {
+        int currentId = first_inherited_function_index + sensible_amount_of_visible_entries + (it - parents.begin());
+        inhopersubm.insertItem(TR("Implement whole " + *it), currentId);
+        inhopersubm.setWhatsThis(currentId, QString("to implement whole ") + *it);
+    }
+    if(!parents.isEmpty())
+        inhopersubm.insertSeparator();
+}
 
 void BrowserClass::menu()
 {
-    Q3PtrList<BrowserOperation> inheritedOperations = inherited_operations(21);
+    Q3PtrList<BrowserOperation> inheritedOperations = inherited_operations(sensible_amount_of_visible_entries);
     Q3PopupMenu m(0);
     Q3PopupMenu gensubm(0);
     Q3PopupMenu roundtripm(0);
@@ -583,8 +587,8 @@ void BrowserClass::menu()
 
                         InstallParentsMenuItems(inhopersubm);
 
-                        if (inheritedOperations.count() > 20)
-                            m.setWhatsThis(m.insertItem(TR("Add inherited operation"), 9999),
+                        if (inheritedOperations.count() > sensible_amount_of_visible_entries)
+                            m.setWhatsThis(m.insertItem(TR("Add inherited operation"), too_much_inherited_functions_index),
                                            TR("to redefine an inherited <i>operation</i> in the <i>class</i>"));
                         else
                         {
@@ -593,12 +597,12 @@ void BrowserClass::menu()
                             MenuFactory::createTitle(inhopersubm, TR("Choose operation to add it"));
                             inhopersubm.insertSeparator();
 
-                            for (oper = inheritedOperations.first(), index = 10000;
+                            for (oper = inheritedOperations.first(), index = first_inherited_function_index;
                                  oper;
                                  oper = inheritedOperations.next(), index += 1)
                             {
                                 QString menuItemText = ((BrowserNode *) oper->parent())->get_name() +
-                                                       QString("::") + oper->get_data()->definition(TRUE, FALSE);
+                                        QString("::") + oper->get_data()->definition(TRUE, FALSE);
 
 
                                 if (((OperationData *) oper->get_data())->get_is_abstract())
@@ -791,15 +795,27 @@ void BrowserClass::menu()
             if (((BrowserNode *) child)->deletedp())
             {
                 m.setWhatsThis(m.insertItem(TR("Undelete recursively"), undelete_recursive_index),
-                               TR("undelete the " + what + " and its \
-                                  nested <i>classes</i>, <i>attributes</i>, <i>operations</i> and \
-                                  <i>relations</i> (except if the class at the other side is also deleted)"));
-                                  break;
+                               TR("undelete the " + what + " and its "
+                                  "nested <i>classes</i>, <i>attributes</i>, <i>operations</i> and "
+                                  "<i>relations</i> (except if the class at the other side is also deleted)"));
+                break;
             }
         }
     }
 
     exec_menu_choice(m.exec(QCursor::pos()), inheritedOperations);
+}
+
+void BrowserClass::AddInheritedOperations(int rank)
+{
+    int firstParentIndex = first_inherited_function_index + sensible_amount_of_visible_entries;
+    int parentIndex = rank - firstParentIndex;
+    QString parentName = get_parents_names().at(parentIndex);
+    Q3PtrList<BrowserOperation> inheritedOperations = inherited_operations(sensible_amount_of_visible_entries,parentName);
+    for(auto operation: inheritedOperations)
+    {
+        add_inherited_operation(operation);
+    }
 }
 
 void BrowserClass::exec_menu_choice(int rank,
@@ -974,7 +990,8 @@ void BrowserClass::exec_menu_choice(int rank,
         ReferenceDialog::show(this);
         return;
 
-    case 9999: {
+    case too_much_inherited_functions_index:
+    {
         l = inherited_operations(~0u);
 
         OperationListDialog dialog(TR("Choose inherited operation"), l);
@@ -989,14 +1006,16 @@ void BrowserClass::exec_menu_choice(int rank,
 
         // no break
     default:
-        if (rank >= 100000)
+        if (rank >= select_component_index)
             // assoc comp
-            associated_components[rank - 100000]->select_in_browser();
+            associated_components[rank - select_component_index]->select_in_browser();
         else if (rank >= 99990)
             ProfiledStereotypes::choiceManagement(this, rank - 99990);
-        else if (rank >= 10000)
+        else if (rank >= first_inherited_function_index + sensible_amount_of_visible_entries)
+            AddInheritedOperations(rank);
+        else if (rank >= first_inherited_function_index)
             // inherited operation
-            add_inherited_operation(l.at(rank - 10000));
+            add_inherited_operation(l.at(rank - first_inherited_function_index));
         else if (rank >= 100)
             ToolCom::run(Tool::command(rank - 100), this);
         else
@@ -2106,7 +2125,7 @@ QString BrowserClass::check_inherit(const BrowserNode * new_parent) const
             : BrowserNode::check_inherit(new_parent);
 }
 
-Q3PtrList<BrowserOperation> BrowserClass::inherited_operations(unsigned limit) const
+Q3PtrList<BrowserOperation> BrowserClass::inherited_operations(unsigned limit, QString parent_name) const
 {
     QApplication::setOverrideCursor(::Qt::waitCursor);
 
@@ -2135,6 +2154,9 @@ Q3PtrList<BrowserOperation> BrowserClass::inherited_operations(unsigned limit) c
 
     for (cl = all_parents.first(); cl != 0; cl = all_parents.next())
     {
+        if(!parent_name.isEmpty() && QString(cl->full_name()) != parent_name)
+            continue;
+
         for (child = cl->firstChild(); child; child = child->nextSibling())
         {
             BrowserNode * childAsNode = dynamic_cast<BrowserNode*>(child);
