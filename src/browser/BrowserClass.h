@@ -179,7 +179,9 @@ public:
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
 
     static BrowserClass * temporary();
-
+private:
+    // some helpers
+    void InstallParentsMenuItems(Q3PopupMenu &inhopersubm);
 
 };
 

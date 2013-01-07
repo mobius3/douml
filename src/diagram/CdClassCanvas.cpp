@@ -1357,6 +1357,7 @@ void CdClassCanvas::menu(const QPoint &)
                         QFont font = inhopersubm.font();
                         font.setItalic(true);
                         inhopersubm.insertItem(menuItemText, index);
+                        //somewhat hackish but seems to work
                         inhopersubm.actions().last()->setFont(font);
                     }
                     else

@@ -2,6 +2,7 @@
 
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2011-2012 Nikolai Marchenko.
 //
 // This file is part of the BOUML Uml Toolkit.
 //
@@ -19,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : https://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -501,6 +502,41 @@ void BrowserClass::member_cpp_def(const QString &, const QString &,
     ClassDialog::cpp_generate_members_def(this, s);
 }
 
+void BrowserClass::InstallParentsMenuItems(Q3PopupMenu& inhopersubm)
+{
+    QStringList parents = get_parents_names();
+    for(QList<QString>::Iterator it = parents.begin(); it != parents.end(); it++)
+    {
+        int currentId = 9999 - (parents.begin() - it) -1;
+        inhopersubm.insertItem(TR("Implement whole " + *it), currentId);
+        inhopersubm.setWhatsThis(currentId, QString("to implement whole ") + *it);
+    }
+    if(!parents.isEmpty())
+        inhopersubm.insertSeparator();
+}
+static const int add_item_index = 8;
+static const int add_attribute_index = 0;
+static const int add_operation_index = 1;
+static const int add_nested_class_index = 14;
+static const int add_extra_member_index = 2;
+static const int edit_index = 3;
+static const int duplicate_index = 13;
+static const int delete_index = 4;
+static const int select_artifact_index = 5;
+static const int select_component_index = 100000;
+static const int see_references_index = 15;
+static const int undelete_index = 6;
+static const int undelete_recursive_index = 7;
+static const int generate_cpp_index = 10;
+static const int roundtrip_cpp_index = 31;
+static const int generate_java_index = 11;
+static const int roundtrip_java_index = 32;
+static const int generate_php_index = 22;
+static const int generate_python_index = 25;
+static const int generate_idl_index = 12;
+
+
+
 void BrowserClass::menu()
 {
     Q3PtrList<BrowserOperation> inheritedOperations = inherited_operations(21);
@@ -530,31 +566,22 @@ void BrowserClass::menu()
                 const char * stereotype = def->get_stereotype();
 
                 if (!strcmp(stereotype, "enum") || !strcmp(stereotype, "enum_pattern"))
-                    m.setWhatsThis(m.insertItem(TR("Add item"), 8),
+                    m.setWhatsThis(m.insertItem(TR("Add item"), add_item_index),
                                    TR("to add an <i>item</i> to the <i>enum</i>"));
 
                 if (strcmp(stereotype, "typedef") && strcmp(stereotype, "enum_pattern"))
                 {
-                    m.setWhatsThis(m.insertItem(TR("Add attribute"), 0),
+                    m.setWhatsThis(m.insertItem(TR("Add attribute"), add_attribute_index),
                                    TR("to add an <i>attribute</i> to the ") + what);
 
-                    m.setWhatsThis(m.insertItem(TR("Add operation"), 1),
+                    m.setWhatsThis(m.insertItem(TR("Add operation"), add_operation_index),
                                    TR("to add an <i>operation</i> to the ") + what);
 
                     bool isUnion = strcmp(stereotype, "union");
                     if (!inheritedOperations.isEmpty() && isUnion)
                     {
 
-                        QStringList parents = get_parents_names();
-                        for(QList<QString>::Iterator it = parents.begin(); it != parents.end(); it++)
-                        {
-                            int currentId = 9999 - (parents.begin() - it) -1;
-                            inhopersubm.insertItem(TR("Implement whole " + *it), currentId);
-                            inhopersubm.setWhatsThis(currentId, QString("to implement whole ") + *it);
-                        }
-                        if(!parents.isEmpty())
-                            inhopersubm.insertSeparator();
-
+                        InstallParentsMenuItems(inhopersubm);
 
                         if (inheritedOperations.count() > 20)
                             m.setWhatsThis(m.insertItem(TR("Add inherited operation"), 9999),
@@ -579,6 +606,7 @@ void BrowserClass::menu()
                                     QFont font = inhopersubm.font();
                                     font.setItalic(true);
                                     inhopersubm.insertItem(menuItemText, index);
+                                    //somewhat hackish but seems to work
                                     inhopersubm.actions().last()->setFont(font);
                                 }
                                 else
@@ -595,22 +623,22 @@ void BrowserClass::menu()
                             strcmp(stereotype, "enum") &&
                             strcmp(stereotype, "enum_pattern"))
                     {
-                        m.setWhatsThis(m.insertItem(TR("Add nested class"), 14),
+                        m.setWhatsThis(m.insertItem(TR("Add nested class"), add_nested_class_index),
                                        TR("to add an <i>nested class</i> to the <i>class</i>"));
                     }
 
-                    m.setWhatsThis(m.insertItem(TR("Add extra member"), 2),
+                    m.setWhatsThis(m.insertItem(TR("Add extra member"), add_extra_member_index),
                                    TR("to add an <i>extra member</i> to the <i>class</i>"));
                 }
 
                 m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Edit"), 3),
+                m.setWhatsThis(m.insertItem(TR("Edit"), edit_index),
                                TR("to edit the " + what + ","
                                   "a double click with the left mouse button does the same thing"));
-                m.setWhatsThis(m.insertItem(TR("Duplicate"), 13),
+                m.setWhatsThis(m.insertItem(TR("Duplicate"), duplicate_index),
                                TR("to duplicate the " + what));
                 m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Delete"), 4),
+                m.setWhatsThis(m.insertItem(TR("Delete"), delete_index),
                                TR("to delete the " + what + "."
                                   "Note that you can undelete it after"));
 
@@ -645,10 +673,10 @@ void BrowserClass::menu()
         }
         else
         {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 3),
+            m.setWhatsThis(m.insertItem(TR("Edit"), edit_index),
                            TR("to edit the " + what + ", "
                               "a double click with the left mouse button does the same thing"));
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), 13),
+            m.setWhatsThis(m.insertItem(TR("Duplicate"), duplicate_index),
                            TR("to duplicate the " + what));
         }
 
@@ -660,7 +688,7 @@ void BrowserClass::menu()
         {
             m.insertSeparator();
             have_sep = TRUE;
-            m.setWhatsThis(m.insertItem(TR("Select associated artifact"), 5),
+            m.setWhatsThis(m.insertItem(TR("Select associated artifact"), select_artifact_index),
                            TR("to select the associated <i>&lt;&lt;source&gt;&gt; artifact</i>"));
         }
 
@@ -673,7 +701,7 @@ void BrowserClass::menu()
 
             if (associated_components.first() == associated_components.last())
                 // only one component
-                m.setWhatsThis(m.insertItem(TR("Select associated component"), 100000),
+                m.setWhatsThis(m.insertItem(TR("Select associated component"), select_component_index),
                                TR("to select the <i>component</i> providing the <i>class</i>"));
             else
             {
@@ -683,11 +711,11 @@ void BrowserClass::menu()
                 m.setWhatsThis(m.insertItem(TR("Select an associated component"), &compsubm),
                                TR("to select a <i>component</i> providing the <i>class</i>"));
 
-                index = 100000;
+                index = select_component_index;
 
                 Q3ValueList<BrowserComponent *>::Iterator it;
 
-                for (it = associated_components.begin(), index = 100000;
+                for (it = associated_components.begin(), index = select_component_index;
                      it != associated_components.end();
                      it++, index += 1)
                     compsubm.insertItem((*it)->full_name(TRUE), index);
@@ -695,7 +723,7 @@ void BrowserClass::menu()
         }
 
         m.insertSeparator();
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 15),
+        m.setWhatsThis(m.insertItem(TR("Referenced by"), see_references_index),
                        TR("to know who reference the " + what));
         mark_menu(m, TR("the class"), 90);
         ProfiledStereotypes::menu(m, this, 99990);
@@ -715,28 +743,28 @@ void BrowserClass::menu()
 
                 if (cpp)
                 {
-                    gensubm.insertItem("C++", 10);
+                    gensubm.insertItem("C++", generate_cpp_index);
 
                     if ((edition_number == 0) && !is_read_only)
-                        roundtripm.insertItem("C++", 31);
+                        roundtripm.insertItem("C++", roundtrip_cpp_index);
                 }
 
                 if (java)
                 {
-                    gensubm.insertItem("Java", 11);
+                    gensubm.insertItem("Java", generate_java_index);
 
                     if ((edition_number == 0) && !is_read_only)
-                        roundtripm.insertItem("Java", 32);
+                        roundtripm.insertItem("Java", roundtrip_java_index);
                 }
 
                 if (php)
-                    gensubm.insertItem("Php", 22);
+                    gensubm.insertItem("Php", generate_php_index);
 
                 if (python)
-                    gensubm.insertItem("Python", 25);
+                    gensubm.insertItem("Python", generate_python_index);
 
                 if (idl)
-                    gensubm.insertItem("Idl", 12);
+                    gensubm.insertItem("Idl", generate_idl_index);
 
                 if (roundtripm.count() != 0)
                     m.insertItem(TR("Roundtrip"), &roundtripm);
@@ -752,7 +780,7 @@ void BrowserClass::menu()
     }
     else if (!is_read_only && (edition_number == 0))
     {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 6),
+        m.setWhatsThis(m.insertItem(TR("Undelete"), undelete_index),
                        TR("undelete the " + what + ". "
                           "Do not undelete its <i>attributes</i>, <i>operations</i> and <i>relations</i>"));
 
@@ -762,7 +790,7 @@ void BrowserClass::menu()
         {
             if (((BrowserNode *) child)->deletedp())
             {
-                m.setWhatsThis(m.insertItem(TR("Undelete recursively"), 7),
+                m.setWhatsThis(m.insertItem(TR("Undelete recursively"), undelete_recursive_index),
                                TR("undelete the " + what + " and its \
                                   nested <i>classes</i>, <i>attributes</i>, <i>operations</i> and \
                                   <i>relations</i> (except if the class at the other side is also deleted)"));
@@ -782,9 +810,9 @@ void BrowserClass::exec_menu_choice(int rank,
              (strcmp(def->get_stereotype(), "metaclass") == 0));
 
     switch (rank) {
-    case 0:
-    case 8: {
-        BrowserAttribute * bn = (BrowserAttribute *) add_attribute(0, rank == 8);
+    case add_attribute_index:
+    case add_item_index: {
+        BrowserAttribute * bn = (BrowserAttribute *) add_attribute(0, rank == add_item_index);
 
         if (bn != 0)
             bn->open_new_ste_attr();
@@ -792,7 +820,7 @@ void BrowserClass::exec_menu_choice(int rank,
 
         return;
 
-    case 1: {
+    case add_operation_index: {
         BrowserNode * bn = add_operation();
 
         if (bn != 0)
@@ -801,7 +829,7 @@ void BrowserClass::exec_menu_choice(int rank,
 
         return;
 
-    case 2: {
+    case add_extra_member_index: {
         BrowserNode * bn = add_extra_member();
 
         if (bn != 0)
@@ -810,17 +838,17 @@ void BrowserClass::exec_menu_choice(int rank,
 
         return;
 
-    case 3:
+    case edit_index:
         // modal edition
         def->edit();
         return;
 
-    case 4:
+    case delete_index:
         ProfiledStereotypes::deleted(this);
         delete_it();
         break;
 
-    case 5:
+    case select_artifact_index:
         if (isstereotypemetaclass)
             return;
 
@@ -839,7 +867,7 @@ void BrowserClass::exec_menu_choice(int rank,
 
         break;
 
-    case 6:
+    case undelete_index:
         BrowserNode::undelete(FALSE);
 
         if (!strcmp(get_data()->get_stereotype(), "stereotype"))
@@ -847,7 +875,7 @@ void BrowserClass::exec_menu_choice(int rank,
 
         break;
 
-    case 7:
+    case undelete_recursive_index:
         BrowserNode::undelete(TRUE);
 
         if (!strcmp(get_data()->get_stereotype(), "stereotype"))
@@ -855,7 +883,7 @@ void BrowserClass::exec_menu_choice(int rank,
 
         break;
 
-    case 10:
+    case generate_cpp_index:
         if (! isstereotypemetaclass) {
             bool preserve = preserve_bodies();
 
@@ -867,7 +895,7 @@ void BrowserClass::exec_menu_choice(int rank,
 
         return;
 
-    case 11:
+    case generate_java_index:
         if (! isstereotypemetaclass) {
             bool preserve = preserve_bodies();
 
@@ -879,7 +907,7 @@ void BrowserClass::exec_menu_choice(int rank,
 
         return;
 
-    case 22:
+    case generate_php_index:
         if (! isstereotypemetaclass) {
             bool preserve = preserve_bodies();
 
@@ -891,7 +919,7 @@ void BrowserClass::exec_menu_choice(int rank,
 
         return;
 
-    case 25:
+    case generate_python_index:
         if (! isstereotypemetaclass) {
             bool preserve = preserve_bodies();
 
@@ -903,25 +931,25 @@ void BrowserClass::exec_menu_choice(int rank,
 
         return;
 
-    case 12:
+    case generate_idl_index:
         if (! isstereotypemetaclass)
             ToolCom::run((verbose_generation()) ? "idl_generator -v" : "idl_generator", this);
 
         return;
 
-    case 31:
+    case roundtrip_cpp_index:
         if (! isstereotypemetaclass)
             ToolCom::run("cpp_roundtrip", this);
 
         return;
 
-    case 32:
+    case roundtrip_java_index:
         if (! isstereotypemetaclass)
             ToolCom::run("java_roundtrip", this);
 
         return;
 
-    case 13: {
+    case duplicate_index: {
         QString name;
 
         if (((BrowserNode *) parent())->enter_child_name(name, TR("enter class's name : "),
@@ -932,7 +960,7 @@ void BrowserClass::exec_menu_choice(int rank,
     }
         break;
 
-    case 14:
+    case add_nested_class_index:
         if (! isstereotypemetaclass) {
             BrowserClass * cl = add_class(FALSE, this);
 
@@ -942,7 +970,7 @@ void BrowserClass::exec_menu_choice(int rank,
 
         break;
 
-    case 15:
+    case see_references_index:
         ReferenceDialog::show(this);
         return;
 
