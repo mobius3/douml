@@ -34,44 +34,45 @@
 #include <stdio.h>
 #include <qstring.h>
 
-class Lex {
-  public:
+class Lex
+{
+public:
     typedef struct sContext {
-      QString filename;
-      unsigned line_number;
-      char * buffer;
-      char * pointer;
-      QString reread;
-      QString comments;
-      QString description;
-      char * mark;
-	  //[lgfreitas] operator= added so copy happens the way we expect.
-	  sContext & operator=(const sContext & src) {
-		memcpy(this, &src, sizeof(*this));
-		return *this;
-	  }
+        QString filename;
+        unsigned line_number;
+        char * buffer;
+        char * pointer;
+        QString reread;
+        QString comments;
+        QString description;
+        char * mark;
+        //[lgfreitas] operator= added so copy happens the way we expect.
+        sContext & operator=(const sContext & src) {
+            memcpy(this, &src, sizeof(*this));
+            return *this;
+        }
     } Context;
-  
-  private:
+
+private:
     static int get();
     static int peek();
     static void unget();
-    
+
     static void bypass_cpp_comment();
     static void bypass_c_comment();
-    static Q3CString manage_operator(QString  & result, int c);  
-    static Q3CString read_string();     
-    static Q3CString read_character();    
-    static Q3CString read_array_dim();  
-    static char bypass_operator(int c);  
-    static void bypass_string();     
-    static void bypass_character();    
-    static void bypass_array_dim();  
-    
+    static Q3CString manage_operator(QString  & result, int c);
+    static Q3CString read_string();
+    static Q3CString read_character();
+    static Q3CString read_array_dim();
+    static char bypass_operator(int c);
+    static void bypass_string();
+    static void bypass_character();
+    static void bypass_array_dim();
+
     static Context context;
     static QStack<Context> stack;
-    
-  public:
+
+public:
     static Q3CString read_word();
     static char read_word_bis();
     static void unread_word(const char * s);
@@ -98,6 +99,6 @@ class Lex {
 
 Q3CString value_of(Q3CString s, Q3CString k, int & index);
 Q3CString value_of(Q3CString s, Q3CString k, int & index,
-		  Q3CString & next, int & index2);
+                   Q3CString & next, int & index2);
 
 #endif

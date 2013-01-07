@@ -9,8 +9,9 @@
 
 class UmlTransition;
 
-class UmlBaseTransition : public UmlItem {
-  public:
+class UmlBaseTransition : public UmlItem
+{
+public:
     // returns the kind of the item
     virtual anItemKind kind();
 
@@ -18,7 +19,7 @@ class UmlBaseTransition : public UmlItem {
     //
     // In case it cannot be created ('parent' cannot contain it etc ...) return 0
     //  in C++ and produce a RuntimeException in Java
-    
+
     static UmlTransition * create(UmlItem * start, UmlItem * end);
 
     // returns the 'end' object (the 'start' object is the parent of the transition) no set !
@@ -101,7 +102,7 @@ class UmlBaseTransition : public UmlItem {
 #endif
 
     // to unload the object to free memory, it will be reloaded automatically
-    // if needed. Recursively done for the sub items if 'rec' is TRUE. 
+    // if needed. Recursively done for the sub items if 'rec' is TRUE.
     //
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
@@ -109,7 +110,7 @@ class UmlBaseTransition : public UmlItem {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     UmlItem * _target;
 
     TransitionBehavior _uml;
@@ -123,7 +124,7 @@ class UmlBaseTransition : public UmlItem {
 #endif
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -135,7 +136,7 @@ class UmlBaseTransition : public UmlItem {
 #endif
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseTransition(void * id, const Q3CString n) : UmlItem(id, n) {
+    UmlBaseTransition(void * id, const Q3CString n) : UmlItem(id, n) {
     }
 
 };

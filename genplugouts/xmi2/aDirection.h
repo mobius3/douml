@@ -4,10 +4,10 @@
 
 // The direction of an operation's parameter, see UmlParameter
 enum aDirection {
-  InputOutputDirection,
-  InputDirection,
-  OutputDirection,
-  ReturnDirection
+    InputOutputDirection,
+    InputDirection,
+    OutputDirection,
+    ReturnDirection
 
 };
 #endif

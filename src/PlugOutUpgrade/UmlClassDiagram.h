@@ -10,10 +10,11 @@
 // management
 // You can modify it as you want (except the constructor)
 
-class UmlClassDiagram : public UmlBaseClassDiagram {
-  public:
-    UmlClassDiagram(void * id, const Q3CString & n) 
-      : UmlBaseClassDiagram(id, n) {};
+class UmlClassDiagram : public UmlBaseClassDiagram
+{
+public:
+    UmlClassDiagram(void * id, const Q3CString & n)
+        : UmlBaseClassDiagram(id, n) {};
 };
 
 #endif

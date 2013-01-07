@@ -43,13 +43,14 @@ class UmlClass;
 // - bye()
 //
 // - close()
-// 
+//
 // you must NOT call the others
 
-class UmlCom {
-  public:
+class UmlCom
+{
+public:
     // does the connexion
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     static bool connect(unsigned int port);
     //  returns the item on which the tool is applied
@@ -59,12 +60,12 @@ class UmlCom {
     // use Qt rich text : allows HTML like formatting
     static void trace(const char * s);
     //to show the trace window
-    
+
     static void showTrace();
 
     //to automatically raise the trace window
     //each time trace() is called
-    
+
     static void traceAutoRaise(bool y);
 
     // to write a message in the status bar line
@@ -75,7 +76,7 @@ class UmlCom {
     // disconnexion
     static void close();
 
-  private:
+private:
     static Q3SocketDevice * sock;
 
     static char * buffer_in;
@@ -93,135 +94,135 @@ class UmlCom {
     static unsigned int buffer_out_size;
 
 
-  protected:
+protected:
     //internal, do NOT use it
-    
+
     static void check_size_out(unsigned int len);
     //internal, do NOT use it
-    
+
     static void read_if_needed();
     //internal, do NOT use it
-    
+
     static void read_buffer(unsigned int len);
     //internal, do NOT use it
-    
+
     static void write_bool(bool b);
     //internal, do NOT use it
-    
+
     static void write_char(char c);
     //internal, do NOT use it
-    
+
     static void write_unsigned(unsigned int u);
     //internal, do NOT use it
-    
+
     static void write_id(const void * id);
     //internal, do NOT use it
-    
+
     static void write_string(const char * p);
 
-  public:
+public:
     // internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd);
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, bool b);
 
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, char arg);
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, int arg, const char * dummy);
 
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, void * id);
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s);
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, void * id, const char * n);
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, const char * v);
 
     //internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd, bool b, const char * s, const char * v);
 
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, const char * arg);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, char arg);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, const UmlTypeSpec & arg);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, const char * arg1, const char * arg2);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg1, const char * arg2);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg1, aRelationKind arg2, const void * id2);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, const void * id1);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, const void * id1, const char * arg2);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, const UmlTypeSpec & arg2);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, const char * arg2, const char * arg3, const UmlTypeSpec & arg4, const UmlTypeSpec & arg5);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, char arg2, const char * arg3, const char * arg4, const UmlTypeSpec & arg5);
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlItem> & l);
     static void send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlClass> & l1, const Q3PtrVector<UmlClass> & l2, const Q3PtrVector<UmlClass> & l3);
 
     //internal, do NOT use it
-    
+
     static void send_cmd(const void * id, OnInstanceCmd cmd, anItemKind arg, const void * id2);
 
     //internal, do NOT use it
-    
+
     static void * read_id();
     //internal, do NOT use it
-    
+
     static const char * read_string();
     //internal, do NOT use it
-    
+
     static bool read_bool();
     //internal, do NOT use it
-    
+
     static char read_char();
     //internal, do NOT use it
-    
+
     static unsigned int read_unsigned();
     // internal, do NOT use it
-    
+
     static void read_item_list(Q3PtrVector<UmlItem> & v);
     //internal, do NOT use it
-    
+
     static void fatal_error(const Q3CString & msg);
     //internal, do NOT use it
-    
+
     static void flush();
 };
 

@@ -1,7 +1,8 @@
 
 #include "UmlNode.h"
 
-int UmlNode::orderWeight() {
-  return 9;
+int UmlNode::orderWeight()
+{
+    return 9;
 }
 

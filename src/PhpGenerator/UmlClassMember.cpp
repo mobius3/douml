@@ -23,7 +23,7 @@
 //
 // *************************************************************************
 
-#include <QTextStream> 
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QTextStream>
@@ -34,70 +34,79 @@
 #include "UmlSettings.h"
 #include "PhpSettings.h"
 
-void UmlClassMember::generate_require_onces(QTextStream &, Q3CString &) {
+void UmlClassMember::generate_require_onces(QTextStream &, Q3CString &)
+{
 }
 
 void UmlClassMember::remove_comments(Q3CString & s)
 {
-  int index1 = 0;
-  
-  if ((index1 = s.find("${comment}")) != -1)
-    s.remove((unsigned) index1, 10);
-  else if ((index1 = s.find("${description}")) != -1)
-    s.remove((unsigned) index1, 14);
-  
-  while ((index1 = s.find('/', index1)) != -1) {
-    int index2;
-    
-    switch (((const char *) s)[index1 + 1]) {
-    case '/':
-      if ((index2 = s.find('\n', index1 + 2)) != -1)
-	s.remove(index1, index2 - index1 + 1);
-      else
-	s.truncate(index1);
-      break;
-    case '*':
-      if ((index2 = s.find("*/", index1 + 2)) != -1)
-	s.replace(index1, index2 - index1 + 1, " ");
-      else
-	s.truncate(index1);
-      break;
-    default:
-      index1 += 1;
+    int index1 = 0;
+
+    if ((index1 = s.find("${comment}")) != -1)
+        s.remove((unsigned) index1, 10);
+    else if ((index1 = s.find("${description}")) != -1)
+        s.remove((unsigned) index1, 14);
+
+    while ((index1 = s.find('/', index1)) != -1) {
+        int index2;
+
+        switch (((const char *) s)[index1 + 1]) {
+        case '/':
+            if ((index2 = s.find('\n', index1 + 2)) != -1)
+                s.remove(index1, index2 - index1 + 1);
+            else
+                s.truncate(index1);
+
+            break;
+
+        case '*':
+            if ((index2 = s.find("*/", index1 + 2)) != -1)
+                s.replace(index1, index2 - index1 + 1, " ");
+            else
+                s.truncate(index1);
+
+            break;
+
+        default:
+            index1 += 1;
+        }
     }
-  }
 }
 
 void UmlClassMember::remove_arrays(Q3CString & s)
 {
-  int index1 = 0;
-  
-  while ((index1 = s.find('[', index1)) != -1) {
-    int index2 = index1 = s.find(']', index1 + 1);
-    
-    if (index2 == -1) {
-      s.truncate(index1);
-      return;
+    int index1 = 0;
+
+    while ((index1 = s.find('[', index1)) != -1) {
+        int index2 = index1 = s.find(']', index1 + 1);
+
+        if (index2 == -1) {
+            s.truncate(index1);
+            return;
+        }
+        else
+            s.replace(index1, index2 - index1 + 1, " ");
     }
-    else
-      s.replace(index1, index2 - index1 + 1, " ");
-  }
 }
 
-void UmlClassMember::generate_visibility(QTextStream & f) {
-  switch (visibility()) {
-  case PublicVisibility:
-    f << "public ";
-    break;
-  case ProtectedVisibility:
-    f << "protected ";
-    break;
-  case PrivateVisibility:
-    f << "private ";
-    break;
-  default:	// package
-    break;
-  }
+void UmlClassMember::generate_visibility(QTextStream & f)
+{
+    switch (visibility()) {
+    case PublicVisibility:
+        f << "public ";
+        break;
+
+    case ProtectedVisibility:
+        f << "protected ";
+        break;
+
+    case PrivateVisibility:
+        f << "private ";
+        break;
+
+    default:	// package
+        break;
+    }
 }
 
 /*
@@ -106,16 +115,16 @@ bool UmlClassMember::compute_dependency(Q3PtrList<PhpRefType> & dependencies,
 {
   remove_comments(decl);
   remove_arrays(decl);
-  
+
   bool have_type = FALSE;
   const char * p = decl;
   const char * dontsubstituteuntil = 0;
-  
+
   for (;;) {
     UmlTypeSpec ts;
     char c;
     bool dontsearchend = FALSE;
-    
+
     // search word beginning
     while ((c = *p) != 0) {
       if ((c == '_') ||
@@ -142,20 +151,20 @@ bool UmlClassMember::compute_dependency(Q3PtrList<PhpRefType> & dependencies,
 	  p = decl;
 	}
       }
-      else 
+      else
 	p += 1;
     }
-    
+
     if (c == 0)
       return have_type;
-    
+
     if (!dontsearchend) {
       // search word end
       const char * p2 = p;
-      
+
       ts.explicit_type = p2;
       p += 1;
-      
+
       while ((c = *p) != 0) {
 	if ((c == '_') ||
 	    (c == ':') ||
@@ -168,14 +177,14 @@ bool UmlClassMember::compute_dependency(Q3PtrList<PhpRefType> & dependencies,
 	  break;
 	}
       }
-      
+
       if ((p2 = strrchr(ts.explicit_type, ':')) != 0)
 	// remove package name !!!
 	ts.explicit_type = p2 + 1;
-      
+
       if (dontsubstituteuntil == 0) {
 	Q3CString subst = PhpSettings::type(ts.explicit_type);
-	
+
 	if (subst != ts.explicit_type) {
 	  decl = subst + ' ' + p;
 	  p = decl;
@@ -184,16 +193,16 @@ bool UmlClassMember::compute_dependency(Q3PtrList<PhpRefType> & dependencies,
 	}
       }
     }
-    
+
     // check manually added keyword
     if ((ts.explicit_type == "const") ||
 	(ts.explicit_type == "static"))
       continue;
-    
+
     if (PhpRefType::add(ts, dependencies))
       have_type = TRUE;
   }
-  
+
   return have_type;
 }
 */

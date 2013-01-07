@@ -27,8 +27,9 @@
 
 #include <QtGui/QWidget>
 
-class UmlDesktop {
-  public:
+class UmlDesktop
+{
+public:
     static void init();
     static void limits(int & l, int & t, int & r, int & b);
     static void set_limits(int l, int t, int r, int b);
@@ -36,15 +37,15 @@ class UmlDesktop {
     static int height();
     static void tocenter(QWidget * who);
     static void limitsize_center(QWidget * who, QSize & previous, double max_w, double max_h);
-    static void limitsize_move(QWidget * who, QSize & previous, 
-			       double max_w, double max_h);
-    static void setsize_center(QWidget * who, QSize & previous, 
-			       double pw, double ph);
+    static void limitsize_move(QWidget * who, QSize & previous,
+                               double max_w, double max_h);
+    static void setsize_center(QWidget * who, QSize & previous,
+                               double pw, double ph);
     static bool fixed();
     static bool nogui();
     static void set_nogui();
-        
-  private:
+
+private:
     static int left;
     static int top;
     static int right;

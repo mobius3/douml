@@ -41,10 +41,11 @@ class BasicData;
 class KeyValuesTable;
 class BodyDialog;
 
-class BasicDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class BasicDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     BasicData * data;
     LineEdit * edname;
     Q3ComboBox * edstereotype;
@@ -52,16 +53,16 @@ class BasicDialog : public Q3TabDialog {
     KeyValuesTable * kvtable;
     QSize & previous_size;
     Q3PtrList<BodyDialog> edits;
-    
+
     static void post_edit_description(BasicDialog * d, QString s);
-      
-  public:
+
+public:
     BasicDialog(BasicData * nd, QString s,
-		const QStringList & default_stereotypes,
-		QSize &, bool unnamed = FALSE);
+                const QStringList & default_stereotypes,
+                QSize &, bool unnamed = FALSE);
     virtual ~BasicDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void edit_description();

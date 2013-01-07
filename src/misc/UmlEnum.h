@@ -34,76 +34,76 @@
 // and known by ToolCom.cpp
 
 enum UmlCode {
-  UmlAssociation, UmlDirectionalAssociation, UmlGeneralisation, 
-  UmlAggregation, UmlAggregationByValue, UmlDirectionalAggregation,
-  UmlDirectionalAggregationByValue, UmlDependency, UmlRealize,
-  UmlRelations, // the first one just after the relations
-  UmlAttribute, UmlOperation, UmlExtraMember,
-  UmlClass,
-  // all the previous ones are class members
-  UmlUseCase, UmlComponent, UmlDeploymentNode, UmlArtifact,
-  UmlSimpleRelations,	// mainly defined for api
-  UmlClassDiagram, UmlUseCaseDiagram, UmlSeqDiagram, UmlColDiagram,
-  UmlComponentDiagram, UmlDeploymentDiagram,
-  UmlObjectDiagram, UmlActivityDiagram,	// api >= 24
-  UmlClassView, UmlUseCaseView, UmlComponentView, UmlDeploymentView,
-  UmlPackage,
-  UmlState, UmlTransition, UmlRegion, UmlStateDiagram, UmlStateAction,
-  InitialPS, EntryPointPS,	// warning : PS order used
-  FinalPS, TerminatePS, ExitPointPS,
-  DeepHistoryPS, ShallowHistoryPS, 
-  JunctionPS, ChoicePS, ForkPS, JoinPS,
-  UmlActivity, UmlFlow, UmlParameter, UmlParameterSet,
-  UmlActivityPartition, UmlExpansionRegion, UmlInterruptibleActivityRegion,
-  UmlActivityAction,
-  // only for plug-out exchange, api know the order ...
-  umlOpaqueAction = UmlActivityAction, umlAcceptEventAction,
-  umlReadVariableValueAction, umlClearVariableValueAction,
-  umlWriteVariableValueAction,
-  umlAddVariableValueAction, umlRemoveVariableValueAction,
-  umlCallBehaviorAction, umlCallOperationAction,
-  umlSendObjectAction, umlSendSignalAction, umlBroadcastSignalAction,
-  umlUnmarshallAction, umlValueSpecificationAction,
-  umlAcceptCallAction, umlReplyAction, umlCreateObjectAction,  // api >= 44
-  umlDestroyObjectAction, umlTestIdentityAction,  // api >= 44
-  umlRaiseExceptionAction, umlReduceAction,  // api >= 44
-  // ... end of only for plug-out exchange
-  UmlActivityObject, UmlExpansionNode, UmlActivityPin, 
-  InitialAN, FlowFinalAN, ActivityFinalAN,	// warning : ActivityNode order used
-  DecisionAN, MergeAN, ForkAN, JoinAN,
-  UmlClassInstance, // api >= 31
-  
-  BrowserNodeSup,
-  
-  // the followings are unknown by api.h
-  UmlDependOn, UmlInherit, UmlObjectLink,	// not between classes
-  UmlArrowPoint,
-  UmlNote, UmlAnchor, UmlLabel, UmlText,
-  UmlSyncMsg, UmlAsyncMsg, 
-  UmlFoundSyncMsg, UmlFoundAsyncMsg, UmlLostSyncMsg, UmlLostAsyncMsg, 
-  UmlSyncSelfMsg, UmlAsyncSelfMsg,
-  UmlReturnMsg, UmlSelfReturnMsg,
-  UmlLifeLine, UmlActivityDuration, UmlLostFoundMsgSupport,
-  UmlLink, UmlSelfLink, UmlLinkDirs,
-  UmlContain, 
-  UmlTemplate, UmlIcon,
-  UmlProject, UmlSelect,
-  UmlHub,
-  UmlRequired, UmlProvided, UmlArrowJunction,
-  UmlFragment, UmlContinuation,
-  UmlPseudoState,		// usefull in some case
-  UmlSignalIn,
-  UmlSignalOut,
-  UmlSubject,
-  UmlActivityNode,		// usefull in some case
-  UmlInfo,
-  UmlFragmentSeparator,
-  UmlConstraint,
-  UmlInner,
-  UmlStereotypeProperties,
-  UmlImage,
+    UmlAssociation, UmlDirectionalAssociation, UmlGeneralisation,
+    UmlAggregation, UmlAggregationByValue, UmlDirectionalAggregation,
+    UmlDirectionalAggregationByValue, UmlDependency, UmlRealize,
+    UmlRelations, // the first one just after the relations
+    UmlAttribute, UmlOperation, UmlExtraMember,
+    UmlClass,
+    // all the previous ones are class members
+    UmlUseCase, UmlComponent, UmlDeploymentNode, UmlArtifact,
+    UmlSimpleRelations,	// mainly defined for api
+    UmlClassDiagram, UmlUseCaseDiagram, UmlSeqDiagram, UmlColDiagram,
+    UmlComponentDiagram, UmlDeploymentDiagram,
+    UmlObjectDiagram, UmlActivityDiagram,	// api >= 24
+    UmlClassView, UmlUseCaseView, UmlComponentView, UmlDeploymentView,
+    UmlPackage,
+    UmlState, UmlTransition, UmlRegion, UmlStateDiagram, UmlStateAction,
+    InitialPS, EntryPointPS,	// warning : PS order used
+    FinalPS, TerminatePS, ExitPointPS,
+    DeepHistoryPS, ShallowHistoryPS,
+    JunctionPS, ChoicePS, ForkPS, JoinPS,
+    UmlActivity, UmlFlow, UmlParameter, UmlParameterSet,
+    UmlActivityPartition, UmlExpansionRegion, UmlInterruptibleActivityRegion,
+    UmlActivityAction,
+    // only for plug-out exchange, api know the order ...
+    umlOpaqueAction = UmlActivityAction, umlAcceptEventAction,
+    umlReadVariableValueAction, umlClearVariableValueAction,
+    umlWriteVariableValueAction,
+    umlAddVariableValueAction, umlRemoveVariableValueAction,
+    umlCallBehaviorAction, umlCallOperationAction,
+    umlSendObjectAction, umlSendSignalAction, umlBroadcastSignalAction,
+    umlUnmarshallAction, umlValueSpecificationAction,
+    umlAcceptCallAction, umlReplyAction, umlCreateObjectAction,  // api >= 44
+    umlDestroyObjectAction, umlTestIdentityAction,  // api >= 44
+    umlRaiseExceptionAction, umlReduceAction,  // api >= 44
+    // ... end of only for plug-out exchange
+    UmlActivityObject, UmlExpansionNode, UmlActivityPin,
+    InitialAN, FlowFinalAN, ActivityFinalAN,	// warning : ActivityNode order used
+    DecisionAN, MergeAN, ForkAN, JoinAN,
+    UmlClassInstance, // api >= 31
 
-  UmlCodeSup
+    BrowserNodeSup,
+
+    // the followings are unknown by api.h
+    UmlDependOn, UmlInherit, UmlObjectLink,	// not between classes
+    UmlArrowPoint,
+    UmlNote, UmlAnchor, UmlLabel, UmlText,
+    UmlSyncMsg, UmlAsyncMsg,
+    UmlFoundSyncMsg, UmlFoundAsyncMsg, UmlLostSyncMsg, UmlLostAsyncMsg,
+    UmlSyncSelfMsg, UmlAsyncSelfMsg,
+    UmlReturnMsg, UmlSelfReturnMsg,
+    UmlLifeLine, UmlActivityDuration, UmlLostFoundMsgSupport,
+    UmlLink, UmlSelfLink, UmlLinkDirs,
+    UmlContain,
+    UmlTemplate, UmlIcon,
+    UmlProject, UmlSelect,
+    UmlHub,
+    UmlRequired, UmlProvided, UmlArrowJunction,
+    UmlFragment, UmlContinuation,
+    UmlPseudoState,		// usefull in some case
+    UmlSignalIn,
+    UmlSignalOut,
+    UmlSubject,
+    UmlActivityNode,		// usefull in some case
+    UmlInfo,
+    UmlFragmentSeparator,
+    UmlConstraint,
+    UmlInner,
+    UmlStereotypeProperties,
+    UmlImage,
+
+    UmlCodeSup
 };
 
 #define IsaRelation(x) (x < UmlRelations)
@@ -115,16 +115,18 @@ enum UmlCode {
 
 inline bool IsaActivityContainer(UmlCode k, bool part = 0)
 {
-  switch (k) {
-  case UmlActivity:
-  case UmlExpansionRegion:
-  case UmlInterruptibleActivityRegion:
-    return !((bool) 0);
-  case UmlActivityPartition:
-    return part;
-  default:
-    return 0;
-  }
+    switch (k) {
+    case UmlActivity:
+    case UmlExpansionRegion:
+    case UmlInterruptibleActivityRegion:
+        return !((bool) 0);
+
+    case UmlActivityPartition:
+        return part;
+
+    default:
+        return 0;
+    }
 }
 
 enum aCorner { NoCorner, UmlTopLeft, UmlTopRight, UmlBottomLeft, UmlBottomRight };
@@ -142,55 +144,55 @@ enum UmlOrderingKind { UmlUnordered, UmlOrdered, UmlLifo, UmlFifo };
 // order known by ActivityActionDialog and api through UmlCode
 // order equals umlXX in UmlCode
 enum UmlActionKind {
-  UmlOpaqueAction, UmlAcceptEventAction,
-  UmlReadVariableValueAction, UmlClearVariableValueAction,
-  UmlWriteVariableValueAction,
-  UmlAddVariableValueAction, UmlRemoveVariableValueAction,
-  UmlCallBehaviorAction, UmlCallOperationAction,
-  UmlSendObjectAction, UmlSendSignalAction, UmlBroadcastSignalAction,
-  UmlUnmarshallAction, UmlValueSpecificationAction,
-  // api >= 44
-  UmlAcceptCallAction, UmlReplyAction, UmlCreateObjectAction,
-  UmlDestroyObjectAction, UmlTestIdentityAction,
-  UmlRaiseExceptionAction, UmlReduceAction,
-};		     
+    UmlOpaqueAction, UmlAcceptEventAction,
+    UmlReadVariableValueAction, UmlClearVariableValueAction,
+    UmlWriteVariableValueAction,
+    UmlAddVariableValueAction, UmlRemoveVariableValueAction,
+    UmlCallBehaviorAction, UmlCallOperationAction,
+    UmlSendObjectAction, UmlSendSignalAction, UmlBroadcastSignalAction,
+    UmlUnmarshallAction, UmlValueSpecificationAction,
+    // api >= 44
+    UmlAcceptCallAction, UmlReplyAction, UmlCreateObjectAction,
+    UmlDestroyObjectAction, UmlTestIdentityAction,
+    UmlRaiseExceptionAction, UmlReduceAction,
+};
 
 enum Uml3States { UmlYes, UmlNo, UmlDefaultState };
 
-enum UmlColor { 
-  UmlTransparent,
-  UmlWhite,
-  UmlLightYellow,
-  UmlYellow,
-  UmlMediumYellow,
-  UmlDarkYellow,
-  UmlLightBlue,
-  UmlBlue,
-  UmlLightMediumBlue,
-  UmlMediumBlue,
-  UmlDarkBlue,
-  UmlLightGreen,
-  UmlGreen,
-  UmlLightMediumGreen,
-  UmlMediumGreen,
-  UmlDarkGreen,
-  UmlLightRed,
-  UmlMidRed,
-  UmlRed,
-  UmlVeryLightOrange,
-  UmlLightOrange,
-  UmlOrange,
-  UmlDarkOrange,
-  UmlLightMagenta,
-  UmlMagenta,
-  UmlMidMagenta,
-  UmlDarkMagenta,
-  UmlVeryLightGray,
-  UmlLightGray,
-  UmlGray,
-  UmlDarkGray,
-  UmlBlack,
-  UmlDefaultColor
+enum UmlColor {
+    UmlTransparent,
+    UmlWhite,
+    UmlLightYellow,
+    UmlYellow,
+    UmlMediumYellow,
+    UmlDarkYellow,
+    UmlLightBlue,
+    UmlBlue,
+    UmlLightMediumBlue,
+    UmlMediumBlue,
+    UmlDarkBlue,
+    UmlLightGreen,
+    UmlGreen,
+    UmlLightMediumGreen,
+    UmlMediumGreen,
+    UmlDarkGreen,
+    UmlLightRed,
+    UmlMidRed,
+    UmlRed,
+    UmlVeryLightOrange,
+    UmlLightOrange,
+    UmlOrange,
+    UmlDarkOrange,
+    UmlLightMagenta,
+    UmlMagenta,
+    UmlMidMagenta,
+    UmlDarkMagenta,
+    UmlVeryLightGray,
+    UmlLightGray,
+    UmlGray,
+    UmlDarkGray,
+    UmlBlack,
+    UmlDefaultColor
 };
 
 enum ClassDrawingMode { asClass, asInterface, asControl, asBoundary, asEntity, asActor, Natural, DefaultClassDrawingMode };
@@ -200,34 +202,34 @@ enum DrawingLanguage { UmlView, CppView, JavaView, IdlView, PhpView, PythonView,
 enum ShowContextMode { noContext, umlContext, namespaceContext, javaPackageContext, pythonPackageContext, moduleContext, DefaultShowContextMode };
 
 enum UmlFont {
-  UmlSmallFont, UmlSmallItalicFont, UmlSmallBoldFont, UmlSmallBoldItalicFont, 
-  UmlNormalFont, UmlNormalItalicFont, UmlNormalBoldFont, UmlNormalBoldItalicFont, 
-  UmlNormalUnderlinedFont, UmlNormalStrikeOutFont,
-  UmlLargeFont, UmlLargeItalicFont, UmlLargeBoldFont, UmlLargeBoldItalicFont,
-  UmlFontNumber
+    UmlSmallFont, UmlSmallItalicFont, UmlSmallBoldFont, UmlSmallBoldItalicFont,
+    UmlNormalFont, UmlNormalItalicFont, UmlNormalBoldFont, UmlNormalBoldItalicFont,
+    UmlNormalUnderlinedFont, UmlNormalStrikeOutFont,
+    UmlLargeFont, UmlLargeItalicFont, UmlLargeBoldFont, UmlLargeBoldItalicFont,
+    UmlFontNumber
 };
 
 // warning : order known by DiagramView::init_format_menu()
 // and UmlWindow::init_format_menu() and UmlWindow::formatMenuAboutToShow()
 enum CanvasFormat {
-  IsoA0, IsoA1, IsoA2, IsoA3, IsoA4, IsoA5,
-  UsA, UsB, UsC, UsD, UsE,
-  UsLetter, UsLegal, UsTabloid,
-  IsoA0Landscape, IsoA1Landscape, IsoA2Landscape,
-  IsoA3Landscape, IsoA4Landscape, IsoA5Landscape,
-  UsALandscape, UsBLandscape, UsCLandscape,
-  UsDLandscape, UsELandscape,
-  UsLetterLandscape, UsLegalLandscape, UsLedger, // ledger =  tabloid lanscape
-  CanvasFormatSup
+    IsoA0, IsoA1, IsoA2, IsoA3, IsoA4, IsoA5,
+    UsA, UsB, UsC, UsD, UsE,
+    UsLetter, UsLegal, UsTabloid,
+    IsoA0Landscape, IsoA1Landscape, IsoA2Landscape,
+    IsoA3Landscape, IsoA4Landscape, IsoA5Landscape,
+    UsALandscape, UsBLandscape, UsCLandscape,
+    UsDLandscape, UsELandscape,
+    UsLetterLandscape, UsLegalLandscape, UsLedger, // ledger =  tabloid lanscape
+    CanvasFormatSup
 };
 
 enum LineGeometry {
-  NoGeometry,
-  HVGeometry, HVrGeometry,
-  VHGeometry, VHrGeometry,
-  HVHGeometry,
-  VHVGeometry,
-  GeometrySup
+    NoGeometry,
+    HVGeometry, HVrGeometry,
+    VHGeometry, VHrGeometry,
+    HVHGeometry,
+    VHVGeometry,
+    GeometrySup
 };
 
 #define RecenterBegin GeometrySup
@@ -252,7 +254,7 @@ extern UmlCode arrow_type(const char *);
 extern bool IsaSimpleRelation(UmlCode);
 extern UmlVisibility visibility(const char * s);
 extern UmlCode relation_type(const char * s,
-			     bool simple_relation = 0);
+                             bool simple_relation = 0);
 extern UmlParamDirection direction(const char * s);
 extern UmlParamEffect effect(const char * s);
 extern Uml3States state(const char * s);

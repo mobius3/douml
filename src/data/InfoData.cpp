@@ -33,35 +33,40 @@
 //Added by qt3to4:
 #include <QTextStream>
 
-void InfoData::save(QTextStream & st, const char * s1, const char * s2) const {
-  indent(+1);
-  
-  if (!first.isEmpty()) {
-    nl_indent(st);
-    st << s1 << " ";
-    save_string(first, st);
-  }
-  if (!second.isEmpty()) {
-    nl_indent(st);
-    st << s2 << " ";
-    save_string(second, st);
-  }
-  
-  indent(-1);
+void InfoData::save(QTextStream & st, const char * s1, const char * s2) const
+{
+    indent(+1);
+
+    if (!first.isEmpty()) {
+        nl_indent(st);
+        st << s1 << " ";
+        save_string(first, st);
+    }
+
+    if (!second.isEmpty()) {
+        nl_indent(st);
+        st << s2 << " ";
+        save_string(second, st);
+    }
+
+    indent(-1);
 }
 
-void InfoData::read(char * & st, char * & k, const char * s1, const char * s2) {
-  if (!strcmp(k, s1)) {
-    first = read_string(st);
-    k = read_keyword(st);
-  }
-  if (!strcmp(k, s2)) {
-    second = read_string(st);
-    k = read_keyword(st);
-  }
+void InfoData::read(char *& st, char *& k, const char * s1, const char * s2)
+{
+    if (!strcmp(k, s1)) {
+        first = read_string(st);
+        k = read_keyword(st);
+    }
+
+    if (!strcmp(k, s2)) {
+        second = read_string(st);
+        k = read_keyword(st);
+    }
 }
 
-void InfoData::send_def(ToolCom * com) {
-  com->write_string(first);
-  com->write_string(second);
+void InfoData::send_def(ToolCom * com)
+{
+    com->write_string(first);
+    com->write_string(second);
 }

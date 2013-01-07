@@ -46,18 +46,19 @@ struct FlowDef;
 class BodyDialog;
 
 struct FlDialog {
-  LineEdit * edweight;
-  MultiLineEdit * edguard;
-  MultiLineEdit * edselection;
-  MultiLineEdit * edtransformation;
-  
-  void accept(FlowDef &);
+    LineEdit * edweight;
+    MultiLineEdit * edguard;
+    MultiLineEdit * edselection;
+    MultiLineEdit * edtransformation;
+
+    void accept(FlowDef &);
 };
 
-class FlowDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class FlowDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     QWidget * umltab;
     bool visit;
     FlowData * flow;
@@ -65,16 +66,16 @@ class FlowDialog : public Q3TabDialog {
     Q3ComboBox * edstereotype;
     MultiLineEdit * comment;
     Q3PtrList<BodyDialog> edits;
-    
+
     FlDialog uml;
     FlDialog cpp;
     FlDialog java;
-        
+
     // User
     KeyValuesTable * kvtable;
-    
+
     static QSize previous_size;
-  
+
     static void post_edit_description(FlowDialog * d, QString s);
     static void post_edit_uml_guard(FlowDialog * d, QString s);
     static void post_edit_uml_selection(FlowDialog * d, QString s);
@@ -85,19 +86,19 @@ class FlowDialog : public Q3TabDialog {
     static void post_edit_java_guard(FlowDialog * d, QString s);
     static void post_edit_java_selection(FlowDialog * d, QString s);
     static void post_edit_java_transformation(FlowDialog * d, QString s);
-  
-  public:
+
+public:
     FlowDialog(FlowData * r);
     virtual ~FlowDialog();
-  
-  protected:
+
+protected:
     void init_tab(FlDialog &, FlowDef & fdef, const char * lbl,
-		  const char * sl_guard, const char * sl_selection,
-		  const char * sl_transformation, bool enabled);
-  protected slots:
+                  const char * sl_guard, const char * sl_selection,
+                  const char * sl_transformation, bool enabled);
+protected slots:
     virtual void polish();
     virtual void accept();
-  
+
     void edit_description();
     void edit_uml_guard();
     void edit_uml_selection();

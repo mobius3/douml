@@ -34,21 +34,22 @@
 class QTextStream;
 class UmlPackage;
 
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n)
-      : UmlBaseItem(id, n) {
+        : UmlBaseItem(id, n) {
     };
     virtual ~UmlItem();
-    
+
     virtual void generate();
     virtual UmlPackage * package();
     void manage_comment(const char *& p, const char *& pp);
-    void manage_description(const char *& p, const char *& pp);  
+    void manage_description(const char *& p, const char *& pp);
     void manage_docstring(const char *& p, const char *& pp, BooL & indent_needed,
-			  Q3CString & indent, Q3CString & saved_indent);  
+                          Q3CString & indent, Q3CString & saved_indent);
     void manage_alias(const char *& p, QTextStream & ts,
-		      Q3CString indent, BooL & indent_needed);
+                      Q3CString indent, BooL & indent_needed);
 };
 
 #endif

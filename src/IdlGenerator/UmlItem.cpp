@@ -30,94 +30,105 @@
 
 #include "UmlItem.h"
 
-UmlItem::~UmlItem() {
+UmlItem::~UmlItem()
+{
 }
 
-void UmlItem::manage_comment(const char *& p, const char *& pp) {
-  static QString the_comment;
-  
-  p += 10;
-  
-  if ((pp != 0) || // comment contains ${comment} !
-      description().isEmpty())
-    return;
-  
-  const char * comment = description();
-  
-  the_comment = "//";
-  
-  do {
-    the_comment += *comment;
-    if ((*comment++ == '\n') && *comment)
-      the_comment += "//";
-  } while (*comment);
+void UmlItem::manage_comment(const char *& p, const char *& pp)
+{
+    static QString the_comment;
 
-  switch (*p) {
-  case 0:
-  case '\n':
-    break;
-  default:
-    the_comment += '\n';
-  }
-  
-  pp = p;
-  p = the_comment;
-}
+    p += 10;
 
-void UmlItem::manage_description(const char *& p, const char *& pp) {
-  static QString the_comment;
-  
-  p += 14;
-  
-  if ((pp != 0) || // comment contains ${description} !
-      description().isEmpty())
-    return;
-  
-  the_comment = description();
+    if ((pp != 0) || // comment contains ${comment} !
+        description().isEmpty())
+        return;
 
-  switch (*p) {
-  case 0:
-  case '\n':
-    break;
-  default:
-    the_comment += '\n';
-  }
-    
-  pp = p;
-  p = the_comment;
-}
+    const char * comment = description();
 
-void UmlItem::manage_alias(const char *& p, QTextStream & ts) {
-  // p starts by '@'
-  const char * pclosed;
-  
-  if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
-    Q3CString key(p + 2, pclosed - p - 1);
-    Q3CString value;
-    UmlItem * node = this;
+    the_comment = "//";
 
     do {
-      if (node->propertyValue(key, value))
-	break;
-      node = node->parent();
-    } while (node != 0);
-    
-    if (node != 0)
-      // find, insert the value
-      ts << value;
-    else
-      // not find, insert the key
-      ts << "@{" << key << '}';
+        the_comment += *comment;
 
-    // bypass the key
-    p += strlen(key) + 3;
-  }
-  else
-    // bypass '$'
-    ts << *p++;
+        if ((*comment++ == '\n') && *comment)
+            the_comment += "//";
+    }
+    while (*comment);
+
+    switch (*p) {
+    case 0:
+    case '\n':
+        break;
+
+    default:
+        the_comment += '\n';
+    }
+
+    pp = p;
+    p = the_comment;
 }
 
-void UmlItem::generate() {
-  // does nothing
+void UmlItem::manage_description(const char *& p, const char *& pp)
+{
+    static QString the_comment;
+
+    p += 14;
+
+    if ((pp != 0) || // comment contains ${description} !
+        description().isEmpty())
+        return;
+
+    the_comment = description();
+
+    switch (*p) {
+    case 0:
+    case '\n':
+        break;
+
+    default:
+        the_comment += '\n';
+    }
+
+    pp = p;
+    p = the_comment;
+}
+
+void UmlItem::manage_alias(const char *& p, QTextStream & ts)
+{
+    // p starts by '@'
+    const char * pclosed;
+
+    if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
+        Q3CString key(p + 2, pclosed - p - 1);
+        Q3CString value;
+        UmlItem * node = this;
+
+        do {
+            if (node->propertyValue(key, value))
+                break;
+
+            node = node->parent();
+        }
+        while (node != 0);
+
+        if (node != 0)
+            // find, insert the value
+            ts << value;
+        else
+            // not find, insert the key
+            ts << "@{" << key << '}';
+
+        // bypass the key
+        p += strlen(key) + 3;
+    }
+    else
+        // bypass '$'
+        ts << *p++;
+}
+
+void UmlItem::generate()
+{
+    // does nothing
 }
 

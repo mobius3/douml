@@ -23,7 +23,7 @@
 //
 // *************************************************************************
 
-#include <QTextStream> 
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QTextStream>
@@ -34,35 +34,38 @@
 #include "UmlClass.h"
 
 void UmlExtraClassMember::compute_dependency(Q3PtrList<CppRefType> &,
-					     const Q3CString &,
-					     bool) {
+        const Q3CString &,
+        bool)
+{
 }
 
 void UmlExtraClassMember::generate_decl(aVisibility &,
-					QTextStream & f_h,
-					const Q3CString &,
-					Q3CString indent,
-					BooL & first, bool) {
-  first = FALSE;
-  
-  const char * p = cppDecl();
-  
-  if (*p != '#')
-    f_h << indent;
-  
-  f_h << p;
+                                        QTextStream & f_h,
+                                        const Q3CString &,
+                                        Q3CString indent,
+                                        BooL & first, bool)
+{
+    first = FALSE;
+
+    const char * p = cppDecl();
+
+    if (*p != '#')
+        f_h << indent;
+
+    f_h << p;
 }
 
 void UmlExtraClassMember::generate_def(QTextStream & f, Q3CString indent,
-				       bool h, Q3CString templates,
-				       Q3CString, Q3CString, Q3CString) {
-  if (!cppDef().isEmpty() &&
-      ((isCppInline() || !templates.isEmpty()) == h)) {
-    const char * p = cppDef();
-    
-    if (*p != '#')
-      f << indent;
-    
-    f << p;
-  }
+                                       bool h, Q3CString templates,
+                                       Q3CString, Q3CString, Q3CString)
+{
+    if (!cppDef().isEmpty() &&
+        ((isCppInline() || !templates.isEmpty()) == h)) {
+        const char * p = cppDef();
+
+        if (*p != '#')
+            f << indent;
+
+        f << p;
+    }
 }

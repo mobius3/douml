@@ -1,7 +1,8 @@
 
 #include "UmlCollaborationDiagram.h"
 
-int UmlCollaborationDiagram::orderWeight() {
-  return 8;
+int UmlCollaborationDiagram::orderWeight()
+{
+    return 8;
 }
 

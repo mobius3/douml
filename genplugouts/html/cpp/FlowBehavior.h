@@ -4,8 +4,9 @@
 
 #include <q3cstring.h>
 
-class FlowBehavior {
-  public:
+class FlowBehavior
+{
+public:
     Q3CString weight;
 
     Q3CString guard;

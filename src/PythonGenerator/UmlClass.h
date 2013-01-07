@@ -39,27 +39,28 @@ class QTextStream;
 class UmlPackage;
 class UmlClass;
 
-class UmlClass : public UmlBaseClass {
-  private:
+class UmlClass : public UmlBaseClass
+{
+private:
     bool managed;
-    
-  public:
+
+public:
     UmlClass(void * id, const Q3CString & n)
-      : UmlBaseClass(id, n), managed(FALSE) {};
-  
+        : UmlBaseClass(id, n), managed(FALSE) {};
+
     Q3CString python_stereotype();
-    
+
     virtual void generate();
     virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, BooL & indent_needed,
-			  int & enum_item_rank, const Q3CString & self);    
-    
+                          Q3CString indent, BooL & indent_needed,
+                          int & enum_item_rank, const Q3CString & self);
+
     void generate_imports(QTextStream & f, Q3CString & made);
     void generate_import(QTextStream & f, UmlArtifact * using_art, bool from, Q3CString & made);
     void generate(QTextStream &, Q3CString indent, BooL & indent_needed);
     void generate_instance_att_rel(QTextStream & f, Q3CString indent,
-				   BooL & indent_needed, Q3CString self);
-    
+                                   BooL & indent_needed, Q3CString self);
+
     UmlArtifact * assocArtifact();
 
     void write(QTextStream &);

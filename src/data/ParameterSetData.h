@@ -35,34 +35,37 @@ class BrowserPin;
 class ToolCom;
 class BrowserNode;
 
-class ParameterSetData : public SimpleData {
-  Q_OBJECT
-    
-  friend class ParameterSetDialog;
-  
-  protected:
+class ParameterSetData : public SimpleData
+{
+    Q_OBJECT
+
+    friend class ParameterSetDialog;
+
+protected:
     Q3ValueList<BrowserPin *> pins;
 
-  public:
+public:
     ParameterSetData();
     ParameterSetData(ParameterSetData * model, BrowserNode * bn);
-  
-    const Q3ValueList<BrowserPin *> & get_pins() const { return pins; }
+
+    const Q3ValueList<BrowserPin *> & get_pins() const {
+        return pins;
+    }
 
     void edit();
-    
-    void send_uml_def(ToolCom * com, BrowserNode * bn,
-		      const QString & comment);
-    bool tool_cmd(ToolCom * com, const char * args,
-		  BrowserNode * bn, const QString & comment);
-    
-    void save(QTextStream &, QString & warning) const;
-    void read(char * &, char * &);
 
-  protected:
+    void send_uml_def(ToolCom * com, BrowserNode * bn,
+                      const QString & comment);
+    bool tool_cmd(ToolCom * com, const char * args,
+                  BrowserNode * bn, const QString & comment);
+
+    void save(QTextStream &, QString & warning) const;
+    void read(char *& , char *&);
+
+protected:
     void set_pins(const Q3ValueList<BrowserPin *> & l);
 
-  protected slots:
+protected slots:
     void check();
 };
 

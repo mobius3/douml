@@ -38,14 +38,15 @@ class QPixmap;
 class StateDiagramWindow;
 class SimpleData;
 
-class BrowserStateDiagram : public BrowserDiagram {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserStateDiagram : public BrowserDiagram
+{
+    friend class StereotypesDialog;
+
+protected:
     static Q3PtrList<BrowserStateDiagram> imported;
     static Q3ValueList<int> imported_ids;
     static QStringList its_default_stereotypes;
-  
+
     SimpleData * def;
     StateDiagramWindow * window;
     StateDiagramSettings settings;
@@ -55,28 +56,28 @@ class BrowserStateDiagram : public BrowserDiagram {
     UmlColor note_color;
     UmlColor fragment_color;
     UmlColor package_color;
-  
+
     BrowserStateDiagram(BrowserStateDiagram * model, BrowserNode * p);
     BrowserStateDiagram(int id);
     void make();
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserStateDiagram(QString s, BrowserNode * p, int id = 0);
     virtual ~BrowserStateDiagram();
-      
+
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
-  
-    virtual const QPixmap* pixmap (int) const;
+                                    QString name = QString());
+
+    virtual const QPixmap * pixmap(int) const;
     virtual void draw_svg() const;
-  
+
     virtual void menu();
     virtual void apply_shortcut(QString s);
     virtual void open(bool);
     virtual void on_close();
-    virtual void read_session(char * & st);
+    virtual void read_session(char *& st);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;
     virtual int get_identifier() const;
@@ -98,25 +99,25 @@ class BrowserStateDiagram : public BrowserDiagram {
     virtual DrawingLanguage get_language() const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserStateDiagram * read(char * &, char *, BrowserNode *);
-    static BrowserStateDiagram * read_ref(char * &, char *);
+    static BrowserStateDiagram * read(char *& , char *, BrowserNode *);
+    static BrowserStateDiagram * read_ref(char *& , char *);
     static BrowserNode * get_it(const char * k, int id);
-    
+
     void edit_settings();
-    
+
     static BrowserStateDiagram * add_state_diagram(BrowserNode * future_parent);
-    
+
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     virtual void renumber(int phase);
     static void open_all();
     static void import();
-    
+
     static void compute_referenced_by(Q3PtrList<BrowserNode> & l, BrowserNode *,
-				      const char * kc, char const * kr);
-    
+                                      const char * kc, char const * kr);
+
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;
     virtual QString drag_postfix() const;

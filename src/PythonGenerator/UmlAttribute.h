@@ -33,15 +33,16 @@ class QTextStream;
 
 #include "UmlBaseAttribute.h"
 
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n)
-      :  UmlBaseAttribute(id, n) {};
+        :  UmlBaseAttribute(id, n) {};
 
     virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, BooL & indent_needed,
-			  int & enum_item_rank, const Q3CString & self);
-    
+                          Q3CString indent, BooL & indent_needed,
+                          int & enum_item_rank, const Q3CString & self);
+
     virtual void generate_imports(QTextStream & f, Q3CString & made);
 };
 

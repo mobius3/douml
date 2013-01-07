@@ -23,146 +23,157 @@
 //
 // *************************************************************************
 
-#include <QTextStream> 
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QTextStream>
 
 #include "UmlItem.h"
 
-UmlItem::~UmlItem() {
+UmlItem::~UmlItem()
+{
 }
 
-void UmlItem::manage_comment(const char *& p, const char *& pp) {
-  static Q3CString the_comment;
-  
-  p += 10;
-  
-  if ((pp != 0) || // comment contains ${comment} !
-      description().isEmpty())
-    return;
-  
-  const char * comment = description();
-  
-  the_comment = "#";
-  
-  do {
-    the_comment += *comment;
-    if ((*comment++ == '\n') && *comment)
-      the_comment += "#";
-  } while (*comment);
-  
-  switch (*p) {
-  case 0:
-  case '\n':
-    break;
-  default:
-    the_comment += '\n';
-  }
-    
-  pp = p;
-  p = the_comment;
+void UmlItem::manage_comment(const char *& p, const char *& pp)
+{
+    static Q3CString the_comment;
+
+    p += 10;
+
+    if ((pp != 0) || // comment contains ${comment} !
+        description().isEmpty())
+        return;
+
+    const char * comment = description();
+
+    the_comment = "#";
+
+    do {
+        the_comment += *comment;
+
+        if ((*comment++ == '\n') && *comment)
+            the_comment += "#";
+    }
+    while (*comment);
+
+    switch (*p) {
+    case 0:
+    case '\n':
+        break;
+
+    default:
+        the_comment += '\n';
+    }
+
+    pp = p;
+    p = the_comment;
 }
 
-void UmlItem::manage_description(const char *& p, const char *& pp) {
-  static Q3CString the_comment;
-  
-  p += 14;
-  
-  the_comment = description();
-  
-  if ((pp != 0) || // comment contains ${description} !
-      the_comment.isEmpty())
-    return;
-  
-  pp = p;
-  p = the_comment;
+void UmlItem::manage_description(const char *& p, const char *& pp)
+{
+    static Q3CString the_comment;
+
+    p += 14;
+
+    the_comment = description();
+
+    if ((pp != 0) || // comment contains ${description} !
+        the_comment.isEmpty())
+        return;
+
+    pp = p;
+    p = the_comment;
 }
 
 void UmlItem::manage_docstring(const char *& p, const char *& pp, BooL & indent_needed,
-			       Q3CString & indent, Q3CString & saved_indent)
+                               Q3CString & indent, Q3CString & saved_indent)
 {
-  static Q3CString the_comment;
-  
-  p += 12;
-  
-  the_comment = description();
-  
-  if ((pp != 0) || // comment contains ${description} !
-      the_comment.isEmpty())
-    return;
-    
-  int index = 0;
-  
-  while ((index = the_comment.find("\"\"\"", index)) != -1) {
-    the_comment.insert(index, "\\");
-    index += 2;
-  }
-  
-  if (!indent.isEmpty()) {
-    int len = indent.length() + 1;
-    
-    index = 0;
-    
-    while ((index = the_comment.find('\n', index)) != -1) {
-      the_comment.insert(index + 1, (const char*)indent);
-      index += len;
-    }
-  }
-  
-  the_comment = "\"\"\"" + the_comment + "\"\"\"\n";
-  
-  if (indent_needed) {
-    indent_needed = FALSE;
-    the_comment = indent + the_comment;
-  }
+    static Q3CString the_comment;
 
-  pp = p;
-  p = the_comment;
-  saved_indent =  indent;
-  indent = "";
+    p += 12;
+
+    the_comment = description();
+
+    if ((pp != 0) || // comment contains ${description} !
+        the_comment.isEmpty())
+        return;
+
+    int index = 0;
+
+    while ((index = the_comment.find("\"\"\"", index)) != -1) {
+        the_comment.insert(index, "\\");
+        index += 2;
+    }
+
+    if (!indent.isEmpty()) {
+        int len = indent.length() + 1;
+
+        index = 0;
+
+        while ((index = the_comment.find('\n', index)) != -1) {
+            the_comment.insert(index + 1, (const char *)indent);
+            index += len;
+        }
+    }
+
+    the_comment = "\"\"\"" + the_comment + "\"\"\"\n";
+
+    if (indent_needed) {
+        indent_needed = FALSE;
+        the_comment = indent + the_comment;
+    }
+
+    pp = p;
+    p = the_comment;
+    saved_indent =  indent;
+    indent = "";
 }
 
 void UmlItem::manage_alias(const char *& p, QTextStream & ts,
-			   Q3CString indent, BooL & indent_needed) {
-  if (indent_needed) {
-    indent_needed = FALSE;
-    ts << indent;
-  }
-  
-  // p starts by '@'
-  const char * pclosed;
-  
-  if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
-    Q3CString key(p + 2, pclosed - p - 1);
-    Q3CString value;
-    UmlItem * node = this;
+                           Q3CString indent, BooL & indent_needed)
+{
+    if (indent_needed) {
+        indent_needed = FALSE;
+        ts << indent;
+    }
 
-    do {
-      if (node->propertyValue(key, value))
-	break;
-      node = node->parent();
-    } while (node != 0);
-    
-    if (node != 0)
-      // find, insert the value
-      ts << value;
+    // p starts by '@'
+    const char * pclosed;
+
+    if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
+        Q3CString key(p + 2, pclosed - p - 1);
+        Q3CString value;
+        UmlItem * node = this;
+
+        do {
+            if (node->propertyValue(key, value))
+                break;
+
+            node = node->parent();
+        }
+        while (node != 0);
+
+        if (node != 0)
+            // find, insert the value
+            ts << value;
+        else
+            // not find, insert the key
+            ts << "@{" << key << '}';
+
+        // bypass the key
+        p += strlen(key) + 3;
+    }
     else
-      // not find, insert the key
-      ts << "@{" << key << '}';
-
-    // bypass the key
-    p += strlen(key) + 3;
-  }
-  else
-    // bypass '$'
-    ts << *p++;
+        // bypass '$'
+        ts << *p++;
 }
 
-void UmlItem::generate() {
-  // does nothing
+void UmlItem::generate()
+{
+    // does nothing
 }
 
-UmlPackage * UmlItem::package() {
-  return parent()->package();
+UmlPackage * UmlItem::package()
+{
+    return parent()->package();
 }

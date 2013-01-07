@@ -32,20 +32,21 @@
 
 #define ICON_CANVAS_MIN_SIZE 16
 
-class IconCanvas : public QObject, public DiagramCanvas {
-  Q_OBJECT
-    
-  public:
+class IconCanvas : public QObject, public DiagramCanvas
+{
+    Q_OBJECT
+
+public:
     IconCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y, int id);
     IconCanvas(UmlCanvas * canvas);
     virtual ~IconCanvas();
 
     virtual void draw(QPainter & p);
     virtual void change_scale();
-    
+
     virtual UmlCode type() const;
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
@@ -56,9 +57,9 @@ class IconCanvas : public QObject, public DiagramCanvas {
     virtual void history_load(QBuffer &);
     virtual void history_hide();
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static IconCanvas * read(char * &, UmlCanvas *, char *);
-    
-  private slots:
+    static IconCanvas * read(char *& , UmlCanvas *, char *);
+
+private slots:
     void deleted();	// the browser_node is deleted
 };
 

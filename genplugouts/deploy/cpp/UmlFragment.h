@@ -5,7 +5,8 @@
 #include "UmlBaseFragment.h"
 
 // this class manages fragments, you can modify it
-class UmlFragment : public UmlBaseFragment {
+class UmlFragment : public UmlBaseFragment
+{
 };
 
 #endif

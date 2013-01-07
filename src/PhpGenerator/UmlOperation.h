@@ -35,23 +35,24 @@
 
 class QTextStream;
 
-class UmlOperation : public UmlBaseOperation {
-  private:
+class UmlOperation : public UmlBaseOperation
+{
+private:
     static Q3IntDict<char> bodies;
 
-  public:
+public:
     UmlOperation(void * id, const Q3CString & n)
-      : UmlBaseOperation(id, n) {};
-  
+        : UmlBaseOperation(id, n) {};
+
     virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent, int &);
+                          Q3CString indent, int &);
     virtual void generate_require_onces(QTextStream & f, Q3CString & made);
-    
+
     Q3CString compute_name();
-    
+
     static void read_bodies(const char * path);
-    
-  private:
+
+private:
     const char * generate_body(QTextStream & f, Q3CString indent, const char * p);
 };
 

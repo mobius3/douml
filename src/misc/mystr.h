@@ -39,98 +39,90 @@
 
 class WrapperStr
 {
-  public:
+public:
     // this serves as a keeper for temporary array that got destroyed otherwise
     // messing the output of operator const char*
     static  QByteArray ba[20];
     static int arrayRotate;
 
-    WrapperStr(){}
-    ~WrapperStr(){}
-    WrapperStr(const WrapperStr & other)
-    {
+    WrapperStr() {}
+    ~WrapperStr() {}
+    WrapperStr(const WrapperStr & other) {
         //QLOG_INFO()() << Q_FUNC_INFO;
         *this = other;
     }
-    WrapperStr(const QString & other)
-    {
+    WrapperStr(const QString & other) {
         //QLOG_INFO()() << Q_FUNC_INFO;
         this->wrappedString = other;
     }
     //QString get(){return s;}
-    bool isEmpty() const
-    {
+    bool isEmpty() const {
         return this->wrappedString.isEmpty();
     }
-    unsigned int length() const
-    {
+    unsigned int length() const {
         return this->wrappedString.length();
     }
-    int find(const char * toFind, int index = 0) const
-    {
+    int find(const char * toFind, int index = 0) const {
         return wrappedString.indexOf(QString(QLatin1String(toFind)), index);
     }
-    int find(int c, int index = 0) const
-    {
+    int find(int c, int index = 0) const {
         return wrappedString.indexOf(QString::number(c) , index);
     }
 
-    WrapperStr & operator=(const WrapperStr & other)
-    {
+    WrapperStr & operator=(const WrapperStr & other) {
         //QLOG_INFO()() << Q_FUNC_INFO;
         //QLOG_INFO()() << "Otheris " << other.wrappedString << "this is" << this->wrappedString;
-        this->wrappedString = other.wrappedString; return *this;
+        this->wrappedString = other.wrappedString;
+        return *this;
         //QLOG_INFO()() << "Otheris " << other.wrappedString << "this is" << this->wrappedString;
     }
-    WrapperStr & operator=(const char * c)
-    {
+    WrapperStr & operator=(const char * c) {
         //QLOG_INFO()() << Q_FUNC_INFO;
         //QLOG_INFO()() << "Otheris " << c << "this is" << this->wrappedString;
         this->wrappedString = QString(QLatin1String(c));
         return *this;
         //QLOG_INFO()() << "Otheris " << c << "this is" << this->wrappedString;
     }
-    WrapperStr & operator=(const QString &other )
-    {
+    WrapperStr & operator=(const QString & other) {
         //QLOG_INFO()() << Q_FUNC_INFO;
         //QLOG_INFO()() << "Otheris " << other << "this is" << this->wrappedString;
-        this->wrappedString = other; return *this;
+        this->wrappedString = other;
+        return *this;
         //QLOG_INFO()() << "Otheris " << other << "this is" << this->wrappedString;
 
     }
-    WrapperStr & operator=(const Q3CString &cstr)
-    {
+    WrapperStr & operator=(const Q3CString & cstr) {
         //QLOG_INFO()() << Q_FUNC_INFO;
         //QLOG_INFO()() << cstr.data()<< Q_FUNC_INFO;
-        this->wrappedString = QByteArray(cstr); return *this;
+        this->wrappedString = QByteArray(cstr);
+        return *this;
     }
-    operator const char *() const
-    {
+    operator const char * () const {
         ////QLOG_INFO()() << Q_FUNC_INFO;
         ////QLOG_INFO()() << wrappedString;
-        if(wrappedString.length()>0)
-        {
+        if (wrappedString.length() > 0) {
             arrayRotate++;
-            if(arrayRotate == 20)
-                arrayRotate=0;
+
+            if (arrayRotate == 20)
+                arrayRotate = 0;
+
             ba[arrayRotate] = wrappedString.toLatin1();
             ////QLOG_INFO()() << ba;
-            const char* retVal = ba[arrayRotate].data();
+            const char * retVal = ba[arrayRotate].data();
             return retVal;
         }
+
         int k = 0;
         k++;
         return returnableNullPtr;
     }
 
-    operator QString() const
-    {
+    operator QString() const {
         //QLOG_INFO()() << Q_FUNC_INFO;
         //QLOG_INFO()() << this->wrappedString;
         return this->wrappedString;
     }
-    operator Q3CString() const
-    {
+    operator Q3CString() const {
         //QLOG_INFO()() << Q_FUNC_INFO;
         //QLOG_INFO()() << this->wrappedString.toLatin1();
         return this->wrappedString.toLatin1();
@@ -151,18 +143,18 @@ class WrapperStr
     friend QString operator+(const WrapperStr & s1, const QString & s2);
     friend QString operator+(const QString & s1, const WrapperStr & s2);
 
-    void assign(const char *c, int len)
-    {
+    void assign(const char * c, int len) {
         //QLOG_INFO()() << Q_FUNC_INFO;
         //QLOG_INFO()() << QString(QLatin1String(c));
-        Q_UNUSED(len); this->wrappedString = QString(QLatin1String(c));
+        Q_UNUSED(len);
+        this->wrappedString = QString(QLatin1String(c));
     }
     //void assign(QString(), int len){this->s = QString();}
 
-  protected:
+protected:
     static char returnableNullPtr[1];
 
-  QString wrappedString;
+    QString wrappedString;
 };
 
 bool operator==(const WrapperStr & s1, const char * s2);

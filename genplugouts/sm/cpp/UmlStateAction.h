@@ -9,10 +9,11 @@
 class UmlClass;
 class UmlState;
 
-class UmlStateAction : public UmlBaseStateAction, public UmlStateItem {
-  public:
+class UmlStateAction : public UmlBaseStateAction, public UmlStateItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlStateAction(void * id) : UmlBaseStateAction(id, "") {
+    UmlStateAction(void * id) : UmlBaseStateAction(id, "") {
     }
 
     //  is the target of a transition

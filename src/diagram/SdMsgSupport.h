@@ -30,11 +30,12 @@ class SdMsgBaseCanvas;
 
 #include "DiagramCanvas.h"
 
-class SdMsgSupport : public DiagramCanvas {
-  public:
+class SdMsgSupport : public DiagramCanvas
+{
+public:
     SdMsgSupport(UmlCanvas * canvas, int x, int y, int w, int h, int id)
-      : DiagramCanvas(0, canvas, x, y, w, h, id) {}
-  
+        : DiagramCanvas(0, canvas, x, y, w, h, id) {}
+
     virtual bool isaDuration() const = 0;
     virtual bool isOverlappingDuration() const = 0;
     virtual void add(SdMsgBaseCanvas *) = 0;

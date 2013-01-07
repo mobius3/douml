@@ -35,62 +35,63 @@ class SimpleRelationData;
 class DiagramItem;
 class StereotypePropertiesCanvas;
 
-class SimpleRelationCanvas : public ArrowCanvas {
-  Q_OBJECT
-    
-  protected:
+class SimpleRelationCanvas : public ArrowCanvas
+{
+    Q_OBJECT
+
+protected:
     BrowserNode * br_begin;
     SimpleRelationData * data;
     StereotypePropertiesCanvas * stereotypeproperties; // in the first segment
-    
-  public:
+
+public:
     SimpleRelationCanvas(UmlCanvas * canvas, DiagramItem * b,
-			 DiagramItem * e, BrowserNode * bb, UmlCode t,
-			 int id, float d_start, float d_end,
-			 SimpleRelationData * d = 0);
+                         DiagramItem * e, BrowserNode * bb, UmlCode t,
+                         int id, float d_start, float d_end,
+                         SimpleRelationData * d = 0);
     virtual ~SimpleRelationCanvas();
-    
+
     virtual void delete_it();
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual void remove(bool from_model);
     virtual void unconnect();
-    
+
     virtual ArrowPointCanvas * brk(const QPoint &);
     virtual ArrowCanvas * join(ArrowCanvas * other, ArrowPointCanvas * ap);
-    
+
     virtual void setSelected(bool yes);
-    
+
     void stereotype_default_position() const;
-    
+
     virtual void history_load(QBuffer &);
     virtual void history_hide();
 
     virtual void apply_shortcut(QString s);
-    
+
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
-    static SimpleRelationCanvas * read(char * & st, UmlCanvas * canvas, char *);
-    
+    static SimpleRelationCanvas * read(char *& st, UmlCanvas * canvas, char *);
+
     virtual BasicData * get_data() const;
-    
+
     virtual void open();
-    virtual void menu(const QPoint&);
-    
-    virtual void setVisible( bool yes);
+    virtual void menu(const QPoint &);
+
+    virtual void setVisible(bool yes);
     virtual void moveBy(double dx, double dy);
     virtual void select_associated();
     virtual void check_stereotypeproperties();
-    
+
     static void drop(BrowserNode *, UmlCanvas *);
     static void drop(BrowserNode *, UmlCanvas *,
-		     Q3PtrDict<DiagramItem> & drawn);
-    
+                     Q3PtrDict<DiagramItem> & drawn);
+
     virtual bool represents(BrowserNode *);
-    
-  protected:
+
+protected:
     BrowserNode * update_begin(DiagramItem * cnend);
     void update(bool updatepos);
-    
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();	// the relation is deleted
 };

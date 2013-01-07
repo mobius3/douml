@@ -38,8 +38,9 @@ class BrowserNode;
 class LabelCanvas;
 class StereotypePropertiesCanvas;
 
-class DiagramCanvas : public Q3CanvasRectangle, public DiagramItem {
-  protected:
+class DiagramCanvas : public Q3CanvasRectangle, public DiagramItem
+{
+protected:
     BrowserNode * browser_node;
     LabelCanvas * label;
     StereotypePropertiesCanvas * stereotypeproperties;
@@ -47,19 +48,19 @@ class DiagramCanvas : public Q3CanvasRectangle, public DiagramItem {
     int height_scale100;
     int center_x_scale100;
     int center_y_scale100;
-    
-  protected:
+
+protected:
     DiagramCanvas(UmlCanvas * canvas, int id);
-  
-  public:
+
+public:
     DiagramCanvas(BrowserNode * bn, UmlCanvas * canvas,
-		  int x, int y, int w, int h, int id);
+                  int x, int y, int w, int h, int id);
     virtual ~DiagramCanvas();
-    
+
     virtual void delete_it();
-    
+
     virtual BrowserNode * get_bn() const;
-  
+
     virtual void upper();
     virtual void lower();
     virtual void z_up();
@@ -67,7 +68,7 @@ class DiagramCanvas : public Q3CanvasRectangle, public DiagramItem {
     virtual bool primaryItem() const;
     virtual double get_z() const;
     virtual void set_z(double z);	// only called by upper() & lower()
-    
+
     virtual void setVisible(bool yes);
     virtual void moveBy(double dx, double dy);
     virtual void setSelected(bool yes);
@@ -78,50 +79,50 @@ class DiagramCanvas : public Q3CanvasRectangle, public DiagramItem {
     virtual bool move_with(UmlCode) const;
     void force_self_rel_visible();
     void moveSelfRelsBy(double dx, double dy);
-    
+
     virtual void change_scale();
     virtual QPoint center() const;
     virtual QRect rect() const;
     void recenter();
     void set_center100();
     virtual bool contains(int, int) const;
-    
+
     void resize(aCorner c, int dx, int dy, QPoint &, int min_width, int min_height,
-		bool odd = FALSE, bool stay_centered = FALSE);
+                bool odd = FALSE, bool stay_centered = FALSE);
     bool resize(const QSize & sz, bool w, bool h,
-		int min_width, int min_height,
-		bool odd = FALSE, bool stay_centered = FALSE);
+                int min_width, int min_height,
+                bool odd = FALSE, bool stay_centered = FALSE);
     virtual void resize(int w, int h);
     virtual UmlCanvas * the_canvas() const;
     void package_modified() const;
 
     bool has_simple_relation(BasicData * def) const;
     void draw_all_simple_relations(DiagramCanvas * end = 0);
-    
+
     bool has_flow(BasicData * def) const;
     void draw_all_flows(DiagramCanvas * end = 0);
-    
+
     bool has_transition(BasicData * def) const;
     void draw_all_transitions(DiagramCanvas * end = 0);
-    
+
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
+
     virtual void check_stereotypeproperties();
     virtual bool get_show_stereotype_properties() const;
     void save_stereotype_property(QTextStream & st, QString &) const;
-    void read_stereotype_property(char * & st, char *& k);
-    
+    void read_stereotype_property(char *& st, char *& k);
+
     static void draw_actor(QPainter * p, QRect r);
     static void draw_interface_icon(QPainter & p, QRect & r,
-				    UmlColor used_color, double zoom);
+                                    UmlColor used_color, double zoom);
     static void draw_entity_icon(QPainter & p, QRect & r,
-				 UmlColor used_color, double zoom);
+                                 UmlColor used_color, double zoom);
     static void draw_boundary_icon(QPainter & p, QRect & r,
-				   UmlColor used_color, double zoom);
+                                   UmlColor used_color, double zoom);
     static void draw_control_icon(QPainter & p, QRect & r,
-				  UmlColor used_color, double zoom);
+                                  UmlColor used_color, double zoom);
     static double compute_angle(double delta_x, double delta_y);
 };
 

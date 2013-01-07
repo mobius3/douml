@@ -261,12 +261,12 @@ body indent :</string>
   <customwidget>
    <class>MultiLineEdit</class>
    <extends>QTextEdit</extends>
-   <header location="global">dialog\DialogUtil.h</header>
+   <header location="global">dialog/DialogUtil.h</header>
   </customwidget>
   <customwidget>
    <class>LineEdit</class>
    <extends>QLineEdit</extends>
-   <header location="global">dialog\DialogUtil.h</header>
+   <header location="global">dialog/DialogUtil.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

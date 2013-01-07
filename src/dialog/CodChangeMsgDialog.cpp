@@ -29,7 +29,7 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <q3combobox.h>
 #include <q3hbox.h>
 #include <qpushbutton.h>
 #include <q3popupmenu.h>
@@ -52,150 +52,162 @@
 QSize CodChangeMsgDialog::previous_size;
 
 CodChangeMsgDialog::CodChangeMsgDialog(QWidget * parent, ColMsg * m)
-    : QDialog(parent, "Communication message dialog", TRUE), msg(m) {
-  setCaption(TR("Communicationg message dialog"));
-  
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
-  
-  vbox->setMargin(5);
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  
-  SmallPushButton * b = new SmallPushButton(TR("message :"), this);
-  
-  hbox->addWidget(b);
-  connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
+    : QDialog(parent, "Communication message dialog", TRUE), msg(m)
+{
+    setCaption(TR("Communicationg message dialog"));
 
-  edoper = new Q3ComboBox(TRUE, this);
-  edoper->setAutoCompletion(completion());
-  if (msg->operation == 0)
-    edoper->insertItem(msg->explicit_operation);
-  else
-    edoper->insertItem(msg->operation->definition(TRUE, FALSE));
-  
-  CodObjCanvas * from;
-  CodObjCanvas * to;
-    
-  msg->in->get_from_to(from, to, msg->is_forward);
-  
-  // gets operations
-  cl = to->get_class();
-  if (cl != 0) {
-    cl->get_opers(opers, list);
-    edoper->insertStringList(list);
-    
-    if (!cl->is_writable())
-      cl = 0;
-  }
-  edoper->setCurrentItem(0);
-    
-  QSizePolicy sp = edoper->sizePolicy();
-  
-  sp.setHorData(QSizePolicy::Expanding);
-  edoper->setSizePolicy(sp);
-  
-  hbox->addWidget(edoper);
-  
-  // ok & cancel
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  QPushButton * ok = new QPushButton(TR("&OK"), this);
-  QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
-  QSize bs(cancel->sizeHint());
-  
-  ok->setDefault(TRUE);
-  ok->setFixedSize(bs);
-  cancel->setFixedSize(bs);
-  
-  hbox->addWidget(ok);
-  hbox->addWidget(cancel);
-    
-  connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
-  connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
-}
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    Q3HBoxLayout * hbox;
 
-void CodChangeMsgDialog::polish() {
-  QDialog::polish();
-  UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
-}
+    vbox->setMargin(5);
 
-CodChangeMsgDialog::~CodChangeMsgDialog() {
-  previous_size = size();
-}
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
 
-void CodChangeMsgDialog::menu_op() {
-  Q3PopupMenu m(0);
+    SmallPushButton * b = new SmallPushButton(TR("message :"), this);
 
-  m.insertItem(TR("Choose"), -1);
-  m.insertSeparator();
-  
-  int index = list.findIndex(edoper->currentText().stripWhiteSpace());
-  
-  if (index != -1)
-    m.insertItem(TR("Select in browser"), 0);
-  
-  BrowserNode * bn = BrowserView::selected_item();
-  
-  if ((bn != 0) && 
-      (bn->get_type() == UmlOperation) &&
-      !bn->deletedp() &&
-      (opers.findIndex((OperationData *) bn->get_data()) != -1))
-    m.insertItem(TR("Choose operation selected in browser"), 1);
-  else
-    bn = 0;
-  
-  if (cl != 0)
-    m.insertItem(TR("Create operation and choose it"), 2);
-  
-  if ((index != -1) || (bn != 0) || (cl != 0)) {
-    switch (m.exec(QCursor::pos())) {
-    case 0:
-      opers[index]->get_browser_node()->select_in_browser();
-      break;
-    case 2:
-      bn = cl->add_operation();
-      if (bn == 0)
-	return;
-      bn->select_in_browser();
-      // no break
-    case 1:
-      {
-	OperationData * od = (OperationData *) bn->get_data();
+    hbox->addWidget(b);
+    connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
 
-	if ((index = opers.findIndex(od)) == -1) {
-	  index = opers.count();
-	  opers.append(od);
-	  
-	  QString s = od->definition(TRUE, FALSE);
-	  
-	  list.append(s);
-	  edoper->insertItem(s);
-	}
-      }
-      edoper->setCurrentItem(index + 1);
+    edoper = new Q3ComboBox(TRUE, this);
+    edoper->setAutoCompletion(completion());
+
+    if (msg->operation == 0)
+        edoper->insertItem(msg->explicit_operation);
+    else
+        edoper->insertItem(msg->operation->definition(TRUE, FALSE));
+
+    CodObjCanvas * from;
+    CodObjCanvas * to;
+
+    msg->in->get_from_to(from, to, msg->is_forward);
+
+    // gets operations
+    cl = to->get_class();
+
+    if (cl != 0) {
+        cl->get_opers(opers, list);
+        edoper->insertStringList(list);
+
+        if (!cl->is_writable())
+            cl = 0;
     }
-  }
+
+    edoper->setCurrentItem(0);
+
+    QSizePolicy sp = edoper->sizePolicy();
+
+    sp.setHorData(QSizePolicy::Expanding);
+    edoper->setSizePolicy(sp);
+
+    hbox->addWidget(edoper);
+
+    // ok & cancel
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    QPushButton * ok = new QPushButton(TR("&OK"), this);
+    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QSize bs(cancel->sizeHint());
+
+    ok->setDefault(TRUE);
+    ok->setFixedSize(bs);
+    cancel->setFixedSize(bs);
+
+    hbox->addWidget(ok);
+    hbox->addWidget(cancel);
+
+    connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-void CodChangeMsgDialog::accept() {
-  QString s = edoper->currentText().stripWhiteSpace();
-  
-  if (s.isEmpty())
-    return;
-  
-  int index = list.findIndex(s);
-  
-  if (index >= 0) {
-    msg->operation = opers[index];
-    msg->explicit_operation = QString();
-  }
-  else {
-    msg->operation = 0;
-    msg->explicit_operation = s;
-  }
-  
-  QDialog::accept();
+void CodChangeMsgDialog::polish()
+{
+    QDialog::polish();
+    UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
+}
+
+CodChangeMsgDialog::~CodChangeMsgDialog()
+{
+    previous_size = size();
+}
+
+void CodChangeMsgDialog::menu_op()
+{
+    Q3PopupMenu m(0);
+
+    m.insertItem(TR("Choose"), -1);
+    m.insertSeparator();
+
+    int index = list.findIndex(edoper->currentText().stripWhiteSpace());
+
+    if (index != -1)
+        m.insertItem(TR("Select in browser"), 0);
+
+    BrowserNode * bn = BrowserView::selected_item();
+
+    if ((bn != 0) &&
+        (bn->get_type() == UmlOperation) &&
+        !bn->deletedp() &&
+        (opers.findIndex((OperationData *) bn->get_data()) != -1))
+        m.insertItem(TR("Choose operation selected in browser"), 1);
+    else
+        bn = 0;
+
+    if (cl != 0)
+        m.insertItem(TR("Create operation and choose it"), 2);
+
+    if ((index != -1) || (bn != 0) || (cl != 0)) {
+        switch (m.exec(QCursor::pos())) {
+        case 0:
+            opers[index]->get_browser_node()->select_in_browser();
+            break;
+
+        case 2:
+            bn = cl->add_operation();
+
+            if (bn == 0)
+                return;
+
+            bn->select_in_browser();
+
+            // no break
+        case 1: {
+            OperationData * od = (OperationData *) bn->get_data();
+
+            if ((index = opers.findIndex(od)) == -1) {
+                index = opers.count();
+                opers.append(od);
+
+                QString s = od->definition(TRUE, FALSE);
+
+                list.append(s);
+                edoper->insertItem(s);
+            }
+        }
+
+        edoper->setCurrentItem(index + 1);
+        }
+    }
+}
+
+void CodChangeMsgDialog::accept()
+{
+    QString s = edoper->currentText().stripWhiteSpace();
+
+    if (s.isEmpty())
+        return;
+
+    int index = list.findIndex(s);
+
+    if (index >= 0) {
+        msg->operation = opers[index];
+        msg->explicit_operation = QString();
+    }
+    else {
+        msg->operation = 0;
+        msg->explicit_operation = s;
+    }
+
+    QDialog::accept();
 }

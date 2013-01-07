@@ -44,157 +44,167 @@
 #endif
 
 UmlPackage::UmlPackage(void * id, const Q3CString & n)
-    : UmlBasePackage(id, n) {
-  classview = 0;
+    : UmlBasePackage(id, n)
+{
+    classview = 0;
 #ifdef REVERSE
-  deploymentview = 0;
+    deploymentview = 0;
 # ifdef ROUNDTRIP
-  package = 0;
+    package = 0;
 # endif
 #endif
 }
 
-UmlClassView * UmlPackage::get_classview() {
-  if (classview == 0) {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
-    
-    for (;v != vsup; v += 1) {
-      // return the first class view find
-      if ((*v)->kind() == aClassView) {
-	classview = (UmlClassView *) *v;
-	return classview;
-      }
-    }
-    
-    if ((classview = UmlBaseClassView::create(this, name())) == 0) {
+UmlClassView * UmlPackage::get_classview()
+{
+    if (classview == 0) {
+        const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+        UmlItem ** v = ch.data();
+        UmlItem ** const vsup = v + ch.size();
+
+        for (; v != vsup; v += 1) {
+            // return the first class view find
+            if ((*v)->kind() == aClassView) {
+                classview = (UmlClassView *) *v;
+                return classview;
+            }
+        }
+
+        if ((classview = UmlBaseClassView::create(this, name())) == 0) {
 #ifdef REVERSE
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create class view <i>")
-		    + name() + "</i> under package <i>"
-		    + name() + "</b></font><br>");
-      UmlCom::message("");
-      throw 0;
+            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create class view <i>")
+                          + name() + "</i> under package <i>"
+                          + name() + "</b></font><br>");
+            UmlCom::message("");
+            throw 0;
 #else
-      QMessageBox::critical(0, "Fatal Error", 
-			    Q3CString("<font face=helvetica><b>cannot create class view <i>")
-			    + name() + "</i> under package <i>"
-			    + name() + "</b></font><br>");
-      QApplication::exit(1);
+            QMessageBox::critical(0, "Fatal Error",
+                                  Q3CString("<font face=helvetica><b>cannot create class view <i>")
+                                  + name() + "</i> under package <i>"
+                                  + name() + "</b></font><br>");
+            QApplication::exit(1);
 #endif
+        }
     }
-  }
-  
-  return classview;
+
+    return classview;
 }
 
 #ifdef REVERSE
 
-UmlDeploymentView * UmlPackage::get_deploymentview() {
-  if (deploymentview == 0) {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
-    
-    for (;v != vsup; v += 1) {
-      // return the first class view found
-      if ((*v)->kind() == aDeploymentView) {
-	deploymentview = (UmlDeploymentView *) *v;
-	return deploymentview;
-      }
-    }
-    
-    if ((deploymentview = UmlBaseDeploymentView::create(this, name())) == 0) {
+UmlDeploymentView * UmlPackage::get_deploymentview()
+{
+    if (deploymentview == 0) {
+        const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+        UmlItem ** v = ch.data();
+        UmlItem ** const vsup = v + ch.size();
+
+        for (; v != vsup; v += 1) {
+            // return the first class view found
+            if ((*v)->kind() == aDeploymentView) {
+                deploymentview = (UmlDeploymentView *) *v;
+                return deploymentview;
+            }
+        }
+
+        if ((deploymentview = UmlBaseDeploymentView::create(this, name())) == 0) {
 #ifdef REVERSE
-      UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
-		    + name() + "</i> under package <i>"
-		    + name() + "</b></font><br>");
-      UmlCom::message("");
-      throw 0;
+            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
+                          + name() + "</i> under package <i>"
+                          + name() + "</b></font><br>");
+            UmlCom::message("");
+            throw 0;
 #else
-      QMessageBox::critical(0, "Fatal Error", 
-			    Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
-			    + name() + "</i> under package <i>"
-			    + name() + "</b></font><br>");
-      QApplication::exit(1);
+            QMessageBox::critical(0, "Fatal Error",
+                                  Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
+                                  + name() + "</i> under package <i>"
+                                  + name() + "</b></font><br>");
+            QApplication::exit(1);
 #endif
+        }
     }
-  }
-  
-  return deploymentview;
+
+    return deploymentview;
 }
 
 # ifdef ROUNDTRIP
 
 // applied on the project
-void UmlPackage::init(Package * p) {
-  package = p;
-  
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-  UmlItem ** v = ch.data();
-  UmlItem ** const vsup = v + ch.size();
-    
-  for (;v != vsup; v += 1)
-    (*v)->upload(package);
+void UmlPackage::init(Package * p)
+{
+    package = p;
+
+    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+    UmlItem ** v = ch.data();
+    UmlItem ** const vsup = v + ch.size();
+
+    for (; v != vsup; v += 1)
+        (*v)->upload(package);
 }
 
-void UmlPackage::upload(ClassContainer * cnt) {
-  package = new Package((Package *) cnt, this);
-  
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-  UmlItem ** v = ch.data();
-  UmlItem ** const vsup = v + ch.size();
-    
-  for (;v != vsup; v += 1)
-    (*v)->upload(package);
+void UmlPackage::upload(ClassContainer * cnt)
+{
+    package = new Package((Package *) cnt, this);
+
+    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+    UmlItem ** v = ch.data();
+    UmlItem ** const vsup = v + ch.size();
+
+    for (; v != vsup; v += 1)
+        (*v)->upload(package);
 }
 
-int UmlPackage::count_roundtriped() {
-  int result = 1;
-  
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-  UmlItem ** v = ch.data();
-  UmlItem ** const vsup = v + ch.size();
-    
-  for (;v != vsup; v += 1)
-    if ((*v)->kind() == aPackage)
-      result += ((UmlPackage *) *v)->count_roundtriped();
-  
-  return result;
+int UmlPackage::count_roundtriped()
+{
+    int result = 1;
+
+    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+    UmlItem ** v = ch.data();
+    UmlItem ** const vsup = v + ch.size();
+
+    for (; v != vsup; v += 1)
+        if ((*v)->kind() == aPackage)
+            result += ((UmlPackage *) *v)->count_roundtriped();
+
+    return result;
 }
 
-bool UmlPackage::set_roundtrip_expected() {
-  if (javaDir().isEmpty())
-    package->accept_roundtrip_root();
-      
-  Progress::tic_it();
-  
-  const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-  UmlItem ** v = ch.data();
-  UmlItem ** const vsup = v + ch.size();
-  bool result = isWritable();
-    
-  for (;v != vsup; v += 1)
-    result &= (*v)->set_roundtrip_expected();
-  
-  return result;
+bool UmlPackage::set_roundtrip_expected()
+{
+    if (javaDir().isEmpty())
+        package->accept_roundtrip_root();
+
+    Progress::tic_it();
+
+    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+    UmlItem ** v = ch.data();
+    UmlItem ** const vsup = v + ch.size();
+    bool result = isWritable();
+
+    for (; v != vsup; v += 1)
+        result &= (*v)->set_roundtrip_expected();
+
+    return result;
 }
 
-void UmlPackage::mark_useless(Q3PtrList<UmlItem> & l) {
-  Q3PtrVector<UmlItem> ch = UmlItem::children();
-  UmlClassItem ** v = (UmlClassItem **) ch.data();
-  UmlClassItem ** const vsup = v + ch.size();
-    
-  for (;v != vsup; v += 1)
-    (*v)->mark_useless(l);
+void UmlPackage::mark_useless(Q3PtrList<UmlItem> & l)
+{
+    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    UmlClassItem ** v = (UmlClassItem **) ch.data();
+    UmlClassItem ** const vsup = v + ch.size();
+
+    for (; v != vsup; v += 1)
+        (*v)->mark_useless(l);
 }
 
-void UmlPackage::scan_it(int & n) {
-  package->scan_dir(n);
+void UmlPackage::scan_it(int & n)
+{
+    package->scan_dir(n);
 }
 
-void UmlPackage::send_it(int n) {
-  package->send_dir(n);
+void UmlPackage::send_it(int n)
+{
+    package->send_dir(n);
 }
 
 # endif

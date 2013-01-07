@@ -47,36 +47,37 @@ class ParameterSetData;
 class KeyValuesTable;
 class BodyDialog;
 
-class ParameterSetDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ParameterSetDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     QWidget * umltab;
     ParameterSetData * data;
     LineEdit * edname;
     Q3ComboBox * edstereotype;
     MultiLineEdit * comment;
     Q3PtrList<BodyDialog> edits;
-    
+
     // associated classes
     Q3ListBox * lb_available;
     Q3ListBox * lb_member;
-        
+
     // user
     KeyValuesTable * kvtable;
-    
+
     static QSize previous_size;
-    
+
     void init_uml_tab();
     void init_pins_tab();
-      
+
     static void post_edit_description(ParameterSetDialog * d, QString s);
-    
-  public:
+
+public:
     ParameterSetDialog(ParameterSetData * nd);
     virtual ~ParameterSetDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void edit_description();

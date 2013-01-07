@@ -13,9 +13,12 @@ class UmlItem;
 // This class manages 'components'
 //
 // You can modify it as you want (except the constructor)
-class UmlComponent : public UmlBaseComponent {
-  public:
-    UmlComponent(void * id, const Q3CString & n) : UmlBaseComponent(id, n) { NumberOf += 1; };
+class UmlComponent : public UmlBaseComponent
+{
+public:
+    UmlComponent(void * id, const Q3CString & n) : UmlBaseComponent(id, n) {
+        NumberOf += 1;
+    };
 
     static void init();
 
@@ -38,10 +41,12 @@ class UmlComponent : public UmlBaseComponent {
     //  not from a class
     virtual void solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString constraint);
 
-    static int numberOf() { return NumberOf; };
+    static int numberOf() {
+        return NumberOf;
+    };
 
 
-  protected:
+protected:
     static int NumberOf;
 
 };

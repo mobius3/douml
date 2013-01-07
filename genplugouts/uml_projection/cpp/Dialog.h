@@ -4,13 +4,14 @@
 
 #include <qdialog.h>
 class QCheckBox;
-class Dialog : public QDialog {
-  Q_OBJECT
-  public:
+class Dialog : public QDialog
+{
+    Q_OBJECT
+public:
     Dialog(BooL & rec, char & lang);
 
 
-  protected:
+protected:
     BooL & _rec;
 
     //c = c++
@@ -22,7 +23,8 @@ class Dialog : public QDialog {
 
     QCheckBox * rec_cb;
 
-  protected slots:    virtual void polish();
+protected slots:
+    virtual void polish();
 
     void accept_cpp();
     void accept_java();

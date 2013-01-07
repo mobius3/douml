@@ -32,66 +32,81 @@
 
 class BrowserExtraMember;
 
-class ExtraMemberData : public BasicData {
-  Q_OBJECT
-    
-  friend class ExtraMemberDialog;
-  
-  protected:
+class ExtraMemberData : public BasicData
+{
+    Q_OBJECT
+
+    friend class ExtraMemberDialog;
+
+protected:
     bool is_deleted;
-    
+
     // C++
     bool cpp_inline;
     WrapperStr cpp_decl;
     WrapperStr cpp_def;
-    
+
     // Java
     WrapperStr java_decl;
-    
+
     // Php
     WrapperStr php_decl;
-    
+
     // Python
     WrapperStr python_decl;
-    
+
     // Idl
     WrapperStr idl_decl;
-    
+
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
     virtual void send_php_def(ToolCom * com);
     virtual void send_python_def(ToolCom * com);
     virtual void send_idl_def(ToolCom * com);
-    
-  public:
+
+public:
     ExtraMemberData();
     ExtraMemberData(const ExtraMemberData * model, BrowserNode *);
     virtual ~ExtraMemberData();
-    
+
     virtual bool deletedp() const;
     virtual void set_deletedp(bool y);
-        
+
     virtual QString definition(bool full, bool with_kind) const;
-    
-    const char * get_cpp_decl() const { return cpp_decl; };
-    const char * get_cpp_def() const { return cpp_def; };
-    bool get_cpp_inline() const { return cpp_inline; };
-            
-    const char * get_java_decl() const { return java_decl; };
-            
-    const char * get_php_decl() const { return php_decl; };
-    
-    const char * get_python_decl() const { return python_decl; };
-    
-    const char * get_idl_decl() const { return idl_decl; };
-    
+
+    const char * get_cpp_decl() const {
+        return cpp_decl;
+    };
+    const char * get_cpp_def() const {
+        return cpp_def;
+    };
+    bool get_cpp_inline() const {
+        return cpp_inline;
+    };
+
+    const char * get_java_decl() const {
+        return java_decl;
+    };
+
+    const char * get_php_decl() const {
+        return php_decl;
+    };
+
+    const char * get_python_decl() const {
+        return python_decl;
+    };
+
+    const char * get_idl_decl() const {
+        return idl_decl;
+    };
+
     void edit();
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * & st, char * & k);
+    void read(char *& st, char *& k);
 };
 
 #endif

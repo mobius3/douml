@@ -47,16 +47,17 @@ struct InfoData;
 class BodyDialog;
 
 struct CondDialog {
-  MultiLineEdit * edpre;
-  MultiLineEdit * edpost;
-  
-  void accept(InfoData &);
+    MultiLineEdit * edpre;
+    MultiLineEdit * edpost;
+
+    void accept(InfoData &);
 };
 
-class ActivityDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ActivityDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     bool visit;
     ActivityData * activity;
     QStringList list;
@@ -73,26 +74,26 @@ class ActivityDialog : public Q3TabDialog {
     CondDialog uml;
     CondDialog cpp;
     CondDialog java;
-        
+
     // User
     KeyValuesTable * kvtable;
-    
+
     static QSize previous_size;
-  
+
     static void post_edit_description(ActivityDialog * d, QString s);
     static void post_edit_constraint(ActivityDialog * d, QString s);
-  
-  public:
+
+public:
     ActivityDialog(ActivityData * r);
     virtual ~ActivityDialog();
-  
-  protected:
+
+protected:
     void init_tab(CondDialog &, InfoData & cond, const char * lbl, bool enabled);
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
-  
+
     void menu_specification();
     void edit_description();
     void edit_constraint();

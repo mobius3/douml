@@ -10,8 +10,9 @@
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlUseCaseDiagram : public UmlBaseUseCaseDiagram {
-  public:
+class UmlUseCaseDiagram : public UmlBaseUseCaseDiagram
+{
+public:
     UmlUseCaseDiagram(void * id, const Q3CString & n) : UmlBaseUseCaseDiagram(id, n) {};
 
 };

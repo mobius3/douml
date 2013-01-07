@@ -10,8 +10,9 @@ class UmlCollaborationDiagram;
 class UmlItem;
 
 //  Manage the collaboration diagrams
-class UmlBaseCollaborationDiagram : public UmlDiagram {
-  public:
+class UmlBaseCollaborationDiagram : public UmlDiagram
+{
+public:
     // returns a new collaboration diagram named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -23,7 +24,7 @@ class UmlBaseCollaborationDiagram : public UmlDiagram {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseCollaborationDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n) {};
 

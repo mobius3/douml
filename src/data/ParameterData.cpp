@@ -37,99 +37,112 @@
 #include "ToolCom.h"
 #include "mu.h"
 
-ParameterData::ParameterData() {
+ParameterData::ParameterData()
+{
 }
 
 ParameterData::ParameterData(ParameterData * model, BrowserNode * bn)
-    : SimpleData(model), PinParamData(model) {
-  default_value = model->default_value;
-  browser_node = bn;
+    : SimpleData(model), PinParamData(model)
+{
+    default_value = model->default_value;
+    browser_node = bn;
 }
 
-void ParameterData::edit() {
-  setName(browser_node->get_name());
-    
-  (new ParameterDialog(this))->show();
+void ParameterData::edit()
+{
+    setName(browser_node->get_name());
+
+    (new ParameterDialog(this))->show();
 }
 
-void ParameterData::do_connect(BrowserClass * c) {
-  connect(c->get_data(), SIGNAL(deleted()), this, SLOT(on_delete()));
+void ParameterData::do_connect(BrowserClass * c)
+{
+    connect(c->get_data(), SIGNAL(deleted()), this, SLOT(on_delete()));
 }
 
-void ParameterData::do_disconnect(BrowserClass * c) {
-  disconnect(c->get_data(), 0, this, 0);
+void ParameterData::do_disconnect(BrowserClass * c)
+{
+    disconnect(c->get_data(), 0, this, 0);
 }
 
-void ParameterData::on_delete() {
-  BrowserClass * cl = get_type().type;
-  
-  if ((cl != 0) && cl->deletedp())
-    set_type((BrowserClass *) 0);
+void ParameterData::on_delete()
+{
+    BrowserClass * cl = get_type().type;
+
+    if ((cl != 0) && cl->deletedp())
+        set_type((BrowserClass *) 0);
 }
 
 void ParameterData::send_uml_def(ToolCom * com, BrowserNode * bn,
-				 const QString & comment) {
-  BasicData::send_uml_def(com, bn, comment);
-  PinParamData::send_uml_def(com);
-  com->write_string(default_value);
+                                 const QString & comment)
+{
+    BasicData::send_uml_def(com, bn, comment);
+    PinParamData::send_uml_def(com);
+    com->write_string(default_value);
 }
 
-void ParameterData::send_cpp_def(ToolCom * com) {
-  PinParamData::send_cpp_def(com);
+void ParameterData::send_cpp_def(ToolCom * com)
+{
+    PinParamData::send_cpp_def(com);
 }
 
-void ParameterData::send_java_def(ToolCom * com) {
-  PinParamData::send_java_def(com);
+void ParameterData::send_java_def(ToolCom * com)
+{
+    PinParamData::send_java_def(com);
 }
 
 bool ParameterData::tool_cmd(ToolCom * com, const char * args,
-			     BrowserNode * bn, const QString & comment) {
-  BooL ack;
+                             BrowserNode * bn, const QString & comment)
+{
+    BooL ack;
 
-  if (((unsigned char) args[-1]) >= firstSetCmd) {
-    if (!bn->is_writable() && !root_permission())
-      ack = FALSE;
-    else {
-      switch ((unsigned char) args[-1]) {
-      case setDefaultValueCmd:
-	default_value = args;
-	ack = TRUE;
-	break;
-      default:
-        if (! PinParamData::tool_cmd(com, args, ack))
-	  return BasicData::tool_cmd(com, args, bn, comment);
-      }
+    if (((unsigned char) args[-1]) >= firstSetCmd) {
+        if (!bn->is_writable() && !root_permission())
+            ack = FALSE;
+        else {
+            switch ((unsigned char) args[-1]) {
+            case setDefaultValueCmd:
+                default_value = args;
+                ack = TRUE;
+                break;
+
+            default:
+                if (! PinParamData::tool_cmd(com, args, ack))
+                    return BasicData::tool_cmd(com, args, bn, comment);
+            }
+        }
     }
-  }
-  else if (! PinParamData::tool_cmd(com, args, ack))
-    return BasicData::tool_cmd(com, args, bn, comment);
-  
-  if (ack) {
-    // ok case
-    bn->package_modified();
-    modified();
-  }
-  
-  com->write_ack(ack);
-  return TRUE;
+    else if (! PinParamData::tool_cmd(com, args, ack))
+        return BasicData::tool_cmd(com, args, bn, comment);
+
+    if (ack) {
+        // ok case
+        bn->package_modified();
+        modified();
+    }
+
+    com->write_ack(ack);
+    return TRUE;
 }
 
-void ParameterData::save(QTextStream & st, QString & warning) const {
-  BasicData::save(st, warning);
-  PinParamData::save(st, warning);
+void ParameterData::save(QTextStream & st, QString & warning) const
+{
+    BasicData::save(st, warning);
+    PinParamData::save(st, warning);
 
-  if (!default_value.isEmpty()) {
-    st << " defaultvalue ";
-    save_string(default_value, st);
-  }
+    if (!default_value.isEmpty()) {
+        st << " defaultvalue ";
+        save_string(default_value, st);
+    }
 }
 
-void ParameterData::read(char * & st, char * & k) {
-  BasicData::read(st, k);	// updates k
-  PinParamData::read(st, k);	// updates k
-    
-  if (!strcmp(k, "defaultvalue")) {
-    default_value = read_string(st);
-    k = read_keyword(st);
-  }
+void ParameterData::read(char *& st, char *& k)
+{
+    BasicData::read(st, k);	// updates k
+    PinParamData::read(st, k);	// updates k
+
+    if (!strcmp(k, "defaultvalue")) {
+        default_value = read_string(st);
+        k = read_keyword(st);
+    }
 }

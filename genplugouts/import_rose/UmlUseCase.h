@@ -12,10 +12,11 @@ class File;
 // This class manages 'use case'
 //
 // You can modify it as you want (except the constructor)
-class UmlUseCase : public UmlBaseUseCase, public Uc {
-  public:
+class UmlUseCase : public UmlBaseUseCase, public Uc
+{
+public:
     UmlUseCase(void * id, const Q3CString & n) : UmlBaseUseCase(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
     virtual UmlItem * item();

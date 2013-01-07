@@ -14,8 +14,9 @@ class UmlArtifact;
 // - a class reference
 //
 // - an explicit type
-class UmlTypeSpec : public UmlBaseTypeSpec {
-  public:
+class UmlTypeSpec : public UmlBaseTypeSpec
+{
+public:
     void generate_import(QTextStream & f, UmlArtifact * using_art, bool from, Q3CString & made) const;
 };
 

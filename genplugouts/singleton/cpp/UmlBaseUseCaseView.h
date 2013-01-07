@@ -9,8 +9,9 @@
 class UmlUseCaseView;
 
 //  Manage the use case views
-class UmlBaseUseCaseView : public UmlItem {
-  public:
+class UmlBaseUseCaseView : public UmlItem
+{
+public:
     // returns a new use case view named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -22,7 +23,7 @@ class UmlBaseUseCaseView : public UmlItem {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseUseCaseView(void * id, const Q3CString & n) : UmlItem(id, n) {};
 

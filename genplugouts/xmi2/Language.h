@@ -3,9 +3,9 @@
 
 
 enum Language {
-  Uml,
-  Cpp,
-  Java
+    Uml,
+    Cpp,
+    Java
 
 };
 #endif

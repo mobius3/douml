@@ -34,41 +34,42 @@
 class Q3HBox;
 class BrowserView;
 class BrowserNode;
- 
+
 // singleton
 
-class SynchroWindow : public Q3MainWindow {
-  Q_OBJECT
-    
-  public:
+class SynchroWindow : public Q3MainWindow
+{
+    Q_OBJECT
+
+public:
     SynchroWindow();
-virtual ~SynchroWindow();
-    
+    virtual ~SynchroWindow();
+
     void load(int argc, char ** argv);
-    
+
     static const Q3PtrList<BrowserView> & get_browsers() {
-      return the->browsers;
+        return the->browsers;
     }
     static void abort();
-  
-  protected:
+
+protected:
     static SynchroWindow * the;
-  
+
     QString project_name;
     Q3PtrList<BrowserView> browsers;
     Q3HBox * hbox;
-    
+
     void load(QString path);
 
-  private slots:
+private slots:
     void load();
     void quit();
     void synchronize();
-    
+
     void motif_style();
     void motifplus_style();
     void windows_style();
-    
+
     void about();
     void aboutQt();
 };

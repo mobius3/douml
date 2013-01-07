@@ -35,27 +35,28 @@
 class Class;
 class UmlTypeSpec;
 
-class ClassContainer {
-  public:
+class ClassContainer
+{
+public:
     ClassContainer() {};
     virtual ~ClassContainer();
-    
+
     virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
-			      const Q3ValueList<FormalParameterList> & tmplts,
-			      Class ** need_object = 0) = 0;
+                              const Q3ValueList<FormalParameterList> & tmplts,
+                              Class ** need_object = 0) = 0;
     virtual Class * define(const Q3CString & name, char st) = 0;
-    
-    bool read_type(UmlTypeSpec & typespec, Class ** cl, 
-		   const Q3ValueList<FormalParameterList> & tmplts,
-		   Q3ValueList<UmlTypeSpec> * actuals, 
-		   Q3CString & str_actual, Q3CString s,
-		   UmlClass ** first_actual_class, Q3CString & def,
-		   Q3CString & genericname);
+
+    bool read_type(UmlTypeSpec & typespec, Class ** cl,
+                   const Q3ValueList<FormalParameterList> & tmplts,
+                   Q3ValueList<UmlTypeSpec> * actuals,
+                   Q3CString & str_actual, Q3CString s,
+                   UmlClass ** first_actual_class, Q3CString & def,
+                   Q3CString & genericname);
 #ifdef ROUNDTRIP
     virtual Class * upload_define(UmlClass *) = 0;
 #endif
 
-  protected:
+protected:
     Q3Dict<Class> Defined;
 };
 

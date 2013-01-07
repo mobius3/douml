@@ -9,8 +9,9 @@
 // is a mother class of all the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n) {};
 
     //returns a string indicating the king of the element
@@ -35,12 +36,12 @@ class UmlRelation : public UmlBaseRelation {
     void gen_python_decl(Q3CString s);
 
 
-  private:
+private:
     //produce the definition in Uml
     void gen_uml_decl();
 
 
-  public:
+public:
     virtual Q3CString pretty_name();
 
 };

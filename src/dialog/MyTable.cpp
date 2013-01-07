@@ -34,39 +34,43 @@
 // definition calls QString::to[U]Long which does not properly
 // manage the empty but not null QString (ie QString(""))
 
-int TableItem::alignment() const {
-  return Qt::AlignLeft | Qt::AlignVCenter;
+int TableItem::alignment() const
+{
+    return Qt::AlignLeft | Qt::AlignVCenter;
 }
 
 // to use TableItem rather than QTableItem
 
-void MyTable::setText(int row, int col, const QString & text) {
-  Q3TableItem * itm = item(row, col);
-  
-  if (itm != 0) {
-    itm->setText(text);
-    updateCell(row, col);
-  }
-  else
-    setItem(row, col, new TableItem(this, Q3TableItem::OnTyping, text));
+void MyTable::setText(int row, int col, const QString & text)
+{
+    Q3TableItem * itm = item(row, col);
+
+    if (itm != 0) {
+        itm->setText(text);
+        updateCell(row, col);
+    }
+    else
+        setItem(row, col, new TableItem(this, Q3TableItem::OnTyping, text));
 }
 
 // force end of edition
 
-void MyTable::forceUpdateCells() {
-  for (int row = 0; row != numRows(); row += 1) {
-    for (int col = 0; col != numCols(); col += 1) {
-      QWidget * w = cellWidget(row, col);
-      
-      if (w != 0) {
-	QString s = item(row, col)->text();
-	
-	item(row, col)->setContentFromEditor(w);
-	if (item(row, col)->text() != s)
-	  emit valueChanged(row, col);
-	
-	// warning : may have other edited cells
-      }
+void MyTable::forceUpdateCells()
+{
+    for (int row = 0; row != numRows(); row += 1) {
+        for (int col = 0; col != numCols(); col += 1) {
+            QWidget * w = cellWidget(row, col);
+
+            if (w != 0) {
+                QString s = item(row, col)->text();
+
+                item(row, col)->setContentFromEditor(w);
+
+                if (item(row, col)->text() != s)
+                    emit valueChanged(row, col);
+
+                // warning : may have other edited cells
+            }
+        }
     }
-  }
 }

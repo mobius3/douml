@@ -14,8 +14,9 @@ class UmlClass;
 struct UmlParameter;
 
 //  Manage the class's operations
-class UmlBaseOperation : public UmlClassMember {
-  public:
+class UmlBaseOperation : public UmlClassMember
+{
+public:
     // returns a new operation named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -30,7 +31,7 @@ class UmlBaseOperation : public UmlClassMember {
     bool isAbstract();
 
     // to set the 'abstract' flag
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isAbstract(bool y);
 
@@ -38,7 +39,7 @@ class UmlBaseOperation : public UmlClassMember {
     const UmlTypeSpec & returnType();
 
     // to set the operation value type
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_ReturnType(const UmlTypeSpec & t);
 
@@ -91,7 +92,7 @@ class UmlBaseOperation : public UmlClassMember {
     bool isCppConst();
 
     // to set if the operation is declared const in C++
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppConst(bool y);
 
@@ -99,7 +100,7 @@ class UmlBaseOperation : public UmlClassMember {
     bool isCppFriend();
 
     // to set if the operation is a friend in C++
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppFriend(bool y);
 
@@ -107,7 +108,7 @@ class UmlBaseOperation : public UmlClassMember {
     bool isCppVirtual();
 
     // to set if the operation is declared virtual in C++
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppVirtual(bool y);
 
@@ -115,7 +116,7 @@ class UmlBaseOperation : public UmlClassMember {
     bool isCppInline();
 
     // to set if the operation is declared inline in C++
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isCppInline(bool y);
 
@@ -134,7 +135,7 @@ class UmlBaseOperation : public UmlClassMember {
     // for memory size reason
     Q3CString cppBody();
 
-    // sets the operation's body in C++, useless if the def does not 
+    // sets the operation's body in C++, useless if the def does not
     // contains ${body}
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
@@ -146,7 +147,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's C++ name must be generated
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_CppNameSpec(const char * s);
 #endif
@@ -156,7 +157,7 @@ class UmlBaseOperation : public UmlClassMember {
     bool isJavaFinal();
 
     // to set if the operation is declared final in JAVA
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaFinal(bool y);
 
@@ -164,7 +165,7 @@ class UmlBaseOperation : public UmlClassMember {
     bool isJavaSynchronized();
 
     // to set if the operation is declared synchronized in JAVA
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaSynchronized(bool y);
 
@@ -183,7 +184,7 @@ class UmlBaseOperation : public UmlClassMember {
     // for memory size reason
     Q3CString javaBody();
 
-    // sets the operation's body in Java, useless if the def does not 
+    // sets the operation's body in Java, useless if the def does not
     // contains ${body}
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
@@ -195,7 +196,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's JAVA name must be generated
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_JavaNameSpec(const char * s);
 #endif
@@ -215,7 +216,7 @@ class UmlBaseOperation : public UmlClassMember {
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's IDL name must be generated
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_IdlNameSpec(const char * s);
 #endif
@@ -225,7 +226,7 @@ class UmlBaseOperation : public UmlClassMember {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     bool _abstract : 1;
 
 #ifdef WITHCPP
@@ -275,7 +276,7 @@ class UmlBaseOperation : public UmlClassMember {
     UmlClassMember * _set_of;
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseOperation(void * id, const Q3CString & n);
 
@@ -295,9 +296,10 @@ class UmlBaseOperation : public UmlClassMember {
 
 };
 
-inline UmlBaseOperation::UmlBaseOperation(void * id, const Q3CString & n) : UmlClassMember(id, n) {
-  _get_of = 0;
-  _set_of = 0;
+inline UmlBaseOperation::UmlBaseOperation(void * id, const Q3CString & n) : UmlClassMember(id, n)
+{
+    _get_of = 0;
+    _set_of = 0;
 }
 
 #endif

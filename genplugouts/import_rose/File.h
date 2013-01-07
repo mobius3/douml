@@ -11,18 +11,19 @@
 #include <qfile.h>
 enum { ATOM = 1, STRING = 2 };
 
-class File : public QFile {
-  public:
+class File : public QFile
+{
+public:
     File(QString s, QString here);
 
     bool open(int m);
 
     //// read a token in 's', returns its kind
-    
+
     int read(Q3CString & s);
 
     //// e is expected, return TRUE if ok
-    
+
     void read(const char * e);
 
     void unread(int k, const Q3CString & s);
@@ -30,7 +31,7 @@ class File : public QFile {
     Q3CString context();
 
 
-  protected:
+protected:
     int readString(Q3CString & s);
 
     int readMLString(Q3CString & s);
@@ -38,7 +39,7 @@ class File : public QFile {
     int readAtom(Q3CString & s);
 
 
-  public:
+public:
     void syntaxError(const Q3CString s);
 
     void syntaxError(const Q3CString s, const Q3CString e);
@@ -48,7 +49,7 @@ class File : public QFile {
     void skipBlock();
 
     //// skip the next form
-    
+
     void skipNextForm();
 
     void eof();
@@ -66,7 +67,7 @@ class File : public QFile {
     void readProperties(Q3Dict<Q3CString> & d);
 
 
-  protected:
+protected:
     int line_number;
 
     int unread_k;

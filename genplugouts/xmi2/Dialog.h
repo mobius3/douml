@@ -13,13 +13,14 @@ class QCheckBox;
 class QComboBox;
 class QRadioButton;
 
-class Dialog : public QDialog {
-  Q_OBJECT
-  public:
+class Dialog : public QDialog
+{
+    Q_OBJECT
+public:
     Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CString & genview, Q3CString & uml20, Q3CString & pk, Q3CString & vis, Q3CString & primitivetype, Q3CString & genextension, Q3CString & geneclipse, Q3CString & commentexporter, Q3CString & linefeed, Language & lang);
 
 
-  protected:
+protected:
     Q3CString & _path;
 
     Q3CString & _encoding;
@@ -77,7 +78,7 @@ class Dialog : public QDialog {
 
     QCheckBox * linefeed_cb;
 
-  protected slots:
+protected slots:
     virtual void polish();
 
     void browse();

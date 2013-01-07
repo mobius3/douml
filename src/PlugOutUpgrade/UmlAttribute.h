@@ -9,22 +9,23 @@
 // is a mother class of the class's children.
 // You can modify it as you want (except the constructor)
 
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n)
-      :  UmlBaseAttribute(id, n) {};
-    
+        :  UmlBaseAttribute(id, n) {};
+
     static UmlAttribute * java2Php(UmlClass * php, UmlClass * java,
-				   const char * javaname,
-				   const char * phpname = 0);
-    
+                                   const char * javaname,
+                                   const char * phpname = 0);
+
     static UmlAttribute * java2Python(UmlClass * python, UmlClass * java,
-				      const char * javaname,
-				      const char * pythonname = 0);
-    
+                                      const char * javaname,
+                                      const char * pythonname = 0);
+
     static UmlAttribute * cpp2Python(UmlClass * python, UmlClass * cpp,
-				     const char * javaname,
-				     const char * pythonname = 0);
+                                     const char * javaname,
+                                     const char * pythonname = 0);
 };
 
 #endif

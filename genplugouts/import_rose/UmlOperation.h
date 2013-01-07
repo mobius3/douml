@@ -13,16 +13,17 @@ class UmlClass;
 // is a mother class of all the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlOperation : public UmlBaseOperation {
-  public:
+class UmlOperation : public UmlBaseOperation
+{
+public:
     UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
     static void import(File & f, UmlClass * parent);
 
 
-  private:
+private:
     void import(File & f);
 
     void importParameters(File & f);

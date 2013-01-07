@@ -34,21 +34,26 @@ class MyTable;
 class RelationData;
 class BrowserClassInstance;
 
-class ObjectLinkDialog : public QDialog {
-  Q_OBJECT
-    
-  public:
+class ObjectLinkDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
     ObjectLinkDialog(BrowserClassInstance * a, BrowserClassInstance * b,
-		     Q3PtrList<RelationData> & l, RelationData * current,
-		     int nfirstdir);
+                     Q3PtrList<RelationData> & l, RelationData * current,
+                     int nfirstdir);
     virtual ~ObjectLinkDialog();
-  
-    RelationData * rel() const { return choozen; }
-    bool rev() const { return reverse; }
-    
-  protected:
+
+    RelationData * rel() const {
+        return choozen;
+    }
+    bool rev() const {
+        return reverse;
+    }
+
+protected:
     void init(RelationData * current);
-    
+
     Q3PtrList<RelationData> & rels;
     int nforward;
     int ninputrels;
@@ -59,10 +64,10 @@ class ObjectLinkDialog : public QDialog {
     MyTable * table;
     RelationData * choozen;
     bool reverse;
-    
+
     static QSize previous_size;
-    
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     virtual void unselect();

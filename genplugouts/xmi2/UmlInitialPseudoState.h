@@ -4,10 +4,11 @@
 
 #include "UmlBaseInitialPseudoState.h"
 
-class UmlInitialPseudoState : public UmlBaseInitialPseudoState {
-  public:
+class UmlInitialPseudoState : public UmlBaseInitialPseudoState
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlInitialPseudoState(void * id) : UmlBaseInitialPseudoState(id, "") {
+    UmlInitialPseudoState(void * id) : UmlBaseInitialPseudoState(id, "") {
     }
 
     virtual const char * sKind() const;

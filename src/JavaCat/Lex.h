@@ -34,43 +34,44 @@
 #include <stdio.h>
 #include <qstring.h>
 
-class Lex {
-  public:
+class Lex
+{
+public:
     typedef struct {
-      QString filename;
-      unsigned line_number;
-      char * buffer;
-      char * pointer;
-      QString reread;
-      QString comments;
-      QString description;
-      char * mark;
+        QString filename;
+        unsigned line_number;
+        char * buffer;
+        char * pointer;
+        QString reread;
+        QString comments;
+        QString description;
+        char * mark;
     } Context;
-  
-  private:
+
+private:
     static int get();
     static int peek();
     static void unget();
-    
+
     static void complete_template(QString & result);
-    static Q3CString manage_operator(QString  & result, int c);  
-    static Q3CString read_string();     
-    static Q3CString read_character();    
-    static Q3CString read_array_dim();  
+    static Q3CString manage_operator(QString  & result, int c);
+    static Q3CString read_string();
+    static Q3CString read_character();
+    static Q3CString read_array_dim();
     static Q3CString read_annotation();
     static void bypass_template();
     static void bypass_cpp_comment();
     static void bypass_c_comment();
-    static char bypass_operator(int c);  
-    static void bypass_string();     
-    static void bypass_character();    
-    static void bypass_annotation();  
-    static void bypass_array_dim();  
-    
+    static char bypass_operator(int c);
+    static void bypass_string();
+    static void bypass_character();
+    static void bypass_annotation();
+    static void bypass_array_dim();
+
     static Context context;
     static QStack<Context> stack;
-    
-  public:
+
+public:
     static Q3CString read_word(bool in_templ = FALSE);
     static char read_word_bis(bool in_templ = FALSE);
     static void unread_word(const char * s);

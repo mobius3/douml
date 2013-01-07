@@ -37,30 +37,35 @@ class QKeyEvent;
 class BrowserView;
 
 enum State {
-  UpToDate, Young, Old, Deleted, Unknown
+    UpToDate, Young, Old, Deleted, Unknown
 };
 
-class BrowserNode : public Q3ListViewItem {
-  public:
+class BrowserNode : public Q3ListViewItem
+{
+public:
     BrowserNode(BrowserView * parent, QString fn);
     BrowserNode(BrowserNode * parent, QString fn, BrowserView * v);
     virtual ~BrowserNode() {};	// to avoid compiler warning
-    
+
     virtual const QPixmap * pixmap(int) const;
-    
+
     bool load(QDir & dir);
-    QString file_name() const { return filename; }
-    
+    QString file_name() const {
+        return filename;
+    }
+
     void set_state(State);
-    State get_state() const { return state; }
-    
+    State get_state() const {
+        return state;
+    }
+
     int get_rev() const;
-    
+
     bool solve();	// solve state and return TRUE if Young
     static void synchronize(QDir & todir, Q3Dict<BrowserNode> & nodes);
-    
-  private:
-    
+
+private:
+
     void memo(Q3Dict<void> & useful);
 
     QString filename;
@@ -70,8 +75,8 @@ class BrowserNode : public Q3ListViewItem {
     State state;
     QStringList diagrams;
     QStringList classes;
-    
-    static Q3Dict<BrowserNode> Youngs;  
+
+    static Q3Dict<BrowserNode> Youngs;
 };
 
 #endif

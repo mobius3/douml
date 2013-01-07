@@ -38,23 +38,24 @@
 // operation/function etc...
 // You can modify it as you want (except the constructor)
 
-class UmlExtraClassMember : public UmlBaseExtraClassMember {
-  public:
+class UmlExtraClassMember : public UmlBaseExtraClassMember
+{
+public:
     UmlExtraClassMember(void * id, const Q3CString & n)
-      : UmlBaseExtraClassMember(id, n) {};
-  
+        : UmlBaseExtraClassMember(id, n) {};
+
     virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-				    const Q3CString & cl_stereotype,
-				    bool all_in_h);
+                                    const Q3CString & cl_stereotype,
+                                    bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility,
-			       QTextStream & f_h,
-			       const Q3CString & cl_stereotype,
-			       Q3CString indent,
-			       BooL & first, bool last);
-    virtual void generate_def(QTextStream &f, Q3CString indent, bool h,
-			      Q3CString templates, Q3CString cl_names,
-			      Q3CString templates_tmplop, 
-			      Q3CString cl_names_tmplop);
+                               QTextStream & f_h,
+                               const Q3CString & cl_stereotype,
+                               Q3CString indent,
+                               BooL & first, bool last);
+    virtual void generate_def(QTextStream & f, Q3CString indent, bool h,
+                              Q3CString templates, Q3CString cl_names,
+                              Q3CString templates_tmplop,
+                              Q3CString cl_names_tmplop);
 };
 
 #endif

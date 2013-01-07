@@ -11,8 +11,9 @@ class UmlNcRelation;
 
 // Manage the relations between non class objects, for instances
 // dependency between packages and use case generalization
-class UmlBaseNcRelation : public UmlItem {
-  public:
+class UmlBaseNcRelation : public UmlItem
+{
+public:
     // returns a new non class relation of the given 'kind' from 'start' to 'end'
     //
     // In case it cannot be created ('parent' cannot contain it etc ...)
@@ -30,7 +31,7 @@ class UmlBaseNcRelation : public UmlItem {
     UmlItem * target();
 
 
-  protected:
+protected:
     aRelationKind _rel_kind;
 
     UmlItem * _target;
@@ -42,8 +43,9 @@ class UmlBaseNcRelation : public UmlItem {
 
 };
 
-inline UmlBaseNcRelation::UmlBaseNcRelation(void * id, const Q3CString & n) : UmlItem(id, n) {
-  _target = 0;
+inline UmlBaseNcRelation::UmlBaseNcRelation(void * id, const Q3CString & n) : UmlItem(id, n)
+{
+    _target = 0;
 }
 
 #endif

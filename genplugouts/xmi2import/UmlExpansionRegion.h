@@ -10,10 +10,11 @@ class UmlItem;
 class Token;
 class FileIn;
 
-class UmlExpansionRegion : public UmlBaseExpansionRegion {
-  public:
+class UmlExpansionRegion : public UmlBaseExpansionRegion
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlExpansionRegion(void * id, const Q3CString & s) : UmlBaseExpansionRegion(id, s) {
+    UmlExpansionRegion(void * id, const Q3CString & s) : UmlBaseExpansionRegion(id, s) {
     }
 
     //returns the first container for a 'kind', going up in the browser tree

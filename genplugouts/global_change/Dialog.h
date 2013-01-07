@@ -14,25 +14,27 @@ class QLineEdit;
 class QRadioButton;
 class QCheckBox;
 
-class LineEdit : public QLineEdit {
-  public:
+class LineEdit : public QLineEdit
+{
+public:
     LineEdit(QWidget * parent);
 
 
-  protected:
+protected:
     bool focusNextPrevChild(bool next);
 
     void keyPressEvent(QKeyEvent * e);
 
 };
 
-class Dialog : public QDialog {
-Q_OBJECT
-  public:
+class Dialog : public QDialog
+{
+    Q_OBJECT
+public:
     Dialog();
 
 
-  protected:
+protected:
     QLineEdit * filter1_le;
 
     QLineEdit * filter2_le;
@@ -81,7 +83,7 @@ Q_OBJECT
 
     QLineEdit * new_le;
 
-  protected slots:
+protected slots:
     void do_replace();
 
     Q3CString digest(const QString s);

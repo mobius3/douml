@@ -8,10 +8,11 @@
 
 class FileOut;
 
-class UmlParameterSet : public UmlBaseParameterSet, public UmlActivityItem {
-  public:
+class UmlParameterSet : public UmlBaseParameterSet, public UmlActivityItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlParameterSet(void * id, const Q3CString & s) : UmlBaseParameterSet(id, s) {
+    UmlParameterSet(void * id, const Q3CString & s) : UmlBaseParameterSet(id, s) {
     }
 
     //write the definition if it is not empty for the target language
@@ -20,7 +21,7 @@ class UmlParameterSet : public UmlBaseParameterSet, public UmlActivityItem {
 
     //goes among tree to memorize incoming flow
     //does nothing at this level
-    
+
     virtual void memo_incoming_flow();
 
 };

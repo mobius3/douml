@@ -40,22 +40,23 @@ class Q3CString;
 class QDataStream;
 class Class;
 
-class BrowserNode : public TreeItem {
-  public:
+class BrowserNode : public TreeItem
+{
+public:
     BrowserNode(BrowserNode * parent, const char * n);
     virtual ~BrowserNode() {};	// to avoid compiler warning
-  
+
     virtual bool isa_package() const = 0;
     virtual void declare(const Q3CString &, Class *) = 0;
 #ifdef ROUNDTRIP
     virtual Class * localy_defined(QString name) const = 0;
 #endif
-    
+
 #ifndef REVERSE
     BrowserNode(BrowserView * parent, const char * n);
-    
+
     void select_in_browser();
-    
+
     virtual void activated();
     virtual void selected();
     virtual void menu() = 0;
@@ -72,8 +73,9 @@ class BrowserNode : public TreeItem {
 
 #include <q3ptrlist.h>
 
-class BrowserNodeList : public Q3PtrList<BrowserNode> {
-  public:
+class BrowserNodeList : public Q3PtrList<BrowserNode>
+{
+public:
     void search(BrowserNode * bn, int k, const QString & s, bool cs);
     virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
 };

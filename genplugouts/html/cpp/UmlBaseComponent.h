@@ -14,8 +14,9 @@ class UmlComponentDiagram;
 class UmlClass;
 
 //  Manage the components.
-class UmlBaseComponent : public UmlItem {
-  public:
+class UmlBaseComponent : public UmlItem
+{
+public:
     // returns a new component named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -44,7 +45,7 @@ class UmlBaseComponent : public UmlItem {
     const Q3PtrVector<UmlClass> & requiredClasses();
 
 
-  private:
+private:
     UmlComponentDiagram * _assoc_diagram;
 
     Q3PtrVector<UmlClass> _realizing;
@@ -54,7 +55,7 @@ class UmlBaseComponent : public UmlItem {
     Q3PtrVector<UmlClass> _required;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
@@ -62,8 +63,9 @@ class UmlBaseComponent : public UmlItem {
 
 };
 
-inline UmlBaseComponent::UmlBaseComponent(void * id, const Q3CString & n) : UmlItem(id, n) {
-  _assoc_diagram = 0;
+inline UmlBaseComponent::UmlBaseComponent(void * id, const Q3CString & n) : UmlItem(id, n)
+{
+    _assoc_diagram = 0;
 }
 
 #endif

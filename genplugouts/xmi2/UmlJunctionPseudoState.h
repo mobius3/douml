@@ -4,10 +4,11 @@
 
 #include "UmlBaseJunctionPseudoState.h"
 
-class UmlJunctionPseudoState : public UmlBaseJunctionPseudoState {
-  public:
+class UmlJunctionPseudoState : public UmlBaseJunctionPseudoState
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlJunctionPseudoState(void * id) : UmlBaseJunctionPseudoState(id, "") {
+    UmlJunctionPseudoState(void * id) : UmlBaseJunctionPseudoState(id, "") {
     }
 
     virtual const char * sKind() const;

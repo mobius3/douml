@@ -3,27 +3,27 @@
 
 
 enum PhpSettingsCmd {
-  getPhpSettingsCmd,
-  getPhpUseDefaultsCmd,
-  setPhpUseDefaultsCmd,
-  setPhpClassStereotypeCmd,
-  setPhpRootdirCmd,
-  setPhpSourceContentCmd,
-  setPhpSourceExtensionCmd,
-  setPhpClassDeclCmd,
-  setPhpEnumDeclCmd,
-  setPhpExternalClassDeclCmd,
-  setPhpInterfaceDeclCmd,
-  setPhpAttributeDeclCmd,
-  setPhpEnumItemDeclCmd,
-  setPhpRelationDeclCmd,
-  setPhpOperationDefCmd,
-  setPhpGetNameCmd,
-  setPhpSetNameCmd,
-  setPhpIsGetFinalCmd,
-  setPhpIsSetFinalCmd,
-  setPhpIsSetParamFinalCmd,
-  setPhpJavadocStyleCmd
+    getPhpSettingsCmd,
+    getPhpUseDefaultsCmd,
+    setPhpUseDefaultsCmd,
+    setPhpClassStereotypeCmd,
+    setPhpRootdirCmd,
+    setPhpSourceContentCmd,
+    setPhpSourceExtensionCmd,
+    setPhpClassDeclCmd,
+    setPhpEnumDeclCmd,
+    setPhpExternalClassDeclCmd,
+    setPhpInterfaceDeclCmd,
+    setPhpAttributeDeclCmd,
+    setPhpEnumItemDeclCmd,
+    setPhpRelationDeclCmd,
+    setPhpOperationDefCmd,
+    setPhpGetNameCmd,
+    setPhpSetNameCmd,
+    setPhpIsGetFinalCmd,
+    setPhpIsSetFinalCmd,
+    setPhpIsSetParamFinalCmd,
+    setPhpJavadocStyleCmd
 
 };
 #endif

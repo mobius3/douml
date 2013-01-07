@@ -44,48 +44,49 @@ class BrowserOperation;
 #include "Labeled.h"
 #include "BrowserActivityElement.h"
 
-class BrowserActivityAction : public BrowserNode, public Labeled<BrowserActivityAction>, public BrowserActivityElement {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserActivityAction : public BrowserNode, public Labeled<BrowserActivityAction>, public BrowserActivityElement
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserActivityAction> all;
     static QStringList its_default_stereotypes;
-  
+
     ActivityActionData * def;
     BrowserNode * associated_diagram;
-    
-  protected:
+
+protected:
     BrowserActivityAction(int id);
-  
+
     void exec_menu_choice(int rank, BrowserNode * who);
 
-  public:
+public:
     BrowserActivityAction(QString s, BrowserNode * p, int id = 0);
     BrowserActivityAction(const BrowserActivityAction * model, BrowserNode * p);
     BrowserActivityAction(QString s, BrowserNode * p, UmlActionKind);
     virtual ~BrowserActivityAction();
-  
+
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
-				   BooL & duplicable) const;
+                                   BooL & duplicable) const;
     static BrowserActivityAction * add_activityaction(BrowserNode * future_parent,
-						      const char * s);
+            const char * s);
     static BrowserActivityAction * get_activityaction(BrowserNode * future_parent);
     static BrowserActivityAction * add_call_behavior(BrowserNode * future_parent,
-						     BrowserNode * beh);
+            BrowserNode * beh);
     static BrowserActivityAction * add_call_operation(BrowserNode * future_parent,
-						      BrowserOperation * oper);
+            BrowserOperation * oper);
     static BrowserActivityAction * add_read_variable_value(BrowserNode * future_parent,
-							   BrowserNode * var);
+            BrowserNode * var);
     static BrowserActivityAction * add_clear_variable_value(BrowserNode * future_parent,
-							    BrowserNode * var);
+            BrowserNode * var);
     static BrowserActivityAction * add_write_variable_value(BrowserNode * future_parent,
-							    BrowserNode * var);
+            BrowserNode * var);
     static BrowserActivityAction * add_add_variable_value(BrowserNode * future_parent,
-							  BrowserNode * var);
+            BrowserNode * var);
     static BrowserActivityAction * add_remove_variable_value(BrowserNode * future_parent,
-							     BrowserNode * var);
+            BrowserNode * var);
 
     void set_pins();
     Q3ValueList<BrowserPin *> get_pins() const;
@@ -97,8 +98,8 @@ class BrowserActivityAction : public BrowserNode, public Labeled<BrowserActivity
     QString may_start() const;
     QString may_connect(UmlCode & l, const BrowserNode * dest) const;
     virtual QString connexion_from(bool control) const;
-    
-    virtual const QPixmap* pixmap (int) const;
+
+    virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -112,32 +113,32 @@ class BrowserActivityAction : public BrowserNode, public Labeled<BrowserActivity
     virtual BasicData * get_data() const;
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual bool allow_empty() const;
-    
+
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserNode *, bool on_read = FALSE);
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserActivityAction * read(char * &, char *, BrowserNode *);
-    static BrowserActivityAction * read_ref(char * & st);
+    static BrowserActivityAction * read(char *& , char *, BrowserNode *);
+    static BrowserActivityAction * read_ref(char *& st);
     static BrowserNode * get_it(const char * k, int id);
 
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual void write_id(ToolCom * com);
     virtual bool api_compatible(unsigned v) const;
-    
+
     virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
     static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserNode *);
-    
+
     static void init();
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;
     virtual QString drag_postfix() const;

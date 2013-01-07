@@ -38,26 +38,29 @@ class QDir;
 class QKeyEvent;
 class BrowserView;
 
-class BrowserNode : public Q3ListViewItem {
-  public:
+class BrowserNode : public Q3ListViewItem
+{
+public:
     BrowserNode(BrowserView * parent, QString fn);
     BrowserNode(BrowserNode * parent, QString fn);
     virtual ~BrowserNode() {};	// to avoid compiler warning
-    
+
     virtual const QPixmap * pixmap(int) const;
-    
+
     void menu();
-    QString get_path() const { return path; }
+    QString get_path() const {
+        return path;
+    }
     bool load(QDir & dir);
     void key_event(QKeyEvent *);
-    
-  private:
+
+private:
     void assign(int);
     void assign_mine(int);
     void assign_unassigned(int);
     void assign_all(int);
 
-  private:
+private:
     QString filename;
     QString path;
     QString modifier_name;
@@ -72,8 +75,9 @@ class BrowserNode : public Q3ListViewItem {
 
 #include <q3ptrlist.h>
 
-class BrowserNodeList : public Q3PtrList<BrowserNode> {
-  public:
+class BrowserNodeList : public Q3PtrList<BrowserNode>
+{
+public:
     void search(BrowserNode * bn, const QString & s, bool cs);
     virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
 };

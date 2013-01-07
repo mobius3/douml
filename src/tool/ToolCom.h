@@ -40,14 +40,15 @@ class AType;
 class QRect;
 class QTimer;
 
-class ToolCom  :public QObject {
-  Q_OBJECT
+class ToolCom  : public QObject
+{
+    Q_OBJECT
 
-    protected:
+protected:
     static Q3PtrList<ToolCom> used;
     static Q3PtrList<ToolCom> unused;
     static int exitvalue;
-  
+
     bool start;
     //! hols the value that processFinished slot should received
     //! originally this value was a parameter passed to a fucntion
@@ -80,20 +81,22 @@ class ToolCom  :public QObject {
 
     unsigned bind(unsigned port);
     void close();
-    
+
     static bool is_running(int id);
-    
-  public:
-    unsigned api_format() const { return api_version; }
+
+public:
+    unsigned api_format() const {
+        return api_version;
+    }
     virtual ~ToolCom();
-  
+
     static int run(const char * cmd, BrowserNode *,
-		   bool exit = FALSE, bool clr = TRUE,
-		   void (*pf)() = 0);
+                   bool exit = FALSE, bool clr = TRUE,
+                   void (*pf)() = 0);
     friend int exit_value();
-  
+
     void data_received(Socket * who);
-    
+
     unsigned get_unsigned(const char *& p);
     bool get_bool(const char *& p);
     void * get_id(const char *& p);
@@ -115,13 +118,13 @@ class ToolCom  :public QObject {
     void write(QRect r);
     void write_ack(bool);
     void fatal_error(const char * msg);
-    
+
     static void close_all();
-    
-  signals:
+
+signals:
     void closed();
-  
-  public slots:
+
+public slots:
     void connexion_timeout();
     void processFinished();
 };

@@ -11,14 +11,15 @@
 class UmlTransition;
 class FileOut;
 
-class UmlPseudoState : public UmlStateItem, public UmlItem {
-  public:
+class UmlPseudoState : public UmlStateItem, public UmlItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlPseudoState(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlPseudoState(void * id, const Q3CString & s) : UmlItem(id, s) {
     }
 
     //goes among tree to memorize incoming transitions
-    
+
     virtual void memo_incoming_trans();
 
     //memorize a new incoming transition
@@ -29,7 +30,7 @@ class UmlPseudoState : public UmlStateItem, public UmlItem {
     virtual const char * sKind() const = 0;
 
 
-  protected:
+protected:
     Q3PtrList<UmlTransition> _incoming_trans;
 
 };

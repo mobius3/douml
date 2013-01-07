@@ -30,34 +30,35 @@
 //Added by qt3to4:
 #include <QTextStream>
 
-class SdSelfMsgCanvas : public SdMsgBaseCanvas {
-  public:
+class SdSelfMsgCanvas : public SdMsgBaseCanvas
+{
+public:
     SdSelfMsgCanvas(UmlCanvas * canvas, SdMsgSupport * d,
-		    UmlCode l, int v, int id);
+                    UmlCode l, int v, int id);
     virtual ~SdSelfMsgCanvas();
-    
+
     virtual void draw(QPainter & p);
-    
+
     virtual void change_scale();
     virtual void update_hpos();
     virtual void check_vpos(const QRect &);
     virtual double min_y() const;
     virtual void update();
     virtual void change_duration(SdDurationCanvas * oldone,
-				 SdDurationCanvas * newone);
+                                 SdDurationCanvas * newone);
     virtual int overlap_dir(SdDurationCanvas *) const;
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual void select_associated();
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
-    
+
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
-  
+
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static SdSelfMsgCanvas * read(char * &, UmlCanvas *, char *);
+    static SdSelfMsgCanvas * read(char *& , UmlCanvas *, char *);
 };
 
 #endif

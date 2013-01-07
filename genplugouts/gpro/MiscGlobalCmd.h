@@ -4,11 +4,11 @@
 
 // Internal enum
 enum MiscGlobalCmd {
-  byeCmd,
-  traceCmd,
-  messageCmd,
-  toolRunningCmd,
-  targetCmd
+    byeCmd,
+    traceCmd,
+    messageCmd,
+    toolRunningCmd,
+    targetCmd
 
 };
 #endif

@@ -42,79 +42,83 @@
 
 QSize StereotypeDialog::previous_size;
 
-StereotypeDialog::StereotypeDialog(const QStringList &defaults,
-				   QString & st, QString & la,
-				   QString cap, QString lbl)
-    : QDialog(0, cap, TRUE), ste(st), lab(la) {
-  setCaption(cap);
-  
-  if (! ste.isEmpty())
-    // removes << and >>
-    ste = ste.mid(2, ste.length() - 4);
-  
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
-  QLabel * label1;
-  QLabel * label2;
-  
-  vbox->setMargin(5);
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  hbox->addWidget(label1 = new QLabel(lbl, this));
-  ed = new LineEdit(la, this);
-  hbox->addWidget(ed);
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  hbox->addWidget(label2 = new QLabel(TR("stereotype : "), this));
-  cb = new Q3ComboBox(TRUE, this);
-  cb->insertItem(ste);
-  cb->setCurrentItem(0);
-  cb->insertStringList(defaults);
-  cb->setAutoCompletion(completion());
-  hbox->addWidget(cb);
-  
-  QSizePolicy sp = cb->sizePolicy();
-  
-  sp.setHorData(QSizePolicy::Expanding);
-  cb->setSizePolicy(sp);
-  
-  same_width(label1, label2);
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  QPushButton * accept = new QPushButton(TR("&OK"), this);
-  QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
-  QSize bs(cancel->sizeHint());
-  
-  accept->setDefault(TRUE);
-  accept->setFixedSize(bs);
-  cancel->setFixedSize(bs);
-  
-  hbox->addWidget(accept);
-  hbox->addWidget(cancel);
-    
-  connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
-  connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
+StereotypeDialog::StereotypeDialog(const QStringList & defaults,
+                                   QString & st, QString & la,
+                                   QString cap, QString lbl)
+    : QDialog(0, cap, TRUE), ste(st), lab(la)
+{
+    setCaption(cap);
+
+    if (! ste.isEmpty())
+        // removes << and >>
+        ste = ste.mid(2, ste.length() - 4);
+
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    Q3HBoxLayout * hbox;
+    QLabel * label1;
+    QLabel * label2;
+
+    vbox->setMargin(5);
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    hbox->addWidget(label1 = new QLabel(lbl, this));
+    ed = new LineEdit(la, this);
+    hbox->addWidget(ed);
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    hbox->addWidget(label2 = new QLabel(TR("stereotype : "), this));
+    cb = new Q3ComboBox(TRUE, this);
+    cb->insertItem(ste);
+    cb->setCurrentItem(0);
+    cb->insertStringList(defaults);
+    cb->setAutoCompletion(completion());
+    hbox->addWidget(cb);
+
+    QSizePolicy sp = cb->sizePolicy();
+
+    sp.setHorData(QSizePolicy::Expanding);
+    cb->setSizePolicy(sp);
+
+    same_width(label1, label2);
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    QPushButton * accept = new QPushButton(TR("&OK"), this);
+    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QSize bs(cancel->sizeHint());
+
+    accept->setDefault(TRUE);
+    accept->setFixedSize(bs);
+    cancel->setFixedSize(bs);
+
+    hbox->addWidget(accept);
+    hbox->addWidget(cancel);
+
+    connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-StereotypeDialog::~StereotypeDialog() {
-  previous_size = size();
+StereotypeDialog::~StereotypeDialog()
+{
+    previous_size = size();
 }
 
-void StereotypeDialog::polish() {
-  QDialog::polish();
-  UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
+void StereotypeDialog::polish()
+{
+    QDialog::polish();
+    UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
-void StereotypeDialog::accept() {
-  ste = cb->currentText().stripWhiteSpace();
+void StereotypeDialog::accept()
+{
+    ste = cb->currentText().stripWhiteSpace();
 
-  if (!ste.isEmpty())
-    ste = QString("<<") + ste + ">>";
-  
-  lab = ed->text();
-  
-  QDialog::accept();
+    if (!ste.isEmpty())
+        ste = QString("<<") + ste + ">>";
+
+    lab = ed->text();
+
+    QDialog::accept();
 }

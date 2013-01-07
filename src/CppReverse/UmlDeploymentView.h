@@ -34,11 +34,12 @@
 // This class manages 'deployment view'
 // You can modify it as you want (except the constructor)
 
-class UmlDeploymentView : public UmlBaseDeploymentView {
-  public:
+class UmlDeploymentView : public UmlBaseDeploymentView
+{
+public:
     UmlDeploymentView(void * id, const Q3CString & n)
-      : UmlBaseDeploymentView(id, n) {};
-  
+        : UmlBaseDeploymentView(id, n) {};
+
 #ifdef ROUNDTRIP
     virtual bool set_roundtrip_expected();
     virtual void mark_useless(Q3PtrList<UmlItem> & l);

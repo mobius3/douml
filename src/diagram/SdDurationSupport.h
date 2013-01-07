@@ -31,10 +31,11 @@
 class SdDurationCanvas;
 class SdLifeLineCanvas;
 
-class SdDurationSupport {
-  public:
+class SdDurationSupport
+{
+public:
     virtual ~SdDurationSupport() {};
-  
+
     virtual void add(SdDurationCanvas *) = 0;
     virtual void remove(SdDurationCanvas *) = 0;
 

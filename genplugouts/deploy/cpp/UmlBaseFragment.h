@@ -12,8 +12,9 @@ class UmlClassInstanceReference;
 class UmlFragment;
 
 // this class manages fragments
-class UmlBaseFragment {
-  public:
+class UmlBaseFragment
+{
+public:
     // return the name
     const Q3CString & name() const {
         return _name;
@@ -48,7 +49,7 @@ class UmlBaseFragment {
     }
 
 
-  private:
+private:
     UmlFragmentCompartment * _container;
 
     Q3PtrVector<UmlFragmentCompartment> _compartments;
@@ -73,25 +74,25 @@ class UmlBaseFragment {
     void read_();
 
 
-  public:
+public:
     //internal, do NOT use it
-    
+
     int vcenter_(int rank) const;
 
     //internal, do NOT use it
-    
+
     void read_covered_(Q3PtrDict<UmlClassInstanceReference> & instances);
 
     // internal
     static UmlFragmentCompartment * get_container_(int x, int y, int w, int h, const Q3PtrVector<UmlFragment> & fragments);
 
 
-  private:
+private:
     // internal
     static void compute_container_(Q3PtrVector<UmlFragment> & fragments);
 
 
-  public:
+public:
     int w() const {
         return _w;
     }
@@ -101,10 +102,10 @@ class UmlBaseFragment {
     }
 
     //  to avoid compiler warning, don't call it
-     ~UmlBaseFragment();
+    ~UmlBaseFragment();
 
-  friend class UmlBaseUseCaseDiagramDefinition;
-  friend class UmlBaseSequenceDiagramDefinition;
+    friend class UmlBaseUseCaseDiagramDefinition;
+    friend class UmlBaseSequenceDiagramDefinition;
 };
 
 #endif

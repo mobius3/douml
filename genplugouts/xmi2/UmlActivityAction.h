@@ -7,17 +7,18 @@
 
 class FileOut;
 
-class UmlActivityAction : public UmlBaseActivityAction {
-  protected:
+class UmlActivityAction : public UmlBaseActivityAction
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityAction(void * id, const Q3CString & s) : UmlBaseActivityAction(id, s) {
+    UmlActivityAction(void * id, const Q3CString & s) : UmlBaseActivityAction(id, s) {
     }
 
     //write start of definition, don't close the element list
     void write_begin(FileOut & out, Q3CString k);
 
     //close the element list and write end of definition without closing it
-    
+
     void write_end(FileOut & out, bool dontclose = FALSE);
 
     //close the element definition
@@ -26,7 +27,7 @@ class UmlActivityAction : public UmlBaseActivityAction {
     void write_condition(FileOut & out, Q3CString cond, bool pre);
 
 
-  public:
+public:
     virtual void solve_output_flows();
 
 };

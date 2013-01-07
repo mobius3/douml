@@ -32,19 +32,20 @@
 #include <Q3CString>
 
 struct Dir {
-  Q3CString src;
-  Q3CString h;
-  bool read;
+    Q3CString src;
+    Q3CString h;
+    bool read;
 };
- 
-class UmlPackage : public UmlBasePackage {
-  public:
+
+class UmlPackage : public UmlBasePackage
+{
+public:
     UmlPackage(void * id, const Q3CString & n);
-  
-  protected:
+
+protected:
     Dir dir;
-  
-  public:
+
+public:
     Q3CString source_path(const Q3CString &);
     Q3CString header_path(const Q3CString &);
     Q3CString java_path(const Q3CString &);
@@ -55,7 +56,7 @@ class UmlPackage : public UmlBasePackage {
     virtual void roundtrip_php();
     virtual void roundtrip_python();
     virtual UmlPackage * package();
-    
+
     static Q3CString rootDir(aLanguage who);
 };
 

@@ -55,118 +55,118 @@ QApplication * theApp;
 
 //
 
-int main(int argc, char **argv)
+int main(int argc, char ** argv)
 {
-  ExitOnError = FALSE;
+    ExitOnError = FALSE;
 
 
 
-  QsLogging::Logger& logger = QsLogging::Logger::instance();
-  logger.setLoggingLevel(QsLogging::TraceLevel);
-  QDir dir;
-  dir.setPath(qApp->applicationDirPath());
-  dir.remove(QString("cpp_generator") + QString(".log"));
-  const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString("douml") + QString(".log")));
-  QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath) );
-  QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
-  logger.addDestination(debugDestination.get());
-  logger.addDestination(fileDestination.get());
-  QLOG_INFO() << "Starting the log";
+    QsLogging::Logger & logger = QsLogging::Logger::instance();
+    logger.setLoggingLevel(QsLogging::TraceLevel);
+    QDir dir;
+    dir.setPath(qApp->applicationDirPath());
+    dir.remove(QString("cpp_generator") + QString(".log"));
+    const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString("douml") + QString(".log")));
+    QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath));
+    QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
+    logger.addDestination(debugDestination.get());
+    logger.addDestination(fileDestination.get());
+    QLOG_INFO() << "Starting the log";
 
-  theApp = new QApplication (argc, argv);
+    theApp = new QApplication(argc, argv);
 
-  UmlDesktop::init();
-  
-  // note : bool conv_env = !QDir::home().exists(".doumlrc") doesn't work
-  // if the path contains non latin1 characters, for instance cyrillic !
-  QString s = QDir::home().absFilePath(".doumlrc");
-  FILE * fp = fopen((const char *) s, "r");
-  bool conv_env = (fp == 0);
+    UmlDesktop::init();
 
-  
-  if (conv_env)
-    EnvDialog::edit(TRUE);
-  else
-    fclose(fp);
-  
-  read_doumlrc();	// for virtual desktop
-  init_pixmaps();
-  init_font();
-  Shortcut::init(conv_env);
-  
-  bool exec = FALSE;
-  bool no_gui = FALSE;
-  
-  if (argc > 3) {
-    if (!strcmp(argv[2], "-execnogui"))
-      exec = no_gui = TRUE;
+    // note : bool conv_env = !QDir::home().exists(".doumlrc") doesn't work
+    // if the path contains non latin1 characters, for instance cyrillic !
+    QString s = QDir::home().absFilePath(".doumlrc");
+    FILE * fp = fopen((const char *) s, "r");
+    bool conv_env = (fp == 0);
+
+
+    if (conv_env)
+        EnvDialog::edit(TRUE);
     else
-      exec = !strcmp(argv[2], "-exec");
-  }
-    
-  UmlWindow * uw = new UmlWindow(exec);
+        fclose(fp);
 
-  if (no_gui)
-    UmlDesktop::set_nogui();
-  else
-    uw->show();
-  
-  if (argc > 1) {
+    read_doumlrc();	// for virtual desktop
+    init_pixmaps();
+    init_font();
+    Shortcut::init(conv_env);
+
+    bool exec = FALSE;
+    bool no_gui = FALSE;
+
+    if (argc > 3) {
+        if (!strcmp(argv[2], "-execnogui"))
+            exec = no_gui = TRUE;
+        else
+            exec = !strcmp(argv[2], "-exec");
+    }
+
+    UmlWindow * uw = new UmlWindow(exec);
+
+    if (no_gui)
+        UmlDesktop::set_nogui();
+    else
+        uw->show();
+
+    if (argc > 1) {
+        try {
+            if ((argc == 3) &&
+                !strcmp(argv[2], "-root") &&
+                (msg_critical(TR("DO NOT CONFIRM"),
+                              TR("Root mode protection\n\n"
+                                 "This mode allows me to develop BOUML\n\n"
+                                 "do NOT confirm to avoid a disaster !!!\n\n"
+                                 "confirm ?"),
+                              QMessageBox::Yes, QMessageBox::No)
+                 == QMessageBox::Yes)) {
+                set_user_id(0);
+                set_editor(getenv("BOUML_EDITOR")); // no environment file
+                argc = 1;
+            }
+
+            uw->load_it(argv[1]);
+        }
+        catch (...) {
+            // cannot read a file
+            return -1;
+        }
+    }
+
+    theApp->connect(theApp, SIGNAL(lastWindowClosed()), theApp, SLOT(quit()));
+
     try {
-      if ((argc == 3) &&
-	  !strcmp(argv[2], "-root") &&
-	  (msg_critical(TR("DO NOT CONFIRM"),
-			TR("Root mode protection\n\n"
-			   "This mode allows me to develop BOUML\n\n"
-			   "do NOT confirm to avoid a disaster !!!\n\n"
-			   "confirm ?"),
-			QMessageBox::Yes, QMessageBox::No)
-	   == QMessageBox::Yes)) {
-	set_user_id(0);
-	set_editor(getenv("BOUML_EDITOR")); // no environment file
-	argc = 1;
-      }
-      
-      uw->load_it(argv[1]);
+        if (argc > 2) {
+            if (exec) {
+                bool with_exit = FALSE;
+
+                if (!strcmp(argv[argc - 1], "-exit")) {
+                    with_exit = TRUE;
+                    argc -= 1;
+                }
+
+                Q3CString cmd = argv[3];
+                Q3CString space = " ";
+                int index;
+
+                for (index = 4; index != argc; index += 1)
+                    cmd += space + Q3CString(argv[index]);
+
+                ToolCom::run((const char *) cmd, BrowserView::get_project(), with_exit);
+            }
+            else
+                msg_warning(TR("Error"), TR("Bouml was called with wrong parameters, ignore them"));
+        }
+
+
+        ExitOnError = TRUE;
+        theApp->exec();
     }
     catch (...) {
-      // cannot read a file
-      return -1;
+        ;
     }
-  }
-  
-  theApp->connect(theApp, SIGNAL(lastWindowClosed()), theApp, SLOT(quit()) );
-    
-  try {
-    if (argc > 2) {
-      if (exec) {
-	bool with_exit = FALSE;
-	
-	if (!strcmp(argv[argc - 1], "-exit")) {
-	  with_exit = TRUE;
-	  argc -= 1;
-	}
-	
-	Q3CString cmd = argv[3];
-	Q3CString space = " ";
-	int index;
-	
-	for (index = 4; index != argc; index += 1)
-	  cmd += space + Q3CString(argv[index]);
-	
-	ToolCom::run((const char *) cmd, BrowserView::get_project(), with_exit);
-      }
-      else
-	msg_warning(TR("Error"), TR("Bouml was called with wrong parameters, ignore them"));
-    }
-    
 
-    ExitOnError = TRUE;
-    theApp->exec();
-  }
-  catch (...) {
-    ;
-  }
-  
-  return exit_value();
+    return exit_value();
 }

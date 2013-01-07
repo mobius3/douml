@@ -33,7 +33,7 @@ EdgeMenuToolBar::EdgeMenuToolBar(QWidget * _parent) : QToolBar(_parent)
     clipboardListSize = 10;
     connect(&decayTimer, SIGNAL(timeout()), this, SLOT(hide()));
     An<ClipboardManager> clipboard;
-    connect(this, SIGNAL(putIntoClipboard(QString)),clipboard.getData(), SLOT(OnPutItemIntoClipboard(QString)));
+    connect(this, SIGNAL(putIntoClipboard(QString)), clipboard.getData(), SLOT(OnPutItemIntoClipboard(QString)));
 }
 
 EdgeMenuToolBar::~EdgeMenuToolBar()
@@ -50,24 +50,24 @@ void EdgeMenuToolBar::SetDialog(EdgeMenuDialog * dialog)
     linkedDialog = dialog;
 }
 
-void EdgeMenuToolBar::leaveEvent(QEvent *event)
+void EdgeMenuToolBar::leaveEvent(QEvent * event)
 {
 
     decayTimer.start(15000);
 }
 
-void EdgeMenuToolBar::enterEvent(QEvent *event)
+void EdgeMenuToolBar::enterEvent(QEvent * event)
 {
     decayTimer.stop();
 }
 
-void EdgeMenuToolBar::mouseMoveEvent(QMouseEvent *event)
+void EdgeMenuToolBar::mouseMoveEvent(QMouseEvent * event)
 {
 }
 
 void EdgeMenuToolBar::focusOutEvent(QFocusEvent *)
 {
-    if(!linkedDialog->hasFocus())
+    if (!linkedDialog->hasFocus())
         hide();
 }
 
@@ -95,37 +95,40 @@ void EdgeMenuToolBar::FillClipboardMenu(int base)
     clipboardMenu->clear();
     An<ClipboardManager> clipboard;
     QStringList strings = clipboard->GetStrings();
-    if(base != 0)
-    {
-        QAction* lessClipboard = new QAction("Less Clipboard", clipboardMenu);
+
+    if (base != 0) {
+        QAction * lessClipboard = new QAction("Less Clipboard", clipboardMenu);
         connect(lessClipboard, SIGNAL(triggered()), this, SLOT(OnLessClipboardRequested()));
         clipboardMenu->addAction(lessClipboard);
     }
+
     int maxItems = strings.size() > 10 ? 10 : strings.size();
     int i = base;
-    for(i; i < maxItems; ++i)
-    {
+
+    for (i; i < maxItems; ++i) {
         QString text = strings.at(strings.size() - 1 - i);
         clipboard->blockSignals(true);
         QString itemText;
-        if(text.length() < 15)
+
+        if (text.length() < 15)
             itemText = text;
-        else
-        {
+        else {
             text.left(15);
             itemText = text  + "...";
         }
-        QAction* action = new QAction(itemText, clipboardMenu);
+
+        QAction * action = new QAction(itemText, clipboardMenu);
         action->setData(text);
         connect(action, SIGNAL(triggered()), this, SLOT(OnPutIntoClipboardRequested()));
         clipboard->blockSignals(false);
         clipboardMenu->addAction(action);
 
     }
-    lastClipboardItemShown+=i;
-    if(lastClipboardItemShown < strings.size())
-    {
-        QAction* moreClipboard = new QAction("More Clipboard", clipboardMenu);
+
+    lastClipboardItemShown += i;
+
+    if (lastClipboardItemShown < strings.size()) {
+        QAction * moreClipboard = new QAction("More Clipboard", clipboardMenu);
         connect(moreClipboard, SIGNAL(triggered()), this, SLOT(OnMoreClipboardRequested()));
         clipboardMenu->addAction(moreClipboard);
     }
@@ -144,7 +147,7 @@ void EdgeMenuToolBar::OnInitiateResize(QPoint origin)
 
 void EdgeMenuToolBar::OnNewCoordinatesReceived(QPoint newPoint)
 {
-    if(modificationMode == wmm_drag)
+    if (modificationMode == wmm_drag)
         MoveThis(modificationOrigin, newPoint);
 }
 
@@ -162,7 +165,7 @@ void EdgeMenuToolBar::OnEndMove()
 void EdgeMenuToolBar::OnClipboardRequested()
 {
     FillClipboardMenu(0);
-    clipboardMenu->exec(this->mapToGlobal(QPoint(0,0)));
+    clipboardMenu->exec(this->mapToGlobal(QPoint(0, 0)));
 }
 
 void EdgeMenuToolBar::OnMoreClipboardRequested()
@@ -177,13 +180,13 @@ void EdgeMenuToolBar::OnLessClipboardRequested()
 
 void EdgeMenuToolBar::OnPutIntoClipboardRequested()
 {
-    QAction* senderAction = qobject_cast<QAction*>(sender());
+    QAction * senderAction = qobject_cast<QAction *>(sender());
     emit putIntoClipboard(senderAction->data().toString());
 }
 
 void EdgeMenuToolBar::OnDialogLostFocus()
 {
-    if(!this->underMouse())
+    if (!this->underMouse())
         hide();
 }
 

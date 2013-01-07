@@ -7,11 +7,12 @@
 #include <q3cstring.h>
 #include "UmlClass.h"
 
-class UmlState : public UmlBaseState, public UmlStateItem {
-  public:
+class UmlState : public UmlBaseState, public UmlStateItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlState(void * id, const Q3CString & s)
-       : UmlBaseState(id, s), _has_initial(FALSE), _has_completion(FALSE), _class(0) {
+    UmlState(void * id, const Q3CString & s)
+        : UmlBaseState(id, s), _has_initial(FALSE), _has_completion(FALSE), _class(0) {
     }
 
     bool isLeaf();
@@ -21,11 +22,11 @@ class UmlState : public UmlBaseState, public UmlStateItem {
     void hasInitial();
 
     //  return the class implementing the state
-    
+
     UmlClass * assocClass() const;
 
     //  the path to the instance of the class managing the state
-    
+
     Q3CString path() const;
 
     //  the path of the state to be produced in debug trace
@@ -37,11 +38,11 @@ class UmlState : public UmlBaseState, public UmlStateItem {
     virtual void init(UmlClass * mother, Q3CString path, Q3CString pretty_path, UmlState * state);
 
     //  to indicate that the state has a completion
-    
+
     void setHasCompletion();
 
     //  return TRUE if the state as completion
-    
+
     bool hasCompletion();
 
     bool needCreate();
@@ -53,7 +54,7 @@ class UmlState : public UmlBaseState, public UmlStateItem {
     virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state);
 
 
-  protected:
+protected:
     bool _has_initial;
 
     bool _has_completion;
@@ -71,24 +72,29 @@ class UmlState : public UmlBaseState, public UmlStateItem {
 
 };
 
-inline UmlClass * UmlState::assocClass() const {
-  return _class;
+inline UmlClass * UmlState::assocClass() const
+{
+    return _class;
 }
 
-inline Q3CString UmlState::path() const {
-  return _path;
+inline Q3CString UmlState::path() const
+{
+    return _path;
 }
 
-inline Q3CString UmlState::prettyPath() const {
-  return _pretty_path;
+inline Q3CString UmlState::prettyPath() const
+{
+    return _pretty_path;
 }
 
-inline void UmlState::setHasCompletion() {
-  _has_completion = TRUE;
+inline void UmlState::setHasCompletion()
+{
+    _has_completion = TRUE;
 }
 
-inline bool UmlState::hasCompletion() {
-  return _has_completion;
+inline bool UmlState::hasCompletion()
+{
+    return _has_completion;
 }
 
 #endif

@@ -5,10 +5,11 @@
 
 UmlUseCaseDiagram * UmlBaseUseCaseDiagram::create(UmlItem * parent, const char * s)
 {
-  return (UmlUseCaseDiagram *) parent->create_(anUseCaseDiagram, s);
+    return (UmlUseCaseDiagram *) parent->create_(anUseCaseDiagram, s);
 }
 
-anItemKind UmlBaseUseCaseDiagram::kind() {
-  return anUseCaseDiagram;
+anItemKind UmlBaseUseCaseDiagram::kind()
+{
+    return anUseCaseDiagram;
 }
 

@@ -23,29 +23,35 @@
 //
 // *************************************************************************
 
-#include <QTextStream> 
+#include <QTextStream>
 
 #include "UmlItem.h"
 
-UmlItem::~UmlItem() {
+UmlItem::~UmlItem()
+{
 }
 
-void UmlItem::roundtrip_cpp() {
-  // does nothing
+void UmlItem::roundtrip_cpp()
+{
+    // does nothing
 }
 
-void UmlItem::roundtrip_java() {
-  // does nothing
+void UmlItem::roundtrip_java()
+{
+    // does nothing
 }
 
-void UmlItem::roundtrip_php() {
-  // does nothing
+void UmlItem::roundtrip_php()
+{
+    // does nothing
 }
 
-void UmlItem::roundtrip_python() {
-  // does nothing
+void UmlItem::roundtrip_python()
+{
+    // does nothing
 }
 
-UmlPackage * UmlItem::package() {
-  return parent()->package();
+UmlPackage * UmlItem::package()
+{
+    return parent()->package();
 }

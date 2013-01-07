@@ -34,10 +34,11 @@
 class Q3ComboBox;
 class LineEdit;
 
-class FragmentDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class FragmentDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     QString & name;
     QString & form;
     BrowserNode *& refer;
@@ -45,15 +46,15 @@ class FragmentDialog : public QDialog {
     Q3ComboBox * diag_cb;
     LineEdit * ed_form;
     BrowserNodeList nodes;
-    
+
     static QSize previous_size;
-  
-  public:
-    FragmentDialog(const QStringList &defaults, QString & na,
-		   QString & fo, BrowserNode *& d);
+
+public:
+    FragmentDialog(const QStringList & defaults, QString & na,
+                   QString & fo, BrowserNode *& d);
     virtual ~FragmentDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     void accept();
     void menu_refer();

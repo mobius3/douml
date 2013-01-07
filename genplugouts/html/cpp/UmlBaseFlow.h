@@ -10,8 +10,9 @@
 class UmlFlow;
 class UmlActivityNode;
 
-class UmlBaseFlow : public UmlItem {
-  public:
+class UmlBaseFlow : public UmlItem
+{
+public:
     // returns the kind of the item
     virtual anItemKind kind();
 
@@ -19,7 +20,7 @@ class UmlBaseFlow : public UmlItem {
     //
     // In case it cannot be created ('parent' cannot contain it etc ...) return 0
     //  in C++ and produce a RuntimeException in Java
-    
+
     static UmlFlow * create(UmlActivityNode * start, UmlActivityNode * end);
 
     // returns the 'end' object (the 'start' object is the parent of the flow) no set !
@@ -126,7 +127,7 @@ class UmlBaseFlow : public UmlItem {
 #endif
 
     // to unload the object to free memory, it will be reloaded automatically
-    // if needed. Recursively done for the sub items if 'rec' is TRUE. 
+    // if needed. Recursively done for the sub items if 'rec' is TRUE.
     //
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
@@ -134,7 +135,7 @@ class UmlBaseFlow : public UmlItem {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     UmlActivityNode * _target;
 
     FlowBehavior _uml;
@@ -148,7 +149,7 @@ class UmlBaseFlow : public UmlItem {
 #endif
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -160,7 +161,7 @@ class UmlBaseFlow : public UmlItem {
 #endif
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseFlow(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseFlow(void * id, const Q3CString & s) : UmlItem(id, s) {
     }
 
 };

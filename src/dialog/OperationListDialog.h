@@ -33,16 +33,17 @@
 class Q3ComboBox;
 class BrowserOperation;
 
-class OperationListDialog : public QDialog {
-  protected:
+class OperationListDialog : public QDialog
+{
+protected:
     Q3ComboBox * cb;
-  
+
     static QSize previous_size;
-  
-  public:
+
+public:
     OperationListDialog(const char * m, Q3PtrList<BrowserOperation> & l);
     virtual ~OperationListDialog();
-  
+
     int choosen();
 };
 

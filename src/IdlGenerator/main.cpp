@@ -31,37 +31,37 @@
 
 int main(int argc, char ** argv)
 {
-  int port_index;
-  
-  if (argc == 2)
-    port_index = 1;
-  else if (argc == 3) {
-    set_verbose();
-    port_index = 2;
-  }
-  else
+    int port_index;
+
+    if (argc == 2)
+        port_index = 1;
+    else if (argc == 3) {
+        set_verbose();
+        port_index = 2;
+    }
+    else
+        return 0;
+
+    if (UmlCom::connect(Q3CString(argv[port_index]).toUInt())) {
+        try {
+            UmlCom::trace("<b>IDL generator</b> release 2.15<br>");
+
+            UmlCom::targetItem()->generate();
+
+            Q3CString s;
+
+            s.sprintf("<hr><font face=helvetica>Generation done : %d warnings, %d errors</font><br>",
+                      n_warnings(), n_errors());
+            UmlCom::trace(s);
+
+            UmlCom::message("");
+
+            UmlCom::bye(n_errors());
+        }
+        catch (...) {
+        }
+    }
+
+    UmlCom::close();
     return 0;
-  
-  if (UmlCom::connect(Q3CString(argv[port_index]).toUInt())) {
-    try {
-      UmlCom::trace("<b>IDL generator</b> release 2.15<br>");
-      
-      UmlCom::targetItem()->generate();
-      
-      Q3CString s;
-      
-      s.sprintf("<hr><font face=helvetica>Generation done : %d warnings, %d errors</font><br>",
-		n_warnings(), n_errors());
-      UmlCom::trace(s);
-      
-      UmlCom::message("");
-    
-      UmlCom::bye(n_errors());
-    }
-    catch (...) {
-    }
-  }
-  
-  UmlCom::close();
-  return 0;
 }

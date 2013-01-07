@@ -34,19 +34,20 @@
 class Class;
 class UmlTypeSpec;
 
-class ClassContainer {
-  public:
+class ClassContainer
+{
+public:
     ClassContainer() {};
     virtual ~ClassContainer();
-    
+
     virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
-			      Class ** need_object = 0) = 0;
+                              Class ** need_object = 0) = 0;
     virtual Class * define(const Q3CString & name, char st) = 0;
-    
+
     bool read_type(UmlTypeSpec & typespec, Class ** cl);
     bool bypass_type(Q3CString s);
 
-  protected:
+protected:
     Q3Dict<Class> Defined;
 };
 

@@ -1,11 +1,13 @@
 
 #include "UmlDeploymentView.h"
 
-void UmlDeploymentView::sort() {
-  sortChildren();
+void UmlDeploymentView::sort()
+{
+    sortChildren();
 }
 
-int UmlDeploymentView::orderWeight() {
-  return 5;
+int UmlDeploymentView::orderWeight()
+{
+    return 5;
 }
 

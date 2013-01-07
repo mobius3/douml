@@ -34,13 +34,14 @@
 class QTextStream;
 class UmlPackage;
 
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n)
-      : UmlBaseItem(id, n) {
+        : UmlBaseItem(id, n) {
     };
     virtual ~UmlItem();
-    
+
     virtual void roundtrip_cpp();
     virtual void roundtrip_java();
     virtual void roundtrip_php();

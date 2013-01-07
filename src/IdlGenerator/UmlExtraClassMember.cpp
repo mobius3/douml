@@ -31,7 +31,8 @@
 #include "UmlExtraClassMember.h"
 
 void UmlExtraClassMember::generate_decl(QTextStream & f, const Q3CString &,
-					Q3CString indent, bool) {
-  f << indent << idlDecl();
+                                        Q3CString indent, bool)
+{
+    f << indent << idlDecl();
 }
 

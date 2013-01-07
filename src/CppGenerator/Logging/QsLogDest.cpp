@@ -36,48 +36,48 @@ namespace QsLogging
 class FileDestination : public Destination
 {
 public:
-   FileDestination(const QString& filePath);
-   virtual void write(const QString& message);
+    FileDestination(const QString & filePath);
+    virtual void write(const QString & message);
 
 private:
-   QFile mFile;
-   QTextStream mOutputStream;
+    QFile mFile;
+    QTextStream mOutputStream;
 };
 
 
-FileDestination::FileDestination(const QString& filePath)
+FileDestination::FileDestination(const QString & filePath)
 {
-   mFile.setFileName(filePath);
-   mFile.open(QFile::WriteOnly | QFile::Text);
-   mOutputStream.setDevice(&mFile);
+    mFile.setFileName(filePath);
+    mFile.open(QFile::WriteOnly | QFile::Text);
+    mOutputStream.setDevice(&mFile);
 }
 
-void FileDestination::write(const QString& message)
+void FileDestination::write(const QString & message)
 {
-   mOutputStream << message << endl;
-   mOutputStream.flush();
+    mOutputStream << message << endl;
+    mOutputStream.flush();
 }
 
 //! debugger sink
 class DebugOutputDestination : public Destination
 {
 public:
-   virtual void write(const QString& message);
+    virtual void write(const QString & message);
 };
 
-void DebugOutputDestination::write(const QString& message)
+void DebugOutputDestination::write(const QString & message)
 {
-   QsDebugOutput::output(message);
+    QsDebugOutput::output(message);
 }
 
-DestinationPtr DestinationFactory::MakeFileDestination(const QString& filePath)
+DestinationPtr DestinationFactory::MakeFileDestination(const QString & filePath)
 {
-   return DestinationPtr(new FileDestination(filePath));
+    return DestinationPtr(new FileDestination(filePath));
 }
 
 DestinationPtr DestinationFactory::MakeDebugOutputDestination()
 {
-   return DestinationPtr(new DebugOutputDestination);
+    return DestinationPtr(new DebugOutputDestination);
 }
 
 } // end namespace

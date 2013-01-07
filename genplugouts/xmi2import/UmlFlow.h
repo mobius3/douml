@@ -11,9 +11,10 @@ class FileIn;
 class Token;
 class UmlItem;
 
-class UmlFlow : public UmlBaseFlow, public UmlActivityItem {
-  public:
-     UmlFlow(void * id, const Q3CString & n) : UmlBaseFlow(id, n) {
+class UmlFlow : public UmlBaseFlow, public UmlActivityItem
+{
+public:
+    UmlFlow(void * id, const Q3CString & n) : UmlBaseFlow(id, n) {
     }
 
     static void init();
@@ -43,10 +44,10 @@ class UmlFlow : public UmlBaseFlow, public UmlActivityItem {
         Q3CString guard;
 
     };
-    
-    
 
-  protected:
+
+
+protected:
     static Q3ValueList<Flow> All;
 
 };

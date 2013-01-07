@@ -32,7 +32,7 @@
 #include <qcursor.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <q3combobox.h>
 #include <qpushbutton.h>
 #include <qtextcodec.h>
 #include <qstringlist.h>
@@ -46,69 +46,72 @@
 
 QSize CharSetDialog::previous_size;
 
-CharSetDialog::CharSetDialog(QString cs) : QDialog(0, "charset dialog", TRUE) {
-  setCaption(TR("Character set dialog"));
-  move(QCursor::pos());
- 
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
- 
-  vbox->setMargin(5);
-  
-  QLabel * lbl = new QLabel(TR("ERROR : No codec for '%1'\n", cs), this);
-  
-  lbl->setAlignment(::Qt::AlignCenter);
-  vbox->addWidget(lbl);
-  
-  vbox->addWidget(new QLabel(TR("\nCharset MUST be changed\n\n"
-				"For this session, choose one of the following else 'ISO_8859-1' will be used"),
-			     this));
-  
-  cb = new Q3ComboBox(FALSE, this);
-  cb->setAutoCompletion(completion());
-  vbox->addWidget(cb);
-  
-  QStringList l;
-  QTextCodec * co;
-  int i = 0;
-  
-  while ((co = QTextCodec::codecForIndex(i++)) != 0) {
-    QString na = co->name();
-    int pos = 0;  
-    
-    while ((pos = na.find(' ', pos)) != -1)
-      na.replace(pos, 1, "_");
-    
-    if (QTextCodec::codecForName(na) == co)
-      l.append(na);
-  }
-  
-  l.sort();
-  cb->insertStringList(l);
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  QPushButton * ok = new QPushButton(TR("&OK"), this);
-  QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
-  QSize bs(cancel->sizeHint());
-  
-  ok->setDefault(TRUE);
-  ok->setFixedSize(bs);
-  cancel->setFixedSize(bs);
-  
-  hbox->addWidget(ok);
-  hbox->addWidget(cancel);
-  
-  connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
-  connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
-  
-  UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
+CharSetDialog::CharSetDialog(QString cs) : QDialog(0, "charset dialog", TRUE)
+{
+    setCaption(TR("Character set dialog"));
+    move(QCursor::pos());
+
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    Q3HBoxLayout * hbox;
+
+    vbox->setMargin(5);
+
+    QLabel * lbl = new QLabel(TR("ERROR : No codec for '%1'\n", cs), this);
+
+    lbl->setAlignment(::Qt::AlignCenter);
+    vbox->addWidget(lbl);
+
+    vbox->addWidget(new QLabel(TR("\nCharset MUST be changed\n\n"
+                                  "For this session, choose one of the following else 'ISO_8859-1' will be used"),
+                               this));
+
+    cb = new Q3ComboBox(FALSE, this);
+    cb->setAutoCompletion(completion());
+    vbox->addWidget(cb);
+
+    QStringList l;
+    QTextCodec * co;
+    int i = 0;
+
+    while ((co = QTextCodec::codecForIndex(i++)) != 0) {
+        QString na = co->name();
+        int pos = 0;
+
+        while ((pos = na.find(' ', pos)) != -1)
+            na.replace(pos, 1, "_");
+
+        if (QTextCodec::codecForName(na) == co)
+            l.append(na);
+    }
+
+    l.sort();
+    cb->insertStringList(l);
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    QPushButton * ok = new QPushButton(TR("&OK"), this);
+    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QSize bs(cancel->sizeHint());
+
+    ok->setDefault(TRUE);
+    ok->setFixedSize(bs);
+    cancel->setFixedSize(bs);
+
+    hbox->addWidget(ok);
+    hbox->addWidget(cancel);
+
+    connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
+
+    UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
-CharSetDialog::~CharSetDialog() {
-  previous_size = size();
+CharSetDialog::~CharSetDialog()
+{
+    previous_size = size();
 }
 
-QString CharSetDialog::choosen() {
-  return cb->currentText();
+QString CharSetDialog::choosen()
+{
+    return cb->currentText();
 }

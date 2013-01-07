@@ -12,12 +12,13 @@ struct UmlStereotype;
 // This class manages settings not linked with a language, configured through
 // the 'Generation settings' dialog.
 //
-// This class may be defined as a 'singleton', but I prefer to use static 
+// This class may be defined as a 'singleton', but I prefer to use static
 // members allowing to just write 'UmlSettings::member' rather than
 // 'UmlSettings::instance()->member' or other long sentence like this.
 
-class UmlSettings {
-  public:
+class UmlSettings
+{
+public:
     // return the default description
     static Q3CString artifactDescription();
 
@@ -75,20 +76,20 @@ class UmlSettings {
     static bool set_UmlSetName(aLanguage v);
 
 
-  protected:
+protected:
     // never called !
     UmlSettings() {};
 
     static bool _defined;
 
 
-  private:
+private:
     static aLanguage _uml_get_name;
 
     static aLanguage _uml_set_name;
 
 
-  protected:
+protected:
     static Q3CString _artifact_default_description;
 
     static Q3CString _class_default_description;
@@ -112,39 +113,39 @@ class UmlSettings {
     static UmlStereotype * _class_stereotypes;
 
     //internal, do NOT use it
-    
+
     static void read_();
 
     //internal, do NOT use it
-    
+
     static void read_if_needed_();
 
     //internal, do NOT use it
-    
+
     static unsigned multiplicity_column(const Q3CString & mult);
 
     //internal, do NOT use it
-    
+
     static Q3CString uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f);
 
     //internal, do NOT use it
-    
+
     static Q3CString uml_rel_attr_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
 
     //internal, do NOT use it
-    
+
     static Q3CString uml_class_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
 
     //internal, do NOT use it
-    
+
     static UmlBuiltin * add_type(const Q3CString & s);
 
     //internal, do NOT use it
-    
+
     static UmlStereotype * add_rel_attr_stereotype(const Q3CString & s);
 
     //internal, do NOT use it
-    
+
     static UmlStereotype * add_class_stereotype(const Q3CString & s);
 
 };

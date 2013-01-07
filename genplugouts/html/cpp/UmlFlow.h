@@ -6,8 +6,9 @@
 #include "UmlBaseFlow.h"
 #include "UmlActivityItem.h"
 
-class UmlFlow : public UmlBaseFlow, public UmlActivityItem {
-  public:
+class UmlFlow : public UmlBaseFlow, public UmlActivityItem
+{
+public:
     //returns a string indicating the king of the element
     virtual Q3CString sKind();
 
@@ -15,7 +16,7 @@ class UmlFlow : public UmlBaseFlow, public UmlActivityItem {
     //path, rank in the mother and level in the browser tree
     virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
 
-     UmlFlow(void * id, const Q3CString & n) : UmlBaseFlow(id, n) {
+    UmlFlow(void * id, const Q3CString & n) : UmlBaseFlow(id, n) {
     }
 
 };

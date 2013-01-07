@@ -28,8 +28,9 @@
 
 #include <qdialog.h>
 
-class AboutDialog : public QDialog {
-  public:
+class AboutDialog : public QDialog
+{
+public:
     AboutDialog();
 };
 

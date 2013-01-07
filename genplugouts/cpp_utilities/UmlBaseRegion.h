@@ -9,8 +9,9 @@
 class UmlRegion;
 class UmlState;
 
-class UmlBaseRegion : public UmlItem {
-  public:
+class UmlBaseRegion : public UmlItem
+{
+public:
     //  returns a new region named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -22,9 +23,9 @@ class UmlBaseRegion : public UmlItem {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseRegion(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseRegion(void * id, const Q3CString & s) : UmlItem(id, s) {
     }
 
 };

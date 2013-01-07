@@ -2,9 +2,11 @@
 #include "UmlItem.h"
 #include "Context.h"
 
- UmlItem::~UmlItem() {
+UmlItem::~UmlItem()
+{
 }
 
-void UmlItem::change(Context &) {
+void UmlItem::change(Context &)
+{
 }
 

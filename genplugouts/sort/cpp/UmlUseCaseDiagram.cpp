@@ -1,7 +1,8 @@
 
 #include "UmlUseCaseDiagram.h"
 
-int UmlUseCaseDiagram::orderWeight() {
-  return 6;
+int UmlUseCaseDiagram::orderWeight()
+{
+    return 6;
 }
 

@@ -12,19 +12,24 @@ class UmlItem;
 // This class manages 'nodes'
 //
 // You can modify it as you want (except the constructor)
-class UmlNode : public UmlBaseNode {
-  public:
-    UmlNode(void * id, const Q3CString & n) : UmlBaseNode(id, n) { NumberOf += 1; };
+class UmlNode : public UmlBaseNode
+{
+public:
+    UmlNode(void * id, const Q3CString & n) : UmlBaseNode(id, n) {
+        NumberOf += 1;
+    };
 
     static void init();
 
     //import the node starting by 'tk' inside 'where'
     static void importIt(FileIn & in, Token & token, UmlItem * where);
 
-    static int numberOf() { return NumberOf; };
+    static int numberOf() {
+        return NumberOf;
+    };
 
 
-  protected:
+protected:
     static int NumberOf;
 
 };

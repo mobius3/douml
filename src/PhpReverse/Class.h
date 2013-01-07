@@ -43,8 +43,9 @@ class QPainter;
 class QColorGroup;
 #endif
 
-class Class : public BrowserNode {
-  protected:
+class Class : public BrowserNode
+{
+protected:
     Q3CString filename;
     Q3CString its_namespace;
     UmlClass * uml;
@@ -56,34 +57,40 @@ class Class : public BrowserNode {
 #else
     bool description_updatedp;
     Q3CString description;
-    
+
     static Q3PtrList<Class> Historic;
 #endif
-    
+
     bool manage_extends(ClassContainer * container);
     bool manage_implements(ClassContainer * container, aRelationKind k);
     bool add_inherit(aRelationKind k, UmlTypeSpec & typespec);
     bool manage_member(Q3CString s);
     void set_description(const char * p);
-    
+
 #ifndef REVERSE
     virtual void activate();
     void manage_historic();
 #endif
-    
-  public:
+
+public:
     Class(Package * parent, const char * n, char st);
-  
+
     void compute_type(Q3CString type, UmlTypeSpec & typespec,
-		      Class ** need_object = 0);
-    const Q3CString & get_namespace() const { return its_namespace; }
+                      Class ** need_object = 0);
+    const Q3CString & get_namespace() const {
+        return its_namespace;
+    }
     UmlClass * get_uml();
-    bool reversed() const { return reversedp; };
+    bool reversed() const {
+        return reversedp;
+    };
     bool already_in_bouml();
     virtual QString get_path() const;
 #ifndef REVERSE
-    const Q3CString & get_description() const { return description; };
-    
+    const Q3CString & get_description() const {
+        return description;
+    };
+
     virtual void selected();
     virtual void activated();
     virtual void menu();
@@ -91,20 +98,20 @@ class Class : public BrowserNode {
 
     const QPixmap * pixmap(int) const;
     void paintCell(QPainter * p, const QColorGroup & cg, int column,
-		   int width, int alignment);
+                   int width, int alignment);
 
-        
+
     virtual void backup(QDataStream & dt) const;
 #endif
-    
+
 #ifdef WITH_PHPCAT
     static void restore(QDataStream & dt, char c, Package * p);
 #endif
-    
+
     static bool reverse(Package * container, Q3CString stereotype,
-			bool abstractp, bool finalp, 
-			Q3CString & f, UmlArtifact * art);
-    
+                        bool abstractp, bool finalp,
+                        Q3CString & f, UmlArtifact * art);
+
 #ifndef REVERSE
     static void historic_back();
     static void historic_forward();

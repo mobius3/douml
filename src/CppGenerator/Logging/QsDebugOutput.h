@@ -31,7 +31,7 @@ class QString;
 class QsDebugOutput
 {
 public:
-   static void output(const QString& a_message);
+    static void output(const QString & a_message);
 };
 
 #endif // QSDEBUGOUTPUT_H

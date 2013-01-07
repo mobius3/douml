@@ -9,20 +9,21 @@
 class FileOut;
 class UmlTransition;
 
-class UmlStateAction : public UmlBaseStateAction, public UmlStateItem {
-  public:
+class UmlStateAction : public UmlBaseStateAction, public UmlStateItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlStateAction(void * id) : UmlBaseStateAction(id, "") {
+    UmlStateAction(void * id) : UmlBaseStateAction(id, "") {
     }
 
     //goes among tree to memorize incoming transitions
-    
+
     virtual void memo_incoming_trans();
 
     virtual void write(FileOut & out);
 
 
-  protected:
+protected:
     Q3PtrList<UmlTransition> _incoming_trans;
 
 };

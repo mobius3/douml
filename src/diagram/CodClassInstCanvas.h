@@ -41,32 +41,33 @@ class QStringList;
 class BrowserNode;
 class ToolCom;
 
-class CodClassInstCanvas : public QObject, public CodObjCanvas, public ClassInstCanvas {
-  Q_OBJECT
-    
-  protected:
+class CodClassInstCanvas : public QObject, public CodObjCanvas, public ClassInstCanvas
+{
+    Q_OBJECT
+
+protected:
     QString iname;	// useless if browser_node is a class instance rather than a class
-  
-  public:
+
+public:
     CodClassInstCanvas(BrowserNode * t, UmlCanvas * canvas,
-		       int x, int y, int id);
+                       int x, int y, int id);
     virtual ~CodClassInstCanvas();
-    
+
     virtual void delete_it();
-    
+
     virtual void draw(QPainter & p);
-    
+
     void compute_size();
     virtual UmlCode type() const;	// -> class or classinstance
     virtual QString get_name() const;	// all cases
     virtual void set_name(const QString & s);	// out of model case
     virtual BrowserNode * get_type() const;	// return class, all cases
     void set_type(BrowserNode * t);	// out of model case
-    virtual BrowserNodeList& get_types(BrowserNodeList&) const;
+    virtual BrowserNodeList & get_types(BrowserNodeList &) const;
     BrowserClass * get_class() const;
     virtual BrowserNode * container(UmlCode) const;
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString get_full_name() const;
     virtual bool alignable() const;
     virtual bool copyable() const;
@@ -74,7 +75,7 @@ class CodClassInstCanvas : public QObject, public CodObjCanvas, public ClassInst
     virtual void remove(bool from_model);
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
@@ -82,13 +83,13 @@ class CodClassInstCanvas : public QObject, public CodObjCanvas, public ClassInst
 
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
-  
+
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static CodClassInstCanvas * read(char * &, UmlCanvas * canvas, char *);
-    
+    static CodClassInstCanvas * read(char *& , UmlCanvas * canvas, char *);
+
     static void send(ToolCom * com, Q3CanvasItemList & all);
-    
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();	// the class is deleted
 };

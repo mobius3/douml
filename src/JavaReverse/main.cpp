@@ -24,13 +24,13 @@
 // *************************************************************************
 
 #include <qapplication.h>
-#include <q3filedialog.h> 
+#include <q3filedialog.h>
 //Added by qt3to4:
 #include <Q3CString>
 #include <stdlib.h>
 #include <qfile.h>
 #include <qdir.h>
-#include <qdatastream.h> 
+#include <qdatastream.h>
 #include <QTextStream>
 
 #include "Class.h"
@@ -44,119 +44,119 @@
 
 void remove_crlf(char * s)
 {
-  int len = strlen(s);
-  
-  if (len != 0) {
-    if (s[len - 1] == '\n')
-      s[--len] = 0;
-    
-    if ((len != 0) && (s[len - 1] == '\r'))
-      s[len - 1] = 0;
-  }
+    int len = strlen(s);
+
+    if (len != 0) {
+        if (s[len - 1] == '\n')
+            s[--len] = 0;
+
+        if ((len != 0) && (s[len - 1] == '\r'))
+            s[len - 1] = 0;
+    }
 }
 
 int main(int argc, char ** argv)
 {
-  if (argc != 2)
+    if (argc != 2)
+        return 0;
+
+    if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
+        try {
+            //UmlCom::with_ack(FALSE);
+            UmlCom::trace("<b>Java reverse</b> release 2.18<br><hr>");
+            UmlCom::traceAutoRaise(FALSE);
+
+            UmlItem * item = UmlCom::targetItem();
+
+            if (item->kind() != aPackage)
+                UmlCom::trace("<font face=helvetica><b>must be applied on a <i>package</i></b></font><br><hr><br>");
+            else {
+                char * argv = 0;
+                int argc = 0;
+
+                QApplication * app = new QApplication(argc, &argv);
+
+                Package::init((UmlPackage *) item, app);
+
+                QString here = QDir::currentDirPath();
+                QString path;
+                // note : QFile fp(QDir::home().absFilePath(".boumlcat")) doesn't work
+                // if the path contains non latin1 characters, for instance cyrillic !
+                QString s = QDir::home().absFilePath(".doumlcat");
+                FILE * fp = fopen((const char *) s, "r");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                if (fp != 0) {
+                    char line[512];
+
+                    if (fgets(line, sizeof(line) - 1, fp) != 0) {
+                        remove_crlf(line);
+                        path = line;
+                    }
+
+                    fclose(fp);
+                }
+
+                while (!(path =
+                             Q3FileDialog::getOpenFileName(path, "*.cat",
+                                     0, 0,
+                                     "select a java catalog file to read it, or cancel"))
+                       .isEmpty()) {
+                    QFile f(path);
+
+                    if (f.open(QIODevice::ReadOnly)) {
+                        if ((fp = fopen((const char *) s, "w")) != 0) {
+                            fwrite((const char *) path, 1, path.length(), fp);
+                            fputc('\n', fp);
+                            fclose(fp);
+                        }
+
+                        QDataStream dt(&f);
+
+                        Package::get_root()->restore_children(dt);
+                    }
+                }
+
+                QDir::setCurrent(here);
+                int n;
+
+                Package * p = Package::scan_dir(n);
+
+                if (p != 0) {
+                    JavaSettings::set_UseDefaults(TRUE);
+
+                    p->send_dir(n);
+                    Statistic::produce();
+                }
+            }
+        }
+        catch (...) {
+        }
+
+        try {
+            // socket may be already closed
+            UmlCom::message("");
+            UmlCom::showTrace();
+            UmlCom::bye(0);	// application must not be deleted
+        }
+        catch (...) {
+        }
+    }
+
+    UmlCom::close();	// application must not be deleted
     return 0;
-  
-  if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
-    try {
-      //UmlCom::with_ack(FALSE);
-      UmlCom::trace("<b>Java reverse</b> release 2.18<br><hr>");
-      UmlCom::traceAutoRaise(FALSE);
-      
-      UmlItem * item = UmlCom::targetItem();
-      
-      if (item->kind() != aPackage)
-	UmlCom::trace("<font face=helvetica><b>must be applied on a <i>package</i></b></font><br><hr><br>");
-      else {
-	char * argv = 0;
-	int argc = 0;
-				 
-	QApplication * app = new QApplication(argc, &argv);
-			 
-	Package::init((UmlPackage *) item, app);
-	
-	QString here = QDir::currentDirPath();
-	QString path;
-	// note : QFile fp(QDir::home().absFilePath(".boumlcat")) doesn't work
-	// if the path contains non latin1 characters, for instance cyrillic !
-	QString s = QDir::home().absFilePath(".doumlcat");
-	FILE * fp = fopen((const char *) s, "r");
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-	if (fp != 0) {
-	  char line[512];
-	  
-	  if (fgets(line, sizeof(line) - 1, fp) != 0) {
-	    remove_crlf(line);
-	    path = line;
-	  }
-	  
-	  fclose(fp);
-	}
-	
-	while (!(path = 
-		 Q3FileDialog::getOpenFileName(path, "*.cat",
-					      0, 0,
-					      "select a java catalog file to read it, or cancel"))
-	       .isEmpty()) {
-	  QFile f(path);
-	  
-	  if (f.open(QIODevice::ReadOnly)) {
-	    if ((fp = fopen((const char *) s, "w")) != 0) {
-	      fwrite((const char *) path, 1, path.length(), fp);
-	      fputc('\n', fp);
-	      fclose(fp);
-	    }
-	    
-	    QDataStream dt(&f);
-	    
-	    Package::get_root()->restore_children(dt);
-	  }
-	}
-	
-	QDir::setCurrent(here);
-	int n;
-	
-	Package * p = Package::scan_dir(n);
-	
-	if (p != 0) {
-	  JavaSettings::set_UseDefaults(TRUE);
-	  
-	  p->send_dir(n);
-	  Statistic::produce();
-	}
-      }
-    }
-    catch (...) {
-    }
-    
-    try {
-      // socket may be already closed
-      UmlCom::message("");
-      UmlCom::showTrace();
-      UmlCom::bye(0);	// application must not be deleted
-    }
-    catch (...) {
-    }
-  }
-  
-  UmlCom::close();	// application must not be deleted
-  return 0;
 }

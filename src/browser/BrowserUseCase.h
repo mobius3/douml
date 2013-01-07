@@ -40,14 +40,15 @@ class UseCaseData;
 #include "Labeled.h"
 #include "Settings.h"
 
-class BrowserUseCase : public BrowserNode, public Labeled<BrowserUseCase> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserUseCase : public BrowserNode, public Labeled<BrowserUseCase>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserUseCase> all;
     static QStringList its_default_stereotypes;
     static QStringList relations_default_stereotypes[UmlRelations];
-    
+
     UseCaseData * def;
     BrowserUseCaseDiagram * associated_diagram;
     UseCaseDiagramSettings usecasediagram_settings;
@@ -74,21 +75,21 @@ class BrowserUseCase : public BrowserNode, public Labeled<BrowserUseCase> {
     UmlColor activityaction_color;
     UmlColor parameterpin_color;
     UmlColor class_color;
-  
+
     BrowserUseCase(int id);
     void make();
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserUseCase(QString s, BrowserNode * p, int id = 0);
     BrowserUseCase(const BrowserUseCase * model, BrowserNode * p);
     virtual ~BrowserUseCase();
-    
+
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserUseCaseDiagram *, bool on_read = FALSE);
-    
+
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -99,7 +100,7 @@ class BrowserUseCase : public BrowserNode, public Labeled<BrowserUseCase> {
     virtual const char * help_topic() const;
     virtual void modified();
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
-				   BooL & duplicable) const;
+                                   BooL & duplicable) const;
     virtual BasicData * get_data() const;
     virtual void get_usecasediagramsettings(UseCaseDiagramSettings &) const;
     virtual void get_sequencediagramsettings(SequenceDiagramSettings &) const;
@@ -113,28 +114,28 @@ class BrowserUseCase : public BrowserNode, public Labeled<BrowserUseCase> {
     virtual void on_delete();
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserUseCase * read_ref(char * &);
-    static BrowserUseCase * read(char * &, char *, BrowserNode *);
+    static BrowserUseCase * read_ref(char *&);
+    static BrowserUseCase * read(char *& , char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
 
     static BrowserNodeList & instances(BrowserNodeList &);
     static BrowserUseCase * add_use_case(BrowserNode * future_parent);
     static BrowserNode * get_use_case(BrowserNode * future_parent);
-    
+
     static void init();
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
-    
+
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
-    virtual const QPixmap* pixmap (int) const;
-    
+
+    virtual const QPixmap * pixmap(int) const;
+
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
     virtual void DragMoveInsideEvent(QDragMoveEvent * e);

@@ -34,31 +34,34 @@
 
 class BrowserUseCase;
 
-class UseCaseData : public SimpleData {
-  Q_OBJECT
-    
-  friend class UseCaseDialog;
-  
-  protected:
+class UseCaseData : public SimpleData
+{
+    Q_OBJECT
+
+    friend class UseCaseDialog;
+
+protected:
     QString extension_points;
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
-  public:
+                              const QString & comment);
+public:
     UseCaseData();
     UseCaseData(UseCaseData * model, BrowserNode *);
     virtual ~UseCaseData();
-    
-    QString get_extension_points() const { return extension_points; }
+
+    QString get_extension_points() const {
+        return extension_points;
+    }
     void set_extension_points(QString s);
-    
+
     void edit();
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * & st, char * & k);
+    void read(char *& st, char *& k);
 };
 
 #endif

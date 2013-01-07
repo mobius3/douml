@@ -26,7 +26,7 @@
 #ifndef BROWSERVIEW_H
 #define BROWSERVIEW_H
 
-#include <q3listview.h> 
+#include <q3listview.h>
 #include <qdir.h>
 //Added by qt3to4:
 #include <QMouseEvent>
@@ -47,51 +47,52 @@ class BrowserPackage;
 
 // in fact it is a singleton => static members (except slots !)
 /* [lgfreitas] This class provides the tree view in the left side */
-class BrowserView : public Q3ListView  {
-  Q_OBJECT
-    
-  private:
+class BrowserView : public Q3ListView
+{
+    Q_OBJECT
+
+private:
     static BrowserView * the;
     static BrowserPackage * project;
     static QDir dir;
     static BrowserPackage * imported_project;
     static QDir import_dir;
-    
+
     QPoint presspos;
     bool mousePressed;
-  
-  public:
+
+public:
     BrowserView(QWidget * parent = 0);
     virtual ~BrowserView();
-  
+
     virtual void clear();
-  
+
     void set_project(const QDir & d);
     bool save_as(const QDir & new_dir);
 
     static BrowserPackage * get_project() {
-      return project;
+        return project;
     }
     static QDir get_dir() {
-      return dir;
+        return dir;
     }
     static void set_imported_project(const QDir &, BrowserPackage *);
     static BrowserPackage * get_imported_project() {
-      return imported_project;
+        return imported_project;
     }
     static QDir get_import_dir() {
-      return import_dir;
+        return import_dir;
     }
     static void select(Q3ListViewItem *);
     static void deselect(Q3ListViewItem *);
     static BrowserNode * selected_item();
     static void force_visible(Q3ListViewItem *);
     static void remove_temporary_files();
-      
-  protected:
+
+protected:
     void keyPressEvent(QKeyEvent * e);
 
-  protected slots:
+protected slots:
     void selected(Q3ListViewItem *);
     void rightPressed(Q3ListViewItem *);
     void doubleClick(Q3ListViewItem *);

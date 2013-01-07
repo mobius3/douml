@@ -26,5 +26,6 @@
 #include "UmlUseCaseView.h"
 
 // to not enter into it
-void UmlUseCaseView::generate() {
+void UmlUseCaseView::generate()
+{
 }

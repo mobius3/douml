@@ -34,18 +34,19 @@
 class QCheckBox;
 class BrowserView;
 
-class SynchroDialog : public QDialog {
-  Q_OBJECT
- 
-  protected:
+class SynchroDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     Q3PtrList<BrowserView> & browsers;
     Q3PtrList<QCheckBox> checks;
-      
-  public:
+
+public:
     SynchroDialog(Q3PtrList<BrowserView> & b);
     virtual ~SynchroDialog();
-    
-  public slots:
+
+public slots:
     virtual void accept();
 };
 

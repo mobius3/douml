@@ -4,10 +4,11 @@
 
 #include "UmlBaseShallowHistoryPseudoState.h"
 
-class UmlShallowHistoryPseudoState : public UmlBaseShallowHistoryPseudoState {
-  public:
+class UmlShallowHistoryPseudoState : public UmlBaseShallowHistoryPseudoState
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlShallowHistoryPseudoState(void * id) : UmlBaseShallowHistoryPseudoState(id, "") {
+    UmlShallowHistoryPseudoState(void * id) : UmlBaseShallowHistoryPseudoState(id, "") {
     }
 
 };

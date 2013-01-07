@@ -7,14 +7,15 @@
 
 class UmlActivityDiagram;
 
-class UmlBaseActivityRegion : public UmlItem {
-  protected:
+class UmlBaseActivityRegion : public UmlItem
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityRegion(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseActivityRegion(void * id, const Q3CString & s) : UmlItem(id, s) {
     }
 
 
-  public:
+public:
     // returns the optional associated diagram
     UmlActivityDiagram * associatedDiagram();
 
@@ -24,11 +25,11 @@ class UmlBaseActivityRegion : public UmlItem {
     bool set_AssociatedDiagram(UmlActivityDiagram * d);
 
 
-  private:
+private:
     UmlActivityDiagram * _assoc_diagram;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

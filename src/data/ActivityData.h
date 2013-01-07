@@ -38,12 +38,13 @@ class BrowserActivity;
 class ActivityDialog;
 class BrowserOperation;
 
-class ActivityData : public SimpleData {
-  Q_OBJECT
-    
-  friend class ActivityDialog;
-    
-  protected:
+class ActivityData : public SimpleData
+{
+    Q_OBJECT
+
+    friend class ActivityDialog;
+
+protected:
     InfoData uml_condition;
     InfoData cpp_condition;
     InfoData java_condition;
@@ -52,36 +53,46 @@ class ActivityData : public SimpleData {
     bool single_execution;
     bool is_active;
     BrowserOperation * specification;
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
+                              const QString & comment);
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
-    
-  public:
+
+public:
     ActivityData();
     ActivityData(ActivityData * model, BrowserNode * br);
     virtual ~ActivityData();
-    
+
     QString get_precond(DrawingLanguage) const;
     QString get_postcond(DrawingLanguage) const;
-    const char * get_constraint() const { return constraint; } 
-    bool get_is_read_only() const { return read_only; }
-    bool get_is_single_execution() const { return single_execution; }
-    bool get_is_active() const { return is_active; }
-    BrowserOperation * get_specification() const { return specification; }
+    const char * get_constraint() const {
+        return constraint;
+    }
+    bool get_is_read_only() const {
+        return read_only;
+    }
+    bool get_is_single_execution() const {
+        return single_execution;
+    }
+    bool get_is_active() const {
+        return is_active;
+    }
+    BrowserOperation * get_specification() const {
+        return specification;
+    }
     void set_specification(BrowserOperation *);
-    
+
     void edit();
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * & st, char * & k);
-    
-  protected slots:
+    void read(char *& st, char *& k);
+
+protected slots:
     void on_delete();
 };
-  
+
 #endif

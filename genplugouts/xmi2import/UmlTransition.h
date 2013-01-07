@@ -11,9 +11,10 @@ class FileIn;
 class Token;
 class UmlItem;
 
-class UmlTransition : public UmlBaseTransition, public UmlStateItem {
-  public:
-     UmlTransition(void * id, const Q3CString & n) : UmlBaseTransition(id, n) {
+class UmlTransition : public UmlBaseTransition, public UmlStateItem
+{
+public:
+    UmlTransition(void * id, const Q3CString & n) : UmlBaseTransition(id, n) {
     }
 
     static void init();
@@ -43,10 +44,10 @@ class UmlTransition : public UmlBaseTransition, public UmlStateItem {
         Q3CString kind;
 
     };
-    
-    
 
-  protected:
+
+
+protected:
     static Q3ValueList<Transition> All;
 
 };

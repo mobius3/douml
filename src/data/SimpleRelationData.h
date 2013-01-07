@@ -36,42 +36,47 @@ class QTextStream;
 class BrowserSimpleRelation;
 class BrowserNode;
 
-class SimpleRelationData : public SimpleData {
-  Q_OBJECT
+class SimpleRelationData : public SimpleData
+{
+    Q_OBJECT
 
-  friend class SimpleRelationDialog;
-  
-  protected:
+    friend class SimpleRelationDialog;
+
+protected:
     UmlCode type;
     BrowserNode * end;
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
-    
-  public:
+                              const QString & comment);
+
+public:
     SimpleRelationData(UmlCode e);
     SimpleRelationData(const BrowserSimpleRelation * model, BrowserSimpleRelation * r);
     virtual ~SimpleRelationData();
-        
+
     virtual void delete_it();
-    
+
     void set_start_end(BrowserSimpleRelation * s, BrowserNode * e);
     void edit();
     BrowserNode * get_start_node() const;
-    BrowserNode * get_end_node() const { return end; }
-    BrowserSimpleRelation * get_start() const { 
-      return (BrowserSimpleRelation *) browser_node;
+    BrowserNode * get_end_node() const {
+        return end;
     }
-    
-    UmlCode get_type() const { return type; }
+    BrowserSimpleRelation * get_start() const {
+        return (BrowserSimpleRelation *) browser_node;
+    }
+
+    UmlCode get_type() const {
+        return type;
+    }
     void set_type(UmlCode e);
-    
-    virtual QString definition(bool full, bool with_kind) const;    
-    
+
+    virtual QString definition(bool full, bool with_kind) const;
+
     void save(QTextStream &, QString & warning) const;
-    static SimpleRelationData * read(char * &);
-    
-  protected slots:
+    static SimpleRelationData * read(char *&);
+
+protected slots:
     void end_deleted();
 };
 

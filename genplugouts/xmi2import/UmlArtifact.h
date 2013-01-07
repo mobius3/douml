@@ -12,9 +12,12 @@ class UmlItem;
 // This class manages 'artifacts'
 //
 // You can modify it as you want (except the constructor)
-class UmlArtifact : public UmlBaseArtifact {
-  public:
-    UmlArtifact(void * id, const Q3CString & n) : UmlBaseArtifact(id, n) { NumberOf += 1; };
+class UmlArtifact : public UmlBaseArtifact
+{
+public:
+    UmlArtifact(void * id, const Q3CString & n) : UmlBaseArtifact(id, n) {
+        NumberOf += 1;
+    };
 
     //  call at end of import : try to manifestation
     virtual void solveManifestation(Q3CString s, Q3CString idref);
@@ -24,10 +27,12 @@ class UmlArtifact : public UmlBaseArtifact {
     //import the artifact starting by 'tk' inside 'where'
     static void importIt(FileIn & in, Token & token, UmlItem * where);
 
-    static int numberOf() { return NumberOf; };
+    static int numberOf() {
+        return NumberOf;
+    };
 
 
-  protected:
+protected:
     static int NumberOf;
 
 };

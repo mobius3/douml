@@ -9,8 +9,9 @@ class UmlClassInstanceReference;
 class UmlOperation;
 
 // this class manages messages indenpendently of the diagram
-class UmlBaseMessage {
-  public:
+class UmlBaseMessage
+{
+public:
     // return the instance sending the message
     UmlClassInstanceReference * from() const {
         return _from;
@@ -34,7 +35,7 @@ class UmlBaseMessage {
     }
 
 
-  private:
+private:
     UmlClassInstanceReference * _from;
 
     UmlClassInstanceReference * _to;
@@ -46,8 +47,8 @@ class UmlBaseMessage {
     // internal, don't call it
     void read_(const Q3PtrDict<UmlClassInstanceReference> & instances);
 
-  friend class UmlBaseSequenceMessage;
-  friend class UmlBaseCollaborationMessage;
+    friend class UmlBaseSequenceMessage;
+    friend class UmlBaseCollaborationMessage;
 };
 
 #endif

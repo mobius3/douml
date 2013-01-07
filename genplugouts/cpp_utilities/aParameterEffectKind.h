@@ -3,11 +3,11 @@
 
 
 enum aParameterEffectKind {
-  noEffect,
-  createEffect,
-  readEffect,
-  updateEffect,
-  deleteEffect
+    noEffect,
+    createEffect,
+    readEffect,
+    updateEffect,
+    deleteEffect
 
 };
 #endif

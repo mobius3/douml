@@ -9,8 +9,9 @@
 class UmlActivityPin;
 class UmlActivityAction;
 
-class UmlBaseActivityPin : public UmlPinParameter {
-  public:
+class UmlBaseActivityPin : public UmlPinParameter
+{
+public:
     //  returns a new activity action pin named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -22,9 +23,9 @@ class UmlBaseActivityPin : public UmlPinParameter {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityPin(void * id, const Q3CString & s) : UmlPinParameter(id, s) {
+    UmlBaseActivityPin(void * id, const Q3CString & s) : UmlPinParameter(id, s) {
     }
 
 };

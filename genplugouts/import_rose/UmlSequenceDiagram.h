@@ -13,10 +13,11 @@ class UmlItem;
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlSequenceDiagram : public UmlBaseSequenceDiagram {
-  public:
+class UmlSequenceDiagram : public UmlBaseSequenceDiagram
+{
+public:
     UmlSequenceDiagram(void * id, const Q3CString & n) : UmlBaseSequenceDiagram(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
     static void import(File & f, UmlItem * parent);

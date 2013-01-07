@@ -28,7 +28,7 @@
 
 #include <q3tabdialog.h>
 #include <q3memarray.h>
-#include <q3ptrvector.h> 
+#include <q3ptrvector.h>
 
 #include "StateSpec.h"
 #include <q3ptrvector.h>
@@ -36,32 +36,48 @@
 class ComboStates;
 class ComboColor;
 
-class ColorSpec {
-  public:
+class ColorSpec
+{
+public:
     QString name;
     UmlColor * color;
-    
-    void set(QString n, UmlColor * c) { name = n; color = c; }
+
+    void set(QString n, UmlColor * c) {
+        name = n;
+        color = c;
+    }
 };
 
-class ColorSpecVector {
-  public:
-    ColorSpecVector(int s) : _size(s) { _v = new ColorSpec[s]; };
-virtual ~ColorSpecVector() { if (_v) delete [] _v; }
-    int size() const { return _size; }
+class ColorSpecVector
+{
+public:
+    ColorSpecVector(int s) : _size(s) {
+        _v = new ColorSpec[s];
+    };
+    virtual ~ColorSpecVector() {
+        if (_v) delete [] _v;
+    }
+    int size() const {
+        return _size;
+    }
     void resize(int s);
-    ColorSpec & operator[] (int i) const { return _v[i]; }
-    ColorSpec & at (int i) const { return _v[i]; }
-    
-  private:
+    ColorSpec & operator[](int i) const {
+        return _v[i];
+    }
+    ColorSpec & at(int i) const {
+        return _v[i];
+    }
+
+private:
     int _size;
     ColorSpec * _v;
 };
 
-class SettingsDialog : public Q3TabDialog {
-  Q_OBJECT
- 
-  protected:
+class SettingsDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     StateSpecVector * states;
     ColorSpecVector * colors;
     Q3PtrVector<ComboStates> * cbstates;
@@ -69,19 +85,21 @@ class SettingsDialog : public Q3TabDialog {
     QWidget * first_visible_page;
     bool several;
     bool did_apply;
- 
+
     static QSize previous_size;
     static QPoint previous_position;
     static QString previous_active_tab;
-  
-  public:
+
+public:
     SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
-		   bool nodefault, bool unchanged = FALSE,
-		   QString title = QString());
+                   bool nodefault, bool unchanged = FALSE,
+                   QString title = QString());
     virtual ~SettingsDialog();
-    bool redo() const { return did_apply; }
-    
-  protected slots:
+    bool redo() const {
+        return did_apply;
+    }
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void apply();

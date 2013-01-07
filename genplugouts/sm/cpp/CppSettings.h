@@ -12,11 +12,12 @@
 // This class manages settings concerning C++, configured through
 // the 'Generation settings' dialog.
 //
-// This class may be defined as a 'singleton', but I prefer to use static 
+// This class may be defined as a 'singleton', but I prefer to use static
 // members allowing to just write 'CppSettings::member' rather than
 // 'CppSettings::instance()->member' or other long sentence like this.
-class CppSettings : public UmlSettings {
-  public:
+class CppSettings : public UmlSettings
+{
+public:
     // returns TRUE when the created C++ objects are initialized
     // with the default declaration/definition
     static bool useDefaults();
@@ -53,7 +54,7 @@ class CppSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_RelationAttributeStereotype(Q3CString s, Q3CString v);
 
-    // reverse of the RelationAttributeStereotype() operation, returns the 'UML' 
+    // reverse of the RelationAttributeStereotype() operation, returns the 'UML'
     // stereotype corresponding to the C++ one given in argument
     static Q3CString relationAttributeUmlStereotype(Q3CString s);
 
@@ -67,24 +68,24 @@ class CppSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_ClassStereotype(Q3CString s, Q3CString v);
 
-    // reverse of the ClassStereotype() operation, returns the 'UML' 
+    // reverse of the ClassStereotype() operation, returns the 'UML'
     // stereotype corresponding to the C++ one given in argument
     static Q3CString classUmlStereotype(Q3CString s);
 
-    // returns the #include or other form specified in the last 
+    // returns the #include or other form specified in the last
     // 'Generation settings' tab for the C++ type given in argument.
     static Q3CString include(Q3CString s);
 
-    // set the #include or other form specified in the last 
+    // set the #include or other form specified in the last
     // 'Generation settings' tab for the C++ type given in argument.
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_Include(Q3CString s, Q3CString v);
 
-    // returns the 'root' directory 
+    // returns the 'root' directory
     static Q3CString rootDir();
 
-    // set the 'root' directory 
+    // set the 'root' directory
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_RootDir(Q3CString v);
@@ -172,31 +173,31 @@ class CppSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_IsGenerateJavadocStyleComment(bool v);
 
-    // returns the default operation 'in' parameter specification 
+    // returns the default operation 'in' parameter specification
     // in case its type is an enum
     static const Q3CString & enumIn();
 
-    // set the default operation 'in' parameter specification 
+    // set the default operation 'in' parameter specification
     // in case its type is an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_EnumIn(Q3CString v);
 
-    // returns the default operation 'out' parameter specification 
+    // returns the default operation 'out' parameter specification
     // in case its type is an enum
     static const Q3CString & enumOut();
 
-    // set the default operation 'out' parameter specification 
+    // set the default operation 'out' parameter specification
     // in case its type is an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_EnumOut(Q3CString v);
 
-    // returns the default operation 'inout' parameter specification 
+    // returns the default operation 'inout' parameter specification
     // in case its type is an enum
     static const Q3CString & enumInout();
 
-    // set the default operation 'inout' parameter specification 
+    // set the default operation 'inout' parameter specification
     // in case its type is an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
@@ -210,41 +211,41 @@ class CppSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_EnumReturn(Q3CString v);
 
-    // returns the default operation 'in' parameter specification 
+    // returns the default operation 'in' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     static const Q3CString & in();
 
-    // set the default operation 'in' parameter specification 
+    // set the default operation 'in' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_In(Q3CString v);
 
-    // returns the default operation 'out' parameter specification 
+    // returns the default operation 'out' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     static const Q3CString & out();
 
-    // set the default operation 'out' parameter specification 
+    // set the default operation 'out' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_Out(Q3CString v);
 
-    // returns the default operation 'inout' parameter specification 
+    // returns the default operation 'inout' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     static const Q3CString & inout();
 
-    // set the default operation 'inout' parameter specification 
+    // set the default operation 'inout' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    
+
     static bool set_Inout(Q3CString v);
 
     // return the default operation value type form
@@ -365,11 +366,11 @@ class CppSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_GetVisibility(aVisibility v);
 
-    // returns the default name of a 'get' operation generated 
+    // returns the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     static const Q3CString & getName();
 
-    // set the default name of a 'get' operation generated 
+    // set the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
@@ -417,11 +418,11 @@ class CppSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_SetVisibility(aVisibility v);
 
-    // returns the default name of a 'set' operation generated 
+    // returns the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     static const Q3CString & setName();
 
-    // set the default name of a 'set' operation generated 
+    // set the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     //
     //
@@ -461,7 +462,7 @@ class CppSettings : public UmlSettings {
     static bool set_IsSetParamRef(bool v);
 
 
-  private:
+private:
     // never called !
     CppSettings() {};
 
@@ -550,13 +551,13 @@ class CppSettings : public UmlSettings {
     static Q3Dict<Q3CString> _map_includes;
 
 
-  protected:
+protected:
     //internal, do NOT use it
-    
+
     static void read_();
 
     //internal, do NOT use it
-    
+
     static void read_if_needed_();
 
 };

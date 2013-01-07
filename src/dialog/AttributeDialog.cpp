@@ -27,16 +27,16 @@
 
 
 
-#include <q3grid.h> 
+#include <q3grid.h>
 #include <q3vbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
+#include <q3combobox.h>
 #include <q3buttongroup.h>
 #include <qcheckbox.h>
-#include <qradiobutton.h> 
-#include <qpushbutton.h> 
-#include <q3popupmenu.h> 
-#include <qcursor.h> 
+#include <qradiobutton.h>
+#include <qpushbutton.h>
+#include <q3popupmenu.h>
+#include <qcursor.h>
 //Added by qt3to4:
 #include <Q3CString>
 
@@ -62,7 +62,8 @@ QSize AttributeDialog::previous_size;
 
 AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose),
-      new_in_st(new_st_attr), att(a) {
+      new_in_st(new_st_attr), att(a)
+{
     a->browser_node->edit_start();
 
     if (a->browser_node->is_writable()) {
@@ -76,7 +77,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
     visit = !hasOkButton();
     ClassData * cld = (ClassData *)
-            ((BrowserNode *) a->browser_node->parent())->get_data();
+                      ((BrowserNode *) a->browser_node->parent())->get_data();
     QString stereotype = cld->get_stereotype();
     QString lang_st;
 
@@ -110,7 +111,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     Q3Grid * grid;
     Q3HBox * htab;
     QString s;
-    
+
     // general tab
 
     grid = new Q3Grid(2, this);
@@ -127,8 +128,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     edname->setReadOnly(visit);
 
     QFont font = edname->font();
+
     if (! hasCodec())
         font.setFamily("Courier");
+
     font.setFixedPitch(TRUE);
 
     if (!java_in_enum_pattern) {
@@ -136,9 +139,11 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         htab = new Q3HBox(grid);
         edstereotype = new Q3ComboBox(!visit, htab);
         edstereotype->insertItem(toUnicode(a->get_stereotype()));
+
         if (!visit) {
             edstereotype->insertStringList(BrowserAttribute::default_stereotypes());
             edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlAttribute));
+
             if (java_in_enum) {
                 int n = edstereotype->count();
 
@@ -158,8 +163,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
                 if (empty_st_rank == n)
                     edstereotype->insertItem("");
             }
+
             edstereotype->setAutoCompletion(completion());
         }
+
         edstereotype->setCurrentItem(0);
 
         QSizePolicy sp = edstereotype->sizePolicy();
@@ -172,6 +179,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         multiplicity->setSizePolicy(sp);
         previous_multiplicity = a->get_multiplicity();
         multiplicity->insertItem(previous_multiplicity);
+
         if (!visit) {
             multiplicity->insertItem("1");
             multiplicity->insertItem("0..1");
@@ -185,6 +193,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         edtype->insertItem(a->get_type().get_full_type());
         BrowserClass::instances(nodes);
         nodes.full_names(list);
+
         if (!visit) {
             QStringList l = GenerationSettings::basic_types();
 
@@ -195,6 +204,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
             edtype->setAutoCompletion(completion());
             view = a->browser_node->container(UmlClass);
         }
+
         edtype->setCurrentItem(0);
         edtype->setSizePolicy(sp);
 
@@ -207,6 +217,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
     htab = new Q3HBox(grid);
     edinit = new LineEdit(a->get_init_value_qstring(), htab);
+
     if (visit)
         edinit->setReadOnly(TRUE);
     else
@@ -220,57 +231,74 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
         htab = new Q3HBox(grid);
         bg = uml_visibility.init(htab, a->get_uml_visibility(), TRUE);
+
         if (visit)
             bg->setEnabled(FALSE);
 
         bg = new Q3ButtonGroup(7, Qt::Horizontal, QString(), htab);
         bg->setExclusive(FALSE);
         classattribute_cb = new QCheckBox("static", bg);
+
         if (a->get_isa_class_attribute())
             classattribute_cb->setChecked(TRUE);
+
         classattribute_cb->setDisabled(visit);
 
         volatile_cb = new QCheckBox("volatile", bg);
+
         if (a->isa_volatile_attribute)
             volatile_cb->setChecked(TRUE);
+
         volatile_cb->setDisabled(visit);
 
         constattribute_cb = new QCheckBox(TR("read-only"), bg);
+
         if (a->get_isa_const_attribute())
             constattribute_cb->setChecked(TRUE);
+
         constattribute_cb->setDisabled(visit);
 
         derived_cb = new QCheckBox(TR("derived"), bg);
+
         if (a->get_is_derived())
             derived_cb->setChecked(TRUE);
+
         derived_cb->setDisabled(visit);
         connect(derived_cb, SIGNAL(toggled(bool)), SLOT(derived_changed(bool)));
 
         derivedunion_cb = new QCheckBox("union", bg);
+
         if (a->get_is_derivedunion())
             derivedunion_cb->setChecked(TRUE);
+
         derivedunion_cb->setDisabled(visit || !derived_cb->isChecked());
 
         ordered_cb = new QCheckBox(TR("ordered"), bg);
+
         if (a->get_is_ordered())
             ordered_cb->setChecked(TRUE);
+
         ordered_cb->setDisabled(visit);
 
         unique_cb = new QCheckBox("unique", bg);
+
         if (a->get_is_unique())
             unique_cb->setChecked(TRUE);
+
         unique_cb->setDisabled(visit);
     }
 
     Q3VBox * vtab = new Q3VBox(grid);
 
     new QLabel(TR("description :"), vtab);
+
     if (! visit) {
         connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
         connect(new SmallPushButton(TR("Default"), vtab), SIGNAL(clicked()),
                 this, SLOT(default_description()));
     }
+
     comment = new MultiLineEdit(grid);
     comment->setReadOnly(visit);
     comment->setText(a->browser_node->get_comment());
@@ -278,10 +306,12 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
     vtab = new Q3VBox(grid);
     new QLabel(TR("constraint :"), vtab);
+
     if (! visit) {
         connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_constraint()));
     }
+
     constraint = new MultiLineEdit(grid);
     constraint->setReadOnly(visit);
     constraint->setText(a->constraint);
@@ -302,7 +332,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
             htab = new Q3HBox(grid);
 
             Q3ButtonGroup * bg =
-                    cpp_visibility.init(htab, a->get_cpp_visibility(), FALSE, 0, TR("follow uml"));
+                cpp_visibility.init(htab, a->get_cpp_visibility(), FALSE, 0, TR("follow uml"));
 
             if (visit)
                 bg->setEnabled(FALSE);
@@ -310,8 +340,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
             new QLabel(" ", htab);
 
             mutable_cb = new QCheckBox("mutable", htab);
+
             if (a->cpp_mutable)
                 mutable_cb->setChecked(TRUE);
+
             if (visit)
                 mutable_cb->setDisabled(TRUE);
             else
@@ -322,6 +354,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         edcppdecl = new MultiLineEdit(grid);
         edcppdecl->setText(a->get_cppdecl());
         edcppdecl->setFont(font);
+
         if (visit)
             edcppdecl->setReadOnly(TRUE);
         else
@@ -335,9 +368,9 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         if (! visit) {
             new QLabel(grid);
             htab = new Q3HBox(grid);
-            connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
+            connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
                     this, SLOT(cpp_default()));
-            connect(new QPushButton(TR("Not generated in C++"), htab), SIGNAL(clicked ()),
+            connect(new QPushButton(TR("Not generated in C++"), htab), SIGNAL(clicked()),
                     this, SLOT(cpp_unmapped()));
         }
 
@@ -360,8 +393,10 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         if (!java_in_enum && !java_in_enum_pattern) {
             new QLabel("", grid);
             transient_cb = new QCheckBox("transient", grid);
+
             if (a->java_transient)
                 transient_cb->setChecked(TRUE);
+
             if (visit)
                 transient_cb->setDisabled(TRUE);
             else
@@ -372,6 +407,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         edjavadecl = new MultiLineEdit(grid);
         edjavadecl->setText(a->get_javadecl());
         edjavadecl->setFont(font);
+
         if (visit)
             edjavadecl->setReadOnly(TRUE);
         else
@@ -387,22 +423,24 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
         if (! visit) {
             if (java_in_enum) {
-                connect(new QPushButton(TR("Default item declaration"), htab), SIGNAL(clicked ()),
+                connect(new QPushButton(TR("Default item declaration"), htab), SIGNAL(clicked()),
                         this, SLOT(java_default_item()));
-                connect(new QPushButton(TR("Default attribute declaration"), htab), SIGNAL(clicked ()),
+                connect(new QPushButton(TR("Default attribute declaration"), htab), SIGNAL(clicked()),
                         this, SLOT(java_default()));
             }
             else
-                connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
+                connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
                         this, SLOT(java_default()));
-            connect(new QPushButton(TR("Not generated in Java"), htab), SIGNAL(clicked ()),
+
+            connect(new QPushButton(TR("Not generated in Java"), htab), SIGNAL(clicked()),
                     this, SLOT(java_unmapped()));
 
         }
+
         javaannotation = (const char *) a->java_annotation;
         editjavaannotation =
-                new QPushButton((visit) ? TR("Show annotation") : TR("Edit annotation"),
-                                htab);
+            new QPushButton((visit) ? TR("Show annotation") : TR("Edit annotation"),
+                            htab);
         connect(editjavaannotation, SIGNAL(clicked()),
                 this, SLOT(java_edit_annotation()));
 
@@ -418,8 +456,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
     if (! php_ignored) {
         python_self =
-                BrowserOperation::python_init_self((BrowserNode *) a->browser_node->parent())
-                + ".";
+            BrowserOperation::python_init_self((BrowserNode *) a->browser_node->parent())
+            + ".";
 
         grid = new Q3Grid(2, this);
         phptab = grid;
@@ -430,6 +468,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         edphpdecl = new MultiLineEdit(grid);
         edphpdecl->setText(a->get_phpdecl());
         edphpdecl->setFont(font);
+
         if (visit)
             edphpdecl->setReadOnly(TRUE);
         else
@@ -444,9 +483,9 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         htab = new Q3HBox(grid);
 
         if (! visit) {
-            connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
+            connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
                     this, SLOT(php_default()));
-            connect(new QPushButton(TR("Not generated in Php"), htab), SIGNAL(clicked ()),
+            connect(new QPushButton(TR("Not generated in Php"), htab), SIGNAL(clicked()),
                     this, SLOT(php_unmapped()));
         }
 
@@ -470,6 +509,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         edpythondecl = new MultiLineEdit(grid);
         edpythondecl->setText(a->get_pythondecl());
         edpythondecl->setFont(font);
+
         if (visit)
             edpythondecl->setReadOnly(TRUE);
         else
@@ -484,9 +524,9 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         htab = new Q3HBox(grid);
 
         if (! visit) {
-            connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked ()),
+            connect(new QPushButton(TR("Default declaration"), htab), SIGNAL(clicked()),
                     this, SLOT(python_default()));
-            connect(new QPushButton(TR("Not generated in Python"), htab), SIGNAL(clicked ()),
+            connect(new QPushButton(TR("Not generated in Python"), htab), SIGNAL(clicked()),
                     this, SLOT(python_unmapped()));
         }
 
@@ -521,12 +561,14 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
                     edcase->setAutoCompletion(completion());
                 }
             }
+
             edcase->setCurrentItem(0);
 
             QSizePolicy sp = edcase->sizePolicy();
 
             sp.setHorData(QSizePolicy::Expanding);
             edcase->setSizePolicy(sp);
+
             if (! visit)
                 connect(edcase, SIGNAL(activated(int)), this, SLOT(idl_update()));
         }
@@ -535,6 +577,7 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
         edidldecl = new MultiLineEdit(grid);
         edidldecl->setText(a->get_idldecl());
         edidldecl->setFont(font);
+
         if (visit)
             edidldecl->setReadOnly(TRUE);
         else
@@ -549,17 +592,20 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
             new QLabel(grid);
             htab = new Q3HBox(grid);
             connect(new QPushButton((idl_in_enum) ? TR("Default declaration")
-                                                  : TR("Default attribute declaration"),
+                                    : TR("Default attribute declaration"),
                                     htab),
-                    SIGNAL(clicked ()), this, SLOT(idl_default()));
+                    SIGNAL(clicked()), this, SLOT(idl_default()));
+
             if (!idl_in_enum && !idl_in_union) {
                 if (!idl_in_struct)
-                    connect(new QPushButton(TR("Default state declaration"), htab), SIGNAL(clicked ()),
+                    connect(new QPushButton(TR("Default state declaration"), htab), SIGNAL(clicked()),
                             this, SLOT(idl_default_state()));
-                connect(new QPushButton(TR("Default constant declaration"), htab), SIGNAL(clicked ()),
+
+                connect(new QPushButton(TR("Default constant declaration"), htab), SIGNAL(clicked()),
                         this, SLOT(idl_default_constant()));
             }
-            connect(new QPushButton(TR("Not generated in Idl"), htab), SIGNAL(clicked ()),
+
+            connect(new QPushButton(TR("Not generated in Idl"), htab), SIGNAL(clicked()),
                     this, SLOT(idl_unmapped()));
         }
 
@@ -581,14 +627,15 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
     addTab(grid, TR("Properties"));
 
     //
-    
+
     connect(this, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(update_all_tabs(QWidget *)));
 
     open_dialog(this);
 }
 
-AttributeDialog::~AttributeDialog() {
+AttributeDialog::~AttributeDialog()
+{
     att->browser_node->edit_end();
     previous_size = size();
 
@@ -602,12 +649,14 @@ AttributeDialog::~AttributeDialog() {
     close_dialog(this);
 }
 
-void AttributeDialog::polish() {
+void AttributeDialog::polish()
+{
     Q3TabDialog::polish();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
-void AttributeDialog::default_defs_if_needed() {
+void AttributeDialog::default_defs_if_needed()
+{
     QString m = multiplicity->currentText().stripWhiteSpace();
 
     if (m != previous_multiplicity) {
@@ -621,7 +670,8 @@ void AttributeDialog::default_defs_if_needed() {
     }
 }
 
-void AttributeDialog::menu_type() {
+void AttributeDialog::menu_type()
+{
     Q3PopupMenu m(0);
 
     m.insertItem(TR("Choose"), -1);
@@ -650,14 +700,17 @@ void AttributeDialog::menu_type() {
         case 0:
             nodes.at(index)->select_in_browser();
             break;
+
         case 2:
             bn = BrowserClass::add_class(FALSE, view);
+
             if (bn == 0)
                 return;
+
             bn->select_in_browser();
+
             // no break
-        case 1:
-        {
+        case 1: {
             QString s = bn->full_name(TRUE);
 
             if ((index = list.findIndex(s)) == -1) {
@@ -670,36 +723,42 @@ void AttributeDialog::menu_type() {
                     ++iter;
                     index += 1;
                 }
+
                 nodes.insert((unsigned) index, bn);
                 list.insert(iter, s);
                 edtype->insertItem(s, index + offset);
             }
         }
-            edtype->setCurrentItem(index + offset);
-            break;
+
+        edtype->setCurrentItem(index + offset);
+        break;
+
         default:
             break;
         }
     }
 }
 
-void AttributeDialog::derived_changed(bool on) {
+void AttributeDialog::derived_changed(bool on)
+{
     derivedunion_cb->setEnabled(on);
 }
 
-void AttributeDialog::accept() {
+void AttributeDialog::accept()
+{
     if (!check_edits(edits) || !kvtable->check_unique())
         return;
-    
+
     BrowserNode * bn = att->browser_node;
     QString oldname = att->name();
     QString s;
 
     s = edname->text().stripWhiteSpace();
+
     if ((s != oldname) &&
-            ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlAttribute,
-                                                             bn->allow_spaces(),
-                                                             bn->allow_empty()))
+        ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlAttribute,
+                bn->allow_spaces(),
+                bn->allow_empty()))
         msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
     else {
         default_defs_if_needed();
@@ -712,6 +771,7 @@ void AttributeDialog::accept() {
             AType t;
 
             s = edtype->currentText().stripWhiteSpace();
+
             if (!s.isEmpty()) {
                 int index = list.findIndex(s);
 
@@ -720,6 +780,7 @@ void AttributeDialog::accept() {
                 else
                     t.explicit_type = s;
             }
+
             att->set_type(t);
 
             att->uml_visibility = uml_visibility.value();
@@ -743,17 +804,18 @@ void AttributeDialog::accept() {
             att->cpp_decl = QString();
         else {
             att->cpp_decl = edcppdecl->text();
+
             if (!cpp_in_enum)
                 att->cpp_visibility = cpp_visibility.value();
         }
 
         att->cpp_mutable = (cpp_in_enum || cpp_ignored)
-                ? FALSE
-                : mutable_cb->isChecked();
+                           ? FALSE
+                           : mutable_cb->isChecked();
 
         att->java_transient = (java_in_enum || java_ignored || java_in_enum_pattern)
-                ? FALSE
-                : transient_cb->isChecked();
+                              ? FALSE
+                              : transient_cb->isChecked();
         att->java_decl = (java_ignored) ? QString() : edjavadecl->text();
         att->java_annotation = javaannotation;
 
@@ -762,6 +824,7 @@ void AttributeDialog::accept() {
         att->python_decl = (python_ignored) ? QString() : edpythondecl->text();
 
         att->idl_decl = (idl_in_typedef) ? QString() : edidldecl->text();
+
         if (idl_in_union) {
             int index;
             s = edcase->currentText().stripWhiteSpace();
@@ -780,6 +843,7 @@ void AttributeDialog::accept() {
         kvtable->update(bn);
 
         ProfiledStereotypes::modified(bn, newst);
+
         if (new_in_st) {
             ProfiledStereotypes::added((BrowserAttribute *) bn);
             new_in_st = FALSE;
@@ -795,7 +859,8 @@ void AttributeDialog::accept() {
     }
 }
 
-void AttributeDialog::update_all_tabs(QWidget * w) {
+void AttributeDialog::update_all_tabs(QWidget * w)
+{
     if (!visit)
         default_defs_if_needed();
 
@@ -807,36 +872,43 @@ void AttributeDialog::update_all_tabs(QWidget * w) {
     }
     else if (w == cppTab) {
         cpp_update();
+
         if (!visit)
             edcppdecl->setFocus();
     }
     else if (w == javatab) {
         java_update();
+
         if (!visit)
             edjavadecl->setFocus();
     }
     else if (w == phptab) {
         php_update();
+
         if (!visit)
             edphpdecl->setFocus();
     }
     else if (w == pythontab) {
         python_update();
+
         if (!visit)
             edpythondecl->setFocus();
     }
     else if (w == idltab) {
         idl_update();
+
         if (!visit)
             edidldecl->setFocus();
     }
 }
 
-void AttributeDialog::default_description() {
+void AttributeDialog::default_description()
+{
     comment->setText(GenerationSettings::default_attribute_description());
 }
 
-void AttributeDialog::edit_description() {
+void AttributeDialog::edit_description()
+{
     edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
          att, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
@@ -846,7 +918,8 @@ void AttributeDialog::post_edit_description(AttributeDialog * d, QString s)
     d->comment->setText(s);
 }
 
-void AttributeDialog::edit_constraint() {
+void AttributeDialog::edit_constraint()
+{
     edit(constraint->text(), edname->text().stripWhiteSpace() + "_constraint",
          att, TxtEdit, this, (post_edit) post_edit_constraint, edits);
 }
@@ -856,7 +929,8 @@ void AttributeDialog::post_edit_constraint(AttributeDialog * d, QString s)
     d->constraint->setText(s);
 }
 
-void AttributeDialog::edit_init() {
+void AttributeDialog::edit_init()
+{
     edit(edinit->text(), edname->text().stripWhiteSpace() + "_initialization",
          att, TxtEdit, this, (post_edit) post_edit_init, edits);
 }
@@ -866,14 +940,16 @@ void AttributeDialog::post_edit_init(AttributeDialog * d, QString s)
     d->edinit->setText(s);
 }
 
-void AttributeDialog::cpp_default() {
+void AttributeDialog::cpp_default()
+{
     edcppdecl->setText((cpp_in_enum)
                        ? GenerationSettings::cpp_default_enum_item_decl()
                        : GenerationSettings::cpp_default_attr_decl(multiplicity->currentText().stripWhiteSpace()));
     cpp_update();
 }
 
-void AttributeDialog::default_cpp_if_needed(QString prev_mult, QString new_mult) {
+void AttributeDialog::default_cpp_if_needed(QString prev_mult, QString new_mult)
+{
     if (!cpp_in_enum && !edcppdecl->text().isEmpty()) {
         QString n = GenerationSettings::cpp_default_attr_decl(new_mult);
 
@@ -882,12 +958,14 @@ void AttributeDialog::default_cpp_if_needed(QString prev_mult, QString new_mult)
     }
 }
 
-void AttributeDialog::cpp_unmapped() {
+void AttributeDialog::cpp_unmapped()
+{
     edcppdecl->setText(QString());
     showcppdecl->setText(QString());
 }
 
-void AttributeDialog::cpp_update() {
+void AttributeDialog::cpp_update()
+{
     if (!cpp_in_enum)
         cpp_visibility.update_default(uml_visibility);
 
@@ -914,8 +992,10 @@ void AttributeDialog::cpp_update() {
             // comment management done
             p = pp;
             pp = 0;
+
             if (*p == 0)
                 break;
+
             if (*p != '#')
                 s += indent;
         }
@@ -930,34 +1010,35 @@ void AttributeDialog::cpp_update() {
             s += edname->text();
         }
         else if ((cpp_in_enum && !strncmp(p, "${value}", 8)) ||
-                 !strncmp(p, "${h_value}", 10))
-        {
+                 !strncmp(p, "${h_value}", 10)) {
             QString i = edinit->text().stripWhiteSpace();
 
             if (!i.isEmpty() && (cpp_in_enum || classattribute_cb->isChecked())) {
                 if (need_equal(p, i, TRUE))
                     s += " = ";
+
                 s += edinit->text();
             }
+
             p += (p[2] == 'h') ? 10 : 8;
         }
-        else if (!strncmp(p, "${value}", 8))
-        {
+        else if (!strncmp(p, "${value}", 8)) {
             QString i = edinit->text().stripWhiteSpace();
 
-            if (!i.isEmpty())
-            {
+            if (!i.isEmpty()) {
                 if (need_equal(p, i, TRUE))
                     s += " = ";
+
                 s += edinit->text();
                 p += (p[2] == 'h') ? 10 : 8;
             }
             else
                 p += 8;
         }
-            //p += 8;
+        //p += 8;
         else if (*p == '\n') {
             s += *p++;
+
             if (*p && (*p != '#'))
                 s += indent;
         }
@@ -965,21 +1046,25 @@ void AttributeDialog::cpp_update() {
             s += *p++;
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
+
             if (classattribute_cb->isChecked())
                 s += "static ";
         }
         else if (!strncmp(p, "${const}", 8)) {
             p += 8;
+
             if (constattribute_cb->isChecked())
                 s += "const ";
         }
         else if (!strncmp(p, "${mutable}", 10)) {
             p += 10;
+
             if (mutable_cb->isChecked())
                 s += "mutable ";
         }
         else if (!strncmp(p, "${volatile}", 11)) {
             p += 11;
+
             if (volatile_cb->isChecked())
                 s += "volatile ";
         }
@@ -1039,9 +1124,11 @@ QString AttributeDialog::cpp_decl(const BrowserAttribute * at, bool init,
                 if (*v) {
                     if (need_equal(p, v, TRUE))
                         s += " = ";
+
                     s += v;
                 }
             }
+
             break;
         }
         else if (!strncmp(p, "${static}", 9))
@@ -1070,8 +1157,10 @@ QString AttributeDialog::cpp_decl(const BrowserAttribute * at, bool init,
         }
         else if (*p == '\n') {
             s += ' ';
+
             do
-                p+= 1;
+                p += 1;
+
             while ((*p == ' ') || (*p == '\t'));
         }
         else if (*p == ';')
@@ -1085,25 +1174,32 @@ QString AttributeDialog::cpp_decl(const BrowserAttribute * at, bool init,
     return s;
 }
 
-void AttributeDialog::java_default_item() {
+void AttributeDialog::java_default_item()
+{
     edjavadecl->setText(GenerationSettings::java_default_enum_item_decl());
+
     if (edstereotype->currentText().stripWhiteSpace() == "attribute")
         edstereotype->setCurrentItem(empty_st_rank);
+
     java_update();
 }
 
-void AttributeDialog::java_default() {
+void AttributeDialog::java_default()
+{
     if (java_in_enum_pattern)
         edjavadecl->setText(GenerationSettings::java_default_enum_pattern_item_decl());
     else {
         if (java_in_enum)
             edstereotype->setCurrentItem(attribute_st_rank);
+
         edjavadecl->setText(GenerationSettings::java_default_attr_decl(multiplicity->currentText().stripWhiteSpace()));
     }
+
     java_update();
 }
 
-void AttributeDialog::default_java_if_needed(QString prev_mult, QString new_mult) {
+void AttributeDialog::default_java_if_needed(QString prev_mult, QString new_mult)
+{
     if (!java_in_enum_pattern && !edjavadecl->text().isEmpty()) {
         QString n = GenerationSettings::java_default_attr_decl(new_mult);
 
@@ -1112,12 +1208,14 @@ void AttributeDialog::default_java_if_needed(QString prev_mult, QString new_mult
     }
 }
 
-void AttributeDialog::java_unmapped() {
+void AttributeDialog::java_unmapped()
+{
     edjavadecl->setText(QString());
     showjavadecl->setText(QString());
 }
 
-void AttributeDialog::java_update() {
+void AttributeDialog::java_update()
+{
     // do NOT write
     //	const char * p = edjavadecl->text();
     // because the QString is immediatly destroyed !
@@ -1140,8 +1238,10 @@ void AttributeDialog::java_update() {
             // comment management done
             p = pp;
             pp = 0;
+
             if (*p == 0)
                 break;
+
             s += indent;
         }
 
@@ -1159,11 +1259,12 @@ void AttributeDialog::java_update() {
 
             if (!i.isEmpty()) {
                 if (java_in_enum &&
-                        (edstereotype->currentText().stripWhiteSpace() != "attribute"))
+                    (edstereotype->currentText().stripWhiteSpace() != "attribute"))
                     s += '(' + edinit->text() + ')';
                 else {
                     if (need_equal(p, i, FALSE))
                         s += " = ";
+
                     s += edinit->text();
                 }
             }
@@ -1174,11 +1275,13 @@ void AttributeDialog::java_update() {
         }
         else if (*p == '\n') {
             s += *p++;
+
             if (*p)
                 s += indent;
         }
         else if (!strncmp(p, "${@}", 4)) {
             p += 4;
+
             if (pp != 0)
                 s += "${@}";
             else if (!javaannotation.isEmpty()) {
@@ -1198,26 +1301,31 @@ void AttributeDialog::java_update() {
         }
         else if (!strncmp(p, "${visibility}", 13)) {
             p += 13;
+
             if (uml_visibility.value() != UmlPackageVisibility)
                 s += uml_visibility.state() + ' ';
         }
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
+
             if (classattribute_cb->isChecked())
                 s += "static ";
         }
         else if (!strncmp(p, "${transient}", 12)) {
             p += 12;
+
             if (!java_in_enum && !java_in_enum_pattern && !java_ignored && transient_cb->isChecked())
                 s += "transient ";
         }
         else if (!strncmp(p, "${volatile}", 11)) {
             p += 11;
+
             if (volatile_cb->isChecked())
                 s += "volatile ";
         }
         else if (!strncmp(p, "${final}", 8)) {
             p += 8;
+
             if (constattribute_cb->isChecked())
                 s += "final ";
         }
@@ -1273,9 +1381,11 @@ QString AttributeDialog::java_decl(const BrowserAttribute * at, bool init,
                 if (*v) {
                     if (need_equal(p, v, FALSE))
                         s += " = ";
+
                     s += v;
                 }
             }
+
             break;
         }
         else if (!strncmp(p, "${class}", 8)) {
@@ -1309,8 +1419,10 @@ QString AttributeDialog::java_decl(const BrowserAttribute * at, bool init,
                     case '[':
                         s += '[';
                         break;
+
                     case ']':
                         s += ']';
+
                     default:
                         break;
                     }
@@ -1325,8 +1437,10 @@ QString AttributeDialog::java_decl(const BrowserAttribute * at, bool init,
             p += 4;
         else if (*p == '\n') {
             s += ' ';
+
             do
-                p+= 1;
+                p += 1;
+
             while ((*p == ' ') || (*p == '\t'));
         }
         else if (*p == ';')
@@ -1340,14 +1454,16 @@ QString AttributeDialog::java_decl(const BrowserAttribute * at, bool init,
     return s;
 }
 
-void AttributeDialog::java_edit_annotation() {  
+void AttributeDialog::java_edit_annotation()
+{
     AnnotationDialog dialog(this, javaannotation, !hasOkButton());
 
     if (dialog.exec() == QDialog::Accepted)
         java_update();
 }
 
-void AttributeDialog::php_default() {
+void AttributeDialog::php_default()
+{
     if (php_in_enum)
         edphpdecl->setText(GenerationSettings::php_default_enum_item_decl());
     else
@@ -1356,16 +1472,19 @@ void AttributeDialog::php_default() {
     php_update();
 }
 
-void AttributeDialog::default_php_if_needed(QString, QString) {
+void AttributeDialog::default_php_if_needed(QString, QString)
+{
     // do nothing : no link with multiplicity
 }
 
-void AttributeDialog::php_unmapped() {
+void AttributeDialog::php_unmapped()
+{
     edphpdecl->setText(QString());
     showphpdecl->setText(QString());
 }
 
-void AttributeDialog::php_update() {
+void AttributeDialog::php_update()
+{
     // do NOT write
     //	const char * p = edphpdecl->text();
     // because the QString is immediatly destroyed !
@@ -1388,8 +1507,10 @@ void AttributeDialog::php_update() {
             // comment management done
             p = pp;
             pp = 0;
+
             if (*p == 0)
                 break;
+
             s += indent;
         }
 
@@ -1400,8 +1521,10 @@ void AttributeDialog::php_update() {
             manage_description(comment->text(), p, pp);
         else if (!strncmp(p, "${name}", 7)) {
             p += 7;
+
             if (!php_in_enum && !constattribute_cb->isChecked())
                 s += "$";
+
             s += edname->text();
         }
         else if (!strncmp(p, "${value}", 8)) {
@@ -1410,6 +1533,7 @@ void AttributeDialog::php_update() {
             if (!i.isEmpty()) {
                 if (need_equal(p, i, FALSE))
                     s += " = ";
+
                 s += edinit->text();
             }
             else if (php_in_enum)
@@ -1419,19 +1543,22 @@ void AttributeDialog::php_update() {
         }
         else if (!strncmp(p, "${const}", 8)) {
             p += 8;
+
             if (constattribute_cb->isChecked())
                 s += "const ";
         }
         else if (!strncmp(p, "${var}", 6)) {
             p += 6;
+
             if (!php_in_enum &&
-                    !constattribute_cb->isChecked() &&
-                    !classattribute_cb->isChecked() &&
-                    (uml_visibility.value() == UmlPackageVisibility))
+                !constattribute_cb->isChecked() &&
+                !classattribute_cb->isChecked() &&
+                (uml_visibility.value() == UmlPackageVisibility))
                 s += "var ";
         }
         else if (*p == '\n') {
             s += *p++;
+
             if (*p)
                 s += indent;
         }
@@ -1439,11 +1566,13 @@ void AttributeDialog::php_update() {
             manage_alias(att->browser_node, p, s, kvtable);
         else if (!strncmp(p, "${visibility}", 13)) {
             p += 13;
+
             if (uml_visibility.value() != UmlPackageVisibility)
                 s += uml_visibility.state() + ' ';
         }
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
+
             if (classattribute_cb->isChecked())
                 s += "static ";
         }
@@ -1483,7 +1612,7 @@ QString AttributeDialog::php_decl(const BrowserAttribute * at, bool init,
             p += 7;
 
             ClassData * cld = (ClassData *)
-                    ((BrowserNode *) at->parent())->get_data();
+                              ((BrowserNode *) at->parent())->get_data();
             QString stereotype = cld->get_stereotype();
             bool in_enum = (stereotype == "enum");
             QString lang_st = GenerationSettings::php_class_stereotype(stereotype);
@@ -1491,8 +1620,9 @@ QString AttributeDialog::php_decl(const BrowserAttribute * at, bool init,
             in_enum |= (lang_st == "enum");
 
             if (!in_enum &&
-                    !((AttributeData *) at->get_data())->get_isa_const_attribute())
+                !((AttributeData *) at->get_data())->get_isa_const_attribute())
                 s += "$";
+
             s += at->get_name();
         }
         else if (!strncmp(p, "${value}", 8)) {
@@ -1502,9 +1632,11 @@ QString AttributeDialog::php_decl(const BrowserAttribute * at, bool init,
                 if (*v) {
                     if (need_equal(p, v, FALSE))
                         s += " = ";
+
                     s += v;
                 }
             }
+
             break;
         }
         else if (!strncmp(p, "${const}", 8))
@@ -1517,8 +1649,10 @@ QString AttributeDialog::php_decl(const BrowserAttribute * at, bool init,
             p += 6;
         else if (*p == '\n') {
             s += ' ';
+
             do
-                p+= 1;
+                p += 1;
+
             while ((*p == ' ') || (*p == '\t'));
         }
         else if (*p == ';')
@@ -1537,7 +1671,8 @@ QString AttributeDialog::php_decl(const BrowserAttribute * at, bool init,
     return s;
 }
 
-void AttributeDialog::python_default() {
+void AttributeDialog::python_default()
+{
     if (python_in_enum)
         edpythondecl->setText(GenerationSettings::python_default_enum_item_decl());
     else if (!java_in_enum_pattern)
@@ -1548,7 +1683,8 @@ void AttributeDialog::python_default() {
     python_update();
 }
 
-void AttributeDialog::default_python_if_needed(QString prev_mult, QString new_mult) {
+void AttributeDialog::default_python_if_needed(QString prev_mult, QString new_mult)
+{
     if (!python_in_enum && !java_in_enum_pattern && !edpythondecl->text().isEmpty()) {
         QString n = GenerationSettings::python_default_attr_decl(new_mult);
 
@@ -1557,12 +1693,14 @@ void AttributeDialog::default_python_if_needed(QString prev_mult, QString new_mu
     }
 }
 
-void AttributeDialog::python_unmapped() {
+void AttributeDialog::python_unmapped()
+{
     edpythondecl->setText(QString());
     showpythondecl->setText(QString());
 }
 
-void AttributeDialog::python_update() {
+void AttributeDialog::python_update()
+{
     // do NOT write
     //	const char * p = edpythondecl->text();
     // because the QString is immediatly destroyed !
@@ -1579,6 +1717,7 @@ void AttributeDialog::python_update() {
             // comment management done
             p = pp;
             pp = 0;
+
             if (*p == 0)
                 break;
         }
@@ -1597,6 +1736,7 @@ void AttributeDialog::python_update() {
             if (!i.isEmpty()) {
                 if (need_equal(p, i, FALSE))
                     s += " = ";
+
                 s += edinit->text();
             }
             else if (python_in_enum)
@@ -1610,11 +1750,13 @@ void AttributeDialog::python_update() {
         }
         else if (!strncmp(p, "${self}", 7)) {
             p += 7;
+
             if (java_in_enum_pattern || !classattribute_cb->isChecked())
                 s += python_self;
         }
         else if (!strncmp(p, "${stereotype}", 13)) {
             p += 13;
+
             if (! java_in_enum_pattern)
                 s += GenerationSettings::python_relationattribute_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
         }
@@ -1662,9 +1804,11 @@ QString AttributeDialog::python_decl(const BrowserAttribute * at,
                 if (*v) {
                     if (need_equal(p, v, FALSE))
                         s += " = ";
+
                     s += v;
                 }
             }
+
             break;
         }
         else if (!strncmp(p, "${self}", 7)) {
@@ -1684,8 +1828,10 @@ QString AttributeDialog::python_decl(const BrowserAttribute * at,
         }
         else if (*p == '\n') {
             s += ' ';
+
             do
-                p+= 1;
+                p += 1;
+
             while ((*p == ' ') || (*p == '\t'));
         }
         else if (*p == '@')
@@ -1697,7 +1843,8 @@ QString AttributeDialog::python_decl(const BrowserAttribute * at,
     return s;
 }
 
-void AttributeDialog::idl_default() {
+void AttributeDialog::idl_default()
+{
     if (idl_in_enum)
         edidldecl->setText(GenerationSettings::idl_default_enum_item_decl());
     else if (idl_in_union)
@@ -1707,10 +1854,12 @@ void AttributeDialog::idl_default() {
                             !edinit->text().stripWhiteSpace().isEmpty())
                            ? GenerationSettings::idl_default_const_decl(multiplicity->currentText().stripWhiteSpace())
                            : GenerationSettings::idl_default_attr_decl(multiplicity->currentText().stripWhiteSpace()));
+
     idl_update();
 }
 
-void AttributeDialog::default_idl_if_needed(QString prev_mult, QString new_mult) {
+void AttributeDialog::default_idl_if_needed(QString prev_mult, QString new_mult)
+{
     if (!idl_in_enum && !idl_in_union && !edidldecl->text().isEmpty()) {
         QString p;
         QString n;
@@ -1729,22 +1878,26 @@ void AttributeDialog::default_idl_if_needed(QString prev_mult, QString new_mult)
     }
 }
 
-void AttributeDialog::idl_default_state() {
+void AttributeDialog::idl_default_state()
+{
     edidldecl->setText(GenerationSettings::idl_default_valuetype_attr_decl(multiplicity->currentText().stripWhiteSpace()));
     idl_update();
 }
 
-void AttributeDialog::idl_default_constant() {
+void AttributeDialog::idl_default_constant()
+{
     edidldecl->setText(GenerationSettings::idl_default_const_decl(multiplicity->currentText().stripWhiteSpace()));
     idl_update();
 }
 
-void AttributeDialog::idl_unmapped() {
+void AttributeDialog::idl_unmapped()
+{
     edidldecl->setText(QString());
     showidldecl->setText(QString());
 }
 
-void AttributeDialog::idl_update() {
+void AttributeDialog::idl_update()
+{
     // do NOT write
     //	const char * p = edidldecl->text();
     // because the QString is immediatly destroyed !
@@ -1768,8 +1921,10 @@ void AttributeDialog::idl_update() {
             // comment management done
             p = pp;
             pp = 0;
+
             if (*p == 0)
                 break;
+
             s += indent;
         }
 
@@ -1786,11 +1941,13 @@ void AttributeDialog::idl_update() {
 
             if (need_equal(p, i, FALSE))
                 s += " = ";
+
             s += edinit->text();
             p += 8;
         }
         else if (*p == '\n') {
             s += *p++;
+
             if (*p && (*p != '#'))
                 s += indent;
         }
@@ -1803,26 +1960,31 @@ void AttributeDialog::idl_update() {
         else if (!strncmp(p, "${attribut}", 11)) {
             // old version
             p += 11;
+
             if (!idl_in_struct)
                 s += "attribute ";
         }
         else if (!strncmp(p, "${attribute}", 12)) {
             p += 12;
+
             if (!idl_in_struct)
                 s += "attribute ";
         }
         else if (!strncmp(p, "${visibility}", 13)) {
             p += 13;
+
             switch (uml_visibility.value()) {
             case UmlPublic:
             case UmlPackageVisibility:
                 s += "public ";
+
             default:
                 s += "private ";
             }
         }
         else if (!strncmp(p, "${readonly}", 11)) {
             p += 11;
+
             if (constattribute_cb->isChecked())
                 s += "readonly ";
         }
@@ -1856,7 +2018,7 @@ QString AttributeDialog::idl_decl(const BrowserAttribute * at,
     Q3CString decl = d->idl_decl;
     QString stereotype = ((BrowserNode *) at->parent())->get_data()->get_stereotype();
     bool in_enum = (stereotype == "enum") ||
-            (GenerationSettings::idl_class_stereotype(stereotype) == "enum");
+                   (GenerationSettings::idl_class_stereotype(stereotype) == "enum");
 
     remove_comments(decl);
 
@@ -1903,8 +2065,10 @@ QString AttributeDialog::idl_decl(const BrowserAttribute * at,
         }
         else if (*p == '\n') {
             s += ' ';
+
             do
-                p+= 1;
+                p += 1;
+
             while ((*p == ' ') || (*p == '\t'));
         }
         else if ((*p == ';') || (in_enum && (*p == ',')))

@@ -36,23 +36,24 @@ class ColMsg;
 class OperationData;
 class BrowserClass;
 
-class CodChangeMsgDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class CodChangeMsgDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     ColMsg * msg;
     BrowserClass * cl;
     QStringList list;
     Q3ValueList<const OperationData *> opers;
-    Q3ComboBox * edoper;    
-    
+    Q3ComboBox * edoper;
+
     static QSize previous_size;
-  
-  public:
+
+public:
     CodChangeMsgDialog(QWidget * parent, ColMsg * m);
     virtual ~CodChangeMsgDialog();
-  
-  protected slots:
+
+protected slots:
     void menu_op();
     virtual void polish();
     void accept();

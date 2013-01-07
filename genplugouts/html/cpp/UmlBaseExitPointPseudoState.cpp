@@ -6,30 +6,35 @@
 
 UmlExitPointPseudoState * UmlBaseExitPointPseudoState::create(UmlItem * parent, const char * s)
 {
-  return (UmlExitPointPseudoState *) parent->create_(anExitPointPseudoState, s);
+    return (UmlExitPointPseudoState *) parent->create_(anExitPointPseudoState, s);
 }
 
-anItemKind UmlBaseExitPointPseudoState::kind() {
-  return anExitPointPseudoState;
+anItemKind UmlBaseExitPointPseudoState::kind()
+{
+    return anExitPointPseudoState;
 }
 
-UmlExitPointPseudoState * UmlBaseExitPointPseudoState::reference() {
-  read_if_needed_();
-  return _reference;
+UmlExitPointPseudoState * UmlBaseExitPointPseudoState::reference()
+{
+    read_if_needed_();
+    return _reference;
 }
 
-bool UmlBaseExitPointPseudoState::set_Reference(UmlExitPointPseudoState * v) {
-  UmlCom::send_cmd(_identifier, setDerivedCmd, (v == 0) ? (void *) v : ((UmlBaseItem *) v)->_identifier);
-  if (UmlCom::read_bool()) {
-    _reference = v;
-    return TRUE;
-  }
-  else
-    return FALSE;
+bool UmlBaseExitPointPseudoState::set_Reference(UmlExitPointPseudoState * v)
+{
+    UmlCom::send_cmd(_identifier, setDerivedCmd, (v == 0) ? (void *) v : ((UmlBaseItem *) v)->_identifier);
+
+    if (UmlCom::read_bool()) {
+        _reference = v;
+        return TRUE;
+    }
+    else
+        return FALSE;
 }
 
-void UmlBaseExitPointPseudoState::read_uml_() {
-  UmlBaseItem::read_uml_();
-  _reference = (UmlExitPointPseudoState *) UmlBaseItem::read_();
+void UmlBaseExitPointPseudoState::read_uml_()
+{
+    UmlBaseItem::read_uml_();
+    _reference = (UmlExitPointPseudoState *) UmlBaseItem::read_();
 }
 

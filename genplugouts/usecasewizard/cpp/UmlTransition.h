@@ -5,9 +5,10 @@
 #include "UmlBaseTransition.h"
 #include "UmlStateItem.h"
 
-class UmlTransition : public UmlBaseTransition, public UmlStateItem {
-  public:
-     UmlTransition(void * id) : UmlBaseTransition(id) {
+class UmlTransition : public UmlBaseTransition, public UmlStateItem
+{
+public:
+    UmlTransition(void * id) : UmlBaseTransition(id) {
     }
 
 };

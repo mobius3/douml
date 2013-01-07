@@ -13,10 +13,11 @@ class FileOut;
 // allows to generalize their management, declare virtual operations etc ...
 //
 // You can modify it as you want (except the constructor)
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n)
-      : UmlBaseItem(id, n), _written(FALSE) {};
+        : UmlBaseItem(id, n), _written(FALSE) {};
 
     virtual ~UmlItem();
 
@@ -33,7 +34,7 @@ class UmlItem : public UmlBaseItem {
     virtual void ref(FileOut & out);
 
 
-  protected:
+protected:
     bool _written;
 
     static bool _gen_views;

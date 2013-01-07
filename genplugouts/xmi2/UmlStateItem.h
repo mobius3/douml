@@ -4,8 +4,9 @@
 
 class UmlTransition;
 
-class UmlStateItem {
-  public:
+class UmlStateItem
+{
+public:
     //memorize trans starting in sub elements to produce them later
     //does nothing at this level
     virtual void memo_trans(UmlTransition * tr);

@@ -31,15 +31,16 @@
 #include "UmlExtraClassMember.h"
 
 void UmlExtraClassMember::generate(QTextStream & f, const Q3CString &,
-				   Q3CString indent, BooL & indent_needed,
-				   int &, const Q3CString &) {
-  const Q3CString & d = pythonDecl();
-  
-  if (! d.isEmpty()) {
-    if (indent_needed)
-      f << indent;
-    
-    f << d;
-    indent_needed = d.at(d.length() - 1) == '\n';
-  }
+                                   Q3CString indent, BooL & indent_needed,
+                                   int &, const Q3CString &)
+{
+    const Q3CString & d = pythonDecl();
+
+    if (! d.isEmpty()) {
+        if (indent_needed)
+            f << indent;
+
+        f << d;
+        indent_needed = d.at(d.length() - 1) == '\n';
+    }
 }

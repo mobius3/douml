@@ -11,14 +11,15 @@ class UmlClass;
 
 //Manages template actuals
 
-class Binding {
-  public:
+class Binding
+{
+public:
     static void import(FileIn & in, Token & token, UmlClass * where);
 
     static void solveThem();
 
 
-  protected:
+protected:
     static Q3PtrList<Binding> All;
 
     //xmiId of the class having the binbing
@@ -34,7 +35,7 @@ class Binding {
     Q3CString actual;
 
     //xmiId of the signature
-    
+
     Q3CString signatureId;
 
 };

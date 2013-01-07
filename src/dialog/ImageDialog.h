@@ -31,22 +31,23 @@
 class QPushButton;
 class LineEdit;
 
-class ImageDialog : public QDialog {
-  Q_OBJECT
- 
-  protected:
+class ImageDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     QString & path;
     LineEdit * edpath;
     QPushButton * pathrootbutton;
     QPushButton * pathprjbutton;
- 
+
     static QSize previous_size;
-  
- public:
+
+public:
     ImageDialog(QString & p);
     virtual ~ImageDialog();
- 
-  protected slots:
+
+protected slots:
     void accept();
     void browse();
     void root_relative();

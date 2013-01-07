@@ -40,35 +40,42 @@ class ClassContainer;
 #include <qstringlist.h>
 #endif
 
-class UmlClass : public UmlBaseClass {
+class UmlClass : public UmlBaseClass
+{
 #ifdef ROUNDTRIP
-  private:
+private:
     bool created;
     Class * the_class;
 #endif
-  
-  public:
+
+public:
     UmlClass(void * id, const Q3CString & n);
 #ifdef REVERSE
     void need_artifact(const QStringList & imports, bool remove_java_lang,
-		       const QStringList & static_imports,
-		       const Q3CString & path, UmlArtifact *& cp);
-    
+                       const QStringList & static_imports,
+                       const Q3CString & path, UmlArtifact *& cp);
+
 # ifdef ROUNDTRIP
     virtual void upload(ClassContainer * cnt);
     virtual bool set_roundtrip_expected();
     virtual void mark_useless(Q3PtrList<UmlItem> & l);
     virtual void scan_it(int & n);
     virtual void send_it(int n);
-    bool is_created() const { return created; }
-    void set_created() { created = TRUE; }
-    Class * get_class() const { return the_class; }
+    bool is_created() const {
+        return created;
+    }
+    void set_created() {
+        created = TRUE;
+    }
+    Class * get_class() const {
+        return the_class;
+    }
     UmlItem * search_for_att_rel(const Q3CString & name);
     void reorder(Q3PtrList<UmlItem> & expected_order);
 # endif
 #endif
     static void manage_generic(Q3CString & form, UmlTypeSpec & typespec,
-			       Q3CString str_actuals, const char * k);
+                               Q3CString str_actuals, const char * k);
 };
 
 #endif

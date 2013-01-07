@@ -13,8 +13,9 @@ class UmlOperation;
 
 //  Manage the class's attributs
 
-class UmlBaseAttribute : public UmlClassMember {
-  public:
+class UmlBaseAttribute : public UmlClassMember
+{
+public:
     // returns a new attribute named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -29,7 +30,7 @@ class UmlBaseAttribute : public UmlClassMember {
     bool isReadOnly();
 
     // to set the 'read only' state of the attribute
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isReadOnly(bool y);
 
@@ -64,7 +65,7 @@ class UmlBaseAttribute : public UmlClassMember {
     const Q3CString & defaultValue();
 
     // to set the default attribute value ("" allowed)
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_DefaultValue(const char * s);
 
@@ -72,7 +73,7 @@ class UmlBaseAttribute : public UmlClassMember {
     const UmlTypeSpec & type();
 
     // to set the attribute UML type
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_Type(const UmlTypeSpec & t);
 
@@ -80,7 +81,7 @@ class UmlBaseAttribute : public UmlClassMember {
     const Q3CString & multiplicity();
 
     // to set the multiplicity
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_Multiplicity(const char * s);
 
@@ -88,16 +89,16 @@ class UmlBaseAttribute : public UmlClassMember {
     UmlOperation * getOperation();
 
     // to generate an associated 'get' operation
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool addGetOperation();
 
     // returns the 'set' operation of the attribute, or 0 if it does not exist
-    
+
     UmlOperation * setOperation();
 
     // to generate an associated 'set' operation
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool addSetOperation();
 
@@ -116,7 +117,7 @@ class UmlBaseAttribute : public UmlClassMember {
     bool isJavaTransient();
 
     // to set the 'transient' state of the attribute
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaTransient(bool y);
 #endif
@@ -144,7 +145,7 @@ class UmlBaseAttribute : public UmlClassMember {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     bool _read_only : 1;
 
     bool _derived : 1;
@@ -180,12 +181,12 @@ class UmlBaseAttribute : public UmlClassMember {
 #endif
 
 
-  public:
+public:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseAttribute(void * id, const Q3CString & n);
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -202,7 +203,7 @@ class UmlBaseAttribute : public UmlClassMember {
 
 #ifdef WITHPYTHON
     //internal, do NOT use it
-    
+
     virtual void read_python_();
 #endif
 
@@ -212,12 +213,13 @@ class UmlBaseAttribute : public UmlClassMember {
 
 };
 
-inline UmlBaseAttribute::UmlBaseAttribute(void * id, const Q3CString & n) : UmlClassMember(id, n) {
-  _get_oper = 0;
-  _set_oper = 0;
-  
+inline UmlBaseAttribute::UmlBaseAttribute(void * id, const Q3CString & n) : UmlClassMember(id, n)
+{
+    _get_oper = 0;
+    _set_oper = 0;
+
 #ifdef WITHIDL
-  _idl_case = 0;
+    _idl_case = 0;
 #endif
 }
 

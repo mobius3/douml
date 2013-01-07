@@ -9,33 +9,34 @@
 // is a mother class of the class's children.
 // You can modify it as you want (except the constructor)
 
-class UmlOperation : public UmlBaseOperation {
-  public:
+class UmlOperation : public UmlBaseOperation
+{
+public:
     UmlOperation(void * id, const Q3CString & n)
-      : UmlBaseOperation(id, n) {};
-  
+        : UmlBaseOperation(id, n) {};
+
     void remove_cpp_throw();
     void add_param(int rank, aDirection dir,
-		   const char * name, UmlTypeSpec type);
+                   const char * name, UmlTypeSpec type);
     void set_cpp(const char * return_form_or_inherit,
-		 const char * params, Q3CString body,
-		 bool inlinep, const char * if_def, const char * end_if);
+                 const char * params, Q3CString body,
+                 bool inlinep, const char * if_def, const char * end_if);
     void set_java(const char * return_form, const char * params,
-		  Q3CString body, bool inlinep);
-    
+                  Q3CString body, bool inlinep);
+
     virtual void rename_jdk5();
-    
+
     static UmlOperation * java2Php(UmlClass * php, UmlClass * java,
-				   const char * name,
-				   const char * newname = 0);
-    
+                                   const char * name,
+                                   const char * newname = 0);
+
     static UmlOperation * java2Python(UmlClass * python, UmlClass * java,
-				   const char * name,
-				   const char * newname = 0);
-    
+                                      const char * name,
+                                      const char * newname = 0);
+
     static UmlOperation * cpp2Python(UmlClass * python, UmlClass * cpp,
-				  const char * name,
-				  const char * newname = 0);
+                                     const char * name,
+                                     const char * newname = 0);
 };
 
 #endif

@@ -5,10 +5,11 @@
 
 UmlJoinPseudoState * UmlBaseJoinPseudoState::create(UmlItem * parent)
 {
-  return (UmlJoinPseudoState *) parent->create_(aJoinPseudoState, "");
+    return (UmlJoinPseudoState *) parent->create_(aJoinPseudoState, "");
 }
 
-anItemKind UmlBaseJoinPseudoState::kind() {
-  return aJoinPseudoState;
+anItemKind UmlBaseJoinPseudoState::kind()
+{
+    return aJoinPseudoState;
 }
 

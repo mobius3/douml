@@ -2,7 +2,8 @@
 #define _UMLSTATEITEM_H
 
 
-class UmlStateItem {
+class UmlStateItem
+{
 };
 
 #endif

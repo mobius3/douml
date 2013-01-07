@@ -43,25 +43,26 @@ class QTextStream;
 #define isa_col_msg_dirs(x) ((x)->rtti() == RTTI_COL_MSG)
 
 class CodDirsCanvas : public QObject, public DiagramCanvas, public CodMsgSupport,
-  		      public MultipleDependency<BasicData> {
-  Q_OBJECT
-    
-  protected:
+    public MultipleDependency<BasicData>
+{
+    Q_OBJECT
+
+protected:
     double angle;
-    
+
     LabelCanvas * backward_label;
     CodLinkCanvas * link;	// to get start & end
-    
-  public:
+
+public:
     CodDirsCanvas(UmlCanvas * canvas, CodLinkCanvas * l, int id);
     virtual ~CodDirsCanvas();
-  
+
     virtual void delete_it();
     virtual void remove_it(ColMsg * msg);
-    
+
     virtual void get_from_to(CodObjCanvas *& from, CodObjCanvas *& to,
-			     bool forward);
-    
+                             bool forward);
+
     virtual UmlCode type() const;
     virtual int rtti() const;
     virtual void open();
@@ -69,24 +70,26 @@ class CodDirsCanvas : public QObject, public DiagramCanvas, public CodMsgSupport
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode &, const DiagramItem *) const;
     virtual bool copyable() const;
-  
-    void set_link(CodLinkCanvas * l) { link = l; };
+
+    void set_link(CodLinkCanvas * l) {
+        link = l;
+    };
     void update_pos(const QPoint & link_start, const QPoint & link_end);
     void update_label_pos(LabelCanvas *, bool forward);
     virtual void update_msgs();
     bool edit_drawing_settings();
     virtual void draw(QPainter & p);
     virtual void setVisible(bool yes);
-    
+
     virtual bool represents(BrowserNode *);
-    
+
     virtual void save(QTextStream & st, bool, QString & warning) const;
-    static CodDirsCanvas * read(char * & st, UmlCanvas * canvas, char * & k);
+    static CodDirsCanvas * read(char *& st, UmlCanvas * canvas, char *& k);
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
-  private slots:
+
+private slots:
     void modified();	// messages must be updated
     //void deleted();	// the relation is deleted
 };

@@ -1,11 +1,13 @@
 
 #include "UmlPackage.h"
 
-void UmlPackage::sort() {
-  sortChildren();
+void UmlPackage::sort()
+{
+    sortChildren();
 }
 
-int UmlPackage::orderWeight() {
-  return 1;
+int UmlPackage::orderWeight()
+{
+    return 1;
 }
 

@@ -34,25 +34,26 @@ class Q3ComboBox;
 class QLineEdit;
 class QCheckBox;
 
-class BrowserSearchDialog : public QDialog {
-  Q_OBJECT
- 
-  protected:
+class BrowserSearchDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     BrowserNodeList nodes;
     Q3ComboBox * kind;
     Q3ComboBox * results;
     QLineEdit * ed;
     QCheckBox * case_sensitive;
-    
+
     static int saved_kind;
     static QString saved_ed;
     static bool saved_case_sensitive;
-      
-  public:
+
+public:
     BrowserSearchDialog(const QPoint & p);
     virtual ~BrowserSearchDialog();
-    
-  protected slots:
+
+protected slots:
     void search();
     void select();
 };

@@ -35,18 +35,19 @@
 
 void EdgeMenuFactory::OnEdgeMenuRequested(uint classID)
 {
-    EdgeMenuDialog* senderWidget = qobject_cast<EdgeMenuDialog*>(sender());
-    SpawnEdgeMenu(classID,senderWidget);
+    EdgeMenuDialog * senderWidget = qobject_cast<EdgeMenuDialog *>(sender());
+    SpawnEdgeMenu(classID, senderWidget);
 }
 
-void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* senderWidget)
+void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * senderWidget)
 {
-    EdgeMenuToolBar* toolbar;
-    if(!createdToolbars.contains(classID))
-    {
+    EdgeMenuToolBar * toolbar;
+
+    if (!createdToolbars.contains(classID)) {
         toolbar = (factories[classID])();
-        createdToolbars.insert(classID,toolbar);
+        createdToolbars.insert(classID, toolbar);
     }
+
     toolbar = createdToolbars[classID];
 
 
@@ -55,12 +56,12 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* senderWidget)
 
     // position 0 and 1 signify horizontal orientation
     //          2 and 3 signify  vertical orientation
-    if(trueOrientation < 2)
+    if (trueOrientation < 2)
         orientation = 1;
     else
         orientation = 2;
 
-    if(!senderWidget->IsConnectedToToolBar())
+    if (!senderWidget->IsConnectedToToolBar())
         signalFunctors[classID](senderWidget, toolbar);
 
     toolbar->setOrientation(static_cast<Qt::Orientation>(orientation));
@@ -71,35 +72,35 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* senderWidget)
     int toolBarIconWidth = 30;
 
     // if we are near the top
-    if(trueOrientation == 0)
-    {
+    if (trueOrientation == 0) {
         int yFixup = senderWidget->frameGeometry().height() - senderWidget->height();
         point.setY(point.y() - toolBarIconHeight - yFixup);
-        point.setX(point.x() - toolBarIconWidth/2);
+        point.setX(point.x() - toolBarIconWidth / 2);
     }
+
     // if we are near the top
-    if(trueOrientation == 1)
-    {
+    if (trueOrientation == 1) {
         point.setY(point.y());
-        point.setX(point.x() - toolBarIconWidth/2);
+        point.setX(point.x() - toolBarIconWidth / 2);
     }
+
     // if we are near the left edge
-    if(trueOrientation == 2)
-    {
+    if (trueOrientation == 2) {
         point.setX(point.x() - toolBarIconWidth);
-        point.setY(point.y() - toolBarIconHeight/2);
+        point.setY(point.y() - toolBarIconHeight / 2);
     }
+
     // if we are near the right edge
-    if(trueOrientation == 3)
-    {
+    if (trueOrientation == 3) {
         point.setX(point.x());
-        point.setY(point.y() - toolBarIconHeight/2);
+        point.setY(point.y() - toolBarIconHeight / 2);
     }
+
     toolbar->move(point);
     toolbar->resize(toolbar->sizeHint());
-    if(!toolbar->isVisible())
-    {
-        toolbar->setWindowFlags(Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
+
+    if (!toolbar->isVisible()) {
+        toolbar->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
         toolbar->setAttribute(Qt::WA_ShowWithoutActivating);
         toolbar->show();
     }
@@ -107,21 +108,19 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* senderWidget)
 
 void EdgeMenuFactory::AddFactory(uint id, ToolbarFactory factory)
 {
-    if(!factories.contains(id))
-    {
-        factories.insert(id,factory);
+    if (!factories.contains(id)) {
+        factories.insert(id, factory);
     }
 }
 
 void EdgeMenuFactory::AddConnectionFunctor(uint classID, ConnectionFunctor functor)
 {
-    if(!signalFunctors.contains(classID))
-    {
-        signalFunctors.insert(classID,functor);
+    if (!signalFunctors.contains(classID)) {
+        signalFunctors.insert(classID, functor);
     }
 }
 
-void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog* parent,  QPoint origin)
+void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * parent,  QPoint origin)
 {
     SpawnEdgeMenu(classID, parent);
 }

@@ -7,23 +7,31 @@
 
 UmlSequenceDiagram * UmlBaseSequenceDiagram::create(UmlItem * parent, const char * s)
 {
-  return (UmlSequenceDiagram *) parent->create_(aSequenceDiagram, s);
+    return (UmlSequenceDiagram *) parent->create_(aSequenceDiagram, s);
 }
 
-anItemKind UmlBaseSequenceDiagram::kind() {
-  return aSequenceDiagram;
+anItemKind UmlBaseSequenceDiagram::kind()
+{
+    return aSequenceDiagram;
 }
 
-UmlSequenceDiagramDefinition * UmlBaseSequenceDiagram::definition() {
-  if (_def == 0) {
-    UmlCom::send_cmd(_identifier, sideCmd);
-    (_def = new UmlSequenceDiagramDefinition())->read_();
-  }
-  return _def;
+UmlSequenceDiagramDefinition * UmlBaseSequenceDiagram::definition()
+{
+    if (_def == 0) {
+        UmlCom::send_cmd(_identifier, sideCmd);
+        (_def = new UmlSequenceDiagramDefinition())->read_();
+    }
+
+    return _def;
 }
 
-void UmlBaseSequenceDiagram::unload(bool rec, bool del) {
-  if (_def != 0) { delete _def; _def = 0; }
-  UmlBaseDiagram::unload(rec, del);
+void UmlBaseSequenceDiagram::unload(bool rec, bool del)
+{
+    if (_def != 0) {
+        delete _def;
+        _def = 0;
+    }
+
+    UmlBaseDiagram::unload(rec, del);
 }
 

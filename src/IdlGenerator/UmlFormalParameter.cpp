@@ -31,18 +31,19 @@
 #include "UmlFormalParameter.h"
 #include "IdlSettings.h"
 
-void UmlFormalParameter::generate(QTextStream & f, Q3CString & s, const char *& sep) const {
-  f << sep << type() << ' ' << name();
-  
-  s += sep;
-  s += type();
-  s += ' ';
-  s += name();
-      
-  Q3CString dflt = IdlSettings::type(defaultValue().toString());
-      
-  if (!dflt.isEmpty())
-    f << " = " << dflt;
-  
-  sep = ", ";
+void UmlFormalParameter::generate(QTextStream & f, Q3CString & s, const char *& sep) const
+{
+    f << sep << type() << ' ' << name();
+
+    s += sep;
+    s += type();
+    s += ' ';
+    s += name();
+
+    Q3CString dflt = IdlSettings::type(defaultValue().toString());
+
+    if (!dflt.isEmpty())
+        f << " = " << dflt;
+
+    sep = ", ";
 }

@@ -36,17 +36,18 @@
 class QTextStream;
 class CppRefType;
 
-class UmlClassItem : public UmlBaseClassItem {
-  public:
+class UmlClassItem : public UmlBaseClassItem
+{
+public:
     UmlClassItem(void * id, const Q3CString & n)
-      : UmlBaseClassItem(id, n) {};
-  
+        : UmlBaseClassItem(id, n) {};
+
     static void remove_comments(Q3CString & s);
     static void remove_arrays(Q3CString & s);
     static void remove_preprocessor(Q3CString & s);
 
     virtual void generate_decl(QTextStream & f, const Q3CString & cl_stereotype,
-			       Q3CString indent, bool = FALSE) = 0;
+                               Q3CString indent, bool = FALSE) = 0;
 };
 
 #endif

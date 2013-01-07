@@ -42,50 +42,54 @@
 QSize ContinuationDialog::previous_size;
 
 ContinuationDialog::ContinuationDialog(QString & s)
-    : QDialog(0, "continuation dialog", TRUE), name(s) {
-  setCaption(TR("stereotype/continuation dialog"));
-  
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
-  QLabel * label;
-  
-  vbox->setMargin(5);
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  hbox->addWidget(label = new QLabel(TR("label : "), this));
-  ed = new LineEdit(name, this);
-  hbox->addWidget(ed);
-  ed->setFocus();
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  QPushButton * accept = new QPushButton(TR("&OK"), this);
-  QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
-  QSize bs(cancel->sizeHint());
-  
-  accept->setDefault(TRUE);
-  accept->setFixedSize(bs);
-  cancel->setFixedSize(bs);
-  
-  hbox->addWidget(accept);
-  hbox->addWidget(cancel);
-    
-  connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
-  connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    : QDialog(0, "continuation dialog", TRUE), name(s)
+{
+    setCaption(TR("stereotype/continuation dialog"));
+
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    Q3HBoxLayout * hbox;
+    QLabel * label;
+
+    vbox->setMargin(5);
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    hbox->addWidget(label = new QLabel(TR("label : "), this));
+    ed = new LineEdit(name, this);
+    hbox->addWidget(ed);
+    ed->setFocus();
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    QPushButton * accept = new QPushButton(TR("&OK"), this);
+    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QSize bs(cancel->sizeHint());
+
+    accept->setDefault(TRUE);
+    accept->setFixedSize(bs);
+    cancel->setFixedSize(bs);
+
+    hbox->addWidget(accept);
+    hbox->addWidget(cancel);
+
+    connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
-void ContinuationDialog::polish() {
-  QDialog::polish();
-  UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
+void ContinuationDialog::polish()
+{
+    QDialog::polish();
+    UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
-ContinuationDialog::~ContinuationDialog() {
-  previous_size = size();
+ContinuationDialog::~ContinuationDialog()
+{
+    previous_size = size();
 }
 
-void ContinuationDialog::accept() {
-  name = ed->text();
-  
-  QDialog::accept();
+void ContinuationDialog::accept()
+{
+    name = ed->text();
+
+    QDialog::accept();
 }

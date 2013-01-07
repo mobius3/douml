@@ -11,8 +11,9 @@ class Context;
 // is a mother class of the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n) :  UmlBaseAttribute(id, n) {};
 
     virtual void change(Context & ctx);

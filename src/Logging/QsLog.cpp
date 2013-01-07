@@ -35,7 +35,7 @@
 
 namespace QsLogging
 {
-typedef QList<Destination*> DestinationList;
+typedef QList<Destination *> DestinationList;
 
 
 static const char TrivialString[] = "TRIVIAL";
@@ -49,114 +49,115 @@ static const char FatalString[] = "FATAL";
 // not using Qt::ISODate because we need the milliseconds too
 static const QString fmtDateTime("yyyy-MM-ddThh:mm:ss.zzz");
 
-static const char* LevelToText(Level theLevel)
+static const char * LevelToText(Level theLevel)
 {
-   switch( theLevel )
-   {
-   case TrivialLevel:
-      return TrivialString;
-   case TraceLevel:
-      return TraceString;
-   case DebugLevel:
-      return DebugString;
-   case InfoLevel:
-      return InfoString;
-   case WarnLevel:
-      return WarnString;
-   case ErrorLevel:
-      return ErrorString;
-   case FatalLevel:
-      return FatalString;
-   default:
-      {
-         assert(!"bad log level");
-         return InfoString;
-      }
-   }
+    switch (theLevel) {
+    case TrivialLevel:
+        return TrivialString;
+
+    case TraceLevel:
+        return TraceString;
+
+    case DebugLevel:
+        return DebugString;
+
+    case InfoLevel:
+        return InfoString;
+
+    case WarnLevel:
+        return WarnString;
+
+    case ErrorLevel:
+        return ErrorString;
+
+    case FatalLevel:
+        return FatalString;
+
+    default: {
+        assert(!"bad log level");
+        return InfoString;
+    }
+    }
 }
 
 class LoggerImpl
 {
 public:
-   LoggerImpl() :
-      level(InfoLevel)
-   {
+    LoggerImpl() :
+        level(InfoLevel) {
 
-   }
-   QMutex logMutex;
-   Level level;
-   DestinationList destList;
+    }
+    QMutex logMutex;
+    Level level;
+    DestinationList destList;
 };
 
 Logger::Logger() :
-   d(new LoggerImpl)
+    d(new LoggerImpl)
 {
 }
 
 Logger::~Logger()
 {
-   delete d;
+    delete d;
 }
 
-void Logger::addDestination(Destination* destination)
+void Logger::addDestination(Destination * destination)
 {
-   assert(destination);
-       d->destList.push_back(destination);
+    assert(destination);
+    d->destList.push_back(destination);
 }
 
 void Logger::setLoggingLevel(Level newLevel)
 {
-   d->level = newLevel;
+    d->level = newLevel;
 }
 
 Level Logger::loggingLevel() const
 {
-   return d->level;
+    return d->level;
 }
 
 //! creates the complete log message and passes it to the logger
 void Logger::Helper::writeToLog()
 {
-   const char* const levelName = LevelToText(level);
-   const QString completeMessage(QString("%1 %2 %3")
-      .arg(levelName, 5)
-      .arg(QDateTime::currentDateTime().toString(fmtDateTime))
-      .arg(buffer)
-      );
+    const char * const levelName = LevelToText(level);
+    const QString completeMessage(QString("%1 %2 %3")
+                                  .arg(levelName, 5)
+                                  .arg(QDateTime::currentDateTime().toString(fmtDateTime))
+                                  .arg(buffer)
+                                 );
 
-   Logger& logger = Logger::instance();
-   QMutexLocker lock(&logger.d->logMutex);
-   logger.write(completeMessage);
+    Logger & logger = Logger::instance();
+    QMutexLocker lock(&logger.d->logMutex);
+    logger.write(completeMessage);
 }
 
 Logger::Helper::~Helper()
 {
-   try
-   {
-      writeToLog();
-   }
-   catch(std::exception& e)
-   {
-      // you shouldn't throw exceptions from a sink
-      Q_UNUSED(e);
-      assert(!"exception in logger helper destructor");
-      throw;
-   }
+    try {
+        writeToLog();
+    }
+    catch (std::exception & e) {
+        // you shouldn't throw exceptions from a sink
+        Q_UNUSED(e);
+        assert(!"exception in logger helper destructor");
+        throw;
+    }
 }
 
 //! sends the message to all the destinations
-void Logger::write(const QString& message)
+void Logger::write(const QString & message)
 {
-   for(DestinationList::iterator it = d->destList.begin(),
-       endIt = d->destList.end();it != endIt;++it)
-   {
-      if( !(*it) )
-      {
-         assert(!"null log destination");
-         continue;
-      }
-      (*it)->write(message);
-   }
+    for (DestinationList::iterator it = d->destList.begin(),
+         endIt = d->destList.end(); it != endIt; ++it) {
+        if (!(*it)) {
+            assert(!"null log destination");
+            continue;
+        }
+
+        (*it)->write(message);
+    }
 }
 
 } // end namespace

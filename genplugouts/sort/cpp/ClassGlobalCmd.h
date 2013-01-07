@@ -4,7 +4,7 @@
 
 // Internal enum
 enum ClassGlobalCmd {
-  findClassCmd
+    findClassCmd
 
 };
 #endif

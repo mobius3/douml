@@ -29,23 +29,24 @@
 #include <qstringlist.h>
 #include <qmap.h>
 
-class Shortcut {
-  public:
+class Shortcut
+{
+public:
     static void init(bool conv);
     static const QStringList & cmds();
     static const QStringList & keys();
 
     static const QMap<QString, QString> & shortcuts();
     static QString extract(QString, BooL & shift, BooL & ctrl, BooL & alt);
-    
+
     static QString shortcut(int key, int buttons);
-    
+
     static void raz();
     static void add(QString k, bool shift, bool ctrl, bool alt, QString s);
-    
+
     static void save();
-    
-  private:
+
+private:
     static void load(bool conv);
 };
 

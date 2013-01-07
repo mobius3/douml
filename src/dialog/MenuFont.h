@@ -26,22 +26,23 @@
 #ifndef MENUFONT_H
 #define MENUFONT_H
 
-#include <qmenudata.h> 
+#include <qmenudata.h>
 #include <QMenuItem> //[lgfreitas] added for QMenuItem
 
 #include "UmlEnum.h"
 
-class MenuFont : public QMenuItem { // QCustomMenuItem does not exists in Qt4. Hopefully QMenuItem will work...
-  protected:
+class MenuFont : public QMenuItem   // QCustomMenuItem does not exists in Qt4. Hopefully QMenuItem will work...
+{
+protected:
     QString str;
     QFont font;
-  
-  public:
+
+public:
     MenuFont(const QString & s, QFont f);
-    virtual ~MenuFont(){};
+    virtual ~MenuFont() {};
 
     virtual void paint(QPainter * p, const QColorGroup & /*cg*/, bool /*act*/,
-		       bool /*enabled*/, int x, int y, int w, int h);
+                       bool /*enabled*/, int x, int y, int w, int h);
     virtual QSize sizeHint();
 };
 

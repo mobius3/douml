@@ -1,7 +1,8 @@
 
 #include "UmlTerminatePseudoState.h"
 
-const char * UmlTerminatePseudoState::sKind() const {
-  return "terminate";
+const char * UmlTerminatePseudoState::sKind() const
+{
+    return "terminate";
 }
 

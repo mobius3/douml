@@ -35,83 +35,90 @@
 BrowserView * BrowserView::the;
 QDir BrowserView::dir;
 
-BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent) {
-  the = this;
-  
-  setSorting(-1);		// manual sorting
-  addColumn("browser          ");
-  addColumn("Owner id");
-  addColumn("Owner name");
-  addColumn("Revision");
-  addColumn("Modified by");
-  setColumnWidthMode(0, Maximum);
-  setColumnWidthMode(1, Maximum);
-  setColumnWidthMode(2, Maximum);
-  setColumnWidthMode(3, Maximum);
-  setColumnWidthMode(4, Maximum);
-  setColumnAlignment(1, ::Qt::AlignHCenter);
-  setColumnAlignment(2, ::Qt::AlignHCenter);
-  setColumnAlignment(3, ::Qt::AlignHCenter);
-  setColumnAlignment(4, ::Qt::AlignHCenter);
-  setTreeStepSize(18);
-  
-  connect(this, SIGNAL(rightButtonPressed(Q3ListViewItem *, const QPoint &, int)),
-	  this, SLOT(rightPressed(Q3ListViewItem *)));
+BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent)
+{
+    the = this;
+
+    setSorting(-1);		// manual sorting
+    addColumn("browser          ");
+    addColumn("Owner id");
+    addColumn("Owner name");
+    addColumn("Revision");
+    addColumn("Modified by");
+    setColumnWidthMode(0, Maximum);
+    setColumnWidthMode(1, Maximum);
+    setColumnWidthMode(2, Maximum);
+    setColumnWidthMode(3, Maximum);
+    setColumnWidthMode(4, Maximum);
+    setColumnAlignment(1, ::Qt::AlignHCenter);
+    setColumnAlignment(2, ::Qt::AlignHCenter);
+    setColumnAlignment(3, ::Qt::AlignHCenter);
+    setColumnAlignment(4, ::Qt::AlignHCenter);
+    setTreeStepSize(18);
+
+    connect(this, SIGNAL(rightButtonPressed(Q3ListViewItem *, const QPoint &, int)),
+            this, SLOT(rightPressed(Q3ListViewItem *)));
 }
 
-BrowserView::~BrowserView() {
+BrowserView::~BrowserView()
+{
 }
 
-void BrowserView::close() {
-  if (firstChild() != 0) {
-    dir.rmdir("all.lock");
-    clear();
-  }
+void BrowserView::close()
+{
+    if (firstChild() != 0) {
+        dir.rmdir("all.lock");
+        clear();
+    }
 }
 
 BrowserNode * BrowserView::get_project()
 {
-  return (BrowserNode *) the->firstChild();
+    return (BrowserNode *) the->firstChild();
 }
 
-void BrowserView::set_project(QDir di) {
-  dir = di;
-  new BrowserNode(the, dir.dirName() + ".prj");
-  setRootIsDecorated(TRUE/*FALSE*/);
+void BrowserView::set_project(QDir di)
+{
+    dir = di;
+    new BrowserNode(the, dir.dirName() + ".prj");
+    setRootIsDecorated(TRUE/*FALSE*/);
 }
 
-void BrowserView::rightPressed(Q3ListViewItem * item) {
-  if (item != 0)
-    ((BrowserNode *) item)->menu();
+void BrowserView::rightPressed(Q3ListViewItem * item)
+{
+    if (item != 0)
+        ((BrowserNode *) item)->menu();
 }
 
-void BrowserView::keyPressEvent(QKeyEvent * e) {
-  switch (e->state()) {
-  case ::Qt::ControlModifier:
-  case ::Qt::AltModifier:
-    switch (e->key()) {
-    case ::Qt::Key_A:
-    case ::Qt::Key_P:
-    case ::Qt::Key_U:
-      {
-	Q3ListViewItem * t = selectedItem();
-	
-	if (t!= 0) {
-	  ((BrowserNode *) t)->key_event(e);
-	  return;
-	}
-      }
+void BrowserView::keyPressEvent(QKeyEvent * e)
+{
+    switch (e->state()) {
+    case ::Qt::ControlModifier:
+    case ::Qt::AltModifier:
+        switch (e->key()) {
+        case ::Qt::Key_A:
+        case ::Qt::Key_P:
+        case ::Qt::Key_U: {
+            Q3ListViewItem * t = selectedItem();
+
+            if (t != 0) {
+                ((BrowserNode *) t)->key_event(e);
+                return;
+            }
+        }
+        }
+
+        break;
+
+    default:
+        break;
     }
-    break;
-  default:
-    break;
-  }
-  
-  Q3ListView::keyPressEvent(e);
+
+    Q3ListView::keyPressEvent(e);
 }
 
 void BrowserView::select(Q3ListViewItem * b)
 {
-  the->ensureItemVisible(b);
-  the->setSelected(b, TRUE);
+    the->ensureItemVisible(b);
+    the->setSelected(b, TRUE);
 }

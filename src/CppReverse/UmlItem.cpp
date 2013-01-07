@@ -29,28 +29,34 @@
 //Added by qt3to4:
 #include <Q3PtrList>
 
-UmlItem::~UmlItem() {
+UmlItem::~UmlItem()
+{
 }
 
 #ifdef ROUNDTRIP
-void UmlItem::upload(ClassContainer *) {
-  // does nothing
+void UmlItem::upload(ClassContainer *)
+{
+    // does nothing
 }
 
-bool UmlItem::set_roundtrip_expected() {
-  // does nothing
-  return TRUE;
+bool UmlItem::set_roundtrip_expected()
+{
+    // does nothing
+    return TRUE;
 }
 
-void UmlItem::mark_useless(Q3PtrList<UmlItem> &) {
-  // does nothing
+void UmlItem::mark_useless(Q3PtrList<UmlItem> &)
+{
+    // does nothing
 }
 
-void UmlItem::scan_it(int &) {
-  // does nothing
+void UmlItem::scan_it(int &)
+{
+    // does nothing
 }
 
-void UmlItem::send_it(int) {
-  // does nothing
+void UmlItem::send_it(int)
+{
+    // does nothing
 }
 #endif

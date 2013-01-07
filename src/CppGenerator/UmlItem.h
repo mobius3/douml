@@ -34,17 +34,18 @@
 class QTextStream;
 class UmlPackage;
 
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n)
-      : UmlBaseItem(id, n) {
+        : UmlBaseItem(id, n) {
     };
     virtual ~UmlItem();
-    
+
     virtual void generate();
     virtual UmlPackage * package();
     bool manage_comment(const char *& p, const char *& pp, bool javadoc);
-    bool manage_description(const char *& p, const char *& pp);    
+    bool manage_description(const char *& p, const char *& pp);
     void replace_alias(Q3CString & s);
     void manage_alias(const char *& p, QTextStream & ts);
 };

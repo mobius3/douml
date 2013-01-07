@@ -5,88 +5,93 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-Q3CString UmlPackage::sKind() {
-  return (stereotype() == "profile")
-    ? "profile" : "package";
+Q3CString UmlPackage::sKind()
+{
+    return (stereotype() == "profile")
+           ? "profile" : "package";
 }
 
-void UmlPackage::html(Q3CString pfix, unsigned int rank, unsigned int level) {
-  define();
-  
-  if (stereotype() == "profile")
-    chapter("Profile", pfix, rank, "profile", level);
-  else
-    chapter("Package", pfix, rank, "package", level);
+void UmlPackage::html(Q3CString pfix, unsigned int rank, unsigned int level)
+{
+    define();
 
-  Q3CString s = description();
-  
-  if (!s.isEmpty()) {
-    fw.write("<p>");
-    writeq(s);
-    fw.write("<br /></p>");
-  }
-  
-  bool ul = FALSE;
-  
-  s = cppNamespace();
-  
-  if (!s.isEmpty()) {
-    fw.write("<p></p><ul>\n");
-    ul = TRUE;
-    fw.write("<li>C++ namespace : ");
-    writeq(s);
-    fw.write("</li>\n");
-  }
+    if (stereotype() == "profile")
+        chapter("Profile", pfix, rank, "profile", level);
+    else
+        chapter("Package", pfix, rank, "package", level);
 
-  s = javaPackage();
-  
-  if (!s.isEmpty()) {
-    if (! ul)
-      fw.write("<p></p><ul>");
-    ul = TRUE;
-    fw.write("<li>Java package : ");
-    writeq(s);
-    fw.write("</li>\n");
-  }
-    
-  if (ul)
-    fw.write("</ul>\n");
-    
-  write_dependencies();
-    
-  UmlDiagram * d = associatedDiagram();
-  
-  if (d != 0) {
-    fw.write("<p>Diagram : ");
-    d->write();
-    fw.write("</p>\n");
-  }
+    Q3CString s = description();
 
-  write_properties();
+    if (!s.isEmpty()) {
+        fw.write("<p>");
+        writeq(s);
+        fw.write("<br /></p>");
+    }
 
-  write_children(pfix, rank, level);
+    bool ul = FALSE;
 
-  unload(FALSE, FALSE);
+    s = cppNamespace();
+
+    if (!s.isEmpty()) {
+        fw.write("<p></p><ul>\n");
+        ul = TRUE;
+        fw.write("<li>C++ namespace : ");
+        writeq(s);
+        fw.write("</li>\n");
+    }
+
+    s = javaPackage();
+
+    if (!s.isEmpty()) {
+        if (! ul)
+            fw.write("<p></p><ul>");
+
+        ul = TRUE;
+        fw.write("<li>Java package : ");
+        writeq(s);
+        fw.write("</li>\n");
+    }
+
+    if (ul)
+        fw.write("</ul>\n");
+
+    write_dependencies();
+
+    UmlDiagram * d = associatedDiagram();
+
+    if (d != 0) {
+        fw.write("<p>Diagram : ");
+        d->write();
+        fw.write("</p>\n");
+    }
+
+    write_properties();
+
+    write_children(pfix, rank, level);
+
+    unload(FALSE, FALSE);
 }
 
-void UmlPackage::memo_ref() {
-  packages.addElement(this);
-  UmlItem::memo_ref();
+void UmlPackage::memo_ref()
+{
+    packages.addElement(this);
+    UmlItem::memo_ref();
 }
 
 void UmlPackage::ref_index()
 {
-  if (!packages.isEmpty())
-    fw.write("<a href=\"packages.html\" target = \"projectFrame\"><b> -Packages- </b></a>");
+    if (!packages.isEmpty())
+        fw.write("<a href=\"packages.html\" target = \"projectFrame\"><b> -Packages- </b></a>");
 }
 
 void UmlPackage::generate_index()
 {
-  UmlItem::generate_index(packages, "Packages", "packages");
+    UmlItem::generate_index(packages, "Packages", "packages");
 }
 
-bool UmlPackage::chapterp() {
-  return TRUE;
+bool UmlPackage::chapterp()
+{
+    return TRUE;
 }
 
 Vector UmlPackage::packages;

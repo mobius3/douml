@@ -26,7 +26,7 @@
 #ifndef UMLRELATION_H
 #define UMLRELATION_H
 
-#include <q3valuelist.h> 
+#include <q3valuelist.h>
 //Added by qt3to4:
 #include <Q3CString>
 
@@ -36,17 +36,18 @@
 class Class;
 class UmlClass;
 
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n)
-      : UmlBaseRelation(id, n) {
-    };  
-  
+        : UmlBaseRelation(id, n) {
+    };
+
     static bool new_one(Class * container, const Q3CString & name,
-			UmlTypeSpec & dest, 
-			aVisibility visibility,	bool staticp,
-			bool constp, const Q3CString & value,
-			Q3CString comment, Q3CString description);
+                        UmlTypeSpec & dest,
+                        aVisibility visibility,	bool staticp,
+                        bool constp, const Q3CString & value,
+                        Q3CString comment, Q3CString description);
 };
 
 #endif

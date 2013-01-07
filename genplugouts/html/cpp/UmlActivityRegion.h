@@ -6,14 +6,15 @@
 #include "UmlActivityItem.h"
 #include <q3cstring.h>
 
-class UmlActivityRegion : public UmlBaseActivityRegion, public UmlActivityItem {
-  protected:
+class UmlActivityRegion : public UmlBaseActivityRegion, public UmlActivityItem
+{
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityRegion(void * id, const Q3CString & s) : UmlBaseActivityRegion(id, s) {
+    UmlActivityRegion(void * id, const Q3CString & s) : UmlBaseActivityRegion(id, s) {
     }
 
 
-  public:
+public:
     virtual bool chapterp();
 
 };

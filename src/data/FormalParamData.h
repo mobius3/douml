@@ -34,42 +34,59 @@
 
 #include "AType.h"
 
-class FormalParamData : public QObject {
-  Q_OBJECT
-    
-  protected:
+class FormalParamData : public QObject
+{
+    Q_OBJECT
+
+protected:
     WrapperStr name;
     WrapperStr type;		// "class" ..., C++
     AType default_value;	// C++
     AType extends;		// Java
 
-  public:
+public:
     FormalParamData() {};
-    FormalParamData(const FormalParamData& p);
-    FormalParamData& operator=(const FormalParamData&);
-  
-    const char * get_name() const { return name; };
-    void set_name(const QString & s) { name = s; };
-    void set_name(const char * s) { name = s; };
-    
-    const char * get_type() const { return type; };
-    void set_type(const char * s) { type = s; };
-    void set_type(const QString & s) { type = s; };
-    
-    const AType & get_default_value() const { return default_value; };
+    FormalParamData(const FormalParamData & p);
+    FormalParamData & operator=(const FormalParamData &);
+
+    const char * get_name() const {
+        return name;
+    };
+    void set_name(const QString & s) {
+        name = s;
+    };
+    void set_name(const char * s) {
+        name = s;
+    };
+
+    const char * get_type() const {
+        return type;
+    };
+    void set_type(const char * s) {
+        type = s;
+    };
+    void set_type(const QString & s) {
+        type = s;
+    };
+
+    const AType & get_default_value() const {
+        return default_value;
+    };
     void set_default_value(BrowserClass * t, const QString & e);
-    
-    const AType & get_extends() const { return extends; };
+
+    const AType & get_extends() const {
+        return extends;
+    };
     void set_extends(BrowserClass * t, const QString & e);
-    
+
     void send_uml_def(ToolCom * com);
     void read(ToolCom * com, const char *& args);
     static void skip(ToolCom * com, const char *& args);
-    
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * &);
-    
-  protected slots:
+    void read(char *&);
+
+protected slots:
     void on_delete_default();
     void on_delete_extends();
 };

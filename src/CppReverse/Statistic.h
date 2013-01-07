@@ -26,29 +26,42 @@
 #ifndef STATISTIC_H
 #define STATISTIC_H
 
-class Statistic {
+class Statistic
+{
 # ifdef ROUNDTRIP
-  protected:
+protected:
     static unsigned n_updated;
     static unsigned n_created;
-    
-  public:
-    static void one_class_updated_more() { n_updated += 1; };
-    static void one_class_created_more() { n_created += 1; };
+
+public:
+    static void one_class_updated_more() {
+        n_updated += 1;
+    };
+    static void one_class_created_more() {
+        n_created += 1;
+    };
 # else
-  protected:
+protected:
     static unsigned n_classes;
     static unsigned n_attributes;
     static unsigned n_relations;
     static unsigned n_operations;
-    
-  public:
-    static void one_class_more() { n_classes += 1; };
-    static void one_attribute_more() { n_attributes += 1; };
-    static void one_relation_more() { n_relations += 1; };
-    static void one_operation_more() { n_operations += 1; };
+
+public:
+    static void one_class_more() {
+        n_classes += 1;
+    };
+    static void one_attribute_more() {
+        n_attributes += 1;
+    };
+    static void one_relation_more() {
+        n_relations += 1;
+    };
+    static void one_operation_more() {
+        n_operations += 1;
+    };
 # endif
-    
+
     static void produce();
 };
 

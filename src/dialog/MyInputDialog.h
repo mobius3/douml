@@ -37,30 +37,31 @@ class QValidator;
 
 class LineEdit;
 
-class MyInputDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class MyInputDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     LineEdit * le;
     Q3ComboBox * cb;
-    
+
     static QSize previous_size;
-      
+
     MyInputDialog(const char * title, const QString & msg,
-		  const QString & init);
+                  const QString & init);
     MyInputDialog(const char * title, const QString & msg,
-		  const QStringList & l, const QString & init, bool existing);
+                  const QStringList & l, const QString & init, bool existing);
     virtual ~MyInputDialog();
-    
-  public:
+
+public:
     static QString getText(const char * title, const QString & msg,
-			   const QString & init, BooL & ok,
-			   const QValidator * v = 0);
+                           const QString & init, BooL & ok,
+                           const QValidator * v = 0);
     static QString getText(const char * title, const QString & msg,
-			   const QStringList & l, const QString & init,
-			   bool existing, BooL & ok);
-    
-  protected slots:
+                           const QStringList & l, const QString & init,
+                           bool existing, BooL & ok);
+
+protected slots:
     virtual void polish();
     virtual void accept();
 };

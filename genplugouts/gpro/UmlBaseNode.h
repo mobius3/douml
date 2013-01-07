@@ -10,8 +10,9 @@ class UmlNode;
 class UmlDeploymentDiagram;
 
 //  Manage the nodes
-class UmlBaseNode : public UmlItem {
-  public:
+class UmlBaseNode : public UmlItem
+{
+public:
     // returns a new node named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -31,11 +32,11 @@ class UmlBaseNode : public UmlItem {
     bool set_AssociatedDiagram(UmlDeploymentDiagram * d);
 
 
-  private:
+private:
     UmlDeploymentDiagram * _assoc_diagram;
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseNode(void * id, const Q3CString & n) : UmlItem(id, n) {};
 

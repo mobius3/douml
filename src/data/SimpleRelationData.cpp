@@ -45,120 +45,136 @@
 #include "myio.h"
 #include "ToolCom.h"
 
-SimpleRelationData::SimpleRelationData(UmlCode e) : type(e), end(0) {
+SimpleRelationData::SimpleRelationData(UmlCode e) : type(e), end(0)
+{
 }
 
 SimpleRelationData::SimpleRelationData(const BrowserSimpleRelation * model,
-				       BrowserSimpleRelation * r)
-    : SimpleData(model->get_data()) {
-  SimpleRelationData * md = (SimpleRelationData *) model->get_data();
-  
-  type = md->type;
-  set_start_end(r, md->end);
+                                       BrowserSimpleRelation * r)
+    : SimpleData(model->get_data())
+{
+    SimpleRelationData * md = (SimpleRelationData *) model->get_data();
+
+    type = md->type;
+    set_start_end(r, md->end);
 }
 
-SimpleRelationData::~SimpleRelationData() {
+SimpleRelationData::~SimpleRelationData()
+{
 }
 
-void SimpleRelationData::delete_it() {
-  if (!deletedp()) {
-    if (!browser_node->deletedp())
-      browser_node->delete_it();
-    BasicData::delete_it();
-  }
+void SimpleRelationData::delete_it()
+{
+    if (!deletedp()) {
+        if (!browser_node->deletedp())
+            browser_node->delete_it();
+
+        BasicData::delete_it();
+    }
 }
 
-void SimpleRelationData::set_start_end(BrowserSimpleRelation * s, BrowserNode * e) {
-  browser_node = s;
-  end = e;
-  connect(e->get_data(), SIGNAL(deleted()), this, SLOT(end_deleted()));
+void SimpleRelationData::set_start_end(BrowserSimpleRelation * s, BrowserNode * e)
+{
+    browser_node = s;
+    end = e;
+    connect(e->get_data(), SIGNAL(deleted()), this, SLOT(end_deleted()));
 }
 
-BrowserNode * SimpleRelationData::get_start_node() const {
-  return (BrowserNode *) browser_node->parent();
+BrowserNode * SimpleRelationData::get_start_node() const
+{
+    return (BrowserNode *) browser_node->parent();
 }
 
-QString SimpleRelationData::definition(bool, bool with_kind) const {
-  QString r;
-  
-  if (with_kind)
-    r = "[" + browser_node->get_stype() + "] ";
+QString SimpleRelationData::definition(bool, bool with_kind) const
+{
+    QString r;
 
-  switch (type) {
-  case UmlDependOn:
-    return r + "<dependency>";
-  case UmlInherit:
-    return r + "<generalization>";
-  default:
-    return "SimpleRelationData::definition error !";
-  }
+    if (with_kind)
+        r = "[" + browser_node->get_stype() + "] ";
+
+    switch (type) {
+    case UmlDependOn:
+        return r + "<dependency>";
+
+    case UmlInherit:
+        return r + "<generalization>";
+
+    default:
+        return "SimpleRelationData::definition error !";
+    }
 }
 
-void SimpleRelationData::edit() {
-  (new SimpleRelationDialog(this))->show();
+void SimpleRelationData::edit()
+{
+    (new SimpleRelationDialog(this))->show();
 }
 
-void SimpleRelationData::end_deleted() {
-  browser_node->package_modified();
-  delete_it();
+void SimpleRelationData::end_deleted()
+{
+    browser_node->package_modified();
+    delete_it();
 }
 
 //
 
 void SimpleRelationData::send_uml_def(ToolCom * com,
-				      BrowserNode * bn,
-				      const QString & comment) {
-  BasicData::send_uml_def(com, bn, comment);
-  switch (type) {
-  case UmlDependOn:
-    com->write_char(UmlDependency);
-    break;
-  default:	// UmlInherit:
-    com->write_char(UmlGeneralisation);
-    break;
-  }
-    
-  get_end_node()->write_id(com);
-}
-
-void SimpleRelationData::save(QTextStream & st, QString & warning) const {
-  st << stringify(type);
-  indent(+1);
-  
-  BasicData::save(st, warning);
-  nl_indent(st);
-  st << "on ";
-  end->save(st, TRUE, warning);
-  indent(-1);
-}
-
-SimpleRelationData * SimpleRelationData::read(char * & st)
+                                      BrowserNode * bn,
+                                      const QString & comment)
 {
-  SimpleRelationData * result =
-    new SimpleRelationData(relation_type(read_keyword(st), TRUE));
-  char * k = read_keyword(st);
-  
-  result->BasicData::read(st, k);	// updates k
+    BasicData::send_uml_def(com, bn, comment);
 
-  if (strcmp(k, "on"))
-    wrong_keyword(k, "on");
-  
-  k = read_keyword(st);
-  
-  // note : BrowserArtifact::read get Component def on component -> artifact
-  if (((result->end = BrowserArtifact::read(st, k, 0)) == 0) &&
-      ((result->end = BrowserComponent::read(st, k, 0)) == 0) &&
-      ((result->end = BrowserUseCase::read(st, k, 0)) == 0) &&
-      ((result->end = BrowserPackage::read(st, k, 0, FALSE)) == 0) &&
-      ((result->end = BrowserDeploymentNode::read(st, k, 0)) == 0) &&
-      ((result->end = BrowserActivity::read(st, k, 0)) == 0) &&
-      ((result->end = BrowserActivityAction::read(st, k, 0)) == 0) &&
-      ((result->end = BrowserActivityObject::read(st, k, 0)) == 0) &&
-      ((result->end = BrowserClass::read(st, k, 0)) == 0))
-    wrong_keyword(k, "a ref to a class, component, usecase, package, deployment node, activity, activity action or activity object");
-  
-  connect(result->end->get_data(), SIGNAL(deleted()),
-	  result, SLOT(end_deleted()));
-  
-  return result;
+    switch (type) {
+    case UmlDependOn:
+        com->write_char(UmlDependency);
+        break;
+
+    default:	// UmlInherit:
+        com->write_char(UmlGeneralisation);
+        break;
+    }
+
+    get_end_node()->write_id(com);
+}
+
+void SimpleRelationData::save(QTextStream & st, QString & warning) const
+{
+    st << stringify(type);
+    indent(+1);
+
+    BasicData::save(st, warning);
+    nl_indent(st);
+    st << "on ";
+    end->save(st, TRUE, warning);
+    indent(-1);
+}
+
+SimpleRelationData * SimpleRelationData::read(char *& st)
+{
+    SimpleRelationData * result =
+        new SimpleRelationData(relation_type(read_keyword(st), TRUE));
+    char * k = read_keyword(st);
+
+    result->BasicData::read(st, k);	// updates k
+
+    if (strcmp(k, "on"))
+        wrong_keyword(k, "on");
+
+    k = read_keyword(st);
+
+    // note : BrowserArtifact::read get Component def on component -> artifact
+    if (((result->end = BrowserArtifact::read(st, k, 0)) == 0) &&
+        ((result->end = BrowserComponent::read(st, k, 0)) == 0) &&
+        ((result->end = BrowserUseCase::read(st, k, 0)) == 0) &&
+        ((result->end = BrowserPackage::read(st, k, 0, FALSE)) == 0) &&
+        ((result->end = BrowserDeploymentNode::read(st, k, 0)) == 0) &&
+        ((result->end = BrowserActivity::read(st, k, 0)) == 0) &&
+        ((result->end = BrowserActivityAction::read(st, k, 0)) == 0) &&
+        ((result->end = BrowserActivityObject::read(st, k, 0)) == 0) &&
+        ((result->end = BrowserClass::read(st, k, 0)) == 0))
+        wrong_keyword(k, "a ref to a class, component, usecase, package, deployment node, activity, activity action or activity object");
+
+    connect(result->end->get_data(), SIGNAL(deleted()),
+            result, SLOT(end_deleted()));
+
+    return result;
 }

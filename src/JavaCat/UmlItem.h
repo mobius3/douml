@@ -37,13 +37,14 @@
 class ClassContainer;
 #endif
 
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n)
-      : UmlBaseItem(id, n) {
+        : UmlBaseItem(id, n) {
     };
     virtual ~UmlItem();
-    
+
 #ifdef ROUNDTRIP
     virtual void upload(ClassContainer *);
     virtual bool set_roundtrip_expected();

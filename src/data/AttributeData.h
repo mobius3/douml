@@ -33,12 +33,13 @@
 
 class BrowserAttribute;
 
-class AttributeData : public ClassMemberData {
-  Q_OBJECT
-    
-  friend class AttributeDialog;
-  
-  protected:
+class AttributeData : public ClassMemberData
+{
+    Q_OBJECT
+
+    friend class AttributeDialog;
+
+protected:
     AType type;
     WrapperStr multiplicity;
     WrapperStr init_value;
@@ -55,100 +56,136 @@ class AttributeData : public ClassMemberData {
     bool java_transient: 1;
     bool dummy : 6;
     UmlVisibility uml_visibility : 8;	// : 4 useless here, : 8 faster than : 3 ?
-    
+
     // C++
     UmlVisibility cpp_visibility : 8;	// : 4 useless here, : 8 faster than : 3 ?
     WrapperStr cpp_decl;
-    
+
     // Java
     WrapperStr java_decl;
     WrapperStr java_annotation;
-    
+
     // Php
     WrapperStr php_decl;
-    
+
     // Python
     WrapperStr python_decl;
-    
+
     // Idl
     BrowserAttribute * idl_case;	// exclusive with idl_explicit_case
     WrapperStr idl_explicit_case;
     WrapperStr idl_decl;
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
+                              const QString & comment);
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
     virtual void send_php_def(ToolCom * com);
     virtual void send_python_def(ToolCom * com);
     virtual void send_idl_def(ToolCom * com);
-    
-  public:
+
+public:
     AttributeData();
     AttributeData(const AttributeData * model, BrowserNode *);
     virtual ~AttributeData();
-    
+
     virtual bool deletedp() const;
     virtual void set_deletedp(bool y);
-        
+
     void set_browser_node(BrowserAttribute *, bool update, bool enum_item);
-  
+
     virtual QString definition(bool full, bool with_kind) const;
     QString definition(bool full, bool mult, bool init, bool modif,
-		       DrawingLanguage language, ShowContextMode mode = noContext) const;
-    
+                       DrawingLanguage language, ShowContextMode mode = noContext) const;
+
     virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *);
-    
-    const char * get_constraint() const { return constraint; }
-    
-    const char * get_multiplicity() const { return multiplicity; }
 
-    bool get_isa_class_attribute() const { return isa_class_attribute; }
-    
-    bool get_isa_const_attribute() const { return isa_const_attribute; }
-    
-    bool get_is_derived() const { return is_derived; }
-    
-    bool get_is_derivedunion() const { return is_derivedunion; }
-    
-    bool get_is_ordered() const { return is_ordered; }
-    
-    bool get_is_unique() const { return is_unique; }
-    
-    UmlVisibility get_uml_visibility() const { return uml_visibility; }
+    const char * get_constraint() const {
+        return constraint;
+    }
+
+    const char * get_multiplicity() const {
+        return multiplicity;
+    }
+
+    bool get_isa_class_attribute() const {
+        return isa_class_attribute;
+    }
+
+    bool get_isa_const_attribute() const {
+        return isa_const_attribute;
+    }
+
+    bool get_is_derived() const {
+        return is_derived;
+    }
+
+    bool get_is_derivedunion() const {
+        return is_derivedunion;
+    }
+
+    bool get_is_ordered() const {
+        return is_ordered;
+    }
+
+    bool get_is_unique() const {
+        return is_unique;
+    }
+
+    UmlVisibility get_uml_visibility() const {
+        return uml_visibility;
+    }
     virtual UmlVisibility get_visibility(BrowserNode *);
-    UmlVisibility get_cpp_visibility() const { return cpp_visibility; }
+    UmlVisibility get_cpp_visibility() const {
+        return cpp_visibility;
+    }
     void set_visibility(UmlVisibility v);
-    
-    const AType & get_type() const { return type; }
-    void set_type(const AType & t);
-    
-    const char * get_init_value() const { return init_value; }
-    QString get_init_value_qstring() const { return init_value; }
 
-    const char * get_cppdecl() const { return cpp_decl; }
-        
-    const char * get_javadecl() const { return java_decl; }
-        
-    const char * get_phpdecl() const { return php_decl; }
-    
-    const char * get_pythondecl() const { return python_decl; }
-    
-    const char * get_idldecl() const { return idl_decl; }
+    const AType & get_type() const {
+        return type;
+    }
+    void set_type(const AType & t);
+
+    const char * get_init_value() const {
+        return init_value;
+    }
+    QString get_init_value_qstring() const {
+        return init_value;
+    }
+
+    const char * get_cppdecl() const {
+        return cpp_decl;
+    }
+
+    const char * get_javadecl() const {
+        return java_decl;
+    }
+
+    const char * get_phpdecl() const {
+        return php_decl;
+    }
+
+    const char * get_pythondecl() const {
+        return python_decl;
+    }
+
+    const char * get_idldecl() const {
+        return idl_decl;
+    }
     const char * get_idlcase() const;
     void set_idlcase(BrowserAttribute * a, const char * e);
-    
+
     void edit(bool new_st_attr);
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * & st, char * & k);
-    
+    void read(char *& st, char *& k);
+
     void replace(BrowserClass * old, BrowserClass * nw);
-    
-  protected slots:
+
+protected slots:
     void on_delete();
     void on_delete_idlcase();
 };

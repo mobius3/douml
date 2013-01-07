@@ -32,60 +32,62 @@
 QStringList Namespace::Stack;
 
 // namespace and class aliases
-QMap<Q3CString,Q3CString> Namespace::Aliases;
+QMap<Q3CString, Q3CString> Namespace::Aliases;
 
 void Namespace::enter(Q3CString s)
 {
-  for (;;) {
-    Stack.prepend(s + "\\");
-    
-    int p = s.findRev('\\');
-    
-    if (p == -1)
-      return;
-    
-    s = s.left(p - 1);
-  }
+    for (;;) {
+        Stack.prepend(s + "\\");
+
+        int p = s.findRev('\\');
+
+        if (p == -1)
+            return;
+
+        s = s.left(p - 1);
+    }
 }
 
 void Namespace::exit()
 {
-  // no really nested namespaces
-  Stack.clear();
-  Aliases.clear();
+    // no really nested namespaces
+    Stack.clear();
+    Aliases.clear();
 }
 
-QString Namespace::namespacify(Q3CString s) {
-  int index = s.find("\\");
-  
-  if (index == 0)
-    // absolute path
-    return ((const char *) s) + 1;
-  
-  QMap<Q3CString,Q3CString>::ConstIterator it;
-  
-  if (index == -1) {
-    if ((it = Aliases.find(s)) != Aliases.end())
-      // a class alias
-      return ((*it)[0] == '\\')
-	? QString(((const char *) *it) + 1)
-	: QString(*it);
-  }
-  else if ((it = Aliases.find(s.left(index))) != Aliases.end())
-    s.replace(0, index, *it);
-  else if (s.left(index) == "namespace")
-    s.remove(0, index + 1);
-  
-  return (Stack.isEmpty())
-    ? QString(s)
-    : Stack.last() + QString(s);
+QString Namespace::namespacify(Q3CString s)
+{
+    int index = s.find("\\");
+
+    if (index == 0)
+        // absolute path
+        return ((const char *) s) + 1;
+
+    QMap<Q3CString, Q3CString>::ConstIterator it;
+
+    if (index == -1) {
+        if ((it = Aliases.find(s)) != Aliases.end())
+            // a class alias
+            return ((*it)[0] == '\\')
+                   ? QString(((const char *) *it) + 1)
+                   : QString(*it);
+    }
+    else if ((it = Aliases.find(s.left(index))) != Aliases.end())
+        s.replace(0, index, *it);
+    else if (s.left(index) == "namespace")
+        s.remove(0, index + 1);
+
+    return (Stack.isEmpty())
+           ? QString(s)
+           : Stack.last() + QString(s);
 }
 
-Q3CString Namespace::current() {
-  if (Stack.isEmpty())
-    return 0;
-  
-  QString & s = Stack.last();
-  
-  return Q3CString(s.left(s.length() - 1).toAscii().constData());
+Q3CString Namespace::current()
+{
+    if (Stack.isEmpty())
+        return 0;
+
+    QString & s = Stack.last();
+
+    return Q3CString(s.left(s.length() - 1).toAscii().constData());
 }

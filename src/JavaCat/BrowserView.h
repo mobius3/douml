@@ -28,23 +28,26 @@
 
 #include <q3listview.h>
 
-class BrowserView : public Q3ListView {
-  Q_OBJECT
-    
-  protected:
+class BrowserView : public Q3ListView
+{
+    Q_OBJECT
+
+protected:
     static BrowserView * the;
-  
-  public:
+
+public:
     BrowserView(QWidget * parent);
-  
-    static BrowserView * instance() { return the; };
+
+    static BrowserView * instance() {
+        return the;
+    };
     static void select(Q3ListViewItem * b);
-    
-  protected slots:
+
+protected slots:
     void selected(Q3ListViewItem *);
     void rightPressed(Q3ListViewItem *);
-    
-  public slots:
+
+public slots:
     void refer(const QString & href);
 };
 

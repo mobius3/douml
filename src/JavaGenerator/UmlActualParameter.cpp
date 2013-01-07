@@ -24,14 +24,15 @@
 // *************************************************************************
 
 
-#include <QTextStream> 
+#include <QTextStream>
 //Added by qt3to4:
 #include <QTextStream>
 
 #include "UmlActualParameter.h"
 #include "UmlClass.h"
 
-void UmlActualParameter::generate(QTextStream & f) const {
-  f << ((rank() == 0) ? "<" : ", ");
-  UmlClass::write(f, value());
+void UmlActualParameter::generate(QTextStream & f) const
+{
+    f << ((rank() == 0) ? "<" : ", ");
+    UmlClass::write(f, value());
 }

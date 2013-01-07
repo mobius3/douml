@@ -34,12 +34,12 @@ class QTextStream;
 class ToolCom;
 
 struct InfoData {
-  WrapperStr first;
-  WrapperStr second;
-  
-  void save(QTextStream & st, const char * s1, const char * s2) const;
-  void read(char * & st, char * & k, const char * s1, const char * s2);
-  void send_def(ToolCom * com);
+    WrapperStr first;
+    WrapperStr second;
+
+    void save(QTextStream & st, const char * s1, const char * s2) const;
+    void read(char *& st, char *& k, const char * s1, const char * s2);
+    void send_def(ToolCom * com);
 };
-  
+
 #endif

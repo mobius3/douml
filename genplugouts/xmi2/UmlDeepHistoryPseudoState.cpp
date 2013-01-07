@@ -1,7 +1,8 @@
 
 #include "UmlDeepHistoryPseudoState.h"
 
-const char * UmlDeepHistoryPseudoState::sKind() const {
-  return "deepHistory";
+const char * UmlDeepHistoryPseudoState::sKind() const
+{
+    return "deepHistory";
 }
 

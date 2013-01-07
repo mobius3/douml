@@ -9,9 +9,10 @@
 
 class FileOut;
 
-class UmlFlow : public UmlBaseFlow, public UmlActivityItem {
-  public:
-     UmlFlow(void * id, const Q3CString & n) : UmlBaseFlow(id, n), _control_or_data(Unset) {
+class UmlFlow : public UmlBaseFlow, public UmlActivityItem
+{
+public:
+    UmlFlow(void * id, const Q3CString & n) : UmlBaseFlow(id, n), _control_or_data(Unset) {
     }
 
     //write the definition if it is not empty for the target language
@@ -19,20 +20,22 @@ class UmlFlow : public UmlBaseFlow, public UmlActivityItem {
 
     //goes among tree to memorize incoming flow :
     //the target memorise the current flow
-    
+
     virtual void memo_incoming_flow();
 
     void write_it(FileOut & out);
 
 
-  private:
+private:
     bool is_control_flow();
 
     ControlOrData _control_or_data;
 
 
-  public:
-    ControlOrData control_or_data() const { return _control_or_data; }
+public:
+    ControlOrData control_or_data() const {
+        return _control_or_data;
+    }
 
     void set_control_or_data(ControlOrData k);
 

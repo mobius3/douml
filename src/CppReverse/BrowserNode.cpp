@@ -26,12 +26,15 @@
 #include "BrowserNode.h"
 
 BrowserNode::BrowserNode(BrowserNode * parent, const char * n)
-    : TreeItem(parent, n) {
+    : TreeItem(parent, n)
+{
 }
 
-TreeItem::TreeItem(TreeItem * parent, const char * n) {
-  its_name = n;
-  its_parent = parent;
-  if (parent != 0)
-    its_parent->its_children.append(this);
+TreeItem::TreeItem(TreeItem * parent, const char * n)
+{
+    its_name = n;
+    its_parent = parent;
+
+    if (parent != 0)
+        its_parent->its_children.append(this);
 }

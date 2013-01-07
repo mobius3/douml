@@ -42,7 +42,7 @@
 #include "UmlWindow.h"
 #include "BrowserView.h"
 #include "translate.h"
-    
+
 QSize ImageDialog::previous_size;
 
 static QString Absolute;
@@ -50,147 +50,154 @@ static QString RelativeRoot;
 static QString RelativePrj;
 
 ImageDialog::ImageDialog(QString & p)
-    : QDialog(0, "Image dialog", TRUE), path(p) {
-  setCaption(TR("Image dialog"));
+    : QDialog(0, "Image dialog", TRUE), path(p)
+{
+    setCaption(TR("Image dialog"));
 
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-  Q3HBoxLayout * hbox;
-    
-  vbox->setMargin(5);
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  hbox->setMargin(5);
-  
-  hbox->addWidget(new QLabel(TR("Image path :"), this));
-  hbox->addWidget(edpath = new LineEdit(path, this));
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    Q3HBoxLayout * hbox;
 
-  RelativeRoot = TR("Set it relative to image root");
-  RelativePrj = TR("Set it relative to project");
-  Absolute = TR("Set it absolute");
-  
-  hbox->addWidget(new QLabel("", this));
-  
-  QPushButton * b = new SmallPushButton(TR("Browse"), this);
-  
-  hbox->addWidget(b);
-  connect(b, SIGNAL(clicked ()), this, SLOT(browse()));
-  hbox->addWidget(new QLabel("", this));
-  
-  Q3VBox * vtab = new Q3VBox(this);
-  
-  hbox->addWidget(vtab);
-  
-  pathrootbutton = new SmallPushButton((path.isEmpty() || QDir::isRelativePath(path))
-				       ? Absolute : RelativeRoot, vtab);
-  connect(pathrootbutton, SIGNAL(clicked ()), this, SLOT(root_relative()));
-  pathprjbutton = new SmallPushButton((path.isEmpty() || QDir::isRelativePath(path))
-				      ? Absolute : RelativePrj, vtab);
-  connect(pathprjbutton, SIGNAL(clicked ()), this, SLOT(prj_relative()));
-  pathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
-  hbox->addWidget(new QLabel("", this));
+    vbox->setMargin(5);
 
-  //
-  
-  QPushButton * accept = new QPushButton(TR("&OK"), this);
-  QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
-  QSize bs(cancel->sizeHint());
-  
-  accept->setDefault(TRUE);  
-  accept->setFixedSize(bs);
-  cancel->setFixedSize(bs);
-  
-  hbox = new Q3HBoxLayout(vbox); 
-  
-  hbox->addWidget(accept);
-  hbox->addWidget(cancel);
-    
-  connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
-  connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
-  
-  UmlDesktop::setsize_center(this, previous_size, 0.7, 0.01);
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+
+    hbox->addWidget(new QLabel(TR("Image path :"), this));
+    hbox->addWidget(edpath = new LineEdit(path, this));
+
+    RelativeRoot = TR("Set it relative to image root");
+    RelativePrj = TR("Set it relative to project");
+    Absolute = TR("Set it absolute");
+
+    hbox->addWidget(new QLabel("", this));
+
+    QPushButton * b = new SmallPushButton(TR("Browse"), this);
+
+    hbox->addWidget(b);
+    connect(b, SIGNAL(clicked()), this, SLOT(browse()));
+    hbox->addWidget(new QLabel("", this));
+
+    Q3VBox * vtab = new Q3VBox(this);
+
+    hbox->addWidget(vtab);
+
+    pathrootbutton = new SmallPushButton((path.isEmpty() || QDir::isRelativePath(path))
+                                         ? Absolute : RelativeRoot, vtab);
+    connect(pathrootbutton, SIGNAL(clicked()), this, SLOT(root_relative()));
+    pathprjbutton = new SmallPushButton((path.isEmpty() || QDir::isRelativePath(path))
+                                        ? Absolute : RelativePrj, vtab);
+    connect(pathprjbutton, SIGNAL(clicked()), this, SLOT(prj_relative()));
+    pathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
+    hbox->addWidget(new QLabel("", this));
+
+    //
+
+    QPushButton * accept = new QPushButton(TR("&OK"), this);
+    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+    QSize bs(cancel->sizeHint());
+
+    accept->setDefault(TRUE);
+    accept->setFixedSize(bs);
+    cancel->setFixedSize(bs);
+
+    hbox = new Q3HBoxLayout(vbox);
+
+    hbox->addWidget(accept);
+    hbox->addWidget(cancel);
+
+    connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
+
+    UmlDesktop::setsize_center(this, previous_size, 0.7, 0.01);
 }
 
-ImageDialog::~ImageDialog() {
-  previous_size = size();
+ImageDialog::~ImageDialog()
+{
+    previous_size = size();
 }
 
-void ImageDialog::browse() {
-  QString s = edpath->text().simplifyWhiteSpace();
-  const QString ns = Q3FileDialog::getOpenFileName(s, "", this, 0, TR("Select image"));
+void ImageDialog::browse()
+{
+    QString s = edpath->text().simplifyWhiteSpace();
+    const QString ns = Q3FileDialog::getOpenFileName(s, "", this, 0, TR("Select image"));
 
-  if (! ns.isEmpty()) {
-    edpath->setText(ns);
-    pathrootbutton->setText(RelativeRoot);
-    pathprjbutton->setText(RelativePrj);
-  }
-}
-
-void ImageDialog::root_relative() {
-  QString root = UmlWindow::images_root_dir();
-  
-  if (root.isEmpty()) {
-    pathrootbutton->setEnabled(FALSE);
-    return;
-  }
-  
-  const QString s = edpath->text();
-
-  if (root.at(root.length() - 1) != QChar('/'))
-    root += '/';
-    
-  if (pathrootbutton->text() == RelativeRoot) {
-    int len = root.length();
-      
-    if (
-
-
-
-	(s.find(root) == 0) &&
-
-	(s.length() >= len)) {
-      edpath->setText(s.mid(len));
-      pathrootbutton->setText(Absolute);
-      pathprjbutton->setText(Absolute);
+    if (! ns.isEmpty()) {
+        edpath->setText(ns);
+        pathrootbutton->setText(RelativeRoot);
+        pathprjbutton->setText(RelativePrj);
     }
-  }
-  else {
-    edpath->setText(root + s);
-    pathrootbutton->setText(RelativeRoot);
-    pathprjbutton->setText(RelativePrj);
-  }
 }
 
-void ImageDialog::prj_relative() {
-  QString root = BrowserView::get_dir().absPath();
-  const QString s = edpath->text();
+void ImageDialog::root_relative()
+{
+    QString root = UmlWindow::images_root_dir();
 
-  if (root.at(root.length() - 1) != QChar('/'))
-    root += '/';
-    
-  if (pathprjbutton->text() == RelativePrj) {
-    int len = root.length();
-      
-    if (
-
-
-
-	(s.find(root) == 0) &&
-
-	(s.length() >= len)) {
-      edpath->setText(s.mid(len));
-      pathrootbutton->setText(Absolute);
-      pathprjbutton->setText(Absolute);
+    if (root.isEmpty()) {
+        pathrootbutton->setEnabled(FALSE);
+        return;
     }
-  }
-  else {
-    edpath->setText(root + s);
-    pathrootbutton->setText(RelativeRoot);
-    pathprjbutton->setText(RelativePrj);
-  }
-  pathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
+
+    const QString s = edpath->text();
+
+    if (root.at(root.length() - 1) != QChar('/'))
+        root += '/';
+
+    if (pathrootbutton->text() == RelativeRoot) {
+        int len = root.length();
+
+        if (
+
+
+
+            (s.find(root) == 0) &&
+
+            (s.length() >= len)) {
+            edpath->setText(s.mid(len));
+            pathrootbutton->setText(Absolute);
+            pathprjbutton->setText(Absolute);
+        }
+    }
+    else {
+        edpath->setText(root + s);
+        pathrootbutton->setText(RelativeRoot);
+        pathprjbutton->setText(RelativePrj);
+    }
 }
 
-void ImageDialog::accept() {
-  path = edpath->text().simplifyWhiteSpace();
-  QDialog::accept();
+void ImageDialog::prj_relative()
+{
+    QString root = BrowserView::get_dir().absPath();
+    const QString s = edpath->text();
+
+    if (root.at(root.length() - 1) != QChar('/'))
+        root += '/';
+
+    if (pathprjbutton->text() == RelativePrj) {
+        int len = root.length();
+
+        if (
+
+
+
+            (s.find(root) == 0) &&
+
+            (s.length() >= len)) {
+            edpath->setText(s.mid(len));
+            pathrootbutton->setText(Absolute);
+            pathprjbutton->setText(Absolute);
+        }
+    }
+    else {
+        edpath->setText(root + s);
+        pathrootbutton->setText(RelativeRoot);
+        pathprjbutton->setText(RelativePrj);
+    }
+
+    pathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
+}
+
+void ImageDialog::accept()
+{
+    path = edpath->text().simplifyWhiteSpace();
+    QDialog::accept();
 }

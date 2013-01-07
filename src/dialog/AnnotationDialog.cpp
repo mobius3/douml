@@ -27,8 +27,8 @@
 
 
 
-#include <qlabel.h> 
-#include <qlayout.h> 
+#include <qlabel.h>
+#include <qlayout.h>
 #include <qpushbutton.h>
 #include <q3combobox.h>
 //Added by qt3to4:
@@ -43,169 +43,179 @@
 QSize AnnotationDialog::previous_size;
 
 static const char * DefaultAnnotations[] = {
-  "Deprecated", "Documented", "Inherit", "Override", "Retention",
-  "SuppressWarnings", "Target"
+    "Deprecated", "Documented", "Inherit", "Override", "Retention",
+    "SuppressWarnings", "Target"
 };
 
 AnnotationDialog::AnnotationDialog(QWidget * parent, QString & s, bool visit)
-    : QDialog(parent, "annotation editor", TRUE), value(s) {
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    : QDialog(parent, "annotation editor", TRUE), value(s)
+{
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
 
-  vbox->setMargin(5);
+    vbox->setMargin(5);
 
-  // multiline edit
-  
-  e = new MultiLineEdit(this);
-  e->setText(s);  
-  vbox->addWidget(e);
-  
-  if (! visit) {
+    // multiline edit
+
+    e = new MultiLineEdit(this);
+    e->setText(s);
+    vbox->addWidget(e);
+
+    if (! visit) {
+        e->setFocus();
+
+        // to choose and add an annotation
+
+        QLabel * label =
+            new QLabel(TR("\nTo add an annotation at the cursor position\n"
+                          "you may select it in the list and press 'add'\n"),
+                       this);
+        label->setAlignment(Qt::AlignCenter);
+        vbox->addWidget(label);
+
+        Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+        QPushButton * add_button;
+
+        hbox->setMargin(5);
+        add_button = new QPushButton(TR("Add "), this);
+        hbox->addWidget(add_button);
+        connect(add_button, SIGNAL(clicked()), this, SLOT(add_annotation()));
+
+        cb = new Q3ComboBox(FALSE, this);
+
+        QSizePolicy sp = cb->sizePolicy();
+
+        sp.setHorData(QSizePolicy::Expanding);
+        cb->setSizePolicy(sp);
+        cb->setAutoCompletion(completion());
+
+        for (int i = 0;
+             i != sizeof(DefaultAnnotations) / sizeof(*DefaultAnnotations);
+             i += 1)
+            cb->insertItem(DefaultAnnotations[i]);
+
+        QStringList list;
+
+        BrowserClass::instances(annotations, "@interface");
+
+        if (! annotations.isEmpty()) {
+            annotations.full_names(list);
+            cb->insertStringList(list);
+        }
+
+        hbox->addWidget(cb);
+
+        // buttons ok, cancel
+
+        vbox->addWidget(new QLabel("", this));
+
+        hbox = new Q3HBoxLayout(vbox);
+        hbox->setMargin(5);
+        QPushButton * accept = new QPushButton(TR("&OK"), this);
+        QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
+        QSize bs(cancel->sizeHint());
+
+        accept->setDefault(TRUE);
+        accept->setFixedSize(bs);
+        cancel->setFixedSize(bs);
+
+        hbox->addWidget(accept);
+        hbox->addWidget(cancel);
+
+        connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
+        connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
+    }
+    else {
+        e->setReadOnly(TRUE);
+
+        // buttons cancel
+
+        vbox->addWidget(new QLabel("", this));
+
+        Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+
+        hbox->setMargin(5);
+        QPushButton * close = new QPushButton(TR("&Close"), this);
+
+        hbox->addWidget(close);
+
+        connect(close, SIGNAL(clicked()), this, SLOT(reject()));
+    }
+
+    // not done in polish else the initial size is too small
+    UmlDesktop::setsize_center(this, previous_size, 0.3, 0.3);
+}
+
+AnnotationDialog::~AnnotationDialog()
+{
+    previous_size = size();
+}
+
+void AnnotationDialog::add_annotation()
+{
+    const int ndefault =
+        sizeof(DefaultAnnotations) / sizeof(*DefaultAnnotations);
+    int added_index = cb->currentItem();
+    QString added;
+
+    if (added_index < ndefault)
+        added = DefaultAnnotations[added_index];
+    else {
+        BrowserNode * cl = annotations.at(added_index - ndefault);
+        added = cl->get_name();
+
+        // have member ?
+        int n = 0;
+        QString first_name;
+        Q3ListViewItem * child;
+
+        for (child = cl->firstChild(); child != 0; child = child->nextSibling()) {
+            if (!((BrowserNode *) child)->deletedp()) {
+                switch (((BrowserNode *) child)->get_type()) {
+                case UmlClass:
+                case UmlExtraMember:
+                    break;
+
+                default:
+                    switch (++n) {
+                    case 1:
+                        first_name = ((BrowserNode *) child)->get_name();
+                        break;
+
+                    case 2:
+                        added += "(" + first_name + QString("=, ")
+                                 + ((BrowserNode *) child)->get_name() + "=";
+                        break;
+
+                    default:
+                        added += QString(", ") + ((BrowserNode *) child)->get_name() + QString("=");
+                    }
+                }
+            }
+        }
+
+        switch (n) {
+        case 0:
+            break;
+
+        case 1:
+            added += "()";
+            break;
+
+        default:
+            added += ")";
+        }
+    }
+
+    e->insert("@" + added + "\n");
     e->setFocus();
-
-    // to choose and add an annotation
-    
-    QLabel * label =
-      new QLabel(TR("\nTo add an annotation at the cursor position\n"
-		    "you may select it in the list and press 'add'\n"),
-		 this);
-    label->setAlignment(Qt::AlignCenter);
-    vbox->addWidget(label);
-    
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
-    QPushButton * add_button;
-    
-    hbox->setMargin(5);
-    add_button = new QPushButton(TR("Add "), this);
-    hbox->addWidget(add_button);  
-    connect(add_button, SIGNAL(clicked()), this, SLOT(add_annotation()));
-    
-    cb = new Q3ComboBox(FALSE, this);
-    
-    QSizePolicy sp = cb->sizePolicy();
-    
-    sp.setHorData(QSizePolicy::Expanding);
-    cb->setSizePolicy(sp);
-    cb->setAutoCompletion(completion());
-    
-    for (int i = 0;
-	 i != sizeof(DefaultAnnotations)/sizeof(*DefaultAnnotations);
-	 i += 1)
-      cb->insertItem(DefaultAnnotations[i]);
-    
-    QStringList list;
-    
-    BrowserClass::instances(annotations, "@interface");
-    if (! annotations.isEmpty()) {
-      annotations.full_names(list);
-      cb->insertStringList(list);
-    }
-    
-    hbox->addWidget(cb);
-    
-    // buttons ok, cancel
-    
-    vbox->addWidget(new QLabel("", this));
-    
-    hbox = new Q3HBoxLayout(vbox);
-    hbox->setMargin(5);
-    QPushButton * accept = new QPushButton(TR("&OK"), this);
-    QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
-    QSize bs(cancel->sizeHint());
-    
-    accept->setDefault( TRUE );
-    accept->setFixedSize(bs);
-    cancel->setFixedSize(bs);
-    
-    hbox->addWidget(accept);
-    hbox->addWidget(cancel);
-    
-    connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));
-  }
-  else {
-    e->setReadOnly(TRUE);
-
-    // buttons cancel
-    
-    vbox->addWidget(new QLabel("", this));
-    
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
-    
-    hbox->setMargin(5);
-    QPushButton * close = new QPushButton(TR("&Close"), this);
-
-    hbox->addWidget(close);
-    
-    connect(close, SIGNAL(clicked()), this, SLOT(reject()));
-  }
-  
-  // not done in polish else the initial size is too small
-  UmlDesktop::setsize_center(this, previous_size, 0.3, 0.3);
 }
 
-AnnotationDialog::~AnnotationDialog() {
-  previous_size = size();
-}
+void AnnotationDialog::accept()
+{
+    value = e->text().stripWhiteSpace();
 
-void AnnotationDialog::add_annotation() {
-  const int ndefault = 
-    sizeof(DefaultAnnotations)/sizeof(*DefaultAnnotations);
-  int added_index = cb->currentItem();
-  QString added;
-  
-  if (added_index < ndefault)
-    added = DefaultAnnotations[added_index];
-  else {
-    BrowserNode * cl = annotations.at(added_index - ndefault);
-    added = cl->get_name();
-    
-    // have member ?
-    int n = 0;
-    QString first_name;
-    Q3ListViewItem * child;
-      
-    for (child = cl->firstChild(); child != 0; child = child->nextSibling()) {
-      if (! ((BrowserNode *) child)->deletedp()) {
-	switch (((BrowserNode *) child)->get_type()) {
-	case UmlClass:
-	case UmlExtraMember:
-	  break;
-	default:
-	  switch (++n) {
-	  case 1:
-	    first_name = ((BrowserNode *) child)->get_name();
-	    break;
-	  case 2:
-	    added += "(" + first_name + QString("=, ")
-	      + ((BrowserNode *) child)->get_name() + "=";
-	    break;
-	  default:
-	    added += QString(", ") + ((BrowserNode *) child)->get_name() + QString("=");
-	  }
-	}
-      }
-    }
-    
-    switch (n) {
-    case 0:
-      break;
-    case 1:
-      added += "()";
-      break;
-    default:
-      added += ")";
-    }
-  }
-  
-  e->insert("@" + added + "\n");
-  e->setFocus();
-}
+    if (!value.isEmpty())
+        value += '\n';
 
-void AnnotationDialog::accept() {
-  value = e->text().stripWhiteSpace();
-  
-  if (!value.isEmpty())
-    value += '\n';
-  
-  QDialog::accept();
+    QDialog::accept();
 }

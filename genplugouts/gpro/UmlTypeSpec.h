@@ -11,8 +11,9 @@ class UmlClass;
 // - a class reference
 //
 // - an explicit type
-class UmlTypeSpec {
-  public:
+class UmlTypeSpec
+{
+public:
     // significant in case type == 0
     Q3CString explicit_type;
 

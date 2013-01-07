@@ -11,10 +11,11 @@ class UmlItem;
 class Token;
 class FileIn;
 
-class UmlRegion : public UmlBaseRegion, public UmlStateItem {
-  public:
+class UmlRegion : public UmlBaseRegion, public UmlStateItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlRegion(void * id, const Q3CString & s) : UmlBaseRegion(id, s) {
+    UmlRegion(void * id, const Q3CString & s) : UmlBaseRegion(id, s) {
     }
 
     //returns the first container for a 'kind', going up in the browser tree

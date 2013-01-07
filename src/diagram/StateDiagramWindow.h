@@ -34,10 +34,11 @@ class QSpinBox;
 class StateDiagramView;
 class BrowserStateDiagram;
 
-class StateDiagramWindow : public DiagramWindow {
-  Q_OBJECT
-    
-  protected:
+class StateDiagramWindow : public DiagramWindow
+{
+    Q_OBJECT
+
+protected:
     StateDiagramView * view;
     QToolButton * addState;
     QToolButton * addEntryPoint;
@@ -46,7 +47,7 @@ class StateDiagramWindow : public DiagramWindow {
     QToolButton * addFinal;
     QToolButton * addTerminate;
     QToolButton * addDeepHistory;
-    QToolButton * addShallowHistory; 
+    QToolButton * addShallowHistory;
     QToolButton * addJunction;
     QToolButton * addChoice;
     QToolButton * addFork;
@@ -63,16 +64,16 @@ class StateDiagramWindow : public DiagramWindow {
     QToolButton * anchor;
     QToolButton * text;
     QToolButton * image;
-  
-  public:
+
+public:
     StateDiagramWindow(const QString & s, BrowserStateDiagram * b, int id = -1);
-virtual ~StateDiagramWindow();
+    virtual ~StateDiagramWindow();
 
     virtual DiagramView * get_view() const;
-    
+
     virtual void hit_button(UmlCode, QToolButton *);
-    
-  protected slots:
+
+protected slots:
     void hit_state();
     void hit_package();
     void hit_fragment();
@@ -82,7 +83,7 @@ virtual ~StateDiagramWindow();
     void hit_final();
     void hit_terminate();
     void hit_deepHistory();
-    void hit_shallowHistory(); 
+    void hit_shallowHistory();
     void hit_junction();
     void hit_choice();
     void hit_fork();

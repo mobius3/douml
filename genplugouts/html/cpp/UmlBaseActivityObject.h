@@ -12,8 +12,9 @@ class UmlActivityObject;
 class UmlItem;
 class UmlActivityDiagram;
 
-class UmlBaseActivityObject : public UmlActivityNode {
-  public:
+class UmlBaseActivityObject : public UmlActivityNode
+{
+public:
     //  returns a new activity object named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -25,13 +26,13 @@ class UmlBaseActivityObject : public UmlActivityNode {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseActivityObject(void * id, const Q3CString & s) : UmlActivityNode(id, s) {
+    UmlBaseActivityObject(void * id, const Q3CString & s) : UmlActivityNode(id, s) {
     }
 
 
-  public:
+public:
     // return the type
     const UmlTypeSpec & type();
 
@@ -109,7 +110,7 @@ class UmlBaseActivityObject : public UmlActivityNode {
     bool set_AssociatedDiagram(UmlActivityDiagram * d);
 
     // to unload the object to free memory, it will be reloaded automatically
-    // if needed. Recursively done for the sub items if 'rec' is TRUE. 
+    // if needed. Recursively done for the sub items if 'rec' is TRUE.
     //
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
@@ -117,7 +118,7 @@ class UmlBaseActivityObject : public UmlActivityNode {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     UmlActivityDiagram * _assoc_diagram;
 
     UmlTypeSpec _type;
@@ -141,7 +142,7 @@ class UmlBaseActivityObject : public UmlActivityNode {
     bool _is_control : 1;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP

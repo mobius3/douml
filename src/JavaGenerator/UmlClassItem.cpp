@@ -28,7 +28,8 @@
 #include <Q3CString>
 #include <QTextStream>
 
-void UmlClassItem::generate_enum_item(QTextStream &, Q3CString, BooL &) {
-  // produce nothing
+void UmlClassItem::generate_enum_item(QTextStream &, Q3CString, BooL &)
+{
+    // produce nothing
 }
 

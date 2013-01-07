@@ -31,24 +31,25 @@
 #include <Q3CString>
 
 struct Dir {
-  Q3CString file;
-  bool file_absolute;
-  bool read;
+    Q3CString file;
+    bool file_absolute;
+    bool read;
 };
- 
-class UmlPackage : public UmlBasePackage {
-  public:
+
+class UmlPackage : public UmlBasePackage
+{
+public:
     UmlPackage(void * id, const Q3CString & n);
-  
-  protected:
+
+protected:
     Dir dir;
-  
-  public:
+
+public:
     Q3CString file_path(const Q3CString &, Q3CString relto = "");
     Q3CString text_path(const Q3CString &);
     virtual void generate();
     virtual UmlPackage * package();
-    
+
     static Q3CString rootDir();
 };
 

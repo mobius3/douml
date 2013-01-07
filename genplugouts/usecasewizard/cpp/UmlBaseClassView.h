@@ -11,8 +11,9 @@ class UmlPackage;
 class UmlDeploymentView;
 
 // Manage the class views
-class UmlBaseClassView : public UmlItem {
-  public:
+class UmlBaseClassView : public UmlItem
+{
+public:
     // returns a new class view named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -29,17 +30,17 @@ class UmlBaseClassView : public UmlItem {
     // sets the associated deployment view, arg may be null to unset it
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    
+
     bool set_AssociatedDeploymentView(UmlDeploymentView * v);
 
 
-  private:
+private:
     UmlDeploymentView * _assoc_view;
 
 
-  protected:
+protected:
     //internal, do NOT use it
-    
+
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!

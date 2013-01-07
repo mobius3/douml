@@ -26,10 +26,11 @@
 #ifndef EDITABLE_H
 #define EDITABLE_H
 
-class Editable {
-  public:
+class Editable
+{
+public:
     virtual ~Editable() { }
-  
+
     virtual void edit_start() = 0;
     virtual void edit_end() = 0;
     virtual bool is_writable() const = 0;

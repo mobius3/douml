@@ -8,17 +8,18 @@
 
 class FileOut;
 
-class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivityItem {
-  public:
+class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivityItem
+{
+public:
     //write the definition if it is not empty for the target language
     virtual void write(FileOut & out);
 
     //goes among tree to memorize incoming flow
-    
+
     virtual void memo_incoming_flow();
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityPartition(void * id, const Q3CString & s) : UmlBaseActivityPartition(id, s) {
+    UmlActivityPartition(void * id, const Q3CString & s) : UmlBaseActivityPartition(id, s) {
     }
 
 };

@@ -31,68 +31,72 @@
 
 void UmlClassItem::remove_comments(Q3CString & s)
 {
-  int index1 = 0;
-  
-  while ((index1 = s.find('/', index1)) != -1) {
-    int index2;
-    
-    switch (((const char *) s)[index1 + 1]) {
-    case '/':
-      if ((index2 = s.find('\n', index1 + 2)) != -1)
-	s.remove(index1, index2 - index1 + 1);
-      else
-	s.truncate(index1);
-      break;
-    case '*':
-      if ((index2 = s.find("*/", index1 + 2)) != -1)
-	s.replace(index1, index2 - index1 + 1, " ");
-      else
-	s.truncate(index1);
-      break;
-    default:
-      index1 += 1;
+    int index1 = 0;
+
+    while ((index1 = s.find('/', index1)) != -1) {
+        int index2;
+
+        switch (((const char *) s)[index1 + 1]) {
+        case '/':
+            if ((index2 = s.find('\n', index1 + 2)) != -1)
+                s.remove(index1, index2 - index1 + 1);
+            else
+                s.truncate(index1);
+
+            break;
+
+        case '*':
+            if ((index2 = s.find("*/", index1 + 2)) != -1)
+                s.replace(index1, index2 - index1 + 1, " ");
+            else
+                s.truncate(index1);
+
+            break;
+
+        default:
+            index1 += 1;
+        }
     }
-  }
 }
 
 void UmlClassItem::remove_preprocessor(Q3CString & s)
 {
-  int index = 0;
-  
-  while ((index = s.find('#', index)) != -1) {
-    // remove all up to the end of line
-    int index2 = index + 1;
-    int index3;
-    
-    while ((index3 = s.find('\n', index2)) != -1) {
-      // manage multi lines #define
-      if (((const char *) s)[index3 - 1] != '\\')
-	break;
-      else
-	index2 = index3 + 1;
+    int index = 0;
+
+    while ((index = s.find('#', index)) != -1) {
+        // remove all up to the end of line
+        int index2 = index + 1;
+        int index3;
+
+        while ((index3 = s.find('\n', index2)) != -1) {
+            // manage multi lines #define
+            if (((const char *) s)[index3 - 1] != '\\')
+                break;
+            else
+                index2 = index3 + 1;
+        }
+
+        // the \n is still here to hava a separator
+        if (index3 == -1)
+            s.truncate(index);
+        else
+            s.remove(index, index3 - index);
     }
-    
-    // the \n is still here to hava a separator
-    if (index3 == -1)
-      s.truncate(index);
-    else
-      s.remove(index, index3 - index);
-  }
 }
 
 void UmlClassItem::remove_arrays(Q3CString & s)
 {
-  int index1 = 0;
-  
-  while ((index1 = s.find('[', index1)) != -1) {
-    int index2 = index1 = s.find(']', index1 + 1);
-    
-    if (index2 == -1) {
-      s.truncate(index1);
-      return;
+    int index1 = 0;
+
+    while ((index1 = s.find('[', index1)) != -1) {
+        int index2 = index1 = s.find(']', index1 + 1);
+
+        if (index2 == -1) {
+            s.truncate(index1);
+            return;
+        }
+        else
+            s.replace(index1, index2 - index1 + 1, " ");
     }
-    else
-      s.replace(index1, index2 - index1 + 1, " ");
-  }
 }
 

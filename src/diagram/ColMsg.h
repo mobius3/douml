@@ -46,68 +46,80 @@ class ColMsg;
 //[lgfreitas] q3ptrlist needed
 #include <q3ptrlist.h>
 
-class ColMsgList : public Q3PtrList<ColMsg> {
-  protected:
+class ColMsgList : public Q3PtrList<ColMsg>
+{
+protected:
     virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
 };
 
 
-class ColMsg {
-  friend class CodAddMsgDialog;
-  friend class ColMsgTable;
-  friend class CodChangeMsgDialog;
-  
-  protected:
+class ColMsg
+{
+    friend class CodAddMsgDialog;
+    friend class ColMsgTable;
+    friend class CodChangeMsgDialog;
+
+protected:
     bool is_forward;
     unsigned absolute_rank;
     QString hierarchical_rank;
     const OperationData * operation;
     QString explicit_operation;
     CodMsgSupport * in;
-    
+
     ColMsgList msgs;	// the sub messages from the current one
-    
+
     ColMsg(bool forward, const OperationData * op, const QString & expl_op,
-	   const QString & hi_rank, CodMsgSupport * su);
-    
+           const QString & hi_rank, CodMsgSupport * su);
+
     void update_ranks(unsigned & r, QString hr);
     void place_in_internal(ColMsgList & l);
     void place_in_its_support();
     void update_rank(unsigned & r);
     void delete_it_internal();
-    
+
     static void get_all(const ColMsgList & l, ColMsgList & r);
-    
-  public:
+
+public:
     void delete_it(bool rec, ColMsgList & top);
-  
-    ColMsgList & get_msgs() { return msgs; };
-    const QString & get_hierarchical_rank() const { return hierarchical_rank; };
-    unsigned get_rank() const { return absolute_rank; };
+
+    ColMsgList & get_msgs() {
+        return msgs;
+    };
+    const QString & get_hierarchical_rank() const {
+        return hierarchical_rank;
+    };
+    unsigned get_rank() const {
+        return absolute_rank;
+    };
     QString next_hierarchical_rank() const;
-    bool get_is_forward() { return is_forward; };
-    const OperationData * get_operation() { return operation; };
+    bool get_is_forward() {
+        return is_forward;
+    };
+    const OperationData * get_operation() {
+        return operation;
+    };
     QString def(bool hierarchical, bool full, DrawingLanguage language, ShowContextMode context);
-    
-    static void update_ranks(ColMsgList & msgs);    
+
+    static void update_ranks(ColMsgList & msgs);
     void place_in(ColMsgList & l);
     bool extract_it(ColMsgList & l);
-    
+
     static void save(QTextStream & st, const ColMsgList & l, bool copy,
-		     QString & warning, const QString & diag_name);
-    static void read(char * & st, ColMsgList & l, UmlCanvas * canvas);
-    
+                     QString & warning, const QString & diag_name);
+    static void read(char *& st, ColMsgList & l, UmlCanvas * canvas);
+
     static ColMsg * new_one(const OperationData * d, const QString & e,
-			    bool f, const QString & hr, CodMsgSupport * in);
-    static void get_all_in_all_out(ColMsgList & all_in, ColMsgList & all_out, 
-				   const ColMsgList & msgs);
+                            bool f, const QString & hr, CodMsgSupport * in);
+    static void get_all_in_all_out(ColMsgList & all_in, ColMsgList & all_out,
+                                   const ColMsgList & msgs);
     static ColMsg * find(const QString & hi, ColMsgList & l);
     static ColMsg * find_rec(const QString & hi, ColMsgList & l);
     static unsigned last_rank(const ColMsgList & l);
-    
+
     static bool lt(const char * h1, const char * h2);
     static bool gt(const char * h1, const char * h2);
-    
+
     static void send(ToolCom * com, const ColMsgList & l);
 };
 

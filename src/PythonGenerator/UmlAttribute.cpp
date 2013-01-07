@@ -23,7 +23,7 @@
 //
 // *************************************************************************
 
-#include <QTextStream> 
+#include <QTextStream>
 //Added by qt3to4:
 #include <Q3CString>
 #include <QTextStream>
@@ -35,121 +35,134 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlAttribute::generate_imports(QTextStream & f, Q3CString & made) {
-  if (!pythonDecl().isEmpty())
-    type().generate_import(f, ((UmlClass *) parent())->assocArtifact(), 
-			   FALSE, made);
+void UmlAttribute::generate_imports(QTextStream & f, Q3CString & made)
+{
+    if (!pythonDecl().isEmpty())
+        type().generate_import(f, ((UmlClass *) parent())->assocArtifact(),
+                               FALSE, made);
 }
 
 void UmlAttribute::generate(QTextStream & f, const Q3CString & st,
-			    Q3CString indent, BooL & indent_needed,
-			    int & enum_item_rank, const Q3CString & self) {
-  if (self.isEmpty() != isClassMember())
-    return;
-  
-  const char * p = pythonDecl();
-  
-  if ((p == 0) || (*p == 0))
-    return;
-  
-  const char * pp = 0;
-    
-  for (;;) {
-    if (*p == 0) {
-      if (pp == 0)
-	break;
-      
-      // comment management done
-      p = pp;
-      if (*p == 0)
-	break;
-      pp = 0;
+                            Q3CString indent, BooL & indent_needed,
+                            int & enum_item_rank, const Q3CString & self)
+{
+    if (self.isEmpty() != isClassMember())
+        return;
+
+    const char * p = pythonDecl();
+
+    if ((p == 0) || (*p == 0))
+        return;
+
+    const char * pp = 0;
+
+    for (;;) {
+        if (*p == 0) {
+            if (pp == 0)
+                break;
+
+            // comment management done
+            p = pp;
+
+            if (*p == 0)
+                break;
+
+            pp = 0;
+        }
+
+        if (*p != '$') {
+            if (*p == '@')
+                manage_alias(p, f, indent, indent_needed);
+            else {
+                if (indent_needed)
+                    f << indent;
+
+                indent_needed = (*p == '\n');
+
+                f << *p++;
+            }
+        }
+        else if (!strncmp(p, "${comment}", 10))
+            manage_comment(p, pp);
+        else if (!strncmp(p, "${description}", 14))
+            manage_description(p, pp);
+        else if (!strncmp(p, "${name}", 7)) {
+            if (indent_needed) {
+                indent_needed = FALSE;
+                f << indent;
+            }
+
+            p += 7;
+            f << name();
+        }
+        else if (!strncmp(p, "${value}", 8)) {
+            if (indent_needed) {
+                indent_needed = FALSE;
+                f << indent;
+            }
+
+            const Q3CString & v = defaultValue();
+
+            if (!v.isEmpty()) {
+                if (need_equal(p, v))
+                    f << " = ";
+
+                f << v;
+            }
+            else if (st == "enum")
+                f << " = " << enum_item_rank;
+            else if (need_equal(p, "None"))
+                f << " = None";
+            else
+                f << "None";
+
+            p += 8;
+        }
+        else if (!strncmp(p, "${self}", 7)) {
+            p += 7;
+
+            if (! self.isEmpty()) {
+                if (indent_needed) {
+                    indent_needed = FALSE;
+                    f << indent;
+                }
+
+                f << self;
+            }
+        }
+        else if (!strncmp(p, "${stereotype}", 13)) {
+            if (indent_needed) {
+                indent_needed = FALSE;
+                f << indent;
+            }
+
+            p += 13;
+            f << PythonSettings::relationAttributeStereotype(stereotype());
+        }
+        else if (!strncmp(p, "${type}", 7)) {
+            if (indent_needed) {
+                indent_needed = FALSE;
+                f << indent;
+            }
+
+            p += 7;
+            UmlClass::write(f, type());
+        }
+        else {
+            // strange
+            if (indent_needed) {
+                indent_needed = FALSE;
+                f << indent;
+            }
+
+            f << *p++;
+        }
     }
-    
-    if (*p != '$') {
-      if (*p == '@')
-	manage_alias(p, f, indent, indent_needed);
-      else {
-	if (indent_needed)
-	  f << indent;
-	indent_needed = (*p == '\n');
-	
-	f << *p++;
-      }
+
+    if (! indent_needed) {
+        f << '\n';
+        indent_needed = TRUE;
     }
-    else if (!strncmp(p, "${comment}", 10))
-      manage_comment(p, pp);
-    else if (!strncmp(p, "${description}", 14))
-      manage_description(p, pp);
-    else if (!strncmp(p, "${name}", 7)) {
-      if (indent_needed) {
-	indent_needed = FALSE;
-	f << indent;
-      }
-      p += 7;
-      f << name();
-    }
-    else if (!strncmp(p, "${value}", 8)) {
-      if (indent_needed) {
-	indent_needed = FALSE;
-	f << indent;
-      }
-      
-      const Q3CString & v = defaultValue();
-      
-      if (!v.isEmpty()) {
-	if (need_equal(p, v))
-	  f << " = ";
-	f << v;
-      }
-      else if (st == "enum")
-	f << " = " << enum_item_rank;
-      else if (need_equal(p, "None"))
-	f << " = None";
-      else
-	f << "None";
-      p += 8;
-    }
-    else if (!strncmp(p, "${self}", 7)) {
-      p += 7;
-      if (! self.isEmpty()) {
-	if (indent_needed) {
-	  indent_needed = FALSE;
-	  f << indent;
-	}
-	f << self;
-      }
-    }
-    else if (!strncmp(p, "${stereotype}", 13)) {
-      if (indent_needed) {
-	indent_needed = FALSE;
-	f << indent;
-      }
-      p += 13;
-      f << PythonSettings::relationAttributeStereotype(stereotype());
-    }
-    else if (!strncmp(p, "${type}", 7)) {
-      if (indent_needed) {
-	indent_needed = FALSE;
-	f << indent;
-      }
-      p += 7;
-      UmlClass::write(f, type());
-    }
-    else {
-      // strange
-      if (indent_needed) {
-	indent_needed = FALSE;
-	f << indent;
-      }
-      f << *p++;
-    }
-  }
-  
-  if (! indent_needed) {
-    f << '\n';
-    indent_needed = TRUE;
-  }
-  
-  enum_item_rank += 1;
+
+    enum_item_rank += 1;
 }

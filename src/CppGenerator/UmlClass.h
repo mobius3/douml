@@ -45,50 +45,51 @@ class UmlPackage;
 class UmlClass;
 class CppRefType;
 
-class UmlClass : public UmlBaseClass {
-  private:
+class UmlClass : public UmlBaseClass
+{
+private:
     bool managed;
-    
+
     static Q3PtrList<UmlClass> context;
-    
+
     static Q3ValueList<UmlActualParameter> noactuals;
-    
-  public:
+
+public:
     UmlClass(void * id, const Q3CString & n)
-      : UmlBaseClass(id, n), managed(FALSE) {};
-  
+        : UmlBaseClass(id, n), managed(FALSE) {};
+
     Q3CString cpp_stereotype();
-    
+
     void compute_dependencies(Q3PtrList<CppRefType> &, bool all_in_h);
-    
+
     virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-				    const Q3CString & cl_stereotype,
-				    bool all_in_h);
+                                    const Q3CString & cl_stereotype,
+                                    bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility,
-                   QTextStream & f_h,
-			       const Q3CString & cl_stereotype,
-			       Q3CString indent,
-			       BooL & first, bool last);
-	void generate_def(QTextStream & f, Q3CString indent, bool h);
-	virtual void generate_def(QTextStream & f, Q3CString indent, bool h,
-			      Q3CString templates, Q3CString cl_names,
-			      Q3CString templates_tmplop, 
-			      Q3CString cl_names_tmplop);
-				         
+                               QTextStream & f_h,
+                               const Q3CString & cl_stereotype,
+                               Q3CString indent,
+                               BooL & first, bool last);
+    void generate_def(QTextStream & f, Q3CString indent, bool h);
+    virtual void generate_def(QTextStream & f, Q3CString indent, bool h,
+                              Q3CString templates, Q3CString cl_names,
+                              Q3CString templates_tmplop,
+                              Q3CString cl_names_tmplop);
+
     virtual void generate();
     void generate_decl(QTextStream &, Q3CString indent);
-    
+
     void get_template_prefixes(Q3CString & template1, Q3CString & template2);
     void spec(Q3CString & templates, Q3CString & names,
-	      Q3CString & templates_tmplop, Q3CString & names_tmplop);
+              Q3CString & templates_tmplop, Q3CString & names_tmplop);
     Q3CString decl();
-    
+
     void write(QTextStream &, bool with_formals = TRUE,
-	       BooL * is_template = 0,
-	       const Q3ValueList<UmlActualParameter> & actuals = noactuals);
-	static void write(QTextStream &, const UmlTypeSpec &,
-		      bool with_formals = TRUE,
-		      BooL * is_template = 0);
+               BooL * is_template = 0,
+               const Q3ValueList<UmlActualParameter> & actuals = noactuals);
+    static void write(QTextStream &, const UmlTypeSpec &,
+                      bool with_formals = TRUE,
+                      BooL * is_template = 0);
 };
 
 #endif

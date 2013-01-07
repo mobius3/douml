@@ -9,26 +9,27 @@
 class UmlStateAction;
 class UmlState;
 
-class UmlBaseStateAction : public UmlItem {
-  public:
+class UmlBaseStateAction : public UmlItem
+{
+public:
     // returns a new state action created under 'parent'
     //
     // In case it cannot be created ('parent' cannot contain it etc ...)
     // return 0 in C++ and produce a RuntimeException in Java
-    
+
     static UmlStateAction * create(UmlState * parent);
 
     // returns the kind of the item
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseStateAction(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseStateAction(void * id, const Q3CString & s) : UmlItem(id, s) {
     }
 
 
-  public:
+public:
     // return the expression in OCL
     const Q3CString & expression();
 
@@ -58,7 +59,7 @@ class UmlBaseStateAction : public UmlItem {
 #endif
 
     // to unload the object to free memory, it will be reloaded automatically
-    // if needed. Recursively done for the sub items if 'rec' is TRUE. 
+    // if needed. Recursively done for the sub items if 'rec' is TRUE.
     //
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
@@ -66,7 +67,7 @@ class UmlBaseStateAction : public UmlItem {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _uml;
 
 #ifdef WITHCPP
@@ -78,7 +79,7 @@ class UmlBaseStateAction : public UmlItem {
 #endif
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP

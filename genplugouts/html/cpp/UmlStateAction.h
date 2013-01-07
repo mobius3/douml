@@ -6,8 +6,9 @@
 #include "UmlBaseStateAction.h"
 #include "UmlStateItem.h"
 
-class UmlStateAction : public UmlBaseStateAction, public UmlStateItem {
-  public:
+class UmlStateAction : public UmlBaseStateAction, public UmlStateItem
+{
+public:
     //returns a string indicating the king of the element
     virtual Q3CString sKind();
 
@@ -16,7 +17,7 @@ class UmlStateAction : public UmlBaseStateAction, public UmlStateItem {
     virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlStateAction(void * id) : UmlBaseStateAction(id, "") {
+    UmlStateAction(void * id) : UmlBaseStateAction(id, "") {
     }
 
 };

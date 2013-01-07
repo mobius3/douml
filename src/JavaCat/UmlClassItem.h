@@ -33,24 +33,31 @@
 
 #include "UmlBaseClassItem.h"
 
-class UmlClassItem : public UmlBaseClassItem {
+class UmlClassItem : public UmlBaseClassItem
+{
 #ifdef ROUNDTRIP
-  private:
+private:
     bool roundtrip_expected;
     bool useless;
 #endif
-  public:
+public:
     UmlClassItem(void * id, const Q3CString & n)
-      : UmlBaseClassItem(id, n)
+        : UmlBaseClassItem(id, n)
 #ifdef ROUNDTRIP
-	, roundtrip_expected(FALSE), useless(FALSE)
+        , roundtrip_expected(FALSE), useless(FALSE)
 #endif
-      {}
-  
+    {}
+
 #ifdef ROUNDTRIP
-    bool is_roundtrip_expected() const { return roundtrip_expected; }
-    bool is_useless() const { return useless; }
-    void set_usefull(bool y = TRUE) { useless = !y; }
+    bool is_roundtrip_expected() const {
+        return roundtrip_expected;
+    }
+    bool is_useless() const {
+        return useless;
+    }
+    void set_usefull(bool y = TRUE) {
+        useless = !y;
+    }
     virtual bool set_roundtrip_expected();
     virtual void mark_useless(Q3PtrList<UmlItem> & l);
 #endif

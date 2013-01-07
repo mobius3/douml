@@ -11,21 +11,22 @@
 class FileOut;
 class UmlTransition;
 
-class UmlState : public UmlBaseState, public UmlStateItem {
-  public:
-    //  the constructor, do not call it yourself !!!!!!!!!!
- UmlState(void * id, const Q3CString & s) : UmlBaseState(id, s) {
-  _all.replace(s, this);
-}
+class UmlState : public UmlBaseState, public UmlStateItem
+{
+public:
+        //  the constructor, do not call it yourself !!!!!!!!!!
+    UmlState(void * id, const Q3CString & s) : UmlBaseState(id, s) {
+        _all.replace(s, this);
+    }
 
     virtual void write(FileOut & out);
 
     //goes among tree to memorize incoming transitions
-    
+
     virtual void memo_incoming_trans();
 
     //memorize trans starting in sub elements to produce them later
-    
+
     virtual void memo_trans(UmlTransition * tr);
 
     //memorize a new incoming transition
@@ -33,11 +34,11 @@ class UmlState : public UmlBaseState, public UmlStateItem {
 
     //Return a state from its name.
     //Doesn't manage namespace/package/module
-    
+
     static UmlState * find(Q3CString s);
 
 
-  protected:
+protected:
     Q3PtrList<UmlTransition> _incoming_trans;
 
     Q3PtrList<UmlTransition> _trans;

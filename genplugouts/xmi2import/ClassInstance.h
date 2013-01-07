@@ -10,8 +10,9 @@ class FileIn;
 class Token;
 class UmlItem;
 
-class ClassInstance {
-  public:
+class ClassInstance
+{
+public:
     static void init();
 
     //import the activity node starting by 'tk' inside 'where'
@@ -20,7 +21,7 @@ class ClassInstance {
     static void solveThem();
 
 
-  protected:
+protected:
     static Q3PtrList<ClassInstance> All;
 
     struct Slot {
@@ -34,8 +35,8 @@ class ClassInstance {
         Q3CString valueId;
 
     };
-    
-    
+
+
     Q3ValueList<Slot> bindings;
 
     Q3CString id;

@@ -27,8 +27,8 @@
 
 
 
-#include <q3intdict.h> 
-#include <qdatetime.h> 
+#include <q3intdict.h>
+#include <qdatetime.h>
 #include <qmessagebox.h>
 #include <q3ptrlist.h>
 #include <q3ptrlist.h>
@@ -45,160 +45,165 @@ static bool ImportLib;
 
 void set_in_import(bool y, bool as_lib)
 {
-  NeedRenumber = y;
-  ImportLib = as_lib;
+    NeedRenumber = y;
+    ImportLib = as_lib;
 }
 
 bool in_import()
 {
-  return NeedRenumber;
+    return NeedRenumber;
 }
 
 bool in_lib_import()
 {
-  return ImportLib;
+    return ImportLib;
 }
 
 //
-    
+
 int place(IdDict<void> & d, int id, void * x)
 {
-  const int uid = user_id();
-  
-  if (id != -1) {
-    // id is relevant
-    bool check = TRUE;
-    
-    if (id == 0) {
-      // compute a new id
-      if ((d.idmax < FIRST_ID) && (uid != 0))
-	d.idmax = FIRST_ID - 128;
-      id = (d.idmax += 128) | uid;
-    }
-    else if (d.old_diagram) {
-      // place id unchanged among the old ones
-      d.dict[1].replace(id, x);
-      
-      if ((d.dict[1].count() / 2) >= d.dict[1].size())
-	d.dict[1].resize(d.dict[1].size() * 2 - 1);
-      
-      // id doesn't contains a user_id field
-      // create new one for the current user_id
-      if ((d.idmax < FIRST_ID) && (uid != 0))
-	d.idmax = FIRST_ID - 128;
-      id = (d.idmax += 128) | uid;
-    }
-    else if (NeedRenumber) {
-      // place id unchanged among the old ones
-      d.dict[1].replace(id, x);
-      
-      if ((d.dict[1].count() / 2) >= d.dict[1].size())
-	d.dict[1].resize(d.dict[1].size() * 2 - 1);
+    const int uid = user_id();
 
-      int nid;
-      
-      if (ImportLib && ((nid = (int) ((long) d.dictlib[id])) != 0)) {
-	// an id was already attributed for it
-	id = nid;
-	
-	if ((d.idmax < FIRST_ID) && (uid != 0))
-	  d.idmax = FIRST_ID - 128;
-	
-	if ((((unsigned) (id & ~127)) > ((unsigned) d.idmax)) &&
-	    ((id & 127) == uid))
-	  d.idmax = id & ~127;
-      }
-      else if ((d.dict[0][id] != 0) || ((id & 127) != uid)) {
-	// already used or for an other user, change id to a new one
-	if ((id & 127) < 2) {
-	  // import a plug out in a plug out !!!!!
-	  // user_id part is unchanged
-	  id = (id & 127) + FIRST_ID;
-	  
-	  while (d.dict[0][id] != 0)
-	    id += 128;
-	  
-	  check = FALSE;
-	}
-	else {
-	  // create new id for the current user_id
-	  if ((d.idmax < FIRST_ID) && (uid != 0))
-	    d.idmax = FIRST_ID - 128;
-	  id = (d.idmax += 128) | uid;
-	}
-      }
-      else
-	// id unchanged for the current user
-	check = FALSE;
-	if ((((unsigned) (id & ~127)) > ((unsigned) d.idmax)) &&
-	    ((id & 127) == uid))
-	  d.idmax = id & ~127;
+    if (id != -1) {
+        // id is relevant
+        bool check = TRUE;
+
+        if (id == 0) {
+            // compute a new id
+            if ((d.idmax < FIRST_ID) && (uid != 0))
+                d.idmax = FIRST_ID - 128;
+
+            id = (d.idmax += 128) | uid;
+        }
+        else if (d.old_diagram) {
+            // place id unchanged among the old ones
+            d.dict[1].replace(id, x);
+
+            if ((d.dict[1].count() / 2) >= d.dict[1].size())
+                d.dict[1].resize(d.dict[1].size() * 2 - 1);
+
+            // id doesn't contains a user_id field
+            // create new one for the current user_id
+            if ((d.idmax < FIRST_ID) && (uid != 0))
+                d.idmax = FIRST_ID - 128;
+
+            id = (d.idmax += 128) | uid;
+        }
+        else if (NeedRenumber) {
+            // place id unchanged among the old ones
+            d.dict[1].replace(id, x);
+
+            if ((d.dict[1].count() / 2) >= d.dict[1].size())
+                d.dict[1].resize(d.dict[1].size() * 2 - 1);
+
+            int nid;
+
+            if (ImportLib && ((nid = (int)((long) d.dictlib[id])) != 0)) {
+                // an id was already attributed for it
+                id = nid;
+
+                if ((d.idmax < FIRST_ID) && (uid != 0))
+                    d.idmax = FIRST_ID - 128;
+
+                if ((((unsigned)(id & ~127)) > ((unsigned) d.idmax)) &&
+                    ((id & 127) == uid))
+                    d.idmax = id & ~127;
+            }
+            else if ((d.dict[0][id] != 0) || ((id & 127) != uid)) {
+                // already used or for an other user, change id to a new one
+                if ((id & 127) < 2) {
+                    // import a plug out in a plug out !!!!!
+                    // user_id part is unchanged
+                    id = (id & 127) + FIRST_ID;
+
+                    while (d.dict[0][id] != 0)
+                        id += 128;
+
+                    check = FALSE;
+                }
+                else {
+                    // create new id for the current user_id
+                    if ((d.idmax < FIRST_ID) && (uid != 0))
+                        d.idmax = FIRST_ID - 128;
+
+                    id = (d.idmax += 128) | uid;
+                }
+            }
+            else
+                // id unchanged for the current user
+                check = FALSE;
+
+            if ((((unsigned)(id & ~127)) > ((unsigned) d.idmax)) &&
+                ((id & 127) == uid))
+                d.idmax = id & ~127;
+        }
+        else {
+            // no renum, id unchanged
+            check = FALSE;
+
+            if ((((unsigned)(id & ~127)) > ((unsigned) d.idmax)) &&
+                ((id & 127) == uid))
+                d.idmax = id & ~127;
+        }
+
+        if (check) {
+            // useless except bug or project broken by user probably on merge
+            while (d.dict[0][id] != 0)
+                id = (d.idmax += 128) | uid;
+        }
+
+        d.dict[0].insert(id, x);
+
+        if ((d.dict[0].count() / 2) >= d.dict[0].size())
+            d.dict[0].resize(d.dict[0].size() * 2 - 1);
     }
-    else {      
-      // no renum, id unchanged
-      check = FALSE;
-      if ((((unsigned) (id & ~127)) > ((unsigned) d.idmax)) &&
-	  ((id & 127) == uid))
-	d.idmax = id & ~127;
-    }
-    
-    if (check) {
-      // useless except bug or project broken by user probably on merge
-      while (d.dict[0][id] != 0)
-	id = (d.idmax += 128) | uid;
-    }
-    
-    d.dict[0].insert(id, x);
-    
-    if ((d.dict[0].count() / 2) >= d.dict[0].size())
-      d.dict[0].resize(d.dict[0].size() * 2 - 1);
-  }
-  
-  return id;
+
+    return id;
 }
 
 int new_place(IdDict<void> & d, int user_id, void * x)
 {
-  if (d.idmax == FIRST_ID)
-    d.idmax = FIRST_BASE_ID;
-  else
-    d.idmax += 128;
-  
-  while (d.dict[0][d.idmax | user_id] != 0)
-    // not possible except bug
-    d.idmax += 128;
-  
-  d.dict[0].insert(d.idmax | user_id, x);
-  return d.idmax | user_id;
+    if (d.idmax == FIRST_ID)
+        d.idmax = FIRST_BASE_ID;
+    else
+        d.idmax += 128;
+
+    while (d.dict[0][d.idmax | user_id] != 0)
+        // not possible except bug
+        d.idmax += 128;
+
+    d.dict[0].insert(d.idmax | user_id, x);
+    return d.idmax | user_id;
 }
 
 // to change id when two elements use the same
 
 struct NeedChange {
-  IdDict<void> & dict;
-  int & ident;
-  void * elt;
+    IdDict<void> & dict;
+    int & ident;
+    void * elt;
 
-  NeedChange(IdDict<void> & d, int & id, void * e) : dict(d), ident(id), elt(e) {}
+    NeedChange(IdDict<void> & d, int & id, void * e) : dict(d), ident(id), elt(e) {}
 };
 
 static Q3PtrList<NeedChange> MustBeRenumered;
 
 void will_change_id(IdDict<void> & d, int & id, void * x)
 {
-  MustBeRenumered.append(new NeedChange(d, id, x));
+    MustBeRenumered.append(new NeedChange(d, id, x));
 }
 
 void do_change_shared_ids()
 {
-  int user = user_id();
+    int user = user_id();
 
-  while (!MustBeRenumered.isEmpty()) {
-    NeedChange * x = MustBeRenumered.take(0);
+    while (!MustBeRenumered.isEmpty()) {
+        NeedChange * x = MustBeRenumered.take(0);
 
-    x->ident = new_place(x->dict, user, x->elt);
-    delete x;
-  }
+        x->ident = new_place(x->dict, user, x->elt);
+        delete x;
+    }
 }
 
 //
@@ -208,9 +213,9 @@ void do_change_shared_ids()
 // before 'main' execution
 
 struct IntList {
-  int * pint;
-  const char * file;
-  IntList * next;
+    int * pint;
+    const char * file;
+    IntList * next;
 };
 
 // initialized to 0 before any execution associated
@@ -219,21 +224,21 @@ IntList * FirstCell;
 
 void memo_idmax_loc(int & idmaxref, const char * who)
 {
-  if (who != 0) {
-    IntList * cell = new IntList;
-    
-    cell->pint = &idmaxref;
-    cell->next = FirstCell;
-    cell->file = who;
-    FirstCell = cell;
-  }
+    if (who != 0) {
+        IntList * cell = new IntList;
+
+        cell->pint = &idmaxref;
+        cell->next = FirstCell;
+        cell->file = who;
+        FirstCell = cell;
+    }
 }
 
 // add a margin of 50
 void idmax_add_margin()
 {
-  for (IntList * cell = FirstCell; cell != 0; cell = cell->next)
-    *(cell->pint) += 128*50;
+    for (IntList * cell = FirstCell; cell != 0; cell = cell->next)
+        * (cell->pint) += 128 * 50;
 }
 
 //
@@ -244,9 +249,9 @@ void idmax_add_margin()
 
 void check_ids_cleared()
 {
-  for (IntList * cell = FirstCell; cell != 0; cell = cell->next)
-    if (*(cell->pint) != FIRST_ID)
-      QMessageBox::critical(0, "Bouml", 
-			    cell->file + QString("\nclear() not called !\n"
-						 "check also update_idmax_for_root()"));
+    for (IntList * cell = FirstCell; cell != 0; cell = cell->next)
+        if (*(cell->pint) != FIRST_ID)
+            QMessageBox::critical(0, "Bouml",
+                                  cell->file + QString("\nclear() not called !\n"
+                                          "check also update_idmax_for_root()"));
 }

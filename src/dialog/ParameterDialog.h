@@ -49,10 +49,11 @@ class MultiLineEdit;
 class KeyValuesTable;
 class BodyDialog;
 
-class ParameterDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ParameterDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     bool visit;
     ParameterData * param;
     QStringList list;
@@ -60,7 +61,7 @@ class ParameterDialog : public Q3TabDialog {
     Q3PtrList<BodyDialog> edits;
     BrowserNode * view;
     int offset;
-    
+
     // uml tab
     QWidget * umltab;
     LineEdit * edname;
@@ -84,35 +85,35 @@ class ParameterDialog : public Q3TabDialog {
     MultiLineEdit * edcpp_selection;
     MultiLineEdit * edjava_selection;
     MultiLineEdit * comment;
-    
+
     // User tab
     KeyValuesTable * kvtable;
 
     static QSize previous_size;
-  
+
     static void post_edit_init(ParameterDialog *, QString);
     static void post_edit_description(ParameterDialog *, QString);
     static void post_edit_uml_selection(ParameterDialog * d, QString s);
     static void post_edit_cpp_selection(ParameterDialog * d, QString s);
     static void post_edit_java_selection(ParameterDialog * d, QString s);
-    
+
     void init_tab(QWidget *& tab, MultiLineEdit *& ed, const char * v,
-		  const char * lbl, const char * sl, bool enabled);
-    
-  public:
+                  const char * lbl, const char * sl, bool enabled);
+
+public:
     ParameterDialog(ParameterData * a);
     virtual ~ParameterDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
-  
+
     void edit_init();
     void edit_description();
     void edit_uml_selection();
     void edit_cpp_selection();
     void edit_java_selection();
-    
+
     void menu_type();
 
     void change_tabs(QWidget *);

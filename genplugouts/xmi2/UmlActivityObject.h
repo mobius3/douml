@@ -7,10 +7,11 @@
 
 class FileOut;
 
-class UmlActivityObject : public UmlBaseActivityObject {
-  public:
+class UmlActivityObject : public UmlBaseActivityObject
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityObject(void * id, const Q3CString & s) : UmlBaseActivityObject(id, s) {
+    UmlActivityObject(void * id, const Q3CString & s) : UmlBaseActivityObject(id, s) {
     }
 
     //write the definition if it is not empty for the target language
@@ -19,7 +20,7 @@ class UmlActivityObject : public UmlBaseActivityObject {
     virtual void solve_output_flows();
 
 
-  protected:
+protected:
     void write_ordering(FileOut & out);
 
     void write_in_state(FileOut & out);

@@ -54,13 +54,13 @@ class DiagramItem;
 extern QString my_baseName(QFileInfo & fi);
 
 typedef struct {
-  QString filename;
-  unsigned linenum;
-  char * previous_word;	// Q[C]String too expensive
-  bool read_only;
-  bool previous_word_allocated;
-  char removed_char;
-  unsigned read_file_format;
+    QString filename;
+    unsigned linenum;
+    char * previous_word;	// Q[C]String too expensive
+    bool read_only;
+    bool previous_word_allocated;
+    char removed_char;
+    unsigned read_file_format;
 } ReadContext;
 
 extern ReadContext current_context();
@@ -104,19 +104,19 @@ extern void indent(int);
 extern int indent();
 extern void indent0();
 
-extern bool at_end(char * & st);
-extern char * read_string(char * & st);
-extern char * read_keyword(char * & st);
-extern char * read_keyword(char * & st, const char * expected);
-extern char * read_keyword(char * & st, const char * expected1,
-			   const char * expected2);
-extern void unread_keyword(char * keyword, char * & st);
-extern int read_id(char * & st);
-extern unsigned read_unsigned(char * & st);
-extern double read_double(char * & st);
-extern void read_string_list(QStringList & list, char * & st);
-extern void read_unicode_string_list(QStringList & list, char * & st);
-extern char * skip_until(char * & st, const char * expected);
+extern bool at_end(char *& st);
+extern char * read_string(char *& st);
+extern char * read_keyword(char *& st);
+extern char * read_keyword(char *& st, const char * expected);
+extern char * read_keyword(char *& st, const char * expected1,
+                           const char * expected2);
+extern void unread_keyword(char * keyword, char *& st);
+extern int read_id(char *& st);
+extern unsigned read_unsigned(char *& st);
+extern double read_double(char *& st);
+extern void read_string_list(QStringList & list, char *& st);
+extern void read_unicode_string_list(QStringList & list, char *& st);
+extern char * skip_until(char *& st, const char * expected);
 
 extern void unknown_keyword(const char * k);
 extern void wrong_keyword(const char * k, const char * expected);
@@ -127,15 +127,15 @@ extern void unknown_ref(const char * kind, int id);
 extern void save_xy(QTextStream & st, const Q3CanvasItem * c, const char * s);
 extern void save_xyz(QTextStream & st, const Q3CanvasItem * c, const char * s);
 extern void save_xyzwh(QTextStream & st, const Q3CanvasRectangle * c, const char * s);
-extern void read_xy(char * & st, Q3CanvasItem * c);
-extern void read_xyz(char * & st, Q3CanvasItem * c);
-extern void read_xyzwh(char * & st, Q3CanvasRectangle * c);
-extern void read_zwh(char * & st, Q3CanvasRectangle * c);
-extern void bypass_xy(char * & st);
+extern void read_xy(char *& st, Q3CanvasItem * c);
+extern void read_xyz(char *& st, Q3CanvasItem * c);
+extern void read_xyzwh(char *& st, Q3CanvasRectangle * c);
+extern void read_zwh(char *& st, Q3CanvasRectangle * c);
+extern void bypass_xy(char *& st);
 extern void save_color(QTextStream & st, const char *, UmlColor, BooL &);
-extern void read_color(char *& st, const char *, UmlColor &, char * &);
+extern void read_color(char *& st, const char *, UmlColor &, char *&);
 
-extern void read_font(char *& st, const char *, UmlFont &, char * &);
+extern void read_font(char *& st, const char *, UmlFont &, char *&);
 
 extern void warn(const QString &);
 
@@ -174,13 +174,13 @@ extern int svg_height();
 extern const char * svg_color(UmlColor);
 extern void draw_shadow(FILE * fp, Q3PointArray & poly);
 extern void draw_poly(FILE * fp, Q3PointArray & poly,
-		      UmlColor color, bool stroke = TRUE);
+                      UmlColor color, bool stroke = TRUE);
 extern void draw_text(const QRect & r, int align, QString s, const QFont &, FILE *);
 extern void draw_text(int x, int y, int w, int h, int align, QString s,
-		      const QFont &, FILE *, UmlColor fg = UmlBlack,
-		      UmlColor bg = UmlTransparent);
-extern void draw_rotate_text(int cx, int cy, int angle, QString s, 
-			     const QFont &, FILE *, UmlColor fg = UmlBlack);
+                      const QFont &, FILE *, UmlColor fg = UmlBlack,
+                      UmlColor bg = UmlTransparent);
+extern void draw_rotate_text(int cx, int cy, int angle, QString s,
+                             const QFont &, FILE *, UmlColor fg = UmlBlack);
 
 // windows wrong home dir
 

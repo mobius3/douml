@@ -9,8 +9,9 @@ class UmlUseCaseReference;
 class UmlClass;
 
 // this class manages association between use case and actor
-class UmlBaseUseCaseAssociation {
-  public:
+class UmlBaseUseCaseAssociation
+{
+public:
     // return the name
     const Q3CString & name() const {
         return _name;
@@ -31,13 +32,13 @@ class UmlBaseUseCaseAssociation {
         return _actor;
     }
 
-    // return true if the actor is a primary actor for the use case 
+    // return true if the actor is a primary actor for the use case
     bool primary() const {
         return _primary;
     }
 
 
-  private:
+private:
     UmlUseCaseReference * _use_case;
 
     UmlClass * _actor;
@@ -51,7 +52,7 @@ class UmlBaseUseCaseAssociation {
     // internal, don't call it
     void read_(const Q3PtrDict<UmlUseCaseReference> & useCases);
 
-  friend class UmlBaseUseCaseDiagramDefinition;
+    friend class UmlBaseUseCaseDiagramDefinition;
 };
 
 #endif

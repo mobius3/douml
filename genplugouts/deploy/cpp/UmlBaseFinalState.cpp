@@ -5,10 +5,11 @@
 
 UmlFinalState * UmlBaseFinalState::create(UmlItem * parent)
 {
-  return (UmlFinalState *) parent->create_(aFinalState, "");
+    return (UmlFinalState *) parent->create_(aFinalState, "");
 }
 
-anItemKind UmlBaseFinalState::kind() {
-  return aFinalState;
+anItemKind UmlBaseFinalState::kind()
+{
+    return aFinalState;
 }
 

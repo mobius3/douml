@@ -11,24 +11,25 @@ class UmlItem;
 class Token;
 class FileIn;
 
-class UmlState : public UmlBaseState, public UmlStateItem {
-  public:
+class UmlState : public UmlBaseState, public UmlStateItem
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlState(void * id, const Q3CString & s) : UmlBaseState(id, s) {
-       NumberOf += 1; 
+    UmlState(void * id, const Q3CString & s) : UmlBaseState(id, s) {
+        NumberOf += 1;
     }
 
     //returns the first container for a 'kind', going up in the browser tree
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);
 
 
-  private:
+private:
     void importActivity(FileIn & in, Token & token);
 
 
-  public:
+public:
     //  call at end of import : try to solve reference to operation
-    
+
     virtual void solve(int context, Q3CString idref);
 
     static void init();
@@ -36,10 +37,12 @@ class UmlState : public UmlBaseState, public UmlStateItem {
     //import the state [machine] starting by 'tk' inside 'where'
     static void importIt(FileIn & in, Token & token, UmlItem * where);
 
-    static int numberOf() { return NumberOf; };
+    static int numberOf() {
+        return NumberOf;
+    };
 
 
-  protected:
+protected:
     static int NumberOf;
 
 };

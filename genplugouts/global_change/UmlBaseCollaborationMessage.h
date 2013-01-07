@@ -9,8 +9,9 @@
 class UmlClassInstanceReference;
 
 // this class manages messages in a collaboration diagram
-class UmlBaseCollaborationMessage : public UmlMessage {
-  public:
+class UmlBaseCollaborationMessage : public UmlMessage
+{
+public:
     // return the global rank of the message
     int rank() const {
         return _rank;
@@ -22,7 +23,7 @@ class UmlBaseCollaborationMessage : public UmlMessage {
     }
 
 
-  private:
+private:
     int _rank;
 
     Q3CString _hrank;
@@ -30,7 +31,7 @@ class UmlBaseCollaborationMessage : public UmlMessage {
     // internal, don't call it
     void read_(const Q3PtrDict<UmlClassInstanceReference> & instances);
 
-  friend class UmlBaseCollaborationDiagramDefinition;
+    friend class UmlBaseCollaborationDiagramDefinition;
 };
 
 #endif

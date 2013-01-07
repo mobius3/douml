@@ -11,11 +11,12 @@
 // This class manages settings concerning PHP, configured through
 // the 'Generation settings' dialog.
 //
-// This class may be defined as a 'singleton', but I prefer to use static 
+// This class may be defined as a 'singleton', but I prefer to use static
 // members allowing to just write 'PhpSettings::member' rather than
 // 'PhpSettings::instance()->member' or other long sentence like this.
-class PhpSettings : public UmlSettings {
-  public:
+class PhpSettings : public UmlSettings
+{
+public:
     // returns TRUE when the created Php objects are initialized
     // with the default declaration/definition
     static bool useDefaults();
@@ -138,21 +139,21 @@ class PhpSettings : public UmlSettings {
     // note : visibility shared with Java
     static bool set_GetVisibility(aVisibility v);
 
-    // returns the default name of a 'get' operation generated 
+    // returns the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     static const Q3CString & getName();
 
-    // set the default name of a 'get' operation generated 
+    // set the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_GetName(Q3CString v);
 
-    // returns the default name of a 'set' operation generated 
+    // returns the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     static const Q3CString & setName();
 
-    // set the default name of a 'set' operation generated 
+    // set the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
@@ -193,7 +194,7 @@ class PhpSettings : public UmlSettings {
     static bool set_SetVisibility(aVisibility v);
 
 
-  private:
+private:
     // never called !
     PhpSettings() {};
 
@@ -238,7 +239,7 @@ class PhpSettings : public UmlSettings {
     static Q3CString _ext;
 
 
-  protected:
+protected:
     static void read_();
 
     static void read_if_needed_();

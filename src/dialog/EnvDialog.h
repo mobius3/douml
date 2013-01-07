@@ -33,19 +33,20 @@ class Q3ComboBox;
 
 // singleton
 
-class EnvDialog : public QDialog {
-  Q_OBJECT
-    
-  public:
+class EnvDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
     static void edit(bool conv, bool noid = FALSE);
-    
-  private:
+
+private:
     EnvDialog(bool conv, bool noid);
-  
+
     bool conversion;
     QLineEdit * ed_id;
     QLineEdit * ed_doc;
-    QLineEdit * ed_navigator; 
+    QLineEdit * ed_navigator;
     QLineEdit * ed_template;
     QLineEdit * ed_editor;
     QLineEdit * ed_lang;
@@ -54,8 +55,8 @@ class EnvDialog : public QDialog {
     QLineEdit * ed_xmax;
     QLineEdit * ed_ymin;
     QLineEdit * ed_ymax;
-    
-  private slots:
+
+private slots:
     virtual void accept();
     virtual void reject();
     void doc_browse();

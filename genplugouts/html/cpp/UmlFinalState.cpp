@@ -3,7 +3,8 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-Q3CString UmlFinalState::sKind() {
-  return "final state";
+Q3CString UmlFinalState::sKind()
+{
+    return "final state";
 }
 

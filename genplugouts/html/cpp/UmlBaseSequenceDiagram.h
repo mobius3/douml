@@ -11,8 +11,9 @@ class UmlItem;
 class UmlSequenceDiagramDefinition;
 
 // Manage the sequence diagrams
-class UmlBaseSequenceDiagram : public UmlDiagram {
-  public:
+class UmlBaseSequenceDiagram : public UmlDiagram
+{
+public:
     // returns a new sequence diagram named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,12 +25,12 @@ class UmlBaseSequenceDiagram : public UmlDiagram {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseSequenceDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n), _def(0) {};
 
 
-  public:
+public:
     // return the semantic part of the diagram not present in the model
     UmlSequenceDiagramDefinition * definition();
 
@@ -38,7 +39,7 @@ class UmlBaseSequenceDiagram : public UmlDiagram {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     UmlSequenceDiagramDefinition * _def;
 
 };

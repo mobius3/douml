@@ -47,17 +47,18 @@ struct StateBehavior;
 class BodyDialog;
 
 struct StDialog {
-  MultiLineEdit * edentry;
-  MultiLineEdit * edexit;
-  MultiLineEdit * edactivity;
-  
-  void accept(StateBehavior &);
+    MultiLineEdit * edentry;
+    MultiLineEdit * edexit;
+    MultiLineEdit * edactivity;
+
+    void accept(StateBehavior &);
 };
 
-class StateDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class StateDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     QWidget * umltab;
     bool visit;
     StateData * state;
@@ -72,19 +73,19 @@ class StateDialog : public Q3TabDialog {
     QCheckBox * active_cb;
     MultiLineEdit * comment;
     Q3PtrList<BodyDialog> edits;
-    
+
     QWidget * ocltab;
     QWidget * cppTab;
     QWidget * javatab;
     StDialog uml;
     StDialog cpp;
     StDialog java;
-        
+
     // User
     KeyValuesTable * kvtable;
-    
+
     static QSize previous_size;
-  
+
     static void post_edit_description(StateDialog * d, QString s);
     static void post_edit_uml_entry(StateDialog * d, QString s);
     static void post_edit_uml_exit(StateDialog * d, QString s);
@@ -95,19 +96,19 @@ class StateDialog : public Q3TabDialog {
     static void post_edit_java_entry(StateDialog * d, QString s);
     static void post_edit_java_exit(StateDialog * d, QString s);
     static void post_edit_java_activity(StateDialog * d, QString s);
-  
-  public:
+
+public:
     StateDialog(StateData * r);
     virtual ~StateDialog();
-  
-  protected:
-    void init_tab(QWidget *&, StDialog &, StateBehavior & td, const char * lbl,
-		  const char * sl_enbeh, const char * sl_exbeh, const char * sl_beh,
-		  bool enabled);
-  protected slots:
+
+protected:
+    void init_tab(QWidget *& , StDialog &, StateBehavior & td, const char * lbl,
+                  const char * sl_enbeh, const char * sl_exbeh, const char * sl_beh,
+                  bool enabled);
+protected slots:
     virtual void polish();
     virtual void accept();
-  
+
     void menu_specification();
     void menu_reference();
     void edit_description();
@@ -122,7 +123,7 @@ class StateDialog : public Q3TabDialog {
     void edit_java_activity();
 
     void change_tabs(QWidget *);
-    
+
     void ed_ref_activated(int);
 };
 

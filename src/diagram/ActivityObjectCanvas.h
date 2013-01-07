@@ -41,10 +41,11 @@ class InfoCanvas;
 
 #define ACTIVITYOBJECT_MIN_SIZE 31
 
-class ActivityObjectCanvas : public QObject, public DiagramCanvas {
-  Q_OBJECT
-    
-  protected:
+class ActivityObjectCanvas : public QObject, public DiagramCanvas
+{
+    Q_OBJECT
+
+protected:
     UmlColor itscolor;
     UmlColor used_color;
     Uml3States write_horizontally;
@@ -57,21 +58,21 @@ class ActivityObjectCanvas : public QObject, public DiagramCanvas {
     ActivityObjectCanvas(UmlCanvas * canvas, int id);
     void check_selection();
 
-  public:
+public:
     ActivityObjectCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityObjectCanvas();
-    
+
     virtual void delete_it();
-    
+
     virtual void draw(QPainter & p);
     virtual void change_scale();
-    
+
     void compute_size();
     bool force_inside();
 
     virtual UmlCode type() const;
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
@@ -81,23 +82,23 @@ class ActivityObjectCanvas : public QObject, public DiagramCanvas {
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void remove(bool from_model);
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
-    
+
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
-  
+
     virtual void history_load(QBuffer &);
     virtual void history_hide();
 
     virtual void save(QTextStream &, bool ref, QString & warning) const;
-    static ActivityObjectCanvas * read(char * &, UmlCanvas * canvas, char *);
+    static ActivityObjectCanvas * read(char *& , UmlCanvas * canvas, char *);
     virtual void post_loaded();
-    
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();	// the class is deleted
 };

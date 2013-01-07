@@ -30,10 +30,11 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n)
-      :  UmlBaseAttribute(id, n) {};
+        :  UmlBaseAttribute(id, n) {};
 };
 
 #endif

@@ -10,8 +10,9 @@
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlComponentDiagram : public UmlBaseComponentDiagram {
-  public:
+class UmlComponentDiagram : public UmlBaseComponentDiagram
+{
+public:
     UmlComponentDiagram(void * id, const Q3CString & n) : UmlBaseComponentDiagram(id, n) {};
 
     virtual int orderWeight();

@@ -35,30 +35,30 @@ static bool Verbose = FALSE;
 
 void set_verbose()
 {
-  Verbose = TRUE;
+    Verbose = TRUE;
 }
 
 bool verbose()
 {
-  return Verbose;
+    return Verbose;
 }
 
 void set_trace_header(Q3CString s)
 {
-  TraceHeader = s;
+    TraceHeader = s;
 }
 
 Q3CString get_trace_header()
 {
-  return TraceHeader;
+    return TraceHeader;
 }
 
 void write_trace_header()
 {
-  if (!Verbose && !TraceHeader.isEmpty()) {
-    UmlCom::trace("<hr>" + TraceHeader);
-    TraceHeader = "";
-  }
+    if (!Verbose && !TraceHeader.isEmpty()) {
+        UmlCom::trace("<hr>" + TraceHeader);
+        TraceHeader = "";
+    }
 }
 
 //
@@ -67,10 +67,10 @@ static int NErrors;
 
 void incr_error()
 {
-  NErrors += 1;
+    NErrors += 1;
 }
 
 int n_errors()
 {
-  return NErrors;
+    return NErrors;
 }

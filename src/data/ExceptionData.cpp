@@ -34,21 +34,25 @@
 //Added by qt3to4:
 #include <QTextStream>
 
-void ExceptionData::set_type(const AType & t) {
-  type = t;
+void ExceptionData::set_type(const AType & t)
+{
+    type = t;
 }
 
-void ExceptionData::send_uml_def(ToolCom * com) {
-  type.send_def(com);
+void ExceptionData::send_uml_def(ToolCom * com)
+{
+    type.send_def(com);
 }
 
-void ExceptionData::save(QTextStream & st, QString & warning) const {
-  nl_indent(st);
-  type.save(st, warning, "  exception ", "  explicit_exception ");
+void ExceptionData::save(QTextStream & st, QString & warning) const
+{
+    nl_indent(st);
+    type.save(st, warning, "  exception ", "  explicit_exception ");
 }
 
-void ExceptionData::read(char * & st, char * & k) {
-  type.read(st, "exception", "explicit_exception", k);
+void ExceptionData::read(char *& st, char *& k)
+{
+    type.read(st, "exception", "explicit_exception", k);
 
-  k = read_keyword(st);
+    k = read_keyword(st);
 }

@@ -27,34 +27,41 @@
 
 #include "StateSpec.h"
 
-void StateSpec::set_state(int v) {
-  switch (who) {
-  case is3states:
-    *((Uml3States *) state) = (Uml3States) v;
-    break;
-  case isClassDrawingMode:
-    *((ClassDrawingMode *) state) = (ClassDrawingMode) v;
-    break;
-  case isDrawingLanguage:
-    *((DrawingLanguage *) state) = (DrawingLanguage) v;
-    break;
-  case isShowContextMode:
-    *((ShowContextMode *) state) = (ShowContextMode) v;
-    break;
-  default:
-    *((char *) state) = v;
-  }
+void StateSpec::set_state(int v)
+{
+    switch (who) {
+    case is3states:
+        *((Uml3States *) state) = (Uml3States) v;
+        break;
+
+    case isClassDrawingMode:
+        *((ClassDrawingMode *) state) = (ClassDrawingMode) v;
+        break;
+
+    case isDrawingLanguage:
+        *((DrawingLanguage *) state) = (DrawingLanguage) v;
+        break;
+
+    case isShowContextMode:
+        *((ShowContextMode *) state) = (ShowContextMode) v;
+        break;
+
+    default:
+        *((char *) state) = v;
+    }
 }
 
-void StateSpecVector::resize(int s) {
-  StateSpec * v = new StateSpec[s];
-  
-  if (_v != 0) {
-    for (int i = 0; i != _size; i += 1)
-      v[i] = _v[i];
-    
-    delete [] _v;
-  }
-  _v = v;
-  _size = s;
+void StateSpecVector::resize(int s)
+{
+    StateSpec * v = new StateSpec[s];
+
+    if (_v != 0) {
+        for (int i = 0; i != _size; i += 1)
+            v[i] = _v[i];
+
+        delete [] _v;
+    }
+
+    _v = v;
+    _size = s;
 }

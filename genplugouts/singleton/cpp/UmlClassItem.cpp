@@ -1,7 +1,8 @@
 
 #include "UmlClassItem.h"
 
-bool UmlClassItem::check() {
-  return TRUE;
+bool UmlClassItem::check()
+{
+    return TRUE;
 }
 

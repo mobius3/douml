@@ -9,29 +9,41 @@ UmlExpansionRegion * UmlBaseExpansionRegion::create(UmlItem * parent, const char
     return (UmlExpansionRegion *) parent->create_(anExpansionRegion, s);
 }
 
-anItemKind UmlBaseExpansionRegion::kind() {
+anItemKind UmlBaseExpansionRegion::kind()
+{
     return anExpansionRegion;
 }
 
-bool UmlBaseExpansionRegion::isMustIsolate() {
+bool UmlBaseExpansionRegion::isMustIsolate()
+{
     read_if_needed_();
     return _must_isolate;
 }
 
-bool UmlBaseExpansionRegion::set_isMustIsolate(bool v) {
+bool UmlBaseExpansionRegion::set_isMustIsolate(bool v)
+{
     return set_it_(_must_isolate, v, setFlagCmd);
 }
 
-anExpansionKind UmlBaseExpansionRegion::mode() {
+anExpansionKind UmlBaseExpansionRegion::mode()
+{
     read_if_needed_();
     return _mode;
 }
 
-bool UmlBaseExpansionRegion::set_Mode(anExpansionKind v) {
-    UmlCom::send_cmd(_identifier, setDefCmd, (char) v);   if (UmlCom::read_bool()) {     _mode = v;     return TRUE;   }   else     return FALSE;
+bool UmlBaseExpansionRegion::set_Mode(anExpansionKind v)
+{
+    UmlCom::send_cmd(_identifier, setDefCmd, (char) v);
+
+    if (UmlCom::read_bool()) {
+        _mode = v;
+        return TRUE;
+    }
+    else     return FALSE;
 }
 
-void UmlBaseExpansionRegion::read_uml_() {
+void UmlBaseExpansionRegion::read_uml_()
+{
     UmlBaseActivityRegion::read_uml_();
     _must_isolate = UmlCom::read_bool();
     _mode = (anExpansionKind) UmlCom::read_char();

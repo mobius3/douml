@@ -44,10 +44,11 @@ class KeyValuesTable;
 class BodyDialog;
 class BrowserNode;
 
-class ActivityPartitionDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class ActivityPartitionDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     QWidget * umltab;
     ActivityPartitionData * data;
     LineEdit * edname;
@@ -61,14 +62,14 @@ class ActivityPartitionDialog : public Q3TabDialog {
     Q3PtrList<BodyDialog> edits;
 
     static QSize previous_size;
-    
+
     static void post_edit_description(ActivityPartitionDialog * d, QString s);
-      
-  public:
+
+public:
     ActivityPartitionDialog(ActivityPartitionData * nd);
     virtual ~ActivityPartitionDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void edit_description();

@@ -10,8 +10,9 @@
 // is a mother class of the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n) :  UmlBaseAttribute(id, n) {};
 
     //returns a string indicating the king of the element
@@ -40,12 +41,12 @@ class UmlAttribute : public UmlBaseAttribute {
     void gen_python_decl(Q3CString s);
 
 
-  private:
+private:
     //produce the definition in Uml
     void gen_uml_decl();
 
 
-  public:
+public:
     static Vector attrs;
 
 };

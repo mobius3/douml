@@ -3,9 +3,9 @@
 
 
 enum ControlOrData {
-  Unset,
-  IsControl,
-  IsData
+    Unset,
+    IsControl,
+    IsData
 
 };
 #endif

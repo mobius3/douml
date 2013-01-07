@@ -41,10 +41,11 @@
 
 class BrowserRegion;
 
-class StateActionCanvas : public QObject, public DiagramCanvas {
-  Q_OBJECT
-    
-  protected:
+class StateActionCanvas : public QObject, public DiagramCanvas
+{
+    Q_OBJECT
+
+protected:
     DrawingLanguage language;
     Uml3States show_stereotype_properties;
     UmlColor itscolor;
@@ -52,52 +53,52 @@ class StateActionCanvas : public QObject, public DiagramCanvas {
     QString s;
     int min_width;
     int min_height;
-    
-  protected:
+
+protected:
     StateActionCanvas(UmlCanvas * canvas, int id);
-  
-  public:
+
+public:
     StateActionCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~StateActionCanvas();
-    
+
     virtual void delete_it();
-    
+
     void compute_size();
-    
+
     virtual void draw(QPainter & p);
     virtual void change_scale();
-    
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void remove(bool from_model);
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
     virtual aCorner on_resize_point(const QPoint & p);
     virtual void resize(aCorner c, int dx, int dy, QPoint &);
     virtual void resize(const QSize & sz, bool w, bool h);
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
-    
+
     virtual void apply_shortcut(QString s);
-  
+
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
-    static StateActionCanvas * read(char * &, UmlCanvas *, char *);
+    static StateActionCanvas * read(char *& , UmlCanvas *, char *);
     virtual void post_loaded();
 
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();
 };

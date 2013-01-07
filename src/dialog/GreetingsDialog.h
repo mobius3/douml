@@ -32,16 +32,17 @@ class QPushButton;
 
 #include <qdialog.h>
 
-class GreetingsDialog : public QDialog {
-  Q_OBJECT
-    
-  private:
+class GreetingsDialog : public QDialog
+{
+    Q_OBJECT
+
+private:
     QPushButton * ok;
-  
-  public:
+
+public:
     GreetingsDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void closeEvent(QCloseEvent * e);
     void valid_ok();
 };

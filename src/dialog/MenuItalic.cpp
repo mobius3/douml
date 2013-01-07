@@ -31,16 +31,19 @@
 
 #include "MenuItalic.h"
 
-MenuItalic::MenuItalic(const QString & s, QFont f) : str(s), font(f) {
-  font.setItalic(TRUE);
+MenuItalic::MenuItalic(const QString & s, QFont f) : str(s), font(f)
+{
+    font.setItalic(TRUE);
 }
 
-void MenuItalic::paint(QPainter * p, const QColorGroup& /*cg*/, bool /*act*/,
-		      bool /*enabled*/, int x, int y, int w, int h) {
-  p->setFont (font);
-  p->drawText( x, y, w, h, Qt::AlignLeft | Qt::TextShowMnemonic | Qt::TextDontClip, str);
+void MenuItalic::paint(QPainter * p, const QColorGroup & /*cg*/, bool /*act*/,
+                       bool /*enabled*/, int x, int y, int w, int h)
+{
+    p->setFont(font);
+    p->drawText(x, y, w, h, Qt::AlignLeft | Qt::TextShowMnemonic | Qt::TextDontClip, str);
 }
 
-QSize MenuItalic::sizeHint() {
-  return QFontMetrics(font).size(Qt::AlignLeft | Qt::TextShowMnemonic | Qt::TextDontClip, str);
+QSize MenuItalic::sizeHint()
+{
+    return QFontMetrics(font).size(Qt::AlignLeft | Qt::TextShowMnemonic | Qt::TextDontClip, str);
 }

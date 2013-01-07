@@ -10,13 +10,16 @@ class QFile;
 class UmlItem;
 
 //QTextOStream + usefull operations
-class FileOut : public Q3TextStream {
-  public:
+class FileOut : public Q3TextStream
+{
+public:
     FileOut(QFile * fp, bool lf, bool utf8);
 
     void indent();
 
-    void indent(int dir) { _indent += dir; }
+    void indent(int dir) {
+        _indent += dir;
+    }
 
     void id(UmlItem * x);
 
@@ -46,21 +49,21 @@ class FileOut : public Q3TextStream {
 
     void define_datatypes(bool uml_20, bool primitive_type, bool gen_extension);
 
-    void quote(const Q3CString &s);
-    
+    void quote(const Q3CString & s);
+
     void quote(const char * s);
 
     void quote(char c);
 
 
-  protected:
+protected:
     bool _lf;
 
     int _indent;
 
-    QMap<Q3CString,int> _datatypes;
+    QMap<Q3CString, int> _datatypes;
 
-    QMap<Q3CString,int> _modifiedtypes;
+    QMap<Q3CString, int> _modifiedtypes;
 
 };
 

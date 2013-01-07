@@ -39,54 +39,54 @@
 
 int main(int argc, char ** argv)
 {
-  if (argc != 2)
-      return 0;
-  
-  if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
-    try {
-      //UmlCom::with_ack(FALSE);
-		       
-      // warning : release is also in JavaCatWindow
-      UmlCom::trace("<b>Java catalog</b> release 2.17<br><hr>");
-      UmlCom::traceAutoRaise(FALSE);
-      
-      UmlItem * item = UmlCom::targetItem();
-      
-      if (item->kind() != aPackage)
-	UmlCom::trace("<font face=helvetica><b>must be applied on a <i>package</i></b></font><br><hr><br>");
-      else {
-	char * argv = 0;
-	int argc = 0;
-	
-	QApplication * app = new QApplication(argc, &argv);
-			 
-	app->connect(app, SIGNAL(lastWindowClosed()), SLOT(quit()) );
+    if (argc != 2)
+        return 0;
 
-	init_pixmaps();
-	
-	JavaCatWindow * w = new JavaCatWindow();
-	
-	w->resize((QApplication::desktop()->width() * 3)/5,
-		  (QApplication::desktop()->height() * 3)/5);
-	
-	w->show();
-	
-	Package::init((UmlPackage *) item, app);
-	app->exec();
-      }
+    if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
+        try {
+            //UmlCom::with_ack(FALSE);
+
+            // warning : release is also in JavaCatWindow
+            UmlCom::trace("<b>Java catalog</b> release 2.17<br><hr>");
+            UmlCom::traceAutoRaise(FALSE);
+
+            UmlItem * item = UmlCom::targetItem();
+
+            if (item->kind() != aPackage)
+                UmlCom::trace("<font face=helvetica><b>must be applied on a <i>package</i></b></font><br><hr><br>");
+            else {
+                char * argv = 0;
+                int argc = 0;
+
+                QApplication * app = new QApplication(argc, &argv);
+
+                app->connect(app, SIGNAL(lastWindowClosed()), SLOT(quit()));
+
+                init_pixmaps();
+
+                JavaCatWindow * w = new JavaCatWindow();
+
+                w->resize((QApplication::desktop()->width() * 3) / 5,
+                          (QApplication::desktop()->height() * 3) / 5);
+
+                w->show();
+
+                Package::init((UmlPackage *) item, app);
+                app->exec();
+            }
+        }
+        catch (...) {
+        }
+
+        try {
+            // socket may be already closed
+            UmlCom::showTrace();
+            UmlCom::bye(0);	// application must not be deleted
+        }
+        catch (...) {
+        }
     }
-    catch (...) {
-    }
-    
-    try {
-      // socket may be already closed
-      UmlCom::showTrace();
-      UmlCom::bye(0);	// application must not be deleted
-    }
-    catch (...) {
-    }
-  }
-  
-  UmlCom::close();	// application must not be deleted
-  return 0;
+
+    UmlCom::close();	// application must not be deleted
+    return 0;
 }

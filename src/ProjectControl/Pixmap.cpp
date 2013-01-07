@@ -44,17 +44,17 @@ QPixmap * RoOtherPackageIcon;
 
 void init_pixmaps()
 {
-  // browser icons
-  
+    // browser icons
+
 #include "package_xpm.xpm"
 
-  ProtectedPackageIcon = new QPixmap((const char **) protected_package_xpm);
-  FreePackageIcon = new QPixmap((const char **) free_package_xpm);
-  UserPackageIcon = new QPixmap((const char **) user_package_xpm);
-  OtherPackageIcon = new QPixmap((const char **) other_package_xpm);
-  
-  RoProtectedPackageIcon = new QPixmap((const char **) ro_protected_package_xpm);
-  RoFreePackageIcon = new QPixmap((const char **) ro_free_package_xpm);
-  RoUserPackageIcon = new QPixmap((const char **) ro_user_package_xpm);
-  RoOtherPackageIcon = new QPixmap((const char **) ro_other_package_xpm);
+    ProtectedPackageIcon = new QPixmap((const char **) protected_package_xpm);
+    FreePackageIcon = new QPixmap((const char **) free_package_xpm);
+    UserPackageIcon = new QPixmap((const char **) user_package_xpm);
+    OtherPackageIcon = new QPixmap((const char **) other_package_xpm);
+
+    RoProtectedPackageIcon = new QPixmap((const char **) ro_protected_package_xpm);
+    RoFreePackageIcon = new QPixmap((const char **) ro_free_package_xpm);
+    RoUserPackageIcon = new QPixmap((const char **) ro_user_package_xpm);
+    RoOtherPackageIcon = new QPixmap((const char **) ro_other_package_xpm);
 }

@@ -6,10 +6,11 @@
 
 class FileOut;
 
-class UmlFinalState : public UmlBaseFinalState {
-  public:
+class UmlFinalState : public UmlBaseFinalState
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlFinalState(void * id) : UmlBaseFinalState(id, "") {
+    UmlFinalState(void * id) : UmlBaseFinalState(id, "") {
     }
 
     virtual void write(FileOut & out);

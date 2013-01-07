@@ -40,225 +40,265 @@
 
 BasicParent BasicParent::the;
 
-void BasicParent::insertChild(QObject *){
-  // does nothing !
+void BasicParent::insertChild(QObject *)
+{
+    // does nothing !
 }
 
-void BasicParent::removeChild(QObject *){
-  // does nothing !
+void BasicParent::removeChild(QObject *)
+{
+    // does nothing !
 }
 
 //
 
 Q3PtrList<BasicData> BasicData::removed;
 
-BasicData::BasicData(const BasicData * model) 
-    : QObject(&BasicParent::the), browser_node(0) {
-   stereotype = model->stereotype;
+BasicData::BasicData(const BasicData * model)
+    : QObject(&BasicParent::the), browser_node(0)
+{
+    stereotype = model->stereotype;
 }
 
-BasicData::~BasicData() {
+BasicData::~BasicData()
+{
 }
 
 // does not really delete it for undelete management
-void BasicData::delete_it() {
-  if (!deletedp()) {
-    set_deletedp(TRUE);
-    emit deleted();
-    removed.append(this);
-  }
+void BasicData::delete_it()
+{
+    if (!deletedp()) {
+        set_deletedp(TRUE);
+        emit deleted();
+        removed.append(this);
+    }
 }
 
-void BasicData::undelete(QString &, QString &) {
-  if (deletedp()) {
-    set_deletedp(FALSE);
-    emit changed();
-    removed.removeRef(this);
-  }
+void BasicData::undelete(QString &, QString &)
+{
+    if (deletedp()) {
+        set_deletedp(FALSE);
+        emit changed();
+        removed.removeRef(this);
+    }
 }
 
 void BasicData::resignal_deleted()
 {
-  BasicData * d;
-  
-  for (d = removed.last(); d != 0; d = removed.prev())
-    d->redelete_it();
+    BasicData * d;
+
+    for (d = removed.last(); d != 0; d = removed.prev())
+        d->redelete_it();
 }
 
-void BasicData::on_delete() {
-  browser_node->on_delete();
+void BasicData::on_delete()
+{
+    browser_node->on_delete();
 }
-  
-void BasicData::modified() {
-  emit changed();
+
+void BasicData::modified()
+{
+    emit changed();
 }
 
 //
 
-const char * BasicData::get_short_stereotype() const {
-  const char * s = stereotype;
-  const char * p = strchr(s, ':');
-  
-  return (p != 0) ? p+1 : s;
+const char * BasicData::get_short_stereotype() const
+{
+    const char * s = stereotype;
+    const char * p = strchr(s, ':');
+
+    return (p != 0) ? p + 1 : s;
 }
 
-bool BasicData::set_stereotype(const QString & s) {
-  bool result = ((const char *) stereotype != s);
-  
-  stereotype = s;
-  if (browser_node != 0)
-    browser_node->update_stereotype();
-  
-  return result;
+bool BasicData::set_stereotype(const QString & s)
+{
+    bool result = ((const char *) stereotype != s);
+
+    stereotype = s;
+
+    if (browser_node != 0)
+        browser_node->update_stereotype();
+
+    return result;
 }
 
-bool BasicData::set_stereotype(const Q3CString & s) {
-  bool result = ((const char *) stereotype != s);
-  
-  stereotype = s;
-  if (browser_node != 0)
-    browser_node->update_stereotype();
-  
-  return result;
+bool BasicData::set_stereotype(const Q3CString & s)
+{
+    bool result = ((const char *) stereotype != s);
+
+    stereotype = s;
+
+    if (browser_node != 0)
+        browser_node->update_stereotype();
+
+    return result;
 }
 
-bool BasicData::set_stereotype(const char * s) {
-  bool result = ((const char *) stereotype != s);
-  
-  stereotype = s;
-  if (browser_node != 0)
-    browser_node->update_stereotype();
-  
-  return result;
+bool BasicData::set_stereotype(const char * s)
+{
+    bool result = ((const char *) stereotype != s);
+
+    stereotype = s;
+
+    if (browser_node != 0)
+        browser_node->update_stereotype();
+
+    return result;
 }
 
-void BasicData::set_browser_node(BrowserNode * bn) {
-  browser_node = bn;
-  bn->update_stereotype();
+void BasicData::set_browser_node(BrowserNode * bn)
+{
+    browser_node = bn;
+    bn->update_stereotype();
 }
 
-QString BasicData::definition(bool, bool with_kind) const {
-  return (with_kind)
-    ? "[" + browser_node->get_stype() + "] " + browser_node->get_name()
-    : QString(browser_node->get_name());
+QString BasicData::definition(bool, bool with_kind) const
+{
+    return (with_kind)
+           ? "[" + browser_node->get_stype() + "] " + browser_node->get_name()
+           : QString(browser_node->get_name());
 }
 
 bool BasicData::decldefbody_contain(const QString &, bool,
-				    BrowserNode *) {
-  return FALSE;
+                                    BrowserNode *)
+{
+    return FALSE;
 }
 
-void BasicData::save(QTextStream & st, QString &) const {
-  if (! stereotype.isEmpty()) {
-    nl_indent(st);
-    st << "stereotype ";
-    save_string(stereotype, st);
-  }
+void BasicData::save(QTextStream & st, QString &) const
+{
+    if (! stereotype.isEmpty()) {
+        nl_indent(st);
+        st << "stereotype ";
+        save_string(stereotype, st);
+    }
 }
 
-void BasicData::read(char * & st, char * & k) {
-  if (!strcmp(k, "stereotype")) {
-    set_stereotype(read_string(st));
-    k = read_keyword(st);
-  }
-  else
-    set_stereotype(QString());
+void BasicData::read(char *& st, char *& k)
+{
+    if (!strcmp(k, "stereotype")) {
+        set_stereotype(read_string(st));
+        k = read_keyword(st);
+    }
+    else
+        set_stereotype(QString());
 }
 
 //
 
 void BasicData::send_uml_def(ToolCom * com, BrowserNode * bn,
-			     const QString & comment) {
-  if (browser_node != 0) {
-    BrowserNode * d = browser_node->get_associated();
-    
-    if (d != browser_node) {
-      // may have an associated diagram/view
-      if ((d != 0) && !d->deletedp())
-	d->write_id(com);
-      else
-	com->write_id(0);
+                             const QString & comment)
+{
+    if (browser_node != 0) {
+        BrowserNode * d = browser_node->get_associated();
+
+        if (d != browser_node) {
+            // may have an associated diagram/view
+            if ((d != 0) && !d->deletedp())
+                d->write_id(com);
+            else
+                com->write_id(0);
+        }
     }
-  }
-  
-  com->write_string(stereotype);
-  ((HaveKeyValueData *) bn)->send_def(com);
-  com->write_string(comment);
-  
-  int api = com->api_format();
-  
-  if (api > 11) {
-    com->write_bool(bn->markedp());
-    if (api > 30)
-      com->write_unsigned(bn->get_identifier());
-  }
+
+    com->write_string(stereotype);
+    ((HaveKeyValueData *) bn)->send_def(com);
+    com->write_string(comment);
+
+    int api = com->api_format();
+
+    if (api > 11) {
+        com->write_bool(bn->markedp());
+
+        if (api > 30)
+            com->write_unsigned(bn->get_identifier());
+    }
 }
 
-void BasicData::send_cpp_def(ToolCom *) {
+void BasicData::send_cpp_def(ToolCom *)
+{
 }
 
-void BasicData::send_java_def(ToolCom *) {
+void BasicData::send_java_def(ToolCom *)
+{
 }
 
-void BasicData::send_php_def(ToolCom *) {
+void BasicData::send_php_def(ToolCom *)
+{
 }
 
-void BasicData::send_python_def(ToolCom *) {
+void BasicData::send_python_def(ToolCom *)
+{
 }
 
-void BasicData::send_idl_def(ToolCom *) {
+void BasicData::send_idl_def(ToolCom *)
+{
 }
 
 bool BasicData::tool_cmd(ToolCom * com, const char * args,
-			 BrowserNode * bn, const QString & comment) {
-  switch ((unsigned char) args[-1]) {
-  case setStereotypeCmd:
-    if (!bn->is_writable() && !root_permission())
-      com->write_ack(FALSE);
-    else {
-      set_stereotype(args);
-      browser_node->package_modified();
-      modified();
-      com->write_ack(TRUE);
+                         BrowserNode * bn, const QString & comment)
+{
+    switch ((unsigned char) args[-1]) {
+    case setStereotypeCmd:
+        if (!bn->is_writable() && !root_permission())
+            com->write_ack(FALSE);
+        else {
+            set_stereotype(args);
+            browser_node->package_modified();
+            modified();
+            com->write_ack(TRUE);
+        }
+
+        break;
+
+    case getDefCmd:
+        send_uml_def(com, bn, comment);
+        send_cpp_def(com);
+        send_java_def(com);
+
+        if (com->api_format() >= 34) {
+            send_php_def(com);
+
+            if (com->api_format() >= 39)
+                send_python_def(com);
+        }
+
+        send_idl_def(com);
+        break;
+
+    case getUmlDefCmd:
+        send_uml_def(com, bn, comment);
+        break;
+
+    case getCppDefCmd:
+        send_uml_def(com, bn, comment);
+        send_cpp_def(com);
+        break;
+
+    case getJavaDefCmd:
+        send_uml_def(com, bn, comment);
+        send_java_def(com);
+        break;
+
+    case getPhpDefCmd:
+        send_uml_def(com, bn, comment);
+        send_php_def(com);
+        break;
+
+    case getPythonDefCmd:
+        send_uml_def(com, bn, comment);
+        send_python_def(com);
+        break;
+
+    case getIdlDefCmd:
+        send_uml_def(com, bn, comment);
+        send_idl_def(com);
+        break;
+
+    default:
+        return FALSE;
     }
-    break;
-  case getDefCmd:
-    send_uml_def(com, bn, comment);
-    send_cpp_def(com);
-    send_java_def(com);
-    if (com->api_format() >= 34) {
-      send_php_def(com);
-      if (com->api_format() >= 39)
-	send_python_def(com);
-    }
-    send_idl_def(com);
-    break;
-  case getUmlDefCmd:
-    send_uml_def(com, bn, comment);
-    break;
-  case getCppDefCmd:
-    send_uml_def(com, bn, comment);
-    send_cpp_def(com);
-    break;
-  case getJavaDefCmd:
-    send_uml_def(com, bn, comment);
-    send_java_def(com);
-    break;
-  case getPhpDefCmd:
-    send_uml_def(com, bn, comment);
-    send_php_def(com);
-    break;
-  case getPythonDefCmd:
-    send_uml_def(com, bn, comment);
-    send_python_def(com);
-    break;
-  case getIdlDefCmd:
-    send_uml_def(com, bn, comment);
-    send_idl_def(com);
-    break;
-  default:
-    return FALSE;
-  }
-  
-  return TRUE;
-}    
+
+    return TRUE;
+}

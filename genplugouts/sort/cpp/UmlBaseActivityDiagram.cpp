@@ -8,7 +8,8 @@ UmlActivityDiagram * UmlBaseActivityDiagram::create(UmlItem * parent, const char
     return (UmlActivityDiagram *) parent->create_(anActivityDiagram, s);
 }
 
-anItemKind UmlBaseActivityDiagram::kind() {
+anItemKind UmlBaseActivityDiagram::kind()
+{
     return anActivityDiagram;
 }
 

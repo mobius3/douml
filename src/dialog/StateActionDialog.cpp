@@ -27,11 +27,11 @@
 
 
 
-#include <q3grid.h> 
+#include <q3grid.h>
 #include <q3vbox.h>
 #include <qlabel.h>
-#include <q3combobox.h> 
-#include <qpushbutton.h> 
+#include <q3combobox.h>
+#include <qpushbutton.h>
 
 #include "StateActionDialog.h"
 #include "StateActionData.h"
@@ -49,179 +49,192 @@
 QSize StateActionDialog::previous_size;
 
 StateActionDialog::StateActionDialog(StateActionData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), action(d) {
-  d->browser_node->edit_start();
-  
-  if (d->browser_node->is_writable()) {
-    setOkButton(TR("OK"));
-    setCancelButton(TR("Cancel"));
-  }
-  else {
-    setOkButton(QString());
-    setCancelButton(TR("Close"));
-  }
+    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), action(d)
+{
+    d->browser_node->edit_start();
 
-  setCaption(TR("State Action dialog"));
-  visit = !hasOkButton();  
+    if (d->browser_node->is_writable()) {
+        setOkButton(TR("OK"));
+        setCancelButton(TR("Cancel"));
+    }
+    else {
+        setOkButton(QString());
+        setCancelButton(TR("Close"));
+    }
 
-  BrowserNode * bn = action->browser_node;
-  Q3Grid * grid;
-  
-  //
-  // general tab
-  //
-  
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
-  
-  new QLabel(TR("stereotype : "), grid);
-  edstereotype = new Q3ComboBox(!visit, grid);
-  edstereotype->insertItem(toUnicode(action->get_stereotype()));
-  if (!visit) {
-    edstereotype->insertStringList(BrowserStateAction::default_stereotypes());
-    edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlStateAction));
-    edstereotype->setAutoCompletion(completion());
-  }
-  edstereotype->setCurrentItem(0);
-  QSizePolicy sp = edstereotype->sizePolicy();
-  sp.setHorData(QSizePolicy::Expanding);
-  edstereotype->setSizePolicy(sp);
-  
-  Q3VBox * vtab = new Q3VBox(grid);
-  new QLabel(TR("description :"), vtab);
-  if (! visit)
-    connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
-	    this, SLOT(edit_description()));
-  comment = new MultiLineEdit(grid);
-  comment->setReadOnly(visit);
-  comment->setText(bn->get_comment());
-  //comment->setFont(font);
-  
-  addTab(grid, "Uml");
+    setCaption(TR("State Action dialog"));
+    visit = !hasOkButton();
 
-  // OCL
-  grid = new Q3Grid(2, this);
-  umltab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
-  
-  new QLabel(TR("behavior"), grid);
-  uml = new MultiLineEdit(grid);
-  uml->setText(action->uml);
-  if (visit)
-    uml->setReadOnly(TRUE);
-  
-  addTab(grid, "Ocl");
+    BrowserNode * bn = action->browser_node;
+    Q3Grid * grid;
 
-  // CPP
-  grid = new Q3Grid(2, this);
-  cppTab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
-  
-  new QLabel(TR("behavior"), grid);
-  cpp = new MultiLineEdit(grid);
-  cpp->setText(action->cpp);
-  if (visit)
-    cpp->setReadOnly(TRUE);
-  
-  addTab(grid, "C++");
-  
-  if (! GenerationSettings::cpp_get_default_defs())
-    removePage(grid);
-  
-  // Java
-  grid = new Q3Grid(2, this);
-  javatab = grid;
-  grid->setMargin(5);
-  grid->setSpacing(5);
-  
-  new QLabel(TR("behavior"), grid);
-  java = new MultiLineEdit(grid);
-  java->setText(action->java);
-  if (visit)
-    java->setReadOnly(TRUE);
-  
-  addTab(grid, "Java");
-  
-  if (! GenerationSettings::java_get_default_defs())
-    removePage(grid);
+    //
+    // general tab
+    //
 
-  // USER : list key - value
-  
-  grid = new Q3Grid(2, this);
-  grid->setMargin(5);
-  grid->setSpacing(5);
-  
-  kvtable = new KeyValuesTable(bn, grid, visit);
-  addTab(grid, TR("Properties"));
-  
-  //
-    
-  connect(this, SIGNAL(currentChanged(QWidget *)),
-	  this, SLOT(change_tabs(QWidget *)));
-  
-  open_dialog(this);
+    grid = new Q3Grid(2, this);
+    grid->setMargin(5);
+    grid->setSpacing(5);
+
+    new QLabel(TR("stereotype : "), grid);
+    edstereotype = new Q3ComboBox(!visit, grid);
+    edstereotype->insertItem(toUnicode(action->get_stereotype()));
+
+    if (!visit) {
+        edstereotype->insertStringList(BrowserStateAction::default_stereotypes());
+        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlStateAction));
+        edstereotype->setAutoCompletion(completion());
+    }
+
+    edstereotype->setCurrentItem(0);
+    QSizePolicy sp = edstereotype->sizePolicy();
+    sp.setHorData(QSizePolicy::Expanding);
+    edstereotype->setSizePolicy(sp);
+
+    Q3VBox * vtab = new Q3VBox(grid);
+    new QLabel(TR("description :"), vtab);
+
+    if (! visit)
+        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+                this, SLOT(edit_description()));
+
+    comment = new MultiLineEdit(grid);
+    comment->setReadOnly(visit);
+    comment->setText(bn->get_comment());
+    //comment->setFont(font);
+
+    addTab(grid, "Uml");
+
+    // OCL
+    grid = new Q3Grid(2, this);
+    umltab = grid;
+    grid->setMargin(5);
+    grid->setSpacing(5);
+
+    new QLabel(TR("behavior"), grid);
+    uml = new MultiLineEdit(grid);
+    uml->setText(action->uml);
+
+    if (visit)
+        uml->setReadOnly(TRUE);
+
+    addTab(grid, "Ocl");
+
+    // CPP
+    grid = new Q3Grid(2, this);
+    cppTab = grid;
+    grid->setMargin(5);
+    grid->setSpacing(5);
+
+    new QLabel(TR("behavior"), grid);
+    cpp = new MultiLineEdit(grid);
+    cpp->setText(action->cpp);
+
+    if (visit)
+        cpp->setReadOnly(TRUE);
+
+    addTab(grid, "C++");
+
+    if (! GenerationSettings::cpp_get_default_defs())
+        removePage(grid);
+
+    // Java
+    grid = new Q3Grid(2, this);
+    javatab = grid;
+    grid->setMargin(5);
+    grid->setSpacing(5);
+
+    new QLabel(TR("behavior"), grid);
+    java = new MultiLineEdit(grid);
+    java->setText(action->java);
+
+    if (visit)
+        java->setReadOnly(TRUE);
+
+    addTab(grid, "Java");
+
+    if (! GenerationSettings::java_get_default_defs())
+        removePage(grid);
+
+    // USER : list key - value
+
+    grid = new Q3Grid(2, this);
+    grid->setMargin(5);
+    grid->setSpacing(5);
+
+    kvtable = new KeyValuesTable(bn, grid, visit);
+    addTab(grid, TR("Properties"));
+
+    //
+
+    connect(this, SIGNAL(currentChanged(QWidget *)),
+            this, SLOT(change_tabs(QWidget *)));
+
+    open_dialog(this);
 }
 
-StateActionDialog::~StateActionDialog() {
-  action->browser_node->edit_end();
-  previous_size = size();
-  
-  while (!edits.isEmpty())
-    edits.take(0)->close();
-  
-  close_dialog(this);
+StateActionDialog::~StateActionDialog()
+{
+    action->browser_node->edit_end();
+    previous_size = size();
+
+    while (!edits.isEmpty())
+        edits.take(0)->close();
+
+    close_dialog(this);
 }
 
-void StateActionDialog::change_tabs(QWidget * w) {
-  if (!visit) {
-    if (w == umltab)
-      uml->setFocus();
-    else if (w == cppTab)
-      cpp->setFocus();
-    else if (w == javatab)
-      java->setFocus();
-  }
+void StateActionDialog::change_tabs(QWidget * w)
+{
+    if (!visit) {
+        if (w == umltab)
+            uml->setFocus();
+        else if (w == cppTab)
+            cpp->setFocus();
+        else if (w == javatab)
+            java->setFocus();
+    }
 }
 
-void StateActionDialog::polish() {
-  Q3TabDialog::polish();
-  UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
+void StateActionDialog::polish()
+{
+    Q3TabDialog::polish();
+    UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
-void StateActionDialog::edit_description() {
-  edit(comment->text(), "state_description", action, TxtEdit,
-       this, (post_edit) post_edit_description, edits);
+void StateActionDialog::edit_description()
+{
+    edit(comment->text(), "state_description", action, TxtEdit,
+         this, (post_edit) post_edit_description, edits);
 }
 
 void StateActionDialog::post_edit_description(StateActionDialog * d, QString s)
 {
-  d->comment->setText(s);
+    d->comment->setText(s);
 }
 
-void StateActionDialog::accept() {
-  if (!check_edits(edits) || !kvtable->check_unique())
-    return;
-    
-  BrowserNode * bn = action->browser_node;
-  bool newst = action->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
-  
-  action->uml = uml->text();
-  action->cpp = cpp->text();
-  action->java = java->text();
-  
-  bn->set_comment(comment->text());
-  UmlWindow::update_comment_if_needed(bn);
-  
-  kvtable->update(bn);
-  
-  ProfiledStereotypes::modified(bn, newst);
-  
-  bn->modified();
-  bn->package_modified();
-  action->modified();
-  
-  Q3TabDialog::accept();
+void StateActionDialog::accept()
+{
+    if (!check_edits(edits) || !kvtable->check_unique())
+        return;
+
+    BrowserNode * bn = action->browser_node;
+    bool newst = action->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+
+    action->uml = uml->text();
+    action->cpp = cpp->text();
+    action->java = java->text();
+
+    bn->set_comment(comment->text());
+    UmlWindow::update_comment_if_needed(bn);
+
+    kvtable->update(bn);
+
+    ProfiledStereotypes::modified(bn, newst);
+
+    bn->modified();
+    bn->package_modified();
+    action->modified();
+
+    Q3TabDialog::accept();
 }

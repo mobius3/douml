@@ -15,11 +15,12 @@ class UmlArtifact;
 // - a class reference
 //
 // - an explicit type
-class UmlTypeSpec : public UmlBaseTypeSpec {
-  public:
+class UmlTypeSpec : public UmlBaseTypeSpec
+{
+public:
     void generate_require_onces(QTextStream & f,
-				Q3CString & made,
-				UmlArtifact * using_art) const;
+                                Q3CString & made,
+                                UmlArtifact * using_art) const;
 };
 
 #endif

@@ -42,17 +42,18 @@ class BrowserNode;
 class KeyValuesTable;
 class BodyDialog;
 
-class PackageDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class PackageDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     QWidget * umltab;
     PackageData * pa;
     LineEdit * edname;
     Q3ComboBox * edstereotype;
     MultiLineEdit * comment;
     Q3PtrList<BodyDialog> edits;
-    
+
     // C++
     QWidget * cppTab;
     LineEdit * edcppsrcdir;
@@ -84,7 +85,7 @@ class PackageDialog : public Q3TabDialog {
     LineEdit * edidldir;
     LineEdit * edidlmodule;
     QPushButton * idlbutton;
-    
+
     // Profile
     QWidget * profiletab;
     LineEdit * edmetamodelReference;
@@ -92,21 +93,21 @@ class PackageDialog : public Q3TabDialog {
 
     // User
     KeyValuesTable * kvtable;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     PackageDialog(PackageData * d);
     virtual ~PackageDialog();
-  
-  protected:
+
+protected:
     void browse(LineEdit * ed, QPushButton * button, const char * caption,
-		QString root);
+                QString root);
     void relative(LineEdit * ed, QPushButton * button, QString root);
-    
+
     static void post_edit_description(PackageDialog * d, QString s);
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void edit_description();

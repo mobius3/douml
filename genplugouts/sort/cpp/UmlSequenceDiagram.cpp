@@ -1,7 +1,8 @@
 
 #include "UmlSequenceDiagram.h"
 
-int UmlSequenceDiagram::orderWeight() {
-  return 7;
+int UmlSequenceDiagram::orderWeight()
+{
+    return 7;
 }
 

@@ -35,15 +35,16 @@
 // and sub-classes
 // You can modify it as you want (except the constructor)
 
-class UmlClassMember : public UmlBaseClassMember {
-  public:
+class UmlClassMember : public UmlBaseClassMember
+{
+public:
     UmlClassMember(void * id, const Q3CString & n)
-      : UmlBaseClassMember(id, n) {};
-  
+        : UmlBaseClassMember(id, n) {};
+
     virtual void generate_require_onces(QTextStream & f, Q3CString & made);
-	
+
     void generate_visibility(QTextStream & f);
-    
+
     static void remove_comments(Q3CString & s);
     static void remove_arrays(Q3CString & s);
 };

@@ -26,7 +26,7 @@
 #ifndef UMLRELATION_H
 #define UMLRELATION_H
 
-#include <q3valuelist.h> 
+#include <q3valuelist.h>
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3PtrList>
@@ -37,35 +37,36 @@
 class Class;
 class UmlClass;
 
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n)
-      : UmlBaseRelation(id, n) {
-    };  
-  
+        : UmlBaseRelation(id, n) {
+    };
+
     static bool new_one(Class * container, const Q3CString & name,
-			UmlTypeSpec & dest, Q3CString str_actuals,
-			aVisibility visibility,	bool staticp,
-			bool constp, bool transientp, bool volatilep,
-			const Q3CString & array,	const Q3CString & value,
-			Q3CString comment, Q3CString description,
-			Q3CString annotation
+                        UmlTypeSpec & dest, Q3CString str_actuals,
+                        aVisibility visibility,	bool staticp,
+                        bool constp, bool transientp, bool volatilep,
+                        const Q3CString & array,	const Q3CString & value,
+                        Q3CString comment, Q3CString description,
+                        Q3CString annotation
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			);
+                       );
     static bool new_one(Class * container, const Q3CString & name,
-			UmlClass * type, Q3CString type_def,
-			Q3CString genericname,
-			aVisibility visibility, bool staticp,
-			bool constp, bool transientp, bool volatilep,
-			const Q3CString & array, const Q3CString & value,
-			Q3CString comment, Q3CString description,
-			Q3CString annotation
+                        UmlClass * type, Q3CString type_def,
+                        Q3CString genericname,
+                        aVisibility visibility, bool staticp,
+                        bool constp, bool transientp, bool volatilep,
+                        const Q3CString & array, const Q3CString & value,
+                        Q3CString comment, Q3CString description,
+                        Q3CString annotation
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			);
+                       );
 #ifdef ROUNDTRIP
     void set_unidir();
 #endif

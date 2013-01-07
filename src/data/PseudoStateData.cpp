@@ -41,122 +41,137 @@
 #include "mu.h"
 #include "strutil.h"
 
-PseudoStateData::PseudoStateData() : reference(0) {
+PseudoStateData::PseudoStateData() : reference(0)
+{
 }
 
 // doesn't copy associated classes or artifacts
 PseudoStateData::PseudoStateData(PseudoStateData * model, BrowserNode * bn)
-    : SimpleData(model) {
-  browser_node = bn;
-  reference = model->reference;
+    : SimpleData(model)
+{
+    browser_node = bn;
+    reference = model->reference;
 }
 
-PseudoStateData::~PseudoStateData() {
+PseudoStateData::~PseudoStateData()
+{
 }
 
-void PseudoStateData::edit() {
-  setName(browser_node->get_name());
-  
-  (new PseudoStateDialog(this))->show();
+void PseudoStateData::edit()
+{
+    setName(browser_node->get_name());
+
+    (new PseudoStateDialog(this))->show();
 }
 
-void PseudoStateData::set_reference(BrowserPseudoState * st) {
-  if (reference != 0)
-    disconnect(reference->get_data(), SIGNAL(deleted()),
-	       this, SLOT(on_delete()));
-  if ((reference = st) != 0) {
-    connect(reference->get_data(), SIGNAL(deleted()),
-	    this, SLOT(on_delete()));
-  }
+void PseudoStateData::set_reference(BrowserPseudoState * st)
+{
+    if (reference != 0)
+        disconnect(reference->get_data(), SIGNAL(deleted()),
+                   this, SLOT(on_delete()));
+
+    if ((reference = st) != 0) {
+        connect(reference->get_data(), SIGNAL(deleted()),
+                this, SLOT(on_delete()));
+    }
 }
 
-void PseudoStateData::on_delete() {
-  if ((reference != 0) && reference->deletedp()) {
-    disconnect(reference->get_data(), SIGNAL(deleted()),
-	       this, SLOT(on_delete()));
-    reference = 0;
-  }
+void PseudoStateData::on_delete()
+{
+    if ((reference != 0) && reference->deletedp()) {
+        disconnect(reference->get_data(), SIGNAL(deleted()),
+                   this, SLOT(on_delete()));
+        reference = 0;
+    }
 }
 
 //
 
-void PseudoStateData::send_uml_def(ToolCom * com, BrowserNode * bn, 
-			       const QString & comment) {
-  BasicData::send_uml_def(com, bn, comment);
-  
-  switch (browser_node->get_type()) {
-  case EntryPointPS:
-  case ExitPointPS:
-    if (com->api_format() >= 55){
-      if ((reference == 0) ||
-	  !((BrowserPseudoState *) browser_node)->can_reference(reference))
-	com->write_id(0);
-      else
-	reference->write_id(com);
+void PseudoStateData::send_uml_def(ToolCom * com, BrowserNode * bn,
+                                   const QString & comment)
+{
+    BasicData::send_uml_def(com, bn, comment);
+
+    switch (browser_node->get_type()) {
+    case EntryPointPS:
+    case ExitPointPS:
+        if (com->api_format() >= 55) {
+            if ((reference == 0) ||
+                !((BrowserPseudoState *) browser_node)->can_reference(reference))
+                com->write_id(0);
+            else
+                reference->write_id(com);
+        }
+
+        break;
+
+    default:
+        break;
     }
-    break;
-  default:
-    break;
-  }
 }
 
 bool PseudoStateData::tool_cmd(ToolCom * com, const char * args,
-			       BrowserNode * bn, const QString & comment) {
-  if (((unsigned char) args[-1]) >= firstSetCmd) {
-    if (!bn->is_writable() && !root_permission())
-      com->write_ack(FALSE);
-    else {
-      switch ((unsigned char) args[-1]) {
-      case setDerivedCmd:
-	{
-	  BrowserPseudoState * st = (BrowserPseudoState *) com->get_id(args);
+                               BrowserNode * bn, const QString & comment)
+{
+    if (((unsigned char) args[-1]) >= firstSetCmd) {
+        if (!bn->is_writable() && !root_permission())
+            com->write_ack(FALSE);
+        else {
+            switch ((unsigned char) args[-1]) {
+            case setDerivedCmd: {
+                BrowserPseudoState * st = (BrowserPseudoState *) com->get_id(args);
 
-	  if (st == reference) {
-	    com->write_ack(TRUE);
-	    return TRUE;
-	  }
-	  if ((st != 0) &&
-	      !((BrowserPseudoState *) browser_node)->can_reference(st)) {
-	    com->write_ack(FALSE);
-	    return TRUE;
-	  }
-	  set_reference(st);
-	}
-	break;
-      default:
-	return BasicData::tool_cmd(com, args, bn, comment);
-      }
-      
-      // ok case
-      bn->modified();
-      modified();
-      com->write_ack(TRUE);
+                if (st == reference) {
+                    com->write_ack(TRUE);
+                    return TRUE;
+                }
+
+                if ((st != 0) &&
+                    !((BrowserPseudoState *) browser_node)->can_reference(st)) {
+                    com->write_ack(FALSE);
+                    return TRUE;
+                }
+
+                set_reference(st);
+            }
+            break;
+
+            default:
+                return BasicData::tool_cmd(com, args, bn, comment);
+            }
+
+            // ok case
+            bn->modified();
+            modified();
+            com->write_ack(TRUE);
+        }
     }
-  }
-  else
-    return BasicData::tool_cmd(com, args, bn, comment);
-  
-  return TRUE;
+    else
+        return BasicData::tool_cmd(com, args, bn, comment);
+
+    return TRUE;
 }
-      
+
 //
 
-void PseudoStateData::save(QTextStream & st, QString & warning) const {
-  if ((reference != 0) &&
-      ((BrowserPseudoState *) browser_node)->can_reference(reference)) {
-    nl_indent(st);
-    st << "reference ";
-    reference->save(st, TRUE, warning);
-  }
-  
-  BasicData::save(st, warning);
+void PseudoStateData::save(QTextStream & st, QString & warning) const
+{
+    if ((reference != 0) &&
+        ((BrowserPseudoState *) browser_node)->can_reference(reference)) {
+        nl_indent(st);
+        st << "reference ";
+        reference->save(st, TRUE, warning);
+    }
+
+    BasicData::save(st, warning);
 }
 
-void PseudoStateData::read(char * & st, char * & k) {
-  if (!strcmp(k, "reference")) {
-    set_reference(BrowserPseudoState::read_ref(st));
-    k = read_keyword(st);
-  }
-  
-  BasicData::read(st, k);	// updates k
+void PseudoStateData::read(char *& st, char *& k)
+{
+    if (!strcmp(k, "reference")) {
+        set_reference(BrowserPseudoState::read_ref(st));
+        k = read_keyword(st);
+    }
+
+    BasicData::read(st, k);	// updates k
 }

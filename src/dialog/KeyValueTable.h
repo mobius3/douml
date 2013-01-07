@@ -31,18 +31,19 @@
 
 class HaveKeyValueData;
 
-class KeyValuesTable : public StringTable {
-  public:
+class KeyValuesTable : public StringTable
+{
+public:
     KeyValuesTable(HaveKeyValueData * h, QWidget * parent, bool visit);
-  
+
     virtual void init_row(int index);
-				
+
     bool check_unique();
     void update(HaveKeyValueData * h);
     bool get_value(const char * key, QString & value);
     void remove(const char * key);
 
-  private:
+private:
     Q3Dict<QStringList> props;
 };
 

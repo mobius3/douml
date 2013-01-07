@@ -34,10 +34,11 @@
 class QCheckBox;
 class QSpinBox;
 
-class RelatedElementsDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class RelatedElementsDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     BrowserNode * elt;
     BrowserNodeList & elts;
     QCheckBox * sametype_rb;
@@ -47,15 +48,15 @@ class RelatedElementsDialog : public QDialog {
     QCheckBox * assoc_rb;
     QCheckBox * referenced_rb;
     QCheckBox * referencing_rb;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     RelatedElementsDialog(BrowserNode *, const char * what,
-			  bool inh, bool assoc, BrowserNodeList &);
+                          bool inh, bool assoc, BrowserNodeList &);
     virtual ~RelatedElementsDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     void accept();
 };

@@ -13,8 +13,9 @@ class UmlClassInstanceReference;
 class UmlFragment;
 
 // this class manages messages in a sequence diagram
-class UmlBaseSequenceMessage : public UmlMessage {
-  public:
+class UmlBaseSequenceMessage : public UmlMessage
+{
+public:
     // return kind of the message
     aMessageKind kind() const {
         return _kind;
@@ -46,7 +47,7 @@ class UmlBaseSequenceMessage : public UmlMessage {
     }
 
 
-  private:
+private:
     aMessageKind _kind;
 
     UmlFragmentCompartment * _fragment;
@@ -64,7 +65,7 @@ class UmlBaseSequenceMessage : public UmlMessage {
     // internal, don't call it
     void read_(const Q3PtrDict<UmlClassInstanceReference> & instances, const Q3PtrVector<UmlFragment> & fragments);
 
-  friend class UmlBaseSequenceDiagramDefinition;
+    friend class UmlBaseSequenceDiagramDefinition;
 };
 
 #endif

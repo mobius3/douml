@@ -12,24 +12,25 @@ class UmlUseCaseView;
 // This class manages 'class view'
 //
 // You can modify it as you want (except the constructor)
-class UmlClassView : public UmlBaseClassView {
-  public:
+class UmlClassView : public UmlBaseClassView
+{
+public:
     UmlClassView(void * id, const Q3CString & n);
 
     static void import(UmlPackage * parent, File & f);
 
 
-  private:
+private:
     void import(File & f);
 
     void readObjects(File & f);
 
 
-  public:
+public:
     UmlUseCaseView * useCaseView();
 
 
-  protected:
+protected:
     UmlUseCaseView * ucv;
 
 };

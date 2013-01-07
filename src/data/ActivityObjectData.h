@@ -31,31 +31,32 @@
 #include "SimpleData.h"
 #include "ObjectData.h"
 
-class ActivityObjectData : public SimpleData, public ObjectData {
-  Q_OBJECT
-    
-  friend class ActivityObjectDialog;
-  
-  public:
+class ActivityObjectData : public SimpleData, public ObjectData
+{
+    Q_OBJECT
+
+    friend class ActivityObjectDialog;
+
+public:
     ActivityObjectData();
     ActivityObjectData(ActivityObjectData * model, BrowserNode * bn);
-  
+
     virtual void do_connect(BrowserClass * c);
     virtual void do_disconnect(BrowserClass * c);
-  
+
     void edit(const char * what, QStringList & st);
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
+                              const QString & comment);
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    void read(char * &, char * &);
-    
-  protected slots:
+    void read(char *& , char *&);
+
+protected slots:
     void on_delete();
 };
 

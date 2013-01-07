@@ -13,8 +13,9 @@ class UmlBaseFragment;
 
 // this class manages fragments compartments,
 // a fragment without separator contains one compartment
-class UmlBaseFragmentCompartment {
-  public:
+class UmlBaseFragmentCompartment
+{
+public:
     // return the fragment owning the compartment
     UmlFragment * fragment() const {
         return _fragment;
@@ -37,7 +38,7 @@ class UmlBaseFragmentCompartment {
     }
 
 
-  private:
+private:
     UmlFragment * _fragment;
 
     Q3PtrVector<UmlFragment> _contained;
@@ -53,13 +54,13 @@ class UmlBaseFragmentCompartment {
     Q3CString _end_continuation;
 
 
-  public:
+public:
     void add_contained_(UmlFragment * x);
 
     void add_text_(Q3CString x);
 
     //internal, do NOT use it
-    
+
     void add_cont_(Q3CString s, int cy);
 
     int b() const {
@@ -69,18 +70,18 @@ class UmlBaseFragmentCompartment {
     bool smaller(const UmlBaseFragmentCompartment * x) const;
 
 
-  private:
+private:
     // internal, don't call it
     void read_(UmlBaseFragment * fragment, int rank);
 
 
-  public:
+public:
     //  to avoid compiler warning, don't call it
-     ~UmlBaseFragmentCompartment();
+    ~UmlBaseFragmentCompartment();
 
-  friend class UmlBaseFragment;
-  friend class UmlBaseUseCaseDiagramDefinition;
-  friend class UmlBaseSequenceDiagramDefinition;
+    friend class UmlBaseFragment;
+    friend class UmlBaseUseCaseDiagramDefinition;
+    friend class UmlBaseSequenceDiagramDefinition;
     // return the continuation ('goto' case), or an empty string/null
     Q3CString endContinuation() const {
         return _end_continuation;

@@ -26,7 +26,8 @@
 #include "UmlClassMember.h"
 
 #ifdef REVERSE
-bool UmlClassMember::need_source() {
-  return isClassMember();
+bool UmlClassMember::need_source()
+{
+    return isClassMember();
 }
 #endif

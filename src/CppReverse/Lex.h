@@ -33,49 +33,51 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class LexContext {
-  friend class Lex;
-  private:
+class LexContext
+{
+    friend class Lex;
+private:
     char * pointer;
     QString comments;
     QString description;
     unsigned line_number;
-    
+
     char * read_word_pointer;
     QString read_word_comments;
     QString read_word_description;
-    unsigned read_word_line_number;    
+    unsigned read_word_line_number;
 };
-    
-class Lex {
-  private:
+
+class Lex
+{
+private:
     static Q3AsciiDict<char> _defines;
     static QString _filename;
     static char * _buffer;
     static LexContext _context;
     static LexContext _mark;
-    
+
     static int get();
     static int peek();
     static void unget();
-    
+
     static void goes_to_word_beginning();
     static void complete_template(QString & result);
-    static Q3CString manage_operator(QString  & result, int c, bool oper);  
-    static Q3CString read_string();     
-    static Q3CString read_character();    
-    static Q3CString read_array_dim(); 
+    static Q3CString manage_operator(QString  & result, int c, bool oper);
+    static Q3CString read_string();
+    static Q3CString read_character();
+    static Q3CString read_array_dim();
     static void bypass_template();
     static void bypass_pp();
     static void bypass_cpp_comment();
     static void bypass_c_comment();
-    static char bypass_operator(int c, bool oper);  
-    static void bypass_string();     
-    static void bypass_character();    
-    static void bypass_array_dim();  
+    static char bypass_operator(int c, bool oper);
+    static void bypass_string();
+    static void bypass_character();
+    static void bypass_array_dim();
     static bool start_template(int c);
 
-  public:
+public:
     static void defines(const Q3CString & f);
     static Q3CString read_word(bool in_expr = FALSE);
     static char read_word_bis(bool set_context, bool in_expr);

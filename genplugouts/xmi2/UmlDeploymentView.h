@@ -12,8 +12,9 @@ class UmlItem;
 // This class manages 'deployment view'
 //
 // You can modify it as you want (except the constructor)
-class UmlDeploymentView : public UmlBaseDeploymentView {
-  public:
+class UmlDeploymentView : public UmlBaseDeploymentView
+{
+public:
     UmlDeploymentView(void * id, const Q3CString & n) : UmlBaseDeploymentView(id, n) {};
 
     virtual void write(FileOut & out);
@@ -21,11 +22,11 @@ class UmlDeploymentView : public UmlBaseDeploymentView {
     //Memorize the relation in the package (or the view in case the views
     //are generated as package) containing the current element, to generate
     //the relation at the package/view level
-    
+
     virtual void memo_relation(UmlItem * r);
 
 
-  protected:
+protected:
     Q3PtrList<UmlItem> _relations;
 
 };

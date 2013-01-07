@@ -12,11 +12,12 @@
 // This class manages settings concerning JAVA, configured through
 // the 'Generation settings' dialog.
 //
-// This class may be defined as a 'singleton', but I prefer to use static 
+// This class may be defined as a 'singleton', but I prefer to use static
 // members allowing to just write 'JavaSettings::member' rather than
 // 'JavaSettings::instance()->member' or other long sentence like this.
-class JavaSettings : public UmlSettings {
-  public:
+class JavaSettings : public UmlSettings
+{
+public:
     // returns TRUE when the created Java objects are initialized
     // with the default declaration/definition
     static bool useDefaults();
@@ -53,7 +54,7 @@ class JavaSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_RelationStereotype(Q3CString s, Q3CString v);
 
-    // reverse of the RelationStereotype() operation, returns the 'UML' 
+    // reverse of the RelationStereotype() operation, returns the 'UML'
     // stereotype corresponding to the JAVA one given in argument
     static Q3CString relationUmlStereotype(const Q3CString & s);
 
@@ -67,7 +68,7 @@ class JavaSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_ClassStereotype(Q3CString s, Q3CString v);
 
-    // reverse of the ClassStereotype() operation, returns the 'UML' 
+    // reverse of the ClassStereotype() operation, returns the 'UML'
     // stereotype corresponding to the JAVA one given in argument
     static Q3CString classUmlStereotype(const Q3CString & s);
 
@@ -157,14 +158,14 @@ class JavaSettings : public UmlSettings {
 
     //Returns the 'case' form produced in the fromInt operation
     //for each enumeration item
-    
+
     static const Q3CString & enumItemCase();
 
     //  set the 'case' form produced in the fromInt operation
     //  for each enumeration item
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    
+
     static bool set_EnumItemCase(Q3CString v);
 
     // returns the default definition of a relation depending on the
@@ -195,21 +196,21 @@ class JavaSettings : public UmlSettings {
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_GetVisibility(aVisibility v);
 
-    // returns the default name of a 'get' operation generated 
+    // returns the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     static const Q3CString & getName();
 
-    // set the default name of a 'get' operation generated 
+    // set the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
     static bool set_GetName(Q3CString v);
 
-    // returns the default name of a 'set' operation generated 
+    // returns the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     static const Q3CString & setName();
 
-    // set the default name of a 'set' operation generated 
+    // set the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
@@ -256,7 +257,7 @@ class JavaSettings : public UmlSettings {
     static bool set_IsSetParamFinal(bool v);
 
 
-  private:
+private:
     // never called !
     JavaSettings() {};
 
@@ -303,13 +304,13 @@ class JavaSettings : public UmlSettings {
     static Q3Dict<Q3CString> _map_imports;
 
 
-  protected:
+protected:
     //internal, do NOT use it
-    
+
     static void read_();
 
     //internal, do NOT use it
-    
+
     static void read_if_needed_();
 
 };

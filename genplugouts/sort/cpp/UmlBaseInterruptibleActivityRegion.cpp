@@ -8,7 +8,8 @@ UmlInterruptibleActivityRegion * UmlBaseInterruptibleActivityRegion::create(UmlI
     return (UmlInterruptibleActivityRegion *) parent->create_(anInterruptibleActivityRegion, s);
 }
 
-anItemKind UmlBaseInterruptibleActivityRegion::kind() {
+anItemKind UmlBaseInterruptibleActivityRegion::kind()
+{
     return anInterruptibleActivityRegion;
 }
 

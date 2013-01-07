@@ -53,9 +53,9 @@ class BodyDialog;
 
 class ArtifactDialog : public EdgeMenuDialog
 {
-  Q_OBJECT
-    
-  protected:
+    Q_OBJECT
+
+protected:
     ArtifactData * data;
     QWidget * uml_page;
     LineEdit * edname;
@@ -64,7 +64,7 @@ class ArtifactDialog : public EdgeMenuDialog
     QMap<BrowserClass *, FormalParamsTable *> formals;	// to generate the associated
     QMap<BrowserClass *, ActualParamsTable *> actuals;	// classes definition
     Q3PtrList<BodyDialog> edits;
-    
+
     // c++
     unsigned n_cpp;
     QSplitter * cpp_h_content_page;
@@ -73,36 +73,36 @@ class ArtifactDialog : public EdgeMenuDialog
     QSplitter * cpp_src_content_page;
     MultiLineEdit * edcpp_src_content;
     MultiLineEdit * showcpp_src_content;
-    
+
     // java
     unsigned n_java;
     QSplitter * java_content_page;
     MultiLineEdit * edjava_content;
     MultiLineEdit * showjava_content;
-    
+
     // php
     unsigned n_php;
     QSplitter * php_content_page;
     MultiLineEdit * edphp_content;
     MultiLineEdit * showphp_content;
-    
+
     // python
     unsigned n_python;
     QSplitter * python_content_page;
     MultiLineEdit * edpython_content;
     MultiLineEdit * showpython_content;
-    
+
     // idl
     unsigned n_idl;
     QSplitter * idl_content_page;
     MultiLineEdit * edidl_content;
     MultiLineEdit * showidl_content;
-    
+
     // associated classes
     Q3VBox * cl_assoc_page;
     Q3ListBox * lb_cl_available;
     Q3ListBox * lb_cl_associated;
-    
+
     // associated artifacts
     bool lb_art_initialized;
     Q3PtrDict<BrowserArtifact> art_associated;
@@ -110,12 +110,12 @@ class ArtifactDialog : public EdgeMenuDialog
     Q3ComboBox * stereotypefilter;
     Q3ListBox * lb_art_available;
     Q3ListBox * lb_art_associated;
-    
+
     // user
     KeyValuesTable * kvtable;
-    
+
     static QSize previous_size;
-    
+
     void init_uml_tab();
     void init_cpp_tab();
     void init_java_tab();
@@ -124,12 +124,12 @@ class ArtifactDialog : public EdgeMenuDialog
     void init_idl_tab();
     void init_assoc_classes_tab();
     void init_assoc_artifacts_tab();
-  
+
     void compute_cpp_namespace(QString & nasp, QString & nasp_start, QString & nasp_end);
     QString compute_java_package();
     QString compute_php_namespace();
     void compute_idl_module(QString & mod, QString & mod_start, QString & mod_end);
-    
+
     static void post_edit_description(ArtifactDialog * d, QString s);
     static void post_cpp_edit_h(ArtifactDialog * d, QString s);
     static void post_cpp_edit_src(ArtifactDialog * d, QString s);
@@ -140,13 +140,13 @@ class ArtifactDialog : public EdgeMenuDialog
 
     virtual uint TypeID();
 
-    
-  public:
+
+public:
     ArtifactDialog(ArtifactData * nd);
     virtual ~ArtifactDialog();
-    static QSharedPointer<ArtifactDialog> Instance(ArtifactData*);
+    static QSharedPointer<ArtifactDialog> Instance(ArtifactData *);
 
-  protected slots:
+protected slots:
     virtual void polish();
     virtual void accept();
     void default_description();

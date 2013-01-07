@@ -30,64 +30,69 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-ClassContainer::~ClassContainer() {
+ClassContainer::~ClassContainer()
+{
 }
 
-bool ClassContainer::read_type(UmlTypeSpec & typespec, Class ** cl) {
-  Q3CString s = Lex::read_word();
-  
-  if (s.isEmpty()) {
-    Lex::premature_eof();
-    return FALSE;
-  }
-    
-  compute_type(s, typespec, cl);
-  
-  return TRUE;
+bool ClassContainer::read_type(UmlTypeSpec & typespec, Class ** cl)
+{
+    Q3CString s = Lex::read_word();
+
+    if (s.isEmpty()) {
+        Lex::premature_eof();
+        return FALSE;
+    }
+
+    compute_type(s, typespec, cl);
+
+    return TRUE;
 }
 
 // don't produce error
 
-bool ClassContainer::bypass_type(Q3CString s) {
-  if (s.isEmpty() && (s = Lex::read_word()).isEmpty())
-    return FALSE;
-    
-  for (;;) {
-    s = Lex::read_word();
-  
-    if (s != "<")
-      break;
-    
-    do {
-      int level = 0;
-      
-      for (;;) {
-	s = Lex::read_word();
-	
-	if (s == ",") {
-	  if (level == 0)
-	    break;
-	}
-	else if (s == ">") {
-	  if (level-- == 0)
-	    break;
-	}
-	else if (s == "]")
-	  level -= 1;
-	else if ((s == "<") || (s == "["))
-	  level += 1;
-	else if (s.isEmpty())
-	  return FALSE;
-      }
-    } while (s == ",");
-    
-    s = Lex::read_word();
-    if (s.isEmpty() || (*s != '.'))
-      break;
-  }
-  
-  if (! s.isEmpty())
-    Lex::unread_word(s);
-  
-  return TRUE;
+bool ClassContainer::bypass_type(Q3CString s)
+{
+    if (s.isEmpty() && (s = Lex::read_word()).isEmpty())
+        return FALSE;
+
+    for (;;) {
+        s = Lex::read_word();
+
+        if (s != "<")
+            break;
+
+        do {
+            int level = 0;
+
+            for (;;) {
+                s = Lex::read_word();
+
+                if (s == ",") {
+                    if (level == 0)
+                        break;
+                }
+                else if (s == ">") {
+                    if (level-- == 0)
+                        break;
+                }
+                else if (s == "]")
+                    level -= 1;
+                else if ((s == "<") || (s == "["))
+                    level += 1;
+                else if (s.isEmpty())
+                    return FALSE;
+            }
+        }
+        while (s == ",");
+
+        s = Lex::read_word();
+
+        if (s.isEmpty() || (*s != '.'))
+            break;
+    }
+
+    if (! s.isEmpty())
+        Lex::unread_word(s);
+
+    return TRUE;
 }

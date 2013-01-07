@@ -38,26 +38,27 @@ class QTextStream;
 class UmlTypeSpec;
 class CppRefType;
 
-class UmlClassItem : public UmlBaseClassItem {
-  public:
+class UmlClassItem : public UmlBaseClassItem
+{
+public:
     UmlClassItem(void * id, const Q3CString & n)
-      : UmlBaseClassItem(id, n) {
+        : UmlBaseClassItem(id, n) {
     };
-  
+
     virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-				    const Q3CString & cl_stereotype,
-				    bool all_in_h) = 0;
-				     
+                                    const Q3CString & cl_stereotype,
+                                    bool all_in_h) = 0;
+
     virtual void generate_decl(aVisibility & current_visibility,
-			       QTextStream & f_h,
-			       const Q3CString & cl_stereotype,
-			       Q3CString indent,
-			       BooL & first, bool last) = 0;
-    
+                               QTextStream & f_h,
+                               const Q3CString & cl_stereotype,
+                               Q3CString indent,
+                               BooL & first, bool last) = 0;
+
     virtual void generate_def(QTextStream & f, Q3CString indent, bool h,
-			      Q3CString templates, Q3CString cl_names,
-			      Q3CString templates_tmplop, 
-			      Q3CString cl_names_tmplop) = 0;
+                              Q3CString templates, Q3CString cl_names,
+                              Q3CString templates_tmplop,
+                              Q3CString cl_names_tmplop) = 0;
 };
 
 #endif

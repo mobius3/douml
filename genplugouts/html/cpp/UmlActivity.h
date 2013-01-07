@@ -6,10 +6,11 @@
 #include <q3cstring.h>
 #include "Vector.h"
 
-class UmlActivity : public UmlBaseActivity {
-  public:
+class UmlActivity : public UmlBaseActivity
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivity(void * id, const Q3CString & s) : UmlBaseActivity(id, s) {
+    UmlActivity(void * id, const Q3CString & s) : UmlBaseActivity(id, s) {
     }
 
     //returns a string indicating the king of the element
@@ -30,7 +31,7 @@ class UmlActivity : public UmlBaseActivity {
     virtual bool chapterp();
 
 
-  protected:
+protected:
     static Vector activities;
 
 };

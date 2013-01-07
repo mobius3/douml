@@ -32,21 +32,22 @@
 
 #define ARROW_POINT_SIZE 5
 
-class ArrowPointCanvas : public DiagramCanvas {
-  public:
+class ArrowPointCanvas : public DiagramCanvas
+{
+public:
     ArrowPointCanvas(UmlCanvas * canvas, int x, int y);
     virtual ~ArrowPointCanvas();
-    
+
     virtual void delete_it();
 
     ArrowCanvas * get_other(const ArrowCanvas *) const;
-    
+
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual void change_scale();
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
@@ -54,7 +55,7 @@ class ArrowPointCanvas : public DiagramCanvas {
     virtual bool alignable() const;
     virtual void prepare_for_move(bool on_resize);
     virtual void save(QTextStream & st, bool ref, QString & warning) const;
-    static ArrowPointCanvas * read(char * & st, UmlCanvas * canvas, char * k);
+    static ArrowPointCanvas * read(char *& st, UmlCanvas * canvas, char * k);
 };
 
 #endif

@@ -52,908 +52,1001 @@ QStack<Lex::Context> Lex::stack;
 
 void Lex::push_context()
 {
-  //Context * c = new Context;
-  Context c = context;
-  
-  //*c = context;
-  stack.push(c);
+    //Context * c = new Context;
+    Context c = context;
+
+    //*c = context;
+    stack.push(c);
 }
 
 void Lex::pop_context()
 {
-  Context c = stack.pop();
-  //[lgfreitas] not needed
-  //context = *c;
-  //delete c;  
+    Context c = stack.pop();
+    //[lgfreitas] not needed
+    //context = *c;
+    //delete c;
 }
 
-int Lex::get() 
+int Lex::get()
 {
-  return (*context.pointer == 0) ? EOF : *context.pointer++;
+    return (*context.pointer == 0) ? EOF : *context.pointer++;
 }
 
 int Lex::peek()
 {
-  return (*context.pointer == 0) ? EOF : *context.pointer;
+    return (*context.pointer == 0) ? EOF : *context.pointer;
 }
 
 void Lex::unget()
 {
-  context.pointer -= 1;
+    context.pointer -= 1;
 }
 
 static Q3CString Separators = " \t\f\n&~\"#{'(-|`)[]=}%*<>?,;/:!@";
 
 const QString & Lex::filename()
 {
-  return context.filename;
+    return context.filename;
 }
 
 unsigned Lex::line_number()
 {
-  return context.line_number;
+    return context.line_number;
 }
 
 bool Lex::open(const QString & f)
 {
 #ifdef TRACE
-  QLOG_INFO() <<"Lex::open(" << f << ")\n";
+    QLOG_INFO() << "Lex::open(" << f << ")\n";
 #endif
-  
-  context.filename = f;
-  context.line_number = 1;
-  context.comments = "";
-  context.description = "";
-  context.reread = "";
-  context.mark = 0;
 
-  QFile in(f);
-  unsigned sz;
-  
-  if (!in.open(QIODevice::ReadOnly) ||
-      ((context.buffer = new char[(sz = in.size()) + 1]) == 0))
-    return FALSE;
-    
-  unsigned offset = 0;
-  
-  do offset += in.readBlock(context.buffer + offset, sz - offset);
-  while (offset != sz);
-  
-  context.pointer = context.buffer;
-  context.buffer[sz] = 0;
-  
-  // remove \r
-  char * p1 = strchr(context.buffer, '\r');
-  
-  if (p1 != 0) {
-    char * p2 = p1 + 1;
-    char c;
-    
-    while ((c = *p2++) != 0) {
-      if (c != '\r')
-	*p1++ = c;
+    context.filename = f;
+    context.line_number = 1;
+    context.comments = "";
+    context.description = "";
+    context.reread = "";
+    context.mark = 0;
+
+    QFile in(f);
+    unsigned sz;
+
+    if (!in.open(QIODevice::ReadOnly) ||
+        ((context.buffer = new char[(sz = in.size()) + 1]) == 0))
+        return FALSE;
+
+    unsigned offset = 0;
+
+    do offset += in.readBlock(context.buffer + offset, sz - offset);
+
+    while (offset != sz);
+
+    context.pointer = context.buffer;
+    context.buffer[sz] = 0;
+
+    // remove \r
+    char * p1 = strchr(context.buffer, '\r');
+
+    if (p1 != 0) {
+        char * p2 = p1 + 1;
+        char c;
+
+        while ((c = *p2++) != 0) {
+            if (c != '\r')
+                *p1++ = c;
+        }
+
+        *p1 = 0;
     }
-    *p1 = 0;
-  }
-  
-  return TRUE;
+
+    return TRUE;
 }
 
 void Lex::close()
 {
 #ifdef TRACE
-  QLOG_INFO() <<"Lex::close()\n";
+    QLOG_INFO() << "Lex::close()\n";
 #endif
-  delete [] context.buffer;
+    delete [] context.buffer;
 }
 
 void Lex::unread_word(const char * s)
 {
-  context.reread = s;
+    context.reread = s;
 }
 
 void Lex::complete_template(QString & result)
 {
-  // template
-  unsigned level = 1;
-  char * pointer = context.pointer;
-  	  
-  result += '<';
-  
-  for (;;) {
-    switch (read_word_bis(TRUE)) {
-    case 0:
-      return;
-    case '<':
-      level += 1;
-      break;
-    case '>':
-      if (--level == 0) {
-	char c = *context.pointer;
-	
-	*context.pointer = 0;
-	result += pointer;
-	*context.pointer = c;
-	return;
-      }
-    default:
-      break;
+    // template
+    unsigned level = 1;
+    char * pointer = context.pointer;
+
+    result += '<';
+
+    for (;;) {
+        switch (read_word_bis(TRUE)) {
+        case 0:
+            return;
+
+        case '<':
+            level += 1;
+            break;
+
+        case '>':
+            if (--level == 0) {
+                char c = *context.pointer;
+
+                *context.pointer = 0;
+                result += pointer;
+                *context.pointer = c;
+                return;
+            }
+
+        default:
+            break;
+        }
     }
-  }
 }
 
 void Lex::bypass_template()
 {
-  // template
-  unsigned level = 1;
-  
-  for (;;) {
-    switch (read_word_bis(TRUE)) {
-    case 0:
-      return;
-    case '<':
-      level += 1;
-      break;
-    case '>':
-      if (--level == 0)
-	return;
-    default:
-      break;
+    // template
+    unsigned level = 1;
+
+    for (;;) {
+        switch (read_word_bis(TRUE)) {
+        case 0:
+            return;
+
+        case '<':
+            level += 1;
+            break;
+
+        case '>':
+            if (--level == 0)
+                return;
+
+        default:
+            break;
+        }
     }
-  }
 }
 
 void Lex::bypass_cpp_comment()
 {
-  get();	// second '/'
-  
-  if (! context.comments.isEmpty())
-    context.comments += '\n';
-  context.description += (! context.description.isEmpty())
-    ? "\n//" :  "//";
-  
-  int c;
-  char * p = context.pointer;
-  
-  for (;;) {
-    c = get();
-    if (c == EOF) {
-      context.comments += p;
-      context.description += p;
-      return;
+    get();	// second '/'
+
+    if (! context.comments.isEmpty())
+        context.comments += '\n';
+
+    context.description += (! context.description.isEmpty())
+                           ? "\n//" :  "//";
+
+    int c;
+    char * p = context.pointer;
+
+    for (;;) {
+        c = get();
+
+        if (c == EOF) {
+            context.comments += p;
+            context.description += p;
+            return;
+        }
+
+        if (c == '\n') {
+            context.line_number += 1;
+            context.pointer[-1] = 0;
+            context.comments += p;
+            context.description += p;
+            context.pointer[-1] = '\n';
+            return;
+        }
     }
-    if (c == '\n') {
-      context.line_number += 1;
-      context.pointer[-1] = 0;
-      context.comments += p;
-      context.description += p;
-      context.pointer[-1] = '\n';
-      return;
-    }
-  }
 }
 
 // '/' read, '*' only peek
 
 void Lex::bypass_c_comment()
 {
-  while (*context.pointer == '*')
-    context.pointer += 1;
-  
-  if ((*context.pointer == '/') && (context.pointer[-2] != '/')) {
-    // /**/ or /***/ etc ...
-    context.pointer += 1;
-    return;
-  }
-  
-  if (! context.comments.isEmpty())
-    context.comments += '\n';
-  context.description += (! context.description.isEmpty())
-    ? "\n/*" :  "/*";
-  
-  char * p = context.pointer;	// start of the comment on the line
-  
-  for (;;) {
-    int c = get();
-    
-    switch (c) {
-    case EOF:
-      return;
-    case '\n':
-      context.line_number += 1;
-      if ((p != 0) && (context.pointer != (p + 1))) {
-	// non empty line
-	c = *context.pointer;
-	*context.pointer = 0;
-	context.comments += p;
-	context.description += p;
-	*context.pointer = c;
-      }
-      else {
-	context.comments += c;
-	context.description += c;
-      }
-  
-      p = 0;
-      break;
-    case '*':
-      if (peek() == '/') {
-	if ((p != 0) && (context.pointer != (p + 1))) {
-	  // non empty line
-	  context.pointer[-1] = 0;
-	  context.comments += p;
-	  context.pointer[-1] = '*';
-	  c = context.pointer[1];
-	  context.pointer[1] = 0;
-	  context.description += p;
-	  context.pointer[1] = c;
-	}
-	get();	// '/'
-	return;
-      }
-      if (p == 0) {
-	if (peek() == ' ')
-	  get();
-	p = context.pointer;
-      }
-      break;
-    case ' ':
-    case '\t':
-      break;
-    default:
-      if (p == 0)
-	p = context.pointer - 1;
+    while (*context.pointer == '*')
+        context.pointer += 1;
+
+    if ((*context.pointer == '/') && (context.pointer[-2] != '/')) {
+        // /**/ or /***/ etc ...
+        context.pointer += 1;
+        return;
     }
-  }
+
+    if (! context.comments.isEmpty())
+        context.comments += '\n';
+
+    context.description += (! context.description.isEmpty())
+                           ? "\n/*" :  "/*";
+
+    char * p = context.pointer;	// start of the comment on the line
+
+    for (;;) {
+        int c = get();
+
+        switch (c) {
+        case EOF:
+            return;
+
+        case '\n':
+            context.line_number += 1;
+
+            if ((p != 0) && (context.pointer != (p + 1))) {
+                // non empty line
+                c = *context.pointer;
+                *context.pointer = 0;
+                context.comments += p;
+                context.description += p;
+                *context.pointer = c;
+            }
+            else {
+                context.comments += c;
+                context.description += c;
+            }
+
+            p = 0;
+            break;
+
+        case '*':
+            if (peek() == '/') {
+                if ((p != 0) && (context.pointer != (p + 1))) {
+                    // non empty line
+                    context.pointer[-1] = 0;
+                    context.comments += p;
+                    context.pointer[-1] = '*';
+                    c = context.pointer[1];
+                    context.pointer[1] = 0;
+                    context.description += p;
+                    context.pointer[1] = c;
+                }
+
+                get();	// '/'
+                return;
+            }
+
+            if (p == 0) {
+                if (peek() == ' ')
+                    get();
+
+                p = context.pointer;
+            }
+
+            break;
+
+        case ' ':
+        case '\t':
+            break;
+
+        default:
+            if (p == 0)
+                p = context.pointer - 1;
+        }
+    }
 }
 
 Q3CString Lex::manage_operator(QString & result, int c)
 {
-  result += c;
-  
-  int next = peek();
-  
-  switch (c) {
-  case '!':
-  case '%':
-  case '*':
-  case '/':
-  case '=':
-  case '^':
-    if (next == '=')
-      result += get();
-    break;
-  case '<':
-  case '>':
-    if (next == '=')
-      result += get();
-    else if (next == c) {
-      result += get();
-      if (peek() == '=')
-	result += get();
+    result += c;
+
+    int next = peek();
+
+    switch (c) {
+    case '!':
+    case '%':
+    case '*':
+    case '/':
+    case '=':
+    case '^':
+        if (next == '=')
+            result += get();
+
+        break;
+
+    case '<':
+    case '>':
+        if (next == '=')
+            result += get();
+        else if (next == c) {
+            result += get();
+
+            if (peek() == '=')
+                result += get();
+        }
+
+        break;
+
+    case '-':
+    case '&':
+    case '+':
+    case '|':
+        if ((next == '=') || (next == c))
+            result += get();
+
+        break;
     }
-    break;
-  case '-':
-  case '&':
-  case '+':
-  case '|':
-    if ((next == '=') || (next == c))
-      result += get();
-    break;
-  }
-  
+
 #ifdef TRACE
-  QLOG_INFO() <<"retourne '" << result << "'\n";
+    QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-  return Q3CString(result.toAscii().constData());
+    return Q3CString(result.toAscii().constData());
 }
 
 char Lex::bypass_operator(int c)
 {
-  int next = peek();
-  
-  switch (c) {
-  case '!':
-  case '%':
-  case '*':
-  case '/':
-  case '=':
-  case '^':
-    if (next == '=') {
-      get();
-      return '!'; // to not be = when ==
+    int next = peek();
+
+    switch (c) {
+    case '!':
+    case '%':
+    case '*':
+    case '/':
+    case '=':
+    case '^':
+        if (next == '=') {
+            get();
+            return '!'; // to not be = when ==
+        }
+
+        return (char) c;
+
+    case '<':
+    case '>':
+        if (next == '=')
+            get();
+        else if (next == c) {
+            get();
+
+            if (peek() == '=')
+                get();
+        }
+        else
+            return (char) c;
+
+        return '!'; // to not be < or > if << >> <= or >=
+
+    case '-':
+    case '&':
+    case '+':
+    case '|':
+        if ((next == '=') || (next == c))
+            get();
+
+        return (char) c;
+
+    default:
+        return (char) c;
     }
-    return (char) c;
-  case '<':
-  case '>':
-    if (next == '=')
-      get();
-    else if (next == c) {
-      get();
-      if (peek() == '=')
-	get();
-    }
-    else
-      return (char) c;
-    return '!'; // to not be < or > if << >> <= or >=
-  case '-':
-  case '&':
-  case '+':
-  case '|':
-    if ((next == '=') || (next == c))
-      get();
-    return (char) c;
-  default:
-    return (char) c;
-  }
 }
 
 Q3CString Lex::read_string()
 {
-  QString result = "\"";;
-  
-  for (;;) {
-    int c = get();
-    
-    switch (c) {
-    case EOF:
-      return 0;
-    case '\\':
-      c = get();
-      if (c == '\n')
-	context.line_number += 1;
-      result += '\\';
-      result += c;
-      break;
-    case '"':
-      return Q3CString((result += c).toAscii().constData());
-    default:
-      result += c;
+    QString result = "\"";;
+
+    for (;;) {
+        int c = get();
+
+        switch (c) {
+        case EOF:
+            return 0;
+
+        case '\\':
+            c = get();
+
+            if (c == '\n')
+                context.line_number += 1;
+
+            result += '\\';
+            result += c;
+            break;
+
+        case '"':
+            return Q3CString((result += c).toAscii().constData());
+
+        default:
+            result += c;
+        }
     }
-  }
 }
 
 void Lex::bypass_string()
 {
-  for (;;) {
-    int c = get();
-    
-    switch (c) {
-    case EOF:
-      return;
-    case '\\':
-      c = get();
-      if (c == '\n')
-	context.line_number += 1;
-      break;
-    case '"':
-      return;
-    default:
-      break;
+    for (;;) {
+        int c = get();
+
+        switch (c) {
+        case EOF:
+            return;
+
+        case '\\':
+            c = get();
+
+            if (c == '\n')
+                context.line_number += 1;
+
+            break;
+
+        case '"':
+            return;
+
+        default:
+            break;
+        }
     }
-  }
 }
 
 Q3CString Lex::read_character()
 {
-  Q3CString result = "'";
-  
-  for (;;) {
-    int c = get();
-    
-    switch (c) {
-    case EOF:
-      return 0;
-    case '\'':
-      return Q3CString(result += c);
-    case '\\':
-      result += c;
-      result += get();
-      break;
-    default:
-      result += c;
+    Q3CString result = "'";
+
+    for (;;) {
+        int c = get();
+
+        switch (c) {
+        case EOF:
+            return 0;
+
+        case '\'':
+            return Q3CString(result += c);
+
+        case '\\':
+            result += c;
+            result += get();
+            break;
+
+        default:
+            result += c;
+        }
     }
-  }
 }
 
 void Lex::bypass_character()
 {
-  for (;;) {
-    switch (get()) {
-    case EOF:
-      return;
-    case '\'':
-      return;
-    case '\\':
-      get();
-      break;
-    default:
-      break;
+    for (;;) {
+        switch (get()) {
+        case EOF:
+            return;
+
+        case '\'':
+            return;
+
+        case '\\':
+            get();
+            break;
+
+        default:
+            break;
+        }
     }
-  }
 }
 
-Q3CString Lex::read_array_dim() 
+Q3CString Lex::read_array_dim()
 {
-  Q3CString result = "[";
-  char * pointer = context.pointer;
-	  
-  for (;;) {
-    switch (read_word_bis()) {
-    case 0:
-      result = 0;
-      return result;
-    case ']':
-      {
-	char c = *context.pointer;
-	
-	*context.pointer = 0;
-	result += pointer;
-	*context.pointer = c;
-	
+    Q3CString result = "[";
+    char * pointer = context.pointer;
+
+    for (;;) {
+        switch (read_word_bis()) {
+        case 0:
+            result = 0;
+            return result;
+
+        case ']': {
+            char c = *context.pointer;
+
+            *context.pointer = 0;
+            result += pointer;
+            *context.pointer = c;
+
 #ifdef TRACE
-	QLOG_INFO() <<"retourne '" << result << "'\n";
+            QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-	return result;
-      }
-    default:
-      break;
+            return result;
+        }
+
+        default:
+            break;
+        }
     }
-  }
 }
 
-void Lex::bypass_array_dim() 
+void Lex::bypass_array_dim()
 {
-  for (;;) {
-    switch (read_word_bis()) {
-    case 0:
-      return;
-    case ']':
-      return;
-    default:
-      break;
+    for (;;) {
+        switch (read_word_bis()) {
+        case 0:
+            return;
+
+        case ']':
+            return;
+
+        default:
+            break;
+        }
     }
-  }
 }
 
 // read all sequential annotations
 
 Q3CString Lex::read_annotation()
 {
-  char * p1 = context.pointer - 1;	// '@' was read
+    char * p1 = context.pointer - 1;	// '@' was read
 
-  for (;;) {
-    if (read_word_bis() == 0)
-      // eof
-      return p1;
-  
-    char * p2 = context.pointer;
-    char c = read_word_bis();
-    
-    if (c == '(') {
-      int level = 1;
-      
-      for (;;) {
-	c = read_word_bis();
-	
-	if (c == 0)
-	  // eof
-	  return p1;
-	else if (c == '(')
-	  level += 1;
-	else if ((c == ')') && (--level == 0))
-	  break;
-      }
-      
-      p2 = context.pointer;
-      c = read_word_bis();
+    for (;;) {
+        if (read_word_bis() == 0)
+            // eof
+            return p1;
+
+        char * p2 = context.pointer;
+        char c = read_word_bis();
+
+        if (c == '(') {
+            int level = 1;
+
+            for (;;) {
+                c = read_word_bis();
+
+                if (c == 0)
+                    // eof
+                    return p1;
+                else if (c == '(')
+                    level += 1;
+                else if ((c == ')') && (--level == 0))
+                    break;
+            }
+
+            p2 = context.pointer;
+            c = read_word_bis();
+        }
+
+        if (c == 0)
+            return p1;
+        else if (c == '@') {
+            c = *context.pointer;
+            *context.pointer = 0;
+
+            Q3CString result = p1;
+
+            *context.pointer = c;
+            return result;
+        }
+        else  {
+            context.pointer = p2;
+            c = *p2;
+            *p2 = 0;
+
+            Q3CString result = p1;
+
+            *p2 = c;
+            return result;
+        }
     }
-    
-    if (c == 0)
-      return p1;
-    else if (c == '@') {
-      c = *context.pointer;
-      *context.pointer = 0;
-      
-      Q3CString result = p1;
-      
-      *context.pointer = c;
-      return result;
-    }
-    else  {
-      context.pointer = p2;
-      c = *p2;
-      *p2 = 0;
-      
-      Q3CString result = p1;
-      
-      *p2 = c;
-      return result;
-    }
-  }
 }
 
 void Lex::bypass_annotation()
 {
-  // '@' was read
+    // '@' was read
 
-  for (;;) {
-    if (read_word_bis() == 0)
-      // eof
-      return;
-  
-    char * p2 = context.pointer;
-    char c = read_word_bis();
-    
-    if (c == '(') {
-      int level = 1;
-      
-      for (;;) {
-	c = read_word_bis();
-	
-	if (c == 0)
-	  // eof
-	  return;
-	else if (c == '(')
-	  level += 1;
-	else if ((c == ')') && (--level == 0))
-	  break;
-      }
-      
-      p2 = context.pointer;
-      c = read_word_bis();
+    for (;;) {
+        if (read_word_bis() == 0)
+            // eof
+            return;
+
+        char * p2 = context.pointer;
+        char c = read_word_bis();
+
+        if (c == '(') {
+            int level = 1;
+
+            for (;;) {
+                c = read_word_bis();
+
+                if (c == 0)
+                    // eof
+                    return;
+                else if (c == '(')
+                    level += 1;
+                else if ((c == ')') && (--level == 0))
+                    break;
+            }
+
+            p2 = context.pointer;
+            c = read_word_bis();
+        }
+
+        if ((c != 0) && (c != '@'))
+            context.pointer = p2;
+
+        return;
     }
-    
-    if ((c != 0) && (c != '@'))
-      context.pointer = p2;
-    return;
-  }
 }
 
 Q3CString Lex::read_word(bool in_templ)
 {
-  QString result;
-  
-  if (!context.reread.isEmpty()) {
-    result = context.reread;
-    
-    if (in_templ && (result == ">>")) {
-      // >> read as > because unlike C++ not have to write "T<..X<..> >"
-      context.reread = result.mid(1);
-      result = result.left(1);
+    QString result;
+
+    if (!context.reread.isEmpty()) {
+        result = context.reread;
+
+        if (in_templ && (result == ">>")) {
+            // >> read as > because unlike C++ not have to write "T<..X<..> >"
+            context.reread = result.mid(1);
+            result = result.left(1);
+        }
+        else
+            context.reread = QString();
     }
-    else
-      context.reread = QString();
-  }
-  else {
-    for (;;) {
-      int c = get();
-      
+    else {
+        for (;;) {
+            int c = get();
+
 #ifdef TRACE
-      QLOG_INFO() <<"deja \"" << result << "\", '" << ((char) c) << "'\n";
+            QLOG_INFO() << "deja \"" << result << "\", '" << ((char) c) << "'\n";
 #endif
-      if (c == EOF)
-	break;
-      else if (Separators.find(c) == -1)
-	result += c;
-      else if (! result.isEmpty()) {	
-	unget();
-	break;
-      }
-      else {
-	switch (c) {
-	case '"':
-	  return read_string();
-	case '[':
-	  return read_array_dim();
-	case '\'':
-	  return read_character();
-	case '/':
-	  switch (peek()) {
-	  case '/':
-	    bypass_cpp_comment();
-	    break;
-	  case '*':
-	    bypass_c_comment();
-	    break;
-	  case '=':
-	    get();
+
+            if (c == EOF)
+                break;
+            else if (Separators.find(c) == -1)
+                result += c;
+            else if (! result.isEmpty()) {
+                unget();
+                break;
+            }
+            else {
+                switch (c) {
+                case '"':
+                    return read_string();
+
+                case '[':
+                    return read_array_dim();
+
+                case '\'':
+                    return read_character();
+
+                case '/':
+                    switch (peek()) {
+                    case '/':
+                        bypass_cpp_comment();
+                        break;
+
+                    case '*':
+                        bypass_c_comment();
+                        break;
+
+                    case '=':
+                        get();
 #ifdef TRACE
-	    QLOG_INFO() <<"retourne '/='\n";
+                        QLOG_INFO() << "retourne '/='\n";
 #endif
-	    return "/=";
-	  default:
+                        return "/=";
+
+                    default:
 #ifdef TRACE
-	    QLOG_INFO() <<"retourne '/'\n";
+                        QLOG_INFO() << "retourne '/'\n";
 #endif
-	    return "/";
-	  }
-	  break;
-	case '\n':
-	  context.line_number += 1;
-	  break;
-	case '@':
-	  return read_annotation();
-	case '>':
-	  if (in_templ && (peek() == '>')) {
-	    // >> read as > because unlike C++ not have to write "T<..X<..> >"
-	    get();
-	    if (peek() != '=') {
-	      unget();
+                        return "/";
+                    }
+
+                    break;
+
+                case '\n':
+                    context.line_number += 1;
+                    break;
+
+                case '@':
+                    return read_annotation();
+
+                case '>':
+                    if (in_templ && (peek() == '>')) {
+                        // >> read as > because unlike C++ not have to write "T<..X<..> >"
+                        get();
+
+                        if (peek() != '=') {
+                            unget();
 #ifdef TRACE
-	      QLOG_INFO() <<"retourne '>'\n";
+                            QLOG_INFO() << "retourne '>'\n";
 #endif
-	      return ">";
-	    }
-	    unget();
-	  }
-	  // no break
-	default:
-	  if (c > ' ')
-	    return manage_operator(result, c);
-	  break;
-	}
-      }
+                            return ">";
+                        }
+
+                        unget();
+                    }
+
+                    // no break
+                default:
+                    if (c > ' ')
+                        return manage_operator(result, c);
+
+                    break;
+                }
+            }
+        }
     }
-  }
+
 #ifdef TRACE
-  QLOG_INFO() <<"retourne '" << result << "'\n";
+    QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-  return Q3CString(result.toAscii().constData());
+    return Q3CString(result.toAscii().constData());
 }
 
 char Lex::read_word_bis(bool in_templ)
 {
-  char result = 0;
-  
-  if (!context.reread.isEmpty()) {
-    if (in_templ && (context.reread == ">>")) {
-      // >> read as > because unlike C++ not have to write "T<..X<..> >"
-      context.reread = context.reread.mid(1);
-      result = '>';
+    char result = 0;
+
+    if (!context.reread.isEmpty()) {
+        if (in_templ && (context.reread == ">>")) {
+            // >> read as > because unlike C++ not have to write "T<..X<..> >"
+            context.reread = context.reread.mid(1);
+            result = '>';
+        }
+        else {
+            result = context.reread.latin1()[0];
+            context.reread = QString();
+        }
     }
     else {
-      result = context.reread.latin1()[0];
-      context.reread = QString();
+        for (;;) {
+            int c = get();
+
+#ifdef TRACE
+            QLOG_INFO() << "deja \"" << result << "\", '" << ((char) c) << "'\n";
+#endif
+
+            if (c == EOF)
+                break;
+            else if (Separators.find(c) == -1) {
+                if (result == 0)
+                    result = c;
+            }
+            else if (result != 0) {
+                unget();
+                break;
+            }
+            else {
+                switch (c) {
+                case '"':
+                    bypass_string();
+#ifdef TRACE
+                    QLOG_INFO() << "retourne '" << (char) c << "'\n";
+#endif
+                    return (char) c;
+
+                case '[':
+                    bypass_array_dim();
+#ifdef TRACE
+                    QLOG_INFO() << "retourne '!' (array dim)\n";
+#endif
+                    return '!';	// to not be [
+
+                case '\'':
+                    bypass_character();
+#ifdef TRACE
+                    QLOG_INFO() << "retourne ' (char)\n";
+#endif
+                    return (char) c;
+
+                case '/':
+                    switch (peek()) {
+                    case '/':
+                        bypass_cpp_comment();
+                        break;
+
+                    case '*':
+                        bypass_c_comment();
+                        break;
+
+                    case '=':
+                        get();
+#ifdef TRACE
+                        QLOG_INFO() << "retourne '/' (/=)\n";
+#endif
+                        return (char) c;
+
+                    default:
+#ifdef TRACE
+                        QLOG_INFO() << "retourne '/'\n";
+#endif
+                        return (char) c;
+                    }
+
+                    break;
+
+                case '\n':
+                    context.line_number += 1;
+                    break;
+
+                case '@':
+                    bypass_annotation();
+#ifdef TRACE
+                    QLOG_INFO() << "retourne '@' (annotation)\n";
+#endif
+                    return (char) c;
+
+                case '>':
+                    if (in_templ && (peek() == '>')) {
+                        // >> read as > because unlike C++ not have to write "T<..X<..> >"
+                        get();
+
+                        if (peek() != '=') {
+                            unget();
+#ifdef TRACE
+                            QLOG_INFO() << "retourne '>'\n";
+#endif
+                            return '>';
+                        }
+
+                        unget();
+                    }
+
+                    // no break
+                default:
+                    if (c > ' ')
+                        return bypass_operator(c);
+
+                    break;
+                }
+            }
+        }
     }
-  }
-  else {
-    for (;;) {
-      int c = get();
-      
+
 #ifdef TRACE
-      QLOG_INFO() <<"deja \"" << result << "\", '" << ((char) c) << "'\n";
+    QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-      if (c == EOF)
-	break;
-      else if (Separators.find(c) == -1) {
-	if (result == 0)
-	  result = c;
-      }
-      else if (result != 0) {	
-	unget();
-	break;
-      }
-      else {
-	switch (c) {
-	case '"':
-	  bypass_string();
-#ifdef TRACE
-	  QLOG_INFO() <<"retourne '" << (char) c << "'\n";
-#endif
-	  return (char) c;
-	case '[':
-	  bypass_array_dim();
-#ifdef TRACE
-	  QLOG_INFO() <<"retourne '!' (array dim)\n";
-#endif
-	  return '!';	// to not be [
-	case '\'':
-	  bypass_character();
-#ifdef TRACE
-	  QLOG_INFO() <<"retourne ' (char)\n";
-#endif
-	  return (char) c;
-	case '/':
-	  switch (peek()) {
-	  case '/':
-	    bypass_cpp_comment();
-	    break;
-	  case '*':
-	    bypass_c_comment();
-	    break;
-	  case '=':
-	    get();
-#ifdef TRACE
-	    QLOG_INFO() <<"retourne '/' (/=)\n";
-#endif
-	    return (char) c;
-	  default:
-#ifdef TRACE
-	    QLOG_INFO() <<"retourne '/'\n";
-#endif
-	    return (char) c;
-	  }
-	  break;
-	case '\n':
-	  context.line_number += 1;
-	  break;
-	case '@':
-	  bypass_annotation();
-#ifdef TRACE
-	  QLOG_INFO() <<"retourne '@' (annotation)\n";
-#endif
-	  return (char) c;
-	case '>':
-	  if (in_templ && (peek() == '>')) {
-	    // >> read as > because unlike C++ not have to write "T<..X<..> >"
-	    get();
-	    if (peek() != '=') {
-	      unget();
-#ifdef TRACE
-	      QLOG_INFO() <<"retourne '>'\n";
-#endif
-	      return '>';
-	    }
-	    unget();
-	  }
-	  // no break
-	default:
-	  if (c > ' ')
-	    return bypass_operator(c);
-	  break;
-	}
-      }
-    }
-  }
-#ifdef TRACE
-  QLOG_INFO() <<"retourne '" << result << "'\n";
-#endif
-  return result;
+    return result;
 }
 
 void Lex::finish_line()
 {
-  for (;;) {
-    int c = get();
-      
-    switch (c) {
-    case '/':
-      switch (peek()) {
-      case '/':
-	bypass_cpp_comment();
-	return;
-      case '*':
-	bypass_c_comment();
-	continue;
-      }
-      // no break
-    default:
-      unget();
-      return;
-    case '\n':
-      context.line_number += 1;
-      // no break
-    case EOF:
-      return;
-    case ' ':
-    case '\t':
-      break;
+    for (;;) {
+        int c = get();
+
+        switch (c) {
+        case '/':
+            switch (peek()) {
+            case '/':
+                bypass_cpp_comment();
+                return;
+
+            case '*':
+                bypass_c_comment();
+                continue;
+            }
+
+            // no break
+        default:
+            unget();
+            return;
+
+        case '\n':
+            context.line_number += 1;
+
+            // no break
+        case EOF:
+            return;
+
+        case ' ':
+        case '\t':
+            break;
+        }
     }
-  }
 }
 
-Q3CString Lex::get_comments() 
+Q3CString Lex::get_comments()
 {
-  Q3CString result = Q3CString(context.comments.toAscii().constData());
-  
-  context.comments = QString();
-  return result;
+    Q3CString result = Q3CString(context.comments.toAscii().constData());
+
+    context.comments = QString();
+    return result;
 }
 
-Q3CString Lex::get_comments(Q3CString & co) 
+Q3CString Lex::get_comments(Q3CString & co)
 {
-  Q3CString result = Q3CString(context.comments.toAscii().constData());
-  
-  context.comments = QString();
-  
-  return (co.isEmpty())
-    ? result
-    : co += "\n" + result;
+    Q3CString result = Q3CString(context.comments.toAscii().constData());
+
+    context.comments = QString();
+
+    return (co.isEmpty())
+           ? result
+           : co += "\n" + result;
 }
 
-Q3CString Lex::get_description() 
+Q3CString Lex::get_description()
 {
-  Q3CString result = Q3CString(context.description.toAscii().constData());
-  
-  context.description = QString();
-  return result;
+    Q3CString result = Q3CString(context.description.toAscii().constData());
+
+    context.description = QString();
+    return result;
 }
 
-Q3CString Lex::get_description(Q3CString & co) 
+Q3CString Lex::get_description(Q3CString & co)
 {
-  Q3CString result = Q3CString(context.description.toAscii().constData());
-  
-  context.description = QString();
-  
-  return (co.isEmpty())
-    ? result
-    : co += "\n" + result;
+    Q3CString result = Q3CString(context.description.toAscii().constData());
+
+    context.description = QString();
+
+    return (co.isEmpty())
+           ? result
+           : co += "\n" + result;
 }
 
 void Lex::clear_comments()
 {
-  context.comments = QString();
+    context.comments = QString();
 }
 
 bool Lex::identifierp(const char * s)
 {
-  return (Separators.find(*s) == -1);
+    return (Separators.find(*s) == -1);
 }
 
-void Lex::mark() {
-  context.mark = context.pointer;
+void Lex::mark()
+{
+    context.mark = context.pointer;
 }
 
-Q3CString Lex::region() {
-  char c = *context.pointer;
-  
-  *context.pointer = 0;
-  
-  Q3CString result = context.mark;
-  
-  *context.pointer = c;
-  
-  return result;
+Q3CString Lex::region()
+{
+    char c = *context.pointer;
+
+    *context.pointer = 0;
+
+    Q3CString result = context.mark;
+
+    *context.pointer = c;
+
+    return result;
 }
 
 //
 
 void Lex::syntax_error(Q3CString s)
 {
-  JavaCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-			+ Q3CString(context.filename.toAscii().constData()) + "</i> line " +
-			Q3CString().setNum(context.line_number) + " <b>"
-			+ s + "</b></font><br>"); 
-  
+    JavaCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
+                         + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
+                         Q3CString().setNum(context.line_number) + " <b>"
+                         + s + "</b></font><br>");
+
 #ifdef TRACE
-  QLOG_INFO() <<"ERROR IN " << context.filename
-    << " LINE " << context.line_number << " : " << s << '\n';
+    QLOG_INFO() << "ERROR IN " << context.filename
+                << " LINE " << context.line_number << " : " << s << '\n';
 #endif
 #ifdef ROUNDTRIP
-  throw 0;
+    throw 0;
 #endif
 }
 
 void Lex::premature_eof()
 {
-  JavaCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-		       + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
-		       Q3CString().setNum(context.line_number) +
-		       " <b>premature eof</b></font><br>"); 
-  
+    JavaCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
+                         + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
+                         Q3CString().setNum(context.line_number) +
+                         " <b>premature eof</b></font><br>");
+
 #ifdef TRACE
-  QLOG_INFO() <<"SYNTAX ERROR IN " << context.filename 
-    << " LINE " << context.line_number << " : premature eof\n";
+    QLOG_INFO() << "SYNTAX ERROR IN " << context.filename
+                << " LINE " << context.line_number << " : premature eof\n";
 #endif
 #ifdef ROUNDTRIP
-  throw 0;
+    throw 0;
 #endif
 }
 
 void Lex::error_near(Q3CString s, const char * m)
 {
-  JavaCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-		       + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
-		       Q3CString().setNum(context.line_number) + " <b>near <font color =\"red\">"
-		       + quote(s) + "</font></b>" + m + "</font><br>"); 
-  
+    JavaCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
+                         + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
+                         Q3CString().setNum(context.line_number) + " <b>near <font color =\"red\">"
+                         + quote(s) + "</font></b>" + m + "</font><br>");
+
 #ifdef TRACE
-  QLOG_INFO() <<"SYNTAX ERROR IN " << context.filename
-    << " LINE " << context.line_number << " : near '" << s << "'\n";
+    QLOG_INFO() << "SYNTAX ERROR IN " << context.filename
+                << " LINE " << context.line_number << " : near '" << s << "'\n";
 #endif
 #ifdef ROUNDTRIP
-  throw 0;
+    throw 0;
 #endif
 }
 
@@ -961,179 +1054,196 @@ void Lex::error_near(Q3CString s, const char * m)
 
 Q3CString Lex::quote(Q3CString s)
 {
-  Q3CString result;
-  const char * p = s;
-  
-  for (;;) {
-    switch (*p) {
-    case 0:
-      return result;
-    case '<':
-      result += "&lt;";
-      break;
-    case '>':
-      result += "&gt;";
-      break;
-    case '&':
-      result += "&amp;";
-      break;
-    default:
-      result += *p;
-    }
+    Q3CString result;
+    const char * p = s;
 
-    p += 1;
-  }
+    for (;;) {
+        switch (*p) {
+        case 0:
+            return result;
+
+        case '<':
+            result += "&lt;";
+            break;
+
+        case '>':
+            result += "&gt;";
+            break;
+
+        case '&':
+            result += "&amp;";
+            break;
+
+        default:
+            result += *p;
+        }
+
+        p += 1;
+    }
 }
 
 // remove first and last line in comment if non significant
 Q3CString Lex::simplify_comment(Q3CString & comment)
 {
-  if (comment.isEmpty())
-    return comment;
-  
-  const char * s = comment;
-  const char * p = s;
-  
-  for (;;) {
-    switch (*p) {
-    case 0:
-      return comment;
-    case ' ':
-    case '\t':
-      p += 1;
-      break;
-    case '\n':
-      comment.remove(0, p - s + 1);
-      
-      if (comment.isEmpty())
-	return comment;
-      
-      s = comment;
-      // no break
-    default:
-      p = s + comment.length() - 1;
+    if (comment.isEmpty())
+        return comment;
 
-      while (p != s) {
-	switch(*p) {
-	case ' ':
-	case '\t':
-	  p -= 1;
-	  break;
-	case '\n':
-	  comment.resize(p - s + 1);
-	  // no break
-	default:
-	  return comment;
-	}
-      }
-      
-      if (*p == '\n')
-	comment = "";
-      return comment;
+    const char * s = comment;
+    const char * p = s;
+
+    for (;;) {
+        switch (*p) {
+        case 0:
+            return comment;
+
+        case ' ':
+        case '\t':
+            p += 1;
+            break;
+
+        case '\n':
+            comment.remove(0, p - s + 1);
+
+            if (comment.isEmpty())
+                return comment;
+
+            s = comment;
+
+            // no break
+        default:
+            p = s + comment.length() - 1;
+
+            while (p != s) {
+                switch (*p) {
+                case ' ':
+                case '\t':
+                    p -= 1;
+                    break;
+
+                case '\n':
+                    comment.resize(p - s + 1);
+
+                    // no break
+                default:
+                    return comment;
+                }
+            }
+
+            if (*p == '\n')
+                comment = "";
+
+            return comment;
+        }
     }
-  }
 }
 
 // don't produce error
 
-bool Lex::bypass_type(Q3CString s) {
-  if (s.isEmpty() && (read_word_bis() == 0))
-    return FALSE;
-    
-  for (;;) {
-    s = read_word();
-  
-    if (s != "<")
-      break;
-    
-    char c;
-    
-    do {
-      int level = 0;
-      
-      for (;;) {
-	c = read_word_bis(TRUE);
-	
-	if (c == ',') {
-	  if (level == 0)
-	    break;
-	}
-	else if (c == '>') {
-	  if (level-- == 0)
-	    break;
-	}
-	else if (c == '<')
-	  level += 1;
-	else if (c == 0)
-	  return FALSE;
-      }
-    } while (c == ',');
-    
-    s = read_word();
-    if (s.isEmpty() || (*s != '.'))
-      break;
-  }
-  
-  if (! s.isEmpty())
-    unread_word(s);
-  
-  return TRUE;
+bool Lex::bypass_type(Q3CString s)
+{
+    if (s.isEmpty() && (read_word_bis() == 0))
+        return FALSE;
+
+    for (;;) {
+        s = read_word();
+
+        if (s != "<")
+            break;
+
+        char c;
+
+        do {
+            int level = 0;
+
+            for (;;) {
+                c = read_word_bis(TRUE);
+
+                if (c == ',') {
+                    if (level == 0)
+                        break;
+                }
+                else if (c == '>') {
+                    if (level-- == 0)
+                        break;
+                }
+                else if (c == '<')
+                    level += 1;
+                else if (c == 0)
+                    return FALSE;
+            }
+        }
+        while (c == ',');
+
+        s = read_word();
+
+        if (s.isEmpty() || (*s != '.'))
+            break;
+    }
+
+    if (! s.isEmpty())
+        unread_word(s);
+
+    return TRUE;
 }
 
 // to compare strings bypassing \r
 
 bool neq(const Q3CString & s1, const Q3CString & s2)
 {
-  const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
-  const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
-  
-  for (;;) {
-    while (*p1 == '\r') p1 += 1;
-    while (*p2 == '\r') p2 += 1;
-    
-    if (*p1 == 0)
-      return (*p2 != 0);
-    if (*p1 != *p2)
-      return TRUE;
-    
-    p1 += 1;
-    p2 += 1;
-  }
+    const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
+    const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
+
+    for (;;) {
+        while (*p1 == '\r') p1 += 1;
+
+        while (*p2 == '\r') p2 += 1;
+
+        if (*p1 == 0)
+            return (*p2 != 0);
+
+        if (*p1 != *p2)
+            return TRUE;
+
+        p1 += 1;
+        p2 += 1;
+    }
 }
 
 // White space means the decimal ASCII codes 9, 10, 11, 12, 13 and 32.
 inline bool is_white_space(char c)
 {
-  return ((c == ' ') || ((c >= '\t') && (c <= '\r')));
+    return ((c == ' ') || ((c >= '\t') && (c <= '\r')));
 }
 
 bool nequal(const Q3CString & s1, const Q3CString & s2)
 {
-  // don't take into account first and last white spaces (like a stripWhiteSpace())
-  const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
-  const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
-  const char * e1 = p1 + s1.length();
-  const char * e2 = p2 + s2.length();
-  
-  while ((p1 != e1) && is_white_space(p1[0]))
-    p1 += 1;
-  
-  while ((p2 != e2) && is_white_space(p2[0]))
-    p2 += 1;
-  
-  while ((e1 != p1) && is_white_space(e1[-1]))
-    e1 -= 1;
-  
-   while ((e2 != p2) && is_white_space(e2[-1]))
-    e2 -= 1;
-  
-  for (;;) {
-    if (p1 >= e1)
-      return (p2 < e2);
-    if (*p1 != *p2)
-      return TRUE;
-    
-    while (*++p1 == '\r') ;
-    while (*++p2 == '\r') ;
-  }
+    // don't take into account first and last white spaces (like a stripWhiteSpace())
+    const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
+    const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
+    const char * e1 = p1 + s1.length();
+    const char * e2 = p2 + s2.length();
+
+    while ((p1 != e1) && is_white_space(p1[0]))
+        p1 += 1;
+
+    while ((p2 != e2) && is_white_space(p2[0]))
+        p2 += 1;
+
+    while ((e1 != p1) && is_white_space(e1[-1]))
+        e1 -= 1;
+
+    while ((e2 != p2) && is_white_space(e2[-1]))
+        e2 -= 1;
+
+    for (;;) {
+        if (p1 >= e1)
+            return (p2 < e2);
+
+        if (*p1 != *p2)
+            return TRUE;
+
+        while (*++p1 == '\r') ;
+
+        while (*++p2 == '\r') ;
+    }
 }

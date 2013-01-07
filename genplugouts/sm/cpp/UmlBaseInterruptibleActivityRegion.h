@@ -9,8 +9,9 @@
 class UmlInterruptibleActivityRegion;
 class UmlItem;
 
-class UmlBaseInterruptibleActivityRegion : public UmlActivityRegion {
-  public:
+class UmlBaseInterruptibleActivityRegion : public UmlActivityRegion
+{
+public:
     //  returns a new interruptible activity region named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -22,9 +23,9 @@ class UmlBaseInterruptibleActivityRegion : public UmlActivityRegion {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseInterruptibleActivityRegion(void * id, const Q3CString & s) : UmlActivityRegion(id, s) {
+    UmlBaseInterruptibleActivityRegion(void * id, const Q3CString & s) : UmlActivityRegion(id, s) {
     }
 
 };

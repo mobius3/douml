@@ -37,14 +37,15 @@ class QPixmap;
 class ColDiagramWindow;
 class SimpleData;
 
-class BrowserColDiagram : public BrowserDiagram {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserColDiagram : public BrowserDiagram
+{
+    friend class StereotypesDialog;
+
+protected:
     static Q3PtrList<BrowserColDiagram> imported;
     static Q3ValueList<int> imported_ids;
     static QStringList its_default_stereotypes;
-  
+
     SimpleData * def;
     ColDiagramWindow * window;
     CollaborationDiagramSettings settings;
@@ -59,22 +60,22 @@ class BrowserColDiagram : public BrowserDiagram {
     void make();
     void exec_menu_choice(int rank);
 
-  public:
+public:
     BrowserColDiagram(QString s, BrowserNode * p, int id = 0);
     virtual ~BrowserColDiagram();
-      
+
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
-  
-    virtual const QPixmap* pixmap (int) const;
-    virtual void draw_svg() const;  
+                                    QString name = QString());
+
+    virtual const QPixmap * pixmap(int) const;
+    virtual void draw_svg() const;
 
     virtual void menu();
     virtual void apply_shortcut(QString s);
     virtual void open(bool);
     virtual void on_close();
-    virtual void read_session(char * & st);
+    virtual void read_session(char *& st);
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;
     virtual int get_identifier() const;
@@ -88,29 +89,29 @@ class BrowserColDiagram : public BrowserDiagram {
     virtual bool get_shadow() const;
     virtual bool get_draw_all_relations() const;
     virtual void dont_draw_all_relations();
-    virtual bool get_auto_label_position() const;    
+    virtual bool get_auto_label_position() const;
     virtual bool get_show_stereotype_properties() const;
     virtual bool get_classinstwritehorizontally() const;
     virtual ShowContextMode get_classinstshowmode() const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserColDiagram * read(char * &, char *, BrowserNode *);
+    static BrowserColDiagram * read(char *& , char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
-    
+
     void edit_settings();
-    
+
     static BrowserColDiagram * add_collaboration_diagram(BrowserNode * future_parent);
-    
+
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     virtual void renumber(int phase);
     static void open_all();
     static void import();
-    
+
     static void compute_referenced_by(Q3PtrList<BrowserNode> & l, BrowserNode *,
-				      const char * kc, char const * kr);
+                                      const char * kc, char const * kr);
 };
 
 #endif

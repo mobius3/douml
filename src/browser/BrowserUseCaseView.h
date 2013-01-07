@@ -26,7 +26,7 @@
 #ifndef BROWSER_USECASEVIEW_H
 #define BROWSER_USECASEVIEW_H
 
-#include <q3intdict.h> 
+#include <q3intdict.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
@@ -40,13 +40,14 @@ class SimpleData;
 #include "Labeled.h"
 #include "Settings.h"
 
-class BrowserUseCaseView : public BrowserNode, public Labeled<BrowserUseCaseView> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserUseCaseView : public BrowserNode, public Labeled<BrowserUseCaseView>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserUseCaseView> all;
     static QStringList its_default_stereotypes;
-    
+
     SimpleData * def;
     UseCaseDiagramSettings usecasediagram_settings;
     SequenceDiagramSettings sequencediagram_settings;
@@ -72,19 +73,19 @@ class BrowserUseCaseView : public BrowserNode, public Labeled<BrowserUseCaseView
     UmlColor activitypartition_color;
     UmlColor activityaction_color;
     UmlColor parameterpin_color;
-    
-  protected:
+
+protected:
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserUseCaseView(QString s, BrowserNode * p, int id = 0);
     BrowserUseCaseView(const BrowserUseCaseView * model, BrowserNode * p);
     virtual ~BrowserUseCaseView();
-  
-    virtual const QPixmap* pixmap (int) const;
-  
+
+    virtual const QPixmap * pixmap(int) const;
+
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     virtual void menu();
     virtual void apply_shortcut(QString s);
     virtual void open(bool);
@@ -93,7 +94,7 @@ class BrowserUseCaseView : public BrowserNode, public Labeled<BrowserUseCaseView
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
-				   BooL & duplicable) const;
+                                   BooL & duplicable) const;
     virtual BrowserNode * container(UmlCode) const; // container for class, state machine and activity
     virtual BasicData * get_data() const;
     virtual void get_usecasediagramsettings(UseCaseDiagramSettings &) const;
@@ -106,21 +107,21 @@ class BrowserUseCaseView : public BrowserNode, public Labeled<BrowserUseCaseView
     virtual UmlColor get_color(UmlCode) const;
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual void save(QTextStream &, bool ref, QString & warning);
-    
+
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
     virtual void DragMoveInsideEvent(QDragMoveEvent * e);
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
 
     static BrowserUseCaseView * add_use_case_view(BrowserNode * future_parent);
-    
+
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
-    static BrowserUseCaseView * read(char * &, char *, BrowserNode *, bool);
+
+    static BrowserUseCaseView * read(char *& , char *, BrowserNode *, bool);
     static BrowserNode * get_it(const char * k, int id);
-    
+
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);

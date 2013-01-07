@@ -31,14 +31,15 @@
 #include <Q3CString>
 #include <QTextStream>
 
-class UmlOperation : public UmlBaseOperation {
-  public:
+class UmlOperation : public UmlBaseOperation
+{
+public:
     UmlOperation(void * id, const Q3CString & n)
-      : UmlBaseOperation(id, n) {};
-  
+        : UmlBaseOperation(id, n) {};
+
     virtual void generate_decl(QTextStream & f, const Q3CString & cl_stereotype,
-			       Q3CString indent, bool = FALSE);
-    
+                               Q3CString indent, bool = FALSE);
+
     Q3CString compute_name();
 };
 

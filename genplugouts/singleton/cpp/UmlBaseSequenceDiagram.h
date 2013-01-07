@@ -10,8 +10,9 @@ class UmlSequenceDiagram;
 class UmlItem;
 
 // Manage the sequence diagrams
-class UmlBaseSequenceDiagram : public UmlDiagram {
-  public:
+class UmlBaseSequenceDiagram : public UmlDiagram
+{
+public:
     // returns a new sequence diagram named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -23,7 +24,7 @@ class UmlBaseSequenceDiagram : public UmlDiagram {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseSequenceDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n) {};
 

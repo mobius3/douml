@@ -9,8 +9,9 @@ class UmlItem;
 
 // this class manages collaboration diagram definition,
 // you can modify it
-class UmlCollaborationDiagramDefinition : public UmlBaseCollaborationDiagramDefinition {
-  public:
+class UmlCollaborationDiagramDefinition : public UmlBaseCollaborationDiagramDefinition
+{
+public:
     virtual ~UmlCollaborationDiagramDefinition();
 
     virtual void write(FileOut & out, UmlItem * diag);

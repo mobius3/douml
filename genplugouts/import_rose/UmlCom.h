@@ -22,7 +22,7 @@ class UmlTypeSpec;
 class UmlClass;
 // This class manages the communications
 //
-// This class may be defined as a 'singleton', but I prefer to use static 
+// This class may be defined as a 'singleton', but I prefer to use static
 // members allowing to just write 'UmlCom::member' rather than
 // 'UmlCom::instance()->member' or other long sentence like this.
 //
@@ -39,12 +39,13 @@ class UmlClass;
 // - bye()
 //
 // - close()
-// 
+//
 // you must NOT call the others
-class UmlCom {
-  public:
+class UmlCom
+{
+public:
     // does the connexion
-    // 
+    //
     // On error return FALSE in C++, produce a RuntimeException in Java
     static bool connect(unsigned int port);
     //  returns the item on which the tool is applied
@@ -61,7 +62,7 @@ class UmlCom {
     // disconnexion
     static void close();
 
-  private:
+private:
     static Q3SocketDevice * sock;
 
     static char * buffer_in;
@@ -79,35 +80,35 @@ class UmlCom {
     static unsigned int buffer_out_size;
 
 
-  protected:
+protected:
     //internal, do NOT use it
-    
+
     static void check_size_out(unsigned int len);
     //internal, do NOT use it
-    
+
     static void read_if_needed();
     //internal, do NOT use it
-    
+
     static void read_buffer(unsigned int len);
     //internal, do NOT use it
-    
+
     static void write_bool(bool b);
     //internal, do NOT use it
-    
+
     static void write_char(char c);
     //internal, do NOT use it
-    
+
     static void write_unsigned(unsigned int u);
     //internal, do NOT use it
-    
+
     static void write_id(const void * id);
     //internal, do NOT use it
-    
+
     static void write_string(const char * p);
 
-  public:
+public:
     // internal, do NOT use it
-    
+
     static void send_cmd(CmdFamily f, unsigned int cmd);
     //internal, do NOT use it
     static void send_cmd(CmdFamily f, unsigned int cmd, char arg);
@@ -162,13 +163,13 @@ class UmlCom {
     //internal, do NOT use it
     static unsigned int read_unsigned();
     // internal, do NOT use it
-    
+
     static void read_item_list(Q3PtrVector<UmlItem> & v);
     //internal, do NOT use it
-    
+
     static void fatal_error(const Q3CString & msg);
     //internal, do NOT use it
-    
+
     static void flush();
 };
 

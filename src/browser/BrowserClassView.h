@@ -26,7 +26,7 @@
 #ifndef BROWSER_CLASSVIEW_H
 #define BROWSER_CLASSVIEW_H
 
-#include <q3intdict.h> 
+#include <q3intdict.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
@@ -41,13 +41,14 @@ class SimpleData;
 #include "Labeled.h"
 #include "Settings.h"
 
-class BrowserClassView : public BrowserNode, public Labeled<BrowserClassView> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserClassView : public BrowserNode, public Labeled<BrowserClassView>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserClassView> all;
     static QStringList its_default_stereotypes;
-  
+
     SimpleData * def;
     ClassDiagramSettings classdiagram_settings;
     SequenceDiagramSettings sequencediagram_settings;
@@ -70,22 +71,22 @@ class BrowserClassView : public BrowserNode, public Labeled<BrowserClassView> {
     UmlColor activityaction_color;
     UmlColor parameterpin_color;
     BrowserDeploymentView * associated_deployment_view;
-    
+
     void exec_menu_choice(int rank);
 
-  public:
+public:
     BrowserClassView(QString s, BrowserNode * p, int id = 0);
     BrowserClassView(const BrowserClassView * model, BrowserNode * p);
     virtual ~BrowserClassView();
-    
-    virtual const QPixmap* pixmap (int) const;
-  
+
+    virtual const QPixmap * pixmap(int) const;
+
     BrowserNode * get_class();
     virtual BrowserNode * get_associated() const;
     void set_associated_deploymentview(BrowserDeploymentView *, bool on_read = FALSE);
-  
+
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -95,7 +96,7 @@ class BrowserClassView : public BrowserNode, public Labeled<BrowserClassView> {
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
-				   BooL & duplicable) const;
+                                   BooL & duplicable) const;
     virtual BrowserNode * container(UmlCode) const; // container for class, state machine and activity
     virtual BasicData * get_data() const;
     virtual void get_classdiagramsettings(ClassDiagramSettings &) const;
@@ -109,9 +110,9 @@ class BrowserClassView : public BrowserNode, public Labeled<BrowserClassView> {
     virtual UmlVisibility get_visibility(UmlCode) const;
     virtual void on_delete();
     virtual void save(QTextStream &, bool ref, QString & warning);
-    
+
     static BrowserClassView * add_class_view(BrowserNode * future_parent);
-    
+
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
     virtual void DragMoveInsideEvent(QDragMoveEvent * e);
@@ -121,10 +122,10 @@ class BrowserClassView : public BrowserNode, public Labeled<BrowserClassView> {
     void insert_in_profile();
 
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
 
-    static BrowserClassView * read(char * &, char *, BrowserNode *, bool);
+    static BrowserClassView * read(char *& , char *, BrowserNode *, bool);
     static BrowserNode * get_it(const char * k, int id);
 
     static void clear(bool old);

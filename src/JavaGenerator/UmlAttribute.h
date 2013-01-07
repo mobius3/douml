@@ -33,23 +33,24 @@ class QTextStream;
 
 #include "UmlBaseAttribute.h"
 
-class UmlAttribute : public UmlBaseAttribute {
-  public:
+class UmlAttribute : public UmlBaseAttribute
+{
+public:
     UmlAttribute(void * id, const Q3CString & n)
-      :  UmlBaseAttribute(id, n) {};
+        :  UmlBaseAttribute(id, n) {};
 
     virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-			  Q3CString indent);
+                          Q3CString indent);
     virtual void generate_enum_pattern_item(QTextStream & f, int & current_value,
-					    const Q3CString & class_name,
-					    Q3CString indent);
+                                            const Q3CString & class_name,
+                                            Q3CString indent);
     virtual void generate_enum_pattern_case(QTextStream & f, Q3CString indent);
     virtual void generate_enum_item(QTextStream & f, Q3CString indent, BooL & first);
     virtual void generate_enum_member(QTextStream & f, Q3CString indent);
-    
-  private:
+
+private:
     void generate(QTextStream & f, const Q3CString & cl_stereotype,
-		  Q3CString indent, bool enumitem);
+                  Q3CString indent, bool enumitem);
 
 };
 

@@ -11,12 +11,13 @@ struct UmlStereotype;
 // This class manages settings not linked with a language, configured through
 // the 'Generation settings' dialog.
 //
-// This class may be defined as a 'singleton', but I prefer to use static 
+// This class may be defined as a 'singleton', but I prefer to use static
 // members allowing to just write 'UmlSettings::member' rather than
 // 'UmlSettings::instance()->member' or other long sentence like this.
 
-class UmlSettings {
-  public:
+class UmlSettings
+{
+public:
     // return the default description
     static Q3CString artifactDescription();
 
@@ -58,7 +59,7 @@ class UmlSettings {
     static bool set_RelationDescription(Q3CString v);
 
 
-  protected:
+protected:
     // never called !
     UmlSettings() {};
 
@@ -87,39 +88,39 @@ class UmlSettings {
     static UmlStereotype * _class_stereotypes;
 
     //internal, do NOT use it
-    
+
     static void read_();
 
     //internal, do NOT use it
-    
+
     static void read_if_needed_();
 
     //internal, do NOT use it
-    
+
     static unsigned multiplicity_column(const Q3CString & mult);
 
     //internal, do NOT use it
-    
+
     static Q3CString uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f);
 
     //internal, do NOT use it
-    
+
     static Q3CString uml_rel_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
 
     //internal, do NOT use it
-    
+
     static Q3CString uml_class_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
 
     //internal, do NOT use it
-    
+
     static UmlBuiltin * add_type(const Q3CString & s);
 
     //internal, do NOT use it
-    
+
     static UmlStereotype * add_rel_stereotype(const Q3CString & s);
 
     //internal, do NOT use it
-    
+
     static UmlStereotype * add_class_stereotype(const Q3CString & s);
 
 };

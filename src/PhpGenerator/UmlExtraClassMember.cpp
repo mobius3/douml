@@ -37,7 +37,8 @@ void UmlExtraClassMember::compute_dependency(Q3PtrList<PhpRefType> &, Q3CString)
 */
 
 void UmlExtraClassMember::generate(QTextStream & f, const Q3CString &,
-				   Q3CString, int &) {
-  f << phpDecl();
+                                   Q3CString, int &)
+{
+    f << phpDecl();
 }
 

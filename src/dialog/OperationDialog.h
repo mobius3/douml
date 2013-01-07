@@ -58,10 +58,11 @@ class KeyValuesTable;
 class BodyDialog;
 class OperationWidgetCpp;
 
-class OperationDialog : public EdgeMenuDialog {
-  Q_OBJECT
-    
-  protected:
+class OperationDialog : public EdgeMenuDialog
+{
+    Q_OBJECT
+
+protected:
     bool visit;
     OperationData * oper;
     ClassData * cl;
@@ -75,7 +76,7 @@ class OperationDialog : public EdgeMenuDialog {
     RelationData * set_of_rel;
     bool is_rel_a;
     DrawingLanguage unique;
-    
+
     // uml tab
     QWidget * umltab;
     LineEdit * edname;
@@ -90,9 +91,9 @@ class OperationDialog : public EdgeMenuDialog {
     ExceptionsTable * etable;
     MultiLineEdit * comment;
     MultiLineEdit * constraint;
-    
+
     // c++ tab
-    OperationWidgetCpp* cppTab;
+    OperationWidgetCpp * cppTab;
     bool cpp_undef;
     VisibilityGroup cpp_visibility;
     QCheckBox * cbCppFriend;
@@ -115,7 +116,7 @@ class OperationDialog : public EdgeMenuDialog {
     QString cl_names;
     QString templates_tmplop;
     QString cl_names_tmplop;
-        
+
     // java tab
     QWidget * javatab;
     bool java_undef;
@@ -131,7 +132,7 @@ class OperationDialog : public EdgeMenuDialog {
     QString javaannotation;
     QString javabody;
     QString oldjavabody;
-        
+
     // php tab
     QWidget * phptab;
     bool php_undef;
@@ -144,7 +145,7 @@ class OperationDialog : public EdgeMenuDialog {
     QPushButton * editphpbody;
     QString phpbody;
     QString oldphpbody;
-        
+
     // python tab
     QWidget * pythontab;
     bool python_undef;
@@ -158,7 +159,7 @@ class OperationDialog : public EdgeMenuDialog {
     QString pythondecorator;
     QString pythonbody;
     QString oldpythonbody;
-        
+
     // idl tab
     QWidget * idltab;
     bool idl_undef;
@@ -167,22 +168,22 @@ class OperationDialog : public EdgeMenuDialog {
     QCheckBox * idlfrozen_cb;	// get/set
     MultiLineEdit * edidldecl;
     MultiLineEdit * showidldecl;
-    
+
     // user
     KeyValuesTable * kvtable;
-    
+
     static QSize previous_size;
-  
-    QLabel* lblFullClassName;
+
+    QLabel * lblFullClassName;
     //QLabel* lblNameFormCpp;
-    QLabel* lblNameFormPhp;
-    QLabel* lblNameFormJava;
-    QLabel* lblNameFormPython;
-    QLabel* lblNameFormIdl;
-    QPushButton* pbValueType;
-    QPushButton* pbEditor;
-    QPushButton* pbDefault;
-    QPushButton* pbConstraintEditor;
+    QLabel * lblNameFormPhp;
+    QLabel * lblNameFormJava;
+    QLabel * lblNameFormPython;
+    QLabel * lblNameFormIdl;
+    QPushButton * pbValueType;
+    QPushButton * pbEditor;
+    QPushButton * pbDefault;
+    QPushButton * pbConstraintEditor;
     Q3ButtonGroup * bgUml1;
     Q3ButtonGroup * bgUml2;
     Q3ButtonGroup * bgUml3;
@@ -193,7 +194,7 @@ class OperationDialog : public EdgeMenuDialog {
     Q3ButtonGroup * bgIdl;
     Q3ButtonGroup * bgCppModifiers;
     Q3ButtonGroup * bgCpp11Modifiers;
-    Q3ButtonGroup* visibilityBg;
+    Q3ButtonGroup * visibilityBg;
 
     Q3HBox * htabBgUml;
     Q3HBox * namespecTab;
@@ -204,21 +205,21 @@ class OperationDialog : public EdgeMenuDialog {
 
 
 
-    QPushButton* pbDefaultDeclarationPhp;
-    QPushButton* pbNotGeneratedInPhp;
-    QPushButton* pbEditParametersPhp;
+    QPushButton * pbDefaultDeclarationPhp;
+    QPushButton * pbNotGeneratedInPhp;
+    QPushButton * pbEditParametersPhp;
 
 
-    QPushButton* pbNotGeneratedInJava;
-    QPushButton* pbDefaultDeclarationJava;
+    QPushButton * pbNotGeneratedInJava;
+    QPushButton * pbDefaultDeclarationJava;
 
-    QPushButton* pbDefaultDeclarationPython;
-    QPushButton* pbNotGeneratedInPython;
-    QPushButton* pbEditParamsPython;
+    QPushButton * pbDefaultDeclarationPython;
+    QPushButton * pbNotGeneratedInPython;
+    QPushButton * pbEditParamsPython;
 
-    QPushButton* editidlbody;
-    QPushButton* pbDefaultDeclarationIdl;
-    QPushButton* pbNotGeneratedInIdl;
+    QPushButton * editidlbody;
+    QPushButton * pbDefaultDeclarationIdl;
+    QPushButton * pbNotGeneratedInIdl;
 
     virtual void InitGui();
     virtual void FillGuiElements(OperationData *);
@@ -230,9 +231,9 @@ class OperationDialog : public EdgeMenuDialog {
     static QSharedPointer<OperationDialog> instance;
 
 
-  protected:
+protected:
     void manage_decorators(QString & s, QString indent,
-			   BooL & indent_needed);
+                           BooL & indent_needed);
     void init_get_set();
     void init_uml();
     void init_cpp();
@@ -242,14 +243,14 @@ class OperationDialog : public EdgeMenuDialog {
     void init_idl();
     void InitPropertiesTab();
 
-    void FillUmlTab(OperationData* );
-    void FillcppTab(OperationData* );
-    void FillJavaTab(OperationData* );
-    void FillPhpTab(OperationData* );
-    void FillPythonTab(OperationData* );
-    void FillIdlTab(OperationData* );
-    void FillPropertiesTab(OperationData*);
-    void FillGeneric(OperationData* oper);
+    void FillUmlTab(OperationData *);
+    void FillcppTab(OperationData *);
+    void FillJavaTab(OperationData *);
+    void FillPhpTab(OperationData *);
+    void FillPythonTab(OperationData *);
+    void FillIdlTab(OperationData *);
+    void FillPropertiesTab(OperationData *);
+    void FillGeneric(OperationData * oper);
 
     QString compute_name(LineEdit * spec);
     void manage_cpp_type(unsigned rank, QString & s);
@@ -263,42 +264,42 @@ class OperationDialog : public EdgeMenuDialog {
     void manage_idl_type(unsigned rank, QString & s);
     void manage_dir(unsigned rank, QString & s);
     void manage_idl_exceptions(QString & s);
-    
+
     void add_param(QString & form, int rank, QString s);
     void replace_param(QString & form, int rank, QString s);
     void insert_param(int rank, MultiLineEdit * ed);
     QString delete_param(int rank, MultiLineEdit * ed);
     void move_param(int old_rank, int new_rank, MultiLineEdit * ed);
-  
+
     static void post_edit_description(OperationDialog * d, QString s);
     static void post_edit_constraint(OperationDialog * d, QString s);
     static void post_cpp_edit_body(OperationDialog * d, QString s);
     static void post_java_edit_body(OperationDialog * d, QString s);
     static void post_python_edit_body(OperationDialog * d, QString s);
     static void post_php_edit_body(OperationDialog * d, QString s);
-  
-  public:
+
+public:
     OperationDialog(OperationData * a, DrawingLanguage l);
     virtual ~OperationDialog();
-  
+
     static QString cpp_decl(const BrowserOperation * op, bool withname,
-			    ShowContextMode mode);
+                            ShowContextMode mode);
     static QString java_decl(const BrowserOperation * op, bool withname,
-				  ShowContextMode mode);
+                             ShowContextMode mode);
     static QString php_decl(const BrowserOperation * op, bool withname,
-				  ShowContextMode mode);
+                            ShowContextMode mode);
     static QString python_decl(const BrowserOperation * op, bool withname,
-				  ShowContextMode mode);
+                               ShowContextMode mode);
     static QString idl_decl(const BrowserOperation * op, bool withdir,
-			    bool withname, ShowContextMode mode);
-    
+                            bool withname, ShowContextMode mode);
+
     void force_param(int rank, bool recompute);
     void insert_param(int rank);
     void delete_param(int rank);
     void move_param(int old_rank, int new_rank);
-    static QSharedPointer<OperationDialog> Instance(OperationData* ,DrawingLanguage l);
-  
-  protected slots:
+    static QSharedPointer<OperationDialog> Instance(OperationData * , DrawingLanguage l);
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void default_description();
@@ -352,27 +353,28 @@ class OperationDialog : public EdgeMenuDialog {
     void menu_returntype();
 };
 
-class ParamsTable : public MyTable {
-  Q_OBJECT
+class ParamsTable : public MyTable
+{
+    Q_OBJECT
 
-  protected:
+protected:
     OperationDialog * dialog;
     const QStringList & types;
     QStringList alltypes;
-  
+
     static QString dir_copy;		// copy/cut/paste
     static QString name_copy;
     static QString type_copy;
     static QString default_value_copy;
-  
-  public:
+
+public:
     ParamsTable(OperationData * a, QWidget * parent,
-		const QStringList & list,
-		OperationDialog * d, bool visit);
-  
-  protected:
+                const QStringList & list,
+                OperationDialog * d, bool visit);
+
+protected:
     virtual void activateNextCell();
-  
+
     void insert_row_before(int row);
     void insert_row_after(int row);
     void delete_row(int row);
@@ -380,35 +382,36 @@ class ParamsTable : public MyTable {
     void cut_row(int row);
     void paste_row(int row);
     void move_row(int from, int to);
-    
-  public:
+
+public:
     void update(OperationData * oper, BrowserNodeList & nodes);
     unsigned nparams() const;
     QString name(unsigned rank) const;
     QString type(unsigned rank) const;
     UmlParamDirection dir(unsigned rank) const;
     QString value(unsigned rank) const;
-  
-  protected slots:
+
+protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
     void value_changed(int row, int col);
 };
 
-class ExceptionsTable : public MyTable {
-  Q_OBJECT
+class ExceptionsTable : public MyTable
+{
+    Q_OBJECT
 
-  protected:
+protected:
     const QStringList & types;
-  
+
     static QString type_copy;		// copy/cut/paste
-  
-  public:
+
+public:
     ExceptionsTable(OperationData * a, QWidget * parent,
-		    const QStringList & list, bool visit);
-  
-  protected:
+                    const QStringList & list, bool visit);
+
+protected:
     virtual void activateNextCell();
-  
+
     void insert_row_before(int row);
     void insert_row_after(int row);
     void delete_row(int row);
@@ -416,33 +419,34 @@ class ExceptionsTable : public MyTable {
     void cut_row(int row);
     void paste_row(int row);
     void move_row(int from, int to);
-    
-  public:
+
+public:
     void update(OperationData * oper, BrowserNodeList & nodes);
     unsigned nexceptions() const;
     QString type(unsigned rank) const;
-  
-  protected slots:
+
+protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
     void value_changed(int row, int col);
 };
 
-class CppParamsTable : public MyTable {
-  Q_OBJECT
+class CppParamsTable : public MyTable
+{
+    Q_OBJECT
 
-  protected:
+protected:
     ParamsTable * params;
     MultiLineEdit * edform;
     bool dcl;
-  
+
     static QString copied[8];		// copy/cut/paste
-  
-  public:
-    CppParamsTable(ParamsTable * p, MultiLineEdit * f, 
-		   QWidget * parent, bool dcl);
+
+public:
+    CppParamsTable(ParamsTable * p, MultiLineEdit * f,
+                   QWidget * parent, bool dcl);
     void update_edform();
-  
-  protected:
+
+protected:
     bool extract(int tblindex, int & strindex, QString s);
 
     void insert_row_before(int row);
@@ -455,47 +459,49 @@ class CppParamsTable : public MyTable {
     void init_row(int row);
     void update_name(int row);
     void update_names();
-    
+
     virtual void setItem(int row, int col, Q3TableItem * item);
-    
-  protected slots:
+
+protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
     virtual void setCurrentCell(int row, int col);
 };
 
-class CppParamsDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class CppParamsDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     CppParamsTable * tbl;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     CppParamsDialog(QWidget * parent, ParamsTable * params,
-		    MultiLineEdit * form, bool decl);
+                    MultiLineEdit * form, bool decl);
     virtual ~CppParamsDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
 };
 
-class PhpParamsTable : public MyTable {
-  Q_OBJECT
+class PhpParamsTable : public MyTable
+{
+    Q_OBJECT
 
-  protected:
+protected:
     ParamsTable * params;
     MultiLineEdit * edform;
-  
+
     static QString copied[6];		// copy/cut/paste
-  
-  public:
+
+public:
     PhpParamsTable(QWidget * parent, ParamsTable * p,
-		   MultiLineEdit * f);
+                   MultiLineEdit * f);
     void update_edform();
-  
-  protected:
+
+protected:
     bool extract(int tblindex, int & strindex, QString s);
 
     void insert_row_before(int row);
@@ -508,46 +514,48 @@ class PhpParamsTable : public MyTable {
     void init_row(int row);
     void update_name(int row);
     void update_names();
-    
+
     virtual void setItem(int row, int col, Q3TableItem * item);
-    
-  protected slots:
+
+protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
     virtual void setCurrentCell(int row, int col);
 };
 
-class PhpParamsDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class PhpParamsDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     PhpParamsTable * tbl;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     PhpParamsDialog(QWidget * parent, ParamsTable * params,
-		    MultiLineEdit * form);
+                    MultiLineEdit * form);
     virtual ~PhpParamsDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
 };
 
-class PythonParamsTable : public MyTable {
-  Q_OBJECT
+class PythonParamsTable : public MyTable
+{
+    Q_OBJECT
 
-  protected:
+protected:
     ParamsTable * params;
     MultiLineEdit * edform;
-  
+
     static QString copied[6];		// copy/cut/paste
-  
-  public:
+
+public:
     PythonParamsTable(QWidget * parent, ParamsTable * p, MultiLineEdit * f);
     void update_edform();
-  
-  protected:
+
+protected:
     bool extract(int tblindex, int & strindex, QString s);
 
     void insert_row_before(int row);
@@ -560,27 +568,28 @@ class PythonParamsTable : public MyTable {
     void init_row(int row);
     void update_name(int row);
     void update_names();
-    
+
     virtual void setItem(int row, int col, Q3TableItem * item);
-    
-  protected slots:
+
+protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
     virtual void setCurrentCell(int row, int col);
 };
 
-class PythonParamsDialog : public QDialog {
-  Q_OBJECT
-    
-  protected:
+class PythonParamsDialog : public QDialog
+{
+    Q_OBJECT
+
+protected:
     PythonParamsTable * tbl;
-    
+
     static QSize previous_size;
-  
-  public:
+
+public:
     PythonParamsDialog(QWidget * parent, ParamsTable * params, MultiLineEdit * form);
     virtual ~PythonParamsDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
 };

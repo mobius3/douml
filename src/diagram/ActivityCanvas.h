@@ -43,10 +43,11 @@
 class ParameterCanvas;
 class InfoCanvas;
 
-class ActivityCanvas : public QObject, public ActivityContainerCanvas {
-  Q_OBJECT
-    
-  protected:
+class ActivityCanvas : public QObject, public ActivityContainerCanvas
+{
+    Q_OBJECT
+
+protected:
     ActivityDrawingSettings settings;
     UmlColor itscolor;
     UmlColor used_color;
@@ -62,35 +63,37 @@ class ActivityCanvas : public QObject, public ActivityContainerCanvas {
     int post_width;
     Q3ValueList<ParameterCanvas *> params;
     InfoCanvas * constraint;
-    
-  protected:
+
+protected:
     ActivityCanvas(UmlCanvas * canvas, int id);
-  
+
     void check_params();
     void check_constraint();
-  
-  public:
+
+public:
     ActivityCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityCanvas();
-    
-    Q3ValueList<ParameterCanvas *> get_params() { return params; }
+
+    Q3ValueList<ParameterCanvas *> get_params() {
+        return params;
+    }
     void force_sub_inside(bool rz);
-    
+
     virtual void delete_it();
-    
+
     void compute_size();
     void deleted(ParameterCanvas *);
-    
+
     virtual void draw(QPainter & p);
     virtual void change_scale();
-    
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void remove(bool from_model);
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);
@@ -100,23 +103,23 @@ class ActivityCanvas : public QObject, public ActivityContainerCanvas {
     virtual void resize(const QSize & sz, bool w, bool h);
     virtual bool move_with_its_package() const;
     virtual void moveBy(double dx, double dy);
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
-    
+
     virtual void apply_shortcut(QString s);
     void edit_drawing_settings();
     virtual bool get_show_stereotype_properties() const;
-  
+
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
-    static ActivityCanvas * read(char * &, UmlCanvas *, char *);
-    
+    static ActivityCanvas * read(char *& , UmlCanvas *, char *);
+
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
-  private slots:
+
+private slots:
     void modified();	// canvas must be updated
     void deleted();
 };

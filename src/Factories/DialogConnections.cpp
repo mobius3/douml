@@ -27,10 +27,10 @@
 #include "dialog/EdgeMenuDialog.h"
 #include "QPushButton"
 
-void ConnectToClassDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar)
+void ConnectToClassDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar)
 {
 
-    MultiPurposeDragArea* dragArea = qobject_cast<MultiPurposeDragArea*>(toolbar->findChild<MultiPurposeDragArea*>("DragArea"));
+    MultiPurposeDragArea * dragArea = qobject_cast<MultiPurposeDragArea *>(toolbar->findChild<MultiPurposeDragArea *>("DragArea"));
     QObject::connect(dragArea, SIGNAL(changeTab(int)), dialog, SLOT(OnChangeTab(int)));
     QObject::connect(dragArea, SIGNAL(initiateMove(QPoint)), dialog, SLOT(OnInitiateMove(QPoint)));
     QObject::connect(dragArea, SIGNAL(initiateResize(QPoint)), dialog, SLOT(OnInitiateResize(QPoint)));
@@ -45,10 +45,10 @@ void ConnectToClassDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar)
     QObject::connect(dialog, SIGNAL(repositionMenu(QPoint)), toolbar, SLOT(OnMenuRepositionRequested(QPoint)));
 
 
-    QPushButton* pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("NextElement"));
+    QPushButton * pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("NextElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(OnPickNextSibling()));
 
-    pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("PreviousElement"));
+    pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("PreviousElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(OnPickPreviousSibling()));
 
     ConnectToLimitedtDialog(dialog, toolbar);
@@ -57,20 +57,20 @@ void ConnectToClassDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar)
 }
 
 
-void ConnectToLimitedtDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar)
+void ConnectToLimitedtDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar)
 {
-    QPushButton* pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("OkayElement"));
+    QPushButton * pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("OkayElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(accept()));
-    pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("CancelElement"));
+    pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("CancelElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(reject()));
 
-    pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("OkayElement"));
+    pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("OkayElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), toolbar, SLOT(close()));
-    pageButton = qobject_cast<QPushButton*>(toolbar->findChild<QPushButton*>("CancelElement"));
+    pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("CancelElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), toolbar, SLOT(close()));
     dialog->ConnectionToToolBarEstablished();
 
-    QAction* clipAction = qobject_cast<QAction*>(toolbar->findChild<QAction*>("Clipboard"));
+    QAction * clipAction = qobject_cast<QAction *>(toolbar->findChild<QAction *>("Clipboard"));
     QObject::connect(clipAction, SIGNAL(triggered()), toolbar, SLOT(OnClipboardRequested()));
 
 }

@@ -18,8 +18,9 @@ class UmlAttribute;
 class UmlRelation;
 class UmlObjectDiagram;
 
-class UmlBaseClassInstance : public UmlItem {
-  public:
+class UmlBaseClassInstance : public UmlItem
+{
+public:
     // returns the kind of the item
     virtual anItemKind kind();
 
@@ -27,7 +28,7 @@ class UmlBaseClassInstance : public UmlItem {
     //
     // In case it cannot be created ('parent' cannot contain it etc ...) return 0
     //  in C++ and produce a RuntimeException in Java
-    
+
     static UmlClassInstance * create(UmlItem * parent, const char * name, UmlClass * type);
 
     // return the type
@@ -76,17 +77,19 @@ class UmlBaseClassInstance : public UmlItem {
     bool set_AssociatedDiagram(UmlObjectDiagram * d);
 
 
-  private:
+private:
     UmlClass * _type;
 
     UmlObjectDiagram * _assoc_diagram;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseClassInstance(void * id, const Q3CString & s) : UmlItem(id, s) { _type = 0; _assoc_diagram = 0;
+    UmlBaseClassInstance(void * id, const Q3CString & s) : UmlItem(id, s) {
+        _type = 0;
+        _assoc_diagram = 0;
     }
 
 };

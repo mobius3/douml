@@ -7,8 +7,9 @@
 #include "UmlBaseStateDiagram.h"
 #include "UmlStateItem.h"
 
-class UmlStateDiagram : public UmlBaseStateDiagram, public UmlStateItem {
-  public:
+class UmlStateDiagram : public UmlBaseStateDiagram, public UmlStateItem
+{
+public:
     //set he html ref
     //set the diagrams list
     virtual void memo_ref();
@@ -21,13 +22,13 @@ class UmlStateDiagram : public UmlBaseStateDiagram, public UmlStateItem {
     static void generate_index();
 
 
-  protected:
+protected:
     static Vector diagrams;
 
 
-  public:
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlStateDiagram(void * id, const Q3CString & s) : UmlBaseStateDiagram(id, s) {
+    UmlStateDiagram(void * id, const Q3CString & s) : UmlBaseStateDiagram(id, s) {
     }
 
 };

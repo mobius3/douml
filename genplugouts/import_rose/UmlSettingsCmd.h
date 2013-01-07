@@ -4,7 +4,7 @@
 
 // Internal enum
 enum UmlSettingsCmd {
-  getUmlSettingsCmd
+    getUmlSettingsCmd
 
 };
 #endif

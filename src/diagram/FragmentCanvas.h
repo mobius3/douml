@@ -35,10 +35,11 @@
 class FragmentSeparatorCanvas;
 class ToolCom;
 
-class FragmentCanvas : public QObject, public DiagramCanvas {
-  Q_OBJECT
-    
-  protected:
+class FragmentCanvas : public QObject, public DiagramCanvas
+{
+    Q_OBJECT
+
+protected:
     UmlColor itscolor;
     UmlColor used_color;
     QString name;
@@ -47,25 +48,25 @@ class FragmentCanvas : public QObject, public DiagramCanvas {
     Q3PtrList<FragmentSeparatorCanvas> separators;
     BrowserNode * refer;
     QString form;
-  
+
     void check_size();
-    
-  public:
+
+public:
     FragmentCanvas(UmlCanvas * canvas, int x, int y, int id);
     virtual ~FragmentCanvas();
-    
+
     virtual void delete_it();
-    
+
     void remove_it(FragmentSeparatorCanvas *);
 
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual aCorner on_resize_point(const QPoint &);
@@ -75,27 +76,29 @@ class FragmentCanvas : public QObject, public DiagramCanvas {
     virtual void prepare_for_move(bool on_resize);
     virtual void moveBy(double dx, double dy);
     virtual void set_z(double z);	// only called by upper() & lower()
-    
+
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
-    static FragmentCanvas * read(char * &, UmlCanvas *, char *);
+    static FragmentCanvas * read(char *& , UmlCanvas *, char *);
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
     void edit_drawing_settings();
-    
+
     virtual void apply_shortcut(QString s);
-    
-    QString arguments() { return form; }
-    
+
+    QString arguments() {
+        return form;
+    }
+
     static void send(ToolCom * com, Q3CanvasItemList & all,
-		     Q3PtrList<FragmentCanvas> & fragments,
-		     Q3PtrList<FragmentCanvas> & refs);
-  
-  private slots:
+                     Q3PtrList<FragmentCanvas> & fragments,
+                     Q3PtrList<FragmentCanvas> & refs);
+
+private slots:
     void modified();
 };
 

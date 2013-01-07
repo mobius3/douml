@@ -10,8 +10,9 @@
 class UmlState;
 class UmlStateDiagram;
 
-class UmlBaseState : public UmlItem {
-  public:
+class UmlBaseState : public UmlItem
+{
+public:
     //  returns a new state named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -23,13 +24,13 @@ class UmlBaseState : public UmlItem {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseState(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseState(void * id, const Q3CString & s) : UmlItem(id, s) {
     }
 
 
-  public:
+public:
     // return the entry behavior in OCL
     const Q3CString & entryBehavior();
 
@@ -115,7 +116,7 @@ class UmlBaseState : public UmlItem {
     bool set_AssociatedDiagram(UmlStateDiagram * d);
 
     // to unload the object to free memory, it will be reloaded automatically
-    // if needed. Recursively done for the sub items if 'rec' is TRUE. 
+    // if needed. Recursively done for the sub items if 'rec' is TRUE.
     //
     // if 'del' is true the sub items are deleted in C++, and removed from the
     // internal dictionnary in C++ and Java (to allow it to be garbaged),
@@ -123,7 +124,7 @@ class UmlBaseState : public UmlItem {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     StateBehavior _uml;
 
 #ifdef WITHCPP
@@ -137,7 +138,7 @@ class UmlBaseState : public UmlItem {
     UmlStateDiagram * _assoc_diagram;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP

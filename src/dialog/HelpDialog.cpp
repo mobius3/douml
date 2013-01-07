@@ -31,8 +31,8 @@
 #include <errno.h>
 
 
-#include <qmessagebox.h> 
-#include <q3textbrowser.h> 
+#include <qmessagebox.h>
+#include <q3textbrowser.h>
 #include <q3textview.h>
 #include <qlayout.h>
 #include <qlabel.h>
@@ -54,22 +54,22 @@ static QString DocDir;
 
 QString manual_dir()
 {
-  return ManualDir;
+    return ManualDir;
 }
 
 void set_manual_dir(QString p)
 {
-  ManualDir = p;
+    ManualDir = p;
 }
 
 QString navigator_path()
 {
-  return NavigatorPath;
+    return NavigatorPath;
 }
 
 void set_navigator_path(QString p)
 {
-  NavigatorPath = p;
+    NavigatorPath = p;
 }
 
 //
@@ -77,136 +77,138 @@ void set_navigator_path(QString p)
 HelpDialog * HelpDialog::the;
 
 HelpDialog::HelpDialog()
-    : QDialog(0, "BOUML Help", FALSE, Qt::WDestructiveClose) {
-  setCaption(TR("BOUML Help"));
-  
-  Q3VBoxLayout * vbox = new Q3VBoxLayout(this);  
-  Q3HBoxLayout * hbox;
-  
-  vbox->setMargin(5);
-  
-  br = new Q3TextBrowser(this);
-  vbox->addWidget(br);
-  
-  //vbox->addWidget(new QLabel(this));
-  
-  if (!DocDir.isEmpty()) {
-    QDir d(DocDir);
-    
+    : QDialog(0, "BOUML Help", FALSE, Qt::WDestructiveClose)
+{
+    setCaption(TR("BOUML Help"));
+
+    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    Q3HBoxLayout * hbox;
+
+    vbox->setMargin(5);
+
+    br = new Q3TextBrowser(this);
+    vbox->addWidget(br);
+
+    //vbox->addWidget(new QLabel(this));
+
+    if (!DocDir.isEmpty()) {
+        QDir d(DocDir);
+
+        hbox = new Q3HBoxLayout(vbox);
+        hbox->addWidget(new QLabel(this));
+        hbox->addWidget(new QLabel(TR("To set the navigator by setting the environment through the menu"
+                                      " Miscellaneous allows to see all the documentation in better conditions")
+                                   , this));
+        hbox->addWidget(new QLabel(this));
+    }
+    else
+        vbox->addWidget(new QLabel(this));
+
     hbox = new Q3HBoxLayout(vbox);
+
+    QPushButton * ok = new QPushButton(TR("Close"), this);
+
     hbox->addWidget(new QLabel(this));
-    hbox->addWidget(new QLabel(TR("To set the navigator by setting the environment through the menu"
-				  " Miscellaneous allows to see all the documentation in better conditions")
-			       , this));
+    hbox->addWidget(ok);
     hbox->addWidget(new QLabel(this));
-  }
-  else
-    vbox->addWidget(new QLabel(this));
-  
-  hbox = new Q3HBoxLayout(vbox);
-  
-  QPushButton * ok = new QPushButton(TR("Close"), this);
-  
-  hbox->addWidget(new QLabel(this));
-  hbox->addWidget(ok);
-  hbox->addWidget(new QLabel(this));
-  
-  QSize sz;
-  
-  UmlDesktop::setsize_center(this, Sz, 0.7, 0.7);
-  
-  connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
-  open_dialog(this);
+
+    QSize sz;
+
+    UmlDesktop::setsize_center(this, Sz, 0.7, 0.7);
+
+    connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
+    open_dialog(this);
 }
 
-HelpDialog::~HelpDialog() {
-  the = 0;
-  close_dialog(this);
+HelpDialog::~HelpDialog()
+{
+    the = 0;
+    close_dialog(this);
 }
-    
+
 void HelpDialog::show(QString topic)
 {
-  unsigned index;
-  
+    unsigned index;
 
 
 
-  QString dirs[3];
-  
-  dirs[1] = "/usr/share/doc/packages/bouml";
-  dirs[2] = "/usr/share/doc/bouml";
 
-  
-  dirs[0] = ManualDir;
-  DocDir = "";
-  
-  for (index = (ManualDir.isEmpty()) ? 1 : 0;
-       index != sizeof(dirs)/sizeof(*dirs);
-       index += 1) {
-    QDir dir(dirs[index]);
-    
-    if (dir.exists(topic + ".html")) {
-      DocDir = dir.absPath();
-      
-      if (!NavigatorPath.isEmpty()) {
-	if (dir.exists("index_" + topic + ".html"))
-	  topic = dir.absFilePath("index_" + topic + ".html");
-	else
-	  topic = dir.absFilePath(topic + ".html");
-	
-	int index = 0;
-	
-	while ((index = topic.find(' ', index)) != -1)
-	  topic.replace(index, 1, "%20");
-	
+    QString dirs[3];
 
-	QString s = NavigatorPath + " file://" + topic + "&";
-	
-	errno = 0;
-	(void) system(s);
-	
-	if (errno != 0)
-	  QMessageBox::critical(0, "Bouml",
-				TR("HelpDialog : error while executing '%1'\n"
-				   "perhaps you must specify its absolute path"
-				   "or set the environment variable PATH ?", NavigatorPath));
+    dirs[1] = "/usr/share/doc/packages/bouml";
+    dirs[2] = "/usr/share/doc/bouml";
 
-	return;
-      }
-	
-      break;
+
+    dirs[0] = ManualDir;
+    DocDir = "";
+
+    for (index = (ManualDir.isEmpty()) ? 1 : 0;
+         index != sizeof(dirs) / sizeof(*dirs);
+         index += 1) {
+        QDir dir(dirs[index]);
+
+        if (dir.exists(topic + ".html")) {
+            DocDir = dir.absPath();
+
+            if (!NavigatorPath.isEmpty()) {
+                if (dir.exists("index_" + topic + ".html"))
+                    topic = dir.absFilePath("index_" + topic + ".html");
+                else
+                    topic = dir.absFilePath(topic + ".html");
+
+                int index = 0;
+
+                while ((index = topic.find(' ', index)) != -1)
+                    topic.replace(index, 1, "%20");
+
+
+                QString s = NavigatorPath + " file://" + topic + "&";
+
+                errno = 0;
+                (void) system(s);
+
+                if (errno != 0)
+                    QMessageBox::critical(0, "Bouml",
+                                          TR("HelpDialog : error while executing '%1'\n"
+                                             "perhaps you must specify its absolute path"
+                                             "or set the environment variable PATH ?", NavigatorPath));
+
+                return;
+            }
+
+            break;
+        }
     }
-  }
-  
-  if (the == 0)
-    the = new HelpDialog();
-  
-  if (!DocDir.isEmpty()) {
-    the->br->mimeSourceFactory()->setFilePath(DocDir);
-    the->br->setSource(topic + ".html");
-  }
-  else {
-    bool old = FALSE;
-    
-    for (index = 0; index != sizeof(dirs)/sizeof(*dirs); index += 1) {
-      QDir dir(dirs[index]);
-      
-      if (dir.exists("bouml.html") && dir.exists("browseritems.html")) {
-	old = true;
-	break;
-      }
+
+    if (the == 0)
+        the = new HelpDialog();
+
+    if (!DocDir.isEmpty()) {
+        the->br->mimeSourceFactory()->setFilePath(DocDir);
+        the->br->setSource(topic + ".html");
     }
-  
-    the->br->setText(QString((old) ? TR("The documentation is too old.<br><br>")
-				   : TR("The documentation isn't installed.<br><br>")) +
-		     TR("The \".tar.gz\" or \".7z\" archives are available here:"
-			"<ul><li>http://bouml.sourceforge.net/documentation.html</li>"
-			"<li>http://bouml.free.fr/documentation.html</li></ul>"
-			"<br>Extract an archive and set the environment through the Miscellaneous"
-			"menu to indicate where the directory \"doc\" is then close this dialog and redo"));
-    the->setMinimumSize(QSize(600, 300));
-  }
-  
-  the->QDialog::show();
-  the->raise();
+    else {
+        bool old = FALSE;
+
+        for (index = 0; index != sizeof(dirs) / sizeof(*dirs); index += 1) {
+            QDir dir(dirs[index]);
+
+            if (dir.exists("bouml.html") && dir.exists("browseritems.html")) {
+                old = true;
+                break;
+            }
+        }
+
+        the->br->setText(QString((old) ? TR("The documentation is too old.<br><br>")
+                                 : TR("The documentation isn't installed.<br><br>")) +
+                         TR("The \".tar.gz\" or \".7z\" archives are available here:"
+                            "<ul><li>http://bouml.sourceforge.net/documentation.html</li>"
+                            "<li>http://bouml.free.fr/documentation.html</li></ul>"
+                            "<br>Extract an archive and set the environment through the Miscellaneous"
+                            "menu to indicate where the directory \"doc\" is then close this dialog and redo"));
+        the->setMinimumSize(QSize(600, 300));
+    }
+
+    the->QDialog::show();
+    the->raise();
 }

@@ -9,8 +9,9 @@
 class UmlExitPointPseudoState;
 class UmlItem;
 
-class UmlBaseExitPointPseudoState : public UmlPseudoState {
-  public:
+class UmlBaseExitPointPseudoState : public UmlPseudoState
+{
+public:
     //  returns a new exit point pseudo state named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -31,17 +32,17 @@ class UmlBaseExitPointPseudoState : public UmlPseudoState {
     bool set_Reference(UmlExitPointPseudoState * v);
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseExitPointPseudoState(void * id, const Q3CString & s) : UmlPseudoState(id, s) {
+    UmlBaseExitPointPseudoState(void * id, const Q3CString & s) : UmlPseudoState(id, s) {
     }
 
 
-  private:
+private:
     UmlExitPointPseudoState * _reference;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

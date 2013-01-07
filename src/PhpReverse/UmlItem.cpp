@@ -26,6 +26,7 @@
 #include "UmlItem.h"
 #include "UmlCom.h"
 
-UmlItem::~UmlItem() {
+UmlItem::~UmlItem()
+{
 }
 

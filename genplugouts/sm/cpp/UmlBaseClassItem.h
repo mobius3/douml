@@ -6,11 +6,12 @@
 #include <q3cstring.h>
 
 //  Mother class of the all the class's items including the class themself
-class UmlBaseClassItem : public UmlItem {
-  public:
+class UmlBaseClassItem : public UmlItem
+{
+public:
 #ifdef WITHCPP
     //  return the C++ declaration
-    
+
     const Q3CString & cppDecl();
 
     //  to set the C++ declaration
@@ -21,7 +22,7 @@ class UmlBaseClassItem : public UmlItem {
 
 #ifdef WITHJAVA
     //  return the Java defininition
-    
+
     const Q3CString & javaDecl();
 
     //  to set the Java definition
@@ -32,7 +33,7 @@ class UmlBaseClassItem : public UmlItem {
 
 #ifdef WITHPHP
     //  return the Php defininition
-    
+
     const Q3CString & phpDecl();
 
     //  to set the Php definition
@@ -43,7 +44,7 @@ class UmlBaseClassItem : public UmlItem {
 
 #ifdef WITHIDL
     //  return the IDL declaration
-    
+
     const Q3CString & idlDecl();
 
     //  set the IDL declaration
@@ -54,11 +55,11 @@ class UmlBaseClassItem : public UmlItem {
 
     virtual void unload(bool = FALSE, bool = FALSE);
 
-  friend class UmlBaseAttribute;
-  friend class UmlBaseOperation;
-  friend class UmlBaseRelation;
+    friend class UmlBaseAttribute;
+    friend class UmlBaseOperation;
+    friend class UmlBaseRelation;
 
-  private:
+private:
 #ifdef WITHCPP
     Q3CString _cpp_decl;
 #endif
@@ -76,36 +77,36 @@ class UmlBaseClassItem : public UmlItem {
 #endif
 
 
-  protected:
+protected:
     UmlBaseClassItem(void * id, const Q3CString & n) : UmlItem(id, n) {};
 
 #ifdef WITHCPP
     //internal, do NOT use it
-    
+
     virtual void read_cpp_();
 #endif
 
 #ifdef WITHJAVA
     //internal, do NOT use it
-    
+
     virtual void read_java_();
 #endif
 
 #ifdef WITHPHP
     //internal, do NOT use it
-    
+
     virtual void read_php_();
 #endif
 
 #ifdef WITHIDL
     //internal, do NOT use it
-    
+
     virtual void read_idl_();
 #endif
 
-  friend class UmlBaseClassMember;
-  friend class UmlBaseExtraClassMember;
-  friend class UmlBaseClass;
+    friend class UmlBaseClassMember;
+    friend class UmlBaseExtraClassMember;
+    friend class UmlBaseClass;
 };
 
 #endif

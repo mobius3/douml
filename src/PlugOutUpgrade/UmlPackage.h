@@ -35,13 +35,14 @@ class UmlClass;
 // This class manages a 'package', notes that the project itself is a package
 // You can modify it as you want (except the constructor)
 
-class UmlPackage : public UmlBasePackage {
-  public:
+class UmlPackage : public UmlBasePackage
+{
+public:
     UmlPackage(void * id, const Q3CString & n)
-      : UmlBasePackage(id, n) {};
-  
+        : UmlBasePackage(id, n) {};
+
     bool upgrade();
-    
+
     virtual void replace_friend();
 };
 

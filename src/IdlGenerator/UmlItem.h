@@ -33,16 +33,17 @@
 
 class QTextStream;
 
-class UmlItem : public UmlBaseItem {
-  public:
+class UmlItem : public UmlBaseItem
+{
+public:
     UmlItem(void * id, const Q3CString & n)
-      : UmlBaseItem(id, n) {
+        : UmlBaseItem(id, n) {
     };
     virtual ~UmlItem();
-    
+
     virtual void generate();
     void manage_comment(const char *& p, const char *& pp);
-    void manage_description(const char *& p, const char *& pp);    
+    void manage_description(const char *& p, const char *& pp);
     void manage_alias(const char *& p, QTextStream & ts);
 };
 

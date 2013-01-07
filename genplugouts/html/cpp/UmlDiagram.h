@@ -8,8 +8,9 @@
 // This class allows to manage diagram
 //
 // You can modify it as you want (except the constructor)
-class UmlDiagram : public UmlBaseDiagram {
-  public:
+class UmlDiagram : public UmlBaseDiagram
+{
+public:
     UmlDiagram(void * id, const Q3CString & n) : UmlBaseDiagram(id, n) {};
 
     //entry to produce the html code receiving chapter number

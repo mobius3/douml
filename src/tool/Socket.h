@@ -31,23 +31,24 @@
 
 class ToolCom;
 
-class Socket : /* public QObject, */ public Q3SocketDevice {
-  Q_OBJECT
-    
-  protected:
+class Socket : /* public QObject, */ public Q3SocketDevice
+{
+    Q_OBJECT
+
+protected:
     ToolCom * com;
     QSocketNotifier * notifier;
     bool on_error;
-  
-  public:
+
+public:
     Socket(ToolCom * c);
     Socket(ToolCom * c, int s);
-virtual ~Socket();
-    
+    virtual ~Socket();
+
     bool write_block(char * data, unsigned int len);
-    
-  protected slots:
+
+protected slots:
     void data_received();
 };
-  
+
 #endif

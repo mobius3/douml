@@ -5,10 +5,11 @@
 
 UmlTerminatePseudoState * UmlBaseTerminatePseudoState::create(UmlItem * parent)
 {
-  return (UmlTerminatePseudoState *) parent->create_(aTerminatePseudoState, "");
+    return (UmlTerminatePseudoState *) parent->create_(aTerminatePseudoState, "");
 }
 
-anItemKind UmlBaseTerminatePseudoState::kind() {
-  return aTerminatePseudoState;
+anItemKind UmlBaseTerminatePseudoState::kind()
+{
+    return aTerminatePseudoState;
 }
 

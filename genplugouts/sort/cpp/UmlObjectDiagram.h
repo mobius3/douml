@@ -10,10 +10,11 @@
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlObjectDiagram : public UmlBaseObjectDiagram {
-  public:
+class UmlObjectDiagram : public UmlBaseObjectDiagram
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlObjectDiagram(void * id, const Q3CString & s) : UmlBaseObjectDiagram(id, s) {
+    UmlObjectDiagram(void * id, const Q3CString & s) : UmlBaseObjectDiagram(id, s) {
     }
 
 };

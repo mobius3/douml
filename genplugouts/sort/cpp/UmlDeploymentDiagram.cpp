@@ -1,7 +1,8 @@
 
 #include "UmlDeploymentDiagram.h"
 
-int UmlDeploymentDiagram::orderWeight() {
-  return 6;
+int UmlDeploymentDiagram::orderWeight()
+{
+    return 6;
 }
 

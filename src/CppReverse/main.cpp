@@ -36,60 +36,60 @@
 
 int main(int argc, char ** argv)
 {
-  if (argc != 2)
-      return 0;
-  
-  if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
-    try {
-      //UmlCom::with_ack(FALSE);
-      UmlCom::trace("<b>C++ reverse</b> release 2.15<br>");
-      UmlCom::traceAutoRaise(FALSE);
-      
-      UmlItem * item = UmlCom::targetItem();
-      
-      if (item->kind() != aPackage)
-	UmlCom::trace("<font face=helvetica><b>must be applied on a <i>package</i></b></font><br><hr><br>");
-      else {
-	char * argv = 0;
-	int argc = 0;
-	QApplication * app = new QApplication(argc, &argv);
-	
-	/* lgfreitas: This initiates the root package as well, using the item provided by the
-	 connection above */
-	Package::init((UmlPackage *) item, app);
-	
-	Q3CString f;
-	
-	if (UmlPackage::getProject()->propertyValue("#file", f))
-	  Lex::defines(f);
-	
-	// add c++ catalog like java ?
-	
-	int n;
-	
-	/* lgfreitas: This is where the reversing happens */
-	Package::scan_dirs(n);
-	
-	if (n != 0) {
-	  CppSettings::set_UseDefaults(TRUE);
-	  Package::send_dirs(n, TRUE);
-	  Statistic::produce();
-	}
-      }
+    if (argc != 2)
+        return 0;
+
+    if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
+        try {
+            //UmlCom::with_ack(FALSE);
+            UmlCom::trace("<b>C++ reverse</b> release 2.15<br>");
+            UmlCom::traceAutoRaise(FALSE);
+
+            UmlItem * item = UmlCom::targetItem();
+
+            if (item->kind() != aPackage)
+                UmlCom::trace("<font face=helvetica><b>must be applied on a <i>package</i></b></font><br><hr><br>");
+            else {
+                char * argv = 0;
+                int argc = 0;
+                QApplication * app = new QApplication(argc, &argv);
+
+                /* lgfreitas: This initiates the root package as well, using the item provided by the
+                 connection above */
+                Package::init((UmlPackage *) item, app);
+
+                Q3CString f;
+
+                if (UmlPackage::getProject()->propertyValue("#file", f))
+                    Lex::defines(f);
+
+                // add c++ catalog like java ?
+
+                int n;
+
+                /* lgfreitas: This is where the reversing happens */
+                Package::scan_dirs(n);
+
+                if (n != 0) {
+                    CppSettings::set_UseDefaults(TRUE);
+                    Package::send_dirs(n, TRUE);
+                    Statistic::produce();
+                }
+            }
+        }
+        catch (...) {
+        }
+
+        try {
+            // socket may be already closed
+            UmlCom::message("");
+            UmlCom::showTrace();
+            UmlCom::bye(0);	// application must not be deleted
+        }
+        catch (...) {
+        }
     }
-    catch (...) {
-    }
-    
-    try {
-      // socket may be already closed
-      UmlCom::message("");
-      UmlCom::showTrace();
-      UmlCom::bye(0);	// application must not be deleted
-    }
-    catch (...) {
-    }
-  }
-  
-  UmlCom::close();
-  return 0;
+
+    UmlCom::close();
+    return 0;
 }

@@ -30,15 +30,16 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class UmlPackage : public UmlBasePackage {
-  public:
+class UmlPackage : public UmlBasePackage
+{
+public:
     UmlPackage(void * id, const Q3CString & n);
-  
-  protected:
+
+protected:
     Q3CString dir;
     bool read;
-  
-  public:
+
+public:
     Q3CString path(const Q3CString &);
     Q3CString text_path(const Q3CString &);
     void generate();

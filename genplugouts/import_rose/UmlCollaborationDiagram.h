@@ -13,10 +13,11 @@ class UmlItem;
 // management
 //
 // You can modify it as you want (except the constructor)
-class UmlCollaborationDiagram : public UmlBaseCollaborationDiagram {
-  public:
+class UmlCollaborationDiagram : public UmlBaseCollaborationDiagram
+{
+public:
     UmlCollaborationDiagram(void * id, const Q3CString & n) : UmlBaseCollaborationDiagram(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
     static void import(File & f, UmlItem * p);

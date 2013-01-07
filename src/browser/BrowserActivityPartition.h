@@ -39,35 +39,36 @@ class ActivityPartitionData;
 
 class BrowserActivityDiagram;
 
-class BrowserActivityPartition : public BrowserNode, public Labeled<BrowserActivityPartition> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserActivityPartition : public BrowserNode, public Labeled<BrowserActivityPartition>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserActivityPartition> all;
     static QStringList its_default_stereotypes;
-  
+
     ActivityPartitionData * def;
     BrowserActivityDiagram * associated_diagram;
-    
-  protected:
+
+protected:
     BrowserActivityPartition(int id);
-  
+
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserActivityPartition(QString s, BrowserNode * p, int id = 0);
     BrowserActivityPartition(const BrowserActivityPartition * model, BrowserNode * p);
     virtual ~BrowserActivityPartition();
-  
+
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
-				   BooL & duplicable) const;
+                                   BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     static BrowserActivityPartition * add_activitypartition(BrowserNode * future_parent);
     static BrowserActivityPartition * add_activitypartition(BrowserNode * future_parent, const char * name);
     static BrowserActivityPartition * get_activitypartition(BrowserNode * parent);
-    
-    virtual const QPixmap* pixmap (int) const;
+
+    virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -84,28 +85,28 @@ class BrowserActivityPartition : public BrowserNode, public Labeled<BrowserActiv
 
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserActivityDiagram *, bool on_read = FALSE);
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserActivityPartition * read(char * &, char *, BrowserNode *);
-    static BrowserActivityPartition * read_ref(char * & st);
+    static BrowserActivityPartition * read(char *& , char *, BrowserNode *);
+    static BrowserActivityPartition * read_ref(char *& st);
     static BrowserNode * get_it(const char * k, int id);
     static void post_load();
 
     virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
-    
+
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual bool api_compatible(unsigned v) const;
-    
+
     static void init();
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     static QString drag_key(BrowserNode * p);
     virtual QString drag_key() const;
     virtual QString drag_postfix() const;

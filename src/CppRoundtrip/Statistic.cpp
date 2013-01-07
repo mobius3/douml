@@ -31,11 +31,11 @@
 unsigned Statistic::n_updated;
 unsigned Statistic::n_created;
 
-void Statistic::produce() 
+void Statistic::produce()
 {
-  UmlCom::trace(Q3CString("<br><hr><br><font face=helvetica>C++ roundtrip done</font><br><br>") +
-		Q3CString("<font face=helvetica>	") +
-		Q3CString().setNum(n_updated) + Q3CString(" classes updated </font><br>") +
-		Q3CString("<font face=helvetica>	") +
-		Q3CString().setNum(n_created) + Q3CString(" classes created</font><br><hr><br>"));
+    UmlCom::trace(Q3CString("<br><hr><br><font face=helvetica>C++ roundtrip done</font><br><br>") +
+                  Q3CString("<font face=helvetica>	") +
+                  Q3CString().setNum(n_updated) + Q3CString(" classes updated </font><br>") +
+                  Q3CString("<font face=helvetica>	") +
+                  Q3CString().setNum(n_created) + Q3CString(" classes created</font><br><hr><br>"));
 }

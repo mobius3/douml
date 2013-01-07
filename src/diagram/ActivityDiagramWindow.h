@@ -34,10 +34,11 @@ class QSpinBox;
 class ActivityDiagramView;
 class BrowserActivityDiagram;
 
-class ActivityDiagramWindow : public DiagramWindow {
-  Q_OBJECT
-    
-  protected:
+class ActivityDiagramWindow : public DiagramWindow
+{
+    Q_OBJECT
+
+protected:
     ActivityDiagramView * view;
     QToolButton * addActivity;
     QToolButton * addInterruptibleActivityRegion;
@@ -60,16 +61,16 @@ class ActivityDiagramWindow : public DiagramWindow {
     QToolButton * anchor;
     QToolButton * text;
     QToolButton * image;
-  
-  public:
+
+public:
     ActivityDiagramWindow(const QString & s, BrowserActivityDiagram * b, int id = -1);
-virtual ~ActivityDiagramWindow();
+    virtual ~ActivityDiagramWindow();
 
     virtual DiagramView * get_view() const;
-    
+
     virtual void hit_button(UmlCode, QToolButton *);
-    
-  protected slots:
+
+protected slots:
     void hit_activity();
     void hit_interruptibleactivityregion();
     void hit_expansionregion();

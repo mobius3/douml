@@ -27,8 +27,9 @@
 
 #ifdef REVERSE
 
-bool UmlExtraClassMember::need_source() {
-  return !cppDef().isEmpty();
+bool UmlExtraClassMember::need_source()
+{
+    return !cppDef().isEmpty();
 }
 
 #endif

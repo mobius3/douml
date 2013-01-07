@@ -9,13 +9,14 @@
 // This class manages a 'package', notes that the project itself is a package
 //
 // You can modify it as you want (except the constructor)
-class UmlPackage : public UmlBasePackage {
-  public:
+class UmlPackage : public UmlBasePackage
+{
+public:
     UmlPackage(void * id, const Q3CString & n) : UmlBasePackage(id, n) {};
 
     //Entry point
     //Ask for the way to do check-in/out, execute the check-in/out command on the files
-    
+
     virtual void fileControl(bool ci);
 
     //Put files list in 'files' if 'rec' is not null.

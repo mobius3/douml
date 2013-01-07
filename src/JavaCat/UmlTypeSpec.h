@@ -9,9 +9,10 @@
 // - a class reference
 //
 // - an explicit type
-class UmlTypeSpec : public UmlBaseTypeSpec {
+class UmlTypeSpec : public UmlBaseTypeSpec
+{
 #ifdef ROUNDTRIP
-  public:
+public:
     bool equal(const UmlTypeSpec &) const;
 #endif
 };

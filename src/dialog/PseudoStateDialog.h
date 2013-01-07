@@ -44,10 +44,11 @@ class PseudoStateData;
 class KeyValuesTable;
 class BodyDialog;
 
-class PseudoStateDialog : public Q3TabDialog {
-  Q_OBJECT
-    
-  protected:
+class PseudoStateDialog : public Q3TabDialog
+{
+    Q_OBJECT
+
+protected:
     PseudoStateData * pst;
     bool visit;
     QStringList reflist;
@@ -58,16 +59,16 @@ class PseudoStateDialog : public Q3TabDialog {
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
     Q3PtrList<BodyDialog> edits;
-    
+
     static QSize previous_size;
-    
+
     static void post_edit_description(PseudoStateDialog * d, QString s);
-      
-  public:
+
+public:
     PseudoStateDialog(PseudoStateData * u);
     virtual ~PseudoStateDialog();
-  
-  protected slots:
+
+protected slots:
     virtual void polish();
     virtual void accept();
     void menu_reference();

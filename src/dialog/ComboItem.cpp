@@ -27,36 +27,40 @@
 
 
 
-#include <q3combobox.h> 
+#include <q3combobox.h>
 
 #include "ComboItem.h"
 #include "DialogUtil.h"
 
 ComboItem::ComboItem(Q3Table * ta, const QString & s,
-		     const QStringList & list, bool edit)
-    : TableItem(ta, Q3TableItem::WhenCurrent, s), editable(edit), cb(0), types(list) {
-  if (editable)
-    setReplaceable(FALSE);	// sinon le combo n est pas editable (!)
+                     const QStringList & list, bool edit)
+    : TableItem(ta, Q3TableItem::WhenCurrent, s), editable(edit), cb(0), types(list)
+{
+    if (editable)
+        setReplaceable(FALSE);	// sinon le combo n est pas editable (!)
 }
 
-QWidget * ComboItem::createEditor() const {
-  ((ComboItem *) this)->cb = new Q3ComboBox(table()->viewport());
-  // setEditable doit etre fait maintenant sinon les items sont perdus !
-  cb->setEditable(editable);
-  cb->setAutoCompletion(completion());
-  cb->insertItem(text());
-  cb->insertStringList(types);
+QWidget * ComboItem::createEditor() const
+{
+    ((ComboItem *) this)->cb = new Q3ComboBox(table()->viewport());
+    // setEditable doit etre fait maintenant sinon les items sont perdus !
+    cb->setEditable(editable);
+    cb->setAutoCompletion(completion());
+    cb->insertItem(text());
+    cb->insertStringList(types);
 
-  int index = types.findIndex(text());
-  
-  if (index != -1)
-    cb->setCurrentItem(index + 1);
-  
-  return cb;
+    int index = types.findIndex(text());
+
+    if (index != -1)
+        cb->setCurrentItem(index + 1);
+
+    return cb;
 }
 
-void ComboItem::setContentFromEditor(QWidget *w) {
-    Q3ComboBox* editor = qobject_cast<Q3ComboBox*>(w);
+void ComboItem::setContentFromEditor(QWidget * w)
+{
+    Q3ComboBox * editor = qobject_cast<Q3ComboBox *>(w);
+
     if (editor)
         setText(editor->currentText());
     else

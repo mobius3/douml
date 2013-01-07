@@ -31,14 +31,17 @@
 #include "Package.h"
 
 Progress::Progress(int n, const char * lbl)
-    : Q3ProgressDialog(lbl, 0, n, 0, 0, FALSE, Qt::WDestructiveClose), n(0) {
-  setMinimumDuration(1000);
+    : Q3ProgressDialog(lbl, 0, n, 0, 0, FALSE, Qt::WDestructiveClose), n(0)
+{
+    setMinimumDuration(1000);
 }
 
-Progress::~Progress() {
-  Package::progress_closed();
+Progress::~Progress()
+{
+    Package::progress_closed();
 }
 
-void Progress::tic() {
-  setProgress(++n);
+void Progress::tic()
+{
+    setProgress(++n);
 }

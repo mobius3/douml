@@ -5,10 +5,11 @@
 
 UmlObjectDiagram * UmlBaseObjectDiagram::create(UmlItem * parent, const char * s)
 {
-  return (UmlObjectDiagram *) parent->create_(anObjectDiagram, s);
+    return (UmlObjectDiagram *) parent->create_(anObjectDiagram, s);
 }
 
-anItemKind UmlBaseObjectDiagram::kind() {
-  return anObjectDiagram;
+anItemKind UmlBaseObjectDiagram::kind()
+{
+    return anObjectDiagram;
 }
 

@@ -10,8 +10,9 @@ class UmlDeploymentDiagram;
 class UmlDeploymentView;
 
 //  Manage the deployment diagrams
-class UmlBaseDeploymentDiagram : public UmlDiagram {
-  public:
+class UmlBaseDeploymentDiagram : public UmlDiagram
+{
+public:
     // returns a new deployment diagram named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -23,7 +24,7 @@ class UmlBaseDeploymentDiagram : public UmlDiagram {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     // the constructor, do not call it yourself !!!!!!!!!!
     UmlBaseDeploymentDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n) {};
 

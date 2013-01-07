@@ -33,33 +33,34 @@
 #define NOTE_CANVAS_MIN_SIZE 35
 #define NOTE_MARGIN 10
 
-class NoteCanvas : public QObject, public DiagramCanvas {
-  Q_OBJECT
-    
-  protected:
+class NoteCanvas : public QObject, public DiagramCanvas
+{
+    Q_OBJECT
+
+protected:
     UmlFont itsfont;
     UmlColor itscolor;
     UmlColor used_color;
     UmlColor fg_c;
     QString note;
-  
-    void save_internal(QTextStream & st) const;
-    void read_internal(char * & st);
 
-  public:
+    void save_internal(QTextStream & st) const;
+    void read_internal(char *& st);
+
+public:
     NoteCanvas(UmlCanvas * canvas, int x, int y, int id);
     virtual ~NoteCanvas();
-    
+
     virtual void delete_it();
 
     virtual void draw(QPainter & p);
-    
+
     virtual UmlCode type() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
     virtual void open();
-    virtual void menu(const QPoint&);
+    virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual aCorner on_resize_point(const QPoint &);
@@ -68,18 +69,18 @@ class NoteCanvas : public QObject, public DiagramCanvas {
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
     virtual void history_hide();
-    
+
     virtual bool has_drawing_settings() const;
     virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
     virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
     void edit_drawing_settings();
 
     virtual void apply_shortcut(QString s);
-  
+
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
-    static NoteCanvas * read(char * &, UmlCanvas *, char *);
-    
-  protected slots:
+    static NoteCanvas * read(char *& , UmlCanvas *, char *);
+
+protected slots:
     void modified();
 };
 

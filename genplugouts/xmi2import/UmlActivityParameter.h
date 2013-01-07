@@ -8,10 +8,11 @@
 class FileIn;
 class Token;
 
-class UmlActivityParameter : public UmlBaseActivityParameter {
-  public:
+class UmlActivityParameter : public UmlBaseActivityParameter
+{
+public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlActivityParameter(void * id, const Q3CString & s) : UmlBaseActivityParameter(id, s) {
+    UmlActivityParameter(void * id, const Q3CString & s) : UmlBaseActivityParameter(id, s) {
     }
 
     void readParameter(FileIn & in, Token & token);
@@ -19,7 +20,7 @@ class UmlActivityParameter : public UmlBaseActivityParameter {
     void readParameterNode(FileIn & in, Token & token);
 
 
-  private:
+private:
     void setEffect(Q3CString s, FileIn & in);
 
 };

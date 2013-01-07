@@ -41,30 +41,31 @@ class BrowserActivityDiagram;
 class BrowserParameter;
 class BrowserOperation;
 
-class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserActivity> all;
     static QStringList its_default_stereotypes;
-  
+
     ActivityData * def;
     BrowserActivityDiagram * associated_diagram;
-    
-  protected:
+
+protected:
     BrowserActivity(int id);
-  
+
     void exec_menu_choice(int rank);
-    
-  public:
+
+public:
     BrowserActivity(QString s, BrowserNode * p, int id = 0);
     BrowserActivity(const BrowserActivity * model, BrowserNode * p);
     virtual ~BrowserActivity();
-  
+
     virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
-				   BooL & duplicable) const;
+                                   BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     static BrowserNodeList & instances(BrowserNodeList &, bool sort);
     static BrowserActivity * add_activity(BrowserNode * future_parent);
     static BrowserActivity * add_activity(BrowserNode * future_parent, const char * name);
@@ -73,8 +74,8 @@ class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity> {
     void add_activity_diagram();
     BrowserNode * add_parameter(BrowserParameter * p);
     QString may_connect(const BrowserNode * dest) const;
-    
-    virtual const QPixmap* pixmap (int) const;
+
+    virtual const QPixmap * pixmap(int) const;
 
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -90,29 +91,29 @@ class BrowserActivity : public BrowserNode, public Labeled<BrowserActivity> {
 
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserActivityDiagram *, bool on_read = FALSE);
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserActivity * read(char * &, char *, BrowserNode *);
-    static BrowserActivity * read_ref(char * & st);
-    static BrowserNode * read_any_ref(char * &, char *);
+    static BrowserActivity * read(char *& , char *, BrowserNode *);
+    static BrowserActivity * read_ref(char *& st);
+    static BrowserNode * read_any_ref(char *& , char *);
     static BrowserNode * get_it(const char * k, int id);
 
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual bool api_compatible(unsigned v) const;
-    
+
     virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
     static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserOperation *);
-    
+
     static void init();
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
     virtual void DragMoveInsideEvent(QDragMoveEvent * e);

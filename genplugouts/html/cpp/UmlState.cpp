@@ -5,165 +5,169 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-Q3CString UmlState::sKind() {
-  return (parent()->kind() == aClassView)
-    ? "state machine" : "state";
+Q3CString UmlState::sKind()
+{
+    return (parent()->kind() == aClassView)
+           ? "state machine" : "state";
 }
 
-void UmlState::html(Q3CString pfix, unsigned int rank, unsigned int level) {
-  define();
+void UmlState::html(Q3CString pfix, unsigned int rank, unsigned int level)
+{
+    define();
 
-  chapter((parent()->kind() == aClassView)
-	  ? "StateMachine" : "State",
-	  pfix, rank, "state", level);
+    chapter((parent()->kind() == aClassView)
+            ? "StateMachine" : "State",
+            pfix, rank, "state", level);
 
-  Q3CString s = description();
-  
-  if (!s.isEmpty()) {
-    fw.write("<p>");
-    writeq(description());
-    fw.write("<br /></p>");
-  }
+    Q3CString s = description();
 
-  UmlState * ref = reference();
-  
-  if (ref != 0) {
-    fw.write("<p>References ");
-    ref->write();
-    fw.write("</p>");
-  }
-  else {
-    if (isActive())
-      fw.write("<p>Active state</p>\n");
-    
-    UmlOperation * beh = specification();
-    
-    if (beh != 0) {
-      fw.write("<p>Implements ");
-      beh->write();
-      fw.write("</p>");
+    if (!s.isEmpty()) {
+        fw.write("<p>");
+        writeq(description());
+        fw.write("<br /></p>");
     }
-    
-    Q3CString scpp, sjava;
-    
-    s = entryBehavior();
-    scpp = cppEntryBehavior();
-    sjava = javaEntryBehavior();
-    
-    if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
-      fw.write("<p>Entry Behavior :</p><ul>");
-      
-      if (!s.isEmpty()) {
-	fw.write("<li>OCL : <pre>\n");
-	writeq(s);
-	fw.write("</pre></li>");
-      }
-      
-      if (!scpp.isEmpty()) {
-	fw.write("<li>C++ : <pre>\n");
-	writeq(scpp);
-	fw.write("</pre></li>");
-      }
-      
-      if (!sjava.isEmpty()) {
-	fw.write("<li>Java : <pre>\n");
-	writeq(sjava);
-	fw.write("</pre></li>");
-      }
-      
-      fw.write("</ul>");
-    }
-    
-    s = exitBehavior();
-    scpp = cppExitBehavior();
-    sjava = javaExitBehavior();
-    
-    if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
-      fw.write("<p>Exit Behavior :</p><ul>");
-      
-      if (!s.isEmpty()) {
-	fw.write("<li>OCL : <pre>\n");
-	writeq(s);
-	fw.write("</pre></li>");
-      }
-      
-      if (!scpp.isEmpty()) {
-	fw.write("<li>C++ : <pre>\n");
-	writeq(scpp);
-	fw.write("</pre></li>");
-      }
-      
-      if (!sjava.isEmpty()) {
-	fw.write("<li>Java : <pre>\n");
-	writeq(sjava);
-	fw.write("</pre></li>");
-      }
-      
-      fw.write("</ul>");
-    }
-    
-    s = doActivity();
-    scpp = cppDoActivity();
-    sjava = javaDoActivity();
-    
-    if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
-      fw.write("<p>Do activity :</p><ul>");
-      
-      if (!s.isEmpty()) {
-	fw.write("<li>OCL : <pre>\n");
-	writeq(s);
-	fw.write("</pre></li>");
-      }
-      
-      if (!scpp.isEmpty()) {
-	fw.write("<li>C++ : <pre>\n");
-	writeq(scpp);
-	fw.write("</pre></li>");
-      }
-      
-      if (!sjava.isEmpty()) {
-	fw.write("<li>Java : <pre>\n");
-	writeq(sjava);
-	fw.write("</pre></li>");
-      }
-      
-      fw.write("</ul>");
-    }
-  }
-  
-  UmlStateDiagram * d = associatedDiagram();
-  
-  if (d != 0) {
-    fw.write("<p>Diagram : ");
-    d->write();
-    fw.write("</p>");
-  }
 
-  write_properties();
+    UmlState * ref = reference();
 
-  write_children(pfix, rank, level);
+    if (ref != 0) {
+        fw.write("<p>References ");
+        ref->write();
+        fw.write("</p>");
+    }
+    else {
+        if (isActive())
+            fw.write("<p>Active state</p>\n");
 
-  unload(FALSE, FALSE);
+        UmlOperation * beh = specification();
+
+        if (beh != 0) {
+            fw.write("<p>Implements ");
+            beh->write();
+            fw.write("</p>");
+        }
+
+        Q3CString scpp, sjava;
+
+        s = entryBehavior();
+        scpp = cppEntryBehavior();
+        sjava = javaEntryBehavior();
+
+        if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
+            fw.write("<p>Entry Behavior :</p><ul>");
+
+            if (!s.isEmpty()) {
+                fw.write("<li>OCL : <pre>\n");
+                writeq(s);
+                fw.write("</pre></li>");
+            }
+
+            if (!scpp.isEmpty()) {
+                fw.write("<li>C++ : <pre>\n");
+                writeq(scpp);
+                fw.write("</pre></li>");
+            }
+
+            if (!sjava.isEmpty()) {
+                fw.write("<li>Java : <pre>\n");
+                writeq(sjava);
+                fw.write("</pre></li>");
+            }
+
+            fw.write("</ul>");
+        }
+
+        s = exitBehavior();
+        scpp = cppExitBehavior();
+        sjava = javaExitBehavior();
+
+        if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
+            fw.write("<p>Exit Behavior :</p><ul>");
+
+            if (!s.isEmpty()) {
+                fw.write("<li>OCL : <pre>\n");
+                writeq(s);
+                fw.write("</pre></li>");
+            }
+
+            if (!scpp.isEmpty()) {
+                fw.write("<li>C++ : <pre>\n");
+                writeq(scpp);
+                fw.write("</pre></li>");
+            }
+
+            if (!sjava.isEmpty()) {
+                fw.write("<li>Java : <pre>\n");
+                writeq(sjava);
+                fw.write("</pre></li>");
+            }
+
+            fw.write("</ul>");
+        }
+
+        s = doActivity();
+        scpp = cppDoActivity();
+        sjava = javaDoActivity();
+
+        if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
+            fw.write("<p>Do activity :</p><ul>");
+
+            if (!s.isEmpty()) {
+                fw.write("<li>OCL : <pre>\n");
+                writeq(s);
+                fw.write("</pre></li>");
+            }
+
+            if (!scpp.isEmpty()) {
+                fw.write("<li>C++ : <pre>\n");
+                writeq(scpp);
+                fw.write("</pre></li>");
+            }
+
+            if (!sjava.isEmpty()) {
+                fw.write("<li>Java : <pre>\n");
+                writeq(sjava);
+                fw.write("</pre></li>");
+            }
+
+            fw.write("</ul>");
+        }
+    }
+
+    UmlStateDiagram * d = associatedDiagram();
+
+    if (d != 0) {
+        fw.write("<p>Diagram : ");
+        d->write();
+        fw.write("</p>");
+    }
+
+    write_properties();
+
+    write_children(pfix, rank, level);
+
+    unload(FALSE, FALSE);
 }
 
-void UmlState::memo_ref() {
-  states.addElement(this);
-  UmlItem::memo_ref();
+void UmlState::memo_ref()
+{
+    states.addElement(this);
+    UmlItem::memo_ref();
 }
 
 void UmlState::ref_index()
 {
-  if (!states.isEmpty())
-    fw.write("<a href=\"states.html\" target = \"projectFrame\"><b> -States- </b></a>");
+    if (!states.isEmpty())
+        fw.write("<a href=\"states.html\" target = \"projectFrame\"><b> -States- </b></a>");
 }
 
 void UmlState::generate_index()
 {
-  UmlItem::generate_index(states, "States", "states");
+    UmlItem::generate_index(states, "States", "states");
 }
 
-bool UmlState::chapterp() {
-  return TRUE;
+bool UmlState::chapterp()
+{
+    return TRUE;
 }
 
 Vector UmlState::states;

@@ -26,7 +26,7 @@
 #ifndef LABELED_H
 #define LABELED_H
 
-#include <q3intdict.h> 
+#include <q3intdict.h>
 
 // id 1 user 1
 #define PROJECT_ID (1*128 + 1)
@@ -60,96 +60,113 @@ extern void do_change_shared_ids();
 extern void memo_idmax_loc(int & idmaxref, const char * who);
 extern void idmax_add_margin();
 
-template <class X> class IdDict {
+template <class X> class IdDict
+{
 #if 0
-  // not managed by some C++ compiler
-  template <class> friend class Labeled;
-  template <class> friend class IdIterator;
-  friend int place(IdDict<void> & d, int id, void *);
-  friend int new_place(IdDict<void> & d, int user_id, void *);
-  
-  private:
+    // not managed by some C++ compiler
+    template <class> friend class Labeled;
+    template <class> friend class IdIterator;
+    friend int place(IdDict<void> & d, int id, void *);
+    friend int new_place(IdDict<void> & d, int user_id, void *);
+
+private:
 #else
-  public:
+public:
 #endif
     Q3IntDict<X> dict[2];
     Q3IntDict<char> dictlib;
     int idmax;
     bool old_diagram;
-    
-  public:
-    IdDict(const char * who) {old_diagram = false; idmax = 0; memo_idmax_loc(idmax, who); }
-    IdDict(int sz, const char * who) {old_diagram = false; idmax = 0; dict[0].resize(sz); memo_idmax_loc(idmax, who); }
-  
+
+public:
+    IdDict(const char * who) {
+        old_diagram = false;
+        idmax = 0;
+        memo_idmax_loc(idmax, who);
+    }
+    IdDict(int sz, const char * who) {
+        old_diagram = false;
+        idmax = 0;
+        dict[0].resize(sz);
+        memo_idmax_loc(idmax, who);
+    }
+
     X * operator[](int k) {
-      return dict[(old_diagram || in_import()) ? 1 : 0][k];
+        return dict[(old_diagram || in_import()) ? 1 : 0][k];
     }
-  
+
     void remove(int id) {
-      dict[0].remove(id);
+        dict[0].remove(id);
     }
-    
+
     void clear(bool olds) {
-      if (olds) {
-	dict[1].clear();
-	dictlib.clear();
-      }
-      else {
-	idmax = FIRST_ID;
-	dict[0].clear();
-      }
+        if (olds) {
+            dict[1].clear();
+            dictlib.clear();
+        }
+        else {
+            idmax = FIRST_ID;
+            dict[0].clear();
+        }
     }
-    
+
     void update_idmax_for_root() {
-      Q3IntDictIterator<X> it(dict[0]); 
-      
-      while (it.current()) {
-	int id = it.currentKey();
-	
-	if ((((unsigned) (id & ~127)) > ((unsigned) idmax)) &&
-	    ((id & 127) == 0))
-	  idmax = id & ~127;
-	
-	++it;
-      }
+        Q3IntDictIterator<X> it(dict[0]);
+
+        while (it.current()) {
+            int id = it.currentKey();
+
+            if ((((unsigned)(id & ~127)) > ((unsigned) idmax)) &&
+                ((id & 127) == 0))
+                idmax = id & ~127;
+
+            ++it;
+        }
     }
-    
-    void read_old_diagram(bool y) { old_diagram = y; }
-    
+
+    void read_old_diagram(bool y) {
+        old_diagram = y;
+    }
+
     void memo_id_oid(intptr_t id, int oid) {
-      dict[0].remove( static_cast<long>( id ) );
-      dictlib.replace( static_cast<long>( oid ), reinterpret_cast<char *>( id ) );
-      
-      if ((dictlib.count() / 2) >= dictlib.size())
-      {
-	dictlib.resize(dictlib.size() * 2 - 1);
-      }
+        dict[0].remove(static_cast<long>(id));
+        dictlib.replace(static_cast<long>(oid), reinterpret_cast<char *>(id));
+
+        if ((dictlib.count() / 2) >= dictlib.size()) {
+            dictlib.resize(dictlib.size() * 2 - 1);
+        }
     }
 };
 
-template <class X> class IdIterator : public Q3IntDictIterator<X> {
-  public:
+template <class X> class IdIterator : public Q3IntDictIterator<X>
+{
+public:
     IdIterator(IdDict<X> & ids) : Q3IntDictIterator<X>(ids.dict[0]) {}
 };
 
-template <class X> class Labeled {
-  private:
+template <class X> class Labeled
+{
+private:
     int ident;
-      
-  protected:
+
+protected:
     Labeled(IdDict<X> & d, int id) {
-      ident = place((IdDict<void> &) d, id, (X *) this);
+        ident = place((IdDict<void> &) d, id, (X *) this);
     }
-    
-  public:
-    int get_ident() const { return ident; }
-    bool is_api_base() { return ((ident & 127) == 0); }
-    
+
+public:
+    int get_ident() const {
+        return ident;
+    }
+    bool is_api_base() {
+        return ((ident & 127) == 0);
+    }
+
     void new_ident(int user_id, IdDict<X> & d) {
-      ident = new_place((IdDict<void> &) d, user_id, (X *) this);
+        ident = new_place((IdDict<void> &) d, user_id, (X *) this);
     }
     void must_change_id(IdDict<X> & d) {
-      will_change_id((IdDict<void> &) d, ident, (X *) this);
+        will_change_id((IdDict<void> &) d, ident, (X *) this);
     }
 };
 

@@ -39,30 +39,31 @@ class QPixmap;
 class SimpleData;
 class BrowserDeploymentDiagram;
 
-class BrowserDeploymentNode : public BrowserNode, public Labeled<BrowserDeploymentNode> {
-  friend class StereotypesDialog;
-  
-  protected:
+class BrowserDeploymentNode : public BrowserNode, public Labeled<BrowserDeploymentNode>
+{
+    friend class StereotypesDialog;
+
+protected:
     static IdDict<BrowserDeploymentNode> all;
     static QStringList its_default_stereotypes;
-    
+
     SimpleData * def;
     BrowserDeploymentDiagram * associated_diagram;
-    
-  protected:
+
+protected:
     void exec_menu_choice(int rank);
-  
-  public:
+
+public:
     BrowserDeploymentNode(QString s, BrowserNode * p, int id = 0);
     BrowserDeploymentNode(const BrowserDeploymentNode * model, BrowserNode * p);
     BrowserDeploymentNode(int id);
     virtual ~BrowserDeploymentNode();
-    
+
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserDeploymentDiagram *, bool on_read = FALSE);
-    
+
     virtual BrowserNode * duplicate(BrowserNode * p,
-				    QString name = QString());
+                                    QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -73,32 +74,32 @@ class BrowserDeploymentNode : public BrowserNode, public Labeled<BrowserDeployme
     virtual const char * help_topic() const;
     virtual BasicData * get_data() const;
     virtual void on_delete();
-    
+
     virtual void save(QTextStream &, bool ref, QString & warning);
-    static BrowserDeploymentNode * read_ref(char * &);
-    static BrowserDeploymentNode * read(char * &, char *, BrowserNode *);
+    static BrowserDeploymentNode * read_ref(char *&);
+    static BrowserDeploymentNode * read(char *& , char *, BrowserNode *);
     static BrowserNode * get_it(const char * k, int id);
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args);
-    
+
     static BrowserNodeList & instances(BrowserNodeList &, const char * st = 0);
     static BrowserDeploymentNode * get_deploymentnode(BrowserNode * future_parent);
     static BrowserDeploymentNode * add_deploymentnode(BrowserNode * future_parent);
-    
+
     static void clear(bool old);
     static void update_idmax_for_root();
     virtual void renumber(int phase);
-    virtual void prepare_update_lib() const;    
+    virtual void prepare_update_lib() const;
     virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
-    
-    virtual const QPixmap* pixmap (int) const;
+
+    virtual const QPixmap * pixmap(int) const;
     virtual void iconChanged();
-    
+
     static void init();
     static const QStringList & default_stereotypes();
-    static void read_stereotypes(char * &, char * & k);
+    static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
-    
+
     virtual void DragMoveEvent(QDragMoveEvent * e);
     virtual void DropEvent(QDropEvent * e);
     virtual void DragMoveInsideEvent(QDragMoveEvent * e);

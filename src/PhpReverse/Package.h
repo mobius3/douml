@@ -26,7 +26,7 @@
 #ifndef PACKAGE_H
 #define PACKAGE_H
 
-#include <qstringlist.h> 
+#include <qstringlist.h>
 #include <qstack.h>
 //Added by qt3to4:
 #include <QPixmap>
@@ -51,58 +51,65 @@ class UmlItem;
 class Progress;
 class QApplication;
 
-class Package : public BrowserNode, public ClassContainer {
-  public:
+class Package : public BrowserNode, public ClassContainer
+{
+public:
 #ifndef REVERSE
     Package(BrowserView * parent, UmlPackage * u);
 #endif
     Package(Package * parent, const char * p, const char * n);
-  
+
     virtual bool isa_package() const;
-    
+
     void reverse_file(Q3CString path, Q3CString f);
-    
-    const Q3CString & get_path() { return path; }
+
+    const Q3CString & get_path() {
+        return path;
+    }
     UmlPackage * get_uml(bool mandatory = TRUE);
 #ifdef REVERSE
     void send_dir(bool rec);
 #endif
-    
+
     void new_class(Class *);
-    
+
     virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
-			      Class ** need_object = 0);
+                              Class ** need_object = 0);
     virtual Class * define(const Q3CString & name, char st);
 #ifdef WITH_PHPCAT
     virtual void declare(const Q3CString &, Class *);
     void restore_children(QDataStream & dts);
     static void restore(QDataStream  & dt, Package *);
 #endif
-    
+
 #ifndef REVERSE
     virtual QString get_path() const;
-    
+
     virtual void menu();
     virtual void refer(const QString & name);
-    
+
     const QPixmap * pixmap(int) const;
-    
+
     virtual void backup(QDataStream  & dts) const;
     void backup_children(QDataStream  & ts) const;
 #endif
 
     static void init(UmlPackage *, QApplication *);
-    static bool scanning() { return scan; };
+    static bool scanning() {
+        return scan;
+    };
     static Package * scan_dir();
-    static Package * get_root() { return root; };
-        
+    static Package * get_root() {
+        return root;
+    };
+
     static void progress_closed();
-    
-  private:
+
+private:
     UmlPackage * uml;
     Q3CString path;
     NDict<Class> Undefined;
-  
+
     static bool scan;
     static Package * root;
     static Package * unknown;
@@ -114,20 +121,20 @@ class Package : public BrowserNode, public ClassContainer {
     static NDict<UmlClass> user_classes;
     static Progress * progress;
     static QApplication * app;
-    
+
     static int file_number(QDir & dir, bool rec);
-    
+
     void reverse_toplevel_form(Q3CString s);
     void reverse_directory(QDir & dir, bool rec);
-    
+
     Package * find(Q3CString s, bool nohack);
     static Package * package_unknown();
-    
+
     static void update_class_list(Q3CString pack, UmlItem * container);
-    
+
     Class * declare_if_needed(Q3CString name, char st);
     Class * new_class(const Q3CString & name, char st);
-    
+
     void use();
 };
 

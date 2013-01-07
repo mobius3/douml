@@ -41,14 +41,15 @@ class UmlClass;
 // operation/function etc...
 // You can modify it as you want (except the constructor)
 
-class UmlExtraClassMember : public UmlBaseExtraClassMember {
-  public:
+class UmlExtraClassMember : public UmlBaseExtraClassMember
+{
+public:
     UmlExtraClassMember(void * id, const Q3CString & n)
-      : UmlBaseExtraClassMember(id, n) {};
-  
+        : UmlBaseExtraClassMember(id, n) {};
+
 #ifdef ROUNDTRIP
     static void add_init(UmlClass * cl, Q3CString def, bool roundtrip,
-			 Q3PtrList<UmlItem> & expected_order);
+                         Q3PtrList<UmlItem> & expected_order);
 #endif
 };
 

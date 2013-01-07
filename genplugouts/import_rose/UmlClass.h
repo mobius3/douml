@@ -16,10 +16,11 @@ class Artifact;
 // is a mother class of the class's children.
 //
 // You can modify it as you want (except the constructor)
-class UmlClass : public UmlBaseClass {
-  public:
+class UmlClass : public UmlBaseClass
+{
+public:
     UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
     Language language() const;
@@ -29,7 +30,7 @@ class UmlClass : public UmlBaseClass {
     static bool replaceType(UmlTypeSpec & t, Q3CString & target_id, const Q3CString & ts);
 
 
-  private:
+private:
     void importAttributes(File & f);
 
     void importOperations(File & f);
@@ -57,13 +58,13 @@ class UmlClass : public UmlBaseClass {
     void assocArtifact(Artifact * c, Q3CString & art_path);
 
 
-  public:
+public:
     const Q3CString file() const;
 
     const Q3CString bodyFile() const;
 
 
-  protected:
+protected:
     Language lang;
 
     Q3CString _file;
@@ -72,16 +73,19 @@ class UmlClass : public UmlBaseClass {
 
 };
 
-inline Language UmlClass::language() const {
-  return lang;
+inline Language UmlClass::language() const
+{
+    return lang;
 }
 
-inline const Q3CString UmlClass::file() const {
-  return _file;
+inline const Q3CString UmlClass::file() const
+{
+    return _file;
 }
 
-inline const Q3CString UmlClass::bodyFile() const {
-  return _body_file;
+inline const Q3CString UmlClass::bodyFile() const
+{
+    return _body_file;
 }
 
 #endif

@@ -33,29 +33,30 @@
 
 class Class;
 
-class UmlRelation : public UmlBaseRelation {
-  public:
+class UmlRelation : public UmlBaseRelation
+{
+public:
     UmlRelation(void * id, const Q3CString & n)
-      : UmlBaseRelation(id, n) {
-    };  
-  
+        : UmlBaseRelation(id, n) {
+    };
+
     static bool new_one(Class * container, const Q3CString & name,
-			UmlClass * dest, const Q3CString & modifier,
-			const Q3CString & pretype, const Q3CString & array,
-			const Q3CString & typeform, aVisibility visibility,
-			bool staticp, bool constp, bool mutablep, bool volatilep,
-			const Q3CString & value,	Q3CString comment,
-			Q3CString description
+                        UmlClass * dest, const Q3CString & modifier,
+                        const Q3CString & pretype, const Q3CString & array,
+                        const Q3CString & typeform, aVisibility visibility,
+                        bool staticp, bool constp, bool mutablep, bool volatilep,
+                        const Q3CString & value,	Q3CString comment,
+                        Q3CString description
 #ifdef ROUNDTRIP
-			, bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
-			);
+                       );
     static bool new_friend(UmlClass * from, UmlClass * to);
-    
+
 #ifdef ROUNDTRIP
     void set_unidir();
     static bool new_friend(Class * from, UmlClass * to,
-			   Q3PtrList<UmlItem> & expected_order);
+                           Q3PtrList<UmlItem> & expected_order);
 #endif
 };
 

@@ -37,11 +37,12 @@
 
 class QTextStream;
 
-class UmlClassMember : public UmlBaseClassMember {
-  public:
+class UmlClassMember : public UmlBaseClassMember
+{
+public:
     UmlClassMember(void * id, const Q3CString & n)
-      : UmlBaseClassMember(id, n) {}
-    
+        : UmlBaseClassMember(id, n) {}
+
     virtual void generate_imports(QTextStream & f, Q3CString & made);
 };
 

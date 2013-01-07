@@ -28,25 +28,27 @@
 #include <Q3PtrList>
 
 #ifdef ROUNDTRIP
-bool UmlClassItem::set_roundtrip_expected() {
-  if (cppDecl().isEmpty())
-    return TRUE;
-  
-  roundtrip_expected = TRUE;
-  useless = TRUE;
-  
-  return isWritable();
+bool UmlClassItem::set_roundtrip_expected()
+{
+    if (cppDecl().isEmpty())
+        return TRUE;
+
+    roundtrip_expected = TRUE;
+    useless = TRUE;
+
+    return isWritable();
 }
 
-void UmlClassItem::mark_useless(Q3PtrList<UmlItem> & l) {
-  if (is_useless()) {
-    set_isMarked(TRUE);
-    
-    if (! parent()->isMarked()) {
-      parent()->set_childrenVisible(TRUE);
-      l.append(this);
+void UmlClassItem::mark_useless(Q3PtrList<UmlItem> & l)
+{
+    if (is_useless()) {
+        set_isMarked(TRUE);
+
+        if (! parent()->isMarked()) {
+            parent()->set_childrenVisible(TRUE);
+            l.append(this);
+        }
     }
-  }
 }
 #endif
 

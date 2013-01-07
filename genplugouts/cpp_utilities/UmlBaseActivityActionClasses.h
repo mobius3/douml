@@ -32,8 +32,9 @@ class UmlTestIdentityAction;
 class UmlRaiseExceptionAction;
 class UmlReduceAction;
 
-class UmlBaseSendObjectAction : public UmlActivityAction {
-  public:
+class UmlBaseSendObjectAction : public UmlActivityAction
+{
+public:
     //  returns a new send object action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -45,15 +46,16 @@ class UmlBaseSendObjectAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseSendObjectAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseSendObjectAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 };
 
-class UmlBaseUnmarshallAction : public UmlActivityAction {
-  public:
+class UmlBaseUnmarshallAction : public UmlActivityAction
+{
+public:
     //  returns a new unmarshall action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -65,15 +67,16 @@ class UmlBaseUnmarshallAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseUnmarshallAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseUnmarshallAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 };
 
-class UmlBaseSendSignalAction : public UmlOnSignalAction {
-  public:
+class UmlBaseSendSignalAction : public UmlOnSignalAction
+{
+public:
     //  returns a new send signal action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -85,15 +88,16 @@ class UmlBaseSendSignalAction : public UmlOnSignalAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseSendSignalAction(void * id, const Q3CString & s) : UmlOnSignalAction(id, s) {
+    UmlBaseSendSignalAction(void * id, const Q3CString & s) : UmlOnSignalAction(id, s) {
     }
 
 };
 
-class UmlBaseBroadcastSignalAction : public UmlOnSignalAction {
-  public:
+class UmlBaseBroadcastSignalAction : public UmlOnSignalAction
+{
+public:
     //  returns a new broadcast signal action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -105,15 +109,16 @@ class UmlBaseBroadcastSignalAction : public UmlOnSignalAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseBroadcastSignalAction(void * id, const Q3CString & s) : UmlOnSignalAction(id, s) {
+    UmlBaseBroadcastSignalAction(void * id, const Q3CString & s) : UmlOnSignalAction(id, s) {
     }
 
 };
 
-class UmlBaseValueSpecificationAction : public UmlActivityAction {
-  public:
+class UmlBaseValueSpecificationAction : public UmlActivityAction
+{
+public:
     //  returns a new value specification action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -125,13 +130,13 @@ class UmlBaseValueSpecificationAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseValueSpecificationAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseValueSpecificationAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the value
     const Q3CString & value();
 
@@ -169,7 +174,7 @@ class UmlBaseValueSpecificationAction : public UmlActivityAction {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _value;
 
 #ifdef WITHCPP
@@ -181,7 +186,7 @@ class UmlBaseValueSpecificationAction : public UmlActivityAction {
 #endif
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -194,8 +199,9 @@ class UmlBaseValueSpecificationAction : public UmlActivityAction {
 
 };
 
-class UmlBaseOpaqueAction : public UmlActivityAction {
-  public:
+class UmlBaseOpaqueAction : public UmlActivityAction
+{
+public:
     //  returns a new opaque action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -207,13 +213,13 @@ class UmlBaseOpaqueAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseOpaqueAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseOpaqueAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the behavior
     const Q3CString & behavior();
 
@@ -251,7 +257,7 @@ class UmlBaseOpaqueAction : public UmlActivityAction {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _behavior;
 
 #ifdef WITHCPP
@@ -263,7 +269,7 @@ class UmlBaseOpaqueAction : public UmlActivityAction {
 #endif
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -276,8 +282,9 @@ class UmlBaseOpaqueAction : public UmlActivityAction {
 
 };
 
-class UmlBaseAcceptEventAction : public UmlActivityAction {
-  public:
+class UmlBaseAcceptEventAction : public UmlActivityAction
+{
+public:
     //  returns a new accept event action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -289,13 +296,13 @@ class UmlBaseAcceptEventAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseAcceptEventAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseAcceptEventAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the  return the isUnmarshall attribute, if TRUE there are multiple output pins for attributes or the event.
     bool isUnmarshall();
 
@@ -349,7 +356,7 @@ class UmlBaseAcceptEventAction : public UmlActivityAction {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     bool _unmarshall;
 
     bool _timeevent;
@@ -365,7 +372,7 @@ class UmlBaseAcceptEventAction : public UmlActivityAction {
 #endif
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -378,8 +385,9 @@ class UmlBaseAcceptEventAction : public UmlActivityAction {
 
 };
 
-class UmlBaseCallOperationAction : public UmlActivityAction {
-  public:
+class UmlBaseCallOperationAction : public UmlActivityAction
+{
+public:
     //  returns a new call operation action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -391,13 +399,13 @@ class UmlBaseCallOperationAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseCallOperationAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseCallOperationAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the  return the isSynchronous attribute, if TRUE the caller waits for the completion of the invoked behavior
     bool isSynchronous();
 
@@ -415,19 +423,20 @@ class UmlBaseCallOperationAction : public UmlActivityAction {
     bool set_Operation(UmlOperation * v);
 
 
-  private:
+private:
     bool _synchronous;
 
     UmlOperation * _operation;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };
 
-class UmlBaseCallBehaviorAction : public UmlActivityAction {
-  public:
+class UmlBaseCallBehaviorAction : public UmlActivityAction
+{
+public:
     //  returns a new call behavior action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -439,13 +448,13 @@ class UmlBaseCallBehaviorAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseCallBehaviorAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseCallBehaviorAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the  return the isSynchronous attribute, if TRUE the caller waits for the completion of the invoked behavior
     bool isSynchronous();
 
@@ -463,19 +472,20 @@ class UmlBaseCallBehaviorAction : public UmlActivityAction {
     bool set_Behavior(UmlItem * v);
 
 
-  private:
+private:
     bool _synchronous;
 
     UmlItem * _behavior;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };
 
-class UmlBaseClearVariableValueAction : public UmlAccessVariableValueAction {
-  public:
+class UmlBaseClearVariableValueAction : public UmlAccessVariableValueAction
+{
+public:
     //  returns a new clear variable value action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -487,15 +497,16 @@ class UmlBaseClearVariableValueAction : public UmlAccessVariableValueAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseClearVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseClearVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 };
 
-class UmlBaseReadVariableValueAction : public UmlAccessVariableValueAction {
-  public:
+class UmlBaseReadVariableValueAction : public UmlAccessVariableValueAction
+{
+public:
     //  returns a new read variable value action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -507,15 +518,16 @@ class UmlBaseReadVariableValueAction : public UmlAccessVariableValueAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseReadVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseReadVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 };
 
-class UmlBaseWriteVariableValueAction : public UmlAccessVariableValueAction {
-  public:
+class UmlBaseWriteVariableValueAction : public UmlAccessVariableValueAction
+{
+public:
     //  returns a new write variable value action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -527,15 +539,16 @@ class UmlBaseWriteVariableValueAction : public UmlAccessVariableValueAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseWriteVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseWriteVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 };
 
-class UmlBaseAddVariableValueAction : public UmlAccessVariableValueAction {
-  public:
+class UmlBaseAddVariableValueAction : public UmlAccessVariableValueAction
+{
+public:
     //  returns a new add variable value action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -547,13 +560,13 @@ class UmlBaseAddVariableValueAction : public UmlAccessVariableValueAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseAddVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseAddVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 
-  public:
+public:
     // return the  return the isReplaceAll attribute, if TRUE existing values of the variable must be removed before adding the new value
     bool isReplaceAll();
 
@@ -563,17 +576,18 @@ class UmlBaseAddVariableValueAction : public UmlAccessVariableValueAction {
     bool set_isReplaceAll(bool v);
 
 
-  private:
+private:
     bool _replace_all;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };
 
-class UmlBaseRemoveVariableValueAction : public UmlAccessVariableValueAction {
-  public:
+class UmlBaseRemoveVariableValueAction : public UmlAccessVariableValueAction
+{
+public:
     //  returns a new remove variable value action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -585,13 +599,13 @@ class UmlBaseRemoveVariableValueAction : public UmlAccessVariableValueAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseRemoveVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseRemoveVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 
-  public:
+public:
     // return the  return the isRemoveDuplicates attribute, if TRUE remove duplicates of the value if non-unique
     bool isRemoveDuplicates();
 
@@ -601,17 +615,18 @@ class UmlBaseRemoveVariableValueAction : public UmlAccessVariableValueAction {
     bool set_isRemoveDuplicates(bool v);
 
 
-  private:
+private:
     bool _remove_duplicates;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };
 
-class UmlBaseAcceptCallAction : public UmlActivityAction {
-  public:
+class UmlBaseAcceptCallAction : public UmlActivityAction
+{
+public:
     //  returns a new accept call action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -623,13 +638,13 @@ class UmlBaseAcceptCallAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseAcceptCallAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseAcceptCallAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the trigger
     const Q3CString & trigger();
 
@@ -667,7 +682,7 @@ class UmlBaseAcceptCallAction : public UmlActivityAction {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _trigger;
 
 #ifdef WITHCPP
@@ -679,7 +694,7 @@ class UmlBaseAcceptCallAction : public UmlActivityAction {
 #endif
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -692,8 +707,9 @@ class UmlBaseAcceptCallAction : public UmlActivityAction {
 
 };
 
-class UmlBaseReplyAction : public UmlActivityAction {
-  public:
+class UmlBaseReplyAction : public UmlActivityAction
+{
+public:
     //  returns a new reply action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -705,13 +721,13 @@ class UmlBaseReplyAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseReplyAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseReplyAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the replyToCall trigger
     const Q3CString & replyToCall();
 
@@ -749,7 +765,7 @@ class UmlBaseReplyAction : public UmlActivityAction {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _trigger;
 
 #ifdef WITHCPP
@@ -761,7 +777,7 @@ class UmlBaseReplyAction : public UmlActivityAction {
 #endif
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -774,8 +790,9 @@ class UmlBaseReplyAction : public UmlActivityAction {
 
 };
 
-class UmlBaseCreateObjectAction : public UmlActivityAction {
-  public:
+class UmlBaseCreateObjectAction : public UmlActivityAction
+{
+public:
     //  returns a new create object action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -787,13 +804,13 @@ class UmlBaseCreateObjectAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseCreateObjectAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseCreateObjectAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the classifier
     const Q3CString & classifier();
 
@@ -811,17 +828,18 @@ class UmlBaseCreateObjectAction : public UmlActivityAction {
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-  private:
+private:
     Q3CString _classifier;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };
 
-class UmlBaseDestroyObjectAction : public UmlActivityAction {
-  public:
+class UmlBaseDestroyObjectAction : public UmlActivityAction
+{
+public:
     //  returns a new destroy object action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -833,13 +851,13 @@ class UmlBaseDestroyObjectAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseDestroyObjectAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseDestroyObjectAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the  return the isDestroyLinks attribute.
     bool isDestroyLinks();
 
@@ -857,19 +875,20 @@ class UmlBaseDestroyObjectAction : public UmlActivityAction {
     bool set_isDestroyOwnedObjects(bool v);
 
 
-  private:
+private:
     bool _links;
 
     bool _owned_objects;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };
 
-class UmlBaseTestIdentityAction : public UmlActivityAction {
-  public:
+class UmlBaseTestIdentityAction : public UmlActivityAction
+{
+public:
     //  returns a new test identity action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -881,15 +900,16 @@ class UmlBaseTestIdentityAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseTestIdentityAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseTestIdentityAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 };
 
-class UmlBaseRaiseExceptionAction : public UmlActivityAction {
-  public:
+class UmlBaseRaiseExceptionAction : public UmlActivityAction
+{
+public:
     //  returns a new raise exception action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -901,15 +921,16 @@ class UmlBaseRaiseExceptionAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseRaiseExceptionAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseRaiseExceptionAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 };
 
-class UmlBaseReduceAction : public UmlActivityAction {
-  public:
+class UmlBaseReduceAction : public UmlActivityAction
+{
+public:
     //  returns a new reduce action named 's' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -921,13 +942,13 @@ class UmlBaseReduceAction : public UmlActivityAction {
     virtual anItemKind kind();
 
 
-  protected:
+protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-     UmlBaseReduceAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseReduceAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
     }
 
 
-  public:
+public:
     // return the  return the isOrdered attribute
     bool isOrdered();
 
@@ -945,13 +966,13 @@ class UmlBaseReduceAction : public UmlActivityAction {
     bool set_Reducer(UmlItem * v);
 
 
-  private:
+private:
     bool _ordered;
 
     UmlItem * _reducer;
 
 
-  protected:
+protected:
     virtual void read_uml_();
 
 };

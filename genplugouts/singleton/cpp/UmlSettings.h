@@ -10,8 +10,9 @@ struct UmlStereotype;
 
 //  Do NOT use it, refer to CppSettings, JavaSettings and IdlSettings classes
 
-class UmlSettings {
-  protected:
+class UmlSettings
+{
+protected:
     // never called !
     UmlSettings() {};
 

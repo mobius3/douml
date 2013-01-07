@@ -37,59 +37,66 @@ class BrowserTransition;
 class BrowserNode;
 
 struct TransDef {
-  WrapperStr trigger;
-  WrapperStr guard;
-  WrapperStr expr;
-  
-  QString str(bool horiz) const;
-  void save(QTextStream & st, const char * lang) const;
-  void read(char * & st, char * & k, const char * lang);
-  
-  void send_def(ToolCom * com);
-};
-    
-class TransitionData : public SimpleData {
-  Q_OBJECT
+    WrapperStr trigger;
+    WrapperStr guard;
+    WrapperStr expr;
 
-  friend class TransitionDialog;
-  
-  protected:
+    QString str(bool horiz) const;
+    void save(QTextStream & st, const char * lang) const;
+    void read(char *& st, char *& k, const char * lang);
+
+    void send_def(ToolCom * com);
+};
+
+class TransitionData : public SimpleData
+{
+    Q_OBJECT
+
+    friend class TransitionDialog;
+
+protected:
     bool is_internal;
     BrowserNode * end;
     TransDef uml;
     TransDef cpp;
     TransDef java;
-    
+
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
-			      const QString & comment);
+                              const QString & comment);
     virtual void send_cpp_def(ToolCom * com);
     virtual void send_java_def(ToolCom * com);
-    
-  public:
+
+public:
     TransitionData();
     TransitionData(const BrowserTransition * model, BrowserTransition * r);
     virtual ~TransitionData();
-        
+
     virtual void delete_it();
-    
+
     void set_start_end(BrowserTransition * s, BrowserNode * e);
     void edit();
     BrowserNode * get_start_node() const;
-    BrowserNode * get_end_node() const { return end; }
-    BrowserTransition * get_start() const { 
-      return (BrowserTransition *) browser_node;
+    BrowserNode * get_end_node() const {
+        return end;
     }
-    bool internal() const { return is_internal; }
-    void set_internal(bool y) { is_internal = y; }
+    BrowserTransition * get_start() const {
+        return (BrowserTransition *) browser_node;
+    }
+    bool internal() const {
+        return is_internal;
+    }
+    void set_internal(bool y) {
+        is_internal = y;
+    }
     QString str(bool horiz, DrawingLanguage) const;
-    
+
     virtual bool tool_cmd(ToolCom * com, const char * args,
-			  BrowserNode * bn, const QString & comment);
-    
+                          BrowserNode * bn, const QString & comment);
+
     void save(QTextStream &, QString & warning) const;
-    static TransitionData * read(char * &, char * & k);
-    
-  protected slots:
+    static TransitionData * read(char *& , char *& k);
+
+protected slots:
     void end_deleted();
 };
 

@@ -32,10 +32,11 @@
 
 #include "UmlBaseClassItem.h"
 
-class UmlClassItem : public UmlBaseClassItem {
-  public:
+class UmlClassItem : public UmlBaseClassItem
+{
+public:
     UmlClassItem(void * id, const Q3CString & n)
-      : UmlBaseClassItem(id, n) {
+        : UmlBaseClassItem(id, n) {
     };
 };
 

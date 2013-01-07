@@ -32,17 +32,18 @@
 #include "UmlClass.h"
 
 void UmlFormalParameter::generate(QTextStream & f_h, const char *& sep1,
-				  const char *& sep2, BooL & need_space) const {
-  f_h << sep1 << type() << ' ' << name();
-  
-  Q3CString s = defaultValue().toString();
-  
-  if (! s.isEmpty()) {
-    f_h << " = ";
-    UmlClass::write(f_h, defaultValue(), TRUE, &need_space);
-  }
-  else
-    need_space = FALSE;
-  
-  sep2 = sep1 = ", ";
+                                  const char *& sep2, BooL & need_space) const
+{
+    f_h << sep1 << type() << ' ' << name();
+
+    Q3CString s = defaultValue().toString();
+
+    if (! s.isEmpty()) {
+        f_h << " = ";
+        UmlClass::write(f_h, defaultValue(), TRUE, &need_space);
+    }
+    else
+        need_space = FALSE;
+
+    sep2 = sep1 = ", ";
 }

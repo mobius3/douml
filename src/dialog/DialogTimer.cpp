@@ -33,23 +33,24 @@
 
 
 #include <stdio.h>
-#include <QTextStream> 
+#include <QTextStream>
 #include <qfile.h>
 #include <q3tabdialog.h>
 
 #include "DialogTimer.h"
 
 DialogTimer::DialogTimer(QString s, QString p, Q3TabDialog * d, post_edit pf)
-    : QTimer(d), current(s), path(p), dlg(d), f(pf) {
-  connect(this, SIGNAL(timeout()), this, SLOT(readfile()));
+    : QTimer(d), current(s), path(p), dlg(d), f(pf)
+{
+    connect(this, SIGNAL(timeout()), this, SLOT(readfile()));
 }
 
-void DialogTimer::readfile() {
-  FILE * fp;
-  
-  if ((fp = fopen((const char *) path, "rb")) != 0) {  
-    QString result;
-    
+void DialogTimer::readfile()
+{
+    FILE * fp;
+
+    if ((fp = fopen((const char *) path, "rb")) != 0) {
+        QString result;
 
 
 
@@ -60,24 +61,25 @@ void DialogTimer::readfile() {
 
 
 
-    QFile fi;
-    
-    fi.open(QIODevice::ReadOnly, fp);
-    
-    QTextStream ts(&fi);
-    
-    ts.setEncoding(QTextStream::Latin1);
-    
-    result = ts.read();
-    ts.flush();
-    fi.close();
 
-    fclose(fp);
-    
-    if (result != current) {
-      current = result;
-      f(dlg, result);
+        QFile fi;
+
+        fi.open(QIODevice::ReadOnly, fp);
+
+        QTextStream ts(&fi);
+
+        ts.setEncoding(QTextStream::Latin1);
+
+        result = ts.read();
+        ts.flush();
+        fi.close();
+
+        fclose(fp);
+
+        if (result != current) {
+            current = result;
+            f(dlg, result);
+        }
     }
-  }
 }
 

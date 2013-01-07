@@ -35,50 +35,54 @@
 #include <Q3PtrCollection>
 
 BrowserNode::BrowserNode(BrowserView * parent, const char * n)
-    : TreeItem(parent, n) {
+    : TreeItem(parent, n)
+{
 }
 
 BrowserNode::BrowserNode(BrowserNode * parent, const char * n)
-    : TreeItem(parent, n) {
-  // move it at end
-  TreeItem * child = parent->firstChild();
-  
-  while (child->nextSibling())
-    child = child->nextSibling();
-  
-  if (child != this)
-    moveItem(child);
+    : TreeItem(parent, n)
+{
+    // move it at end
+    TreeItem * child = parent->firstChild();
+
+    while (child->nextSibling())
+        child = child->nextSibling();
+
+    if (child != this)
+        moveItem(child);
 }
 
-void BrowserNode::activated() {
+void BrowserNode::activated()
+{
 }
 
-void BrowserNode::selected() {
+void BrowserNode::selected()
+{
 }
 
 //
 
 void BrowserNodeList::search(BrowserNode * bn, int k,
-			     const QString & s, bool cs)
+                             const QString & s, bool cs)
 {
-  TreeItem * child;
-    
-  for (child = bn->firstChild(); child != 0; child = child->nextSibling()) {
-    if ((k == aPackage)
-	? (((BrowserNode *) child)->isa_package() && 
-	   (child->text(0).find(s, 0, cs) != -1))
-	: (!((BrowserNode *) child)->isa_package() && 
-	   ((k == aClass)
-	    ? (child->text(0).find(s, 0, cs) != -1)
-	    : (QString(((Class *) child)->get_description()).find(s, 0, cs) != -1))))
-      append((BrowserNode *) child);
-    
-    search((BrowserNode *) child, k, s, cs);
-  }
+    TreeItem * child;
+
+    for (child = bn->firstChild(); child != 0; child = child->nextSibling()) {
+        if ((k == aPackage)
+            ? (((BrowserNode *) child)->isa_package() &&
+               (child->text(0).find(s, 0, cs) != -1))
+            : (!((BrowserNode *) child)->isa_package() &&
+               ((k == aClass)
+                ? (child->text(0).find(s, 0, cs) != -1)
+                : (QString(((Class *) child)->get_description()).find(s, 0, cs) != -1))))
+            append((BrowserNode *) child);
+
+        search((BrowserNode *) child, k, s, cs);
+    }
 }
 
 int BrowserNodeList::compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2)
 {
-  return ((BrowserNode *) item1)->text(0)
-    .compare(((BrowserNode *) item2)->text(0));
+    return ((BrowserNode *) item1)->text(0)
+           .compare(((BrowserNode *) item2)->text(0));
 }

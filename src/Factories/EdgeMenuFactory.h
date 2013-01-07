@@ -36,17 +36,16 @@
 class EdgeMenuDialog;
 class EdgeMenuToolBar;
 
-struct Orientationvariables
-{
+struct Orientationvariables {
     int orientation;
     //std::map<std::pair<int,QString>, QString> iconNames;
 };
 
 typedef std::function<EdgeMenuToolBar*()>  ToolbarFactory;
-typedef std::function<void(EdgeMenuDialog*,EdgeMenuToolBar*)>  ConnectionFunctor;
+typedef std::function<void(EdgeMenuDialog *, EdgeMenuToolBar *)>  ConnectionFunctor;
 
-void ConnectToLimitedtDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar);
-void ConnectToClassDialog(EdgeMenuDialog* dialog, EdgeMenuToolBar* toolbar);
+void ConnectToLimitedtDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar);
+void ConnectToClassDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar);
 
 class EdgeMenuFactory : public QObject
 {
@@ -57,16 +56,16 @@ public:
 
     void AddFactory(uint, ToolbarFactory);
     void AddConnectionFunctor(uint, ConnectionFunctor);
-    void SpawnEdgeMenu(uint, EdgeMenuDialog*,  QPoint);
+    void SpawnEdgeMenu(uint, EdgeMenuDialog *,  QPoint);
 public slots:
     void OnEdgeMenuRequested(uint classID);
 
 private :
     QMap<uint, ToolbarFactory > factories;
     QMap<uint, ConnectionFunctor > signalFunctors;
-    QMap<uint, EdgeMenuToolBar*> createdToolbars;
+    QMap<uint, EdgeMenuToolBar *> createdToolbars;
     QMap<int, Orientationvariables> orientationSwitch;
-    void SpawnEdgeMenu(uint, EdgeMenuDialog*);
+    void SpawnEdgeMenu(uint, EdgeMenuDialog *);
 
 };
 BIND_TO_SELF_SINGLE(EdgeMenuFactory);

@@ -29,10 +29,11 @@
 //Added by qt3to4:
 #include <Q3CString>
 
-class UmlDiagram : public UmlBaseDiagram {
-  public:
-    UmlDiagram(void * id, const Q3CString & n) 
-      : UmlBaseDiagram(id, n) {};
+class UmlDiagram : public UmlBaseDiagram
+{
+public:
+    UmlDiagram(void * id, const Q3CString & n)
+        : UmlBaseDiagram(id, n) {};
 };
 
 #endif

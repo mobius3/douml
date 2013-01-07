@@ -15,10 +15,11 @@ class File;
 // This class manages a 'package', notes that the project itself is a package
 //
 // You can modify it as you want (except the constructor)
-class UmlPackage : public UmlBasePackage {
-  public:
+class UmlPackage : public UmlBasePackage
+{
+public:
     UmlPackage(void * id, const Q3CString & n) : UmlBasePackage(id, n) {
-      cpt[kind()] += 1;
+        cpt[kind()] += 1;
     };
 
     virtual void roseImport();
@@ -34,7 +35,7 @@ class UmlPackage : public UmlBasePackage {
     UmlDeploymentView * addDeplView(Q3CString s, UmlPackage * p);
 
 
-  private:
+private:
     bool import(File & f);
 
     void readUseCaseView(File & f);
@@ -46,7 +47,7 @@ class UmlPackage : public UmlBasePackage {
     void readDeploymentView(File & f);
 
 
-  protected:
+protected:
     Q3PtrList<UmlDeploymentView> _deplviews;
 
 };
