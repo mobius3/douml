@@ -398,3 +398,19 @@ SOURCES		= ./UmlBaseExpansionRegion.cpp \
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+Release{
+
+
+    MOC_DIR = bin/douml/MOC_release
+    OBJECTS_DIR = bin/douml/Obj_release
+}
+
+Debug{
+    MOC_DIR = bin/douml/MOC_Debug
+    OBJECTS_DIR = bin/douml/Obj_Debug
+
+}
+    UI_DIR = src/ui
+    DESTDIR = ../../bin
+
+QMAKE_CXXFLAGS += -std=gnu++11

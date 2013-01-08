@@ -33,7 +33,7 @@
 #include <Q3PointArray>
 #include <QSharedPointer>
 
-#define FILEFORMAT 75
+#define FILEFORMAT 76
 
 class QDir;
 class QFile;

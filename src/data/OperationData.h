@@ -97,7 +97,7 @@ protected:
     unsigned short nparams;
     unsigned short nexceptions;
     AType return_type;
-    WrapperStr originClass = 0;
+    WrapperStr originClass = QString("0");
     ParamData * params;			// remark : do NOT use QArray
     ExceptionData * exceptions;
     WrapperStr constraint;
@@ -147,7 +147,7 @@ public:
     OperationData(int id = 0);
     OperationData(OperationData * model, BrowserNode *);
     virtual ~OperationData();
-    void PropagateFrom(const OperationData*);
+    void PropagateFrom(const OperationData*, QList<const OperationData *> passed = QList<const OperationData *>());
 
     virtual bool deletedp() const;
     virtual void set_deletedp(bool y);
@@ -228,6 +228,8 @@ public:
     bool get_idl_oneway() const {
         return idl_oneway;
     };
+
+    WrapperStr get_origin_class() { return originClass;}
 
     UmlVisibility get_uml_visibility() const {
         return uml_visibility;

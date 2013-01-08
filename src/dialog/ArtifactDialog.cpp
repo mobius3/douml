@@ -59,7 +59,7 @@
 QSize ArtifactDialog::previous_size;
 static QSharedPointer<ArtifactDialog> instance;
 ArtifactDialog::ArtifactDialog(ArtifactData * nd)
-    : EdgeMenuDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd)
+    : EdgeMenuDialog(0, 0, FALSE), data(nd)
 {
     nd->browser_node->edit_start();
 
@@ -100,7 +100,7 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
     connect(this, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(update_tab(QWidget *)));
 
-//  open_dialog(this);
+    //open_dialog(this);
 }
 
 void ArtifactDialog::polish()
@@ -111,13 +111,13 @@ void ArtifactDialog::polish()
 
 ArtifactDialog::~ArtifactDialog()
 {
-    data->browser_node->edit_end();
+    //data->browser_node->edit_end();
     previous_size = size();
 
     while (!edits.isEmpty())
         edits.take(0)->close();
 
-    close_dialog(this);
+    //close_dialog(this);
 }
 
 void ArtifactDialog::init_uml_tab()

@@ -89,7 +89,7 @@
 // Added for porting by lgfreitas
 #include <QChar>
 
-IdDict<BrowserClass> BrowserClass::all(1257, __FILE__);
+IdDict<BrowserClass> BrowserClass::all(257, __FILE__);
 
 QStringList BrowserClass::its_default_stereotypes;	// unicode
 QStringList BrowserClass::relations_default_stereotypes[UmlRelations];	// unicode
@@ -822,49 +822,70 @@ void BrowserClass::AddInheritedOperations(int rank)
 QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData * oper, QList<BrowserNode *> & passedNodes)
 {
     QList<OperationData*> result;
-    if(passedNodes.contains(dynamic_cast<BrowserNode*>(this)))
+    if(passedNodes.contains(static_cast<BrowserNode*>(this)))
         return result;
-    passedNodes.append(dynamic_cast<BrowserNode*>(this));
-    //    Q3PtrList<BrowserRelation> relations;
-    //    get_rels(this, relations);
-    BrowserNodeList listOfChildren;
+    passedNodes.append(static_cast<BrowserNode*>(this));
+    QList<BrowserNode*> listOfChildren;
     IdIterator<BrowserClass> it(all);
     BrowserClass* testedClass;
+
     while ((testedClass = it.current()) != 0)
     {
         BrowserNodeList listOfTested;
-        testedClass->children(listOfTested,UmlGeneralisation, UmlGeneralisation);
+        testedClass->children(listOfTested,UmlGeneralisation, UmlRealize);
         for(BrowserNode* node : listOfTested)
         {
             BrowserRelation* generalization = static_cast<BrowserRelation*>(node);
             RelationData* relData = static_cast<RelationData*>(generalization->get_data());
             BrowserClass* startClass = relData->get_start_class();
             BrowserClass* endClass = relData->get_end_class();
+//            QLOG_INFO() << "This class" << this->name.operator QString();
+//            QLOG_INFO() << "Relation start" << startClass->get_name();
+//            QLOG_INFO() << "Relation end" << endClass->get_name();
             if(endClass == this)
-                listOfChildren.append(node);
+                listOfChildren.append(startClass);
+            else if (startClass == this)
+                listOfChildren.append(endClass);
         }
         ++it;
     }
 
+    QList<BrowserNode *>  passedCopy = passedNodes;
     for(BrowserNode* child : listOfChildren)
     {
-        //BrowserNode* containingClass = child->get_container(UmlClass);
-        result.append(dynamic_cast<BrowserClass*>(child)->CollectSameThroughInheritance(oper, passedNodes));
+        if(!passedCopy.contains(static_cast<BrowserNode*>(child)))
+        {
+            //QLOG_INFO() << "Child is" << child->get_name();
+            result.append(static_cast<BrowserClass*>(child)->CollectSameThroughInheritance(oper, passedNodes));
+        }
     }
-    //BrowserClass* containingClass = dynamic_cast<BrowserClass*>(this->get_container(UmlClass));
+    //QLOG_INFO() << "Using :" << this->get_name();
     QList<BrowserClass*> parents = get_all_parents();
+    QStringList parentsNames;
     for(BrowserNode* parent : parents)
     {
-        result.append(dynamic_cast<BrowserClass*>(parent)->CollectSameThroughInheritance(oper, passedNodes));
+        if(passedNodes.contains(parent))
+            continue;
+        parentsNames.append(parent->full_name());
+        result.append(static_cast<BrowserClass*>(parent)->CollectSameThroughInheritance(oper, passedNodes));
     }
+    //QLOG_INFO() << "Using 2: " << this->get_name();
+    BrowserClass* operContainter = static_cast<BrowserClass*>(oper->get_browser_node()->get_container(UmlClass));
+    if(operContainter == this)
+        return result;
     Q3ValueList<OperationData *> usedInheritedOpers;
     QStringList listUsedInheritedOpers;
-    get_used_inherited_opers(usedInheritedOpers,listUsedInheritedOpers);
+    get_own_opers(usedInheritedOpers,listUsedInheritedOpers);
+    //QLOG_INFO() << oper->definition(TRUE, FALSE);
     for(OperationData* testedOper: usedInheritedOpers)
     {
+        //QLOG_INFO() << testedOper->definition(TRUE, FALSE);
         if(oper->definition(TRUE, FALSE) == testedOper->definition(TRUE, FALSE))
         {
-            result.append(testedOper);
+            QString name = full_name();
+            QString origin_name = oper->get_origin_class();
+            if(parentsNames.contains(origin_name) || name ==  origin_name || origin_name == "0")
+                result.append(testedOper);
         }
     }
     return result;
@@ -1379,8 +1400,9 @@ BrowserNode * BrowserClass::add_operation(BrowserOperation * oper)
 BrowserNode * BrowserClass::add_inherited_operation(BrowserOperation * model)
 {
     BrowserOperation * oper = new BrowserOperation(model, this);
-
+    BrowserClass* modelContainer = static_cast<BrowserClass*>(model->get_container(UmlClass));
     ((OperationData *) oper->get_data())->set_is_abstract(0);
+    ((OperationData *) oper->get_data())->set_origin_class(modelContainer->full_name());
     setOpen(TRUE);
     def->modified();
     package_modified();

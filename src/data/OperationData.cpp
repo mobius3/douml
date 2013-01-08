@@ -152,8 +152,15 @@ OperationData::~OperationData()
     all.remove(get_ident());
 }
 
-void OperationData::PropagateFrom(const OperationData * model)
+void OperationData::PropagateFrom(const OperationData * model, QList<const OperationData*> passed)
 {
+
+    passed.append(this);
+    BrowserClass* containingClass = static_cast<BrowserClass*>(this->browser_node->get_container(UmlClass));
+    QList<BrowserNode *>  passedNodes;
+    QList<OperationData*> inheritanceSiblings;
+    inheritanceSiblings = containingClass->CollectSameThroughInheritance(this, passedNodes);
+
     uml_visibility=model->uml_visibility;
     cpp_visibility=UmlDefaultVisibility;
     is_abstract = model->is_abstract;
@@ -163,10 +170,6 @@ void OperationData::PropagateFrom(const OperationData * model)
     cpp_friend = model->cpp_friend;
     cpp_virtual = model->cpp_virtual;
     cpp_inline = model->cpp_inline;
-    cpp_default = model->cpp_default;
-    cpp_delete = model->cpp_delete;
-    cpp_override = model->cpp_override;
-    cpp_final = model->cpp_final;
     cpp_get_set_frozen = model->cpp_get_set_frozen;
     cpp_indent_body = model->cpp_indent_body;
     java_final = model->java_final;
@@ -236,6 +239,19 @@ void OperationData::PropagateFrom(const OperationData * model)
             depend_on(exceptions[i].get_type().type);
         }
     }
+
+
+    for(OperationData* siblingOper : inheritanceSiblings)
+    {
+        if(passed.contains(siblingOper))
+            continue;
+        siblingOper->PropagateFrom(this, passed);
+        ProfiledStereotypes::modified(siblingOper->browser_node, true);
+        siblingOper->browser_node->modified();
+        siblingOper->browser_node->package_modified();
+        siblingOper->modified();
+    }
+
 }
 
 bool OperationData::deletedp() const
@@ -3336,6 +3352,10 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
         nl_indent(st);
 
         st << "nparams " << nparams;
+        nl_indent(st);
+        st << "origin ";
+        save_string(originClass, st);
+
 
         for (unsigned i = 0; i != nparams; i += 1)
             params[i].save(st, warning);
@@ -3604,8 +3624,15 @@ void OperationData::read(char *& st, char *& k)
     read_keyword(st, "nparams");
 
     unsigned n = read_unsigned(st);
-
     set_n_params(n);
+
+
+    if(read_file_format() > 75)
+    {
+        read_keyword(st, "origin");
+        set_origin_class(WrapperStr(read_string(st)));
+    }
+
     k = read_keyword(st);
 
     for (unsigned i = 0; i != n; i += 1) {

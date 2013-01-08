@@ -444,6 +444,11 @@ void OperationDialog::FillcppTab(OperationData * oper)
     cbCppFriend->setChecked(oper->get_cpp_friend());
     cbCppVirtual->setChecked(oper->get_cpp_virtual());
     cbCppInline->setChecked(oper->get_cpp_inline());
+    cppTab->ui->cbCppDefaulted->setChecked(oper->get_cpp_default());
+    cppTab->ui->cbCppDeleted->setChecked(oper->get_cpp_delete());
+    cppTab->ui->cbCppOverride->setChecked(oper->get_cpp_override());
+    cppTab->ui->cbCppFinal->setChecked(oper->get_cpp_final());
+
 
     cbCppConst->setDisabled(!isWritable);
     cbCppVolatile->setDisabled(!isWritable);
@@ -3192,7 +3197,7 @@ void OperationDialog::SaveData()
     BrowserClass* containingClass = static_cast<BrowserClass*>(oper->browser_node->get_container(UmlClass));
     QList<BrowserNode *>  passedNodes;
     QList<OperationData*> inheritanceSiblings;
-    //QList<OperationData*> inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper, passedNodes);
+    inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper, passedNodes);
     bool propagateThroughInheritance = false;
     if(!inheritanceSiblings.isEmpty())
     {
@@ -3201,6 +3206,7 @@ void OperationDialog::SaveData()
         msg.setWindowTitle(tr("Warning!"));
         msg.setText(tr("The Operation you are trying to change is inhertied from/to other classes.\n"
                              "Do you want to propagate the changes to it through the inheritance tree?"));
+        msg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
         if(msg.exec() == QMessageBox::Ok)
             propagateThroughInheritance = true;
     }
@@ -3425,9 +3431,11 @@ void OperationDialog::SaveData()
 
         if(propagateThroughInheritance)
         {
+            QList<const OperationData*> passed;
             for(OperationData* siblingOper : inheritanceSiblings)
             {
-                siblingOper->PropagateFrom(oper);
+                passed.append(oper);
+                siblingOper->PropagateFrom(oper, passed);
                 ProfiledStereotypes::modified(siblingOper->browser_node, newst);
                 siblingOper->browser_node->modified();
                 siblingOper->browser_node->package_modified();
