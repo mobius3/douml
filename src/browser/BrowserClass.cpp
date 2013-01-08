@@ -84,11 +84,12 @@
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
+#include "RelationData.h"
 
 // Added for porting by lgfreitas
 #include <QChar>
 
-IdDict<BrowserClass> BrowserClass::all(257, __FILE__);
+IdDict<BrowserClass> BrowserClass::all(1257, __FILE__);
 
 QStringList BrowserClass::its_default_stereotypes;	// unicode
 QStringList BrowserClass::relations_default_stereotypes[UmlRelations];	// unicode
@@ -817,6 +818,86 @@ void BrowserClass::AddInheritedOperations(int rank)
         add_inherited_operation(operation);
     }
 }
+
+QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData * oper, QList<BrowserNode *> & passedNodes)
+{
+    QList<OperationData*> result;
+    if(passedNodes.contains(dynamic_cast<BrowserNode*>(this)))
+        return result;
+    passedNodes.append(dynamic_cast<BrowserNode*>(this));
+    //    Q3PtrList<BrowserRelation> relations;
+    //    get_rels(this, relations);
+    BrowserNodeList listOfChildren;
+    IdIterator<BrowserClass> it(all);
+    BrowserClass* testedClass;
+    while ((testedClass = it.current()) != 0)
+    {
+        BrowserNodeList listOfTested;
+        testedClass->children(listOfTested,UmlGeneralisation, UmlGeneralisation);
+        for(BrowserNode* node : listOfTested)
+        {
+            BrowserRelation* generalization = static_cast<BrowserRelation*>(node);
+            RelationData* relData = static_cast<RelationData*>(generalization->get_data());
+            BrowserClass* startClass = relData->get_start_class();
+            BrowserClass* endClass = relData->get_end_class();
+            if(endClass == this)
+                listOfChildren.append(node);
+        }
+        ++it;
+    }
+
+    for(BrowserNode* child : listOfChildren)
+    {
+        //BrowserNode* containingClass = child->get_container(UmlClass);
+        result.append(dynamic_cast<BrowserClass*>(child)->CollectSameThroughInheritance(oper, passedNodes));
+    }
+    //BrowserClass* containingClass = dynamic_cast<BrowserClass*>(this->get_container(UmlClass));
+    QList<BrowserClass*> parents = get_all_parents();
+    for(BrowserNode* parent : parents)
+    {
+        result.append(dynamic_cast<BrowserClass*>(parent)->CollectSameThroughInheritance(oper, passedNodes));
+    }
+    Q3ValueList<OperationData *> usedInheritedOpers;
+    QStringList listUsedInheritedOpers;
+    get_used_inherited_opers(usedInheritedOpers,listUsedInheritedOpers);
+    for(OperationData* testedOper: usedInheritedOpers)
+    {
+        if(oper->definition(TRUE, FALSE) == testedOper->definition(TRUE, FALSE))
+        {
+            result.append(testedOper);
+        }
+    }
+    return result;
+}
+
+//bool BrowserClass::PropagateChanges(OperationData * oper, OperationData * newOper, QList<BrowserNode *> & passedNodes)
+//{
+//    QList<OperationData*>
+//    if(passedNodes.contains(dynamic_cast<BrowserNode*>(this)))
+//        return;
+//    passedNodes.append(dynamic_cast<BrowserNode*>(this));
+//    BrowserNodeList listOfChildren;
+//    children(listOfChildren,UmlGeneralisation, UmlRealize);
+//    for(BrowserNode* child : listOfChildren)
+//    {
+//        dynamic_cast<BrowserClass*>(child)->PropagateChanges(oper, newOper,passedNodes);
+//    }
+//    QList<BrowserClass*> parents = containingClass->get_all_parents();
+//    for(BrowserNode* parent : parents)
+//    {
+//        dynamic_cast<BrowserClass*>(parent)->PropagateChanges(oper, newOper, passedNodes);
+//    }
+//    Q3ValueList<OperationData *> usedInheritedOpers;
+//    QStringList listUsedInheritedOpers;
+//    get_used_inherited_opers(usedInheritedOpers,listUsedInheritedOpers);
+//    for(OperationData* testedOper: usedInheritedOpers)
+//    {
+//        if(oper->definition(TRUE, FALSE) == testedOper->definition(TRUE, FALSE))
+//        {
+//            testedOper->PropagateFrom(newOper);
+//        }
+//    }
+//}
 
 void BrowserClass::exec_menu_choice(int rank,
                                     Q3PtrList<BrowserOperation> & l)
@@ -1576,8 +1657,10 @@ void BrowserClass::get_opers(Q3ValueList<const OperationData *> & opers,
 
     BrowserClass * cl;
 
-    for (cl = all_parents.first(); cl != 0; cl = all_parents.next()) {
-        for (child = cl->firstChild(); child; child = child->nextSibling()) {
+    for (cl = all_parents.first(); cl != 0; cl = all_parents.next())
+    {
+        for (child = cl->firstChild(); child; child = child->nextSibling())
+        {
             if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
                     (((BrowserNode *) child)->get_name() != cl->name) &&		// not a constructor
                     (((BrowserNode *) child)->get_name()[0] != '~')) {// not a destructor
@@ -1585,12 +1668,90 @@ void BrowserClass::get_opers(Q3ValueList<const OperationData *> & opers,
                         ((BrowserOperation *) child)->get_data();
                 QString profile = data->definition(TRUE, FALSE);
 
-                if (already.find(profile) == 0) {
+                if (already.find(profile) == 0)
+                {
                     // not yet added
                     opers.append(data);
                     list.append(profile);
                     already.insert(profile, (void *) 1);
                 }
+            }
+        }
+    }
+}
+
+void BrowserClass::get_own_opers(Q3ValueList<OperationData *> &opers, QStringList &list)
+{
+    // own operations
+    Q3ListViewItem * child;
+    Q3Dict<void> already(499);
+
+    for (child = firstChild(); child; child = child->nextSibling()) {
+        if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
+                !((BrowserNode *) child)->deletedp()) {
+            OperationData * od =
+                    (OperationData *)((BrowserNode *) child)->get_data();
+            QString msg = od->definition(TRUE, FALSE);
+
+            opers.append(od);
+            list.append(msg);
+            already.insert(msg, (void *) 1);
+        }
+    }
+}
+
+void BrowserClass::get_inherited_opers(Q3ValueList< OperationData *> &opers, QStringList &list)
+{
+    Q3PtrList<BrowserClass> all_parents;
+
+    get_all_parents(all_parents);
+
+    BrowserClass * cl;
+    Q3ListViewItem * child;
+    Q3Dict<void> already(499);
+    for (cl = all_parents.first(); cl != 0; cl = all_parents.next())
+    {
+        for (child = cl->firstChild(); child; child = child->nextSibling())
+        {
+            if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
+                    (((BrowserNode *) child)->get_name() != cl->name) &&		// not a constructor
+                    (((BrowserNode *) child)->get_name()[0] != '~')) {// not a destructor
+                OperationData * data = (OperationData *)
+                        ((BrowserOperation *) child)->get_data();
+                QString profile = data->definition(TRUE, FALSE);
+
+                if (already.find(profile) == 0)
+                {
+                    // not yet added
+                    opers.append(data);
+                    list.append(profile);
+                    already.insert(profile, (void *) 1);
+                }
+            }
+        }
+    }
+}
+
+void BrowserClass::get_used_inherited_opers(Q3ValueList< OperationData *> &opers, QStringList &list)
+{
+    Q3ValueList<OperationData *> ownOpers;
+    QStringList listOwnOpers;
+    Q3ValueList<OperationData *> inheritedOpers;
+    QStringList listInheritedOpers;
+    Q3ValueList<OperationData *> usedInheritedOpers;
+    QStringList listUsedInheritedOpers;
+    get_own_opers(ownOpers,listOwnOpers);
+    get_inherited_opers(inheritedOpers,listInheritedOpers);
+    for(OperationData* oper: ownOpers)
+    {
+        QString profile = oper->definition(TRUE, FALSE);
+        for(OperationData* inhritedOper: inheritedOpers)
+        {
+            QString testProfile = inhritedOper->definition(TRUE, FALSE);
+            if(profile == testProfile && !listUsedInheritedOpers.contains(profile))
+            {
+                usedInheritedOpers.append(oper);
+                listUsedInheritedOpers.append(profile);
             }
         }
     }

@@ -97,6 +97,7 @@ protected:
     unsigned short nparams;
     unsigned short nexceptions;
     AType return_type;
+    WrapperStr originClass = 0;
     ParamData * params;			// remark : do NOT use QArray
     ExceptionData * exceptions;
     WrapperStr constraint;
@@ -129,6 +130,7 @@ protected:
     WrapperStr idl_name_spec;	// get_${name}
 
     void depend_on(BrowserClass * cl);
+    void no_longer_depend_on(BrowserClass * cl);
 
     virtual void send_uml_def(ToolCom * com, BrowserNode * bn,
                               const QString & comment);
@@ -145,6 +147,7 @@ public:
     OperationData(int id = 0);
     OperationData(OperationData * model, BrowserNode *);
     virtual ~OperationData();
+    void PropagateFrom(const OperationData*);
 
     virtual bool deletedp() const;
     virtual void set_deletedp(bool y);
@@ -235,7 +238,7 @@ public:
     };
     void set_uml_visibility(UmlVisibility v);
     void set_cpp_visibility(UmlVisibility v);
-
+    void set_origin_class(WrapperStr value){originClass = value;}
     const AType & get_return_type() const {
         return return_type;
     };

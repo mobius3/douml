@@ -50,6 +50,7 @@
 #include "mu.h"
 #include "err.h"
 #include "DialogUtil.h"
+#include "ProfiledStereotypes.h"
 
 IdDict<OperationData> OperationData::all(1023, __FILE__);
 
@@ -151,6 +152,92 @@ OperationData::~OperationData()
     all.remove(get_ident());
 }
 
+void OperationData::PropagateFrom(const OperationData * model)
+{
+    uml_visibility=model->uml_visibility;
+    cpp_visibility=UmlDefaultVisibility;
+    is_abstract = model->is_abstract;
+    force_body_gen = model->force_body_gen;
+    is_volatile = model->is_volatile;
+    cpp_const = model->cpp_const;
+    cpp_friend = model->cpp_friend;
+    cpp_virtual = model->cpp_virtual;
+    cpp_inline = model->cpp_inline;
+    cpp_default = model->cpp_default;
+    cpp_delete = model->cpp_delete;
+    cpp_override = model->cpp_override;
+    cpp_final = model->cpp_final;
+    cpp_get_set_frozen = model->cpp_get_set_frozen;
+    cpp_indent_body = model->cpp_indent_body;
+    java_final = model->java_final;
+    java_synchronized = model->java_synchronized;
+    java_get_set_frozen = model->java_get_set_frozen;
+    java_indent_body = model->java_indent_body;
+    php_final = model->php_final;
+    php_get_set_frozen = model->php_get_set_frozen;
+    php_indent_body = model->php_indent_body;
+    python_get_set_frozen = model->python_get_set_frozen;
+
+    python_indent_body = model->python_indent_body;
+    idl_oneway = model->idl_oneway;
+    idl_get_set_frozen = model->idl_get_set_frozen;
+
+    if (nparams != 0)
+    {
+        for (unsigned i = 0; i != nparams; i += 1)
+        {
+            no_longer_depend_on(params[i].get_type().type);
+        }
+    }
+    if (nexceptions != 0)
+    {
+        for (unsigned i = 0; i != nexceptions; i += 1)
+        {
+            no_longer_depend_on(exceptions[i].get_type().type);
+        }
+    }
+    nparams = model->nparams;
+    nexceptions = model->nexceptions;
+    constraint = model->constraint;
+    cpp_decl = model->cpp_decl;
+    java_annotation = model->java_annotation;
+    python_decorator = model->python_decorator;
+    idl_decl = model->idl_decl;
+
+    cpp_def.assign((const char *) model->cpp_def, FALSE);
+    java_def.assign((const char *) model->java_def, FALSE);
+    php_def.assign((const char *) model->php_def, FALSE);
+    python_def.assign((const char *) model->python_def, FALSE);
+    return_type = model->return_type;
+    depend_on(return_type.type);
+
+    if (nparams == 0)
+        params = 0;
+    else
+    {
+        params = new ParamData[nparams];
+
+        for (unsigned i = 0; i != nparams; i += 1)
+        {
+            params[i] = model->params[i];
+            depend_on(params[i].get_type().type);
+        }
+    }
+
+    if (nexceptions == 0)
+        exceptions = 0;
+    else
+    {
+        exceptions = new ExceptionData[nexceptions];
+
+        for (unsigned i = 0; i != nexceptions; i += 1)
+        {
+            exceptions[i] = model->exceptions[i];
+            depend_on(exceptions[i].get_type().type);
+        }
+    }
+}
+
 bool OperationData::deletedp() const
 {
     return is_deleted;
@@ -211,6 +298,17 @@ void OperationData::depend_on(BrowserClass * cl)
 
         if (subscribe(def)) {
             connect(def, SIGNAL(deleted()), this, SLOT(on_delete()));
+        }
+    }
+}
+void OperationData::no_longer_depend_on(BrowserClass * cl)
+{
+    if (cl != 0) {
+        BasicData * def = cl->get_data();
+
+        if (unsubscribe(def))
+        {
+            disconnect(def, SIGNAL(deleted()), this, SLOT(on_delete()));
         }
     }
 }

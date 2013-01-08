@@ -92,6 +92,15 @@ public:
     bool have_abstract_operation();
     void get_opers(Q3ValueList<const OperationData *> & opers,
                    QStringList & list) const;
+    void get_own_opers(Q3ValueList<OperationData *> &opers,
+                   QStringList & list) ;
+    void get_inherited_opers(Q3ValueList<OperationData *> & opers,
+                   QStringList & list) ;
+    void get_used_inherited_opers(Q3ValueList<OperationData *> & opers,
+                   QStringList & list) ;
+
+
+
     void get_attrs(BrowserNodeList &) const;
     void get_rels(BrowserClass *, Q3PtrList<RelationData> &, int * rev = 0) const;
     void get_rels(BrowserClass * target, Q3PtrList<BrowserRelation> & l) const;
@@ -185,6 +194,9 @@ private:
     // some helpers
     void InstallParentsMenuItems(Q3PopupMenu &inhopersubm);
     void AddInheritedOperations(int rank);
+
+public:
+    QList<OperationData*>  CollectSameThroughInheritance(OperationData*,  QList<BrowserNode*>&);
 
 };
 

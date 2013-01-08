@@ -1131,10 +1131,16 @@ void BrowserNode::children(BrowserNodeList & nodes,
     Q3ListViewItem * child;
 
     for (child = firstChild(); child; child = child->nextSibling())
-        if (!((BrowserNode *) child)->is_deleted &&
-            ((((BrowserNode *) child)->get_type() == kind1) ||
-             (((BrowserNode *) child)->get_type() == kind2)))
+    {
+        bool isAlive = !((BrowserNode *) child)->is_deleted;
+        UmlCode type = ((BrowserNode *) child)->get_type();
+        QLOG_INFO() << stringify(type);
+        bool isFirstKind = (type == kind1);
+        bool isSecondKind = (type == kind2);
+        if ( isAlive && ( isFirstKind || isSecondKind))
             nodes.append((BrowserNode *) child);
+    }
+
 }
 
 bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode type,

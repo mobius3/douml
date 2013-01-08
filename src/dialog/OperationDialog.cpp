@@ -3189,6 +3189,22 @@ void OperationDialog::post_php_edit_body(OperationDialog * d, QString s)
 
 void OperationDialog::SaveData()
 {
+    BrowserClass* containingClass = static_cast<BrowserClass*>(oper->browser_node->get_container(UmlClass));
+    QList<BrowserNode *>  passedNodes;
+    QList<OperationData*> inheritanceSiblings;
+    //QList<OperationData*> inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper, passedNodes);
+    bool propagateThroughInheritance = false;
+    if(!inheritanceSiblings.isEmpty())
+    {
+        // call messagebox to confirm propagation
+        QMessageBox msg;
+        msg.setWindowTitle(tr("Warning!"));
+        msg.setText(tr("The Operation you are trying to change is inhertied from/to other classes.\n"
+                             "Do you want to propagate the changes to it through the inheritance tree?"));
+        if(msg.exec() == QMessageBox::Ok)
+            propagateThroughInheritance = true;
+    }
+
     if (!check_edits(edits) || !kvtable->check_unique())
         return;
 
@@ -3406,6 +3422,18 @@ void OperationDialog::SaveData()
         bn->modified();
         bn->package_modified();
         oper->modified();
+
+        if(propagateThroughInheritance)
+        {
+            for(OperationData* siblingOper : inheritanceSiblings)
+            {
+                siblingOper->PropagateFrom(oper);
+                ProfiledStereotypes::modified(siblingOper->browser_node, newst);
+                siblingOper->browser_node->modified();
+                siblingOper->browser_node->package_modified();
+                siblingOper->modified();
+            }
+        }
     }
 }
 
