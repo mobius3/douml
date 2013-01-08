@@ -464,8 +464,8 @@ void BrowserPackage::update_stereotype(bool rec)
         const char * stereotype = def->get_stereotype();
 
         if (show_stereotypes &&
-            stereotype[0] &&
-            (strcmp(stereotype, "profile") != 0)) {
+                stereotype[0] &&
+                (strcmp(stereotype, "profile") != 0)) {
             QString s = QString(QLatin1String(stereotype));
             int index = s.find(':');
 
@@ -524,8 +524,8 @@ QString BrowserPackage::check_inherit(const BrowserNode * new_parent) const
         BrowserNode * ch = ((BrowserNode *) child);
 
         if ((ch->get_type() == UmlInherit) &&
-            ((((SimpleRelationData *) ch->get_data())->get_end_node())
-             == new_parent))
+                ((((SimpleRelationData *) ch->get_data())->get_end_node())
+                 == new_parent))
             return TR("already exist");
     }
 
@@ -572,16 +572,16 @@ void BrowserPackage::menu()
             m.insertSeparator();
             m.setWhatsThis(m.insertItem(TR("Import project"), 14),
                            TR("to import the contents of a <i>project</i> under \
-the current <i>package</i>"));
-            m.setWhatsThis(m.insertItem(TR("Import project as library"), 16),
-                           TR("to import the contents of a <i>project</i> under \
-the current <i>package</i> and to be able later to reimport it to update it"));
+                              the current <i>package</i>"));
+                              m.setWhatsThis(m.insertItem(TR("Import project as library"), 16),
+                                             TR("to import the contents of a <i>project</i> under \
+                                                the current <i>package</i> and to be able later to reimport it to update it"));
         }
 
         if (!is_edited) {
             if ((edition_number == 0) &&
-                is_from_lib() &&
-                !((BrowserPackage *) parent())->is_from_lib()) {
+                    is_from_lib() &&
+                    !((BrowserPackage *) parent())->is_from_lib()) {
                 m.setWhatsThis(m.insertItem(TR("Update imported library"), 17),
                                TR("to update the previously imported <i>project</i>"));
                 m.insertSeparator();
@@ -596,12 +596,12 @@ the current <i>package</i> and to be able later to reimport it to update it"));
                 if (this == BrowserView::get_project()) {
                     m.setWhatsThis(m.insertItem(TR("Edit generation settings"), 8),
                                    TR("to set how an Uml type is compiled in C++ etc..., \
-to set the default parameter passing, to set the default code \
-produced for an attribute etc..., and to set the root directories"));
-                    m.setWhatsThis(m.insertItem(TR("Edit reverse/roundtrip settings"), 18),
-                                   TR("to specify directory/file to not reverse/roundtrip them"));
-                    m.setWhatsThis(m.insertItem(TR("Edit default stereotypes"), 6),
-                                   TR("to set the default stereotypes list"));
+                                      to set the default parameter passing, to set the default code \
+                                      produced for an attribute etc..., and to set the root directories"));
+                                      m.setWhatsThis(m.insertItem(TR("Edit reverse/roundtrip settings"), 18),
+                                                     TR("to specify directory/file to not reverse/roundtrip them"));
+                                   m.setWhatsThis(m.insertItem(TR("Edit default stereotypes"), 6),
+                                                  TR("to set the default stereotypes list"));
                 }
 
                 m.setWhatsThis(m.insertItem(TR("Edit class settings"), 7),
@@ -613,16 +613,16 @@ produced for an attribute etc..., and to set the root directories"));
                     m.insertItem(TR("Import"), &importm);
                     m.setWhatsThis(importm.insertItem(TR("Generation settings"), 28),
                                    TR("to import the generation settings from an other project, \
-note that the root directories are not imported"));
-                    m.setWhatsThis(importm.insertItem(TR("Default stereotypes"), 29),
-                                   TR("to import the default stereotypes from an other project"));
+                                      note that the root directories are not imported"));
+                                      m.setWhatsThis(importm.insertItem(TR("Default stereotypes"), 29),
+                                                     TR("to import the default stereotypes from an other project"));
                 }
 
                 if ((edition_number == 0) && (this != BrowserView::get_project())) {
                     m.insertSeparator();
                     m.setWhatsThis(m.insertItem(TR("Delete"), 10),
                                    TR("to delete the <i>package</i> and its sub items. \
-Note that you can undelete it after"));
+                                      Note that you can undelete it after"));
                 }
             }
             else if ((edition_number == 0) &&
@@ -632,18 +632,18 @@ Note that you can undelete it after"));
                 m.insertSeparator();
                 m.setWhatsThis(m.insertItem(TR("Delete"), 10),
                                TR("to delete the <i>package</i> and its sub items. \
-Note that you can undelete it after"));
+                                  Note that you can undelete it after"));
             }
         }
 
         m.insertSeparator();
         m.setWhatsThis(m.insertItem(TR("Referenced by"), 13),
                        TR("to know who reference the <i>package</i> \
-through a relation"));
-        mark_menu(m, TR("the package"), 90);
-        ProfiledStereotypes::menu(m, this, 99990);
+                          through a relation"));
+                          mark_menu(m, TR("the package"), 90);
+                       ProfiledStereotypes::menu(m, this, 99990);
 
-        if (! isprofile) {
+                if (! isprofile) {
             bool cpp = GenerationSettings::cpp_get_default_defs();
             bool java = GenerationSettings::java_get_default_defs();
             bool php = GenerationSettings::php_get_default_defs();
@@ -762,7 +762,7 @@ static bool contain_profile(BrowserPackage * p)
 
     for (child = p->firstChild(); child != 0; child = child->nextSibling()) {
         if (!((BrowserNode *) child)->deletedp() &&
-            (((BrowserNode *) child)->get_type() == UmlPackage)) {
+                (((BrowserNode *) child)->get_type() == UmlPackage)) {
             if (!strcmp(((BrowserNode *) child)->get_data()->get_stereotype(), "profile"))
                 return TRUE;
             else if (contain_profile((BrowserPackage *) child))
@@ -785,54 +785,54 @@ void BrowserPackage::exec_menu_choice(int rank)
 
     case 1: {
         BrowserUseCaseView * v =
-            BrowserUseCaseView::add_use_case_view(this);
+                BrowserUseCaseView::add_use_case_view(this);
 
         if (v == 0)
             return;
 
         v->select_in_browser();
     }
-    break;
+        break;
 
     case 2: {
         BrowserClassView * v =
-            BrowserClassView::add_class_view(this);
+                BrowserClassView::add_class_view(this);
 
         if (v == 0)
             return;
 
         v->select_in_browser();
     }
-    break;
+        break;
 
     case 3:
         if (isprofile)
             return;
 
-        {
-            BrowserComponentView * v =
+    {
+        BrowserComponentView * v =
                 BrowserComponentView::add_component_view(this);
 
-            if (v == 0)
-                return;
+        if (v == 0)
+            return;
 
-            v->select_in_browser();
-        }
+        v->select_in_browser();
+    }
         break;
 
     case 4:
         if (isprofile)
             return;
 
-        {
-            BrowserDeploymentView * v =
+    {
+        BrowserDeploymentView * v =
                 BrowserDeploymentView::add_deployment_view(this);
 
-            if (v == 0)
-                return;
+        if (v == 0)
+            return;
 
-            v->select_in_browser();
-        }
+        v->select_in_browser();
+    }
         break;
 
     case 5:
@@ -866,7 +866,7 @@ void BrowserPackage::exec_menu_choice(int rank)
         }
         else {
             bool recomp = ProfiledStereotypes::hasStereotype() &&
-                          contain_profile(this);
+                    contain_profile(this);
 
             delete_it();
 
@@ -915,8 +915,8 @@ void BrowserPackage::exec_menu_choice(int rank)
         if (!isprofile) {
             ToolCom::run((verbose_generation())
                          ? ((preserve) ? "cpp_generator -v -p" : "cpp_generator -v")
-                             : ((preserve) ? "cpp_generator -p" : "cpp_generator"),
-                             this);
+                         : ((preserve) ? "cpp_generator -p" : "cpp_generator"),
+                         this);
         }
 
         return;
@@ -925,8 +925,8 @@ void BrowserPackage::exec_menu_choice(int rank)
         if (!isprofile) {
             ToolCom::run((verbose_generation())
                          ? ((preserve) ? "java_generator -v -p" : "java_generator -v")
-                             : ((preserve) ? "java_generator -p" : "java_generator"),
-                             this);
+                         : ((preserve) ? "java_generator -p" : "java_generator"),
+                         this);
         }
 
         return;
@@ -935,8 +935,8 @@ void BrowserPackage::exec_menu_choice(int rank)
         if (!isprofile) {
             ToolCom::run((verbose_generation())
                          ? ((preserve) ? "php_generator -v -p" : "php_generator -v")
-                             : ((preserve) ? "php_generator -p" : "php_generator"),
-                             this);
+                         : ((preserve) ? "php_generator -p" : "php_generator"),
+                         this);
         }
 
         return;
@@ -945,8 +945,8 @@ void BrowserPackage::exec_menu_choice(int rank)
         if (!isprofile) {
             ToolCom::run((verbose_generation())
                          ? ((preserve) ? "python_generator -v -p" : "python_generator -v")
-                             : ((preserve) ? "python_generator -p" : "python_generator"),
-                             this);
+                         : ((preserve) ? "python_generator -p" : "python_generator"),
+                         this);
         }
 
         return;
@@ -1265,8 +1265,8 @@ BrowserPackage * BrowserPackage::get_package()
     BrowserNodeList nodes;
 
     BrowserView::get_project()->enter_child_name(dummy, TR("choose existing package : "),
-            UmlPackage, instances(nodes), &old,
-            FALSE, TRUE, TRUE);
+                                                 UmlPackage, instances(nodes), &old,
+                                                 FALSE, TRUE, TRUE);
 
     return ((BrowserPackage *) old);
 }
@@ -1287,11 +1287,11 @@ void BrowserPackage::add_package(bool profile)
         p->select_in_browser();
 
         if ((owner != -1) &&
-            (msg_warning("Bouml",
-                         TR("Do you want to be the owner of this new package ?\n"
-                            "(other users can't modify it while you are the owner)"),
-                         QMessageBox::Yes, QMessageBox::No)
-             == QMessageBox::Yes))
+                (msg_warning("Bouml",
+                             TR("Do you want to be the owner of this new package ?\n"
+                                "(other users can't modify it while you are the owner)"),
+                             QMessageBox::Yes, QMessageBox::No)
+                 == QMessageBox::Yes))
             p->owner = owner;
     }
 }
@@ -1312,8 +1312,8 @@ BrowserPackage * BrowserPackage::import_project(QString fn, bool aslib, int id)
     QFileInfo fi(fn);
 
     if (!fi.exists() ||
-        !fi.isFile() ||
-        (fi.extension(FALSE).lower() != "prj"))
+            !fi.isFile() ||
+            (fi.extension(FALSE).lower() != "prj"))
         return 0;
 
     QString bname = my_baseName(fi);
@@ -1382,7 +1382,7 @@ void BrowserPackage::update_lib()
                            "\n"
                            "Save it to perform update ?\n"),
                         QMessageBox::Yes, QMessageBox::Cancel)
-            != QMessageBox::Yes)
+                != QMessageBox::Yes)
             return;
 
         UmlWindow::save_it();
@@ -1472,8 +1472,8 @@ int BrowserPackage::get_identifier() const
 const char * BrowserPackage::help_topic() const
 {
     return (!strcmp(def->get_stereotype(), "profile"))
-           ? "profile"
-           : "package";
+            ? "profile"
+            : "package";
 }
 
 BasicData * BrowserPackage::get_data() const
@@ -1617,8 +1617,8 @@ UmlColor BrowserPackage::get_color(UmlCode who) const
     }
 
     return (c != UmlDefaultColor)
-           ? c
-           : ((BrowserNode *) parent())->get_color(who);
+            ? c
+            : ((BrowserNode *) parent())->get_color(who);
 }
 
 UmlVisibility BrowserPackage::get_visibility(UmlCode who) const
@@ -1640,15 +1640,15 @@ UmlVisibility BrowserPackage::get_visibility(UmlCode who) const
     }
 
     return (v != UmlDefaultVisibility)
-           ? v
-           : ((BrowserNode *) parent())->get_visibility(who);
+            ? v
+            : ((BrowserNode *) parent())->get_visibility(who);
 }
 
 void BrowserPackage::open(bool force_edit)
 {
     if (!force_edit &&
-        (associated_diagram != 0) &&
-        !associated_diagram->deletedp())
+            (associated_diagram != 0) &&
+            !associated_diagram->deletedp())
         associated_diagram->open(FALSE);
     else if (!is_edited)
         def->edit();
@@ -1664,7 +1664,7 @@ BrowserNode * BrowserPackage::get_associated() const
 }
 
 void BrowserPackage::set_associated_diagram(BrowserNode * dg,
-        bool on_read)
+                                            bool on_read)
 {
     if (associated_diagram != dg) {
         if (associated_diagram != 0)
@@ -1755,7 +1755,7 @@ bool BrowserPackage::tool_cmd(ToolCom * com, const char * args)
         com->write_string(d.absFilePath(fn));
     }
 
-    return TRUE;
+        return TRUE;
 
     case createCmd: {
         bool ok = TRUE;
@@ -1786,7 +1786,7 @@ bool BrowserPackage::tool_cmd(ToolCom * com, const char * args)
                         ok = FALSE;
                 }
             }
-            break;
+                break;
 
             case UmlUseCaseView:
                 if (wrong_child_name(args, UmlUseCaseView, TRUE, FALSE))
@@ -1832,7 +1832,7 @@ bool BrowserPackage::tool_cmd(ToolCom * com, const char * args)
 
         return TRUE;
     }
-    break;
+        break;
 
     case setAssocDiagramCmd:
         if (is_read_only && !root_permission())
@@ -1861,8 +1861,8 @@ bool BrowserPackage::tool_cmd(ToolCom * com, const char * args)
     case old_deleteCmd:
     case deleteCmd:
         if ((is_read_only && !root_permission()) ||
-            (parent() == 0) ||
-            (((BrowserPackage *) parent())->is_read_only && !root_permission()))
+                (parent() == 0) ||
+                (((BrowserPackage *) parent())->is_read_only && !root_permission()))
             com->write_ack(FALSE);
         else {
             delete_it();
@@ -1948,7 +1948,7 @@ bool BrowserPackage::tool_global_cmd(ToolCom * com, const char * args)
             r->write_id(com);
     }
 
-    return TRUE;
+        return TRUE;
 
     default:
         return FALSE;
@@ -1984,7 +1984,7 @@ BrowserPackage::find_it(const char * s,
                  child = child->nextSibling()) {
                 if (((BrowserNode *) child)->get_type() == UmlPackage) {
                     BrowserPackage * p =
-                        ((BrowserPackage *) child)->find_it(s, pf);
+                            ((BrowserPackage *) child)->find_it(s, pf);
 
                     if (p != 0)
                         return p;
@@ -2002,13 +2002,13 @@ void BrowserPackage::DragMoveEvent(QDragMoveEvent * e)
     bool rel = UmlDrag::canDecode(e, BrowserSimpleRelation::drag_key(this));
 
     if (rel ||
-        UmlDrag::canDecode(e, UmlPackage) ||
-        UmlDrag::canDecode(e, UmlUseCaseView) ||
-        UmlDrag::canDecode(e, UmlClassView) ||
-        UmlDrag::canDecode(e, UmlComponentView) ||
-        UmlDrag::canDecode(e, UmlDeploymentView)) {
+            UmlDrag::canDecode(e, UmlPackage) ||
+            UmlDrag::canDecode(e, UmlUseCaseView) ||
+            UmlDrag::canDecode(e, UmlClassView) ||
+            UmlDrag::canDecode(e, UmlComponentView) ||
+            UmlDrag::canDecode(e, UmlDeploymentView)) {
         if (!is_read_only ||
-            (!rel && (parent() != 0) && !((BrowserPackage *) parent())->is_read_only))
+                (!rel && (parent() != 0) && !((BrowserPackage *) parent())->is_read_only))
             e->accept();
         else
             e->ignore();
@@ -2022,12 +2022,12 @@ void BrowserPackage::DragMoveEvent(QDragMoveEvent * e)
 void BrowserPackage::DragMoveInsideEvent(QDragMoveEvent * e)
 {
     if (!is_read_only &&
-        (UmlDrag::canDecode(e, UmlPackage) ||
-         UmlDrag::canDecode(e, UmlUseCaseView) ||
-         UmlDrag::canDecode(e, UmlClassView) ||
-         UmlDrag::canDecode(e, UmlComponentView) ||
-         UmlDrag::canDecode(e, UmlDeploymentView) ||
-         UmlDrag::canDecode(e, BrowserSimpleRelation::drag_key(this))))
+            (UmlDrag::canDecode(e, UmlPackage) ||
+             UmlDrag::canDecode(e, UmlUseCaseView) ||
+             UmlDrag::canDecode(e, UmlClassView) ||
+             UmlDrag::canDecode(e, UmlComponentView) ||
+             UmlDrag::canDecode(e, UmlDeploymentView) ||
+             UmlDrag::canDecode(e, BrowserSimpleRelation::drag_key(this))))
         e->accept();
     else
         e->ignore();
@@ -2049,7 +2049,7 @@ bool BrowserPackage::may_contains_them(const Q3PtrList<BrowserNode> & l,
 
         default:
             if (!IsaSimpleRelation(it.current()->get_type()) ||
-                (((const BrowserNode *) it.current()->parent()) != this))
+                    (((const BrowserNode *) it.current()->parent()) != this))
                 return FALSE;
         }
 
@@ -2078,16 +2078,16 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after)
          ((bn = UmlDrag::decode(e, UmlClassView)) != 0) ||
          ((bn = UmlDrag::decode(e, UmlComponentView)) != 0) ||
          ((bn = UmlDrag::decode(e, UmlDeploymentView)) != 0)) &&
-        (bn != after) && (bn != this)) {
+            (bn != after) && (bn != this)) {
         UmlCode what = bn->get_type();
 
         if (may_contains(bn, what == UmlPackage)) {
             BrowserNode * x = this;
 
             if ((after == 0) &&
-                !rel &&
-                (parent() != 0) &&
-                ((BrowserNode *) parent())->may_contains(bn, what == UmlPackage)) {
+                    !rel &&
+                    (parent() != 0) &&
+                    ((BrowserNode *) parent())->may_contains(bn, what == UmlPackage)) {
                 // have choice
                 Q3PopupMenu m(0);
 
@@ -2118,8 +2118,8 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             bool stereotype_moved = FALSE;
 
             if ((what == UmlClassView) &&
-                (x != old_parent) &&
-                !strcmp(old_parent->get_data()->get_stereotype(), "profile"))
+                    (x != old_parent) &&
+                    !strcmp(old_parent->get_data()->get_stereotype(), "profile"))
                 stereotype_moved = ((BrowserClassView *) bn)->extract_from_profile();
 
             if (after)
@@ -2131,8 +2131,8 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 
             if (old_parent != x) {
                 if (stereotype_moved &&
-                    (what == UmlClassView) &&
-                    !strcmp(x->get_data()->get_stereotype(), "profile"))
+                        (what == UmlClassView) &&
+                        !strcmp(x->get_data()->get_stereotype(), "profile"))
                     ((BrowserClassView *) bn)->insert_in_profile();
 
                 old_parent->package_modified();
@@ -2188,7 +2188,7 @@ void BrowserPackage::save_stereotypes()
     QTextStream st(newdef.data(), QIODevice::WriteOnly);
     //  QLOG_INFO() << newdef->data();
     st.setEncoding(QTextStream::Latin1);
-//  QLOG_INFO() << newdef->data();
+    //  QLOG_INFO() << newdef->data();
     nl_indent(st);
     st << "package_stereotypes ";
     st.flush();
@@ -2341,9 +2341,9 @@ void BrowserPackage::save_all(bool modified_only)
         BrowserPackage * pack = itcpt.current();
 
         if (!pack->deletedp() &&
-            (!modified_only ||
-             (pack->is_modified &&
-              (pack->is_imported || !pack->is_read_only))))
+                (!modified_only ||
+                 (pack->is_modified &&
+                  (pack->is_imported || !pack->is_read_only))))
             pack->BrowserNode::init_save_counter();
 
         ++itcpt;
@@ -2572,8 +2572,8 @@ bool BrowserPackage::must_be_saved()
 
     while (it.current()) {
         if (it.current()->is_modified &&
-            !it.current()->deletedp() &&
-            !it.current()->is_read_only)
+                !it.current()->deletedp() &&
+                !it.current()->is_read_only)
             return TRUE;
 
         ++it;
@@ -2737,9 +2737,9 @@ BrowserNode * BrowserPackage::get_it(const char * k, int id)
     BrowserNode * r;
 
     if (((r = BrowserUseCaseView::get_it(k, id)) == 0) &&
-        ((r = BrowserClassView::get_it(k, id)) == 0) &&
-        ((r = BrowserComponentView::get_it(k, id)) == 0) &&
-        ((r = BrowserDeploymentView::get_it(k, id)) == 0))
+            ((r = BrowserClassView::get_it(k, id)) == 0) &&
+            ((r = BrowserComponentView::get_it(k, id)) == 0) &&
+            ((r = BrowserDeploymentView::get_it(k, id)) == 0))
         r = BrowserSimpleRelation::get_it(k, id);
 
     return r;
@@ -2751,7 +2751,7 @@ unsigned BrowserPackage::load(bool recursive, int id)
     unsigned result = ~0;
     QString fn;
     bool prj = (this == BrowserView::get_project()) ||
-               (this == BrowserView::get_imported_project());
+            (this == BrowserView::get_imported_project());
 
     if (prj) {
         //const char * tName = name.operator Q3CString();
@@ -2776,7 +2776,7 @@ unsigned BrowserPackage::load(bool recursive, int id)
         int nread;
 
         is_read_only = (!in_import() && read_only_file()) ||
-                       ((user_id() != 0) && is_api_base());
+                ((user_id() != 0) && is_api_base());
 
         do {
             if ((nread = fp.readBlock(s + offset, sz - offset)) == -1) {
@@ -2810,20 +2810,22 @@ unsigned BrowserPackage::load(bool recursive, int id)
                 throw 0;
             }
 
-            if (in_import() && prj) {
+            if (in_import() && prj)
+            {
                 result = read_file_format();
 
                 if (read_file_format() <= 21) {
                     msg_critical(TR("Error"),
-                                 TR("\
-Sorry, the imported project has a too old format.\n\
-To change its format : load this project and save it."));
+                                 TR(
+                                     "Sorry, the imported project has a too old format.\n"
+                                     "To change its format : load this project and save it."));
                     throw 0;
                 }
 
                 k = skip_until(st, "mark_for_import");
             }
-            else {
+            else
+            {
                 set_name(read_string(st));
 
                 k = read_keyword(st);
@@ -2935,8 +2937,10 @@ To change its format : load this project and save it."));
                 read_color(st, "parameterpin_color", parameterpin_color, k);		// updates k
             }
 
-            if (read_file_format() > 9) {
-                if (prj) {
+            if (read_file_format() > 9)
+            {
+                if (prj)
+                {
                     if (!strcmp(k, "font_size")) {
                         resize_font((int) read_unsigned(st));
                         k = read_keyword(st);
@@ -2969,20 +2973,23 @@ To change its format : load this project and save it."));
             else if (prj)
                 init_font();
 
-            if (!strcmp(k, "associated_class_diagram")) {
+            if (!strcmp(k, "associated_class_diagram"))
+            {
                 // old format
                 set_associated_diagram(BrowserClassDiagram::read_ref(st, "classdiagram_ref"),
                                        TRUE);
                 k = read_keyword(st);
             }
-            else if (!strcmp(k, "associated_diagram")) {
+            else if (!strcmp(k, "associated_diagram"))
+            {
                 set_associated_diagram(BrowserDiagram::read_diagram_ref(st), TRUE);
                 k = read_keyword(st);
             }
 
             BrowserNode::read(st, k, id);	// updates k
 
-            if (strcmp(k, "end")) {
+            if (strcmp(k, "end"))
+            {
                 while (BrowserPackage::read(st, k, this, recursive) ||
                        BrowserUseCaseView::read(st, k, this, recursive) ||
                        BrowserClassView::read(st, k, this, recursive) ||
@@ -2992,7 +2999,8 @@ To change its format : load this project and save it."));
                        BrowserSimpleRelation::read(st, k, this))
                     k = read_keyword(st);
 
-                if (!strcmp(k, "preserve_bodies")) {
+                if (!strcmp(k, "preserve_bodies"))
+                {
                     if (!in_import() && !preserve_bodies())
                         toggle_preserve_bodies();
 
@@ -3001,7 +3009,8 @@ To change its format : load this project and save it."));
 
                     k = read_keyword(st);
                 }
-                else {
+                else
+                {
                     if (preserve_bodies())
                         toggle_preserve_bodies();
 
@@ -3117,8 +3126,8 @@ BrowserPackage * BrowserPackage::read_ref(char *& st)
     BrowserPackage * result = all[id];
 
     return (result == 0)
-           ? new BrowserPackage(id)
-           : result;
+            ? new BrowserPackage(id)
+            : result;
 }
 
 BrowserPackage * BrowserPackage::read(char *& st, char * k,
@@ -3132,8 +3141,8 @@ BrowserPackage * BrowserPackage::read(char *& st, char * k,
 
         if (r == 0)
             r = (parent)
-                ? new BrowserPackage("<not yet loaded>", parent, id)
-                : new BrowserPackage(id);
+                    ? new BrowserPackage("<not yet loaded>", parent, id)
+                    : new BrowserPackage(id);
         else if (parent != 0) {
             r->set_parent(parent);
             r->set_name("<not yet loaded>");
@@ -3182,7 +3191,7 @@ void BrowserPackage::renumber(int phase)
         set_user_id(0);
     }
 
-    return;
+        return;
 
     default: {
         QDir dir = BrowserView::get_dir();
@@ -3193,7 +3202,7 @@ void BrowserPackage::renumber(int phase)
         BrowserNode::renumber(phase);
     }
 
-    return;
+        return;
 
     case 2: {
         QDir dir = BrowserView::get_dir();

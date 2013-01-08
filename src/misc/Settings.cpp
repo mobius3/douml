@@ -207,7 +207,8 @@ void ClassDiagramSettings::save(QTextStream & st) const
 
 void ClassDiagramSettings::read(char *& st, char *& k)
 {
-    if (!strcmp(k, "draw_all_relations")) {
+    if (!strcmp(k, "draw_all_relations"))
+    {
         draw_all_relations = state(read_keyword(st));
         k = read_keyword(st);
     }
@@ -228,7 +229,8 @@ void ClassDiagramSettings::read(char *& st, char *& k)
         k = read_keyword(st);
     }
 
-    if (!strcmp(k, "show_full_members_definition")) {
+    if (!strcmp(k, "show_full_members_definition"))
+    {
         // old version
         show_full_members_definition = state(read_keyword(st));
         show_members_visibility = show_full_members_definition;
@@ -244,7 +246,8 @@ void ClassDiagramSettings::read(char *& st, char *& k)
         show_relation_visibility = UmlNo;
         k = read_keyword(st);
     }
-    else {
+    else
+    {
         if (!strcmp(k, "show_members_full_definition")) {
             // new version
             show_full_members_definition = state(read_keyword(st));
@@ -896,6 +899,16 @@ void CollaborationDiagramSettings::read(char *& st, char *& k)
         !strcmp(k, "write_horizontaly")) {
         write_horizontally = state(read_keyword(st));
         k = read_keyword(st);
+    }
+
+    if(read_file_format() == 76)
+    {
+        if (!strcmp(k, "class_drawing_mode") ||
+                !strcmp(k, "class_drawing_mode")) {
+            //write_horizontally = state(read_keyword(st));
+            k = read_keyword(st);
+            k = read_keyword(st);
+        }
     }
 
     if (!strcmp(k, "drawing_language")) {

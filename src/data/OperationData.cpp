@@ -44,6 +44,7 @@
 #include "ClassDialog.h"
 #include "GenerationSettings.h"
 #include "myio.h"
+#include "translate.h"
 #include "ToolCom.h"
 #include "strutil.h"
 #include "BrowserView.h"
@@ -3621,13 +3622,25 @@ void OperationData::read(char *& st, char *& k)
     t.read(st, "return_type", "explicit_return_type", k);
     set_return_type(t);
 
-    read_keyword(st, "nparams");
+
+    k = read_keyword(st);
+    if (read_file_format() == 76 && !strcmp(k, "multiplicity"))
+    {
+        read_string(st);
+        k = read_keyword(st);
+    }
+
+    if(strcmp(k, "nparams"))
+    {
+        msg_critical(TR("Error"),  TR("Expected nparams instead of " + QString(k)));
+        THROW_ERROR 0;
+    }
 
     unsigned n = read_unsigned(st);
     set_n_params(n);
 
 
-    if(read_file_format() > 75)
+    if(read_file_format() > 76)
     {
         read_keyword(st, "origin");
         set_origin_class(WrapperStr(read_string(st)));

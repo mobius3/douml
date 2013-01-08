@@ -3821,6 +3821,18 @@ void GenerationSettings::read(char *& st, char *& k)
         else
             cpp_indent_visibility = "  ";
 
+        if(read_file_format() == 76)
+        {
+            if (!strcmp(k, "cpp_indent_friendclass")) {
+                read_string(st);
+                k = read_keyword(st);
+            }
+            if (!strcmp(k, "cpp_indent_subclass")) {
+                read_string(st);
+                k = read_keyword(st);
+            }
+        }
+
         if (!strcmp(k, "cpp_includes")) {
             // old version
             cpp_includes.types.clear();
@@ -3854,6 +3866,7 @@ void GenerationSettings::read(char *& st, char *& k)
         }
         else
             java_src_content = JAVA_SRC_CONTENT;
+
 
         if (strcmp(k, "java_default_class_decl"))
             wrong_keyword(k, "java_default_class_decl");
