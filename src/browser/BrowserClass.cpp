@@ -819,7 +819,7 @@ void BrowserClass::AddInheritedOperations(int rank)
     }
 }
 
-QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData * oper, QList<BrowserNode *> & passedNodes)
+QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData * oper, QList<BrowserNode *> & passedNodes, bool goBack )
 {
     QList<OperationData*> result;
     if(passedNodes.contains(static_cast<BrowserNode*>(this)))
@@ -832,19 +832,23 @@ QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData 
     while ((testedClass = it.current()) != 0)
     {
         BrowserNodeList listOfTested;
-        testedClass->children(listOfTested,UmlGeneralisation, UmlRealize);
+        UmlCode kind1 = UmlGeneralisation;
+        UmlCode kind2 = UmlRealize;
+//        if(!goBack)
+//            kind1=kind2;
+        testedClass->children(listOfTested,kind1, kind2);
         for(BrowserNode* node : listOfTested)
         {
             BrowserRelation* generalization = static_cast<BrowserRelation*>(node);
             RelationData* relData = static_cast<RelationData*>(generalization->get_data());
             BrowserClass* startClass = relData->get_start_class();
             BrowserClass* endClass = relData->get_end_class();
-//            QLOG_INFO() << "This class" << this->name.operator QString();
-//            QLOG_INFO() << "Relation start" << startClass->get_name();
-//            QLOG_INFO() << "Relation end" << endClass->get_name();
+            if(endClass != this && startClass != this)
+                continue;
+            //QLOG_INFO() << relData->get_start_class()->get_name() << stringify(generalization->get_type()) << relData->get_end_class()->get_name();
             if(endClass == this)
                 listOfChildren.append(startClass);
-            else if (startClass == this)
+            else if (startClass == this  && goBack )
                 listOfChildren.append(endClass);
         }
         ++it;
@@ -856,18 +860,22 @@ QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData 
         if(!passedCopy.contains(static_cast<BrowserNode*>(child)))
         {
             //QLOG_INFO() << "Child is" << child->get_name();
-            result.append(static_cast<BrowserClass*>(child)->CollectSameThroughInheritance(oper, passedNodes));
+            result.append(static_cast<BrowserClass*>(child)->CollectSameThroughInheritance(oper, passedNodes, goBack));
         }
     }
     //QLOG_INFO() << "Using :" << this->get_name();
+
     QList<BrowserClass*> parents = get_all_parents();
     QStringList parentsNames;
-    for(BrowserNode* parent : parents)
+    if(goBack)
     {
-        if(passedNodes.contains(parent))
-            continue;
-        parentsNames.append(parent->full_name());
-        result.append(static_cast<BrowserClass*>(parent)->CollectSameThroughInheritance(oper, passedNodes));
+        for(BrowserNode* parent : parents)
+        {
+            if(passedNodes.contains(parent))
+                continue;
+            parentsNames.append(parent->full_name());
+            result.append(static_cast<BrowserClass*>(parent)->CollectSameThroughInheritance(oper, passedNodes, goBack));
+        }
     }
     //QLOG_INFO() << "Using 2: " << this->get_name();
     BrowserClass* operContainter = static_cast<BrowserClass*>(oper->get_browser_node()->get_container(UmlClass));
@@ -884,41 +892,16 @@ QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData 
         {
             QString name = full_name();
             QString origin_name = oper->get_origin_class();
-            if(parentsNames.contains(origin_name) || name ==  origin_name || origin_name == "0")
+            QString containerName = operContainter->full_name();
+            if(parentsNames.contains(origin_name) ||
+                    name ==  origin_name ||
+                    origin_name == "0" ||
+                    containerName == testedOper->get_origin_class())
                 result.append(testedOper);
         }
     }
     return result;
 }
-
-//bool BrowserClass::PropagateChanges(OperationData * oper, OperationData * newOper, QList<BrowserNode *> & passedNodes)
-//{
-//    QList<OperationData*>
-//    if(passedNodes.contains(dynamic_cast<BrowserNode*>(this)))
-//        return;
-//    passedNodes.append(dynamic_cast<BrowserNode*>(this));
-//    BrowserNodeList listOfChildren;
-//    children(listOfChildren,UmlGeneralisation, UmlRealize);
-//    for(BrowserNode* child : listOfChildren)
-//    {
-//        dynamic_cast<BrowserClass*>(child)->PropagateChanges(oper, newOper,passedNodes);
-//    }
-//    QList<BrowserClass*> parents = containingClass->get_all_parents();
-//    for(BrowserNode* parent : parents)
-//    {
-//        dynamic_cast<BrowserClass*>(parent)->PropagateChanges(oper, newOper, passedNodes);
-//    }
-//    Q3ValueList<OperationData *> usedInheritedOpers;
-//    QStringList listUsedInheritedOpers;
-//    get_used_inherited_opers(usedInheritedOpers,listUsedInheritedOpers);
-//    for(OperationData* testedOper: usedInheritedOpers)
-//    {
-//        if(oper->definition(TRUE, FALSE) == testedOper->definition(TRUE, FALSE))
-//        {
-//            testedOper->PropagateFrom(newOper);
-//        }
-//    }
-//}
 
 void BrowserClass::exec_menu_choice(int rank,
                                     Q3PtrList<BrowserOperation> & l)

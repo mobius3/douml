@@ -196,7 +196,7 @@ private:
     void AddInheritedOperations(int rank);
 
 public:
-    QList<OperationData*>  CollectSameThroughInheritance(OperationData*,  QList<BrowserNode*>&);
+    QList<OperationData*>  CollectSameThroughInheritance(OperationData*,  QList<BrowserNode*>&, bool goBack = true);
 
 };
 

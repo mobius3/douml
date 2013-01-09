@@ -1134,7 +1134,7 @@ void BrowserNode::children(BrowserNodeList & nodes,
     {
         bool isAlive = !((BrowserNode *) child)->is_deleted;
         UmlCode type = ((BrowserNode *) child)->get_type();
-        QLOG_INFO() << stringify(type);
+        //QLOG_INFO() << stringify(type);
         bool isFirstKind = (type == kind1);
         bool isSecondKind = (type == kind2);
         if ( isAlive && ( isFirstKind || isSecondKind))

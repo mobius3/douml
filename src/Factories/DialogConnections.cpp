@@ -70,6 +70,7 @@ void ConnectToLimitedtDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar)
     QObject::connect(dragArea, SIGNAL(endResize()), toolbar, SLOT(OnEndResize()));
     QObject::connect(dragArea, SIGNAL(endMove()), toolbar, SLOT(OnEndMove()));
     QObject::connect(dialog, SIGNAL(lostFocus()), toolbar, SLOT(OnDialogLostFocus()));
+    QObject::connect(dialog, SIGNAL(hideEdgeMenu()), toolbar, SLOT(OnMenuHideRequested()));
     QObject::connect(dialog, SIGNAL(repositionMenu(QPoint)), toolbar, SLOT(OnMenuRepositionRequested(QPoint)));
 
     QAction * clipAction = qobject_cast<QAction *>(toolbar->findChild<QAction *>("Clipboard"));

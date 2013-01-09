@@ -153,14 +153,14 @@ OperationData::~OperationData()
     all.remove(get_ident());
 }
 
-void OperationData::PropagateFrom(const OperationData * model, QList<const OperationData*> passed)
+void OperationData::PropagateFrom(const OperationData * model, bool goBack, QList<const OperationData*> passed)
 {
 
     passed.append(this);
     BrowserClass* containingClass = static_cast<BrowserClass*>(this->browser_node->get_container(UmlClass));
     QList<BrowserNode *>  passedNodes;
     QList<OperationData*> inheritanceSiblings;
-    inheritanceSiblings = containingClass->CollectSameThroughInheritance(this, passedNodes);
+    inheritanceSiblings = containingClass->CollectSameThroughInheritance(this, passedNodes, goBack);
 
     uml_visibility=model->uml_visibility;
     cpp_visibility=UmlDefaultVisibility;
@@ -246,7 +246,7 @@ void OperationData::PropagateFrom(const OperationData * model, QList<const Opera
     {
         if(passed.contains(siblingOper))
             continue;
-        siblingOper->PropagateFrom(this, passed);
+        siblingOper->PropagateFrom(this, goBack, passed);
         ProfiledStereotypes::modified(siblingOper->browser_node, true);
         siblingOper->browser_node->modified();
         siblingOper->browser_node->package_modified();

@@ -64,6 +64,8 @@ protected:
 
     virtual void closeEvent(QCloseEvent *) override;
 
+    virtual void hideEvent(QHideEvent *) override;
+
     void moveEvent(QMoveEvent *);
 
     virtual void focusOutEvent(QFocusEvent *) override;

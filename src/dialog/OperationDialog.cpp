@@ -3200,18 +3200,30 @@ void OperationDialog::SaveData()
     BrowserClass* containingClass = static_cast<BrowserClass*>(oper->browser_node->get_container(UmlClass));
     QList<BrowserNode *>  passedNodes;
     QList<OperationData*> inheritanceSiblings;
-    inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper, passedNodes);
+    bool goBack = true;
+    inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper, passedNodes, goBack);
     bool propagateThroughInheritance = false;
     if(!inheritanceSiblings.isEmpty())
     {
         // call messagebox to confirm propagation
         QMessageBox msg;
         msg.setWindowTitle(tr("Warning!"));
-        msg.setText(tr("The Operation you are trying to change is inhertied from/to other classes.\n"
-                             "Do you want to propagate the changes to it through the inheritance tree?"));
-        msg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-        if(msg.exec() == QMessageBox::Ok)
+        msg.setText(tr("The Operation you are trying to change is\ninhertied from/to other classes.\n"
+                             "Do you want to propagate the changes to it\n through the inheritance tree?"));
+        QPushButton* above = msg.addButton(tr("Above"), QMessageBox::ActionRole);
+        QPushButton* whole = msg.addButton(tr("Everywhere"), QMessageBox::ActionRole);
+        QPushButton* dont = msg.addButton(tr("Do not propagate"), QMessageBox::ActionRole);
+        msg.exec();
+        if(msg.clickedButton() != dont)
             propagateThroughInheritance = true;
+        if(msg.clickedButton() == above)
+        {
+            goBack = false;
+            passedNodes.clear();
+            inheritanceSiblings.clear();
+            inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper,passedNodes, goBack);
+        }
+
     }
 
     if (!check_edits(edits) || !kvtable->check_unique())
@@ -3438,7 +3450,7 @@ void OperationDialog::SaveData()
             for(OperationData* siblingOper : inheritanceSiblings)
             {
                 passed.append(oper);
-                siblingOper->PropagateFrom(oper, passed);
+                siblingOper->PropagateFrom(oper, goBack, passed);
                 ProfiledStereotypes::modified(siblingOper->browser_node, newst);
                 siblingOper->browser_node->modified();
                 siblingOper->browser_node->package_modified();
@@ -7399,4 +7411,11 @@ void OperationDialog::InitPropertiesTab()
 void OperationDialog::FillPropertiesTab(OperationData * o)
 {
     kvtable->update(o->browser_node);
+}
+
+
+void OperationDialog::closeEvent(QCloseEvent *)
+{
+    int k = 0;
+    k++;
 }

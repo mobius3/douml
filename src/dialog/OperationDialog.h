@@ -64,6 +64,7 @@ class OperationDialog : public EdgeMenuDialog
     Q_OBJECT
 
 protected:
+    virtual void closeEvent(QCloseEvent *);
     bool visit;
     OperationData * oper;
     ClassData * cl;

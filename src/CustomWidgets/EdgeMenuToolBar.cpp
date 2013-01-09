@@ -52,7 +52,6 @@ void EdgeMenuToolBar::SetDialog(EdgeMenuDialog * dialog)
 
 void EdgeMenuToolBar::leaveEvent(QEvent * event)
 {
-
     decayTimer.start(15000);
 }
 

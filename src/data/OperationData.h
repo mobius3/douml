@@ -147,7 +147,7 @@ public:
     OperationData(int id = 0);
     OperationData(OperationData * model, BrowserNode *);
     virtual ~OperationData();
-    void PropagateFrom(const OperationData*, QList<const OperationData *> passed = QList<const OperationData *>());
+    void PropagateFrom(const OperationData*, bool goBack = true, QList<const OperationData *> passed = QList<const OperationData *>());
 
     virtual bool deletedp() const;
     virtual void set_deletedp(bool y);

@@ -112,6 +112,11 @@ void EdgeMenuDialog::closeEvent(QCloseEvent *)
     emit hideEdgeMenu();
 }
 
+void EdgeMenuDialog::hideEvent(QHideEvent *)
+{
+    emit hideEdgeMenu();
+}
+
 void EdgeMenuDialog::moveEvent(QMoveEvent * event)
 {
     emit repositionMenu(event->pos() - event->oldPos());

@@ -34,7 +34,7 @@ static int defaultButtonSize = 15;
 EdgeMenuToolBar * CreateLimitedDialogMenu()
 {
     EdgeMenuToolBar * toolbar = new EdgeMenuToolBar();
-
+    toolbar->setAttribute(Qt::WA_ShowWithoutActivating);
     QAction * clipboardAction = new QAction(toolbar);
     clipboardAction->setText("Clip...");
     clipboardAction->setName("Clipboard");

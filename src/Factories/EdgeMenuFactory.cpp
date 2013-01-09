@@ -49,6 +49,7 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * senderWidget)
     }
 
     toolbar = createdToolbars[classID];
+    toolbar->setAttribute(Qt::WA_ShowWithoutActivating);
     toolbar->setParent(senderWidget);
 
 

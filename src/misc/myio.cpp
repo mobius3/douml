@@ -289,7 +289,8 @@ const char * stringify(UmlOrderingKind k)
 
 const char * stringify(UmlCode c)
 {
-    switch (c) {
+    switch (c)
+    {
     case UmlAssociation:
         return "----";
 
