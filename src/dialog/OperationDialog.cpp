@@ -1266,7 +1266,8 @@ void OperationDialog::update_all_tabs(QWidget * w)
         if (isWritable)
             edname->setFocus();
     }
-    else if (w == cppTab) {
+    else if (w == cppTab)
+    {
         cpp_update_decl();
         cpp_update_def();
 
@@ -4548,7 +4549,7 @@ void OperationDialog::force_param(int rank, bool recompute)
             cppTab->ui->edCppDeclProto->setText(s);
         }
         else if (recompute) {
-            replace_param(s, rank, theo);
+            replace_param(s, rank, theo + QString(v));
             cppTab->ui->edCppDeclProto->setText(s);
         }
 
@@ -5070,7 +5071,7 @@ void ParamsTable::value_changed(int row, int col)
     if ((row == (numRows() - 1)) && (col != 0) && !text(row, col).isEmpty())
         insert_row_after(row);
 
-    if ((col <= 2) && (!text(row, 1).isEmpty() || !text(row, 2).isEmpty()))
+    if ((col <= 3) && (!text(row, 1).isEmpty() || !text(row, 2).isEmpty()))
         dialog->force_param(row, col != 1);
 }
 

@@ -81,7 +81,7 @@ EdgeMenuToolBar * CreateLimitedDialogMenu()
 EdgeMenuToolBar * CreateClassDialogMenu()
 {
     EdgeMenuToolBar * toolbar = new EdgeMenuToolBar();
-//    /toolbar->setWindowFlags(Qt::Tool);
+    //toolbar->setWindowFlags(Qt::Tool);
 
     QAction * clipboardAction = new QAction(toolbar);
     clipboardAction->setName("Clipboard");

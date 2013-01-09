@@ -92,10 +92,18 @@ SOURCES          = util.cpp activity.cpp state.cpp instance.cpp \
         ../Tools/UmlBaseTypeSpec.cpp \
         ../Tools/UmlBaseParameter.cpp \
         ../Tools/UmlBaseView.cpp \
-        ../Tools/UmlBaseClassInstance.cpp
+        ../Tools/UmlBaseClassInstance.cpp \
+    ../Logging/QsLogDest.cpp \
+    ../Logging/QsLog.cpp \
+    ../Logging/QsDebugOutput.cpp
 
 TARGET          = plug_out_upgrade
 DEFINES          = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON
-INCLUDEPATH   = ../Tools ../PlugOutUpgrade
+INCLUDEPATH   = ../Tools ../PlugOutUpgrade ../
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+
+HEADERS += \
+    ../Logging/QsLogDest.h \
+    ../Logging/QsLog.h \
+    ../Logging/QsDebugOutput.h

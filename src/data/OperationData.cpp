@@ -164,7 +164,7 @@ void OperationData::PropagateFrom(const OperationData * model, bool goBack, QLis
 
     uml_visibility=model->uml_visibility;
     cpp_visibility=UmlDefaultVisibility;
-    is_abstract = model->is_abstract;
+    //is_abstract = model->is_abstract;
     force_body_gen = model->force_body_gen;
     is_volatile = model->is_volatile;
     cpp_const = model->cpp_const;

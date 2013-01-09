@@ -57,18 +57,18 @@ public:
 protected:
 
     //! called when user leaves the window
-    virtual void leaveEvent(QEvent * event);
+    void leaveEvent(QEvent * event);
 
     //! called when user enters the window
-    virtual void enterEvent(QEvent * event);
+    void enterEvent(QEvent * event) override;
 
-    virtual void closeEvent(QCloseEvent *) override;
+    void closeEvent(QCloseEvent *) override;
 
-    virtual void hideEvent(QHideEvent *) override;
+    void hideEvent(QHideEvent *) override;
 
-    void moveEvent(QMoveEvent *);
+    void moveEvent(QMoveEvent *) override;
 
-    virtual void focusOutEvent(QFocusEvent *) override;
+    void focusOutEvent(QFocusEvent *) override;
 
     //! called on window show()
     void showEvent(QShowEvent * event);
