@@ -87,10 +87,15 @@ ArtifactData::~ArtifactData()
 void ArtifactData::edit()
 {
     setName(browser_node->get_name());
-
-    ArtifactDialog::Instance(this)->show();
-    //dialog->setModal(true);
-    //dialog->show();
+    static  ArtifactDialog* dialog = nullptr;
+    QSize size;
+    if(dialog != nullptr)
+        size = dialog->size();
+    //ArtifactDialog::Instance(this)->hide();
+    //ArtifactDialog::Instance(this)->resize(ArtifactDialog::Instance(this)->sizeHint());
+    dialog = ArtifactDialog::Instance(this);
+    dialog->resize(size);
+    dialog->show();
     //(new ArtifactDialog(this))->show();
 }
 

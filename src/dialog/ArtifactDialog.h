@@ -144,11 +144,12 @@ protected:
 public:
     ArtifactDialog(ArtifactData * nd);
     virtual ~ArtifactDialog();
-    static QSharedPointer<ArtifactDialog> Instance(ArtifactData *);
+    static ArtifactDialog* Instance(ArtifactData *);
 
 protected slots:
     virtual void polish();
     virtual void accept();
+    virtual void reject();
     void default_description();
     void edit_description();
     void edStereotypeActivated(const QString &);

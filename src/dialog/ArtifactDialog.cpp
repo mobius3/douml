@@ -57,7 +57,7 @@
 #include "misc/TypeIdentifier.h"
 
 QSize ArtifactDialog::previous_size;
-static QSharedPointer<ArtifactDialog> instance;
+static QScopedPointer<ArtifactDialog> instance;
 ArtifactDialog::ArtifactDialog(ArtifactData * nd)
     : EdgeMenuDialog(0, 0, FALSE), data(nd)
 {
@@ -111,13 +111,13 @@ void ArtifactDialog::polish()
 
 ArtifactDialog::~ArtifactDialog()
 {
-    //data->browser_node->edit_end();
+    data->browser_node->edit_end();
     previous_size = size();
 
     while (!edits.isEmpty())
         edits.take(0)->close();
 
-    //close_dialog(this);
+    close_dialog(this);
 }
 
 void ArtifactDialog::init_uml_tab()
@@ -1958,15 +1958,24 @@ void ArtifactDialog::accept()
         bn->package_modified();
         data->modified();
 
+        BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
+        bn->edit_end();
         Q3TabDialog::accept();
     }
 }
-QSharedPointer<ArtifactDialog> ArtifactDialog::Instance(ArtifactData * nd)
+
+void ArtifactDialog::reject()
+{
+    BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
+    bn->edit_end();
+    Q3TabDialog::accept();
+}
+ArtifactDialog* ArtifactDialog::Instance(ArtifactData * nd)
 {
     //since the dialog is not yet fixed to be called multiple times we do recreation
     //if(instance.isNull())
-    instance = QSharedPointer<ArtifactDialog>(new ArtifactDialog(nd));
+    instance.reset(new ArtifactDialog(nd));
     //else
     //instance->FillGuiElements(cl);
-    return instance;
+    return instance.data();
 }

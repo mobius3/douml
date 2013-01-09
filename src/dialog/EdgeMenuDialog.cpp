@@ -26,7 +26,8 @@
 #include "browser/BrowserNode.h"
 #include "Logging/QsLog.h"
 #include "Factories/EdgeMenuFactory.h"
-
+#include "QApplication"
+#include "QDesktopWidget"
 unsigned int ClosestEdge(QWidget * widget, QPoint position)
 {
     QPoint widgetGlobalOrigin = widget->mapToGlobal(QPoint());
@@ -124,7 +125,10 @@ void EdgeMenuDialog::focusOutEvent(QFocusEvent *)
 void EdgeMenuDialog::showEvent(QShowEvent * )
 {
     An<EdgeMenuFactory> factory;
-    this->move(QCursor::pos().x() + 15, QCursor::pos().y());
+    int yPos = QCursor::pos().y();
+    if((QApplication::desktop()->height() - QCursor::pos().y()) < this->height())
+        yPos=(QApplication::desktop()->height() - this->height() - 120);
+    this->move(QCursor::pos().x() + 15, yPos);
     factory->SpawnEdgeMenu(this->TypeID(), this, QCursor::pos());
     this->setFocus();
 }
@@ -350,3 +354,4 @@ void EdgeMenuDialog::ChangeTab(int delta)
 
     tabBar()->setCurrentIndex(currentTab);
 }
+

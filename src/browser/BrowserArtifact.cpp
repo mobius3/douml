@@ -763,10 +763,22 @@ void BrowserArtifact::apply_shortcut(QString s)
 
 void BrowserArtifact::open(bool force_edit)
 {
-    if (!force_edit &&
-        (associated_diagram != 0) &&
-        !associated_diagram->deletedp())
-        associated_diagram->open(FALSE);
+
+    if (!force_edit )
+    {
+        if(associated_diagram != 0)
+        {
+            bool deletedDigram = associated_diagram->deletedp();
+            if(!deletedDigram)
+            {
+                associated_diagram->open(FALSE);
+            }
+            else if (!is_edited)
+                def->edit();
+        }
+        else if (!is_edited)
+            def->edit();
+    }
     else if (!is_edited)
         def->edit();
 }

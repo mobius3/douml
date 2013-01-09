@@ -32,18 +32,6 @@ void ConnectToClassDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar)
 
     MultiPurposeDragArea * dragArea = qobject_cast<MultiPurposeDragArea *>(toolbar->findChild<MultiPurposeDragArea *>("DragArea"));
     QObject::connect(dragArea, SIGNAL(changeTab(int)), dialog, SLOT(OnChangeTab(int)));
-    QObject::connect(dragArea, SIGNAL(initiateMove(QPoint)), dialog, SLOT(OnInitiateMove(QPoint)));
-    QObject::connect(dragArea, SIGNAL(initiateResize(QPoint)), dialog, SLOT(OnInitiateResize(QPoint)));
-    QObject::connect(dragArea, SIGNAL(newCoordinates(QPoint)), dialog, SLOT(OnNewCoordinatesReceived(QPoint)));
-
-    QObject::connect(dragArea, SIGNAL(initiateMove(QPoint)), toolbar, SLOT(OnInitiateMove(QPoint)));
-    QObject::connect(dragArea, SIGNAL(initiateResize(QPoint)), toolbar, SLOT(OnInitiateResize(QPoint)));
-    QObject::connect(dragArea, SIGNAL(newCoordinates(QPoint)), toolbar, SLOT(OnNewCoordinatesReceived(QPoint)));
-    QObject::connect(dragArea, SIGNAL(endResize()), toolbar, SLOT(OnEndResize()));
-    QObject::connect(dragArea, SIGNAL(endMove()), toolbar, SLOT(OnEndMove()));
-    QObject::connect(dialog, SIGNAL(lostFocus()), toolbar, SLOT(OnDialogLostFocus()));
-    QObject::connect(dialog, SIGNAL(repositionMenu(QPoint)), toolbar, SLOT(OnMenuRepositionRequested(QPoint)));
-
 
     QPushButton * pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("NextElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(OnPickNextSibling()));
@@ -53,7 +41,7 @@ void ConnectToClassDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar)
 
     ConnectToLimitedtDialog(dialog, toolbar);
 
-    dialog->ConnectionToToolBarEstablished();
+//    /dialog->ConnectionToToolBarEstablished();
 }
 
 
@@ -68,9 +56,24 @@ void ConnectToLimitedtDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar)
     QObject::connect(pageButton, SIGNAL(clicked()), toolbar, SLOT(close()));
     pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("CancelElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), toolbar, SLOT(close()));
-    dialog->ConnectionToToolBarEstablished();
+
+    MultiPurposeDragArea * dragArea = qobject_cast<MultiPurposeDragArea *>(toolbar->findChild<MultiPurposeDragArea *>("DragArea"));
+    QObject::connect(dragArea, SIGNAL(initiateMove(QPoint)), dialog, SLOT(OnInitiateMove(QPoint)));
+    QObject::connect(dragArea, SIGNAL(initiateResize(QPoint)), dialog, SLOT(OnInitiateResize(QPoint)));
+    QObject::connect(dragArea, SIGNAL(newCoordinates(QPoint)), dialog, SLOT(OnNewCoordinatesReceived(QPoint)));
+
+    QObject::connect(dragArea, SIGNAL(initiateMove(QPoint)), toolbar, SLOT(OnInitiateMove(QPoint)));
+    QObject::connect(dragArea, SIGNAL(initiateResize(QPoint)), toolbar, SLOT(OnInitiateResize(QPoint)));
+    QObject::connect(dragArea, SIGNAL(newCoordinates(QPoint)), toolbar, SLOT(OnNewCoordinatesReceived(QPoint)));
+
+    QObject::connect(dragArea, SIGNAL(endResize()), toolbar, SLOT(OnEndResize()));
+    QObject::connect(dragArea, SIGNAL(endMove()), toolbar, SLOT(OnEndMove()));
+    QObject::connect(dialog, SIGNAL(lostFocus()), toolbar, SLOT(OnDialogLostFocus()));
+    QObject::connect(dialog, SIGNAL(repositionMenu(QPoint)), toolbar, SLOT(OnMenuRepositionRequested(QPoint)));
 
     QAction * clipAction = qobject_cast<QAction *>(toolbar->findChild<QAction *>("Clipboard"));
     QObject::connect(clipAction, SIGNAL(triggered()), toolbar, SLOT(OnClipboardRequested()));
+    dialog->ConnectionToToolBarEstablished();
+
 
 }
