@@ -3799,7 +3799,10 @@ void GenerationSettings::read(char *& st, char *& k)
         cpp_set_visibility = ::visibility(k);
 
         read_keyword(st, "cpp_default_operation_declaration");
-        cpp_oper_decl = read_string(st);
+        WrapperStr cpp_oper_decl_temp(read_string(st));
+        if(FILEFORMAT > 77 &&
+                (cpp_oper_decl_temp.operator QString()).contains("{final}"))
+        cpp_oper_decl = cpp_oper_decl_temp;
         read_keyword(st, "cpp_default_operation_definition");
         cpp_oper_def = read_string(st);
         k = read_keyword(st);

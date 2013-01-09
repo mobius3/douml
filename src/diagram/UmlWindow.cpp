@@ -667,7 +667,8 @@ void UmlWindow::projectMenuAboutToShow()
         QString whats = TR("to open this project.<br><br>The historic is saved in <i>%1</i>",
                            homeDir().absFilePath(".bouml"));
 
-        for (unsigned i(0); i < historic.size(); ++i) {
+        for (unsigned i(0); i < historic.size(); ++i)
+        {
             id = projectMenu->insertItem(historic.at(i), this, SLOT(historicActivated(int)));
             projectMenu->setItemParameter(id, i);
             projectMenu->setWhatsThis(id, whats);
@@ -680,9 +681,10 @@ void UmlWindow::projectMenuAboutToShow()
 
 void UmlWindow::historicActivated(int id)
 {
-    bool idExists = id >= historic.size() || id <= 0;
+    bool idExists = id <= historic.size() && id >= 0;
 
-    if (!idExists) {
+    if (!idExists)
+    {
         statusBar()->message(TR("Loading aborted as supplied project id is out of history array bounds"), 2000);
         return;
     }

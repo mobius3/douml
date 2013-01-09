@@ -1401,8 +1401,14 @@ BrowserNode * BrowserClass::add_inherited_operation(BrowserOperation * model)
 {
     BrowserOperation * oper = new BrowserOperation(model, this);
     BrowserClass* modelContainer = static_cast<BrowserClass*>(model->get_container(UmlClass));
-    ((OperationData *) oper->get_data())->set_is_abstract(0);
-    ((OperationData *) oper->get_data())->set_origin_class(modelContainer->full_name());
+    OperationData* data = (OperationData *) oper->get_data();
+    if(data->get_is_abstract())
+    {
+        data->set_is_abstract(0);
+        data->set_cppdef(data->default_cpp_def(oper->get_name()));
+
+    }
+    data->set_origin_class(modelContainer->full_name());
     setOpen(TRUE);
     def->modified();
     package_modified();

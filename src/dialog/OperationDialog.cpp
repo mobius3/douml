@@ -1384,7 +1384,8 @@ void OperationDialog::default_toggled(bool on)
 
 void OperationDialog::cpp_default_decl()
 {
-    if (oper->is_get_or_set) {
+    if (oper->is_get_or_set)
+    {
         Q3CString decl;
         Q3CString def;
 
@@ -1398,7 +1399,8 @@ void OperationDialog::cpp_default_decl()
                                     set_of_attr->get_cppdecl(),
                                     set_of_attr->get_isa_const_attribute(),
                                     set_of_attr->get_multiplicity());
-        else if (get_of_rel != 0) {
+        else if (get_of_rel != 0)
+        {
             if (is_rel_a)
                 oper->update_cpp_get_of(decl, def, get_of_rel->get_role_a(),
                                         get_of_rel->get_cppdecl_a(),
@@ -1426,7 +1428,8 @@ void OperationDialog::cpp_default_decl()
 
         cppTab->ui->edCppDeclProto->setText(decl);
     }
-    else {
+    else
+    {
         QString s = oper->default_cpp_decl(edname->text().stripWhiteSpace());
 
         GenerationSettings::set_cpp_return_type(the_type(edreturn_type->currentText()

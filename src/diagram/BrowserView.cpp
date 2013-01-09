@@ -62,7 +62,7 @@ BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent)
     mousePressed = FALSE;
 
     setSorting(-1);		// manual sorting
-    setSelectionMode(Q3ListView::Extended);
+    setSelectionMode(Q3ListView::Single);
     addColumn(TR("browser          "));
     setTreeStepSize(18);
     //setSelectionMode(Extended);	// multi selection

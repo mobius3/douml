@@ -272,6 +272,7 @@ public:
     const char * get_cppdef() const {
         return cpp_def;
     };
+    void set_cppdef(QString value){cpp_def = value;}
     QString default_cpp_decl(const QString & name);
     QString default_cpp_def(const QString & name);
 
