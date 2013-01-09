@@ -30,6 +30,7 @@
 void ConnectToClassDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar)
 {
 
+
     MultiPurposeDragArea * dragArea = qobject_cast<MultiPurposeDragArea *>(toolbar->findChild<MultiPurposeDragArea *>("DragArea"));
     QObject::connect(dragArea, SIGNAL(changeTab(int)), dialog, SLOT(OnChangeTab(int)));
 
@@ -74,6 +75,5 @@ void ConnectToLimitedtDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar)
     QAction * clipAction = qobject_cast<QAction *>(toolbar->findChild<QAction *>("Clipboard"));
     QObject::connect(clipAction, SIGNAL(triggered()), toolbar, SLOT(OnClipboardRequested()));
     dialog->ConnectionToToolBarEstablished();
-
-
+    //toolbar->setParent(dialog);
 }

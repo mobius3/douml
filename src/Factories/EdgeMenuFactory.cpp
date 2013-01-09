@@ -49,6 +49,7 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * senderWidget)
     }
 
     toolbar = createdToolbars[classID];
+    toolbar->setParent(senderWidget);
 
 
     int trueOrientation = ClosestEdge(senderWidget, QCursor::pos());
@@ -96,11 +97,12 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * senderWidget)
         point.setY(point.y() - toolBarIconHeight / 2);
     }
 
+    QPoint movePoint = senderWidget->mapFromGlobal(point);
     toolbar->move(point);
     toolbar->resize(toolbar->sizeHint());
 
     if (!toolbar->isVisible()) {
-        toolbar->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+        toolbar->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool);
         toolbar->setAttribute(Qt::WA_ShowWithoutActivating);
         toolbar->show();
     }

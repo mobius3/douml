@@ -111,7 +111,7 @@ void ArtifactDialog::polish()
 
 ArtifactDialog::~ArtifactDialog()
 {
-    data->browser_node->edit_end();
+    //data->browser_node->edit_end();
     previous_size = size();
 
     while (!edits.isEmpty())
