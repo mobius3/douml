@@ -212,6 +212,9 @@ public:
     bool get_cpp_final() const {
         return cpp_final;
     };
+    QString get_cpp_name_spec() const {
+        return cpp_name_spec;
+    };
 
     bool get_java_final() const {
         return java_final;
@@ -247,6 +250,9 @@ public:
     void set_return_type(const AType & t);
 
     const char * get_param_name(int rank) const;
+    QStringList get_param_names() const;
+    QStringList get_param_types() const;
+    QStringList get_param_default_values() const;
     void set_param_name(int rank, const char * s);
     UmlParamDirection get_param_dir(int rank) const;
     void set_param_dir(int rank, UmlParamDirection d);

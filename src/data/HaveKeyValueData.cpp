@@ -75,6 +75,17 @@ void HaveKeyValueData::set_value(int rank, const char * v)
     keyvalues[rank].set_value(v);
 }
 
+int HaveKeyValueData::has_key(const char * v)
+{
+    unsigned index;
+
+    for (index = 0; index != nkeyvalues; index += 1)
+        if (strcmp(keyvalues[index].get_key(), v) == 0)
+            return index;
+
+    return -1;
+}
+
 void HaveKeyValueData::remove_key_value(unsigned index)
 {
     nkeyvalues -= 1;

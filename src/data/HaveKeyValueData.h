@@ -47,10 +47,12 @@ public:
     virtual ~HaveKeyValueData();
 
     const char * get_key(int rank) const;
+
     void set_key(int rank, const char * k);
     const char * get_value(int rank) const;
     const char * get_value(const char * k) const;
     void set_value(int rank, const char * v);
+    int has_key(const char*);
     unsigned get_n_keys() const {
         return nkeyvalues;
     };

@@ -751,6 +751,36 @@ const char * OperationData::get_param_name(int rank) const
     return params[rank].get_name();
 }
 
+QStringList OperationData::get_param_names() const
+{
+    QStringList result;
+    for(int i(0); i < nparams; i++)
+    {
+        result.append(params[i].get_name());
+    }
+    return result;
+}
+
+QStringList OperationData::get_param_types() const
+{
+    QStringList result;
+    for(int i(0); i < nparams; i++)
+    {
+        result.append(params[i].get_type().get_type());
+    }
+    return result;
+}
+
+QStringList OperationData::get_param_default_values() const
+{
+    QStringList result;
+    for(int i(0); i < nparams; i++)
+    {
+        result.append(params[i].get_default_value());
+    }
+    return result;
+}
+
 void OperationData::set_param_name(int rank, const char * str)
 {
     params[rank].set_name(str);

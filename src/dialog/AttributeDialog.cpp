@@ -1166,7 +1166,7 @@ QString AttributeDialog::cpp_decl(const BrowserAttribute * at, bool init,
         else if (*p == ';')
             break;
         else if (*p == '@')
-            manage_alias(at, p, s, 0);
+            manage_alias(at, p, s, static_cast<KeyValuesTable*>(0));
         else
             s += *p++;
     }
@@ -1446,7 +1446,7 @@ QString AttributeDialog::java_decl(const BrowserAttribute * at, bool init,
         else if (*p == ';')
             break;
         else if (*p == '@')
-            manage_alias(at, p, s, 0);
+            manage_alias(at, p, s, static_cast<KeyValuesTable*>(0));
         else
             s += *p++;
     }
@@ -1658,7 +1658,7 @@ QString AttributeDialog::php_decl(const BrowserAttribute * at, bool init,
         else if (*p == ';')
             break;
         else if (*p == '@')
-            manage_alias(at, p, s, 0);
+            manage_alias(at, p, s, static_cast<KeyValuesTable*>(0));
         else if (!strncmp(p, "${type}", 7)) {
             // for comment
             p += 7;
@@ -1835,7 +1835,7 @@ QString AttributeDialog::python_decl(const BrowserAttribute * at,
             while ((*p == ' ') || (*p == '\t'));
         }
         else if (*p == '@')
-            manage_alias(at, p, s, 0);
+            manage_alias(at, p, s, static_cast<KeyValuesTable*>(0));
         else
             s += *p++;
     }
@@ -2074,7 +2074,7 @@ QString AttributeDialog::idl_decl(const BrowserAttribute * at,
         else if ((*p == ';') || (in_enum && (*p == ',')))
             break;
         else if (*p == '@')
-            manage_alias(at, p, s, 0);
+            manage_alias(at, p, s, static_cast<KeyValuesTable*>(0));
         else
             s += *p++;
     }

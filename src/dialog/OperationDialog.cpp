@@ -1551,6 +1551,7 @@ void OperationDialog::cpp_edit_param_decl()
         msg_warning("Bouml", TR("wrong specification"));
 }
 
+
 void OperationDialog::manage_cpp_type(unsigned rank, QString & s)
 {
     if (rank < table->nparams())
@@ -1575,7 +1576,8 @@ void OperationDialog::manage_var(unsigned rank, QString & s)
 
 QString OperationDialog::compute_name(LineEdit * spec)
 {
-    if (spec->isVisible()) {
+    if (spec->isVisible())
+    {
         QString s = spec->text().stripWhiteSpace();
         int index;
 
@@ -1606,13 +1608,16 @@ void OperationDialog::manage_init(unsigned rank, QString & s)
     }
 }
 
+
+
 void OperationDialog::manage_cpp_exceptions(QString & s)
 {
     int index;
     int ne = etable->nexceptions();
     const char * sep = " throw (";
 
-    for (index = 0; index != ne; index += 1) {
+    for (index = 0; index != ne; index += 1)
+    {
         s += sep;
         s += GenerationSettings::cpp_type(type(etable->type(index), list, nodes));
         sep = ", ";
@@ -1658,7 +1663,8 @@ void OperationDialog::cpp_update_decl()
     QString currentTag;
 
     for (;;) {
-        if (*p == 0) {
+        if (*p == 0)
+        {
             if (pp == 0)
                 break;
 
@@ -1789,13 +1795,13 @@ void OperationDialog::cpp_update_decl()
             p += currentTag.length() + 3;
 
             if (cppTab->ui->cbCppDefaulted->isChecked())
-                s += " " + currentTag;
+                s += " = " + currentTag;
         }
         else if (compareTagToBuffer("delete")) {
             p += currentTag.length() + 3;
 
             if (cppTab->ui->cbCppDeleted->isChecked())
-                s += " " + currentTag;
+                s += " = " + currentTag;
         }
         else if (compareTagToBuffer("override")) {
             p += currentTag.length() + 3;
@@ -1927,7 +1933,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
                  ((*p == ':') && afterparams))
             break;
         else if (*p == '@')
-            manage_alias(op, p, s, 0);
+            manage_alias(op, p, s, static_cast<KeyValuesTable*>(0));
         else
             s += *p++;
     }
@@ -2268,6 +2274,7 @@ void OperationDialog::cpp_update_def()
             s += indent;
 
         for (;;) {
+
             if (*p == 0) {
                 if (pp == 0)
                     break;
@@ -2816,7 +2823,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
         else if ((*p == '{') || (*p == ';'))
             break;
         else if (*p == '@')
-            manage_alias(op, p, s, 0);
+            manage_alias(op, p, s,static_cast<KeyValuesTable*>(0));
         else
             s += *p++;
     }
@@ -3162,7 +3169,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         else if ((*p == '{') || (*p == ';'))
             break;
         else if (*p == '@')
-            manage_alias(op, p, s, 0);
+            manage_alias(op, p, s, static_cast<KeyValuesTable*>(0));
         else if (!strncmp(p, "${type}", 7)) {
             p += 7;
             s += get_php_name(d->return_type, mode);
@@ -3214,7 +3221,10 @@ void OperationDialog::SaveData()
         QPushButton* above = msg.addButton(tr("Above"), QMessageBox::ActionRole);
         QPushButton* whole = msg.addButton(tr("Everywhere"), QMessageBox::ActionRole);
         QPushButton* dont = msg.addButton(tr("Do not propagate"), QMessageBox::ActionRole);
+        QPushButton* cancel = msg.addButton(tr("Cancel"), QMessageBox::ActionRole);
         msg.exec();
+        if(msg.clickedButton() != cancel)
+            return;
         if(msg.clickedButton() != dont)
             propagateThroughInheritance = true;
         if(msg.clickedButton() == above)
@@ -3902,7 +3912,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
             s += op->get_of_association().get_type();
         }
         else if (*p == '@')
-            manage_alias(op, p, s, 0);
+            manage_alias(op, p, s, static_cast<KeyValuesTable*>(0));
         else if (!strncmp(p, "${type}", 7)) {
             // probably in comment
             p += 7;
@@ -4302,7 +4312,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
         else if (*p == ';')
             break;
         else if (*p == '@')
-            manage_alias(op, p, s, 0);
+            manage_alias(op, p, s, static_cast<KeyValuesTable*>(0));
         else
             s += *p++;
     }
@@ -5353,6 +5363,36 @@ UmlParamDirection ParamsTable::dir(unsigned rank) const
 QString ParamsTable::value(unsigned rank) const
 {
     return text(rank, 3);
+}
+
+QStringList ParamsTable::all_types()
+{
+    QStringList result;
+    for(int i(1); i < nparams()+1; i++)
+    {
+        result.append(text(i, 1));
+    }
+    return result;
+}
+
+QStringList ParamsTable::all_names()
+{
+    QStringList result;
+    for(int i(1); i < nparams()+1; i++)
+    {
+        result.append(text(i, 2));
+    }
+    return result;
+}
+
+QStringList ParamsTable::all_values()
+{
+    QStringList result;
+    for(int i(1); i < nparams()+1; i++)
+    {
+        result.append(text(i, 3));
+    }
+    return result;
 }
 
 //

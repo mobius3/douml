@@ -586,7 +586,63 @@ void manage_alias(const BrowserNode * node,
         s += *p++;
 }
 
-//
+
+void manage_alias(const BrowserNode * node,
+                  const char *& p, QString & s,
+                  HaveKeyValueData * kvt)
+{
+    // p starts by '@'
+    const char * pclosed;
+
+    if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0))
+    {
+        static char st[256];
+        char * key = ((pclosed - p) > 255) ? new char[pclosed - p - 1] : st;
+        int keylen = pclosed - p - 2;
+
+        strncpy(key, p + 2, keylen);
+        key[keylen] = 0;
+
+        if ((kvt != 0))
+        {
+            // find in dialog, insert the value
+            s += QString(kvt->get_value(key));
+        }
+        else {
+            const char * value = 0;
+            const BrowserNode * nd = (kvt != 0)
+                                     ? ((const BrowserNode *) node->parent())
+                                     : node;
+
+            while (nd != 0) {
+                if ((value = nd->get_value(key)) != 0)
+                    break;
+
+                nd = (BrowserNode *) nd->parent();
+            }
+
+            if (value != 0)
+                // find, insert the value
+                s += value;
+            else {
+                // not find, insert the key
+                s += "@{";
+                s += key;
+                s += "}";
+            }
+        }
+
+        // bypass the key
+        p += keylen + 3;
+
+        if (key != st)
+            delete [] key;
+    }
+    else
+        // bypass '@'
+        s += *p++;
+}
+
 
 static int msg_msg(QMessageBox::Icon icon,
                    QString caption, QString text,

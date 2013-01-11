@@ -85,6 +85,7 @@
 #include "ProfiledStereotypes.h"
 #include "translate.h"
 #include "RelationData.h"
+#include "menufactory.h"
 
 // Added for porting by lgfreitas
 #include <QChar>
@@ -544,13 +545,16 @@ void BrowserClass::InstallParentsMenuItems(Q3PopupMenu& inhopersubm)
 
 void BrowserClass::menu()
 {
+
     Q3PtrList<BrowserOperation> inheritedOperations = inherited_operations(sensible_amount_of_visible_entries);
-    Q3PopupMenu m(0);
+
     Q3PopupMenu gensubm(0);
     Q3PopupMenu roundtripm(0);
     Q3PopupMenu inhopersubm(0);
     Q3PopupMenu compsubm(0);
     Q3PopupMenu toolm(0);
+    MenuFactory builder(WrapperStr("Menu"));
+    Q3PopupMenu& m = builder.menu();
     bool isstereotype = (strcmp(def->get_stereotype(), "stereotype") == 0);
     bool ismetaclass = (strcmp(def->get_stereotype(), "metaclass") == 0);
     QString what = (isstereotype) ? "<i>stereotype</i>"
@@ -622,7 +626,6 @@ void BrowserClass::menu()
                                            TR("to redefine an inherited <i>operation</i> in the <i>class</i>"));
                         }
                     }
-
                     if (!isstereotype &&
                             !ismetaclass &&
                             strcmp(stereotype, "enum") &&
@@ -819,6 +822,12 @@ void BrowserClass::AddInheritedOperations(int rank)
     }
 }
 
+void BrowserClass::AddConstructorInitalizer()
+{
+
+
+}
+
 QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData * oper, QList<BrowserNode *> & passedNodes, bool goBack )
 {
     QList<OperationData*> result;
@@ -911,6 +920,7 @@ void BrowserClass::exec_menu_choice(int rank,
              (strcmp(def->get_stereotype(), "metaclass") == 0));
 
     switch (rank) {
+
     case add_attribute_index:
     case add_item_index: {
         BrowserAttribute * bn = (BrowserAttribute *) add_attribute(0, rank == add_item_index);

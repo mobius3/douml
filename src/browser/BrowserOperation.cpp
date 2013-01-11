@@ -36,6 +36,9 @@
 #include <QTextStream>
 #include <QPixmap>
 #include <QDropEvent>
+#include <functional>
+#include <tuple>
+#include <algorithm>
 
 #include "BrowserOperation.h"
 #include "BrowserAttribute.h"
@@ -54,6 +57,7 @@
 #include "GenerationSettings.h"
 #include "UmlPixmap.h"
 #include "UmlGlobal.h"
+#include "DialogUtil.h"
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
@@ -63,9 +67,14 @@
 #include "ProfiledStereotypes.h"
 #include "mu.h"
 #include "translate.h"
+#include "tagmanagement/cpptagmanagement.h"
+#include "ui/constructorinitializerdialog.h"
+#include "ui/ui_constructorinitializerdialog.h"
 
 IdDict<BrowserOperation> BrowserOperation::all(1021, __FILE__);
 QStringList BrowserOperation::its_default_stereotypes;	// unicode
+
+QString cpp_updated_def(OperationData* oper);
 
 BrowserOperation::BrowserOperation(int id)
     : BrowserNode(), Labeled<BrowserOperation>(all, id),
@@ -129,7 +138,7 @@ BrowserNode * BrowserOperation::duplicate(BrowserNode * p, QString n)
 
     // get_of/set_of re-updated later by post_duplicate
     if (((result->get_of = get_of) != 0) ||
-        ((result->set_of = set_of) != 0))
+            ((result->set_of = set_of) != 0))
         result->def->copy_getset(def);
 
     result->set_name(n);
@@ -163,7 +172,7 @@ void BrowserOperation::post_duplicate()
 
     for (child = parent()->firstChild(); child != 0; child = child->nextSibling()) {
         if ((((BrowserNode *) child)->get_type() == k) &&
-            !strcmp(((BrowserNode *) child)->get_name(), s)) {
+                !strcmp(((BrowserNode *) child)->get_name(), s)) {
             // this one
             (this->*set_x_of)((BrowserNode *) child);
             break;
@@ -211,6 +220,43 @@ bool BrowserOperation::delete_internal(QString &)
 
     return TRUE;
 }
+
+void BrowserOperation::AddConstructorInitalizer()
+{
+    ConstructorInitializerDialog ciDialog;
+    BrowserClass* container = static_cast<BrowserClass*>(get_container(UmlClass));
+    Q3PtrList<BrowserNode> parents = container->parents();
+    QString initializerDummy(" : ");
+    for(BrowserNode* parent : parents)
+    {
+        BrowserClass* parentClass = static_cast<BrowserClass*>(parent);
+        initializerDummy+=parentClass->get_name() + QString("(), ");
+    }
+    if(initializerDummy != " : ")
+        initializerDummy.chop(2);
+
+    QString constructorPrototype = static_cast<OperationData*>(this->get_data())->get_cppdef();
+
+    QString constructorActual = TagManagers::Cpp::updated_def(static_cast<OperationData*>(this->get_data()));
+    QString initializer(this->get_value("constructor-initializer"));
+    if(initializer.trimmed().isEmpty())
+        ciDialog.ui->edInitializer->setText(initializerDummy);
+    else
+        ciDialog.ui->edInitializer->setText(this->get_value("constructor-initializer"));
+    ciDialog.ui->edConstructorPrototype->setText(constructorPrototype);
+    ciDialog.ui->edActualConstructor->setText(constructorActual);
+    ciDialog.Init(static_cast<OperationData*>(this->get_data()));
+    if(ciDialog.exec() == QDialog::Accepted)
+    {
+        this->set_value("constructor-initializer", ciDialog.ui->edInitializer->toPlainText());
+        this->modified();
+        this->get_data()->get_browser_node()->modified();
+        this->get_data()->get_browser_node()->package_modified();
+    }
+}
+
+
+
 
 void BrowserOperation::renumber(int phase)
 {
@@ -278,7 +324,7 @@ BrowserOperation * BrowserOperation::new_one(QString s, BrowserNode * p)
 {
     OperationData * d = new OperationData();
     BrowserOperation * result =
-        new BrowserOperation(s, p, d, d->get_ident());
+            new BrowserOperation(s, p, d, d->get_ident());
 
     d->set_browser_node(result, TRUE);
 
@@ -442,8 +488,8 @@ QString BrowserOperation::get_of_name() const
     int index;
 
     return ((index = result.find(' ')) != -1)
-           ? result.left(index)
-           : result;
+            ? result.left(index)
+            : result;
 }
 
 AType BrowserOperation::get_of_association() const
@@ -532,6 +578,7 @@ void BrowserOperation::paintCell(QPainter * p, const QColorGroup & cg, int colum
 }
 
 static Q3PtrList<BrowserNode> ImplBy;
+static const int add_constructor_initializer = 35;
 
 void BrowserOperation::menu()
 {
@@ -548,27 +595,36 @@ void BrowserOperation::menu()
                 m.setWhatsThis(m.insertItem(TR("Up"), 20),
                                TR("to return to parent node"));
 
+            QString nameOfNode = ((BrowserNode *) parent())->get_name();
+            if(name == nameOfNode)
+                MenuFactory::addItem(m, TR("Add constructor initializer"),
+                                     add_constructor_initializer,
+                                     TR("to edit the <i>operation</i>,"
+                                        "a double click with the left mouse button does the same thing"));
+
+
+
             m.setWhatsThis(m.insertItem(TR("Edit"), 0),
                            TR("to edit the <i>operation</i>,"
                               "a double click with the left mouse button does the same thing"));
 
             if (GenerationSettings::cpp_get_default_defs() &&
-                (strstr(def->get_cppdef(), "${body}") != 0))
+                    (strstr(def->get_cppdef(), "${body}") != 0))
                 m.setWhatsThis(m.insertItem(TR("Edit C++ body"), 4),
                                TR("to edit the <i>operation</i> and its C++ body"));
 
             if (GenerationSettings::java_get_default_defs() &&
-                (strstr(def->get_javadef(), "${body}") != 0))
+                    (strstr(def->get_javadef(), "${body}") != 0))
                 m.setWhatsThis(m.insertItem(TR("Edit Java body"), 5),
                                TR("to edit the <i>operation</i> and its Java body"));
 
             if (GenerationSettings::php_get_default_defs() &&
-                (strstr(def->get_phpdef(), "${body}") != 0))
+                    (strstr(def->get_phpdef(), "${body}") != 0))
                 m.setWhatsThis(m.insertItem(TR("Edit Php body"), 6),
                                TR("to edit the <i>operation</i> and its Php body"));
 
             if (GenerationSettings::python_get_default_defs() &&
-                (strstr(def->get_pythondef(), "${body}") != 0))
+                    (strstr(def->get_pythondef(), "${body}") != 0))
                 m.setWhatsThis(m.insertItem(TR("Edit Python body"), 7),
                                TR("to edit the <i>operation</i> and its Python body"));
 
@@ -617,7 +673,7 @@ void BrowserOperation::menu()
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
-            Tool::menu_insert(&toolm, get_type(), 100)) {
+                Tool::menu_insert(&toolm, get_type(), 100)) {
             m.insertSeparator();
             m.insertItem(TR("Tool"), &toolm);
         }
@@ -695,8 +751,8 @@ void BrowserOperation::exec_menu_choice(int rank)
         }
     }
 
-    ImplBy.clear();
-    return;
+        ImplBy.clear();
+        return;
 
     case 10: {
         BrowserNode * bn = this;
@@ -719,8 +775,15 @@ void BrowserOperation::exec_menu_choice(int rank)
         BrowserView::select(get_container(UmlClass));
     }
 
-    ImplBy.clear();
-    return;
+    case add_constructor_initializer:
+    {
+        AddConstructorInitalizer();
+        return;
+    }
+
+
+        ImplBy.clear();
+        return;
 
     default:
         if (rank >= 99990)
@@ -863,7 +926,7 @@ void BrowserOperation::member_cpp_def(const QString & prefix,
 }
 
 void BrowserOperation::compute_referenced_by(Q3PtrList<BrowserNode> & l,
-        BrowserClass * target)
+                                             BrowserClass * target)
 {
     IdIterator<BrowserOperation> it(all);
 
@@ -894,10 +957,10 @@ QString BrowserOperation::python_init_self(BrowserNode * cl)
 
     for (child = cl->firstChild(); child; child = child->nextSibling()) {
         if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
-            !strcmp(((BrowserNode *) child)->get_name(), "__init__")) {
+                !strcmp(((BrowserNode *) child)->get_name(), "__init__")) {
             return (((BrowserOperation *) child)->def->get_n_params() != 0)
-                   ? ((BrowserOperation *) child)->def->get_param_name(0)
-                   : "self";
+                    ? ((BrowserOperation *) child)->def->get_param_name(0)
+                    : "self";
         }
     }
 
@@ -928,7 +991,7 @@ bool BrowserOperation::tool_cmd(ToolCom * com, const char * args)
             bn->write_id(com);
     }
 
-    return TRUE;
+        return TRUE;
 
     case getIdCmd:
         // not for a user, old plug-out
@@ -952,15 +1015,15 @@ void BrowserOperation::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 QString BrowserOperation::drag_key() const
 {
     return ((get_of == 0) && (set_of == 0))
-           ? QString::number(UmlOperation)
-           : QString::number(UmlOperation)
-           + "#" + QString::number((unsigned long) parent());
+            ? QString::number(UmlOperation)
+            : QString::number(UmlOperation)
+              + "#" + QString::number((unsigned long) parent());
 }
 
 QString BrowserOperation::drag_key(BrowserNode * p)
 {
     return QString::number(UmlOperation)
-           + "#" + QString::number((unsigned long) p);
+            + "#" + QString::number((unsigned long) p);
 }
 
 //
@@ -1024,13 +1087,13 @@ void BrowserOperation::save(QTextStream & st, bool ref, QString & warning)
         if ((get_of != 0) && !get_of->deletedp()) {
             nl_indent(st);
             st << ((get_of->get_type() == UmlAttribute) ? "get_of_attribute "
-                   : "get_of_relation ");
+                                                        : "get_of_relation ");
             get_of->save(st, TRUE, warning);
         }
         else if ((set_of != 0) && !set_of->deletedp()) {
             nl_indent(st);
             st << ((set_of->get_type() == UmlAttribute) ? "set_of_attribute "
-                   : "set_of_relation ");
+                                                        : "set_of_relation ");
             set_of->save(st, TRUE, warning);
         }
 
@@ -1053,13 +1116,13 @@ BrowserOperation * BrowserOperation::read_ref(char *& st)
     BrowserOperation * result = all[id];
 
     return (result == 0)
-           ? new BrowserOperation(id)
-           : result;
+            ? new BrowserOperation(id)
+            : result;
 }
 
 BrowserOperation * BrowserOperation::read(char *& st, char * k,
-        BrowserNode * parent,
-        bool force)
+                                          BrowserNode * parent,
+                                          bool force)
 {
     BrowserOperation * result;
     int id;
@@ -1095,12 +1158,12 @@ BrowserOperation * BrowserOperation::read(char *& st, char * k,
         result->def->read(st, k);	// updates k
 
         result->is_read_only = !parent->is_writable() ||
-                               ((user_id() != 0) && result->is_api_base());
+                ((user_id() != 0) && result->is_api_base());
 
         result->def->set_browser_node(result, FALSE);
 
         if (!strcmp(k, "get_of_attribute") ||
-            !strcmp(k, "get_of_attribut")) {
+                !strcmp(k, "get_of_attribut")) {
             BrowserAttribute * att = BrowserAttribute::read_ref(st);
 
             if (att != 0)

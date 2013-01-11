@@ -139,7 +139,10 @@ public:
 
 protected:
     virtual bool delete_internal(QString & warning);
-};
 
+    void AddConstructorInitalizer();
+};
+extern bool CompareAgainstTag(QString & currentTag, QString tagToCompare, const char * p);
+extern bool insert_template(const QString & tm, const char *& p, QString & s, const QString & indent);
 #endif
 

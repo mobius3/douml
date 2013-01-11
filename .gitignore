@@ -101,3 +101,4 @@ include/Libs*
 *.blameresult
 ui_*.h
 src/ui/ui_*.h
+*.b

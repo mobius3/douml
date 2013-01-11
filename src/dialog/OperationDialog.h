@@ -400,6 +400,10 @@ public:
     UmlParamDirection dir(unsigned rank) const;
     QString value(unsigned rank) const;
 
+    QStringList all_types();
+    QStringList all_names();
+    QStringList all_values();
+
 protected slots:
     void button_pressed(int row, int col, int button, const QPoint & mousePos);
     void value_changed(int row, int col);

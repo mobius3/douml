@@ -1,7 +1,7 @@
 TEMPLATE    = app
 INCLUDEPATH    += src/browser src/data src/diagram src/dialog src/misc src/tool src/xpm
 DEPENDPATH += src/browser src/data src/diagram src/dialog src/misc src/tool src/xpm
-INCLUDEPATH += src
+INCLUDEPATH += src/boost src
 CONFIG        += qt warn_on debug
 HEADERS        = \
         src/data/ActualParamData.h \
@@ -219,6 +219,8 @@ HEADERS        = \
         src/CustomWidgets/MultiPurposeDragArea.h \
         src/misc/ClipboardManager.h \
         src/ui/operationwidgetcpp.h \
+    src/ui/constructorinitializerdialog.h \
+    src/tagmanagement/cpptagmanagement.h
 
 
 SOURCES = \
@@ -493,7 +495,9 @@ SOURCES = \
         src/CustomWidgets/MultiPurposeDragArea.cpp \
         src/CustomWidgets/EdgeMenuToolBar.cpp \
         src/misc/ClipboardManager.cpp \
-        src/ui/operationwidgetcpp.cpp
+        src/ui/operationwidgetcpp.cpp \
+    src/ui/constructorinitializerdialog.cpp \
+    src/tagmanagement/cpptagmanagement.cpp
 
 TARGET        = douml
 DEFINES         = BooL=bool DEBUGCOM
@@ -523,4 +527,5 @@ RESOURCES += \
     src/icons.qrc
 
 FORMS += \
-    src/ui/operationwidgetcpp.ui
+    src/ui/operationwidgetcpp.ui \
+    src/ui/constructorinitializerdialog.ui

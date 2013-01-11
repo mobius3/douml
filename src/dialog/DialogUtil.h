@@ -45,6 +45,7 @@ class UmlCanvas;
 class BodyDialog;
 class BrowserNode;
 class KeyValuesTable;
+class HaveKeyValueData;
 
 // a push button without magin
 class SmallPushButton : public QPushButton
@@ -131,6 +132,8 @@ extern QString get_idl_name(const AType,
 
 extern void manage_alias(const BrowserNode * node, const char *& p,
                          QString & s, KeyValuesTable *);
+extern void manage_alias(const BrowserNode * node, const char *& p,
+                         QString & s, HaveKeyValueData *);
 
 extern int msg_warning(QString caption, QString text,
                        int button0 = QMessageBox::Ok,
