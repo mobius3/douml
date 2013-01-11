@@ -302,8 +302,7 @@ QString updated_def(OperationData* oper)
         bool re_template;
         SetupManagerStruct(tempStruct, oper, tempStruct.indent, templates, re_template);
 
-        using namespace TagManagers::Cpp;
-        HashSymbol(tempStruct);
+        TagManagers::Cpp::HashSymbol(tempStruct);
 
         QHash<QString, TagManagers::TagData> extractors;
         extractors.insert(QString("$"), {QString("${"), QString("}")});
@@ -312,18 +311,20 @@ QString updated_def(OperationData* oper)
 
         forever
         {
-            if(!NullValue(tempStruct, re_template, templates, tempStruct.indent))
+            if(!TagManagers::Cpp::NullValue(tempStruct, re_template, templates, tempStruct.indent))
                 break;
 
             tempStruct.currentTag = QString();
-            ExtractTag(tempStruct, extractors);
-            QString generalizedTag = GeneralizeNumbered(tempStruct.currentTag);
-            QLOG_INFO() << generalizedTag;
+            TagManagers::Cpp::ExtractTag(tempStruct, extractors);
+            // GeneralizeNumbered below changes t/p/v{number} into t/p/v.
+            // Obviously, I have no desire to riddle tagProcessor with keys like t1,t2,t3,...
+            QString generalizedTag = TagManagers::Cpp::GeneralizeNumbered(tempStruct.currentTag);
+            //QLOG_INFO() << generalizedTag;
             if(tempStruct.tagProcessor.contains(generalizedTag))
                 tempStruct.tagProcessor[generalizedTag]();
             else
                 tempStruct.s += *tempStruct.p++;
-            QLOG_INFO() << QString(tempStruct.s);
+            //QLOG_INFO() << QString(tempStruct.s);
         }
     }
     return QString(tempStruct.s);

@@ -2,9 +2,7 @@
 #define CONSTRUCTORINITIALIZERDIALOG_H
 
 #include <QDialog>
-//#include "EdgeMenuDialog.h"
 #include "dialog/edgemenudialogqt4.h"
-//#include "dialogsubclass.h"
 class OperationData;
 namespace Ui {
 class ConstructorInitializerDialog;

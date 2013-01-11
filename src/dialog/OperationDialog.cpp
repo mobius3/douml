@@ -664,7 +664,7 @@ void OperationDialog::init_php()
 {
     Q3Grid * grid;
     Q3HBox * htab = 0;
-    Q3ButtonGroup * bg;
+    Q3ButtonGroup * bgPhp;
 
     grid = new Q3Grid(2, this);
     phptab = grid;
@@ -676,7 +676,7 @@ void OperationDialog::init_php()
 
     bgPhp = new Q3ButtonGroup(2, Qt::Horizontal, QString(), grid);
 
-    phpfinal_cb = new QCheckBox("final", bg);
+    phpfinal_cb = new QCheckBox("final", bgPhp);
 
     connect(phpfinal_cb, SIGNAL(toggled(bool)), SLOT(php_final_toggled(bool)));
 

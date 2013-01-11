@@ -62,9 +62,6 @@ EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal ,
     isConnectedToToolBar = false;
     An<EdgeMenuFactory> factory;
     QObject::connect(this, SIGNAL(edgeMenuRequested(uint)), factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
-    //setMouseTracking(true);
-    //this->setWindowFlags(Qt::FramelessWindowHint );
-    //installEventFilter(this);
 }
 
 EdgeMenuDialog::~EdgeMenuDialog()

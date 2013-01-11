@@ -24,7 +24,6 @@
 #include "EdgeMenuFactory.h"
 #include "dialog/EdgeMenuDialog.h"
 #include "dialog/edgemenudialogqt4.h"
-#include "dialog/ClassDialog.h" //< todo Temporary
 #include "Factories/DialogConnections.h"
 #include "Factories/EdgeToolBarCreation.h"
 #include "CustomWidgets/EdgeMenuToolBar.h"

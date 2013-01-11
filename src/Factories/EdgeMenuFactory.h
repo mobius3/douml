@@ -69,9 +69,5 @@ private :
     QMap<uint, EdgeMenuToolBar *> createdToolbars;
     QMap<int, Orientationvariables> orientationSwitch;
 };
-
-
 BIND_TO_SELF_SINGLE(EdgeMenuFactory);
-
-
 #endif // EDGEMENUFACTORY_H

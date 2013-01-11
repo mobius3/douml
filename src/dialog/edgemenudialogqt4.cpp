@@ -26,7 +26,6 @@
 #include "Logging/QsLog.h"
 #include "Factories/EdgeMenuFactory.h"
 #include "QApplication"
-
 #include "QDesktopWidget"
 
 
@@ -37,9 +36,6 @@ EdgeMenuDialogQt4::EdgeMenuDialogQt4(QWidget * parent, Qt::WindowFlags f): QDial
     isConnectedToToolBar = false;
     An<EdgeMenuFactory> factory;
     QObject::connect(this, SIGNAL(edgeMenuRequested(uint)), factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
-    //setMouseTracking(true);
-    //this->setWindowFlags(Qt::FramelessWindowHint );
-    //installEventFilter(this);
 }
 
 EdgeMenuDialogQt4::~EdgeMenuDialogQt4()

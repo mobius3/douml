@@ -4,7 +4,6 @@
 #include "OperationData.h"
 #include "misc/TypeIdentifier.h"
 #include "tagmanagement/cpptagmanagement.h"
-#include "dialogsubclass.h"
 ConstructorInitializerDialog::ConstructorInitializerDialog(QWidget *parent) :
     EdgeMenuDialogQt4(parent),
     ui(new Ui::ConstructorInitializerDialog)
@@ -24,9 +23,6 @@ ConstructorInitializerDialog::~ConstructorInitializerDialog()
 void ConstructorInitializerDialog::Init(OperationData * _oper)
 {
     this->setWindowTitle(tr("Constructor-initializer setup"));
-//    ui->tvPossibleItems->setEnabled(false);
-//    ui->tvPossibleItems->hide();
-//    ui->lblAttributes->hide();
     oper = _oper;
     QString constructorPrototype = ui->edConstructorPrototype->toPlainText();
     if(!constructorPrototype.contains("@{constructor-initializer}"))
