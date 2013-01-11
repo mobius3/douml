@@ -23,6 +23,7 @@
 // *************************************************************************
 #include "EdgeMenuFactory.h"
 #include "dialog/EdgeMenuDialog.h"
+#include "dialog/edgemenudialogqt4.h"
 #include "dialog/ClassDialog.h" //< todo Temporary
 #include "Factories/DialogConnections.h"
 #include "Factories/EdgeToolBarCreation.h"
@@ -35,11 +36,10 @@
 
 void EdgeMenuFactory::OnEdgeMenuRequested(uint classID)
 {
-    EdgeMenuDialog * senderWidget = qobject_cast<EdgeMenuDialog *>(sender());
-    SpawnEdgeMenu(classID, senderWidget);
+    SpawnEdgeMenu(classID, dynamic_cast<EdgeMenuDialogBase*>(sender()));
 }
 
-void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * senderWidget)
+void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialogBase * sender)
 {
     EdgeMenuToolBar * toolbar;
 
@@ -50,10 +50,12 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * senderWidget)
 
     toolbar = createdToolbars[classID];
     toolbar->setAttribute(Qt::WA_ShowWithoutActivating);
-    toolbar->setParent(senderWidget);
+
+    QDialog* senderDialog = dynamic_cast<QDialog *>(sender);
+    toolbar->setParent(senderDialog);
 
 
-    int trueOrientation = ClosestEdge(senderWidget, QCursor::pos());
+    int trueOrientation = ClosestEdge(senderDialog, QCursor::pos());
     int orientation;
 
     // position 0 and 1 signify horizontal orientation
@@ -63,8 +65,15 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * senderWidget)
     else
         orientation = 2;
 
-    if (!senderWidget->IsConnectedToToolBar())
-        signalFunctors[classID](senderWidget, toolbar);
+    if (!sender->IsConnectedToToolBar())
+    {
+        EdgeMenuDialog * senderWidget = dynamic_cast<EdgeMenuDialog *>(sender);
+        EdgeMenuDialogQt4 * senderWidgetqt4 = dynamic_cast<EdgeMenuDialogQt4 *>(sender);
+        if(senderWidget)
+            signalFunctors[classID](senderWidget, toolbar);
+        else
+            signalFunctorsQt4[classID](senderWidgetqt4, toolbar);
+    }
 
     toolbar->setOrientation(static_cast<Qt::Orientation>(orientation));
     QPoint point = QCursor::pos();
@@ -75,7 +84,7 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * senderWidget)
 
     // if we are near the top
     if (trueOrientation == 0) {
-        int yFixup = senderWidget->frameGeometry().height() - senderWidget->height();
+        int yFixup = senderDialog->frameGeometry().height() - senderDialog->height();
         point.setY(point.y() - toolBarIconHeight - yFixup);
         point.setX(point.x() - toolBarIconWidth / 2);
     }
@@ -98,7 +107,7 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * senderWidget)
         point.setY(point.y() - toolBarIconHeight / 2);
     }
 
-    QPoint movePoint = senderWidget->mapFromGlobal(point);
+    QPoint movePoint = senderDialog->mapFromGlobal(point);
     toolbar->move(point);
     toolbar->resize(toolbar->sizeHint());
 
@@ -123,9 +132,11 @@ void EdgeMenuFactory::AddConnectionFunctor(uint classID, ConnectionFunctor funct
     }
 }
 
-void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialog * parent,  QPoint origin)
+void EdgeMenuFactory::AddConnectionFunctorQt4(uint classID, ConnectionFunctorQt4 functor)
 {
-    SpawnEdgeMenu(classID, parent);
+    if (!signalFunctorsQt4.contains(classID)) {
+        signalFunctorsQt4.insert(classID, functor);
+    }
 }
 
 EdgeMenuFactory::~EdgeMenuFactory()

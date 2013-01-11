@@ -31,28 +31,19 @@
 #include <QHash>
 #include <QMap>
 #include "CustomWidgets/MultiPurposeDragArea.h"
+#include "edgemenudialogbase.h"
 
 unsigned int ClosestEdge(QWidget *, QPoint);
 class BrowserNode;
 
 //! class contains some methods that make it possible to change
 //! the behaviour of Bruno's dialogs as non-intrusively as possible
-class EdgeMenuDialog : public Q3TabDialog
+class EdgeMenuDialog : public Q3TabDialog, public EdgeMenuDialogBase
 {
     Q_OBJECT
 public:
     EdgeMenuDialog(QWidget * parent = 0, const char * name = 0, bool modal = false, Qt::WindowFlags f = 0);
     virtual ~EdgeMenuDialog();
-
-
-    //! Returns if this dialog already has signal connections to some toolbar
-    //! if this function is not used the double(triple...) connections are created
-    //! and next/previous slots start beng called multiple times per click
-    bool IsConnectedToToolBar();
-    //! notifies dialog that connection has been established
-    void ConnectionToToolBarEstablished();
-    //! notifies dialog that connection has been broken
-    void BreakConnectionToToolBar();
 
 protected:
 
@@ -87,51 +78,20 @@ protected:
     //! dialogs that are not writable have slightly different element structure
     virtual void SetDialogMode(bool _isWritable);
 
-    //! if data contains unsaved changes this shoould pop up to warn the user
-    void ShowSaveDataWarning();
 
-    void IntitiateMove(QPoint);
-    void InitiateResize(QPoint);
-    void ResizeThis(QPoint, QPoint);
     void MoveThis(QPoint, QPoint);
     void ChangeTab(int);
 
-
-    //! return unique TypeId associated with each classs
-    //! crc on PRETTY_FUNCTION is basically used to create one
-    virtual uint TypeID() = 0;
-    //! Returns the current node associated with this dialog
-    virtual BrowserNode * GetCurrentNode();
-    //! Assigns a browser node(listview node effectively) to this dialog
-    void SetCurrentNode(BrowserNode *);
-
-    // these functions should be pure virtual in the end
-    //! Initializes GUI elements
-    virtual void InitGui();
-    //! fills GUI elements with values from a new BrowserNode
-    virtual void FillGuiElements(BrowserNode *);
-    //! Tells if there have been any changes in the data associated with the dialog
-    bool ContainsUnsavedChanges();
-    //! Called on accept() and saves GUI elements
-    virtual void SaveData();
-    //! Called on reject() and discards gui data
-    virtual void RejectData();
-
-
+    virtual void IntitiateMove(QPoint);
+    virtual void InitiateResize(QPoint);
+    virtual void ResizeThis(QPoint, QPoint);
 
     bool isWritable;
-    bool isConnectedToToolBar;
+
 
     int currentTab;
 
     QMap<QString, QWidget *> tabs;
-    BrowserNode * currentNode;
-    EWidgetModificationMode modificationMode;
-    QPoint modificationOrigin;
-    QPoint dialogOrigin;
-    QSize originalSize;
-
-
 
 signals:
     void edgeMenuRequested(uint);
@@ -148,5 +108,6 @@ public slots:
     virtual void OnNewCoordinatesReceived(QPoint);
     virtual void OnChangeTab(int);
 };
+
 
 #endif // EDGEMENUDIALOG_H

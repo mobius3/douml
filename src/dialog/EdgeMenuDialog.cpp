@@ -70,20 +70,6 @@ EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal ,
 EdgeMenuDialog::~EdgeMenuDialog()
 {}
 
-bool EdgeMenuDialog::IsConnectedToToolBar()
-{
-    return isConnectedToToolBar;
-}
-
-void EdgeMenuDialog::ConnectionToToolBarEstablished()
-{
-    isConnectedToToolBar = true;
-}
-
-void EdgeMenuDialog::BreakConnectionToToolBar()
-{
-    isConnectedToToolBar = false;
-}
 
 void EdgeMenuDialog::leaveEvent(QEvent * )
 {
@@ -134,7 +120,7 @@ void EdgeMenuDialog::showEvent(QShowEvent * )
     if((QApplication::desktop()->height() - QCursor::pos().y()) < this->height())
         yPos=(QApplication::desktop()->height() - this->height() - 120);
     this->move(QCursor::pos().x() + 15, yPos);
-    factory->SpawnEdgeMenu(this->TypeID(), this, QCursor::pos());
+    factory->SpawnEdgeMenu(this->TypeID(), dynamic_cast<EdgeMenuDialogBase*>(this));
     this->setFocus();
 }
 
@@ -170,80 +156,35 @@ void EdgeMenuDialog::SetDialogMode(bool /*_isWritable*/)
 
 }
 
+void EdgeMenuDialog::OnChangeTab(int delta)
+{
+    ChangeTab(delta);
+}
+
+
+void EdgeMenuDialog::ChangeTab(int delta)
+{
+    currentTab += delta;
+
+    if (currentTab > tabBar()->count())
+        currentTab = 0;
+
+    if (currentTab < 0)
+        currentTab = tabBar()->count() - 1;
+
+    tabBar()->setCurrentIndex(currentTab);
+}
+
 void EdgeMenuDialog::OnPickNextSibling()
 {
-    bool continueSearch = true;
-    BrowserNode * nextNode = 0;
-    BrowserNode * originalNode = GetCurrentNode();
-    BrowserNode * currentNode = originalNode;
-
-    while (continueSearch)
-    {
-        nextNode = dynamic_cast<BrowserNode *>(currentNode->itemAbove());
-        QLOG_INFO() << "CurrentNode is: "<< currentNode->get_name();
-
-        QLOG_INFO() << "NEXT: " << nextNode->get_name() << " " << nextNode->depth();
-        if (!nextNode)
-            break;
-
-        QLOG_INFO() << "NextNode is: "<< nextNode->get_name();
-        bool sameLevel = originalNode->depth() == nextNode->depth();
-
-        bool sameType = originalNode->get_stype() == nextNode->get_stype();
-
-        QLOG_INFO() << originalNode->get_stype();
-        QLOG_INFO() << nextNode->get_stype();
-        //        QLOG_INFO() << "NEXT: " << "Origin level : " << originalNode->depth();
-        //        QLOG_INFO() << "NEXT: " << "Current level : " << nextNode->depth();
-        if (sameLevel && sameType)
-            continueSearch = false;
-
-        currentNode = nextNode;
-    }
-
-    if (nextNode == 0)
-        return;
-
-    SaveData();
-    FillGuiElements(nextNode);
+    PickNextSibling();
 }
-
 void EdgeMenuDialog::OnPickPreviousSibling()
 {
-    bool continueSearch = true;
-    BrowserNode * previousNode = 0;
-    BrowserNode * originalNode = GetCurrentNode();
-    int originalDepth = originalNode->depth();
-    BrowserNode * currentNode = originalNode;
-
-    while (continueSearch)
-    {
-        QLOG_INFO() << "CurrentNode is: " << currentNode->get_name();
-        previousNode = dynamic_cast<BrowserNode *>(currentNode->itemBelow());
-
-        QLOG_INFO() << "Nodename is: " << previousNode->get_name() << " " << previousNode->depth();
-        if (!previousNode)
-            break;
-
-        QLOG_INFO() << "Previous Node is: "<< previousNode->get_name();
-        int previousDepth = previousNode->depth();
-        bool sameType = originalNode->get_stype() == previousNode->get_stype();
-        QLOG_INFO() << "PREVIOUS: " << "Origin level : " << originalDepth;
-        QLOG_INFO() << "PREVIOUS: " << "Current level : " << previousDepth;
-        bool sameLevel = originalDepth == previousDepth;
-
-        if (sameLevel && sameType)
-            continueSearch = false;
-
-        currentNode = previousNode;
-    }
-
-    if (previousNode == 0)
-        return;
-
-    SaveData();
-    FillGuiElements(previousNode);
+    PickPreviousSibling();
 }
+
+
 
 void EdgeMenuDialog::OnInitiateMove(QPoint origin)
 {
@@ -263,49 +204,6 @@ void EdgeMenuDialog::OnNewCoordinatesReceived(QPoint newPoint)
     if (modificationMode == wmm_resize)
         ResizeThis(modificationOrigin, newPoint);
 }
-
-void EdgeMenuDialog::OnChangeTab(int delta)
-{
-    ChangeTab(delta);
-}
-
-void EdgeMenuDialog::InitGui()
-{
-    //this is just a stub for dialogs that still do not have this function themselves
-}
-
-void EdgeMenuDialog::FillGuiElements(BrowserNode *)
-{
-    //this is just a stub for dialogs that still do not have this function themselves
-}
-
-bool EdgeMenuDialog::ContainsUnsavedChanges()
-{
-    return false;
-}
-
-void EdgeMenuDialog::SaveData()
-{
-    // this is reimplemented to do actual work in subclasses
-    // but since not all subclasses reimplement this as of now
-    // I can't make this pure virtual
-    // Therefore, I provide default implementation that does nothing instead
-}
-
-void EdgeMenuDialog::RejectData()
-{
-}
-
-void EdgeMenuDialog::SetCurrentNode(BrowserNode * node)
-{
-    currentNode = node;
-}
-
-BrowserNode * EdgeMenuDialog::GetCurrentNode()
-{
-    return currentNode;
-}
-
 void EdgeMenuDialog::IntitiateMove(QPoint origin)
 {
     modificationOrigin = origin;
@@ -315,7 +213,6 @@ void EdgeMenuDialog::IntitiateMove(QPoint origin)
                                    ));
     modificationMode = wmm_drag;
 }
-
 void EdgeMenuDialog::InitiateResize(QPoint origin)
 {
     modificationOrigin = origin;
@@ -323,6 +220,7 @@ void EdgeMenuDialog::InitiateResize(QPoint origin)
     originalSize = size();
     modificationMode = wmm_resize;
 }
+
 
 void EdgeMenuDialog::ResizeThis(QPoint origin, QPoint newPoint)
 {
@@ -346,17 +244,3 @@ void EdgeMenuDialog::MoveThis(QPoint origin, QPoint newPoint)
     this->move(newPoint - origin + dialogOrigin);
 
 }
-
-void EdgeMenuDialog::ChangeTab(int delta)
-{
-    currentTab += delta;
-
-    if (currentTab > tabBar()->count())
-        currentTab = 0;
-
-    if (currentTab < 0)
-        currentTab = tabBar()->count() - 1;
-
-    tabBar()->setCurrentIndex(currentTab);
-}
-

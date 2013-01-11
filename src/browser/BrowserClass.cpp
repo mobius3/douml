@@ -822,12 +822,6 @@ void BrowserClass::AddInheritedOperations(int rank)
     }
 }
 
-void BrowserClass::AddConstructorInitalizer()
-{
-
-
-}
-
 QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData * oper, QList<BrowserNode *> & passedNodes, bool goBack )
 {
     QList<OperationData*> result;

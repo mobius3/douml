@@ -246,6 +246,7 @@ void BrowserOperation::AddConstructorInitalizer()
     ciDialog.ui->edConstructorPrototype->setText(constructorPrototype);
     ciDialog.ui->edActualConstructor->setText(constructorActual);
     ciDialog.Init(static_cast<OperationData*>(this->get_data()));
+    ciDialog.resize(800, 400);
     if(ciDialog.exec() == QDialog::Accepted)
     {
         this->set_value("constructor-initializer", ciDialog.ui->edInitializer->toPlainText());

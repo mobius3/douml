@@ -31,9 +31,9 @@
 
 #include "misc/SingletonHolder.h"
 
-
-//#include <pair>
 class EdgeMenuDialog;
+class EdgeMenuDialogBase;
+class EdgeMenuDialogQt4;
 class EdgeMenuToolBar;
 
 struct Orientationvariables {
@@ -43,6 +43,7 @@ struct Orientationvariables {
 
 typedef std::function<EdgeMenuToolBar*()>  ToolbarFactory;
 typedef std::function<void(EdgeMenuDialog *, EdgeMenuToolBar *)>  ConnectionFunctor;
+typedef std::function<void(EdgeMenuDialogQt4 *, EdgeMenuToolBar *)>  ConnectionFunctorQt4;
 
 void ConnectToLimitedtDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar);
 void ConnectToClassDialog(EdgeMenuDialog * dialog, EdgeMenuToolBar * toolbar);
@@ -56,18 +57,20 @@ public:
 
     void AddFactory(uint, ToolbarFactory);
     void AddConnectionFunctor(uint, ConnectionFunctor);
-    void SpawnEdgeMenu(uint, EdgeMenuDialog *,  QPoint);
+    void AddConnectionFunctorQt4(uint, ConnectionFunctorQt4);
+    void SpawnEdgeMenu(uint, EdgeMenuDialogBase*);
 public slots:
     void OnEdgeMenuRequested(uint classID);
 
 private :
     QMap<uint, ToolbarFactory > factories;
     QMap<uint, ConnectionFunctor > signalFunctors;
+    QMap<uint, ConnectionFunctorQt4 > signalFunctorsQt4;
     QMap<uint, EdgeMenuToolBar *> createdToolbars;
     QMap<int, Orientationvariables> orientationSwitch;
-    void SpawnEdgeMenu(uint, EdgeMenuDialog *);
-
 };
+
+
 BIND_TO_SELF_SINGLE(EdgeMenuFactory);
 
 

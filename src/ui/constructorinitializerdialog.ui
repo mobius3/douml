@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>ConstructorInitializerDialog</class>
- <widget class="QDialog" name="ConstructorInitializerDialog">
+ <widget class="EdgeMenuDialogQt4" name="ConstructorInitializerDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>762</width>
-    <height>326</height>
+    <width>974</width>
+    <height>365</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -155,7 +155,7 @@ substitution:</string>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>253</width>
+       <width>256</width>
        <height>20</height>
       </size>
      </property>
@@ -163,6 +163,6 @@ substitution:</string>
    </item>
   </layout>
  </widget>
- <resources/>
+  <resources/>
  <connections/>
 </ui>

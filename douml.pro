@@ -1,7 +1,7 @@
 TEMPLATE    = app
 INCLUDEPATH    += src/browser src/data src/diagram src/dialog src/misc src/tool src/xpm
 DEPENDPATH += src/browser src/data src/diagram src/dialog src/misc src/tool src/xpm
-INCLUDEPATH += src/boost src
+INCLUDEPATH += src/boost src src/ui
 CONFIG        += qt warn_on debug
 HEADERS        = \
         src/data/ActualParamData.h \
@@ -220,7 +220,9 @@ HEADERS        = \
         src/misc/ClipboardManager.h \
         src/ui/operationwidgetcpp.h \
     src/ui/constructorinitializerdialog.h \
-    src/tagmanagement/cpptagmanagement.h
+    src/tagmanagement/cpptagmanagement.h \
+    src/dialog/edgemenudialogqt4.h \
+    src/dialog/edgemenudialogbase.h
 
 
 SOURCES = \
@@ -490,14 +492,15 @@ SOURCES = \
         src/Factories/EdgeMenuFactory.cpp \
         src/dialog/EdgeMenuDialog.cpp \
         src/misc/GenerateTypeId.cpp \
-        src/Factories/DialogConnections.cpp \
         src/Factories/EdgeToolBarCreation.cpp \
         src/CustomWidgets/MultiPurposeDragArea.cpp \
         src/CustomWidgets/EdgeMenuToolBar.cpp \
         src/misc/ClipboardManager.cpp \
         src/ui/operationwidgetcpp.cpp \
     src/ui/constructorinitializerdialog.cpp \
-    src/tagmanagement/cpptagmanagement.cpp
+    src/tagmanagement/cpptagmanagement.cpp \
+    src/dialog/edgemenudialogqt4.cpp \
+    src/dialog/edgemenudialogbase.cpp
 
 TARGET        = douml
 DEFINES         = BooL=bool DEBUGCOM
@@ -529,3 +532,4 @@ RESOURCES += \
 FORMS += \
     src/ui/operationwidgetcpp.ui \
     src/ui/constructorinitializerdialog.ui
+

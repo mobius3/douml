@@ -194,7 +194,6 @@ private:
     // some helpers
     void InstallParentsMenuItems(Q3PopupMenu &inhopersubm);
     void AddInheritedOperations(int rank);
-    void AddConstructorInitalizer();
 
 public:
     QList<OperationData*>  CollectSameThroughInheritance(OperationData*,  QList<BrowserNode*>&, bool goBack = true);

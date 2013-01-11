@@ -2,9 +2,11 @@
 #include "ui_constructorinitializerdialog.h"
 #include "BrowserOperation.h"
 #include "OperationData.h"
+#include "misc/TypeIdentifier.h"
 #include "tagmanagement/cpptagmanagement.h"
+#include "dialogsubclass.h"
 ConstructorInitializerDialog::ConstructorInitializerDialog(QWidget *parent) :
-    QDialog(parent),
+    EdgeMenuDialogQt4(parent),
     ui(new Ui::ConstructorInitializerDialog)
 {
     ui->setupUi(this);
@@ -48,6 +50,11 @@ void ConstructorInitializerDialog::reject()
 void ConstructorInitializerDialog::accept()
 {
     QDialog::accept();
+}
+
+uint ConstructorInitializerDialog::TypeID()
+{
+    return TypeIdentifier<ConstructorInitializerDialog>::id();
 }
 
 void ConstructorInitializerDialog::RegenerateConstructor()
