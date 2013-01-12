@@ -41,7 +41,7 @@
 #include "UmlChoicePseudoState.h"
 #include "UmlForkPseudoState.h"
 #include "UmlJoinPseudoState.h"
-#include "MiscGlobalCmd.h"
+#include "Tools/ApiCmd.h"
 //Added by qt3to4:
 #include <Q3CString>
 

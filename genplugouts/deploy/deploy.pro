@@ -404,6 +404,7 @@ SOURCES		= ./UmlBaseExpansionRegion.cpp \
 
 #The following line was inserted by qt3to4
 QT += network  qt3support
+INCLUDEPATH += ../../src
 CONFIG += qtestlib
 Release{
 

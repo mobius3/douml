@@ -4,8 +4,8 @@
 #include "PhpSettings.h"
 
 #include "UmlCom.h"
-#include "PhpSettingsCmd.h"
-#include "JavaSettingsCmd.h"
+//#include "Tools/ApiCmd.h"
+//#include "Tools/ApiCmd.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:
 #include <Q3CString>

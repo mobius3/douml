@@ -4,8 +4,8 @@
 #include "UmlDiagram.h"
 
 #include "UmlCom.h"
-#include "PackageGlobalCmd.h"
-#include "MiscGlobalCmd.h"
+//#include "Tools/ApiCmd.h"
+//#include "Tools/ApiCmd.h"
 //Added by qt3to4:
 #include <Q3CString>
 UmlPackage * UmlBasePackage::create(UmlPackage * parent, const char * name)

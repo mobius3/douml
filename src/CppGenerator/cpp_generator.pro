@@ -97,7 +97,7 @@ SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
         
 TARGET          = cpp_generator
 DEFINES          = WITHCPP BooL=bool TRACE
-INCLUDEPATH   = ../Tools ../CppGenerator
+INCLUDEPATH   = ../Tools ../CppGenerator ../
 
 
 #The following line was inserted by qt3to4

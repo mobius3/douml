@@ -8,8 +8,8 @@
 #include "UmlPackage.h"
 
 #include "UmlCom.h"
-#include "ClassGlobalCmd.h"
-#include "PackageGlobalCmd.h"
+#include "Tools/ApiCmd.h"
+#include "Tools/ApiCmd.h"
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>

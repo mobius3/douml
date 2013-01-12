@@ -56,7 +56,7 @@
 #include "UmlActivityPin.h"
 #include "UmlActivityControlNodeClasses.h"
 #include "UmlActivityPartition.h"
-#include "MiscGlobalCmd.h"
+#include "Tools/ApiCmd.h"
 #include "Logging/QsLog.h"
 //Added by qt3to4:
 #include <Q3CString>

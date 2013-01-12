@@ -5,7 +5,7 @@
 
 #include "UmlCom.h"
 #include "UmlSettings.h"
-#include "CppSettingsCmd.h"
+#include "Tools/ApiCmd.h"
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
 #include "Logging/QsLog.h"

@@ -55,7 +55,7 @@
 #include "UmlExpansionNode.h"
 #include "UmlActivityPin.h"
 #include "UmlActivityControlNodeClasses.h"
-#include "MiscGlobalCmd.h"
+#include "Tools/ApiCmd.h"
 //Added by qt3to4:
 #include <Q3CString>
 

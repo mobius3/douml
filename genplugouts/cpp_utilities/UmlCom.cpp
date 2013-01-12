@@ -10,7 +10,7 @@
 #include "UmlTypeSpec.h"
 #include "UmlClass.h"
 #include "UmlSettings.h"
-#include "MiscGlobalCmd.h"
+#include "Tools/ApiCmd.h"
 #include "Logging/QsLog.h"
 bool UmlCom::connect(unsigned int port)
 {
