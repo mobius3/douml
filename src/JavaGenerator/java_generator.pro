@@ -101,3 +101,18 @@ DESTDIR = ../../bin
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+
+QMAKE_CXXFLAGS += -std=gnu++11
+Release{
+    MOC_DIR = ../../bin/MOC_release/java_gen/
+    OBJECTS_DIR = ../../bin/Obj_release/java_gen
+}
+
+Debug{
+    MOC_DIR = ../../bin/MOC_debug/java_gen/
+    OBJECTS_DIR = ../../bin/Obj_debug/java_gen
+
+}
+
+    DESTDIR = ../../bin
+

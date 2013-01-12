@@ -183,7 +183,7 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     com->cmd = strdup(cmd);
     com->timer = new QTimer(com);
     connect(com->timer, SIGNAL(timeout()), com, SLOT(connexion_timeout()));
-    com->timer->start(30 * 1000, TRUE);
+    com->timer->start(30 * 10000, TRUE);
 
     unsigned port = com->bind(1024);
 
@@ -285,7 +285,8 @@ void ToolCom::close_all()
 
 const char * ToolCom::read_buffer()
 {
-    if (wanted == 0) {
+    if (wanted == 0)
+    {
         char s[4];
 
         while ((sock->readBlock(s, 4) != 4));

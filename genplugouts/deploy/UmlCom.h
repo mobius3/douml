@@ -101,6 +101,9 @@ protected:
     //internal, do NOT use it
 
     static void read_if_needed();
+
+    static void read_size();
+
     //internal, do NOT use it
 
     static void read_buffer(unsigned int len);

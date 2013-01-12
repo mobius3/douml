@@ -92,10 +92,8 @@ SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
     Logging/QsLogDest.cpp \
     Logging/QsLog.cpp \
-    Logging/QsDebugOutput.cpp \
-    Logging/QsLogDest.cpp \
-    Logging/QsLog.cpp \
     Logging/QsDebugOutput.cpp
+
         
 TARGET          = cpp_generator
 DEFINES          = WITHCPP BooL=bool TRACE

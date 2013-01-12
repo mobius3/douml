@@ -472,7 +472,8 @@ bool UmlBaseItem::set_it_(Q3CString & r, const char * v, OnInstanceCmd cmd)
 {
     UmlCom::send_cmd(_identifier, cmd, v);
 
-    if (UmlCom::read_bool()) {
+    if (UmlCom::read_bool())
+    {
         if (_defined) r = v;
 
         return TRUE;

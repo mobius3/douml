@@ -5,6 +5,7 @@
 #include "UmlClass.h"
 #include <QApplication>
 #include <QDir>
+#include <QtTest>
 #include "../../src/Logging/QsLog.h"
 #include "../../src/Logging/QsLogDest.h"
 // the program is called with the socket port number in argument
@@ -23,7 +24,7 @@ int main(int argc, char ** argv)
     QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
-
+    //QTest::qSleep(15000);
     QLOG_INFO() << " STARTING DEPLOY";
     if (UmlCom::connect(QString(argv[1]).toUInt())) {
         try {

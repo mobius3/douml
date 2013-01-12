@@ -84,6 +84,11 @@ enum OnInstanceCmd {
     setIsCppConstCmd,
     setIsCppFriendCmd,
     setIsCppVirtualCmd,
+		setIsCppDefaultCmd,
+    setIsCppDeleteCmd,
+    setIsCppOverrideCmd,
+    setIsCppFinalCmd,
+
     setIsIdlTruncatableCmd,
     setCppBodyCmd,
     setCppNameSpecCmd,

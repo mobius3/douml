@@ -107,13 +107,13 @@ QT += network  qt3support
 Release{
 
 
-    MOC_DIR = bin/douml/MOC_release
-    OBJECTS_DIR = bin/douml/Obj_release
+    MOC_DIR = bin/douml/cppreverse/MOC_release
+    OBJECTS_DIR = bin/douml/cppreverse/Obj_release
 }
 
 Debug{
-    MOC_DIR = bin/douml/MOC_Debug
-    OBJECTS_DIR = bin/douml/Obj_Debug
+    MOC_DIR = bin/douml/cppreverse/MOC_Debug
+    OBJECTS_DIR = bin/douml/cppreverse/Obj_Debug
 
 }
     UI_DIR = src/ui

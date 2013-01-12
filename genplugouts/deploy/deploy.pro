@@ -403,17 +403,18 @@ SOURCES		= ./UmlBaseExpansionRegion.cpp \
     ../../src/Logging/QsDebugOutput.cpp
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network  qt3support
+CONFIG += qtestlib
 Release{
 
 
-    MOC_DIR = bin/douml/MOC_release
-    OBJECTS_DIR = bin/douml/Obj_release
+    MOC_DIR = bin/douml/deploy/MOC_release
+    OBJECTS_DIR = bin/douml/deploy/Obj_release
 }
 
 Debug{
-    MOC_DIR = bin/douml/MOC_Debug
-    OBJECTS_DIR = bin/douml/Obj_Debug
+    MOC_DIR = bin/douml/deploy/MOC_Debug
+    OBJECTS_DIR = bin/douml/deploy/Obj_Debug
 
 }
     UI_DIR = src/ui

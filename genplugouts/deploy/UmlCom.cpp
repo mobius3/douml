@@ -124,22 +124,50 @@ void UmlCom::check_size_out(unsigned int len)
     }
 }
 
-void UmlCom::read_if_needed()
+void UmlCom::read_size()
 {
 #ifdef TRACE
-    //QLOG_INFO() << "UmlCom::read_if_needed " << buffer_in_end - p_buffer_in << '\n';
+    QLOG_INFO() << "enter UmlCom::size(" << 4 << ")\n";
 #endif
 
-    if (p_buffer_in == buffer_in_end) {
-        read_buffer(4);
-#ifdef TRACE
-        QLOG_INFO() << "UmlCom::read " << ((((unsigned char *) buffer_in)[0] << 24) + (((unsigned char *) buffer_in)[1] << 16) + (((unsigned char *) buffer_in)[2] << 8) + ((unsigned char *) buffer_in)[3]) << " bytes\n";
-#endif
-        read_buffer((((unsigned char *) buffer_in)[0] << 24) +
-                    (((unsigned char *) buffer_in)[1] << 16) +
-                    (((unsigned char *) buffer_in)[2] << 8) +
-                    ((unsigned char *) buffer_in)[3]);
+    delete [] buffer_in;
+    buffer_in_size = 4;
+    buffer_in = new char[buffer_in_size];
+
+    int remainder = 4;
+    int nread;
+    char * p = buffer_in;
+
+    for (;;)
+    {
+        while(sock->bytesAvailable() < 4);
+        nread = sock->readBlock(p, 4);
+//        if(nread != 4)
+//            continue;
+
+        QLOG_INFO() << "Remainder is: " + QString::number(remainder);
+        p += nread;
+
+        QLOG_INFO() << "nread = " + QString::number(nread);
+        QLOG_INFO() << "new size = " + QString::number((((unsigned char *) buffer_in)[0] << 24) +
+                (((unsigned char *) buffer_in)[1] << 16) +
+                (((unsigned char *) buffer_in)[2] << 8) +
+                ((unsigned char *) buffer_in)[3]);
+        if ((remainder -= nread) == 0)
+            break;
     }
+
+#ifdef TRACE
+    QLOG_INFO() << "UmlCom a lu " << nread << '\n';
+#endif
+
+
+#ifdef TRACE
+    QLOG_INFO() << "exit UmlCom::read_buffer()\n";
+#endif
+
+    p_buffer_in = buffer_in;
+    buffer_in_end = buffer_in + 4;
 }
 
 void UmlCom::read_buffer(unsigned int len)
@@ -148,7 +176,9 @@ void UmlCom::read_buffer(unsigned int len)
     QLOG_INFO() << "enter UmlCom::read_buffer(" << len << ")\n";
 #endif
 
-    if (buffer_in_size < len) {
+    if (buffer_in_size < len)
+    {
+        QLOG_INFO() << "Allocating new memory";
         delete [] buffer_in;
         buffer_in_size = len + 256;
         buffer_in = new char[buffer_in_size];
@@ -157,30 +187,20 @@ void UmlCom::read_buffer(unsigned int len)
     int remainder = (int) len;
     int nread;
     char * p = buffer_in;
-
-    for (;;) {
-        if ((nread = sock->readBlock(p, remainder)) == -1) {
-            if (sock->error() != 0) {
-#ifdef TRACE
-                QLOG_INFO() << "UmlCom::read_buffer ERROR, already " << p - buffer_in
-                     << " remainder " << remainder << '\n';
-#endif
-                fatal_error("UmlCom read error");
-            }
-            else
-                nread = 0;
-        }
-
-#ifdef TRACE
-        //QLOG_INFO() << "UmlCom a lu " << nread << '\n';
-#endif
-
-        if ((remainder -= nread) == 0)
-            break;
-
+    QLOG_INFO() << "Allocated address" << (size_t) buffer_in;
+    for (;;)
+    {
+        while(sock->bytesAvailable() != len);
+        nread = sock->readBlock(p, len);
         p += nread;
-        sock->waitForMore(100);
+
+        QLOG_INFO() << "nread = " + QString::number(nread);
+        break;
     }
+
+#ifdef TRACE
+    QLOG_INFO() << "UmlCom a lu " << nread << '\n';
+#endif
 
 #ifdef TRACE
     QLOG_INFO() << "exit UmlCom::read_buffer()\n";
@@ -189,6 +209,35 @@ void UmlCom::read_buffer(unsigned int len)
     p_buffer_in = buffer_in;
     buffer_in_end = buffer_in + len;
 }
+
+void UmlCom::read_if_needed()
+{
+#ifdef TRACE
+    QLOG_INFO() << "UmlCom::read_if_needed " << buffer_in_end - p_buffer_in << '\n';
+#endif
+    size_t val2 = (size_t)p_buffer_in;
+    size_t val1 = (size_t)buffer_in_end;
+    QLOG_INFO() << val1 << "||" << val2;
+    if (p_buffer_in == buffer_in_end)
+    {
+        read_size();
+#ifdef TRACE
+        //QLOG_INFO() << "UmlCom::read " << ((((unsigned char *) buffer_in)[0] << 24) + (((unsigned char *) buffer_in)[1] << 16) + (((unsigned char *) buffer_in)[2] << 8) + ((unsigned char *) buffer_in)[3]) << " bytes\n";
+#endif
+
+        size_t val1 = (size_t)buffer_in_end;
+        size_t val2 = (size_t)p_buffer_in;
+        QLOG_INFO() << "AFTER SIZE" << val1 << "||" << val2;
+        read_buffer((((unsigned char *) buffer_in)[0] << 24) +
+                (((unsigned char *) buffer_in)[1] << 16) +
+                (((unsigned char *) buffer_in)[2] << 8) +
+                ((unsigned char *) buffer_in)[3]);
+    }
+    QLOG_INFO() << " AFTER READ: " << val1 << "||" << val2;
+}
+
+
+
 
 void UmlCom::write_bool(bool b)
 {
@@ -226,7 +275,7 @@ void UmlCom::write_id(const void * id)
     TRACE_FUNCTION;
     check_size_out(sizeof(void *));
 
-    QLOG_INFO() << id;
+    //QLOG_INFO() << *static_cast<const int*>(id);
     memcpy(p_buffer_out, &id, sizeof(void *));
     p_buffer_out += sizeof(void *);
 }
