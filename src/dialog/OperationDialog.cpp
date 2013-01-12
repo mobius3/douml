@@ -43,6 +43,7 @@
 #include <qtimer.h>
 //Added by qt3to4:
 #include <Q3HBoxLayout>
+#include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <Q3VBoxLayout>
 #include <Q3CString>
@@ -1201,8 +1202,9 @@ void OperationDialog::post_edit_constraint(OperationDialog * d, QString s)
 
 void OperationDialog::accept()
 {
-    SaveData();
-    Q3TabDialog::accept();
+
+    if(SaveData())
+        Q3TabDialog::accept();
 }
 
 void OperationDialog::classoper_toggled(bool on)
@@ -3203,7 +3205,7 @@ void OperationDialog::post_php_edit_body(OperationDialog * d, QString s)
     d->phpbody = (add_operation_profile()) ? remove_profile(s) : s;
 }
 
-void OperationDialog::SaveData()
+bool OperationDialog::SaveData()
 {
     BrowserClass* containingClass = static_cast<BrowserClass*>(oper->browser_node->get_container(UmlClass));
     QList<BrowserNode *>  passedNodes;
@@ -3222,9 +3224,18 @@ void OperationDialog::SaveData()
         QPushButton* whole = msg.addButton(tr("Everywhere"), QMessageBox::ActionRole);
         QPushButton* dont = msg.addButton(tr("Do not propagate"), QMessageBox::ActionRole);
         QPushButton* cancel = msg.addButton(tr("Cancel"), QMessageBox::ActionRole);
+        msg.show();
+
+
+        int yPos = QCursor::pos().y();
+        if((QApplication::desktop()->height() - QCursor::pos().y()) < msg.height())
+            yPos=(QApplication::desktop()->height() - msg.height() - 120);
+        msg.move(QCursor::pos().x() + 15, yPos);
+
+        //msg.move(QCursor::pos());
         msg.exec();
         if(msg.clickedButton() == cancel)
-            return;
+            return false;
         if(msg.clickedButton() != dont)
             propagateThroughInheritance = true;
         if(msg.clickedButton() == above)
@@ -3238,7 +3249,7 @@ void OperationDialog::SaveData()
     }
 
     if (!check_edits(edits) || !kvtable->check_unique())
-        return;
+        return true;
 
     BrowserNode * bn = oper->browser_node;
     QString s = edname->text().stripWhiteSpace();
@@ -3469,6 +3480,7 @@ void OperationDialog::SaveData()
             }
         }
     }
+    return true;
 }
 
 void OperationDialog::php_edit_param()

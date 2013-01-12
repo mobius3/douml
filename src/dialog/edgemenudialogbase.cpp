@@ -110,7 +110,7 @@ bool EdgeMenuDialogBase::ContainsUnsavedChanges()
     return false;
 }
 
-void EdgeMenuDialogBase::SaveData()
+bool EdgeMenuDialogBase::SaveData()
 {
     // this is reimplemented to do actual work in subclasses
     // but since not all subclasses reimplement this as of now

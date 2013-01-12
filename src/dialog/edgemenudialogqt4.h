@@ -69,7 +69,7 @@ protected:
     //! Tells if there have been any changes in the data associated with the dialog
     bool ContainsUnsavedChanges();
     //! Called on accept() and saves GUI elements
-    virtual void SaveData();
+    virtual bool SaveData();
     //! Called on reject() and discards gui data
     virtual void RejectData();
 

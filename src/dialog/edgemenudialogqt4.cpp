@@ -221,7 +221,7 @@ bool EdgeMenuDialogQt4::ContainsUnsavedChanges()
     return false;
 }
 
-void EdgeMenuDialogQt4::SaveData()
+bool EdgeMenuDialogQt4::SaveData()
 {
     // this is reimplemented to do actual work in subclasses
     // but since not all subclasses reimplement this as of now

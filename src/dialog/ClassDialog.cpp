@@ -3629,10 +3629,10 @@ void ClassDialog::NullPointers()
     applicableon_table = 0;
 }
 
-void ClassDialog::SaveData()
+bool ClassDialog::SaveData()
 {
     if (!check_edits(edits) || !kvtable->check_unique())
-        return;
+        return true;
 
     BrowserClass * bn = (BrowserClass *) cl->get_browser_node();
     QString oldname = cl->browser_node->get_name();
@@ -3648,13 +3648,13 @@ void ClassDialog::SaveData()
                 bn->allow_spaces(),
                 bn->allow_empty())) {
             msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
-            return;
+            return true;
         }
 
         if ((st == "stereotype") &&
             (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
             msg_critical(TR("Error"), s + " " + err);
-            return;
+            return true;
         }
 
         bn->set_name(s);
@@ -3663,7 +3663,7 @@ void ClassDialog::SaveData()
         if (!was_st &&
             (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
             msg_critical(TR("Error"), oldname + " " + err);
-            return;
+            return true;
         }
         else if (stereotypetab != 0) {
             Q3CString path = fromUnicode(ediconpath->text().simplifyWhiteSpace());
@@ -3672,7 +3672,7 @@ void ClassDialog::SaveData()
                 msg_critical(TR("Error"),
                              ((const char *) path) +
                              TR("\ndoesn't exist or is not a know image format"));
-                return;
+                return true;
             }
         }
     }
@@ -3783,4 +3783,5 @@ void ClassDialog::SaveData()
     bn->modified();
     bn->package_modified();
     cl->modified();
+    return true;
 }

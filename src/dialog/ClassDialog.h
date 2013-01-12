@@ -219,7 +219,7 @@ protected:
     void FillGuiElements(BrowserNode *);
     void FillGuiElements(ClassData * _cl);
     void NullPointers();
-    void SaveData();
+    bool SaveData();
 
     //refactoring changes
 
