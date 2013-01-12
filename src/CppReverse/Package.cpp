@@ -490,7 +490,8 @@ void Package::scan_dirs(int & n)
     /* lgfreitas: This is where the reversing magic happens. It iterates
        through each package, asking for it to do the reversing on the
        given path */
-    for (p = Choozen.first(); p != 0; p = Choozen.next()) {
+    for (p = Choozen.first(); p != 0; p = Choozen.next())
+    {
         p->reverse_directory(p->h_path, TRUE, CppSettings::headerExtension(), TRUE);
         p->reverse_directory(p->src_path, TRUE, CppSettings::sourceExtension(), FALSE);
     }
@@ -724,10 +725,12 @@ void Package::reverse_directory(QString path, bool rec,
         d.entryInfoList("*." + ext, QDir::Files | QDir::Readable);
 
     /* lgfreitas: If the package/path has files step thru them */
-    if (list.isEmpty() == false) {
+    if (list.isEmpty() == false)
+    {
         QFileInfoList::iterator it = list.begin();
 
         while (it != list.end())
+        {
             if (allowed(FileFilter, (*it).fileName())) {
 #ifdef ROUNDTRIP
                 QString fn = (*it).absFilePath();
@@ -747,12 +750,15 @@ void Package::reverse_directory(QString path, bool rec,
                 if (h)
                     fname = my_baseName(&(*it));
 
-                reverse_file(Q3CString((*it).filePath().toAscii().constData()));
+                QByteArray tmp = (*it).filePath().toAscii();
+                const char * c = tmp.constData();
+                reverse_file(c);
 #endif
             }
 
-        Progress::tic_it();
-        ++it;
+            Progress::tic_it();
+            ++it;
+        }
     }
 
 
@@ -883,7 +889,11 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block)
     Q3CString s;
 
     /* lgfreitas: Read each word from the file and analyzes it */
-    while (!(s = Lex::read_word()).isEmpty()) {
+    while(true)
+    {
+        s = Lex::read_word();
+        if(s.isEmpty())
+            break;
         if (s == "template") {
             FormalParameterList fmt;
 

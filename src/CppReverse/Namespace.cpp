@@ -109,5 +109,7 @@ Q3CString Namespace::current()
 
     QString & s = Stack.last();
 
-    return Q3CString((s.left(s.length() - 2)).toAscii().constData());
+    QByteArray temp = (s.left(s.length() - 2)).toAscii();
+    const char * c = temp.constData();
+    return Q3CString(c);
 }

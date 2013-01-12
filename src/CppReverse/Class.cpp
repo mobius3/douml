@@ -1142,15 +1142,20 @@ Class * Class::reverse_enum(ClassContainer * container,
     Q3CString description = Lex::get_description();
     Q3CString s;
 
-    if (!from_typedef) {
-        if ((name = Lex::read_word()).isEmpty()) {
+    if (!from_typedef)
+    {
+        name = Lex::read_word();
+        QLOG_INFO() << "Name is: "     << name;
+        if (name.isEmpty())
+        {
             if (!Package::scanning())
                 Lex::premature_eof();
 
             return 0;
         }
 
-        if (name == "{") {
+        if (name == "{")
+        {
             if (!Package::scanning()) {
                 Lex::unread_word();
                 name = 0;
@@ -1162,8 +1167,10 @@ Class * Class::reverse_enum(ClassContainer * container,
             }
         }
     }
-
-    if ((s = Lex::read_word()).isEmpty()) {
+    s = Lex::read_word();
+    QLOG_INFO() << "S is: " << s;
+    if (s.isEmpty())
+    {
         if (!Package::scanning())
             Lex::premature_eof();
 
@@ -1197,17 +1204,25 @@ Class * Class::reverse_enum(ClassContainer * container,
     // enum definition
     Class * cl = container->define(name, "enum");
 
-    if ((cl == 0) || cl->reversedp) {
+    if(cl)
+        QLOG_INFO() << "RE got definition" << cl->stereotype;
+    //QLOG_INFO() << "RE got definition" << cl->uml;
+    if ((cl == 0) || cl->reversedp)
+    {
+        QLOG_INFO() << "RE returning;";
         Lex::unread_word();
         return 0;
     }
 
-    if (Package::scanning()) {
+    if (Package::scanning())
+    {
         cl->filename = path;
         cl->its_namespace = Namespace::current();
+        QLOG_INFO() << "RE got namespace" << cl->its_namespace;
 #ifndef REVERSE
         cl->description = comment;
 #endif
+        QLOG_INFO() << "RE skipping body";
         UmlOperation::skip_body(1);
         return cl;
     }
@@ -1251,6 +1266,7 @@ Class * Class::reverse_enum(ClassContainer * container,
         roundtrip = TRUE;
 
 #else
+    QLOG_INFO() << "RE getting uml";
     UmlClass * cl_uml = cl->get_uml();
 
     cl->reversedp = TRUE;
@@ -1262,12 +1278,13 @@ Class * Class::reverse_enum(ClassContainer * container,
     }
 
 # ifdef REVERSE
+    QLOG_INFO() << "RE getting more class";
     Statistic::one_class_more();
 # endif
 #endif
 
     int index;
-
+    QLOG_INFO() << "RE getting enum decl";
     s = CppSettings::enumDecl();
 
     if (name.isEmpty() && ((index = s.find("${name}")) != -1))

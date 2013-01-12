@@ -1932,7 +1932,8 @@ void UmlOperation::skip_body(int level)
 {
     char e;
 
-    while ((e = Lex::read_word_bis(TRUE, TRUE)) != 0) {	// not end of file
+    while ((e = Lex::read_word_bis(TRUE, TRUE)) != 0)
+    {	// not end of file
         if (e == '}') {
             if (--level == 0)
                 // end of body

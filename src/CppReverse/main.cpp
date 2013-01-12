@@ -36,6 +36,7 @@
 #include "Logging/QsLogDest.h"
 #include "Logging/QsLog.h"
 #include <QDir>
+#include <QTest>
 
 int main(int argc, char ** argv)
 {
@@ -56,6 +57,7 @@ int main(int argc, char ** argv)
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
     QLOG_INFO() << "Starting the log";
+    //QTest::qSleep(7000);
     if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
         try {
             //UmlCom::with_ack(FALSE);

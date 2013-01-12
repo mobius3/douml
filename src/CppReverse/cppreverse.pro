@@ -99,6 +99,7 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
 TARGET          = cpp_reverse
 DEFINES          = WITHCPP REVERSE BooL=bool DEBUG_BOUML
 INCLUDEPATH   = ../Tools ../CppReverse ../
+CONFIG += qtestlib
 
 
 #The following line was inserted by qt3to4
