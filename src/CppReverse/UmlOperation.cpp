@@ -30,6 +30,7 @@
 #include <Q3CString>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include "Logging/QsLog.h"
 
 using namespace std;
 #endif

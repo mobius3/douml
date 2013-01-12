@@ -33,12 +33,29 @@
 #include "Package.h"
 #include "Lex.h"
 #include "Statistic.h"
+#include "Logging/QsLogDest.h"
+#include "Logging/QsLog.h"
+#include <QDir>
 
 int main(int argc, char ** argv)
 {
     if (argc != 2)
         return 0;
 
+    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+
+    QsLogging::Logger & logger = QsLogging::Logger::instance();
+    logger.setLoggingLevel(QsLogging::TraceLevel);
+    QDir dir;
+    dir.setPath(qApp->applicationDirPath());
+    dir.remove(QString("cpp_reverse") + QString(".log"));
+    const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString("cpp_reverse") + QString(".log")));
+    QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath));
+    QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
+    logger.addDestination(debugDestination.get());
+    logger.addDestination(fileDestination.get());
+    QLOG_INFO() << "Starting the log";
     if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
         try {
             //UmlCom::with_ack(FALSE);

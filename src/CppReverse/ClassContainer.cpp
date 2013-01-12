@@ -28,7 +28,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
-
+#include "Logging/QsLog.h"
 using namespace std;
 #endif
 

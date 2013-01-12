@@ -40,6 +40,7 @@ using namespace std;
 #include "UmlCom.h"
 #include "CppSettings.h"
 #include "Lex.h"
+#include "Logging/QsLog.h"
 #ifdef REVERSE
 #include "Statistic.h"
 # ifdef ROUNDTRIP

@@ -29,6 +29,7 @@
 #include <Q3CString>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include "Logging/QsLog.h"
 
 using namespace std;
 #endif
@@ -99,9 +100,9 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
                          )
 {
 #ifdef DEBUG_BOUML
-    QLOG_INFO() << "RELATION '" << name << "' from '" << cl->name() << "' to '" << dest->name()
-                << "' modifier '" << modifier << "' array '" << array
-                << "' typeform '" << typeform << "'\n";
+//    QLOG_INFO() << "RELATION '" << name << "' from '" << cl->name() << "' to '" << dest->name()
+//                << "' modifier '" << modifier << "' array '" << array
+//                << "' typeform '" << typeform << "'\n";
 #endif
 
     if (

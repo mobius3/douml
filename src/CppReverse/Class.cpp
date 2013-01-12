@@ -50,7 +50,7 @@ using namespace std;
 #include "CppCatWindow.h"
 #endif
 #include "Statistic.h"
-
+#include "Logging/QsLog.h"
 
 Class::Class(BrowserNode * parent, const char * name, const Q3CString & st)
     : BrowserNode(parent, name), uml(0), reversedp(FALSE),

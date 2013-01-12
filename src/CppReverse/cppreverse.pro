@@ -97,7 +97,7 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
 
 
 TARGET          = cpp_reverse
-DEFINES          = WITHCPP REVERSE BooL=bool
+DEFINES          = WITHCPP REVERSE BooL=bool DEBUG_BOUML
 INCLUDEPATH   = ../Tools ../CppReverse ../
 
 

@@ -46,6 +46,7 @@ using namespace std;
 #include "UmlDeploymentView.h"
 #include "Statistic.h"
 #include "UmlCom.h"
+#include "Logging/QsLog.h"
 #ifdef REVERSE
 #include "CppCatWindow.h"
 # ifdef ROUNDTRIP

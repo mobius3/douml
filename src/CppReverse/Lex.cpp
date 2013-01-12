@@ -33,6 +33,7 @@
 #include <iostream>
 //Added by qt3to4:
 #include <Q3CString>
+#include "Logging/QsLog.h"
 
 using namespace std;
 #endif
@@ -470,7 +471,9 @@ Q3CString Lex::manage_operator(QString & result, int c, bool oper)
 #ifdef DEBUG_BOUML
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-    return Q3CString(result.toAscii().constData());
+    QByteArray temp = result.toAscii();
+    const char* c = temp.constData();
+    return Q3CString(c);
 }
 
 char Lex::bypass_operator(int c, bool oper)
@@ -571,7 +574,12 @@ Q3CString Lex::read_string()
             break;
 
         case '"':
-            return Q3CString((result += c).toAscii().constData());
+        {
+            result += c;
+            QByteArray temp = result.toAscii();
+            const char* c = temp.constData();
+            return Q3CString(c);
+        }
 
         default:
             result += c;
@@ -940,7 +948,9 @@ Q3CString Lex::read_word(bool in_expr)
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
 
-    return Q3CString(result.toAscii().constData());
+    QByteArray temp = result.toAscii();
+    const char* c = temp.constData();
+    return Q3CString(c);
 }
 
 char Lex::read_word_bis(bool set_context, bool in_expr)
