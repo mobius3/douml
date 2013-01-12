@@ -3223,7 +3223,7 @@ void OperationDialog::SaveData()
         QPushButton* dont = msg.addButton(tr("Do not propagate"), QMessageBox::ActionRole);
         QPushButton* cancel = msg.addButton(tr("Cancel"), QMessageBox::ActionRole);
         msg.exec();
-        if(msg.clickedButton() != cancel)
+        if(msg.clickedButton() == cancel)
             return;
         if(msg.clickedButton() != dont)
             propagateThroughInheritance = true;
