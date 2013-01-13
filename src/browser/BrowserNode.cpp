@@ -990,12 +990,19 @@ void BrowserNode::mark_management(int choice)
              bn != 0;
              bn = marked_list.prev())
         {
-            BrowserAttribute* asAttribute = ((BrowserAttribute *) bn);
-            if((BrowserNode *) bn->parent()  != this && asAttribute != 0)
+            if (bn->get_type() == UmlAttribute )
             {
+                BrowserAttribute* asAttribute =  dynamic_cast<BrowserAttribute*>(bn);
                 move(((BrowserNode *) asAttribute->get_get_oper()), 0);
                 move(((BrowserNode *) asAttribute->get_set_oper()), 0);
             }
+            else if (bn->get_type() >= UmlAggregation &&  bn->get_type() <= UmlDirectionalAggregationByValue)
+            {
+                BrowserRelation* asRelation =  dynamic_cast<BrowserRelation*>(bn);
+                move(((BrowserNode *) asRelation->get_get_oper()), 0);
+                move(((BrowserNode *) asRelation->get_set_oper()), 0);
+            }
+            //QLOG_INFO() << stringify(bn->get_type());
             move(bn, 0);
         }
 
@@ -1009,12 +1016,29 @@ void BrowserNode::mark_management(int choice)
              bn = marked_list.prev())
         {
             //BrowserView::removeItem(p->get_)
-            BrowserAttribute* asAttribute = ((BrowserAttribute *) bn);
-            if(p != (BrowserNode *) bn->parent() && asAttribute != 0)
+//            BrowserAttribute* asAttribute = ((BrowserAttribute *) bn);
+//            if(p != (BrowserNode *) bn->parent() && asAttribute != 0)
+//            {
+//                p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
+//                p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
+//            }
+
+            if(p != (BrowserNode *) bn->parent())
             {
-                p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
-                p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
+                if (bn->get_type() == UmlAttribute )
+                {
+                    BrowserAttribute* asAttribute =  dynamic_cast<BrowserAttribute*>(bn);
+                    p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
+                    p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
+                }
+                else if (bn->get_type() >= UmlAggregation &&  bn->get_type() <= UmlDirectionalAggregationByValue)
+                {
+                    BrowserRelation* asRelation =  dynamic_cast<BrowserRelation*>(bn);
+                    p->move(((BrowserNode *) asRelation->get_get_oper()), this);
+                    p->move(((BrowserNode *) asRelation->get_set_oper()), this);
+                }
             }
+
             p->move(bn, this);
 
         }
@@ -1026,38 +1050,44 @@ void BrowserNode::mark_management(int choice)
              bn != 0;
              bn = marked_list.prev())
         {
-            BrowserAttribute* asAttribute = ((BrowserAttribute *) bn);
             BrowserNode* getOperCopy = nullptr;
             BrowserNode* setOperCopy = nullptr;
-            if((BrowserNode *) bn->parent()  != this && asAttribute != 0)
+            if((BrowserNode *) bn->parent()  != this)
             {
-                getOperCopy = ((BrowserNode *) asAttribute->get_get_oper())->duplicate(this);
-                setOperCopy = ((BrowserNode *) asAttribute->get_set_oper())->duplicate(this);
-                move(getOperCopy, 0);
-                move(setOperCopy, 0);
-            }
-            BrowserNode* nodeCopy = bn->duplicate(this);
-            move(nodeCopy, 0);
+                BrowserNode* nodeCopy = bn->duplicate(this);
+                move(nodeCopy, 0);
 
-            if (nodeCopy->get_type() == UmlAttribute)
-            {
-                ((BrowserAttribute *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
-                ((BrowserAttribute *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
-            }
-            else if(nodeCopy->get_type() == UmlRelations)
-            {
-                ((BrowserRelation *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
-                ((BrowserRelation *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
-            }
-            if((BrowserOperation*)setOperCopy)
-            {
-                ((OperationData*)((BrowserOperation*)setOperCopy)->get_data())->set_get_or_set(true);
-                ((BrowserOperation*)setOperCopy)->set_set_of(nodeCopy);
-            }
-            if((BrowserOperation*)getOperCopy)
-            {
-                ((OperationData*)((BrowserOperation*)setOperCopy)->get_data())->set_get_or_set(true);
-                ((BrowserOperation*)getOperCopy)->set_get_of(nodeCopy);
+                if (nodeCopy->get_type() == UmlAttribute)
+                {
+                    BrowserAttribute* asAttribute =  dynamic_cast<BrowserAttribute*>(bn);
+                    getOperCopy = ((BrowserNode *) asAttribute->get_get_oper())->duplicate(this);
+                    setOperCopy = ((BrowserNode *) asAttribute->get_set_oper())->duplicate(this);
+                    move(getOperCopy, 0);
+                    move(setOperCopy, 0);
+
+                    ((BrowserAttribute *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
+                    ((BrowserAttribute *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
+                }
+                else if(bn->get_type() >= UmlAggregation &&  bn->get_type() <= UmlDirectionalAggregationByValue)
+                {
+                    BrowserRelation* asRelation =  dynamic_cast<BrowserRelation*>(bn);
+                    getOperCopy = ((BrowserNode *) asRelation->get_get_oper())->duplicate(this);
+                    setOperCopy = ((BrowserNode *) asRelation->get_set_oper())->duplicate(this);
+                    move(getOperCopy, 0);
+                    move(setOperCopy, 0);
+                    ((BrowserRelation *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
+                    ((BrowserRelation *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
+                }
+                if((BrowserOperation*)setOperCopy)
+                {
+                    ((OperationData*)((BrowserOperation*)setOperCopy)->get_data())->set_get_or_set(true);
+                    ((BrowserOperation*)setOperCopy)->set_set_of(nodeCopy);
+                }
+                if((BrowserOperation*)getOperCopy)
+                {
+                    ((OperationData*)((BrowserOperation*)setOperCopy)->get_data())->set_get_or_set(true);
+                    ((BrowserOperation*)getOperCopy)->set_get_of(nodeCopy);
+                }
             }
         }
 

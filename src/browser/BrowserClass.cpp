@@ -2021,12 +2021,15 @@ bool BrowserClass::may_contains_them(const Q3PtrList<BrowserNode> & l,
             return TRUE;
 
         default:
-            if (!IsaRelation(it.current()->get_type()) ||
-                    (((const BrowserNode *) it.current()->parent()) != this))
+        {
+            bool isNotRelation = !IsaRelation(it.current()->get_type()) ;
+            bool parentIsOtherNode =  (((const BrowserNode *) it.current()->parent()) != this);
+            if (isNotRelation/* || parentIsOtherNode*/)
                 return FALSE;
 
-            duplicable = FALSE;
+            duplicable = true;
             return TRUE;
+        }
         }
 
         if (! may_contains(it.current(), FALSE))
