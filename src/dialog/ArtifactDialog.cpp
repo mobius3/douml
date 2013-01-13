@@ -42,6 +42,7 @@
 #include "ArtifactData.h"
 #include "PackageData.h"
 #include "GenerationSettings.h"
+#include "CustomWidgets/EdgeMenuToolBar.h"
 #include "BrowserClass.h"
 #include "UmlWindow.h"
 #include "DialogUtil.h"
@@ -1960,6 +1961,8 @@ void ArtifactDialog::accept()
 
         BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
         bn->edit_end();
+        toolbar->setParent(0);
+        toolbar->hide();
         Q3TabDialog::accept();
     }
 }
@@ -1968,6 +1971,8 @@ void ArtifactDialog::reject()
 {
     BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
     bn->edit_end();
+    toolbar->setParent(0);
+    toolbar->hide();
     Q3TabDialog::accept();
 }
 ArtifactDialog* ArtifactDialog::Instance(ArtifactData * nd)
