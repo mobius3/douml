@@ -21,7 +21,7 @@
 // e-mail : enmarantispam@gmail.com
 //
 // *************************************************************************
-#include "EdgeMenuDialogQt4.h"
+#include "edgemenudialogqt4.h"
 #include "browser/BrowserNode.h"
 #include "Logging/QsLog.h"
 #include "Factories/EdgeMenuFactory.h"

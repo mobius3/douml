@@ -4,6 +4,7 @@
 #include "OperationData.h"
 #include "misc/TypeIdentifier.h"
 #include "tagmanagement/cpptagmanagement.h"
+//#include "edge
 ConstructorInitializerDialog::ConstructorInitializerDialog(QWidget *parent) :
     EdgeMenuDialogQt4(parent),
     ui(new Ui::ConstructorInitializerDialog)
@@ -40,11 +41,15 @@ void ConstructorInitializerDialog::reject()
 {
    oper->get_browser_node()->set_value("constructor-initializer", initializerCopy);
    oper->set_cppdef(definitionCopy);
+   toolbar->setParent(0);
+   toolbar->hide();
    QDialog::reject();
 }
 
 void ConstructorInitializerDialog::accept()
 {
+    toolbar->setParent(0);
+    toolbar->hide();
     QDialog::accept();
 }
 

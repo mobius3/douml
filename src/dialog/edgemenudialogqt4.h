@@ -7,6 +7,7 @@
 #include <QMap>
 #include <QDialog>
 #include "CustomWidgets/MultiPurposeDragArea.h"
+#include "CustomWidgets/EdgeMenuToolBar.h"
 #include "edgemenudialogbase.h"
 unsigned int ClosestEdge(QWidget *, QPoint);
 class BrowserNode;

@@ -580,6 +580,7 @@ void BrowserOperation::paintCell(QPainter * p, const QColorGroup & cg, int colum
 
 static Q3PtrList<BrowserNode> ImplBy;
 static const int add_constructor_initializer = 35;
+static const int go_up = 36;
 
 void BrowserOperation::menu()
 {
@@ -593,7 +594,7 @@ void BrowserOperation::menu()
     if (!deletedp()) {
         if (!is_edited) {
             if (get_container(UmlClass) != 0)
-                m.setWhatsThis(m.insertItem(TR("Up"), 20),
+                m.setWhatsThis(m.insertItem(TR("Up"), go_up),
                                TR("to return to parent node"));
 
             QString nameOfNode = ((BrowserNode *) parent())->get_name();
@@ -771,9 +772,10 @@ void BrowserOperation::exec_menu_choice(int rank)
         }
     }
 
-    case 20: {
+    case go_up: {
         BrowserView::deselect(this);
         BrowserView::select(get_container(UmlClass));
+        return;
     }
 
     case add_constructor_initializer:

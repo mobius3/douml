@@ -2,6 +2,7 @@
 #include "browser/BrowserNode.h"
 #include "Logging/QsLog.h"
 #include "Factories/EdgeMenuFactory.h"
+#include "CustomWidgets/EdgeMenuToolBar.h"
 #include "QApplication"
 #include "QDesktopWidget"
 
@@ -93,6 +94,11 @@ void EdgeMenuDialogBase::PickPreviousSibling()
 
     SaveData();
     FillGuiElements(previousNode);
+}
+
+void EdgeMenuDialogBase::SetToolBar(EdgeMenuToolBar * newToolbar)
+{
+    toolbar = newToolbar;
 }
 
 void EdgeMenuDialogBase::InitGui()

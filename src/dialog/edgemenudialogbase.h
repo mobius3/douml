@@ -2,7 +2,7 @@
 #define EDGEMENUDIALOGBASE_H
 #include "CustomWidgets/MultiPurposeDragArea.h"
 class BrowserNode;
-
+class EdgeMenuToolBar;
 class EdgeMenuDialogBase
 {
 public:
@@ -45,8 +45,10 @@ public:
     virtual void RejectData();
     void PickNextSibling();
     void PickPreviousSibling();
+    void SetToolBar(EdgeMenuToolBar*);
 
     bool isConnectedToToolBar;
+    EdgeMenuToolBar* toolbar = 0;
     BrowserNode * currentNode;
     EWidgetModificationMode modificationMode;
     QPoint modificationOrigin;

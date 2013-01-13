@@ -510,8 +510,6 @@ QT += network  qt3support
 
 
 Release{
-
-
     MOC_DIR = bin/douml/MOC_release
     OBJECTS_DIR = bin/douml/Obj_release
 }
