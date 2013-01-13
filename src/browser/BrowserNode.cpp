@@ -993,14 +993,18 @@ void BrowserNode::mark_management(int choice)
             if (bn->get_type() == UmlAttribute )
             {
                 BrowserAttribute* asAttribute =  dynamic_cast<BrowserAttribute*>(bn);
-                move(((BrowserNode *) asAttribute->get_get_oper()), 0);
-                move(((BrowserNode *) asAttribute->get_set_oper()), 0);
+                if(((BrowserNode *) asAttribute->get_get_oper()))
+                    move(((BrowserNode *) asAttribute->get_get_oper()), 0);
+                if(((BrowserNode *) asAttribute->get_set_oper()))
+                    move(((BrowserNode *) asAttribute->get_set_oper()), 0);
             }
             else if (bn->get_type() >= UmlAggregation &&  bn->get_type() <= UmlDirectionalAggregationByValue)
             {
                 BrowserRelation* asRelation =  dynamic_cast<BrowserRelation*>(bn);
-                move(((BrowserNode *) asRelation->get_get_oper()), 0);
-                move(((BrowserNode *) asRelation->get_set_oper()), 0);
+                if(((BrowserNode *) asRelation->get_get_oper()))
+                    move(((BrowserNode *) asRelation->get_get_oper()), 0);
+                if(((BrowserNode *) asRelation->get_set_oper()))
+                    move(((BrowserNode *) asRelation->get_set_oper()), 0);
             }
             //QLOG_INFO() << stringify(bn->get_type());
             move(bn, 0);
@@ -1028,14 +1032,18 @@ void BrowserNode::mark_management(int choice)
                 if (bn->get_type() == UmlAttribute )
                 {
                     BrowserAttribute* asAttribute =  dynamic_cast<BrowserAttribute*>(bn);
-                    p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
-                    p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
+                    if(((BrowserNode *) asAttribute->get_get_oper()))
+                        p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
+                    if(((BrowserNode *) asAttribute->get_set_oper()))
+                        p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
                 }
                 else if (bn->get_type() >= UmlAggregation &&  bn->get_type() <= UmlDirectionalAggregationByValue)
                 {
                     BrowserRelation* asRelation =  dynamic_cast<BrowserRelation*>(bn);
-                    p->move(((BrowserNode *) asRelation->get_get_oper()), this);
-                    p->move(((BrowserNode *) asRelation->get_set_oper()), this);
+                    if(((BrowserNode *) asRelation->get_get_oper()))
+                        p->move(((BrowserNode *) asRelation->get_get_oper()), this);
+                    if(((BrowserNode *) asRelation->get_set_oper()))
+                        p->move(((BrowserNode *) asRelation->get_set_oper()), this);
                 }
             }
 
@@ -1073,8 +1081,10 @@ void BrowserNode::mark_management(int choice)
                     BrowserRelation* asRelation =  dynamic_cast<BrowserRelation*>(bn);
                     getOperCopy = ((BrowserNode *) asRelation->get_get_oper())->duplicate(this);
                     setOperCopy = ((BrowserNode *) asRelation->get_set_oper())->duplicate(this);
-                    move(getOperCopy, 0);
-                    move(setOperCopy, 0);
+                    if(getOperCopy)
+                        move(getOperCopy, 0);
+                    if(setOperCopy)
+                        move(setOperCopy, 0);
                     ((BrowserRelation *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
                     ((BrowserRelation *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
                 }
