@@ -34,7 +34,7 @@
 
 class QTextStream;
 class ComponentDrawingSettings;
-
+class DiagramWindow;
 class BrowserDiagram : public BrowserNode, public Labeled<BrowserDiagram>
 {
 protected:
@@ -49,6 +49,10 @@ public:
     virtual ~BrowserDiagram();
 
     virtual void package_modified();
+    virtual bool set_diagram_window(DiagramWindow*)
+    {
+        //nothing
+    };
 
     virtual void update_drawing_settings() = 0;
     virtual bool get_auto_label_position() const = 0;

@@ -94,7 +94,7 @@ void ArtifactData::edit()
     //ArtifactDialog::Instance(this)->hide();
     //ArtifactDialog::Instance(this)->resize(ArtifactDialog::Instance(this)->sizeHint());
     dialog = ArtifactDialog::Instance(this);
-    dialog->resize(size);
+    dialog->resize(800, 500);
     dialog->show();
     //(new ArtifactDialog(this))->show();
 }

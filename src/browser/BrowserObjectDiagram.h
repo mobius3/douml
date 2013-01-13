@@ -63,6 +63,7 @@ protected:
 public:
     BrowserObjectDiagram(QString s, BrowserNode * p, int id = 0);
     virtual ~BrowserObjectDiagram();
+    virtual bool set_diagram_window(DiagramWindow*);
 
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
@@ -87,6 +88,7 @@ public:
     virtual bool get_auto_label_position() const;
     virtual void package_settings(BooL & name_in_tab, ShowContextMode & show_context) const;
     virtual UmlColor get_color(UmlCode) const;
+
     virtual bool get_shadow() const;
     virtual bool get_draw_all_relations() const;
     virtual void dont_draw_all_relations();

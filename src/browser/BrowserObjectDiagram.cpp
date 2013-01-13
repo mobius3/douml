@@ -108,9 +108,17 @@ BrowserObjectDiagram::~BrowserObjectDiagram()
 
         QFile::remove(d.absFilePath(fn));
     }
+    on_close();
+    if(window)
+        window->set_browser_diagram(0);
 
     all.remove(get_ident());
     delete def;
+}
+
+bool BrowserObjectDiagram::set_diagram_window(DiagramWindow * value)
+{
+    window = dynamic_cast<ObjectDiagramWindow*>(value);
 }
 
 void BrowserObjectDiagram::make()
@@ -378,7 +386,7 @@ void BrowserObjectDiagram::edit_settings()
 
 void BrowserObjectDiagram::on_close()
 {
-    window = 0;
+    //window = 0;
 
     if (used_settings != 0) {
         delete used_settings;

@@ -60,6 +60,7 @@ extern QString imageText();
 ObjectDiagramWindow::ObjectDiagramWindow(const QString & s, BrowserObjectDiagram * b, int id)
     : DiagramWindow(b, s), view(0)
 {
+    b->set_diagram_window(this);
     Q3ToolBar * toolbar = new Q3ToolBar(this, "object diagram operations");
     addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
 
@@ -167,7 +168,8 @@ ObjectDiagramWindow::~ObjectDiagramWindow()
             warn(warning);
     }
 
-    browser_node->on_close();
+    if(browser_node)
+        browser_node->on_close();
 }
 
 DiagramView * ObjectDiagramWindow::get_view() const

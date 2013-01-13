@@ -54,7 +54,7 @@ protected:
     bool no_save;
     UmlCanvas * canvas;
     /* This links us to the diagram in the browser */
-    BrowserDiagram * browser_node;
+    BrowserDiagram * browser_node = nullptr;
     UmlCode current_button;
 
     QToolButton * select;
@@ -89,6 +89,11 @@ public:
     BrowserDiagram * browser_diagram() const {
         return browser_node;
     };
+
+    void set_browser_diagram(BrowserDiagram* value)
+    {
+        browser_node = value;
+    }
     void package_modified() const;
     bool frozen() const;
 
