@@ -74,9 +74,9 @@ protected:
     BrowserNode * view;
     AttributeData * get_of_attr;
     AttributeData * set_of_attr;
-    RelationData * get_of_rel;
-    RelationData * set_of_rel;
-    bool is_rel_a;
+    RelationData * get_of_rel = nullptr;
+    RelationData * set_of_rel = nullptr;
+    bool is_rel_a = false;
     DrawingLanguage unique;
 
     // uml tab

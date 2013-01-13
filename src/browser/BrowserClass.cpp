@@ -1969,30 +1969,45 @@ bool BrowserClass::may_contains_them(const Q3PtrList<BrowserNode> & l,
     for (; it.current(); ++it) {
         switch (it.current()->get_type()) {
         case UmlOperation:
-            if (((BrowserOperation *) it.current())->get_get_of())
-                if (l.containsRef(((BrowserOperation *) it.current())->get_get_of())
+        {
+            BrowserOperation* asOperation = ((BrowserOperation *) it.current());
+            if (asOperation->get_get_of())
+            {
+                if (l.containsRef(asOperation->get_get_of())
                         == 0)
                     return FALSE;
+            }
 
-            if (((BrowserOperation *) it.current())->get_set_of())
-                if (l.containsRef(((BrowserOperation *) it.current())->get_set_of())
+            if (asOperation->get_set_of())
+            {
+                if (l.containsRef(asOperation->get_set_of())
                         == 0)
                     return FALSE;
+            }
+
 
             break;
+        }
 
         case UmlAttribute:
-            if (((BrowserAttribute *) it.current())->get_get_oper())
-                if (l.containsRef(((BrowserAttribute *) it.current())->get_get_oper())
-                        == 0)
-                    return FALSE;
+        {
+//            BrowserAttribute* asAttribute = ((BrowserAttribute *) it.current());
+//            if (asAttribute->get_get_oper())
+//            {
+//                int numReferencesToGetOperations=l.containsRef(asAttribute->get_get_oper());
+//                if (numReferencesToGetOperations == 0)
+//                    return FALSE;
+//            }
 
-            if (((BrowserAttribute *) it.current())->get_set_oper())
-                if (l.containsRef(((BrowserAttribute *) it.current())->get_set_oper())
-                        == 0)
-                    return FALSE;
+//            if (asAttribute->get_set_oper())
+//            {
+//                int numReferencesToSetOperations=l.containsRef(asAttribute->get_set_oper());
+//                if (numReferencesToSetOperations == 0)
+//                    return FALSE;
+//            }
 
             break;
+        }
 
         case UmlClass:
         case UmlExtraMember:

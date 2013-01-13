@@ -44,8 +44,11 @@
 #include "BrowserUseCase.h"
 #include "BrowserState.h"
 #include "BrowserDiagram.h"
+#include "BrowserOperation.h"
 #include "BrowserActivity.h"
+#include "BrowserRelation.h"
 #include "BrowserArtifact.h"
+#include "BrowserAttribute.h"
 #include "BrowserComponent.h"
 #include "BrowserDeploymentNode.h"
 #include "BrowserSimpleRelation.h"
@@ -69,6 +72,7 @@
 #include "ProfiledStereotypes.h"
 #include "BrowserSearchDialog.h"
 #include "ReferenceDialog.h"
+#include "OperationData.h"
 #include "translate.h"
 #include "../Logging/QsLog.h"
 
@@ -824,8 +828,8 @@ QString BrowserNode::check_inherit(const BrowserNode * new_parent) const
     return 0;
 }
 
-bool BrowserNode::may_contains_them(const Q3PtrList<BrowserNode> &,
-                                    BooL &) const
+bool BrowserNode::may_contains_them(const Q3PtrList<BrowserNode> & nodes,
+                                    BooL & result) const
 {
     return FALSE;
 }
@@ -896,11 +900,13 @@ void BrowserNode::mark_menu(Q3PopupMenu & m, const char * s, int bias) const
             BooL duplicable_after = TRUE;
             bool into = may_contains_them(marked_list, duplicable_into)
                         && is_writable();
-            bool after = (this != BrowserView::get_project()) &&
-                         ((BrowserNode *) parent())->is_writable() &&
-                         ((BrowserNode *) parent())->may_contains_them(marked_list, duplicable_after);
+            bool thisIsntProject = this != BrowserView::get_project();
+            bool isWritable = ((BrowserNode *) parent())->is_writable();
+            bool parentCanHold = ((BrowserNode *) parent())->may_contains_them(marked_list, duplicable_after);
+            bool after = thisIsntProject && isWritable && parentCanHold;
 
-            if (!parents_marked) {
+            if (!parents_marked)
+            {
                 if (moveable) {
                     if (into)
                         m.setWhatsThis(m.insertItem(TR("Move marked into"), bias + 3),
@@ -983,7 +989,15 @@ void BrowserNode::mark_management(int choice)
         for (bn = marked_list.last();
              bn != 0;
              bn = marked_list.prev())
+        {
+            BrowserAttribute* asAttribute = ((BrowserAttribute *) bn);
+            if((BrowserNode *) bn->parent()  != this && asAttribute != 0)
+            {
+                move(((BrowserNode *) asAttribute->get_get_oper()), 0);
+                move(((BrowserNode *) asAttribute->get_set_oper()), 0);
+            }
             move(bn, 0);
+        }
 
         break;
 
@@ -993,7 +1007,17 @@ void BrowserNode::mark_management(int choice)
         for (bn = marked_list.last();
              bn != 0;
              bn = marked_list.prev())
+        {
+            //BrowserView::removeItem(p->get_)
+            BrowserAttribute* asAttribute = ((BrowserAttribute *) bn);
+            if(p != (BrowserNode *) bn->parent() && asAttribute != 0)
+            {
+                p->move(((BrowserNode *) asAttribute->get_get_oper()), this);
+                p->move(((BrowserNode *) asAttribute->get_set_oper()), this);
+            }
             p->move(bn, this);
+
+        }
     }
     break;
 
@@ -1001,7 +1025,41 @@ void BrowserNode::mark_management(int choice)
         for (bn = marked_list.last();
              bn != 0;
              bn = marked_list.prev())
-            move(bn->duplicate(this), 0);
+        {
+            BrowserAttribute* asAttribute = ((BrowserAttribute *) bn);
+            BrowserNode* getOperCopy = nullptr;
+            BrowserNode* setOperCopy = nullptr;
+            if((BrowserNode *) bn->parent()  != this && asAttribute != 0)
+            {
+                getOperCopy = ((BrowserNode *) asAttribute->get_get_oper())->duplicate(this);
+                setOperCopy = ((BrowserNode *) asAttribute->get_set_oper())->duplicate(this);
+                move(getOperCopy, 0);
+                move(setOperCopy, 0);
+            }
+            BrowserNode* nodeCopy = bn->duplicate(this);
+            move(nodeCopy, 0);
+
+            if (nodeCopy->get_type() == UmlAttribute)
+            {
+                ((BrowserAttribute *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
+                ((BrowserAttribute *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
+            }
+            else if(nodeCopy->get_type() == UmlRelations)
+            {
+                ((BrowserRelation *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
+                ((BrowserRelation *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
+            }
+            if((BrowserOperation*)setOperCopy)
+            {
+                ((OperationData*)((BrowserOperation*)setOperCopy)->get_data())->set_get_or_set(true);
+                ((BrowserOperation*)setOperCopy)->set_set_of(nodeCopy);
+            }
+            if((BrowserOperation*)getOperCopy)
+            {
+                ((OperationData*)((BrowserOperation*)setOperCopy)->get_data())->set_get_or_set(true);
+                ((BrowserOperation*)getOperCopy)->set_get_of(nodeCopy);
+            }
+        }
 
         break;
 #ifndef SIMPLE_DUPLICATION

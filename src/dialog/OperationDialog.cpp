@@ -135,7 +135,8 @@ void OperationDialog::init_get_set()
     get_of_rel = 0;
     set_of_rel = 0;
 
-    if (oper->is_get_or_set) {
+    if (oper->is_get_or_set)
+    {
         BrowserOperation * br_op = (BrowserOperation *) oper->browser_node;
         Q3ListViewItem * child;
 
@@ -145,7 +146,8 @@ void OperationDialog::init_get_set()
             BrowserNode * br = (BrowserNode *) child;
 
             if (!br->deletedp()) {
-                if (br->get_type() == UmlAttribute) {
+                if (br->get_type() == UmlAttribute)
+                {
                     if (((BrowserAttribute *) br)->get_get_oper() == br_op) {
                         get_of_attr = (AttributeData *) br->get_data();
                         break;

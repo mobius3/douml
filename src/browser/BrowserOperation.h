@@ -47,8 +47,8 @@ protected:
     static QStringList its_default_stereotypes;
 
     OperationData * def;
-    BrowserNode * get_of;	// exclusive with set_of;
-    BrowserNode * set_of;
+    BrowserNode * get_of = nullptr;	// exclusive with set_of;
+    BrowserNode * set_of = nullptr;
 
 protected:
     BrowserOperation(int id);
