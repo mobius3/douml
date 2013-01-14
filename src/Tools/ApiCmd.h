@@ -26,6 +26,8 @@
 #ifndef APICMD_H
 #define APICMD_H
 
+
+
 enum CmdFamily {
     onInstanceCmd, classGlobalCmd, packageGlobalCmd, miscGlobalCmd,
     umlSettingsCmd, cppSettingsCmd, javaSettingsCmd, idlSettingsCmd,

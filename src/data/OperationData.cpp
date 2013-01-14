@@ -52,6 +52,7 @@
 #include "err.h"
 #include "DialogUtil.h"
 #include "ProfiledStereotypes.h"
+#include "QSettings"
 
 IdDict<OperationData> OperationData::all(1023, __FILE__);
 
@@ -3356,17 +3357,22 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
         if (cpp_const)
             st << "const ";
 
-        if (cpp_default)
-            st << "default ";
+        QSettings settings("settings.ini", QSettings::IniFormat);
+        settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+        if(settings.value("General/compatibility_save") .toInt() != 1)
+        {
+            if (cpp_default)
+                st << "default ";
 
-        if (cpp_delete)
-            st << "delete ";
+            if (cpp_delete)
+                st << "delete ";
 
-        if (cpp_override)
-            st << "override ";
+            if (cpp_override)
+                st << "override ";
 
-        if (cpp_final)
-            st << "final ";
+            if (cpp_final)
+                st << "final ";
+        }
 
         if (cpp_friend)
             st << "friend ";
@@ -3384,8 +3390,13 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
 
         st << "nparams " << nparams;
         nl_indent(st);
-        st << "origin ";
-        save_string(originClass, st);
+
+        if(settings.value("General/compatibility_save") .toInt() != 1)
+        {
+
+            st << "origin ";
+            save_string(originClass, st);
+        }
 
 
         for (unsigned i = 0; i != nparams; i += 1)

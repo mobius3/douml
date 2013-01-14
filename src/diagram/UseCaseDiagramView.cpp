@@ -504,7 +504,7 @@ void UseCaseDiagramView::save(QTextStream & st, QString & warning,
         // sort is useless for a copy
         items.sort();
 
-    st << "format " << FILEFORMAT << "\n";
+    st << "format " << api_format() << "\n";
 
     // save first class use_cases packages fragment subject notes and icons
 

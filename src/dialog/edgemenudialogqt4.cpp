@@ -227,6 +227,7 @@ bool EdgeMenuDialogQt4::SaveData()
     // but since not all subclasses reimplement this as of now
     // I can't make this pure virtual
     // Therefore, I provide default implementation that does nothing instead
+    return true;
 }
 
 void EdgeMenuDialogQt4::RejectData()

@@ -116,7 +116,7 @@ BrowserObjectDiagram::~BrowserObjectDiagram()
     delete def;
 }
 
-bool BrowserObjectDiagram::set_diagram_window(DiagramWindow * value)
+void BrowserObjectDiagram::set_diagram_window(DiagramWindow * value)
 {
     window = dynamic_cast<ObjectDiagramWindow*>(value);
 }

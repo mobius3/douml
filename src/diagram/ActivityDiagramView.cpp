@@ -775,7 +775,7 @@ void ActivityDiagramView::save(QTextStream & st, QString & warning,
         // sort is useless for a copy
         items.sort();
 
-    st << "format " << FILEFORMAT << "\n";
+    st << "format " << api_format() << "\n";
 
     // save first activity, activity nodes, actions, objects, packages, fragments, notes and icons
 

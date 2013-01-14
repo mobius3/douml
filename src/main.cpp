@@ -56,6 +56,8 @@
 #include "dialog/OperationDialog.h"
 #include "ui/constructorinitializerdialog.h"
 #include "misc/TypeIdentifier.h"
+#include <QSettings>
+#include <QFileInfo>
 
 
 
@@ -98,6 +100,18 @@ int main(int argc, char ** argv)
 
 
     UmlDesktop::init();
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    bool overridePresent = QFileInfo("override_transition.txt").exists();
+    if(settings.value("General/compatibility_save") .toInt() == 1 && !overridePresent)
+    {
+    QMessageBox::warning(0, QObject::tr("Warning"),
+                         QObject::tr("Douml is working in transitional mode.\n All UI improvements are yours to use,  "
+                                     "but saving is done in the format of Bouml 4.22 "
+                                     "which loses all new c++11 and hierarchy specifiers\n\n"
+                                     "To suppress this warning place empty file override_transition.txt into the application folder\n"
+                                     "To disable the mode - change compatibility_save parameter to 0 in settings.ini\n"));
+    }
 
     // note : bool conv_env = !QDir::home().exists(".doumlrc") doesn't work
     // if the path contains non latin1 characters, for instance cyrillic !

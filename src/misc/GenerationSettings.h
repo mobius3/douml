@@ -482,7 +482,7 @@ public:
     static bool python_default_operation3() {
         return python_3_operation;
     };
-    static const QString & python_get_indent_step() {
+    static const WrapperStr & python_get_indent_step() {
         return python_indent_step;
     }
     static const char * python_default_source_content() {

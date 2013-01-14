@@ -2994,6 +2994,17 @@ void set_last_used_directory(QString s)
     Last_Used_Directory = fi.dirPath();
 }
 
+unsigned api_format(bool useTrueFormat)
+{
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    if(settings.value("General/compatibility_save") .toInt() != 1 || useTrueFormat)
+        return settings.value("General/fileformat").toInt();
+    else
+        return 75;
+}
+
+
 //
 
 

@@ -471,7 +471,13 @@ void GenerationSettings::init()
     cpp_rel_decl[1][0] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};\n";
     cpp_rel_decl[1][1] = "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n";
     cpp_rel_decl[1][2] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n";
-    cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract}${final}${default}${delete}${override};\n";
+
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    if(settings.value("General/compatibility_save") .toInt() != 1)
+        cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract}${final}${default}${delete}${override};\n";
+    else
+        cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};\n";
     cpp_oper_def = "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{\n  ${body}}\n";
     cpp_force_throw = FALSE;
     cpp_get_visibility = UmlPublic;
@@ -3800,7 +3806,7 @@ void GenerationSettings::read(char *& st, char *& k)
 
         read_keyword(st, "cpp_default_operation_declaration");
         WrapperStr cpp_oper_decl_temp(read_string(st));
-        if(FILEFORMAT > 77 &&
+        if(api_format() > 77 &&
                 (cpp_oper_decl_temp.operator QString()).contains("{final}"))
         cpp_oper_decl = cpp_oper_decl_temp;
         read_keyword(st, "cpp_default_operation_definition");

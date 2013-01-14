@@ -31,6 +31,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3PointArray>
+#include <QSettings>
 #include <QSharedPointer>
 
 #define FILEFORMAT 77
@@ -50,6 +51,9 @@ class QRect;
 class QFont;
 
 class DiagramItem;
+
+
+extern unsigned api_format(bool useTrueFormat = false);
 
 extern QString my_baseName(QFileInfo & fi);
 

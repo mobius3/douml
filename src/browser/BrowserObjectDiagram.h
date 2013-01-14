@@ -63,7 +63,7 @@ protected:
 public:
     BrowserObjectDiagram(QString s, BrowserNode * p, int id = 0);
     virtual ~BrowserObjectDiagram();
-    virtual bool set_diagram_window(DiagramWindow*);
+    virtual void set_diagram_window(DiagramWindow*);
 
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,

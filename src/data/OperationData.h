@@ -307,7 +307,7 @@ public:
     bool get_or_set() const {
         return is_get_or_set;
     }
-    bool set_get_or_set(bool value)  {
+    void set_get_or_set(bool value)  {
         is_get_or_set = value;
     }
     void update_get_of(const QString & attr_name,

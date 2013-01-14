@@ -33,6 +33,7 @@
 #include <Q3PtrList>
 
 #include "BrowserNode.h"
+#include <QSettings>
 #include "../Tools/ApiCmd.h"
 
 class Socket;
@@ -86,7 +87,12 @@ protected:
 
 public:
     unsigned api_format() const {
-        return api_version;
+        QSettings settings("settings.ini", QSettings::IniFormat);
+        settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+        if(settings.value("General/compatibility_save") .toInt() != 1)
+            return api_version;
+        else
+            return 75;
     }
     virtual ~ToolCom();
 

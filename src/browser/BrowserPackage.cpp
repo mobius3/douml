@@ -2394,7 +2394,7 @@ void BrowserPackage::save_all(bool modified_only)
                 // saves the package own data
 
                 indent0();
-                st << "format " << FILEFORMAT << "\n";
+                st << "format " << api_format() << "\n";
 
                 save_string(pack->name, st);
 
@@ -2804,7 +2804,7 @@ unsigned BrowserPackage::load(bool recursive, int id)
             read_keyword(st, "format");
             set_read_file_format(read_unsigned(st));
 
-            if (read_file_format() > FILEFORMAT) {
+            if (read_file_format() > api_format(true)) {
                 msg_critical("Error",
                              TR("Your version of BOUML is too old to read this project"));
                 throw 0;
@@ -3094,7 +3094,7 @@ bool BrowserPackage::load_version(QString fn)
                 read_keyword(st, "format");
                 set_read_file_format(read_unsigned(st));
 
-                if (read_file_format() > FILEFORMAT) {
+                if (read_file_format() > api_format(true)) {
                     msg_critical(TR("Error"),
                                  TR("Your version of BOUML is too old to read this project"));
                     throw 0;

@@ -539,7 +539,7 @@ void DeploymentDiagramView::save(QTextStream & st, QString & warning,
         // sort is useless for a copy
         items.sort();
 
-    st << "format " << FILEFORMAT << "\n";
+    st << "format " << api_format() << "\n";
 
     // save first package fragment deploymentnode component hub notes text and icons
 

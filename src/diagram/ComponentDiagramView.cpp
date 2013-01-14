@@ -426,7 +426,7 @@ void ComponentDiagramView::save(QTextStream & st, QString & warning,
         // sort is useless for a copy
         items.sort();
 
-    st << "format " << FILEFORMAT << "\n";
+    st << "format " << api_format() << "\n";
 
     // save first component packages fragment notes junctions and icons
 

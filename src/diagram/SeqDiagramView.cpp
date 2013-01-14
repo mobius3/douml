@@ -386,7 +386,7 @@ void SeqDiagramView::save(QTextStream & st, QString & warning,
         // sort is useless for a copy
         items.sort();
 
-    st << "format " << FILEFORMAT << "\n";
+    st << "format " << api_format() << "\n";
 
     // save first the fragments, continuation, actors, classes instances, notes, icons and text
 
