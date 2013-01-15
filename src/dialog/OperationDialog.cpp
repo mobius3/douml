@@ -1398,7 +1398,7 @@ void OperationDialog::cpp_default_decl()
             oper->update_cpp_get_of(decl, def, get_of_attr->get_browser_node()->get_name(),
                                     get_of_attr->get_cppdecl(),
                                     get_of_attr->get_isa_const_attribute(),
-                                    get_of_attr->get_multiplicity());
+                                    get_of_attr->get_multiplicity(), oper->get_isa_class_operation());
         else if (set_of_attr != 0)
             oper->update_cpp_set_of(decl, def, set_of_attr->get_browser_node()->get_name(),
                                     set_of_attr->get_cppdecl(),
@@ -1410,12 +1410,12 @@ void OperationDialog::cpp_default_decl()
                 oper->update_cpp_get_of(decl, def, get_of_rel->get_role_a(),
                                         get_of_rel->get_cppdecl_a(),
                                         get_of_rel->get_isa_const_relation_a(),
-                                        get_of_rel->get_multiplicity_a());
+                                        get_of_rel->get_multiplicity_a(), oper->get_isa_class_operation());
             else
                 oper->update_cpp_get_of(decl, def, get_of_rel->get_role_b(),
                                         get_of_rel->get_cppdecl_b(),
                                         get_of_rel->get_isa_const_relation_b(),
-                                        get_of_rel->get_multiplicity_b());
+                                        get_of_rel->get_multiplicity_b(), oper->get_isa_class_operation());
         }
         else {
             // set_of_rel != 0
@@ -1955,7 +1955,7 @@ void OperationDialog::cpp_default_def()
             oper->update_cpp_get_of(decl, def, get_of_attr->get_browser_node()->get_name(),
                                     get_of_attr->get_cppdecl(),
                                     get_of_attr->get_isa_const_attribute(),
-                                    get_of_attr->get_multiplicity());
+                                    get_of_attr->get_multiplicity(), oper->get_isa_class_operation());
         else if (set_of_attr != 0)
             oper->update_cpp_set_of(decl, def, set_of_attr->get_browser_node()->get_name(),
                                     set_of_attr->get_cppdecl(),
@@ -1966,12 +1966,12 @@ void OperationDialog::cpp_default_def()
                 oper->update_cpp_get_of(decl, def, get_of_rel->get_role_a(),
                                         get_of_rel->get_cppdecl_a(),
                                         get_of_rel->get_isa_const_relation_a(),
-                                        get_of_rel->get_multiplicity_a());
+                                        get_of_rel->get_multiplicity_a(), oper->get_isa_class_operation());
             else
                 oper->update_cpp_get_of(decl, def, get_of_rel->get_role_b(),
                                         get_of_rel->get_cppdecl_b(),
                                         get_of_rel->get_isa_const_relation_b(),
-                                        get_of_rel->get_multiplicity_b());
+                                        get_of_rel->get_multiplicity_b(), oper->get_isa_class_operation());
         }
         else {
             // set_of_rel != 0

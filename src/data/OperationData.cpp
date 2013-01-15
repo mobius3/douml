@@ -897,7 +897,7 @@ void OperationData::copy_getset(const OperationData * model)
 void OperationData::update_cpp_get_of(Q3CString & decl, Q3CString & def,
                                       const QString & attr_name,
                                       QString attcpp_decl, bool attis_const,
-                                      QString multiplicity)
+                                      QString multiplicity, bool isStatic)
 {
     remove_comments(attcpp_decl);
     attcpp_decl = attcpp_decl.stripWhiteSpace();
@@ -1010,7 +1010,8 @@ void OperationData::update_cpp_get_of(Q3CString & decl, Q3CString & def,
             if ((index = d.find("$$")) != -1)
                 d.replace(index, 2, (has_stereotype) ? "& ${name}" : "${name}");
 
-            if (has_multiplicity) {
+            if (has_multiplicity || isStatic)
+            {
                 if ((index = d.find("${const}")) != -1)
                     d.remove(index, 8);
 
@@ -1051,7 +1052,7 @@ void OperationData::update_cpp_get_of(Q3CString & decl, Q3CString & def,
             if ((index = d.find("$$")) != -1)
                 d.replace(index, 2, "${name}");
 
-            if (has_multiplicity) {
+            if (has_multiplicity || isStatic) {
                 if ((index = d.find("${const}")) != -1)
                     d.remove(index, 8);
 
@@ -1409,7 +1410,7 @@ void OperationData::update_get_of(const QString & attr_name,
             }
 
             update_cpp_get_of(decl, def, attr_name, attcpp_decl,
-                              attis_const, multiplicity);
+                              attis_const, multiplicity, this->isa_class_operation);
             cpp_decl = decl;
 
             if (def.isEmpty())

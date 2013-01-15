@@ -355,7 +355,7 @@ public:
     static void update_cpp_get_of(Q3CString & decl, Q3CString & def,
                                   const QString & attr_name,
                                   QString attcpp_decl, bool attis_const,
-                                  QString multiplicity);
+                                  QString multiplicity, bool isStatic);
     static void update_java_get_of(Q3CString & def, const QString & attr_name,
                                    QString attjava_decl, QString multiplicity);
     static void update_php_get_of(Q3CString & def, const QString & attr_name,
