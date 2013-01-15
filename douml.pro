@@ -1,8 +1,18 @@
 TEMPLATE    = app
 INCLUDEPATH    += src/browser src/data src/diagram src/dialog src/misc src/tool src/xpm
 DEPENDPATH += src/browser src/data src/diagram src/dialog src/misc src/tool src/xpm
-INCLUDEPATH += src/boost src src/ui
-CONFIG        += qt warn_on debug
+INCLUDEPATH += src/boost src src/ui ..
+#CONFIG        += qt warn_on debug
+CONFIG(debug, debug|release) {
+    CONFIG -= debug release
+    CONFIG += qt warn_on debug
+    QMAKE_POST_LINK = " "
+}
+CONFIG(release, debug|release) {
+    CONFIG -= debug release
+    CONFIG += qt release
+    QMAKE_POST_LINK = " "
+}
 HEADERS        = \
         src/data/ActualParamData.h \
         src/data/BasicData.h \
@@ -502,25 +512,55 @@ SOURCES = \
     src/dialog/edgemenudialogqt4.cpp \
     src/dialog/edgemenudialogbase.cpp
 
-TARGET        = douml
-DEFINES         = BooL=bool DEBUGCOM
+TARGET = douml
+DEFINES = BooL=bool DEBUGCOM
+
 #The following line was inserted by qt3to4
 QT += network  qt3support
 
+#release{
+#    MOC_DIR = bin/douml/MOC_release
+#    OBJECTS_DIR = bin/douml/OBJ_release
+#}
+#
+#debug{
+#    MOC_DIR = bin/douml/MOC_debug
+#    OBJECTS_DIR = bin/douml/OBJ_debug
+#}
 
-
-Release{
-    MOC_DIR = bin/douml/MOC_release
-    OBJECTS_DIR = bin/douml/Obj_release
+win32{
+    Release:
+        MOC_DIR = $$PWD/bin/release/win32/$$TARGET
+        OBJECTS_DIR = $$PWD/bin/release/win32/$$TARGET
+        DESTDIR = $$PWD/bin/release/win32/$$TARGET
+    Debug:
+        MOC_DIR = $$PWD/bin/debug/win32/$$TARGET
+        OBJECTS_DIR = $$PWD/bin/debug/win32/$$TARGET
+        DESTDIR = $$PWD/bin/debug/win32/$$TARGET
+}
+macx{
+    Release:
+        MOC_DIR = $$PWD/bin/release/macx/$$TARGET
+        OBJECTS_DIR = $$PWD/bin/release/macx/$$TARGET
+        DESTDIR = $$PWD/bin/release/macx/$$TARGET
+    Debug:
+        MOC_DIR = $$PWD/bin/debug/macx/$$TARGET
+        OBJECTS_DIR = $$PWD/bin/debug/macx/$$TARGET
+        DESTDIR = $$PWD/bin/debug/macx/$$TARGET
+}
+unix{
+    Release:
+        MOC_DIR = $$PWD/bin/release/unix/$$TARGET
+        OBJECTS_DIR = $$PWD/bin/release/unix/$$TARGET
+        DESTDIR = $$PWD/bin/release/unix/$$TARGET
+    Debug:
+        MOC_DIR = $$PWD/bin/debug/unix/$$TARGET
+        OBJECTS_DIR = $$PWD/bin/debug/unix/$$TARGET
+        DESTDIR = $$PWD/bin/debug/unix/$$TARGET
 }
 
-Debug{
-    MOC_DIR = bin/douml/MOC_Debug
-    OBJECTS_DIR = bin/douml/Obj_Debug
-
-}
-    UI_DIR = src/ui
-    DESTDIR = bin
+UI_DIR = src/ui
+DESTDIR = bin
 
 QMAKE_CXXFLAGS += -std=gnu++11
 
