@@ -11,6 +11,7 @@ public:
     //  the constructor, do not call it yourself !!!!!!!!!!
     UmlActivityPin(void * id, const Q3CString & s) : UmlBaseActivityPin(id, s) {
     }
+    virtual ~UmlActivityPin(){}
 
 };
 

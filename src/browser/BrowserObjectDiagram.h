@@ -47,7 +47,7 @@ protected:
     static QStringList its_default_stereotypes;
 
     SimpleData * def;
-    ObjectDiagramWindow * window;
+    ObjectDiagramWindow * window = nullptr;
     ObjectDiagramSettings settings;
     ObjectDiagramSettings * used_settings;
     UmlColor note_color;

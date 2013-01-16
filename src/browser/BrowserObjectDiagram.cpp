@@ -159,6 +159,7 @@ void BrowserObjectDiagram::import()
         BrowserObjectDiagram * d = imported.take(0);
 
         (new ObjectDiagramWindow(d->full_name(), d, *it))->close(TRUE);
+        d->set_diagram_window(nullptr);
         it = imported_ids.remove(it);
         d->is_modified = TRUE;
     }
@@ -675,7 +676,7 @@ BrowserObjectDiagram * BrowserObjectDiagram::read(char *& st, char * k,
             r->set_parent(parent);
             r->set_name(s);
         }
-
+        r->set_diagram_window(0);
         r->is_defined = TRUE;
 
         r->is_read_only = (!in_import() && read_only_file()) ||
