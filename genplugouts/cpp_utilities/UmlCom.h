@@ -3,14 +3,15 @@
 
 
 #include <q3socketdevice.h>
-#include "CmdFamily.h"
-#include "OnInstanceCmd.h"
+
+
 #include "anItemKind.h"
 #include "aRelationKind.h"
 #include <q3cstring.h>
 
 #include <q3ptrvector.h>
 #include <qstring.h>
+#include "Tools/ApiCmd.h"
 
 class UmlItem;
 class UmlTypeSpec;
