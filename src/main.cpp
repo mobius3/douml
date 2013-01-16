@@ -74,6 +74,7 @@ int main(int argc, char ** argv)
 
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
     QsLogging::Logger & logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(QsLogging::TraceLevel);
@@ -103,7 +104,7 @@ int main(int argc, char ** argv)
     QSettings settings("settings.ini", QSettings::IniFormat);
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
     bool overridePresent = QFileInfo("override_transition.txt").exists();
-    if(settings.value("General/compatibility_save") .toInt() == 1 && !overridePresent)
+    if(settings.value("Main/compatibility_save") .toInt() == 1 && !overridePresent)
     {
     QMessageBox::warning(0, QObject::tr("Warning"),
                          QObject::tr("Douml is working in transitional mode.\n All UI improvements are yours to use,  "

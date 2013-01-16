@@ -516,7 +516,7 @@ TARGET = douml
 DEFINES = BooL=bool DEBUGCOM
 
 #The following line was inserted by qt3to4
-QT += network  qt3support
+QT += core gui network  qt3support
 
 #release{
 #    MOC_DIR = bin/douml/MOC_release

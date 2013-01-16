@@ -46,6 +46,8 @@
 #include <Q3VBoxLayout>
 #include <Q3CString>
 #include <Q3PointArray>
+#include <QTextCodec>
+#include <QFileInfo>
 
 #include "myio.h"
 #include "UmlWindow.h"
@@ -2996,10 +2998,16 @@ void set_last_used_directory(QString s)
 
 unsigned api_format(bool useTrueFormat)
 {
+    QFileInfo info("settings.ini");
+    bool test = info.exists();
     QSettings settings("settings.ini", QSettings::IniFormat);
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-    if(settings.value("General/compatibility_save") .toInt() != 1 || useTrueFormat)
-        return settings.value("General/fileformat").toInt();
+    int compat = settings.value("Main/compatibility_save").toInt();
+    if(compat != 1 || useTrueFormat)
+    {
+        int fileFormat = settings.value("Main/fileformat").toInt();
+        return fileFormat;
+    }
     else
         return 75;
 }
