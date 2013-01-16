@@ -1006,7 +1006,10 @@ void UmlWindow::load(QString fn, bool forcesaveas)
     }
 
     QDir di(fi.dirPath(TRUE));
-    QString filename = fi.baseName();
+    QRegExp dotSearch("[.]");
+    int pos  = dotSearch.lastIndexIn(fi.fileName());
+    int nameLength = fi.fileName().length();
+    QString filename = fi.fileName().left(nameLength - (nameLength - pos));
 
     //s.truncate(s.length() - 4);	// QFileInfo::baseName remove all after first dot
 
