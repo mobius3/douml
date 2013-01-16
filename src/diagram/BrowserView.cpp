@@ -47,6 +47,8 @@
 #include "myio.h"
 #include "mu.h"
 #include "translate.h"
+#include "ToolCom.h"
+#include "Tool.h"
 
 BrowserPackage * BrowserView::project;
 BrowserPackage * BrowserView::imported_project;
@@ -298,6 +300,43 @@ void BrowserView::contentsMouseMoveEvent(QMouseEvent * e)
 void BrowserView::contentsMouseReleaseEvent(QMouseEvent *)
 {
     mousePressed = FALSE;
+}
+
+void BrowserView::OnGenerateCpp()
+{
+    BrowserNode* currentNode = static_cast<BrowserNode*>(this->currentItem());
+
+    bool preserve = preserve_bodies();
+
+    ToolCom::run((verbose_generation())
+                 ? ((preserve) ? "cpp_generator -v -p" : "cpp_generator -v")
+                     : ((preserve) ? "cpp_generator -p" : "cpp_generator"),
+                     currentNode);
+
+}
+
+void BrowserView::OnGenerateJava()
+{
+    BrowserNode* currentNode = static_cast<BrowserNode*>(this->currentItem());
+
+    bool preserve = preserve_bodies();
+
+    ToolCom::run((verbose_generation())
+                 ? ((preserve) ? "cpp_generator -v -p" : "cpp_generator -v")
+                     : ((preserve) ? "cpp_generator -p" : "cpp_generator"),
+                     currentNode);
+}
+
+void BrowserView::OnGeneratePhp()
+{
+}
+
+void BrowserView::OnGeneratePython()
+{
+}
+
+void BrowserView::OnGenerateIdl()
+{
 }
 
 void BrowserView::keyPressEvent(QKeyEvent * e)

@@ -89,6 +89,8 @@ public:
     static void force_visible(Q3ListViewItem *);
     static void remove_temporary_files();
 
+
+
 protected:
     void keyPressEvent(QKeyEvent * e);
 
@@ -103,6 +105,13 @@ protected slots:
     void contentsMouseMoveEvent(QMouseEvent * e);
     void contentsMousePressEvent(QMouseEvent * e);
     void contentsMouseReleaseEvent(QMouseEvent * e);
+
+public slots:
+    void OnGenerateCpp();
+    void OnGenerateJava();
+    void OnGeneratePhp();
+    void OnGeneratePython();
+    void OnGenerateIdl();
 };
 
 #endif

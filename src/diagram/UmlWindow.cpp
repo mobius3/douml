@@ -53,6 +53,7 @@
 #include <QCloseEvent>
 #include <Q3ValueList>
 #include <QTextStream>
+#include <QLabel>
 #include <QKeyEvent>
 #include <QStyle>
 //#include <qcdestyle.h>
@@ -305,15 +306,20 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
                             this, SLOT(next_select()), projectTools, "next selected");
     Q3WhatsThis::add(next, nextText());
 
-    //todo
-    //removed for testing purposes
-    //(void)Q3WhatsThis::whatsThisButton(projectTools);
 
     Q3WhatsThis::add(projectOpen, projectOpenText());
     Q3WhatsThis::add(projectSave, projectSaveText());
     QToolButton * whatsThisButton
         = CreateToolButton(QApplication::style()->standardIcon(QStyle::SP_TitleBarContextHelpButton).pixmap(),
                            this, SLOT(whats_this()), projectTools, "Whats's this?");
+
+    QLabel* generateLabel = new QLabel(tr("Generate:"));
+    QFont font = generateLabel->font();
+    font.setBold(true);
+    generateLabel->setFont(font);
+    projectTools->addWidget(generateLabel);
+
+
     Q3WhatsThis::add(whatsThisButton, whatsThisText());
 
     projectMenu = new Q3PopupMenu(this);
@@ -468,6 +474,15 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     spl2 = new QSplitter(Qt::Vertical, spl1, "spl2");
 
     browser = new BrowserView(spl1);
+
+
+
+    QAction* cppAction = new QAction(QIcon(), tr("C++"),QKeySequence(), browser, SLOT(OnGenerateCpp());
+    QAction* javaAction = new QAction(QIcon(), tr("Java"),QKeySequence(), browser, SLOT(OnGenerateJava());
+    QAction* phAction = new QAction(QIcon(), tr("Python"),QKeySequence(), browser, SLOT(OnGeneratePython());
+    QAction* pythonAction = new QAction(QIcon(), tr("Php"),QKeySequence(), browser, SLOT(OnGeneratePhp());
+    QAction* idlAction = new QAction(QIcon(), tr("Idl"),QKeySequence(), browser, SLOT(OnGenerateIdl());
+
 
     ws = new QWorkspace(spl2);
 
