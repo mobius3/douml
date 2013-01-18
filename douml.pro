@@ -565,7 +565,7 @@ DESTDIR = bin
 QMAKE_CXXFLAGS += -std=gnu++11
 
 RESOURCES += \
-    src/icons.qrc
+    icons.qrc
 
 FORMS += \
     src/ui/operationwidgetcpp.ui \
