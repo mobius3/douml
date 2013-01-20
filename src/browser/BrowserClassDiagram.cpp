@@ -109,7 +109,8 @@ BrowserClassDiagram::~BrowserClassDiagram()
         QFile::remove(d.absFilePath(fn));
     }
 
-    if (window != 0) window->close();
+//    if (window != 0)
+//        window->close();
 
     window = 0;
     all.remove(get_ident());

@@ -1951,7 +1951,7 @@ void ArtifactDialog::accept()
         else
             data->update_associated(art_associated);
 
-        kvtable->update(bn);
+        kvtable->updateNodeFromThis(bn);
 
         ProfiledStereotypes::modified(bn, newst);
 

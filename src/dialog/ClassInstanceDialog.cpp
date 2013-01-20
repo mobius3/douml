@@ -457,7 +457,7 @@ void ClassInstanceDialog::accept()
                                              s));
     }
 
-    kvtable->update(bn);
+    kvtable->updateNodeFromThis(bn);
 
     ProfiledStereotypes::modified(bn, newst);
 

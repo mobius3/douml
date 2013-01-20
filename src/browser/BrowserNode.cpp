@@ -862,14 +862,17 @@ void BrowserNode::mark_menu(Q3PopupMenu & m, const char * s, int bias) const
         m.setWhatsThis(m.insertItem(TR("Mark"), bias),
                        TR("to mark %1", s));
 
-        if (!marked_list.isEmpty()) {
+        if (!marked_list.isEmpty())
+        {
             bool parents_marked = FALSE;
             const BrowserNode * bn = this;
 
-            while (bn != BrowserView::get_project()) {
+            while (bn != BrowserView::get_project())
+            {
                 bn = (BrowserNode *) bn->parent();
 
-                if (bn->is_marked) {
+                if (bn->is_marked)
+                {
                     parents_marked = TRUE;
                     break;
                 }
@@ -880,10 +883,14 @@ void BrowserNode::mark_menu(Q3PopupMenu & m, const char * s, int bias) const
             bool rec = FALSE;
 #endif
             Q3PtrListIterator<BrowserNode> it(marked_list);
-
-            for (; (bn = it.current()) != 0; ++it) {
+            bool moveInsideSameClass = true;
+            for (; (bn = it.current()) != 0; ++it)
+            {
+                if(bn->parent() != this->parent())
+                    moveInsideSameClass = false;
                 if ((bn == BrowserView::get_project()) ||
-                    !((BrowserNode *) bn->parent())->is_writable()) {
+                    !((BrowserNode *) bn->parent())->is_writable())
+                {
                     moveable = FALSE;
 #ifndef SIMPLE_DUPLICATION
                 }
@@ -898,12 +905,12 @@ void BrowserNode::mark_menu(Q3PopupMenu & m, const char * s, int bias) const
 
             BooL duplicable_into = TRUE;
             BooL duplicable_after = TRUE;
-            bool into = may_contains_them(marked_list, duplicable_into)
-                        && is_writable();
+            bool canContain = may_contains_them(marked_list, duplicable_into);
+            bool into = canContain && is_writable();
             bool thisIsntProject = this != BrowserView::get_project();
             bool isWritable = ((BrowserNode *) parent())->is_writable();
-            bool parentCanHold = ((BrowserNode *) parent())->may_contains_them(marked_list, duplicable_after);
-            bool after = thisIsntProject && isWritable && parentCanHold;
+            bool parentCanContain = ((BrowserNode *) parent())->may_contains_them(marked_list, duplicable_after);
+            bool after = thisIsntProject && isWritable &&  ( parentCanContain || moveInsideSameClass);
 
             if (!parents_marked)
             {
@@ -1079,14 +1086,22 @@ void BrowserNode::mark_management(int choice)
                 else if(bn->get_type() >= UmlAggregation &&  bn->get_type() <= UmlDirectionalAggregationByValue)
                 {
                     BrowserRelation* asRelation =  dynamic_cast<BrowserRelation*>(bn);
-                    getOperCopy = ((BrowserNode *) asRelation->get_get_oper())->duplicate(this);
-                    setOperCopy = ((BrowserNode *) asRelation->get_set_oper())->duplicate(this);
+                    BrowserNode* getOper=((BrowserNode *) asRelation->get_get_oper());
+                    BrowserNode* setOper=((BrowserNode *) asRelation->get_get_oper());
+                    if(getOper)
+                        getOperCopy = getOper->duplicate(this);
+                    if(setOper)
+                        setOperCopy = setOper->duplicate(this);
                     if(getOperCopy)
+                    {
                         move(getOperCopy, 0);
+                        ((BrowserRelation *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
+                    }
                     if(setOperCopy)
+                    {
                         move(setOperCopy, 0);
-                    ((BrowserRelation *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
-                    ((BrowserRelation *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
+                        ((BrowserRelation *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
+                    }
                 }
                 if((BrowserOperation*)setOperCopy)
                 {

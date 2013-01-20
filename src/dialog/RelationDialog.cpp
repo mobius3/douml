@@ -2699,7 +2699,7 @@ void RelationDialog::accept()
         }
 
         if (! a.ro)
-            a.kvtable->update(rel->start);
+            a.kvtable->updateNodeFromThis(rel->start);
 
         if (! b.ro) {
             if (rel->end)
@@ -2707,7 +2707,7 @@ void RelationDialog::accept()
 
             if (rel->check_end_visibility()) {
                 rel->end->modified();
-                b.kvtable->update(rel->end);
+                b.kvtable->updateNodeFromThis(rel->end);
             }
         }
 

@@ -182,7 +182,7 @@ void UseCaseDialog::accept()
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
 
-    kvtable->update(bn);
+    kvtable->updateNodeFromThis(bn);
 
     uc->set_extension_points(extension_points->text().stripWhiteSpace());
 

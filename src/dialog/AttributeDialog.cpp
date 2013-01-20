@@ -840,7 +840,7 @@ void AttributeDialog::accept()
 
         att->constraint = constraint->stripWhiteSpaceText();
 
-        kvtable->update(bn);
+        kvtable->updateNodeFromThis(bn);
 
         ProfiledStereotypes::modified(bn, newst);
 

@@ -483,7 +483,7 @@ void ComponentDialog::accept()
 
         bn->set_associated_classes(rz, pr, rq);
 
-        kvtable->update(bn);
+        kvtable->updateNodeFromThis(bn);
 
         ProfiledStereotypes::modified(bn, newst);
 

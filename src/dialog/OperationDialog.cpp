@@ -80,7 +80,7 @@
 #include "misc/TypeIdentifier.h"
 #include "ui/operationwidgetcpp.h"
 #include "ui_operationwidgetcpp.h"
-
+#include "Tools/SignalBlockerWrapper.h"
 QSize OperationDialog::previous_size;
 QSharedPointer<OperationDialog> OperationDialog::instance;
 OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
@@ -89,8 +89,8 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
 {
     //o->browser_node->edit_start();
 
-    isWritable = hasOkButton();
     SetDialogMode(o->browser_node->is_writable());
+    //isWritable = hasOkButton();
     setCaption(TR("Operation dialog"));
     SetCurrentNode(o->browser_node);
     //setWindowFlags(!Qt::WindowTitleHint);
@@ -442,15 +442,15 @@ void OperationDialog::FillcppTab(OperationData * oper)
     visibilityBg = cpp_visibility.init(tabBgCppModifiers, oper->get_cpp_visibility(), FALSE, 0, TR("follow uml")); // update this
     visibilityBg->setEnabled(isWritable);
 
-    cbCppConst->setChecked(oper->get_cpp_const());
-    cbCppVolatile->setChecked(oper->get_is_volatile());
-    cbCppFriend->setChecked(oper->get_cpp_friend());
-    cbCppVirtual->setChecked(oper->get_cpp_virtual());
-    cbCppInline->setChecked(oper->get_cpp_inline());
-    cppTab->ui->cbCppDefaulted->setChecked(oper->get_cpp_default());
-    cppTab->ui->cbCppDeleted->setChecked(oper->get_cpp_delete());
-    cppTab->ui->cbCppOverride->setChecked(oper->get_cpp_override());
-    cppTab->ui->cbCppFinal->setChecked(oper->get_cpp_final());
+    SilentCall(cbCppConst)->setChecked(oper->get_cpp_const());
+    SilentCall(cbCppVolatile)->setChecked(oper->get_is_volatile());
+    SilentCall(cbCppFriend)->setChecked(oper->get_cpp_friend());
+    SilentCall(cbCppVirtual)->setChecked(oper->get_cpp_virtual());
+    SilentCall(cbCppInline)->setChecked(oper->get_cpp_inline());
+    SilentCall(cppTab->ui->cbCppDefaulted)->setChecked(oper->get_cpp_default());
+    SilentCall(cppTab->ui->cbCppDeleted)->setChecked(oper->get_cpp_delete());
+    SilentCall(cppTab->ui->cbCppOverride)->setChecked(oper->get_cpp_override());
+    SilentCall(cppTab->ui->cbCppFinal)->setChecked(oper->get_cpp_final());
 
 
     cbCppConst->setDisabled(!isWritable);
@@ -3460,7 +3460,7 @@ bool OperationDialog::SaveData()
 
         // user
 
-        kvtable->update(bn);
+        kvtable->updateNodeFromThis(bn);
 
         ProfiledStereotypes::modified(bn, newst);
 
@@ -4904,8 +4904,8 @@ static QStringList DirList;
 
 ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
                          const QStringList & list,
-                         OperationDialog * d, bool visit)
-    : MyTable(o->get_n_params() + 1, (visit) ? 4 : 5, parent),
+                         OperationDialog * d, bool isReadOnly)
+    : MyTable(o->get_n_params() + 1, (isReadOnly) ? 4 : 5, parent),
       dialog(d), types(list)
 {
     int index;
@@ -4919,7 +4919,7 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     horizontalHeader()->setLabel(2, TR("Type"));
     horizontalHeader()->setLabel(3, TR("Default value"));
 
-    if (visit) {
+    if (isReadOnly) {
         for (index = 0; index < sup; index += 1) {
             setItem(index, 0, new TableItem(this, Q3TableItem::Never, stringify(o->get_param_dir(index))));
             setItem(index, 1, new TableItem(this, Q3TableItem::Never, o->get_param_name(index)));
@@ -4970,7 +4970,7 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     //setColumnStretchable (3, TRUE);
     horizontalHeader()->setResizeEnabled(TRUE, 3);
 
-    if (!visit) {
+    if (!isReadOnly) {
         adjustColumn(4);
         setColumnStretchable(4, FALSE);
 
@@ -4981,8 +4981,21 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     }
 }
 
-void ParamsTable::update(OperationData *o, const QStringList &list, OperationDialog *d, bool visit)
+void ParamsTable::update(OperationData *o, const QStringList &list, OperationDialog *d, bool isReadOnly)
 {
+
+    if (!isReadOnly)
+    {
+        if(numCols() == 4)
+            insertColumns(4);
+        horizontalHeader()->setLabel(4, TR("do"));
+    }
+    else
+    {
+        if(numCols() == 5)
+            removeColumn(4);
+    }
+
 
     int index;
     int sup = o->get_n_params();
@@ -4996,15 +5009,25 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
     disconnect(this, SIGNAL(valueChanged(int, int)),
             this, SLOT(value_changed(int, int)));
 
-    if (visit) {
-        for (index = 0; index < sup; index += 1) {
+    int rowCount = numRows();
+    for (index = rowCount - 1; index > sup; index -= 1)
+        removeRow(index);
+
+    if (isReadOnly)
+    {
+        for (index = 0; index < sup; index += 1)
+        {
+            if(index == numRows())
+                insertRows(numRows());
+
             setItem(index, 0, new TableItem(this, Q3TableItem::Never, stringify(o->get_param_dir(index))));
             setItem(index, 1, new TableItem(this, Q3TableItem::Never, o->get_param_name(index)));
             setItem(index, 2, new TableItem(this, Q3TableItem::Never, o->get_param_type(index).get_full_type()));
             setItem(index, 3, new TableItem(this, Q3TableItem::Never, o->get_param_default_value(index)));
         }
     }
-    else {
+    else
+    {
         horizontalHeader()->setLabel(4, TR("do"));
 
         alltypes = GenerationSettings::basic_types();
@@ -5024,9 +5047,7 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
             DirList[UmlOut] = stringify(UmlOut);
             // can't be return
         }
-        int rowCount = numRows();
-        for (index = rowCount - 1; index > sup; index -= 1)
-            removeRow(index);
+
 
         for (index = 0; index < sup; index += 1)
         {
@@ -5040,6 +5061,7 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
             setText(index, 4, QString());
         }
 
+        int columnCount = numCols();
         if(index == numRows())
             insertRows(numRows());
         setItem(index, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
@@ -5056,7 +5078,7 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
     //setColumnStretchable (3, TRUE);
     horizontalHeader()->setResizeEnabled(TRUE, 3);
 
-    if (!visit) {
+    if (!isReadOnly) {
         adjustColumn(4);
         setColumnStretchable(4, FALSE);
 
@@ -7395,6 +7417,7 @@ void OperationDialog::FillGuiElements(BrowserNode * bn)
 
 void OperationDialog::FillGuiElements(OperationData * _oper)
 {
+    SetDialogMode(_oper->browser_node->is_writable());
     cppbody = QString();
     oldcppbody = QString();
     templates = QString();
@@ -7465,7 +7488,7 @@ void OperationDialog::InitPropertiesTab()
 
 void OperationDialog::FillPropertiesTab(OperationData * o)
 {
-    kvtable->update(o->browser_node);
+    kvtable->updateThisFromNode(o->browser_node, !isWritable);
 }
 
 

@@ -295,7 +295,7 @@ void FlowDialog::accept()
         bn->set_comment(comment->text());
         UmlWindow::update_comment_if_needed(bn);
 
-        kvtable->update(bn);
+        kvtable->updateNodeFromThis(bn);
 
         ProfiledStereotypes::modified(bn, newst);
 

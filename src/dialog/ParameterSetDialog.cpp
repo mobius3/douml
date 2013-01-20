@@ -303,7 +303,7 @@ void ParameterSetDialog::accept()
 
         data->set_pins(l);
 
-        kvtable->update(bn);
+        kvtable->updateNodeFromThis(bn);
 
         ProfiledStereotypes::modified(bn, newst);
 

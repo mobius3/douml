@@ -137,9 +137,9 @@ void EdgeMenuDialog::ShowTab(QString name)
     addTab(tabs[name], name);
 }
 
-void EdgeMenuDialog::SetDialogMode(bool /*_isWritable*/)
+void EdgeMenuDialog::SetDialogMode(bool _isWritable)
 {
-
+    isWritable = _isWritable;
     if (isWritable)
     {
         setOkButton(QObject::tr("OK"));
