@@ -497,7 +497,8 @@ void BrowserArtifact::exec_menu_choice(int rank,
         ReferenceDialog::show(this);
         return;
 
-    case 10: {
+    case 10:
+    {
         bool preserve = preserve_bodies();
 
         ToolCom::run((verbose_generation())
