@@ -49,7 +49,9 @@
 // to manage preserved bodies, the key is the id under bouml
 Q3IntDict<char> UmlOperation::bodies(127);
 const char * BodyPrefix = "// Bouml preserved body begin ";
-const char * BodyPostfix = "// Bouml preserved body end ";
+const char * BodyPrefix2 = "// Douml preserved body begin ";
+static const char * BodyPostfix = "// Bouml preserved body end ";
+static const char * BodyPostfix2 = "// Douml preserved body end ";
 const int BodyPrefixLength = 30;
 const int BodyPostfixLength = 28;
 
@@ -595,6 +597,8 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
 void UmlOperation::generate_throw(QTextStream & f)
 {
     const Q3ValueList<UmlTypeSpec> exc = exceptions();
+    if(exc.count() == 0)
+        return;
 
     if (!exc.isEmpty()) {
         Q3ValueList<UmlTypeSpec>::ConstIterator it;
@@ -631,7 +635,8 @@ const char * UmlOperation::generate_body(QTextStream & fs,
         body = bodies.find((long) id);
     }
 
-    if (body == 0) {
+    if (body == 0)
+    {
         no_indent = !cppContextualBodyIndent();
         modeler_body = cppBody();	// to not free the string
         body = modeler_body;
@@ -645,7 +650,7 @@ const char * UmlOperation::generate_body(QTextStream & fs,
         indent += *p++;
 
     if (preserve() && !isBodyGenerationForced())
-        fs << indent << BodyPrefix << s_id << '\n';
+        fs << indent << BodyPrefix2 << s_id << '\n';
 
     if ((body != 0) && (*body != 0)) {
         // output body
@@ -691,7 +696,7 @@ const char * UmlOperation::generate_body(QTextStream & fs,
         if (add_nl)
             fs << '\n';
 
-        fs << indent << BodyPostfix << s_id << '\n';
+        fs << indent << BodyPostfix2 << s_id << '\n';
     }
 
     return p + 7;
@@ -924,6 +929,27 @@ static char * read_file(const char * filename)
         return 0;
 }
 
+static char* CheckBodyPrefix(char*& pointer, const char * prefix1, const char * prefix2)
+{
+    QLOG_ERROR() << "postfix iteration";
+    QLOG_ERROR() << prefix1;
+    QLOG_ERROR() << prefix2;
+    //QLOG_ERROR() << pointer;
+    char * pActual = nullptr;
+
+    char* test1 = strstr(pointer, prefix1);
+    char* test2 = strstr(pointer, prefix2);
+
+    if( !test1 && !test2 )
+    {
+        pActual = nullptr;
+        QLOG_ERROR() << "Failed to find balanced body postfix";
+    }
+    else
+        pActual = test1 ? test1 : test2;
+    return pActual;
+}
+
 static void read_bodies(const char * path, Q3IntDict<char> & bodies)
 {
     QLOG_INFO() << "Reading bodies from file: " << path;
@@ -939,7 +965,10 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
         char * p1 = s;
         char * p2;
 
-        while ((p2 = strstr(p1, BodyPrefix)) != 0) {
+        while ((p2 = CheckBodyPrefix(p1, BodyPrefix,BodyPrefix2)) != 0)
+        {
+            //QLOG_INFO() << "Successfully found body pretfix: ";
+            //QLOG_INFO() << p2;
             p2 += BodyPrefixLength;
 
             char * body;
@@ -974,8 +1003,22 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
                 UmlCom::fatal_error("read_bodies 3");
             }
 
-            if (((p1 = strstr(body, BodyPostfix)) == 0) ||
-                (strncmp(p1 + BodyPostfixLength, p2, 8) != 0)) {
+
+            char * pActual = nullptr;
+
+            char* test1 = strstr(body, BodyPostfix);
+            char* test2 = strstr(body, BodyPostfix2);
+
+            if( !test1 && !test2 )
+            {
+                pActual = nullptr;
+                QLOG_ERROR() << "Failed to fnd balanced body";
+            }
+            else
+                pActual = test1 ? test1 : test2;
+
+            if (pActual == nullptr || (strncmp(pActual + BodyPostfixLength, p2, 8) != 0))
+            {
                 QLOG_ERROR() << "bye happened";
                 UmlCom::trace(Q3CString("<font  color =\"red\"> Error in ") + path +
                               " : invalid preserve body block, wrong balanced</font><br>");
@@ -983,6 +1026,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
                 UmlCom::fatal_error("read_bodies 4");
             }
 
+            p1 = pActual;
             p2 = p1;
 
             while ((p2 != body) && (p2[-1] != '\n'))
@@ -1010,3 +1054,4 @@ void UmlOperation::read_bodies(const char * h_path, const char * src_path)
     ::read_bodies(h_path, bodies);
     ::read_bodies(src_path, bodies);
 }
+

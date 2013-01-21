@@ -1051,7 +1051,7 @@ void GenerationSettings::send_uml_def(ToolCom * com)
     for (index = 0; index != nclassstereotypes; index += 1)
         com->write_string(class_stereotypes[index].uml);
 
-    int api_version = com->api_format();
+    int api_version = com->api_format(true);
 
     if (api_version >= 16) {
         com->write_string(artifact_default_description);
@@ -1072,7 +1072,7 @@ void GenerationSettings::send_cpp_def(ToolCom * com)
     com->write_string(cpp_root_dir);
 
     int index;
-    int api_version = com->api_format();
+    int api_version = com->api_format(true);
 
     com->write_unsigned((unsigned) nbuiltins);
 
@@ -1194,7 +1194,7 @@ void GenerationSettings::send_cpp_def(ToolCom * com)
 
 void GenerationSettings::send_java_def(ToolCom * com)
 {
-    int api_version = com->api_format();
+    int api_version = com->api_format(true);
 
     com->write_string(java_root_dir);
 
@@ -1410,7 +1410,7 @@ void GenerationSettings::send_python_def(ToolCom * com)
     com->write_string(python_get_name);
     com->write_string(python_set_name);
 
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     if (api > 43) {
         com->write_string(python_initoper_def);
@@ -1422,7 +1422,7 @@ void GenerationSettings::send_python_def(ToolCom * com)
 
 void GenerationSettings::send_idl_def(ToolCom * com)
 {
-    int api_version = com->api_format();
+    int api_version = com->api_format(true);
 
     com->write_string(idl_root_dir);
 

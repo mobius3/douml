@@ -206,7 +206,7 @@ void BasicData::send_uml_def(ToolCom * com, BrowserNode * bn,
     ((HaveKeyValueData *) bn)->send_def(com);
     com->write_string(comment);
 
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     if (api > 11) {
         com->write_bool(bn->markedp());

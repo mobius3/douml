@@ -375,11 +375,11 @@ protected:
 public:
     ParamsTable(OperationData * a, QWidget * parent,
                 const QStringList & list,
-                OperationDialog * d, bool visit);
+                OperationDialog * d, bool isReadOnly);
 
     void update(OperationData * o,
                 const QStringList & list,
-                OperationDialog * d, bool visit);
+                OperationDialog * d, bool isReadOnly);
 
 protected:
     virtual void activateNextCell();

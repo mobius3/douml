@@ -2240,7 +2240,7 @@ void OperationData::replace(BrowserClass * old, BrowserClass * nw)
 void OperationData::send_uml_def(ToolCom * com, BrowserNode * bn,
                                  const QString & comment)
 {
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     BasicData::send_uml_def(com, bn, comment);
     com->write_bool(isa_class_operation);
@@ -2316,10 +2316,13 @@ void OperationData::send_cpp_def(ToolCom * com)
     com->write_bool(cpp_virtual);
     com->write_bool(cpp_inline);
     QLOG_INFO() << "writing defaulted";
-    com->write_bool(cpp_default);
-    com->write_bool(cpp_delete);
-    com->write_bool(cpp_override);
-    com->write_bool(cpp_final);
+    if(api_format(true) > 76)
+    {
+        com->write_bool(cpp_default);
+        com->write_bool(cpp_delete);
+        com->write_bool(cpp_override);
+        com->write_bool(cpp_final);
+    }
     com->write_string(cpp_def);
     com->write_string(cpp_name_spec);
 
@@ -3360,7 +3363,7 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
 
         QSettings settings("settings.ini", QSettings::IniFormat);
         settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-        if(settings.value("Main/compatibility_save") .toInt() != 1)
+        if(settings.value("Main/compatibility_save").toInt() != 1)
         {
             if (cpp_default)
                 st << "default ";
@@ -3392,7 +3395,7 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
         st << "nparams " << nparams;
         nl_indent(st);
 
-        if(settings.value("Main/compatibility_save") .toInt() != 1)
+        if(settings.value("Main/compatibility_save").toInt() != 1)
         {
 
             st << "origin ";
@@ -3600,33 +3603,36 @@ void OperationData::read(char *& st, char *& k)
     else
         cpp_const = FALSE;
 
-    if (!strcmp(k, "default")) {
-        cpp_default = TRUE;
-        k = read_keyword(st);
-    }
-    else
-        cpp_default = FALSE;
+    if(api_format(true) > 76)
+    {
+        if (!strcmp(k, "default")) {
+            cpp_default = TRUE;
+            k = read_keyword(st);
+        }
+        else
+            cpp_default = FALSE;
 
-    if (!strcmp(k, "delete")) {
-        cpp_delete = TRUE;
-        k = read_keyword(st);
-    }
-    else
-        cpp_delete = FALSE;
+        if (!strcmp(k, "delete")) {
+            cpp_delete = TRUE;
+            k = read_keyword(st);
+        }
+        else
+            cpp_delete = FALSE;
 
-    if (!strcmp(k, "override")) {
-        cpp_override = TRUE;
-        k = read_keyword(st);
-    }
-    else
-        cpp_override = FALSE;
+        if (!strcmp(k, "override")) {
+            cpp_override = TRUE;
+            k = read_keyword(st);
+        }
+        else
+            cpp_override = FALSE;
 
-    if (!strcmp(k, "final")) {
-        cpp_final = TRUE;
-        k = read_keyword(st);
+        if (!strcmp(k, "final")) {
+            cpp_final = TRUE;
+            k = read_keyword(st);
+        }
+        else
+            cpp_final = FALSE;
     }
-    else
-        cpp_final = FALSE;
 
     if (!strcmp(k, "friend")) {
         cpp_friend = TRUE;
@@ -3682,7 +3688,13 @@ void OperationData::read(char *& st, char *& k)
     set_n_params(n);
 
 
-    if(read_file_format() > 76)
+    QFileInfo info("settings.ini");
+    bool test = info.exists();
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    int compat = settings.value("Main/compatibility_save").toInt();
+
+    if(read_file_format() > 76 && !compat)
     {
         read_keyword(st, "origin");
         set_origin_class(WrapperStr(read_string(st)));

@@ -8,11 +8,12 @@
 #include "UmlPackage.h"
 
 #include "UmlCom.h"
-//#include "Tools/ApiCmd.h"
+#include "Tools/ApiCmd.h"
 //#include "Tools/ApiCmd.h"
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
+#include "Logging/QsLog.h"
 UmlClass * UmlBaseClass::create(UmlItem * parent, const char * s)
 {
     return (UmlClass *) parent->create_(aClass, s);
@@ -454,6 +455,7 @@ void UmlBaseClass::read_uml_()
 void UmlBaseClass::read_cpp_()
 {
     UmlBaseClassMember::read_cpp_();
+    QLOG_WARN() << "reading cpp class ";
     _cpp_external = UmlCom::read_bool();
 }
 #endif

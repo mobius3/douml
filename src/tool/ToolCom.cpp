@@ -611,8 +611,8 @@ void ToolCom::data_received(Socket * who)
             if (start) {
                 // plug-out start, get API version
                 start = FALSE;
-                api_version = get_unsigned(p);
 
+                api_version = get_unsigned(p);
                 if (api_version < 11) {
                     TraceDialog::add("<font color =\"red\"><b>the plug-out was written for a BOUML release less or equal to 1.5<b></font>");
                     TraceDialog::show_it();
@@ -729,7 +729,7 @@ void ToolCom::data_received(Socket * who)
                         break;
 
                     case targetCmd:
-                        if (target->api_compatible(api_version))
+                        if (target->api_compatible(api_format(true)))
                             target->write_id(this);
                         else
                             write_id(0);
@@ -742,13 +742,13 @@ void ToolCom::data_received(Socket * who)
                         BrowserNode * bn;
 
                         for (bn = marked.first(); bn != 0; bn = marked.next())
-                            if (bn->api_compatible(api_version))
+                            if (bn->api_compatible(api_format(true)))
                                 n += 1;
 
                         write_unsigned(n);
 
                         for (bn = marked.first(); bn != 0; bn = marked.next())
-                            if (bn->api_compatible(api_version))
+                            if (bn->api_compatible(api_format(true)))
                                 bn->write_id(this);
                     }
                         break;

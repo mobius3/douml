@@ -1474,6 +1474,8 @@ LineGeometry line_geometry(const char * s)
 
 void set_read_file_format(unsigned u)
 {
+    if(api_format() == 75)
+        u = 75;
     Context.read_file_format = u;
 }
 
@@ -3003,7 +3005,8 @@ unsigned api_format(bool useTrueFormat)
     QSettings settings("settings.ini", QSettings::IniFormat);
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
     int compat = settings.value("Main/compatibility_save").toInt();
-    if(compat != 1 || useTrueFormat)
+    //int compat = 0;
+    if((compat != 1) || useTrueFormat)
     {
         int fileFormat = settings.value("Main/fileformat").toInt();
         return fileFormat;

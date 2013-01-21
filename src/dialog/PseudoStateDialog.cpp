@@ -317,7 +317,7 @@ void PseudoStateDialog::accept()
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
 
-    kvtable->update(bn);
+    kvtable->updateNodeFromThis(bn);
 
     if (edreference != 0) {
         int index = reflist.findIndex(edreference->currentText());

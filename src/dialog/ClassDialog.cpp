@@ -3546,7 +3546,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     // USER : list key - value
     ShowTab("Properties");
-    kvtable->update(currentNode);
+    kvtable->updateNodeFromThis(currentNode);
     kvtable->remove("stereotypeCheck");
     kvtable->remove("stereotypeSetParameters");
     kvtable->remove("stereotypeCheckParameters");
@@ -3747,7 +3747,7 @@ bool ClassDialog::SaveData()
         cl->set_switch_type(swt);
     }
 
-    kvtable->update(bn);
+    kvtable->updateNodeFromThis(bn);
 
     if (stereotypetab != 0) {
         if (st == "stereotype") {

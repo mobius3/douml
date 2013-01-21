@@ -6,9 +6,15 @@
 #include "UmlCom.h"
 #include "UmlBaseClass.h"
 #include "UmlClassMember.h"
+#include "UmlOperation.h"
+//#include "misc/myio.h"
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
+#include <QFileInfo>
+#include <QSettings>
+#include "Logging/QsLog.h"
+
 UmlOperation * UmlBaseOperation::create(UmlClass * parent, const char * s)
 {
     return (UmlOperation *) parent->create_(anOperation, s);
@@ -767,7 +773,26 @@ void UmlBaseOperation::read_uml_()
     _get_of = (UmlClassMember *) UmlBaseItem::read_();
     _set_of = (UmlClassMember *) UmlBaseItem::read_();
 }
-
+static unsigned api_format()
+{
+    QFileInfo info("settings.ini");
+    bool test = info.exists();
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    int compat = settings.value("Main/compatibility_save").toInt();
+    //int compat = 0;
+    if(compat != 1)
+    {
+        int fileFormat = settings.value("Main/fileformat").toInt();
+        QLOG_WARN() << "grabbing real format 77";
+        return fileFormat;
+    }
+    else
+    {
+        QLOG_WARN() << "grabbing real format 75";
+        return 75;
+    }
+}
 #ifdef WITHCPP
 void UmlBaseOperation::read_cpp_()
 {
@@ -776,10 +801,14 @@ void UmlBaseOperation::read_cpp_()
     _cpp_friend = UmlCom::read_bool();
     _cpp_virtual = UmlCom::read_bool();
     _cpp_inline = UmlCom::read_bool();
-    _cpp_default = UmlCom::read_bool();
-    _cpp_delete = UmlCom::read_bool();
-    _cpp_override = UmlCom::read_bool();
-    _cpp_final = UmlCom::read_bool();
+    QLOG_WARN() << "reading cpp";
+    if(api_format() > 76)
+    {
+        _cpp_default = UmlCom::read_bool();
+        _cpp_delete = UmlCom::read_bool();
+        _cpp_override = UmlCom::read_bool();
+        _cpp_final = UmlCom::read_bool();
+    }
     _cpp_def = UmlCom::read_string();
     _cpp_name_spec = UmlCom::read_string();
     _cpp_get_set_frozen = UmlCom::read_bool();

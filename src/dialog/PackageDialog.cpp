@@ -606,7 +606,7 @@ void PackageDialog::accept()
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
 
-    kvtable->update(bn);
+    kvtable->updateNodeFromThis(bn);
 
     if (st == "profile") {
         unsigned n = bn->get_n_keys();

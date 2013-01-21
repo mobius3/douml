@@ -39,7 +39,8 @@ public:
     virtual void init_row(int index);
 
     bool check_unique();
-    void update(HaveKeyValueData * h);
+    void updateNodeFromThis(HaveKeyValueData * h);
+    void updateThisFromNode(HaveKeyValueData * h, bool visit = false);
     bool get_value(const char * key, QString & value);
     void remove(const char * key);
 
