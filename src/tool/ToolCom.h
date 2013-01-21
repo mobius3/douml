@@ -86,10 +86,10 @@ protected:
     static bool is_running(int id);
 
 public:
-    unsigned api_format() const {
+    unsigned api_format(bool trueFormat = false) const {
         QSettings settings("settings.ini", QSettings::IniFormat);
         settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-        if(settings.value("Main/compatibility_save") .toInt() != 1)
+        if((settings.value("Main/compatibility_save") .toInt() != 1) || trueFormat)
             return api_version;
         else
             return 75;

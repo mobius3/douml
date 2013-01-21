@@ -6,6 +6,7 @@
 #include "UmlCom.h"
 #include "UmlBaseClass.h"
 #include "UmlClassMember.h"
+#include "misc/myio.h"
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
@@ -857,10 +858,14 @@ void UmlBaseOperation::read_cpp_()
     _cpp_friend = UmlCom::read_bool();
     _cpp_virtual = UmlCom::read_bool();
     _cpp_inline = UmlCom::read_bool();
-    _cpp_default = UmlCom::read_bool();
-    _cpp_delete = UmlCom::read_bool();
-    _cpp_override = UmlCom::read_bool();
-    _cpp_final = UmlCom::read_bool();
+
+    if(api_format() > 76)
+    {
+        _cpp_default = UmlCom::read_bool();
+        _cpp_delete = UmlCom::read_bool();
+        _cpp_override = UmlCom::read_bool();
+        _cpp_final = UmlCom::read_bool();
+    }
     _cpp_def = UmlCom::read_string();
     _cpp_name_spec = UmlCom::read_string();
     _cpp_get_set_frozen = UmlCom::read_bool();

@@ -32,7 +32,9 @@ int main(int argc, char ** argv)
             UmlCom::targetItem()->deploy();
             UmlCom::trace("Done");
         }
-        catch (...) {
+        catch (...)
+        {
+            QLOG_INFO() << "Exception caught";
         }
 
         // must be called to cleanly inform that all is done

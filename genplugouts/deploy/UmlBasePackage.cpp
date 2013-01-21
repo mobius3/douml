@@ -8,6 +8,7 @@
 //#include "Tools/ApiCmd.h"
 //Added by qt3to4:
 #include <Q3CString>
+#include "Logging/QsLog.h"
 UmlPackage * UmlBasePackage::create(UmlPackage * parent, const char * name)
 {
     return (UmlPackage *) parent->create_(aPackage, name);
@@ -259,6 +260,7 @@ void UmlBasePackage::read_uml_()
 #ifdef WITHCPP
 void UmlBasePackage::read_cpp_()
 {
+    QLOG_WARN() << "reading cpp package";
     _cpp_src_dir = UmlCom::read_string();
     _cpp_h_dir = UmlCom::read_string();
     _cpp_namespace = UmlCom::read_string();

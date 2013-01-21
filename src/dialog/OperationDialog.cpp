@@ -1071,7 +1071,8 @@ void OperationDialog::FillGeneric(OperationData * oper)
 
     //
 
-    switch (drawingLanguage) {
+    switch (drawingLanguage)
+    {
     case CppView:
         if (! cpp_undef) {
             cpp_update_def();
@@ -5069,6 +5070,13 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
         setItem(index, 2, new ComboItem(this, QString(), alltypes));
         setText(index, 3, QString());
         setText(index, 4, QString());
+
+
+
+        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
+                this, SLOT(button_pressed(int, int, int, const QPoint &)));
+        connect(this, SIGNAL(valueChanged(int, int)),
+                this, SLOT(value_changed(int, int)));
     }
 
     adjustColumn(0);
@@ -5081,11 +5089,6 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
     if (!isReadOnly) {
         adjustColumn(4);
         setColumnStretchable(4, FALSE);
-
-        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-                this, SLOT(button_pressed(int, int, int, const QPoint &)));
-        connect(this, SIGNAL(valueChanged(int, int)),
-                this, SLOT(value_changed(int, int)));
     }
 }
 

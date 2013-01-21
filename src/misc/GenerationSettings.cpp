@@ -474,9 +474,10 @@ void GenerationSettings::init()
 
     QSettings settings("settings.ini", QSettings::IniFormat);
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-    if(settings.value("Main/compatibility_save") .toInt() != 1)
+    if(/*settings.value("Main/compatibility_save") .toInt() != 1*/true)
         cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract}${final}${default}${delete}${override};\n";
     else
+        //cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract}${final}${default}${delete}${override};\n";
         cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};\n";
     cpp_oper_def = "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{\n  ${body}}\n";
     cpp_force_throw = FALSE;
@@ -1051,7 +1052,7 @@ void GenerationSettings::send_uml_def(ToolCom * com)
     for (index = 0; index != nclassstereotypes; index += 1)
         com->write_string(class_stereotypes[index].uml);
 
-    int api_version = com->api_format();
+    int api_version = com->api_format(true);
 
     if (api_version >= 16) {
         com->write_string(artifact_default_description);
@@ -1072,7 +1073,7 @@ void GenerationSettings::send_cpp_def(ToolCom * com)
     com->write_string(cpp_root_dir);
 
     int index;
-    int api_version = com->api_format();
+    int api_version = com->api_format(true);
 
     com->write_unsigned((unsigned) nbuiltins);
 
@@ -1194,7 +1195,7 @@ void GenerationSettings::send_cpp_def(ToolCom * com)
 
 void GenerationSettings::send_java_def(ToolCom * com)
 {
-    int api_version = com->api_format();
+    int api_version = com->api_format(true);
 
     com->write_string(java_root_dir);
 
@@ -1410,7 +1411,7 @@ void GenerationSettings::send_python_def(ToolCom * com)
     com->write_string(python_get_name);
     com->write_string(python_set_name);
 
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     if (api > 43) {
         com->write_string(python_initoper_def);
@@ -1422,7 +1423,7 @@ void GenerationSettings::send_python_def(ToolCom * com)
 
 void GenerationSettings::send_idl_def(ToolCom * com)
 {
-    int api_version = com->api_format();
+    int api_version = com->api_format(true);
 
     com->write_string(idl_root_dir);
 

@@ -126,7 +126,7 @@ void StateData::edit()
 void StateData::send_uml_def(ToolCom * com, BrowserNode * bn,
                              const QString & comment)
 {
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     SimpleData::send_uml_def(com, bn, comment);
     uml.send_def(com);

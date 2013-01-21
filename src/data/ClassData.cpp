@@ -869,7 +869,7 @@ void ClassData::edit()
 void ClassData::send_uml_def(ToolCom * com, BrowserNode * bn,
                              const QString & comment)
 {
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     BasicData::send_uml_def(com, bn, comment);
     com->write_bool(FALSE);	// class member
@@ -919,7 +919,7 @@ void ClassData::send_uml_def(ToolCom * com, BrowserNode * bn,
 
 void ClassData::send_cpp_def(ToolCom * com)
 {
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     com->write_string(cpp_decl);
 
@@ -948,7 +948,7 @@ void ClassData::send_cpp_def(ToolCom * com)
 
 void ClassData::send_java_def(ToolCom * com)
 {
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     com->write_string(java_decl);
 

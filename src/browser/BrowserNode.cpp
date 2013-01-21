@@ -1450,7 +1450,7 @@ bool BrowserNode::tool_cmd(ToolCom * com, const char * args)
         break;
 
     case childrenCmd: {
-        unsigned v = com->api_format();
+        unsigned v = com->api_format(true);
         unsigned n = 0;
         Q3ListViewItem * child;
 

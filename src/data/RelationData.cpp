@@ -699,7 +699,7 @@ void RelationData::set_idlcase(RoleData & role, BrowserAttribute * at,
 
 void RelationData::send_uml_def(ToolCom * com, BrowserRelation * rel)
 {
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     if (rel == start) {
         BasicData::send_uml_def(com, rel, a.comment);
@@ -779,7 +779,7 @@ void RelationData::send_uml_def(ToolCom * com, BrowserRelation * rel)
 
 void RelationData::send_cpp_def(ToolCom * com, BrowserRelation * rel)
 {
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     if (rel == start) {
         com->write_string(a.cpp_decl);
@@ -837,7 +837,7 @@ void RelationData::send_cpp_def(ToolCom * com, BrowserRelation * rel)
 
 void RelationData::send_java_def(ToolCom * com, BrowserRelation * rel)
 {
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     if (rel == start) {
         com->write_string(a.java_decl);

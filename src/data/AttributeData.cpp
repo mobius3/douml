@@ -385,7 +385,7 @@ void AttributeData::replace(BrowserClass * old, BrowserClass * nw)
 void AttributeData::send_uml_def(ToolCom * com, BrowserNode * bn,
                                  const QString & comment)
 {
-    int api = com->api_format();
+    int api = com->api_format(true);
 
     BasicData::send_uml_def(com, bn, comment);
     com->write_bool(isa_class_attribute);
