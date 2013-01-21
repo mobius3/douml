@@ -105,4 +105,4 @@ src/ui/ui_*.h
 *.b
 bin/douml
 qrc_*.cpp
-
+src/CppReverse/cpp_reverse
