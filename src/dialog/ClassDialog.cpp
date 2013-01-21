@@ -61,6 +61,7 @@
 #include "OperationData.h"
 #include "ExtraMemberData.h"
 #include "BrowserArtifact.h"
+#include "CustomWidgets/EdgeMenuToolBar.h"
 #include "strutil.h"
 #include "BodyDialog.h"
 #include "AnnotationDialog.h"
@@ -99,6 +100,11 @@ ClassDialog::~ClassDialog()
 
     while (!edits.isEmpty())
         edits.take(0)->close();
+    if(toolbar)
+    {
+        toolbar->setParent(0);
+        toolbar->hide();
+    }
 }
 
 QSharedPointer<ClassDialog> ClassDialog::Instance(ClassData * cl)

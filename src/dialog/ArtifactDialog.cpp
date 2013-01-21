@@ -118,7 +118,13 @@ ArtifactDialog::~ArtifactDialog()
     while (!edits.isEmpty())
         edits.take(0)->close();
 
+    if(toolbar)
+    {
+        toolbar->setParent(0);
+        toolbar->hide();
+    }
     close_dialog(this);
+
 }
 
 void ArtifactDialog::init_uml_tab()

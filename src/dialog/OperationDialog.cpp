@@ -81,6 +81,7 @@
 #include "ui/operationwidgetcpp.h"
 #include "ui_operationwidgetcpp.h"
 #include "Tools/SignalBlockerWrapper.h"
+#include "CustomWidgets/EdgeMenuToolBar.h"
 QSize OperationDialog::previous_size;
 QSharedPointer<OperationDialog> OperationDialog::instance;
 OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
@@ -110,6 +111,12 @@ OperationDialog::~OperationDialog()
 
     while (!edits.isEmpty())
         edits.take(0)->close();
+
+    if(toolbar)
+    {
+        toolbar->setParent(0);
+        toolbar->hide();
+    }
 
     //close_dialog(this);
 }
