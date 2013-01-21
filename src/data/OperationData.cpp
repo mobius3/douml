@@ -3363,7 +3363,7 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
 
         QSettings settings("settings.ini", QSettings::IniFormat);
         settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-        if(/*settings.value("Main/compatibility_save").toInt() != 1*/true)
+        if(settings.value("Main/compatibility_save").toInt() != 1)
         {
             if (cpp_default)
                 st << "default ";
@@ -3395,7 +3395,7 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
         st << "nparams " << nparams;
         nl_indent(st);
 
-        if(/*settings.value("Main/compatibility_save").toInt() != 1*/true)
+        if(settings.value("Main/compatibility_save").toInt() != 1)
         {
 
             st << "origin ";

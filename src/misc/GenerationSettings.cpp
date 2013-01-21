@@ -474,10 +474,9 @@ void GenerationSettings::init()
 
     QSettings settings("settings.ini", QSettings::IniFormat);
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-    if(/*settings.value("Main/compatibility_save") .toInt() != 1*/true)
+    if(settings.value("Main/compatibility_save") .toInt() != 1)
         cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract}${final}${default}${delete}${override};\n";
     else
-        //cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract}${final}${default}${delete}${override};\n";
         cpp_oper_decl = "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};\n";
     cpp_oper_def = "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{\n  ${body}}\n";
     cpp_force_throw = FALSE;
