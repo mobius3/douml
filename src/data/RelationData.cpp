@@ -677,7 +677,7 @@ void RelationData::select_in_browser(bool prefer_start) const
 
 const char * RelationData::get_idlcase(const RoleData & role)
 {
-    return (role.idl_case != 0) ? role.idl_case->get_name() : role.idl_explicit_case;
+    return (role.idl_case != 0) ? role.idl_case->get_name() : role.idl_explicit_case.operator const char *();
 }
 
 void RelationData::set_idlcase(RoleData & role, BrowserAttribute * at,

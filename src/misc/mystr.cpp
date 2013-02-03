@@ -30,7 +30,7 @@
 #include <qstring.h>
 //Added by qt3to4:
 #include <Q3StrList>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include "Logging/QsLog.h"
 
 #include "mystr.h"
@@ -48,6 +48,10 @@ bool operator==(const char * s1, const WrapperStr & s2)
 bool operator==(const WrapperStr & s1, const QString & s2)
 {
     return s1.wrappedString == s2;
+}
+bool operator==(const WrapperStr & s1, const WrapperStr & s2)
+{
+    return s1.wrappedString == s2.wrappedString;
 }
 
 bool operator==(const QString & s1, const WrapperStr & s2)
@@ -67,6 +71,12 @@ bool operator!=(const WrapperStr & s1, const QString & s2)
 {
     return s1.wrappedString == s2;
 }
+
+bool operator !=(const WrapperStr &s1, const WrapperStr &s2)
+{
+    return s1.wrappedString != s2.wrappedString;
+}
+
 
 bool operator!=(const QString & s1, const WrapperStr & s2)
 {
@@ -93,6 +103,12 @@ QString operator+(const WrapperStr & s1, const QString & s2)
 //    QLOG_INFO() << Q_FUNC_INFO;
 //    QLOG_INFO() << s1.wrappedString << " " << s2 << Q_FUNC_INFO;
     return s1.wrappedString + s2;
+}
+QString operator+(const WrapperStr & s1, const WrapperStr & s2)
+{
+//    QLOG_INFO() << Q_FUNC_INFO;
+//    QLOG_INFO() << s1.wrappedString << " " << s2 << Q_FUNC_INFO;
+    return s1.wrappedString + s2.wrappedString;
 }
 QString operator+(const QString & s1, const WrapperStr & s2)
 {
@@ -127,5 +143,10 @@ void WrapperStr::statistics()
             printf("%d : %d\n", index, l[index]);
 }
 #endif
-
+QTextStream & operator<<(QTextStream & ds, const WrapperStr &str)
+{
+    ds << str.wrappedString.toStdString().c_str();
+    return ds;
+}
 //
+

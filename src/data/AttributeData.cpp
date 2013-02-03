@@ -541,7 +541,7 @@ bool AttributeData::tool_cmd(ToolCom * com, const char * args,
                 if (! s.isEmpty())
                     s += '\n';
 
-                java_annotation = s;
+                java_annotation = QString(s);
             }
             break;
 
