@@ -28,7 +28,7 @@
 
 #include "qstring.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include "mystr.h"
 
 extern bool manage_comment(QString comment, const char *& p,
@@ -47,14 +47,12 @@ extern QString true_name(const QString & name, const QString & decl);
 extern bool is_char_of_name(char c);
 extern QString extract_name(QString s);
 extern QString quote(QString s);
-extern void remove_comments(Q3CString & s);
-extern void remove_comments(QString & s);
 extern void remove_comments(WrapperStr & s);
-extern void remove_python_comments(Q3CString & s);
+extern void remove_comments(QString & s);
+extern void remove_python_comments(WrapperStr & s);
 extern void remove_python_comments(QString & s);
-extern void remove_preprocessor(Q3CString & s);
-extern void remove_preprocessor(QString & s);
 extern void remove_preprocessor(WrapperStr & s);
+extern void remove_preprocessor(QString & s);
 extern QString java_multiplicity(QString m);
 extern bool need_equal(const char * p, QString v, bool cpp);
 extern bool need_equal(const char * p, const char * v, bool cpp);

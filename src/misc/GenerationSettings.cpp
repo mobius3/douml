@@ -31,7 +31,7 @@
 #include <q3filedialog.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <QSettings>
 
@@ -86,7 +86,7 @@ WrapperStr GenerationSettings::cpp_set_name;
 bool GenerationSettings::cpp_set_inline;
 bool GenerationSettings::cpp_set_param_const;
 bool GenerationSettings::cpp_set_param_ref;
-Q3CString GenerationSettings::cpp_indent_visibility;
+WrapperStr GenerationSettings::cpp_indent_visibility;
 
 bool GenerationSettings::java_default_defs;
 bool GenerationSettings::java_javadoc_comment;
@@ -3687,7 +3687,7 @@ void GenerationSettings::read(char *& st, char *& k)
 
         if (!strcmp(k, "cpp_default_src_content")) {
             // old -> new version
-            Q3CString s = read_string(st);
+            WrapperStr s = read_string(st);
             int index;
 
             if ((index = s.find("${class_attributes}\n${operations}")) != -1)

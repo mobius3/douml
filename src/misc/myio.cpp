@@ -44,7 +44,7 @@
 #include <qbuffer.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PointArray>
 #include <QTextCodec>
 #include <QFileInfo>
@@ -2748,7 +2748,7 @@ void draw_text(const QRect & r, int align, QString s, const QFont & fn, FILE * f
 
 static void xml_text(FILE * fp, QString s)
 {
-    Q3CString cs = s.utf8();
+    WrapperStr cs = s.utf8();
     const char * p = cs;
 
     for (;;) {

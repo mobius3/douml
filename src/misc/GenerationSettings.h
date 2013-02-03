@@ -29,7 +29,7 @@
 #include <QTextStream>
 #include <qstringlist.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlEnum.h"
@@ -131,7 +131,7 @@ protected:
     static bool cpp_set_inline;
     static bool cpp_set_param_const;
     static bool cpp_set_param_ref;
-    static Q3CString cpp_indent_visibility;
+    static WrapperStr cpp_indent_visibility;
 
     static bool java_default_defs;
     static bool java_javadoc_comment;

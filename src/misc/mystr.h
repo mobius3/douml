@@ -30,7 +30,7 @@
 
 #include <q3strlist.h>
 #include <QString>
-#include <Q3CString>
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include "Logging/QsLog.h"
 //#include "myio.h"
@@ -81,10 +81,6 @@ public:
 //        this->wrappedString = other.wrappedString;
 //        return *this;
 //    }
-    WrapperStr & operator=(const Q3CString & cstr) {
-        this->wrappedString = QByteArray(cstr);
-        return *this;
-    }
     WrapperStr & operator=(const char * c) {
         this->wrappedString = QString(QLatin1String(c));
         return *this;
@@ -93,12 +89,12 @@ public:
         this->wrappedString += QString(QLatin1String(c));
         return *this;
     }
-    WrapperStr & operator+=(const WrapperStr& str) {
-        this->wrappedString += str.wrappedString;
-        return *this;
-    }
     WrapperStr & operator+=(const QString& str) {
         this->wrappedString += str;
+        return *this;
+    }
+    WrapperStr & operator+=(const WrapperStr& str) {
+        this->wrappedString += str.wrappedString;
         return *this;
     }
 //    WrapperStr & operator+=(const char* str) {
@@ -130,7 +126,7 @@ public:
         k++;
         return returnableNullPtr;
     }
-    operator Q3CString() const {
+    operator WrapperStr() const {
          //QLOG_INFO()() << Q_FUNC_INFO;
          //QLOG_INFO()() << this->wrappedString.toLatin1();
          return this->wrappedString.toLatin1();
@@ -138,11 +134,6 @@ public:
 
     operator QString() const {
         return this->wrappedString;
-    }
-
-    QString& GetInternalRef()
-    {
-        return wrappedString;
     }
 
     friend bool operator==(const WrapperStr & s1, const char * s2);
@@ -227,7 +218,10 @@ public:
         return wrappedString.toLower();
     }
 
-
+    QString& GetInternalRef()
+    {
+        return wrappedString;
+    }
     //void assign(QString(), int len){this->s = QString();}
 
 protected:

@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <qdatetime.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "mu.h"
 #include "myio.h"
@@ -126,7 +126,7 @@ int root_permission()
 const char * user_name()
 {
     static bool done = FALSE;
-    static Q3CString name;
+    static WrapperStr name;
 
     if (! done) {
         name = homeDir().dirName();

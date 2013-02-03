@@ -30,7 +30,7 @@
 #include <qimage.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QPixmap>
 
 #include "ProfiledStereotypes.h"
@@ -495,7 +495,7 @@ void renamed(BrowserClass * cl, QString oldname, QString oldpkname)
     Q3PtrDictIterator<ProfiledStereotype> it(ProfiledStereotyped);
     const char * oldsst = (const char *) oldst;
     int oldlen = oldst.length();
-    Q3CString newcst = (const char *) newst;
+    WrapperStr newcst = (const char *) newst;
 
     newcst += ":";
 
@@ -514,7 +514,7 @@ void renamed(BrowserClass * cl, QString oldname, QString oldpkname)
             const char * k = bn->get_key(index);
 
             if (!strncmp(k, oldsst, oldlen)) {
-                Q3CString newk = newcst + (k + oldlen);
+                WrapperStr newk = newcst + (k + oldlen);
 
                 bn->set_key(index, (const char *) newk);
             }
@@ -726,7 +726,7 @@ void ProfiledStereotypes::changed(BrowserClass * cl, QString oldname, bool newic
 // warning : must be called before any change on the class
 void ProfiledStereotypes::deleted(BrowserClass * cl)
 {
-    if (::deleted(((BrowserNode *) cl->parent()->parent())->get_name() + Q3CString(":"),
+    if (::deleted(((BrowserNode *) cl->parent()->parent())->get_name() + WrapperStr(":"),
                   cl, TRUE))
         recompute(FALSE);
 }
@@ -1029,7 +1029,7 @@ void ProfiledStereotypes::modified(BrowserNode * bn, bool newst)
             if (args == 0)
                 ToolCom::run(s, bn, FALSE, FALSE);
             else {
-                Q3CString cmd = Q3CString(s) + " " + args;
+                WrapperStr cmd = WrapperStr(s) + " " + args;
 
                 ToolCom::run((const char *) cmd, bn, FALSE, FALSE);
             }
