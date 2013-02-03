@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3PointArray>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "FragmentCanvas.h"
 #include "FragmentDialog.h"

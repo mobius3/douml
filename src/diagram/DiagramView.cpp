@@ -47,7 +47,7 @@
 #include <Q3ValueList>
 #include <QTextStream>
 #include <QKeyEvent>
-#include <Q3CString>
+#include "misc/mystr.h"
 #endif
 
 #include "DiagramView.h"
@@ -88,7 +88,7 @@
 #include "align_vcenter.xpm"
 #include "align_hcenter.xpm"
 
-Q3CString DiagramView::clipboard;
+WrapperStr DiagramView::clipboard;
 UmlCode DiagramView::copied_from;
 
 DiagramView::DiagramView(QWidget * parent, UmlCanvas * canvas, int i)

@@ -33,7 +33,7 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QPixmap>
 
 #include "ArrowCanvas.h"
@@ -2219,7 +2219,7 @@ void ArrowCanvas::remove_redondant_rels()
 {
     Q3PtrListIterator<ArrowCanvas> liter(RelsToCheck);
     // the key is <source address>_<browser node address>_<target address>
-    QMap<Q3CString, ArrowCanvas *> arrows;
+    QMap<QString, ArrowCanvas *> arrows;
     char s[128];
 
     for (;;) {

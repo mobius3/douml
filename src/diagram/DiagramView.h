@@ -29,7 +29,7 @@
 #include <q3canvas.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QWheelEvent>
 #include <Q3ValueList>
 #include <QMouseEvent>
@@ -82,7 +82,7 @@ protected:
 
 
 
-    static Q3CString clipboard;
+    static WrapperStr clipboard;
     static UmlCode copied_from;
 
 public:

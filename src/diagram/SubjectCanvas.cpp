@@ -32,7 +32,7 @@
 #include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "SubjectCanvas.h"
 #include "MyInputDialog.h"
@@ -508,7 +508,7 @@ void SubjectCanvas::send(ToolCom * com, Q3CanvasItemList & all)
     SubjectCanvas * sc;
 
     for (sc = subjects.first(); sc != 0; sc = subjects.next()) {
-        Q3CString s = fromUnicode(sc->name);
+        WrapperStr s = fromUnicode(sc->name);
 
         com->write_string((const char *) s);
         com->write(sc->rect());

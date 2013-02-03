@@ -32,7 +32,7 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "SdClassInstCanvas.h"
 #include "BrowserDiagram.h"
@@ -834,7 +834,7 @@ void SdClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
         if (i->browser_node->get_type() == UmlClass) {
             com->write_id(0);
 
-            Q3CString s = fromUnicode(i->iname);
+            WrapperStr s = fromUnicode(i->iname);
 
             com->write_string((const char *) s);
         }

@@ -32,7 +32,7 @@
 #include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "TextCanvas.h"
 #include "MLEDialog.h"
@@ -426,7 +426,7 @@ void TextCanvas::send(ToolCom * com, Q3CanvasItemList & all)
             (*cit)->visible() &&
             (di->type() == UmlText)) {
             TextCanvas * tx = (TextCanvas *) di;
-            Q3CString s = fromUnicode(tx->text);
+            WrapperStr s = fromUnicode(tx->text);
 
             com->write_bool(TRUE);	// one more
             com->write_string((const char *) s);

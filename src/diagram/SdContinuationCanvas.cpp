@@ -32,7 +32,7 @@
 #include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "SdContinuationCanvas.h"
 #include "ContinuationDialog.h"
@@ -467,7 +467,7 @@ void SdContinuationCanvas::send(ToolCom * com, Q3CanvasItemList & all)
         DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
         if ((di != 0) && (*cit)->visible() && (di->type() == UmlContinuation)) {
-            Q3CString s = fromUnicode(((SdContinuationCanvas *) di)->name);
+            WrapperStr s = fromUnicode(((SdContinuationCanvas *) di)->name);
 
             com->write_bool(TRUE);	// one more
             com->write_string((const char *) s);
