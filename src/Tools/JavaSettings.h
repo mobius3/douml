@@ -376,7 +376,7 @@ private:
 
     static bool _is_force_package_gen;
 
-    static Q3Dict<WrapperStr> _map_imports;
+    static Q3Dict<QString> _map_imports;
 
 
 protected:

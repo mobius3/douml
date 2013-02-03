@@ -228,7 +228,7 @@ private:
 
     static WrapperStr _ext;
 
-    static Q3Dict<WrapperStr> _map_imports;
+    static Q3Dict<QString> _map_imports;
 
 protected:
     static void read_();

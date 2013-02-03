@@ -134,9 +134,9 @@ WrapperStr CppSettings::include(WrapperStr s)
 {
     read_if_needed_();
 
-    WrapperStr * r = _map_includes[s];
+   QString * r = _map_includes[s];
 
-    return (r) ? *r : WrapperStr(0);
+    return (r) ? *r : QString();
 }
 
 bool CppSettings::set_Include(WrapperStr s, WrapperStr v)
@@ -145,10 +145,10 @@ bool CppSettings::set_Include(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(cppSettingsCmd, setCppIncludeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        WrapperStr * r = _map_includes.take(s);
+       QString * r = _map_includes.take(s);
 
         if (!v.isEmpty())
-            _map_includes.insert(s, new WrapperStr(v));
+            _map_includes.insert(s, new QString(v.GetInternalRef()));
 
         if (r)
             delete r;
@@ -1267,7 +1267,7 @@ bool CppSettings::_is_inline_force_header_in_h;
 
 WrapperStr CppSettings::_visibility_indent;
 
-Q3Dict<WrapperStr> CppSettings::_map_includes;
+Q3Dict<QString> CppSettings::_map_includes;
 
 void CppSettings::read_()
 {
@@ -1306,7 +1306,7 @@ void CppSettings::read_()
         WrapperStr t = UmlCom::read_string();
         WrapperStr i = UmlCom::read_string();
 
-        _map_includes.insert(t, new WrapperStr(i));
+        _map_includes.insert(t, new QString(i.GetInternalRef()));
     }
 
     _h_content = UmlCom::read_string();

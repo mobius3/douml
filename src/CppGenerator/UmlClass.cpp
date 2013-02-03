@@ -31,6 +31,7 @@
 #include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <Q3CString>
 
 #include "UmlClass.h"
 #include "UmlPackage.h"
@@ -223,7 +224,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
             manage_description(p, pp);
         else if (! strncmp(p, "${name}", 7)) {
             p += 7;
-            f_h << name();
+            f_h << Q3CString("aaa"); //name();
         }
         else if (a_typedef) {
             if (!strncmp(p, "${type}", 7)) {

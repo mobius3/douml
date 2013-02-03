@@ -660,7 +660,7 @@ private:
 
     static WrapperStr _visibility_indent;
 
-    static Q3Dict<WrapperStr> _map_includes;
+    static Q3Dict<QString> _map_includes;
 
 
 protected:

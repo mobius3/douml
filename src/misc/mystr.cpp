@@ -117,35 +117,10 @@ WrapperStr operator+(const QString & s1, const WrapperStr & s2)
     return s1 + s2.wrappedString ;
 }
 
-#if 0
-#include <stdio.h>
-
-void WrapperStr::statistics()
-{
-    int l[128];
-    int n = 0;
-
-    memset(l, 0, sizeof(l));
-
-    int index = SHAREDDICTSIZE;
-
-    while (index--) {
-        int ln = shared[index].count();
-
-        n += ln;
-        l[(ln > 127) ? 127 : ln] += 1;
-    }
-
-    printf("%d strings\n", n);
-
-    for (index = 0; index != 128; index += 1)
-        if (l[index] != 0)
-            printf("%d : %d\n", index, l[index]);
-}
-#endif
 QTextStream & operator<<(QTextStream & ds, const WrapperStr &str)
 {
-    ds << str.wrappedString.toStdString().c_str();
+    QLOG_INFO() << "Piping: " + str.wrappedString;
+    ds << Q3CString(str.wrappedString.toStdString().c_str());
     return ds;
 }
 //

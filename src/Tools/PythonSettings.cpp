@@ -426,7 +426,7 @@ WrapperStr PythonSettings::_src_content;
 
 WrapperStr PythonSettings::_ext;
 
-Q3Dict<WrapperStr> PythonSettings::_map_imports;
+Q3Dict<QString> PythonSettings::_map_imports;
 
 void PythonSettings::read_()
 {

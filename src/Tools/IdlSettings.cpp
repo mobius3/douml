@@ -134,7 +134,7 @@ WrapperStr IdlSettings::include(WrapperStr s)
 {
     read_if_needed_();
 
-    WrapperStr * r = _map_includes[s];
+   QString * r = _map_includes[s];
 
     return (r) ? *r : WrapperStr(0);
 }
@@ -145,7 +145,7 @@ bool IdlSettings::set_Include(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(idlSettingsCmd, setIdlIncludeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        WrapperStr * r = _map_includes.take(s);
+       QString * r = _map_includes.take(s);
 
         if (!v.isEmpty())
             _map_includes.insert(s, new WrapperStr(v));
@@ -651,7 +651,7 @@ WrapperStr IdlSettings::_src_content;
 
 WrapperStr IdlSettings::_ext;
 
-Q3Dict<WrapperStr> IdlSettings::_map_includes;
+Q3Dict<QString> IdlSettings::_map_includes;
 
 void IdlSettings::read_()
 {

@@ -32,10 +32,7 @@
 #include <QString>
 #include <Q3CString>
 #include "misc/mystr.h"
-//Added by qt3to4:
 #include "Logging/QsLog.h"
-//#include "myio.h"
-//#include "strutil.h"
 
 
 class WrapperStr
@@ -116,20 +113,21 @@ public:
     }
 
     operator const char * () const {
-        if (wrappedString.length() > 0) {
-            arrayRotate++;
+//        if (wrappedString.length() > 0) {
+//            arrayRotate++;
 
-            if (arrayRotate == 20)
-                arrayRotate = 0;
+//            if (arrayRotate == 20)
+//                arrayRotate = 0;
 
-            ba[arrayRotate] = wrappedString.toLatin1();
-            const char * retVal = ba[arrayRotate].data();
-            return retVal;
-        }
+//            ba[arrayRotate] = wrappedString.toLatin1();
+//            const char * retVal = ba[arrayRotate].data();
+//            return retVal;
+//        }
 
-        int k = 0;
-        k++;
-        return returnableNullPtr;
+//        int k = 0;
+//        k++;
+//        return returnableNullPtr;
+        return wrappedString;
     }
     operator WrapperStr() const {
          //QLOG_INFO()() << Q_FUNC_INFO;

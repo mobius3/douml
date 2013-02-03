@@ -151,8 +151,17 @@ bool UmlBaseItem::propertyValue(const WrapperStr & k, WrapperStr & v)
     if (s == 0)
     {
         QLOG_INFO() << "DICT READ FAILURE";
+        QLOG_INFO() << "CLASS WAS: " << k.operator QString();
+        Q3DictIterator<QString> it( _dict );
+        for( ; it.current(); ++it )
+        {
+            QLOG_INFO() << it.currentKey();
+        }
+        QLOG_INFO() << "END";
+
         return FALSE;
     }
+    QLOG_INFO() << "DICT READ SUCCESS";
 
     v = *s;
     return TRUE;
@@ -167,12 +176,12 @@ bool UmlBaseItem::set_PropertyValue(const WrapperStr & k, const WrapperStr & v)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            WrapperStr * s = _dict[k];
+            QString * s = _dict[k];
 
             if (s == 0)
-                _dict.insert(k, new WrapperStr(v));
+                _dict.insert(k.operator QString(), new QString(v.operator QString()));
             else
-                *s = v;
+                *s = v.operator QString();
         }
 
         return TRUE;
@@ -181,7 +190,7 @@ bool UmlBaseItem::set_PropertyValue(const WrapperStr & k, const WrapperStr & v)
         return FALSE;
 }
 
-const Q3Dict<WrapperStr> UmlBaseItem::properties()
+const Q3Dict<QString> UmlBaseItem::properties()
 {
     read_if_needed_();
 
@@ -373,7 +382,7 @@ void UmlBaseItem::read_uml_()
     while (n--) {
         WrapperStr k = UmlCom::read_string();
 
-        _dict.insert(k, new WrapperStr(UmlCom::read_string()));
+        _dict.insert(k, new QString(UmlCom::read_string()));
     }
 
     _description = UmlCom::read_string();

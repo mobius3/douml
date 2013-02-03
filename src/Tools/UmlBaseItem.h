@@ -107,7 +107,7 @@ public:
 
     // returns all the properties of the object through (in Java a copy of) a dictionnary
 
-    const Q3Dict<WrapperStr> properties();
+    const Q3Dict<QString> properties();
 
     // If the parameter is null, move the current item to be
     // the first child of its parent. Else the current item and

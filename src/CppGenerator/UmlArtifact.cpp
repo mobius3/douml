@@ -59,6 +59,7 @@ void UmlArtifact::generate()
         package_of_generated_artifact = package();
 
         const WrapperStr hdef = cppHeader();
+        QLOG_INFO() << "Read header as: " + hdef.operator QString();
         const WrapperStr srcdef = cppSource();
 
         if (hdef.isEmpty() && srcdef.isEmpty()) {
@@ -154,10 +155,13 @@ void UmlArtifact::generate()
             //QTextStream f_h(file.data()); //[lgfreitas] Now QTextStream receives a pointer to a byte array...
             QSharedPointer<QByteArray> headerFile(new QByteArray());
             QTextStream f_h(headerFile.data(), QIODevice::WriteOnly);
+            //QString h_copy = QString(hdef.operator QString());
             const char * p = hdef;
             const char * pp = 0;
 
-            for (;;) {
+            for (;;)
+            {
+                QLOG_INFO() << "At this point P is: " << QString(p);
                 if (*p == 0) {
                     if (pp == 0)
                         break;
@@ -169,6 +173,7 @@ void UmlArtifact::generate()
                     if (*p == 0)
                         break;
                 }
+
 
                 if (*p == '@')
                     manage_alias(p, f_h);
@@ -204,15 +209,21 @@ void UmlArtifact::generate()
                     f_h << nasp.upper();
                 }
                 else if (!strncmp(p, "${includes}", 11)
-                         || !strncmp(p, "${all_includes}", 15)) {
+                         || !strncmp(p, "${all_includes}", 15))
+                {
+                    QLOG_INFO() << "REaDING INCLUDES";
                     p += (p[2] == 'a') ? 15 : 11;
-
-                    if (!incl_computed) {
+                    QLOG_INFO() << "Modified p 1 to be" << QString(p);
+                    if (!incl_computed)
+                    {
                         incl_computed = TRUE;
-                        CppRefType::compute(dependencies, hdef, srcdef, h_incl, decl, src_incl, this);
-                    }
+                        CppRefType::compute(dependencies, hdef.operator QString(), srcdef, h_incl, decl, src_incl, this);
+                        QLOG_INFO() << "Modified hdef to be: " << hdef.operator QString();
 
-                    if (!h_incl.isEmpty()) {
+                    }
+                    QLOG_INFO() << "Modified p 2 to be" << QString(p);
+                    if (!h_incl.isEmpty())
+                    {
                         f_h << h_incl;
 
                         if (*p != '\n')
@@ -220,16 +231,20 @@ void UmlArtifact::generate()
                     }
                     else if (*p == '\n')
                         p += 1;
+                    QLOG_INFO() << "FINISHED INCLUDES";
                 }
-                else if (!strncmp(p, "${declarations}", 15)) {
+                else if (!strncmp(p, "${declarations}", 15))
+                {
                     p += 15;
 
-                    if (!incl_computed) {
+                    if (!incl_computed)
+                    {
                         incl_computed = TRUE;
-                        CppRefType::compute(dependencies, hdef, srcdef, h_incl, decl, src_incl, this);
+                        CppRefType::compute(dependencies, hdef.operator QString(), srcdef, h_incl, decl, src_incl, this);
                     }
-
-                    if (!decl.isEmpty()) {
+                    QLOG_INFO() << "DECLS IS: " << decl.operator QString();
+                    if (!decl.isEmpty())
+                    {
                         f_h << decl;
 
                         if (*p != '\n')
@@ -260,7 +275,7 @@ void UmlArtifact::generate()
                     p += 13;
 
                     for (index = 0; index != n; index += 1)
-                        cls[index]->generate_decl(f_h, current_indent(p, hdef));
+                        cls[index]->generate_decl(f_h, current_indent(p, hdef.operator QString()));
 
                     if (*p == '\n')
                         p += 1;
@@ -343,7 +358,7 @@ void UmlArtifact::generate()
 
                     if (!incl_computed) {
                         incl_computed = TRUE;
-                        CppRefType::compute(dependencies, hdef, srcdef, h_incl, decl, src_incl, this);
+                        CppRefType::compute(dependencies, hdef.operator QString(), srcdef, h_incl, decl, src_incl, this);
                     }
 
                     if (!src_incl.isEmpty()) {

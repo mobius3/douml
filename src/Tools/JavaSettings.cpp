@@ -134,7 +134,7 @@ WrapperStr JavaSettings::get_import(const WrapperStr & s)
 {
     read_if_needed_();
 
-    WrapperStr * r = _map_imports[s];
+   QString * r = _map_imports[s];
 
     return (r) ? *r : WrapperStr(0);
 }
@@ -145,7 +145,7 @@ bool JavaSettings::set_Import(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(javaSettingsCmd, setJavaImportCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        WrapperStr * r = _map_imports.take(s);
+       QString * r = _map_imports.take(s);
 
         if (!v.isEmpty())
             _map_imports.insert(s, new WrapperStr(v));
@@ -715,7 +715,7 @@ bool JavaSettings::_is_generate_javadoc_comment;
 
 bool JavaSettings::_is_force_package_gen;
 
-Q3Dict<WrapperStr> JavaSettings::_map_imports;
+Q3Dict<QString> JavaSettings::_map_imports;
 
 void JavaSettings::read_()
 {
