@@ -4,7 +4,7 @@
 #ifdef WITHPYTHON
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "aVisibility.h"
 #include "UmlSettings.h"
 #include <q3dict.h>

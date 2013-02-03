@@ -28,7 +28,7 @@
 
 #include "UmlBaseClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <Q3PtrList>
 
@@ -39,21 +39,21 @@
 class UmlClassMember : public UmlBaseClassMember
 {
 public:
-    UmlClassMember(void * id, const Q3CString & n)
+    UmlClassMember(void * id, const WrapperStr & n)
         : UmlBaseClassMember(id, n) {};
 
-    static void remove_comments(Q3CString & s);
-    static void remove_arrays(Q3CString & s);
-    static void remove_preprocessor(Q3CString & s);
+    static void remove_comments(WrapperStr & s);
+    static void remove_arrays(WrapperStr & s);
+    static void remove_preprocessor(WrapperStr & s);
     static bool compute_dependency(Q3PtrList<CppRefType> & dependency,
-                                   Q3CString decl, const UmlTypeSpec &,
+                                   WrapperStr decl, const UmlTypeSpec &,
                                    bool force_incl = FALSE);
 
     void generate_visibility(aVisibility & current_visibility,
                              QTextStream & f_h, bool ahead,
-                             const Q3CString & indent);
+                             const WrapperStr & indent);
     bool insert_template(const char *& p, QTextStream & fs,
-                         const Q3CString & indent, const Q3CString & templ);
+                         const WrapperStr & indent, const WrapperStr & templ);
 };
 
 #endif

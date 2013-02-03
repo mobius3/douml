@@ -6,7 +6,7 @@
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
 #include <q3valuelist.h>
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 #include "UmlParameter.h"
 class UmlOperation;

@@ -4,7 +4,7 @@
 
 #include "UmlActivityAction.h"
 #include "anItemKind.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "UmlOnSignalAction.h"
 #include "UmlAccessVariableValueAction.h"
 

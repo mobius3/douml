@@ -8,7 +8,7 @@
 #include "anItemKind.h"
 #include <q3valuelist.h>
 #include <q3ptrvector.h>
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 class UmlClassInstance;
 class UmlClass;

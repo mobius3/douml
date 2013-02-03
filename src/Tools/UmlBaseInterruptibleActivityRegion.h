@@ -4,7 +4,7 @@
 
 #include "UmlActivityRegion.h"
 #include "anItemKind.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 class UmlInterruptibleActivityRegion;
 class UmlItem;

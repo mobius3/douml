@@ -7,7 +7,7 @@
 #include "UmlTypeSpec.h"
 #include <q3valuelist.h>
 #include <q3ptrvector.h>
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include <q3dict.h>
 
 #include "UmlFormalParameter.h"

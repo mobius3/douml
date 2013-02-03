@@ -25,7 +25,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <Q3ValueList>
 //Added by qt3to4:
@@ -40,7 +40,7 @@
 #include "util.h"
 
 void UmlRelation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
-                                     const Q3CString & cl_stereotype,
+                                     const WrapperStr & cl_stereotype,
                                      bool all_in_h)
 {
     if (cl_stereotype == "enum")
@@ -61,7 +61,7 @@ void UmlRelation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
         break;
 
     default:
-        Q3CString decl = cppDecl();
+        WrapperStr decl = cppDecl();
         int index;
 
         if ((index = decl.find("${static}")) != -1)
@@ -111,7 +111,7 @@ void UmlRelation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 
 void UmlRelation::generate_inherit(const char *& sep, QTextStream & f_h,
                                    const Q3ValueList<UmlActualParameter> & actuals,
-                                   const Q3CString & cl_stereotype)
+                                   const WrapperStr & cl_stereotype)
 {
     switch (relationKind()) {
     default:
@@ -121,7 +121,7 @@ void UmlRelation::generate_inherit(const char *& sep, QTextStream & f_h,
     case aRealization:
         if ((cl_stereotype == "union") || (cl_stereotype == "enum")) {
             write_trace_header();
-            UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
+            UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
                           + cl_stereotype + "</i> cannot inherits</b></font><br>");
             incr_warning();
             return;
@@ -134,12 +134,12 @@ void UmlRelation::generate_inherit(const char *& sep, QTextStream & f_h,
         }
 
         UmlClass * role_type = roleType();
-        const Q3CString & other_stereotype = role_type->stereotype();
+        const WrapperStr & other_stereotype = role_type->stereotype();
 
         if ((other_stereotype == "union") ||
             (other_stereotype == "enum")) {
             write_trace_header();
-            UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot inherits an <i>")
+            UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot inherits an <i>")
                           + other_stereotype + "</i></b></font><br>");
             incr_warning();
             return;
@@ -184,7 +184,7 @@ void UmlRelation::generate_inherit(const char *& sep, QTextStream & f_h,
 }
 
 void UmlRelation::generate_decl(aVisibility & current_visibility, QTextStream & f_h,
-                                const Q3CString & cl_stereotype, Q3CString indent,
+                                const WrapperStr & cl_stereotype, WrapperStr indent,
                                 BooL & first, bool)
 {
     switch (relationKind()) {
@@ -239,7 +239,7 @@ void UmlRelation::generate_decl(aVisibility & current_visibility, QTextStream & 
 
             const char * p = cppDecl();
             const char * pp = 0;
-            Q3CString s;
+            WrapperStr s;
 
             while ((*p == ' ') || (*p == '\t'))
                 indent += *p++;
@@ -325,7 +325,7 @@ void UmlRelation::generate_decl(aVisibility & current_visibility, QTextStream & 
                 else if (!strncmp(p, "${multiplicity}", 15)) {
                     p += 15;
 
-                    const Q3CString & m = multiplicity();
+                    const WrapperStr & m = multiplicity();
 
                     if (!m.isEmpty() && (*((const char *) m) == '['))
                         f_h << m;
@@ -362,9 +362,9 @@ void UmlRelation::generate_decl(aVisibility & current_visibility, QTextStream & 
     }
 }
 
-void UmlRelation::generate_def(QTextStream & f, Q3CString indent, bool h,
-                               Q3CString templates, Q3CString cl_names,
-                               Q3CString, Q3CString)
+void UmlRelation::generate_def(QTextStream & f, WrapperStr indent, bool h,
+                               WrapperStr templates, WrapperStr cl_names,
+                               WrapperStr, WrapperStr)
 {
     if (isClassMember() && !cppDecl().isEmpty()) {
         UmlClass * cl = (UmlClass *) parent();
@@ -473,7 +473,7 @@ void UmlRelation::generate_def(QTextStream & f, Q3CString indent, bool h,
                 else if (!strncmp(p, "${multiplicity}", 15)) {
                     p += 15;
 
-                    const Q3CString & m = multiplicity();
+                    const WrapperStr & m = multiplicity();
 
                     if (!m.isEmpty() && (*((const char *) m) == '['))
                         f << m;

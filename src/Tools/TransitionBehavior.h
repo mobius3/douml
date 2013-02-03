@@ -2,7 +2,7 @@
 #define _TRANSITIONBEHAVIOR_H
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 class TransitionBehavior
 {

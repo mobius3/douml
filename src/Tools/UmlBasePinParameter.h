@@ -3,7 +3,7 @@
 
 
 #include "UmlActivityObject.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "aDirection.h"
 #include "aParameterEffectKind.h"
 

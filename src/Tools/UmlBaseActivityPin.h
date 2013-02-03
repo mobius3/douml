@@ -4,7 +4,7 @@
 
 #include "UmlPinParameter.h"
 #include "anItemKind.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 class UmlActivityPin;
 class UmlActivityAction;

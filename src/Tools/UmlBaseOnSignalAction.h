@@ -3,7 +3,7 @@
 
 
 #include "UmlActivityAction.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 class UmlBaseOnSignalAction : public UmlActivityAction
 {

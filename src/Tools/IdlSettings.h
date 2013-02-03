@@ -4,7 +4,7 @@
 #ifdef WITHIDL
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "UmlSettings.h"
 #include <q3dict.h>
 

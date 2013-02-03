@@ -25,7 +25,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -34,15 +34,15 @@
 #include "UmlClass.h"
 
 void UmlExtraClassMember::compute_dependency(Q3PtrList<CppRefType> &,
-        const Q3CString &,
+        const WrapperStr &,
         bool)
 {
 }
 
 void UmlExtraClassMember::generate_decl(aVisibility &,
                                         QTextStream & f_h,
-                                        const Q3CString &,
-                                        Q3CString indent,
+                                        const WrapperStr &,
+                                        WrapperStr indent,
                                         BooL & first, bool)
 {
     first = FALSE;
@@ -55,9 +55,9 @@ void UmlExtraClassMember::generate_decl(aVisibility &,
     f_h << p;
 }
 
-void UmlExtraClassMember::generate_def(QTextStream & f, Q3CString indent,
-                                       bool h, Q3CString templates,
-                                       Q3CString, Q3CString, Q3CString)
+void UmlExtraClassMember::generate_def(QTextStream & f, WrapperStr indent,
+                                       bool h, WrapperStr templates,
+                                       WrapperStr, WrapperStr, WrapperStr)
 {
     if (!cppDef().isEmpty() &&
         ((isCppInline() || !templates.isEmpty()) == h)) {

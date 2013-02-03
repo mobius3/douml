@@ -28,12 +28,12 @@
 
 #include "UmlBaseClassDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class UmlClassDiagram : public UmlBaseClassDiagram
 {
 public:
-    UmlClassDiagram(void * id, const Q3CString & n)
+    UmlClassDiagram(void * id, const WrapperStr & n)
         : UmlBaseClassDiagram(id, n) {};
 };
 

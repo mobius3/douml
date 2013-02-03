@@ -28,7 +28,7 @@
 
 #include <q3intdict.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <Q3PtrList>
 
@@ -42,26 +42,26 @@ private:
     static Q3IntDict<char> bodies;
 
 public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const WrapperStr & n)
         : UmlBaseOperation(id, n) {};
 
     virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-                                    const Q3CString & cl_stereotype,
+                                    const WrapperStr & cl_stereotype,
                                     bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility, QTextStream & f_h,
-                               const Q3CString & cl_stereotype, Q3CString indent,
+                               const WrapperStr & cl_stereotype, WrapperStr indent,
                                BooL & first, bool last);
-    virtual void generate_def(QTextStream &, Q3CString indent, bool h,
-                              Q3CString templates, Q3CString cl_names,
-                              Q3CString templates_tmplop, Q3CString cl_names_tmplop);
+    virtual void generate_def(QTextStream &, WrapperStr indent, bool h,
+                              WrapperStr templates, WrapperStr cl_names,
+                              WrapperStr templates_tmplop, WrapperStr cl_names_tmplop);
 
-    Q3CString compute_name();
+    WrapperStr compute_name();
     bool is_template_operation();
 
     static void read_bodies(const char * h_path, const char * src_path);
 
 private:
-    const char * generate_body(QTextStream & fs, Q3CString indent, const char * p);
+    const char * generate_body(QTextStream & fs, WrapperStr indent, const char * p);
     void generate_throw(QTextStream & f_h);
 };
 

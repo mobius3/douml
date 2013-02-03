@@ -4,7 +4,7 @@
 
 #include "UmlClassMember.h"
 #include "anItemKind.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "UmlTypeSpec.h"
 
 class UmlAttribute;

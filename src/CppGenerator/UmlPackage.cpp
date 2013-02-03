@@ -25,20 +25,20 @@
 
 #include <qdir.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlPackage.h"
 #include "UmlCom.h"
 #include "CppSettings.h"
 #include "util.h"
 
-UmlPackage::UmlPackage(void * id, const Q3CString & n)
+UmlPackage::UmlPackage(void * id, const WrapperStr & n)
     : UmlBasePackage(id, n)
 {
     dir.read = FALSE;
 }
 
-static void create_directory(Q3CString s)
+static void create_directory(WrapperStr s)
 {
     int index = 0;
     QChar sep = QDir::separator(); //[lgfreitas] QChar does not
@@ -54,12 +54,12 @@ static void create_directory(Q3CString s)
     int index2;
 
     while ((index2 = s.find("/", index + 1)) != -1) {
-        Q3CString s2 = s.left(index2);
+        WrapperStr s2 = s.left(index2);
         QDir sd(s2);
 
         if (!sd.exists()) {
             if (!sd.mkdir(s2)) {
-                UmlCom::trace(Q3CString("<font color=\"red\"><b> cannot create directory <i>")
+                UmlCom::trace(WrapperStr("<font color=\"red\"><b> cannot create directory <i>")
                               + s2 + "</i></b></font><br>");
                 UmlCom::bye(n_errors() + 1);
                 UmlCom::fatal_error("UmlPackage::file_path");
@@ -71,13 +71,13 @@ static void create_directory(Q3CString s)
 }
 
 static bool RootDirRead;
-static Q3CString RootDir;
+static WrapperStr RootDir;
 
-static Q3CString relative_path(const QDir & destdir, Q3CString relto)
+static WrapperStr relative_path(const QDir & destdir, WrapperStr relto)
 {
     QDir fromdir(relto);
-    /*Q3CString from = Q3CString(fromdir.absPath());
-    Q3CString to = Q3CString(destdir.absPath());*/
+    /*WrapperStr from = WrapperStr(fromdir.absPath());
+    WrapperStr to = WrapperStr(destdir.absPath());*/
     const char * cfrom = fromdir.absolutePath().toAscii().constData();
     const char * cto = destdir.absolutePath().toAscii().constData();
     int lastsep = -1;
@@ -95,11 +95,11 @@ static Q3CString relative_path(const QDir & destdir, Q3CString relto)
 
             case '/':
                 // to = .../aze/qsd/wxc, from = .../aze => qsd/wxc/
-                return (cto + index + 1) + Q3CString("/");
+                return (cto + index + 1) + WrapperStr("/");
 
             default:
                 // to = .../aze/qsd/wxc, from = .../az => ../aze/qsd/wxc/
-                return "../" + Q3CString(cto + lastsep + 1) + "/";
+                return "../" + WrapperStr(cto + lastsep + 1) + "/";
             }
         }
         else if (t == f) {
@@ -109,7 +109,7 @@ static Q3CString relative_path(const QDir & destdir, Q3CString relto)
             index += 1;
         }
         else if (t == 0) {
-            Q3CString r;
+            WrapperStr r;
             const char * p = cfrom + index;
 
             do {
@@ -127,7 +127,7 @@ static Q3CString relative_path(const QDir & destdir, Q3CString relto)
         }
         else {
             // to = .../aze, from = .../iop/klm => ../../aze/
-            Q3CString r = "../";
+            WrapperStr r = "../";
             const char * p = cfrom + lastsep + 1;
 
             while (*p != 0)
@@ -139,7 +139,7 @@ static Q3CString relative_path(const QDir & destdir, Q3CString relto)
     }
 }
 
-Q3CString UmlPackage::rootDir()
+WrapperStr UmlPackage::rootDir()
 {
     if (! RootDirRead) {
         RootDirRead = TRUE;
@@ -157,7 +157,7 @@ Q3CString UmlPackage::rootDir()
     return RootDir;
 }
 
-Q3CString UmlPackage::source_path(const Q3CString & f, Q3CString relto)
+WrapperStr UmlPackage::source_path(const WrapperStr & f, WrapperStr relto)
 {
     if (!dir.read) {
         dir.src = cppSrcDir();
@@ -183,7 +183,7 @@ Q3CString UmlPackage::source_path(const Q3CString & f, Q3CString relto)
             dir.h_absolute = TRUE;
 
         if (dir.src.isEmpty()) {
-            UmlCom::trace(Q3CString("<font color=\"red\"><b><b> The generation directory "
+            UmlCom::trace(WrapperStr("<font color=\"red\"><b><b> The generation directory "
                                     "must be specified for the package<i> ") + name()
                           + "</i>, edit the <i> generation settings</i> (tab 'directory') "
                           "or edit the package (tab 'C++')</b></font><br>");
@@ -202,20 +202,20 @@ Q3CString UmlPackage::source_path(const Q3CString & f, Q3CString relto)
     if (! d.exists())
         create_directory(dir.src);	// don't return on error
 
-    Q3CString df = (dir.src_absolute || relto.isEmpty())
-                   ? Q3CString(d.filePath(f).toAscii().constData())
+    WrapperStr df = (dir.src_absolute || relto.isEmpty())
+                   ? WrapperStr(d.filePath(f).toAscii().constData())
                    : relative_path(d, relto) + f;
 
-    return df + Q3CString(".") + CppSettings::sourceExtension();
+    return df + WrapperStr(".") + CppSettings::sourceExtension();
 }
 
-Q3CString UmlPackage::header_path(const Q3CString & f, Q3CString relto)
+WrapperStr UmlPackage::header_path(const WrapperStr & f, WrapperStr relto)
 {
     if (!dir.read) {
         source_path(f);
 
         if (dir.h.isEmpty()) {
-            UmlCom::trace(Q3CString("<font color=\"red\"><b><b> The generation directory "
+            UmlCom::trace(WrapperStr("<font color=\"red\"><b><b> The generation directory "
                                     "must be specified for the package<i> ") + name()
                           + "</i>, edit the <i> generation settings</i> (tab 'directory') "
                           "or edit the package (tab 'C++')</b></font><br>");
@@ -224,7 +224,7 @@ Q3CString UmlPackage::header_path(const Q3CString & f, Q3CString relto)
         }
 
         if (QDir::isRelativePath(dir.h)) {
-            UmlCom::trace(Q3CString("<font color=\"red\"><b><i>")
+            UmlCom::trace(WrapperStr("<font color=\"red\"><b><i>")
                           + name() + "</i>'s header path <i>(" + dir.h
                           + "</i>) is not absolute, edit the <i> generation settings</i> "
                           "(tab 'directory'), or edit the package (tab 'C++')</b></font><br>");
@@ -241,16 +241,16 @@ Q3CString UmlPackage::header_path(const Q3CString & f, Q3CString relto)
     if (! d.exists())
         create_directory(dir.h);	// don't return on error
 
-    Q3CString df = (dir.h_absolute || relto.isEmpty())
-                   ? Q3CString(d.filePath(f).toAscii().constData())
+    WrapperStr df = (dir.h_absolute || relto.isEmpty())
+                   ? WrapperStr(d.filePath(f).toAscii().constData())
                    : relative_path(d, relto) + f;
 
-    return df + Q3CString(".") + CppSettings::headerExtension();
+    return df + WrapperStr(".") + CppSettings::headerExtension();
 }
 
-Q3CString UmlPackage::text_path(const Q3CString & f, Q3CString relto)
+WrapperStr UmlPackage::text_path(const WrapperStr & f, WrapperStr relto)
 {
-    Q3CString r = source_path(f, relto);
+    WrapperStr r = source_path(f, relto);
 
     return r.left(r.length() - 1 - CppSettings::sourceExtension().length());
 }

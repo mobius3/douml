@@ -8,7 +8,7 @@
 #include "OnInstanceCmd.h"
 #include "anItemKind.h"
 #include "aRelationKind.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 #include <q3ptrvector.h>
 #include <qstring.h>

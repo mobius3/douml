@@ -32,7 +32,7 @@
 #include "UmlCom.h"
 #include "util.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -49,7 +49,7 @@ bool CppRefType::add(UmlClass * cl, Q3PtrList<CppRefType> & l,
                      bool incl, bool hight)
 {
     CppRefType * ref;
-    Q3CString t = cl->name();
+    WrapperStr t = cl->name();
     Weight w;
 
     if (cl->parent()->kind() == aClass) {
@@ -84,7 +84,7 @@ bool CppRefType::add(UmlClass * cl, Q3PtrList<CppRefType> & l,
     return TRUE;
 }
 
-bool CppRefType::add(const Q3CString & t, Q3PtrList<CppRefType> & l, bool incl)
+bool CppRefType::add(const WrapperStr & t, Q3PtrList<CppRefType> & l, bool incl)
 {
     if (t.isEmpty())
         return FALSE;
@@ -123,7 +123,7 @@ bool CppRefType::add(const Q3CString & t, Q3PtrList<CppRefType> & l, bool incl)
     return TRUE;
 }
 
-void CppRefType::remove(const Q3CString & t, Q3PtrList<CppRefType> & l)
+void CppRefType::remove(const WrapperStr & t, Q3PtrList<CppRefType> & l)
 {
     Q3PtrListIterator<CppRefType> it(l);
 
@@ -151,7 +151,7 @@ void CppRefType::remove(UmlClass * cl, Q3PtrList<CppRefType> & l)
 void CppRefType::force_ref(UmlClass * cl, Q3PtrList<CppRefType> & l)
 {
     CppRefType * ref;
-    Q3CString t = cl->name();
+    WrapperStr t = cl->name();
 
     for (ref = l.first(); ref; ref = l.next()) {
         // don't use ref->type.toString() because of synonymous
@@ -166,16 +166,16 @@ void CppRefType::force_ref(UmlClass * cl, Q3PtrList<CppRefType> & l)
 }
 
 void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
-                         const Q3CString & hdef, const Q3CString & srcdef,
-                         Q3CString & h_incl,  Q3CString & decl, Q3CString & src_incl,
+                         const WrapperStr & hdef, const WrapperStr & srcdef,
+                         WrapperStr & h_incl,  WrapperStr & decl, WrapperStr & src_incl,
                          UmlArtifact * who)
 {
     UmlPackage * pack = who->package();
-    Q3CString hdir;
-    Q3CString srcdir;
+    WrapperStr hdir;
+    WrapperStr srcdir;
 
     if (CppSettings::isRelativePath()) {
-        Q3CString empty;
+        WrapperStr empty;
 
         hdir = pack->header_path(empty);
         srcdir = pack->source_path(empty);
@@ -195,8 +195,8 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
     }
 
     src_incl += "\"\n";
-    h_incl = "";	// to not be Q3CString::null
-    decl = "";	// to not be Q3CString::null
+    h_incl = "";	// to not be WrapperStr::null
+    decl = "";	// to not be WrapperStr::null
 
     CppRefType * ref;
 
@@ -205,11 +205,11 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
                         ? ref->type.type
                         : UmlBaseClass::get(ref->type.explicit_type, 0);
         bool included = ref->included;
-        Q3CString hform;	// form in header
-        Q3CString srcform;	// form in source
+        WrapperStr hform;	// form in header
+        WrapperStr srcform;	// form in source
 
         if (cl == 0) {
-            Q3CString in = CppSettings::include(ref->type.explicit_type);
+            WrapperStr in = CppSettings::include(ref->type.explicit_type);
 
             if (!in.isEmpty())
                 hform = srcform = in + '\n';
@@ -244,7 +244,7 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
             srcform = hform;
         }
         else {
-            Q3CString st = cl->cpp_stereotype();
+            WrapperStr st = cl->cpp_stereotype();
 
             if ((st == "enum") || (st == "typedef"))
                 included = TRUE;
@@ -268,7 +268,7 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
             }
             else if (cl->parent()->kind() != aClass) {
                 write_trace_header();
-                UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b> class<i> ") + cl->name() +
+                UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b> class<i> ") + cl->name() +
                               "</i> referenced but does not have associated <i>artifact</i></b></font><br>");
                 incr_warning();
                 continue;
@@ -297,7 +297,7 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
                 if ((cl->associatedArtifact() == 0) &&
                     (cl->parent()->kind() != aClass)) {
                     write_trace_header();
-                    UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b> class<i> ") + cl->name() +
+                    UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b> class<i> ") + cl->name() +
                                   "</i> referenced but does not have associated <i>artifact</i></b></font><br>");
                     incr_warning();
                 }

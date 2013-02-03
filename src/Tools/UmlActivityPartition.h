@@ -2,7 +2,7 @@
 #define _UMLACTIVITYPARTITION_H
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "UmlBaseActivityPartition.h"
 #include "UmlActivityItem.h"
 

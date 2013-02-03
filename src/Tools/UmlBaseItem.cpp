@@ -144,10 +144,15 @@ bool UmlBaseItem::propertyValue(const WrapperStr & k, WrapperStr & v)
 {
     read_if_needed_();
 
-    WrapperStr * s = _dict[k];
+
+    QString * s = _dict[k];
+
 
     if (s == 0)
+    {
+        QLOG_INFO() << "DICT READ FAILURE";
         return FALSE;
+    }
 
     v = *s;
     return TRUE;

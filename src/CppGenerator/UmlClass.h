@@ -29,7 +29,7 @@
 #include <q3dict.h>
 #include <q3ptrlist.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <Q3ValueList>
 #include <Q3PtrList>
@@ -55,34 +55,34 @@ private:
     static Q3ValueList<UmlActualParameter> noactuals;
 
 public:
-    UmlClass(void * id, const Q3CString & n)
+    UmlClass(void * id, const WrapperStr & n)
         : UmlBaseClass(id, n), managed(FALSE) {};
 
-    Q3CString cpp_stereotype();
+    WrapperStr cpp_stereotype();
 
     void compute_dependencies(Q3PtrList<CppRefType> &, bool all_in_h);
 
     virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
-                                    const Q3CString & cl_stereotype,
+                                    const WrapperStr & cl_stereotype,
                                     bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility,
                                QTextStream & f_h,
-                               const Q3CString & cl_stereotype,
-                               Q3CString indent,
+                               const WrapperStr & cl_stereotype,
+                               WrapperStr indent,
                                BooL & first, bool last);
-    void generate_def(QTextStream & f, Q3CString indent, bool h);
-    virtual void generate_def(QTextStream & f, Q3CString indent, bool h,
-                              Q3CString templates, Q3CString cl_names,
-                              Q3CString templates_tmplop,
-                              Q3CString cl_names_tmplop);
+    void generate_def(QTextStream & f, WrapperStr indent, bool h);
+    virtual void generate_def(QTextStream & f, WrapperStr indent, bool h,
+                              WrapperStr templates, WrapperStr cl_names,
+                              WrapperStr templates_tmplop,
+                              WrapperStr cl_names_tmplop);
 
     virtual void generate();
-    void generate_decl(QTextStream &, Q3CString indent);
+    void generate_decl(QTextStream &, WrapperStr indent);
 
-    void get_template_prefixes(Q3CString & template1, Q3CString & template2);
-    void spec(Q3CString & templates, Q3CString & names,
-              Q3CString & templates_tmplop, Q3CString & names_tmplop);
-    Q3CString decl();
+    void get_template_prefixes(WrapperStr & template1, WrapperStr & template2);
+    void spec(WrapperStr & templates, WrapperStr & names,
+              WrapperStr & templates_tmplop, WrapperStr & names_tmplop);
+    WrapperStr decl();
 
     void write(QTextStream &, bool with_formals = TRUE,
                BooL * is_template = 0,

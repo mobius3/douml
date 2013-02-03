@@ -4,7 +4,7 @@
 
 #include "UmlActivityObject.h"
 #include "anItemKind.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 class UmlExpansionNode;
 class UmlExpansionRegion;

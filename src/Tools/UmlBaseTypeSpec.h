@@ -2,7 +2,7 @@
 #define _UMLBASETYPESPEC_H
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 class UmlClass;
 

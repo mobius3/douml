@@ -28,11 +28,11 @@
 
 #include "UmlBasePackage.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 struct Dir {
-    Q3CString src;
-    Q3CString h;
+    WrapperStr src;
+    WrapperStr h;
     bool read;
     bool src_absolute;
     bool h_absolute;
@@ -41,19 +41,19 @@ struct Dir {
 class UmlPackage : public UmlBasePackage
 {
 public:
-    UmlPackage(void * id, const Q3CString & n);
+    UmlPackage(void * id, const WrapperStr & n);
 
 protected:
     Dir dir;
 
 public:
-    Q3CString source_path(const Q3CString &, Q3CString relto = "");
-    Q3CString header_path(const Q3CString &, Q3CString relto = "");
-    Q3CString text_path(const Q3CString &, Q3CString relto = "");
+    WrapperStr source_path(const WrapperStr &, WrapperStr relto = "");
+    WrapperStr header_path(const WrapperStr &, WrapperStr relto = "");
+    WrapperStr text_path(const WrapperStr &, WrapperStr relto = "");
     virtual void generate();
     virtual UmlPackage * package();
 
-    static Q3CString rootDir();
+    static WrapperStr rootDir();
 };
 
 #endif

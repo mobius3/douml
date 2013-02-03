@@ -4,7 +4,7 @@
 
 #include "UmlActivityNode.h"
 #include "anItemKind.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "UmlTypeSpec.h"
 #include "anOrdering.h"
 

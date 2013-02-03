@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include <QTextStream>
 //Added by qt3to4:
@@ -51,12 +51,12 @@
 Q3PtrList<UmlClass> UmlClass::context;
 Q3ValueList<UmlActualParameter> UmlClass::noactuals;
 
-Q3CString UmlClass::cpp_stereotype()
+WrapperStr UmlClass::cpp_stereotype()
 {
-    Q3CString s = CppSettings::classStereotype(stereotype());
+    WrapperStr s = CppSettings::classStereotype(stereotype());
 
     return ((s == "struct") || (s == "union") || (s == "enum") || (s == "typedef"))
-           ? s : Q3CString("class");
+           ? s : WrapperStr("class");
 }
 
 void UmlClass::generate()
@@ -67,12 +67,12 @@ void UmlClass::generate()
         if (!isCppExternal() && !cppDecl().isEmpty()) {
             if (associatedArtifact() == 0) {
                 if (verbose())
-                    UmlCom::trace(Q3CString("<hr><font face=helvetica><i> ") + name() +
+                    UmlCom::trace(WrapperStr("<hr><font face=helvetica><i> ") + name() +
                                   " : </i> does not have associated <i>artifact</i></font><br>");
             }
             else if (cppDecl().isEmpty()) {
                 if (verbose())
-                    UmlCom::trace(Q3CString("<hr><font face=helvetica>class <i>")
+                    UmlCom::trace(WrapperStr("<hr><font face=helvetica>class <i>")
                                   + name() + "</i> has an empty C++ definition</font><br>");
             }
             else
@@ -84,16 +84,16 @@ void UmlClass::generate()
 void UmlClass::compute_dependencies(Q3PtrList<CppRefType> & dependencies,
                                     bool all_in_h)
 {
-    const Q3CString dummy;
+    const WrapperStr dummy;
 
     compute_dependency(dependencies, dummy, all_in_h);
 }
 
 void UmlClass::compute_dependency(Q3PtrList<CppRefType> & dependencies,
-                                  const Q3CString &, bool all_in_h)
+                                  const WrapperStr &, bool all_in_h)
 {
     Q3PtrVector<UmlItem> ch = children();
-    const Q3CString stereotype = cpp_stereotype();
+    const WrapperStr stereotype = cpp_stereotype();
     bool a_typedef = (stereotype == "typedef");
     bool an_enum = (stereotype == "enum");
     const Q3ValueList<UmlFormalParameter> formals = this->formals();
@@ -135,7 +135,7 @@ void UmlClass::compute_dependency(Q3PtrList<CppRefType> & dependencies,
                                                (*ita).value(), all_in_h);
 
         if (a_typedef) {
-            Q3CString decl = cppDecl();
+            WrapperStr decl = cppDecl();
             int index;
 
             remove_comments(decl);
@@ -157,7 +157,7 @@ void UmlClass::compute_dependency(Q3PtrList<CppRefType> & dependencies,
         CppRefType::force_ref(this, dependencies);
 }
 
-void UmlClass::generate_decl(QTextStream & f_h, Q3CString indent)
+void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
 {
     context.append(this);
 
@@ -165,7 +165,7 @@ void UmlClass::generate_decl(QTextStream & f_h, Q3CString indent)
     Q3PtrVector<UmlItem> ch = children();
     const unsigned sup = ch.size();
     QLOG_INFO() << "children.size() is: " << sup;
-    const Q3CString & stereotype = cpp_stereotype();
+    const WrapperStr & stereotype = cpp_stereotype();
     bool a_typedef = (stereotype == "typedef");
 
     bool an_enum = (stereotype == "enum");
@@ -366,10 +366,10 @@ void UmlClass::generate_decl(QTextStream & f_h, Q3CString indent)
             if (! nestedp) {
                 // inline operations definition
                 // template class members
-                Q3CString templates;
-                Q3CString cl_names;
-                Q3CString templates_tmplop;
-                Q3CString cl_names_tmplop;
+                WrapperStr templates;
+                WrapperStr cl_names;
+                WrapperStr templates_tmplop;
+                WrapperStr cl_names_tmplop;
 
                 spec(templates, cl_names, templates_tmplop, cl_names_tmplop);
 
@@ -393,7 +393,7 @@ void UmlClass::generate_decl(QTextStream & f_h, Q3CString indent)
 }
 
 void UmlClass::generate_decl(aVisibility & current_visibility, QTextStream & f_h,
-                             const Q3CString &, Q3CString indent,
+                             const WrapperStr &, WrapperStr indent,
                              BooL & first, bool)
 {
     generate_visibility(current_visibility, f_h, first, indent);
@@ -403,14 +403,14 @@ void UmlClass::generate_decl(aVisibility & current_visibility, QTextStream & f_h
     f_h << '\n';
 }
 
-void UmlClass::generate_def(QTextStream & f, Q3CString indent, bool h)
+void UmlClass::generate_def(QTextStream & f, WrapperStr indent, bool h)
 {
     if (! cppDecl().isEmpty()) {
         Q3PtrVector<UmlItem> ch = children();
-        Q3CString templates;
-        Q3CString cl_names;
-        Q3CString templates_tmplop;
-        Q3CString cl_names_tmplop;
+        WrapperStr templates;
+        WrapperStr cl_names;
+        WrapperStr templates_tmplop;
+        WrapperStr cl_names_tmplop;
 
         spec(templates, cl_names, templates_tmplop, cl_names_tmplop);
 
@@ -422,18 +422,18 @@ void UmlClass::generate_def(QTextStream & f, Q3CString indent, bool h)
     }
 }
 
-void UmlClass::generate_def(QTextStream & f, Q3CString indent, bool h,
-                            Q3CString templates, Q3CString cl_names,
-                            Q3CString, Q3CString)
+void UmlClass::generate_def(QTextStream & f, WrapperStr indent, bool h,
+                            WrapperStr templates, WrapperStr cl_names,
+                            WrapperStr, WrapperStr)
 {
     QLOG_INFO() << "generating definition";
 
     //QsLogging::Logger::instance().
     if (! cppDecl().isEmpty()) {
-        Q3CString template1;
-        Q3CString template2;
-        Q3CString templates_tmplop;
-        Q3CString cl_names_tmplop;
+        WrapperStr template1;
+        WrapperStr template2;
+        WrapperStr templates_tmplop;
+        WrapperStr cl_names_tmplop;
 
         get_template_prefixes(template1, template2);
         templates_tmplop = templates + "template<>\n";
@@ -451,8 +451,8 @@ void UmlClass::generate_def(QTextStream & f, Q3CString indent, bool h,
     }
 }
 
-void UmlClass::get_template_prefixes(Q3CString & template1,
-                                     Q3CString & template2)
+void UmlClass::get_template_prefixes(WrapperStr & template1,
+                                     WrapperStr & template2)
 {
     Q3ValueList<UmlFormalParameter> formals = this->formals();
 
@@ -480,9 +480,9 @@ void UmlClass::get_template_prefixes(Q3CString & template1,
     }
 }
 
-void UmlClass::spec(Q3CString & templates, Q3CString & names,
-                    Q3CString & templates_tmplop,
-                    Q3CString & names_tmplop)
+void UmlClass::spec(WrapperStr & templates, WrapperStr & names,
+                    WrapperStr & templates_tmplop,
+                    WrapperStr & names_tmplop)
 {
     if (parent()->kind() == aClass) {
         ((UmlClass *) parent())
@@ -490,8 +490,8 @@ void UmlClass::spec(Q3CString & templates, Q3CString & names,
         names += "::";
     }
 
-    Q3CString t1;
-    Q3CString t2;
+    WrapperStr t1;
+    WrapperStr t2;
 
     get_template_prefixes(t1, t2);
     templates_tmplop = templates + "template<>\n";
@@ -503,19 +503,19 @@ void UmlClass::spec(Q3CString & templates, Q3CString & names,
 
 // warning : nested case not managed
 
-Q3CString UmlClass::decl()
+WrapperStr UmlClass::decl()
 {
-    Q3CString result;
-    Q3CString close_template;
+    WrapperStr result;
+    WrapperStr close_template;
     UmlArtifact * cp = associatedArtifact();
-    Q3CString nasp = ((UmlPackage *)
+    WrapperStr nasp = ((UmlPackage *)
                       ((cp != 0) ? (UmlItem *) cp : (UmlItem *) this)->package())
                      ->cppNamespace();
 
-    if (! nasp.isEmpty()) {
+    if (!nasp.isEmpty()) {
         int index =
             // bypass :: allowing ::a...
-            ((nasp.at(0) == ':') && (nasp != "::")) ? 2 : 0;
+            ((nasp.at(0) == ":") && (nasp != QString("::"))) ? 2 : 0;
         int index2 = 0;
 
         while ((index2 = nasp.find("::", index)) != -1) {
@@ -528,8 +528,8 @@ Q3CString UmlClass::decl()
         close_template += " } ";
     }
 
-    Q3CString template1;
-    Q3CString template2;
+    WrapperStr template1;
+    WrapperStr template2;
 
     get_template_prefixes(template1, template2);
 
@@ -547,12 +547,12 @@ void UmlClass::write(QTextStream & f, const UmlTypeSpec & t,
     if (t.type != 0)
         t.type->write(f, with_formals, is_template);
     else {
-        Q3CString s = CppSettings::type(t.explicit_type);
+        WrapperStr s = CppSettings::type(t.explicit_type);
 
         f << s;
 
         if (is_template != 0)
-            *is_template = (!s.isEmpty() && (s.at(s.length() - 1) == '>'));
+            *is_template = (!s.isEmpty() && (s.at(s.length() - 1) == QString('>')));
     }
 
 }
@@ -570,7 +570,7 @@ void UmlClass::write(QTextStream & f, bool with_formals, BooL * is_template,
         }
         else {
             UmlArtifact * cp = associatedArtifact();
-            Q3CString nasp = ((UmlPackage *)
+            WrapperStr nasp = ((UmlPackage *)
                               ((cp != 0) ? (UmlItem *) cp : (UmlItem *) this)->package())
                              ->cppNamespace();
 
@@ -580,7 +580,7 @@ void UmlClass::write(QTextStream & f, bool with_formals, BooL * is_template,
         }
     }
 
-    Q3CString s;
+    WrapperStr s;
 
     if (isCppExternal()) {
         s = cppDecl();
@@ -606,7 +606,7 @@ void UmlClass::write(QTextStream & f, bool with_formals, BooL * is_template,
         f << s;
 
         if (is_template != 0)
-            *is_template = (s.at(s.length() - 1) == '>');
+            *is_template = (s.at(s.length() - 1) == QString('>'));
     }
     else if (is_template != 0)
         *is_template = FALSE;

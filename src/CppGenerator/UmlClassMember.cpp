@@ -25,7 +25,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -40,7 +40,7 @@
 
 void UmlClassMember::generate_visibility(aVisibility & current_visibility,
         QTextStream & f_h, bool ahead,
-        const Q3CString & indent)
+        const WrapperStr & indent)
 {
     aVisibility v = (cppVisibility() == DefaultVisibility)
                     ? visibility() : cppVisibility();
@@ -72,7 +72,7 @@ void UmlClassMember::generate_visibility(aVisibility & current_visibility,
     }
 }
 
-void UmlClassMember::remove_comments(Q3CString & s)
+void UmlClassMember::remove_comments(WrapperStr & s)
 {
     int index1 = 0;
 
@@ -107,7 +107,7 @@ void UmlClassMember::remove_comments(Q3CString & s)
     }
 }
 
-void UmlClassMember::remove_preprocessor(Q3CString & s)
+void UmlClassMember::remove_preprocessor(WrapperStr & s)
 {
     int index = 0;
 
@@ -132,7 +132,7 @@ void UmlClassMember::remove_preprocessor(Q3CString & s)
     }
 }
 
-void UmlClassMember::remove_arrays(Q3CString & s)
+void UmlClassMember::remove_arrays(WrapperStr & s)
 {
     int index1 = 0;
 
@@ -152,7 +152,7 @@ void UmlClassMember::remove_arrays(Q3CString & s)
 // because I cannot know how the type is used and I do not want to
 // produce circular #include
 bool UmlClassMember::compute_dependency(Q3PtrList<CppRefType> & dependencies,
-                                        Q3CString decl, const UmlTypeSpec & t,
+                                        WrapperStr decl, const UmlTypeSpec & t,
                                         bool force_incl)
 {
     remove_comments(decl);
@@ -238,7 +238,7 @@ bool UmlClassMember::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 //#warning NAMESPACE
 
             if (dontsubstituteuntil == 0) {
-                Q3CString subst = CppSettings::type(ts.explicit_type);
+                WrapperStr subst = CppSettings::type(ts.explicit_type);
 
                 if (subst != ts.explicit_type) {
                     decl = subst + ' ' + p;
@@ -288,8 +288,8 @@ bool UmlClassMember::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 
 // return TRUE if stop on comment/description
 bool UmlClassMember::insert_template(const char *& p, QTextStream & fs,
-                                     const Q3CString & indent,
-                                     const Q3CString & templ)
+                                     const WrapperStr & indent,
+                                     const WrapperStr & templ)
 {
     // search the beginning of the definition/declaration in p;
     for (;;) {

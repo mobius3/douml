@@ -3,7 +3,7 @@
 
 
 #include "UmlItem.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 //  Manage the deployments
 class UmlBaseDeployment : public UmlItem

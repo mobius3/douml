@@ -5,7 +5,7 @@
 #include "UmlActivityPin.h"
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include <q3ptrvector.h>
 
 class UmlActivityParameter;

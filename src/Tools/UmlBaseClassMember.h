@@ -4,7 +4,7 @@
 
 #include "UmlClassItem.h"
 #include "aVisibility.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "UmlBaseClassItem.h"
 
 // This class manages 'true' class's items : attributes, relation,

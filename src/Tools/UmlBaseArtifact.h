@@ -5,7 +5,7 @@
 #include "UmlItem.h"
 #include "anItemKind.h"
 #include <q3ptrvector.h>
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 #include "UmlClass.h"	// to avoid destructor problem
 class UmlArtifact;

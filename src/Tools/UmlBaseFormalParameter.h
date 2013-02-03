@@ -2,7 +2,7 @@
 #define _UMLBASEFORMALPARAMETER_H
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "UmlTypeSpec.h"
 
 // This class manages 'formal parameters' of a template class. For instance 'T' in

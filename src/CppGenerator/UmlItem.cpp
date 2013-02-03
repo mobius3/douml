@@ -25,8 +25,9 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
+#include <Q3CString>
 
 #include "UmlItem.h"
 
@@ -91,7 +92,7 @@ bool UmlItem::manage_comment(const char *& p, const char *& pp,
 
 bool UmlItem::manage_description(const char *& p, const char *& pp)
 {
-    static Q3CString the_comment;
+    static WrapperStr the_comment;
 
     p += 14;
 
@@ -115,7 +116,7 @@ bool UmlItem::manage_description(const char *& p, const char *& pp)
     return TRUE;
 }
 
-void UmlItem::replace_alias(Q3CString & s)
+void UmlItem::replace_alias(WrapperStr & s)
 {
     int index = 0;
 
@@ -126,8 +127,8 @@ void UmlItem::replace_alias(Q3CString & s)
             return;
 
         UmlBaseItem * obj = this;
-        Q3CString key = s.mid(index + 2, index2 - index - 2);
-        Q3CString value;
+        WrapperStr key = s.mid(index + 2, index2 - index - 2);
+        WrapperStr value;
 
         for (;;) {
             if (obj->propertyValue(key, value)) {
@@ -149,8 +150,9 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts)
     const char * pclosed;
 
     if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
-        Q3CString key(p + 2, pclosed - p - 1);
-        Q3CString value;
+        Q3CString key_(p + 2, pclosed - p - 1);
+        WrapperStr key = key_;
+        WrapperStr value;
         UmlItem * node = this;
 
         do {

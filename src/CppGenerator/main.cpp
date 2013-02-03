@@ -27,7 +27,7 @@
 #include "UmlItem.h"
 #include "util.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QApplication>
 #include <QDir>
 #include "Logging/QsLog.h"
@@ -92,10 +92,11 @@ int main(int argc, char ** argv)
             UmlCom::traceAutoRaise(FALSE);
             UmlCom::targetItem()->generate();
 
-            Q3CString s;
+            QString s;
 
-            s.sprintf("<hr><font face=helvetica>Generation done : %d warnings, %d errors</font><br>",
-                      n_warnings(), n_errors());
+            s = "<hr><font face=helvetica>Generation done : %1 warnings, %2 errors</font><br>";
+            s=s.arg(QString::number(n_warnings())).arg(QString::number(n_errors()));
+
             UmlCom::trace(s);
 
             UmlCom::showTrace();

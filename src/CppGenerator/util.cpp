@@ -25,12 +25,12 @@
 
 #include <qstring.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "util.h"
 #include "UmlCom.h"
 
-Q3CString capitalize(const Q3CString & s)
+WrapperStr capitalize(const WrapperStr & s)
 {
     return (s.isEmpty())
            ? s
@@ -44,14 +44,14 @@ QString capitalize(const QString & s)
            : s.left(1).upper() + s.mid(1);
 }
 
-Q3CString current_indent(const char * p, const char * begin)
+WrapperStr current_indent(const char * p, const char * begin)
 {
-    QString indent = "";	// to not be Q3CString::null
+    QString indent = "";	// to not be WrapperStr::null
 
     while ((p != begin) && ((p[-1] == ' ') || (p[-1] == '\t')))
         indent.prepend(*--p);
 
-    return Q3CString(indent.toAscii().constData());
+    return WrapperStr(indent.toAscii().constData());
 }
 
 const char * name_spec(const char * spec)
@@ -113,7 +113,7 @@ bool need_equal(const char * p, const char * v)
 
 //
 
-static Q3CString TraceHeader;
+static WrapperStr TraceHeader;
 static bool Verbose = FALSE;
 static bool Preserve = FALSE;
 
@@ -137,12 +137,12 @@ bool preserve()
     return Preserve;
 }
 
-void set_trace_header(Q3CString s)
+void set_trace_header(WrapperStr s)
 {
     TraceHeader = s;
 }
 
-Q3CString get_trace_header()
+WrapperStr get_trace_header()
 {
     return TraceHeader;
 }

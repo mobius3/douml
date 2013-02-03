@@ -25,7 +25,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlActualParameter.h"
@@ -33,7 +33,7 @@
 
 bool UmlActualParameter::generate(QTextStream & f_h, BooL & need_space) const
 {
-    Q3CString s = value().toString();
+    WrapperStr s = value().toString();
 
     if (s.isEmpty()) {
         if (rank() == 0)

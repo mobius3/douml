@@ -25,7 +25,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlFormalParameter.h"
@@ -36,7 +36,7 @@ void UmlFormalParameter::generate(QTextStream & f_h, const char *& sep1,
 {
     f_h << sep1 << type() << ' ' << name();
 
-    Q3CString s = defaultValue().toString();
+    WrapperStr s = defaultValue().toString();
 
     if (! s.isEmpty()) {
         f_h << " = ";

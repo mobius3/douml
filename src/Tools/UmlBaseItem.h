@@ -3,7 +3,7 @@
 
 
 #include "anItemKind.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include <q3ptrvector.h>
 #include <q3dict.h>
 #include <q3ptrdict.h>
@@ -239,7 +239,7 @@ private:
 
     Q3PtrVector<UmlItem> * _children;
 
-    Q3Dict<WrapperStr> _dict;
+    Q3Dict<QString> _dict;
 
     static Q3PtrDict<UmlItem> _all;
 

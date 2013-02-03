@@ -30,6 +30,7 @@
 
 #include <q3strlist.h>
 #include <QString>
+#include <Q3CString>
 #include "misc/mystr.h"
 //Added by qt3to4:
 #include "Logging/QsLog.h"
@@ -60,6 +61,10 @@ public:
         this->wrappedString = QString(other);
     }
     //QString get(){return s;}
+    WrapperStr & operator=(const Q3CString & cstr) {
+        this->wrappedString = QByteArray(cstr);
+        return *this;
+    }
     bool isEmpty() const {
         return this->wrappedString.isEmpty();
     }
@@ -221,6 +226,14 @@ public:
     QString& GetInternalRef()
     {
         return wrappedString;
+    }
+    QString at(int pos)
+    {
+        return wrappedString.at(pos);
+    }
+    int find(QChar c, int from = 0)
+    {
+        return wrappedString.toAscii().find(c, from);
     }
     //void assign(QString(), int len){this->s = QString();}
 

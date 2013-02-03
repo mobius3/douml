@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -58,36 +58,36 @@ void UmlArtifact::generate()
 
         package_of_generated_artifact = package();
 
-        const Q3CString hdef = cppHeader();
-        const Q3CString srcdef = cppSource();
+        const WrapperStr hdef = cppHeader();
+        const WrapperStr srcdef = cppSource();
 
         if (hdef.isEmpty() && srcdef.isEmpty()) {
             if (verbose())
-                UmlCom::trace(Q3CString("<hr><font face=helvetica>artifact <i>")
+                UmlCom::trace(WrapperStr("<hr><font face=helvetica>artifact <i>")
                               + name() + "</i> has an empty C++ definition</font><br>");
 
             return;
         }
 
-        const Q3CString & name = UmlArtifact::name();
+        const WrapperStr & name = UmlArtifact::name();
         UmlPackage * pack = package();
-        Q3CString h_path = pack->header_path(name);
-        Q3CString src_path = pack->source_path(name);
-        Q3CString nasp_start;
-        Q3CString nasp_end;
+        WrapperStr h_path = pack->header_path(name);
+        WrapperStr src_path = pack->source_path(name);
+        WrapperStr nasp_start;
+        WrapperStr nasp_end;
         const char * cnasp = pack->cppNamespace();
-        Q3CString nasp = ((cnasp[0] == ':') && (cnasp[1] == ':'))
+        WrapperStr nasp = ((cnasp[0] == ':') && (cnasp[1] == ':'))
                          ? cnasp + 2 : cnasp;
 
         if (!nasp.isEmpty()) {
             int index = 0;
             int index2;
-            Q3CString closed = "\n} // namespace ";
+            WrapperStr closed = "\n} // namespace ";
 
             while ((index2 = nasp.find(':', index)) != -1) {
-                Q3CString na = nasp.mid(index, index2 - index);
+                WrapperStr na = nasp.mid(index, index2 - index);
 
-                nasp_start += Q3CString("namespace ") + na + " {\n\n";
+                nasp_start += WrapperStr("namespace ") + na + " {\n\n";
                 closed += na;
                 nasp_end = closed + "\n" + nasp_end;
                 closed += "::";
@@ -95,12 +95,12 @@ void UmlArtifact::generate()
                 index = index2 + 1;
             }
 
-            nasp_start += Q3CString("namespace ") + nasp.mid(index) + " {\n\n";
+            nasp_start += WrapperStr("namespace ") + nasp.mid(index) + " {\n\n";
             closed += nasp.mid(index);
             nasp_end = closed + "\n" + nasp_end;
         }
         else {
-            Q3CString s;
+            WrapperStr s;
 
             if (!hdef.isEmpty())
                 s = " in <i> " + h_path + "</i>";
@@ -115,10 +115,10 @@ void UmlArtifact::generate()
             UmlCom::message(name);
 
             if (verbose())
-                UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
+                UmlCom::trace(WrapperStr("<hr><font face=helvetica>Generate code for <i> ")
                               + name + "</i>" + s + "</font><br>");
             else
-                set_trace_header(Q3CString("<font face=helvetica>Generate code for <i> ")
+                set_trace_header(WrapperStr("<font face=helvetica>Generate code for <i> ")
                                  + name + "</i>" + s + "</font><br>");
         }
 
@@ -140,9 +140,9 @@ void UmlArtifact::generate()
 
         // generate header file
 
-        Q3CString h_incl;
-        Q3CString src_incl;
-        Q3CString decl;
+        WrapperStr h_incl;
+        WrapperStr src_incl;
+        WrapperStr decl;
         bool incl_computed = FALSE;
 
         if (!hdef.isEmpty()) {
@@ -184,7 +184,7 @@ void UmlArtifact::generate()
                 }
                 else if (!strncmp(p, "${Name}", 7)) {
                     p += 7;
-                    QLOG_INFO() << "Outputting name: " << name;
+                    //QLOG_INFO() << "Outputting name: " << name;
                     f_h << capitalize(name);
                 }
                 else if (!strncmp(p, "${NAME}", 7)) {
@@ -280,7 +280,7 @@ void UmlArtifact::generate()
                 FILE * fp_h;
 
                 if ((fp_h = fopen((const char *) h_path, "wb")) == 0) {
-                    UmlCom::trace(Q3CString("<font color=\"red\"><b><i> ")
+                    UmlCom::trace(WrapperStr("<font color=\"red\"><b><i> ")
                                   + name + "</i> : cannot open <i> "
                                   + h_path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
                                   + pack->name() + "</i> C++ directory specification</b></font><br>");
@@ -293,10 +293,10 @@ void UmlArtifact::generate()
                 }
             }
             else {
-                Q3CString th = get_trace_header();
+                WrapperStr th = get_trace_header();
 
                 if (th.isEmpty())
-                    UmlCom::trace(Q3CString("<br><font face=helvetica><i> ")
+                    UmlCom::trace(WrapperStr("<br><font face=helvetica><i> ")
                                   + h_path + "</i> not modified</font><br>");
                 else
                     set_trace_header(th + "<font face=helvetica><i> "
@@ -397,7 +397,7 @@ void UmlArtifact::generate()
 
                 if ((fp_src = fopen((const char *) src_path, "wb")) == 0) {
                     write_trace_header();
-                    UmlCom::trace(Q3CString("<font color=\"red\"><b><i> ")
+                    UmlCom::trace(WrapperStr("<font color=\"red\"><b><i> ")
                                   + name + " : </i> cannot open <i> "
                                   + src_path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
                                   + pack->name() + "</i> C++ directory specification</b></font><br>");
@@ -409,7 +409,7 @@ void UmlArtifact::generate()
                 }
             }
             else if (get_trace_header().isEmpty())
-                UmlCom::trace(Q3CString("<font face=helvetica><i> ")
+                UmlCom::trace(WrapperStr("<font face=helvetica><i> ")
                               + src_path + "</i> not modified</font><br>");
         }
     }
@@ -417,29 +417,29 @@ void UmlArtifact::generate()
 
 void UmlArtifact::generate_text()
 {
-    const Q3CString srcdef = cppSource();
+    const WrapperStr srcdef = cppSource();
 
     if (srcdef.isEmpty()) {
         if (verbose())
-            UmlCom::trace(Q3CString("<hr><font face=helvetica>artifact <i>")
+            UmlCom::trace(WrapperStr("<hr><font face=helvetica>artifact <i>")
                           + name() + "</i> has an empty C++ definition</font><br>");
 
         return;
     }
 
     UmlPackage * pack = package();
-    const Q3CString & name = UmlArtifact::name();
-    Q3CString src_path = pack->text_path(name);
+    const WrapperStr & name = UmlArtifact::name();
+    WrapperStr src_path = pack->text_path(name);
 
-    Q3CString s = " in <i> " + src_path + "</i>";
+    WrapperStr s = " in <i> " + src_path + "</i>";
 
     UmlCom::message(name);
 
     if (verbose())
-        UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
+        UmlCom::trace(WrapperStr("<hr><font face=helvetica>Generate code for <i> ")
                       + name + "</i>" + s + "</font><br>");
     else
-        set_trace_header(Q3CString("<font face=helvetica>Generate code for <i> ")
+        set_trace_header(WrapperStr("<font face=helvetica>Generate code for <i> ")
                          + name + "</i>" + s + "</font><br>");
 
     if (must_be_saved(src_path, (const char *) srcdef)) {
@@ -449,7 +449,7 @@ void UmlArtifact::generate_text()
 
         if ((fp_src = fopen((const char *) src_path, "wb")) == 0) {
             write_trace_header();
-            UmlCom::trace(Q3CString("<font color=\"red\"><b><i> ")
+            UmlCom::trace(WrapperStr("<font color=\"red\"><b><i> ")
                           + name + " : </i> cannot open <i> "
                           + src_path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
                           + pack->name() + "</i> C++ directory specification</b></font><br>");
@@ -461,7 +461,7 @@ void UmlArtifact::generate_text()
         }
     }
     else if (get_trace_header().isEmpty())
-        UmlCom::trace(Q3CString("<font face=helvetica><i> ")
+        UmlCom::trace(WrapperStr("<font face=helvetica><i> ")
                       + src_path + "</i> not modified</font><br>");
 }
 

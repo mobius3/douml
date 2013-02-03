@@ -2,7 +2,7 @@
 #define _UMLSETTINGS_H
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "aLanguage.h"
 #include <q3dict.h>
 

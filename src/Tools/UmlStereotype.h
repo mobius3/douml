@@ -2,7 +2,7 @@
 #define _UMLSTEREOTYPE_H
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 //  Internal class used to know how what code is produced for a stereotype in each language
 

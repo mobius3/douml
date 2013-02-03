@@ -3,7 +3,7 @@
 
 
 #include "UmlActivityNode.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 class UmlBaseActivityControlNode : public UmlActivityNode
 {

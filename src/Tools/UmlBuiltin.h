@@ -2,7 +2,7 @@
 #define _UMLBUILTIN_H
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 //  Internal class used to memorize the types defined through the first 'generation settings' tab
 

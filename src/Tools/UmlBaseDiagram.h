@@ -3,7 +3,7 @@
 
 
 #include "UmlItem.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 //  Mother class of all the classes managing the diagrams
 class UmlBaseDiagram : public UmlItem

@@ -3,7 +3,7 @@
 
 
 #include "UmlItem.h"
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 
 //  Mother class of the all the class's items including the class themself
 class UmlBaseClassItem : public UmlItem

@@ -2,7 +2,7 @@
 #define _UMLBASEPARAMETER_H
 
 
-#include <WrapperStr.h>
+#include "misc/mystr.h"
 #include "UmlTypeSpec.h"
 #include "aDirection.h"
 
