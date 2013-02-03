@@ -183,6 +183,11 @@ public:
     {
         return wrappedString.trimmed();
     }
+    WrapperStr simplifyWhiteSpace() const
+    {
+        return wrappedString.simplified();
+    }
+
     WrapperStr& remove(int pos, int len)
     {
         wrappedString.remove(pos, len);

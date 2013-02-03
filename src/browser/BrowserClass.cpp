@@ -41,7 +41,7 @@
 #include <QTextStream>
 #include <QDropEvent>
 #include <QDragMoveEvent>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "BrowserClass.h"
 #include "BrowserClassInstance.h"
@@ -1286,7 +1286,7 @@ void BrowserClass::set_name(const char * s)
                     else if ((*((const char *) op_name) == '~') &&
                              ((((const char *) op_name) + 1) == name)) {
                         // destructor renamed
-                        Q3CString d = "~";
+                        WrapperStr d = "~";
 
                         d += s;
                         ((BrowserNode *) child)->set_name(d);
@@ -3071,7 +3071,7 @@ static const char * component2artifact(const char * b)
         { "aComponent", "anArtifact" },
         { "Component", "Artifact" }
     };
-    static Q3CString s;
+    static WrapperStr s;
 
     s = b;
 
@@ -3128,7 +3128,7 @@ void BrowserClass::plug_out_conversion()
         // do conversion
         int uid = user_id();
         Q3ListViewItem * child;
-        Q3CString s;
+        WrapperStr s;
         int index;
         AType t_deplview;
         AType t_depldiag;
@@ -3749,14 +3749,14 @@ static BrowserClass * add_metaclass(BrowserClass * cl, const char * mclname,
     return r;
 }
 
-static void extend(BrowserClass * cl, Q3CString mclpath,
+static void extend(BrowserClass * cl, WrapperStr mclpath,
                    Q3PtrList<BrowserClass> & metaclasses)
 {
     int index = mclpath.find('#');
 
     if (index != -1) {
         const char * mclname = ((const char *) mclpath) + (index + 1);
-        Q3CString path = mclpath.left(index);
+        WrapperStr path = mclpath.left(index);
 
         const char * defltpath0 = "http://schema.omg.org/spec/UML/2.0/uml.xml";
         const char * defltpath1 = "http://schema.omg.org/spec/UML/2.1/uml.xml";
@@ -3829,7 +3829,7 @@ void BrowserClass::post_load()
         while (! stereotypes.isEmpty()) {
             cl = stereotypes.take(0);
 
-            Q3CString s = cl->get_value("stereotypeExtension"); // non empty
+            WrapperStr s = cl->get_value("stereotypeExtension"); // non empty
 
             s = s.simplifyWhiteSpace();
 
