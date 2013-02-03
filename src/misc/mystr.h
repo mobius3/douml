@@ -97,6 +97,10 @@ public:
         this->wrappedString += str.wrappedString;
         return *this;
     }
+    WrapperStr & operator+=(const QString& str) {
+        this->wrappedString += str;
+        return *this;
+    }
 //    WrapperStr & operator+=(const char* str) {
 //        this->wrappedString += QString(str);
 //        return *this;
@@ -134,6 +138,11 @@ public:
 
     operator QString() const {
         return this->wrappedString;
+    }
+
+    QString& GetInternalRef()
+    {
+        return wrappedString;
     }
 
     friend bool operator==(const WrapperStr & s1, const char * s2);

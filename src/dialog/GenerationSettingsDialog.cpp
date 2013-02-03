@@ -41,7 +41,7 @@
 #include <qsplitter.h>
 #include <qspinbox.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "GenerationSettingsDialog.h"
 #include "BrowserView.h"
@@ -139,11 +139,11 @@ static void init_indent(Q3ComboBox * cb, const char * v)
     cb->insertItem(TR("empty"));
     cb->insertItem(TR("1 space"));
 
-    Q3CString f = "%1 spaces";
-    Q3CString s = "2";
+    WrapperStr f = "%1 spaces";
+    WrapperStr s = "2";
 
-    for (char c = '2'; c != '9'; c += 1) {
-        s[0] = c;
+    for (int c = 2; c != 9; c += 1) {
+        s.setNum(c);
         cb->insertItem(TR(f, s));
     }
 

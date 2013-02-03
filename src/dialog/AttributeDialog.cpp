@@ -38,7 +38,7 @@
 #include <q3popupmenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "AttributeDialog.h"
 #include "AttributeData.h"
@@ -1099,7 +1099,7 @@ QString AttributeDialog::cpp_decl(const BrowserAttribute * at, bool init,
 {
     QString s;
     AttributeData * d = (AttributeData *) at->get_data();
-    Q3CString decl = d->cpp_decl;
+    WrapperStr decl = d->cpp_decl;
 
     remove_comments(decl);
     remove_preprocessor(decl);
@@ -1357,7 +1357,7 @@ QString AttributeDialog::java_decl(const BrowserAttribute * at, bool init,
 {
     QString s;
     AttributeData * d = (AttributeData *) at->get_data();
-    Q3CString decl = d->java_decl;
+    WrapperStr decl = d->java_decl;
 
     remove_comments(decl);
 
@@ -1595,7 +1595,7 @@ QString AttributeDialog::php_decl(const BrowserAttribute * at, bool init,
 {
     QString s;
     AttributeData * d = (AttributeData *) at->get_data();
-    Q3CString decl = d->php_decl;
+    WrapperStr decl = d->php_decl;
 
     remove_comments(decl);
 
@@ -1781,7 +1781,7 @@ QString AttributeDialog::python_decl(const BrowserAttribute * at,
 {
     QString s;
     AttributeData * d = (AttributeData *) at->get_data();
-    Q3CString decl = d->python_decl;
+    WrapperStr decl = d->python_decl;
 
     remove_comments(decl);
 
@@ -2016,7 +2016,7 @@ QString AttributeDialog::idl_decl(const BrowserAttribute * at,
 {
     QString s;
     AttributeData * d = (AttributeData *) at->get_data();
-    Q3CString decl = d->idl_decl;
+    WrapperStr decl = d->idl_decl;
     QString stereotype = ((BrowserNode *) at->parent())->get_data()->get_stereotype();
     bool in_enum = (stereotype == "enum") ||
                    (GenerationSettings::idl_class_stereotype(stereotype) == "enum");

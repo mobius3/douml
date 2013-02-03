@@ -42,7 +42,7 @@
 #include <qpushbutton.h>
 #include <q3filedialog.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "ClassDialog.h"
 #include "ClassData.h"
@@ -3672,7 +3672,7 @@ bool ClassDialog::SaveData()
             return true;
         }
         else if (stereotypetab != 0) {
-            Q3CString path = fromUnicode(ediconpath->text().simplifyWhiteSpace());
+            WrapperStr path = fromUnicode(ediconpath->text().simplifyWhiteSpace());
 
             if (!path.isEmpty() && (get_pixmap((const char *) path) == 0)) {
                 msg_critical(TR("Error"),
@@ -3758,8 +3758,8 @@ bool ClassDialog::SaveData()
     if (stereotypetab != 0) {
         if (st == "stereotype") {
             unsigned n = bn->get_n_keys();
-            Q3CString oldiconpath = bn->get_value("stereotypeIconPath");
-            Q3CString newiconpath = fromUnicode(ediconpath->text().simplifyWhiteSpace());
+            WrapperStr oldiconpath = bn->get_value("stereotypeIconPath");
+            WrapperStr newiconpath = fromUnicode(ediconpath->text().simplifyWhiteSpace());
 
             bn->set_n_keys(n + 6);
             bn->set_key(n, "stereotypeSet");

@@ -285,6 +285,11 @@ void remove_comments(Q3CString & s)
     }
 }
 
+void remove_comments(WrapperStr & s)
+{
+    remove_comments(s.GetInternalRef());
+}
+
 void remove_comments(QString & s)
 {
     int index1 = 0;
@@ -367,7 +372,35 @@ void remove_preprocessor(Q3CString & s)
             s.remove(index, index3 - index);
     }
 }
+void remove_preprocessor(WrapperStr & s)
+{
+    remove_preprocessor(s.GetInternalRef());
+}
 
+void remove_preprocessor(QString & s)
+{
+    int index = 0;
+
+    while ((index = s.find('#', index)) != -1) {
+        // remove all up to the end of line
+        int index2 = index + 1;
+        int index3;
+
+        while ((index3 = s.find('\n', index2)) != -1) {
+            // manage multi lines #define
+            if (((const char *) s)[index3 - 1] != '\\')
+                break;
+            else
+                index2 = index3 + 1;
+        }
+
+        // the \n is still here to have a separator
+        if (index3 == -1)
+            s.truncate(index);
+        else
+            s.remove(index, index3 - index);
+    }
+}
 
 QString java_multiplicity(QString m)
 {

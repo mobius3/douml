@@ -46,7 +46,7 @@
 #include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <Q3VBoxLayout>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QRegExp>
 #include <functional>
 
@@ -1832,14 +1832,14 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
                                   ShowContextMode mode)
 {
     OperationData * d = (OperationData *) op->get_data();
-    Q3CString decl = d->cpp_decl;
+    WrapperStr decl = d->cpp_decl;
 
     remove_comments(decl);
     remove_preprocessor(decl);
 
     const char * p = decl;
     bool afterparams = FALSE;
-    QString s;
+    WrapperStr s;
     unsigned rank;
 
     while ((*p == ' ') || (*p == '\t'))
@@ -1909,7 +1909,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                Q3CString v = d->params[rank].get_default_value();
+                WrapperStr v = d->params[rank].get_default_value();
 
                 if (!v.isEmpty())
                     s += " = " + v;
@@ -1945,7 +1945,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
                  ((*p == ':') && afterparams))
             break;
         else if (*p == '@')
-            manage_alias(op, p, s, static_cast<KeyValuesTable*>(0));
+            manage_alias(op, p, s.GetInternalRef(), static_cast<KeyValuesTable*>(0));
         else
             s += *p++;
     }
@@ -2740,7 +2740,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
                                    ShowContextMode mode)
 {
     OperationData * d = (OperationData *) op->get_data();
-    Q3CString decl = d->java_def;
+    WrapperStr decl = d->java_def;
 
     remove_comments(decl);
 
@@ -3086,7 +3086,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
                                   ShowContextMode mode)
 {
     OperationData * d = (OperationData *) op->get_data();
-    Q3CString decl = d->php_def;
+    WrapperStr decl = d->php_def;
 
     remove_comments(decl);
 
@@ -3096,7 +3096,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         decl.remove(index, 9);
 
     const char * p = decl;
-    QString s;
+    WrapperStr s;
     unsigned rank;
 
     while ((*p == ' ') || (*p == '\t'))
@@ -3145,7 +3145,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += Q3CString("$") + d->params[rank].get_name();
+                    s += WrapperStr("$") + d->params[rank].get_name();
                 else {
                     s += "${p";
                     s += QString::number(rank);
@@ -3157,7 +3157,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                Q3CString v = d->params[rank].get_default_value();
+                WrapperStr v = d->params[rank].get_default_value();
 
                 if (!v.isEmpty())
                     s += " = " + v;
@@ -3181,7 +3181,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         else if ((*p == '{') || (*p == ';'))
             break;
         else if (*p == '@')
-            manage_alias(op, p, s, static_cast<KeyValuesTable*>(0));
+            manage_alias(op, p, s.GetInternalRef(), static_cast<KeyValuesTable*>(0));
         else if (!strncmp(p, "${type}", 7)) {
             p += 7;
             s += get_php_name(d->return_type, mode);
@@ -3832,13 +3832,13 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
                                      ShowContextMode mode)
 {
     OperationData * d = (OperationData *) op->get_data();
-    Q3CString decl = d->python_def;
+    WrapperStr decl = d->python_def;
     bool in_params = FALSE;
 
-    remove_python_comments(decl);
+    remove_python_comments(decl.GetInternalRef());
 
     int index = decl.find("def ");
-    QString s;
+    WrapperStr s;
 
     if (index == -1)
         return s;
@@ -3915,7 +3915,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                Q3CString v = d->params[rank].get_default_value();
+                WrapperStr v = d->params[rank].get_default_value();
 
                 if (!v.isEmpty())
                     s += " = " + v;
@@ -3934,7 +3934,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
             s += op->get_of_association().get_type();
         }
         else if (*p == '@')
-            manage_alias(op, p, s, static_cast<KeyValuesTable*>(0));
+            manage_alias(op, p, s.GetInternalRef(), static_cast<KeyValuesTable*>(0));
         else if (!strncmp(p, "${type}", 7)) {
             // probably in comment
             p += 7;
@@ -4224,7 +4224,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
                                   bool withname, ShowContextMode mode)
 {
     OperationData * d = (OperationData *) op->get_data();
-    Q3CString decl = d->idl_decl;
+    WrapperStr decl = d->idl_decl;
 
     remove_comments(decl);
 
