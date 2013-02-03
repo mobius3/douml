@@ -59,7 +59,7 @@
 #include "Tools/ApiCmd.h"
 #include "Logging/QsLog.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <iostream>
 using namespace std;
 int UmlBaseItem::getIdentifier()
@@ -69,7 +69,7 @@ int UmlBaseItem::getIdentifier()
     return _modeler_id;
 }
 
-bool UmlBaseItem::set_Name(const Q3CString & s)
+bool UmlBaseItem::set_Name(const WrapperStr & s)
 {
     // don't use _set_it else the name is not
     // updated in case the item is not yet load (!_defined)
@@ -83,26 +83,26 @@ bool UmlBaseItem::set_Name(const Q3CString & s)
         return FALSE;
 }
 
-const Q3CString & UmlBaseItem::stereotype()
+const WrapperStr & UmlBaseItem::stereotype()
 {
     read_if_needed_();
 
     return _stereotype;
 }
 
-bool UmlBaseItem::set_Stereotype(const Q3CString & s)
+bool UmlBaseItem::set_Stereotype(const WrapperStr & s)
 {
     return set_it_(_stereotype, s, setStereotypeCmd);
 }
 
-const Q3CString & UmlBaseItem::description()
+const WrapperStr & UmlBaseItem::description()
 {
     read_if_needed_();
 
     return _description;
 }
 
-bool UmlBaseItem::set_Description(const Q3CString & s)
+bool UmlBaseItem::set_Description(const WrapperStr & s)
 {
     return set_it_(_description, s, setDescriptionCmd);
 }
@@ -140,11 +140,11 @@ bool UmlBaseItem::set_childrenVisible(bool y)
     return UmlCom::read_bool();
 }
 
-bool UmlBaseItem::propertyValue(const Q3CString & k, Q3CString & v)
+bool UmlBaseItem::propertyValue(const WrapperStr & k, WrapperStr & v)
 {
     read_if_needed_();
 
-    Q3CString * s = _dict[k];
+    WrapperStr * s = _dict[k];
 
     if (s == 0)
         return FALSE;
@@ -154,7 +154,7 @@ bool UmlBaseItem::propertyValue(const Q3CString & k, Q3CString & v)
 
 }
 
-bool UmlBaseItem::set_PropertyValue(const Q3CString & k, const Q3CString & v)
+bool UmlBaseItem::set_PropertyValue(const WrapperStr & k, const WrapperStr & v)
 {
     read_if_needed_();
 
@@ -162,10 +162,10 @@ bool UmlBaseItem::set_PropertyValue(const Q3CString & k, const Q3CString & v)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            Q3CString * s = _dict[k];
+            WrapperStr * s = _dict[k];
 
             if (s == 0)
-                _dict.insert(k, new Q3CString(v));
+                _dict.insert(k, new WrapperStr(v));
             else
                 *s = v;
         }
@@ -176,7 +176,7 @@ bool UmlBaseItem::set_PropertyValue(const Q3CString & k, const Q3CString & v)
         return FALSE;
 }
 
-const Q3Dict<Q3CString> UmlBaseItem::properties()
+const Q3Dict<WrapperStr> UmlBaseItem::properties()
 {
     read_if_needed_();
 
@@ -195,7 +195,7 @@ bool UmlBaseItem::moveAfter(const UmlItem * x)
         return FALSE;
 }
 
-Q3CString UmlBaseItem::supportFile()
+WrapperStr UmlBaseItem::supportFile()
 {
     UmlCom::send_cmd(_identifier, supportFileCmd);
     return UmlCom::read_string();
@@ -207,7 +207,7 @@ bool UmlBaseItem::isWritable()
     return UmlCom::read_bool();
 }
 
-int UmlBaseItem::apply(Q3CString cmd)
+int UmlBaseItem::apply(WrapperStr cmd)
 {
     UmlCom::send_cmd(_identifier, applyCmd, cmd);
     return (int) UmlCom::read_unsigned();
@@ -366,9 +366,9 @@ void UmlBaseItem::read_uml_()
     unsigned n = UmlCom::read_unsigned();
 
     while (n--) {
-        Q3CString k = UmlCom::read_string();
+        WrapperStr k = UmlCom::read_string();
 
-        _dict.insert(k, new Q3CString(UmlCom::read_string()));
+        _dict.insert(k, new WrapperStr(UmlCom::read_string()));
     }
 
     _description = UmlCom::read_string();
@@ -473,7 +473,7 @@ bool UmlBaseItem::set_it_(aDirection & r, aDirection v, OnInstanceCmd cmd)
         return FALSE;
 }
 
-bool UmlBaseItem::set_it_(Q3CString & r, const char * v, OnInstanceCmd cmd)
+bool UmlBaseItem::set_it_(WrapperStr & r, const char * v, OnInstanceCmd cmd)
 {
     UmlCom::send_cmd(_identifier, cmd, v);
 
@@ -753,14 +753,14 @@ UmlItem * UmlBaseItem::read_()
 
         default:
             UmlCom::bye(1);
-            UmlCom::fatal_error(Q3CString("unknown item type ") + Q3CString().setNum(kind));
+            UmlCom::fatal_error(WrapperStr("unknown item type ") + WrapperStr().setNum(kind));
         }
     }
 
     return result;
 }
 
-UmlBaseItem::UmlBaseItem(void * id, const Q3CString & n)
+UmlBaseItem::UmlBaseItem(void * id, const WrapperStr & n)
     : _defined(FALSE), _identifier(id), _name(n), _parent(0), _children(0)
 {
     _all.insert(id, (UmlItem *) this);

@@ -4,7 +4,7 @@
 
 #include "UmlActivityNode.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <WrapperStr.h>
 #include "UmlTypeSpec.h"
 #include "anOrdering.h"
 
@@ -28,7 +28,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseActivityObject(void * id, const Q3CString & s) : UmlActivityNode(id, s) {
+    UmlBaseActivityObject(void * id, const WrapperStr & s) : UmlActivityNode(id, s) {
     }
 
 
@@ -42,7 +42,7 @@ public:
     bool set_Type(const UmlTypeSpec & v);
 
     // return the multiplicity
-    const Q3CString & multiplicity();
+    const WrapperStr & multiplicity();
 
     // set the multiplicity
     //
@@ -50,7 +50,7 @@ public:
     bool set_Multiplicity(const char * v);
 
     // return the inState attribute
-    const Q3CString & inState();
+    const WrapperStr & inState();
 
     // set the inState attribute
     //
@@ -58,7 +58,7 @@ public:
     bool set_InState(const char * v);
 
     // return the selection in OCL
-    const Q3CString & selection();
+    const WrapperStr & selection();
 
     // set the selection in OCL
     //
@@ -67,7 +67,7 @@ public:
 
 #ifdef WITHCPP
     // return the selection in C++
-    const Q3CString & cppSelection();
+    const WrapperStr & cppSelection();
 
     // set the selection in C++
     //
@@ -77,7 +77,7 @@ public:
 
 #ifdef WITHJAVA
     // return the selection in Java
-    const Q3CString & javaSelection();
+    const WrapperStr & javaSelection();
 
     // set the selection in Java
     //
@@ -123,18 +123,18 @@ private:
 
     UmlTypeSpec _type;
 
-    Q3CString _multiplicity;
+    WrapperStr _multiplicity;
 
-    Q3CString _in_state;
+    WrapperStr _in_state;
 
-    Q3CString _selection;
+    WrapperStr _selection;
 
 #ifdef WITHCPP
-    Q3CString _cpp_selection;
+    WrapperStr _cpp_selection;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_selection;
+    WrapperStr _java_selection;
 #endif
 
     anOrdering _ordering : 8;

@@ -4,7 +4,7 @@
 
 #include "UmlActivityObject.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <WrapperStr.h>
 
 class UmlExpansionNode;
 class UmlExpansionRegion;
@@ -25,7 +25,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseExpansionNode(void * id, const Q3CString & s) : UmlActivityObject(id, s) {
+    UmlBaseExpansionNode(void * id, const WrapperStr & s) : UmlActivityObject(id, s) {
     }
 
 };

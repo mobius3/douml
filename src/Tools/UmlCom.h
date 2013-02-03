@@ -8,7 +8,7 @@
 #include "OnInstanceCmd.h"
 #include "anItemKind.h"
 #include "aRelationKind.h"
-#include <q3cstring.h>
+#include <WrapperStr.h>
 
 #include <q3ptrvector.h>
 #include <qstring.h>
@@ -137,16 +137,16 @@ public:
     //internal, do NOT use it
 
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s);
-    // [lgfreitas] Wrapper to handle Q3CString
-    static void send_cmd(CmdFamily f, unsigned int cmd, const Q3CString s) {
+    // [lgfreitas] Wrapper to handle WrapperStr
+    static void send_cmd(CmdFamily f, unsigned int cmd, const WrapperStr s) {
         send_cmd(f, cmd, (const char *) s);
     }
 
     //internal, do NOT use it
 
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, bool b);
-    // [lgfreitas] Wrapper to handle Q3CString
-    static void send_cmd(CmdFamily f, unsigned int cmd, const Q3CString s, bool b) {
+    // [lgfreitas] Wrapper to handle WrapperStr
+    static void send_cmd(CmdFamily f, unsigned int cmd, const WrapperStr s, bool b) {
         send_cmd(f, cmd, (const char *) s, b);
     }
     //internal, do NOT use it
@@ -156,14 +156,14 @@ public:
 
     static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, const char * v);
 
-    // [lgfreitas] Wrapper to handle Q3CString
-    static void send_cmd(CmdFamily f, unsigned int cmd, const Q3CString s, Q3CString v) {
+    // [lgfreitas] Wrapper to handle WrapperStr
+    static void send_cmd(CmdFamily f, unsigned int cmd, const WrapperStr s, WrapperStr v) {
         send_cmd(f, cmd, (const char *) s, (const char) * v);
     }
-    static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, Q3CString v) {
+    static void send_cmd(CmdFamily f, unsigned int cmd, const char * s, WrapperStr v) {
         send_cmd(f, cmd, (const char *) s, (const char) * v);
     }
-    static void send_cmd(CmdFamily f, unsigned int cmd, Q3CString s, const char * v) {
+    static void send_cmd(CmdFamily f, unsigned int cmd, WrapperStr s, const char * v) {
         send_cmd(f, cmd, (const char *) s, (const char) * v);
     }
     //internal, do NOT use it
@@ -176,8 +176,8 @@ public:
     //internal, do NOT use it
 
     static void send_cmd(const void * id, OnInstanceCmd cmd, const char * arg);
-    // [lgfreitas] Wrapper do handle Q3CString
-    static void send_cmd(const void * id, OnInstanceCmd cmd, Q3CString arg) {
+    // [lgfreitas] Wrapper do handle WrapperStr
+    static void send_cmd(const void * id, OnInstanceCmd cmd, WrapperStr arg) {
         send_cmd(id, cmd, (const char *) arg);
     }
     //internal, do NOT use it
@@ -192,8 +192,8 @@ public:
     //internal, do NOT use it
 
     static void send_cmd(const void * id, OnInstanceCmd cmd, const char * arg1, const char * arg2);
-    // [lgfreitas] Wrapper do handle Q3CString
-    static void send_cmd(const void * id, OnInstanceCmd cmd, Q3CString arg1, Q3CString arg2) {
+    // [lgfreitas] Wrapper do handle WrapperStr
+    static void send_cmd(const void * id, OnInstanceCmd cmd, WrapperStr arg1, WrapperStr arg2) {
         send_cmd(id, cmd, (const char *) arg1, (const char *) arg2);
     }
     //internal, do NOT use it
@@ -246,7 +246,7 @@ public:
     static void read_item_list(Q3PtrVector<UmlItem> & v);
     //internal, do NOT use it
 
-    static void fatal_error(const Q3CString & msg);
+    static void fatal_error(const WrapperStr & msg);
     //internal, do NOT use it
 
     static void flush();

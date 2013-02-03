@@ -2,7 +2,7 @@
 #define _UMLACTIVITYPARTITION_H
 
 
-#include <q3cstring.h>
+#include <WrapperStr.h>
 #include "UmlBaseActivityPartition.h"
 #include "UmlActivityItem.h"
 
@@ -10,7 +10,7 @@ class UmlActivityPartition : public UmlBaseActivityPartition, public UmlActivity
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlActivityPartition(void * id, const Q3CString & s) : UmlBaseActivityPartition(id, s) {
+    UmlActivityPartition(void * id, const WrapperStr & s) : UmlBaseActivityPartition(id, s) {
     }
 
 };

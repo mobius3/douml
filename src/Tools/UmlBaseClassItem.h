@@ -3,7 +3,7 @@
 
 
 #include "UmlItem.h"
-#include <q3cstring.h>
+#include <WrapperStr.h>
 
 //  Mother class of the all the class's items including the class themself
 class UmlBaseClassItem : public UmlItem
@@ -12,7 +12,7 @@ public:
 #ifdef WITHCPP
     //  return the C++ declaration
 
-    const Q3CString & cppDecl();
+    const WrapperStr & cppDecl();
 
     //  to set the C++ declaration
     //
@@ -23,7 +23,7 @@ public:
 #ifdef WITHJAVA
     //  return the Java defininition
 
-    const Q3CString & javaDecl();
+    const WrapperStr & javaDecl();
 
     //  to set the Java definition
     //
@@ -34,7 +34,7 @@ public:
 #ifdef WITHPHP
     //  return the Php defininition
 
-    const Q3CString & phpDecl();
+    const WrapperStr & phpDecl();
 
     //  to set the Php definition
     //
@@ -45,7 +45,7 @@ public:
 #ifdef WITHPYTHON
     //  return the Python defininition
 
-    const Q3CString & pythonDecl();
+    const WrapperStr & pythonDecl();
 
     //  to set the Python definition
     //
@@ -56,7 +56,7 @@ public:
 #ifdef WITHIDL
     //  return the IDL declaration
 
-    const Q3CString & idlDecl();
+    const WrapperStr & idlDecl();
 
     //  set the IDL declaration
     //
@@ -72,28 +72,28 @@ public:
 
 private:
 #ifdef WITHCPP
-    Q3CString _cpp_decl;
+    WrapperStr _cpp_decl;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_decl;
+    WrapperStr _java_decl;
 #endif
 
 #ifdef WITHPHP
-    Q3CString _php_decl;
+    WrapperStr _php_decl;
 #endif
 
 #ifdef WITHPYTHON
-    Q3CString _python_decl;
+    WrapperStr _python_decl;
 #endif
 
 #ifdef WITHIDL
-    Q3CString _idl_decl;
+    WrapperStr _idl_decl;
 #endif
 
 
 protected:
-    UmlBaseClassItem(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseClassItem(void * id, const WrapperStr & n) : UmlItem(id, n) {};
 
 #ifdef WITHCPP
     //internal, do NOT use it

@@ -3,10 +3,10 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include "Logging/QsLog.h"
 #ifdef WITHCPP
-const Q3CString & UmlBaseClassItem::cppDecl()
+const WrapperStr & UmlBaseClassItem::cppDecl()
 {
     QLOG_INFO() << "Reading CPP delaration";
     read_if_needed_();
@@ -21,7 +21,7 @@ bool UmlBaseClassItem::set_CppDecl(const char * s)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseClassItem::javaDecl()
+const WrapperStr & UmlBaseClassItem::javaDecl()
 {
     read_if_needed_();
 
@@ -35,7 +35,7 @@ bool UmlBaseClassItem::set_JavaDecl(const char * s)
 #endif
 
 #ifdef WITHPHP
-const Q3CString & UmlBaseClassItem::phpDecl()
+const WrapperStr & UmlBaseClassItem::phpDecl()
 {
     read_if_needed_();
 
@@ -49,7 +49,7 @@ bool UmlBaseClassItem::set_PhpDecl(const char * s)
 #endif
 
 #ifdef WITHPYTHON
-const Q3CString & UmlBaseClassItem::pythonDecl()
+const WrapperStr & UmlBaseClassItem::pythonDecl()
 {
     read_if_needed_();
 
@@ -63,7 +63,7 @@ bool UmlBaseClassItem::set_PythonDecl(const char * s)
 #endif
 
 #ifdef WITHIDL
-const Q3CString & UmlBaseClassItem::idlDecl()
+const WrapperStr & UmlBaseClassItem::idlDecl()
 {
     read_if_needed_();
 

@@ -7,7 +7,7 @@
 #include "UmlTypeSpec.h"
 #include <q3valuelist.h>
 #include <q3ptrvector.h>
-#include <q3cstring.h>
+#include <WrapperStr.h>
 #include <q3dict.h>
 
 #include "UmlFormalParameter.h"
@@ -221,7 +221,7 @@ public:
     //exist, else 0/null. In case the package is specified (not 0/null),
     //the returned class will be defined in a sub-level of the package.
 
-    static UmlClass * get(const Q3CString & n, const UmlPackage * p);
+    static UmlClass * get(const WrapperStr & n, const UmlPackage * p);
 
     //returns all the classes
     static void getAll(Q3PtrVector<UmlClass> & v);
@@ -237,7 +237,7 @@ public:
     // to set the name
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    virtual bool set_Name(const Q3CString & s);
+    virtual bool set_Name(const WrapperStr & s);
 
     friend class UmlBaseRelation;
     friend class UmlBaseArtifact;
@@ -289,7 +289,7 @@ private:
 
 protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseClass(void * id, const Q3CString & n);
+    UmlBaseClass(void * id, const WrapperStr & n);
 
     //internal, do NOT use it
 

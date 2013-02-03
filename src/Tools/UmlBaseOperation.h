@@ -6,7 +6,7 @@
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
 #include <q3valuelist.h>
-#include <q3cstring.h>
+#include <WrapperStr.h>
 
 #include "UmlParameter.h"
 class UmlOperation;
@@ -158,7 +158,7 @@ public:
 
     // returns the operation's definition in C++, notes that the declaration
     // is returned by the inherited ClassItemBase::CppDecl() operation
-    const Q3CString & cppDef();
+    const WrapperStr & cppDef();
 
     // sets the operation's definition in C++, notes that the declaration
     // is set through the inherited ClassItemBase::set_CppDecl() operation
@@ -169,7 +169,7 @@ public:
     // returns the operation's body in C++, useless if the def does not
     // contains ${body}. Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString cppBody();
+    WrapperStr cppBody();
 
     // sets the operation's body in C++, useless if the def does not
     // contains ${body}
@@ -179,7 +179,7 @@ public:
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's C++ name must be generated
-    const Q3CString & cppNameSpec();
+    const WrapperStr & cppNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's C++ name must be generated
@@ -227,7 +227,7 @@ public:
 
     // returns the operation's definition in Java, notes that it is
     // already made by the inherited JavaDecl operation
-    const Q3CString & javaDef();
+    const WrapperStr & javaDef();
 
     // sets the operation's definition in Java, notes that it is
     // already made by the inherited set_JavaDecl operation
@@ -238,7 +238,7 @@ public:
     // returns the operation's body in Java++, useless if the def does
     // not contains ${body} Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString javaBody();
+    WrapperStr javaBody();
 
     // sets the operation's body in Java, useless if the def does not
     // contains ${body}
@@ -248,7 +248,7 @@ public:
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's JAVA name must be generated
-    const Q3CString & javaNameSpec();
+    const WrapperStr & javaNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's JAVA name must be generated
@@ -288,7 +288,7 @@ public:
 
     // returns the operation's definition in Php, notes that it is
     // already made by the inherited PhpDecl operation
-    const Q3CString & phpDef();
+    const WrapperStr & phpDef();
 
     // sets the operation's definition in Php, notes that it is
     // already made by the inherited set_PhpDecl operation
@@ -299,7 +299,7 @@ public:
     // returns the operation's body in Php++, useless if the def does
     // not contains ${body} Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString phpBody();
+    WrapperStr phpBody();
 
     // sets the operation's body in Php, useless if the def does not
     // contains ${body}
@@ -309,7 +309,7 @@ public:
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's PHP name must be generated
-    const Q3CString & phpNameSpec();
+    const WrapperStr & phpNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's PHP name must be generated
@@ -341,7 +341,7 @@ public:
 #ifdef WITHPYTHON
     // returns the operation's definition in Python, notes that it is
     // already made by the inherited PythonDecl operation
-    const Q3CString & pythonDef();
+    const WrapperStr & pythonDef();
 
     // sets the operation's definition in Python, notes that it is
     // already made by the inherited set_PythonDecl operation
@@ -352,7 +352,7 @@ public:
     // returns the operation's body in Python++, useless if the def does
     // not contains ${body} Note that the body is get each time from BOUML
     // for memory size reason
-    Q3CString pythonBody();
+    WrapperStr pythonBody();
 
     // sets the operation's body in Python, useless if the def does not
     // contains ${body}
@@ -362,7 +362,7 @@ public:
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's PYTHON name must be generated
-    const Q3CString & pythonNameSpec();
+    const WrapperStr & pythonNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's PYTHON name must be generated
@@ -393,7 +393,7 @@ public:
 
 #ifdef WITHPYTHON
     // return the decorators
-    const Q3CString  & pythonDecorators();
+    const WrapperStr  & pythonDecorators();
 
     // set the decorators
     //
@@ -412,7 +412,7 @@ public:
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's IDL name must be generated
-    const Q3CString & idlNameSpec();
+    const WrapperStr & idlNameSpec();
 
     // in case the operation is a 'get' or 'set' operation, returns how
     // the operation's IDL name must be generated
@@ -520,26 +520,26 @@ private:
     Q3ValueList<UmlTypeSpec> _exceptions;
 
 #ifdef WITHCPP
-    Q3CString _cpp_def;
+    WrapperStr _cpp_def;
 
-    Q3CString _cpp_name_spec;
+    WrapperStr _cpp_name_spec;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_name_spec;
+    WrapperStr _java_name_spec;
 #endif
 
 #ifdef WITHPHP
-    Q3CString _php_name_spec;
+    WrapperStr _php_name_spec;
 #endif
 
 #ifdef WITHPYTHON
-    Q3CString _python_name_spec;
-    Q3CString _python_decorators;
+    WrapperStr _python_name_spec;
+    WrapperStr _python_decorators;
 #endif
 
 #ifdef WITHIDL
-    Q3CString _idl_name_spec;
+    WrapperStr _idl_name_spec;
 #endif
 
     // exclusive with set_of
@@ -551,7 +551,7 @@ private:
 
 protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseOperation(void * id, const Q3CString & n);
+    UmlBaseOperation(void * id, const WrapperStr & n);
 
     //internal, do NOT use it
 
@@ -589,7 +589,7 @@ protected:
 
 };
 
-inline UmlBaseOperation::UmlBaseOperation(void * id, const Q3CString & n) : UmlClassMember(id, n)
+inline UmlBaseOperation::UmlBaseOperation(void * id, const WrapperStr & n) : UmlClassMember(id, n)
 {
     _get_of = 0;
     _set_of = 0;

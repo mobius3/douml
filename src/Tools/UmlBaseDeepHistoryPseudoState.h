@@ -4,7 +4,7 @@
 
 #include "UmlPseudoState.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <WrapperStr.h>
 
 class UmlDeepHistoryPseudoState;
 class UmlItem;
@@ -25,7 +25,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseDeepHistoryPseudoState(void * id, const Q3CString & s) : UmlPseudoState(id, s) {
+    UmlBaseDeepHistoryPseudoState(void * id, const WrapperStr & s) : UmlPseudoState(id, s) {
     }
 
 };

@@ -8,7 +8,7 @@
 #include "UmlClassMember.h"
 //#include "misc/myio.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 
 #include <QFileInfo>
@@ -363,7 +363,7 @@ bool UmlBaseOperation::set_isCppFinal(bool y)
         return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::cppDef()
+const WrapperStr & UmlBaseOperation::cppDef()
 {
     read_if_needed_();
 
@@ -375,7 +375,7 @@ bool UmlBaseOperation::set_CppDef(const char * s)
     return set_it_(_cpp_def, s, setCppDefCmd);
 }
 
-Q3CString UmlBaseOperation::cppBody()
+WrapperStr UmlBaseOperation::cppBody()
 {
     // not memorized in the instance for memory size reason
     UmlCom::send_cmd(_identifier, cppBodyCmd);
@@ -389,7 +389,7 @@ bool UmlBaseOperation::set_CppBody(const char * s)
     return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::cppNameSpec()
+const WrapperStr & UmlBaseOperation::cppNameSpec()
 {
     read_if_needed_();
 
@@ -482,7 +482,7 @@ bool UmlBaseOperation::set_isJavaSynchronized(bool y)
         return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::javaDef()
+const WrapperStr & UmlBaseOperation::javaDef()
 {
     return javaDecl();
 }
@@ -492,7 +492,7 @@ bool UmlBaseOperation::set_JavaDef(const char * s)
     return set_JavaDecl(s);
 }
 
-Q3CString UmlBaseOperation::javaBody()
+WrapperStr UmlBaseOperation::javaBody()
 {
     // not memorized in the instance for memory size reason
     UmlCom::send_cmd(_identifier, javaBodyCmd);
@@ -506,7 +506,7 @@ bool UmlBaseOperation::set_JavaBody(const char * s)
     return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::javaNameSpec()
+const WrapperStr & UmlBaseOperation::javaNameSpec()
 {
     read_if_needed_();
 
@@ -580,7 +580,7 @@ bool UmlBaseOperation::set_isPhpFinal(bool y)
         return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::phpDef()
+const WrapperStr & UmlBaseOperation::phpDef()
 {
     return phpDecl();
 }
@@ -590,7 +590,7 @@ bool UmlBaseOperation::set_PhpDef(const char * s)
     return set_PhpDecl(s);
 }
 
-Q3CString UmlBaseOperation::phpBody()
+WrapperStr UmlBaseOperation::phpBody()
 {
     // not memorized in the instance for memory size reason
     UmlCom::send_cmd(_identifier, phpBodyCmd);
@@ -604,7 +604,7 @@ bool UmlBaseOperation::set_PhpBody(const char * s)
     return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::phpNameSpec()
+const WrapperStr & UmlBaseOperation::phpNameSpec()
 {
     read_if_needed_();
 
@@ -659,7 +659,7 @@ bool UmlBaseOperation::set_PhpContextualBodyIndent(bool v)
 #endif
 
 #ifdef WITHPYTHON
-const Q3CString & UmlBaseOperation::pythonDef()
+const WrapperStr & UmlBaseOperation::pythonDef()
 {
     return pythonDecl();
 }
@@ -669,7 +669,7 @@ bool UmlBaseOperation::set_PythonDef(const char * s)
     return set_PythonDecl(s);
 }
 
-Q3CString UmlBaseOperation::pythonBody()
+WrapperStr UmlBaseOperation::pythonBody()
 {
     // not memorized in the instance for memory size reason
     UmlCom::send_cmd(_identifier, pythonBodyCmd);
@@ -683,7 +683,7 @@ bool UmlBaseOperation::set_PythonBody(const char * s)
     return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::pythonNameSpec()
+const WrapperStr & UmlBaseOperation::pythonNameSpec()
 {
     read_if_needed_();
 
@@ -738,7 +738,7 @@ bool UmlBaseOperation::set_PythonContextualBodyIndent(bool v)
 #endif
 
 #ifdef WITHPYTHON
-const Q3CString & UmlBaseOperation::pythonDecorators()
+const WrapperStr & UmlBaseOperation::pythonDecorators()
 {
     read_if_needed_();
 
@@ -771,7 +771,7 @@ bool UmlBaseOperation::set_isIdlOneway(bool y)
         return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::idlNameSpec()
+const WrapperStr & UmlBaseOperation::idlNameSpec()
 {
     read_if_needed_();
 

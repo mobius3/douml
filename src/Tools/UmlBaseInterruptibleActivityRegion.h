@@ -4,7 +4,7 @@
 
 #include "UmlActivityRegion.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <WrapperStr.h>
 
 class UmlInterruptibleActivityRegion;
 class UmlItem;
@@ -25,7 +25,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseInterruptibleActivityRegion(void * id, const Q3CString & s) : UmlActivityRegion(id, s) {
+    UmlBaseInterruptibleActivityRegion(void * id, const WrapperStr & s) : UmlActivityRegion(id, s) {
     }
 
 };

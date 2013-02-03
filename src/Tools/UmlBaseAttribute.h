@@ -4,7 +4,7 @@
 
 #include "UmlClassMember.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <WrapperStr.h>
 #include "UmlTypeSpec.h"
 
 class UmlAttribute;
@@ -35,7 +35,7 @@ public:
     bool set_isReadOnly(bool y);
 
     // returns the default attribute value, may be an empty string
-    const Q3CString & defaultValue();
+    const WrapperStr & defaultValue();
 
     // to set the default attribute value ("" allowed)
     //
@@ -51,7 +51,7 @@ public:
     bool set_Type(const UmlTypeSpec & t);
 
     // returns the multiplicity (may be an empty string)
-    const Q3CString & multiplicity();
+    const WrapperStr & multiplicity();
 
     // to set the multiplicity
     //
@@ -97,7 +97,7 @@ public:
 #ifdef WITHIDL
     // in case the attribute is an IDL union's member returns the
     // corresponding 'case', an empty string in case it is not specified
-    Q3CString idlCase();
+    WrapperStr idlCase();
 
     // to set the 'case' even the attribute is not (already) known as
     // an IDL union's member
@@ -127,9 +127,9 @@ private:
     bool _java_transient : 1;
 #endif
 
-    Q3CString _multiplicity;
+    WrapperStr _multiplicity;
 
-    Q3CString _default_value;
+    WrapperStr _default_value;
 
     UmlTypeSpec _type;
 
@@ -141,13 +141,13 @@ private:
     // exclusive with idl_explicit_case
     UmlAttribute * _idl_case;
 
-    Q3CString _idl_explicit_case;
+    WrapperStr _idl_explicit_case;
 #endif
 
 
 public:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseAttribute(void * id, const Q3CString & n);
+    UmlBaseAttribute(void * id, const WrapperStr & n);
 
 
 protected:
@@ -175,7 +175,7 @@ protected:
 
 };
 
-inline UmlBaseAttribute::UmlBaseAttribute(void * id, const Q3CString & n) : UmlClassMember(id, n)
+inline UmlBaseAttribute::UmlBaseAttribute(void * id, const WrapperStr & n) : UmlClassMember(id, n)
 {
     _get_oper = 0;
     _set_oper = 0;

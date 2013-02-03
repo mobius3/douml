@@ -2,7 +2,7 @@
 #define _UMLSETTINGS_H
 
 
-#include <q3cstring.h>
+#include <WrapperStr.h>
 #include "aLanguage.h"
 #include <q3dict.h>
 
@@ -20,44 +20,44 @@ class UmlSettings
 {
 public:
     // return the default description
-    static Q3CString artifactDescription();
+    static WrapperStr artifactDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ArtifactDescription(Q3CString v);
+    static bool set_ArtifactDescription(WrapperStr v);
 
     // return the default description
-    static Q3CString classDescription();
+    static WrapperStr classDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassDescription(Q3CString v);
+    static bool set_ClassDescription(WrapperStr v);
 
     // return the default description
-    static Q3CString operationDescription();
+    static WrapperStr operationDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDescription(Q3CString v);
+    static bool set_OperationDescription(WrapperStr v);
 
     // return the default description
-    static Q3CString attributeDescription();
+    static WrapperStr attributeDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_AttributeDescription(Q3CString v);
+    static bool set_AttributeDescription(WrapperStr v);
 
     // return the default description
-    static Q3CString relationDescription();
+    static WrapperStr relationDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationDescription(Q3CString v);
+    static bool set_RelationDescription(WrapperStr v);
 
     // return the language from which the getter's name rule must be followed at Uml level
     static aLanguage umlGetName();
@@ -90,15 +90,15 @@ private:
 
 
 protected:
-    static Q3CString _artifact_default_description;
+    static WrapperStr _artifact_default_description;
 
-    static Q3CString _class_default_description;
+    static WrapperStr _class_default_description;
 
-    static Q3CString _operation_default_description;
+    static WrapperStr _operation_default_description;
 
-    static Q3CString _attribute_default_description;
+    static WrapperStr _attribute_default_description;
 
-    static Q3CString _relation_default_description;
+    static WrapperStr _relation_default_description;
 
     static Q3Dict<UmlBuiltin> _map_builtins;
 
@@ -116,19 +116,19 @@ protected:
 
     static void read_if_needed_();
 
-    static unsigned multiplicity_column(const Q3CString & mult);
+    static unsigned multiplicity_column(const WrapperStr & mult);
 
-    static Q3CString uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f);
+    static WrapperStr uml_type(const WrapperStr & t, WrapperStr UmlBuiltin::* f);
 
-    static Q3CString uml_rel_attr_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static WrapperStr uml_rel_attr_stereotype(const WrapperStr & t, WrapperStr UmlStereotype::* f);
 
-    static Q3CString uml_class_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static WrapperStr uml_class_stereotype(const WrapperStr & t, WrapperStr UmlStereotype::* f);
 
-    static UmlBuiltin * add_type(const Q3CString & s);
+    static UmlBuiltin * add_type(const WrapperStr & s);
 
-    static UmlStereotype * add_rel_attr_stereotype(const Q3CString & s);
+    static UmlStereotype * add_rel_attr_stereotype(const WrapperStr & s);
 
-    static UmlStereotype * add_class_stereotype(const Q3CString & s);
+    static UmlStereotype * add_class_stereotype(const WrapperStr & s);
 
 };
 

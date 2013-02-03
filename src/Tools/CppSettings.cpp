@@ -9,7 +9,7 @@
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 bool CppSettings::useDefaults()
 {
     UmlCom::send_cmd(cppSettingsCmd, getCppUseDefaultsCmd);
@@ -22,7 +22,7 @@ bool CppSettings::set_UseDefaults(bool y)
     return UmlCom::read_bool();
 }
 
-Q3CString CppSettings::type(Q3CString s)
+WrapperStr CppSettings::type(WrapperStr s)
 {
     if (s.isEmpty())
         return s;
@@ -34,7 +34,7 @@ Q3CString CppSettings::type(Q3CString s)
     return (b) ? b->cpp : s;
 }
 
-bool CppSettings::set_Type(Q3CString s, Q3CString v)
+bool CppSettings::set_Type(WrapperStr s, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(cppSettingsCmd, setCppTypeCmd, s, v);
@@ -53,14 +53,14 @@ bool CppSettings::set_Type(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::umlType(Q3CString s)
+WrapperStr CppSettings::umlType(WrapperStr s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_type(s, &UmlBuiltin::cpp);
 }
 
-Q3CString CppSettings::relationAttributeStereotype(Q3CString s)
+WrapperStr CppSettings::relationAttributeStereotype(WrapperStr s)
 {
     read_if_needed_();
 
@@ -69,7 +69,7 @@ Q3CString CppSettings::relationAttributeStereotype(Q3CString s)
     return (b) ? b->cpp : s;
 }
 
-bool CppSettings::set_RelationAttributeStereotype(Q3CString s, Q3CString v)
+bool CppSettings::set_RelationAttributeStereotype(WrapperStr s, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(cppSettingsCmd, setCppRelationAttributeStereotypeCmd, s, v);
@@ -88,14 +88,14 @@ bool CppSettings::set_RelationAttributeStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::relationAttributeUmlStereotype(Q3CString s)
+WrapperStr CppSettings::relationAttributeUmlStereotype(WrapperStr s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_rel_attr_stereotype(s, &UmlStereotype::cpp);
 }
 
-Q3CString CppSettings::classStereotype(Q3CString s)
+WrapperStr CppSettings::classStereotype(WrapperStr s)
 {
     read_if_needed_();
 
@@ -104,7 +104,7 @@ Q3CString CppSettings::classStereotype(Q3CString s)
     return (b) ? b->cpp : s;
 }
 
-bool CppSettings::set_ClassStereotype(Q3CString s, Q3CString v)
+bool CppSettings::set_ClassStereotype(WrapperStr s, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(cppSettingsCmd, setCppClassStereotypeCmd, s, v);
@@ -123,32 +123,32 @@ bool CppSettings::set_ClassStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::classUmlStereotype(Q3CString s)
+WrapperStr CppSettings::classUmlStereotype(WrapperStr s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_class_stereotype(s, &UmlStereotype::cpp);
 }
 
-Q3CString CppSettings::include(Q3CString s)
+WrapperStr CppSettings::include(WrapperStr s)
 {
     read_if_needed_();
 
-    Q3CString * r = _map_includes[s];
+    WrapperStr * r = _map_includes[s];
 
-    return (r) ? *r : Q3CString(0);
+    return (r) ? *r : WrapperStr(0);
 }
 
-bool CppSettings::set_Include(Q3CString s, Q3CString v)
+bool CppSettings::set_Include(WrapperStr s, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(cppSettingsCmd, setCppIncludeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        Q3CString * r = _map_includes.take(s);
+        WrapperStr * r = _map_includes.take(s);
 
         if (!v.isEmpty())
-            _map_includes.insert(s, new Q3CString(v));
+            _map_includes.insert(s, new WrapperStr(v));
 
         if (r)
             delete r;
@@ -159,14 +159,14 @@ bool CppSettings::set_Include(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::rootDir()
+WrapperStr CppSettings::rootDir()
 {
     read_if_needed_();
 
     return _root;
 }
 
-bool CppSettings::set_RootDir(Q3CString v)
+bool CppSettings::set_RootDir(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppRootDirCmd, v);
 
@@ -178,14 +178,14 @@ bool CppSettings::set_RootDir(Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::headerContent()
+WrapperStr CppSettings::headerContent()
 {
     read_if_needed_();
 
     return _h_content;
 }
 
-bool CppSettings::set_HeaderContent(Q3CString v)
+bool CppSettings::set_HeaderContent(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppHeaderContentCmd, v);
 
@@ -197,14 +197,14 @@ bool CppSettings::set_HeaderContent(Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::sourceContent()
+WrapperStr CppSettings::sourceContent()
 {
     read_if_needed_();
 
     return _src_content;
 }
 
-bool CppSettings::set_SourceContent(Q3CString v)
+bool CppSettings::set_SourceContent(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppSourceContentCmd, v);
 
@@ -216,14 +216,14 @@ bool CppSettings::set_SourceContent(Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::headerExtension()
+WrapperStr CppSettings::headerExtension()
 {
     read_if_needed_();
 
     return _h_ext;
 }
 
-bool CppSettings::set_HeaderExtension(Q3CString v)
+bool CppSettings::set_HeaderExtension(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppHeaderExtensionCmd, v);
 
@@ -235,14 +235,14 @@ bool CppSettings::set_HeaderExtension(Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::sourceExtension()
+WrapperStr CppSettings::sourceExtension()
 {
     read_if_needed_();
 
     return _src_ext;
 }
 
-bool CppSettings::set_SourceExtension(Q3CString v)
+bool CppSettings::set_SourceExtension(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppSourceExtensionCmd, v);
 
@@ -254,7 +254,7 @@ bool CppSettings::set_SourceExtension(Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::reverseRoundtripDirRegExp()
+WrapperStr CppSettings::reverseRoundtripDirRegExp()
 {
     read_if_needed_();
 
@@ -268,7 +268,7 @@ bool CppSettings::isReverseRoundtripDirRegExpCaseSensitive()
     return _dir_regexp_case_sensitive;
 }
 
-bool CppSettings::set_ReverseRoundtripDirRegExp(Q3CString s, bool cs)
+bool CppSettings::set_ReverseRoundtripDirRegExp(WrapperStr s, bool cs)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppDirRevFilterCmd, s, cs);
 
@@ -281,7 +281,7 @@ bool CppSettings::set_ReverseRoundtripDirRegExp(Q3CString s, bool cs)
         return FALSE;
 }
 
-Q3CString CppSettings::reverseRoundtripFileRegExp()
+WrapperStr CppSettings::reverseRoundtripFileRegExp()
 {
     read_if_needed_();
 
@@ -295,7 +295,7 @@ bool CppSettings::isReverseRoundtripFileRegExpCaseSensitive()
     return _file_regexp_case_sensitive;
 }
 
-bool CppSettings::set_ReverseRoundtripFileRegExp(Q3CString s, bool cs)
+bool CppSettings::set_ReverseRoundtripFileRegExp(WrapperStr s, bool cs)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppFileRevFilterCmd, s, cs);
 
@@ -428,14 +428,14 @@ bool CppSettings::set_IsGenerateJavadocStyleComment(bool v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::visibilityIndent()
+const WrapperStr & CppSettings::visibilityIndent()
 {
     read_if_needed_();
 
     return _visibility_indent;
 }
 
-bool CppSettings::set_VisibilityIndent(Q3CString v)
+bool CppSettings::set_VisibilityIndent(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppIndentVisibilityCmd, v);
 
@@ -449,14 +449,14 @@ bool CppSettings::set_VisibilityIndent(Q3CString v)
 
 
 
-const Q3CString & CppSettings::enumIn()
+const WrapperStr & CppSettings::enumIn()
 {
     read_if_needed_();
 
     return _enum_in;
 }
 
-bool CppSettings::set_EnumIn(Q3CString v)
+bool CppSettings::set_EnumIn(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppEnumInCmd, v);
 
@@ -468,14 +468,14 @@ bool CppSettings::set_EnumIn(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::enumOut()
+const WrapperStr & CppSettings::enumOut()
 {
     read_if_needed_();
 
     return _enum_out;
 }
 
-bool CppSettings::set_EnumOut(Q3CString v)
+bool CppSettings::set_EnumOut(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppEnumOutCmd, v);
 
@@ -487,14 +487,14 @@ bool CppSettings::set_EnumOut(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::enumInout()
+const WrapperStr & CppSettings::enumInout()
 {
     read_if_needed_();
 
     return _enum_inout;
 }
 
-bool CppSettings::set_EnumInout(Q3CString v)
+bool CppSettings::set_EnumInout(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppEnumInOutCmd, v);
 
@@ -506,14 +506,14 @@ bool CppSettings::set_EnumInout(Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::enumReturn()
+WrapperStr CppSettings::enumReturn()
 {
     read_if_needed_();
 
     return _enum_return;
 }
 
-bool CppSettings::set_EnumReturn(Q3CString v)
+bool CppSettings::set_EnumReturn(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppEnumReturnCmd, v);
 
@@ -529,13 +529,13 @@ bool CppSettings::set_EnumReturn(Q3CString v)
 // in case its type is specified in the first 'Generation
 // settings' tab, else an empty string/null
 
-Q3CString CppSettings::builtinIn(Q3CString s)
+WrapperStr CppSettings::builtinIn(WrapperStr s)
 {
     read_if_needed_();
 
     UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
 
-    return (b) ? b->cpp_in : Q3CString();
+    return (b) ? b->cpp_in : WrapperStr();
 }
 
 // set the default operation 'in' parameter specification
@@ -544,7 +544,7 @@ Q3CString CppSettings::builtinIn(Q3CString s)
 //
 // On error : return FALSE in C++, produce a RuntimeException in Java
 
-bool CppSettings::set_BuiltinIn(Q3CString type, Q3CString form)
+bool CppSettings::set_BuiltinIn(WrapperStr type, WrapperStr form)
 {
     read_if_needed_();
     UmlCom::send_cmd(cppSettingsCmd, setCppInCmd, type, form);
@@ -567,13 +567,13 @@ bool CppSettings::set_BuiltinIn(Q3CString type, Q3CString form)
 // in case its type is specified in the first 'Generation
 // settings' tab, else an empty string/null
 
-Q3CString CppSettings::builtinOut(Q3CString s)
+WrapperStr CppSettings::builtinOut(WrapperStr s)
 {
     read_if_needed_();
 
     UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
 
-    return (b) ? b->cpp_out : Q3CString();
+    return (b) ? b->cpp_out : WrapperStr();
 }
 
 // set the default operation 'out' parameter specification
@@ -582,7 +582,7 @@ Q3CString CppSettings::builtinOut(Q3CString s)
 //
 // On error : return FALSE in C++, produce a RuntimeException in Java
 
-bool CppSettings::set_BuiltinOut(Q3CString type, Q3CString form)
+bool CppSettings::set_BuiltinOut(WrapperStr type, WrapperStr form)
 {
     read_if_needed_();
     UmlCom::send_cmd(cppSettingsCmd, setCppOutCmd, type, form);
@@ -605,13 +605,13 @@ bool CppSettings::set_BuiltinOut(Q3CString type, Q3CString form)
 // in case its type is specified in the first 'Generation
 // settings' tab, else an empty string/null
 
-Q3CString CppSettings::builtinInOut(Q3CString s)
+WrapperStr CppSettings::builtinInOut(WrapperStr s)
 {
     read_if_needed_();
 
     UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
 
-    return (b) ? b->cpp_inout : Q3CString();
+    return (b) ? b->cpp_inout : WrapperStr();
 }
 
 // set the default operation 'inout' parameter specification
@@ -620,7 +620,7 @@ Q3CString CppSettings::builtinInOut(Q3CString s)
 //
 // On error : return FALSE in C++, produce a RuntimeException in Java
 
-bool CppSettings::set_BuiltinInOut(Q3CString type, Q3CString form)
+bool CppSettings::set_BuiltinInOut(WrapperStr type, WrapperStr form)
 {
     read_if_needed_();
     UmlCom::send_cmd(cppSettingsCmd, setCppInOutCmd, type, form);
@@ -643,13 +643,13 @@ bool CppSettings::set_BuiltinInOut(Q3CString type, Q3CString form)
 // in case its type is specified in the first 'Generation
 // settings' tab, else an empty string/null
 
-Q3CString CppSettings::builtinReturn(Q3CString s)
+WrapperStr CppSettings::builtinReturn(WrapperStr s)
 {
     read_if_needed_();
 
     UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
 
-    return (b) ? b->cpp_return : Q3CString();
+    return (b) ? b->cpp_return : WrapperStr();
 }
 
 // set the default operation 'return' parameter specification
@@ -658,7 +658,7 @@ Q3CString CppSettings::builtinReturn(Q3CString s)
 //
 // On error : return FALSE in C++, produce a RuntimeException in Java
 
-bool CppSettings::set_BuiltinReturn(Q3CString type, Q3CString form)
+bool CppSettings::set_BuiltinReturn(WrapperStr type, WrapperStr form)
 {
     read_if_needed_();
     UmlCom::send_cmd(cppSettingsCmd, setCppReturnCmd, type, form);
@@ -677,14 +677,14 @@ bool CppSettings::set_BuiltinReturn(Q3CString type, Q3CString form)
         return FALSE;
 }
 
-const Q3CString & CppSettings::in()
+const WrapperStr & CppSettings::in()
 {
     read_if_needed_();
 
     return _in;
 }
 
-bool CppSettings::set_In(Q3CString v)
+bool CppSettings::set_In(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppInCmd, v, "");
 
@@ -696,14 +696,14 @@ bool CppSettings::set_In(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::out()
+const WrapperStr & CppSettings::out()
 {
     read_if_needed_();
 
     return _out;
 }
 
-bool CppSettings::set_Out(Q3CString v)
+bool CppSettings::set_Out(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppOutCmd, v, "");
 
@@ -715,14 +715,14 @@ bool CppSettings::set_Out(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::inout()
+const WrapperStr & CppSettings::inout()
 {
     read_if_needed_();
 
     return _inout;
 }
 
-bool CppSettings::set_Inout(Q3CString v)
+bool CppSettings::set_Inout(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppInOutCmd, v, "");
 
@@ -734,14 +734,14 @@ bool CppSettings::set_Inout(Q3CString v)
         return FALSE;
 }
 
-Q3CString CppSettings::Return()
+WrapperStr CppSettings::Return()
 {
     read_if_needed_();
 
     return _return;
 }
 
-bool CppSettings::set_Return(Q3CString v)
+bool CppSettings::set_Return(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppReturnCmd, v, "");
 
@@ -753,14 +753,14 @@ bool CppSettings::set_Return(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::classDecl()
+const WrapperStr & CppSettings::classDecl()
 {
     read_if_needed_();
 
     return _class_decl;
 }
 
-bool CppSettings::set_ClassDecl(Q3CString v)
+bool CppSettings::set_ClassDecl(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppClassDeclCmd, v);
 
@@ -772,14 +772,14 @@ bool CppSettings::set_ClassDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::externalClassDecl()
+const WrapperStr & CppSettings::externalClassDecl()
 {
     read_if_needed_();
 
     return _external_class_decl;
 }
 
-bool CppSettings::set_ExternalClassDecl(Q3CString v)
+bool CppSettings::set_ExternalClassDecl(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppExternalClassDeclCmd, v);
 
@@ -791,14 +791,14 @@ bool CppSettings::set_ExternalClassDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::structDecl()
+const WrapperStr & CppSettings::structDecl()
 {
     read_if_needed_();
 
     return _struct_decl;
 }
 
-bool CppSettings::set_StructDecl(Q3CString v)
+bool CppSettings::set_StructDecl(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppStructDeclCmd, v);
 
@@ -810,14 +810,14 @@ bool CppSettings::set_StructDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::unionDecl()
+const WrapperStr & CppSettings::unionDecl()
 {
     read_if_needed_();
 
     return _union_decl;
 }
 
-bool CppSettings::set_UnionDecl(Q3CString v)
+bool CppSettings::set_UnionDecl(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppUnionDeclCmd, v);
 
@@ -829,14 +829,14 @@ bool CppSettings::set_UnionDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::enumDecl()
+const WrapperStr & CppSettings::enumDecl()
 {
     read_if_needed_();
 
     return _enum_decl;
 }
 
-bool CppSettings::set_EnumDecl(Q3CString v)
+bool CppSettings::set_EnumDecl(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppEnumDeclCmd, v);
 
@@ -848,14 +848,14 @@ bool CppSettings::set_EnumDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::typedefDecl()
+const WrapperStr & CppSettings::typedefDecl()
 {
     read_if_needed_();
 
     return _typedef_decl;
 }
 
-bool CppSettings::set_TypedefDecl(Q3CString v)
+bool CppSettings::set_TypedefDecl(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppTypedefDeclCmd, v);
 
@@ -867,14 +867,14 @@ bool CppSettings::set_TypedefDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::attributeDecl(const char * multiplicity)
+const WrapperStr & CppSettings::attributeDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _attr_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool CppSettings::set_AttributeDecl(const char * multiplicity, Q3CString v)
+bool CppSettings::set_AttributeDecl(const char * multiplicity, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(cppSettingsCmd, setCppAttributeDeclCmd, multiplicity, v);
@@ -887,14 +887,14 @@ bool CppSettings::set_AttributeDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::enumItemDecl()
+const WrapperStr & CppSettings::enumItemDecl()
 {
     read_if_needed_();
 
     return _enum_item_decl;
 }
 
-bool CppSettings::set_EnumItemDecl(Q3CString v)
+bool CppSettings::set_EnumItemDecl(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppEnumItemDeclCmd, v);
 
@@ -906,7 +906,7 @@ bool CppSettings::set_EnumItemDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::relationDecl(bool by_value, const char * multiplicity)
+const WrapperStr & CppSettings::relationDecl(bool by_value, const char * multiplicity)
 {
     read_if_needed_();
 
@@ -926,14 +926,14 @@ bool CppSettings::set_RelationDecl(bool by_value, const char * multiplicity, con
         return FALSE;
 }
 
-const Q3CString & CppSettings::operationDecl()
+const WrapperStr & CppSettings::operationDecl()
 {
     read_if_needed_();
 
     return _oper_decl;
 }
 
-bool CppSettings::set_OperationDecl(Q3CString v)
+bool CppSettings::set_OperationDecl(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppOperationDeclCmd, v);
 
@@ -945,14 +945,14 @@ bool CppSettings::set_OperationDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::operationDef()
+const WrapperStr & CppSettings::operationDef()
 {
     read_if_needed_();
 
     return _oper_def;
 }
 
-bool CppSettings::set_OperationDef(Q3CString v)
+bool CppSettings::set_OperationDef(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppOperationDefCmd, v);
 
@@ -1002,14 +1002,14 @@ bool CppSettings::set_GetVisibility(aVisibility v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::getName()
+const WrapperStr & CppSettings::getName()
 {
     read_if_needed_();
 
     return _get_name;
 }
 
-bool CppSettings::set_GetName(Q3CString v)
+bool CppSettings::set_GetName(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppGetNameCmd, v);
 
@@ -1097,14 +1097,14 @@ bool CppSettings::set_SetVisibility(aVisibility v)
         return FALSE;
 }
 
-const Q3CString & CppSettings::setName()
+const WrapperStr & CppSettings::setName()
 {
     read_if_needed_();
 
     return _set_name;
 }
 
-bool CppSettings::set_SetName(Q3CString v)
+bool CppSettings::set_SetName(WrapperStr v)
 {
     UmlCom::send_cmd(cppSettingsCmd, setCppSetNameCmd, v);
 
@@ -1175,51 +1175,51 @@ bool CppSettings::set_IsSetParamRef(bool v)
 
 bool CppSettings::_defined;
 
-Q3CString CppSettings::_root;
+WrapperStr CppSettings::_root;
 
-Q3CString CppSettings::_in;
+WrapperStr CppSettings::_in;
 
-Q3CString CppSettings::_out;
+WrapperStr CppSettings::_out;
 
-Q3CString CppSettings::_inout;
+WrapperStr CppSettings::_inout;
 
-Q3CString CppSettings::_return;
+WrapperStr CppSettings::_return;
 
-Q3CString CppSettings::_enum_in;
+WrapperStr CppSettings::_enum_in;
 
-Q3CString CppSettings::_enum_out;
+WrapperStr CppSettings::_enum_out;
 
-Q3CString CppSettings::_enum_inout;
+WrapperStr CppSettings::_enum_inout;
 
-Q3CString CppSettings::_enum_return;
+WrapperStr CppSettings::_enum_return;
 
-Q3CString CppSettings::_class_decl;
+WrapperStr CppSettings::_class_decl;
 
-Q3CString CppSettings::_external_class_decl;
+WrapperStr CppSettings::_external_class_decl;
 
-Q3CString CppSettings::_struct_decl;
+WrapperStr CppSettings::_struct_decl;
 
-Q3CString CppSettings::_union_decl;
+WrapperStr CppSettings::_union_decl;
 
-Q3CString CppSettings::_enum_decl;
+WrapperStr CppSettings::_enum_decl;
 
-Q3CString CppSettings::_typedef_decl;
+WrapperStr CppSettings::_typedef_decl;
 
-Q3CString CppSettings::_attr_decl[3/*multiplicity*/];
+WrapperStr CppSettings::_attr_decl[3/*multiplicity*/];
 
-Q3CString CppSettings::_enum_item_decl;
+WrapperStr CppSettings::_enum_item_decl;
 
-Q3CString CppSettings::_rel_decl[2/*relation kind*/][3/*multiplicity*/];
+WrapperStr CppSettings::_rel_decl[2/*relation kind*/][3/*multiplicity*/];
 
-Q3CString CppSettings::_oper_decl;
+WrapperStr CppSettings::_oper_decl;
 
-Q3CString CppSettings::_oper_def;
+WrapperStr CppSettings::_oper_def;
 
 bool CppSettings::_force_oper_throw;
 
 aVisibility CppSettings::_get_visibility;
 
-Q3CString CppSettings::_get_name;
+WrapperStr CppSettings::_get_name;
 
 bool CppSettings::_is_get_inline;
 
@@ -1229,7 +1229,7 @@ bool CppSettings::_is_get_value_const;
 
 aVisibility CppSettings::_set_visibility;
 
-Q3CString CppSettings::_set_name;
+WrapperStr CppSettings::_set_name;
 
 bool CppSettings::_is_set_inline;
 
@@ -1237,19 +1237,19 @@ bool CppSettings::_is_set_param_const;
 
 bool CppSettings::_is_set_param_ref;
 
-Q3CString CppSettings::_h_content;
+WrapperStr CppSettings::_h_content;
 
-Q3CString CppSettings::_src_content;
+WrapperStr CppSettings::_src_content;
 
-Q3CString CppSettings::_h_ext;
+WrapperStr CppSettings::_h_ext;
 
-Q3CString CppSettings::_src_ext;
+WrapperStr CppSettings::_src_ext;
 
-Q3CString CppSettings::_dir_regexp;
+WrapperStr CppSettings::_dir_regexp;
 
 bool CppSettings::_dir_regexp_case_sensitive;
 
-Q3CString CppSettings::_file_regexp;
+WrapperStr CppSettings::_file_regexp;
 
 bool CppSettings::_file_regexp_case_sensitive;
 
@@ -1265,9 +1265,9 @@ bool CppSettings::_is_generate_javadoc_comment;
 
 bool CppSettings::_is_inline_force_header_in_h;
 
-Q3CString CppSettings::_visibility_indent;
+WrapperStr CppSettings::_visibility_indent;
 
-Q3Dict<Q3CString> CppSettings::_map_includes;
+Q3Dict<WrapperStr> CppSettings::_map_includes;
 
 void CppSettings::read_()
 {
@@ -1303,10 +1303,10 @@ void CppSettings::read_()
         _map_includes.resize(n);
 
     for (index = 0; index != n; index += 1) {
-        Q3CString t = UmlCom::read_string();
-        Q3CString i = UmlCom::read_string();
+        WrapperStr t = UmlCom::read_string();
+        WrapperStr i = UmlCom::read_string();
 
-        _map_includes.insert(t, new Q3CString(i));
+        _map_includes.insert(t, new WrapperStr(i));
     }
 
     _h_content = UmlCom::read_string();

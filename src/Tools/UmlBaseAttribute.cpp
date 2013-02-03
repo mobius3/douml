@@ -6,7 +6,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 UmlAttribute * UmlBaseAttribute::create(UmlClass * parent, const char * s)
 {
     return (UmlAttribute *) parent->create_(anAttribute, s);
@@ -36,7 +36,7 @@ bool UmlBaseAttribute::set_isReadOnly(bool y)
         return FALSE;
 }
 
-const Q3CString & UmlBaseAttribute::defaultValue()
+const WrapperStr & UmlBaseAttribute::defaultValue()
 {
     read_if_needed_();
 
@@ -60,7 +60,7 @@ bool UmlBaseAttribute::set_Type(const UmlTypeSpec & t)
     return set_it_(_type, t, setTypeCmd);
 }
 
-const Q3CString & UmlBaseAttribute::multiplicity()
+const WrapperStr & UmlBaseAttribute::multiplicity()
 {
     read_if_needed_();
 
@@ -153,7 +153,7 @@ bool UmlBaseAttribute::set_isJavaTransient(bool y)
 #endif
 
 #ifdef WITHIDL
-Q3CString UmlBaseAttribute::idlCase()
+WrapperStr UmlBaseAttribute::idlCase()
 {
     read_if_needed_();
 

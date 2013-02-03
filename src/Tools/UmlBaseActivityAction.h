@@ -3,7 +3,7 @@
 
 
 #include "UmlActivityNode.h"
-#include <q3cstring.h>
+#include <WrapperStr.h>
 
 class UmlDiagram;
 
@@ -11,13 +11,13 @@ class UmlBaseActivityAction : public UmlActivityNode
 {
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseActivityAction(void * id, const Q3CString & s) : UmlActivityNode(id, s) {
+    UmlBaseActivityAction(void * id, const WrapperStr & s) : UmlActivityNode(id, s) {
     }
 
 
 public:
     // return the pre condition
-    const Q3CString & preCondition();
+    const WrapperStr & preCondition();
 
     // set the pre condition
     //
@@ -25,7 +25,7 @@ public:
     bool set_PreCondition(const char * v);
 
     // return the post condition
-    const Q3CString & postCondition();
+    const WrapperStr & postCondition();
 
     // set the post condition
     //
@@ -34,7 +34,7 @@ public:
 
 #ifdef WITHCPP
     // return the pre condition in C++
-    const Q3CString & cppPreCondition();
+    const WrapperStr & cppPreCondition();
 
     // set the pre condition in C++
     //
@@ -42,7 +42,7 @@ public:
     bool set_CppPreCondition(const char * v);
 
     // return the post condition in C++
-    const Q3CString & cppPostCondition();
+    const WrapperStr & cppPostCondition();
 
     // set the post condition in C++
     //
@@ -52,7 +52,7 @@ public:
 
 #ifdef WITHJAVA
     // return the pre condition in Java
-    const Q3CString & javaPreCondition();
+    const WrapperStr & javaPreCondition();
 
     // set the pre condition in Java
     //
@@ -60,7 +60,7 @@ public:
     bool set_JavaPreCondition(const char * v);
 
     // return the post condition in Java
-    const Q3CString & javaPostCondition();
+    const WrapperStr & javaPostCondition();
 
     // set the post condition in Java
     //
@@ -86,20 +86,20 @@ public:
 
 
 private:
-    Q3CString _pre_condition;
+    WrapperStr _pre_condition;
 
-    Q3CString _post_condition;
+    WrapperStr _post_condition;
 
 #ifdef WITHCPP
-    Q3CString _cpp_pre_condition;
+    WrapperStr _cpp_pre_condition;
 
-    Q3CString _cpp_post_condition;
+    WrapperStr _cpp_post_condition;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_pre_condition;
+    WrapperStr _java_pre_condition;
 
-    Q3CString _java_post_condition;
+    WrapperStr _java_post_condition;
 #endif
 
     UmlDiagram * _assoc_diagram;

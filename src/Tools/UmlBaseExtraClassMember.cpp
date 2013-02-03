@@ -5,7 +5,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 UmlExtraClassMember * UmlBaseExtraClassMember::create(UmlClass * parent, const char * name)
 {
     return (UmlExtraClassMember *) parent->create_(anExtraClassMember, name);
@@ -29,7 +29,7 @@ bool UmlBaseExtraClassMember::set_isCppInline(bool y)
     return set_it_(_cpp_inline, y, setIsCppInlineCmd);
 }
 
-const Q3CString & UmlBaseExtraClassMember::cppDef()
+const WrapperStr & UmlBaseExtraClassMember::cppDef()
 {
     read_if_needed_();
 

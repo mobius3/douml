@@ -2,7 +2,7 @@
 #ifdef TRACE
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 using namespace std;
 #endif
@@ -721,7 +721,7 @@ void UmlCom::read_item_list(Q3PtrVector<UmlItem> & v)
         v.insert(index, UmlBaseItem::read_());
 }
 
-void UmlCom::fatal_error(const Q3CString &
+void UmlCom::fatal_error(const WrapperStr &
 #ifdef DEBUG_BOUML
                          msg
 #endif

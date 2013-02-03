@@ -8,7 +8,7 @@
 #include "Tools/ApiCmd.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #ifdef WITHJAVA
 #include "JavaSettings.h"
 #endif
@@ -24,7 +24,7 @@ bool PhpSettings::set_UseDefaults(bool y)
     return UmlCom::read_bool();
 }
 
-Q3CString PhpSettings::classStereotype(const Q3CString & s)
+WrapperStr PhpSettings::classStereotype(const WrapperStr & s)
 {
     read_if_needed_();
 
@@ -33,7 +33,7 @@ Q3CString PhpSettings::classStereotype(const Q3CString & s)
     return (b) ? b->php : s;
 }
 
-bool PhpSettings::set_ClassStereotype(Q3CString s, Q3CString v)
+bool PhpSettings::set_ClassStereotype(WrapperStr s, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(phpSettingsCmd, setPhpClassStereotypeCmd, s, v);
@@ -52,21 +52,21 @@ bool PhpSettings::set_ClassStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString PhpSettings::classUmlStereotype(const Q3CString & s)
+WrapperStr PhpSettings::classUmlStereotype(const WrapperStr & s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_class_stereotype(s, &UmlStereotype::php);
 }
 
-const Q3CString & PhpSettings::rootDir()
+const WrapperStr & PhpSettings::rootDir()
 {
     read_if_needed_();
 
     return _root;
 }
 
-bool PhpSettings::set_RootDir(Q3CString v)
+bool PhpSettings::set_RootDir(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpRootdirCmd, v);
 
@@ -78,14 +78,14 @@ bool PhpSettings::set_RootDir(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::sourceContent()
+const WrapperStr & PhpSettings::sourceContent()
 {
     read_if_needed_();
 
     return _src_content;
 }
 
-bool PhpSettings::set_SourceContent(Q3CString v)
+bool PhpSettings::set_SourceContent(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpSourceContentCmd, v);
 
@@ -97,14 +97,14 @@ bool PhpSettings::set_SourceContent(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::sourceExtension()
+const WrapperStr & PhpSettings::sourceExtension()
 {
     read_if_needed_();
 
     return _ext;
 }
 
-bool PhpSettings::set_SourceExtension(Q3CString v)
+bool PhpSettings::set_SourceExtension(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpSourceExtensionCmd, v);
 
@@ -116,7 +116,7 @@ bool PhpSettings::set_SourceExtension(Q3CString v)
         return FALSE;
 }
 
-Q3CString PhpSettings::reverseRoundtripDirRegExp()
+WrapperStr PhpSettings::reverseRoundtripDirRegExp()
 {
     read_if_needed_();
 
@@ -130,7 +130,7 @@ bool PhpSettings::isReverseRoundtripDirRegExpCaseSensitive()
     return _dir_regexp_case_sensitive;
 }
 
-bool PhpSettings::set_ReverseRoundtripDirRegExp(Q3CString s, bool cs)
+bool PhpSettings::set_ReverseRoundtripDirRegExp(WrapperStr s, bool cs)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpDirRevFilterCmd, s, cs);
 
@@ -143,7 +143,7 @@ bool PhpSettings::set_ReverseRoundtripDirRegExp(Q3CString s, bool cs)
         return FALSE;
 }
 
-Q3CString PhpSettings::reverseRoundtripFileRegExp()
+WrapperStr PhpSettings::reverseRoundtripFileRegExp()
 {
     read_if_needed_();
 
@@ -157,7 +157,7 @@ bool PhpSettings::isReverseRoundtripFileRegExpCaseSensitive()
     return _file_regexp_case_sensitive;
 }
 
-bool PhpSettings::set_ReverseRoundtripFileRegExp(Q3CString s, bool cs)
+bool PhpSettings::set_ReverseRoundtripFileRegExp(WrapperStr s, bool cs)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpFileRevFilterCmd, s, cs);
 
@@ -271,14 +271,14 @@ bool PhpSettings::set_IsGenerateJavadocStyleComment(bool v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::classDecl()
+const WrapperStr & PhpSettings::classDecl()
 {
     read_if_needed_();
 
     return _class_decl;
 }
 
-bool PhpSettings::set_ClassDecl(Q3CString v)
+bool PhpSettings::set_ClassDecl(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpClassDeclCmd, v);
 
@@ -290,14 +290,14 @@ bool PhpSettings::set_ClassDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::externalClassDecl()
+const WrapperStr & PhpSettings::externalClassDecl()
 {
     read_if_needed_();
 
     return _external_class_decl;
 }
 
-bool PhpSettings::set_ExternalClassDecl(Q3CString v)
+bool PhpSettings::set_ExternalClassDecl(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpExternalClassDeclCmd, v);
 
@@ -309,14 +309,14 @@ bool PhpSettings::set_ExternalClassDecl(Q3CString v)
         return FALSE;
 }
 
-Q3CString PhpSettings::enumDecl()
+WrapperStr PhpSettings::enumDecl()
 {
     read_if_needed_();
 
     return _enum_decl;
 }
 
-bool PhpSettings::set_EnumDecl(Q3CString v)
+bool PhpSettings::set_EnumDecl(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpEnumDeclCmd, v);
 
@@ -328,14 +328,14 @@ bool PhpSettings::set_EnumDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::interfaceDecl()
+const WrapperStr & PhpSettings::interfaceDecl()
 {
     read_if_needed_();
 
     return _interface_decl;
 }
 
-bool PhpSettings::set_InterfaceDecl(Q3CString v)
+bool PhpSettings::set_InterfaceDecl(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpInterfaceDeclCmd, v);
 
@@ -347,14 +347,14 @@ bool PhpSettings::set_InterfaceDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::attributeDecl()
+const WrapperStr & PhpSettings::attributeDecl()
 {
     read_if_needed_();
 
     return _attr_decl;
 }
 
-bool PhpSettings::set_AttributeDecl(Q3CString v)
+bool PhpSettings::set_AttributeDecl(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpAttributeDeclCmd, v);
 
@@ -366,14 +366,14 @@ bool PhpSettings::set_AttributeDecl(Q3CString v)
         return FALSE;
 }
 
-Q3CString PhpSettings::enumItemDecl()
+WrapperStr PhpSettings::enumItemDecl()
 {
     read_if_needed_();
 
     return _enum_item_decl;
 }
 
-bool PhpSettings::set_EnumItemDecl(Q3CString v)
+bool PhpSettings::set_EnumItemDecl(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpEnumItemDeclCmd, v);
 
@@ -385,14 +385,14 @@ bool PhpSettings::set_EnumItemDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::relationDecl()
+const WrapperStr & PhpSettings::relationDecl()
 {
     read_if_needed_();
 
     return _rel_decl;
 }
 
-bool PhpSettings::set_RelationDecl(Q3CString v)
+bool PhpSettings::set_RelationDecl(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpRelationDeclCmd, v);
 
@@ -404,14 +404,14 @@ bool PhpSettings::set_RelationDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::operationDef()
+const WrapperStr & PhpSettings::operationDef()
 {
     read_if_needed_();
 
     return _oper_def;
 }
 
-bool PhpSettings::set_OperationDef(Q3CString v)
+bool PhpSettings::set_OperationDef(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpOperationDefCmd, v);
 
@@ -451,14 +451,14 @@ bool PhpSettings::set_GetVisibility(aVisibility v)
 #endif
 }
 
-const Q3CString & PhpSettings::getName()
+const WrapperStr & PhpSettings::getName()
 {
     read_if_needed_();
 
     return _get_name;
 }
 
-bool PhpSettings::set_GetName(Q3CString v)
+bool PhpSettings::set_GetName(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpGetNameCmd, v);
 
@@ -470,14 +470,14 @@ bool PhpSettings::set_GetName(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::setName()
+const WrapperStr & PhpSettings::setName()
 {
     read_if_needed_();
 
     return _set_name;
 }
 
-bool PhpSettings::set_SetName(Q3CString v)
+bool PhpSettings::set_SetName(WrapperStr v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpSetNameCmd, v);
 
@@ -557,29 +557,29 @@ bool PhpSettings::set_SetVisibility(aVisibility v)
 
 bool PhpSettings::_defined;
 
-Q3CString PhpSettings::_root;
+WrapperStr PhpSettings::_root;
 
-Q3CString PhpSettings::_class_decl;
+WrapperStr PhpSettings::_class_decl;
 
-Q3CString PhpSettings::_external_class_decl;
+WrapperStr PhpSettings::_external_class_decl;
 
-Q3CString PhpSettings::_enum_decl;
+WrapperStr PhpSettings::_enum_decl;
 
-Q3CString PhpSettings::_interface_decl;
+WrapperStr PhpSettings::_interface_decl;
 
-Q3CString PhpSettings::_attr_decl;
+WrapperStr PhpSettings::_attr_decl;
 
-Q3CString PhpSettings::_enum_item_decl;
+WrapperStr PhpSettings::_enum_item_decl;
 
-Q3CString PhpSettings::_rel_decl;
+WrapperStr PhpSettings::_rel_decl;
 
-Q3CString PhpSettings::_oper_def;
+WrapperStr PhpSettings::_oper_def;
 
 #ifndef WITHJAVA
 aVisibility PhpSettings::_get_visibility;
 #endif
 
-Q3CString PhpSettings::_get_name;
+WrapperStr PhpSettings::_get_name;
 
 bool PhpSettings::_is_get_final;
 
@@ -587,19 +587,19 @@ bool PhpSettings::_is_get_final;
 aVisibility PhpSettings::_set_visibility;
 #endif
 
-Q3CString PhpSettings::_set_name;
+WrapperStr PhpSettings::_set_name;
 
 bool PhpSettings::_is_set_final;
 
-Q3CString PhpSettings::_src_content;
+WrapperStr PhpSettings::_src_content;
 
-Q3CString PhpSettings::_ext;
+WrapperStr PhpSettings::_ext;
 
-Q3CString PhpSettings::_dir_regexp;
+WrapperStr PhpSettings::_dir_regexp;
 
 bool PhpSettings::_dir_regexp_case_sensitive;
 
-Q3CString PhpSettings::_file_regexp;
+WrapperStr PhpSettings::_file_regexp;
 
 bool PhpSettings::_file_regexp_case_sensitive;
 

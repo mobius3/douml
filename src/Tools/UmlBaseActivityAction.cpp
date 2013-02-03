@@ -3,9 +3,9 @@
 #include "UmlBaseActivityAction.h"
 #include "UmlDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
-const Q3CString & UmlBaseActivityAction::preCondition()
+const WrapperStr & UmlBaseActivityAction::preCondition()
 {
     read_if_needed_();
     return _pre_condition;
@@ -16,7 +16,7 @@ bool UmlBaseActivityAction::set_PreCondition(const char * v)
     return set_it_(_pre_condition, v, setUmlEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseActivityAction::postCondition()
+const WrapperStr & UmlBaseActivityAction::postCondition()
 {
     read_if_needed_();
     return _post_condition;
@@ -28,7 +28,7 @@ bool UmlBaseActivityAction::set_PostCondition(const char * v)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseActivityAction::cppPreCondition()
+const WrapperStr & UmlBaseActivityAction::cppPreCondition()
 {
     read_if_needed_();
     return _cpp_pre_condition;
@@ -39,7 +39,7 @@ bool UmlBaseActivityAction::set_CppPreCondition(const char * v)
     return set_it_(_cpp_pre_condition, v, setCppEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseActivityAction::cppPostCondition()
+const WrapperStr & UmlBaseActivityAction::cppPostCondition()
 {
     read_if_needed_();
     return _cpp_post_condition;
@@ -52,7 +52,7 @@ bool UmlBaseActivityAction::set_CppPostCondition(const char * v)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseActivityAction::javaPreCondition()
+const WrapperStr & UmlBaseActivityAction::javaPreCondition()
 {
     read_if_needed_();
     return _java_pre_condition;
@@ -63,7 +63,7 @@ bool UmlBaseActivityAction::set_JavaPreCondition(const char * v)
     return set_it_(_java_pre_condition, v, setJavaEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseActivityAction::javaPostCondition()
+const WrapperStr & UmlBaseActivityAction::javaPostCondition()
 {
     read_if_needed_();
     return _java_post_condition;
