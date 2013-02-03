@@ -35,6 +35,7 @@
 //Added by qt3to4:
 #include <Q3PtrList>
 #include <functional>
+#include <QSettings>
 
 #include "UmlOperation.h"
 #include "UmlSettings.h"
@@ -649,8 +650,13 @@ const char * UmlOperation::generate_body(QTextStream & fs,
     while (*p != '$')
         indent += *p++;
 
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    int compat = settings.value("Main/compatibility_save").toInt();
+
+    const char* actualPrefix = compat ? BodyPrefix : BodyPrefix2;
     if (preserve() && !isBodyGenerationForced())
-        fs << indent << BodyPrefix2 << s_id << '\n';
+        fs << indent << actualPrefix << s_id << '\n';
 
     if ((body != 0) && (*body != 0)) {
         // output body
@@ -696,7 +702,13 @@ const char * UmlOperation::generate_body(QTextStream & fs,
         if (add_nl)
             fs << '\n';
 
-        fs << indent << BodyPostfix2 << s_id << '\n';
+        QSettings settings("settings.ini", QSettings::IniFormat);
+        settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+        int compat = settings.value("Main/compatibility_save").toInt();
+
+        const char* actualPostfix = compat ? BodyPostfix : BodyPostfix2;
+
+        fs << indent << actualPostfix << s_id << '\n';
     }
 
     return p + 7;

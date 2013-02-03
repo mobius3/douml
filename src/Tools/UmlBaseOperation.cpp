@@ -6,10 +6,32 @@
 #include "UmlCom.h"
 #include "UmlBaseClass.h"
 #include "UmlClassMember.h"
-#include "misc/myio.h"
+//#include "misc/myio.h"
 //Added by qt3to4:
 #include <Q3CString>
 #include <Q3ValueList>
+
+#include <QFileInfo>
+#include <QSettings>
+
+
+unsigned api_format(bool useTrueFormat)
+{
+    QFileInfo info("settings.ini");
+    bool test = info.exists();
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    int compat = settings.value("Main/compatibility_save").toInt();
+    //int compat = 0;
+    if((compat != 1) || useTrueFormat)
+    {
+        int fileFormat = settings.value("Main/fileformat").toInt();
+        return fileFormat;
+    }
+    else
+        return 75;
+}
+
 UmlOperation * UmlBaseOperation::create(UmlClass * parent, const char * s)
 {
     return (UmlOperation *) parent->create_(anOperation, s);
@@ -859,7 +881,7 @@ void UmlBaseOperation::read_cpp_()
     _cpp_virtual = UmlCom::read_bool();
     _cpp_inline = UmlCom::read_bool();
 
-    if(api_format() > 76)
+    if(api_format(true) > 76)
     {
         _cpp_default = UmlCom::read_bool();
         _cpp_delete = UmlCom::read_bool();

@@ -3687,14 +3687,7 @@ void OperationData::read(char *& st, char *& k)
     unsigned n = read_unsigned(st);
     set_n_params(n);
 
-
-    QFileInfo info("settings.ini");
-    bool test = info.exists();
-    QSettings settings("settings.ini", QSettings::IniFormat);
-    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-    int compat = settings.value("Main/compatibility_save").toInt();
-
-    if(read_file_format() > 76 && !compat)
+    if(read_file_format() > 76)
     {
         read_keyword(st, "origin");
         set_origin_class(WrapperStr(read_string(st)));

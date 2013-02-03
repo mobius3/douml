@@ -1474,7 +1474,7 @@ LineGeometry line_geometry(const char * s)
 
 void set_read_file_format(unsigned u)
 {
-    if(api_format() == 75)
+    if(api_format(true) == 75)
         u = 75;
     Context.read_file_format = u;
 }
