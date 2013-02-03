@@ -1399,8 +1399,8 @@ void OperationDialog::cpp_default_decl()
 {
     if (oper->is_get_or_set)
     {
-        Q3CString decl;
-        Q3CString def;
+        WrapperStr decl;
+        WrapperStr def;
 
         if (get_of_attr != 0)
             oper->update_cpp_get_of(decl, def, get_of_attr->get_browser_node()->get_name(),
@@ -1956,8 +1956,8 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
 void OperationDialog::cpp_default_def()
 {
     if (oper->is_get_or_set) {
-        Q3CString decl;
-        Q3CString def;
+        WrapperStr decl;
+        WrapperStr def;
 
         if (get_of_attr != 0)
             oper->update_cpp_get_of(decl, def, get_of_attr->get_browser_node()->get_name(),
@@ -2488,7 +2488,7 @@ void OperationDialog::manage_java_exceptions(QString & s)
 void OperationDialog::java_default_def()
 {
     if (oper->is_get_or_set) {
-        Q3CString def;
+        WrapperStr def;
 
         if (get_of_attr != 0)
             oper->update_java_get_of(def, get_of_attr->get_browser_node()->get_name(),
@@ -2894,7 +2894,7 @@ void OperationDialog::manage_php_type(unsigned rank, QString & s)
 void OperationDialog::php_default_def()
 {
     if (oper->is_get_or_set) {
-        Q3CString def;
+        WrapperStr def;
 
         if (get_of_attr != 0)
             oper->update_php_get_of(def, get_of_attr->get_browser_node()->get_name(),
@@ -3533,7 +3533,7 @@ void OperationDialog::manage_python_type(unsigned rank, QString & s, bool in_par
 void OperationDialog::python_default_def()
 {
     if (oper->is_get_or_set) {
-        Q3CString def;
+        WrapperStr def;
 
         if (get_of_attr != 0)
             oper->update_python_get_of(def, get_of_attr->get_browser_node()->get_name(),
@@ -4053,7 +4053,7 @@ void OperationDialog::manage_idl_exceptions(QString & s)
 void OperationDialog::idl_default_def()
 {
     if (oper->is_get_or_set) {
-        Q3CString decl;
+        WrapperStr decl;
 
         if (get_of_attr != 0)
             oper->update_idl_get_of(decl, get_of_attr->get_idldecl(),

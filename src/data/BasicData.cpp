@@ -33,7 +33,7 @@
 #include "ToolCom.h"
 #include "mu.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -123,7 +123,7 @@ bool BasicData::set_stereotype(const QString & s)
     return result;
 }
 
-bool BasicData::set_stereotype(const Q3CString & s)
+bool BasicData::set_stereotype(const WrapperStr & s)
 {
     bool result = ((const char *) stereotype != s);
 

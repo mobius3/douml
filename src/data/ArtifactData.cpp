@@ -30,7 +30,7 @@
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 
 #include "ArtifactData.h"
@@ -390,7 +390,7 @@ void ArtifactData::convert_add_include_artifact()
         int index = cpp_src.find("#include \"UmlComponent.h\"");
 
         if (index != -1) {
-            Q3CString s = cpp_src.WrapperStr::operator Q3CString();
+            WrapperStr s = cpp_src;
 
             s.insert(index, "#include \"UmlArtifact.h\"\n");
             cpp_src = s;
@@ -484,7 +484,7 @@ void ArtifactData::read(char *& st, char *& k)
 
         if (!strcmp(k, "cpp_src")) {
             // old -> new version
-            Q3CString s = read_string(st);
+            WrapperStr s = read_string(st);
             int index;
 
             if ((index = s.find("${class_attributes}\n${operations}")) != -1)

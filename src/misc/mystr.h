@@ -53,6 +53,9 @@ public:
     WrapperStr(const QString & other) {
         this->wrappedString = other;
     }
+    WrapperStr(const QByteArray & other) {
+        this->wrappedString = QString(other);
+    }
     WrapperStr(const char* other) {
         this->wrappedString = QString(other);
     }
@@ -145,12 +148,12 @@ public:
     friend bool operator!=(const WrapperStr & s1, const WrapperStr & s2);
     friend bool operator!=(const QString & s1, const WrapperStr & s2);
 
-    friend QString operator+(const WrapperStr & s1, const char * s2);
-    friend QString operator+(const WrapperStr & s1, const WrapperStr & s2);
+    friend WrapperStr operator+(const WrapperStr & s1, const char * s2);
+    friend WrapperStr operator+(const WrapperStr & s1, const WrapperStr & s2);
     //friend QString operator+(const WrapperStr & s1, const char * s2);
-    friend QString operator+(const char * s1, const WrapperStr & s2);
-    friend QString operator+(const WrapperStr & s1, const QString & s2);
-    friend QString operator+(const QString & s1, const WrapperStr & s2);
+    friend WrapperStr operator+(const char * s1, const WrapperStr & s2);
+    friend WrapperStr operator+(const WrapperStr & s1, const QString & s2);
+    friend WrapperStr operator+(const QString & s1, const WrapperStr & s2);
     friend QTextStream & operator<<(QTextStream & ds, const WrapperStr &str);
 
     void assign(const char * c, int len) {
@@ -234,11 +237,11 @@ bool operator!=(const char * s1, const WrapperStr & s2);
 bool operator!=(const WrapperStr & s1, const QString & s2);
 bool operator!=(const WrapperStr & s1, const WrapperStr & s2);
 bool operator!=(const QString & s1, const WrapperStr & s2);
-QString operator+(const WrapperStr & s1, const char * s2);
-QString operator+(const WrapperStr & s1, const WrapperStr& s2);
-QString operator+(const char * s1, const WrapperStr & s2);
-QString operator+(const WrapperStr & s1, const QString & s2);
-QString operator+(const QString & s1, const WrapperStr & s2);
+WrapperStr operator+(const WrapperStr & s1, const char * s2);
+WrapperStr operator+(const WrapperStr & s1, const WrapperStr& s2);
+WrapperStr operator+(const char * s1, const WrapperStr & s2);
+WrapperStr operator+(const WrapperStr & s1, const QString & s2);
+WrapperStr operator+(const QString & s1, const WrapperStr & s2);
 QTextStream & operator<<(QTextStream & ds, const WrapperStr &str);
 
 

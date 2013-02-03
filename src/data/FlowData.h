@@ -31,7 +31,7 @@
 #include "UmlEnum.h"
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class QTextStream;
 
@@ -44,8 +44,8 @@ struct FlowDef {
     InfoData sel_trans;
 
     QString str(bool horiz) const;
-    void save(QTextStream & st, Q3CString lang) const;
-    void read(char *& st, char *& k, Q3CString lang);
+    void save(QTextStream & st, WrapperStr lang) const;
+    void read(char *& st, char *& k, WrapperStr lang);
 
     void send_def(ToolCom * com);
 };

@@ -30,7 +30,7 @@
 #include <QTextStream>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "FlowData.h"
 #include "BrowserFlow.h"
@@ -294,7 +294,7 @@ void FlowDef::send_def(ToolCom * com)
     sel_trans.send_def(com);
 }
 
-void FlowDef::save(QTextStream & st, Q3CString lang) const
+void FlowDef::save(QTextStream & st, WrapperStr lang) const
 {
     indent(+1);
 
@@ -315,7 +315,7 @@ void FlowDef::save(QTextStream & st, Q3CString lang) const
     indent(-1);
 }
 
-void FlowDef::read(char *& st, char *& k, Q3CString lang)
+void FlowDef::read(char *& st, char *& k, WrapperStr lang)
 {
     int ln = strlen(lang);
 

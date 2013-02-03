@@ -31,7 +31,7 @@
 #include <qfile.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "OperationData.h"
 #include "ClassData.h"
@@ -593,7 +593,7 @@ QString OperationData::definition(bool full, bool with_kind) const
     QString stereot = browser_node->get_stype();
     QString definit1 =  definition(full, TRUE, TRUE, DefaultShowContextMode);
     QString definit2 =  definition(full, TRUE, TRUE, DefaultShowContextMode);
-    return (with_kind) ? "[" + stereotype + "] " + definit1 : definit2;
+    return (with_kind) ? ("[" + stereotype + "] " + definit1).operator QString() : definit2;
 }
 
 QString OperationData::definition(bool full, bool withdir,
@@ -894,7 +894,7 @@ void OperationData::copy_getset(const OperationData * model)
     idl_name_spec = model->idl_name_spec;
 }
 
-void OperationData::update_cpp_get_of(Q3CString & decl, Q3CString & def,
+void OperationData::update_cpp_get_of(WrapperStr & decl, WrapperStr & def,
                                       const QString & attr_name,
                                       QString attcpp_decl, bool attis_const,
                                       QString multiplicity, bool isStatic)
@@ -998,7 +998,7 @@ void OperationData::update_cpp_get_of(Q3CString & decl, Q3CString & def,
             type_spec_oper_name.replace(index, 7, (has_multiplicity) ? "(* $$" : "$$");
         }
 
-        Q3CString d = (const char *) GenerationSettings::cpp_default_oper_decl();
+        WrapperStr d = (const char *) GenerationSettings::cpp_default_oper_decl();
 
         if (((index = d.find("${type}")) != -1) &&
             ((index2 = d.find("${name}", index + 1)) != -1)) {
@@ -1079,7 +1079,7 @@ void OperationData::update_cpp_get_of(Q3CString & decl, Q3CString & def,
     }
 }
 
-void OperationData::update_java_get_of(Q3CString & def, const QString & attr_name,
+void OperationData::update_java_get_of(WrapperStr & def, const QString & attr_name,
                                        QString attjava_decl, QString multiplicity)
 {
     remove_comments(attjava_decl);
@@ -1126,7 +1126,7 @@ void OperationData::update_java_get_of(Q3CString & def, const QString & attr_nam
         def = "";
     else {
         int index2;
-        Q3CString d = (const char *) GenerationSettings::java_default_oper_def();
+        WrapperStr d = (const char *) GenerationSettings::java_default_oper_def();
         QString type_spec_name = attjava_decl;
 
         type_spec_name.replace(type_spec_name.find(attr_name_spec),
@@ -1164,7 +1164,7 @@ void OperationData::update_java_get_of(Q3CString & def, const QString & attr_nam
     }
 }
 
-void OperationData::update_php_get_of(Q3CString & def, const QString & attr_name,
+void OperationData::update_php_get_of(WrapperStr & def, const QString & attr_name,
                                       QString attphp_decl)
 {
     remove_comments(attphp_decl);
@@ -1201,7 +1201,7 @@ void OperationData::update_php_get_of(Q3CString & def, const QString & attr_name
     if (attr_name_spec.isEmpty())
         def = "";
     else {
-        Q3CString d = (const char *) GenerationSettings::php_default_oper_def();
+        WrapperStr d = (const char *) GenerationSettings::php_default_oper_def();
         QString type_spec_name = attphp_decl;
 
         type_spec_name.replace(type_spec_name.find(attr_name_spec),
@@ -1235,7 +1235,7 @@ void OperationData::update_php_get_of(Q3CString & def, const QString & attr_name
     }
 }
 
-void OperationData::update_python_get_of(Q3CString & def, const QString & attr_name,
+void OperationData::update_python_get_of(WrapperStr & def, const QString & attr_name,
         QString attpython_decl, bool attis_class_member)
 {
     remove_python_comments(attpython_decl);
@@ -1274,7 +1274,7 @@ void OperationData::update_python_get_of(Q3CString & def, const QString & attr_n
     if (attr_name_spec.isEmpty())
         def = "";
     else {
-        Q3CString d = (const char *) GenerationSettings::python_default_oper_def();
+        WrapperStr d = (const char *) GenerationSettings::python_default_oper_def();
         QString type_spec_name = attpython_decl;
 
         type_spec_name.replace(type_spec_name.find(attr_name_spec),
@@ -1307,7 +1307,7 @@ void OperationData::update_python_get_of(Q3CString & def, const QString & attr_n
     }
 }
 
-void OperationData::update_idl_get_of(Q3CString & decl, QString attidl_decl,
+void OperationData::update_idl_get_of(WrapperStr & decl, QString attidl_decl,
                                       QString multiplicity)
 {
     remove_comments(attidl_decl);
@@ -1348,7 +1348,7 @@ void OperationData::update_idl_get_of(Q3CString & decl, QString attidl_decl,
     if (attr_name_spec.isEmpty())
         decl = 0;
     else {
-        Q3CString d = (const char *) GenerationSettings::idl_default_oper_decl();
+        WrapperStr d = (const char *) GenerationSettings::idl_default_oper_decl();
         int index2;
         QString mult;
         QString type_spec_name = attidl_decl;
@@ -1390,8 +1390,8 @@ void OperationData::update_get_of(const QString & attr_name,
         force_body_gen = TRUE;
 
     QString st = ((BrowserClass *) browser_node->parent())->get_stereotype();
-    Q3CString decl;
-    Q3CString def;
+    WrapperStr decl;
+    WrapperStr def;
 
     // C++
 
@@ -1489,18 +1489,18 @@ void OperationData::update_get_of(const QString & attr_name,
     }
 }
 
-static Q3CString cpp_copy(const Q3CString attr_full_name, const Q3CString param_name,
-                          Q3CString multiplicity, const Q3CString elt_type,
-                          Q3CString indent)
+static WrapperStr cpp_copy(const WrapperStr attr_full_name, const WrapperStr param_name,
+                          WrapperStr multiplicity, const WrapperStr elt_type,
+                          WrapperStr indent)
 {
     int var_index = elt_type.find("$$");
 
     // note : param name is value or new_value
-    Q3CString src_pfix;
-    Q3CString tgt_pfix;
-    Q3CString index_pfix;
+    WrapperStr src_pfix;
+    WrapperStr tgt_pfix;
+    WrapperStr index_pfix;
 
-    Q3CString s4 = attr_full_name.left(4);
+    WrapperStr s4 = attr_full_name.left(4);
 
     if ((s4 == "src_") || (s4 == "tgt_") || (s4 == "pos_")) {
         src_pfix = "src";
@@ -1513,11 +1513,11 @@ static Q3CString cpp_copy(const Q3CString attr_full_name, const Q3CString param_
         index_pfix = "pos_";
     }
 
-    Q3CString r;
-    Q3CString srank;
-    Q3CString close;
-    Q3CString src_prev = param_name;
-    Q3CString tgt_prev = attr_full_name;
+    WrapperStr r;
+    WrapperStr srank;
+    WrapperStr close;
+    WrapperStr src_prev = param_name;
+    WrapperStr tgt_prev = attr_full_name;
     int rank = 0;
 
     do {
@@ -1525,13 +1525,13 @@ static Q3CString cpp_copy(const Q3CString attr_full_name, const Q3CString param_
 
         if ((*((const char *) multiplicity) != '[') ||
             ((index = multiplicity.find("]")) == -1))
-            return "#error invalid multiplicity part \"" + Q3CString(multiplicity) + "\"\n";
+            return "#error invalid multiplicity part \"" + WrapperStr(multiplicity) + "\"\n";
 
-        Q3CString n = "(" + multiplicity.mid(1, index - 1) + ")";
+        WrapperStr n = "(" + multiplicity.mid(1, index - 1) + ")";
 
         multiplicity = multiplicity.mid(index + 1).stripWhiteSpace();
 
-        Q3CString s;
+        WrapperStr s;
 
         srank.setNum(rank);
 
@@ -1563,7 +1563,7 @@ static Q3CString cpp_copy(const Q3CString attr_full_name, const Q3CString param_
     return r;
 }
 
-void OperationData::update_cpp_set_of(Q3CString & decl, Q3CString & def,
+void OperationData::update_cpp_set_of(WrapperStr & decl, WrapperStr & def,
                                       const QString & attr_name,
                                       QString attcpp_decl, bool attis_const,
                                       QString multiplicity)
@@ -1658,7 +1658,7 @@ void OperationData::update_cpp_set_of(Q3CString & decl, Q3CString & def,
                 elt_type.remove(index, 8);
         }
 
-        Q3CString d = (const char *) GenerationSettings::cpp_default_oper_decl();
+        WrapperStr d = (const char *) GenerationSettings::cpp_default_oper_decl();
 
         if ((index = d.find("${)}")) != -1) {
             d.insert(index, (const char *) arg_spec);
@@ -1684,7 +1684,7 @@ void OperationData::update_cpp_set_of(Q3CString & decl, Q3CString & def,
                 attr_full_name.replace(index, 7, attr_name);
 
             if ((index = d.find("${body}")) != -1) {
-                QString indent;
+                WrapperStr indent;
 
                 if (has_multiplicity) {
                     if (d[index - 1] == '\n')
@@ -1722,16 +1722,16 @@ void OperationData::update_cpp_set_of(Q3CString & decl, Q3CString & def,
 
 
                     QByteArray indent_array;
-                    indent_array = indent.toLatin1();
+                    indent_array = indent.operator QString().toLatin1();
                     const char * c_indent = indent_array.data();
 
                     d.replace(index, 7,
                               cpp_copy(
-                                  Q3CString(c_attr_full_name),
+                                  WrapperStr(c_attr_full_name),
                                   params[0].get_name(),
-                                  Q3CString(c_multiplicity),
-                                  Q3CString(c_elt_type),
-                                  Q3CString(c_indent)));
+                                  WrapperStr(c_multiplicity),
+                                  WrapperStr(c_elt_type),
+                                  WrapperStr(c_indent)));
                 }
                 else {
                     if (d[index - 1] == '\n')
@@ -1751,7 +1751,7 @@ void OperationData::update_cpp_set_of(Q3CString & decl, Q3CString & def,
     }
 }
 
-void OperationData::update_java_set_of(Q3CString & def, const QString & attr_name,
+void OperationData::update_java_set_of(WrapperStr & def, const QString & attr_name,
                                        QString attjava_decl, QString multiplicity)
 {
     remove_comments(attjava_decl);
@@ -1812,7 +1812,7 @@ void OperationData::update_java_set_of(Q3CString & def, const QString & attr_nam
                 arg_spec.remove(index, 8);
         }
 
-        Q3CString d = (const char *) GenerationSettings::java_default_oper_def();
+        WrapperStr d = (const char *) GenerationSettings::java_default_oper_def();
 
         if ((index = d.find("${)}")) != -1) {
             d.insert(index, (const char *) arg_spec);
@@ -1844,7 +1844,7 @@ void OperationData::update_java_set_of(Q3CString & def, const QString & attr_nam
     }
 }
 
-void OperationData::update_php_set_of(Q3CString & def,
+void OperationData::update_php_set_of(WrapperStr & def,
                                       const QString & attr_name,
                                       QString attphp_decl)
 {
@@ -1891,7 +1891,7 @@ void OperationData::update_php_set_of(Q3CString & def,
             arg_spec.remove(index, 8);
         }
 
-        Q3CString d = (const char *) GenerationSettings::php_default_oper_def();
+        WrapperStr d = (const char *) GenerationSettings::php_default_oper_def();
 
         if ((index = d.find("${)}")) != -1) {
             d.insert(index, (const char *) arg_spec);
@@ -1920,7 +1920,7 @@ void OperationData::update_php_set_of(Q3CString & def,
     }
 }
 
-void OperationData::update_python_set_of(Q3CString & def,
+void OperationData::update_python_set_of(WrapperStr & def,
         const QString & attr_name,
         QString attpython_decl,
         bool attis_class_member)
@@ -1966,7 +1966,7 @@ void OperationData::update_python_set_of(Q3CString & def,
         arg_spec.replace(arg_spec.find(attr_name_spec),
                          attr_name_spec.length(), "${p0}");
 
-        Q3CString d = (const char *) GenerationSettings::python_default_oper_def();
+        WrapperStr d = (const char *) GenerationSettings::python_default_oper_def();
 
         if ((index = d.find("${)}")) != -1) {
             if (! attis_class_member) {
@@ -1998,7 +1998,7 @@ void OperationData::update_python_set_of(Q3CString & def,
     }
 }
 
-void OperationData::update_idl_set_of(Q3CString & decl, QString attidl_decl,
+void OperationData::update_idl_set_of(WrapperStr & decl, QString attidl_decl,
                                       QString multiplicity)
 {
     remove_comments(attidl_decl);
@@ -2048,7 +2048,7 @@ void OperationData::update_idl_set_of(Q3CString & decl, QString attidl_decl,
         if ((index = arg_spec.find("${type}")) != -1)
             arg_spec.replace(index, 7, "${t0}");
 
-        Q3CString d = (const char *) GenerationSettings::idl_default_oper_decl();
+        WrapperStr d = (const char *) GenerationSettings::idl_default_oper_decl();
 
         if ((index = d.find("${)}")) == -1)
             decl = 0;
@@ -2091,8 +2091,8 @@ void OperationData::update_set_of(const QString & attr_name,
         force_body_gen = TRUE;
 
     QString st = ((BrowserClass *) browser_node->parent())->get_stereotype();
-    Q3CString decl;
-    Q3CString def;
+    WrapperStr decl;
+    WrapperStr def;
 
     // C++
     if (!cpp_get_set_frozen) {
@@ -2400,7 +2400,7 @@ void OperationData::convert(OperationData * comp, OperationData * art)
     // in the UmlArtifact contructor
 
     int index;
-    Q3CString s = art->cpp_decl;
+    WrapperStr s = art->cpp_decl;
 
     if ((index = s.find("UmlBaseComponent")) != -1) {
         s.replace(index + 7, 9, "Artifact");
@@ -2571,7 +2571,7 @@ bool OperationData::tool_cmd(ToolCom * com, const char * args,
             break;
 
             case setJavaAnnotationCmd: {
-                Q3CString s = args;
+                WrapperStr s = args;
 
                 s = s.stripWhiteSpace();
 
@@ -2698,8 +2698,8 @@ bool OperationData::tool_cmd(ToolCom * com, const char * args,
                     return TRUE;
                 }
 
-                Q3CString name = com->get_string(args);
-                Q3CString dflt = com->get_string(args);
+                WrapperStr name = com->get_string(args);
+                WrapperStr dflt = com->get_string(args);
                 AType t;
                 ParamData * new_params = new ParamData[nparams + 1];
                 unsigned index;
@@ -2736,8 +2736,8 @@ bool OperationData::tool_cmd(ToolCom * com, const char * args,
                     return TRUE;
                 }
 
-                Q3CString name = com->get_string(args);
-                Q3CString dflt = com->get_string(args);
+                WrapperStr name = com->get_string(args);
+                WrapperStr dflt = com->get_string(args);
                 AType t;
 
                 com->get_type(t, args);

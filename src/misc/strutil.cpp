@@ -506,7 +506,7 @@ void latinize(QString & s)
     }
 }
 
-Q3CString fromUnicode(const QString & s)
+WrapperStr fromUnicode(const QString & s)
 {
     if (Codec == 0) {
         QString str = s;
@@ -514,12 +514,12 @@ Q3CString fromUnicode(const QString & s)
         latinize(str);
         QByteArray ba = str.toLatin1();
         const char * retTemp = ba.data();
-        return Q3CString(retTemp); //[lgfreitas] that nasty trick
+        return retTemp; //[lgfreitas] that nasty trick
     }
     else if (s.isEmpty())	// fromUnicode crash if null string
         return "";
     else
-        return Codec->fromUnicode(s);
+        return WrapperStr(Codec->fromUnicode(s));
 }
 
 //

@@ -30,7 +30,7 @@
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -643,7 +643,7 @@ bool ClassData::tool_cmd(ToolCom * com, const char * args,
                 break;
 
             case setJavaAnnotationCmd: {
-                Q3CString s = args;
+                WrapperStr s = args;
 
                 s = s.stripWhiteSpace();
 

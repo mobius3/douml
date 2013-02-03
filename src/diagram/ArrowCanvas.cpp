@@ -2274,7 +2274,7 @@ void ArrowCanvas::write_uc_rel(ToolCom * com) const
 
     search_supports(plabel, pstereotype);
 
-    Q3CString s;
+    WrapperStr s;
 
     if (plabel == 0)
         com->write_string("");

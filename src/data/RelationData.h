@@ -31,7 +31,7 @@
 #include "AType.h"
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -152,7 +152,7 @@ public:
     void set_name(const QString &);
     virtual QString definition(bool full, bool with_kind) const;
     virtual bool set_stereotype(const QString &);
-    virtual bool set_stereotype(const Q3CString &);
+    virtual bool set_stereotype(const WrapperStr &);
     virtual bool set_stereotype(const char *);
 
     virtual bool decldefbody_contain(const QString & s, bool cs, BrowserNode *);

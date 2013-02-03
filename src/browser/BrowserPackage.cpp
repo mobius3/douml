@@ -500,7 +500,7 @@ QString BrowserPackage::full_name(bool rev, bool) const
     else if (rev)
         return name + (FullPathPrefix + p + FullPathPostfix);
     else
-        full_path = p + (FullPathDotDot + name);
+        full_path = (p + (FullPathDotDot + name)).operator QString();
 
     return full_path;
 }

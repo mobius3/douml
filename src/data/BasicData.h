@@ -28,7 +28,7 @@
 
 #include <qobject.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -90,7 +90,7 @@ public:
     }
     const char * get_short_stereotype() const;
     virtual bool set_stereotype(const QString &);
-    virtual bool set_stereotype(const Q3CString &);
+    virtual bool set_stereotype(const WrapperStr &);
     virtual bool set_stereotype(const char *);
 
     virtual void set_browser_node(BrowserNode * bn);

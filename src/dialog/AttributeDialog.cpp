@@ -795,7 +795,8 @@ void AttributeDialog::accept()
 
             att->multiplicity = multiplicity->currentText().stripWhiteSpace();
 
-            newst = att->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+            WrapperStr tempStereo = fromUnicode(edstereotype->currentText().stripWhiteSpace());
+            newst = att->set_stereotype(tempStereo.operator const char *());
         }
 
         att->init_value = edinit->text();

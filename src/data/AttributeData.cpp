@@ -30,7 +30,7 @@
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "AttributeData.h"
 #include "BrowserClass.h"
@@ -534,14 +534,14 @@ bool AttributeData::tool_cmd(ToolCom * com, const char * args,
                 break;
 
             case setJavaAnnotationCmd: {
-                Q3CString s = args;
+                WrapperStr s = args;
 
                 s = s.stripWhiteSpace();
 
                 if (! s.isEmpty())
                     s += '\n';
 
-                java_annotation = QString(s);
+                java_annotation = s;
             }
             break;
 

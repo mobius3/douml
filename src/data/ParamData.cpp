@@ -61,7 +61,7 @@ void ParamData::set_default_value(const char * str)
 QString ParamData::definition(bool withdir, bool withname,
                               ShowContextMode mode) const
 {
-    QString t;
+    WrapperStr t;
 
     if (type.type == 0)
         t = (const char *) type.explicit_type;
@@ -69,7 +69,7 @@ QString ParamData::definition(bool withdir, bool withname,
         t = type.type->contextual_name(mode);
 
     if (withdir) {
-        QString r = stringify(dir) + QString(" ");
+        WrapperStr r = stringify(dir) + QString(" ");
 
         if (withname)
             r += name + " : ";

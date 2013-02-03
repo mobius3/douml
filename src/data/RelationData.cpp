@@ -30,7 +30,7 @@
 #include <QTextStream>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -378,7 +378,7 @@ QString RelationData::get_name(BrowserRelation * cl) const
     bool nameIsNotADefaultType = this->name != default_name(type);
 
     if (nameIsNotADefaultType)
-        result = "(" + this->name + ")";
+        result = ("(" + this->name + ")").operator QString();
     else
         result = this->name.operator QString();
 
@@ -389,7 +389,7 @@ QString RelationData::get_name(BrowserRelation * cl) const
 QString RelationData::definition(bool, bool with_kind) const
 {
     return (with_kind)
-           ? "[" + TR("relation") + "] " + this->name
+            ? ("[" + TR("relation") + "] " + this->name).operator QString()
            : this->name.WrapperStr::operator QString();
 }
 
@@ -450,7 +450,7 @@ bool RelationData::set_stereotype(const QString & s)
     return result;
 }
 
-bool RelationData::set_stereotype(const Q3CString & s)
+bool RelationData::set_stereotype(const WrapperStr & s)
 {
     bool result = ((const char *) stereotype != s);
 
@@ -1002,7 +1002,7 @@ bool RelationData::tool_cmd(ToolCom * com, BrowserRelation * rel,
                 break;
 
             case setJavaAnnotationCmd: {
-                Q3CString s = args;
+                WrapperStr s = args;
 
                 s = s.stripWhiteSpace();
 

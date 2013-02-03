@@ -37,6 +37,7 @@
 #include "DiagramCanvas.h"
 #include "MultipleDependency.h"
 #include "Settings.h"
+#include "misc/mystr.h"
 
 #define STATE_CANVAS_MIN_SIZE 40
 
@@ -53,7 +54,7 @@ protected:
     bool region_horizontally : 2;
     bool show_decomp_icon : 2;
     bool was_drawn : 2;
-    QString activities;
+    WrapperStr activities;
     int min_width;
     int min_height;
     Q3MemArray<QRect> regions_rect;	// from bottom to top / right to left

@@ -746,7 +746,7 @@ void FragmentCanvas::send(ToolCom * com, Q3CanvasItemList & all,
     FragmentCanvas * f;
 
     for (f = fragments.first(); f != 0; f = fragments.next()) {
-        Q3CString s = fromUnicode(f->name);
+        WrapperStr s = fromUnicode(f->name);
 
         com->write_string((const char *) s);
         com->write(f->rect());
