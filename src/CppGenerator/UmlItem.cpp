@@ -180,7 +180,7 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts)
     }
     else
         // bypass '$'
-        ts << *p++;
+        ts << toUtf(p);
 }
 
 void UmlItem::generate()

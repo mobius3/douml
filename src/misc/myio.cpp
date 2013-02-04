@@ -1882,10 +1882,10 @@ void save_string(const char * p, QTextStream & st)
 
                 // do NOT use writeRawBytes !
                 while (p != p2)
-                    st << *p++;
+                    st << toUtf(p);
 
                 st << '\\';
-                st << *p++;
+                st << toUtf(p);
 
                 if (*p == 0)
                     break;

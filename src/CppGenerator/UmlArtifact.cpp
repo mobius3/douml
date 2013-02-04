@@ -288,7 +288,7 @@ void UmlArtifact::generate()
                 }
                 else
                     // strange
-                    f_h << *p++;
+                    f_h << toUtf(p);
             }
 
             f_h << '\000';
@@ -410,7 +410,7 @@ void UmlArtifact::generate()
                 }
                 else
                     // strange
-                    f_src << *p++;
+                    f_src << toUtf(p);
             }
 
             f_src << '\000';

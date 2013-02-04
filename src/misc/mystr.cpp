@@ -43,7 +43,7 @@ bool operator==(const WrapperStr & s1, const char * s2)
 }
 bool operator==(const char * s1, const WrapperStr & s2)
 {
-    return s2.wrappedString == QString(QLatin1String(s2));
+    return s2.wrappedString == QString(QLatin1String(s1));
 }
 bool operator==(const WrapperStr & s1, const QString & s2)
 {
@@ -119,16 +119,7 @@ WrapperStr operator+(const QString & s1, const WrapperStr & s2)
 
 QTextStream & operator<<(QTextStream & ds, const WrapperStr &str)
 {
-    QLOG_INFO() << "Piping: " + str.wrappedString;
+    //QLOG_INFO() << "Piping: " + str.wrappedString;
     ds << QString::fromUtf8(str.operator const char *());
     return ds;
 }
-QString toUtf(const char*& p)
-{
-    QString temp1 = QString::fromUtf8(p).left(1);
-    int size = temp1.toUtf8().size();
-    p+=size;
-    return temp1;
-}
-//
-

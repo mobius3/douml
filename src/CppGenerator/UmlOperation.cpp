@@ -447,7 +447,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             std::function<bool(QString)> compareTagToBuffer = std::bind(CompareAgainstTag, std::ref(currentTag), std::placeholders::_1, p);
 
             if (*p == '\n') {
-                f_h << *p++;
+                f_h << toUtf(p);
 
                 if (*p && (*p != '#'))
                     f_h << indent;
@@ -593,7 +593,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             }
             else
                 // strange
-                f_h << *p++;
+                f_h << toUtf(p);
         }
 
         f_h << '\n';
@@ -797,7 +797,7 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
                 }
 
                 if (*p == '\n') {
-                    fs << *p++;
+                    fs << toUtf(p);
 
                     if (p == body_indent)
                         p = generate_body(fs, indent, p);
@@ -917,7 +917,7 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
                         UmlClass::write(fs, ((UmlRelation *) m)->association());
                 }
                 else
-                    fs << *p++;
+                    fs << toUtf(p);
             }
 
             fs << '\n';

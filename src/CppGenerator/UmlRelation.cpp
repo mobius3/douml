@@ -178,7 +178,7 @@ void UmlRelation::generate_inherit(const char *& sep, QTextStream & f_h,
             else if (*p == '@')
                 manage_alias(p, f_h);
             else
-                f_h << *p++;
+                f_h << toUtf(p);
         }
     }
 }
@@ -264,7 +264,7 @@ void UmlRelation::generate_decl(aVisibility & current_visibility, QTextStream & 
                 }
 
                 if (*p == '\n') {
-                    f_h << *p++;
+                    f_h << toUtf(p);
 
                     if (*p && (*p != '#'))
                         f_h << indent;
@@ -359,7 +359,7 @@ void UmlRelation::generate_decl(aVisibility & current_visibility, QTextStream & 
                 }
                 else
                     // strange
-                    f_h << *p++;
+                    f_h << toUtf(p);
             }
 
             f_h << '\n';
@@ -410,7 +410,7 @@ void UmlRelation::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
 
                 if (*p == '\n') {
-                    f << *p++;
+                    f << toUtf(p);
 
                     if (*p && (*p != '#'))
                         f << indent;
@@ -513,7 +513,7 @@ void UmlRelation::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
                 else
                     // strange
-                    f << *p++;
+                    f << toUtf(p);
             }
 
             f << '\n';

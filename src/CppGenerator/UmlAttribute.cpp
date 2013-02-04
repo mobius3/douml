@@ -131,7 +131,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         }
 
         if (*p == '\n') {
-            f_h << *p++;
+            f_h << toUtf(p);
 
             if (*p && (*p != '#'))
                 f_h << indent;
@@ -177,7 +177,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
                     f_h << " = ";
 
                 //f_h << QString::fromUtf8(defaultValue().operator const char *());
-                f_h << defaultValue();
+                f_h << defaultValue().operator const char *();
             }
 
             if (in_enum) {
@@ -198,7 +198,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         }
         else if (in_enum)
             // strange
-            f_h << *p++;
+            f_h << toUtf(p);
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
 
@@ -281,7 +281,7 @@ void UmlAttribute::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
 
                 if (*p == '\n') {
-                    f << *p++;
+                    f << toUtf(p);
 
                     if (*p && (*p != '#'))
                         f << indent;
@@ -368,7 +368,7 @@ void UmlAttribute::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
                 else
                     // strange
-                    f << *p++;
+                    f << toUtf(p);
             }
 
             f << '\n';

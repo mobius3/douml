@@ -205,7 +205,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
         }
 
         if (*p == '\n') {
-            f_h << *p++;
+            f_h << toUtf(p);
             bool isNotNull = *p;
             bool isNotGrid = *p != '#';
             bool isMembers = strncmp(p, "${members}", 10);
@@ -296,7 +296,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
             }
             else
                 // strange
-                f_h << *p++;
+                f_h << toUtf(p);
         }
         else if (! strncmp(p, "${template}", 11)) {
             p += 11;
@@ -395,7 +395,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
         }
         else
             // strange
-            f_h << *p++;
+            f_h << toUtf(p);
     }
 
     if (! removed)
