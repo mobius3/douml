@@ -385,7 +385,7 @@ void UmlBaseItem::read_uml_()
         _dict.insert(k, new QString(UmlCom::read_string()));
     }
 
-    _description = UmlCom::read_string();
+    _description = QString::fromUtf8(UmlCom::read_string());
 
     _marked = UmlCom::read_bool();
 

@@ -603,7 +603,7 @@ void PackageDialog::accept()
     pa->idl_dir = edidldir->text().simplifyWhiteSpace();
     pa->idl_module = edidlmodule->text().simplifyWhiteSpace();
 
-    bn->set_comment(comment->text());
+    bn->set_comment(comment->text().toLatin1().data());
     UmlWindow::update_comment_if_needed(bn);
 
     kvtable->updateNodeFromThis(bn);

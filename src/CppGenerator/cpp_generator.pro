@@ -1,5 +1,6 @@
 TEMPLATE      = app
 CONFIG          += qt warn_on debug
+QT += testlib
 SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
         UmlExtraClassMember.cpp UmlArtifact.cpp \
@@ -91,6 +92,7 @@ SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
         ../Tools/UmlBaseView.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
         ../misc/mystr.cpp \
+        #../misc/strutil.cpp \
     Logging/QsLogDest.cpp \
     Logging/QsLog.cpp \
     Logging/QsDebugOutput.cpp

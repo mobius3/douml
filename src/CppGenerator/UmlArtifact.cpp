@@ -155,6 +155,7 @@ void UmlArtifact::generate()
             //QTextStream f_h(file.data()); //[lgfreitas] Now QTextStream receives a pointer to a byte array...
             QSharedPointer<QByteArray> headerFile(new QByteArray());
             QTextStream f_h(headerFile.data(), QIODevice::WriteOnly);
+            f_h.setCodec(QTextCodec::codecForName("UTF-8"));
             //QString h_copy = QString(hdef.operator QString());
             const char * p = hdef;
             const char * pp = 0;

@@ -282,12 +282,12 @@ bool BrowserNode::delete_internal(QString & warning)
     return ok;
 }
 
-const char * BrowserNode::get_comment() const
+QString BrowserNode::get_comment() const
 {
     return comment;
 }
 
-void BrowserNode::set_comment(const char * c)
+void BrowserNode::set_comment(QString c)
 {
     comment = c;
 }
@@ -1738,7 +1738,7 @@ void BrowserNode::save(QTextStream & st) const
     if (! comment.isEmpty()) {
         nl_indent(st);
         st << "comment ";
-        save_string(comment, st);
+        save_string(comment.operator QString().toUtf8(), st);
     }
 }
 
@@ -1763,7 +1763,7 @@ void BrowserNode::read(char *& st, char *& k, int id)
     HaveKeyValueData::read(st, k);
 
     if (!strcmp(k, "comment")) {
-        comment = read_string(st);
+        comment = QString::fromUtf8(read_string(st));
         k = read_keyword(st);
     }
 
@@ -1945,8 +1945,8 @@ void BrowserNodeList::search(BrowserNode * bn, UmlCode k, const QString & s,
                   : (ch->get_type() == k))) &&
                 (s.isEmpty() ||
                  (QString((for_name)
-                          ? ch->get_name()
-                          : ((for_stereotype) ? ch->get_stereotype()
+                          ? QString(ch->get_name())
+                          : ((for_stereotype) ? QString(ch->get_stereotype())
                              : ch->get_comment()))
                   .find(s, 0, cs) != -1)))
                 append((BrowserNode *) child);

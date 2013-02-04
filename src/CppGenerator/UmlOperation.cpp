@@ -455,7 +455,12 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             else if (*p == '@')
                 manage_alias(p, f_h);
             else if (*p != '$')
-                f_h << *p++;
+            {
+                QString temp1 = QString::fromUtf8(p).left(1);
+                int size = temp1.toUtf8().size();
+                f_h << temp1;
+                p+=size;
+            }
             else if (!strncmp(p, "${comment}", 10))
                 manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
             else if (!strncmp(p, "${description}", 14))

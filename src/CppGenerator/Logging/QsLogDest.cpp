@@ -27,6 +27,7 @@
 #include "QsDebugOutput.h"
 #include <QFile>
 #include <QTextStream>
+#include <QTextCodec>
 #include <QString>
 
 namespace QsLogging
@@ -49,12 +50,14 @@ FileDestination::FileDestination(const QString & filePath)
 {
     mFile.setFileName(filePath);
     mFile.open(QFile::WriteOnly | QFile::Text);
+    mOutputStream.setCodec(QTextCodec::codecForName("UTF-8"));
     mOutputStream.setDevice(&mFile);
+
 }
 
 void FileDestination::write(const QString & message)
 {
-    mOutputStream << message << endl;
+    mOutputStream << message.toUtf8() << endl;
     mOutputStream.flush();
 }
 

@@ -120,7 +120,7 @@ WrapperStr operator+(const QString & s1, const WrapperStr & s2)
 QTextStream & operator<<(QTextStream & ds, const WrapperStr &str)
 {
     QLOG_INFO() << "Piping: " + str.wrappedString;
-    ds << Q3CString(str.wrappedString.toStdString().c_str());
+    ds << QString::fromUtf8(str.operator const char *());
     return ds;
 }
 //

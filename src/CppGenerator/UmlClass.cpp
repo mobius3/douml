@@ -251,7 +251,11 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
             }
             else
                 // strange
-                f_h << *p++;
+            {
+                QString tempStr(p[0]);
+                p++;
+                f_h << tempStr.toUtf8();
+            }
         }
         else if (an_enum) {
             if (!strncmp(p, "${items}", 8)) {

@@ -120,6 +120,8 @@ public:
     void write_id(BrowserNode * bn, char kind, const char * name);
     void write_id(void * id);
     void write_string(const char * p);
+    void write_string(QString str);
+    void write_string(WrapperStr str);
     void write_char(char c);
     void write(QRect r);
     void write_ack(bool);

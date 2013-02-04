@@ -29,6 +29,7 @@
 #include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
+#include <QTextCodec>
 
 #include "UmlAttribute.h"
 #include "UmlSettings.h"
@@ -36,6 +37,7 @@
 #include "UmlClass.h"
 #include "UmlCom.h"
 #include "util.h"
+//#include "misc/strutil.h"
 
 void UmlAttribute::compute_dependency(Q3PtrList<CppRefType> & dependency,
                                       const WrapperStr & cl_stereotype,
@@ -137,7 +139,12 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         else if (*p == '@')
             manage_alias(p, f_h);
         else if (*p != '$')
-            f_h << *p++;
+        {
+            QString temp1 = QString::fromUtf8(p).left(1);
+            int size = temp1.toUtf8().size();
+            f_h << temp1;
+            p+=size;
+        }
         else if (!strncmp(p, "${comment}", 10))
             manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
         else if (!strncmp(p, "${description}", 14))
@@ -169,6 +176,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
                 if (need_equal(pb, defaultValue()))
                     f_h << " = ";
 
+                //f_h << QString::fromUtf8(defaultValue().operator const char *());
                 f_h << defaultValue();
             }
 
@@ -222,7 +230,11 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         }
         else
             // strange
-            f_h << *p++;
+        {
+            QString temp(p[0]);
+            p++;
+            f_h << temp.toUtf8().data();
+        }
     }
 
     f_h << '\n';
@@ -287,7 +299,8 @@ void UmlAttribute::generate_def(QTextStream & f, WrapperStr indent, bool h,
                         && re_template)
                         f << templates;
                 }
-                else if (!strncmp(p, "${description}", 14)) {
+                else if (!strncmp(p, "${description}", 14))
+                {
                     if (!manage_description(p, pp) && re_template)
                         f << templates;
                 }

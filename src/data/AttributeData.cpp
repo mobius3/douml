@@ -680,11 +680,11 @@ void AttributeData::save(QTextStream & st, QString & warning) const
         st << "multiplicity ";
         save_string(multiplicity, st);
     }
-
+    QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     if (!init_value.isEmpty()) {
         nl_indent(st);
         st << "init_value ";
-        save_string(init_value, st);
+        save_string(codec->fromUnicode(init_value), st);
     }
 
     if (!constraint.isEmpty()) {
@@ -814,10 +814,11 @@ void AttributeData::read(char *& st, char *& k)
     }
     else
         multiplicity = 0;
-
+    QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     if (!strcmp(k, "init_value")) {
         init_value = read_string(st);
-        k = read_keyword(st);
+        QString temp =codec->toUnicode(read_keyword(st));
+        k = temp.toUtf8().data();
     }
     else
         init_value = QString();

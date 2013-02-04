@@ -191,7 +191,7 @@ bool BrowserRelation::undelete(bool, QString & warning, QString & renamed)
     return TRUE;
 }
 
-const char * BrowserRelation::get_comment() const
+QString BrowserRelation::get_comment() const
 {
     return (def->is_a(this))
            ? def->get_comment_a()

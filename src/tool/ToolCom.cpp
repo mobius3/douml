@@ -495,6 +495,17 @@ void ToolCom::write_id(BrowserNode * bn, char k, const char * s)
 #endif
 }
 
+void ToolCom::write_string(QString str)
+{
+    QByteArray ba = str.toUtf8();
+    const char* pointer = ba.constData();
+    write_string(pointer);
+}
+void ToolCom::write_string(WrapperStr str)
+{
+    write_string(str.operator QString());
+}
+
 void ToolCom::write_string(const char * p)
 {
     if (p == 0)

@@ -46,7 +46,8 @@ bool UmlItem::manage_comment(const char *& p, const char *& pp,
         description().isEmpty())
         return FALSE;
 
-    const char * comment = description();
+    QString temp = description();
+    const char * comment = description().operator QString().toUtf8();
 
     if (javadoc) {
         the_comment = "/**\n * ";
@@ -86,7 +87,7 @@ bool UmlItem::manage_comment(const char *& p, const char *& pp,
     }
 
     pp = p;
-    p = the_comment;
+    p = the_comment.toUtf8().data();
     return TRUE;
 }
 
@@ -112,7 +113,11 @@ bool UmlItem::manage_description(const char *& p, const char *& pp)
     }
 
     pp = p;
-    p = the_comment;
+    QString temp = the_comment.operator QString();
+    static QByteArray ba;
+    ba = temp.toUtf8();
+    p = ba.data();
+    temp =QString::fromUtf8(p);
     return TRUE;
 }
 
