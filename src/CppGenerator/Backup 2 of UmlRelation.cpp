@@ -272,12 +272,7 @@ void UmlRelation::generate_decl(aVisibility & current_visibility, QTextStream & 
                 else if (*p == '@')
                     manage_alias(p, f_h);
                 else if (*p != '$')
-                {
-                    QString temp1 = QString::fromUtf8(p).left(1);
-                    int size = temp1.toUtf8().size();
-                    f_h << temp1;
-                    p+=size;
-                }
+                    f_h << *p++;
                 else if (!strncmp(p, "${comment}", 10))
                     manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
                 else if (!strncmp(p, "${description}", 14))
@@ -417,17 +412,11 @@ void UmlRelation::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
                 else if (*p == '@')
                     manage_alias(p, f);
-                else if (*p != '$')
-                {
+                else if (*p != '$') {
                     if (p == pname)
                         f << cl_names << "::";
 
-                    {
-                        QString temp1 = QString::fromUtf8(p).left(1);
-                        int size = temp1.toUtf8().size();
-                        f << temp1;
-                        p+=size;
-                    }
+                    f << *p++;
                 }
                 else if (!strncmp(p, "${comment}", 10)) {
                     if (!manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment())

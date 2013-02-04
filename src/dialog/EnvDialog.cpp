@@ -481,27 +481,6 @@ void EnvDialog::editor_browse()
 static QString lang_file()
 {
     QString lang;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     lang = getenv("LANG");
 
     if ((lang.length() > 3) && (lang[2] == '_')) {

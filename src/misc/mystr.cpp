@@ -123,5 +123,12 @@ QTextStream & operator<<(QTextStream & ds, const WrapperStr &str)
     ds << QString::fromUtf8(str.operator const char *());
     return ds;
 }
+QString toUtf(const char*& p)
+{
+    QString temp1 = QString::fromUtf8(p).left(1);
+    int size = temp1.toUtf8().size();
+    p+=size;
+    return temp1;
+}
 //
 

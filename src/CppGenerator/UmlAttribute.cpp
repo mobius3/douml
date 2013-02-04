@@ -288,11 +288,17 @@ void UmlAttribute::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
                 else if (*p == '@')
                     manage_alias(p, f);
-                else if (*p != '$') {
+                else if (*p != '$')
+                {
                     if (p == pname)
                         f << cl_names << "::";
 
-                    f << *p++;
+                    {
+                        QString temp1 = QString::fromUtf8(p).left(1);
+                        int size = temp1.toUtf8().size();
+                        f << temp1;
+                        p+=size;
+                    }
                 }
                 else if (!strncmp(p, "${comment}", 10)) {
                     if (!manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment())

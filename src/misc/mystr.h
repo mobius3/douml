@@ -257,6 +257,6 @@ WrapperStr operator+(const char * s1, const WrapperStr & s2);
 WrapperStr operator+(const WrapperStr & s1, const QString & s2);
 WrapperStr operator+(const QString & s1, const WrapperStr & s2);
 QTextStream & operator<<(QTextStream & ds, const WrapperStr &str);
-
+inline QString toUtf(const char *&p);
 
 #endif
