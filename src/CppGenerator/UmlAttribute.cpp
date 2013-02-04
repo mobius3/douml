@@ -177,7 +177,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
                     f_h << " = ";
 
                 //f_h << QString::fromUtf8(defaultValue().operator const char *());
-                f_h << defaultValue().operator const char *();
+                f_h << defaultValue();
             }
 
             if (in_enum) {

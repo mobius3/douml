@@ -1864,7 +1864,14 @@ static QString where()
 }
 
 //
-
+void save_string(WrapperStr str, QTextStream & st)
+{
+    save_string(QString::fromUtf8(str.operator const char *()),st);
+}
+void save_string(QString str, QTextStream & st)
+{
+    save_string(str.toUtf8().constData(),st);
+}
 void save_string(const char * p, QTextStream & st)
 {
     if ((p == 0) || (*p == 0))

@@ -38,6 +38,7 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <Q3PtrCollection>
+#include <QRegExp>
 
 #include "BrowserView.h"
 #include "BrowserNode.h"
@@ -1326,7 +1327,10 @@ bool BrowserNode::wrong_child_name(const QString & s, UmlCode type,
 
     const char * str = s;
 
-    if (str != fromUnicode(s))
+    QRegExp rx("[^A-Za-z0-9]");
+    int pos = rx.indexIn(s);
+    bool hasIllegal = pos != -1;
+    if(hasIllegal)
         return true;
 
     if (allow_empty)
@@ -1375,7 +1379,7 @@ bool BrowserNode::wrong_child_name(const QString & s, UmlCode type,
 
     for (Q3ListViewItem * child = firstChild(); child; child = child->nextSibling())
         if (!((BrowserNode *) child)->deletedp() &&
-            ((BrowserNode *) child)->same_name(s, type))
+                ((BrowserNode *) child)->same_name(s, type) && ((BrowserNode *) child) != (BrowserNode *) listView()->currentItem())
             return TRUE;
 
     return FALSE;
@@ -1738,7 +1742,7 @@ void BrowserNode::save(QTextStream & st) const
     if (! comment.isEmpty()) {
         nl_indent(st);
         st << "comment ";
-        save_string(comment.operator QString().toUtf8(), st);
+        save_string(comment, st);
     }
 }
 
