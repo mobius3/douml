@@ -74,6 +74,7 @@ class BrowserNode : public Q3ListViewItem,
 protected:
     WrapperStr name;
     WrapperStr comment;
+    QByteArray tempBa;
     int original_id;	// from project library
     BooL is_new;	// backup file useless
     BooL is_deleted;
@@ -155,7 +156,7 @@ public:
         return ((BrowserNode *) parent())->get_type() == get_type();
     };
     virtual const char * get_comment() const;
-    virtual void set_comment(const char * c);
+    virtual void set_comment(QString c);
     const char * get_stereotype() const;
     virtual QString stereotypes_properties() const;
     bool may_contains(BrowserNode *, bool rec) const;

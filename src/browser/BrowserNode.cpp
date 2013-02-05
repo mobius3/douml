@@ -284,10 +284,10 @@ bool BrowserNode::delete_internal(QString & warning)
 
 const char * BrowserNode::get_comment() const
 {
-    return comment;
+    return comment.operator const char *();
 }
 
-void BrowserNode::set_comment(const char * c)
+void BrowserNode::set_comment(QString c)
 {
     comment = c;
 }
@@ -1763,7 +1763,7 @@ void BrowserNode::read(char *& st, char *& k, int id)
     HaveKeyValueData::read(st, k);
 
     if (!strcmp(k, "comment")) {
-        comment = read_string(st);
+        comment = QString(QTextCodec::codecForName(codec())->fromUnicode(read_string(st)));
         k = read_keyword(st);
     }
 
