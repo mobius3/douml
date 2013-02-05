@@ -109,8 +109,8 @@ BrowserObjectDiagram::~BrowserObjectDiagram()
         QFile::remove(d.absFilePath(fn));
     }
     on_close();
-    if(window)
-        window->set_browser_diagram(0);
+//    if(window)
+//        window->set_browser_diagram(0);
 
     all.remove(get_ident());
     delete def;
@@ -349,7 +349,7 @@ void BrowserObjectDiagram::apply_shortcut(QString s)
 
 void BrowserObjectDiagram::open(bool)
 {
-    if (window == 0)
+    if (window == 0 || windowDestroyed)
         window = new ObjectDiagramWindow(full_name(TRUE), this);
     else
         window->raise();

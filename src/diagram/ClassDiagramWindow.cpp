@@ -103,7 +103,7 @@ ClassDiagramWindow::ClassDiagramWindow(const QString & s, BrowserClassDiagram * 
     select->setToggleButton(TRUE);
     select->setOn(TRUE);
     current_button = UmlSelect;
-
+    b->set_diagram_window(this);
     addClass
         = new QToolButton(*classButton, TR("Add Class"), QString(),
                           this, SLOT(hit_class()), toolbar, "add class");
@@ -239,6 +239,8 @@ ClassDiagramWindow::~ClassDiagramWindow()
         if (!warning.isEmpty())
             warn(warning);
     }
+    if(browser_node)
+        browser_node->set_diagram_window(0);
 
 //  if(browser_node)
 //    browser_node->on_close();

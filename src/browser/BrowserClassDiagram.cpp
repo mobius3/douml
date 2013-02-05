@@ -108,10 +108,6 @@ BrowserClassDiagram::~BrowserClassDiagram()
 
         QFile::remove(d.absFilePath(fn));
     }
-
-//    if (window != 0)
-//        window->close();
-
     window = 0;
     all.remove(get_ident());
     delete def;
@@ -345,8 +341,11 @@ void BrowserClassDiagram::apply_shortcut(QString s)
 /* This will open a class diagram window */
 void BrowserClassDiagram::open(bool)
 {
-    if (window == 0)
+    if (window == 0 || windowDestroyed)
+    {
         window = new ClassDiagramWindow(full_name(TRUE), this);
+        windowDestroyed = false;
+    }
     else
         window->raise();
 

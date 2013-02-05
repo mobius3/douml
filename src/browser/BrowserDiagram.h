@@ -43,11 +43,13 @@ protected:
     CanvasFormat canvas_size;
 
     BrowserDiagram(int id);
+    bool windowDestroyed = false;
+
 
 public:
     BrowserDiagram(QString s, BrowserNode * parent, int id);
     virtual ~BrowserDiagram();
-
+    void set_window_destroyed(){ windowDestroyed = true;}
     virtual void package_modified();
     virtual void set_diagram_window(DiagramWindow*)
     {

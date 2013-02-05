@@ -361,7 +361,7 @@ void BrowserSeqDiagram::apply_shortcut(QString s)
 
 void BrowserSeqDiagram::open(bool)
 {
-    if (window == 0)
+    if (window == 0 || windowDestroyed)
         window = new SeqDiagramWindow(full_name(TRUE), this);
     else
         window->raise();

@@ -353,7 +353,7 @@ void BrowserActivityDiagram::apply_shortcut(QString s)
 
 void BrowserActivityDiagram::open(bool)
 {
-    if (window == 0)
+    if (window == 0 || windowDestroyed)
         window = new ActivityDiagramWindow(full_name(TRUE), this);
     else
         window->raise();

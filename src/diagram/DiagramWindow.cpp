@@ -85,6 +85,7 @@ DiagramWindow::DiagramWindow(BrowserDiagram * br, const QString & s)
 
 DiagramWindow::~DiagramWindow()
 {
+    browser_node->set_window_destroyed();
     delete canvas;
     setParent(0);
 }

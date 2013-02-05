@@ -343,7 +343,7 @@ void BrowserColDiagram::apply_shortcut(QString s)
 
 void BrowserColDiagram::open(bool)
 {
-    if (window == 0)
+    if (window == 0 || windowDestroyed)
         window = new ColDiagramWindow(full_name(TRUE), this);
     else
         window->raise();

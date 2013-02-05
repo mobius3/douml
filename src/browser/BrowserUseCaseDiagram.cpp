@@ -356,7 +356,7 @@ void BrowserUseCaseDiagram::apply_shortcut(QString s)
 
 void BrowserUseCaseDiagram::open(bool)
 {
-    if (window == 0)
+    if (window == 0 || windowDestroyed)
         window = new UseCaseDiagramWindow(full_name(TRUE), this);
     else
         window->raise();

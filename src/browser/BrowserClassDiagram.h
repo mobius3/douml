@@ -48,7 +48,7 @@ protected:
     static QStringList its_default_stereotypes;
 
     SimpleData * def;
-    ClassDiagramWindow * window;
+    ClassDiagramWindow* window;
     ClassDiagramSettings settings;
     ClassDiagramSettings * used_settings;
     UmlColor class_color;

@@ -344,7 +344,7 @@ void BrowserComponentDiagram::apply_shortcut(QString s)
 
 void BrowserComponentDiagram::open(bool)
 {
-    if (window == 0)
+    if (window == 0 || windowDestroyed)
         window = new ComponentDiagramWindow(full_name(TRUE), this);
     else
         window->raise();

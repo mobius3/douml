@@ -351,7 +351,7 @@ void BrowserStateDiagram::apply_shortcut(QString s)
 
 void BrowserStateDiagram::open(bool)
 {
-    if (window == 0)
+    if (window == 0 || windowDestroyed)
         window = new StateDiagramWindow(full_name(TRUE), this);
     else
         window->raise();

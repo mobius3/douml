@@ -347,7 +347,7 @@ void BrowserDeploymentDiagram::apply_shortcut(QString s)
 
 void BrowserDeploymentDiagram::open(bool)
 {
-    if (window == 0)
+    if (window == 0 || windowDestroyed)
         window = new DeploymentDiagramWindow(full_name(TRUE), this);
     else
         window->raise();
