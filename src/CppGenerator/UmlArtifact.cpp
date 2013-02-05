@@ -186,7 +186,7 @@ void UmlArtifact::generate()
                     QTextCodec* codec = QTextCodec::codecForLocale();
                     //f_h << codec->fromUnicode(*p,1);
                     //p++;
-                    f_h << *p++;
+                    f_h << toLocale(p);
                 }
                 else if (!strncmp(p, "${comment}", 10))
                     manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
@@ -291,7 +291,7 @@ void UmlArtifact::generate()
                 }
                 else
                     // strange
-                    f_h << *p++;
+                    f_h << toLocale(p);
             }
 
             f_h << '\000';
@@ -319,6 +319,7 @@ void UmlArtifact::generate()
                     out.setCodec(QTextCodec::codecForLocale());
                     QString temp(*headerFile.data());
                     out << codec->toUnicode(temp);
+                    //out << *headerFile.data();
                     out.flush();
                 }
             }
@@ -358,7 +359,7 @@ void UmlArtifact::generate()
                 if (*p == '@')
                     manage_alias(p, f_src);
                 else if (*p != '$')
-                    f_src << *p++;
+                    f_src << toLocale(p);
                 else if (!strncmp(p, "${comment}", 10))
                     manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
                 else if (!strncmp(p, "${description}", 14))
@@ -414,7 +415,7 @@ void UmlArtifact::generate()
                 }
                 else
                     // strange
-                    f_src << *p++;
+                    f_src << toLocale(p);
             }
 
             f_src << '\000';

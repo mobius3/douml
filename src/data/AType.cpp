@@ -117,3 +117,24 @@ void AType::read(char *& st, const char * t, const char * ex, const char * k)
     else
         wrong_keyword(k, QString(t) + '/' + ex);
 }
+bool operator==(const AType & s1, const AType & s2)
+{
+    bool typeResult = false;
+    if(!s1.type && !s2.type)
+        typeResult = true;
+    else if(s1.type != s2.type)
+    {
+        if(s1.type == nullptr)
+            return false;
+        else if(s2.type == nullptr)
+            return false;
+         typeResult = *s1.type->get_name() == *s2.type->get_name();
+    }
+
+
+    return s1.explicit_type == s2.explicit_type && typeResult;
+}
+bool operator!=(const AType & s1, const AType & s2)
+{
+    return !(s1==s2);
+}

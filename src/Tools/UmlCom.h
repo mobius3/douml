@@ -9,6 +9,7 @@
 #include "anItemKind.h"
 #include "aRelationKind.h"
 #include "misc/mystr.h"
+#include "misc/codec.h"
 
 #include <q3ptrvector.h>
 #include <qstring.h>

@@ -30,6 +30,7 @@
 #include <Q3CString>
 
 #include "UmlItem.h"
+#include "misc/codec.h"
 
 UmlItem::~UmlItem()
 {
@@ -176,7 +177,7 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts)
     }
     else
         // bypass '$'
-        ts << *p++;
+        ts << toLocale(p);
 }
 
 void UmlItem::generate()

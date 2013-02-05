@@ -282,6 +282,7 @@ protected:
     static void post_php_edit_body(OperationDialog * d, QString s);
 
     bool SaveData() override;
+    bool SaveData(OperationData* oper);
 
 public:
     OperationDialog(OperationData * a, DrawingLanguage l);

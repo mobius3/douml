@@ -27,6 +27,7 @@
 #define _UTIL_h
 
 #include "misc/mystr.h"
+#include "misc/codec.h"
 
 extern QString capitalize(const QString & s);
 extern WrapperStr capitalize(const WrapperStr & s);

@@ -297,28 +297,28 @@ bool UmlClassMember::insert_template(const char *& p, QTextStream & fs,
             return FALSE;
 
         if (*p == '\n') {
-            fs << *p++;
+            fs << toLocale(p);
 
             if (*p != '#')
                 fs << indent;
         }
 
         if (*p <= ' ')
-            fs << *p++;
+            fs << toLocale(p);
         else if (*p == '/') {
             if (p[1] == '/') {
                 // comment
-                fs << *p++;
+                fs << toLocale(p);
 
-                do fs << *p++;
+                do fs << toLocale(p);
 
                 while (*p && (*p != '\n'));
             }
             else if (p[1] == '*') {
                 /* comment */
-                fs << *p++;
+                fs << toLocale(p);
 
-                do fs << *p++;
+                do fs << toLocale(p);
 
                 while (*p && ((*p != '*') || (p[1] != '/')));
 
@@ -330,11 +330,11 @@ bool UmlClassMember::insert_template(const char *& p, QTextStream & fs,
         }
         else if (*p == '#') {
             do {
-                fs << *p++;
+                fs << toLocale(p);
 
                 if (*p == '\\') {
-                    fs << *p++;
-                    fs << *p++;
+                    fs << toLocale(p);
+                    fs << toLocale(p);
                 }
                 else if ((*p == '/') && (p[1] == '*')) {
                     /* comment */

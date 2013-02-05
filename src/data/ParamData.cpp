@@ -129,3 +129,15 @@ void ParamData::read(char *& st, char *& k)
         k = read_keyword(st);
     }
 }
+bool operator==(const ParamData & first, const ParamData & second)
+{
+    return first.name == second.name &&
+    first.dir == second.dir &&
+    first.type == second.type &&
+    first.default_value == second.default_value;
+}
+
+bool operator!=(const ParamData & first, const ParamData & second)
+{
+    return !(first == second);
+}

@@ -39,7 +39,7 @@ class AType
 {
 public:
     WrapperStr explicit_type;
-    BrowserClass * type;
+    BrowserClass * type = nullptr;
 
 public:
     AType() : type(0) {};
@@ -52,7 +52,10 @@ public:
               const char * t, const char * ex) const;
     void read(char *& st, const char * t, const char * ex);
     void read(char *& st, const char * t, const char * ex, const char * k);
+    friend bool operator==(const AType & s1, const AType & s2);
+    friend bool operator!=(const AType & s1, const AType & s2);
 };
-
+bool operator==(const AType & s1, const AType & s2);
+bool operator!=(const AType & s1, const AType & s2);
 #endif
 

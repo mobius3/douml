@@ -3223,13 +3223,18 @@ bool OperationDialog::SaveData()
     bool goBack = true;
     inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper, passedNodes, goBack);
     bool propagateThroughInheritance = false;
-    if(!inheritanceSiblings.isEmpty())
+    OperationData* operCopy = new OperationData(oper, (BrowserOperation*)oper->get_browser_node());
+
+    SaveData(operCopy);
+    bool equals = *oper == *operCopy;
+    bool newst = operCopy->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+    if(!inheritanceSiblings.isEmpty() && !equals)
     {
         // call messagebox to confirm propagation
         QMessageBox msg;
         msg.setWindowTitle(tr("Warning!"));
         msg.setText(tr("The Operation you are trying to change is\ninhertied from/to other classes.\n"
-                             "Do you want to propagate the changes to it\n through the inheritance tree?"));
+                       "Do you want to propagate the changes to it\n through the inheritance tree?"));
         QPushButton* above = msg.addButton(tr("Above"), QMessageBox::ActionRole);
         QPushButton* whole = msg.addButton(tr("Everywhere"), QMessageBox::ActionRole);
         QPushButton* dont = msg.addButton(tr("Do not propagate"), QMessageBox::ActionRole);
@@ -3255,8 +3260,35 @@ bool OperationDialog::SaveData()
             inheritanceSiblings.clear();
             inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper,passedNodes, goBack);
         }
-
     }
+    SaveData(oper);
+    // user
+    kvtable->updateNodeFromThis(oper->get_browser_node());
+
+    ProfiledStereotypes::modified(oper->get_browser_node(), newst);
+
+    oper->get_browser_node()->modified();
+    oper->get_browser_node()->package_modified();
+    oper->modified();
+
+    if(propagateThroughInheritance && !equals)
+    {
+        QList<const OperationData*> passed;
+        for(OperationData* siblingOper : inheritanceSiblings)
+        {
+            passed.append(oper);
+            siblingOper->PropagateFrom(oper, goBack, passed);
+            ProfiledStereotypes::modified(siblingOper->browser_node, newst);
+            siblingOper->browser_node->modified();
+            siblingOper->browser_node->package_modified();
+            siblingOper->modified();
+        }
+    }
+    return true;
+}
+
+bool OperationDialog::SaveData(OperationData *oper)
+{
 
     if (!check_edits(edits) || !kvtable->check_unique())
         return true;
@@ -3269,7 +3301,8 @@ bool OperationDialog::SaveData()
                 bn->allow_spaces(),
                 bn->allow_empty()))
         msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
-    else {
+    else
+    {
         bn->set_name(s);
 
         bool newst = FALSE;
@@ -3466,31 +3499,8 @@ bool OperationDialog::SaveData()
             oper->idl_decl = edidldecl->text();
         }
 
-        // user
 
-        kvtable->updateNodeFromThis(bn);
-
-        ProfiledStereotypes::modified(bn, newst);
-
-        bn->modified();
-        bn->package_modified();
-        oper->modified();
-
-        if(propagateThroughInheritance)
-        {
-            QList<const OperationData*> passed;
-            for(OperationData* siblingOper : inheritanceSiblings)
-            {
-                passed.append(oper);
-                siblingOper->PropagateFrom(oper, goBack, passed);
-                ProfiledStereotypes::modified(siblingOper->browser_node, newst);
-                siblingOper->browser_node->modified();
-                siblingOper->browser_node->package_modified();
-                siblingOper->modified();
-            }
-        }
     }
-    return true;
 }
 
 void OperationDialog::php_edit_param()

@@ -419,7 +419,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
         unsigned rank;
 
         while ((*p == ' ') || (*p == '\t'))
-            indent += *p++;
+            indent += toLocale(p);
 
         if (*p != '#')
             f_h << indent;
@@ -447,7 +447,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             std::function<bool(QString)> compareTagToBuffer = std::bind(CompareAgainstTag, std::ref(currentTag), std::placeholders::_1, p);
 
             if (*p == '\n') {
-                f_h << *p++;
+                f_h << toLocale(p);
 
                 if (*p && (*p != '#'))
                     f_h << indent;
@@ -455,7 +455,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             else if (*p == '@')
                 manage_alias(p, f_h);
             else if (*p != '$')
-                f_h << *p++;
+                f_h << toLocale(p);
             else if (!strncmp(p, "${comment}", 10))
                 manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
             else if (!strncmp(p, "${description}", 14))
@@ -588,7 +588,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             }
             else
                 // strange
-                f_h << *p++;
+                f_h << toLocale(p);
         }
 
         f_h << '\n';
@@ -648,7 +648,7 @@ const char * UmlOperation::generate_body(QTextStream & fs,
 
     // get keyword indent
     while (*p != '$')
-        indent += *p++;
+        indent += toLocale(p);
 
     QSettings settings("settings.ini", QSettings::IniFormat);
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
@@ -763,7 +763,7 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
 
             // manage old style indent
             while ((*p == ' ') || (*p == '\t'))
-                indent += *p++;
+                indent += toLocale(p);
 
             bool re_template = !templates.isEmpty() &&
                                insert_template(p, fs, indent,
@@ -792,7 +792,7 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
                 }
 
                 if (*p == '\n') {
-                    fs << *p++;
+                    fs << toLocale(p);
 
                     if (p == body_indent)
                         p = generate_body(fs, indent, p);
@@ -805,7 +805,7 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
                     if (p == body_indent)
                         p = generate_body(fs, indent, p);
                     else
-                        fs << *p++;
+                        fs << toLocale(p);
                 }
                 else if (!strncmp(p, "${comment}", 10)) {
                     if (!manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment())
@@ -906,7 +906,7 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
                         UmlClass::write(fs, ((UmlRelation *) m)->association());
                 }
                 else
-                    fs << *p++;
+                    fs << toLocale(p);
             }
 
             fs << '\n';
