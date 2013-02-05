@@ -424,7 +424,11 @@ void NoteCanvas::resize(const QSize & sz, bool w, bool h)
 
 void NoteCanvas::save_internal(QTextStream & st) const
 {
-    save_string(fromUnicode(note), st);
+    QTextCodec* codec = QTextCodec::codecForLocale();
+    QByteArray toWrite = codec->fromUnicode(note);
+    save_string(toWrite, st);
+
+    //save_string(temp1, st);
     nl_indent(st);
 
     if (itscolor != UmlDefaultColor)
@@ -454,7 +458,17 @@ void NoteCanvas::save(QTextStream & st, bool ref, QString &) const
 
 void NoteCanvas::read_internal(char *& st)
 {
-    note = toUnicode(read_string(st));
+    const char * p = st;
+    QTextCodec* codec = QTextCodec::codecForLocale();
+    QTextStream stream(p);
+    stream.setCodec(codec);
+    QString streamtest;
+    QByteArray ba;
+    stream   >> ba;
+    QString temp = QString::fromLocal8Bit(ba);
+    char* test = read_string(st);
+    note = temp;
+
 
     char * k = read_keyword(st);
     read_color(st, "color", itscolor, k);

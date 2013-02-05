@@ -187,6 +187,7 @@ void HaveKeyValueData::save(QTextStream & st) const
             st << "key ";
             save_string(keyvalues[i].get_key(), st);
             st << " value ";
+            qDebug() << keyvalues[i].get_value();
             save_string(keyvalues[i].get_value(), st);
         }
     }

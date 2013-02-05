@@ -29,6 +29,7 @@
 #include "DiagramCanvas.h"
 //Added by qt3to4:
 #include <QTextStream>
+#include "misc/mystr.h"
 
 #define NOTE_CANVAS_MIN_SIZE 35
 #define NOTE_MARGIN 10
@@ -42,7 +43,7 @@ protected:
     UmlColor itscolor;
     UmlColor used_color;
     UmlColor fg_c;
-    QString note;
+    WrapperStr note;
 
     void save_internal(QTextStream & st) const;
     void read_internal(char *& st);

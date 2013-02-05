@@ -33,6 +33,7 @@
 #include <Q3PointArray>
 #include <QSettings>
 #include <QSharedPointer>
+#include "misc/mystr.h"
 
 #define FILEFORMAT 77
 

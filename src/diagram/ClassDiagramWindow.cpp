@@ -239,8 +239,8 @@ ClassDiagramWindow::~ClassDiagramWindow()
         if (!warning.isEmpty())
             warn(warning);
     }
-    if(browser_node)
-        browser_node->set_diagram_window(0);
+//    if(browser_node)
+//        browser_node->set_diagram_window(0);
 
 //  if(browser_node)
 //    browser_node->on_close();

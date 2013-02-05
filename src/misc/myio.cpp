@@ -118,7 +118,7 @@ void set_on_load_diagram(bool y)
 
 const char * stringify(UmlVisibility v)
 {
-    QLOG_INFO() << "Call to stringigy detected";
+    //QLOG_INFO() << "Call to stringigy detected";
     switch (v) {
     case UmlPublic:
         return "public";
@@ -1883,13 +1883,22 @@ void save_string(const char * p, QTextStream & st)
                 // do NOT use writeRawBytes !
                 while (p != p2)
                 {
-                    st << QTextCodec::codecForLocale()->toUnicode(&p[0]);
-                    p++;
+
+                    QString temp1 = QTextCodec::codecForLocale()->toUnicode(p).left(1);
+                    int size = QTextCodec::codecForLocale()->fromUnicode(temp1).size();
+                    st << temp1;
+                    p+=size;
+
+
                 }
 
                 st << '\\';
-                st << QTextCodec::codecForLocale()->toUnicode(&p[0]);
-                p++;
+                QString temp1 = QTextCodec::codecForLocale()->toUnicode(p).left(1);
+                int size =  QTextCodec::codecForLocale()->fromUnicode(temp1).size();
+                p+=size;
+                st << temp1;
+
+
                 if (*p == 0)
                     break;
             }

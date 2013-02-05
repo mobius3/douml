@@ -618,6 +618,7 @@ int read_doumlrc()
     set_template_project("");
     set_editor("");
     set_codec("UTF-8");
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
     UmlDesktop::set_limits(0, 0, 0, 0);
 

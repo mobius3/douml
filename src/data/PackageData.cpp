@@ -191,6 +191,7 @@ void PackageData::save(QTextStream & st, QString & warning) const
     if (!cpp_src_dir.isEmpty()) {
         nl_indent(st);
         st << "cpp_src_dir ";
+        qDebug() << cpp_src_dir.operator QString();
         save_string(cpp_src_dir, st);
     }
 
