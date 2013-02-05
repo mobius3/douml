@@ -24,6 +24,7 @@
 // *************************************************************************
 
 #include <stdio.h>
+#include <QFile>
 #include <QTextStream>
 //Added by qt3to4:
 #include "misc/mystr.h"
@@ -39,6 +40,7 @@
 #include "CppSettings.h"
 #include "UmlCom.h"
 #include "util.h"
+#include "misc/codec.h"
 #include <QSharedPointer>
 #include <Logging/QsLog.h>
 
@@ -154,7 +156,9 @@ void UmlArtifact::generate()
             QLOG_INFO() << "openign file for writing: ";
             //QTextStream f_h(file.data()); //[lgfreitas] Now QTextStream receives a pointer to a byte array...
             QSharedPointer<QByteArray> headerFile(new QByteArray());
-            QTextStream f_h(headerFile.data(), QIODevice::WriteOnly);
+            QTextStream f_h(headerFile.data(), QFile::WriteOnly);
+            f_h.setCodec(QTextCodec::codecForLocale());
+            //QTextStream f_h(headerFile.data(), QIODevice::WriteOnly);
             //QString h_copy = QString(hdef.operator QString());
             const char * p = hdef;
             const char * pp = 0;
@@ -178,7 +182,12 @@ void UmlArtifact::generate()
                 if (*p == '@')
                     manage_alias(p, f_h);
                 else if (*p != '$')
-                    f_h << *p++;
+                {
+                    QTextCodec* codec = QTextCodec::codecForLocale();
+                    //f_h << codec->fromUnicode(*p,1);
+                    //p++;
+                    f_h << toLocale(p);
+                }
                 else if (!strncmp(p, "${comment}", 10))
                     manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
                 else if (!strncmp(p, "${description}", 14))
@@ -282,7 +291,7 @@ void UmlArtifact::generate()
                 }
                 else
                     // strange
-                    f_h << *p++;
+                    f_h << toLocale(p);
             }
 
             f_h << '\000';
@@ -292,9 +301,10 @@ void UmlArtifact::generate()
                 QLOG_INFO() << "this is essentially what goes to the header file: " << headerFile->size();
                 write_trace_header();
 
-                FILE * fp_h;
-
-                if ((fp_h = fopen((const char *) h_path, "wb")) == 0) {
+                //FILE * fp_h;
+                 QFile file(h_path);
+                if (!file.open(QFile::WriteOnly))
+                {
                     UmlCom::trace(WrapperStr("<font color=\"red\"><b><i> ")
                                   + name + "</i> : cannot open <i> "
                                   + h_path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
@@ -303,8 +313,14 @@ void UmlArtifact::generate()
                 }
                 else {
                     QLOG_INFO() << "this is essentially what goes to the file: " << headerFile->constData();
-                    fputs((const char *) headerFile->data(), fp_h);
-                    fclose(fp_h);
+
+                    QTextCodec* codec = QTextCodec::codecForLocale();
+                    QTextStream out(&file);
+                    out.setCodec(QTextCodec::codecForLocale());
+                    QString temp(*headerFile.data());
+                    out << codec->toUnicode(temp);
+                    //out << *headerFile.data();
+                    out.flush();
                 }
             }
             else {
@@ -343,7 +359,7 @@ void UmlArtifact::generate()
                 if (*p == '@')
                     manage_alias(p, f_src);
                 else if (*p != '$')
-                    f_src << *p++;
+                    f_src << toLocale(p);
                 else if (!strncmp(p, "${comment}", 10))
                     manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
                 else if (!strncmp(p, "${description}", 14))
@@ -399,7 +415,7 @@ void UmlArtifact::generate()
                 }
                 else
                     // strange
-                    f_src << *p++;
+                    f_src << toLocale(p);
             }
 
             f_src << '\000';

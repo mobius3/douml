@@ -31,7 +31,7 @@
 #include <q3strlist.h>
 #include <QString>
 #include <Q3CString>
-#include "misc/mystr.h"
+//#include "misc/mystr.h"
 #include "Logging/QsLog.h"
 
 
@@ -112,21 +112,8 @@ public:
         return *this;
     }
 
-    operator const char * () const {
-//        if (wrappedString.length() > 0) {
-//            arrayRotate++;
-
-//            if (arrayRotate == 20)
-//                arrayRotate = 0;
-
-//            ba[arrayRotate] = wrappedString.toLatin1();
-//            const char * retVal = ba[arrayRotate].data();
-//            return retVal;
-//        }
-
-//        int k = 0;
-//        k++;
-//        return returnableNullPtr;
+    operator const char * () const
+    {
         return wrappedString;
     }
     operator WrapperStr() const {
@@ -257,6 +244,7 @@ WrapperStr operator+(const char * s1, const WrapperStr & s2);
 WrapperStr operator+(const WrapperStr & s1, const QString & s2);
 WrapperStr operator+(const QString & s1, const WrapperStr & s2);
 QTextStream & operator<<(QTextStream & ds, const WrapperStr &str);
+
 
 
 #endif

@@ -43,6 +43,7 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "mu.h"
+#include "strutil.h"
 #include "translate.h"
 
 AttributeData::AttributeData()
@@ -816,7 +817,8 @@ void AttributeData::read(char *& st, char *& k)
         multiplicity = 0;
 
     if (!strcmp(k, "init_value")) {
-        init_value = read_string(st);
+        init_value = QString(QTextCodec::codecForName(codec())->fromUnicode(read_string(st)));
+//        init_value = read_string(st);
         k = read_keyword(st);
     }
     else

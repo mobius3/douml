@@ -30,6 +30,7 @@
 #include "misc/mystr.h"
 #include <QApplication>
 #include <QDir>
+#include <QSettings>
 #include "Logging/QsLog.h"
 #include "Logging/QsLogDest.h"
 int main(int argc, char ** argv)
@@ -45,6 +46,13 @@ int main(int argc, char ** argv)
     QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
+
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    QString locale = settings.value("Main/encoding").toString();
+    QTextCodec* codec = QTextCodec::codecForName(locale);
+    QTextCodec::setCodecForLocale(codec);
+
 
     QLOG_INFO() << " STARTING CPP_GENERATOR";
 

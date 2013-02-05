@@ -49,6 +49,7 @@
 #include "UmlWindow.h"
 #include "DialogUtil.h"
 #include "strutil.h"
+#include "codec.h"
 #include "mu.h"
 #include "myio.h"
 #include "translate.h"
@@ -617,6 +618,7 @@ int read_doumlrc()
     set_template_project("");
     set_editor("");
     set_codec("UTF-8");
+
     UmlDesktop::set_limits(0, 0, 0, 0);
 
     int id = -1;
@@ -638,7 +640,15 @@ int read_doumlrc()
         else if (!strncmp(line, "EDITOR ", 7))
             set_editor(line + 7);
         else if (!strncmp(line, "CHARSET ", 8))
+        {
             set_codec(line + 8);
+            QSettings settings("settings.ini", QSettings::IniFormat);
+            settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+            settings.setValue("Main/encoding", QString(line + 8));
+            settings.sync();
+            QTextCodec::setCodecForTr(QTextCodec::codecForName(line + 8));
+            QTextCodec::setCodecForLocale(QTextCodec::codecForName(line + 8));
+        }
         else if (!strncmp(line, "DESKTOP ", 8)) {
             int l, t, r, b;
 

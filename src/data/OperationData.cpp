@@ -3928,3 +3928,89 @@ void OperationData::read(char *& st, char *& k)
         idl_name_spec = "";
     }
 }
+bool operator==(const OperationData & origin, const OperationData & another)
+{
+    bool paramsResult = false;
+    if(!origin.params && !another.params)
+        paramsResult = true;
+    else if(origin.params != another.params)
+    {
+        if(origin.params == nullptr)
+            return false;
+        else if(another.params == nullptr)
+            return false;
+         paramsResult = *origin.params == *another.params;
+    }
+    if(!paramsResult)
+        return false;
+    if(origin.uml_visibility != another.uml_visibility ||
+     origin.cpp_visibility!= another.cpp_visibility ||
+     origin.is_deleted != another.is_deleted ||
+     origin.is_get_or_set != another.is_get_or_set ||
+     origin.isa_class_operation!= another.isa_class_operation ||
+     origin.is_abstract!= another.is_abstract ||
+     origin.force_body_gen != another.force_body_gen ||
+     origin.is_volatile != another.is_volatile ||
+     origin.cpp_const != another.cpp_const ||
+     origin.cpp_friend!= another. cpp_friend||
+     origin.cpp_virtual!= another.cpp_virtual ||
+     origin.cpp_inline!= another.cpp_inline ||
+     origin.cpp_default!= another.cpp_default ||
+     origin.cpp_delete!= another.cpp_delete ||
+     origin.cpp_override != another. cpp_override||
+     origin.cpp_final != another.cpp_final ||
+     origin.cpp_get_set_frozen != another.cpp_get_set_frozen ||
+     origin.cpp_indent_body != another.cpp_indent_body ||
+     origin.java_final != another. java_final||
+     origin.java_synchronized != another. java_synchronized||
+     origin.java_get_set_frozen!= another. java_get_set_frozen||
+     origin.java_indent_body != another.java_indent_body ||
+     origin.php_final != another.php_final ||
+     origin.php_get_set_frozen != another. php_get_set_frozen||
+     origin.php_indent_body != another. php_indent_body||
+     origin.python_get_set_frozen != another. python_get_set_frozen||
+     origin.python_indent_body != another.python_indent_body ||
+     origin.idl_oneway != another.idl_oneway ||
+     origin.idl_get_set_frozen != another.idl_get_set_frozen ||
+
+     origin.nexceptions!= another.nexceptions ||
+     origin.return_type!= another.return_type ||
+     origin.originClass!= another.originClass ||
+     origin.exceptions!= another.exceptions ||
+     origin.constraint!= another. constraint||
+
+
+    origin.cpp_body.offset!= another.cpp_body.offset ||
+    origin.cpp_body.length!= another.cpp_body.length ||
+    origin.cpp_decl!= another.cpp_decl ||
+    origin.cpp_def!= another.cpp_def ||
+    origin.cpp_name_spec!= another.cpp_name_spec||
+
+
+    origin.java_body.offset!= another.java_body.offset ||
+    origin.java_body.length!= another.java_body.length ||
+    origin.java_def!= another.java_def ||
+    origin.java_name_spec!= another.java_name_spec ||
+    //origin.java_annotation!= another. java_annotation||
+
+
+    origin.php_body.offset!= another.php_body.offset||
+    origin.php_body.length!= another.php_body.length||
+    origin.php_def!= another.php_def ||
+    origin.php_name_spec!= another.php_name_spec||
+
+
+    origin.python_body.offset!= another. python_body.offset||
+    origin.python_body.length!= another. python_body.length||
+    origin.python_def!= another.python_def ||
+    origin.python_name_spec!= another. python_name_spec||
+    origin.python_decorator!= another.python_decorator ||
+
+
+    origin.idl_decl!= another.idl_decl ||
+    origin.idl_name_spec != another. idl_name_spec)
+         return false;
+     return true;
+
+
+}

@@ -119,8 +119,9 @@ WrapperStr operator+(const QString & s1, const WrapperStr & s2)
 
 QTextStream & operator<<(QTextStream & ds, const WrapperStr &str)
 {
-    QLOG_INFO() << "Piping: " + str.wrappedString;
-    ds << Q3CString(str.wrappedString.toStdString().c_str());
+    //QLOG_INFO() << "Piping: " + str.wrappedString;
+    //ds << Q3CString(str.wrappedString.toStdString().c_str());
+    ds << QTextCodec::codecForLocale()->toUnicode(str.operator const char *());
     return ds;
 }
 //

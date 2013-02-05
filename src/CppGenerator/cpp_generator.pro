@@ -91,6 +91,7 @@ SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
         ../Tools/UmlBaseView.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
         ../misc/mystr.cpp \
+        ../misc/codec.cpp \
     Logging/QsLogDest.cpp \
     Logging/QsLog.cpp \
     Logging/QsDebugOutput.cpp
@@ -120,4 +121,5 @@ Debug{
 HEADERS += \
     Logging/QsLogDest.h \
     Logging/QsLog.h \
-    Logging/QsDebugOutput.h
+    Logging/QsDebugOutput.h \
+    ../misc/codec.h

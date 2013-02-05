@@ -180,6 +180,11 @@ void BrowserOperation::post_duplicate()
     }
 }
 
+bool BrowserOperation::only_comment_differs(BrowserOperation *another)
+{
+    return this->def == (OperationData*)another->get_data();
+}
+
 BrowserOperation::~BrowserOperation()
 {
 

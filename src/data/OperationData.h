@@ -98,7 +98,7 @@ protected:
     unsigned short nexceptions;
     AType return_type;
     WrapperStr originClass = QString("0");
-    ParamData * params;			// remark : do NOT use QArray
+    ParamData * params = nullptr;			// remark : do NOT use QArray
     ExceptionData * exceptions;
     WrapperStr constraint;
 
@@ -128,6 +128,8 @@ protected:
     // idl
     WrapperStr idl_decl;
     WrapperStr idl_name_spec;	// get_${name}
+
+    friend bool operator==(const OperationData & , const OperationData & );
 
     void depend_on(BrowserClass * cl);
     void no_longer_depend_on(BrowserClass * cl);
@@ -381,5 +383,8 @@ public:
 protected slots:
     void on_delete();
 };
+
+bool operator==(const OperationData & s1, const OperationData & s2);
+//bool operator!=(const OperationData & s1, const OperationData & s2);
 #endif
 

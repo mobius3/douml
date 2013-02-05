@@ -36,6 +36,7 @@
 #include "UmlClass.h"
 #include "UmlCom.h"
 #include "util.h"
+#include "misc/codec.h"
 
 void UmlAttribute::compute_dependency(Q3PtrList<CppRefType> & dependency,
                                       const WrapperStr & cl_stereotype,
@@ -86,6 +87,9 @@ void UmlAttribute::compute_dependency(Q3PtrList<CppRefType> & dependency,
     }
 }
 
+
+
+
 void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream & f_h,
                                  const WrapperStr & cl_stereotype, WrapperStr indent,
                                  BooL & first, bool last)
@@ -107,7 +111,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
     first = FALSE;
 
     while ((*p == ' ') || (*p == '\t'))
-        indent += *p++;
+        indent += toLocale(p);
 
     if (*p != '#')
         f_h << indent;
@@ -129,7 +133,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         }
 
         if (*p == '\n') {
-            f_h << *p++;
+            f_h << toLocale(p);
 
             if (*p && (*p != '#'))
                 f_h << indent;
@@ -137,7 +141,10 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         else if (*p == '@')
             manage_alias(p, f_h);
         else if (*p != '$')
-            f_h << *p++;
+        {
+            //f_h << toLocale(p);
+            f_h << toLocale(p);
+        }
         else if (!strncmp(p, "${comment}", 10))
             manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
         else if (!strncmp(p, "${description}", 14))
@@ -190,7 +197,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         }
         else if (in_enum)
             // strange
-            f_h << *p++;
+            f_h << toLocale(p);
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
 
@@ -222,7 +229,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         }
         else
             // strange
-            f_h << *p++;
+            f_h << toLocale(p);
     }
 
     f_h << '\n';
@@ -269,7 +276,7 @@ void UmlAttribute::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
 
                 if (*p == '\n') {
-                    f << *p++;
+                    f << toLocale(p);
 
                     if (*p && (*p != '#'))
                         f << indent;
@@ -280,7 +287,7 @@ void UmlAttribute::generate_def(QTextStream & f, WrapperStr indent, bool h,
                     if (p == pname)
                         f << cl_names << "::";
 
-                    f << *p++;
+                    f << toLocale(p);
                 }
                 else if (!strncmp(p, "${comment}", 10)) {
                     if (!manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment())
@@ -349,7 +356,7 @@ void UmlAttribute::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
                 else
                     // strange
-                    f << *p++;
+                    f << toLocale(p);
             }
 
             f << '\n';

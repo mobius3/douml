@@ -66,6 +66,9 @@ public:
 
     void save(QTextStream &, QString & warning) const;
     void read(char *& , char *&);
+    friend bool operator==(const ParamData &, const ParamData &);
+    friend bool operator!=(const ParamData & first, const ParamData & second);
 };
-
+bool operator==(const ParamData &, const ParamData &);
+bool operator!=(const ParamData & first, const ParamData & second);
 #endif

@@ -30,6 +30,7 @@
 #include <Q3CString>
 
 #include "UmlItem.h"
+#include "misc/codec.h"
 
 UmlItem::~UmlItem()
 {
@@ -102,7 +103,8 @@ bool UmlItem::manage_description(const char *& p, const char *& pp)
 
     the_comment = description();
 
-    switch (*p) {
+    switch (*p)
+    {
     case 0:
     case '\n':
         break;
@@ -175,7 +177,7 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts)
     }
     else
         // bypass '$'
-        ts << *p++;
+        ts << toLocale(p);
 }
 
 void UmlItem::generate()

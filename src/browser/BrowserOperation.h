@@ -71,6 +71,7 @@ public:
     BrowserNode * get_set_of() {
         return set_of;
     };
+    bool only_comment_differs(BrowserOperation * another);
     void set_get_of(BrowserNode * o);
     void set_set_of(BrowserNode * o);
     void update_get_of(const QString & attr_name, const QString & cpp_decl,

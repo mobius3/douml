@@ -301,7 +301,8 @@ AttributeDialog::AttributeDialog(AttributeData * a, bool new_st_attr)
 
     comment = new MultiLineEdit(grid);
     comment->setReadOnly(visit);
-    comment->setText(a->browser_node->get_comment());
+    QString temp =  a->browser_node->get_comment();
+    comment->setText(temp);
     comment->setFont(font);
 
     vtab = new Q3VBox(grid);
