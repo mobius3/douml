@@ -510,7 +510,8 @@ SOURCES = \
     src/ui/constructorinitializerdialog.cpp \
     src/tagmanagement/cpptagmanagement.cpp \
     src/dialog/edgemenudialogqt4.cpp \
-    src/dialog/edgemenudialogbase.cpp
+    src/dialog/edgemenudialogbase.cpp \
+    src/misc/codec.cpp
 
 TARGET = douml
 DEFINES = BooL=bool DEBUGCOM

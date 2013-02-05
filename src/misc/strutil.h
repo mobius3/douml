@@ -30,6 +30,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include "mystr.h"
+#include "codec.h"
 
 extern bool manage_comment(QString comment, const char *& p,
                            const char *& pp, bool javadoc);
@@ -57,11 +58,6 @@ extern QString java_multiplicity(QString m);
 extern bool need_equal(const char * p, QString v, bool cpp);
 extern bool need_equal(const char * p, const char * v, bool cpp);
 
-extern QString codec();
-extern void set_codec(QString);
-extern QString toUnicode(const char *);
-extern WrapperStr fromUnicode(const QString &);
-extern bool hasCodec();
 
 extern void remove_crlf(char *);
 

@@ -86,6 +86,16 @@ void UmlAttribute::compute_dependency(Q3PtrList<CppRefType> & dependency,
     }
 }
 
+
+QString toLocale(const char*& p)
+{
+    QTextCodec* codec = QTextCodec::codecForLocale();
+    QString temp1 = codec->toUnicode(p).left(1);
+    int size =  codec->fromUnicode(temp1).size();
+    p+=size;
+    return temp1;
+}
+
 void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream & f_h,
                                  const WrapperStr & cl_stereotype, WrapperStr indent,
                                  BooL & first, bool last)
@@ -137,7 +147,9 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         else if (*p == '@')
             manage_alias(p, f_h);
         else if (*p != '$')
-            f_h << *p++;
+        {
+            f_h << toLocale(p);
+        }
         else if (!strncmp(p, "${comment}", 10))
             manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
         else if (!strncmp(p, "${description}", 14))

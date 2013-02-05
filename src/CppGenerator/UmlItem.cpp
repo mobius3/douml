@@ -102,7 +102,8 @@ bool UmlItem::manage_description(const char *& p, const char *& pp)
 
     the_comment = description();
 
-    switch (*p) {
+    switch (*p)
+    {
     case 0:
     case '\n':
         break;
