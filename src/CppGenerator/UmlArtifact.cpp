@@ -155,7 +155,6 @@ void UmlArtifact::generate()
             //QTextStream f_h(file.data()); //[lgfreitas] Now QTextStream receives a pointer to a byte array...
             QSharedPointer<QByteArray> headerFile(new QByteArray());
             QTextStream f_h(headerFile.data(), QIODevice::WriteOnly);
-            f_h.setCodec(QTextCodec::codecForName("UTF-8"));
             //QString h_copy = QString(hdef.operator QString());
             const char * p = hdef;
             const char * pp = 0;
@@ -179,12 +178,7 @@ void UmlArtifact::generate()
                 if (*p == '@')
                     manage_alias(p, f_h);
                 else if (*p != '$')
-                {
-                    QString temp1 = QString::fromUtf8(p).left(1);
-                    int size = temp1.toUtf8().size();
-                    f_h << temp1;
-                    p+=size;
-                }
+                    f_h << *p++;
                 else if (!strncmp(p, "${comment}", 10))
                     manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
                 else if (!strncmp(p, "${description}", 14))
@@ -288,7 +282,7 @@ void UmlArtifact::generate()
                 }
                 else
                     // strange
-                    f_h << toUtf(p);
+                    f_h << *p++;
             }
 
             f_h << '\000';
@@ -349,12 +343,7 @@ void UmlArtifact::generate()
                 if (*p == '@')
                     manage_alias(p, f_src);
                 else if (*p != '$')
-                {
-                    QString temp1 = QString::fromUtf8(p).left(1);
-                    int size = temp1.toUtf8().size();
-                    f_src << temp1;
-                    p+=size;
-                }
+                    f_src << *p++;
                 else if (!strncmp(p, "${comment}", 10))
                     manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
                 else if (!strncmp(p, "${description}", 14))
@@ -410,7 +399,7 @@ void UmlArtifact::generate()
                 }
                 else
                     // strange
-                    f_src << toUtf(p);
+                    f_src << *p++;
             }
 
             f_src << '\000';

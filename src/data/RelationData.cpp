@@ -107,7 +107,7 @@ RelationData::RelationData(const BrowserRelation * model,
             // uni dir
             end = 0;
             end_removed_from = (md->end_removed_from == (BrowserClass *) model->parent())
-                    ? (BrowserClass *) r->parent() : md->end_removed_from;
+                               ? (BrowserClass *) r->parent() : md->end_removed_from;
             connect(end_removed_from->get_data(), SIGNAL(deleted()),
                     this, SLOT(end_deleted()));
         }
@@ -149,7 +149,7 @@ void RelationData::garbage(BrowserRelation * r)
         start = 0;
 
         if ((end == 0) ||
-                (end->get_data() == 0)) // bi-dir rel, reverse rel wasn't read
+            (end->get_data() == 0)) // bi-dir rel, reverse rel wasn't read
             delete this;
     }
     else if (start == 0)
@@ -254,7 +254,7 @@ static void default_decls(RoleData & r, UmlCode type, QString cl_stereotype)
     if (GenerationSettings::cpp_get_default_defs()) {
         if (ClassDialog::cpp_stereotype(cl_stereotype) != "enum")
             r.cpp_decl =
-                    GenerationSettings::cpp_default_rel_decl(type, QString());
+                GenerationSettings::cpp_default_rel_decl(type, QString());
         else
             r.cpp_decl = "";
     }
@@ -303,7 +303,7 @@ BrowserRelation * RelationData::set_start_end(BrowserRelation * s, BrowserClass 
 
             if (GenerationSettings::cpp_get_default_defs())
                 a.cpp_decl = (ClassDialog::cpp_stereotype(st) != "enum")
-                        ? "${type}" : "";
+                             ? "${type}" : "";
 
             if (GenerationSettings::java_get_default_defs())
                 a.java_decl = "${type}";
@@ -316,7 +316,7 @@ BrowserRelation * RelationData::set_start_end(BrowserRelation * s, BrowserClass 
 
             if (GenerationSettings::idl_get_default_defs())
                 a.idl_decl = (ClassDialog::idl_stereotype(st) != "enum")
-                        ? "${type}" : "";
+                             ? "${type}" : "";
 
             break;
 
@@ -334,7 +334,7 @@ BrowserRelation * RelationData::set_start_end(BrowserRelation * s, BrowserClass 
 
         default:
             a.uml_visibility =
-                    ((BrowserNode *) start->parent())->get_visibility(UmlRelations);
+                ((BrowserNode *) start->parent())->get_visibility(UmlRelations);
             default_decls(a, type,
                           ((BrowserNode *) start->parent())->get_data()->get_stereotype());
         }
@@ -367,7 +367,7 @@ QString RelationData::get_name(BrowserRelation * cl) const
     }
     else if (cl == end) {
         if (!b.role.isEmpty()) {
-            QLOG_INFO() << "Returning name for relation: " << QString((const char *) b.role) + " (" + get_name() + ")";
+        QLOG_INFO() << "Returning name for relation: " << QString((const char *) b.role) + " (" + get_name() + ")";
             const char * role = b.role;
             const char * tName = get_name();
             result = QString(role + QString(" (") + tName + ")");
@@ -390,14 +390,14 @@ QString RelationData::definition(bool, bool with_kind) const
 {
     return (with_kind)
             ? ("[" + TR("relation") + "] " + this->name).operator QString()
-            : this->name.WrapperStr::operator QString();
+           : this->name.WrapperStr::operator QString();
 }
 
 UmlVisibility RelationData::get_visibility(BrowserNode * bn)
 {
     return (bn == start)
-            ? a.uml_visibility
-            : b.uml_visibility;
+           ? a.uml_visibility
+           : b.uml_visibility;
 }
 
 void RelationData::set_association(const AType & t)
@@ -484,16 +484,16 @@ bool RelationData::decldefbody_contain(const QString & s, bool cs,
                                        BrowserNode * br)
 {
     return (is_a((BrowserRelation *) br))
-            ? ((QString(get_cppdecl_a()).find(s, 0, cs) != -1) ||
-               (QString(get_javadecl_a()).find(s, 0, cs) != -1) ||
-               (QString(get_pythondecl_a()).find(s, 0, cs) != -1) ||
-               (QString(get_phpdecl_a()).find(s, 0, cs) != -1) ||
-               (QString(get_idldecl_a()).find(s, 0, cs) != -1))
-            : ((QString(get_cppdecl_b()).find(s, 0, cs) != -1) ||
-               (QString(get_javadecl_b()).find(s, 0, cs) != -1) ||
-               (QString(get_phpdecl_b()).find(s, 0, cs) != -1) ||
-               (QString(get_pythondecl_b()).find(s, 0, cs) != -1) ||
-               (QString(get_idldecl_b()).find(s, 0, cs) != -1));
+           ? ((QString(get_cppdecl_a()).find(s, 0, cs) != -1) ||
+              (QString(get_javadecl_a()).find(s, 0, cs) != -1) ||
+              (QString(get_pythondecl_a()).find(s, 0, cs) != -1) ||
+              (QString(get_phpdecl_a()).find(s, 0, cs) != -1) ||
+              (QString(get_idldecl_a()).find(s, 0, cs) != -1))
+           : ((QString(get_cppdecl_b()).find(s, 0, cs) != -1) ||
+              (QString(get_javadecl_b()).find(s, 0, cs) != -1) ||
+              (QString(get_phpdecl_b()).find(s, 0, cs) != -1) ||
+              (QString(get_pythondecl_b()).find(s, 0, cs) != -1) ||
+              (QString(get_idldecl_b()).find(s, 0, cs) != -1));
 }
 
 bool RelationData::wrong_role_a_name(const QString & s)
@@ -651,8 +651,8 @@ BrowserClass * RelationData::get_start_class() const
 BrowserClass * RelationData::get_end_class() const
 {
     return (end_removed_from != 0)
-            ? ((BrowserClass *) end_removed_from)
-            : ((BrowserClass *) end->parent());
+           ? ((BrowserClass *) end_removed_from)
+           : ((BrowserClass *) end->parent());
 }
 
 void RelationData::unidir_change_dest(BrowserNode * e)
@@ -959,7 +959,7 @@ bool RelationData::tool_cmd(ToolCom * com, BrowserRelation * rel,
                     start->write_id(com);
             }
 
-                return TRUE;
+            return TRUE;
 
             case setNameCmd:
                 name = args;
@@ -987,7 +987,7 @@ bool RelationData::tool_cmd(ToolCom * com, BrowserRelation * rel,
 
                 r.uml_visibility = v;
             }
-                break;
+            break;
 
             case setConstraintCmd:
                 r.constraint = args;
@@ -1011,7 +1011,7 @@ bool RelationData::tool_cmd(ToolCom * com, BrowserRelation * rel,
 
                 r.java_annotation = s;
             }
-                break;
+            break;
 
             case setPhpDeclCmd:
                 r.php_decl = args;
@@ -1035,7 +1035,7 @@ bool RelationData::tool_cmd(ToolCom * com, BrowserRelation * rel,
 
                 r.cpp_visibility = v;
             }
-                break;
+            break;
 
             case setIsReadOnlyCmd:
                 r.isa_const_relation = (*args != 0);
@@ -1047,7 +1047,7 @@ bool RelationData::tool_cmd(ToolCom * com, BrowserRelation * rel,
 
             case setRoleNameCmd:
                 if ((rel == start) ? wrong_role_a_name(args)
-                        : wrong_role_b_name(args)) {
+                    : wrong_role_b_name(args)) {
                     com->write_ack(FALSE);
                     return TRUE;
                 }
@@ -1076,7 +1076,7 @@ bool RelationData::tool_cmd(ToolCom * com, BrowserRelation * rel,
 
                 set_idlcase(r, at, args);
             }
-                break;
+            break;
 
             case setDerivedCmd:
                 switch (*args) {
@@ -1132,7 +1132,7 @@ bool RelationData::tool_cmd(ToolCom * com, BrowserRelation * rel,
                     modified();
                 }
             }
-                break;
+            break;
 
             default:
                 return FALSE;
@@ -1706,7 +1706,7 @@ RelationData * RelationData::read(char *& st, char *& k,
 
             result->end_removed_from = BrowserClass::read_ref(st);
             result->b.uml_visibility =
-                    ((BrowserNode *) result->end_removed_from->parent())->get_visibility(UmlRelations);
+                ((BrowserNode *) result->end_removed_from->parent())->get_visibility(UmlRelations);
             connect(result->end_removed_from->get_data(), SIGNAL(deleted()),
                     result, SLOT(end_deleted()));
             result->end = 0;
@@ -1750,7 +1750,7 @@ RelationData * RelationData::read(char *& st, char *& k,
         AType t;
 
         if (!strcmp(k, "association_type") ||
-                !strcmp(k, "association_explicit_type")) {
+            !strcmp(k, "association_explicit_type")) {
             t.read(st, "association_type", "association_explicit_type", k);
             result->set_association(t);
             k = read_keyword(st);
@@ -1800,8 +1800,8 @@ void RelationData::post_load()
         RelationData * rd = IncludeToHeaderIfExternal.take(0);
 
         if ((rd->end_removed_from != 0) &&
-                (rd->end_removed_from->get_type() == UmlClass) &&
-                ((ClassData *) rd->end_removed_from->get_data())->cpp_is_external())
+            (rd->end_removed_from->get_type() == UmlClass) &&
+            ((ClassData *) rd->end_removed_from->get_data())->cpp_is_external())
             rd->a.cpp_decl = "#include in header";
     }
 }

@@ -154,8 +154,8 @@ public:
     bool nestedp() const {
         return ((BrowserNode *) parent())->get_type() == get_type();
     };
-    virtual QString get_comment() const;
-    virtual void set_comment(QString  c);
+    virtual const char * get_comment() const;
+    virtual void set_comment(const char * c);
     const char * get_stereotype() const;
     virtual QString stereotypes_properties() const;
     bool may_contains(BrowserNode *, bool rec) const;

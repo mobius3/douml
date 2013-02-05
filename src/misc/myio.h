@@ -28,7 +28,6 @@
 
 #include <stdio.h>
 #include "UmlEnum.h"
-#include "misc/mystr.h"
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3PointArray>
@@ -101,8 +100,6 @@ char * read_definition(int id, const char * ext, int offset, int len);
 extern void save_definition(int id, const char * ext, const char * def, BooL & is_new);
 extern void delete_definition(int id, const char * ext);
 
-extern void save_string(WrapperStr, QTextStream & st);
-extern void save_string(QString, QTextStream & st);
 extern void save_string(const char *, QTextStream & st);
 extern void save_string_list(QStringList & list, QTextStream & st);
 extern void save_unicode_string_list(QStringList & list, QTextStream & st);

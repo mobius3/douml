@@ -1496,8 +1496,8 @@ void RelationDialog::cpp_update(RoleDialog & role, BrowserClass * cl, BrowserNod
             else if (!strncmp(p, "${h_value}", 10)) {
                 p += 10;
 
-                if (!role.edinit->text().stripWhiteSpace().isEmpty() /*&&
-                    role.classrelation_cb->isChecked()*/) {
+                if (!role.edinit->text().stripWhiteSpace().isEmpty() &&
+                    role.classrelation_cb->isChecked()) {
                     if (role.edinit->text().at(0) == QChar('='))
                         s += ' ';
 
@@ -1505,19 +1505,7 @@ void RelationDialog::cpp_update(RoleDialog & role, BrowserClass * cl, BrowserNod
                 }
             }
             else if (!strncmp(p, "${value}", 8))
-            {
-                QString i = role.edinit->text().stripWhiteSpace();
-
-                if (!i.isEmpty()) {
-                    if (need_equal(p, i, TRUE))
-                        s += " = ";
-
-                    s += role.edinit->text();
-                    p += (p[2] == 'h') ? 10 : 8;
-                }
-                else
-                    p += 8;
-            }
+                p += 8;
             else if (!strncmp(p, "${association}", 14)) {
                 p += 14;
                 s += GenerationSettings::cpp_type(type(edassociation->currentText().stripWhiteSpace(),

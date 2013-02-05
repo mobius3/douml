@@ -46,8 +46,7 @@ bool UmlItem::manage_comment(const char *& p, const char *& pp,
         description().isEmpty())
         return FALSE;
 
-    QString temp = description();
-    const char * comment = description().operator QString().toUtf8();
+    const char * comment = description();
 
     if (javadoc) {
         the_comment = "/**\n * ";
@@ -87,7 +86,7 @@ bool UmlItem::manage_comment(const char *& p, const char *& pp,
     }
 
     pp = p;
-    p = the_comment.toUtf8().data();
+    p = the_comment;
     return TRUE;
 }
 
@@ -113,11 +112,7 @@ bool UmlItem::manage_description(const char *& p, const char *& pp)
     }
 
     pp = p;
-    QString temp = the_comment.operator QString();
-    static QByteArray ba;
-    ba = temp.toUtf8();
-    p = ba.data();
-    temp =QString::fromUtf8(p);
+    p = the_comment;
     return TRUE;
 }
 
@@ -180,7 +175,7 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts)
     }
     else
         // bypass '$'
-        ts << toUtf(p);
+        ts << *p++;
 }
 
 void UmlItem::generate()

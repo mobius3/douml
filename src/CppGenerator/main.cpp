@@ -30,7 +30,6 @@
 #include "misc/mystr.h"
 #include <QApplication>
 #include <QDir>
-#include <QTest>
 #include "Logging/QsLog.h"
 #include "Logging/QsLogDest.h"
 int main(int argc, char ** argv)
@@ -50,7 +49,6 @@ int main(int argc, char ** argv)
     QLOG_INFO() << " STARTING CPP_GENERATOR";
 
     int port_index;
-    //QTest::qSleep(5000);
 
     if (argc == 2) {
         port_index = 1;

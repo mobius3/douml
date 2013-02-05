@@ -29,7 +29,6 @@
 #include <QTextStream>
 //Added by qt3to4:
 #include <Q3PtrList>
-#include <QTextCodec>
 
 #include "UmlAttribute.h"
 #include "UmlSettings.h"
@@ -37,7 +36,6 @@
 #include "UmlClass.h"
 #include "UmlCom.h"
 #include "util.h"
-//#include "misc/strutil.h"
 
 void UmlAttribute::compute_dependency(Q3PtrList<CppRefType> & dependency,
                                       const WrapperStr & cl_stereotype,
@@ -131,7 +129,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         }
 
         if (*p == '\n') {
-            f_h << toUtf(p);
+            f_h << *p++;
 
             if (*p && (*p != '#'))
                 f_h << indent;
@@ -139,12 +137,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         else if (*p == '@')
             manage_alias(p, f_h);
         else if (*p != '$')
-        {
-            QString temp1 = QString::fromUtf8(p).left(1);
-            int size = temp1.toUtf8().size();
-            f_h << temp1;
-            p+=size;
-        }
+            f_h << *p++;
         else if (!strncmp(p, "${comment}", 10))
             manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
         else if (!strncmp(p, "${description}", 14))
@@ -176,7 +169,6 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
                 if (need_equal(pb, defaultValue()))
                     f_h << " = ";
 
-                //f_h << QString::fromUtf8(defaultValue().operator const char *());
                 f_h << defaultValue();
             }
 
@@ -198,7 +190,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         }
         else if (in_enum)
             // strange
-            f_h << toUtf(p);
+            f_h << *p++;
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
 
@@ -230,11 +222,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
         }
         else
             // strange
-        {
-            QString temp(p[0]);
-            p++;
-            f_h << temp.toUtf8().data();
-        }
+            f_h << *p++;
     }
 
     f_h << '\n';
@@ -281,32 +269,25 @@ void UmlAttribute::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
 
                 if (*p == '\n') {
-                    f << toUtf(p);
+                    f << *p++;
 
                     if (*p && (*p != '#'))
                         f << indent;
                 }
                 else if (*p == '@')
                     manage_alias(p, f);
-                else if (*p != '$')
-                {
+                else if (*p != '$') {
                     if (p == pname)
                         f << cl_names << "::";
 
-                    {
-                        QString temp1 = QString::fromUtf8(p).left(1);
-                        int size = temp1.toUtf8().size();
-                        f << temp1;
-                        p+=size;
-                    }
+                    f << *p++;
                 }
                 else if (!strncmp(p, "${comment}", 10)) {
                     if (!manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment())
                         && re_template)
                         f << templates;
                 }
-                else if (!strncmp(p, "${description}", 14))
-                {
+                else if (!strncmp(p, "${description}", 14)) {
                     if (!manage_description(p, pp) && re_template)
                         f << templates;
                 }
@@ -368,7 +349,7 @@ void UmlAttribute::generate_def(QTextStream & f, WrapperStr indent, bool h,
                 }
                 else
                     // strange
-                    f << toUtf(p);
+                    f << *p++;
             }
 
             f << '\n';

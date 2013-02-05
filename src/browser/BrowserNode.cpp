@@ -38,7 +38,6 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <Q3PtrCollection>
-#include <QRegExp>
 
 #include "BrowserView.h"
 #include "BrowserNode.h"
@@ -283,12 +282,12 @@ bool BrowserNode::delete_internal(QString & warning)
     return ok;
 }
 
-QString BrowserNode::get_comment() const
+const char * BrowserNode::get_comment() const
 {
     return comment;
 }
 
-void BrowserNode::set_comment(QString c)
+void BrowserNode::set_comment(const char * c)
 {
     comment = c;
 }
@@ -1327,10 +1326,7 @@ bool BrowserNode::wrong_child_name(const QString & s, UmlCode type,
 
     const char * str = s;
 
-    QRegExp rx("[^A-Za-z0-9]");
-    int pos = rx.indexIn(s);
-    bool hasIllegal = pos != -1;
-    if(hasIllegal)
+    if (str != fromUnicode(s))
         return true;
 
     if (allow_empty)
@@ -1379,7 +1375,7 @@ bool BrowserNode::wrong_child_name(const QString & s, UmlCode type,
 
     for (Q3ListViewItem * child = firstChild(); child; child = child->nextSibling())
         if (!((BrowserNode *) child)->deletedp() &&
-                ((BrowserNode *) child)->same_name(s, type) && ((BrowserNode *) child) != (BrowserNode *) listView()->currentItem())
+            ((BrowserNode *) child)->same_name(s, type))
             return TRUE;
 
     return FALSE;
@@ -1767,7 +1763,7 @@ void BrowserNode::read(char *& st, char *& k, int id)
     HaveKeyValueData::read(st, k);
 
     if (!strcmp(k, "comment")) {
-        comment = QString::fromUtf8(read_string(st));
+        comment = read_string(st);
         k = read_keyword(st);
     }
 
@@ -1949,8 +1945,8 @@ void BrowserNodeList::search(BrowserNode * bn, UmlCode k, const QString & s,
                   : (ch->get_type() == k))) &&
                 (s.isEmpty() ||
                  (QString((for_name)
-                          ? QString(ch->get_name())
-                          : ((for_stereotype) ? QString(ch->get_stereotype())
+                          ? ch->get_name()
+                          : ((for_stereotype) ? ch->get_stereotype()
                              : ch->get_comment()))
                   .find(s, 0, cs) != -1)))
                 append((BrowserNode *) child);

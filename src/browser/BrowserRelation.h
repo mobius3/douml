@@ -65,7 +65,7 @@ public:
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());
 
-    virtual QString get_comment() const;
+    virtual const char * get_comment() const;
     virtual void set_comment(const char * c);
 
     BrowserOperation * get_get_oper() {

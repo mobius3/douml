@@ -205,7 +205,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
         }
 
         if (*p == '\n') {
-            f_h << toUtf(p);
+            f_h << *p++;
             bool isNotNull = *p;
             bool isNotGrid = *p != '#';
             bool isMembers = strncmp(p, "${members}", 10);
@@ -217,12 +217,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
         else if (*p == '@')
             manage_alias(p, f_h);
         else if (*p != '$')
-        {
-            QString temp1 = QString::fromUtf8(p).left(1);
-            int size = temp1.toUtf8().size();
-            f_h << temp1;
-            p+=size;
-        }
+            f_h << *p++;
         else if (!strncmp(p, "${comment}", 10))
             manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
         else if (!strncmp(p, "${description}", 14))
@@ -256,11 +251,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
             }
             else
                 // strange
-            {
-                QString tempStr(p[0]);
-                p++;
-                f_h << tempStr.toUtf8();
-            }
+                f_h << *p++;
         }
         else if (an_enum) {
             if (!strncmp(p, "${items}", 8)) {
@@ -296,7 +287,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
             }
             else
                 // strange
-                f_h << toUtf(p);
+                f_h << *p++;
         }
         else if (! strncmp(p, "${template}", 11)) {
             p += 11;
@@ -395,7 +386,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
         }
         else
             // strange
-            f_h << toUtf(p);
+            f_h << *p++;
     }
 
     if (! removed)

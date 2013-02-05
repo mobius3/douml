@@ -447,7 +447,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             std::function<bool(QString)> compareTagToBuffer = std::bind(CompareAgainstTag, std::ref(currentTag), std::placeholders::_1, p);
 
             if (*p == '\n') {
-                f_h << toUtf(p);
+                f_h << *p++;
 
                 if (*p && (*p != '#'))
                     f_h << indent;
@@ -455,12 +455,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             else if (*p == '@')
                 manage_alias(p, f_h);
             else if (*p != '$')
-            {
-                QString temp1 = QString::fromUtf8(p).left(1);
-                int size = temp1.toUtf8().size();
-                f_h << temp1;
-                p+=size;
-            }
+                f_h << *p++;
             else if (!strncmp(p, "${comment}", 10))
                 manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment());
             else if (!strncmp(p, "${description}", 14))
@@ -593,7 +588,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
             }
             else
                 // strange
-                f_h << toUtf(p);
+                f_h << *p++;
         }
 
         f_h << '\n';
@@ -797,7 +792,7 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
                 }
 
                 if (*p == '\n') {
-                    fs << toUtf(p);
+                    fs << *p++;
 
                     if (p == body_indent)
                         p = generate_body(fs, indent, p);
@@ -806,17 +801,11 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
                 }
                 else if (*p == '@')
                     manage_alias(p, fs);
-                else if (*p != '$')
-                {
+                else if (*p != '$') {
                     if (p == body_indent)
                         p = generate_body(fs, indent, p);
                     else
-                    {
-                        QString temp1 = QString::fromUtf8(p).left(1);
-                        int size = temp1.toUtf8().size();
-                        fs << temp1;
-                        p+=size;
-                    }
+                        fs << *p++;
                 }
                 else if (!strncmp(p, "${comment}", 10)) {
                     if (!manage_comment(p, pp, CppSettings::isGenerateJavadocStyleComment())
@@ -917,7 +906,7 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
                         UmlClass::write(fs, ((UmlRelation *) m)->association());
                 }
                 else
-                    fs << toUtf(p);
+                    fs << *p++;
             }
 
             fs << '\n';
