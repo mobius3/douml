@@ -43,7 +43,7 @@ bool operator==(const WrapperStr & s1, const char * s2)
 }
 bool operator==(const char * s1, const WrapperStr & s2)
 {
-    return s2.wrappedString == QString(QLatin1String(s2));
+    return s2.wrappedString == QString(QLatin1String(s1));
 }
 bool operator==(const WrapperStr & s1, const QString & s2)
 {

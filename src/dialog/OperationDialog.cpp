@@ -84,7 +84,7 @@
 #include "CustomWidgets/EdgeMenuToolBar.h"
 QSize OperationDialog::previous_size;
 QSharedPointer<OperationDialog> OperationDialog::instance;
-OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
+OperationDialog::OperationDialog(OperationData * o, DrawingLanguage )
     : EdgeMenuDialog(0, 0, FALSE), oper(o),
       cl((ClassData *)((BrowserClass *) o->browser_node->parent())->get_data())
 {
@@ -803,8 +803,6 @@ void OperationDialog::init_python()
 {
     Q3Grid * grid;
     Q3HBox * htab = 0;
-    Q3ButtonGroup * bg;
-
     grid = new Q3Grid(2, this);
     pythontab = grid;
     RegisterTab("Python", pythontab);
@@ -1028,7 +1026,7 @@ void OperationDialog::FillIdlTab(OperationData *)
         HideTab("Idl");
 }
 
-void OperationDialog::FillGeneric(OperationData * oper)
+void OperationDialog::FillGeneric(/*OperationData * oper*/)
 {
     QString stereotype = cl->get_stereotype();
     QString st;
@@ -3239,6 +3237,7 @@ bool OperationDialog::SaveData()
                        "Do you want to propagate the changes to it\n through the inheritance tree?"));
         QPushButton* above = msg.addButton(tr("Above"), QMessageBox::ActionRole);
         QPushButton* whole = msg.addButton(tr("Everywhere"), QMessageBox::ActionRole);
+        Q_UNUSED(whole);
         QPushButton* dont = msg.addButton(tr("Do not propagate"), QMessageBox::ActionRole);
         QPushButton* cancel = msg.addButton(tr("Cancel"), QMessageBox::ActionRole);
         msg.show();
@@ -3306,9 +3305,6 @@ bool OperationDialog::SaveData(OperationData *oper)
     else
     {
         bn->set_name(s);
-
-        bool newst = FALSE;
-
         if (!oper->is_get_or_set)
         {
             AType t;
@@ -3326,7 +3322,8 @@ bool OperationDialog::SaveData(OperationData *oper)
 
             oper->set_return_type(t);
 
-            newst = oper->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+            bool newst = oper->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+            Q_UNUSED(newst);
         }
 
         oper->uml_visibility = uml_visibility.value();
@@ -3503,6 +3500,7 @@ bool OperationDialog::SaveData(OperationData *oper)
 
 
     }
+    return true;
 }
 
 void OperationDialog::php_edit_param()
@@ -5001,7 +4999,7 @@ ParamsTable::ParamsTable(OperationData * o, QWidget * parent,
     }
 }
 
-void ParamsTable::update(OperationData *o, const QStringList &list, OperationDialog *d, bool isReadOnly)
+void ParamsTable::update(OperationData *o, const QStringList &list, OperationDialog *, bool isReadOnly)
 {
 
     if (!isReadOnly)
@@ -5081,7 +5079,7 @@ void ParamsTable::update(OperationData *o, const QStringList &list, OperationDia
             setText(index, 4, QString());
         }
 
-        int columnCount = numCols();
+        //int columnCount = numCols();
         if(index == numRows())
             insertRows(numRows());
         setItem(index, 0, new ComboItem(this, stringify(UmlIn), DirList, FALSE));
@@ -5426,7 +5424,7 @@ QString ParamsTable::value(unsigned rank) const
 QStringList ParamsTable::all_types()
 {
     QStringList result;
-    for(int i(1); i < nparams()+1; i++)
+    for(unsigned i(1); i < nparams()+1; i++)
     {
         result.append(text(i, 1));
     }
@@ -5436,7 +5434,7 @@ QStringList ParamsTable::all_types()
 QStringList ParamsTable::all_names()
 {
     QStringList result;
-    for(int i(1); i < nparams()+1; i++)
+    for(unsigned i(1); i < nparams()+1; i++)
     {
         result.append(text(i, 2));
     }
@@ -5446,7 +5444,7 @@ QStringList ParamsTable::all_names()
 QStringList ParamsTable::all_values()
 {
     QStringList result;
-    for(int i(1); i < nparams()+1; i++)
+    for(unsigned i(1); i < nparams()+1; i++)
     {
         result.append(text(i, 3));
     }
@@ -7466,7 +7464,7 @@ void OperationDialog::FillGuiElements(OperationData * _oper)
     oper = _oper;
     cl = ((ClassData *)((BrowserClass *) _oper->browser_node->parent())->get_data());
     init_get_set();
-    FillGeneric(oper);
+    FillGeneric();
     FillUmlTab(oper);
     FillcppTab(oper);
     FillJavaTab(oper);

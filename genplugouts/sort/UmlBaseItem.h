@@ -8,7 +8,8 @@
 
 #include <q3dict.h>
 #include <q3ptrdict.h>
-#include "OnInstanceCmd.h"
+//#include "OnInstanceCmd.h"
+#include "Tools/ApiCmd.h"
 #include "aVisibility.h"
 #include "aDirection.h"
 

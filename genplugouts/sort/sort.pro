@@ -1,6 +1,7 @@
 TEMPLATE	= app
 TARGET		= browsersort
-CONFIG		+= debug warn_on qt
+CONFIG		+= warn_on qt
+INCLUDEPATH += ../../src
 HEADERS		= ./UmlActivityPin.h \
 		  ./TransitionBehavior.h \
 		  ./UmlBaseFinalState.h \
@@ -320,3 +321,16 @@ SOURCES		= ./UmlActivityPin.cpp \
 		  ./UmlBaseShallowHistoryPseudoState.cpp
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+QMAKE_CXXFLAGS += -std=gnu++11
+CONFIG(release){
+    MOC_DIR = ../../bin/MOC_release/sort/
+    OBJECTS_DIR = ../../bin/Obj_release/sort
+}
+
+CONFIG(debug){
+    MOC_DIR = ../../bin/MOC_debug/sort/
+    OBJECTS_DIR = ../../bin/Obj_debug/sort
+
+}
+
+    DESTDIR = ../../bin

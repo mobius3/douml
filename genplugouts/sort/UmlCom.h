@@ -3,8 +3,9 @@
 
 
 #include <q3socketdevice.h>
-#include "CmdFamily.h"
-#include "OnInstanceCmd.h"
+////#include "CmdFamily.h"
+////#include "OnInstanceCmd.h"
+#include "Tools/ApiCmd.h"
 #include "anItemKind.h"
 #include "aRelationKind.h"
 #include <q3ptrvector.h>

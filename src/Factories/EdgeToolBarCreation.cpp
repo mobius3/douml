@@ -48,8 +48,7 @@ EdgeMenuToolBar * CreateLimitedDialogMenu()
     QHBoxLayout * layout = new QHBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     QLabel * label = new QLabel();
-    QFileInfo f("../src/icons/mouse_control.png");
-    bool exists = f.exists();
+
     label->setPixmap(QIcon("../src/icons/mouse_control.png").pixmap());
     layout->addWidget(label);
     dragArea->setLayout(layout);

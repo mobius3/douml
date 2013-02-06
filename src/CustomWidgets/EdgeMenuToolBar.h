@@ -41,7 +41,7 @@ protected:
     //! called on window show()
     void leaveEvent(QEvent * event);
     void enterEvent(QEvent * event);
-    void mouseMoveEvent(QMouseEvent * event);
+
     void focusOutEvent(QFocusEvent *) override;
 private:
 

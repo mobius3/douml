@@ -462,11 +462,11 @@ void NoteCanvas::read_internal(char *& st)
     QTextCodec* codec = QTextCodec::codecForLocale();
     QTextStream stream(p);
     stream.setCodec(codec);
-    QString streamtest;
     QByteArray ba;
     stream   >> ba;
     QString temp = QString::fromLocal8Bit(ba);
     char* test = read_string(st);
+    Q_UNUSED(test);
     note = temp;
 
 

@@ -828,9 +828,10 @@ QString BrowserNode::check_inherit(const BrowserNode * new_parent) const
     return 0;
 }
 
-bool BrowserNode::may_contains_them(const Q3PtrList<BrowserNode> & nodes,
-                                    BooL & result) const
+bool BrowserNode::may_contains_them(const Q3PtrList<BrowserNode> & ,
+                                    BooL & ) const
 {
+    //for inheritance
     return FALSE;
 }
 
@@ -1326,7 +1327,9 @@ bool BrowserNode::wrong_child_name(const QString & s, UmlCode type,
 
     const char * str = s;
 
-    if (str != fromUnicode(s))
+    bool nonUnicodeName = str != fromUnicode(s);
+    bool controllable = type >= UmlAssociation && type <= UmlClass;
+    if (nonUnicodeName && controllable)
         return true;
 
     if (allow_empty)

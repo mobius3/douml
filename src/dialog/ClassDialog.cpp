@@ -2509,10 +2509,10 @@ void ClassDialog::InitGui()
     Q3Grid * grid;
     QSplitter * split;
     Q3GroupBox * bg;
-    QLabel * lbl1;
-    QLabel * lbl2;
-    QLabel * lbl3;
-    QLabel * lbl4;
+//    QLabel * lbl1;
+//    QLabel * lbl2;
+//    QLabel * lbl3;
+//    QLabel * lbl4;
     currentNode = (BrowserClass *) cl->get_browser_node();
     grandParent = (BrowserNode *) currentNode->parent()->parent();
 

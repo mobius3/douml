@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= deplcl
-CONFIG		+= debug warn_on qt qxt
+CONFIG		+= warn_on qt qxt
 QXT += core
 DEFINES		= WITHCPP WITHJAVA WITHPHP WITHPYTHON WITHIDL TRACE BooL=bool
 HEADERS		= ./UmlBaseExpansionRegion.h \

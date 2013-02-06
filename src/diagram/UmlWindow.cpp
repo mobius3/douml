@@ -245,7 +245,7 @@ CreateToolButton(
     return newButton;
 }
 
-UmlWindow::UmlWindow(bool batch) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
+UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
 {
     setCaption("DoUML");
 
@@ -667,7 +667,7 @@ void UmlWindow::projectMenuAboutToShow()
         QString whats = TR("to open this project.<br><br>The historic is saved in <i>%1</i>",
                            homeDir().absFilePath(".bouml"));
 
-        for (unsigned i(0); i < historic.size(); ++i)
+        for (int i(0); i < historic.size(); ++i)
         {
             id = projectMenu->insertItem(historic.at(i), this, SLOT(historicActivated(int)));
             projectMenu->setItemParameter(id, i);

@@ -67,7 +67,6 @@ bool NullValue(TagTempStructure& updateData, bool re_template, QString templates
 }
 void ReturnType(TagTempStructure& updateData, QString type, QStringList list, BrowserNodeList& nodes)
 {
-    int rank; //get rank
     updateData.p+=updateData.currentTag.length() + updateData.tagPart.length();
     updateData.s += get_cpp_name(the_type(type, list, nodes));
 }

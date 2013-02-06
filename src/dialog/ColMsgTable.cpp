@@ -151,7 +151,7 @@ ColMsgTable::ColMsgTable(QWidget * parent, ColDiagramView * v, ColMsgList & m)
 
 void ColMsgTable::button_pressed(int row, int col, int, const QPoint &)
 {
-    if ((((unsigned) row) >= flat_msg_list.count()) || (col > CMD_COL))
+    if ((( row) >= flat_msg_list.count()) || (col > CMD_COL))
         // wrong signal
         return;
 

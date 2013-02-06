@@ -106,7 +106,7 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialogBase * sender)
         point.setY(point.y() - toolBarIconHeight / 2);
     }
 
-    QPoint movePoint = senderDialog->mapFromGlobal(point);
+    //QPoint movePoint = senderDialog->mapFromGlobal(point);
     toolbar->move(point);
     toolbar->resize(toolbar->sizeHint());
 

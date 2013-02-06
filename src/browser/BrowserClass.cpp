@@ -592,7 +592,7 @@ void BrowserClass::menu()
 
                         InstallParentsMenuItems(inhopersubm);
 
-                        if (inheritedOperations.count() > sensible_amount_of_visible_entries)
+                        if (inheritedOperations.count() > (unsigned)sensible_amount_of_visible_entries)
                             m.setWhatsThis(m.insertItem(TR("Add inherited operation"), too_much_inherited_functions_index),
                                            TR("to redefine an inherited <i>operation</i> in the <i>class</i>"));
                         else
@@ -1747,7 +1747,7 @@ void BrowserClass::get_inherited_opers(Q3ValueList< OperationData *> &opers, QSt
     }
 }
 
-void BrowserClass::get_used_inherited_opers(Q3ValueList< OperationData *> &opers, QStringList &list)
+void BrowserClass::get_used_inherited_opers()
 {
     Q3ValueList<OperationData *> ownOpers;
     QStringList listOwnOpers;
@@ -2023,7 +2023,7 @@ bool BrowserClass::may_contains_them(const Q3PtrList<BrowserNode> & l,
         default:
         {
             bool isNotRelation = !IsaRelation(it.current()->get_type()) ;
-            bool parentIsOtherNode =  (((const BrowserNode *) it.current()->parent()) != this);
+            //bool parentIsOtherNode =  (((const BrowserNode *) it.current()->parent()) != this);
             if (isNotRelation/* || parentIsOtherNode*/)
                 return FALSE;
 

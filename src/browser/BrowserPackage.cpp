@@ -685,7 +685,7 @@ void BrowserPackage::menu()
                     if (php)
                         revm.insertItem("Php", 32);
 
-#warning reverse python
+//#warning reverse python
 
 
                     if (java || cpp) {

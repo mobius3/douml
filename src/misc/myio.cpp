@@ -3012,12 +3012,9 @@ void set_last_used_directory(QString s)
 
 unsigned api_format(bool useTrueFormat)
 {
-    QFileInfo info("settings.ini");
-    bool test = info.exists();
     QSettings settings("settings.ini", QSettings::IniFormat);
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
     int compat = settings.value("Main/compatibility_save").toInt();
-    //int compat = 0;
     if((compat != 1) || useTrueFormat)
     {
         int fileFormat = settings.value("Main/fileformat").toInt();
@@ -3026,24 +3023,3 @@ unsigned api_format(bool useTrueFormat)
     else
         return 75;
 }
-
-
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -96,8 +96,7 @@ public:
                    QStringList & list) ;
     void get_inherited_opers(Q3ValueList<OperationData *> & opers,
                    QStringList & list) ;
-    void get_used_inherited_opers(Q3ValueList<OperationData *> & opers,
-                   QStringList & list) ;
+    void get_used_inherited_opers();
 
 
 

@@ -50,18 +50,14 @@ void EdgeMenuToolBar::SetDialog(EdgeMenuDialog * dialog)
     linkedDialog = dialog;
 }
 
-void EdgeMenuToolBar::leaveEvent(QEvent * event)
+void EdgeMenuToolBar::leaveEvent(QEvent * )
 {
     decayTimer.start(15000);
 }
 
-void EdgeMenuToolBar::enterEvent(QEvent * event)
+void EdgeMenuToolBar::enterEvent(QEvent * )
 {
     decayTimer.stop();
-}
-
-void EdgeMenuToolBar::mouseMoveEvent(QMouseEvent * event)
-{
 }
 
 void EdgeMenuToolBar::focusOutEvent(QFocusEvent *)
@@ -104,7 +100,7 @@ void EdgeMenuToolBar::FillClipboardMenu(int base)
     int maxItems = strings.size() > 10 ? 10 : strings.size();
     int i = base;
 
-    for (i; i < maxItems; ++i) {
+    for (; i < maxItems; ++i) {
         QString text = strings.at(strings.size() - 1 - i);
         clipboard->blockSignals(true);
         QString itemText;

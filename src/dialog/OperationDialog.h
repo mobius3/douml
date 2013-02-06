@@ -253,7 +253,7 @@ protected:
     void FillPythonTab(OperationData *);
     void FillIdlTab(OperationData *);
     void FillPropertiesTab(OperationData *);
-    void FillGeneric(OperationData * oper);
+    void FillGeneric(/*OperationData * oper*/);
 
     QString compute_name(LineEdit * spec);
     void manage_cpp_type(unsigned rank, QString & s);

@@ -3,8 +3,8 @@
 
 
 #include <q3socketdevice.h>
-#include "CmdFamily.h"
-#include "OnInstanceCmd.h"
+//#include "CmdFamily.h"
+//#include "OnInstanceCmd.h"
 #include "anItemKind.h"
 #include "aRelationKind.h"
 #include <q3cstring.h>
