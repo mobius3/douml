@@ -3228,6 +3228,8 @@ bool OperationDialog::SaveData()
     SaveData(operCopy);
     bool equals = *oper == *operCopy;
     bool newst = operCopy->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+    delete operCopy;
+
     if(!inheritanceSiblings.isEmpty() && !equals)
     {
         // call messagebox to confirm propagation

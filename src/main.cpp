@@ -144,7 +144,9 @@ int main(int argc, char ** argv)
     if (no_gui)
         UmlDesktop::set_nogui();
     else
-        uw->show();
+    {
+        uw->showMaximized();
+    }
 
     if (argc > 1) {
         try {
