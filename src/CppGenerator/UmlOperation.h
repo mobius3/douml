@@ -39,7 +39,7 @@ class QTextStream;
 class UmlOperation : public UmlBaseOperation
 {
 private:
-    static Q3IntDict<char> bodies;
+    static QHash<long, WrapperStr> bodies;
 
 public:
     UmlOperation(void * id, const WrapperStr & n)

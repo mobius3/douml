@@ -48,7 +48,7 @@
 #include "Logging/QsLog.h"
 
 // to manage preserved bodies, the key is the id under bouml
-Q3IntDict<char> UmlOperation::bodies(127);
+QHash<long, WrapperStr> UmlOperation::bodies;
 const char * BodyPrefix = "// Bouml preserved body begin ";
 const char * BodyPrefix2 = "// Douml preserved body begin ";
 static const char * BodyPostfix = "// Bouml preserved body end ";
@@ -623,6 +623,7 @@ const char * UmlOperation::generate_body(QTextStream & fs,
         WrapperStr indent,
         const char * p)
 {
+    fs.setCodec(QTextCodec::codecForLocale());
     const char * body = 0;
     WrapperStr modeler_body;
     bool add_nl = FALSE;
@@ -633,7 +634,8 @@ const char * UmlOperation::generate_body(QTextStream & fs,
         unsigned id = get_id();
 
         sprintf(s_id, "%08X", id);
-        body = bodies.find((long) id);
+        if(bodies.contains((long) id))
+            body = bodies[(long) id];
     }
 
     if (body == 0)
@@ -661,23 +663,24 @@ const char * UmlOperation::generate_body(QTextStream & fs,
     if ((body != 0) && (*body != 0)) {
         // output body
         if (indent.isEmpty() || no_indent) {
-            fs << body;
+            fs << toLocaleFull(body);
             body += strlen(body);
         }
         else {
             if (*body != '#')
                 fs << indent;
 
-            while (*body) {
+            while (*body)
+            {
                 switch (*body) {
                 case '\\':
                     fs << '\\';
 
                     if (*++body == '\r')
-                        fs << *body++;
+                        fs << toLocale(body);
 
                     if (*body == '\n')
-                        fs << *body++;
+                        fs << toLocale(body);
 
                     break;
 
@@ -690,7 +693,7 @@ const char * UmlOperation::generate_body(QTextStream & fs,
                     break;
 
                 default:
-                    fs << *body++;
+                    fs << toLocale(body);
                 }
             }
         }
@@ -962,13 +965,13 @@ static char* CheckBodyPrefix(char*& pointer, const char * prefix1, const char * 
     return pActual;
 }
 
-static void read_bodies(const char * path, Q3IntDict<char> & bodies)
+static void read_bodies(const char * path, QHash<long, WrapperStr> & bodies)
 {
     QLOG_INFO() << "Reading bodies from file: " << path;
     int bodiesSize = bodies.size();
 
     for (int i(0); i < bodiesSize; ++i) {
-        QLOG_INFO() << bodies[i];
+        QLOG_INFO() << bodies[i].operator QString();
     }
 
     char * s = read_file(path);
@@ -994,7 +997,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
                 UmlCom::fatal_error("read_bodies 1");
             }
 
-            if (bodies.find(id) != 0) {
+            if (bodies.contains(id) != 0) {
                 QLOG_ERROR() << "bye happened";
                 UmlCom::trace(WrapperStr("<font  color =\"red\"> Error in ") + path +
                               " : preserve body identifier used twice</font><br>");
@@ -1047,11 +1050,16 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
             *p2 = 0;
 
             int len = p2 - body + 1;
-            char * b = new char[len];
+            //char * b = new char[len];
 
-            memcpy(b, body, len);
-            bodies.insert(id, b);
-
+            //memcpy(b, body, len);
+            //QTextStream st(b);
+            //st.setCodec(QTextCodec::codecForLocale());
+            //QByteArray ba(body, len);
+            WrapperStr str = QByteArray(body,len);
+            //const char * temp = body;
+            //st << toLocale(temp);
+            bodies.insert(id, str);
             p1 += BodyPostfixLength + 8;
         }
 
@@ -1061,7 +1069,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
 
 void UmlOperation::read_bodies(const char * h_path, const char * src_path)
 {
-    bodies.setAutoDelete(TRUE);
+    //bodies.setAutoDelete(TRUE);
     bodies.clear();
     ::read_bodies(h_path, bodies);
     ::read_bodies(src_path, bodies);

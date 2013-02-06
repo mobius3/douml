@@ -17,5 +17,13 @@ inline QString toLocale(const char*& p)
     int size =  codec->fromUnicode(temp1).size();
     p+=size;
     return temp1;
+}inline QString toLocaleFull(const char*& p)
+{
+    QTextCodec* codec = QTextCodec::codecForLocale();
+    QString temp1 = codec->toUnicode(p);
+    int size =  codec->fromUnicode(temp1).size();
+    p+=size;
+    return temp1;
 }
+
 #endif // CODEC_H
