@@ -252,30 +252,37 @@ void edit(const QString & s, QString name, void * id, EditType k,
     if (!ed.isEmpty() && (pf != 0)) {
         // try to use it
         QString f;
-
+        QString firstProto = "%s_%lx_%d.%s";
+        QString secondProto = "%s_%lx_%d.txt";
+        firstProto = firstProto.arg(name)
+                .arg(QString::number((unsigned long) id))
+                .arg(QString::number((unsigned long) user_id()));
+       secondProto=secondProto.arg(name)
+                .arg(QString::number((unsigned long) id))
+                .arg(QString::number((unsigned long) user_id()));
         switch (k) {
         case CppEdit:
-            f.sprintf("%s_%lx_%d.%s", (const char *) name, (unsigned long) id, user_id(),
-                      (const char *) GenerationSettings::get_cpp_src_extension());
+            firstProto=firstProto.arg(GenerationSettings::get_cpp_src_extension());
+            f=firstProto;
             break;
 
         case JavaEdit:
-            f.sprintf("%s_%lx_%d.%s", (const char *) name, (unsigned long) id, user_id(),
-                      (const char *) GenerationSettings::get_java_extension());
+            firstProto=firstProto.arg(GenerationSettings::get_java_extension());
+            f=firstProto;
             break;
 
         case PhpEdit:
-            f.sprintf("%s_%lx_%d.%s", (const char *) name, (unsigned long) id, user_id(),
-                      (const char *) GenerationSettings::get_php_extension());
+            firstProto=firstProto.arg(GenerationSettings::get_php_extension());
+            f=firstProto;
             break;
 
         case PythonEdit:
-            f.sprintf("%s_%lx_%d.%s", (const char *) name, (unsigned long) id, user_id(),
-                      (const char *) GenerationSettings::get_python_extension());
+            firstProto=firstProto.arg(GenerationSettings::get_python_extension());
+            f=firstProto;
             break;
 
         default: // TxTEdit
-            f.sprintf("%s_%lx_%d.txt", (const char *) name, (unsigned long) id, user_id());
+            f = secondProto;
         }
 
         for (int index = 0; index != (int) name.length(); index += 1)
@@ -291,18 +298,6 @@ void edit(const QString & s, QString name, void * id, EditType k,
                 fputs((const char *) s, fp);
 
             fclose(fp);
-
-
-
-
-
-
-
-
-
-
-
-
 
             ed += " \"" + path + "\"&";
             (void) system(ed);

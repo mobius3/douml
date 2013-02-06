@@ -72,7 +72,7 @@ static QString editText()
 }
 
 DiagramWindow::DiagramWindow(BrowserDiagram * br, const QString & s)
-    : Q3MainWindow(UmlWindow::get_workspace(), (const char *) s, Qt::WDestructiveClose),
+    : Q3MainWindow(0, (const char *) s, Qt::WDestructiveClose),
       no_save(FALSE), browser_node(br)
 {
     setCaption(s);
@@ -87,7 +87,7 @@ DiagramWindow::~DiagramWindow()
 {
     browser_node->set_window_destroyed();
     delete canvas;
-    setParent(0);
+    this->setParent(0);
 }
 
 void DiagramWindow::call_menu()

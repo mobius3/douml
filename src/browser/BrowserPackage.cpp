@@ -358,7 +358,7 @@ BrowserNode * BrowserPackage::duplicate(BrowserNode * p, QString name)
 {
     BrowserPackage * result = new BrowserPackage(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : (const char *) name);
+    result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype();
 
     return result;
@@ -474,7 +474,7 @@ void BrowserPackage::update_stereotype(bool rec)
                     + ">> " + name);
         }
         else
-            setText(0, (const char *) name);
+            setText(0, name);
     }
 
     if (rec) {
@@ -496,11 +496,11 @@ QString BrowserPackage::full_name(bool rev, bool) const
     QString p = ((BrowserNode *) parent())->full_name(FALSE, FALSE);
 
     if (p.isEmpty())
-        full_path = (const char *) name;
+        full_path = name;
     else if (rev)
         return name + (FullPathPrefix + p + FullPathPostfix);
     else
-        full_path = (p + (FullPathDotDot + name)).operator QString();
+        full_path = (p + (FullPathDotDot + name));
 
     return full_path;
 }
@@ -1746,7 +1746,7 @@ bool BrowserPackage::tool_cmd(ToolCom * com, const char * args)
         QString fn;
 
         if (this == BrowserView::get_project())
-            fn.sprintf("%s.prj", (const char *) name);
+            fn = name +"s.prj" ;
         else
             fn.setNum(get_ident());
 

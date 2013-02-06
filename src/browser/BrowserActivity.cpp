@@ -92,7 +92,7 @@ BrowserNode * BrowserActivity::duplicate(BrowserNode * p, QString name)
 {
     BrowserNode * result = new BrowserActivity(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : (const char *) name);
+    result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype(TRUE);
 
     return result;

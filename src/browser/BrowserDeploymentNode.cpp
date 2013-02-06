@@ -92,7 +92,7 @@ BrowserNode * BrowserDeploymentNode::duplicate(BrowserNode * p, QString name)
 {
     BrowserDeploymentNode * result = new BrowserDeploymentNode(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : (const char *) name);
+    result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype();
 
     return result;

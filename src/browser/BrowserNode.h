@@ -72,7 +72,7 @@ class BrowserNode : public Q3ListViewItem,
     public Editable
 {
 protected:
-    WrapperStr name;
+    QString name;
     WrapperStr comment;
     QByteArray tempBa;
     int original_id;	// from project library
@@ -110,10 +110,10 @@ public:
 
     virtual bool is_undefined() const;
 
-    const char * get_name() const {
+   QString get_name() const {
         return name;
     }
-    virtual void set_name(const char * s);
+    virtual void set_name(QString s);
     virtual void update_stereotype(bool rec = FALSE);
 
     static bool edition_active() {

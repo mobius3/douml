@@ -124,7 +124,7 @@ BrowserNode * BrowserUseCaseView::duplicate(BrowserNode * p, QString name)
 {
     BrowserUseCaseView * result = new BrowserUseCaseView(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : (const char *) name);
+    result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype();
 
     return result;

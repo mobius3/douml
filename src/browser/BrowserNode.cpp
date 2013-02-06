@@ -411,17 +411,14 @@ bool BrowserNode::is_writable() const
     return !is_read_only;
 }
 
-void BrowserNode::set_name(const char * s)
+void BrowserNode::set_name(QString  s)
 {
     bool firsttime = name.isEmpty();
-
-    if ((s == 0) ? !firsttime : (name != s)) {
-        name = s;
+    name = s;
 
         if (! firsttime)
             // else set by BrowserNode::post_load()
             update_stereotype();
-    }
 }
 
 //
@@ -441,7 +438,7 @@ void BrowserNode::update_stereotype(bool rec)
             setText(0, "<<" + str + ">> " + name);
         }
         else
-            setText(0, (const char *) name);
+            setText(0, name);
     }
 
     if (rec) {
@@ -1949,8 +1946,8 @@ void BrowserNodeList::search(BrowserNode * bn, UmlCode k, const QString & s,
                 (s.isEmpty() ||
                  (QString((for_name)
                           ? ch->get_name()
-                          : ((for_stereotype) ? ch->get_stereotype()
-                             : ch->get_comment()))
+                          : ((for_stereotype) ? QString(ch->get_stereotype())
+                             : QString(ch->get_comment())))
                   .find(s, 0, cs) != -1)))
                 append((BrowserNode *) child);
 

@@ -392,7 +392,7 @@ void BrowserClass::update_stereotype(bool rec)
                     + ">> " + name);
         }
         else
-            setText(0, (const char *) name);
+            setText(0, name);
     }
 
     if (rec) {
@@ -1228,7 +1228,7 @@ BrowserNode * BrowserClass::duplicate(BrowserNode * p, QString name)
 {
     BrowserClass * result = new BrowserClass(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : (const char *) name);
+    result->set_name((name.isEmpty()) ? get_name() : name);
 
     // count the current sub elt to not take into account two time the
     // bi-dir self relations

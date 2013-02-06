@@ -88,7 +88,7 @@ BrowserNode * BrowserParameter::duplicate(BrowserNode * p, QString name)
 {
     BrowserNode * result = new BrowserParameter(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : (const char *) name);
+    result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype();
 
     return result;

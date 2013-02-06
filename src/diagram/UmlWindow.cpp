@@ -706,8 +706,10 @@ void UmlWindow::clear()
         DiagramWindow * w = (DiagramWindow *) the->ws->windowList().at(0);
 
         w->dont_save();
-        w->close(TRUE);
+        w->setParent(0);
+        delete w;
     }
+
 
     if (BrowserSearchDialog::get() != 0)
         BrowserSearchDialog::get()->close();

@@ -514,7 +514,7 @@ AType BrowserOperation::get_of_association() const
 QString BrowserOperation::compute_name(const char * name_spec) const
 {
     if (*name_spec != 0) {
-        QString s = (const char *) name_spec;
+        QString s = name_spec;
         int index;
 
         if ((index = s.find("${name}")) != -1)

@@ -370,7 +370,7 @@ BasicData * BrowserFlow::get_data() const
 
 QString BrowserFlow::full_name(bool rev, bool) const
 {
-    QString s = (const char *) name;
+    QString s = name;
 
     if (s.isEmpty())
         s = "<anonymous flow>";

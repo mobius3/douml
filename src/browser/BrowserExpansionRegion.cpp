@@ -90,7 +90,7 @@ BrowserNode * BrowserExpansionRegion::duplicate(BrowserNode * p, QString name)
 {
     BrowserNode * result = new BrowserExpansionRegion(this, p);
 
-    result->set_name((const char *) name);
+    result->set_name(name);
     result->update_stereotype(TRUE);
 
     return result;

@@ -93,7 +93,7 @@ BrowserNode * BrowserComponentView::duplicate(BrowserNode * p, QString name)
 {
     BrowserComponentView * result = new BrowserComponentView(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : (const char *) name);
+    result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype();
 
     return result;
@@ -168,7 +168,7 @@ QString BrowserComponentView::full_name(bool rev, bool itself) const
     if (!itself)
         return p;
     else if (p.isEmpty())
-        return QString((const char *) name);
+        return name;
     else if (rev)
         return name + (FullPathPrefix + p + FullPathPostfix);
     else

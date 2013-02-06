@@ -369,7 +369,7 @@ BasicData * BrowserTransition::get_data() const
 
 QString BrowserTransition::full_name(bool rev, bool) const
 {
-    QString s = (const char *) name;
+    QString s = name;
 
     if (s.isEmpty())
         s = "<anonymous transition>";

@@ -88,7 +88,7 @@ BrowserNode * BrowserPseudoState::duplicate(BrowserNode * p, QString name)
     BrowserNode * result = new BrowserPseudoState(this, p);
 
     if (!allow_empty())
-        result->set_name((name.isEmpty()) ? get_name() : (const char *) name);
+        result->set_name((name.isEmpty()) ? get_name() : name);
 
     result->update_stereotype();
     return result;

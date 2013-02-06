@@ -179,7 +179,7 @@ BrowserNode * BrowserComponentDiagram::duplicate(BrowserNode * p, QString name)
 {
     BrowserComponentDiagram * result = new BrowserComponentDiagram(this, p);
 
-    result->set_name((name.isEmpty()) ? get_name() : (const char *) name);
+    result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype();
 
     return result;

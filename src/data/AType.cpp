@@ -36,7 +36,7 @@
 
 const char * AType::get_type() const
 {
-    return (type != 0) ? type->get_name() : explicit_type.operator const char *();
+    return (type != 0) ? type->get_name() : explicit_type.operator QString();
 }
 
 QString AType::get_type(ShowContextMode mode) const

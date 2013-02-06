@@ -759,7 +759,7 @@ QString BrowserRelation::full_name(bool rev, bool) const
     QString s = (def->is_a(this)) ? def->get_role_a() : def->get_role_b();
 
     if (s.isEmpty())
-        s = (const char *) name;
+        s = name;
 
     return fullname(s, rev);
 }

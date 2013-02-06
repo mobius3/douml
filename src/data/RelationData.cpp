@@ -677,7 +677,7 @@ void RelationData::select_in_browser(bool prefer_start) const
 
 const char * RelationData::get_idlcase(const RoleData & role)
 {
-    return (role.idl_case != 0) ? role.idl_case->get_name() : role.idl_explicit_case.operator const char *();
+    return (role.idl_case != 0) ? role.idl_case->get_name() : role.idl_explicit_case.operator QString();
 }
 
 void RelationData::set_idlcase(RoleData & role, BrowserAttribute * at,
@@ -1350,7 +1350,7 @@ static void save_role(const RoleData & role, bool assoc, QTextStream & st,
 void RelationData::save(QTextStream & st, bool ref, QString & warning) const
 {
     if (ref)
-        st << "relation_ref " << get_ident() << " // " << ((const char *) name);
+        st << "relation_ref " << get_ident() << " // " << (name);
     else {
         nl_indent(st);
         st << "relation " << get_ident() << ' ' << stringify(type);
