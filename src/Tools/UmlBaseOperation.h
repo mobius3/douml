@@ -167,7 +167,7 @@ public:
     bool set_CppDef(const char * s);
 
     // returns the operation's body in C++, useless if the def does not
-    // contains ${body}. Note that the body is get each time from BOUML
+    // contains ${body}. Note that the body is get each time from DOUML
     // for memory size reason
     WrapperStr cppBody();
 
@@ -236,7 +236,7 @@ public:
     bool set_JavaDef(const char * s);
 
     // returns the operation's body in Java++, useless if the def does
-    // not contains ${body} Note that the body is get each time from BOUML
+    // not contains ${body} Note that the body is get each time from DOUML
     // for memory size reason
     WrapperStr javaBody();
 
@@ -297,7 +297,7 @@ public:
     bool set_PhpDef(const char * s);
 
     // returns the operation's body in Php++, useless if the def does
-    // not contains ${body} Note that the body is get each time from BOUML
+    // not contains ${body} Note that the body is get each time from DOUML
     // for memory size reason
     WrapperStr phpBody();
 
@@ -350,7 +350,7 @@ public:
     bool set_PythonDef(const char * s);
 
     // returns the operation's body in Python++, useless if the def does
-    // not contains ${body} Note that the body is get each time from BOUML
+    // not contains ${body} Note that the body is get each time from DOUML
     // for memory size reason
     WrapperStr pythonBody();
 
@@ -435,7 +435,7 @@ public:
     // automatically if needed. args unused
     virtual void unload(bool = FALSE, bool = FALSE);
 
-    // not in plug-outs managed through bouml
+    // not in plug-outs managed through DOUML
     unsigned get_id() const;
 
 

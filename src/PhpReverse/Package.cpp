@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -78,7 +80,7 @@ NDict<Class> Package::classes(1001);
 // the php classes, the key are just the name without package
 NDict<Class> Package::php_classes(1001);
 
-// all the classes defined in bouml, not known through a .cat
+// all the classes defined in Douml, not known through a .cat
 // nor reversed, the key is the full name including package
 NDict<UmlClass> Package::user_classes(1001);
 

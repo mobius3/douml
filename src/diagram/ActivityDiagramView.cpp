@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -129,7 +131,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Bouml", TR("already drawn"));
+                    msg_information("Douml", TR("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -158,7 +160,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Bouml", TR("already drawn"));
+                    msg_information("Douml", TR("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -189,7 +191,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Bouml", TR("already drawn"));
+                    msg_information("Douml", TR("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -249,7 +251,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 history_protected = TRUE;
 
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Bouml", TR("already drawn"));
+                    msg_information("Douml", TR("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -277,7 +279,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Bouml", TR("already drawn"));
+                    msg_information("Douml", TR("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -308,7 +310,7 @@ void ActivityDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 if (the_canvas()->already_drawn(b)) {
-                    msg_information("Bouml", TR("already drawn"));
+                    msg_information("Douml", TR("already drawn"));
                     history_protected = FALSE;
                     return;
                 }
@@ -450,7 +452,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlActivityNode, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Bouml", TR("already drawn"));
+            msg_information("Douml", TR("already drawn"));
         else {
             history_save();
 
@@ -469,7 +471,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlInterruptibleActivityRegion, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Bouml", TR("already drawn"));
+            msg_information("Douml", TR("already drawn"));
         else {
             history_save();
 
@@ -493,7 +495,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlExpansionRegion, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Bouml", TR("already drawn"));
+            msg_information("Douml", TR("already drawn"));
         else {
             history_save();
 
@@ -517,7 +519,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlActivityPartition, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Bouml", TR("already drawn"));
+            msg_information("Douml", TR("already drawn"));
         else {
             history_save();
 
@@ -541,7 +543,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlActivityAction, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Bouml", TR("already drawn"));
+            msg_information("Douml", TR("already drawn"));
         else {
             history_save();
             history_protected = TRUE;
@@ -561,7 +563,7 @@ void ActivityDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlActivityObject, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
-            msg_information("Bouml", TR("already drawn"));
+            msg_information("Douml", TR("already drawn"));
         else {
             history_save();
             history_protected = TRUE;

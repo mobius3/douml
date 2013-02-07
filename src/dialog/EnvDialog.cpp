@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -310,7 +312,7 @@ void EnvDialog::accept()
         (sscanf((const char *) ed_id->text(), "%d", &id) != 1) ||
         (id < 2) ||
         (id > 127)) {
-        QMessageBox::critical(this, "Bouml", TR("Invalid identifier, must be an integer between 2 and 127"));
+        QMessageBox::critical(this, "Douml", TR("Invalid identifier, must be an integer between 2 and 127"));
         return;
     }
 
@@ -324,34 +326,34 @@ void EnvDialog::accept()
 
     if (ok_l && ok_t && ok_r && ok_b) {
         if ((l < 0) || (t < 0) || (r < 0) || (b < 0)) {
-            QMessageBox::critical(this, "Bouml",
+            QMessageBox::critical(this, "Douml",
                                   TR("Invalid DEFAULT SCREEN : coordinates can't be negative"));
             return;
         }
         else if ((l != 0) || (t != 0) || (r != 0) || (b != 0)) {
             if (r <= l) {
-                QMessageBox::critical(this, "Bouml",
+                QMessageBox::critical(this, "Douml",
                                       TR("Invalid DEFAULT SCREEN : the right must be greater than the left"));
                 return;
             }
 
             if (b <= t) {
-                QMessageBox::critical(this, "Bouml",
+                QMessageBox::critical(this, "Douml",
                                       TR("Invalid DEFAULT SCREEN : the bottom must be greater than the top"));
                 return;
             }
 
             if ((r - l) < 500)
-                QMessageBox::warning(this, "Bouml",
+                QMessageBox::warning(this, "Douml",
                                      TR("small DEFAULT SCREEN, width less than 500 points !"));
 
             if ((b - t) < 500)
-                QMessageBox::warning(this, "Bouml",
+                QMessageBox::warning(this, "Douml",
                                      TR("small DEFAULT SCREEN, height less than 500 points !"));
         }
     }
     else {
-        QMessageBox::critical(this, "Bouml",
+        QMessageBox::critical(this, "Douml",
                               TR("Invalid DEFAULT SCREEN"
                                  "To not specify the desktop all values must be empty or null."
                                  "Else the values must be non negative, the right must be greater\n"
@@ -382,7 +384,7 @@ void EnvDialog::accept()
 
 
     if (fp == 0) {
-        QMessageBox::critical(this, "Bouml", "cannot write in '" + s + "'");
+        QMessageBox::critical(this, "Douml", "cannot write in '" + s + "'");
 
         if (conversion)
             exit(-1);
@@ -609,7 +611,7 @@ int read_doumlrc()
     FILE * fp = fopen((const char *) s, "r");
 
     if (fp == 0) {
-        QMessageBox::critical(0, "Bouml", TR("cannot read '%1'", s));
+        QMessageBox::critical(0, "Douml", TR("cannot read '%1'", s));
         exit(-1);
     }
 
@@ -675,7 +677,7 @@ int read_doumlrc()
     }
 
     if (id == -1) {
-        QMessageBox::critical(0, "Bouml", TR("Own identifier missing or invalid"));
+        QMessageBox::critical(0, "Douml", TR("Own identifier missing or invalid"));
         EnvDialog::edit(FALSE, TRUE);
         return read_doumlrc();
     }

@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,18 +20,18 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
 // lexer written by hand rather than using [f]lex as usual,
 // BOUML is also my first development including a source code
 // reader where I do not use yacc/bison, to see how it is
-// without ...
+// without ... (comment by Bruno)
 
-//#define DEBUG_BOUML
-#ifdef DEBUG_BOUML
+//#define DEBUG_DOUML
+#ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
 #include <Q3CString>
@@ -135,7 +137,7 @@ unsigned Lex::line_number()
 
 bool Lex::open(const QString & f)
 {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "Lex::open(" << f << ")\n";
 #endif
 
@@ -165,7 +167,7 @@ bool Lex::open(const QString & f)
 
 void Lex::close()
 {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "Lex::close()\n";
 #endif
     delete [] _buffer;
@@ -468,7 +470,7 @@ Q3CString Lex::manage_operator(QString & result, int c, bool oper)
             result += get();
     }
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
     QByteArray temp = result.toAscii();
@@ -670,7 +672,7 @@ Q3CString Lex::read_array_dim()
             result += pointer;
             *_context.pointer = c;
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
             QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
             return result;
@@ -905,13 +907,13 @@ Q3CString Lex::read_word(bool in_expr)
 
                 case '=':
                     get();
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                     QLOG_INFO() << "retourne '/='\n";
 #endif
                     return "/=";
 
                 default:
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                     QLOG_INFO() << "retourne '/'\n";
 #endif
                     return "/";
@@ -936,7 +938,7 @@ Q3CString Lex::read_word(bool in_expr)
                 // keyword removed
                 return read_word(in_expr);
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
             QLOG_INFO() << "retourne '" << v << "'\n";
 #endif
 
@@ -944,7 +946,7 @@ Q3CString Lex::read_word(bool in_expr)
         }
     }
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
 
@@ -1263,7 +1265,7 @@ void Lex::syntax_error(Q3CString s)
                   Q3CString().setNum(_context.line_number) + " <b>"
                   + s + "</b></font><br>");
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "SYNTAX ERROR IN " << _filename
                 << " LINE " << _context.line_number << " : " << s << '\n';
 #endif
@@ -1276,7 +1278,7 @@ void Lex::warn(Q3CString s)
                   Q3CString().setNum(_context.line_number) + " <b>"
                   + s + "</b></font><br>");
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "ERROR IN " << _filename
                 << " LINE " << _context.line_number << " : " << s << '\n';
 #endif
@@ -1289,7 +1291,7 @@ void Lex::premature_eof()
                   Q3CString().setNum(_context.line_number) +
                   " <b>premature eof</b></font><br>");
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "SYNTAX ERROR IN " << _filename
                 << " LINE " << _context.line_number << " : premature eof\n";
 #endif
@@ -1302,7 +1304,7 @@ void Lex::error_near(Q3CString s)
                   Q3CString().setNum(_context.line_number) + " <b>near <font color =\"red\">"
                   + quote(s) + "</font></b></font><br>");
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "SYNTAX ERROR IN " << _filename
                 << " LINE " << _context.line_number << " : near '" << s << "'\n";
 #endif

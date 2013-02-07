@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -114,7 +116,7 @@ ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control"
 
     // historic
 
-    // note : QFile fp(QDir::home().absFilePath(".bouml")) doesn't work
+    // note : QFile fp(QDir::home().absFilePath(".douml")) doesn't work
     // if the path contains non latin1 characters, for instance cyrillic !
     QString s = homeDir.absFilePath(".douml");
     FILE * fp = fopen((const char *) s, "r");

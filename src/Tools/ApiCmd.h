@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -284,13 +286,13 @@ enum OnInstanceCmd {
     // api 55
     setPhpNamespaceCmd,
 
-    setUserCmd = 252, // not in plug-outs managed through bouml
-    moveInCmd = 253,  // not in plug-outs managed through bouml
+    setUserCmd = 252, // not in plug-outs managed through Douml
+    moveInCmd = 253,  // not in plug-outs managed through Douml
 
-    getIdCmd = 254, // not in old plug-outs managed through bouml
+    getIdCmd = 254, // not in old plug-outs managed through Douml
 
     // api 20
-    old_deleteCmd = 255 // not in plug-outs managed through bouml
+    old_deleteCmd = 255 // not in plug-outs managed through Douml
 };
 
 enum ClassGlobalCmd {

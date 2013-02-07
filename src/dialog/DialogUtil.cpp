@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -60,7 +62,7 @@
 #include "UmlDesktop.h"
 #include "translate.h"
 
-static QString BoumlEditor;
+static QString DoumlEditor;
 
 SmallPushButton::SmallPushButton(const QString & text, QWidget * parent)
     : QPushButton(text, parent)
@@ -247,7 +249,7 @@ void same_width(QWidget * l1, QWidget * l2, QWidget * l3,
 void edit(const QString & s, QString name, void * id, EditType k,
           Q3TabDialog * d, post_edit pf, Q3PtrList<BodyDialog> & edits)
 {
-    QString ed = BoumlEditor;
+    QString ed = DoumlEditor;
 
     if (!ed.isEmpty() && (pf != 0)) {
         // try to use it
@@ -324,7 +326,7 @@ bool check_edits(Q3PtrList<BodyDialog> & edits)
     if (edits.isEmpty())
         return TRUE;
 
-    return (msg_critical("Bouml",
+    return (msg_critical("Douml",
                          TR("Sub dialog(s) still opened\n"
                             "If you choose 'Ok' the dialog will be closed\n"
                             "without taking into account it content"),
@@ -691,12 +693,12 @@ int msg_information(QString caption, QString text,
 
 QString editor()
 {
-    return BoumlEditor;
+    return DoumlEditor;
 }
 
 void set_editor(QString s)
 {
-    BoumlEditor = s;
+    DoumlEditor = s;
 }
 
 //

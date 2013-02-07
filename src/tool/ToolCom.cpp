@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -567,7 +569,7 @@ void ToolCom::fatal_error(const char *
 
 void ToolCom::connexion_timeout()
 {
-    msg_critical("Bouml",
+    msg_critical("Douml",
                  QString("connexion timeout for '") + QString(cmd) + QString("'"));
     close();
 
@@ -623,7 +625,7 @@ void ToolCom::data_received(Socket * who)
 
                 api_version = get_unsigned(p);
                 if (api_version < 11) {
-                    TraceDialog::add("<font color =\"red\"><b>the plug-out was written for a BOUML release less or equal to 1.5<b></font>");
+                    TraceDialog::add("<font color =\"red\"><b>the plug-out was written for a BDUML release less or equal to 1.5<b></font>");
                     TraceDialog::show_it();
                     close();
                     return;
@@ -635,7 +637,7 @@ void ToolCom::data_received(Socket * who)
                 return;
                 }*/
                 else if (api_version > 55) {
-                    TraceDialog::add("<font color =\"red\"><b>the plug-out is incompatible with this too old version of BOUML<b></font>");
+                    TraceDialog::add("<font color =\"red\"><b>the plug-out is incompatible with this too old version of DOUML<b></font>");
                     TraceDialog::show_it();
                     close();
                     return;
@@ -969,7 +971,7 @@ void ToolCom::processFinished()
     QLOG_TRACE() << "Disconnecting external process signals";
 
     if (errno != 0) {
-        msg_critical("Bouml",
+        msg_critical("Douml",
                      "error while executing '" + QString(cmd) + "'\n"
                      "perhaps you must specify its absolute path"
                      "or set the environment variable PATH ?");

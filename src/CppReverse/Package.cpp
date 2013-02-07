@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,12 +20,12 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -453,7 +455,7 @@ void Package::scan_dirs(int & n)
             path = d.absPath();
         }
 
-        // just to give a chance to Bouml to update trace window before the
+        // just to give a chance to Douml to update trace window before the
         // file dialog appears to not have it under the trace windows
         UmlBasePackage::getProject();
     }
@@ -1053,7 +1055,7 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block)
                      (s == "Q_TYPENAME"))
                 ; // lost
             else if (Scan && (s != "extern") && (s != "typename")) {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "reverse_toplevel_forms skip_body sur '" << s << "'\n";
 #endif
                 UmlOperation::skip_body();
@@ -1065,7 +1067,7 @@ void Package::reverse_toplevel_forms(Q3CString f, bool sub_block)
         }
     }
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "exit Package::reverse_toplevel_forms avec '" << s << "'\n";
 #endif
 }
@@ -1080,7 +1082,7 @@ void Package::reverse_toplevel_form(Q3CString f, Q3CString s)
     Q3CString name;
     Q3CString array;
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "Package::reverse_toplevel_form(" << s << ")\n";
 #endif
 
@@ -1160,27 +1162,27 @@ void Package::reverse_toplevel_form(Q3CString f, Q3CString s)
             if (type.isEmpty()) {
                 type = s = Lex::complete_template_type(s);
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "type = '" << type << "'\n";
 #endif
             }
             else if (name.isEmpty()) {
                 if (type.right(3) == "::~") {
                     type += s;
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                     QLOG_INFO() << "type => '" << type << "'\n";
 #endif
                 }
                 else {
                     name = Lex::complete_template_type(s);
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                     QLOG_INFO() << "name = '" << name << "'\n";
 #endif
                 }
             }
             else {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "ERROR '" << s << "' alors qu a deja le type '" << type << "' et le nom '" << name << "'\n";
 #endif
                 break;
@@ -1189,7 +1191,7 @@ void Package::reverse_toplevel_form(Q3CString f, Q3CString s)
         else if (*((const char *) s) == '[')
             array += s;
         else {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
             QLOG_INFO() << "ERROR : '" << s << "'\n";
 #endif
             break;
@@ -1225,7 +1227,7 @@ void Package::reverse_variable(const Q3CString & name)
 
     if (name.isEmpty()) {
         Lex::syntax_error();
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
         QLOG_INFO() << "ERROR ';' et name.isEmpty() || type.isEmpty()\n";
 #endif
         return;
@@ -1239,7 +1241,7 @@ void Package::reverse_variable(const Q3CString & name)
         !find_type(Lex::normalize(name.left(index)), typespec)) {
         Lex::warn(Q3CString("<font color =\"red\"> ") + Lex::quote(name) +
                   "</font> is lost");
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
         QLOG_INFO() << "ERROR " << name << " lost";
 #endif
         return;
@@ -1334,7 +1336,7 @@ void Package::reverse_variable(const Q3CString & name)
     Lex::warn(Q3CString("<font color =\"red\"> ") + Lex::quote(name)
               + "</font> is not a static attribute of <font color =\"red\"> " +
               Lex::quote(typespec.type->name()) + "</font>");
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "ERROR " << name << " undeclared static attribute\n";
 #endif
 }

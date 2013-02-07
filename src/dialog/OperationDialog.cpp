@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -1558,7 +1560,7 @@ void OperationDialog::cpp_edit_param_decl()
         }
     }
     else
-        msg_warning("Bouml", TR("wrong specification"));
+        msg_warning("Douml", TR("wrong specification"));
 }
 
 
@@ -2171,7 +2173,7 @@ void OperationDialog::cpp_edit_param_def()
             cpp_update_def();
     }
     else
-        msg_warning("Bouml", TR("wrong specification"));
+        msg_warning("Douml", TR("wrong specification"));
 }
 
 // return TRUE if stop on ${commnt} or ${description}
@@ -3516,7 +3518,7 @@ void OperationDialog::php_edit_param()
             php_update_def();
     }
     else
-        msg_warning("Bouml", TR("wrong specification"));
+        msg_warning("Douml", TR("wrong specification"));
 }
 
 // Python
@@ -3991,7 +3993,7 @@ void OperationDialog::python_edit_param()
             python_update_def();
     }
     else
-        msg_warning("Bouml", TR("wrong specification"));
+        msg_warning("Douml", TR("wrong specification"));
 }
 
 void OperationDialog::python_edit_decorator()

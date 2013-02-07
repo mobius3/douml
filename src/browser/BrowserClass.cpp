@@ -2,9 +2,11 @@
 
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 // Copyright 2011-2012 Nikolai Marchenko.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -3686,7 +3688,7 @@ void BrowserClass::plug_out_conversion()
 
         if (strcmp(bn->get_name(), "Com Component view") == 0) {
             bn->set_name("Com Deployment view");
-            bn->set_comment("The API system artifacts concerning the communication with BOUML\n\nDO NOT MODIFY THEM !!!\n");
+            bn->set_comment("The API system artifacts concerning the communication with DOUML\n\nDO NOT MODIFY THEM !!!\n");
         }
 
         BrowserArtifact * settingsArtifact = BrowserArtifact::find("CppSettings");

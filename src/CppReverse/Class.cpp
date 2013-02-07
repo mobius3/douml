@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,12 +20,12 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -349,7 +351,7 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
             break;
         }
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
         QLOG_INFO() << "in class def a lu '" << s << "'\n";
 #endif
 
@@ -479,7 +481,7 @@ Class * Class::reverse(ClassContainer * container, Q3CString stereotype,
             continue;
         }
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
         QLOG_INFO() << "visi = " << s << '\n';
 #endif
 
@@ -642,7 +644,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
     Q3ValueList<FormalParameterList> tmplts;
     Q3CString friend_template;
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "Class::manage_member(" << s << ")\n";
 #endif
 
@@ -709,7 +711,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
             else if (!type.isEmpty())
                 modifier = s;
             else {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "ERROR modifier " << s << " et type empty\n";
 #endif
 
@@ -888,7 +890,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
 
                 if (s.isEmpty() || (s != ";")) {
                     Lex::error_near("friend");
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                     QLOG_INFO() << "ERROR ';' doit terminer un 'friend'\n";
 #endif
                     break;
@@ -947,7 +949,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
                     if (! Package::scanning())
                         Lex::error_near(s);
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                     QLOG_INFO() << "ERROR '" << s << " {' alors qu a deja le type '" << type << "' et le nom '" << name << "'\n";
 #endif
                     return;
@@ -1075,14 +1077,14 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
         else if (Lex::identifierp(s, FALSE)) {
             if (type.isEmpty()) {
                 s = Lex::complete_template_type(s);
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "type = '" << s << "'\n";
 #endif
                 type = (destructor) ? Q3CString("~") + s : s;	// will be the name if ~
             }
             else if (name.isEmpty()) {
                 name = s;
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "name = '" << name << "'\n";
 #endif
             }
@@ -1090,7 +1092,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
                 if (!Package::scanning())
                     Lex::error_near(s);
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "ERROR '" << s << "' alors qu a deja le type '" << type << "' et le nom '" << name << "'\n";
 #endif
                 break;
@@ -1116,7 +1118,7 @@ void Class::manage_member(Q3CString s, aVisibility visibility,
             if (!Package::scanning())
                 Lex::error_near(s);
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
             QLOG_INFO() << "ERROR : '" << s << "'\n";
 #endif
             break;
@@ -1735,7 +1737,7 @@ Class * Class::reverse_enum(ClassContainer * container,
         // prefix if the code before 'type' and Lex::region() the code after
         // 'type' up to 's' (including 's', may be except template actuals)
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
         QLOG_INFO() << "typedef " << s << "...\n";
 #endif
         Class * ty = container->define(s, "typedef");
@@ -1753,7 +1755,7 @@ Class * Class::reverse_enum(ClassContainer * container,
         UmlClass * ty_uml;
 
         if ((ty == 0) || ((ty_uml = ty->get_uml()) == 0)) {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
             QLOG_INFO() << ((ty == 0) ? "typedef ty\n" : "typedef ty_uml\n");
 #endif
             UmlOperation::skip_body();

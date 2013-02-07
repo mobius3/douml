@@ -390,7 +390,7 @@ void UmlBaseRelation::read_idl_()
 }
 #endif
 
-// not in plug-out managed through bouml
+// not in plug-out managed through DOUML
 // applied on first role
 bool UmlBaseRelation::set_rel_kind(aRelationKind k)
 {

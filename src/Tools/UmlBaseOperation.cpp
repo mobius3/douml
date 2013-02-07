@@ -939,7 +939,7 @@ void UmlBaseOperation::read_idl_()
 }
 #endif
 
-// not in plug-outs managed through bouml
+// not in plug-outs managed through Douml
 unsigned UmlBaseOperation::get_id() const
 {
     UmlCom::send_cmd(_identifier, getIdCmd);

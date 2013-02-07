@@ -513,7 +513,7 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, con
 
 void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, const char * arg2, const char * arg3, const UmlTypeSpec & arg4, const UmlTypeSpec & arg5)
 {
-#ifdef DEBUGBOUML
+#ifdef DEBUGDOUML
     QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", " << arg1 << \", \"" << arg2 << "\", \"" << arg3 << "\", " << ", UmlTypeSpec, UmlTypeSpec)\n";
 #endif
 
@@ -653,7 +653,7 @@ void * UmlCom::read_id()
 
     void * a;
 
-    // sizeof(void *) must be the same for bouml and
+    // sizeof(void *) must be the same for DOUML and
     // the plug-out, bypass it
     memcpy((char *) &a, p_buffer_in + 1, sizeof(void *));
     p_buffer_in += sizeof(void *) + 1;
@@ -722,12 +722,12 @@ void UmlCom::read_item_list(Q3PtrVector<UmlItem> & v)
 }
 
 void UmlCom::fatal_error(const WrapperStr &
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                          msg
 #endif
                         )
 {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << msg << '\n';
 #endif
 

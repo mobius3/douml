@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,12 +20,12 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
 #include <Q3ValueList>
@@ -228,7 +230,7 @@ bool UmlOperation::new_one(Class * cl, const Q3CString & name,
 {
     // the "(" was read
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "OPERATION '" << name << "' type '" << type << "' modifier '" << modifier << "'\n";
 #endif
 
@@ -448,7 +450,7 @@ bool UmlOperation::new_one(Class * cl, const Q3CString & name,
 
             for (rank = 0, it = params.begin(); it != params.end(); ++it, rank += 1) {
                 if (!op->addParameter(rank, *it)) {
-# ifdef DEBUG_BOUML
+# ifdef DEBUG_DOUML
                     QLOG_INFO() << "ERROR cannot add param '" << param.name << "' type '" << param.type.toString() << '\n';
 # endif
                     return FALSE;
@@ -462,7 +464,7 @@ bool UmlOperation::new_one(Class * cl, const Q3CString & name,
 #endif
         while (read_param(cl, rank, param, decl, tmplts, on_error, TRUE)) {
             if ((op != 0) && !op->addParameter(rank++, param)) {
-# ifdef DEBUG_BOUML
+# ifdef DEBUG_DOUML
                 QLOG_INFO() << "ERROR cannot add param '" << param.name << "' type '" << param.type.toString() << '\n';
 # endif
                 return FALSE;
@@ -921,7 +923,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
                               const Q3ValueList<FormalParameterList> & tmplt,
                               BooL & on_error, bool add_defaultvalue)
 {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "UmlOperation::manage_param " << rank << "\n";
 #endif
 
@@ -930,7 +932,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
 
     Q3CString s = Lex::read_word();
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << "commence par " << s << '\n';
 #endif
 
@@ -1004,7 +1006,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
                 modifier = s;
             else {
                 Lex::error_near(s);
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "ERROR modifier " << s << " et type empty\n";
 #endif
                 return FALSE;
@@ -1040,7 +1042,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
 
             // note : doesn't add the pretype (class ...) else
             // this will be a problem if this one is not used both
-            // in the declaration and definition, furthermore Bouml
+            // in the declaration and definition, furthermore Douml
             // add needed declaration/includes
 
             if (!pfct) {
@@ -1093,7 +1095,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
             // suppose struct name ...
             if (! pretype.isEmpty()) {
                 Lex::error_near(s);
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "ERROR '" << s << "' alors qu a deja le pre-type '" << pretype << "'\n";
 #endif
                 return FALSE;
@@ -1107,19 +1109,19 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
             else if (type.isEmpty()) {
                 type = Lex::complete_template_type(s);
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "type = '" << type << "'\n";
 #endif
             }
             else if (param.name.isEmpty()) {
                 param.name = s;
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "name = '" << param.name << "'\n";
 #endif
             }
             else {
                 Lex::error_near(s);
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "ERROR '" << s << "' alors qu a deja le type '" << type << "' et le nom '" << param.name << "'\n";
 #endif
                 return FALSE;
@@ -1136,7 +1138,7 @@ bool UmlOperation::read_param(ClassContainer * container, unsigned rank,
                 pfct = TRUE;
             else {
                 Lex::error_near(s);
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                 QLOG_INFO() << "ERROR : '" << s << "'\n";
 #endif
                 return FALSE;
@@ -1230,7 +1232,7 @@ static bool compare_templates(const FormalParameterList & t1,
     if (t1.count() != t2.count()) {
         Lex::warn("wrong template specification " + w + " <font color =\"red\">" +
                   Lex::quote(s) + "</font>");
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
         QLOG_INFO() << "ERROR wrong template specification " << w << s << '\n';
 #endif
         return FALSE;
@@ -1243,7 +1245,7 @@ static bool compare_templates(const FormalParameterList & t1,
             Lex::warn("please, help me, use the template specification of <font color =\"red\">"
                       + Lex::quote(s)
                       + "</font>'s declaration, template are already enough complicated !");
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
             QLOG_INFO() << "ERROR change template names !";
 #endif
             return TRUE;	// just a warning
@@ -1479,7 +1481,7 @@ void UmlOperation::reverse_definition(Package * pack, Q3CString name,
         oper_tmplt = 0;
     }
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << candidates.count() << " compatible operations for " << name << '\n';
 #endif
 

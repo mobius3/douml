@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,12 +20,12 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
 #include <Q3CString>
@@ -83,14 +85,14 @@ bool UmlClass::manage_inherit(ClassContainer * container,
 #endif
                              )
 {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
     QLOG_INFO() << name() << "->manage_inherit()\n";
 #endif
 
     Q3CString s = Lex::read_word(TRUE);
 
     while (s != "{") {
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
         QLOG_INFO() << "Class::manage_inherit, visibility : " << s << '\n';
 #endif
 
@@ -125,7 +127,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
             return FALSE;
         }
 
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
         QLOG_INFO() << "UmlClass::manage_inherit, mother : " << s << '\n';
 #endif
 
@@ -179,7 +181,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
                     ((rel = UmlBaseRelation::create(aRealization, this, mother.type)) == 0)) {
                     Lex::warn("cannot inherit <font color =\"red\">" +
                               Lex::quote(mother_name) + " </font>");
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
                     QLOG_INFO() << "cannot create <|---\n";
 #endif
                     return FALSE;
@@ -233,7 +235,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
             ((rel = UmlBaseRelation::create(aGeneralisation, this, mother.type)) == 0)) {
             Lex::warn("cannot inherit <font color =\"red\">" +
                       Lex::quote(mother_name) + " </font>");
-#ifdef DEBUG_BOUML
+#ifdef DEBUG_DOUML
             QLOG_INFO() << "cannot create <|---\n";
 #endif
             return FALSE;

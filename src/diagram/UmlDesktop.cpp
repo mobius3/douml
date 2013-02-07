@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -148,7 +150,7 @@ void UmlDesktop::set_limits(int l, int t, int r, int b)
         fixedp = FALSE;
     else if ((r < 0) || (t < 0) || (r < 0) || (b < 0)) {
         fixedp = FALSE;
-        QMessageBox::critical(0, "Bouml",
+        QMessageBox::critical(0, "Douml",
                               "Invalid DEFAULT SCREEN, values not taken into account\n"
                               "\n"
                               "coordinates can't be negative");
@@ -156,7 +158,7 @@ void UmlDesktop::set_limits(int l, int t, int r, int b)
     else if ((r <= l) || (b <= t)) {
         fixedp = FALSE;
 
-        QMessageBox::critical(0, "Bouml",
+        QMessageBox::critical(0, "Douml",
                               "Invalid DEFAULT SCREEN, values not taken into account\n"
                               "\n"
                               "right must be greater than left, and bottom must be greater than top");

@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -168,7 +170,7 @@ void HelpDialog::show(QString topic)
                 (void) system(s);
 
                 if (errno != 0)
-                    QMessageBox::critical(0, "Bouml",
+                    QMessageBox::critical(0, "Douml",
                                           TR("HelpDialog : error while executing '%1'\n"
                                              "perhaps you must specify its absolute path"
                                              "or set the environment variable PATH ?", NavigatorPath));
@@ -203,7 +205,7 @@ void HelpDialog::show(QString topic)
                                  : TR("The documentation isn't installed.<br><br>")) +
                          TR("The \".tar.gz\" or \".7z\" archives are available here:"
                             "<ul><li>http://bouml.sourceforge.net/documentation.html</li>"
-                            "<li>http://bouml.free.fr/documentation.html</li></ul>"
+                            "<li>http://sourceforge.net/projects/douml/documentation.html</li></ul>"
                             "<br>Extract an archive and set the environment through the Miscellaneous"
                             "menu to indicate where the directory \"doc\" is then close this dialog and redo"));
         the->setMinimumSize(QSize(600, 300));

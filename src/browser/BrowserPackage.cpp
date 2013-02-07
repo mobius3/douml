@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -1287,7 +1289,7 @@ void BrowserPackage::add_package(bool profile)
         p->select_in_browser();
 
         if ((owner != -1) &&
-                (msg_warning("Bouml",
+                (msg_warning("Douml",
                              TR("Do you want to be the owner of this new package ?\n"
                                 "(other users can't modify it while you are the owner)"),
                              QMessageBox::Yes, QMessageBox::No)
@@ -1375,7 +1377,7 @@ BrowserPackage * BrowserPackage::import_project(QString fn, bool aslib, int id)
 void BrowserPackage::update_lib()
 {
     if (must_be_saved()) {
-        if (msg_warning("Bouml",
+        if (msg_warning("Douml",
                         TR("The project is modified and need to be saved first.\n"
                            "If you don't want to save your modifications reload\n"
                            "the project then ask again for the update\n"
@@ -2806,7 +2808,7 @@ unsigned BrowserPackage::load(bool recursive, int id)
 
             if (read_file_format() > api_format(true)) {
                 msg_critical("Error",
-                             TR("Your version of BOUML is too old to read this project"));
+                             TR("Your version of DOUML is too old to read this project"));
                 throw 0;
             }
 
@@ -3096,7 +3098,7 @@ bool BrowserPackage::load_version(QString fn)
 
                 if (read_file_format() > api_format(true)) {
                     msg_critical(TR("Error"),
-                                 TR("Your version of BOUML is too old to read this project"));
+                                 TR("Your version of DOUML is too old to read this project"));
                     throw 0;
                 }
             }

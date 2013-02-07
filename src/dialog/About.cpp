@@ -1,8 +1,10 @@
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
+// Copyright 2012-2013 Nikolai Marchenko.
+// Copyright 2012-2013 Leonardo Guilherme.
 //
-// This file is part of the BOUML Uml Toolkit.
+// This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -18,8 +20,8 @@
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : bouml@free.fr
-// home   : http://bouml.free.fr
+// e-mail : enmarantispam@gmail.com
+// home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
 
@@ -64,27 +66,13 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
     const char htmltext[] = "<p>DoUML</p>\n"
                             "<p>This project is a fork of\n"
                             "Bruno Pages's work, BoUML:\n"
-                            "<i>http://bouml.free.fr/</i></p>\n"
+                            "<i>http://sourceforge.net/projects/douml/</i></p>\n"
                             "<p>DoUML focus is to port BoUML to Qt4\n"
                             "and to maintain it as a community</p>\n"
                             "<p>Join us at:<br>\n"
                             "https://github.com/leonardo2d/douml/<br>\n"
                             "#bdouml@irc.freenode.net</p>\n\n\n";
 
-    /*
-      const char * htmltext = ("BOUML release <b>4.22.2</b><br>\n"
-    			   "<br>\n"
-    			   "<i>http://bouml.free.fr</i><br>\n"
-    			   "<i>http://bouml.sourceforge.net/</i><br>\n"
-    			   "<br>\n"
-    			   "Bruno Pages (<i>bouml@free.fr</i>)");
-      const char * sizetext = ("BOUML release <b>4.88.88 patch 1</b>\n"
-    			   "\n"
-    			   "http://bouml.free.fr\n"
-    			   "http://bouml.sourceforge.net/____\n"
-    			   "\n"
-    			   "Bruno Pages (bouml@free.fr)\n\n");
-    			   */
     Q3TextView * tx =
         new Q3TextView(htmltext, QString(), this);
     QFont fnt = tx->font();
