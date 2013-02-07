@@ -76,10 +76,7 @@
 #include "translate.h"
 #include "../Logging/QsLog.h"
 
-
-
-
-
+QList<UmlCode> BrowserNode::generatable_types;
 Q3PtrList<BrowserNode> BrowserNode::marked_list;
 
 static BrowserPackage * UndefinedNodePackage;
@@ -736,6 +733,41 @@ void BrowserNode::DropAfterEvent(QDropEvent * e, BrowserNode *)
     msg_critical(TR("Error"), TR("Forbidden"));
 }
 
+BrowserNode *BrowserNode::get_first_generatable_node()
+{
+    BrowserNode * result = nullptr;
+    BrowserNode * testSubject = this;
+    while(!generatable_types.contains(testSubject->get_type()))
+    {
+        testSubject = (BrowserNode *)this->parent();
+        if(testSubject == 0)
+        {
+            break;
+        }
+    }
+    result = testSubject;
+    return result;
+}
+
+QList<BrowserNode *> BrowserNode::get_generation_list()
+{
+    QList<BrowserNode *> result;
+    if(marked_list.count() > 0)
+    {
+        Q3PtrListIterator<BrowserNode> it(marked_list);
+
+        for (; it.current() != 0; ++it)
+        {
+            BrowserNode * temp = it.current()->get_first_generatable_node();
+            if(temp != 0 && !result.contains(temp))
+                result << temp;
+        }
+    }
+    else
+        result << this->get_first_generatable_node();
+    return result;
+}
+
 //
 
 void BrowserNode::open(bool)
@@ -1195,6 +1227,12 @@ void BrowserNode::toggle_mark()
 
     if (ReferenceDialog::get() != 0)
         ReferenceDialog::get()->update();
+}
+
+void BrowserNode::setup_generatable_types()
+{
+    generatable_types << UmlClass << UmlComponent << UmlDeploymentNode << UmlArtifact
+                         << UmlClassView << UmlComponentView << UmlDeploymentView << UmlPackage << UmlProject;
 }
 
 //

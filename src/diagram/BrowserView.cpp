@@ -59,7 +59,7 @@ BrowserView * BrowserView::the;
 BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent)
 {
     the = this;
-
+    BrowserNode::setup_generatable_types();
     project = 0;			// no project yet
     mousePressed = FALSE;
 
@@ -304,39 +304,87 @@ void BrowserView::contentsMouseReleaseEvent(QMouseEvent *)
 
 void BrowserView::OnGenerateCpp()
 {
-    BrowserNode* currentNode = static_cast<BrowserNode*>(this->currentItem());
+    QList<BrowserNode*> toGenerate = static_cast<BrowserNode*>(this->currentItem())->get_generation_list();
+    for(BrowserNode* node: toGenerate)
+    {
+        if(!node)
+            continue;
 
-    bool preserve = preserve_bodies();
+        bool preserve = preserve_bodies();
 
-    ToolCom::run((verbose_generation())
-                 ? ((preserve) ? "cpp_generator -v -p" : "cpp_generator -v")
+
+        ToolCom::run((verbose_generation())
+                     ? ((preserve) ? "cpp_generator -v -p" : "cpp_generator -v")
                      : ((preserve) ? "cpp_generator -p" : "cpp_generator"),
-                     currentNode);
+                     node);
+    }
 
 }
 
 void BrowserView::OnGenerateJava()
 {
-    BrowserNode* currentNode = static_cast<BrowserNode*>(this->currentItem());
+    QList<BrowserNode*> toGenerate = static_cast<BrowserNode*>(this->currentItem())->get_generation_list();
+    for(BrowserNode* node: toGenerate)
+    {
+        if(!node)
+            continue;
 
-    bool preserve = preserve_bodies();
+        bool preserve = preserve_bodies();
 
-    ToolCom::run((verbose_generation())
-                 ? ((preserve) ? "cpp_generator -v -p" : "cpp_generator -v")
-                     : ((preserve) ? "cpp_generator -p" : "cpp_generator"),
-                     currentNode);
+
+
+        ToolCom::run((verbose_generation())
+                     ? ((preserve) ? "java_generator -v -p" : "java_generator -v")
+                     : ((preserve) ? "java_generator -p" : "java_generator"),
+                     node);
+    }
 }
 
 void BrowserView::OnGeneratePhp()
 {
+    QList<BrowserNode*> toGenerate = static_cast<BrowserNode*>(this->currentItem())->get_generation_list();
+    for(BrowserNode* node: toGenerate)
+    {
+        if(!node)
+            continue;
+
+        bool preserve = preserve_bodies();
+
+
+        ToolCom::run((verbose_generation())
+                     ? ((preserve) ? "php_generator -v -p" : "php_generator -v")
+                     : ((preserve) ? "php_generator -p" : "php_generator"),
+                     node);
+    }
 }
 
 void BrowserView::OnGeneratePython()
 {
+    QList<BrowserNode*> toGenerate = static_cast<BrowserNode*>(this->currentItem())->get_generation_list();
+    for(BrowserNode* node: toGenerate)
+    {
+        if(!node)
+            continue;
+
+        bool preserve = preserve_bodies();
+
+        ToolCom::run((verbose_generation())
+                     ? ((preserve) ? "python_generator -v -p" : "python_generator -v")
+                     : ((preserve) ? "python_generator -p" : "python_generator"),
+                     node);
+    }
 }
 
 void BrowserView::OnGenerateIdl()
 {
+    QList<BrowserNode*> toGenerate = static_cast<BrowserNode*>(this->currentItem())->get_generation_list();
+    for(BrowserNode* node: toGenerate)
+    {
+        if(!node)
+            continue;
+
+        ToolCom::run((verbose_generation()) ? "idl_generator -v" : "idl_generator", node);
+    }
 }
 
 void BrowserView::keyPressEvent(QKeyEvent * e)

@@ -32,6 +32,7 @@
 #include <QCloseEvent>
 #include <Q3ValueList>
 #include <Q3PopupMenu>
+#include <QLabel>
 #include <QKeyEvent>
 #include <QMainWindow>
 
@@ -72,6 +73,12 @@ protected:
     Q3PopupMenu * fontSizeMenu;
     Q3PopupMenu * formatMenu;
     Q3PopupMenu * formatLandscapeMenu;
+    QAction* cppAction = nullptr;
+    QAction* javaAction = nullptr;
+    QAction* phpAction = nullptr;
+    QAction* pythonAction = nullptr;
+    QAction* idlAction = nullptr;
+    QAction* generateLabelAction = nullptr;
     int use_cpp_id;
     int use_java_id;
     int use_php_id;
@@ -131,6 +138,7 @@ protected:
     virtual void closeEvent(QCloseEvent *);
     void save_session();
     void read_session();
+    void setup_generator_action_visibility();
 
 private slots:
     void newProject();
@@ -155,6 +163,11 @@ private slots:
     void use_php();
     void use_python();
     void use_idl();
+    bool using_cpp();
+    bool using_java();
+    bool using_php();
+    bool using_python();
+    bool using_idl();
     void verbose();
     void preserve();
     void addoperationprofile();

@@ -89,7 +89,7 @@ protected:
     static unsigned edition_number;
     static Q3PtrList<BrowserNode> marked_list;
     static bool popup_menu_active;
-
+    static QList<UmlCode> generatable_types;
     static SaveProgress * save_progress;
     static int must_be_saved_counter;
     static int already_saved;
@@ -133,6 +133,8 @@ public:
     static const Q3PtrList<BrowserNode> & marked_nodes() {
         return marked_list;
     }
+
+    static void setup_generatable_types();
     static void unmark_all();
 
     bool is_from_lib() const {
@@ -274,6 +276,9 @@ public:
     static void setPopupMenuActive(bool y) {
         popup_menu_active = y;
     }
+
+    BrowserNode* get_first_generatable_node();
+    QList<BrowserNode*> get_generation_list();
 };
 
 inline QString BrowserNode::fullname(bool rev) const

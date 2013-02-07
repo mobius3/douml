@@ -317,7 +317,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     QFont font = generateLabel->font();
     font.setBold(true);
     generateLabel->setFont(font);
-    projectTools->addWidget(generateLabel);
+    generateLabelAction = projectTools->addWidget(generateLabel);
 
 
     Q3WhatsThis::add(whatsThisButton, whatsThisText());
@@ -475,13 +475,27 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
 
     browser = new BrowserView(spl1);
 
+    cppAction = new QAction(tr("C++"),0);
+    connect(cppAction, SIGNAL(triggered()),browser, SLOT(OnGenerateCpp()));
+    javaAction = new QAction( tr("Java"),0);
+    connect(javaAction, SIGNAL(triggered()),browser, SLOT(OnGenerateJava()));
+    phpAction = new QAction(tr("Python"),0);
+    connect(phpAction, SIGNAL(triggered()),browser, SLOT(OnGeneratePhp()));
+    pythonAction = new QAction(tr("Php"),0);
+    connect(pythonAction, SIGNAL(triggered()),browser, SLOT(OnGeneratePython()));
+    idlAction = new QAction(tr("Idl"),0);
+    connect(idlAction, SIGNAL(triggered()),browser, SLOT(OnGenerateIdl()));
+    projectTools->addAction(cppAction);
+    projectTools->addAction(javaAction);
+    projectTools->addAction(phpAction);
+    projectTools->addAction(pythonAction);
+    projectTools->addAction(idlAction);
+    cppAction->setVisible(false);
+    javaAction->setVisible(false);
+    phpAction->setVisible(false);
+    pythonAction->setVisible(false);
+    idlAction->setVisible(false);
 
-
-    QAction* cppAction = new QAction(QIcon(), tr("C++"),QKeySequence(), browser, SLOT(OnGenerateCpp());
-    QAction* javaAction = new QAction(QIcon(), tr("Java"),QKeySequence(), browser, SLOT(OnGenerateJava());
-    QAction* phAction = new QAction(QIcon(), tr("Python"),QKeySequence(), browser, SLOT(OnGeneratePython());
-    QAction* pythonAction = new QAction(QIcon(), tr("Php"),QKeySequence(), browser, SLOT(OnGeneratePhp());
-    QAction* idlAction = new QAction(QIcon(), tr("Idl"),QKeySequence(), browser, SLOT(OnGenerateIdl());
 
 
     ws = new QWorkspace(spl2);
@@ -1124,6 +1138,7 @@ void UmlWindow::load(QString fn, bool forcesaveas)
     }
 
     clear_select_historic(); // in case selection are done by error
+    setup_generator_action_visibility();
 }
 
 void UmlWindow::save()
@@ -1488,6 +1503,36 @@ void UmlWindow::read_session()
     }
 }
 
+void UmlWindow::setup_generator_action_visibility()
+{
+    bool commandVisible = using_cpp() || using_java() || using_php() || using_python() || using_idl();
+    if(commandVisible)
+        generateLabelAction->setVisible(true);
+    else
+        generateLabelAction->setVisible(false);
+    if(using_cpp())
+        cppAction->setVisible(true);
+    else
+        cppAction->setVisible(false);
+
+    if(using_java())
+        javaAction->setVisible(true);
+    else
+        javaAction->setVisible(false);
+    if(using_php())
+        phpAction->setVisible(true);
+    else
+        phpAction->setVisible(false);
+    if(using_python())
+        pythonAction->setVisible(true);
+    else
+        pythonAction->setVisible(false);
+    if(using_idl())
+        idlAction->setVisible(true);
+    else
+        idlAction->setVisible(false);
+}
+
 void UmlWindow::print_it()
 {
     the->print();
@@ -1567,26 +1612,79 @@ void UmlWindow::edit_drawing_settings()
 void UmlWindow::use_cpp()
 {
     GenerationSettings::cpp_set_default_defs(!GenerationSettings::cpp_get_default_defs());
+    bool cpp = GenerationSettings::cpp_get_default_defs();
+    if(cpp)
+        cppAction->setVisible(true);
+    else
+        cppAction->setVisible(false);
 }
 
 void UmlWindow::use_java()
 {
     GenerationSettings::java_set_default_defs(!GenerationSettings::java_get_default_defs());
+    bool java = GenerationSettings::java_get_default_defs();
+    if(java)
+        javaAction->setVisible(true);
+    else
+        javaAction->setVisible(false);
 }
 
 void UmlWindow::use_php()
 {
     GenerationSettings::php_set_default_defs(!GenerationSettings::php_get_default_defs());
+    bool php = GenerationSettings::php_get_default_defs();
+    if(php)
+        phpAction->setVisible(true);
+    else
+        phpAction->setVisible(false);
+
 }
 
 void UmlWindow::use_python()
 {
     GenerationSettings::python_set_default_defs(!GenerationSettings::python_get_default_defs());
+    bool python = GenerationSettings::python_get_default_defs();
+    if(python)
+        pythonAction->setVisible(true);
+    else
+        pythonAction->setVisible(false);
+
 }
 
 void UmlWindow::use_idl()
 {
     GenerationSettings::idl_set_default_defs(!GenerationSettings::idl_get_default_defs());
+    bool idl = GenerationSettings::idl_get_default_defs();
+    if(idl)
+        idlAction->setVisible(true);
+    else
+        idlAction->setVisible(false);
+
+}
+
+bool UmlWindow::using_cpp()
+{
+   return GenerationSettings::cpp_get_default_defs();
+}
+
+bool UmlWindow::using_java()
+{
+   return GenerationSettings::java_get_default_defs();
+}
+
+bool UmlWindow::using_php()
+{
+   return GenerationSettings::php_get_default_defs();
+}
+
+bool UmlWindow::using_python()
+{
+   return GenerationSettings::python_get_default_defs();
+}
+
+bool UmlWindow::using_idl()
+{
+   return GenerationSettings::idl_get_default_defs();
 }
 
 void UmlWindow::verbose()

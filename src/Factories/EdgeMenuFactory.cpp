@@ -82,31 +82,36 @@ void EdgeMenuFactory::SpawnEdgeMenu(uint classID, EdgeMenuDialogBase * sender)
     int toolBarIconWidth = 30;
 
     // if we are near the top
-    if (trueOrientation == 0) {
+    if (trueOrientation == 0)
+    {
         int yFixup = senderDialog->frameGeometry().height() - senderDialog->height();
-        point.setY(point.y() - toolBarIconHeight - yFixup);
+        QPoint yEventClamp = senderDialog->mapToGlobal(QPoint(0,0));
+        point.setY(yEventClamp.y() - toolBarIconHeight - yFixup);
         point.setX(point.x() - toolBarIconWidth / 2);
     }
 
     // if we are near the top
-    if (trueOrientation == 1) {
-        point.setY(point.y());
+    if (trueOrientation == 1)
+    {
+        QPoint yEventClamp = senderDialog->mapToGlobal(QPoint(0,senderDialog->height()));
+        point.setY(yEventClamp.y());
         point.setX(point.x() - toolBarIconWidth / 2);
     }
 
     // if we are near the left edge
-    if (trueOrientation == 2) {
+    if (trueOrientation == 2)
+    {
         point.setX(point.x() - toolBarIconWidth);
         point.setY(point.y() - toolBarIconHeight / 2);
     }
 
     // if we are near the right edge
-    if (trueOrientation == 3) {
+    if (trueOrientation == 3)
+    {
         point.setX(point.x());
         point.setY(point.y() - toolBarIconHeight / 2);
     }
 
-    //QPoint movePoint = senderDialog->mapFromGlobal(point);
     toolbar->move(point);
     toolbar->resize(toolbar->sizeHint());
 
