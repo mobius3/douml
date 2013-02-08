@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <Q3ValueList>
 
@@ -82,20 +82,20 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
     return TRUE;
 }
 
-static void param_error(const Q3CString & parent, const Q3CString & name,
+static void param_error(const WrapperStr & parent, const WrapperStr & name,
                         unsigned rank, const char * where)
 {
     write_trace_header();
-    UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>while compiling <i>")
+    UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>while compiling <i>")
                   + parent + "::" + name + "</i> " + where
-                  + ", parameter rank " + Q3CString().setNum(rank)
+                  + ", parameter rank " + WrapperStr().setNum(rank)
                   + " does not exist</font></b><br>");
     incr_error();
 }
 
-Q3CString UmlOperation::compute_name()
+WrapperStr UmlOperation::compute_name()
 {
-    Q3CString get_set_spec = idlNameSpec();
+    WrapperStr get_set_spec = idlNameSpec();
 
     if (! get_set_spec.isEmpty()) {
         UmlClassMember * it;
@@ -104,7 +104,7 @@ Q3CString UmlOperation::compute_name()
             it = setOf();
 
         int index;
-        Q3CString s = (it->kind() == aRelation)
+        WrapperStr s = (it->kind() == aRelation)
                       ? ((UmlRelation *) it)->roleName()
                       : it->name();
 
@@ -124,8 +124,8 @@ Q3CString UmlOperation::compute_name()
 }
 
 void UmlOperation::generate_decl(QTextStream & f,
-                                 const Q3CString & cl_stereotype,
-                                 Q3CString indent, bool)
+                                 const WrapperStr & cl_stereotype,
+                                 WrapperStr indent, bool)
 {
     if (!idlDecl().isEmpty()) {
         if ((cl_stereotype != "interface") &&

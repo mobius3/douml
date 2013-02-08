@@ -30,7 +30,7 @@
 
 #include "UmlBaseArtifact.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class UmlPackage;
 
@@ -49,7 +49,7 @@ private:
     void generate_text();
 
 public:
-    UmlArtifact(void * id, const Q3CString & n)
+    UmlArtifact(void * id, const WrapperStr & n)
         : UmlBaseArtifact(id, n) {
         managed = FALSE;
     };

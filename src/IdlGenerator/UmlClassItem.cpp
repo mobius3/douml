@@ -29,9 +29,9 @@
 #include "UmlCom.h"
 #include "UmlSettings.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
-void UmlClassItem::remove_comments(Q3CString & s)
+void UmlClassItem::remove_comments(WrapperStr & s)
 {
     int index1 = 0;
 
@@ -61,7 +61,7 @@ void UmlClassItem::remove_comments(Q3CString & s)
     }
 }
 
-void UmlClassItem::remove_preprocessor(Q3CString & s)
+void UmlClassItem::remove_preprocessor(WrapperStr & s)
 {
     int index = 0;
 
@@ -86,7 +86,7 @@ void UmlClassItem::remove_preprocessor(Q3CString & s)
     }
 }
 
-void UmlClassItem::remove_arrays(Q3CString & s)
+void UmlClassItem::remove_arrays(WrapperStr & s)
 {
     int index1 = 0;
 

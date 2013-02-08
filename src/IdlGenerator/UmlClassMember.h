@@ -30,7 +30,7 @@
 
 #include "UmlBaseClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 // This class globaly manages class's operations, relations, attributes
 // and sub-classes
@@ -39,7 +39,7 @@
 class UmlClassMember : public UmlBaseClassMember
 {
 public:
-    UmlClassMember(void * id, const Q3CString & n)
+    UmlClassMember(void * id, const WrapperStr & n)
         : UmlBaseClassMember(id, n) {};
 };
 

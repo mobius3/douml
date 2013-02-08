@@ -30,7 +30,7 @@
 
 #include <q3dict.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlBaseClass.h"
@@ -43,16 +43,16 @@ private:
     bool managed;
 
 public:
-    UmlClass(void * id, const Q3CString & n)
+    UmlClass(void * id, const WrapperStr & n)
         : UmlBaseClass(id, n) {
         managed = FALSE;
     };
 
-    Q3CString idl_stereotype();
+    WrapperStr idl_stereotype();
     void generate();
     virtual void generate(QTextStream & f);
-    virtual void generate_decl(QTextStream & f, const Q3CString & cl_stereotype,
-                               Q3CString indent, bool = FALSE);
+    virtual void generate_decl(QTextStream & f, const WrapperStr & cl_stereotype,
+                               WrapperStr indent, bool = FALSE);
 
     void write(QTextStream & f);
     static void write(QTextStream & f, const UmlTypeSpec & t);

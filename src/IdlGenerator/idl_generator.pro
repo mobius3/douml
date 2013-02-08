@@ -91,6 +91,7 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
         ../Tools/UmlBaseParameter.cpp \
         ../Tools/UmlBaseView.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
+    ../misc/mystr.cpp \
     ../Logging/QsLogDest.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
@@ -102,3 +103,18 @@ INCLUDEPATH   = ../Tools ../IdlGenerator ../
 DESTDIR = ../../bin
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+
+QMAKE_CXXFLAGS += -std=gnu++11
+Release{
+    MOC_DIR = ../../bin/MOC_release/idl_gen
+    OBJECTS_DIR = ../../bin/Obj_release/idl_gen
+}
+
+Debug{
+    MOC_DIR = ../../bin/MOC_debug/idl_gen
+    OBJECTS_DIR = ../../bin/Obj_debug/idl_gen
+
+}
+
+    DESTDIR = ../../bin
+

@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlRelation.h"
@@ -38,19 +38,19 @@
 #include "util.h"
 
 void UmlRelation::generate_inherit(const char *& sep, QTextStream & f,
-                                   const Q3CString & cl_stereotype,
+                                   const WrapperStr & cl_stereotype,
                                    BooL & already)
 {
     if ((relationKind() == aGeneralisation) || (relationKind() == aRealization)) {
         UmlClass * role_type = roleType();
-        Q3CString other_stereotype = role_type->idl_stereotype();
+        WrapperStr other_stereotype = role_type->idl_stereotype();
 
         if (other_stereotype == "ignored")
             return;
 
         if ((cl_stereotype == "union") || (cl_stereotype == "enum")) {
             write_trace_header();
-            UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
+            UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
                           + cl_stereotype + "</i> cannot inherits</b></font><br>");
             incr_warning();
             return;
@@ -61,7 +61,7 @@ void UmlRelation::generate_inherit(const char *& sep, QTextStream & f,
             (other_stereotype == "enum") ||
             (other_stereotype == "typedef")) {
             write_trace_header();
-            UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot inherits an <i>")
+            UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot inherits an <i>")
                           + other_stereotype + "</i></b></font><br>");
             incr_warning();
             return;
@@ -105,8 +105,8 @@ void UmlRelation::generate_inherit(const char *& sep, QTextStream & f,
 }
 
 void UmlRelation::generate_decl(QTextStream & f,
-                                const Q3CString & cl_stereotype,
-                                Q3CString indent, bool)
+                                const WrapperStr & cl_stereotype,
+                                WrapperStr indent, bool)
 {
     if ((relationKind() != aGeneralisation) &&
         (relationKind() != aRealization) &&
@@ -128,7 +128,7 @@ void UmlRelation::generate_decl(QTextStream & f,
         if (!idlDecl().isEmpty()) {
             const char * p = idlDecl();
             const char * pp = 0;
-            Q3CString s;
+            WrapperStr s;
 
             while ((*p == ' ') || (*p == '\t'))
                 indent += *p++;
@@ -203,11 +203,11 @@ void UmlRelation::generate_decl(QTextStream & f,
                 else if (!strncmp(p, "${case}", 7)) {
                     p += 7;
 
-                    Q3CString idl_case = idlCase();
+                    WrapperStr idl_case = idlCase();
 
                     if (idl_case.isEmpty()) {
                         write_trace_header();
-                        UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>unspecified <i>case</i> for <i>")
+                        UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>unspecified <i>case</i> for <i>")
                                       + name() + "</b></font><br>");
                         incr_error();
                     }

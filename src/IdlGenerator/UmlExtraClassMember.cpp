@@ -27,13 +27,13 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlExtraClassMember.h"
 
-void UmlExtraClassMember::generate_decl(QTextStream & f, const Q3CString &,
-                                        Q3CString indent, bool)
+void UmlExtraClassMember::generate_decl(QTextStream & f, const WrapperStr &,
+                                        WrapperStr indent, bool)
 {
     f << indent << idlDecl();
 }

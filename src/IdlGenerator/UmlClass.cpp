@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <Q3ValueList>
 
@@ -40,14 +40,14 @@
 #include "UmlCom.h"
 #include "util.h"
 
-Q3CString UmlClass::idl_stereotype()
+WrapperStr UmlClass::idl_stereotype()
 {
-    Q3CString s = IdlSettings::classStereotype(stereotype());
+    WrapperStr s = IdlSettings::classStereotype(stereotype());
 
     return ((s == "struct") || (s == "union") || (s == "enum") ||
             (s == "typedef") || (s == "exception") || (s == "ignored") ||
             (s == "interface"))
-           ? s : Q3CString("valuetype");
+           ? s : WrapperStr("valuetype");
 }
 
 void UmlClass::generate()
@@ -59,7 +59,7 @@ void UmlClass::generate()
             if (associatedArtifact() != 0)
                 associatedArtifact()->generate();
             else if (verbose())
-                UmlCom::trace(Q3CString("<hr><font face=helvetica><i> ") + name() +
+                UmlCom::trace(WrapperStr("<hr><font face=helvetica><i> ") + name() +
                               " : </i> does not have associated <i>artifact</i></font>");
         }
     }
@@ -71,15 +71,15 @@ void UmlClass::generate(QTextStream & f)
         return;
 
     Q3PtrVector<UmlItem> ch = children();
-    Q3CString stereotype = idl_stereotype();
+    WrapperStr stereotype = idl_stereotype();
     bool a_typedef = (stereotype == "typedef");
     bool an_enum = (stereotype == "enum");
     bool an_union = (stereotype == "union");
     const char * p = idlDecl();
     const char * pp = 0;
-    Q3CString templ;
+    WrapperStr templ;
     const char * sep;
-    Q3CString indent = "";
+    WrapperStr indent = "";
     unsigned index;
 
     while ((*p == ' ') || (*p == '\t'))
@@ -180,7 +180,7 @@ void UmlClass::generate(QTextStream & f)
                 for (index = 0; n != 0; index += 1)
                     if ((ch[index]->kind() != aNcRelation) &&
                         !((UmlClassItem *) ch[index])->idlDecl().isEmpty())
-                        ((UmlClassItem *) ch[index])->generate_decl(f, stereotype, --n == 0);
+                        ((UmlClassItem *) ch[index])->generate_decl(f, stereotype,indent, --n == 0);
 
                 if (*p == '}')
                     f << indent;
@@ -228,11 +228,11 @@ void UmlClass::generate(QTextStream & f)
     }
 }
 
-void UmlClass::generate_decl(QTextStream &, const Q3CString &,
-                             Q3CString, bool)
+void UmlClass::generate_decl(QTextStream &, const WrapperStr &,
+                             WrapperStr, bool)
 {
     write_trace_header();
-    UmlCom::trace(Q3CString("<font color=\"red\"><b>Embedded class <it>")
+    UmlCom::trace(WrapperStr("<font color=\"red\"><b>Embedded class <it>")
                   + name() + "</it> not generated</b></font><br>");
     incr_warning();
 }
@@ -257,13 +257,13 @@ void UmlClass::write(QTextStream & f)
     }
     while (p->kind() != aPackage);
 
-    Q3CString module = ((UmlPackage *) p)->idlModule();
+    WrapperStr module = ((UmlPackage *) p)->idlModule();
 
     if (module != UmlArtifact::generation_package()->idlModule())
         f << module << "::";
 
     if (isIdlExternal()) {
-        Q3CString s = idlDecl();
+        WrapperStr s = idlDecl();
         int index = s.find('\n');
 
         s = (index == -1) ? s.stripWhiteSpace()

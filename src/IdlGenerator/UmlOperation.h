@@ -30,19 +30,19 @@
 
 #include "UmlBaseOperation.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 class UmlOperation : public UmlBaseOperation
 {
 public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const WrapperStr & n)
         : UmlBaseOperation(id, n) {};
 
-    virtual void generate_decl(QTextStream & f, const Q3CString & cl_stereotype,
-                               Q3CString indent, bool = FALSE);
+    virtual void generate_decl(QTextStream & f, const WrapperStr & cl_stereotype,
+                               WrapperStr indent, bool = FALSE);
 
-    Q3CString compute_name();
+    WrapperStr compute_name();
 };
 
 #endif

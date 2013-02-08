@@ -27,13 +27,13 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlFormalParameter.h"
 #include "IdlSettings.h"
 
-void UmlFormalParameter::generate(QTextStream & f, Q3CString & s, const char *& sep) const
+void UmlFormalParameter::generate(QTextStream & f, WrapperStr & s, const char *& sep) const
 {
     f << sep << type() << ' ' << name();
 
@@ -42,7 +42,7 @@ void UmlFormalParameter::generate(QTextStream & f, Q3CString & s, const char *& 
     s += ' ';
     s += name();
 
-    Q3CString dflt = IdlSettings::type(defaultValue().toString());
+    WrapperStr dflt = IdlSettings::type(defaultValue().toString());
 
     if (!dflt.isEmpty())
         f << " = " << dflt;

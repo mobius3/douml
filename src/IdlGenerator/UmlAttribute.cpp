@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlAttribute.h"
@@ -37,8 +37,8 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlAttribute::generate_decl(QTextStream & f, const Q3CString & cl_stereotype,
-                                 Q3CString indent, bool islast)
+void UmlAttribute::generate_decl(QTextStream & f, const WrapperStr & cl_stereotype,
+                                 WrapperStr indent, bool islast)
 {
     if (!idlDecl().isEmpty()) {
         if (cl_stereotype == "typedef") {
@@ -145,11 +145,11 @@ void UmlAttribute::generate_decl(QTextStream & f, const Q3CString & cl_stereotyp
             else if (!strncmp(p, "${case}", 7)) {
                 p += 7;
 
-                Q3CString idl_case = idlCase();
+                WrapperStr idl_case = idlCase();
 
                 if (idl_case.isEmpty()) {
                     write_trace_header();
-                    UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>unspecified <i>case</i> for <i>")
+                    UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>unspecified <i>case</i> for <i>")
                                   + name() + "</b></font><br>");
                     incr_error();
                 }

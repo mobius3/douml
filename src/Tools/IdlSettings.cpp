@@ -136,7 +136,7 @@ WrapperStr IdlSettings::include(WrapperStr s)
 
    QString * r = _map_includes[s];
 
-    return (r) ? *r : WrapperStr(0);
+    return (r) ? *r : QString::number(0);
 }
 
 bool IdlSettings::set_Include(WrapperStr s, WrapperStr v)
@@ -148,7 +148,7 @@ bool IdlSettings::set_Include(WrapperStr s, WrapperStr v)
        QString * r = _map_includes.take(s);
 
         if (!v.isEmpty())
-            _map_includes.insert(s, new WrapperStr(v));
+            _map_includes.insert(s, new QString(v.operator QString()));
 
         if (r)
             delete r;
@@ -686,7 +686,7 @@ void IdlSettings::read_()
         WrapperStr t = UmlCom::read_string();
         WrapperStr i = UmlCom::read_string();
 
-        _map_includes.insert(t, new WrapperStr(i));
+        _map_includes.insert(t, new QString(i.operator QString()));
     }
 
     _src_content = UmlCom::read_string();

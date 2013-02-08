@@ -27,20 +27,20 @@
 
 #include <qdir.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlPackage.h"
 #include "UmlCom.h"
 #include "IdlSettings.h"
 #include "util.h"
 
-UmlPackage::UmlPackage(void * id, const Q3CString & n)
+UmlPackage::UmlPackage(void * id, const WrapperStr & n)
     : UmlBasePackage(id, n)
 {
     read = FALSE;
 }
 
-static void create_directory(Q3CString s)
+static void create_directory(WrapperStr s)
 {
     int index = 0;
     QChar sep = QDir::separator();
@@ -56,12 +56,12 @@ static void create_directory(Q3CString s)
     int index2;
 
     while ((index2 = s.find("/", index + 1)) != -1) {
-        Q3CString s2 = s.left(index2);
+        WrapperStr s2 = s.left(index2);
         QDir sd(s2);
 
         if (!sd.exists()) {
             if (!sd.mkdir(s2)) {
-                UmlCom::trace(Q3CString("<font color=\"red\"><b> cannot create directory <i>")
+                UmlCom::trace(WrapperStr("<font color=\"red\"><b> cannot create directory <i>")
                               + s2 + "</i></b></font><br>");
                 UmlCom::bye(n_errors() + 1);
                 UmlCom::fatal_error("UmlPackage::file_path");
@@ -73,9 +73,9 @@ static void create_directory(Q3CString s)
 }
 
 static bool RootDirRead;
-static Q3CString RootDir;
+static WrapperStr RootDir;
 
-Q3CString UmlPackage::path(const Q3CString & f)
+WrapperStr UmlPackage::path(const WrapperStr & f)
 {
     if (!read) {
         dir = idlDir();
@@ -101,7 +101,7 @@ Q3CString UmlPackage::path(const Q3CString & f)
             dir = d_root.filePath(dir);
 
         if (dir.isEmpty()) {
-            UmlCom::trace(Q3CString("<font color=\"red\"><b><b> The generation directory "
+            UmlCom::trace(WrapperStr("<font color=\"red\"><b><b> The generation directory "
                                     "must be specified for the package<i> ") + name()
                           + "</i>, edit the <i> generation settings</i> (tab 'directory') "
                           "or edit the package (tab 'Idl')</b></font><br>");
@@ -110,7 +110,7 @@ Q3CString UmlPackage::path(const Q3CString & f)
         }
 
         if (QDir::isRelativePath(dir)) {
-            UmlCom::trace(Q3CString("<font color=\"red\"><b><i>")
+            UmlCom::trace(WrapperStr("<font color=\"red\"><b><i>")
                           + name() + "</i>'s source path <i>(" + dir
                           + "</i>) is not absolute, edit the <i> generation settings</i> "
                           "(tab 'directory'), or edit the package (tab 'Idl')</b></font><br>");
@@ -126,13 +126,13 @@ Q3CString UmlPackage::path(const Q3CString & f)
     if (! d.exists())
         create_directory(dir);	// don't return on error
 
-    return Q3CString(d.filePath(f).toAscii().constData()) + Q3CString(".") +
+    return WrapperStr(d.filePath(f).toAscii().constData()) + WrapperStr(".") +
            IdlSettings::sourceExtension();
 }
 
-Q3CString UmlPackage::text_path(const Q3CString & f)
+WrapperStr UmlPackage::text_path(const WrapperStr & f)
 {
-    Q3CString r = path(f);
+    WrapperStr r = path(f);
 
     return r.left(r.length() - 1 - IdlSettings::sourceExtension().length());
 }
