@@ -28,7 +28,7 @@
 #include "Statistic.h"
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 unsigned Statistic::n_classes;
 unsigned Statistic::n_attributes;
@@ -37,13 +37,13 @@ unsigned Statistic::n_operations;
 
 void Statistic::produce()
 {
-    UmlCom::trace(Q3CString("<br><hr><br><font face=helvetica>Php reverse done</font><br><br>") +
-                  Q3CString("<font face=helvetica>	") +
-                  Q3CString().setNum(n_classes) + Q3CString(" classes </font><br>") +
-                  Q3CString("<font face=helvetica>	") +
-                  Q3CString().setNum(n_attributes) + Q3CString(" attributes </font><br>") +
-                  Q3CString("<font face=helvetica>	") +
-                  Q3CString().setNum(n_relations) + " relations </font><br>" +
-                  Q3CString("<font face=helvetica>	") +
-                  Q3CString().setNum(n_operations) + " operations </font><br><hr><br>");
+    UmlCom::trace(WrapperStr("<br><hr><br><font face=helvetica>Php reverse done</font><br><br>") +
+                  WrapperStr("<font face=helvetica>	") +
+                  WrapperStr().setNum(n_classes) + WrapperStr(" classes </font><br>") +
+                  WrapperStr("<font face=helvetica>	") +
+                  WrapperStr().setNum(n_attributes) + WrapperStr(" attributes </font><br>") +
+                  WrapperStr("<font face=helvetica>	") +
+                  WrapperStr().setNum(n_relations) + " relations </font><br>" +
+                  WrapperStr("<font face=helvetica>	") +
+                  WrapperStr().setNum(n_operations) + " operations </font><br><hr><br>");
 }

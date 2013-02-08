@@ -30,7 +30,7 @@
 
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlBaseFormalParameter.h"
 
@@ -44,7 +44,7 @@ class UmlFormalParameter : public UmlBaseFormalParameter
 public:
     UmlFormalParameter() {};
 
-    UmlFormalParameter(Q3CString n, const UmlTypeSpec & e);
+    UmlFormalParameter(WrapperStr n, const UmlTypeSpec & e);
 };
 
 typedef Q3ValueList<UmlFormalParameter> FormalParameterList;

@@ -33,7 +33,7 @@
 #ifdef TRACE
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 using namespace std;
 #endif
@@ -78,7 +78,7 @@ void Lex::unget()
     context.pointer -= 1;
 }
 
-static Q3CString Separators = " \r\t\f\n&~\"#{'(-|`)[]=}%*<>?,;/:!";
+static WrapperStr Separators = " \r\t\f\n&~\"#{'(-|`)[]=}%*<>?,;/:!";
 
 const QString & Lex::filename()
 {
@@ -251,7 +251,7 @@ void Lex::bypass_c_comment()
     }
 }
 
-Q3CString Lex::manage_operator(QString & result, int c)
+WrapperStr Lex::manage_operator(QString & result, int c)
 {
     result += c;
 
@@ -295,7 +295,7 @@ Q3CString Lex::manage_operator(QString & result, int c)
 #ifdef TRACE
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-    return Q3CString(result.toAscii().constData());
+    return WrapperStr(result.toAscii().constData());
 }
 
 char Lex::bypass_operator(int c)
@@ -343,7 +343,7 @@ char Lex::bypass_operator(int c)
     }
 }
 
-Q3CString Lex::read_string()
+WrapperStr Lex::read_string()
 {
     QString result = "\"";;
 
@@ -365,7 +365,7 @@ Q3CString Lex::read_string()
             break;
 
         case '"':
-            return Q3CString((result += c).toAscii().constData());
+            return WrapperStr((result += c).toAscii().constData());
 
         default:
             result += c;
@@ -399,9 +399,9 @@ void Lex::bypass_string()
     }
 }
 
-Q3CString Lex::read_character()
+WrapperStr Lex::read_character()
 {
-    Q3CString result = "'";
+    WrapperStr result = "'";
 
     for (;;) {
         int c = get();
@@ -411,7 +411,7 @@ Q3CString Lex::read_character()
             return 0;
 
         case '\'':
-            return Q3CString(result += c);
+            return WrapperStr(result += c);
 
         default:
             result += c;
@@ -441,9 +441,9 @@ void Lex::bypass_character()
     }
 }
 
-Q3CString Lex::read_array_dim()
+WrapperStr Lex::read_array_dim()
 {
-    Q3CString result = "[";
+    WrapperStr result = "[";
     char * pointer = context.pointer;
 
     for (;;) {
@@ -484,7 +484,7 @@ void Lex::bypass_array_dim()
     }
 }
 
-Q3CString Lex::read_word()
+WrapperStr Lex::read_word()
 {
     QString result;
 
@@ -572,7 +572,7 @@ Q3CString Lex::read_word()
         QLOG_INFO() << "retourne '" << result << "'\n";
 
 #endif
-    return Q3CString(result.toAscii().constData());
+    return WrapperStr(result.toAscii().constData());
 }
 
 char Lex::read_word_bis()
@@ -697,17 +697,17 @@ void Lex::finish_line()
     }
 }
 
-Q3CString Lex::get_comments()
+WrapperStr Lex::get_comments()
 {
-    Q3CString result = Q3CString(context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(context.comments.toAscii().constData());
 
     context.comments = QString();
     return result;
 }
 
-Q3CString Lex::get_comments(Q3CString & co)
+WrapperStr Lex::get_comments(WrapperStr & co)
 {
-    Q3CString result = Q3CString(context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(context.comments.toAscii().constData());
 
     context.comments = QString();
 
@@ -716,17 +716,17 @@ Q3CString Lex::get_comments(Q3CString & co)
            : co += "\n" + result;
 }
 
-Q3CString Lex::get_description()
+WrapperStr Lex::get_description()
 {
-    Q3CString result = Q3CString(context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(context.description.toAscii().constData());
 
     context.description = QString();
     return result;
 }
 
-Q3CString Lex::get_description(Q3CString & co)
+WrapperStr Lex::get_description(WrapperStr & co)
 {
-    Q3CString result = Q3CString(context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(context.description.toAscii().constData());
 
     context.description = QString();
 
@@ -750,13 +750,13 @@ void Lex::mark()
     context.mark = context.pointer;
 }
 
-Q3CString Lex::region()
+WrapperStr Lex::region()
 {
     char c = *context.pointer;
 
     *context.pointer = 0;
 
-    Q3CString result = context.mark;
+    WrapperStr result = context.mark;
 
     *context.pointer = c;
 
@@ -765,11 +765,11 @@ Q3CString Lex::region()
 
 //
 
-void Lex::syntax_error(Q3CString s)
+void Lex::syntax_error(WrapperStr s)
 {
-    PhpCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-                        + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
-                        Q3CString().setNum(context.line_number) + " <b>"
+    PhpCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
+                        + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                        WrapperStr().setNum(context.line_number) + " <b>"
                         + s + "</b></font><br>");
 
 #ifdef TRACE
@@ -780,9 +780,9 @@ void Lex::syntax_error(Q3CString s)
 
 void Lex::premature_eof()
 {
-    PhpCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-                        + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
-                        Q3CString().setNum(context.line_number) +
+    PhpCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
+                        + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                        WrapperStr().setNum(context.line_number) +
                         " <b>premature eof</b></font><br>");
 
 #ifdef TRACE
@@ -791,11 +791,11 @@ void Lex::premature_eof()
 #endif
 }
 
-void Lex::error_near(Q3CString s)
+void Lex::error_near(WrapperStr s)
 {
-    PhpCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-                        + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
-                        Q3CString().setNum(context.line_number) + " <b>near <font color =\"red\">"
+    PhpCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
+                        + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                        WrapperStr().setNum(context.line_number) + " <b>near <font color =\"red\">"
                         + quote(s) + "</font></b></font><br>");
 
 #ifdef TRACE
@@ -806,9 +806,9 @@ void Lex::error_near(Q3CString s)
 
 // allows a string to be written as it is by an html writer
 
-Q3CString Lex::quote(Q3CString s)
+WrapperStr Lex::quote(WrapperStr s)
 {
-    Q3CString result;
+    WrapperStr result;
     const char * p = s;
 
     for (;;) {
@@ -838,9 +838,9 @@ Q3CString Lex::quote(Q3CString s)
 
 //
 
-static Q3CString get_next_word(Q3CString s, int & index, int & index2)
+static WrapperStr get_next_word(WrapperStr s, int & index, int & index2)
 {
-    Q3CString result;
+    WrapperStr result;
     const char * p = ((const char *)  s) + index;
 
     for (;;) {
@@ -885,12 +885,12 @@ static Q3CString get_next_word(Q3CString s, int & index, int & index2)
     }
 }
 
-Q3CString value_of(Q3CString s, Q3CString k, int & index)
+WrapperStr value_of(WrapperStr s, WrapperStr k, int & index)
 {
     index = s.find(k);
 
     if (index == -1) {
-        Q3CString result;
+        WrapperStr result;
 
         return result;
     }
@@ -902,10 +902,10 @@ Q3CString value_of(Q3CString s, Q3CString k, int & index)
     }
 }
 
-Q3CString value_of(Q3CString s, Q3CString k, int & index,
-                   Q3CString & next, int & index2)
+WrapperStr value_of(WrapperStr s, WrapperStr k, int & index,
+                   WrapperStr & next, int & index2)
 {
-    Q3CString result;
+    WrapperStr result;
 
     index = s.find(k, index);
 

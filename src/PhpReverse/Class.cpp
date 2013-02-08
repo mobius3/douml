@@ -28,7 +28,7 @@
 #ifdef TRACE
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QPixmap>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -86,7 +86,7 @@ UmlClass * Class::get_uml()
 
     UmlItem * p = // no nested classe in php
         (UmlItem *)((Package *) parent())->get_uml()->get_classview(get_namespace());
-    Q3CString str = Q3CString(text(0).toAscii().constData());
+    WrapperStr str = WrapperStr(text(0).toAscii().constData());
 
     uml = UmlBaseClass::create(p, str);
 
@@ -147,13 +147,13 @@ bool Class::already_in_bouml()
     return FALSE;
 }
 
-bool Class::reverse(Package * container, Q3CString stereotype,
+bool Class::reverse(Package * container, WrapperStr stereotype,
                     bool abstractp, bool finalp,
-                    Q3CString & path, UmlArtifact * art)
+                    WrapperStr & path, UmlArtifact * art)
 {
-    Q3CString comment = Lex::get_comments();
-    Q3CString description = Lex::get_description();
-    Q3CString name;
+    WrapperStr comment = Lex::get_comments();
+    WrapperStr description = Lex::get_description();
+    WrapperStr name;
 
     if ((name = Lex::read_word()).isEmpty())
         return FALSE;
@@ -196,7 +196,7 @@ bool Class::reverse(Package * container, Q3CString stereotype,
             cl_uml->set_isPhpFinal(finalp);
     }
 
-    Q3CString s = Lex::read_word();
+    WrapperStr s = Lex::read_word();
 
     if (s.isEmpty()) {
         if (! Package::scanning()) {
@@ -208,7 +208,7 @@ bool Class::reverse(Package * container, Q3CString stereotype,
     }
 
     if (Package::scanning()) {
-        char c = s.at(0);
+        char c = s.operator QString().toAscii().at(0);
 
         while (c != '{') {
             if ((c = Lex::read_word_bis()) == 0)
@@ -326,7 +326,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k)
         if (!add_inherit(k, typespec))
             return FALSE;
 
-        Q3CString s = Lex::read_word();
+        WrapperStr s = Lex::read_word();
 
         if (s == "{") {
             Lex::unread_word(s);
@@ -373,12 +373,12 @@ bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec)
 // [<visibility>] 'const' ctename '=' value ';'
 // ['final'] [<visibility>] ['static' | 'abstract'] 'function' ...
 
-bool Class::manage_member(Q3CString s)
+bool Class::manage_member(WrapperStr s)
 {
-    Q3CString comment = Lex::get_comments();
-    Q3CString description = Lex::get_description();
+    WrapperStr comment = Lex::get_comments();
+    WrapperStr description = Lex::get_description();
     int index;
-    Q3CString access = value_of(description, "@access", index);
+    WrapperStr access = value_of(description, "@access", index);
     aVisibility visibility;
 
     if (access == "public")
@@ -434,8 +434,8 @@ bool Class::manage_member(Q3CString s)
     }
 
     for (;;) {
-        Q3CString name = s;
-        Q3CString value;
+        WrapperStr name = s;
+        WrapperStr value;
 
         s = Lex::read_word();
 
@@ -487,7 +487,7 @@ bool Class::manage_member(Q3CString s)
     }
 }
 
-void Class::compute_type(Q3CString name, UmlTypeSpec & typespec,
+void Class::compute_type(WrapperStr name, UmlTypeSpec & typespec,
                          Class ** need_object)
 {
     // no nested classe in php
@@ -785,7 +785,7 @@ void Class::restore(QDataStream  & dt, char c, Package * parent)
     cl->from_lib = TRUE;
 #endif
 
-    Q3CString name(n);
+    WrapperStr name(n);
 
     parent->declare(n, cl);
 

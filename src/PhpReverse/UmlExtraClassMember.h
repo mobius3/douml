@@ -30,7 +30,7 @@
 
 #include "UmlBaseExtraClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 // This class allows to manage extra class member, mainly defined for C++
 // it allows to insert C++ pre-processor directive (even they may be placed
@@ -41,7 +41,7 @@
 class UmlExtraClassMember : public UmlBaseExtraClassMember
 {
 public:
-    UmlExtraClassMember(void * id, const Q3CString & n)
+    UmlExtraClassMember(void * id, const WrapperStr & n)
         : UmlBaseExtraClassMember(id, n) {};
 };
 

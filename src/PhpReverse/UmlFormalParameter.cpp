@@ -27,9 +27,9 @@
 
 #include "UmlFormalParameter.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
-UmlFormalParameter::UmlFormalParameter(Q3CString n, const UmlTypeSpec & e)
+UmlFormalParameter::UmlFormalParameter(WrapperStr n, const UmlTypeSpec & e)
 {
     _name = n;
     _extends = e;

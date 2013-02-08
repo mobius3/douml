@@ -28,7 +28,7 @@
 #ifdef TRACE
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 using namespace std;
 #endif
@@ -52,11 +52,11 @@ using namespace std;
 
 bool UmlOperation::new_one(Class * container, aVisibility visibility,
                            bool finalp, bool abstractp, bool staticp,
-                           Q3CString comment, Q3CString description)
+                           WrapperStr comment, WrapperStr description)
 {
     // 'function' was read, it is followed by :
     // ['&'] name'(' {'array' | <classname>] ['&'] '$'<varname> ['=' <value>]}* ')' '{' ... '}'
-    Q3CString s = Lex::read_word();
+    WrapperStr s = Lex::read_word();
     bool refp;
 
     if (s == "&") {
@@ -71,7 +71,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
         return FALSE;
     }
 
-    Q3CString name = s;
+    WrapperStr name = s;
 
 #ifdef TRACE
     QLOG_INFO() << "OPERATION '" << name << "'\n";
@@ -97,7 +97,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
         op = UmlBaseOperation::create(cl, name);
 
         if (op == 0) {
-            PhpCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add operation <i>")
+            PhpCatWindow::trace(WrapperStr("<font face=helvetica><b>cannot add operation <i>")
                                 + name + "</i> in <i>" + cl->name()
                                 + "</i></b></font><br>");
             return FALSE;
@@ -108,7 +108,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
 #endif
     }
 
-    Q3CString def;
+    WrapperStr def;
 
     if (op != 0) {
         op->set_Visibility(visibility);
@@ -159,7 +159,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
 
     while (read_param(container, rank, param, def, op == 0)) {
         if ((op != 0) && ! op->addParameter(rank++, param)) {
-            PhpCatWindow::trace(Q3CString("<font face=helvetica><b>cannot add param <i>")
+            PhpCatWindow::trace(WrapperStr("<font face=helvetica><b>cannot add param <i>")
                                 + name + "</i> in <i>" + cl->name()
                                 + "</i></b></font><br>");
 #ifdef TRACE
@@ -215,7 +215,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
 #ifdef REVERSE
 
         if (op != 0) {
-            Q3CString e = Lex::region();
+            WrapperStr e = Lex::region();
 
             e.truncate(e.length() - 1);	// remove }
 
@@ -259,7 +259,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
         unsigned nparams = l.count();
 
         if (nparams != 0) {
-            Q3CString varname;
+            WrapperStr varname;
             int index2;
             char xn[16];
 
@@ -306,13 +306,13 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
 // a param is : {'array' | <classname>] ['&'] '$'<varname> ['=' <value>]
 
 bool UmlOperation::read_param(Class * container, unsigned rank,
-                              UmlParameter & param, Q3CString & def, bool bypass)
+                              UmlParameter & param, WrapperStr & def, bool bypass)
 {
 #ifdef TRACE
     QLOG_INFO() << "UmlOperation::manage_param " << rank << "\n";
 #endif
 
-    Q3CString s = Lex::read_word();
+    WrapperStr s = Lex::read_word();
 
     if (s.isEmpty()) {
         Lex::premature_eof();
@@ -373,7 +373,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
     }
 
     if (! bypass) {
-        Q3CString n_close = Q3CString().setNum(rank) + "}";
+        WrapperStr n_close = WrapperStr().setNum(rank) + "}";
 
         param.name = s.mid(1);
 
@@ -440,7 +440,7 @@ void UmlOperation::skip_body(int level)
     Lex::clear_comments();
 }
 
-Q3CString UmlOperation::skip_expr(int level)
+WrapperStr UmlOperation::skip_expr(int level)
 {
     char c;
 
@@ -459,7 +459,7 @@ Q3CString UmlOperation::skip_expr(int level)
 
     Lex::clear_comments();
 
-    Q3CString e;
+    WrapperStr e;
 
     if (c != 0)
         e += c;

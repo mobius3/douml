@@ -30,25 +30,25 @@
 
 #include "UmlBaseAttribute.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class Class;
 
 class UmlAttribute : public UmlBaseAttribute
 {
 public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const WrapperStr & n)
         :  UmlBaseAttribute(id, n) {};
 
-    static bool new_one(Class * container, Q3CString name,
+    static bool new_one(Class * container, WrapperStr name,
                         aVisibility visibility, bool constp,
-                        bool staticp, const Q3CString & value,
-                        Q3CString comment, Q3CString description);
+                        bool staticp, const WrapperStr & value,
+                        WrapperStr comment, WrapperStr description);
 
 
 #ifdef REVERSE
-    static bool new_initialization(Class * container, Q3CString comment,
-                                   Q3CString description);
+    static bool new_initialization(Class * container, WrapperStr comment,
+                                   WrapperStr description);
 #endif
 };
 

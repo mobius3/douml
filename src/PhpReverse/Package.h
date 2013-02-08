@@ -32,7 +32,7 @@
 #include <qstack.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "Namespace.h"
 #include "Class.h"
@@ -63,9 +63,9 @@ public:
 
     virtual bool isa_package() const;
 
-    void reverse_file(Q3CString path, Q3CString f);
+    void reverse_file(WrapperStr path, WrapperStr f);
 
-    const Q3CString & get_path() {
+    const WrapperStr & get_path() {
         return path;
     }
     UmlPackage * get_uml(bool mandatory = TRUE);
@@ -75,11 +75,11 @@ public:
 
     void new_class(Class *);
 
-    virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
+    virtual void compute_type(WrapperStr type, UmlTypeSpec & typespec,
                               Class ** need_object = 0);
-    virtual Class * define(const Q3CString & name, char st);
+    virtual Class * define(const WrapperStr & name, char st);
 #ifdef WITH_PHPCAT
-    virtual void declare(const Q3CString &, Class *);
+    virtual void declare(const WrapperStr &, Class *);
     void restore_children(QDataStream & dts);
     static void restore(QDataStream  & dt, Package *);
 #endif
@@ -109,7 +109,7 @@ public:
 
 private:
     UmlPackage * uml;
-    Q3CString path;
+    WrapperStr path;
     NDict<Class> Undefined;
 
     static bool scan;
@@ -126,16 +126,16 @@ private:
 
     static int file_number(QDir & dir, bool rec);
 
-    void reverse_toplevel_form(Q3CString s);
+    void reverse_toplevel_form(WrapperStr s);
     void reverse_directory(QDir & dir, bool rec);
 
-    Package * find(Q3CString s, bool nohack);
+    Package * find(WrapperStr s, bool nohack);
     static Package * package_unknown();
 
-    static void update_class_list(Q3CString pack, UmlItem * container);
+    static void update_class_list(WrapperStr pack, UmlItem * container);
 
-    Class * declare_if_needed(Q3CString name, char st);
-    Class * new_class(const Q3CString & name, char st);
+    Class * declare_if_needed(WrapperStr name, char st);
+    Class * new_class(const WrapperStr & name, char st);
 
     void use();
 };

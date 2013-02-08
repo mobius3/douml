@@ -27,21 +27,21 @@
 
 #include "Namespace.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 // namespace stack, namespaces.last() = current namespace full name + "\",
 // i.e. "A\B...\Z\"
 QStringList Namespace::Stack;
 
 // namespace and class aliases
-QMap<Q3CString, Q3CString> Namespace::Aliases;
+QMap<QString, WrapperStr> Namespace::Aliases;
 
-void Namespace::enter(Q3CString s)
+void Namespace::enter(WrapperStr s)
 {
     for (;;) {
         Stack.prepend(s + "\\");
 
-        int p = s.findRev('\\');
+        int p = s.operator QString().lastIndexOf('\\');
 
         if (p == -1)
             return;
@@ -57,7 +57,7 @@ void Namespace::exit()
     Aliases.clear();
 }
 
-QString Namespace::namespacify(Q3CString s)
+QString Namespace::namespacify(WrapperStr s)
 {
     int index = s.find("\\");
 
@@ -65,14 +65,14 @@ QString Namespace::namespacify(Q3CString s)
         // absolute path
         return ((const char *) s) + 1;
 
-    QMap<Q3CString, Q3CString>::ConstIterator it;
+    QMap<QString, WrapperStr>::ConstIterator it;
 
     if (index == -1) {
         if ((it = Aliases.find(s)) != Aliases.end())
             // a class alias
             return ((*it)[0] == '\\')
-                   ? QString(((const char *) *it) + 1)
-                   : QString(*it);
+                   ?  *(it + 1)
+                   : *it;
     }
     else if ((it = Aliases.find(s.left(index))) != Aliases.end())
         s.replace(0, index, *it);
@@ -80,16 +80,16 @@ QString Namespace::namespacify(Q3CString s)
         s.remove(0, index + 1);
 
     return (Stack.isEmpty())
-           ? QString(s)
-           : Stack.last() + QString(s);
+           ? s
+           : Stack.last() + s;
 }
 
-Q3CString Namespace::current()
+WrapperStr Namespace::current()
 {
     if (Stack.isEmpty())
         return 0;
 
     QString & s = Stack.last();
 
-    return Q3CString(s.left(s.length() - 1).toAscii().constData());
+    return WrapperStr(s.left(s.length() - 1).toAscii().constData());
 }

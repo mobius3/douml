@@ -30,12 +30,12 @@
 
 #include "UmlBaseItem.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class UmlItem : public UmlBaseItem
 {
 public:
-    UmlItem(void * id, const Q3CString & n)
+    UmlItem(void * id, const WrapperStr & n)
         : UmlBaseItem(id, n) {
     };
     virtual ~UmlItem();

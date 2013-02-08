@@ -30,7 +30,7 @@
 
 #include <q3valuelist.h>
 #include <qstringlist.h>
-#include <q3cstring.h>
+#include "misc/mystr.h"
 #include <q3dict.h>
 #include <qmap.h>
 
@@ -42,26 +42,26 @@
 class Namespace
 {
 public:
-    static void enter(Q3CString s);
+    static void enter(WrapperStr s);
     static void exit();
 
     static const QStringList stack() {
         return Stack;
     }
 
-    static void add_alias(const Q3CString & a, const Q3CString & s) {
-        Aliases.replace(a, s);
+    static void add_alias(const WrapperStr & a, const WrapperStr & s) {
+        Aliases.replace(a.operator QString(), s);
     }
     static void clear_aliases() {
         Aliases.clear();
     }
 
-    static QString namespacify(Q3CString s);
-    static Q3CString current();
+    static QString namespacify(WrapperStr s);
+    static WrapperStr current();
 
 private:
     static QStringList Stack;
-    static QMap<Q3CString, Q3CString> Aliases;
+    static QMap<QString, WrapperStr> Aliases;
 };
 
 // does not not inherit QDict to not allow to use directly
@@ -77,35 +77,35 @@ public:
         d.resize(n);
     }
 
-    void insert(const Q3CString & key, const T * item);
-    void replace(const Q3CString & key, const T * item);
-    bool remove(const Q3CString & key);
-    T * operator[](const Q3CString & key) const;
+    void insert(const WrapperStr & key, const T * item);
+    void replace(const WrapperStr & key, const T * item);
+    bool remove(const WrapperStr & key);
+    T * operator[](const WrapperStr & key) const;
 
 private:
     Q3Dict<T> d;
 };
 
 template<class T>
-void NDict<T>::insert(const Q3CString & key, const T * item)
+void NDict<T>::insert(const WrapperStr & key, const T * item)
 {
     d.insert(Namespace::namespacify(key), item);
 }
 
 template<class T>
-void NDict<T>::replace(const Q3CString & key, const T * item)
+void NDict<T>::replace(const WrapperStr & key, const T * item)
 {
     d.replace(Namespace::namespacify(key), item);
 }
 
 template<class T>
-bool NDict<T>::remove(const Q3CString & key)
+bool NDict<T>::remove(const WrapperStr & key)
 {
     return d.remove(Namespace::namespacify(key));
 }
 
 template<class T>
-T * NDict<T>::operator[](const Q3CString & key) const
+T * NDict<T>::operator[](const WrapperStr & key) const
 {
     QString k = Namespace::namespacify(key);
     T * r = d[k];
@@ -118,7 +118,7 @@ T * NDict<T>::operator[](const Q3CString & key) const
     if (((const char *) key)[0] != '\\') {
         QStringList::ConstIterator it;
 
-        s = key;
+        s = key.operator QString();
 
         for (it = Namespace::stack().begin();
              it != Namespace::stack().end();

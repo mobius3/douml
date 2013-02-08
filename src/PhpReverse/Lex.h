@@ -30,7 +30,7 @@
 
 #include <qstack.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 // fstream is bugged under Windows
 #include <stdio.h>
@@ -62,10 +62,10 @@ private:
 
     static void bypass_cpp_comment();
     static void bypass_c_comment();
-    static Q3CString manage_operator(QString  & result, int c);
-    static Q3CString read_string();
-    static Q3CString read_character();
-    static Q3CString read_array_dim();
+    static WrapperStr manage_operator(QString  & result, int c);
+    static WrapperStr read_string();
+    static WrapperStr read_character();
+    static WrapperStr read_array_dim();
     static char bypass_operator(int c);
     static void bypass_string();
     static void bypass_character();
@@ -75,13 +75,13 @@ private:
     static QStack<Context> stack;
 
 public:
-    static Q3CString read_word();
+    static WrapperStr read_word();
     static char read_word_bis();
     static void unread_word(const char * s);
-    static Q3CString get_comments();
-    static Q3CString get_comments(Q3CString & co);
-    static Q3CString get_description();
-    static Q3CString get_description(Q3CString & co);
+    static WrapperStr get_comments();
+    static WrapperStr get_comments(WrapperStr & co);
+    static WrapperStr get_description();
+    static WrapperStr get_description(WrapperStr & co);
     static void clear_comments();
     static void finish_line();
     static bool open(const QString &);
@@ -90,17 +90,17 @@ public:
     static unsigned line_number();
     static bool identifierp(const char *);
     static void mark();
-    static Q3CString region();
-    static void syntax_error(Q3CString = 0);
+    static WrapperStr region();
+    static void syntax_error(WrapperStr = 0);
     static void premature_eof();
-    static void error_near(Q3CString);
-    static Q3CString quote(Q3CString);
+    static void error_near(WrapperStr);
+    static WrapperStr quote(WrapperStr);
     static void push_context();
     static void pop_context();
 };
 
-Q3CString value_of(Q3CString s, Q3CString k, int & index);
-Q3CString value_of(Q3CString s, Q3CString k, int & index,
-                   Q3CString & next, int & index2);
+WrapperStr value_of(WrapperStr s, WrapperStr k, int & index);
+WrapperStr value_of(WrapperStr s, WrapperStr k, int & index,
+                   WrapperStr & next, int & index2);
 
 #endif

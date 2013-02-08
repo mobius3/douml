@@ -30,7 +30,7 @@
 #include "Class.h"
 #include "Lex.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 ClassContainer::~ClassContainer()
 {
@@ -38,7 +38,7 @@ ClassContainer::~ClassContainer()
 
 bool ClassContainer::read_type(UmlTypeSpec & typespec, Class ** cl)
 {
-    Q3CString s = Lex::read_word();
+    WrapperStr s = Lex::read_word();
 
     if (s.isEmpty()) {
         Lex::premature_eof();
@@ -52,7 +52,7 @@ bool ClassContainer::read_type(UmlTypeSpec & typespec, Class ** cl)
 
 // don't produce error
 
-bool ClassContainer::bypass_type(Q3CString s)
+bool ClassContainer::bypass_type(WrapperStr s)
 {
     if (s.isEmpty() && (s = Lex::read_word()).isEmpty())
         return FALSE;

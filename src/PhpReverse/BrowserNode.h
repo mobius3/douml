@@ -30,7 +30,7 @@
 
 #include "TreeItem.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrCollection>
 #include <Q3PtrList>
 
@@ -38,7 +38,7 @@
 class BrowserView;
 #endif
 
-class Q3CString;
+class WrapperStr;
 class QDataStream;
 class Class;
 

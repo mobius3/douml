@@ -31,7 +31,7 @@
 #include "UmlBaseOperation.h"
 #include "UmlClass.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class Class;
 
@@ -39,18 +39,18 @@ class UmlOperation : public UmlBaseOperation
 {
 private:
     static bool read_param(Class * container, unsigned rank,
-                           UmlParameter & param, Q3CString & decl, bool bypass);
+                           UmlParameter & param, WrapperStr & decl, bool bypass);
 
 public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const WrapperStr & n)
         : UmlBaseOperation(id, n) {};
 
     static bool new_one(Class * container, aVisibility visibility,
                         bool finalp, bool abstractp, bool staticp,
-                        Q3CString comment, Q3CString description);
+                        WrapperStr comment, WrapperStr description);
 
     static void skip_body(int level = 0);
-    static Q3CString skip_expr(int level = 0);
+    static WrapperStr skip_expr(int level = 0);
 };
 
 #endif

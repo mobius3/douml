@@ -30,14 +30,14 @@
 
 #include <q3ptrlist.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlBaseClassItem.h"
 
 class UmlClassItem : public UmlBaseClassItem
 {
 public:
-    UmlClassItem(void * id, const Q3CString & n)
+    UmlClassItem(void * id, const WrapperStr & n)
         : UmlBaseClassItem(id, n) {
     };
 };
