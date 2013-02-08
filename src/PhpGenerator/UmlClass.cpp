@@ -29,7 +29,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlClass.h"
@@ -43,12 +43,12 @@
 #include "UmlCom.h"
 #include "util.h"
 
-Q3CString UmlClass::php_stereotype()
+WrapperStr UmlClass::php_stereotype()
 {
-    Q3CString s = PhpSettings::classStereotype(stereotype());
+    WrapperStr s = PhpSettings::classStereotype(stereotype());
 
     return ((s == "ignored") || (s == "enum") || (s == "interface"))
-           ? s : Q3CString("class");
+           ? s : WrapperStr("class");
 }
 
 void UmlClass::generate()
@@ -60,15 +60,15 @@ void UmlClass::generate()
             if (associatedArtifact() != 0)
                 associatedArtifact()->generate();
             else if ((children().size() != 0) && verbose())
-                UmlCom::trace(Q3CString("<hr><font face=helvetica><i> ") + name() +
+                UmlCom::trace(WrapperStr("<hr><font face=helvetica><i> ") + name() +
                               " : </i> does not have associated <i>artifact</i></font><br>");
         }
     }
 }
 
-void UmlClass::generate(QTextStream & f, Q3CString indent)
+void UmlClass::generate(QTextStream & f, WrapperStr indent)
 {
-    const Q3CString & stereotype = php_stereotype();
+    const WrapperStr & stereotype = php_stereotype();
 
     if (stereotype == "ignored")
         return;
@@ -213,11 +213,11 @@ void UmlClass::generate(QTextStream & f, Q3CString indent)
     }
 }
 
-void UmlClass::generate(QTextStream &, const Q3CString &, Q3CString, int &)
+void UmlClass::generate(QTextStream &, const WrapperStr &, WrapperStr, int &)
 {
 }
 
-void UmlClass::generate_require_onces(QTextStream & f, Q3CString & made)
+void UmlClass::generate_require_onces(QTextStream & f, WrapperStr & made)
 {
     if (!phpDecl().isEmpty()) {
         Q3PtrVector<UmlItem> ch = children();
@@ -233,10 +233,10 @@ void UmlClass::generate_require_onces(QTextStream & f, Q3CString & made)
     }
 }
 
-void UmlClass::generate_require_onces(QTextStream & f, Q3CString & made,
+void UmlClass::generate_require_onces(QTextStream & f, WrapperStr & made,
                                       UmlArtifact * using_art)
 {
-    Q3CString s;
+    WrapperStr s;
 
     if (isPhpExternal()) {
         s = phpDecl();
@@ -271,10 +271,10 @@ void UmlClass::generate_require_onces(QTextStream & f, Q3CString & made,
         if (PhpSettings::requireOnceWithPath()) {
             UmlPackage * p = art->package();
             UmlPackage * pack = using_art->package();
-            Q3CString dir;
+            WrapperStr dir;
 
             if (PhpSettings::isRelativePath()) {
-                Q3CString empty;
+                WrapperStr empty;
 
                 dir = pack->file_path(empty);
             }
@@ -306,7 +306,7 @@ void UmlClass::write(QTextStream & f, const UmlTypeSpec & t)
 
 void UmlClass::write(QTextStream & f)
 {
-    Q3CString nasp;
+    WrapperStr nasp;
     UmlArtifact * a = associatedArtifact();
 
     if (a != 0)
@@ -320,14 +320,14 @@ void UmlClass::write(QTextStream & f)
             f << nasp << '\\';
     }
     else {
-        const Q3CString & currentNasp =
+        const WrapperStr & currentNasp =
             UmlArtifact::generation_package()->phpNamespace();
 
         if (nasp != currentNasp) {
             if (nasp.isEmpty())
                 f << '\\';
             else if ((strncmp(nasp, currentNasp, currentNasp.length()) == 0) &&
-                     (nasp.at(currentNasp.length()) == '\\'))
+                     (nasp.at(currentNasp.length()) == "\\"))
                 f << ((const char *) nasp) + currentNasp.length() + 1 << '\\';
             else
                 f << '\\' << nasp << '\\';
@@ -335,7 +335,7 @@ void UmlClass::write(QTextStream & f)
     }
 
     if (isPhpExternal()) {
-        Q3CString s = phpDecl().stripWhiteSpace();
+        WrapperStr s = phpDecl().stripWhiteSpace();
         int index;
 
         if ((index = s.find("${name}")) != -1)

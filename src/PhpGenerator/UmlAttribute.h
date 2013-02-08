@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 // *************************************************************************
 //
@@ -38,12 +38,12 @@ class QTextStream;
 class UmlAttribute : public UmlBaseAttribute
 {
 public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const WrapperStr & n)
         :  UmlBaseAttribute(id, n) {};
 
-    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-                          Q3CString indent, int & enum_item_rank);
-    virtual void generate_require_onces(QTextStream & f, Q3CString & made);
+    virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                          WrapperStr indent, int & enum_item_rank);
+    virtual void generate_require_onces(QTextStream & f, WrapperStr & made);
 };
 
 #endif

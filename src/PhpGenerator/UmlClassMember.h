@@ -30,7 +30,7 @@
 
 #include "UmlBaseClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 // This class globaly manages class's operations, relations, attributes
@@ -40,15 +40,15 @@
 class UmlClassMember : public UmlBaseClassMember
 {
 public:
-    UmlClassMember(void * id, const Q3CString & n)
+    UmlClassMember(void * id, const WrapperStr & n)
         : UmlBaseClassMember(id, n) {};
 
-    virtual void generate_require_onces(QTextStream & f, Q3CString & made);
+    virtual void generate_require_onces(QTextStream & f, WrapperStr & made);
 
     void generate_visibility(QTextStream & f);
 
-    static void remove_comments(Q3CString & s);
-    static void remove_arrays(Q3CString & s);
+    static void remove_comments(WrapperStr & s);
+    static void remove_arrays(WrapperStr & s);
 };
 
 #endif

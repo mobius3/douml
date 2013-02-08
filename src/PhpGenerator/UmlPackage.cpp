@@ -28,27 +28,27 @@
 #include <qdir.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlPackage.h"
 #include "UmlCom.h"
 #include "PhpSettings.h"
 #include "util.h"
 
-UmlPackage::UmlPackage(void * id, const Q3CString & n)
+UmlPackage::UmlPackage(void * id, const WrapperStr & n)
     : UmlBasePackage(id, n)
 {
     dir.read = FALSE;
 }
 
 static bool RootDirRead;
-static Q3CString RootDir;
+static WrapperStr RootDir;
 
-static Q3CString relative_path(const QDir & destdir, Q3CString relto)
+static WrapperStr relative_path(const QDir & destdir, WrapperStr relto)
 {
     QDir fromdir(relto);
-    Q3CString from = Q3CString(fromdir.absPath().toAscii().constData());
-    Q3CString to = Q3CString(destdir.absPath().toAscii().constData());
+    WrapperStr from = WrapperStr(fromdir.absPath().toAscii().constData());
+    WrapperStr to = WrapperStr(destdir.absPath().toAscii().constData());
     const char * cfrom = from;
     const char * cto = to;
     int lastsep = -1;
@@ -66,11 +66,11 @@ static Q3CString relative_path(const QDir & destdir, Q3CString relto)
 
             case '/':
                 // to = .../aze/qsd/wxc, from = .../aze => qsd/wxc/
-                return (cto + index + 1) + Q3CString("/");
+                return (cto + index + 1) + WrapperStr("/");
 
             default:
                 // to = .../aze/qsd/wxc, from = .../az => ../aze/qsd/wxc/
-                return "../" + Q3CString(cto + lastsep + 1) + "/";
+                return "../" + WrapperStr(cto + lastsep + 1) + "/";
             }
         }
         else if (t == f) {
@@ -80,7 +80,7 @@ static Q3CString relative_path(const QDir & destdir, Q3CString relto)
             index += 1;
         }
         else if (t == 0) {
-            Q3CString r;
+            WrapperStr r;
             const char * p = cfrom + index;
 
             do {
@@ -98,7 +98,7 @@ static Q3CString relative_path(const QDir & destdir, Q3CString relto)
         }
         else {
             // to = .../aze, from = .../iop/klm => ../../aze/
-            Q3CString r = "../";
+            WrapperStr r = "../";
             const char * p = cfrom + lastsep + 1;
 
             while (*p != 0)
@@ -110,7 +110,7 @@ static Q3CString relative_path(const QDir & destdir, Q3CString relto)
     }
 }
 
-Q3CString UmlPackage::rootDir()
+WrapperStr UmlPackage::rootDir()
 {
     if (! RootDirRead) {
         RootDirRead = TRUE;
@@ -128,7 +128,7 @@ Q3CString UmlPackage::rootDir()
     return RootDir;
 }
 
-Q3CString UmlPackage::file_path(const Q3CString & f, Q3CString relto)
+WrapperStr UmlPackage::file_path(const WrapperStr & f, WrapperStr relto)
 {
     if (!dir.read) {
         dir.file = phpDir();
@@ -144,7 +144,7 @@ Q3CString UmlPackage::file_path(const Q3CString & f, Q3CString relto)
             dir.file_absolute = TRUE;
 
         if (dir.file.isEmpty()) {
-            UmlCom::trace(Q3CString("<font color=\"red\"><b><b> The generation directory "
+            UmlCom::trace(WrapperStr("<font color=\"red\"><b><b> The generation directory "
                                     "must be specified for the package<i> ") + name()
                           + "</i>, edit the <i> generation settings</i> (tab 'directory') "
                           "or edit the package (tab 'Php')</b></font><br>");
@@ -162,7 +162,7 @@ Q3CString UmlPackage::file_path(const Q3CString & f, Q3CString relto)
 
     if (! d.exists()) {
         // create directory including the intermediates
-        Q3CString s = dir.file;
+        WrapperStr s = dir.file;
         int index = 0;
         QChar sep = QDir::separator();
 
@@ -177,12 +177,12 @@ Q3CString UmlPackage::file_path(const Q3CString & f, Q3CString relto)
         int index2;
 
         while ((index2 = s.find("/", index + 1)) != -1) {
-            Q3CString s2 = s.left(index2);
+            WrapperStr s2 = s.left(index2);
             QDir sd(s2);
 
             if (!sd.exists()) {
                 if (!sd.mkdir(s2)) {
-                    UmlCom::trace(Q3CString("<font color=\"red\"><b> cannot create directory <i>")
+                    UmlCom::trace(WrapperStr("<font color=\"red\"><b> cannot create directory <i>")
                                   + s2 + "</i></b></font><br>");
                     UmlCom::bye(n_errors() + 1);
                     UmlCom::fatal_error("UmlPackage::file_path");
@@ -193,19 +193,19 @@ Q3CString UmlPackage::file_path(const Q3CString & f, Q3CString relto)
         }
     }
 
-    Q3CString df = (dir.file_absolute || relto.isEmpty())
-                   ? Q3CString(d.filePath(f).toAscii().constData())
+    WrapperStr df = (dir.file_absolute || relto.isEmpty())
+                   ? WrapperStr(d.filePath(f).toAscii().constData())
                    : relative_path(d, relto) + f;
 
     if (PhpSettings::isRelativePath() && (df[0] != '/') && (df[0] != '.'))
         df = "./" + df;
 
-    return df + Q3CString(".") + PhpSettings::sourceExtension();
+    return df + WrapperStr(".") + PhpSettings::sourceExtension();
 }
 
-Q3CString UmlPackage::text_path(const Q3CString & f)
+WrapperStr UmlPackage::text_path(const WrapperStr & f)
 {
-    Q3CString r = file_path(f);
+    WrapperStr r = file_path(f);
 
     return r.left(r.length() - 1 - PhpSettings::sourceExtension().length());
 }

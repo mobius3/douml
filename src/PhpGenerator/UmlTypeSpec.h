@@ -4,7 +4,7 @@
 
 #include "UmlBaseTypeSpec.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 class QTextStream;
@@ -19,7 +19,7 @@ class UmlTypeSpec : public UmlBaseTypeSpec
 {
 public:
     void generate_require_onces(QTextStream & f,
-                                Q3CString & made,
+                                WrapperStr & made,
                                 UmlArtifact * using_art) const;
 };
 

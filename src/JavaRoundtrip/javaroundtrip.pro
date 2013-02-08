@@ -95,11 +95,31 @@ SOURCES          = main.cpp BrowserNode.cpp Statistic.cpp \
         ../Tools/UmlBaseTypeSpec.cpp \
         ../Tools/UmlBaseParameter.cpp \
         ../Tools/UmlBaseView.cpp \
-        ../Tools/UmlBaseClassInstance.cpp
+        ../Tools/UmlBaseClassInstance.cpp \
+    ../misc/mystr.cpp \
+    ../Logging/QsLogDest.cpp \
+    ../Logging/QsLog.cpp \
+    ../Logging/QsDebugOutput.cpp
 
 TARGET          = java_roundtrip
 DEFINES          = WITHJAVA REVERSE ROUNDTRIP
-INCLUDEPATH   = ../Tools ../JavaRoundtrip ../JavaCat
+INCLUDEPATH   = ../Tools ../JavaRoundtrip ../JavaCat ../
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+
+
+QMAKE_CXXFLAGS += -std=gnu++11
+Release{
+    MOC_DIR = ../../bin/MOC_release/java_round
+    OBJECTS_DIR = ../../bin/Obj_release/java_round
+}
+
+Debug{
+    MOC_DIR = ../../bin/MOC_debug/java_round
+    OBJECTS_DIR = ../../bin/Obj_debug/java_round
+
+}
+
+    DESTDIR = ../../bin
+

@@ -27,19 +27,19 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlExtraClassMember.h"
 
 /*
-void UmlExtraClassMember::compute_dependency(Q3PtrList<PhpRefType> &, Q3CString) {
+void UmlExtraClassMember::compute_dependency(Q3PtrList<PhpRefType> &, WrapperStr) {
   // does nothing
 }
 */
 
-void UmlExtraClassMember::generate(QTextStream & f, const Q3CString &,
-                                   Q3CString, int &)
+void UmlExtraClassMember::generate(QTextStream & f, const WrapperStr &,
+                                   WrapperStr, int &)
 {
     f << phpDecl();
 }

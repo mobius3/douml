@@ -31,7 +31,7 @@
 #include "UmlBaseRelation.h"
 #include "UmlClass.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 class QTextStream;
@@ -39,18 +39,18 @@ class QTextStream;
 class UmlRelation : public UmlBaseRelation
 {
 public:
-    UmlRelation(void * id, const Q3CString & n)
+    UmlRelation(void * id, const WrapperStr & n)
         : UmlBaseRelation(id, n) {
     };
 
-    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-                          Q3CString indent, int & enum_item_rank);
-    virtual void generate_require_onces(QTextStream & f, Q3CString & made);
+    virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                          WrapperStr indent, int & enum_item_rank);
+    virtual void generate_require_onces(QTextStream & f, WrapperStr & made);
 
     void generate_extends(const char *& sep, QTextStream & f,
-                          const Q3CString & stereotype);
+                          const WrapperStr & stereotype);
     void generate_implements(const char *& sep, QTextStream & f,
-                             const Q3CString & stereotype);
+                             const WrapperStr & stereotype);
 };
 
 #endif

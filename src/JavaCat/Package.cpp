@@ -202,7 +202,7 @@ Package::Package(Package * parent, UmlPackage * pk)
     package = pk->javaPackage();
 
     if (!package.isEmpty()) {
-        QString full = QString(package);
+        QString full = package;
 
         user_packages.insert(full, pk);
         known_packages.insert(full, this);
@@ -689,7 +689,7 @@ void Package::reverse_directory(QDir & d, bool rec)
 #ifdef ROUNDTRIP
 void Package::reverse(UmlArtifact * art)
 {
-    if (allowed(FileFilter, QString(art->name()) + "." + Ext))
+    if (allowed(FileFilter, art->name() + "." + Ext))
         reverse_file(path + "/" + art->name() + "." + WrapperStr(Ext.toAscii().constData()), art);
 }
 #endif

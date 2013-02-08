@@ -228,7 +228,7 @@ bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
                 int index2;
 
                 if (!t.isEmpty() &&
-                    (t.at(t.length() - 1) == '>') &&
+                    (t.at(t.length() - 1) == ">") &&
                     ((index2 = t.find('<')) > 0)) {
                     stereotype = t.left(index2);
                     typespec.explicit_type =

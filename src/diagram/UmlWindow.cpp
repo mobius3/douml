@@ -481,9 +481,9 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     connect(cppAction, SIGNAL(triggered()),browser, SLOT(OnGenerateCpp()));
     javaAction = new QAction( tr("Java"),0);
     connect(javaAction, SIGNAL(triggered()),browser, SLOT(OnGenerateJava()));
-    phpAction = new QAction(tr("Python"),0);
+    phpAction = new QAction(tr("Php"),0);
     connect(phpAction, SIGNAL(triggered()),browser, SLOT(OnGeneratePhp()));
-    pythonAction = new QAction(tr("Php"),0);
+    pythonAction = new QAction(tr("Python"),0);
     connect(pythonAction, SIGNAL(triggered()),browser, SLOT(OnGeneratePython()));
     idlAction = new QAction(tr("Idl"),0);
     connect(idlAction, SIGNAL(triggered()),browser, SLOT(OnGenerateIdl()));
@@ -1525,6 +1525,7 @@ void UmlWindow::setup_generator_action_visibility()
         phpAction->setVisible(true);
     else
         phpAction->setVisible(false);
+
     if(using_python())
         pythonAction->setVisible(true);
     else

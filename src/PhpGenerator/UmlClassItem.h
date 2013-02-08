@@ -30,7 +30,7 @@
 
 #include <q3ptrlist.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlBaseClassItem.h"
@@ -41,12 +41,12 @@ class UmlTypeSpec;
 class UmlClassItem : public UmlBaseClassItem
 {
 public:
-    UmlClassItem(void * id, const Q3CString & n)
+    UmlClassItem(void * id, const WrapperStr & n)
         : UmlBaseClassItem(id, n) {
     };
 
-    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-                          Q3CString indent, int & enum_item_rank) = 0;
+    virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                          WrapperStr indent, int & enum_item_rank) = 0;
 };
 
 #endif

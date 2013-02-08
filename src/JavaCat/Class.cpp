@@ -656,11 +656,11 @@ bool Class::reverse(ClassContainer * container, WrapperStr stereotype,
                     if (CurrentArtifact->associatedClasses().isEmpty()) {
                         // first association, to set artifact def
                         Package * pack = (Package *) cl->parent();
-                        UmlArtifact * nullptr = 0;
+                        UmlArtifact * art = 0;
 
                         CurrentArtifact->addAssociatedClass(cl_uml);
                         cl_uml->need_artifact(pack->get_imports(), pack->is_java_lang_added(),
-                                              pack->get_static_imports(), path, nullptr);
+                                              pack->get_static_imports(), path, art);
                     }
                     else
                         CurrentArtifact->addAssociatedClass(cl_uml);

@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlClassMember.h"
@@ -36,11 +36,11 @@
 #include "UmlSettings.h"
 #include "PhpSettings.h"
 
-void UmlClassMember::generate_require_onces(QTextStream &, Q3CString &)
+void UmlClassMember::generate_require_onces(QTextStream &, WrapperStr &)
 {
 }
 
-void UmlClassMember::remove_comments(Q3CString & s)
+void UmlClassMember::remove_comments(WrapperStr & s)
 {
     int index1 = 0;
 
@@ -75,7 +75,7 @@ void UmlClassMember::remove_comments(Q3CString & s)
     }
 }
 
-void UmlClassMember::remove_arrays(Q3CString & s)
+void UmlClassMember::remove_arrays(WrapperStr & s)
 {
     int index1 = 0;
 
@@ -113,7 +113,7 @@ void UmlClassMember::generate_visibility(QTextStream & f)
 
 /*
 bool UmlClassMember::compute_dependency(Q3PtrList<PhpRefType> & dependencies,
-					Q3CString decl, const UmlTypeSpec & t)
+					WrapperStr decl, const UmlTypeSpec & t)
 {
   remove_comments(decl);
   remove_arrays(decl);
@@ -185,7 +185,7 @@ bool UmlClassMember::compute_dependency(Q3PtrList<PhpRefType> & dependencies,
 	ts.explicit_type = p2 + 1;
 
       if (dontsubstituteuntil == 0) {
-	Q3CString subst = PhpSettings::type(ts.explicit_type);
+	WrapperStr subst = PhpSettings::type(ts.explicit_type);
 
 	if (subst != ts.explicit_type) {
 	  decl = subst + ' ' + p;

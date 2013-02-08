@@ -1,13 +1,13 @@
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlTypeSpec.h"
 #include "UmlClass.h"
 
 void UmlTypeSpec::generate_require_onces(QTextStream & f,
-        Q3CString & made,
+        WrapperStr & made,
         UmlArtifact * using_art) const
 {
     if (type != 0)

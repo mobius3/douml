@@ -1190,26 +1190,26 @@ bool Lex::bypass_type(WrapperStr s)
 
 // to compare strings bypassing \r
 
-bool neq(const WrapperStr & s1, const WrapperStr & s2)
-{
-    const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
-    const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
+//bool neq(const WrapperStr & s1, const WrapperStr & s2)
+//{
+//    const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
+//    const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
 
-    for (;;) {
-        while (*p1 == '\r') p1 += 1;
+//    for (;;) {
+//        while (*p1 == '\r') p1 += 1;
 
-        while (*p2 == '\r') p2 += 1;
+//        while (*p2 == '\r') p2 += 1;
 
-        if (*p1 == 0)
-            return (*p2 != 0);
+//        if (*p1 == 0)
+//            return (*p2 != 0);
 
-        if (*p1 != *p2)
-            return TRUE;
+//        if (*p1 != *p2)
+//            return TRUE;
 
-        p1 += 1;
-        p2 += 1;
-    }
-}
+//        p1 += 1;
+//        p2 += 1;
+//    }
+//}
 
 // White space means the decimal ASCII codes 9, 10, 11, 12, 13 and 32.
 inline bool is_white_space(char c)

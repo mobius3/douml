@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlRelation.h"
@@ -38,7 +38,7 @@
 #include "UmlCom.h"
 
 void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
-                                   const Q3CString & cl_stereotype)
+                                   const WrapperStr & cl_stereotype)
 {
     switch (relationKind()) {
     default:
@@ -50,12 +50,12 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
             return;
 
         UmlClass * role_type = roleType();
-        const Q3CString & other_stereotype = role_type->php_stereotype();
+        const WrapperStr & other_stereotype = role_type->php_stereotype();
 
         if ((cl_stereotype == "interface") || (cl_stereotype == "@interface")) {
             if ((other_stereotype != "interface") && (other_stereotype != "@interface")) {
                 write_trace_header();
-                UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot extends a <i>")
+                UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot extends a <i>")
                               + other_stereotype + "</i></b></font><br>");
                 incr_warning();
                 return;
@@ -64,7 +64,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
         else if ((other_stereotype != "interface") && (other_stereotype != "@interface")) {
             if (cl_stereotype == "union") {
                 write_trace_header();
-                UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
+                UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
                               + cl_stereotype + "</i> cannot extends</b></font><br>");
                 incr_warning();
                 return;
@@ -72,7 +72,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
             else if ((other_stereotype == "union") ||
                      (other_stereotype == "enum")) {
                 write_trace_header();
-                UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot extends an <i>")
+                UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot extends an <i>")
                               + other_stereotype + "</i></b></font><br>");
                 incr_warning();
                 return;
@@ -107,7 +107,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
 }
 
 void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
-                                      const Q3CString & cl_stereotype)
+                                      const WrapperStr & cl_stereotype)
 {
     switch (relationKind()) {
     default:
@@ -119,12 +119,12 @@ void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
             return;
 
         UmlClass * role_type = roleType();
-        const Q3CString & other_stereotype = role_type->php_stereotype();
+        const WrapperStr & other_stereotype = role_type->php_stereotype();
 
         if (other_stereotype == "interface") {
             if (cl_stereotype == "union") {
                 write_trace_header();
-                UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
+                UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
                               + cl_stereotype + "</i> cannot inherits</b></font><br>");
                 incr_warning();
             }
@@ -149,8 +149,8 @@ void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
     }
 }
 
-void UmlRelation::generate(QTextStream & f, const Q3CString &,
-                           Q3CString indent, int &)
+void UmlRelation::generate(QTextStream & f, const WrapperStr &,
+                           WrapperStr indent, int &)
 {
     switch (relationKind()) {
     case aDependency:
@@ -162,7 +162,7 @@ void UmlRelation::generate(QTextStream & f, const Q3CString &,
         if (!phpDecl().isEmpty()) {
             const char * p = phpDecl();
             const char * pp = 0;
-            Q3CString s;
+            WrapperStr s;
 
             while ((*p == ' ') || (*p == '\t'))
                 indent += *p++;
@@ -272,7 +272,7 @@ void UmlRelation::generate(QTextStream & f, const Q3CString &,
     }
 }
 
-void UmlRelation::generate_require_onces(QTextStream & f, Q3CString & made)
+void UmlRelation::generate_require_onces(QTextStream & f, WrapperStr & made)
 {
     if (!phpDecl().isEmpty())
         roleType()->generate_require_onces(f, made, ((UmlClass *) parent())->assocArtifact());
