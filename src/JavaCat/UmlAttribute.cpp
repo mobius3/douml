@@ -434,7 +434,7 @@ bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
                 index = decl.find("${value}");
             }
 
-            //aux.resize(aux.length()); // remove , ; or }, warning resize count \000 //warn_q3cstring
+            //aux.resize(aux.length()); // remove , ; or }, warning resize count \000 //warn_WrapperStr
 
             if (!aux.stripWhiteSpace().isEmpty())
                 decl.replace(index, 8, aux);

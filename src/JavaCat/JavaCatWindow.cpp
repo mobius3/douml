@@ -375,7 +375,7 @@ void JavaCatWindow::trace(QString s)
 
 void JavaCatWindow::trace(WrapperStr s)
 {
-    trace(QString(s));
+    trace(s);
 }
 
 void JavaCatWindow::clear_trace()

@@ -76,7 +76,7 @@ void BrowserNodeList::search(BrowserNode * bn, int k,
             : (!((BrowserNode *) child)->isa_package() &&
                ((k == aClass)
                 ? (child->text(0).find(s, 0, cs) != -1)
-                : (QString(((Class *) child)->get_description()).find(s, 0, cs) != -1))))
+                : (WrapperStr(((Class *) child)->get_description()).operator QString().find(s, 0, cs) != -1))))
             append((BrowserNode *) child);
 
         search((BrowserNode *) child, k, s, cs);

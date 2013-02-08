@@ -44,7 +44,7 @@ int main(int argc, char ** argv)
     if (argc != 2)
         return 0;
 
-    if (UmlCom::connect(WrapperStr(argv[1]).toUInt())) {
+    if (UmlCom::connect(WrapperStr(argv[1]).operator QString().toUInt())) {
         try {
             //UmlCom::with_ack(FALSE);
 
