@@ -2,10 +2,11 @@
 
 
 #include "CppSettings.h"
+#include "CppSettingsCmd.h"
 
 #include "UmlCom.h"
 #include "UmlSettings.h"
-#include "Tools/ApiCmd.h"
+//#include "Tools/ApiCmd.h"
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:

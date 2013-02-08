@@ -8,9 +8,10 @@
 #include "UmlCom.h"
 #include "UmlItem.h"
 #include "UmlTypeSpec.h"
+#include "MiscGlobalCmd.h"
 #include "UmlClass.h"
 #include "UmlSettings.h"
-#include "Tools/ApiCmd.h"
+//#include "Tools/ApiCmd.h"
 bool UmlCom::connect(unsigned int port)
 {
     sock = new Q3SocketDevice(Q3SocketDevice::Stream);

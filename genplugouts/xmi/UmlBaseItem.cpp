@@ -2,7 +2,7 @@
 #include "UmlBaseItem.h"
 #include "UmlItem.h"
 #include "UmlTypeSpec.h"
-
+#include "MiscGlobalCmd.h"
 #include "UmlCom.h"
 #include "UmlRelation.h"
 #include "UmlNcRelation.h"
@@ -41,7 +41,7 @@
 #include "UmlChoicePseudoState.h"
 #include "UmlForkPseudoState.h"
 #include "UmlJoinPseudoState.h"
-#include "Tools/ApiCmd.h"
+//#include "Tools/ApiCmd.h"
 //Added by qt3to4:
 #include <Q3CString>
 

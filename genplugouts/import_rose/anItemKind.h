@@ -1,7 +1,7 @@
 #ifndef _ANITEMKIND_H
 #define _ANITEMKIND_H
 
-
+////#include "Tools/ApiCmd.h"
 // the king of any item, returned by UmlBaseItem::Kind()
 enum anItemKind {
     aRelation,

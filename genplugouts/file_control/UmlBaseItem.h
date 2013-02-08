@@ -9,6 +9,7 @@
 #include <q3ptrdict.h>
 //#include "OnInstanceCmd.h"
 #include "aVisibility.h"
+
 #include "aDirection.h"
 
 class UmlItem;

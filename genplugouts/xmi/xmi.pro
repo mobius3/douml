@@ -235,3 +235,22 @@ SOURCES        = ./UmlBaseFinalState.cpp \
           ./UmlOperation.cpp
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+
+INCLUDEPATH += ../../src
+CONFIG += qtestlib
+Release{
+
+
+    MOC_DIR = bin/douml/xmi/MOC_release
+    OBJECTS_DIR = bin/douml/xmi/Obj_release
+}
+
+Debug{
+    MOC_DIR = bin/douml/xmi/MOC_Debug
+    OBJECTS_DIR = bin/douml/xmi/Obj_Debug
+
+}
+    UI_DIR = src/ui
+    DESTDIR = ../../bin
+
+QMAKE_CXXFLAGS += -std=gnu++11

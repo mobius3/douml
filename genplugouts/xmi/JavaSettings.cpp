@@ -2,10 +2,11 @@
 
 
 #include "JavaSettings.h"
+#include "JavaSettingsCmd.h"
 
 #include "UmlCom.h"
 #include "UmlSettings.h"
-#include "Tools/ApiCmd.h"
+//#include "Tools/ApiCmd.h"
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:

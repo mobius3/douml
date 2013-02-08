@@ -1,5 +1,6 @@
 
 #include "UmlBaseClassMember.h"
+#include "PackageGlobalCmd.h"
 
 #include "UmlCom.h"
 bool UmlBaseClassMember::isClassMember()

@@ -299,7 +299,7 @@ protected:
 
 public:
     // the constructor, do not call it yourself !
-    UmlBaseItem(void * id, const Q3CString & n);
+    UmlBaseItem(void * id, const UmlItem &n);
 
     // the destructor, do not delete objects yourself !!!!!!!!!!
     virtual ~UmlBaseItem();

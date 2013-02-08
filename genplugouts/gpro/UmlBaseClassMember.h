@@ -1,7 +1,7 @@
 #ifndef _UMLBASECLASSMEMBER_H
 #define _UMLBASECLASSMEMBER_H
 
-
+#include "Tools/ApiCmd.h"
 #include "UmlClassItem.h"
 #include "aVisibility.h"
 #include <q3cstring.h>
