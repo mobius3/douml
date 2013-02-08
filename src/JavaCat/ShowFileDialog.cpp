@@ -38,12 +38,12 @@
 #include <qdir.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QDesktopWidget>
 
 #include "ShowFileDialog.h"
 
-ShowFileDialog::ShowFileDialog(const Q3CString & filename)
+ShowFileDialog::ShowFileDialog(const WrapperStr & filename)
     : QDialog(0, filename)
 {
     Q3VBoxLayout * vbox = new Q3VBoxLayout(this);

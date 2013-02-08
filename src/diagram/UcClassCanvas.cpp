@@ -962,14 +962,14 @@ void UcClassCanvas::save(QTextStream & st, bool ref, QString & warning) const
         st << "classcanvas_ref " << get_ident() << " // " << browser_node->get_name();
     else {
         nl_indent(st);
-        st << "classcanvas " << get_ident() << ' ';
+        st << "classcanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
         settings.save(st);
         nl_indent(st);
 
         if (itscolor != UmlDefaultColor)
-            st << "color " << stringify(itscolor) << ' ';
+            st << "color " << stringify(itscolor) << " ";
 
         save_xyz(st, this, "xyz");
         save_stereotype_property(st, warning);

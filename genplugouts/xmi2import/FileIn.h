@@ -3,7 +3,7 @@
 
 
 #include <qstring.h>
-#include <q3cstring.h>
+
 #include <q3dict.h>
 
 #include <stdio.h>
@@ -21,7 +21,7 @@ public:
     Token & read(bool any = FALSE);
 
     //return content and the next token which must be a 'what'
-    Q3CString body(Q3CString what);
+    WrapperStr body(WrapperStr what);
 
     //return the next work, may be :
     //<
@@ -39,28 +39,28 @@ public:
     //Warning : returned value will be changed by next call !
     const char * readWord(bool any, BooL & str);
 
-    void finish(Q3CString what);
+    void finish(WrapperStr what);
 
     void bypass(Token & tk);
 
     void bypassedId(Token & tk);
 
     //doesn't return
-    void error(Q3CString s);
+    void error(WrapperStr s);
 
-    void warning(Q3CString s);
+    void warning(WrapperStr s);
 
-    const Q3CString & path() const {
+    const WrapperStr & path() const {
         return _path;
     }
 
-    static bool isBypassedId(Q3CString id) {
+    static bool isBypassedId(WrapperStr id) {
         return BypassedIds[QString(id)] != 0;
     }
 
 
 protected:
-    Q3CString _path;
+    WrapperStr _path;
 
     FILE * _fp;
 
@@ -72,7 +72,7 @@ protected:
 
     char * _buffer;
 
-    QMap<Q3CString, char> _special_chars;
+    QMap<WrapperStr, char> _special_chars;
 
     static Q3Dict<char> BypassedIds;
 
@@ -86,7 +86,7 @@ private:
 
 
 public:
-    void setEncoding(Q3CString s);
+    void setEncoding(WrapperStr s);
 
 };
 

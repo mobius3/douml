@@ -30,7 +30,7 @@
 
 #include "UmlBaseDeploymentView.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrList>
 
 // This class manages 'deployment view'
@@ -39,7 +39,7 @@
 class UmlDeploymentView : public UmlBaseDeploymentView
 {
 public:
-    UmlDeploymentView(void * id, const Q3CString & n)
+    UmlDeploymentView(void * id, const WrapperStr & n)
         : UmlBaseDeploymentView(id, n) {}
 
 #ifdef ROUNDTRIP

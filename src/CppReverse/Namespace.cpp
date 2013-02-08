@@ -27,7 +27,7 @@
 
 #include "Namespace.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 
 // namespace stack, namespaces.last() = current namespace full name + "::",
@@ -44,12 +44,12 @@ int Namespace::AnonymousLevel;
 Q3ValueList<QStringList> Namespace::UsingScope;
 
 // namespace aliases
-QMap<Q3CString, Q3CString> Namespace::Aliases;
+QMap<QString, WrapperStr> Namespace::Aliases;
 
-void Namespace::set(const Q3CString & s)
+void Namespace::set(const WrapperStr & s)
 {
     // for upload only
-    Stack.append(QString(s) + "::");
+    Stack.append(s + "::");
 }
 
 void Namespace::unset()
@@ -58,12 +58,12 @@ void Namespace::unset()
     Stack.remove(Stack.last());
 }
 
-void Namespace::enter(const Q3CString & s)
+void Namespace::enter(const WrapperStr & s)
 {
     save_using_scope();
     Stack.append((Stack.isEmpty())
-                 ? QString(s) + "::"
-                 : Stack.last() + QString(s) + "::");
+                 ? s + "::"
+                 : Stack.last() + s + "::");
 }
 
 void Namespace::exit()
@@ -78,7 +78,7 @@ void Namespace::restore_using_scope()
     UsingScope.remove(UsingScope.begin());
 }
 
-QString Namespace::namespacify(Q3CString s, bool local)
+QString Namespace::namespacify(WrapperStr s, bool local)
 {
     QString r;
     int index = s.find("::");
@@ -87,7 +87,7 @@ QString Namespace::namespacify(Q3CString s, bool local)
         r = ((const char *) s) + 2;
     else {
         if (index != -1) {
-            QMap<Q3CString, Q3CString>::ConstIterator it =
+            QMap<QString, WrapperStr>::ConstIterator it =
                 Aliases.find(s.left(index));
 
             if (it != Aliases.end())
@@ -95,8 +95,8 @@ QString Namespace::namespacify(Q3CString s, bool local)
         }
 
         r = (Stack.isEmpty())
-            ? QString(s)
-            : Stack.last() + QString(s);
+            ? s.operator QString()
+            : Stack.last() + s.operator QString();
     }
 
     return (local)
@@ -104,7 +104,7 @@ QString Namespace::namespacify(Q3CString s, bool local)
            : r;
 }
 
-Q3CString Namespace::current()
+WrapperStr Namespace::current()
 {
     if (Stack.isEmpty())
         return 0;
@@ -113,5 +113,5 @@ Q3CString Namespace::current()
 
     QByteArray temp = (s.left(s.length() - 2)).toAscii();
     const char * c = temp.constData();
-    return Q3CString(c);
+    return WrapperStr(c);
 }

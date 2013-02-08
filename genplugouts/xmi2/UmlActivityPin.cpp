@@ -2,11 +2,11 @@
 #include "UmlActivityPin.h"
 #include "FileOut.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 void UmlActivityPin::write(FileOut & out)
 {
-    Q3CString s = name();
+    WrapperStr s = name();
     const char * k;
     const char * K;
 

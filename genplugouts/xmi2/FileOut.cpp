@@ -5,7 +5,7 @@
 #include <q3textstream.h>
 #include <qfile.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 FileOut::FileOut(QFile * fp, bool lf, bool utf8) : Q3TextStream(fp), _lf(lf), _indent(0)
 {
     if (utf8)
@@ -42,7 +42,7 @@ void FileOut::idref(UmlItem * x)
 
 }
 
-void FileOut::idref(Q3CString s, UmlItem * x)
+void FileOut::idref(WrapperStr s, UmlItem * x)
 {
     QString keys;
     {
@@ -51,7 +51,7 @@ void FileOut::idref(Q3CString s, UmlItem * x)
         keyst << ((void *) x) << "_" << s;
     }
 
-    QMap<Q3CString, int>::ConstIterator it =
+    QMap<WrapperStr, int>::ConstIterator it =
         _modifiedtypes.find((const char *) keys);
 
     if (it == _modifiedtypes.end())
@@ -76,12 +76,12 @@ void FileOut::idref_prefix(UmlItem * x, const char * pfix, int n)
 
 }
 
-void FileOut::idref_datatype(const Q3CString & t)
+void FileOut::idref_datatype(const WrapperStr & t)
 {
     if (t.isEmpty())
         return;
 
-    QMap<Q3CString, int>::ConstIterator it = _datatypes.find(t);
+    QMap<WrapperStr, int>::ConstIterator it = _datatypes.find(t);
 
     if (it == _datatypes.end())
         it = _datatypes.insert(t, _datatypes.count());
@@ -93,13 +93,13 @@ void FileOut::idref_datatype(const Q3CString & t)
 
 void FileOut::ref(UmlItem * x, const char * pfix1, const char * pfix2)
 {
-    ((Q3TextStream &) *this) << ' ' << pfix1 << "=\"BOUML_"
+    ((Q3TextStream &) *this) << " " << pfix1 << "=\"BOUML_"
                              << pfix2 << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 }
 
 void FileOut::ref(UmlItem * x, const char * pfix1, const char * pfix2, int n)
 {
-    ((Q3TextStream &) *this) << ' ' << pfix1 << "=\"BOUML_"
+    ((Q3TextStream &) *this) << " " << pfix1 << "=\"BOUML_"
                              << pfix2 << n << "_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 }
 
@@ -117,7 +117,7 @@ void FileOut::define_datatypes(bool uml_20, bool primitive_type, bool gen_extens
                             : ((uml_20) ? "<ownedMember xmi:type=\"uml:DataType\""
                                : "<packagedElement xmi:type=\"uml:DataType\"");
 
-    QMap<Q3CString, int>::ConstIterator it;
+    QMap<WrapperStr, int>::ConstIterator it;
 
     for (it = _datatypes.begin();
          it != _datatypes.end();
@@ -135,7 +135,7 @@ void FileOut::define_datatypes(bool uml_20, bool primitive_type, bool gen_extens
     for (it = _modifiedtypes.begin();
          it != _modifiedtypes.end();
          ++it) {
-        Q3CString k = it.key();
+        WrapperStr k = it.key();
         int index = k.find('_');
 
         indent();
@@ -160,9 +160,9 @@ void FileOut::define_datatypes(bool uml_20, bool primitive_type, bool gen_extens
     }
 }
 
-void FileOut::quote(const Q3CString & s)
+void FileOut::quote(const WrapperStr & s)
 {
-    //[jasa] added to handle ambiguous calls with Q3CString.
+    //[jasa] added to handle ambiguous calls with WrapperStr.
     quote((const char *)s);
 }
 

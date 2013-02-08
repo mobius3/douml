@@ -33,7 +33,7 @@
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 
 #include "CodClassInstCanvas.h"
 #include "CodSelfLinkCanvas.h"
@@ -520,18 +520,18 @@ void CodClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) con
            << full_name();
     else if (browser_node->get_type() == UmlClass) {
         nl_indent(st);
-        st << "classinstance " << get_ident() << ' ';
+        st << "classinstance " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         nl_indent(st);
         ClassInstCanvas::save(st);
         st << " name ";
         save_string(iname, st);
-        st << ' ';
+        st << " ";
         save_xyz(st, this, " xyz");
     }
     else {
         nl_indent(st);
-        st << "classinstancecanvas " << get_ident() << ' ';
+        st << "classinstancecanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
 
         indent(+1);

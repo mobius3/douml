@@ -216,7 +216,7 @@ EnvDialog::EnvDialog(bool conv, bool noid)
         QString na = co->name();
         int pos = 0;
 
-        while ((pos = na.find(' ', pos)) != -1)
+        while ((pos = na.find(" ", pos)) != -1)
             na.replace(pos, 1, "_");
 
         if (QTextCodec::codecForName(na) == co)

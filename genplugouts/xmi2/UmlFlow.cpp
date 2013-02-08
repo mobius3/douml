@@ -6,7 +6,7 @@
 #include "UmlFlow.h"
 #include "FileOut.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 void UmlFlow::write(FileOut & out)
 {
@@ -65,10 +65,10 @@ void UmlFlow::write_it(FileOut & out)
     out.ref(parent(), "source");
     out.ref(target(), "target");
 
-    Q3CString w;
-    Q3CString g;
-    Q3CString s;
-    Q3CString t;
+    WrapperStr w;
+    WrapperStr g;
+    WrapperStr s;
+    WrapperStr t;
 
     switch (_lang) {
     case Uml:

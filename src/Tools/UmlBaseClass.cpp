@@ -10,7 +10,7 @@
 #include "UmlCom.h"
 #include "Tools/ApiCmd.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 #include <Q3ValueList>
 UmlClass * UmlBaseClass::create(UmlItem * parent, const char * s)
 {

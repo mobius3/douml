@@ -273,7 +273,7 @@ void InfoCanvas::save(QTextStream & st, bool ref, QString &) const
     else {
         nl_indent(st);
 
-        st << "information " << get_ident() << ' ';
+        st << "information " << get_ident() << " ";
         save_internal(st);
     }
 }

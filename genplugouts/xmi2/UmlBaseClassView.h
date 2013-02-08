@@ -4,7 +4,7 @@
 
 #include "UmlView.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 
 class UmlClassView;
 class UmlPackage;
@@ -44,7 +44,7 @@ protected:
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseClassView(void * id, const Q3CString & n) : UmlView(id, n) {};
+    UmlBaseClassView(void * id, const WrapperStr & n) : UmlView(id, n) {};
 
 };
 

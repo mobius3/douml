@@ -31,7 +31,7 @@
 #include <qapplication.h>
 #include <QTextCodec>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextCodec>
 
 #include "UmlWindow.h"
@@ -185,12 +185,12 @@ int main(int argc, char ** argv)
                     argc -= 1;
                 }
 
-                Q3CString cmd = argv[3];
-                Q3CString space = " ";
+                WrapperStr cmd = argv[3];
+                WrapperStr space = " ";
                 int index;
 
                 for (index = 4; index != argc; index += 1)
-                    cmd += space + Q3CString(argv[index]);
+                    cmd += space + WrapperStr(argv[index]);
 
                 ToolCom::run((const char *) cmd, BrowserView::get_project(), with_exit);
             }

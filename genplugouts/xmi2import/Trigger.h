@@ -2,7 +2,7 @@
 #define _TRIGGER_H
 
 
-#include <q3cstring.h>
+
 #include <qmap.h>
 
 class FileIn;
@@ -19,13 +19,13 @@ public:
 
     //the result is null if not find
 
-    static Q3CString get(Q3CString idref);
+    static WrapperStr get(WrapperStr idref);
 
-    static void add(FileIn & in, Token & token, Q3CString & name, Q3CString & idref);
+    static void add(FileIn & in, Token & token, WrapperStr & name, WrapperStr & idref);
 
 
 protected:
-    static QMap<Q3CString, Q3CString> All;
+    static QMap<QString, WrapperStr> All;
 
 };
 

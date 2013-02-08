@@ -35,7 +35,7 @@
 #include <qmessagebox.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QPixmap>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -90,7 +90,7 @@ Class::Class(BrowserNode * p, UmlClass * ucl)
     : BrowserNode(p, ucl->name()),
       uml(ucl), abstractp(FALSE), reversedp(FALSE), from_lib(FALSE), updated(FALSE)
 {
-    Q3CString st = ucl->stereotype();
+    WrapperStr st = ucl->stereotype();
 
     if (!st.isEmpty())
         st = JavaSettings::classStereotype(st);
@@ -131,7 +131,7 @@ UmlClass * Class::get_uml()
     UmlItem * p = (((BrowserNode *) parent())->isa_package())
                   ? (UmlItem *)((Package *) parent())->get_uml()->get_classview()
                   : (UmlItem *)((Class *) parent())->get_uml();
-    Q3CString str = Q3CString(text(0).toAscii().constData());
+    WrapperStr str = WrapperStr(text(0).toAscii().constData());
 
     uml = UmlBaseClass::create(p, str);
 
@@ -199,11 +199,11 @@ case 'i':
     break;
 
 case '@': {
-    Q3CString s = JavaSettings::interfaceDecl();
+    WrapperStr s = JavaSettings::interfaceDecl();
     int index = s.find("interface");
 
     if (index != -1)
-        s.insert(index, '@');
+        s.insert(index, "@");
 
 #ifdef ROUNDTRIP
 
@@ -259,7 +259,7 @@ default:
 #ifdef ROUNDTRIP
     if (roundtrip) {
         if (!uml->stereotype().isEmpty()) {
-            Q3CString jst = JavaSettings::classStereotype(uml->stereotype());
+            WrapperStr jst = JavaSettings::classStereotype(uml->stereotype());
 
             if ((jst == "interface") || (jst == "@interface") || (jst == "enum")) {
                 uml->set_Stereotype("");
@@ -363,18 +363,18 @@ bool Class::already_in_bouml()
 // note : 'tmplts' must be given by value to not have to
 // remove the may be added formals in all the return cases
 
-bool Class::reverse(ClassContainer * container, Q3CString stereotype,
-                    Q3CString annotation, bool abstractp, bool finalp,
-                    aVisibility visibility, Q3CString & path,
+bool Class::reverse(ClassContainer * container, WrapperStr stereotype,
+                    WrapperStr annotation, bool abstractp, bool finalp,
+                    aVisibility visibility, WrapperStr & path,
                     Q3ValueList<FormalParameterList> tmplts
 #ifdef ROUNDTRIP
                     , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
 #endif
                    )
 {
-    Q3CString comment = Lex::get_comments();
-    Q3CString description = Lex::get_description();
-    Q3CString name;
+    WrapperStr comment = Lex::get_comments();
+    WrapperStr description = Lex::get_description();
+    WrapperStr name;
 
     if ((name = Lex::read_word()).isEmpty())
         return FALSE;
@@ -507,7 +507,7 @@ bool Class::reverse(ClassContainer * container, Q3CString stereotype,
 #endif
     }
 
-    Q3CString s = Lex::read_word();
+    WrapperStr s = Lex::read_word();
 
     if (s == "<") {
         if (!cl->get_formals(cl->formals, FALSE, tmplts))
@@ -718,8 +718,8 @@ bool Class::manage_extends(ClassContainer * container,
     UmlTypeSpec typespec;
     Class * cl = 0;
     Q3ValueList<UmlTypeSpec> actuals;
-    Q3CString str_actuals;
-    Q3CString dummy;
+    WrapperStr str_actuals;
+    WrapperStr dummy;
 
     if (! container->read_type(typespec, &cl, tmplts, &actuals, str_actuals,
                                dummy, 0, dummy, dummy))
@@ -760,8 +760,8 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k,
         UmlTypeSpec typespec;
         Class * cl = 0;
         Q3ValueList<UmlTypeSpec> actuals;
-        Q3CString str_actuals;
-        Q3CString dummy;
+        WrapperStr str_actuals;
+        WrapperStr dummy;
 
         if (! container->read_type(typespec, &cl, tmplts, &actuals, str_actuals,
                                    dummy, 0, dummy, dummy))
@@ -786,7 +786,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k,
                         ))
             return FALSE;
 
-        Q3CString s = Lex::read_word();
+        WrapperStr s = Lex::read_word();
 
         if (s == "{") {
             Lex::unread_word(s);
@@ -802,7 +802,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k,
 
 bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec,
                         Q3ValueList<UmlTypeSpec> & actuals,
-                        Q3CString & str_actuals
+                        WrapperStr & str_actuals
 #ifdef ROUNDTRIP
                         , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
@@ -835,7 +835,7 @@ bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec,
                     if (rk != k)
                         rel->set_rel_kind(k);
 
-                    Q3CString expected_decl;
+                    WrapperStr expected_decl;
 
                     if (!typespec.explicit_type.isEmpty())
                         expected_decl = typespec.explicit_type;
@@ -955,12 +955,12 @@ void Class::inherit(Class * cl)
 
             if ((cl->uml != 0) && !cl->uml->is_created()) {
                 if (cl->uml->is_roundtrip_expected())
-                    ((Package *) cl->parent())->reverse_file(Q3CString(f.toAscii().constData()),
+                    ((Package *) cl->parent())->reverse_file(WrapperStr(f.toAscii().constData()),
                             cl->uml->associatedArtifact());
             }
             else
 #endif
-                ((Package *) cl->parent())->reverse_file(Q3CString(f.toAscii().constData()));
+                ((Package *) cl->parent())->reverse_file(WrapperStr(f.toAscii().constData()));
 
             Lex::pop_context();
             Package::pop_context();
@@ -986,7 +986,7 @@ void Class::inherit(Class * cl)
 }
 
 // this inherits uml_cl => it knowns uml_cl's sub-classes
-void Class::inherit(UmlClass * uml_cl, Q3CString header)
+void Class::inherit(UmlClass * uml_cl, WrapperStr header)
 {
     Q3PtrVector<UmlItem> ch = uml_cl->children();
     UmlItem ** v = ch.data();
@@ -995,7 +995,7 @@ void Class::inherit(UmlClass * uml_cl, Q3CString header)
 
     for (; v != vsup; v += 1) {
         if ((x = *v)->kind() == aClass) {
-            Q3CString s = (header.isEmpty()) ? x->name() : header + x->name();
+            WrapperStr s = (header.isEmpty()) ? x->name() : header + x->name();
 
             user_defined.replace(s, (UmlClass *) x);
             s += ".";
@@ -1010,10 +1010,10 @@ bool Class::get_formals(FormalParameterList & tmplt, bool name_only,
     // '<' already read
     tmplt.clear();
 
-    Q3CString s;
+    WrapperStr s;
 
     do {
-        Q3CString n = Lex::read_word();
+        WrapperStr n = Lex::read_word();
 
         if (n == ">")
             break;
@@ -1066,7 +1066,7 @@ bool Class::get_formals(FormalParameterList & tmplt, bool name_only,
         UmlTypeSpec typespec;
 
         if (!name_only && !Package::scanning()) {
-            Q3CString e = Lex::region();
+            WrapperStr e = Lex::region();
 
             e.resize(e.length()); // remove , or >
             e = e.stripWhiteSpace();
@@ -1083,7 +1083,7 @@ bool Class::get_formals(FormalParameterList & tmplt, bool name_only,
     return TRUE;
 }
 
-bool Class::manage_member(Q3CString s, Q3CString & path
+bool Class::manage_member(WrapperStr s, WrapperStr & path
 #ifdef ROUNDTRIP
                           , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
@@ -1101,8 +1101,8 @@ bool Class::manage_member(Q3CString s, Q3CString & path
         visibility = PackageVisibility;
     }
 
-    Q3CString comment = Lex::get_comments();
-    Q3CString description = Lex::get_description();
+    WrapperStr comment = Lex::get_comments();
+    WrapperStr description = Lex::get_description();
     bool m_staticp = FALSE;
     bool m_finalp = FALSE;
     bool m_abstractp = FALSE;
@@ -1112,20 +1112,20 @@ bool Class::manage_member(Q3CString s, Q3CString & path
     bool m_transientp = FALSE;
     bool m_volatilep = FALSE;
     bool first_var = TRUE;
-    Q3CString array_before_name;
-    Q3CString array;
+    WrapperStr array_before_name;
+    WrapperStr array;
     UmlTypeSpec type;
     bool type_read = FALSE;
     Q3ValueList<FormalParameterList> tmplts;
     Q3ValueList<UmlTypeSpec> actuals;
-    Q3CString str_actuals;
-    Q3CString name;
-    Q3CString value;
-    Q3CString annotation;
-    Q3CString oper_templ;
+    WrapperStr str_actuals;
+    WrapperStr name;
+    WrapperStr value;
+    WrapperStr annotation;
+    WrapperStr oper_templ;
     UmlClass * first_actual_class = 0;
-    Q3CString type_def;
-    Q3CString genericname;
+    WrapperStr type_def;
+    WrapperStr genericname;
 
 #ifdef TRACE
     QLOG_INFO() << "Class::manage_member(" << s << ")\n";
@@ -1236,7 +1236,7 @@ bool Class::manage_member(Q3CString s, Q3CString & path
                 return FALSE;
             }
             else if (name.isEmpty()) {
-                if (type.toString() == Q3CString(text(0).toAscii().constData())) {
+                if (type.toString() == WrapperStr(text(0).toAscii().constData())) {
                     // constructor
                     name = text(0);
                     type.type = 0;
@@ -1420,7 +1420,7 @@ bool Class::manage_enum_items(
 )
 {
     UmlClass * cl_uml = (Package::scanning()) ? 0 : get_uml();
-    Q3CString s;
+    WrapperStr s;
 
     for (;;) {
         if ((s = Lex::read_word()).isEmpty()) {
@@ -1450,7 +1450,7 @@ bool Class::manage_enum_items(
     }
 }
 
-Class * Class::define(const Q3CString & name, char st)
+Class * Class::define(const WrapperStr & name, char st)
 {
     Class * cl = Defined[name];
 
@@ -1480,7 +1480,7 @@ Class * Class::localy_defined(QString name) const
 }
 #endif
 
-void Class::compute_type(Q3CString name, UmlTypeSpec & typespec,
+void Class::compute_type(WrapperStr name, UmlTypeSpec & typespec,
                          const Q3ValueList<FormalParameterList> & tmplts,
                          Class ** need_object)
 {
@@ -1509,7 +1509,7 @@ void Class::compute_type(Q3CString name, UmlTypeSpec & typespec,
         }
     }
 
-    Q3CString s = name;
+    WrapperStr s = name;
     Class * cl = this;
 
     for (;;) {
@@ -1553,11 +1553,11 @@ void Class::compute_type(Q3CString name, UmlTypeSpec & typespec,
         ((Package *) p)->compute_type(name, typespec, tmplts, need_object);
 }
 
-void Class::declare(const Q3CString & name, Class * cl)
+void Class::declare(const WrapperStr & name, Class * cl)
 {
     Defined.insert(name, cl);
 
-    Q3CString s = Q3CString(text(0).toAscii().constData()) + '.' + name;
+    WrapperStr s = WrapperStr(text(0).toAscii().constData()) + '.' + name;
     ((BrowserNode *) parent())->declare(s, cl);
 }
 
@@ -1882,7 +1882,7 @@ void Class::restore(QDataStream  & dt, char c, BrowserNode * parent)
         cl->from_lib = TRUE;
 #endif
 
-        Q3CString name(n);
+        WrapperStr name(n);
 
         parent->declare(n, cl);
 

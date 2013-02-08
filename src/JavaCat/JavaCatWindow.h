@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -54,7 +54,7 @@ public:
     JavaCatWindow();
 
     static void trace(QString);
-    static void trace(Q3CString);
+    static void trace(WrapperStr);
     static void clear_trace();
 
 protected:

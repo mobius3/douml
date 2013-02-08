@@ -5,9 +5,9 @@
 #include "UmlClass.h"
 #include "JavaSettings.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
-static inline bool eq(const Q3CString & s1, const Q3CString s2)
+static inline bool eq(const WrapperStr & s1, const WrapperStr s2)
 {
     return (s1.isEmpty()) ? s2.isEmpty() : (s1 == s2);
 }

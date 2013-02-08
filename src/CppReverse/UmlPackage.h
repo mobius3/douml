@@ -30,7 +30,7 @@
 
 #include "UmlBasePackage.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrList>
 
 class UmlClassView;
@@ -45,12 +45,12 @@ class ClassContainer;
 class UmlPackage : public UmlBasePackage
 {
 public:
-    UmlPackage(void * id, const Q3CString & n);
+    UmlPackage(void * id, const WrapperStr & n);
 
-    void reverse_main(const Q3CString & type, Q3CString comment);
-    UmlClassView * get_classview(const Q3CString & nmsp);
+    void reverse_main(const WrapperStr & type, WrapperStr comment);
+    UmlClassView * get_classview(const WrapperStr & nmsp);
 #ifdef REVERSE
-    UmlDeploymentView * get_deploymentview(const Q3CString & nmsp);
+    UmlDeploymentView * get_deploymentview(const WrapperStr & nmsp);
 # ifdef ROUNDTRIP
     void init(Package *);
     virtual void upload(ClassContainer *);

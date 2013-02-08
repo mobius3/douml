@@ -4,7 +4,7 @@
 #include "Token.h"
 #include "UmlItem.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 void UmlActivityPin::init()
 {
@@ -35,7 +35,7 @@ void UmlActivityPin::importIt(FileIn & in, Token & token, UmlItem * where)
     where = where->container(anActivityPin, token, in);
 
     if (where != 0) {
-        Q3CString s = token.valueOf("name");
+        WrapperStr s = token.valueOf("name");
 
         if (s.isEmpty()) {
             s = token.what();

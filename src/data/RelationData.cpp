@@ -32,7 +32,7 @@
 #include <QTextStream>
 #include <qcursor.h>
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -1246,7 +1246,7 @@ static void save_role(const RoleData & role, bool assoc, QTextStream & st,
             save_string(role.init_value, st);
         }
 
-        st << ' ';
+        st << " ";
 
         if (role.isa_class_relation)
             st << "class_relation ";
@@ -1291,7 +1291,7 @@ static void save_role(const RoleData & role, bool assoc, QTextStream & st,
         if (role.cpp_mutable)
             st << "mutable ";
 
-        st << stringify(role.cpp_visibility) << ' ';
+        st << stringify(role.cpp_visibility) << " ";
         save_string(role.cpp_decl, st);
     }
 
@@ -1355,7 +1355,7 @@ void RelationData::save(QTextStream & st, bool ref, QString & warning) const
         st << "relation_ref " << get_ident() << " // " << (name);
     else {
         nl_indent(st);
-        st << "relation " << get_ident() << ' ' << stringify(type);
+        st << "relation " << get_ident() << " " << stringify(type);
 
         if (name != default_name(type)) {
             st << " name ";
@@ -1385,7 +1385,7 @@ void RelationData::save(QTextStream & st, bool ref, QString & warning) const
         st << "b";
 
         if (!RelationData::uni_directional(type)) {
-            st << ' ';
+            st << " ";
             save_role(b, assoc, st, warning);
             end->save(st, TRUE, warning);
         }

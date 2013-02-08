@@ -2,7 +2,7 @@
 #include "Token.h"
 #include "FileIn.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 
 void Token::read(FileIn & in, bool any)
@@ -63,7 +63,7 @@ void Token::read(FileIn & in, bool any)
         _close = FALSE;
 
     if (str)
-        in.error("syntax error \"" + Q3CString(k) + "\" unexpected");
+        in.error("syntax error \"" + WrapperStr(k) + "\" unexpected");
 
     _what = k;
 
@@ -72,7 +72,7 @@ void Token::read(FileIn & in, bool any)
             k = in.readWord(any, str);
 
             if (str || (*k != '>'))
-                in.error("syntax error near '" + Q3CString(k)  + "'>' expected");
+                in.error("syntax error near '" + WrapperStr(k)  + "'>' expected");
 
             _closed = TRUE;
             return;
@@ -80,7 +80,7 @@ void Token::read(FileIn & in, bool any)
 
         if (str) {
             if (!any)
-                in.error("syntax error near '" + Q3CString(k) + "'");
+                in.error("syntax error near '" + WrapperStr(k) + "'");
         }
         else {
             Couple cpl;
@@ -93,7 +93,7 @@ void Token::read(FileIn & in, bool any)
 
                 if ((*in.readWord(FALSE, str) != '=') || str) {
                     if (! any)
-                        in.error("syntax error near '" + Q3CString(k) + "', '=' expected");
+                        in.error("syntax error near '" + WrapperStr(k) + "', '=' expected");
                 }
                 else {
                     cpl.value = in.readWord(FALSE, str);
@@ -115,7 +115,7 @@ bool Token::close(const char * what) const
     return _close && (_what == what);
 }
 
-const Q3CString & Token::valueOf(Q3CString key) const
+const WrapperStr & Token::valueOf(WrapperStr key) const
 {
     Q3ValueList<Couple>::ConstIterator iter;
 
@@ -123,12 +123,12 @@ const Q3CString & Token::valueOf(Q3CString key) const
         if ((*iter).key == key)
             return (*iter).value;
 
-    static Q3CString null;
+    static WrapperStr null;
 
     return null;
 }
 
-bool Token::valueOf(Q3CString key, Q3CString & v) const
+bool Token::valueOf(WrapperStr key, WrapperStr & v) const
 {
     Q3ValueList<Couple>::ConstIterator iter;
 

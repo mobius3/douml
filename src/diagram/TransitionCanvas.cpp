@@ -753,7 +753,7 @@ void TransitionCanvas::save(QTextStream & st, bool ref, QString & warning) const
     else if (begin->type() != UmlArrowPoint) {
         // relation canvas start
         nl_indent(st);
-        st << "transitioncanvas " << get_ident() << ' ';
+        st << "transitioncanvas " << get_ident() << " ";
         data->get_start()->save(st, TRUE, warning);	// data doesn't have id
         indent(+1);
 

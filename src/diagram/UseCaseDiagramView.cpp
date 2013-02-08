@@ -545,8 +545,8 @@ void UseCaseDiagramView::save(QTextStream & st, QString & warning,
 
     if (!copy && (preferred_zoom != 0)) {
         nl_indent(st);
-        st << "preferred_whz " << preferred_size.width() << ' '
-           << preferred_size.height() << ' ' << preferred_zoom;
+        st << "preferred_whz " << preferred_size.width() << " "
+           << preferred_size.height() << " " << preferred_zoom;
     }
 
     nl_indent(st);

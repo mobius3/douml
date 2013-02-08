@@ -34,7 +34,7 @@
 #include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 
 #include "SubjectCanvas.h"
 #include "MyInputDialog.h"
@@ -415,7 +415,7 @@ void SubjectCanvas::save(QTextStream & st, bool ref, QString &) const
     else {
         nl_indent(st);
 
-        st << "subject " << get_ident() << ' ';
+        st << "subject " << get_ident() << " ";
         save_string(fromUnicode(name), st);
         nl_indent(st);
 

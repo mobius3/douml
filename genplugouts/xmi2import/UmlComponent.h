@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseComponent.h"
-#include <q3cstring.h>
+
 #include "anItemKind.h"
 
 class FileIn;
@@ -16,7 +16,7 @@ class UmlItem;
 class UmlComponent : public UmlBaseComponent
 {
 public:
-    UmlComponent(void * id, const Q3CString & n) : UmlBaseComponent(id, n) {
+    UmlComponent(void * id, const WrapperStr & n) : UmlBaseComponent(id, n) {
         NumberOf += 1;
     };
 
@@ -31,15 +31,15 @@ public:
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);
 
     //  call at end of import : try to solve interfaces
-    virtual void solve(int context, Q3CString idref);
+    virtual void solve(int context, WrapperStr idref);
 
     //  call at end of import : try to solve generalization dependencies and realization
     //  not from a class
-    virtual void generalizeDependRealize(UmlItem * target, FileIn & in, int context, Q3CString label, Q3CString constraint);
+    virtual void generalizeDependRealize(UmlItem * target, FileIn & in, int context, WrapperStr label, WrapperStr constraint);
 
     //  call at end of import : try to solve generalization dependencies and realization,
     //  not from a class
-    virtual void solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString constraint);
+    virtual void solveGeneralizationDependencyRealization(int context, WrapperStr idref, WrapperStr label, WrapperStr constraint);
 
     static int numberOf() {
         return NumberOf;

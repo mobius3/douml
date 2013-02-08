@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #include "misc/codec.h"
-#include "misc/mystr.h"
+
 #include "misc/strutil.h"
 static QTextCodec * Codec = 0;
 
@@ -41,7 +41,7 @@ QString codec()
         QString na = Codec->name();
         int pos = 0;
 
-        while ((pos = na.find(' ', pos)) != -1)
+        while ((pos = na.find(" ", pos)) != -1)
             na.replace(pos, 1, "_");
 
         if (QTextCodec::codecForName(na) == Codec)

@@ -70,9 +70,9 @@ public:
     int find(const char * toFind, int index = 0) const {
         return wrappedString.indexOf(QString(QLatin1String(toFind)), index);
     }
-    int find(int c, int index = 0) const {
-        return wrappedString.indexOf(QString::number(c) , index);
-    }
+//    int find(int c, int index = 0) const {
+//        return wrappedString.indexOf(QString::number(c) , index);
+//    }
 
     WrapperStr & operator=(const WrapperStr & other) {
         this->wrappedString = other.wrappedString;
@@ -215,9 +215,36 @@ public:
     {
         return wrappedString.at(pos);
     }
-    int find(QChar c, int from = 0)
+    int find(QChar c, int from = 0) const
     {
         return wrappedString.toAscii().find(c, from);
+    }
+    WrapperStr & append ( const char * str )
+    {
+        wrappedString += QString(str);
+        return *this;
+    }
+    WrapperStr & append (QString str )
+    {
+        wrappedString += str;
+        return *this;
+    }
+    WrapperStr & append (const WrapperStr& str )
+    {
+        wrappedString += str.wrappedString;
+        return *this;
+    }
+    bool isNull() const
+    {
+        return wrappedString.isNull();
+    }
+    void resize(int size)
+    {
+        wrappedString.resize(size);
+    }
+    QCharRef operator[](int i)
+    {
+        return wrappedString[i];
     }
     //void assign(QString(), int len){this->s = QString();}
 

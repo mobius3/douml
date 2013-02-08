@@ -31,7 +31,7 @@
 #include <q3canvas.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 #include <QWheelEvent>
 #include <Q3ValueList>
 #include <QMouseEvent>

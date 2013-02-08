@@ -28,7 +28,7 @@
 #ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -51,7 +51,7 @@ using namespace std;
 #endif
 
 #ifdef ROUNDTRIP
-UmlAttribute * UmlAttribute::search_attr(UmlClass * cl, const Q3CString & name)
+UmlAttribute * UmlAttribute::search_attr(UmlClass * cl, const WrapperStr & name)
 {
     UmlItem * x = cl->search_for_att_rel(name);
 
@@ -86,13 +86,13 @@ UmlAttribute * UmlAttribute::search_attr(UmlClass * cl, const Q3CString & name)
 
 #endif
 
-bool UmlAttribute::new_one(Class * container, const Q3CString & name,
-                           const Q3CString & type, const Q3CString & modifier,
-                           const Q3CString & pretype, const Q3CString & array,
+bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
+                           const WrapperStr & type, const WrapperStr & modifier,
+                           const WrapperStr & pretype, const WrapperStr & array,
                            aVisibility visibility, bool staticp, bool constp,
                            bool typenamep, bool mutablep, bool volatilep,
-                           const Q3CString & bitfield, const Q3CString & value,
-                           Q3CString comment, Q3CString description
+                           const WrapperStr & bitfield, const WrapperStr & value,
+                           WrapperStr comment, WrapperStr description
 #ifdef ROUNDTRIP
                            , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
@@ -124,8 +124,8 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
         at = UmlBaseAttribute::create(cl, name);
 
         if (at == 0) {
-            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot add attribute <i>")
-                          + name + "</i> in <i>" + Q3CString(cl->name())
+            UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot add attribute <i>")
+                          + name + "</i> in <i>" + WrapperStr(cl->name())
                           + "</i></b></font><br><hr>");
             return FALSE;
         }
@@ -153,12 +153,12 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
 
         bool pfunc = (type.find('$') != -1);
         UmlTypeSpec typespec;
-        Q3CString typeform;
-        Q3CString stereotype;
+        WrapperStr typeform;
+        WrapperStr stereotype;
 
         if (! pfunc) {
             typeform = (pretype.isEmpty())
-                       ? Q3CString("${type}")
+                       ? WrapperStr("${type}")
                        : pretype + " ${type}";
 
             container->compute_type(type, typespec, typeform);
@@ -172,7 +172,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
                 typespec.explicit_type.remove(index, 7);
         }
 
-        Q3CString decl = CppSettings::attributeDecl("");
+        WrapperStr decl = CppSettings::attributeDecl("");
         int index = decl.find("${type}");
 
         if ((index == -1) ||
@@ -189,17 +189,16 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
             decl.replace(index, decl.find("${name}") + 7 - index, type);
         else {
             if (!modifier.isEmpty())
-                decl.insert(index + 7, (const char *)(Q3CString(" ") + modifier));
+                decl.insert(index + 7, (const char *)(WrapperStr(" ") + modifier));
 
             if (typeform != "${type}")
                 decl.replace(index, 7, typeform);
             else if (typespec.type == 0) {
-                Q3CString t = typespec.explicit_type;
+                WrapperStr t = typespec.explicit_type;
                 int index2;
 
-                if (!t.isEmpty() &&
-                    (t.at(t.length() - 1) == '>') &&
-                    ((index2 = t.find('<')) > 0)) {
+                if (!t.isEmpty() && (t.at(t.length() - 1) == ">") && ((index2 = t.find('<')) > 0))
+                {
                     stereotype = t.left(index2);
                     typespec.explicit_type =
                         // may be a,b ...
@@ -212,7 +211,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
                 decl.insert(decl.find("${name}") + 7, "${multiplicity}");
 
             if (!bitfield.isEmpty())
-                decl.insert(decl.find(';'), (const char *)(Q3CString(" : ") + bitfield));
+                decl.insert(decl.find(';'), (const char *)(WrapperStr(" : ") + bitfield));
         }
 
         if (typenamep) {
@@ -270,7 +269,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
             }
 
             if (!staticp) {
-                Q3CString v = at->defaultValue();
+                WrapperStr v = at->defaultValue();
 
                 if (!v.isEmpty() && (((const char *) v)[0] == '='))
                     v = v.mid(1);
@@ -287,7 +286,7 @@ bool UmlAttribute::new_one(Class * container, const Q3CString & name,
             }
 
             if (!stereotype.isEmpty()) {
-                Q3CString cppst;
+                WrapperStr cppst;
 
                 if (!at->stereotype().isEmpty())
                     cppst = CppSettings::relationAttributeStereotype(at->stereotype());

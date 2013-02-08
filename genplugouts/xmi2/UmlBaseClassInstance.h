@@ -8,7 +8,7 @@
 #include "anItemKind.h"
 #include <q3valuelist.h>
 #include <q3ptrvector.h>
-#include <q3cstring.h>
+
 
 class UmlClassInstance;
 class UmlClass;
@@ -87,7 +87,7 @@ protected:
     virtual void read_uml_();
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseClassInstance(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseClassInstance(void * id, const WrapperStr & s) : UmlItem(id, s) {
     }
 
 };

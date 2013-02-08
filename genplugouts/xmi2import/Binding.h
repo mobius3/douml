@@ -3,7 +3,7 @@
 
 
 #include <q3ptrlist.h>
-#include <q3cstring.h>
+
 
 class FileIn;
 class Token;
@@ -23,20 +23,20 @@ protected:
     static Q3PtrList<Binding> All;
 
     //xmiId of the class having the binbing
-    Q3CString boundId;
+    WrapperStr boundId;
 
     //xmiId of the formal
-    Q3CString formalId;
+    WrapperStr formalId;
 
     //xmiId of the actual, may be a class, or an opaque expression
-    Q3CString actualId;
+    WrapperStr actualId;
 
     //the actual if actualId is empty
-    Q3CString actual;
+    WrapperStr actual;
 
     //xmiId of the signature
 
-    Q3CString signatureId;
+    WrapperStr signatureId;
 
 };
 

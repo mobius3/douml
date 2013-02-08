@@ -34,16 +34,16 @@
 #include "Namespace.h"
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include <Q3PtrList>
 
 class Class : public BrowserNode, public ClassContainer
 {
 protected:
-    Q3CString filename;
-    Q3CString stereotype;
-    Q3CString its_namespace;
+    WrapperStr filename;
+    WrapperStr stereotype;
+    WrapperStr its_namespace;
     UmlClass * uml;
     bool reversedp;
     bool stereotype_declared;
@@ -59,40 +59,40 @@ protected:
     NDict<Class> declared;
     NDict<Class> defined;
 
-    void manage_member(Q3CString s, aVisibility visibility,
-                       ClassContainer * container, const Q3CString & path
+    void manage_member(WrapperStr s, aVisibility visibility,
+                       ClassContainer * container, const WrapperStr & path
 #ifdef ROUNDTRIP
                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
                       );
 
 public:
-    Class(BrowserNode * parent, const char * name, const Q3CString & st);
+    Class(BrowserNode * parent, const char * name, const WrapperStr & st);
 #ifdef ROUNDTRIP
     Class(BrowserNode * parent, UmlClass * ucl);
 #endif
     virtual ~Class();	// just to not have warning
 
-    bool set_stereotype(const Q3CString & st);
+    bool set_stereotype(const WrapperStr & st);
 
-    virtual bool find_type(Q3CString type, UmlTypeSpec & typespec);
-    virtual Class * declare_if_needed(const Q3CString & name,
-                                      Q3CString stereotype = 0);
-    virtual Class * define(const Q3CString & name, Q3CString stereotype = 0);
-    virtual void declare_if_needed(Q3CString name, Class * cl);
-    virtual void define(Q3CString name, Class * cl);
-    virtual Class * new_class(const Q3CString & name,
-                              const Q3CString & stereotype,
+    virtual bool find_type(WrapperStr type, UmlTypeSpec & typespec);
+    virtual Class * declare_if_needed(const WrapperStr & name,
+                                      WrapperStr stereotype = 0);
+    virtual Class * define(const WrapperStr & name, WrapperStr stereotype = 0);
+    virtual void declare_if_needed(WrapperStr name, Class * cl);
+    virtual void define(WrapperStr name, Class * cl);
+    virtual Class * new_class(const WrapperStr & name,
+                              const WrapperStr & stereotype,
                               bool declaration);
-    virtual void declaration(const Q3CString & name, const Q3CString & stereotype,
-                             const Q3CString & decl
+    virtual void declaration(const WrapperStr & name, const WrapperStr & stereotype,
+                             const WrapperStr & decl
 #ifdef ROUNDTRIP
                              , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
                             );
 
     virtual bool isa_package() const;
-    const Q3CString & get_namespace() const {
+    const WrapperStr & get_namespace() const {
         return its_namespace;
     }
     UmlClass * get_uml();
@@ -115,7 +115,7 @@ public:
         return from_lib;
     };
 #else
-    const Q3CString & get_description() const {
+    const WrapperStr & get_description() const {
         return description;
     };
 
@@ -133,20 +133,20 @@ public:
 #endif
 
     static Class * reverse(ClassContainer * container,
-                           Q3CString stereotype,
+                           WrapperStr stereotype,
                            const Q3ValueList<FormalParameterList> & tmplt,
-                           const Q3CString & path, Q3CString name
+                           const WrapperStr & path, WrapperStr name
 #ifdef ROUNDTRIP
                            , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
 #endif
                           );
     static Class * reverse_enum(ClassContainer * container,
-                                const Q3CString & path, Q3CString name
+                                const WrapperStr & path, WrapperStr name
 #ifdef ROUNDTRIP
                                 , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
 #endif
                                );
-    static bool reverse_typedef(ClassContainer * container, const Q3CString & path,
+    static bool reverse_typedef(ClassContainer * container, const WrapperStr & path,
                                 Q3ValueList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
                                 , bool rndtrp, Q3PtrList<UmlItem> & expectedorder

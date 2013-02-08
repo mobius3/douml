@@ -4,7 +4,7 @@
 #include "Token.h"
 #include "UmlItem.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 void UmlExpansionNode::init()
 {
@@ -19,7 +19,7 @@ void UmlExpansionNode::importIt(FileIn & in, Token & token, UmlItem * where)
     if (where->kind() != anExpansionRegion)
         in.bypass(token);
     else {
-        Q3CString s = token.valueOf("name");
+        WrapperStr s = token.valueOf("name");
         UmlExpansionNode * e =
             UmlExpansionNode::create((UmlExpansionRegion *) where, s);
 
@@ -45,7 +45,7 @@ void UmlExpansionNode::importIt(FileIn & in, Token & token, UmlItem * where)
             e->setType(s);
 
         if (! token.closed()) {
-            Q3CString k = token.what();
+            WrapperStr k = token.what();
             const char * kstr = k;
 
             while (in.read(), !token.close(kstr)) {

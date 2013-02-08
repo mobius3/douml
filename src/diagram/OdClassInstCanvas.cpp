@@ -835,7 +835,7 @@ void OdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) cons
            << browser_node->full_name();
     else {
         nl_indent(st);
-        st << "classinstancecanvas " << get_ident() << ' ';
+        st << "classinstancecanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
 
         indent(+1);

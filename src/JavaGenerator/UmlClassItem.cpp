@@ -27,10 +27,10 @@
 
 #include "UmlClassItem.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
-void UmlClassItem::generate_enum_item(QTextStream &, Q3CString, BooL &)
+void UmlClassItem::generate_enum_item(QTextStream &, WrapperStr, BooL &)
 {
     // produce nothing
 }

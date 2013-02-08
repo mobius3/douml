@@ -673,7 +673,7 @@ void ActivityPartitionCanvas::save(QTextStream & st, bool ref, QString & warning
     }
     else {
         nl_indent(st);
-        st << "activitypartitioncanvas " << get_ident() << ' ';
+        st << "activitypartitioncanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
 

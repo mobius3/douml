@@ -566,7 +566,7 @@ void SimpleRelationCanvas::save(QTextStream & st, bool ref, QString & warning) c
     else if (begin->type() != UmlArrowPoint) {
         // relation canvas start
         nl_indent(st);
-        st << "simplerelationcanvas " << get_ident() << ' ';
+        st << "simplerelationcanvas " << get_ident() << " ";
         data->get_start()->save(st, TRUE, warning);	// data doesn't have id
         indent(+1);
 

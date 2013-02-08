@@ -3,13 +3,14 @@
 
 
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 #include <q3ptrvector.h>
 #include <q3dict.h>
 #include <q3ptrdict.h>
 //#include "OnInstanceCmd.h"
 #include "aVisibility.h"
 #include "aDirection.h"
+#include "misc/mystr.h"
 
 class UmlItem;
 class UmlTypeSpec;
@@ -37,21 +38,21 @@ public:
     virtual anItemKind kind() = 0;
 
     // returns the name
-    const Q3CString & name() {
+    const WrapperStr & name() {
         return _name;
     };
 
     // to set the name
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    virtual bool set_Name(const Q3CString & s);
+    virtual bool set_Name(const WrapperStr & s);
 
     // returns the stereotype
-    const Q3CString & stereotype();
+    const WrapperStr & stereotype();
 
     // to set the stereotype
     //  On error return FALSE in C++, produce a RuntimeException in Java
-    virtual bool set_Stereotype(const Q3CString & s);
+    virtual bool set_Stereotype(const WrapperStr & s);
 
     // If the current stereotype is part of a profile add needed properties.
     // In all cases remove extra properties whose keys contain two ':'.
@@ -60,11 +61,11 @@ public:
     bool applyStereotype();
 
     // returns the description
-    const Q3CString & description();
+    const WrapperStr & description();
 
     // to set the description
     //  On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_Description(const Q3CString & s);
+    bool set_Description(const WrapperStr & s);
 
     // returns the parent (0/null if it is applied on the project itself),
     // to go all over the browser tree
@@ -96,16 +97,16 @@ public:
     //
     // These properties may be edited through the object dialog last tab
     // named 'user'
-    bool propertyValue(const Q3CString & k, Q3CString & v);
+    bool propertyValue(const WrapperStr & k, WrapperStr & v);
 
     // to set (may be insert a new) the value 'v' associated to the key 'k'
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_PropertyValue(const Q3CString & k, const Q3CString & v);
+    bool set_PropertyValue(const WrapperStr & k, const WrapperStr & v);
 
     // returns all the properties of the object through (in Java a copy of) a dictionnary
 
-    const Q3Dict<Q3CString> properties();
+    const Q3Dict<WrapperStr> properties();
 
     // If the parameter is null, move the current item to be
     // the first child of its parent. Else the current item and
@@ -140,7 +141,7 @@ public:
     //    external type and edited through the last Idl tab of the
     //    'Generation Settings' dialog is saved in the file 'idl_includes'
     //
-    Q3CString supportFile();
+    WrapperStr supportFile();
 
     // return TRUE in case the item may be modified, i.e. it is not
     // an API base 'plug-out' class and the corresponding file(s) are not
@@ -148,7 +149,7 @@ public:
     bool isWritable();
 
     //  Apply asynchronously the tool on the item, returns an identifier to call isToolDone()
-    int apply(Q3CString cmd);
+    int apply(WrapperStr cmd);
 
     //return TRUE in case the item is marked
     bool isMarked();
@@ -204,19 +205,19 @@ protected:
 
 
 private:
-    Q3CString _name;
+    WrapperStr _name;
 
     //  Note : protected in Java for internal reason, but do NOT
     //  access to this field yourself !
-    Q3CString _stereotype;
+    WrapperStr _stereotype;
 
-    Q3CString _description;
+    WrapperStr _description;
 
     UmlItem * _parent;
 
     Q3PtrVector<UmlItem> * _children;
 
-    Q3Dict<Q3CString> _dict;
+    Q3Dict<WrapperStr> _dict;
 
     static Q3PtrDict<UmlItem> _all;
 
@@ -286,7 +287,7 @@ protected:
 
     //internal, do NOT use it
 
-    bool set_it_(Q3CString & r, const char * v, OnInstanceCmd cmd);
+    bool set_it_(WrapperStr & r, const char * v, OnInstanceCmd cmd);
 
     //internal, do NOT use it
 

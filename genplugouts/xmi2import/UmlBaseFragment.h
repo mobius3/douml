@@ -2,7 +2,7 @@
 #define _UMLBASEFRAGMENT_H
 
 
-#include <q3cstring.h>
+
 #include <q3ptrvector.h>
 #include <q3ptrdict.h>
 
@@ -16,7 +16,7 @@ class UmlBaseFragment
 {
 public:
     // return the name
-    const Q3CString & name() const {
+    const WrapperStr & name() const {
         return _name;
     }
 
@@ -39,7 +39,7 @@ public:
 
     // return the form corresponding to the arguments
     // and return value of the interaction use
-    Q3CString arguments() const {
+    WrapperStr arguments() const {
         return _arguments;
     }
 
@@ -54,7 +54,7 @@ private:
 
     Q3PtrVector<UmlFragmentCompartment> _compartments;
 
-    Q3CString _name;
+    WrapperStr _name;
 
     int _x;
 
@@ -66,7 +66,7 @@ private:
 
     UmlDiagram * _refer;
 
-    Q3CString _arguments;
+    WrapperStr _arguments;
 
     Q3PtrVector<UmlClassInstanceReference> _covered;
 

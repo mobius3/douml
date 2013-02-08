@@ -6,7 +6,7 @@
 
 #include "UmlExpansionNode.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 UmlItem * UmlExpansionRegion::container(anItemKind kind, Token & token, FileIn & in)
 {
     switch (kind) {
@@ -56,7 +56,7 @@ void UmlExpansionRegion::importIt(FileIn & in, Token & token, UmlItem * where)
     where = where->container(anExpansionRegion, token, in);
 
     if (where != 0) {
-        Q3CString s = token.valueOf("name");
+        WrapperStr s = token.valueOf("name");
         UmlExpansionRegion * r = create(where, s);
 
         if (r == 0)
@@ -68,7 +68,7 @@ void UmlExpansionRegion::importIt(FileIn & in, Token & token, UmlItem * where)
         if (token.valueOf("mustisolate") == "true")
             r->set_isMustIsolate(TRUE);
 
-        Q3CString v = token.valueOf("mode").lower();
+        WrapperStr v = token.valueOf("mode").lower();
 
         if (v == "parallel")
             r->set_Mode(parallelExecution);
@@ -80,7 +80,7 @@ void UmlExpansionRegion::importIt(FileIn & in, Token & token, UmlItem * where)
             in.error("illegal mode '" + v + "'");
 
         if (! token.closed()) {
-            Q3CString k = token.what();
+            WrapperStr k = token.what();
             const char * kstr = k;
 
             while (in.read(), !token.close(kstr))

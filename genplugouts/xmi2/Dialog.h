@@ -2,7 +2,7 @@
 #define _DIALOG_H
 
 
-#include <q3cstring.h>
+
 #include "Language.h"
 
 #include <qdialog.h>
@@ -17,38 +17,38 @@ class Dialog : public QDialog
 {
     Q_OBJECT
 public:
-    Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CString & genview, Q3CString & uml20, Q3CString & pk, Q3CString & vis, Q3CString & primitivetype, Q3CString & genextension, Q3CString & geneclipse, Q3CString & commentexporter, Q3CString & linefeed, Language & lang);
+    Dialog(WrapperStr & path, WrapperStr & encoding, WrapperStr & nomodel, WrapperStr & genview, WrapperStr & uml20, WrapperStr & pk, WrapperStr & vis, WrapperStr & primitivetype, WrapperStr & genextension, WrapperStr & geneclipse, WrapperStr & commentexporter, WrapperStr & linefeed, Language & lang);
 
 
 protected:
-    Q3CString & _path;
+    WrapperStr & _path;
 
-    Q3CString & _encoding;
+    WrapperStr & _encoding;
 
-    Q3CString & _nomodel;
+    WrapperStr & _nomodel;
 
-    Q3CString & _genview;
-
-    //yes => generate pk_ prefix
-    Q3CString & _uml20;
+    WrapperStr & _genview;
 
     //yes => generate pk_ prefix
-    Q3CString & _pk;
+    WrapperStr & _uml20;
+
+    //yes => generate pk_ prefix
+    WrapperStr & _pk;
 
     //yes => generate vis_ prefix
-    Q3CString & _vis;
+    WrapperStr & _vis;
 
     //yes => use primitiveType rather than dataType for int ...
-    Q3CString & _primitivetype;
+    WrapperStr & _primitivetype;
 
-    Q3CString & _genextension;
+    WrapperStr & _genextension;
 
-    Q3CString & _geneclipse;
+    WrapperStr & _geneclipse;
 
-    Q3CString & _commentexporter;
+    WrapperStr & _commentexporter;
 
     //yes => generate linefeed inside string, else &#10;
-    Q3CString & _linefeed;
+    WrapperStr & _linefeed;
 
     Language & _lang;
 

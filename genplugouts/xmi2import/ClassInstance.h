@@ -3,7 +3,7 @@
 
 
 #include <q3ptrlist.h>
-#include <q3cstring.h>
+
 #include <q3valuelist.h>
 
 class FileIn;
@@ -28,22 +28,22 @@ protected:
         //import the activity node starting by 'tk' inside 'where'
         void importIt(FileIn & in, Token & token);
 
-        Q3CString featureId;
+        WrapperStr featureId;
 
-        Q3CString value;
+        WrapperStr value;
 
-        Q3CString valueId;
+        WrapperStr valueId;
 
     };
 
 
     Q3ValueList<Slot> bindings;
 
-    Q3CString id;
+    WrapperStr id;
 
-    Q3CString name;
+    WrapperStr name;
 
-    Q3CString classifierId;
+    WrapperStr classifierId;
 
     UmlItem * where;
 

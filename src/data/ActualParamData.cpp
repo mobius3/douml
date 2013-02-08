@@ -91,7 +91,7 @@ void ActualParamData::save(QTextStream & st, QString & warning) const
     st << "actual class ";
     super->save(st, TRUE, warning);
     nl_indent(st);
-    st << "  rank " << rank << ' ';
+    st << "  rank " << rank << " ";
     value.save(st, warning, "value ", "explicit_value ");
 }
 

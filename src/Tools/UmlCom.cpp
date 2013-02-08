@@ -2,7 +2,7 @@
 #ifdef TRACE
 #include <iostream>
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 using namespace std;
 #endif

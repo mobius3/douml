@@ -30,7 +30,7 @@
 
 #include <q3valuelist.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrList>
 
 #include "UmlBaseRelation.h"
@@ -42,29 +42,29 @@ class UmlClass;
 class UmlRelation : public UmlBaseRelation
 {
 public:
-    UmlRelation(void * id, const Q3CString & n)
+    UmlRelation(void * id, const WrapperStr & n)
         : UmlBaseRelation(id, n) {
     };
 
-    static bool new_one(Class * container, const Q3CString & name,
-                        UmlTypeSpec & dest, Q3CString str_actuals,
+    static bool new_one(Class * container, const WrapperStr & name,
+                        UmlTypeSpec & dest, WrapperStr str_actuals,
                         aVisibility visibility,	bool staticp,
                         bool constp, bool transientp, bool volatilep,
-                        const Q3CString & array,	const Q3CString & value,
-                        Q3CString comment, Q3CString description,
-                        Q3CString annotation
+                        const WrapperStr & array,	const WrapperStr & value,
+                        WrapperStr comment, WrapperStr description,
+                        WrapperStr annotation
 #ifdef ROUNDTRIP
                         , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
                        );
-    static bool new_one(Class * container, const Q3CString & name,
-                        UmlClass * type, Q3CString type_def,
-                        Q3CString genericname,
+    static bool new_one(Class * container, const WrapperStr & name,
+                        UmlClass * type, WrapperStr type_def,
+                        WrapperStr genericname,
                         aVisibility visibility, bool staticp,
                         bool constp, bool transientp, bool volatilep,
-                        const Q3CString & array, const Q3CString & value,
-                        Q3CString comment, Q3CString description,
-                        Q3CString annotation
+                        const WrapperStr & array, const WrapperStr & value,
+                        WrapperStr comment, WrapperStr description,
+                        WrapperStr annotation
 #ifdef ROUNDTRIP
                         , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif

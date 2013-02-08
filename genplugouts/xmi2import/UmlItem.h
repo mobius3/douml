@@ -2,7 +2,7 @@
 #define _UMLITEM_H
 
 
-#include <q3cstring.h>
+
 #include <q3valuelist.h>
 #include "UmlBaseItem.h"
 #include <qstring.h>
@@ -20,22 +20,22 @@ typedef void (*PFunc)(FileIn &, Token &, UmlItem *);
 class Unresolved
 {
 public:
-    static void addGeneralization(UmlItem * e, Q3CString & id, Q3CString cstr);
+    static void addGeneralization(UmlItem * e, WrapperStr & id, WrapperStr cstr);
 
-    static void addRef(UmlItem * e, Q3CString & id);
+    static void addRef(UmlItem * e, WrapperStr & id);
 
     //  for QValueList
     Unresolved() {};
 
 
 protected:
-    Unresolved(UmlItem * e, Q3CString id, Q3CString cstr) : element(e), idref(id), constraint(cstr) {}
+    Unresolved(UmlItem * e, WrapperStr id, WrapperStr cstr) : element(e), idref(id), constraint(cstr) {}
 
     UmlItem * element;
 
-    Q3CString idref;
+    WrapperStr idref;
 
-    Q3CString constraint;
+    WrapperStr constraint;
 
     static Q3ValueList<Unresolved> Generalizations;
 
@@ -51,7 +51,7 @@ public:
 class UnresolvedWithContext
 {
 public:
-    static void add(UmlItem * e, Q3CString id, int c);
+    static void add(UmlItem * e, WrapperStr id, int c);
 
     static void solveThem();
 
@@ -60,11 +60,11 @@ public:
 
 
 protected:
-    UnresolvedWithContext(UmlItem * e, Q3CString id, int c) : element(e), idref(id), context(c) {}
+    UnresolvedWithContext(UmlItem * e, WrapperStr id, int c) : element(e), idref(id), context(c) {}
 
     UmlItem * element;
 
-    Q3CString idref;
+    WrapperStr idref;
 
     int context;
 
@@ -75,25 +75,25 @@ protected:
 class UnresolvedRelation
 {
 public:
-    static void add(int ctx, Q3CString idFrom, Q3CString idTo, Q3CString label, Q3CString constraint);
+    static void add(int ctx, WrapperStr idFrom, WrapperStr idTo, WrapperStr label, WrapperStr constraint);
 
     //  for QValueList
     UnresolvedRelation();
 
 
 protected:
-    UnresolvedRelation(int ctx, Q3CString idFrom, Q3CString idTo, Q3CString label, Q3CString cnst)
+    UnresolvedRelation(int ctx, WrapperStr idFrom, WrapperStr idTo, WrapperStr label, WrapperStr cnst)
         : context(ctx), from(idFrom), to(idTo), name(label), constraint(cnst) {}
 
     int context;
 
-    Q3CString from;
+    WrapperStr from;
 
-    Q3CString to;
+    WrapperStr to;
 
-    Q3CString name;
+    WrapperStr name;
 
-    Q3CString constraint;
+    WrapperStr constraint;
 
     static Q3ValueList<UnresolvedRelation> All;
 
@@ -110,18 +110,18 @@ public:
 class UmlItem : public UmlBaseItem
 {
 public:
-    UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n) {};
+    UmlItem(void * id, const WrapperStr & n) : UmlBaseItem(id, n) {};
 
     virtual ~UmlItem();
 
-    Q3CString id() const {
+    WrapperStr id() const {
         return _xmi_id;
     }
 
     //Import an xmi file, only allowed in a package
     virtual void import(QString path);
 
-    void addItem(Q3CString id, FileIn & in);
+    void addItem(WrapperStr id, FileIn & in);
 
     //look at the token kind to call the function managing
     //this case or bypass the token
@@ -133,29 +133,29 @@ public:
 
     //  call at end of import : try to solve reference
     //  does nothing at this level : never called
-    virtual void solve(Q3CString idref);
+    virtual void solve(WrapperStr idref);
 
     //  call at end of import : try to solve reference
     //  does nothing at this level : never called
-    virtual void solve(int context, Q3CString idref);
+    virtual void solve(int context, WrapperStr idref);
 
     //  call at end of import : try to solve generalization dependencies and realization
     //  not from a class
-    virtual void generalizeDependRealize(UmlItem * target, FileIn & in, int context, Q3CString label, Q3CString constraint);
+    virtual void generalizeDependRealize(UmlItem * target, FileIn & in, int context, WrapperStr label, WrapperStr constraint);
 
     //  call at end of import : try to solve generalization dependencies and realization,
     //  not from a class
-    virtual void solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString constraint);
+    virtual void solveGeneralizationDependencyRealization(int context, WrapperStr idref, WrapperStr label, WrapperStr constraint);
 
 
 protected:
     //  try to solve type, return true is type already known
     //  else memorize unsolved couple if needed and return false
-    bool setType(Q3CString idref, UmlTypeSpec & type);
+    bool setType(WrapperStr idref, UmlTypeSpec & type);
 
     //  try to solve type, return true is type already known
     //  else memorize unsolved couple if needed and return false
-    bool setType(Q3CString idref, int context, UmlTypeSpec & type);
+    bool setType(WrapperStr idref, int context, UmlTypeSpec & type);
 
     //  try to solve token being <type ..>, return true is type already known
     //  else memorize unsolved couple if needed and return false
@@ -175,15 +175,15 @@ public:
 protected:
     //  try to solve type, return true if type already known
     //  and set 'type', else return false
-    static bool getType(Q3CString idref, UmlTypeSpec & type);
+    static bool getType(WrapperStr idref, UmlTypeSpec & type);
 
 
 public:
-    static void declareFct(Q3CString what, Q3CString type, PFunc fct);
+    static void declareFct(WrapperStr what, WrapperStr type, PFunc fct);
 
     static PFunc getFct(const Token & tk);
 
-    static Q3CString readComment(FileIn & in, Token & token);
+    static WrapperStr readComment(FileIn & in, Token & token);
 
     static void init();
 
@@ -209,13 +209,13 @@ public:
 
     static void outgoing(FileIn & in, Token & token, UmlItem * where);
 
-    static Q3CString legalName(Q3CString s);
+    static WrapperStr legalName(WrapperStr s);
 
     static bool fromEclipse();
 
-    static Q3CString readConstraint(FileIn & in, Token & token);
+    static WrapperStr readConstraint(FileIn & in, Token & token);
 
-    static QMap<Q3CString, Q3CString> OpaqueDefs;
+    static QMap<QString, WrapperStr> OpaqueDefs;
 
 
 protected:
@@ -225,21 +225,21 @@ protected:
 
 
 public:
-    static QMap<Q3CString, UmlItem *> All;
+    static QMap<WrapperStr, UmlItem *> All;
 
 
 protected:
-    static QMap<Q3CString, PFunc> Functions;
+    static QMap<WrapperStr, PFunc> Functions;
 
-    static QMap<Q3CString, UmlTypeSpec> PrimitiveTypes;
+    static QMap<WrapperStr, UmlTypeSpec> PrimitiveTypes;
 
-    static QMap<Q3CString, UmlItem *> Incomings;
+    static QMap<WrapperStr, UmlItem *> Incomings;
 
-    static QMap<Q3CString, UmlItem *> Outgoings;
+    static QMap<WrapperStr, UmlItem *> Outgoings;
 
 
 private:
-    Q3CString _xmi_id;
+    WrapperStr _xmi_id;
 
 };
 

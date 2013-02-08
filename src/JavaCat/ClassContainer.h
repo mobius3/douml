@@ -30,7 +30,7 @@
 
 #include <q3dict.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include "UmlClass.h"
 
@@ -43,17 +43,17 @@ public:
     ClassContainer() {};
     virtual ~ClassContainer();
 
-    virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
+    virtual void compute_type(WrapperStr type, UmlTypeSpec & typespec,
                               const Q3ValueList<FormalParameterList> & tmplts,
                               Class ** need_object = 0) = 0;
-    virtual Class * define(const Q3CString & name, char st) = 0;
+    virtual Class * define(const WrapperStr & name, char st) = 0;
 
     bool read_type(UmlTypeSpec & typespec, Class ** cl,
                    const Q3ValueList<FormalParameterList> & tmplts,
                    Q3ValueList<UmlTypeSpec> * actuals,
-                   Q3CString & str_actual, Q3CString s,
-                   UmlClass ** first_actual_class, Q3CString & def,
-                   Q3CString & genericname);
+                   WrapperStr & str_actual, WrapperStr s,
+                   UmlClass ** first_actual_class, WrapperStr & def,
+                   WrapperStr & genericname);
 #ifdef ROUNDTRIP
     virtual Class * upload_define(UmlClass *) = 0;
 #endif

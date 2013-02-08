@@ -132,7 +132,7 @@ QString SdMsgBaseCanvas::get_msg(bool with_args) const
     int w = fm.width(m.left(index1 + 1));
 
     while (fm.width(indent) < w)
-        indent += ' ';
+        indent += " ";
 
     QString s = m.left(index1 + 1);
 
@@ -425,11 +425,11 @@ void SdMsgBaseCanvas::save(QTextStream & st, QString & warning) const
     nl_indent(st);
 #ifdef FORCE_INT_COORD
     // note : << float bugged in Qt 3.3.3
-    st << "yz " << (int) y() << ' ' << (int) z();
+    st << "yz " << (int) y() << " " << (int) z();
 #else
     QString sy, sz;
 
-    st << "yz " << sy.setNum(y()) << ' ' << sz.setNum(z());
+    st << "yz " << sy.setNum(y()) << " " << sz.setNum(z());
 #endif
 
     if (msg != 0) {

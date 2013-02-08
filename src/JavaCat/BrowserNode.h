@@ -30,7 +30,7 @@
 
 #include "TreeItem.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrCollection>
 #include <Q3PtrList>
 
@@ -38,7 +38,7 @@
 class BrowserView;
 #endif
 
-class Q3CString;
+class WrapperStr;
 class QDataStream;
 class Class;
 
@@ -49,7 +49,7 @@ public:
     virtual ~BrowserNode() {};	// to avoid compiler warning
 
     virtual bool isa_package() const = 0;
-    virtual void declare(const Q3CString &, Class *) = 0;
+    virtual void declare(const WrapperStr &, Class *) = 0;
 #ifdef ROUNDTRIP
     virtual Class * localy_defined(QString name) const = 0;
 #endif

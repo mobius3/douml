@@ -30,7 +30,7 @@
 
 #include "UmlBaseRelation.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrList>
 
 class Class;
@@ -38,17 +38,17 @@ class Class;
 class UmlRelation : public UmlBaseRelation
 {
 public:
-    UmlRelation(void * id, const Q3CString & n)
+    UmlRelation(void * id, const WrapperStr & n)
         : UmlBaseRelation(id, n) {
     };
 
-    static bool new_one(Class * container, const Q3CString & name,
-                        UmlClass * dest, const Q3CString & modifier,
-                        const Q3CString & pretype, const Q3CString & array,
-                        const Q3CString & typeform, aVisibility visibility,
+    static bool new_one(Class * container, const WrapperStr & name,
+                        UmlClass * dest, const WrapperStr & modifier,
+                        const WrapperStr & pretype, const WrapperStr & array,
+                        const WrapperStr & typeform, aVisibility visibility,
                         bool staticp, bool constp, bool mutablep, bool volatilep,
-                        const Q3CString & value,	Q3CString comment,
-                        Q3CString description
+                        const WrapperStr & value,	WrapperStr comment,
+                        WrapperStr description
 #ifdef ROUNDTRIP
                         , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif

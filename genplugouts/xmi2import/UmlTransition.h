@@ -4,7 +4,7 @@
 
 #include "UmlBaseTransition.h"
 #include "UmlStateItem.h"
-#include <q3cstring.h>
+
 #include <q3valuelist.h>
 
 class FileIn;
@@ -14,7 +14,7 @@ class UmlItem;
 class UmlTransition : public UmlBaseTransition, public UmlStateItem
 {
 public:
-    UmlTransition(void * id, const Q3CString & n) : UmlBaseTransition(id, n) {
+    UmlTransition(void * id, const WrapperStr & n) : UmlBaseTransition(id, n) {
     }
 
     static void init();
@@ -25,23 +25,23 @@ public:
     static void importIt(FileIn & in, Token & token, UmlItem * where);
 
     struct Transition {
-        Q3CString id;
+        WrapperStr id;
 
-        Q3CString name;
+        WrapperStr name;
 
-        Q3CString source;
+        WrapperStr source;
 
-        Q3CString target;
+        WrapperStr target;
 
-        Q3CString guard;
+        WrapperStr guard;
 
-        Q3CString effect;
+        WrapperStr effect;
 
-        Q3CString trigger;
+        WrapperStr trigger;
 
-        Q3CString triggerRef;
+        WrapperStr triggerRef;
 
-        Q3CString kind;
+        WrapperStr kind;
 
     };
 

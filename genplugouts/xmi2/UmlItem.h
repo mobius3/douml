@@ -4,7 +4,7 @@
 
 #include <qmap.h>
 #include "UmlBaseItem.h"
-#include <q3cstring.h>
+
 #include "Language.h"
 #include <q3ptrlist.h>
 
@@ -20,7 +20,7 @@ class UmlTypeSpec;
 class UmlItem : public UmlBaseItem
 {
 public:
-    UmlItem(void * id, const Q3CString & n)
+    UmlItem(void * id, const WrapperStr & n)
         : UmlBaseItem(id, n), _written(FALSE) {};
 
     virtual ~UmlItem();
@@ -50,13 +50,13 @@ public:
 
     virtual void memo_ac_uc_assoc(UmlUseCaseDiagram * d);
 
-    static void write_multiplicity(FileOut & out, Q3CString s, UmlItem * who);
+    static void write_multiplicity(FileOut & out, WrapperStr s, UmlItem * who);
 
     //if the type is specified write it in a form "<type xmi:type=... />"
     //except if tk is given and replace "type"
     static void write_type(FileOut & out, const UmlTypeSpec & t, const char * tk = 0);
 
-    static void write_default_value(FileOut & out, Q3CString v, UmlItem * who, int rank = -1);
+    static void write_default_value(FileOut & out, WrapperStr v, UmlItem * who, int rank = -1);
 
     static void write_stereotyped(FileOut & out);
 
@@ -84,7 +84,7 @@ protected:
 
     static bool _gen_eclipse;
 
-    static QMap<Q3CString, Q3PtrList<UmlItem> > _stereotypes;
+    static QMap<WrapperStr, Q3PtrList<UmlItem> > _stereotypes;
 
 };
 

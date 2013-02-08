@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 // *************************************************************************
 //
@@ -45,7 +45,7 @@ class UmlFormalParameter : public UmlBaseFormalParameter
 {
 public:
     UmlFormalParameter() {};
-    UmlFormalParameter(Q3CString t, Q3CString n, Q3CString v);
+    UmlFormalParameter(WrapperStr t, WrapperStr n, WrapperStr v);
 
 };
 

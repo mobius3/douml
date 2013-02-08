@@ -7,7 +7,7 @@
 #include "UmlOperation.h"
 #include "UmlClassInstanceReference.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 void UmlCollaborationMessage::write(FileOut & out, UmlItem * diagram, const Q3PtrVector< UmlCollaborationMessage > & msgs, unsigned & index)
 {
     unsigned sup = msgs.size();
@@ -15,7 +15,7 @@ void UmlCollaborationMessage::write(FileOut & out, UmlItem * diagram, const Q3Pt
 
     while (index != sup) {
         const UmlCollaborationMessage * msg = msgs[index++];
-        Q3CString pfix = msg->hrank() + ".";
+        WrapperStr pfix = msg->hrank() + ".";
         unsigned pfixlen = pfix.length();
 
 #define MSG  "MSG", msg->itsrank
@@ -65,7 +65,7 @@ void UmlCollaborationMessage::write(FileOut & out, UmlItem * diagram, const Q3Pt
         out << "/>\n";
 
         if (index != sup) {
-            Q3CString pfix2 = msgs[index]->hrank() + ".";
+            WrapperStr pfix2 = msgs[index]->hrank() + ".";
 
             if ((pfix2.length() > pfixlen) && !strncmp(pfix, pfix2, pfixlen))
                 write(out, diagram, msgs, index);

@@ -30,7 +30,7 @@
 
 #include <qdialog.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class Q3TextEdit;
 
@@ -42,7 +42,7 @@ protected:
     Q3TextEdit * e;
 
 public:
-    ShowFileDialog(const Q3CString & fn);
+    ShowFileDialog(const WrapperStr & fn);
     virtual ~ShowFileDialog();
 
 protected slots:

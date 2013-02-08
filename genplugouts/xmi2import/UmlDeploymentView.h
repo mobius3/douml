@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseDeploymentView.h"
-#include <q3cstring.h>
+
 #include "anItemKind.h"
 
 class UmlItem;
@@ -16,7 +16,7 @@ class FileIn;
 class UmlDeploymentView : public UmlBaseDeploymentView
 {
 public:
-    UmlDeploymentView(void * id, const Q3CString & n) : UmlBaseDeploymentView(id, n) {};
+    UmlDeploymentView(void * id, const WrapperStr & n) : UmlBaseDeploymentView(id, n) {};
 
     //returns the first container for a 'kind', going up in the browser tree
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);

@@ -591,7 +591,7 @@ void BrowserDeploymentDiagram::save(QTextStream & st, bool ref, QString & warnin
         st << "deploymentdiagram_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "deploymentdiagram " << get_ident() << ' ';
+        st << "deploymentdiagram " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

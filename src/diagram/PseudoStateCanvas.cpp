@@ -781,7 +781,7 @@ void PseudoStateCanvas::save(QTextStream & st, bool ref, QString & warning) cons
     }
     else {
         nl_indent(st);
-        st << "pseudostatecanvas " << get_ident() << ' ';
+        st << "pseudostatecanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
         nl_indent(st);

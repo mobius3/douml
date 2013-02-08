@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseOperation.h"
-#include <q3cstring.h>
+
 
 class FileIn;
 class Token;
@@ -16,7 +16,7 @@ class UmlItem;
 class UmlOperation : public UmlBaseOperation
 {
 public:
-    UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {};
+    UmlOperation(void * id, const WrapperStr & n) : UmlBaseOperation(id, n) {};
 
     static void init();
 
@@ -32,7 +32,7 @@ private:
 
 public:
     //  call at end of import : try to solve types
-    virtual void solve(int context, Q3CString idref);
+    virtual void solve(int context, WrapperStr idref);
 
 };
 

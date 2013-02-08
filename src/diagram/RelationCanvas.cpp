@@ -1377,7 +1377,7 @@ void RelationCanvas::save(QTextStream & st, bool ref, QString & warning) const
     else if (begin->type() != UmlArrowPoint) {
         // relation canvas start
         nl_indent(st);
-        st << "relationcanvas " << get_ident() << ' ';
+        st << "relationcanvas " << get_ident() << " ";
         data->save(st, TRUE, warning);
         indent(+1);
 

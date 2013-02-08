@@ -4,7 +4,7 @@
 
 #include "UmlBaseFragmentCompartment.h"
 #include <q3ptrlist.h>
-#include <q3cstring.h>
+
 
 class FileOut;
 class UmlItem;
@@ -21,7 +21,7 @@ public:
 
     //
 
-    void write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs, Q3CString oper);
+    void write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs, WrapperStr oper);
 
     //
 

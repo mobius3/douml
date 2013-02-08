@@ -32,7 +32,7 @@
 #include <q3ptrlist.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include <Q3PtrList>
 
@@ -62,26 +62,26 @@ public:
     void own(UmlArtifact *);
     void reverse(UmlArtifact *);
 #endif
-    void reverse_variable(const Q3CString & name);
+    void reverse_variable(const WrapperStr & name);
 
-    Class * declare_if_needed(const Q3CString & name,
-                              Q3CString stereotype = 0);
-    virtual Class * define(const Q3CString & name, Q3CString stereotype = 0);
-    virtual void declare_if_needed(Q3CString name, Class * cl);
-    virtual void define(Q3CString name, Class * cl);
-    virtual bool find_type(Q3CString type, UmlTypeSpec & typespec);
-    virtual void declaration(const Q3CString & name, const Q3CString & stereotype,
-                             const Q3CString & decl
+    Class * declare_if_needed(const WrapperStr & name,
+                              WrapperStr stereotype = 0);
+    virtual Class * define(const WrapperStr & name, WrapperStr stereotype = 0);
+    virtual void declare_if_needed(WrapperStr name, Class * cl);
+    virtual void define(WrapperStr name, Class * cl);
+    virtual bool find_type(WrapperStr type, UmlTypeSpec & typespec);
+    virtual void declaration(const WrapperStr & name, const WrapperStr & stereotype,
+                             const WrapperStr & decl
 #ifdef ROUNDTRIP
                              , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
                             );
 
     virtual bool isa_package() const;
-    const Q3CString & get_h_path() const {
+    const WrapperStr & get_h_path() const {
         return h_path;
     };
-    const Q3CString & get_src_path() const {
+    const WrapperStr & get_src_path() const {
         return src_path;
     };
     UmlPackage * get_uml(bool mandatory = TRUE);
@@ -111,7 +111,7 @@ public:
     static void send_dirs(int n, bool rec);
 #endif
 
-    static const Q3CString & get_fname() {
+    static const WrapperStr & get_fname() {
         return fname;
     }
 #ifdef ROUNDTRIP
@@ -124,9 +124,9 @@ public:
 
 private:
     UmlPackage * uml;
-    Q3CString namespace_;
-    Q3CString h_path;	// empty or finish by a /
-    Q3CString src_path;	// empty or finish by a /
+    WrapperStr namespace_;
+    WrapperStr h_path;	// empty or finish by a /
+    WrapperStr src_path;	// empty or finish by a /
 
     static QApplication * app;
     static Q3PtrList<Package> Choozen; /* List of chosen "packages" to reverse */
@@ -142,7 +142,7 @@ private:
     static NDict<Class> Declared;
     static NDict<Class> Defined;
 
-    static Q3CString fname;	// without extension, empty for non header file
+    static WrapperStr fname;	// without extension, empty for non header file
 #ifdef ROUNDTRIP
     static UmlArtifact * artfct; // currently roundtriped artifact
 #endif
@@ -151,19 +151,19 @@ private:
     */
     void reverse_directory(QString path, bool rec, QString ext, bool h);
 #ifdef ROUNDTRIP
-    void reverse_file(Q3CString f, UmlArtifact * art, bool h);
+    void reverse_file(WrapperStr f, UmlArtifact * art, bool h);
 #else
     /* lgfreitas: This does the reversing of files */
-    void reverse_file(Q3CString f);
+    void reverse_file(WrapperStr f);
 #endif
     /* lgfreitas: This seems to be where the reversing is finally done, word by word. */
-    void reverse_toplevel_forms(Q3CString f, bool sub_block);
-    void reverse_toplevel_form(Q3CString f, Q3CString s);
+    void reverse_toplevel_forms(WrapperStr f, bool sub_block);
+    void reverse_toplevel_form(WrapperStr f, WrapperStr s);
 
-    Class * new_class(const Q3CString & name, const Q3CString & stereotype,
+    Class * new_class(const WrapperStr & name, const WrapperStr & stereotype,
                       bool declaration);
 
-    void set_namespace(Q3CString s);
+    void set_namespace(WrapperStr s);
     Package * find(QFileInfo * di);
 
 #ifdef ROUNDTRIP

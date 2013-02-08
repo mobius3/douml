@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseNode.h"
-#include <q3cstring.h>
+
 
 class FileIn;
 class Token;
@@ -15,7 +15,7 @@ class UmlItem;
 class UmlNode : public UmlBaseNode
 {
 public:
-    UmlNode(void * id, const Q3CString & n) : UmlBaseNode(id, n) {
+    UmlNode(void * id, const WrapperStr & n) : UmlBaseNode(id, n) {
         NumberOf += 1;
     };
 

@@ -223,7 +223,7 @@ bool ArrowJunctionCanvas::alignable() const
 void ArrowJunctionCanvas::save(QTextStream & st, bool, QString & warning) const
 {
     nl_indent(st);
-    st << "arrowjunctioncanvas " << get_ident() << ' ';
+    st << "arrowjunctioncanvas " << get_ident() << " ";
     interface->save(st, TRUE, warning);
     nl_indent(st);
     save_xyz(st, this, "  xyz");

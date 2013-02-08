@@ -2,7 +2,7 @@
 #define _UMLBASEUSECASEASSOCIATION_H
 
 
-#include <q3cstring.h>
+
 #include <q3ptrdict.h>
 
 class UmlUseCaseReference;
@@ -13,12 +13,12 @@ class UmlBaseUseCaseAssociation
 {
 public:
     // return the name
-    const Q3CString & name() const {
+    const WrapperStr & name() const {
         return _name;
     }
 
     // return the stereotype
-    const Q3CString & stereotype() const {
+    const WrapperStr & stereotype() const {
         return _stereotype;
     }
 
@@ -43,9 +43,9 @@ private:
 
     UmlClass * _actor;
 
-    Q3CString _name;
+    WrapperStr _name;
 
-    Q3CString _stereotype;
+    WrapperStr _stereotype;
 
     bool _primary;
 

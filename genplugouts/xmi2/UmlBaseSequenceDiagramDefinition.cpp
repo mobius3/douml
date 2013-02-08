@@ -2,7 +2,7 @@
 #include "UmlCom.h"
 #include "UmlBaseSequenceDiagramDefinition.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 static void qsort(UmlSequenceMessage ** v, int low, int high)
 {
@@ -91,7 +91,7 @@ void UmlBaseSequenceDiagramDefinition::read_()
         _fragments.at(rank)->read_covered_(instances);
 
     while (UmlCom::read_bool()) {
-        Q3CString s = UmlCom::read_string();
+        WrapperStr s = UmlCom::read_string();
         int x = (int) UmlCom::read_unsigned();
         int y = (int) UmlCom::read_unsigned();
         int w = (int) UmlCom::read_unsigned();
@@ -102,7 +102,7 @@ void UmlBaseSequenceDiagramDefinition::read_()
     }
 
     while (UmlCom::read_bool()) {
-        Q3CString s = UmlCom::read_string();
+        WrapperStr s = UmlCom::read_string();
         int x = (int) UmlCom::read_unsigned();
         int y = (int) UmlCom::read_unsigned();
         int w = (int) UmlCom::read_unsigned();

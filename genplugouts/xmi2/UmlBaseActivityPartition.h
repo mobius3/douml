@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 
 class UmlActivityPartition;
 class UmlActivityDiagram;
@@ -25,7 +25,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseActivityPartition(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseActivityPartition(void * id, const WrapperStr & s) : UmlItem(id, s) {
     }
 
 

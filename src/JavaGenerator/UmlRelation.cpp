@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <Q3ValueList>
 
@@ -40,7 +40,7 @@
 
 void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
                                    const Q3ValueList<UmlActualParameter> & actuals,
-                                   const Q3CString & cl_stereotype)
+                                   const WrapperStr & cl_stereotype)
 {
     switch (relationKind()) {
     default:
@@ -52,12 +52,12 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
             return;
 
         UmlClass * role_type = roleType();
-        const Q3CString & other_stereotype = role_type->java_stereotype();
+        const WrapperStr & other_stereotype = role_type->java_stereotype();
 
         if ((cl_stereotype == "interface") || (cl_stereotype == "@interface")) {
             if ((other_stereotype != "interface") && (other_stereotype != "@interface")) {
                 write_trace_header();
-                UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot extends a <i>")
+                UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot extends a <i>")
                               + other_stereotype + "</i></b></font><br>");
                 incr_warning();
                 return;
@@ -66,7 +66,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
         else if ((other_stereotype != "interface") && (other_stereotype != "@interface")) {
             if ((cl_stereotype == "union") || (cl_stereotype == "enum_pattern")) {
                 write_trace_header();
-                UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
+                UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
                               + cl_stereotype + "</i> cannot extends</b></font><br>");
                 incr_warning();
                 return;
@@ -75,7 +75,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
                      (other_stereotype == "enum") ||
                      (other_stereotype == "enum_pattern")) {
                 write_trace_header();
-                UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot extends an <i>")
+                UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>cannot extends an <i>")
                               + other_stereotype + "</i></b></font><br>");
                 incr_warning();
                 return;
@@ -127,7 +127,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
 
 void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
                                       const Q3ValueList<UmlActualParameter> & actuals,
-                                      const Q3CString & cl_stereotype)
+                                      const WrapperStr & cl_stereotype)
 {
     switch (relationKind()) {
     default:
@@ -139,12 +139,12 @@ void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
             return;
 
         UmlClass * role_type = roleType();
-        const Q3CString & other_stereotype = role_type->java_stereotype();
+        const WrapperStr & other_stereotype = role_type->java_stereotype();
 
         if ((other_stereotype == "interface") || (other_stereotype == "@interface")) {
             if ((cl_stereotype == "union") || (cl_stereotype == "enum_pattern")) {
                 write_trace_header();
-                UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
+                UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>")
                               + cl_stereotype + "</i> cannot inherits</b></font><br>");
                 incr_warning();
             }
@@ -185,8 +185,8 @@ void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
     }
 }
 
-void UmlRelation::generate(QTextStream & f, const Q3CString & cl_stereotype,
-                           Q3CString indent)
+void UmlRelation::generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                           WrapperStr indent)
 {
     switch (relationKind()) {
     case aDependency:
@@ -205,7 +205,7 @@ void UmlRelation::generate(QTextStream & f, const Q3CString & cl_stereotype,
 
             const char * p = javaDecl();
             const char * pp = 0;
-            Q3CString s;
+            WrapperStr s;
 
             while ((*p == ' ') || (*p == '\t'))
                 indent += *p++;
@@ -297,13 +297,13 @@ void UmlRelation::generate(QTextStream & f, const Q3CString & cl_stereotype,
                 else if (!strncmp(p, "${multiplicity}", 15)) {
                     p += 15;
 
-                    Q3CString m = multiplicity();
+                    WrapperStr m = multiplicity();
 
                     if (*m != '[')
                         f << "[]";
                     else {
                         for (unsigned index = 0; index != m.length(); index += 1) {
-                            switch (m.at(index)) {
+                            switch (m.at(index).toAscii().at(0)) {
                             case '[':
                                 f << '[';
                                 break;
@@ -352,24 +352,24 @@ void UmlRelation::generate(QTextStream & f, const Q3CString & cl_stereotype,
 }
 
 void UmlRelation::generate_enum_pattern_item(QTextStream &, int &,
-        const Q3CString &, Q3CString)
+        const WrapperStr &, WrapperStr)
 {
     write_trace_header();
     UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>enum_pattern</i> cannot have relation</b></font><br>");
     incr_warning();
 }
 
-void UmlRelation::generate_enum_pattern_case(QTextStream &, Q3CString)
+void UmlRelation::generate_enum_pattern_case(QTextStream &, WrapperStr)
 {
     // error already signaled
 }
 
-void UmlRelation::generate_enum_member(QTextStream & f, Q3CString indent)
+void UmlRelation::generate_enum_member(QTextStream & f, WrapperStr indent)
 {
     generate(f, "enum", indent);
 }
 
-void UmlRelation::generate_import(QTextStream & f, const Q3CString & indent)
+void UmlRelation::generate_import(QTextStream & f, const WrapperStr & indent)
 {
     if ((relationKind() == aDependency) &&
         (stereotype() == "import"))

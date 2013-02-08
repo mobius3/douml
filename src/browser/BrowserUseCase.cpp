@@ -1158,7 +1158,7 @@ void BrowserUseCase::save(QTextStream & st, bool ref, QString & warning)
         st << "usecase_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "usecase " << get_ident() << ' ';
+        st << "usecase " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

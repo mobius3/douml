@@ -5,7 +5,7 @@
 #include "UmlOperation.h"
 #include "UmlActivity.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 void UmlSendObjectAction::write(FileOut & out)
 {
     write_begin(out, "SendObjectAction");
@@ -39,7 +39,7 @@ void UmlValueSpecificationAction::write(FileOut & out)
 {
     write_begin(out, "ValueSpecificationAction");
 
-    Q3CString val;
+    WrapperStr val;
 
     switch (_lang) {
     case Uml:
@@ -67,7 +67,7 @@ void UmlOpaqueAction::write(FileOut & out)
     write_begin(out, "OpaqueAction");
     write_end(out, TRUE);
 
-    Q3CString body;
+    WrapperStr body;
 
     switch (_lang) {
     case Uml:
@@ -101,7 +101,7 @@ void UmlAcceptEventAction::write(FileOut & out)
     if (isUnmarshall())
         out << " isUnmarshall=\"true\"";
 
-    Q3CString trig;
+    WrapperStr trig;
 
     switch (_lang) {
     case Uml:
@@ -213,7 +213,7 @@ void UmlAcceptCallAction::write(FileOut & out)
     write_begin(out, "AcceptCallAction");
     out << " isUnmarshall=\"true\"";
 
-    Q3CString trig;
+    WrapperStr trig;
 
     switch (_lang) {
     case Uml:
@@ -249,7 +249,7 @@ void UmlReplyAction::write(FileOut & out)
 {
     write_begin(out, "ReplyAction");
 
-    Q3CString trig;
+    WrapperStr trig;
 
     switch (_lang) {
     case Uml:

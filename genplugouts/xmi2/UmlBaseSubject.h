@@ -2,7 +2,7 @@
 #define _UMLBASESUBJECT_H
 
 
-#include <q3cstring.h>
+
 #include <q3ptrvector.h>
 
 class UmlSubject;
@@ -12,13 +12,13 @@ class UmlBaseSubject
 {
 public:
     // return the name
-    const Q3CString & name() const {
+    const WrapperStr & name() const {
         return _name;
     }
 
 
 private:
-    Q3CString _name;
+    WrapperStr _name;
 
     int _x;
 

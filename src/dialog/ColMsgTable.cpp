@@ -232,7 +232,7 @@ void ColMsgTable::refresh(ColMsgList & m)
         setItem(r, ABS_RANK_COL, new MsgTableItem(this, msg->absolute_rank));
         setItem(r, HI_RANK_COL, new MsgTableItem(this, msg->hierarchical_rank));
         setItem(r, FROM_COL, new MsgTableItem(this, from->get_full_name()));
-        setItem(r, MSG_COL, new MsgTableItem(this, def.mid(def.find(' ') + 1)));
+        setItem(r, MSG_COL, new MsgTableItem(this, def.mid(def.find(" ") + 1)));
         setItem(r, TO_COL, new MsgTableItem(this, to->get_full_name()));
         setItem(r, CMD_COL, new MsgTableItem(this, TR("do"), Qt::AlignHCenter));
 
@@ -253,7 +253,7 @@ void ColMsgTable::edit_msg(int row)
         QString def = msg->def(FALSE, TRUE, UmlView, DefaultShowContextMode);
 
         msg->in->update_msgs();
-        item(row, MSG_COL)->setText(def.mid(def.find(' ') + 1));
+        item(row, MSG_COL)->setText(def.mid(def.find(" ") + 1));
         updateCell(row, MSG_COL);
     }
 }

@@ -4,7 +4,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 FileIn::FileIn(const QString & path, FILE * fp)
     : _path((const char *)path), _fp(fp), _utf8(false), _linenum(1), _length(1024)  //[rageek] ambiguous, cast *
 {
@@ -130,9 +130,9 @@ Token & FileIn::read(bool any)
     return token;
 }
 
-Q3CString FileIn::body(Q3CString what)
+WrapperStr FileIn::body(WrapperStr what)
 {
-    Q3CString r;
+    WrapperStr r;
     int index = 0;
     int c;
 
@@ -186,7 +186,7 @@ const char * FileIn::readWord(bool any, BooL & str)
 
         if (c == '\n')
             _linenum += 1;
-        else if ((c != ' ') && (c != '\t') && (c != '\r'))
+        else if ((c != " ") && (c != '\t') && (c != '\r'))
             break;
     }
 
@@ -216,7 +216,7 @@ const char * FileIn::readWord(bool any, BooL & str)
 
 }
 
-void FileIn::finish(Q3CString what)
+void FileIn::finish(WrapperStr what)
 {
     for (;;) {
         Token & tk = read(TRUE);
@@ -226,7 +226,7 @@ void FileIn::finish(Q3CString what)
         else if (tk.close())
             error("'&lt;/" + tk.what() + "&gt;' while wait for '&lt;/" + what + "&gt;'");
         else {
-            Q3CString s = tk.xmiId();
+            WrapperStr s = tk.xmiId();
 
             if (! s.isEmpty())
                 BypassedIds.insert(QString(s), "");
@@ -241,7 +241,7 @@ void FileIn::bypass(Token & tk)
 {
     static Q3Dict<char> bypassed;
 
-    Q3CString s = tk.xmiType();
+    WrapperStr s = tk.xmiType();
 
     if (s.isEmpty()) {
         QString k = QString(tk.what());
@@ -273,27 +273,27 @@ void FileIn::bypass(Token & tk)
 
 void FileIn::bypassedId(Token & tk)
 {
-    Q3CString s = tk.xmiId();
+    WrapperStr s = tk.xmiId();
 
     if (! s.isEmpty())
         BypassedIds.insert(QString(s), "");
 
 }
 
-void FileIn::error(Q3CString s)
+void FileIn::error(WrapperStr s)
 {
-    Q3CString num;
-    Q3CString err = Q3CString("error in ") + _path + " line " +
+    WrapperStr num;
+    WrapperStr err = WrapperStr("error in ") + _path + " line " +
                     num.setNum(_linenum) + " : " + s + "<br>";
 
     UmlCom::trace(err);
     throw 0;
 }
 
-void FileIn::warning(Q3CString s)
+void FileIn::warning(WrapperStr s)
 {
-    Q3CString num;
-    Q3CString warn = Q3CString("warning in ") + _path + " line " +
+    WrapperStr num;
+    WrapperStr warn = WrapperStr("warning in ") + _path + " line " +
                      num.setNum(_linenum) + " : " + s + "<br>";
 
     UmlCom::trace(warn);
@@ -322,7 +322,7 @@ const char * FileIn::read_word(int c, bool any)
         cs[0] = c;
         cs[1] = 0;
 
-        error("unexpected character '" + Q3CString(cs) + "'");
+        error("unexpected character '" + WrapperStr(cs) + "'");
     }
 
     int index = 1;
@@ -476,7 +476,7 @@ char FileIn::read_special_char()
 
         s[index] = 0; // check on index useless
 
-        QMap<Q3CString, char>::ConstIterator iter = _special_chars.find(s);
+        QMap<WrapperStr, char>::ConstIterator iter = _special_chars.find(s);
 
         if (iter == _special_chars.end())
             // doesn't return
@@ -486,7 +486,7 @@ char FileIn::read_special_char()
     }
 }
 
-void FileIn::setEncoding(Q3CString s)
+void FileIn::setEncoding(WrapperStr s)
 {
     if (s.left(3).lower() == "utf") {
         if (s.right(1) != "8") {

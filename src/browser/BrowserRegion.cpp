@@ -568,7 +568,7 @@ void BrowserRegion::save(QTextStream & st, bool ref, QString & warning)
         st << "region_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "region " << get_ident() << ' ';
+        st << "region " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

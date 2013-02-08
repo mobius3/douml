@@ -175,15 +175,15 @@ void ObjectData::save(QTextStream & st, QString & warning) const
     if (!multiplicity.isEmpty()) {
         st << " multiplicity ";
         save_string(multiplicity, st);
-        st << ' ';
+        st << " ";
     }
 
-    st << stringify(ordering) << ' ';
+    st << stringify(ordering) << " ";
 
     if (!in_state.isEmpty()) {
         st << " in_state ";
         save_string(in_state, st);
-        st << ' ';
+        st << " ";
     }
 
     if (is_control)

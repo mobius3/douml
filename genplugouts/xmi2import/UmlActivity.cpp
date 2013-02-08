@@ -13,7 +13,7 @@
 #include "UmlFlow.h"
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 UmlItem * UmlActivity::container(anItemKind kind, Token & token, FileIn & in)
 {
@@ -58,9 +58,9 @@ UmlItem * UmlActivity::container(anItemKind kind, Token & token, FileIn & in)
 
 }
 
-void UmlActivity::solve(Q3CString idref)
+void UmlActivity::solve(WrapperStr idref)
 {
-    QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))
@@ -108,7 +108,7 @@ void UmlActivity::importIt(FileIn & in, Token & token, UmlItem * where)
     where = where->container(anActivity, token, in);
 
     if (where != 0) {
-        Q3CString s = token.valueOf("name");
+        WrapperStr s = token.valueOf("name");
 
         if (s.isEmpty()) {
             static unsigned n = 0;
@@ -133,10 +133,10 @@ void UmlActivity::importIt(FileIn & in, Token & token, UmlItem * where)
         if (token.valueOf("isactive") == "true")
             a->set_isActive(TRUE);
 
-        Q3CString spec = token.valueOf("specification");
+        WrapperStr spec = token.valueOf("specification");
 
         if (! token.closed()) {
-            Q3CString k = token.what();
+            WrapperStr k = token.what();
             const char * kstr = k;
 
             while (in.read(), !token.close(kstr)) {
@@ -164,7 +164,7 @@ void UmlActivity::importIt(FileIn & in, Token & token, UmlItem * where)
         }
 
         if (! spec.isEmpty()) {
-            QMap<Q3CString, UmlItem *>::Iterator it = All.find(spec);
+            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(spec);
 
             if (it == All.end())
                 Unresolved::addRef(a, spec);
@@ -179,14 +179,14 @@ void UmlActivity::importIt(FileIn & in, Token & token, UmlItem * where)
 void UmlActivity::readCondition(FileIn & in, Token & token)
 {
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
-            Q3CString s = token.what();
+            WrapperStr s = token.what();
 
             if (s == "specification") {
-                Q3CString v = token.valueOf("body");
+                WrapperStr v = token.valueOf("body");
 
                 if (v.isNull())
                     v = token.valueOf("value");	// UMODEL
@@ -210,7 +210,7 @@ void UmlActivity::readParameter(FileIn & in, Token & token)
     // the parameter may already exist because of a
     // ActivityParameterNode definition, search for it
     UmlActivityParameter * param = 0;
-    Q3CString s = token.valueOf("name");
+    WrapperStr s = token.valueOf("name");
     const Q3PtrVector<UmlItem> ch = children();
     unsigned int n = ch.size();
     int i;
@@ -242,7 +242,7 @@ void UmlActivity::readParameterNode(FileIn & in, Token & token)
     // the parameter node may already exist because of a
     // ActivityParameter definition, search for it
     UmlActivityParameter * param = 0;
-    Q3CString s = token.valueOf("name");
+    WrapperStr s = token.valueOf("name");
     const Q3PtrVector<UmlItem> ch = children();
     unsigned int n = ch.size();
     int i;

@@ -30,7 +30,7 @@
 
 #include "TreeItem.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrCollection>
 #include <Q3PtrList>
 
@@ -48,7 +48,7 @@ public:
     virtual ~BrowserNode() {};	// to avoid compiler warning
 
     virtual bool isa_package() const = 0;
-    virtual bool find_type(Q3CString type, UmlTypeSpec & typespec) = 0;
+    virtual bool find_type(WrapperStr type, UmlTypeSpec & typespec) = 0;
 
 #ifndef REVERSE
     BrowserNode(BrowserView * parent, const char * n);

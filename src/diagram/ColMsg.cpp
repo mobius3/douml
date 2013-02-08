@@ -422,10 +422,10 @@ void ColMsg::save(QTextStream & st, const ColMsgList & l, bool copy,
         indent(+1);
         nl_indent(st);
         st << ((msg->is_forward) ? "forward" : "backward")
-           << " ranks " << msg->absolute_rank << ' ';
+           << " ranks " << msg->absolute_rank << " ";
         save_string(msg->hierarchical_rank, st);
 
-        st << ' ';
+        st << " ";
         msg->in->save(st, TRUE, warning);
 
         save(st, msg->msgs, copy, warning, diag_name);

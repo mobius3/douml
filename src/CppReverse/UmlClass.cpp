@@ -28,7 +28,7 @@
 #ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -67,7 +67,7 @@ Q3Dict<UmlClass> UmlClass::Usings;
 // to lost usings defined under a namespace/class block
 Q3ValueList<Q3Dict<UmlClass> > UmlClass::UsingScope;
 
-UmlClass::UmlClass(void * id, const Q3CString & n)
+UmlClass::UmlClass(void * id, const WrapperStr & n)
     : UmlBaseClass(id, n)
 #ifdef ROUNDTRIP
     , created(FALSE), the_class(0)
@@ -89,7 +89,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
     QLOG_INFO() << name() << "->manage_inherit()\n";
 #endif
 
-    Q3CString s = Lex::read_word(TRUE);
+    WrapperStr s = Lex::read_word(TRUE);
 
     while (s != "{") {
 #ifdef DEBUG_DOUML
@@ -131,9 +131,9 @@ bool UmlClass::manage_inherit(ClassContainer * container,
         QLOG_INFO() << "UmlClass::manage_inherit, mother : " << s << '\n';
 #endif
 
-        Q3CString mother_name = s;
+        WrapperStr mother_name = s;
         UmlTypeSpec mother;
-        Q3CString typeform;
+        WrapperStr typeform;
         UmlRelation * rel = 0;
 #ifdef ROUNDTRIP
         bool is_new = TRUE;
@@ -147,7 +147,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
             Lex::mark();
 
             // goes up to the corresponding '>'
-            Q3CString after_gt;
+            WrapperStr after_gt;
 
             Lex::finish_template(after_gt);
 
@@ -286,7 +286,7 @@ bool UmlClass::manage_inherit(ClassContainer * container,
     return TRUE;
 }
 
-UmlClass * UmlClass::auxilarily_typedef(const Q3CString & base
+UmlClass * UmlClass::auxilarily_typedef(const WrapperStr & base
 #ifdef REVERSE
                                         , bool libp
 # ifdef ROUNDTRIP
@@ -296,7 +296,7 @@ UmlClass * UmlClass::auxilarily_typedef(const Q3CString & base
 #endif
                                        )
 {
-    Q3CString typedef_decl = CppSettings::typedefDecl();
+    WrapperStr typedef_decl = CppSettings::typedefDecl();
     const Q3PtrVector<UmlItem> & children = parent()->children();
     unsigned n = children.count();
     unsigned index;
@@ -325,9 +325,9 @@ UmlClass * UmlClass::auxilarily_typedef(const Q3CString & base
     for (;;) {
         static unsigned nty;
 
-        Q3CString s;
+        QString s("typedef%1");
+        s=s.arg(QString::number(++nty));
 
-        s.sprintf("typedef%u", ++nty);
 
         for (index = 0; index != n; index += 1)
             if (children[index]->name() == s)
@@ -339,13 +339,13 @@ UmlClass * UmlClass::auxilarily_typedef(const Q3CString & base
             if (cl == 0) {
 #ifdef REVERSE
                 UmlCom::message("");
-                CppCatWindow::trace(Q3CString("<font face=helvetica><b>cannot create class <i>")
+                CppCatWindow::trace(WrapperStr("<font face=helvetica><b>cannot create class <i>")
                                     + s + "</i> under <i>"
                                     + parent()->name() + "</b></font><br>");
                 throw 0;
 #else
                 QMessageBox::critical(0, "Fatal Error",
-                                      Q3CString("<font face=helvetica><b>cannot create class <i>")
+                                      WrapperStr("<font face=helvetica><b>cannot create class <i>")
                                       + s + "</i> under <i>"
                                       + parent()->name() + "</b></font><br>");
                 QApplication::exit(1);
@@ -412,10 +412,10 @@ bool UmlClass::get_actuals(UmlClass * mother, ClassContainer * container,
 
             Lex::unread_word();
 
-            Q3CString s = Lex::read_list_elt();
+            WrapperStr s = Lex::read_list_elt();
 
             UmlTypeSpec typespec;
-            Q3CString typeform = "${type}";
+            WrapperStr typeform = "${type}";
 
             container->compute_type(s, typespec, typeform, FALSE, tmplts);
 
@@ -475,7 +475,7 @@ bool UmlClass::inside_its_definition()
     return UnderConstruction.findRef(this) != -1;
 }
 
-bool UmlClass::is_itself(Q3CString t)
+bool UmlClass::is_itself(WrapperStr t)
 {
     // class is a template class and t is x<...> where x is the class,
     // t is normalized
@@ -486,7 +486,7 @@ bool UmlClass::is_itself(Q3CString t)
 
     Q3ValueList<UmlFormalParameter> l = formals();
     Q3ValueList<UmlFormalParameter>::ConstIterator it = l.begin();
-    Q3CString t2 = (*it).name();
+    WrapperStr t2 = (*it).name();
 
     while ((++it) != l.end())
         t2 += ',' + (*it).name();
@@ -502,7 +502,7 @@ void UmlClass::restore_using_scope()
 
 #ifdef REVERSE
 
-void UmlClass::need_artifact(const Q3CString & nmsp)
+void UmlClass::need_artifact(const WrapperStr & nmsp)
 {
     if (parent()->kind() == aClassView) {
         UmlArtifact * cp;
@@ -517,7 +517,7 @@ void UmlClass::need_artifact(const Q3CString & nmsp)
 
 #endif
 
-            Q3CString name = Package::get_fname();
+            WrapperStr name = Package::get_fname();
             int index;
 
             if (name.isEmpty()) {
@@ -548,7 +548,7 @@ void UmlClass::need_artifact(const Q3CString & nmsp)
                 if ((cp = UmlBaseArtifact::create(cpv, name))
                     == 0) {
 #ifdef REVERSE
-                    UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create artifact <i>")
+                    UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot create artifact <i>")
                                   + Lex::quote(name) + "</i> under <i>"
                                   + Lex::quote(cpv->name()) +
                                   "</b></font><br>");
@@ -556,7 +556,7 @@ void UmlClass::need_artifact(const Q3CString & nmsp)
                     throw 0;
 #else
                     QMessageBox::critical(0, "Fatal Error",
-                                          Q3CString("<font face=helvetica><b>cannot create artifact <i>")
+                                          WrapperStr("<font face=helvetica><b>cannot create artifact <i>")
                                           + Lex::quote(name) + "</i> under <i>"
                                           + Lex::quote(cpv->Name()) + "</b></font><br>");
                     QApplication::exit(1);
@@ -579,7 +579,7 @@ void UmlClass::need_artifact(const Q3CString & nmsp)
 
 bool UmlClass::need_source()
 {
-    const Q3CString & stereotype = this->stereotype();
+    const WrapperStr & stereotype = this->stereotype();
 
     if ((stereotype != "enum") && (stereotype != "typedef")) {
         Q3PtrVector<UmlItem> children = this->children();
@@ -599,7 +599,7 @@ bool UmlClass::need_source()
 void UmlClass::upload(ClassContainer * cnt)
 {
     UmlArtifact * art = associatedArtifact();
-    Q3CString na;
+    WrapperStr na;
 
     if (art != 0) {
         na = ((UmlPackage *) art->parent()->parent())->cppNamespace();
@@ -665,7 +665,7 @@ void UmlClass::send_it(int n)
         associatedArtifact()->send_it(n);
 }
 
-UmlItem * UmlClass::search_for_att_rel(const Q3CString & name)
+UmlItem * UmlClass::search_for_att_rel(const WrapperStr & name)
 {
     const Q3PtrVector<UmlItem> & ch = UmlItem::children();
     UmlItem ** v = ch.data();
@@ -694,7 +694,7 @@ UmlItem * UmlClass::search_for_att_rel(const Q3CString & name)
 }
 
 UmlExtraClassMember *
-UmlClass::search_for_extra(const Q3CString & name, const Q3CString & decl)
+UmlClass::search_for_extra(const WrapperStr & name, const WrapperStr & decl)
 {
     const Q3PtrVector<UmlItem> & ch = UmlItem::children();
     UmlItem ** v = ch.data();

@@ -44,7 +44,7 @@
 #include <qpushbutton.h>
 #include <q3filedialog.h>
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 #include "ClassDialog.h"
 #include "ClassData.h"
@@ -599,7 +599,7 @@ static void generate_members(BrowserNode * cl, QString & s, QString indent,
                 ClassData * cl = (ClassData *)((BrowserNode *) child)->get_data();
 
                 decl = (cl->*class_f)();
-                pre += ste_f(cl->get_stereotype()) + ' ';
+                pre += ste_f(cl->get_stereotype()) + " ";
                 post = (pre.left(11) == "...typedef ") ? "\n" : " {...}\n";
             }
 
@@ -2213,7 +2213,7 @@ void FormalParamsTable::generate_cpp(QString & s, BrowserNodeList & nodes,
         for (int index = 0; index != n; index += 1) {
             s += sep;
             s += text(index, 0).stripWhiteSpace();
-            s += ' ';
+            s += " ";
             s += text(index, 1).stripWhiteSpace();
             sep = ", ";
 

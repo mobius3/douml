@@ -11,7 +11,7 @@
 #include "Tools/ApiCmd.h"
 #include "Tools/ApiCmd.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 UmlClass * UmlBaseClass::create(UmlItem * parent, const char * s)
 {
@@ -388,7 +388,7 @@ bool UmlBaseClass::set_isIdlCustom(bool y)
 }
 #endif
 
-UmlClass * UmlBaseClass::get(const Q3CString & n, const UmlPackage * p)
+UmlClass * UmlBaseClass::get(const WrapperStr & n, const UmlPackage * p)
 {
     if (p == 0) {
         UmlClass * x = _classes[n];
@@ -403,7 +403,7 @@ UmlClass * UmlBaseClass::get(const Q3CString & n, const UmlPackage * p)
     return (UmlClass *) UmlBaseItem::read_();
 }
 
-UmlClass * UmlBaseClass::findStereotype(Q3CString s, bool caseSensitive)
+UmlClass * UmlBaseClass::findStereotype(WrapperStr s, bool caseSensitive)
 {
     UmlCom::send_cmd(packageGlobalCmd, findStereotypeCmd,
                      (caseSensitive) ? "y" : "n", (const char *) s);
@@ -421,13 +421,13 @@ void UmlBaseClass::unload(bool rec, bool del)
     UmlBaseClassItem::unload(rec, del);
 }
 
-bool UmlBaseClass::set_Name(const Q3CString & s)
+bool UmlBaseClass::set_Name(const WrapperStr & s)
 {
     if (!UmlBaseItem::set_Name(s))
         return FALSE;
 
     const Q3PtrVector<UmlItem> ch = children();
-    Q3CString destr = "~" + name();
+    WrapperStr destr = "~" + name();
 
     for (unsigned i = 0; i != ch.size(); i += 1) {
         if (ch[i]->kind() == anOperation) {
@@ -443,7 +443,7 @@ bool UmlBaseClass::set_Name(const Q3CString & s)
 
 Q3Dict<UmlClass> UmlBaseClass::_classes(1001);
 
-UmlBaseClass::UmlBaseClass(void * id, const Q3CString & n)
+UmlBaseClass::UmlBaseClass(void * id, const WrapperStr & n)
     : UmlClassMember(id, n)
 {
     _assoc_diagram = 0;

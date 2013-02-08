@@ -35,7 +35,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <Q3PointArray>
-#include "misc/mystr.h"
+
 
 #include "FragmentCanvas.h"
 #include "FragmentDialog.h"
@@ -588,13 +588,13 @@ void FragmentCanvas::save(QTextStream & st, bool ref, QString & warning) const
     else {
         nl_indent(st);
 
-        st << "fragment " << get_ident() << ' ';
+        st << "fragment " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         nl_indent(st);
 
         if (itscolor != UmlDefaultColor)
-            st << "color " << stringify(itscolor) << ' ';
+            st << "color " << stringify(itscolor) << " ";
 
         if (refer != 0) {
             st << "refer ";
@@ -605,7 +605,7 @@ void FragmentCanvas::save(QTextStream & st, bool ref, QString & warning) const
         if (! form.isEmpty()) {
             st << "form ";
             save_string(form, st);
-            st << ' ';
+            st << " ";
         }
 
         save_xyzwh(st, this, "xyzwh");

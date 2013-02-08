@@ -33,7 +33,7 @@
 #ifdef TRACE
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 using namespace std;
 #endif
@@ -84,7 +84,7 @@ void Lex::unget()
     context.pointer -= 1;
 }
 
-static Q3CString Separators = " \t\f\n&~\"#{'(-|`)[]=}%*<>?,;/:!@";
+static WrapperStr Separators = " \t\f\n&~\"#{'(-|`)[]=}%*<>?,;/:!@";
 
 const QString & Lex::filename()
 {
@@ -330,7 +330,7 @@ void Lex::bypass_c_comment()
     }
 }
 
-Q3CString Lex::manage_operator(QString & result, int c)
+WrapperStr Lex::manage_operator(QString & result, int c)
 {
     result += c;
 
@@ -374,7 +374,7 @@ Q3CString Lex::manage_operator(QString & result, int c)
 #ifdef TRACE
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-    return Q3CString(result.toAscii().constData());
+    return WrapperStr(result.toAscii().constData());
 }
 
 char Lex::bypass_operator(int c)
@@ -424,7 +424,7 @@ char Lex::bypass_operator(int c)
     }
 }
 
-Q3CString Lex::read_string()
+WrapperStr Lex::read_string()
 {
     QString result = "\"";;
 
@@ -446,7 +446,7 @@ Q3CString Lex::read_string()
             break;
 
         case '"':
-            return Q3CString((result += c).toAscii().constData());
+            return WrapperStr((result += c).toAscii().constData());
 
         default:
             result += c;
@@ -480,9 +480,9 @@ void Lex::bypass_string()
     }
 }
 
-Q3CString Lex::read_character()
+WrapperStr Lex::read_character()
 {
-    Q3CString result = "'";
+    WrapperStr result = "'";
 
     for (;;) {
         int c = get();
@@ -492,7 +492,7 @@ Q3CString Lex::read_character()
             return 0;
 
         case '\'':
-            return Q3CString(result += c);
+            return WrapperStr(result += c);
 
         case '\\':
             result += c;
@@ -525,9 +525,9 @@ void Lex::bypass_character()
     }
 }
 
-Q3CString Lex::read_array_dim()
+WrapperStr Lex::read_array_dim()
 {
-    Q3CString result = "[";
+    WrapperStr result = "[";
     char * pointer = context.pointer;
 
     for (;;) {
@@ -573,7 +573,7 @@ void Lex::bypass_array_dim()
 
 // read all sequential annotations
 
-Q3CString Lex::read_annotation()
+WrapperStr Lex::read_annotation()
 {
     char * p1 = context.pointer - 1;	// '@' was read
 
@@ -610,7 +610,7 @@ Q3CString Lex::read_annotation()
             c = *context.pointer;
             *context.pointer = 0;
 
-            Q3CString result = p1;
+            WrapperStr result = p1;
 
             *context.pointer = c;
             return result;
@@ -620,7 +620,7 @@ Q3CString Lex::read_annotation()
             c = *p2;
             *p2 = 0;
 
-            Q3CString result = p1;
+            WrapperStr result = p1;
 
             *p2 = c;
             return result;
@@ -666,7 +666,7 @@ void Lex::bypass_annotation()
     }
 }
 
-Q3CString Lex::read_word(bool in_templ)
+WrapperStr Lex::read_word(bool in_templ)
 {
     QString result;
 
@@ -771,7 +771,7 @@ Q3CString Lex::read_word(bool in_templ)
 #ifdef TRACE
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-    return Q3CString(result.toAscii().constData());
+    return WrapperStr(result.toAscii().constData());
 }
 
 char Lex::read_word_bis(bool in_templ)
@@ -936,17 +936,17 @@ void Lex::finish_line()
     }
 }
 
-Q3CString Lex::get_comments()
+WrapperStr Lex::get_comments()
 {
-    Q3CString result = Q3CString(context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(context.comments.toAscii().constData());
 
     context.comments = QString();
     return result;
 }
 
-Q3CString Lex::get_comments(Q3CString & co)
+WrapperStr Lex::get_comments(WrapperStr & co)
 {
-    Q3CString result = Q3CString(context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(context.comments.toAscii().constData());
 
     context.comments = QString();
 
@@ -955,17 +955,17 @@ Q3CString Lex::get_comments(Q3CString & co)
            : co += "\n" + result;
 }
 
-Q3CString Lex::get_description()
+WrapperStr Lex::get_description()
 {
-    Q3CString result = Q3CString(context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(context.description.toAscii().constData());
 
     context.description = QString();
     return result;
 }
 
-Q3CString Lex::get_description(Q3CString & co)
+WrapperStr Lex::get_description(WrapperStr & co)
 {
-    Q3CString result = Q3CString(context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(context.description.toAscii().constData());
 
     context.description = QString();
 
@@ -989,13 +989,13 @@ void Lex::mark()
     context.mark = context.pointer;
 }
 
-Q3CString Lex::region()
+WrapperStr Lex::region()
 {
     char c = *context.pointer;
 
     *context.pointer = 0;
 
-    Q3CString result = context.mark;
+    WrapperStr result = context.mark;
 
     *context.pointer = c;
 
@@ -1004,11 +1004,11 @@ Q3CString Lex::region()
 
 //
 
-void Lex::syntax_error(Q3CString s)
+void Lex::syntax_error(WrapperStr s)
 {
-    JavaCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-                         + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
-                         Q3CString().setNum(context.line_number) + " <b>"
+    JavaCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
+                         + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                         WrapperStr().setNum(context.line_number) + " <b>"
                          + s + "</b></font><br>");
 
 #ifdef TRACE
@@ -1022,9 +1022,9 @@ void Lex::syntax_error(Q3CString s)
 
 void Lex::premature_eof()
 {
-    JavaCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-                         + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
-                         Q3CString().setNum(context.line_number) +
+    JavaCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
+                         + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                         WrapperStr().setNum(context.line_number) +
                          " <b>premature eof</b></font><br>");
 
 #ifdef TRACE
@@ -1036,11 +1036,11 @@ void Lex::premature_eof()
 #endif
 }
 
-void Lex::error_near(Q3CString s, const char * m)
+void Lex::error_near(WrapperStr s, const char * m)
 {
-    JavaCatWindow::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-                         + Q3CString(context.filename.toAscii().constData()) + "</i> line " +
-                         Q3CString().setNum(context.line_number) + " <b>near <font color =\"red\">"
+    JavaCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
+                         + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                         WrapperStr().setNum(context.line_number) + " <b>near <font color =\"red\">"
                          + quote(s) + "</font></b>" + m + "</font><br>");
 
 #ifdef TRACE
@@ -1054,9 +1054,9 @@ void Lex::error_near(Q3CString s, const char * m)
 
 // allows a string to be written as it is by an html writer
 
-Q3CString Lex::quote(Q3CString s)
+WrapperStr Lex::quote(WrapperStr s)
 {
-    Q3CString result;
+    WrapperStr result;
     const char * p = s;
 
     for (;;) {
@@ -1085,7 +1085,7 @@ Q3CString Lex::quote(Q3CString s)
 }
 
 // remove first and last line in comment if non significant
-Q3CString Lex::simplify_comment(Q3CString & comment)
+WrapperStr Lex::simplify_comment(WrapperStr & comment)
 {
     if (comment.isEmpty())
         return comment;
@@ -1141,7 +1141,7 @@ Q3CString Lex::simplify_comment(Q3CString & comment)
 
 // don't produce error
 
-bool Lex::bypass_type(Q3CString s)
+bool Lex::bypass_type(WrapperStr s)
 {
     if (s.isEmpty() && (read_word_bis() == 0))
         return FALSE;
@@ -1190,7 +1190,7 @@ bool Lex::bypass_type(Q3CString s)
 
 // to compare strings bypassing \r
 
-bool neq(const Q3CString & s1, const Q3CString & s2)
+bool neq(const WrapperStr & s1, const WrapperStr & s2)
 {
     const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
     const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
@@ -1217,7 +1217,7 @@ inline bool is_white_space(char c)
     return ((c == ' ') || ((c >= '\t') && (c <= '\r')));
 }
 
-bool nequal(const Q3CString & s1, const Q3CString & s2)
+bool nequal(const WrapperStr & s1, const WrapperStr & s2)
 {
     // don't take into account first and last white spaces (like a stripWhiteSpace())
     const char * p1 = (s1.isNull()) ? "" : (const char *) s1;

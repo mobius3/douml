@@ -9,7 +9,7 @@
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 bool IdlSettings::useDefaults()
 {
     UmlCom::send_cmd(idlSettingsCmd, getIdlUseDefaultsCmd);
@@ -22,7 +22,7 @@ bool IdlSettings::set_UseDefaults(bool y)
     return UmlCom::read_bool();
 }
 
-Q3CString IdlSettings::type(Q3CString s)
+WrapperStr IdlSettings::type(WrapperStr s)
 {
     read_if_needed_();
 
@@ -31,7 +31,7 @@ Q3CString IdlSettings::type(Q3CString s)
     return (b) ? b->idl : s;
 }
 
-bool IdlSettings::set_Type(Q3CString s, Q3CString v)
+bool IdlSettings::set_Type(WrapperStr s, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlTypeCmd, (const char *)s, (const char *)v); //[jasa] ambiguous call
@@ -50,14 +50,14 @@ bool IdlSettings::set_Type(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString IdlSettings::umlType(Q3CString s)
+WrapperStr IdlSettings::umlType(WrapperStr s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_type(s, &UmlBuiltin::idl);
 }
 
-Q3CString IdlSettings::relationAttributeStereotype(const Q3CString & s)
+WrapperStr IdlSettings::relationAttributeStereotype(const WrapperStr & s)
 {
     read_if_needed_();
 
@@ -66,7 +66,7 @@ Q3CString IdlSettings::relationAttributeStereotype(const Q3CString & s)
     return (b) ? b->idl : s;
 }
 
-bool IdlSettings::set_RelationAttributeStereotype(Q3CString s, Q3CString v)
+bool IdlSettings::set_RelationAttributeStereotype(WrapperStr s, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlRelationAttributeStereotypeCmd, (const char *)s, (const char *)v); //[jasa] ambiguous call
@@ -85,14 +85,14 @@ bool IdlSettings::set_RelationAttributeStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString IdlSettings::relationAttributeUmlStereotype(Q3CString s)
+WrapperStr IdlSettings::relationAttributeUmlStereotype(WrapperStr s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_rel_attr_stereotype(s, &UmlStereotype::idl);
 }
 
-Q3CString IdlSettings::classStereotype(Q3CString s)
+WrapperStr IdlSettings::classStereotype(WrapperStr s)
 {
     read_if_needed_();
 
@@ -101,7 +101,7 @@ Q3CString IdlSettings::classStereotype(Q3CString s)
     return (b) ? b->idl : s;
 }
 
-bool IdlSettings::set_ClassStereotype(Q3CString s, Q3CString v)
+bool IdlSettings::set_ClassStereotype(WrapperStr s, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlClassStereotypeCmd, (const char *)s, (const char *)v); //[jasa] ambiguous call
@@ -120,32 +120,32 @@ bool IdlSettings::set_ClassStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString IdlSettings::classUmlStereotype(Q3CString s)
+WrapperStr IdlSettings::classUmlStereotype(WrapperStr s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_class_stereotype(s, &UmlStereotype::idl);
 }
 
-Q3CString IdlSettings::include(Q3CString s)
+WrapperStr IdlSettings::include(WrapperStr s)
 {
     read_if_needed_();
 
-    Q3CString * r = _map_includes[s];
+    WrapperStr * r = _map_includes[s];
 
-    return (r) ? *r : Q3CString(0);
+    return (r) ? *r : WrapperStr(0);
 }
 
-bool IdlSettings::set_Include(Q3CString s, Q3CString v)
+bool IdlSettings::set_Include(WrapperStr s, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlIncludeCmd, (const char *)s, (const char *)v); //[jasa] ambiguous call
 
     if (UmlCom::read_bool()) {
-        Q3CString * r = _map_includes.take(s);
+        WrapperStr * r = _map_includes.take(s);
 
         if (!v.isEmpty())
-            _map_includes.insert(s, new Q3CString(v));
+            _map_includes.insert(s, new WrapperStr(v));
 
         if (r)
             delete r;
@@ -156,14 +156,14 @@ bool IdlSettings::set_Include(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::rootDir()
+const WrapperStr & IdlSettings::rootDir()
 {
     read_if_needed_();
 
     return _root;
 }
 
-bool IdlSettings::set_RootDir(Q3CString v)
+bool IdlSettings::set_RootDir(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlRootDirCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -175,14 +175,14 @@ bool IdlSettings::set_RootDir(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::sourceContent()
+const WrapperStr & IdlSettings::sourceContent()
 {
     read_if_needed_();
 
     return _src_content;
 }
 
-bool IdlSettings::set_SourceContent(Q3CString v)
+bool IdlSettings::set_SourceContent(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlSourceContentCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -194,14 +194,14 @@ bool IdlSettings::set_SourceContent(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::sourceExtension()
+const WrapperStr & IdlSettings::sourceExtension()
 {
     read_if_needed_();
 
     return _ext;
 }
 
-bool IdlSettings::set_SourceExtension(Q3CString v)
+bool IdlSettings::set_SourceExtension(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlSourceExtensionCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -213,14 +213,14 @@ bool IdlSettings::set_SourceExtension(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::interfaceDecl()
+const WrapperStr & IdlSettings::interfaceDecl()
 {
     read_if_needed_();
 
     return _interface_decl;
 }
 
-bool IdlSettings::set_InterfaceDecl(Q3CString v)
+bool IdlSettings::set_InterfaceDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlInterfaceDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -232,14 +232,14 @@ bool IdlSettings::set_InterfaceDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::valuetypeDecl()
+const WrapperStr & IdlSettings::valuetypeDecl()
 {
     read_if_needed_();
 
     return _valuetype_decl;
 }
 
-bool IdlSettings::set_ValuetypeDecl(Q3CString v)
+bool IdlSettings::set_ValuetypeDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlValuetypeDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -251,14 +251,14 @@ bool IdlSettings::set_ValuetypeDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::externalClassDecl()
+const WrapperStr & IdlSettings::externalClassDecl()
 {
     read_if_needed_();
 
     return _external_class_decl;
 }
 
-bool IdlSettings::set_ExternalClassDecl(Q3CString v)
+bool IdlSettings::set_ExternalClassDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlExternalClassDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -270,14 +270,14 @@ bool IdlSettings::set_ExternalClassDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::structDecl()
+const WrapperStr & IdlSettings::structDecl()
 {
     read_if_needed_();
 
     return _struct_decl;
 }
 
-bool IdlSettings::set_StructDecl(Q3CString v)
+bool IdlSettings::set_StructDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlStructDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -289,14 +289,14 @@ bool IdlSettings::set_StructDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::typedefDecl()
+const WrapperStr & IdlSettings::typedefDecl()
 {
     read_if_needed_();
 
     return _typedef_decl;
 }
 
-bool IdlSettings::set_TypedefDecl(Q3CString v)
+bool IdlSettings::set_TypedefDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlTypedefDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -308,14 +308,14 @@ bool IdlSettings::set_TypedefDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::exceptionDecl()
+const WrapperStr & IdlSettings::exceptionDecl()
 {
     read_if_needed_();
 
     return _exception_decl;
 }
 
-bool IdlSettings::set_ExceptionDecl(Q3CString v)
+bool IdlSettings::set_ExceptionDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlExceptionDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -327,14 +327,14 @@ bool IdlSettings::set_ExceptionDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::unionDecl()
+const WrapperStr & IdlSettings::unionDecl()
 {
     read_if_needed_();
 
     return _union_decl;
 }
 
-bool IdlSettings::set_UnionDecl(Q3CString v)
+bool IdlSettings::set_UnionDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlUnionDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -346,14 +346,14 @@ bool IdlSettings::set_UnionDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::enumDecl()
+const WrapperStr & IdlSettings::enumDecl()
 {
     read_if_needed_();
 
     return _enum_decl;
 }
 
-bool IdlSettings::set_EnumDecl(Q3CString v)
+bool IdlSettings::set_EnumDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlEnumDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -365,14 +365,14 @@ bool IdlSettings::set_EnumDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::attributeDecl(const char * multiplicity)
+const WrapperStr & IdlSettings::attributeDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _attr_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_AttributeDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_AttributeDecl(const char * multiplicity, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlAttributeDeclCmd, multiplicity, (const char *)v); //[jasa] ambiguous call
@@ -385,14 +385,14 @@ bool IdlSettings::set_AttributeDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::valuetypeAttributeDecl(const char * multiplicity)
+const WrapperStr & IdlSettings::valuetypeAttributeDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _valuetype_attr_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_ValuetypeAttributeDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_ValuetypeAttributeDecl(const char * multiplicity, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlValuetypeAttributeDeclCmd, multiplicity, (const char *)v); //[jasa] ambiguous call
@@ -405,14 +405,14 @@ bool IdlSettings::set_ValuetypeAttributeDecl(const char * multiplicity, Q3CStrin
         return FALSE;
 }
 
-const Q3CString & IdlSettings::unionItemDecl(const char * multiplicity)
+const WrapperStr & IdlSettings::unionItemDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _union_item_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_UnionItemDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_UnionItemDecl(const char * multiplicity, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlUnionItemDeclCmd, multiplicity, (const char *)v); //[jasa] ambiguous call
@@ -425,14 +425,14 @@ bool IdlSettings::set_UnionItemDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::enumItemDecl()
+const WrapperStr & IdlSettings::enumItemDecl()
 {
     read_if_needed_();
 
     return _enum_item_decl;
 }
 
-bool IdlSettings::set_EnumItemDecl(Q3CString v)
+bool IdlSettings::set_EnumItemDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlEnumItemDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -444,14 +444,14 @@ bool IdlSettings::set_EnumItemDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::constDecl(const char * multiplicity)
+const WrapperStr & IdlSettings::constDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _const_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_ConstDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_ConstDecl(const char * multiplicity, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlConstDeclCmd, multiplicity, (const char *)v); //[jasa] ambiguous call
@@ -464,14 +464,14 @@ bool IdlSettings::set_ConstDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::relationDecl(const char * multiplicity)
+const WrapperStr & IdlSettings::relationDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _rel_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_RelationDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_RelationDecl(const char * multiplicity, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlRelationDeclCmd, multiplicity, (const char *)v); //[jasa] ambiguous call
@@ -484,14 +484,14 @@ bool IdlSettings::set_RelationDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::valuetypeRelationDecl(const char * multiplicity)
+const WrapperStr & IdlSettings::valuetypeRelationDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _valuetype_rel_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_ValuetypeRelationDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_ValuetypeRelationDecl(const char * multiplicity, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlValuetypeRelationDeclCmd, multiplicity, (const char *)v); //[jasa] ambiguous call
@@ -504,14 +504,14 @@ bool IdlSettings::set_ValuetypeRelationDecl(const char * multiplicity, Q3CString
         return FALSE;
 }
 
-const Q3CString & IdlSettings::unionRelationDecl(const char * multiplicity)
+const WrapperStr & IdlSettings::unionRelationDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _union_rel_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_UnionRelationDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_UnionRelationDecl(const char * multiplicity, WrapperStr v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlUnionRelationDeclCmd, multiplicity, (const char *)v); //[jasa] ambiguous call
@@ -524,14 +524,14 @@ bool IdlSettings::set_UnionRelationDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::operationDecl()
+const WrapperStr & IdlSettings::operationDecl()
 {
     read_if_needed_();
 
     return _oper_decl;
 }
 
-bool IdlSettings::set_OperationDecl(Q3CString v)
+bool IdlSettings::set_OperationDecl(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlOperationDeclCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -543,14 +543,14 @@ bool IdlSettings::set_OperationDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::getName()
+const WrapperStr & IdlSettings::getName()
 {
     read_if_needed_();
 
     return _get_name;
 }
 
-bool IdlSettings::set_GetName(Q3CString v)
+bool IdlSettings::set_GetName(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlGetNameCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -562,14 +562,14 @@ bool IdlSettings::set_GetName(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::setName()
+const WrapperStr & IdlSettings::setName()
 {
     read_if_needed_();
 
     return _set_name;
 }
 
-bool IdlSettings::set_SetName(Q3CString v)
+bool IdlSettings::set_SetName(WrapperStr v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlSetNameCmd, (const char *)v); //[jasa] ambiguous call
 
@@ -602,53 +602,53 @@ bool IdlSettings::set_IsSetOneway(bool v)
 
 bool IdlSettings::_defined;
 
-Q3CString IdlSettings::_root;
+WrapperStr IdlSettings::_root;
 
-Q3CString IdlSettings::_interface_decl;
+WrapperStr IdlSettings::_interface_decl;
 
-Q3CString IdlSettings::_valuetype_decl;
+WrapperStr IdlSettings::_valuetype_decl;
 
-Q3CString IdlSettings::_struct_decl;
+WrapperStr IdlSettings::_struct_decl;
 
-Q3CString IdlSettings::_typedef_decl;
+WrapperStr IdlSettings::_typedef_decl;
 
-Q3CString IdlSettings::_exception_decl;
+WrapperStr IdlSettings::_exception_decl;
 
-Q3CString IdlSettings::_union_decl;
+WrapperStr IdlSettings::_union_decl;
 
-Q3CString IdlSettings::_enum_decl;
+WrapperStr IdlSettings::_enum_decl;
 
-Q3CString IdlSettings::_external_class_decl;
+WrapperStr IdlSettings::_external_class_decl;
 
-Q3CString IdlSettings::_attr_decl[3/*multiplicity*/];
+WrapperStr IdlSettings::_attr_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_valuetype_attr_decl[3/*multiplicity*/];
+WrapperStr IdlSettings::_valuetype_attr_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_union_item_decl[3/*multiplicity*/];
+WrapperStr IdlSettings::_union_item_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_enum_item_decl;
+WrapperStr IdlSettings::_enum_item_decl;
 
-Q3CString IdlSettings::_const_decl[3/*multiplicity*/];
+WrapperStr IdlSettings::_const_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_rel_decl[3/*multiplicity*/];
+WrapperStr IdlSettings::_rel_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_valuetype_rel_decl[3/*multiplicity*/];
+WrapperStr IdlSettings::_valuetype_rel_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_union_rel_decl[3/*multiplicity*/];
+WrapperStr IdlSettings::_union_rel_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_oper_decl;
+WrapperStr IdlSettings::_oper_decl;
 
-Q3CString IdlSettings::_get_name;
+WrapperStr IdlSettings::_get_name;
 
-Q3CString IdlSettings::_set_name;
+WrapperStr IdlSettings::_set_name;
 
 bool IdlSettings::_is_set_oneway;
 
-Q3CString IdlSettings::_src_content;
+WrapperStr IdlSettings::_src_content;
 
-Q3CString IdlSettings::_ext;
+WrapperStr IdlSettings::_ext;
 
-Q3Dict<Q3CString> IdlSettings::_map_includes;
+Q3Dict<WrapperStr> IdlSettings::_map_includes;
 
 void IdlSettings::read_()
 {
@@ -680,10 +680,10 @@ void IdlSettings::read_()
         _map_includes.resize(n);
 
     for (index = 0; index != n; index += 1) {
-        Q3CString t = UmlCom::read_string();
-        Q3CString i = UmlCom::read_string();
+        WrapperStr t = UmlCom::read_string();
+        WrapperStr i = UmlCom::read_string();
 
-        _map_includes.insert(t, new Q3CString(i));
+        _map_includes.insert(t, new WrapperStr(i));
     }
 
     _src_content = UmlCom::read_string();

@@ -2,7 +2,7 @@
 #define _ASSOCIATION_H
 
 
-#include <q3cstring.h>
+
 #include "aRelationKind.h"
 #include <qmap.h>
 
@@ -11,12 +11,12 @@ class Token;
 
 // an unused role has an empty id
 struct Role {
-    Q3CString name;
+    WrapperStr name;
 
-    Q3CString id;
+    WrapperStr id;
 
     // idref of the type containing it
-    Q3CString idref;
+    WrapperStr idref;
 
     aRelationKind aggregate;
 
@@ -34,19 +34,19 @@ struct Role {
 
     bool isStatic : 1;
 
-    Q3CString multiplicity;
+    WrapperStr multiplicity;
 
-    Q3CString visibility;
+    WrapperStr visibility;
 
-    Q3CString comment;
+    WrapperStr comment;
 
-    Q3CString constraint;
+    WrapperStr constraint;
 
-    Q3CString defaultValue;
+    WrapperStr defaultValue;
 
     Role() : aggregate(anAssociation), navigable(TRUE), readOnly(FALSE), isStatic(FALSE) {}
 
-    void setMultiplicity(Q3CString v, bool upper, const char * dflt);
+    void setMultiplicity(WrapperStr v, bool upper, const char * dflt);
 
 };
 
@@ -62,23 +62,23 @@ public:
     }
     // search for the association from its id
 
-    static Association & get(Q3CString id, Q3CString s = "");
+    static Association & get(WrapperStr id, WrapperStr s = "");
 
     static void solveThem();
 
 
 protected:
-    Q3CString name;
+    WrapperStr name;
 
     Role roles[2];
 
-    static QMap<Q3CString, Association> All;
+    static QMap<WrapperStr, Association> All;
 
     bool is_class_association;
 
 
 private:
-    void solve(Q3CString id);
+    void solve(WrapperStr id);
 
 };
 

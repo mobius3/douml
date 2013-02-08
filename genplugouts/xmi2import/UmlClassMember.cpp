@@ -1,9 +1,9 @@
 
 #include "UmlClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
-void UmlClassMember::setVisibility(Q3CString v)
+void UmlClassMember::setVisibility(WrapperStr v)
 {
     if ((v == "public") || (v == "vis_public"))
         set_Visibility(PublicVisibility);

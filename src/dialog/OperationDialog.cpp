@@ -48,7 +48,7 @@
 #include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <Q3VBoxLayout>
-#include "misc/mystr.h"
+
 #include <QRegExp>
 #include <functional>
 
@@ -1933,7 +1933,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
             s += GenerationSettings::cpp_type(op->get_of_association().get_type());
         }
         else if (*p == '\n') {
-            s += ' ';
+            s += " ";
 
             do
                 p += 1;
@@ -2370,7 +2370,7 @@ void OperationDialog::cpp_update_def()
                     s += indent;
                 }
                 else
-                    s += ' ';
+                    s += " ";
             }
             else if (sscanf(p, "${t%u}", &rank) == 1) {
                 manage_cpp_type(rank, s);
@@ -2482,7 +2482,7 @@ void OperationDialog::manage_java_exceptions(QString & s)
     }
 
     if (index != 0)
-        s += ' ';
+        s += " ";
 }
 
 void OperationDialog::java_default_def()
@@ -2621,7 +2621,7 @@ void OperationDialog::java_update_def()
             p += 13;
 
             if (uml_visibility.value() != UmlPackageVisibility)
-                s += uml_visibility.state() + ' ';
+                s += uml_visibility.state() + " ";
         }
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
@@ -2671,7 +2671,7 @@ void OperationDialog::java_update_def()
                 s += indent;
             }
             else
-                s += ' ';
+                s += " ";
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             manage_java_type(rank, s);
@@ -2786,7 +2786,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
             p += 9;
         else if (!strncmp(p, "${staticnl}", 11)) {
             p += 11;
-            s += ' ';
+            s += " ";
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams)
@@ -2825,7 +2825,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
             s += GenerationSettings::java_type(op->get_of_association().get_type());
         }
         else if (*p == '\n') {
-            s += ' ';
+            s += " ";
 
             do
                 p += 1;
@@ -3003,7 +3003,7 @@ void OperationDialog::php_update_def()
             p += 13;
 
             if (uml_visibility.value() != UmlPackageVisibility)
-                s += uml_visibility.state() + ' ';
+                s += uml_visibility.state() + " ";
         }
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
@@ -3038,7 +3038,7 @@ void OperationDialog::php_update_def()
                 s += indent;
             }
             else
-                s += ' ';
+                s += " ";
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             manage_php_type(rank, s);
@@ -3129,7 +3129,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         }
         else if (!strncmp(p, "${staticnl}", 11)) {
             p += 11;
-            s += ' ';
+            s += " ";
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams)
@@ -3171,7 +3171,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
             p = strchr(p, '}') + 1;
         }
         else if (*p == '\n') {
-            s += ' ';
+            s += " ";
 
             do
                 p += 1;
@@ -4331,12 +4331,12 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
         }
         else if (!strncmp(p, "${raisesnl}", 11)) {
             p += 11;
-            s += ' ';
+            s += " ";
         }
         else if (!strncmp(p, "${raises}", 9))
             p += 9;
         else if (*p == '\n') {
-            s += ' ';
+            s += " ";
 
             do
                 p += 1;

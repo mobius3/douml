@@ -3,7 +3,7 @@
 
 
 #include "UmlBasePinParameter.h"
-#include <q3cstring.h>
+
 
 class FileOut;
 
@@ -15,7 +15,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlPinParameter(void * id, const Q3CString & s) : UmlBasePinParameter(id, s) {
+    UmlPinParameter(void * id, const WrapperStr & s) : UmlBasePinParameter(id, s) {
     }
 
     void write_dir(FileOut & out);

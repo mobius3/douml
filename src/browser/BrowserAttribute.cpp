@@ -609,7 +609,7 @@ void BrowserAttribute::save(QTextStream & st, bool ref, QString & warning)
         st << "attribute_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "attribute " << get_ident() << ' ';
+        st << "attribute " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

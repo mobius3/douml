@@ -28,7 +28,7 @@
 #ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include <Q3PtrList>
 #include "Logging/QsLog.h"
@@ -52,8 +52,8 @@ using namespace std;
 #endif
 
 #ifdef ROUNDTRIP
-static UmlRelation * search_rel(Class * container, const Q3CString & name,
-                                UmlClass * dest, const Q3CString & st)
+static UmlRelation * search_rel(Class * container, const WrapperStr & name,
+                                UmlClass * dest, const WrapperStr & st)
 {
     UmlItem * x = container->get_uml()->search_for_att_rel(name);
 
@@ -89,13 +89,13 @@ static UmlRelation * search_rel(Class * container, const Q3CString & name,
 }
 #endif
 
-bool UmlRelation::new_one(Class * container, const Q3CString & name,
-                          UmlClass * dest, const Q3CString & modifier,
-                          const Q3CString & pretype, const Q3CString & array,
-                          const Q3CString & typeform, aVisibility visibility,
+bool UmlRelation::new_one(Class * container, const WrapperStr & name,
+                          UmlClass * dest, const WrapperStr & modifier,
+                          const WrapperStr & pretype, const WrapperStr & array,
+                          const WrapperStr & typeform, aVisibility visibility,
                           bool staticp, bool constp, bool mutablep, bool volatilep,
-                          const Q3CString & value, Q3CString comment,
-                          Q3CString description
+                          const WrapperStr & value, WrapperStr comment,
+                          WrapperStr description
 #ifdef ROUNDTRIP
                           , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
@@ -137,7 +137,7 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
                                       cl, dest);
 
         if (rel == 0) {
-            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot add relation <i>")
+            UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot add relation <i>")
                           + name + "</i> in <i>" + cl->name() + "</i> to <i>"
                           + dest->name() + "</i></b></font><br><hr>");
             return FALSE;
@@ -208,15 +208,15 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
 
 #endif
 
-        Q3CString decl;
+        WrapperStr decl;
 
         if (typeform != "${type}") {
             // array & modified are empty, pretype is empty ?
             decl = CppSettings::relationDecl(TRUE, "*");
 
             int index = typeform.find("<");	// cannot be -1
-            Q3CString st = typeform.left(index);
-            Q3CString st_uml = CppSettings::umlType(st);
+            WrapperStr st = typeform.left(index);
+            WrapperStr st_uml = CppSettings::umlType(st);
 
 #ifdef ROUNDTRIP
 
@@ -279,7 +279,7 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
 
             if (roundtrip) {
                 if (!staticp) {
-                    Q3CString v = rel->defaultValue();
+                    WrapperStr v = rel->defaultValue();
 
                     if (!v.isEmpty() && (((const char *) v)[0] == '='))
                         v = v.mid(1);
@@ -338,7 +338,7 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
         UmlRelation * rel = UmlBaseRelation::create(aDependency, from, to);
 
         if (rel == 0) {
-            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot add friend relation in <i>")
+            UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot add friend relation in <i>")
                           + from->name() + "</i> to <i>"
                           + to->name() + "</i></b></font><br><hr><br>");
             return FALSE;
@@ -384,7 +384,7 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
         UmlRelation * rel = UmlBaseRelation::create(aDependency, from, to);
 
         if (rel == 0) {
-            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot add friend relation in <i>")
+            UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot add friend relation in <i>")
                           + from->name() + "</i> to <i>"
                           + to->name() + "</i></b></font><br><hr><br>");
             return FALSE;
@@ -422,8 +422,8 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
         UmlRelation * r2 = (r1 != this) ? this : side(FALSE);
 
         if (r1->isReadOnly() || r2->isReadOnly()) {
-            UmlCom::trace(Q3CString("<font face=helvetica>in <i>") + Q3CString(Lex::filename().toAscii().constData())
-                          + "</i> line " + Q3CString().setNum(Lex::line_number())
+            UmlCom::trace(WrapperStr("<font face=helvetica>in <i>") + WrapperStr(Lex::filename().toAscii().constData())
+                          + "</i> line " + WrapperStr().setNum(Lex::line_number())
                           + " <b>cannot remove relation between classes <i>"
                           + roleType()->name() + "</i> and <i>" + parent()->name()
                           + "</i> because one is read only</b></font><br>");
@@ -451,7 +451,7 @@ bool UmlRelation::new_one(Class * container, const Q3CString & name,
             UmlRelation * rel =
                 UmlBaseRelation::create(aDirectionalAssociation,
                                         (UmlClass *) parent(), roleType());
-            Q3CString role = roleName();
+            WrapperStr role = roleName();
 
             rel->moveAfter(this);
             rel->set_Visibility(visibility());

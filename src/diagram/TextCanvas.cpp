@@ -34,7 +34,7 @@
 #include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 
 #include "TextCanvas.h"
 #include "MLEDialog.h"
@@ -336,7 +336,7 @@ void TextCanvas::save(QTextStream & st, bool ref, QString &) const
         st << "textcanvas_ref " << get_ident();
     else {
         nl_indent(st);
-        st << "textcanvas " << get_ident() << ' ';
+        st << "textcanvas " << get_ident() << " ";
         save_string(fromUnicode(text), st);
         nl_indent(st);
 

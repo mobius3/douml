@@ -31,7 +31,7 @@
 #include "UmlBaseRelation.h"
 #include "UmlClass.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <Q3ValueList>
 
@@ -40,24 +40,24 @@ class QTextStream;
 class UmlRelation : public UmlBaseRelation
 {
 public:
-    UmlRelation(void * id, const Q3CString & n)
+    UmlRelation(void * id, const WrapperStr & n)
         : UmlBaseRelation(id, n) {
     };
 
-    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-                          Q3CString indent);
+    virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                          WrapperStr indent);
     virtual void generate_enum_pattern_item(QTextStream &, int &,
-                                            const Q3CString &, Q3CString);
-    virtual void generate_enum_pattern_case(QTextStream &, Q3CString);
-    virtual void generate_enum_member(QTextStream &, Q3CString);
-    virtual void generate_import(QTextStream & f, const Q3CString & indent);
+                                            const WrapperStr &, WrapperStr);
+    virtual void generate_enum_pattern_case(QTextStream &, WrapperStr);
+    virtual void generate_enum_member(QTextStream &, WrapperStr);
+    virtual void generate_import(QTextStream & f, const WrapperStr & indent);
 
     void generate_extends(const char *& sep, QTextStream & f,
                           const Q3ValueList<UmlActualParameter> & actuals,
-                          const Q3CString & stereotype);
+                          const WrapperStr & stereotype);
     void generate_implements(const char *& sep, QTextStream & f,
                              const Q3ValueList<UmlActualParameter> & actuals,
-                             const Q3CString & stereotype);
+                             const WrapperStr & stereotype);
 };
 
 #endif

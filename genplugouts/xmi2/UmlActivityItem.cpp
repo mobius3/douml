@@ -5,8 +5,8 @@
 
 #include "UmlFlow.h"
 //Added by qt3to4:
-#include <Q3CString>
-void UmlActivityItem::write_selection(FileOut & out, Q3CString s)
+#include "misc/mystr.h"
+void UmlActivityItem::write_selection(FileOut & out, WrapperStr s)
 {
     if (! s.isEmpty())
         out.ref(activity()->add_opaque_behavior(s, dynamic_cast<UmlItem *>(this),

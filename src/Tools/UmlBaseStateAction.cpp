@@ -4,7 +4,7 @@
 #include "UmlStateAction.h"
 #include "UmlState.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 UmlStateAction * UmlBaseStateAction::create(UmlState * parent)
 {

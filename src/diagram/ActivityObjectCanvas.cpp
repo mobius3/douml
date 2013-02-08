@@ -800,17 +800,17 @@ void ActivityObjectCanvas::save(QTextStream & st, bool ref, QString & warning) c
            << browser_node->full_name();
     else {
         nl_indent(st);
-        st << "activityobjectcanvas " << get_ident() << ' ';
+        st << "activityobjectcanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
         settings.save(st);
         nl_indent(st);
 
         if (itscolor != UmlDefaultColor)
-            st << "color " << stringify(itscolor) << ' ';
+            st << "color " << stringify(itscolor) << " ";
 
         if (write_horizontally != UmlDefaultState)
-            st << "write_horizontally " << stringify(write_horizontally) << ' ';
+            st << "write_horizontally " << stringify(write_horizontally) << " ";
 
         save_xyzwh(st, this, "xyzwh");
 

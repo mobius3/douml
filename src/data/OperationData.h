@@ -31,7 +31,7 @@
 #include <q3memarray.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 
 #include "UmlEnum.h"
 #include "AType.h"

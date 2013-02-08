@@ -5,7 +5,7 @@
 #include "UmlItem.h"
 #include "UmlOperation.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 UmlSendObjectAction * UmlBaseSendObjectAction::create(UmlItem * parent, const char * s)
 {

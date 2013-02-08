@@ -987,7 +987,7 @@ void ChangeVariableValueAction::save(QTextStream & st, QString & warning,
 {
     if (flag) {
         nl_indent(st);
-        st << str << ' ';
+        st << str << " ";
     }
 
     AccessVariableValueAction::save(st, warning);

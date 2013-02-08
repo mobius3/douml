@@ -797,7 +797,7 @@ void BrowserDeploymentView::save(QTextStream & st, bool ref, QString & warning)
         st << "deploymentview_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "deploymentview " << get_ident() << ' ';
+        st << "deploymentview " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
 

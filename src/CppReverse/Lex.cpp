@@ -34,7 +34,7 @@
 #ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include "Logging/QsLog.h"
 
 using namespace std;
@@ -54,7 +54,7 @@ char * Lex::_buffer;
 LexContext Lex::_context;
 LexContext Lex::_mark;
 
-void Lex::defines(const Q3CString & f)
+void Lex::defines(const WrapperStr & f)
 {
     QFile in(f);
 
@@ -123,7 +123,7 @@ void Lex::unget()
         _context.line_number -= 1;
 }
 
-static Q3CString Separators = " \r\t\f\n&~\"#{'(+-|`^)[]=}%*<>?,.;/:!";
+static WrapperStr Separators = " \r\t\f\n&~\"#{'(+-|`^)[]=}%*<>?,.;/:!";
 
 const QString & Lex::filename()
 {
@@ -249,7 +249,7 @@ void Lex::bypass_template()
 
 // the '<' was read, read up to the coresponding '>'
 
-bool Lex::finish_template(Q3CString & s)
+bool Lex::finish_template(WrapperStr & s)
 {
     // template
     unsigned level = 1;
@@ -275,9 +275,9 @@ bool Lex::finish_template(Q3CString & s)
 // an type is an identifier (probably a type)
 // in case it is followed by '::qsd', '::qsd' is read and added to id
 
-Q3CString Lex::complete_template_type(Q3CString id)
+WrapperStr Lex::complete_template_type(WrapperStr id)
 {
-    Q3CString s;
+    WrapperStr s;
 
     while (!(s = read_word()).isEmpty()) {
         if ((((const char *) s)[0] != ':') || (((const char *) s)[1] != ':')) {
@@ -399,7 +399,7 @@ void Lex::bypass_c_comment()
     }
 }
 
-Q3CString Lex::manage_operator(QString & result, int c, bool oper)
+WrapperStr Lex::manage_operator(QString & result, int c, bool oper)
 {
     // a comment is not correctly managed !
     result += c;
@@ -475,7 +475,7 @@ Q3CString Lex::manage_operator(QString & result, int c, bool oper)
 #endif
     QByteArray temp = result.toAscii();
     const char* c = temp.constData();
-    return Q3CString(c);
+    return WrapperStr(c);
 }
 
 char Lex::bypass_operator(int c, bool oper)
@@ -558,7 +558,7 @@ char Lex::bypass_operator(int c, bool oper)
     }
 }
 
-Q3CString Lex::read_string()
+WrapperStr Lex::read_string()
 {
     QString result = "\"";;
 
@@ -580,7 +580,7 @@ Q3CString Lex::read_string()
             result += c;
             QByteArray temp = result.toAscii();
             const char* c = temp.constData();
-            return Q3CString(c);
+            return WrapperStr(c);
         }
 
         default:
@@ -609,9 +609,9 @@ void Lex::bypass_string()
     }
 }
 
-Q3CString Lex::read_character()
+WrapperStr Lex::read_character()
 {
-    Q3CString result = "'";
+    WrapperStr result = "'";
 
     for (;;) {
         int c = get();
@@ -654,9 +654,9 @@ void Lex::bypass_character()
     }
 }
 
-Q3CString Lex::read_array_dim()
+WrapperStr Lex::read_array_dim()
 {
-    Q3CString result = "[";
+    WrapperStr result = "[";
     char * pointer = _context.pointer;
 
     for (;;) {
@@ -701,7 +701,7 @@ void Lex::bypass_array_dim()
 
 
 // remove first and last line in comment if non significant
-Q3CString Lex::simplify_comment(Q3CString & comment)
+WrapperStr Lex::simplify_comment(WrapperStr & comment)
 {
     if (comment.isEmpty())
         return comment;
@@ -733,13 +733,13 @@ Q3CString Lex::simplify_comment(Q3CString & comment)
 
             while (p != s) {
                 switch (*p) {
-                case ' ':
+                case ' ' :
                 case '\t':
                     p -= 1;
                     break;
 
                 case '\n':
-                    comment.resize(p - s + 1);
+                    //comment.resize(p - s + 1);
 
                     // no break
                 default:
@@ -785,7 +785,7 @@ void Lex::goes_to_word_beginning()
 
             break;
 
-        case ' ':
+        case ' ' :
         case '\t':
         case '\n':
         case '\r':
@@ -806,7 +806,7 @@ void Lex::unread_word()
     _context.line_number = _context.read_word_line_number;
 }
 
-Q3CString Lex::read_word(bool in_expr)
+WrapperStr Lex::read_word(bool in_expr)
 {
     goes_to_word_beginning();
 
@@ -815,7 +815,7 @@ Q3CString Lex::read_word(bool in_expr)
     _context.read_word_description = _context.description;
     _context.read_word_line_number = _context.line_number;
 
-    static Q3CString spaces = " \t\n\r";
+    static WrapperStr spaces = " \t\n\r";
 
     QString result;
 
@@ -857,13 +857,13 @@ Q3CString Lex::read_word(bool in_expr)
                     c = get();
 
                 if (Separators.find(c) != -1)
-                    return manage_operator(result += ' ', c, TRUE);
+                    return manage_operator(result += " ", c, TRUE);
                 else {
                     // operator new/delete, conversions
-                    result += ' ';
+                    result += " ";
                     unget();
 
-                    Q3CString w;
+                    WrapperStr w;
 
                     while (!(w = read_word()).isEmpty()) {
                         if (w == "(") {
@@ -871,7 +871,7 @@ Q3CString Lex::read_word(bool in_expr)
                             break;
                         }
 
-                        result += w;
+                        result += w.operator QString();
                     }
                 }
             }
@@ -942,7 +942,7 @@ Q3CString Lex::read_word(bool in_expr)
             QLOG_INFO() << "retourne '" << v << "'\n";
 #endif
 
-            return Q3CString(v);
+            return WrapperStr(v);
         }
     }
 
@@ -952,7 +952,7 @@ Q3CString Lex::read_word(bool in_expr)
 
     QByteArray temp = result.toAscii();
     const char* c = temp.constData();
-    return Q3CString(c);
+    return WrapperStr(c);
 }
 
 char Lex::read_word_bis(bool set_context, bool in_expr)
@@ -966,7 +966,7 @@ char Lex::read_word_bis(bool set_context, bool in_expr)
         _context.read_word_line_number = _context.line_number;
     }
 
-    static Q3CString spaces = " \t\n\r";
+    static WrapperStr spaces = " \t\n\r";
 
     char result = 0;
     bool is_template = FALSE;
@@ -1115,24 +1115,24 @@ void Lex::finish_line()
         case EOF:
             return;
 
-        case ' ':
+        case ' ' :
         case '\t':
             break;
         }
     }
 }
 
-Q3CString Lex::get_comments()
+WrapperStr Lex::get_comments()
 {
-    Q3CString result = Q3CString(_context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(_context.comments.toAscii().constData());
 
     _context.comments = QString();
     return result;
 }
 
-Q3CString Lex::get_comments(Q3CString & co)
+WrapperStr Lex::get_comments(WrapperStr & co)
 {
-    Q3CString result = Q3CString(_context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(_context.comments.toAscii().constData());
 
     _context.comments = QString();
 
@@ -1141,17 +1141,17 @@ Q3CString Lex::get_comments(Q3CString & co)
            : co += "\n" + result;
 }
 
-Q3CString Lex::get_description()
+WrapperStr Lex::get_description()
 {
-    Q3CString result = Q3CString(_context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(_context.description.toAscii().constData());
 
     _context.description = QString();
     return result;
 }
 
-Q3CString Lex::get_description(Q3CString & co)
+WrapperStr Lex::get_description(WrapperStr & co)
 {
-    Q3CString result = Q3CString(_context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(_context.description.toAscii().constData());
 
     _context.description = QString();
 
@@ -1235,13 +1235,13 @@ void Lex::come_back()
     _context = _mark;
 }
 
-Q3CString Lex::region()
+WrapperStr Lex::region()
 {
     char c = *_context.pointer;
 
     *_context.pointer = 0;
 
-    Q3CString result = _mark.pointer;
+    WrapperStr result = _mark.pointer;
 
     *_context.pointer = c;
 
@@ -1258,11 +1258,11 @@ void Lex::set_context(const LexContext & context)
     _context = context;
 }
 
-void Lex::syntax_error(Q3CString s)
+void Lex::syntax_error(WrapperStr s)
 {
-    UmlCom::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-                  + Q3CString(_filename.toAscii().constData()) + "</i> line " +
-                  Q3CString().setNum(_context.line_number) + " <b>"
+    UmlCom::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
+                  + WrapperStr(_filename.toAscii().constData()) + "</i> line " +
+                  WrapperStr().setNum(_context.line_number) + " <b>"
                   + s + "</b></font><br>");
 
 #ifdef DEBUG_DOUML
@@ -1271,11 +1271,11 @@ void Lex::syntax_error(Q3CString s)
 #endif
 }
 
-void Lex::warn(Q3CString s)
+void Lex::warn(WrapperStr s)
 {
-    UmlCom::trace(Q3CString("<font face=helvetica>in <i> ")
-                  + Q3CString(_filename.toAscii().constData()) + "</i> line " +
-                  Q3CString().setNum(_context.line_number) + " <b>"
+    UmlCom::trace(WrapperStr("<font face=helvetica>in <i> ")
+                  + WrapperStr(_filename.toAscii().constData()) + "</i> line " +
+                  WrapperStr().setNum(_context.line_number) + " <b>"
                   + s + "</b></font><br>");
 
 #ifdef DEBUG_DOUML
@@ -1286,9 +1286,9 @@ void Lex::warn(Q3CString s)
 
 void Lex::premature_eof()
 {
-    UmlCom::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-                  + Q3CString(_filename.toAscii().constData()) + "</i> line " +
-                  Q3CString().setNum(_context.line_number) +
+    UmlCom::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
+                  + WrapperStr(_filename.toAscii().constData()) + "</i> line " +
+                  WrapperStr().setNum(_context.line_number) +
                   " <b>premature eof</b></font><br>");
 
 #ifdef DEBUG_DOUML
@@ -1297,11 +1297,11 @@ void Lex::premature_eof()
 #endif
 }
 
-void Lex::error_near(Q3CString s)
+void Lex::error_near(WrapperStr s)
 {
-    UmlCom::trace(Q3CString("<font face=helvetica>syntax error in <i> ")
-                  + Q3CString(_filename.toAscii().constData()) + "</i> line " +
-                  Q3CString().setNum(_context.line_number) + " <b>near <font color =\"red\">"
+    UmlCom::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
+                  + WrapperStr(_filename.toAscii().constData()) + "</i> line " +
+                  WrapperStr().setNum(_context.line_number) + " <b>near <font color =\"red\">"
                   + quote(s) + "</font></b></font><br>");
 
 #ifdef DEBUG_DOUML
@@ -1312,9 +1312,9 @@ void Lex::error_near(Q3CString s)
 
 // allows a string to be written as it is by an html writer
 
-Q3CString Lex::quote(Q3CString s)
+WrapperStr Lex::quote(WrapperStr s)
 {
-    Q3CString result;
+    WrapperStr result;
     const char * p = s;
 
     if (p == 0)
@@ -1357,14 +1357,14 @@ static bool identifierp(char c)
             (c == '_'));
 }
 
-Q3CString Lex::normalize(const Q3CString & s)
+WrapperStr Lex::normalize(const WrapperStr & s)
 {
     int index = s.find('<');
 
     if (index == -1)
         return s;
 
-    Q3CString r;
+    WrapperStr r;
     const char * p = s;
 
     index = 0;
@@ -1377,14 +1377,14 @@ Q3CString Lex::normalize(const Q3CString & s)
             return r;
 
         case '<':
-            if (!r.isEmpty() && (r.at(r.length() - 1) == ' '))
+            if (!r.isEmpty() && (r.at(r.length() - 1) == " "))
                 r.truncate(r.length() - 1);
 
             r += '<';
             break;
 
         case '>':
-            if (!r.isEmpty() && (r.at(r.length() - 1) == '>'))
+            if (!r.isEmpty() && (r.at(r.length() - 1) == ">"))
                 r += " >";
             else
                 r += '>';
@@ -1411,7 +1411,7 @@ Q3CString Lex::normalize(const Q3CString & s)
                 p += 2;
             }
             else {
-                if (!r.isEmpty() && (r.at(r.length() - 1) == ' '))
+                if (!r.isEmpty() && (r.at(r.length() - 1) == " "))
                     r.truncate(r.length() - 1);
             }
 
@@ -1438,9 +1438,9 @@ Q3CString Lex::normalize(const Q3CString & s)
 
         case '"':
             if (!r.isEmpty() &&
-                (r.at(r.length() - 1) == '"') &&
+                (r.at(r.length() - 1) == "\"") &&
                 (p[-2] != '"'))
-                r += ' ';
+                r += " ";
 
             do {
                 if (*++p == '\\')
@@ -1451,7 +1451,7 @@ Q3CString Lex::normalize(const Q3CString & s)
             break;
 
         case '\'':
-            if (!r.isEmpty() && (r.at(r.length() - 1) == ' '))
+            if (!r.isEmpty() && (r.at(r.length() - 1) == " "))
                 r.truncate(r.length() - 1);
 
             do {
@@ -1472,9 +1472,17 @@ Q3CString Lex::normalize(const Q3CString & s)
 
         default:
             if (c > ' ') {
-                if (::identifierp(c)) {
-                    if (!r.isEmpty() && ::identifierp(r.at(r.length() - 1)))
-                        r += ' ';
+                if (::identifierp(c))
+                {
+                    bool notEmpty = !r.isEmpty();
+                    if(notEmpty)
+                    {
+                        int length = r.length() - 1;
+                        QString temp =r.at(length);
+                        bool ident = ::identifierp(temp.toAscii().at(0));
+                        if (ident)
+                            r += " ";
+                    }
 
                     r += c;
 
@@ -1490,11 +1498,11 @@ Q3CString Lex::normalize(const Q3CString & s)
     return r;
 }
 
-Q3CString Lex::read_list_elt()
+WrapperStr Lex::read_list_elt()
 {
     const char * p = _context.pointer;
     int level = 1;
-    Q3CString s;
+    WrapperStr s;
 
     while (!((s = read_word(TRUE)).isEmpty())) {
         int c = *s;
@@ -1525,7 +1533,7 @@ Q3CString Lex::read_list_elt()
 
 // to compare strings bypassing \r
 
-bool neq(const Q3CString & s1, const Q3CString & s2)
+bool neq(const WrapperStr & s1, const WrapperStr & s2)
 {
     const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
     const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
@@ -1552,7 +1560,7 @@ inline bool is_white_space(char c)
     return ((c == ' ') || ((c >= '\t') && (c <= '\r')));
 }
 
-bool nequal(const Q3CString & s1, const Q3CString & s2)
+bool nequal(const WrapperStr & s1, const WrapperStr & s2)
 {
     // don't take into account first and last white spaces (like a stripWhiteSpace())
     const char * p1 = (s1.isNull()) ? "" : (const char *) s1;

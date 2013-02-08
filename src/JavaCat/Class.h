@@ -34,7 +34,7 @@
 #include "aRelationKind.h"
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include <Q3PtrList>
 
@@ -49,7 +49,7 @@ class QColorGroup;
 class Class : public BrowserNode, public ClassContainer
 {
 protected:
-    Q3CString filename;
+    WrapperStr filename;
     UmlClass * uml;
     Q3Dict<UmlClass> user_defined;
     char stereotype;	// 'c' : class, 'i' : interface, '@' @interface, 'e' : enum
@@ -64,7 +64,7 @@ protected:
     static UmlArtifact * CurrentArtifact;
 #else
     bool description_updatedp;
-    Q3CString description;
+    WrapperStr description;
 
     static Q3PtrList<Class> Historic;
 #endif
@@ -85,14 +85,14 @@ protected:
 #endif
                           );
     bool add_inherit(aRelationKind k, UmlTypeSpec & typespec,
-                     Q3ValueList<UmlTypeSpec> & actuals, Q3CString & str_actual
+                     Q3ValueList<UmlTypeSpec> & actuals, WrapperStr & str_actual
 #ifdef ROUNDTRIP
                      , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
                     );
     void inherit(Class * cl);
-    void inherit(UmlClass * uml_cl, Q3CString header = 0);
-    bool manage_member(Q3CString s, Q3CString & path
+    void inherit(UmlClass * uml_cl, WrapperStr header = 0);
+    bool manage_member(WrapperStr s, WrapperStr & path
 #ifdef ROUNDTRIP
                        , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
@@ -118,11 +118,11 @@ public:
     Class(BrowserNode * parent, UmlClass * ucl);
 #endif
 
-    virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
+    virtual void compute_type(WrapperStr type, UmlTypeSpec & typespec,
                               const Q3ValueList<FormalParameterList> & tmplts,
                               Class ** need_object = 0);
-    virtual Class * define(const Q3CString & name, char st);
-    virtual void declare(const Q3CString &, Class *);
+    virtual Class * define(const WrapperStr & name, char st);
+    virtual void declare(const WrapperStr &, Class *);
     virtual bool isa_package() const;
     UmlClass * get_uml();
     bool reversed() const {
@@ -149,7 +149,7 @@ public:
         return from_lib;
     };
 #else
-    const Q3CString & get_description() const {
+    const WrapperStr & get_description() const {
         return description;
     };
 
@@ -169,9 +169,9 @@ public:
     static void restore(QDataStream & dt, char c, BrowserNode * p);
 
     // note tmplts equals its input value on exit
-    static bool reverse(ClassContainer * container, Q3CString stereotype,
-                        Q3CString annotation, bool abstractp, bool finalp,
-                        aVisibility visibility,	Q3CString & f,
+    static bool reverse(ClassContainer * container, WrapperStr stereotype,
+                        WrapperStr annotation, bool abstractp, bool finalp,
+                        aVisibility visibility,	WrapperStr & f,
                         Q3ValueList<FormalParameterList> tmplts
 #ifdef ROUNDTRIP
                         , bool rndtrp, Q3PtrList<UmlItem> & expectedorder

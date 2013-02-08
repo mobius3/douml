@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseActivityParameter.h"
-#include <q3cstring.h>
+
 
 class FileIn;
 class Token;
@@ -12,7 +12,7 @@ class UmlActivityParameter : public UmlBaseActivityParameter
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlActivityParameter(void * id, const Q3CString & s) : UmlBaseActivityParameter(id, s) {
+    UmlActivityParameter(void * id, const WrapperStr & s) : UmlBaseActivityParameter(id, s) {
     }
 
     void readParameter(FileIn & in, Token & token);
@@ -21,7 +21,7 @@ public:
 
 
 private:
-    void setEffect(Q3CString s, FileIn & in);
+    void setEffect(WrapperStr s, FileIn & in);
 
 };
 

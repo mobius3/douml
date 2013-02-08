@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseNode.h"
-#include <q3cstring.h>
+
 
 class FileOut;
 
@@ -13,7 +13,7 @@ class FileOut;
 class UmlNode : public UmlBaseNode
 {
 public:
-    UmlNode(void * id, const Q3CString & n) : UmlBaseNode(id, n) {};
+    UmlNode(void * id, const WrapperStr & n) : UmlBaseNode(id, n) {};
 
     virtual void write(FileOut & out);
 

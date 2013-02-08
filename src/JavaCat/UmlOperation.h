@@ -31,7 +31,7 @@
 #include "UmlBaseOperation.h"
 #include "UmlClass.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include <Q3PtrList>
 
@@ -42,22 +42,22 @@ class UmlOperation : public UmlBaseOperation
 private:
     static bool read_param(Class * container, unsigned rank,
                            const Q3ValueList<FormalParameterList> & tmplts,
-                           UmlParameter & param, Q3CString & decl, bool bypass);
+                           UmlParameter & param, WrapperStr & decl, bool bypass);
 
 public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const WrapperStr & n)
         : UmlBaseOperation(id, n) {};
 
-    static bool new_one(Class * container, const Q3CString & name,
+    static bool new_one(Class * container, const WrapperStr & name,
                         const Q3ValueList<FormalParameterList> & tmplts,
-                        const Q3CString & oper_templ,
-                        UmlTypeSpec & type, Q3CString str_actuals,
-                        UmlClass * first_actual_class, Q3CString type_def,
+                        const WrapperStr & oper_templ,
+                        UmlTypeSpec & type, WrapperStr str_actuals,
+                        UmlClass * first_actual_class, WrapperStr type_def,
                         aVisibility visibility,
                         bool finalp, bool abstractp, bool staticp,
                         bool nativep, bool strictfp, bool synchronizedp,
-                        const Q3CString & array,	Q3CString comment,
-                        Q3CString description, Q3CString annotation
+                        const WrapperStr & array,	WrapperStr comment,
+                        WrapperStr description, WrapperStr annotation
 #ifdef ROUNDTRIP
                         , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
@@ -68,8 +68,8 @@ public:
 
 #ifdef ROUNDTRIP
 private:
-    static UmlOperation * already_exist_from_id(Class * container, Q3CString & body);
-    static UmlOperation * already_exist(Class * container, const Q3CString & name,
+    static UmlOperation * already_exist_from_id(Class * container, WrapperStr & body);
+    static UmlOperation * already_exist(Class * container, const WrapperStr & name,
                                         Q3ValueList<UmlParameter> & params);
 #endif
 };

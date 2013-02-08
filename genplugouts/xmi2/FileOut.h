@@ -4,7 +4,7 @@
 
 #include <q3textstream.h>
 #include <qmap.h>
-#include <q3cstring.h>
+
 
 class QFile;
 class UmlItem;
@@ -30,13 +30,13 @@ public:
     void idref(UmlItem * x);
 
     //for C++/Java types
-    void idref(Q3CString s, UmlItem * x);
+    void idref(WrapperStr s, UmlItem * x);
 
     void idref_prefix(UmlItem * x, const char * pfix);
 
     void idref_prefix(UmlItem * x, const char * pfix, int n);
 
-    void idref_datatype(const Q3CString & t);
+    void idref_datatype(const WrapperStr & t);
 
     //output <space><pfix1>="BOUML_<pfix2><x>"
     void ref(UmlItem * x, const char * pfix1, const char * pfix2 = "");
@@ -49,7 +49,7 @@ public:
 
     void define_datatypes(bool uml_20, bool primitive_type, bool gen_extension);
 
-    void quote(const Q3CString & s);
+    void quote(const WrapperStr & s);
 
     void quote(const char * s);
 
@@ -61,9 +61,9 @@ protected:
 
     int _indent;
 
-    QMap<Q3CString, int> _datatypes;
+    QMap<WrapperStr, int> _datatypes;
 
-    QMap<Q3CString, int> _modifiedtypes;
+    QMap<WrapperStr, int> _modifiedtypes;
 
 };
 

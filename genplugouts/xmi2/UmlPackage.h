@@ -3,7 +3,7 @@
 
 
 #include "UmlBasePackage.h"
-#include <q3cstring.h>
+
 #include <q3ptrlist.h>
 
 class FileOut;
@@ -16,7 +16,7 @@ class UmlUseCaseDiagram;
 class UmlPackage : public UmlBasePackage
 {
 public:
-    UmlPackage(void * id, const Q3CString & n) : UmlBasePackage(id, n) {};
+    UmlPackage(void * id, const WrapperStr & n) : UmlBasePackage(id, n) {};
 
     virtual void xmi(int argc, char ** argv);
 

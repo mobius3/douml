@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseExpansionNode.h"
-#include <q3cstring.h>
+
 
 class FileIn;
 class Token;
@@ -13,7 +13,7 @@ class UmlExpansionNode : public UmlBaseExpansionNode
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlExpansionNode(void * id, const Q3CString & s) : UmlBaseExpansionNode(id, s) {
+    UmlExpansionNode(void * id, const WrapperStr & s) : UmlBaseExpansionNode(id, s) {
     }
 
     static void init();

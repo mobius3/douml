@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 // *************************************************************************
 //
@@ -38,21 +38,21 @@ class QTextStream;
 class UmlAttribute : public UmlBaseAttribute
 {
 public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const WrapperStr & n)
         :  UmlBaseAttribute(id, n) {};
 
-    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-                          Q3CString indent);
+    virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                          WrapperStr indent);
     virtual void generate_enum_pattern_item(QTextStream & f, int & current_value,
-                                            const Q3CString & class_name,
-                                            Q3CString indent);
-    virtual void generate_enum_pattern_case(QTextStream & f, Q3CString indent);
-    virtual void generate_enum_item(QTextStream & f, Q3CString indent, BooL & first);
-    virtual void generate_enum_member(QTextStream & f, Q3CString indent);
+                                            const WrapperStr & class_name,
+                                            WrapperStr indent);
+    virtual void generate_enum_pattern_case(QTextStream & f, WrapperStr indent);
+    virtual void generate_enum_item(QTextStream & f, WrapperStr indent, BooL & first);
+    virtual void generate_enum_member(QTextStream & f, WrapperStr indent);
 
 private:
-    void generate(QTextStream & f, const Q3CString & cl_stereotype,
-                  Q3CString indent, bool enumitem);
+    void generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                  WrapperStr indent, bool enumitem);
 
 };
 

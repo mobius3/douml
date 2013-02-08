@@ -1023,7 +1023,7 @@ void BrowserState::save(QTextStream & st, bool ref, QString & warning)
         st << "state_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "state " << get_ident() << ' ';
+        st << "state " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

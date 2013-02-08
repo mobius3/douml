@@ -2414,7 +2414,7 @@ void BrowserPackage::save_all(bool modified_only)
                 if (pack->owner != -1) {
                     // owner specified, the save is done => owner is current user !
                     nl_indent(st);
-                    st << "owner " << pack->owner << ' ';
+                    st << "owner " << pack->owner << " ";
 
                     if (pack->owner > 1)
                         save_string(user_name(), st);

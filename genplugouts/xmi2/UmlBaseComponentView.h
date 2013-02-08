@@ -4,7 +4,7 @@
 
 #include "UmlView.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 
 class UmlComponentView;
 class UmlPackage;
@@ -26,7 +26,7 @@ public:
 
 protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseComponentView(void * id, const Q3CString & n) : UmlView(id, n) {};
+    UmlBaseComponentView(void * id, const WrapperStr & n) : UmlView(id, n) {};
 
 };
 

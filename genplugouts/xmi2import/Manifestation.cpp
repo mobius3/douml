@@ -4,14 +4,14 @@
 #include "FileIn.h"
 #include "Token.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 
 void Manifestation::import(FileIn & in, Token & token, UmlArtifact * artifact)
 {
-    Q3CString s;
-    Q3CString name;
-    Q3CString utilized;
+    WrapperStr s;
+    WrapperStr name;
+    WrapperStr utilized;
 
     name = token.valueOf("name");
 
@@ -21,7 +21,7 @@ void Manifestation::import(FileIn & in, Token & token, UmlArtifact * artifact)
         utilized = s;
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {

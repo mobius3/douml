@@ -49,7 +49,7 @@
 #include <Q3ValueList>
 #include <QTextStream>
 #include <QKeyEvent>
-#include "misc/mystr.h"
+
 #endif
 
 #include "DiagramView.h"
@@ -2611,9 +2611,9 @@ void DiagramView::renumber(int ident)
 void DiagramView::save_session(QTextStream & st)
 {
     st << (int)(((UmlCanvas *) canvas())->zoom() * 100)
-       << ' ' << (int) window()->browser_diagram()->get_format() // useless
-       << ' ' << verticalScrollBar()->value()
-       << ' ' << horizontalScrollBar()->value() << '\n';
+       << " " << (int) window()->browser_diagram()->get_format() // useless
+       << " " << verticalScrollBar()->value()
+       << " " << horizontalScrollBar()->value() << '\n';
 }
 
 void DiagramView::read_session(char *& st)

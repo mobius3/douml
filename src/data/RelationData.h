@@ -33,7 +33,7 @@
 #include "AType.h"
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 //Added by qt3to4:
 #include <Q3PtrList>
 

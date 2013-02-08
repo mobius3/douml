@@ -43,7 +43,7 @@
 #include <qsplitter.h>
 #include <qspinbox.h>
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 #include "GenerationSettingsDialog.h"
 #include "BrowserView.h"

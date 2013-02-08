@@ -5,7 +5,7 @@
 #include "UmlOperation.h"
 #include "UmlStateDiagram.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 UmlState * UmlBaseState::create(UmlItem * parent, const char * s)
 {

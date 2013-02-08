@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlAttribute.h"
@@ -37,14 +37,14 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlAttribute::generate(QTextStream & f, const Q3CString & cl_stereotype,
-                            Q3CString indent)
+void UmlAttribute::generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                            WrapperStr indent)
 {
     generate(f, cl_stereotype, indent, FALSE);
 }
 
-void UmlAttribute::generate(QTextStream & f, const Q3CString & cl_stereotype,
-                            Q3CString indent, bool enumitem)
+void UmlAttribute::generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                            WrapperStr indent, bool enumitem)
 {
     if (!javaDecl().isEmpty()) {
         const char * p = javaDecl();
@@ -127,13 +127,13 @@ void UmlAttribute::generate(QTextStream & f, const Q3CString & cl_stereotype,
             else if (!strncmp(p, "${multiplicity}", 15)) {
                 p += 15;
 
-                Q3CString m = multiplicity();
+                WrapperStr m = multiplicity();
 
                 if (*m != '[')
                     f << "[]";
                 else {
                     for (unsigned index = 0; index != m.length(); index += 1) {
-                        switch (m.at(index)) {
+                        switch (m.at(index).toAscii().at(0)) {
                         case '[':
                             f << '[';
                             break;
@@ -182,8 +182,8 @@ void UmlAttribute::generate(QTextStream & f, const Q3CString & cl_stereotype,
 }
 
 void UmlAttribute::generate_enum_pattern_item(QTextStream & f, int & current_value,
-        const Q3CString & class_name,
-        Q3CString indent)
+        const WrapperStr & class_name,
+        WrapperStr indent)
 {
     if (!javaDecl().isEmpty()) {
         const char * p = javaDecl();
@@ -225,7 +225,7 @@ void UmlAttribute::generate_enum_pattern_item(QTextStream & f, int & current_val
                 p += 8;
 
                 if (!defaultValue().isEmpty()) {
-                    Q3CString d = defaultValue().simplifyWhiteSpace();
+                    WrapperStr d = defaultValue().simplifyWhiteSpace();
 
                     if (*((const char *) d) == '=')
                         d = d.mid(1).simplifyWhiteSpace();
@@ -233,10 +233,10 @@ void UmlAttribute::generate_enum_pattern_item(QTextStream & f, int & current_val
                     bool ok;
                     int v;
 
-                    v = d.toInt(&ok);
+                    v = d.operator QString().toInt(&ok);
 
                     if (! ok) {
-                        UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b><i>") +
+                        UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b><i>") +
                                       defaultValue() + "</i> wrong value for <i> "
                                       + name() + "</i></b></font><br>");
                         incr_error();
@@ -272,7 +272,7 @@ void UmlAttribute::generate_enum_pattern_item(QTextStream & f, int & current_val
 }
 
 void UmlAttribute::generate_enum_pattern_case(QTextStream & f,
-        Q3CString indent)
+        WrapperStr indent)
 {
     if (!javaDecl().isEmpty()) {
         const char * p = JavaSettings::enumPatternItemCase();
@@ -321,7 +321,7 @@ void UmlAttribute::generate_enum_pattern_case(QTextStream & f,
 }
 
 void UmlAttribute::generate_enum_item(QTextStream & f,
-                                      Q3CString indent,
+                                      WrapperStr indent,
                                       BooL & first)
 {
     if (stereotype() != "attribute") {
@@ -335,7 +335,7 @@ void UmlAttribute::generate_enum_item(QTextStream & f,
 }
 
 void UmlAttribute::generate_enum_member(QTextStream & f,
-                                        Q3CString indent)
+                                        WrapperStr indent)
 {
     if (stereotype() == "attribute")
         generate(f, "enum", indent, FALSE);

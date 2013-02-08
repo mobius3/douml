@@ -749,8 +749,8 @@ bool BrowserRelation::same_name(const QString & s, UmlCode t) const
 
         if (role[0] != '(')
             // role have name, compare with the role name
-            // followed by ' ' then '(' then the relation's name
-            return (s == role.left(role.find(' ')));
+            // followed by " " then '(' then the relation's name
+            return (s == role.left(role.find(" ")));
     }
 
     return FALSE;

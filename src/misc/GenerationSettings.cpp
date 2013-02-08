@@ -33,7 +33,7 @@
 #include <q3filedialog.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 #include <QTextStream>
 #include <QSettings>
 
@@ -2611,7 +2611,7 @@ static void save_includes_imports(IncludesSpec & sp, const char * filename)
 
     for (int index = 0; index != sup; index += 1, it_type++, it_incl++) {
         save_string(*it_type, st);
-        st << ' ';
+        st << " ";
         save_string(*it_incl, st);
         st << "\n\n";
     }
@@ -2791,19 +2791,19 @@ void GenerationSettings::save()
         nl_indent(st);
         st << "  ";
         save_string(b.uml, st);
-        st << ' ';
+        st << " ";
         save_string(b.cpp, st);
-        st << ' ';
+        st << " ";
         save_string(b.java, st);
-        st << ' ';
+        st << " ";
         save_string(b.idl, st);
-        st << ' ';
+        st << " ";
         save_string(b.cpp_in, st);
-        st << ' ';
+        st << " ";
         save_string(b.cpp_out, st);
-        st << ' ';
+        st << " ";
         save_string(b.cpp_inout, st);
-        st << ' ';
+        st << " ";
         save_string(b.cpp_return, st);
     }
 
@@ -2817,13 +2817,13 @@ void GenerationSettings::save()
         nl_indent(st);
         st << "  ";
         save_string(s.uml, st);
-        st << ' ';
+        st << " ";
         save_string(s.cpp, st);
-        st << ' ';
+        st << " ";
         save_string(s.java, st);
-        st << ' ';
+        st << " ";
         save_string(s.python, st);
-        st << ' ';
+        st << " ";
         save_string(s.idl, st);
     }
 
@@ -2837,15 +2837,15 @@ void GenerationSettings::save()
         nl_indent(st);
         st << "  ";
         save_string(s.uml, st);
-        st << ' ';
+        st << " ";
         save_string(s.cpp, st);
-        st << ' ';
+        st << " ";
         save_string(s.java, st);
-        st << ' ';
+        st << " ";
         save_string(s.php, st);
-        st << ' ';
+        st << " ";
         save_string(s.python, st);
-        st << ' ';
+        st << " ";
         save_string(s.idl, st);
     }
 
@@ -2853,21 +2853,21 @@ void GenerationSettings::save()
     nl_indent(st);
     st << "cpp_enum_default_type_forms ";
     save_string(cpp_enum_in, st);
-    st << ' ';
+    st << " ";
     save_string(cpp_enum_out, st);
-    st << ' ';
+    st << " ";
     save_string(cpp_enum_inout, st);
-    st << ' ';
+    st << " ";
     save_string(cpp_enum_return, st);
     st << " // in out inout return";
     nl_indent(st);
     st << "other_cpp_types_default_type_forms ";
     save_string(cpp_in, st);
-    st << ' ';
+    st << " ";
     save_string(cpp_out, st);
-    st << ' ';
+    st << " ";
     save_string(cpp_inout, st);
-    st << ' ';
+    st << " ";
     save_string(cpp_return, st);
     st << " // in out inout return";
 
@@ -2945,7 +2945,7 @@ void GenerationSettings::save()
 
     if (cpp_get_value_const) st << " value_const";
 
-    st << ' ' << stringify(cpp_get_visibility);
+    st << " " << stringify(cpp_get_visibility);
     nl_indent(st);
     st << "cpp_set ";
     save_string(cpp_set_name, st);
@@ -2956,7 +2956,7 @@ void GenerationSettings::save()
 
     if (cpp_set_param_ref) st << " param_ref";
 
-    st << ' ' << stringify(cpp_set_visibility);
+    st << " " << stringify(cpp_set_visibility);
     nl_indent(st);
     st << "cpp_default_operation_declaration ";
     save_string(cpp_oper_decl, st);
@@ -3042,7 +3042,7 @@ void GenerationSettings::save()
 
     if (java_get_final) st << " final";
 
-    st << ' ' << stringify(noncpp_get_visibility);
+    st << " " << stringify(noncpp_get_visibility);
     nl_indent(st);
     st << "java_set ";
     save_string(java_set_name, st);
@@ -3051,7 +3051,7 @@ void GenerationSettings::save()
 
     if (java_set_param_final) st << " param_final";
 
-    st << ' ' << stringify(noncpp_set_visibility);
+    st << " " << stringify(noncpp_set_visibility);
     nl_indent(st);
     st << "java_default_operation_definition ";
     save_string(java_oper_def, st);
@@ -4691,7 +4691,7 @@ void ReverseRoundtripFilter::receive_def(const char * args)
 void ReverseRoundtripFilter::save(const char * key, QTextStream & st)   //[lgfreitas] we are not using the new qtextstream yet
 {
     if (! regexp.isEmpty()) {
-        st << key << ' ';
+        st << key << " ";
         save_string(regexp, st);
 
         if (case_sensitive)

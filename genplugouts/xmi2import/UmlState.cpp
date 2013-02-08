@@ -10,7 +10,7 @@
 #include "UmlFinalState.h"
 #include "UmlTransition.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 UmlItem * UmlState::container(anItemKind kind, Token & token, FileIn & in)
 {
@@ -38,14 +38,14 @@ UmlItem * UmlState::container(anItemKind kind, Token & token, FileIn & in)
 
 void UmlState::importActivity(FileIn & in, Token & token)
 {
-    Q3CString k = token.what();
+    WrapperStr k = token.what();
     const char * kstr = k;
-    Q3CString b = token.valueOf("body");
+    WrapperStr b = token.valueOf("body");
 
     if (b.isEmpty()) {
         if (! token.closed()) {
             while (in.read(), !token.close(kstr)) {
-                Q3CString s = token.what();
+                WrapperStr s = token.what();
 
                 if (s == "body") {
                     b = in.body("body");
@@ -90,9 +90,9 @@ void UmlState::importActivity(FileIn & in, Token & token)
 
 }
 
-void UmlState::solve(int context, Q3CString idref)
+void UmlState::solve(int context, WrapperStr idref)
 {
-    QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))
@@ -102,7 +102,7 @@ void UmlState::solve(int context, Q3CString idref)
         if (context == 3)
             set_Specification((UmlOperation *) *it);
         else {
-            Q3CString b = (*it)->name() + "()";
+            WrapperStr b = (*it)->name() + "()";
 
             switch (context) {
             case 0:
@@ -145,7 +145,7 @@ void UmlState::importIt(FileIn & in, Token & token, UmlItem * where)
         bool machine = ((token.xmiType() == "uml:StateMachine") ||
                         (token.valueOf("issubmachinestate") == "true") ||
                         (token.what() == "ownedstatemachine")); // andromda emf
-        Q3CString s = token.valueOf("name");
+        WrapperStr s = token.valueOf("name");
 
         if (s.isEmpty()) {
             static unsigned n = 0;
@@ -167,11 +167,11 @@ void UmlState::importIt(FileIn & in, Token & token, UmlItem * where)
         if (token.valueOf("isactive") == "true")
             st->set_isActive(TRUE);
 
-        Q3CString ref = token.valueOf("submachine");
-        Q3CString spec = token.valueOf("specification");
+        WrapperStr ref = token.valueOf("submachine");
+        WrapperStr spec = token.valueOf("specification");
 
         if (! token.closed()) {
-            Q3CString k = token.what();
+            WrapperStr k = token.what();
             const char * kstr = k;
 
             while (in.read(), !token.close(kstr)) {
@@ -194,7 +194,7 @@ void UmlState::importIt(FileIn & in, Token & token, UmlItem * where)
             st->set_Stereotype("machine");
 
         if (! ref.isEmpty()) {
-            QMap<Q3CString, UmlItem *>::Iterator it = All.find(ref);
+            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(ref);
 
             if (it == All.end())
                 UnresolvedWithContext::add(st, ref, 4);
@@ -203,7 +203,7 @@ void UmlState::importIt(FileIn & in, Token & token, UmlItem * where)
         }
 
         if (! spec.isEmpty()) {
-            QMap<Q3CString, UmlItem *>::Iterator it = All.find(spec);
+            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(spec);
 
             if (it == All.end())
                 UnresolvedWithContext::add(st, spec, 3);

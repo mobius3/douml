@@ -30,7 +30,7 @@
 
 #include <q3asciidict.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlBaseArtifact.h"
 
@@ -53,14 +53,14 @@ private:
     void generate_text();
 
 public:
-    UmlArtifact(void * id, const Q3CString & n)
+    UmlArtifact(void * id, const WrapperStr & n)
         : UmlBaseArtifact(id, n), managed(FALSE), imports(0) {};
 
     virtual void generate();
 
-    void imported(const Q3CString & s);
-    bool is_imported(const Q3CString & s);
-    bool is_imported(Q3CString path, Q3CString class_name);
+    void imported(const WrapperStr & s);
+    bool is_imported(const WrapperStr & s);
+    bool is_imported(WrapperStr path, WrapperStr class_name);
 
     static UmlArtifact * generated_one();
     static UmlPackage * generation_package();

@@ -2,7 +2,7 @@
 #include "UmlUseCase.h"
 #include "FileOut.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 void UmlUseCase::write(FileOut & out)
 {
@@ -19,7 +19,7 @@ void UmlUseCase::write(FileOut & out)
     out.indent(+1);
     write_description_properties(out);
 
-    Q3CString eps = extensionPoints().stripWhiteSpace();
+    WrapperStr eps = extensionPoints().stripWhiteSpace();
 
     if (! eps.isEmpty()) {
         int index0 = 0;
@@ -27,7 +27,7 @@ void UmlUseCase::write(FileOut & out)
 
         for (;;) {
             int index1 = eps.find('\n', index0);
-            Q3CString ep = eps.mid(index0, index1);
+            WrapperStr ep = eps.mid(index0, index1);
 
             if (! ep.isEmpty()) {
                 out.indent();

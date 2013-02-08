@@ -7,8 +7,8 @@
 #include "UmlRelation.h"
 #include "UmlClass.h"
 //Added by qt3to4:
-#include <Q3CString>
-void Role::setMultiplicity(Q3CString v, bool upper, const char * dflt)
+#include "misc/mystr.h"
+void Role::setMultiplicity(WrapperStr v, bool upper, const char * dflt)
 {
     if (v.isEmpty())
         v = dflt;
@@ -28,7 +28,7 @@ void Role::setMultiplicity(Q3CString v, bool upper, const char * dflt)
 
 void Association::import(FileIn & in, Token & token)
 {
-    Q3CString s = token.xmiId();
+    WrapperStr s = token.xmiId();
     int index = ((roles[0].id == s)
                  ? 0
                  : ((roles[1].id == s)
@@ -67,7 +67,7 @@ void Association::import(FileIn & in, Token & token)
         roles[(UmlItem::fromEclipse()) ? 1 - index : index].aggregate = anAggregationByValue;
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
@@ -112,9 +112,9 @@ void Association::import(FileIn & in, Token & token)
     }
 }
 
-Association & Association::get(Q3CString id, Q3CString s)
+Association & Association::get(WrapperStr id, WrapperStr s)
 {
-    QMap<Q3CString, Association>::Iterator it = All.find(id);
+    QMap<WrapperStr, Association>::Iterator it = All.find(id);
 
     if (it == All.end()) {
         Association a;
@@ -131,7 +131,7 @@ Association & Association::get(Q3CString id, Q3CString s)
 
 void Association::solveThem()
 {
-    QMap<Q3CString, Association>::Iterator it;
+    QMap<WrapperStr, Association>::Iterator it;
 
     for (it = All.begin(); it != All.end(); ++it)
         (*it).solve(it.key());
@@ -139,9 +139,9 @@ void Association::solveThem()
     All.clear();
 }
 
-QMap<Q3CString, Association> Association::All;
+QMap<WrapperStr, Association> Association::All;
 
-void Association::solve(Q3CString id)
+void Association::solve(WrapperStr id)
 {
     if (roles[0].id.isEmpty() || roles[0].idref.isEmpty() ||
         roles[1].id.isEmpty() || roles[1].idref.isEmpty())
@@ -160,7 +160,7 @@ void Association::solve(Q3CString id)
 
         Role & a = roles[rank];
         Role & b = roles[1 - rank];
-        QMap<Q3CString, UmlItem *>::Iterator it;
+        QMap<WrapperStr, UmlItem *>::Iterator it;
 
         if ((it = UmlItem::All.find(a.idref)) == UmlItem::All.end()) {
             if (!FileIn::isBypassedId(a.idref))
@@ -196,7 +196,7 @@ void Association::solve(Q3CString id)
 
                 UmlRelation * ra = UmlRelation::create(k, clb, cla);
                 UmlRelation * rb = ra->side(FALSE);
-                Q3CString s;
+                WrapperStr s;
 
                 if (!name.isEmpty()) {
                     int index = 0;

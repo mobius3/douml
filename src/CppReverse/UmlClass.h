@@ -31,7 +31,7 @@
 #include "UmlBaseClass.h"
 #include "UmlFormalParameter.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include <Q3PtrList>
 
@@ -53,7 +53,7 @@ private:
 #endif
 
 public:
-    UmlClass(void * id, const Q3CString & n);
+    UmlClass(void * id, const WrapperStr & n);
 
     bool manage_inherit(ClassContainer * pack,
                         const Q3ValueList<FormalParameterList> & tmplt
@@ -74,7 +74,7 @@ public:
 
     void set_under_construction(bool y, bool rec = FALSE);
     bool inside_its_definition();
-    bool is_itself(Q3CString t);
+    bool is_itself(WrapperStr t);
 
     static void clear_usings() {
         Usings.clear();
@@ -91,7 +91,7 @@ public:
     static void restore_using_scope();
 
 #ifdef REVERSE
-    void need_artifact(const Q3CString & nmsp);
+    void need_artifact(const WrapperStr & nmsp);
     virtual bool need_source();
 
 # ifdef ROUNDTRIP
@@ -109,15 +109,15 @@ public:
     Class * get_class() const {
         return the_class;
     }
-    UmlItem * search_for_att_rel(const Q3CString & name);
-    UmlExtraClassMember * search_for_extra(const Q3CString & name, const Q3CString & decl);
+    UmlItem * search_for_att_rel(const WrapperStr & name);
+    UmlExtraClassMember * search_for_extra(const WrapperStr & name, const WrapperStr & decl);
     UmlRelation * search_for_inherit(UmlClass * mother);
     void reorder(Q3PtrList<UmlItem> & expected_order);
 # endif
 #endif
 
 private:
-    UmlClass * auxilarily_typedef(const Q3CString & base
+    UmlClass * auxilarily_typedef(const WrapperStr & base
 #ifdef REVERSE
                                   , bool libp
 # ifdef ROUNDTRIP

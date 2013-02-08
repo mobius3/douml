@@ -4,7 +4,7 @@
 
 #include "UmlBaseFlow.h"
 #include "UmlActivityItem.h"
-#include <q3cstring.h>
+
 #include "ControlOrData.h"
 
 class FileOut;
@@ -12,7 +12,7 @@ class FileOut;
 class UmlFlow : public UmlBaseFlow, public UmlActivityItem
 {
 public:
-    UmlFlow(void * id, const Q3CString & n) : UmlBaseFlow(id, n), _control_or_data(Unset) {
+    UmlFlow(void * id, const WrapperStr & n) : UmlBaseFlow(id, n), _control_or_data(Unset) {
     }
 
     //write the definition if it is not empty for the target language

@@ -578,7 +578,7 @@ void BrowserComponentDiagram::save(QTextStream & st, bool ref, QString & warning
         st << "componentdiagram_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "componentdiagram " << get_ident() << ' ';
+        st << "componentdiagram " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

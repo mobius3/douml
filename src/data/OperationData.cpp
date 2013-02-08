@@ -33,7 +33,7 @@
 #include <qfile.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 
 #include "OperationData.h"
 #include "ClassData.h"
@@ -1695,7 +1695,7 @@ void OperationData::update_cpp_set_of(WrapperStr & decl, WrapperStr & def,
                         int index2 = index;
 
                         while (index2 != 0) {
-                            char c = d[index2 - 1];
+                            char c = d[index2 - 1].toAscii();
 
                             if ((c != ' ') && (c != '\t'))
                                 break;

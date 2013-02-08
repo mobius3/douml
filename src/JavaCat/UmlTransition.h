@@ -4,12 +4,12 @@
 
 #include "UmlBaseTransition.h"
 #include "UmlStateItem.h"
-#include <q3cstring.h>
+#include "misc/mystr.h"
 
 class UmlTransition : public UmlBaseTransition, public UmlStateItem
 {
 public:
-    UmlTransition(void * id, const Q3CString & n) : UmlBaseTransition(id, n) {
+    UmlTransition(void * id, const WrapperStr & n) : UmlBaseTransition(id, n) {
     }
 
 };

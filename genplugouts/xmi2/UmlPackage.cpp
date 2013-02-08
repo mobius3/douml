@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <qfile.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlCom.h"
 #include "Dialog.h"
@@ -24,18 +24,18 @@ void UmlPackage::xmi(int argc, char ** argv)
     // the project
 
     bool noarg = (argc == 0);
-    Q3CString path;
-    Q3CString encoding;
-    Q3CString nomodel;
-    Q3CString genviews;
-    Q3CString uml20;
-    Q3CString pkprefix;
-    Q3CString visprefix;
-    Q3CString primitivetype;
-    Q3CString genextension;
-    Q3CString geneclipse;
-    Q3CString commentexporter;
-    Q3CString linefeed;
+    WrapperStr path;
+    WrapperStr encoding;
+    WrapperStr nomodel;
+    WrapperStr genviews;
+    WrapperStr uml20;
+    WrapperStr pkprefix;
+    WrapperStr visprefix;
+    WrapperStr primitivetype;
+    WrapperStr genextension;
+    WrapperStr geneclipse;
+    WrapperStr commentexporter;
+    WrapperStr linefeed;
 
     bool comment_exporter = FALSE;
     bool no_model = FALSE;
@@ -257,8 +257,8 @@ void UmlPackage::write(FileOut & out)
     out.quote((const char *)name()); //[jasa] ambiguous call
     out << '"';
 
-    Q3CString mcr;
-    Q3CString mmr;
+    WrapperStr mcr;
+    WrapperStr mmr;
 
     if (is_profile) {
         propertyValue("metaclassreference", mcr);

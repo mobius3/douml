@@ -3,7 +3,7 @@
 
 
 #include "UmlTransition.h"
-#include <q3cstring.h>
+
 #include "UmlItem.h"
 #include "UmlStateItem.h"
 #include <q3ptrlist.h>
@@ -15,7 +15,7 @@ class UmlPseudoState : public UmlStateItem, public UmlItem
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlPseudoState(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlPseudoState(void * id, const WrapperStr & s) : UmlItem(id, s) {
     }
 
     //goes among tree to memorize incoming transitions

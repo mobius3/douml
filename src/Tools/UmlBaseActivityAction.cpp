@@ -3,7 +3,7 @@
 #include "UmlBaseActivityAction.h"
 #include "UmlDiagram.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 const WrapperStr & UmlBaseActivityAction::preCondition()
 {

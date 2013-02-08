@@ -6,7 +6,7 @@
 #include "UmlOperation.h"
 #include "UmlActivityDiagram.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 UmlActivity * UmlBaseActivity::create(UmlClassView * parent, const char * s)
 {

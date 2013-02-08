@@ -4,7 +4,7 @@
 #include "Token.h"
 #include "UmlItem.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 void Signal::init()
 {
@@ -22,21 +22,21 @@ void Signal::importIt(FileIn & in, Token & token, UmlItem *)
         in.finish(token.what());
 }
 
-Q3CString Signal::get(Q3CString idref)
+WrapperStr Signal::get(WrapperStr idref)
 {
-    QMap<Q3CString, Q3CString>::Iterator iter = All.find(idref);
-    static Q3CString null_str;
+    QMap<QString, WrapperStr>::Iterator iter = All.find(idref);
+    static WrapperStr null_str;
 
     return (iter == All.end()) ? null_str : *iter;
 }
 
-void Signal::add(FileIn & in, Token & token, Q3CString & name, Q3CString & idref)
+void Signal::add(FileIn & in, Token & token, WrapperStr & name, WrapperStr & idref)
 {
     // token is <signal ...>
-    Q3CString t = token.xmiIdref();
+    WrapperStr t = token.xmiIdref();
 
     if (! t.isEmpty()) {
-        QMap<Q3CString, Q3CString>::Iterator iter = All.find(t);
+        QMap<QString, WrapperStr>::Iterator iter = All.find(t);
 
         if (iter == All.end()) {
             idref = t;
@@ -58,5 +58,5 @@ void Signal::add(FileIn & in, Token & token, Q3CString & name, Q3CString & idref
 
 }
 
-QMap<Q3CString, Q3CString> Signal::All;
+QMap<QString, WrapperStr> Signal::All;
 

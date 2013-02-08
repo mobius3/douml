@@ -3,7 +3,7 @@
 
 #include <q3socketdevice.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlCom.h"
 #include "UmlItem.h"
@@ -692,7 +692,7 @@ void UmlCom::read_item_list(Q3PtrVector<UmlItem> & v)
         v.insert(index, UmlBaseItem::read_());
 }
 
-void UmlCom::fatal_error(const Q3CString &
+void UmlCom::fatal_error(const WrapperStr &
 #ifdef DEBUG_BOUML
                          msg
 #endif

@@ -2,7 +2,7 @@
 #include "UmlTransition.h"
 #include "FileOut.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 void UmlTransition::memo_incoming_trans()
 {
@@ -46,9 +46,9 @@ void UmlTransition::write_it(FileOut & out)
     out.indent(+1);
     write_description_properties(out);
 
-    Q3CString trig;
-    Q3CString grd;
-    Q3CString effect;
+    WrapperStr trig;
+    WrapperStr grd;
+    WrapperStr effect;
 
     switch (_lang) {
     case Uml:

@@ -7,7 +7,7 @@
 #include "UmlTypeSpec.h"
 #include <q3valuelist.h>
 #include <q3ptrvector.h>
-#include <q3cstring.h>
+
 #include <q3dict.h>
 
 #include "UmlFormalParameter.h"
@@ -232,11 +232,11 @@ public:
     //exist, else 0/null. In case the package is specified (not 0/null),
     //the returned class will be defined in a sub-level of the package.
 
-    static UmlClass * get(const Q3CString & n, const UmlPackage * p);
+    static UmlClass * get(const WrapperStr & n, const UmlPackage * p);
 
     // Return the class supporting the stereotype corresponding to
     // the first parameter being 'profile_name:stereotype_name', or 0/null
-    static UmlClass * findStereotype(Q3CString s, bool caseSensitive);
+    static UmlClass * findStereotype(WrapperStr s, bool caseSensitive);
 
     // to unload the object to free memory, it will be reloaded automatically
     // if needed. Recursively done for the sub items if 'rec' is TRUE.
@@ -249,7 +249,7 @@ public:
     // to set the name
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    virtual bool set_Name(const Q3CString & s);
+    virtual bool set_Name(const WrapperStr & s);
 
 
 private:
@@ -302,7 +302,7 @@ private:
 
 protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseClass(void * id, const Q3CString & n);
+    UmlBaseClass(void * id, const WrapperStr & n);
 
     //internal, do NOT use it
 

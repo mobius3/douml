@@ -6,7 +6,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 UmlAttribute * UmlBaseAttribute::create(UmlClass * parent, const char * s)
 {
     return (UmlAttribute *) parent->create_(anAttribute, s);

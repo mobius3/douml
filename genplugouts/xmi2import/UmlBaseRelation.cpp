@@ -7,7 +7,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 UmlRelation * UmlBaseRelation::create(aRelationKind kind, UmlClass * start, UmlClass * end)
 {
     UmlCom::send_cmd(start->_identifier, createCmd, aRelation,
@@ -139,7 +139,7 @@ bool UmlBaseRelation::set_isUnique(bool v)
         return FALSE;
 }
 
-const Q3CString & UmlBaseRelation::defaultValue()
+const WrapperStr & UmlBaseRelation::defaultValue()
 {
     read_if_needed_();
 
@@ -151,7 +151,7 @@ bool UmlBaseRelation::set_DefaultValue(const char * s)
     return set_it_(_default_value, s, setDefaultValueCmd);
 }
 
-bool UmlBaseRelation::set_Stereotype(const Q3CString & s)
+bool UmlBaseRelation::set_Stereotype(const WrapperStr & s)
 {
     if (UmlBaseItem::set_Stereotype(s)) {
         UmlBaseRelation * other = (UmlBaseRelation *) UmlBaseItem::read_();
@@ -193,7 +193,7 @@ bool UmlBaseRelation::set_Association(const UmlTypeSpec & t)
         return FALSE;
 }
 
-const Q3CString & UmlBaseRelation::roleName()
+const WrapperStr & UmlBaseRelation::roleName()
 {
     read_if_needed_();
 
@@ -205,7 +205,7 @@ bool UmlBaseRelation::set_RoleName(const char * s)
     return set_it_(_role_name, s, setRoleNameCmd);
 }
 
-const Q3CString & UmlBaseRelation::multiplicity()
+const WrapperStr & UmlBaseRelation::multiplicity()
 {
     read_if_needed_();
 
@@ -337,7 +337,7 @@ bool UmlBaseRelation::set_isIdlTruncatableInheritance(bool y)
         return FALSE;
 }
 
-Q3CString UmlBaseRelation::idlCase()
+WrapperStr UmlBaseRelation::idlCase()
 {
     read_if_needed_();
 

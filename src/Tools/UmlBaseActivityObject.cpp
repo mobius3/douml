@@ -5,7 +5,7 @@
 #include "UmlItem.h"
 #include "UmlActivityDiagram.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 UmlActivityObject * UmlBaseActivityObject::create(UmlItem * parent, const char * s)
 {

@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseSequenceDiagram.h"
-#include <q3cstring.h>
+
 
 class FileOut;
 
@@ -15,7 +15,7 @@ class FileOut;
 class UmlSequenceDiagram : public UmlBaseSequenceDiagram
 {
 public:
-    UmlSequenceDiagram(void * id, const Q3CString & n) : UmlBaseSequenceDiagram(id, n) {};
+    UmlSequenceDiagram(void * id, const WrapperStr & n) : UmlBaseSequenceDiagram(id, n) {};
 
     virtual void write(FileOut & out);
 

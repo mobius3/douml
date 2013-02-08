@@ -2,7 +2,7 @@
 #define _MANIFESTATION_H
 
 
-#include <q3cstring.h>
+
 #include <q3valuelist.h>
 
 class UmlArtifact;
@@ -15,7 +15,7 @@ public:
     //for QValueList
     Manifestation() {}
 
-    Manifestation(Q3CString s, UmlArtifact * art, Q3CString client) : name(s), artifact(art), utilized(client) {}
+    Manifestation(WrapperStr s, UmlArtifact * art, WrapperStr client) : name(s), artifact(art), utilized(client) {}
 
     static void import(FileIn & in, Token & token, UmlArtifact * artifact);
 
@@ -23,11 +23,11 @@ public:
 
 
 protected:
-    Q3CString name;
+    WrapperStr name;
 
     UmlArtifact * artifact;
 
-    Q3CString utilized;
+    WrapperStr utilized;
 
     static Q3ValueList<Manifestation> All;
 

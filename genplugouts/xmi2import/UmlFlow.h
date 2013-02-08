@@ -4,7 +4,7 @@
 
 #include "UmlBaseFlow.h"
 #include "UmlActivityItem.h"
-#include <q3cstring.h>
+
 #include <q3valuelist.h>
 
 class FileIn;
@@ -14,7 +14,7 @@ class UmlItem;
 class UmlFlow : public UmlBaseFlow, public UmlActivityItem
 {
 public:
-    UmlFlow(void * id, const Q3CString & n) : UmlBaseFlow(id, n) {
+    UmlFlow(void * id, const WrapperStr & n) : UmlBaseFlow(id, n) {
     }
 
     static void init();
@@ -25,23 +25,23 @@ public:
     static void importIt(FileIn & in, Token & token, UmlItem * where);
 
     struct Flow {
-        Q3CString id;
+        WrapperStr id;
 
-        Q3CString name;
+        WrapperStr name;
 
         bool interrupt;
 
-        Q3CString source;
+        WrapperStr source;
 
-        Q3CString target;
+        WrapperStr target;
 
-        Q3CString selection;
+        WrapperStr selection;
 
-        Q3CString transformation;
+        WrapperStr transformation;
 
-        Q3CString weight;
+        WrapperStr weight;
 
-        Q3CString guard;
+        WrapperStr guard;
 
     };
 

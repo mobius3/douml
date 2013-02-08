@@ -43,7 +43,7 @@
 #include <QTextStream>
 #include <QDropEvent>
 #include <QDragMoveEvent>
-#include "misc/mystr.h"
+
 
 #include "BrowserClass.h"
 #include "BrowserClassInstance.h"
@@ -2904,7 +2904,7 @@ void BrowserClass::save(QTextStream & st, bool ref, QString & warning)
         st << "class_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "class " << get_ident() << ' ';
+        st << "class " << get_ident() << " ";
         save_string(name, st);
 
         indent(+1);
@@ -3838,7 +3838,7 @@ void BrowserClass::post_load()
             int index1 = 0;
             int index2;
 
-            while ((index2 = s.find(' ', index1)) != -1) {
+            while ((index2 = s.find(" ", index1)) != -1) {
                 extend(cl, s.mid(index1, index2 - index1), metaclasses);
                 index1 = index2 + 1;
             }

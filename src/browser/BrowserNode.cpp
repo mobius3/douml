@@ -1378,7 +1378,7 @@ bool BrowserNode::wrong_child_name(const QString & s, UmlCode type,
     switch (type) {
     case UmlOperation:
         switch (*str) {
-        case ' ':
+        case ' ' :
         case '\t':
         case '\r':
             return TRUE;

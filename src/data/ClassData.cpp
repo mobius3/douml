@@ -32,7 +32,7 @@
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 //Added by qt3to4:
 #include <Q3PtrList>
 
@@ -1002,7 +1002,7 @@ void ClassData::save(QTextStream & st, QString & warning) const
     if (is_active)
         st << "active ";
 
-    st << "visibility " << stringify(uml_visibility) << ' ';
+    st << "visibility " << stringify(uml_visibility) << " ";
 
     if (!stereotype.isEmpty()) {
         st << "stereotype ";

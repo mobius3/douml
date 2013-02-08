@@ -4,7 +4,7 @@
 #include "UmlFlow.h"
 #include "UmlActivityNode.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 anItemKind UmlBaseFlow::kind()
 {

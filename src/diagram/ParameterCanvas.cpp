@@ -619,7 +619,7 @@ void ParameterCanvas::save(QTextStream & st, bool ref, QString & warning) const
     }
     else {
         nl_indent(st);
-        st << "parametercanvas " << get_ident() << ' ';
+        st << "parametercanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
         nl_indent(st);

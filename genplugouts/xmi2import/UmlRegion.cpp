@@ -4,7 +4,7 @@
 #include "Token.h"
 #include "FileIn.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 UmlItem * UmlRegion::container(anItemKind kind, Token & token, FileIn & in)
 {
@@ -41,7 +41,7 @@ void UmlRegion::importIt(FileIn & in, Token & token, UmlItem * where)
     where = where->container(aRegion, token, in);
 
     if (where != 0) {
-        Q3CString s = token.valueOf("name");
+        WrapperStr s = token.valueOf("name");
 
         UmlRegion * st = create((UmlState *) where, s);
 
@@ -52,7 +52,7 @@ void UmlRegion::importIt(FileIn & in, Token & token, UmlItem * where)
         st->addItem(token.xmiId(), in);
 
         if (! token.closed()) {
-            Q3CString k = token.what();
+            WrapperStr k = token.what();
             const char * kstr = k;
 
             while (in.read(), !token.close(kstr))

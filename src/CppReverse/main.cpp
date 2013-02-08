@@ -26,7 +26,7 @@
 // *************************************************************************
 #include <qapplication.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlCom.h"
 #include "UmlItem.h"
@@ -60,7 +60,7 @@ int main(int argc, char ** argv)
     logger.addDestination(fileDestination.get());
     QLOG_INFO() << "Starting the log";
     //QTest::qSleep(7000);
-    if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
+    if (UmlCom::connect(WrapperStr(argv[1]).operator QString().toUInt())) {
         try {
             //UmlCom::with_ack(FALSE);
             UmlCom::trace("<b>C++ reverse</b> release 2.15<br>");
@@ -79,7 +79,7 @@ int main(int argc, char ** argv)
                  connection above */
                 Package::init((UmlPackage *) item, app);
 
-                Q3CString f;
+                WrapperStr f;
 
                 if (UmlPackage::getProject()->propertyValue("#file", f))
                     Lex::defines(f);

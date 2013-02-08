@@ -32,7 +32,7 @@
 #include <qstring.h>
 //Added by qt3to4:
 #include <Q3StrList>
-#include "misc/mystr.h"
+
 #include "Logging/QsLog.h"
 
 #include "mystr.h"
@@ -122,7 +122,7 @@ WrapperStr operator+(const QString & s1, const WrapperStr & s2)
 QTextStream & operator<<(QTextStream & ds, const WrapperStr &str)
 {
     //QLOG_INFO() << "Piping: " + str.wrappedString;
-    //ds << Q3CString(str.wrappedString.toStdString().c_str());
+    //ds << WrapperStr(str.wrappedString.toStdString().c_str());
     ds << QTextCodec::codecForLocale()->toUnicode(str.operator const char *());
     return ds;
 }

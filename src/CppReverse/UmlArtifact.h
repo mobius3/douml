@@ -30,7 +30,7 @@
 
 #include "UmlBaseArtifact.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrList>
 
 // This class manages 'artifact'
@@ -52,7 +52,7 @@ private:
     static UmlArtifact * main_art;
 #endif
 public:
-    UmlArtifact(void * id, const Q3CString & n)
+    UmlArtifact(void * id, const WrapperStr & n)
         : UmlBaseArtifact(id, n)
 #ifdef ROUNDTRIP
         , h_scanned(FALSE), src_scanned(FALSE),

@@ -1153,7 +1153,7 @@ void ActivityActionCanvas::save(QTextStream & st, bool ref, QString & warning) c
     }
     else {
         nl_indent(st);
-        st << "activityactioncanvas " << get_ident() << ' ';
+        st << "activityactioncanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
         settings.save(st);

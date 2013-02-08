@@ -4,7 +4,7 @@
 
 #include "UmlBaseRegion.h"
 #include "UmlStateItem.h"
-#include <q3cstring.h>
+
 #include <q3ptrlist.h>
 
 class UmlTransition;
@@ -14,7 +14,7 @@ class UmlRegion : public UmlBaseRegion, public UmlStateItem
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlRegion(void * id, const Q3CString & s) : UmlBaseRegion(id, s) {
+    UmlRegion(void * id, const WrapperStr & s) : UmlBaseRegion(id, s) {
     }
 
     //goes among tree to memorize incoming transitions

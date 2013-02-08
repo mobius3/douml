@@ -15,12 +15,12 @@
 #include <qradiobutton.h>
 #include <q3buttongroup.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3VBoxLayout>
 
 #include "SmallPushButton.h"
 
-Dialog::Dialog(Q3CString & path, Q3CString & encoding, Q3CString & nomodel, Q3CString & genview, Q3CString & uml20, Q3CString & pk, Q3CString & vis, Q3CString & primitivetype, Q3CString & genextension, Q3CString & geneclipse, Q3CString & commentexporter, Q3CString & linefeed, Language & lang)
+Dialog::Dialog(WrapperStr & path, WrapperStr & encoding, WrapperStr & nomodel, WrapperStr & genview, WrapperStr & uml20, WrapperStr & pk, WrapperStr & vis, WrapperStr & primitivetype, WrapperStr & genextension, WrapperStr & geneclipse, WrapperStr & commentexporter, WrapperStr & linefeed, Language & lang)
     : QDialog(0, 0, TRUE), _path(path), _encoding(encoding), _nomodel(nomodel), _genview(genview), _uml20(uml20), _pk(pk), _vis(vis), _primitivetype(primitivetype), _genextension(genextension), _geneclipse(geneclipse), _commentexporter(commentexporter), _linefeed(linefeed), _lang(lang)
 {
     Q3VBoxLayout * vbox = new Q3VBoxLayout(this);

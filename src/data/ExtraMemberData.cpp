@@ -181,7 +181,7 @@ void ExtraMemberData::save(QTextStream & st, QString & warning) const
     nl_indent(st);
     st << "cpp ";
     save_string(cpp_decl, st);
-    st << ' ';
+    st << " ";
     save_string(cpp_def, st);
 
     if (cpp_inline)

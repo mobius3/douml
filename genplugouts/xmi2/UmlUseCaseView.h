@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseUseCaseView.h"
-#include <q3cstring.h>
+
 #include <q3ptrlist.h>
 
 class FileOut;
@@ -16,7 +16,7 @@ class UmlUseCaseDiagram;
 class UmlUseCaseView : public UmlBaseUseCaseView
 {
 public:
-    UmlUseCaseView(void * id, const Q3CString & n) : UmlBaseUseCaseView(id, n) {};
+    UmlUseCaseView(void * id, const WrapperStr & n) : UmlBaseUseCaseView(id, n) {};
 
     virtual void write(FileOut & out);
 

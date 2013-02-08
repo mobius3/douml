@@ -9,7 +9,7 @@
 #include "UmlRelation.h"
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 void ClassInstance::init()
 {
@@ -29,11 +29,11 @@ void ClassInstance::importIt(FileIn & in, Token & token, UmlItem * where)
     cli->where = where;
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
-            Q3CString s = token.what();
+            WrapperStr s = token.what();
 
             if (s == "classifier")
                 cli->classifierId = token.xmiIdref();
@@ -65,7 +65,7 @@ void ClassInstance::solveThem()
     Q3PtrList<UmlClassInstance> insts;
 
     for (cli = All.first(); cli != 0; cli = All.next()) {
-        QMap<Q3CString, UmlItem *>::Iterator it;
+        QMap<WrapperStr, UmlItem *>::Iterator it;
 
         it = UmlItem::All.find(cli->classifierId);
 
@@ -92,7 +92,7 @@ void ClassInstance::solveThem()
     // set attribute ans relation values
 
     while (! All.isEmpty()) {
-        QMap<Q3CString, UmlItem *>::Iterator it;
+        QMap<WrapperStr, UmlItem *>::Iterator it;
 
         cli = All.take(0);
 
@@ -159,11 +159,11 @@ void ClassInstance::Slot::importIt(FileIn & in, Token & token)
     valueId = token.valueOf("value");
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
-            Q3CString s = token.what();
+            WrapperStr s = token.what();
 
             if (s == "featureid")
                 featureId = token.xmiIdref();

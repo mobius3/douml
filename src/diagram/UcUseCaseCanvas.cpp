@@ -598,7 +598,7 @@ void UcUseCaseCanvas::save(QTextStream & st, bool ref, QString & warning) const
         st << "usecasecanvas_ref " << get_ident() << " // " << browser_node->get_name();
     else {
         nl_indent(st);
-        st << "usecasecanvas " << get_ident() << ' ';
+        st << "usecasecanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
 
         if (itscolor != UmlDefaultColor) {

@@ -7,7 +7,7 @@
 #include "UmlCom.h"
 #include "UmlClass.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 
 UmlItem::~UmlItem()
@@ -45,11 +45,11 @@ void UmlItem::write_description_properties(FileOut & out)
         out << "\"/>\n";
     }
 
-    Q3CString ste = stereotype();
+    WrapperStr ste = stereotype();
 
     if (_gen_extension) {
-        const Q3Dict<Q3CString> up = properties();
-        Q3DictIterator<Q3CString> it(up);
+        const Q3Dict<WrapperStr> up = properties();
+        Q3DictIterator<WrapperStr> it(up);
 
         if (it.current()) {
             out.indent();
@@ -103,11 +103,11 @@ void UmlItem::memo_ac_uc_assoc(UmlUseCaseDiagram * d)
     parent()->memo_ac_uc_assoc(d);
 }
 
-void UmlItem::write_multiplicity(FileOut & out, Q3CString s, UmlItem * who)
+void UmlItem::write_multiplicity(FileOut & out, WrapperStr s, UmlItem * who)
 {
     if (!s.isEmpty()) {
-        Q3CString min;
-        Q3CString max;
+        WrapperStr min;
+        WrapperStr max;
         int index = s.find("..");
 
         if (index != -1) {
@@ -166,7 +166,7 @@ void UmlItem::write_type(FileOut & out, const UmlTypeSpec & t, const char * tk)
 
 }
 
-void UmlItem::write_default_value(FileOut & out, Q3CString v, UmlItem * who, int rank)
+void UmlItem::write_default_value(FileOut & out, WrapperStr v, UmlItem * who, int rank)
 {
     if (! v.isEmpty()) {
         if (v[0] == '=') {
@@ -192,14 +192,14 @@ void UmlItem::write_default_value(FileOut & out, Q3CString v, UmlItem * who, int
 
 void UmlItem::write_stereotyped(FileOut & out)
 {
-    QMap<Q3CString, Q3PtrList<UmlItem> >::Iterator it;
+    QMap<WrapperStr, Q3PtrList<UmlItem> >::Iterator it;
 
     for (it = _stereotypes.begin(); it != _stereotypes.end(); ++it) {
         const char * st = it.key();
         UmlClass * cl = UmlClass::findStereotype(it.key(), TRUE);
 
         if (cl != 0) {
-            Q3ValueList<Q3CString> extended;
+            Q3ValueList<WrapperStr> extended;
 
             cl->get_extended(extended);
 
@@ -210,14 +210,14 @@ void UmlItem::write_stereotyped(FileOut & out)
                 out << "\t<" << st;
                 out.id_prefix(elt, "STELT_");
 
-                const Q3Dict<Q3CString> props = elt->properties();
-                Q3DictIterator<Q3CString> itp(props);
+                const Q3Dict<WrapperStr> props = elt->properties();
+                Q3DictIterator<WrapperStr> itp(props);
 
                 while (itp.current()) {
                     QString k = itp.currentKey();
 
                     if (k.contains(':') == 2) {
-                        out << ' ';
+                        out << " ";
                         out.quote((const char *)k.mid(k.findRev(':') + 1)); //[jasa] ambiguous call
                         out << "=\"";
                         out.quote((const char *)*itp.current());
@@ -227,12 +227,12 @@ void UmlItem::write_stereotyped(FileOut & out)
                     ++itp;
                 }
 
-                Q3ValueList<Q3CString>::Iterator iter_extended;
+                Q3ValueList<WrapperStr>::Iterator iter_extended;
 
                 for (iter_extended = extended.begin();
                      iter_extended != extended.end();
                      ++iter_extended) {
-                    Q3CString vr = "base_" + *iter_extended;
+                    WrapperStr vr = "base_" + *iter_extended;
 
                     out.ref(elt, vr);
                 }
@@ -269,5 +269,5 @@ bool UmlItem::_gen_extension;
 
 bool UmlItem::_gen_eclipse;
 
-QMap<Q3CString, Q3PtrList<UmlItem> > UmlItem::_stereotypes;
+QMap<WrapperStr, Q3PtrList<UmlItem> > UmlItem::_stereotypes;
 

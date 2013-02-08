@@ -30,7 +30,7 @@
 
 #include <qstack.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 // fstream is bugged under Windows
 #include <stdio.h>
@@ -56,11 +56,11 @@ private:
     static void unget();
 
     static void complete_template(QString & result);
-    static Q3CString manage_operator(QString  & result, int c);
-    static Q3CString read_string();
-    static Q3CString read_character();
-    static Q3CString read_array_dim();
-    static Q3CString read_annotation();
+    static WrapperStr manage_operator(QString  & result, int c);
+    static WrapperStr read_string();
+    static WrapperStr read_character();
+    static WrapperStr read_array_dim();
+    static WrapperStr read_annotation();
     static void bypass_template();
     static void bypass_cpp_comment();
     static void bypass_c_comment();
@@ -74,13 +74,13 @@ private:
     static QStack<Context> stack;
 
 public:
-    static Q3CString read_word(bool in_templ = FALSE);
+    static WrapperStr read_word(bool in_templ = FALSE);
     static char read_word_bis(bool in_templ = FALSE);
     static void unread_word(const char * s);
-    static Q3CString get_comments();
-    static Q3CString get_comments(Q3CString & co);
-    static Q3CString get_description();
-    static Q3CString get_description(Q3CString & co);
+    static WrapperStr get_comments();
+    static WrapperStr get_comments(WrapperStr & co);
+    static WrapperStr get_description();
+    static WrapperStr get_description(WrapperStr & co);
     static void clear_comments();
     static void finish_line();
     static bool open(const QString &);
@@ -89,18 +89,18 @@ public:
     static unsigned line_number();
     static bool identifierp(const char *);
     static void mark();
-    static Q3CString region();
-    static void syntax_error(Q3CString = 0);
+    static WrapperStr region();
+    static void syntax_error(WrapperStr = 0);
     static void premature_eof();
-    static void error_near(Q3CString, const char * m = "");
-    static Q3CString quote(Q3CString);
+    static void error_near(WrapperStr, const char * m = "");
+    static WrapperStr quote(WrapperStr);
     static void push_context();
     static void pop_context();
-    static Q3CString simplify_comment(Q3CString &);
-    static bool bypass_type(Q3CString s);
+    static WrapperStr simplify_comment(WrapperStr &);
+    static bool bypass_type(WrapperStr s);
 };
 
-bool neq(const Q3CString & s1, const Q3CString & s2);
-bool nequal(const Q3CString & s1, const Q3CString & s2);
+bool neq(const WrapperStr & s1, const WrapperStr & s2);
+bool nequal(const WrapperStr & s1, const WrapperStr & s2);
 
 #endif

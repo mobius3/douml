@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <qtextcodec.h>
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 #include "strutil.h"
 #include "misc/codec.h"
@@ -212,7 +212,7 @@ QString true_name(const QString & name, const QString & decl)
     int index;
     QString n;
 
-    n = ((index = name.find(' ')) == -1)
+    n = ((index = name.find(" ")) == -1)
         ? name
         : name.left(index);
 
@@ -392,7 +392,7 @@ bool need_equal(const char * p, QString v, bool cpp)
         case '=':
             return FALSE;
 
-        case ' ':
+        case ' ' :
         case '\t':
         case '\n':
         case '\r':
@@ -415,7 +415,7 @@ bool need_equal(const char * p, const char * v, bool cpp)
         case '=':
             return FALSE;
 
-        case ' ':
+        case ' ' :
         case '\t':
         case '\n':
         case '\r':
@@ -435,7 +435,7 @@ static void bypass_spaces(const char *& s)
 {
     for (;;) {
         switch (*s) {
-        case ' ':
+        case ' ' :
         case '\t':
         case '\r':
         case '\n':

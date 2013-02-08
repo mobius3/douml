@@ -469,7 +469,7 @@ void InterruptibleActivityRegionCanvas::save(QTextStream & st, bool ref, QString
     }
     else {
         nl_indent(st);
-        st << "interruptibleactivityregioncanvas " << get_ident() << ' ';
+        st << "interruptibleactivityregioncanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
 

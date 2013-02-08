@@ -2,7 +2,7 @@
 #define _UMLCLASSMEMBER_H
 
 
-#include <q3cstring.h>
+
 #include "UmlBaseClassMember.h"
 
 // This class globaly manages class's relations, attributes, operations
@@ -12,9 +12,9 @@
 class UmlClassMember : public UmlBaseClassMember
 {
 public:
-    UmlClassMember(void * id, const Q3CString & n) : UmlBaseClassMember(id, n) {};
+    UmlClassMember(void * id, const WrapperStr & n) : UmlBaseClassMember(id, n) {};
 
-    void setVisibility(Q3CString v);
+    void setVisibility(WrapperStr v);
 
 };
 

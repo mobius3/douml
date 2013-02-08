@@ -29,7 +29,7 @@
 #include <qapplication.h>
 #include <qmessagebox.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include <Q3PtrList>
 #endif
@@ -45,7 +45,7 @@
 # endif
 #endif
 
-UmlPackage::UmlPackage(void * id, const Q3CString & n)
+UmlPackage::UmlPackage(void * id, const WrapperStr & n)
     : UmlBasePackage(id, n)
 {
     classview = 0;
@@ -74,14 +74,14 @@ UmlClassView * UmlPackage::get_classview()
 
         if ((classview = UmlBaseClassView::create(this, name())) == 0) {
 #ifdef REVERSE
-            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create class view <i>")
+            UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot create class view <i>")
                           + name() + "</i> under package <i>"
                           + name() + "</b></font><br>");
             UmlCom::message("");
             throw 0;
 #else
             QMessageBox::critical(0, "Fatal Error",
-                                  Q3CString("<font face=helvetica><b>cannot create class view <i>")
+                                  WrapperStr("<font face=helvetica><b>cannot create class view <i>")
                                   + name() + "</i> under package <i>"
                                   + name() + "</b></font><br>");
             QApplication::exit(1);
@@ -111,14 +111,14 @@ UmlDeploymentView * UmlPackage::get_deploymentview()
 
         if ((deploymentview = UmlBaseDeploymentView::create(this, name())) == 0) {
 #ifdef REVERSE
-            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
+            UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot create deployment view <i>")
                           + name() + "</i> under package <i>"
                           + name() + "</b></font><br>");
             UmlCom::message("");
             throw 0;
 #else
             QMessageBox::critical(0, "Fatal Error",
-                                  Q3CString("<font face=helvetica><b>cannot create deployment view <i>")
+                                  WrapperStr("<font face=helvetica><b>cannot create deployment view <i>")
                                   + name() + "</i> under package <i>"
                                   + name() + "</b></font><br>");
             QApplication::exit(1);

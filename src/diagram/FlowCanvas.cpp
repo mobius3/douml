@@ -605,7 +605,7 @@ void FlowCanvas::update(bool updatepos)
 
         if (! s.isEmpty()) {
             if (n != "<flow>")
-                s = n + ((horiz) ? ' ' : '\n') + toUnicode(s);
+                s = n + ((horiz) ? " " : "\n") + toUnicode(s);
             else
                 s = toUnicode(s);
         }
@@ -847,7 +847,7 @@ void FlowCanvas::save(QTextStream & st, bool ref, QString & warning) const
     else if (begin->type() != UmlArrowPoint) {
         // relation canvas start
         nl_indent(st);
-        st << "flowcanvas " << get_ident() << ' ';
+        st << "flowcanvas " << get_ident() << " ";
         data->get_start()->save(st, TRUE, warning);	// data doesn't have id
         indent(+1);
 

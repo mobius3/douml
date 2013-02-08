@@ -29,7 +29,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #include <Q3ValueList>
 
@@ -44,16 +44,16 @@
 #include "UmlCom.h"
 #include "util.h"
 
-static Q3CString dot(".");
+static WrapperStr dot(".");
 
-Q3CString UmlClass::java_stereotype()
+WrapperStr UmlClass::java_stereotype()
 {
-    Q3CString s = JavaSettings::classStereotype(stereotype());
+    WrapperStr s = JavaSettings::classStereotype(stereotype());
 
     return ((s == "ignored") || (s == "union") || (s == "enum") ||
             (s == "interface") || (s == "@interface") ||
             (s == "enum_pattern"))
-           ? s : Q3CString("class");
+           ? s : WrapperStr("class");
 }
 
 void UmlClass::generate()
@@ -65,18 +65,18 @@ void UmlClass::generate()
             if (associatedArtifact() != 0)
                 associatedArtifact()->generate();
             else if ((children().size() != 0) && verbose())
-                UmlCom::trace(Q3CString("<hr><font face=helvetica><i> ") + name() +
+                UmlCom::trace(WrapperStr("<hr><font face=helvetica><i> ") + name() +
                               " : </i> does not have associated <i>artifact</i></font><br>");
         }
     }
 }
 
-void UmlClass::generate(QTextStream & f, Q3CString indent)
+void UmlClass::generate(QTextStream & f, WrapperStr indent)
 {
     Q3PtrVector<UmlItem> ch = children();
     const Q3ValueList<UmlActualParameter> actuals = this->actuals();
     const unsigned sup = ch.size();
-    const Q3CString & stereotype = java_stereotype();
+    const WrapperStr & stereotype = java_stereotype();
     bool an_enum_pattern = (stereotype == "enum_pattern");
     bool an_enum = (stereotype == "enum");
     unsigned index;
@@ -163,7 +163,7 @@ void UmlClass::generate(QTextStream & f, Q3CString indent)
                 p += 10;
 
                 int current_value = 0;
-                Q3CString name = this->name();
+                WrapperStr name = this->name();
 
                 for (index = 0; index != sup; index += 1)
                     if ((ch[index]->kind() != aNcRelation) &&
@@ -276,8 +276,8 @@ void UmlClass::generate(QTextStream & f, Q3CString indent)
     }
 }
 
-void UmlClass::generate(QTextStream & f, const Q3CString &,
-                        Q3CString indent)
+void UmlClass::generate(QTextStream & f, const WrapperStr &,
+                        WrapperStr indent)
 {
     generate(f, indent);
 }
@@ -293,7 +293,7 @@ void UmlClass::write(QTextStream & f, const UmlTypeSpec & t)
 void UmlClass::write(QTextStream & f)
 {
     if (isJavaExternal()) {
-        Q3CString s = javaDecl().stripWhiteSpace();
+        WrapperStr s = javaDecl().stripWhiteSpace();
         int index;
 
         if ((index = s.find("${name}")) != -1)
@@ -310,7 +310,7 @@ void UmlClass::write(QTextStream & f)
     else {
         UmlClass * toplevel = this;
         UmlItem * p;
-        Q3CString s2;
+        WrapperStr s2;
 
         while ((p = toplevel->parent())->kind() == aClass) {
             toplevel = (UmlClass *) p;
@@ -322,7 +322,7 @@ void UmlClass::write(QTextStream & f)
                             ((cp != 0) ? (UmlItem *) cp : (UmlItem *) toplevel)->package();
 
         if (pack != UmlArtifact::generation_package()) {
-            Q3CString s = pack->javaPackage();
+            WrapperStr s = pack->javaPackage();
 
             if (! s.isEmpty() && (s != "java.lang") && (s.left(10) != "java.lang.")) {
                 s += s2;
@@ -339,9 +339,9 @@ void UmlClass::write(QTextStream & f)
     }
 }
 
-void UmlClass::import(QTextStream & f, const Q3CString & indent)
+void UmlClass::import(QTextStream & f, const WrapperStr & indent)
 {
-    Q3CString s;
+    WrapperStr s;
 
     if (!isJavaExternal()) {
         UmlArtifact * cp = associatedArtifact();
@@ -351,7 +351,7 @@ void UmlClass::import(QTextStream & f, const Q3CString & indent)
         if ((s = pack->javaPackage()).isEmpty())
             return;
 
-        Q3CString s2 = name();
+        WrapperStr s2 = name();
         UmlItem * p = this;
 
         while ((p = p->parent())->kind() == aClass)
@@ -371,19 +371,19 @@ void UmlClass::import(QTextStream & f, const Q3CString & indent)
 }
 
 void UmlClass::generate_enum_pattern_item(QTextStream &, int &,
-        const Q3CString &, Q3CString)
+        const WrapperStr &, WrapperStr)
 {
     write_trace_header();
     UmlCom::trace("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>an <i>enum pattern</i> cannot have sub-class</b></font><br>");
     incr_warning();
 }
 
-void UmlClass::generate_enum_pattern_case(QTextStream &, Q3CString)
+void UmlClass::generate_enum_pattern_case(QTextStream &, WrapperStr)
 {
     // error already signaled
 }
 
-void UmlClass::generate_enum_member(QTextStream & f, Q3CString indent)
+void UmlClass::generate_enum_member(QTextStream & f, WrapperStr indent)
 {
     generate(f, indent + "  ");
     f << '\n';
@@ -418,7 +418,7 @@ void UmlClass::generate_formals(QTextStream & f)
     }
 }
 
-void UmlClass::generate_import(QTextStream & f, const Q3CString & indent)
+void UmlClass::generate_import(QTextStream & f, const WrapperStr & indent)
 {
     Q3PtrVector<UmlItem> ch = children();
     const unsigned sup = ch.size();

@@ -1501,7 +1501,7 @@ void RelationDialog::cpp_update(RoleDialog & role, BrowserClass * cl, BrowserNod
                 if (!role.edinit->text().stripWhiteSpace().isEmpty() &&
                     role.classrelation_cb->isChecked()) {
                     if (role.edinit->text().at(0) == QChar('='))
-                        s += ' ';
+                        s += " ";
 
                     s += role.edinit->text();
                 }
@@ -1706,7 +1706,7 @@ void RelationDialog::java_update(RoleDialog & role, BrowserClass * cl, BrowserNo
                 p += 13;
 
                 if (role.uml_visibility.value() != UmlPackageVisibility)
-                    s += role.uml_visibility.state() + ' ';
+                    s += role.uml_visibility.state() + " ";
             }
             else if (!strncmp(p, "${static}", 9)) {
                 p += 9;
@@ -1967,7 +1967,7 @@ void RelationDialog::php_update(RoleDialog & role, BrowserClass * cl, BrowserNod
                 p += 13;
 
                 if (role.uml_visibility.value() != UmlPackageVisibility)
-                    s += role.uml_visibility.state() + ' ';
+                    s += role.uml_visibility.state() + " ";
             }
             else if (!strncmp(p, "${static}", 9)) {
                 p += 9;

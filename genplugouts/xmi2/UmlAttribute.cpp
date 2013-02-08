@@ -6,10 +6,10 @@
 #include "CppSettings.h"
 #include "JavaSettings.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 void UmlAttribute::write(FileOut & out)
 {
-    Q3CString stp = parent()->stereotype();
+    WrapperStr stp = parent()->stereotype();
     bool enum_item = (stp == "enum_pattern") ||
                      ((stp == "enum") && (stereotype() != "attribute"));
     const char * k;
@@ -110,7 +110,7 @@ void UmlAttribute::write(FileOut & out)
 void UmlAttribute::write_cpp_type(FileOut & out)
 {
     // note : doesn't manage function/operation pointer
-    Q3CString s = cppDecl();
+    WrapperStr s = cppDecl();
     int index;
 
     remove_comments(s);
@@ -148,7 +148,7 @@ void UmlAttribute::write_cpp_type(FileOut & out)
 
 void UmlAttribute::write_java_type(FileOut & out)
 {
-    Q3CString s = javaDecl();
+    WrapperStr s = javaDecl();
     int index;
 
     remove_comments(s);

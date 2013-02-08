@@ -30,7 +30,7 @@
 
 #include "UmlBaseAttribute.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrList>
 
 class Class;
@@ -38,22 +38,22 @@ class Class;
 class UmlAttribute : public UmlBaseAttribute
 {
 public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const WrapperStr & n)
         :  UmlBaseAttribute(id, n) {};
 
-    static bool new_one(Class * cl, const Q3CString & name, const Q3CString & type,
-                        const Q3CString & modifier, const Q3CString & pretype,
-                        const Q3CString & array,	aVisibility visibility,
+    static bool new_one(Class * cl, const WrapperStr & name, const WrapperStr & type,
+                        const WrapperStr & modifier, const WrapperStr & pretype,
+                        const WrapperStr & array,	aVisibility visibility,
                         bool staticp, bool constp, bool typenamep, bool mutablep,
-                        bool volatilep,	const Q3CString & bitfield,
-                        const Q3CString & value,	Q3CString comment,
-                        Q3CString description
+                        bool volatilep,	const WrapperStr & bitfield,
+                        const WrapperStr & value,	WrapperStr comment,
+                        WrapperStr description
 #ifdef ROUNDTRIP
                         , bool roundtrip, Q3PtrList<UmlItem> & expected_order
 #endif
                        );
 #ifdef ROUNDTRIP
-    static UmlAttribute * search_attr(UmlClass * cl, const Q3CString & name);
+    static UmlAttribute * search_attr(UmlClass * cl, const WrapperStr & name);
 #endif
 };
 

@@ -1199,14 +1199,14 @@ void ComponentCanvas::save(QTextStream & st, bool ref, QString & warning) const
     }
     else {
         nl_indent(st);
-        st << "componentcanvas " << get_ident() << ' ';
+        st << "componentcanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
         settings.save(st);
         nl_indent(st);
 
         if (itscolor != UmlDefaultColor)
-            st << "color " << stringify(itscolor) << ' ';
+            st << "color " << stringify(itscolor) << " ";
 
         save_xyzwh(st, this, "xyzwh");
         save_stereotype_property(st, warning);

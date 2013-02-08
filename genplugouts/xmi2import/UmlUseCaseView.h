@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseUseCaseView.h"
-#include <q3cstring.h>
+
 #include "anItemKind.h"
 
 class UmlItem;
@@ -16,7 +16,7 @@ class FileIn;
 class UmlUseCaseView : public UmlBaseUseCaseView
 {
 public:
-    UmlUseCaseView(void * id, const Q3CString & n) : UmlBaseUseCaseView(id, n) {};
+    UmlUseCaseView(void * id, const WrapperStr & n) : UmlBaseUseCaseView(id, n) {};
 
     //returns the first container for a 'kind', going up in the browser tree
     virtual UmlItem * container(anItemKind kind, Token & token, FileIn & in);

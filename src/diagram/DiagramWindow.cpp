@@ -197,7 +197,7 @@ void DiagramWindow::save_session(QTextStream & st)
 
     st << "  ";
     ((BrowserNode *) browser_node)->save(st, TRUE, warning);
-    st << "\n    " << width() << ' ' << height() << ' ';
+    st << "\n    " << width() << " " << height() << " ";
     get_view()->save_session(st);
 }
 

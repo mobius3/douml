@@ -5,7 +5,7 @@
 #include "UmlItem.h"
 #include "anItemKind.h"
 #include <q3ptrvector.h>
-#include <q3cstring.h>
+
 
 #include "UmlClass.h"	// to avoid destructor problem
 class UmlArtifact;
@@ -83,60 +83,60 @@ public:
 
 #ifdef WITHCPP
     // returns the C++ header file definition
-    const Q3CString & cppHeader();
+    const WrapperStr & cppHeader();
 
     // to set the C++ header file definition
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_CppHeader(const Q3CString & s);
+    bool set_CppHeader(const WrapperStr & s);
 
     // returns the C++ source file definition
-    const Q3CString & cppSource();
+    const WrapperStr & cppSource();
 
     // to set the C++ source file definition
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_CppSource(const Q3CString & s);
+    bool set_CppSource(const WrapperStr & s);
 #endif
 
 #ifdef WITHJAVA
     // returns the Java file definition
-    const Q3CString & javaSource();
+    const WrapperStr & javaSource();
 
     // to set the Java file definition
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_JavaSource(const Q3CString & s);
+    bool set_JavaSource(const WrapperStr & s);
 #endif
 
 #ifdef WITHPHP
     // returns the Php file definition
-    const Q3CString & phpSource();
+    const WrapperStr & phpSource();
 
     // to set the Php file definition
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_PhpSource(const Q3CString & s);
+    bool set_PhpSource(const WrapperStr & s);
 #endif
 
 #ifdef WITHPYTHON
     // returns the Python file definition
-    const Q3CString & pythonSource();
+    const WrapperStr & pythonSource();
 
     // to set the Python file definition
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_PythonSource(const Q3CString & s);
+    bool set_PythonSource(const WrapperStr & s);
 #endif
 
 #ifdef WITHIDL
     // returns the Idl file definition
-    const Q3CString & idlSource();
+    const WrapperStr & idlSource();
 
     // to set the Idl file definition
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_IdlSource(const Q3CString & s);
+    bool set_IdlSource(const WrapperStr & s);
 #endif
 
     // to unload the object to free memory, it will be reloaded
@@ -152,25 +152,25 @@ private:
     Q3PtrVector<UmlArtifact> _associated;
 
 #ifdef WITHCPP
-    Q3CString _cpp_h;
+    WrapperStr _cpp_h;
 
-    Q3CString _cpp_src;
+    WrapperStr _cpp_src;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_src;
+    WrapperStr _java_src;
 #endif
 
 #ifdef WITHPHP
-    Q3CString _php_src;
+    WrapperStr _php_src;
 #endif
 
 #ifdef WITHPYTHON
-    Q3CString _python_src;
+    WrapperStr _python_src;
 #endif
 
 #ifdef WITHIDL
-    Q3CString _idl_src;
+    WrapperStr _idl_src;
 #endif
 
 
@@ -210,12 +210,12 @@ protected:
 #endif
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseArtifact(void * id, const Q3CString & n);
+    UmlBaseArtifact(void * id, const WrapperStr & n);
 
     friend class UmlBaseClass;
 };
 
-inline UmlBaseArtifact::UmlBaseArtifact(void * id, const Q3CString & n) : UmlItem(id, n)
+inline UmlBaseArtifact::UmlBaseArtifact(void * id, const WrapperStr & n) : UmlItem(id, n)
 {
     _assoc_diagram = 0;
 }

@@ -46,7 +46,7 @@
 #include <qbuffer.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
-#include "misc/mystr.h"
+
 #include <Q3PointArray>
 #include <QTextCodec>
 #include <QFileInfo>
@@ -1916,24 +1916,24 @@ void save_string(const char * p, QTextStream & st)
 
 void save_string_list(QStringList & list, QTextStream & st)
 {
-    st << ' ' << list.count();
+    st << " " << list.count();
 
     for (QStringList::Iterator it = list.begin();
          it != list.end();
          ++it) {
-        st << ' ';
+        st << " ";
         save_string(*it, st);
     }
 }
 
 void save_unicode_string_list(QStringList & list, QTextStream & st)
 {
-    st << ' ' << list.count();
+    st << " " << list.count();
 
     for (QStringList::Iterator it = list.begin();
          it != list.end();
          ++it) {
-        st << ' ';
+        st << " ";
         save_string(fromUnicode(*it), st);
     }
 }
@@ -1981,7 +1981,7 @@ static void skip_whitespace_comment(char *& s)
         case '\n':
             Context.linenum += 1;
 
-        case ' ':
+        case ' ' :
         case '\r':
         case '\t':
             s += 1;
@@ -2397,35 +2397,35 @@ void unknown_ref(const char * kind, int id)
 void save_xy(QTextStream & st, const Q3CanvasItem * c, const char * s)
 {
 #ifdef FORCE_INT_COORD
-    st << s << ' ' << (int) c->x() << ' ' << (int) c->y();
+    st << s << " " << (int) c->x() << " " << (int) c->y();
 #else
     QString xs, ys;
 
-    st << s << ' ' << xs.setNum(c->x()) << ' ' << ys.setNum(c->y());
+    st << s << " " << xs.setNum(c->x()) << " " << ys.setNum(c->y());
 #endif
 }
 
 void save_xyz(QTextStream & st, const Q3CanvasItem * c, const char * s)
 {
 #ifdef FORCE_INT_COORD
-    st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z();
+    st << s << " " << (int) c->x() << " " << (int) c->y() << " " << (int) c->z();
 #else
     QString xs, ys, zs;
 
-    st << s << ' ' << xs.setNum(c->x()) << ' ' << ys.setNum(c->y()) << ' ' << zs.setNum(c->z());
+    st << s << " " << xs.setNum(c->x()) << " " << ys.setNum(c->y()) << " " << zs.setNum(c->z());
 #endif
 }
 
 void save_xyzwh(QTextStream & st, const Q3CanvasRectangle * c, const char * s)
 {
 #ifdef FORCE_INT_COORD
-    st << s << ' ' << (int) c->x() << ' ' << (int) c->y() << ' ' << (int) c->z()
-       << ' ' << (int) c->width() << ' ' << (int) c->height();
+    st << s << " " << (int) c->x() << " " << (int) c->y() << " " << (int) c->z()
+       << " " << (int) c->width() << " " << (int) c->height();
 #else
     QString xs, ys, zs;
 
-    st << s << ' ' << xs.setNum(c->x()) << ' ' << ys.setNum(c->y()) << ' ' << zs.setNum(c->z())
-       << ' ' << (int) c->width() << ' ' << (int) c->height();
+    st << s << " " << xs.setNum(c->x()) << " " << ys.setNum(c->y()) << " " << zs.setNum(c->z())
+       << " " << (int) c->width() << " " << (int) c->height();
 #endif
 }
 
@@ -2482,7 +2482,7 @@ void save_color(QTextStream & st, const char * s, UmlColor c, BooL & nl)
             nl = TRUE;
         }
 
-        st << s << ' ' << stringify(c) << ' ';
+        st << s << " " << stringify(c) << " ";
     }
 }
 

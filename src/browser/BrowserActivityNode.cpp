@@ -670,11 +670,11 @@ void BrowserActivityNode::save(QTextStream & st, bool ref, QString & warning)
         st << "activitynode_ref " << get_ident() << " // " << stringify(kind);
 
         if (!allow_spaces())
-            st << ' ' << get_name();
+            st << " " << get_name();
     }
     else {
         nl_indent(st);
-        st << "activitynode " << get_ident() << ' ' << stringify(kind) << ' ';
+        st << "activitynode " << get_ident() << " " << stringify(kind) << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

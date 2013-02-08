@@ -745,11 +745,11 @@ void BrowserPseudoState::save(QTextStream & st, bool ref, QString & warning)
         st << "pseudostate_ref " << get_ident() << " // " << stringify(kind);
 
         if (!allow_spaces())
-            st << ' ' << get_name();
+            st << " " << get_name();
     }
     else {
         nl_indent(st);
-        st << "pseudostate " << get_ident() << ' ' << stringify(kind) << ' ';
+        st << "pseudostate " << get_ident() << " " << stringify(kind) << " ";
 
         if (!allow_empty())
             save_string(name, st);

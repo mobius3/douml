@@ -2,7 +2,7 @@
 #define _UMLBASEMESSAGE_H
 
 
-#include <q3cstring.h>
+
 #include <q3ptrdict.h>
 
 class UmlClassInstanceReference;
@@ -30,7 +30,7 @@ public:
 
     // return message as a string, may be empty/null,
     // exclusive with operation()
-    const Q3CString & form() const {
+    const WrapperStr & form() const {
         return _form;
     }
 
@@ -42,7 +42,7 @@ private:
 
     UmlOperation * _operation;
 
-    Q3CString _form;
+    WrapperStr _form;
 
     // internal, don't call it
     void read_(const Q3PtrDict<UmlClassInstanceReference> & instances);

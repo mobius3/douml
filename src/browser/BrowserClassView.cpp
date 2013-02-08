@@ -1133,7 +1133,7 @@ void BrowserClassView::save(QTextStream & st, bool ref, QString & warning)
         st << "classview_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "classview " << get_ident() << ' ';
+        st << "classview " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
 

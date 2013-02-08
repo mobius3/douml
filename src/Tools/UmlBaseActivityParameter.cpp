@@ -4,7 +4,7 @@
 #include "UmlActivityParameter.h"
 #include "UmlActivity.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 UmlActivityParameter * UmlBaseActivityParameter::create(UmlActivity * parent, const char * s)
 {

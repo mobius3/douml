@@ -33,7 +33,7 @@ void UmlRegion::write(FileOut & out)
     out << "<region xmi:type=\"uml:Region\"";
     out.id(this);
     out << " name=\"";
-    out.quote((const char *)name()); //[jasa] Q3CString to const char*.
+    out.quote((const char *)name()); //[jasa] WrapperStr to const char*.
     out << "\">\n";
     out.indent(+1);
 

@@ -28,7 +28,7 @@
 #ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include "Logging/QsLog.h"
 using namespace std;
@@ -52,13 +52,13 @@ ClassContainer::~ClassContainer()
 {
 }
 
-Class * ClassContainer::declare_if_needed(const Q3CString & name,
-        const Q3CString & stereotype,
+Class * ClassContainer::declare_if_needed(const WrapperStr & name,
+        const WrapperStr & stereotype,
         const FormalParameterList & formals,
         NDict<Class> & declared,
         NDict<Class> & defined)
 {
-    if (name.find(' ') != -1)
+    if (name.find(" ") != -1)
         // anonymous struct/union/enum
         return 0;
 
@@ -68,7 +68,7 @@ Class * ClassContainer::declare_if_needed(const Q3CString & name,
 
     if (! formals.isEmpty()) {
         FormalParameterList::ConstIterator it;
-        Q3CString st = stereotype;
+        WrapperStr st = stereotype;
 
         if (st.isEmpty())
             st = "class";
@@ -93,8 +93,8 @@ Class * ClassContainer::declare_if_needed(const Q3CString & name,
            ? result : 0;
 }
 
-Class * ClassContainer::define(const Q3CString & name,
-                               const Q3CString & stereotype,
+Class * ClassContainer::define(const WrapperStr & name,
+                               const WrapperStr & stereotype,
                                NDict<Class> & declared,
                                NDict<Class> & defined)
 {
@@ -140,8 +140,8 @@ Class * ClassContainer::define(const Q3CString & name,
     return new_class(name, stereotype, FALSE);
 }
 
-void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
-                                  Q3CString & typeform,
+void ClassContainer::compute_type(WrapperStr type, UmlTypeSpec & typespec,
+                                  WrapperStr & typeform,
                                   bool get_first_template_actual,
                                   const Q3ValueList<FormalParameterList> & tmplts)
 {
@@ -170,8 +170,8 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
         // look at each actual in <>
         unsigned level = 1;
         int index2;
-        Q3CString tf1;
-        Q3CString t1;
+        WrapperStr tf1;
+        WrapperStr t1;
 
         for (;;) {
             // earch for the current arg end
@@ -189,18 +189,18 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
             }
 
             if (p[index2]) {
-                Q3CString tf = type.left(index + 1) + typeform + type.mid(index2);
-                Q3CString t = type.mid(index + 1, index2 - index - 1).stripWhiteSpace();
+                WrapperStr tf = type.left(index + 1) + typeform + type.mid(index2);
+                WrapperStr t = type.mid(index + 1, index2 - index - 1).stripWhiteSpace();
 #ifdef DEBUG_DOUML
                 QLOG_INFO() << "typeform '" << tf << "' type '" << t << "'\n";
 #endif
                 UmlTypeSpec ts;
 
-                Q3CString normalized = Lex::normalize(t);
+                WrapperStr normalized = Lex::normalize(t);
 
                 if (!find_type(normalized, ts) &&
                     (Namespace::current().isEmpty() ||
-                     (normalized.at(0) == ':') ||
+                     (normalized.at(0) == ":") ||
                      !find_type("::" + normalized, ts))) {
                     if (get_first_template_actual) {
                         get_first_template_actual = FALSE;
@@ -247,14 +247,14 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
         }
     }
 
-    Q3CString normalized;
+    WrapperStr normalized;
 
     if (typespec.type == 0) {
         normalized = Lex::normalize(type);
 
         if (!find_type(normalized, typespec) &&
             (Namespace::current().isEmpty() ||
-             (normalized.at(0) == ':') ||
+             (normalized.at(0) == ":") ||
              !find_type("::" + normalized, typespec))) {
             typespec.explicit_type = CppSettings::umlType(type);
 
@@ -281,7 +281,7 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
 	if (!Lex::identifierp(type, TRUE))
 	  typespec.explicit_type = type;
 	else {
-	  Q3CString t = type;
+	  WrapperStr t = type;
 
 	  while ((index = t.find(':')) == 0)
 	    t = t.mid(1);
@@ -312,7 +312,7 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
 
     if ((typespec.type != 0) &&
         !typespec.type->formals().isEmpty() &&
-        (type.at(type.length() - 1) == '>') &&
+        (type.at(type.length() - 1) == ">") &&
         (!typespec.type->inside_its_definition() ||
          !typespec.type->is_itself((normalized.isEmpty()) ? Lex::normalize(type)
                                    : normalized))) {
@@ -321,7 +321,7 @@ void ClassContainer::compute_type(Q3CString type, UmlTypeSpec & typespec,
     }
 }
 
-bool ClassContainer::find_type(Q3CString type, UmlTypeSpec & typespec,
+bool ClassContainer::find_type(WrapperStr type, UmlTypeSpec & typespec,
                                NDict<Class> & defined)
 {
     typespec.explicit_type = 0;
@@ -376,7 +376,7 @@ bool ClassContainer::get_template(FormalParameterList & tmplt)
 {
     tmplt.clear();
 
-    Q3CString t = Lex::read_word(TRUE);
+    WrapperStr t = Lex::read_word(TRUE);
 
     if (t != "<") {
         if (!Package::scanning() && (t != "class"))
@@ -394,8 +394,8 @@ bool ClassContainer::get_template(FormalParameterList & tmplt)
             if (t == ">")
                 break;
 
-            Q3CString x;
-            Q3CString s;
+            WrapperStr x;
+            WrapperStr s;
 
             if ((t == "class") || (t == "typename")) {
                 x = Lex::read_word();
@@ -420,10 +420,10 @@ bool ClassContainer::get_template(FormalParameterList & tmplt)
                 return FALSE;
             }
             else {
-                Q3CString pre_pre_region;
-                Q3CString pre_region = Lex::region();
-                Q3CString pre_pre_word;
-                Q3CString pre_word = t;
+                WrapperStr pre_pre_region;
+                WrapperStr pre_region = Lex::region();
+                WrapperStr pre_pre_word;
+                WrapperStr pre_word = t;
                 int level = 0;
 
                 for (;;) {
@@ -469,7 +469,7 @@ bool ClassContainer::get_template(FormalParameterList & tmplt)
                 }
             }
 
-            Q3CString v;
+            WrapperStr v;
 
             if (s == "=") {
                 v = Lex::read_list_elt();

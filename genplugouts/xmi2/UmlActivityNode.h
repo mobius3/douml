@@ -5,7 +5,7 @@
 #include "UmlFlow.h"
 #include "UmlBaseActivityNode.h"
 #include "UmlActivityItem.h"
-#include <q3cstring.h>
+
 #include <q3ptrlist.h>
 
 class UmlFlow;
@@ -15,7 +15,7 @@ class UmlActivityNode : public UmlBaseActivityNode, public UmlActivityItem
 {
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlActivityNode(void * id, const Q3CString & s) : UmlBaseActivityNode(id, s) {
+    UmlActivityNode(void * id, const WrapperStr & s) : UmlBaseActivityNode(id, s) {
     }
 
 

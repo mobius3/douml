@@ -103,7 +103,7 @@ void ClassSettings::save(QTextStream & st) const
 
     if (relation_visibility != UmlDefaultVisibility) {
         if (nl)
-            st << ' ';
+            st << " ";
         else {
             nl_indent(st);
             nl = TRUE;
@@ -114,7 +114,7 @@ void ClassSettings::save(QTextStream & st) const
 
     if (operation_visibility != UmlDefaultVisibility) {
         if (nl)
-            st << ' ';
+            st << " ";
         else
             nl_indent(st);
 

@@ -40,7 +40,7 @@
 #include <q3popupmenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 #include "AttributeDialog.h"
 #include "AttributeData.h"
@@ -1160,7 +1160,7 @@ QString AttributeDialog::cpp_decl(const BrowserAttribute * at, bool init,
             s += GenerationSettings::cpp_relationattribute_stereotype(d->stereotype);
         }
         else if (*p == '\n') {
-            s += ' ';
+            s += " ";
 
             do
                 p += 1;
@@ -1307,7 +1307,7 @@ void AttributeDialog::java_update()
             p += 13;
 
             if (uml_visibility.value() != UmlPackageVisibility)
-                s += uml_visibility.state() + ' ';
+                s += uml_visibility.state() + " ";
         }
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
@@ -1440,7 +1440,7 @@ QString AttributeDialog::java_decl(const BrowserAttribute * at, bool init,
         else if (!strncmp(p, "${@}", 4))
             p += 4;
         else if (*p == '\n') {
-            s += ' ';
+            s += " ";
 
             do
                 p += 1;
@@ -1572,7 +1572,7 @@ void AttributeDialog::php_update()
             p += 13;
 
             if (uml_visibility.value() != UmlPackageVisibility)
-                s += uml_visibility.state() + ' ';
+                s += uml_visibility.state() + " ";
         }
         else if (!strncmp(p, "${static}", 9)) {
             p += 9;
@@ -1652,7 +1652,7 @@ QString AttributeDialog::php_decl(const BrowserAttribute * at, bool init,
         else if (!strncmp(p, "${var}", 6))
             p += 6;
         else if (*p == '\n') {
-            s += ' ';
+            s += " ";
 
             do
                 p += 1;
@@ -1831,7 +1831,7 @@ QString AttributeDialog::python_decl(const BrowserAttribute * at,
                 s += *p++;
         }
         else if (*p == '\n') {
-            s += ' ';
+            s += " ";
 
             do
                 p += 1;
@@ -2068,7 +2068,7 @@ QString AttributeDialog::idl_decl(const BrowserAttribute * at,
             s += d->get_multiplicity();
         }
         else if (*p == '\n') {
-            s += ' ';
+            s += " ";
 
             do
                 p += 1;

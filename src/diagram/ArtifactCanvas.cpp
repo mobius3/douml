@@ -896,13 +896,13 @@ void ArtifactCanvas::save(QTextStream & st, bool ref, QString & warning) const
     }
     else {
         nl_indent(st);
-        st << "artifactcanvas " << get_ident() << ' ';
+        st << "artifactcanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
         nl_indent(st);
 
         if (itscolor != UmlDefaultColor)
-            st << "color " << stringify(itscolor) << ' ';
+            st << "color " << stringify(itscolor) << " ";
 
         save_xyz(st, this, "xyz");
         save_stereotype_property(st, warning);

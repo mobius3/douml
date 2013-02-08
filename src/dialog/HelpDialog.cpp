@@ -160,7 +160,7 @@ void HelpDialog::show(QString topic)
 
                 int index = 0;
 
-                while ((index = topic.find(' ', index)) != -1)
+                while ((index = topic.find(" ", index)) != -1)
                     topic.replace(index, 1, "%20");
 
 

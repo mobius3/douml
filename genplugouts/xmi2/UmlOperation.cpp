@@ -9,11 +9,11 @@
 #include "JavaSettings.h"
 #include "UmlPackage.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 void UmlOperation::write(FileOut & out)
 {
-    Q3CString decl;
+    WrapperStr decl;
 
     switch (_lang) {
     case Uml:
@@ -103,7 +103,7 @@ void UmlOperation::write_exceptions(FileOut & out)
     }
 }
 
-void UmlOperation::write_return_type(FileOut & out, Q3CString decl)
+void UmlOperation::write_return_type(FileOut & out, WrapperStr decl)
 {
     const UmlTypeSpec & t = returnType();
     static int return_rank = 0;
@@ -144,7 +144,7 @@ void UmlOperation::write_return_type(FileOut & out, Q3CString decl)
     }
 }
 
-void UmlOperation::write_cpp_returntype(FileOut & out, Q3CString decl)
+void UmlOperation::write_cpp_returntype(FileOut & out, WrapperStr decl)
 {
     // doesn't manage function pointer
     // manage keywords
@@ -174,7 +174,7 @@ void UmlOperation::write_cpp_returntype(FileOut & out, Q3CString decl)
         write_type(out, t, decl, "${name}", "${type}");
 }
 
-void UmlOperation::write_java_returntype(FileOut & out, Q3CString decl)
+void UmlOperation::write_java_returntype(FileOut & out, WrapperStr decl)
 {
 // manage keywords
     int index;
@@ -245,7 +245,7 @@ void UmlOperation::write_uml_params(FileOut & out)
     }
 }
 
-void UmlOperation::write_cpp_java_params(FileOut & out, Q3CString decl)
+void UmlOperation::write_cpp_java_params(FileOut & out, WrapperStr decl)
 {
     int index1 = decl.find("${(}");
 
@@ -262,9 +262,9 @@ void UmlOperation::write_cpp_java_params(FileOut & out, Q3CString decl)
     index1 = 0;
 
     const Q3ValueList<UmlParameter> p = params();
-    Q3CString sparam;
-    Q3CString kname;
-    Q3CString ktype;
+    WrapperStr sparam;
+    WrapperStr kname;
+    WrapperStr ktype;
     int rank;
 
     while (get_param(decl, index1, sparam, kname, ktype, rank)) {
@@ -310,7 +310,7 @@ void UmlOperation::write_cpp_java_params(FileOut & out, Q3CString decl)
     }
 }
 
-bool UmlOperation::get_param(Q3CString s, int & index, Q3CString & r, Q3CString & kname, Q3CString & ktype, int & rank)
+bool UmlOperation::get_param(WrapperStr s, int & index, WrapperStr & r, WrapperStr & kname, WrapperStr & ktype, int & rank)
 {
     int index0 = index;
     int level = 0;
@@ -410,13 +410,13 @@ const char * UmlOperation::event(bool rec)
     return s;
 }
 
-const char * UmlOperation::event(const char * pfix, Q3CString msg)
+const char * UmlOperation::event(const char * pfix, WrapperStr msg)
 {
     int index0 = 0;
     int index1;
 
     while ((index1 = msg.find('\n', index0)) != -1) {
-        msg[index1] = ' ';
+        msg[index1] = " ";
         index0 = index1 + 1;
     }
 

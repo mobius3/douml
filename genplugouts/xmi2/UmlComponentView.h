@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseComponentView.h"
-#include <q3cstring.h>
+
 #include <q3ptrlist.h>
 
 class FileOut;
@@ -15,7 +15,7 @@ class UmlItem;
 class UmlComponentView : public UmlBaseComponentView
 {
 public:
-    UmlComponentView(void * id, const Q3CString & n) : UmlBaseComponentView(id, n) {};
+    UmlComponentView(void * id, const WrapperStr & n) : UmlBaseComponentView(id, n) {};
 
     virtual void write(FileOut & out);
 

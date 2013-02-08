@@ -7,7 +7,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 UmlRelation * UmlBaseRelation::create(aRelationKind kind, UmlClass * start, UmlClass * end)
 {
     UmlCom::send_cmd(start->_identifier, createCmd, aRelation,

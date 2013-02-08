@@ -768,19 +768,19 @@ void StateActionCanvas::save(QTextStream & st, bool ref, QString & warning) cons
     }
     else {
         nl_indent(st);
-        st << "stateactioncanvas " << get_ident() << ' ';
+        st << "stateactioncanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
         nl_indent(st);
 
         if (language != DefaultDrawingLanguage)
-            st << "language " << stringify(language) << ' ';
+            st << "language " << stringify(language) << " ";
 
         if (show_stereotype_properties != UmlDefaultState)
-            st << "show_stereotype_properties " << stringify(show_stereotype_properties) << ' ';
+            st << "show_stereotype_properties " << stringify(show_stereotype_properties) << " ";
 
         if (itscolor != UmlDefaultColor)
-            st << "color " << stringify(itscolor) << ' ';
+            st << "color " << stringify(itscolor) << " ";
 
         save_xyzwh(st, this, "xyzwh");
         save_stereotype_property(st, warning);

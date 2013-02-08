@@ -1120,7 +1120,7 @@ void SdDurationCanvas::save(QTextStream & st, bool ref, QString & warning) const
         st << "durationcanvas_ref " << get_ident();
     else if (!support->isaDuration()) {
         nl_indent(st);
-        st << "durationcanvas " << get_ident() << ' ';
+        st << "durationcanvas " << get_ident() << " ";
         ((DiagramCanvas *)((SdLifeLineCanvas *) support)->get_obj())->save(st, TRUE, warning);
         save_internal(st);
     }

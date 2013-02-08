@@ -157,6 +157,10 @@ enum OnInstanceCmd {
     setIsCppConstCmd,
     setIsCppFriendCmd,
     setIsCppVirtualCmd,
+    setIsCppDefaultCmd,
+    setIsCppDeleteCmd,
+    setIsCppOverrideCmd,
+    setIsCppFinalCmd,
     setIsIdlTruncatableCmd,
     setCppBodyCmd,
     setCppNameSpecCmd,
@@ -288,11 +292,8 @@ enum OnInstanceCmd {
     getIdCmd = 254, // not in old plug-outs managed through Douml
 
     // api 20
-    old_deleteCmd = 255, // not in plug-outs managed through Douml
-    setIsCppDefaultCmd,
-    setIsCppDeleteCmd,
-    setIsCppOverrideCmd,
-    setIsCppFinalCmd
+    old_deleteCmd = 255 // not in plug-outs managed through Douml
+
 };
 
 enum ClassGlobalCmd {

@@ -4,8 +4,8 @@
 
 #include "UmlActivityObject.h"
 //Added by qt3to4:
-#include <Q3CString>
-void UmlActivityAction::write_begin(FileOut & out, Q3CString k)
+#include "misc/mystr.h"
+void UmlActivityAction::write_begin(FileOut & out, WrapperStr k)
 {
     out.indent();
     out << ((parent()->kind() == anActivity) ? "<node" : "<containedNode")
@@ -24,7 +24,7 @@ void UmlActivityAction::write_end(FileOut & out, bool dontclose)
     out << ">\n";
     out.indent(+1);
 
-    Q3CString s = constraint();
+    WrapperStr s = constraint();
 
     if (! s.isEmpty()) {
         out.indent();
@@ -86,7 +86,7 @@ void UmlActivityAction::write_close(FileOut & out)
     unload();
 }
 
-void UmlActivityAction::write_condition(FileOut & out, Q3CString cond, bool pre)
+void UmlActivityAction::write_condition(FileOut & out, WrapperStr cond, bool pre)
 {
     if (! cond.isEmpty()) {
         const char * k;

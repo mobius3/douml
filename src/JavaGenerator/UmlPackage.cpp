@@ -28,7 +28,7 @@
 #include <qdir.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlPackage.h"
@@ -37,16 +37,16 @@
 #include "UmlArtifact.h"
 #include "util.h"
 
-UmlPackage::UmlPackage(void * id, const Q3CString & n)
+UmlPackage::UmlPackage(void * id, const WrapperStr & n)
     : UmlBasePackage(id, n)
 {
     dir.read = FALSE;
 }
 
 static bool RootDirRead;
-static Q3CString RootDir;
+static WrapperStr RootDir;
 
-Q3CString UmlPackage::file_path(const Q3CString & f)
+WrapperStr UmlPackage::file_path(const WrapperStr & f)
 {
     if (!dir.read) {
         dir.file = javaDir();
@@ -72,7 +72,7 @@ Q3CString UmlPackage::file_path(const Q3CString & f)
             dir.file = d_root.filePath(dir.file);
 
         if (dir.file.isEmpty()) {
-            UmlCom::trace(Q3CString("<font color=\"red\"><b><b> The generation directory "
+            UmlCom::trace(WrapperStr("<font color=\"red\"><b><b> The generation directory "
                                     "must be specified for the package<i> ") + name()
                           + "</i>, edit the <i> generation settings</i> (tab 'directory') "
                           "or edit the package (tab 'Java')</b></font><br>");
@@ -87,7 +87,7 @@ Q3CString UmlPackage::file_path(const Q3CString & f)
 
     if (! d.exists()) {
         // create directory including the intermediates
-        Q3CString s = dir.file;
+        WrapperStr s = dir.file;
         int index = 0;
         QChar sep = QDir::separator();
 
@@ -102,12 +102,12 @@ Q3CString UmlPackage::file_path(const Q3CString & f)
         int index2;
 
         while ((index2 = s.find("/", index + 1)) != -1) {
-            Q3CString s2 = s.left(index2);
+            WrapperStr s2 = s.left(index2);
             QDir sd(s2);
 
             if (!sd.exists()) {
                 if (!sd.mkdir(s2)) {
-                    UmlCom::trace(Q3CString("<font color=\"red\"><b> cannot create directory <i>")
+                    UmlCom::trace(WrapperStr("<font color=\"red\"><b> cannot create directory <i>")
                                   + s2 + "</i></b></font><br>");
                     UmlCom::bye(n_errors() + 1);
                     UmlCom::fatal_error("UmlPackage::file_path");
@@ -118,13 +118,13 @@ Q3CString UmlPackage::file_path(const Q3CString & f)
         }
     }
 
-    return Q3CString(d.filePath(f).toAscii().constData()) + Q3CString(".") +
+    return WrapperStr(d.filePath(f).toAscii().constData()) + WrapperStr(".") +
            JavaSettings::sourceExtension();
 }
 
-Q3CString UmlPackage::text_path(const Q3CString & f)
+WrapperStr UmlPackage::text_path(const WrapperStr & f)
 {
-    Q3CString r = file_path(f);
+    WrapperStr r = file_path(f);
 
     return r.left(r.length() - 1 - JavaSettings::sourceExtension().length());
 }
@@ -142,9 +142,9 @@ UmlPackage * UmlPackage::package()
     return this;
 }
 
-void UmlPackage::import(QTextStream & f, const Q3CString & indent)
+void UmlPackage::import(QTextStream & f, const WrapperStr & indent)
 {
-    Q3CString s = javaPackage();
+    WrapperStr s = javaPackage();
 
     if (!s.isEmpty()) {
         s += ".*";

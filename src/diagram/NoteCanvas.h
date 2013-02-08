@@ -29,9 +29,10 @@
 #define NOTECANVAS_H
 
 #include "DiagramCanvas.h"
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 
 #define NOTE_CANVAS_MIN_SIZE 35
 #define NOTE_MARGIN 10

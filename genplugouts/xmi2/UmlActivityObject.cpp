@@ -5,7 +5,7 @@
 #include "UmlState.h"
 #include "UmlTransition.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 void UmlActivityObject::write(FileOut & out)
 {
     const char * k = (parent()->kind() == anActivity)
@@ -14,7 +14,7 @@ void UmlActivityObject::write(FileOut & out)
     out.indent();
     out << '<' << k << " xmi:type=\"uml:";
 
-    Q3CString st = stereotype();
+    WrapperStr st = stereotype();
 
     if (st == "datastore")
         out << "DataStoreNode";
@@ -109,7 +109,7 @@ void UmlActivityObject::write_ordering(FileOut & out)
 
 void UmlActivityObject::write_in_state(FileOut & out)
 {
-    Q3CString s = inState();
+    WrapperStr s = inState();
 
     if (!s.isEmpty()) {
         UmlState * st = UmlState::find(s);

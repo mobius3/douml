@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseDeploymentView.h"
-#include <q3cstring.h>
+
 #include <q3ptrlist.h>
 
 class FileOut;
@@ -15,7 +15,7 @@ class UmlItem;
 class UmlDeploymentView : public UmlBaseDeploymentView
 {
 public:
-    UmlDeploymentView(void * id, const Q3CString & n) : UmlBaseDeploymentView(id, n) {};
+    UmlDeploymentView(void * id, const WrapperStr & n) : UmlBaseDeploymentView(id, n) {};
 
     virtual void write(FileOut & out);
 

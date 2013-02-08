@@ -3,7 +3,7 @@
 
 
 #include "aMessageKind.h"
-#include <q3cstring.h>
+
 #include <q3ptrdict.h>
 #include <q3ptrvector.h>
 #include "UmlMessage.h"
@@ -22,7 +22,7 @@ public:
     }
 
     // return the stereotype of the message
-    Q3CString stereotype() const {
+    WrapperStr stereotype() const {
         return _stereotype;
     }
 
@@ -42,7 +42,7 @@ public:
     }
 
     // return the arguments of the operation, may be empty
-    const Q3CString & arguments() const {
+    const WrapperStr & arguments() const {
         return _args;
     }
 
@@ -58,9 +58,9 @@ private:
 
     int _received_at;
 
-    Q3CString _args;
+    WrapperStr _args;
 
-    Q3CString _stereotype;
+    WrapperStr _stereotype;
 
     // internal, don't call it
     void read_(const Q3PtrDict<UmlClassInstanceReference> & instances, const Q3PtrVector<UmlFragment> & fragments);

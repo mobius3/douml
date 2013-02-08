@@ -3,7 +3,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 bool UmlBaseClassMember::isClassMember()
 {
     read_if_needed_();

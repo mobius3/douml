@@ -43,7 +43,7 @@
 #include <qdatastream.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include <QPixmap>
 
@@ -373,7 +373,7 @@ void JavaCatWindow::trace(QString s)
     the->spl->setSizes(sz);
 }
 
-void JavaCatWindow::trace(Q3CString s)
+void JavaCatWindow::trace(WrapperStr s)
 {
     trace(QString(s));
 }

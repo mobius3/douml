@@ -32,7 +32,7 @@
 #include <QTextStream>
 #include <qcursor.h>
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 #include "FlowData.h"
 #include "BrowserFlow.h"

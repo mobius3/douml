@@ -6,10 +6,10 @@
 #include "UmlCom.h"
 #include "Sgnl.h"
 //Added by qt3to4:
-#include <Q3CString>
-void UmlOnSignalAction::solve(Q3CString idref)
+#include "misc/mystr.h"
+void UmlOnSignalAction::solve(WrapperStr idref)
 {
-    Q3CString sig = Signal::get(idref);
+    WrapperStr sig = Signal::get(idref);
 
     if (!sig.isNull())
         set_Signal(sig);
@@ -20,10 +20,10 @@ void UmlOnSignalAction::solve(Q3CString idref)
 
 void UmlOnSignalAction::import_it(FileIn & in, Token & token)
 {
-    Q3CString s = token.valueOf("signal");
+    WrapperStr s = token.valueOf("signal");
 
     if (!s.isEmpty()) {
-        Q3CString sig = Signal::get(s);
+        WrapperStr sig = Signal::get(s);
 
         if (!sig.isNull())
             set_Signal(sig);
@@ -32,13 +32,13 @@ void UmlOnSignalAction::import_it(FileIn & in, Token & token)
     }
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * ks = k;
 
         while (in.read(), !token.close(ks)) {
             if (token.what() == "signal") {
-                Q3CString sig_name;
-                Q3CString sig_ref;
+                WrapperStr sig_name;
+                WrapperStr sig_ref;
 
                 Signal::add(in, token, sig_name, sig_ref);
 

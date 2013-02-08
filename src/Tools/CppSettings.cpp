@@ -9,7 +9,7 @@
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 bool CppSettings::useDefaults()
 {
     UmlCom::send_cmd(cppSettingsCmd, getCppUseDefaultsCmd);

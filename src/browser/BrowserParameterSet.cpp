@@ -367,7 +367,7 @@ void BrowserParameterSet::save(QTextStream & st, bool ref, QString & warning)
         st << "parameterset_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "parameterset " << get_ident() << ' ';
+        st << "parameterset " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

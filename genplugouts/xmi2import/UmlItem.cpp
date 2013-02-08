@@ -7,15 +7,15 @@
 #include "UmlClass.h"
 #include "UmlNcRelation.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 
-void Unresolved::addGeneralization(UmlItem * e, Q3CString & id, Q3CString cstr)
+void Unresolved::addGeneralization(UmlItem * e, WrapperStr & id, WrapperStr cstr)
 {
     Generalizations.append(Unresolved(e, id, cstr));
 }
 
-void Unresolved::addRef(UmlItem * e, Q3CString & id)
+void Unresolved::addRef(UmlItem * e, WrapperStr & id)
 {
     Refs.append(Unresolved(e, id, ""));
 }
@@ -39,7 +39,7 @@ void Unresolved::solveThem()
     Generalizations.clear();
 }
 
-void UnresolvedWithContext::add(UmlItem * e, Q3CString id, int c)
+void UnresolvedWithContext::add(UmlItem * e, WrapperStr id, int c)
 {
     All.append(UnresolvedWithContext(e, id, c));
 }
@@ -56,7 +56,7 @@ void UnresolvedWithContext::solveThem()
 
 Q3ValueList<UnresolvedWithContext> UnresolvedWithContext::All;
 
-void UnresolvedRelation::add(int ctx, Q3CString idFrom, Q3CString idTo, Q3CString label, Q3CString constraint)
+void UnresolvedRelation::add(int ctx, WrapperStr idFrom, WrapperStr idTo, WrapperStr label, WrapperStr constraint)
 {
     All.append(UnresolvedRelation(ctx, idFrom, idTo, label, constraint));
 }
@@ -72,7 +72,7 @@ void UnresolvedRelation::solveThem()
     Q3ValueList<UnresolvedRelation>::Iterator it;
 
     for (it = All.begin(); it != All.end(); ++it) {
-        QMap<Q3CString, UmlItem *>::Iterator from = UmlItem::All.find((*it).from);
+        QMap<WrapperStr, UmlItem *>::Iterator from = UmlItem::All.find((*it).from);
 
         if (from != UmlItem::All.end())
             (*from)->solveGeneralizationDependencyRealization((*it).context, (*it).to, (*it).name, (*it).constraint);
@@ -92,9 +92,9 @@ void UmlItem::import(QString)
     UmlCom::trace("Error : must be applied on a package<br>");
 }
 
-void UmlItem::addItem(Q3CString id, FileIn & in)
+void UmlItem::addItem(WrapperStr id, FileIn & in)
 {
-    QMap<Q3CString, UmlItem *>::ConstIterator iter = All.find(id);
+    QMap<WrapperStr, UmlItem *>::ConstIterator iter = All.find(id);
 
     if (iter != All.end())
         in.error("xmi:id '" + id + "' used twice");
@@ -105,7 +105,7 @@ void UmlItem::addItem(Q3CString id, FileIn & in)
 
 void UmlItem::import(FileIn & in, Token & tk)
 {
-    Q3CString key = tk.what() + " " + tk.xmiType();
+    WrapperStr key = tk.what() + " " + tk.xmiType();
 
     PFunc pf = Functions[key];
 
@@ -121,15 +121,15 @@ UmlItem * UmlItem::container(anItemKind kind, Token & token, FileIn & in)
     return parent()->container(kind, token, in);
 }
 
-void UmlItem::solve(Q3CString)
+void UmlItem::solve(WrapperStr)
 {
 }
 
-void UmlItem::solve(int, Q3CString)
+void UmlItem::solve(int, WrapperStr)
 {
 }
 
-void UmlItem::generalizeDependRealize(UmlItem * target, FileIn & in, int context, Q3CString label, Q3CString)
+void UmlItem::generalizeDependRealize(UmlItem * target, FileIn & in, int context, WrapperStr label, WrapperStr)
 {
     static const struct {
         aRelationKind rk;
@@ -150,9 +150,9 @@ void UmlItem::generalizeDependRealize(UmlItem * target, FileIn & in, int context
 
 }
 
-void UmlItem::solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString)
+void UmlItem::solveGeneralizationDependencyRealization(int context, WrapperStr idref, WrapperStr label, WrapperStr)
 {
-    QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
 
     if (it != All.end()) {
         static const struct {
@@ -193,7 +193,7 @@ void UmlItem::solveGeneralizationDependencyRealization(int context, Q3CString id
 
 }
 
-bool UmlItem::setType(Q3CString idref, UmlTypeSpec & type)
+bool UmlItem::setType(WrapperStr idref, UmlTypeSpec & type)
 {
     if (idref.isEmpty())
         return FALSE;
@@ -205,7 +205,7 @@ bool UmlItem::setType(Q3CString idref, UmlTypeSpec & type)
     }
 }
 
-bool UmlItem::setType(Q3CString idref, int context, UmlTypeSpec & type)
+bool UmlItem::setType(WrapperStr idref, int context, UmlTypeSpec & type)
 {
     if (idref.isEmpty())
         return FALSE;
@@ -219,7 +219,7 @@ bool UmlItem::setType(Q3CString idref, int context, UmlTypeSpec & type)
 
 bool UmlItem::setType(Token & token, UmlTypeSpec & type)
 {
-    Q3CString idref = token.xmiIdref();
+    WrapperStr idref = token.xmiIdref();
 
     if (idref.isEmpty())
         return UmlClass::isPrimitiveType(token, type);
@@ -233,7 +233,7 @@ bool UmlItem::setType(Token & token, UmlTypeSpec & type)
 
 bool UmlItem::setType(Token & token, int context, UmlTypeSpec & type)
 {
-    Q3CString idref = token.xmiIdref();
+    WrapperStr idref = token.xmiIdref();
 
     if (idref.isEmpty())
         return UmlClass::isPrimitiveType(token, type);
@@ -247,7 +247,7 @@ bool UmlItem::setType(Token & token, int context, UmlTypeSpec & type)
 
 void UmlItem::loadFromProfile()
 {
-    Q3CString id;
+    WrapperStr id;
 
     if (propertyValue("xmiId", id) && (All.find(id) == All.end()))
         All.insert(id, this);
@@ -259,9 +259,9 @@ void UmlItem::loadFromProfile()
         ch[u]->loadFromProfile();
 }
 
-bool UmlItem::getType(Q3CString idref, UmlTypeSpec & type)
+bool UmlItem::getType(WrapperStr idref, UmlTypeSpec & type)
 {
-    QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
 
     type.type = 0;
     type.explicit_type = "";
@@ -275,7 +275,7 @@ bool UmlItem::getType(Q3CString idref, UmlTypeSpec & type)
             return FALSE;
     }
     else {
-        QMap<Q3CString, UmlTypeSpec>::Iterator itp = PrimitiveTypes.find(idref);
+        QMap<WrapperStr, UmlTypeSpec>::Iterator itp = PrimitiveTypes.find(idref);
 
         if (itp != PrimitiveTypes.end()) {
             type = *itp;
@@ -286,26 +286,26 @@ bool UmlItem::getType(Q3CString idref, UmlTypeSpec & type)
     }
 }
 
-void UmlItem::declareFct(Q3CString what, Q3CString type, PFunc fct)
+void UmlItem::declareFct(WrapperStr what, WrapperStr type, PFunc fct)
 {
     Functions[what + " " + type] = fct;
 }
 
 PFunc UmlItem::getFct(const Token & tk)
 {
-    Q3CString key = tk.what() + " " + tk.xmiType();
+    WrapperStr key = tk.what() + " " + tk.xmiType();
 
     return Functions[key];
 }
 
-Q3CString UmlItem::readComment(FileIn & in, Token & token)
+WrapperStr UmlItem::readComment(FileIn & in, Token & token)
 {
     in.bypassedId(token);
 
-    Q3CString doc = token.valueOf("body");
+    WrapperStr doc = token.valueOf("body");
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
@@ -360,7 +360,7 @@ void UmlItem::init()
 
 void UmlItem::importDocumentation(FileIn & in, Token & token, UmlItem *)
 {
-    Q3CString who = token.valueOf("exporter");
+    WrapperStr who = token.valueOf("exporter");
 
     if (who.isNull())
         who = token.valueOf("xmi:exporter");
@@ -376,7 +376,7 @@ void UmlItem::importDocumentation(FileIn & in, Token & token, UmlItem *)
 
 void UmlItem::importComment(FileIn & in, Token & token, UmlItem * where)
 {
-    Q3CString doc = readComment(in, token);
+    WrapperStr doc = readComment(in, token);
 
     if (! doc.isEmpty())
         where->set_Description(doc);
@@ -385,13 +385,13 @@ void UmlItem::importComment(FileIn & in, Token & token, UmlItem * where)
 void UmlItem::importExtension(FileIn & in, Token & token, UmlItem * where)
 {
     if (! token.closed()) {
-        Q3CString s = token.valueOf("extender");
+        WrapperStr s = token.valueOf("extender");
 
         if (s.isNull())
             s = token.valueOf("xmi:extender");
 
         if (s == "Bouml") {
-            Q3CString k = token.what();
+            WrapperStr k = token.what();
             const char * kstr = k;
 
             while (in.read(), !token.close(kstr)) {
@@ -408,7 +408,7 @@ void UmlItem::importExtension(FileIn & in, Token & token, UmlItem * where)
             }
         }
         else if (s == "Visual Paradigm for UML") {
-            Q3CString k = token.what();
+            WrapperStr k = token.what();
             const char * kstr = k;
 
             while (in.read(), !token.close(kstr)) {
@@ -436,13 +436,13 @@ void UmlItem::importExtension(FileIn & in, Token & token, UmlItem * where)
 
 void UmlItem::importOpaqueDef(FileIn & in, Token & token, UmlItem *)
 {
-    Q3CString id = token.xmiId();
-    QMap<Q3CString, Q3CString>::ConstIterator iter = OpaqueDefs.find(id);
+    WrapperStr id = token.xmiId();
+    QMap<QString, WrapperStr>::ConstIterator iter = OpaqueDefs.find(id);
 
     if (iter != OpaqueDefs.end())
         in.error("xmi:id '" + id + "' used twice");
 
-    Q3CString s = token.valueOf("body");
+    WrapperStr s = token.valueOf("body");
 
     if (!s.isNull()) {
         OpaqueDefs.insert(id, s);
@@ -451,7 +451,7 @@ void UmlItem::importOpaqueDef(FileIn & in, Token & token, UmlItem *)
             in.finish(token.what());
     }
     else if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
@@ -467,15 +467,15 @@ void UmlItem::importOpaqueDef(FileIn & in, Token & token, UmlItem *)
 
 void UmlItem::importGeneralization(FileIn & in, Token & token, UmlItem * where)
 {
-    Q3CString id = token.valueOf("general");
-    Q3CString constraint;
+    WrapperStr id = token.valueOf("general");
+    WrapperStr constraint;
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
-            Q3CString s = token.what();
+            WrapperStr s = token.what();
 
             if (s == "general") {
                 id = token.xmiIdref();
@@ -498,7 +498,7 @@ void UmlItem::importGeneralization(FileIn & in, Token & token, UmlItem * where)
     }
 
     if (!id.isEmpty()) {
-        QMap<Q3CString, UmlItem *>::ConstIterator iter = All.find(id);
+        QMap<WrapperStr, UmlItem *>::ConstIterator iter = All.find(id);
 
         if (iter != All.end())
             where->generalizeDependRealize(*iter, in, 0, "", constraint);
@@ -511,18 +511,18 @@ void UmlItem::importGeneralization(FileIn & in, Token & token, UmlItem * where)
 
 void UmlItem::importDependency(FileIn & in, Token & token, UmlItem * where)
 {
-    Q3CString client = token.valueOf("client");
-    Q3CString supplier = token.valueOf("supplier");
-    Q3CString label = token.valueOf("name");
-    Q3CString constraint;
+    WrapperStr client = token.valueOf("client");
+    WrapperStr supplier = token.valueOf("supplier");
+    WrapperStr label = token.valueOf("name");
+    WrapperStr constraint;
     int kind = (token.xmiType() == "uml:Usage") ? 3 : 1;
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
-            Q3CString s = token.what();
+            WrapperStr s = token.what();
 
             if (s == "client")
                 client = token.xmiIdref();
@@ -545,8 +545,8 @@ void UmlItem::importDependency(FileIn & in, Token & token, UmlItem * where)
             // Borland Together 2006 for Eclipse
             supplier = where->id();
 
-        QMap<Q3CString, UmlItem *>::ConstIterator from = All.find(client);
-        QMap<Q3CString, UmlItem *>::ConstIterator to = All.find(supplier);
+        QMap<WrapperStr, UmlItem *>::ConstIterator from = All.find(client);
+        QMap<WrapperStr, UmlItem *>::ConstIterator to = All.find(supplier);
 
         if ((from != All.end()) && (to != All.end()))
             (*from)->generalizeDependRealize(*to, in, kind, label, constraint);
@@ -557,17 +557,17 @@ void UmlItem::importDependency(FileIn & in, Token & token, UmlItem * where)
 
 void UmlItem::importRealization(FileIn & in, Token & token, UmlItem * where)
 {
-    Q3CString client = token.valueOf("client");
-    Q3CString supplier = token.valueOf("supplier");
-    Q3CString label = token.valueOf("name");
-    Q3CString constraint;
+    WrapperStr client = token.valueOf("client");
+    WrapperStr supplier = token.valueOf("supplier");
+    WrapperStr label = token.valueOf("name");
+    WrapperStr constraint;
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
-            Q3CString s = token.what();
+            WrapperStr s = token.what();
 
             if (s == "client")
                 client = token.xmiIdref();
@@ -590,8 +590,8 @@ void UmlItem::importRealization(FileIn & in, Token & token, UmlItem * where)
             // Borland Together 2006 for Eclipse
             supplier = where->id();
 
-        QMap<Q3CString, UmlItem *>::ConstIterator from = All.find(client);
-        QMap<Q3CString, UmlItem *>::ConstIterator to = All.find(supplier);
+        QMap<WrapperStr, UmlItem *>::ConstIterator from = All.find(client);
+        QMap<WrapperStr, UmlItem *>::ConstIterator to = All.find(supplier);
 
         if ((from != All.end()) && (to != All.end()))
             (*from)->generalizeDependRealize(*to, in, 2, label, constraint);
@@ -620,7 +620,7 @@ void UmlItem::outgoing(FileIn & in, Token & token, UmlItem * where)
         in.finish(token.what());
 }
 
-Q3CString UmlItem::legalName(Q3CString s)
+WrapperStr UmlItem::legalName(WrapperStr s)
 {
     unsigned index;
     unsigned n = s.length();
@@ -643,16 +643,16 @@ bool UmlItem::fromEclipse()
     return FromEclipse;
 }
 
-Q3CString UmlItem::readConstraint(FileIn & in, Token & token)
+WrapperStr UmlItem::readConstraint(FileIn & in, Token & token)
 {
-    Q3CString constraint;
+    WrapperStr constraint;
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
-            Q3CString s = token.what();
+            WrapperStr s = token.what();
 
             if ((s == "specification") && (token.xmiType() == "uml:OpaqueExpression")) {
                 constraint = token.valueOf("body");
@@ -676,19 +676,19 @@ Q3CString UmlItem::readConstraint(FileIn & in, Token & token)
     return constraint;
 }
 
-QMap<Q3CString, Q3CString> UmlItem::OpaqueDefs;
+QMap<QString, WrapperStr> UmlItem::OpaqueDefs;
 
 bool UmlItem::FromBouml;
 
 bool UmlItem::FromEclipse;
 
-QMap<Q3CString, UmlItem *> UmlItem::All;
+QMap<WrapperStr, UmlItem *> UmlItem::All;
 
-QMap<Q3CString, PFunc> UmlItem::Functions;
+QMap<WrapperStr, PFunc> UmlItem::Functions;
 
-QMap<Q3CString, UmlTypeSpec> UmlItem::PrimitiveTypes;
+QMap<WrapperStr, UmlTypeSpec> UmlItem::PrimitiveTypes;
 
-QMap<Q3CString, UmlItem *> UmlItem::Incomings;
+QMap<WrapperStr, UmlItem *> UmlItem::Incomings;
 
-QMap<Q3CString, UmlItem *> UmlItem::Outgoings;
+QMap<WrapperStr, UmlItem *> UmlItem::Outgoings;
 

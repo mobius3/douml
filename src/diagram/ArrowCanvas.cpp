@@ -35,7 +35,7 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 #include <QPixmap>
 
 #include "ArrowCanvas.h"
@@ -1897,7 +1897,7 @@ void ArrowCanvas::save(QTextStream & st, bool ref, QString & warning) const
         st << "line_ref " << get_ident();
     else if (begin->type() != UmlArrowPoint) {
         nl_indent(st);
-        st << "line " << get_ident() << ' ' << stringify(itstype);
+        st << "line " << get_ident() << " " << stringify(itstype);
 
         if (geometry != NoGeometry) {
             st << " geometry " << stringify(geometry);
@@ -1936,7 +1936,7 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
         st << " z " << zs.setNum(z());
 
         if (with_label && ar->label) {
-            st << ' ';
+            st << " ";
             ar->label->save(st, FALSE, warning);
         }
 
@@ -1956,7 +1956,7 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
     st << " z " << zs.setNum(z());
 
     if (with_label && ar->label) {
-        st << ' ';
+        st << " ";
         ar->label->save(st, FALSE, warning);
     }
 

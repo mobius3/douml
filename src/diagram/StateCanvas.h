@@ -39,7 +39,7 @@
 #include "DiagramCanvas.h"
 #include "MultipleDependency.h"
 #include "Settings.h"
-#include "misc/mystr.h"
+
 
 #define STATE_CANVAS_MIN_SIZE 40
 

@@ -4,7 +4,7 @@
 
 #include "UmlBaseActivity.h"
 #include "FlowContainer.h"
-#include <q3cstring.h>
+
 #include <qmap.h>
 
 class FileOut;
@@ -14,17 +14,17 @@ class UmlActivity : public UmlBaseActivity, public FlowContainer
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlActivity(void * id, const Q3CString & s) : UmlBaseActivity(id, s) {
+    UmlActivity(void * id, const WrapperStr & s) : UmlBaseActivity(id, s) {
     }
 
     //write the definition if it is not empty for the target language
     virtual void write(FileOut & out);
 
-    void write_condition(FileOut & out, Q3CString cond, bool pre);
+    void write_condition(FileOut & out, WrapperStr cond, bool pre);
 
-    UmlItem * add_opaque_behavior(Q3CString beh, UmlItem * who, const char * k);
+    UmlItem * add_opaque_behavior(WrapperStr beh, UmlItem * who, const char * k);
 
-    UmlItem * add_opaque_expression(Q3CString val, UmlItem * who);
+    UmlItem * add_opaque_expression(WrapperStr val, UmlItem * who);
 
 
 private:
@@ -42,9 +42,9 @@ private:
 
 
 protected:
-    QMap<Q3CString, Opaque> _opaque_behavior;
+    QMap<WrapperStr, Opaque> _opaque_behavior;
 
-    QMap<Q3CString, UmlItem *> _opaque_expression;
+    QMap<WrapperStr, UmlItem *> _opaque_expression;
 
 };
 

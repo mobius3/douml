@@ -893,7 +893,7 @@ void BrowserActivity::save(QTextStream & st, bool ref, QString & warning)
         st << "activity_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "activity " << get_ident() << ' ';
+        st << "activity " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

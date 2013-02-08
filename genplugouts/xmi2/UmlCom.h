@@ -7,7 +7,7 @@
 //#include "OnInstanceCmd.h"
 #include "anItemKind.h"
 #include "aRelationKind.h"
-#include <q3cstring.h>
+
 
 #include <q3ptrvector.h>
 #include <qstring.h>
@@ -220,7 +220,7 @@ public:
     static void read_item_list(Q3PtrVector<UmlItem> & v);
     //internal, do NOT use it
 
-    static void fatal_error(const Q3CString & msg);
+    static void fatal_error(const WrapperStr & msg);
     //internal, do NOT use it
 
     static void flush();

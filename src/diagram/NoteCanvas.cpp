@@ -453,7 +453,7 @@ void NoteCanvas::save(QTextStream & st, bool ref, QString &) const
     else {
         nl_indent(st);
 
-        st << "note " << get_ident() << ' ';
+        st << "note " << get_ident() << " ";
         save_internal(st);
     }
 }

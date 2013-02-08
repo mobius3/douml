@@ -8,10 +8,10 @@
 #include "UmlFragmentCompartment.h"
 #include "UmlDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 void UmlFragment::write(FileOut & out, UmlItem * diagram, Q3PtrList<UmlSequenceMessage> & msgs)
 {
-    Q3CString oper = name();
+    WrapperStr oper = name();
 
     if (oper == "ref")
         write_ref(out, diagram, msgs);
@@ -48,7 +48,7 @@ void UmlFragment::write(FileOut & out, UmlItem * diagram, Q3PtrList<UmlSequenceM
                     if (lifeline == 0)
                         break;
 
-                    out << ' ';
+                    out << " ";
                 }
 
                 out << '"';
@@ -109,7 +109,7 @@ void UmlFragment::write_ref(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequ
             if (++index == n)
                 break;
 
-            out << ' ';
+            out << " ";
         }
 
         out << '"';

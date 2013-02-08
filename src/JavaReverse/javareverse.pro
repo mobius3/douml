@@ -95,11 +95,30 @@ SOURCES          = main.cpp BrowserNode.cpp Statistic.cpp \
         ../Tools/UmlBaseTypeSpec.cpp \
         ../Tools/UmlBaseParameter.cpp \
         ../Tools/UmlBaseView.cpp \
-        ../Tools/UmlBaseClassInstance.cpp
+        ../Tools/UmlBaseClassInstance.cpp \
+    ../misc/mystr.cpp \
+    ../Logging/QsLogDest.cpp \
+    ../Logging/QsLog.cpp \
+    ../Logging/QsDebugOutput.cpp
 
 TARGET          = java_reverse
 DEFINES          = WITHJAVA REVERSE
-INCLUDEPATH   = ../Tools ../JavaReverse ../JavaCat
+INCLUDEPATH   = ../Tools ../JavaReverse ../JavaCat ../
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+
+QMAKE_CXXFLAGS += -std=gnu++11
+Release{
+    MOC_DIR = ../../bin/MOC_release/java_rev
+    OBJECTS_DIR = ../../bin/Obj_release/java_rev
+}
+
+Debug{
+    MOC_DIR = ../../bin/MOC_debug/java_rev/
+    OBJECTS_DIR = ../../bin/Obj_debug/java_rev
+
+}
+
+    DESTDIR = ../../bin
+

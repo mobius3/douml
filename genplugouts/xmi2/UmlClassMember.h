@@ -2,7 +2,7 @@
 #define _UMLCLASSMEMBER_H
 
 
-#include <q3cstring.h>
+
 #include "UmlBaseClassMember.h"
 
 class FileOut;
@@ -15,7 +15,7 @@ class UmlTypeSpec;
 class UmlClassMember : public UmlBaseClassMember
 {
 public:
-    UmlClassMember(void * id, const Q3CString & n) : UmlBaseClassMember(id, n) {};
+    UmlClassMember(void * id, const WrapperStr & n) : UmlBaseClassMember(id, n) {};
 
     void write_scope(FileOut & out);
 
@@ -27,7 +27,7 @@ public:
 
     //  return the true name of the item
 
-    Q3CString true_name(Q3CString name, Q3CString decl);
+    WrapperStr true_name(WrapperStr name, WrapperStr decl);
 
     static bool identChar(char c);
 
@@ -35,9 +35,9 @@ public:
     //Have to remove the name and type keywords given in argument,
     //and to remove the initial value.
     //t.type != 0 or t.explicit_type != ""
-    static void write_type(FileOut & out, const UmlTypeSpec & t, Q3CString s, const char * k_name, const char * k_type);
+    static void write_type(FileOut & out, const UmlTypeSpec & t, WrapperStr s, const char * k_name, const char * k_type);
 
-    static void remove_comments(Q3CString & s);
+    static void remove_comments(WrapperStr & s);
 
 };
 

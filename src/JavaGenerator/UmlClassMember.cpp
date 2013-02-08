@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlClassMember.h"
@@ -37,7 +37,7 @@
 #include "UmlSettings.h"
 #include "JavaSettings.h"
 
-void UmlClassMember::remove_comments(Q3CString & s)
+void UmlClassMember::remove_comments(WrapperStr & s)
 {
     int index1 = 0;
 
@@ -72,7 +72,7 @@ void UmlClassMember::remove_comments(Q3CString & s)
     }
 }
 
-void UmlClassMember::remove_arrays(Q3CString & s)
+void UmlClassMember::remove_arrays(WrapperStr & s)
 {
     int index1 = 0;
 
@@ -115,7 +115,7 @@ void UmlClassMember::generate_visibility(QTextStream & f, const char * parent_st
 
 /*
 bool UmlClassMember::compute_dependency(Q3PtrList<JavaRefType> & dependencies,
-					Q3CString decl, const UmlTypeSpec & t)
+					WrapperStr decl, const UmlTypeSpec & t)
 {
   remove_comments(decl);
   remove_arrays(decl);
@@ -187,7 +187,7 @@ bool UmlClassMember::compute_dependency(Q3PtrList<JavaRefType> & dependencies,
 	ts.explicit_type = p2 + 1;
 
       if (dontsubstituteuntil == 0) {
-	Q3CString subst = JavaSettings::type(ts.explicit_type);
+	WrapperStr subst = JavaSettings::type(ts.explicit_type);
 
 	if (subst != ts.explicit_type) {
 	  decl = subst + ' ' + p;

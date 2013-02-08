@@ -4,7 +4,7 @@
 
 #include "UmlActivityControlNode.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 
 class UmlInitialActivityNode;
 class UmlItem;
@@ -31,7 +31,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseInitialActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseInitialActivityNode(void * id, const WrapperStr & s) : UmlActivityControlNode(id, s) {
     }
 
 };
@@ -52,7 +52,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseFlowFinalActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseFlowFinalActivityNode(void * id, const WrapperStr & s) : UmlActivityControlNode(id, s) {
     }
 
 };
@@ -73,7 +73,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseActivityFinalActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseActivityFinalActivityNode(void * id, const WrapperStr & s) : UmlActivityControlNode(id, s) {
     }
 
 };
@@ -94,7 +94,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseDecisionActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseDecisionActivityNode(void * id, const WrapperStr & s) : UmlActivityControlNode(id, s) {
     }
 
 };
@@ -115,7 +115,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseMergeActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseMergeActivityNode(void * id, const WrapperStr & s) : UmlActivityControlNode(id, s) {
     }
 
 };
@@ -136,7 +136,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseForkActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseForkActivityNode(void * id, const WrapperStr & s) : UmlActivityControlNode(id, s) {
     }
 
 };
@@ -157,7 +157,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseJoinActivityNode(void * id, const Q3CString & s) : UmlActivityControlNode(id, s) {
+    UmlBaseJoinActivityNode(void * id, const WrapperStr & s) : UmlActivityControlNode(id, s) {
     }
 
 };

@@ -30,13 +30,13 @@
 
 #include "UmlBaseClassView.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrList>
 
 class UmlClassView : public UmlBaseClassView
 {
 public:
-    UmlClassView(void * id, const Q3CString & n)
+    UmlClassView(void * id, const WrapperStr & n)
         : UmlBaseClassView(id, n) {};
 
 #ifdef ROUNDTRIP

@@ -5,11 +5,11 @@
 #include "UmlRelation.h"
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 void UmlClass::write(FileOut & out)
 {
-    Q3CString st = stereotype();
+    WrapperStr st = stereotype();
 
     if (st == "metaclass")
         return;
@@ -108,7 +108,7 @@ void UmlClass::write(FileOut & out)
         ch[i]->write(out);
 
     if (is_stereotype) {
-        Q3CString path;
+        WrapperStr path;
 
         if (propertyValue("stereotypeIconPath", path) && !path.isEmpty()) {
             out.indent();
@@ -223,7 +223,7 @@ UmlClass * UmlClass::set_assoc(UmlRelation * rel)
         return this;
     }
     else {
-        Q3CString msg = "warning : class '" +  name() +
+        WrapperStr msg = "warning : class '" +  name() +
                         "' is an association class associated with several relations<br>";
 
         UmlCom::trace(msg);
@@ -231,7 +231,7 @@ UmlClass * UmlClass::set_assoc(UmlRelation * rel)
     }
 }
 
-void UmlClass::get_extended(Q3ValueList<Q3CString> & r)
+void UmlClass::get_extended(Q3ValueList<WrapperStr> & r)
 {
     r.clear();
 

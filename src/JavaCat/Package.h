@@ -33,7 +33,7 @@
 #include <qstack.h>
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 
 #include "Class.h"
@@ -68,14 +68,14 @@ public:
     virtual Class * localy_defined(QString name) const;
     void own(UmlArtifact *);
     void reverse(UmlArtifact *);
-    void reverse_file(Q3CString f, UmlArtifact * art = 0);
+    void reverse_file(WrapperStr f, UmlArtifact * art = 0);
 #else
-    void reverse_file(Q3CString f);
+    void reverse_file(WrapperStr f);
 #endif
 
     virtual bool isa_package() const;
 
-    const Q3CString & get_path() {
+    const WrapperStr & get_path() {
         return path;
     }
     UmlPackage * get_uml(bool mandatory = TRUE);
@@ -94,12 +94,12 @@ public:
 
     void new_class(Class *);
 
-    virtual void compute_type(Q3CString type, UmlTypeSpec & typespec,
+    virtual void compute_type(WrapperStr type, UmlTypeSpec & typespec,
                               const Q3ValueList<FormalParameterList> & tmplts,
                               Class ** need_object = 0);
-    virtual Class * define(const Q3CString & name, char st);
-    virtual void declare(const Q3CString &, Class *);
-    void force_class(Q3CString name, UmlTypeSpec & typespec, Class ** need_object);
+    virtual Class * define(const WrapperStr & name, char st);
+    virtual void declare(const WrapperStr &, Class *);
+    void force_class(WrapperStr name, UmlTypeSpec & typespec, Class ** need_object);
 
 #ifndef REVERSE
     virtual QString get_path() const;
@@ -135,8 +135,8 @@ public:
 
 private:
     UmlPackage * uml;
-    Q3CString package;		// java package may be with '.'
-    Q3CString path;
+    WrapperStr package;		// java package may be with '.'
+    WrapperStr path;
     Q3Dict<Class> Undefined;
 #ifdef ROUNDTRIP
     Q3Dict<UmlArtifact> roundtriped;
@@ -164,18 +164,18 @@ private:
     static int file_number(QDir & dir, bool rec);
 
     static void manage_import();
-    void reverse_toplevel_form(Q3CString s);
+    void reverse_toplevel_form(WrapperStr s);
     void reverse_directory(QDir & dir, bool rec);
 
-    void set_package(Q3CString s);
-    Package * find(Q3CString s, bool nohack);
+    void set_package(WrapperStr s);
+    Package * find(WrapperStr s, bool nohack);
     static Package * package_unknown();
 
-    static void update_package_list(Q3CString name);
-    static void update_class_list(Q3CString pack, UmlItem * container);
+    static void update_package_list(WrapperStr name);
+    static void update_class_list(WrapperStr pack, UmlItem * container);
 
-    Class * declare_if_needed(Q3CString name, char st);
-    Class * new_class(const Q3CString & name, char st);
+    Class * declare_if_needed(WrapperStr name, char st);
+    Class * new_class(const WrapperStr & name, char st);
 
 #ifdef ROUNDTRIP
     int count_file_number();

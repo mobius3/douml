@@ -4,7 +4,7 @@
 
 #include "UmlClass.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 void UmlRelation::write(FileOut & out)
 {
     write(out, TRUE);
@@ -140,7 +140,7 @@ void UmlRelation::write_relation(FileOut & out)
     out << '<' << k << " xmi:type=\"uml:Association\"";
     out.id_prefix(this, "ASSOC_");
 
-    Q3CString s = name();
+    WrapperStr s = name();
     int i1 = s.find("(");
     int i2 = s.findRev(")");
 
@@ -227,7 +227,7 @@ void UmlRelation::write_ends(FileOut & out)
 void UmlRelation::write_relation_as_attribute(FileOut & out)
 {
     UmlRelation * first = side(TRUE);
-    Q3CString s;
+    WrapperStr s;
     UmlClass * base;
 
     if ((first->parent()->stereotype() == "stereotype") &&

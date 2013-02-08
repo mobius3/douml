@@ -598,7 +598,7 @@ void BrowserComponentView::save(QTextStream & st, bool ref, QString & warning)
         st << "componentview_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "componentview " << get_ident() << ' ';
+        st << "componentview " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
 

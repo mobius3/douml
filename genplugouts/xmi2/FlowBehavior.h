@@ -2,18 +2,18 @@
 #define _FLOWBEHAVIOR_H
 
 
-#include <q3cstring.h>
+
 
 class FlowBehavior
 {
 public:
-    Q3CString weight;
+    WrapperStr weight;
 
-    Q3CString guard;
+    WrapperStr guard;
 
-    Q3CString selection;
+    WrapperStr selection;
 
-    Q3CString transformation;
+    WrapperStr transformation;
 
     void read();
 

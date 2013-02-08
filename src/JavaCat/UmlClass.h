@@ -30,7 +30,7 @@
 
 #include "UmlBaseClass.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3PtrList>
 
 #ifdef ROUNDTRIP
@@ -51,11 +51,11 @@ private:
 #endif
 
 public:
-    UmlClass(void * id, const Q3CString & n);
+    UmlClass(void * id, const WrapperStr & n);
 #ifdef REVERSE
     void need_artifact(const QStringList & imports, bool remove_java_lang,
                        const QStringList & static_imports,
-                       const Q3CString & path, UmlArtifact *& cp);
+                       const WrapperStr & path, UmlArtifact *& cp);
 
 # ifdef ROUNDTRIP
     virtual void upload(ClassContainer * cnt);
@@ -72,12 +72,12 @@ public:
     Class * get_class() const {
         return the_class;
     }
-    UmlItem * search_for_att_rel(const Q3CString & name);
+    UmlItem * search_for_att_rel(const WrapperStr & name);
     void reorder(Q3PtrList<UmlItem> & expected_order);
 # endif
 #endif
-    static void manage_generic(Q3CString & form, UmlTypeSpec & typespec,
-                               Q3CString str_actuals, const char * k);
+    static void manage_generic(WrapperStr & form, UmlTypeSpec & typespec,
+                               WrapperStr str_actuals, const char * k);
 };
 
 #endif

@@ -30,7 +30,7 @@
 
 #include <q3valuelist.h>
 #include <qstringlist.h>
-#include <q3cstring.h>
+#include "misc/mystr.h"
 #include <q3dict.h>
 #include <qmap.h>
 
@@ -42,9 +42,9 @@
 class Namespace
 {
 public:
-    static void set(const Q3CString & s);
+    static void set(const WrapperStr & s);
     static void unset();
-    static void enter(const Q3CString & s);
+    static void enter(const WrapperStr & s);
     static void exit();
     static void enter_anonymous() {
         AnonymousLevel += 1;
@@ -64,8 +64,8 @@ public:
         return Stack;
     }
 
-    static void add_using(const Q3CString & s) {
-        Usings.append(QString(s) + "::");
+    static void add_using(const WrapperStr & s) {
+        Usings.append(s + "::");
     }
     static void clear_usings() {
         Usings.clear();
@@ -74,22 +74,22 @@ public:
         return Usings;
     }
 
-    static void add_alias(const Q3CString & a, const Q3CString & s) {
+    static void add_alias(const WrapperStr & a, const WrapperStr & s) {
         Aliases.replace(a, s);
     }
     static void clear_aliases() {
         Aliases.clear();
     }
 
-    static QString namespacify(Q3CString s, bool local);
-    static Q3CString current();
+    static QString namespacify(WrapperStr s, bool local);
+    static WrapperStr current();
 
 private:
     static QStringList Stack;
     static int AnonymousLevel;
     static QStringList Usings;
     static Q3ValueList<QStringList> UsingScope;
-    static QMap<Q3CString, Q3CString> Aliases;
+    static QMap<QString, WrapperStr> Aliases;
 };
 
 // does not not inherit QDict to not allow to use directly
@@ -105,10 +105,10 @@ public:
         d.resize(n);
     }
 
-    void insert(const Q3CString & key, const T * item);
-    void replace(const Q3CString & key, const T * item);
-    bool remove(const Q3CString & key);
-    T * operator[](const Q3CString & key) const;
+    void insert(const WrapperStr & key, const T * item);
+    void replace(const WrapperStr & key, const T * item);
+    bool remove(const WrapperStr & key);
+    T * operator[](const WrapperStr & key) const;
 
 private:
     bool hasAnonymous;
@@ -116,27 +116,27 @@ private:
 };
 
 template<class T>
-void NDict<T>::insert(const Q3CString & key, const T * item)
+void NDict<T>::insert(const WrapperStr & key, const T * item)
 {
     hasAnonymous |= Namespace::underAnonymous();
     d.insert(Namespace::namespacify(key, Namespace::underAnonymous()), item);
 }
 
 template<class T>
-void NDict<T>::replace(const Q3CString & key, const T * item)
+void NDict<T>::replace(const WrapperStr & key, const T * item)
 {
     hasAnonymous |= Namespace::underAnonymous();
     d.replace(Namespace::namespacify(key, Namespace::underAnonymous()), item);
 }
 
 template<class T>
-bool NDict<T>::remove(const Q3CString & key)
+bool NDict<T>::remove(const WrapperStr & key)
 {
     return d.remove(Namespace::namespacify(key, Namespace::underAnonymous()));
 }
 
 template<class T>
-T * NDict<T>::operator[](const Q3CString & key) const
+T * NDict<T>::operator[](const WrapperStr & key) const
 {
     QString k = Namespace::namespacify(key, FALSE);
     T * r = d[k];
@@ -150,7 +150,7 @@ T * NDict<T>::operator[](const Q3CString & key) const
         (((const char *) key)[1] != ':')) {
         QStringList::ConstIterator it;
 
-        s = key;
+        s = key.operator QString();
 
         for (it = Namespace::usings().begin();
              it != Namespace::usings().end();

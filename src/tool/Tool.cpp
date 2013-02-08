@@ -337,12 +337,12 @@ void Tool::save()
 
         st << "\ntool ";
         save_string(tools[rank].display, st);
-        st << ' ';
+        st << " ";
         save_string(tools[rank].cmd, st);
 
         for (int index = 0; index != sizeof(ToolCase) / sizeof(*ToolCase); index += 1) {
             if (tool.applicable[ToolCase[index].kind]) {
-                st << ' ' << ToolCase[index].key;
+                st << " " << ToolCase[index].key;
             }
         }
     }

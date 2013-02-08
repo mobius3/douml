@@ -261,7 +261,7 @@ bool IconCanvas::represents(BrowserNode * bn)
 void IconCanvas::save(QTextStream & st, bool, QString & warning) const
 {
     nl_indent(st);
-    st << "iconcanvas " << get_ident() << ' ';
+    st << "iconcanvas " << get_ident() << " ";
     browser_node->save(st, TRUE, warning);
     nl_indent(st);
     save_xyz(st, this, "  xyz");

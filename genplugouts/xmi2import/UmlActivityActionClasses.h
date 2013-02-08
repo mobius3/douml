@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseActivityActionClasses.h"
-#include <q3cstring.h>
+
 
 class FileIn;
 class Token;
@@ -13,7 +13,7 @@ class UmlSendObjectAction : public UmlBaseSendObjectAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlSendObjectAction(void * id, const Q3CString & s) : UmlBaseSendObjectAction(id, s) {
+    UmlSendObjectAction(void * id, const WrapperStr & s) : UmlBaseSendObjectAction(id, s) {
     }
 
     static void init();
@@ -27,7 +27,7 @@ class UmlUnmarshallAction : public UmlBaseUnmarshallAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlUnmarshallAction(void * id, const Q3CString & s) : UmlBaseUnmarshallAction(id, s) {
+    UmlUnmarshallAction(void * id, const WrapperStr & s) : UmlBaseUnmarshallAction(id, s) {
     }
 
     static void init();
@@ -41,7 +41,7 @@ class UmlSendSignalAction : public UmlBaseSendSignalAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlSendSignalAction(void * id, const Q3CString & s) : UmlBaseSendSignalAction(id, s) {
+    UmlSendSignalAction(void * id, const WrapperStr & s) : UmlBaseSendSignalAction(id, s) {
     }
 
     static void init();
@@ -55,7 +55,7 @@ class UmlBroadcastSignalAction : public UmlBaseBroadcastSignalAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBroadcastSignalAction(void * id, const Q3CString & s) : UmlBaseBroadcastSignalAction(id, s) {
+    UmlBroadcastSignalAction(void * id, const WrapperStr & s) : UmlBaseBroadcastSignalAction(id, s) {
     }
 
     static void init();
@@ -69,7 +69,7 @@ class UmlValueSpecificationAction : public UmlBaseValueSpecificationAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlValueSpecificationAction(void * id, const Q3CString & s) : UmlBaseValueSpecificationAction(id, s) {
+    UmlValueSpecificationAction(void * id, const WrapperStr & s) : UmlBaseValueSpecificationAction(id, s) {
     }
 
     static void init();
@@ -79,12 +79,12 @@ public:
 
 
 protected:
-    void setValue(Q3CString idref);
+    void setValue(WrapperStr idref);
 
 
 public:
     //  call at end of import : try to solve type or state
-    virtual void solve(Q3CString idref);
+    virtual void solve(WrapperStr idref);
 
 };
 
@@ -92,7 +92,7 @@ class UmlOpaqueAction : public UmlBaseOpaqueAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlOpaqueAction(void * id, const Q3CString & s) : UmlBaseOpaqueAction(id, s) {
+    UmlOpaqueAction(void * id, const WrapperStr & s) : UmlBaseOpaqueAction(id, s) {
     }
 
     static void init();
@@ -106,7 +106,7 @@ class UmlAcceptEventAction : public UmlBaseAcceptEventAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlAcceptEventAction(void * id, const Q3CString & s) : UmlBaseAcceptEventAction(id, s) {
+    UmlAcceptEventAction(void * id, const WrapperStr & s) : UmlBaseAcceptEventAction(id, s) {
     }
 
     static void init();
@@ -116,7 +116,7 @@ public:
 
     //  call at end of import : try to solve trigger
 
-    virtual void solve(Q3CString idref);
+    virtual void solve(WrapperStr idref);
 
 };
 
@@ -124,7 +124,7 @@ class UmlCallOperationAction : public UmlBaseCallOperationAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlCallOperationAction(void * id, const Q3CString & s) : UmlBaseCallOperationAction(id, s) {
+    UmlCallOperationAction(void * id, const WrapperStr & s) : UmlBaseCallOperationAction(id, s) {
     }
 
     static void init();
@@ -134,12 +134,12 @@ public:
 
 
 protected:
-    void setOperation(Q3CString idref);
+    void setOperation(WrapperStr idref);
 
 
 public:
     //  call at end of import : try to solve oper
-    virtual void solve(Q3CString idref);
+    virtual void solve(WrapperStr idref);
 
 };
 
@@ -147,7 +147,7 @@ class UmlCallBehaviorAction : public UmlBaseCallBehaviorAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlCallBehaviorAction(void * id, const Q3CString & s) : UmlBaseCallBehaviorAction(id, s) {
+    UmlCallBehaviorAction(void * id, const WrapperStr & s) : UmlBaseCallBehaviorAction(id, s) {
     }
 
     static void init();
@@ -157,12 +157,12 @@ public:
 
 
 protected:
-    void setBehavior(Q3CString idref);
+    void setBehavior(WrapperStr idref);
 
 
 public:
     //  call at end of import : try to solve behavior
-    virtual void solve(Q3CString idref);
+    virtual void solve(WrapperStr idref);
 
 };
 
@@ -170,7 +170,7 @@ class UmlClearVariableValueAction : public UmlBaseClearVariableValueAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlClearVariableValueAction(void * id, const Q3CString & s) : UmlBaseClearVariableValueAction(id, s) {
+    UmlClearVariableValueAction(void * id, const WrapperStr & s) : UmlBaseClearVariableValueAction(id, s) {
     }
 
     static void init();
@@ -184,7 +184,7 @@ class UmlReadVariableValueAction : public UmlBaseReadVariableValueAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlReadVariableValueAction(void * id, const Q3CString & s) : UmlBaseReadVariableValueAction(id, s) {
+    UmlReadVariableValueAction(void * id, const WrapperStr & s) : UmlBaseReadVariableValueAction(id, s) {
     }
 
     static void init();
@@ -198,7 +198,7 @@ class UmlWriteVariableValueAction : public UmlBaseWriteVariableValueAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlWriteVariableValueAction(void * id, const Q3CString & s) : UmlBaseWriteVariableValueAction(id, s) {
+    UmlWriteVariableValueAction(void * id, const WrapperStr & s) : UmlBaseWriteVariableValueAction(id, s) {
     }
 
     static void init();
@@ -212,7 +212,7 @@ class UmlAddVariableValueAction : public UmlBaseAddVariableValueAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlAddVariableValueAction(void * id, const Q3CString & s) : UmlBaseAddVariableValueAction(id, s) {
+    UmlAddVariableValueAction(void * id, const WrapperStr & s) : UmlBaseAddVariableValueAction(id, s) {
     }
 
     static void init();
@@ -226,7 +226,7 @@ class UmlRemoveVariableValueAction : public UmlBaseRemoveVariableValueAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlRemoveVariableValueAction(void * id, const Q3CString & s) : UmlBaseRemoveVariableValueAction(id, s) {
+    UmlRemoveVariableValueAction(void * id, const WrapperStr & s) : UmlBaseRemoveVariableValueAction(id, s) {
     }
 
     static void init();
@@ -240,7 +240,7 @@ class UmlAcceptCallAction : public UmlBaseAcceptCallAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlAcceptCallAction(void * id, const Q3CString & s) : UmlBaseAcceptCallAction(id, s) {
+    UmlAcceptCallAction(void * id, const WrapperStr & s) : UmlBaseAcceptCallAction(id, s) {
     }
 
     static void init();
@@ -250,7 +250,7 @@ public:
 
     //  call at end of import : try to solve trigger
 
-    virtual void solve(Q3CString idref);
+    virtual void solve(WrapperStr idref);
 
 };
 
@@ -258,7 +258,7 @@ class UmlReplyAction : public UmlBaseReplyAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlReplyAction(void * id, const Q3CString & s) : UmlBaseReplyAction(id, s) {
+    UmlReplyAction(void * id, const WrapperStr & s) : UmlBaseReplyAction(id, s) {
     }
 
     static void init();
@@ -268,7 +268,7 @@ public:
 
     //  call at end of import : try to solve trigger
 
-    virtual void solve(Q3CString idref);
+    virtual void solve(WrapperStr idref);
 
 };
 
@@ -276,7 +276,7 @@ class UmlCreateObjectAction : public UmlBaseCreateObjectAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlCreateObjectAction(void * id, const Q3CString & s) : UmlBaseCreateObjectAction(id, s) {
+    UmlCreateObjectAction(void * id, const WrapperStr & s) : UmlBaseCreateObjectAction(id, s) {
     }
 
     static void init();
@@ -286,7 +286,7 @@ public:
 
     //  call at end of import : try to solve trigger
 
-    virtual void solve(Q3CString idref);
+    virtual void solve(WrapperStr idref);
 
 };
 
@@ -294,7 +294,7 @@ class UmlDestroyObjectAction : public UmlBaseDestroyObjectAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlDestroyObjectAction(void * id, const Q3CString & s) : UmlBaseDestroyObjectAction(id, s) {
+    UmlDestroyObjectAction(void * id, const WrapperStr & s) : UmlBaseDestroyObjectAction(id, s) {
     }
 
     static void init();
@@ -308,7 +308,7 @@ class UmlTestIdentityAction : public UmlBaseTestIdentityAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlTestIdentityAction(void * id, const Q3CString & s) : UmlBaseTestIdentityAction(id, s) {
+    UmlTestIdentityAction(void * id, const WrapperStr & s) : UmlBaseTestIdentityAction(id, s) {
     }
 
     static void init();
@@ -322,7 +322,7 @@ class UmlRaiseExceptionAction : public UmlBaseRaiseExceptionAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlRaiseExceptionAction(void * id, const Q3CString & s) : UmlBaseRaiseExceptionAction(id, s) {
+    UmlRaiseExceptionAction(void * id, const WrapperStr & s) : UmlBaseRaiseExceptionAction(id, s) {
     }
 
     static void init();
@@ -336,7 +336,7 @@ class UmlReduceAction : public UmlBaseReduceAction
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlReduceAction(void * id, const Q3CString & s) : UmlBaseReduceAction(id, s) {
+    UmlReduceAction(void * id, const WrapperStr & s) : UmlBaseReduceAction(id, s) {
     }
 
     static void init();
@@ -346,7 +346,7 @@ public:
 
     //  call at end of import : try to solve trigger
 
-    virtual void solve(Q3CString idref);
+    virtual void solve(WrapperStr idref);
 
 };
 

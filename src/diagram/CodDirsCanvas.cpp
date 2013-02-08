@@ -384,7 +384,7 @@ void CodDirsCanvas::save(QTextStream & st, bool ref, QString & warning) const
         st << "dirscanvas_ref " << get_ident();
     else {
         nl_indent(st);
-        st << "dirscanvas " << get_ident() << " z " << z() << ' ';
+        st << "dirscanvas " << get_ident() << " z " << z() << " ";
         link->save(st, TRUE, warning);
 
         indent(+1);

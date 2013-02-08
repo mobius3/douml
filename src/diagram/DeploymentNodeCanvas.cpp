@@ -767,7 +767,7 @@ void DeploymentNodeCanvas::save(QTextStream & st, bool ref, QString & warning) c
         st << "deploymentnodecanvas_ref " << get_ident() << " // " << browser_node->get_name();
     else {
         nl_indent(st);
-        st << "deploymentnodecanvas " << get_ident() << ' ';
+        st << "deploymentnodecanvas " << get_ident() << " ";
         indent(+1);
         browser_node->save(st, TRUE, warning);
 
@@ -780,13 +780,13 @@ void DeploymentNodeCanvas::save(QTextStream & st, bool ref, QString & warning) c
         nl_indent(st);
 
         if (write_horizontally != UmlDefaultState)
-            st << "write_horizontally " << stringify(write_horizontally) << ' ';
+            st << "write_horizontally " << stringify(write_horizontally) << " ";
 
         if (show_stereotype_properties != UmlDefaultState)
-            st << "show_stereotype_properties " << stringify(show_stereotype_properties) << ' ';
+            st << "show_stereotype_properties " << stringify(show_stereotype_properties) << " ";
 
         if (itscolor != UmlDefaultColor)
-            st << "color " << stringify(itscolor) << ' ';
+            st << "color " << stringify(itscolor) << " ";
 
         save_xyzwh(st, this, "xyzwh");
         save_stereotype_property(st, warning);

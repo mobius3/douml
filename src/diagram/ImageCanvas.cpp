@@ -266,7 +266,7 @@ void ImageCanvas::save(QTextStream & st, bool ref, QString &) const
     else {
         nl_indent(st);
 
-        st << "image " << get_ident() << ' ';
+        st << "image " << get_ident() << " ";
         save_string(fromUnicode(path), st);
         save_xyz(st, this, " xyz");
         st << " end";

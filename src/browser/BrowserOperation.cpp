@@ -495,7 +495,7 @@ QString BrowserOperation::get_of_name() const
 
     int index;
 
-    return ((index = result.find(' ')) != -1)
+    return ((index = result.find(" ")) != -1)
             ? result.left(index)
             : result;
 }
@@ -1089,7 +1089,7 @@ void BrowserOperation::save(QTextStream & st, bool ref, QString & warning)
         st << "operation_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "operation " << get_ident() << ' ';
+        st << "operation " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, FALSE, warning);

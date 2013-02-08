@@ -27,12 +27,12 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlFormalParameter.h"
 #include "UmlClass.h"
 
-UmlFormalParameter::UmlFormalParameter(Q3CString t, Q3CString n, Q3CString v)
+UmlFormalParameter::UmlFormalParameter(WrapperStr t, WrapperStr n, WrapperStr v)
 {
     _type = t;
     _name = n;

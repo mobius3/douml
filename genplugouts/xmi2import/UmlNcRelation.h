@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseNcRelation.h"
-#include <q3cstring.h>
+
 
 //This class manages 'relations' between non class objects
 //
@@ -11,7 +11,7 @@
 class UmlNcRelation : public UmlBaseNcRelation
 {
 public:
-    UmlNcRelation(void * id, const Q3CString & n) : UmlBaseNcRelation(id, n) {};
+    UmlNcRelation(void * id, const WrapperStr & n) : UmlBaseNcRelation(id, n) {};
 
 };
 

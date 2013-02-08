@@ -976,7 +976,7 @@ void BrowserUseCaseView::save(QTextStream & st, bool ref, QString & warning)
         st << "usecaseview_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "usecaseview " << get_ident() << ' ';
+        st << "usecaseview " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
 

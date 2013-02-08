@@ -59,7 +59,7 @@
 #include "Tools/ApiCmd.h"
 #include "Logging/QsLog.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 #include <iostream>
 using namespace std;
 int UmlBaseItem::getIdentifier()

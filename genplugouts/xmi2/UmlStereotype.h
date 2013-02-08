@@ -2,31 +2,31 @@
 #define _UMLSTEREOTYPE_H
 
 
-#include <q3cstring.h>
+
 
 //  Internal class used to know how what code is produced for a stereotype in each language
 
 struct UmlStereotype {
-    Q3CString uml;
+    WrapperStr uml;
 
 #ifdef WITHCPP
-    Q3CString cpp;
+    WrapperStr cpp;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString java;
+    WrapperStr java;
 #endif
 
 #ifdef WITHPHP
-    Q3CString php;
+    WrapperStr php;
 #endif
 
 #ifdef WITHPYTHON
-    Q3CString python;
+    WrapperStr python;
 #endif
 
 #ifdef WITHIDL
-    Q3CString idl;
+    WrapperStr idl;
 #endif
 
 };

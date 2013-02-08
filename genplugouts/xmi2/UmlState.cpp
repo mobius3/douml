@@ -5,7 +5,7 @@
 
 #include "UmlOperation.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 void UmlState::write(FileOut & out)
 {
     anItemKind pkind = parent()->kind();
@@ -45,9 +45,9 @@ void UmlState::write(FileOut & out)
     write_description_properties(out);
 
     if (ref == 0) {
-        Q3CString doentry;
-        Q3CString doactivity;
-        Q3CString doexit;
+        WrapperStr doentry;
+        WrapperStr doactivity;
+        WrapperStr doexit;
 
         switch (_lang) {
         case Uml:
@@ -197,12 +197,12 @@ void UmlState::add_incoming_trans(UmlTransition * tr)
     _incoming_trans.append(tr);
 }
 
-UmlState * UmlState::find(Q3CString s)
+UmlState * UmlState::find(WrapperStr s)
 {
-    QMap<Q3CString, UmlState *>::Iterator iter = _all.find(s);
+    QMap<WrapperStr, UmlState *>::Iterator iter = _all.find(s);
 
     return (iter == _all.end()) ? 0 : *iter;
 }
 
-QMap<Q3CString, UmlState *> UmlState::_all;
+QMap<WrapperStr, UmlState *> UmlState::_all;
 

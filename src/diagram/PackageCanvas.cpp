@@ -833,7 +833,7 @@ void PackageCanvas::save(QTextStream & st, bool ref, QString & warning) const
         st << "packagecanvas_ref " << get_ident() << " // " << browser_node->get_name();
     else {
         nl_indent(st);
-        st << "packagecanvas " << get_ident() << ' ';
+        st << "packagecanvas " << get_ident() << " ";
         indent(+1);
         browser_node->save(st, TRUE, warning);
         nl_indent(st);

@@ -7,7 +7,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 UmlArtifact * UmlBaseArtifact::create(UmlDeploymentView * parent, const char * s)
 {
     return (UmlArtifact *) parent->create_(anArtifact, s);

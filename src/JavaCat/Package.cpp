@@ -40,7 +40,7 @@
 #include <qmessagebox.h>
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QPixmap>
 //Added by qt3to4:
 #include <Q3PtrList>
@@ -119,7 +119,7 @@ Q3ValueList<FormalParameterList> Package::Formals;
 QApplication * Package::app;
 
 static QString RootSDir;	// empty or finish by a /
-static Q3CString RootCDir;	// empty or finish by a /
+static WrapperStr RootCDir;	// empty or finish by a /
 
 static Q3Dict<bool> FileManaged;
 
@@ -127,7 +127,7 @@ static Q3Dict<bool> FileManaged;
 static Q3Dict<bool> DirManaged;
 #endif
 
-static Q3CString force_final_slash(Q3CString p)
+static WrapperStr force_final_slash(WrapperStr p)
 {
     int ln = p.length();
 
@@ -135,16 +135,16 @@ static Q3CString force_final_slash(Q3CString p)
         return p;
 
     return (p[ln - 1] != '/')
-           ? p + '/'
+           ? WrapperStr(p + '/')
            : p;
 }
 
-static inline Q3CString force_final_slash(QString p)
+static inline WrapperStr force_final_slash(QString p)
 {
-    return force_final_slash(Q3CString(p.toAscii().constData()));
+    return force_final_slash(WrapperStr(p.toAscii().constData()));
 }
 
-static Q3CString root_relative_if_possible(Q3CString p)
+static WrapperStr root_relative_if_possible(WrapperStr p)
 {
     int pln = p.length();
     int rln = RootCDir.length();
@@ -190,7 +190,7 @@ Package::Package(Package * parent, UmlPackage * pk)
         path = RootCDir;
     else if (QDir::isRelativePath(path)) {
         if (RootCDir.isEmpty()) {
-            Q3CString err = "<font face=helvetica><b>root path not set in <i>generation settings</i>, "
+            WrapperStr err = "<font face=helvetica><b>root path not set in <i>generation settings</i>, "
                             "don't know where is <i>" + path + "<i></b></font><br>";
 
             UmlCom::trace(err);
@@ -227,13 +227,13 @@ void Package::init(UmlPackage * r, QApplication * a)
     app = a;
 
     RootCDir = force_final_slash(JavaSettings::rootDir());
-    RootSDir = RootCDir;
+    RootSDir = RootCDir.operator QString();
 
     if (!RootSDir.isEmpty() && QDir::isRelativePath(RootSDir)) {
         QFileInfo f(UmlPackage::getProject()->supportFile());
         QDir d(f.dirPath());
 
-        RootSDir = force_final_slash(d.filePath(RootSDir));
+        RootSDir = force_final_slash(d.filePath(RootSDir)).operator QString();
         RootCDir = RootSDir;
     }
 
@@ -247,7 +247,7 @@ void Package::init(UmlPackage * r, QApplication * a)
                  ? new QRegExp(s, JavaSettings::isReverseRoundtripFileRegExpCaseSensitive(), TRUE)
                  : 0;
 
-    Ext = JavaSettings::sourceExtension();
+    Ext = JavaSettings::sourceExtension().operator QString();
 
 #ifdef ROUNDTRIP
     root = new Package(0, r);
@@ -582,7 +582,7 @@ void Package::send_dir(int n)
 //     while ((fi = it.current()) != 0) {
 //       if (fi->extension() == Ext) {
 // 	if (allowed(FileFilter, fi->fileName()))
-// 	  reverse_file(Q3CString(fi->filePath())
+// 	  reverse_file(WrapperStr(fi->filePath())
 // #ifdef ROUNDTRIP
 // 		       , roundtriped.find(fi->baseName())
 // #endif
@@ -607,7 +607,7 @@ void Package::send_dir(int n)
 // #ifndef REVERSE
 // 	  if (allowed(DirFilter, sd.dirName())) {
 // #endif
-// 	    Package * p = find(Q3CString(sd.dirName()), TRUE);
+// 	    Package * p = find(WrapperStr(sd.dirName()), TRUE);
 //
 // 	    if (p != 0)
 // 	      p->reverse_directory(sd, TRUE);
@@ -642,7 +642,7 @@ void Package::reverse_directory(QDir & d, bool rec)
         while (it != list.end()) {
             if ((*it).extension() == Ext) {
                 if (allowed(FileFilter, (*it).fileName()))
-                    reverse_file(Q3CString((*it).filePath().toAscii().constData())
+                    reverse_file(WrapperStr((*it).filePath().toAscii().constData())
 #ifdef ROUNDTRIP
                                  , roundtriped.find((*it).baseName())
 #endif
@@ -669,7 +669,7 @@ void Package::reverse_directory(QDir & d, bool rec)
 
                     if (allowed(DirFilter, sd.dirName())) {
 #endif
-                        Package * p = find(Q3CString(sd.dirName().toAscii().constData()), TRUE);
+                        Package * p = find(WrapperStr(sd.dirName().toAscii().constData()), TRUE);
 
                         if (p != 0)
                             p->reverse_directory(sd, TRUE);
@@ -690,11 +690,11 @@ void Package::reverse_directory(QDir & d, bool rec)
 void Package::reverse(UmlArtifact * art)
 {
     if (allowed(FileFilter, QString(art->name()) + "." + Ext))
-        reverse_file(path + "/" + art->name() + "." + Q3CString(Ext.toAscii().constData()), art);
+        reverse_file(path + "/" + art->name() + "." + WrapperStr(Ext.toAscii().constData()), art);
 }
 #endif
 
-void Package::reverse_file(Q3CString f
+void Package::reverse_file(WrapperStr f
 #ifdef ROUNDTRIP
                            , UmlArtifact * art
 #endif
@@ -709,7 +709,7 @@ void Package::reverse_file(Q3CString f
 #ifdef ROUNDTRIP
 
         if (art != 0) {
-            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot open <i>")
+            UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot open <i>")
                           + f + "</i></b></font><br>");
             throw 0;
         }
@@ -718,7 +718,7 @@ void Package::reverse_file(Q3CString f
 
             // very strange !
             if (!scan)
-                UmlCom::trace(Q3CString("<font face=helvetica><b>cannot open <i>")
+                UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot open <i>")
                               + f + "</i></b></font><br>");
     }
     else {
@@ -745,10 +745,10 @@ void Package::reverse_file(Q3CString f
         for (;;) {		// not a true loop, to use break on error
             UmlCom::message(((scan) ? "scan " : "reverse ") + f);
 
-            Q3CString s = Lex::read_word();
+            WrapperStr s = Lex::read_word();
 #ifdef REVERSE
-            Q3CString art_comment;
-            Q3CString art_description;
+            WrapperStr art_comment;
+            WrapperStr art_description;
 #endif
 
             if (s == "package") {
@@ -805,7 +805,7 @@ void Package::reverse_file(Q3CString f
             aVisibility visibility = PackageVisibility;
             bool abstractp = FALSE;
             bool finalp = FALSE;
-            Q3CString annotation;
+            WrapperStr annotation;
 
             while (!s.isEmpty()) {
                 if ((s == "class") || (s == "enum") ||
@@ -879,8 +879,8 @@ void Package::reverse_file(Q3CString f
 
 void Package::manage_import()
 {
-    Q3CString s;
-    Q3CString s2;
+    WrapperStr s;
+    WrapperStr s2;
 
     if ((s = Lex::read_word()).isEmpty()) {
         if (! scan)
@@ -946,7 +946,7 @@ void Package::manage_import()
     }
 }
 
-void Package::update_package_list(Q3CString name)
+void Package::update_package_list(WrapperStr name)
 {
     if ((known_packages[name] == 0) &&
         (user_packages[name] == 0) &&
@@ -959,8 +959,8 @@ void Package::update_package_list(Q3CString name)
         if (up == 0) {
             int index;
 
-            if ((index = name.findRev('.')) != -1) {
-                Q3CString subname = name.left(index);
+            if ((index = name.operator QString().lastIndexOf('.')) != -1) {
+                WrapperStr subname = name.left(index);
 
                 if ((user_packages[subname] != 0) ||
                     (unknown_packages.findIndex(subname) != -1))
@@ -986,7 +986,7 @@ void Package::update_package_list(Q3CString name)
     }
 }
 
-void Package::update_class_list(Q3CString pack, UmlItem * container)
+void Package::update_class_list(WrapperStr pack, UmlItem * container)
 {
     const Q3PtrVector<UmlItem> & ch = container->children();
     UmlItem ** v = ch.data();
@@ -1011,7 +1011,7 @@ void Package::update_class_list(Q3CString pack, UmlItem * container)
     }
 }
 
-Class * Package::define(const Q3CString & name, char st)
+Class * Package::define(const WrapperStr & name, char st)
 {
     Class * cl = Defined[name];
 
@@ -1041,7 +1041,7 @@ Class * Package::define(const Q3CString & name, char st)
 Class * Package::upload_define(UmlClass * ucl)
 {
     Class * cl = new Class(this, ucl);
-    Q3CString s = ucl->name();	// not defined inside an other class
+    WrapperStr s = ucl->name();	// not defined inside an other class
 
     classes.insert(package + "." + s, cl);
     Defined.insert(s, cl);
@@ -1055,7 +1055,7 @@ Class * Package::localy_defined(QString name) const
 }
 #endif
 
-void Package::compute_type(Q3CString name, UmlTypeSpec & typespec,
+void Package::compute_type(WrapperStr name, UmlTypeSpec & typespec,
                            const Q3ValueList<FormalParameterList> & tmplts,
                            Class ** need_object)
 {
@@ -1113,7 +1113,7 @@ void Package::compute_type(Q3CString name, UmlTypeSpec & typespec,
         }
 
         int index =  name.find('.');
-        QString left = Q3CString((index == -1) ? name : name.left(index));
+        QString left = WrapperStr((index == -1) ? name : name.left(index));
 
         for (QStringList::iterator it = imports.begin(); it != imports.end(); ++it) {
             const QString & import = *it;
@@ -1122,11 +1122,11 @@ void Package::compute_type(Q3CString name, UmlTypeSpec & typespec,
 
             if (((const char *) import)[import.length() - 1] == '.')
                 // import a.b.* ('*' removed)
-                s = import + QString(name);	// a.b.name
+                s = import + name.operator QString();	// a.b.name
             else if (((index2 = import.findRev('.')) != -1) &&
                      (import.mid(index2 + 1) == left))
                 // import a.b.c & name = c.d...
-                s = import.left(index2 + 1) + QString(name);	// a.b.name
+                s = import.left(index2 + 1) + name.operator QString();	// a.b.name
             else
                 continue;
 
@@ -1168,7 +1168,7 @@ void Package::compute_type(Q3CString name, UmlTypeSpec & typespec,
             else {
                 // the class does not already exist, create it
                 Package * pack = package_unknown();
-                int index = name.findRev('.');
+                int index = name.operator QString().lastIndexOf('.');
 
                 if (index != -1) {
                     pack = pack->find(name.left(index), FALSE);
@@ -1188,7 +1188,7 @@ void Package::compute_type(Q3CString name, UmlTypeSpec & typespec,
 // name is a formal but a class is needed,
 // create a pseudo one
 
-void Package::force_class(Q3CString name, UmlTypeSpec & typespec,
+void Package::force_class(WrapperStr name, UmlTypeSpec & typespec,
                           Class ** need_object)
 {
     Class * cl = Undefined[name];
@@ -1211,7 +1211,7 @@ void Package::force_class(Q3CString name, UmlTypeSpec & typespec,
 // the class is not a builtin, the package is the right,
 // the name doesn't contains '.'
 
-Class * Package::declare_if_needed(Q3CString name, char st)
+Class * Package::declare_if_needed(WrapperStr name, char st)
 {
     Class * cl;
 
@@ -1227,7 +1227,7 @@ Class * Package::declare_if_needed(Q3CString name, char st)
     return cl;
 }
 
-void Package::declare(const Q3CString & name, Class * cl)
+void Package::declare(const WrapperStr & name, Class * cl)
 {
     if (! package.isEmpty())
         classes.insert(package + "." + name, cl);
@@ -1236,10 +1236,10 @@ void Package::declare(const Q3CString & name, Class * cl)
         Undefined.insert(name, cl);
 }
 
-Package * Package::find(Q3CString s, bool nohack)
+Package * Package::find(WrapperStr s, bool nohack)
 {
     int index;
-    Q3CString name = ((index = s.find('.')) != -1) ? s.left(index) : s;
+    WrapperStr name = ((index = s.find('.')) != -1) ? s.left(index) : s;
 
     // hack
     if (!nohack && (text(0) == (const char *) name)) {
@@ -1286,7 +1286,7 @@ Package * Package::package_unknown()
     return unknown;
 }
 
-void Package::set_package(Q3CString s)
+void Package::set_package(WrapperStr s)
 {
     Package * pack = this;
 
@@ -1297,7 +1297,7 @@ void Package::set_package(Q3CString s)
         if (pack->uml != 0)
             pack->uml->set_JavaPackage(s);
 
-        int index = s.findRev('.');
+        int index = s.operator QString().lastIndexOf('.');
 
         if (index == -1)
             return;
@@ -1337,7 +1337,7 @@ UmlPackage * Package::get_uml(bool mandatory)
                 return 0;
 
 #ifdef REVERSE
-            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create package <i>")
+            UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot create package <i>")
                           + name + "</i> under package <i>" + uml_pa->name() +
                           "</b></font><br>");
             UmlCom::message("");
@@ -1451,7 +1451,7 @@ void Package::menu()
             QApplication::restoreOverrideCursor();
         }
         else
-            UmlCom::trace(Q3CString("<font face=helvetica><i>") + path +
+            UmlCom::trace(WrapperStr("<font face=helvetica><i>") + path +
                           "</i> <b>doesn't exist !</b></font><br>");
 
     }

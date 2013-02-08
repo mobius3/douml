@@ -470,7 +470,7 @@ void BrowserFlow::save(QTextStream & st, bool ref, QString & warning)
     }
     else {
         nl_indent(st);
-        st << "flow " << get_ident() << ' ';
+        st << "flow " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

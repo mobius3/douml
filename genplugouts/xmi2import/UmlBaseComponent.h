@@ -5,7 +5,7 @@
 #include "UmlItem.h"
 #include "anItemKind.h"
 #include <q3ptrvector.h>
-#include <q3cstring.h>
+
 
 #include "UmlClass.h"	// to avoid destructor problem
 class UmlComponent;
@@ -70,11 +70,11 @@ protected:
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseComponent(void * id, const Q3CString & n);
+    UmlBaseComponent(void * id, const WrapperStr & n);
 
 };
 
-inline UmlBaseComponent::UmlBaseComponent(void * id, const Q3CString & n) : UmlItem(id, n)
+inline UmlBaseComponent::UmlBaseComponent(void * id, const WrapperStr & n) : UmlItem(id, n)
 {
     _assoc_diagram = 0;
 }

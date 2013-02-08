@@ -1301,7 +1301,7 @@ void BrowserArtifact::save(QTextStream & st, bool ref, QString & warning)
         st << "artifact_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "artifact " << get_ident() << ' ';
+        st << "artifact " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

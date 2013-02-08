@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 #include <q3ptrvector.h>
 
 class UmlActivityParameter;
@@ -27,7 +27,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseParameterSet(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseParameterSet(void * id, const WrapperStr & s) : UmlItem(id, s) {
     }
 
 

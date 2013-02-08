@@ -6,7 +6,7 @@
 
 #include "UmlActivityControlNodeClasses.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 void UmlActivityControlNode::init()
 {
     declareFct("node", "uml:InitialNode", &importIt);
@@ -36,9 +36,9 @@ void UmlActivityControlNode::importIt(FileIn & in, Token & token, UmlItem * wher
     where = where->container(anInitialActivityNode, token, in);
 
     if (where != 0) {
-        Q3CString s = token.valueOf("name");
+        WrapperStr s = token.valueOf("name");
         UmlActivityControlNode * a;
-        Q3CString t = token.xmiType();
+        WrapperStr t = token.xmiType();
 
         t = t.mid(4, t.length() - 8);
 
@@ -64,7 +64,7 @@ void UmlActivityControlNode::importIt(FileIn & in, Token & token, UmlItem * wher
         a->addItem(token.xmiId(), in);
 
         if (! token.closed()) {
-            Q3CString k = token.what();
+            WrapperStr k = token.what();
             const char * kstr = k;
 
             while (in.read(), !token.close(kstr))

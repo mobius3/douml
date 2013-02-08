@@ -2,7 +2,7 @@
 #include "UmlCom.h"
 #include "UmlBaseOnSignalAction.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 
 const WrapperStr & UmlBaseOnSignalAction::signal()
 {

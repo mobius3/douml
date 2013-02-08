@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlItem.h"
@@ -100,7 +100,7 @@ void UmlItem::manage_description(const char *& p, const char *& pp)
         description().isEmpty())
         return;
 
-    the_comment = description();
+    the_comment = description().operator QString();
 
     switch (*p) {
     case 0:
@@ -122,7 +122,7 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts)
 
     if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
         Q3CString key(p + 2, pclosed - p - 1);
-        Q3CString value;
+        WrapperStr value;
         UmlItem * node = this;
 
         do {
@@ -153,7 +153,7 @@ void UmlItem::generate()
     // does nothing
 }
 
-void UmlItem::generate_import(QTextStream &, const Q3CString &)
+void UmlItem::generate_import(QTextStream &, const WrapperStr &)
 {
     // does nothing
 }

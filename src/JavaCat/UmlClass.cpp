@@ -28,7 +28,7 @@
 #ifdef REVERSE
 # include <qfileinfo.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 //Added by qt3to4:
 #include <Q3PtrList>
 #endif
@@ -45,7 +45,7 @@
 #endif
 
 
-UmlClass::UmlClass(void * id, const Q3CString & n)
+UmlClass::UmlClass(void * id, const WrapperStr & n)
     : UmlBaseClass(id, n)
 #ifdef ROUNDTRIP
     , created(FALSE), the_class(0)
@@ -58,7 +58,7 @@ UmlClass::UmlClass(void * id, const Q3CString & n)
 void UmlClass::need_artifact(const QStringList & imports,
                              bool remove_java_lang,
                              const QStringList & static_imports,
-                             const Q3CString & path, UmlArtifact *& cp)
+                             const WrapperStr & path, UmlArtifact *& cp)
 {
     if (parent()->kind() == aClassView) {
         if (cp != 0)
@@ -69,10 +69,10 @@ void UmlClass::need_artifact(const QStringList & imports,
             if ((cp = associatedArtifact()) == 0) {
                 // create associated artifact
                 QFileInfo fi(path);
-                Q3CString artname = Q3CString(fi.baseName().toAscii().constData());
+                WrapperStr artname = WrapperStr(fi.baseName().toAscii().constData());
 
                 if ((cp = UmlBaseArtifact::create(pack->get_deploymentview(), artname)) == 0) {
-                    UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create<i> artifact ")
+                    UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot create<i> artifact ")
                                   + artname + "</i></b></font><br>");
                     return;
                 }
@@ -82,14 +82,14 @@ void UmlClass::need_artifact(const QStringList & imports,
 
             cp->set_Stereotype("source");
 
-            Q3CString s = JavaSettings::sourceContent();
+            WrapperStr s = JavaSettings::sourceContent();
             int index = s.find("${definition}");
 
             if (index != -1) {
 
 
                 for (QStringList::const_iterator it = imports.begin(); it != imports.end(); it++) {
-                    Q3CString import = Q3CString((*it).toAscii().constData());
+                    WrapperStr import = WrapperStr((*it).toAscii().constData());
 
                     if (!remove_java_lang || (import != "java.lang.")) {
                         import += (((const char *) import)[import.length() - 1] == '.')
@@ -101,12 +101,12 @@ void UmlClass::need_artifact(const QStringList & imports,
                 }
 
                 for (QStringList::const_iterator it = imports.begin(); it != imports.end(); it++) {
-                    s.insert(index, (const char *)("import static" + Q3CString((*it).toAscii().constData()) + '\n'));
+                    s.insert(index, (const char *)("import static" + WrapperStr((*it).toAscii().constData()) + '\n'));
                     index = s.find("${definition}", index);
                 }
             }
 
-            cp->set_JavaSource(Q3CString(s));
+            cp->set_JavaSource(WrapperStr(s));
         }
     }
 }
@@ -169,7 +169,7 @@ void UmlClass::send_it(int n)
         associatedArtifact()->send_it(n);
 }
 
-UmlItem * UmlClass::search_for_att_rel(const Q3CString & name)
+UmlItem * UmlClass::search_for_att_rel(const WrapperStr & name)
 {
     const Q3PtrVector<UmlItem> & ch = UmlItem::children();
     UmlItem ** v = ch.data();
@@ -241,8 +241,8 @@ void UmlClass::reorder(Q3PtrList<UmlItem> & expected_order)
 
 #endif
 
-void UmlClass::manage_generic(Q3CString & form, UmlTypeSpec & typespec,
-                              Q3CString str_actuals, const char * k)
+void UmlClass::manage_generic(WrapperStr & form, UmlTypeSpec & typespec,
+                              WrapperStr str_actuals, const char * k)
 {
     if (typespec.type != 0) {
         int index;

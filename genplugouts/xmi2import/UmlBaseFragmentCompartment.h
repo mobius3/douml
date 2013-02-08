@@ -6,7 +6,7 @@
 #include "UmlFragment.h"
 
 #include <q3ptrvector.h>
-#include <q3cstring.h>
+
 
 class UmlFragment;
 class UmlBaseFragment;
@@ -38,12 +38,12 @@ public:
     }
 
     // return the continuation ('label' case), or an empty string/null
-    Q3CString startContinuation() const {
+    WrapperStr startContinuation() const {
         return _start_continuation;
     }
 
     // return the continuation ('goto' case), or an empty string/null
-    Q3CString endContinuation() const {
+    WrapperStr endContinuation() const {
         return _end_continuation;
     }
 
@@ -59,19 +59,19 @@ private:
 
     int _y;
 
-    Q3CString _start_continuation;
+    WrapperStr _start_continuation;
 
-    Q3CString _end_continuation;
+    WrapperStr _end_continuation;
 
 
 public:
     void add_contained_(UmlFragment * x);
 
-    void add_text_(Q3CString x);
+    void add_text_(WrapperStr x);
 
     //internal, do NOT use it
 
-    void add_cont_(Q3CString s, int cy);
+    void add_cont_(WrapperStr s, int cy);
 
     int b() const {
         return _y;

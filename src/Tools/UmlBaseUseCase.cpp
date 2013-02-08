@@ -5,7 +5,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 UmlUseCase * UmlBaseUseCase::create(UmlItem * parent, const char * s)
 {
     return (UmlUseCase *) parent->create_(anUseCase, s);

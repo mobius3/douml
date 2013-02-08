@@ -195,7 +195,7 @@ void StaticInclude(TagTempStructure& updateData, bool conditional, QString inden
         updateData.s += indent;
     }
     else
-        updateData.s += ' ';
+        updateData.s += " ";
 }
 void StereotypeForGetSet(TagTempStructure& updateData)
 {

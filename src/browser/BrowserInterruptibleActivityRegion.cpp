@@ -722,7 +722,7 @@ void BrowserInterruptibleActivityRegion::save(QTextStream & st, bool ref, QStrin
         st << "interruptibleactivityregion_ref " << get_ident() << " // " << get_name();
     else {
         nl_indent(st);
-        st << "interruptibleactivityregion " << get_ident() << ' ';
+        st << "interruptibleactivityregion " << get_ident() << " ";
         save_string(name, st);
         indent(+1);
         def->save(st, warning);

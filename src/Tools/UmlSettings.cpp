@@ -6,7 +6,7 @@
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 WrapperStr UmlSettings::artifactDescription()
 {
     read_if_needed_();

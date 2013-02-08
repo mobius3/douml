@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 
 class UmlActivity;
 class UmlClassView;
@@ -27,13 +27,13 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseActivity(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseActivity(void * id, const WrapperStr & s) : UmlItem(id, s) {
     }
 
 
 public:
     // return the pre condition
-    const Q3CString & preCondition();
+    const WrapperStr & preCondition();
 
     // set the pre condition
     //
@@ -41,7 +41,7 @@ public:
     bool set_PreCondition(const char * v);
 
     // return the post condition
-    const Q3CString & postCondition();
+    const WrapperStr & postCondition();
 
     // set the post condition
     //
@@ -50,7 +50,7 @@ public:
 
 #ifdef WITHCPP
     // return the pre condition in C++
-    const Q3CString & cppPreCondition();
+    const WrapperStr & cppPreCondition();
 
     // set the pre condition in C++
     //
@@ -58,7 +58,7 @@ public:
     bool set_CppPreCondition(const char * v);
 
     // return the post condition in C++
-    const Q3CString & cppPostCondition();
+    const WrapperStr & cppPostCondition();
 
     // set the post condition in C++
     //
@@ -68,7 +68,7 @@ public:
 
 #ifdef WITHJAVA
     // return the pre condition in Java
-    const Q3CString & javaPreCondition();
+    const WrapperStr & javaPreCondition();
 
     // set the pre condition in Java
     //
@@ -76,7 +76,7 @@ public:
     bool set_JavaPreCondition(const char * v);
 
     // return the post condition in Java
-    const Q3CString & javaPostCondition();
+    const WrapperStr & javaPostCondition();
 
     // set the post condition in Java
     //
@@ -85,7 +85,7 @@ public:
 #endif
 
     // return the constraint
-    const Q3CString & constraint();
+    const WrapperStr & constraint();
 
     // set the constraint
     //
@@ -142,23 +142,23 @@ public:
 
 
 private:
-    Q3CString _pre_condition;
+    WrapperStr _pre_condition;
 
-    Q3CString _post_condition;
+    WrapperStr _post_condition;
 
 #ifdef WITHCPP
-    Q3CString _cpp_pre_condition;
+    WrapperStr _cpp_pre_condition;
 
-    Q3CString _cpp_post_condition;
+    WrapperStr _cpp_post_condition;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_pre_condition;
+    WrapperStr _java_pre_condition;
 
-    Q3CString _java_post_condition;
+    WrapperStr _java_post_condition;
 #endif
 
-    Q3CString _constraint;
+    WrapperStr _constraint;
 
     bool _read_only;
 

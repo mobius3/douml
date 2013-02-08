@@ -680,7 +680,7 @@ void ExpansionRegionCanvas::save(QTextStream & st, bool ref, QString & warning) 
     }
     else {
         nl_indent(st);
-        st << "expansionregioncanvas " << get_ident() << ' ';
+        st << "expansionregioncanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
 

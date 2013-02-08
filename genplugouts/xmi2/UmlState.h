@@ -4,7 +4,7 @@
 
 #include "UmlBaseState.h"
 #include "UmlStateItem.h"
-#include <q3cstring.h>
+
 #include <q3ptrlist.h>
 #include <qmap.h>
 
@@ -15,7 +15,7 @@ class UmlState : public UmlBaseState, public UmlStateItem
 {
 public:
         //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlState(void * id, const Q3CString & s) : UmlBaseState(id, s) {
+    UmlState(void * id, const WrapperStr & s) : UmlBaseState(id, s) {
         _all.replace(s, this);
     }
 
@@ -35,7 +35,7 @@ public:
     //Return a state from its name.
     //Doesn't manage namespace/package/module
 
-    static UmlState * find(Q3CString s);
+    static UmlState * find(WrapperStr s);
 
 
 protected:
@@ -43,7 +43,7 @@ protected:
 
     Q3PtrList<UmlTransition> _trans;
 
-    static QMap<Q3CString, UmlState *> _all;
+    static QMap<WrapperStr, UmlState *> _all;
 
 };
 

@@ -3,11 +3,11 @@
 #include "FileIn.h"
 #include "Token.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 void UmlActivityParameter::readParameter(FileIn & in, Token & token)
 {
-    Q3CString s;
+    WrapperStr s;
 
     s = token.valueOf("direction");
 
@@ -38,7 +38,7 @@ void UmlActivityParameter::readParameter(FileIn & in, Token & token)
         setType(s);
 
     if (!token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
@@ -72,7 +72,7 @@ void UmlActivityParameter::readParameter(FileIn & in, Token & token)
 
 void UmlActivityParameter::readParameterNode(FileIn & in, Token & token)
 {
-    Q3CString s;
+    WrapperStr s;
 
     if (token.valueOf("iscontroltype") == "true")
         set_IsControlType(TRUE);
@@ -90,7 +90,7 @@ void UmlActivityParameter::readParameterNode(FileIn & in, Token & token)
         setType(s);
 
     if (!token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
@@ -120,7 +120,7 @@ void UmlActivityParameter::readParameterNode(FileIn & in, Token & token)
     }
 }
 
-void UmlActivityParameter::setEffect(Q3CString s, FileIn & in)
+void UmlActivityParameter::setEffect(WrapperStr s, FileIn & in)
 {
     if (s == "create")
         set_Effect(createEffect);

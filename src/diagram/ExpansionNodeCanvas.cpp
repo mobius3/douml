@@ -552,7 +552,7 @@ void ExpansionNodeCanvas::save(QTextStream & st, bool ref, QString & warning) co
     }
     else {
         nl_indent(st);
-        st << "expansionnodecanvas " << get_ident() << ' ';
+        st << "expansionnodecanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         indent(+1);
         nl_indent(st);

@@ -7,7 +7,7 @@
 #include "Tools/ApiCmd.h"
 #include "Tools/ApiCmd.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 UmlPackage * UmlBasePackage::create(UmlPackage * parent, const char * name)
 {
     return (UmlPackage *) parent->create_(aPackage, name);

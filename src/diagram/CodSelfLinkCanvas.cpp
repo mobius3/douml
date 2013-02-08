@@ -353,7 +353,7 @@ void CodSelfLinkCanvas::save(QTextStream & st, bool ref, QString & warning) cons
         st << "selflinkcanvas_ref " << get_ident();
     else {
         nl_indent(st);
-        st << "selflinkcanvas " << get_ident() << ' ';
+        st << "selflinkcanvas " << get_ident() << " ";
         obj->save(st, TRUE, warning);
 
         indent(+1);
@@ -364,12 +364,12 @@ void CodSelfLinkCanvas::save(QTextStream & st, bool ref, QString & warning) cons
 #ifdef FORCE_INT_COORD
         // note : << float bugged in Qt 3.3.3
         st << "xy " << (int)(delta_x + obj_center.x())
-           << ' ' << (int)(delta_y + obj_center.y());
+           << " " << (int)(delta_y + obj_center.y());
 #else
         QString sx, sy;
 
         st << "xy " << sx.setNum(delta_x + obj_center.x())
-           << ' ' << sy.setNum(delta_y + obj_center.y());
+           << " " << sy.setNum(delta_y + obj_center.y());
 #endif
 
         settings.save_msg(st);

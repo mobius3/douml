@@ -7,7 +7,7 @@
 #include "Tools/ApiCmd.h"
 #include "Tools/ApiCmd.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 UmlPackage * UmlBasePackage::create(UmlPackage * parent, const char * name)
 {
     return (UmlPackage *) parent->create_(aPackage, name);
@@ -37,7 +37,7 @@ bool UmlBasePackage::set_AssociatedDiagram(UmlDiagram * d)
         return FALSE;
 }
 
-UmlPackage * UmlBasePackage::importProject(const Q3CString & fn)
+UmlPackage * UmlBasePackage::importProject(const WrapperStr & fn)
 {
     UmlCom::send_cmd(_identifier, importProjectCmd, (const char *)fn); //[rageek] Fix prototype
 
@@ -45,43 +45,43 @@ UmlPackage * UmlBasePackage::importProject(const Q3CString & fn)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBasePackage::cppSrcDir()
+const WrapperStr & UmlBasePackage::cppSrcDir()
 {
     read_if_needed_();
 
     return _cpp_src_dir;
 }
 
-bool UmlBasePackage::set_CppSrcDir(const Q3CString & s)
+bool UmlBasePackage::set_CppSrcDir(const WrapperStr & s)
 {
     return set_it_(_cpp_src_dir, s, setCppSrcDirCmd);
 }
 
-const Q3CString & UmlBasePackage::cppHDir()
+const WrapperStr & UmlBasePackage::cppHDir()
 {
     read_if_needed_();
 
     return _cpp_h_dir;
 }
 
-bool UmlBasePackage::set_CppHDir(const Q3CString & s)
+bool UmlBasePackage::set_CppHDir(const WrapperStr & s)
 {
     return set_it_(_cpp_h_dir, s, setCppHDirCmd);
 }
 
-Q3CString UmlBasePackage::cppNamespace()
+WrapperStr UmlBasePackage::cppNamespace()
 {
     read_if_needed_();
 
     return _cpp_namespace;
 }
 
-bool UmlBasePackage::set_CppNamespace(const Q3CString & s)
+bool UmlBasePackage::set_CppNamespace(const WrapperStr & s)
 {
     return set_it_(_cpp_namespace, s, setCppNamespaceCmd);
 }
 
-UmlPackage * UmlBasePackage::findCppNamespace(const Q3CString & n) const
+UmlPackage * UmlBasePackage::findCppNamespace(const WrapperStr & n) const
 {
     UmlCom::send_cmd(packageGlobalCmd, findCppNamespaceCmd, _identifier, n);
 
@@ -90,31 +90,31 @@ UmlPackage * UmlBasePackage::findCppNamespace(const Q3CString & n) const
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBasePackage::javaDir()
+const WrapperStr & UmlBasePackage::javaDir()
 {
     read_if_needed_();
 
     return _java_dir;
 }
 
-bool UmlBasePackage::set_JavaDir(const Q3CString & s)
+bool UmlBasePackage::set_JavaDir(const WrapperStr & s)
 {
     return set_it_(_java_dir, s, setJavaDirCmd);
 }
 
-Q3CString UmlBasePackage::javaPackage()
+WrapperStr UmlBasePackage::javaPackage()
 {
     read_if_needed_();
 
     return _java_package;
 }
 
-bool UmlBasePackage::set_JavaPackage(const Q3CString & s)
+bool UmlBasePackage::set_JavaPackage(const WrapperStr & s)
 {
     return set_it_(_java_package, s, setJavaPackageCmd);
 }
 
-UmlPackage * UmlBasePackage::findJavaPackage(const Q3CString & n) const
+UmlPackage * UmlBasePackage::findJavaPackage(const WrapperStr & n) const
 {
     UmlCom::send_cmd(packageGlobalCmd, findJavaPackageCmd, _identifier, n);
 
@@ -123,30 +123,30 @@ UmlPackage * UmlBasePackage::findJavaPackage(const Q3CString & n) const
 #endif
 
 #ifdef WITHPHP
-const Q3CString & UmlBasePackage::phpDir()
+const WrapperStr & UmlBasePackage::phpDir()
 {
     read_if_needed_();
 
     return _php_dir;
 }
 
-bool UmlBasePackage::set_PhpDir(const Q3CString & s)
+bool UmlBasePackage::set_PhpDir(const WrapperStr & s)
 {
     return set_it_(_php_dir, s, setPhpDirCmd);
 }
-const Q3CString & UmlBasePackage::phpNamespace()
+const WrapperStr & UmlBasePackage::phpNamespace()
 {
     read_if_needed_();
 
     return _php_namespace;
 }
 
-bool UmlBasePackage::set_PhpNamespace(const Q3CString & v)
+bool UmlBasePackage::set_PhpNamespace(const WrapperStr & v)
 {
     return set_it_(_php_namespace, v, setPhpNamespaceCmd);
 }
 
-UmlPackage * UmlBasePackage::findPhpNamespace(const Q3CString & n)
+UmlPackage * UmlBasePackage::findPhpNamespace(const WrapperStr & n)
 {
     UmlCom::send_cmd(packageGlobalCmd, findPhpNamespaceCmd, _identifier, n);
 
@@ -155,31 +155,31 @@ UmlPackage * UmlBasePackage::findPhpNamespace(const Q3CString & n)
 #endif
 
 #ifdef WITHPYTHON
-const Q3CString & UmlBasePackage::pythonDir()
+const WrapperStr & UmlBasePackage::pythonDir()
 {
     read_if_needed_();
 
     return _python_dir;
 }
 
-bool UmlBasePackage::set_PythonDir(const Q3CString & s)
+bool UmlBasePackage::set_PythonDir(const WrapperStr & s)
 {
     return set_it_(_python_dir, s, setPythonDirCmd);
 }
 
-Q3CString UmlBasePackage::pythonPackage()
+WrapperStr UmlBasePackage::pythonPackage()
 {
     read_if_needed_();
 
     return _python_package;
 }
 
-bool UmlBasePackage::set_PythonPackage(const Q3CString & s)
+bool UmlBasePackage::set_PythonPackage(const WrapperStr & s)
 {
     return set_it_(_python_package, s, setPythonPackageCmd);
 }
 
-UmlPackage * UmlBasePackage::findPythonPackage(const Q3CString & n) const
+UmlPackage * UmlBasePackage::findPythonPackage(const WrapperStr & n) const
 {
     UmlCom::send_cmd(packageGlobalCmd, findPythonPackageCmd, _identifier, n);
 
@@ -188,31 +188,31 @@ UmlPackage * UmlBasePackage::findPythonPackage(const Q3CString & n) const
 #endif
 
 #ifdef WITHIDL
-const Q3CString & UmlBasePackage::idlDir()
+const WrapperStr & UmlBasePackage::idlDir()
 {
     read_if_needed_();
 
     return _idl_dir;
 }
 
-bool UmlBasePackage::set_IdlDir(const Q3CString & s)
+bool UmlBasePackage::set_IdlDir(const WrapperStr & s)
 {
     return set_it_(_idl_dir, s, setIdlDirCmd);
 }
 
-Q3CString UmlBasePackage::idlModule()
+WrapperStr UmlBasePackage::idlModule()
 {
     read_if_needed_();
 
     return _idl_module;
 }
 
-bool UmlBasePackage::set_IdlModule(const Q3CString & s)
+bool UmlBasePackage::set_IdlModule(const WrapperStr & s)
 {
     return set_it_(_idl_module, s, setIdlModuleCmd);
 }
 
-UmlPackage * UmlBasePackage::findIdlModule(const Q3CString & n) const
+UmlPackage * UmlBasePackage::findIdlModule(const WrapperStr & n) const
 {
     UmlCom::send_cmd(packageGlobalCmd, findIdlModuleCmd, _identifier, n);
 
@@ -239,7 +239,7 @@ void UmlBasePackage::saveProject()
     UmlCom::send_cmd(packageGlobalCmd, saveProjectCmd);
 }
 
-void UmlBasePackage::loadProject(Q3CString p)
+void UmlBasePackage::loadProject(WrapperStr p)
 {
     UmlCom::send_cmd(miscGlobalCmd, loadCmd, (const char *) p);
 }

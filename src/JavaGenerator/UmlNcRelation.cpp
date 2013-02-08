@@ -28,10 +28,10 @@
 #include "UmlNcRelation.h"
 #include "UmlPackage.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
-void UmlNcRelation::generate_import(QTextStream & f, const Q3CString & indent)
+void UmlNcRelation::generate_import(QTextStream & f, const WrapperStr & indent)
 {
     if ((relationKind() == aDependency) &&
         (stereotype() == "import") &&

@@ -2,16 +2,16 @@
 #define _UMLBASEPARAMETER_H
 
 
-#include <q3cstring.h>
+
 #include "UmlTypeSpec.h"
 #include "aDirection.h"
 
 //  Represent an operation's parameter
 
 struct UmlBaseParameter {
-    Q3CString name;
+    WrapperStr name;
 
-    Q3CString default_value;
+    WrapperStr default_value;
 
     UmlTypeSpec type;
 

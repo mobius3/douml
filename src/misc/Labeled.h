@@ -29,7 +29,7 @@
 #define LABELED_H
 
 #include <q3intdict.h>
-
+#include "misc/mystr.h"
 // id 1 user 1
 #define PROJECT_ID (1*128 + 1)
 

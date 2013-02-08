@@ -4,7 +4,7 @@
 #include "UmlItem.h"
 #include "UmlSequenceMessage.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs)
 {
@@ -16,7 +16,7 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
     fr->write(out, diagram, msgs);
 }
 
-void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs, Q3CString oper)
+void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs, WrapperStr oper)
 {
     Q3PtrListIterator<UmlSequenceMessage> it(msgs);
     UmlSequenceMessage * m;
@@ -37,7 +37,7 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
             out.id_prefix(diagram, "GUARD", rank);
             out << ">\n";
 
-            Q3CString txt = texts()[0];
+            WrapperStr txt = texts()[0];
 
             txt.stripWhiteSpace();
 
@@ -46,8 +46,8 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
 
             if (oper == "loop") {
                 int index;
-                Q3CString min;
-                Q3CString max;
+                WrapperStr min;
+                WrapperStr max;
 
                 if ((index = txt.find(',')) != -1) {
                     min = txt.left(index);

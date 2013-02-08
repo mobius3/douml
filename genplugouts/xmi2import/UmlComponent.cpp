@@ -6,7 +6,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 void UmlComponent::init()
 {
     declareFct("ownedmember", "uml:Component", &importIt);
@@ -20,7 +20,7 @@ void UmlComponent::importIt(FileIn & in, Token & token, UmlItem * where)
     if (where == 0)
         return;
 
-    Q3CString s = token.valueOf("name");
+    WrapperStr s = token.valueOf("name");
 
     if (s.isEmpty()) {
         static unsigned n = 0;
@@ -37,11 +37,11 @@ void UmlComponent::importIt(FileIn & in, Token & token, UmlItem * where)
     component->addItem(token.xmiId(), in);
 
     if (! token.closed()) {
-        Q3CString k = token.what();
+        WrapperStr k = token.what();
         const char * kstr = k;
 
         while (in.read(), !token.close(kstr)) {
-            Q3CString ks = token.what();
+            WrapperStr ks = token.what();
 
             if ((ks == "interfacerealization") || (ks == "realization"))
                 component->manageInterface(token, in);
@@ -55,9 +55,9 @@ void UmlComponent::importIt(FileIn & in, Token & token, UmlItem * where)
 
 void UmlComponent::manageInterface(Token & token, FileIn & in)
 {
-    Q3CString idref = token.valueOf("supplier");
+    WrapperStr idref = token.valueOf("supplier");
 
-    QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
     int c = ((const char *) token.what())[0];
 
     if (it != All.end()) {
@@ -100,9 +100,9 @@ UmlItem * UmlComponent::container(anItemKind kind, Token & token, FileIn & in)
     }
 }
 
-void UmlComponent::solve(int context, Q3CString idref)
+void UmlComponent::solve(int context, WrapperStr idref)
 {
-    QMap<Q3CString, UmlItem *>::Iterator it = All.find(idref);
+    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
 
     if (it != All.end()) {
         if ((*it)->kind() == aClass) {
@@ -130,7 +130,7 @@ void UmlComponent::solve(int context, Q3CString idref)
         UmlCom::trace("component : unknown reference '" + idref + "'<br>");
 }
 
-void UmlComponent::generalizeDependRealize(UmlItem * target, FileIn & in, int context, Q3CString label, Q3CString constraint)
+void UmlComponent::generalizeDependRealize(UmlItem * target, FileIn & in, int context, WrapperStr label, WrapperStr constraint)
 {
     if ((context == 3) && (target->kind() == aClass)) {
         // usage indicate a required interface
@@ -145,9 +145,9 @@ void UmlComponent::generalizeDependRealize(UmlItem * target, FileIn & in, int co
         UmlItem::generalizeDependRealize(target, in, context, label, constraint);
 }
 
-void UmlComponent::solveGeneralizationDependencyRealization(int context, Q3CString idref, Q3CString label, Q3CString constraint)
+void UmlComponent::solveGeneralizationDependencyRealization(int context, WrapperStr idref, WrapperStr label, WrapperStr constraint)
 {
-    QMap<Q3CString, UmlItem *>::Iterator it;
+    QMap<WrapperStr, UmlItem *>::Iterator it;
 
     if ((context == 3) &&
         ((it = All.find(idref)) != All.end()) &&

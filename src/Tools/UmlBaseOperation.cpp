@@ -8,7 +8,7 @@
 #include "UmlClassMember.h"
 //#include "misc/myio.h"
 //Added by qt3to4:
-#include "misc/mystr.h"
+
 #include <Q3ValueList>
 
 #include <QFileInfo>

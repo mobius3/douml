@@ -450,7 +450,7 @@ void Shortcut::load(bool conv)
                     index += 4;
                 }
 
-                int index2 = ln.find(' ', index);
+                int index2 = ln.find(" ", index);
 
                 if (index2 != -1) {
                     QString s = ln.mid(index2 + 1);

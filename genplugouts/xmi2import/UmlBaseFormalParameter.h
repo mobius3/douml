@@ -2,7 +2,7 @@
 #define _UMLBASEFORMALPARAMETER_H
 
 
-#include <q3cstring.h>
+
 #include "UmlTypeSpec.h"
 
 // This class manages 'formal parameters' of a template class. For instance 'T' in
@@ -14,12 +14,12 @@ public:
     UmlBaseFormalParameter() {};
 
     // returns the name of the formal
-    const Q3CString & name() const {
+    const WrapperStr & name() const {
         return _name;
     };
 
     // returns the type of a formal, probably "class"
-    const Q3CString & type() const {
+    const WrapperStr & type() const {
         return _type;
     };
 
@@ -34,10 +34,10 @@ public:
     };
 
 protected:
-    Q3CString _name;
+    WrapperStr _name;
 
     // "class" ...
-    Q3CString _type;
+    WrapperStr _type;
 
     UmlTypeSpec _default_value;
 

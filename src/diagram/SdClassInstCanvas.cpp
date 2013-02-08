@@ -34,7 +34,7 @@
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include "misc/mystr.h"
+
 
 #include "SdClassInstCanvas.h"
 #include "BrowserDiagram.h"
@@ -662,7 +662,7 @@ void SdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) cons
            << full_name();
     else if (browser_node->get_type() == UmlClass) {
         nl_indent(st);
-        st << "classinstance " << get_ident() << ' ';
+        st << "classinstance " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         nl_indent(st);
         ClassInstCanvas::save(st);
@@ -672,12 +672,12 @@ void SdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) cons
 
         st << "  name ";
         save_string(iname, st);
-        st << ' ';
+        st << " ";
         SdObjCanvas::save(st);
     }
     else {
         nl_indent(st);
-        st << "classinstancecanvas " << get_ident() << ' ';
+        st << "classinstancecanvas " << get_ident() << " ";
         browser_node->save(st, TRUE, warning);
         nl_indent(st);
         ClassInstCanvas::save(st);
