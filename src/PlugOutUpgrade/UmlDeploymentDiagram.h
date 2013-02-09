@@ -3,7 +3,7 @@
 
 #include "UmlBaseDeploymentDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 // This class manages 'deployment diagrams', notes that the class 'UmlDiagram'
 // is a mother class of all the diagrams, allowing to generalize their
@@ -13,7 +13,7 @@
 class UmlDeploymentDiagram : public UmlBaseDeploymentDiagram
 {
 public:
-    UmlDeploymentDiagram(void * id, const Q3CString & n)
+    UmlDeploymentDiagram(void * id, const WrapperStr & n)
         : UmlBaseDeploymentDiagram(id, n) {};
 };
 

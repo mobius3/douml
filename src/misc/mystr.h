@@ -150,9 +150,10 @@ public:
         this->wrappedString = QString(QLatin1String(c));
     }
 
-    void replace(int pos, int len, const char* c)
+    WrapperStr& replace(int pos, int len, const char* c)
     {
         wrappedString.replace(pos, len, c);
+        return *this;
     }
     WrapperStr& insert(int pos, const char* c)
     {

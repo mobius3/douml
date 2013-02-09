@@ -3,13 +3,13 @@
 
 
 #include "UmlBaseActivity.h"
-#include <q3cstring.h>
+#include "misc/mystr.h"
 
 class UmlActivity : public UmlBaseActivity
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlActivity(void * id, const Q3CString & s) : UmlBaseActivity(id, s) {
+    UmlActivity(void * id, const WrapperStr & s) : UmlBaseActivity(id, s) {
     }
 
 };

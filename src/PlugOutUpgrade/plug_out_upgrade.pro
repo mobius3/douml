@@ -93,6 +93,7 @@ SOURCES          = util.cpp activity.cpp state.cpp instance.cpp \
         ../Tools/UmlBaseParameter.cpp \
         ../Tools/UmlBaseView.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
+    ../misc/mystr.cpp \
     ../Logging/QsLogDest.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
@@ -107,3 +108,22 @@ HEADERS += \
     ../Logging/QsLogDest.h \
     ../Logging/QsLog.h \
     ../Logging/QsDebugOutput.h
+
+INCLUDEPATH += ../../src
+CONFIG += qtestlib
+Release{
+
+
+    MOC_DIR = bin/douml/py_gen/MOC_release
+    OBJECTS_DIR = bin/douml/py_gen/Obj_release
+}
+
+Debug{
+    MOC_DIR = bin/douml/py_gen/MOC_Debug
+    OBJECTS_DIR = bin/douml/py_gen/Obj_Debug
+
+}
+    UI_DIR = src/ui
+    DESTDIR = ../../bin
+
+QMAKE_CXXFLAGS += -std=gnu++11

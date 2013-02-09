@@ -37,7 +37,7 @@
 #include "util.h"
 #include "state.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 //
 // add all concerning states
@@ -195,7 +195,7 @@ UmlClass * add_state(UmlClassView * base_class_view, UmlClassView * user_class_v
                 "#endif\n"
                 "  UmlBaseItem::unload(rec, del);\n",
                 FALSE, 0, 0);
-    Q3CString s = op->cppDecl();
+    WrapperStr s = op->cppDecl();
 
     s.replace(s.find("${p0}"), 5, "= FALSE");
     s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -418,7 +418,7 @@ void add_transition(UmlClassView * base_class_view, UmlClassView * user_class_vi
                 "  UmlBaseItem::unload(rec, del);\n",
                 FALSE, 0, 0);
 
-    Q3CString s = op->cppDecl();
+    WrapperStr s = op->cppDecl();
 
     s.replace(s.find("${p0}"), 5, "= FALSE");
     s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -561,7 +561,7 @@ void add_stateaction(UmlClassView * base_class_view, UmlClassView * user_class_v
                 "  UmlBaseItem::unload(rec, del);\n",
                 FALSE, 0, 0);
 
-    Q3CString s = op->cppDecl();
+    WrapperStr s = op->cppDecl();
 
     s.replace(s.find("${p0}"), 5, "= FALSE");
     s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -626,7 +626,7 @@ void add_pseudostates(UmlClassView * base_class_view, UmlClassView * user_class_
     UmlRelation * rel;
 
     if ((rel = UmlBaseRelation::create(aGeneralisation, user_pseudostate, user_stateitem)) == 0) {
-        Q3CString msg = user_pseudostate->name() + " can't inherit " + user_stateitem->name() + "<br>\n";
+        WrapperStr msg = user_pseudostate->name() + " can't inherit " + user_stateitem->name() + "<br>\n";
 
         UmlCom::trace("<b>" + msg + "</b>");
         throw 0;
@@ -637,7 +637,7 @@ void add_pseudostates(UmlClassView * base_class_view, UmlClassView * user_class_
     }
 
     if ((rel = UmlBaseRelation::create(aGeneralisation, user_pseudostate, user_item)) == 0) {
-        Q3CString msg = user_pseudostate->name() + " can't inherit " + user_item->name() + "<br>\n";
+        WrapperStr msg = user_pseudostate->name() + " can't inherit " + user_item->name() + "<br>\n";
 
         UmlCom::trace("<b>" + msg + "</b>");
         throw 0;
@@ -735,9 +735,9 @@ void add_state_on_instance_cmd()
         "setDefCmd"
     };
     UmlClass * itcmd = UmlClass::get("OnInstanceCmd", 0);
-    Q3CString cpp = CppSettings::enumItemDecl();
-    Q3CString java = JavaSettings::enumPatternItemDecl();
-    Q3CString m = "add enum item OnInstanceCmd::";
+    WrapperStr cpp = CppSettings::enumItemDecl();
+    WrapperStr java = JavaSettings::enumPatternItemDecl();
+    WrapperStr m = "add enum item OnInstanceCmd::";
 
     for (int i = 0; i != sizeof(cmds) / sizeof(cmds[0]); i += 1) {
         UmlAttribute * at;
@@ -745,7 +745,7 @@ void add_state_on_instance_cmd()
         if ((at = UmlBaseAttribute::create(itcmd, cmds[i])) == 0) {
             // setMarkedCmd may alreadu exist
             if (i != 0) {
-                Q3CString msg = "cannot add enum item '" + Q3CString(cmds[i]) +
+                WrapperStr msg = "cannot add enum item '" + WrapperStr(cmds[i]) +
                                 "' in 'OnInstanceCmd'<br>\n";
 
                 UmlCom::trace("<b>" + msg + "</b>");
@@ -766,10 +766,10 @@ void baseitem_read_state(UmlClass * base_item)
     UmlOperation * op = base_item->get_operation("read_");
 
     if (op != 0) {
-        Q3CString body;
+        WrapperStr body;
 
         body = op->cppBody();
-        body.insert(body.findRev("default:"),
+        body.insert(body.operator QString().lastIndexOf("default:"),
                     "case aState:\n\
       return new UmlState(id, name);\n\
     case aTransition:\n\
@@ -806,7 +806,7 @@ void baseitem_read_state(UmlClass * base_item)
         op->set_CppBody(body);
 
         body = op->javaBody();
-        body.insert(body.findRev("default:"),
+        body.insert(body.operator QString().lastIndexOf("default:"),
                     "case anItemKind._aState:\n\
       return new UmlState(id, name);\n\
     case anItemKind._aTransition:\n\
@@ -845,7 +845,7 @@ void baseitem_read_state(UmlClass * base_item)
 
     // update artifact
     UmlArtifact * art = base_item->associatedArtifact();
-    Q3CString s;
+    WrapperStr s;
 
     s = art->cppSource();
     s.insert(s.find("#include \"MiscGlobalCmd.h\""),
@@ -985,7 +985,7 @@ void upgrade_states(UmlClass * base_item,
 void base_state_include_umlcom()
 {
     UmlArtifact * art = UmlClass::get("UmlBaseState", 0)->associatedArtifact();
-    Q3CString s = art->cppSource();
+    WrapperStr s = art->cppSource();
 
     if (s.find("#include \"UmlCom.h\"\n") == -1) {
         s.insert(s.find("${includes}"), "#include \"UmlCom.h\"\n");
@@ -1025,7 +1025,7 @@ void add_state_specification()
                              "_specification", PrivateVisibility,
                              uml_oper, 0, 0);
 
-    Q3CString s;
+    WrapperStr s;
 
     op = base_state->get_operation("read_uml_");
 
@@ -1077,7 +1077,7 @@ static void add_ref(const char * scl, const char * sucl, const char * aa, const 
 
     // read
 
-    Q3CString s;
+    WrapperStr s;
 
     op = cl->get_operation("read_uml_");
 
@@ -1091,9 +1091,9 @@ static void add_ref(const char * scl, const char * sucl, const char * aa, const 
         op = cl->add_op("read_uml_", ProtectedVisibility, "void");
 
         op->set_isCppVirtual(TRUE);
-        s = Q3CString("  UmlBaseItem::read_uml_();\n  _reference = (") + sucl +  " *) UmlBaseItem::read_();\n";
+        s = WrapperStr("  UmlBaseItem::read_uml_();\n  _reference = (") + sucl +  " *) UmlBaseItem::read_();\n";
         op->set_CppBody(s);
-        s = Q3CString("  super.read_uml_();\n  _reference = (") + sucl +  ") UmlBaseItem.read_();\n";
+        s = WrapperStr("  super.read_uml_();\n  _reference = (") + sucl +  ") UmlBaseItem.read_();\n";
         op->set_JavaBody(s);
 
         include_umlcom(cl);

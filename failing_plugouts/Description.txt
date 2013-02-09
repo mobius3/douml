@@ -1,0 +1,12 @@
+gpro - generates qt .pro files
+	status - total junk. needs fixing
+
+
+rose import - importer of rational rose models
+	need to pick older code from repo as the current seems to not have  compatible enums
+singleton = junk, need to find setIsCppVolatileCmd in version control
+state machine generator - kills douml
+UML projection - doesnt seem to be working recursively. seems to crash douml on repeated use
+xmi 1 generator - seems to fail with command mismatch
+xmiimport - crashes midway
+

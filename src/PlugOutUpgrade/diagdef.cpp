@@ -41,7 +41,7 @@
 #include "util.h"
 #include "diagdef.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 //
 // add access to use case, collaboration and sequence diagram 'machine'
@@ -132,7 +132,7 @@ void add_fragment(UmlClassView * base_class_view, UmlClassView * user_class_view
     base_fragment->add_vect_assoc("_compartments", PrivateVisibility, user_fragment_compart, 0, 0);
 
     UmlAttribute * att;
-    Q3CString s;
+    WrapperStr s;
 
     base_fragment->add_attribute("_name", PrivateVisibility, "string", 0, 0);
     base_fragment_compart->add_attribute("_rank", PrivateVisibility, "int", 0, 0);
@@ -664,7 +664,7 @@ UmlClass * add_ucassoc(UmlClassView * base_class_view, UmlClassView * user_class
 void add_ddef(UmlClass * cl, UmlClass * user_ddef)
 {
     UmlOperation * def = cl->add_op("definition", PublicVisibility, user_ddef);
-    Q3CString s;
+    WrapperStr s;
 
     def->set_Description(" return the semantic part of the diagram not present in the model");
     s =
@@ -710,10 +710,10 @@ void add_ddef(UmlClass * cl, UmlClass * user_ddef)
 
     op = cl->get_operation(cl->name());
     s = op->cppDecl();
-    s.insert(s.findRev(")") + 1, ", _def(0)");
+    s.insert(s.operator QString().lastIndexOf(")") + 1, ", _def(0)");
     op->set_CppDecl(s);
     s = op->javaDecl();
-    s.insert(s.findRev("}"), "  _def = null;\n");
+    s.insert(s.operator QString().lastIndexOf("}"), "  _def = null;\n");
     op->set_JavaDecl(s);
 }
 
@@ -1114,7 +1114,7 @@ UmlClass * add_seqmessage(UmlClassView * base_class_view, UmlClassView * user_cl
     user_seqmessage->set_Description(" this class manages messages in a sequence diagram,\n"
                                      " you can modify it");
 
-    Q3CString s = base_seqmessage->javaDecl();
+    WrapperStr s = base_seqmessage->javaDecl();
 
     s.replace(s.find("${implements}"), 13, " implements java.lang.Comparable");
     base_seqmessage->set_JavaDecl(s);
@@ -1331,7 +1331,7 @@ void add_seqdiagdef(UmlClassView * base_class_view, UmlClassView * user_class_vi
                 "  }\n"
                 "\n"
                 "  while (UmlCom::read_bool()) {\n"
-                "    Q3CString s = UmlCom::read_string();\n"
+                "    WrapperStr s = UmlCom::read_string();\n"
                 "    int x = (int) UmlCom::read_unsigned();\n"
                 "    int y = (int) UmlCom::read_unsigned();\n"
                 "    int w = (int) UmlCom::read_unsigned();\n"
@@ -1702,7 +1702,7 @@ void upgrade_interaction()
     a->moveAfter(r);
 
     UmlClass * instref = UmlClass::get("UmlClassInstanceReference", 0);
-    QString s;
+    WrapperStr s;
     int index;
 
     op = base_fragment->add_op("covered", PublicVisibility, instref);
@@ -1717,7 +1717,7 @@ void upgrade_interaction()
     r->set_Stereotype("vector");
     r->set_Multiplicity("*");
     r->set_CppDecl(CppSettings::relationDecl(TRUE, "*"));
-    s = r->javaDecl();
+    s = r->javaDecl().operator QString();
     index = s.find("${type} ${name}");
 
     if (index != -1) {
@@ -1728,7 +1728,7 @@ void upgrade_interaction()
     r->moveAfter(a);
 
     op = base_fragment->get_operation("read_");
-    s = op->cppBody();
+    s = op->cppBody().operator QString();
     index = s.find("fc->init(this, rank, UmlCom::read_unsigned());");
 
     if (index != -1)
@@ -1737,7 +1737,7 @@ void upgrade_interaction()
     s += "  _refer = (UmlDiagram *) UmlBaseItem::read_();\n"
          "  _arguments = UmlCom::read_string();\n";
     op->set_CppBody(s);
-    s = op->javaBody();
+    s = op->javaBody().operator QString();
     index = s.find("fc.init(this, rank, UmlCom.read_unsigned());");
 
     if (index != -1)
@@ -1862,7 +1862,7 @@ void upgrade_interaction()
 
     s += "\n\
   while (UmlCom::read_bool()) {\n\
-    Q3CString s = UmlCom::read_string();\n\
+    WrapperStr s = UmlCom::read_string();\n\
     int x = (int) UmlCom::read_unsigned();\n\
     int y = (int) UmlCom::read_unsigned();\n\
     int w = (int) UmlCom::read_unsigned();\n\
@@ -1931,7 +1931,7 @@ void add_stereotype_on_seq_msg(UmlClass * baseseqmsg)
 
     //
 
-    QString s;
+    WrapperStr s;
     int index;
 
     op = baseseqmsg->get_operation("read_");

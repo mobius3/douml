@@ -2,7 +2,7 @@
 #include "UmlClass.h"
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 UmlRelation * UmlRelation::java2Php(UmlClass * php, UmlClass * java,
                                     const char * name)
@@ -10,9 +10,9 @@ UmlRelation * UmlRelation::java2Php(UmlClass * php, UmlClass * java,
     UmlRelation * from = java->get_relation(name);
 
     if (from == 0) {
-        Q3CString err = Q3CString("cannot find relation '") +
-                        name + Q3CString("' in class '") + java->name()
-                        + Q3CString("'<br>\n");
+        WrapperStr err = WrapperStr("cannot find relation '") +
+                        name + WrapperStr("' in class '") + java->name()
+                        + WrapperStr("'<br>\n");
         UmlCom::trace(err);
         throw 0;
     }
@@ -21,9 +21,9 @@ UmlRelation * UmlRelation::java2Php(UmlClass * php, UmlClass * java,
         UmlBaseRelation::create(from->relationKind(), php, from->roleType());
 
     if (to == 0) {
-        Q3CString err = Q3CString("cannot create relation '") +
-                        name + Q3CString("' in class '") + php->name()
-                        + Q3CString("'<br>\n");
+        WrapperStr err = WrapperStr("cannot create relation '") +
+                        name + WrapperStr("' in class '") + php->name()
+                        + WrapperStr("'<br>\n");
         UmlCom::trace(err);
         throw 0;
     }

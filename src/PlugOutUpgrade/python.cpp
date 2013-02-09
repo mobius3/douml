@@ -39,7 +39,7 @@
 #include "util.h"
 #include "python.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 
 void add_bypass_python()
@@ -48,7 +48,7 @@ void add_bypass_python()
     UmlClass * cl;
     UmlAttribute * att;
     UmlOperation * op;
-    QString s;
+    WrapperStr s;
 
     //
 
@@ -70,13 +70,13 @@ void add_bypass_python()
     op->set_Description("internal, do NOT use it\n");
 
     op = cl->get_operation("unload");
-    s = op->cppBody();
+    s = op->cppBody().operator QString();
     s.insert(s.find("#ifdef WITHIDL"),
              "#ifdef WITHPYTHON\n"
              "  _python_src = 0;\n"
              "#endif\n");
     op->set_CppBody(s);
-    s = op->javaBody();
+    s = op->javaBody().operator QString();
     s.insert(s.find("  _idl_src = null;"),
              "  _python_src = null;\n");
     op->set_JavaBody(s);
@@ -116,13 +116,13 @@ void add_bypass_python()
     op->set_Description("internal, do NOT use it\n");
 
     op = cl->get_operation("unload");
-    s = op->cppBody();
+    s = op->cppBody().operator QString();
     s.insert(s.find("#ifdef WITHIDL"),
              "#ifdef WITHPYTHON\n"
              "  _python_decl = 0;\n"
              "#endif\n");
     op->set_CppBody(s);
-    s = op->javaBody();
+    s = op->javaBody().operator QString();
     s.insert(s.find("  _idl_decl = null;"),
              "  _python_decl = null;\n");
     op->set_JavaBody(s);
@@ -163,21 +163,21 @@ void add_bypass_python()
     cl = UmlClass::get("UmlBaseOperation", 0);
 
     att = cl->get_attribute("_java_get_set_frozen");
-    s = att->cppDecl();
+    s = att->cppDecl().operator QString();
     index = s.find("CPP");
 
     if (index != -1)
         att->set_CppDecl(s.replace(index, 3, "JAVA"));
 
     att = cl->get_attribute("_php_get_set_frozen");
-    s = att->cppDecl();
+    s = att->cppDecl().operator QString();
     index = s.find("CPP");
 
     if (index != -1)
         att->set_CppDecl(s.replace(index, 3, "PHP"));
 
     att = cl->get_attribute("_idl_get_set_frozen");
-    s = att->cppDecl();
+    s = att->cppDecl().operator QString();
     index = s.find("CPP");
 
     if (index != -1)
@@ -200,25 +200,25 @@ void add_bypass_python()
     att2->moveAfter(att);
 
     op = cl->get_operation("phpContextualBodyIndent");
-    s = op->cppDef();
+    s = op->cppDef().operator QString();
     index = s.find("IDL");
 
     if (index != -1)
         op->set_CppDef(s.replace(index, 3, "PHP"));
 
-    s = op->cppDecl();
+    s = op->cppDecl().operator QString();
     index = s.find("IDL");
 
     if (index != -1)
         op->set_CppDecl(s.replace(index, 3, "PHP"));
 
-    s = op->cppBody();
+    s = op->cppBody().operator QString();
     index = s.find("idl");
 
     if (index != -1)
         op->set_CppBody(s.replace(index, 3, "php"));
 
-    s = op->javaBody();
+    s = op->javaBody().operator QString();
     index = s.find("idl");
 
     if (index != -1)
@@ -245,14 +245,14 @@ void add_bypass_python()
     op->set_Description("internal, do NOT use it\n");
 
     op = cl->get_operation("unload");
-    s = op->cppBody();
+    s = op->cppBody().operator QString();
     s.insert(s.find("#ifdef WITHIDL"),
              "#ifdef WITHPYTHON\n"
              "  _python_name_spec = 0;\n"
              "  _python_decorators = 0;\n"
              "#endif\n");
     op->set_CppBody(s);
-    s = op->javaBody();
+    s = op->javaBody().operator QString();
     s.insert(s.find("  _idl_name_spec = null;"),
              "  _python_name_spec = null;\n"
              "  _python_decorators = null;\n");
@@ -457,7 +457,7 @@ UmlArtifact * add_python_settings()
                                     " 'PythonSettings::instance()->member' or other long sentence like this.");
 
     UmlOperation * op;
-    Q3CString s;
+    WrapperStr s;
 
     defGetBool(pythonsettings, _2_2, isPython_2_2, 0, 0, "");
     op->set_Description(" return if classes follow Python 2.2 by default");
@@ -591,7 +591,7 @@ UmlArtifact * add_python_settings()
     UmlRelation * rel;
 
     if ((rel = UmlBaseRelation::create(aGeneralisation, pythonsettings, umlsettings)) == 0) {
-        Q3CString msg = "PythonSettings can't inherit UmlSettings<br>\n";
+        WrapperStr msg = "PythonSettings can't inherit UmlSettings<br>\n";
 
         UmlCom::trace("<b>" + msg + "</b>");
         throw 0;
@@ -695,10 +695,10 @@ UmlArtifact * add_python_settings()
                 "    _map_imports.resize(n);\n"
                 "  \n"
                 "  for (index = 0; index != n; index += 1) {\n"
-                "    Q3CString t = UmlCom::read_string();\n"
-                "    Q3CString i = UmlCom::read_string();\n"
+                "    WrapperStr t = UmlCom::read_string();\n"
+                "    WrapperStr i = UmlCom::read_string();\n"
                 "    \n"
-                "    _map_imports.insert(t, new Q3CString(i));\n"
+                "    _map_imports.insert(t, new WrapperStr(i));\n"
                 "  }\n"
                 "  \n"
                 "  _src_content = UmlCom::read_string();\n"
@@ -921,7 +921,7 @@ void operation_add_python()
     UmlClass * cl = UmlClass::get("UmlBaseOperation", 0);
     UmlOperation * prev = cl->get_operation("set_PhpContextualBodyIndent");
     UmlOperation * op;
-    Q3CString s;
+    WrapperStr s;
     int index;
 
     // fixing
@@ -1129,7 +1129,7 @@ void add_default_initoper(UmlClass * pythonsettings)
 
     //
 
-    QString s;
+    WrapperStr s;
 
     op = pythonsettings->get_operation("read_");
 
@@ -1222,7 +1222,7 @@ void add_operation3(UmlClass * pythonsettings)
 
     //
 
-    QString s;
+    WrapperStr s;
 
     op = pythonsettings->get_operation("read_");
 

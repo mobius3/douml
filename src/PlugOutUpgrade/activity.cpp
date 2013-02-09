@@ -41,7 +41,7 @@
 #include "activity.h"
 //Added by qt3to4:
 #include <Q3ValueList>
-#include <Q3CString>
+#include "misc/mystr.h"
 
 //
 // add all concerning activities
@@ -174,7 +174,7 @@ void add_activity(UmlClassView * base_class_view, UmlClassView * user_class_view
                 "#endif\n"
                 "  UmlBaseItem::unload(rec, del);\n",
                 FALSE, 0, 0);
-    Q3CString s = op->cppDecl();
+    WrapperStr s = op->cppDecl();
 
     s.replace(s.find("${p0}"), 5, "= FALSE");
     s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -464,7 +464,7 @@ void add_flow(UmlClassView * base_class_view, UmlClassView * user_class_view,
                 "  UmlBaseItem::unload(rec, del);\n",
                 FALSE, 0, 0);
 
-    Q3CString s = op->cppDecl();
+    WrapperStr s = op->cppDecl();
 
     s.replace(s.find("${p0}"), 5, "= FALSE");
     s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -727,7 +727,7 @@ void add_activityaction(UmlClassView * base_class_view, UmlClassView * user_clas
                 "#endif\n"
                 "  UmlBaseItem::unload(rec, del);\n",
                 FALSE, 0, 0);
-    Q3CString s = op->cppDecl();
+    WrapperStr s = op->cppDecl();
 
     s.replace(s.find("${p0}"), 5, "= FALSE");
     s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -1759,7 +1759,7 @@ UmlClass * add_activityobject(UmlClassView * base_class_view, UmlClassView * use
                 "  UmlBaseActivityNode::unload(rec, del);\n",
                 FALSE, 0, 0);
 
-    Q3CString s = op->cppDecl();
+    WrapperStr s = op->cppDecl();
 
     s.replace(s.find("${p0}"), 5, "= FALSE");
     s.replace(s.find("${p1}"), 5, "= FALSE");
@@ -1929,7 +1929,7 @@ void add_pinparam(UmlClassView * base_class_view, UmlClassView * user_class_view
     defSetEnum(base_pinparam, _effect, set_Effect, effect, replaceParameterCmd, 0, 0, "effect");
 
     UmlAttribute * att;
-    Q3CString s;
+    WrapperStr s;
 
     base_pinparam->add_attribute("_unique", PrivateVisibility, "bool", 0, 0, " : 1");
     base_pinparam->add_attribute("_exception", PrivateVisibility, "bool", 0, 0, " : 1");
@@ -2270,11 +2270,11 @@ void baseitem_read_activities(UmlClass * base_item)
     UmlOperation * op = base_item->get_operation("read_");
 
     if (op != 0) {
-        Q3CString body;
+        WrapperStr body;
 
         body = op->cppBody();
-        body.remove(body.findRev("//return new UmlActivityDiagram(id, name);"), 2);
-        body.insert(body.findRev("default:"),
+        body.remove(body.operator QString().lastIndexOf("//return new UmlActivityDiagram(id, name);"), 2);
+        body.insert(body.operator QString().lastIndexOf("default:"),
                     "case anActivity:\n"
                     "      return new UmlActivity(id, name);\n"
                     "    case aFlow:\n"
@@ -2341,8 +2341,8 @@ void baseitem_read_activities(UmlClass * base_item)
         op->set_CppBody(body);
 
         body = op->javaBody();
-        body.remove(body.findRev("//return new UmlActivityDiagram(id, name);"), 2);
-        body.insert(body.findRev("default:"),
+        body.remove(body.operator QString().lastIndexOf("//return new UmlActivityDiagram(id, name);"), 2);
+        body.insert(body.operator QString().lastIndexOf("default:"),
                     "case anItemKind._anActivity:\n"
                     "      return new UmlActivity(id, name);\n"
                     "    case anItemKind._aFlow:\n"
@@ -2411,7 +2411,7 @@ void baseitem_read_activities(UmlClass * base_item)
 
     // update UmlBaseItem artifact
     UmlArtifact * art = base_item->associatedArtifact();
-    Q3CString s;
+    WrapperStr s;
 
     s = art->cppSource();
     s.insert(s.find("#include \"MiscGlobalCmd.h\""),
@@ -2530,7 +2530,7 @@ void fixe_activity(UmlClass * base_pinparam)
 
     // dummy must have 5 bits rather than 4
     UmlAttribute * dummy = base_pinparam->get_attribute("_dummy");
-    Q3CString cppdecl = dummy->cppDecl();
+    WrapperStr cppdecl = dummy->cppDecl();
     int index = cppdecl.find(": 4");
 
     if (index != -1) {
@@ -2574,7 +2574,7 @@ void fixe_activity(UmlClass * base_pinparam)
                                 UmlClass::get("UmlActivityItem", 0));
 
     if (rel == 0) {
-        Q3CString msg = "UmlParameterSet can't inherit UmlActivityItem<br>\n";
+        WrapperStr msg = "UmlParameterSet can't inherit UmlActivityItem<br>\n";
 
         UmlCom::trace(msg);
         throw 0;
@@ -2667,17 +2667,17 @@ void add_partition(UmlClass * base_item, UmlClass * user_item)
     op->set_isCppVirtual(TRUE);
 
     // update read_()'s body
-    Q3CString s;
+    WrapperStr s;
 
     op = base_item->get_operation("read_");
 
     s = op->cppBody();
-    s.replace(s.findRev("//return new UmlPartition"),
+    s.replace(s.operator QString().lastIndexOf("//return new UmlPartition"),
               25, "return new UmlActivityPartition");
     op->set_CppBody(s);
 
     s = op->javaBody();
-    s.replace(s.findRev("//return new UmlPartition"),
+    s.replace(s.operator QString().lastIndexOf("//return new UmlPartition"),
               25, "return new UmlActivityPartition");
     op->set_JavaBody(s);
 
@@ -2709,7 +2709,7 @@ void add_additionalactions(UmlClass * base_item, UmlClass * user_item)
     UmlArtifact * user_art =
         UmlClass::get("UmlAcceptEventAction", 0)->associatedArtifact();
     UmlOperation * op;
-    Q3CString s;
+    WrapperStr s;
     unsigned uid = UmlCom::user_id();
 
     UmlCom::trace("<b>Add some activity actions</b><br>\n");
@@ -3152,7 +3152,7 @@ void add_additionalactions(UmlClass * base_item, UmlClass * user_item)
     op = base_item->get_operation("read_");
 
     s = op->cppBody();
-    s.insert(s.findRev("default:"),
+    s.insert(s.operator QString().lastIndexOf("default:"),
              "case anAcceptCallAction:\n"
              "      return new UmlAcceptCallAction(id, name);\n"
              "    case aReplyAction:\n"
@@ -3171,7 +3171,7 @@ void add_additionalactions(UmlClass * base_item, UmlClass * user_item)
     op->set_CppBody(s);
 
     s = op->javaBody();
-    s.insert(s.findRev("default:"),
+    s.insert(s.operator QString().lastIndexOf("default:"),
              "case anItemKind._anAcceptCallAction:\n"
              "      return new UmlAcceptCallAction(id, name);\n"
              "    case anItemKind._aReplyAction:\n"
@@ -3276,7 +3276,7 @@ void add_activity_specification()
                                 "_specification", PrivateVisibility,
                                 uml_oper, 0, 0);
 
-    Q3CString s;
+    WrapperStr s;
 
     op = base_activity->get_operation("read_uml_");
 

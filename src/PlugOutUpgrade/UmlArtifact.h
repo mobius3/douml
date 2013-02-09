@@ -30,7 +30,7 @@
 
 #include "UmlBaseArtifact.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class UmlPackage;
 class UmlDeploymentView;
@@ -41,12 +41,12 @@ class UmlDeploymentView;
 class UmlArtifact : public UmlBaseArtifact
 {
 public:
-    UmlArtifact(void * id, const Q3CString & n)
+    UmlArtifact(void * id, const WrapperStr & n)
         : UmlBaseArtifact(id, n) {};
 
     void add_includes(const char *, bool h = TRUE);
     void add_import(const char *);
-    static UmlArtifact * made(UmlDeploymentView * depl_view, const Q3CString & s);
+    static UmlArtifact * made(UmlDeploymentView * depl_view, const WrapperStr & s);
 };
 
 #endif

@@ -31,7 +31,7 @@
 #include "UmlCom.h"
 #include "util.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 
 UmlAttribute * UmlAttribute::java2Php(UmlClass * php, UmlClass * java,
@@ -44,9 +44,9 @@ UmlAttribute * UmlAttribute::java2Php(UmlClass * php, UmlClass * java,
     UmlAttribute * from = java->get_attribute(javaname);
 
     if (from == 0) {
-        Q3CString err = Q3CString("cannot find attribute '") +
-                        javaname + Q3CString("' in class '") + java->name()
-                        + Q3CString("'<br>\n");
+        WrapperStr err = WrapperStr("cannot find attribute '") +
+                        javaname + WrapperStr("' in class '") + java->name()
+                        + WrapperStr("'<br>\n");
         UmlCom::trace(err);
         throw 0;
     }
@@ -54,9 +54,9 @@ UmlAttribute * UmlAttribute::java2Php(UmlClass * php, UmlClass * java,
     UmlAttribute * to = UmlBaseAttribute::create(php, phpname);
 
     if (to == 0) {
-        Q3CString err = Q3CString("cannot create attribute '") +
-                        phpname + Q3CString("' in class '") + php->name()
-                        + Q3CString("'<br>\n");
+        WrapperStr err = WrapperStr("cannot create attribute '") +
+                        phpname + WrapperStr("' in class '") + php->name()
+                        + WrapperStr("'<br>\n");
         UmlCom::trace(err);
         throw 0;
     }
@@ -83,9 +83,9 @@ UmlAttribute * UmlAttribute::java2Python(UmlClass * python, UmlClass * java,
     UmlAttribute * from = java->get_attribute(javaname);
 
     if (from == 0) {
-        Q3CString err = Q3CString("cannot find attribute '") +
-                        javaname + Q3CString("' in class '") + java->name()
-                        + Q3CString("'<br>\n");
+        WrapperStr err = WrapperStr("cannot find attribute '") +
+                        javaname + WrapperStr("' in class '") + java->name()
+                        + WrapperStr("'<br>\n");
         UmlCom::trace(err);
         throw 0;
     }
@@ -93,9 +93,9 @@ UmlAttribute * UmlAttribute::java2Python(UmlClass * python, UmlClass * java,
     UmlAttribute * to = UmlBaseAttribute::create(python, pythonname);
 
     if (to == 0) {
-        Q3CString err = Q3CString("cannot create attribute '") +
-                        pythonname + Q3CString("' in class '") + python->name()
-                        + Q3CString("'<br>\n");
+        WrapperStr err = WrapperStr("cannot create attribute '") +
+                        pythonname + WrapperStr("' in class '") + python->name()
+                        + WrapperStr("'<br>\n");
         UmlCom::trace(err);
         throw 0;
     }
@@ -122,9 +122,9 @@ UmlAttribute * UmlAttribute::cpp2Python(UmlClass * python, UmlClass * cpp,
     UmlAttribute * from = cpp->get_attribute(cppname);
 
     if (from == 0) {
-        Q3CString err = Q3CString("cannot find attribute '") +
-                        cppname + Q3CString("' in class '") + cpp->name()
-                        + Q3CString("'<br>\n");
+        WrapperStr err = WrapperStr("cannot find attribute '") +
+                        cppname + WrapperStr("' in class '") + cpp->name()
+                        + WrapperStr("'<br>\n");
         UmlCom::trace(err);
         throw 0;
     }
@@ -132,9 +132,9 @@ UmlAttribute * UmlAttribute::cpp2Python(UmlClass * python, UmlClass * cpp,
     UmlAttribute * to = UmlBaseAttribute::create(python, pythonname);
 
     if (to == 0) {
-        Q3CString err = Q3CString("cannot create attribute '") +
-                        pythonname + Q3CString("' in class '") + python->name()
-                        + Q3CString("'<br>\n");
+        WrapperStr err = WrapperStr("cannot create attribute '") +
+                        pythonname + WrapperStr("' in class '") + python->name()
+                        + WrapperStr("'<br>\n");
         UmlCom::trace(err);
         throw 0;
     }

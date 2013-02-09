@@ -39,7 +39,7 @@
 #include "util.h"
 #include "instance.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 
 //
@@ -391,7 +391,7 @@ void add_class_instance(UmlClassView * base_class_view, UmlClassView * user_clas
 
     //
 
-    Q3CString s;
+    WrapperStr s;
 
     art = base_class_instance->associatedArtifact();
     s = art->cppHeader();
@@ -423,17 +423,17 @@ void baseitem_read_class_instance(UmlClass * base_item)
     UmlOperation * op = base_item->get_operation("read_");
 
     if (op != 0) {
-        Q3CString body;
+        WrapperStr body;
 
         body = op->cppBody();
-        body.insert(body.findRev("default:"),
+        body.insert(body.operator QString().lastIndexOf("default:"),
                     "case aClassInstance:\n\
       return new UmlClassInstance(id, name);\n\
     ");
         op->set_CppBody(body);
 
         body = op->javaBody();
-        body.insert(body.findRev("default:"),
+        body.insert(body.operator QString().lastIndexOf("default:"),
                     "case anItemKind._aClassInstance:\n\
       return new UmlClassInstance(id, name);\n\
     ");
@@ -442,7 +442,7 @@ void baseitem_read_class_instance(UmlClass * base_item)
 
     // update BaseUmlItem artifact
     UmlArtifact * art = base_item->associatedArtifact();
-    Q3CString s;
+    WrapperStr s;
 
     s = art->cppSource();
     s.insert(s.find("#include \"UmlUseCase.h\""),

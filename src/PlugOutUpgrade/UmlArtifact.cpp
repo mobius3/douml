@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "UmlArtifact.h"
 #include "UmlDeploymentView.h"
@@ -37,12 +37,12 @@
 #include "JavaSettings.h"
 
 UmlArtifact * UmlArtifact::made(UmlDeploymentView * depl_view,
-                                const Q3CString & s)
+                                const WrapperStr & s)
 {
     UmlArtifact * art = UmlBaseArtifact::create(depl_view, s);
 
     if (art == 0) {
-        Q3CString msg = "can't create artifact " + s + " in " + depl_view->name() + "<br>\n";
+        WrapperStr msg = "can't create artifact " + s + " in " + depl_view->name() + "<br>\n";
 
         UmlCom::trace(msg);
         throw 0;
@@ -60,13 +60,13 @@ UmlArtifact * UmlArtifact::made(UmlDeploymentView * depl_view,
 void UmlArtifact::add_includes(const char * i, bool h)
 {
     if (h) {
-        Q3CString s = cppHeader();
+        WrapperStr s = cppHeader();
 
         s.insert(s.find("${includes}"), i);
         set_CppHeader(s);
     }
     else {
-        Q3CString s = cppSource();
+        WrapperStr s = cppSource();
 
         s.insert(s.find("${includes}"), i);
         set_CppSource(s);
@@ -75,7 +75,7 @@ void UmlArtifact::add_includes(const char * i, bool h)
 
 void UmlArtifact::add_import(const char * i)
 {
-    Q3CString s = javaSource();
+    WrapperStr s = javaSource();
 
     s.insert(s.find("${definition}"), i);
     set_JavaSource(s);
