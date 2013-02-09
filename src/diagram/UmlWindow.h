@@ -81,6 +81,7 @@ protected:
     QAction* pythonAction = nullptr;
     QAction* idlAction = nullptr;
     QAction* generateLabelAction = nullptr;
+    QLabel* generateLabel = nullptr;
     int use_cpp_id;
     int use_java_id;
     int use_php_id;
@@ -109,6 +110,8 @@ public:
 
     void load(QString fn, bool forcesaveas = FALSE);
     bool can_close();
+    static void set_marked_generation();
+    static void set_selected_generation();
 
     static void set_commented(BrowserNode * bn);
     static void update_comment_if_needed(BrowserNode * bn);

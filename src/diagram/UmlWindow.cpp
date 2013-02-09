@@ -315,7 +315,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
         = CreateToolButton(QApplication::style()->standardIcon(QStyle::SP_TitleBarContextHelpButton).pixmap(),
                            this, SLOT(whats_this()), projectTools, "Whats's this?");
 
-    QLabel* generateLabel = new QLabel(tr("Generate:"));
+    generateLabel = new QLabel(tr("Generate:"));
     QFont font = generateLabel->font();
     font.setBold(true);
     generateLabel->setFont(font);
@@ -1253,6 +1253,24 @@ bool UmlWindow::can_close()
     }
 
     return TRUE;
+}
+
+void UmlWindow::set_marked_generation()
+{
+    QPalette pal;
+    pal.setColor(QPalette::Button, QColor(255,210,210));
+    the->generateLabel->setAutoFillBackground(true);   // <--- this is the important line
+    the->generateLabel->setPalette(pal);
+    QApplication::processEvents();
+}
+
+void UmlWindow::set_selected_generation()
+{
+    QPalette pal;
+    pal.setColor(QPalette::Button, QColor(182,206,252));
+    the->generateLabel->setAutoFillBackground(true);   // <--- this is the important line
+    the->generateLabel->setPalette(pal);
+    QApplication::processEvents();
 }
 
 void UmlWindow::close()

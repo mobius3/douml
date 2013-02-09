@@ -1231,6 +1231,10 @@ void BrowserNode::toggle_mark()
 
     if (ReferenceDialog::get() != 0)
         ReferenceDialog::get()->update();
+    if(marked_list.count() != 0)
+        UmlWindow::set_marked_generation();
+    else
+        UmlWindow::set_selected_generation();
 }
 
 void BrowserNode::setup_generatable_types()
