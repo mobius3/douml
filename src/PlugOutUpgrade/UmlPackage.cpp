@@ -908,7 +908,7 @@ void upgrade_jdk5(UmlClass * javasettings)
 
     op1 = baseformalparam->add_op("extend", PublicVisibility,
                                   typespec, FALSE);
-    op1->set_CppDecl("  ${comment}${static}${virtual}const ${type} & ${name}${(}${)}${const}${volatile}${abstract} { return _extends; };");
+    op1->set_CppDecl("  ${comment}${static}${virtual}const ${type} & ${name}${(}${)}${const}${volatile}${abstract}${default}${delete}${override}${final} { return _extends; };");
     op1->set_CppDef("");
     op1->set_JavaDecl("  ${comment}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{ return _extends; }");
     op1->set_Description("  return the optional extend (Java)");
@@ -954,8 +954,8 @@ void upgrade_jdk5(UmlClass * javasettings)
                 UmlParameter p = params.last();
 
                 p.name = "arg5";
-                op1->addParameter(6, p);
-                op1->set_CppDecl("    ${comment}${friend}${static}${virtual}${type} ${name}${(}const ${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, const ${t3} ${p3}, const ${t4} ${p4}, const ${t5} & ${p5}, const ${t6} & ${p6}${)}${const}${volatile}${abstract};");
+                op1->addParameter(5, p);
+                op1->set_CppDecl("    ${comment}${friend}${static}${virtual}${type} ${name}${(}const ${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, const ${t3} ${p3}, const ${t4} ${p4}, const ${t5} & ${p5}, const ${t6} & ${p6}${)}${const}${volatile}${abstract}${final}${default}${delete}${override};");
                 op1->set_CppDef("${inline}${type} ${class}::${name}${(}const ${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, const ${t3} ${p3}, const ${t4} ${p4}, const ${t5} & ${p5}, const ${t6} & ${p6}${)}${const}${volatile}${staticnl}{\n${body}}");
                 op1->set_JavaDef("  ${comment}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}, ${t6} ${p6}${)}${throws}${staticnl}{\n${body}}");
                 op1->set_CppBody("#ifdef DEBUGBOUML\n"
@@ -1105,24 +1105,24 @@ void upgrade_jdk5(UmlClass * javasettings)
 
     UmlCom::trace("update UmlBaseClass::read_java_()<br>\n");
     baseclass->get_operation("read_java_")
-    ->set_CppBody("  UmlBaseClassMember::read_java_();\n"
+    ->set_JavaBody("  UmlBaseClassMember::read_java_();\n"
                   "  _java_public = UmlCom::read_bool();\n"
                   "  _java_final = UmlCom::read_bool();\n"
                   "  _java_external = UmlCom::read_bool();\n");
 
     UmlCom::trace("update UmlBaseAttribute::read_java_()<br>\n");
     UmlClass::get("UmlBaseAttribute", 0)->get_operation("read_java_")
-    ->set_CppBody("  UmlBaseClassMember::read_java_();\n"
+    ->set_JavaBody("  UmlBaseClassMember::read_java_();\n"
                   "  _java_transient = UmlCom::read_bool();\n");
 
     UmlCom::trace("update UmlBaseRelation::read_java_()<br>\n");
     UmlClass::get("UmlBaseRelation", 0)->get_operation("read_java_")
-    ->set_CppBody("  UmlBaseClassMember::read_java_();\n"
+    ->set_JavaBody("  UmlBaseClassMember::read_java_();\n"
                   "  _java_transient = UmlCom::read_bool();\n");
 
     UmlCom::trace("update UmlBaseOperation::read_java_()<br>\n");
     UmlClass::get("UmlBaseOperation", 0)->get_operation("read_java_")
-    ->set_CppBody("  UmlBaseClassMember::read_java_();\n"
+    ->set_JavaBody("  UmlBaseClassMember::read_java_();\n"
                   "  _java_final = UmlCom::read_bool();\n"
                   "  _java_synchronized = UmlCom::read_bool();\n"
                   "  _java_name_spec = UmlCom::read_string();\n");

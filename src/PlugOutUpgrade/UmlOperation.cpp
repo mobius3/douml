@@ -365,6 +365,10 @@ UmlOperation * UmlOperation::java2Php(UmlClass * php, UmlClass * java,
     to->set_isCppVirtual(from->isCppVirtual());
     to->set_isCppConst(from->isCppConst());
     to->set_isCppInline(from->isCppInline());
+    to->set_isCppDefault(from->isCppDefault());
+    to->set_isCppDelete(from->isCppDelete());
+    to->set_isCppOverride(from->isCppOverride());
+    to->set_isCppFinal(from->isCppFinal());
     to->set_CppDecl(::java2Php(from->cppDecl()));
     to->set_CppDef(::java2Php(from->cppDef()));
     to->set_CppBody(::java2Php(from->cppBody()));
@@ -425,6 +429,10 @@ UmlOperation * UmlOperation::java2Python(UmlClass * python, UmlClass * java,
     to->set_isCppVirtual(from->isCppVirtual());
     to->set_isCppConst(from->isCppConst());
     to->set_isCppInline(from->isCppInline());
+    to->set_isCppDefault(from->isCppDefault());
+    to->set_isCppDelete(from->isCppDelete());
+    to->set_isCppOverride(from->isCppOverride());
+    to->set_isCppFinal(from->isCppFinal());
     to->set_CppDecl(::java2Python(from->cppDecl()));
     to->set_CppDef(::java2Python(from->cppDef()));
     to->set_CppBody(::java2Python(from->cppBody()));
@@ -485,6 +493,10 @@ UmlOperation * UmlOperation::cpp2Python(UmlClass * python, UmlClass * cpp,
     to->set_isCppVirtual(from->isCppVirtual());
     to->set_isCppConst(from->isCppConst());
     to->set_isCppInline(from->isCppInline());
+    to->set_isCppDefault(from->isCppDefault());
+    to->set_isCppDelete(from->isCppDelete());
+    to->set_isCppOverride(from->isCppOverride());
+    to->set_isCppFinal(from->isCppFinal());
     to->set_CppDecl(::cpp2Python(from->cppDecl()));
     to->set_CppDef(::cpp2Python(from->cppDef()));
     to->set_CppBody(::cpp2Python(from->cppBody()));

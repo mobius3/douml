@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
+CONFIG          += qt warn_on
 SOURCES          = util.cpp activity.cpp state.cpp instance.cpp \
         insertbase.cpp php.cpp python.cpp diagdef.cpp \
         UmlClassItem.cpp UmlAttribute.cpp \
@@ -110,17 +110,17 @@ HEADERS += \
     ../Logging/QsDebugOutput.h
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+#CONFIG += qtestlib
 Release{
 
 
-    MOC_DIR = bin/douml/py_gen/MOC_release
-    OBJECTS_DIR = bin/douml/py_gen/Obj_release
+    MOC_DIR = bin/douml/plug_upg/MOC_release
+    OBJECTS_DIR = bin/douml/plug_upg/Obj_release
 }
 
-Debug{
-    MOC_DIR = bin/douml/py_gen/MOC_Debug
-    OBJECTS_DIR = bin/douml/py_gen/Obj_Debug
+CONFIG(declarative_debug){
+    MOC_DIR = bin/douml/plug_upg/MOC_Debug
+    OBJECTS_DIR = bin/douml/plug_upg/Obj_Debug
 
 }
     UI_DIR = src/ui
