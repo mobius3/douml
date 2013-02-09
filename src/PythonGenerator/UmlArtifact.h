@@ -30,7 +30,7 @@
 
 #include <q3asciidict.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlBaseArtifact.h"
@@ -48,23 +48,23 @@ private:
 
     static UmlArtifact * current;
     static UmlPackage * package_of_generated_artifact;
-    static Q3CString imports;
+    static WrapperStr imports;
 
-    void generate_imports(QTextStream & f, Q3CString & made);
+    void generate_imports(QTextStream & f, WrapperStr & made);
 
     static bool must_be_saved(const char * path, const char * new_contains);
 
     void generate_text();
 
 public:
-    UmlArtifact(void * id, const Q3CString & n)
+    UmlArtifact(void * id, const WrapperStr & n)
         : UmlBaseArtifact(id, n), managed(FALSE) {};
 
     virtual void generate();
 
     static UmlArtifact * generated_one();
     static UmlPackage * generation_package();
-    static const Q3CString & all_imports();
+    static const WrapperStr & all_imports();
 };
 
 #endif

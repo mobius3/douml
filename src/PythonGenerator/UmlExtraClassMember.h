@@ -30,7 +30,7 @@
 
 #include "UmlBaseExtraClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 // This class allows to manage extra class member, mainly defined for C++
@@ -42,12 +42,12 @@
 class UmlExtraClassMember : public UmlBaseExtraClassMember
 {
 public:
-    UmlExtraClassMember(void * id, const Q3CString & n)
+    UmlExtraClassMember(void * id, const WrapperStr & n)
         : UmlBaseExtraClassMember(id, n) {};
 
-    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-                          Q3CString indent, BooL & indent_needed,
-                          int &, const Q3CString &);
+    virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                          WrapperStr indent, BooL & indent_needed,
+                          int &, const WrapperStr &);
 };
 
 #endif

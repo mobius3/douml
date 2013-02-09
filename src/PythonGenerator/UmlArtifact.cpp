@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlArtifact.h"
@@ -42,9 +42,9 @@
 
 UmlPackage * UmlArtifact::package_of_generated_artifact;
 UmlArtifact * UmlArtifact::current;
-Q3CString UmlArtifact::imports;
+WrapperStr UmlArtifact::imports;
 
-void UmlArtifact::generate_imports(QTextStream & f, Q3CString & made)
+void UmlArtifact::generate_imports(QTextStream & f, WrapperStr & made)
 {
     Q3PtrVector<UmlItem> ch = children();
     unsigned index;
@@ -57,7 +57,7 @@ void UmlArtifact::generate_imports(QTextStream & f, Q3CString & made)
             (r->relationKind() == aDependency) &&
             (r->target()->kind() == anArtifact)) {
             UmlArtifact * other_art = (UmlArtifact *) r->target();
-            Q3CString s_art =
+            WrapperStr s_art =
                 ((UmlPackage *) other_art->parent()->parent())->pythonPackage();
 
             if (! s_art.isEmpty())
@@ -65,7 +65,7 @@ void UmlArtifact::generate_imports(QTextStream & f, Q3CString & made)
             else
                 s_art = other_art->name();
 
-            Q3CString s = r->stereotype();
+            WrapperStr s = r->stereotype();
 
             if (s == "import")
                 s = "import " + s_art;
@@ -97,21 +97,21 @@ void UmlArtifact::generate()
         package_of_generated_artifact = package();
         current = this;
 
-        const Q3CString filedef = pythonSource();
+        const WrapperStr filedef = pythonSource();
 
         if (filedef.isEmpty())
             return;
 
-        const Q3CString & name = this->name();
-        Q3CString path = package_of_generated_artifact->file_path(name);
+        const WrapperStr & name = this->name();
+        WrapperStr path = package_of_generated_artifact->file_path(name);
 
         UmlCom::message(name);
 
         if (verbose())
-            UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
+            UmlCom::trace(WrapperStr("<hr><font face=helvetica>Generate code for <i> ")
                           + name + "</i> in " + path + "</i></font><br>");
         else
-            set_trace_header(Q3CString("<font face=helvetica>Generate code for <i> ")
+            set_trace_header(WrapperStr("<font face=helvetica>Generate code for <i> ")
                              + name + "</i> in " + path + "</i></font><br>");
 
         // get bodies if preserve
@@ -122,7 +122,7 @@ void UmlArtifact::generate()
 
         // generate file
 
-        Q3CString indent;
+        WrapperStr indent;
         BooL indent_needed;
         unsigned n = cls.count();
         unsigned index;
@@ -204,7 +204,7 @@ void UmlArtifact::generate()
 
             if ((fp = fopen((const char *) path, "wb")) == 0) {
                 write_trace_header();
-                UmlCom::trace(Q3CString("<font color=\"red\"><b><i> ")
+                UmlCom::trace(WrapperStr("<font color=\"red\"><b><i> ")
                               + name + "</i> : cannot open <i> "
                               + path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
                               + package_of_generated_artifact->name()
@@ -217,36 +217,36 @@ void UmlArtifact::generate()
             }
         }
         else if (get_trace_header().isEmpty())
-            UmlCom::trace(Q3CString("<font face=helvetica><i> ")
+            UmlCom::trace(WrapperStr("<font face=helvetica><i> ")
                           + path + "</i> not modified</font><br>");
     }
 }
 
 void UmlArtifact::generate_text()
 {
-    const Q3CString srcdef = pythonSource();
+    const WrapperStr srcdef = pythonSource();
 
     if (srcdef.isEmpty()) {
         if (verbose())
-            UmlCom::trace(Q3CString("<hr><font face=helvetica>artifact <i>")
+            UmlCom::trace(WrapperStr("<hr><font face=helvetica>artifact <i>")
                           + name() + "</i> has an empty Python definition</font><br>");
 
         return;
     }
 
     UmlPackage * pack = package();
-    const Q3CString & name = UmlArtifact::name();
-    Q3CString src_path = pack->text_path(name);
+    const WrapperStr & name = UmlArtifact::name();
+    WrapperStr src_path = pack->text_path(name);
 
-    Q3CString s = " in <i> " + src_path + "</i>";
+    WrapperStr s = " in <i> " + src_path + "</i>";
 
     UmlCom::message(name);
 
     if (verbose())
-        UmlCom::trace(Q3CString("<hr><font face=helvetica>Generate code for <i> ")
+        UmlCom::trace(WrapperStr("<hr><font face=helvetica>Generate code for <i> ")
                       + name + "</i>" + s + "</font><br>");
     else
-        set_trace_header(Q3CString("<font face=helvetica>Generate code for <i> ")
+        set_trace_header(WrapperStr("<font face=helvetica>Generate code for <i> ")
                          + name + "</i>" + s + "</font><br>");
 
     if (must_be_saved(src_path, (const char *) srcdef)) {
@@ -256,7 +256,7 @@ void UmlArtifact::generate_text()
 
         if ((fp_src = fopen((const char *) src_path, "wb")) == 0) {
             write_trace_header();
-            UmlCom::trace(Q3CString("<font color=\"red\"><b><i> ")
+            UmlCom::trace(WrapperStr("<font color=\"red\"><b><i> ")
                           + name + " : </i> cannot open <i> "
                           + src_path + "</i>, edit the <i> generation settings</i> (tab directory) or the <i>"
                           + pack->name() + "</i> Python directory specification</b></font><br>");
@@ -268,7 +268,7 @@ void UmlArtifact::generate_text()
         }
     }
     else if (get_trace_header().isEmpty())
-        UmlCom::trace(Q3CString("<font face=helvetica><i> ")
+        UmlCom::trace(WrapperStr("<font face=helvetica><i> ")
                       + src_path + "</i> not modified</font><br>");
 }
 
@@ -282,7 +282,7 @@ UmlArtifact * UmlArtifact::generated_one()
     return current;
 }
 
-const Q3CString & UmlArtifact::all_imports()
+const WrapperStr & UmlArtifact::all_imports()
 {
     return imports;
 }

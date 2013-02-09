@@ -27,12 +27,12 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlClassMember.h"
 
-void UmlClassMember::generate_imports(QTextStream &, Q3CString &)
+void UmlClassMember::generate_imports(QTextStream &, WrapperStr &)
 {
     // do nothing
 }

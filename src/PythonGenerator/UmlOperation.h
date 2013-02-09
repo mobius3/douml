@@ -30,7 +30,7 @@
 
 #include <q3intdict.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlBaseOperation.h"
@@ -43,21 +43,21 @@ private:
     static Q3IntDict<char> bodies;
 
 public:
-    UmlOperation(void * id, const Q3CString & n)
+    UmlOperation(void * id, const WrapperStr & n)
         : UmlBaseOperation(id, n) {};
 
-    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-                          Q3CString indent, BooL & indent_needed,
-                          int &, const Q3CString &);
+    virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                          WrapperStr indent, BooL & indent_needed,
+                          int &, const WrapperStr &);
 
-    virtual void generate_imports(QTextStream & f, Q3CString & made);
+    virtual void generate_imports(QTextStream & f, WrapperStr & made);
 
-    Q3CString compute_name();
+    WrapperStr compute_name();
 
     static void read_bodies(const char * path);
 
 private:
-    const char * generate_body(QTextStream & f, Q3CString indent,
+    const char * generate_body(QTextStream & f, WrapperStr indent,
                                BooL & indent_needed, const char * p);
 };
 

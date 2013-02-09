@@ -30,12 +30,12 @@
 
 #include "UmlBaseUseCaseView.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class UmlUseCaseView : public UmlBaseUseCaseView
 {
 public:
-    UmlUseCaseView(void * id, const Q3CString & n)
+    UmlUseCaseView(void * id, const WrapperStr & n)
         : UmlBaseUseCaseView(id, n) {};
 };
 

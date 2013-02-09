@@ -27,22 +27,22 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlExtraClassMember.h"
 
-void UmlExtraClassMember::generate(QTextStream & f, const Q3CString &,
-                                   Q3CString indent, BooL & indent_needed,
-                                   int &, const Q3CString &)
+void UmlExtraClassMember::generate(QTextStream & f, const WrapperStr &,
+                                   WrapperStr indent, BooL & indent_needed,
+                                   int &, const WrapperStr &)
 {
-    const Q3CString & d = pythonDecl();
+    const WrapperStr & d = pythonDecl();
 
     if (! d.isEmpty()) {
         if (indent_needed)
             f << indent;
 
         f << d;
-        indent_needed = d.at(d.length() - 1) == '\n';
+        indent_needed = d.at(d.length() - 1) == "\n";
     }
 }

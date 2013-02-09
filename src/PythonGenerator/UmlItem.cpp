@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlItem.h"
@@ -38,7 +38,7 @@ UmlItem::~UmlItem()
 
 void UmlItem::manage_comment(const char *& p, const char *& pp)
 {
-    static Q3CString the_comment;
+    static WrapperStr the_comment;
 
     p += 10;
 
@@ -73,7 +73,7 @@ void UmlItem::manage_comment(const char *& p, const char *& pp)
 
 void UmlItem::manage_description(const char *& p, const char *& pp)
 {
-    static Q3CString the_comment;
+    static WrapperStr the_comment;
 
     p += 14;
 
@@ -88,9 +88,9 @@ void UmlItem::manage_description(const char *& p, const char *& pp)
 }
 
 void UmlItem::manage_docstring(const char *& p, const char *& pp, BooL & indent_needed,
-                               Q3CString & indent, Q3CString & saved_indent)
+                               WrapperStr & indent, WrapperStr & saved_indent)
 {
-    static Q3CString the_comment;
+    static WrapperStr the_comment;
 
     p += 12;
 
@@ -132,7 +132,7 @@ void UmlItem::manage_docstring(const char *& p, const char *& pp, BooL & indent_
 }
 
 void UmlItem::manage_alias(const char *& p, QTextStream & ts,
-                           Q3CString indent, BooL & indent_needed)
+                           WrapperStr indent, BooL & indent_needed)
 {
     if (indent_needed) {
         indent_needed = FALSE;
@@ -144,7 +144,7 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts,
 
     if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
         Q3CString key(p + 2, pclosed - p - 1);
-        Q3CString value;
+        WrapperStr value;
         UmlItem * node = this;
 
         do {

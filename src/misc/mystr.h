@@ -211,7 +211,7 @@ public:
     {
         return wrappedString;
     }
-    QString at(int pos)
+    QString at(int pos) const
     {
         return wrappedString.at(pos);
     }

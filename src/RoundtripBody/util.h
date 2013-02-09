@@ -28,12 +28,12 @@
 #ifndef _UTIL_H
 #define _UTIL_h
 
-#include <q3cstring.h>
+#include "misc/mystr.h"
 
 extern void set_verbose();
 extern bool verbose();
-extern void set_trace_header(Q3CString s);
-extern Q3CString get_trace_header();
+extern void set_trace_header(WrapperStr s);
+extern WrapperStr get_trace_header();
 extern void write_trace_header();
 
 extern void incr_error();

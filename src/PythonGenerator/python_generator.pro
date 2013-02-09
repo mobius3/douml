@@ -89,6 +89,7 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         ../Tools/UmlBaseParameter.cpp \
         ../Tools/UmlBaseView.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
+    ../misc/mystr.cpp \
     ../Logging/QsLogDest.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
@@ -99,3 +100,21 @@ DESTDIR = ../../bin
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+INCLUDEPATH += ../../src
+CONFIG += qtestlib
+Release{
+
+
+    MOC_DIR = bin/douml/py_gen/MOC_release
+    OBJECTS_DIR = bin/douml/py_gen/Obj_release
+}
+
+Debug{
+    MOC_DIR = bin/douml/py_gen/MOC_Debug
+    OBJECTS_DIR = bin/douml/py_gen/Obj_Debug
+
+}
+    UI_DIR = src/ui
+    DESTDIR = ../../bin
+
+QMAKE_CXXFLAGS += -std=gnu++11

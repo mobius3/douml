@@ -29,7 +29,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlClass.h"
@@ -43,15 +43,15 @@
 #include "UmlCom.h"
 #include "util.h"
 
-Q3CString UmlClass::python_stereotype()
+WrapperStr UmlClass::python_stereotype()
 {
-    Q3CString s = PythonSettings::classStereotype(stereotype());
+    WrapperStr s = PythonSettings::classStereotype(stereotype());
 
     return ((s == "ignored") || (s == "enum"))
-           ? s : Q3CString("class");
+           ? s : WrapperStr("class");
 }
 
-void UmlClass::generate_imports(QTextStream & f, Q3CString & made)
+void UmlClass::generate_imports(QTextStream & f, WrapperStr & made)
 {
     if (! pythonDecl().isEmpty()) {
         Q3PtrVector<UmlItem> ch = children();
@@ -68,9 +68,9 @@ void UmlClass::generate_imports(QTextStream & f, Q3CString & made)
 }
 
 void UmlClass::generate_import(QTextStream & f, UmlArtifact * using_art,
-                               bool from, Q3CString & made)
+                               bool from, WrapperStr & made)
 {
-    Q3CString s;
+    WrapperStr s;
 
     if (isPythonExternal()) {
         // get def after first line
@@ -92,9 +92,9 @@ void UmlClass::generate_import(QTextStream & f, UmlArtifact * using_art,
         if ((art == 0) || (art == using_art))
             return;
 
-        Q3CString s_art =
+        WrapperStr s_art =
             ((UmlPackage *) art->parent()->parent())->pythonPackage();
-        Q3CString art_name = art->name();
+        WrapperStr art_name = art->name();
 
         if (s_art.isEmpty())
             s_art = art_name;
@@ -124,16 +124,16 @@ void UmlClass::generate()
             if (associatedArtifact() != 0)
                 associatedArtifact()->generate();
             else if ((children().size() != 0) && verbose())
-                UmlCom::trace(Q3CString("<hr><font face=helvetica><i> ") + name() +
+                UmlCom::trace(WrapperStr("<hr><font face=helvetica><i> ") + name() +
                               " : </i> does not have associated <i>artifact</i></font><br>");
         }
     }
 }
 
-void UmlClass::generate(QTextStream & f, Q3CString indent,
+void UmlClass::generate(QTextStream & f, WrapperStr indent,
                         BooL & indent_needed)
 {
-    const Q3CString & stereotype = python_stereotype();
+    const WrapperStr & stereotype = python_stereotype();
 
     if (stereotype == "ignored")
         return;
@@ -148,8 +148,8 @@ void UmlClass::generate(QTextStream & f, Q3CString indent,
     int enum_item_rank = 0;
     unsigned index;
     const char * pp = 0;
-    Q3CString saved_indent = indent;
-    Q3CString indent_step = PythonSettings::indentStep();
+    WrapperStr saved_indent = indent;
+    WrapperStr indent_step = PythonSettings::indentStep();
     bool inherits = FALSE;
 
     for (;;) {
@@ -225,7 +225,7 @@ void UmlClass::generate(QTextStream & f, Q3CString indent,
             p += 10;
 
             bool has__init__ = FALSE;
-            Q3CString noself;
+            WrapperStr noself;
 
             for (index = 0; index != sup; index += 1) {
                 UmlClassItem * it = dynamic_cast<UmlClassItem *>(ch[index]);
@@ -246,7 +246,7 @@ void UmlClass::generate(QTextStream & f, Q3CString indent,
 
                 f << "def __init__(self):\n";
                 indent_needed = TRUE;
-                Q3CString ind = indent;
+                WrapperStr ind = indent;
 
                 indent += PythonSettings::indentStep();
 
@@ -275,17 +275,17 @@ void UmlClass::generate(QTextStream & f, Q3CString indent,
     }
 }
 
-void UmlClass::generate(QTextStream & f, const Q3CString &,
-                        Q3CString indent, BooL & indent_needed,
-                        int &, const Q3CString &)
+void UmlClass::generate(QTextStream & f, const WrapperStr &,
+                        WrapperStr indent, BooL & indent_needed,
+                        int &, const WrapperStr &)
 {
     generate(f, indent, indent_needed);
 }
 
-void UmlClass::generate_instance_att_rel(QTextStream & f, Q3CString indent,
-        BooL & indent_needed, Q3CString self)
+void UmlClass::generate_instance_att_rel(QTextStream & f, WrapperStr indent,
+        BooL & indent_needed, WrapperStr self)
 {
-    const Q3CString & stereotype = python_stereotype();
+    const WrapperStr & stereotype = python_stereotype();
     int enum_item_rank = 0;
 
     Q3PtrVector<UmlItem> ch = children();
@@ -327,7 +327,7 @@ void UmlClass::write(QTextStream & f, const UmlTypeSpec & t)
 void UmlClass::write(QTextStream & f)
 {
     if (isPythonExternal()) {
-        Q3CString s = pythonDecl().stripWhiteSpace();
+        WrapperStr s = pythonDecl().stripWhiteSpace();
         int index = s.find('\n');
 
         s = (index == -1) ? s.stripWhiteSpace()
@@ -347,7 +347,7 @@ void UmlClass::write(QTextStream & f)
     else {
         UmlClass * toplevel = this;
         UmlItem * p;
-        Q3CString s2 = name();
+        WrapperStr s2 = name();
 
         while ((p = toplevel->parent())->kind() == aClass) {
             toplevel = (UmlClass *) p;
@@ -358,17 +358,17 @@ void UmlClass::write(QTextStream & f)
         UmlArtifact * gen_art = UmlArtifact::generated_one();
 
         if ((cl_art != gen_art) && (cl_art != 0)) {
-            Q3CString cl_pack =
+            WrapperStr cl_pack =
                 ((UmlPackage *) cl_art->parent()->parent())->pythonPackage();
 
             if (!cl_pack.isEmpty()) {
                 bool is__init__ = (cl_art->name() == "__init__");
-                Q3CString s = (is__init__)
+                WrapperStr s = (is__init__)
                               ? "from " + cl_pack + " import "
                               : "from " + cl_pack + "." + cl_art->name() + " import ";
-                const Q3CString & imports = UmlArtifact::all_imports();
-                Q3CString importit = s + name();
-                Q3CString importstar = s + "*";
+                const WrapperStr & imports = UmlArtifact::all_imports();
+                WrapperStr importit = s + name();
+                WrapperStr importstar = s + "*";
 
                 if ((imports.find(importit) != -1) ||
                     (imports.find(importstar) != -1) ||
@@ -382,10 +382,10 @@ void UmlClass::write(QTextStream & f)
                     f << cl_pack << "." << cl_art->name() << "." << s2;
             }
             else {
-                Q3CString s = "from " + cl_art->name() + " import ";
-                const Q3CString & imports = UmlArtifact::all_imports();
-                Q3CString importit = s + name();
-                Q3CString importstar = s + "*";
+                WrapperStr s = "from " + cl_art->name() + " import ";
+                const WrapperStr & imports = UmlArtifact::all_imports();
+                WrapperStr importit = s + name();
+                WrapperStr importstar = s + "*";
 
                 if ((imports.find(importit) == -1) &&
                     (imports.find(importstar) == -1) &&

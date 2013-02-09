@@ -30,12 +30,12 @@
 
 #include "UmlBaseAttribute.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class UmlAttribute : public UmlBaseAttribute
 {
 public:
-    UmlAttribute(void * id, const Q3CString & n)
+    UmlAttribute(void * id, const WrapperStr & n)
         :  UmlBaseAttribute(id, n) {};
 };
 

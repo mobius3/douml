@@ -31,7 +31,7 @@
 #include <qfile.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <Q3ValueList>
 #include <QTextStream>
 
@@ -50,9 +50,9 @@ const char * BodyPostfix = "## Bouml preserved body end ";
 const int BodyPrefixLength = 30;
 const int BodyPostfixLength = 28;
 
-void UmlOperation::generate_imports(QTextStream & f, Q3CString & made)
+void UmlOperation::generate_imports(QTextStream & f, WrapperStr & made)
 {
-    Q3CString s = pythonDecl();
+    WrapperStr s = pythonDecl();
 
     if (!s.isEmpty()) {
         UmlArtifact * art = ((UmlClass *) parent())->assocArtifact();
@@ -128,18 +128,18 @@ static bool generate_init(const Q3ValueList<UmlParameter> & params,
     return TRUE;
 }
 
-static void param_error(const Q3CString & parent, const Q3CString & name, unsigned rank)
+static void param_error(const WrapperStr & parent, const WrapperStr & name, unsigned rank)
 {
     write_trace_header();
-    UmlCom::trace(Q3CString("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>while compiling <i>")
-                  + parent + "::" + name + "</i> parameter rank " + Q3CString().setNum(rank)
+    UmlCom::trace(WrapperStr("&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b>while compiling <i>")
+                  + parent + "::" + name + "</i> parameter rank " + WrapperStr().setNum(rank)
                   + " does not exist</font></b><br>");
     incr_error();
 }
 
-Q3CString UmlOperation::compute_name()
+WrapperStr UmlOperation::compute_name()
 {
-    Q3CString get_set_spec = pythonNameSpec();
+    WrapperStr get_set_spec = pythonNameSpec();
 
     if (! get_set_spec.isEmpty()) {
         UmlClassMember * it;
@@ -148,7 +148,7 @@ Q3CString UmlOperation::compute_name()
             it = setOf();
 
         int index;
-        Q3CString s = (it->kind() == aRelation)
+        WrapperStr s = (it->kind() == aRelation)
                       ? ((UmlRelation *) it)->roleName()
                       : it->name();
 
@@ -169,13 +169,13 @@ Q3CString UmlOperation::compute_name()
 
 // p point to ${body}
 const char * UmlOperation::generate_body(QTextStream & f,
-        Q3CString indent,
+        WrapperStr indent,
         BooL & indent_needed,
         const char * p)
 {
     const char * body = 0;
-    Q3CString modeler_body;
-    Q3CString body_indent;
+    WrapperStr modeler_body;
+    WrapperStr body_indent;
     char s_id[9];
 
     if (preserve() && !isBodyGenerationForced()) {
@@ -200,7 +200,7 @@ const char * UmlOperation::generate_body(QTextStream & f,
             ((UmlClass *) parent())->generate_instance_att_rel(f, indent, indent_needed,
                     params[0].name + ".");
         else {
-            Q3CString err = "&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b><i>" +
+            WrapperStr err = "&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"red\"><b><i>" +
                             parent()->name() + ".__init__()</i> doesn't have parameter, instance variables not generated </b></font><br>";
 
             write_trace_header();
@@ -246,7 +246,7 @@ const char * UmlOperation::generate_body(QTextStream & f,
 }
 
 
-static void manage_decorators(QTextStream & f, const Q3CString & decorators,
+static void manage_decorators(QTextStream & f, const WrapperStr & decorators,
                               QString indent, BooL & indent_needed)
 {
     if (! decorators.isEmpty()) {
@@ -274,9 +274,9 @@ static void manage_decorators(QTextStream & f, const Q3CString & decorators,
     }
 }
 
-void UmlOperation::generate(QTextStream & f, const Q3CString &,
-                            Q3CString indent, BooL & indent_needed,
-                            int &, const Q3CString &)
+void UmlOperation::generate(QTextStream & f, const WrapperStr &,
+                            WrapperStr indent, BooL & indent_needed,
+                            int &, const WrapperStr &)
 {
     const char * p = pythonDecl();
 
@@ -284,8 +284,8 @@ void UmlOperation::generate(QTextStream & f, const Q3CString &,
         return;
 
     const char * pp = 0;
-    Q3CString saved_indent = indent;
-    Q3CString indent_step = PythonSettings::indentStep();
+    WrapperStr saved_indent = indent;
+    WrapperStr indent_step = PythonSettings::indentStep();
     const char * afterparam = 0;
     const Q3ValueList<UmlParameter> & params = this->params();
     unsigned rank;
@@ -515,14 +515,14 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
             long id = strtol(p2, &body, 16);
 
             if (body != (p2 + 8)) {
-                UmlCom::trace(Q3CString("<font color =\"red\"> Error in ") + path +
+                UmlCom::trace(WrapperStr("<font color =\"red\"> Error in ") + path +
                               " : invalid preserve body identifier</font><br>");
                 UmlCom::bye(n_errors() + 1);
                 UmlCom::fatal_error("read_bodies 1");
             }
 
             if (bodies.find(id) != 0) {
-                UmlCom::trace(Q3CString("<font  color =\"red\"> Error in ") + path +
+                UmlCom::trace(WrapperStr("<font  color =\"red\"> Error in ") + path +
                               " : preserve body identifier used twice</font><br>");
                 UmlCom::bye(n_errors() + 1);
                 UmlCom::fatal_error("read_bodies 2");
@@ -534,7 +534,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
             if (*body == '\n')
                 body += 1;
             else {
-                UmlCom::trace(Q3CString("<font  color =\"red\"> Error in ") + path +
+                UmlCom::trace(WrapperStr("<font  color =\"red\"> Error in ") + path +
                               " : invalid preserve body block, end of line expected</font><br>");
                 UmlCom::bye(n_errors() + 1);
                 UmlCom::fatal_error("read_bodies 3");
@@ -542,7 +542,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
 
             if (((p1 = strstr(body, BodyPostfix)) == 0) ||
                 (strncmp(p1 + BodyPostfixLength, p2, 8) != 0)) {
-                UmlCom::trace(Q3CString("<font  color =\"red\"> Error in ") + path +
+                UmlCom::trace(WrapperStr("<font  color =\"red\"> Error in ") + path +
                               " : invalid preserve body block, wrong balanced</font><br>");
                 UmlCom::bye(n_errors() + 1);
                 UmlCom::fatal_error("read_bodies 4");

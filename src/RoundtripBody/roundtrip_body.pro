@@ -91,10 +91,31 @@ SOURCES          = main.cpp util.cpp \
         ../Tools/UmlBaseTypeSpec.cpp \
         ../Tools/UmlBaseParameter.cpp \
         ../Tools/UmlBaseView.cpp \
-        ../Tools/UmlBaseClassInstance.cpp
-        
+        ../Tools/UmlBaseClassInstance.cpp \
+    ../misc/mystr.cpp \
+    ../Logging/QsLogDest.cpp \
+    ../Logging/QsLog.cpp \
+    ../Logging/QsDebugOutput.cpp
 TARGET          = roundtrip_body
 DEFINES          = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON
 INCLUDEPATH   = ../Tools ../RoundtripBody
 #The following line was inserted by qt3to4
 QT += network  qt3support 
+INCLUDEPATH += ../../src
+CONFIG += qtestlib
+Release{
+
+
+    MOC_DIR = bin/douml/rtrip_body/MOC_release
+    OBJECTS_DIR = bin/douml/rtrip_body/Obj_release
+}
+
+Debug{
+    MOC_DIR = bin/douml/rtrip_body/MOC_Debug
+    OBJECTS_DIR = bin/douml/rtrip_body/Obj_Debug
+
+}
+    UI_DIR = src/ui
+    DESTDIR = ../../bin
+
+QMAKE_CXXFLAGS += -std=gnu++11

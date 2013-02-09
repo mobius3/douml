@@ -135,9 +135,9 @@ WrapperStr PythonSettings::get_import(const WrapperStr & s)
 {
     read_if_needed_();
 
-    WrapperStr * r = _map_imports[s];
+    QString * r = _map_imports[s];
 
-    return (r) ? *r : WrapperStr(0);
+    return (r) ? *r : QString::number(0);
 }
 
 bool PythonSettings::set_Import(WrapperStr s, WrapperStr v)
@@ -146,10 +146,10 @@ bool PythonSettings::set_Import(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(pythonSettingsCmd, setPythonImportCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        WrapperStr * r = _map_imports.take(s);
+        QString * r = _map_imports.take(s);
 
         if (!v.isEmpty())
-            _map_imports.insert(s, new WrapperStr(v));
+            _map_imports.insert(s, new QString(v.operator QString()));
 
         if (r)
             delete r;
@@ -459,7 +459,7 @@ void PythonSettings::read_()
         WrapperStr t = UmlCom::read_string();
         WrapperStr i = UmlCom::read_string();
 
-        _map_imports.insert(t, new WrapperStr(i));
+        _map_imports.insert(t, new QString(i.operator QString()));
     }
 
     _src_content = UmlCom::read_string();

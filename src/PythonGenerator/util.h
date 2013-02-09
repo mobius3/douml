@@ -30,17 +30,17 @@
 
 #include <qstring.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
-extern Q3CString capitalize(const Q3CString & s);
+extern WrapperStr capitalize(const WrapperStr & s);
 extern bool need_equal(const char * p, const char * v);
 
 extern void set_verbose();
 extern bool verbose();
 extern void set_preserve();
 extern bool preserve();
-extern void set_trace_header(Q3CString s);
-extern Q3CString get_trace_header();
+extern void set_trace_header(WrapperStr s);
+extern WrapperStr get_trace_header();
 extern void write_trace_header();
 extern void incr_error();
 extern void incr_warning();

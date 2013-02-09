@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 #ifndef _UMLTYPESPEC_H
 #define _UMLTYPESPEC_H
@@ -17,7 +17,7 @@ class UmlArtifact;
 class UmlTypeSpec : public UmlBaseTypeSpec
 {
 public:
-    void generate_import(QTextStream & f, UmlArtifact * using_art, bool from, Q3CString & made) const;
+    void generate_import(QTextStream & f, UmlArtifact * using_art, bool from, WrapperStr & made) const;
 };
 
 #endif

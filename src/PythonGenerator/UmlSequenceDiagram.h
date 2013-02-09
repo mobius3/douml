@@ -30,12 +30,12 @@
 
 #include "UmlBaseSequenceDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 class UmlSequenceDiagram : public UmlBaseSequenceDiagram
 {
 public:
-    UmlSequenceDiagram(void * id, const Q3CString & n)
+    UmlSequenceDiagram(void * id, const WrapperStr & n)
         : UmlBaseSequenceDiagram(id, n) {};
 
 };

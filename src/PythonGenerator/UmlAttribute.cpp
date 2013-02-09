@@ -27,7 +27,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlAttribute.h"
@@ -37,16 +37,16 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlAttribute::generate_imports(QTextStream & f, Q3CString & made)
+void UmlAttribute::generate_imports(QTextStream & f, WrapperStr & made)
 {
     if (!pythonDecl().isEmpty())
         type().generate_import(f, ((UmlClass *) parent())->assocArtifact(),
                                FALSE, made);
 }
 
-void UmlAttribute::generate(QTextStream & f, const Q3CString & st,
-                            Q3CString indent, BooL & indent_needed,
-                            int & enum_item_rank, const Q3CString & self)
+void UmlAttribute::generate(QTextStream & f, const WrapperStr & st,
+                            WrapperStr indent, BooL & indent_needed,
+                            int & enum_item_rank, const WrapperStr & self)
 {
     if (self.isEmpty() != isClassMember())
         return;
@@ -103,7 +103,7 @@ void UmlAttribute::generate(QTextStream & f, const Q3CString & st,
                 f << indent;
             }
 
-            const Q3CString & v = defaultValue();
+            const WrapperStr & v = defaultValue();
 
             if (!v.isEmpty()) {
                 if (need_equal(p, v))

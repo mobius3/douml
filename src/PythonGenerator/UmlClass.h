@@ -30,7 +30,7 @@
 
 #include <q3ptrlist.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 #include <QTextStream>
 
 #include "UmlBaseClass.h"
@@ -47,21 +47,21 @@ private:
     bool managed;
 
 public:
-    UmlClass(void * id, const Q3CString & n)
+    UmlClass(void * id, const WrapperStr & n)
         : UmlBaseClass(id, n), managed(FALSE) {};
 
-    Q3CString python_stereotype();
+    WrapperStr python_stereotype();
 
     virtual void generate();
-    virtual void generate(QTextStream & f, const Q3CString & cl_stereotype,
-                          Q3CString indent, BooL & indent_needed,
-                          int & enum_item_rank, const Q3CString & self);
+    virtual void generate(QTextStream & f, const WrapperStr & cl_stereotype,
+                          WrapperStr indent, BooL & indent_needed,
+                          int & enum_item_rank, const WrapperStr & self);
 
-    void generate_imports(QTextStream & f, Q3CString & made);
-    void generate_import(QTextStream & f, UmlArtifact * using_art, bool from, Q3CString & made);
-    void generate(QTextStream &, Q3CString indent, BooL & indent_needed);
-    void generate_instance_att_rel(QTextStream & f, Q3CString indent,
-                                   BooL & indent_needed, Q3CString self);
+    void generate_imports(QTextStream & f, WrapperStr & made);
+    void generate_import(QTextStream & f, UmlArtifact * using_art, bool from, WrapperStr & made);
+    void generate(QTextStream &, WrapperStr indent, BooL & indent_needed);
+    void generate_instance_att_rel(QTextStream & f, WrapperStr indent,
+                                   BooL & indent_needed, WrapperStr self);
 
     UmlArtifact * assocArtifact();
 

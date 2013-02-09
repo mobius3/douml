@@ -27,12 +27,12 @@
 
 #include <qstring.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 #include "util.h"
 #include "UmlCom.h"
 
-static Q3CString TraceHeader;
+static WrapperStr TraceHeader;
 static bool Verbose = FALSE;
 
 void set_verbose()
@@ -45,12 +45,12 @@ bool verbose()
     return Verbose;
 }
 
-void set_trace_header(Q3CString s)
+void set_trace_header(WrapperStr s)
 {
     TraceHeader = s;
 }
 
-Q3CString get_trace_header()
+WrapperStr get_trace_header()
 {
     return TraceHeader;
 }

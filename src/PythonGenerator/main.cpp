@@ -29,7 +29,7 @@
 #include "UmlItem.h"
 #include "util.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include "misc/mystr.h"
 
 int main(int argc, char ** argv)
 {
@@ -53,18 +53,17 @@ int main(int argc, char ** argv)
     else
         return 0;
 
-    if (UmlCom::connect(Q3CString(argv[port_index]).toUInt())) {
+    if (UmlCom::connect(WrapperStr(argv[port_index]).operator QString().toUInt())) {
         try {
             UmlCom::trace("<b>Python generator</b> release 1.5<br>");
             UmlCom::traceAutoRaise(FALSE);
 
             UmlCom::targetItem()->generate();
 
-            Q3CString s;
-
-            s.sprintf("<hr><font face=helvetica>Generation done : %d warnings, %d errors</font><br>",
-                      n_warnings(), n_errors());
+            QString s("<hr><font face=helvetica>Generation done : %1 warnings, %2 errors</font><br>");
+            s=s.arg(QString::number(n_warnings())).arg(QString::number(n_errors()));
             UmlCom::trace(s);
+
 
             UmlCom::showTrace();
             UmlCom::message("");
