@@ -1,15 +1,15 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
-
-SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
+CONFIG          += qt warn_on
+SOURCES          = main.cpp util.cpp \
+        UmlClassItem.cpp UmlAttribute.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
-        UmlExtraClassMember.cpp \
+        UmlExtraClassMember.cpp UmlArtifact.cpp \
         UmlClassView.cpp UmlCollaborationDiagram.cpp UmlComponent.cpp \
         UmlComponentDiagram.cpp UmlComponentView.cpp \
         UmlDeploymentDiagram.cpp UmlDeploymentView.cpp UmlDiagram.cpp \
         UmlItem.cpp UmlNode.cpp UmlOperation.cpp UmlPackage.cpp \
         UmlRelation.cpp UmlNcRelation.cpp UmlSequenceDiagram.cpp UmlUseCase.cpp \
-        UmlUseCaseDiagram.cpp UmlUseCaseView.cpp main.cpp util.cpp \
+        UmlUseCaseDiagram.cpp UmlUseCaseView.cpp \
         UmlChoicePseudoState.cpp UmlDeepHistoryPseudoState.cpp \
         UmlEntryPointPseudoState.cpp UmlExitPointPseudoState.cpp \
         UmlFinalState.cpp UmlForkPseudoState.cpp \
@@ -42,6 +42,7 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
         UmlClassInstance.cpp \
         ../Tools/UmlBaseClassItem.cpp ../Tools/CppSettings.cpp \
         ../Tools/IdlSettings.cpp ../Tools/JavaSettings.cpp \
+        ../Tools/PhpSettings.cpp ../Tools/PythonSettings.cpp \
         ../Tools/UmlBaseArtifact.cpp \
         ../Tools/UmlBaseAttribute.cpp ../Tools/UmlBaseClass.cpp \
         ../Tools/UmlBaseClassDiagram.cpp ../Tools/UmlBaseClassMember.cpp \
@@ -95,26 +96,26 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
     ../Logging/QsLogDest.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
-
-
-TARGET          = idl_generator
-DEFINES          = WITHIDL BooL=bool
-INCLUDEPATH   = ../Tools ../IdlGenerator ../
-DESTDIR = ../../bin
+TARGET          = roundtrip_body
+DEFINES          = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON
+INCLUDEPATH   = ../Tools ../RoundtripBody
 #The following line was inserted by qt3to4
 QT += network  qt3support 
-
-QMAKE_CXXFLAGS += -std=gnu++11
+INCLUDEPATH += ../../src
+CONFIG += qtestlib
 Release{
-    MOC_DIR = ../../bin/MOC_release/idl_gen
-    OBJECTS_DIR = ../../bin/Obj_release/idl_gen
+
+
+    MOC_DIR = bin/douml/rtrip_body/MOC_release
+    OBJECTS_DIR = bin/douml/rtrip_body/Obj_release
 }
 
 Debug{
-    MOC_DIR = ../../bin/MOC_debug/idl_gen
-    OBJECTS_DIR = ../../bin/Obj_debug/idl_gen
+    MOC_DIR = bin/douml/rtrip_body/MOC_Debug
+    OBJECTS_DIR = bin/douml/rtrip_body/Obj_Debug
 
 }
-
+    UI_DIR = src/ui
     DESTDIR = ../../bin
 
+QMAKE_CXXFLAGS += -std=gnu++11

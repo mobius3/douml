@@ -1,8 +1,9 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
-SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
+CONFIG          += qt warn_on
+
+SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
-        UmlExtraClassMember.cpp UmlArtifact.cpp \
+        UmlExtraClassMember.cpp \
         UmlClassView.cpp UmlCollaborationDiagram.cpp UmlComponent.cpp \
         UmlComponentDiagram.cpp UmlComponentView.cpp \
         UmlDeploymentDiagram.cpp UmlDeploymentView.cpp UmlDiagram.cpp \
@@ -39,12 +40,12 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         UmlInterruptibleActivityRegion.cpp \
         UmlTypeSpec.cpp \
         UmlClassInstance.cpp \
-        ../Tools/UmlBaseClassItem.cpp ../Tools/UmlBaseClassMember.cpp \
-        ../Tools/UmlBaseExtraClassMember.cpp ../Tools/CppSettings.cpp \
+        ../Tools/UmlBaseClassItem.cpp ../Tools/CppSettings.cpp \
         ../Tools/IdlSettings.cpp ../Tools/JavaSettings.cpp \
         ../Tools/UmlBaseArtifact.cpp \
         ../Tools/UmlBaseAttribute.cpp ../Tools/UmlBaseClass.cpp \
-        ../Tools/UmlBaseClassDiagram.cpp ../Tools/UmlBaseClassView.cpp \
+        ../Tools/UmlBaseClassDiagram.cpp ../Tools/UmlBaseClassMember.cpp \
+        ../Tools/UmlBaseExtraClassMember.cpp ../Tools/UmlBaseClassView.cpp \
         ../Tools/UmlBaseCollaborationDiagram.cpp ../Tools/UmlBaseComponent.cpp \
         ../Tools/UmlBaseComponentDiagram.cpp ../Tools/UmlBaseComponentView.cpp \
         ../Tools/UmlBaseDeploymentDiagram.cpp ../Tools/UmlBaseDeploymentView.cpp \
@@ -94,24 +95,24 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
     ../Logging/QsLogDest.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
-TARGET          = java_generator
-DEFINES          = WITHJAVA BooL=bool
-INCLUDEPATH   = ../Tools ../JavaGenerator ../
 
+
+TARGET          = idl_generator
+DEFINES          = WITHIDL BooL=bool
+INCLUDEPATH   = ../Tools ../IdlGenerator ../
 DESTDIR = ../../bin
-
 #The following line was inserted by qt3to4
 QT += network  qt3support 
 
 QMAKE_CXXFLAGS += -std=gnu++11
 Release{
-    MOC_DIR = ../../bin/MOC_release/java_gen/
-    OBJECTS_DIR = ../../bin/Obj_release/java_gen
+    MOC_DIR = ../../bin/MOC_release/idl_gen
+    OBJECTS_DIR = ../../bin/Obj_release/idl_gen
 }
 
 Debug{
-    MOC_DIR = ../../bin/MOC_debug/java_gen/
-    OBJECTS_DIR = ../../bin/Obj_debug/java_gen
+    MOC_DIR = ../../bin/MOC_debug/idl_gen
+    OBJECTS_DIR = ../../bin/Obj_debug/idl_gen
 
 }
 

@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
+CONFIG          += qt warn_on
 HEADERS          = 
 SOURCES          = main.cpp BrowserNode.cpp Statistic.cpp \
         ../JavaCat/UmlClassItem.cpp ../JavaCat/UmlArtifact.cpp \

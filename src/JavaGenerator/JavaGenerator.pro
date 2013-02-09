@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
+CONFIG          += qt warn_on
 SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
         UmlExtraClassMember.cpp UmlArtifact.cpp \
@@ -40,7 +40,8 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         UmlTypeSpec.cpp \
         UmlClassInstance.cpp \
         ../Tools/UmlBaseClassItem.cpp ../Tools/UmlBaseClassMember.cpp \
-        ../Tools/UmlBaseExtraClassMember.cpp ../Tools/PythonSettings.cpp \
+        ../Tools/UmlBaseExtraClassMember.cpp ../Tools/CppSettings.cpp \
+        ../Tools/IdlSettings.cpp ../Tools/JavaSettings.cpp \
         ../Tools/UmlBaseArtifact.cpp \
         ../Tools/UmlBaseAttribute.cpp ../Tools/UmlBaseClass.cpp \
         ../Tools/UmlBaseClassDiagram.cpp ../Tools/UmlBaseClassView.cpp \
@@ -93,28 +94,26 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
     ../Logging/QsLogDest.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
-TARGET          = python_generator
-DEFINES          = WITHPYTHON BooL=bool
-INCLUDEPATH   = ../Tools ../PythonGenerator ../
+TARGET          = java_generator
+DEFINES          = WITHJAVA BooL=bool
+INCLUDEPATH   = ../Tools ../JavaGenerator ../
+
 DESTDIR = ../../bin
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 
-INCLUDEPATH += ../../src
-CONFIG += qtestlib
+
+QMAKE_CXXFLAGS += -std=gnu++11
 Release{
-
-
-    MOC_DIR = bin/douml/py_gen/MOC_release
-    OBJECTS_DIR = bin/douml/py_gen/Obj_release
+    MOC_DIR = ../../bin/MOC_release/java_gen/
+    OBJECTS_DIR = ../../bin/Obj_release/java_gen
 }
 
 Debug{
-    MOC_DIR = bin/douml/py_gen/MOC_Debug
-    OBJECTS_DIR = bin/douml/py_gen/Obj_Debug
+    MOC_DIR = ../../bin/MOC_debug/java_gen/
+    OBJECTS_DIR = ../../bin/Obj_debug/java_gen
 
 }
-    UI_DIR = src/ui
+
     DESTDIR = ../../bin
 
-QMAKE_CXXFLAGS += -std=gnu++11

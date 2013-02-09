@@ -1,6 +1,6 @@
 TEMPLATE	= app
 TARGET		= ghtml
-CONFIG		+= debug warn_on qt
+CONFIG		+=  warn_on qt
 DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON
 HEADERS		= ./UmlBaseRelation.h \
 		  ./UmlFormalParameter.h \

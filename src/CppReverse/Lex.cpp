@@ -7,20 +7,20 @@
 // This file is part of the DOUML Uml Toolkit.
 //
 // This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
+// it under the terms of the GNU General Public License Version 3.0 as published by
+// the Free Software Foundation and appearing in the file LICENSE.GPL included in the
+//  packaging of this file.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU General Public License Version 3.0 for more details.
 //
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
-// e-mail : enmarantispam@gmail.com
+// e-mail : doumleditor@gmail.com
 // home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
@@ -1533,26 +1533,26 @@ WrapperStr Lex::read_list_elt()
 
 // to compare strings bypassing \r
 
-bool neq(const WrapperStr & s1, const WrapperStr & s2)
-{
-    const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
-    const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
+//bool neq(const WrapperStr & s1, const WrapperStr & s2)
+//{
+//    const char * p1 = (s1.isNull()) ? "" : (const char *) s1;
+//    const char * p2 = (s2.isNull()) ? "" : (const char *) s2;
 
-    for (;;) {
-        while (*p1 == '\r') p1 += 1;
+//    for (;;) {
+//        while (*p1 == '\r') p1 += 1;
 
-        while (*p2 == '\r') p2 += 1;
+//        while (*p2 == '\r') p2 += 1;
 
-        if (*p1 == 0)
-            return (*p2 != 0);
+//        if (*p1 == 0)
+//            return (*p2 != 0);
 
-        if (*p1 != *p2)
-            return TRUE;
+//        if (*p1 != *p2)
+//            return TRUE;
 
-        p1 += 1;
-        p2 += 1;
-    }
-}
+//        p1 += 1;
+//        p2 += 1;
+//    }
+//}
 
 // White space means the decimal ASCII codes 9, 10, 11, 12, 13 and 32.
 inline bool is_white_space(char c)

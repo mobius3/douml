@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
+CONFIG          += qt warn_on
 SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
         UmlExtraClassMember.cpp \
@@ -99,6 +99,7 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
 
 TARGET          = cpp_reverse
 DEFINES          = WITHCPP REVERSE BooL=bool DEBUG_BOUML
+
 INCLUDEPATH   = ../Tools ../CppReverse ../
 CONFIG += qtestlib
 
@@ -106,7 +107,7 @@ CONFIG += qtestlib
 #The following line was inserted by qt3to4
 QT += network  qt3support 
 
-Release{
+release{
 
 
     MOC_DIR = bin/douml/cppreverse/MOC_release

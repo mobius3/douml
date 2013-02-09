@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
+CONFIG          += qt warn_on
 SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
         UmlExtraClassMember.cpp UmlArtifact.cpp \
@@ -40,7 +40,7 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         UmlTypeSpec.cpp \
         UmlClassInstance.cpp \
         ../Tools/UmlBaseClassItem.cpp ../Tools/UmlBaseClassMember.cpp \
-        ../Tools/UmlBaseExtraClassMember.cpp ../Tools/PhpSettings.cpp \
+        ../Tools/UmlBaseExtraClassMember.cpp ../Tools/PythonSettings.cpp \
         ../Tools/UmlBaseArtifact.cpp \
         ../Tools/UmlBaseAttribute.cpp ../Tools/UmlBaseClass.cpp \
         ../Tools/UmlBaseClassDiagram.cpp ../Tools/UmlBaseClassView.cpp \
@@ -89,25 +89,32 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         ../Tools/UmlBaseParameter.cpp \
         ../Tools/UmlBaseView.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
-        ../misc/mystr.cpp \
+    ../misc/mystr.cpp \
     ../Logging/QsLogDest.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
-TARGET          = php_generator
-DEFINES          = WITHPHP
-INCLUDEPATH   = ../Tools ../PhpGenerator ../
+TARGET          = python_generator
+DEFINES          = WITHPYTHON BooL=bool
+INCLUDEPATH   = ../Tools ../PythonGenerator ../
 DESTDIR = ../../bin
+
 #The following line was inserted by qt3to4
 QT += network  qt3support 
-
-QMAKE_CXXFLAGS += -std=gnu++11
+INCLUDEPATH += ../../src
+CONFIG += qtestlib
 Release{
-    MOC_DIR = ../../bin/MOC_release/php_gen
-    OBJECTS_DIR = ../../bin/Obj_release/php_gen
+
+
+    MOC_DIR = bin/douml/py_gen/MOC_release
+    OBJECTS_DIR = bin/douml/py_gen/Obj_release
 }
 
 Debug{
-    MOC_DIR = ../../bin/MOC_debug/php_gen
-    OBJECTS_DIR = ../../bin/Obj_debug/php_gen
+    MOC_DIR = bin/douml/py_gen/MOC_Debug
+    OBJECTS_DIR = bin/douml/py_gen/Obj_Debug
 
 }
+    UI_DIR = src/ui
+    DESTDIR = ../../bin
+
+QMAKE_CXXFLAGS += -std=gnu++11

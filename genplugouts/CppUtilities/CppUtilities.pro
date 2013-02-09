@@ -1,6 +1,6 @@
 TEMPLATE    = app
 TARGET        = cpp_util
-CONFIG        += debug warn_on qt
+CONFIG        +=  warn_on qt
 DEFINES        = WITHCPP TRACE
 INCLUDEPATH += ../../src
 HEADERS        = ./UmlBasePackage.h \

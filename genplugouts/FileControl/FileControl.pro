@@ -1,6 +1,6 @@
 TEMPLATE    = app
 TARGET        = file_control
-CONFIG        += debug warn_on qt
+CONFIG        +=  warn_on qt
 DEFINES        = BooL=bool
 HEADERS        = ./aVisibility.h \
           ./UmlBaseExtraClassMember.h \

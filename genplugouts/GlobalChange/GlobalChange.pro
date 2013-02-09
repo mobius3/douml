@@ -1,6 +1,6 @@
 TEMPLATE    = app
 TARGET        = global_change
-CONFIG        += debug warn_on qt
+CONFIG        +=  warn_on qt
 DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON
 HEADERS        = ./UmlBaseUseCaseAssociation.h \
           ./UmlActivityDiagram.h \

@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
+CONFIG          += qt warn_on
 HEADERS          = 
 SOURCES          = main.cpp BrowserNode.cpp Statistic.cpp \
         ../JavaCat/UmlClassItem.cpp ../JavaCat/UmlArtifact.cpp \
@@ -96,21 +96,21 @@ SOURCES          = main.cpp BrowserNode.cpp Statistic.cpp \
         ../Tools/UmlBaseParameter.cpp \
         ../Tools/UmlBaseView.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
-    ../misc/mystr.cpp \
+        ../misc/mystr.cpp \
     ../Logging/QsLogDest.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
 
 TARGET          = java_roundtrip
 DEFINES          = WITHJAVA REVERSE ROUNDTRIP
-INCLUDEPATH   = ../Tools ../JavaRoundtrip ../JavaCat ../
+INCLUDEPATH   = ../Tools ../JavaRoundtrip ../JavaCat ../ ../misc
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 
 
 
 QMAKE_CXXFLAGS += -std=gnu++11
-Release{
+release{
     MOC_DIR = ../../bin/MOC_release/java_round
     OBJECTS_DIR = ../../bin/Obj_release/java_round
 }

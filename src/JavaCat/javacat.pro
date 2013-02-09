@@ -1,5 +1,5 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on debug
+CONFIG          += qt warn_on
 HEADERS          = JavaCatWindow.h BrowserView.h BrowserSearchDialog.h ShowFileDialog.h \
         CommentView.h
 SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \

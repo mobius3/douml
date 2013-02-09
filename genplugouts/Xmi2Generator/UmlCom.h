@@ -7,6 +7,7 @@
 //#include "OnInstanceCmd.h"
 #include "anItemKind.h"
 #include "aRelationKind.h"
+#include "misc/mystr.h"
 
 
 #include <q3ptrvector.h>
