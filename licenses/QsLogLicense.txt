@@ -1,3 +1,5 @@
+This license is applied to QsLog code snippets used to provide debug logging in the application
+
 // Copyright (c) 2010, Razvan Petru
 // All rights reserved.
 
