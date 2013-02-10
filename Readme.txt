@@ -1,6 +1,10 @@
 =========
-Douml version 1.0
+Douml version 1.0b
 =========
+
+*** IMPORTANT NOTICE ***
+	This is still a work in progress and the fact that the release is made doesn't mean that it is bug free.
+	We recommend that you use Douml along with source control and save your work frequently.
 
 About
 
@@ -11,6 +15,8 @@ About
 	Support for later, commercial versions, of Bouml is possible but sample projects will be required.
 	
 Project status:
+
+
 	Core editor seems to be working. It is still very rough around the edges but much easier to work with than bouml 4.23 (I am biased, lol)
 	Generators/reversers seem to be working.
 	Some of the plugouts do not work yet, but these are not critical to actual modelling.
@@ -84,6 +90,8 @@ Compiling
 	
 Webpage
 	http://sourceforge.net/projects/douml/
+Contact email: 
+	doumleditor@gmail.com
 	!!! CONTRIBUTORS NEEDED!!!		
 	
 	
