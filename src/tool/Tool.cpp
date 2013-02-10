@@ -156,14 +156,23 @@ void Tool::defaults()
         tools[16].applicable[index] = TRUE;
 }
 
+QList<QString> SetupFailingTools()
+{
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    return settings.value("Failing_Tools/Tools").toString().split(",");
+}
+
 bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target,
                        const QObject * receiver, const char * member)
 {
     unsigned index;
     bool first = TRUE;
 
+    static QList<QString> failingTools = SetupFailingTools();
+
     for (index = 0; index != ntools; index += 1) {
-        if (tools[index].applicable[target]) {
+        if (tools[index].applicable[target] && !failingTools.contains(tools[index].display)) {
             if (first) {
                 tool->insertSeparator();
                 first = FALSE;
@@ -183,8 +192,10 @@ bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target, int first_id)
     unsigned index;
     bool have = FALSE;
 
+    static QList<QString> failingTools = SetupFailingTools();
+
     for (index = 0; index != ntools; index += 1) {
-        if (tools[index].applicable[target]) {
+        if (tools[index].applicable[target] && !failingTools.contains(tools[index].display)) {
             have = TRUE;
             tool->insertItem(tools[index].display, first_id + index);
         }

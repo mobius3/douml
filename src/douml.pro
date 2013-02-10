@@ -561,7 +561,7 @@ unix{
 }
 
 UI_DIR = ui
-DESTDIR = bin
+DESTDIR = ../bin
 
 QMAKE_CXXFLAGS += -std=gnu++11
 

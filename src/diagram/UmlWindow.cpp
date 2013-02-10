@@ -978,6 +978,10 @@ void UmlWindow::load()
                 statusBar()->message(TR("Loading aborted"), 2000);
         }
     }
+    if(BrowserNode::marked_nodes().count()!=0)
+        set_marked_generation();
+    else
+        set_selected_generation();
 }
 
 void UmlWindow::historic_add(QString fn)

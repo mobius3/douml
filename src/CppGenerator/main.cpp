@@ -37,7 +37,7 @@
 #include "Logging/QsLogDest.h"
 int main(int argc, char ** argv)
 {
-
+#ifdef DEBUG
     QsLogging::Logger & logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(QsLogging::TraceLevel);
     QDir dir;
@@ -57,7 +57,7 @@ int main(int argc, char ** argv)
 
 
     QLOG_INFO() << " STARTING CPP_GENERATOR";
-
+#endif
     int port_index;
 
     if (argc == 2) {

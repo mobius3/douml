@@ -10,17 +10,19 @@
 
 int main(int argc, char ** argv)
 {
+#ifdef DEBUG
     QsLogging::Logger & logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(QsLogging::TraceLevel);
     QDir dir;
     dir.setPath(qApp->applicationDirPath());
-    dir.remove(QString("cpp_utils") + QString(".log"));
+    dir.remove(QString("cpp_uyils") + QString(".log"));
     const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString("cpp_utils") + QString(".log")));
     QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath));
     QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
-    QLOG_INFO() << " STARTING CPP_UTILS";
+    QLOG_INFO() << "Starting the log";
+#endif
     if (argc != 2)
         return 0;
 

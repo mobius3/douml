@@ -47,7 +47,7 @@ int main(int argc, char ** argv)
 
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-
+#ifdef DEBUG
     QsLogging::Logger & logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(QsLogging::TraceLevel);
     QDir dir;
@@ -59,6 +59,7 @@ int main(int argc, char ** argv)
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
     QLOG_INFO() << "Starting the log";
+#endif
     //QTest::qSleep(7000);
     if (UmlCom::connect(WrapperStr(argv[1]).operator QString().toUInt())) {
         try {

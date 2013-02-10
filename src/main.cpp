@@ -74,17 +74,19 @@ int main(int argc, char ** argv)
 
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
+#ifdef DEBUG
     QsLogging::Logger & logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(QsLogging::TraceLevel);
     QDir dir;
     dir.setPath(qApp->applicationDirPath());
-    dir.remove(QString("cpp_generator") + QString(".log"));
+    dir.remove(QString("douml") + QString(".log"));
     const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString("douml") + QString(".log")));
     QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath));
     QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
     QLOG_INFO() << "Starting the log";
+#endif
 
 
     An<EdgeMenuFactory> factory;

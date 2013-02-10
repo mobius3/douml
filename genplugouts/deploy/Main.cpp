@@ -10,6 +10,7 @@
 #include "../../src/Logging/QsLogDest.h"
 // the program is called with the socket port number in argument
 
+#ifdef DEBUG
 int main(int argc, char ** argv)
 {
     if (argc != 2)
@@ -26,6 +27,7 @@ int main(int argc, char ** argv)
     logger.addDestination(fileDestination.get());
     //QTest::qSleep(15000);
     QLOG_INFO() << " STARTING DEPLOY";
+#endif
     if (UmlCom::connect(QString(argv[1]).toUInt())) {
         try {
             UmlCom::trace("<b>Deploy classes</b> release 1.1 (C++ version)<br>");
