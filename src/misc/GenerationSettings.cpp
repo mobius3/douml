@@ -390,57 +390,57 @@ void GenerationSettings::init()
       builtins[13].set("double", "double", "double", "double");
       builtins[14].set("string", "string", "String", "string");
 
-    #define CPP_H_CONTENT "#ifndef ${NAMESPACE}_${NAME}_H\n\
-    #define ${NAMESPACE}_${NAME}_H\n\
-    \n\
-    ${comment}\n\
-    ${includes}\n\
-    ${declarations}\n\
-    ${namespace_start}\n\
-    ${definition}\n\
-    ${namespace_end}\n\
-    #endif\n"
-      cpp_h_content = CPP_H_CONTENT;
-    #define CPP_SRC_CONTENT "${comment}\n\
-    ${includes}\n\
-    ${namespace_start}\n\
-    ${members}\n\
-    ${namespace_end}"
+#define CPP_H_CONTENT "#ifndef ${NAMESPACE}_${NAME}_H\n\
+#define ${NAMESPACE}_${NAME}_H\n\
+\n\
+${comment}\n\
+${includes}\n\
+${declarations}\n\
+${namespace_start}\n\
+${definition}\n\
+${namespace_end}\n\
+#endif\n"
+  cpp_h_content = CPP_H_CONTENT;
+#define CPP_SRC_CONTENT "${comment}\n\
+${includes}\n\
+${namespace_start}\n\
+${members}\n\
+${namespace_end}"
       cpp_src_content = CPP_SRC_CONTENT;
       cpp_h_extension = "h";
       cpp_src_extension = "cpp";
 
-    #define JAVA_SRC_CONTENT "${comment}\n\
-    ${package}\n\
-    ${imports}\n\
-    ${definition}";
+#define JAVA_SRC_CONTENT "${comment}\n\
+${package}\n\
+${imports}\n\
+${definition}";
       java_src_content = JAVA_SRC_CONTENT;
       java_extension = "java";
 
-    #define PHP_SRC_CONTENT "<?php\n\
-    ${comment}\n\
-    ${namespace}\n\
-    ${require_once}\n\
-    ${definition}\n\
-    ?>\n";
+#define PHP_SRC_CONTENT "<?php\n\
+${comment}\n\
+${namespace}\n\
+${require_once}\n\
+${definition}\n\
+?>\n";
       php_src_content = PHP_SRC_CONTENT;
       php_extension = "php";
 
-    #define PYTHON_SRC_CONTENT "${comment}\n\
-    ${import}\n\
-    ${definition}";
+#define PYTHON_SRC_CONTENT "${comment}\n\
+${import}\n\
+${definition}";
       python_src_content = PYTHON_SRC_CONTENT;
       python_extension = "py";
 
-    #define IDL_SRC_CONTENT "#ifndef ${MODULE}_${NAME}_H\n\
-    #define ${MODULE}_${NAME}_H\n\
-    \n\
-    ${comment}\n\
-    ${includes}\n\
-    ${module_start}\n\
-    ${definition}\n\
-    ${module_end}\n\
-    #endif\n"
+#define IDL_SRC_CONTENT "#ifndef ${MODULE}_${NAME}_H\n\
+#define ${MODULE}_${NAME}_H\n\
+\n\
+${comment}\n\
+${includes}\n\
+${module_start}\n\
+${definition}\n\
+${module_end}\n\
+#endif\n"
       idl_src_content = IDL_SRC_CONTENT;
       idl_extension = "idl";
 
@@ -493,10 +493,10 @@ void GenerationSettings::init()
       cpp_union_decl = "${comment}${template}union ${name} {\n${members}};\n${inlines}\n";
       cpp_enum_decl = "${comment}enum ${name} {\n${items}\n};\n";
       cpp_typedef_decl = "${comment}typedef ${type} ${name};\n";
-    #define CPP_ATTR_DECL1	"    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n"
-    #define CPP_ATTR_DECL2	"    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n"
-    #define CPP_ATTR_DESCR1	"    ${description}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n"
-    #define CPP_ATTR_DESCR2	"    ${description}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n"
+#define CPP_ATTR_DECL1	"    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n"
+#define CPP_ATTR_DECL2	"    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n"
+#define CPP_ATTR_DESCR1	"    ${description}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};\n"
+#define CPP_ATTR_DESCR2	"    ${description}${static}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};\n"
       cpp_attr_decl[0] = "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};\n";
       cpp_attr_decl[1] = CPP_ATTR_DECL1;
       cpp_attr_decl[2] = CPP_ATTR_DECL2;
@@ -526,7 +526,7 @@ void GenerationSettings::init()
       cpp_force_namespace_gen = FALSE;
       cpp_inline_force_incl_in_h = FALSE;
       cpp_javadoc_comment = FALSE;
-    #define CPP_INDENT_VISIBILITY "  "
+#define CPP_INDENT_VISIBILITY "  "
       cpp_indent_visibility = CPP_INDENT_VISIBILITY;
 
       java_class_decl = "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {\n${members}}\n";
@@ -544,10 +544,10 @@ void GenerationSettings::init()
         }\n\n\
       }\n\
       private ${name}(int v) { value = v; };\n}\n";
-    #define JAVA_ATTR_DECL1	"  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n"
-    #define JAVA_ATTR_DECL2	"  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n"
-    #define JAVA_ATTR_DESCR1	"  ${description}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n"
-    #define JAVA_ATTR_DESCR2	"  ${description}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n"
+#define JAVA_ATTR_DECL1	"  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n"
+#define JAVA_ATTR_DECL2	"  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n"
+#define JAVA_ATTR_DESCR1	"  ${description}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};\n"
+#define JAVA_ATTR_DESCR2	"  ${description}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};\n"
       java_attr_decl[0] = "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};\n";
       java_attr_decl[1] = JAVA_ATTR_DECL1;
       java_attr_decl[2] = JAVA_ATTR_DECL2;
