@@ -152,12 +152,12 @@ public:
 
     WrapperStr& replace(int pos, int len, const char* c)
     {
-        wrappedString.replace(pos, len, c);
+        wrappedString = wrappedString.replace(pos, len, c);
         return *this;
     }
     WrapperStr& insert(int pos, const char* c)
     {
-        wrappedString.insert(pos, c);
+        wrappedString  = wrappedString.insert(pos, c);
         return *this;
     }
     WrapperStr left(int len) const
@@ -183,7 +183,7 @@ public:
 
     WrapperStr& remove(int pos, int len)
     {
-        wrappedString.remove(pos, len);
+        wrappedString = wrappedString.remove(pos, len);
         return *this;
     }
     WrapperStr mid(int pos, int len = -1) const
@@ -192,12 +192,12 @@ public:
     }
     WrapperStr& setNum(int num)
     {
-        wrappedString.setNum(num);
+        wrappedString = wrappedString.setNum(num);
         return *this;
     }
     void truncate(int pos)
     {
-        wrappedString.left(pos);
+        wrappedString = wrappedString.left(pos);
     }
     QString upper() const
     {

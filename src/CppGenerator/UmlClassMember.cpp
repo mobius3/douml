@@ -232,7 +232,8 @@ bool UmlClassMember::compute_dependency(Q3PtrList<CppRefType> & dependencies,
                     ((c >= '0') && (c <= '9')))
                     p += 1;
                 else {
-                    ts.explicit_type.truncate(p - p2);
+                    ts.explicit_type = ts.explicit_type.left(p - p2);
+                    //ts.explicit_type.truncate(p - p2);
                     break;
                 }
             }

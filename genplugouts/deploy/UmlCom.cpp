@@ -190,12 +190,9 @@ void UmlCom::read_buffer(unsigned int len)
     QLOG_INFO() << "Allocated address" << (size_t) buffer_in;
     for (;;)
     {
-        while(sock->bytesAvailable() < len)
-        {
-            int available = sock->bytesAvailable();
-            QLOG_INFO() << sock->bytesAvailable();
-        }
-        nread = sock->readBlock(p, len);
+        sock->readBlock(p, remainder);
+//        QByteArray arr(p);
+//        QLOG_INFO() << arr;
         p += nread;
 
         QLOG_INFO() << "nread = " + QString::number(nread);

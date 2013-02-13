@@ -72,9 +72,8 @@ bool CppRefType::add(UmlClass * cl, Q3PtrList<CppRefType> & l,
     for (ref = l.first(); ref; ref = l.next()) {
         // don't use ref->type.toString() because of synonymous
         // in several namespaces
-        if ((ref->type.type != 0)
-            ? (ref->type.type == cl)
-            : (ref->type.explicit_type == t)) {
+        if ((ref->type.type != 0) ? (ref->type.type == cl) : (ref->type.explicit_type == t))
+        {
             if (w > ref->weight)
                 ref->included = incl;
 
@@ -202,11 +201,13 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
 
     CppRefType * ref;
 
-    for (ref = dependencies.first(); ref != 0; ref = dependencies.next()) {
+    for (ref = dependencies.first(); ref != 0; ref = dependencies.next())
+    {
         UmlClass * cl = (ref->type.type)
                         ? ref->type.type
                         : UmlBaseClass::get(ref->type.explicit_type, 0);
         bool included = ref->included;
+
         WrapperStr hform;	// form in header
         WrapperStr srcform;	// form in source
 
@@ -219,7 +220,9 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
                 // doesn't know what it is
                 continue;
         }
-        else if (cl->isCppExternal()) {
+        else if (cl->isCppExternal())
+        {
+            QString className = cl->name();
             hform = cl->cppDecl();
 
             int index;
@@ -246,6 +249,7 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
             srcform = hform;
         }
         else {
+            QString className = cl->name();
             WrapperStr st = cl->cpp_stereotype();
 
             if ((st == "enum") || (st == "typedef"))
