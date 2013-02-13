@@ -49,18 +49,18 @@ EdgeMenuToolBar * CreateLimitedDialogMenu()
     layout->setContentsMargins(0, 0, 0, 0);
     QLabel * label = new QLabel();
 
-    label->setPixmap(QIcon("../src/icons/mouse_control.png").pixmap());
+    label->setPixmap(QIcon(":/root/icons/mouse_control.png").pixmap());
     layout->addWidget(label);
     dragArea->setLayout(layout);
 
     QPushButton * okayElement = new QPushButton();
-    okayElement->setIcon(QIcon(":/root/src/icons/accept.png"));
+    okayElement->setIcon(QIcon(":/root/icons/accept.png"));
     okayElement->setName("OkayElement");
     okayElement->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     okayElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
     QPushButton * cancelElement = new QPushButton();
-    cancelElement->setIcon(QIcon(":/root/src/icons/reject.png"));
+    cancelElement->setIcon(QIcon(":/root/icons/reject.png"));
     cancelElement->setName("CancelElement");
     okayElement->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
     cancelElement->setBaseSize(defaultButtonSize, defaultButtonSize);
@@ -97,30 +97,30 @@ EdgeMenuToolBar * CreateClassDialogMenu()
     QHBoxLayout * layout = new QHBoxLayout();
     layout->setContentsMargins(0, 0, 0, 0);
     QLabel * label = new QLabel();
-    label->setPixmap(QIcon(":/root/src/icons/mouse_control.png").pixmap());
+    label->setPixmap(QIcon(":/root/icons/mouse_control.png").pixmap());
     layout->addWidget(label);
     dragArea->setLayout(layout);
 
-//    QFileInfo f("../src/icons/mouse_control.png");
+//    QFileInfo f(":/root/icons/mouse_control.png");
 //    bool exists = f.exists();
 
     QPushButton * okayElement = new QPushButton();
-    okayElement->setIcon(QIcon(":/root/src/icons/accept.png"));
+    okayElement->setIcon(QIcon(":/root/icons/accept.png"));
     okayElement->setName("OkayElement");
     okayElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
     QPushButton * nextElement = new QPushButton();
-    nextElement->setIcon(QIcon(":/root/src/icons/up.png"));
+    nextElement->setIcon(QIcon(":/root/icons/up.png"));
     nextElement->setName("NextElement");
     nextElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
     QPushButton * previousElement = new QPushButton();
-    previousElement->setIcon(QIcon(":/root/src/icons/down.png"));
+    previousElement->setIcon(QIcon(":/root/icons/down.png"));
     previousElement->setName("PreviousElement");
     previousElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
     QPushButton * cancelElement = new QPushButton();
-    cancelElement->setIcon(QIcon(":/root/src/icons/reject.png"));
+    cancelElement->setIcon(QIcon(":/root/icons/reject.png"));
     cancelElement->setName("CancelElement");
     cancelElement->setBaseSize(defaultButtonSize, defaultButtonSize);
 
