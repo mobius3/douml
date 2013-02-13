@@ -74,7 +74,7 @@ int main(int argc, char ** argv)
 
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
-#ifdef DEBUG
+//#ifdef DEBUG
     QsLogging::Logger & logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(QsLogging::TraceLevel);
     QDir dir;
@@ -86,7 +86,7 @@ int main(int argc, char ** argv)
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
     QLOG_INFO() << "Starting the log";
-#endif
+//#endif
 
 
     An<EdgeMenuFactory> factory;
