@@ -211,10 +211,10 @@ void OperationData::PropagateFrom(const OperationData * model, bool goBack, QLis
     python_decorator = model->python_decorator;
     idl_decl = model->idl_decl;
 
-    cpp_def =  model->cpp_def, FALSE;
-    java_def = model->java_def, FALSE;
-    php_def = model->php_def, FALSE;
-    python_def =model->python_def, FALSE;
+    cpp_def =  model->cpp_def;
+    java_def = model->java_def;
+    php_def = model->php_def;
+    python_def =model->python_def;
     return_type = model->return_type;
     depend_on(return_type.type);
 

@@ -55,10 +55,11 @@ void EdgeMenuDialogBase::PickNextSibling()
     {
         nextNode = dynamic_cast<BrowserNode *>(currentNode->itemAbove());
         QLOG_INFO() << "CurrentNode is: "<< currentNode->get_name();
-
-        QLOG_INFO() << "NEXT: " << nextNode->get_name() << " " << nextNode->depth();
         if (!nextNode)
             break;
+
+        QLOG_INFO() << "NEXT: " << nextNode->get_name() << " " << nextNode->depth();
+
 
         QLOG_INFO() << "NextNode is: "<< nextNode->get_name();
         bool sameLevel = originalNode->depth() == nextNode->depth();
