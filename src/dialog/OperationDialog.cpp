@@ -100,6 +100,8 @@ OperationDialog::OperationDialog(OperationData * o, DrawingLanguage )
     InitGui();
     FillGuiElements(oper);
 
+
+
     connect(this, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(update_all_tabs(QWidget *)));
     open_dialog(this);
@@ -7501,7 +7503,9 @@ QSharedPointer<OperationDialog> OperationDialog::Instance(OperationData * o, Dra
         instance = QSharedPointer<OperationDialog>(new OperationDialog(o, l));
     else {
         instance->drawingLanguage = l;
+        instance->ChangeTab(0);
         instance->FillGuiElements(o);
+
     }
 
     return instance;
