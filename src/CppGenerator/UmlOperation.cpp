@@ -624,6 +624,10 @@ const char * UmlOperation::generate_body(QTextStream & fs,
         WrapperStr indent,
         const char * p)
 {
+
+    if(isAbstract())
+        return p + 7;
+
     fs.setCodec(QTextCodec::codecForLocale());
     const char * body = 0;
     WrapperStr modeler_body;
@@ -657,11 +661,13 @@ const char * UmlOperation::generate_body(QTextStream & fs,
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
     int compat = settings.value("Main/compatibility_save").toInt();
 
+
     const char* actualPrefix = compat ? BodyPrefix : BodyPrefix2;
     if (preserve() && !isBodyGenerationForced())
         fs << indent << actualPrefix << s_id << '\n';
 
-    if ((body != 0) && (*body != 0)) {
+    if ((body != 0) && (*body != 0))
+    {
         // output body
         if (indent.isEmpty() || no_indent) {
             fs << toLocaleFull(body);

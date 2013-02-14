@@ -211,10 +211,16 @@ void OperationData::PropagateFrom(const OperationData * model, bool goBack, QLis
     python_decorator = model->python_decorator;
     idl_decl = model->idl_decl;
 
-    cpp_def.assign((const char *) model->cpp_def, FALSE);
-    java_def.assign((const char *) model->java_def, FALSE);
-    php_def.assign((const char *) model->php_def, FALSE);
-    python_def.assign((const char *) model->python_def, FALSE);
+    //todo need to check why abstract operation sometimes end with empty definition
+    //if(this->is_abstract && model->is_abstract)
+    //bool defAllowed = true;//!model->is_abstract || (model->is_abstract && this->is_abstract);
+//    if(defAllowed)
+//    {
+        cpp_def.assign((const char *) model->cpp_def, FALSE);
+        java_def.assign((const char *) model->java_def, FALSE);
+        php_def.assign((const char *) model->php_def, FALSE);
+        python_def.assign((const char *) model->python_def, FALSE);
+//    }
     return_type = model->return_type;
     depend_on(return_type.type);
 
@@ -3432,7 +3438,7 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
             save_string(cpp_decl, st);
         }
 
-        if (!is_abstract && !cpp_def.isEmpty()) {
+        if (/*!is_abstract &&*/ !cpp_def.isEmpty()) {
             nl_indent(st);
             st << "cpp_def ";
             save_string(cpp_def, st);

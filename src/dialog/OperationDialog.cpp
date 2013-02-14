@@ -499,6 +499,9 @@ void OperationDialog::FillcppTab(OperationData * oper)
     cppTab->ui->pbNotGeneratedInCpp->setEnabled(isWritable && !oper->is_get_or_set);
     cppTab->ui->pbEditParameters->setEnabled(isWritable);
 
+//    if(oper->get_is_abstract())
+//        cpp_default_def();
+//    else
     cppTab->ui->edCppDefProto->setText(oper->get_cppdef());
     cppTab->ui->edCppDefProto->setFont(comment->font());
     cppTab->ui->edCppDefProto->setReadOnly(!isWritable);
@@ -521,6 +524,7 @@ void OperationDialog::FillcppTab(OperationData * oper)
         delete [] b;
     }
 
+    //cppTab->ui->edCppDefProto
     cppTab->ui->pbDefaultDefinition->setEnabled(isWritable);
     cppTab->ui->pbFromDeclaration->setEnabled(isWritable);
     cppTab->ui->pb2NotGeneratedInCpp->setEnabled(isWritable && !oper->is_get_or_set);
@@ -3345,7 +3349,8 @@ bool OperationDialog::SaveData(OperationData *oper)
 
         // C++
 
-        if (cpp_undef) {
+        if (cpp_undef)
+        {
             oper->cpp_decl = QString();
             oper->cpp_def.assign(QString(), TRUE);
 
@@ -3353,7 +3358,8 @@ bool OperationDialog::SaveData(OperationData *oper)
                 oper->new_body(QString(), 'c');
         }
         else {
-            if (oper->is_get_or_set) {
+            if (oper->is_get_or_set)
+            {
                 oper->cpp_name_spec = cppTab->ui->leCppNamespec->text().stripWhiteSpace();
                 oper->cpp_body.length = 0;
                 oper->cpp_get_set_frozen = cppTab->ui->cbCppFrozen->isChecked();
@@ -3362,7 +3368,8 @@ bool OperationDialog::SaveData(OperationData *oper)
                 oper->cpp_indent_body = cppTab->ui->cbIndentCppBody->isChecked();
 
             if (!abstract_cb->isChecked() &&
-                (cppTab->ui->edCppDefProto->text().find("${body}") != -1)) {
+                (cppTab->ui->edCppDefProto->text().find("${body}") != -1))
+            {
                 if (cppbody != oldcppbody)
                     oper->new_body(cppbody, 'c');
             }

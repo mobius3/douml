@@ -276,11 +276,13 @@ public:
     };
     void set_n_exceptions(unsigned n);	// the old exceptions are lost
 
-    const char * get_cppdecl() const {
+    const char * get_cppdecl() const
+    {
         return cpp_decl;
     };
-    const char * get_cppdef() const {
-        return cpp_def;
+    const char * get_cppdef() const
+    {
+            return cpp_def;
     };
     void set_cppdef(QString value){cpp_def = value;}
     QString default_cpp_decl(const QString & name);
