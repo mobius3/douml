@@ -2063,8 +2063,8 @@ void OperationDialog::cpp_def_from_decl()
 
 
     // manage abstract
-    if ((dcl.find("${abstract}") == -1) || // abstract removed
-        !abstract_cb->isChecked()) {
+    if (/*(dcl.find("${abstract}") == -1) || !abstract_cb->isChecked()*/true)
+    {
         // probably not abstract
         int index1;
         int index2;
@@ -2126,39 +2126,44 @@ void OperationDialog::cpp_def_from_decl()
             index1 = index2;
         }
     }
-    QList<UserTag> failedTags;
-    for(auto tag : tags)
-    {
-        //first we try to find left context in the new definition
-        QRegExp rx(QRegExp::escape(tag.leftContext));
-        int index = rx.indexIn(def);
-        if(index != -1)
+//    if(!oper->is_abstract)
+//    {
+        QList<UserTag> failedTags;
+        for(auto tag : tags)
         {
-            def.replace(tag.leftContext, tag.leftContext + tag.tag);
-            continue;
+            //first we try to find left context in the new definition
+            QRegExp rx(QRegExp::escape(tag.leftContext));
+            int index = rx.indexIn(def);
+            if(index != -1)
+            {
+                def.replace(tag.leftContext, tag.leftContext + tag.tag);
+                continue;
+            }
+            // next we try right context
+            rx.setPattern(QRegExp::escape(tag.leftContext));
+            index = rx.indexIn(def);
+            if(index != -1)
+            {
+                def.replace(tag.rightContext, tag.tag + tag.leftContext);
+                continue;
+            }
+            failedTags.append(tag);
         }
-        // next we try right context
-        rx.setPattern(QRegExp::escape(tag.leftContext));
-        index = rx.indexIn(def);
-        if(index != -1)
+        if(failedTags.size() > 0)
         {
-            def.replace(tag.rightContext, tag.tag + tag.leftContext);
-            continue;
+            QString tagString;
+            for(auto tag : failedTags)
+                tagString.append(tag.tag + tr(","));
+            if(tagString.length() > 0)
+                tagString.chop(1);
+            QMessageBox::critical(0, tr("Warning!"), tr("Could not find correct place for these tags: " + tagString), QMessageBox::Ok);
         }
-        failedTags.append(tag);
-    }
-    if(failedTags.size() > 0)
-    {
-        QString tagString;
-        for(auto tag : failedTags)
-            tagString.append(tag.tag + tr(","));
-        if(tagString.length() > 0)
-            tagString.chop(1);
-        QMessageBox::critical(0, tr("Warning!"), tr("Could not find correct place for these tags: " + tagString), QMessageBox::Ok);
-    }
+    //}
 
     // update def
     cppTab->ui->edCppDefProto->setText(def);
+    if(oper->is_abstract)
+        return;
     cpp_update_def();
 }
 
@@ -2402,7 +2407,9 @@ void OperationDialog::cpp_update_def()
                     s += indent;
             }
             else if (*p == '@')
+            {
                 manage_alias(oper->browser_node, p, s, kvtable);
+            }
             else
                 s += *p++;
         }
