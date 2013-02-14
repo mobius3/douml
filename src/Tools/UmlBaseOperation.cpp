@@ -17,8 +17,6 @@
 
 unsigned api_format(bool useTrueFormat)
 {
-    QFileInfo info("settings.ini");
-    bool test = info.exists();
     QSettings settings("settings.ini", QSettings::IniFormat);
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
     int compat = settings.value("Main/compatibility_save").toInt();

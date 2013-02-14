@@ -173,6 +173,9 @@ const char * UmlOperation::generate_body(QTextStream & f,
         BooL & indent_needed,
         const char * p)
 {
+    if(isAbstract())
+        return p + 7;
+
     const char * body = 0;
     WrapperStr modeler_body;
     WrapperStr body_indent;

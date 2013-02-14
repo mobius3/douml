@@ -36,10 +36,10 @@
 #include <Q3PtrList>
 
 // an empty string is != a null string in Qt !
-bool inline neq(const WrapperStr & s1, const WrapperStr & s2)
-{
-    return (s1.isEmpty()) ? !s2.isEmpty() : (s1 != s2);
-}
+//bool inline neq(const WrapperStr & s1, const WrapperStr & s2)
+//{
+//    return (s1.isEmpty()) ? !s2.isEmpty() : (s1 != s2);
+//}
 
 void UmlExtraClassMember::add_init(UmlClass * cl, WrapperStr def, bool roundtrip,
                                    Q3PtrList<UmlItem> & expected_order)
