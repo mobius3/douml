@@ -232,7 +232,8 @@ HEADERS        = \
     ui/constructorinitializerdialog.h \
     tagmanagement/cpptagmanagement.h \
     dialog/edgemenudialogqt4.h \
-    dialog/edgemenudialogbase.h
+    dialog/edgemenudialogbase.h \
+    ui/catalogwidget.h
 
 
 SOURCES = \
@@ -511,7 +512,8 @@ SOURCES = \
     tagmanagement/cpptagmanagement.cpp \
     dialog/edgemenudialogqt4.cpp \
     dialog/edgemenudialogbase.cpp \
-    misc/codec.cpp
+    misc/codec.cpp \
+    ui/catalogwidget.cpp
 
 TARGET = douml
 DEFINES = BooL=bool DEBUGCOM
@@ -569,5 +571,6 @@ RESOURCES += icons.qrc
 
 FORMS += \
     ui/operationwidgetcpp.ui \
-    ui/constructorinitializerdialog.ui
+    ui/constructorinitializerdialog.ui \
+    ui/catalogwidget.ui
 

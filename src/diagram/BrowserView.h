@@ -90,6 +90,7 @@ public:
     static BrowserNode * selected_item();
     static void force_visible(Q3ListViewItem *);
     static void remove_temporary_files();
+    void send_marked(QList<BrowserNode*>);
 
 
 
@@ -114,6 +115,8 @@ public slots:
     void OnGeneratePhp();
     void OnGeneratePython();
     void OnGenerateIdl();
+signals:
+    void marked_list(QList<BrowserNode*>);
 };
 
 #endif

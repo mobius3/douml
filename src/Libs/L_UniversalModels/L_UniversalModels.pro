@@ -32,7 +32,8 @@ HEADERS += include/TreeModel.h \
     include/ItemController.h \
     include/treeviewfunctions.h \
     include/treeviewtemplatefunctions.h \
-    include/treeitemfunctions.h
+    include/treeitemfunctions.h \
+    include/genericeventfilter.h
 
 SOURCES += src/TreeModel.cpp \
     src/TreeItemInterface.cpp \
@@ -40,7 +41,8 @@ SOURCES += src/TreeModel.cpp \
     src/TableDataInterface.cpp \
     src/AdaptingTableModelPrivate.cpp \
     src/treeviewfunctions.cpp \
-    src/treeviewtemplatefunctions.cpp
+    src/treeviewtemplatefunctions.cpp \
+    src/genericeventfilter.cpp
 
 Debug{
     MOC_DIR = .../.././build/MOC_debug/UniversalModels

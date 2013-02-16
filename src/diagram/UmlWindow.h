@@ -64,6 +64,7 @@ class TreeItemInterface;
 class TreeModel;
 class QLineEdit;
 class Q3ListViewItem;
+class CatalogWidget;
 class UmlWindow : public QMainWindow
 {
     Q_OBJECT
@@ -76,25 +77,12 @@ protected:
     BrowserView * dummyBrowser = nullptr;
 
     // perverted stuff
-    QTabWidget* twTreeHolder = nullptr;
-    QTreeView* tvLastVisited = nullptr;
-    QWidget* wdgLeftBarHolder = nullptr;
-    QLineEdit* leVisitedSearch = nullptr;
     QSplitter* splTreeTab = nullptr;
-    TreeModel* treeModel = nullptr;
-    QMenu* treeItemMenu = nullptr;
-
-    bool isFilteredTree = false;
-    QStringList expandedNodes;
-    QSharedPointer<TreeItemInterface> templateRootItem;
-    QSharedPointer<ItemController<BrowserNode> > treeController;
-    BrowserNode* treeRootData;
-
+    CatalogWidget* wdgCatalog = nullptr;
     void SetupTreeModel();
     void SetupTreeController();
     void PerformFiltering();
     QList<std::function<bool (TreeItemInterface *)> > CreateCheckList();
-
 
     // end of perverted stuff
     MultiLineEdit * comment;
@@ -277,8 +265,8 @@ private slots:
 
 public slots:
     void whats_this() const;
-    void OnUpdateVisitedView(Q3ListViewItem*);
-    void OnPerformVisitedFiltering();
+    //void OnUpdateVisitedView(Q3ListViewItem*);
+    //void OnPerformVisitedFiltering();
     void OnPickSelectionFromVisited(const QModelIndex&,const QModelIndex& );
 
 

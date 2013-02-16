@@ -103,13 +103,14 @@ Q3PtrDict<QString> SynonymousPath(259);
 QString BrowserNode::FullPathPrefix = "   [";
 QString BrowserNode::FullPathPostfix = "]";
 QString BrowserNode::FullPathDotDot = "::";
-
+BrowserView* BrowserNode::viewptr = 0;
 BrowserNode::BrowserNode(QString s, BrowserView * parent)
     : Q3ListViewItem(parent, s),
       name(s), original_id(0), is_new(TRUE), is_deleted(FALSE),
       is_modified(FALSE), is_read_only(FALSE), is_edited(FALSE),
       is_marked(FALSE), is_defined(FALSE)
 {
+    viewptr = parent;
 }
 
 BrowserNode::BrowserNode(QString s, BrowserNode * parent)
@@ -1197,6 +1198,8 @@ void BrowserNode::unmark_all()
         UmlWindow::set_marked_generation();
     else
         UmlWindow::set_selected_generation();
+    if(viewptr)
+        viewptr->send_marked(get_marked_nodes());
 }
 
 void BrowserNode::move(BrowserNode * bn, BrowserNode * after)
@@ -1240,6 +1243,8 @@ void BrowserNode::toggle_mark()
         UmlWindow::set_marked_generation();
     else
         UmlWindow::set_selected_generation();
+    if(viewptr)
+        viewptr->send_marked(get_marked_nodes());
 }
 
 void BrowserNode::setup_generatable_types()

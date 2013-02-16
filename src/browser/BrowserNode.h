@@ -99,6 +99,7 @@ protected:
     static QString FullPathPrefix;
     static QString FullPathPostfix;
     static QString FullPathDotDot;
+    static BrowserView* viewptr;
 
     BrowserNode();
 
@@ -134,6 +135,16 @@ public:
     }
     static const Q3PtrList<BrowserNode> & marked_nodes() {
         return marked_list;
+    }
+    static const QList<BrowserNode*>  get_marked_nodes()
+    {
+        Q3PtrListIterator<BrowserNode> it(marked_list);
+        QList<BrowserNode*> result;
+        for (; it.current() != 0; ++it)
+        {
+            result.append(it.current());
+        }
+        return result;
     }
 
     static void setup_generatable_types();

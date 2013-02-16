@@ -110,6 +110,11 @@ void BrowserView::remove_temporary_files()
     }
 }
 
+void BrowserView::send_marked(QList<BrowserNode *> list)
+{
+    emit marked_list(list);
+}
+
 BrowserView::~BrowserView()
 {
     remove_temporary_files();
