@@ -1,0 +1,55 @@
+format 76
+
+note 128042 "Fonts:
+- Labels for elements
+- Message plain text
+- Formatted message text
+- Syntax Highlighted text
+- Erraneous Text
+- Table
+"
+  xyzwh 72 61 2000 191 143
+usecasecanvas 128170 usecase_ref 128938 // Text entity
+  xyzwh 298 279 3005 64 32 label_xy 298 311
+end
+usecasecanvas 128298 usecase_ref 129066 // Family
+  xyzwh 545 517 3005 64 32 label_xy 557 549
+end
+usecasecanvas 128426 usecase_ref 129194 // Size
+  xyzwh 550 463 3005 64 32 label_xy 570 495
+end
+usecasecanvas 128682 usecase_ref 129450 // Zoom
+  xyzwh 621 469 3005 64 32 label_xy 636 501
+end
+usecasecanvas 128810 usecase_ref 129578 // Bold/italic
+  xyzwh 456 439 3005 64 32 label_xy 459 471
+end
+usecasecanvas 128938 usecase_ref 129706 // Foreground/background
+  xyzwh 604 176 3005 64 32 label_xy 563 208
+end
+usecasecanvas 129066 usecase_ref 129834 // Identficator
+  xyzwh 487 153 3005 64 32 label_xy 485 189
+end
+usecasecanvas 129194 usecase_ref 129962 // Using Code
+  xyzwh 72 283 3005 64 32 label_xy 70 315
+end
+usecasecanvas 129322 usecase_ref 130090 // Type of text
+  xyzwh 180 280 3005 64 32 label_xy 176 312
+end
+usecasecanvas 129450 usecase_ref 130218 // Font Settings
+  xyzwh 554 366 3005 64 32 label_xy 543 405
+end
+usecasecanvas 129578 usecase_ref 130346 // Additional Settings
+  xyzwh 554 246 3005 64 32 label_xy 529 278
+end
+usecasecanvas 129706 usecase_ref 130474 // Text
+  xyzwh 562 118 3005 64 32 label_xy 581 150
+end
+fragment 129834 ""
+  color lightblue xyzwh 254 227 2000 180 152
+end
+line 129962 --->
+  from ref 128170 z 3006 to ref 129450
+line 130090 --->
+  from ref 128170 z 3006 to ref 129578
+end

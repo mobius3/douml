@@ -1,0 +1,18 @@
+class QueryClause
+!!!290986.cpp!!!	clone() : QueryClause
+	return new QueryClause(*this);
+!!!291114.cpp!!!	~QueryClause()
+//	int k;
+//	k++;
+!!!156458.cpp!!!	SetClausePosition(in pos : int) : void
+	positionInQuery = pos;
+!!!156586.cpp!!!	GetClausePosition() : int
+	return positionInQuery;
+!!!156714.cpp!!!	GetClauseText() : string
+	return text;
+!!!156842.cpp!!!	SetClauseText(in _text : string) : void
+	text = _text;
+!!!158890.cpp!!!	SetClauseType(in _type : EClauses) : void
+	type = _type;
+!!!159018.cpp!!!	GetClauseType() : EClauses
+	return type;

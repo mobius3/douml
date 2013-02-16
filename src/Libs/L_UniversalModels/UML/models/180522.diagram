@@ -1,0 +1,48 @@
+format 76
+
+classinstance 128042 class_ref 667434 // DatabaseMessageIO
+  name ""   xyz 592 4 2000 life_line_z 2000
+classinstance 128170 class_ref 667690 // MessageEditor
+  name ""   xyz 53 4 2000 life_line_z 2000
+classinstance 128298 class_ref 667818 // FPLMessageSeparated
+  name ""   xyz 324 4 2000 life_line_z 2000
+durationcanvas 128426 classinstance_ref 128298 // :FPLMessageSeparated
+  xyzwh 391 56 2010 11 29
+end
+durationcanvas 128554 classinstance_ref 128170 // :MessageEditor
+  xyzwh 96 65 2010 11 105
+  overlappingdurationcanvas 128682
+    xyzwh 102 120 2020 11 25
+  end
+end
+durationcanvas 128810 classinstance_ref 128298 // :FPLMessageSeparated
+  xyzwh 391 131 2010 11 59
+end
+durationcanvas 128938 classinstance_ref 128042 // :DatabaseMessageIO
+  xyzwh 652 163 2010 11 36
+end
+msg 129066 synchronous
+  from durationcanvas_ref 128426
+  to durationcanvas_ref 128554
+  yz 68 2015 explicitmsg "Accept Message Clicked"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 182 55
+msg 129194 synchronous
+  from durationcanvas_ref 128554
+  to durationcanvas_ref 128810
+  yz 152 2015 explicitmsg "Save Request Result"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  args "bool"
+  label_xy 191 139
+msg 129322 synchronous
+  from durationcanvas_ref 128810
+  to durationcanvas_ref 128938
+  yz 177 2015 explicitmsg "MessageAccepted"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 474 164
+reflexivemsg 129450 synchronous
+  to durationcanvas_ref 128682
+  yz 120 2025 explicitmsg "Request Confirmation"
+  show_full_operations_definition default drawing_language default show_context_mode default
+  label_xy 109 104
+end

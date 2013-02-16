@@ -1,0 +1,48 @@
+format 76
+
+classcanvas 128042 class_ref 317354 // AniGraphicsItemAreaZonalCenter
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 517 564 2000
+end
+classcanvas 128170 class_ref 310186 // AniAreaObject
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 150 448 2005
+end
+classcanvas 128298 class_ref 317226 // AniAreaZonalCenter
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 343 250 2011
+end
+classcanvas 128554 class_ref 192810 // AniGraphicsItemArea
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 337 508 2011
+end
+classcanvas 128938 class_ref 317482 // AniGraphicsAreaZonalCenterSettings
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 506 829 2000
+end
+relationcanvas 128426 relation_ref 304554 // <generalisation>
+  from ref 128298 z 2012 to ref 128170
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128810 relation_ref 304682 // <generalisation>
+  from ref 128042 z 2012 to ref 128554
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129194 relation_ref 305450 // <directional aggregation>
+  from ref 128042 z 2001 to ref 128938
+  role_a_pos 626 811 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129322 relation_ref 360106 // <directional composition>
+  from ref 128554 z 2012 to ref 128170
+  role_a_pos 294 706 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129450 relation_ref 359722 // <directional composition>
+  from ref 128042 z 2012 to ref 128298
+  role_a_pos 481 446 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

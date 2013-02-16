@@ -1,0 +1,12 @@
+window_sizes 1680 988 394 1281 806 104
+diagrams
+  active  classdiagram_ref 200490 // Adapting Table Model
+    1024 644 100 3 0 0
+end
+show_stereotypes
+selected class_ref 714794 // TreeItem
+open
+  class_ref 714794 // TreeItem
+  class_ref 714922 // TreeItemInterface
+end
+end

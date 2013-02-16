@@ -37,6 +37,9 @@
 #include <QLabel>
 #include <QKeyEvent>
 #include <QMainWindow>
+#include <QSharedPointer>
+#include <functional>
+#include "Libs/L_UniversalModels/include/ItemController.h"
 
 class Q3CanvasView;
 class QWorkspace;
@@ -55,6 +58,12 @@ class MultiLineEdit;
 
 /* This class seems to be responsible for the main Project, with Open,
  * Save, Close, etc... It is the main window */
+class QTreeView;
+class QTabWidget;
+class TreeItemInterface;
+class TreeModel;
+class QLineEdit;
+class Q3ListViewItem;
 class UmlWindow : public QMainWindow
 {
     Q_OBJECT
@@ -62,8 +71,32 @@ class UmlWindow : public QMainWindow
 protected:
     static UmlWindow * the;
 
-    QWorkspace * ws;
-    BrowserView * browser;
+    QWorkspace * ws = nullptr;
+    BrowserView * browser = nullptr;
+    BrowserView * dummyBrowser = nullptr;
+
+    // perverted stuff
+    QTabWidget* twTreeHolder = nullptr;
+    QTreeView* tvLastVisited = nullptr;
+    QWidget* wdgLeftBarHolder = nullptr;
+    QLineEdit* leVisitedSearch = nullptr;
+    QSplitter* splTreeTab = nullptr;
+    TreeModel* treeModel = nullptr;
+    QMenu* treeItemMenu = nullptr;
+
+    bool isFilteredTree = false;
+    QStringList expandedNodes;
+    QSharedPointer<TreeItemInterface> templateRootItem;
+    QSharedPointer<ItemController<BrowserNode> > treeController;
+    BrowserNode* treeRootData;
+
+    void SetupTreeModel();
+    void SetupTreeController();
+    void PerformFiltering();
+    QList<std::function<bool (TreeItemInterface *)> > CreateCheckList();
+
+
+    // end of perverted stuff
     MultiLineEdit * comment;
     BrowserNode * commented;	// the commented object
     QToolBar * projectTools;
@@ -241,8 +274,12 @@ private slots:
 
     virtual void keyPressEvent(QKeyEvent * e);
 
+
 public slots:
     void whats_this() const;
+    void OnUpdateVisitedView(Q3ListViewItem*);
+    void OnPerformVisitedFiltering();
+    void OnPickSelectionFromVisited(const QModelIndex&,const QModelIndex& );
 
 
 };

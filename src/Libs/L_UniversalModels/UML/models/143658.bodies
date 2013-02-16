@@ -1,0 +1,97 @@
+class QueryGenerator
+!!!291242.cpp!!!	QueryGenerator()
+
+!!!291370.cpp!!!	QueryGenerator(in origin : QueryGenerator)
+	QLOG_INFO() << "Query generator: Entering the constructor of filtering query generator";
+	foreach(QSharedPointer<AbstractQueryClause> clause, origin.queryClauses)
+	{
+		queryClauses.push_back(QSharedPointer<AbstractQueryClause>(clause->clone()));
+	}
+	foreach(QSharedPointer<AbstractQueryItem> item, origin.queryItems)
+	{
+		queryItems.push_back(QSharedPointer<AbstractQueryItem>(item->clone()));
+	}
+!!!291498.cpp!!!	~QueryGenerator()
+	QLOG_INFO() << "Query generator: Deletion of query generator object";
+!!!291626.cpp!!!	clone() : QueryGenerator
+	QLOG_TRACE() << "Query generator: Cloning query generator";
+	return new QueryGenerator(*this);
+!!!156970.cpp!!!	GenerateQuery() : string
+	QLOG_INFO() << "Query generator: Generating query";
+	QLOG_TRACE() << "Query generator: Amount of items in generator: " << queryItems.size();
+	QString clauseText("");
+	//qDebug()<<QString("Amount of clauses in generator:")<<queryClauses.size();
+	Q_ASSERT(queryClauses.size() != 0);
+	foreach(QSharedPointer<AbstractQueryClause> clause, queryClauses)
+	{
+		Q_ASSERT(clause.data() != 0);
+		//qDebug()<<QString("Clause points to:")<<clause.data();
+		clauseText = clauseText + GenerateClause(clause);
+		QLOG_TRACE() << "text is: " << clauseText;
+	}
+	return clauseText;
+!!!157226.cpp!!!	RemoveQueryItem(in _name : string) : bool
+	QLOG_INFO() << "Query generator: Removing item from query generator";
+	int index = 0;
+	while(!queryItems.empty())
+	{
+		AbstractQueryBitInfo* info = dynamic_cast<AbstractQueryBitInfo*>(queryItems[index].data());
+		if(info->GetItemName() == _name)
+		{
+			queryItems.remove(index);
+			return true;
+		}
+	}
+	qDebug()<<QString("Attempt to delete non existing item");
+	Q_ASSERT(!queryItems.empty());
+	return false;
+!!!166442.cpp!!!	RemoveQueryClause(in _clause : string) : bool
+	QLOG_INFO() << "Query generator: Removing query clause";
+	int index = 0;
+  	while(!queryClauses.empty())
+  	{
+  		AbstractQueryBitInfo* info = dynamic_cast<AbstractQueryBitInfo*>(queryClauses[index].data());
+  		if(info->GetItemName() == _clause)
+  		{
+  			queryClauses.remove(index);
+  			return true;
+  		}
+  	}
+  	Q_ASSERT(!queryClauses.empty());
+  	return false;
+!!!158122.cpp!!!	GenerateClause(in clause : clausesharedpointer) : string
+	QLOG_INFO() << "Query generator: Generating clause: " << clause->GetClauseText();
+
+	QString clauseText;
+	Q_ASSERT(clause.data() != 0);
+	clauseText += clause->GetClauseText();
+	bool hit = false;
+	if(!queryItems.isEmpty())
+	{
+		foreach(QSharedPointer<AbstractQueryItem> item, queryItems)
+		{
+			Q_ASSERT(item.data() != 0);
+			bool enabled = CheckEnabled(clause->GetClauseType(), item.data());
+			if(!enabled || (item->GetParentClause() != clause->GetClauseType()))
+				continue;
+
+			if(item->GetItemText().length() > 0)
+			{
+				if(hit)
+				{
+					clauseText += item->GetLinkType();
+				}
+				clauseText += item->GetItemText();
+
+				hit = true;
+			}
+		}
+		if(!hit)
+			clauseText ="";
+		//qDebug()<<"At this time, the clause is: "<<clauseText;
+	}
+	else
+	{
+		clauseText ="";
+	}
+	return clauseText;

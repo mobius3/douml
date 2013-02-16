@@ -1,0 +1,55 @@
+window_sizes 1680 1005 393 1182 700 82
+diagrams
+  classdiagram_ref 134570 // dia
+    1355 1167 77 4 0 0
+  classdiagram_ref 161706 // Global Diagram
+    1020 679 100 2 0 285
+  classdiagram_ref 182570 // (Unused)Individual Settings
+    1020 679 100 4 0 0
+  classdiagram_ref 228650 // Simple item
+    1020 679 100 3 0 0
+  classdiagram_ref 228906 // NullInterface
+    1020 679 100 4 0 0
+  classdiagram_ref 229034 // Object Settings
+    1020 679 100 3 0 0
+  classdiagram_ref 229290 // Picture Object
+    1020 679 100 3 0 0
+  classdiagram_ref 229418 // Cursor
+    1020 679 100 3 0 0
+  classdiagram_ref 202282 // Area : Hierarchy
+    1020 679 100 3 0 0
+  classdiagram_ref 175402 // Airport
+    1020 679 100 3 216 0
+  classdiagram_ref 175274 // Dia
+    1020 679 100 4 0 0
+  classdiagram_ref 175786 // International Routes
+    1020 679 100 3 216 0
+  classdiagram_ref 175658 // Local Routes
+    1020 679 100 4 0 0
+  classdiagram_ref 189098 // Map
+    1020 679 100 3 0 0
+  classdiagram_ref 175530 // NoEntry Area
+    1020 679 100 3 0 0
+  classdiagram_ref 175914 // Regional Center Area
+    1020 679 100 3 324 0
+  active  classdiagram_ref 176042 // Rote Entry Corridor
+    1277 849 100 3 144 0
+end
+show_stereotypes
+selected class_ref 410794 // AniAbstractPainterInterface
+open
+  
+  package_ref 128170 // Geo
+  class_ref 317226 // AniAreaZonalCenter
+  class_ref 199466 // AniAreaPoint
+  class_ref 324138 // AniAirport
+  class_ref 410922 // AniGraphicsItemTemplate
+  class_ref 410794 // AniAbstractPainterInterface
+  class_ref 417578 // AniAbstractPainterBase
+  class_ref 430762 // AniPaintControllerTemplate
+  
+  package_ref 141226 // AniGraphics
+  class_ref 128034 // AniObjectTEST
+  deploymentview_ref 134562 // tests
+end
+end

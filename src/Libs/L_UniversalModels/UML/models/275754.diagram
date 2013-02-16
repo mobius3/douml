@@ -1,0 +1,54 @@
+format 76
+
+classcanvas 128042 class_ref 404266 // AniScaleTracer
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 694 536 2000
+end
+classcanvas 128170 class_ref 404138 // AniScaleVector
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 676 188 2005
+end
+classcanvas 128426 class_ref 390826 // AniLineSegment
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 1099 33 2000
+end
+classcanvas 128682 class_ref 172714 // AniPoint
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 877 292 2006
+end
+relationcanvas 128298 relation_ref 449578 // <generalisation>
+  from ref 128170 z 2006 to ref 128042
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128810 relation_ref 416042 // <directional composition>
+  decenter_begin 856
+  from ref 128426 z 2007 to ref 128682
+  role_a_pos 977 420 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128938 relation_ref 416170 // <directional composition>
+  from ref 128426 z 2007 to ref 128682
+  role_a_pos 977 369 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129066 relation_ref 416426 // <directional composition>
+  decenter_begin 500
+  from ref 128426 z 2007 to ref 128682
+  role_a_pos 977 359 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129194 relation_ref 456234 // <directional composition>
+  decenter_begin 194
+  decenter_end 699
+  from ref 128682 z 2007 to ref 128170
+  role_a_pos 810 350 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129322 relation_ref 456362 // <directional composition>
+  decenter_end 824
+  from ref 128682 z 2007 to ref 128170
+  role_a_pos 810 385 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+end

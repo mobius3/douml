@@ -55,6 +55,7 @@ class BrowserClass : public BrowserNode, public Labeled<BrowserClass>
     friend class StereotypesDialog;
 
 protected:
+    BrowserClass(int id);
     static IdDict<BrowserClass> all;
 
     static QStringList its_default_stereotypes;
@@ -66,7 +67,7 @@ protected:
     Q3ValueList<BrowserComponent *> associated_components;	// realize or provide it
 
 protected:
-    BrowserClass(int id);
+
     void exec_menu_choice(int index, Q3PtrList<BrowserOperation> & l);
 
 public:

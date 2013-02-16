@@ -43,6 +43,7 @@
 #include <qmenubar.h>
 #ifndef QT_NO_PRINTER
 #include <qprinter.h>
+#include <QLineEdit>
 #endif
 #include <q3whatsthis.h>
 #include <qapplication.h>
@@ -50,6 +51,7 @@
 #include <qfileinfo.h>
 #include <qwindowsstyle.h>
 #include <qmotifstyle.h>
+#include <QVBoxLayout>
 //#include <qmotifplusstyle.h> [lgfreitas] this does not exists anymore
 //Added by qt3to4:
 #include <QCloseEvent>
@@ -105,6 +107,17 @@
 #include "misc/ClipboardManager.h"
 #include <QClipboard>
 #include <QApplication>
+#include <QTreeView>
+
+// some very perverted stuff
+#include "Libs/L_UniversalModels/include/TreeModel.h"
+#include "Libs/L_UniversalModels/include/TreeItemInterface.h"
+#include "Libs/L_UniversalModels/include/treeviewfunctions.h"
+#include "Libs/L_UniversalModels/include/treeviewtemplatefunctions.h"
+#include "Libs/L_UniversalModels/include/TreeItem.h"
+#include "ProfiledStereotypes.h"
+#include "ClassData.h"
+#include <functional>
 
 static QString TemplateProject;
 
@@ -475,8 +488,35 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     spl1 = new QSplitter(Qt::Horizontal, this, "spl1");
     spl2 = new QSplitter(Qt::Vertical, spl1, "spl2");
 
-    browser = new BrowserView(spl1);
 
+    twTreeHolder = new QTabWidget();
+    tvLastVisited = new QTreeView();
+    leVisitedSearch = new QLineEdit();
+
+
+
+    QVBoxLayout* layVisited = new QVBoxLayout();
+    layVisited->addWidget(tvLastVisited);
+    layVisited->addWidget(leVisitedSearch);
+    layVisited->setContentsMargins(0,0,0,0);
+    twTreeHolder->addTab(new QWidget(), "Visited");
+    twTreeHolder->page(0)->setLayout(layVisited);
+
+
+
+    dummyBrowser = new BrowserView();
+    browser = new BrowserView();
+    //connect(browser, SIGNAL(clicked(Q3ListViewItem*)), this, SLOT(OnUpdateVisitedView(Q3ListViewItem*)));
+    connect(browser, SIGNAL(selectionChanged(Q3ListViewItem *)),
+            this, SLOT(OnUpdateVisitedView(Q3ListViewItem *)));
+    connect(leVisitedSearch, SIGNAL(returnPressed()), this, SLOT(OnPerformVisitedFiltering()));
+
+
+
+    SetupTreeModel();
+    splTreeTab = new QSplitter(Qt::Vertical, spl1);
+    splTreeTab->addWidget(browser);
+    splTreeTab->addWidget(twTreeHolder);
     cppAction = new QAction(tr("C++"),0);
     connect(cppAction, SIGNAL(triggered()),browser, SLOT(OnGenerateCpp()));
     javaAction = new QAction( tr("Java"),0);
@@ -498,15 +538,13 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     pythonAction->setVisible(false);
     idlAction->setVisible(false);
 
-
-
     ws = new QWorkspace(spl2);
 
     comment = new MultiLineEdit(spl2);
     set_commented(0);
     connect(comment, SIGNAL(textChanged()), this, SLOT(comment_changed()));
 
-    spl1->moveToFirst(browser);
+    spl1->moveToFirst(splTreeTab);
     spl2->moveToFirst(ws);
 
 
@@ -575,6 +613,106 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     //
 
     statusBar()->message(TR("Ready"), 2000);
+}
+void UmlWindow::SetupTreeModel()
+{
+    treeModel = new TreeModel();
+    SetupTreeController();
+
+    TreeItem<BrowserNode>* pointer = new TreeItem<BrowserNode>(0);
+    templateRootItem = QSharedPointer<TreeItemInterface >(pointer);
+    QList<QSharedPointer<TreeItemInterface > >  items;
+    pointer->SetController(treeController);
+    pointer->addChildren(items);
+    //result = new BrowserClass(s, parent, new ClassData, id);
+    treeRootData = new BrowserPackage(QString("hmm"), dummyBrowser);
+
+    pointer->SetInternalData(treeRootData);
+    treeController->SetColumns(QStringList() << "class");
+    treeModel->InsertRootItem(templateRootItem);
+    //templateRootItem->AddChildren();
+
+    tvLastVisited->setModel(treeModel);
+    tvLastVisited->setContextMenuPolicy(Qt::CustomContextMenu);
+    tvLastVisited->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    tvLastVisited->setColumnWidth(0, 230);
+    tvLastVisited->setExpandsOnDoubleClick(false);
+    tvLastVisited->setRootIsDecorated(true);
+    connect(tvLastVisited, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(OnTreeRequestsContextMenu(QPoint)));
+    connect(tvLastVisited, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(OnTreeItemDoubleClicked(QModelIndex)));
+    connect(treeModel, SIGNAL(dataEditFinished(QModelIndex)), this, SLOT(OnDataEditFinished(QModelIndex)));
+
+    connect(tvLastVisited->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+            this, SLOT(OnPickSelectionFromVisited(QModelIndex,QModelIndex)));
+}
+
+
+void UmlWindow::SetupTreeController()
+{
+    treeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
+    treeController->AddGetter(QPair<int,int>(0,0),
+
+                              [] (const BrowserNode* data)
+    {
+        if(data)
+            return QVariant(data->get_name());
+        else
+            return QVariant();
+    }
+    );
+
+    treeController->AddGetter(QPair<int,int>(0,1),
+
+                              [] (const BrowserNode* data)
+    {
+        const QPixmap * pm = data->pixmap(true);
+        if(!pm)
+            return QIcon();
+        return QIcon(*pm);
+    }
+    );
+
+    treeController->AddFlagsFunctor(
+                [](const QModelIndex& )
+    {
+        Qt::ItemFlags result;
+        result |= Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+        return result;
+    }
+    );
+
+
+
+}
+
+void UmlWindow::PerformFiltering()
+{
+    std::function<QVariant(BrowserNode*)> dataAccessFunc =
+            [](BrowserNode* data){return QVariant(data->get_name());};
+
+    std::function<QList<std::function<bool (TreeItemInterface *)> > ()> checksFunc =
+            std::bind(&UmlWindow::CreateCheckList, this);
+
+    TreeFunctions::FilterTreeAndRestoreNodes<TreeItemInterface, TreeItem, BrowserNode>
+            (dataAccessFunc, checksFunc,
+                     expandedNodes, tvLastVisited, treeModel, templateRootItem );
+}
+
+QList<std::function<bool (TreeItemInterface *)> > UmlWindow::CreateCheckList()
+{
+    QList<std::function<bool (TreeItemInterface *)> > result;
+    if(!leVisitedSearch->text().trimmed().isEmpty())
+    {
+        QString value = leVisitedSearch->text();
+        std::function<bool(TreeItemInterface*)> addressFilterFunc =  [value](TreeItemInterface* iface)
+        {
+            BrowserNode* data = static_cast<BrowserNode*>(iface->InternalPointer());
+            bool match = data->get_name().contains(value);
+            return match;
+        };
+        result.append(addressFilterFunc);
+    }
+    return result;
 }
 
 UmlWindow::~UmlWindow()
@@ -2367,6 +2505,57 @@ void UmlWindow::keyPressEvent(QKeyEvent * e)
     }
     else
         QMainWindow::keyPressEvent(e);
+}
+
+void UmlWindow::OnUpdateVisitedView(Q3ListViewItem * item)
+{
+    BrowserNode* itemAsNode = static_cast<BrowserNode*>(item);
+    itemAsNode = itemAsNode->get_first_generatable_node();
+
+    QList<std::function<bool (TreeItemInterface *)> > checkList;
+    QString value = itemAsNode->get_name();
+    std::function<bool(TreeItemInterface*)> nameFilterFunc =  [value](TreeItemInterface* iface)
+    {
+        BrowserNode* data = static_cast<BrowserNode*>(iface->InternalPointer());
+        bool match = data->get_name() == value;
+        return match;
+    };
+
+
+    QList<std::function<void (TreeItemInterface *)> > modifyList;
+    TreeFunctions::ModifierFunction<TreeItemInterface> modifyFunc = [] (TreeItemInterface* interface)
+    {
+        TreeItemInterface* parent = interface->parent();
+        if(parent)
+            parent->removeChildren(parent->GetIndexOfChild(interface),1);
+    };
+
+    TreeFunctions::RecursiveModify(templateRootItem.data(), checkList << nameFilterFunc, modifyList << modifyFunc, true, false);
+
+
+    TreeItem<BrowserNode>* pointer = new TreeItem<BrowserNode>(0);
+    QSharedPointer<TreeItemInterface > interfaceItem(pointer);
+
+    pointer->SetController(treeController);
+
+    pointer->SetInternalData(itemAsNode);
+    pointer->SetParent(templateRootItem);
+    QList<QSharedPointer<TreeItemInterface > >  items;
+    items << interfaceItem;
+    templateRootItem->AddChildren(items);
+    treeModel->InsertRootItem(templateRootItem);
+}
+
+void UmlWindow::OnPerformVisitedFiltering()
+{
+    PerformFiltering();
+}
+
+void UmlWindow::OnPickSelectionFromVisited(const QModelIndex & current, const QModelIndex &)
+{
+    TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
+    BrowserNode* itemAsNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
+    itemAsNode->select_in_browser();
 }
 
 void UmlWindow::whats_this() const

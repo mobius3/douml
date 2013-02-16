@@ -190,6 +190,7 @@ public:
     virtual void menu() = 0;
     virtual void apply_shortcut(QString s) = 0;
     /* Open a Diagram Window */
+    virtual const QPixmap * pixmap(int) const{return 0;}
     virtual void open(bool force_edit);
     virtual void on_close();
     virtual UmlCode get_type() const = 0;

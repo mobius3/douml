@@ -1,7 +1,7 @@
 TEMPLATE  =  app
 INCLUDEPATH    += browser data diagram dialog misc tool xpm
 DEPENDPATH += browser data diagram dialog misc tool xpm
-INCLUDEPATH += boost src ui .. $$PWD
+INCLUDEPATH += boost src ui .. $$PWD Libs/L_UniversalModels
 #CONFIG        += qt warn_on debug
 CONFIG(debug, debug|release) {
     CONFIG -= debug release
@@ -564,7 +564,7 @@ UI_DIR = ui
 DESTDIR = ../bin
 
 QMAKE_CXXFLAGS += -std=gnu++11
-
+LIBS += -L../bin -lUniversalModelsd
 RESOURCES += icons.qrc
 
 FORMS += \

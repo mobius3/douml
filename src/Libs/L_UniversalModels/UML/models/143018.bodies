@@ -1,0 +1,13 @@
+class QueryBitInfo
+!!!290858.cpp!!!	clone() : AbstractQueryBitInfo
+	return new QueryBitInfo(*this);
+!!!155818.cpp!!!	Enable() : void
+	enabled = true;
+!!!155946.cpp!!!	Disable() : void
+	enabled = false;
+!!!156074.cpp!!!	IsEnabled() : bool
+	return enabled;
+!!!156202.cpp!!!	GetItemName() : string
+	return name;
+!!!156330.cpp!!!	SetItemName(in _name : string) : void
+	name = _name;
