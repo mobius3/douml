@@ -36,9 +36,6 @@ HEADERS += include/TreeModel.h \
 
 SOURCES += src/TreeModel.cpp \
     src/TreeItemInterface.cpp \
-    src/InterfaceAwareTreeData.cpp \
-    src/AddressTemplateData.cpp \
-    src/AddressTemplateTreeData.cpp \
     src/AdaptingTableModel.cpp \
     src/TableDataInterface.cpp \
     src/AdaptingTableModelPrivate.cpp \
