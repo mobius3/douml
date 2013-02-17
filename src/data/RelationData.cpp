@@ -500,6 +500,8 @@ bool RelationData::decldefbody_contain(const QString & s, bool cs,
 
 bool RelationData::wrong_role_a_name(const QString & s)
 {
+
+    QString aRole = a.role;
     return (!s.isEmpty() &&
             (s != a.role) &&
             ((BrowserNode *) start->parent())->wrong_child_name(s, type, FALSE, FALSE));

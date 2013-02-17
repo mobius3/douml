@@ -151,6 +151,8 @@ protected:
     UmlCode current_type;
     QStringList list;
     BrowserNodeList nodes;
+    QString aOldText;
+    QString bOldText;
     Q3ComboBox * edassociation;
     QWidgetList groupb;
     Q3GroupBox * cpp_b;

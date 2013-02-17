@@ -252,6 +252,8 @@ RelationDialog::RelationDialog(RelationData * r)
     // role A
     bg = new Q3GroupBox(2, Qt::Horizontal, ina, split);
     init_uml_role(a, rel->a, bg, rel->get_start_class());
+    aOldText = rel->a.role.operator QString();
+    bOldText = rel->b.role.operator QString();
 
     // role B
     bg = new Q3GroupBox(2, Qt::Horizontal, inb, split);
@@ -2649,10 +2651,11 @@ void RelationDialog::accept()
 
     QString ra = a.edrole->text().stripWhiteSpace();
     QString rb = b.edrole->text().stripWhiteSpace();
-
-    if (rel->wrong_role_a_name(ra))
+    bool aTextSame = ra == aOldText;
+    bool bTextSame = rb == bOldText;
+    if (!aTextSame && rel->wrong_role_a_name(ra))
         msg_critical(TR("Error"), ra + TR("\n\nillegal name or already used"));
-    else if (rel->wrong_role_b_name(rb))
+    else if (!bTextSame && rel->wrong_role_b_name(rb))
         msg_critical(TR("Error"), rb + TR("\n\nillegal name or already used"));
     else {
         rel->name = edname->text().stripWhiteSpace();

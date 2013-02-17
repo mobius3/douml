@@ -1,12 +1,13 @@
-window_sizes 1680 988 394 1281 806 104
+window_sizes 1680 988 628 1047 806 104
 diagrams
   active  classdiagram_ref 200490 // Adapting Table Model
-    1024 644 100 3 0 0
+    830 644 100 3 0 0
 end
 show_stereotypes
-selected classrelation_ref 800810 // rootItem (<directional aggregation>)
+selected classrelation_ref 821290 // rootItem (<directional aggregation>)
 open
   class_ref 741802 // TreeModel
+  class_ref 748458 // TableDataListHolder
   artifact_ref 639914 // TableDataInterface
 end
 end

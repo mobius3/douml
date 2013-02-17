@@ -82,7 +82,7 @@ bool operator !=(const WrapperStr &s1, const WrapperStr &s2)
 
 bool operator!=(const QString & s1, const WrapperStr & s2)
 {
-    return s1 == s2.wrappedString ;
+    return s1 != s2.wrappedString ;
 }
 
 
