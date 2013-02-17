@@ -65,8 +65,6 @@ using namespace std;"
 
 "QScopedPointer" "#include <QScopedPointer>"
 
-"Point2" "#include <Point2.h>"
-
 "QPoint" "#include <QPoint>"
 
 "QMap" "#include <QMap>"
@@ -86,8 +84,6 @@ using namespace std;"
 "QGLWidget" "#include <QGLWidget>"
 
 "QGraphicsItem" "#include <QGraphicsItem>"
-
-"RenderThread" "#include \"../Threading/renderthread.h\""
 
 "QPixmap" "#include <QPixmap>"
 
@@ -119,8 +115,6 @@ using namespace std;"
 
 "QHash" "#include <QHash>"
 
-"Point2" "#include \"MapWrapper/Point2.h\""
-
 "QDateTime" "#include <QDateTime>"
 
 "QEvent" "#include <QEvent>"
@@ -130,6 +124,4 @@ using namespace std;"
 "std::ptr_vector<T>" "#include <boost/ptr_container/ptr_vector.hpp>"
 
 "QMultiMap" "#include <QMultiMap>"
-
-"QSharedPointer<MessageBase>" "#include \"MessageBase.h\""
 

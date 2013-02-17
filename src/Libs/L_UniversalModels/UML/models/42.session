@@ -8,5 +8,6 @@ selected class_ref 714794 // TreeItem
 open
   class_ref 714794 // TreeItem
   class_ref 714922 // TreeItemInterface
+  deploymentview_ref 227626 // classes
 end
 end
