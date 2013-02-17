@@ -76,6 +76,33 @@ QSharedPointer<InterfaceType> RecursiveGetSubset(InterfaceType* rootItem, RootCh
     return newItem;
 }
 
+
+template<typename InterfaceType>
+bool RecursiveSearch(InterfaceType* rootItem, RootChecks<InterfaceType> filterFunctions)
+{
+    bool result = true;
+    for(std::function<bool(InterfaceType*)> filter: filterFunctions)
+    {
+       if(!filter(rootItem))
+       {
+           result = false;
+           break;
+       }
+    }
+    if(result)
+        return true;
+    if(!rootItem->GetChildren().isEmpty())
+    {
+        for(QSharedPointer<InterfaceType> child: rootItem->GetChildren())
+        {
+            bool result = RecursiveSearch<InterfaceType>(child.data(), filterFunctions);
+            if(result)
+                return true;
+        }
+    }
+    return false;
+}
+
 template<typename InterfaceType>
 void ModifyNode(InterfaceType* node, ModifierFunctions<InterfaceType> modifierFunctions)
 {

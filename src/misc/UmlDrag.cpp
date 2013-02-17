@@ -40,13 +40,14 @@
 const QString UmlDrag::Key = "Bouml/";
 QString UmlDrag::postfix;
 bool UmlDrag::ro;
+BrowserNode* UmlDrag::node = nullptr;
 
 UmlDrag::UmlDrag(BrowserNode * bn, QWidget * parent, const char * name)
     : Q3StoredDrag(UmlDrag::Key + bn->drag_key(), parent, name)
 {
     // stay in the same application : can use address directly
     QByteArray a(sizeof(bn));
-
+    node = bn;
     memcpy(a.data(), &bn, sizeof(bn));
     setEncodedData(a);
 
@@ -103,5 +104,10 @@ BrowserNode * UmlDrag::decode(QDropEvent * e, const QString & type)
     }
 
     return 0;
+}
+
+BrowserNode *UmlDrag::get_node()
+{
+    return node;
 }
 

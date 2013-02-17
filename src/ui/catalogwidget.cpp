@@ -10,38 +10,59 @@
 #include "Libs/L_UniversalModels/include/genericeventfilter.h"
 #include "diagram/BrowserView.h"
 #include "browser/BrowserPackage.h"
-#include "ProfiledStereotypes.h"
+#include "diagram/UmlWindow.h"
+#include "misc/UmlDrag.h"
 #include "ClassData.h"
 #include <functional>
 #include <QTreeView>
+#include <QDragMoveEvent>
 
 CatalogWidget::CatalogWidget( QWidget *parent) :
     QWidget(parent),
     ui(new Ui::CatalogWidget)
 {
     ui->setupUi(this);
+    if(!dummyView)
+        dummyView = new BrowserView();
 }
 
 CatalogWidget::~CatalogWidget()
 {
+    delete dummyView;
     delete ui;
 }
 
-bool ProcessDragDrop(QObject* /*obj*/, QEvent *event, QTreeView* view)
+bool ProcessDragDrop(QObject* /*obj*/, QEvent *event, std::function<void(BrowserNode*)> favsFunc)
 {
-    if(event->type() == QEvent::DragMove)
+    if(event->type() == QEvent::DragEnter)
     {
-        QModelIndex index =view->selectionModel()->currentIndex();
-        if(!index.isValid())
+        QList<UmlCode> codes;
+        codes << UmlClass << UmlAttribute << UmlOperation << UmlDeploymentNode;
+        BrowserNode * node = UmlDrag::get_node();
+        UmlCode code = node->get_type();
+        if(codes.contains(code))
             return true;
+        return false;
+    }
+    else if(event->type() == QEvent::Drop)
+    {
+        QList<UmlCode> codes;
+        codes << UmlClass << UmlAttribute << UmlOperation << UmlDeploymentNode;
+        BrowserNode * node = UmlDrag::get_node();
+        UmlCode code = node->get_type();
+        if(!codes.contains(code))
+            return false;
+
+        favsFunc(UmlDrag::get_node());
         return true;
     }
     return false;
 }
 
-void CatalogWidget::Init(BrowserView* view)
+void CatalogWidget::Init(UmlWindow* window, BrowserView* view)
 {
     originalView = view;
+    mainWindow = window;
 
     connect(view, SIGNAL(selectionChanged(Q3ListViewItem *)),
             this, SLOT(OnUpdateVisitedView(Q3ListViewItem *)));
@@ -51,23 +72,61 @@ void CatalogWidget::Init(BrowserView* view)
     connect(view, SIGNAL(marked_list(QList<BrowserNode*>)), this, SLOT(OnUpdateMarkedView(QList<BrowserNode*>)));
 
     SetupTreeModel(tmodVisited, ui->tvVisitedNodes,rootVisitedInterface,controllerVisited,rootVisited,
-                   originalView, SLOT(OnPickSelectionFromVisited( QModelIndex, QModelIndex )));
+                   this, SLOT(OnSelectedInVisited(const QModelIndex &, const QModelIndex &)));
     SetupTreeModel(tmodMarked, ui->tvMarkedNodes,rootMarkedInterface,controllerMarked,rootMarked,
-                   originalView, SLOT(OnPickSelectionFromVisited(QModelIndex,QModelIndex )));
+                   mainWindow, SLOT(OnPickSelectionFromItem(QModelIndex,QModelIndex )));
     SetupTreeModel(tmodFavourites, ui->tvFavourites,rootFavouritesInterface,controllerFavourites,rootFavourites,
-                   originalView, SLOT(OnPickSelectionFromVisited( QModelIndex, QModelIndex )));
+                   mainWindow, SLOT(OnPickSelectionFromItem( QModelIndex, QModelIndex )));
 
 
     dragDropFilter = new GenericEventFilter(this);
-    dragDropFilter->SetEventProcessor(std::bind(ProcessDragDrop,std::placeholders::_1, std::placeholders::_2, ui->tvFavourites));
+    std::function<void(BrowserNode*)>favsFunc = std::bind(&CatalogWidget::AddToFavourites, this, std::placeholders::_1);
+    dragDropFilter->SetEventProcessor(std::bind(ProcessDragDrop,std::placeholders::_1, std::placeholders::_2, favsFunc));
     ui->tvFavourites->installEventFilter(dragDropFilter);
+    ui->tvFavourites->setAcceptDrops(true);
+    ui->tvFavourites->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tvFavourites, SIGNAL(customContextMenuRequested(QPoint)),this, SLOT(OnFavouritesContextMenu(QPoint)));
+}
+
+void CatalogWidget::CleanupBeforeNewProject()
+{
+    rootVisitedInterface->removeChildren(0,rootVisitedInterface->childCount());
+    tmodVisited->InsertRootItem(rootVisitedInterface);
+    if(rootMarkedInterface)
+    {
+        rootMarkedInterface->removeChildren(0,rootMarkedInterface->childCount());
+        tmodMarked->InsertRootItem(rootMarkedInterface);
+    }
+    if(rootFavouritesInterface)
+    {
+        rootFavouritesInterface->removeChildren(0,rootFavouritesInterface->childCount());
+        tmodFavourites->InsertRootItem(rootFavouritesInterface);
+    }
+
+
+
+}
+
+void CatalogWidget::StageSkipVisited()
+{
+    skipVisited = true;
+}
+
+bool CatalogWidget::UseSkipVisited()
+{
+    if(skipVisited)
+    {
+        skipVisited = false;
+        return true;
+    }
+    return false;
 }
 
 
-void CatalogWidget::SetupTreeModel(TreeModel* model , QTreeView* view,
+void CatalogWidget::SetupTreeModel(TreeModel*& model , QTreeView* view,
                                QSharedPointer<TreeItemInterface> &interface,
                                QSharedPointer<ItemController<BrowserNode> > &controller,
-                               QSharedPointer<BrowserNode> &data, BrowserView* originalView ,const char* slotName)
+                               QSharedPointer<BrowserNode> &data, QWidget* originalView ,const char* slotName)
 {
     model = new TreeModel();
     SetupTreeController(controller);
@@ -77,13 +136,12 @@ void CatalogWidget::SetupTreeModel(TreeModel* model , QTreeView* view,
     QList<QSharedPointer<TreeItemInterface > >  items;
     pointer->SetController(controller);
     pointer->addChildren(items);
-    //result = new BrowserClass(s, parent, new ClassData, id);
+
     data = QSharedPointer<BrowserNode>(new BrowserPackage(QString("hmm"), dummyView));
 
     pointer->SetInternalData(data.data());
     controller->SetColumns(QStringList() << "class");
     model->InsertRootItem(interface);
-    //templateRootItem->AddChildren();
 
     view->setModel(model);
     view->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -91,11 +149,8 @@ void CatalogWidget::SetupTreeModel(TreeModel* model , QTreeView* view,
     view->setColumnWidth(0, 230);
     view->setExpandsOnDoubleClick(false);
     view->setRootIsDecorated(true);
-    connect(view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(OnTreeRequestsContextMenu(QPoint)));
-    connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(OnTreeItemDoubleClicked(QModelIndex)));
-    connect(model, SIGNAL(dataEditFinished(QModelIndex)), this, SLOT(OnDataEditFinished(QModelIndex)));
-
-    connect(view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+    if(originalView)
+        connect(view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             originalView, slotName);
 }
 
@@ -153,9 +208,114 @@ QList<std::function<bool (TreeItemInterface *)> > CatalogWidget::CreateCheckList
     return result;
 }
 
+bool CatalogWidget::RemoveExisting(BrowserNode * node, QSharedPointer<TreeItemInterface> rootInterface)
+{
+    QList<std::function<bool (TreeItemInterface *)> > checkList;
+    QString value = node->get_name();
+    std::function<bool(TreeItemInterface*)> nameFilterFunc =  [value](TreeItemInterface* iface)
+    {
+        BrowserNode* data = static_cast<BrowserNode*>(iface->InternalPointer());
+        bool match = data->get_name() == value;
+        return match;
+    };
+
+
+    QList<std::function<void (TreeItemInterface *)> > modifyList;
+    TreeFunctions::ModifierFunction<TreeItemInterface> modifyFunc = [] (TreeItemInterface* interface)
+    {
+        TreeItemInterface* parent = interface->parent();
+        if(parent)
+            parent->removeChildren(parent->GetIndexOfChild(interface),1);
+    };
+
+    return TreeFunctions::RecursiveModify(rootInterface.data(), checkList << nameFilterFunc, modifyList << modifyFunc, true, false);
+}
+
+bool CatalogWidget::AddToFavourites(BrowserNode * node)
+{
+    QList<std::function<bool (TreeItemInterface *)> > checkList;
+    QString value = node->get_name();
+    UmlCode code = node->get_type();
+    std::function<bool(TreeItemInterface*)> nameFilterFunc =  [value](TreeItemInterface* iface)
+    {
+        BrowserNode* data = static_cast<BrowserNode*>(iface->InternalPointer());
+        bool match = data->get_name() == value;
+        return match;
+    };
+    std::function<bool(TreeItemInterface*)> typeFilterFunc =  [code](TreeItemInterface* iface)
+    {
+        BrowserNode* data = static_cast<BrowserNode*>(iface->InternalPointer());
+        bool match = data->get_type() == code;
+        return match;
+    };
+    bool result = TreeFunctions::RecursiveSearch<TreeItemInterface>(rootFavouritesInterface.data(), checkList << nameFilterFunc << typeFilterFunc);
+    if(result)
+        return true;
+
+    TreeItem<BrowserNode>* pointer = new TreeItem<BrowserNode>(0);
+    QSharedPointer<TreeItemInterface > interfaceItem(pointer);
+
+    pointer->SetController(controllerFavourites);
+
+    pointer->SetInternalData(node);
+    pointer->SetParent(rootFavouritesInterface);
+    QList<QSharedPointer<TreeItemInterface > >  items;
+    items << interfaceItem;
+    rootFavouritesInterface->AddChildren(items);
+    tmodFavourites->InsertRootItem(rootFavouritesInterface);
+    return true;
+}
+
+void CatalogWidget::CreateFavouritesMenu()
+{
+    if(favouritesMenu.isNull())
+    {
+        favouritesMenu.reset(new QMenu());
+        favouritesMenu->addAction("Remove from favourites", this, SLOT(OnRemoveCurrentItemFromFavourites()));
+    }
+}
+
+void CatalogWidget::PullNodeUpwardsInVisited(BrowserNode * itemAsNode)
+{
+    RemoveExisting(itemAsNode, rootVisitedInterface);
+
+    TreeItem<BrowserNode>* pointer = new TreeItem<BrowserNode>(0);
+    QSharedPointer<TreeItemInterface > interfaceItem(pointer);
+
+    pointer->SetController(controllerVisited);
+
+    pointer->SetInternalData(itemAsNode);
+    pointer->SetParent(rootVisitedInterface);
+    QList<QSharedPointer<TreeItemInterface > >  items;
+    items << interfaceItem;
+    rootVisitedInterface->AddChildren(items);
+    tmodVisited->InsertRootItem(rootVisitedInterface);
+}
+
 
 void CatalogWidget::OnUpdateFavoutitesView()
 {
+}
+
+void CatalogWidget::OnSelectedInVisited(const QModelIndex& current, const QModelIndex&)
+{
+    StageSkipVisited();
+    TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
+    BrowserNode* itemAsNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
+    itemAsNode->select_in_browser();
+}
+
+void CatalogWidget::OnRemoveCurrentItemFromFavourites()
+{
+    QModelIndex current = ui->tvFavourites->currentIndex();
+    rootFavouritesInterface->removeChildren(current.row(),1);
+    tmodFavourites->InsertRootItem(rootFavouritesInterface);
+}
+
+void CatalogWidget::OnFavouritesContextMenu(QPoint point)
+{
+    CreateFavouritesMenu();
+    favouritesMenu->popup(ui->tvFavourites->mapToGlobal(point));
 }
 
 void CatalogWidget::OnPerformVisitedFiltering()
@@ -191,44 +351,33 @@ void CatalogWidget::PerformFiltering(QStringList expandedNodes, QTreeView* view,
 
 void CatalogWidget::OnUpdateVisitedView(Q3ListViewItem * item)
 {
+    if(UseSkipVisited())
+        return;
+
     BrowserNode* itemAsNode = static_cast<BrowserNode*>(item);
     itemAsNode = itemAsNode->get_first_generatable_node();
 
-    QList<std::function<bool (TreeItemInterface *)> > checkList;
-    QString value = itemAsNode->get_name();
-    std::function<bool(TreeItemInterface*)> nameFilterFunc =  [value](TreeItemInterface* iface)
-    {
-        BrowserNode* data = static_cast<BrowserNode*>(iface->InternalPointer());
-        bool match = data->get_name() == value;
-        return match;
-    };
-
-
-    QList<std::function<void (TreeItemInterface *)> > modifyList;
-    TreeFunctions::ModifierFunction<TreeItemInterface> modifyFunc = [] (TreeItemInterface* interface)
-    {
-        TreeItemInterface* parent = interface->parent();
-        if(parent)
-            parent->removeChildren(parent->GetIndexOfChild(interface),1);
-    };
-
-    TreeFunctions::RecursiveModify(rootVisitedInterface.data(), checkList << nameFilterFunc, modifyList << modifyFunc, true, false);
-
-
-    TreeItem<BrowserNode>* pointer = new TreeItem<BrowserNode>(0);
-    QSharedPointer<TreeItemInterface > interfaceItem(pointer);
-
-    pointer->SetController(controllerVisited);
-
-    pointer->SetInternalData(itemAsNode);
-    pointer->SetParent(rootVisitedInterface);
-    QList<QSharedPointer<TreeItemInterface > >  items;
-    items << interfaceItem;
-    rootVisitedInterface->AddChildren(items);
-    tmodVisited->InsertRootItem(rootVisitedInterface);
+    PullNodeUpwardsInVisited(itemAsNode);
 }
 
-void CatalogWidget::OnUpdateMarkedView(QList<BrowserNode *>)
+void CatalogWidget::OnUpdateMarkedView(QList<BrowserNode *> markedItems)
 {
+    if(rootMarkedInterface.isNull())
+        return;
+    QList<QSharedPointer<TreeItemInterface > >  items;
+    rootMarkedInterface->removeChildren(0, rootMarkedInterface->childCount());
+    for(BrowserNode * marked : markedItems)
+    {
+        TreeItem<BrowserNode>* pointer = new TreeItem<BrowserNode>(0);
+        QSharedPointer<TreeItemInterface > interfaceItem(pointer);
 
+        pointer->SetController(controllerMarked);
+
+        pointer->SetInternalData(marked);
+        pointer->SetParent(rootMarkedInterface);
+
+        items << interfaceItem;
+    }
+    rootMarkedInterface->AddChildren(items);
+    tmodMarked->InsertRootItem(rootMarkedInterface);
 }

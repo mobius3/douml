@@ -479,8 +479,10 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     spl1 = new QSplitter(Qt::Horizontal, this, "spl1");
     spl2 = new QSplitter(Qt::Vertical, spl1, "spl2");
 
-    browser = new BrowserView();
     wdgCatalog = new CatalogWidget;
+    browser = new BrowserView();
+
+    wdgCatalog->Init(this, browser);
 
     splTreeTab = new QSplitter(Qt::Vertical, spl1);
     splTreeTab->addWidget(browser);
@@ -1313,7 +1315,8 @@ void UmlWindow::closeEvent(QCloseEvent *)
 
 void UmlWindow::close_it()
 {
-    if (user_id() != 0) {
+    if (user_id() != 0)
+    {
         clear_select_historic();
 
         ToolCom::close_all();
@@ -1329,6 +1332,7 @@ void UmlWindow::close_it()
 
         // empty the browser
         set_commented(0);
+        the->wdgCatalog->CleanupBeforeNewProject();
         the->browser->clear();
 
         // remove tools
@@ -2374,7 +2378,7 @@ void UmlWindow::keyPressEvent(QKeyEvent * e)
         QMainWindow::keyPressEvent(e);
 }
 
-void UmlWindow::OnPickSelectionFromVisited(const QModelIndex & current, const QModelIndex &)
+void UmlWindow::OnPickSelectionFromItem(const QModelIndex & current, const QModelIndex &)
 {
     TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
     BrowserNode* itemAsNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());

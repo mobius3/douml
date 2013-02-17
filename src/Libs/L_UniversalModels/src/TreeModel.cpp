@@ -217,7 +217,7 @@ TreeItemInterface * TreeModel::RootItem()
 void TreeModel::InsertRootItem(QSharedPointer<TreeItemInterface> item)
 {
     reset();
-    if(!rootItem.isNull())
+    if(!rootItem.isNull() && rootItem->childCount() != 0)
     {
         int prevRows = rootItem->childCount();
         int prevColumns = rootItem->columnCount();

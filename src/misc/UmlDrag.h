@@ -35,8 +35,9 @@
 #include <QDropEvent>
 
 #include "UmlEnum.h"
+#include "browser/BrowserNode.h"
 
-class BrowserNode;
+//class BrowserNode;
 
 class UmlDrag : public Q3StoredDrag
 {
@@ -46,6 +47,7 @@ private:
 
 public:
     static const QString Key;
+    static BrowserNode* node;
 
     UmlDrag(BrowserNode * bn, QWidget * parent = 0, const char * name = 0);
     virtual ~UmlDrag() {};
@@ -56,6 +58,7 @@ public:
     static bool canDecode(QDragMoveEvent * e, const QString & type);
     static BrowserNode * decode(QDropEvent * e, UmlCode type, bool withpostfix = FALSE);
     static BrowserNode * decode(QDropEvent * e, const QString & type);
+    static BrowserNode* get_node();
 };
 
 #endif

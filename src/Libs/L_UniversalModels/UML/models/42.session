@@ -4,10 +4,8 @@ diagrams
     1024 644 100 3 0 0
 end
 show_stereotypes
-selected class_ref 714794 // TreeItem
+selected artifact_ref 639914 // TableDataInterface
 open
-  class_ref 714794 // TreeItem
-  class_ref 714922 // TreeItemInterface
-  deploymentview_ref 227626 // classes
+  artifact_ref 639914 // TableDataInterface
 end
 end
