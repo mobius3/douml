@@ -1430,9 +1430,14 @@ bool BrowserNode::wrong_child_name(const QString & s, UmlCode type,
     // check unicity
 
     for (Q3ListViewItem * child = firstChild(); child; child = child->nextSibling())
+    {
+        if(((BrowserNode *) child) != this)
+            return false;
+
         if (!((BrowserNode *) child)->deletedp() &&
             ((BrowserNode *) child)->same_name(s, type))
             return TRUE;
+    }
 
     return FALSE;
 }

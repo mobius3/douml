@@ -4,8 +4,9 @@ diagrams
     1024 644 100 3 0 0
 end
 show_stereotypes
-selected artifact_ref 639914 // TableDataInterface
+selected classrelation_ref 800810 // rootItem (<directional aggregation>)
 open
+  class_ref 741802 // TreeModel
   artifact_ref 639914 // TableDataInterface
 end
 end

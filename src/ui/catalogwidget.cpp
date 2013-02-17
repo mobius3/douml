@@ -1,3 +1,26 @@
+// *************************************************************************
+//
+// Copyright 2012-2013 Nikolai Marchenko.
+//
+// This file is part of the Douml Uml Toolkit.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License Version 3.0 as published by
+// the Free Software Foundation and appearing in the file LICENSE.GPL included in the
+//  packaging of this file.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License Version 3.0 for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// e-mail : doumleditor@gmail.com
+//
+// *************************************************************************
 #include "catalogwidget.h"
 #include "ui_catalogwidget.h"
 
@@ -66,7 +89,7 @@ void CatalogWidget::Init(UmlWindow* window, BrowserView* view)
 
     connect(view, SIGNAL(selectionChanged(Q3ListViewItem *)),
             this, SLOT(OnUpdateVisitedView(Q3ListViewItem *)));
-    connect(ui->leVisitedSearch, SIGNAL(returnPressed()), this, SLOT(OnPerformVisitedFiltering()));
+    connect(ui->leVisitedSearch, SIGNAL(textChanged(QString)), this, SLOT(OnPerformVisitedFiltering(QString)));
 
     qRegisterMetaType<QList<BrowserNode*>>("QList<BrowserNode*>");
     connect(view, SIGNAL(marked_list(QList<BrowserNode*>)), this, SLOT(OnUpdateMarkedView(QList<BrowserNode*>)));
@@ -102,9 +125,6 @@ void CatalogWidget::CleanupBeforeNewProject()
         rootFavouritesInterface->removeChildren(0,rootFavouritesInterface->childCount());
         tmodFavourites->InsertRootItem(rootFavouritesInterface);
     }
-
-
-
 }
 
 void CatalogWidget::StageSkipVisited()
@@ -318,7 +338,7 @@ void CatalogWidget::OnFavouritesContextMenu(QPoint point)
     favouritesMenu->popup(ui->tvFavourites->mapToGlobal(point));
 }
 
-void CatalogWidget::OnPerformVisitedFiltering()
+void CatalogWidget::OnPerformVisitedFiltering(QString)
 {
     PerformFiltering(expandedNodesVisited, ui->tvVisitedNodes, tmodVisited, rootVisitedInterface);
 }
