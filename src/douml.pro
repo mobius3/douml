@@ -233,7 +233,8 @@ HEADERS        = \
     tagmanagement/cpptagmanagement.h \
     dialog/edgemenudialogqt4.h \
     dialog/edgemenudialogbase.h \
-    ui/catalogwidget.h
+    ui/catalogwidget.h \
+    browser/BrowserNodeDummy.h
 
 
 SOURCES = \
@@ -513,7 +514,8 @@ SOURCES = \
     dialog/edgemenudialogqt4.cpp \
     dialog/edgemenudialogbase.cpp \
     misc/codec.cpp \
-    ui/catalogwidget.cpp
+    ui/catalogwidget.cpp \
+    browser/BrowserNodeDummy.cpp
 
 TARGET = douml
 DEFINES = BooL=bool DEBUGCOM

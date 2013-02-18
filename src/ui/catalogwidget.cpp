@@ -32,7 +32,8 @@
 #include "Libs/L_UniversalModels/include/TreeItem.h"
 #include "Libs/L_UniversalModels/include/genericeventfilter.h"
 #include "diagram/BrowserView.h"
-#include "browser/BrowserPackage.h"
+//#include "browser/BrowserClassView.h"
+#include "browser/BrowserNodeDummy.h"
 #include "diagram/UmlWindow.h"
 #include "misc/UmlDrag.h"
 #include "ClassData.h"
@@ -157,7 +158,7 @@ void CatalogWidget::SetupTreeModel(TreeModel*& model , QTreeView* view,
     pointer->SetController(controller);
     pointer->addChildren(items);
 
-    data = QSharedPointer<BrowserNode>(new BrowserPackage(QString("hmm"), dummyView));
+    data = QSharedPointer<BrowserNode>(new BrowserNodeDummy(dummyView));
 
     pointer->SetInternalData(data.data());
     controller->SetColumns(QStringList() << "class");

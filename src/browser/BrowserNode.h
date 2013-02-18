@@ -77,14 +77,14 @@ protected:
     QString name;
     WrapperStr comment;
     QByteArray tempBa;
-    int original_id;	// from project library
-    BooL is_new;	// backup file useless
-    BooL is_deleted;
-    bool is_modified : 1;
-    bool is_read_only : 1;
-    bool is_edited : 1;
-    bool is_marked : 1;
-    bool is_defined : 1;	// to indicate unconsistency due to projectSynchro
+    int original_id = 0;	// from project library
+    bool is_new = true;	// backup file useless
+    bool is_deleted = false;
+    bool is_modified = false;
+    bool is_read_only = false;
+    bool is_edited = false;
+    bool is_marked = false;
+    bool is_defined = false;	// to indicate unconsistency due to projectSynchro
     // pre condition not followed
 
     static bool show_stereotypes;
@@ -102,6 +102,7 @@ protected:
     static BrowserView* viewptr;
 
     BrowserNode();
+    BrowserNode(Q3ListView*);
 
     void set_parent(Q3ListViewItem * parent);
     virtual bool delete_internal(QString & warning);
@@ -338,6 +339,8 @@ public:
     void full_defs(QStringList & list) const;
     void sort_it();
 };
+
+
 
 
 #endif

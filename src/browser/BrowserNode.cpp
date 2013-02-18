@@ -106,18 +106,14 @@ QString BrowserNode::FullPathDotDot = "::";
 BrowserView* BrowserNode::viewptr = 0;
 BrowserNode::BrowserNode(QString s, BrowserView * parent)
     : Q3ListViewItem(parent, s),
-      name(s), original_id(0), is_new(TRUE), is_deleted(FALSE),
-      is_modified(FALSE), is_read_only(FALSE), is_edited(FALSE),
-      is_marked(FALSE), is_defined(FALSE)
+      name(s)
 {
     viewptr = parent;
 }
 
 BrowserNode::BrowserNode(QString s, BrowserNode * parent)
     : Q3ListViewItem(parent, s),
-      name(s), original_id(0), is_new(TRUE), is_deleted(FALSE),
-      is_modified(FALSE), is_read_only(FALSE), is_edited(FALSE),
-      is_marked(FALSE), is_defined(FALSE)
+      name(s)
 {
 
     // move it at end
@@ -131,10 +127,12 @@ BrowserNode::BrowserNode(QString s, BrowserNode * parent)
 }
 
 BrowserNode::BrowserNode()
-    : Q3ListViewItem(UndefinedNodePackage, "<not yet read>"),
-      original_id(0), is_new(TRUE), is_deleted(FALSE),
-      is_modified(FALSE), is_read_only(FALSE), is_edited(FALSE),
-      is_marked(FALSE), is_defined(FALSE)
+    : Q3ListViewItem(UndefinedNodePackage, "<not yet read>")
+{
+}
+
+BrowserNode::BrowserNode(Q3ListView * view)
+    : Q3ListViewItem(view, "<not yet read>")
 {
 }
 
