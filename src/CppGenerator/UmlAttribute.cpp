@@ -174,7 +174,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
 
             p += (p[2] == 'h') ? 10 : 8;
 
-            if (!defaultValue().isEmpty()) {
+            if (!defaultValue().isEmpty() && !isClassMember()) {
                 if (need_equal(pb, defaultValue()))
                     f_h << " = ";
 
