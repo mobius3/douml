@@ -30,12 +30,13 @@
 
 #include "MyTable.h"
 
-class Q3TextEdit;
+
+class QTextEdit;
 
 class MLinesItem : public TableItem
 {
 protected:
-    Q3TextEdit * mle;
+    QTextEdit * mle;
 
 public:
     MLinesItem(Q3Table * t, const QString & s);

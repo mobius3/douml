@@ -31,6 +31,8 @@
 
 #include <stdio.h>
 #include <q3popupmenu.h>
+#include <QEvent>
+#include <QKeyEvent>
 
 #include "KeyValueTable.h"
 #include "HaveKeyValueData.h"
@@ -48,7 +50,6 @@ KeyValuesTable::KeyValuesTable(HaveKeyValueData * hv, QWidget * parent, bool isR
 {
     horizontalHeader()->setLabel(0, TR("Key"));
     horizontalHeader()->setLabel(1, TR("Value"));
-
     if (!isReadOnly)
         horizontalHeader()->setLabel(2, TR("do"));
 
@@ -132,6 +133,15 @@ void KeyValuesTable::init_row(int index)
     setItem(index, 1, new MLinesItem(this, QString()));
     setText(index, 2, QString());
     setRowStretchable(index, TRUE);
+}
+
+bool KeyValuesTable::eventFilter(QObject *o, QEvent * e)
+{
+    if(e->type() == QEvent::KeyPress)
+    {
+        return false;
+    }
+   return  Q3Table::eventFilter(o,e);
 }
 
 bool KeyValuesTable::check_unique()
