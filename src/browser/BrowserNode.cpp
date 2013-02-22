@@ -941,8 +941,13 @@ void BrowserNode::mark_menu(Q3PopupMenu & m, const char * s, int bias) const
             bool canContain = may_contains_them(marked_list, duplicable_into);
             bool into = canContain && is_writable();
             bool thisIsntProject = this != BrowserView::get_project();
-            bool isWritable = ((BrowserNode *) parent())->is_writable();
-            bool parentCanContain = ((BrowserNode *) parent())->may_contains_them(marked_list, duplicable_after);
+            bool isWritable = true;
+            bool parentCanContain = false;
+            if(((BrowserNode *) parent()) != 0)
+            {
+                isWritable = ((BrowserNode *) parent())->is_writable();
+                parentCanContain = ((BrowserNode *) parent())->may_contains_them(marked_list, duplicable_after);
+            }
             bool after = thisIsntProject && isWritable &&  ( parentCanContain || moveInsideSameClass);
 
             if (!parents_marked)

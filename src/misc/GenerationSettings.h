@@ -44,6 +44,14 @@ class ToolCom;
 class Builtin
 {
 public:
+    Builtin(){}
+    Builtin(QString _uml,QString _cpp,QString _java,QString _idl)
+    {
+        uml = _uml;
+        cpp = _cpp;
+        java = _java;
+        idl = _idl;
+    }
     QString uml;
     QString cpp;
     QString java;
@@ -95,8 +103,9 @@ class GenerationSettings
     friend class StereotypesTable;
 
 protected:
+    friend class BuiltinTable;
     static int nbuiltins;
-    static Builtin * builtins;
+    static QList<Builtin> builtins;
     static QStringList umltypes;
 
     static bool cpp_default_defs;

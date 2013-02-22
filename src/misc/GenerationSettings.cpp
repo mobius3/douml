@@ -50,7 +50,7 @@
 #include "err.h"
 
 int GenerationSettings::nbuiltins;
-Builtin * GenerationSettings::builtins;
+QList<Builtin> GenerationSettings::builtins;
 QStringList GenerationSettings::umltypes;
 
 bool GenerationSettings::cpp_default_defs;
@@ -366,29 +366,31 @@ void GenerationSettings::read_declaration_defaults()
 
 void GenerationSettings::init()
 {
-    if (builtins != 0)
-        delete [] builtins;
+//    if (builtins != 0)
+//        delete [] builtins;
 
       nbuiltins = 15;
-      builtins = new Builtin[nbuiltins];
+      //builtins = new Builtin[nbuiltins];
 
-      builtins[0].set("void", "void", "void", "void");
-      builtins[1].set("any", "void *", "Object", "any");
+      builtins.append(Builtin("void", "void", "void", "void"));
+      builtins.append(Builtin("any", "void *", "Object", "any"));
+
       builtins[1].cpp_in =  "const ${type}";
       builtins[1].cpp_out = builtins[0].cpp_inout = "${type}";
-      builtins[2].set("bool", "bool", "boolean", "boolean");
-      builtins[3].set("char", "char", "char", "char");
-      builtins[4].set("uchar", "unsigned char", "char", "octet");
-      builtins[5].set("byte", "unsigned char", "byte", "octet");
-      builtins[6].set("short", "short", "short", "short");
-      builtins[7].set("ushort", "unsigned short", "short", "unsigned short");
-      builtins[8].set("int", "int", "int", "long");
-      builtins[9].set("uint", "unsigned int", "int", "unsigned long");
-      builtins[10].set("long", "long", "long", "long");
-      builtins[11].set("ulong", "unsigned long", "long", "unsigned long");
-      builtins[12].set("float", "float", "float", "float");
-      builtins[13].set("double", "double", "double", "double");
-      builtins[14].set("string", "string", "String", "string");
+
+      builtins.append(Builtin("bool", "bool", "boolean", "boolean"));
+      builtins.append(Builtin("char", "char", "char", "char"));
+      builtins.append(Builtin("uchar", "unsigned char", "char", "octet"));
+      builtins.append(Builtin("byte", "unsigned char", "byte", "octet"));
+      builtins.append(Builtin("short", "short", "short", "short"));
+      builtins.append(Builtin("ushort", "unsigned short", "short", "unsigned short"));
+      builtins.append(Builtin("int", "int", "int", "long"));
+      builtins.append(Builtin("uint", "unsigned int", "int", "unsigned long"));
+      builtins.append(Builtin("long", "long", "long", "long"));
+      builtins.append(Builtin("ulong", "unsigned long", "long", "unsigned long"));
+      builtins.append(Builtin("float", "float", "float", "float"));
+      builtins.append(Builtin("double", "double", "double", "double"));
+      builtins.append(Builtin("string", "string", "String", "string"));
 
 #define CPP_H_CONTENT "#ifndef ${NAMESPACE}_${NAME}_H\n\
 #define ${NAMESPACE}_${NAME}_H\n\
@@ -1644,23 +1646,11 @@ Builtin & GenerationSettings::get_type(const char * u)
         if (builtins[index].uml == u)
             return builtins[index];
 
-    // not find, add it
-
-    Builtin * b = new Builtin[index + 1];
-
-    for (index = 0; index != nbuiltins; index += 1)
-        b[index] = builtins[index];
-
-    b[index].set(u, u, u, u);
-    b[index].cpp_in =  "const ${type}";
-
-    if (builtins)
-        delete [] builtins;
-
-    builtins = b;
+    Builtin newBuiltin(u,u,u,u);
+    newBuiltin.cpp_in =  "const ${type}";
     nbuiltins += 1;
-
-    return b[index];
+    builtins.append(newBuiltin);
+    return builtins.last();
 }
 
 Stereotype & GenerationSettings::get_stereotype(int & n, Stereotype *& st,
@@ -2845,7 +2835,8 @@ void GenerationSettings::save()
 
     int index;
 
-    for (index = 0; index != nbuiltins; index += 1) {
+    for (index = 0; index != nbuiltins; index += 1)
+    {
         Builtin & b = builtins[index];
 
         nl_indent(st);
@@ -3650,19 +3641,19 @@ void GenerationSettings::read(char *& st, char *& k)
     bool new_types = !strcmp(k, "type_forms");
 
     if (old_types || new_types) {
-        if (builtins != 0)
-            delete [] builtins;
+        if (!builtins.isEmpty())
+            builtins.clear();
 
         nbuiltins = (int) read_unsigned(st);
-        builtins = new Builtin[nbuiltins];
+        //builtins = new Builtin[nbuiltins];
 
         umltypes.clear();
 
         int index;
 
-        for (index = 0; index != nbuiltins; index += 1) {
-            Builtin & b = builtins[index];
-
+        for (index = 0; index != nbuiltins; index += 1)
+        {
+            Builtin b;
             b.uml = read_string(st);
             b.cpp = read_string(st);
             b.java = read_string(st);
@@ -3675,6 +3666,8 @@ void GenerationSettings::read(char *& st, char *& k)
                 b.cpp_return = read_string(st);
             else
                 b.cpp_return = "${type}";
+
+            builtins.append(b);
 
             umltypes.append(b.uml);
         }

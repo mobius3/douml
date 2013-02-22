@@ -11,5 +11,6 @@
         <file>icons/reject.png</file>
         <file>icons/right.png</file>
         <file>icons/up.png</file>
+        <file>icons/bullet_add.png</file>
     </qresource>
 </RCC>

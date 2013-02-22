@@ -234,7 +234,8 @@ HEADERS        = \
     dialog/edgemenudialogqt4.h \
     dialog/edgemenudialogbase.h \
     ui/catalogwidget.h \
-    browser/BrowserNodeDummy.h
+    browser/BrowserNodeDummy.h \
+    dialog/GenerationSettingsBuiltinTable.h
 
 
 SOURCES = \
@@ -515,7 +516,8 @@ SOURCES = \
     dialog/edgemenudialogbase.cpp \
     misc/codec.cpp \
     ui/catalogwidget.cpp \
-    browser/BrowserNodeDummy.cpp
+    browser/BrowserNodeDummy.cpp \
+    dialog/GenerationSettingsBuiltinTable.cpp
 
 TARGET = douml
 DEFINES = BooL=bool DEBUGCOM

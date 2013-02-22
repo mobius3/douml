@@ -33,6 +33,7 @@
 #include "VisibilityGroup.h"
 #include "StringTable.h"
 #include "GenerationSettings.h"
+#include "GenerationSettingsBuiltinTable.h"
 
 class Q3ComboBox;
 class QCheckBox;
@@ -45,6 +46,7 @@ class StereotypesTable;
 class RelationTable;
 class IncludeTable;
 
+
 class GenerationSettingsDialog : public Q3TabDialog
 {
     Q_OBJECT
@@ -52,7 +54,7 @@ class GenerationSettingsDialog : public Q3TabDialog
 protected:
     // all
     TypesTable * types_table;
-
+    BuiltinTable* builtinTable;
     // stereotypes
     StereotypesTable * relation_stereotypes_table;
     StereotypesTable * class_stereotypes_table;
@@ -279,17 +281,6 @@ protected slots:
     void follow_python_set_name();
     void follow_idl_get_name();
     void follow_idl_set_name();
-};
-
-class TypesTable : public StringTable
-{
-public:
-    TypesTable(QWidget * parent);
-
-    virtual void init_row(int r);
-
-    void update();
-    bool check();
 };
 
 class StereotypesTable : public StringTable

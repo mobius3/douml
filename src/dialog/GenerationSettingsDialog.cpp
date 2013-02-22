@@ -53,6 +53,11 @@
 #include "UmlDesktop.h"
 #include "strutil.h"
 #include "translate.h"
+#include "Libs/L_UniversalModels/include/ItemController.h"
+#include "Libs/L_UniversalModels/include/TableDataInterface.h"
+#include "Libs/L_UniversalModels/include/TableDataListHolder.h"
+#include "Libs/L_UniversalModels/include/AdaptingTableModel.h"
+
 
 QSize GenerationSettingsDialog::previous_size;
 
@@ -107,9 +112,8 @@ void GenerationSettingsDialog::init_types()
     grid->setSpacing(3);
 
     new QLabel(TR("Types correspondence, and C++ operation argument default passing for them :"), grid);
-
-    types_table = new TypesTable(grid);
-
+    builtinTable = new BuiltinTable(grid);
+    builtinTable->Init();
     addTab(grid, TR("Types"));
 }
 
@@ -1855,7 +1859,7 @@ static const char * get_indent(Q3ComboBox * cb)
 
 void GenerationSettingsDialog::accept()
 {
-    if (types_table->check()) {
+    if (/*types_table->check()*/true) {
         QString enum_in = cpp_enum_in->text().stripWhiteSpace();
         QString enum_out = cpp_enum_out->text().stripWhiteSpace();
         QString enum_inout = cpp_enum_inout->text().stripWhiteSpace();
@@ -1906,7 +1910,7 @@ void GenerationSettingsDialog::accept()
             return;
         }
 
-        types_table->update();
+        //types_table->update();
         relation_stereotypes_table->update(GenerationSettings::nrelattrstereotypes,
                                            GenerationSettings::relattr_stereotypes);
         class_stereotypes_table->update(GenerationSettings::nclassstereotypes,
@@ -2332,126 +2336,48 @@ void GenerationSettingsDialog::php_set_visi_changed(int)
 }
 
 // TypesTable
+// todo need to implement this in new table
+//bool TypesTable::check()
+//{
+//    int n = numRows();
+//    int index;
 
-TypesTable::TypesTable(QWidget * parent)
-    : StringTable(GenerationSettings::nbuiltins + 1, 9, parent, FALSE)
-{
-    horizontalHeader()->setLabel(0, "Uml");
-    horizontalHeader()->setLabel(1, "C++");
-    horizontalHeader()->setLabel(2, "Java");
-    horizontalHeader()->setLabel(3, "Idl");
-    horizontalHeader()->setLabel(4, TR("C++ in"));
-    horizontalHeader()->setLabel(5, TR("C++ out"));
-    horizontalHeader()->setLabel(6, TR("C++ in out"));
-    horizontalHeader()->setLabel(7, TR("C++ return"));
-    horizontalHeader()->setLabel(8, TR("do"));
+//    if (text(n - 1, 0).isEmpty())
+//        n -= 1;
 
-    int index;
+//    for (index = 0; index != n; index += 1) {
+//        int col;
 
-    for (index = 0; index < GenerationSettings::nbuiltins; index += 1) {
-        Builtin & b = GenerationSettings::builtins[index];
+//        for (col = 0; col != 4; col += 1) {
+//            if (text(index, col).stripWhiteSpace().isEmpty()) {
+//                char n[16];
 
-        setText(index, 0, b.uml);
-        setText(index, 1, b.cpp);
-        setText(index, 2, b.java);
-        setText(index, 3, b.idl);
-        setText(index, 4, b.cpp_in);
-        setText(index, 5, b.cpp_out);
-        setText(index, 6, b.cpp_inout);
-        setText(index, 7, b.cpp_return);
-        setText(index, 8, QString());
-    }
+//                sprintf(n, "%d", index + 1);
+//                msg_critical(TR("Error"),
+//                             TR("row %1 : ", n) +
+//                             TR("%1 specification is mandatory", horizontalHeader()->label(col)));
+//                return FALSE;
+//            }
+//        }
 
-    init_row(index);
+//        for (col = 4; col != 8; col += 1) {
+//            if (text(index, col).find("${type}") == -1) {
+//                char n[16];
 
-    for (index = 4; index < 8; index += 1)
-        setColumnStretchable(index, TRUE);
+//                sprintf(n, "%d", index + 1);
+//                msg_critical(TR("Error"),
+//                             TR("row %1 : ", n) +
+//                             TR("%1 '%2' argument default passing does not contains ${type}",
+//                                (const char *) text(index, 0),
+//                                (const char *) horizontalHeader()->label(col)));
 
-    adjustColumn(8);
-    setColumnStretchable(8, FALSE);
-}
+//                return FALSE;
+//            }
+//        }
+//    }
 
-void TypesTable::init_row(int index)
-{
-    setText(index, 0, QString());
-    setText(index, 1, QString());
-    setText(index, 2, QString());
-    setText(index, 3, QString());
-    setText(index, 4, "${type}");
-    setText(index, 5, "${type} &");
-    setText(index, 6, "${type} &");
-    setText(index, 7, "${type}");
-}
-
-void TypesTable::update()
-{
-    forceUpdateCells();
-
-    int n = numRows();
-    int index;
-
-    if (text(n - 1, 0).isEmpty())
-        n -= 1;
-
-    delete [] GenerationSettings::builtins;
-    GenerationSettings::nbuiltins = n;
-    GenerationSettings::builtins = new Builtin[n];
-
-    for (index = 0; index != n; index += 1) {
-        Builtin & b = GenerationSettings::builtins[index];
-
-        b.uml = text(index, 0).stripWhiteSpace();
-        b.cpp = text(index, 1).stripWhiteSpace();
-        b.java = text(index, 2).stripWhiteSpace();
-        b.idl = text(index, 3).stripWhiteSpace();
-        b.cpp_in = text(index, 4).stripWhiteSpace();
-        b.cpp_out = text(index, 5).stripWhiteSpace();
-        b.cpp_inout = text(index, 6).stripWhiteSpace();
-        b.cpp_return = text(index, 7).stripWhiteSpace();
-    }
-}
-
-bool TypesTable::check()
-{
-    int n = numRows();
-    int index;
-
-    if (text(n - 1, 0).isEmpty())
-        n -= 1;
-
-    for (index = 0; index != n; index += 1) {
-        int col;
-
-        for (col = 0; col != 4; col += 1) {
-            if (text(index, col).stripWhiteSpace().isEmpty()) {
-                char n[16];
-
-                sprintf(n, "%d", index + 1);
-                msg_critical(TR("Error"),
-                             TR("row %1 : ", n) +
-                             TR("%1 specification is mandatory", horizontalHeader()->label(col)));
-                return FALSE;
-            }
-        }
-
-        for (col = 4; col != 8; col += 1) {
-            if (text(index, col).find("${type}") == -1) {
-                char n[16];
-
-                sprintf(n, "%d", index + 1);
-                msg_critical(TR("Error"),
-                             TR("row %1 : ", n) +
-                             TR("%1 '%2' argument default passing does not contains ${type}",
-                                (const char *) text(index, 0),
-                                (const char *) horizontalHeader()->label(col)));
-
-                return FALSE;
-            }
-        }
-    }
-
-    return TRUE;
-}
+//    return TRUE;
+//}
 
 // StereotypesTable
 

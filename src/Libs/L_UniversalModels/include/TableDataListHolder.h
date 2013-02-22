@@ -33,12 +33,12 @@
 #include <QSharedPointer>
 #include "ItemController.h"
 
-#include "l_tree_controller_global.h"
+//#include "l_tree_controller_global.h"
 
 
 
-template<class T>
-class  TableDataListHolder : public TableDataInterface  
+template<typename T>
+class TableDataListHolder : public TableDataInterface
 {
   public:
     virtual QVariant GetValue(int row, int column, int role) const;
@@ -49,7 +49,7 @@ class  TableDataListHolder : public TableDataInterface
 
     void SetColumns(QStringList _columns);
 
-    void SetData(const QList<T> & data);
+    void SetData(QList<T*> data);
 
     QList<T> GetData() const;
 
@@ -67,10 +67,10 @@ class  TableDataListHolder : public TableDataInterface
 
 
   private:
-     QList<T> m_data;
+     QList<T*> m_data;
      QHash<QPair<int,int>, std::function<void(T*, QVariant)> > setters;
      QHash<QPair<int, int>, std::function<QVariant(const T*)> > getters;
-    QSharedPointer<ItemController<T> > controller;
+     QSharedPointer<ItemController<T> > controller;
 
      QStringList m_columns;
      int previousRowCount;
@@ -81,7 +81,7 @@ QVariant TableDataListHolder<T>::GetValue(int row, int column, int role) const
     // Bouml preserved body begin 0021352A
     if(!getters.contains(QPair<int,int>(column, role)))
         return QVariant();
-    QVariant ret = getters[QPair<int,int>(column, role)](&m_data.at(row));
+    QVariant ret = getters[QPair<int,int>(column, role)](m_data.at(row));
     return ret;
     // Bouml preserved body end 0021352A
 }
@@ -92,7 +92,7 @@ void TableDataListHolder<T>::SetValue(int row, int column, int role, const QVari
     // Bouml preserved body begin 002135AA
     if(setters.contains(QPair<int,int>(column, role)))
         return;
-    setters[QPair<int,int>(column, role)](&m_data[row], value);
+    setters[QPair<int,int>(column, role)](m_data[row], value);
     // Bouml preserved body end 002135AA
 }
 
@@ -113,7 +113,7 @@ void TableDataListHolder<T>::SetColumns(QStringList _columns)
 }
 
 template<class T>
-void TableDataListHolder<T>::SetData(const QList<T> & data) 
+void TableDataListHolder<T>::SetData(QList<T*>  data)
 {
     // Bouml preserved body begin 002136AA
     previousRowCount = m_data.size();
