@@ -93,9 +93,10 @@ void AdaptingTableModel::SetInterface(QSharedPointer<TableDataInterface> _interf
 QModelIndex AdaptingTableModel::index(int row, int column, const QModelIndex & parent) const 
 {
     // Bouml preserved body begin 00213CAA
+    Q_D(AdaptingTableModel);
     if (!hasIndex(row, column, parent))
         return QModelIndex();
-    return createIndex(row, column);
+    return createIndex(row, column, d->interface);
     // Bouml preserved body end 00213CAA
 }
 

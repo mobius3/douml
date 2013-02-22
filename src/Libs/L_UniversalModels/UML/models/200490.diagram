@@ -55,12 +55,12 @@ relationcanvas 132778 relation_ref 807466 // <generalisation>
 end
 relationcanvas 133034 relation_ref 807722 // <directional aggregation>
   from ref 132650 z 2012 to ref 128682
-  role_a_pos 223 184 3000 no_role_b
+  role_a_pos 223 185 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 133418 relation_ref 814250 // <directional aggregation>
   from ref 133290 z 2001 to ref 132394
-  role_a_pos 136 348 3000 no_role_b
+  role_a_pos 140 348 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 133546 relation_ref 814378 // <directional aggregation>

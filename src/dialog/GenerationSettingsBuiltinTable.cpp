@@ -8,6 +8,33 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QMenu>
+#include <algorithm>
+static Builtin rowTemporary;
+
+static void InsertRow(QList<Builtin>& builtins, Builtin newRowValue, const Builtin& currentRowValue, AdaptingTableModel* model, QSharedPointer<TableDataInterface> interface, ERowInsertMode insertMode)
+{
+    TableDataListHolder<Builtin> * holderPtr = static_cast<TableDataListHolder<Builtin>* >(interface.data());
+
+    QList<Builtin>::Iterator it;
+    if(insertMode == ERowInsertMode::before_current || insertMode == ERowInsertMode::after_current)
+    {
+        it = std::find(builtins.begin(),builtins.end(), currentRowValue);
+        if(insertMode == ERowInsertMode::after_current)
+            it++;
+    }
+    else if(insertMode == ERowInsertMode::before_first)
+    {
+        it = builtins.begin();
+    }
+    else
+    {
+        it = builtins.end() - 1;
+    }
+    builtins.insert(it,newRowValue);
+    model->SetInterface(interface);
+}
+
+
 BuiltinTable::BuiltinTable(QWidget *parent, Qt::WindowFlags f) : QWidget(parent, f)
 {
 }
@@ -124,6 +151,14 @@ void BuiltinTable::OnIdlVisibilityToggled(bool)
 
 void BuiltinTable::OnInsertNewRow()
 {
+    QAction* senderAction = dynamic_cast<QAction*>(sender());
+    TableDataInterface* iFace = static_cast<TableDataInterface*>(types_table->currentIndex().internalPointer());
+    Builtin* holderPtr = static_cast<Builtin*>(iFace);
+    if(senderAction->data().toString() == "before")
+        InsertRow(GenerationSettings::builtins, Builtin(), *holderPtr, typetableModel, typetableInterface, ERowInsertMode::before_current);
+    else
+        InsertRow(GenerationSettings::builtins, Builtin(), *holderPtr, typetableModel, typetableInterface, ERowInsertMode::after_current);
+
 }
 
 void BuiltinTable::OnPasteRow()

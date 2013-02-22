@@ -12,6 +12,14 @@ class QCheckBox;
 class QPushButton;
 class QLabel;
 class QMenu;
+
+enum class ERowInsertMode
+{
+    before_first,
+    before_current,
+    after_last,
+    after_current
+};
 class BuiltinTable : public QWidget
 {
     Q_OBJECT
@@ -24,6 +32,7 @@ private:
     void SetupAccess();
     void TableSetup();
     void InitInterface();
+
     void CreateRowMenu();
     void CreateConnections();
 

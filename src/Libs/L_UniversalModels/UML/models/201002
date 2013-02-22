@@ -1,6 +1,6 @@
 format 75
 "TreeController" // TreeController
-  revision 24
+  revision 25
   modified_by 42 "zeks"
   // class settings
   //class diagram settings
@@ -1780,6 +1780,18 @@ Q_OBJECT
 	
       end
 
+      operation 2248874 "InternalPointer"
+	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "void*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
       extra_member 189098 "signals"
 	
 	cpp "
@@ -2059,6 +2071,18 @@ ${members}}
 	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
   ${body}}
 "
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2249002 "InternalPointer"
+	preserve_cpp_body_indent cpp_virtual public explicit_return_type "void*"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
 	preserve_php_body_indent 
 	preserve_python_body_indent 
 	
