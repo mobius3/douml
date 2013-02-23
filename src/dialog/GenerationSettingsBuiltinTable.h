@@ -5,13 +5,16 @@ class QTableView;
 #include "Libs/L_UniversalModels/include/ItemController.h"
 #include "Libs/L_UniversalModels/include/TableDataInterface.h"
 #include "Libs/L_UniversalModels/include/TableDataListHolder.h"
+#include "GenerationSettings.h"
 
 class AdaptingTableModel;
-class Builtin;
+//class Builtin;
 class QCheckBox;
 class QPushButton;
 class QLabel;
 class QMenu;
+class QComboBox;
+class QLineEdit;
 class QSortFilterProxyModel;
 enum class ERowInsertMode
 {
@@ -27,6 +30,8 @@ public:
     BuiltinTable(QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~BuiltinTable();
     void Init();
+    bool ValidateTypes();
+    void RollBack();
 
 private:
     void SetupAccess();
@@ -44,9 +49,14 @@ private:
     QCheckBox* chkCpp = nullptr;
     QCheckBox* chkJava = nullptr;
     QCheckBox* chkIdl = nullptr;
+    QComboBox* cbSort = nullptr;
     QLabel* lblVisibility = nullptr;
+    QLabel* lblSort = nullptr;
+    QLabel* lblSearch = nullptr;
     QPushButton* pbAddNewType = nullptr;
+    QLineEdit* leSearch = nullptr;
     QMenu* menuRow = nullptr;
+    QList<Builtin> rollbackBuiltins;
 public slots:
     void OnAddNewType();
     void OnCppVisibilityToggled(bool);
@@ -59,6 +69,8 @@ public slots:
     void OnCopyRow();
     void OnCutRow();
     void OnCallRowMenu(const QModelIndex&);
+    void OnSetParameterVisibility();
+    void OnFilterTable(QString);
 
 };
 

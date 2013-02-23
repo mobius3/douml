@@ -53,7 +53,7 @@ class GenerationSettingsDialog : public Q3TabDialog
 
 protected:
     // all
-    TypesTable * types_table;
+    //TypesTable * types_table;
     BuiltinTable* builtinTable;
     // stereotypes
     StereotypesTable * relation_stereotypes_table;
@@ -257,6 +257,7 @@ protected:
 protected slots:
     virtual void polish();
     virtual void accept();
+    virtual void reject();
     void cpproot_browse();
     void javaroot_browse();
     void phproot_browse();

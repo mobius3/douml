@@ -6,13 +6,25 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QLabel>
 #include <QMenu>
+#include <QLineEdit>
+#include <QMessageBox>
 #include <algorithm>
 #include <boost/bind.hpp>
 //#include <boost/bind/placeholders.hpp>
 //#include <boost/mpl/placeholders.hpp>
 static Builtin rowTemporary;
+
+//static bool SortBuiltinAscending(void* val1, void* val2)
+//{
+//    return static_cast<Builtin*>(val1)->uml < static_cast<Builtin*>(val2)->uml;
+//}
+//static bool SortBuiltinDescending(void* val1, void* val2)
+//{
+//    return static_cast<Builtin*>(val1)->uml < static_cast<Builtin*>(val2)->uml;
+//}
 
 static void InsertRow(QList<Builtin>& builtins, const Builtin& newRowValue, const Builtin& currentRowValue, AdaptingTableModel* model, QSharedPointer<TableDataInterface> interface, ERowInsertMode insertMode)
 {
@@ -58,14 +70,54 @@ void BuiltinTable::Init()
     InitInterface();
     CreateRowMenu();
     TableSetup();
+    OnSetParameterVisibility();
     CreateConnections();
+    sortModel->sort(0, Qt::AscendingOrder);
 
+}
+
+bool BuiltinTable::ValidateTypes()
+{
+    for(Builtin& value : GenerationSettings::builtins)
+    {
+        if(value.uml.trimmed().isEmpty() ||
+                value.cpp.trimmed().isEmpty() ||
+                value.java.trimmed().isEmpty() ||
+                value.idl.trimmed().isEmpty() )
+        {
+            QMessageBox::critical(0, tr("Error"), "Uml/Cpp/Java/Idl fields cannot be empty");
+            return false;
+        }
+        QList<Builtin>& builtins =  GenerationSettings::builtins;
+        std::function<bool(const Builtin&)> func = [&](const Builtin& val1){return val1.uml == value.uml;};
+        int count = std::count_if(builtins.begin(), builtins.end(), func);
+        if(count > 1)
+        {
+            QMessageBox::critical(0, tr("Error"), "Duplicate Uml entries are not allowed");
+            return false;
+        }
+        if(!value.cpp_in.contains("${type}") ||
+                !value.cpp_in.contains("${type}") ||
+                !value.cpp_inout.contains("${type}") ||
+                !value.cpp_out.contains("${type}") ||
+                !value.cpp_return.contains("${type}"))
+        {
+            QMessageBox::critical(0, tr("Error"), "Cpp parameter controls must contain ${type}");
+            return false;
+        }
+    }
+    return true;
+}
+
+void BuiltinTable::RollBack()
+{
+    GenerationSettings::builtins = rollbackBuiltins;
 }
 
 void BuiltinTable::TableSetup()
 {
     holder = new TableDataListHolder<Builtin>();
-
+    rollbackBuiltins = GenerationSettings::builtins;
     QList<Builtin*> builtInList;
     for(int i(0); i < GenerationSettings::nbuiltins; i++)
     {
@@ -85,9 +137,12 @@ void BuiltinTable::TableSetup()
 
     sortModel = new QSortFilterProxyModel();
     sortModel->setSourceModel(typetableModel);
+    sortModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+
     types_table->setModel(sortModel);
+
     types_table->setAlternatingRowColors(true);
-    //types_table->setSortingEnabled(true);
+    types_table->setSortingEnabled(true);
     types_table->resizeColumnToContents(0);
     types_table->resizeColumnToContents(8);
 }
@@ -97,10 +152,25 @@ void BuiltinTable::InitInterface()
     QHBoxLayout* layControls = new QHBoxLayout;
     pbAddNewType = new QPushButton(QIcon(":/root/icons/bullet_add.png"), "Add type");
     lblVisibility = new QLabel("Language visibility:");
+    //lblSort = new QLabel("Sort order:");
     chkCpp = new QCheckBox("C++");
+    chkCpp->setChecked(true);
     chkJava = new QCheckBox("Java");
+    chkJava->setChecked(true);
     chkIdl = new QCheckBox("Idl");
+    chkIdl->setChecked(true);
+    lblSearch = new QLabel("Search:");
+    leSearch = new QLineEdit();
+//    cbSort = new QComboBox();
+//    cbSort->addItem(tr("None"));
+//    cbSort->addItem(tr("Ascending"));
+//    cbSort->addItem(tr("Descending"));
+//    cbSort->setCurrentIndex(0);
     layControls->addWidget(pbAddNewType);
+    //layControls->addWidget(lblSort);
+    //layControls->addWidget(cbSort);
+    layControls->addWidget(lblSearch);
+    layControls->addWidget(leSearch);
     layControls->addWidget(lblVisibility);
     layControls->addWidget(chkCpp);
     layControls->addWidget(chkJava);
@@ -141,6 +211,11 @@ void BuiltinTable::CreateRowMenu()
 void BuiltinTable::CreateConnections()
 {
     connect(types_table, SIGNAL(clicked(QModelIndex)), this, SLOT(OnCallRowMenu(QModelIndex)));
+    connect(chkCpp, SIGNAL(clicked()),this, SLOT(OnSetParameterVisibility()));
+    connect(chkIdl, SIGNAL(clicked()),this, SLOT(OnSetParameterVisibility()));
+    connect(chkJava, SIGNAL(clicked()),this, SLOT(OnSetParameterVisibility()));
+    connect(leSearch, SIGNAL(textEdited(QString)), this, SLOT(OnFilterTable(QString)));
+
 }
 
 void BuiltinTable::OnAddNewType()
@@ -190,46 +265,81 @@ void BuiltinTable::OnCutRow()
 {
 }
 
-#define ADD_STRING_GETSET(X,Y,Z)  \
-X->AddGetter(QPair<int,int>(Y,0), \
+#define ADD_STRING_GETSET(HOLDER,ROW,ROLE,PARAM)  \
+HOLDER->AddGetter(QPair<int,int>(ROW,ROLE), \
 [] (const Builtin* data) \
 { \
     if(data) \
-        return QVariant(data->Z); \
+        return QVariant(data->PARAM); \
     else \
         return QVariant(); \
 } \
 ); \
-X->AddSetter(QPair<int,int>(Y,0), \
+HOLDER->AddSetter(QPair<int,int>(ROW,ROLE), \
 [] (Builtin* data, QVariant value) \
 { \
     if(data) \
-        data->Z = value.toString(); \
+        data->PARAM = value.toString(); \
 } \
 ); \
 
 void BuiltinTable::SetupAccess()
 {
-    ADD_STRING_GETSET(holder, 0, uml);
-    ADD_STRING_GETSET(holder, 1, cpp);
-    ADD_STRING_GETSET(holder, 2, java);
-    ADD_STRING_GETSET(holder, 3, idl);
-    ADD_STRING_GETSET(holder, 4, cpp_in);
-    ADD_STRING_GETSET(holder, 5, cpp_out);
-    ADD_STRING_GETSET(holder, 6, cpp_inout);
-    ADD_STRING_GETSET(holder, 7, cpp_return);
+    ADD_STRING_GETSET(holder, 0, 0, uml);
+    ADD_STRING_GETSET(holder, 1, 0, cpp);
+    ADD_STRING_GETSET(holder, 2, 0, java);
+    ADD_STRING_GETSET(holder, 3, 0, idl);
+    ADD_STRING_GETSET(holder, 4, 0, cpp_in);
+    ADD_STRING_GETSET(holder, 5, 0, cpp_out);
+    ADD_STRING_GETSET(holder, 6, 0, cpp_inout);
+    ADD_STRING_GETSET(holder, 7, 0, cpp_return);
+
+    ADD_STRING_GETSET(holder, 0, 2, uml);
+    ADD_STRING_GETSET(holder, 1, 2, cpp);
+    ADD_STRING_GETSET(holder, 2, 2, java);
+    ADD_STRING_GETSET(holder, 3, 2, idl);
+    ADD_STRING_GETSET(holder, 4, 2, cpp_in);
+    ADD_STRING_GETSET(holder, 5, 2, cpp_out);
+    ADD_STRING_GETSET(holder, 6, 2, cpp_inout);
+    ADD_STRING_GETSET(holder, 7, 2, cpp_return);
     holder->AddGetter(QPair<int,int>(8,0),
     [] (const Builtin* )
     {
         return QVariant(QString("   "));
     });
+
+    holder->AddFlagsFunctor(
+                [](const QModelIndex& index)
+    {
+        if(index.column() == 8)
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+        Qt::ItemFlags result;
+        result |= Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+        return result;
+    }
+    );
 }
+
+
 
 
 void BuiltinTable::OnCallRowMenu(const QModelIndex & index)
 {
     if(index.column() == 8)
         menuRow->popup(QCursor::pos());
+}
+
+void BuiltinTable::OnSetParameterVisibility()
+{
+    types_table->setColumnHidden(1, !chkCpp->isChecked());
+    types_table->setColumnHidden(2, !chkJava->isChecked());
+    types_table->setColumnHidden(3, !chkIdl->isChecked());
+}
+
+void BuiltinTable::OnFilterTable(QString val)
+{
+    sortModel->setFilterRegExp(val);
+    sortModel->setDynamicSortFilter(true);
 }
 
 

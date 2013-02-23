@@ -29,6 +29,8 @@
 #include <QVariant>
 #include <QStringList>
 #include <QList>
+#include <QVector>
+#include <QModelIndex>
 #include <QHash>
 #include <QSharedPointer>
 #include "ItemController.h"
@@ -55,6 +57,8 @@ class  TableDataListHolder : public TableDataInterface
 
     QList<T>& GetData();
 
+    static inline QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > GetFlagsFunctors();
+
     virtual int columnCount() const;
 
     virtual int rowCount() const;
@@ -69,6 +73,18 @@ class  TableDataListHolder : public TableDataInterface
 
     virtual void* InternalPointer(int row) const;
 
+    virtual bool Equal(int row, void* data);
+
+    Qt::ItemFlags flags(const QModelIndex & index) const;
+
+    virtual void sort();
+
+    static void AddFlagsFunctor(std::function<Qt::ItemFlags(const QModelIndex&)> functor);
+
+    static void SetFlagsFunctors(QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > value);
+
+    virtual void SetSortFunction(std::function<bool(void*, void*)> func);
+
 
   private:
      QList<T*> m_data;
@@ -78,6 +94,8 @@ class  TableDataListHolder : public TableDataInterface
 
      QStringList m_columns;
      int previousRowCount = 0;
+     std::function<bool(void*, void*)> sortFunction;
+     static QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > flagsFunctors;
 };
 template<class T>
 QVariant TableDataListHolder<T>::GetValue(int row, int column, int role) const 
@@ -94,7 +112,7 @@ template<class T>
 void TableDataListHolder<T>::SetValue(int row, int column, int role, const QVariant & value) 
 {
     // Bouml preserved body begin 002135AA
-    if(setters.contains(QPair<int,int>(column, role)))
+    if(!setters.contains(QPair<int,int>(column, role)))
         return;
     setters[QPair<int,int>(column, role)](m_data[row], value);
     // Bouml preserved body end 002135AA
@@ -140,6 +158,13 @@ QList<T>& TableDataListHolder<T>::GetData()
     // Bouml preserved body begin 0021E7AA
     return m_data;
     // Bouml preserved body end 0021E7AA
+}
+
+template<class T>
+inline QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > TableDataListHolder<T>::GetFlagsFunctors()
+
+{
+    return flagsFunctors;
 }
 
 template<class T>
@@ -202,4 +227,62 @@ void* TableDataListHolder<T>::InternalPointer(int row) const
     // Bouml preserved body end 00226AAA
 }
 
+template<class T>
+bool TableDataListHolder<T>::Equal(int row, void* data) 
+{
+    // Bouml preserved body begin 0022852A
+    T* value = static_cast<T*>(data);
+    if(*m_data[row] == *value)
+        return true;
+    return false;
+    // Bouml preserved body end 0022852A
+}
+
+template<class T>
+Qt::ItemFlags TableDataListHolder<T>::flags(const QModelIndex & index) const 
+{
+    // Bouml preserved body begin 0022BE2A
+    Qt::ItemFlags result;
+    for(auto func: flagsFunctors)
+    {
+        result |= func(index);
+    }
+    return result;
+    // Bouml preserved body end 0022BE2A
+}
+
+template<class T>
+void TableDataListHolder<T>::sort() 
+{
+    // Bouml preserved body begin 0022A42A
+    qSort(m_data.begin(), m_data.end(), sortFunction);
+    // Bouml preserved body end 0022A42A
+}
+
+template<class T>
+void TableDataListHolder<T>::AddFlagsFunctor(std::function<Qt::ItemFlags(const QModelIndex&)> functor)
+
+{
+    // Bouml preserved body begin 0022BDAA
+    flagsFunctors.append(functor);
+    // Bouml preserved body end 0022BDAA
+}
+
+template<class T>
+void TableDataListHolder<T>::SetFlagsFunctors(QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > value)
+
+{
+    flagsFunctors = value;
+}
+
+template<class T>
+void TableDataListHolder<T>::SetSortFunction(std::function<bool(void*, void*)> func) 
+{
+    // Bouml preserved body begin 0022A3AA
+    sortFunction = func;
+    // Bouml preserved body end 0022A3AA
+}
+
+template<class T>
+QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > TableDataListHolder<T>::flagsFunctors;
 #endif

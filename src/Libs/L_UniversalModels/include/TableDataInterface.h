@@ -28,6 +28,7 @@
 #include <QObject>
 #include <QVariant>
 #include <QStringList>
+#include <QModelIndex>
 
 #include "l_tree_controller_global.h"
 
@@ -58,6 +59,14 @@ Q_OBJECT
     virtual void* InternalPointer() const = 0;
 
     virtual void* InternalPointer(int row) const = 0;
+
+    virtual bool Equal(int row, void* data) = 0;
+
+    virtual void SetSortFunction(std::function<bool(void*, void*)> func) = 0;
+
+    virtual void sort() = 0;
+
+    virtual Qt::ItemFlags flags(const QModelIndex & index) const = 0;
 
 
 signals:

@@ -1,6 +1,6 @@
 format 75
 "TreeController" // TreeController
-  revision 27
+  revision 30
   modified_by 42 "zeks"
   // class settings
   //class diagram settings
@@ -1558,6 +1558,39 @@ d_ptr(new AdaptingTableModelPrivate())"
 	
       end
 
+      operation 2262954 "RowForValue"
+	public explicit_return_type "int"
+	nparams 1
+	
+	  param in name "value" explicit_type "void*"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2269482 "sort"
+	public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
       extra_member 188842 "slots"
 	
 	cpp "
@@ -1828,6 +1861,76 @@ Q_OBJECT
 	
       end
 
+      operation 2262186 "Equal"
+	abstract cpp_virtual public explicit_return_type "bool"
+	nparams 2
+	
+	  param in name "row" explicit_type "int"
+	  param in name "data" explicit_type "void*"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2269994 "SetSortFunction"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "func" explicit_type "std::function<bool(void*, void*)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2269738 "sort"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2277290 "flags"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "Qt::ItemFlags"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
       extra_member 189098 "signals"
 	
 	cpp "
@@ -1855,7 +1958,7 @@ signals:
     end
 
     class 748458 "TableDataListHolder"
-      visibility package 
+      abstract visibility package 
       nformals 1
       formal name "T" type "class" explicit_default_value ""
         explicit_extends ""
@@ -2018,6 +2121,32 @@ ${members}}
 	
       end
 
+      operation 2277034 "get_flagsFunctors"
+	class_operation force_body_gen cpp_inline public explicit_return_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	nparams 0
+	
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    return flagsFunctors;
+}
+"
+	cpp_name_spec "Get${Name}"
+	final java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  return flagsFunctors;
+}
+"
+	java_name_spec "get${Name}"
+	php_final 
+	php_name_spec "get${Name}"
+	
+	python_name_spec "get${Name}"
+	
+	idl_name_spec "get_${name}"
+	get_of_attribute attribute_ref 1294122 // flagsFunctors
+      end
+
       operation 2177194 "columnCount"
 	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "int"
 	nparams 0
@@ -2145,6 +2274,122 @@ ${members}}
 	
       end
 
+      operation 2262314 "Equal"
+	cpp_virtual public explicit_return_type "bool"
+	nparams 2
+	
+	  param in name "row" explicit_type "int"
+	  param in name "data" explicit_type "void*"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2276906 "flags"
+	preserve_cpp_body_indent const public explicit_return_type "Qt::ItemFlags"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2270250 "sort"
+	cpp_virtual public explicit_return_type "void"
+	nparams 0
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2276778 "AddFlagsFunctor"
+	class_operation preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param inout name "functor" explicit_type "std::function<Qt::ItemFlags(const QModelIndex&)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2277162 "set_flagsFunctors"
+	class_operation force_body_gen public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "value" explicit_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${)}${const}${volatile};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    flagsFunctors = ${p0};
+}
+"
+	cpp_name_spec "Set${Name}"
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+  flagsFunctors = ${p0};
+}
+"
+	java_name_spec "set${Name}"
+	
+	php_name_spec "set${Name}"
+	
+	python_name_spec "set${Name}"
+	
+	idl_name_spec "set_${name}"
+	set_of_attribute attribute_ref 1294122 // flagsFunctors
+      end
+
+      operation 2270122 "SetSortFunction"
+	cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "func" explicit_type "std::function<bool(void*, void*)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
       attribute 1286314 "m_data"
 	private explicit_type "QList<T*>"
 	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
@@ -2203,6 +2448,27 @@ ${members}}
 	php_decl ""
 	python_decl ""
 	idl_decl ""
+      end
+
+      attribute 1313834 "sortFunction"
+	private explicit_type "std::function<bool(void*, void*)>"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 1320362 "flagsFunctors"
+	class_attribute private explicit_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	get_oper operation_ref 2277034 // get_flagsFunctors
+	set_oper operation_ref 2277162 // set_flagsFunctors
       end
     end
 
@@ -2649,7 +2915,8 @@ ${namespace_end}"
 
     artifact 633386 "AdaptingTableModel"
       stereotype "source"
-      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+      cpp_h "@{copyright}
+#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
 
 ${description}
@@ -2664,7 +2931,8 @@ ${definition}
 ${namespace_end}
 #endif
 "
-      cpp_src "${description}
+      cpp_src "@{copyright}
+${description}
 @{meta}
 @{src}
 ${includes}

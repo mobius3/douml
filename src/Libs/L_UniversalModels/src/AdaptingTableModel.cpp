@@ -23,6 +23,7 @@
 // *************************************************************************
 
 
+
 #include "../include/AdaptingTableModel.h"
 #include "../include/TableDataInterface.h"
 #include "../include/AdaptingTableModelPrivate.h"
@@ -103,15 +104,10 @@ QModelIndex AdaptingTableModel::index(int row, int column, const QModelIndex & p
 Qt::ItemFlags AdaptingTableModel::flags(const QModelIndex & index) const 
 {
     // Bouml preserved body begin 002170AA
+    Q_D(const AdaptingTableModel);
     if (!index.isValid())
         return 0;
-
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-
-    if ( index.column() == 0 )
-        flags |= Qt::ItemIsUserCheckable;
-
-    return flags;
+    return d->interface->flags(index);
     // Bouml preserved body end 002170AA
 }
 
@@ -128,6 +124,25 @@ QVariant AdaptingTableModel::headerData(int section, Qt::Orientation orientation
     }
     return QVariant();
     // Bouml preserved body end 0021712A
+}
+
+int AdaptingTableModel::RowForValue(void* value) 
+{
+    // Bouml preserved body begin 002287AA
+    Q_D(const AdaptingTableModel);
+    for(int i(0); i < rowCount(QModelIndex()); ++i)
+    {
+        if(d->interface->Equal(i, value))
+            return i;
+    }
+    return -1;
+    // Bouml preserved body end 002287AA
+}
+
+void AdaptingTableModel::sort() 
+{
+    // Bouml preserved body begin 0022A12A
+    // Bouml preserved body end 0022A12A
 }
 
 void AdaptingTableModel::OnReloadDataFromInterface() 

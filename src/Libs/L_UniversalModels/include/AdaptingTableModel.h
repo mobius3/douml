@@ -64,6 +64,10 @@ Q_OBJECT
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+    int RowForValue(void* value);
+
+    void sort();
+
 
 public slots:
     void OnReloadDataFromInterface();

@@ -1859,7 +1859,7 @@ static const char * get_indent(Q3ComboBox * cb)
 
 void GenerationSettingsDialog::accept()
 {
-    if (/*types_table->check()*/true) {
+    if (builtinTable->ValidateTypes()) {
         QString enum_in = cpp_enum_in->text().stripWhiteSpace();
         QString enum_out = cpp_enum_out->text().stripWhiteSpace();
         QString enum_inout = cpp_enum_inout->text().stripWhiteSpace();
@@ -2194,6 +2194,12 @@ void GenerationSettingsDialog::accept()
 
         QDialog::accept();
     }
+}
+
+void GenerationSettingsDialog::reject()
+{
+    builtinTable->RollBack();
+    QDialog::reject();
 }
 
 void GenerationSettingsDialog::cpproot_browse()
