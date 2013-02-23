@@ -9,16 +9,20 @@
 #include <QLabel>
 #include <QMenu>
 #include <algorithm>
+#include <boost/bind.hpp>
+//#include <boost/bind/placeholders.hpp>
+//#include <boost/mpl/placeholders.hpp>
 static Builtin rowTemporary;
 
-static void InsertRow(QList<Builtin>& builtins, Builtin newRowValue, const Builtin& currentRowValue, AdaptingTableModel* model, QSharedPointer<TableDataInterface> interface, ERowInsertMode insertMode)
+static void InsertRow(QList<Builtin>& builtins, const Builtin& newRowValue, const Builtin& currentRowValue, AdaptingTableModel* model, QSharedPointer<TableDataInterface> interface, ERowInsertMode insertMode)
 {
-    TableDataListHolder<Builtin> * holderPtr = static_cast<TableDataListHolder<Builtin>* >(interface.data());
-
+    TableDataListHolder<Builtin>* holder = static_cast<TableDataListHolder<Builtin>*>(interface.data());
     QList<Builtin>::Iterator it;
     if(insertMode == ERowInsertMode::before_current || insertMode == ERowInsertMode::after_current)
     {
-        it = std::find(builtins.begin(),builtins.end(), currentRowValue);
+        using std::placeholders::_1;
+        std::function<bool(Builtin)> func = [&](const Builtin& val1){return val1 == currentRowValue;};
+        it = std::find_if(builtins.begin(),builtins.end(), std::bind(func, std::placeholders::_1));
         if(insertMode == ERowInsertMode::after_current)
             it++;
     }
@@ -31,6 +35,12 @@ static void InsertRow(QList<Builtin>& builtins, Builtin newRowValue, const Built
         it = builtins.end() - 1;
     }
     builtins.insert(it,newRowValue);
+    QList<Builtin*> newBuiltins;
+    for(int i(0); i < builtins.size(); i++)
+    {
+        newBuiltins.append(&builtins[i]);
+    }
+    holder->SetData(newBuiltins);
     model->SetInterface(interface);
 }
 
@@ -73,11 +83,11 @@ void BuiltinTable::TableSetup()
 
     typetableModel->SetInterface(typetableInterface);
 
-    QSortFilterProxyModel* sortModel = new QSortFilterProxyModel();
+    sortModel = new QSortFilterProxyModel();
     sortModel->setSourceModel(typetableModel);
     types_table->setModel(sortModel);
     types_table->setAlternatingRowColors(true);
-    types_table->setSortingEnabled(true);
+    //types_table->setSortingEnabled(true);
     types_table->resizeColumnToContents(0);
     types_table->resizeColumnToContents(8);
 }
@@ -152,8 +162,11 @@ void BuiltinTable::OnIdlVisibilityToggled(bool)
 void BuiltinTable::OnInsertNewRow()
 {
     QAction* senderAction = dynamic_cast<QAction*>(sender());
-    TableDataInterface* iFace = static_cast<TableDataInterface*>(types_table->currentIndex().internalPointer());
-    Builtin* holderPtr = static_cast<Builtin*>(iFace);
+    //TableDataInterface* iFace = static_cast<TableDataInterface*>(types_table->currentIndex().internalPointer());
+    QModelIndex current = types_table->selectionModel()->currentIndex();
+    current = sortModel->mapToSource(current);
+    Builtin* holderPtr = static_cast<Builtin*>(current.internalPointer());
+
     if(senderAction->data().toString() == "before")
         InsertRow(GenerationSettings::builtins, Builtin(), *holderPtr, typetableModel, typetableInterface, ERowInsertMode::before_current);
     else

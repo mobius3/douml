@@ -12,7 +12,7 @@ class QCheckBox;
 class QPushButton;
 class QLabel;
 class QMenu;
-
+class QSortFilterProxyModel;
 enum class ERowInsertMode
 {
     before_first,
@@ -37,6 +37,7 @@ private:
     void CreateConnections();
 
     QTableView* types_table = nullptr;
+    QSortFilterProxyModel* sortModel;
     AdaptingTableModel* typetableModel = nullptr;
     QSharedPointer<TableDataInterface> typetableInterface;
     TableDataListHolder<Builtin>* holder = nullptr;

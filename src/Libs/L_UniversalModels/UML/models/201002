@@ -1,6 +1,6 @@
 format 75
 "TreeController" // TreeController
-  revision 25
+  revision 27
   modified_by 42 "zeks"
   // class settings
   //class diagram settings
@@ -28,9 +28,32 @@ format 75
   
   cpp_h_dir "include/"
   cpp_src_dir "src/"
-  ncouples 2
+  ncouples 3
   key "exportHeader" value "#include \"l_tree_controller_global.h\""
   key "export" value "L_TREE_CONTROLLER_EXPORT"
+  key "copyright" value "// *************************************************************************
+//
+// Copyright 2012-2013 Nikolai Marchenko.
+//
+// This file is part of the Douml Uml Toolkit.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License Version 3.0 as published by
+// the Free Software Foundation and appearing in the file LICENSE.GPL included in the
+//  packaging of this file.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License Version 3.0 for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+//
+// e-mail : doumleditor@gmail.com
+//
+// *************************************************************************"
   classview 254890 "classes"
     //class diagram settings
     draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
@@ -1781,10 +1804,23 @@ Q_OBJECT
       end
 
       operation 2248874 "InternalPointer"
-	abstract preserve_cpp_body_indent cpp_virtual public explicit_return_type "void*"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
 	nparams 0
 	
 	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2255658 "InternalPointer"
+	abstract preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
+	nparams 1
+	
+	  param in name "row" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
 "
 	preserve_java_body_indent 
 	preserve_php_body_indent 
@@ -1931,7 +1967,7 @@ ${members}}
 	preserve_cpp_body_indent public explicit_return_type "void"
 	nparams 1
 	
-	  param in name "data" explicit_type "QList<T>"
+	  param in name "data" explicit_type "QList<T*>"
 	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
 "
 	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
@@ -2077,10 +2113,31 @@ ${members}}
       end
 
       operation 2249002 "InternalPointer"
-	preserve_cpp_body_indent cpp_virtual public explicit_return_type "void*"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
 	nparams 0
 	
 	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent 
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2255530 "InternalPointer"
+	preserve_cpp_body_indent const cpp_virtual public explicit_return_type "void*"
+	nparams 1
+	
+	  param in name "row" explicit_type "int"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
 "
 	preserve_java_body_indent 
 	preserve_php_body_indent 
@@ -2089,7 +2146,7 @@ ${members}}
       end
 
       attribute 1286314 "m_data"
-	private explicit_type "QList<T>"
+	private explicit_type "QList<T*>"
 	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
 	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
@@ -2624,7 +2681,8 @@ ${namespace_end}"
 
     artifact 639914 "TableDataInterface"
       stereotype "source"
-      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+      cpp_h "@{copyright}
+#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
 
 ${description}
@@ -2653,12 +2711,13 @@ ${namespace_end}"
 
     artifact 640042 "TableDataListHolder"
       stereotype "source"
-      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+      cpp_h "@{copyright}
+#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
 
 ${description}
 ${includes}
-@{exportHeader}
+
 @{loggingHeader}
 @{header}
 ${declarations}

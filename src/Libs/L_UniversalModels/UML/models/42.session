@@ -4,11 +4,16 @@ diagrams
     1047 806 100 3 0 0
 end
 show_stereotypes
+marked
+  class_ref 748458 // TableDataListHolder
+  class_ref 748330 // TableDataInterface
+end
 selected 
 package_ref 129 // models
 open
   class_ref 741802 // TreeModel
+  class_ref 748330 // TableDataInterface
   class_ref 748458 // TableDataListHolder
-  artifact_ref 639914 // TableDataInterface
+  deploymentview_ref 227626 // classes
 end
 end

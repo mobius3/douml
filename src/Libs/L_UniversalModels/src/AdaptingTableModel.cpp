@@ -93,10 +93,10 @@ void AdaptingTableModel::SetInterface(QSharedPointer<TableDataInterface> _interf
 QModelIndex AdaptingTableModel::index(int row, int column, const QModelIndex & parent) const 
 {
     // Bouml preserved body begin 00213CAA
-    Q_D(AdaptingTableModel);
+    Q_D(const AdaptingTableModel);
     if (!hasIndex(row, column, parent))
         return QModelIndex();
-    return createIndex(row, column, d->interface);
+    return createIndex(row, column, d->interface->InternalPointer(row));
     // Bouml preserved body end 00213CAA
 }
 
@@ -136,7 +136,7 @@ void AdaptingTableModel::OnReloadDataFromInterface()
     Q_D(AdaptingTableModel);
     reset();
 
-    if(d->interface->PreviousRowCount() == 0)
+    if(d->interface->PreviousRowCount() != 0)
     {
         int removeLimit = d->interface->PreviousRowCount() == 0 ? 0 : d->interface->PreviousRowCount()- 1;
         beginRemoveRows(QModelIndex(), 0, removeLimit);

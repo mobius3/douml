@@ -55,6 +55,10 @@ Q_OBJECT
 
     virtual int PreviousRowCount() = 0;
 
+    virtual void* InternalPointer() const = 0;
+
+    virtual void* InternalPointer(int row) const = 0;
+
 
 signals:
     void reloadData();

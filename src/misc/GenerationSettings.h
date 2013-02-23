@@ -52,6 +52,7 @@ public:
         java = _java;
         idl = _idl;
     }
+
     QString uml;
     QString cpp;
     QString java;
@@ -63,7 +64,17 @@ public:
 
     void set(const char * u, const char * c, const char * j, const char * i);
 };
-
+inline bool operator==(const Builtin & s1, const Builtin & s2)
+{
+    return s1.uml==s2.uml &&
+            s1.cpp==s2.cpp &&
+            s1.java==s2.java &&
+            s1.idl==s2.idl &&
+            s1.cpp_in==s2.cpp_in &&
+            s1.cpp_out==s2.cpp_out &&
+            s1.cpp_inout==s2.cpp_inout &&
+            s1.cpp_return==s2.cpp_return;
+}
 class Stereotype
 {
 public:

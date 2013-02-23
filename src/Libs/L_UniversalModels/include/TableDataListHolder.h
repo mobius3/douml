@@ -33,12 +33,12 @@
 #include <QSharedPointer>
 #include "ItemController.h"
 
-//#include "l_tree_controller_global.h"
 
 
 
-template<typename T>
-class TableDataListHolder : public TableDataInterface
+
+template<class T>
+class  TableDataListHolder : public TableDataInterface  
 {
   public:
     virtual QVariant GetValue(int row, int column, int role) const;
@@ -49,7 +49,7 @@ class TableDataListHolder : public TableDataInterface
 
     void SetColumns(QStringList _columns);
 
-    void SetData(QList<T*> data);
+    void SetData(const QList<T*> & data);
 
     QList<T> GetData() const;
 
@@ -65,15 +65,19 @@ class TableDataListHolder : public TableDataInterface
 
     virtual int PreviousRowCount();
 
+    virtual void* InternalPointer() const;
+
+    virtual void* InternalPointer(int row) const;
+
 
   private:
      QList<T*> m_data;
      QHash<QPair<int,int>, std::function<void(T*, QVariant)> > setters;
      QHash<QPair<int, int>, std::function<QVariant(const T*)> > getters;
-     QSharedPointer<ItemController<T> > controller;
+    QSharedPointer<ItemController<T> > controller;
 
      QStringList m_columns;
-     int previousRowCount;
+     int previousRowCount = 0;
 };
 template<class T>
 QVariant TableDataListHolder<T>::GetValue(int row, int column, int role) const 
@@ -113,7 +117,7 @@ void TableDataListHolder<T>::SetColumns(QStringList _columns)
 }
 
 template<class T>
-void TableDataListHolder<T>::SetData(QList<T*>  data)
+void TableDataListHolder<T>::SetData(const QList<T*> & data) 
 {
     // Bouml preserved body begin 002136AA
     previousRowCount = m_data.size();
@@ -176,6 +180,26 @@ int TableDataListHolder<T>::PreviousRowCount()
     // Bouml preserved body begin 0022372A
     return previousRowCount;
     // Bouml preserved body end 0022372A
+}
+
+template<class T>
+void* TableDataListHolder<T>::InternalPointer() const 
+{
+    // Bouml preserved body begin 0022512A
+    if(m_data.size() == 0)
+        return 0;
+    return m_data[0];
+    // Bouml preserved body end 0022512A
+}
+
+template<class T>
+void* TableDataListHolder<T>::InternalPointer(int row) const 
+{
+    // Bouml preserved body begin 00226AAA
+    if(m_data.size() < row)
+        return 0;
+    return m_data[row];
+    // Bouml preserved body end 00226AAA
 }
 
 #endif
