@@ -198,10 +198,10 @@ void BuiltinTable::CreateRowMenu()
         actInsertNewAfter->setData("after");
         menuRow->addSeparator();
         menuRow->addAction("Copy row", this, SLOT(OnCopyRow()));
-        QAction* actPasteRowBefore = menuRow->addAction("Paste row before", this, SLOT(OnPasteRow()));
-        actPasteRowBefore->setData("before");
-        QAction* actPasteRowAfter = menuRow->addAction("Paste row after", this, SLOT(OnPasteRow()));
-        actPasteRowAfter->setData("after");
+        menuRow->addAction("Paste row", this, SLOT(OnPasteRow()));
+//        actPasteRowBefore->setData("before");
+//        QAction* actPasteRowAfter = menuRow->addAction("Paste row after", this, SLOT(OnPasteRow()));
+//        actPasteRowAfter->setData("after");
         menuRow->addAction("Cut row", this, SLOT(OnCutRow()));
         menuRow->addSeparator();
         menuRow->addAction("Delete row", this, SLOT(OnDeleteRow()));
@@ -251,14 +251,39 @@ void BuiltinTable::OnInsertNewRow()
 
 void BuiltinTable::OnPasteRow()
 {
+    QModelIndex current = types_table->selectionModel()->currentIndex();
+    current = sortModel->mapToSource(current);
+
+    typetableModel->setData(current.sibling(current.row(),0), rowTemporary.uml, Qt::DisplayRole);
+    typetableModel->setData(current.sibling(current.row(),1), rowTemporary.cpp, Qt::DisplayRole);
+    typetableModel->setData(current.sibling(current.row(),2), rowTemporary.java, Qt::DisplayRole);
+    typetableModel->setData(current.sibling(current.row(),3), rowTemporary.idl, Qt::DisplayRole);
+    typetableModel->setData(current.sibling(current.row(),4), rowTemporary.cpp_in, Qt::DisplayRole);
+    typetableModel->setData(current.sibling(current.row(),5), rowTemporary.cpp_out, Qt::DisplayRole);
+    typetableModel->setData(current.sibling(current.row(),6), rowTemporary.cpp_inout, Qt::DisplayRole);
+    typetableModel->setData(current.sibling(current.row(),7), rowTemporary.cpp_return, Qt::DisplayRole);
 }
 
 void BuiltinTable::OnDeleteRow()
 {
+    QModelIndex current = types_table->selectionModel()->currentIndex();
+    current = sortModel->mapToSource(current);
+    //typetableInterface->
+    //Builtin* holderPtr = static_cast<Builtin*>(current.internalPointer());
+
+    //std::function<bool(Builtin)> func = [&](const Builtin& val1){return val1 == *holderPtr;};
+    //it = std::find_if(builtins.begin(),builtins.end(), std::bind(func, std::placeholders::_1));
+
+
 }
 
 void BuiltinTable::OnCopyRow()
 {
+    QModelIndex current = types_table->selectionModel()->currentIndex();
+    current = sortModel->mapToSource(current);
+    Builtin* holderPtr = static_cast<Builtin*>(current.internalPointer());
+    if(holderPtr)
+        rowTemporary = *holderPtr;
 }
 
 void BuiltinTable::OnCutRow()
