@@ -53,12 +53,10 @@ class GenerationSettingsDialog : public Q3TabDialog
 
 protected:
     // all
-    //TypesTable * types_table;
     BuiltinTable* builtinTable;
     // stereotypes
     StereotypesTable * relation_stereotypes_table;
     StereotypesTable * class_stereotypes_table;
-
     // C++ specific
     MultiLineEdit * edcpp_h_content;
     MultiLineEdit * edcpp_src_content;

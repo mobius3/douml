@@ -14,21 +14,8 @@
 #include <QApplication>
 #include <QHeaderView>
 #include <algorithm>
-#include <boost/bind.hpp>
-//#include <boost/bind/placeholders.hpp>
-//#include <boost/mpl/placeholders.hpp>
 static Builtin rowTemporary;
-
-//static bool SortBuiltinAscending(void* val1, void* val2)
-//{
-//    return static_cast<Builtin*>(val1)->uml < static_cast<Builtin*>(val2)->uml;
-//}
-//static bool SortBuiltinDescending(void* val1, void* val2)
-//{
-//    return static_cast<Builtin*>(val1)->uml < static_cast<Builtin*>(val2)->uml;
-//}
-
-static void InsertRow(QList<Builtin>& builtins, const Builtin& newRowValue, const Builtin& currentRowValue, AdaptingTableModel* model, QSharedPointer<TableDataInterface> interface, ERowInsertMode insertMode)
+static void InsertRow(QList<Builtin>& builtins, const Builtin& newRowValue, const Builtin& currentRowValue, QSharedPointer<TableDataInterface> interface, ERowInsertMode insertMode)
 {
     TableDataListHolder<Builtin>* holder = static_cast<TableDataListHolder<Builtin>*>(interface.data());
     QList<Builtin>::Iterator it;
@@ -55,7 +42,6 @@ static void InsertRow(QList<Builtin>& builtins, const Builtin& newRowValue, cons
         newBuiltins.append(&builtins[i]);
     }
     holder->SetData(newBuiltins);
-    //model->SetInterface(interface);
 }
 
 
@@ -87,7 +73,7 @@ bool BuiltinTable::ValidateTypes()
                 value.java.trimmed().isEmpty() ||
                 value.idl.trimmed().isEmpty() )
         {
-            QMessageBox::critical(0, tr("Error"), "Uml/Cpp/Java/Idl fields cannot be empty");
+            QMessageBox::critical(0, tr("Error"), tr("Uml/Cpp/Java/Idl fields cannot be empty"));
             return false;
         }
         QList<Builtin>& builtins =  GenerationSettings::builtins;
@@ -95,7 +81,7 @@ bool BuiltinTable::ValidateTypes()
         int count = std::count_if(builtins.begin(), builtins.end(), func);
         if(count > 1)
         {
-            QMessageBox::critical(0, tr("Error"), "Duplicate Uml entries are not allowed");
+            QMessageBox::critical(0, tr("Error"), tr("Duplicate Uml entries are not allowed"));
             return false;
         }
         if(!value.cpp_in.contains("${type}") ||
@@ -104,7 +90,7 @@ bool BuiltinTable::ValidateTypes()
                 !value.cpp_out.contains("${type}") ||
                 !value.cpp_return.contains("${type}"))
         {
-            QMessageBox::critical(0, tr("Error"), "Cpp parameter controls must contain ${type}");
+            QMessageBox::critical(0, tr("Error"), tr("Cpp parameter controls must contain ${type}"));
             return false;
         }
     }
@@ -131,7 +117,7 @@ QList<Builtin> BuiltinTable::GetBuiltins()
 QSize BuiltinTable::GetOptimalSize()
 {
     QRect rect = types_table->geometry();
-    int horizontalWidgth = 0;// = types_table->horizontalHeader()->width();
+    int horizontalWidgth = 0;
     for(int i(0); i < types_table->horizontalHeader()->count(); i++)
     {
         if(!types_table->horizontalHeader()->isSectionHidden(i))
@@ -156,7 +142,7 @@ void BuiltinTable::TableSetup()
     SetupAccess();
 
     holder->SetData(builtInList);
-    holder->SetColumns(QStringList() << "Uml" << "Cpp" << "Java" << "Idl" << "cpp_in" << "cpp_out" << "cpp_inout" << "cpp_return" << "do");
+    holder->SetColumns(QStringList() << "Uml" << "Cpp" << "Java" << "Idl" << "cpp_in" << "cpp_out" << "cpp_inout" << "cpp_return" << tr("do"));
 
     typetableInterface = QSharedPointer<TableDataInterface>(dynamic_cast<TableDataInterface*>(holder));
 
@@ -177,25 +163,17 @@ void BuiltinTable::TableSetup()
 void BuiltinTable::InitInterface()
 {
     QHBoxLayout* layControls = new QHBoxLayout;
-    pbAddNewType = new QPushButton(QIcon(":/root/icons/bullet_add.png"), "Add type");
-    lblVisibility = new QLabel("Language visibility:");
-    //lblSort = new QLabel("Sort order:");
+    pbAddNewType = new QPushButton(QIcon(":/root/icons/bullet_add.png"), tr("Add type"));
+    lblVisibility = new QLabel(tr("Language visibility:"));
     chkCpp = new QCheckBox("C++");
     chkCpp->setChecked(true);
     chkJava = new QCheckBox("Java");
     chkJava->setChecked(true);
     chkIdl = new QCheckBox("Idl");
     chkIdl->setChecked(true);
-    lblSearch = new QLabel("Search:");
+    lblSearch = new QLabel(tr("Search:"));
     leSearch = new QLineEdit();
-//    cbSort = new QComboBox();
-//    cbSort->addItem(tr("None"));
-//    cbSort->addItem(tr("Ascending"));
-//    cbSort->addItem(tr("Descending"));
-//    cbSort->setCurrentIndex(0);
     layControls->addWidget(pbAddNewType);
-    //layControls->addWidget(lblSort);
-    //layControls->addWidget(cbSort);
     layControls->addWidget(lblSearch);
     layControls->addWidget(leSearch);
     layControls->addWidget(lblVisibility);
@@ -220,19 +198,12 @@ void BuiltinTable::CreateRowMenu()
     if(!menuRow)
     {
         menuRow = new QMenu();
-//        QAction* actInsertNewBefore = menuRow->addAction("Insert row before", this, SLOT(OnInsertNewRow()));
-//        actInsertNewBefore->setData("before");
-//        QAction* actInsertNewAfter = menuRow->addAction("Insert row after", this, SLOT(OnInsertNewRow()));
-//        actInsertNewAfter->setData("after");
         menuRow->addSeparator();
-        menuRow->addAction("Copy row", this, SLOT(OnCopyRow()));
-        menuRow->addAction("Paste row", this, SLOT(OnPasteRow()));
-//        actPasteRowBefore->setData("before");
-//        QAction* actPasteRowAfter = menuRow->addAction("Paste row after", this, SLOT(OnPasteRow()));
-//        actPasteRowAfter->setData("after");
-        menuRow->addAction("Cut row", this, SLOT(OnCutRow()));
+        menuRow->addAction(tr("Copy row"), this, SLOT(OnCopyRow()));
+        menuRow->addAction(tr("Paste row"), this, SLOT(OnPasteRow()));
+        menuRow->addAction(tr("Cut row"), this, SLOT(OnCutRow()));
         menuRow->addSeparator();
-        menuRow->addAction("Delete row", this, SLOT(OnDeleteRow()));
+        menuRow->addAction(tr("Delete row"), this, SLOT(OnDeleteRow()));
     }
 }
 
@@ -247,35 +218,10 @@ void BuiltinTable::CreateConnections()
 
 }
 
-void BuiltinTable::OnAddNewType()
-{
-}
-
-void BuiltinTable::OnCppVisibilityToggled(bool)
-{
-}
-
-void BuiltinTable::OnJavaVisibilityToggled(bool)
-{
-}
-
-void BuiltinTable::OnIdlVisibilityToggled(bool)
-{
-}
 
 void BuiltinTable::OnInsertNewRow()
 {
-    //QAction* senderAction = dynamic_cast<QAction*>(sender());
-    //TableDataInterface* iFace = static_cast<TableDataInterface*>(types_table->currentIndex().internalPointer());
-    //QModelIndex current = types_table->selectionModel()->currentIndex();
-    //current = sortModel->mapToSource(current);
-    //Builtin* holderPtr = static_cast<Builtin*>(current.internalPointer());
-
-    //if(senderAction->data().toString() == "before")
-    InsertRow(GenerationSettings::builtins, Builtin(), Builtin(), typetableModel, typetableInterface, ERowInsertMode::after_last);
-//    else
-//        InsertRow(GenerationSettings::builtins, Builtin(), *holderPtr, typetableModel, typetableInterface, ERowInsertMode::after_current);
-
+    InsertRow(GenerationSettings::builtins, Builtin(), Builtin(), typetableInterface, ERowInsertMode::after_last);
 }
 
 void BuiltinTable::OnPasteRow()
@@ -298,13 +244,6 @@ void BuiltinTable::OnDeleteRow()
     QModelIndex current = types_table->selectionModel()->currentIndex();
     current = sortModel->mapToSource(current);
     typetableModel->RemoveRow(current);
-    //typetableInterface->
-    //Builtin* holderPtr = static_cast<Builtin*>(current.internalPointer());
-
-    //std::function<bool(Builtin)> func = [&](const Builtin& val1){return val1 == *holderPtr;};
-    //it = std::find_if(builtins.begin(),builtins.end(), std::bind(func, std::placeholders::_1));
-
-
 }
 
 void BuiltinTable::OnCopyRow()
@@ -397,7 +336,6 @@ void BuiltinTable::OnFilterTable(QString val)
 {
     sortModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     sortModel->setFilterRegExp(val);
-    //sortModel->setDynamicSortFilter(true);
 }
 
 

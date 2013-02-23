@@ -1,14 +1,12 @@
 #ifndef GENERATIONSETTINGSBUILTINTABLE_H
 #define GENERATIONSETTINGSBUILTINTABLE_H
 #include <QWidget>
-class QTableView;
-#include "Libs/L_UniversalModels/include/ItemController.h"
 #include "Libs/L_UniversalModels/include/TableDataInterface.h"
 #include "Libs/L_UniversalModels/include/TableDataListHolder.h"
 #include "GenerationSettings.h"
 
+class QTableView;
 class AdaptingTableModel;
-//class Builtin;
 class QCheckBox;
 class QPushButton;
 class QLabel;
@@ -60,11 +58,6 @@ private:
     QMenu* menuRow = nullptr;
     QList<Builtin> rollbackBuiltins;
 public slots:
-    void OnAddNewType();
-    void OnCppVisibilityToggled(bool);
-    void OnJavaVisibilityToggled(bool);
-    void OnIdlVisibilityToggled(bool);
-
     void OnInsertNewRow();
     void OnPasteRow();
     void OnDeleteRow();
