@@ -1,6 +1,6 @@
 format 75
 "TreeController" // TreeController
-  revision 30
+  revision 31
   modified_by 42 "zeks"
   // class settings
   //class diagram settings
@@ -1591,6 +1591,23 @@ d_ptr(new AdaptingTableModelPrivate())"
 	
       end
 
+      operation 2283818 "RemoveRow"
+	public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "index" explicit_type "modelIndex"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}const ${t0} & ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
       extra_member 188842 "slots"
 	
 	cpp "
@@ -1928,6 +1945,23 @@ Q_OBJECT
 "
 	preserve_php_body_indent 
 	preserve_python_body_indent 
+	
+      end
+
+      operation 2283946 "RemoveRow"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "index" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
 	
       end
 
@@ -2378,6 +2412,23 @@ ${members}}
 	nparams 1
 	
 	  param in name "func" explicit_type "std::function<bool(void*, void*)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2284074 "RemoveRow"
+	cpp_virtual public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "index" explicit_type "int"
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${abstract};
 "
 	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}

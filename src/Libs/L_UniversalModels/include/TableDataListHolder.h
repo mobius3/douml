@@ -53,9 +53,9 @@ class  TableDataListHolder : public TableDataInterface
 
     void SetData(const QList<T*> & data);
 
-    QList<T> GetData() const;
+    QList<T*> GetData() const;
 
-    QList<T>& GetData();
+    QList<T*>& GetData();
 
     static inline QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > GetFlagsFunctors();
 
@@ -84,6 +84,8 @@ class  TableDataListHolder : public TableDataInterface
     static void SetFlagsFunctors(QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > value);
 
     virtual void SetSortFunction(std::function<bool(void*, void*)> func);
+
+    virtual void RemoveRow(int index);
 
 
   private:
@@ -145,7 +147,7 @@ void TableDataListHolder<T>::SetData(const QList<T*> & data)
 }
 
 template<class T>
-QList<T> TableDataListHolder<T>::GetData() const 
+QList<T*> TableDataListHolder<T>::GetData() const
 {
     // Bouml preserved body begin 00218C2A
     return m_data;
@@ -153,7 +155,7 @@ QList<T> TableDataListHolder<T>::GetData() const
 }
 
 template<class T>
-QList<T>& TableDataListHolder<T>::GetData() 
+QList<T*>& TableDataListHolder<T>::GetData()
 {
     // Bouml preserved body begin 0021E7AA
     return m_data;
@@ -281,6 +283,14 @@ void TableDataListHolder<T>::SetSortFunction(std::function<bool(void*, void*)> f
     // Bouml preserved body begin 0022A3AA
     sortFunction = func;
     // Bouml preserved body end 0022A3AA
+}
+
+template<class T>
+void TableDataListHolder<T>::RemoveRow(int index) 
+{
+    // Bouml preserved body begin 0022DA2A
+    m_data.remove(m_data.begin()+index);
+    // Bouml preserved body end 0022DA2A
 }
 
 template<class T>

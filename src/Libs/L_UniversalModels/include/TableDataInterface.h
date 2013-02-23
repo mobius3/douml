@@ -68,6 +68,8 @@ Q_OBJECT
 
     virtual Qt::ItemFlags flags(const QModelIndex & index) const = 0;
 
+    virtual void RemoveRow(int index) = 0;
+
 
 signals:
     void reloadData();

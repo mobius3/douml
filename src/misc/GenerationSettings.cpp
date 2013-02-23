@@ -1092,6 +1092,8 @@ QString GenerationSettings::idl_class_stereotype(const QString & s)
 bool GenerationSettings::edit()
 {
     GenerationSettingsDialog d;
+    //d.resize(1200,600);
+    //d.adjustSize();
 
     return (d.exec() == QDialog::Accepted);
 }

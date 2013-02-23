@@ -32,6 +32,8 @@ public:
     void Init();
     bool ValidateTypes();
     void RollBack();
+    QList<Builtin> GetBuiltins();
+    QSize GetOptimalSize();
 
 private:
     void SetupAccess();

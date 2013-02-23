@@ -857,6 +857,7 @@ void ClassData::edit()
     // edition must be modal
     //An<EdgeMenuFactory> factory;
     ClassDialog::Instance(this)->show();
+    ClassDialog::Instance(this)->raise();
     //dialog->setModal(false);
     //QObject::connect(dialog.data(), SIGNAL(edgeMenuRequested(uint)),factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
     //dialog->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);

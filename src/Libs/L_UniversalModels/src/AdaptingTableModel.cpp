@@ -87,6 +87,7 @@ void AdaptingTableModel::SetInterface(QSharedPointer<TableDataInterface> _interf
     Q_D(AdaptingTableModel);
     d->interface = _interface;
     TableDataInterface* interfacePointer = d->interface.data();
+    disconnect(interfacePointer, SIGNAL(reloadData()), this, SLOT(OnReloadDataFromInterface()));
     connect(interfacePointer, SIGNAL(reloadData()), this, SLOT(OnReloadDataFromInterface()));
     // Bouml preserved body end 00218B2A
 }
@@ -117,6 +118,8 @@ QVariant AdaptingTableModel::headerData(int section, Qt::Orientation orientation
     Q_D(const AdaptingTableModel);
     if(d->interface->rowCount() == 0 )
         return QVariant();
+    if(section < 0 || section > d->interface->GetColumns().size())
+        return QVariant();
     if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
         //qDebug() << interface->GetColumns().at(section);
@@ -145,6 +148,18 @@ void AdaptingTableModel::sort()
     // Bouml preserved body end 0022A12A
 }
 
+void AdaptingTableModel::RemoveRow(const QModelIndex & index) 
+{
+    // Bouml preserved body begin 0022D92A
+    Q_D(AdaptingTableModel);
+    if(!index.isValid())
+        return;
+    d->interface->RemoveRow(index.row());
+    beginRemoveRows(QModelIndex(), index.row(),index.row());
+    endRemoveRows();
+    // Bouml preserved body end 0022D92A
+}
+
 void AdaptingTableModel::OnReloadDataFromInterface() 
 {
     // Bouml preserved body begin 0021702A
@@ -153,7 +168,7 @@ void AdaptingTableModel::OnReloadDataFromInterface()
 
     if(d->interface->PreviousRowCount() != 0)
     {
-        int removeLimit = d->interface->PreviousRowCount() == 0 ? 0 : d->interface->PreviousRowCount()- 1;
+        int removeLimit = d->interface->PreviousRowCount() == 0 ? 0 : d->interface->PreviousRowCount();
         beginRemoveRows(QModelIndex(), 0, removeLimit);
         endRemoveRows();
     }

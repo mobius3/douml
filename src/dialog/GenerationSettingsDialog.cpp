@@ -42,6 +42,7 @@
 #include <q3buttongroup.h>
 #include <qsplitter.h>
 #include <qspinbox.h>
+#include <QApplication>
 //Added by qt3to4:
 
 
@@ -91,6 +92,7 @@ GenerationSettingsDialog::GenerationSettingsDialog()
     init_idl5();
     init_descriptions();
     init_dirs();
+
 }
 
 void GenerationSettingsDialog::polish()
@@ -114,6 +116,7 @@ void GenerationSettingsDialog::init_types()
     new QLabel(TR("Types correspondence, and C++ operation argument default passing for them :"), grid);
     builtinTable = new BuiltinTable(grid);
     builtinTable->Init();
+    this->resize(builtinTable->GetOptimalSize());
     addTab(grid, TR("Types"));
 }
 
@@ -123,7 +126,7 @@ void GenerationSettingsDialog::init_stereotypes()
 
     grid->setMargin(3);
     grid->setSpacing(3);
-
+    this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     new QLabel(TR("Attributes and \nRelations\nstereotypes \ncorrespondence : "), grid);
     relation_stereotypes_table =
         new StereotypesTable(grid, GenerationSettings::nrelattrstereotypes,
@@ -1859,7 +1862,10 @@ static const char * get_indent(Q3ComboBox * cb)
 
 void GenerationSettingsDialog::accept()
 {
-    if (builtinTable->ValidateTypes()) {
+    if (builtinTable->ValidateTypes())
+    {
+        GenerationSettings::builtins = builtinTable->GetBuiltins();
+        GenerationSettings::nbuiltins = GenerationSettings::builtins.size();
         QString enum_in = cpp_enum_in->text().stripWhiteSpace();
         QString enum_out = cpp_enum_out->text().stripWhiteSpace();
         QString enum_inout = cpp_enum_inout->text().stripWhiteSpace();
@@ -2570,3 +2576,4 @@ void IncludeTable::update()
         }
     }
 }
+

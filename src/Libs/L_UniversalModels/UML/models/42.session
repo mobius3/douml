@@ -6,13 +6,11 @@ end
 show_stereotypes
 marked
   class_ref 748458 // TableDataListHolder
-  class_ref 748330 // TableDataInterface
 end
 selected 
-  package_ref 129 // models
+package_ref 129 // models
 open
-  class_ref 714666 // ItemController
-  class_ref 748330 // TableDataInterface
+  extra_member_ref 188970 // object
   operation_ref 2277034 // get_flagsFunctors
   operation_ref 2276906 // flags
   operation_ref 2276778 // AddFlagsFunctor

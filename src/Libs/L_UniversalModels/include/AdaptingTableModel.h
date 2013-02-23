@@ -68,6 +68,8 @@ Q_OBJECT
 
     void sort();
 
+    void RemoveRow(const QModelIndex & index);
+
 
 public slots:
     void OnReloadDataFromInterface();

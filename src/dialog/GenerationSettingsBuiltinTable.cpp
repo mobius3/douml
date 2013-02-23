@@ -11,6 +11,8 @@
 #include <QMenu>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QApplication>
+#include <QHeaderView>
 #include <algorithm>
 #include <boost/bind.hpp>
 //#include <boost/bind/placeholders.hpp>
@@ -53,7 +55,7 @@ static void InsertRow(QList<Builtin>& builtins, const Builtin& newRowValue, cons
         newBuiltins.append(&builtins[i]);
     }
     holder->SetData(newBuiltins);
-    model->SetInterface(interface);
+    //model->SetInterface(interface);
 }
 
 
@@ -112,6 +114,31 @@ bool BuiltinTable::ValidateTypes()
 void BuiltinTable::RollBack()
 {
     GenerationSettings::builtins = rollbackBuiltins;
+}
+
+QList<Builtin> BuiltinTable::GetBuiltins()
+{
+    QList<Builtin> result;
+    QList<Builtin*> builtins = holder->GetData();
+    for(Builtin* builtin : builtins)
+    {
+        if(builtin)
+            result.append(*builtin);
+    }
+    return result;
+}
+
+QSize BuiltinTable::GetOptimalSize()
+{
+    QRect rect = types_table->geometry();
+    int horizontalWidgth = 0;// = types_table->horizontalHeader()->width();
+    for(int i(0); i < types_table->horizontalHeader()->count(); i++)
+    {
+        if(!types_table->horizontalHeader()->isSectionHidden(i))
+            horizontalWidgth+= types_table->horizontalHeader()->sectionSize(i);
+    }
+    rect.setWidth(horizontalWidgth);
+    return QSize(rect.width()+45, rect.height());
 }
 
 void BuiltinTable::TableSetup()
@@ -182,6 +209,7 @@ void BuiltinTable::InitInterface()
     layMain->addLayout(layControls);
     layMain->addWidget(types_table);
     layMain->setContentsMargins(0,0,0,0);
+
     this->setLayout(layMain);
 
 
@@ -192,10 +220,10 @@ void BuiltinTable::CreateRowMenu()
     if(!menuRow)
     {
         menuRow = new QMenu();
-        QAction* actInsertNewBefore = menuRow->addAction("Insert row before", this, SLOT(OnInsertNewRow()));
-        actInsertNewBefore->setData("before");
-        QAction* actInsertNewAfter = menuRow->addAction("Insert row after", this, SLOT(OnInsertNewRow()));
-        actInsertNewAfter->setData("after");
+//        QAction* actInsertNewBefore = menuRow->addAction("Insert row before", this, SLOT(OnInsertNewRow()));
+//        actInsertNewBefore->setData("before");
+//        QAction* actInsertNewAfter = menuRow->addAction("Insert row after", this, SLOT(OnInsertNewRow()));
+//        actInsertNewAfter->setData("after");
         menuRow->addSeparator();
         menuRow->addAction("Copy row", this, SLOT(OnCopyRow()));
         menuRow->addAction("Paste row", this, SLOT(OnPasteRow()));
@@ -215,6 +243,7 @@ void BuiltinTable::CreateConnections()
     connect(chkIdl, SIGNAL(clicked()),this, SLOT(OnSetParameterVisibility()));
     connect(chkJava, SIGNAL(clicked()),this, SLOT(OnSetParameterVisibility()));
     connect(leSearch, SIGNAL(textEdited(QString)), this, SLOT(OnFilterTable(QString)));
+    connect(pbAddNewType, SIGNAL(clicked()),this, SLOT(OnInsertNewRow()));
 
 }
 
@@ -236,16 +265,16 @@ void BuiltinTable::OnIdlVisibilityToggled(bool)
 
 void BuiltinTable::OnInsertNewRow()
 {
-    QAction* senderAction = dynamic_cast<QAction*>(sender());
+    //QAction* senderAction = dynamic_cast<QAction*>(sender());
     //TableDataInterface* iFace = static_cast<TableDataInterface*>(types_table->currentIndex().internalPointer());
-    QModelIndex current = types_table->selectionModel()->currentIndex();
-    current = sortModel->mapToSource(current);
-    Builtin* holderPtr = static_cast<Builtin*>(current.internalPointer());
+    //QModelIndex current = types_table->selectionModel()->currentIndex();
+    //current = sortModel->mapToSource(current);
+    //Builtin* holderPtr = static_cast<Builtin*>(current.internalPointer());
 
-    if(senderAction->data().toString() == "before")
-        InsertRow(GenerationSettings::builtins, Builtin(), *holderPtr, typetableModel, typetableInterface, ERowInsertMode::before_current);
-    else
-        InsertRow(GenerationSettings::builtins, Builtin(), *holderPtr, typetableModel, typetableInterface, ERowInsertMode::after_current);
+    //if(senderAction->data().toString() == "before")
+    InsertRow(GenerationSettings::builtins, Builtin(), Builtin(), typetableModel, typetableInterface, ERowInsertMode::after_last);
+//    else
+//        InsertRow(GenerationSettings::builtins, Builtin(), *holderPtr, typetableModel, typetableInterface, ERowInsertMode::after_current);
 
 }
 
@@ -268,6 +297,7 @@ void BuiltinTable::OnDeleteRow()
 {
     QModelIndex current = types_table->selectionModel()->currentIndex();
     current = sortModel->mapToSource(current);
+    typetableModel->RemoveRow(current);
     //typetableInterface->
     //Builtin* holderPtr = static_cast<Builtin*>(current.internalPointer());
 
@@ -288,6 +318,8 @@ void BuiltinTable::OnCopyRow()
 
 void BuiltinTable::OnCutRow()
 {
+    OnCopyRow();
+    OnDeleteRow();
 }
 
 #define ADD_STRING_GETSET(HOLDER,ROW,ROLE,PARAM)  \
@@ -363,8 +395,9 @@ void BuiltinTable::OnSetParameterVisibility()
 
 void BuiltinTable::OnFilterTable(QString val)
 {
+    sortModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     sortModel->setFilterRegExp(val);
-    sortModel->setDynamicSortFilter(true);
+    //sortModel->setDynamicSortFilter(true);
 }
 
 

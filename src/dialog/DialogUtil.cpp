@@ -721,7 +721,8 @@ static QWidgetList NonModalDialogs;
 
 void open_dialog(QWidget * w)
 {
-    NonModalDialogs.append(w);
+    if(!NonModalDialogs.contains(w))
+        NonModalDialogs.append(w);
 }
 
 

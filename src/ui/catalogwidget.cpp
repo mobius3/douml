@@ -374,7 +374,7 @@ void CatalogWidget::OnUpdateVisitedView(Q3ListViewItem * item)
 {
     if(UseSkipVisited())
         return;
-
+    this->ui->tabWidget->setCurrentWidget(this->ui->tabVisited);
     BrowserNode* itemAsNode = static_cast<BrowserNode*>(item);
     itemAsNode = itemAsNode->get_first_generatable_node();
 
@@ -383,6 +383,7 @@ void CatalogWidget::OnUpdateVisitedView(Q3ListViewItem * item)
 
 void CatalogWidget::OnUpdateMarkedView(QList<BrowserNode *> markedItems)
 {
+    this->ui->tabWidget->setCurrentWidget(this->ui->tabMarked);
     if(rootMarkedInterface.isNull())
         return;
     QList<QSharedPointer<TreeItemInterface > >  items;

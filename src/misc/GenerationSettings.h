@@ -54,13 +54,13 @@ public:
     }
 
     QString uml;
-    QString cpp;
-    QString java;
-    QString idl;
-    QString cpp_in;
-    QString cpp_out;
-    QString cpp_inout;
-    QString cpp_return;
+    QString cpp = "DEFAULT";
+    QString java = "DEFAULT";
+    QString idl = "DEFAULT";
+    QString cpp_in = "${type}";
+    QString cpp_out = "${type} &";
+    QString cpp_inout = "${type} &";
+    QString cpp_return = "${type}";
 
     void set(const char * u, const char * c, const char * j, const char * i);
 };

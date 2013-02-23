@@ -227,6 +227,7 @@ public:
     GenerationSettingsDialog();
     virtual ~GenerationSettingsDialog();
 
+
 protected:
     void init_types();
     void init_stereotypes();

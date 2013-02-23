@@ -88,6 +88,7 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0, 0, FALSE), cl(c)
     SetCurrentNode(c->browser_node);
     InitGui();
     FillGuiElements(c);
+    //open_dialog(this);
 }
 
 void ClassDialog::polish()
@@ -3067,6 +3068,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     formals_table->update(cl, inh);
 
     // instantiate tab
+    //todo
     actuals_table->update(cl, inh);
 
     if (cl->get_n_actualparams() != 0)
