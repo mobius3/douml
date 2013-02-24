@@ -149,7 +149,8 @@ static WrapperStr root_relative_if_possible(WrapperStr p)
     int pln = p.length();
     int rln = RootCDir.length();
 
-    return ((pln >= rln) && (p.left(rln).length() == rln)) // [lgfreitas] i am assuming its comparing lengths...
+    //todo try to fix root relative
+    return ((pln >= rln) && (p.left(rln).length() == (unsigned)rln)) // [lgfreitas] i am assuming its comparing lengths...
            ? p.mid(rln)
            : p;
 }
@@ -396,7 +397,6 @@ Package * Package::scan_dir(int & n)
 static bool allowed(QRegExp * rg, QString f)
 {
     if (rg != 0) {
-        int matchLen;
         return rg->exactMatch(f); //[lgfreitas] I do not know if this will work
         /*return ((rg->match(f, 0, &matchLen) != 0) ||
             (matchLen != (int) f.length()));*/

@@ -570,7 +570,7 @@ UI_DIR = ui
 DESTDIR = ../bin
 
 QMAKE_CXXFLAGS += -std=gnu++11
-LIBS += -L../bin -lUniversalModelsd
+LIBS += -L../bin -lUniversalModels
 RESOURCES += icons.qrc
 
 FORMS += \

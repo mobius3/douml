@@ -302,11 +302,12 @@ bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
 
             if ((typespec.type == 0) && (cl->stereotype() != "enum")) {
                 WrapperStr t = typespec.explicit_type;
-                int index2;
+                int index2 = 0;
 
                 if (!t.isEmpty() &&
                         (t.at(t.length() - 1) == ">") &&
-                    ((index2 = t.find('<')) > 0)) {
+                    ((index2 = t.find('<')) > 0))
+                {
                     at->set_Stereotype(t.left(index2));
                     typespec.explicit_type =
                         // may be a,b ...

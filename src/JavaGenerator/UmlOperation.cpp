@@ -53,7 +53,7 @@ const int BodyPostfixLength = 28;
 static bool generate_type(const Q3ValueList<UmlParameter> & params,
                           unsigned rank, QTextStream & f)
 {
-    if (rank >= params.count())
+    if ((int)rank >= params.count())
         return FALSE;
 
     UmlClass::write(f, params[rank].type);
@@ -63,7 +63,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
 static bool generate_var(const Q3ValueList<UmlParameter> & params,
                          unsigned rank, QTextStream & f)
 {
-    if (rank >= params.count())
+    if ((int)rank >= params.count())
         return FALSE;
 
     f << params[rank].name;

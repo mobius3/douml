@@ -57,7 +57,7 @@ UmlClass::UmlClass(void * id, const WrapperStr & n)
 
 void UmlClass::need_artifact(const QStringList & imports,
                              bool remove_java_lang,
-                             const QStringList & static_imports,
+                             const QStringList & ,
                              const WrapperStr & path, UmlArtifact *& cp)
 {
     if (parent()->kind() == aClassView) {

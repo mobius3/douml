@@ -281,7 +281,7 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
             cl->compute_type(type, return_type, typeform, FALSE, tmplts);
     }
 
-    int index;
+    int index = 0;
     WrapperStr decl;
 
     if (op != 0) {
@@ -1271,7 +1271,7 @@ bool UmlOperation::operations(Q3PtrList<UmlOperation> & candidates, UmlClass * c
     do {
         if (!((UmlClass *) cl1)->formals().isEmpty()) {
             // template not explicit
-            if (bypassed_tmplts == tmplts.count()) {
+            if ((int)bypassed_tmplts == tmplts.count()) {
                 Lex::warn("not enouth template specification for <font color =\"red\">"
                           + Lex::quote(name) + "</font>");
                 return TRUE;
@@ -1498,7 +1498,7 @@ void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
     UmlClass * cl = 0;
 
     do {
-        if ((nargs == ~0u) || (it.current()->params().count() == nargs)) {
+        if ((nargs == ~0u) || (it.current()->params().count() == (int)nargs)) {
             if (cl != it.current()->parent()) {
                 cl = (UmlClass *) it.current()->parent();
                 cl->set_under_construction(TRUE, TRUE);
@@ -1544,7 +1544,7 @@ bool UmlOperation::reverse_if_def(Package * pack,
     param_names.setAutoDelete(TRUE);
 
     while (read_param(pack /*yes !*/, rank, param, decl, tmplts, on_error, FALSE)) {
-        if ((params.count() <= rank) ||
+        if ((params.count() <= (int)rank) ||
             (params[rank].dir != param.dir) ||
             (params[rank].type.toString() != param.type.toString()))
             // uncompatible
@@ -1635,14 +1635,14 @@ bool UmlOperation::reverse_if_def(Package * pack,
         rank = 0;
 
         while (read_throw_elt(pack, tcl, tmplts)) {
-            if ((exc.count() <= rank) || (exc[rank].toString() != tcl.toString()))
+            if ((exc.count() <= (int)rank) || (exc[rank].toString() != tcl.toString()))
                 // uncompatible
                 return FALSE;
 
             rank += 1;
         }
 
-        if (exc.count() != rank)
+        if (exc.count() != (int)rank)
             // uncompatible
             return FALSE;
 
@@ -1703,7 +1703,7 @@ bool UmlOperation::reverse_if_def(Package * pack,
         else {
 #ifdef ROUNDTRIP
 
-            while (params.count() != nargs) {
+            while (params.count() != (int)nargs) {
 #if QT_VERSION == 230
                 Q3ValueList<UmlParameter>::Iterator it = params.end();
 

@@ -1,4 +1,4 @@
-DoUML version 1.0b
+DoUML version 1.0b2
 ==================
 
 *** IMPORTANT NOTICE ***

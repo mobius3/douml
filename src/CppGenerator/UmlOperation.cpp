@@ -188,7 +188,7 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
             else if (sscanf(p, "${t%u}", (unsigned *) &index) == 1) {
                 p = strchr(p, '}') + 1;
 
-                if (((unsigned) index) < params.count()) {
+                if ((index) < params.count()) {
                     // else error signaled later
                     ts = params[index].type;
 
@@ -309,7 +309,7 @@ void UmlOperation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 static bool generate_type(const Q3ValueList<UmlParameter> & params,
                           unsigned rank, QTextStream & f_h)
 {
-    if (rank >= params.count())
+    if ((int)rank >= params.count())
         return FALSE;
 
     UmlClass::write(f_h, params[rank].type);
@@ -320,7 +320,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
 static bool generate_var(const Q3ValueList<UmlParameter> & params,
                          unsigned rank, QTextStream & f_h)
 {
-    if (rank >= params.count())
+    if ((int)rank >= params.count())
         return FALSE;
 
     f_h << params[rank].name;
@@ -330,7 +330,7 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
 static bool generate_init(const Q3ValueList<UmlParameter> & params,
                           unsigned rank, QTextStream & f_h)
 {
-    if (rank >= params.count())
+    if ((int)rank >= params.count())
         return FALSE;
 
     if (! params[rank].default_value.isEmpty())

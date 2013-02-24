@@ -185,9 +185,6 @@ void UmlArtifact::generate()
                     manage_alias(p, f_h);
                 else if (*p != '$')
                 {
-                    QTextCodec* codec = QTextCodec::codecForLocale();
-                    //f_h << codec->fromUnicode(*p,1);
-                    //p++;
                     f_h << toLocale(p);
                 }
                 else if (!strncmp(p, "${comment}", 10))
