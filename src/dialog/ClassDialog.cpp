@@ -432,9 +432,9 @@ static void cpp_generate_inherit(QString & s, ClassData * cl,
                                  BrowserNodeList & nodes,
                                  QStringList & node_names)
 {
-    BrowserNodeList inh;
-    const char * sep = " : ";
 
+    const char * sep = " : ";
+    BrowserNodeList inh;
     cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
 
     Q3PtrListIterator<BrowserNode> it(inh);

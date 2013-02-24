@@ -353,14 +353,17 @@ void OperationDialog::FillUmlTab(OperationData * oper)
         forcegenbody_cb->setChecked(false);
 
     init_get_set();
-    table->update(oper, list, this, !isWritable); //todo update the table
+    table->update(oper, list, this, !isWritable);
     if (oper->is_get_or_set)
         table->setEnabled(FALSE);
     else
         table->setEnabled(true);
 
-    //etable->update(oper,oper->browser_node->children(inh, UmlGeneralisation, UmlRealize));
-            //= new ExceptionsTable(oper, umlGrid, list, !isWritable); //todo update the table
+    etable->Reinitialize(oper,list, isWritable);
+
+//    BrowserNodeList inh;
+//    cl->get_browser_node()->children(inh, UmlGeneralisation, UmlRealize);
+//    etable->update(oper,inh);
     pbEditor->setEnabled(isWritable);
     pbDefault->setEnabled(isWritable);
     comment->setText(oper->get_browser_node()->get_comment());
@@ -3231,8 +3234,8 @@ bool OperationDialog::SaveData()
 {
     BrowserClass* containingClass = static_cast<BrowserClass*>(oper->browser_node->get_container(UmlClass));
     QList<BrowserNode *>  passedNodes;
-    QList<OperationData*> inheritanceSiblings;
     bool goBack = true;
+    QList<OperationData*> inheritanceSiblings;
     inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper, passedNodes, goBack);
     bool propagateThroughInheritance = false;
     OperationData* operCopy = new OperationData(oper, (BrowserOperation*)oper->get_browser_node());
@@ -5476,7 +5479,7 @@ QStringList ParamsTable::all_values()
 QString ExceptionsTable::type_copy;
 
 ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
-                                 const QStringList & list, bool visit)
+                                 QStringList & list, bool visit)
     : MyTable(o->get_n_exceptions() + 1, (visit) ? 1 : 2, parent), types(list)
 {
     int index;
@@ -5487,7 +5490,8 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
     setRowMovingEnabled(TRUE);
     horizontalHeader()->setLabel(0, TR("Type"));
 
-    if (visit) {
+    if (visit)
+    {
         for (index = 0; index < sup; index += 1)
             setItem(index, 0, new TableItem(this, Q3TableItem::Never, o->get_exception(index).get_full_type()));
     }
@@ -5516,8 +5520,48 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
     }
 }
 
-void ExceptionsTable::Reinitialize(OperationData *a, const QStringList &list, bool visit)
+void ExceptionsTable::Reinitialize(OperationData *o, QStringList &list, bool isWritable)
 {
+    types = list;
+    int oldRowCount = numRows()-1;
+    for (int index =  oldRowCount; index > -1; index -= 1) {
+        removeRow(index);
+    }
+    int sup = o->get_n_exceptions();
+    setNumRows(sup+1);
+
+    if (!isWritable)
+    {
+        disconnect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
+                this, SLOT(button_pressed(int, int, int, const QPoint &)));
+        disconnect(this, SIGNAL(valueChanged(int, int)),
+                this, SLOT(value_changed(int, int)));
+        setNumCols(1);
+        for (int index = 0; index < sup; index += 1)
+            setItem(index, 0, new TableItem(this, Q3TableItem::Never, o->get_exception(index).get_full_type()));
+    }
+    else
+    {
+        setNumCols(2);
+        horizontalHeader()->setLabel(1, TR("do"));
+        setColumnStretchable(1, FALSE);
+        adjustColumn(1);
+
+        int index;
+        for (index = 0; index < sup; index += 1) {
+            setItem(index, 0, new ComboItem(this, o->get_exception(index).get_full_type(), types));
+            setText(index, 1, QString());
+        }
+
+        setItem(index, 0, new ComboItem(this, QString(), types));
+        setText(index, 1, QString());
+        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
+                this, SLOT(button_pressed(int, int, int, const QPoint &)));
+        connect(this, SIGNAL(valueChanged(int, int)),
+                this, SLOT(value_changed(int, int)));
+
+    }
+
 }
 
 

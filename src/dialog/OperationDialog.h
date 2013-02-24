@@ -417,14 +417,14 @@ class ExceptionsTable : public MyTable
     Q_OBJECT
 
 protected:
-    const QStringList & types;
+    QStringList & types;
 
     static QString type_copy;		// copy/cut/paste
 
 public:
     ExceptionsTable(OperationData * a, QWidget * parent,
-                    const QStringList & list, bool visit);
-    void Reinitialize(OperationData * a, const QStringList & list, bool visit);
+                    QStringList & list, bool visit);
+    void Reinitialize(OperationData * a, QStringList & list, bool visit);
 
 protected:
     virtual void activateNextCell();
