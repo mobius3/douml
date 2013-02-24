@@ -892,9 +892,16 @@ QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData 
     //QLOG_INFO() << oper->definition(TRUE, FALSE);
     for(OperationData* testedOper: usedInheritedOpers)
     {
-        //QLOG_INFO() << testedOper->definition(TRUE, FALSE);
+
+
         if(oper->definition(TRUE, FALSE) == testedOper->definition(TRUE, FALSE))
+        //if(compare)
         {
+            bool compare = PropagationEquality(*oper,*testedOper);
+            if(!compare)
+                continue;
+
+            //QLOG_INFO() << testedOper->definition(TRUE, FALSE);
             QString name = full_name();
             QString origin_name = oper->get_origin_class();
             QString containerName = operContainter->full_name();

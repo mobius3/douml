@@ -132,6 +132,7 @@ protected:
     WrapperStr idl_name_spec;	// get_${name}
 
     friend bool operator==(const OperationData & , const OperationData & );
+    friend bool PropagationEquality(const OperationData & origin, const OperationData & another);
 
     void depend_on(BrowserClass * cl);
     void no_longer_depend_on(BrowserClass * cl);
@@ -389,6 +390,7 @@ protected slots:
 };
 
 bool operator==(const OperationData & s1, const OperationData & s2);
+bool PropagationEquality(const OperationData & origin, const OperationData & another);
 //bool operator!=(const OperationData & s1, const OperationData & s2);
 #endif
 

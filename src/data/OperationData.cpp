@@ -168,24 +168,24 @@ void OperationData::PropagateFrom(const OperationData * model, bool goBack, QLis
     uml_visibility=model->uml_visibility;
     cpp_visibility=UmlDefaultVisibility;
     //is_abstract = model->is_abstract;
-    force_body_gen = model->force_body_gen;
+    //force_body_gen = model->force_body_gen;
     is_volatile = model->is_volatile;
     cpp_const = model->cpp_const;
     cpp_friend = model->cpp_friend;
     cpp_virtual = model->cpp_virtual;
-    cpp_inline = model->cpp_inline;
+    //cpp_inline = model->cpp_inline;
     cpp_get_set_frozen = model->cpp_get_set_frozen;
-    cpp_indent_body = model->cpp_indent_body;
-    java_final = model->java_final;
-    java_synchronized = model->java_synchronized;
+    //cpp_indent_body = model->cpp_indent_body;
+    //java_final = model->java_final;
+    //java_synchronized = model->java_synchronized;
     java_get_set_frozen = model->java_get_set_frozen;
     java_indent_body = model->java_indent_body;
-    php_final = model->php_final;
+    //php_final = model->php_final;
     php_get_set_frozen = model->php_get_set_frozen;
     php_indent_body = model->php_indent_body;
     python_get_set_frozen = model->python_get_set_frozen;
 
-    python_indent_body = model->python_indent_body;
+    //python_indent_body = model->python_indent_body;
     idl_oneway = model->idl_oneway;
     idl_get_set_frozen = model->idl_get_set_frozen;
 
@@ -207,7 +207,7 @@ void OperationData::PropagateFrom(const OperationData * model, bool goBack, QLis
     nexceptions = model->nexceptions;
     constraint = model->constraint;
     cpp_decl = model->cpp_decl;
-    java_annotation = model->java_annotation;
+    //java_annotation = model->java_annotation; todo
     python_decorator = model->python_decorator;
     idl_decl = model->idl_decl;
 
@@ -4015,4 +4015,123 @@ bool operator==(const OperationData & origin, const OperationData & another)
      return true;
 
 
+}
+
+bool PropagationEquality(const OperationData & origin, const OperationData & another)
+{
+    bool paramsResult = false;
+    if(!origin.params && !another.params)
+        paramsResult = true;
+    else if(origin.params != another.params)
+    {
+        if(origin.params == nullptr)
+            return false;
+        else if(another.params == nullptr)
+            return false;
+         paramsResult = *origin.params == *another.params;
+    }
+
+
+    if(!paramsResult)
+        return false;
+    if(origin.uml_visibility != another.uml_visibility ||
+     origin.cpp_visibility!= another.cpp_visibility ||
+     origin.is_deleted != another.is_deleted ||
+     origin.is_get_or_set != another.is_get_or_set ||
+     origin.isa_class_operation!= another.isa_class_operation ||
+     origin.is_volatile != another.is_volatile ||
+     origin.cpp_const != another.cpp_const ||
+     origin.cpp_friend!= another. cpp_friend||
+     origin.cpp_virtual!= another.cpp_virtual ||
+     //origin.cpp_inline!= another.cpp_inline ||
+     origin.cpp_get_set_frozen != another.cpp_get_set_frozen ||
+     origin.java_synchronized != another. java_synchronized||
+     origin.java_get_set_frozen!= another. java_get_set_frozen||
+     origin.php_get_set_frozen != another. php_get_set_frozen||
+
+     origin.python_get_set_frozen != another. python_get_set_frozen||
+     origin.idl_oneway != another.idl_oneway ||
+     origin.idl_get_set_frozen != another.idl_get_set_frozen ||
+
+     origin.nexceptions!= another.nexceptions ||
+     origin.return_type!= another.return_type ||
+     origin.originClass!= another.originClass ||
+     origin.exceptions!= another.exceptions ||
+     origin.constraint!= another.constraint||
+
+
+    origin.cpp_body.offset!= another.cpp_body.offset ||
+    origin.cpp_body.length!= another.cpp_body.length ||
+    origin.cpp_decl!= another.cpp_decl ||
+    origin.cpp_def!= another.cpp_def ||
+    origin.cpp_name_spec!= another.cpp_name_spec||
+
+
+    origin.java_body.offset!= another.java_body.offset ||
+    origin.java_body.length!= another.java_body.length ||
+    origin.java_def!= another.java_def ||
+    origin.java_name_spec!= another.java_name_spec ||
+
+
+    origin.php_body.offset!= another.php_body.offset||
+    origin.php_body.length!= another.php_body.length||
+    origin.php_def!= another.php_def ||
+    origin.php_name_spec!= another.php_name_spec||
+
+
+    origin.python_body.offset!= another. python_body.offset||
+    origin.python_body.length!= another. python_body.length||
+    origin.python_def!= another.python_def ||
+    origin.python_name_spec!= another. python_name_spec||
+    origin.python_decorator!= another.python_decorator ||
+    origin.idl_decl!= another.idl_decl ||
+    origin.idl_name_spec != another. idl_name_spec)
+         return false;
+     return true;
+
+
+
+     //origin.java_annotation!= another. java_annotation||
+     //     origin.cpp_default!= another.cpp_default ||
+     //     origin.cpp_delete!= another.cpp_delete ||
+     //     origin.cpp_override != another. cpp_override||
+     //     origin.cpp_final != another.cpp_final ||
+
+     //origin.cpp_indent_body != another.cpp_indent_body ||
+     //origin.java_final != another. java_final||
+
+     //origin.java_indent_body != another.java_indent_body ||
+     //origin.php_final != another.php_final ||
+
+     //origin.php_indent_body != another. php_indent_body||
+
+
+     //origin.python_indent_body != another.python_indent_body ||
+
+//     bool constraint = origin.constraint != another.constraint;
+//     bool uml_visibility = origin.uml_visibility != another.uml_visibility;
+//     bool cpp_visibility = origin.cpp_visibility != another.cpp_visibility;
+//     bool is_deleted = origin.is_deleted != another.is_deleted;
+//     bool is_get_or_set = origin.is_get_or_set != another.is_get_or_set;
+//     bool isa_class_operation = origin.isa_class_operation != another.isa_class_operation;
+//     bool is_volatile = origin.is_volatile != another.is_volatile;
+//     bool cpp_const = origin.cpp_const != another.cpp_const;
+//     bool cpp_friend = origin.cpp_friend != another.cpp_friend;
+//     bool cpp_virtual = origin.cpp_virtual != another.cpp_virtual;
+//     bool cpp_inline = origin.cpp_inline != another.cpp_inline;
+//     bool cpp_get_set_frozen = origin.cpp_get_set_frozen != another.cpp_get_set_frozen;
+//     bool nexceptions = origin.nexceptions != another.nexceptions;
+//     bool return_type = origin.return_type != another.return_type;
+//     bool originClass = origin.originClass != another.originClass;
+//     bool exceptions = origin.exceptions != another.exceptions;
+//     bool java_synchronized = origin.java_synchronized != another.java_synchronized;
+//     bool java_get_set_frozen = origin.java_get_set_frozen != another.java_get_set_frozen;
+//     bool php_get_set_frozen = origin.php_get_set_frozen != another.php_get_set_frozen;
+//     bool python_get_set_frozen = origin.python_get_set_frozen != another.python_get_set_frozen;
+//     bool idl_oneway = origin.idl_oneway != another.idl_oneway;
+//     bool idl_get_set_frozen = origin.idl_get_set_frozen != another.idl_get_set_frozen;
+//     bool cpp_bodyoffset = origin.cpp_body.offset != another.cpp_body.offset;
+//     bool cpp_bodylength = origin.cpp_body.length != another.cpp_body.length;
+//     bool cpp_decl = origin.cpp_decl != another.cpp_decl;
+//     bool cpp_def = origin.cpp_def != another.cpp_def;
 }
