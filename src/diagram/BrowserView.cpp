@@ -270,9 +270,12 @@ void BrowserView::contentsMousePressEvent(QMouseEvent * e)
         selected(i);
 
         if (e->button() == ::Qt::LeftButton) {
-            if (!((BrowserNode *) i)->deletedp() && (i != project)) {
+            if (!((BrowserNode *) i)->deletedp() && (i != project))
+            {
                 if (e->state() & ::Qt::ControlModifier)
+                {
                     ((BrowserNode *) i)->toggle_mark();
+                }
                 else if (e->pos().x() > header()->cellPos(header()->mapToActual(0)) +
                          treeStepSize() * (i->depth() + (rootIsDecorated() ? 1 : 0)) + itemMargin()/* ||
 											      p.x() < header()->cellPos(header()->mapToActual(0))*/) {
@@ -392,6 +395,23 @@ void BrowserView::OnGenerateIdl()
 
         ToolCom::run((verbose_generation()) ? "idl_generator -v" : "idl_generator", node);
     }
+}
+
+void BrowserView::OnUnmarkItem(QString name, int type)
+{
+    Q3PtrListIterator<BrowserNode> it( BrowserNode::marked_list );
+    BrowserNode *node;
+    while ( (node = it.current()) != 0 )
+    {
+        ++it;
+        if(node->get_name() == name && node->get_type() == type)
+            node->toggle_mark();
+    }
+}
+
+void BrowserView::OnUnmarkAll()
+{
+    BrowserNode::unmark_all();
 }
 
 void BrowserView::keyPressEvent(QKeyEvent * e)

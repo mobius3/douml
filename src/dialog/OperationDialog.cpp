@@ -198,8 +198,7 @@ void OperationDialog::init_uml()
 
     new QLabel(TR("class : "), umlGrid);
     lblFullClassName = new QLabel(((BrowserNode *) oper->get_browser_node()->parent())->full_name(TRUE),
-                                  umlGrid); //todo
-
+                                  umlGrid);
     new QLabel(TR("name : "), umlGrid);
     edname = new LineEdit(oper->name(), umlGrid);
 
@@ -241,7 +240,7 @@ void OperationDialog::init_uml()
     connect(forcegenbody_cb, SIGNAL(toggled(bool)), SLOT(forcegenbody_toggled(bool)));
 
     new QLabel(TR("parameters : "), umlGrid);
-    table = new ParamsTable(oper, umlGrid, list, this, !isWritable); //todo update the table
+    table = new ParamsTable(oper, umlGrid, list, this, !isWritable);
 
     new QLabel(TR("exceptions : "), umlGrid);
     etable = new ExceptionsTable(oper, umlGrid, list, !isWritable); //todo update the table
@@ -5517,6 +5516,38 @@ ExceptionsTable::ExceptionsTable(OperationData * o, QWidget * parent,
     }
 }
 
+void ExceptionsTable::Reinitialize(OperationData *a, const QStringList &list, bool visit)
+{
+}
+
+
+void ExceptionsTable::update(OperationData * oper,
+                             BrowserNodeList & nodes)
+{
+    forceUpdateCells();
+
+    int n = nexceptions();
+    int index;
+
+    oper->set_n_exceptions(n);
+
+    for (index = 0; index != n; index += 1) {
+        AType t;
+        QString s = text(index, 0).stripWhiteSpace();
+
+        if (!s.isEmpty()) {
+            int rank = types.findIndex(s);
+
+            if (rank != -1)
+                t.type = (BrowserClass *) nodes.at(rank);
+            else
+                t.explicit_type = s;
+        }
+
+        oper->set_exception(index, t);
+    }
+}
+
 void ExceptionsTable::activateNextCell()
 {
     int row = currentRow();
@@ -5704,32 +5735,6 @@ void ExceptionsTable::move_row(int from, int to)
     type_copy = save_type_copy;
 }
 
-void ExceptionsTable::update(OperationData * oper,
-                             BrowserNodeList & nodes)
-{
-    forceUpdateCells();
-
-    int n = nexceptions();
-    int index;
-
-    oper->set_n_exceptions(n);
-
-    for (index = 0; index != n; index += 1) {
-        AType t;
-        QString s = text(index, 0).stripWhiteSpace();
-
-        if (!s.isEmpty()) {
-            int rank = types.findIndex(s);
-
-            if (rank != -1)
-                t.type = (BrowserClass *) nodes.at(rank);
-            else
-                t.explicit_type = s;
-        }
-
-        oper->set_exception(index, t);
-    }
-}
 
 unsigned ExceptionsTable::nexceptions() const
 {

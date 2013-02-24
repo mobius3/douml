@@ -61,6 +61,7 @@ private:
     BrowserView* originalView = nullptr;
     UmlWindow* mainWindow = nullptr;
     QScopedPointer<QMenu> favouritesMenu;
+    QScopedPointer<QMenu> markedMenu;
     bool skipVisited = false;
 
     // visited treeview
@@ -101,6 +102,7 @@ private:
     bool RemoveExisting(BrowserNode *,QSharedPointer<TreeItemInterface> );
     bool AddToFavourites(BrowserNode*);
     void CreateFavouritesMenu();
+    void CreateMarkedMenu();
     void PullNodeUpwardsInVisited(BrowserNode*);
 
 public slots:
@@ -113,9 +115,13 @@ public slots:
     void OnUpdateFavoutitesView();
     void OnSelectedInVisited(const QModelIndex &, const QModelIndex &);
     void OnRemoveCurrentItemFromFavourites();
+    void OnRemoveCurrentItemFromMarked();
+    void OnRemoveAllItemsFromMarked();
     void OnFavouritesContextMenu(QPoint);
+    void OnMarkedContextMenu(QPoint point);
 signals:
-
+    void markedRemove(QString, int);
+    void allMarkedRemove();
 
 };
 

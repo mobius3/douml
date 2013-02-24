@@ -77,6 +77,7 @@ protected:
     QString name;
     WrapperStr comment;
     QByteArray tempBa;
+    friend class BrowserView;
     int original_id = 0;	// from project library
     bool is_new = true;	// backup file useless
     bool is_deleted = false;

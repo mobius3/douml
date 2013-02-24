@@ -424,6 +424,7 @@ protected:
 public:
     ExceptionsTable(OperationData * a, QWidget * parent,
                     const QStringList & list, bool visit);
+    void Reinitialize(OperationData * a, const QStringList & list, bool visit);
 
 protected:
     virtual void activateNextCell();

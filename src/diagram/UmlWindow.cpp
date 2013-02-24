@@ -483,6 +483,8 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     browser = new BrowserView();
 
     wdgCatalog->Init(this, browser);
+    connect(wdgCatalog, SIGNAL(markedRemove(QString,int)), browser, SLOT(OnUnmarkItem(QString,int)));
+    connect(wdgCatalog, SIGNAL(allMarkedRemove()), browser, SLOT(OnUnmarkAll()));
 
     splTreeTab = new QSplitter(Qt::Vertical, spl1);
     splTreeTab->addWidget(browser);

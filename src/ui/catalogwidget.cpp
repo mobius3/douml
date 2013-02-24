@@ -39,6 +39,7 @@
 #include "ClassData.h"
 #include <functional>
 #include <QTreeView>
+#include <QMouseEvent>
 #include <QDragMoveEvent>
 
 CatalogWidget::CatalogWidget( QWidget *parent) :
@@ -109,7 +110,9 @@ void CatalogWidget::Init(UmlWindow* window, BrowserView* view)
     ui->tvFavourites->installEventFilter(dragDropFilter);
     ui->tvFavourites->setAcceptDrops(true);
     ui->tvFavourites->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tvMarkedNodes->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tvFavourites, SIGNAL(customContextMenuRequested(QPoint)),this, SLOT(OnFavouritesContextMenu(QPoint)));
+    connect(ui->tvMarkedNodes, SIGNAL(customContextMenuRequested(QPoint)),this, SLOT(OnMarkedContextMenu(QPoint)));
 }
 
 void CatalogWidget::CleanupBeforeNewProject()
@@ -292,7 +295,17 @@ void CatalogWidget::CreateFavouritesMenu()
     if(favouritesMenu.isNull())
     {
         favouritesMenu.reset(new QMenu());
-        favouritesMenu->addAction("Remove from favourites", this, SLOT(OnRemoveCurrentItemFromFavourites()));
+        favouritesMenu->addAction(tr("Remove from favourites"), this, SLOT(OnRemoveCurrentItemFromFavourites()));
+    }
+}
+
+void CatalogWidget::CreateMarkedMenu()
+{
+    if(markedMenu.isNull())
+    {
+        markedMenu.reset(new QMenu());
+        markedMenu->addAction(tr("Unmark"), this, SLOT(OnRemoveCurrentItemFromMarked()));
+        markedMenu->addAction(tr("Unmark all"), this, SLOT(OnRemoveAllItemsFromMarked()));
     }
 }
 
@@ -333,10 +346,31 @@ void CatalogWidget::OnRemoveCurrentItemFromFavourites()
     tmodFavourites->InsertRootItem(rootFavouritesInterface);
 }
 
+void CatalogWidget::OnRemoveCurrentItemFromMarked()
+{
+    QModelIndex current = ui->tvMarkedNodes->currentIndex();
+    TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
+    BrowserNode* itemAsNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
+    if(itemAsNode)
+    {
+        emit markedRemove(itemAsNode->get_name(), itemAsNode->get_type());
+    }
+}
+
+void CatalogWidget::OnRemoveAllItemsFromMarked()
+{
+    emit allMarkedRemove();
+}
+
 void CatalogWidget::OnFavouritesContextMenu(QPoint point)
 {
     CreateFavouritesMenu();
     favouritesMenu->popup(ui->tvFavourites->mapToGlobal(point));
+}
+void CatalogWidget::OnMarkedContextMenu(QPoint point)
+{
+    CreateMarkedMenu();
+    markedMenu->popup(ui->tvMarkedNodes->mapToGlobal(point));
 }
 
 void CatalogWidget::OnPerformVisitedFiltering(QString)
@@ -374,7 +408,7 @@ void CatalogWidget::OnUpdateVisitedView(Q3ListViewItem * item)
 {
     if(UseSkipVisited())
         return;
-    this->ui->tabWidget->setCurrentWidget(this->ui->tabVisited);
+    //this->ui->tabWidget->setCurrentWidget(this->ui->tabVisited);
     BrowserNode* itemAsNode = static_cast<BrowserNode*>(item);
     itemAsNode = itemAsNode->get_first_generatable_node();
 
@@ -386,6 +420,7 @@ void CatalogWidget::OnUpdateMarkedView(QList<BrowserNode *> markedItems)
     this->ui->tabWidget->setCurrentWidget(this->ui->tabMarked);
     if(rootMarkedInterface.isNull())
         return;
+    StageSkipVisited();
     QList<QSharedPointer<TreeItemInterface > >  items;
     rootMarkedInterface->removeChildren(0, rootMarkedInterface->childCount());
     for(BrowserNode * marked : markedItems)

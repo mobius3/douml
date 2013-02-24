@@ -265,10 +265,7 @@ private slots:
 
 public slots:
     void whats_this() const;
-    //void OnUpdateVisitedView(Q3ListViewItem*);
-    //void OnPerformVisitedFiltering();
     void OnPickSelectionFromItem(const QModelIndex&,const QModelIndex& );
-
 
 };
 

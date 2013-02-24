@@ -2630,9 +2630,7 @@ void ClassDialog::InitGui()
     active_cb = new QCheckBox("active", opt_bg);
 
     // setting up radiobutton group for accessibility
-    //todo make external
     // ASSUMING INSTANTIATE ON NULL
-
     uml_visibility.init(htabUml, cl->get_uml_visibility(), TRUE); //toAdd
 
     basetypelbl = new QLabel(TR("base type : "), grid);
@@ -2912,9 +2910,8 @@ void ClassDialog::InitGui()
     pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htabidl);
 
     addTab(idltab, "Idl");
+
     // Profiled stereotype
-
-
     stereotypeGrid = new Q3Grid(2, this);
     stereotypetab = stereotypeGrid;
     RegisterTab("Stereotype", stereotypetab);
@@ -3550,7 +3547,8 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     bool grannyIsUmlPackage = grandParent->get_type() == UmlPackage;
     bool grannyIsProfiled = !strcmp(grandParent->get_data()->get_stereotype(), "profile");
 
-    if (grannyIsUmlPackage && grannyIsProfiled) {
+    if (grannyIsUmlPackage && grannyIsProfiled)
+    {
 
         QString s;
         s = currentNode->get_value("stereotypeSet");

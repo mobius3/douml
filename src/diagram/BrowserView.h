@@ -115,6 +115,8 @@ public slots:
     void OnGeneratePhp();
     void OnGeneratePython();
     void OnGenerateIdl();
+    void OnUnmarkItem(QString name, int type);
+    void OnUnmarkAll();
 signals:
     void marked_list(QList<BrowserNode*>);
 };
