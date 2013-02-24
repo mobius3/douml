@@ -102,8 +102,20 @@ Enchancements:
       * If its background is red - there are marked items in the tree and their nodes will be generated
       * If its background is blue - there are no marked in the tree so generation will be done on user-selected node
       * The generation is done on a "first generatable node upwards in the tree" Meaning - if an attribute is marked the app will traverse to containing class and generate it
+   * Added "Catalog" widget below class tree. This widget is used for quick tree navigation and has 3 tabs.
+      * "Visited" tab updates each time user clicks on a node in a tree. This node is inserted into visited and clicking on it will immediately scroll the main tree to it.
+      * "Marked" tab tracks user selection and serves double purpose of tree navigation(as in "Visited") and node deselection via rightclick menu.
+      * "Favourites" tab is used when user ahs often visited tree nodes and wants an easy wasy to return to the in a tree.
+      * Adding nodes s done by dragging them from the main tree onto favourites tabs.
+      * Catalog widget has line edit under tabs which serves the purpose of filtering the Visited view (only Visited atm).
+      
+   * Builtin types" tab in generation settings has been completely reworked. 
+      * User can now search and sort it.
+      * User can selectively turn off languages he does not use in the table.
+      * When a new row is being added it is initialized with enough defaults to make assigning UML name the only obligatory edit before clicking "OK".
+      * Adding new rows is now done through "Add type" button and a few options were removed from "do" menu as they no longer make sense.
 
-Manual
+      Manual
 ------
 
   Currently - the manual of Bouml version 4.22 is being used. To access it, set "Manual" path in
@@ -111,7 +123,8 @@ Manual
 
 Compiling
 ---------
-
+    L_UniversalModels library needs to be built prior to douml compilation. It is located in src/Libs/L_UniversalModels
+    
   * Under Windows:
       * Mingw based on gcc 4.7+
       * Qt 4.7+ built with aforementioned mingw.

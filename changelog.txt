@@ -1,0 +1,35 @@
+v1.0b2
+
+Changes
+	Previously, opened tab was saved in operation dialog between dialog opens.This turned out to be very anoying and is now disabled.
+	
+
+Bugfixes
+	1. cpp header file was not produced correctly on generation of new projects.
+	2. Deploy plugin was freezing on some classes due to some weird bug which involved ->bytesAvailable function to return different value than what was written to socket.
+	3. Mini toolbar could crash when user tried navigating above the highest node via arrow buttons.
+	4. Some icons were not shown in minit-toolbar.
+	5. "Unmark all" did not change the color of generator label.
+	6. Propagating changes from abstract operation will not null op definition in subclasses.
+	7. Clicking OK in relations dialog while ot editing relation's name produced "illegal name" error.
+	8. static class members were incorrectly given "= {$value] " when generated in cpp headers.
+	9. In Properties tables around the app pressing enter or any arrow button finished editing of the cell.
+	10. Reopening class dialog did not properly reinitialize formals/inheritance/properties.
+	10. Reopening operation dialog did not properly reinitialize exceptions.
+	
+
+Features
+	1. Added "Catalog" widget below class tree. This widget is used for quick tree navigation and has 3 tabs.
+		"Visited" tab updates each time user clicks on a node in a tree. This node is inserted into visited and clicking on it will.
+		immediately scroll the main tree to it.
+		"Marked" tab tracks user selection and serves double purpose of tree navigation(as in "Visited") and node deselection via rightclick menu.
+		"Favourites" tab is used when user ahs often visited tree nodes and wants an easy wasy to return to the in a tree.
+		Adding nodes s done by dragging them from the main tree onto favourites tabs.
+		Catalog widget has line edit under tabs which serves the purpose of filtering the Visited view (only Visited atm).
+	2. "Builtin types" tab in generation settings has been completely reworked. 
+		User can now search and sort it.
+		User can selectively turn off languages he does not use in the table.
+		When a new row is being produced it is initialized with enough defaults to make assigning UML name the only obligatory edit before clicking "OK".
+		Adding new rows is now done through "Add type" button and a few options were removed from "do" menu as they no longer make sense.
+	
+	
