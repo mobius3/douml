@@ -1909,7 +1909,7 @@ QString FormalParamsTable::default_value_copy;
 QString FormalParamsTable::extends_copy;
 
 FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
-                                     const QStringList & node_names, bool visit)
+                                     QStringList & node_names, bool visit)
     : MyTable(cl->get_n_formalparams() + 1, (visit) ? 4 : 5, parent),
       types(node_names)
 {
@@ -1966,6 +1966,73 @@ FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
                 this, SLOT(button_pressed(int, int, int, const QPoint &)));
         connect(this, SIGNAL(valueChanged(int, int)),
                 this, SLOT(value_changed(int, int)));
+    }
+}
+
+void FormalParamsTable::Reinitiliaze(ClassData *cl, QStringList &node_names, bool isWritable)
+{
+    int oldRowCount = numRows()-1;
+    for (int index =  oldRowCount; index > -1; index -= 1) {
+        removeRow(index);
+    }
+    int sup = cl->get_n_formalparams();
+    types = node_names;
+    setNumRows(sup + 1);
+
+    if (isWritable)
+    {
+        setNumCols(5);
+        adjustColumn(4);
+        setColumnStretchable(4, FALSE);
+        horizontalHeader()->setLabel(4, TR("do"));
+
+        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
+                this, SLOT(button_pressed(int, int, int, const QPoint &)));
+        connect(this, SIGNAL(valueChanged(int, int)),
+                this, SLOT(value_changed(int, int)));
+
+        int index;
+        for ( index = 0; index < sup; index += 1) {
+            setText(index, 0, cl->get_formalparam_type(index));
+            setText(index, 1, cl->get_formalparam_name(index));
+            setItem(index, 2, new ComboItem(this, cl->get_formalparam_default_value(index, TRUE), types));
+            setItem(index, 3, new ComboItem(this, cl->get_formalparam_extends(index, TRUE), types));
+            setText(index, 4, QString());
+        }
+
+        setText(index, 0, "class");
+        setText(index, 1, QString());
+        setItem(index, 2, new ComboItem(this, QString(), types));
+        setItem(index, 3, new ComboItem(this, QString(), types));
+        setText(index, 4, QString());
+    }
+    else
+    {
+        setNumCols(4);
+        disconnect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
+                   this, SLOT(button_pressed(int, int, int, const QPoint &)));
+        disconnect(this, SIGNAL(valueChanged(int, int)),
+                   this, SLOT(value_changed(int, int)));
+
+        for (int index = 0; index < sup; index += 1) {
+            setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_formalparam_type(index)));
+            setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_formalparam_name(index)));
+            setItem(index, 2, new TableItem(this, Q3TableItem::Never,
+                                            cl->get_formalparam_default_value(index, !node_names.isEmpty())));
+            setItem(index, 3, new TableItem(this, Q3TableItem::Never,
+                                            cl->get_formalparam_extends(index, !node_names.isEmpty())));
+
+        }
+
+
+        for (int index = 0; index < sup; index += 1) {
+            setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_name(index)));
+
+            if (!isWritable)
+                setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_value(index)));
+            else
+                setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
+        }
     }
 }
 
@@ -2303,7 +2370,7 @@ void FormalParamsTable::update(ClassData * cl, BrowserNodeList & nodes)
 //
 
 ActualParamsTable::ActualParamsTable(ClassData * cl, QWidget * parent,
-                                     const QStringList & node_names, bool visit)
+                                     QStringList & node_names, bool isWritable)
     : MyTable(cl->get_n_actualparams(), 2, parent), types(node_names)
 {
     setSorting(true);
@@ -2318,7 +2385,7 @@ ActualParamsTable::ActualParamsTable(ClassData * cl, QWidget * parent,
     for (index = 0; index < sup; index += 1) {
         setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_name(index)));
 
-        if (visit)
+        if (!isWritable)
             setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_value(index)));
         else
             setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
@@ -2327,6 +2394,28 @@ ActualParamsTable::ActualParamsTable(ClassData * cl, QWidget * parent,
     adjustColumn(0);
     setColumnStretchable(0, FALSE);
     setColumnStretchable(1, TRUE);
+}
+
+void ActualParamsTable::Reinitiliaze(ClassData * cl, QStringList & node_names, bool isWritable)
+{
+    int oldRowCount = numRows()-1;
+    for (int index =  oldRowCount; index > -1; index -= 1) {
+        removeRow(index);
+    }
+
+    int sup = cl->get_n_actualparams();
+    types = node_names;
+    setNumRows(sup);
+    for (int index = 0; index < sup; index += 1) {
+        setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_name(index)));
+
+        if (!isWritable)
+            setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_value(index)));
+        else
+            setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
+    }
+    types = node_names;
+
 }
 
 #if 0
@@ -3065,10 +3154,12 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     constraint->setText(cl->constraint);
 
     // parameterized tab
+    formals_table->Reinitiliaze(cl, node_names, isWritable);
     formals_table->update(cl, inh);
 
     // instantiate tab
     //todo
+    actuals_table->Reinitiliaze(cl, node_names, isWritable);
     actuals_table->update(cl, inh);
 
     if (cl->get_n_actualparams() != 0)
@@ -3556,7 +3647,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     // USER : list key - value
     ShowTab("Properties");
-    kvtable->updateNodeFromThis(currentNode);
+    kvtable->updateThisFromNode(currentNode);
     kvtable->remove("stereotypeCheck");
     kvtable->remove("stereotypeSetParameters");
     kvtable->remove("stereotypeCheckParameters");

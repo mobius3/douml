@@ -325,7 +325,7 @@ class FormalParamsTable : public MyTable
     Q_OBJECT
 
 protected:
-    const QStringList & types;
+    QStringList & types;
 
     static QString type_copy;
     static QString name_copy;		// copy/cut/paste
@@ -334,7 +334,8 @@ protected:
 
 public:
     FormalParamsTable(ClassData * a, QWidget * parent,
-                      const QStringList & list, bool visit);
+                      QStringList &list, bool visit);
+    void Reinitiliaze(ClassData * cl,  QStringList & node_names, bool isWritable);
 
 protected:
     virtual void activateNextCell();
@@ -362,11 +363,12 @@ protected slots:
 class ActualParamsTable : public MyTable
 {
 protected:
-    const QStringList & types;
+    QStringList & types;
 
 public:
     ActualParamsTable(ClassData * a, QWidget * parent,
-                      const QStringList & list, bool visit);
+                       QStringList & list, bool visit);
+    void Reinitiliaze(ClassData * cl,  QStringList & node_names, bool isWritable);
     void generate(QString & s, ClassData * cl, BrowserNode * parent, bool cpp,
                   BrowserNodeList & nodes, QStringList & node_names);
 

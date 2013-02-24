@@ -4,13 +4,9 @@ diagrams
     1047 806 100 3 0 0
 end
 show_stereotypes
-marked
-  class_ref 748458 // TableDataListHolder
-end
 selected 
 package_ref 129 // models
 open
-  extra_member_ref 188970 // object
   operation_ref 2277034 // get_flagsFunctors
   operation_ref 2276906 // flags
   operation_ref 2276778 // AddFlagsFunctor

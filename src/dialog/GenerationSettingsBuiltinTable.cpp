@@ -158,6 +158,7 @@ void BuiltinTable::TableSetup()
     types_table->setSortingEnabled(true);
     types_table->resizeColumnToContents(0);
     types_table->resizeColumnToContents(8);
+    types_table->resizeRowsToContents();
 }
 
 void BuiltinTable::InitInterface()
@@ -301,7 +302,7 @@ void BuiltinTable::SetupAccess()
     holder->AddGetter(QPair<int,int>(8,0),
     [] (const Builtin* )
     {
-        return QVariant(QString("   "));
+        return QVariant(QString(" "));
     });
 
     holder->AddFlagsFunctor(
@@ -315,9 +316,6 @@ void BuiltinTable::SetupAccess()
     }
     );
 }
-
-
-
 
 void BuiltinTable::OnCallRowMenu(const QModelIndex & index)
 {
