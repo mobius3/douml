@@ -742,7 +742,7 @@ BrowserNode *BrowserNode::get_first_generatable_node()
     BrowserNode * testSubject = this;
     while(!generatable_types.contains(testSubject->get_type()))
     {
-        testSubject = (BrowserNode *)this->parent();
+        testSubject = (BrowserNode *)testSubject->parent();
         if(testSubject == 0)
         {
             break;
