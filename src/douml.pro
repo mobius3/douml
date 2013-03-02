@@ -235,7 +235,8 @@ HEADERS        = \
     dialog/edgemenudialogbase.h \
     ui/catalogwidget.h \
     browser/BrowserNodeDummy.h \
-    dialog/GenerationSettingsBuiltinTable.h
+    dialog/GenerationSettingsBuiltinTable.h \
+    CustomWidgets/quickedit.h
 
 
 SOURCES = \
@@ -517,7 +518,8 @@ SOURCES = \
     misc/codec.cpp \
     ui/catalogwidget.cpp \
     browser/BrowserNodeDummy.cpp \
-    dialog/GenerationSettingsBuiltinTable.cpp
+    dialog/GenerationSettingsBuiltinTable.cpp \
+    CustomWidgets/quickedit.cpp
 
 TARGET = douml
 DEFINES = BooL=bool DEBUGCOM
@@ -576,5 +578,6 @@ RESOURCES += icons.qrc
 FORMS += \
     ui/operationwidgetcpp.ui \
     ui/constructorinitializerdialog.ui \
-    ui/catalogwidget.ui
+    ui/catalogwidget.ui \
+    CustomWidgets/quickedit.ui
 
