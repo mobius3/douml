@@ -45,7 +45,9 @@ class ExceptionData;
 class KeyValueData;
 class BrowserClass;
 class BrowserOperation;
-
+class BrowserOperationAttribute;
+class BrowserOperationReturnType;
+class QuickEdit;
 class OperationBody
 {
 public:
@@ -62,6 +64,10 @@ class OperationData : public ClassMemberData,
     Q_OBJECT
 
     friend class OperationDialog;
+    friend class BrowserOperation;
+    friend class QuickEdit;
+    friend class BrowserOperationAttribute;
+    friend class BrowserOperationReturnType;
 
 protected:
     static IdDict<OperationData> all;

@@ -236,7 +236,8 @@ HEADERS        = \
     ui/catalogwidget.h \
     browser/BrowserNodeDummy.h \
     dialog/GenerationSettingsBuiltinTable.h \
-    CustomWidgets/quickedit.h
+    CustomWidgets/quickedit.h \
+    browser/BrowserOperationAttribute.h
 
 
 SOURCES = \
@@ -519,7 +520,8 @@ SOURCES = \
     ui/catalogwidget.cpp \
     browser/BrowserNodeDummy.cpp \
     dialog/GenerationSettingsBuiltinTable.cpp \
-    CustomWidgets/quickedit.cpp
+    CustomWidgets/quickedit.cpp \
+    browser/BrowserOperationAttribute.cpp
 
 TARGET = douml
 DEFINES = BooL=bool DEBUGCOM

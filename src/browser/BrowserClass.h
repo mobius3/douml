@@ -53,6 +53,7 @@ class BrowserClassDiagram;
 class BrowserClass : public BrowserNode, public Labeled<BrowserClass>
 {
     friend class StereotypesDialog;
+    friend class QuickEdit;
 
 protected:
     BrowserClass(int id);

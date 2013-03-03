@@ -43,6 +43,7 @@ class BrowserClass;
 class BrowserOperation : public BrowserNode, public Labeled<BrowserOperation>
 {
     friend class StereotypesDialog;
+    friend class BrowserOperationAttribute;
 
 protected:
     static IdDict<BrowserOperation> all;

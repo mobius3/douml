@@ -49,6 +49,7 @@ class ClassData : public BasicData
 
     friend class ClassDialog;
     friend class ActualParamsTable;
+    //friend class QuickEdit;
 
 protected:
     WrapperStr constraint;
@@ -149,6 +150,7 @@ public:
         return cpp_visibility;
     }
     void set_uml_visibility(UmlVisibility v);
+    void set_uml_visibility(int v);
     void set_cpp_visibility(UmlVisibility v);
 
     int get_n_formalparams() const {

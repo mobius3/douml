@@ -554,6 +554,11 @@ void ClassData::set_uml_visibility(UmlVisibility v)
     uml_visibility = v;
 }
 
+void ClassData::set_uml_visibility(int v)
+{
+    uml_visibility = static_cast<UmlVisibility>(v);
+}
+
 void ClassData::set_cpp_visibility(UmlVisibility v)
 {
     cpp_visibility = v;

@@ -1313,6 +1313,23 @@ void BrowserNode::children(BrowserNodeList & nodes,
 
 }
 
+QList<BrowserNode*> BrowserNode::children(QList<UmlCode> searchTypes) const
+{
+    QList<BrowserNode*> items;
+    Q3ListViewItem * child;
+
+    for (child = firstChild(); child; child = child->nextSibling())
+    {
+        bool isAlive = !((BrowserNode *) child)->is_deleted;
+        UmlCode type = ((BrowserNode *) child)->get_type();
+        //QLOG_INFO() << stringify(type);
+        bool validType = searchTypes.contains(type);
+        if ( isAlive && validType)
+            items.append((BrowserNode *) child);
+    }
+    return items;
+}
+
 bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode type,
                                    bool allow_spaces, bool allow_empty)
 {

@@ -196,6 +196,7 @@ public:
     void edit(const char *, const QStringList & default_stereotypes);
     void children(BrowserNodeList & nodes,
                   UmlCode kind1, UmlCode kind2 = UmlRelations) const;
+    QList<BrowserNode*> children(QList<UmlCode>) const;
 
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     QString fullname(bool rev) const;

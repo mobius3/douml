@@ -44,8 +44,10 @@ public:
     BrowserClass * type = nullptr;
 
 public:
-    AType() : type(0) {};
+    AType(){}
     const char * get_type() const;
+    void set_explicit_type(QString value){explicit_type = value;}
+    void set_type(BrowserClass* value){type = value;}
     QString get_type(ShowContextMode mode) const;
     QString get_full_type() const;
 

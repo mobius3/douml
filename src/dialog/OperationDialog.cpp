@@ -3622,7 +3622,7 @@ void OperationDialog::python_default_def()
             }
         }
 
-        int index2;
+        int index2 = -1;
 
         if (((index = s.find("${(}") + 4) != (-1 + 4)) &&
             ((index2 = s.find("${)}", index)) != -1)) {

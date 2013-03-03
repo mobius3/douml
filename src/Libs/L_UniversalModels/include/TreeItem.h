@@ -1,26 +1,3 @@
-// *************************************************************************
-//
-// Copyright 2012-2013 Nikolai Marchenko.
-//
-// This file is part of the Douml Uml Toolkit.
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License Version 3.0 as published by
-// the Free Software Foundation and appearing in the file LICENSE.GPL included in the
-//  packaging of this file.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License Version 3.0 for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-//
-// e-mail : doumleditor@gmail.com
-//
-// *************************************************************************
 #ifndef _TREEITEM_H
 #define _TREEITEM_H
 
@@ -87,6 +64,8 @@ typedef TreeItem<T> value_type;
     void SetInternalData(T * _data);
 
     void* InternalPointer();
+
+    virtual void* InternalPointer() const;
 
     virtual TreeItemInterface* child(int row);
 
@@ -315,6 +294,14 @@ void* TreeItem<T>::InternalPointer()
     // Bouml preserved body begin 002086AA
     return m_data;
     // Bouml preserved body end 002086AA
+}
+
+template<class T>
+void* TreeItem<T>::InternalPointer() const 
+{
+    // Bouml preserved body begin 0022F42A
+    return m_data;
+    // Bouml preserved body end 0022F42A
 }
 
 template<class T>
