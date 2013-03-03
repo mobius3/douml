@@ -33,12 +33,14 @@ public:
     BrowserOperationAttribute(BrowserView* view, BrowserOperation* _operation, ParamData* _data);
     void set_name(QString);
     QString get_name() const;
-    void set_direction(UmlParamDirection);
-    UmlParamDirection get_direction() const;
+    void set_direction(QString);
+    QString get_direction() const;
     void set_param_type(QString);
     AType get_param_type() const;
     void set_default_value(QString);
     QString get_default_value() const;
+    void set_passage_type(QString);
+    QString get_passage_type() const;
 
 };
 

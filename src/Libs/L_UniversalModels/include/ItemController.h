@@ -53,20 +53,20 @@ class ItemController
 
     Qt::ItemFlags flags(const QModelIndex & index) const;
 
-    static inline QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > GetFlagsFunctors();
+    inline QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > GetFlagsFunctors();
 
-    static void SetFlagsFunctors(QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > value);
+    void SetFlagsFunctors(QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > value);
 
-    static void AddFlagsFunctor(std::function<Qt::ItemFlags(const QModelIndex&)> functor);
+    void AddFlagsFunctor(std::function<Qt::ItemFlags(const QModelIndex&)> functor);
 
-    static void SetDefaultTreeFunctor();
+    void SetDefaultTreeFunctor();
 
 
   private:
      QStringList columns;
      QHash<QPair<int, int>, std::function<QVariant(const T*)> > getters;
      QHash<QPair<int,int>, std::function<bool(T*, QVariant)> > setters;
-     static QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > flagsFunctors;
+     QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > flagsFunctors;
 };
 template<class T>
 inline QStringList ItemController<T>::GetColumns() const 
@@ -170,6 +170,6 @@ void ItemController<T>::SetDefaultTreeFunctor()
     // Bouml preserved body end 0021B1AA
 }
 
-template<class T>
-QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > ItemController<T>::flagsFunctors;
+//template<class T>
+//QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > ItemController<T>::flagsFunctors;
 #endif

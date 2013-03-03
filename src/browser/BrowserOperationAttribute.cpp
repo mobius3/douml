@@ -34,14 +34,16 @@ QString BrowserOperationAttribute::get_name() const
     return data->get_name();
 }
 
-void BrowserOperationAttribute::set_direction(UmlParamDirection value)
+void BrowserOperationAttribute::set_direction(QString value)
 {
-    data->set_dir(value);
+    FIllDirList();
+    UmlParamDirection dir = static_cast<UmlParamDirection>(DirList.indexOf(value));
+    data->set_dir(dir);
 }
 
-UmlParamDirection BrowserOperationAttribute::get_direction() const
+QString BrowserOperationAttribute::get_direction() const
 {
-    return data->get_dir();
+    return stringify(data->get_dir());
 }
 
 void BrowserOperationAttribute::set_param_type(QString value)
@@ -81,6 +83,15 @@ void BrowserOperationAttribute::set_default_value(QString value)
 QString BrowserOperationAttribute::get_default_value() const
 {
     return data->get_default_value();
+}
+
+void BrowserOperationAttribute::set_passage_type(QString)
+{
+}
+
+QString BrowserOperationAttribute::get_passage_type() const
+{
+    return QString();
 }
 
 

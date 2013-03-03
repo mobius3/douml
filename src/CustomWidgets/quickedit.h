@@ -47,6 +47,7 @@ private:
     QSharedPointer<TreeItemInterface> rootInterface;
     QSharedPointer<BrowserNode> modelRoot;
 
+    QSharedPointer<ItemController<BrowserNode> > nullController;
     QSharedPointer<ItemController<BrowserNode> > classController;
     QSharedPointer<ItemController<BrowserNode> > operationController;
     QSharedPointer<ItemController<BrowserNode> > attributeController;
@@ -94,6 +95,7 @@ private:
 
     public slots:
     void OnContextMenu(QPoint);
+    void OnShow();
     //void OnPerformFiltering(QString);
 
 };

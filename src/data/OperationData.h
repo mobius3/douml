@@ -254,6 +254,7 @@ public:
     };
     void set_uml_visibility(UmlVisibility v);
     void set_cpp_visibility(UmlVisibility v);
+    void set_cpp_visibility(int v);
     void set_origin_class(WrapperStr value){originClass = value;}
     const AType & get_return_type() const {
         return return_type;

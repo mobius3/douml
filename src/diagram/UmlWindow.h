@@ -51,6 +51,7 @@ class QToolButton;
 class BrowserView;
 class BrowserNode;
 class MultiLineEdit;
+class QuickEdit;
 
 #include "UmlEnum.h"
 
@@ -65,6 +66,7 @@ class TreeModel;
 class QLineEdit;
 class Q3ListViewItem;
 class CatalogWidget;
+class QShortcut;
 class UmlWindow : public QMainWindow
 {
     Q_OBJECT
@@ -84,6 +86,8 @@ protected:
     void PerformFiltering();
     QList<std::function<bool (TreeItemInterface *)> > CreateCheckList();
 
+    QuickEdit* quickEdit = nullptr;
+    QShortcut* sh1;
     // end of perverted stuff
     MultiLineEdit * comment;
     BrowserNode * commented;	// the commented object
@@ -266,6 +270,7 @@ private slots:
 public slots:
     void whats_this() const;
     void OnPickSelectionFromItem(const QModelIndex&,const QModelIndex& );
+    void OnShowQuickEdit();
 
 };
 

@@ -108,6 +108,8 @@
 #include "ui/catalogwidget.h"
 #include <QClipboard>
 #include <QApplication>
+#include <QShortcut>
+#include "CustomWidgets/quickedit.h"
 #include "Libs/L_UniversalModels/include/TreeItemInterface.h"
 
 static QString TemplateProject;
@@ -480,11 +482,17 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     spl2 = new QSplitter(Qt::Vertical, spl1, "spl2");
 
     wdgCatalog = new CatalogWidget;
+    quickEdit = new QuickEdit();
     browser = new BrowserView();
 
     wdgCatalog->Init(this, browser);
     connect(wdgCatalog, SIGNAL(markedRemove(QString,int)), browser, SLOT(OnUnmarkItem(QString,int)));
     connect(wdgCatalog, SIGNAL(allMarkedRemove()), browser, SLOT(OnUnmarkAll()));
+
+
+    quickEdit->Init(this, browser);
+    sh1 = new QShortcut(QKeySequence(tr("1")),this, SLOT(OnShowQuickEdit()),SLOT(OnShowQuickEdit()), Qt::ApplicationShortcut);
+
 
     splTreeTab = new QSplitter(Qt::Vertical, spl1);
     splTreeTab->addWidget(browser);
@@ -2385,6 +2393,11 @@ void UmlWindow::OnPickSelectionFromItem(const QModelIndex & current, const QMode
     TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
     BrowserNode* itemAsNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
     itemAsNode->select_in_browser();
+}
+
+void UmlWindow::OnShowQuickEdit()
+{
+    quickEdit->OnShow();
 }
 
 void UmlWindow::whats_this() const

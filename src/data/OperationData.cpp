@@ -710,6 +710,10 @@ UmlVisibility OperationData::get_visibility(BrowserNode *)
 {
     return uml_visibility;
 }
+//UmlVisibility OperationData::get_visibility()
+//{
+//    return uml_visibility;
+//}
 
 void OperationData::set_is_abstract(bool yes)
 {
@@ -4134,4 +4138,9 @@ bool PropagationEquality(const OperationData & origin, const OperationData & ano
 //     bool cpp_bodylength = origin.cpp_body.length != another.cpp_body.length;
 //     bool cpp_decl = origin.cpp_decl != another.cpp_decl;
 //     bool cpp_def = origin.cpp_def != another.cpp_def;
+}
+
+void OperationData::set_cpp_visibility(int v)
+{
+    cpp_visibility = static_cast<UmlVisibility>(v);
 }
