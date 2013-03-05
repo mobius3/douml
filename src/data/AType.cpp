@@ -36,9 +36,13 @@
 #include "ToolCom.h"
 #include "myio.h"
 
-const char * AType::get_type() const
+QString AType::get_type() const
 {
-    return (type != 0) ? type->get_name() : explicit_type.operator QString();
+    QString result;
+    if(type != 0)
+        result = type->get_name();
+    result = explicit_type.operator QString();
+    return result;
 }
 
 QString AType::get_type(ShowContextMode mode) const

@@ -94,7 +94,7 @@ private:
     QSharedPointer<TreeItemInterface > CreateInterfaceNode(QSharedPointer<TreeItemInterface> root, QSharedPointer<ItemController<BrowserNode> > controller, BrowserNode *node);
     void AssignItemsForOperation(QSharedPointer<TreeItemInterface> root,BrowserNode*);
     void AssignItemsForClass(QSharedPointer<TreeItemInterface> root,BrowserNode*);
-//    void AssignItemsForAttribute(QSharedPointer<TreeItemInterface> root,BrowserNode*);
+    void AssignItemsForAttribute(QSharedPointer<TreeItemInterface> root,BrowserNode*);
 //    void AssignItemsForExternal(QSharedPointer<TreeItemInterface> root,BrowserNode*);
 //    void AssignItemsForAggregation(QSharedPointer<TreeItemInterface> root,BrowserNode*);
 

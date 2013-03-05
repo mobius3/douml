@@ -306,6 +306,11 @@ void AttributeData::set_visibility(UmlVisibility v)
     uml_visibility = v;
 }
 
+void AttributeData::set_visibility(int v)
+{
+    uml_visibility = static_cast<UmlVisibility>(v);
+}
+
 void AttributeData::set_type(const AType & t)
 {
     if (type.type != t.type) {
@@ -320,6 +325,26 @@ void AttributeData::set_type(const AType & t)
     }
 
     type.explicit_type = t.explicit_type;
+}
+
+void AttributeData::set_type(const QString &value)
+{
+    QStringList list;
+    BrowserNodeList nodes;
+    BrowserClass::instances(nodes);
+    nodes.full_names(list);
+
+    AType t;
+    if (!value.isEmpty())
+    {
+        int rank = list.findIndex(value);
+
+        if (rank != -1)
+            t.type = (BrowserClass *) nodes.at(rank);
+        else
+            t.explicit_type = value;
+    }
+    set_type(t);
 }
 
 void AttributeData::on_delete()

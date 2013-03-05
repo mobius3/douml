@@ -10,6 +10,8 @@
 #include "browser/BrowserClass.h"
 #include "browser/BrowserOperationAttribute.h"
 #include "browser/BrowserNodeDummy.h"
+#include "browser/BrowserAttribute.h"
+#include "AttributeData.h"
 #include "BrowserView.h"
 #include "AType.h"
 #include "UmlEnum.h"
@@ -22,6 +24,17 @@
 #include <iostream>
 #include <array>
 #include <functional>
+
+static const int nameIndex = 0;
+static const int typeIndex = 1;
+static const int defaultIndex = 2;
+static const int stereotypeIndex = 3;
+static const int visibilityIndex = 4;
+static const int staticIndex = 5;
+static const int abstractIndex = 6;
+static const int multiplicityIndex = 7;
+static const int directionIndex = 8;
+
 
 static QRect CheckBoxRect(const QStyleOptionViewItem &view_item_style_options) {
   QStyleOptionButton check_box_style_option;
@@ -128,7 +141,7 @@ void QuickEdit::SetupItemCreationFuncs()
 
     //std::function<>
     itemCreators.insert(UmlClass, std::bind(&QuickEdit::AssignItemsForClass, this, std::placeholders::_1, std::placeholders::_2));
-    //itemCreators.insert(UmlAttribute, std::bind(CreateItemsForAttribute, this, std::placeholders::_1, std::placeholders::_2));
+    itemCreators.insert(UmlAttribute, std::bind(&QuickEdit::AssignItemsForAttribute, this, std::placeholders::_1, std::placeholders::_2));
     itemCreators.insert(UmlOperation, std::bind(&QuickEdit::AssignItemsForOperation, this, std::placeholders::_1, std::placeholders::_2));
     //itemCreators.insert(UmlExtraMember, std::bind(CreateItemsForExternal, this, std::placeholders::_1, std::placeholders::_2));
 }
@@ -245,22 +258,22 @@ void QuickEdit::SetupClassController(QSharedPointer<ItemController<BrowserNode> 
     classController->SetColumns(QStringList() << "name" <<   "type" <<  "default_value" <<  "stereotype"
                                 << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
                                 );
-    ADD_GETSET(BrowserClass, classController, 0, 0, toString, get_name, set_name);
-    ADD_GETSET(BrowserClass, classController, 0, 2, toString, get_name, set_name);
+    ADD_GETSET(BrowserClass, classController, nameIndex, 0, toString, get_name, set_name);
+    ADD_GETSET(BrowserClass, classController, nameIndex, 2, toString, get_name, set_name);
 
 //    ADD_GETSET_DATA(BrowserOperation, ClassData, classController, 1, 0, toBool,
 //               cpp_is_external, set_cpp_is_external);
 //    ADD_GETSET_DATA(BrowserOperation, ClassData, classController, 1, 2, toBool,
 //               cpp_is_external, set_cpp_is_external);
 
-    ADD_GETSET(BrowserClass, classController, 3, 0, toString, get_stereotype, def->set_stereotype);
-    ADD_GETSET(BrowserClass, classController, 3, 2, toString, get_stereotype, def->set_stereotype);
+    ADD_GETSET(BrowserClass, classController, stereotypeIndex, 0, toString, get_stereotype, def->set_stereotype);
+    ADD_GETSET(BrowserClass, classController, stereotypeIndex, 2, toString, get_stereotype, def->set_stereotype);
 
-    ADD_GETSET(BrowserClass, classController, 4, 0, toInt, def->get_uml_visibility, def->set_uml_visibility);
-    ADD_GETSET(BrowserClass, classController, 4, 2, toInt, def->get_uml_visibility, def->set_uml_visibility);
+    ADD_GETSET(BrowserClass, classController, visibilityIndex, 0, toInt, def->get_uml_visibility, def->set_uml_visibility);
+    ADD_GETSET(BrowserClass, classController, visibilityIndex, 2, toInt, def->get_uml_visibility, def->set_uml_visibility);
 
-    ADD_GETSET(BrowserClass, classController, 6, 0, toBool, def->get_is_abstract, def->set_is_abstract);
-    ADD_GETSET(BrowserClass, classController, 6, 2, toBool, def->get_is_abstract, def->set_is_abstract);
+    ADD_GETSET(BrowserClass, classController, abstractIndex, 0, toBool, def->get_is_abstract, def->set_is_abstract);
+    ADD_GETSET(BrowserClass, classController, abstractIndex, 2, toBool, def->get_is_abstract, def->set_is_abstract);
 
 
     classController->AddFlagsFunctor
@@ -269,7 +282,7 @@ void QuickEdit::SetupClassController(QSharedPointer<ItemController<BrowserNode> 
     {
         Qt::ItemFlags result;
         result |= Qt::ItemIsSelectable;
-        if(!(index.column() *in(0,3,4,5)))
+        if(!(index.column() *in(nameIndex,stereotypeIndex,visibilityIndex,abstractIndex)))
             return result;
 
         TreeItemInterface* iface = static_cast<TreeItemInterface*>(index.internalPointer());
@@ -293,27 +306,27 @@ void QuickEdit::SetupOperationController(QSharedPointer<ItemController<BrowserNo
     operationController->SetColumns(QStringList() << "name" <<  "type" <<  "default_value" <<  "stereotype"
                                 << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
                                 );
-    ADD_GETSET(BrowserOperation, operationController, 0, 0, toString, get_name, set_name);
-    ADD_GETSET(BrowserOperation, operationController, 0, 2, toString, get_name, set_name);
+    ADD_GETSET(BrowserOperation, operationController, nameIndex, 0, toString, get_name, set_name);
+    ADD_GETSET(BrowserOperation, operationController, nameIndex, 2, toString, get_name, set_name);
 
-    ADD_GETSET(BrowserOperationReturnType, operationController, 1, 0, toString,
+    ADD_GETSET(BrowserOperationReturnType, operationController, typeIndex, 0, toString,
                get_param_type().get_type, set_param_type);
-    ADD_GETSET(BrowserOperationReturnType, operationController, 1, 2, toString,
+    ADD_GETSET(BrowserOperationReturnType, operationController, typeIndex, 2, toString,
                get_param_type().get_type, set_param_type);
 
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, 4, 0, toInt,
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, visibilityIndex, 0, toInt,
                get_cpp_visibility, set_cpp_visibility);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, 4, 2, toInt,
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, visibilityIndex, 2, toInt,
                get_cpp_visibility, set_cpp_visibility);
 
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, 5, 0, toBool,
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, staticIndex, 0, toBool,
                     get_isa_class_operation, set_isa_class_operation);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, 5, 2, toBool,
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, staticIndex, 2, toBool,
                     get_isa_class_operation, set_isa_class_operation);
 
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, 6, 0, toBool,
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, abstractIndex, 0, toBool,
                     get_is_abstract, set_is_abstract);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, 6, 2, toBool,
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, abstractIndex, 2, toBool,
                     get_is_abstract, set_is_abstract);
 
 
@@ -323,7 +336,7 @@ void QuickEdit::SetupOperationController(QSharedPointer<ItemController<BrowserNo
     {
         Qt::ItemFlags result;
         result |= Qt::ItemIsSelectable;
-        if(!(index.column() *in(0,1,4,5,6)))
+        if(!(index.column() *in(nameIndex,typeIndex,staticIndex,visibilityIndex,abstractIndex)))
             return result;
 
         TreeItemInterface* iface = static_cast<TreeItemInterface*>(index.internalPointer());
@@ -342,6 +355,58 @@ void QuickEdit::SetupOperationController(QSharedPointer<ItemController<BrowserNo
 
 void QuickEdit::SetupAttributeController(QSharedPointer<ItemController<BrowserNode> > &)
 {
+    attributeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
+    attributeController->SetColumns(QStringList() << "name" <<  "type" <<  "default_value" <<  "stereotype"
+                                << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
+                                );
+    ADD_GETSET(BrowserAttribute, attributeController, nameIndex, 0, toString, get_name, set_name);
+    ADD_GETSET(BrowserAttribute, attributeController, nameIndex, 2, toString, get_name, set_name);
+
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, typeIndex, 0, toString,
+                    get_type().get_type, set_type);
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, typeIndex, 2, toString,
+                    get_type().get_type, set_type);
+
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, defaultIndex, 0, toString,
+                    get_init_value, set_init_value);
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, defaultIndex, 2, toString,
+                    get_init_value, set_init_value);
+
+    ADD_GETSET(BrowserAttribute, attributeController, stereotypeIndex, 0, toString,
+               get_stereotype, def->set_stereotype);
+    ADD_GETSET(BrowserAttribute, attributeController, stereotypeIndex, 2, toString,
+               get_stereotype, def->set_stereotype);
+
+    ADD_GETSET(BrowserAttribute, attributeController, visibilityIndex, 0, toInt, def->get_uml_visibility, def->set_visibility);
+    ADD_GETSET(BrowserAttribute, attributeController, visibilityIndex, 2, toInt, def->get_uml_visibility, def->set_visibility);
+
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, staticIndex, 0, toBool,
+                    get_isa_class_attribute, set_isa_class_attribute);
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, staticIndex, 2, toBool,
+                    get_isa_class_attribute, set_isa_class_attribute);
+
+
+    attributeController->AddFlagsFunctor
+            (
+                [](const QModelIndex& index)
+    {
+        Qt::ItemFlags result;
+        result |= Qt::ItemIsSelectable;
+        if(!(index.column() *in(nameIndex,typeIndex,defaultIndex,stereotypeIndex, visibilityIndex, staticIndex)))
+            return result;
+
+        TreeItemInterface* iface = static_cast<TreeItemInterface*>(index.internalPointer());
+        if(!iface)
+            return result;
+        BrowserNode* pointer = static_cast<BrowserNode*>(iface->InternalPointer());
+        if(!pointer)
+            return result;
+        if(pointer->is_writable())
+            result |= Qt::ItemIsEditable;
+        result |=  Qt::ItemIsEnabled ;
+        return result;
+    }
+    );
 }
 
 void QuickEdit::SetupOperationAttributeController(QSharedPointer<ItemController<BrowserNode> > &)
@@ -350,22 +415,22 @@ void QuickEdit::SetupOperationAttributeController(QSharedPointer<ItemController<
     operationAttributeController->SetColumns(QStringList() << "name" <<  "type" <<  "default_value" <<  "stereotype"
                                 << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
                                 );
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, 0, 0, toString, get_name, set_name);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, 0, 2, toString, get_name, set_name);
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, nameIndex, 0, toString, get_name, set_name);
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, nameIndex, 2, toString, get_name, set_name);
 
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, 1, 0, toString,
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, typeIndex, 0, toString,
                get_param_type().get_type, set_param_type);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, 1, 2, toString,
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, typeIndex, 2, toString,
                get_param_type().get_type, set_param_type);
 
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, 2, 0, toString,
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, defaultIndex, 0, toString,
                get_default_value, set_default_value);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, 2, 2, toString,
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, defaultIndex, 2, toString,
                get_default_value, set_default_value);
 
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, 8, 0, toString,
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, directionIndex, 0, toString,
                get_direction, set_direction);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, 8, 2, toString,
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, directionIndex, 2, toString,
                get_direction, set_direction);
 
 
@@ -376,7 +441,7 @@ void QuickEdit::SetupOperationAttributeController(QSharedPointer<ItemController<
     {
         Qt::ItemFlags result;
         result |= Qt::ItemIsSelectable;
-        if(!(index.column() *in(0,1,2,8)))
+        if(!(index.column() *in(nameIndex,typeIndex,defaultIndex,visibilityIndex)))
             return result;
 
         TreeItemInterface* iface = static_cast<TreeItemInterface*>(index.internalPointer());
@@ -404,32 +469,31 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     nullController = QSharedPointer<ItemController<BrowserNode> > (new ItemController<BrowserNode>());
     //validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
 //                                        UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember};
-    validTypes = {UmlClass, UmlOperation};
+    validTypes = {UmlClass, UmlOperation, UmlAttribute};
 
     SetupItemCreationFuncs();
     qRegisterMetaType<QList<BrowserNode*>>("QList<BrowserNode*>");
     SetupClassController(classController);
     SetupOperationController(operationController);
+    SetupAttributeController(attributeController);
     SetupOperationAttributeController(operationAttributeController);
     SetupTreeModel(treeModel,ui->tvEditor,rootInterface,classController,modelRoot);
     ui->tvEditor->setContextMenuPolicy(Qt::CustomContextMenu);
-//    >SetColumns(QStringList() << "name" << "external" <<  "type" <<  "default_value" <<  "stereotype"
-//                                    << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
-//                                    );
+
     GenericDelegate* checkboxDelegate = new GenericDelegate(ui->tvEditor);
-    //checkboxDelegate->widgetCreator = [](QWidget * parent) {return new QCheckBox(parent);};
-//    checkboxDelegate->dataAccessor = [](QWidget * editor, const QModelIndex & index)
-//    {
-//        bool value = index.model()->data(index, Qt::EditRole).toBool();
-//        QCheckBox *checkboxEdit = static_cast<QCheckBox*>(editor);
-//        checkboxEdit->setChecked(value);
-//    };
-//    checkboxDelegate->dataSetter = [](QWidget * editor,QAbstractItemModel* model, const QModelIndex &index)
-//    {
-//        QCheckBox * checkboxEdit = static_cast<QCheckBox*>(editor);
-//        bool value = checkboxEdit->isChecked();
-//        model->setData(index, value, Qt::EditRole);
-//    };
+    checkboxDelegate->widgetCreator = [](QWidget * parent) {return new QCheckBox(parent);};
+    checkboxDelegate->dataAccessor = [](QWidget * editor, const QModelIndex & index)
+    {
+        bool value = index.model()->data(index, Qt::EditRole).toBool();
+        QCheckBox *checkboxEdit = static_cast<QCheckBox*>(editor);
+        checkboxEdit->setChecked(value);
+    };
+    checkboxDelegate->dataSetter = [](QWidget * editor,QAbstractItemModel* model, const QModelIndex &index)
+    {
+        QCheckBox * checkboxEdit = static_cast<QCheckBox*>(editor);
+        bool value = checkboxEdit->isChecked();
+        model->setData(index, value, Qt::EditRole);
+    };
     checkboxDelegate->editorEventProcessor = editorEvent;
 
     ui->tvEditor->setItemDelegateForColumn(6, checkboxDelegate);
@@ -492,6 +556,12 @@ void QuickEdit::AssignItemsForClass(QSharedPointer<TreeItemInterface> root,  Bro
         itemCreators[nodeType](interfaceItem, child);
     }
     //interfaceItem->AddChildren(items);
+    root->AddChildren(QList<QSharedPointer<TreeItemInterface> >() << interfaceItem);
+}
+
+void QuickEdit::AssignItemsForAttribute(QSharedPointer<TreeItemInterface> root,  BrowserNode * classNode)
+{
+    QSharedPointer<TreeItemInterface > interfaceItem = CreateInterfaceNode(root, attributeController, classNode);
     root->AddChildren(QList<QSharedPointer<TreeItemInterface> >() << interfaceItem);
 }
 

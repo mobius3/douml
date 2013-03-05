@@ -38,6 +38,11 @@ void GenericDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
     //dataSetter(editor, model, index);
 }
 
+QString GenericDelegate::displayText(const QVariant &value, const QLocale &locale) const
+{
+    return QString();
+}
+
 
 void GenericDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
@@ -45,13 +50,7 @@ void GenericDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
             return;
 
     QVariant value = index.model()->data(index, Qt::DisplayRole);
-
-    QStyleOptionViewItemV4 noSelectionOption(option);
-    initStyleOption(&noSelectionOption, index);
-    QFont font;
-    font.setWeight(0);
-    noSelectionOption.font = font;
-    ///QStyledItemDelegate::paint(painter, noSelectionOption, index);
+    QStyledItemDelegate::paint(painter, option, index);
     if(!value.isValid())
     {
         return;
