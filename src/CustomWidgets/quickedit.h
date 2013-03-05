@@ -3,7 +3,9 @@
 
 #include <QWidget>
 #include <QSharedPointer>
+#include <QModelIndex>
 #include <QMenu>
+#include <QStyledItemDelegate>
 #include <functional>
 #include "Libs/L_UniversalModels/include/ItemController.h"
 #include "UmlEnum.h"
@@ -19,6 +21,9 @@ class QTreeView;
 class Q3ListViewItem;
 class GenericEventFilter;
 class UmlWindow;
+
+
+
 
 class QuickEdit : public QWidget
 {
@@ -77,7 +82,7 @@ private:
     void SetupOperationController(QSharedPointer<ItemController<BrowserNode> >&);
     void SetupAttributeController(QSharedPointer<ItemController<BrowserNode> >&);
     void SetupOperationAttributeController(QSharedPointer<ItemController<BrowserNode> >&);
-    void SetupOperationReturnTypeController(QSharedPointer<ItemController<BrowserNode> >&);
+    //void SetupOperationReturnTypeController(QSharedPointer<ItemController<BrowserNode> >&);
 
 
     void PerformFiltering(QStringList, QTreeView*, TreeModel*, QSharedPointer<TreeItemInterface>);

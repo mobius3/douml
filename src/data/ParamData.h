@@ -56,10 +56,10 @@ public:
         return type;
     };
     void set_type(const AType & t);
-    const char * get_default_value() const {
+    WrapperStr get_default_value() const {
         return default_value;
     };
-    void set_default_value(const char * s);
+    void set_default_value(WrapperStr s);
 
     QString definition(bool withdir, bool withname,
                        ShowContextMode mode = noContext) const;

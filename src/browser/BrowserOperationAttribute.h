@@ -41,6 +41,13 @@ public:
     QString get_default_value() const;
     void set_passage_type(QString);
     QString get_passage_type() const;
+    bool is_writable() const
+    {
+        if(operation)
+            return operation->is_writable();
+        return false;
+    }
+    void modified(){operation->package_modified();}
 
 };
 

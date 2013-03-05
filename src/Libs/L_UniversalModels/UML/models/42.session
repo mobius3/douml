@@ -9,7 +9,7 @@ marked
   class_ref 714922 // TreeItemInterface
   operation_ref 2131626 // InternalPointer
 end
-selected operation_ref 2131626 // InternalPointer
+selected class_ref 714794 // TreeItem
 open
   class_ref 714794 // TreeItem
   class_ref 714922 // TreeItemInterface

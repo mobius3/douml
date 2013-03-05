@@ -184,6 +184,9 @@ public:
     bool cpp_is_external() const {
         return cpp_external;
     }
+    void set_cpp_is_external(bool value) {
+        cpp_external = value;
+    }
 
     const char * get_javadecl() const {
         return java_decl;

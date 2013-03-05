@@ -181,6 +181,9 @@ public:
     bool get_isa_class_operation() const {
         return isa_class_operation;
     };
+    void set_isa_class_operation(bool value) {
+        isa_class_operation = value;
+    };
 
     bool get_is_abstract() const {
         return is_abstract;

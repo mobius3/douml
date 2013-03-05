@@ -58,8 +58,8 @@ QVariant TreeModel::data(const QModelIndex & index, int role) const
     if(role == Qt::DisplayRole || role == Qt::EditRole)
         return item->data(index.column(),role);
 
-    if(role == Qt::DecorationRole )
-        return item->data(index.column(),role);
+//    if(role == Qt::DecorationRole )
+//        return item->data(index.column(),role);
     if(role == Qt::ForegroundRole)
     {
         if(index.sibling(index.row(), 14).data().toBool() == true)
@@ -111,7 +111,8 @@ Qt::ItemFlags TreeModel::flags(const QModelIndex & index) const
         return 0;
 
     //Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    Qt::ItemFlags flags = rootItem->flags(index);
+    TreeItemInterface* iface = static_cast<TreeItemInterface*>(index.internalPointer());
+    Qt::ItemFlags flags = iface->flags(index);
 
 //    if ( index.column() == 0 )
 //        flags |= Qt::ItemIsUserCheckable;
