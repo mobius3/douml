@@ -1605,6 +1605,11 @@ QStringList BrowserClass::get_parents_names()
     return result;
 }
 
+UmlVisibility BrowserClass::get_visibility() const
+{
+    return def->get_uml_visibility();
+}
+
 
 // compute all parents, grand parents ...
 void BrowserClass::get_all_parents(Q3PtrList<BrowserClass> & l) const

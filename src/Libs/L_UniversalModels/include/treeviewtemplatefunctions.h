@@ -298,6 +298,29 @@ void StoreNodePathExpandState(std::function<QVariant(DataType*)> dataAccessor,
     // Bouml preserved body end 002020AA
 }
 
+
+template<typename InterfaceType>
+bool ExpandAllSatisfying(std::function<bool(InterfaceType*)> check,
+                              QTreeView * view,
+                              QAbstractItemModel * model,
+                              const QModelIndex startIndex)
+{
+    bool returnResult = false;
+    for(int i(0); i < model->rowCount(startIndex); ++i)
+    {
+        QModelIndex child = model->index(i, 0, startIndex);
+        if(ExpandAllSatisfying<InterfaceType>
+                (check, view, model, child))
+        {
+            view->setExpanded( startIndex.sibling(startIndex.row(), 0), true );
+            returnResult = true;
+        }
+    }
+    if(returnResult || check(static_cast<InterfaceType*>(startIndex.internalPointer())))
+        returnResult = true;
+    return returnResult;
+}
+
 template<typename InterfaceType, template <typename> class ItemType, typename DataType>
 void FilterTreeAndRestoreNodes(std::function<QVariant(DataType*)> dataAccessor,
                                std::function<QList<std::function<bool (InterfaceType *)> > ()> createCheckListFunc,

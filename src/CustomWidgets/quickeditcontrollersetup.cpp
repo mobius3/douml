@@ -64,6 +64,46 @@ static const int directionIndex = 8;
     } \
     );
 
+#define ADD_PIXMAP_GETTER(TYPE,HOLDER,ROW,ROLES,ACCESSOR)  \
+    HOLDER->AddGetter(ROW,ROLES, \
+    [] (const BrowserNode* data) \
+{ \
+    if(!data)\
+    return QVariant(); \
+    const TYPE* pointer = static_cast<const TYPE*>(data);\
+    if(pointer) \
+    return QVariant(QIcon(*pointer->ACCESSOR(0))); \
+    else \
+    return QVariant(); \
+    } \
+    ); \
+
+#define ADD_GETSET_CONVERTED(TYPE,HOLDER,ROW,ROLES,VARIANTCONVERTER, VALUECONVERTER, ACCESSOR,SETTER)  \
+    HOLDER->AddGetter(ROW,ROLES, \
+    [] (const BrowserNode* data) \
+{ \
+    if(!data)\
+    return QVariant(); \
+    const TYPE* pointer = static_cast<const TYPE*>(data);\
+    if(pointer) \
+    return QVariant(pointer->ACCESSOR()); \
+    else \
+    return QVariant(); \
+    } \
+    ); \
+    HOLDER->AddSetter(ROW,ROLES, \
+    [] (BrowserNode* data, QVariant value) \
+{ \
+    if(!data)\
+    return false; \
+    TYPE* pointer = static_cast<TYPE*>(data);\
+    if(pointer) \
+    SETTER(VALUECONVERTER(value.VARIANTCONVERTER())); \
+    pointer->modified();\
+    return true;\
+    } \
+    );
+
 #define ADD_GETSET_DIRECT(TYPE,HOLDER,ROW,ROLES,CONVERTER,PARAM)  \
     HOLDER->AddGetter(ROW,ROLES, \
     [] (const BrowserNode* data) \
@@ -126,6 +166,14 @@ void QuickEdit::SetupControllers()
     SetupExtraNodeController();
 }
 
+void QuickEdit::SetupDelegates()
+{
+    CheckBoxDelegateSetup();
+    VisibilityDelegateSetup();
+    TypeDelegateSetup();
+    DirectionDelegateSetup();
+}
+
 // some really insane code from stackoverflow that allows to shorten lengthy ifs
 template <typename T0, typename T1, std::size_t N>
 bool operator *(const T0& lhs, const std::array<T1, N>& rhs) {
@@ -173,10 +221,37 @@ void QuickEdit::SetupClassController()
                toString, get_name, set_name);
     ADD_GETSET(BrowserClass, classController, stereotypeIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_stereotype, def->set_stereotype);
-    ADD_GETSET(BrowserClass, classController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
-               toInt, def->get_uml_visibility, def->set_uml_visibility);
+//    ADD_GETSET(BrowserClass, classController, stereotypeIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//               toString, get_stereotype, def->set_stereotype);
+//    ADD_GETSET(BrowserClass, classController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//               toInt, def->get_uml_visibility, def->set_uml_visibility);
+
+
+    ADD_GETSET_CONVERTED(BrowserClass, classController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                         toString,BrowserNode::encode_visibility,visibility_as_string, pointer->def->set_uml_visibility);
+
     ADD_GETSET(BrowserClass, classController, abstractIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, def->get_is_abstract, def->set_is_abstract);
+
+    ADD_PIXMAP_GETTER(BrowserClass, classController, nameIndex,std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+//    classController->AddGetter(nameIndex,std::initializer_list<int>({Qt::DecorationRole}),
+//    [] (const BrowserNode* data)
+//{
+//    if(!data)
+//    return QVariant();
+//    const BrowserClass* pointer = static_cast<const BrowserClass*>(data);
+//    if(pointer)
+//    {
+//        const QPixmap* px = pointer->pixmap(0);
+////        QPixmap pxConst = QIcon(":/root/icons/mouse_control.png").pixmap();
+////        const QPixmap* px = &pxConst;
+//        return QVariant(QIcon(*px));
+//    }
+//    else
+//    return QVariant();
+//    }
+//    );
+
 
 
     classController->AddFlagsFunctor
@@ -212,12 +287,20 @@ void QuickEdit::SetupOperationController()
                toString, get_name, set_name);
     ADD_GETSET(BrowserOperationReturnType, operationController, typeIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_param_type().get_type, set_param_type);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
-                    toInt, get_cpp_visibility, set_cpp_visibility);
+//    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//                    toInt, get_cpp_visibility, set_cpp_visibility);
+//    ADD_GETSET_DIRECT_ASSIGNMENT(BrowserOperation, operationController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//                                 visibility_as_string(), BrowserNode::encode_visibility(value.toString()));
+
+    ADD_GETSET_CONVERTED(BrowserOperation, operationController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                         toString,BrowserNode::encode_visibility,visibility_as_string, pointer->def->set_uml_visibility);
+
     ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, staticIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_isa_class_operation, set_isa_class_operation);
     ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, abstractIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_is_abstract, set_is_abstract);
+
+    ADD_PIXMAP_GETTER(BrowserOperation, operationController, nameIndex,std::initializer_list<int>({Qt::DecorationRole}), pixmap);
 
 
     operationController->AddFlagsFunctor
@@ -257,12 +340,18 @@ void QuickEdit::SetupAttributeController()
                     toString, get_init_value, set_init_value);
     ADD_GETSET(BrowserAttribute, attributeController, stereotypeIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_stereotype, def->set_stereotype);
-    ADD_GETSET(BrowserAttribute, attributeController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
-               toInt, def->get_uml_visibility, def->set_visibility);
+
+//    ADD_GETSET_DIRECT_ASSIGNMENT(BrowserAttribute, attributeController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//                                 visibility_as_string(), BrowserNode::encode_visibility(value.toString()));
+    ADD_GETSET_CONVERTED(BrowserAttribute, attributeController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                         toString,BrowserNode::encode_visibility,visibility_as_string, pointer->def->set_visibility);
+
+
+
     ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, staticIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_isa_class_attribute, set_isa_class_attribute);
 
-
+    ADD_PIXMAP_GETTER(BrowserAttribute, attributeController, nameIndex, std::initializer_list<int>({Qt::DecorationRole}), pixmap);
 
     attributeController->AddFlagsFunctor
             (
@@ -302,6 +391,10 @@ void QuickEdit::SetupOperationAttributeController()
     ADD_GETSET(BrowserOperationAttribute, operationAttributeController, directionIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_direction, set_direction);
 
+    //ADD_PIXMAP_GETTER(BrowserAttribute, attributeController, nameIndex, std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+
+    ADD_PIXMAP_GETTER(BrowserOperationAttribute, operationAttributeController, nameIndex, std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+
 
 
     operationAttributeController->AddFlagsFunctor
@@ -340,8 +433,40 @@ void QuickEdit::SetupRelationController()
                toString, get_name, set_name);
     ADD_GETSET_DIRECT(BrowserRelation, relationController, defaultIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                       toString, def->a.init_value.operator QString());
-    ADD_GETSET_DIRECT_ASSIGNMENT(BrowserRelation, relationController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
-                                 def->a.uml_visibility,  static_cast<UmlVisibility>(value.toInt()));
+//    ADD_GETSET_DIRECT_ASSIGNMENT(BrowserRelation, relationController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//                                 visibility_as_string(),  BrowserNode::encode_visibility(value.toString()));
+    std::function<void(RoleData& , UmlVisibility ) > f = [](RoleData& data, UmlVisibility vis){data.uml_visibility = vis;};
+//    ADD_GETSET_CONVERTED(BrowserRelation, relationController, visibilityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//                         toString,BrowserNode::encode_visibility,visibility_as_string,  [](RoleData& data, UmlVisibility vis){data.uml_visibility = vis;}(pointer->def->a));
+    ADD_PIXMAP_GETTER(BrowserRelation, relationController, nameIndex, std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+
+
+    relationController->AddGetter(visibilityIndex,std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    [] (const BrowserNode* data)
+{
+    if(!data)
+    return QVariant();
+    const BrowserRelation* pointer = static_cast<const BrowserRelation*>(data);
+    if(pointer)
+    return QVariant(pointer->visibility_as_string());
+    else
+    return QVariant();
+    }
+    );
+    relationController->AddSetter(visibilityIndex,std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    [] (BrowserNode* data, QVariant value)
+{
+    if(!data)
+    return false;
+    BrowserRelation* pointer = static_cast<BrowserRelation*>(data);
+    if(pointer)
+        pointer->def->a.uml_visibility = BrowserNode::encode_visibility(value.toString());
+    pointer->modified();
+    return true;
+    }
+    );
+
+
     ADD_GETSET_DIRECT(BrowserRelation, relationController, staticIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                       toBool, def->a.isa_class_relation);
     ADD_GETSET_DIRECT(BrowserRelation, relationController, multiplicityIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
@@ -404,6 +529,8 @@ void QuickEdit::SetupExtraNodeController()
                                 );
     ADD_GETSET(BrowserExtraMember, extraNodeController, nameIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
+
+    ADD_PIXMAP_GETTER(BrowserExtraMember, extraNodeController, nameIndex, std::initializer_list<int>({Qt::DecorationRole}), pixmap);
 
     extraNodeController->AddFlagsFunctor
             (

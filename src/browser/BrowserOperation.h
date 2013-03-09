@@ -44,6 +44,7 @@ class BrowserOperation : public BrowserNode, public Labeled<BrowserOperation>
 {
     friend class StereotypesDialog;
     friend class BrowserOperationAttribute;
+    friend class QuickEdit;
 
 protected:
     static IdDict<BrowserOperation> all;
@@ -100,6 +101,7 @@ public:
     virtual UmlCode get_type() const;
     virtual QString get_stype() const;
     virtual int get_identifier() const;
+    virtual UmlVisibility get_visibility() const;
     virtual const char * help_topic() const;
     virtual void modified();
     virtual BasicData * get_data() const;

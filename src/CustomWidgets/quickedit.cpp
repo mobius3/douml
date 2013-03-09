@@ -13,6 +13,7 @@
 #include "browser/BrowserAttribute.h"
 #include "browser/BrowserRelation.h"
 #include "browser/BrowserExtraMember.h"
+#include "GenerationSettings.h"
 #include "AttributeData.h"
 #include "BrowserView.h"
 #include "AType.h"
@@ -22,7 +23,8 @@
 #include "data/RelationData.h"
 #include "GenericDelegate.h"
 
-
+#include <QCompleter>
+#include <QStringListModel>
 #include <algorithm>
 #include <iostream>
 #include <array>
@@ -136,6 +138,8 @@ void QuickEdit::CreateMenu()
 
 
 
+
+
 void QuickEdit::SetupItemCreationFuncs()
 {
     //    itemCreators.insert(UmlAggregation, std::bind(CreateItemsForAggregation, this, std::placeholders::_1, std::placeholders::_2));
@@ -210,9 +214,10 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     SetupItemCreationFuncs();
     qRegisterMetaType<QList<BrowserNode*>>("QList<BrowserNode*>");
     SetupControllers();
+    SetupDelegates();
     SetupTreeModel(treeModel,ui->tvEditor,rootInterface,classController,modelRoot);
     ui->tvEditor->setContextMenuPolicy(Qt::CustomContextMenu);
-    CheckBoxDelegateSetup();
+
     //ui->tvEditor->setStyleSheet("QTreeView::item { border-right: 1px solid black }");
     ui->tvEditor->setAlternatingRowColors(true);
     //connect(ui->tvEditor, SIGNAL(customContextMenuRequested(QPoint)),this, SLOT(OnContextMenu(QPoint)));
@@ -235,12 +240,19 @@ void QuickEdit::Show(BrowserNode * node)
         return;
     itemCreators[nodeType](rootInterface, node);
     // we then assign items and all is ok
-    //rootInterface->AddChildren(items);
     treeModel->InsertRootItem(rootInterface);
     ui->tvEditor->resizeColumnToContents(0);
     ui->tvEditor->resizeColumnToContents(1);
     ui->tvEditor->resizeColumnToContents(2);
-    this->show();
+
+    std::function<bool(TreeItemInterface*)> check = [&](TreeItemInterface* interface)
+    {
+       return true;
+    };
+
+    TreeFunctions::ExpandAllSatisfying<TreeItemInterface>(check, ui->tvEditor, treeModel, QModelIndex());
+
+    this->showMaximized();
 
 }
 
@@ -344,27 +356,107 @@ static void paintCheckbox(const QStyledItemDelegate* delegate, QPainter *painter
 void QuickEdit::CheckBoxDelegateSetup()
 {
     GenericDelegate* checkboxDelegate = new GenericDelegate(ui->tvEditor, true);
-    checkboxDelegate->widgetCreator = [](QWidget * parent) {return static_cast<QWidget*>(0);};
+    checkboxDelegate->widgetCreator = [](QWidget * ) {return static_cast<QWidget*>(0);};
     checkboxDelegate->paintProcessor = paintCheckbox;
-//    checkboxDelegate->dataAccessor = [](QWidget * editor, const QModelIndex & index)
-//    {
-//        bool value = index.model()->data(index, Qt::EditRole).toBool();
-//        QCheckBox *checkboxEdit = static_cast<QCheckBox*>(editor);
-//        checkboxEdit->setChecked(value);
-//    };
-//    checkboxDelegate->dataSetter = [](QWidget * editor,QAbstractItemModel* model, const QModelIndex &index)
-//    {
-//        QCheckBox * checkboxEdit = static_cast<QCheckBox*>(editor);
-//        bool value = checkboxEdit->isChecked();
-//        model->setData(index, value, Qt::EditRole);
-//    };
     checkboxDelegate->editorEventProcessor = editorEvent;
-
     ui->tvEditor->setItemDelegateForColumn(staticIndex, checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(abstractIndex, checkboxDelegate);
 }
 
-void QuickEdit::ComboBoxDelegateSetup()
-{
 
+void QuickEdit::VisibilityDelegateSetup()
+{
+    GenericDelegate* visibilityDelegate = new GenericDelegate(ui->tvEditor, false);
+    visibilityDelegate->widgetCreator = [&](QWidget * parent)
+    {
+        QStringList visibilities = {"public" , "protected", "private", "package", "default"};
+        QComboBox* box = new QComboBox(parent);
+        QStringListModel* model = new QStringListModel;
+        model->setStringList(visibilities);
+        box->setModel(model);
+        box->setEditable(false);
+        return box;
+    };
+    visibilityDelegate->dataAccessor = [](QWidget * editor, const QModelIndex & index)
+    {
+        QString value = index.model()->data(index, Qt::EditRole).toString();
+        QComboBox *box = static_cast<QComboBox*>(editor);
+        box->setCurrentText(value);
+    };
+    visibilityDelegate->dataSetter = [](QWidget * editor,QAbstractItemModel* model, const QModelIndex &index)
+    {
+        QComboBox * box = static_cast<QComboBox*>(editor);
+        QString value = box->currentText();
+        model->setData(index, value, Qt::EditRole);
+    };
+    ui->tvEditor->setItemDelegateForColumn(visibilityIndex, visibilityDelegate);
+}
+
+
+void QuickEdit::TypeDelegateSetup()
+{
+    GenericDelegate* delegate = new GenericDelegate(ui->tvEditor, false);
+    delegate->widgetCreator = [&](QWidget * parent)
+    {
+        BrowserNodeList result;
+        QStringList classes;
+        BrowserClass::instances(result);
+        result.full_names(classes);
+
+        QStringList basics = GenerationSettings::basic_types();
+        classes+=basics;
+        QCompleter *completer = new QCompleter(classes, parent);
+        completer->setCaseSensitivity(Qt::CaseSensitive);
+
+
+        QComboBox* box = new QComboBox(parent);
+        QStringListModel* model = new QStringListModel;
+        model->setStringList(classes);
+        box->setModel(model);
+        box->setEditable(true);
+        box->setCompleter(completer);
+        return box;
+    };
+    delegate->dataAccessor = [](QWidget * editor, const QModelIndex & index)
+    {
+        QString value = index.model()->data(index, Qt::EditRole).toString();
+        QComboBox *box = static_cast<QComboBox*>(editor);
+        box->setCurrentText(value);
+    };
+    delegate->dataSetter = [](QWidget * editor,QAbstractItemModel* model, const QModelIndex &index)
+    {
+        QComboBox * box = static_cast<QComboBox*>(editor);
+        QString value = box->currentText();
+        model->setData(index, value, Qt::EditRole);
+    };
+    ui->tvEditor->setItemDelegateForColumn(typeIndex, delegate);
+}
+
+
+void QuickEdit::DirectionDelegateSetup()
+{
+    GenericDelegate* delegate = new GenericDelegate(ui->tvEditor, false);
+    delegate->widgetCreator = [&](QWidget * parent)
+    {
+        QStringList visibilities = {"inout" , "in", "out"};
+        QComboBox* box = new QComboBox(parent);
+        QStringListModel* model = new QStringListModel;
+        model->setStringList(visibilities);
+        box->setModel(model);
+        box->setEditable(false);
+        return box;
+    };
+    delegate->dataAccessor = [](QWidget * editor, const QModelIndex & index)
+    {
+        QString value = index.model()->data(index, Qt::EditRole).toString();
+        QComboBox *box = static_cast<QComboBox*>(editor);
+        box->setCurrentText(value);
+    };
+    delegate->dataSetter = [](QWidget * editor,QAbstractItemModel* model, const QModelIndex &index)
+    {
+        QComboBox * box = static_cast<QComboBox*>(editor);
+        QString value = box->currentText();
+        model->setData(index, value, Qt::EditRole);
+    };
+    ui->tvEditor->setItemDelegateForColumn(directionIndex, delegate);
 }

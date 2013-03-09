@@ -53,6 +53,7 @@ public:
         return ((OperationData*)operation->get_data())->get_or_set();
     }
     void modified(){operation->package_modified();}
+    virtual const QPixmap * pixmap(int) const;
 
 };
 

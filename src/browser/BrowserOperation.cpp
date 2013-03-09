@@ -892,6 +892,11 @@ int BrowserOperation::get_identifier() const
     return get_ident();
 }
 
+UmlVisibility BrowserOperation::get_visibility() const
+{
+    return def->get_uml_visibility();
+}
+
 BasicData * BrowserOperation::get_data() const
 {
     return def;

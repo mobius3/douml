@@ -2,6 +2,7 @@
 #include "BrowserView.h"
 #include "BrowserClass.h"
 #include "OperationData.h"
+#include "UmlPixmap.h"
 
 static QStringList DirList;
 static void  FIllDirList()
@@ -92,6 +93,11 @@ void BrowserOperationAttribute::set_passage_type(QString)
 QString BrowserOperationAttribute::get_passage_type() const
 {
     return QString();
+}
+
+const QPixmap *BrowserOperationAttribute::pixmap(int) const
+{
+    return PublicAttributeIcon;
 }
 
 

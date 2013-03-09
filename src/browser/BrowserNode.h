@@ -238,6 +238,12 @@ public:
     virtual void get_activitydiagramsettings(ActivityDiagramSettings &) const;
     virtual UmlColor get_color(UmlCode) const;
     virtual UmlVisibility get_visibility(UmlCode) const;
+    virtual UmlVisibility get_visibility() const {return UmlDefaultVisibility;}
+    //stringifies visibility of this node
+    QString visibility_as_string() const;
+    //converts visibility from string to enum representation
+    static UmlVisibility encode_visibility(QString) ;
+
     virtual void package_settings(BooL & name_in_tab, ShowContextMode & show_context) const;
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
     virtual BrowserNode * get_associated() const;

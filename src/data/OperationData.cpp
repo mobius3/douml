@@ -710,6 +710,11 @@ UmlVisibility OperationData::get_visibility(BrowserNode *)
 {
     return uml_visibility;
 }
+
+void OperationData::set_uml_visibility(UmlVisibility v)
+{
+    uml_visibility = v;
+}
 //UmlVisibility OperationData::get_visibility()
 //{
 //    return uml_visibility;

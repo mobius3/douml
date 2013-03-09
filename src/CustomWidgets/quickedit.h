@@ -88,10 +88,13 @@ private:
     void SetupRelationController();
     void SetupExtraNodeController();
     void SetupControllers();
+    void SetupDelegates();
     void PerformFiltering(QStringList, QTreeView*, TreeModel*, QSharedPointer<TreeItemInterface>);
     QList<std::function<bool (TreeItemInterface *)> > CreateCheckList();
     void CreateMenu();
-    void ComboBoxDelegateSetup();
+    void VisibilityDelegateSetup();
+    void TypeDelegateSetup();
+    void DirectionDelegateSetup();
     void CheckBoxDelegateSetup();
     void SetupItemCreationFuncs();
 

@@ -49,6 +49,7 @@ class BrowserClassDiagram;
 
 #include "BrowserNode.h"
 #include "Labeled.h"
+#include "UmlEnum.h"
 
 class BrowserClass : public BrowserNode, public Labeled<BrowserClass>
 {
@@ -90,7 +91,8 @@ public:
     // more modern interface to get all parents. Still a lot of qt3 compatibility inside
     QList<BrowserClass*> get_all_parents();
     QStringList get_parents_names();
-
+    using BrowserNode::get_visibility;
+    virtual UmlVisibility get_visibility() const override;
 
     virtual QString check_inherit(const BrowserNode * parent) const;
     bool have_abstract_operation();

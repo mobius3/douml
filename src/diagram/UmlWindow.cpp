@@ -491,7 +491,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
 
 
     quickEdit->Init(this, browser);
-    sh1 = new QShortcut(QKeySequence(tr("1")),this, SLOT(OnShowQuickEdit()),SLOT(OnShowQuickEdit()), Qt::ApplicationShortcut);
+    sh1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_E),this, SLOT(OnShowQuickEdit()),SLOT(OnShowQuickEdit()), Qt::ApplicationShortcut);
 
 
     splTreeTab = new QSplitter(Qt::Vertical, spl1);

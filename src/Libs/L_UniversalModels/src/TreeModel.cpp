@@ -55,7 +55,7 @@ QVariant TreeModel::data(const QModelIndex & index, int role) const
     if ( role == Qt::CheckStateRole && index.column() == 0 && (flags(index) & Qt::ItemIsUserCheckable))
         return static_cast< int >( item->checkState() ? Qt::Checked : Qt::Unchecked );
 
-    if(role == Qt::DisplayRole || role == Qt::EditRole)
+    if(role == Qt::DisplayRole || role == Qt::EditRole ||  role == Qt::DecorationRole)
         return item->data(index.column(),role);
 
 //    if(role == Qt::DecorationRole )

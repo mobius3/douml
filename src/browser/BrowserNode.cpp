@@ -698,6 +698,16 @@ UmlVisibility BrowserNode::get_visibility(UmlCode who) const
     return ((BrowserNode *) parent())->get_visibility(who);
 }
 
+QString BrowserNode::visibility_as_string() const
+{
+    return stringify(get_visibility());
+}
+
+UmlVisibility BrowserNode::encode_visibility(QString val)
+{
+    return visibility(val);
+}
+
 void BrowserNode::package_settings(BooL &, ShowContextMode &) const
 {
     // never called

@@ -71,6 +71,8 @@ public:
     virtual const char * get_comment() const;
     virtual void set_comment(const char * c);
 
+    virtual UmlVisibility get_visibility() const override;
+
     BrowserOperation * get_get_oper() {
         return get_oper;
     };

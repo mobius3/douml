@@ -208,6 +208,11 @@ void BrowserRelation::set_comment(const char * c)
         def->set_comment_b(c);
 }
 
+UmlVisibility BrowserRelation::get_visibility() const
+{
+    return def->get_uml_visibility_a();
+}
+
 void BrowserRelation::compute_referenced_by(Q3PtrList<BrowserNode> & l,
         BrowserClass * target)
 {
