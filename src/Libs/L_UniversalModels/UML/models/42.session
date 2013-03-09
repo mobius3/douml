@@ -4,14 +4,8 @@ diagrams
     1047 806 100 3 0 0
 end
 show_stereotypes
-marked
-  operation_ref 2290602 // InternalPointer
-  class_ref 714922 // TreeItemInterface
-  operation_ref 2131626 // InternalPointer
-end
-selected class_ref 714794 // TreeItem
+selected artifact_ref 613034 // ItemController
 open
-  class_ref 714794 // TreeItem
   class_ref 714922 // TreeItemInterface
   deploymentview_ref 227626 // classes
 end

@@ -1,6 +1,6 @@
 format 75
 "TreeController" // TreeController
-  revision 32
+  revision 33
   modified_by 42 "zeks"
   // class settings
   //class diagram settings
@@ -839,6 +839,27 @@ ${inlines}
 	
       end
 
+      operation 2297258 "AddGetter"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 3
+	
+	  param in name "row" explicit_type "int"
+	  param in name "roles" explicit_type "QVector<int>"
+	  param inout name "function" explicit_type "std::function<QVariant(const T*)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, const ${t1} & ${p1}, ${t2} ${p2}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
       operation 2168874 "AddSetter"
 	preserve_cpp_body_indent public explicit_return_type "void"
 	nparams 2
@@ -848,6 +869,27 @@ ${inlines}
 	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${abstract};
 "
 	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} & ${p0}, ${t1} ${p1}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	preserve_java_body_indent java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+  ${body}}
+"
+	preserve_php_body_indent 
+	preserve_python_body_indent 
+	
+      end
+
+      operation 2297130 "AddSetter"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 3
+	
+	  param in name "row" explicit_type "int"
+	  param in name "roles" explicit_type "QVector<int>"
+	  param inout name "function" explicit_type "std::function<bool(T*, QVariant)>"
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+"
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} ${p0}, const ${t1} & ${p1}, ${t2} ${p2}${)}${const}${volatile}${staticnl}
 {
     ${body}}
 "
@@ -879,10 +921,10 @@ ${inlines}
       end
 
       operation 2207786 "get_flagsFunctors"
-	class_operation force_body_gen cpp_inline public explicit_return_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	force_body_gen cpp_inline public explicit_return_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
 	nparams 0
 	
-	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile};
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw};
 "
 	cpp_def "${description}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}
 {
@@ -905,11 +947,11 @@ ${inlines}
       end
 
       operation 2207914 "set_flagsFunctors"
-	class_operation force_body_gen public explicit_return_type "void"
+	force_body_gen public explicit_return_type "void"
 	nparams 1
 	
 	  param in name "value" explicit_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
-	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${)}${const}${volatile};
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${)}${const}${volatile}${throw};
 "
 	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${staticnl}
 {
@@ -932,7 +974,7 @@ ${inlines}
       end
 
       operation 2208298 "AddFlagsFunctor"
-	class_operation preserve_cpp_body_indent public explicit_return_type "void"
+	preserve_cpp_body_indent public explicit_return_type "void"
 	nparams 1
 	
 	  param inout name "functor" explicit_type "std::function<Qt::ItemFlags(const QModelIndex&)>"
@@ -951,7 +993,7 @@ ${inlines}
       end
 
       operation 2208170 "SetDefaultTreeFunctor"
-	class_operation preserve_cpp_body_indent public explicit_return_type "void"
+	preserve_cpp_body_indent public explicit_return_type "void"
 	nparams 0
 	
 	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
@@ -998,7 +1040,7 @@ ${inlines}
       end
 
       attribute 1294122 "flagsFunctors"
-	class_attribute private explicit_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
+	private explicit_type "QVector<std::function<Qt::ItemFlags(const QModelIndex&)> >"
 	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
 	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
 "
@@ -2832,7 +2874,8 @@ ${namespace_end}
 
     artifact 613034 "ItemController"
       stereotype "source"
-      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+      cpp_h "@{copyright}
+#ifndef ${NAMESPACE}_${NAME}_H
 #define ${NAMESPACE}_${NAME}_H
 
 ${description}

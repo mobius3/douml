@@ -75,7 +75,8 @@ RelationData::RelationData(UmlCode e, int id)
     a.idl_truncatable_inheritance = b.idl_truncatable_inheritance = FALSE;
     a.idl_case = b.idl_case = 0;
     name = default_name(e);
-    start = end = 0;
+    SetStart(0);
+    SetEnd(0);
     end_removed_from = 0;
     original_id = 0;
 }
@@ -96,18 +97,18 @@ RelationData::RelationData(const BrowserRelation * model,
     original_id = 0;
 
     if (md->start == model) {
-        start = r;
+        SetStart(r);
 
         if (md->end_removed_from == 0) {
             // bi dir, self to model became self to r
-            end = new BrowserRelation((md->get_end_class() == (BrowserClass *) model->parent())
+            SetEnd(new BrowserRelation((md->get_end_class() == (BrowserClass *) model->parent())
                                       ? (BrowserClass *) r->parent() : md->get_end_class(),
-                                      this);
+                                      this));
             end_removed_from = 0;
         }
         else {
             // uni dir
-            end = 0;
+            SetEnd(0);
             end_removed_from = (md->end_removed_from == (BrowserClass *) model->parent())
                                ? (BrowserClass *) r->parent() : md->end_removed_from;
             connect(end_removed_from->get_data(), SIGNAL(deleted()),
@@ -116,10 +117,10 @@ RelationData::RelationData(const BrowserRelation * model,
     }
     else {
         // bi dir, self to model became self to r
-        end = r;
-        start = new BrowserRelation((md->get_start_class() == (BrowserClass *) model->parent())
-                                    ? (BrowserClass *) r->parent() : md->get_start_class(),
-                                    this);
+        SetEnd(r);
+        SetStart(new BrowserRelation((md->get_start_class() == (BrowserClass *) model->parent())
+                                     ? (BrowserClass *) r->parent() : md->get_start_class(),
+                                     this));
         end_removed_from = 0;
     }
 
@@ -148,7 +149,7 @@ void RelationData::copy(RelationData * model)
 void RelationData::garbage(BrowserRelation * r)
 {
     if (r == start) {
-        start = 0;
+        SetStart(0);
 
         if ((end == 0) ||
             (end->get_data() == 0)) // bi-dir rel, reverse rel wasn't read
@@ -158,7 +159,7 @@ void RelationData::garbage(BrowserRelation * r)
         // end -> start read, but start -> end not read
         delete this;
     else {
-        end = 0;
+        SetEnd(0);
 
         if (start == 0)
             delete this;
@@ -286,10 +287,9 @@ static void default_decls(RoleData & r, UmlCode type, QString cl_stereotype)
 
 BrowserRelation * RelationData::set_start_end(BrowserRelation * s, BrowserClass * e)
 {
-    start = s;
-
+    SetStart(s);
     if (! uni_directional(type))
-        end = new BrowserRelation(e, this);
+        SetEnd(new BrowserRelation(e, this));
     else {
         end_removed_from = e;
         connect(e->get_data(), SIGNAL(deleted()), this, SLOT(end_deleted()));
@@ -525,7 +525,7 @@ bool RelationData::check_end_visibility()
     if (!navigable(end)) {
         if (end_removed_from == 0) {
             end_removed_from = end->extract();
-            end = 0;
+            SetEnd(0);
             connect(end_removed_from->get_data(), SIGNAL(deleted()),
                     this, SLOT(end_deleted()));
         }
@@ -536,7 +536,7 @@ bool RelationData::check_end_visibility()
     if (end_removed_from != 0) {
         disconnect(end_removed_from->get_data(), SIGNAL(deleted()),
                    this, SLOT(end_deleted()));
-        end = BrowserRelation::reinsert(end_removed_from, this);
+        SetEnd(BrowserRelation::reinsert(end_removed_from, this));
         end_removed_from = 0;
         end->update_stereotype();
     }
@@ -1428,8 +1428,8 @@ RelationData * RelationData::read_ref(char *& st, bool complete,
 
         if (complete) {
             // must create a valid temporary relation
-            result->start = BrowserRelation::temporary(result);
-            result->end = BrowserRelation::temporary(result);
+            result->SetStart(BrowserRelation::temporary(result));
+            result->SetEnd(BrowserRelation::temporary(result));
         }
     }
 
@@ -1684,13 +1684,13 @@ RelationData * RelationData::read(char *& st, char *& k,
             wrong_keyword(k, "a");
 
         read_role(result->a, assoc, st, k, result);		// updates k
-        result->start = BrowserRelation::read_ref(st, k);
+        result->SetStart(BrowserRelation::read_ref(st, k));
 
         read_keyword(st, "b");
 
         if (!RelationData::uni_directional(result->type)) {
             read_role(result->b, assoc, st, k, result);	// updates k
-            result->end = BrowserRelation::read_ref(st, k);
+            result->SetEnd(BrowserRelation::read_ref(st, k));
             // 'end' may be read before 'start' : relation's type was unknown
             result->end->set_name(0);
             result->end->set_name(result->name);
@@ -1713,7 +1713,7 @@ RelationData * RelationData::read(char *& st, char *& k,
                 ((BrowserNode *) result->end_removed_from->parent())->get_visibility(UmlRelations);
             connect(result->end_removed_from->get_data(), SIGNAL(deleted()),
                     result, SLOT(end_deleted()));
-            result->end = 0;
+            result->SetEnd(0);;
 
             // manage old declarations
             switch (result->type) {
@@ -1786,8 +1786,8 @@ void RelationData::delete_unconsistent()
     while (! Unconsistent.isEmpty()) {
         RelationData * d = Unconsistent.take(0);
 
-        d->start = d->end = 0;
-
+        d->SetStart(0);
+        d->SetEnd(0);
         if (!d->deletedp())
             d->BasicData::delete_it();
 
@@ -1808,4 +1808,26 @@ void RelationData::post_load()
             ((ClassData *) rd->end_removed_from->get_data())->cpp_is_external())
             rd->a.cpp_decl = "#include in header";
     }
+}
+
+void RelationData::IndexStartEnd()
+{
+    dataForClass.clear();
+    if(start && start->parent())
+        dataForClass.insert(((BrowserNode*)start->parent())->get_name(), &a);
+    if(end && end->parent())
+        dataForClass.insert(((BrowserNode*)end->parent())->get_name(), &b);
+
+}
+
+void RelationData::SetStart(BrowserRelation * relStart)
+{
+    start = relStart;
+    IndexStartEnd();
+}
+
+void RelationData::SetEnd(BrowserRelation * relEnd)
+{
+    end = relEnd;
+    IndexStartEnd();
 }

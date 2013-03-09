@@ -1484,7 +1484,8 @@ QString BrowserClass::may_connect(UmlCode l, BrowserClass * other)
 
 BasicData * BrowserClass::add_relation(UmlCode t, BrowserNode * end)
 {
-    if (IsaRelation(t)) {
+    if (IsaRelation(t))
+    {
         RelationData * d = new RelationData(t);
 
         BrowserRelation * br1 = new BrowserRelation(this, d);

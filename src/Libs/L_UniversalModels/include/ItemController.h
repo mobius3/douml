@@ -27,8 +27,8 @@
 
 #include <QStringList>
 #include <QVariant>
-#include <QModelIndex>
 #include <QVector>
+#include <QModelIndex>
 #include <QHash>
 
 #include "l_tree_controller_global.h"
@@ -49,7 +49,11 @@ class ItemController
 
     void AddGetter(const QPair<int,int> & index, std::function<QVariant(const T*)> function);
 
+    void AddGetter(int row, const QVector<int> & roles, std::function<QVariant(const T*)> function);
+
     void AddSetter(const QPair<int,int> & index, std::function<bool(T*, QVariant)> function);
+
+    void AddSetter(int row, const QVector<int> & roles, std::function<bool(T*, QVariant)> function);
 
     Qt::ItemFlags flags(const QModelIndex & index) const;
 
@@ -111,11 +115,33 @@ void ItemController<T>::AddGetter(const QPair<int,int> & index, std::function<QV
 }
 
 template<class T>
+void ItemController<T>::AddGetter(int row, const QVector<int> & roles, std::function<QVariant(const T*)> function) 
+{
+    // Bouml preserved body begin 00230DAA
+    for(int role : roles)
+    {
+        AddGetter(QPair<int,int>(row, role), function);
+    }
+    // Bouml preserved body end 00230DAA
+}
+
+template<class T>
 void ItemController<T>::AddSetter(const QPair<int,int> & index, std::function<bool(T*, QVariant)> function) 
 {
     // Bouml preserved body begin 0021182A
     setters.insert(index, function);
     // Bouml preserved body end 0021182A
+}
+
+template<class T>
+void ItemController<T>::AddSetter(int row, const QVector<int> & roles, std::function<bool(T*, QVariant)> function) 
+{
+    // Bouml preserved body begin 00230D2A
+    for(int role : roles)
+    {
+        AddSetter(QPair<int,int>(row, role), function);
+    }
+    // Bouml preserved body end 00230D2A
 }
 
 template<class T>
@@ -132,22 +158,19 @@ Qt::ItemFlags ItemController<T>::flags(const QModelIndex & index) const
 }
 
 template<class T>
-inline QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > ItemController<T>::GetFlagsFunctors()
-
+inline QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > ItemController<T>::GetFlagsFunctors() 
 {
     return flagsFunctors;
 }
 
 template<class T>
-void ItemController<T>::SetFlagsFunctors(QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > value)
-
+void ItemController<T>::SetFlagsFunctors(QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > value) 
 {
     flagsFunctors = value;
 }
 
 template<class T>
-void ItemController<T>::AddFlagsFunctor(std::function<Qt::ItemFlags(const QModelIndex&)> functor)
-
+void ItemController<T>::AddFlagsFunctor(std::function<Qt::ItemFlags(const QModelIndex&)> functor) 
 {
     // Bouml preserved body begin 0021B22A
     flagsFunctors.append(functor);
@@ -155,8 +178,7 @@ void ItemController<T>::AddFlagsFunctor(std::function<Qt::ItemFlags(const QModel
 }
 
 template<class T>
-void ItemController<T>::SetDefaultTreeFunctor()
-
+void ItemController<T>::SetDefaultTreeFunctor() 
 {
     // Bouml preserved body begin 0021B1AA
     AddFlagsFunctor([](const QModelIndex& index)
@@ -170,6 +192,4 @@ void ItemController<T>::SetDefaultTreeFunctor()
     // Bouml preserved body end 0021B1AA
 }
 
-//template<class T>
-//QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > ItemController<T>::flagsFunctors;
 #endif

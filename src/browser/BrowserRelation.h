@@ -44,6 +44,7 @@ class BrowserOperation;
 
 class BrowserRelation : public BrowserNode, public Labeled<BrowserRelation>
 {
+friend class QuickEdit;
 protected:
     static IdDict<BrowserRelation> all;
 
