@@ -261,11 +261,6 @@ void QuickEdit::SetupClassController(QSharedPointer<ItemController<BrowserNode> 
     ADD_GETSET(BrowserClass, classController, nameIndex, 0, toString, get_name, set_name);
     ADD_GETSET(BrowserClass, classController, nameIndex, 2, toString, get_name, set_name);
 
-//    ADD_GETSET_DATA(BrowserOperation, ClassData, classController, 1, 0, toBool,
-//               cpp_is_external, set_cpp_is_external);
-//    ADD_GETSET_DATA(BrowserOperation, ClassData, classController, 1, 2, toBool,
-//               cpp_is_external, set_cpp_is_external);
-
     ADD_GETSET(BrowserClass, classController, stereotypeIndex, 0, toString, get_stereotype, def->set_stereotype);
     ADD_GETSET(BrowserClass, classController, stereotypeIndex, 2, toString, get_stereotype, def->set_stereotype);
 
@@ -457,11 +452,6 @@ void QuickEdit::SetupOperationAttributeController(QSharedPointer<ItemController<
     }
     );
 }
-
-//void QuickEdit::SetupOperationReturnTypeController(QSharedPointer<ItemController<BrowserNode> > &)
-//{
-//}
-
 void QuickEdit::Init(UmlWindow* window, BrowserView* view)
 {
     originalView = view;

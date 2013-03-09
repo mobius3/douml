@@ -22,9 +22,6 @@ class Q3ListViewItem;
 class GenericEventFilter;
 class UmlWindow;
 
-
-
-
 class QuickEdit : public QWidget
 {
     Q_OBJECT
@@ -82,8 +79,6 @@ private:
     void SetupOperationController(QSharedPointer<ItemController<BrowserNode> >&);
     void SetupAttributeController(QSharedPointer<ItemController<BrowserNode> >&);
     void SetupOperationAttributeController(QSharedPointer<ItemController<BrowserNode> >&);
-    //void SetupOperationReturnTypeController(QSharedPointer<ItemController<BrowserNode> >&);
-
 
     void PerformFiltering(QStringList, QTreeView*, TreeModel*, QSharedPointer<TreeItemInterface>);
     QList<std::function<bool (TreeItemInterface *)> > CreateCheckList();
