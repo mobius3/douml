@@ -523,7 +523,8 @@ SOURCES = \
     dialog/GenerationSettingsBuiltinTable.cpp \
     CustomWidgets/quickedit.cpp \
     browser/BrowserOperationAttribute.cpp \
-    CustomWidgets/GenericDelegate.cpp
+    CustomWidgets/GenericDelegate.cpp \
+    CustomWidgets/quickeditcontrollersetup.cpp
 
 TARGET = douml
 DEFINES = BooL=bool DEBUGCOM

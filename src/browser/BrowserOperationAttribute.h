@@ -2,6 +2,7 @@
 #define BROWSEROPERATIONATTRIBUTE_H
 #include "BrowserNode.h"
 #include "BrowserOperation.h"
+#include "OperationData.h"
 #include "ParamData.h"
 #include "Labeled.h"
 
@@ -46,6 +47,10 @@ public:
         if(operation)
             return operation->is_writable();
         return false;
+    }
+    bool is_get_set()
+    {
+        return ((OperationData*)operation->get_data())->get_or_set();
     }
     void modified(){operation->package_modified();}
 

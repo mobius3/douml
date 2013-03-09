@@ -15,62 +15,47 @@ static QRect CheckBoxRect(const QStyleOptionViewItem &view_item_style_options) {
   return QRect(check_box_point, check_box_rect.size());
 }
 
-GenericDelegate::GenericDelegate(QObject *parent)
-    : QStyledItemDelegate(parent)
+GenericDelegate::GenericDelegate(QObject *parent, bool _hideText)
+    : QStyledItemDelegate(parent), hideText(_hideText)
 {
 }
 QWidget * GenericDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &/* option */,
     const QModelIndex &/* index */) const
 {
-    //return widgetCreator(parent);
-    return static_cast<QWidget*>(0);
+    return widgetCreator(parent);
 }
 
 void GenericDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
-    //dataAccessor(editor, index);
+    if(dataAccessor)
+        dataAccessor(editor, index);
 }
 void GenericDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
 {
-    //dataSetter(editor, model, index);
+    if(dataSetter)
+        dataSetter(editor, model, index);
 }
 
 QString GenericDelegate::displayText(const QVariant &value, const QLocale &locale) const
 {
-    return QString();
+    if(hideText)
+        return QString();
+    else
+        return QStyledItemDelegate::displayText(value, locale);
 }
 
 
 void GenericDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if(!index.isValid())
-            return;
-
-    QVariant value = index.model()->data(index, Qt::DisplayRole);
-    QStyledItemDelegate::paint(painter, option, index);
-    if(!value.isValid())
-    {
         return;
-    }
-
-    bool checked = index.model()->data(index, Qt::DisplayRole).toBool();
-
-    QStyleOptionButton check_box_style_option;
-    check_box_style_option.state |= QStyle::State_Enabled;
-    if (checked) {
-        check_box_style_option.state |= QStyle::State_On;
-    } else {
-        check_box_style_option.state |= QStyle::State_Off;
-    }
-    check_box_style_option.rect = CheckBoxRect(option);
-
-    QApplication::style()->drawControl(QStyle::CE_CheckBox,
-                                       &check_box_style_option,
-                                       painter);
-    //QStyledItemDelegate::paint(painter, option, index);
+    if(paintProcessor)
+        paintProcessor(this, painter, option, index);
+    else
+        QStyledItemDelegate::paint(painter, option, index);
 }
 
 bool GenericDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)

@@ -5,7 +5,7 @@
 class GenericDelegate : public QStyledItemDelegate
 {
 public:
-    GenericDelegate(QObject *parent = 0);
+    GenericDelegate(QObject *parent = 0, bool _hideText = false);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
@@ -24,12 +24,16 @@ public:
     std::function<void(QWidget *, const QModelIndex &) > dataAccessor;
     std::function<void(QWidget *,QAbstractItemModel*,  const QModelIndex &)> dataSetter;
     std::function<QWidget *(QWidget *)> widgetCreator;
+    std::function<void (const QStyledItemDelegate* , QPainter *,const QStyleOptionViewItem&,const QModelIndex &)> paintProcessor;
     std::function<bool(QEvent *event,QAbstractItemModel *model,const QStyleOptionViewItem &option,const QModelIndex &index)> editorEventProcessor;
+    bool hideText = false;
 
 private:
 
     //std::function<void(QWidget *,  const QStyleOptionViewItem &, const QModelIndex &)const> geometryUpdater;
 };
+
+
 
 
 #endif // GENERICDELEGATE_H

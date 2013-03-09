@@ -56,6 +56,7 @@ private:
     QSharedPointer<ItemController<BrowserNode> > operationReturnTypeController;
     QSharedPointer<ItemController<BrowserNode> > operationAttributeController;
     QSharedPointer<ItemController<BrowserNode> > relationController;
+    QSharedPointer<ItemController<BrowserNode> > extraNodeController;
 
     QSharedPointer<TreeItemInterface > classInterface;
     QSharedPointer<TreeItemInterface > operationInterface;
@@ -63,12 +64,14 @@ private:
     QSharedPointer<TreeItemInterface > operationReturnTypeInterface;
     QSharedPointer<TreeItemInterface> operationAttributeInterface;
     QSharedPointer<TreeItemInterface > relationInterface;
+    QSharedPointer<TreeItemInterface > extraNodeInterface;
 
     std::function<Qt::ItemFlags(const QModelIndex&)> classFlagFunctor;
     std::function<Qt::ItemFlags(const QModelIndex&)> operationFlagFunctor;
     std::function<Qt::ItemFlags(const QModelIndex&)> attributeFlagFunctor;
     std::function<Qt::ItemFlags(const QModelIndex&)> operationReturnTypeFlagFunctor;
     std::function<Qt::ItemFlags(const QModelIndex&)> operationAttributeFlagFunctor;
+    std::function<Qt::ItemFlags(const QModelIndex&)> extraNodeFlagFunctor;
 
 
     void SetupTreeModel(TreeModel*& , QTreeView*,
@@ -77,15 +80,19 @@ private:
                         QSharedPointer<BrowserNode>&);
 
 
-    void SetupClassController(QSharedPointer<ItemController<BrowserNode> >&);
-    void SetupOperationController(QSharedPointer<ItemController<BrowserNode> >&);
-    void SetupAttributeController(QSharedPointer<ItemController<BrowserNode> >&);
-    void SetupOperationAttributeController(QSharedPointer<ItemController<BrowserNode> >&);
-    void SetupRelationController(QSharedPointer<ItemController<BrowserNode> > &);
+
+    void SetupClassController();
+    void SetupOperationController();
+    void SetupAttributeController();
+    void SetupOperationAttributeController();
+    void SetupRelationController();
+    void SetupExtraNodeController();
+    void SetupControllers();
     void PerformFiltering(QStringList, QTreeView*, TreeModel*, QSharedPointer<TreeItemInterface>);
     QList<std::function<bool (TreeItemInterface *)> > CreateCheckList();
     void CreateMenu();
-
+    void ComboBoxDelegateSetup();
+    void CheckBoxDelegateSetup();
     void SetupItemCreationFuncs();
 
     QSharedPointer<TreeItemInterface > CreateInterfaceNode(QSharedPointer<TreeItemInterface> root, QSharedPointer<ItemController<BrowserNode> > controller, BrowserNode *node);
@@ -93,7 +100,7 @@ private:
     void AssignItemsForClass(QSharedPointer<TreeItemInterface> root,BrowserNode*);
     void AssignItemsForAttribute(QSharedPointer<TreeItemInterface> root,BrowserNode*);
     void AssignItemsForRelation(QSharedPointer<TreeItemInterface> root,  BrowserNode * classNode);
-//    void AssignItemsForExternal(QSharedPointer<TreeItemInterface> root,BrowserNode*);
+    void AssignItemsForExtraNode(QSharedPointer<TreeItemInterface> root,BrowserNode*);
 //    void AssignItemsForAggregation(QSharedPointer<TreeItemInterface> root,BrowserNode*);
 
     public slots:
