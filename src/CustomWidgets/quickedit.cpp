@@ -129,6 +129,11 @@ void QuickEdit::OnShow()
 void QuickEdit::OnPerformFiltering(QString)
 {
     PerformFiltering(expandedNodes, ui->tvEditor, treeModel, rootInterface);
+    std::function<bool(TreeItemInterface*)> check = [&](TreeItemInterface* interface)
+    {
+       return true;
+    };
+    TreeFunctions::ExpandAllSatisfying<TreeItemInterface>(check, ui->tvEditor, treeModel, QModelIndex());
 }
 
 

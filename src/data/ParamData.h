@@ -45,7 +45,7 @@ public:
     ParamData();
 
     void set_name(const char *);
-    const char * get_name() const {
+    QString get_name() const {
         return name;
     };
     UmlParamDirection get_dir() const {

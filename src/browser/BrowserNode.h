@@ -115,7 +115,7 @@ public:
 
     virtual bool is_undefined() const;
 
-   QString get_name() const {
+   virtual QString get_name() const {
         return name;
     }
     virtual void set_name(QString s);
