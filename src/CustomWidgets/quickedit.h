@@ -109,6 +109,7 @@ private:
     public slots:
     void OnContextMenu(QPoint);
     void OnShow();
+    void OnPerformFiltering(QString);
     //void OnPerformFiltering(QString);
 
 };

@@ -181,14 +181,14 @@ TreeItemType<DataType>* AddItem(std::function<DataType(DataType*)> dataGenerator
 template<typename InterfaceType, template <typename> class ItemType, typename DataType>
 bool PerformFiltering(TreeModel* treeModel,
                       QSharedPointer<InterfaceType > rootItem,
-                      std::function<QList<std::function<bool (InterfaceType *)> > ()> createCheckListFunc)
+                      std::function<QList<std::function<bool (InterfaceType *)> > ()> createCheckListFunc, bool forceChildren = true)
 {
     QSharedPointer<InterfaceType > item;
     QList<std::function<bool (InterfaceType *)> > checkList = createCheckListFunc();
     if(checkList.isEmpty())
         item = rootItem;
     else
-        item = TreeFunctions::FilterSubset<InterfaceType,ItemType,DataType>(rootItem, checkList);
+        item = TreeFunctions::FilterSubset<InterfaceType,ItemType,DataType>(rootItem, checkList, forceChildren);
     treeModel->InsertRootItem(item);
     if(item == rootItem)
         return false;
@@ -327,10 +327,10 @@ void FilterTreeAndRestoreNodes(std::function<QVariant(DataType*)> dataAccessor,
                                QStringList & nodes,
                                QTreeView * view,
                                TreeModel * model,
-                               QSharedPointer<InterfaceType > startIndex)
+                               QSharedPointer<InterfaceType > startIndex, bool forceChildren = true)
 {
     TreeFunctions::StoreNodePathExpandState<InterfaceType,ItemType,DataType>(dataAccessor, nodes, view, model, QModelIndex());
-    PerformFiltering<InterfaceType,ItemType,DataType>(model,startIndex,createCheckListFunc);
+    PerformFiltering<InterfaceType,ItemType,DataType>(model,startIndex,createCheckListFunc, forceChildren);
     TreeFunctions::ApplyNodePathExpandState<InterfaceType,ItemType,DataType>(dataAccessor, nodes, view, model, QModelIndex());
 }
 }

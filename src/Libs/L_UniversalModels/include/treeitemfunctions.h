@@ -40,7 +40,7 @@ using ModifierFunctions = QList<ModifierFunction<K> >;
  * @forcePick говорит о том, что ноду нужно зацепить в любом случае(когда нода-папка удовлетворяет условию)
  **/
 template<typename InterfaceType, typename ConcreteItemType>
-QSharedPointer<InterfaceType> RecursiveGetSubset(InterfaceType* rootItem, RootChecks<InterfaceType> filterFunctions, bool forcePick = false)
+QSharedPointer<InterfaceType> RecursiveGetSubset(InterfaceType* rootItem, RootChecks<InterfaceType> filterFunctions, bool forcePick = false, bool forceChildren = true)
 {
     QList<QSharedPointer<InterfaceType>> newChildren;
     bool nodeValid = true;
@@ -56,7 +56,7 @@ QSharedPointer<InterfaceType> RecursiveGetSubset(InterfaceType* rootItem, RootCh
     {
         for(QSharedPointer<InterfaceType> child: rootItem->GetChildren())
         {
-            QSharedPointer<InterfaceType> newChild = RecursiveGetSubset<InterfaceType,ConcreteItemType>(child.data(), filterFunctions, nodeValid);
+            QSharedPointer<InterfaceType> newChild = RecursiveGetSubset<InterfaceType,ConcreteItemType>(child.data(), filterFunctions, nodeValid && forceChildren, forceChildren);
             if(!newChild.isNull())
                 newChildren += newChild;
         }
@@ -185,13 +185,13 @@ QList<K> RecursiveGet(T* rootItem, std::function<K(T*)> accessor)
  * @filterFunctions список проверок которым должна удовлетворять нода
  **/
 template<typename InterfaceType, template <typename> class ItemType, typename DataType>
-QSharedPointer<InterfaceType > FilterSubset(QSharedPointer<InterfaceType> rootItem, QList<std::function<bool(InterfaceType*)> > filterFunctions)
+QSharedPointer<InterfaceType > FilterSubset(QSharedPointer<InterfaceType> rootItem, QList<std::function<bool(InterfaceType*)> > filterFunctions, bool forceChildren = true)
 {
     QSharedPointer<InterfaceType > item;
     ItemType<DataType>* newRoot = new ItemType<DataType>(0);
     item = QSharedPointer<InterfaceType >(newRoot);
 
-    item = TreeFunctions::RecursiveGetSubset<InterfaceType, ItemType<DataType>>(rootItem.data(), filterFunctions);
+    item = TreeFunctions::RecursiveGetSubset<InterfaceType, ItemType<DataType>>(rootItem.data(), filterFunctions, false, forceChildren);
     return item;
 }
 

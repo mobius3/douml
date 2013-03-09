@@ -109,7 +109,7 @@ void QuickEdit::PerformFiltering(QStringList expandedNodes, QTreeView* view, Tre
 
     TreeFunctions::FilterTreeAndRestoreNodes<TreeItemInterface, TreeItem, BrowserNode>
             (dataAccessFunc, checksFunc,
-             expandedNodes, view, model, interface);
+             expandedNodes, view, model, interface, false);
 }
 
 void QuickEdit::OnContextMenu(QPoint point)
@@ -124,6 +124,11 @@ void QuickEdit::OnShow()
     if(!current)
         return;
     Show(current);
+}
+
+void QuickEdit::OnPerformFiltering(QString)
+{
+    PerformFiltering(expandedNodes, ui->tvEditor, treeModel, rootInterface);
 }
 
 
@@ -161,19 +166,20 @@ void QuickEdit::SetupItemCreationFuncs()
 
 QList<std::function<bool (TreeItemInterface *)> > QuickEdit::CreateCheckList()
 {
-    //    QList<std::function<bool (TreeItemInterface *)> > result;
-    //    if(!ui->leVisitedSearch->text().trimmed().isEmpty())
-    //    {
-    //        QString value = ui->leVisitedSearch->text();
-    //        std::function<bool(TreeItemInterface*)> addressFilterFunc =  [value](TreeItemInterface* iface)
-    //        {
-    //            BrowserNode* data = static_cast<BrowserNode*>(iface->InternalPointer());
-    //            bool match = data->get_name().contains(value, Qt::CaseInsensitive);
-    //            return match;
-    //        };
-    //        result.append(addressFilterFunc);
-    //    }
-    //    return result;
+        QList<std::function<bool (TreeItemInterface *)> > result;
+        if(!ui->leSearch->text().trimmed().isEmpty())
+        {
+            QString value = ui->leSearch->text();
+            std::function<bool(TreeItemInterface*)> addressFilterFunc =  [value](TreeItemInterface* iface)
+            {
+                BrowserNode* data = static_cast<BrowserNode*>(iface->InternalPointer());
+                QString name = data->get_name();
+                bool match = data->get_name().contains(value, Qt::CaseInsensitive);
+                return match;
+            };
+            result.append(addressFilterFunc);
+        }
+        return result;
 }
 
 void QuickEdit::SetupTreeModel(TreeModel*& model , QTreeView* view,
