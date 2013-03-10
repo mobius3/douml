@@ -42,13 +42,23 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cbViewMode"/>
+      <widget class="QLineEdit" name="leSearch"/>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cbViewMode">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QWidget" name="wdgContextButtonHolder" native="true"/>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_2">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Previous Item</string>
        </property>
@@ -56,16 +66,19 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Next Item</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="leSearch"/>
-     </item>
-     <item>
       <widget class="QCheckBox" name="chkCpp">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>C++</string>
        </property>
@@ -73,6 +86,9 @@
      </item>
      <item>
       <widget class="QCheckBox" name="chkJava">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Java</string>
        </property>
@@ -80,6 +96,9 @@
      </item>
      <item>
       <widget class="QCheckBox" name="chkPython">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Python</string>
        </property>
@@ -87,6 +106,9 @@
      </item>
      <item>
       <widget class="QCheckBox" name="chkPhp">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Php</string>
        </property>
@@ -94,6 +116,9 @@
      </item>
      <item>
       <widget class="QCheckBox" name="chkIdl">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Idl</string>
        </property>
