@@ -109,7 +109,7 @@ void QuickEdit::PerformFiltering(QStringList expandedNodes, QTreeView* view, Tre
 
     TreeFunctions::FilterTreeAndRestoreNodes<TreeItemInterface, TreeItem, BrowserNode>
             (dataAccessFunc, checksFunc,
-             expandedNodes, view, model, interface, false);
+             expandedNodes, view, model, interface,false, true);
 }
 
 void QuickEdit::OnContextMenu(QPoint point)
