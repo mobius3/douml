@@ -136,6 +136,20 @@ void QuickEdit::OnPerformFiltering(QString)
     TreeFunctions::ExpandAllSatisfying<TreeItemInterface>(check, ui->tvEditor, treeModel, QModelIndex());
 }
 
+void QuickEdit::OnDecreaseOpenLevels()
+{
+    int level = TreeFunctions::MaxOpenLevel(ui->tvEditor, treeModel, QModelIndex());
+    level--;
+    TreeFunctions::ExpandUpToLevel(ui->tvEditor, treeModel, QModelIndex(),level);
+}
+
+void QuickEdit::OnIncreaseOpenLevels()
+{
+    int level = TreeFunctions::MaxOpenLevel(ui->tvEditor, treeModel, QModelIndex());
+    level++;
+    TreeFunctions::ExpandUpToLevel(ui->tvEditor, treeModel, QModelIndex(),level);
+}
+
 
 void QuickEdit::CreateMenu()
 {
@@ -152,13 +166,6 @@ void QuickEdit::CreateMenu()
 
 void QuickEdit::SetupItemCreationFuncs()
 {
-    //    itemCreators.insert(UmlAggregation, std::bind(CreateItemsForAggregation, this, std::placeholders::_1, std::placeholders::_2));
-    //    itemCreators.insert(UmlAggregationByValue, std::bind(CreateItemsForAggregation, this, std::placeholders::_1, std::placeholders::_2));/*composition?*/
-    //    itemCreators.insert(UmlDirectionalAggregation, std::bind(CreateItemsForAggregation, this, std::placeholders::_1, std::placeholders::_2));
-    //    itemCreators.insert(UmlDirectionalAggregationByValue, std::bind(CreateItemsForAggregation, this, std::placeholders::_1, std::placeholders::_2));
-    //void QuickEdit::AssignItemsForClass(QSharedPointer<TreeItemInterface> root,  BrowserNode * classNode)
-
-    //std::function<>
     itemCreators.insert(UmlClass, std::bind(&QuickEdit::AssignItemsForClass, this, std::placeholders::_1, std::placeholders::_2));
     itemCreators.insert(UmlAttribute, std::bind(&QuickEdit::AssignItemsForAttribute, this, std::placeholders::_1, std::placeholders::_2));
     itemCreators.insert(UmlOperation, std::bind(&QuickEdit::AssignItemsForOperation, this, std::placeholders::_1, std::placeholders::_2));
@@ -167,6 +174,8 @@ void QuickEdit::SetupItemCreationFuncs()
     itemCreators.insert(UmlDirectionalAggregation, std::bind(&QuickEdit::AssignItemsForRelation, this, std::placeholders::_1, std::placeholders::_2));
     itemCreators.insert(UmlDirectionalAggregationByValue, std::bind(&QuickEdit::AssignItemsForRelation, this, std::placeholders::_1, std::placeholders::_2));
     itemCreators.insert(UmlExtraMember, std::bind(&QuickEdit::AssignItemsForExtraNode, this, std::placeholders::_1, std::placeholders::_2));
+    itemCreators.insert(UmlClassView, std::bind(&QuickEdit::AssignItemsForClassView, this, std::placeholders::_1, std::placeholders::_2));
+    itemCreators.insert(UmlPackage, std::bind(&QuickEdit::AssignItemsForPackage, this, std::placeholders::_1, std::placeholders::_2));
 }
 
 QList<std::function<bool (TreeItemInterface *)> > QuickEdit::CreateCheckList()
@@ -219,7 +228,7 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     //validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
     //                                        UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember};
     validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
-                  UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember};
+                  UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember, UmlClassView, UmlPackage};
     //validTypes = {UmlClass, UmlOperation, UmlAttribute};
 
     SetupItemCreationFuncs();
@@ -233,6 +242,8 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     ui->tvEditor->setAlternatingRowColors(true);
     //connect(ui->tvEditor, SIGNAL(customContextMenuRequested(QPoint)),this, SLOT(OnContextMenu(QPoint)));
     connect(ui->leSearch, SIGNAL(textChanged(QString)), this, SLOT(OnPerformFiltering(QString)));
+    connect(ui->pbUpOneLevel, SIGNAL(clicked()), this, SLOT(OnDecreaseOpenLevels()));
+    connect(ui->pbDownOneLevel, SIGNAL(clicked()), this, SLOT(OnIncreaseOpenLevels()));
 }
 
 void QuickEdit::Show(BrowserNode * node)
@@ -313,6 +324,41 @@ void QuickEdit::AssignItemsForExtraNode(QSharedPointer<TreeItemInterface> root, 
 {
     QSharedPointer<TreeItemInterface > interfaceItem = CreateInterfaceNode(root, extraNodeController, extraNode);
     root->AddChildren(QList<QSharedPointer<TreeItemInterface> >() << interfaceItem);
+
+}
+
+void QuickEdit::AssignItemsForClassView(QSharedPointer<TreeItemInterface> root, BrowserNode * classViewNode)
+{
+    QSharedPointer<TreeItemInterface > interfaceItem = CreateInterfaceNode(root, classController, classViewNode);
+
+    QList<BrowserNode*> children = classViewNode->children(validTypes);
+    std::reverse(children.begin(), children.end());
+    for(BrowserNode* child : children)
+    {
+        if(!child)
+            continue;
+        UmlCode nodeType = child->get_type();
+        itemCreators[nodeType](root, child);
+    }
+//    root->AddChildren(QList<QSharedPointer<TreeItemInterface> >() << interfaceItem);
+
+}
+
+void QuickEdit::AssignItemsForPackage(QSharedPointer<TreeItemInterface> root, BrowserNode * packageNode)
+{
+
+    QSharedPointer<TreeItemInterface > interfaceItem = CreateInterfaceNode(root, classController, packageNode);
+
+    QList<BrowserNode*> children = packageNode->children(validTypes);
+    std::reverse(children.begin(), children.end());
+    for(BrowserNode* child : children)
+    {
+        if(!child)
+            continue;
+        UmlCode nodeType = child->get_type();
+        itemCreators[nodeType](root, child);
+    }
+//    root->AddChildren(QList<QSharedPointer<TreeItemInterface> >() << interfaceItem);
 }
 
 void QuickEdit::AssignItemsForOperation(QSharedPointer<TreeItemInterface> root, BrowserNode * node)

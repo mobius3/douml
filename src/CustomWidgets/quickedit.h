@@ -57,6 +57,8 @@ private:
     QSharedPointer<ItemController<BrowserNode> > operationAttributeController;
     QSharedPointer<ItemController<BrowserNode> > relationController;
     QSharedPointer<ItemController<BrowserNode> > extraNodeController;
+    QSharedPointer<ItemController<BrowserNode> > classviewController;
+    QSharedPointer<ItemController<BrowserNode> > packageController;
 
     QSharedPointer<TreeItemInterface > classInterface;
     QSharedPointer<TreeItemInterface > operationInterface;
@@ -65,13 +67,17 @@ private:
     QSharedPointer<TreeItemInterface> operationAttributeInterface;
     QSharedPointer<TreeItemInterface > relationInterface;
     QSharedPointer<TreeItemInterface > extraNodeInterface;
+    QSharedPointer<TreeItemInterface> classviewInterface;
+    QSharedPointer<TreeItemInterface > packageInterface;
 
-    std::function<Qt::ItemFlags(const QModelIndex&)> classFlagFunctor;
-    std::function<Qt::ItemFlags(const QModelIndex&)> operationFlagFunctor;
-    std::function<Qt::ItemFlags(const QModelIndex&)> attributeFlagFunctor;
-    std::function<Qt::ItemFlags(const QModelIndex&)> operationReturnTypeFlagFunctor;
-    std::function<Qt::ItemFlags(const QModelIndex&)> operationAttributeFlagFunctor;
-    std::function<Qt::ItemFlags(const QModelIndex&)> extraNodeFlagFunctor;
+//    std::function<Qt::ItemFlags(const QModelIndex&)> classFlagFunctor;
+//    std::function<Qt::ItemFlags(const QModelIndex&)> operationFlagFunctor;
+//    std::function<Qt::ItemFlags(const QModelIndex&)> attributeFlagFunctor;
+//    std::function<Qt::ItemFlags(const QModelIndex&)> operationReturnTypeFlagFunctor;
+//    std::function<Qt::ItemFlags(const QModelIndex&)> operationAttributeFlagFunctor;
+//    std::function<Qt::ItemFlags(const QModelIndex&)> extraNodeFlagFunctor;
+//    QSharedPointer<ItemController<BrowserNode> > classviewFlagFunctor;
+//    QSharedPointer<ItemController<BrowserNode> > packageFlagFunctor;
 
 
     void SetupTreeModel(TreeModel*& , QTreeView*,
@@ -104,12 +110,16 @@ private:
     void AssignItemsForAttribute(QSharedPointer<TreeItemInterface> root,BrowserNode*);
     void AssignItemsForRelation(QSharedPointer<TreeItemInterface> root,  BrowserNode * classNode);
     void AssignItemsForExtraNode(QSharedPointer<TreeItemInterface> root,BrowserNode*);
+    void AssignItemsForClassView(QSharedPointer<TreeItemInterface> root,BrowserNode*);
+    void AssignItemsForPackage(QSharedPointer<TreeItemInterface> root,BrowserNode*);
 //    void AssignItemsForAggregation(QSharedPointer<TreeItemInterface> root,BrowserNode*);
 
     public slots:
     void OnContextMenu(QPoint);
     void OnShow();
     void OnPerformFiltering(QString);
+    void OnDecreaseOpenLevels();
+    void OnIncreaseOpenLevels();
     //void OnPerformFiltering(QString);
 
 };

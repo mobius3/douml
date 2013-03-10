@@ -321,6 +321,45 @@ bool ExpandAllSatisfying(std::function<bool(InterfaceType*)> check,
     return returnResult;
 }
 
+
+static int MaxOpenLevel(QTreeView * view, QAbstractItemModel * model,const QModelIndex startIndex, int level = -1, bool isFirst = true)
+{
+    static int result = 0;
+    level++;
+    if(isFirst)
+    {
+        result = 0;
+        isFirst = false;
+    }
+    if(view->isExpanded(startIndex.sibling(startIndex.row(), 0)) && (result <= level))
+        result = level;
+
+    for(int i(0); i < model->rowCount(startIndex); ++i)
+    {
+        QModelIndex child = model->index(i, 0, startIndex);
+        MaxOpenLevel(view, model, child, level, isFirst);
+
+    }
+    level--;
+    return result;
+}
+
+static void ExpandUpToLevel(QTreeView * view,QAbstractItemModel * model, const QModelIndex startIndex,int maxLevel, int level = -1)
+{
+    int currentLevel = level+1;
+    for(int i(0); i < model->rowCount(startIndex); ++i)
+    {
+        bool expand = currentLevel <= maxLevel;
+//        qDebug() << "Level: " << currentLevel;
+//        qDebug() << "Maxlevel: " << maxLevel;
+//        qDebug() << "Expand? " << expand;
+        QModelIndex child = model->index(i, 0, startIndex);
+        view->setExpanded( startIndex.sibling(startIndex.row(), 0), expand);
+        ExpandUpToLevel(view, model, child,maxLevel, currentLevel);
+    }
+}
+
+
 template<typename InterfaceType, template <typename> class ItemType, typename DataType>
 void FilterTreeAndRestoreNodes(std::function<QVariant(DataType*)> dataAccessor,
                                std::function<QList<std::function<bool (InterfaceType *)> > ()> createCheckListFunc,
