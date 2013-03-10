@@ -1,3 +1,24 @@
+v1.0b4
+    Added a new class/operation/parameter control. It is brought up by pressing Ctlr-E on Package, Classview, Class, Operation or Attribute nodes in main tree
+    This control is essentially an alternative way to insert quick fixes into class hierarchy. 
+    Things of note:
+    1) you can quickly search for classes/operation etc... by entering text in lineedit on the top. It even picks operation parameters!
+    2) two buttons to the left of the search lineedit allow you to expand/collapse whole levels in the tree
+    3) "Type" of an operation node is actually its return type.
+    4) Nodes below operations are their parameters
+    5) Changes made into editable cells are IMMEDIATELY done to the model. So far there is no rollback once you've edited something.
+    6) Classviews/Packages are not shown in the tree, but they are used to create it.
+    
+    Currently, the changes you can insert in this editor are limited, and some buttons are disabled but you can expect to have MUCH more control from it in later versions.
+    Feedback and requests will be appreciated.
+    
+    
+
+v1.0b3
+Bugfixes
+	App entered endless cycle while trying to open some diagrams. Fixed
+
+
 v1.0b2
 
 Changes
