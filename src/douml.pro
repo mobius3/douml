@@ -238,7 +238,8 @@ HEADERS        = \
     dialog/GenerationSettingsBuiltinTable.h \
     CustomWidgets/quickedit.h \
     browser/BrowserOperationAttribute.h \
-    CustomWidgets/GenericDelegate.h
+    CustomWidgets/GenericDelegate.h \
+    browserfunctions/operationfuncs.h
 
 
 SOURCES = \
@@ -524,7 +525,8 @@ SOURCES = \
     CustomWidgets/quickedit.cpp \
     browser/BrowserOperationAttribute.cpp \
     CustomWidgets/GenericDelegate.cpp \
-    CustomWidgets/quickeditcontrollersetup.cpp
+    CustomWidgets/quickeditcontrollersetup.cpp \
+    browserfunctions/operationfuncs.cpp
 
 TARGET = douml
 DEFINES = BooL=bool DEBUGCOM

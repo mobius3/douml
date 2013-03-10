@@ -30,8 +30,10 @@ class BrowserOperationAttribute: public BrowserNodeAbstractRemove
 {
     BrowserOperation* operation = nullptr;
     ParamData* data = nullptr;
+
 public:
     BrowserOperationAttribute(BrowserView* view, BrowserOperation* _operation, ParamData* _data);
+    BrowserOperation* get_operation(){return operation;}
     void set_name(QString);
     QString get_name() const;
     void set_direction(QString);

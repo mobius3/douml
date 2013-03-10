@@ -56,7 +56,7 @@ QVariant TreeModel::data(const QModelIndex & index, int role) const
         return static_cast< int >( item->checkState() ? Qt::Checked : Qt::Unchecked );
 
     if(role == Qt::DisplayRole || role == Qt::EditRole ||  role == Qt::DecorationRole)
-        return item->data(index.column(),role);
+        return item->data(index,role);
 
 //    if(role == Qt::DecorationRole )
 //        return item->data(index.column(),role);
@@ -91,7 +91,7 @@ bool TreeModel::setData(const QModelIndex & index, const QVariant & value, int r
     if(role==Qt::EditRole)
     {
         TreeItemInterface* item = dynamic_cast<TreeItemInterface*>(getItem(index));
-        bool result = item->setData(index.column(), value, role);
+        bool result = item->setData(index, value, role);
 
         if (result)
         {

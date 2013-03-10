@@ -38,8 +38,9 @@
 #include <QKeyEvent>
 #include <QMainWindow>
 #include <QSharedPointer>
+#include <QModelIndex>
 #include <functional>
-#include "Libs/L_UniversalModels/include/ItemController.h"
+//#include "Libs/L_UniversalModels/include/ItemController.h"
 
 class Q3CanvasView;
 class QWorkspace;

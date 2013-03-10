@@ -5,8 +5,8 @@
 #include <QList>
 #include <QSharedPointer>
 #include <QVariant>
-#include <QStringList>
 #include <QModelIndex>
+#include <QStringList>
 
 #include "l_tree_controller_global.h"
 
@@ -29,7 +29,7 @@ class L_TREE_CONTROLLER_EXPORT TreeItemInterface
 
     virtual int columnCount() const = 0;
 
-    virtual QVariant data(int column, int role) = 0;
+    virtual QVariant data(const QModelIndex & index, int role) = 0;
 
     virtual bool isCheckable() const = 0;
 
@@ -37,7 +37,7 @@ class L_TREE_CONTROLLER_EXPORT TreeItemInterface
 
     virtual Qt::CheckState checkState() = 0;
 
-    virtual bool setData(int column, const QVariant & value, int role) = 0;
+    virtual bool setData(const QModelIndex & index, const QVariant & value, int role) = 0;
 
     virtual bool removeChildren(int position, int count) = 0;
 

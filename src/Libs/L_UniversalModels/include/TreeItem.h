@@ -6,9 +6,9 @@
 #include <QSharedPointer>
 #include "TreeItemInterface.h"
 #include <QVariant>
+#include <QModelIndex>
 #include "ItemController.h"
 #include <QStringList>
-#include <QModelIndex>
 
 #include "l_tree_controller_global.h"
 
@@ -33,7 +33,7 @@ typedef TreeItem<T> value_type;
 
     virtual int childCount() const;
 
-    virtual QVariant data(int column, int role);
+    virtual QVariant data(const QModelIndex & index, int role);
 
     virtual bool isCheckable() const;
 
@@ -41,7 +41,7 @@ typedef TreeItem<T> value_type;
 
     virtual Qt::CheckState checkState();
 
-    virtual bool setData(int column, const QVariant & value, int role);
+    virtual bool setData(const QModelIndex & index, const QVariant & value, int role);
 
     virtual bool removeChildren(int position, int count);
 
@@ -65,7 +65,7 @@ typedef TreeItem<T> value_type;
 
     void* InternalPointer();
 
-    virtual void* InternalPointer() const;
+    void* InternalPointer() const;
 
     virtual TreeItemInterface* child(int row);
 
@@ -157,10 +157,10 @@ int TreeItem<T>::childCount() const
 }
 
 template<class T>
-QVariant TreeItem<T>::data(int column, int role) 
+QVariant TreeItem<T>::data(const QModelIndex & index, int role) 
 {
     // Bouml preserved body begin 00203FAA
-    return controller->GetValue(m_data, column, role);
+    return controller->GetValue(m_data, index, role);
     // Bouml preserved body end 00203FAA
 }
 
@@ -189,10 +189,10 @@ Qt::CheckState TreeItem<T>::checkState()
 }
 
 template<class T>
-bool TreeItem<T>::setData(int column, const QVariant & value, int role) 
+bool TreeItem<T>::setData(const QModelIndex & index, const QVariant & value, int role) 
 {
     // Bouml preserved body begin 00203D2A
-    controller->SetValue(m_data, column,value, role);
+    controller->SetValue(m_data, index,value, role);
     return true;
     // Bouml preserved body end 00203D2A
 }
@@ -299,9 +299,9 @@ void* TreeItem<T>::InternalPointer()
 template<class T>
 void* TreeItem<T>::InternalPointer() const 
 {
-    // Bouml preserved body begin 0022F42A
+    // Bouml preserved body begin 0023282A
     return m_data;
-    // Bouml preserved body end 0022F42A
+    // Bouml preserved body end 0023282A
 }
 
 template<class T>

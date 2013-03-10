@@ -184,7 +184,6 @@ ${items}
 {
     ${body}}
 "
-  cpp_force_throw
   cpp_indent_visibility "  "java_default_src_content "${comment}
 ${package}
 ${imports}

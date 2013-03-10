@@ -296,27 +296,32 @@ public:
             return cpp_def;
     };
     void set_cppdef(QString value){cpp_def = value;}
+    void set_cppdecl(QString value){cpp_decl = value;}
     QString default_cpp_decl(const QString & name);
     QString default_cpp_def(const QString & name);
 
     const char * get_javadef() const {
         return java_def;
     };
+    void set_javadef(QString value){java_def = value;}
     QString default_java_def(const QString & name);
 
     const char * get_phpdef() const {
         return php_def;
     };
+    void set_phpdef(QString value){php_def = value;}
     QString default_php_def(const QString & name, bool nobody);
 
     const char * get_pythondef() const {
         return python_def;
     };
+    void set_pythondef(QString value){python_def = value;}
     QString default_python_def(const QString & name);
 
     const char * get_idldecl() const {
         return idl_decl;
     };
+    void set_idldecl(QString value){idl_decl = value;}
     QString default_idl_decl(const QString & name);
 
     void edit(DrawingLanguage);

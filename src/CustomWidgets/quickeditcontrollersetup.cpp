@@ -21,6 +21,7 @@
 #include "data/OperationData.h"
 #include "data/RelationData.h"
 #include "GenericDelegate.h"
+#include "browserfunctions/operationfuncs.h"
 
 
 #include <algorithm>
@@ -390,6 +391,13 @@ void QuickEdit::SetupOperationAttributeController()
                toString, get_default_value, set_default_value);
     ADD_GETSET(BrowserOperationAttribute, operationAttributeController, directionIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_direction, set_direction);
+
+    std::function<void(BrowserNode* , const QModelIndex&)> f = [](BrowserNode* node, const QModelIndex& index)
+    {
+        BrowserOperationAttribute* oper = static_cast<BrowserOperationAttribute*>(node);
+        recompute_param(oper->get_operation(),index.row(),true);
+    };
+    operationAttributeController->AddPostProcessors(directionIndex, QVector<int>(std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole})),f);
 
     //ADD_PIXMAP_GETTER(BrowserAttribute, attributeController, nameIndex, std::initializer_list<int>({Qt::DecorationRole}), pixmap);
 

@@ -1,6 +1,6 @@
 format 75
 "TreeController" // TreeController
-  revision 33
+  revision 34
   modified_by 42 "zeks"
   // class settings
   //class diagram settings
@@ -785,11 +785,11 @@ ${inlines}
 	nparams 3
 	
 	  param in name "item" explicit_type "T"
-	  param in name "index" explicit_type "int"
+	  param in name "index" explicit_type "modelIndex"
 	  param in name "role" explicit_type "int"
-	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} * ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}const ${t0} * ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} ${p2}${v2}${)}${const}${volatile}${abstract};
 "
-	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} * ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${const}${staticnl}
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}const ${t0} * ${p0}, const ${t1} & ${p1}, ${t2} ${p2}${)}${const}${staticnl}
 {
     ${body}}
 "
@@ -804,12 +804,12 @@ ${inlines}
 	nparams 4
 	
 	  param inout name "item" explicit_type "T"
-	  param in name "column" explicit_type "int"
+	  param in name "index" explicit_type "modelIndex"
 	  param in name "value" explicit_type "QVariant"
 	  param in name "role" explicit_type "int"
-	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}${v1}, const ${t2} & ${p2}${v2}, ${t3} ${p3}${v3}${)}${const}${volatile}${abstract};
+	cpp_decl "    ${description}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, const ${t1} & ${p1}${v1}, const ${t2} & ${p2}${v2}, ${t3} ${p3}${v3}${)}${const}${volatile}${abstract};
 "
-	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1}, const ${t2} & ${p2}, ${t3} ${p3}${)}${const}${staticnl}
+	cpp_def "${description}${inline}${type} ${class}::${name}${(}${t0} * ${p0}, const ${t1} & ${p1}, const ${t2} & ${p2}, ${t3} ${p3}${)}${const}${staticnl}
 {
     ${body}}
 "
@@ -898,6 +898,44 @@ ${inlines}
 "
 	preserve_php_body_indent 
 	preserve_python_body_indent 
+	
+      end
+
+      operation 2303914 "AddPostProcessor"
+	public explicit_return_type "void"
+	nparams 3
+	
+	  param in name "column" explicit_type "int"
+	  param in name "role" explicit_type "int"
+	  param inout name "_postProcessor" explicit_type "std::function<void(T*)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} & ${p2}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 2303786 "AddPostProcessors"
+	public explicit_return_type "void"
+	nparams 3
+	
+	  param in name "column" explicit_type "int"
+	  param in name "roles" explicit_type "QVector<int>"
+	  param inout name "_postProcessor" explicit_type "std::function<void(T*)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}, const ${t1} & ${p1}${v1}, ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${description}${inline}${type} @{externalClass}${class}::${name}${(}${t0} ${p0}, const ${t1} & ${p1}, ${t2} & ${p2}${)}${const}${volatile}${staticnl}
+{
+    ${body}}
+"
+	
+	
+	
 	
       end
 
@@ -1049,6 +1087,15 @@ ${inlines}
 	idl_decl ""
 	get_oper operation_ref 2207786 // get_flagsFunctors
 	set_oper operation_ref 2207914 // set_flagsFunctors
+      end
+
+      attribute 1326890 "postProcessors"
+	private explicit_type "QHash<QPair<int, int> , std::function<void(T*)> >"
+	cpp_decl "     ${description}${static}${mutable}${volatile}${const}${type} ${name}${value};"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
       end
     end
 

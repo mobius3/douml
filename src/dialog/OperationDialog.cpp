@@ -84,6 +84,8 @@
 #include "ui_operationwidgetcpp.h"
 #include "Tools/SignalBlockerWrapper.h"
 #include "CustomWidgets/EdgeMenuToolBar.h"
+#include "browserfunctions/operationfuncs.h"
+
 QSize OperationDialog::previous_size;
 QSharedPointer<OperationDialog> OperationDialog::instance;
 OperationDialog::OperationDialog(OperationData * o, DrawingLanguage )
@@ -3387,7 +3389,7 @@ bool OperationDialog::SaveData(OperationData *oper)
             else if (!oldcppbody.isEmpty())
                 oper->new_body(QString(), 'c');
 
-            oper->cpp_decl = cppTab->ui->edCppDeclProto->text();
+
             oper->cpp_visibility = cpp_visibility.value();
 
             oper->cpp_const = cbCppConst->isChecked();
@@ -3399,6 +3401,7 @@ bool OperationDialog::SaveData(OperationData *oper)
             oper->cpp_delete = cppTab->ui->cbCppDeleted->isChecked();
             oper->cpp_override = cppTab->ui->cbCppOverride->isChecked();
             oper->cpp_final = cppTab->ui->cbCppFinal->isChecked();
+            oper->cpp_decl = cppTab->ui->edCppDeclProto->text();
             oper->cpp_def.assign(cppTab->ui->edCppDefProto->text(),
                                  abstract_cb->isChecked() ||
                                  (cppTab->ui->edCppDefProto->text().find("${body}") != -1));
@@ -4372,220 +4375,6 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
     return s;
 }
 
-// automatic add / remove param when only one language is set
-
-static int bypass_string(const char * s, int index)
-{
-    // index is just after the "
-    for (;;) {
-        switch (s[index]) {
-        case '"':
-            return index + 1;
-
-        case '\\':
-            if (s[index + 1] == 0)
-                return index + 1;
-
-            index += 2;
-            break;
-
-        case 0:
-            return index;
-
-        default:
-            index += 1;
-        }
-    }
-}
-
-static int bypass_char(const char * s, int index)
-{
-    // index is just after the '
-    for (;;) {
-        switch (s[index]) {
-        case '\'':
-            return index + 1;
-
-        case '\\':
-            if (s[index + 1] == 0)
-                return index + 1;
-
-            index += 2;
-            break;
-
-        case 0:
-            return index;
-
-        default:
-            index += 1;
-        }
-    }
-}
-
-static int bypass_cpp_comment(const char * s, int index)
-{
-    // index is just after the //
-    const char * p = strchr(s, '\n');
-
-    return (p == 0)
-           ? index + strlen(s + index)
-           : p - s;
-}
-
-static int bypass_c_comment(const char * s, int index)
-{
-    // index is just after the /*
-    for (;;) {
-        switch (s[index]) {
-        case '*':
-            if (s[index + 1] == '/')
-                return index + 2;
-
-            break;
-
-        case 0:
-            return index;
-        }
-
-        index += 1;
-    }
-}
-
-static int supOf(const char * s, int index)
-{
-    // return the index after of the parameter form
-    // s at least contains ${)}
-    int ouvr = 0;
-
-    for (;;) {
-        switch (s[index]) {
-        case '$':
-            if (strncmp(s + index, "${)}", 4) == 0)
-                return index;
-
-            index += 1;
-            break;
-
-        case '(':
-        case '[':
-        case '{':
-            ouvr += 1;
-            index += 1;
-            break;
-
-        case ')':
-        case ']':
-        case '}':
-            ouvr -= 1;
-            index += 1;
-            break;
-
-        case '"':
-            index = bypass_string(s, index + 1);
-            break;
-
-        case '\'':
-            index = bypass_char(s, index + 1);
-            break;
-
-        case '/':
-            switch (s[index + 1]) {
-            case '/':
-                index = bypass_cpp_comment(s, index + 2);
-                break;
-
-            case '*':
-                index = bypass_c_comment(s, index + 2);
-                break;
-
-            default:
-                index += 1;
-            }
-
-            break;
-
-        case 0:
-            // in case ${)} is in a comment etc ...
-            return index;
-
-        case ',':
-            if (ouvr == 0)
-                return index;
-
-            // no break
-        default:
-            index += 1;
-        }
-    }
-}
-
-static int param_begin(QString s, int rank)
-{
-    // return position of ',' or '}' (inside ${(}),
-    // or '$' (inside ${)}) or -1 on error
-    const char * p = s;
-    const char * b = strstr(p, "${(}");
-
-    if ((b == 0) || (strstr(b + 4, "${)}") == 0))
-        return -1;
-
-    int index  = (b - p) + 3;	// '}'
-
-    while (rank != 0) {
-        int end = supOf(p, index + 1);
-
-        switch (p[end]) {
-        case ',':
-            index = end;
-            break;
-
-        case '$': // ${)}
-            return (rank == 1) ? end : -1;
-
-        default:
-            return -1;
-        }
-
-        rank -= 1;
-    }
-
-    return index;
-}
-
-static void renumber(QString & form, int rank,
-                     int delta, bool equal = FALSE)
-{
-    int index = form.find("${(}");
-
-    if (index == -1)
-        return;
-
-    index += 4;
-
-    int index_sup = form.find("${)}", index);
-
-    while (index < index_sup) {
-        index = form.find("${", index);
-
-        if (index == -1)
-            break;
-
-        int index2 = form.find('}', index + 3);
-        QString n = form.mid(index + 3, index2 - index - 3);
-        bool ok = FALSE;
-        int r = n.toInt(&ok);
-
-        if (!ok || ((equal) ? (r != rank) : (r < rank)))
-            index = index2 + 1;
-        else {
-            char nn[16];
-
-            sprintf(nn, "%d", r + delta);
-            form.replace(index + 3, n.length(), nn);
-            index = form.find('}', index + 3) + 1;
-        }
-    }
-}
 
 void OperationDialog::force_param(int rank, bool recompute)
 {
