@@ -25,6 +25,8 @@
 
 #include <QCompleter>
 #include <QStringListModel>
+#include <QSettings>
+#include <QHeaderView>
 #include <algorithm>
 #include <iostream>
 #include <array>
@@ -129,7 +131,7 @@ void QuickEdit::OnShow()
 void QuickEdit::OnPerformFiltering(QString)
 {
     PerformFiltering(expandedNodes, ui->tvEditor, treeModel, rootInterface);
-    std::function<bool(TreeItemInterface*)> check = [&](TreeItemInterface* interface)
+    std::function<bool(TreeItemInterface*)> check = [&](TreeItemInterface* )
     {
        return true;
     };
@@ -148,6 +150,16 @@ void QuickEdit::OnIncreaseOpenLevels()
     int level = TreeFunctions::MaxOpenLevel(ui->tvEditor, treeModel, QModelIndex());
     level++;
     TreeFunctions::ExpandUpToLevel(ui->tvEditor, treeModel, QModelIndex(),level);
+}
+
+void QuickEdit::OnNewSectionSizes(int, int, int)
+{
+
+}
+
+void QuickEdit::OnChangeColumnVisibility()
+{
+    CheckColumnVisibility();
 }
 
 
@@ -176,6 +188,41 @@ void QuickEdit::SetupItemCreationFuncs()
     itemCreators.insert(UmlExtraMember, std::bind(&QuickEdit::AssignItemsForExtraNode, this, std::placeholders::_1, std::placeholders::_2));
     itemCreators.insert(UmlClassView, std::bind(&QuickEdit::AssignItemsForClassView, this, std::placeholders::_1, std::placeholders::_2));
     itemCreators.insert(UmlPackage, std::bind(&QuickEdit::AssignItemsForPackage, this, std::placeholders::_1, std::placeholders::_2));
+}
+
+void QuickEdit::CheckColumnVisibility()
+{
+//    columns << "name" <<  "type" <<  "default_value" <<  "stereotype"
+//                                        << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
+//                                        << "pass"
+//                                        << "const" << "volatile" <<  "friend" <<  "virtual" <<  "inline"
+//                                              << "default" << "delete" <<  "override" <<  "final" <<  "noexcept";
+    if(ui->chkCpp->isChecked())
+    {
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("pass"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("const"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("volatile"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("friend"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("virtual"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("inline"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("default"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("delete"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("override"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("final"),false);
+    }
+    else
+    {
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("pass"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("const"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("volatile"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("friend"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("virtual"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("inline"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("default"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("delete"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("override"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("final"),true);
+    }
 }
 
 QList<std::function<bool (TreeItemInterface *)> > QuickEdit::CreateCheckList()
@@ -230,7 +277,11 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
                   UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember, UmlClassView, UmlPackage};
     //validTypes = {UmlClass, UmlOperation, UmlAttribute};
-
+    columns << "name" <<  "type" <<  "default_value" <<  "stereotype"
+                                        << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
+                                        << "pass"
+                                        << "const" << "volatile" <<  "friend" <<  "virtual" <<  "inline"
+                                              << "default" << "delete" <<  "override" <<  "final" <<  "noexcept";
     SetupItemCreationFuncs();
     qRegisterMetaType<QList<BrowserNode*>>("QList<BrowserNode*>");
     SetupControllers();
@@ -244,6 +295,9 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     connect(ui->leSearch, SIGNAL(textChanged(QString)), this, SLOT(OnPerformFiltering(QString)));
     connect(ui->pbUpOneLevel, SIGNAL(clicked()), this, SLOT(OnDecreaseOpenLevels()));
     connect(ui->pbDownOneLevel, SIGNAL(clicked()), this, SLOT(OnIncreaseOpenLevels()));
+    connect(ui->chkCpp, SIGNAL(clicked()), this, SLOT(OnChangeColumnVisibility()));
+    connect(ui->tvEditor->header(), SIGNAL(sectionResized(int,int,int)),
+            this, SLOT(OnNewSectionSizes(int,int,int)));
 }
 
 void QuickEdit::Show(BrowserNode * node)
@@ -263,19 +317,44 @@ void QuickEdit::Show(BrowserNode * node)
     itemCreators[nodeType](rootInterface, node);
     // we then assign items and all is ok
     treeModel->InsertRootItem(rootInterface);
-    ui->tvEditor->resizeColumnToContents(0);
-    ui->tvEditor->resizeColumnToContents(1);
-    ui->tvEditor->resizeColumnToContents(2);
 
-    std::function<bool(TreeItemInterface*)> check = [&](TreeItemInterface* interface)
+    std::function<bool(TreeItemInterface*)> check = [&](TreeItemInterface* )
     {
        return true;
     };
 
     TreeFunctions::ExpandAllSatisfying<TreeItemInterface>(check, ui->tvEditor, treeModel, QModelIndex());
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    QByteArray arr = settings.value("headers/quickedit", QByteArray()).toByteArray();
+    if(!arr.isNull())
+        ui->tvEditor->header()->restoreState(arr);
 
+    ui->chkCpp->setChecked(settings.value("quickedit_checkboxes/cpp",true).toBool());
+    ui->chkJava->setChecked(settings.value("quickedit_checkboxes/java", true).toBool());
+    ui->chkPhp->setChecked(settings.value("quickedit_checkboxes/php",true).toBool());
+    ui->chkPython->setChecked(settings.value("quickedit_checkboxes/python", true).toBool());
+    ui->chkIdl->setChecked(settings.value("quickedit_checkboxes/idl", true).toBool());
+
+    CheckColumnVisibility();
     this->showMaximized();
 
+}
+
+void QuickEdit::closeEvent(QCloseEvent *)
+{
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    if(ui->tvEditor->header()->count() > 0)
+    {
+        settings.setValue("headers/quickedit", ui->tvEditor->header()->saveState());
+        settings.sync();
+    }
+    settings.setValue("quickedit_checkboxes/cpp", ui->chkCpp->isChecked());
+    settings.setValue("quickedit_checkboxes/java", ui->chkJava->isChecked());
+    settings.setValue("quickedit_checkboxes/php",ui->chkPhp->isChecked());
+    settings.setValue("quickedit_checkboxes/python", ui->chkPython->isChecked());
+    settings.setValue("quickedit_checkboxes/idl", ui->chkIdl->isChecked());
 }
 
 QSharedPointer<TreeItemInterface> QuickEdit::CreateInterfaceNode(QSharedPointer<TreeItemInterface> root,
@@ -418,6 +497,15 @@ void QuickEdit::CheckBoxDelegateSetup()
     checkboxDelegate->editorEventProcessor = editorEvent;
     ui->tvEditor->setItemDelegateForColumn(staticIndex, checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(abstractIndex, checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("const"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("volatile"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("friend"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("virtual"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("inline"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("default"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("delete"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("override"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("final"), checkboxDelegate);
 }
 
 

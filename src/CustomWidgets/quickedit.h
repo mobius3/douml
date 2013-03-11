@@ -32,6 +32,9 @@ public:
     void Init(UmlWindow* window, BrowserView* view);
     void Show(BrowserNode*);
     
+protected:
+    void closeEvent(QCloseEvent *) override;
+
 private:
     Ui::QuickEdit *ui = nullptr;
     BrowserView* dummyView = nullptr;
@@ -70,6 +73,8 @@ private:
     QSharedPointer<TreeItemInterface> classviewInterface;
     QSharedPointer<TreeItemInterface > packageInterface;
 
+
+    QStringList columns;
 //    std::function<Qt::ItemFlags(const QModelIndex&)> classFlagFunctor;
 //    std::function<Qt::ItemFlags(const QModelIndex&)> operationFlagFunctor;
 //    std::function<Qt::ItemFlags(const QModelIndex&)> attributeFlagFunctor;
@@ -103,6 +108,7 @@ private:
     void DirectionDelegateSetup();
     void CheckBoxDelegateSetup();
     void SetupItemCreationFuncs();
+    void CheckColumnVisibility();
 
     QSharedPointer<TreeItemInterface > CreateInterfaceNode(QSharedPointer<TreeItemInterface> root, QSharedPointer<ItemController<BrowserNode> > controller, BrowserNode *node);
     void AssignItemsForOperation(QSharedPointer<TreeItemInterface> root,BrowserNode*);
@@ -120,6 +126,8 @@ private:
     void OnPerformFiltering(QString);
     void OnDecreaseOpenLevels();
     void OnIncreaseOpenLevels();
+    void OnNewSectionSizes(int,int,int);
+    void OnChangeColumnVisibility();
     //void OnPerformFiltering(QString);
 
 };

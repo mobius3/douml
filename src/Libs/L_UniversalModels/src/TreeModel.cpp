@@ -60,13 +60,7 @@ QVariant TreeModel::data(const QModelIndex & index, int role) const
 
 //    if(role == Qt::DecorationRole )
 //        return item->data(index.column(),role);
-    if(role == Qt::ForegroundRole)
-    {
-        if(index.sibling(index.row(), 14).data().toBool() == true)
-            return QColor(Qt::lightGray);
-        if(index.sibling(index.row(), 15).data().toBool() == true)
-            return QColor(Qt::darkGreen);
-    }
+
     if(role == Qt::SizeHintRole)
         return QSize(100, 20);
     return QVariant();

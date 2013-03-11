@@ -215,9 +215,7 @@ template<class T0, class...T> std::array<T0, 1+sizeof...(T)> in(T0 arg0, T...arg
 void QuickEdit::SetupClassController()
 {
     classController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
-    classController->SetColumns(QStringList() << "name" <<   "type" <<  "default_value" <<  "stereotype"
-                                << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
-                                );
+    classController->SetColumns(columns);
     ADD_GETSET(BrowserClass, classController, nameIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
     ADD_GETSET(BrowserClass, classController, stereotypeIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
@@ -281,9 +279,7 @@ void QuickEdit::SetupClassController()
 void QuickEdit::SetupOperationController()
 {
     operationController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
-    operationController->SetColumns(QStringList() << "name" <<  "type" <<  "default_value" <<  "stereotype"
-                                    << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
-                                    );
+    operationController->SetColumns(columns);
     ADD_GETSET(BrowserOperation, operationController, nameIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
     ADD_GETSET(BrowserOperationReturnType, operationController, typeIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
@@ -301,16 +297,44 @@ void QuickEdit::SetupOperationController()
     ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, abstractIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_is_abstract, set_is_abstract);
 
+    //data->get_cpp_name_spec();
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("const"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                    toBool,get_cpp_const, set_cpp_const);
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("volatile"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                    toBool,get_is_volatile, set_is_volatile);
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("friend"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                    toBool,get_cpp_friend, set_cpp_friend);
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("virtual"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                    toBool,get_cpp_virtual, set_cpp_virtual);
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("inline"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                    toBool,get_cpp_inline, set_cpp_inline);
+    //"default" << "delete" <<  "override" <<  "final" <<  "noexcept";
+
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("default"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                    toBool,get_cpp_default, set_cpp_default);
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("delete"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                    toBool,get_cpp_delete, set_cpp_delete);
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("override"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                    toBool,get_cpp_override, set_cpp_override);
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("final"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                    toBool,get_cpp_final, set_cpp_final);
+//    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("noexcept"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//                    toBool,get_cpp_const, set_cpp_const);
+
+
+
     ADD_PIXMAP_GETTER(BrowserOperation, operationController, nameIndex,std::initializer_list<int>({Qt::DecorationRole}), pixmap);
 
 
     operationController->AddFlagsFunctor
             (
-                [](const QModelIndex& index)
+                [&](const QModelIndex& index)
     {
         Qt::ItemFlags result;
         result |= Qt::ItemIsSelectable;
-        if(!(index.column() *in(nameIndex,typeIndex,staticIndex,visibilityIndex,abstractIndex)))
+        if(!(index.column() *in(nameIndex,typeIndex,staticIndex,visibilityIndex,abstractIndex,
+                                columns.indexOf("const"), columns.indexOf("volatile"),columns.indexOf("friend"),columns.indexOf("virtual"),columns.indexOf("inline")
+                                ,columns.indexOf("default"),columns.indexOf("delete"),columns.indexOf("override"),columns.indexOf("final"))))
             return result;
 
         TreeItemInterface* iface = static_cast<TreeItemInterface*>(index.internalPointer());
@@ -330,9 +354,7 @@ void QuickEdit::SetupOperationController()
 void QuickEdit::SetupAttributeController()
 {
     attributeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
-    attributeController->SetColumns(QStringList() << "name" <<  "type" <<  "default_value" <<  "stereotype"
-                                    << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
-                                    );
+    attributeController->SetColumns(columns);
     ADD_GETSET(BrowserAttribute, attributeController, nameIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
     ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, typeIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
@@ -351,6 +373,10 @@ void QuickEdit::SetupAttributeController()
 
     ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, staticIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_isa_class_attribute, set_isa_class_attribute);
+
+
+
+
 
     ADD_PIXMAP_GETTER(BrowserAttribute, attributeController, nameIndex, std::initializer_list<int>({Qt::DecorationRole}), pixmap);
 
@@ -380,9 +406,7 @@ void QuickEdit::SetupAttributeController()
 void QuickEdit::SetupOperationAttributeController()
 {
     operationAttributeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
-    operationAttributeController->SetColumns(QStringList() << "name" <<  "type" <<  "default_value" <<  "stereotype"
-                                             << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
-                                             );
+    operationAttributeController->SetColumns(columns);
     ADD_GETSET(BrowserOperationAttribute, operationAttributeController, nameIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
     ADD_GETSET(BrowserOperationAttribute, operationAttributeController, typeIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
@@ -433,9 +457,7 @@ void QuickEdit::SetupOperationAttributeController()
 void QuickEdit::SetupRelationController()
 {
     relationController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
-    relationController->SetColumns(QStringList() << "name" <<  "type" <<  "default_value" <<  "stereotype"
-                                   << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
-                                   );
+    relationController->SetColumns(columns);
 
     ADD_GETSET(BrowserRelation, relationController, nameIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
@@ -532,9 +554,7 @@ void QuickEdit::SetupExtraNodeController()
 {
 
     extraNodeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
-    extraNodeController->SetColumns(QStringList() << "name" <<   "type" <<  "default_value" <<  "stereotype"
-                                << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
-                                );
+    extraNodeController->SetColumns(columns);
     ADD_GETSET(BrowserExtraMember, extraNodeController, nameIndex, std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
 

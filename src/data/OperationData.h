@@ -192,8 +192,10 @@ public:
 
     bool get_is_volatile() const {
         return is_volatile;
-    };
-
+    }
+    void set_is_volatile(bool value){
+        is_volatile = value;
+    }
     bool body_generation_forced() const {
         return force_body_gen;
     };
@@ -201,51 +203,89 @@ public:
     bool get_cpp_const() const {
         return cpp_const;
     };
-
+    void set_cpp_const(bool value){
+        cpp_const = value;
+    }
     bool get_cpp_friend() const {
         return cpp_friend;
     };
-
+    void set_cpp_friend(bool value){
+        cpp_friend = value;
+    }
     bool get_cpp_virtual() const {
         return cpp_virtual;
     };
-
+    void set_cpp_virtual(bool value){
+        cpp_virtual = value;
+    }
     bool get_cpp_inline() const {
         return cpp_inline;
     };
-
+    void set_cpp_inline(bool value){
+        cpp_inline = value;
+    }
     bool get_cpp_default() const {
         return cpp_default;
     };
+    void set_cpp_default(bool value){
+        cpp_default = value;
+    }
     bool get_cpp_delete() const {
         return cpp_delete;
-    };
+    }
+    void set_cpp_delete(bool value){
+        cpp_delete = value;
+    }
     bool get_cpp_override() const {
         return cpp_override;
     };
+    void set_cpp_override(bool value){
+        cpp_override = value;
+    }
     bool get_cpp_final() const {
         return cpp_final;
     };
+    void set_cpp_final(bool value){
+        cpp_final = value;
+    }
     QString get_cpp_name_spec() const {
         return cpp_name_spec;
-    };
+    }
+    void set_cpp_pass_type(QString value)
+    {
+        value = value;
+        //do nothing, yet
+    }
+    QString get_cpp_pass_type() const
+    {
+        return QString();
+    }
 
     bool get_java_final() const {
         return java_final;
     };
-
+    void set_java_final(bool value){
+        java_final = value;
+    }
     bool get_java_synchronized() const {
         return java_synchronized;
     };
-
+    void set_java_synchronized(bool value){
+        java_synchronized = value;
+    }
     bool get_php_final() const {
         return php_final;
     };
+    void set_php_final(bool value){
+        php_final = value;
+    }
 
     bool get_idl_oneway() const {
         return idl_oneway;
     };
-
+    void set_idl_oneway(bool value){
+        idl_oneway = value;
+    }
     WrapperStr get_origin_class() { return originClass;}
 
     UmlVisibility get_uml_visibility() const {
