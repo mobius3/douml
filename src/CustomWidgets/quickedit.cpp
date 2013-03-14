@@ -12,6 +12,7 @@
 #include "browser/BrowserNodeDummy.h"
 #include "browser/BrowserAttribute.h"
 #include "browser/BrowserRelation.h"
+#include "browser/BrowserOperationAttribute.h"
 #include "browser/BrowserExtraMember.h"
 #include "GenerationSettings.h"
 #include "AttributeData.h"
@@ -128,6 +129,11 @@ void QuickEdit::OnShow()
     Show(current);
 }
 
+void QuickEdit::OnAddParameter()
+{
+    AddParameter();
+}
+
 void QuickEdit::OnPerformFiltering(QString)
 {
     PerformFiltering(expandedNodes, ui->tvEditor, treeModel, rootInterface);
@@ -223,6 +229,31 @@ void QuickEdit::CheckColumnVisibility()
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("override"),true);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("final"),true);
     }
+}
+
+void QuickEdit::AddParameter()
+{
+    BrowserNode * currentNode = GetCurrentNode();
+    BrowserNode* operationNode;
+
+    if(currentNode->TypeID()  == TypeIdentifier<BrowserOperation>()) //, TypeIdentifier<BrowserOperation>())
+        operationNode = currentNode;
+    else
+        operationNode = static_cast<BrowserOperationAttribute*>(currentNode)->get_operation();
+
+    OperationData* currentData = static_cast<OperationData*>(operationNode->get_data());
+    currentData->set_n_params(currentData->nparams + 1);
+
+
+
+}
+
+BrowserNode *QuickEdit::GetCurrentNode()
+{
+    QModelIndex current = ui->tvEditor->currentIndex();
+    TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
+    BrowserNode* itemAsNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
+    return itemAsNode;
 }
 
 QList<std::function<bool (TreeItemInterface *)> > QuickEdit::CreateCheckList()
@@ -355,6 +386,7 @@ void QuickEdit::closeEvent(QCloseEvent *)
     settings.setValue("quickedit_checkboxes/php",ui->chkPhp->isChecked());
     settings.setValue("quickedit_checkboxes/python", ui->chkPython->isChecked());
     settings.setValue("quickedit_checkboxes/idl", ui->chkIdl->isChecked());
+    ui->leSearch->setText("");
 }
 
 QSharedPointer<TreeItemInterface> QuickEdit::CreateInterfaceNode(QSharedPointer<TreeItemInterface> root,

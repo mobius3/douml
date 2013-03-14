@@ -1895,7 +1895,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
             break;
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams)
-                s += GenerationSettings::cpp_type(d->params[rank].get_type().get_type(mode));
+                s += GenerationSettings::cpp_type(d->params[rank]->get_type().get_type(mode));
             else {
                 s += "${t";
                 s += QString::number(rank);
@@ -1907,7 +1907,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += d->params[rank].get_name();
+                    s += d->params[rank]->get_name();
                 else {
                     s += "${p";
                     s += QString::number(rank);
@@ -1919,7 +1919,7 @@ QString OperationDialog::cpp_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                WrapperStr v = d->params[rank].get_default_value();
+                WrapperStr v = d->params[rank]->get_default_value();
 
                 if (!v.isEmpty())
                     s += " = " + v;

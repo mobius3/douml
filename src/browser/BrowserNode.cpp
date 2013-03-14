@@ -607,6 +607,11 @@ void BrowserNode::on_close()
     // does nothing
 }
 
+uint BrowserNode::TypeID()
+{
+   return TypeIdentifier<BrowserNode>::id();
+}
+
 BrowserNode * BrowserNode::get_container(UmlCode k) const
 {
     BrowserNode * p  = (BrowserNode *) this;

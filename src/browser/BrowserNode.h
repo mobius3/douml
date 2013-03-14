@@ -44,7 +44,7 @@
 #include "mystr.h"
 #include "Editable.h"
 #include "AType.h"
-
+#include "misc/TypeIdentifier.h"
 class QDragMoveEvent;
 class Q3PopupMenu;
 template <class K> class Q3PtrDict;
@@ -208,6 +208,7 @@ public:
     virtual void open(bool force_edit);
     virtual void on_close();
     virtual UmlCode get_type() const = 0;
+    virtual uint TypeID();
     virtual QString get_stype() const = 0;
     virtual int get_identifier() const = 0;
     virtual const char * help_topic() const;

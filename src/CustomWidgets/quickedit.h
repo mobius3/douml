@@ -110,6 +110,11 @@ private:
     void SetupItemCreationFuncs();
     void CheckColumnVisibility();
 
+    void AddParameter();
+
+    BrowserNode* GetCurrentNode();
+
+
     QSharedPointer<TreeItemInterface > CreateInterfaceNode(QSharedPointer<TreeItemInterface> root, QSharedPointer<ItemController<BrowserNode> > controller, BrowserNode *node);
     void AssignItemsForOperation(QSharedPointer<TreeItemInterface> root,BrowserNode*);
     void AssignItemsForClass(QSharedPointer<TreeItemInterface> root,BrowserNode*);
@@ -123,6 +128,7 @@ private:
     public slots:
     void OnContextMenu(QPoint);
     void OnShow();
+    void OnAddParameter();
     void OnPerformFiltering(QString);
     void OnDecreaseOpenLevels();
     void OnIncreaseOpenLevels();

@@ -149,6 +149,7 @@ public:
     static BrowserNode * read_any_ref(char *& , char *);
     static BrowserNode * get_it(const char * k, int id);
     static void post_load();
+    uint TypeID() override;
 
     static void plug_out_conversion();
     bool get_bodies_read();

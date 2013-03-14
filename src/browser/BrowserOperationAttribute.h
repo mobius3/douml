@@ -56,6 +56,7 @@ public:
     }
     void modified(){operation->package_modified();}
     virtual const QPixmap * pixmap(int) const;
+    virtual uint TypeID();
 
 };
 

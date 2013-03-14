@@ -72,7 +72,7 @@ OperationData::OperationData(int id)
       php_final(FALSE), php_get_set_frozen(FALSE), php_indent_body(TRUE),
       python_get_set_frozen(FALSE), python_indent_body(TRUE),
       idl_oneway(FALSE), idl_get_set_frozen(FALSE),
-      nparams(0), nexceptions(0), params(0), exceptions(0)
+      nparams(0), nexceptions(0), exceptions(0)
 {
 }
 
@@ -119,16 +119,18 @@ OperationData::OperationData(OperationData * model, BrowserNode * bn)
     return_type = model->return_type;
     depend_on(return_type.type);
 
-    if (nparams == 0)
-        params = 0;
-    else {
-        params = new ParamData[nparams];
 
-        for (unsigned i = 0; i != nparams; i += 1) {
-            params[i] = model->params[i];
-            depend_on(params[i].get_type().type);
+    if(nparams > 0)
+    {
+        for(int i(0); i < nparams; ++i)
+        {
+            params << std::shared_ptr<ParamData>(new ParamData());
+            *params[i] = *model->params[i];
+            depend_on(params[i]->get_type().type);
         }
     }
+
+
 
     if (nexceptions == 0)
         exceptions = 0;
@@ -144,8 +146,6 @@ OperationData::OperationData(OperationData * model, BrowserNode * bn)
 
 OperationData::~OperationData()
 {
-    if (params)
-        delete [] params;
 
     if (exceptions)
         delete [] exceptions;
@@ -193,7 +193,7 @@ void OperationData::PropagateFrom(const OperationData * model, bool goBack, QLis
     {
         for (unsigned i = 0; i != nparams; i += 1)
         {
-            no_longer_depend_on(params[i].get_type().type);
+            no_longer_depend_on(params[i]->get_type().type);
         }
     }
     if (nexceptions != 0)
@@ -218,16 +218,13 @@ void OperationData::PropagateFrom(const OperationData * model, bool goBack, QLis
     return_type = model->return_type;
     depend_on(return_type.type);
 
-    if (nparams == 0)
-        params = 0;
-    else
+    if(nparams > 0)
     {
-        params = new ParamData[nparams];
-
-        for (unsigned i = 0; i != nparams; i += 1)
+        for(int i(0); i < nparams; ++i)
         {
-            params[i] = model->params[i];
-            depend_on(params[i].get_type().type);
+            params << std::shared_ptr<ParamData>(new ParamData());
+            *params[i] = *model->params[i];
+            depend_on(params[i]->get_type().type);
         }
     }
 
@@ -343,13 +340,13 @@ void OperationData::on_delete()
     unsigned short i;
 
     for (i = 0; i != nparams; i += 1) {
-        AType t = params[i].get_type();
+        AType t = params[i]->get_type();
 
         if (t.type && t.type->deletedp()) {
             t.explicit_type = t.type->get_name();
             t.type = 0;
 
-            params[i].set_type(t);
+            params[i]->set_type(t);
         }
     }
 
@@ -576,8 +573,10 @@ void OperationData::set_browser_node(BrowserOperation * o, bool update)
 
             if (!strcmp(browser_node->get_name(), "__init__")) {
                 nparams = 1;
-                params = new ParamData[1];
-                params[0].set_name("self");
+                //params = new ParamData[1];
+                params.clear();
+                params << std::shared_ptr<ParamData>(new ParamData());
+                params[0]->set_name("self");
             }
         }
 
@@ -618,7 +617,7 @@ QString OperationData::definition(bool full, bool withdir,
 
             for (index = 0; index != nparams; index += 1) {
                 result += sep;
-                result += params[index].definition(withdir, withname, mode);
+                result += params[index]->definition(withdir, withname, mode);
                 sep = ", ";
             }
 
@@ -760,7 +759,7 @@ void OperationData::set_return_type(const AType & t)
 
 const char * OperationData::get_param_name(int rank) const
 {
-    return params[rank].get_name();
+    return params[rank]->get_name();
 }
 
 QStringList OperationData::get_param_names() const
@@ -768,7 +767,7 @@ QStringList OperationData::get_param_names() const
     QStringList result;
     for(int i(0); i < nparams; i++)
     {
-        result.append(params[i].get_name());
+        result.append(params[i]->get_name());
     }
     return result;
 }
@@ -778,7 +777,7 @@ QStringList OperationData::get_param_types() const
     QStringList result;
     for(int i(0); i < nparams; i++)
     {
-        result.append(params[i].get_type().get_type());
+        result.append(params[i]->get_type().get_type());
     }
     return result;
 }
@@ -788,44 +787,44 @@ QStringList OperationData::get_param_default_values() const
     QStringList result;
     for(int i(0); i < nparams; i++)
     {
-        result.append(params[i].get_default_value());
+        result.append(params[i]->get_default_value());
     }
     return result;
 }
 
 void OperationData::set_param_name(int rank, const char * str)
 {
-    params[rank].set_name(str);
+    params[rank]->set_name(str);
 }
 
 UmlParamDirection OperationData::get_param_dir(int rank) const
 {
-    return params[rank].get_dir();
+    return params[rank]->get_dir();
 }
 
 void OperationData::set_param_dir(int rank, UmlParamDirection dir)
 {
-    params[rank].set_dir(dir);
+    params[rank]->set_dir(dir);
 }
 
 const AType & OperationData::get_param_type(int rank) const
 {
-    return params[rank].get_type();
+    return params[rank]->get_type();
 }
 
 const char * OperationData::get_param_default_value(int rank) const
 {
-    return params[rank].get_default_value();
+    return params[rank]->get_default_value();
 }
 
 void OperationData::set_param_default_value(int rank, const char * str)
 {
-    params[rank].set_default_value(str);
+    params[rank]->set_default_value(str);
 }
 
 void OperationData::set_param_type(int rank, const AType & t)
 {
-    const AType & old = params[rank].get_type();
+    const AType & old = params[rank]->get_type();
 
     if (old.type != t.type) {
         if ((old.type != 0) && unsubscribe(old.type->get_data()))
@@ -834,19 +833,19 @@ void OperationData::set_param_type(int rank, const AType & t)
         depend_on(t.type);
     }
 
-    params[rank].set_type(t);
+    params[rank]->set_type(t);
 }
 
 void OperationData::set_n_params(unsigned n)
 {
-    if (n > nparams) {
-        if (params)
-            delete [] params;
-
-        params = new ParamData[n];
+    int add_count = 0;
+    add_count = n - params.count();
+    if(add_count > 0)
+    {
+        for(int i(0); i < add_count; ++i)
+            params << std::shared_ptr<ParamData>(new ParamData());
     }
-
-    nparams = n;
+    nparams = params.count();
 }
 
 const AType & OperationData::get_exception(int rank) const
@@ -1739,7 +1738,7 @@ void OperationData::update_cpp_set_of(WrapperStr & decl, WrapperStr & def,
                     d.replace(index, 7,
                               cpp_copy(
                                   WrapperStr(c_attr_full_name),
-                                  params[0].get_name(),
+                                  params[0]->get_name(),
                                   WrapperStr(c_multiplicity),
                                   WrapperStr(c_elt_type),
                                   WrapperStr(c_indent)));
@@ -2213,7 +2212,7 @@ bool OperationData::reference(BrowserClass * target) const
     unsigned i;
 
     for (i = 0; i != nparams; i += 1)
-        if (params[i].get_type().type == target)
+        if (params[i]->get_type().type == target)
             return TRUE;
 
     for (i = 0; i != nexceptions; i += 1)
@@ -2237,8 +2236,8 @@ void OperationData::replace(BrowserClass * old, BrowserClass * nw)
     unsigned i;
 
     for (i = 0; i != nparams; i += 1)
-        if (params[i].get_type().type == old)
-            params[i].set_type(t);
+        if (params[i]->get_type().type == old)
+            params[i]->set_type(t);
 
     for (i = 0; i != nexceptions; i += 1)
         if (exceptions[i].get_type().type == old)
@@ -2276,9 +2275,13 @@ void OperationData::send_uml_def(ToolCom * com, BrowserNode * bn,
     ParamData * p;
 
     com->write_unsigned(nparams);
-
-    for (p = params, n = nparams; n; p += 1, n -= 1)
-        p->send_uml_def(com);
+    n = nparams;
+    //for (p = params, n = nparams; n; p += 1, n -= 1)
+    for(auto& param : params)
+    {
+        param->send_uml_def(com);
+        n -= 1;
+    }
 
     ExceptionData * ep;
 
@@ -2712,27 +2715,15 @@ bool OperationData::tool_cmd(ToolCom * com, const char * args,
                 WrapperStr name = com->get_string(args);
                 WrapperStr dflt = com->get_string(args);
                 AType t;
-                ParamData * new_params = new ParamData[nparams + 1];
-                unsigned index;
 
                 com->get_type(t, args);
 
-                for (index = 0; index != rank; index += 1)
-                    new_params[index] = params[index];
-
-                new_params[index].set_name(name);
-                new_params[index].set_dir(dir);
-                new_params[index].set_default_value((dflt.isEmpty()) ? "" : (const char *) dflt);
-                new_params[index].set_type(t);
+                params.insert(rank, std::shared_ptr<ParamData> (new ParamData()));
+                params[rank]->set_name(name);
+                params[rank]->set_dir(dir);
+                params[rank]->set_default_value((dflt.isEmpty()) ? "" : (const char *) dflt);
+                params[rank]->set_type(t);
                 depend_on(t.type);
-
-                while (index != nparams) {
-                    new_params[index + 1] = params[index];
-                    index += 1;
-                }
-
-                delete [] params;
-                params = new_params;
                 nparams += 1;
             }
             break;
@@ -2753,9 +2744,9 @@ bool OperationData::tool_cmd(ToolCom * com, const char * args,
 
                 com->get_type(t, args);
 
-                params[rank].set_name(name);
-                params[rank].set_dir(dir);
-                params[rank].set_default_value((dflt.isEmpty()) ? "" : (const char *) dflt);
+                params[rank]->set_name(name);
+                params[rank]->set_dir(dir);
+                params[rank]->set_default_value((dflt.isEmpty()) ? "" : (const char *) dflt);
                 set_param_type(rank, t);
             }
             break;
@@ -2769,7 +2760,7 @@ bool OperationData::tool_cmd(ToolCom * com, const char * args,
                 }
 
                 while (++rank != nparams)
-                    params[rank - 1] = params[rank];
+                    *params[rank - 1] = *params[rank];
 
                 nparams -= 1;
             }
@@ -3415,7 +3406,7 @@ void OperationData::save(QTextStream & st, bool ref, QString & warning) const
 
 
         for (unsigned i = 0; i != nparams; i += 1)
-            params[i].save(st, warning);
+            params[i]->save(st, warning);
 
         if (nexceptions != 0) {
             nl_indent(st);
@@ -3707,8 +3698,8 @@ void OperationData::read(char *& st, char *& k)
     k = read_keyword(st);
 
     for (unsigned i = 0; i != n; i += 1) {
-        params[i].read(st, k);	// updates k
-        depend_on(params[i].get_type().type);
+        params[i]->read(st, k);	// updates k
+        depend_on(params[i]->get_type().type);
     }
 
     if (!strcmp(k, "nexceptions")) {
@@ -3942,16 +3933,17 @@ void OperationData::read(char *& st, char *& k)
 bool operator==(const OperationData & origin, const OperationData & another)
 {
     bool paramsResult = false;
-    if(!origin.params && !another.params)
-        paramsResult = true;
-    else if(origin.params != another.params)
-    {
-        if(origin.params == nullptr)
-            return false;
-        else if(another.params == nullptr)
-            return false;
-         paramsResult = *origin.params == *another.params;
-    }
+//    if(origin.params.isEmpty() && another.params.isEmpty())
+//        paramsResult = true;
+//    else if(origin.params != another.params)
+//    {
+//        if(origin.params.isEmpty())
+//            return false;
+//        else if(another.params.isEmpty() == nullptr)
+//            return false;
+//         paramsResult = *origin.params == *another.params;
+//    }
+    paramsResult = origin.params == another.params;
     if(!paramsResult)
         return false;
     if(origin.uml_visibility != another.uml_visibility ||
@@ -4029,17 +4021,7 @@ bool operator==(const OperationData & origin, const OperationData & another)
 bool PropagationEquality(const OperationData & origin, const OperationData & another)
 {
     bool paramsResult = false;
-    if(!origin.params && !another.params)
-        paramsResult = true;
-    else if(origin.params != another.params)
-    {
-        if(origin.params == nullptr)
-            return false;
-        else if(another.params == nullptr)
-            return false;
-         paramsResult = *origin.params == *another.params;
-    }
-
+    paramsResult = origin.params != another.params;
 
     if(!paramsResult)
         return false;

@@ -31,6 +31,7 @@
 #include <q3memarray.h>
 //Added by qt3to4:
 #include <QTextStream>
+#include  <memory>
 
 
 #include "UmlEnum.h"
@@ -106,7 +107,8 @@ protected:
     unsigned short nexceptions;
     AType return_type;
     WrapperStr originClass = QString("0");
-    ParamData * params = nullptr;			// remark : do NOT use QArray
+    QList<std::shared_ptr<ParamData>> params;
+    //ParamData * params = nullptr;			// remark : do NOT use QArray
     ExceptionData * exceptions;
     WrapperStr constraint;
 

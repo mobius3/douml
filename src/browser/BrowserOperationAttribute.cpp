@@ -135,3 +135,8 @@ AType BrowserOperationReturnType::get_param_type() const
 BrowserNodeAbstractRemove::BrowserNodeAbstractRemove(BrowserView* view) : BrowserNode(QString(), view)
 {
 }
+
+uint BrowserNodeAbstractRemove::TypeID()
+{
+   return TypeIdentifier<BrowserNodeAbstractRemove>::id();
+}

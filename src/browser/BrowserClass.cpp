@@ -88,6 +88,7 @@
 #include "translate.h"
 #include "RelationData.h"
 #include "menufactory.h"
+#include "misc/TypeIdentifier.h"
 
 // Added for porting by lgfreitas
 #include <QChar>
@@ -4026,4 +4027,9 @@ BrowserNode * BrowserClass::get_it(const char * k, int id)
         r = BrowserExtraMember::get_it(k, id);
 
     return r;
+}
+
+uint BrowserClass::TypeID()
+{
+    return TypeIdentifier<BrowserClass>::id();
 }
