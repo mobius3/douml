@@ -13,6 +13,7 @@
 #include "browser/BrowserAttribute.h"
 #include "browser/BrowserRelation.h"
 #include "browser/BrowserOperationAttribute.h"
+#include "browserfunctions/operationfuncs.h"
 #include "browser/BrowserExtraMember.h"
 #include "GenerationSettings.h"
 #include "AttributeData.h"
@@ -235,11 +236,11 @@ void QuickEdit::AddParameter()
     TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
     BrowserNode* currentNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
 
-    BrowserNode* operationNode;
+    BrowserOperation* operationNode;
 
     if(currentNode->TypeID()  == TypeIdentifier<BrowserOperation>::id()) //, TypeIdentifier<BrowserOperation>())
     {
-        operationNode = currentNode;
+        operationNode = static_cast<BrowserOperation*>(currentNode);
     }
     else if(currentNode->TypeID()  ==  TypeIdentifier<BrowserOperationAttribute>::id())
     {
@@ -263,20 +264,22 @@ void QuickEdit::AddParameter()
     QSharedPointer<TreeItemInterface> sharedOfOperation =  parent->GetChildren()[insertIndex];
 
     int newItemPosition = currentData->nparams;
-    if(!treeModel->insertRows(newItemPosition-1, 1, current))
+    if(!treeModel->insertRows(sharedOfOperation->childCount(), 1, current))
         return;
 
     QSharedPointer<BrowserNode> param(new BrowserOperationAttribute(dummyView,static_cast<BrowserOperation*>(operationNode),currentData->params.last()));
     localNodeHolder.push_back(param);
     if(!current.isValid())
         return;
-    QModelIndex newItem = treeModel->index(newItemPosition-1,0,current);
+    QModelIndex newItem = treeModel->index(sharedOfOperation->childCount()-1,0,current);
     TreeItemInterface *newItemInterface = static_cast<TreeItemInterface*>(newItem.internalPointer());
     TreeItem<BrowserNode>* newItemAsNode = static_cast<TreeItem<BrowserNode>*>(newItemInterface);
     newItemAsNode->SetController(operationAttributeController);
     newItemAsNode->SetParent(sharedOfOperation);
     newItemAsNode->SetInternalData(param.data());
     operationNode->modified();
+    recompute_param(operationNode, newItemPosition-1, true);
+    //operationNode->renumber(-1);
 }
 
 void QuickEdit::AddOperation()

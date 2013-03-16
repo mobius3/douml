@@ -4,7 +4,7 @@
 class BrowserOperation;
 class OperationData;
 
-//void force_param(int rank, OperationData *data, bool recompute);
+
 void add_param(BrowserOperation* oper, QString & form, int rank, QString s);
 void replace_param( QString & form, int rank, QString s);
 void recompute_param(BrowserOperation* oper, int rank, bool recompute);
