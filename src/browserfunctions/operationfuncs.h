@@ -26,6 +26,10 @@ void move_param(int old_rank, int new_rank,
 
 
 
+QString extract_specifier(int position, QString s);
+QString extract_pointer(int position,  QString s);
+
+
 
 
 #endif // OPERATIONFUNCS_H

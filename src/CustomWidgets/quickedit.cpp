@@ -424,9 +424,9 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     nullController = QSharedPointer<ItemController<BrowserNode> > (new ItemController<BrowserNode>());
     validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
                   UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember, UmlClassView, UmlPackage};
-    columns << "name" <<  "mark" << "type" <<  "default_value" <<  "stereotype" << "deleted"
+    columns << "name" <<  "mark" << "prefix" << "type"  << "postfix" <<  "default_value" <<  "stereotype" << "deleted"
                                         << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
-                                        << "pass"
+
                                         << "const" << "volatile" <<  "friend" <<  "virtual" <<  "inline"
                                               << "default" << "delete" <<  "override" <<  "final" <<  "noexcept";
     SetupItemCreationFuncs();

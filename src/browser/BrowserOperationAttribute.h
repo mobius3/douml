@@ -45,8 +45,7 @@ public:
     AType get_param_type() const;
     void set_default_value(QString);
     QString get_default_value() const;
-    void set_passage_type(QString);
-    QString get_passage_type() const;
+
     bool is_writable() const
     {
         if(operation)
@@ -63,6 +62,11 @@ public:
     bool deletedp() const;
     void set_deleted(bool, int position = 0);
     std::shared_ptr<ParamData> get_param() {return param;}
+
+    QString get_specifier(int position) const;
+    void set_specifier(QString value, int position);
+    void set_passage_type(QString, int position);
+    QString get_passage_type(int position) const;
 
     bool isDeleted = false;
 

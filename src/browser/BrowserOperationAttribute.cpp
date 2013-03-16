@@ -28,7 +28,7 @@ BrowserOperationAttribute::BrowserOperationAttribute(BrowserView* view, BrowserO
 
 BrowserOperationAttribute::~BrowserOperationAttribute()
 {
-    //set_marked(false);
+    set_marked(false);
 }
 
 void BrowserOperationAttribute::set_name(QString value)
@@ -92,13 +92,15 @@ QString BrowserOperationAttribute::get_default_value() const
     return param->get_default_value();
 }
 
-void BrowserOperationAttribute::set_passage_type(QString)
+void BrowserOperationAttribute::set_passage_type(QString , int position)
 {
+
 }
 
-QString BrowserOperationAttribute::get_passage_type() const
+QString BrowserOperationAttribute::get_passage_type(int position) const
 {
-    return QString();
+    OperationData* data = (OperationData*)operation->get_data();
+    return extract_pointer(position, data->get_cppdecl());
 }
 
 const QPixmap *BrowserOperationAttribute::pixmap(int) const
@@ -168,9 +170,17 @@ void BrowserOperationAttribute::set_deleted(bool value, int position)
         data->insert_param(position, param);
         recompute_param(operation, position, true);
 
-        //renumber(form, rank, 1);
-
         isDeleted = false;
     }
 
+}
+
+QString BrowserOperationAttribute::get_specifier(int position) const
+{
+    OperationData* data = (OperationData*)operation->get_data();
+    return extract_specifier(position, data->get_cppdecl());
+}
+
+void BrowserOperationAttribute::set_specifier(QString value, int position)
+{
 }

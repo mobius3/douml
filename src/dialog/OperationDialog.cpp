@@ -1559,7 +1559,8 @@ void OperationDialog::cpp_edit_param_decl()
     int index;
 
     if (((index = form.find("${(}")) != 0) &&
-        (form.find("${)}", index + 4) != 0)) {
+        (form.find("${)}", index + 4) != 0))
+    {
         CppParamsDialog d(this, table, cppTab->ui->edCppDeclProto, TRUE);
 
         if (d.exec() == QDialog::Accepted)

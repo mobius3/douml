@@ -441,6 +441,43 @@ QString delete_param(int rank, QString text)
     return form;
 }
 
+
+QString extract_specifier(int position,  QString s)
+{
+    // s at least contains ${)}
+    QRegExp rxStart(QRegExp::escape("${(}"));
+    QRegExp rxPrev(QRegExp::escape("${v" + QString::number(position - 1) +  "}"));
+    int startIndex;
+    if(position == 0)
+        startIndex = rxStart.indexIn(s) + 4 ;
+    else
+        startIndex = rxPrev.indexIn(s) + 4 + QString::number(position).length();
+
+    QRegExp rxType(QRegExp::escape("${t" + QString::number(position)));
+    int tIndex = rxType.indexIn(s);
+    int length = tIndex -(startIndex + 1);
+    QString specifier;
+    if(length > 0)
+        specifier = s.mid(startIndex + 1, length);
+    return specifier;
+}
+
+QString extract_pointer(int position,  QString s)
+{
+    // s at least contains ${)}
+    QRegExp rxStart(QRegExp::escape("${t" + QString::number(position) +  "}"));
+    int startIndex;
+    startIndex = rxStart.indexIn(s) + 4 + QString::number(position).length();
+
+    QRegExp rxEnd(QRegExp::escape("${p" + QString::number(position)+  "}"));
+    int tIndex = rxEnd.indexIn(s);
+    int length = tIndex -(startIndex + 1);
+    QString ptrType;
+    if(length > 0)
+        ptrType = s.mid(startIndex + 1, length);
+    return ptrType;
+}
+
 //void move_param(int old_rank, int new_rank)
 //{
 //    switch (unique) {

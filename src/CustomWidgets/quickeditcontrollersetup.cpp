@@ -409,6 +409,9 @@ void QuickEdit::SetupOperationAttributeController()
     ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("deleted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, deletedp, set_deleted);
 
+//    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("prefix"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//               toString, get_specifier, set_specifier);
+
     ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("mark"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, markedp, set_marked);
 
@@ -440,6 +443,61 @@ void QuickEdit::SetupOperationAttributeController()
     }
     );
 
+    operationAttributeController->AddGetter(columns.indexOf("prefix"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    [] (const BrowserNode* data, const QModelIndex& index)
+{
+        Q_UNUSED(index);
+        if(!data)
+    return QVariant();
+    const BrowserOperationAttribute* pointer = static_cast<const BrowserOperationAttribute*>(data);
+    if(pointer)
+        return QVariant(pointer->get_specifier(index.row()));
+    else
+    return QVariant();
+    }
+    );
+    operationAttributeController->AddSetter(columns.indexOf("prefix"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    [] (BrowserNode* data, QVariant value, const QModelIndex& index)
+ {
+    if(!data)
+    return false;
+    BrowserOperationAttribute* pointer = static_cast<BrowserOperationAttribute*>(data);
+    if(pointer)
+    {
+        pointer->set_specifier(value.toString(), index.row());
+        pointer->modified();
+    }
+    return true;
+    }
+    );
+
+    operationAttributeController->AddGetter(columns.indexOf("postfix"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    [] (const BrowserNode* data, const QModelIndex& index)
+{
+        Q_UNUSED(index);
+        if(!data)
+    return QVariant();
+    const BrowserOperationAttribute* pointer = static_cast<const BrowserOperationAttribute*>(data);
+    if(pointer)
+        return QVariant(pointer->get_passage_type(index.row()));
+    else
+    return QVariant();
+    }
+    );
+    operationAttributeController->AddSetter(columns.indexOf("postfix"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    [] (BrowserNode* data, QVariant value, const QModelIndex& index)
+ {
+    if(!data)
+    return false;
+    BrowserOperationAttribute* pointer = static_cast<BrowserOperationAttribute*>(data);
+    if(pointer)
+    {
+        pointer->set_passage_type(value.toString(), index.row());
+        pointer->modified();
+    }
+    return true;
+    }
+    );
 
 
 
@@ -463,7 +521,8 @@ void QuickEdit::SetupOperationAttributeController()
         Qt::ItemFlags result;
         result |= Qt::ItemIsSelectable;
         if(!(index.column() *in(columns.indexOf("name"),columns.indexOf("type"),columns.indexOf("default"),
-                                columns.indexOf("direction"), columns.indexOf("deleted"), columns.indexOf("mark"))))
+                                columns.indexOf("direction"), columns.indexOf("deleted"), columns.indexOf("mark"),
+                                columns.indexOf("prefix"), columns.indexOf("postfix"))))
             return result;
 
         TreeItemInterface* iface = static_cast<TreeItemInterface*>(index.internalPointer());
