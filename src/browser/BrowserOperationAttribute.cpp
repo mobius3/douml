@@ -26,6 +26,11 @@ BrowserOperationAttribute::BrowserOperationAttribute(BrowserView* view, BrowserO
 
 }
 
+BrowserOperationAttribute::~BrowserOperationAttribute()
+{
+    //set_marked(false);
+}
+
 void BrowserOperationAttribute::set_name(QString value)
 {
     param->set_name(value);

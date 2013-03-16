@@ -184,7 +184,7 @@ void CatalogWidget::SetupTreeController(QSharedPointer<ItemController<BrowserNod
     treeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     treeController->AddGetter(QPair<int,int>(0,0),
 
-                              [] (const BrowserNode* data, QModelIndex index)
+                              [] (const BrowserNode* data, QModelIndex )
     {
         if(data)
             return QVariant(data->get_name());
@@ -195,7 +195,7 @@ void CatalogWidget::SetupTreeController(QSharedPointer<ItemController<BrowserNod
 
     treeController->AddGetter(QPair<int,int>(0,1),
 
-                              [] (const BrowserNode* data, QModelIndex index)
+                              [] (const BrowserNode* data, QModelIndex )
     {
         const QPixmap * pm = data->pixmap(true);
         if(!pm)

@@ -1274,6 +1274,32 @@ void BrowserNode::toggle_mark()
         viewptr->send_marked(get_marked_nodes());
 }
 
+void BrowserNode::set_marked(bool value)
+{
+    is_marked = value;
+    if (value) {
+        marked_list.append(this);
+    }
+    else {
+        marked_list.removeRef(this);
+
+    }
+
+    repaint();
+
+    if (BrowserSearchDialog::get() != 0)
+        BrowserSearchDialog::get()->update();
+
+    if (ReferenceDialog::get() != 0)
+        ReferenceDialog::get()->update();
+    if(marked_list.count() != 0)
+        UmlWindow::set_marked_generation();
+    else
+        UmlWindow::set_selected_generation();
+    if(viewptr)
+        viewptr->send_marked(get_marked_nodes());
+}
+
 void BrowserNode::setup_generatable_types()
 {
     generatable_types << UmlClass << UmlComponent << UmlDeploymentNode << UmlArtifact

@@ -35,6 +35,7 @@ class BrowserOperationAttribute: public BrowserNodeAbstractRemove
 
 public:
     BrowserOperationAttribute(BrowserView* view, BrowserOperation* _operation, std::shared_ptr<ParamData> _data);
+    ~BrowserOperationAttribute();
     BrowserOperation* get_operation(){return operation;}
     void set_name(QString);
     QString get_name() const;
@@ -61,6 +62,7 @@ public:
     virtual uint TypeID();
     bool deletedp() const;
     void set_deleted(bool, int position = 0);
+    std::shared_ptr<ParamData> get_param() {return param;}
 
     bool isDeleted = false;
 

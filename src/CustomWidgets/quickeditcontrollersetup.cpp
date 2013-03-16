@@ -409,6 +409,9 @@ void QuickEdit::SetupOperationAttributeController()
     ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("deleted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, deletedp, set_deleted);
 
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("mark"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+               toBool, markedp, set_marked);
+
     operationAttributeController->AddGetter(columns.indexOf("deleted"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
     [] (const BrowserNode* data, const QModelIndex& index)
 {
@@ -459,7 +462,8 @@ void QuickEdit::SetupOperationAttributeController()
     {
         Qt::ItemFlags result;
         result |= Qt::ItemIsSelectable;
-        if(!(index.column() *in(columns.indexOf("name"),columns.indexOf("type"),columns.indexOf("default"),columns.indexOf("direction"), columns.indexOf("deleted"))))
+        if(!(index.column() *in(columns.indexOf("name"),columns.indexOf("type"),columns.indexOf("default"),
+                                columns.indexOf("direction"), columns.indexOf("deleted"), columns.indexOf("mark"))))
             return result;
 
         TreeItemInterface* iface = static_cast<TreeItemInterface*>(index.internalPointer());

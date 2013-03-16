@@ -85,6 +85,7 @@ protected:
     bool is_read_only = false;
     bool is_edited = false;
     bool is_marked = false;
+    //bool is_marked_for_move = false;
     bool is_defined = false;	// to indicate unconsistency due to projectSynchro
     // pre condition not followed
 
@@ -132,6 +133,7 @@ public:
     void mark_shortcut(QString s, int & index, int bias);
     void mark_management(int choice);
     void toggle_mark();
+    void set_marked(bool value);//{is_marked = value;}
     bool markedp() const {
         return is_marked;
     }
@@ -151,6 +153,10 @@ public:
 
     static void setup_generatable_types();
     static void unmark_all();
+
+//    bool marked_for_move(){return is_marked_for_move;}
+//    void set_marked_for_move(bool value){ is_marked_for_move = value;}
+
 
     bool is_from_lib() const {
         return original_id != 0;

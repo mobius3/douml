@@ -107,7 +107,20 @@ void QuickEdit::PerformFiltering(QStringList expandedNodes, QTreeView* view, Tre
 
 void QuickEdit::OnContextMenu(QPoint point)
 {
+
     CreateMenu();
+
+    current = ui->tvEditor->selectionModel()->currentIndex();
+    if(!current.isValid())
+        return;
+
+    current = current.sibling(current.row(), 0);
+    TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
+    BrowserNode* currentNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
+
+    if(currentNode->TypeID()  !=  TypeIdentifier<BrowserOperationAttribute>::id())
+        return;
+
     contextMenu->popup(ui->tvEditor->mapToGlobal(point));
 }
 
@@ -153,29 +166,36 @@ void QuickEdit::OnIncreaseOpenLevels()
     TreeFunctions::ExpandUpToLevel(ui->tvEditor, treeModel, QModelIndex(),level);
 }
 
-void QuickEdit::OnNewSectionSizes(int, int, int)
-{
-
-}
-
 void QuickEdit::OnChangeColumnVisibility()
 {
     CheckColumnVisibility();
 }
 
+void QuickEdit::OnMoveMarkedAfter()
+{
+    MoveMarked(false);
+}
+
+void QuickEdit::OnMoveMarkedBefore()
+{
+    MoveMarked(true);
+}
 
 void QuickEdit::CreateMenu()
 {
     if(contextMenu.isNull())
     {
         contextMenu.reset(new QMenu());
-        contextMenu->addAction(tr("Remove from favourites"), this, SLOT(OnRemoveCurrentItemFromFavourites()));
+    }
+    contextMenu->clear();
+    QAction* before = contextMenu->addAction(tr("Move marked before"), this, SLOT(OnMoveMarkedBefore()));
+    QAction* after = contextMenu->addAction(tr("Move marked after"), this, SLOT(OnMoveMarkedAfter()));
+    if(BrowserNode::marked_nodes().count() == 0)
+    {
+        before->setEnabled(false);
+        after->setEnabled(false);
     }
 }
-
-
-
-
 
 void QuickEdit::SetupItemCreationFuncs()
 {
@@ -193,11 +213,6 @@ void QuickEdit::SetupItemCreationFuncs()
 
 void QuickEdit::CheckColumnVisibility()
 {
-//    columns << "name" <<  "type" <<  "default_value" <<  "stereotype"
-//                                        << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
-//                                        << "pass"
-//                                        << "const" << "volatile" <<  "friend" <<  "virtual" <<  "inline"
-//                                              << "default" << "delete" <<  "override" <<  "final" <<  "noexcept";
     if(ui->chkCpp->isChecked())
     {
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("pass"),false);
@@ -279,7 +294,6 @@ void QuickEdit::AddParameter()
     newItemAsNode->SetInternalData(param.data());
     operationNode->modified();
     recompute_param(operationNode, newItemPosition-1, true);
-    //operationNode->renumber(-1);
 }
 
 void QuickEdit::AddOperation()
@@ -349,6 +363,18 @@ BrowserNode *QuickEdit::GetCurrentNode()
     return itemAsNode;
 }
 
+QSharedPointer<TreeItemInterface> QuickEdit::GetSharedOfOperation(const QModelIndex & index)
+{
+    QModelIndex parentIndex = index.parent();
+    parentIndex = parentIndex.sibling(parentIndex.row(), 0);
+    TreeItemInterface* parent =  static_cast<TreeItemInterface*>(parentIndex.internalPointer());
+    if(!parent)
+        parent = treeModel->RootItem();
+    TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(index.internalPointer());
+    int operationIndex = parent->GetIndexOfChild(itemAsInterface);
+    return parent->GetChildren()[operationIndex];
+}
+
 QList<std::function<bool (TreeItemInterface *)> > QuickEdit::CreateCheckList()
 {
         QList<std::function<bool (TreeItemInterface *)> > result;
@@ -396,12 +422,9 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     originalView = view;
     mainWindow = window;
     nullController = QSharedPointer<ItemController<BrowserNode> > (new ItemController<BrowserNode>());
-    //validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
-    //                                        UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember};
     validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
                   UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember, UmlClassView, UmlPackage};
-    //validTypes = {UmlClass, UmlOperation, UmlAttribute};
-    columns << "name" <<  "type" <<  "default_value" <<  "stereotype" << "deleted"
+    columns << "name" <<  "mark" << "type" <<  "default_value" <<  "stereotype" << "deleted"
                                         << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
                                         << "pass"
                                         << "const" << "volatile" <<  "friend" <<  "virtual" <<  "inline"
@@ -415,7 +438,7 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
 
     //ui->tvEditor->setStyleSheet("QTreeView::item { border-right: 1px solid black }");
     ui->tvEditor->setAlternatingRowColors(true);
-    //connect(ui->tvEditor, SIGNAL(customContextMenuRequested(QPoint)),this, SLOT(OnContextMenu(QPoint)));
+    connect(ui->tvEditor, SIGNAL(customContextMenuRequested(QPoint)),this, SLOT(OnContextMenu(QPoint)));
     connect(ui->leSearch, SIGNAL(textChanged(QString)), this, SLOT(OnPerformFiltering(QString)));
     connect(ui->pbUpOneLevel, SIGNAL(clicked()), this, SLOT(OnDecreaseOpenLevels()));
     connect(ui->pbDownOneLevel, SIGNAL(clicked()), this, SLOT(OnIncreaseOpenLevels()));
@@ -482,6 +505,7 @@ void QuickEdit::closeEvent(QCloseEvent *)
     settings.setValue("quickedit_checkboxes/python", ui->chkPython->isChecked());
     settings.setValue("quickedit_checkboxes/idl", ui->chkIdl->isChecked());
     ui->leSearch->setText("");
+    localNodeHolder.clear();
 }
 
 QSharedPointer<TreeItemInterface> QuickEdit::CreateInterfaceNode(QSharedPointer<TreeItemInterface> root,
@@ -546,8 +570,6 @@ void QuickEdit::AssignItemsForClassView(QSharedPointer<TreeItemInterface> root, 
         UmlCode nodeType = child->get_type();
         itemCreators[nodeType](root, child);
     }
-//    root->AddChildren(QList<QSharedPointer<TreeItemInterface> >() << interfaceItem);
-
 }
 
 void QuickEdit::AssignItemsForPackage(QSharedPointer<TreeItemInterface> root, BrowserNode * packageNode)
@@ -564,7 +586,107 @@ void QuickEdit::AssignItemsForPackage(QSharedPointer<TreeItemInterface> root, Br
         UmlCode nodeType = child->get_type();
         itemCreators[nodeType](root, child);
     }
-//    root->AddChildren(QList<QSharedPointer<TreeItemInterface> >() << interfaceItem);
+}
+
+void QuickEdit::MoveMarked(bool before)
+{
+    QModelIndex current = ui->tvEditor->currentIndex();
+
+    if(!current.isValid())
+        return;
+
+    TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
+    BrowserNode* currentNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
+
+    //next we reorganize nodes in parent
+    TreeItemInterface* parentInterface = itemAsInterface->parent();
+    QList<QSharedPointer<TreeItemInterface>> children = parentInterface->GetChildren();
+    QList<QSharedPointer<TreeItemInterface>> markedChildren;
+    // we store all marked nodes
+    QList<BrowserNode*> parentList;
+    for(QSharedPointer<TreeItemInterface> child : children)
+    {
+        BrowserNode* childNode = static_cast<BrowserNode*>(child->InternalPointer());
+        if(!parentList.contains(static_cast<BrowserNode*>(childNode->parent())))
+            parentList.append(static_cast<BrowserNode*>(childNode->parent()));
+        if(childNode->markedp())
+            markedChildren.append(child);
+    }
+
+    if(parentList.size() > 1)
+        return;
+
+    // remove all marked from children
+    for(QSharedPointer<TreeItemInterface> child : markedChildren)
+    {
+        children.remove(child);
+    }
+    //get the new position of origin node
+    int newPositionOfCurrent = -1;
+    for(QSharedPointer<TreeItemInterface> child : children)
+    {
+        newPositionOfCurrent++;
+        BrowserNode* childNode = static_cast<BrowserNode*>(child->InternalPointer());
+        if(childNode == currentNode)
+        {
+            if(!before)
+                newPositionOfCurrent++;
+            break;
+        }
+    }
+    //insert the nodes back
+    std::reverse(markedChildren.begin(), markedChildren.end());
+    for(QSharedPointer<TreeItemInterface> child : markedChildren)
+    {
+        children.insert(newPositionOfCurrent, child);
+    }
+
+    QSharedPointer<TreeItemInterface> sharedOfOperation = GetSharedOfOperation(current.parent());
+    TreeItem<BrowserNode>* operationItemAsNode = static_cast<TreeItem<BrowserNode>*>(sharedOfOperation.data());
+    // reorganize params vector
+
+    BrowserOperation* operationNode = static_cast<BrowserOperation*>(operationItemAsNode->InternalPointer());
+    OperationData* operationData = static_cast<OperationData*>(operationNode->get_data());
+    operationData->params.clear();
+    for(QSharedPointer<TreeItemInterface> child : children)
+    {
+        BrowserOperationAttribute* attributeNode = static_cast<BrowserOperationAttribute*>(child->InternalPointer());
+        operationData->params.append(attributeNode->get_param());
+    }
+
+    // install children back
+    QModelIndex parentIndex = current.parent();
+    treeModel->removeRows(0 , children.count(), parentIndex);
+    treeModel->insertRows(0 , children.count(), parentIndex);
+    int pos = -1;
+    for(QSharedPointer<TreeItemInterface> child : children)
+    {
+        pos++;
+        QModelIndex newItem = treeModel->index(pos,0,parentIndex);
+        if(!newItem.isValid())
+            continue;
+        TreeItemInterface *newItemInterface = static_cast<TreeItemInterface*>(newItem.internalPointer());
+        TreeItem<BrowserNode>* newItemAsNode = static_cast<TreeItem<BrowserNode>*>(newItemInterface);
+        newItemAsNode->SetController(operationAttributeController);
+        newItemAsNode->SetParent(sharedOfOperation);
+        newItemAsNode->SetInternalData(static_cast<BrowserNode*>(child->InternalPointer()));
+    }
+    pos = -1;
+    for(QSharedPointer<TreeItemInterface> child : children)
+    {
+        pos++;
+        QModelIndex newItem = treeModel->index(pos,0,parentIndex);
+        if(!newItem.isValid())
+            continue;
+        BrowserNode* node = static_cast<BrowserNode*>(child->InternalPointer());
+        node->set_marked(false);
+    }
+
+    QModelIndex newItem = treeModel->index(pos,0,parentIndex);
+    if(newItem.isValid())
+        pos++;
+    operationNode->modified();
+
 }
 
 void QuickEdit::AssignItemsForOperation(QSharedPointer<TreeItemInterface> root, BrowserNode * node)
@@ -579,11 +701,9 @@ void QuickEdit::AssignItemsForOperation(QSharedPointer<TreeItemInterface> root, 
     operationNodes << returnType;
     // next we make dummy nodes for all attributes
     int paramCount = ((OperationData*)operationNode->get_data())->nparams;
-    //items << CreateInterfaceNode(interfaceItem, nullController, returnType.data());
 
     for(int i(0); i< paramCount; ++i)
     {
-        //ParamData* data = ((OperationData*)operationNode->get_data())->params[i].get();
         QSharedPointer<BrowserNode> param(new BrowserOperationAttribute(dummyView,operationNode,
                                                                         ((OperationData*)operationNode->get_data())->params[i]));
         operationNodes << param;
@@ -635,6 +755,7 @@ void QuickEdit::CheckBoxDelegateSetup()
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("override"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("final"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("deleted"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("mark"), checkboxDelegate);
 }
 
 
