@@ -4,7 +4,8 @@
 class BrowserOperation;
 class OperationData;
 
-
+namespace OperationFuncs
+{
 void add_param(BrowserOperation* oper, QString & form, int rank, QString s);
 void replace_param( QString & form, int rank, QString s);
 void recompute_param(BrowserOperation* oper, int rank, bool recompute);
@@ -24,12 +25,11 @@ void move_param(int old_rank, int new_rank);
 void move_param(int old_rank, int new_rank,
                                  QString proto);
 
-
-
 QString extract_specifier(int position, QString s);
 QString extract_pointer(int position,  QString s);
-
-
+QString set_specifier(int position,  QString s, QString newValue);
+QString set_pointer(int position,  QString s, QString newValue);
+}
 
 
 #endif // OPERATIONFUNCS_H

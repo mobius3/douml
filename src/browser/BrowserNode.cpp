@@ -1285,13 +1285,13 @@ void BrowserNode::set_marked(bool value)
 
     }
 
-    repaint();
+    //repaint();
 
-    if (BrowserSearchDialog::get() != 0)
-        BrowserSearchDialog::get()->update();
+//    if (BrowserSearchDialog::get() != 0)
+//        BrowserSearchDialog::get()->update();
 
-    if (ReferenceDialog::get() != 0)
-        ReferenceDialog::get()->update();
+//    if (ReferenceDialog::get() != 0)
+//        ReferenceDialog::get()->update();
     if(marked_list.count() != 0)
         UmlWindow::set_marked_generation();
     else

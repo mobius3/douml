@@ -92,15 +92,16 @@ QString BrowserOperationAttribute::get_default_value() const
     return param->get_default_value();
 }
 
-void BrowserOperationAttribute::set_passage_type(QString , int position)
+void BrowserOperationAttribute::set_passage_type(QString value, int position)
 {
-
+    OperationData* data = (OperationData*)operation->get_data();
+    data->set_cppdecl(OperationFuncs::set_pointer(position, data->get_cppdecl(), value));
 }
 
 QString BrowserOperationAttribute::get_passage_type(int position) const
 {
     OperationData* data = (OperationData*)operation->get_data();
-    return extract_pointer(position, data->get_cppdecl());
+    return OperationFuncs::extract_pointer(position, data->get_cppdecl());
 }
 
 const QPixmap *BrowserOperationAttribute::pixmap(int) const
@@ -162,13 +163,13 @@ void BrowserOperationAttribute::set_deleted(bool value, int position)
     if(value)
     {
         data->remove_param(param);
-        delete_param(position, data);
+        OperationFuncs::delete_param(position, data);
         isDeleted = true;
     }
     else
     {
         data->insert_param(position, param);
-        recompute_param(operation, position, true);
+        OperationFuncs::recompute_param(operation, position, true);
 
         isDeleted = false;
     }
@@ -178,9 +179,11 @@ void BrowserOperationAttribute::set_deleted(bool value, int position)
 QString BrowserOperationAttribute::get_specifier(int position) const
 {
     OperationData* data = (OperationData*)operation->get_data();
-    return extract_specifier(position, data->get_cppdecl());
+    return OperationFuncs::extract_specifier(position, data->get_cppdecl());
 }
 
 void BrowserOperationAttribute::set_specifier(QString value, int position)
 {
+    OperationData* data = (OperationData*)operation->get_data();
+    data->set_cppdecl(OperationFuncs::set_specifier(position, data->get_cppdecl(), value));
 }

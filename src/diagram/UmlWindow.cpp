@@ -1274,7 +1274,6 @@ void UmlWindow::set_marked_generation()
     pal.setColor(QPalette::Button, QColor(255,210,210));
     the->generateLabel->setAutoFillBackground(true);   // <--- this is the important line
     the->generateLabel->setPalette(pal);
-    QApplication::processEvents();
 }
 
 void UmlWindow::set_selected_generation()
@@ -1283,7 +1282,6 @@ void UmlWindow::set_selected_generation()
     pal.setColor(QPalette::Button, QColor(182,206,252));
     the->generateLabel->setAutoFillBackground(true);   // <--- this is the important line
     the->generateLabel->setPalette(pal);
-    QApplication::processEvents();
 }
 
 void UmlWindow::close()

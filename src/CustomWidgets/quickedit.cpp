@@ -110,7 +110,7 @@ void QuickEdit::OnContextMenu(QPoint point)
 
     CreateMenu();
 
-    current = ui->tvEditor->selectionModel()->currentIndex();
+    QModelIndex current = ui->tvEditor->selectionModel()->currentIndex();
     if(!current.isValid())
         return;
 
@@ -221,10 +221,13 @@ void QuickEdit::CheckColumnVisibility()
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("friend"),false);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("virtual"),false);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("inline"),false);
-        ui->tvEditor->header()->setSectionHidden(columns.indexOf("default"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("defaulted"),false);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("delete"),false);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("override"),false);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("final"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("default_value"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("prefix"),false);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("postfix"),false);
     }
     else
     {
@@ -234,10 +237,13 @@ void QuickEdit::CheckColumnVisibility()
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("friend"),true);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("virtual"),true);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("inline"),true);
-        ui->tvEditor->header()->setSectionHidden(columns.indexOf("default"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("defaulted"),true);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("delete"),true);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("override"),true);
         ui->tvEditor->header()->setSectionHidden(columns.indexOf("final"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("default_value"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("prefix"),true);
+        ui->tvEditor->header()->setSectionHidden(columns.indexOf("postfix"),true);
     }
 }
 
@@ -293,7 +299,7 @@ void QuickEdit::AddParameter()
     newItemAsNode->SetParent(sharedOfOperation);
     newItemAsNode->SetInternalData(param.data());
     operationNode->modified();
-    recompute_param(operationNode, newItemPosition-1, true);
+    OperationFuncs::recompute_param(operationNode, newItemPosition-1, true);
 }
 
 void QuickEdit::AddOperation()
@@ -424,11 +430,11 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     nullController = QSharedPointer<ItemController<BrowserNode> > (new ItemController<BrowserNode>());
     validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
                   UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember, UmlClassView, UmlPackage};
-    columns << "name" <<  "mark" << "prefix" << "type"  << "postfix" <<  "default_value" <<  "stereotype" << "deleted"
-                                        << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
+    columns << "name" <<  "mark"  << "deleted" << "prefix" << "type"  << "postfix" <<  "default_value" <<  "stereotype"
+                                        << "visibility" <<  "direction" << "static" <<  "abstract" <<  "multiplicity"
 
                                         << "const" << "volatile" <<  "friend" <<  "virtual" <<  "inline"
-                                              << "default" << "delete" <<  "override" <<  "final" <<  "noexcept";
+                                              << "defaulted" << "delete" <<  "override" <<  "final" <<  "noexcept";
     SetupItemCreationFuncs();
     qRegisterMetaType<QList<BrowserNode*>>("QList<BrowserNode*>");
     SetupControllers();
@@ -750,7 +756,7 @@ void QuickEdit::CheckBoxDelegateSetup()
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("friend"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("virtual"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("inline"), checkboxDelegate);
-    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("default"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("defaulted"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("delete"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("override"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("final"), checkboxDelegate);

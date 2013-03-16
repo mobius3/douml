@@ -74,7 +74,7 @@ private:
 
 
     QStringList columns;
-    QModelIndex current;
+    //QModelIndex current;
 
     void SetupTreeModel(TreeModel*& , QTreeView*,
                         QSharedPointer<TreeItemInterface>&,

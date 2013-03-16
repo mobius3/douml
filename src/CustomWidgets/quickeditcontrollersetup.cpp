@@ -290,7 +290,7 @@ void QuickEdit::SetupOperationController()
     ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("inline"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_inline, set_cpp_inline);
 
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("default"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("defaulted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_default, set_cpp_default);
     ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("delete"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_delete, set_cpp_delete);
@@ -321,7 +321,7 @@ void QuickEdit::SetupOperationController()
         result |= Qt::ItemIsSelectable;
         if(!(index.column() *in(columns.indexOf("name"),columns.indexOf("type"),columns.indexOf("static"),columns.indexOf("visibility"),columns.indexOf("abstract"),
                                 columns.indexOf("const"), columns.indexOf("volatile"),columns.indexOf("friend"),columns.indexOf("virtual"),columns.indexOf("inline")
-                                ,columns.indexOf("default"),columns.indexOf("delete"),columns.indexOf("override"),columns.indexOf("final"), columns.indexOf("deleted"))))
+                                ,columns.indexOf("defaulted"),columns.indexOf("delete"),columns.indexOf("override"),columns.indexOf("final"), columns.indexOf("deleted"))))
             return result;
 
         TreeItemInterface* iface = static_cast<TreeItemInterface*>(index.internalPointer());
@@ -346,7 +346,7 @@ void QuickEdit::SetupAttributeController()
                toString, get_name, set_name);
     ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, columns.indexOf("type"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toString, get_type().get_type, set_type);
-    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, columns.indexOf("default"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, columns.indexOf("default_value"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                     toString, get_init_value, set_init_value);
     ADD_GETSET(BrowserAttribute, attributeController, columns.indexOf("stereotype"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_stereotype, def->set_stereotype);
@@ -376,7 +376,7 @@ void QuickEdit::SetupAttributeController()
     {
         Qt::ItemFlags result;
         result |= Qt::ItemIsSelectable;
-        if(!(index.column() *in(columns.indexOf("name"),columns.indexOf("type"),columns.indexOf("default"),columns.indexOf("stereotype"),
+        if(!(index.column() *in(columns.indexOf("name"),columns.indexOf("type"),columns.indexOf("default_value"),columns.indexOf("stereotype"),
                                 columns.indexOf("visibility"), columns.indexOf("static"), columns.indexOf("deleted"))))
             return result;
 
@@ -402,7 +402,7 @@ void QuickEdit::SetupOperationAttributeController()
                toString, get_name, set_name);
     ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("type"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_param_type().get_type, set_param_type);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("default"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("default_value"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_default_value, set_default_value);
     ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("direction"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_direction, set_direction);
@@ -506,7 +506,7 @@ void QuickEdit::SetupOperationAttributeController()
     std::function<void(BrowserNode* , const QModelIndex&)> f = [](BrowserNode* node, const QModelIndex& index)
     {
         BrowserOperationAttribute* oper = static_cast<BrowserOperationAttribute*>(node);
-        recompute_param(oper->get_operation(),index.row(),true);
+        OperationFuncs::recompute_param(oper->get_operation(),index.row(),true);
     };
     operationAttributeController->AddPostProcessors(columns.indexOf("direction"), QVector<int>(std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole})),f);
 
@@ -520,7 +520,7 @@ void QuickEdit::SetupOperationAttributeController()
     {
         Qt::ItemFlags result;
         result |= Qt::ItemIsSelectable;
-        if(!(index.column() *in(columns.indexOf("name"),columns.indexOf("type"),columns.indexOf("default"),
+        if(!(index.column() *in(columns.indexOf("name"),columns.indexOf("type"),columns.indexOf("default_value"),
                                 columns.indexOf("direction"), columns.indexOf("deleted"), columns.indexOf("mark"),
                                 columns.indexOf("prefix"), columns.indexOf("postfix"))))
             return result;

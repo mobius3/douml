@@ -4468,7 +4468,7 @@ void OperationDialog::force_param(int rank, bool recompute)
 
 void OperationDialog::add_param(QString & form, int rank, QString s)
 {
-    int index = param_begin(form, rank);
+    int index = OperationFuncs::param_begin(form, rank);
 
     if (index == -1)
         return;
@@ -4489,7 +4489,7 @@ void OperationDialog::add_param(QString & form, int rank, QString s)
 
 void OperationDialog::replace_param(QString & form, int rank, QString s)
 {
-    int index_start = param_begin(form, rank);
+    int index_start = OperationFuncs::param_begin(form, rank);
 
     if (index_start == -1)
         return;
@@ -4512,7 +4512,7 @@ void OperationDialog::replace_param(QString & form, int rank, QString s)
         index_start += 1;
     }
 
-    int index_sup = supOf(p, index_start);
+    int index_sup = OperationFuncs::supOf(p, index_start);
 
     switch (p[index_sup]) {
     case ',':
@@ -4562,7 +4562,7 @@ void OperationDialog::insert_param(int rank, MultiLineEdit * ed)
     // just renumber
     QString form = ed->text();
 
-    renumber(form, rank, 1);
+    OperationFuncs::renumber(form, rank, 1);
     ed->setText(form);
 }
 
@@ -4600,7 +4600,7 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed)
 {
     // remove
     QString form = ed->text();
-    int index = param_begin(form, rank);
+    int index = OperationFuncs::param_begin(form, rank);
 
     if (index == -1)
         return "";
@@ -4615,12 +4615,12 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed)
         return "";
 
     case ',':
-        index_sup = supOf(p, index + 1);
+        index_sup = OperationFuncs::supOf(p, index + 1);
         break;
 
     default: // first param, index point to '}' ending ${(}
         index += 1;
-        index_sup = supOf(p, index);
+        index_sup = OperationFuncs::supOf(p, index);
         break;
     }
 
@@ -4664,7 +4664,7 @@ QString OperationDialog::delete_param(int rank, MultiLineEdit * ed)
     form.remove(index, index_sup - index);
 
     // renumber
-    renumber(form, rank, -1);
+    OperationFuncs::renumber(form, rank, -1);
 
     ed->setText(form);
     return result;
@@ -4708,11 +4708,11 @@ void OperationDialog::move_param(int old_rank, int new_rank,
         return;
 
     s = "${(}" + s + "${)}";
-    renumber(s, old_rank, new_rank - old_rank, TRUE);
+    OperationFuncs::renumber(s, old_rank, new_rank - old_rank, TRUE);
 
     QString form = ed->text();
 
-    renumber(form, new_rank, 1);
+    OperationFuncs::renumber(form, new_rank, 1);
     add_param(form, new_rank, s.mid(4, s.length() - 8));
 
     ed->setText(form);
@@ -5711,7 +5711,7 @@ bool CppParamsTable::extract(int tblindex, int & strindex, QString s)
     while (s.at(strindex).isSpace())
         strindex += 1;
 
-    int sup = supOf(s, strindex);
+    int sup = OperationFuncs::supOf(s, strindex);
 
     if (s.mid(strindex, sup - strindex).stripWhiteSpace().isEmpty())
         return FALSE;
@@ -6308,7 +6308,7 @@ bool PhpParamsTable::extract(int tblindex, int & strindex, QString s)
     while (s.at(strindex).isSpace())
         strindex += 1;
 
-    int sup = supOf(s, strindex);
+    int sup = OperationFuncs::supOf(s, strindex);
 
     if (s.mid(strindex, sup - strindex).stripWhiteSpace().isEmpty())
         return FALSE;
@@ -6858,7 +6858,7 @@ bool PythonParamsTable::extract(int tblindex, int & strindex, QString s)
     while (s.at(strindex).isSpace())
         strindex += 1;
 
-    int sup = supOf(s, strindex);
+    int sup = OperationFuncs::supOf(s, strindex);
 
     if (s.mid(strindex, sup - strindex).stripWhiteSpace().isEmpty())
         return FALSE;

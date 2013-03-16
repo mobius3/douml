@@ -4,7 +4,8 @@
 #include "OperationData.h"
 #include "DialogUtil.h"
 #include "GenerationSettings.h"
-
+namespace OperationFuncs
+{
 void add_param(BrowserOperation* oper, QString & form, int rank, QString s)
 {
     int index = param_begin(form, rank);
@@ -452,13 +453,15 @@ QString extract_specifier(int position,  QString s)
         startIndex = rxStart.indexIn(s) + 4 ;
     else
         startIndex = rxPrev.indexIn(s) + 4 + QString::number(position).length();
+    if(s.at(startIndex) == ",")
+        startIndex++;
 
     QRegExp rxType(QRegExp::escape("${t" + QString::number(position)));
     int tIndex = rxType.indexIn(s);
-    int length = tIndex -(startIndex + 1);
+    int length = tIndex -(startIndex);
     QString specifier;
     if(length > 0)
-        specifier = s.mid(startIndex + 1, length);
+        specifier = s.mid(startIndex, length);
     return specifier;
 }
 
@@ -471,12 +474,51 @@ QString extract_pointer(int position,  QString s)
 
     QRegExp rxEnd(QRegExp::escape("${p" + QString::number(position)+  "}"));
     int tIndex = rxEnd.indexIn(s);
-    int length = tIndex -(startIndex + 1);
+    int length = tIndex -(startIndex);
     QString ptrType;
     if(length > 0)
-        ptrType = s.mid(startIndex + 1, length);
+        ptrType = s.mid(startIndex, length);
     return ptrType;
 }
+
+QString set_specifier(int position,  QString s, QString newValue)
+{
+    // s at least contains ${)}
+    QRegExp rxStart(QRegExp::escape("${(}"));
+    QRegExp rxPrev(QRegExp::escape("${v" + QString::number(position - 1) +  "}"));
+    int startIndex;
+    if(position == 0)
+        startIndex = rxStart.indexIn(s) + 4 ;
+    else
+        startIndex = rxPrev.indexIn(s) + 4 + QString::number(position).length();
+
+    QRegExp rxType(QRegExp::escape("${t" + QString::number(position)));
+    int tIndex = rxType.indexIn(s);
+    int length = tIndex -(startIndex + 1);
+    if(length < 0)
+        length = 0;
+    //s = s.replace(startIndex,length,newValue);
+    s = s.left(startIndex) + newValue + s.right(s.length() - tIndex);
+    return s;
+}
+
+QString set_pointer(int position,  QString s, QString newValue)
+{
+    // s at least contains ${)}
+    QRegExp rxStart(QRegExp::escape("${t" + QString::number(position) +  "}"));
+    int startIndex;
+    startIndex = rxStart.indexIn(s) + 4 + QString::number(position).length();
+
+    QRegExp rxEnd(QRegExp::escape("${p" + QString::number(position)+  "}"));
+    int tIndex = rxEnd.indexIn(s);
+    int length = tIndex -(startIndex + 1);
+    if(length < 0)
+        length = 0;
+    //s = s.replace(startIndex,length,newValue);
+    s = s.left(startIndex) + newValue + s.right(s.length() - tIndex);
+    return s;
+}
+
 
 //void move_param(int old_rank, int new_rank)
 //{
@@ -526,3 +568,4 @@ QString extract_pointer(int position,  QString s)
 //    ed->setText(form);
 //}
 
+}
