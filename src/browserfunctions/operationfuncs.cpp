@@ -5,9 +5,6 @@
 #include "DialogUtil.h"
 #include "GenerationSettings.h"
 
-
-
-
 void add_param(BrowserOperation* oper, QString & form, int rank, QString s)
 {
     int index = param_begin(form, rank);
@@ -120,9 +117,6 @@ void recompute_param(BrowserOperation* oper, int rank, bool recompute)
             add_param(oper, javaDef, rank, QString(t) + QString(" ") + QString(p));
             data->set_javadef(javaDef);
         }
-
-
-
         QString phpDef =  data->get_phpdef();
 
         if (phpDef.find(p) == -1)
@@ -130,21 +124,12 @@ void recompute_param(BrowserOperation* oper, int rank, bool recompute)
             add_param(oper, phpDef, rank, QString(p) + QString(v));
             data->set_phpdef(phpDef);
         }
-
-
-
-
         QString pythonDef =  data->get_pythondef();
 
         if (pythonDef.find(p) == -1) {
             add_param(oper, pythonDef, rank, QString(p) + QString(v));
             data->set_pythondef(pythonDef);
         }
-
-
-
-
-
         QString idlDecl =  data->get_idldecl();
         if ((idlDecl.find(t) == -1) && (idlDecl.find(p) == -1)) {
             char d[16];
@@ -153,7 +138,6 @@ void recompute_param(BrowserOperation* oper, int rank, bool recompute)
             add_param(oper, idlDecl, rank, QString(d) + QString(" ") + QString(t) + QString(" ") + QString(p));
             data->set_idldecl(idlDecl);
         }
-
 }
 
 
@@ -371,3 +355,137 @@ void renumber(QString & form, int rank,
         }
     }
 }
+
+
+
+void delete_param(int rank, OperationData* data)
+{
+    // remove and renumber
+    data->set_cppdecl(delete_param(rank, data->get_cppdecl()));
+    data->set_cppdef(delete_param(rank, data->get_cppdef()));
+    data->set_javadef(delete_param(rank, data->get_javadef()));
+    data->set_phpdef(delete_param(rank, data->get_phpdef()));
+    data->set_pythondef(delete_param(rank, data->get_pythondef()));
+    data->set_idldecl(delete_param(rank, data->get_idldecl()));
+}
+
+QString delete_param(int rank, QString text)
+{
+    // remove
+    QString form = text;
+    int index = param_begin(form, rank);
+
+    if (index == -1)
+        return "";
+
+    const char * p = form;
+    int index_sup;
+
+    switch (p[index]) {
+    case '$':
+        // '$' starting ${)}, param not yet present, not first one,
+        // not possible except if user remove it in language form
+        return "";
+
+    case ',':
+        index_sup = supOf(p, index + 1);
+        break;
+
+    default: // first param, index point to '}' ending ${(}
+        index += 1;
+        index_sup = supOf(p, index);
+        break;
+    }
+
+    QString result;
+
+    switch (p[index_sup]) {
+    case ',':
+        if (p[index] == ',') {
+            if (p[index + 1] == ' ')
+                result = form.mid(index + 2, index_sup - index - 2);
+            else
+                result = form.mid(index + 1, index_sup - index - 1);
+        }
+        else {
+            // first param
+            result = form.mid(index, index_sup - index);
+            index_sup += (p[index_sup + 1] == ' ') ? 2 : 1;
+        }
+
+        break;
+
+    case '$': // ${)}
+        if (p[index] == ',') {
+            if (p[index + 1] == ' ')
+                result = form.mid(index + 2, index_sup - index - 2);
+            else
+                result = form.mid(index + 1, index_sup - index - 1);
+        }
+        else {
+            // alone param
+            result = form.mid(index, index_sup - index);
+        }
+
+        break;
+
+    default:
+        // error
+        return "";
+    }
+
+    form.remove(index, index_sup - index);
+
+    // renumber
+    renumber(form, rank, -1);
+    return form;
+}
+
+//void move_param(int old_rank, int new_rank)
+//{
+//    switch (unique) {
+//    case CppView:
+//        move_param(old_rank, new_rank, cppTab->ui->edCppDeclProto);
+//        move_param(old_rank, new_rank, cppTab->ui->edCppDefProto);
+//        break;
+
+//    case JavaView:
+//        move_param(old_rank, new_rank, edjavadef);
+//        break;
+
+//    case PhpView:
+//        move_param(old_rank, new_rank, edphpdef);
+//        break;
+
+//    case PythonView:
+//        move_param(old_rank, new_rank, edpythondef);
+//        break;
+
+//    case IdlView:
+//        move_param(old_rank, new_rank, edidldecl);
+//        break;
+
+//    default:
+//        break;
+//    }
+//}
+
+//void move_param(int old_rank, int new_rank,
+//                                 QString proto)
+//{
+//    QString s = delete_param(old_rank, ed);
+
+//    if (s.isEmpty())
+//        return;
+
+//    s = "${(}" + s + "${)}";
+//    renumber(s, old_rank, new_rank - old_rank, TRUE);
+
+//    QString form = ed->text();
+
+//    renumber(form, new_rank, 1);
+//    add_param(form, new_rank, s.mid(4, s.length() - 8));
+
+//    ed->setText(form);
+//}
+

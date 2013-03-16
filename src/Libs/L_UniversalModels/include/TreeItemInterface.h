@@ -65,6 +65,8 @@ class L_TREE_CONTROLLER_EXPORT TreeItemInterface
 
     virtual int GetIndexOfChild(TreeItemInterface * child) = 0;
 
+    virtual QSharedPointer<TreeItemInterface> GetParent() = 0;
+
 };
 
 

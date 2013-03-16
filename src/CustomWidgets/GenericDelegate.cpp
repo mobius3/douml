@@ -1,19 +1,19 @@
 #include "GenericDelegate.h"
 #include <QApplication>
 #include <QVariant>
-static QRect CheckBoxRect(const QStyleOptionViewItem &view_item_style_options) {
-  QStyleOptionButton check_box_style_option;
-  QRect check_box_rect = QApplication::style()->subElementRect(
-      QStyle::SE_CheckBoxIndicator,
-      &check_box_style_option);
-  QPoint check_box_point(view_item_style_options.rect.x() +
-                         view_item_style_options.rect.width() / 2 -
-                         check_box_rect.width() / 2,
-                         view_item_style_options.rect.y() +
-                         view_item_style_options.rect.height() / 2 -
-                         check_box_rect.height() / 2);
-  return QRect(check_box_point, check_box_rect.size());
-}
+//static QRect CheckBoxRect(const QStyleOptionViewItem &view_item_style_options) {
+//  QStyleOptionButton check_box_style_option;
+//  QRect check_box_rect = QApplication::style()->subElementRect(
+//      QStyle::SE_CheckBoxIndicator,
+//      &check_box_style_option);
+//  QPoint check_box_point(view_item_style_options.rect.x() +
+//                         view_item_style_options.rect.width() / 2 -
+//                         check_box_rect.width() / 2,
+//                         view_item_style_options.rect.y() +
+//                         view_item_style_options.rect.height() / 2 -
+//                         check_box_rect.height() / 2);
+//  return QRect(check_box_point, check_box_rect.size());
+//}
 
 GenericDelegate::GenericDelegate(QObject *parent, bool _hideText)
     : QStyledItemDelegate(parent), hideText(_hideText)

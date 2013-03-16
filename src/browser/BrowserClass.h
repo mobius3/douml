@@ -80,6 +80,7 @@ public:
     BrowserNode * add_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE);
     BrowserNode * add_relation(BrowserRelation * rel);
     BrowserNode * add_operation(BrowserOperation * oper = 0);
+    BrowserNode * addOperation(BrowserOperation * oper = nullptr);
     BrowserNode * add_inherited_operation(BrowserOperation * model);
     BrowserNode * add_extra_member(BrowserExtraMember * em = 0);
     Q3PtrList<BrowserOperation> inherited_operations(unsigned limit, QString parent_name = QString()) const;

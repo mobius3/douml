@@ -29,10 +29,12 @@ protected:
 class BrowserOperationAttribute: public BrowserNodeAbstractRemove
 {
     BrowserOperation* operation = nullptr;
-    ParamData* data = nullptr;
+    std::shared_ptr<ParamData> param;
+
+
 
 public:
-    BrowserOperationAttribute(BrowserView* view, BrowserOperation* _operation, ParamData* _data);
+    BrowserOperationAttribute(BrowserView* view, BrowserOperation* _operation, std::shared_ptr<ParamData> _data);
     BrowserOperation* get_operation(){return operation;}
     void set_name(QString);
     QString get_name() const;
@@ -57,6 +59,10 @@ public:
     void modified(){operation->package_modified();}
     virtual const QPixmap * pixmap(int) const;
     virtual uint TypeID();
+    bool deletedp() const;
+    void set_deleted(bool, int position = 0);
+
+    bool isDeleted = false;
 
 };
 

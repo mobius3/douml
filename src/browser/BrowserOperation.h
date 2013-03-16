@@ -99,6 +99,7 @@ public:
     virtual void apply_shortcut(QString s);
     virtual void open(bool);
     virtual UmlCode get_type() const;
+    virtual uint TypeID();
     virtual QString get_stype() const;
     virtual int get_identifier() const;
     virtual UmlVisibility get_visibility() const;

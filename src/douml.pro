@@ -586,5 +586,5 @@ FORMS += \
     ui/operationwidgetcpp.ui \
     ui/constructorinitializerdialog.ui \
     ui/catalogwidget.ui \
-    CustomWidgets/quickedit.ui
+    ui/quickedit.ui
 

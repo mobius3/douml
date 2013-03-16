@@ -160,10 +160,11 @@ public:
 
     virtual bool is_writable() const;	// file writable & not api base
     virtual void delete_it();
+    virtual void set_deleted(bool);
     bool deletedp() const {
         return is_deleted;
     };
-    void undelete(bool rec);
+    void undelete(bool recursive);
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
     void must_be_deleted(); // deleted after load time
     virtual BrowserNode * duplicate(BrowserNode * p,

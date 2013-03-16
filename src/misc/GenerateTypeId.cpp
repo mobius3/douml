@@ -14,6 +14,7 @@
 #include <boost/crc.hpp>
 #include <cassert>
 #include <cstring>
+#include <QtCore>
 
 
 
@@ -59,6 +60,10 @@ namespace
 {
 void EnsureUniqueIdOrDie(const char * typeName, unsigned int id)
 {
+#ifndef _DEBUG
+    Q_UNUSED(typeName);
+    Q_UNUSED(id);
+#endif
 #ifdef _DEBUG
     typedef std::unordered_map<unsigned int, const char *> id_to_type_map_t;
 

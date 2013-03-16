@@ -209,6 +209,14 @@ TreeItemInterface * TreeModel::RootItem()
     // Bouml preserved body end 0014CB2A
 }
 
+void TreeModel::UpdateData(QModelIndex index)
+{
+    TreeItemInterface* item = static_cast<TreeItemInterface*>(index.internalPointer());
+    QModelIndex lastChild = index.child(item->childCount()-1, item->columnCount()-1);
+    emit dataChanged(index.sibling(index.row(),0),
+                     lastChild);
+}
+
 void TreeModel::InsertRootItem(QSharedPointer<TreeItemInterface> item)
 {
     reset();
@@ -248,13 +256,13 @@ bool TreeModel::insertRows(int position, int rows, const QModelIndex & parent)
     // Bouml preserved body begin 0014CCAA
     //TRACE_FUNCTION;
     TreeItemInterface *parentItem = getItem(parent);
-    bool success;
+    bool success = true;
 
     beginInsertRows(parent, position, position + rows - 1);
     success = parentItem->insertChildren(position, rows);
     endInsertRows();
 
-    //emit dataChanged(this->index(position, 0, parent), this->index(position + rows - 1, columnCount(), parent));
+    emit dataChanged(this->index(position, 0, parent), this->index(position + rows - 1, columnCount(), parent));
     return success;
     // Bouml preserved body end 0014CCAA
 }

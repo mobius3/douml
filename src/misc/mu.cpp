@@ -90,7 +90,7 @@ int user_id()
                 }
                 else {
                     int retCode = msg_critical(TR("User Own Identifier"),
-                                               TR("\It seems that you are already editing the project.\n\n"
+                                               TR("It seems that you are already editing the project.\n\n"
                                                   "If you're SURE that this is not the case and\n"
                                                   "another user does not have an identifier equal\n"
                                                   "to yours you can gain ownership of the lock.").arg(dir.absFilePath(fn))

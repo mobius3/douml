@@ -2807,7 +2807,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams)
-                s += GenerationSettings::java_type(d->params[rank].get_type().get_type(mode));
+                s += GenerationSettings::java_type(d->params[rank]->get_type().get_type(mode));
             else {
                 s += "${t";
                 s += QString::number(rank);
@@ -2819,7 +2819,7 @@ QString OperationDialog::java_decl(const BrowserOperation * op, bool withname,
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += d->params[rank].get_name();
+                    s += d->params[rank]->get_name();
                 else {
                     s += "${p";
                     s += QString::number(rank);
@@ -3150,7 +3150,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams)
-                s += d->params[rank].get_type().get_type(mode);
+                s += d->params[rank]->get_type().get_type(mode);
             else {
                 s += "${t";
                 s += QString::number(rank);
@@ -3162,7 +3162,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += WrapperStr("$") + d->params[rank].get_name();
+                    s += WrapperStr("$") + d->params[rank]->get_name();
                 else {
                     s += "${p";
                     s += QString::number(rank);
@@ -3174,7 +3174,7 @@ QString OperationDialog::php_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                WrapperStr v = d->params[rank].get_default_value();
+                WrapperStr v = d->params[rank]->get_default_value();
 
                 if (!v.isEmpty())
                     s += " = " + v;
@@ -3916,7 +3916,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                QString t = d->params[rank].get_type().get_type(mode);
+                QString t = d->params[rank]->get_type().get_type(mode);
 
                 if (!t.isEmpty()) {
                     if (in_params)
@@ -3936,7 +3936,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += d->params[rank].get_name();
+                    s += d->params[rank]->get_name();
                 else {
                     s += "${p";
                     s += QString::number(rank);
@@ -3948,7 +3948,7 @@ QString OperationDialog::python_decl(const BrowserOperation * op, bool withname,
         }
         else if (sscanf(p, "${v%u}", &rank) == 1) {
             if (rank < d->nparams) {
-                WrapperStr v = d->params[rank].get_default_value();
+                WrapperStr v = d->params[rank]->get_default_value();
 
                 if (!v.isEmpty())
                     s += " = " + v;
@@ -4294,7 +4294,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
         else if (sscanf(p, "${d%u}", &rank) == 1) {
             if (withdir) {
                 if (rank < d->nparams)
-                    switch (d->params[rank].get_dir()) {
+                    switch (d->params[rank]->get_dir()) {
                     case UmlIn:
                         s += "in";
                         break;
@@ -4319,7 +4319,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
         else if (sscanf(p, "${t%u}", &rank) == 1) {
             if (withname) {
                 if (rank < d->nparams)
-                    s += GenerationSettings::idl_type(d->params[rank].get_type().get_type(mode));
+                    s += GenerationSettings::idl_type(d->params[rank]->get_type().get_type(mode));
                 else {
                     s += "${t";
                     s += QString::number(rank);
@@ -4331,7 +4331,7 @@ QString OperationDialog::idl_decl(const BrowserOperation * op, bool withdir,
         }
         else if (sscanf(p, "${p%u}", &rank) == 1) {
             if (rank < d->nparams)
-                s += d->params[rank].get_name();
+                s += d->params[rank]->get_name();
             else {
                 s += "${p";
                 s += QString::number(rank);

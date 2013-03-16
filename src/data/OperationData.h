@@ -165,6 +165,9 @@ public:
     virtual bool deletedp() const;
     virtual void set_deletedp(bool y);
 
+    void remove_param(std::shared_ptr<ParamData>);
+    void insert_param(int position, std::shared_ptr<ParamData> param);
+
     void set_browser_node(BrowserOperation *, bool update);
 
     virtual QString definition(bool full, bool with_kind) const;

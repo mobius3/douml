@@ -814,14 +814,6 @@ void UmlWindow::toolMenuAboutToShow()
                 if (php)
                     toolMenu->insertItem(TR("Reverse Php"), this, SLOT(php_reverse()));
 
-#warning reverse python
-
-#if 0
-
-                if (python)
-                    toolMenu->insertItem(TR("Reverse Python"), this, SLOT(python_reverse()));
-
-#endif
 
                 if (java) {
                     toolMenu->insertSeparator();

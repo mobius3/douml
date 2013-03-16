@@ -1378,7 +1378,8 @@ BrowserNode * BrowserClass::add_operation(BrowserOperation * oper)
     QString name;
 
     if (enter_child_name(name, TR("enter operation's name : "),
-                         UmlOperation, FALSE, FALSE)) {
+                         UmlOperation, FALSE, FALSE))
+    {
         oper = (oper == 0) ? BrowserOperation::new_one(name, this)
                            : (BrowserOperation *) oper->duplicate(this);
 
@@ -1392,6 +1393,22 @@ BrowserNode * BrowserClass::add_operation(BrowserOperation * oper)
     }
 
     return 0;
+}
+
+BrowserNode *BrowserClass::addOperation(BrowserOperation *oper)
+{
+
+    QString name;
+    oper = BrowserOperation::new_one(name, this);
+
+
+    setOpen(TRUE);
+    def->modified();
+    package_modified();
+    oper->set_name(name);
+    oper->select_in_browser();
+
+    return oper;
 }
 
 BrowserNode * BrowserClass::add_inherited_operation(BrowserOperation * model)

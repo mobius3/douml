@@ -199,6 +199,15 @@ void BrowserNode::delete_it()
     }
 }
 
+void BrowserNode::set_deleted(bool value)
+{
+    if(value)
+        delete_it();
+    else
+        undelete(true);
+
+}
+
 bool BrowserNode::delete_internal(QString & warning)
 {
     if (deletedp())
@@ -316,17 +325,17 @@ const char * BrowserNode::help_topic() const
 
 // undelete entry operation
 
-void BrowserNode::undelete(bool rec)
+void BrowserNode::undelete(bool recursive)
 {
     QString warning;
     QString renamed;
 
-    if (undelete(rec, warning, renamed) && rec) {
+    if (undelete(recursive, warning, renamed) && recursive) {
         // Redo it because now all classes are undeleted but it is
         // possible that some relations was not undeleted because
         // at least one of the two extremities was not undeleted
         warning = QString();
-        undelete(rec, warning, renamed);
+        undelete(recursive, warning, renamed);
     }
 
     if (!warning.isEmpty())

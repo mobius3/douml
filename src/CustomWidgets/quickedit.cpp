@@ -33,17 +33,6 @@
 #include <array>
 #include <functional>
 
-static const int nameIndex = 0;
-static const int typeIndex = 1;
-static const int defaultIndex = 2;
-static const int stereotypeIndex = 3;
-static const int visibilityIndex = 4;
-static const int staticIndex = 5;
-static const int abstractIndex = 6;
-static const int multiplicityIndex = 7;
-static const int directionIndex = 8;
-
-
 static QRect CheckBoxRect(const QStyleOptionViewItem &view_item_style_options) {
     QStyleOptionButton check_box_style_option;
     QRect check_box_rect = QApplication::style()->subElementRect(
@@ -132,6 +121,11 @@ void QuickEdit::OnShow()
 void QuickEdit::OnAddParameter()
 {
     AddParameter();
+}
+
+void QuickEdit::OnAddOperation()
+{
+    AddOperation();
 }
 
 void QuickEdit::OnPerformFiltering(QString)
@@ -233,19 +227,115 @@ void QuickEdit::CheckColumnVisibility()
 
 void QuickEdit::AddParameter()
 {
-    BrowserNode * currentNode = GetCurrentNode();
+    QModelIndex current = ui->tvEditor->selectionModel()->currentIndex();
+    if(!current.isValid())
+        return;
+
+    current = current.sibling(current.row(), 0);
+    TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
+    BrowserNode* currentNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
+
     BrowserNode* operationNode;
 
-    if(currentNode->TypeID()  == TypeIdentifier<BrowserOperation>()) //, TypeIdentifier<BrowserOperation>())
+    if(currentNode->TypeID()  == TypeIdentifier<BrowserOperation>::id()) //, TypeIdentifier<BrowserOperation>())
+    {
         operationNode = currentNode;
-    else
+    }
+    else if(currentNode->TypeID()  ==  TypeIdentifier<BrowserOperationAttribute>::id())
+    {
         operationNode = static_cast<BrowserOperationAttribute*>(currentNode)->get_operation();
+        itemAsInterface = itemAsInterface->parent();
+        current = current.parent();
+    }
+    else
+        return;
 
     OperationData* currentData = static_cast<OperationData*>(operationNode->get_data());
-    currentData->set_n_params(currentData->nparams + 1);
+    int originalParamCount = currentData->nparams;
+    currentData->set_n_params(originalParamCount + 1);
+    QModelIndex parentIndex = current.parent();
 
+    parentIndex = parentIndex.sibling(parentIndex.row(), 0);
+    TreeItemInterface* parent =  static_cast<TreeItemInterface*>(parentIndex.internalPointer());
+    if(!parent)
+        parent = treeModel->RootItem();
+    int insertIndex = parent->GetIndexOfChild(itemAsInterface);
+    QSharedPointer<TreeItemInterface> sharedOfOperation =  parent->GetChildren()[insertIndex];
 
+    int newItemPosition = currentData->nparams;
+    if(!treeModel->insertRows(newItemPosition-1, 1, current))
+        return;
 
+    QSharedPointer<BrowserNode> param(new BrowserOperationAttribute(dummyView,static_cast<BrowserOperation*>(operationNode),currentData->params.last()));
+    localNodeHolder.push_back(param);
+    if(!current.isValid())
+        return;
+    QModelIndex newItem = treeModel->index(newItemPosition-1,0,current);
+    TreeItemInterface *newItemInterface = static_cast<TreeItemInterface*>(newItem.internalPointer());
+    TreeItem<BrowserNode>* newItemAsNode = static_cast<TreeItem<BrowserNode>*>(newItemInterface);
+    newItemAsNode->SetController(operationAttributeController);
+    newItemAsNode->SetParent(sharedOfOperation);
+    newItemAsNode->SetInternalData(param.data());
+    operationNode->modified();
+}
+
+void QuickEdit::AddOperation()
+{
+    QModelIndex current = ui->tvEditor->selectionModel()->currentIndex();
+    if(!current.isValid())
+        return;
+
+    current = current.sibling(current.row(), 0);
+    TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
+    BrowserNode* currentNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
+
+    BrowserClass* classNode;
+
+    int newItemPosition = 0;
+    if(currentNode->TypeID()  == TypeIdentifier<BrowserClass>::id()) //, TypeIdentifier<BrowserOperation>())
+    {
+        classNode = static_cast<BrowserClass*>(currentNode);
+        newItemPosition = itemAsInterface->childCount();
+    }
+    else if(currentNode->TypeID()  == TypeIdentifier<BrowserOperation>::id() && current.parent().isValid())
+    {
+        itemAsInterface = static_cast<TreeItemInterface*>(current.parent().internalPointer());
+        classNode = static_cast<BrowserClass*>(itemAsInterface->InternalPointer());
+        newItemPosition = current.row()+1;
+        current = current.parent();
+    }
+    else
+        return;
+
+    if(!classNode)
+        return;
+    BrowserOperation* newOperation = static_cast<BrowserOperation*>(classNode->addOperation());
+    QModelIndex parentIndex;
+    TreeItemInterface* parent;
+    if(treeModel->parent(current).isValid())
+    {
+        parentIndex = treeModel->parent(current);
+        parentIndex = parentIndex.sibling(parentIndex.row(), 0);
+        parent =  static_cast<TreeItemInterface*>(parentIndex.internalPointer());
+    }
+    else
+        parent = treeModel->RootItem();
+    int insertIndex = parent->GetIndexOfChild(itemAsInterface);
+    QSharedPointer<TreeItemInterface> sharedOfOperation =  parent->GetChildren()[insertIndex];
+
+    if(!treeModel->insertRows(newItemPosition-1, 1, current))
+        return;
+
+    if(!current.isValid())
+        return;
+
+    QModelIndex newItem = treeModel->index(newItemPosition-1,0,current);
+    TreeItemInterface *newItemInterface = static_cast<TreeItemInterface*>(newItem.internalPointer());
+    TreeItem<BrowserNode>* newItemAsNode = static_cast<TreeItem<BrowserNode>*>(newItemInterface);
+    newItemAsNode->SetController(operationController);
+    newItemAsNode->SetParent(sharedOfOperation);
+    newItemAsNode->SetInternalData(newOperation);
+    //classNode->modified();
 }
 
 BrowserNode *QuickEdit::GetCurrentNode()
@@ -308,7 +398,7 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
                   UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember, UmlClassView, UmlPackage};
     //validTypes = {UmlClass, UmlOperation, UmlAttribute};
-    columns << "name" <<  "type" <<  "default_value" <<  "stereotype"
+    columns << "name" <<  "type" <<  "default_value" <<  "stereotype" << "deleted"
                                         << "visibility" << "static" <<  "abstract" <<  "multiplicity" <<  "direction"
                                         << "pass"
                                         << "const" << "volatile" <<  "friend" <<  "virtual" <<  "inline"
@@ -326,6 +416,8 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     connect(ui->leSearch, SIGNAL(textChanged(QString)), this, SLOT(OnPerformFiltering(QString)));
     connect(ui->pbUpOneLevel, SIGNAL(clicked()), this, SLOT(OnDecreaseOpenLevels()));
     connect(ui->pbDownOneLevel, SIGNAL(clicked()), this, SLOT(OnIncreaseOpenLevels()));
+    connect(ui->pbAddAttribute, SIGNAL(clicked()), this, SLOT(OnAddParameter()));
+    connect(ui->pbAddOperation, SIGNAL(clicked()), this, SLOT(OnAddOperation()));
     connect(ui->chkCpp, SIGNAL(clicked()), this, SLOT(OnChangeColumnVisibility()));
     connect(ui->tvEditor->header(), SIGNAL(sectionResized(int,int,int)),
             this, SLOT(OnNewSectionSizes(int,int,int)));
@@ -488,8 +580,9 @@ void QuickEdit::AssignItemsForOperation(QSharedPointer<TreeItemInterface> root, 
 
     for(int i(0); i< paramCount; ++i)
     {
-        ParamData* data = &((OperationData*)operationNode->get_data())->params[i];
-        QSharedPointer<BrowserNode> param(new BrowserOperationAttribute(dummyView,operationNode,data));
+        //ParamData* data = ((OperationData*)operationNode->get_data())->params[i].get();
+        QSharedPointer<BrowserNode> param(new BrowserOperationAttribute(dummyView,operationNode,
+                                                                        ((OperationData*)operationNode->get_data())->params[i]));
         operationNodes << param;
         items << CreateInterfaceNode(interfaceItem, operationAttributeController, param.data());
     }
@@ -527,8 +620,8 @@ void QuickEdit::CheckBoxDelegateSetup()
     checkboxDelegate->widgetCreator = [](QWidget * ) {return static_cast<QWidget*>(0);};
     checkboxDelegate->paintProcessor = paintCheckbox;
     checkboxDelegate->editorEventProcessor = editorEvent;
-    ui->tvEditor->setItemDelegateForColumn(staticIndex, checkboxDelegate);
-    ui->tvEditor->setItemDelegateForColumn(abstractIndex, checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("static"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("abstract"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("const"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("volatile"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("friend"), checkboxDelegate);
@@ -538,6 +631,7 @@ void QuickEdit::CheckBoxDelegateSetup()
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("delete"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("override"), checkboxDelegate);
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("final"), checkboxDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("deleted"), checkboxDelegate);
 }
 
 
@@ -566,7 +660,7 @@ void QuickEdit::VisibilityDelegateSetup()
         QString value = box->currentText();
         model->setData(index, value, Qt::EditRole);
     };
-    ui->tvEditor->setItemDelegateForColumn(visibilityIndex, visibilityDelegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("visibility"), visibilityDelegate);
 }
 
 
@@ -606,7 +700,7 @@ void QuickEdit::TypeDelegateSetup()
         QString value = box->currentText();
         model->setData(index, value, Qt::EditRole);
     };
-    ui->tvEditor->setItemDelegateForColumn(typeIndex, delegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("type"), delegate);
 }
 
 
@@ -635,5 +729,5 @@ void QuickEdit::DirectionDelegateSetup()
         QString value = box->currentText();
         model->setData(index, value, Qt::EditRole);
     };
-    ui->tvEditor->setItemDelegateForColumn(directionIndex, delegate);
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("direction"), delegate);
 }

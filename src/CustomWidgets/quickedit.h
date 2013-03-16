@@ -111,6 +111,7 @@ private:
     void CheckColumnVisibility();
 
     void AddParameter();
+    void AddOperation();
 
     BrowserNode* GetCurrentNode();
 
@@ -129,6 +130,7 @@ private:
     void OnContextMenu(QPoint);
     void OnShow();
     void OnAddParameter();
+    void OnAddOperation();
     void OnPerformFiltering(QString);
     void OnDecreaseOpenLevels();
     void OnIncreaseOpenLevels();

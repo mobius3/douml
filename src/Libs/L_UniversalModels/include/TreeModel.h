@@ -60,6 +60,8 @@ class L_TREE_CONTROLLER_EXPORT TreeModel  : public QAbstractItemModel
 
     TreeItemInterface * RootItem();
 
+    void UpdateData(QModelIndex);
+
     void InsertRootItem(QSharedPointer<TreeItemInterface>);
 
     TreeItemInterface * getItem(const QModelIndex & index) const;

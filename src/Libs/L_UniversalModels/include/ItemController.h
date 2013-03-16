@@ -47,17 +47,17 @@ class ItemController
 
     bool SetValue(T * item, const QModelIndex & index, const QVariant & value, int role);
 
-    void AddGetter(const QPair<int,int> & index, std::function<QVariant(const T*)> function);
+    void AddGetter(const QPair<int,int> & index, std::function<QVariant(const T*, QModelIndex)> function);
 
-    void AddGetter(int row, const QVector<int> & roles, std::function<QVariant(const T*)> function);
+    void AddGetter(int row, const QVector<int> & roles, std::function<QVariant(const T*, QModelIndex)> function);
 
-    void AddSetter(const QPair<int,int> & index, std::function<bool(T*, QVariant)> function);
+    void AddSetter(const QPair<int,int> & index, std::function<bool(T*, QVariant, QModelIndex)> function);
 
-    void AddSetter(int row, const QVector<int> & roles, std::function<bool(T*, QVariant)> function);
+    void AddSetter(int row, const QVector<int> & roles, std::function<bool(T*, QVariant, QModelIndex)> function);
 
-    void AddPostProcessor(int column, int role, std::function<void(T*, const QModelIndex&)> _postProcessor);
+    void AddPostProcessor(int column, int role, std::function<void(T*, const QModelIndex&)> & _postProcessor);
 
-    void AddPostProcessors(int column, QVector<int> roles, std::function<void(T*, const QModelIndex&)> _postProcessor);
+    void AddPostProcessors(int column, const QVector<int> & roles, std::function<void(T*,const QModelIndex&)> & _postProcessor);
 
     Qt::ItemFlags flags(const QModelIndex & index) const;
 
@@ -72,8 +72,8 @@ class ItemController
 
   private:
      QStringList columns;
-     QHash<QPair<int, int>, std::function<QVariant(const T*)> > getters;
-     QHash<QPair<int,int>, std::function<bool(T*, QVariant)> > setters;
+     QHash<QPair<int, int>, std::function<QVariant(const T*, QModelIndex)> > getters;
+     QHash<QPair<int,int>, std::function<bool(T*, QVariant, QModelIndex)> > setters;
      QVector<std::function<Qt::ItemFlags(const QModelIndex&)> > flagsFunctors;
      QHash<QPair<int, int> , std::function<void(T*, const QModelIndex&)> > postProcessors;
 };
@@ -96,7 +96,7 @@ QVariant ItemController<T>::GetValue(const T * item, const QModelIndex & index, 
     //return QVariant();
     if(!getters.contains(QPair<int,int>(index.column(), role)))
         return QVariant();
-    QVariant ret = getters[QPair<int,int>(index.column(), role)](item);
+    QVariant ret = getters[QPair<int,int>(index.column(), role)](item, index);
     return ret;
     // Bouml preserved body end 00203B2A
 }
@@ -107,7 +107,7 @@ bool ItemController<T>::SetValue(T * item, const QModelIndex & index, const QVar
     // Bouml preserved body begin 00203BAA
     if(!setters.contains(QPair<int,int>(index.column(), role)))
         return false;
-    bool result = setters[QPair<int,int>(index.column(), role)](item, value);
+    bool result = setters[QPair<int,int>(index.column(), role)](item, value, index);
     if(postProcessors.contains(QPair<int,int>(index.column(), role)) && postProcessors[QPair<int,int>(index.column(), role)] != 0)
         postProcessors[QPair<int,int>(index.column(), role)](item, index);
     return result;
@@ -115,7 +115,7 @@ bool ItemController<T>::SetValue(T * item, const QModelIndex & index, const QVar
 }
 
 template<class T>
-void ItemController<T>::AddGetter(const QPair<int,int> & index, std::function<QVariant(const T*)> function) 
+void ItemController<T>::AddGetter(const QPair<int,int> & index, std::function<QVariant(const T*, QModelIndex)> function) 
 {
     // Bouml preserved body begin 002117AA
     getters.insert(index, function);
@@ -123,7 +123,7 @@ void ItemController<T>::AddGetter(const QPair<int,int> & index, std::function<QV
 }
 
 template<class T>
-void ItemController<T>::AddGetter(int row, const QVector<int> & roles, std::function<QVariant(const T*)> function) 
+void ItemController<T>::AddGetter(int row, const QVector<int> & roles, std::function<QVariant(const T*, QModelIndex)> function) 
 {
     // Bouml preserved body begin 00230DAA
     for(int role : roles)
@@ -134,7 +134,7 @@ void ItemController<T>::AddGetter(int row, const QVector<int> & roles, std::func
 }
 
 template<class T>
-void ItemController<T>::AddSetter(const QPair<int,int> & index, std::function<bool(T*, QVariant)> function) 
+void ItemController<T>::AddSetter(const QPair<int,int> & index, std::function<bool(T*, QVariant, QModelIndex)> function) 
 {
     // Bouml preserved body begin 0021182A
     setters.insert(index, function);
@@ -142,7 +142,7 @@ void ItemController<T>::AddSetter(const QPair<int,int> & index, std::function<bo
 }
 
 template<class T>
-void ItemController<T>::AddSetter(int row, const QVector<int> & roles, std::function<bool(T*, QVariant)> function) 
+void ItemController<T>::AddSetter(int row, const QVector<int> & roles, std::function<bool(T*, QVariant, QModelIndex)> function) 
 {
     // Bouml preserved body begin 00230D2A
     for(int role : roles)
@@ -153,7 +153,7 @@ void ItemController<T>::AddSetter(int row, const QVector<int> & roles, std::func
 }
 
 template<class T>
-void ItemController<T>::AddPostProcessor(int column, int role, std::function<void(T*, const QModelIndex&)> _postProcessor) 
+void ItemController<T>::AddPostProcessor(int column, int role, std::function<void(T*, const QModelIndex&)> & _postProcessor) 
 {
     // Bouml preserved body begin 002327AA
     postProcessors.insert(QPair<int,int>(column,role), _postProcessor);
@@ -161,7 +161,7 @@ void ItemController<T>::AddPostProcessor(int column, int role, std::function<voi
 }
 
 template<class T>
-void ItemController<T>::AddPostProcessors(int column, QVector<int> roles, std::function<void(T*, const QModelIndex&)> _postProcessor) 
+void ItemController<T>::AddPostProcessors(int column, const QVector<int> & roles, std::function<void(T*,const QModelIndex&)> & _postProcessor) 
 {
     // Bouml preserved body begin 0023272A
     for(int role : roles)

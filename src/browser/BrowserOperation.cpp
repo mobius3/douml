@@ -882,6 +882,11 @@ UmlCode BrowserOperation::get_type() const
     return UmlOperation;
 }
 
+uint BrowserOperation::TypeID()
+{
+    return TypeIdentifier<BrowserOperation>::id();
+}
+
 QString BrowserOperation::get_stype() const
 {
     return TR("operation");

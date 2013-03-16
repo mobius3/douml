@@ -65,7 +65,7 @@ typedef TreeItem<T> value_type;
 
     void* InternalPointer();
 
-    void* InternalPointer() const;
+    virtual void* InternalPointer() const;
 
     virtual TreeItemInterface* child(int row);
 
@@ -80,6 +80,8 @@ typedef TreeItem<T> value_type;
     virtual Qt::ItemFlags flags(const QModelIndex & index) const;
 
     virtual void AddChildren(QList<QSharedPointer<TreeItemInterface> > children, int insertAfter = 0);
+
+    virtual QSharedPointer<TreeItemInterface> GetParent();
 
 
   private:
@@ -221,6 +223,7 @@ bool TreeItem<T>::insertChildren(int position, int count)
     for (int row = 0; row < count; ++row)
     {
         QSharedPointer<TreeItemInterface> item (new TreeItem<T>(0));
+        item->SetParent(this->parent()->GetChildren()[this->parent()->GetIndexOfChild(this)]);
         m_children.insert(position, item);
     }
 
@@ -299,16 +302,19 @@ void* TreeItem<T>::InternalPointer()
 template<class T>
 void* TreeItem<T>::InternalPointer() const 
 {
-    // Bouml preserved body begin 0023282A
-    return m_data;
-    // Bouml preserved body end 0023282A
+    // Bouml preserved body begin 00235B2A
+     return m_data;
+    // Bouml preserved body end 00235B2A
 }
 
 template<class T>
 TreeItemInterface* TreeItem<T>::child(int row) 
 {
     // Bouml preserved body begin 0020CD2A
-    return m_children.at(row).data();
+    TreeItemInterface* returnChildren = nullptr;
+    if(m_children.size() > row)
+        returnChildren = m_children[row].data();
+    return returnChildren;
     // Bouml preserved body end 0020CD2A
 }
 
@@ -355,7 +361,9 @@ template<class T>
 Qt::ItemFlags TreeItem<T>::flags(const QModelIndex & index) const 
 {
     // Bouml preserved body begin 0021B2AA
-    return controller->flags(index);
+    if(index.isValid())
+        return controller->flags(index);
+    return Qt::ItemFlags();
     // Bouml preserved body end 0021B2AA
 }
 
@@ -372,6 +380,14 @@ void TreeItem<T>::AddChildren(QList<QSharedPointer<TreeItemInterface> > children
         i++;
     }
     // Bouml preserved body end 002201AA
+}
+
+template<class T>
+QSharedPointer<TreeItemInterface> TreeItem<T>::GetParent() 
+{
+    // Bouml preserved body begin 002341AA
+    return m_parent.toStrongRef();
+    // Bouml preserved body end 002341AA
 }
 
 

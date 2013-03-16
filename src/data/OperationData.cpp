@@ -268,6 +268,18 @@ void OperationData::set_deletedp(bool y)
         create_modified_body_file();
 }
 
+void OperationData::remove_param(std::shared_ptr<ParamData> param)
+{
+    nparams = nparams - 1;
+    params.removeAll(param);
+}
+
+void OperationData::insert_param(int position, std::shared_ptr<ParamData> param)
+{
+    nparams = nparams + 1;
+    params.insert(position, param);
+}
+
 void OperationData::clear(bool old)
 {
     all.clear(old);
@@ -845,6 +857,9 @@ void OperationData::set_n_params(unsigned n)
         for(int i(0); i < add_count; ++i)
             params << std::shared_ptr<ParamData>(new ParamData());
     }
+    else if (add_count < 0)
+        for(int i(0); i < qAbs(add_count); ++i)
+            params.pop_back();
     nparams = params.count();
 }
 
@@ -2272,11 +2287,9 @@ void OperationData::send_uml_def(ToolCom * com, BrowserNode * bn,
         com->write_bool(force_body_gen);
 
     unsigned n;
-    ParamData * p;
 
     com->write_unsigned(nparams);
     n = nparams;
-    //for (p = params, n = nparams; n; p += 1, n -= 1)
     for(auto& param : params)
     {
         param->send_uml_def(com);
