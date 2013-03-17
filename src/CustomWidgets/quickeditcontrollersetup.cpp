@@ -174,6 +174,8 @@ void QuickEdit::SetupDelegates()
     VisibilityDelegateSetup();
     TypeDelegateSetup();
     DirectionDelegateSetup();
+    PrefixDelegateSetup();
+    PostfixDelegateSetup();
 }
 
 // some really insane code from stackoverflow that allows to shorten lengthy ifs

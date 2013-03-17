@@ -12,5 +12,6 @@
         <file>icons/right.png</file>
         <file>icons/up.png</file>
         <file>icons/bullet_add.png</file>
+        <file>icons/arrow_refresh.png</file>
     </qresource>
 </RCC>

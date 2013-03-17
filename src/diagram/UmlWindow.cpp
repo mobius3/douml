@@ -2387,7 +2387,10 @@ void UmlWindow::OnPickSelectionFromItem(const QModelIndex & current, const QMode
 
 void UmlWindow::OnShowQuickEdit()
 {
-    quickEdit->OnShow();
+    if(quickEdit->isVisible())
+        quickEdit->close();
+    else
+        quickEdit->OnShow();
 }
 
 void UmlWindow::whats_this() const

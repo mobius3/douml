@@ -77,9 +77,11 @@ public:
     BrowserClass(const BrowserClass * model, BrowserNode * p);
     virtual ~BrowserClass();
 
-    BrowserNode * add_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE);
+    BrowserNode * add_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE, bool sameName = false);
+    BrowserNode * duplicate_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE);
     BrowserNode * add_relation(BrowserRelation * rel);
-    BrowserNode * add_operation(BrowserOperation * oper = 0);
+    BrowserNode * add_operation(BrowserOperation * oper = 0, bool sameName = false);
+    BrowserNode * duplicate_operation(BrowserOperation * oper = 0);
     BrowserNode * addOperation(BrowserOperation * oper = nullptr);
     BrowserNode * add_inherited_operation(BrowserOperation * model);
     BrowserNode * add_extra_member(BrowserExtraMember * em = 0);

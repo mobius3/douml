@@ -82,6 +82,7 @@ QuickEdit::QuickEdit(QWidget *parent) :
     ui(new Ui::QuickEdit)
 {
     ui->setupUi(this);
+    this->setWindowTitle(QObject::tr("Quick Edit"));
     if(!dummyView)
         dummyView = new BrowserView();
 }
@@ -126,10 +127,10 @@ void QuickEdit::OnContextMenu(QPoint point)
 
 void QuickEdit::OnShow()
 {
-    BrowserNode* current = static_cast<BrowserNode*>(originalView->currentItem());
-    if(!current)
+    currentNode = static_cast<BrowserNode*>(originalView->currentItem());
+    if(!currentNode)
         return;
-    Show(current);
+    Show(currentNode);
 }
 
 void QuickEdit::OnAddParameter()
@@ -179,6 +180,11 @@ void QuickEdit::OnMoveMarkedAfter()
 void QuickEdit::OnMoveMarkedBefore()
 {
     MoveMarked(true);
+}
+
+void QuickEdit::OnRefreshTable()
+{
+    RefreshTable();
 }
 
 void QuickEdit::CreateMenu()
@@ -361,6 +367,12 @@ void QuickEdit::AddOperation()
     //classNode->modified();
 }
 
+void QuickEdit::RefreshTable()
+{
+    if(currentNode)
+        Show(currentNode);
+}
+
 BrowserNode *QuickEdit::GetCurrentNode()
 {
     QModelIndex current = ui->tvEditor->currentIndex();
@@ -450,6 +462,7 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     connect(ui->pbDownOneLevel, SIGNAL(clicked()), this, SLOT(OnIncreaseOpenLevels()));
     connect(ui->pbAddAttribute, SIGNAL(clicked()), this, SLOT(OnAddParameter()));
     connect(ui->pbAddOperation, SIGNAL(clicked()), this, SLOT(OnAddOperation()));
+    connect(ui->pbRefreshView, SIGNAL(clicked()), this, SLOT(OnRefreshTable()));
     connect(ui->chkCpp, SIGNAL(clicked()), this, SLOT(OnChangeColumnVisibility()));
     connect(ui->tvEditor->header(), SIGNAL(sectionResized(int,int,int)),
             this, SLOT(OnNewSectionSizes(int,int,int)));
@@ -490,9 +503,17 @@ void QuickEdit::Show(BrowserNode * node)
     ui->chkPhp->setChecked(settings.value("quickedit_checkboxes/php",true).toBool());
     ui->chkPython->setChecked(settings.value("quickedit_checkboxes/python", true).toBool());
     ui->chkIdl->setChecked(settings.value("quickedit_checkboxes/idl", true).toBool());
+    QSize size = settings.value("window/size", QSize()).toSize();
 
     CheckColumnVisibility();
-    this->showMaximized();
+    if(!size.isValid())
+        this->showMaximized();
+    else
+    {
+        this->resize(size);
+        this->show();
+    }
+
 
 }
 
@@ -510,6 +531,10 @@ void QuickEdit::closeEvent(QCloseEvent *)
     settings.setValue("quickedit_checkboxes/php",ui->chkPhp->isChecked());
     settings.setValue("quickedit_checkboxes/python", ui->chkPython->isChecked());
     settings.setValue("quickedit_checkboxes/idl", ui->chkIdl->isChecked());
+    if(!this->isMaximized())
+        settings.setValue("window/size", this->size());
+    else
+        settings.setValue("window/size",QSize());
     ui->leSearch->setText("");
     localNodeHolder.clear();
 }
@@ -831,6 +856,75 @@ void QuickEdit::TypeDelegateSetup()
         model->setData(index, value, Qt::EditRole);
     };
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("type"), delegate);
+}
+
+
+void QuickEdit::PrefixDelegateSetup()
+{
+    GenericDelegate* delegate = new GenericDelegate(ui->tvEditor, false);
+    delegate->widgetCreator = [&](QWidget * parent)
+    {
+        QStringList list;
+        list << " " << "const " << "volatile ";
+        QCompleter *completer = new QCompleter(list, parent);
+        completer->setCaseSensitivity(Qt::CaseSensitive);
+
+
+        QComboBox* box = new QComboBox(parent);
+        QStringListModel* model = new QStringListModel;
+        model->setStringList(list);
+        box->setModel(model);
+        box->setEditable(true);
+        box->setCompleter(completer);
+        return box;
+    };
+    delegate->dataAccessor = [](QWidget * editor, const QModelIndex & index)
+    {
+        QString value = index.model()->data(index, Qt::EditRole).toString();
+        QComboBox *box = static_cast<QComboBox*>(editor);
+        box->setCurrentText(value);
+    };
+    delegate->dataSetter = [](QWidget * editor,QAbstractItemModel* model, const QModelIndex &index)
+    {
+        QComboBox * box = static_cast<QComboBox*>(editor);
+        QString value = box->currentText();
+        model->setData(index, value, Qt::EditRole);
+    };
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("prefix"), delegate);
+}
+
+void QuickEdit::PostfixDelegateSetup()
+{
+    GenericDelegate* delegate = new GenericDelegate(ui->tvEditor, false);
+    delegate->widgetCreator = [&](QWidget * parent)
+    {
+        QStringList list;
+        list << " " << "*" << "&";
+        QCompleter *completer = new QCompleter(list, parent);
+        completer->setCaseSensitivity(Qt::CaseSensitive);
+
+
+        QComboBox* box = new QComboBox(parent);
+        QStringListModel* model = new QStringListModel;
+        model->setStringList(list);
+        box->setModel(model);
+        box->setEditable(true);
+        box->setCompleter(completer);
+        return box;
+    };
+    delegate->dataAccessor = [](QWidget * editor, const QModelIndex & index)
+    {
+        QString value = index.model()->data(index, Qt::EditRole).toString();
+        QComboBox *box = static_cast<QComboBox*>(editor);
+        box->setCurrentText(value);
+    };
+    delegate->dataSetter = [](QWidget * editor,QAbstractItemModel* model, const QModelIndex &index)
+    {
+        QComboBox * box = static_cast<QComboBox*>(editor);
+        QString value = box->currentText();
+        model->setData(index, value, Qt::EditRole);
+    };
+    ui->tvEditor->setItemDelegateForColumn(columns.indexOf("postfix"), delegate);
 }
 
 

@@ -369,7 +369,7 @@ void BrowserAttribute::exec_menu_choice(int rank)
         break;
 
     case 6:
-        ((BrowserClass *) parent())->add_attribute(this);
+        ((BrowserClass *) parent())->duplicate_attribute(this);
         return;
 
     case 7:

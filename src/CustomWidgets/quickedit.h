@@ -75,6 +75,7 @@ private:
 
     QStringList columns;
     //QModelIndex current;
+    BrowserNode* currentNode = nullptr;
 
     void SetupTreeModel(TreeModel*& , QTreeView*,
                         QSharedPointer<TreeItemInterface>&,
@@ -98,11 +99,15 @@ private:
     void TypeDelegateSetup();
     void DirectionDelegateSetup();
     void CheckBoxDelegateSetup();
+    void PrefixDelegateSetup();
+    void PostfixDelegateSetup();
     void SetupItemCreationFuncs();
     void CheckColumnVisibility();
 
     void AddParameter();
     void AddOperation();
+
+    void RefreshTable();
 
 
 
@@ -132,7 +137,7 @@ private:
     void OnChangeColumnVisibility();
     void OnMoveMarkedAfter();
     void OnMoveMarkedBefore();
-
+    void OnRefreshTable();
 };
 
 #endif // QUICKEDIT_H

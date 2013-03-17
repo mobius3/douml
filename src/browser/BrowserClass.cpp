@@ -1065,7 +1065,7 @@ void BrowserClass::exec_menu_choice(int rank,
         return;
 
     case duplicate_index: {
-        QString name;
+        QString name = get_name();
 
         if (((BrowserNode *) parent())->enter_child_name(name, TR("enter class's name : "),
                                                          UmlClass, FALSE, FALSE))
@@ -1319,10 +1319,11 @@ void BrowserClass::set_name(const char * s)
 }
 
 BrowserNode * BrowserClass::add_attribute(BrowserAttribute * attr,
-                                          bool enum_item)
+                                          bool enum_item, bool sameName)
 {
     QString name;
-
+    if(attr && sameName)
+        name = attr->get_name();
     if (enter_child_name(name, (enum_item) ? TR("enter item's name : ")
                          : TR("enter attribute's name : "),
                          UmlAttribute, FALSE, FALSE)) {
@@ -1346,6 +1347,11 @@ BrowserNode * BrowserClass::add_attribute(BrowserAttribute * attr,
     }
 
     return 0;
+}
+
+BrowserNode *BrowserClass::duplicate_attribute(BrowserAttribute *attr, bool enum_item)
+{
+    return add_attribute(attr, enum_item, true);
 }
 
 BrowserNode * BrowserClass::add_extra_member(BrowserExtraMember * em)
@@ -1373,9 +1379,11 @@ BrowserNode * BrowserClass::add_relation(BrowserRelation * rel)
     return rel;
 }
 
-BrowserNode * BrowserClass::add_operation(BrowserOperation * oper)
+BrowserNode * BrowserClass::add_operation(BrowserOperation * oper, bool sameName)
 {
     QString name;
+    if(oper && sameName)
+        name = oper->get_name();
 
     if (enter_child_name(name, TR("enter operation's name : "),
                          UmlOperation, FALSE, FALSE))
@@ -1393,6 +1401,11 @@ BrowserNode * BrowserClass::add_operation(BrowserOperation * oper)
     }
 
     return 0;
+}
+
+BrowserNode *BrowserClass::duplicate_operation(BrowserOperation *oper)
+{
+    return add_operation(oper, true);
 }
 
 BrowserNode *BrowserClass::addOperation(BrowserOperation *oper)

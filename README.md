@@ -115,7 +115,8 @@ Enchancements:
       * When a new row is being added it is initialized with enough defaults to make assigning UML name the only obligatory edit before clicking "OK".
       * Adding new rows is now done through "Add type" button and a few options were removed from "do" menu as they no longer make sense.
 
-   * A totally new control can be brought up by pressing Ctlr-E on tree nodes. See changelog.txt for details
+   * A totally new control can be brought up by pressing Ctlr-E on tree nodes. See changelog.txt for details. (section 1.0b4) 
+      
       Manual
 ------
 

@@ -1385,7 +1385,7 @@ bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode typ
 {
     for (;;) {
         BooL ok = FALSE;
-        r = MyInputDialog::getText("Uml", msg, QString(), ok);
+        r = MyInputDialog::getText("Uml", msg, r, ok);
 
         if (ok) {
             if (wrong_child_name(r, type, allow_spaces, allow_empty))
@@ -1420,8 +1420,8 @@ bool BrowserNode::enter_child_name(QString & r, const QString & msg, UmlCode typ
         BooL ok = FALSE;
 
         r = (list.count() == 1)
-            ? MyInputDialog::getText("Uml", msg, QString(), ok)
-            : MyInputDialog::getText("Uml", msg, list, QString(), existing, ok);
+                ? MyInputDialog::getText("Uml", msg, QString(), ok)
+            : MyInputDialog::getText("Uml", msg, list,  QString(), existing, ok);
 
         if (! ok)
             return FALSE;

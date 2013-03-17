@@ -14,8 +14,19 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="3">
+   <item row="0" column="0" colspan="4">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pbRefreshView">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../icons.qrc">
+         <normaloff>:/root/icons/arrow_refresh.png</normaloff>:/root/icons/arrow_refresh.png</iconset>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QPushButton" name="pbUpOneLevel">
        <property name="text">
@@ -126,6 +137,9 @@
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::MinimumExpanding</enum>
+       </property>
        <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
@@ -136,18 +150,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QPushButton" name="pbAddAttribute">
-     <property name="text">
-      <string>Attribute</string>
-     </property>
-     <property name="icon">
-      <iconset resource="../icons.qrc">
-       <normaloff>:/root/icons/bullet_add.png</normaloff>:/root/icons/bullet_add.png</iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2">
+   <item row="1" column="3">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -160,13 +163,24 @@
      </property>
     </spacer>
    </item>
-   <item row="2" column="0" colspan="3">
+   <item row="2" column="0" colspan="4">
     <widget class="QTreeView" name="tvEditor"/>
    </item>
    <item row="1" column="1">
     <widget class="QPushButton" name="pbAddOperation">
      <property name="text">
       <string>Operation</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../icons.qrc">
+       <normaloff>:/root/icons/bullet_add.png</normaloff>:/root/icons/bullet_add.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="pbAddAttribute">
+     <property name="text">
+      <string>Parameter</string>
      </property>
      <property name="icon">
       <iconset resource="../icons.qrc">

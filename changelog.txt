@@ -1,3 +1,22 @@
+v1.0b5
+    1. Duplicating class, operation and attribute produces its name in the name request edit.
+    2. Vastly expanded functionality of Quickedit window. 
+        0. Repeatedly pressing "ctrl-e" closes it if it is already open
+        1. It will remember the state it was in prior to close and restore itself accordingly.
+        2. Almost all features necessary for C++ editing are present. 
+            Postfix/prefix columns in quickedit table mean how parameter is actually passed in the function where:     const/volatile(prefix), *,&(postfix) 
+        3. You can add operation by clicking on +Operation button if you are currently on the operation or class node.
+        4. You can add operation parameters by clicking on +Parameter button if you are on an attribute or operation node.
+        5. You can delete all nodes by clicking on "Delete" column. Deleting is done in Bouml way where "deleted" node is marked as deleted but is not actually deleted until program is closed.
+            A thing to note - operation parameters are also deleted in this way, but they are only present in their "deleted" state until window is closed or trr is filtered.
+        6. You can move operation parameters within a single function (I will expand this later). To move parameters - click on their "mark" column, then right click on parameter you want to move them to and select either "Move after" or "Move before"
+        7. If you do not ant to see c++ columns in the table - untick "C++" checkbox on the top of the window.
+        !. There is a drawback to using this window atm - it knows nothing of propagation through hierarchy. Once You've edited an operation - make sure to make same edits in the others.
+        !!. Quickedit, at the moment, knows _nothing_ of the changes you make in the other dialogs, if you are using it in windowed mode - make sure to press refresh button on the top left after you've changed stuff! Although I'd recommend closing it immediately after you edited what you wanted and reopening with correct data later.
+        
+        Now the only major things missing from Quickedit are management of enums and adding attributes to classes. These will be added in the next version.
+
+
 v1.0b4
     Added a new class/operation/parameter control. It is brought up by pressing Ctlr-E on Package, Classview, Class, Operation or Attribute nodes in main tree
     This control is essentially an alternative way to insert quick fixes into class hierarchy. 
