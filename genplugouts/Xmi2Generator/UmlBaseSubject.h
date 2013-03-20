@@ -1,7 +1,7 @@
 #ifndef _UMLBASESUBJECT_H
 #define _UMLBASESUBJECT_H
 
-
+#include "../src/misc/mystr.h"
 
 #include <q3ptrvector.h>
 

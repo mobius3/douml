@@ -54,7 +54,7 @@ void UmlFragment::write(FileOut & out, UmlItem * diagram, Q3PtrList<UmlSequenceM
                 out << '"';
             }
 
-            out << " interactionOperator=\"" << oper << "\">\n";
+            out << " interactionOperator=\"" << oper.operator QString() << "\">\n";
             out.indent(+1);
         }
 

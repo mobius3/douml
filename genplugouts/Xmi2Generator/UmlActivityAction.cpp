@@ -9,7 +9,7 @@ void UmlActivityAction::write_begin(FileOut & out, WrapperStr k)
 {
     out.indent();
     out << ((parent()->kind() == anActivity) ? "<node" : "<containedNode")
-        << " xmi:type=\"uml:" << k << '"';
+        << " xmi:type=\"uml:" << k.operator QString() << '"';
     out.id(this);
 
     if (!name().isEmpty()) {

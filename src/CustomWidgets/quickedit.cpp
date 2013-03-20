@@ -7,6 +7,7 @@
 #include "Libs/L_UniversalModels/include/treeviewtemplatefunctions.h"
 #include "Libs/L_UniversalModels/include/TreeItem.h"
 #include "Libs/L_UniversalModels/include/genericeventfilter.h"
+#include "Libs/L_UniversalModels/include/ItemController.h"
 #include "browser/BrowserClass.h"
 #include "browser/BrowserOperationAttribute.h"
 #include "browser/BrowserNodeDummy.h"
@@ -24,6 +25,7 @@
 #include "data/OperationData.h"
 #include "data/RelationData.h"
 #include "GenericDelegate.h"
+#include <QStyledItemDelegate>
 
 #include <QCompleter>
 #include <QStringListModel>
@@ -33,7 +35,7 @@
 #include <iostream>
 #include <array>
 #include <functional>
-
+#include <QMenu>
 static QRect CheckBoxRect(const QStyleOptionViewItem &view_item_style_options) {
     QStyleOptionButton check_box_style_option;
     QRect check_box_rect = QApplication::style()->subElementRect(

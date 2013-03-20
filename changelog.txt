@@ -1,3 +1,6 @@
+v1.0b6
+    1. Import/Export XMI2.1 are working now. Pls test for any possible bugs before fully embracing them.
+
 v1.0b5
     1. Duplicating class, operation and attribute produces its name in the name request edit.
     2. Vastly expanded functionality of Quickedit window. 

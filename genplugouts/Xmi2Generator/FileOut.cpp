@@ -4,6 +4,7 @@
 
 #include <q3textstream.h>
 #include <qfile.h>
+#include <unordered_map>
 //Added by qt3to4:
 #include "misc/mystr.h"
 FileOut::FileOut(QFile * fp, bool lf, bool utf8) : Q3TextStream(fp), _lf(lf), _indent(0)
@@ -48,11 +49,11 @@ void FileOut::idref(WrapperStr s, UmlItem * x)
     {
         Q3TextStream keyst(&keys, QIODevice::WriteOnly);
 
-        keyst << ((void *) x) << "_" << s;
+        keyst << ((void *) x) << "_" << s.operator QString();
     }
 
-    QMap<WrapperStr, int>::ConstIterator it =
-        _modifiedtypes.find((const char *) keys);
+    QMap<QString, int>::ConstIterator it =
+            _modifiedtypes.find((const char *) keys);
 
     if (it == _modifiedtypes.end())
         it = _modifiedtypes.insert((const char *) keys, _modifiedtypes.count());
@@ -81,7 +82,7 @@ void FileOut::idref_datatype(const WrapperStr & t)
     if (t.isEmpty())
         return;
 
-    QMap<WrapperStr, int>::ConstIterator it = _datatypes.find(t);
+    QMap<QString, int>::ConstIterator it = _datatypes.find(t);
 
     if (it == _datatypes.end())
         it = _datatypes.insert(t, _datatypes.count());
@@ -112,25 +113,25 @@ void FileOut::ref_only(UmlItem * x, const char * pfix)
 void FileOut::define_datatypes(bool uml_20, bool primitive_type, bool gen_extension)
 {
     const char * pfix = (primitive_type)
-                        ? ((uml_20) ? "<ownedMember xmi:type=\"uml:PrimitiveType\""
-                           : "<packagedElement xmi:type=\"uml:PrimitiveType\"")
-                            : ((uml_20) ? "<ownedMember xmi:type=\"uml:DataType\""
-                               : "<packagedElement xmi:type=\"uml:DataType\"");
+            ? ((uml_20) ? "<ownedMember xmi:type=\"uml:PrimitiveType\""
+                        : "<packagedElement xmi:type=\"uml:PrimitiveType\"")
+            : ((uml_20) ? "<ownedMember xmi:type=\"uml:DataType\""
+                        : "<packagedElement xmi:type=\"uml:DataType\"");
 
-    QMap<WrapperStr, int>::ConstIterator it;
+    QMap<QString, int>::ConstIterator it;
 
     for (it = _datatypes.begin();
          it != _datatypes.end();
          ++it) {
         indent();
         (*this) << pfix << " xmi:id=\"BOUML_datatype_"
-                << it.data() << "\" name=\"";
+                        << it.data() << "\" name=\"";
         quote((const char *)it.key()); //[jasa] ambiguous call
         (*this) << "\"/>\n";
     }
 
     const char * postfix =
-        (uml_20) ? "</ownedMember>\n" : "</packagedElement>\n";
+            (uml_20) ? "</ownedMember>\n" : "</packagedElement>\n";
 
     for (it = _modifiedtypes.begin();
          it != _modifiedtypes.end();
@@ -140,7 +141,7 @@ void FileOut::define_datatypes(bool uml_20, bool primitive_type, bool gen_extens
 
         indent();
         (*this) << pfix << " xmi:id=\"BOUML_basedontype_"
-                << it.data() << "\" name = \"";
+                        << it.data() << "\" name = \"";
         quote((const char *)k.mid(index + 1));
         (*this) << '"';
 
@@ -149,7 +150,7 @@ void FileOut::define_datatypes(bool uml_20, bool primitive_type, bool gen_extens
             indent();
             (*this) << "\t<xmi:Extension extender=\"Bouml\">\n";
             indent();
-            (*this) << "\t\t<basedOn \"BOUML_" << k.left(index) << "\"/>\n";
+            (*this) << "\t\t<basedOn \"BOUML_" << k.left(index).operator QString() << "\"/>\n";
             indent();
             (*this) << "\t</xmi:Extension>\n";
             indent();
@@ -160,90 +161,25 @@ void FileOut::define_datatypes(bool uml_20, bool primitive_type, bool gen_extens
     }
 }
 
-void FileOut::quote(const WrapperStr & s)
+void FileOut::quote(const QString &s)
 {
-    //[jasa] added to handle ambiguous calls with WrapperStr.
-    quote((const char *)s);
-}
+    int i = 0;
+    static std::unordered_map <std::string, std::function<void()>> converter = {
+    {"<", [&](){ (*this) <<  "&lt;";}},
+    {">", [&](){ (*this) <<  "&gt;";}},
+    {"\"", [&](){ (*this) <<  "&quot;";}},
+    {"&", [&](){ (*this) <<  "&amp;";}},
+    {"\n", [&](){if (_lf) (*this) << s.mid(i, 1); else (*this) << "&#10;";}},
+    {"\r", [&](){if (_lf) (*this) << s.mid(i, 1); else (*this) << "&#13;";}},
+};
 
-void FileOut::quote(const char * s)
-{
-    for (;;) {
-        switch (*s) {
-        case 0:
-            return;
-
-        case '<':
-            (*this) << "&lt;";
-            break;
-
-        case '>':
-            (*this) << "&gt;";
-            break;
-
-        case '"':
-            (*this) << "&quot;";
-            break;
-
-        case '&':
-            (*this) << "&amp;";
-            break;
-
-        case '\n':
-            if (_lf)(*this) << *s;
-            else (*this) << "&#10;";
-
-            break;
-
-        case '\r':
-            if (_lf)(*this) << *s;
-            else (*this) << "&#13;";
-
-            break;
-
-        default:
-            (*this) << *s;
-            break;
-        }
-
-        s += 1;
-    }
-}
-
-void FileOut::quote(char c)
-{
-    switch (c) {
-    case '<':
-        (*this) << "&lt;";
-        break;
-
-    case '>':
-        (*this) << "&gt;";
-        break;
-
-    case '"':
-        (*this) << "&quot;";
-        break;
-
-    case '&':
-        (*this) << "&amp;";
-        break;
-
-    case '\n':
-        if (_lf)(*this) << c;
-        else (*this) << "&#10;";
-
-        break;
-
-    case '\r':
-        if (_lf)(*this) << c;
-        else (*this) << "&#13;";
-
-        break;
-
-    default:
-        (*this) << c;
-        break;
+    while(i < s.length())
+    {
+        if(converter.count(s.mid(i, 1).toStdString()) > 0)
+            converter[s.mid(i, 1).toStdString()]();
+        else
+            (*this) << s.mid(i, 1);
+        i++;
     }
 }
 

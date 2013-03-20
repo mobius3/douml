@@ -2,6 +2,7 @@ TEMPLATE    = app
 TARGET        = ixmi2
 CONFIG        += debug warn_on qt
 DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
+PRECOMPILED_HEADER += ../../src/misc/mystr.h
 HEADERS        = ./UmlActivityPartition.h \
           ./UmlBaseNode.h \
           ./UmlPackage.h \
@@ -414,7 +415,8 @@ SOURCES        = ./UmlActivityPartition.cpp \
           ./UmlUseCaseView.cpp \
           ./UmlBaseActivityActionClasses.cpp \
           ./UmlBaseClassItem.cpp \
-          ./UmlClass.cpp
+          ./UmlClass.cpp \
+        ../../src/misc/mystr.cpp
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 

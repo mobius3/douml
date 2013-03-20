@@ -756,7 +756,7 @@ UmlItem * UmlBaseItem::read_()
     return result;
 }
 
-UmlBaseItem::UmlBaseItem(void * id, const UmlItem & n)
+UmlBaseItem::UmlBaseItem(void * id, const WrapperStr & n)
     : _defined(FALSE), _identifier(id), _name(n), _parent(0), _children(0)
 {
     _all.insert(id, (UmlItem *) this);

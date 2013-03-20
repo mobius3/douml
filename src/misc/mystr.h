@@ -125,6 +125,12 @@ public:
         return this->wrappedString;
     }
 
+    void sprintf(QString proto, unsigned val)
+    {
+        proto.replace("%u", QString::number(val));
+        this->wrappedString = proto;
+    }
+
     friend bool operator==(const WrapperStr & s1, const char * s2);
     friend bool operator==(const char * s1, const WrapperStr & s2);
     friend bool operator==(const WrapperStr & s1, const QString & s2);

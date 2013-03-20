@@ -27,8 +27,8 @@ void UmlFlow::solveThem()
     for (iter = All.begin(); iter != All.end(); ++iter) {
         Flow & flow = *iter;
 
-        QMap<WrapperStr, UmlItem *>::Iterator isrc = UmlItem::All.find(flow.source);
-        QMap<WrapperStr, UmlItem *>::Iterator itgt = UmlItem::All.find(flow.target);
+        QMap<QString, UmlItem *>::Iterator isrc = UmlItem::All.find(flow.source);
+        QMap<QString, UmlItem *>::Iterator itgt = UmlItem::All.find(flow.target);
 
         if ((isrc == UmlItem::All.end()) &&
             ((isrc = Outgoings.find(flow.id)) == Outgoings.end())) {

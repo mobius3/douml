@@ -2,7 +2,7 @@
 #define _UMLBASETYPESPEC_H
 
 
-
+#include "../src/misc/mystr.h"
 
 class UmlClass;
 

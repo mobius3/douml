@@ -55,7 +55,7 @@ public:
     }
 
     static bool isBypassedId(WrapperStr id) {
-        return BypassedIds[QString(id)] != 0;
+        return BypassedIds[id] != 0;
     }
 
 
@@ -72,7 +72,7 @@ protected:
 
     char * _buffer;
 
-    QMap<WrapperStr, char> _special_chars;
+    QMap<QString, char> _special_chars;
 
     static Q3Dict<char> BypassedIds;
 

@@ -8,7 +8,7 @@
 void UmlEntryPointPseudoState::solve(WrapperStr idref)
 {
     // note : parent state already resolved => is a state reference
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))

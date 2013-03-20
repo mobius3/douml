@@ -248,7 +248,7 @@ void UmlClass::generalizeDependRealize(UmlItem * target, FileIn & in, int contex
 
 void UmlClass::solveGeneralizationDependencyRealization(int context, WrapperStr idref, WrapperStr label, WrapperStr constraint)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it != All.end()) {
         static const struct {
@@ -288,7 +288,7 @@ void UmlClass::solveGeneralizationDependencyRealization(int context, WrapperStr 
 
 UmlClass * UmlClass::signature(WrapperStr id)
 {
-    QMap<WrapperStr, UmlClass *>::Iterator iter = signatures.find(id);
+    QMap<QString, UmlClass *>::Iterator iter = signatures.find(id);
 
     return (iter == signatures.end()) ? 0 : *iter;
 }
@@ -297,7 +297,7 @@ int UmlClass::formalRank(WrapperStr id)
 {
     int r = formalsId.findIndex(id);
 
-    if ((r == -1) && !FileIn::isBypassedId(r))
+    if ((r == -1) && !FileIn::isBypassedId(QString::number(r)))
         UmlCom::trace("unknown template formal reference '" + id + "'<br>");
 
     return r;
@@ -575,5 +575,5 @@ int UmlClass::NumberOf;
 int UmlClass::NumberOfStereotype;
 
 //associate the class owning the template signature with the signature id
-QMap<WrapperStr, UmlClass *> UmlClass::signatures;
+QMap<QString, UmlClass *> UmlClass::signatures;
 

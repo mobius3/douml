@@ -2,7 +2,7 @@
 #include "UmlCollaborationMessage.h"
 #include "FileOut.h"
 #include "UmlItem.h"
-
+#include "../src/misc/mystr.h"
 #include "UmlPackage.h"
 #include "UmlOperation.h"
 #include "UmlClassInstanceReference.h"

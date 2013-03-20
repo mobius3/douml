@@ -225,17 +225,17 @@ protected:
 
 
 public:
-    static QMap<WrapperStr, UmlItem *> All;
+    static QMap<QString, UmlItem *> All;
 
 
 protected:
-    static QMap<WrapperStr, PFunc> Functions;
+    static QMap<QString, PFunc> Functions;
 
-    static QMap<WrapperStr, UmlTypeSpec> PrimitiveTypes;
+    static QMap<QString, UmlTypeSpec> PrimitiveTypes;
 
-    static QMap<WrapperStr, UmlItem *> Incomings;
+    static QMap<QString, UmlItem *> Incomings;
 
-    static QMap<WrapperStr, UmlItem *> Outgoings;
+    static QMap<QString, UmlItem *> Outgoings;
 
 
 private:

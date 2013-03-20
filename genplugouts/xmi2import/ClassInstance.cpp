@@ -65,7 +65,7 @@ void ClassInstance::solveThem()
     Q3PtrList<UmlClassInstance> insts;
 
     for (cli = All.first(); cli != 0; cli = All.next()) {
-        QMap<WrapperStr, UmlItem *>::Iterator it;
+        QMap<QString, UmlItem *>::Iterator it;
 
         it = UmlItem::All.find(cli->classifierId);
 
@@ -92,7 +92,7 @@ void ClassInstance::solveThem()
     // set attribute ans relation values
 
     while (! All.isEmpty()) {
-        QMap<WrapperStr, UmlItem *>::Iterator it;
+        QMap<QString, UmlItem *>::Iterator it;
 
         cli = All.take(0);
 

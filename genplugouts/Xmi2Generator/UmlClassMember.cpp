@@ -4,6 +4,7 @@
 #include "UmlTypeSpec.h"
 
 #include "UmlClass.h"
+#include <QRegExp>
 //Added by qt3to4:
 #include "misc/mystr.h"
 void UmlClassMember::write_scope(FileOut & out)
@@ -132,12 +133,14 @@ WrapperStr UmlClassMember::true_name(WrapperStr name, WrapperStr decl)
     return r;
 }
 
-bool UmlClassMember::identChar(char c)
+bool UmlClassMember::identChar(QCharRef s)
 {
-    return (((c >= 'a') && (c <= 'z')) ||
-            ((c >= 'A') && (c <= 'Z')) ||
-            ((c >= '0') && (c <= '9')) ||
-            (c == '_'));
+    QRegExp rx(QRegExp::escape("[A-Za-z0-9_]"));
+    return rx.indexIn(QString(s)) != -1;
+//    return (((c >= 'a') && (c <= 'z')) ||
+//            ((c >= 'A') && (c <= 'Z')) ||
+//            ((c >= '0') && (c <= '9')) ||
+//            (c == '_'));
 }
 
 void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, WrapperStr s, const char * k_name, const char * k_type)
@@ -153,7 +156,7 @@ void UmlClassMember::write_type(FileOut & out, const UmlTypeSpec & t, WrapperStr
         s.remove(index, strlen(k_name));
 
         for (;;) {
-            if (s[index] == " ")
+            if (s[index] == ' ')
                 s.remove(index, 1);
 
             if (s[index] != '[')

@@ -98,7 +98,7 @@ void Binding::solveThem()
     while (! All.isEmpty()) {
         Binding * b = All.take(0);
 
-        QMap<WrapperStr, UmlItem *>::Iterator it = UmlItem::All.find(b->boundId);
+        QMap<QString, UmlItem *>::Iterator it = UmlItem::All.find(b->boundId);
         UmlClass * tmpl = UmlClass::signature(b->signatureId);
 
         if (it == UmlItem::All.end()) {

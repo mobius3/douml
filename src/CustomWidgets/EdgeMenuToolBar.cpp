@@ -36,6 +36,7 @@ EdgeMenuToolBar::EdgeMenuToolBar(QWidget * _parent) : QToolBar(_parent)
     connect(this, SIGNAL(putIntoClipboard(QString)), clipboard.getData(), SLOT(OnPutItemIntoClipboard(QString)));
 }
 
+
 EdgeMenuToolBar::~EdgeMenuToolBar()
 {
 }

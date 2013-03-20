@@ -60,7 +60,7 @@ UmlItem * UmlActivity::container(anItemKind kind, Token & token, FileIn & in)
 
 void UmlActivity::solve(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))
@@ -164,7 +164,7 @@ void UmlActivity::importIt(FileIn & in, Token & token, UmlItem * where)
         }
 
         if (! spec.isEmpty()) {
-            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(spec);
+            QMap<QString, UmlItem *>::Iterator it = All.find(spec);
 
             if (it == All.end())
                 Unresolved::addRef(a, spec);

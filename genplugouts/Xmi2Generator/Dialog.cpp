@@ -67,7 +67,7 @@ Dialog::Dialog(WrapperStr & path, WrapperStr & encoding, WrapperStr & nomodel, W
     if (_encoding.isEmpty())
         _encoding = "UTF-8";
 
-    encoding_cb->insertItem(QString(_encoding));
+    encoding_cb->insertItem(_encoding);
 
     if (!charset.isEmpty() && (_encoding != (const char *) charset))
         encoding_cb->insertItem(charset);

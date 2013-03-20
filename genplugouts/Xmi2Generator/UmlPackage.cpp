@@ -175,7 +175,7 @@ void UmlPackage::xmi(int argc, char ** argv)
                 search_profiles(profiles);
 
                 out << "\
-<?xml version=\"1.0\" encoding=\"" << encoding << "\"?>\n\
+                       <?xml version=\"1.0\" encoding=\"" << encoding.operator QString() << "\"?>\n\
 <xmi:XMI xmi:version=\"2." << ((_uml_20) ? "0" : "1")
                     << "\" xmlns:uml=\"http://schema.omg.org/spec/UML/2." << ((_uml_20) ? "0" : "1")
                     << "\" xmlns:xmi=\"http://schema.omg.org/spec/XMI/2." << ((_uml_20) ? "0" : "1")
@@ -205,7 +205,7 @@ void UmlPackage::xmi(int argc, char ** argv)
                     out.indent(+1);
                 else {
                     out << "\t<uml:Model xmi:type=\"uml:Model\" xmi:id=\"themodel\" name=\""
-                        << name() << "\">\n";
+                        << name().operator QString() << "\">\n";
                     out.indent(+2);
                 }
 
@@ -279,15 +279,15 @@ void UmlPackage::write(FileOut & out)
         out << "<elementImport";
         out.id_prefix(this, "MCR_");
 
-        int index = mcr.findRev('#');
+        int index = mcr.operator QString().indexOf('#');
 
         if (index != -1)
-            out << " alias=\"" << mcr.mid(index + 1) << "\">\n";
+            out << " alias=\"" << mcr.mid(index + 1).operator QString() << "\">\n";
         else
             out << ">\n";
 
         out.indent();
-        out << "\t<importedElement xmi:type=\"uml:Class\" href=\"" << mcr << "#1\"/>\n";
+        out << "\t<importedElement xmi:type=\"uml:Class\" href=\"" << mcr.operator QString() << "#1\"/>\n";
         out.indent();
         out << "</elementImport>\n";
     }
@@ -298,7 +298,7 @@ void UmlPackage::write(FileOut & out)
         out.id_prefix(this, "MMR_");
         out << ">\n";
         out.indent();
-        out << "\t<importedPackage xmi:type=\"uml:Model\" href=\"" << mmr << "#1\"/>\n";
+        out << "\t<importedPackage xmi:type=\"uml:Model\" href=\"" << mmr.operator QString() << "#1\"/>\n";
         out.indent();
         out << "</packageImport>\n";
     }

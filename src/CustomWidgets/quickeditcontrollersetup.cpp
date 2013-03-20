@@ -1,6 +1,6 @@
 #include "quickedit.h"
 
-
+#include "Libs/L_UniversalModels/include/ItemController.h"
 #include "Libs/L_UniversalModels/include/TreeModel.h"
 #include "Libs/L_UniversalModels/include/TreeItemInterface.h"
 #include "Libs/L_UniversalModels/include/treeviewfunctions.h"

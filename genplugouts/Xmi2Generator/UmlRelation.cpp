@@ -142,7 +142,7 @@ void UmlRelation::write_relation(FileOut & out)
 
     WrapperStr s = name();
     int i1 = s.find("(");
-    int i2 = s.findRev(")");
+    int i2 = s.operator QString().indexOf(")");
 
     if ((i1 != -1) && (i2 != -1) && (i2 > i1) && (s[i1 + 1] != '<')  && (s[i2 - 1] != '>')) {
         s = s.mid(i1 + 1, i2 - i1 - 1);
@@ -262,7 +262,7 @@ void UmlRelation::write_relation_as_attribute(FileOut & out)
     }
 
     out.indent();
-    out << "<ownedAttribute xmi:type=\"uml:Property\" name=\"" << s << '"';
+    out << "<ownedAttribute xmi:type=\"uml:Property\" name=\"" << s.operator QString() << '"';
     out.id(this);
 
     if (base != 0)
@@ -349,7 +349,7 @@ void UmlRelation::write_relation_as_attribute(FileOut & out)
             s = (_uml_20) ? "http://schema.omg.org/spec/UML/2.0/uml.xml"
                 : "http://schema.omg.org/spec/UML/2.1/uml.xml";
 
-        out << " href=\"" << s << '#' << base->name() << '"';
+        out << " href=\"" << s.operator QString() << '#' << base->name().operator QString() << '"';
     }
     else
         out.idref(roleType());

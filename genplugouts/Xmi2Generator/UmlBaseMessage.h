@@ -1,6 +1,6 @@
 #ifndef _UMLBASEMESSAGE_H
 #define _UMLBASEMESSAGE_H
-
+#include "../src/misc/mystr.h"
 
 
 #include <q3ptrdict.h>

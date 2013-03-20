@@ -84,7 +84,7 @@ void UmlItem::write_description_properties(FileOut & out)
         }
     }
 
-    if (ste.contains(':') == 1)
+    if (ste.operator QString().contains(':') == 1)
         // probably a stereotype part of profile
         _stereotypes[ste].append(this);
 }
@@ -120,12 +120,12 @@ void UmlItem::write_multiplicity(FileOut & out, WrapperStr s, UmlItem * who)
         out.indent();
         out << "<lowerValue xmi:type=\"uml:LiteralString\"";
         out.id_prefix(who, "MULTIPLICITY_L_");
-        out << " value=\"" << min << "\"/>\n";
+        out << " value=\"" << min.operator QString() << "\"/>\n";
 
         out.indent();
         out << "<upperValue xmi:type=\"uml:LiteralString\"";
         out.id_prefix(who, "MULTIPLICITY_U_");
-        out << " value=\"" << max << "\"/>\n";
+        out << " value=\"" << max.operator QString() << "\"/>\n";
     }
 }
 
@@ -192,7 +192,7 @@ void UmlItem::write_default_value(FileOut & out, WrapperStr v, UmlItem * who, in
 
 void UmlItem::write_stereotyped(FileOut & out)
 {
-    QMap<WrapperStr, Q3PtrList<UmlItem> >::Iterator it;
+    QMap<QString, Q3PtrList<UmlItem> >::Iterator it;
 
     for (it = _stereotypes.begin(); it != _stereotypes.end(); ++it) {
         const char * st = it.key();
@@ -269,5 +269,5 @@ bool UmlItem::_gen_extension;
 
 bool UmlItem::_gen_eclipse;
 
-QMap<WrapperStr, Q3PtrList<UmlItem> > UmlItem::_stereotypes;
+QMap<QString, Q3PtrList<UmlItem> > UmlItem::_stereotypes;
 

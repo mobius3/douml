@@ -24,8 +24,8 @@ void UmlTransition::solveThem()
     for (iter = All.begin(); iter != All.end(); ++iter) {
         Transition & transition = *iter;
 
-        QMap<WrapperStr, UmlItem *>::Iterator isrc = UmlItem::All.find(transition.source);
-        QMap<WrapperStr, UmlItem *>::Iterator itgt = UmlItem::All.find(transition.target);
+        QMap<QString, UmlItem *>::Iterator isrc = UmlItem::All.find(transition.source);
+        QMap<QString, UmlItem *>::Iterator itgt = UmlItem::All.find(transition.target);
 
         if ((isrc == UmlItem::All.end()) /*&&
 	((isrc = Outgoings.find(transition.id)) == Outgoings.end())*/) {

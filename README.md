@@ -1,4 +1,6 @@
-DoUML version 1.0b4
+Built from tag: 1.0b6
+
+DoUML version 1.0b6
 ==================
 
 *** IMPORTANT NOTICE ***

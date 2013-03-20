@@ -41,7 +41,7 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
 
             txt.stripWhiteSpace();
 
-            if ((txt.at(0) == '[') && (txt.at(txt.length() - 1) == ']'))
+            if ((txt.at(0) == "[") && (txt.at(txt.length() - 1) == "]"))
                 txt = txt.mid(1, txt.length() - 2);
 
             if (oper == "loop") {

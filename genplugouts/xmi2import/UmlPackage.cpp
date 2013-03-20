@@ -375,7 +375,7 @@ void UmlPackage::applyStereotype(FileIn & in, Token & token)
                 while (it.current()) {
                     WrapperStr k = it.currentKey().latin1();
 
-                    if (token.valueOf(k.mid(k.findRev(':') + 1).lower(), s))
+                    if (token.valueOf(k.mid(k.operator QString().indexOf(':') + 1).lower(), s))
                         elt->set_PropertyValue(k, s);
 
                     ++it;
@@ -398,7 +398,7 @@ UmlPackage * UmlPackage::importProfile(FileIn & in, WrapperStr href)
 
         if (index != -1) {
             WrapperStr id = href.mid(index + 1);
-            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(id);
+            QMap<QString, UmlItem *>::Iterator it = All.find(id);
 
             if (it == All.end()) {
                 UmlPackage * pf = getProject()->findProfile(id);
@@ -469,7 +469,7 @@ void UmlPackage::packageImport(FileIn & in, Token & tk)
                     UmlPackage * pf = 0;
 
                     if (!s.isEmpty()) {
-                        QMap<WrapperStr, UmlItem *>::Iterator it = All.find(s);
+                        QMap<QString, UmlItem *>::Iterator it = All.find(s);
 
                         if (it == All.end())
                             UnresolvedRelation::add(4, this->id(), s, "", "");

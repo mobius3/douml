@@ -72,7 +72,7 @@ void UnresolvedRelation::solveThem()
     Q3ValueList<UnresolvedRelation>::Iterator it;
 
     for (it = All.begin(); it != All.end(); ++it) {
-        QMap<WrapperStr, UmlItem *>::Iterator from = UmlItem::All.find((*it).from);
+        QMap<QString, UmlItem *>::Iterator from = UmlItem::All.find((*it).from);
 
         if (from != UmlItem::All.end())
             (*from)->solveGeneralizationDependencyRealization((*it).context, (*it).to, (*it).name, (*it).constraint);
@@ -94,7 +94,7 @@ void UmlItem::import(QString)
 
 void UmlItem::addItem(WrapperStr id, FileIn & in)
 {
-    QMap<WrapperStr, UmlItem *>::ConstIterator iter = All.find(id);
+    QMap<QString, UmlItem *>::ConstIterator iter = All.find(id);
 
     if (iter != All.end())
         in.error("xmi:id '" + id + "' used twice");
@@ -152,7 +152,7 @@ void UmlItem::generalizeDependRealize(UmlItem * target, FileIn & in, int context
 
 void UmlItem::solveGeneralizationDependencyRealization(int context, WrapperStr idref, WrapperStr label, WrapperStr)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it != All.end()) {
         static const struct {
@@ -261,7 +261,7 @@ void UmlItem::loadFromProfile()
 
 bool UmlItem::getType(WrapperStr idref, UmlTypeSpec & type)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     type.type = 0;
     type.explicit_type = "";
@@ -275,7 +275,7 @@ bool UmlItem::getType(WrapperStr idref, UmlTypeSpec & type)
             return FALSE;
     }
     else {
-        QMap<WrapperStr, UmlTypeSpec>::Iterator itp = PrimitiveTypes.find(idref);
+        QMap<QString, UmlTypeSpec>::Iterator itp = PrimitiveTypes.find(idref);
 
         if (itp != PrimitiveTypes.end()) {
             type = *itp;
@@ -498,7 +498,7 @@ void UmlItem::importGeneralization(FileIn & in, Token & token, UmlItem * where)
     }
 
     if (!id.isEmpty()) {
-        QMap<WrapperStr, UmlItem *>::ConstIterator iter = All.find(id);
+        QMap<QString, UmlItem *>::ConstIterator iter = All.find(id);
 
         if (iter != All.end())
             where->generalizeDependRealize(*iter, in, 0, "", constraint);
@@ -545,8 +545,8 @@ void UmlItem::importDependency(FileIn & in, Token & token, UmlItem * where)
             // Borland Together 2006 for Eclipse
             supplier = where->id();
 
-        QMap<WrapperStr, UmlItem *>::ConstIterator from = All.find(client);
-        QMap<WrapperStr, UmlItem *>::ConstIterator to = All.find(supplier);
+        QMap<QString, UmlItem *>::ConstIterator from = All.find(client);
+        QMap<QString, UmlItem *>::ConstIterator to = All.find(supplier);
 
         if ((from != All.end()) && (to != All.end()))
             (*from)->generalizeDependRealize(*to, in, kind, label, constraint);
@@ -590,8 +590,8 @@ void UmlItem::importRealization(FileIn & in, Token & token, UmlItem * where)
             // Borland Together 2006 for Eclipse
             supplier = where->id();
 
-        QMap<WrapperStr, UmlItem *>::ConstIterator from = All.find(client);
-        QMap<WrapperStr, UmlItem *>::ConstIterator to = All.find(supplier);
+        QMap<QString, UmlItem *>::ConstIterator from = All.find(client);
+        QMap<QString, UmlItem *>::ConstIterator to = All.find(supplier);
 
         if ((from != All.end()) && (to != All.end()))
             (*from)->generalizeDependRealize(*to, in, 2, label, constraint);
@@ -626,7 +626,7 @@ WrapperStr UmlItem::legalName(WrapperStr s)
     unsigned n = s.length();
 
     for (index = 0; index != n; index += 1) {
-        char c = s.at(index);
+        char c = s.operator QString().toLocal8Bit()[index];
 
         if (!(((c >= 'a') && (c <= 'z')) ||
               ((c >= 'A') && (c <= 'Z')) ||
@@ -682,13 +682,13 @@ bool UmlItem::FromBouml;
 
 bool UmlItem::FromEclipse;
 
-QMap<WrapperStr, UmlItem *> UmlItem::All;
+QMap<QString, UmlItem *> UmlItem::All;
 
-QMap<WrapperStr, PFunc> UmlItem::Functions;
+QMap<QString, PFunc> UmlItem::Functions;
 
-QMap<WrapperStr, UmlTypeSpec> UmlItem::PrimitiveTypes;
+QMap<QString, UmlTypeSpec> UmlItem::PrimitiveTypes;
 
-QMap<WrapperStr, UmlItem *> UmlItem::Incomings;
+QMap<QString, UmlItem *> UmlItem::Incomings;
 
-QMap<WrapperStr, UmlItem *> UmlItem::Outgoings;
+QMap<QString, UmlItem *> UmlItem::Outgoings;
 

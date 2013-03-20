@@ -34,7 +34,7 @@ void UmlAccessVariableValueAction::import_it(FileIn & in, Token & token)
 
 void UmlAccessVariableValueAction::setVariable(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end())
         Unresolved::addRef(this, idref);
@@ -52,7 +52,7 @@ void UmlAccessVariableValueAction::setVariable(WrapperStr idref)
 
 void UmlAccessVariableValueAction::solve(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))

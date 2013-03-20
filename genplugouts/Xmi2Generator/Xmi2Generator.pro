@@ -2,6 +2,8 @@ TEMPLATE    = app
 TARGET        = gxmi2
 CONFIG        += debug warn_on qt
 DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
+QMAKE_CXXFLAGS += -std=gnu++11
+PRECOMPILED_HEADER += ../../src/misc/mystr.h
 HEADERS        = ./UmlBaseClassDiagram.h \
           ./UmlBaseDeepHistoryPseudoState.h \
           ./FlowContainer.h \
@@ -410,7 +412,8 @@ SOURCES        = ./UmlBaseClassDiagram.cpp \
           ./UmlStateDiagram.cpp \
           ./UmlBaseNcRelation.cpp \
           ./UmlBaseJunctionPseudoState.cpp \
-          ./UmlClassMember.cpp
+          ./UmlClassMember.cpp \
+          ../../src/misc/mystr.cpp
 
 #The following line was inserted by qt3to4
 QT += network  qt3support 

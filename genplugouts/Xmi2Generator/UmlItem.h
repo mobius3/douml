@@ -84,7 +84,7 @@ protected:
 
     static bool _gen_eclipse;
 
-    static QMap<WrapperStr, Q3PtrList<UmlItem> > _stereotypes;
+    static QMap<QString, Q3PtrList<UmlItem> > _stereotypes;
 
 };
 

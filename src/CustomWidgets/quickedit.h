@@ -2,12 +2,8 @@
 #define QUICKEDIT_H
 
 #include <QWidget>
-#include <QSharedPointer>
-#include <QModelIndex>
-#include <QMenu>
-#include <QStyledItemDelegate>
+#include <QHash>
 #include <functional>
-#include "Libs/L_UniversalModels/include/ItemController.h"
 #include "UmlEnum.h"
 
 namespace Ui {
@@ -21,6 +17,16 @@ class QTreeView;
 class Q3ListViewItem;
 class GenericEventFilter;
 class UmlWindow;
+class QMenu;
+class QModelIndex;
+template <typename T>
+class ItemController;
+
+template <typename T>
+class QSharedPointer;
+template <typename T, typename K>
+class QHash;
+
 
 class QuickEdit : public QWidget
 {

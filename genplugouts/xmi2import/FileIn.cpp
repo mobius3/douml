@@ -186,7 +186,7 @@ const char * FileIn::readWord(bool any, BooL & str)
 
         if (c == '\n')
             _linenum += 1;
-        else if ((c != " ") && (c != '\t') && (c != '\r'))
+        else if ((c != ' ') && (c != '\t') && (c != '\r'))
             break;
     }
 
@@ -229,7 +229,7 @@ void FileIn::finish(WrapperStr what)
             WrapperStr s = tk.xmiId();
 
             if (! s.isEmpty())
-                BypassedIds.insert(QString(s), "");
+                BypassedIds.insert(s, "");
 
             if (! tk.closed())
                 finish(tk.what());
@@ -244,7 +244,7 @@ void FileIn::bypass(Token & tk)
     WrapperStr s = tk.xmiType();
 
     if (s.isEmpty()) {
-        QString k = QString(tk.what());
+        QString k = tk.what();
 
         if (bypassed[k] == 0) {
             warning("bypass &lt;" + tk.what() + "...&gt; (other cases not signaled)");
@@ -252,7 +252,7 @@ void FileIn::bypass(Token & tk)
         }
     }
     else {
-        QString k = QString(tk.what()) + " " + QString(s);
+        QString k = tk.what() + " " + s;
 
         if (bypassed[k] == 0) {
             warning("bypass &lt;" + tk.what() +
@@ -264,7 +264,7 @@ void FileIn::bypass(Token & tk)
     s = tk.xmiId();
 
     if (! s.isEmpty())
-        BypassedIds.insert(QString(s), "");
+        BypassedIds.insert(s, "");
 
     if (! tk.closed())
         finish(tk.what());
@@ -276,7 +276,7 @@ void FileIn::bypassedId(Token & tk)
     WrapperStr s = tk.xmiId();
 
     if (! s.isEmpty())
-        BypassedIds.insert(QString(s), "");
+        BypassedIds.insert(s, "");
 
 }
 
@@ -476,7 +476,7 @@ char FileIn::read_special_char()
 
         s[index] = 0; // check on index useless
 
-        QMap<WrapperStr, char>::ConstIterator iter = _special_chars.find(s);
+        QMap<QString, char>::ConstIterator iter = _special_chars.find(s);
 
         if (iter == _special_chars.end())
             // doesn't return

@@ -5,7 +5,8 @@
 #include "UmlClassMember.h"
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
-#include <q3valuelist.h>
+//#include <q3valuelist.h>
+#include <QList>
 #include <q3ptrvector.h>
 
 
@@ -483,9 +484,9 @@ private:
 
     UmlTypeSpec _return_type;
 
-    Q3ValueList<UmlParameter> _params;
+    QList<UmlParameter> _params;
 
-    Q3ValueList<UmlTypeSpec> _exceptions;
+    QList<UmlTypeSpec> _exceptions;
 
 #ifdef WITHCPP
     WrapperStr _cpp_def;

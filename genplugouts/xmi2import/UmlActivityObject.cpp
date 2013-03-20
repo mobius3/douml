@@ -108,7 +108,7 @@ void UmlActivityObject::setInState(WrapperStr s)
     if (FromBouml && (s.left(8) != "BOUML_0x"))
         set_InState(s);
     else {
-        QMap<WrapperStr, UmlItem *>::Iterator it = All.find(s);
+        QMap<QString, UmlItem *>::Iterator it = All.find(s);
 
         if (it != All.end()) {
             if ((*it)->kind() == aState)
@@ -219,7 +219,7 @@ void UmlActivityObject::solve(int context, WrapperStr idref)
     case 1:
         // state
     {
-        QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+        QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
         if (it != All.end()) {
             if ((*it)->kind() == aState)

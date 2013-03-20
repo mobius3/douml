@@ -16,7 +16,7 @@ class UmlState : public UmlBaseState, public UmlStateItem
 public:
         //  the constructor, do not call it yourself !!!!!!!!!!
     UmlState(void * id, const WrapperStr & s) : UmlBaseState(id, s) {
-        _all.replace(s, this);
+        _all.replace(s.operator QString(), this);
     }
 
     virtual void write(FileOut & out);
@@ -43,7 +43,7 @@ protected:
 
     Q3PtrList<UmlTransition> _trans;
 
-    static QMap<WrapperStr, UmlState *> _all;
+    static QMap<QString, UmlState *> _all;
 
 };
 

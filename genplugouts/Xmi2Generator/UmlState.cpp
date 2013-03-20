@@ -199,10 +199,10 @@ void UmlState::add_incoming_trans(UmlTransition * tr)
 
 UmlState * UmlState::find(WrapperStr s)
 {
-    QMap<WrapperStr, UmlState *>::Iterator iter = _all.find(s);
+    QMap<QString, UmlState *>::Iterator iter = _all.find(s);
 
     return (iter == _all.end()) ? 0 : *iter;
 }
 
-QMap<WrapperStr, UmlState *> UmlState::_all;
+QMap<QString, UmlState *> UmlState::_all;
 

@@ -57,7 +57,7 @@ void UmlComponent::manageInterface(Token & token, FileIn & in)
 {
     WrapperStr idref = token.valueOf("supplier");
 
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
     int c = ((const char *) token.what())[0];
 
     if (it != All.end()) {
@@ -102,7 +102,7 @@ UmlItem * UmlComponent::container(anItemKind kind, Token & token, FileIn & in)
 
 void UmlComponent::solve(int context, WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it != All.end()) {
         if ((*it)->kind() == aClass) {
@@ -147,7 +147,7 @@ void UmlComponent::generalizeDependRealize(UmlItem * target, FileIn & in, int co
 
 void UmlComponent::solveGeneralizationDependencyRealization(int context, WrapperStr idref, WrapperStr label, WrapperStr constraint)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it;
+    QMap<QString, UmlItem *>::Iterator it;
 
     if ((context == 3) &&
         ((it = All.find(idref)) != All.end()) &&

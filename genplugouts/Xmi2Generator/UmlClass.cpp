@@ -114,7 +114,7 @@ void UmlClass::write(FileOut & out)
             out.indent();
             out << "<icon xmi:type=\"uml:Image\"";
             out.id_prefix(this, "Icon_");
-            out << " location=\"" << path << "\"/>\n";
+            out << " location=\"" << path.operator QString() << "\"/>\n";
         }
     }
 

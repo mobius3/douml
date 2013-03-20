@@ -27,7 +27,7 @@ void UmlAttribute::write(FileOut & out)
     switch (_lang) {
     case Uml:
         out.indent();
-        out << "<" << k << kk << name() << '"';
+        out << "<" << k << kk << name().operator QString() << '"';
         break;
 
     case Cpp:
@@ -35,7 +35,7 @@ void UmlAttribute::write(FileOut & out)
             return;
 
         out.indent();
-        out << "<" << k << kk << true_name(name(), cppDecl()) << '"';
+        out << "<" << k << kk << true_name(name(), cppDecl()).operator QString() << '"';
         break;
 
     default: // Java
@@ -43,7 +43,7 @@ void UmlAttribute::write(FileOut & out)
             return;
 
         out.indent();
-        out << "<" << k << kk << true_name(name(), javaDecl()) << '"';
+        out << "<" << k << kk << true_name(name(), javaDecl()).operator QString() << '"';
         break;
     }
 

@@ -92,7 +92,7 @@ void UmlActivity::write(FileOut & out)
 
     write_flows(out);
 
-    QMap<WrapperStr, Opaque>::ConstIterator ito;
+    QMap<QString, Opaque>::ConstIterator ito;
 
     for (ito = _opaque_behavior.begin(); ito != _opaque_behavior.end(); ++ito) {
         out.indent();
@@ -111,7 +111,7 @@ void UmlActivity::write(FileOut & out)
     out.indent();
     out << "</" << k << ">\n";
 
-    QMap<WrapperStr, UmlItem *>::ConstIterator ite;
+    QMap<QString, UmlItem *>::ConstIterator ite;
 
     for (ite = _opaque_expression.begin(); ite != _opaque_expression.end(); ++ite) {
         out.indent();
@@ -164,7 +164,7 @@ void UmlActivity::write_condition(FileOut & out, WrapperStr cond, bool pre)
 
 UmlItem * UmlActivity::add_opaque_behavior(WrapperStr beh, UmlItem * who, const char * k)
 {
-    QMap<WrapperStr, Opaque>::Iterator iter = _opaque_behavior.find(beh);
+    QMap<QString, Opaque>::Iterator iter = _opaque_behavior.find(beh);
 
     if (iter == _opaque_behavior.end()) {
         _opaque_behavior.insert(beh, Opaque(who, k));
@@ -176,7 +176,7 @@ UmlItem * UmlActivity::add_opaque_behavior(WrapperStr beh, UmlItem * who, const 
 
 UmlItem * UmlActivity::add_opaque_expression(WrapperStr val, UmlItem * who)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator iter = _opaque_expression.find(val);
+    QMap<QString, UmlItem *>::Iterator iter = _opaque_expression.find(val);
 
     if (iter == _opaque_expression.end()) {
         _opaque_expression.insert(val, who);

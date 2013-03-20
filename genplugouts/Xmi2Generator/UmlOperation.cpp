@@ -3,7 +3,7 @@
 #include "FileOut.h"
 
 #include <stdlib.h>
-
+#include "../src/misc/mystr.h"
 #include "UmlClass.h"
 #include "CppSettings.h"
 #include "JavaSettings.h"
@@ -11,6 +11,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <Q3ValueList>
+#include <array>
 void UmlOperation::write(FileOut & out)
 {
     WrapperStr decl;
@@ -216,7 +217,7 @@ void UmlOperation::write_uml_params(FileOut & out)
 
     for (it = p.begin(); it != p.end(); ++it) {
         out.indent();
-        out << "<ownedParameter xmi:type=\"uml:Parameter\" name=\"" << (*it).name
+        out << "<ownedParameter xmi:type=\"uml:Parameter\" name=\"" << (*it).name.operator QString()
             << "\" xmi:id=\"BOUML_op_param_"
             << ++param_id << "\" direction=\"";
 
@@ -272,7 +273,7 @@ void UmlOperation::write_cpp_java_params(FileOut & out, WrapperStr decl)
             const UmlParameter & pa = p[rank];
 
             out.indent();
-            out << "<ownedParameter xmi:type=\"uml:Parameter\" name=\"" << pa.name
+            out << "<ownedParameter xmi:type=\"uml:Parameter\" name=\"" << pa.name.operator QString()
                 << "\" xmi:id=\"BOUML_op_param_"
                 << ++param_id << "\" direction =\"";
 
@@ -310,6 +311,17 @@ void UmlOperation::write_cpp_java_params(FileOut & out, WrapperStr decl)
     }
 }
 
+// some really insane code from stackoverflow that allows to shorten lengthy ifs
+template <typename T0, typename T1, std::size_t N>
+bool operator *(const T0& lhs, const std::array<T1, N>& rhs) {
+    return std::find(begin(rhs), end(rhs), lhs) != end(rhs);
+}
+
+template<class T0, class...T> std::array<T0, 1+sizeof...(T)> in(T0 arg0, T...args) {
+    return {{arg0, args...}};
+}
+
+
 bool UmlOperation::get_param(WrapperStr s, int & index, WrapperStr & r, WrapperStr & kname, WrapperStr & ktype, int & rank)
 {
     int index0 = index;
@@ -330,9 +342,10 @@ bool UmlOperation::get_param(WrapperStr s, int & index, WrapperStr & r, WrapperS
 
             break;
         }
-
-        switch (s[index]) {
-        case ',':
+        if(s[index] *in('(', '{', '['))
+            level += 1;
+        else if(s.at(index) == ",")
+        {
             if (level == 0) {
                 r = s.mid(index0, index - index0).stripWhiteSpace();
                 index += 1;
@@ -340,23 +353,11 @@ bool UmlOperation::get_param(WrapperStr s, int & index, WrapperStr & r, WrapperS
                 if (r.isEmpty())
                     return FALSE;
             }
-
-            break;
-
-        case '(':
-        case '{':
-        case '[':
-            level += 1;
-            break;
-
-        case ')':
-        case '}':
-        case ']':
+        }
+        else if(s[index] *in(')', '}', ']'))
+        {
             if (--level < 0)
                 return FALSE;
-
-        default:
-            break;
         }
 
         index += 1;
@@ -415,8 +416,9 @@ const char * UmlOperation::event(const char * pfix, WrapperStr msg)
     int index0 = 0;
     int index1;
 
-    while ((index1 = msg.find('\n', index0)) != -1) {
-        msg[index1] = " ";
+    while ((index1 = msg.find('\n', index0)) != -1)
+    {
+        msg.replace(index1,1, " ");
         index0 = index1 + 1;
     }
 

@@ -2288,7 +2288,7 @@ void OperationData::send_uml_def(ToolCom * com, BrowserNode * bn,
 
     unsigned n;
 
-    com->write_unsigned(nparams);
+    com->write_unsigned(params.count());
     n = nparams;
     for(auto& param : params)
     {

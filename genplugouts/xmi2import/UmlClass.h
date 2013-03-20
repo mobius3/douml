@@ -93,7 +93,7 @@ protected:
     Q3ValueList<WrapperStr> formalsId;
 
     //associate the class owning the template signature with the signature id
-    static QMap<WrapperStr, UmlClass *> signatures;
+    static QMap<QString, UmlClass *> signatures;
 
 };
 

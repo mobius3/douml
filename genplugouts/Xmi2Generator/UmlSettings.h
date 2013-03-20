@@ -5,7 +5,7 @@
 
 #include "aLanguage.h"
 #include <q3dict.h>
-
+#include "../src/misc/mystr.h"
 struct UmlBuiltin;
 struct UmlStereotype;
 

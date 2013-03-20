@@ -87,7 +87,12 @@ bool UmlBaseOperation::addParameter(unsigned rank, const UmlParameter & p)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _params.insert(_params.at(rank), p);
+        {
+            if(_params.count() > 0)
+                _params.insert(_params.begin() + rank, p);
+            else
+                _params.insert(_params.begin(), p);
+        }
 
         return TRUE;
     }
@@ -101,7 +106,7 @@ bool UmlBaseOperation::removeParameter(unsigned rank)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _params.remove(_params.at(rank));
+            _params.removeAt(rank);
 
         return TRUE;
     }
@@ -137,7 +142,7 @@ bool UmlBaseOperation::addException(unsigned rank, const UmlTypeSpec & t)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _exceptions.insert(_exceptions.at(rank), t);
+            _exceptions.insert(_exceptions.begin() + rank, t);
 
         return TRUE;
     }
@@ -151,7 +156,7 @@ bool UmlBaseOperation::removeException(unsigned rank)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _exceptions.remove(_exceptions.at(rank));
+            _exceptions.removeAt(rank);
 
         return TRUE;
     }
