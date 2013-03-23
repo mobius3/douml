@@ -59,10 +59,11 @@
 #include <QSettings>
 #include <QFileInfo>
 
-
-
-
 #include "translate.h"
+
+#ifdef Q_OS_LINUX
+#include "settings_ini.h"
+#endif /* Q_OS_LINUX */
 
 bool ExitOnError = FALSE;
 int main(int argc, char ** argv)
@@ -86,7 +87,7 @@ int main(int argc, char ** argv)
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
     QLOG_INFO() << "Starting the log";
-//#endif
+//#endif /* DEBUG */
 
 
     An<EdgeMenuFactory> factory;
@@ -101,7 +102,26 @@ int main(int argc, char ** argv)
 
 
     UmlDesktop::init();
+#ifdef Q_OS_LINUX
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    QFileInfo settings_info(settings.fileName());
+    if(!settings_info.exists())
+    {
+      QDir settings_path(settings_info.absolutePath());
+      if(!settings_path.exists())
+      {
+        settings_path.mkpath(settings_path.absolutePath());
+      }
+      QFile settings_file(settings_info.absoluteFilePath());
+      settings_file.open(QIODevice::WriteOnly);
+      QByteArray data((const char *)settings_ini, settings_ini_len);
+      settings_file.write(data);
+      settings_file.close();
+    }
+    settings.sync();
+#else
     QSettings settings("settings.ini", QSettings::IniFormat);
+#endif /* Q_OS_LINUX */
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
     bool overridePresent = QFileInfo("override_transition.txt").exists();
     if(settings.value("Main/compatibility_save") .toInt() == 1 && !overridePresent)

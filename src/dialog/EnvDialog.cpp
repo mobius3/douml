@@ -645,7 +645,11 @@ int read_doumlrc()
         else if (!strncmp(line, "CHARSET ", 8))
         {
             set_codec(line + 8);
-            QSettings settings("settings.ini", QSettings::IniFormat);
+#ifdef Q_OS_LINUX
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+#else
+    QSettings settings("settings.ini", QSettings::IniFormat);
+#endif
             settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
             settings.setValue("Main/encoding", QString(line + 8));
             settings.sync();

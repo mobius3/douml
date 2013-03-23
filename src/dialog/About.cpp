@@ -66,11 +66,11 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
     const char htmltext[] = "<p>DoUML</p>\n"
                             "<p>This project is a fork of\n"
                             "Bruno Pages's work, BoUML:\n"
-                            "<i>http://sourceforge.net/projects/douml/</i></p>\n"
+                            "<i>http://sourceforge.net/projects/bouml/</i></p>\n"
                             "<p>DoUML focus is to port BoUML to Qt4\n"
                             "and to maintain it as a community</p>\n"
                             "<p>Join us at:<br>\n"
-                            "https://github.com/leonardo2d/douml/<br>\n"
+                            "https://github.com/DoUML/douml<br>\n"
                             "#bdouml@irc.freenode.net</p>\n\n\n";
 
     Q3TextView * tx =
