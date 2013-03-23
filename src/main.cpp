@@ -72,6 +72,7 @@ int main(int argc, char ** argv)
     ExitOnError = FALSE;
 
     QApplication a(argc, argv);
+    a.setWindowIcon(QIcon(QString(":/douml.64.png")));
 
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 

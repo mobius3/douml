@@ -548,7 +548,7 @@ Debug {
 
 QMAKE_CXXFLAGS += -std=gnu++11
 LIBS += -L../bin -lUniversalModels
-RESOURCES += icons.qrc
+RESOURCES += icons.qrc ../douml.qrc
 
 FORMS += \
     ui/operationwidgetcpp.ui \
