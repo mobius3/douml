@@ -25,10 +25,6 @@
 //
 // *************************************************************************
 
-
-
-
-
 #include <qlayout.h>
 #include <qlabel.h>
 #include <q3textview.h>
@@ -40,11 +36,9 @@
 #include <QPainter>
 #include <QTabWidget>
 #include "About.h"
-#include "bp_xpm.xpm"
 #include "UmlDesktop.h"
 #include "translate.h"
-
-#define LICENSE_GPL _()
+#include "version.h"
 
 AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
 {
@@ -64,7 +58,7 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
     QPainter p(&pix);
     p.setFont(QFont("Arial", 14, QFont::Black));
     p.setPen( Qt::black );
-    p.drawText( p.window(), Qt::AlignCenter, QString("1.0b6"));
+    p.drawText( p.window(), Qt::AlignCenter, QString(DOUML_VERSION));
     p.end();
 
     QLabel * lbp = new QLabel(this);
@@ -75,6 +69,12 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
     lbp->setAutoFillBackground(true);
 
     lbp->setPixmap(pix);
+    hbox->addWidget(lbp);
+
+    hbox = new Q3HBoxLayout(vbox);
+    hbox->setMargin(5);
+    lbp = new QLabel(this);
+    lbp->setText(QString("Build: " DOUML_BUILD_DATE " - Qt version " QT_VERSION_STR));
     hbox->addWidget(lbp);
 
     hbox = new Q3HBoxLayout(vbox);
