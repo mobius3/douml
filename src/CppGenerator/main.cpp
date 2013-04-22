@@ -49,16 +49,11 @@ int main(int argc, char ** argv)
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
 
-#ifdef Q_OS_LINUX
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
-#else
-    QSettings settings("settings.ini", QSettings::IniFormat);
-#endif
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
     QString locale = settings.value("Main/encoding").toString();
     QTextCodec* codec = QTextCodec::codecForName(locale);
     QTextCodec::setCodecForLocale(codec);
-
 
     QLOG_INFO() << " STARTING CPP_GENERATOR";
 #endif

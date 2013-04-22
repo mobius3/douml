@@ -57,13 +57,9 @@
 #include "ui/constructorinitializerdialog.h"
 #include "misc/TypeIdentifier.h"
 #include <QSettings>
-#include <QFileInfo>
 
 #include "translate.h"
-
-#ifdef Q_OS_LINUX
 #include "settings_ini.h"
-#endif /* Q_OS_LINUX */
 
 bool ExitOnError = FALSE;
 int main(int argc, char ** argv)
@@ -103,8 +99,10 @@ int main(int argc, char ** argv)
 
 
     UmlDesktop::init();
-#ifdef Q_OS_LINUX
+
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+
     QFileInfo settings_info(settings.fileName());
     if(!settings_info.exists())
     {
@@ -118,39 +116,25 @@ int main(int argc, char ** argv)
       QByteArray data((const char *)settings_ini, settings_ini_len);
       settings_file.write(data);
       settings_file.close();
+      EnvDialog::edit(TRUE);
+      settings.sync();
     }
-    settings.sync();
-#else
-    QSettings settings("settings.ini", QSettings::IniFormat);
-#endif /* Q_OS_LINUX */
-    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+
     bool overridePresent = QFileInfo("override_transition.txt").exists();
     if(settings.value("Main/compatibility_save") .toInt() == 1 && !overridePresent)
     {
-    QMessageBox::warning(0, QObject::tr("Warning"),
-                         QObject::tr("Douml is working in transitional mode.\n All UI improvements are yours to use,  "
-                                     "but saving is done in the format of Bouml 4.22 "
-                                     "which loses all new c++11 and hierarchy specifiers\n\n"
-                                     "To suppress this warning place empty file override_transition.txt into the application folder\n"
-                                     "To disable the mode - change compatibility_save parameter to 0 in settings.ini\n"));
+      QMessageBox::warning(0, QObject::tr("Warning"),
+         QObject::tr("Douml is working in transitional mode.\n All UI improvements are yours to use,  "
+                     "but saving is done in the format of Bouml 4.22 "
+                     "which loses all new c++11 and hierarchy specifiers\n\n"
+                     "To suppress this warning place empty file override_transition.txt into the application folder\n"
+                     "To disable the mode - change compatibility_save parameter to 0 in settings.ini\n"));
     }
 
-    // note : bool conv_env = !QDir::home().exists(".doumlrc") doesn't work
-    // if the path contains non latin1 characters, for instance cyrillic !
-    QString s = QDir::home().absFilePath(".doumlrc");
-    FILE * fp = fopen((const char *) s, "r");
-    bool conv_env = (fp == 0);
-
-
-    if (conv_env)
-        EnvDialog::edit(TRUE);
-    else
-        fclose(fp);
-
-    read_doumlrc();	// for virtual desktop
+    read_doumlrc(); // for virtual desktop
     init_pixmaps();
     init_font();
-    Shortcut::init(conv_env);
+    Shortcut::init(true);
 
     bool exec = FALSE;
     bool no_gui = FALSE;

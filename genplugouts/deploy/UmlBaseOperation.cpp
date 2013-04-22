@@ -775,14 +775,9 @@ void UmlBaseOperation::read_uml_()
 }
 static unsigned api_format()
 {
-#ifdef Q_OS_LINUX
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
-#else
-    QSettings settings("settings.ini", QSettings::IniFormat);
-#endif
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
-    int compat = settings.value("Main/compatibility_save").toInt();
-    //int compat = 0;
+    int compat = settings.value("Main/compatibility_save", 0).toInt();
     if(compat != 1)
     {
         int fileFormat = settings.value("Main/fileformat").toInt();

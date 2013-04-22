@@ -108,5 +108,5 @@ qrc_*.cpp
 src/CppReverse/cpp_reverse
 /bin/
 !/bin/settings.ini
-src/settings_ini.h
+!src/settings_ini.h
 /install/
