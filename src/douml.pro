@@ -550,6 +550,9 @@ QMAKE_CXXFLAGS += -std=gnu++11
 LIBS += -L../bin -lUniversalModels
 RESOURCES += icons.qrc ../douml.qrc
 
+INCLUDEPATH += $${PWD}
+
+
 FORMS += \
     ui/operationwidgetcpp.ui \
     ui/constructorinitializerdialog.ui \

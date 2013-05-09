@@ -47,6 +47,7 @@ private:
     BrowserView* originalView = nullptr;
     UmlWindow* mainWindow = nullptr;
     QScopedPointer<QMenu> contextMenu;
+    QMenu* collapseExpandMenu = nullptr;
     QList<UmlCode> validTypes;
     QList<QSharedPointer<BrowserNode> > localNodeHolder;
     QHash<UmlCode, std::function<void(QSharedPointer<TreeItemInterface>, BrowserNode*) > > itemCreators;
@@ -79,6 +80,12 @@ private:
     QSharedPointer<TreeItemInterface > packageInterface;
 
 
+    QAction* actBefore = nullptr;
+    QAction* actAfter = nullptr;
+    QAction* actCollapseExpandSelf = nullptr;
+    QAction* actCollapseExpandParent = nullptr;
+
+
     QStringList columns;
     //QModelIndex current;
     BrowserNode* currentNode = nullptr;
@@ -101,6 +108,7 @@ private:
     void PerformFiltering(QStringList, QTreeView*, TreeModel*, QSharedPointer<TreeItemInterface>);
     QList<std::function<bool (TreeItemInterface *)> > CreateCheckList();
     void CreateMenu();
+    void SetupMenu(TreeItemInterface *);
     void VisibilityDelegateSetup();
     void TypeDelegateSetup();
     void DirectionDelegateSetup();
@@ -112,8 +120,10 @@ private:
 
     void AddParameter();
     void AddOperation();
+    void AddAttribute();
 
     void RefreshTable();
+    void CollapseExpand(const QModelIndex& index );
 
 
 
@@ -137,6 +147,7 @@ private:
     void OnShow();
     void OnAddParameter();
     void OnAddOperation();
+    void OnAddAttribute();
     void OnPerformFiltering(QString);
     void OnDecreaseOpenLevels();
     void OnIncreaseOpenLevels();
@@ -144,6 +155,8 @@ private:
     void OnMoveMarkedAfter();
     void OnMoveMarkedBefore();
     void OnRefreshTable();
+    void OnCollapseExpandSelf();
+    void OnCollapseExpandParent();
 };
 
 #endif // QUICKEDIT_H

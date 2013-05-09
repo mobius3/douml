@@ -1327,7 +1327,7 @@ BrowserNode * BrowserClass::add_attribute(BrowserAttribute * attr,
     if (enter_child_name(name, (enum_item) ? TR("enter item's name : ")
                          : TR("enter attribute's name : "),
                          UmlAttribute, FALSE, FALSE)) {
-        bool newone = (attr == 0);
+        bool newone = (attr == nullptr);
 
         attr = (newone) ? BrowserAttribute::new_one(name, this, enum_item)
                         : (BrowserAttribute *) attr->duplicate(this, name);
@@ -1347,6 +1347,18 @@ BrowserNode * BrowserClass::add_attribute(BrowserAttribute * attr,
     }
 
     return 0;
+}
+
+BrowserNode *BrowserClass::addAttribute()
+{
+    BrowserAttribute * attr = nullptr;
+    QString name;
+    attr = BrowserAttribute::new_one(name, this, false);
+    setOpen(TRUE);
+    def->modified();
+    package_modified();
+    attr->select_in_browser();
+    return attr;
 }
 
 BrowserNode *BrowserClass::duplicate_attribute(BrowserAttribute *attr, bool enum_item)

@@ -2133,11 +2133,13 @@ void OperationDialog::cpp_def_from_decl()
             index1 = index2;
         }
     }
-//    if(!oper->is_abstract)
-//    {
+
         QList<UserTag> failedTags;
         for(auto tag : tags)
         {
+            //we remove all instances of the tag that might have been left
+            def = def.replace(QString("@{") + tag.tag + QString("}"), "");
+
             //first we try to find left context in the new definition
             QRegExp rx(QRegExp::escape(tag.leftContext));
             int index = rx.indexIn(def);
@@ -2165,7 +2167,7 @@ void OperationDialog::cpp_def_from_decl()
                 tagString.chop(1);
             QMessageBox::critical(0, tr("Warning!"), tr("Could not find correct place for these tags: " + tagString), QMessageBox::Ok);
         }
-    //}
+
 
     // update def
     cppTab->ui->edCppDefProto->setText(def);

@@ -11,6 +11,7 @@
 #include "browser/BrowserOperationAttribute.h"
 #include "browser/BrowserNodeDummy.h"
 #include "browser/BrowserAttribute.h"
+#include "tool/snippets.h"
 #include "ProfiledStereotypes.h"
 #include "browser/BrowserRelation.h"
 #include "browser/BrowserExtraMember.h"
@@ -178,15 +179,15 @@ void QuickEdit::SetupDelegates()
     PostfixDelegateSetup();
 }
 
-// some really insane code from stackoverflow that allows to shorten lengthy ifs
-template <typename T0, typename T1, std::size_t N>
-bool operator *(const T0& lhs, const std::array<T1, N>& rhs) {
-    return std::find(begin(rhs), end(rhs), lhs) != end(rhs);
-}
+//// some really insane code from stackoverflow that allows to shorten lengthy ifs
+//template <typename T0, typename T1, std::size_t N>
+//bool operator *(const T0& lhs, const std::array<T1, N>& rhs) {
+//    return std::find(begin(rhs), end(rhs), lhs) != end(rhs);
+//}
 
-template<class T0, class...T> std::array<T0, 1+sizeof...(T)> in(T0 arg0, T...args) {
-    return {{arg0, args...}};
-}
+//template<class T0, class...T> std::array<T0, 1+sizeof...(T)> in(T0 arg0, T...args) {
+//    return {{arg0, args...}};
+//}
 
 
 #define ADD_GETSET_DATA(TYPE,DATA_TYPE, HOLDER,ROW,ROLES,CONVERTER,ACCESSOR,SETTER)  \
@@ -394,6 +395,17 @@ void QuickEdit::SetupAttributeController()
         return result;
     }
     );
+
+    std::function<void(BrowserNode*,const QModelIndex& index)> f = [](BrowserNode* node ,const QModelIndex& index)
+    {
+        Q_UNUSED(index);
+        BrowserAttribute* attr = static_cast<BrowserAttribute*>(node);
+        attr->modified();
+        attr->setText(0,attr->get_name() );
+        attr->package_modified();
+        attr->get_data()->modified();
+    };
+    attributeController->AddPostProcessors(columns.indexOf("name"), QVector<int>(std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole})),f);
 }
 
 void QuickEdit::SetupOperationAttributeController()

@@ -78,6 +78,7 @@ public:
     virtual ~BrowserClass();
 
     BrowserNode * add_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE, bool sameName = false);
+    BrowserNode * addAttribute();
     BrowserNode * duplicate_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE);
     BrowserNode * add_relation(BrowserRelation * rel);
     BrowserNode * add_operation(BrowserOperation * oper = 0, bool sameName = false);
