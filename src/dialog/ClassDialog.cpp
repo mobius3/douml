@@ -3645,7 +3645,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     // USER : list key - value
     ShowTab("Properties");
-    kvtable->updateThisFromNode(currentNode);
+    kvtable->updateThisFromNode(currentNode, !isWritable);
     kvtable->remove("stereotypeCheck");
     kvtable->remove("stereotypeSetParameters");
     kvtable->remove("stereotypeCheckParameters");

@@ -37,8 +37,8 @@
 #include "DialogUtil.h"
 
 
-MLinesItem::MLinesItem(Q3Table * ta, const QString & s)
-    : TableItem(ta, Q3TableItem::WhenCurrent, s)
+MLinesItem::MLinesItem(Q3Table * ta, const QString & s, bool editable)
+    : TableItem(ta, editable ? Q3TableItem::WhenCurrent : Q3TableItem::Never, s)
 {
     mle = 0;
 }

@@ -39,7 +39,7 @@ protected:
     QTextEdit * mle;
 
 public:
-    MLinesItem(Q3Table * t, const QString & s);
+    MLinesItem(Q3Table * t, const QString & s, bool editable = true);
 
     virtual QWidget * createEditor() const;
     virtual void setContentFromEditor(QWidget * w);

@@ -1,6 +1,6 @@
 TEMPLATE    = app
 TARGET        = gxmi2
-CONFIG        += debug warn_on qt
+CONFIG        += warn_on qt
 DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
 QMAKE_CXXFLAGS += -std=gnu++11
 PRECOMPILED_HEADER += ../../src/misc/mystr.h

@@ -1,6 +1,6 @@
 TEMPLATE    = app
 TARGET        = ixmi2
-CONFIG        += debug warn_on qt
+CONFIG        += warn_on qt
 DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
 PRECOMPILED_HEADER += ../../src/misc/mystr.h
 HEADERS        = ./UmlActivityPartition.h \

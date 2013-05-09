@@ -46,8 +46,15 @@ public:
     bool get_value(const char * key, QString & value);
     void remove(const char * key);
 
+
 private:
-    Q3Dict<QStringList> props;
+    void Init(HaveKeyValueData * h, bool isReadOnly);
+    void SetupTableText(HaveKeyValueData * hv, bool isReadOnly);
+    void AdjustColumnCount(bool);
+    void AdjustRowCount(HaveKeyValueData *, bool);
+    void AdjustEditability(bool);
+    QHash<QString, QStringList> props;
+    QHash<int, QString> colNames;
 };
 
 #endif

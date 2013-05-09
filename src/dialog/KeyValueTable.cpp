@@ -24,11 +24,6 @@
 // home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
-
-
-
-
-
 #include <stdio.h>
 #include <q3popupmenu.h>
 #include <QEvent>
@@ -44,87 +39,14 @@
 #include "DialogUtil.h"
 #include "translate.h"
 
-KeyValuesTable::KeyValuesTable(HaveKeyValueData * hv, QWidget * parent, bool isReadOnly)
-    : StringTable(((hv == 0) ? 0 : hv->get_n_keys()) + ((isReadOnly) ? 0 : 1),
+KeyValuesTable::KeyValuesTable(HaveKeyValueData * kvData, QWidget * parent, bool isReadOnly)
+    : StringTable(((kvData == 0) ? 0 : kvData->get_n_keys()) + ((isReadOnly) ? 0 : 1),
                   (isReadOnly) ? 2 : 3, parent, isReadOnly)
 {
-    horizontalHeader()->setLabel(0, TR("Key"));
-    horizontalHeader()->setLabel(1, TR("Value"));
-    if (!isReadOnly)
-        horizontalHeader()->setLabel(2, TR("do"));
-
-    int index;
-    int sup = 0;
-    if(hv)
-        sup = hv->get_n_keys();
-
-    if (isReadOnly)
-    {
-        for (index = 0; index < sup; index += 1)
-        {
-            TableItem * ti;
-
-            ti = new TableItem(this, Q3TableItem::Never,
-                               toUnicode(hv->get_key(index)));
-            ti->setReplaceable(FALSE);
-            setItem(index, 0, ti);
-
-            QString s = toUnicode(hv->get_value(index));
-            int n = s.count('\n');
-
-            ti = new TableItem(this, Q3TableItem::Never, s);
-            ti->setReplaceable(FALSE);
-            setItem(index, 1, ti);
-
-            if (n != 0)
-            {
-                // note : adjustRow(index) does nothing
-                setRowHeight(index, rowHeight(index) * (n + 1));
-            }
-        }
-    }
-    else
-    {
-        props.setAutoDelete(TRUE);
-
-        QStringList items;
-
-        for (index = 0; index < sup; index += 1) {
-            QString k = toUnicode(hv->get_key(index));
-            QString v = toUnicode(hv->get_value(index));
-            QStringList * psl = props[k];
-
-            setText(index, 0, k);
-
-            if (psl != 0)
-                setItem(index, 1, new ComboItem(this, v, *psl, FALSE));
-
-            if ((k.contains(':') == 2) &&
-                    ProfiledStereotypes::enumerated(k, items)) {
-                psl = new QStringList(items);
-                props.insert(k, psl);
-                setItem(index, 1, new ComboItem(this, v, *psl, FALSE));
-            }
-            else
-                setItem(index, 1, new MLinesItem(this, v));
-
-            setText(index, 2, QString());
-            setRowStretchable(index, TRUE);
-        }
-
-        setText(index, 0, QString());
-        setItem(index, 1, new MLinesItem(this, QString()));
-        setText(index, 2, QString());
-        setRowStretchable(index, TRUE);
-    }
-
-    horizontalHeader()->setResizeEnabled(TRUE, 0);  //setColumnStretchable (0, TRUE);
-    setColumnStretchable(1, TRUE);
-
-    if (! isReadOnly) {
-        adjustColumn(2);
-        setColumnStretchable(2, FALSE);
-    }
+    colNames.insert(0, TR("Key"));
+    colNames.insert(1, TR("Value"));
+    colNames.insert(2, TR("Do"));
+    Init(kvData, isReadOnly);
 }
 
 void KeyValuesTable::init_row(int index)
@@ -191,112 +113,9 @@ void KeyValuesTable::updateNodeFromThis(HaveKeyValueData * oper)
     }
 }
 
-void KeyValuesTable::updateThisFromNode(HaveKeyValueData *hv, bool isReadOnly)
+void KeyValuesTable::updateThisFromNode(HaveKeyValueData *kvData, bool isReadOnly)
 {
-
-    if (!isReadOnly)
-    {
-        if(numCols() == 2)
-            insertColumns(2);
-        horizontalHeader()->setLabel(2, TR("do"));
-    }
-    else
-    {
-        if(numCols() == 3)
-            removeColumn(2);
-    }
-
-    int index;
-    int sup = 0;
-    if(hv)
-        sup = hv->get_n_keys();
-    int rowCount = numRows();
-    for (index = rowCount - 1; index > sup; index -= 1)
-        removeRow(index);
-
-    if (isReadOnly)
-    {
-        for (index = 0; index < sup; index += 1)
-        {
-            TableItem * tiKey = nullptr;
-            TableItem * tiValue = nullptr;
-            QString s = toUnicode(hv->get_value(index));
-            int n = s.count('\n');
-
-            if(index == numRows() || numRows() == 0)
-            {
-                tiKey = new TableItem(this, Q3TableItem::Never,
-                                   toUnicode(hv->get_key(index)));
-                tiValue = new TableItem(this, Q3TableItem::Never, s);
-                setItem(index, 0, tiKey);
-                setItem(index, 1, tiValue);
-            }
-            else
-            {
-                tiKey = dynamic_cast<TableItem*>(item(index, 0));
-                tiKey->setText(hv->get_key(index));
-                tiValue = dynamic_cast<TableItem*>(item(index, 1));
-                tiValue->setText(s);
-            }
-            tiKey->setReplaceable(FALSE);
-            tiValue->setReplaceable(FALSE);
-
-
-            if (n != 0)
-            {
-                // note : adjustRow(index) does nothing
-                setRowHeight(index, rowHeight(index) * (n + 1));
-            }
-        }
-    }
-    else
-    {
-        props.setAutoDelete(TRUE);
-
-        QStringList items;
-
-        for (index = 0; index < sup; index += 1)
-        {
-            QString k = toUnicode(hv->get_key(index));
-            QString v = toUnicode(hv->get_value(index));
-            QStringList * psl = props[k];
-
-            setText(index, 0, k);
-
-            if (psl != 0)
-                setItem(index, 1, new ComboItem(this, v, *psl, FALSE));
-
-            if ((k.contains(':') == 2) &&
-                    ProfiledStereotypes::enumerated(k, items)) {
-                psl = new QStringList(items);
-                props.insert(k, psl);
-                setItem(index, 1, new ComboItem(this, v, *psl, FALSE));
-            }
-            else
-                setItem(index, 1, new MLinesItem(this, v));
-
-            setText(index, 2, QString());
-            setRowStretchable(index, TRUE);
-        }
-
-        if(index == numRows())
-            insertRows(numRows());
-        setText(index, 0, QString());
-        setItem(index, 1, new MLinesItem(this, QString()));
-        setText(index, 2, QString());
-        setRowStretchable(index, TRUE);
-    }
-
-    horizontalHeader()->setResizeEnabled(TRUE, 0);  //setColumnStretchable (0, TRUE);
-    setColumnStretchable(1, TRUE);
-
-    if (! isReadOnly) {
-        adjustColumn(2);
-        setColumnStretchable(2, FALSE);
-    }
-
-
-
+    Init(kvData, isReadOnly);
 }
 
 bool KeyValuesTable::get_value(const char * key, QString & value)
@@ -324,5 +143,107 @@ void KeyValuesTable::remove(const char * key)
             delete_row(index);
             break;
         }
+    }
+}
+
+void KeyValuesTable::Init(HaveKeyValueData *kvData, bool isReadOnly)
+{
+    AdjustColumnCount(isReadOnly);
+    AdjustRowCount(kvData, isReadOnly);
+    SetupTableText(kvData, isReadOnly);
+    AdjustEditability(isReadOnly);
+}
+
+void KeyValuesTable::SetupTableText(HaveKeyValueData *kvData,  bool isReadOnly)
+{
+    QStringList items;
+    unsigned index = 0;
+    for (index = 0; index < kvData->get_n_keys(); index++)
+    {
+        QString k = toUnicode(kvData->get_key(index));
+        QString v = toUnicode(kvData->get_value(index));
+
+        TableItem * tiKey = nullptr;
+        tiKey =  new MLinesItem(this, k, !isReadOnly);
+
+        setItem(index, 0, tiKey);
+
+        if (props.contains(k))
+            setItem(index, 1, new ComboItem(this, v, props[k], FALSE));
+
+        if ((k.contains(':') == 2) &&
+                ProfiledStereotypes::enumerated(k, items))
+        {
+            props.insert(k, items);
+            setItem(index, 1, new ComboItem(this, v, props[k], FALSE));
+        }
+        else
+            setItem(index, 1, new MLinesItem(this, v, !isReadOnly));
+
+        setItem(index, 2, new TableItem(this, Q3TableItem::Never,""));
+        setRowStretchable(index, true);
+
+        int crCount = v.count('\n');
+        if (crCount != 0)
+            setRowHeight(index, rowHeight(index) * (crCount + 1));
+
+
+    }
+
+    setItem(index, 0, new MLinesItem(this, QString()));
+    setItem(index, 1, new MLinesItem(this, QString()));
+    if(!isReadOnly)
+        setItem(index, 2, new TableItem(this, Q3TableItem::Never,""));
+    setRowStretchable(index, TRUE);
+}
+
+void KeyValuesTable::AdjustColumnCount(bool isReadOnly)
+{
+    int columnCount = isReadOnly ? 2 : 3;
+    int currentCount = numCols();
+
+    for(int current = currentCount - 1; current  > -1; current--)
+        removeColumn(0);
+
+    for(int current(0); current < columnCount ; current++)
+    {
+        insertColumns(current);
+        horizontalHeader()->setLabel(current, colNames[current]);
+    }
+    setColumnStretchable(1, true);
+    if(!isReadOnly)
+    {
+        setColumnStretchable(2, false);
+        adjustColumn(2);
+    }
+    horizontalHeader()->setResizeEnabled(true, 0);
+    horizontalHeader()->setResizeEnabled(true, 1);
+
+}
+
+void KeyValuesTable::AdjustRowCount(HaveKeyValueData * kvData, bool)
+{
+    int rowCount = numRows();
+    int index ;
+    for (index = rowCount - 1; index > -1; index --)
+        removeRow(0);
+    for(unsigned i(0); i < kvData->get_n_keys() + 1; i++)
+    {
+        insertRows(i);
+        setRowStretchable(i, true);
+    }
+}
+
+void KeyValuesTable::AdjustEditability(bool isReadOnly)
+{
+    int rowCount = numRows();
+    for (int i(0); i < rowCount; i++)
+    {
+        item(i, 0)->setReplaceable(!isReadOnly);
+        item(i, 1)->setReplaceable(!isReadOnly);
+        if(!isReadOnly)
+            item(i, 2)->setReplaceable(false);
+        setRowReadOnly(i, isReadOnly);
+
     }
 }
