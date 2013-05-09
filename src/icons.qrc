@@ -13,5 +13,7 @@
         <file>icons/up.png</file>
         <file>icons/bullet_add.png</file>
         <file>icons/arrow_refresh.png</file>
+        <file>icons/date_empty.png</file>
+        <file>icons/photo_edit.png</file>
     </qresource>
 </RCC>

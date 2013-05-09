@@ -106,6 +106,7 @@
 #include "browsersearch.xpm"
 #include "misc/ClipboardManager.h"
 #include "ui/catalogwidget.h"
+#include "tool/snippets.h"
 #include <QClipboard>
 #include <QApplication>
 #include <QShortcut>
@@ -249,6 +250,7 @@ CreateToolButton(
     QObject::connect(newButton, SIGNAL(clicked()), receiver, boundslot);
     newButton->setIcon(icon);
     newButton->setText(shown);
+    newButton->setToolTip(shown);
     newButton->setMinimumSize(30, 30);
     parent->addWidget(newButton);
     return newButton;
@@ -306,20 +308,27 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
 
 
 
-    prev = CreateToolButton(*leftPixmap,
-                            this, SLOT(prev_select()), projectTools, "previous selected");
+    prev = CreateToolButton(*leftPixmap,  this, SLOT(prev_select()), projectTools, "previous selected");
     Q3WhatsThis::add(prev, prevText());
 
-    next = CreateToolButton(*rightPixmap,
-                            this, SLOT(next_select()), projectTools, "next selected");
+    next = CreateToolButton(*rightPixmap, this, SLOT(next_select()), projectTools, "next selected");
     Q3WhatsThis::add(next, nextText());
 
 
     Q3WhatsThis::add(projectOpen, projectOpenText());
     Q3WhatsThis::add(projectSave, projectSaveText());
+
+    tbClipboard = CreateToolButton(QIcon(":/root/icons/date_empty.png").pixmap(),
+                                   this, SLOT(OnCallClipboardMenu()), projectTools, "Call clipboard");
+    tbQuickEdit = CreateToolButton(QIcon(":/root/icons/photo_edit.png").pixmap(),
+                                   this, SLOT(OnShowQuickEdit()), projectTools, "Call QuickEdit window(Ctrl-E)");
+    tbQuickEdit->setEnabled(false);
+
     QToolButton * whatsThisButton
         = CreateToolButton(QApplication::style()->standardIcon(QStyle::SP_TitleBarContextHelpButton).pixmap(),
                            this, SLOT(whats_this()), projectTools, "Whats's this?");
+
+
 
     generateLabel = new QLabel(tr("Generate:"));
     QFont font = generateLabel->font();
@@ -484,6 +493,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
     wdgCatalog = new CatalogWidget;
     quickEdit = new QuickEdit();
     browser = new BrowserView();
+    connect(browser, SIGNAL(currentChanged(Q3ListViewItem*)), this, SLOT(OnChooseQuickEditMode(Q3ListViewItem*)));
 
     wdgCatalog->Init(this, browser);
     connect(wdgCatalog, SIGNAL(markedRemove(QString,int)), browser, SLOT(OnUnmarkItem(QString,int)));
@@ -491,6 +501,7 @@ UmlWindow::UmlWindow(bool ) : QMainWindow(0, "DoUML", Qt::WDestructiveClose)
 
 
     quickEdit->Init(this, browser);
+    quickEdit->setWindowFlags(Qt::WindowStaysOnTopHint);
     sh1 = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_E),this, SLOT(OnShowQuickEdit()),SLOT(OnShowQuickEdit()), Qt::ApplicationShortcut);
 
 
@@ -2363,12 +2374,35 @@ void UmlWindow::OnPickSelectionFromItem(const QModelIndex & current, const QMode
     itemAsNode->select_in_browser();
 }
 
+void UmlWindow::OnChooseQuickEditMode(Q3ListViewItem* item)
+{
+    if(!item)
+        return;
+    //TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
+//    if(!itemAsInterface)
+//        return;
+    BrowserNode* itemAsNode = static_cast<BrowserNode*>(item);
+    if(!itemAsNode)
+        return;
+    if(quickEdit->ValidType(itemAsNode))
+        tbQuickEdit->setEnabled(true);
+    else
+        tbQuickEdit->setEnabled(false);
+
+}
+
 void UmlWindow::OnShowQuickEdit()
 {
     if(quickEdit->isVisible())
         quickEdit->close();
     else
         quickEdit->OnShow();
+}
+
+void UmlWindow::OnCallClipboardMenu()
+{
+    An<ClipboardManager> clipboard;
+    clipboard->GetMenuInstance()->popup(QCursor::pos());
 }
 
 void UmlWindow::whats_this() const

@@ -37,6 +37,7 @@ public:
     ~QuickEdit();
     void Init(UmlWindow* window, BrowserView* view);
     void Show(BrowserNode*);
+    bool ValidType(BrowserNode*);
     
 protected:
     void closeEvent(QCloseEvent *) override;

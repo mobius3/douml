@@ -25,6 +25,7 @@
 #define CLIPBOARDMANAGER_H
 
 #include <QObject>
+#include <QMenu>
 #include <QStringList>
 #include "misc/SingletonHolder.h"
 
@@ -35,12 +36,24 @@ public:
     ClipboardManager(QObject * _parent = 0);
     ~ClipboardManager();
     QStringList GetStrings();
+    QMenu* GetMenuInstance(int base = 0, QMenu * existingMenu = nullptr);
 public slots:
     virtual void OnClipboardUpdate();
-    //void OnClipboardDataRequested();
     virtual void OnPutItemIntoClipboard(QString);
+
+    virtual void OnPutItemIntoClipboardRequested();
+    virtual void OnClipboardRequested();
+    virtual void OnMoreClipboardRequested();
+    virtual void OnLessClipboardRequested();
+
 private:
+    void FillClipboardMenu(QMenu* clipboardMenu, int base);
     QStringList strings;
+    QMenu* clipboardMenu = nullptr;
+
+    int lastClipboardItemShown = 0;
+    int clipboardListSize = 10;
+
 };
 BIND_TO_SELF_SINGLE(ClipboardManager);
 #endif // CLIPBOARDMANAGER_H

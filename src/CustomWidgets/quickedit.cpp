@@ -640,6 +640,16 @@ void QuickEdit::Show(BrowserNode * node)
 
 }
 
+bool QuickEdit::ValidType(BrowserNode * node)
+{
+    if(!node)
+        return false;
+    UmlCode nodeType = node->get_type();
+    if(!validTypes.contains(nodeType))
+        return false;
+    return true;
+}
+
 void QuickEdit::closeEvent(QCloseEvent *)
 {
     QSettings settings("settings.ini", QSettings::IniFormat);

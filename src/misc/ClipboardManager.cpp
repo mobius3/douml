@@ -35,6 +35,18 @@ QStringList ClipboardManager::GetStrings()
 {
     return strings;
 }
+
+QMenu* ClipboardManager::GetMenuInstance(int base, QMenu* existingMenu)
+{
+    if(!existingMenu)
+    {
+        if(!clipboardMenu)
+            clipboardMenu = new QMenu();
+        existingMenu = clipboardMenu;
+    }
+    FillClipboardMenu(existingMenu, base);
+    return existingMenu;
+}
 ClipboardManager::~ClipboardManager()
 {}
 
@@ -51,5 +63,68 @@ void ClipboardManager::OnPutItemIntoClipboard(QString text)
 {
     QClipboard * clipboard = QApplication::clipboard();
     clipboard->setText(text);
+}
+
+void ClipboardManager::OnPutItemIntoClipboardRequested()
+{
+    QAction * senderAction = qobject_cast<QAction *>(sender());
+    OnPutItemIntoClipboard(senderAction->data().toString());
+}
+
+void ClipboardManager::OnClipboardRequested()
+{
+
+}
+
+void ClipboardManager::OnMoreClipboardRequested()
+{
+    FillClipboardMenu(clipboardMenu, lastClipboardItemShown);
+}
+
+void ClipboardManager::OnLessClipboardRequested()
+{
+    FillClipboardMenu(clipboardMenu, lastClipboardItemShown - clipboardListSize);
+}
+
+void ClipboardManager::FillClipboardMenu(QMenu * clipboardMenu, int base)
+{
+    clipboardMenu->clear();
+    if (base != 0)
+    {
+        QAction * lessClipboard = new QAction("Less Clipboard", clipboardMenu);
+        connect(lessClipboard, SIGNAL(triggered()), this, SLOT(OnLessClipboardRequested()));
+        clipboardMenu->addAction(lessClipboard);
+    }
+
+    int maxItems = strings.size() > 10 ? 10 : strings.size();
+    int i = base;
+
+    for (; i < maxItems; ++i) {
+        QString text = strings.at(strings.size() - 1 - i);
+        this->blockSignals(true);
+        QString itemText;
+
+        if (text.length() < 15)
+            itemText = text;
+        else {
+            text.left(15);
+            itemText = text  + "...";
+        }
+
+        QAction * action = new QAction(itemText, clipboardMenu);
+        action->setData(text);
+        connect(action, SIGNAL(triggered()), this, SLOT(OnPutItemIntoClipboardRequested()));
+        this->blockSignals(false);
+        clipboardMenu->addAction(action);
+
+    }
+
+    lastClipboardItemShown += i;
+
+    if (lastClipboardItemShown < strings.size()) {
+        QAction * moreClipboard = new QAction("More Clipboard", clipboardMenu);
+        connect(moreClipboard, SIGNAL(triggered()), this, SLOT(OnMoreClipboardRequested()));
+        clipboardMenu->addAction(moreClipboard);
+    }
 }
 

@@ -128,6 +128,8 @@ protected:
     char style;	// '?' unknown, 'm' = motif, '+' = motif+, 'w' = windows
     QToolButton * prev;
     QToolButton * next;
+    QToolButton * tbClipboard = nullptr;
+    QToolButton * tbQuickEdit = nullptr;
     Q3ValueList<BrowserNode *> select_historic;
 
 public:
@@ -271,7 +273,10 @@ private slots:
 public slots:
     void whats_this() const;
     void OnPickSelectionFromItem(const QModelIndex&,const QModelIndex& );
+    void OnChooseQuickEditMode(Q3ListViewItem *item);
     void OnShowQuickEdit();
+    void OnCallClipboardMenu();
+    //void OnCallQuickEdit();
 
 };
 
