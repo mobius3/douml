@@ -1069,7 +1069,12 @@ void BrowserClass::exec_menu_choice(int rank,
 
         if (((BrowserNode *) parent())->enter_child_name(name, TR("enter class's name : "),
                                                          UmlClass, FALSE, FALSE))
-            duplicate((BrowserNode *) parent(), name)->select_in_browser();
+
+        {
+            BrowserNode * duplicatedNode = duplicate((BrowserNode *) parent(), name);
+            move(duplicatedNode, this);
+            duplicatedNode->select_in_browser();
+        }
         else
             return;
     }
@@ -1249,15 +1254,16 @@ BrowserNode * BrowserClass::duplicate(BrowserNode * p, QString name)
         n += 1;
 
     // duplicates the sub elts
-    for (child = firstChild(); n != 0; child = child->nextSibling(), n -= 1) {
-        if (!((BrowserNode *) child)->deletedp()) {
-            if (IsaRelation(((BrowserNode *) child)->get_type())) {
+    for (child = firstChild(); n != 0; child = child->nextSibling(), n -= 1)
+    {
+        if (!((BrowserNode *) child)->deletedp())
+        {
+            if (IsaRelation(((BrowserNode *) child)->get_type()))
+            {
                 RelationData * rd = (RelationData *)
                         ((BrowserNode *) child)->get_data();
 
-                if ((rd->get_start_class() != this) ||
-                        (rd->get_end_class() != this) ||
-                        rd->is_a((BrowserRelation *) child))
+                if ((rd->get_start_class() != this) || (rd->get_end_class() != this) || rd->is_a((BrowserRelation *) child))
                     ((BrowserNode *) child)->duplicate(result);
             }
             else
@@ -2229,13 +2235,14 @@ void BrowserClass::DropAfterEvent(QDropEvent * e, BrowserNode * after)
          ((bn = UmlDrag::decode(e, BrowserOperation::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserRelation::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserSimpleRelation::drag_key(this))) != 0)) &&
-            (bn != after) && (bn != this)) {
+            (bn != after) && (bn != this))
+    {
         bool a_class = (bn->get_type() == UmlClass);
 
-        if (may_contains(bn, a_class))  {
-            if ((after == 0) &&
-                    a_class &&
-                    ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
+        if (may_contains(bn, a_class))
+        {
+            if ((after == 0) && a_class && ((BrowserNode *) parent())->may_contains(bn, TRUE))
+            {
                 // have choice
                 Q3PopupMenu m(0);
 

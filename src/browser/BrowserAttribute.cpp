@@ -97,7 +97,8 @@ BrowserNode * BrowserAttribute::duplicate(BrowserNode * p, QString name)
 {
     BrowserAttribute * result = new BrowserAttribute(this, p);
 
-    if (name.isEmpty()) {
+    if (name.isEmpty())
+    {
         result->set_name(get_name());
         result->def->replace((BrowserClass *) parent(), (BrowserClass *) p);
     }
@@ -105,6 +106,8 @@ BrowserNode * BrowserAttribute::duplicate(BrowserNode * p, QString name)
         result->set_name(name);
 
     result->update_stereotype();
+    move(result, this);
+    result->select_in_browser();
 
     return result;
 }

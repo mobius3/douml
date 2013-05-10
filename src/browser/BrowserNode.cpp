@@ -984,6 +984,7 @@ void BrowserNode::mark_menu(Q3PopupMenu & m, const char * s, int bias) const
                     if (after)
                         m.setWhatsThis(m.insertItem(TR("Move marked after"), bias + 4),
                                        TR("to move the marked items after %1", s));
+                    m.insertSeparator();
                 }
             }
 

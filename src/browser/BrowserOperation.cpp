@@ -145,7 +145,8 @@ BrowserNode * BrowserOperation::duplicate(BrowserNode * p, QString n)
 
     result->set_name(n);
     result->update_stereotype();
-
+    move(result, this);
+    result->select_in_browser();
     return result;
 }
 

@@ -128,6 +128,8 @@ BrowserNode * BrowserArtifact::duplicate(BrowserNode * p, QString name)
 
     result->set_name((name.isEmpty()) ? get_name() : name);
     result->update_stereotype();
+    move(result, this);
+    result->select_in_browser();
 
     return result;
 }
