@@ -35,6 +35,7 @@
 #include <QSettings>
 #include "Logging/QsLog.h"
 #include "Logging/QsLogDest.h"
+#include <QTest>
 int main(int argc, char ** argv)
 {
 #ifdef DEBUG
@@ -93,10 +94,9 @@ int main(int argc, char ** argv)
         return 0;
     }
 
-
-
     if (UmlCom::connect(QString(argv[port_index]).toUInt())) {
         try {
+
             UmlCom::trace("<b>C++ generator</b> release 2.18<br>");
             UmlCom::traceAutoRaise(FALSE);
             UmlCom::targetItem()->generate();

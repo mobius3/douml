@@ -80,8 +80,10 @@ static WrapperStr relative_path(const QDir & destdir, WrapperStr relto)
     QDir fromdir(relto);
     /*WrapperStr from = WrapperStr(fromdir.absPath());
     WrapperStr to = WrapperStr(destdir.absPath());*/
-    const char * cfrom = fromdir.absolutePath().toAscii().constData();
-    const char * cto = destdir.absolutePath().toAscii().constData();
+    QByteArray fromBa = fromdir.absolutePath().toAscii();
+    QByteArray toBa = destdir.absolutePath().toAscii();
+    const char * cfrom = fromBa.constData();
+    const char * cto = toBa.constData();
     int lastsep = -1;
     int index = 0;
 
