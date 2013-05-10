@@ -62,7 +62,7 @@ public:
     BrowserAttribute(QString s, BrowserNode * p, AttributeData * d, int id = 0);
     BrowserAttribute(const BrowserAttribute * model, BrowserNode * p);
     virtual ~BrowserAttribute();
-
+    uint TypeID() override;
     virtual void delete_it();
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());

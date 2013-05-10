@@ -115,6 +115,11 @@ BrowserAttribute::~BrowserAttribute()
     delete def;
 }
 
+uint BrowserAttribute::TypeID()
+{
+    return TypeIdentifier<BrowserAttribute>::id();
+}
+
 void BrowserAttribute::clear(bool old)
 {
     all.clear(old);
@@ -459,6 +464,7 @@ void BrowserAttribute::modified()
 {
     repaint();
     ((BrowserNode *) parent())->modified();
+    def->modified();
 
     if (get_oper != 0)
         update_get_oper();

@@ -1361,6 +1361,18 @@ BrowserNode *BrowserClass::addAttribute()
     return attr;
 }
 
+BrowserNode *BrowserClass::addEnumItem()
+{
+    BrowserAttribute * attr = nullptr;
+    QString name;
+    attr = BrowserAttribute::new_one(name, this, true);
+    setOpen(TRUE);
+    def->modified();
+    package_modified();
+    attr->select_in_browser();
+    return attr;
+}
+
 BrowserNode *BrowserClass::duplicate_attribute(BrowserAttribute *attr, bool enum_item)
 {
     return add_attribute(attr, enum_item, true);

@@ -115,15 +115,13 @@ void QuickEdit::OnContextMenu(QPoint point)
     if(!current.isValid())
         return;
 
-    CreateMenu();
     current = current.sibling(current.row(), 0);
-
-
-
     TreeItemInterface *itemAsInterface = static_cast<TreeItemInterface*>(current.internalPointer());
     BrowserNode* currentNode = static_cast<BrowserNode*>(itemAsInterface->InternalPointer());
     if(!itemAsInterface)
         return;
+
+    CreateMenu();
     SetupMenu(itemAsInterface);
     if(currentNode->TypeID()  !=  TypeIdentifier<BrowserOperationAttribute>::id())
     {
@@ -257,7 +255,6 @@ void QuickEdit::SetupMenu(TreeItemInterface * interface)
         actAfter->setEnabled(true);
     }
     interface->childCount() == 0 ? actCollapseExpandSelf->setEnabled(false) : actCollapseExpandSelf->setEnabled(true);
-    //itemExpanded ? actCollapseExpand->setText(tr("Collapse")) : actCollapseExpand->setText(tr("Expand"));
 }
 
 void QuickEdit::SetupItemCreationFuncs()
@@ -455,7 +452,11 @@ void QuickEdit::AddAttribute()
         return;
 
     //classNode->addOperation()
-    BrowserAttribute* newAttribute = static_cast<BrowserAttribute*>(classNode->addAttribute());
+    BrowserAttribute* newAttribute;
+    if(QString(classNode->get_stereotype()) == "enum")
+        newAttribute = static_cast<BrowserAttribute*>(classNode->addEnumItem());
+    else
+        newAttribute = static_cast<BrowserAttribute*>(classNode->addAttribute());
     QModelIndex parentIndex;
     TreeItemInterface* parent;
     if(treeModel->parent(current).isValid())
@@ -471,13 +472,13 @@ void QuickEdit::AddAttribute()
 
     QSharedPointer<TreeItemInterface> sharedOfNode =  parent->GetChildren()[insertIndex];
 
-    if(!treeModel->insertRows(newItemPosition-1, 1, current))
+    if(!treeModel->insertRows(newItemPosition, 1, current))
         return;
 
     if(!current.isValid())
         return;
 
-    QModelIndex newItem = treeModel->index(newItemPosition-1,0,current);
+    QModelIndex newItem = treeModel->index(newItemPosition,0,current);
     TreeItemInterface *newItemInterface = static_cast<TreeItemInterface*>(newItem.internalPointer());
     TreeItem<BrowserNode>* newItemAsNode = static_cast<TreeItem<BrowserNode>*>(newItemInterface);
     newItemAsNode->SetController(attributeController);
