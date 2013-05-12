@@ -130,11 +130,12 @@ install:
 		echo "Encoding=UTF-8" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "Name=DoUML" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "Type=Application" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
+		echo "GenericName=Free UML 2 modeler" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "Comment=Free UML 2 modeler" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "Exec=$(DEB_DESTDIR)$(DOUML_DIR)/douml" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "TryExec=douml" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "Icon=douml" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Categories=Development;" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
+		echo "Categories=Development;Building;GUIDesigner;IDE;Documentation;" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 	fi
 
 uninstall:
