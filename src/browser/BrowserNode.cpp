@@ -1133,7 +1133,8 @@ void BrowserNode::mark_management(int choice)
             if((BrowserNode *) bn->parent()  != this)
             {
                 BrowserNode* nodeCopy = bn->duplicate(this);
-                move(nodeCopy, 0);
+                move(nodeCopy, this);
+                nodeCopy->select_in_browser();
 
                 if (nodeCopy->get_type() == UmlAttribute)
                 {
