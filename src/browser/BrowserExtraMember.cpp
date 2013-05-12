@@ -194,8 +194,12 @@ void BrowserExtraMember::exec_menu_choice(int rank)
         break;
 
     case 3:
-        ((BrowserClass *) parent())->add_extra_member(this);
+    {
+        BrowserNode * extraDuplicate = ((BrowserClass *) parent())->add_extra_member(this);
+        move(extraDuplicate, this);
+        extraDuplicate->select_in_browser();
         return;
+    }
 
     default:
         if (rank >= 99990)

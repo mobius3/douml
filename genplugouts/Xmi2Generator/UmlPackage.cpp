@@ -174,8 +174,7 @@ void UmlPackage::xmi(int argc, char ** argv)
 
                 search_profiles(profiles);
 
-                out << "<?xml version=\"1.0\" encoding=\"" << encoding.operator QString() << "\"?>\n\
-<xmi:XMI xmi:version=\"2." << ((_uml_20) ? "0" : "1")
+                out << "<?xml version=\"1.0\" encoding=\"" << encoding.operator QString() << "\"?>\n<xmi:XMI xmi:version=\"2." << ((_uml_20) ? "0" : "1")
                     << "\" xmlns:uml=\"http://schema.omg.org/spec/UML/2." << ((_uml_20) ? "0" : "1")
                     << "\" xmlns:xmi=\"http://schema.omg.org/spec/XMI/2." << ((_uml_20) ? "0" : "1")
                     << "\"";

@@ -707,7 +707,11 @@ void BrowserOperation::exec_menu_choice(int rank)
 
     case 1:
         if ((get_of == 0) && (set_of == 0))
-            ((BrowserClass *) parent())->duplicate_operation(this);
+        {
+            BrowserNode * operDuplicate = ((BrowserClass *) parent())->duplicate_operation(this);
+            move(operDuplicate, this);
+            operDuplicate->select_in_browser();
+        }
 
         ImplBy.clear();
         return;

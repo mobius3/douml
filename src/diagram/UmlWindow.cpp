@@ -1236,25 +1236,27 @@ bool UmlWindow::can_close()
     if (packagePtr) {
         bool mustBeSaved = BrowserPackage::must_be_saved();
 
-        if (mustBeSaved) {
+        if (mustBeSaved)
+        {
             int result = msg_warning("DoUML", TR("The project is modified, save it ?\n"),
                                      QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
 
-            switch (result) {
+            switch (result)
+            {
             case QMessageBox::Yes:
                 ws->hide();
                 BrowserPackage::save_all(TRUE);
                 ws->show();
                 break;
 
-            case QMessageBox::Cancel:
+            case QMessageBox::No:
                 statusBar()->message(TR("Close aborted"), 2000);
-                return FALSE;
+                return true;
             }
         }
     }
 
-    return TRUE;
+    return false;
 }
 
 void UmlWindow::set_marked_generation()
@@ -1289,9 +1291,10 @@ void UmlWindow::do_close()
         the->close();
 }
 
-void UmlWindow::closeEvent(QCloseEvent *)
+void UmlWindow::closeEvent(QCloseEvent *e)
 {
     quit();
+    e->ignore();
 #if 0
 
     if (can_close()) {
@@ -1348,7 +1351,8 @@ void UmlWindow::quit()
 {
     abort_line_construction();
 
-    if (!BrowserNode::edition_active() && can_close()) {
+    if (!BrowserNode::edition_active() && can_close())
+    {
         if (browser->get_project() != 0) {
             save_session();
             BrowserView::remove_temporary_files();
