@@ -10,7 +10,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = UniversalModels
 TEMPLATE = lib
-CONFIG+= build_all staticlib
+unix:CONFIG+= build_all staticlib
+windows:CONFIG+= build_all
 TARGET = $$qtLibraryTarget(UniversalModels)
 
 INCLUDEPATH += include \

@@ -1232,29 +1232,30 @@ bool UmlWindow::saveas_it()
 bool UmlWindow::can_close()
 {
     BrowserPackage * packagePtr = browser->get_project();
+    if(!packagePtr)
+        return true;
+    bool mustBeSaved = BrowserPackage::must_be_saved();
 
-    if (packagePtr) {
-        bool mustBeSaved = BrowserPackage::must_be_saved();
+    if (mustBeSaved)
+    {
+        int result = msg_warning("DoUML", TR("The project is modified, save it ?\n"),
+                                 QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
 
-        if (mustBeSaved) {
-            int result = msg_warning("DoUML", TR("The project is modified, save it ?\n"),
-                                     QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel);
+        switch (result)
+        {
+        case QMessageBox::Yes:
+            ws->hide();
+            BrowserPackage::save_all(TRUE);
+            ws->show();
+            break;
 
-            switch (result) {
-            case QMessageBox::Yes:
-                ws->hide();
-                BrowserPackage::save_all(TRUE);
-                ws->show();
-                break;
-
-            case QMessageBox::Cancel:
-                statusBar()->message(TR("Close aborted"), 2000);
-                return FALSE;
-            }
+        case QMessageBox::No:
+            statusBar()->message(TR("Close aborted"), 2000);
+            return true;
         }
     }
 
-    return TRUE;
+    return false;
 }
 
 void UmlWindow::set_marked_generation()
@@ -1278,9 +1279,10 @@ void UmlWindow::close()
     abort_line_construction();
     bool editionActive = !BrowserNode::edition_active();
     bool canClose = can_close();
-
     if (editionActive && canClose)
+    {
         close_it();
+    }
 }
 
 void UmlWindow::do_close()
@@ -1289,9 +1291,11 @@ void UmlWindow::do_close()
         the->close();
 }
 
-void UmlWindow::closeEvent(QCloseEvent *)
+void UmlWindow::closeEvent(QCloseEvent *e)
 {
     quit();
+    if(!quitConfirmed)
+        e->ignore();
 #if 0
 
     if (can_close()) {
@@ -1348,16 +1352,21 @@ void UmlWindow::quit()
 {
     abort_line_construction();
 
-    if (!BrowserNode::edition_active() && can_close()) {
+    bool canClose = true;
+    bool editionActive = false;
+    if ((editionActive = BrowserNode::edition_active() == false) && (canClose = can_close()) == true)
+    {
         if (browser->get_project() != 0) {
             save_session();
             BrowserView::remove_temporary_files();
             // delete lock
             set_user_id(-1);
         }
-
+        quitConfirmed = true;
         QApplication::exit(0);
+        return;
     }
+    quitConfirmed = canClose;
 }
 
 void UmlWindow::do_quit()

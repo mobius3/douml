@@ -112,8 +112,8 @@ BrowserNode * BrowserRelation::duplicate(BrowserNode * p, QString)
     }
 
     result->update_stereotype();
-    move(result, this);
-    result->select_in_browser();
+    //move(result, this);
+    //result->select_in_browser();
     return result;
 }
 

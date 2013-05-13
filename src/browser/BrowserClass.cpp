@@ -1381,7 +1381,8 @@ BrowserNode *BrowserClass::addEnumItem()
 
 BrowserNode *BrowserClass::duplicate_attribute(BrowserAttribute *attr, bool enum_item)
 {
-    return add_attribute(attr, enum_item, true);
+    //BrowserNode * attrDuplicate = add_attribute(attr, enum_item, true);
+    return add_attribute(attr, enum_item, true);;
 }
 
 BrowserNode * BrowserClass::add_extra_member(BrowserExtraMember * em)

@@ -11,6 +11,7 @@
 #include <q3groupbox.h>
 #include <qtextcodec.h>
 #include <qdir.h>
+#include <QSettings>
 //Added by qt3to4:
 #include <Q3CString>
 

@@ -1,3 +1,13 @@
+v1.0b7
+    1. Previously, after "close window" button was clicked and user selected "Cancel" the app closed nevertheless. No longer the case.
+    2. Fixed crash when reopening operation window that had different amount of KV-pairs
+    3. Duplicated items in tree appear next to their source (valid of class, attribute, operation, extra member)
+    4. Settings will now be craeted automatically if there is no file present.
+    5. Fixed "relative path" for cpp generation.
+    6. Added capability of adding enum items and class attributes to Quickedit window
+    7. Added buttons for clipboard access and Quickedit to the toolbar
+    8. List of recent projects now lives in settings.ini
+    9. Updated "About" dialog and a new icon 
 v1.0b6
     1. Import/Export XMI2.1 are working now. Pls test for any possible bugs before fully embracing them.
 

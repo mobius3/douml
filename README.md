@@ -1,6 +1,6 @@
-Built from tag: 1.0b6
+Built from tag: 1.0b7
 
-DoUML version 1.0b6
+DoUML version 1.0b7
 ==================
 
 *** IMPORTANT NOTICE ***

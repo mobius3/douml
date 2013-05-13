@@ -106,8 +106,8 @@ BrowserNode * BrowserAttribute::duplicate(BrowserNode * p, QString name)
         result->set_name(name);
 
     result->update_stereotype();
-    move(result, this);
-    result->select_in_browser();
+    //move(result, this);
+    //result->select_in_browser();
 
     return result;
 }
@@ -377,8 +377,12 @@ void BrowserAttribute::exec_menu_choice(int rank)
         break;
 
     case 6:
-        ((BrowserClass *) parent())->duplicate_attribute(this);
+    {
+        BrowserNode * attrDuplicate = ((BrowserClass *) parent())->duplicate_attribute(this);
+        move(attrDuplicate, this);
+        attrDuplicate->select_in_browser();
         return;
+    }
 
     case 7:
         ReferenceDialog::show(this);
