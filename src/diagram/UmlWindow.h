@@ -131,6 +131,7 @@ protected:
     QToolButton * tbClipboard = nullptr;
     QToolButton * tbQuickEdit = nullptr;
     Q3ValueList<BrowserNode *> select_historic;
+    bool quitConfirmed = false;
 
 public:
     UmlWindow(bool batch);
