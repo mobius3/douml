@@ -651,7 +651,7 @@ bool PackageCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void PackageCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void PackageCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(3);
@@ -671,22 +671,21 @@ void PackageCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                PackageCanvas *canvas = (PackageCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((PackageCanvas *) it.current())->name_in_tab = name_in_tab;
+                    canvas->name_in_tab = name_in_tab;
 
                 if (!st[1].name.isEmpty())
-                    ((PackageCanvas *) it.current())->show_context_mode = show_context_mode;
+                    canvas->show_context_mode = show_context_mode;
 
                 if (!st[2].name.isEmpty())
-                    ((PackageCanvas *) it.current())->show_stereotype_properties = show_stereotype_properties;
+                    canvas->show_stereotype_properties = show_stereotype_properties;
 
                 if (!co[0].name.isEmpty())
-                    ((PackageCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((PackageCanvas *) it.current())->modified();	// call package_modified()
+                canvas->modified();
             }
         }
 

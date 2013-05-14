@@ -671,7 +671,7 @@ bool ActivityObjectCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void ActivityObjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ActivityObjectCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(1);
@@ -690,18 +690,17 @@ void ActivityObjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                ActivityObjectCanvas *canvas = (ActivityObjectCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((ActivityObjectCanvas *) it.current())->write_horizontally =
+                    canvas->write_horizontally =
                         write_horizontally;
 
                 if (!co[0].name.isEmpty())
-                    ((ActivityObjectCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((ActivityObjectCanvas *) it.current())->settings.set(st, 1);
-                ((ActivityObjectCanvas *) it.current())->modified();	// call package_modified()
+                canvas->settings.set(st, 1);
+                canvas->modified();	// call package_modified()
             }
         }
 

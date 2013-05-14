@@ -310,7 +310,7 @@ bool SdContinuationCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void SdContinuationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SdContinuationCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -323,11 +323,10 @@ void SdContinuationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((SdContinuationCanvas *) it.current())->itscolor = itscolor;
-                ((SdContinuationCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                SdContinuationCanvas *canvas = (SdContinuationCanvas *)item;
+                canvas->itscolor = itscolor;
+                canvas->modified();
             }
         }
 

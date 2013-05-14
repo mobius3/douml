@@ -605,7 +605,7 @@ bool ActivityPartitionCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void ActivityPartitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ActivityPartitionCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -618,11 +618,10 @@ void ActivityPartitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((ActivityPartitionCanvas *) it.current())->itscolor = itscolor;
-                ((ActivityPartitionCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                ActivityPartitionCanvas *canvas = (ActivityPartitionCanvas *)item;
+                canvas->itscolor = itscolor;
+                canvas->modified();
             }
         }
 

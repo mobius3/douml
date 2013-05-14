@@ -586,7 +586,7 @@ bool SdClassInstCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void SdClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SdClassInstCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(3);
@@ -606,25 +606,24 @@ void SdClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                SdClassInstCanvas *canvas = (SdClassInstCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((SdClassInstCanvas *) it.current())->drawing_mode =
+                    canvas->drawing_mode =
                         drawing_mode;
 
                 if (!st[1].name.isEmpty())
-                    ((SdClassInstCanvas *) it.current())->write_horizontally =
+                    canvas->write_horizontally =
                         write_horizontally;
 
                 if (!st[2].name.isEmpty())
-                    ((SdClassInstCanvas *) it.current())->show_context_mode =
+                    canvas->show_context_mode =
                         show_context_mode;
 
                 if (!co[0].name.isEmpty())
-                    ((SdClassInstCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((SdClassInstCanvas *) it.current())->modified();	// call package_modified()
+                canvas->modified();	// call package_modified()
             }
         }
 
@@ -798,7 +797,7 @@ void SdClassInstCanvas::history_load(QBuffer & b)
 
 void SdClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 {
-    Q3PtrList<SdClassInstCanvas> l;
+    QList<SdClassInstCanvas *> l;
     Q3CanvasItemList::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -819,11 +818,7 @@ void SdClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 
     com->write_unsigned(l.count());
 
-    Q3PtrListIterator<SdClassInstCanvas> it(l);
-
-    for (; it.current(); ++it) {
-        SdClassInstCanvas * i = it.current();
-
+    foreach (SdClassInstCanvas *i, l) {
         com->write_unsigned((unsigned) i->get_ident());
 
         if (i->browser_node->get_type() == UmlClass) {

@@ -245,7 +245,7 @@ bool ConstraintCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void ConstraintCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ConstraintCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -258,11 +258,10 @@ void ConstraintCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((ConstraintCanvas *) it.current())->itscolor = itscolor;
-                ((ConstraintCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                ConstraintCanvas *canvas = (ConstraintCanvas *)item;
+                canvas->itscolor = itscolor;
+                canvas->modified();
             }
         }
 
@@ -292,11 +291,10 @@ ConstraintCanvas::compute(UmlCanvas * canvas,
 
     QString s;
     QString constraint;
-    BrowserNode * bn;
 
     if (current == 0) {
         // get all
-        for (bn = elts.first(); bn != 0; bn = elts.next()) {
+        foreach (BrowserNode *bn, elts) {
             if (bn->get_type() == UmlClass)
                 // change on class's members modify class => memorize classes only
                 list.append(bn->get_data());
@@ -310,7 +308,7 @@ ConstraintCanvas::compute(UmlCanvas * canvas,
     else if (current->indicate_visible) {
         Q3ValueList<BrowserNode *> & visible = current->hidden_visible;
 
-        for (bn = elts.first(); bn != 0; bn = elts.next()) {
+        foreach (BrowserNode *bn, elts) {
             if (visible.findIndex(bn) != -1) {
                 if (bn->get_type() == UmlClass)
                     // change on class's members modify class => memorize classes only
@@ -326,7 +324,7 @@ ConstraintCanvas::compute(UmlCanvas * canvas,
     else {
         Q3ValueList<BrowserNode *> & hidden = current->hidden_visible;
 
-        for (bn = elts.first(); bn != 0; bn = elts.next()) {
+        foreach (BrowserNode *bn, elts) {
             if (hidden.findIndex(bn) == -1) {
                 if (bn->get_type() == UmlClass)
                     // change on class's members modify class => memorize classes only

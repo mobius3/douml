@@ -80,7 +80,7 @@ public:
     virtual bool move_with_its_package() const;
 
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
     virtual void clone_drawing_settings(const DiagramItem *src);
     void edit_drawing_settings();
 

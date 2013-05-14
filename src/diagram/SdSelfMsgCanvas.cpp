@@ -411,7 +411,7 @@ bool SdSelfMsgCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void SdSelfMsgCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SdSelfMsgCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(3);
@@ -428,22 +428,21 @@ void SdSelfMsgCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                SdSelfMsgCanvas *canvas = (SdSelfMsgCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((SdSelfMsgCanvas *) it.current())->drawing_language =
+                    canvas->drawing_language =
                         drawing_language;
 
                 if (!st[1].name.isEmpty())
-                    ((SdSelfMsgCanvas *) it.current())->show_full_oper =
+                    canvas->show_full_oper =
                         show_full_oper;
 
                 if (!st[2].name.isEmpty())
-                    ((SdSelfMsgCanvas *) it.current())->show_context_mode =
+                    canvas->show_context_mode =
                         show_context_mode;
 
-                ((SdSelfMsgCanvas *) it.current())->modified();	// call package_modified()
+                canvas->modified();
             }
         }
 

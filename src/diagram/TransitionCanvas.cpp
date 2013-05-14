@@ -403,7 +403,7 @@ bool TransitionCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void TransitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void TransitionCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(3);
@@ -421,23 +421,22 @@ void TransitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                TransitionCanvas *canvas = (TransitionCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((TransitionCanvas *) it.current())->drawing_language =
+                    canvas->drawing_language =
                         drawing_language;
 
                 if (!st[1].name.isEmpty())
-                    ((TransitionCanvas *) it.current())->write_horizontally =
+                    canvas->write_horizontally =
                         write_horizontally;
 
                 if (!st[2].name.isEmpty())
-                    ((TransitionCanvas *) it.current())->show_definition =
+                    canvas->show_definition =
                         show_definition;
 
-                ((TransitionCanvas *) it.current())->propagate_drawing_settings();
-                ((TransitionCanvas *) it.current())->modified();	// call package_modified()
+                canvas->propagate_drawing_settings();
+                canvas->modified();	// call package_modified()
             }
         }
 

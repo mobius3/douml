@@ -757,7 +757,7 @@ bool UcClassCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void UcClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void UcClassCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st;
@@ -774,15 +774,15 @@ void UcClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
 
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                UcClassCanvas *canvas = (UcClassCanvas *)item;
                 if (!co[0].name.isEmpty())
-                    ((UcClassCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((UcClassCanvas *) it.current())->settings.set(st, 0);
-                ((UcClassCanvas *) it.current())->modified();
-                ((UcClassCanvas *) it.current())->package_modified();
+                canvas->settings.set(st, 0);
+                canvas->modified();
+                canvas->package_modified();
             }
         }
 
@@ -840,14 +840,10 @@ QString UcClassCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 
 bool UcClassCanvas::has_relation(BasicData * def) const
 {
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    while (it.current()) {
-        if (IsaRelation(it.current()->type()) &&
-            (((RelationCanvas *) it.current())->get_data() == def))
+    foreach (ArrowCanvas *line, lines) {
+        if (IsaRelation(line->type()) &&
+            (((RelationCanvas *) line)->get_data() == def))
             return TRUE;
-
-        ++it;
     }
 
     return FALSE;

@@ -467,7 +467,7 @@ bool UcUseCaseCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void UcUseCaseCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void UcUseCaseCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -480,11 +480,10 @@ void UcUseCaseCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((UcUseCaseCanvas *) it.current())->itscolor = itscolor;
-                ((UcUseCaseCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                UcUseCaseCanvas *canvas = (UcUseCaseCanvas *)item;
+                canvas->itscolor = itscolor;
+                canvas->modified();	// call package_modified()
             }
         }
 
@@ -705,8 +704,8 @@ void UcUseCaseCanvas::history_load(QBuffer & b)
 
 void UcUseCaseCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 {
-    Q3PtrList<UcUseCaseCanvas> lu;
-    Q3PtrList<UcClassCanvas> la;
+    QList<UcUseCaseCanvas *> lu;
+    QList<UcClassCanvas *> la;
     Q3CanvasItemList::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -732,32 +731,25 @@ void UcUseCaseCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 
     com->write_unsigned(lu.count());
 
-    Q3PtrListIterator<UcUseCaseCanvas> itu(lu);
-
-    for (; itu.current(); ++itu) {
-        com->write_unsigned((unsigned) itu.current()->get_ident());
-        itu.current()->get_bn()->write_id(com);
-        com->write(itu.current()->rect());
+    foreach (UcUseCaseCanvas *canvas, lu) {
+        com->write_unsigned((unsigned) canvas->get_ident());
+        canvas->get_bn()->write_id(com);
+        com->write(canvas->rect());
     }
 
     // send Actors
 
     com->write_unsigned(la.count());
 
-    Q3PtrListIterator<UcClassCanvas> ita(la);
-
-    for (; ita.current(); ++ita)
-        ita.current()->get_bn()->write_id(com);
+    foreach (UcClassCanvas *canvas, la)
+        canvas->get_bn()->write_id(com);
 
     // send rels
 
-    Q3PtrList<ArrowCanvas> lr;
+    QList<ArrowCanvas *> lr;
 
-    for (itu.toFirst(); itu.current(); ++itu) {
-        Q3PtrListIterator<ArrowCanvas> itl(itu.current()->lines);
-
-        for (; itl.current(); ++itl) {
-            ArrowCanvas * r = itl.current();
+    foreach (UcUseCaseCanvas *canvas, lu) {
+        foreach (ArrowCanvas *r, canvas->lines) {
             DiagramItem * from = r->get_start();
             DiagramItem * to = r->get_end();
 
@@ -770,8 +762,6 @@ void UcUseCaseCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 
     com->write_unsigned(lr.count());
 
-    Q3PtrListIterator<ArrowCanvas> itr(lr);
-
-    for (; itr.current(); ++itr)
-        itr.current()->write_uc_rel(com);
+    foreach (ArrowCanvas *arrow, lr)
+        arrow->write_uc_rel(com);
 }

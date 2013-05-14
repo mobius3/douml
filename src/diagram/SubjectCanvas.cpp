@@ -318,7 +318,7 @@ bool SubjectCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void SubjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SubjectCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -331,11 +331,9 @@ void SubjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((SubjectCanvas *) it.current())->itscolor = itscolor;
-                ((SubjectCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                ((SubjectCanvas *) item)->itscolor = itscolor;
+                ((SubjectCanvas *) item)->modified();	// call package_modified()
             }
         }
 
@@ -486,7 +484,7 @@ void SubjectCanvas::history_hide()
 
 void SubjectCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 {
-    Q3PtrList<SubjectCanvas> subjects;
+    QList<SubjectCanvas *> subjects;
     Q3CanvasItemList::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
@@ -500,11 +498,8 @@ void SubjectCanvas::send(ToolCom * com, Q3CanvasItemList & all)
 
     com->write_unsigned(subjects.count());
 
-    SubjectCanvas * sc;
-
-    for (sc = subjects.first(); sc != 0; sc = subjects.next()) {
+    foreach (SubjectCanvas *sc, subjects) {
         WrapperStr s = fromUnicode(sc->name);
-
         com->write_string((const char *) s);
         com->write(sc->rect());
     }

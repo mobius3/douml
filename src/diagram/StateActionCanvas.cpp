@@ -655,7 +655,7 @@ bool StateActionCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void StateActionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void StateActionCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(2);
@@ -673,19 +673,18 @@ void StateActionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l)  {
+                StateActionCanvas *canvas = (StateActionCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((StateActionCanvas *) it.current())->language = language;
+                    canvas->language = language;
 
                 if (!st[1].name.isEmpty())
-                    ((StateActionCanvas *) it.current())->show_stereotype_properties = show_stereotype_properties;
+                    canvas->show_stereotype_properties = show_stereotype_properties;
 
                 if (!co[0].name.isEmpty())
-                    ((StateActionCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((StateActionCanvas *) it.current())->modified();	// call package_modified()
+                canvas->modified();	// call package_modified()
             }
         }
 

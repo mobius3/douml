@@ -227,7 +227,7 @@ bool StereotypePropertiesCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void StereotypePropertiesCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void StereotypePropertiesCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -240,11 +240,10 @@ void StereotypePropertiesCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & 
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((StereotypePropertiesCanvas *) it.current())->itscolor = itscolor;
-                ((StereotypePropertiesCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                StereotypePropertiesCanvas *canvas = (StereotypePropertiesCanvas *)item;
+                canvas->itscolor = itscolor;
+                canvas->modified();
             }
         }
 
