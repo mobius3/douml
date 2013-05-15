@@ -631,18 +631,11 @@ void ActivityPartitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ActivityPartitionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ActivityPartitionCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ActivityPartitionCanvas * x = (ActivityPartitionCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ActivityPartitionCanvas * o = (ActivityPartitionCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const ActivityPartitionCanvas * x = (const ActivityPartitionCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString ActivityPartitionCanvas::may_start(UmlCode & l) const

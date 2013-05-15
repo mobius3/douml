@@ -1070,19 +1070,12 @@ void ComponentCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ComponentCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ComponentCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ComponentCanvas * x = (ComponentCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ComponentCanvas * o = (ComponentCanvas *) it.current();
-
-        o->settings = x->settings;
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const ComponentCanvas * x = (const ComponentCanvas *) src;
+    settings = x->settings;
+    itscolor = x->itscolor;
+    modified();
 }
 
 bool ComponentCanvas::get_show_stereotype_properties() const

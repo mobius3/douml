@@ -493,18 +493,11 @@ void UcUseCaseCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void UcUseCaseCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void UcUseCaseCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    UcUseCaseCanvas * x = (UcUseCaseCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        UcUseCaseCanvas * o = (UcUseCaseCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const UcUseCaseCanvas * x = (const UcUseCaseCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString UcUseCaseCanvas::may_start(UmlCode & l) const

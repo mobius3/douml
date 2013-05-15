@@ -710,20 +710,13 @@ void ActivityObjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ActivityObjectCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ActivityObjectCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ActivityObjectCanvas * x = (ActivityObjectCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ActivityObjectCanvas * o = (ActivityObjectCanvas *) it.current();
-
-        o->write_horizontally = x->write_horizontally;
-        o->itscolor = x->itscolor;
-        o->settings = x->settings;
-        o->modified();	// call package_modified()
-    }
+    const ActivityObjectCanvas * x = (const ActivityObjectCanvas *) src;
+    write_horizontally = x->write_horizontally;
+    itscolor = x->itscolor;
+    settings = x->settings;
+    modified();
 }
 
 bool ActivityObjectCanvas::get_show_stereotype_properties() const

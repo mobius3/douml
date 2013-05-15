@@ -427,18 +427,11 @@ void InterruptibleActivityRegionCanvas::edit_drawing_settings(Q3PtrList<DiagramI
     }
 }
 
-void InterruptibleActivityRegionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void InterruptibleActivityRegionCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    InterruptibleActivityRegionCanvas * x = (InterruptibleActivityRegionCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        InterruptibleActivityRegionCanvas * o = (InterruptibleActivityRegionCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const InterruptibleActivityRegionCanvas * x = (const InterruptibleActivityRegionCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString InterruptibleActivityRegionCanvas::may_start(UmlCode & l) const

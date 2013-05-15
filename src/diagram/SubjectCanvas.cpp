@@ -344,18 +344,11 @@ void SubjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void SubjectCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SubjectCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    SubjectCanvas * x = (SubjectCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        SubjectCanvas * o = (SubjectCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const SubjectCanvas * x = (const SubjectCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString SubjectCanvas::may_start(UmlCode & l) const

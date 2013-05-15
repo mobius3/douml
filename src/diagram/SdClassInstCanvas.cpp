@@ -633,21 +633,14 @@ void SdClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void SdClassInstCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SdClassInstCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    SdClassInstCanvas * x = (SdClassInstCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        SdClassInstCanvas * o = (SdClassInstCanvas *) it.current();
-
-        o->drawing_mode = x->drawing_mode;
-        o->show_context_mode = x->show_context_mode;
-        o->write_horizontally = x->write_horizontally;
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const SdClassInstCanvas * x = (const SdClassInstCanvas *) src;
+    drawing_mode = x->drawing_mode;
+    show_context_mode = x->show_context_mode;
+    write_horizontally = x->write_horizontally;
+    itscolor = x->itscolor;
+    modified();
 }
 
 bool SdClassInstCanvas::get_show_stereotype_properties() const

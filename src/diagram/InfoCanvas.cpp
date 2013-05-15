@@ -251,18 +251,11 @@ void InfoCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void InfoCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void InfoCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    InfoCanvas * x = (InfoCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        InfoCanvas * o = (InfoCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const InfoCanvas * x = (const InfoCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 void InfoCanvas::save(QTextStream & st, bool ref, QString &) const

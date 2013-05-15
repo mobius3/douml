@@ -660,20 +660,13 @@ void DeploymentNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void DeploymentNodeCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void DeploymentNodeCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    DeploymentNodeCanvas * x = (DeploymentNodeCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        DeploymentNodeCanvas * o = (DeploymentNodeCanvas *) it.current();
-
-        o->write_horizontally = x->write_horizontally;
-        o->show_stereotype_properties = x->show_stereotype_properties;
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const DeploymentNodeCanvas * x = (const DeploymentNodeCanvas *) src;
+    write_horizontally = x->write_horizontally;
+    show_stereotype_properties = x->show_stereotype_properties;
+    itscolor = x->itscolor;
+    modified();
 }
 
 bool DeploymentNodeCanvas::get_show_stereotype_properties() const

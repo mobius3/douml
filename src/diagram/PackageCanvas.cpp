@@ -695,21 +695,14 @@ void PackageCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void PackageCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void PackageCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    PackageCanvas * x = (PackageCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        PackageCanvas * o = (PackageCanvas *) it.current();
-
-        o->name_in_tab = x->name_in_tab;
-        o->show_context_mode = x->show_context_mode;
-        o->show_stereotype_properties = x->show_stereotype_properties;
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const PackageCanvas * x = (const PackageCanvas *) src;
+    name_in_tab = x->name_in_tab;
+    show_context_mode = x->show_context_mode;
+    show_stereotype_properties = x->show_stereotype_properties;
+    itscolor = x->itscolor;
+    modified();
 }
 
 bool PackageCanvas::get_show_stereotype_properties() const

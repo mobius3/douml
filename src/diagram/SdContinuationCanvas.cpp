@@ -336,18 +336,11 @@ void SdContinuationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void SdContinuationCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SdContinuationCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    SdContinuationCanvas * x = (SdContinuationCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        SdContinuationCanvas * o = (SdContinuationCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const SdContinuationCanvas * x = (const SdContinuationCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString SdContinuationCanvas::may_start(UmlCode & l) const

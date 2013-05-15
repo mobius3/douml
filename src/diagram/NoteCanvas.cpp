@@ -381,18 +381,11 @@ void NoteCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void NoteCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void NoteCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    NoteCanvas * x = (NoteCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        NoteCanvas * o = (NoteCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const NoteCanvas * x = (const NoteCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString NoteCanvas::may_start(UmlCode & l) const

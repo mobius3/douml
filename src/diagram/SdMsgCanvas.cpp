@@ -471,20 +471,13 @@ void SdMsgCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void SdMsgCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SdMsgCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    SdMsgCanvas * x = (SdMsgCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        SdMsgCanvas * o = (SdMsgCanvas *) it.current();
-
-        o->drawing_language = x->drawing_language;
-        o->show_full_oper = x->show_full_oper;
-        o->show_context_mode = x->show_context_mode;
-        o->modified();	// call package_modified()
-    }
+    const SdMsgCanvas * x = (const SdMsgCanvas *) src;
+    drawing_language = x->drawing_language;
+    show_full_oper = x->show_full_oper;
+    show_context_mode = x->show_context_mode;
+    modified();
 }
 
 void SdMsgCanvas::select_associated()

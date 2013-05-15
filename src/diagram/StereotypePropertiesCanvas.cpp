@@ -253,18 +253,11 @@ void StereotypePropertiesCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & 
     }
 }
 
-void StereotypePropertiesCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void StereotypePropertiesCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    StereotypePropertiesCanvas * x = (StereotypePropertiesCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        StereotypePropertiesCanvas * o = (StereotypePropertiesCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const StereotypePropertiesCanvas * x = (const StereotypePropertiesCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 void StereotypePropertiesCanvas::needed(UmlCanvas * canvas, DiagramItem * di, QString s,

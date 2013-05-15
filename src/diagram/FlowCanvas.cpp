@@ -454,20 +454,13 @@ void FlowCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void FlowCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void FlowCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    FlowCanvas * x = (FlowCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        FlowCanvas * o = (FlowCanvas *) it.current();
-
-        o->write_horizontally = x->write_horizontally;
-        o->settings = x->settings;
-        o->propagate_drawing_settings();
-        o->modified();
-    }
+    const FlowCanvas * x = (const FlowCanvas *) src;
+    write_horizontally = x->write_horizontally;
+    settings = x->settings;
+    propagate_drawing_settings();
+    modified();
 }
 
 ArrowPointCanvas * FlowCanvas::brk(const QPoint & p)

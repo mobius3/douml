@@ -538,18 +538,11 @@ void PinCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void PinCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void PinCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    PinCanvas * x = (PinCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        PinCanvas * o = (PinCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const PinCanvas * x = (const PinCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString PinCanvas::may_start(UmlCode & l) const

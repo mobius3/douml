@@ -482,20 +482,13 @@ void CodClassInstCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void CodClassInstCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void CodClassInstCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    CodClassInstCanvas * x = (CodClassInstCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        CodClassInstCanvas * o = (CodClassInstCanvas *) it.current();
-
-        o->write_horizontally = x->write_horizontally;
-        o->show_context_mode = x->show_context_mode;
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const CodClassInstCanvas * x = (const CodClassInstCanvas *) src;
+    write_horizontally = x->write_horizontally;
+    show_context_mode = x->show_context_mode;
+    itscolor = x->itscolor;
+    modified();
 }
 
 bool CodClassInstCanvas::get_show_stereotype_properties() const

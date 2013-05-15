@@ -462,18 +462,11 @@ void ParameterSetCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ParameterSetCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ParameterSetCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ParameterSetCanvas * x = (ParameterSetCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ParameterSetCanvas * o = (ParameterSetCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const ParameterSetCanvas * x = (const ParameterSetCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString ParameterSetCanvas::may_start(UmlCode &) const

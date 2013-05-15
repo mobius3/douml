@@ -813,18 +813,11 @@ void ArtifactCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ArtifactCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ArtifactCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ArtifactCanvas * x = (ArtifactCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ArtifactCanvas * o = (ArtifactCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const ArtifactCanvas * x = (const ArtifactCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString ArtifactCanvas::may_start(UmlCode & l) const

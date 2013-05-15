@@ -405,7 +405,7 @@ void DiagramItem::edit_drawing_settings(Q3PtrList<DiagramItem> &)
     // never called
 }
 
-void DiagramItem::same_drawing_settings(Q3PtrList<DiagramItem> &)
+void DiagramItem::clone_drawing_settings(const DiagramItem *src)
 {
     // never called
 }

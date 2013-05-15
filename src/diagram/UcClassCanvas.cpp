@@ -791,20 +791,13 @@ void UcClassCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void UcClassCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void UcClassCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    UcClassCanvas * x = (UcClassCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        UcClassCanvas * o = (UcClassCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->settings = x->settings;
-        o->modified();
-        o->package_modified();
-    }
+    const UcClassCanvas * x = (const UcClassCanvas *) src;
+    itscolor = x->itscolor;
+    settings = x->settings;
+    modified();
+    package_modified();
 }
 
 QString UcClassCanvas::may_start(UmlCode & c) const

@@ -1158,9 +1158,13 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
         same_size(TRUE, TRUE);
         break;
 
-    case 17:
+    case 17: {
         history_protected = FALSE;
-        l_drawing_settings.first()->same_drawing_settings(l_drawing_settings);
+        Q3PtrListIterator<DiagramItem> it(l_drawing_settings);
+        const DiagramItem *source = it.current();
+        while (++it, it.current() != 0)
+            it.current()->clone_drawing_settings(source);
+        }
 
     default:
         return;
@@ -1475,8 +1479,13 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
 
                             if (s == "Edit drawing settings")
                                 l.first()->edit_drawing_settings(l);
-                            else
-                                l.first()->same_drawing_settings(l);
+                            else {
+                                history_protected = FALSE;
+                                Q3PtrListIterator<DiagramItem> it(l);
+                                const DiagramItem *source = it.current();
+                                while (++it, it.current() != 0)
+                                    it.current()->clone_drawing_settings(source);
+                            }
                         }
                     }
                     else if (s == "Align bottom") {

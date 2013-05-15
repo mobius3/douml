@@ -694,20 +694,13 @@ void StateActionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void StateActionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void StateActionCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    StateActionCanvas * x = (StateActionCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        StateActionCanvas * o = (StateActionCanvas *) it.current();
-
-        o->language = x->language;
-        o->show_stereotype_properties = x->show_stereotype_properties;
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const StateActionCanvas * x = (const StateActionCanvas *) src;
+    language = x->language;
+    show_stereotype_properties = x->show_stereotype_properties;
+    itscolor = x->itscolor;
+    modified();
 }
 
 bool StateActionCanvas::get_show_stereotype_properties() const

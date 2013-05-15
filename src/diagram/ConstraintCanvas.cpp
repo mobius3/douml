@@ -271,18 +271,11 @@ void ConstraintCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ConstraintCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ConstraintCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ConstraintCanvas * x = (ConstraintCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ConstraintCanvas * o = (ConstraintCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const ConstraintCanvas * x = (const ConstraintCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 // warning : don't remove connect because may be called

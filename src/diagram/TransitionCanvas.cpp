@@ -446,21 +446,14 @@ void TransitionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void TransitionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void TransitionCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    TransitionCanvas * x = (TransitionCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        TransitionCanvas * o = (TransitionCanvas *) it.current();
-
-        o->drawing_language = x->drawing_language;
-        o->write_horizontally = x->write_horizontally;
-        o->show_definition = x->show_definition;
-        o->propagate_drawing_settings();
-        o->modified();	// call package_modified()
-    }
+    const TransitionCanvas * x = (const TransitionCanvas *) src;
+    drawing_language = x->drawing_language;
+    write_horizontally = x->write_horizontally;
+    show_definition = x->show_definition;
+    propagate_drawing_settings();
+    modified();
 }
 
 ArrowPointCanvas * TransitionCanvas::brk(const QPoint & p)

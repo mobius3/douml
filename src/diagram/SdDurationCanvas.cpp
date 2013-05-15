@@ -925,18 +925,11 @@ void SdDurationCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void SdDurationCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SdDurationCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    SdDurationCanvas * x = (SdDurationCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        SdDurationCanvas * o = (SdDurationCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const SdDurationCanvas * x = (const SdDurationCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 aCorner SdDurationCanvas::on_resize_point(const QPoint & p)

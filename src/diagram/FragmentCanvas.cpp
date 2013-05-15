@@ -507,18 +507,11 @@ void FragmentCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void FragmentCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void FragmentCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    FragmentCanvas * x = (FragmentCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        FragmentCanvas * o = (FragmentCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const FragmentCanvas * x = (const FragmentCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString FragmentCanvas::may_start(UmlCode & l) const

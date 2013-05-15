@@ -638,18 +638,11 @@ void ExpansionRegionCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ExpansionRegionCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ExpansionRegionCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ExpansionRegionCanvas * x = (ExpansionRegionCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ExpansionRegionCanvas * o = (ExpansionRegionCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const ExpansionRegionCanvas * x = (const ExpansionRegionCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString ExpansionRegionCanvas::may_start(UmlCode & l) const
