@@ -3564,10 +3564,10 @@ OperationData * OperationData::read_ref(char *& st)
 
 void OperationData::read(char *& st, char *& k)
 {
-    cpp_body.length = -1;
-    java_body.length = -1;
-    python_body.length = -1;
-    php_body.length = -1;
+    cpp_body.length = 0;
+    java_body.length = 0;
+    python_body.length = 0;
+    php_body.length = 0;
 
     k = read_keyword(st);
     BasicData::read(st, k);	// updates k
@@ -4030,11 +4030,27 @@ bool operator==(const OperationData & origin, const OperationData & another)
 
 
 }
-
+#include <algorithm>
 bool PropagationEquality(const OperationData & origin, const OperationData & another)
 {
-    bool paramsResult = false;
-    paramsResult = origin.params != another.params;
+    bool paramsResult = true;
+
+    if(origin.params.size() != another.params.size())
+        paramsResult = false;
+    else
+    {
+        int i = 0;
+        auto it = origin.params.begin();
+        while(it != origin.params.end())
+        {
+            it++;i++;
+            if(*origin.params[i].get() == *another.params[i].get() )
+                continue;
+            paramsResult = false;
+            break;
+        }
+    }
+    //origin.params != another.params;
 
     if(!paramsResult)
         return false;
@@ -4067,7 +4083,7 @@ bool PropagationEquality(const OperationData & origin, const OperationData & ano
     origin.cpp_body.offset!= another.cpp_body.offset ||
     origin.cpp_body.length!= another.cpp_body.length ||
     origin.cpp_decl!= another.cpp_decl ||
-    origin.cpp_def!= another.cpp_def ||
+    //origin.cpp_def!= another.cpp_def ||
     origin.cpp_name_spec!= another.cpp_name_spec||
 
 

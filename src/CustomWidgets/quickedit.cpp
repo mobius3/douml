@@ -393,6 +393,8 @@ void QuickEdit::AddOperation()
     if(!classNode)
         return;
     BrowserOperation* newOperation = static_cast<BrowserOperation*>(classNode->addOperation());
+    classNode->move(newOperation, currentNode);
+    classNode->select_in_browser();
     QModelIndex parentIndex;
     TreeItemInterface* parent;
     if(treeModel->parent(current).isValid())
@@ -457,6 +459,8 @@ void QuickEdit::AddAttribute()
         newAttribute = static_cast<BrowserAttribute*>(classNode->addEnumItem());
     else
         newAttribute = static_cast<BrowserAttribute*>(classNode->addAttribute());
+    classNode->move(newAttribute, currentNode);
+    classNode->select_in_browser();
     QModelIndex parentIndex;
     TreeItemInterface* parent;
     if(treeModel->parent(current).isValid())
@@ -670,7 +674,6 @@ void QuickEdit::closeEvent(QCloseEvent *)
     else
         settings.setValue("window/size",QSize());
     ui->leSearch->setText("");
-    localNodeHolder.clear();
 }
 
 QSharedPointer<TreeItemInterface> QuickEdit::CreateInterfaceNode(QSharedPointer<TreeItemInterface> root,

@@ -1365,7 +1365,7 @@ void BrowserNode::children(BrowserNodeList & nodes,
 
 }
 
-QList<BrowserNode*> BrowserNode::children(QList<UmlCode> searchTypes) const
+QList<BrowserNode*> BrowserNode::children(QList<UmlCode> searchTypes, bool includeDeleted) const
 {
     QList<BrowserNode*> items;
     Q3ListViewItem * child;
@@ -1376,7 +1376,7 @@ QList<BrowserNode*> BrowserNode::children(QList<UmlCode> searchTypes) const
         UmlCode type = ((BrowserNode *) child)->get_type();
         //QLOG_INFO() << stringify(type);
         bool validType = searchTypes.contains(type);
-        if ( isAlive && validType)
+        if ( (isAlive || includeDeleted) && validType)
             items.append((BrowserNode *) child);
     }
     return items;
