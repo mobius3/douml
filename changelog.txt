@@ -1,3 +1,10 @@
+v1.0b7.1 
+    1. Fixed the crash that could occur if the user closed quick edit while editing param type
+    2. Attribute and operations added through quick edit now appear at their proper places in main tree view
+    3. Fixed operation propagation that got broken during previous releases
+v1.0b7.1 
+    1. Fixed the issue that stopped app from closing rpoperly
+
 v1.0b7
     1. Previously, after "close window" button was clicked and user selected "Cancel" the app closed nevertheless. No longer the case.
     2. Fixed crash when reopening operation window that had different amount of KV-pairs
