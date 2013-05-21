@@ -1108,19 +1108,35 @@ void BrowserNode::mark_management(int choice)
             if((BrowserNode *) bn->parent()  != this)
             {
                 BrowserNode* nodeCopy = bn->duplicate(this);
-                move(nodeCopy, this);
+
+                nodeCopy->set_n_keys(bn->get_n_keys());
+                for(int i(0); i < bn->get_n_keys(); i++)
+                {
+                    nodeCopy->set_key(i, bn->get_key(i));
+                    nodeCopy->set_value(i, bn->get_value(i));
+                }
+                //move(nodeCopy, this);
                 nodeCopy->select_in_browser();
 
                 if (nodeCopy->get_type() == UmlAttribute)
                 {
                     BrowserAttribute* asAttribute =  dynamic_cast<BrowserAttribute*>(bn);
-                    getOperCopy = ((BrowserNode *) asAttribute->get_get_oper())->duplicate(this);
-                    setOperCopy = ((BrowserNode *) asAttribute->get_set_oper())->duplicate(this);
-                    move(getOperCopy, 0);
-                    move(setOperCopy, 0);
-
-                    ((BrowserAttribute *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
-                    ((BrowserAttribute *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
+                    BrowserNode* getOper=((BrowserNode *) asAttribute->get_get_oper());
+                    BrowserNode* setOper=((BrowserNode *) asAttribute->get_get_oper());
+                    if(getOper)
+                        getOperCopy = getOper->duplicate(this);
+                    if(setOper)
+                        setOperCopy = setOper->duplicate(this);
+                    if(getOperCopy)
+                    {
+                        move(getOperCopy, 0);
+                        ((BrowserRelation *) nodeCopy)->set_get_oper((BrowserOperation *) getOperCopy);
+                    }
+                    if(setOperCopy)
+                    {
+                        move(setOperCopy, 0);
+                        ((BrowserRelation *) nodeCopy)->set_set_oper((BrowserOperation *) setOperCopy);
+                    }
                 }
                 else if(bn->get_type() >= UmlAggregation &&  bn->get_type() <= UmlDirectionalAggregationByValue)
                 {
@@ -1167,7 +1183,16 @@ void BrowserNode::mark_management(int choice)
 
         for (int i = marked_list.size() - 1; i >= 0; --i) {
             bn = marked_list[i];
-            p->move(bn->duplicate(p), this);
+        {
+            BrowserNode* nodeCopy = bn->duplicate(p);
+            nodeCopy->set_n_keys(bn->get_n_keys());
+            for(int i(0); i < bn->get_n_keys(); i++)
+            {
+                nodeCopy->set_key(i, bn->get_key(i));
+                nodeCopy->set_value(i, bn->get_value(i));
+            }
+            p->move(nodeCopy, this);
+        }
         }
     }
     break;
