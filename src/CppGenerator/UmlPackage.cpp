@@ -206,8 +206,9 @@ WrapperStr UmlPackage::source_path(const WrapperStr & f, WrapperStr relto)
     if (! d.exists())
         create_directory(dir.src);	// don't return on error
 
+    QByteArray temp = d.filePath(f).toAscii();
     WrapperStr df = (dir.src_absolute || relto.isEmpty())
-                   ? WrapperStr(d.filePath(f).toAscii().constData())
+                   ? WrapperStr(temp.constData())
                    : relative_path(d, relto) + f;
 
     return df + WrapperStr(".") + CppSettings::sourceExtension();
@@ -244,9 +245,10 @@ WrapperStr UmlPackage::header_path(const WrapperStr & f, WrapperStr relto)
 
     if (! d.exists())
         create_directory(dir.h);	// don't return on error
+    QByteArray temp = d.filePath(f).toAscii();
 
     WrapperStr df = (dir.h_absolute || relto.isEmpty())
-                   ? WrapperStr(d.filePath(f).toAscii().constData())
+                   ? WrapperStr(temp.constData())
                    : relative_path(d, relto) + f;
 
     return df + WrapperStr(".") + CppSettings::headerExtension();
