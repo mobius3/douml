@@ -257,8 +257,9 @@ void QuickEdit::SetupOperationController()
     operationController->SetColumns(columns);
     ADD_GETSET(BrowserOperation, operationController, columns.indexOf("name"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
-    ADD_GETSET(BrowserOperationReturnType, operationController, columns.indexOf("type"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
-               toString, get_param_type().get_type, set_param_type);
+
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("type"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+                   toString, get_return_type().get_type, set_return_type);
 
     ADD_GETSET_CONVERTED(BrowserOperation, operationController, columns.indexOf("visibility"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
                          toString,BrowserNode::encode_visibility,visibility_as_string, pointer->def->set_uml_visibility);

@@ -104,10 +104,10 @@ void CatalogWidget::Init(UmlWindow* window, BrowserView* view)
                    mainWindow, SLOT(OnPickSelectionFromItem( QModelIndex, QModelIndex )));
 
 
-    dragDropFilter = new GenericEventFilter(this);
-    std::function<void(BrowserNode*)>favsFunc = std::bind(&CatalogWidget::AddToFavourites, this, std::placeholders::_1);
-    dragDropFilter->SetEventProcessor(std::bind(ProcessDragDrop,std::placeholders::_1, std::placeholders::_2, favsFunc));
-    ui->tvFavourites->installEventFilter(dragDropFilter);
+    //dragDropFilter = new GenericEventFilter(this);
+    //std::function<void(BrowserNode*)>favsFunc = std::bind(&CatalogWidget::AddToFavourites, this, std::placeholders::_1);
+    //dragDropFilter->SetEventProcessor(std::bind(ProcessDragDrop,std::placeholders::_1, std::placeholders::_2, favsFunc));
+    //ui->tvFavourites->installEventFilter(dragDropFilter);
     ui->tvFavourites->setAcceptDrops(true);
     ui->tvFavourites->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->tvMarkedNodes->setContextMenuPolicy(Qt::CustomContextMenu);
