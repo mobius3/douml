@@ -149,8 +149,10 @@ ClassData::~ClassData()
     if (formals != 0)
         delete [] formals;
 
-    while (! actuals.isEmpty()) {
+    while (! actuals.isEmpty())
+    {
         delete actuals.at(0);
+        actuals[0] = nullptr;
         actuals.remove(0u);
     }
 }
