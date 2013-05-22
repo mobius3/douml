@@ -115,8 +115,9 @@ OperationDialog::~OperationDialog()
 //        oper->browser_node->edit_end();
     previous_size = size();
 
-    while (!edits.isEmpty())
-        edits.take(0)->close();
+    foreach (BodyDialog *dialog, edits)
+        dialog->close();
+    edits.clear();
 
     if(toolbar)
     {
@@ -3237,7 +3238,6 @@ void OperationDialog::post_php_edit_body(OperationDialog * d, QString s)
 
 bool OperationDialog::SaveData()
 {
-
     BrowserClass* containingClass = static_cast<BrowserClass*>(oper->browser_node->get_container(UmlClass));
     QList<BrowserNode *>  passedNodes;
     bool goBack = true;
@@ -3250,8 +3250,6 @@ bool OperationDialog::SaveData()
     bool equals = *oper == *operCopy;
     bool newst = operCopy->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
     delete operCopy;
-    if(equals)
-        return true;
 
     if(!inheritanceSiblings.isEmpty() && !equals)
     {
