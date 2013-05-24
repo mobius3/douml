@@ -40,6 +40,7 @@
 #include <Q3HBox>
 #include <Q3Grid>
 #include <QSharedPointer>
+#include <memory>
 
 #include "MyTable.h"
 #include "BrowserNode.h"
@@ -232,7 +233,7 @@ public:
     ClassDialog(ClassData * c);
     virtual ~ClassDialog();
 
-    static QSharedPointer<ClassDialog> Instance(ClassData *);
+    static std::shared_ptr<ClassDialog> Instance(ClassData *);
 
     static void cpp_generate_decl(QString & s, ClassData * cl,
                                   QString def, QString name,

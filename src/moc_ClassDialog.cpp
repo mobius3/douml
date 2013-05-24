@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'ClassDialog.h'
 **
-** Created: Sat May 25 00:03:48 2013
+** Created: Sat May 25 00:24:50 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.3)
 **
 ** WARNING! All changes made in this file will be lost!

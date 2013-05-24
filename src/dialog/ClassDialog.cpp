@@ -112,11 +112,11 @@ ClassDialog::~ClassDialog()
     }
 }
 
-QSharedPointer<ClassDialog> ClassDialog::Instance(ClassData * cl)
+std::shared_ptr<ClassDialog> ClassDialog::Instance(ClassData * cl)
 {
-    static QSharedPointer<ClassDialog> instance;
-    if (instance.isNull())
-        instance = QSharedPointer<ClassDialog>(new ClassDialog(cl));
+    static std::shared_ptr<ClassDialog> instance;
+    if (!instance)
+        instance.reset(new ClassDialog(cl));
     else
         instance->FillGuiElements(cl);
 
