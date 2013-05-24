@@ -225,7 +225,7 @@ protected:
 
     //refactoring changes
 
-    static QSharedPointer<ClassDialog> instance;
+    //static QSharedPointer<ClassDialog> instance;
 
 
 public:
