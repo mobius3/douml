@@ -103,13 +103,13 @@ int main(int argc, char ** argv)
     bool conv_env = !info.exists();
     if(conv_env)
     {
-      settings.setIniCodec(QTextCodec::codecForName("ISO 8859-1"));
+      settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
       settings.setValue("/test", "test");
       settings.setValue("Main/compatibility_save", "1");
       settings.setValue("Main/fileformat", "77");
       settings.setValue("Main/encoding", "UTF-8");
       settings.setValue("Failing_Tools/Tools", "Import Rose,Uml projection,C++ state machine,Generate XMI 1.2,Generate .pro");
-      settings.setValue("headers/quickedit", QByteArray("\0\0\0ÿ\0\0\0\0\0\0\0\x1\0\0\0\x1\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\x6Ý\0\0\0\x17\x1\0\0\x1\0\0\0\0\0\0\0\0\0\0\0\0\x64ÿÿÿÿ\0\0\0\0\0\0\0\0\0\0\x17\0\0\x1\x11\0\0\0\x1\0\0\0\0\0\0\0\"\0\0\0\x1\0\0\0\0\0\0\0.\0\0\0\x1\0\0\0\0\0\0\0>\0\0\0\x1\0\0\0\0\0\0\0\x37\0\0\0\x1\0\0\0\0\0\0\0+\0\0\0\x1\0\0\0\0\0\0\0L\0\0\0\x1\0\0\0\0\0\0\0\x35\0\0\0\x1\0\0\0\0\0\0\0\x64\0\0\0\x1\0\0\0\0\0\0\0\x42\0\0\0\x1\0\0\0\0\0\0\0\x1d\0\0\0\x1\0\0\0\0\0\0\0\x32\0\0\0\x1\0\0\0\0\0\0\0\x35\0\0\0\x1\0\0\0\0\0\0\0#\0\0\0\x1\0\0\0\0\0\0\0$\0\0\0\x1\0\0\0\0\0\0\0(\0\0\0\x1\0\0\0\0\0\0\0.\0\0\0\x1\0\0\0\0\0\0\0!\0\0\0\x1\0\0\0\0\0\0\0\x41\0\0\0\x1\0\0\0\0\0\0\0-\0\0\0\x1\0\0\0\0\0\0\0\x38\0\0\0\x1\0\0\0\0\0\0\0\x64\0\0\0\x1\0\0\0\0\0\0\x1i\0\0\0\x1\0\0\0\0", 361));
+      //settings.setValue("headers/quickedit", 0);
       settings.setValue("quickedit_checkboxes/cpp", "true");
       settings.setValue("quickedit_checkboxes/java", "false");
       settings.setValue("quickedit_checkboxes/php", "false");
