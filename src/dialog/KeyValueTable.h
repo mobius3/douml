@@ -46,6 +46,7 @@ public:
     bool get_value(const char * key, QString & value);
     void remove(const char * key);
 
+    bool EqualData(HaveKeyValueData*);
 
 private:
     void Init(HaveKeyValueData * h, bool isReadOnly);
@@ -55,6 +56,8 @@ private:
     void AdjustEditability(bool);
     QHash<QString, QStringList> props;
     QHash<int, QString> colNames;
+
+
 };
 
 #endif

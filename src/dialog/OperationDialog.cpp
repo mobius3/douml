@@ -3247,7 +3247,7 @@ bool OperationDialog::SaveData()
     OperationData* operCopy = new OperationData(oper, (BrowserOperation*)oper->get_browser_node());
 
     SaveData(operCopy);
-    bool equals = *oper == *operCopy;
+    bool equals = *oper == *operCopy && kvtable->EqualData(static_cast<HaveKeyValueData*>(oper->browser_node));
     bool newst = operCopy->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
     delete operCopy;
     if(equals)
@@ -3287,9 +3287,10 @@ bool OperationDialog::SaveData()
             inheritanceSiblings = containingClass->CollectSameThroughInheritance(oper,passedNodes, goBack);
         }
     }
+    kvtable->updateNodeFromThis(oper->get_browser_node());
     SaveData(oper);
     // user
-    kvtable->updateNodeFromThis(oper->get_browser_node());
+
 
     ProfiledStereotypes::modified(oper->get_browser_node(), newst);
 
