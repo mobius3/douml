@@ -28,6 +28,7 @@ include/Libs*
 .cproject
 .project
 .settings
+src/moc_*.cpp
 *.log
 *.cppcheck
 *.rc

@@ -592,8 +592,8 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     connect(ui->pbAddAttribute, SIGNAL(clicked()), this, SLOT(OnAddAttribute()));
     connect(ui->pbRefreshView, SIGNAL(clicked()), this, SLOT(OnRefreshTable()));
     connect(ui->chkCpp, SIGNAL(clicked()), this, SLOT(OnChangeColumnVisibility()));
-    connect(ui->tvEditor->header(), SIGNAL(sectionResized(int,int,int)),
-            this, SLOT(OnNewSectionSizes(int,int,int)));
+//    connect(ui->tvEditor->header(), SIGNAL(sectionResized(int,int,int)),
+//            this, SLOT(OnNewSectionSizes(int,int,int)));
 }
 
 void QuickEdit::Show(BrowserNode * node)

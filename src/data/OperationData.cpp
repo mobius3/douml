@@ -769,6 +769,30 @@ void OperationData::set_return_type(const AType & t)
     return_type.explicit_type = t.explicit_type;
 }
 
+void OperationData::set_return_type(const QString &value)
+{
+    QStringList list;
+    BrowserNodeList nodes;
+    BrowserClass::instances(nodes);
+    nodes.full_names(list);
+
+//    oper->set_param_dir(index, (UmlParamDirection) DirList.findIndex(text(index, 0)));
+
+//    oper->set_param_name(index, text(index, 1).stripWhiteSpace());
+
+    AType t;
+    if (!value.isEmpty())
+    {
+        int rank = list.findIndex(value);
+
+        if (rank != -1)
+            t.type = (BrowserClass *) nodes.at(rank);
+        else
+            t.explicit_type = value;
+    }
+    return_type = t;
+}
+
 const char * OperationData::get_param_name(int rank) const
 {
     return params[rank]->get_name();

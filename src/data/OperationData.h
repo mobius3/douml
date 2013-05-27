@@ -308,6 +308,7 @@ public:
         return return_type;
     };
     void set_return_type(const AType & t);
+    void set_return_type(const QString & value);
 
     const char * get_param_name(int rank) const;
     QStringList get_param_names() const;

@@ -28,13 +28,13 @@ DOUML_ICONS_PREFIX_DIR = /usr/share/icons/hicolor
 # The copy is done if you uncomment the definition.
 DOUML_UNIX_PIXMAPS_DIR = /usr/share/pixmaps
 
-# for packaging purpose, useless by default
+# If not defined (local install), DoUML will be install into LOCAL_DESTDIR or "./install" directory
+# Else (packaging) desktop and executable script are copied into DESTDIR but reference are /
 ifndef DESTDIR
-  DESTDIR = ${PWD}/install
-endif
-
-ifndef DEB_DESTDIR
-  DEB_DESTDIR = ${DESTDIR}
+  ifndef LOCAL_DESTDIR
+    LOCAL_DESTDIR = ${PWD}/install
+  endif
+  DESTDIR = ${LOCAL_DESTDIR}
 endif
 
 QMAKE=qmake
@@ -88,14 +88,11 @@ PROGS=douml \
 	gxmi2  \
 	ixmi2
 
-compile: src/settings_ini.h
+compile:
 	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} L_UniversalModels.pro; ) || exit 1 ; $(MAKE) -C src/Libs/L_UniversalModels || exit 1
 	( cd src ; $(QMAKE) -config ${config} douml.pro; ) || exit 1 ; $(MAKE) -C src || exit 1
 	for i in $(SRC_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
 	for i in $(PLUGOUT_DIRS); do if [ -d $$i ]; then ( cd $$i; $(QMAKE) -config ${config}; ) || exit 1 ; $(MAKE) -C $$i || exit 1 ; fi; done
-
-src/settings_ini.h: bin/settings.ini
-	( cd bin && xxd -i  settings.ini ../src/settings_ini.h; ) || exit 1
 
 install:
 	mkdir -p "$(DESTDIR)$(DOUML_DIR)"
@@ -117,11 +114,11 @@ install:
 	cp -p *.lang "$(DESTDIR)$(DOUML_LOCALE_DIR)"
 	for i in $(PROGS); do cp -p bin/$$i "$(DESTDIR)$(DOUML_LIB)" ; done
 	echo "#!/bin/sh" >$(DESTDIR)$(DOUML_DIR)/douml
-	echo "PATH=$(DEB_DESTDIR)$(DOUML_LIB):$$"PATH >>$(DESTDIR)$(DOUML_DIR)/douml
-	echo "DOUML_LIB_DIR=$(DEB_DESTDIR)$(DOUML_LIB)" >>$(DESTDIR)$(DOUML_DIR)/douml
+	echo "PATH=$(LOCAL_DESTDIR)$(DOUML_LIB):$$"PATH >>$(DESTDIR)$(DOUML_DIR)/douml
+	echo "DOUML_LIB_DIR=$(LOCAL_DESTDIR)$(DOUML_LIB)" >>$(DESTDIR)$(DOUML_DIR)/douml
 	echo "export PATH" >>$(DESTDIR)$(DOUML_DIR)/douml
 	echo "export DOUML_LIB_DIR" >>$(DESTDIR)$(DOUML_DIR)/douml
-	echo "exec $(DEB_DESTDIR)$(DOUML_LIB)/douml \"$$"@"\"" >>$(DESTDIR)$(DOUML_DIR)/douml
+	echo "exec $(LOCAL_DESTDIR)$(DOUML_LIB)/douml \"$$"@"\"" >>$(DESTDIR)$(DOUML_DIR)/douml
 	chmod +x "$(DESTDIR)$(DOUML_DIR)/douml"
 	if test -n "$(DOUML_DESKTOP_DIR)" ; \
 	then \
@@ -130,11 +127,12 @@ install:
 		echo "Encoding=UTF-8" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "Name=DoUML" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "Type=Application" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
+		echo "GenericName=Free UML 2 modeler" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "Comment=Free UML 2 modeler" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Exec=$(DEB_DESTDIR)$(DOUML_DIR)/douml" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
+		echo "Exec=$(LOCAL_DESTDIR)$(DOUML_DIR)/douml" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "TryExec=douml" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 		echo "Icon=douml" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
-		echo "Categories=Development;" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
+		echo "Categories=Development;Building;GUIDesigner;IDE;Documentation;" >> "$(DESTDIR)$(DOUML_DESKTOP_DIR)/douml.desktop" ; \
 	fi
 
 uninstall:

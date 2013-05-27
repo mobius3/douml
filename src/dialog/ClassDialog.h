@@ -40,6 +40,7 @@
 #include <Q3HBox>
 #include <Q3Grid>
 #include <QSharedPointer>
+#include <memory>
 
 #include "MyTable.h"
 #include "BrowserNode.h"
@@ -85,7 +86,7 @@ protected:
     BrowserNodeList nodes;
     QStringList node_names;
     BrowserNodeList artifacts;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog *> edits;
 
     ActualParamsTable * actuals_table;
     Q3VBox * instantiate_vtab;
@@ -225,14 +226,14 @@ protected:
 
     //refactoring changes
 
-    static QSharedPointer<ClassDialog> instance;
+    //static QSharedPointer<ClassDialog> instance;
 
 
 public:
     ClassDialog(ClassData * c);
     virtual ~ClassDialog();
 
-    static QSharedPointer<ClassDialog> Instance(ClassData *);
+    static std::shared_ptr<ClassDialog> Instance(ClassData *);
 
     static void cpp_generate_decl(QString & s, ClassData * cl,
                                   QString def, QString name,

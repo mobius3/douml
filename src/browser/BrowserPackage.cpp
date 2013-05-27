@@ -102,7 +102,7 @@
 #include "translate.h"
 
 IdDict<BrowserPackage> BrowserPackage::all(__FILE__);
-Q3PtrList<BrowserPackage> BrowserPackage::removed;
+QList<BrowserPackage *> BrowserPackage::removed;
 
 QStringList BrowserPackage::its_default_stereotypes;	// unicode
 QStringList BrowserPackage::relation_default_stereotypes;	// unicode
@@ -420,7 +420,7 @@ void BrowserPackage::support_file(Q3Dict<char> & files, bool add) const
         ((BrowserNode *) child)->support_file(files, add);
 }
 
-void BrowserPackage::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
+void BrowserPackage::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
     BrowserNode::referenced_by(l, ondelete);
 
@@ -2036,13 +2036,11 @@ void BrowserPackage::DragMoveInsideEvent(QDragMoveEvent * e)
         e->ignore();
 }
 
-bool BrowserPackage::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserPackage::may_contains_them(const QList<BrowserNode *> & l,
                                        BooL & duplicable) const
 {
-    Q3PtrListIterator<BrowserNode> it(l);
-
-    for (; it.current(); ++it) {
-        switch (it.current()->get_type()) {
+    foreach (BrowserNode *node, l) {
+        switch (node->get_type()) {
         case UmlPackage:
         case UmlUseCaseView:
         case UmlClassView:
@@ -2051,14 +2049,14 @@ bool BrowserPackage::may_contains_them(const Q3PtrList<BrowserNode> & l,
             break;
 
         default:
-            if (!IsaSimpleRelation(it.current()->get_type()) ||
-                    (((const BrowserNode *) it.current()->parent()) != this))
+            if (!IsaSimpleRelation(node->get_type()) ||
+                    (((const BrowserNode *) node->parent()) != this))
                 return FALSE;
         }
 
         duplicable = FALSE;
 
-        if (! may_contains(it.current(), FALSE))
+        if (! may_contains(node, FALSE))
             return FALSE;
     }
 
@@ -2593,13 +2591,11 @@ void BrowserPackage::save_session(QTextStream & st)
     QString warning;
 
     if (! marked_list.isEmpty()) {
-        Q3PtrListIterator<BrowserNode> it(marked_list);
-
         st << "marked\n";
 
-        for (; it.current() != 0; ++it) {
+        foreach (BrowserNode *node, marked_list) {
             st << "  ";
-            it.current()->save(st, TRUE, warning);
+            node->save(st, TRUE, warning);
             st << '\n';
         }
 
