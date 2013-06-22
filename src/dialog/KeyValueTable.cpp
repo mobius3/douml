@@ -146,17 +146,44 @@ void KeyValuesTable::remove(const char * key)
     }
 }
 
+bool KeyValuesTable::EqualData(HaveKeyValueData * kvData)
+{
+    if(!kvData)
+        return false;
+    unsigned n = numRows();
+
+    if (text(n - 1, 0).isEmpty())
+        n -= 1;
+
+    if(kvData->get_n_keys() != n)
+        return false;
+
+    unsigned index;
+    for (index = 0; index != n; index += 1)
+    {
+        if(kvData->has_key(fromUnicode(text(index, 0))) == -1)
+            return false;
+        if(kvData->get_value(fromUnicode(text(index, 0))) != fromUnicode(text(index, 1)))
+            return false;
+    }
+    return true;
+}
+
+//bool HaveKeyValueData::isSame(KeyValueData * kvData)
+//{
+
+//}
 void KeyValuesTable::Init(HaveKeyValueData *kvData, bool isReadOnly)
 {
     if(!kvData)
     {
-        this->setEnabled(false);
+        //this->setEnabled(false);
         return;
     }
     AdjustColumnCount(isReadOnly);
     AdjustRowCount(kvData, isReadOnly);
     SetupTableText(kvData, isReadOnly);
-    AdjustEditability(isReadOnly);
+    //AdjustEditability(isReadOnly);
 }
 
 void KeyValuesTable::SetupTableText(HaveKeyValueData *kvData,  bool isReadOnly)
