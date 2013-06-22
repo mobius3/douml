@@ -1432,12 +1432,16 @@ void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
             WrapperStr s1;
             WrapperStr s2;
 
-            if (((index = type.operator QString().lastIndexOf("::")) > 0) &&
-                pack->find_type(normalized = Lex::normalize(type.left(index)), tcl) &&
-                (s1 = tcl.type->name(),
-                 s2 = type.mid(index + 2),
-                 s1 = ((index = s1.find('<')) != -1) ? s1.left(index) : s1,
-                 ((s1 == s2) || (s2 == (WrapperStr("~") + s1))))) {
+            auto hasDoubleColon = [&](){index = type.operator QString().lastIndexOf("::"); return index > 0;};
+            auto typeFound = [&](){return pack->find_type(normalized = Lex::normalize(type.left(index)), tcl);};
+            auto readTypes = [&]()
+            {
+                s1 = tcl.type->name();
+                s2 = type.mid(index + 2);
+                s1 = ((index = s1.find('<')) != -1) ? s1.left(index) : s1;
+            };
+            if (hasDoubleColon() && typeFound() && (readTypes(),  ((s1 == s2) || (s2 == (WrapperStr("~") + s1)))))
+            {
                 name = type;
                 type = 0;
             }
