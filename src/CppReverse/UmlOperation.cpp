@@ -2144,7 +2144,7 @@ void UmlOperation::clean_body(WrapperStr & body)
             return;
         }
 
-        const char * e = strstr(b, BodyPostfix);
+        const char * e = strstr(b, compat ? BodyPostfix : BodyPostfix2);
 
         if (e != 0) {
             while ((e != b) && (e[-1] != '\n'))
