@@ -2118,11 +2118,21 @@ void UmlOperation::update_exceptions(Class * cl,
 
 void UmlOperation::clean_body(WrapperStr & body)
 {
-    const char * BodyPrefix = "// Bouml preserved body begin ";
-    const char * BodyPostfix = "// Bouml preserved body end ";
-    const int BodyPrefixLength = 30;
+//    const char * BodyPrefix = "// Bouml preserved body begin ";
+//    const char * BodyPostfix = "// Bouml preserved body end ";
 
-    int index = body.find(BodyPrefix);
+    static const char * BodyPrefix = "// Bouml preserved body begin ";
+    static const char * BodyPrefix2 = "// Douml preserved body begin ";
+    static const char * BodyPostfix = "// Bouml preserved body end ";
+    static const char * BodyPostfix2 = "// Douml preserved body end ";
+
+    const int BodyPrefixLength = 30;
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    int compat = settings.value("Main/compatibility_save").toInt();
+
+    const char* actualPrefix = compat ? BodyPrefix : BodyPrefix2;
+    int index = body.find(actualPrefix);
 
     if (index != -1) {
         const char * b =

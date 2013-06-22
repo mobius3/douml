@@ -4,6 +4,7 @@
 *.pro.user
 *.o
 *moc_*
+src/moc_*
 *.rar
 debug/*
 release/*
@@ -28,6 +29,7 @@ include/Libs*
 .cproject
 .project
 .settings
+src/moc_*.cpp
 *.log
 *.cppcheck
 *.rc
