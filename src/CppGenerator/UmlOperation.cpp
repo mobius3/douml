@@ -51,8 +51,8 @@
 
 // to manage preserved bodies, the key is the id under bouml
 QHash<long, WrapperStr> UmlOperation::bodies;
-const char * BodyPrefix = "// Bouml preserved body begin ";
-const char * BodyPrefix2 = "// Douml preserved body begin ";
+static const char * BodyPrefix = "// Bouml preserved body begin ";
+static const char * BodyPrefix2 = "// Douml preserved body begin ";
 static const char * BodyPostfix = "// Bouml preserved body end ";
 static const char * BodyPostfix2 = "// Douml preserved body end ";
 const int BodyPrefixLength = 30;

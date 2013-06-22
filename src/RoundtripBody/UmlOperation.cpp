@@ -28,6 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <QTextStream>
+#include <QSettings>
+#include <QTextCodec>
 #include <qfile.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
@@ -37,10 +39,14 @@
 #include "UmlCom.h"
 #include "util.h"
 
-const char * BodyPrefix = "// Bouml preserved body begin ";
-const char * BodyPostfix = "// Bouml preserved body end ";
-const char * BodyPythonPrefix = "## Bouml preserved body begin ";
-const char * BodyPythonPostfix = "## Bouml preserved body end ";
+static const char * BodyPrefix = "// Bouml preserved body begin ";
+static const char * BodyPostfix = "// Bouml preserved body end ";
+static const char * BodyPythonPrefix = "## Bouml preserved body begin ";
+static const char * BodyPythonPostfix = "## Bouml preserved body end ";
+static const char * BodyPrefix2 = "// Douml preserved body begin ";
+static const char * BodyPostfix2 = "// Douml preserved body end ";
+static const char * BodyPythonPrefix2 = "## Douml preserved body begin ";
+static const char * BodyPythonPostfix2 = "## Douml preserved body end ";
 const int BodyPrefixLength = 30;
 const int BodyPostfixLength = 28;
 
@@ -91,6 +97,13 @@ void UmlOperation::roundtrip(const char * path, aLanguage who)
 {
     char * s = read_file(path);
 
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    int compat = settings.value("Main/compatibility_save").toInt();
+
+    const char* actuaPrefix = compat ? BodyPrefix : BodyPrefix2;
+    const char* actualPostfix = compat ? BodyPostfix : BodyPostfix2;
+
     if (s != 0) {
         char * p1 = s;
         char * p2;
@@ -105,24 +118,24 @@ void UmlOperation::roundtrip(const char * path, aLanguage who)
             get_body = &UmlOperation::cppBody;
             set_body = &UmlOperation::set_CppBody;
             set_contextualbodyindent = &UmlOperation::set_CppContextualBodyIndent;
-            prefix = BodyPrefix;
-            postfix = BodyPostfix;
+            prefix = actuaPrefix;
+            postfix = actualPostfix;
             break;
 
         case javaLanguage:
             get_body = &UmlOperation::javaBody;
             set_body = &UmlOperation::set_JavaBody;
             set_contextualbodyindent = &UmlOperation::set_JavaContextualBodyIndent;
-            prefix = BodyPrefix;
-            postfix = BodyPostfix;
+            prefix = actuaPrefix;
+            postfix = actualPostfix;
             break;
 
         case phpLanguage:
             get_body = &UmlOperation::phpBody;
             set_body = &UmlOperation::set_PhpBody;
             set_contextualbodyindent = &UmlOperation::set_PhpContextualBodyIndent;
-            prefix = BodyPrefix;
-            postfix = BodyPostfix;
+            prefix = actuaPrefix;
+            postfix = actualPostfix;
             break;
 
         default:
@@ -130,8 +143,15 @@ void UmlOperation::roundtrip(const char * path, aLanguage who)
             get_body = &UmlOperation::pythonBody;
             set_body = &UmlOperation::set_PythonBody;
             set_contextualbodyindent = &UmlOperation::set_PythonContextualBodyIndent;
-            prefix = BodyPythonPrefix;
-            postfix = BodyPythonPostfix;
+
+
+
+
+            const char* actualPythonPrefix = compat ? BodyPythonPrefix : BodyPythonPrefix2;
+            const char* actualPythonPostfix = compat ? BodyPythonPostfix : BodyPythonPostfix2;
+
+            prefix = actualPythonPrefix;
+            postfix = actualPythonPostfix;
         }
 
         while ((p2 = strstr(p1, prefix)) != 0) {
