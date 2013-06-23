@@ -440,26 +440,26 @@ public:
 
 
 private:
-    bool _force_body_generation : 1;
+    bool _force_body_generation = false;
 
-    bool _abstract : 1;
+    bool _abstract = false;
 
 #ifdef WITHCPP
-    bool _cpp_const : 1;
+    bool _cpp_const = false;
 
-    bool _cpp_friend : 1;
+    bool _cpp_friend = false;
 
-    bool _cpp_virtual : 1;
+    bool _cpp_virtual = false;
 
-    bool _cpp_inline : 1;
+    bool _cpp_inline = false;
 
-    bool _cpp_default : 1;
+    bool _cpp_default = false;
 
-    bool _cpp_delete : 1;
+    bool _cpp_delete = false;
 
-    bool _cpp_override : 1;
+    bool _cpp_override = false;
 
-    bool _cpp_final : 1;
+    bool _cpp_final = false;
 
 #endif
 

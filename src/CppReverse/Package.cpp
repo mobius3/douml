@@ -898,14 +898,34 @@ void Package::reverse_toplevel_forms(WrapperStr f, bool sub_block)
                 Lex::mark();
                 /* lgfreitas: We are building a class here, so get the class name */
                 WrapperStr s2 = Lex::read_word();
+                WrapperStr possibleExportToken = s2;
+                WrapperStr nextWord = Lex::read_word();
+                nextWord = Lex::read_word();
+                Lex::come_back();
+                s2 = Lex::read_word();
 
+                QLOG_INFO() << "Nextword is: " << nextWord.operator QString();
                 /* lgfreitas: This seems to have the purpose of ignoring these parameters (personal use?) */
                 if ((strncmp(s2, "Q_EXPORT", 8) == 0) ||
                     (strncmp(s2, "QM_EXPORT", 9) == 0) ||
                     (strncmp(s2, "Q_PNGEXPORT", 11) == 0))
                     s2 = Lex::read_word();
 
-                if (Lex::identifierp(s2, TRUE) &&
+                if(nextWord == "{" || nextWord == ":")
+                {
+                    //s2 = Lex::read_word();
+                    QLOG_INFO() << "Using export mode";
+
+#ifdef ROUNDTRIP
+                    QList<UmlItem *> dummy;
+
+                    Class::reverse(this, s, Formals, f, 0, FALSE, dummy, possibleExportToken);
+#else
+                    Class::reverse(this, s, Formals, f, 0, possibleExportToken);
+#endif
+
+                }
+                else if (Lex::identifierp(s2, TRUE) &&
                     ((s2 = Lex::read_word()) != "{") && (s2 != ":") && (s2 != ";")) {
                     // form like 'class X Y'
                     pretype = s;
@@ -917,9 +937,9 @@ void Package::reverse_toplevel_forms(WrapperStr f, bool sub_block)
 #ifdef ROUNDTRIP
                     QList<UmlItem *> dummy;
 
-                    Class::reverse(this, s, Formals, f, 0, FALSE, dummy);
+                    Class::reverse(this, s, Formals, f, 0, FALSE, dummy, "");
 #else
-                    Class::reverse(this, s, Formals, f, 0);
+                    Class::reverse(this, s, Formals, f, 0, "");
 #endif
                 }
             }

@@ -45,6 +45,7 @@ using namespace std;
 #include "UmlOperation.h"
 #include "UmlAttribute.h"
 #include "CppSettings.h"
+#include <functional>
 #include "UmlExtraClassMember.h"
 #include "Lex.h"
 #include "UmlCom.h"
@@ -96,7 +97,7 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
 #ifdef ROUNDTRIP
                        , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
-                      )
+                      ,WrapperStr ignoredToken)
 {
     bool from_typedef = !name.isEmpty();
     WrapperStr comment = Lex::get_comments();
@@ -110,6 +111,12 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
     if ((strncmp(name, "Q_EXPORT", 8) == 0) ||
         (strncmp(name, "QM_EXPORT", 9) == 0) ||
         (strncmp(name, "Q_PNGEXPORT", 11) == 0)) {
+        q_modifier = name + " ";
+
+        if ((name = Lex::read_word()).isEmpty())
+            return 0;
+    }
+    if (!ignoredToken.isEmpty() && name == ignoredToken) {
         q_modifier = name + " ";
 
         if ((name = Lex::read_word()).isEmpty())
@@ -343,8 +350,10 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
     if (cl_uml)
         cl_uml->set_under_construction(TRUE);
 
-    while (Lex::mark(), ((s = Lex::read_word()) != "}")) {
-        if (s.isEmpty()) {
+    while (Lex::mark(), ((s = Lex::read_word()) != "}"))
+    {
+        if (s.isEmpty())
+        {
             if (! Package::scanning())
                 Lex::premature_eof();
 
@@ -472,7 +481,8 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
 
             continue;
         }
-        else {
+        else
+        {
             cl->manage_member(s, visibility, container, path
 #ifdef ROUNDTRIP
                               , roundtrip, expected_order
@@ -609,6 +619,84 @@ void Class::declaration(const WrapperStr & name, const WrapperStr & stereotype,
         }
 }
 
+
+ESwitchKeyword Class::manage_operation(WrapperStr& s, WrapperStr& type, WrapperStr& name,
+                                         const Q3ValueList<FormalParameterList> & tmplts, WrapperStr& modifier, WrapperStr& pretype,
+                                       bool& inlinep, bool& virtualp, bool& staticp, bool& constp,
+                                       bool& volatilep, bool explicitp, bool friendp, bool typenamep, aVisibility& visibility,
+                                       WrapperStr& friend_template, WrapperStr& comment, WrapperStr& description
+                                       #ifdef ROUNDTRIP
+                                                                           , bool roundtrip,  QList<UmlItem *> expected_order
+                                       #endif
+                                       )
+{
+    // suppose an operation
+    if (Package::scanning())
+        return ESwitchKeyword::k_break;
+
+    if (type.isEmpty()) {
+        if (!Package::scanning())
+            Lex::error_near("(");
+        return ESwitchKeyword::k_break;
+    }
+
+    BooL func = FALSE;
+    WrapperStr cl_name = WrapperStr(text(0).toAscii().constData());
+    WrapperStr cl_full_name = cl_name;
+    int index;
+
+    if ((index = cl_name.find('<')) != -1)
+        cl_name.truncate(index);
+
+    if (name.isEmpty()) {
+        if ((type == cl_full_name) ||
+            (type == (WrapperStr("~") + cl_full_name))) {
+            name = type;
+            type = "";
+        }
+        else if ((type == cl_name) ||
+                 (type == (WrapperStr("~") + cl_name))) {
+            name = type;
+            type = "";
+        }
+        else if (type.left(9) == "operator ") {
+            name = type;
+            type = 0;
+        }
+        else {
+            WrapperStr typ;
+
+            if (((index = type.find('<')) != -1) &&
+                // wrong tests : not so simple
+                (((typ = type.left(index)) == cl_name) ||
+                 (typ == (WrapperStr("~") + cl_name)))) {
+                name = type;
+                type = "";
+            }
+            else {
+                if (! UmlOperation::pfunc(func, name, type, "${name}"))
+                    return ESwitchKeyword::k_break;
+
+                //???modifier = FALSE;
+                if (!func) {
+                    s = Lex::read_word();
+                    return ESwitchKeyword::k_continue;
+                }
+            }
+        }
+    }
+
+    UmlOperation::new_one(this, name, tmplts, type, modifier, pretype, visibility,
+                          inlinep, virtualp, staticp, constp, volatilep,
+                          typenamep, explicitp, friendp, friend_template,
+                          comment, description, func
+#ifdef ROUNDTRIP
+                          , roundtrip, expected_order
+#endif
+                         );
+    return ESwitchKeyword::k_return;
+}
+
 void Class::manage_member(WrapperStr s, aVisibility visibility,
                           ClassContainer * /*container*/,
                           const WrapperStr & path
@@ -647,149 +735,100 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #ifdef DEBUG_DOUML
     QLOG_INFO() << "Class::manage_member(" << s << ")\n";
 #endif
-
-    for (;;) {
-        if (s == "static") {
-            staticp = TRUE;
+    QHash<QString, std::function<ESwitchKeyword()>> hashBased;
+    std::function<ESwitchKeyword(bool&)> modifierProcessor = [&](bool& toProcess)
+    {
+        if (!modifier.isEmpty())
+            modifier += WrapperStr(" ") + s;
+        else {
+            toProcess = TRUE;
             Lex::mark();
         }
-        else if (s == "virtual") {
-            virtualp = TRUE;
-            Lex::mark();
-        }
-        else if (s == "const") {
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else {
-                constp = TRUE;
-                Lex::mark();
-            }
-        }
-        else if (s == "mutable") {
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else {
-                mutablep = TRUE;
-                Lex::mark();
-            }
-        }
-        else if (s == "volatile") {
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else {
-                volatilep = TRUE;
-                Lex::mark();
-            }
-        }
-        else if (s == "typename") {
-            // note : may have "const typename ...", but not "typename const ..."
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else {
-                typenamep = TRUE;
-                Lex::mark();
-            }
-        }
-        else if (s == "inline") {
-            inlinep = TRUE;
-            Lex::mark();
-        }
-        else if (s == "explicit") {
-            explicitp = TRUE;
-            Lex::mark();
-        }
-        else if ((s == "unsigned") || (s == "signed") ||
-                 (s == "void") || (s == "bool"))
-            type = s;
-        else if ((s == "char") || (s == "short") || (s == "int") ||
-                 (s == "long") || (s == "float") || (s == "double")) {
-            type = (type.isEmpty()) ? s : type + " " + s;
-        }
-        else if (Lex::star(s) || (s == "&") || (s == "volatile")) {
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else if (!type.isEmpty())
-                modifier = s;
-            else {
-#ifdef DEBUG_DOUML
-                QLOG_INFO() << "ERROR modifier " << s << " et type empty\n";
-#endif
-
-                if (!Package::scanning())
-                    Lex::error_near(s);
-
-                break;
-            }
-        }
-        else if (s == "(") {
-            // suppose an operation
-            if (Package::scanning())
-                break;
-
-            if (type.isEmpty()) {
-                if (!Package::scanning())
-                    Lex::error_near("(");
-
-                break;
-            }
-
-            BooL func = FALSE;
-            WrapperStr cl_name = WrapperStr(text(0).toAscii().constData());
-            WrapperStr cl_full_name = cl_name;
-            int index;
-
-            if ((index = cl_name.find('<')) != -1)
-                cl_name.truncate(index);
-
-            if (name.isEmpty()) {
-                if ((type == cl_full_name) ||
-                    (type == (WrapperStr("~") + cl_full_name))) {
-                    name = type;
-                    type = "";
-                }
-                else if ((type == cl_name) ||
-                         (type == (WrapperStr("~") + cl_name))) {
-                    name = type;
-                    type = "";
-                }
-                else if (type.left(9) == "operator ") {
-                    name = type;
-                    type = 0;
-                }
-                else {
-                    WrapperStr typ;
-
-                    if (((index = type.find('<')) != -1) &&
-                        // wrong tests : not so simple
-                        (((typ = type.left(index)) == cl_name) ||
-                         (typ == (WrapperStr("~") + cl_name)))) {
-                        name = type;
-                        type = "";
-                    }
-                    else {
-                        if (! UmlOperation::pfunc(func, name, type, "${name}"))
-                            break;
-
-                        //???modifier = FALSE;
-                        if (!func) {
-                            s = Lex::read_word();
-                            continue;
-                        }
-                    }
-                }
-            }
-
-            UmlOperation::new_one(this, name, tmplts, type, modifier, pretype, visibility,
-                                  inlinep, virtualp, staticp, constp, volatilep,
-                                  typenamep, explicitp, friendp, friend_template,
-                                  comment, description, func
+        return ESwitchKeyword::k_none;
+    };
+    std::function<ESwitchKeyword(bool&)> basicProcessor = [&](bool& toProcess)
+    {
+        toProcess = TRUE;
+        Lex::mark();
+        return ESwitchKeyword::k_none;
+    };
+    std::function<ESwitchKeyword()> typeProcessor = [&]()
+    {
+        type = (type.isEmpty()) ? s : type + " " + s;
+        return ESwitchKeyword::k_none;
+    };
+    std::function<ESwitchKeyword()> operationProcessor = [&]()
+    {
+        return manage_operation(s, type, name, tmplts, modifier, pretype,
+                                inlinep,virtualp,staticp,constp,volatilep,explicitp,friendp,typenamep,
+                                visibility,
+                                friend_template,comment,description
 #ifdef ROUNDTRIP
-                                  , roundtrip, expected_order
+                                ,roundtrip, expected_order
 #endif
-                                 );
-            return;
+                                );
+    };
+    std::function<ESwitchKeyword()> starProcessor = [&]()
+    {
+        if (!modifier.isEmpty())
+            modifier += WrapperStr(" ") + s;
+        else if (!type.isEmpty())
+            modifier = s;
+        else {
+#ifdef DEBUG_DOUML
+            QLOG_INFO() << "ERROR modifier " << s << " et type empty\n";
+#endif
+
+            if (!Package::scanning())
+                Lex::error_near(s);
+            return ESwitchKeyword::k_break;
         }
-        else if (s == "=") {
+        return ESwitchKeyword::k_none;
+    };
+
+
+    //type block
+    hashBased.insert("unsigned", typeProcessor); hashBased.insert("explicit", typeProcessor); hashBased.insert("signed", typeProcessor);
+    hashBased.insert("void", typeProcessor); hashBased.insert("bool", typeProcessor); hashBased.insert("char", typeProcessor);
+    hashBased.insert("short", typeProcessor);hashBased.insert("int", typeProcessor);hashBased.insert("long", typeProcessor);
+    hashBased.insert("float", typeProcessor); hashBased.insert("double", typeProcessor);
+    //modifier block
+    hashBased.insert("static", std::bind(basicProcessor, staticp));
+    hashBased.insert("virtual", std::bind(basicProcessor, virtualp));
+    hashBased.insert("inline", std::bind(basicProcessor, inlinep));
+    hashBased.insert("explicit", std::bind(basicProcessor, explicitp));
+    hashBased.insert("const", std::bind(modifierProcessor, constp));
+    hashBased.insert("mutable", std::bind(modifierProcessor, mutablep));
+    //volatile seemed to have unaccessible second else if in the original. need to cehck
+    hashBased.insert("volatile", std::bind(modifierProcessor, volatilep));
+    hashBased.insert("typename", std::bind(modifierProcessor, typenamep));
+
+    // pass block
+    hashBased.insert("star", starProcessor);
+    hashBased.insert("&",  starProcessor);
+
+    // containers block
+    hashBased.insert("(",  operationProcessor);
+    QString control = "";
+    for (;;)
+    {
+        control =  Lex::star(s) ? "star" : control;
+        if(hashBased.contains(s) || hashBased.contains(control))
+        {
+
+            ESwitchKeyword retVal;
+            retVal = hashBased.contains(control) ? hashBased[control]() : hashBased[s]();
+            control = "";
+            if(retVal == ESwitchKeyword::k_none)
+                s = Lex::read_word();
+            else if (retVal == ESwitchKeyword::k_continue)
+                continue;
+            else if (retVal == ESwitchKeyword::k_break)
+                break;
+            else
+                return;
+        }
+        if (s == "=") {
             // initialized variable, by pass value
             Lex::mark();
             UmlOperation::skip_expr(";");
@@ -800,7 +839,8 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 
             value = "= " + Lex::region();
         }
-        else if (s == ";") {
+        else if (s == ";")
+        {
             if (Package::scanning())
                 return;
 
@@ -836,7 +876,8 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 
             return;
         }
-        else if (s == "friend") {
+        else if (s == "friend")
+        {
             s = Lex::read_word();
 
             if (s == "QMAC_PASCAL")
@@ -928,7 +969,8 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
         }
         else if ((s == "struct") ||
                  (s == "union") ||
-                 (s == "enum")) {
+                 (s == "enum"))
+        {
             Lex::mark();
 
             WrapperStr s2 = Lex::read_word();
@@ -968,11 +1010,11 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #endif
                                     );
                     else
-                        reverse(this, s, tmplts, path, 0
+                        reverse(this, s, tmplts, path, 0,
 #ifdef ROUNDTRIP
-                                , roundtrip, expected_order
+                                 roundtrip, expected_order,
 #endif
-                               );
+                               "");
 
                     return;
                 }
@@ -992,7 +1034,7 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #ifdef ROUNDTRIP
                         , roundtrip, expected_order
 #endif
-                       );
+                       , "");
                 return;
             }
             else if ((s2 != "{") && (s2 != ":")) {
@@ -1014,12 +1056,13 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #ifdef ROUNDTRIP
                             , roundtrip, expected_order
 #endif
-                           );
+                           , "");
 
                 return;
             }
         }
-        else if (s == "class") {
+        else if (s == "class")
+        {
             Lex::mark();
 
             WrapperStr s2 = Lex::read_word();
@@ -1046,11 +1089,12 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #ifdef ROUNDTRIP
                         , roundtrip, expected_order
 #endif
-                       );
+                       , "");
                 return;
             }
         }
-        else if (s == "typedef") {
+        else if (s == "typedef")
+        {
             reverse_typedef(this, path, tmplts
 #ifdef ROUNDTRIP
                             , roundtrip, expected_order
@@ -1058,7 +1102,8 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
                            );
             return;
         }
-        else if (s == "template") {
+        else if (s == "template")
+        {
             FormalParameterList tmplt;
 
             tmplts.append(tmplt);
@@ -1553,7 +1598,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 #ifdef ROUNDTRIP
                                               , rndtrp, expectedorder
 #endif
-                                             )) == 0)
+                                             , "")) == 0)
                     return FALSE;
 
                 // here '}' is the last item read

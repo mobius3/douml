@@ -48,6 +48,7 @@ using namespace std;
 #include "UmlCom.h"
 #include "CppSettings.h"
 #include "Lex.h"
+#include <QSettings>
 #ifdef REVERSE
 #include "Statistic.h"
 # ifdef ROUNDTRIP
@@ -237,8 +238,7 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
     WrapperStr cl_name = WrapperStr((cl->text(0)).toAscii().constData());
     UmlOperation * op;
 #ifdef ROUNDTRIP
-    bool may_roundtrip = roundtrip &&
-                         (!cl->from_libp() || (visibility != PrivateVisibility));
+    bool may_roundtrip = roundtrip && (!cl->from_libp() || (visibility != PrivateVisibility));
     Q3ValueList<UmlParameter> params;
     WrapperStr body;
 
@@ -271,7 +271,8 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
     UmlTypeSpec return_type;
     WrapperStr typeform;
 
-    if (!pfunc) {
+    if (!pfunc)
+    {
         typeform = (pretype.isEmpty())
                    ? WrapperStr("${type}")
                    : pretype + " ${type}";
@@ -284,7 +285,8 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
     int index = 0;
     WrapperStr decl;
 
-    if (op != 0) {
+    if (op != 0)
+    {
         op->set_Visibility(visibility);
 
         if (staticp) op->set_isClassMember(staticp);
@@ -375,15 +377,18 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
     // note : don't use preserve_body identifier like in Java
     // else need to report existing operation detection when
     // will read its body rather than only its declaration
-    if (may_roundtrip) {
-        while (read_param(cl, rank, param, decl, tmplts, on_error, TRUE)) {
+    if (may_roundtrip)
+    {
+        while (read_param(cl, rank, param, decl, tmplts, on_error, TRUE))
+        {
             if (may_roundtrip) {
                 params.append(param);
                 rank += 1;
             }
         }
 
-        if ((op = already_exist(cl, name, params, FALSE)) != 0) {
+        if ((op = already_exist(cl, name, params, FALSE)) != 0)
+        {
             // update already existing operation
             op->set_usefull();
 
@@ -420,7 +425,8 @@ bool UmlOperation::new_one(Class * cl, const WrapperStr & name,
                 cl->set_updated();
             }
         }
-        else {
+        else
+        {
             // operation doesn't yet exist
             op = UmlBaseOperation::create(cl->get_uml(), name);
 
@@ -1486,7 +1492,8 @@ void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
     QLOG_INFO() << candidates.count() << " compatible operations for " << name << '\n';
 #endif
 
-    if (candidates.isEmpty()) {
+    if (candidates.isEmpty())
+    {
         Lex::warn("<font color =\"red\"> " + Lex::quote(name) + "</font> is lost");
         UmlOperation::skip_body();
         return;
