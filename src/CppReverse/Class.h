@@ -38,6 +38,14 @@
 #include <Q3ValueList>
 #include <Q3PtrList>
 
+enum class ESwitchKeyword
+{
+    k_none,
+    k_continue,
+    k_return,
+    k_break
+};
+
 class Class : public BrowserNode, public ClassContainer
 {
 protected:
@@ -59,6 +67,11 @@ protected:
     NDict<Class> declared;
     NDict<Class> defined;
 
+    ESwitchKeyword manage_operation(WrapperStr& s,WrapperStr& type, WrapperStr& name,
+                                             const Q3ValueList<FormalParameterList> &tmplts, WrapperStr& modifier, WrapperStr& pretype,
+                                           bool& inlinep,bool& virtualp,bool& staticp,bool& constp,
+                                           bool& volatilep, bool explicitp, bool friendp,bool typenamep, aVisibility& visibility,
+                                           WrapperStr& friend_template, WrapperStr& comment, WrapperStr& description);
     void manage_member(WrapperStr s, aVisibility visibility,
                        ClassContainer * container, const WrapperStr & path
 #ifdef ROUNDTRIP
@@ -135,7 +148,7 @@ public:
     static Class * reverse(ClassContainer * container,
                            WrapperStr stereotype,
                            const Q3ValueList<FormalParameterList> & tmplt,
-                           const WrapperStr & path, WrapperStr name
+                           const WrapperStr & path, WrapperStr name, WrapperStr ignoredToken
 #ifdef ROUNDTRIP
                            , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
