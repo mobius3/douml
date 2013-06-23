@@ -38,7 +38,7 @@ using namespace std;
 #endif
 
 #include <qstringlist.h>
-
+#include <QSettings>
 #include "UmlOperation.h"
 #include "Package.h"
 #include "UmlClass.h"
