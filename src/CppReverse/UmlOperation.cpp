@@ -1432,12 +1432,16 @@ void UmlOperation::reverse_definition(Package * pack, WrapperStr name,
             WrapperStr s1;
             WrapperStr s2;
 
-            if (((index = type.operator QString().lastIndexOf("::")) > 0) &&
-                pack->find_type(normalized = Lex::normalize(type.left(index)), tcl) &&
-                (s1 = tcl.type->name(),
-                 s2 = type.mid(index + 2),
-                 s1 = ((index = s1.find('<')) != -1) ? s1.left(index) : s1,
-                 ((s1 == s2) || (s2 == (WrapperStr("~") + s1))))) {
+            auto hasDoubleColon = [&](){index = type.operator QString().lastIndexOf("::"); return index > 0;};
+            auto typeFound = [&](){return pack->find_type(normalized = Lex::normalize(type.left(index)), tcl);};
+            auto readTypes = [&]()
+            {
+                s1 = tcl.type->name();
+                s2 = type.mid(index + 2);
+                s1 = ((index = s1.find('<')) != -1) ? s1.left(index) : s1;
+            };
+            if (hasDoubleColon() && typeFound() && (readTypes(),  ((s1 == s2) || (s2 == (WrapperStr("~") + s1)))))
+            {
                 name = type;
                 type = 0;
             }
@@ -2114,11 +2118,21 @@ void UmlOperation::update_exceptions(Class * cl,
 
 void UmlOperation::clean_body(WrapperStr & body)
 {
-    const char * BodyPrefix = "// Bouml preserved body begin ";
-    const char * BodyPostfix = "// Bouml preserved body end ";
-    const int BodyPrefixLength = 30;
+//    const char * BodyPrefix = "// Bouml preserved body begin ";
+//    const char * BodyPostfix = "// Bouml preserved body end ";
 
-    int index = body.find(BodyPrefix);
+    static const char * BodyPrefix = "// Bouml preserved body begin ";
+    static const char * BodyPrefix2 = "// Douml preserved body begin ";
+    static const char * BodyPostfix = "// Bouml preserved body end ";
+    static const char * BodyPostfix2 = "// Douml preserved body end ";
+
+    const int BodyPrefixLength = 30;
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    int compat = settings.value("Main/compatibility_save").toInt();
+
+    const char* actualPrefix = compat ? BodyPrefix : BodyPrefix2;
+    int index = body.find(actualPrefix);
 
     if (index != -1) {
         const char * b =
@@ -2130,7 +2144,7 @@ void UmlOperation::clean_body(WrapperStr & body)
             return;
         }
 
-        const char * e = strstr(b, BodyPostfix);
+        const char * e = strstr(b, compat ? BodyPostfix : BodyPostfix2);
 
         if (e != 0) {
             while ((e != b) && (e[-1] != '\n'))

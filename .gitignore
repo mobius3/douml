@@ -4,6 +4,7 @@
 *.pro.user
 *.o
 *moc_*
+src/moc_*
 *.rar
 debug/*
 release/*

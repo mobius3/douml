@@ -233,7 +233,7 @@ protected:
 
     DrawingLanguage drawingLanguage;
 
-    static QSharedPointer<OperationDialog> instance;
+    //static QSharedPointer<OperationDialog> instance;
 
 
 protected:
@@ -305,7 +305,7 @@ public:
     void insert_param(int rank);
     void delete_param(int rank);
     void move_param(int old_rank, int new_rank);
-    static QSharedPointer<OperationDialog> Instance(OperationData * , DrawingLanguage l);
+    static OperationDialog *Instance(OperationData * , DrawingLanguage l);
 
 protected slots:
     virtual void polish();

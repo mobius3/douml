@@ -87,7 +87,6 @@
 #include "browserfunctions/operationfuncs.h"
 
 QSize OperationDialog::previous_size;
-QSharedPointer<OperationDialog> OperationDialog::instance;
 OperationDialog::OperationDialog(OperationData * o, DrawingLanguage )
     : EdgeMenuDialog(0, 0, FALSE), oper(o),
       cl((ClassData *)((BrowserClass *) o->browser_node->parent())->get_data())
@@ -7343,18 +7342,11 @@ uint OperationDialog::TypeID()
     return TypeIdentifier<OperationDialog>::id();
 }
 
-QSharedPointer<OperationDialog> OperationDialog::Instance(OperationData * o, DrawingLanguage l)
+OperationDialog* OperationDialog::Instance(OperationData * o, DrawingLanguage l)
 {
-    if (instance.isNull())
-        instance = QSharedPointer<OperationDialog>(new OperationDialog(o, l));
-    else {
-        instance->drawingLanguage = l;
-        instance->ChangeTab(0);
-        instance->FillGuiElements(o);
-
-    }
-
-    return instance;
+    OperationDialog* dialog = new OperationDialog(o, l);
+    dialog->setWindowFlags(Qt::WDestructiveClose);
+    return dialog;
 }
 
 void OperationDialog::InitPropertiesTab()
