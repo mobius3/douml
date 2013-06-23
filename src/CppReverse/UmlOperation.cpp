@@ -48,6 +48,7 @@ using namespace std;
 #include "UmlCom.h"
 #include "CppSettings.h"
 #include "Lex.h"
+#include <QSettings>
 #ifdef REVERSE
 #include "Statistic.h"
 # ifdef ROUNDTRIP

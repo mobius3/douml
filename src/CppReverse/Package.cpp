@@ -915,7 +915,15 @@ void Package::reverse_toplevel_forms(WrapperStr f, bool sub_block)
                 {
                     //s2 = Lex::read_word();
                     QLOG_INFO() << "Using export mode";
+
+#ifdef ROUNDTRIP
+                    QList<UmlItem *> dummy;
+
+                    Class::reverse(this, s, Formals, f, 0, FALSE, dummy, possibleExportToken);
+#else
                     Class::reverse(this, s, Formals, f, 0, possibleExportToken);
+#endif
+
                 }
                 else if (Lex::identifierp(s2, TRUE) &&
                     ((s2 = Lex::read_word()) != "{") && (s2 != ":") && (s2 != ";")) {
@@ -929,7 +937,7 @@ void Package::reverse_toplevel_forms(WrapperStr f, bool sub_block)
 #ifdef ROUNDTRIP
                     QList<UmlItem *> dummy;
 
-                    Class::reverse(this, s, Formals, f, 0, Lex::read_word(), FALSE, dummy);
+                    Class::reverse(this, s, Formals, f, 0, FALSE, dummy, "");
 #else
                     Class::reverse(this, s, Formals, f, 0, "");
 #endif

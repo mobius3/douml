@@ -71,7 +71,11 @@ protected:
                                              const Q3ValueList<FormalParameterList> &tmplts, WrapperStr& modifier, WrapperStr& pretype,
                                            bool& inlinep,bool& virtualp,bool& staticp,bool& constp,
                                            bool& volatilep, bool explicitp, bool friendp,bool typenamep, aVisibility& visibility,
-                                           WrapperStr& friend_template, WrapperStr& comment, WrapperStr& description);
+                                           WrapperStr& friend_template, WrapperStr& comment, WrapperStr& description
+#ifdef ROUNDTRIP
+                                    , bool roundtrip,  QList<UmlItem *> expected_order
+#endif
+                                    );
     void manage_member(WrapperStr s, aVisibility visibility,
                        ClassContainer * container, const WrapperStr & path
 #ifdef ROUNDTRIP
@@ -148,10 +152,11 @@ public:
     static Class * reverse(ClassContainer * container,
                            WrapperStr stereotype,
                            const Q3ValueList<FormalParameterList> & tmplt,
-                           const WrapperStr & path, WrapperStr name, WrapperStr ignoredToken
+                           const WrapperStr & path, WrapperStr name
 #ifdef ROUNDTRIP
                            , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
+                           , WrapperStr ignoredToken
                           );
     static Class * reverse_enum(ClassContainer * container,
                                 const WrapperStr & path, WrapperStr name

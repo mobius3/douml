@@ -93,11 +93,11 @@ Class::~Class()
 
 Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
                        const Q3ValueList<FormalParameterList> & tmplts,
-                       const WrapperStr & path, WrapperStr name,WrapperStr ignoredToken
+                       const WrapperStr & path, WrapperStr name
 #ifdef ROUNDTRIP
                        , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
-                      )
+                      ,WrapperStr ignoredToken)
 {
     bool from_typedef = !name.isEmpty();
     WrapperStr comment = Lex::get_comments();
@@ -620,11 +620,15 @@ void Class::declaration(const WrapperStr & name, const WrapperStr & stereotype,
 }
 
 
-ESwitchKeyword Class::manage_operation(WrapperStr& s,WrapperStr& type, WrapperStr& name,
+ESwitchKeyword Class::manage_operation(WrapperStr& s, WrapperStr& type, WrapperStr& name,
                                          const Q3ValueList<FormalParameterList> & tmplts, WrapperStr& modifier, WrapperStr& pretype,
-                                       bool& inlinep,bool& virtualp,bool& staticp,bool& constp,
-                                       bool& volatilep, bool explicitp, bool friendp,bool typenamep, aVisibility& visibility,
-                                       WrapperStr& friend_template, WrapperStr& comment, WrapperStr& description)
+                                       bool& inlinep, bool& virtualp, bool& staticp, bool& constp,
+                                       bool& volatilep, bool explicitp, bool friendp, bool typenamep, aVisibility& visibility,
+                                       WrapperStr& friend_template, WrapperStr& comment, WrapperStr& description
+                                       #ifdef ROUNDTRIP
+                                                                           , bool roundtrip,  QList<UmlItem *> expected_order
+                                       #endif
+                                       )
 {
     // suppose an operation
     if (Package::scanning())
@@ -758,7 +762,11 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
         return manage_operation(s, type, name, tmplts, modifier, pretype,
                                 inlinep,virtualp,staticp,constp,volatilep,explicitp,friendp,typenamep,
                                 visibility,
-                                friend_template,comment,description);
+                                friend_template,comment,description
+#ifdef ROUNDTRIP
+                                ,roundtrip, expected_order
+#endif
+                                );
     };
     std::function<ESwitchKeyword()> starProcessor = [&]()
     {
@@ -1002,11 +1010,11 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #endif
                                     );
                     else
-                        reverse(this, s, tmplts, path, 0, ""
+                        reverse(this, s, tmplts, path, 0,
 #ifdef ROUNDTRIP
-                                , roundtrip, expected_order
+                                 roundtrip, expected_order,
 #endif
-                               );
+                               "");
 
                     return;
                 }
@@ -1022,11 +1030,11 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
             else if ((s2 = Lex::read_word()) == ";") {
                 // form like 'struct X;'
                 Lex::come_back();
-                reverse(this, s, tmplts, path, 0, ""
+                reverse(this, s, tmplts, path, 0
 #ifdef ROUNDTRIP
                         , roundtrip, expected_order
 #endif
-                       );
+                       , "");
                 return;
             }
             else if ((s2 != "{") && (s2 != ":")) {
@@ -1044,11 +1052,11 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #endif
                                 );
                 else
-                    reverse(this, s, tmplts, path, 0, ""
+                    reverse(this, s, tmplts, path, 0
 #ifdef ROUNDTRIP
                             , roundtrip, expected_order
 #endif
-                           );
+                           , "");
 
                 return;
             }
@@ -1077,11 +1085,11 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
             }
             else {
                 Lex::come_back();
-                reverse(this, s, tmplts, path, 0, ""
+                reverse(this, s, tmplts, path, 0
 #ifdef ROUNDTRIP
                         , roundtrip, expected_order
 #endif
-                       );
+                       , "");
                 return;
             }
         }
@@ -1586,11 +1594,11 @@ Class * Class::reverse_enum(ClassContainer * container,
                                                  )) == 0)
                         return FALSE;
                 }
-                else if ((cl = Class::reverse(container, s, tmplts, path, name1, ""
+                else if ((cl = Class::reverse(container, s, tmplts, path, name1
 #ifdef ROUNDTRIP
                                               , rndtrp, expectedorder
 #endif
-                                             )) == 0)
+                                             , "")) == 0)
                     return FALSE;
 
                 // here '}' is the last item read
