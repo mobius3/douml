@@ -107,7 +107,7 @@ SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
 
         
 TARGET          = cpp_generator
-DEFINES          = WITHCPP BooL=bool TRACE
+DEFINES          = WITHCPP BooL=bool TRACE DEBUG
 INCLUDEPATH   = ../Tools ../CppGenerator ../
 
 
