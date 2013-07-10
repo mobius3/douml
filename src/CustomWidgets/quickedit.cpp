@@ -568,8 +568,8 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     originalView = view;
     mainWindow = window;
     nullController = QSharedPointer<ItemController<BrowserNode> > (new ItemController<BrowserNode>());
-    validTypes = {UmlAggregation,UmlAggregationByValue,UmlDirectionalAggregation, UmlClass,
-                  UmlDirectionalAggregationByValue, UmlAttribute, UmlOperation, UmlExtraMember, UmlClassView, UmlPackage};
+    validTypes << UmlAggregation << UmlAggregationByValue << UmlDirectionalAggregation << UmlClass
+               << UmlDirectionalAggregationByValue << UmlAttribute << UmlOperation << UmlExtraMember << UmlClassView << UmlPackage;
     columns << "name" <<  "mark"  << "deleted" << "prefix" << "type"  << "postfix" <<  "default_value" <<  "stereotype"
                                         << "visibility" <<  "direction" << "static" <<  "abstract" <<  "multiplicity"
 
@@ -932,7 +932,8 @@ void QuickEdit::VisibilityDelegateSetup()
     GenericDelegate* visibilityDelegate = new GenericDelegate(ui->tvEditor, false);
     visibilityDelegate->widgetCreator = [&](QWidget * parent)
     {
-        QStringList visibilities = {"public" , "protected", "private", "package", "default"};
+        QStringList visibilities; 
+        visibilities << "public" << "protected" << "private" << "package" << "default";
         QComboBox* box = new QComboBox(parent);
         QStringListModel* model = new QStringListModel;
         model->setStringList(visibilities);
@@ -1070,7 +1071,8 @@ void QuickEdit::DirectionDelegateSetup()
     GenericDelegate* delegate = new GenericDelegate(ui->tvEditor, false);
     delegate->widgetCreator = [&](QWidget * parent)
     {
-        QStringList visibilities = {"inout" , "in", "out"};
+        QStringList visibilities;
+        visibilities << "inout" << "in" << "out";
         QComboBox* box = new QComboBox(parent);
         QStringListModel* model = new QStringListModel;
         model->setStringList(visibilities);
