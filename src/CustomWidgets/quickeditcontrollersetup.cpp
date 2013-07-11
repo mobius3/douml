@@ -211,21 +211,21 @@ void QuickEdit::SetupClassController()
 {
     classController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     classController->SetColumns(columns);
-    ADD_GETSET(BrowserClass, classController, columns.indexOf("name"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserClass, classController, columns.indexOf("name"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
-    ADD_GETSET(BrowserClass, classController, columns.indexOf("stereotype"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserClass, classController, columns.indexOf("stereotype"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_stereotype, def->set_stereotype);
 
-    ADD_GETSET(BrowserClass, classController, columns.indexOf("deleted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserClass, classController, columns.indexOf("deleted"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, deletedp, set_deleted);
 
-    ADD_GETSET_CONVERTED(BrowserClass, classController, columns.indexOf("visibility"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_CONVERTED(BrowserClass, classController, columns.indexOf("visibility"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                          toString,BrowserNode::encode_visibility,visibility_as_string, pointer->def->set_uml_visibility);
 
-    ADD_GETSET(BrowserClass, classController, columns.indexOf("abstract"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserClass, classController, columns.indexOf("abstract"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, def->get_is_abstract, def->set_is_abstract);
 
-    ADD_PIXMAP_GETTER(BrowserClass, classController, columns.indexOf("name"),std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+    ADD_PIXMAP_GETTER(BrowserClass, classController, columns.indexOf("name"),QVector<int>({Qt::DecorationRole}), pixmap);
 
 
     classController->AddFlagsFunctor
@@ -255,41 +255,41 @@ void QuickEdit::SetupOperationController()
 {
     operationController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     operationController->SetColumns(columns);
-    ADD_GETSET(BrowserOperation, operationController, columns.indexOf("name"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserOperation, operationController, columns.indexOf("name"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
 
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("type"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("type"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                    toString, get_return_type().get_type, set_return_type);
 
-    ADD_GETSET_CONVERTED(BrowserOperation, operationController, columns.indexOf("visibility"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_CONVERTED(BrowserOperation, operationController, columns.indexOf("visibility"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                          toString,BrowserNode::encode_visibility,visibility_as_string, pointer->def->set_uml_visibility);
 
-    ADD_GETSET(BrowserOperation, operationController, columns.indexOf("deleted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserOperation, operationController, columns.indexOf("deleted"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, deletedp, set_deleted);
 
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("static"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("static"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_isa_class_operation, set_isa_class_operation);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("abstract"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("abstract"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_is_abstract, set_is_abstract);
 
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("const"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("const"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_const, set_cpp_const);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("volatile"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("volatile"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_is_volatile, set_is_volatile);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("friend"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("friend"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_friend, set_cpp_friend);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("virtual"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("virtual"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_virtual, set_cpp_virtual);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("inline"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("inline"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_inline, set_cpp_inline);
 
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("defaulted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("defaulted"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_default, set_cpp_default);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("delete"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("delete"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_delete, set_cpp_delete);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("override"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("override"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_override, set_cpp_override);
-    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("final"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("final"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_cpp_final, set_cpp_final);
 
     std::function<void(BrowserNode*,const QModelIndex& index)> f = [](BrowserNode* node ,const QModelIndex& index)
@@ -301,9 +301,9 @@ void QuickEdit::SetupOperationController()
         oper->package_modified();
         oper->get_data()->modified();
     };
-    operationController->AddPostProcessors(columns.indexOf("name"), QVector<int>(std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole})),f);
+    operationController->AddPostProcessors(columns.indexOf("name"), QVector<int>(QVector<int>({Qt::DisplayRole,Qt::EditRole})),f);
 
-    ADD_PIXMAP_GETTER(BrowserOperation, operationController, columns.indexOf("name"),std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+    ADD_PIXMAP_GETTER(BrowserOperation, operationController, columns.indexOf("name"),QVector<int>({Qt::DecorationRole}), pixmap);
 
 
     operationController->AddFlagsFunctor
@@ -335,33 +335,33 @@ void QuickEdit::SetupAttributeController()
 {
     attributeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     attributeController->SetColumns(columns);
-    ADD_GETSET(BrowserAttribute, attributeController, columns.indexOf("name"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserAttribute, attributeController, columns.indexOf("name"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
-    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, columns.indexOf("type"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, columns.indexOf("type"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toString, get_type().get_type, set_type);
-    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, columns.indexOf("default_value"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, columns.indexOf("default_value"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toString, get_init_value, set_init_value);
-    ADD_GETSET(BrowserAttribute, attributeController, columns.indexOf("stereotype"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserAttribute, attributeController, columns.indexOf("stereotype"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_stereotype, def->set_stereotype);
 
-    ADD_GETSET(BrowserAttribute, attributeController, columns.indexOf("deleted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserAttribute, attributeController, columns.indexOf("deleted"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, deletedp, set_deleted);
 
-//    ADD_GETSET_DIRECT_ASSIGNMENT(BrowserAttribute, attributeController, columns.indexOf("visibility"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//    ADD_GETSET_DIRECT_ASSIGNMENT(BrowserAttribute, attributeController, columns.indexOf("visibility"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
 //                                 visibility_as_string(), BrowserNode::encode_visibility(value.toString()));
-    ADD_GETSET_CONVERTED(BrowserAttribute, attributeController, columns.indexOf("visibility"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_CONVERTED(BrowserAttribute, attributeController, columns.indexOf("visibility"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                          toString,BrowserNode::encode_visibility,visibility_as_string, pointer->def->set_visibility);
 
 
 
-    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, columns.indexOf("static"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DATA(BrowserAttribute, AttributeData, attributeController, columns.indexOf("static"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                     toBool,get_isa_class_attribute, set_isa_class_attribute);
 
 
 
 
 
-    ADD_PIXMAP_GETTER(BrowserAttribute, attributeController, columns.indexOf("name"), std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+    ADD_PIXMAP_GETTER(BrowserAttribute, attributeController, columns.indexOf("name"), QVector<int>({Qt::DecorationRole}), pixmap);
 
     attributeController->AddFlagsFunctor
             (
@@ -395,31 +395,31 @@ void QuickEdit::SetupAttributeController()
         attr->package_modified();
         attr->get_data()->modified();
     };
-    attributeController->AddPostProcessors(columns.indexOf("name"), QVector<int>(std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole})),f);
+    attributeController->AddPostProcessors(columns.indexOf("name"), QVector<int>(QVector<int>({Qt::DisplayRole,Qt::EditRole})),f);
 }
 
 void QuickEdit::SetupOperationAttributeController()
 {
     operationAttributeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     operationAttributeController->SetColumns(columns);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("name"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("name"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("type"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("type"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_param_type().get_type, set_param_type);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("default_value"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("default_value"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_default_value, set_default_value);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("direction"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("direction"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_direction, set_direction);
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("deleted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("deleted"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, deletedp, set_deleted);
 
-//    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("prefix"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+//    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("prefix"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
 //               toString, get_specifier, set_specifier);
 
-    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("mark"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserOperationAttribute, operationAttributeController, columns.indexOf("mark"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, markedp, set_marked);
 
-    operationAttributeController->AddGetter(columns.indexOf("deleted"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    operationAttributeController->AddGetter(columns.indexOf("deleted"),QVector<int>({Qt::DisplayRole,Qt::EditRole}),
     [] (const BrowserNode* data, const QModelIndex& index)
 {
         Q_UNUSED(index);
@@ -432,7 +432,7 @@ void QuickEdit::SetupOperationAttributeController()
     return QVariant();
     }
     );
-    operationAttributeController->AddSetter(columns.indexOf("deleted"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    operationAttributeController->AddSetter(columns.indexOf("deleted"),QVector<int>({Qt::DisplayRole,Qt::EditRole}),
     [] (BrowserNode* data, QVariant value, const QModelIndex& index)
  {
     if(!data)
@@ -447,7 +447,7 @@ void QuickEdit::SetupOperationAttributeController()
     }
     );
 
-    operationAttributeController->AddGetter(columns.indexOf("prefix"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    operationAttributeController->AddGetter(columns.indexOf("prefix"),QVector<int>({Qt::DisplayRole,Qt::EditRole}),
     [] (const BrowserNode* data, const QModelIndex& index)
 {
         Q_UNUSED(index);
@@ -460,7 +460,7 @@ void QuickEdit::SetupOperationAttributeController()
     return QVariant();
     }
     );
-    operationAttributeController->AddSetter(columns.indexOf("prefix"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    operationAttributeController->AddSetter(columns.indexOf("prefix"),QVector<int>({Qt::DisplayRole,Qt::EditRole}),
     [] (BrowserNode* data, QVariant value, const QModelIndex& index)
  {
     if(!data)
@@ -475,7 +475,7 @@ void QuickEdit::SetupOperationAttributeController()
     }
     );
 
-    operationAttributeController->AddGetter(columns.indexOf("postfix"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    operationAttributeController->AddGetter(columns.indexOf("postfix"),QVector<int>({Qt::DisplayRole,Qt::EditRole}),
     [] (const BrowserNode* data, const QModelIndex& index)
 {
         Q_UNUSED(index);
@@ -488,7 +488,7 @@ void QuickEdit::SetupOperationAttributeController()
     return QVariant();
     }
     );
-    operationAttributeController->AddSetter(columns.indexOf("postfix"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    operationAttributeController->AddSetter(columns.indexOf("postfix"),QVector<int>({Qt::DisplayRole,Qt::EditRole}),
     [] (BrowserNode* data, QVariant value, const QModelIndex& index)
  {
     if(!data)
@@ -512,9 +512,9 @@ void QuickEdit::SetupOperationAttributeController()
         BrowserOperationAttribute* oper = static_cast<BrowserOperationAttribute*>(node);
         OperationFuncs::recompute_param(oper->get_operation(),index.row(),true);
     };
-    operationAttributeController->AddPostProcessors(columns.indexOf("direction"), QVector<int>(std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole})),f);
+    operationAttributeController->AddPostProcessors(columns.indexOf("direction"), QVector<int>(QVector<int>({Qt::DisplayRole,Qt::EditRole})),f);
 
-    ADD_PIXMAP_GETTER(BrowserOperationAttribute, operationAttributeController, columns.indexOf("name"), std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+    ADD_PIXMAP_GETTER(BrowserOperationAttribute, operationAttributeController, columns.indexOf("name"), QVector<int>({Qt::DecorationRole}), pixmap);
 
 
 
@@ -550,20 +550,20 @@ void QuickEdit::SetupRelationController()
     relationController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     relationController->SetColumns(columns);
 
-    ADD_GETSET(BrowserRelation, relationController, columns.indexOf("name"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserRelation, relationController, columns.indexOf("name"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
-    ADD_GETSET_DIRECT(BrowserRelation, relationController, columns.indexOf("default"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DIRECT(BrowserRelation, relationController, columns.indexOf("default"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                       toString, def->a.init_value.operator QString());
 
-    ADD_GETSET(BrowserRelation, relationController, columns.indexOf("deleted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserRelation, relationController, columns.indexOf("deleted"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, deletedp, set_deleted);
 
     std::function<void(RoleData& , UmlVisibility ) > f = [](RoleData& data, UmlVisibility vis){data.uml_visibility = vis;};
 
-    ADD_PIXMAP_GETTER(BrowserRelation, relationController, columns.indexOf("name"), std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+    ADD_PIXMAP_GETTER(BrowserRelation, relationController, columns.indexOf("name"), QVector<int>({Qt::DecorationRole}), pixmap);
 
 
-    relationController->AddGetter(columns.indexOf("visibility"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    relationController->AddGetter(columns.indexOf("visibility"),QVector<int>({Qt::DisplayRole,Qt::EditRole}),
     [] (const BrowserNode* data, const QModelIndex& index)
 {
     Q_UNUSED(index);
@@ -576,7 +576,7 @@ void QuickEdit::SetupRelationController()
     return QVariant();
     }
     );
-    relationController->AddSetter(columns.indexOf("visibility"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    relationController->AddSetter(columns.indexOf("visibility"),QVector<int>({Qt::DisplayRole,Qt::EditRole}),
     [] (BrowserNode* data, QVariant value, const QModelIndex& index)
 {
     Q_UNUSED(index);
@@ -591,12 +591,12 @@ void QuickEdit::SetupRelationController()
     );
 
 
-    ADD_GETSET_DIRECT(BrowserRelation, relationController, columns.indexOf("static"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DIRECT(BrowserRelation, relationController, columns.indexOf("static"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                       toBool, def->a.isa_class_relation);
-    ADD_GETSET_DIRECT(BrowserRelation, relationController, columns.indexOf("multiplicity"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET_DIRECT(BrowserRelation, relationController, columns.indexOf("multiplicity"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                       toString, def->a.multiplicity.operator QString());
 
-    relationController->AddGetter(columns.indexOf("type"),std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    relationController->AddGetter(columns.indexOf("type"),QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                                   [] (const BrowserNode* data, const QModelIndex& )
     {
 
@@ -609,7 +609,7 @@ void QuickEdit::SetupRelationController()
             return QVariant();
     }
     );
-    relationController->AddSetter(1,std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    relationController->AddSetter(1,QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                                   [] (BrowserNode* data, QVariant value, const QModelIndex& )
     {
         if(!data)
@@ -650,13 +650,13 @@ void QuickEdit::SetupExtraNodeController()
 
     extraNodeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     extraNodeController->SetColumns(columns);
-    ADD_GETSET(BrowserExtraMember, extraNodeController, columns.indexOf("name"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserExtraMember, extraNodeController, columns.indexOf("name"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toString, get_name, set_name);
 
-    ADD_GETSET(BrowserExtraMember, extraNodeController, columns.indexOf("deleted"), std::initializer_list<int>({Qt::DisplayRole,Qt::EditRole}),
+    ADD_GETSET(BrowserExtraMember, extraNodeController, columns.indexOf("deleted"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, deletedp, set_deleted);
 
-    ADD_PIXMAP_GETTER(BrowserExtraMember, extraNodeController, columns.indexOf("name"), std::initializer_list<int>({Qt::DecorationRole}), pixmap);
+    ADD_PIXMAP_GETTER(BrowserExtraMember, extraNodeController, columns.indexOf("name"), QVector<int>({Qt::DecorationRole}), pixmap);
 
     extraNodeController->AddFlagsFunctor
             (
