@@ -18,6 +18,7 @@ INCLUDEPATH += include \
             ../L_UniversalModels
 
 QMAKE_CXXFLAGS += -std=gnu++11
+mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 
 DEFINES += L_TREE_CONTROLLER_LIBRARY
 

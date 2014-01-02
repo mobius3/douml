@@ -131,3 +131,4 @@ Debug {
 }
 UI_DIR = src/ui
 QMAKE_CXXFLAGS += -std=gnu++11
+mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++

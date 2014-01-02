@@ -474,8 +474,8 @@ WrapperStr Lex::manage_operator(QString & result, int c, bool oper)
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
     QByteArray temp = result.toAscii();
-    const char* c = temp.constData();
-    return WrapperStr(c);
+    const char* ch = temp.constData();
+    return WrapperStr(ch);
 }
 
 char Lex::bypass_operator(int c, bool oper)

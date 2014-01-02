@@ -114,6 +114,7 @@ INCLUDEPATH   = ../Tools ../CppGenerator ../
 #The following line was inserted by qt3to4
 QT += network qt3support testlib
 QMAKE_CXXFLAGS += -std=gnu++11
+mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/cpp_generator
