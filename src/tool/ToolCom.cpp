@@ -40,6 +40,8 @@ using namespace std;
 #endif
 #include <QCoreApplication>
 #include <QProcess>
+#include <QDir>
+#include <QDebug>
 #include <qtimer.h>
 #include "ToolCom.h"
 #include "Socket.h"
@@ -189,7 +191,7 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
 
     unsigned port = com->bind(1024);
 
-
+    qDebug() << QDir::currentPath();
     QStringList commandList = QString(cmd).split(" ");
     QString command = commandList.at(0);
     commandList.removeAt(0);
@@ -200,7 +202,13 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     QStringList arguments;
     arguments.append(commandList << QString::number(port));
     com->exitStaged = exit;
+#ifdef Q_OS_UNIX
+    com->externalProcess->start("./" + command, arguments);
+#endif
+#ifdef Q_OS_WIN
     com->externalProcess->start(command, arguments);
+#endif
+    qDebug() << "error was:" << com->externalProcess->error();
     com->start = TRUE;
 
     return com->id;

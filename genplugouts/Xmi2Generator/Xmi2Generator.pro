@@ -13,6 +13,7 @@ CONFIG(Release, Debug|Release) {
 CONFIG += precompile_header
 DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
 QMAKE_CXXFLAGS += -std=gnu++11
+mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 PRECOMPILED_HEADER += ../../src/misc/mystr.h
 HEADERS        = ./UmlBaseClassDiagram.h \
           ./UmlBaseDeepHistoryPseudoState.h \
@@ -431,6 +432,8 @@ QT += network  qt3support
 INCLUDEPATH += ../../src
 CONFIG += qtestlib
 QMAKE_CXXFLAGS += -std=gnu++11
+mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+mac:LIBS += -lc++
 UI_DIR = src/ui
 DESTDIR = ../../bin
 

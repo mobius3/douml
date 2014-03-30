@@ -547,6 +547,8 @@ Debug {
 }
 
 QMAKE_CXXFLAGS += -std=gnu++11
+mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+mac:LIBS += -lc++
 LIBS += -L../bin -lUniversalModels
 RESOURCES += icons.qrc ../douml.qrc
 

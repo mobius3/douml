@@ -434,6 +434,7 @@ QT += network  qt3support
 INCLUDEPATH += ../../src
 CONFIG += qtestlib
 QMAKE_CXXFLAGS += -std=gnu++11
+mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 UI_DIR = src/ui
 DESTDIR = ../../bin
 
