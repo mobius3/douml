@@ -695,7 +695,7 @@ void QuickEdit::AssignItemsForClass(QSharedPointer<TreeItemInterface> root,  Bro
 
     QList<BrowserNode*> children = classNode->children(validTypes);
     std::reverse(children.begin(), children.end());
-    QList<TreeItemInterface> items;
+    //QList<TreeItemInterface> items;
     for(BrowserNode* child : children)
     {
         if(!child)
