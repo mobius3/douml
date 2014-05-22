@@ -31,6 +31,7 @@
 #include <QModelIndex>
 
 #include "l_tree_controller_global.h"
+#include <functional> // std::function
 
 
 
