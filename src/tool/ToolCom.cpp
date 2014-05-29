@@ -203,7 +203,8 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     arguments.append(commandList << QString::number(port));
     com->exitStaged = exit;
 #ifdef Q_OS_UNIX
-    com->externalProcess->start("./" + command, arguments);
+    qDebug() << QCoreApplication::applicationDirPath() + "/" + command;
+    com->externalProcess->start(QCoreApplication::applicationDirPath() + "/" + command, arguments);
 #endif
 #ifdef Q_OS_WIN
     com->externalProcess->start(command, arguments);

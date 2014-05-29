@@ -61,9 +61,11 @@ SRC_DIRS=\
 
 PLUGOUT_DIRS=genplugouts/BrowserSort  \
 	genplugouts/CppUtilities  \
+	genplugouts/deploy  \
 	genplugouts/FileControl  \
 	genplugouts/GlobalChange  \
 	genplugouts/HtmlDoc  \
+	genplugouts/usecasewizard  \
 	genplugouts/Xmi2Generator  \
 	genplugouts/xmi2import
 
@@ -73,10 +75,13 @@ PROGS=douml \
 	cpp_reverse  \
 	cpp_roundtrip  \
 	cpp_util  \
+	deplcl \
 	file_control  \
 	ghtml  \
 	global_change \
+	gxmi2  \
 	idl_generator  \
+	ixmi2 \
 	java_catalog  \
 	java_generator  \
 	java_reverse  \
@@ -85,8 +90,7 @@ PROGS=douml \
 	php_reverse  \
 	python_generator  \
 	roundtrip_body  \
-	gxmi2  \
-	ixmi2
+	usecasewizard
 
 compile:
 	( cd src/Libs/L_UniversalModels ; $(QMAKE) -config ${config} L_UniversalModels.pro; ) || exit 1 ; $(MAKE) -C src/Libs/L_UniversalModels || exit 1
