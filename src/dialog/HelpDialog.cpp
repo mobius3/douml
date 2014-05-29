@@ -144,6 +144,9 @@ void HelpDialog::show(QString topic)
     dirs[0] = ManualDir;
     DocDir = "";
 
+   if (NavigatorPath.isEmpty())
+     NavigatorPath = "/usr/bin/xdg-open";
+
     for (index = (ManualDir.isEmpty()) ? 1 : 0;
          index != sizeof(dirs) / sizeof(*dirs);
          index += 1) {

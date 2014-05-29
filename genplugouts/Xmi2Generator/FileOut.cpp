@@ -7,6 +7,7 @@
 #include <unordered_map>
 //Added by qt3to4:
 #include "misc/mystr.h"
+#include <functional> // std::function
 FileOut::FileOut(QFile * fp, bool lf, bool utf8) : Q3TextStream(fp), _lf(lf), _indent(0)
 {
     if (utf8)
