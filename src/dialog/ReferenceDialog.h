@@ -32,7 +32,7 @@
 
 #include "BrowserNode.h"
 
-class Q3ComboBox;
+class QComboBox;
 
 class ReferenceDialog : public QDialog
 {
@@ -41,7 +41,7 @@ class ReferenceDialog : public QDialog
 protected:
     BrowserNode * target;
     BrowserNodeList nodes;
-    Q3ComboBox * results;
+    QComboBox * results;
     QPushButton * select_b;
     QPushButton * mark_unmark_b;
     QPushButton * mark_them_b;

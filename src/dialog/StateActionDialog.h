@@ -30,14 +30,11 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
+#include <tabdialog.h>
 #include "BrowserNode.h"
 
 class QPushButton;
-class Q3ComboBox;
+class QComboBox;
 
 class LineEdit;
 class MultiLineEdit;
@@ -46,16 +43,16 @@ class BrowserNode;
 class KeyValuesTable;
 class BodyDialog;
 
-class StateActionDialog : public Q3TabDialog
+class StateActionDialog : public TabDialog
 {
     Q_OBJECT
 
 protected:
     bool visit;
     StateActionData * action;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog *> edits;
 
     QWidget * umltab;
     QWidget * cppTab;

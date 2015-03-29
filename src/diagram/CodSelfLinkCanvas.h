@@ -51,6 +51,7 @@ protected:
     double angle;
     CodObjCanvas * obj;
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     CodSelfLinkCanvas(UmlCanvas * canvas, CodObjCanvas * o,
                       const QPoint & p, int id);
@@ -70,7 +71,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void moveBy(double dx, double dy);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual void open();
     virtual void menu(const QPoint &);

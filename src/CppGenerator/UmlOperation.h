@@ -27,13 +27,9 @@
 
 #ifndef UMLOPERATION_H
 #define UMLOPERATION_H
-
-#include <q3intdict.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
-
 #include "UmlBaseOperation.h"
 
 class QTextStream;
@@ -47,7 +43,7 @@ public:
     UmlOperation(void * id, const WrapperStr & n)
         : UmlBaseOperation(id, n) {};
 
-    virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
+    virtual void compute_dependency(QList<CppRefType *> & dependency,
                                     const WrapperStr & cl_stereotype,
                                     bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility, QTextStream & f_h,

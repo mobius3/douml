@@ -27,8 +27,10 @@
 
 #ifndef BROWSER_USECASEVIEW_H
 #define BROWSER_USECASEVIEW_H
-
+#ifdef habip
 #include <q3intdict.h>
+#endif
+
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>
@@ -95,7 +97,7 @@ public:
     virtual QString get_stype() const;
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
+    virtual bool may_contains_them(const QList<BrowserNode *> &,
                                    BooL & duplicable) const;
     virtual BrowserNode * container(UmlCode) const; // container for class, state machine and activity
     virtual BasicData * get_data() const;

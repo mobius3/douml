@@ -27,31 +27,21 @@
 
 #ifndef CLASSDIALOG_H
 #define  CLASSDIALOG_H
-
-
-
-
-
-#include <q3tabdialog.h>
-//Added by qt3to4:
 #include <QLabel>
-//Added by qt3to4:
-#include <Q3PtrList>
-#include <Q3HBox>
-#include <Q3Grid>
-#include <QSharedPointer>
-
+#include <hhbox.h>
+#include <gridbox.h>
 #include "MyTable.h"
+#include <QSharedPointer>
+#include <memory>
 #include "BrowserNode.h"
 #include "VisibilityGroup.h"
 #include "dialog/EdgeMenuDialog.h"
 
-class Q3VBox;
+class VVBox;
 class QLabel;
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
-class Q3GroupBox;
-
+class QGroupBox;
 class LineEdit;
 class MultiLineEdit;
 class ClassData;
@@ -61,6 +51,7 @@ class ActualParamsTable;
 class ApplicableOnTable;
 class KeyValuesTable;
 class BodyDialog;
+class TableWidgetItemDelegate;
 
 class ClassDialog : public EdgeMenuDialog
 {
@@ -70,25 +61,25 @@ protected:
     QWidget * umltab;
     ClassData * cl;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     VisibilityGroup uml_visibility;
     QLabel * basetypelbl;
-    Q3ComboBox * edbasetype;
+    QComboBox * edbasetype;
     QCheckBox * abstract_cb;
     QCheckBox * active_cb;
-    Q3GroupBox * opt_bg;
-    Q3ComboBox * artifact;
+    QGroupBox * opt_bg;
+    QComboBox * artifact;
     MultiLineEdit * comment;
     MultiLineEdit * constraint;
     FormalParamsTable * formals_table;
-    Q3VBox * parametrized_vtab;
+    VVBox * parametrized_vtab;
     BrowserNodeList nodes;
     QStringList node_names;
     BrowserNodeList artifacts;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog *> edits;
 
     ActualParamsTable * actuals_table;
-    Q3VBox * instantiate_vtab;
+    VVBox * instantiate_vtab;
 
     // C++
     QWidget * cppTab;
@@ -130,16 +121,16 @@ protected:
     QCheckBox * idl_external_cb;
     MultiLineEdit * edidldecl;
     MultiLineEdit * showidldecl;
-    Q3GroupBox * switch_bg;
-    Q3ComboBox * edswitch_type;
+    QGroupBox * switch_bg;
+    QComboBox * edswitch_type;
     QCheckBox * idl_local_cb;
     QCheckBox * idl_custom_cb;
 
     // profiled stereotype
     QWidget * stereotypetab;
-    Q3ComboBox * stereo_init_cb;
+    QComboBox * stereo_init_cb;
     LineEdit * edinitparam;
-    Q3ComboBox * stereo_check_cb;
+    QComboBox * stereo_check_cb;
     LineEdit * edcheckparam;
     LineEdit * ediconpath;
     QPushButton * iconpathrootbutton;
@@ -172,15 +163,15 @@ protected:
     QPushButton * pbProfiledSteretypeBrowse;
     QLabel * lblProfiledEmpty2;
     QLabel * lblProfiledEmpty3;
-    Q3VBox * vtabProfiled;
-    Q3ButtonGroup * bgvUml;
-    Q3ButtonGroup * bgvCpp;
-    Q3ButtonGroup * bgvJava;
-    Q3ButtonGroup * bgvPython;
-    Q3ButtonGroup * bgvPhp;
-    Q3ButtonGroup * bgvIDL;
-    Q3HBox * htabcpp;
-    Q3HBox * htabidl;
+    VVBox * vtabProfiled;
+    QGroupBox * bgvUml;
+    QGroupBox * bgvCpp;
+    QGroupBox * bgvJava;
+    QGroupBox * bgvPython;
+    QGroupBox * bgvPhp;
+    QGroupBox * bgvIDL;
+    HHBox * htabcpp;
+    HHBox * htabidl;
     QLabel * lbl1cpp;
     QLabel * lbl2cpp;
     QLabel * lbl3cpp;
@@ -206,14 +197,14 @@ protected:
     QLabel * lbl2java;
     QLabel * lbl3java;
     QLabel * lbl4java;
-    Q3Grid * stereotypeGrid;
-    Q3HBox * htabUml;
+    GridBox * stereotypeGrid;
+    HHBox * htabUml;
     QFont font;
 
     BrowserClass * currentNode;
     BrowserNode * grandParent;
 
-    Q3VBox * keyValueTab;
+    VVBox * keyValueTab;
 
     virtual uint TypeID();
 
@@ -225,14 +216,14 @@ protected:
 
     //refactoring changes
 
-    static QSharedPointer<ClassDialog> instance;
+    //static QSharedPointer<ClassDialog> instance;
 
 
 public:
     ClassDialog(ClassData * c);
     virtual ~ClassDialog();
 
-    static QSharedPointer<ClassDialog> Instance(ClassData *);
+    static std::shared_ptr<ClassDialog> Instance(ClassData *);
 
     static void cpp_generate_decl(QString & s, ClassData * cl,
                                   QString def, QString name,
@@ -297,7 +288,7 @@ protected slots:
     void icon_browse();
     void icon_root_relative();
     void icon_prj_relative();
-    void update_all_tabs(QWidget *);
+    void update_all_tabs(int current);
     void cpp_update_decl();
     void cpp_default_decl();
     void cpp_unmapped_decl();
@@ -325,16 +316,19 @@ class FormalParamsTable : public MyTable
     Q_OBJECT
 
 protected:
-    const QStringList & types;
+    QStringList & types;
 
     static QString type_copy;
     static QString name_copy;		// copy/cut/paste
     static QString default_value_copy;
     static QString extends_copy;
+private:
+    TableWidgetItemDelegate* m_comboBoxDelegate;
 
 public:
     FormalParamsTable(ClassData * a, QWidget * parent,
-                      const QStringList & list, bool visit);
+                      QStringList &list, bool visit);
+    void Reinitiliaze(ClassData * cl,  QStringList & node_names, bool isWritable);
 
 protected:
     virtual void activateNextCell();
@@ -355,23 +349,26 @@ public:
                        QStringList & node_names);
 
 protected slots:
-    void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    void button_pressed(const QModelIndex &index);
     void value_changed(int row, int col);
 };
 
 class ActualParamsTable : public MyTable
 {
 protected:
-    const QStringList & types;
+    QStringList & types;
 
 public:
     ActualParamsTable(ClassData * a, QWidget * parent,
-                      const QStringList & list, bool visit);
+                       QStringList & list, bool visit);
+    void Reinitiliaze(ClassData * cl,  QStringList & node_names, bool isWritable);
     void generate(QString & s, ClassData * cl, BrowserNode * parent, bool cpp,
                   BrowserNodeList & nodes, QStringList & node_names);
 
 protected:
     //virtual void activateNextCell();
+private:
+    TableWidgetItemDelegate* m_comboBoxDelegate;
 
 public:
     void update(ClassData * c, BrowserNodeList & nodes);
@@ -391,7 +388,7 @@ public:
     QString targets();
 
 protected slots:
-    void button_pressed(int row, int col, int, const QPoint &);
+    void button_pressed(const QModelIndex &index);
 };
 
 #endif

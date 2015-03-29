@@ -50,7 +50,7 @@ static void create_directory(WrapperStr s)
             s.replace(index++, 1, "/");
     }
 
-    s = QDir::cleanDirPath(s) + "/";
+    s = QDir::cleanPath(s) + "/";
     index = s.find("/");
 
     int index2;
@@ -80,8 +80,10 @@ static WrapperStr relative_path(const QDir & destdir, WrapperStr relto)
     QDir fromdir(relto);
     /*WrapperStr from = WrapperStr(fromdir.absPath());
     WrapperStr to = WrapperStr(destdir.absPath());*/
-    const char * cfrom = fromdir.absolutePath().toAscii().constData();
-    const char * cto = destdir.absolutePath().toAscii().constData();
+    QByteArray fromBa = fromdir.absolutePath().toLatin1();
+    QByteArray toBa = destdir.absolutePath().toLatin1();
+    const char * cfrom = fromBa.constData();
+    const char * cto = toBa.constData();
     int lastsep = -1;
     int index = 0;
 
@@ -150,7 +152,7 @@ WrapperStr UmlPackage::rootDir()
         if (!RootDir.isEmpty() && // empty -> error
             QDir::isRelativePath(RootDir)) {
             QFileInfo f(getProject()->supportFile());
-            QDir d(f.dirPath());
+            QDir d(f.path());
 
             RootDir = d.filePath(RootDir);
         }
@@ -204,8 +206,9 @@ WrapperStr UmlPackage::source_path(const WrapperStr & f, WrapperStr relto)
     if (! d.exists())
         create_directory(dir.src);	// don't return on error
 
+    QByteArray temp = d.filePath(f).toLatin1();
     WrapperStr df = (dir.src_absolute || relto.isEmpty())
-                   ? WrapperStr(d.filePath(f).toAscii().constData())
+                   ? WrapperStr(temp.constData())
                    : relative_path(d, relto) + f;
 
     return df + WrapperStr(".") + CppSettings::sourceExtension();
@@ -242,9 +245,10 @@ WrapperStr UmlPackage::header_path(const WrapperStr & f, WrapperStr relto)
 
     if (! d.exists())
         create_directory(dir.h);	// don't return on error
+    QByteArray temp = d.filePath(f).toLatin1();
 
     WrapperStr df = (dir.h_absolute || relto.isEmpty())
-                   ? WrapperStr(d.filePath(f).toAscii().constData())
+                   ? WrapperStr(temp.constData())
                    : relative_path(d, relto) + f;
 
     return df + WrapperStr(".") + CppSettings::headerExtension();
@@ -259,7 +263,7 @@ WrapperStr UmlPackage::text_path(const WrapperStr & f, WrapperStr relto)
 
 void UmlPackage::generate()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->generate();

@@ -1,0 +1,151 @@
+format 76
+
+activityobjectcanvas 128042 activityobject_ref 128810 // activity object Cursor changed position
+  show_infonote default drawing_language default show_stereotype_properties default
+  xyzwh 74 64 2000 131 31
+end
+activitynodecanvas 128298 activitynode_ref 129066 // decision
+  xyz 224 264 2000
+end
+activityactioncanvas 128938 activityaction_ref 129834 // activity action Read combined image from map pieces
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 435 250 2000 100 60
+end
+textcanvas 129194 "All needed pieces are available"
+  xyzwh 257 260 2006 147 13
+activitynodecanvas 129322 activitynode_ref 129194 // decision
+  xyz 224 353 2000
+end
+activityactioncanvas 129706 activityaction_ref 129962 // activity action Load maps around the cursor new position
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 35 566 2000 111 68
+end
+textcanvas 130090 "Memory available"
+  xyzwh 119 352 2006 82 13
+activityactioncanvas 130218 activityaction_ref 130090 // activity action Initiate memory cleanup procedure
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 119 427 2000 100 60
+end
+textcanvas 130474 "Low on memory"
+  xyzwh 243 424 2006 74 13
+activityactioncanvas 134314 activityaction_ref 130218 // activity action Fill vector of potentially obsolette maps
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 698 110 2000 100 60
+end
+activityactioncanvas 134442 activityaction_ref 130346 // activity action Return new image to the application
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 549 114 2000 100 60
+end
+activitynodecanvas 134826 activitynode_ref 129322 // fork
+  xyz 571 264 2000
+end
+activityactioncanvas 135338 activityaction_ref 130474 // activity action Load the maps surrounding the active area
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 703 358 2000 100 60
+end
+activityactioncanvas 135722 activityaction_ref 130602 // activity action For each scale according to if it's active
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 90 149 2000 100 60
+end
+activitynodecanvas 136234 activitynode_ref 129450 // decision
+  xyz 632 286 2000
+end
+textcanvas 136874 "Scale is active"
+  xyzwh 669 289 2006 69 13
+activitynodecanvas 137002 activitynode_ref 129578 // activity_final
+  xyz 633 482 2000
+end
+textcanvas 137258 "Scale is not active"
+  xyzwh 553 376 2000 87 13
+flowcanvas 129066 flow_ref 131754 // <flow>
+  
+  from ref 128298 z 2001 to ref 128938
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 129450 flow_ref 131882 // <flow>
+  
+  from ref 128298 z 2001 to ref 129322
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 129834 flow_ref 132010 // <flow>
+  
+  from ref 129322 z 2001 to point 90 371
+  line 129962 z 2001 to ref 129706
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 131114 flow_ref 132394 // <flow>
+  geometry HVr
+  
+  from ref 129322 z 2001 to point 234 454
+  line 131242 z 2001 to ref 130218
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 132778 flow_ref 133034 // <flow>
+  geometry HVr
+  
+  from ref 130218 z 2001 to point 165 594
+  line 132906 z 2001 to ref 129706
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 133034 flow_ref 133162 // <flow>
+  
+  from ref 129706 z 2001 to point 87 672
+  line 133162 z 2001 to point 483 674
+  line 133290 z 2001 to ref 128938
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 134954 flow_ref 133418 // <flow>
+  
+  from ref 128938 z 2001 to ref 134826
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 135082 flow_ref 133546 // <flow>
+  
+  from ref 134826 z 2001 to ref 134314
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 135210 flow_ref 133674 // <flow>
+  
+  from ref 134826 z 2001 to ref 134442
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 135850 flow_ref 133930 // <flow>
+  
+  from ref 128042 z 2001 to ref 135722
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 135978 flow_ref 134058 // <flow>
+  
+  from ref 135722 z 2001 to ref 128298
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 136362 flow_ref 134186 // <flow>
+  
+  from ref 134826 z 2001 to ref 136234
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 136490 flow_ref 134314 // <flow>
+  geometry HV
+  
+  from ref 136234 z 2001 to point 749 302
+  line 136746 z 2001 to ref 135338
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 137130 flow_ref 134442 // <flow>
+  
+  from ref 136234 z 2001 to ref 137002
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 137514 flow_ref 134570 // <flow>
+  
+  from ref 135338 z 2001 to ref 137002
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+end

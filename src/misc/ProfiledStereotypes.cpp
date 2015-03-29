@@ -25,13 +25,13 @@
 //
 // *************************************************************************
 
-#include <q3ptrdict.h>
-#include <q3dict.h>
-#include <q3popupmenu.h>
+#include <qhash.h>
+////
+//#include <q3popupmenu.h>
 #include <qstack.h>
 #include <qimage.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 
 #include <QPixmap>
 
@@ -49,15 +49,14 @@
 #include "DialogUtil.h"
 #include "Images.h"
 #include "translate.h"
-
-#include <q3ptrstack.h>
+#include <QStack.h>
 
 struct ProfiledStereotype {
     ProfiledStereotype() : cl(0), properties_set(FALSE), browser_icon(0) {}
 
     BrowserClass * cl;
     QStringList propertiesFullName; // profile:stereotype:property
-    Q3ValueList<BrowserAttribute *> properties;
+    QList<BrowserAttribute *> properties;
     bool properties_set;
     QPixmap * browser_icon;
 
@@ -75,11 +74,11 @@ struct ProfiledStereotype {
 };
 
 // stereotypable element kind form -> code
-static Q3Dict<UmlCode> UnPretty2Code;
+static QMap<QString, UmlCode*> UnPretty2Code;
 
 // pretty <-> encoded element kind
-static Q3Dict<QString> Pretty;
-static Q3Dict<QString> UnPretty;
+static QMap<QString, QString*> Pretty;
+static QMap<QString, QString*> UnPretty;
 
 // all unpretty element kinds
 static QStringList Targets;
@@ -90,13 +89,13 @@ static QStringList Defaults[BrowserNodeSup];
 
 // key = an element (BrowserNode), give the stereotype
 // if its stereotype is modeled
-static Q3PtrDict<ProfiledStereotype> ProfiledStereotyped(257);
+static QHash<void*, ProfiledStereotype*> ProfiledStereotyped;
 
 // all the stereotype, key = profile:stereotype
-static Q3Dict<ProfiledStereotype> All;
+static QMap<QString, ProfiledStereotype*> All;
 
 // all the pixmap for browser, key = path
-static Q3Dict<QPixmap> BrowserPixmap;
+static QMap<const char* ,QPixmap*> BrowserPixmap;
 
 // to continue to apply check recursively
 struct CheckCell {
@@ -106,7 +105,7 @@ struct CheckCell {
     CheckCell(BrowserNode * b, bool n) : bn(b), next(n) {}
 };
 
-static Q3PtrStack<CheckCell> CheckStack;
+static QStack<CheckCell*> CheckStack;
 
 void ProfiledStereotype::clear_properties()
 {
@@ -166,25 +165,26 @@ void ProfiledStereotype::set_properties()
 // an attribute is renamed, st is pack:class
 void ProfiledStereotype::renamed(BrowserAttribute * at)
 {
-    int rank = properties.findIndex(at);
+    int rank = properties.indexOf(at);
 
     if (rank == -1)
         return;
 
     QString prop_oldname = propertiesFullName[rank];
     QString prop_newname =
-        prop_oldname.left(prop_oldname.findRev(':') + 1) + at->get_name();
-    const char * oldprop = (const char *) prop_oldname;
-    const char * newprop = (const char *) prop_newname;
+        prop_oldname.left(prop_oldname.lastIndexOf(':') + 1) + at->get_name();
+    const char * oldprop = (const char *) prop_oldname.toLatin1().constData();
+    const char * newprop = (const char *) prop_newname.toLatin1().constData();
 
     propertiesFullName[rank] = prop_newname;
 
-    Q3PtrDictIterator<ProfiledStereotype> it(ProfiledStereotyped);
+    QHashIterator<void*,ProfiledStereotype*> it(ProfiledStereotyped);
 
-    while (it.current() != 0) {
+    while (it.hasNext() != 0) {
+        it.next();
         // update properties
-        // even if it.current() != this because of inheritances
-        BrowserNode * bn = (BrowserNode *) it.currentKey();
+        // even if it.value() != this because of inheritances
+        BrowserNode * bn = (BrowserNode *) it.key();
         unsigned nprop = bn->get_n_keys();
 
         for (unsigned index = 0; index != nprop; index += 1) {
@@ -194,30 +194,31 @@ void ProfiledStereotype::renamed(BrowserAttribute * at)
             }
         }
 
-        ++it;
+        //++it;
     }
 }
 
 // the attribute is deleted
 void ProfiledStereotype::deleted(BrowserAttribute * at)
 {
-    int rank = properties.findIndex(at);
+    int rank = properties.indexOf(at);
 
     if (rank == -1)
         return;
 
     QString prop_name = propertiesFullName[rank];
-    const char * prop = (const char *) prop_name;
+    const char * prop = (const char *) prop_name.toLatin1().constData();
 
-    propertiesFullName.remove(propertiesFullName.at(rank));
-    properties.remove(properties.at(rank));
+    propertiesFullName.removeOne(propertiesFullName.at(rank));
+    properties.removeOne(properties.at(rank));
 
-    Q3PtrDictIterator<ProfiledStereotype> it(ProfiledStereotyped);
+    QHashIterator<void*, ProfiledStereotype*> it(ProfiledStereotyped);
 
-    while (it.current() != 0) {
+    while (it.hasNext()) {
+        it.next();
         // update properties
-        // even if it.current() != this because of inheritances
-        BrowserNode * bn = (BrowserNode *) it.currentKey();
+        // even if it.value() != this because of inheritances
+        BrowserNode * bn = (BrowserNode *) it.key();
         unsigned nprop = bn->get_n_keys();
 
         for (unsigned index = 0; index != nprop; index += 1) {
@@ -228,7 +229,7 @@ void ProfiledStereotype::deleted(BrowserAttribute * at)
             }
         }
 
-        ++it;
+        //++it;
     }
 }
 
@@ -236,7 +237,7 @@ void ProfiledStereotype::deleted(BrowserAttribute * at)
 // if its type return TRUE and set 'l' to the enum's items
 bool ProfiledStereotype::enumerated(QString k, QStringList & l) const
 {
-    int index = propertiesFullName.findIndex(k);
+    int index = propertiesFullName.indexOf(k);
 
     if (index == -1)
         // non consistent
@@ -271,7 +272,7 @@ void ProfiledStereotype::setIcon()
     if ((path == 0) || (*path == 0))
         return;
 
-    QPixmap * px = BrowserPixmap.find(path);
+    QPixmap * px = BrowserPixmap[path];
 
     if (px != 0) {
         if (!(px->isNull()))
@@ -295,7 +296,7 @@ void ProfiledStereotype::setIcon()
                 h = 16;
             }
 
-            QImage img = px->convertToImage().smoothScale(w, h);
+            QImage img = px->toImage().scaled(w, h);
 
             browser_icon = new QPixmap();
             browser_icon->convertFromImage(img);
@@ -306,14 +307,16 @@ void ProfiledStereotype::setIcon()
 
 void ProfiledStereotype::updateStereotypedIcon()
 {
-    Q3PtrDictIterator<ProfiledStereotype> it(ProfiledStereotyped);
+    QHashIterator<void*,ProfiledStereotype*> it(ProfiledStereotyped);
     ProfiledStereotype * pst;
 
-    while ((pst = it.current()) != 0) {
+    while (it.hasNext()) {
+        it.next();
+        pst = it.value();
         if (pst == this)
-            ((BrowserNode *) it.currentKey())->iconChanged();
+            ((BrowserNode *) it.key())->iconChanged();
 
-        ++it;
+        //++it;
     }
 }
 
@@ -330,9 +333,12 @@ void ProfiledStereotypes::init()
 {
     init_images();
 
-    CheckStack.setAutoDelete(TRUE);
+    /*CheckStack.setAutoDelete(TRUE);
     CheckStack.clear();
     CheckStack.setAutoDelete(FALSE);
+    */
+    while(!CheckStack.isEmpty())
+        delete CheckStack.pop();
 
     int index;
 
@@ -341,17 +347,26 @@ void ProfiledStereotypes::init()
 
     ProfiledStereotyped.clear();
 
-    All.setAutoDelete(TRUE);
+    /*All.setAutoDelete(TRUE);
     All.clear();
     All.setAutoDelete(FALSE);
+    */
+    QList<ProfiledStereotype*> allVals = All.values();
+    while(!allVals.empty())
+        delete allVals.takeFirst();
+    All.clear();
 
-    BrowserPixmap.setAutoDelete(TRUE);
+    //BrowserPixmap.setAutoDelete(TRUE);
+    //BrowserPixmap.clear();
+    QList<QPixmap*> brList = BrowserPixmap.values();
+    while(!brList.isEmpty())
+        delete brList.takeFirst();
     BrowserPixmap.clear();
 
     if (UnPretty2Code.isEmpty()) {
-        UnPretty2Code.setAutoDelete(TRUE); // for valgrind
-        Pretty.setAutoDelete(TRUE); // for valgrind
-        UnPretty.setAutoDelete(TRUE); // for valgrind
+        //UnPretty2Code.setAutoDelete(TRUE); // for valgrind
+        //Pretty.setAutoDelete(TRUE); // for valgrind
+        //UnPretty.setAutoDelete(TRUE); // for valgrind
 
         UmlCode * pcode;
 
@@ -462,7 +477,7 @@ static void setDefault(QString st, QString sl)
 {
     if (! sl.isEmpty()) {
         QChar sep(' ');
-        QStringList ls = QStringList::split(sep, sl);
+        QStringList ls = sl.split(sep); //QStringList::split(sep, sl);
         QStringList::Iterator it;
 
         for (it = ls.begin(); it != ls.end(); ++it) {
@@ -483,7 +498,7 @@ void renamed(BrowserClass * cl, QString oldname, QString oldpkname)
     unsigned index;
 
     for (index = 0; index != BrowserNodeSup; index += 1)
-        Defaults[index].remove(oldst);
+        Defaults[index].removeOne(oldst);
 
     setDefault(newst, cl->get_value("stereotypeApplyOn"));
 
@@ -494,22 +509,23 @@ void renamed(BrowserClass * cl, QString oldname, QString oldpkname)
 
     oldst += ":";
 
-    Q3PtrDictIterator<ProfiledStereotype> it(ProfiledStereotyped);
-    const char * oldsst = (const char *) oldst;
+    QHashIterator<void*, ProfiledStereotype*> it(ProfiledStereotyped);
+    const char * oldsst = (const char *) oldst.toLatin1().constData();
     int oldlen = oldst.length();
-    WrapperStr newcst = (const char *) newst;
+    WrapperStr newcst = (const char *) newst.toLatin1().constData();
 
     newcst += ":";
 
-    while (it.current()) {
-        BrowserNode * bn = (BrowserNode *) it.currentKey();
+    while (it.hasNext()) {
+        it.next();
+        BrowserNode * bn = (BrowserNode *) it.key();
 
         // update stereotype
-        if (it.current() == pst)
+        if (it.value() == pst)
             bn->get_data()->set_stereotype(newst);
 
         // update properties
-        // even if it.current() != pst because of inheritances
+        // even if it.value() != pst because of inheritances
         unsigned nprop = bn->get_n_keys();
 
         for (index = 0; index != nprop; index += 1) {
@@ -524,7 +540,7 @@ void renamed(BrowserClass * cl, QString oldname, QString oldpkname)
 
         bn->modified();
 
-        ++it;
+       // ++it;
     }
 }
 
@@ -573,28 +589,30 @@ static bool deleted(QString pfix, BrowserClass * cl, bool propag)
 {
     pfix += cl->get_name();
 
-    ProfiledStereotype * pst = All.find(pfix);
+    ProfiledStereotype * pst = All.value(pfix);
 
     if (pst != 0) {
-        Q3PtrDictIterator<ProfiledStereotype> it(ProfiledStereotyped);
-
-        while (it.current()) {
-            if (it.current() == pst) {
+        QHashIterator<void*, ProfiledStereotype*> it(ProfiledStereotyped);
+        while (it.hasNext()) {
+            it.next();
+            if (it.value() == pst) {
                 if (propag) {
-                    ((BrowserNode *) it.currentKey())->get_data()->set_stereotype("");
-                    ((BrowserNode *) it.currentKey())->modified();
+                    ((BrowserNode *) it.key())->get_data()->set_stereotype("");
+                    ((BrowserNode *) it.key())->modified();
                 }
 
-                ProfiledStereotyped.remove(it.currentKey());
+                ProfiledStereotyped.remove(it.key());
             }
             else
-                ++it;
+            {
+                //++it;
+            }
         }
 
         All.remove(pfix);
 
         for (unsigned index = 0; index != BrowserNodeSup; index += 1)
-            Defaults[index].remove(pfix);
+            Defaults[index].removeOne(pfix);
 
         delete pst;
         return TRUE;
@@ -639,13 +657,13 @@ QString ProfiledStereotypes::canAddStereotype(BrowserClass * cl, QString name)
 
     if ((pf->get_type() != UmlPackage) ||
         (strcmp(pf->get_data()->get_stereotype(), "profile") != 0))
-        return TR("isn't in a profile");
+        return QObject::TR("isn't in a profile");
     else {
         ProfiledStereotype * st =
             All[pf->get_name() + QString(":") + name];
 
         return ((st != 0) && (st->cl != cl))
-               ? TR("is already a stereotype")
+               ? QObject::TR("is already a stereotype")
                : QString();
     }
 }
@@ -656,13 +674,13 @@ QString ProfiledStereotypes::canAddStereotype(BrowserClassView * v, QString name
     BrowserNode * pf = (BrowserNode *) v->parent();
 
     if (strcmp(pf->get_data()->get_stereotype(), "profile") != 0)
-        return TR("isn't in a profile");
+        return QObject::TR("isn't in a profile");
     else {
         ProfiledStereotype * st =
             All[pf->get_name() + QString(":") + name];
 
         return (st != 0)
-               ? TR("is already a stereotype")
+               ? QObject::TR("is already a stereotype")
                : QString();
     }
 }
@@ -678,10 +696,9 @@ void ProfiledStereotypes::added(BrowserClass * cl)
 
         if (All[s] != 0) {
             // only possible during a load / import
-            msg_critical(TR("Unconsistency"),
-                         TR("stereotype '%1' defined several times,\n"
-                            "redondant definition is not managed as a stereotype",
-                            s));
+            msg_critical(QObject::TR("Unconsistency"),
+                         QObject::tr("stereotype '%1' defined several times,\n"
+                            "redondant definition is not managed as a stereotype").arg(s));
             cl->get_data()->set_stereotype("redondantProfiledStereotype");
         }
         else {
@@ -711,7 +728,7 @@ void ProfiledStereotypes::changed(BrowserClass * cl, QString oldname, bool newic
         unsigned index;
 
         for (index = 0; index != BrowserNodeSup; index += 1)
-            Defaults[index].remove(oldst);
+            Defaults[index].removeOne(oldst);
 
         setDefault(newst, cl->get_value("stereotypeApplyOn"));
     }
@@ -742,7 +759,7 @@ void ProfiledStereotypes::added(BrowserAttribute *)
 // attribute part of stereotype is modified
 void ProfiledStereotypes::changed(BrowserAttribute * at, QString oldname)
 {
-    if (strcmp(oldname, at->get_name())) {
+    if (strcmp(oldname.toLatin1().constData(), at->get_name().toLatin1().constData())) {
         QString sts = ((BrowserNode *) at->parent()->parent()->parent())->get_name() +
                       QString(":") + ((BrowserNode *) at->parent())->get_name();
         ProfiledStereotype * st = All[sts];
@@ -773,15 +790,16 @@ BrowserClass * ProfiledStereotypes::isModeled(QString s, bool case_sensitive)
     else if (case_sensitive)
         return 0;
 
-    Q3DictIterator<ProfiledStereotype> it(All);
+    QMapIterator<QString, ProfiledStereotype*> it(All);
 
-    s = s.lower();
+    s = s.toLower();
 
-    while (it.current() != 0) {
-        if (s == it.currentKey().lower())
-            return it.current()->cl;
+    while (it.hasNext()) {
+        it.next();
+        if (s == it.key().toLower())
+            return it.value()->cl;
 
-        ++it;
+        //++it;
     }
 
     return 0;
@@ -813,7 +831,8 @@ void ProfiledStereotypes::recompute(BrowserNode * bn)
     ProfiledStereotype * st;
 
     if (!s_st.isEmpty() && ((st = All[s_st]) != 0)) {
-        ProfiledStereotyped.replace(bn, st);
+        //ProfiledStereotyped.replace(bn, st);
+        ProfiledStereotyped.insert(bn, st);
 
         // search for extra properties
         unsigned nprop = bn->get_n_keys();
@@ -830,7 +849,7 @@ void ProfiledStereotypes::recompute(BrowserNode * bn)
                     nseps += 1;
 
             if (nseps == 2) {
-                if (st->propertiesFullName.findIndex(k) == -1) {
+                if (st->propertiesFullName.indexOf(k) == -1) {
                     // extra property, remove it
                     bn->remove_key_value(index);
                     nprop -= 1;
@@ -856,12 +875,12 @@ void ProfiledStereotypes::recompute(BrowserNode * bn)
             unsigned insertindex = nprop;
             QStringList::Iterator its =
                 st->propertiesFullName.begin();
-            Q3ValueList<BrowserAttribute *>::Iterator ita =
+            QList<BrowserAttribute *>::Iterator ita =
                 st->properties.begin();
 
             for (;;) {
                 QString s = *its;
-                const char * k = s;
+                const char * k = s.toLatin1().constData();
 
                 for (index = 0; index != nprop; index += 1)
                     if (strcmp(k, bn->get_key(index)) == 0)
@@ -872,7 +891,7 @@ void ProfiledStereotypes::recompute(BrowserNode * bn)
                     modified = TRUE;
                     bn->set_key(insertindex, k);
                     bn->set_value(insertindex,
-                                  ((AttributeData *)(*ita)->get_data())->get_init_value());
+                                  ((AttributeData *)(*ita)->get_data())->get_init_value().toLatin1().constData());
 
                     if (--missing == 0)
                         break;
@@ -931,9 +950,13 @@ static void recompute_recur(BrowserNode * bn)
 
 static void recompute_st_list()
 {
-    All.setAutoDelete(TRUE);
+    /*All.setAutoDelete(TRUE);
     All.clear();
-    All.setAutoDelete(FALSE);
+    All.setAutoDelete(FALSE);*/
+    QList<ProfiledStereotype*> allVals = All.values();
+    while(!allVals.empty())
+        delete allVals.takeFirst();
+    All.clear();
 
     int index;
 
@@ -945,7 +968,7 @@ static void recompute_st_list()
     BrowserClass::instances(l, "stereotype", TRUE);
 
     while (! l.isEmpty()) {
-        BrowserClass * cl = (BrowserClass *) l.take(0);
+        BrowserClass * cl = (BrowserClass *) l.takeFirst();
         BrowserNode * pf = (BrowserNode *) cl->parent()->parent();
 
         if ((pf->get_type() == UmlPackage) &&
@@ -953,9 +976,9 @@ static void recompute_st_list()
             QString s = pf->get_name() + QString(":") + cl->get_name();
 
             if (All[s] != 0) {
-                msg_critical(TR("Unconsistency"),
-                             TR("stereotype '%1' defined several times,\n"
-                                "redondant definition is not managed as a stereotype",
+                msg_critical(QObject::TR("Unconsistency"),
+                             QObject::TR("stereotype '%1' defined several times,\n"
+                                "redondant definition is not managed as a stereotype").arg(
                                 s));
                 cl->get_data()->set_stereotype("redondantProfiledStereotype");
             }
@@ -975,31 +998,38 @@ static void recompute_st_list()
 void ProfiledStereotypes::recompute(bool warm)
 {
     // compute stereotype attributes
-    Q3DictIterator<ProfiledStereotype> it(All);
+    QMapIterator<QString, ProfiledStereotype*> it(All);
     ProfiledStereotype * st;
 
     if (! warm)
         recompute_st_list();
     else {
-        while ((st = it.current()) != 0) {
-            st->clear_properties();
-            ++it;
+        while (it.hasNext()/*(st = it.value()) != 0*/) {
+            it.next();
+            st = it.value();
+            if(st)
+                st->clear_properties();
+            //++it;
         }
     }
 
-    it.toFirst();
+    QMapIterator<QString, ProfiledStereotype*> it2(All);
 
-    while ((st = it.current()) != 0) {
-        st->set_properties();
-        ++it;
+    while (it2.hasNext()/*(st = it.value()) != 0*/) {
+        it2.next();
+        st = it2.value();
+        if(st)
+            st->set_properties();
+        //++it;
     }
 
     if (warm) {
-        Q3PtrDictIterator<ProfiledStereotype> it(ProfiledStereotyped);
+        QHashIterator<void*, ProfiledStereotype*> it(ProfiledStereotyped);
 
-        while (it.current()) {
-            recompute((BrowserNode *) it.currentKey());
-            ++it;
+        while (it.hasNext()) {
+            it.next();
+            recompute((BrowserNode *) it.key());
+            //++it;
         }
     }
     else {
@@ -1017,7 +1047,8 @@ void ProfiledStereotypes::modified(BrowserNode * bn, bool newst)
 
     if (st != 0) {
         if (newst) {
-            ProfiledStereotyped.replace(bn, st);	// add it if needed
+            //ProfiledStereotyped.replace(bn, st);	// add it if needed
+            ProfiledStereotyped.insert(bn, st);
             recompute(bn);
         }
 
@@ -1052,7 +1083,8 @@ void ProfiledStereotypes::applyStereotype(BrowserNode * bn)
     ProfiledStereotype * st = All[sts];
 
     if (st != 0) {
-        ProfiledStereotyped.replace(bn, st);	// add it if needed
+        //ProfiledStereotyped.replace(bn, st);	// add it if needed
+        ProfiledStereotyped.insert(bn, st);	// add it if needed
         recompute(bn);
     }
     else if (ProfiledStereotyped.remove(bn))
@@ -1133,7 +1165,7 @@ static bool haveCheck(BrowserNode * bn)
 }
 
 // add menu entries if relevant
-void ProfiledStereotypes::menu(Q3PopupMenu & m, BrowserNode * bn, int bias)
+void ProfiledStereotypes::menu(QMenu & m, BrowserNode * bn, int bias)
 {
     QString sts = bn->get_data()->get_stereotype();
     ProfiledStereotype * st = All[sts];
@@ -1144,9 +1176,13 @@ void ProfiledStereotypes::menu(Q3PopupMenu & m, BrowserNode * bn, int bias)
 
         if ((s != 0) && (Tool::command(s) != 0)) {
             separatorinserted = TRUE;
-            m.insertSeparator();
-            m.setWhatsThis(m.insertItem(TR("Check"), bias),
-                           TR("to call the <i>check plug-out</i> associated to the stereotype"));
+            m.addSeparator();
+            QAction *action;
+            action = m.addAction(QObject::TR("Check"));
+            action->setData(bias);
+            action->setWhatsThis(QObject::TR("to call the <i>check plug-out</i> associated to the stereotype"));
+            //MenuFactory::addItem(m, QObject::TR("Check"), bias),
+              //             QObject::TR("to call the <i>check plug-out</i> associated to the stereotype"));
         }
     }
 
@@ -1161,15 +1197,29 @@ void ProfiledStereotypes::menu(Q3PopupMenu & m, BrowserNode * bn, int bias)
 
     if (have) {
         if (! separatorinserted)
-            m.insertSeparator();
+            m.addSeparator();
 
-        m.setWhatsThis(m.insertItem(TR("Force stereotype consistency"), bias + 2),
-                       TR("to recompute all concerning the profiles"));
+        QAction *action;
+        action = m.addAction(QObject::TR("Force stereotype consistency"));
+        action->setData(bias+2);
+        action->setWhatsThis(QObject::TR("to recompute all concerning the profiles"));
+
+
+        //MenuFactory::addItem(m, QObject::TR("Force stereotype consistency"), bias + 2),
+          //             QObject::TR("to recompute all concerning the profiles"));
 
         if (!ProfiledStereotyped.isEmpty() && haveCheck(bn))
-            m.setWhatsThis(m.insertItem(TR("Check recursively"), bias + 1),
-                           TR("to call the <i>check plug-out</i> associated to the stereotypes,"
-                              "doing down recursively"));
+        {
+            QAction *action;
+            action = m.addAction(QObject::TR("Check recursively"));
+            action->setData(bias+1);
+            action->setWhatsThis(QObject::TR("to call the <i>check plug-out</i> associated to the stereotypes,"
+                                             "doing down recursively"));
+
+            //MenuFactory::addItem(m, QObject::TR("Check recursively"), bias + 1),
+              //             QObject::TR("to call the <i>check plug-out</i> associated to the stereotypes,"
+                //              "doing down recursively"));
+        }
     }
 }
 
@@ -1201,7 +1251,7 @@ void ProfiledStereotypes::choiceManagement(BrowserNode * bn, int choice)
 
 bool ProfiledStereotypes::enumerated(QString k, QStringList & l)
 {
-    QString st = k.left(k.findRev(':'));
+    QString st = k.left(k.lastIndexOf(':'));
     ProfiledStereotype * pst = All[st];
 
     return (pst == 0) ? FALSE : pst->enumerated(k, l);

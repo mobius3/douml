@@ -6,17 +6,18 @@
 #include "UmlClass.h"
 
 #include <qlist.h>
-#include <q3ptrlist.h>
-#include <q3hgroupbox.h>
+
+#include <gridbox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+#include <hhbox.h>
+#include <vvbox.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include "Logging/QsLog.h"
+#include <QSettings>
+
 class FunctionTracer
 {
 public:
@@ -39,11 +40,12 @@ ConstrDestrCopyDialog::ConstrDestrCopyDialog(UmlClass * cl, bool have_constructo
         bool have_destructor, bool have_copy,
         bool have_const_copy, bool have_assignment,
         bool have_const_assignment)
-    : QDialog(0, 0, TRUE), target(cl)
+    : QDialog(0), target(cl)
 {
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HGroupBox * g;
-    Q3PtrList<QLabel> labels;
+    setModal(true);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    GridBox * g;
+    QList<QLabel*> labels;
     QLabel * lbl;
 
     vbox->setSpacing(5);
@@ -57,32 +59,36 @@ ConstrDestrCopyDialog::ConstrDestrCopyDialog(UmlClass * cl, bool have_constructo
 
     // constructor
 
-    g = new Q3HGroupBox(this);
+    g = new GridBox(2, this);
     vbox->addWidget(g);
 
-    labels.append(new QLabel((have_constructor)
+    labels.append(lbl = new QLabel((have_constructor)
                              ? "the class already have contructor  "
                              : "the class doesn't have contructor  ",
                              g));
+    g->addWidget(lbl);
 
-    Q3HBox * h = new Q3HBox(g);
+    HHBox * h;
+    g->addWidget(h = new HHBox(g));
 
-    add_constr = new QCheckBox("add constructor", h);
-    constr_explicit = new QCheckBox("explicit", h);
+    h->addWidget(add_constr = new QCheckBox("add constructor", h));
+    h->addWidget(constr_explicit = new QCheckBox("explicit", h));
 
     // destructor
 
     if (! have_destructor) {
-        g = new Q3HGroupBox(this);
+        g = new GridBox(2,this);
         vbox->addWidget(g);
 
-        labels.append(new QLabel("the class doesn't have destructor  ",
+        labels.append(lbl = new QLabel("the class doesn't have destructor  ",
                                  g));
+        g->addWidget(lbl);
 
-        h = new Q3HBox(g);
+        h = new HHBox(g);
+        g->addWidget(h);
 
-        add_destr = new QCheckBox("add destructor", h);
-        virtual_destr = new QCheckBox("virtual", h);
+        h->addWidget(add_destr = new QCheckBox("add destructor", h));
+        h->addWidget(virtual_destr = new QCheckBox("virtual", h));
     }
     else
         add_destr = 0;
@@ -93,39 +99,42 @@ ConstrDestrCopyDialog::ConstrDestrCopyDialog(UmlClass * cl, bool have_constructo
         add_copy = 0;
 
         if (!have_const_copy) {
-            g = new Q3HGroupBox(this);
+            g = new GridBox(2, this);
             vbox->addWidget(g);
 
-            labels.append(new QLabel("the class doesn't have copy contructor  \nwith const argument  ",
+            labels.append(lbl = new QLabel("the class doesn't have copy contructor  \nwith const argument  ",
                                      g));
-            add_const_copy = new QCheckBox("add copy constructor\nwith const argument",
-                                           g);
+            g->addWidget(lbl);
+            g->addWidget(add_const_copy = new QCheckBox("add copy constructor\nwith const argument",
+                                           g));
         }
         else
             add_const_copy = 0;
     }
     else if (!have_const_copy) {
-        g = new Q3HGroupBox(this);
+        g = new GridBox(2, this);
         vbox->addWidget(g);
 
-        labels.append(new QLabel("the class doesn't have copy contructor  ",
+        labels.append(lbl = new QLabel("the class doesn't have copy contructor  ",
                                  g));
+        g->addWidget(lbl);
 
-        Q3VBox * v = new Q3VBox(g);
-
-        add_const_copy = new QCheckBox("add copy constructor\nwith const argument",
-                                       v);
-        add_copy = new QCheckBox("add copy constructor\nwith non const argument",
-                                 v);
+        VVBox * v = new VVBox(g);
+        g->addWidget(v);
+        v->addWidget(add_const_copy = new QCheckBox("add copy constructor\nwith const argument",
+                                       v));
+        v->addWidget(add_copy = new QCheckBox("add copy constructor\nwith non const argument",
+                                 v));
     }
     else {
-        g = new Q3HGroupBox(this);
+        g = new GridBox(2,this);
         vbox->addWidget(g);
 
-        labels.append(new QLabel("the class doesn't have copy contructor  \nwith non const argument  ",
+        labels.append(lbl = new QLabel("the class doesn't have copy contructor  \nwith non const argument  ",
                                  g));
-        add_copy = new QCheckBox("add copy constructor\nwith non const argument",
-                                 g);
+        g->addWidget(lbl);
+        g->addWidget(add_copy = new QCheckBox("add copy constructor\nwith non const argument",
+                                 g));
         add_const_copy = 0;
     }
 
@@ -135,38 +144,42 @@ ConstrDestrCopyDialog::ConstrDestrCopyDialog(UmlClass * cl, bool have_constructo
         add_assign = 0;
 
         if (!have_const_assignment) {
-            g = new Q3HGroupBox(this);
+            g = new GridBox(2, this);
             vbox->addWidget(g);
 
-            labels.append(new QLabel("the class doesn't have assignment\noperator with const argument  ",
+            labels.append(lbl = new QLabel("the class doesn't have assignment\noperator with const argument  ",
                                      g));
-            add_const_assign = new QCheckBox("add assignment\nwith const argument",
-                                             g);
+            g->addWidget(lbl);
+            g->addWidget(add_const_assign = new QCheckBox("add assignment\nwith const argument",
+                                             g));
         }
         else
             add_const_assign = 0;
     }
     else if (!have_const_assignment) {
-        g = new Q3HGroupBox(this);
+        g = new GridBox(2, this);
         vbox->addWidget(g);
 
-        labels.append(new QLabel("the class doesn't have assignment operator  ", g));
+        labels.append(lbl = new QLabel("the class doesn't have assignment operator  ", g));
 
-        Q3VBox * v = new Q3VBox(g);
+        g->addWidget(lbl);
+        VVBox * v = new VVBox(g);
+        g->addWidget(v);
 
-        add_const_assign = new QCheckBox("add assignment\nwith const argument",
-                                         v);
-        add_assign = new QCheckBox("add assignment\nwith non const argument",
-                                   v);
+        v->addWidget(add_const_assign = new QCheckBox("add assignment\nwith const argument",
+                                         v));
+        v->addWidget(add_assign = new QCheckBox("add assignment\nwith non const argument",
+                                   v));
     }
     else {
-        g = new Q3HGroupBox(this);
+        g = new GridBox(2,this);
         vbox->addWidget(g);
 
-        labels.append(new QLabel("the class doesn't have assignment operator  \nwith non const argument  ",
+        labels.append(lbl = new QLabel("the class doesn't have assignment operator  \nwith non const argument  ",
                                  g));
-        add_assign = new QCheckBox("add assignment\nwith non const argument",
-                                   g);
+        g->addWidget(lbl);
+        g->addWidget(add_assign = new QCheckBox("add assignment\nwith non const argument",
+                                   g));
         add_const_assign = 0;
     }
 
@@ -174,24 +187,26 @@ ConstrDestrCopyDialog::ConstrDestrCopyDialog(UmlClass * cl, bool have_constructo
 
     QSize sz(labels.first()->sizeHint());
 
-    while ((lbl = labels.next()) != 0) {
+    foreach (lbl,labels) {
         if (lbl->sizeHint().width() > sz.width())
             sz.setWidth(lbl->sizeHint().width());
     }
 
-    for (lbl = labels.first(); lbl != 0; lbl = labels.next()) {
+    foreach (lbl,labels) {
         sz.setHeight(lbl->sizeHint().height());
         lbl->setFixedSize(sz);
     }
 
     // ok & cancel buttons
 
-    Q3HBox * hbox = new Q3HBox(this);
+    HHBox * hbox = new HHBox(this);
 
     vbox->addWidget(hbox);
 
     QPushButton * ok = new QPushButton("&OK", hbox);
     QPushButton * cancel = new QPushButton("&Cancel", hbox);
+    hbox->addWidget(ok);
+    hbox->addWidget(cancel);
 
     QSize bs(cancel->sizeHint());
 
@@ -206,53 +221,27 @@ ConstrDestrCopyDialog::ConstrDestrCopyDialog(UmlClass * cl, bool have_constructo
 
 void ConstrDestrCopyDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
 
-    // try to read .doumlrc
-    // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
-    // if the path contains non latin1 characters, for instance cyrillic !
-    QString s = QDir::home().absFilePath(".doumlrc");
-    FILE * fp = fopen((const char *) s, "r");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec("UTF-8");
+    int l, t, r, b;
+    l = settings.value("Desktop/left", -1).toInt();
+    r = settings.value("Desktop/right", -1).toInt();
+    t = settings.value("Desktop/top", -1).toInt();
+    b = settings.value("Desktop/bottom", -1).toInt();
 
-#ifdef WIN32
+    if(l != -1 && r != -1 && t != -1 && b != -1)
+    {
+      if (!((r == 0) && (t == 0) && (r == 0) && (b == 0)) &&
+          !((r < 0) || (t < 0) || (r < 0) || (b < 0)) &&
+          !((r <= l) || (b <= t)))
+      {
+        int cx = (r + l) / 2;
+        int cy = (t + b) / 2;
 
-    if (fp == 0) {
-        QString hd = getenv("USERPROFILE");
-
-        if (! hd.isEmpty()) {
-            QDir d(hd);
-            QString s2 = d.absFilePath(".doumlrc");
-
-            fp = fopen((const char *) s2, "r");
-        }
-    }
-
-#endif
-
-    if (fp != 0) {
-        char line[512];
-
-        while (fgets(line, sizeof(line) - 1, fp) != 0) {
-            if (!strncmp(line, "DESKTOP ", 8)) {
-                int l, t, r, b;
-
-                if (sscanf(line + 8, "%d %d %d %d", &l, &t, &r, &b) == 4) {
-                    if (!((r == 0) && (t == 0) && (r == 0) && (b == 0)) &&
-                        !((r < 0) || (t < 0) || (r < 0) || (b < 0)) &&
-                        !((r <= l) || (b <= t))) {
-                        int cx = (r + l) / 2;
-                        int cy = (t + b) / 2;
-
-                        move(x() + cx - (x() + width() / 2),
-                             y() + cy - (y() + height() / 2));
-                    }
-                }
-
-                break;
-            }
-        }
-
-        fclose(fp);
+        move(x() + cx - (x() + width() / 2), y() + cy - (y() + height() / 2));
+      }
     }
 }
 

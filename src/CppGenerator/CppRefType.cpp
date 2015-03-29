@@ -36,10 +36,10 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+////
 
 // not in case of a dependency => external class in h
-bool CppRefType::add(const UmlTypeSpec & t, Q3PtrList<CppRefType> & l,
+bool CppRefType::add(const UmlTypeSpec & t, QList<CppRefType *> & l,
                      bool incl)
 {
     return (t.type)
@@ -47,10 +47,9 @@ bool CppRefType::add(const UmlTypeSpec & t, Q3PtrList<CppRefType> & l,
            : add(t.explicit_type, l, incl);
 }
 
-bool CppRefType::add(UmlClass * cl, Q3PtrList<CppRefType> & l,
+bool CppRefType::add(UmlClass * cl, QList<CppRefType *> & l,
                      bool incl, bool hight)
 {
-    CppRefType * ref;
     WrapperStr t = cl->name();
     Weight w;
 
@@ -69,12 +68,11 @@ bool CppRefType::add(UmlClass * cl, Q3PtrList<CppRefType> & l,
     else
         w = (hight) ? High : Low;
 
-    for (ref = l.first(); ref; ref = l.next()) {
+    foreach (CppRefType *ref, l) {
         // don't use ref->type.toString() because of synonymous
         // in several namespaces
-        if ((ref->type.type != 0)
-            ? (ref->type.type == cl)
-            : (ref->type.explicit_type == t)) {
+        if ((ref->type.type != 0) ? (ref->type.type == cl) : (ref->type.explicit_type == t))
+        {
             if (w > ref->weight)
                 ref->included = incl;
 
@@ -86,12 +84,12 @@ bool CppRefType::add(UmlClass * cl, Q3PtrList<CppRefType> & l,
     return TRUE;
 }
 
-bool CppRefType::add(const WrapperStr & t, Q3PtrList<CppRefType> & l, bool incl)
+bool CppRefType::add(const WrapperStr & t, QList<CppRefType *> & l, bool incl)
 {
     if (t.isEmpty())
         return FALSE;
 
-    static Q3Dict<char> cpp_builtin_types;
+    static QHash<QString,char*> cpp_builtin_types;
 
     if (cpp_builtin_types.count() == 0) {
         cpp_builtin_types.insert("unsigned", " ");
@@ -109,10 +107,9 @@ bool CppRefType::add(const WrapperStr & t, Q3PtrList<CppRefType> & l, bool incl)
     if (cpp_builtin_types[t] != 0)
         return TRUE;
 
-    CppRefType * ref;
     Weight w = (incl) ? Medium : Low;
 
-    for (ref = l.first(); ref; ref = l.next()) {
+    foreach (CppRefType *ref, l) {
         if (ref->type.toString() == t) {
             if (w > ref->weight)
                 ref->included = incl;
@@ -125,37 +122,38 @@ bool CppRefType::add(const WrapperStr & t, Q3PtrList<CppRefType> & l, bool incl)
     return TRUE;
 }
 
-void CppRefType::remove(const WrapperStr & t, Q3PtrList<CppRefType> & l)
+void CppRefType::remove(const WrapperStr & t, QList<CppRefType *> & l)
 {
-    Q3PtrListIterator<CppRefType> it(l);
+    QMutableListIterator<CppRefType *> it(l);
 
-    for (; it.current(); ++it) {
-        if ((*it)->type.explicit_type == t) {
-            delete *it;
-            l.remove(it);
+    while (it.hasNext()) {
+        CppRefType *ref = it.next();
+        if (ref->type.explicit_type == t) {
+            delete ref;
+            it.remove();
             return;
         }
     }
 }
 
-void CppRefType::remove(UmlClass * cl, Q3PtrList<CppRefType> & l)
+void CppRefType::remove(UmlClass * cl, QList<CppRefType *> & l)
 {
-    Q3PtrListIterator<CppRefType> it(l);
+    QMutableListIterator<CppRefType *> it(l);
 
-    for (; it.current(); ++it) {
-        if ((*it)->type.type == cl) {
-            l.remove(it);
+    while (it.hasNext()) {
+        CppRefType *ref = it.next();
+        if (ref->type.type == cl) {
+            it.remove();
             return;
         }
     }
 }
 
-void CppRefType::force_ref(UmlClass * cl, Q3PtrList<CppRefType> & l)
+void CppRefType::force_ref(UmlClass * cl, QList<CppRefType *> & l)
 {
-    CppRefType * ref;
     WrapperStr t = cl->name();
 
-    for (ref = l.first(); ref; ref = l.next()) {
+    foreach (CppRefType *ref, l) {
         // don't use ref->type.toString() because of synonymous
         // in several namespaces
         if ((ref->type.type != 0)
@@ -167,7 +165,7 @@ void CppRefType::force_ref(UmlClass * cl, Q3PtrList<CppRefType> & l)
     }
 }
 
-void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
+void CppRefType::compute(QList<CppRefType *> & dependencies,
                          const WrapperStr & hdef, const WrapperStr & srcdef,
                          WrapperStr & h_incl,  WrapperStr & decl, WrapperStr & src_incl,
                          UmlArtifact * who)
@@ -200,13 +198,12 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
     h_incl = "";	// to not be WrapperStr::null
     decl = "";	// to not be WrapperStr::null
 
-    CppRefType * ref;
-
-    for (ref = dependencies.first(); ref != 0; ref = dependencies.next()) {
+    foreach (CppRefType *ref, dependencies) {
         UmlClass * cl = (ref->type.type)
                         ? ref->type.type
                         : UmlBaseClass::get(ref->type.explicit_type, 0);
         bool included = ref->included;
+
         WrapperStr hform;	// form in header
         WrapperStr srcform;	// form in source
 
@@ -219,7 +216,9 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
                 // doesn't know what it is
                 continue;
         }
-        else if (cl->isCppExternal()) {
+        else if (cl->isCppExternal())
+        {
+            QString className = cl->name();
             hform = cl->cppDecl();
 
             int index;
@@ -236,9 +235,9 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
                 else if ((index = hform.find("${Name}")) != -1)
                     hform.replace(index, 7, capitalize(cl->name()));
                 else if ((index = hform.find("${NAME}")) != -1)
-                    hform.replace(index, 7, cl->name().upper());
+                    hform.replace(index, 7, cl->name().upper().toLatin1().constData());
                 else if ((index = hform.find("${nAME}")) != -1)
-                    hform.replace(index, 7, cl->name().lower());
+                    hform.replace(index, 7, cl->name().lower().toLatin1().constData());
                 else
                     break;
             }
@@ -246,6 +245,7 @@ void CppRefType::compute(Q3PtrList<CppRefType> & dependencies,
             srcform = hform;
         }
         else {
+            QString className = cl->name();
             WrapperStr st = cl->cpp_stereotype();
 
             if ((st == "enum") || (st == "typedef"))

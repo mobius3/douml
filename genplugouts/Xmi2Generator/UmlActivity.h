@@ -42,9 +42,9 @@ private:
 
 
 protected:
-    QMap<WrapperStr, Opaque> _opaque_behavior;
+    QMap<QString, Opaque> _opaque_behavior;
 
-    QMap<WrapperStr, UmlItem *> _opaque_expression;
+    QMap<QString, UmlItem *> _opaque_expression;
 
 };
 

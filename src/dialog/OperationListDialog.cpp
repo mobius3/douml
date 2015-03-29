@@ -31,14 +31,10 @@
 
 #include <qcursor.h>
 #include <qlayout.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
-//Added by qt3to4:
-#include <Q3PtrList>
-
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "OperationListDialog.h"
 #include "BrowserOperation.h"
 #include "OperationData.h"
@@ -48,31 +44,32 @@
 QSize OperationListDialog::previous_size;
 
 OperationListDialog::OperationListDialog(const char * m,
-        Q3PtrList<BrowserOperation> & l)
-    : QDialog(0, m, TRUE)
+        QList<BrowserOperation *> & l)
+    : QDialog(0)
 {
-    setCaption(m);
+    setWindowTitle(m);
     move(QCursor::pos());
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    cb = new Q3ComboBox(FALSE, this);
+    cb = new QComboBox(this);
     vbox->addWidget(cb);
 
-    for (BrowserOperation * oper = l.first(); oper; oper = l.next()) {
+    foreach (BrowserOperation *oper, l) {
         QString s = ((BrowserNode *) oper->parent())->get_name() +
                     QString("::") + oper->get_data()->definition(TRUE, FALSE);
 
         if (((OperationData *) oper->get_data())->get_is_abstract())
-            cb->insertItem("[a] " + s);
+            cb->addItem("[a] " + s);
         else
-            cb->insertItem(s);
+            cb->addItem(s);
     }
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * ok = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -98,5 +95,5 @@ OperationListDialog::~OperationListDialog()
 
 int OperationListDialog::choosen()
 {
-    return cb->currentItem();
+    return cb->currentIndex();
 }

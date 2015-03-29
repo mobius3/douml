@@ -5,15 +5,15 @@
 #include "UmlRelation.h"
 #include "UmlClassInstance.h"
 //Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
+#include <QByteArray>
+#include <QList>
 
-Q3CString UmlClassInstance::sKind()
+QByteArray UmlClassInstance::sKind()
 {
     return "class instance";
 }
 
-void UmlClassInstance::html(Q3CString, unsigned int, unsigned int)
+void UmlClassInstance::html(QByteArray, unsigned int, unsigned int)
 {
     define();
 
@@ -21,7 +21,7 @@ void UmlClassInstance::html(Q3CString, unsigned int, unsigned int)
     writeq(name());
     fw.write("</b></div></td></tr></table>");
 
-    Q3CString s = description();
+    QByteArray s = description();
 
     if (!s.isEmpty()) {
         fw.write("<p>");
@@ -33,14 +33,14 @@ void UmlClassInstance::html(Q3CString, unsigned int, unsigned int)
     type()->write();
     fw.write("</p>");
 
-    Q3ValueList<SlotAttribute> va;
+    QList<SlotAttribute> va;
 
     attributesValue(va);
 
     if (!va.isEmpty()) {
         fw.write("<p>attributes :</p><ul>\n");
 
-        Q3ValueList<SlotAttribute>::Iterator it;
+        QList<SlotAttribute>::Iterator it;
 
         for (it = va.begin(); it != va.end(); ++it) {
             SlotAttribute & slot = *it;
@@ -55,14 +55,14 @@ void UmlClassInstance::html(Q3CString, unsigned int, unsigned int)
         fw.write("</ul>");
     }
 
-    Q3ValueList<SlotRelation> vr;
+    QList<SlotRelation> vr;
 
     relationsValue(vr);
 
     if (!vr.isEmpty()) {
         fw.write("<p>relations :</p><ul>\n");
 
-        Q3ValueList<SlotRelation>::Iterator it;
+        QList<SlotRelation>::Iterator it;
 
         for (it = vr.begin(); it != vr.end(); ++it) {
             SlotRelation & slot = *it;

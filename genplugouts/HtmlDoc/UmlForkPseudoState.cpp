@@ -1,9 +1,9 @@
 
 #include "UmlForkPseudoState.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlForkPseudoState::sKind()
+QByteArray UmlForkPseudoState::sKind()
 {
     return "fork pseudo state";
 }

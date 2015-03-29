@@ -51,8 +51,7 @@ ActivityObjectData::ActivityObjectData(ActivityObjectData * model, BrowserNode *
 
 void ActivityObjectData::edit(const char * what, QStringList & st)
 {
-    setName(browser_node->get_name());
-
+    setObjectName(browser_node->get_name());
     (new ActivityObjectDialog(this, what, st))->show();
 }
 

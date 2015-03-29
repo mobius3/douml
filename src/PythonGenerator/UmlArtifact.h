@@ -28,11 +28,8 @@
 #ifndef UMLARTIFACT_H
 #define UMLARTIFACT_H
 
-#include <q3asciidict.h>
-//Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-
 #include "UmlBaseArtifact.h"
 
 class QTextStream;

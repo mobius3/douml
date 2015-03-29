@@ -38,7 +38,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
+//
 
 class ActualParamData;
 class FormalParamData;
@@ -49,11 +49,12 @@ class ClassData : public BasicData
 
     friend class ClassDialog;
     friend class ActualParamsTable;
+    //friend class QuickEdit;
 
 protected:
     WrapperStr constraint;
     FormalParamData * formals;		// remark : do NOT use QArray
-    Q3PtrList<ActualParamData> actuals;
+    QList<ActualParamData *> actuals;
     AType base_type;			// typedef
     unsigned char nformals;
     bool is_deleted : 1;
@@ -104,9 +105,9 @@ protected:
     virtual void send_idl_def(ToolCom * com);
 
     void update_actuals(BrowserClass *,
-                        Q3PtrList<ActualParamData> & new_actuals,
-                        Q3PtrList<ActualParamData> & managed);
-    void get_actuals(Q3PtrList<ActualParamData> & l, BrowserClass * parent);
+                        QList<ActualParamData *> & new_actuals,
+                        QList<ActualParamData *> & managed);
+    void get_actuals(QList<ActualParamData *> & l, BrowserClass * parent);
 
 public:
     ClassData();
@@ -149,6 +150,7 @@ public:
         return cpp_visibility;
     }
     void set_uml_visibility(UmlVisibility v);
+    void set_uml_visibility(int v);
     void set_cpp_visibility(UmlVisibility v);
 
     int get_n_formalparams() const {
@@ -181,6 +183,9 @@ public:
     }
     bool cpp_is_external() const {
         return cpp_external;
+    }
+    void set_cpp_is_external(bool value) {
+        cpp_external = value;
     }
 
     const char * get_javadecl() const {

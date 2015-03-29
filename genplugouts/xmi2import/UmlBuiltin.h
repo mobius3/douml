@@ -1,5 +1,6 @@
 #ifndef _UMLBUILTIN_H
 #define _UMLBUILTIN_H
+#include <QByteArray>
 
 
 

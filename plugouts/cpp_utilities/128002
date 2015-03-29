@@ -1,7 +1,7 @@
 format 75
 "IHM" // IHM
-  revision 4
-  modified_by 2 "pages4"
+  revision 5
+  modified_by 2 "C:/Users/habip"
   // class settings
   //class diagram settings
   draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype no show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir yes show_parameter_name yes package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
@@ -26,6 +26,47 @@ format 75
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default show_stereotype_properties default
   
+  deploymentview 128002 "Deployment view"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+    artifact 132738 "ConstrDestrCopyDialog"
+      stereotype "source"
+      cpp_h "#ifndef _${NAME}_H
+#define _${NAME}_H
+
+${comment}
+${includes}
+#include \"qdialog.h\"
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+#ifdef WIN32
+#include <stdlib.h>
+#endif
+${includes}
+#include <qlist.h>
+#include <qhgroupbox.h> 
+#include <qpushbutton.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qhbox.h>
+#include <qvbox.h> 
+#include <qdir.h>
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 132738 // ConstrDestrCopyDialog
+	class_ref 159106 // typedef1
+      end
+    end
+  end
+
   classview 128002 "Class view"
     //class diagram settings
     draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype no show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir yes show_parameter_name yes package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
@@ -45,7 +86,7 @@ format 75
     associated_deployment_view deploymentview_ref 128002 // Deployment view
     class 132738 "ConstrDestrCopyDialog"
       visibility package 
-      cpp_decl "${comment}${template}class ${name} : public QDialog {
+      cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
 
 ${inlines}
@@ -70,8 +111,9 @@ ${members}}
       end
 
       operation 144386 "ConstrDestrCopyDialog"
-	public explicit_return_type ""
+	preserve_cpp_body_indent public explicit_return_type ""
 	nparams 7
+	
 	  param inout name "cl" type class_ref 7169 // UmlClass
 	  param in name "have_constructor" explicit_type "bool"
 	  param in name "have_destructor" explicit_type "bool"
@@ -79,15 +121,11 @@ ${members}}
 	  param in name "have_const_copy" explicit_type "bool"
 	  param in name "have_assignment" explicit_type "bool"
 	  param in name "have_const_assignment" explicit_type "bool"
-	cpp_decl "    ${comment}${name}${(}${t0} * ${p0}, ${t1} ${p1}, ${t2} ${p2},
-                      ${t3} ${p3}, ${t4} ${p4},
-                      ${t5} ${p5}, ${t6} ${p6}${)}${volatile};
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} ${p3}${v3}, ${t4} ${p4}${v4}, ${t5} ${p5}${v5}, ${t6} ${p6}${v6}${)}${volatile}${throw};
 "
-	cpp_def "${inline}${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1},
-                                  ${t2} ${p2}, ${t3} ${p3},
-                                  ${t4} ${p4}, ${t5} ${p5},
-                                  ${t6} ${p6}${)}${volatile}
-   : QDialog(0, 0, TRUE), target(cl) {
+	cpp_def "${inline}${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}, ${t6} ${p6}${)}
+    : QDialog(0), target(cl)
+${throw}{
 ${body}}
 "
 	java_def "  ${comment}${visibility}${final}${synchronized}${name}${(}${)}${throws} {
@@ -109,11 +147,12 @@ ${body}}
       end
 
       operation 247682 "polish"
-	cpp_virtual protected explicit_return_type "void"
+	preserve_cpp_body_indent protected explicit_return_type "void"
 	nparams 0
-	cpp_decl "    ${comment}${static}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
 "
-	cpp_def "${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}{
+	cpp_def "${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
 ${body}}
 "
 	
@@ -123,11 +162,12 @@ ${body}}
       end
 
       operation 144514 "accept"
-	public explicit_return_type "void"
+	preserve_cpp_body_indent public explicit_return_type "void"
 	nparams 0
-	cpp_decl "    ${comment}${static}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+	
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
 "
-	cpp_def "${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}{
+	cpp_def "${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
 ${body}}
 "
 	java_def "  ${comment}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
@@ -138,16 +178,33 @@ ${body}}
 	
       end
 
-      attribute 128002 "target"
-	protected type class_ref 7169 // UmlClass
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+      extra_member 134658 "Q_OBJECT"
+	
+	cpp "  Q_OBJECT" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      extra_member 134786 "slots"
+	
+	cpp "  public slots:" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      classrelation 174594 // target (<unidirectional association>)
+	relation 174594 ---> name "<unidirectional association>"
+	  a role_name "target" protected
+	    comment "the class on which the plug-out is applied
 "
-	java_decl "  ${comment}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	php_decl ""
-	python_decl ""
-	idl_decl ""
-	comment "the class on which the plug-out is applied"
+	    classrelation_ref 174594 // target (<unidirectional association>)
+	  b parent class_ref 7169 // UmlClass
       end
 
       attribute 128130 "add_constr"
@@ -248,46 +305,26 @@ ${body}}
 	idl_decl ""
 	comment "checkbox to add operator = (const param)"
       end
-    end
-  end
 
-  deploymentview 128002 "Deployment view"
-    //deployment diagram settings
-    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
-    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
-    artifact 132738 "ConstrDestrCopyDialog"
-      stereotype "source"
-      cpp_h "#ifndef _${NAME}_H
-#define _${NAME}_H
-
-${comment}
-${includes}
-#include \"qdialog.h\"
-${declarations}
-${namespace_start}
-${definition}
-${namespace_end}
-#endif
-"
-      cpp_src "${comment}
-#ifdef WIN32
-#include <stdlib.h>
-#endif
-${includes}
-#include <qlist.h>
-#include <qhgroupbox.h> 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qhbox.h>
-#include <qvbox.h> 
-#include <qdir.h>
-${namespace_start}
-${members}
-${namespace_end}"
-      associated_classes
-	class_ref 132738 // ConstrDestrCopyDialog
+      classrelation 174466 // (<generalisation>)
+	relation 174466 ---|> name "<generalisation>"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 174466 // (<generalisation>)
+	  b parent class_ref 159106 // typedef1
       end
+    end
+
+    class 159106 "typedef1"
+      visibility package stereotype "typedef" explicit_base_type "QDialog"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
   end
 end

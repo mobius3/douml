@@ -30,9 +30,9 @@
 
 
 #include <qpainter.h>
-#include <q3intdict.h>
+//#include <q3intdict.h>
 //Added by qt3to4:
-#include <Q3PtrCollection>
+//
 
 #include "DiagramItem.h"
 #include "DiagramCanvas.h"
@@ -43,7 +43,7 @@
 #include "myio.h"
 #include "translate.h"
 
-Q3PtrList<DiagramItem> DiagramItem::Undefined;
+QList<DiagramItem *> DiagramItem::Undefined;
 
 DiagramItem::DiagramItem(int id, UmlCanvas * canvas)
     : Labeled<DiagramItem>(canvas->get_all_items(), id)
@@ -70,26 +70,22 @@ void DiagramItem::remove(bool)
 
 void DiagramItem::hide_lines()
 {
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    for (; it.current(); ++it)
-        it.current()->hide();
+    foreach (ArrowCanvas *canvas, lines)
+        canvas->hide();
 }
 
 void DiagramItem::update_show_lines()
 {
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    for (; it.current(); ++it) {
-        it.current()->update_pos();
-        it.current()->show();
-        it.current()->update_geometry();
+    foreach (ArrowCanvas *canvas, lines) {
+        canvas->update_pos();
+        canvas->show();
+        canvas->update_geometry();
     }
 }
 
 void DiagramItem::remove_line(ArrowCanvas * l, bool)
 {
-    lines.remove(l);
+    lines.removeOne(l);
 }
 
 void DiagramItem::check_line(ArrowCanvas *)
@@ -99,10 +95,8 @@ void DiagramItem::check_line(ArrowCanvas *)
 
 bool DiagramItem::attached_to(const ArrowCanvas * l) const
 {
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    for (; it.current(); ++it)
-        if (it.current() == l)
+    foreach (ArrowCanvas *canvas, lines)
+        if (canvas == l)
             return TRUE;
 
     return FALSE;
@@ -167,29 +161,31 @@ void DiagramItem::post_connexion(UmlCode, DiagramItem *)
 
 void DiagramItem::remove_if_already_present()
 {
-    const UmlCode k = type();
+    const UmlCode k = typeUmlCode();
     const BrowserNode * bn = get_bn();
     IdIterator<DiagramItem> it(the_canvas()->get_all_items());
     DiagramItem * di;
-
-    while ((di = it.current()) != 0) {
-        if ((di->type() == k) && (di->get_bn() == bn) && (di != this)) {
+    while (it.hasNext()) {
+        it.next();
+        if((di = it.value()) != 0)
+        {
+        if ((di->typeUmlCode() == k) && (di->get_bn() == bn) && (di != this)) {
             // already present
             if (Undefined.isEmpty())
-                msg_warning("Douml", TR("some elements already present in the diagram are NOT paste"));
+                msg_warning("Douml", QObject::tr("some elements already present in the diagram are NOT paste"));
 
             Undefined.append(this);
             return;
         }
-
-        ++it;
+        }
     }
 }
 
 void DiagramItem::post_load()
 {
-    while (! Undefined.isEmpty())
-        Undefined.take()->delete_it();
+    foreach (DiagramItem *item, Undefined)
+        item->delete_it();
+    Undefined.clear();
 }
 
 BasicData * DiagramItem::add_relation(UmlCode t, DiagramItem * end)
@@ -208,31 +204,18 @@ BasicData * DiagramItem::add_relation(UmlCode t, DiagramItem * end)
 bool DiagramItem::has_relation(BasicData * def) const
 {
     // manage only SimpleRelations
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    while (it.current()) {
-        if (IsaSimpleRelation(it.current()->type()) &&
-            (it.current()->get_data() == def))
+    foreach (ArrowCanvas *canvas, lines)
+        if (IsaSimpleRelation(canvas->typeUmlCode()) && (canvas->get_data() == def))
             return TRUE;
-
-        ++it;
-    }
-
     return FALSE;
 }
 
 bool DiagramItem::has_relation(UmlCode t, BasicData * def) const
 {
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    while (it.current()) {
-        if ((it.current()->type() == t) &&
-            (it.current()->get_data() == def))
+    foreach (ArrowCanvas *canvas, lines) {
+        if ((canvas->typeUmlCode() == t) && (canvas->get_data() == def))
             return TRUE;
-
-        ++it;
     }
-
     return FALSE;
 }
 
@@ -253,10 +236,8 @@ bool DiagramItem::move_with(UmlCode) const
 
 void DiagramItem::select_associated()
 {
-    Q3PtrListIterator<ArrowCanvas> it(lines);
-
-    for (; it.current(); ++it)
-        it.current()->select_associated();
+    foreach (ArrowCanvas *canvas, lines)
+        canvas->select_associated();
 }
 
 void DiagramItem::unassociate(DiagramItem *)
@@ -267,7 +248,7 @@ void DiagramItem::unassociate(DiagramItem *)
 
 bool DiagramItem::represents(BrowserNode * bn)
 {
-    return ((type() == bn->get_type()) && (get_bn() == bn));
+    return ((typeUmlCode() == bn->get_type()) && (get_bn() == bn));
 }
 
 void show_mark(QPainter & p, const QRect & r)
@@ -300,8 +281,9 @@ aCorner on_resize_point(const QPoint & p, const QRect & r)
     return NoCorner;
 }
 
-DiagramItem * QCanvasItemToDiagramItem(Q3CanvasItem * ci)
+DiagramItem * QCanvasItemToDiagramItem(QGraphicsItem * ci)
 {
+
     if (isa_arrow(ci))
         return ((ArrowCanvas *) ci);
     else if (isa_label(ci))
@@ -312,7 +294,7 @@ DiagramItem * QCanvasItemToDiagramItem(Q3CanvasItem * ci)
                : ((DiagramCanvas *) ci);
 }
 
-DiagramCanvas * QCanvasItemToDiagramCanvas(Q3CanvasItem * ci)
+DiagramCanvas * QCanvasItemToDiagramCanvas(QGraphicsItem * ci)
 {
     return (isa_arrow(ci) || isa_label(ci) || isa_alien(ci))
            ? 0
@@ -341,7 +323,7 @@ static inline int iabs(int v)
 
 void DiagramItem::shift(QPoint & p, QPoint other, bool contains_other) const
 {
-    QRect r = rect();
+    QRect r = sceneRect();
 
     p = r.center();
 
@@ -400,13 +382,14 @@ bool DiagramItem::has_drawing_settings() const
     return FALSE;
 }
 
-void DiagramItem::edit_drawing_settings(Q3PtrList<DiagramItem> &)
+void DiagramItem::edit_drawing_settings(QList<DiagramItem *> &)
 {
     // never called
 }
 
-void DiagramItem::same_drawing_settings(Q3PtrList<DiagramItem> &)
+void DiagramItem::clone_drawing_settings(const DiagramItem *src)
 {
+    Q_UNUSED(src);
     // never called
 }
 
@@ -419,12 +402,12 @@ void DiagramItem::apply_shortcut(QString)
 
 //
 
-DiagramItemList::DiagramItemList(Q3CanvasItemList l)
+DiagramItemList::DiagramItemList(QList<QGraphicsItem*> l)
 {
-    Q3CanvasItemList::Iterator it;
+    QList<QGraphicsItem*>::Iterator it;
 
     for (it = l.begin(); it != l.end(); ++it) {
-        if ((*it)->visible()) {
+        if ((*it)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*it);
 
             if (di != 0)
@@ -437,11 +420,13 @@ DiagramItemList::~DiagramItemList()
 {
 }
 
-int DiagramItemList::compareItems(Q3PtrCollection::Item i1,
-                                  Q3PtrCollection::Item i2)
+void DiagramItemList::sort()
 {
-    // i1 <> i2 !
-    return (((DiagramItem *) i1)->get_ident() >
-            ((DiagramItem *) i2)->get_ident())
-           ? 1 : -1;
+    qSort(begin(), end(), lessThan);
+}
+
+bool DiagramItemList::lessThan(DiagramItem *a, DiagramItem *b)
+{
+    // a <> b !
+    return a->get_ident() > b->get_ident();
 }

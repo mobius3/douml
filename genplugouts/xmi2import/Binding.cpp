@@ -9,7 +9,7 @@
 #include "misc/mystr.h"
 void Binding::import(FileIn & in, Token & token, UmlClass * where)
 {
-    Q3PtrList<Binding> l;
+    QList<Binding*> l;
     WrapperStr boundid = token.valueOf("boundelement");
     WrapperStr signatureid = token.valueOf("signature");
 
@@ -83,7 +83,7 @@ void Binding::import(FileIn & in, Token & token, UmlClass * where)
             boundid = where->id();
 
         do {
-            Binding * b = l.take(0);
+            Binding * b = l.takeAt(0);
 
             b->boundId = boundid;
             b->signatureId = signatureid;
@@ -96,9 +96,9 @@ void Binding::import(FileIn & in, Token & token, UmlClass * where)
 void Binding::solveThem()
 {
     while (! All.isEmpty()) {
-        Binding * b = All.take(0);
+        Binding * b = All.takeAt(0);
 
-        QMap<WrapperStr, UmlItem *>::Iterator it = UmlItem::All.find(b->boundId);
+        QMap<QString, UmlItem *>::Iterator it = UmlItem::All.find(b->boundId);
         UmlClass * tmpl = UmlClass::signature(b->signatureId);
 
         if (it == UmlItem::All.end()) {
@@ -148,5 +148,5 @@ void Binding::solveThem()
 
 }
 
-Q3PtrList<Binding> Binding::All;
+QList<Binding*> Binding::All;
 

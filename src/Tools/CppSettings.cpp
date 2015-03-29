@@ -29,7 +29,7 @@ WrapperStr CppSettings::type(WrapperStr s)
 
     read_if_needed_();
 
-    UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+    UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
     return (b) ? b->cpp : s;
 }
@@ -40,7 +40,7 @@ bool CppSettings::set_Type(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(cppSettingsCmd, setCppTypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+        UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
         if (b == 0)
             b = UmlSettings::add_type(s);
@@ -64,7 +64,7 @@ WrapperStr CppSettings::relationAttributeStereotype(WrapperStr s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.value(s);
 
     return (b) ? b->cpp : s;
 }
@@ -75,7 +75,7 @@ bool CppSettings::set_RelationAttributeStereotype(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(cppSettingsCmd, setCppRelationAttributeStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_rel_attr_stereotype(s);
@@ -99,7 +99,7 @@ WrapperStr CppSettings::classStereotype(WrapperStr s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_class_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_class_stereotypes.value(s);
 
     return (b) ? b->cpp : s;
 }
@@ -110,7 +110,7 @@ bool CppSettings::set_ClassStereotype(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(cppSettingsCmd, setCppClassStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_class_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_class_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_class_stereotype(s);
@@ -134,9 +134,9 @@ WrapperStr CppSettings::include(WrapperStr s)
 {
     read_if_needed_();
 
-   QString * r = _map_includes[s];
+   QString r = _map_includes[s];
 
-    return (r) ? *r : QString();
+    return (!r.isEmpty()) ? r : QString();
 }
 
 bool CppSettings::set_Include(WrapperStr s, WrapperStr v)
@@ -145,14 +145,10 @@ bool CppSettings::set_Include(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(cppSettingsCmd, setCppIncludeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-       QString * r = _map_includes.take(s);
+       QString r = _map_includes.take(s);
 
         if (!v.isEmpty())
-            _map_includes.insert(s, new QString(v.GetInternalRef()));
-
-        if (r)
-            delete r;
-
+            _map_includes.insert(s, QString(v.GetInternalRef()));
         return TRUE;
     }
     else
@@ -533,7 +529,7 @@ WrapperStr CppSettings::builtinIn(WrapperStr s)
 {
     read_if_needed_();
 
-    UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+    UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
     return (b) ? b->cpp_in : WrapperStr();
 }
@@ -550,7 +546,7 @@ bool CppSettings::set_BuiltinIn(WrapperStr type, WrapperStr form)
     UmlCom::send_cmd(cppSettingsCmd, setCppInCmd, type, form);
 
     if (UmlCom::read_bool()) {
-        UmlBuiltin * b = UmlSettings::_map_builtins.find(type);
+        UmlBuiltin * b = UmlSettings::_map_builtins.value(type);
 
         if (b == 0)
             b = UmlSettings::add_type(type);
@@ -571,7 +567,7 @@ WrapperStr CppSettings::builtinOut(WrapperStr s)
 {
     read_if_needed_();
 
-    UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+    UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
     return (b) ? b->cpp_out : WrapperStr();
 }
@@ -588,7 +584,7 @@ bool CppSettings::set_BuiltinOut(WrapperStr type, WrapperStr form)
     UmlCom::send_cmd(cppSettingsCmd, setCppOutCmd, type, form);
 
     if (UmlCom::read_bool()) {
-        UmlBuiltin * b = UmlSettings::_map_builtins.find(type);
+        UmlBuiltin * b = UmlSettings::_map_builtins.value(type);
 
         if (b == 0)
             b = UmlSettings::add_type(type);
@@ -609,7 +605,7 @@ WrapperStr CppSettings::builtinInOut(WrapperStr s)
 {
     read_if_needed_();
 
-    UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+    UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
     return (b) ? b->cpp_inout : WrapperStr();
 }
@@ -626,7 +622,7 @@ bool CppSettings::set_BuiltinInOut(WrapperStr type, WrapperStr form)
     UmlCom::send_cmd(cppSettingsCmd, setCppInOutCmd, type, form);
 
     if (UmlCom::read_bool()) {
-        UmlBuiltin * b = UmlSettings::_map_builtins.find(type);
+        UmlBuiltin * b = UmlSettings::_map_builtins.value(type);
 
         if (b == 0)
             b = UmlSettings::add_type(type);
@@ -647,7 +643,7 @@ WrapperStr CppSettings::builtinReturn(WrapperStr s)
 {
     read_if_needed_();
 
-    UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+    UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
     return (b) ? b->cpp_return : WrapperStr();
 }
@@ -664,7 +660,7 @@ bool CppSettings::set_BuiltinReturn(WrapperStr type, WrapperStr form)
     UmlCom::send_cmd(cppSettingsCmd, setCppReturnCmd, type, form);
 
     if (UmlCom::read_bool()) {
-        UmlBuiltin * b = UmlSettings::_map_builtins.find(type);
+        UmlBuiltin * b = UmlSettings::_map_builtins.value(type);
 
         if (b == 0)
             b = UmlSettings::add_type(type);
@@ -1267,7 +1263,7 @@ bool CppSettings::_is_inline_force_header_in_h;
 
 WrapperStr CppSettings::_visibility_indent;
 
-Q3Dict<QString> CppSettings::_map_includes;
+QHash<QString,QString> CppSettings::_map_includes;
 
 void CppSettings::read_()
 {
@@ -1300,13 +1296,13 @@ void CppSettings::read_()
     _map_includes.clear();
 
     if (n > _map_includes.size())
-        _map_includes.resize(n);
+        _map_includes.reserve(n);
 
     for (index = 0; index != n; index += 1) {
         WrapperStr t = UmlCom::read_string();
         WrapperStr i = UmlCom::read_string();
 
-        _map_includes.insert(t, new QString(i.GetInternalRef()));
+        _map_includes.insert(t, QString(i.GetInternalRef()));
     }
 
     _h_content = UmlCom::read_string();

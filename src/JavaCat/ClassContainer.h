@@ -28,10 +28,10 @@
 #ifndef _CLASS_CONTAINER_H
 #define _CLASS_CONTAINER_H
 
-#include <q3dict.h>
+
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 #include "UmlClass.h"
 
 class Class;
@@ -44,13 +44,13 @@ public:
     virtual ~ClassContainer();
 
     virtual void compute_type(WrapperStr type, UmlTypeSpec & typespec,
-                              const Q3ValueList<FormalParameterList> & tmplts,
+                              const QList<FormalParameterList> & tmplts,
                               Class ** need_object = 0) = 0;
     virtual Class * define(const WrapperStr & name, char st) = 0;
 
     bool read_type(UmlTypeSpec & typespec, Class ** cl,
-                   const Q3ValueList<FormalParameterList> & tmplts,
-                   Q3ValueList<UmlTypeSpec> * actuals,
+                   const QList<FormalParameterList> & tmplts,
+                   QList<UmlTypeSpec> * actuals,
                    WrapperStr & str_actual, WrapperStr s,
                    UmlClass ** first_actual_class, WrapperStr & def,
                    WrapperStr & genericname);
@@ -59,7 +59,7 @@ public:
 #endif
 
 protected:
-    Q3Dict<Class> Defined;
+    QHash<WrapperStr, Class*> Defined;
 };
 
 #endif

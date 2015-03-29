@@ -3,13 +3,13 @@
 
 
 #include "UmlBaseActivityParameter.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlActivityParameter : public UmlBaseActivityParameter
 {
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlActivityParameter(void * id, const Q3CString & s) : UmlBaseActivityParameter(id, s) {
+    UmlActivityParameter(void * id, const QByteArray & s) : UmlBaseActivityParameter(id, s) {
     }
 
 };

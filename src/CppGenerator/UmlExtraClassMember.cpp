@@ -30,12 +30,12 @@
 #include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
+////
 
 #include "UmlExtraClassMember.h"
 #include "UmlClass.h"
 
-void UmlExtraClassMember::compute_dependency(Q3PtrList<CppRefType> &,
+void UmlExtraClassMember::compute_dependency(QList<CppRefType *> &,
         const WrapperStr &,
         bool)
 {

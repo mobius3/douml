@@ -13,10 +13,10 @@
 #include "UmlRelation.h"
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
+#include <QByteArray>
+#include <QList>
 
-Q3CString UmlClass::sKind()
+QByteArray UmlClass::sKind()
 {
     return (stereotype() == "stereotype")
            ? "stereotype" : "class";
@@ -27,7 +27,7 @@ void UmlClass::memo_ref()
     classes.addElement(this);
     UmlItem::memo_ref();
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     if (inherited_opers == 0)
         add_inherited_opers(0);
@@ -45,9 +45,9 @@ void UmlClass::memo_ref()
     unload(TRUE, FALSE);
 }
 
-void UmlClass::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlClass::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
-    Q3CString s = stereotype();
+    QByteArray s = stereotype();
 
     if (flat) {
         define();
@@ -77,7 +77,7 @@ void UmlClass::html(Q3CString pfix, unsigned int rank, unsigned int level)
 
 void UmlClass::html()
 {
-    Q3CString s;
+    QByteArray s;
 
     UmlCom::message(name());
 
@@ -95,11 +95,11 @@ void UmlClass::html()
     unload(FALSE, FALSE);
 }
 
-void UmlClass::gen_html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlClass::gen_html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     UmlCom::message(name());
 
-    Q3CString s;
+    QByteArray s;
 
     s = description();
 
@@ -187,7 +187,7 @@ void UmlClass::gen_html(Q3CString pfix, unsigned int rank, unsigned int level)
         x->write();
     }
 
-    const Q3PtrVector<UmlComponent> comps = associatedComponents();
+    const QVector<UmlComponent*> comps = associatedComponents();
 
     if (comps.size() != 0) {
         if (p)
@@ -227,7 +227,7 @@ void UmlClass::gen_html(Q3CString pfix, unsigned int rank, unsigned int level)
 
     //
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     if (ch.size() != 0) {
         if (stereotype() == "enum_pattern") {
@@ -294,7 +294,6 @@ void UmlClass::gen_html(Q3CString pfix, unsigned int rank, unsigned int level)
             fw.write("</div>\n");
         }
     }
-
     sort(*inherited_opers);
     bool already = FALSE;
 
@@ -319,7 +318,7 @@ void UmlClass::write()
     if (!known)
         writeq(name());
     else {
-        Q3CString s = stereotype();
+        QByteArray s = stereotype();
 
         if ((s != "stereotype") && (s != "metaclass"))
             s = "class";
@@ -341,10 +340,10 @@ void UmlClass::write()
     }
 }
 
-void UmlClass::write(Q3CString target)
+void UmlClass::write(QByteArray target)
 {
     if (known) {
-        Q3CString s = stereotype();
+        QByteArray s = stereotype();
 
         if ((s != "stereotype") && (s != "metaclass"))
             s = "class";
@@ -399,7 +398,7 @@ void UmlClass::generate_index()
 void UmlClass::add_inherited_opers(Vector * ops)
 {
     if (inherited_opers == 0) {
-        const Q3PtrVector<UmlItem> ch = children();
+        const QVector<UmlItem*> ch = children();
 
         inherited_opers = new Vector;
 
@@ -439,7 +438,7 @@ void UmlClass::add_inherited_opers(Vector * ops)
 
 Vector UmlClass::classes;
 
-void UmlClass::gen_cpp_decl(Q3CString s, bool descr)
+void UmlClass::gen_cpp_decl(QByteArray s, bool descr)
 {
     const char * p = (descr)
                      ? (const char *) s
@@ -456,7 +455,7 @@ void UmlClass::gen_cpp_decl(Q3CString s, bool descr)
 
             if (baseType().type != 0) {
                 UmlClass * mother = baseType().type;
-                const Q3PtrVector<UmlItem> ch = children();
+                const QVector<UmlItem*> ch = children();
 
                 for (unsigned i = 0; i != ch.size(); i += 1) {
                     if (ch[i]->kind() == aRelation) {
@@ -489,7 +488,7 @@ void UmlClass::gen_cpp_decl(Q3CString s, bool descr)
         else if (!strncmp(p, "${inherit}", 10)) {
             p += 10;
 
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
             const char * sep = " : ";
 
             for (unsigned i = 0; i != ch.size(); i += 1) {
@@ -543,7 +542,7 @@ void UmlClass::gen_cpp_decl(Q3CString s, bool descr)
 
 }
 
-void UmlClass::gen_java_decl(Q3CString s, bool descr)
+void UmlClass::gen_java_decl(QByteArray s, bool descr)
 {
     const char * p = bypass_comment(s);
     UmlRelation * extend = 0;
@@ -584,7 +583,7 @@ void UmlClass::gen_java_decl(Q3CString s, bool descr)
         else if (!strncmp(p, "${extends}", 10)) {
             p += 10;
 
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
 
             for (unsigned i = 0; i != ch.size(); i += 1) {
                 if (ch[i]->kind() == aRelation) {
@@ -608,7 +607,7 @@ void UmlClass::gen_java_decl(Q3CString s, bool descr)
         else if (!strncmp(p, "${implements}", 13)) {
             p += 13;
 
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
             const char * sep = " implements ";
 
             for (unsigned i = 0; i != ch.size(); i += 1) {
@@ -659,9 +658,9 @@ void UmlClass::gen_java_decl(Q3CString s, bool descr)
     }
 }
 
-void UmlClass::gen_php_decl(Q3CString s, bool descr)
+void UmlClass::gen_php_decl(QByteArray s, bool descr)
 {
-    Q3CString st = PhpSettings::classStereotype(stereotype());
+    QByteArray st = PhpSettings::classStereotype(stereotype());
 
     if (st == "ignored")
         return;
@@ -699,7 +698,7 @@ void UmlClass::gen_php_decl(Q3CString s, bool descr)
         else if (!strncmp(p, "${extends}", 10)) {
             p += 10;
 
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
 
             for (unsigned i = 0; i != ch.size(); i += 1) {
                 if (ch[i]->kind() == aRelation) {
@@ -722,7 +721,7 @@ void UmlClass::gen_php_decl(Q3CString s, bool descr)
         else if (!strncmp(p, "${implements}", 13)) {
             p += 13;
 
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
             const char * sep = " implements ";
 
             for (unsigned i = 0; i != ch.size(); i += 1) {
@@ -770,9 +769,9 @@ void UmlClass::gen_php_decl(Q3CString s, bool descr)
     }
 }
 
-void UmlClass::gen_python_decl(Q3CString s, bool descr)
+void UmlClass::gen_python_decl(QByteArray s, bool descr)
 {
-    Q3CString st = PythonSettings::classStereotype(stereotype());
+    QByteArray st = PythonSettings::classStereotype(stereotype());
 
     if (st == "ignored")
         return;
@@ -793,7 +792,7 @@ void UmlClass::gen_python_decl(Q3CString s, bool descr)
         else if (!strncmp(p, "${inherit}", 10)) {
             p += 10;
 
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
             bool inh = FALSE;
 
             for (unsigned i = 0; i != ch.size(); i += 1) {
@@ -831,7 +830,7 @@ void UmlClass::gen_python_decl(Q3CString s, bool descr)
     }
 }
 
-void UmlClass::generate(const Q3ValueList<UmlActualParameter> a, UmlClass * mother, bool cpp)
+void UmlClass::generate(const QList<UmlActualParameter> a, UmlClass * mother, bool cpp)
 {
     unsigned i;
     unsigned n = a.count();
@@ -858,7 +857,7 @@ void UmlClass::generate(const Q3ValueList<UmlActualParameter> a, UmlClass * moth
     writeq('>');
 }
 
-void UmlClass::generate(const Q3ValueList<UmlFormalParameter> f)
+void UmlClass::generate(const QList<UmlFormalParameter> f)
 {
     unsigned n = f.count();
 
@@ -876,13 +875,13 @@ void UmlClass::generate(const Q3ValueList<UmlFormalParameter> f)
 
         writeq("> ");
     }
-    else if (name().find("<") != -1)
+    else if (name().indexOf("<") != -1)
         writeq("template<> ");
 }
 
 void UmlClass::generics()
 {
-    Q3ValueList<UmlFormalParameter> f = formals();
+    QList<UmlFormalParameter> f = formals();
     unsigned n = f.count();
 
     if (n != 0) {
@@ -912,7 +911,11 @@ void UmlClass::generate()
         int n = classes.size();
 
         for (int i = 0; i != n; i += 1)
-            ((UmlClass *) classes.elementAt(i))->html();
+        {
+
+            UmlClass * cl = (UmlClass *)classes.elementAt(i);
+            cl->html();
+        }
     }
 }
 

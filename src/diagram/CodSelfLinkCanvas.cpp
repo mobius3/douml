@@ -31,7 +31,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -57,7 +57,7 @@ CodSelfLinkCanvas::CodSelfLinkCanvas(UmlCanvas * canvas, CodObjCanvas * o,
                     SELF_LINK_RADIUS * 2, id),
     obj(o)
 {
-    setZ(o->z() - 0.5);
+    setZValue(o->zValue() - 0.5);
     browser_node = canvas->browser_diagram();
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
     compute_pos(p);
@@ -85,7 +85,7 @@ void CodSelfLinkCanvas::remove_it(ColMsg * msg)
     if (unsubscribe(oper_data))
         disconnect(oper_data, 0, this, 0);
 
-    msgs.removeRef(msg);
+    msgs.removeOne(msg);
 }
 
 void CodSelfLinkCanvas::delete_available(BooL &, BooL & out_model) const
@@ -148,7 +148,7 @@ void CodSelfLinkCanvas::compute_pos(QPoint p)
 
 void CodSelfLinkCanvas::update_label_pos()
 {
-    if (!label->selected())
+    if (!label->isSelected())
         label->move_outside(rect(), angle);
 }
 
@@ -166,23 +166,22 @@ void CodSelfLinkCanvas::update_msgs()
 
         the_canvas()->browser_diagram()->get_collaborationdiagramsettings(dflt);
 
-        Q3PtrListIterator<ColMsg> it(msgs);
         QString nl = "\n";
         QString null;
         const QString * pfix = &null;
 
-        for (; it.current() != 0; ++it) {
-            const BasicData * oper_data = it.current()->get_operation();
+        foreach (ColMsg *msg, msgs) {
+            const BasicData *oper_data = msg->get_operation();
 
             if ((oper_data != 0) && subscribe(oper_data)) {
                 connect(oper_data, SIGNAL(changed()), this, SLOT(modified()));
                 connect(oper_data, SIGNAL(deleted()), this, SLOT(modified()));
             }
 
-            QString m = it.current()->def(dflt.show_hierarchical_rank == UmlYes,
-                                          dflt.show_full_operations_definition == UmlYes,
-                                          dflt.drawing_language,
-                                          dflt.show_msg_context_mode);
+            QString m = msg->def(dflt.show_hierarchical_rank == UmlYes,
+                                 dflt.show_full_operations_definition == UmlYes,
+                                 dflt.drawing_language,
+                                 dflt.show_msg_context_mode);
 
             if (!m.isEmpty()) {
                 s += *pfix + m;
@@ -230,7 +229,7 @@ void CodSelfLinkCanvas::draw(QPainter & p)
     if (! visible()) return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
-    QPoint ce = center();
+    QPoint ce = rect().center();//center();
 
     p.save();
     p.translate(ce.x(), ce.y());
@@ -251,8 +250,11 @@ void CodSelfLinkCanvas::draw(QPainter & p)
 
     p.restore();
 }
-
-UmlCode CodSelfLinkCanvas::type() const
+void CodSelfLinkCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode CodSelfLinkCanvas::typeUmlCode() const
 {
     return UmlSelfLink;
 }
@@ -266,20 +268,23 @@ void CodSelfLinkCanvas::open()
 
 void CodSelfLinkCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m;
+    QMenu m;
 
     MenuFactory::createTitle(m, TR("Self link"));
-    m.insertSeparator();
-    m.insertItem(TR("Add messages"), 1);
-    m.insertSeparator();
-    m.insertItem(TR("Edit its messages"), 2);
-    m.insertItem(TR("Edit all the messages"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 4);
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 5);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Add messages"), 1);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit its messages"), 2);
+    MenuFactory::addItem(m, TR("Edit all the messages"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
 
-    switch (m.exec(QCursor::pos())) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    switch (retAction->data().toInt()) {
     case 1: {
         CodAddMsgDialog d(obj, obj, this, (ColDiagramView *) the_canvas()->get_view(),
                           TRUE);
@@ -322,6 +327,7 @@ void CodSelfLinkCanvas::menu(const QPoint &)
 
     default:
         return;
+    }
     }
 
     package_modified();
@@ -377,7 +383,7 @@ void CodSelfLinkCanvas::save(QTextStream & st, bool ref, QString & warning) cons
         if (label != 0) {
             nl_indent(st);
             st << "forward_label ";
-            save_string(label->get_name(), st);
+            save_string(label->get_name().toLatin1().constData(), st);
             save_xyz(st, label, " xyz");
         }
 
@@ -403,7 +409,7 @@ CodSelfLinkCanvas * CodSelfLinkCanvas::read(char *& st, UmlCanvas * canvas,
             new CodSelfLinkCanvas(canvas, o, p, id);
 
         o->set_self_link(result);
-        result->setZ(o->z() - 0.5);
+        result->setZValue(o->zValue() - 0.5);
 
         k = read_keyword(st);
         result->settings.read(st, k);		// updates k
@@ -414,7 +420,7 @@ CodSelfLinkCanvas * CodSelfLinkCanvas::read(char *& st, UmlCanvas * canvas,
             if (read_file_format() < 5) {
                 read_keyword(st, "xy");
                 read_xy(st, result->label);
-                //result->label->setZ(OLD_LABEL_Z);
+                //result->label->setZValue(OLD_LABEL_Z);
             }
             else {
                 read_keyword(st, "xyz");
@@ -449,10 +455,8 @@ void CodSelfLinkCanvas::history_load(QBuffer & b)
     ::load(delta_y, b);
     ::load(angle, b);
 
-    Q3PtrListIterator<ColMsg> it(msgs);
-
-    for (; it.current() != 0; ++it) {
-        const BasicData * oper_data = it.current()->get_operation();
+    foreach (ColMsg *msg, msgs) {
+        const BasicData *oper_data = msg->get_operation();
 
         if ((oper_data != 0) && subscribe(oper_data)) {
             connect(oper_data, SIGNAL(changed()), this, SLOT(modified()));
@@ -466,13 +470,10 @@ void CodSelfLinkCanvas::history_hide()
     DiagramCanvas::setVisible(FALSE);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 
-    Q3PtrListIterator<ColMsg> it(msgs);
-
-    for (; it.current() != 0; ++it) {
-        const BasicData * oper_data = it.current()->get_operation();
+    foreach (ColMsg *msg, msgs) {
+        const BasicData * oper_data = msg->get_operation();
 
         if ((oper_data != 0) && unsubscribe(oper_data))
             disconnect(oper_data, 0, this, 0);
     }
 }
-

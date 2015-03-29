@@ -29,11 +29,11 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 
 #include "BrowserClassInstance.h"
@@ -62,7 +62,7 @@
 IdDict<BrowserClassInstance> BrowserClassInstance::all(__FILE__);
 
 BrowserClassInstance::BrowserClassInstance(QString s, BrowserClass * cl,
-        BrowserNode * p, int id)
+                                           BrowserNode * p, int id)
     : BrowserNode(s, p), Labeled<BrowserClassInstance>(all, id)
 {
     def = new ClassInstanceData(cl);
@@ -72,7 +72,7 @@ BrowserClassInstance::BrowserClassInstance(QString s, BrowserClass * cl,
 }
 
 BrowserClassInstance::BrowserClassInstance(const BrowserClassInstance * model,
-        BrowserNode * p)
+                                           BrowserNode * p)
     : BrowserNode(model->name, p), Labeled<BrowserClassInstance>(all, 0)
 {
     def = new ClassInstanceData(model->def);
@@ -103,7 +103,7 @@ bool BrowserClassInstance::undelete(bool, QString & warning, QString & renamed)
 
     if (def->get_class()->deletedp()) {
         warning += QString("<li><b>") + quote(name) +
-                   ":" + quote(def->get_class()->get_name()) + "</b>\n";
+                ":" + quote(def->get_class()->get_name()) + "</b>\n";
         return FALSE;
     }
 
@@ -129,19 +129,20 @@ BrowserNode * BrowserClassInstance::duplicate(BrowserNode * p, QString name)
 void BrowserClassInstance::post_load()
 {
     IdIterator<BrowserClassInstance> it(all);
-
-    while (it.current()) {
-        it.current()->def->init_other_side();
-        ++it;
+    while(it.hasNext()){
+        it.next();
+        if(it.value())
+        it.value()->def->init_other_side();
     }
 
-    it.toFirst();
+    it.toFront();
 
-    while (it.current()) {
-        it.current()->def->check();
-        it.current()->def->check_rels();
-
-        ++it;
+    while(it.hasNext()){
+        it.next();
+        if(it.value()) {
+        it.value()->def->check();
+        it.value()->def->check_rels();
+        }
     }
 }
 
@@ -197,7 +198,7 @@ void BrowserClassInstance::update_stereotype(bool)
 
         if (show_stereotypes && stereotype[0]) {
             QString s = toUnicode(stereotype);
-            int index = s.find(':');
+            int index = s.indexOf(':');
 
             setText(0,
                     "<<" + ((index == -1) ? s : s.mid(index + 1))
@@ -208,7 +209,7 @@ void BrowserClassInstance::update_stereotype(bool)
     }
 }
 
-void BrowserClassInstance::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
+void BrowserClassInstance::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
     BrowserNode::referenced_by(l, ondelete);
     BrowserClassInstance::compute_referenced_by(l, this);
@@ -220,19 +221,20 @@ void BrowserClassInstance::referenced_by(Q3PtrList<BrowserNode> & l, bool ondele
     }
 }
 
-void BrowserClassInstance::compute_referenced_by(Q3PtrList<BrowserNode> & l,
-        BrowserNode * target)
+void BrowserClassInstance::compute_referenced_by(QList<BrowserNode *> & l,
+                                                 BrowserNode * target)
 {
     IdIterator<BrowserClassInstance> it(all);
-
-    while (it.current()) {
-        if (!it.current()->deletedp()) {
-            ClassInstanceData * data = it.current()->def;
+    while(it.hasNext()){
+        it.next();
+        if(it.value()) {
+        if (!it.value()->deletedp()) {
+            ClassInstanceData * data = it.value()->def;
             bool add = (data->get_class() == target);
 
             if (!add && (target->get_type() == UmlAttribute)) {
-                const Q3ValueList<SlotAttr> & attrs = data->get_attributes();
-                Q3ValueList<SlotAttr>::ConstIterator it_a;
+                const QList<SlotAttr> & attrs = data->get_attributes();
+                QList<SlotAttr>::ConstIterator it_a;
 
                 for (it_a = attrs.begin(); it_a != attrs.end(); ++it_a) {
                     if ((*it_a).att == target) {
@@ -243,14 +245,14 @@ void BrowserClassInstance::compute_referenced_by(Q3PtrList<BrowserNode> & l,
             }
 
             if (!add) {
-                const Q3ValueList<SlotRel> & rels = data->get_relations();
-                Q3ValueList<SlotRel>::ConstIterator it_r;
+                const QList<SlotRel> & rels = data->get_relations();
+                QList<SlotRel>::ConstIterator it_r;
 
                 for (it_r = rels.begin(); it_r != rels.end(); ++it_r) {
                     const SlotRel & slot = *it_r;
 
                     if ((slot.is_a) ? (slot.rel->get_start() == target)
-                        : (slot.rel->get_end() == target)) {
+                            : (slot.rel->get_end() == target)) {
                         add = TRUE;
                         break;
                     }
@@ -263,59 +265,65 @@ void BrowserClassInstance::compute_referenced_by(Q3PtrList<BrowserNode> & l,
             }
 
             if (add)
-                l.append(it.current());
+                l.append(it.value());
         }
-
-        ++it;
+    }
     }
 }
 
 void BrowserClassInstance::menu()
 {
-    Q3PopupMenu m(0, "class instance");
-    Q3PopupMenu toolm(0);
+    QMenu m("class instance",0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_edited) {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 0),
-                           TR("to edit the <i>class instance</i>, \
-a double click with the left mouse button does the same thing"));
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), 4),
-                           TR("to duplicate the <i>class instance</i>"));
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                                 QObject::TR("to edit the <i>class instance</i>, \
+                                             a double click with the left mouse button does the same thing"));
+                                             MenuFactory::addItem(m, QObject::tr("Duplicate"), 4,
+                                                                  QObject::TR("to duplicate the <i>class instance</i>"));
 
-            if (!is_read_only && (edition_number == 0)) {
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Delete"), 1),
-                               TR("to delete the <i>class instance</i>. \
-Note that you can undelete it after"));
-            }
+                                 if (!is_read_only && (edition_number == 0)) {
+                                     m.addSeparator();
+                                     MenuFactory::addItem(m, QObject::tr("Delete"), 1,
+                                     QObject::TR("to delete the <i>class instance</i>. \
+                                     Note that you can undelete it after"));
+                                 }
         }
 
-        m.insertSeparator();
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 3),
-                       TR("to know who reference the <i>class instance</i> \
-through a relation"));
-        mark_menu(m, TR("the class instance"), 90);
-        ProfiledStereotypes::menu(m, this, 99990);
+        m.addSeparator();
+        MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
+                             QObject::TR("to know who reference the <i>class instance</i> \
+                                         through a relation"));
+                                         mark_menu(m, QObject::tr("the class instance").toLatin1().constData(), 90);
+                             ProfiledStereotypes::menu(m, this, 99990);
 
-        if ((edition_number == 0) &&
-            Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+                if ((edition_number == 0) &&
+                    Tool::menu_insert(&toolm, get_type(), 100)) {
+            m.addSeparator();
+            toolm.setTitle(QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 2),
-                       TR("to undelete the <i>class instance</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 2,
+                             QObject::tr("to undelete the <i>class instance</i>"));
 
         if (def->get_class()->deletedp())
-            m.setItemEnabled(2, FALSE);
+        {
+            QAction *act = MenuFactory::findAction(m, 2);
+            if(act)
+                act->setEnabled(false);
+        }
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserClassInstance::exec_menu_choice(int rank)
@@ -390,8 +398,8 @@ void BrowserClassInstance::apply_shortcut(QString s)
 void BrowserClassInstance::open(bool force_edit)
 {
     if (!force_edit &&
-        (associated_diagram != 0) &&
-        !associated_diagram->deletedp())
+            (associated_diagram != 0) &&
+            !associated_diagram->deletedp())
         associated_diagram->open(FALSE);
     else if (!is_edited)
         def->edit();
@@ -404,7 +412,7 @@ UmlCode BrowserClassInstance::get_type() const
 
 QString BrowserClassInstance::get_stype() const
 {
-    return TR("class instance");
+    return QObject::TR("class instance");
 }
 
 int BrowserClassInstance::get_identifier() const
@@ -423,7 +431,7 @@ BrowserClassInstance * BrowserClassInstance::get_classinstance(BrowserNode * fut
     QString name;
     BrowserNodeList nodes;
 
-    if (!future_parent->enter_child_name(name, TR("enter class instance's name (may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::TR("enter class instance's name (may be empty) : "),
                                          UmlClassInstance, instances(nodes),
                                          &old, TRUE, TRUE))
         return 0;
@@ -437,7 +445,7 @@ BrowserClassInstance * BrowserClassInstance::get_classinstance(BrowserNode * fut
         return 0;
 
     BrowserClassInstance * result =
-        new BrowserClassInstance(name, cl, future_parent);
+            new BrowserClassInstance(name, cl, future_parent);
 
     future_parent->setOpen(TRUE);
     future_parent->package_modified();
@@ -452,29 +460,28 @@ BrowserClassInstance * BrowserClassInstance::get_classinstance(BrowserClass * cl
     BrowserNodeList nodes;
 
     IdIterator<BrowserClassInstance> it(all);
-
-    while (it.current() != 0) {
-        if (!it.current()->deletedp() &&
-            (((ClassInstanceData *)(it.current()->get_data()))->get_class() == cl))
-            nodes.append(it.current());
-
-        ++it;
+    while(it.hasNext()){
+        it.next();
+        if(it.value() != 0) {
+        if (!it.value()->deletedp() &&
+                (((ClassInstanceData *)(it.value()->get_data()))->get_class() == cl))
+            nodes.append(it.value());
     }
-
+    }
     nodes.sort_it();
 
     // use cl here but any element is good for
-    return (! cl->enter_child_name(dummy, TR("choose existing instance : "),
+    return (! cl->enter_child_name(dummy, QObject::TR("choose existing instance : "),
                                    UmlClassInstance, nodes, &old,
                                    TRUE, TRUE, TRUE))
-           ? 0 : ((BrowserClassInstance *) old);
+            ? 0 : ((BrowserClassInstance *) old);
 }
 
 BrowserClassInstance * BrowserClassInstance::add_classinstance(BrowserNode * future_parent)
 {
     QString name;
 
-    if (! future_parent->enter_child_name(name, TR("enter class instance's name (may be empty) : "),
+    if (! future_parent->enter_child_name(name, QObject::TR("enter class instance's name (may be empty) : "),
                                           UmlClassInstance, TRUE, TRUE))
         return 0;
 
@@ -484,7 +491,7 @@ BrowserClassInstance * BrowserClassInstance::add_classinstance(BrowserNode * fut
         return 0;
 
     BrowserClassInstance * result =
-        new BrowserClassInstance(name, cl, future_parent);
+            new BrowserClassInstance(name, cl, future_parent);
 
     future_parent->setOpen(TRUE);
     future_parent->package_modified();
@@ -494,16 +501,16 @@ BrowserClassInstance * BrowserClassInstance::add_classinstance(BrowserNode * fut
 
 // to add BrowserClassInstance from old diagrams
 BrowserClassInstance * BrowserClassInstance::get_it(QString s, BrowserClass * cl,
-        BrowserNode * parent)
+                                                    BrowserNode * parent)
 {
     if (! s.isEmpty()) {
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = parent->firstChild(); child != 0; child = child->nextSibling())
             if (!((BrowserNode *) child)->deletedp() &&
-                (((BrowserNode *) child)->get_type() == UmlClassInstance) &&
-                (((BrowserClassInstance *) child)->name == s) &&
-                (((BrowserClassInstance *) child)->def->get_class() == cl))
+                    (((BrowserNode *) child)->get_type() == UmlClassInstance) &&
+                    (((BrowserClassInstance *) child)->name == s) &&
+                    (((BrowserClassInstance *) child)->def->get_class() == cl))
                 return ((BrowserClassInstance *) child);
     }
 
@@ -516,28 +523,28 @@ BasicData * BrowserClassInstance::get_data() const
 }
 
 BrowserNodeList & BrowserClassInstance::instances(BrowserNodeList & result,
-        const char * st)
+                                                  const char * st)
 {
     IdIterator<BrowserClassInstance> it(all);
-
     if ((st == 0) || (*st == 0)) {
-        while (it.current() != 0) {
-            if (!it.current()->deletedp())
-                result.append(it.current());
+        while(it.hasNext()){
+            it.next();
+            if (it.value() != 0)
+                if (!it.value()->deletedp())
+                    result.append(it.value());
 
-            ++it;
         }
     }
     else {
-        while (it.current() != 0) {
-            if (!it.current()->deletedp() &&
-                !strcmp(it.current()->get_data()->get_stereotype(), st))
-                result.append(it.current());
+        while(it.hasNext()){
+            it.next();
+            if (it.value() != 0)
+                if (!it.value()->deletedp() &&
+                        !strcmp(it.value()->get_data()->get_stereotype(), st))
+                    result.append(it.value());
 
-            ++it;
         }
     }
-
     result.sort_it();
 
     return result;
@@ -549,7 +556,7 @@ BrowserNode * BrowserClassInstance::get_associated() const
 }
 
 void BrowserClassInstance::set_associated_diagram(BrowserObjectDiagram * dg,
-        bool on_read)
+                                                  bool on_read)
 {
     if (associated_diagram != dg) {
         if (associated_diagram != 0)
@@ -599,7 +606,7 @@ bool BrowserClassInstance::api_compatible(unsigned v) const
 
 
 void BrowserClassInstance::add_from_tool(BrowserNode * parent, ToolCom * com,
-        const char * args)
+                                         const char * args)
 {
     BrowserClass * cl = (BrowserClass *) com->get_id(args);
     BrowserClassInstance * ci = new BrowserClassInstance("", cl, parent);
@@ -615,7 +622,7 @@ void BrowserClassInstance::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "classinstance " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1(), st);
         indent(+1);
         def->save(st, warning);
 
@@ -645,12 +652,12 @@ BrowserClassInstance * BrowserClassInstance::read_ref(char *& st)
     BrowserClassInstance * result = all[id];
 
     return (result == 0)
-           ? new BrowserClassInstance(id)
-           : result;
+            ? new BrowserClassInstance(id)
+            : result;
 }
 
 BrowserClassInstance * BrowserClassInstance::read(char *& st, char * k,
-        BrowserNode * parent)
+                                                  BrowserNode * parent)
 {
     BrowserClassInstance * result;
     int id;
@@ -660,8 +667,8 @@ BrowserClassInstance * BrowserClassInstance::read(char *& st, char * k,
         result = all[id];
 
         return (result == 0)
-               ? new BrowserClassInstance(id)
-               : result;
+                ? new BrowserClassInstance(id)
+                : result;
     }
     else if (!strcmp(k, "classinstance")) {
         id = read_id(st);
@@ -669,14 +676,14 @@ BrowserClassInstance * BrowserClassInstance::read(char *& st, char * k,
 
         if (result == 0)
             result =
-                new BrowserClassInstance(read_string(st), (BrowserClass *) 0,
-                                         parent, id);
+                    new BrowserClassInstance(read_string(st), (BrowserClass *) 0,
+                                             parent, id);
         else if (result->is_defined) {
             BrowserClassInstance * already_exist = result;
 
             result =
-                new BrowserClassInstance(read_string(st), (BrowserClass *) 0,
-                                         parent, id);
+                    new BrowserClassInstance(read_string(st), (BrowserClass *) 0,
+                                             parent, id);
 
             already_exist->must_change_id(all);
             already_exist->unconsistent_fixed("class instance", result);
@@ -689,7 +696,7 @@ BrowserClassInstance * BrowserClassInstance::read(char *& st, char * k,
         result->is_defined = TRUE;
 
         result->is_read_only = (!in_import() && read_only_file()) ||
-                               ((user_id() != 0) && result->is_api_base());
+                ((user_id() != 0) && result->is_api_base());
 
         k = read_keyword(st);
 

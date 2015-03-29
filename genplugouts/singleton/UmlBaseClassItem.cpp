@@ -3,9 +3,9 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #ifdef WITHCPP
-const Q3CString & UmlBaseClassItem::cppDecl()
+const QByteArray & UmlBaseClassItem::cppDecl()
 {
     read_if_needed_();
 
@@ -19,7 +19,7 @@ bool UmlBaseClassItem::set_CppDecl(const char * s)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseClassItem::javaDecl()
+const QByteArray & UmlBaseClassItem::javaDecl()
 {
     read_if_needed_();
 
@@ -33,7 +33,7 @@ bool UmlBaseClassItem::set_JavaDecl(const char * s)
 #endif
 
 #ifdef WITHIDL
-const Q3CString & UmlBaseClassItem::idlDecl()
+const QByteArray & UmlBaseClassItem::idlDecl()
 {
     read_if_needed_();
 

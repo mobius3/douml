@@ -1,7 +1,17 @@
+#ok
 TEMPLATE    = app
 TARGET        = cpp_util
-CONFIG        +=  warn_on qt
-DEFINES        = WITHCPP TRACE
+CONFIG(Debug, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt warn_on Debug
+    QMAKE_POST_LINK = " "
+}
+CONFIG(Release, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt Release
+    QMAKE_POST_LINK = " "
+}
+DEFINES        += WITHCPP TRACE
 INCLUDEPATH += ../../src
 HEADERS        = ./UmlBasePackage.h \
           ./UmlFragmentCompartment.h \
@@ -204,7 +214,10 @@ HEADERS        = ./UmlBasePackage.h \
           ./UmlBaseTypeSpec.h \
     Logging/QsLogDest.h \
     Logging/QsLog.h \
-    Logging/QsDebugOutput.h
+    Logging/QsDebugOutput.h \
+    gridbox.h \
+    hhbox.h \
+    vvbox.h
 SOURCES        = ./UmlBasePackage.cpp \
           ./UmlFragmentCompartment.cpp \
           ./UmlBaseUseCase.cpp \
@@ -407,24 +420,23 @@ SOURCES        = ./UmlBasePackage.cpp \
           ./UmlBaseTypeSpec.cpp \
     Logging/QsLogDest.cpp \
     Logging/QsLog.cpp \
-    Logging/QsDebugOutput.cpp
+    Logging/QsDebugOutput.cpp \
+    gridbox.cpp \
+    hhbox.cpp \
+    vvbox.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 
-
-Release{
-
-
-    MOC_DIR = bin/douml/MOC_release
-    OBJECTS_DIR = bin/douml/Obj_release
+QT += network widgets
+DEFINES += TRUE=true FALSE=false DEBUG
+DESTDIR = ../../bin
+Release {
+    MOC_DIR = $${DESTDIR}/moc_release/cpp_util
+    OBJECTS_DIR = $${DESTDIR}/obj_release/cpp_util
 }
 
-Debug{
-    MOC_DIR = bin/douml/MOC_Debug
-    OBJECTS_DIR = bin/douml/Obj_Debug
-
+Debug {
+    MOC_DIR = $${DESTDIR}/moc_debug/cpp_util
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/cpp_util
 }
-    UI_DIR = src/ui
-    DESTDIR = ../../bin
+UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11

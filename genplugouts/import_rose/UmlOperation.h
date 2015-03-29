@@ -3,8 +3,8 @@
 
 
 #include "UmlBaseOperation.h"
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <QByteArray>
+
 
 class File;
 class UmlClass;
@@ -16,7 +16,7 @@ class UmlClass;
 class UmlOperation : public UmlBaseOperation
 {
 public:
-    UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {
+    UmlOperation(void * id, const QByteArray & n) : UmlBaseOperation(id, n) {
         cpt[kind()] += 1;
     };
 
@@ -30,13 +30,13 @@ private:
 
     void importExceptions(File & f);
 
-    void cplusplus(Q3Dict<Q3CString> & prop);
+    void cplusplus(QHash<QByteArray, QByteArray*> & prop);
 
-    void oracle8(Q3Dict<Q3CString> & prop);
+    void oracle8(QHash<QByteArray, QByteArray*> & prop);
 
-    void corba(Q3Dict<Q3CString> & prop);
+    void corba(QHash<QByteArray, QByteArray*> & prop);
 
-    void java(Q3Dict<Q3CString> & prop);
+    void java(QHash<QByteArray, QByteArray*> & prop);
 
 };
 

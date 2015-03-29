@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 using namespace std;
 #endif
@@ -94,7 +94,7 @@ bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
                            const WrapperStr & bitfield, const WrapperStr & value,
                            WrapperStr comment, WrapperStr description
 #ifdef ROUNDTRIP
-                           , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                           , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                           )
 {
@@ -195,7 +195,7 @@ bool UmlAttribute::new_one(Class * container, const WrapperStr & name,
                 decl.replace(index, 7, typeform);
             else if (typespec.type == 0) {
                 WrapperStr t = typespec.explicit_type;
-                int index2;
+                int index2 = 0;
 
                 if (!t.isEmpty() && (t.at(t.length() - 1) == ">") && ((index2 = t.find('<')) > 0))
                 {

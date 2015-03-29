@@ -31,39 +31,39 @@
 #include <qapplication.h>
 #include <QTextCodec>
 //Added by qt3to4:
-#include "misc/mystr.h"
-#include <QTextCodec>
 
-#include "UmlWindow.h"
-#include "UmlPixmap.h"
-#include "UmlGlobal.h"
-#include "UmlDesktop.h"
+#include "misc/mystr.h"
 #include "ToolCom.h"
 #include "BrowserView.h"
 #include "BrowserPackage.h"
 #include "Shortcut.h"
+#include "err.h"
+
+#include "UmlWindow.h"
+#include "UmlGlobal.h"
+#include "UmlPixmap.h"
+#include <QTextCodec>
+#include "UmlDesktop.h"
 #include "DialogUtil.h"
 #include "mu.h"
-#include "err.h"
 #include "EnvDialog.h"
 #include "Logging/QsLogDest.h"
 #include "Logging/QsLog.h"
 #include "Factories/EdgeMenuFactory.h"
 #include "Factories/DialogConnections.h"
 #include "Factories/EdgeToolBarCreation.h"
-#include "dialog/ClassDialog.h"
 #include "dialog/ArtifactDialog.h"
 #include "dialog/OperationDialog.h"
 #include "ui/constructorinitializerdialog.h"
+#include "dialog/ClassDialog.h"
 #include "misc/TypeIdentifier.h"
+#include "misc/Shortcut.h"
 #include <QSettings>
-#include <QFileInfo>
-
-
-
-
 #include "translate.h"
-
+#include <QIcon>
+#include <QDir>
+#include <QSettings>
+#include <QMessageBox>
 bool ExitOnError = FALSE;
 int main(int argc, char ** argv)
 {
@@ -71,12 +71,13 @@ int main(int argc, char ** argv)
     ExitOnError = FALSE;
 
     QApplication a(argc, argv);
+    a.setWindowIcon(QIcon(QString(":/douml.64.png")));
 
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 
-#ifdef DEBUG
+//#ifdef DEBUG
     QsLogging::Logger & logger = QsLogging::Logger::instance();
-    logger.setLoggingLevel(QsLogging::TraceLevel);
+    logger.setLoggingLevel(QsLogging::FatalLevel);
     QDir dir;
     dir.setPath(qApp->applicationDirPath());
     dir.remove(QString("douml") + QString(".log"));
@@ -86,14 +87,13 @@ int main(int argc, char ** argv)
     logger.addDestination(debugDestination.get());
     logger.addDestination(fileDestination.get());
     QLOG_INFO() << "Starting the log";
-#endif
-
+//#endif /* DEBUG */
 
     An<EdgeMenuFactory> factory;
-    factory->AddFactory(TypeIdentifier<ClassDialog>::id(), CreateClassDialogMenu);
-    factory->AddConnectionFunctor(TypeIdentifier<ClassDialog>::id(), ConnectToClassDialog<EdgeMenuDialog>);
-    factory->AddFactory(TypeIdentifier<OperationDialog>::id(), CreateClassDialogMenu);
     factory->AddConnectionFunctor(TypeIdentifier<OperationDialog>::id(), ConnectToClassDialog<EdgeMenuDialog>);
+    factory->AddFactory(TypeIdentifier<OperationDialog>::id(), CreateClassDialogMenu);
+    factory->AddConnectionFunctor(TypeIdentifier<ClassDialog>::id(), ConnectToClassDialog<EdgeMenuDialog>);
+    factory->AddFactory(TypeIdentifier<ClassDialog>::id(), CreateClassDialogMenu);
     factory->AddFactory(TypeIdentifier<ArtifactDialog>::id(), CreateLimitedDialogMenu);
     factory->AddConnectionFunctor(TypeIdentifier<ArtifactDialog>::id(), ConnectToLimitedDialog<EdgeMenuDialog>);
     factory->AddFactory(TypeIdentifier<ConstructorInitializerDialog>::id(), CreateLimitedDialogMenu);
@@ -101,36 +101,45 @@ int main(int argc, char ** argv)
 
 
     UmlDesktop::init();
-    QSettings settings("settings.ini", QSettings::IniFormat);
+
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    QFileInfo info(settings.fileName());
+    bool conv_env = !info.exists();
+    if(conv_env)
+    {
+      settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+      settings.setValue("/test", "test");
+      settings.setValue("Main/compatibility_save", "1");
+      settings.setValue("Main/fileformat", "77");
+      settings.setValue("Main/encoding", "UTF-8");
+      settings.setValue("Failing_Tools/Tools", "Import Rose,Uml projection,C++ state machine,Generate XMI 1.2,Generate .pro");
+      //settings.setValue("headers/quickedit", 0);
+      settings.setValue("quickedit_checkboxes/cpp", "true");
+      settings.setValue("quickedit_checkboxes/java", "false");
+      settings.setValue("quickedit_checkboxes/php", "false");
+      settings.setValue("quickedit_checkboxes/python", "false");
+      settings.setValue("quickedit_checkboxes/idl", "false");
+      settings.setValue("window/size", QSize(927, 595));
+      settings.sync();
+    }
+
     bool overridePresent = QFileInfo("override_transition.txt").exists();
     if(settings.value("Main/compatibility_save") .toInt() == 1 && !overridePresent)
     {
-    QMessageBox::warning(0, QObject::tr("Warning"),
-                         QObject::tr("Douml is working in transitional mode.\n All UI improvements are yours to use,  "
-                                     "but saving is done in the format of Bouml 4.22 "
-                                     "which loses all new c++11 and hierarchy specifiers\n\n"
-                                     "To suppress this warning place empty file override_transition.txt into the application folder\n"
-                                     "To disable the mode - change compatibility_save parameter to 0 in settings.ini\n"));
+      QMessageBox::warning(0, QObject::tr("Warning"),
+         QObject::tr("Douml is working in transitional mode.\n All UI improvements are yours to use,  "
+                     "but saving is done in the format of Bouml 4.22 "
+                     "which loses all new c++11 and hierarchy specifiers\n\n"
+                     "To suppress this warning place empty file override_transition.txt into the application folder\n"
+                     "To disable the mode - change compatibility_save parameter to 0 in settings.ini\n"));
     }
-
-    // note : bool conv_env = !QDir::home().exists(".doumlrc") doesn't work
-    // if the path contains non latin1 characters, for instance cyrillic !
-    QString s = QDir::home().absFilePath(".doumlrc");
-    FILE * fp = fopen((const char *) s, "r");
-    bool conv_env = (fp == 0);
-
-
     if (conv_env)
-        EnvDialog::edit(TRUE);
-    else
-        fclose(fp);
-
-    read_doumlrc();	// for virtual desktop
+       EnvDialog::edit(TRUE);
+    read_doumlrc(); // for virtual desktop
     init_pixmaps();
     init_font();
     Shortcut::init(conv_env);
-
     bool exec = FALSE;
     bool no_gui = FALSE;
 
@@ -140,7 +149,6 @@ int main(int argc, char ** argv)
         else
             exec = !strcmp(argv[2], "-exec");
     }
-
     UmlWindow * uw = new UmlWindow(exec);
 
     if (no_gui)
@@ -149,13 +157,12 @@ int main(int argc, char ** argv)
     {
         uw->showMaximized();
     }
-
     if (argc > 1) {
         try {
             if ((argc == 3) &&
                 !strcmp(argv[2], "-root") &&
-                (msg_critical(TR("DO NOT CONFIRM"),
-                              TR("Root mode protection\n\n"
+                (msg_critical(QObject::TR("DO NOT CONFIRM"),
+                              QObject::TR("Root mode protection\n\n"
                                  "This mode allows me to develop BOUML\n\n"
                                  "do NOT confirm to avoid a disaster !!!\n\n"
                                  "confirm ?"),
@@ -193,11 +200,12 @@ int main(int argc, char ** argv)
 
                 for (index = 4; index != argc; index += 1)
                     cmd += space + WrapperStr(argv[index]);
-
                 ToolCom::run((const char *) cmd, BrowserView::get_project(), with_exit);
             }
             else
-                msg_warning(TR("Error"), TR("Bouml was called with wrong parameters, ignore them"));
+            {
+                msg_warning(QObject::TR("Error"), QObject::TR("Bouml was called with wrong parameters, ignore them"));
+            }
         }
 
 
@@ -207,7 +215,5 @@ int main(int argc, char ** argv)
     catch (...) {
         ;
     }
-
-
     return exit_value();
 }

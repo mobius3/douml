@@ -9,7 +9,7 @@
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 bool IdlSettings::useDefaults()
 {
     UmlCom::send_cmd(idlSettingsCmd, getIdlUseDefaultsCmd);
@@ -22,22 +22,22 @@ bool IdlSettings::set_UseDefaults(bool y)
     return UmlCom::read_bool();
 }
 
-Q3CString IdlSettings::type(Q3CString s)
+QByteArray IdlSettings::type(QByteArray s)
 {
     read_if_needed_();
 
-    UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+    UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
     return (b) ? b->idl : s;
 }
 
-bool IdlSettings::set_Type(Q3CString s, Q3CString v)
+bool IdlSettings::set_Type(QByteArray s, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlTypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+        UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
         if (b == 0)
             b = UmlSettings::add_type(s);
@@ -50,29 +50,29 @@ bool IdlSettings::set_Type(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString IdlSettings::umlType(Q3CString s)
+QByteArray IdlSettings::umlType(QByteArray s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_type(s, &UmlBuiltin::idl);
 }
 
-Q3CString IdlSettings::relationAttributeStereotype(const Q3CString & s)
+QByteArray IdlSettings::relationAttributeStereotype(const QByteArray & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.value(s);
 
     return (b) ? b->idl : s;
 }
 
-bool IdlSettings::set_RelationAttributeStereotype(Q3CString s, Q3CString v)
+bool IdlSettings::set_RelationAttributeStereotype(QByteArray s, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlRelationAttributeStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_rel_attr_stereotype(s);
@@ -85,29 +85,29 @@ bool IdlSettings::set_RelationAttributeStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString IdlSettings::relationAttributeUmlStereotype(Q3CString s)
+QByteArray IdlSettings::relationAttributeUmlStereotype(QByteArray s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_rel_attr_stereotype(s, &UmlStereotype::idl);
 }
 
-Q3CString IdlSettings::classStereotype(Q3CString s)
+QByteArray IdlSettings::classStereotype(QByteArray s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_class_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_class_stereotypes.value(s);
 
     return (b) ? b->idl : s;
 }
 
-bool IdlSettings::set_ClassStereotype(Q3CString s, Q3CString v)
+bool IdlSettings::set_ClassStereotype(QByteArray s, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlClassStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_class_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_class_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_class_stereotype(s);
@@ -120,32 +120,32 @@ bool IdlSettings::set_ClassStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString IdlSettings::classUmlStereotype(Q3CString s)
+QByteArray IdlSettings::classUmlStereotype(QByteArray s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_class_stereotype(s, &UmlStereotype::idl);
 }
 
-Q3CString IdlSettings::include(Q3CString s)
+QByteArray IdlSettings::include(QByteArray s)
 {
     read_if_needed_();
 
-    Q3CString * r = _map_includes[s];
+    QByteArray * r = _map_includes[s];
 
-    return (r) ? *r : Q3CString(0);
+    return (r) ? *r : QByteArray(0);
 }
 
-bool IdlSettings::set_Include(Q3CString s, Q3CString v)
+bool IdlSettings::set_Include(QByteArray s, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlIncludeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        Q3CString * r = _map_includes.take(s);
+        QByteArray * r = _map_includes.take(s);
 
         if (!v.isEmpty())
-            _map_includes.insert(s, new Q3CString(v));
+            _map_includes.insert(s, new QByteArray(v));
 
         if (r)
             delete r;
@@ -156,14 +156,14 @@ bool IdlSettings::set_Include(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::rootDir()
+const QByteArray & IdlSettings::rootDir()
 {
     read_if_needed_();
 
     return _root;
 }
 
-bool IdlSettings::set_RootDir(Q3CString v)
+bool IdlSettings::set_RootDir(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlRootDirCmd, v);
 
@@ -175,14 +175,14 @@ bool IdlSettings::set_RootDir(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::sourceContent()
+const QByteArray & IdlSettings::sourceContent()
 {
     read_if_needed_();
 
     return _src_content;
 }
 
-bool IdlSettings::set_SourceContent(Q3CString v)
+bool IdlSettings::set_SourceContent(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlSourceContentCmd, v);
 
@@ -194,14 +194,14 @@ bool IdlSettings::set_SourceContent(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::sourceExtension()
+const QByteArray & IdlSettings::sourceExtension()
 {
     read_if_needed_();
 
     return _ext;
 }
 
-bool IdlSettings::set_SourceExtension(Q3CString v)
+bool IdlSettings::set_SourceExtension(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlSourceExtensionCmd, v);
 
@@ -213,14 +213,14 @@ bool IdlSettings::set_SourceExtension(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::interfaceDecl()
+const QByteArray & IdlSettings::interfaceDecl()
 {
     read_if_needed_();
 
     return _interface_decl;
 }
 
-bool IdlSettings::set_InterfaceDecl(Q3CString v)
+bool IdlSettings::set_InterfaceDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlInterfaceDeclCmd, v);
 
@@ -232,14 +232,14 @@ bool IdlSettings::set_InterfaceDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::valuetypeDecl()
+const QByteArray & IdlSettings::valuetypeDecl()
 {
     read_if_needed_();
 
     return _valuetype_decl;
 }
 
-bool IdlSettings::set_ValuetypeDecl(Q3CString v)
+bool IdlSettings::set_ValuetypeDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlValuetypeDeclCmd, v);
 
@@ -251,14 +251,14 @@ bool IdlSettings::set_ValuetypeDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::externalClassDecl()
+const QByteArray & IdlSettings::externalClassDecl()
 {
     read_if_needed_();
 
     return _external_class_decl;
 }
 
-bool IdlSettings::set_ExternalClassDecl(Q3CString v)
+bool IdlSettings::set_ExternalClassDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlExternalClassDeclCmd, v);
 
@@ -270,14 +270,14 @@ bool IdlSettings::set_ExternalClassDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::structDecl()
+const QByteArray & IdlSettings::structDecl()
 {
     read_if_needed_();
 
     return _struct_decl;
 }
 
-bool IdlSettings::set_StructDecl(Q3CString v)
+bool IdlSettings::set_StructDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlStructDeclCmd, v);
 
@@ -289,14 +289,14 @@ bool IdlSettings::set_StructDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::typedefDecl()
+const QByteArray & IdlSettings::typedefDecl()
 {
     read_if_needed_();
 
     return _typedef_decl;
 }
 
-bool IdlSettings::set_TypedefDecl(Q3CString v)
+bool IdlSettings::set_TypedefDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlTypedefDeclCmd, v);
 
@@ -308,14 +308,14 @@ bool IdlSettings::set_TypedefDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::exceptionDecl()
+const QByteArray & IdlSettings::exceptionDecl()
 {
     read_if_needed_();
 
     return _exception_decl;
 }
 
-bool IdlSettings::set_ExceptionDecl(Q3CString v)
+bool IdlSettings::set_ExceptionDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlExceptionDeclCmd, v);
 
@@ -327,14 +327,14 @@ bool IdlSettings::set_ExceptionDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::unionDecl()
+const QByteArray & IdlSettings::unionDecl()
 {
     read_if_needed_();
 
     return _union_decl;
 }
 
-bool IdlSettings::set_UnionDecl(Q3CString v)
+bool IdlSettings::set_UnionDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlUnionDeclCmd, v);
 
@@ -346,14 +346,14 @@ bool IdlSettings::set_UnionDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::enumDecl()
+const QByteArray & IdlSettings::enumDecl()
 {
     read_if_needed_();
 
     return _enum_decl;
 }
 
-bool IdlSettings::set_EnumDecl(Q3CString v)
+bool IdlSettings::set_EnumDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlEnumDeclCmd, v);
 
@@ -365,14 +365,14 @@ bool IdlSettings::set_EnumDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::attributeDecl(const char * multiplicity)
+const QByteArray & IdlSettings::attributeDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _attr_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_AttributeDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_AttributeDecl(const char * multiplicity, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlAttributeDeclCmd, multiplicity, v);
@@ -385,14 +385,14 @@ bool IdlSettings::set_AttributeDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::valuetypeAttributeDecl(const char * multiplicity)
+const QByteArray & IdlSettings::valuetypeAttributeDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _valuetype_attr_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_ValuetypeAttributeDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_ValuetypeAttributeDecl(const char * multiplicity, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlValuetypeAttributeDeclCmd, multiplicity, v);
@@ -405,14 +405,14 @@ bool IdlSettings::set_ValuetypeAttributeDecl(const char * multiplicity, Q3CStrin
         return FALSE;
 }
 
-const Q3CString & IdlSettings::unionItemDecl(const char * multiplicity)
+const QByteArray & IdlSettings::unionItemDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _union_item_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_UnionItemDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_UnionItemDecl(const char * multiplicity, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlUnionItemDeclCmd, multiplicity, v);
@@ -425,14 +425,14 @@ bool IdlSettings::set_UnionItemDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::enumItemDecl()
+const QByteArray & IdlSettings::enumItemDecl()
 {
     read_if_needed_();
 
     return _enum_item_decl;
 }
 
-bool IdlSettings::set_EnumItemDecl(Q3CString v)
+bool IdlSettings::set_EnumItemDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlEnumItemDeclCmd, v);
 
@@ -444,14 +444,14 @@ bool IdlSettings::set_EnumItemDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::constDecl(const char * multiplicity)
+const QByteArray & IdlSettings::constDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _const_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_ConstDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_ConstDecl(const char * multiplicity, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlConstDeclCmd, multiplicity, v);
@@ -464,14 +464,14 @@ bool IdlSettings::set_ConstDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::relationDecl(const char * multiplicity)
+const QByteArray & IdlSettings::relationDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _rel_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_RelationDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_RelationDecl(const char * multiplicity, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlRelationDeclCmd, multiplicity, v);
@@ -484,14 +484,14 @@ bool IdlSettings::set_RelationDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::valuetypeRelationDecl(const char * multiplicity)
+const QByteArray & IdlSettings::valuetypeRelationDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _valuetype_rel_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_ValuetypeRelationDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_ValuetypeRelationDecl(const char * multiplicity, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlValuetypeRelationDeclCmd, multiplicity, v);
@@ -504,14 +504,14 @@ bool IdlSettings::set_ValuetypeRelationDecl(const char * multiplicity, Q3CString
         return FALSE;
 }
 
-const Q3CString & IdlSettings::unionRelationDecl(const char * multiplicity)
+const QByteArray & IdlSettings::unionRelationDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _union_rel_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool IdlSettings::set_UnionRelationDecl(const char * multiplicity, Q3CString v)
+bool IdlSettings::set_UnionRelationDecl(const char * multiplicity, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(idlSettingsCmd, setIdlUnionRelationDeclCmd, multiplicity, v);
@@ -524,14 +524,14 @@ bool IdlSettings::set_UnionRelationDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::operationDecl()
+const QByteArray & IdlSettings::operationDecl()
 {
     read_if_needed_();
 
     return _oper_decl;
 }
 
-bool IdlSettings::set_OperationDecl(Q3CString v)
+bool IdlSettings::set_OperationDecl(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlOperationDeclCmd, v);
 
@@ -543,14 +543,14 @@ bool IdlSettings::set_OperationDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::getName()
+const QByteArray & IdlSettings::getName()
 {
     read_if_needed_();
 
     return _get_name;
 }
 
-bool IdlSettings::set_GetName(Q3CString v)
+bool IdlSettings::set_GetName(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlGetNameCmd, v);
 
@@ -562,14 +562,14 @@ bool IdlSettings::set_GetName(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & IdlSettings::setName()
+const QByteArray & IdlSettings::setName()
 {
     read_if_needed_();
 
     return _set_name;
 }
 
-bool IdlSettings::set_SetName(Q3CString v)
+bool IdlSettings::set_SetName(QByteArray v)
 {
     UmlCom::send_cmd(idlSettingsCmd, setIdlSetNameCmd, v);
 
@@ -602,53 +602,53 @@ bool IdlSettings::set_IsSetOneway(bool v)
 
 bool IdlSettings::_defined;
 
-Q3CString IdlSettings::_root;
+QByteArray IdlSettings::_root;
 
-Q3CString IdlSettings::_interface_decl;
+QByteArray IdlSettings::_interface_decl;
 
-Q3CString IdlSettings::_valuetype_decl;
+QByteArray IdlSettings::_valuetype_decl;
 
-Q3CString IdlSettings::_struct_decl;
+QByteArray IdlSettings::_struct_decl;
 
-Q3CString IdlSettings::_typedef_decl;
+QByteArray IdlSettings::_typedef_decl;
 
-Q3CString IdlSettings::_exception_decl;
+QByteArray IdlSettings::_exception_decl;
 
-Q3CString IdlSettings::_union_decl;
+QByteArray IdlSettings::_union_decl;
 
-Q3CString IdlSettings::_enum_decl;
+QByteArray IdlSettings::_enum_decl;
 
-Q3CString IdlSettings::_external_class_decl;
+QByteArray IdlSettings::_external_class_decl;
 
-Q3CString IdlSettings::_attr_decl[3/*multiplicity*/];
+QByteArray IdlSettings::_attr_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_valuetype_attr_decl[3/*multiplicity*/];
+QByteArray IdlSettings::_valuetype_attr_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_union_item_decl[3/*multiplicity*/];
+QByteArray IdlSettings::_union_item_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_enum_item_decl;
+QByteArray IdlSettings::_enum_item_decl;
 
-Q3CString IdlSettings::_const_decl[3/*multiplicity*/];
+QByteArray IdlSettings::_const_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_rel_decl[3/*multiplicity*/];
+QByteArray IdlSettings::_rel_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_valuetype_rel_decl[3/*multiplicity*/];
+QByteArray IdlSettings::_valuetype_rel_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_union_rel_decl[3/*multiplicity*/];
+QByteArray IdlSettings::_union_rel_decl[3/*multiplicity*/];
 
-Q3CString IdlSettings::_oper_decl;
+QByteArray IdlSettings::_oper_decl;
 
-Q3CString IdlSettings::_get_name;
+QByteArray IdlSettings::_get_name;
 
-Q3CString IdlSettings::_set_name;
+QByteArray IdlSettings::_set_name;
 
 bool IdlSettings::_is_set_oneway;
 
-Q3CString IdlSettings::_src_content;
+QByteArray IdlSettings::_src_content;
 
-Q3CString IdlSettings::_ext;
+QByteArray IdlSettings::_ext;
 
-Q3Dict<Q3CString> IdlSettings::_map_includes;
+QHash<QByteArray,QByteArray*> IdlSettings::_map_includes;
 
 void IdlSettings::read_()
 {
@@ -677,13 +677,13 @@ void IdlSettings::read_()
     _map_includes.clear();
 
     if (n > _map_includes.size())
-        _map_includes.resize(n);
+        _map_includes.reserve(n);
 
     for (index = 0; index != n; index += 1) {
-        Q3CString t = UmlCom::read_string();
-        Q3CString i = UmlCom::read_string();
+        QByteArray t = UmlCom::read_string();
+        QByteArray i = UmlCom::read_string();
 
-        _map_includes.insert(t, new Q3CString(i));
+        _map_includes.insert(t, new QByteArray(i));
     }
 
     _src_content = UmlCom::read_string();

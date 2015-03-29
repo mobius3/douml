@@ -1,7 +1,18 @@
 TEMPLATE    = app
 TARGET        = ixmi2
-CONFIG        += debug warn_on qt
-DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
+CONFIG(Debug, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt warn_on Debug
+    QMAKE_POST_LINK = " "
+}
+CONFIG(Release, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt Release
+    QMAKE_POST_LINK = " "
+}
+DEFINES        += WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON BooL=bool
+PRECOMPILED_HEADER += ../../src/misc/mystr.h
+CONFIG += precompile_header
 HEADERS        = ./UmlActivityPartition.h \
           ./UmlBaseNode.h \
           ./UmlPackage.h \
@@ -414,26 +425,24 @@ SOURCES        = ./UmlActivityPartition.cpp \
           ./UmlUseCaseView.cpp \
           ./UmlBaseActivityActionClasses.cpp \
           ./UmlBaseClassItem.cpp \
-          ./UmlClass.cpp
+          ./UmlClass.cpp \
+        ../../src/misc/mystr.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+DEFINES += TRUE=true FALSE=false
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
-Release{
-
-
-    MOC_DIR = bin/douml/xmi2import/MOC_release
-    OBJECTS_DIR = bin/douml/xmi2import/Obj_release
-}
-
-Debug{
-    MOC_DIR = bin/douml/xmi2import/MOC_Debug
-    OBJECTS_DIR = bin/douml/xmi2import/Obj_Debug
-
-}
-    UI_DIR = src/ui
-    DESTDIR = ../../bin
-
+QT += testlib
 QMAKE_CXXFLAGS += -std=gnu++11
+UI_DIR = src/ui
+DESTDIR = ../../bin
+
+Release {
+    MOC_DIR = $${DESTDIR}/moc_release/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_release/$${TARGET}
+}
+
+Debug {
+    MOC_DIR = $${DESTDIR}/moc_debug/$${TARGET}
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/$${TARGET}
+}

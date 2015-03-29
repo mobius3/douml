@@ -32,7 +32,7 @@
 #include <qdialog.h>
 #include <qlayout.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include "CodEditMsgDialog.h"
 #include "ColDiagramView.h"
@@ -42,11 +42,11 @@
 
 void CodEditMsgDialog::exec(ColDiagramView * view, ColMsgList & msgs)
 {
-    QDialog d(0, "Communication diagram message dialog", TRUE, 0);
+    QDialog d(0/*, "Communication diagram message dialog", TRUE, 0*/);
 
-    d.setCaption(TR("Communication diagram message dialog"));
+    d.setWindowTitle(QObject::tr("Communication diagram message dialog"));
 
-    Q3VBoxLayout vbox(&d);
+    QVBoxLayout vbox(&d);
 
     vbox.addWidget(new ColMsgTable(&d, view, msgs));
 

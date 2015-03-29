@@ -1,0 +1,20 @@
+class Logger
+!!!256258.cpp!!!	addDestination(inout destination : Destination) : void
+    assert(destination);
+    d->destList.push_back(destination);
+!!!256386.cpp!!!	setLoggingLevel(in newLevel : Level) : void
+    d->level = newLevel;
+!!!256514.cpp!!!	loggingLevel() : Level
+    return d->level;
+!!!257538.cpp!!!	~Logger()
+    delete d;
+!!!257666.cpp!!!	write(in message : QString) : void
+    for (DestinationList::iterator it = d->destList.begin(),
+         endIt = d->destList.end(); it != endIt; ++it) {
+        if (!(*it)) {
+            assert(!"null log destination");
+            continue;
+        }
+
+        (*it)->write(message);
+    }

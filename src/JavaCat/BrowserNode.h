@@ -31,8 +31,8 @@
 #include "TreeItem.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrCollection>
-#include <Q3PtrList>
+
+
 
 #ifndef REVERSE
 class BrowserView;
@@ -45,6 +45,7 @@ class Class;
 class BrowserNode : public TreeItem
 {
 public:
+    BrowserNode* firstChild() const {return /*(BrowserNode*)this->child(0)*/0;}
     BrowserNode(BrowserNode * parent, const char * n);
     virtual ~BrowserNode() {};	// to avoid compiler warning
 
@@ -66,6 +67,8 @@ public:
     virtual void backup(QDataStream  & dt) const = 0;
     virtual QString get_path() const = 0;
 #endif
+    BrowserNode* nextSibling();
+    virtual QVariant	data(int column, int role) const{};
 };
 
 
@@ -73,13 +76,14 @@ public:
 
 // a sortable list of BrowserNode
 
-#include <q3ptrlist.h>
 
-class BrowserNodeList : public Q3PtrList<BrowserNode>
+
+class BrowserNodeList : public QList<BrowserNode *>
 {
 public:
     void search(BrowserNode * bn, int k, const QString & s, bool cs);
-    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
+    static bool lessThan(BrowserNode *a, BrowserNode *b);
+    void sort();
 };
 
 #endif

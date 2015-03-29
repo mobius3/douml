@@ -3,15 +3,14 @@
 
 
 #include "UmlBaseNode.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 // This class manages 'nodes'
 //
 // You can modify it as you want (except the constructor)
-class UmlNode : public UmlBaseNode
-{
-public:
-    UmlNode(void * id, const Q3CString & n) : UmlBaseNode(id, n) {};
+class UmlNode : public UmlBaseNode {
+  public:
+    UmlNode(void * id, const QByteArray & n) : UmlBaseNode(id, n) {};
 
 };
 

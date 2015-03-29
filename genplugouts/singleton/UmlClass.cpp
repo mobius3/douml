@@ -7,11 +7,11 @@
 #include "UmlOperation.h"
 #include "UmlRelation.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 void UmlClass::singleton()
 {
     // checking
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem*> ch = children();
     int index;
     bool ok = TRUE;
 
@@ -26,7 +26,7 @@ void UmlClass::singleton()
     UmlOperation * op = UmlBaseOperation::create(this, name());
 
     if (op == 0)
-        UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create constructor for <i>")
+        UmlCom::trace(QByteArray("<font face=helvetica><b>cannot create constructor for <i>")
                       + name() + "</i></b></font><br><hr><br>");
     else {
         op->set_Visibility(PrivateVisibility);
@@ -36,14 +36,14 @@ void UmlClass::singleton()
         op = UmlBaseOperation::create(this, "instance");
 
         if (op == 0)
-            UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create operation <i>instance</i> for <i>")
+            UmlCom::trace(QByteArray("<font face=helvetica><b>cannot create operation <i>instance</i> for <i>")
                           + name() + "</i></b></font><br><hr><br>");
         else {
             op->set_Visibility(PublicVisibility);
             op->set_isClassMember(TRUE);
 
             UmlTypeSpec t;
-            Q3CString s;
+            QByteArray s;
 
             t.type = this;
             op->set_ReturnType(t);
@@ -52,7 +52,7 @@ void UmlClass::singleton()
 
             s = CppSettings::operationDecl();
 
-            if ((index = s.find("${type}")) != -1) {
+            if ((index = s.indexOf("${type}")) != -1) {
                 s.insert(index + 7, " *");
                 op->set_CppDecl(s);
             }
@@ -63,14 +63,14 @@ void UmlClass::singleton()
 
             s = CppSettings::operationDef();
 
-            if (((s.find("${body}")) != -1) && ((index = s.find("${type}")) != -1))
+            if (((s.indexOf("${body}")) != -1) && ((index = s.indexOf("${type}")) != -1))
                 s.insert(index + 7, " *");
             else {
                 UmlCom::trace("<font face=helvetica><b>strange default cpp operation definition: no <i>${type}</i> or <i>${body}</i></b></font><br><hr><br>");
                 s = "${inline}${type} * ${class}::${name}${(}${)}${const}${volatile}${staticnl}{\n${body}}\n";
             }
 
-            s.replace(s.findRev("${body}"),	// cannot be -1 !
+            s.replace(s.lastIndexOf("${body}"),	// cannot be -1 !
                       7,
                       "  return (the == 0) ? the = new ${type}() : the;\n");
             op->set_CppDef(s);
@@ -79,7 +79,7 @@ void UmlClass::singleton()
 
             s = JavaSettings::operationDef();
 
-            if ((index = s.findRev("${body}")) != -1)
+            if ((index = s.lastIndexOf("${body}")) != -1)
                 op->set_JavaDecl(s.replace(index, 7,
                                            "  return (the == null) ? the = new ${type}() : the;\n"));
             else {
@@ -107,7 +107,7 @@ return (the == null) ? the = new ${type}() : the;\n\
                 UmlBaseRelation::create(aDirectionalAssociation, this, this);
 
             if (rel == 0) {
-                UmlCom::trace(Q3CString("<font face=helvetica><b>cannot create relation <i>the</i> for <i>")
+                UmlCom::trace(QByteArray("<font face=helvetica><b>cannot create relation <i>the</i> for <i>")
                               + name() + "</i></b></font><br><hr><br>");
 
                 if (stereotype_changed)

@@ -32,22 +32,27 @@
 #include <qstringlist.h>
 //Added by qt3to4:
 #include <QCloseEvent>
-#include <Q3ValueList>
-#include <Q3PopupMenu>
+//#include <QList>
+////#include <QMenu>
 #include <QLabel>
 #include <QKeyEvent>
 #include <QMainWindow>
+#include <QSharedPointer>
+#include <QModelIndex>
+#include <functional>
+#include <QMdiArea>
+//#include "Libs/L_UniversalModels/include/ItemController.h"
 
-class Q3CanvasView;
+class QGraphicsView;
 class QWorkspace;
 class QToolBar;
-class Q3PopupMenu;
 class QSplitter;
 class QToolButton;
 
 class BrowserView;
 class BrowserNode;
 class MultiLineEdit;
+class QuickEdit;
 
 #include "UmlEnum.h"
 
@@ -55,6 +60,14 @@ class MultiLineEdit;
 
 /* This class seems to be responsible for the main Project, with Open,
  * Save, Close, etc... It is the main window */
+class QTreeView;
+class QTabWidget;
+class TreeItemInterface;
+class TreeModel;
+class QLineEdit;
+class QTreeWidgetItem;
+class CatalogWidget;
+class QShortcut;
 class UmlWindow : public QMainWindow
 {
     Q_OBJECT
@@ -62,19 +75,32 @@ class UmlWindow : public QMainWindow
 protected:
     static UmlWindow * the;
 
-    QWorkspace * ws;
-    BrowserView * browser;
+    QMdiArea  * ws = nullptr;
+
+    BrowserView * browser = nullptr;
+    BrowserView * dummyBrowser = nullptr;
+    // perverted stuff
+    QSplitter* splTreeTab = nullptr;
+    CatalogWidget* wdgCatalog = nullptr;
+    void SetupTreeModel();
+    void SetupTreeController();
+    void PerformFiltering();
+    QList<std::function<bool (TreeItemInterface *)> > CreateCheckList();
+
+    QuickEdit* quickEdit = nullptr;
+    QShortcut* sh1;
+    // end of perverted stuff
     MultiLineEdit * comment;
     BrowserNode * commented;	// the commented object
     QToolBar * projectTools;
-    Q3PopupMenu * projectMenu;
-    Q3PopupMenu * windowsMenu;
-    Q3PopupMenu * toolMenu;
-    Q3PopupMenu * langMenu;
-    Q3PopupMenu * miscMenu;
-    Q3PopupMenu * fontSizeMenu;
-    Q3PopupMenu * formatMenu;
-    Q3PopupMenu * formatLandscapeMenu;
+    QMenu * projectMenu;
+    QMenu * windowsMenu;
+    QMenu * toolMenu;
+    QMenu * langMenu;
+    QMenu * miscMenu;
+    QMenu * fontSizeMenu;
+    QMenu * formatMenu;
+    QMenu * formatLandscapeMenu;
     QAction* cppAction = nullptr;
     QAction* javaAction = nullptr;
     QAction* phpAction = nullptr;
@@ -82,19 +108,20 @@ protected:
     QAction* idlAction = nullptr;
     QAction* generateLabelAction = nullptr;
     QLabel* generateLabel = nullptr;
-    int use_cpp_id;
-    int use_java_id;
-    int use_php_id;
-    int use_python_id;
-    int use_idl_id;
-    int verbose_gen_id;
-    int preserve_bodies_id;
-    int add_operation_profile_id;
-    int shortcut_id;
-    int img_root_dir_id;
-    int show_browser_stereotypes_id;
-    int completion_id;
+    QAction* use_cpp_id;
+    QAction* use_java_id;
+    QAction* use_php_id;
+    QAction* use_python_id;
+    QAction* use_idl_id;
+    QAction*  verbose_gen_id;
+    QAction*  preserve_bodies_id;
+    QAction*  add_operation_profile_id;
+    QAction*  shortcut_id;
+    QAction*  img_root_dir_id;
+    QAction*  show_browser_stereotypes_id;
+    QAction*  completion_id;
     QStringList historic;
+
     CanvasFormat format;
     QString img_root_dir;
     QSplitter * spl1;
@@ -102,13 +129,15 @@ protected:
     char style;	// '?' unknown, 'm' = motif, '+' = motif+, 'w' = windows
     QToolButton * prev;
     QToolButton * next;
-    Q3ValueList<BrowserNode *> select_historic;
-
+    QToolButton * tbClipboard = nullptr;
+    QToolButton * tbQuickEdit = nullptr;
+    QList<BrowserNode *> select_historic;
+    bool quitConfirmed = false;
 public:
     UmlWindow(bool batch);
     virtual ~UmlWindow();
 
-    void load(QString fn, bool forcesaveas = FALSE);
+
     bool can_close();
     static void set_marked_generation();
     static void set_selected_generation();
@@ -116,41 +145,45 @@ public:
     static void set_commented(BrowserNode * bn);
     static void update_comment_if_needed(BrowserNode * bn);
     static void set_message(const QString &);
-    static QWorkspace * get_workspace();
     static void clear();
-    static void historic_add(QString fn);
     static void historic_forget(BrowserNode *);
     static void save_it();
     static bool saveas_it();
-    static void close_it();
     static void do_close();
     static void do_quit();
+    static void historic_add(QString fn);
+    static void close_it();
+    void load(QString fn, bool forcesaveas = FALSE);
+    static QMdiArea * get_workspace();
     static void load_it();
     static void load_it(QString fn);
     static void reload_it();
-    static CanvasFormat default_format();
+    static void abort_line_construction();
     static void set_default_format(CanvasFormat);
+    static CanvasFormat default_format();
     static QString images_root_dir();
     static void set_images_root_dir(QString);
-    static void abort_line_construction();
     static void clear_select_historic();
+
     static void browser_search_it();
     static void print_it();
-
 protected:
-    void init_format_menu(Q3PopupMenu * m, Q3PopupMenu * lm);
+    void init_format_menu(QMenu * m, QMenu * lm);
+
     void is_selected(BrowserNode *);
     virtual void closeEvent(QCloseEvent *);
     void save_session();
-    void read_session();
-    void setup_generator_action_visibility();
 
+    void setup_generator_action_visibility();
+    void read_session();
 private slots:
+    void saveAs();
+    void save();
     void newProject();
     void newFromTemplate();
     void load();
-    void save();
-    void saveAs();
+
+
     void print();
     void close();
     void quit();
@@ -168,31 +201,36 @@ private slots:
     void use_php();
     void use_python();
     void use_idl();
+
+    void verbose();
+    void preserve();
+    void addoperationprofile();
+    void edit_shortcuts();
     bool using_cpp();
     bool using_java();
     bool using_php();
     bool using_python();
     bool using_idl();
-    void verbose();
-    void preserve();
-    void addoperationprofile();
-    void edit_shortcuts();
     void edit_env();
-    void edit_image_root_dir();
-
     void motif_style();
     void motifplus_style();
     //void sgi_style();
     //void cde_style();
     void windows_style();
 
+
+
+
+
     void show_stereotypes();
-
-    void do_completion();
-
     void about();
     void aboutQt();
     void help();
+
+     void edit_image_root_dir();
+    void do_completion();
+
+
 
     void show_trace();
     void cpp_generate();
@@ -212,38 +250,41 @@ private slots:
     void java_roundtripbody();
     void php_roundtripbody();
     void python_roundtripbody();
-    void run_tool(int param);
-    void tool_settings();
-    void import_tool_settings();
     void plug_out_upgrade();
 
-    void comment_changed();
+    void run_tool();
+    void tool_settings();
+    void import_tool_settings();
+
+
     void preferred_geometry();
     void close_all_windows();
 
-    void toolMenuAboutToShow();
+    void comment_changed();
+    void historicActivated();
     void projectMenuAboutToShow();
-    void historicActivated(int id);
+    void toolMenuAboutToShow();
 
     void langMenuAboutToShow();
 
     void miscMenuAboutToShow();
 
     void fontSizeMenuAboutToShow();
-    void setFontSize(int);
+    void setFontSize();
 
     void formatMenuAboutToShow();
-    void setFormat(int);
-
+    void setFormat();
     void windowsMenuAboutToShow();
-    void windowsMenuActivated(int id);
-    void dialogsMenuActivated(int id);
-
+    void windowsMenuActivated();
+    void dialogsMenuActivated();
     virtual void keyPressEvent(QKeyEvent * e);
-
 public slots:
     void whats_this() const;
-
+    void OnPickSelectionFromItem(const QModelIndex&,const QModelIndex& );
+    void OnChooseQuickEditMode(QTreeWidgetItem *item, QTreeWidgetItem *old);
+    void OnShowQuickEdit();
+    void OnCallClipboardMenu();
+    //void OnCallQuickEdit();
 
 };
 

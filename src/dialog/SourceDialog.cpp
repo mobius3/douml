@@ -38,8 +38,8 @@
 #include <qlabel.h>
 //Added by qt3to4:
 #include <QEvent>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "SourceDialog.h"
 #include "UmlDesktop.h"
@@ -54,8 +54,9 @@ bool NumberedMultiLineEdit::event(QEvent * e)
     bool r = MultiLineEdit::event(e);
     int l;
     int c;
-
+#ifdef habip
     getCursorPosition(&l, &c);
+#endif
 
     if ((c != old_c) || (l != old_l)) {
         old_c = c;
@@ -69,14 +70,14 @@ bool NumberedMultiLineEdit::event(QEvent * e)
 QSize SourceDialog::previous_size;
 
 SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
-    : QDialog(0, 0, FALSE, Qt::WDestructiveClose),
+    : QDialog(0),
       path(p), edited(flg), edition_number(edn)
 {
     QFileInfo fi(p);
 
-    setCaption(fi.fileName());
+    setWindowTitle(fi.fileName());
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     e = new NumberedMultiLineEdit(this);
     QFont font = e->font();
@@ -88,7 +89,8 @@ SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
     e->setFont(font);
     vbox->addWidget(e);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     lineColumn = new QLabel(this);
@@ -104,7 +106,7 @@ SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
     if (f.open(QIODevice::ReadOnly)) {
         char * s = new char[size + 1];
 
-        if (f.readBlock(s, size) != -1) {
+        if (f.read(s, size) != -1) {
             edited = TRUE;
             edition_number += 1;
 
@@ -129,13 +131,13 @@ SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
 #endif
         }
         else
-            e->setText(TR("cannot read %1", p));
+            e->setText(TR("cannot read %1"/*, p*/));
 
         delete [] s;
         f.close();
     }
     else
-        e->setText(TR("cannot read %1", p));
+        e->setText(TR("cannot read %1"/*, p*/));
 
 #if 0
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);

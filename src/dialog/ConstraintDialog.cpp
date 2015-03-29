@@ -33,11 +33,9 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-#include <Q3ValueList>
-
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QList>
 #include "ConstraintDialog.h"
 #include "ConstraintCanvas.h"
 #include "CdClassCanvas.h"
@@ -47,15 +45,16 @@
 #include "strutil.h"
 #include "MyTable.h"
 #include "translate.h"
+#include <QHeaderView>
 
 QSize ConstraintDialog::previous_size;
 
 ConstraintDialog::ConstraintDialog(ConstraintCanvas * c)
-    : QDialog(0, "ConstraintVisibilityDialog", TRUE, 0), constraint(c)
+    : QDialog(0/*, "ConstraintVisibilityDialog", TRUE, 0*/), constraint(c)
 {
-    setCaption(TR("Constraints visibility dialog"));
+    setWindowTitle(TR("Constraints visibility dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->setMargin(5);
 
@@ -63,10 +62,10 @@ ConstraintDialog::ConstraintDialog(ConstraintCanvas * c)
     vbox->addWidget(table);
     vbox->addWidget(new QLabel(this));
 
-    Q3HBoxLayout * hbox;
+    QHBoxLayout * hbox;
 
-    hbox = new Q3HBoxLayout(vbox);
-
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     cb_visible = new QCheckBox(TR("Specify visible elements rather than hidden ones"), this);
     cb_visible->setChecked(constraint->indicate_visible);
     hbox->addWidget(cb_visible);
@@ -93,7 +92,8 @@ ConstraintDialog::ConstraintDialog(ConstraintCanvas * c)
     connect(hideinherited, SIGNAL(clicked()), this, SLOT(hide_inherited()));
 
     vbox->addWidget(new QLabel(this));
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
 
     hbox->setMargin(5);
     QPushButton * ok = new QPushButton(TR("&OK"), this);
@@ -120,7 +120,7 @@ void ConstraintDialog::polish()
 {
     static bool first = TRUE;
 
-    QDialog::polish();
+    QDialog::ensurePolished();
 
     if (first) {
         first = FALSE;
@@ -162,75 +162,78 @@ void ConstraintDialog::accept()
 // v/h, icon, name, constraint
 
 ConstraintTable::ConstraintTable(QWidget * parent, ConstraintCanvas * c)
-    : Q3Table(c->elements.count(), 4, parent)
+    : QTableWidget(c->elements.count(), 4, parent)
 {
-    setSorting(true);
     setSelectionMode(NoSelection);
-    setRowMovingEnabled(FALSE);
-
+    //setSortingEnabled(true);
+    verticalHeader()->setSectionsMovable(false);
+    QStringList headerLabels;
+    headerLabels<<TR("visible")
+               <<" "
+              <<TR("element")
+             <<TR("constraint");
+    /*
     horizontalHeader()->setLabel(0, TR("visible"));
     horizontalHeader()->setLabel(1, " ");
     horizontalHeader()->setLabel(2, TR("element"));
     horizontalHeader()->setLabel(3, TR("constraint"));
-    setColumnStretchable(0, FALSE);
-    setColumnStretchable(1, FALSE);
-
-    int row;
+    */
+    setHorizontalHeaderLabels(headerLabels);
+    horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+    horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
     bool v = c->indicate_visible;
-    Q3ValueList<BrowserNode *> & hv = c->hidden_visible;
+    QList<BrowserNode *> & hv = c->hidden_visible;
     BrowserNodeList & elts = c->elements;
-    BrowserNode * bn;
     QString yes = TR("  yes");
-    QString empty;
 
     elts.sort();
 
-    for (bn = elts.first(), row = 0; bn != 0; bn = elts.next(), row += 1) {
-        if ((v) ? hv.findIndex(bn) != -1 : hv.findIndex(bn) == -1)
-            setText(row, 0, yes);
+    int row = 0;
+    foreach (BrowserNode *bn, elts) {
+        setItem(row, 0, new QTableWidgetItem());
+        setItem(row, 1, new QTableWidgetItem());
+        if ((v) ? hv.indexOf(bn) != -1 : hv.indexOf(bn) == -1)
+            item( row, 0)->setText( yes);
 
-        setPixmap(row, 1, *(bn->pixmap(0)));
+        item(row, 1)->setIcon( *(bn->pixmap(0)));
 
         TableItem * ti;
 
-        ti = new TableItem(this, Q3TableItem::Never, bn->full_name(TRUE));
-        ti->setReplaceable(FALSE);
+        ti = new TableItem(this, TableItem::Never, bn->full_name(TRUE), TableItem::TableItemType);
         setItem(row, 2, ti);
 
         QString s = toUnicode(bn->constraint());
         int n = s.count('\n');
 
-        ti = new TableItem(this, Q3TableItem::Never, s);
-        ti->setReplaceable(FALSE);
+        ti = new TableItem(this, TableItem::Never, s, TableItem::TableItemType);
         setItem(row, 3, ti);
 
         if (n != 0) {
             // note : adjustRow(row) does nothing
             setRowHeight(row, rowHeight(row) * (n + 1));
         }
+        ++row;
     }
-
-    adjustColumn(0);
-    adjustColumn(1);
-    setColumnStretchable(2, TRUE);
-    setColumnStretchable(3, TRUE);
-
+    horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+    horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+    horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
     connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
             this, SLOT(button_pressed(int, int, int, const QPoint &)));
 }
 
 void ConstraintTable::button_pressed(int row, int col, int, const QPoint &)
 {
-    if (col == 0)
-        setText(row, col, (text(row, col).isEmpty()) ? TR("  yes") : QString());
+    if (col == 0&&item(row, col))
+        item(row, col)->setText( (item(row, col)->text().isEmpty()) ? TR("  yes") : QString());
 }
 
 void ConstraintTable::show_all()
 {
     int row;
 
-    for (row = 0; row != numRows(); row += 1)
-        setText(row, 0, TR("  yes"));
+    for (row = 0; row != rowCount(); row += 1)
+        if(item(row, 0))
+        item(row, 0)->setText( TR("  yes"));
 }
 
 void ConstraintTable::hide_all()
@@ -238,35 +241,37 @@ void ConstraintTable::hide_all()
     QString empty;
     int row;
 
-    for (row = 0; row != numRows(); row += 1)
-        setText(row, 0, empty);
+    for (row = 0; row != rowCount(); row += 1)
+        item(row, 0)->setText( empty);
 }
 
 void ConstraintTable::hide_inherited(ConstraintCanvas * c)
 {
     BrowserNode * cl = c->cl->get_bn();
     BrowserNodeList & elts = c->elements;
-    BrowserNode * bn;
-    int row;
     QString yes = TR("  yes");
     QString empty;
 
-    for (bn = elts.first(), row = 0; bn != 0; bn = elts.next(), row += 1)
-        setText(row, 0,
+    int row = 0;
+    foreach (BrowserNode *bn, elts) {
+        item(row, 0)->setText(
                 ((bn == cl) || (bn->parent() == cl)) ? yes : empty);
+        ++row;
+    }
 }
 
 void ConstraintTable::update(ConstraintCanvas * c)
 {
-    Q3ValueList<BrowserNode *> & list = c->hidden_visible;
+    QList<BrowserNode *> & list = c->hidden_visible;
     bool empty_if_visible = !c->indicate_visible;
     BrowserNodeList & elts = c->elements;
-    BrowserNode * bn;
-    int row;
 
     list.clear();
 
-    for (bn = elts.first(), row = 0; bn != 0; bn = elts.next(), row += 1)
-        if (text(row, 0).isEmpty() == empty_if_visible)
+    int row = 0;
+    foreach (BrowserNode *bn, elts) {
+        if (item(row, 0) && item(row, 0)->text().isEmpty() == empty_if_visible)
             list.append(bn);
+        ++row;
+    }
 }

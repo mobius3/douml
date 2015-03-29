@@ -31,8 +31,6 @@
 // fstream is bugged under Windows
 #include <stdio.h>
 #include <qstring.h>
-#include <q3asciidict.h>
-//Added by qt3to4:
 #include "misc/mystr.h"
 
 class LexContext
@@ -53,7 +51,7 @@ private:
 class Lex
 {
 private:
-    static Q3AsciiDict<char> _defines;
+    static QHash<char*,char*> _defines;
     static QString _filename;
     static char * _buffer;
     static LexContext _context;

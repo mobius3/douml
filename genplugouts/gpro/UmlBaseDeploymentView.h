@@ -4,15 +4,14 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlDeploymentView;
 class UmlPackage;
 
 //  Manage the deployment views
-class UmlBaseDeploymentView : public UmlItem
-{
-public:
+class UmlBaseDeploymentView : public UmlItem {
+  public:
     // returns a new deployment view named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,9 +23,9 @@ public:
     virtual anItemKind kind();
 
 
-protected:
+  protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseDeploymentView(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseDeploymentView(void * id, const QByteArray & n) : UmlItem(id, n) {};
 
 };
 

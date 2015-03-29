@@ -2,7 +2,7 @@
 #define _DIALOG_H
 
 
-#include <q3cstring.h>
+
 #include <qstring.h>
 
 #include <qdialog.h>
@@ -86,7 +86,7 @@ protected:
 protected slots:
     void do_replace();
 
-    Q3CString digest(const QString s);
+    QByteArray digest(const QString s);
 
     virtual void polish();
 

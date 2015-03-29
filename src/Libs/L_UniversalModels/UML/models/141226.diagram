@@ -1,0 +1,26 @@
+format 76
+
+usecasecanvas 128042 usecase_ref 128042 // Vector of Connections
+  xyzwh 276 225 3005 64 32 label_xy 242 257
+end
+usecasecanvas 128170 usecase_ref 128170 // ARMWindow
+  xyzwh 357 109 3005 64 32 label_xy 352 141
+end
+usecasecanvas 128298 usecase_ref 128298 // Settings Structure
+  xyzwh 160 102 3005 64 32 label_xy 136 134
+end
+usecasecanvas 128426 usecase_ref 128426 // Abstract Connection
+  xyzwh 172 392 3005 64 32 label_xy 143 424
+end
+usecasecanvas 128554 usecase_ref 128554 // Abstract User
+  xyzwh 424 630 3005 64 32 label_xy 415 662
+end
+usecasecanvas 128682 usecase_ref 128682 // System User
+  xyzwh 323 578 3005 64 32 label_xy 317 610
+end
+usecasecanvas 128810 usecase_ref 128810 // User
+  xyzwh 493 559 3005 64 32 label_xy 511 591
+end
+note 128938 "Is a global user for the DB. Is kept at the using machine in a ciphered state."
+  xyzwh 49 623 2000 213 73
+end

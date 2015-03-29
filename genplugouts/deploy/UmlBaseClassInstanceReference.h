@@ -1,9 +1,6 @@
 #ifndef _UMLBASECLASSINSTANCEREFERENCE_H
 #define _UMLBASECLASSINSTANCEREFERENCE_H
-
-
-#include <q3cstring.h>
-
+#include <QByteArray>
 class UmlClass;
 class UmlClassInstance;
 
@@ -20,7 +17,7 @@ public:
     }
 
     // return the name of the instance
-    const Q3CString & name() const;
+    const QByteArray & name() const;
 
 
 private:
@@ -28,7 +25,7 @@ private:
 
     UmlClassInstance * _instance;
 
-    Q3CString _name;
+    QByteArray _name;
 
     // internal, don't call it
     void read_();

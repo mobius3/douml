@@ -31,10 +31,10 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3PointArray>
+#include <QPolygon>
 #include <QPixmap>
 
 #include "DeploymentNodeCanvas.h"
@@ -56,10 +56,10 @@
 #include "translate.h"
 
 DeploymentNodeCanvas::DeploymentNodeCanvas(BrowserNode * bn, UmlCanvas * canvas,
-        int x, int y, int id)
+                                           int x, int y, int id)
     : DiagramCanvas(0, canvas, x, y, DEPLOYMENTNODE_CANVAS_MIN_SIZE,
                     DEPLOYMENTNODE_CANVAS_MIN_SIZE, id),
-    itscolor(UmlDefaultColor), used_color(UmlDefaultColor)
+      itscolor(UmlDefaultColor), used_color(UmlDefaultColor)
 {
     browser_node = bn;
     write_horizontally = UmlDefaultState;
@@ -135,17 +135,17 @@ void DeploymentNodeCanvas::set_type(BrowserNode * t)
 BrowserNode * DeploymentNodeCanvas::new_type()
 {
     BrowserNode * container = (BrowserNode *)
-                              the_canvas()->browser_diagram()->parent();
+            the_canvas()->browser_diagram()->parent();
 
     return (container->is_writable())
-           ? BrowserDeploymentNode::add_deploymentnode(container)
-           : 0;
+            ? BrowserDeploymentNode::add_deploymentnode(container)
+            : 0;
 }
 
 bool DeploymentNodeCanvas::new_type_available()
 {
     BrowserNode * container = (BrowserNode *)
-                              the_canvas()->browser_diagram()->parent();
+            the_canvas()->browser_diagram()->parent();
 
     return container->is_writable();
 }
@@ -181,8 +181,8 @@ int DeploymentNodeCanvas::min_width()
     int min_w = (int)(DEPLOYMENTNODE_CANVAS_MIN_SIZE * the_canvas()->zoom());
 
     return (wi < min_w)
-           ? min_w
-           : wi;
+            ? min_w
+            : wi;
 }
 
 int DeploymentNodeCanvas::min_height()
@@ -204,8 +204,8 @@ int DeploymentNodeCanvas::min_height()
     int min_h = (int)(DEPLOYMENTNODE_CANVAS_MIN_SIZE * the_canvas()->zoom());
 
     return (he < min_h)
-           ? min_h
-           : he;
+            ? min_h
+            : he;
 }
 
 void DeploymentNodeCanvas::check_size()
@@ -218,8 +218,8 @@ void DeploymentNodeCanvas::check_size()
     show_properties = (dflt.componentdrawingsettings.show_stereotype_properties == UmlYes);
 
     const QPixmap * px =
-        ProfiledStereotypes::diagramPixmap(browser_node->get_data()->get_stereotype(),
-                                           the_canvas()->zoom());
+            ProfiledStereotypes::diagramPixmap(browser_node->get_data()->get_stereotype(),
+                                               the_canvas()->zoom());
 
     if (px != 0) {
         QFontMetrics fm(the_canvas()->get_font(UmlNormalBoldFont));
@@ -260,11 +260,11 @@ void DeploymentNodeCanvas::change_scale()
 {
     double scale = the_canvas()->zoom();
 
-    Q3CanvasRectangle::setVisible(FALSE);
-    setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+    QGraphicsRectItem::setVisible(FALSE);
+    setRect(0,0,(int)(width_scale100 * scale), (int)(height_scale100 * scale));
     check_size();
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void DeploymentNodeCanvas::draw(QPainter & p)
@@ -274,14 +274,15 @@ void DeploymentNodeCanvas::draw(QPainter & p)
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
     FILE * fp = svg();
+    QBrush backBrush = p.background();
 
     if (fp != 0)
         fputs("<g>\n", fp);
 
     const int three = (int)(3 * the_canvas()->zoom());
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
     const QPixmap * px =
-        ProfiledStereotypes::diagramPixmap(browser_node->get_data()->get_stereotype(), the_canvas()->zoom());
+            ProfiledStereotypes::diagramPixmap(browser_node->get_data()->get_stereotype(), the_canvas()->zoom());
 
     if (px != 0) {
         p.setBackgroundMode(::Qt::TransparentMode);
@@ -293,7 +294,7 @@ void DeploymentNodeCanvas::draw(QPainter & p)
         if (fp != 0)
             // pixmap not really exported in SVG
             fprintf(fp, "\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                     svg_color(UmlBlack), lft, r.y(), px->width() - 1, px->height() - 1);
 
         r.setTop(r.top() + px->height());
@@ -313,7 +314,7 @@ void DeploymentNodeCanvas::draw(QPainter & p)
 
         QColor co = color(c);
         const int added = (int)(DEPLOYMENTNODE_CANVAS_ADDED * the_canvas()->zoom());
-        Q3PointArray a(7);
+        QPolygon a(7);
 
         r.setTop(r.top() + added);
         r.setRight(r.right() - added);
@@ -328,12 +329,13 @@ void DeploymentNodeCanvas::draw(QPainter & p)
 
         if (c == UmlTransparent) {
             p.setBackgroundMode(::Qt::TransparentMode);
-            p.setBackgroundColor(co);
+            backBrush.setColor(co);
+            p.setBackground(backBrush);
             p.drawPolyline(a);
 
             if (fp != 0) {
                 fprintf(fp, "\t<rect fill=\"none\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                            " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                         r.x(), r.y(), r.width() - 1, r.height() - 1);
                 draw_poly(fp, a, UmlTransparent);
             }
@@ -344,13 +346,15 @@ void DeploymentNodeCanvas::draw(QPainter & p)
             p.setBackgroundMode(::Qt::OpaqueMode);
             p.fillRect(r, co);
             p.setBrush(co);
-            p.drawPolygon(a, TRUE, 0, 6);
+            //p.drawPolygon(a, TRUE, 0, 6);
+            p.drawPolygon(a);
             p.setBrush(brsh);
-            p.setBackgroundColor(co);
+            backBrush.setColor(co);
+            p.setBackground(backBrush);
 
             if (fp != 0) {
                 fprintf(fp, "\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                            " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                         svg_color(c),
                         r.x(), r.y(), r.width() - 1, r.height() - 1);
                 draw_poly(fp, a, c);
@@ -362,7 +366,7 @@ void DeploymentNodeCanvas::draw(QPainter & p)
 
         if (fp != 0)
             fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
+                        " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
                     r.right(), r.top(), a.point(2).x(), a.point(2).y());
 
         QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
@@ -410,16 +414,19 @@ void DeploymentNodeCanvas::draw(QPainter & p)
     }
 
     p.setFont(the_canvas()->get_font(UmlNormalFont));
-    p.setBackgroundColor(bckgrnd);
-
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
     if (fp != 0)
         fputs("</g>\n", fp);
 
     if (selected())
         show_mark(p, rect());
 }
-
-UmlCode DeploymentNodeCanvas::type() const
+void DeploymentNodeCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode DeploymentNodeCanvas::typeUmlCode() const
 {
     return UmlDeploymentNode;
 }
@@ -451,8 +458,8 @@ void DeploymentNodeCanvas::open()
 void DeploymentNodeCanvas::modified()
 {
     used_color = (itscolor == UmlDefaultColor)
-                 ? the_canvas()->browser_diagram()->get_color(UmlDeploymentNode)
-                 : itscolor;
+            ? the_canvas()->browser_diagram()->get_color(UmlDeploymentNode)
+            : itscolor;
     // force son reaffichage
     hide();
     check_size();
@@ -465,97 +472,101 @@ void DeploymentNodeCanvas::modified()
 
 void DeploymentNodeCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Add related elements"), 10);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select node in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Add related elements"), 10);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select node in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
-    m.insertItem(TR("Set node associated diagram"), 6);
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Set node associated diagram"), 6);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlDeploymentNode, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    int rank = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int rank = retAction->data().toInt();
 
-    switch (rank) {
-    case 0:
-        upper();
-        modified();	// call package_modified()
-        return;
+        switch (rank) {
+        case 0:
+            upper();
+            modified();	// call package_modified()
+            return;
 
-    case 1:
-        lower();
-        modified();	// call package_modified()
-        return;
+        case 1:
+            lower();
+            modified();	// call package_modified()
+            return;
 
-    case 13:
-        z_up();
-        modified();	// call package_modified()
-        return;
+        case 13:
+            z_up();
+            modified();	// call package_modified()
+            return;
 
-    case 14:
-        z_down();
-        modified();	// call package_modified()
-        return;
+        case 14:
+            z_down();
+            modified();	// call package_modified()
+            return;
 
-    case 2:
-        open();
-        return;
+        case 2:
+            open();
+            return;
 
-    case 3:
-        edit_drawing_settings();
-        return;
+        case 3:
+            edit_drawing_settings();
+            return;
 
-    case 4:
-        browser_node->select_in_browser();
-        return;
+        case 4:
+            browser_node->select_in_browser();
+            return;
 
-    case 5:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
+        case 5:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
 
-    case 6:
-        ((BrowserDeploymentNode *) browser_node)
-        ->set_associated_diagram((BrowserDeploymentDiagram *)
-                                 the_canvas()->browser_diagram());
-        return;
+        case 6:
+            ((BrowserDeploymentNode *) browser_node)
+                    ->set_associated_diagram((BrowserDeploymentDiagram *)
+                                             the_canvas()->browser_diagram());
+            return;
 
-    case 7:
-        // remove from diagram
-        delete_it();
-        break;
+        case 7:
+            // remove from diagram
+            delete_it();
+            break;
 
-    case 10:
-        ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("node"), FALSE, FALSE);
-        return;
+        case 10:
+            ((UmlCanvas *) canvas())->get_view()
+                    ->add_related_elements(this, TR("node"), FALSE, FALSE);
+            return;
 
-    default:
-        if (rank >= 20)
-            ToolCom::run(Tool::command(rank - 20), browser_node);
+        default:
+            if (rank >= 20)
+                ToolCom::run(Tool::command(rank - 20), browser_node);
 
-        return;
+            return;
+        }
     }
 
     package_modified();
@@ -581,7 +592,7 @@ void DeploymentNodeCanvas::apply_shortcut(QString s)
     }
     else if (s == "Add related elements") {
         ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("node"), FALSE, FALSE);
+                ->add_related_elements(this, TR("node"), FALSE, FALSE);
         return;
     }
     else {
@@ -619,7 +630,7 @@ bool DeploymentNodeCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void DeploymentNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void DeploymentNodeCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(2);
@@ -637,21 +648,20 @@ void DeploymentNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                DeploymentNodeCanvas *canvas = (DeploymentNodeCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((DeploymentNodeCanvas *) it.current())->write_horizontally =
-                        write_horizontally;
+                    canvas->write_horizontally =
+                            write_horizontally;
 
                 if (!st[1].name.isEmpty())
-                    ((DeploymentNodeCanvas *) it.current())->show_stereotype_properties =
-                        show_stereotype_properties;
+                    canvas->show_stereotype_properties =
+                            show_stereotype_properties;
 
                 if (!co[0].name.isEmpty())
-                    ((DeploymentNodeCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((DeploymentNodeCanvas *) it.current())->modified();	// call package_modified()
+                canvas->modified();
             }
         }
 
@@ -660,20 +670,13 @@ void DeploymentNodeCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void DeploymentNodeCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void DeploymentNodeCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    DeploymentNodeCanvas * x = (DeploymentNodeCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        DeploymentNodeCanvas * o = (DeploymentNodeCanvas *) it.current();
-
-        o->write_horizontally = x->write_horizontally;
-        o->show_stereotype_properties = x->show_stereotype_properties;
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const DeploymentNodeCanvas * x = (const DeploymentNodeCanvas *) src;
+    write_horizontally = x->write_horizontally;
+    show_stereotype_properties = x->show_stereotype_properties;
+    itscolor = x->itscolor;
+    modified();
 }
 
 bool DeploymentNodeCanvas::get_show_stereotype_properties() const
@@ -711,7 +714,7 @@ QString DeploymentNodeCanvas::may_connect(UmlCode & l, const DiagramItem * dest)
     if (l == UmlAnchor)
         return dest->may_start(l);
 
-    switch (dest->type()) {
+    switch (dest->typeUmlCode()) {
     case UmlDeploymentNode:
         return 0;
 
@@ -740,10 +743,10 @@ void DeploymentNodeCanvas::connexion(UmlCode action, DiagramItem * dest,
 aCorner DeploymentNodeCanvas::on_resize_point(const QPoint & p)
 {
     return (ProfiledStereotypes::diagramPixmap(browser_node->get_data()->get_stereotype(),
-            the_canvas()->zoom())
+                                               the_canvas()->zoom())
             != 0)
-           ? NoCorner
-           : ::on_resize_point(p, rect());
+            ? NoCorner
+            : ::on_resize_point(p, rect());
 }
 
 void DeploymentNodeCanvas::resize(aCorner c, int dx, int dy, QPoint & o)
@@ -774,7 +777,7 @@ void DeploymentNodeCanvas::save(QTextStream & st, bool ref, QString & warning) c
         if (!iname.isEmpty()) {
             nl_indent(st);
             st << "name ";
-            save_string(iname, st);
+            save_string(iname.toLatin1().constData(), st);
         }
 
         nl_indent(st);
@@ -815,7 +818,7 @@ DeploymentNodeCanvas * DeploymentNodeCanvas::read(char *& st, UmlCanvas * canvas
         }
 
         if (!strcmp(k, "write_horizontally") ||
-            !strcmp(k, "write_horizontaly")) {
+                !strcmp(k, "write_horizontaly")) {
             write_horizontally = state(read_keyword(st));
             k = read_keyword(st);
         }
@@ -834,7 +837,7 @@ DeploymentNodeCanvas * DeploymentNodeCanvas::read(char *& st, UmlCanvas * canvas
 
         int x = (int) read_double(st);
         DeploymentNodeCanvas * result =
-            new DeploymentNodeCanvas(br, canvas, x, (int) read_double(st), id);
+                new DeploymentNodeCanvas(br, canvas, x, (int) read_double(st), id);
 
         read_zwh(st, result);
 
@@ -863,7 +866,7 @@ DeploymentNodeCanvas * DeploymentNodeCanvas::read(char *& st, UmlCanvas * canvas
 
 void DeploymentNodeCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
     disconnect(browser_node->get_data(), 0, this, 0);
 }
@@ -887,7 +890,7 @@ void DeploymentNodeCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));

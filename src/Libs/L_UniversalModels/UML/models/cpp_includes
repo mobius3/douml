@@ -1,0 +1,127 @@
+// "a type" "needed cpp_includes"
+"vector" "#include <QVector>
+"
+
+"list" "#include <QList>"
+
+"map" "#include <map>
+using namespace std;"
+
+"string" "#include <string>
+"
+
+"QStringList" "#include <QStringList>"
+
+"QString" "#include <QString>
+#include <QDebug>"
+
+"QSharedPointer" "#include <QSharedPointer>"
+
+"QVector" "#include <QVector>"
+
+"QLineEdit" "#include <QLineEdit>"
+
+"QDateTimeEdit" "#include <QDateTimeEdit>"
+
+"QCheckBox" "#include<QCheckBox>"
+
+"QObject" "#include <QObject>"
+
+"QCheckBox" "#include <QCheckBox>"
+
+"QLineEdit" "#include <QLineEdit>"
+
+"QDateTimeEdit" "#include <QDateTimeEdit>"
+
+"QListView" "#include <QListView>"
+
+"QAbstractItemModel" "#include <QAbstractItemModel>"
+
+"QColor" "#include <QColor>"
+
+"QFont" "#include <QFont>"
+
+"QAbstractListModel" "#include <QAbstractListModel>"
+
+"QModelIndex" "#include <QModelIndex>"
+
+"QVariant" "#include <QVariant>"
+
+"QList" "#include <QList>"
+
+"runtime_error" "#include <stdexcept>"
+
+"QLibrary" "#include <QLibrary>"
+
+"QCursor" "#include <QCursor>"
+
+"QSize" "#include <QSize>"
+
+"QImage" "#include <QImage>"
+
+"BITMAPINFOHEADER" "#include \"windows.h\""
+
+"RECT" "#include \"windows.h\""
+
+"QScopedPointer" "#include <QScopedPointer>"
+
+"QPoint" "#include <QPoint>"
+
+"QMap" "#include <QMap>"
+
+"QGraphicsScene" "#include <QGraphicsScene>"
+
+"std::vector<int>" "#include <vector>"
+
+"QRectF" "#include <QRectF>"
+
+"QPainterPath" "#include <QPainterPath>"
+
+"QGraphicsItem" "#include <QGraphicsItem>"
+
+"QPointF" "#include <QPointF>"
+
+"QGLWidget" "#include <QGLWidget>"
+
+"QGraphicsItem" "#include <QGraphicsItem>"
+
+"QPixmap" "#include <QPixmap>"
+
+"QTimerEvent" "#include <QTimerEvent>"
+
+"QPainter" "#include <QPainter>"
+
+"QStyleOptionGraphicsItem" "#include<QStyleOptionGraphicsItem>"
+
+"QWidget" "#include<QWidget>"
+
+"QPen" "#include <QPen>"
+
+"QTransform" "#include <QTransform>"
+
+"QPolygon" "#include <QPolygon>"
+
+"QGraphicsSceneMouseEvent" "#include <QGraphicsSceneMouseEvent>"
+
+"QGraphicsSceneHoverEvent" "#include <QGraphicsSceneHoverEvent>"
+
+"QRect" "#include <QRect>"
+
+"QFont" "#include <QFont>"
+
+"QBrush" "#include <QBrush>"
+
+"QIcon" "#include <QIcon>"
+
+"QHash" "#include <QHash>"
+
+"QDateTime" "#include <QDateTime>"
+
+"QEvent" "#include <QEvent>"
+
+"QRegExp" "#include <QRegExp>"
+
+"std::ptr_vector<T>" "#include <boost/ptr_container/ptr_vector.hpp>"
+
+"QMultiMap" "#include <QMultiMap>"
+

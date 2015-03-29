@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 
-#define LIFE_LINE_TOPOFFSET 41
+#define LIFE_LINE_TOPOFFSET 30//41
 
 class SdDead;
 class SdObjCanvas;
@@ -44,12 +44,13 @@ class ToolCom;
 class SdLifeLineCanvas : public DiagramCanvas, public SdDurationSupport
 {
 protected:
-    Q3PtrList<SdDurationCanvas> durations;
+    QList<SdDurationCanvas *> durations;
     SdObjCanvas * obj;
     int end; // 0 if masked by user, LIFE_LINE_HEIGHT if not mortal
 
     void exec_menu(int rank);
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     SdLifeLineCanvas(UmlCanvas * canvas, SdObjCanvas * o);
     virtual ~SdLifeLineCanvas();
@@ -85,7 +86,7 @@ public:
     virtual void drawShape(QPainter & p);
     virtual void moveBy(double dx, double dy);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void open();
     virtual void menu(const QPoint &);
     virtual void change_scale();
@@ -102,9 +103,9 @@ public:
     virtual void history_save(QBuffer &) const;
     virtual void history_load(QBuffer &);
 
-    static void send(ToolCom * com, const Q3CanvasItemList & l,
-                     Q3PtrList<FragmentCanvas> & fragments,
-                     Q3PtrList<FragmentCanvas> & refs);
+    static void send(ToolCom * com, const QList<QGraphicsItem*> & l,
+                     QList<FragmentCanvas *> & fragments,
+                     QList<FragmentCanvas *> & refs);
 };
 
 #endif

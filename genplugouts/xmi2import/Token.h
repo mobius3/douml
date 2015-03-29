@@ -3,7 +3,7 @@
 
 
 
-#include <q3valuelist.h>
+#include <QList.h>
 
 class FileIn;
 
@@ -53,7 +53,7 @@ private:
 
 
 protected:
-    Q3ValueList<Couple> _couples;
+    QList<Couple> _couples;
 
     //the work after < with out the / if it is </what>
     WrapperStr _what;

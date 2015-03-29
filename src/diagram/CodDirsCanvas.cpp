@@ -51,7 +51,7 @@ CodDirsCanvas::CodDirsCanvas(UmlCanvas * canvas, CodLinkCanvas * l, int id)
     : DiagramCanvas(0, canvas, 0, 0, COL_DIRS_SIZE, COL_DIRS_SIZE, id),
       angle(0), backward_label(0), link(l)
 {
-    setZ(COL_MSG_Z);
+    setZValue(COL_MSG_Z);
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
 
@@ -77,7 +77,7 @@ void CodDirsCanvas::remove_it(ColMsg * msg)
     if (unsubscribe(oper_data))
         disconnect(oper_data, 0, this, 0);
 
-    msgs.removeRef(msg);
+    msgs.removeOne(msg);
 }
 
 
@@ -106,7 +106,7 @@ void CodDirsCanvas::update_pos(const QPoint & link_start,
 
     r.moveCenter((link_start + link_end) / 2);
 
-    move(r.x(), r.y());
+    moveBy(r.x(), r.y());
 
     if (label != 0)
         update_label_pos(label, TRUE);
@@ -120,7 +120,7 @@ void CodDirsCanvas::update_pos(const QPoint & link_start,
 
 void CodDirsCanvas::update_label_pos(LabelCanvas * lbl, bool forward)
 {
-    if (!lbl->selected()) {
+    if (!lbl->isSelected()) {
         double a = angle + ((forward) ? 270 : 90);
         QRect r = rect();
         QPoint c = r.center();
@@ -140,19 +140,17 @@ void CodDirsCanvas::update_msgs()
     // cannot be modified in this case
     msgs.sort();
 
-    Q3PtrListIterator<ColMsg> it(msgs);
     QString nl = "\n";
     QString null;
     const QString * forward_pfix = &null;
     const QString * backward_pfix = &null;
     QString forward;
     QString backward;
-    ColMsg * msg;
     CollaborationDiagramSettings  dflt = settings;
 
     the_canvas()->browser_diagram()->get_collaborationdiagramsettings(dflt);
 
-    for (; (msg = it.current()) != 0; ++it) {
+    foreach (ColMsg *msg, msgs) {
         const BasicData * oper_data = msg->get_operation();
 
         if ((oper_data != 0) && subscribe(oper_data)) {
@@ -309,7 +307,10 @@ void CodDirsCanvas::draw(QPainter & p)
 
     p.restore();
 }
-
+void CodDirsCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
 bool CodDirsCanvas::edit_drawing_settings()
 {
     for (;;) {
@@ -331,7 +332,7 @@ bool CodDirsCanvas::edit_drawing_settings()
     }
 }
 
-UmlCode CodDirsCanvas::type() const
+UmlCode CodDirsCanvas::typeUmlCode() const
 {
     return UmlLinkDirs;
 }
@@ -370,7 +371,7 @@ bool CodDirsCanvas::copyable() const
 
     link->get_start_end(from, to);
 
-    return link->selected() && from->copyable() && to->copyable();
+    return link->isSelected() && from->copyable() && to->copyable();
 }
 
 bool CodDirsCanvas::represents(BrowserNode * bn)
@@ -384,7 +385,7 @@ void CodDirsCanvas::save(QTextStream & st, bool ref, QString & warning) const
         st << "dirscanvas_ref " << get_ident();
     else {
         nl_indent(st);
-        st << "dirscanvas " << get_ident() << " z " << z() << " ";
+        st << "dirscanvas " << get_ident() << " z " << zValue() << " ";
         link->save(st, TRUE, warning);
 
         indent(+1);
@@ -394,14 +395,14 @@ void CodDirsCanvas::save(QTextStream & st, bool ref, QString & warning) const
         if (label != 0) {
             nl_indent(st);
             st << "forward_label ";
-            save_string(label->get_name(), st);
+            save_string(label->get_name().toLatin1().constData(), st);
             save_xyz(st, label, " xyz");
         }
 
         if (backward_label != 0) {
             nl_indent(st);
             st << "backward_label ";
-            save_string(backward_label->get_name(), st);
+            save_string(backward_label->get_name().toLatin1().constData(), st);
             save_xyz(st, backward_label, " xyz");
         }
 
@@ -429,7 +430,7 @@ CodDirsCanvas * CodDirsCanvas::read(char *& st, UmlCanvas * canvas, char *& k)
         CodDirsCanvas * result =
             new CodDirsCanvas(canvas, CodLinkCanvas::read(st, canvas, k), id);
 
-        result->setZ(z);
+        result->setZValue(z);
         result->link->set_dirs(result);
         result->link->update_pos();		// to place result
 
@@ -486,10 +487,7 @@ void CodDirsCanvas::history_load(QBuffer & b)
     ::load(angle, b);
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 
-    Q3PtrListIterator<ColMsg> it(msgs);
-    ColMsg * msg;
-
-    for (; (msg = it.current()) != 0; ++it) {
+    foreach (ColMsg *msg, msgs) {
         const BasicData * oper_data = msg->get_operation();
 
         if ((oper_data != 0) && subscribe(oper_data)) {
@@ -501,13 +499,10 @@ void CodDirsCanvas::history_load(QBuffer & b)
 
 void CodDirsCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 
-    Q3PtrListIterator<ColMsg> it(msgs);
-    ColMsg * msg;
-
-    for (; (msg = it.current()) != 0; ++it) {
+    foreach (ColMsg *msg, msgs) {
         const BasicData * oper_data = msg->get_operation();
 
         if ((oper_data != 0) && unsubscribe(oper_data)) {
@@ -515,4 +510,9 @@ void CodDirsCanvas::history_hide()
             disconnect(oper_data, SIGNAL(deleted()), this, SLOT(modified()));
         }
     }
+}
+
+int CodDirsCanvas::type() const
+{
+    return (DiagramItemTypeStart+RTTI_COL_MSG);
 }

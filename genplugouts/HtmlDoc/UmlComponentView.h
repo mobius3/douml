@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseComponentView.h"
-#include <q3cstring.h>
+
 
 // This class manages 'component view'
 //
@@ -11,14 +11,14 @@
 class UmlComponentView : public UmlBaseComponentView
 {
 public:
-    UmlComponentView(void * id, const Q3CString & n) : UmlBaseComponentView(id, n) {};
+    UmlComponentView(void * id, const QByteArray & n) : UmlBaseComponentView(id, n) {};
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
+    virtual void html(QByteArray pfix, unsigned int rank, unsigned int level);
 
     virtual bool chapterp();
 

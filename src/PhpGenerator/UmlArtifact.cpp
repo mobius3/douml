@@ -75,7 +75,7 @@ void UmlArtifact::generate()
                              + name + "</i> in " + path + "</i></font><br>");
 
         // get bodies if preserve
-        const Q3PtrVector<UmlClass> & cls = associatedClasses();
+        const QVector<UmlClass*> & cls = associatedClasses();
 
         if (preserve())
             UmlOperation::read_bodies(path);

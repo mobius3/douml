@@ -27,23 +27,19 @@
 
 #ifndef OPERATIONLISTDIALOG_H
 #define OPERATIONLISTDIALOG_H
-
-#include <q3ptrlist.h>
 #include <qdialog.h>
-#include <q3ptrlist.h>
-
-class Q3ComboBox;
+class QComboBox;
 class BrowserOperation;
 
 class OperationListDialog : public QDialog
 {
 protected:
-    Q3ComboBox * cb;
+    QComboBox * cb;
 
     static QSize previous_size;
 
 public:
-    OperationListDialog(const char * m, Q3PtrList<BrowserOperation> & l);
+    OperationListDialog(const char * m, QList<BrowserOperation *> & l);
     virtual ~OperationListDialog();
 
     int choosen();

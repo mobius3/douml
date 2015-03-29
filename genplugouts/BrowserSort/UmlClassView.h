@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClassView.h"
-#include <q3cstring.h>
+
 
 // This class manages 'class view'
 //
@@ -13,7 +13,7 @@ class UmlClassView : public UmlBaseClassView
 public:
     virtual void sort();
 
-    UmlClassView(void * id, const Q3CString & n) : UmlBaseClassView(id, n) {};
+    UmlClassView(void * id, const QByteArray & n) : UmlBaseClassView(id, n) {};
 
     virtual int orderWeight();
 

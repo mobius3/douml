@@ -1,5 +1,5 @@
 class UmlItem
-!!!144130.cpp!!!	utilities()
-  UmlCom::trace("<font face=helvetica><b>Must be applied on a <i>class</i></b></font><br><hr><br>");
-!!!144130.java!!!	utilities()
+!!!144130.cpp!!!	utilities() : void
+    UmlCom::trace("<font face=helvetica><b>Must be applied on a <i>class</i></b></font><br><hr><br>");
+!!!144130.java!!!	utilities() : void
   UmlCom.trace("<font face=helvetica><b>Must be applied on a <i>class</i></b></font><br><hr><br>");

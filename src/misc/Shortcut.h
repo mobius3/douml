@@ -41,7 +41,7 @@ public:
     static const QMap<QString, QString> & shortcuts();
     static QString extract(QString, BooL & shift, BooL & ctrl, BooL & alt);
 
-    static QString shortcut(int key, int buttons);
+    static QString shortcut(int key, Qt::KeyboardModifiers buttons);
 
     static void raz();
     static void add(QString k, bool shift, bool ctrl, bool alt, QString s);

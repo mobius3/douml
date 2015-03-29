@@ -34,7 +34,7 @@
 #include "UmlPixmap.h"
 #include "UmlDesktop.h"
 #include "translate.h"
-
+#include <QHeaderView>
 static const ToolColumnDef Classes[] = {
     { UmlClass, &classButton },
     { UmlOperation, &PublicOperationIcon },
@@ -135,9 +135,9 @@ static Tbl Tables[] = {
 
 QSize ToolDialog::previous_size;
 
-ToolDialog::ToolDialog() : Q3TabDialog(0, "ToolDialog", TRUE, 0)
+ToolDialog::ToolDialog() : TabDialog(0, "ToolDialog", TRUE)
 {
-    setCaption(TR("Tools dialog"));
+    setWindowTitle(TR("Tools dialog"));
     setOkButton(TR("OK"));
     setCancelButton(TR("Cancel"));
 
@@ -154,7 +154,7 @@ ToolDialog::~ToolDialog()
 
 void ToolDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.9, 0.9);
 }
 
@@ -173,7 +173,7 @@ void ToolDialog::accept()
     for (i = 0; i != sizeof(Tables) / sizeof(Tbl); i += 1)
         n = Tables[i].tbl->update(n);
 
-    Q3TabDialog::accept();
+    TabDialog::accept();
 }
 
 // ToolTable
@@ -197,26 +197,29 @@ ToolTable::ToolTable(QWidget * parent,
         }
     }
 
-    setNumRows(nrows);
+    setRowCount(nrows);
 
-    horizontalHeader()->setLabel(0, TR("executable"));
-    horizontalHeader()->setLabel(1, TR("display"));
+    setHorizontalHeaderLabel(0, QObject::tr("executable"));
+    setHorizontalHeaderLabel(1, QObject::tr("display"));
     setColumnStretchable(0, FALSE);
     setColumnStretchable(1, FALSE);
 
     for (col = 0; col != ncols; col += 1) {
         if (cd[col].pixmap == 0) {
-            horizontalHeader()->setLabel(col + 2, "Prj");
-            adjustColumn(col + 2);
+            setHorizontalHeaderLabel(col + 2, "Prj");
+            resizeColumnToContents(col + 2);
         }
         else
-            horizontalHeader()->setLabel(col + 2, QIcon(**(cd[col].pixmap)), "", 24);
+        {
+            setHorizontalHeaderLabel(col + 2, QIcon(**(cd[col].pixmap)), ""/*, 24*/);
+            resizeColumnToContents(col + 2);
+        }
 
         setColumnStretchable(col, FALSE);
     }
 
-    horizontalHeader()->setLabel(ncols + 2, TR("do"));
-    adjustColumn(ncols + 2);
+    setHorizontalHeaderLabel(ncols + 2, QObject::tr("do"));
+    resizeColumnToContents(ncols + 2);
     setColumnStretchable(ncols + 2, FALSE);
 
     nrows = 0;
@@ -242,37 +245,39 @@ ToolTable::ToolTable(QWidget * parent,
         }
     }
 
-    adjustColumn(0);
-    adjustColumn(1);
+    resizeColumnToContents(0);
+    resizeColumnToContents(1);
 }
 
 void ToolTable::init_row(int row)
 {
     int index;
-    int n = numCols();
+    int n = columnCount();
 
     setText(row, 0, QString());
     setText(row, 1, QString());
 
     for (index = 2; index != n; index += 1)
         setItem(row, index,
-                new TableItem(this, Q3TableItem::Never, ""));
+                new TableItem(this, TableItem::Never, "", TableItem::TableItemType));
 }
 
-void ToolTable::button_pressed(int row, int col, int b, const QPoint & p)
+void ToolTable::button_pressed(const QModelIndex &index)
 {
-    if ((col >= 2) && (col != (numCols() - 1))) {
-        setText(row, col, text(row, col).isEmpty() ? " X" : "");
+    int col = index.column();
+    int row = index.row();
+    if ((col >= 2) && (col != (columnCount() - 1))) {
+        item(row, col)->setText(text(row, col).isEmpty() ? " X" : "");
     }
     else
-        StringTable::button_pressed(row,  col, b, p);
+        StringTable::button_pressed( this->model()->index(row,  col)/* b, p*/);
 }
 
 unsigned ToolTable::ntools()
 {
     forceUpdateCells();
 
-    int n = numRows();
+    int n = rowCount();
 
     return (text(n - 1, 0).isEmpty() || text(n - 1, 1).isEmpty())
            ? (unsigned) n - 1 : (unsigned) n;
@@ -280,8 +285,8 @@ unsigned ToolTable::ntools()
 
 unsigned ToolTable::update(unsigned rank)
 {
-    int n = numRows();
-    int ncol = numCols();
+    int n = rowCount();
+    int ncol = columnCount();
 
     if (text(n - 1, 0).isEmpty() || text(n - 1, 1).isEmpty())
         n -= 1;
@@ -289,12 +294,12 @@ unsigned ToolTable::update(unsigned rank)
     for (int row = 0; row != n; row += 1) {
         ATool & tool = Tool::tools[rank];
 
-        tool.cmd = text(row, 0).stripWhiteSpace();
-        tool.display = text(row, 1).stripWhiteSpace();
+        tool.cmd = text(row, 0).trimmed();
+        tool.display = text(row, 1).trimmed();
 
         for (int index = 2; index != ncol - 1; index += 1)
             tool.applicable[cd[index - 2].kind] =
-                !text(row, index).stripWhiteSpace().isEmpty();
+                !text(row, index).trimmed().isEmpty();
 
         rank += 1;
     }

@@ -24,7 +24,7 @@
 // home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
-#include <qapplication.h>
+#include <qcoreapplication.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
 
@@ -44,9 +44,8 @@ int main(int argc, char ** argv)
 {
     if (argc != 2)
         return 0;
-
-    QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
+    //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #ifdef DEBUG
     QsLogging::Logger & logger = QsLogging::Logger::instance();
     logger.setLoggingLevel(QsLogging::TraceLevel);

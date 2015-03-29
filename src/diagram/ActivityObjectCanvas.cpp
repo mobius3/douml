@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -268,16 +268,16 @@ bool ActivityObjectCanvas::force_inside()
 {
     // if its parent is present, force inside it
 
-    Q3CanvasItemList all = the_canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = the_canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
     BrowserNode * parent = (BrowserNode *) browser_node->parent();
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if ((di != 0) &&
-                IsaActivityContainer(di->type()) &&
+                IsaActivityContainer(di->typeUmlCode()) &&
                 (((ActivityContainerCanvas *) di)->get_bn() == parent)) {
                 ((ActivityContainerCanvas *) di)->force_inside(this, this);
                 return TRUE;
@@ -312,7 +312,7 @@ void ActivityObjectCanvas::check_selection()
                 int cdx = (int) x() - margin;
                 int cdy = (int) y() - selection->height() - margin;
 
-                selection->move((cdx < 0) ? 0 : cdx, (cdy < 0) ? 0 : cdy);
+                selection->moveBy((cdx < 0) ? 0 : cdx, (cdy < 0) ? 0 : cdy);
                 selection->show();
                 (new ArrowCanvas(the_canvas(), this, selection, UmlAnchor,
                                  0, FALSE, -1.0, -1.0))
@@ -369,15 +369,15 @@ void ActivityObjectCanvas::moveBy(double dx, double dy)
 
 void ActivityObjectCanvas::change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     compute_size();
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void ActivityObjectCanvas::draw(QPainter & p)
 {
-    if (visible()) {
+    if (isVisible()) {
         QRect r = rect();
         FILE * fp = svg();
         p.setRenderHint(QPainter::Antialiasing, true);
@@ -385,7 +385,8 @@ void ActivityObjectCanvas::draw(QPainter & p)
         if (fp != 0)
             fputs("<g>\n", fp);
 
-        QColor bckgrnd = p.backgroundColor();
+        QBrush backBrush = p.background();
+        QColor bckgrnd = p.background().color();
         const QPixmap * px =
             ProfiledStereotypes::diagramPixmap(browser_node->get_data()->get_stereotype(), the_canvas()->zoom());
 
@@ -441,7 +442,8 @@ void ActivityObjectCanvas::draw(QPainter & p)
             else
                 p.setBackgroundMode(::Qt::OpaqueMode);
 
-            p.setBackgroundColor(co);
+            backBrush.setColor(co);
+            p.setBackground(backBrush);
 
             if (used_color != UmlTransparent) {
                 p.fillRect(r, co);
@@ -474,15 +476,19 @@ void ActivityObjectCanvas::draw(QPainter & p)
         else if (fp != 0)
             fputs("</g>\n", fp);
 
-        p.setBackgroundColor(bckgrnd);
+        backBrush.setColor(bckgrnd);
+        p.setBackground(backBrush);
         p.setFont(the_canvas()->get_font(UmlNormalFont));
 
         if (selected())
             show_mark(p, rect());
     }
 }
-
-UmlCode ActivityObjectCanvas::type() const
+void ActivityObjectCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode ActivityObjectCanvas::typeUmlCode() const
 {
     return UmlActivityObject;
 }
@@ -497,53 +503,56 @@ void ActivityObjectCanvas::menu(const QPoint &)
     BrowserClass * cl =
         ((ActivityObjectData *) browser_node->get_data())->get_type().type;
 
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit activity object"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit activity object"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (cl != 0)
-        m.insertItem(TR("Select class in browser"), 9);
+        MenuFactory::addItem(m, TR("Select class in browser"), 9);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
             (BrowserNode *) the_canvas()->browser_diagram())
-            m.insertItem(TR("Set associated diagram"), 6);
+            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            m.insertItem(TR("Remove diagram association"), 10);
+            MenuFactory::addItem(m, TR("Remove diagram association"), 10);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlActivityObject, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
     int index;
 
-    switch (index = m.exec(QCursor::pos())) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    switch (index = retAction->data().toInt()) {
     case 0:
         upper();
         modified();	// call package_modified
@@ -612,6 +621,7 @@ void ActivityObjectCanvas::menu(const QPoint &)
 
         return;
     }
+    }
 }
 
 void ActivityObjectCanvas::apply_shortcut(QString s)
@@ -671,7 +681,7 @@ bool ActivityObjectCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void ActivityObjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ActivityObjectCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(1);
@@ -690,18 +700,17 @@ void ActivityObjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                ActivityObjectCanvas *canvas = (ActivityObjectCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((ActivityObjectCanvas *) it.current())->write_horizontally =
+                    canvas->write_horizontally =
                         write_horizontally;
 
                 if (!co[0].name.isEmpty())
-                    ((ActivityObjectCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((ActivityObjectCanvas *) it.current())->settings.set(st, 1);
-                ((ActivityObjectCanvas *) it.current())->modified();	// call package_modified()
+                canvas->settings.set(st, 1);
+                canvas->modified();	// call package_modified()
             }
         }
 
@@ -710,20 +719,13 @@ void ActivityObjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void ActivityObjectCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void ActivityObjectCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    ActivityObjectCanvas * x = (ActivityObjectCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        ActivityObjectCanvas * o = (ActivityObjectCanvas *) it.current();
-
-        o->write_horizontally = x->write_horizontally;
-        o->itscolor = x->itscolor;
-        o->settings = x->settings;
-        o->modified();	// call package_modified()
-    }
+    const ActivityObjectCanvas * x = (const ActivityObjectCanvas *) src;
+    write_horizontally = x->write_horizontally;
+    itscolor = x->itscolor;
+    settings = x->settings;
+    modified();
 }
 
 bool ActivityObjectCanvas::get_show_stereotype_properties() const
@@ -902,7 +904,7 @@ ActivityObjectCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
 void ActivityObjectCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(browser_node->get_data(), 0, this, 0);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }

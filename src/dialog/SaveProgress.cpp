@@ -34,7 +34,7 @@
 #include "UmlDesktop.h"
 
 SaveProgress::SaveProgress(int n)
-    : Q3ProgressDialog(0, 0, n, 0, 0, FALSE, Qt::WDestructiveClose)
+    : QProgressDialog(0/*, 0, n, 0, 0, FALSE, Qt::WDestructiveClose*/)
 {
 
     if (UmlDesktop::fixed())

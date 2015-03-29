@@ -29,10 +29,10 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3ptrdict.h>
+
+#include <qpainter.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QDropEvent>
@@ -113,9 +113,9 @@ bool BrowserTransition::undelete(bool, QString & warning, QString & renamed)
 
     if (def->get_start_node()->deletedp() ||
         def->get_end_node()->deletedp()) {
-        warning += QString("<li><b>") + quote(name) + "</b> " + TR("from") + " <b>" +
+        warning += QString("<li><b>") + quote(name) + "</b> " + QObject::TR("from") + " <b>" +
                    def->get_start_node()->full_name() +
-                   "</b> " + TR("to") + " <b>" + def->get_end_node()->full_name() + "</b>\n";
+                   "</b> " + QObject::TR("to") + " <b>" + def->get_end_node()->full_name() + "</b>\n";
         return FALSE;
     }
 
@@ -128,25 +128,25 @@ bool BrowserTransition::undelete(bool, QString & warning, QString & renamed)
     return TRUE;
 }
 
-void BrowserTransition::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
+void BrowserTransition::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
     BrowserNode::referenced_by(l, ondelete);
-
     if (! ondelete)
         BrowserStateDiagram::compute_referenced_by(l, this, "transitioncanvas", "transition_ref");
 }
 
-void BrowserTransition::compute_referenced_by(Q3PtrList<BrowserNode> & l,
+void BrowserTransition::compute_referenced_by(QList<BrowserNode *> & l,
         BrowserNode * target)
 {
     IdIterator<BrowserTransition> it(all);
+    while (it.hasNext()) {
+        it.next();
+        if(it.value()) {
+        if (!it.value()->deletedp() &&
+            (it.value()->def->get_end_node() == target))
+            l.append(it.value());
 
-    while (it.current()) {
-        if (!it.current()->deletedp() &&
-            (it.current()->def->get_end_node() == target))
-            l.append(it.current());
-
-        ++it;
+}
     }
 }
 
@@ -182,7 +182,7 @@ void BrowserTransition::update_stereotype(bool)
 
         if (show_stereotypes && stereotype[0]) {
             QString s = toUnicode(stereotype);
-            int index = s.find(':');
+            int index = s.indexOf(':');
 
             setText(0,
                     "<<" + ((index == -1) ? s : s.mid(index + 1))
@@ -210,25 +210,24 @@ QString BrowserTransition::str(bool horiz, DrawingLanguage lg) const
 
 void BrowserTransition::menu()
 {
-    Q3PopupMenu m(0, "transition");
-    Q3PopupMenu toolm(0);
+    QMenu m("transition",0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
-
+    m.addSeparator();
     if (!deletedp()) {
         if (!in_edition()) {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 0),
-                           TR("to edit the <i>transition</i>, \
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                           QObject::TR("to edit the <i>transition</i>, \
 a double click with the left mouse button does the same thing"));
 
             if (!is_read_only && (edition_number == 0)) {
-                m.setWhatsThis(m.insertItem(TR("Delete"), 2),
-                               TR("to delete the <i>transition</i>. \
+                MenuFactory::addItem(m, QObject::tr("Delete"), 2,
+                               QObject::TR("to delete the <i>transition</i>. \
 Note that you can undelete it after"));
             }
 
-            m.insertSeparator();
+            m.addSeparator();
         }
 
         QString s = def->get_end_node()->get_name();
@@ -236,30 +235,38 @@ Note that you can undelete it after"));
         if (s.isEmpty())
             s = stringify(def->get_end_node()->get_type());
 
-        m.setWhatsThis(m.insertItem(TR("Select ") + s, 7),
-                       TR("to select the destination"));
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 4),
-                       TR("to know who reference the <i>transition</i>"));
-        mark_menu(m, TR("the transition"), 90);
+        MenuFactory::addItem(m, QObject::tr("Select ") + s, 7,
+                       QObject::TR("to select the destination"));
+        MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
+                       QObject::TR("to know who reference the <i>transition</i>"));
+        mark_menu(m, QObject::tr("the transition").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0)
             && Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle( QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 3),
-                       TR("undelete the <i>transition</i> \
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 3,
+                       QObject::TR("undelete the <i>transition</i> \
 (except if the other side is also deleted)"));
 
         if (def->get_start_node()->deletedp() ||
             def->get_end_node()->deletedp())
-            m.setItemEnabled(3, FALSE);
+        {
+                                       QAction *act = MenuFactory::findAction(m, 3);
+                                       if(act)
+                                        act->setEnabled(false);
+            //m.setItemEnabled(3, FALSE);
+                                   }
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserTransition::exec_menu_choice(int rank)
@@ -356,7 +363,7 @@ UmlCode BrowserTransition::get_type() const
 
 QString BrowserTransition::get_stype() const
 {
-    return TR("transition");
+    return QObject::TR("transition");
 }
 
 int BrowserTransition::get_identifier() const
@@ -432,7 +439,7 @@ void BrowserTransition::save(QTextStream & st, bool ref,
     else {
         nl_indent(st);
         st << "transition " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         BrowserNode::save(st);

@@ -4,7 +4,7 @@
 
 #include "UmlClassItem.h"
 #include "aVisibility.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "UmlBaseClassItem.h"
 
 // This class manages 'true' class's items : attributes, relation,
@@ -68,14 +68,21 @@ private:
     aVisibility _cpp_visibility : 8;
 #endif
 
+#ifdef WITHJAVA
+    QByteArray _java_annotation;
+#endif
 
 protected:
-    UmlBaseClassMember(void * id, const Q3CString & n) : UmlClassItem(id, n) {};
+    UmlBaseClassMember(void * id, const QByteArray & n) : UmlClassItem(id, n) {};
 
     void read_uml_();
 
 #ifdef WITHCPP
     virtual void read_cpp_();
+#endif
+
+#ifdef WITHJAVA
+    virtual void read_java_();
 #endif
 
     friend class UmlBaseOperation;

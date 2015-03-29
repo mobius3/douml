@@ -1,17 +1,16 @@
 #ifndef _UMLBASECLASSMEMBER_H
 #define _UMLBASECLASSMEMBER_H
 
-#include "Tools/ApiCmd.h"
+
 #include "UmlClassItem.h"
 #include "aVisibility.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "UmlBaseClassItem.h"
 
 // This class manages 'true' class's items : attributes, relation,
 // operation and sub-classes
-class UmlBaseClassMember : public UmlClassItem
-{
-public:
+class UmlBaseClassMember : public UmlClassItem {
+  public:
     // Indicate if the member is a 'class member' (static)
     // Always false in case of a class
     bool isClassMember();
@@ -54,7 +53,7 @@ public:
     bool set_isCppVolatile(bool y);
 #endif
 
-private:
+  private:
     bool _class_member;
 
     aVisibility _visibility : 8;
@@ -66,8 +65,8 @@ private:
 #endif
 
 
-protected:
-    UmlBaseClassMember(void * id, const Q3CString & n) : UmlClassItem(id, n) {};
+  protected:
+    UmlBaseClassMember(void * id, const QByteArray & n) : UmlClassItem(id, n) {};
 
     void read_uml_();
 
@@ -75,10 +74,10 @@ protected:
     virtual void read_cpp_();
 #endif
 
-    friend class UmlBaseOperation;
-    friend class UmlBaseAttribute;
-    friend class UmlBaseRelation;
-    friend class UmlBaseClass;
+  friend class UmlBaseOperation;
+  friend class UmlBaseAttribute;
+  friend class UmlBaseRelation;
+  friend class UmlBaseClass;
 };
 
 #endif

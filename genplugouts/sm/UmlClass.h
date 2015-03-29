@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClass.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlOperation;
 
@@ -14,7 +14,7 @@ class UmlOperation;
 class UmlClass : public UmlBaseClass
 {
 public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {};
+    UmlClass(void * id, const QByteArray & n) : UmlBaseClass(id, n) {};
 
     //  set default C++/Java definition if needed
     //  set it usefull
@@ -22,7 +22,7 @@ public:
 
     //  add a trigger, returns the one for the class
     //  Don't return on error
-    UmlOperation * trigger(Q3CString s, UmlClass * machine, UmlClass * anystate);
+    UmlOperation * trigger(QByteArray s, UmlClass * machine, UmlClass * anystate);
 
     //add a virtual destructor if needed
     //initial definition is empty

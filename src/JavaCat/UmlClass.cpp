@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 #endif
 #include "UmlClass.h"
 #include "UmlArtifact.h"
@@ -57,7 +57,7 @@ UmlClass::UmlClass(void * id, const WrapperStr & n)
 
 void UmlClass::need_artifact(const QStringList & imports,
                              bool remove_java_lang,
-                             const QStringList & static_imports,
+                             const QStringList & ,
                              const WrapperStr & path, UmlArtifact *& cp)
 {
     if (parent()->kind() == aClassView) {
@@ -69,7 +69,7 @@ void UmlClass::need_artifact(const QStringList & imports,
             if ((cp = associatedArtifact()) == 0) {
                 // create associated artifact
                 QFileInfo fi(path);
-                WrapperStr artname = WrapperStr(fi.baseName().toAscii().constData());
+                WrapperStr artname = WrapperStr(fi.baseName().toLatin1().constData());
 
                 if ((cp = UmlBaseArtifact::create(pack->get_deploymentview(), artname)) == 0) {
                     UmlCom::trace(WrapperStr("<font face=helvetica><b>cannot create<i> artifact ")
@@ -89,7 +89,7 @@ void UmlClass::need_artifact(const QStringList & imports,
 
 
                 for (QStringList::const_iterator it = imports.begin(); it != imports.end(); it++) {
-                    WrapperStr import = WrapperStr((*it).toAscii().constData());
+                    WrapperStr import = WrapperStr((*it).toLatin1().constData());
 
                     if (!remove_java_lang || (import != "java.lang.")) {
                         import += (((const char *) import)[import.length() - 1] == '.')
@@ -101,7 +101,7 @@ void UmlClass::need_artifact(const QStringList & imports,
                 }
 
                 for (QStringList::const_iterator it = imports.begin(); it != imports.end(); it++) {
-                    s.insert(index, (const char *)("import static" + WrapperStr((*it).toAscii().constData()) + '\n'));
+                    s.insert(index, (const char *)QString("import static" + WrapperStr((*it).toLatin1().constData()) + '\n').toLatin1().constData());
                     index = s.find("${definition}", index);
                 }
             }
@@ -117,9 +117,9 @@ void UmlClass::upload(ClassContainer * cnt)
 {
     the_class = cnt->upload_define(this);
 
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
 
     for (; v != vsup; v += 1)
         (*v)->upload(the_class);
@@ -133,7 +133,7 @@ bool UmlClass::set_roundtrip_expected()
           !associatedArtifact()->set_roundtrip_expected_for_class())))
         return TRUE;
 
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
+    const QVector<UmlItem*> & ch = UmlItem::children();
     UmlClassItem ** v = (UmlClassItem **) ch.data();
     UmlClassItem ** const vsup = v + ch.size();
     bool result = UmlClassItem::set_roundtrip_expected();
@@ -145,11 +145,11 @@ bool UmlClass::set_roundtrip_expected()
 
 }
 
-void UmlClass::mark_useless(Q3PtrList<UmlItem> & l)
+void UmlClass::mark_useless(QList<UmlItem *> & l)
 {
     UmlClassItem::mark_useless(l);
 
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
     UmlClassItem ** v = (UmlClassItem **) ch.data();
     UmlClassItem ** const vsup = v + ch.size();
 
@@ -171,9 +171,9 @@ void UmlClass::send_it(int n)
 
 UmlItem * UmlClass::search_for_att_rel(const WrapperStr & name)
 {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
 
     for (; v != vsup; v += 1) {
         switch ((*v)->kind()) {
@@ -197,22 +197,20 @@ UmlItem * UmlClass::search_for_att_rel(const WrapperStr & name)
     return 0;
 }
 
-void UmlClass::reorder(Q3PtrList<UmlItem> & expected_order)
+void UmlClass::reorder(QList<UmlItem *> & expected_order)
 {
     if (expected_order.isEmpty())
         return;
 
-    Q3PtrVector<UmlItem> ch = UmlItem::children(); // copy
+    QVector<UmlItem*> ch = UmlItem::children(); // copy
     UmlItem ** v = ch.data();
 
     unload(); // to not reload children each time
 
     //bool updated = FALSE;
     UmlItem * expected_previous = 0;
-    Q3PtrListIterator<UmlItem> expected_it(expected_order);
-    UmlItem * expected;
 
-    while ((expected = expected_it.current()) != 0) {
+    foreach (UmlItem *expected, expected_order) {
         if (*v != expected) {
             //updated = TRUE;
             expected->moveAfter(expected_previous);
@@ -229,7 +227,6 @@ void UmlClass::reorder(Q3PtrList<UmlItem> & expected_order)
         }
 
         expected_previous = expected;
-        ++expected_it;
         v += 1;
     }
 

@@ -2,17 +2,17 @@
 #include "FileOut.h"
 #include "UmlItem.h"
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qfile.h>
 //Added by qt3to4:
-#include <Q3CString>
-FileOut::FileOut(QFile * fp) : Q3TextStream(fp), _indent(0)
+#include <QByteArray>
+FileOut::FileOut(QFile * fp) : QTextStream(fp), _indent(0)
 {
 }
 
 void FileOut::indent()
 {
-    Q3TextStream & ts = *this;
+    QTextStream & ts = *this;
 
     for (int n = _indent; n > 0; n -= 1)
         ts << '\t';
@@ -20,63 +20,63 @@ void FileOut::indent()
 
 void FileOut::id(const UmlItem * x)
 {
-    ((Q3TextStream &) *this) << " xmi.id=\"BOUML_" << ((void *) x) << '"';
+    ((QTextStream &) *this) << " xmi.id=\"BOUML_" << ((void *) x) << '"';
 
 }
 
 void FileOut::idref(const UmlItem * x)
 {
-    ((Q3TextStream &) *this) << " xmi.idref=\"BOUML_" << ((void *) x) << '"';
+    ((QTextStream &) *this) << " xmi.idref=\"BOUML_" << ((void *) x) << '"';
 
 }
 
-void FileOut::idref(Q3CString s, const UmlItem * x)
+void FileOut::idref(QByteArray s, const UmlItem * x)
 {
     QString keys;
     {
-        Q3TextStream keyst(&keys, QIODevice::WriteOnly);
+        QTextStream keyst(&keys, QIODevice::WriteOnly);
 
         keyst << ((void *) x) << "_" << s;
     }
 
-    QMap<Q3CString, int>::ConstIterator it =
-        _modifiedtypes.find((const char *) keys);
+    QMap<QByteArray, int>::ConstIterator it =
+        _modifiedtypes.find((const char *) keys.toLatin1().constData());
 
     if (it == _modifiedtypes.end())
-        it = _modifiedtypes.insert((const char *) keys, _modifiedtypes.count());
+        it = _modifiedtypes.insert((const char *) keys.toLatin1().constData(), _modifiedtypes.count());
 
-    ((Q3TextStream &) *this) << " xmi.idref=\"BOUML_basedontype_"
-                             << it.data() << '"';
+    ((QTextStream &) *this) << " xmi.idref=\"BOUML_basedontype_"
+                             << it.value() << '"';
 
 }
 
 void FileOut::ref(const UmlItem * x)
 {
-    ((Q3TextStream &) *this) << "BOUML_" << ((void *) x);
+    ((QTextStream &) *this) << "BOUML_" << ((void *) x);
 }
 
-void FileOut::idref_datatype(const Q3CString & t)
+void FileOut::idref_datatype(const QByteArray & t)
 {
-    QMap<Q3CString, int>::ConstIterator it = _datatypes.find(t);
+    QMap<QByteArray, int>::ConstIterator it = _datatypes.find(t);
 
     if (it == _datatypes.end())
         it = _datatypes.insert(t, _datatypes.count());
 
-    ((Q3TextStream &) *this) << " xmi.idref=\"BOUML_datatype_"
-                             << it.data() << '"';
+    ((QTextStream &) *this) << " xmi.idref=\"BOUML_datatype_"
+                             << it.value() << '"';
 
 }
 
 void FileOut::define_datatypes(int taggedvalue_mode)
 {
-    QMap<Q3CString, int>::ConstIterator it;
+    QMap<QByteArray, int>::ConstIterator it;
 
     for (it = _datatypes.begin();
          it != _datatypes.end();
          ++it) {
         indent();
         (*this) << "<UML:DataType xmi.id=\"BOUML_datatype_"
-                << it.data() << "\" name = \"";
+                << it.value() << "\" name = \"";
         quote(it.key());
         (*this) << "\" visibility=\"private\" isRoot=\"false\" isLeaf=\"false\" isAbstract=\"false\"/>\n";
     }
@@ -84,12 +84,12 @@ void FileOut::define_datatypes(int taggedvalue_mode)
     for (it = _modifiedtypes.begin();
          it != _modifiedtypes.end();
          ++it) {
-        Q3CString k = it.key();
-        int index = k.find('_');
+        QByteArray k = it.key();
+        int index = k.indexOf('_');
 
         indent();
         (*this) << "<UML:DataType xmi.id=\"BOUML_basedontype_"
-                << it.data() << "\" name = \"";
+                << it.value() << "\" name = \"";
         quote(k.mid(index + 1));
         (*this) << "\" visibility=\"private\" isRoot=\"false\" isLeaf=\"false\" isAbstract=\"false\">\n";
 

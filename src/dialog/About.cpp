@@ -25,68 +25,135 @@
 //
 // *************************************************************************
 
-
-
-
-
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3textview.h>
+#include <QTextEdit>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QPixmap>
-#include <Q3HBoxLayout>
-
+#include <QHBoxLayout>
+#include <QPainter>
+#include <QTabWidget>
 #include "About.h"
-#include "bp_xpm.xpm"
 #include "UmlDesktop.h"
 #include "translate.h"
+#include "version.h"
 
-AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
+AboutDialog::AboutDialog() : QDialog(0/*, "About DoUML", TRUE*/)
 {
-    setCaption(TR("About DoUML"));
-    //move(p);
+    setWindowTitle(TR("About DoUML"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
-    QPixmap bp((const char **) bp_xpm);
-    // QLabel * lbp = new QLabel(this);
+    QPixmap pix(QPixmap(QString(":/douml.png")));
+    QColor backgroundColor = palette().light().color();
+    backgroundColor.setAlpha(200);
+    QPainter p(&pix);
+    p.setFont(QFont("Arial", 14, QFont::Black));
+    p.setPen( Qt::black );
+    p.drawText( p.window(), Qt::AlignCenter, QString(DOUML_VERSION));
+    p.end();
 
-    // lbp->setPixmap(bp);
-    //  hbox->addWidget(lbp);
-    hbox->addWidget(new QLabel("  ", this));
-    // Replacing about to bouml-ng
-    const char htmltext[] = "<p>DoUML</p>\n"
+    QLabel * lbp = new QLabel(this);
+    QPalette palette;
+    QBrush brush(Qt::lightGray);
+    palette.setBrush(QPalette::Active, QPalette::Window, brush);
+    lbp->setPalette(palette);
+    lbp->setAutoFillBackground(true);
+
+    lbp->setPixmap(pix);
+    hbox->addWidget(lbp);
+
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
+    hbox->setMargin(5);
+    lbp = new QLabel(this);
+    lbp->setText(QString("Build: " DOUML_BUILD_DATE " - Qt version " QT_VERSION_STR));
+    hbox->addWidget(lbp);
+
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
+    QTabWidget *tabs = new QTabWidget(this);
+
+    // Description
+
+    QWidget *page_description = new QWidget;
+
+    hbox = new QHBoxLayout;
+    hbox->setMargin(5);
+
+    const char htmltext_description[] = "<p>DoUML</p>\n"
                             "<p>This project is a fork of\n"
                             "Bruno Pages's work, BoUML:\n"
-                            "<i>http://sourceforge.net/projects/douml/</i></p>\n"
+                            "<i>http://sourceforge.net/projects/bouml/</i></p>\n"
                             "<p>DoUML focus is to port BoUML to Qt4\n"
                             "and to maintain it as a community</p>\n"
                             "<p>Join us at:<br>\n"
-                            "https://github.com/leonardo2d/douml/<br>\n"
+                            "https://github.com/DoUML/douml<br>\n"
                             "#bdouml@irc.freenode.net</p>\n\n\n";
 
-    Q3TextView * tx =
-        new Q3TextView(htmltext, QString(), this);
+    QTextEdit * tx_description = new QTextEdit(htmltext_description, this);
+    QFont fnt_description = tx_description->font();
+    tx_description->setReadOnly(true);
+
+    fnt_description.setItalic(TRUE);
+
+    QFontMetrics fm_description(fnt_description);
+
+    tx_description->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    tx_description->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    tx_description->setMinimumSize(fm_description.size(0, htmltext_description));
+
+    hbox->addWidget(tx_description);
+
+    page_description->setLayout(hbox);
+
+    // License
+
+    QWidget *page_license = new QWidget;
+
+    hbox = new QHBoxLayout;
+    hbox->setMargin(5);
+
+    const char htmltext[] = "This program is licensed under the terms of the GNU General Public\n"
+                            "License version 3\n\n"
+                            "Available online under:\n"
+                            "http://www.gnu.org/licenses/gpl-3.0.html";
+
+    QTextEdit * tx = new QTextEdit(htmltext, this);
     QFont fnt = tx->font();
 
     fnt.setItalic(TRUE);
 
     QFontMetrics fm(fnt);
 
-    tx->setVScrollBarMode(Q3ScrollView::AlwaysOff);
-    tx->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    tx->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    tx->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tx->setMinimumSize(fm.size(0, htmltext));
+    tx->setReadOnly(true);
+
     hbox->addWidget(tx);
 
-    hbox = new Q3HBoxLayout(vbox);
+    page_license->setLayout(hbox);
+
+    // Build tabs
+
+    tabs->addTab(page_description, "Description");
+    tabs->addTab(page_license, "License");
+    vbox->addWidget(tabs);
+
+    // Build button
+
+    hbox = new QHBoxLayout(this);
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * ok = new QPushButton(TR("&OK"), this);
 

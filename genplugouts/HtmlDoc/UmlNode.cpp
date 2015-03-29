@@ -3,13 +3,13 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
-Q3CString UmlNode::sKind()
+#include <QByteArray>
+QByteArray UmlNode::sKind()
 {
     return "node";
 }
 
-void UmlNode::html(Q3CString, unsigned int, unsigned int)
+void UmlNode::html(QByteArray, unsigned int, unsigned int)
 {
     UmlCom::message(name());
 

@@ -156,7 +156,7 @@ void ClassInstCanvas::draw(QPainter & p, UmlCanvas * canvas, QRect r)
     BrowserClass * cl = (BrowserClass *) get_type();
     QString iname = get_name();
 
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
     p.setRenderHint(QPainter::Antialiasing, true);
     p.setBackgroundMode((used_color == UmlTransparent)
                         ? ::Qt::TransparentMode :
@@ -168,8 +168,10 @@ void ClassInstCanvas::draw(QPainter & p, UmlCanvas * canvas, QRect r)
         fputs("<g>\n", fp);
 
     QColor co = color(used_color);
+    QBrush backBrush = p.background();
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
 
     if (used_color != UmlTransparent) {
         const int shadow = canvas->shadow();
@@ -260,7 +262,7 @@ void ClassInstCanvas::draw(QPainter & p, UmlCanvas * canvas, QRect r)
             draw_text(r1, ::Qt::AlignCenter, iname + ":",
                       p.font(), fp);
 
-        r1.moveBy(0, r.height() / 2);
+        r1.translate(0, r.height() / 2);
         p.drawText(r1, ::Qt::AlignCenter, cl->contextual_name(used_show_context_mode));
 
         if (fp != 0)
@@ -269,7 +271,8 @@ void ClassInstCanvas::draw(QPainter & p, UmlCanvas * canvas, QRect r)
     }
 
     p.setFont(canvas->get_font(UmlNormalFont));
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
 
     if (fp != 0)
         fputs("</g>\n", fp);

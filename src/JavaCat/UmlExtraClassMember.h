@@ -31,7 +31,7 @@
 #include "UmlBaseExtraClassMember.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
+
 
 #ifdef ROUNDTRIP
 class UmlClass;
@@ -51,7 +51,7 @@ public:
 
 #ifdef ROUNDTRIP
     static void add_init(UmlClass * cl, WrapperStr def, bool roundtrip,
-                         Q3PtrList<UmlItem> & expected_order);
+                         QList<UmlItem *> & expected_order);
 #endif
 };
 

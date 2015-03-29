@@ -34,7 +34,7 @@
 #include <QPixmap>
 #include <QDropEvent>
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 class QPixmap;
 class StateDiagramWindow;
@@ -45,8 +45,8 @@ class BrowserStateDiagram : public BrowserDiagram
     friend class StereotypesDialog;
 
 protected:
-    static Q3PtrList<BrowserStateDiagram> imported;
-    static Q3ValueList<int> imported_ids;
+    static QList<BrowserStateDiagram *> imported;
+    static QList<int> imported_ids;
     static QStringList its_default_stereotypes;
 
     SimpleData * def;
@@ -85,7 +85,7 @@ public:
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
     virtual BasicData * get_data() const;
-    virtual void set_name(const char * s);
+    virtual void set_name(QString s);
     virtual void update_drawing_settings();
     virtual void get_statediagramsettings(StateDiagramSettings &) const;
     virtual void get_statedrawingsettings(StateDrawingSettings &) const;
@@ -117,7 +117,7 @@ public:
     static void open_all();
     static void import();
 
-    static void compute_referenced_by(Q3PtrList<BrowserNode> & l, BrowserNode *,
+    static void compute_referenced_by(QList<BrowserNode *> & l, BrowserNode *,
                                       const char * kc, char const * kr);
 
     static QString drag_key(BrowserNode * p);

@@ -4,7 +4,7 @@
 
 #include "UmlBaseUseCaseView.h"
 
-#include <q3ptrlist.h>
+
 
 class FileOut;
 class UmlItem;
@@ -34,9 +34,9 @@ public:
 
 
 protected:
-    Q3PtrList<UmlItem> _relations;
+    QList<UmlItem*> _relations;
 
-    Q3PtrList<UmlUseCaseDiagram> _assocs;
+    QList<UmlUseCaseDiagram*> _assocs;
 
 };
 

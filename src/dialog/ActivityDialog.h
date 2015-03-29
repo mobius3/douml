@@ -30,17 +30,13 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
+#include <tabdialog.h>
 #include "UmlEnum.h"
 #include "BrowserNode.h"
 
 class QPushButton;
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
-
 class LineEdit;
 class MultiLineEdit;
 class ActivityData;
@@ -55,7 +51,7 @@ struct CondDialog {
     void accept(InfoData &);
 };
 
-class ActivityDialog : public Q3TabDialog
+class ActivityDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -65,11 +61,11 @@ protected:
     QStringList list;
     BrowserNodeList opers;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * edspecification;
+    QComboBox * edstereotype;
+    QComboBox * edspecification;
     MultiLineEdit * comment;
     MultiLineEdit * constraint;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog *> edits;
     QCheckBox * readonly_cb;
     QCheckBox * singlexec_cb;
     QCheckBox * active_cb;

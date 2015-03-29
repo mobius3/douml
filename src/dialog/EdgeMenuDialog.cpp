@@ -28,6 +28,7 @@
 #include "Factories/EdgeMenuFactory.h"
 #include "QApplication"
 #include "QDesktopWidget"
+#include "tabdialog.h"
 unsigned int ClosestEdge(QWidget * widget, QPoint position)
 {
     QPoint widgetGlobalOrigin = widget->mapToGlobal(QPoint());
@@ -55,13 +56,14 @@ unsigned int ClosestEdge(QWidget * widget, QPoint position)
     return it - distances.begin();
 }
 
-EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal , Qt::WindowFlags f): Q3TabDialog(parent, name, modal, f)
+EdgeMenuDialog::EdgeMenuDialog(QWidget * parent, const char * name, bool modal , Qt::WindowFlags f)
+    : TabDialog(parent, name, modal/*, f*/)
 {
     currentTab = 0;
     currentNode = 0;
     isConnectedToToolBar = false;
     An<EdgeMenuFactory> factory;
-    QObject::connect(this, SIGNAL(edgeMenuRequested(uint)), factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
+    connect(this, SIGNAL(edgeMenuRequested(uint)), factory.getData(), SLOT(OnEdgeMenuRequested(uint)));
 }
 
 EdgeMenuDialog::~EdgeMenuDialog()
@@ -150,7 +152,6 @@ void EdgeMenuDialog::SetDialogMode(bool _isWritable)
         setOkButton(QString());
         setCancelButton(QObject::tr("Close"));
     }
-
 }
 
 void EdgeMenuDialog::OnChangeTab(int delta)
@@ -162,7 +163,6 @@ void EdgeMenuDialog::OnChangeTab(int delta)
 void EdgeMenuDialog::ChangeTab(int delta)
 {
     currentTab += delta;
-
     if (currentTab > tabBar()->count())
         currentTab = 0;
 
@@ -222,7 +222,6 @@ void EdgeMenuDialog::InitiateResize(QPoint origin)
 void EdgeMenuDialog::ResizeThis(QPoint origin, QPoint newPoint)
 {
     int newWidth;
-
     if (origin.x() > newPoint.x())
     {
         newWidth = originalSize.width() + (origin.x() - newPoint.x());
@@ -239,5 +238,4 @@ void EdgeMenuDialog::MoveThis(QPoint origin, QPoint newPoint)
 {
     QPoint difference;
     this->move(newPoint - origin + dialogOrigin);
-
 }

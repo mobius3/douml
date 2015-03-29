@@ -28,10 +28,10 @@
 #ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 using namespace std;
 #endif
@@ -45,6 +45,7 @@ using namespace std;
 #include "UmlOperation.h"
 #include "UmlAttribute.h"
 #include "CppSettings.h"
+#include <functional>
 #include "UmlExtraClassMember.h"
 #include "Lex.h"
 #include "UmlCom.h"
@@ -91,12 +92,12 @@ Class::~Class()
 }
 
 Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
-                       const Q3ValueList<FormalParameterList> & tmplts,
+                       const QList<FormalParameterList> & tmplts,
                        const WrapperStr & path, WrapperStr name
 #ifdef ROUNDTRIP
-                       , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
+                       , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
-                      )
+                      ,WrapperStr ignoredToken)
 {
     bool from_typedef = !name.isEmpty();
     WrapperStr comment = Lex::get_comments();
@@ -110,6 +111,12 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
     if ((strncmp(name, "Q_EXPORT", 8) == 0) ||
         (strncmp(name, "QM_EXPORT", 9) == 0) ||
         (strncmp(name, "Q_PNGEXPORT", 11) == 0)) {
+        q_modifier = name + " ";
+
+        if ((name = Lex::read_word()).isEmpty())
+            return 0;
+    }
+    if (!ignoredToken.isEmpty() && name == ignoredToken) {
         q_modifier = name + " ";
 
         if ((name = Lex::read_word()).isEmpty())
@@ -169,7 +176,7 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
     }
 
     bool roundtrip = FALSE;
-    Q3PtrList<UmlItem> expected_order;
+    QList<UmlItem *> expected_order;
 #else
     UmlClass * cl_uml = 0;
 #endif
@@ -343,8 +350,10 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
     if (cl_uml)
         cl_uml->set_under_construction(TRUE);
 
-    while (Lex::mark(), ((s = Lex::read_word()) != "}")) {
-        if (s.isEmpty()) {
+    while (Lex::mark(), ((s = Lex::read_word()) != "}"))
+    {
+        if (s.isEmpty())
+        {
             if (! Package::scanning())
                 Lex::premature_eof();
 
@@ -472,7 +481,8 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
 
             continue;
         }
-        else {
+        else
+        {
             cl->manage_member(s, visibility, container, path
 #ifdef ROUNDTRIP
                               , roundtrip, expected_order
@@ -543,9 +553,9 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
             if (cl->updated) {
                 Statistic::one_class_updated_more();
 
-                UmlCom::trace(QString("<font face=helvetica>class <i>")
+                UmlCom::trace(QString(QString("<font face=helvetica>class <i>")
                               + cl->text(0) + "</i> updated from <i>"
-                              + Lex::filename() + "</i></font><br>");
+                              + Lex::filename() + "</i></font><br>").toLatin1().constData());
             }
         }
 
@@ -571,7 +581,7 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
 void Class::declaration(const WrapperStr & name, const WrapperStr & stereotype,
                         const WrapperStr & decl
 #ifdef ROUNDTRIP
-                        , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
+                        , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
                        )
 {
@@ -609,11 +619,89 @@ void Class::declaration(const WrapperStr & name, const WrapperStr & stereotype,
         }
 }
 
+
+ESwitchKeyword Class::manage_operation(WrapperStr& s, WrapperStr& type, WrapperStr& name,
+                                         const QList<FormalParameterList> & tmplts, WrapperStr& modifier, WrapperStr& pretype,
+                                       bool& inlinep, bool& virtualp, bool& staticp, bool& constp,
+                                       bool& volatilep, bool explicitp, bool friendp, bool typenamep, aVisibility& visibility,
+                                       WrapperStr& friend_template, WrapperStr& comment, WrapperStr& description
+                                       #ifdef ROUNDTRIP
+                                                                           , bool roundtrip,  QList<UmlItem *> expected_order
+                                       #endif
+                                       )
+{
+    // suppose an operation
+    if (Package::scanning())
+        return ESwitchKeyword::k_break;
+
+    if (type.isEmpty()) {
+        if (!Package::scanning())
+            Lex::error_near("(");
+        return ESwitchKeyword::k_break;
+    }
+
+    BooL func = FALSE;
+    WrapperStr cl_name = WrapperStr(text(0).toLatin1().constData());
+    WrapperStr cl_full_name = cl_name;
+    int index;
+
+    if ((index = cl_name.find('<')) != -1)
+        cl_name.truncate(index);
+
+    if (name.isEmpty()) {
+        if ((type == cl_full_name) ||
+            (type == (WrapperStr("~") + cl_full_name))) {
+            name = type;
+            type = "";
+        }
+        else if ((type == cl_name) ||
+                 (type == (WrapperStr("~") + cl_name))) {
+            name = type;
+            type = "";
+        }
+        else if (type.left(9) == "operator ") {
+            name = type;
+            type = 0;
+        }
+        else {
+            WrapperStr typ;
+
+            if (((index = type.find('<')) != -1) &&
+                // wrong tests : not so simple
+                (((typ = type.left(index)) == cl_name) ||
+                 (typ == (WrapperStr("~") + cl_name)))) {
+                name = type;
+                type = "";
+            }
+            else {
+                if (! UmlOperation::pfunc(func, name, type, "${name}"))
+                    return ESwitchKeyword::k_break;
+
+                //???modifier = FALSE;
+                if (!func) {
+                    s = Lex::read_word();
+                    return ESwitchKeyword::k_continue;
+                }
+            }
+        }
+    }
+
+    UmlOperation::new_one(this, name, tmplts, type, modifier, pretype, visibility,
+                          inlinep, virtualp, staticp, constp, volatilep,
+                          typenamep, explicitp, friendp, friend_template,
+                          comment, description, func
+#ifdef ROUNDTRIP
+                          , roundtrip, expected_order
+#endif
+                         );
+    return ESwitchKeyword::k_return;
+}
+
 void Class::manage_member(WrapperStr s, aVisibility visibility,
                           ClassContainer * /*container*/,
                           const WrapperStr & path
 #ifdef ROUNDTRIP
-                          , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                          , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                          )
 {
@@ -641,155 +729,106 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
     WrapperStr value;
     WrapperStr bitfield;
     WrapperStr pretype;	// struct/union/class/enum
-    Q3ValueList<FormalParameterList> tmplts;
+    QList<FormalParameterList> tmplts;
     WrapperStr friend_template;
 
 #ifdef DEBUG_DOUML
     QLOG_INFO() << "Class::manage_member(" << s << ")\n";
 #endif
-
-    for (;;) {
-        if (s == "static") {
-            staticp = TRUE;
+    QHash<QString, std::function<ESwitchKeyword()>> hashBased;
+    std::function<ESwitchKeyword(bool&)> modifierProcessor = [&](bool& toProcess)
+    {
+        if (!modifier.isEmpty())
+            modifier += WrapperStr(" ") + s;
+        else {
+            toProcess = TRUE;
             Lex::mark();
         }
-        else if (s == "virtual") {
-            virtualp = TRUE;
-            Lex::mark();
-        }
-        else if (s == "const") {
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else {
-                constp = TRUE;
-                Lex::mark();
-            }
-        }
-        else if (s == "mutable") {
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else {
-                mutablep = TRUE;
-                Lex::mark();
-            }
-        }
-        else if (s == "volatile") {
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else {
-                volatilep = TRUE;
-                Lex::mark();
-            }
-        }
-        else if (s == "typename") {
-            // note : may have "const typename ...", but not "typename const ..."
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else {
-                typenamep = TRUE;
-                Lex::mark();
-            }
-        }
-        else if (s == "inline") {
-            inlinep = TRUE;
-            Lex::mark();
-        }
-        else if (s == "explicit") {
-            explicitp = TRUE;
-            Lex::mark();
-        }
-        else if ((s == "unsigned") || (s == "signed") ||
-                 (s == "void") || (s == "bool"))
-            type = s;
-        else if ((s == "char") || (s == "short") || (s == "int") ||
-                 (s == "long") || (s == "float") || (s == "double")) {
-            type = (type.isEmpty()) ? s : type + " " + s;
-        }
-        else if (Lex::star(s) || (s == "&") || (s == "volatile")) {
-            if (!modifier.isEmpty())
-                modifier += WrapperStr(" ") + s;
-            else if (!type.isEmpty())
-                modifier = s;
-            else {
-#ifdef DEBUG_DOUML
-                QLOG_INFO() << "ERROR modifier " << s << " et type empty\n";
-#endif
-
-                if (!Package::scanning())
-                    Lex::error_near(s);
-
-                break;
-            }
-        }
-        else if (s == "(") {
-            // suppose an operation
-            if (Package::scanning())
-                break;
-
-            if (type.isEmpty()) {
-                if (!Package::scanning())
-                    Lex::error_near("(");
-
-                break;
-            }
-
-            BooL func = FALSE;
-            WrapperStr cl_name = WrapperStr(text(0).toAscii().constData());
-            WrapperStr cl_full_name = cl_name;
-            int index;
-
-            if ((index = cl_name.find('<')) != -1)
-                cl_name.truncate(index);
-
-            if (name.isEmpty()) {
-                if ((type == cl_full_name) ||
-                    (type == (WrapperStr("~") + cl_full_name))) {
-                    name = type;
-                    type = "";
-                }
-                else if ((type == cl_name) ||
-                         (type == (WrapperStr("~") + cl_name))) {
-                    name = type;
-                    type = "";
-                }
-                else if (type.left(9) == "operator ") {
-                    name = type;
-                    type = 0;
-                }
-                else {
-                    WrapperStr typ;
-
-                    if (((index = type.find('<')) != -1) &&
-                        // wrong tests : not so simple
-                        (((typ = type.left(index)) == cl_name) ||
-                         (typ == (WrapperStr("~") + cl_name)))) {
-                        name = type;
-                        type = "";
-                    }
-                    else {
-                        if (! UmlOperation::pfunc(func, name, type, "${name}"))
-                            break;
-
-                        //???modifier = FALSE;
-                        if (!func) {
-                            s = Lex::read_word();
-                            continue;
-                        }
-                    }
-                }
-            }
-
-            UmlOperation::new_one(this, name, tmplts, type, modifier, pretype, visibility,
-                                  inlinep, virtualp, staticp, constp, volatilep,
-                                  typenamep, explicitp, friendp, friend_template,
-                                  comment, description, func
+        return ESwitchKeyword::k_none;
+    };
+    std::function<ESwitchKeyword(bool&)> basicProcessor = [&](bool& toProcess)
+    {
+        toProcess = TRUE;
+        Lex::mark();
+        return ESwitchKeyword::k_none;
+    };
+    std::function<ESwitchKeyword()> typeProcessor = [&]()
+    {
+        type = (type.isEmpty()) ? s : type + " " + s;
+        return ESwitchKeyword::k_none;
+    };
+    std::function<ESwitchKeyword()> operationProcessor = [&]()
+    {
+        return manage_operation(s, type, name, tmplts, modifier, pretype,
+                                inlinep,virtualp,staticp,constp,volatilep,explicitp,friendp,typenamep,
+                                visibility,
+                                friend_template,comment,description
 #ifdef ROUNDTRIP
-                                  , roundtrip, expected_order
+                                ,roundtrip, expected_order
 #endif
-                                 );
-            return;
+                                );
+    };
+    std::function<ESwitchKeyword()> starProcessor = [&]()
+    {
+        if (!modifier.isEmpty())
+            modifier += WrapperStr(" ") + s;
+        else if (!type.isEmpty())
+            modifier = s;
+        else {
+#ifdef DEBUG_DOUML
+            QLOG_INFO() << "ERROR modifier " << s << " et type empty\n";
+#endif
+
+            if (!Package::scanning())
+                Lex::error_near(s);
+            return ESwitchKeyword::k_break;
         }
-        else if (s == "=") {
+        return ESwitchKeyword::k_none;
+    };
+
+
+    //type block
+    hashBased.insert("unsigned", typeProcessor); hashBased.insert("explicit", typeProcessor); hashBased.insert("signed", typeProcessor);
+    hashBased.insert("void", typeProcessor); hashBased.insert("bool", typeProcessor); hashBased.insert("char", typeProcessor);
+    hashBased.insert("short", typeProcessor);hashBased.insert("int", typeProcessor);hashBased.insert("long", typeProcessor);
+    hashBased.insert("float", typeProcessor); hashBased.insert("double", typeProcessor);
+    //modifier block
+    hashBased.insert("static", std::bind(basicProcessor, staticp));
+    hashBased.insert("virtual", std::bind(basicProcessor, virtualp));
+    hashBased.insert("inline", std::bind(basicProcessor, inlinep));
+    hashBased.insert("explicit", std::bind(basicProcessor, explicitp));
+    hashBased.insert("const", std::bind(modifierProcessor, constp));
+    hashBased.insert("mutable", std::bind(modifierProcessor, mutablep));
+    //volatile seemed to have unaccessible second else if in the original. need to cehck
+    hashBased.insert("volatile", std::bind(modifierProcessor, volatilep));
+    hashBased.insert("typename", std::bind(modifierProcessor, typenamep));
+
+    // pass block
+    hashBased.insert("star", starProcessor);
+    hashBased.insert("&",  starProcessor);
+
+    // containers block
+    hashBased.insert("(",  operationProcessor);
+    QString control = "";
+    for (;;)
+    {
+        control =  Lex::star(s) ? "star" : control;
+        if(hashBased.contains(s) || hashBased.contains(control))
+        {
+
+            ESwitchKeyword retVal;
+            retVal = hashBased.contains(control) ? hashBased[control]() : hashBased[s]();
+            control = "";
+            if(retVal == ESwitchKeyword::k_none)
+                s = Lex::read_word();
+            else if (retVal == ESwitchKeyword::k_continue)
+                continue;
+            else if (retVal == ESwitchKeyword::k_break)
+                break;
+            else
+                return;
+        }
+        if (s == "=") {
             // initialized variable, by pass value
             Lex::mark();
             UmlOperation::skip_expr(";");
@@ -800,7 +839,8 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 
             value = "= " + Lex::region();
         }
-        else if (s == ";") {
+        else if (s == ";")
+        {
             if (Package::scanning())
                 return;
 
@@ -836,7 +876,8 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 
             return;
         }
-        else if (s == "friend") {
+        else if (s == "friend")
+        {
             s = Lex::read_word();
 
             if (s == "QMAC_PASCAL")
@@ -928,7 +969,8 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
         }
         else if ((s == "struct") ||
                  (s == "union") ||
-                 (s == "enum")) {
+                 (s == "enum"))
+        {
             Lex::mark();
 
             WrapperStr s2 = Lex::read_word();
@@ -968,11 +1010,11 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #endif
                                     );
                     else
-                        reverse(this, s, tmplts, path, 0
+                        reverse(this, s, tmplts, path, 0,
 #ifdef ROUNDTRIP
-                                , roundtrip, expected_order
+                                 roundtrip, expected_order,
 #endif
-                               );
+                               "");
 
                     return;
                 }
@@ -992,7 +1034,7 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #ifdef ROUNDTRIP
                         , roundtrip, expected_order
 #endif
-                       );
+                       , "");
                 return;
             }
             else if ((s2 != "{") && (s2 != ":")) {
@@ -1014,12 +1056,13 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #ifdef ROUNDTRIP
                             , roundtrip, expected_order
 #endif
-                           );
+                           , "");
 
                 return;
             }
         }
-        else if (s == "class") {
+        else if (s == "class")
+        {
             Lex::mark();
 
             WrapperStr s2 = Lex::read_word();
@@ -1046,11 +1089,12 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 #ifdef ROUNDTRIP
                         , roundtrip, expected_order
 #endif
-                       );
+                       , "");
                 return;
             }
         }
-        else if (s == "typedef") {
+        else if (s == "typedef")
+        {
             reverse_typedef(this, path, tmplts
 #ifdef ROUNDTRIP
                             , roundtrip, expected_order
@@ -1058,7 +1102,8 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
                            );
             return;
         }
-        else if (s == "template") {
+        else if (s == "template")
+        {
             FormalParameterList tmplt;
 
             tmplts.append(tmplt);
@@ -1135,7 +1180,7 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
 Class * Class::reverse_enum(ClassContainer * container,
                             const WrapperStr & path, WrapperStr name
 #ifdef ROUNDTRIP
-                            , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
+                            , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
                            )
 {
@@ -1206,8 +1251,9 @@ Class * Class::reverse_enum(ClassContainer * container,
     // enum definition
     Class * cl = container->define(name, "enum");
 
-    if(cl)
+    if(cl) {
         QLOG_INFO() << "RE got definition" << cl->stereotype.operator QString();
+    }
     //QLOG_INFO() << "RE got definition" << cl->uml;
     if ((cl == 0) || cl->reversedp)
     {
@@ -1258,7 +1304,7 @@ Class * Class::reverse_enum(ClassContainer * container,
         expectedorder.append(cl_uml);
 
     bool roundtrip;
-    Q3PtrList<UmlItem> expected_order;
+    QList<UmlItem *> expected_order;
 
     if (cl_uml->is_created()) {
         Statistic::one_class_created_more();
@@ -1460,9 +1506,9 @@ Class * Class::reverse_enum(ClassContainer * container,
             if (cl->updated) {
                 Statistic::one_class_updated_more();
 
-                UmlCom::trace(QString("<font face=helvetica>class <i>")
+                UmlCom::trace(QString(QString("<font face=helvetica>class <i>")
                               + cl->text(0) + "</i> updated from <i>"
-                              + Lex::filename() + "</i></font><br>");
+                              + Lex::filename() + "</i></font><br>").toLatin1().constData());
             }
         }
 
@@ -1479,9 +1525,9 @@ Class * Class::reverse_enum(ClassContainer * container,
     }
 
     bool Class::reverse_typedef(ClassContainer  * container, const WrapperStr & path,
-                                Q3ValueList<FormalParameterList> & tmplts
+                                QList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
-                                , bool rndtrp, Q3PtrList<UmlItem> & expectedorder
+                                , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
                                )
     {
@@ -1552,7 +1598,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 #ifdef ROUNDTRIP
                                               , rndtrp, expectedorder
 #endif
-                                             )) == 0)
+                                             , "")) == 0)
                     return FALSE;
 
                 // here '}' is the last item read
@@ -1800,9 +1846,9 @@ Class * Class::reverse_enum(ClassContainer * container,
 
             if (roundtrip) {
                 UmlRelation * dep = 0;
-                const Q3PtrVector<UmlItem> & ch = ty_uml->children();
-                UmlItem ** v = ch.data();
-                UmlItem ** const vsup = v + ch.size();
+                const QVector<UmlItem*> & ch = ty_uml->children();
+                UmlItem *const* v = ch.data();
+                UmlItem *const*  vsup = v + ch.size();
 
                 for (; v != vsup; v += 1) {
                     if (((*v)->kind() == aRelation) &&
@@ -1953,7 +1999,7 @@ Class * Class::reverse_enum(ClassContainer * container,
             if (stereotype_declared) {
                 if (st != ((stereotype.isEmpty()) ? WrapperStr("class") : stereotype)) {
                     UmlCom::trace(WrapperStr("<font face=helvetica><b><i>") +
-                                  WrapperStr(text(0).toAscii().constData()) +
+                                  WrapperStr(text(0).toLatin1().constData()) +
                                   "</i> have several stereotypes</b></font><br><hr><br>");
                     return FALSE;
                 }
@@ -1984,7 +2030,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 
         ((p->isa_package()) ? ((ClassContainer *)((Package *) p))
          : ((ClassContainer *)((Class *) p)))
-        ->declare_if_needed(WrapperStr(text(0).toAscii().constData()) + "::" + name, cl);
+        ->declare_if_needed(WrapperStr(text(0).toLatin1().constData()) + "::" + name, cl);
     }
 
     Class * Class::define(const WrapperStr & name, WrapperStr stereotype)
@@ -2005,7 +2051,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 
             ((p->isa_package()) ? ((ClassContainer *)((Package *) p))
              : ((ClassContainer *)((Class *) p)))
-            ->define(WrapperStr(text(0).toAscii().constData()) + "::" + name, cl);
+            ->define(WrapperStr(text(0).toLatin1().constData()) + "::" + name, cl);
         }
     }
 
@@ -2081,7 +2127,7 @@ Class * Class::reverse_enum(ClassContainer * container,
         UmlItem * p = (((BrowserNode *) parent())->isa_package())
                       ? (UmlItem *)((Package *) parent())->get_uml()->get_classview(get_namespace())
                       : (UmlItem *)((Class *) parent())->get_uml();
-        WrapperStr str = WrapperStr(text(0).toAscii().constData());
+        WrapperStr str = WrapperStr(text(0).toLatin1().constData());
         bool anonymous = str.isEmpty();
 
         for (;;) {
@@ -2097,7 +2143,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 
             if (uml == 0) {
                 // probably already exist
-                Q3PtrVector<UmlItem> ch = p->children();
+                QVector<UmlItem*> ch = p->children();
                 UmlItem * x;
 
                 for (unsigned chindex = 0; chindex != ch.size(); chindex += 1) {
@@ -2138,9 +2184,9 @@ Class * Class::reverse_enum(ClassContainer * container,
                 if (uml == 0) {
 #ifdef REVERSE
                     UmlCom::message("");
-                    CppCatWindow::trace(QString("<font face=helvetica><b>cannot create class <i>")
+                    CppCatWindow::trace(QString(QString("<font face=helvetica><b>cannot create class <i>")
                                         + text(0) + "</i> under <i>"
-                                        + parent()->text(0) + "</b></font><br>");
+                                        + parent()->text(0) + "</b></font><br>").toLatin1().constData());
                     throw 0;
 #else
                     QMessageBox::critical(0, "Fatal Error",
@@ -2161,8 +2207,8 @@ Class * Class::reverse_enum(ClassContainer * container,
 #ifdef ROUNDTRIP
 
                 if (roundtrip) {
-                    Q3ValueList<UmlFormalParameter> fs = uml->formals();
-                    Q3ValueList<UmlFormalParameter>::ConstIterator it2;
+                    QList<UmlFormalParameter> fs = uml->formals();
+                    QList<UmlFormalParameter>::ConstIterator it2;
 
                     for (rank = 0, it = formals.begin(), it2 = fs.begin();
                          (it != formals_end) && (it2 != fs.end());
@@ -2251,7 +2297,7 @@ void Class::set_uml(UmlClass * c)
 #ifndef ROUNDTRIP
 bool Class::already_in_bouml()
 {
-    Q3PtrVector<UmlItem> ch = get_uml()->children();
+    QVector<UmlItem*> ch = get_uml()->children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         if (ch[index]->kind() != aClass)

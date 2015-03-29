@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClass.h"
-#include <q3cstring.h>
+
 
 class UmlDeploymentView;
 
@@ -14,7 +14,7 @@ class UmlDeploymentView;
 class UmlClass : public UmlBaseClass
 {
 public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {};
+    UmlClass(void * id, const QByteArray & n) : UmlBaseClass(id, n) {};
 
     virtual void deploy(UmlDeploymentView * view);
 

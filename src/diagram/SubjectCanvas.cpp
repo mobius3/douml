@@ -31,7 +31,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -76,7 +76,8 @@ void SubjectCanvas::draw(QPainter & p)
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
+    QBrush backBrush = p.background();
 
     p.setBackgroundMode((used_color == UmlTransparent) ? ::Qt::TransparentMode : ::Qt::OpaqueMode);
 
@@ -86,7 +87,8 @@ void SubjectCanvas::draw(QPainter & p)
     if (fp != 0)
         fputs("<g>\n", fp);
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
     p.setFont(the_canvas()->get_font(UmlNormalBoldFont));
 
     if (used_color != UmlTransparent)
@@ -109,13 +111,17 @@ void SubjectCanvas::draw(QPainter & p)
         fputs("</g>\n", fp);
     }
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
 
     if (selected())
         show_mark(p, rect());
 }
-
-UmlCode SubjectCanvas::type() const
+void SubjectCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode SubjectCanvas::typeUmlCode() const
 {
     return UmlSubject;
 }
@@ -138,11 +144,11 @@ bool SubjectCanvas::copyable() const
 void SubjectCanvas::open()
 {
     BooL ok;
-    QString s = MyInputDialog::getText(TR("Subject dialog"), TR("subject : "),
+    QString s = MyInputDialog::getText(tr("Subject dialog").toLatin1().constData(), TR("subject : "),
                                        fromUnicode(name), ok);
 
     if (ok) {
-        name = toUnicode(s);
+        name = toUnicode(s.toLatin1().constData());
         modified();
     }
 }
@@ -181,11 +187,12 @@ void SubjectCanvas::change_scale()
 {
     double scale = the_canvas()->zoom();
 
-    Q3CanvasRectangle::setVisible(FALSE);
-    setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+    QGraphicsRectItem::setVisible(FALSE);
+    //setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+    setRect(0,0, (int)(width_scale100 * scale), (int)(height_scale100 * scale));
     check_size();
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void SubjectCanvas::modified()
@@ -200,28 +207,31 @@ void SubjectCanvas::modified()
 
 void SubjectCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("Subject"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 6);
-    m.insertItem(TR("Go down"), 7);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 6);
+    MenuFactory::addItem(m, TR("Go down"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
 
     if (linked()) {
-        m.insertSeparator();
-        m.insertItem(TR("Select linked items"), 4);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Select linked items"), 4);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 5);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
 
-    int index = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    int index = retAction->data().toInt();
 
     switch (index) {
     case 0:
@@ -264,6 +274,7 @@ void SubjectCanvas::menu(const QPoint &)
 
     default:
         return;
+    }
     }
 
     package_modified();
@@ -318,7 +329,7 @@ bool SubjectCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void SubjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SubjectCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         ColorSpecVector co(1);
@@ -331,11 +342,9 @@ void SubjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if ((dialog.exec() == QDialog::Accepted) && !co[0].name.isEmpty()) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
-                ((SubjectCanvas *) it.current())->itscolor = itscolor;
-                ((SubjectCanvas *) it.current())->modified();	// call package_modified()
+            foreach (DiagramItem *item, l) {
+                ((SubjectCanvas *) item)->itscolor = itscolor;
+                ((SubjectCanvas *) item)->modified();	// call package_modified()
             }
         }
 
@@ -344,18 +353,11 @@ void SubjectCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void SubjectCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void SubjectCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    SubjectCanvas * x = (SubjectCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        SubjectCanvas * o = (SubjectCanvas *) it.current();
-
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const SubjectCanvas * x = (const SubjectCanvas *) src;
+    itscolor = x->itscolor;
+    modified();
 }
 
 QString SubjectCanvas::may_start(UmlCode & l) const
@@ -389,14 +391,14 @@ void SubjectCanvas::prepare_for_move(bool on_resize)
         DiagramCanvas::prepare_for_move(on_resize);
 
         QRect r = rect();
-        Q3CanvasItemList l = collisions(TRUE);
-        Q3CanvasItemList::ConstIterator it;
-        Q3CanvasItemList::ConstIterator end = l.end();
+        QList<QGraphicsItem*> l = collidingItems();
+        QList<QGraphicsItem*>::ConstIterator it;
+        QList<QGraphicsItem*>::ConstIterator end = l.end();
         DiagramItem * di;
 
         for (it = l.begin(); it != end; ++it) {
-            if ((*it)->visible() && // at least not deleted
-                !(*it)->selected() &&
+            if ((*it)->isVisible() && // at least not deleted
+                !(*it)->isSelected() &&
                 ((di = QCanvasItemToDiagramItem(*it)) != 0) &&
                 r.contains(di->rect(), TRUE) &&
                 di->move_with(UmlSubject)) {
@@ -478,7 +480,7 @@ void SubjectCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
@@ -491,27 +493,24 @@ void SubjectCanvas::history_hide()
 
 // for plug outs
 
-void SubjectCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void SubjectCanvas::send(ToolCom * com, QList<QGraphicsItem*> & all)
 {
-    Q3PtrList<SubjectCanvas> subjects;
-    Q3CanvasItemList::Iterator cit;
+    QList<SubjectCanvas *> subjects;
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
         DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
         if ((di != 0) &&
-            (*cit)->visible() &&
-            (di->type() == UmlSubject))
+            (*cit)->isVisible() &&
+            (di->typeUmlCode() == UmlSubject))
             subjects.append((SubjectCanvas *) di);
     }
 
     com->write_unsigned(subjects.count());
 
-    SubjectCanvas * sc;
-
-    for (sc = subjects.first(); sc != 0; sc = subjects.next()) {
+    foreach (SubjectCanvas *sc, subjects) {
         WrapperStr s = fromUnicode(sc->name);
-
         com->write_string((const char *) s);
         com->write(sc->rect());
     }

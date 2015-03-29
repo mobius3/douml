@@ -299,7 +299,7 @@ void UmlCallOperationAction::importIt(FileIn & in, Token & token, UmlItem * wher
 
 void UmlCallOperationAction::setOperation(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end())
         Unresolved::addRef(this, idref);
@@ -309,7 +309,7 @@ void UmlCallOperationAction::setOperation(WrapperStr idref)
 
 void UmlCallOperationAction::solve(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))
@@ -364,7 +364,7 @@ void UmlCallBehaviorAction::importIt(FileIn & in, Token & token, UmlItem * where
 
 void UmlCallBehaviorAction::setBehavior(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end())
         Unresolved::addRef(this, idref);
@@ -383,7 +383,7 @@ void UmlCallBehaviorAction::setBehavior(WrapperStr idref)
 
 void UmlCallBehaviorAction::solve(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))
@@ -688,7 +688,7 @@ void UmlCreateObjectAction::importIt(FileIn & in, Token & token, UmlItem * where
         }
 
         if (!s.isEmpty()) {
-            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(s);
+            QMap<QString, UmlItem *>::Iterator it = All.find(s);
 
             if (it == All.end())
                 Unresolved::addRef(a, s);
@@ -700,7 +700,7 @@ void UmlCreateObjectAction::importIt(FileIn & in, Token & token, UmlItem * where
 
 void UmlCreateObjectAction::solve(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it != All.end())
         set_Classifier((*it)->name());
@@ -826,7 +826,7 @@ void UmlReduceAction::importIt(FileIn & in, Token & token, UmlItem * where)
         }
 
         if (!s.isEmpty()) {
-            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(s);
+            QMap<QString, UmlItem *>::Iterator it = All.find(s);
 
             if (it == All.end())
                 Unresolved::addRef(a, s);
@@ -847,7 +847,7 @@ void UmlReduceAction::importIt(FileIn & in, Token & token, UmlItem * where)
 
 void UmlReduceAction::solve(WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it != All.end()) {
         switch ((*it)->kind()) {

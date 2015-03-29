@@ -1,7 +1,7 @@
 
 #include "UmlStateDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 void UmlStateDiagram::memo_ref()
 {
@@ -9,7 +9,7 @@ void UmlStateDiagram::memo_ref()
     UmlDiagram::memo_ref();
 }
 
-Q3CString UmlStateDiagram::sKind()
+QByteArray UmlStateDiagram::sKind()
 {
     return "state diagram";
 }

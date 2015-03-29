@@ -44,18 +44,37 @@ class ToolCom;
 class Builtin
 {
 public:
+    Builtin(){}
+    Builtin(QString _uml,QString _cpp,QString _java,QString _idl)
+    {
+        uml = _uml;
+        cpp = _cpp;
+        java = _java;
+        idl = _idl;
+    }
+
     QString uml;
-    QString cpp;
-    QString java;
-    QString idl;
-    QString cpp_in;
-    QString cpp_out;
-    QString cpp_inout;
-    QString cpp_return;
+    QString cpp = "DEFAULT";
+    QString java = "DEFAULT";
+    QString idl = "DEFAULT";
+    QString cpp_in = "${type}";
+    QString cpp_out = "${type} &";
+    QString cpp_inout = "${type} &";
+    QString cpp_return = "${type}";
 
     void set(const char * u, const char * c, const char * j, const char * i);
 };
-
+inline bool operator==(const Builtin & s1, const Builtin & s2)
+{
+    return s1.uml==s2.uml &&
+            s1.cpp==s2.cpp &&
+            s1.java==s2.java &&
+            s1.idl==s2.idl &&
+            s1.cpp_in==s2.cpp_in &&
+            s1.cpp_out==s2.cpp_out &&
+            s1.cpp_inout==s2.cpp_inout &&
+            s1.cpp_return==s2.cpp_return;
+}
 class Stereotype
 {
 public:
@@ -95,8 +114,9 @@ class GenerationSettings
     friend class StereotypesTable;
 
 protected:
+    friend class BuiltinTable;
     static int nbuiltins;
-    static Builtin * builtins;
+    static QList<Builtin> builtins;
     static QStringList umltypes;
 
     static bool cpp_default_defs;

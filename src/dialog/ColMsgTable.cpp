@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qvalidator.h>
 #include <qcursor.h>
 
@@ -42,7 +42,7 @@
 #include "MyInputDialog.h"
 #include "DialogUtil.h"
 #include "translate.h"
-
+#include "QHeaderView"
 #define ABS_RANK_COL	0
 #define HI_RANK_COL	1
 #define FROM_COL	2
@@ -58,11 +58,11 @@ protected:
     int align;
 
 public:
-    MsgTableItem(Q3Table * table, const QString & txt, int al = Qt::AlignLeft)
-        : TableItem(table, Never, txt), align(al | Qt::AlignVCenter) { };
+    MsgTableItem(QTableWidget * table, const QString & txt, int al = Qt::AlignLeft)
+        : TableItem(table, Never, txt, TableItem::MsgTableItemType), align(al | Qt::AlignVCenter) { };
 
-    MsgTableItem(Q3Table * table, unsigned u, int al = Qt::AlignLeft)
-        : TableItem(table, Never, QString::number(u)), align(al | Qt::AlignVCenter) { };
+    MsgTableItem(QTableWidget * table, unsigned u, int al = Qt::AlignLeft)
+        : TableItem(table, Never, QString::number(u), TableItem::MsgTableItemType), align(al | Qt::AlignVCenter) { };
 
     virtual int alignment() const {
         return align;
@@ -87,7 +87,8 @@ QValidator::State HierarchicalRankValidator::validate(QString & s, int &) const
     if (s.isEmpty())
         return QValidator::Intermediate;
 
-    const char * p = s;
+    QByteArray byteArray = s.toLatin1();
+    const char * p = byteArray.constData();
 
     for (;;) {
         // digits expected
@@ -96,7 +97,7 @@ QValidator::State HierarchicalRankValidator::validate(QString & s, int &) const
             return QValidator::Intermediate;
 
         case '.':
-            return (strncmp(sub, s, sub.length()))
+            return (strncmp(sub.toLatin1().constData(), s.toLatin1().constData(), sub.length()))
                    ? QValidator::Intermediate
                    : QValidator::Invalid;
 
@@ -113,7 +114,7 @@ QValidator::State HierarchicalRankValidator::validate(QString & s, int &) const
         // '.' or end of string expected
         switch (*p) {
         case 0:
-            return (strncmp(sub, s, sub.length()))
+            return (strncmp(sub.toLatin1().constData(), s.toLatin1().constData(), sub.length()))
                    ? QValidator::Acceptable
                    : QValidator::Invalid;
 
@@ -132,18 +133,18 @@ QValidator::State HierarchicalRankValidator::validate(QString & s, int &) const
 ColMsgTable::ColMsgTable(QWidget * parent, ColDiagramView * v, ColMsgList & m)
     : MyTable(parent), rec(v->get_msgs() == m), view(v), msgs(m)
 {
-    setSorting(true);
+    //setSortingEnabled(true);
     setSelectionMode(NoSelection);	// single does not work
 
-    setNumCols(6);
+    setColumnCount(6);
 
     verticalHeader()->hide();
-    horizontalHeader()->setLabel(ABS_RANK_COL, TR("Rank"));
-    horizontalHeader()->setLabel(HI_RANK_COL, TR("Hierarchical rank"));
-    horizontalHeader()->setLabel(FROM_COL, TR("From"));
-    horizontalHeader()->setLabel(MSG_COL, TR("Message"));
-    horizontalHeader()->setLabel(TO_COL, TR("To"));
-    horizontalHeader()->setLabel(CMD_COL, TR("do"));
+    setHorizontalHeaderLabel(ABS_RANK_COL, TR("Rank"));
+    setHorizontalHeaderLabel(HI_RANK_COL, TR("Hierarchical rank"));
+    setHorizontalHeaderLabel(FROM_COL, TR("From"));
+    setHorizontalHeaderLabel(MSG_COL, TR("Message"));
+    setHorizontalHeaderLabel(TO_COL, TR("To"));
+    setHorizontalHeaderLabel(CMD_COL, TR("do"));
 
     refresh();
 
@@ -162,20 +163,23 @@ void ColMsgTable::button_pressed(int row, int col, int, const QPoint &)
     else if (col <= HI_RANK_COL)
         change_ranks(row, col);
     else {
-        Q3PopupMenu m;
+        QMenu m;
 
         MenuFactory::createTitle(m, QString(TR("rank ")) + text(row, ABS_RANK_COL)
                                  + " : " + text(row, HI_RANK_COL));
-        m.insertSeparator();
-        m.insertItem(TR("Edit message"), 1);
-        m.insertItem(TR("Change ranks"), 2);
-        m.insertSeparator();
-        m.insertItem(TR("Delete it"), 3);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Edit message"), 1);
+        MenuFactory::addItem(m, TR("Change ranks"), 2);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Delete it"), 3);
 
         if (!flat_msg_list[row]->msgs.isEmpty())
-            m.insertItem(TR("Delete recursively"), 4);
+            MenuFactory::addItem(m, TR("Delete recursively"), 4);
 
-        switch (m.exec(QCursor::pos())) {
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        switch (retAction->data().toInt()) {
         case 1:
             edit_msg(row);
 
@@ -195,6 +199,7 @@ void ColMsgTable::button_pressed(int row, int col, int, const QPoint &)
             flat_msg_list[row]->delete_it(TRUE, view->get_msgs());
             break;
         }
+        }
 
         view->update_msgs();
         refresh();
@@ -203,7 +208,7 @@ void ColMsgTable::button_pressed(int row, int col, int, const QPoint &)
 
 void ColMsgTable::refresh()
 {
-    setNumRows(0);
+    setRowCount(0);
     flat_msg_list.clear();
     refresh(msgs);
     adjustColumn(ABS_RANK_COL);
@@ -216,23 +221,20 @@ void ColMsgTable::refresh()
 
 void ColMsgTable::refresh(ColMsgList & m)
 {
-    ColMsg * msg;
-    Q3PtrListIterator<ColMsg> it(m);
-
-    for (; (msg = it.current()) != 0; ++it) {
+    foreach (ColMsg *msg, m) {
         QString def = msg->def(FALSE, TRUE, UmlView, DefaultShowContextMode);
         CodObjCanvas * from;
         CodObjCanvas * to;
-        int r = numRows();
+        int r = rowCount();
 
         msg->in->get_from_to(from, to, msg->is_forward);
 
-        setNumRows(r + 1);
+        setRowCount(r + 1);
 
         setItem(r, ABS_RANK_COL, new MsgTableItem(this, msg->absolute_rank));
         setItem(r, HI_RANK_COL, new MsgTableItem(this, msg->hierarchical_rank));
         setItem(r, FROM_COL, new MsgTableItem(this, from->get_full_name()));
-        setItem(r, MSG_COL, new MsgTableItem(this, def.mid(def.find(" ") + 1)));
+        setItem(r, MSG_COL, new MsgTableItem(this, def.mid(def.indexOf(" ") + 1)));
         setItem(r, TO_COL, new MsgTableItem(this, to->get_full_name()));
         setItem(r, CMD_COL, new MsgTableItem(this, TR("do"), Qt::AlignHCenter));
 
@@ -253,8 +255,7 @@ void ColMsgTable::edit_msg(int row)
         QString def = msg->def(FALSE, TRUE, UmlView, DefaultShowContextMode);
 
         msg->in->update_msgs();
-        item(row, MSG_COL)->setText(def.mid(def.find(" ") + 1));
-        updateCell(row, MSG_COL);
+        item(row, MSG_COL)->setText(def.mid(def.indexOf(" ") + 1));
     }
 }
 
@@ -264,11 +265,7 @@ void ColMsgTable::save_list(ColMsgList & l, Q3PtrDict<ColMsgList> & saved)
     if (saved.find(&l) == 0) {
         saved.insert(&l, new ColMsgList(l));
 
-        Q3PtrListIterator<ColMsg> it(l);
-
-        for (; it.current(); ++it) {
-            ColMsg * m = it.current();
-
+        foreach (ColMsg *m, l) {
             save_list(m->get_msgs(), saved);
             save_list(m->in->get_msgs(), saved);
         }
@@ -281,7 +278,7 @@ void ColMsgTable::change_ranks(int row, int col)
     ColMsg * msg = flat_msg_list[row];
     HierarchicalRankValidator validator(view, msg->hierarchical_rank);
     BooL ok;
-    QString new_hr = MyInputDialog::getText(TR("Enter new hierarchical rank"), TR("Hierarchical rank : "),
+    QString new_hr = MyInputDialog::getText(tr("Enter new hierarchical rank").toLatin1().constData(), tr("Hierarchical rank : "),
                                             msg->hierarchical_rank, ok,
                                             &validator);
 
@@ -305,10 +302,10 @@ void ColMsgTable::change_ranks(int row, int col)
             msg->place_in_its_support();
             ColMsg::update_ranks(view->get_msgs());
 
-            if (new_hr.find('.') != -1) {
+            if (new_hr.indexOf('.') != -1) {
                 // upper level msg dest must be msg start
                 ColMsg * upper =
-                    ColMsg::find_rec(new_hr.left(new_hr.findRev('.')), view->get_msgs());
+                    ColMsg::find_rec(new_hr.left(new_hr.lastIndexOf('.')), view->get_msgs());
 
                 if (upper == 0)
                     // error
@@ -339,7 +336,7 @@ void ColMsgTable::change_ranks(int row, int col)
 
         if (new_hr != old_hr) {
             refresh();
-            setCurrentCell(flat_msg_list.findIndex(msg), col);
+            setCurrentCell(flat_msg_list.indexOf(msg), col);
         }
 
 #else

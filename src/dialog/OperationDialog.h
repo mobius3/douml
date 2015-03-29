@@ -28,10 +28,10 @@
 #ifndef OPERATIONDIALOG_H
 #define  OPERATIONDIALOG_H
 
-#include <q3tabdialog.h>
+#include <tabdialog.h>
 //Added by qt3to4:
-#include <Q3PtrList>
-#include <Q3Grid>
+//
+#include <gridbox.h>
 #include <QVBoxLayout>
 #include <QLabel>
 
@@ -39,9 +39,9 @@
 #include "BrowserNode.h"
 #include "VisibilityGroup.h"
 #include "dialog/EdgeMenuDialog.h"
-#include <Q3HBox>
+#include <hhbox.h>
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QRadioButton;
 class QPushButton;
@@ -72,7 +72,7 @@ protected:
     ClassData * cl;
     QStringList list;
     BrowserNodeList nodes;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog *> edits;
     BrowserNode * view;
     AttributeData * get_of_attr;
     AttributeData * set_of_attr;
@@ -83,11 +83,11 @@ protected:
 
     // uml tab
     QWidget * umltab;
-    Q3Grid * umlGrid;
+    GridBox * umlGrid;
     LineEdit * edname;
-    Q3ComboBox * edreturn_type;
+    QComboBox * edreturn_type;
     int edreturn_type_offset;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     VisibilityGroup uml_visibility;
     QCheckBox * classoperation_cb;
     QCheckBox * abstract_cb;
@@ -106,11 +106,11 @@ protected:
     QCheckBox * cbCppVolatile;
     QCheckBox * cbCppVirtual;
     QCheckBox * cbCppInline;
-    Q3ButtonGroup * cppBg;
-    Q3ButtonGroup * cppBg2;
+    BButtonGroup * cppBg;
+    BButtonGroup * cppBg2;
 
-    Q3HBox * htabBgCpp1;
-    Q3HBox * tabBgCppModifiers;
+    HHBox * htabBgCpp1;
+    HHBox * tabBgCppModifiers;
 
 
     CppParamsTable * paramcppdecltable;
@@ -189,22 +189,22 @@ protected:
     QPushButton * pbEditor;
     QPushButton * pbDefault;
     QPushButton * pbConstraintEditor;
-    Q3ButtonGroup * bgUml1;
-    Q3ButtonGroup * bgUml2;
-    Q3ButtonGroup * bgUml3;
+    BButtonGroup * bgUml1;
+    BButtonGroup * bgUml2;
+    BButtonGroup * bgUml3;
 
-    Q3ButtonGroup * notableBg;
-    Q3ButtonGroup * bgPhp;
-    Q3ButtonGroup * bgPython;
-    Q3ButtonGroup * bgIdl;
-    Q3ButtonGroup * bgCppModifiers;
-    Q3ButtonGroup * bgCpp11Modifiers;
-    Q3ButtonGroup * visibilityBg;
+    BButtonGroup * notableBg;
+    BButtonGroup * bgPhp;
+    BButtonGroup * bgPython;
+    BButtonGroup * bgIdl;
+    BButtonGroup * bgCppModifiers;
+    BButtonGroup * bgCpp11Modifiers;
+    BButtonGroup * visibilityBg;
 
-    Q3HBox * htabBgUml;
-    Q3HBox * namespecTab;
-    Q3HBox * namespecTabIdl;
-    Q3HBox * pythonNamespecTab;
+    HHBox * htabBgUml;
+    HHBox * namespecTab;
+    HHBox * namespecTabIdl;
+    HHBox * pythonNamespecTab;
 
 
 
@@ -233,7 +233,7 @@ protected:
 
     DrawingLanguage drawingLanguage;
 
-    static QSharedPointer<OperationDialog> instance;
+    //static QSharedPointer<OperationDialog> instance;
 
 
 protected:
@@ -305,7 +305,7 @@ public:
     void insert_param(int rank);
     void delete_param(int rank);
     void move_param(int old_rank, int new_rank);
-    static QSharedPointer<OperationDialog> Instance(OperationData * , DrawingLanguage l);
+    static OperationDialog *Instance(OperationData * , DrawingLanguage l);
 
 protected slots:
     virtual void polish();
@@ -357,7 +357,7 @@ protected slots:
     void idl_unmapped_def();
     void idl_update_decl();
     void oneway_toggled(bool on);
-    void update_all_tabs(QWidget *);
+    void update_all_tabs(int index);
     void menu_returntype();
 };
 
@@ -408,8 +408,10 @@ public:
     QStringList all_values();
 
 protected slots:
-    void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    void button_pressed(const QModelIndex &index);
     void value_changed(int row, int col);
+private:
+    TableWidgetItemDelegate* m_delegate;
 };
 
 class ExceptionsTable : public MyTable
@@ -417,13 +419,14 @@ class ExceptionsTable : public MyTable
     Q_OBJECT
 
 protected:
-    const QStringList & types;
+    QStringList & types;
 
     static QString type_copy;		// copy/cut/paste
 
 public:
     ExceptionsTable(OperationData * a, QWidget * parent,
-                    const QStringList & list, bool visit);
+                    QStringList & list, bool visit);
+    void Reinitialize(OperationData * a, QStringList & list, bool visit);
 
 protected:
     virtual void activateNextCell();
@@ -442,8 +445,10 @@ public:
     QString type(unsigned rank) const;
 
 protected slots:
-    void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    void button_pressed(const QModelIndex &index);
     void value_changed(int row, int col);
+private:
+    TableWidgetItemDelegate* m_delegate;
 };
 
 class CppParamsTable : public MyTable
@@ -476,11 +481,13 @@ protected:
     void update_name(int row);
     void update_names();
 
-    virtual void setItem(int row, int col, Q3TableItem * item);
+    virtual void setItem(int row, int col, QTableWidgetItem * item);
 
 protected slots:
-    void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    void button_pressed(const QModelIndex &index);
     virtual void setCurrentCell(int row, int col);
+private:
+    TableWidgetItemDelegate* m_delegate;
 };
 
 class CppParamsDialog : public QDialog
@@ -531,11 +538,13 @@ protected:
     void update_name(int row);
     void update_names();
 
-    virtual void setItem(int row, int col, Q3TableItem * item);
+    virtual void setItem(int row, int col, QTableWidgetItem * item);
 
 protected slots:
-    void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    void button_pressed(const QModelIndex &index);
     virtual void setCurrentCell(int row, int col);
+private:
+    TableWidgetItemDelegate* m_delegate;
 };
 
 class PhpParamsDialog : public QDialog
@@ -585,11 +594,13 @@ protected:
     void update_name(int row);
     void update_names();
 
-    virtual void setItem(int row, int col, Q3TableItem * item);
+    virtual void setItem(int row, int col, QTableWidgetItem * item);
 
 protected slots:
-    void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    void button_pressed(const QModelIndex &index);
     virtual void setCurrentCell(int row, int col);
+private:
+    TableWidgetItemDelegate* m_delegate;
 };
 
 class PythonParamsDialog : public QDialog

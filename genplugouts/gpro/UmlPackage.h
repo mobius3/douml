@@ -3,15 +3,14 @@
 
 
 #include "UmlBasePackage.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 // This class manages a 'package', notes that the project itself is a package
 //
 // You can modify it as you want (except the constructor)
-class UmlPackage : public UmlBasePackage
-{
-public:
-    UmlPackage(void * id, const Q3CString & n) : UmlBasePackage(id, n) {};
+class UmlPackage : public UmlBasePackage {
+  public:
+    UmlPackage(void * id, const QByteArray & n) : UmlBasePackage(id, n) {};
 
 };
 

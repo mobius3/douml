@@ -3,10 +3,10 @@
 
 
 #include "anItemKind.h"
-#include <q3cstring.h>
-#include <q3ptrvector.h>
-#include <q3dict.h>
-#include <q3ptrdict.h>
+#include <QByteArray>
+#include <QVector>
+
+#include <QHash>
 //#include "OnInstanceCmd.h"
 #include "aVisibility.h"
 #include "aDirection.h"
@@ -37,21 +37,21 @@ public:
     virtual anItemKind kind() = 0;
 
     // returns the name
-    const Q3CString & name() {
+    const QByteArray & name() {
         return _name;
     };
 
     // to set the name
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    virtual bool set_Name(const Q3CString & s);
+    virtual bool set_Name(const QByteArray & s);
 
     // returns the stereotype
-    const Q3CString & stereotype();
+    const QByteArray & stereotype();
 
     // to set the stereotype
     //  On error return FALSE in C++, produce a RuntimeException in Java
-    virtual bool set_Stereotype(const Q3CString & s);
+    virtual bool set_Stereotype(const QByteArray & s);
 
     // If the current stereotype is part of a profile add needed properties.
     // In all cases remove extra properties whose keys contain two ':'.
@@ -60,18 +60,18 @@ public:
     bool applyStereotype();
 
     // returns the description
-    const Q3CString & description();
+    const QByteArray & description();
 
     // to set the description
     //  On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_Description(const Q3CString & s);
+    bool set_Description(const QByteArray & s);
 
     // returns the parent (0/null if it is applied on the project itself),
     // to go all over the browser tree
     UmlItem * parent();
 
     // returns (in Java : a copy of) the children list, to go all over the browser tree
-    const Q3PtrVector<UmlItem> children();
+    const QVector<UmlItem*> children();
 
     // return TRUE if the children exist and are visible (independently
     // of the scroll bar) in the browser, else FALSE
@@ -96,16 +96,16 @@ public:
     //
     // These properties may be edited through the object dialog last tab
     // named 'user'
-    bool propertyValue(const Q3CString & k, Q3CString & v);
+    bool propertyValue(const QByteArray & k, QByteArray & v);
 
     // to set (may be insert a new) the value 'v' associated to the key 'k'
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_PropertyValue(const Q3CString & k, const Q3CString & v);
+    bool set_PropertyValue(const QByteArray & k, const QByteArray & v);
 
     // returns all the properties of the object through (in Java a copy of) a dictionnary
 
-    const Q3Dict<Q3CString> properties();
+    const QHash<QByteArray, QByteArray*> properties();
 
     // If the parameter is null, move the current item to be
     // the first child of its parent. Else the current item and
@@ -140,7 +140,7 @@ public:
     //    external type and edited through the last Idl tab of the
     //    'Generation Settings' dialog is saved in the file 'idl_includes'
     //
-    Q3CString supportFile();
+    QByteArray supportFile();
 
     // return TRUE in case the item may be modified, i.e. it is not
     // an API base 'plug-out' class and the corresponding file(s) are not
@@ -148,7 +148,7 @@ public:
     bool isWritable();
 
     //  Apply asynchronously the tool on the item, returns an identifier to call isToolDone()
-    int apply(Q3CString cmd);
+    int apply(QByteArray cmd);
 
     //return TRUE in case the item is marked
     bool isMarked();
@@ -161,7 +161,7 @@ public:
     //  The result may contains UmlAttribute, UmlRelations, UmlNcRelations,
     //  UmlOperation (their bodies are not taken into account) , UmlClass
     //  and UmlComponents.
-    const Q3PtrVector<UmlItem> referencedBy();
+    const QVector<UmlItem*> referencedBy();
 
     // return a constant identifier, it is unique within a given
     // kind of element (two classes can't have the same identifiers, but
@@ -187,7 +187,7 @@ public:
     //  'id' is an identifier returned by apply(), indicates if the tool is still running
     static bool isToolRunning(int id);
 
-    static const Q3PtrVector<UmlItem> markedItems();
+    static const QVector<UmlItem*> markedItems();
 
 
 private:
@@ -203,21 +203,21 @@ protected:
 
 
 private:
-    Q3CString _name;
+    QByteArray _name;
 
     //  Note : protected in Java for internal reason, but do NOT
     //  access to this field yourself !
-    Q3CString _stereotype;
+    QByteArray _stereotype;
 
-    Q3CString _description;
+    QByteArray _description;
 
     UmlItem * _parent;
 
-    Q3PtrVector<UmlItem> * _children;
+    QVector<UmlItem*> * _children;
 
-    Q3Dict<Q3CString> _dict;
+    QHash<QByteArray, QByteArray*> _dict;
 
-    static Q3PtrDict<UmlItem> _all;
+    static QHash<void*,UmlItem*> _all;
 
 
 protected:
@@ -285,7 +285,7 @@ protected:
 
     //internal, do NOT use it
 
-    bool set_it_(Q3CString & r, const char * v, OnInstanceCmd cmd);
+    bool set_it_(QByteArray & r, const char * v, OnInstanceCmd cmd);
 
     //internal, do NOT use it
 
@@ -298,7 +298,7 @@ protected:
 
 public:
     // the constructor, do not call it yourself !
-    UmlBaseItem(void * id, const Q3CString & n);
+    UmlBaseItem(void * id, const QByteArray & n);
 
     // the destructor, do not delete objects yourself !!!!!!!!!!
     virtual ~UmlBaseItem();

@@ -44,6 +44,7 @@ class BrowserOperation;
 
 class BrowserRelation : public BrowserNode, public Labeled<BrowserRelation>
 {
+friend class QuickEdit;
 protected:
     static IdDict<BrowserRelation> all;
 
@@ -70,6 +71,8 @@ public:
     virtual const char * get_comment() const;
     virtual void set_comment(const char * c);
 
+    virtual UmlVisibility get_visibility() const override;
+
     BrowserOperation * get_get_oper() {
         return get_oper;
     };
@@ -84,7 +87,7 @@ public:
     void add_set_oper();
 
     virtual const QPixmap * pixmap(int) const;
-    virtual void paintCell(QPainter *, const QColorGroup &, int, int, int);
+    virtual void paintCell(QPainter *, const QPalette &, int, int, int);
     BrowserNode * extract();
     static BrowserRelation * reinsert(BrowserNode * p, RelationData * d);
 
@@ -122,8 +125,8 @@ public:
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
 
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
-    static void compute_referenced_by(Q3PtrList<BrowserNode> &, BrowserClass *);
+    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE);
+    static void compute_referenced_by(QList<BrowserNode *> &, BrowserClass *);
 
     virtual bool tool_cmd(ToolCom * com, const char * args);
 
@@ -132,9 +135,10 @@ public:
     virtual QString drag_postfix() const;
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
 
-    static void get_relating(BrowserNode *, Q3PtrDict<BrowserNode> & d,
+    static void get_relating(BrowserNode *, QHash<BrowserNode *, BrowserNode *> &d,
                              BrowserNodeList & newones,
                              bool inh, bool dep, bool assoc);
+    virtual QVariant	data(int column, int role) const;
 };
 
 #endif

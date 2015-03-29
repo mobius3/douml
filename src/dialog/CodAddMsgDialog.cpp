@@ -31,16 +31,13 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
-#include <q3hbox.h>
+#include <qcombobox.h>
+#include <hhbox.h>
 #include <qpushbutton.h>
-#include <q3grid.h>
-#include <q3popupmenu.h>
+#include <gridbox.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "CodAddMsgDialog.h"
 #include "ColDiagramView.h"
 #include "CodMsgSupport.h"
@@ -53,85 +50,84 @@
 #include "UmlDesktop.h"
 #include "BrowserView.h"
 #include "translate.h"
+#include "menufactory.h"
 
 QSize CodAddMsgDialog::previous_size;
 
 CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
                                  CodMsgSupport * i, ColDiagramView * v,
                                  bool fo)
-    : QDialog(0, "add msg dialog", TRUE), in(i), view(v), forward(fo)
+    : QDialog(0/*, "add msg dialog", TRUE*/), in(i), view(v), forward(fo)
 {
-    setCaption(TR("Add message dialog"));
+    setWindowTitle(TR("Add message dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(10);
-    QLabel * label1 = new QLabel(TR("Add message to %1", to->get_full_name()), this);
+    QLabel * label1 = new QLabel(TR("Add message to %1") + to->get_full_name(), this);
     label1->setAlignment(Qt::AlignCenter);
     hbox->addWidget(label1);
 
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
 
     vbox->addWidget(grid);
-    new QLabel(TR("rank : "), grid);
-    cbrank = new Q3ComboBox(FALSE, grid);
+    grid->addWidget(new QLabel(TR("rank : "), grid));
+    grid->addWidget(cbrank = new QComboBox(grid));
 
     ColMsgList all_in;
     ColMsgList all_out;
 
     from->get_all_in_all_out(all_in, all_out);
 
-    ColMsg * m;
     QStringList new_ones;
-    Q3PtrListIterator<ColMsg> itout(all_out);
-
-    for (; (m = itout.current()) != 0; ++itout) {
+    foreach (ColMsg *m, all_out) {
         QString s = m->next_hierarchical_rank();
 
-        if ((s.find('.') != - 1) && (ColMsg::find(s, all_out) == 0)) {
-            cbrank->insertItem(QString::number(m->get_rank() + 1) + " : " + s);
+        if ((s.indexOf('.') != - 1) && (ColMsg::find(s, all_out) == 0)) {
+            cbrank->addItem(QString::number(m->get_rank() + 1) + " : " + s);
             new_ones.append(s);
         }
     }
 
-    Q3PtrListIterator<ColMsg> itin(all_in);
-
-    for (; (m = itin.current()) != 0; ++itin) {
+    foreach (ColMsg *m, all_in) {
         QString s = m->get_hierarchical_rank() + ".1";
 
-        if ((ColMsg::find(s, all_out) == 0) && (new_ones.findIndex(s) == -1)) {
-            cbrank->insertItem(QString::number(m->get_rank() + 1) + " : " + s);
+        if ((ColMsg::find(s, all_out) == 0) && (new_ones.indexOf(s) == -1)) {
+            cbrank->addItem(QString::number(m->get_rank() + 1) + " : " + s);
             new_ones.append(s);
         }
     }
 
     // add a the rank for a new toplevel link
-    cbrank->insertItem(QString::number(ColMsg::last_rank(view->get_msgs()) + 1)
+    cbrank->addItem(QString::number(ColMsg::last_rank(view->get_msgs()) + 1)
                        + " : "
                        + QString::number(view->get_msgs().count() + 1));
 
     // the default new one follow the last input or output or view's last msg
-    cbrank->setCurrentItem((cbrank->count() == 1) ? 0 : cbrank->count() - 2);
+    cbrank->setCurrentIndex((cbrank->count() == 1) ? 0 : cbrank->count() - 2);
 
     QSizePolicy sp = cbrank->sizePolicy();
 
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     cbrank->setSizePolicy(sp);
 
-    new QLabel("", grid);
-    new QLabel("", grid);
+    grid->addWidget(new QLabel("", grid));
+    grid->addWidget(new QLabel("", grid));
 
     // the operations
 
-    SmallPushButton * b = new SmallPushButton(TR("message :"), grid);
+    SmallPushButton * b;
+    grid->addWidget(b = new SmallPushButton(TR("message :"), grid));
 
     connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
 
-    edoper = new Q3ComboBox(TRUE, grid);
+    grid->addWidget(edoper = new QComboBox(grid));
+    edoper->setEditable(true);
     edoper->setAutoCompletion(completion());
 
     // gets operations
@@ -139,7 +135,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
 
     if (cl != 0) {
         cl->get_opers(opers, list);
-        edoper->insertStringList(list);
+        edoper->addItems(list);
 
         if (!cl->is_writable())
             cl = 0;
@@ -147,12 +143,13 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
 
     edoper->setSizePolicy(sp);
 
-    new QLabel("", grid);
-    new QLabel("", grid);
+    grid->addWidget(new QLabel("", grid));
+    grid->addWidget(new QLabel("", grid));
 
     // ok & cancel
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * ok = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -171,7 +168,7 @@ CodAddMsgDialog::CodAddMsgDialog(CodObjCanvas * from, CodObjCanvas * to,
 
 void CodAddMsgDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -182,31 +179,34 @@ CodAddMsgDialog::~CodAddMsgDialog()
 
 void CodAddMsgDialog::menu_op()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = list.findIndex(edoper->currentText().stripWhiteSpace());
+    int index = list.indexOf(edoper->currentText().trimmed());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = BrowserView::selected_item();
 
     if ((bn != 0) &&
         (bn->get_type() == UmlOperation) &&
         !bn->deletedp() &&
-        (opers.findIndex((OperationData *) bn->get_data()) != -1))
-        m.insertItem(TR("Choose operation selected in browser"), 1);
+        (opers.indexOf((OperationData *) bn->get_data()) != -1))
+        MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
     else
         bn = 0;
 
     if (cl != 0)
-        m.insertItem(TR("Create operation and choose it"), 2);
+        MenuFactory::addItem(m, TR("Create operation and choose it"), 2);
 
     if ((index != -1) || (bn != 0) || (cl != 0)) {
-        switch (m.exec(QCursor::pos())) {
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        switch (retAction->data().toInt()) {
         case 0:
             opers[index]->get_browser_node()->select_in_browser();
             break;
@@ -223,30 +223,31 @@ void CodAddMsgDialog::menu_op()
         case 1: {
             OperationData * od = (OperationData *) bn->get_data();
 
-            if ((index = opers.findIndex(od)) == -1) {
+            if ((index = opers.indexOf(od)) == -1) {
                 index = opers.count();
                 opers.append(od);
 
                 QString s = od->definition(TRUE, FALSE);
 
                 list.append(s);
-                edoper->insertItem(s);
+                edoper->addItem(s);
             }
         }
 
-        edoper->setCurrentItem(index + 1);
+        edoper->setCurrentIndex(index + 1);
+        }
         }
     }
 }
 
 void CodAddMsgDialog::accept()
 {
-    QString s = edoper->currentText().stripWhiteSpace();
+    QString s = edoper->currentText().trimmed();
 
     if (s.isEmpty())
         return;
 
-    int index = list.findIndex(s);
+    int index = list.indexOf(s);
     const OperationData * d;
     QString e;
 
@@ -259,7 +260,7 @@ void CodAddMsgDialog::accept()
 
     s = cbrank->currentText();
 
-    ColMsg::new_one(d, e, forward, s.mid(s.find(':') + 2), in)
+    ColMsg::new_one(d, e, forward, s.mid(s.indexOf(':') + 2), in)
     ->place_in(view->get_msgs());
 
     view->update_msg_supports();

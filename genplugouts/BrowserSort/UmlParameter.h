@@ -4,7 +4,7 @@
 
 #include "aDirection.h"
 #include "UmlTypeSpec.h"
-#include <q3cstring.h>
+
 
 //  Represent an operation's parameter
 
@@ -13,9 +13,9 @@ struct UmlParameter {
 
     UmlTypeSpec type;
 
-    Q3CString name;
+    QByteArray name;
 
-    Q3CString default_value;
+    QByteArray default_value;
 
 };
 

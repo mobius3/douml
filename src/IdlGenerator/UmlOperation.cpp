@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include "UmlOperation.h"
 #include "UmlSettings.h"
@@ -40,10 +40,10 @@
 #include "UmlRelation.h"
 #include "util.h"
 
-static bool generate_dir(const Q3ValueList<UmlParameter> & params,
+static bool generate_dir(const QList<UmlParameter> & params,
                          unsigned rank, QTextStream & f)
 {
-    if (rank >= params.count())
+    if ((int)rank >= params.count())
         return FALSE;
 
     switch (params[rank].dir) {
@@ -62,20 +62,20 @@ static bool generate_dir(const Q3ValueList<UmlParameter> & params,
     return TRUE;
 }
 
-static bool generate_type(const Q3ValueList<UmlParameter> & params,
+static bool generate_type(const QList<UmlParameter> & params,
                           unsigned rank, QTextStream & f)
 {
-    if (rank >= params.count())
+    if ((int)rank >= params.count())
         return FALSE;
 
     UmlClass::write(f, params[rank].type);
     return TRUE;
 }
 
-static bool generate_var(const Q3ValueList<UmlParameter> & params,
+static bool generate_var(const QList<UmlParameter> & params,
                          unsigned rank, QTextStream & f)
 {
-    if (rank >= params.count())
+    if ((int)rank >= params.count())
         return FALSE;
 
     f << params[rank].name;
@@ -113,9 +113,9 @@ WrapperStr UmlOperation::compute_name()
         else if ((index = get_set_spec.find("${Name}")) != -1)
             get_set_spec.replace(index, 7, capitalize(s));
         else if ((index = s.find("${NAME}")) != -1)
-            get_set_spec.replace(index, 7, s.upper());
+            get_set_spec.replace(index, 7, s.upper().toLatin1().constData());
         else if ((index = s.find("${nAME}")) != -1)
-            get_set_spec.replace(index, 7, s.lower());
+            get_set_spec.replace(index, 7, s.lower().toLatin1().constData());
 
         return get_set_spec;
     }
@@ -138,8 +138,8 @@ void UmlOperation::generate_decl(QTextStream & f,
 
         const char * p = idlDecl();
         const char * pp = 0;
-        const Q3ValueList<UmlParameter> & params = this->params();
-        const Q3ValueList<UmlTypeSpec> & exceptions = this->exceptions();
+        const QList<UmlParameter> & params = this->params();
+        const QList<UmlTypeSpec> & exceptions = this->exceptions();
         unsigned rank;
 
         while ((*p == ' ') || (*p == '\t'))
@@ -234,7 +234,7 @@ void UmlOperation::generate_decl(QTextStream & f,
 
                 if (! exceptions.isEmpty()) {
                     const char * sep;
-                    Q3ValueList<UmlTypeSpec>::ConstIterator it;
+                    QList<UmlTypeSpec>::ConstIterator it;
 
                     for (it = exceptions.begin(), sep = " raises (";
                          it != exceptions.end();

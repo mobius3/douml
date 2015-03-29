@@ -4,7 +4,6 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3ptrvector.h>
 #include "misc/mystr.h"
 
 #include "UmlClass.h"	// to avoid destructor problem
@@ -36,18 +35,18 @@ public:
     bool set_AssociatedDiagram(UmlComponentDiagram * d);
 
     // returns (in Java a copy of) the optional realizing classes
-    const Q3PtrVector<UmlClass> & realizingClasses();
+    const QHash<int,UmlClass*> & realizingClasses();
 
     // returns (in Java a copy of) the optional provided classes
-    const Q3PtrVector<UmlClass> & providedClasses();
+    const QHash<int,UmlClass*> & providedClasses();
 
     // returns (in Java a copy of) the optional required classes
-    const Q3PtrVector<UmlClass> & requiredClasses();
+    const QHash<int,UmlClass*> & requiredClasses();
 
     // set the realization, provided and required classes lists
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool set_AssociatedClasses(const Q3PtrVector<UmlClass> & realizing, const Q3PtrVector<UmlClass> & provided, const Q3PtrVector<UmlClass> & required);
+    bool set_AssociatedClasses(const QHash<int,UmlClass*> & realizing, const QHash<int,UmlClass*> & provided, const QHash<int,UmlClass*> & required);
 
     // to unload the object to free memory, it will be reloaded
     // automatically if needed. args unused
@@ -57,11 +56,11 @@ public:
 private:
     UmlComponentDiagram * _assoc_diagram;
 
-    Q3PtrVector<UmlClass> _realizing;
+    QHash<int,UmlClass*> _realizing;
 
-    Q3PtrVector<UmlClass> _provided;
+    QHash<int,UmlClass*> _provided;
 
-    Q3PtrVector<UmlClass> _required;
+    QHash<int,UmlClass*> _required;
 
 
 protected:

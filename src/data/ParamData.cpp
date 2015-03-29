@@ -55,7 +55,7 @@ void ParamData::set_type(const AType & t)
     type = t;
 }
 
-void ParamData::set_default_value(const char * str)
+void ParamData::set_default_value(WrapperStr str)
 {
     default_value = str;
 }
@@ -80,7 +80,7 @@ QString ParamData::definition(bool withdir, bool withname,
 
         QString v = default_value;
 
-        v = v.simplifyWhiteSpace();
+        v = v.simplified();
 
         return ((dir == UmlOut) || v.isEmpty())
                ? r

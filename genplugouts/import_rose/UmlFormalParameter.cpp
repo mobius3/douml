@@ -2,7 +2,7 @@
 #include "UmlFormalParameter.h"
 #include "File.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 void UmlFormalParameter::import(File & f, bool scanning)
 {
@@ -12,7 +12,7 @@ void UmlFormalParameter::import(File & f, bool scanning)
     if (f.read(_name) != STRING)
         f.syntaxError(_name, "formal's name");
 
-    Q3CString s;
+    QByteArray s;
 
     for (;;) {
         switch (f.read(s)) {

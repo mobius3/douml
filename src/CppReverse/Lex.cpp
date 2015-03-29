@@ -48,7 +48,7 @@ using namespace std;
 #include "Lex.h"
 #include "UmlCom.h"
 
-Q3AsciiDict<char> Lex::_defines;
+QHash<char*, char*> Lex::_defines;
 QString Lex::_filename;
 char * Lex::_buffer;
 LexContext Lex::_context;
@@ -81,7 +81,7 @@ void Lex::defines(const WrapperStr & f)
             }
 
             char * p = strchr(l, '=');
-            const char * v;
+            char * v;
 
             if (p != 0) {
                 *p = 0;
@@ -155,7 +155,7 @@ bool Lex::open(const QString & f)
 
     unsigned offset = 0;
 
-    do offset += in.readBlock(_buffer + offset, sz - offset);
+    do offset += in.read(_buffer + offset, sz - offset);
 
     while (offset != sz);
 
@@ -473,7 +473,7 @@ WrapperStr Lex::manage_operator(QString & result, int c, bool oper)
 #ifdef DEBUG_DOUML
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-    QByteArray temp = result.toAscii();
+    QByteArray temp = result.toLatin1();
     const char* c = temp.constData();
     return WrapperStr(c);
 }
@@ -578,7 +578,7 @@ WrapperStr Lex::read_string()
         case '"':
         {
             result += c;
-            QByteArray temp = result.toAscii();
+            QByteArray temp = result.toLatin1();
             const char* c = temp.constData();
             return WrapperStr(c);
         }
@@ -931,7 +931,7 @@ WrapperStr Lex::read_word(bool in_expr)
     }
 
     if (! result.isEmpty()) {
-        const char * v = _defines.find((const char *) result);
+        const char * v = _defines.value(result.toLatin1().data());
 
         if (v != 0) {
             if (*v == 0)
@@ -950,7 +950,7 @@ WrapperStr Lex::read_word(bool in_expr)
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
 
-    QByteArray temp = result.toAscii();
+    QByteArray temp = result.toLatin1();
     const char* c = temp.constData();
     return WrapperStr(c);
 }
@@ -1124,7 +1124,7 @@ void Lex::finish_line()
 
 WrapperStr Lex::get_comments()
 {
-    WrapperStr result = WrapperStr(_context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(_context.comments.toLatin1().constData());
 
     _context.comments = QString();
     return result;
@@ -1132,7 +1132,7 @@ WrapperStr Lex::get_comments()
 
 WrapperStr Lex::get_comments(WrapperStr & co)
 {
-    WrapperStr result = WrapperStr(_context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(_context.comments.toLatin1().constData());
 
     _context.comments = QString();
 
@@ -1143,7 +1143,7 @@ WrapperStr Lex::get_comments(WrapperStr & co)
 
 WrapperStr Lex::get_description()
 {
-    WrapperStr result = WrapperStr(_context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(_context.description.toLatin1().constData());
 
     _context.description = QString();
     return result;
@@ -1151,7 +1151,7 @@ WrapperStr Lex::get_description()
 
 WrapperStr Lex::get_description(WrapperStr & co)
 {
-    WrapperStr result = WrapperStr(_context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(_context.description.toLatin1().constData());
 
     _context.description = QString();
 
@@ -1261,7 +1261,7 @@ void Lex::set_context(const LexContext & context)
 void Lex::syntax_error(WrapperStr s)
 {
     UmlCom::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
-                  + WrapperStr(_filename.toAscii().constData()) + "</i> line " +
+                  + WrapperStr(_filename.toLatin1().constData()) + "</i> line " +
                   WrapperStr().setNum(_context.line_number) + " <b>"
                   + s + "</b></font><br>");
 
@@ -1274,7 +1274,7 @@ void Lex::syntax_error(WrapperStr s)
 void Lex::warn(WrapperStr s)
 {
     UmlCom::trace(WrapperStr("<font face=helvetica>in <i> ")
-                  + WrapperStr(_filename.toAscii().constData()) + "</i> line " +
+                  + WrapperStr(_filename.toLatin1().constData()) + "</i> line " +
                   WrapperStr().setNum(_context.line_number) + " <b>"
                   + s + "</b></font><br>");
 
@@ -1287,7 +1287,7 @@ void Lex::warn(WrapperStr s)
 void Lex::premature_eof()
 {
     UmlCom::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
-                  + WrapperStr(_filename.toAscii().constData()) + "</i> line " +
+                  + WrapperStr(_filename.toLatin1().constData()) + "</i> line " +
                   WrapperStr().setNum(_context.line_number) +
                   " <b>premature eof</b></font><br>");
 
@@ -1300,7 +1300,7 @@ void Lex::premature_eof()
 void Lex::error_near(WrapperStr s)
 {
     UmlCom::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
-                  + WrapperStr(_filename.toAscii().constData()) + "</i> line " +
+                  + WrapperStr(_filename.toLatin1().constData()) + "</i> line " +
                   WrapperStr().setNum(_context.line_number) + " <b>near <font color =\"red\">"
                   + quote(s) + "</font></b></font><br>");
 
@@ -1479,7 +1479,7 @@ WrapperStr Lex::normalize(const WrapperStr & s)
                     {
                         int length = r.length() - 1;
                         QString temp =r.at(length);
-                        bool ident = ::identifierp(temp.toAscii().at(0));
+                        bool ident = ::identifierp(temp.toLatin1().at(0));
                         if (ident)
                             r += " ";
                     }

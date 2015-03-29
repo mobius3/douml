@@ -38,7 +38,7 @@ void MenuFactory::createTitle(
 }
 
 void MenuFactory::addItems(
-    Q3PopupMenu & menu,
+    QMenu & menu,
     const Item items[],
     const int nofItems)
 {
@@ -52,25 +52,32 @@ void MenuFactory::addItems(
 }
 
 void MenuFactory::addItem(
-    Q3PopupMenu   &   menu,
+    QMenu   &   menu,
     const char * const name,
     const int         id,
     const char * const whatsThis)
 {
-    const int itemId = menu.insertItem(
-                           TR(name),
-                           id);
-
-    if (NULL != whatsThis) {
-        menu.setWhatsThis(itemId, TR(whatsThis));
-    }
+    QAction *action = menu.addAction(QObject::TR(name));
+    if(whatsThis)
+        action->setWhatsThis(QObject::TR(whatsThis));
+    action->setData(id);
+}
+void MenuFactory::addItem(
+    QMenu   &   menu,
+    QString const name,
+    const int         id,
+    QString const whatsThis)
+{
+    QAction *action = menu.addAction(name);
+    if(!whatsThis.isEmpty())
+        action->setWhatsThis((whatsThis));
+    action->setData(id);
 }
 
 MenuFactory::MenuFactory(
     const WrapperStr & menuName)
-    : m_menu(0, menuName)
+    : m_menu(menuName,0)
 {
-
 }
 
 MenuFactory::~MenuFactory()
@@ -78,7 +85,7 @@ MenuFactory::~MenuFactory()
 
 }
 
-Q3PopupMenu & MenuFactory::menu()
+QMenu & MenuFactory::menu()
 {
     return m_menu;
 }
@@ -108,11 +115,28 @@ void MenuFactory::addItem(
     const char * const name,
     QMenu * const      subMenu)
 {
-    m_menu.insertItem(name, subMenu);
+    //m_menu.insertItem(name, subMenu);
+    m_menu.addMenu(subMenu);
 }
 
 
 void MenuFactory::insertSeparator()
 {
-    m_menu.insertSeparator();
+    m_menu.addSeparator();
+}
+
+QAction *MenuFactory::findAction(const QMenu &menu, int id)
+{
+    foreach (QAction* action, menu.actions()) {
+        if(action->data().toInt() == id)return action;
+    }
+    return NULL;
+}
+
+void MenuFactory::insertItem(QMenu &parentMenu, QString name, QMenu *menu, QString what)
+{
+    menu->setTitle(name);
+    parentMenu.addMenu(menu);
+    if(!what.isEmpty())
+        menu->setWhatsThis(what);
 }

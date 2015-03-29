@@ -1,9 +1,9 @@
 
 #include "UmlAccessVariableValueAction.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-void UmlAccessVariableValueAction::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlAccessVariableValueAction::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     UmlActivityAction::html();
 

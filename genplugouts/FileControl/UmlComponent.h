@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseComponent.h"
-#include <q3cstring.h>
+
 
 // This class manages 'components'
 //
@@ -11,7 +11,7 @@
 class UmlComponent : public UmlBaseComponent
 {
 public:
-    UmlComponent(void * id, const Q3CString & n) : UmlBaseComponent(id, n) {};
+    UmlComponent(void * id, const QByteArray & n) : UmlBaseComponent(id, n) {};
 
 };
 

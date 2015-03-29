@@ -41,13 +41,14 @@ protected:
     DiagramCanvas * cl;
     QString text;
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     TemplateCanvas(DiagramCanvas * c);
     virtual ~TemplateCanvas();
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void open();
     virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;

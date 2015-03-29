@@ -1,11 +1,11 @@
 
 #include "UmlClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-void UmlClassMember::setComment(Q3CString s)
+void UmlClassMember::setComment(QByteArray s)
 {
-    set_Description(((cppDecl().find("${description}") != -1) ? "// " : " ")
+    set_Description(((cppDecl().indexOf("${description}") != -1) ? "// " : " ")
                     + s);
 
 }

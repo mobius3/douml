@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseOperation.h"
-#include <q3cstring.h>
+
 
 class Context;
 
@@ -14,7 +14,7 @@ class Context;
 class UmlOperation : public UmlBaseOperation
 {
 public:
-    UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n) {};
+    UmlOperation(void * id, const QByteArray & n) : UmlBaseOperation(id, n) {};
 
     virtual void change(Context & ctx);
 

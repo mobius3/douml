@@ -1,0 +1,20 @@
+window_sizes 1680 988 450 1350 833 111
+diagrams
+  classdiagram_ref 160682 // Structure Diagram : Field
+    1167 284 100 4 84 0
+  classdiagram_ref 167210 // Structure Diagram : Mistake
+    1464 831 100 3 72 0
+  active  classdiagram_ref 154154 // message
+    1464 833 100 2 0 0
+end
+show_stereotypes
+selected class_ref 559914 // MessageBase
+open
+  deploymentview_ref 180522 // include_
+  classview_ref 193578 // include
+  classview_ref 206634 // Message Format Checks
+  classview_ref 206762 // Additional Checks
+  class_ref 559914 // MessageBase
+  classview_ref 207146 // Processing Results
+end
+end

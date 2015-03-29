@@ -1,5 +1,14 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on
+CONFIG(Debug, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt warn_on Debug
+    QMAKE_POST_LINK = " "
+}
+CONFIG(Release, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt Release
+    QMAKE_POST_LINK = " "
+}
 SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
         UmlExtraClassMember.cpp UmlArtifact.cpp \
@@ -95,25 +104,23 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
 TARGET          = java_generator
-DEFINES          = WITHJAVA BooL=bool
+DEFINES          = WITHJAVA BooL=bool TRUE=true FALSE=false
 INCLUDEPATH   = ../Tools ../JavaGenerator ../
 
 DESTDIR = ../../bin
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network
+#qt3support
 
 QMAKE_CXXFLAGS += -std=gnu++11
-Release{
-    MOC_DIR = ../../bin/MOC_release/java_gen/
-    OBJECTS_DIR = ../../bin/Obj_release/java_gen
+DESTDIR = ../../bin
+Release {
+    MOC_DIR = $${DESTDIR}/moc_release/java_generator
+    OBJECTS_DIR = $${DESTDIR}/obj_release/java_generator
 }
 
-Debug{
-    MOC_DIR = ../../bin/MOC_debug/java_gen/
-    OBJECTS_DIR = ../../bin/Obj_debug/java_gen
-
+Debug {
+    MOC_DIR = $${DESTDIR}/moc_debug/java_generator
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/java_generator
 }
-
-    DESTDIR = ../../bin
-

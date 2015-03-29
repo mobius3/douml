@@ -1,14 +1,14 @@
 
 #include "UmlComponentView.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlComponentView::sKind()
+QByteArray UmlComponentView::sKind()
 {
     return "component view";
 }
 
-void UmlComponentView::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlComponentView::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     UmlItem::html(pfix, rank, "Component View", level, "view");
 

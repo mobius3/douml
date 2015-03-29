@@ -7,9 +7,9 @@
 #include "UmlOperation.h"
 #include "UmlTransition.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-void UmlFinalState::generate(UmlClass *, UmlClass *, UmlState *, Q3CString & body, Q3CString indent)
+void UmlFinalState::generate(UmlClass *, UmlClass *, UmlState *, QByteArray & body, QByteArray indent)
 {
     if (parent()->kind() != aRegion)
         body += indent + "stm._final();\n";

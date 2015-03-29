@@ -9,4 +9,5 @@ TARGET          = projectSynchro
 DEFINES          = BooL=bool
 INCLUDEPATH   = 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network  widgets
+#qt3support

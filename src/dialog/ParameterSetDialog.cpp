@@ -30,14 +30,12 @@
 
 
 #include <qsplitter.h>
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-
+#include <qcombobox.h>
+#include <QList>
 #include "ParameterSetDialog.h"
 #include "UmlDesktop.h"
 #include "BrowserParameterSet.h"
@@ -53,11 +51,12 @@
 #include "BodyDialog.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
+#include "hhbox.h"
 
 QSize ParameterSetDialog::previous_size;
 
 ParameterSetDialog::ParameterSetDialog(ParameterSetData * nd)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(nd)
 {
     nd->browser_node->edit_start();
 
@@ -70,20 +69,20 @@ ParameterSetDialog::ParameterSetDialog(ParameterSetData * nd)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("ParameterSet dialog"));
+    setWindowTitle(TR("ParameterSet dialog"));
 
     init_uml_tab();
     init_pins_tab();
 
     // USER : list key - value
 
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
 
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable((BrowserParameterSet *) data->get_browser_node(),
-                                 grid, !hasOkButton());
+    grid->addWidget(kvtable = new KeyValuesTable((BrowserParameterSet *) data->get_browser_node(),
+                                 grid, !hasOkButton()));
     addTab(grid, TR("Properties"));
 
     //
@@ -99,8 +98,9 @@ ParameterSetDialog::~ParameterSetDialog()
     data->browser_node->edit_end();
     previous_size = size();
 
-    while (!edits.isEmpty())
-        edits.take(0)->close();
+    foreach (BodyDialog *dialog, edits)
+        dialog->close();
+    edits.clear();
 
     close_dialog(this);
 }
@@ -113,7 +113,7 @@ void ParameterSetDialog::change_tabs(QWidget * w)
 
 void ParameterSetDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -123,41 +123,43 @@ void ParameterSetDialog::init_uml_tab()
 
     BrowserParameterSet * bn =
         (BrowserParameterSet *) data->get_browser_node();
-    Q3VBox * vbox;
-    Q3Grid * grid = new Q3Grid(2, this);
+    VVBox * vbox;
+    GridBox * grid = new GridBox(2, this);
 
     umltab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(TRUE, grid);
-    edstereotype->insertItem(toUnicode(data->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(true);
+    edstereotype->addItem(toUnicode(data->get_stereotype()));
 
     if (! visit) {
-        edstereotype->insertStringList(BrowserParameterSet::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlParameterSet));
+        edstereotype->addItems(BrowserParameterSet::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlParameterSet));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    vbox = new Q3VBox(grid);
-    new QLabel(TR("description :"), vbox);
-
+    grid->addWidget(vbox = new VVBox(grid));
+    vbox->addWidget(new QLabel(TR("description :"), vbox));
+    SmallPushButton* b;
     if (! visit) {
-        connect(new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
+        connect( b = new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vbox->addWidget(b);
     }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     QFont font = comment->font();
@@ -174,61 +176,66 @@ void ParameterSetDialog::init_uml_tab()
 void ParameterSetDialog::init_pins_tab()
 {
     bool visit = !hasOkButton();
-    Q3HBox * hbox;
+    HHBox * hbox;
     QPushButton * button;
-    Q3VBox * vbox = new Q3VBox(this);
-    Q3VBox * page = vbox;
-    const Q3ValueList<BrowserPin *> & inpins = data->pins;
-    Q3ValueList<BrowserPin *>::ConstIterator it;
-
+    VVBox * vbox = new VVBox(this);
+    VVBox * page = vbox;
+    const QList<BrowserPin *> & inpins = data->pins;
+    QList<BrowserPin *>::ConstIterator it;
+    QLabel* l;
     if (!visit) {
-        hbox = new Q3HBox(vbox);
-        vbox = new Q3VBox(hbox);
+        vbox->addWidget(hbox = new HHBox(vbox));
+        hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (new QLabel(TR("Parameters out of Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
-        lb_available = new Q3ListBox(vbox);
-        lb_available->setSelectionMode(Q3ListBox::Multi);
+        (l = new QLabel(TR("Parameters out of Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
+        vbox->addWidget(l);
+        vbox->addWidget(lb_available = new QListWidget(vbox));
+        lb_available->setSelectionMode(QListWidget::MultiSelection);
 
         BrowserParameterSet * bn =
             (BrowserParameterSet *) data->get_browser_node();
-        Q3ValueList<BrowserPin *> allpins =
+        QList<BrowserPin *> allpins =
             ((BrowserActivityAction *) bn->parent())->get_pins();
 
         for (it = allpins.begin(); it != allpins.end(); it++)
-            if (inpins.find(*it) == inpins.end())
-                lb_available->insertItem(new ListBoxBrowserNode(*it, (*it)->full_name(TRUE)));
+            if (!inpins.contains(*it))
+                lb_available->addItem(new ListBoxBrowserNode(*it, (*it)->full_name(TRUE)));
 
-        lb_available->sort();
+        lb_available->sortItems();
 
-        vbox = new Q3VBox(hbox);
+        hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (new QLabel("", vbox))->setScaledContents(TRUE);
-        button = new QPushButton(vbox);
-        button->setPixmap(*rightPixmap);
+        (l = new QLabel("", vbox))->setScaledContents(TRUE);
+        vbox->addWidget(l);
+        vbox->addWidget(button = new QPushButton(vbox));
+        button->setIcon(*rightPixmap);
         connect(button, SIGNAL(clicked()), this, SLOT(associate_cls()));
-        (new QLabel("", vbox))->setScaledContents(TRUE);
-        button = new QPushButton(vbox);
-        button->setPixmap(*leftPixmap);
+        (l =new QLabel("", vbox))->setScaledContents(TRUE);
+        vbox->addWidget(l);
+        vbox->addWidget(button = new QPushButton(vbox));
+        button->setIcon(*leftPixmap);
         connect(button, SIGNAL(clicked()), this, SLOT(unassociate_cls()));
-        (new QLabel("", vbox))->setScaledContents(TRUE);
-        vbox = new Q3VBox(hbox);
+        (l = new QLabel("", vbox))->setScaledContents(TRUE);
+        vbox->addWidget(l);
+        hbox->addWidget(vbox = new VVBox(hbox));
     }
 
     vbox->setMargin(5);
-    (new QLabel(TR("Parameters in Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
-    lb_member = new Q3ListBox(vbox);
-    lb_member->setSelectionMode((visit) ? Q3ListBox::NoSelection
-                                : Q3ListBox::Multi);
+    (l = new QLabel(TR("Parameters in Parameter Set"), vbox))->setAlignment(Qt::AlignCenter);
+    vbox->addWidget(l);
+    vbox->addWidget(lb_member = new QListWidget(vbox));
+    lb_member->setSelectionMode((visit) ? QListWidget::NoSelection
+                                : QListWidget::MultiSelection);
 
     for (it = inpins.begin(); it != inpins.end(); ++it)
-        lb_member->insertItem(new ListBoxBrowserNode(*it, (*it)->full_name(TRUE)));
+        lb_member->addItem(new ListBoxBrowserNode(*it, (*it)->full_name(TRUE)));
 
     addTab(page, TR("Parameters"));
 }
 
 void ParameterSetDialog::edit_description()
 {
-    edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
+    edit(comment->text(), edname->text().trimmed() + "_description",
          data, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -242,17 +249,17 @@ void ParameterSetDialog::associate_cls()
     unsigned int i = 0;
 
     while (i < lb_available->count()) {
-        Q3ListBoxItem * item = lb_available->item(i);
+        QListWidgetItem * item = lb_available->item(i);
 
-        if (item->selected()) {
-            lb_available->takeItem(item);
-            lb_member->insertItem(item);
+        if (item->isSelected()) {
+            lb_available->takeItem(lb_available->row(item));
+            lb_member->addItem(item);
         }
         else
             i += 1;
     }
 
-    lb_member->sort();
+    lb_member->sortItems();
 }
 
 void ParameterSetDialog::unassociate_cls()
@@ -260,17 +267,17 @@ void ParameterSetDialog::unassociate_cls()
     unsigned int i = 0;
 
     while (i < lb_member->count()) {
-        Q3ListBoxItem * item = lb_member->item(i);
+        QListWidgetItem * item = lb_member->item(i);
 
-        if (item->selected()) {
-            lb_member->takeItem(item);
-            lb_available->insertItem(item);
+        if (item->isSelected()) {
+            lb_member->takeItem(lb_member->row(item));
+            lb_available->addItem(item);
         }
         else
             i += 1;
     }
 
-    lb_available->sort();
+    lb_available->sortItems();
 }
 
 void ParameterSetDialog::accept()
@@ -278,7 +285,7 @@ void ParameterSetDialog::accept()
     if (!check_edits(edits) || !kvtable->check_unique())
         return;
 
-    QString s = edname->text().stripWhiteSpace();
+    QString s = edname->text().trimmed();
     BrowserParameterSet * bn =
         (BrowserParameterSet *) data->get_browser_node();
 
@@ -293,9 +300,9 @@ void ParameterSetDialog::accept()
         UmlWindow::update_comment_if_needed(bn);
 
         QString stereotype =
-            fromUnicode(edstereotype->currentText().stripWhiteSpace());
+            fromUnicode(edstereotype->currentText().trimmed());
         bool newst = data->set_stereotype(stereotype);
-        Q3ValueList<BrowserPin *> l;
+        QList<BrowserPin *> l;
         unsigned n = lb_member->count();
 
         for (unsigned i = 0; i != n; i += 1)
@@ -313,6 +320,6 @@ void ParameterSetDialog::accept()
         bn->package_modified();
         data->modified();
 
-        Q3TabDialog::accept();
+        TabDialog::accept();
     }
 }

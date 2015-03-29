@@ -8,7 +8,7 @@
 #include "UmlActivityNode.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 void UmlFlow::init()
 {
     declareFct("edge", "uml:ObjectFlow", &importIt);
@@ -22,13 +22,13 @@ void UmlFlow::init()
 
 void UmlFlow::solveThem()
 {
-    Q3ValueList<Flow>::Iterator iter;
+    QList<Flow>::Iterator iter;
 
     for (iter = All.begin(); iter != All.end(); ++iter) {
         Flow & flow = *iter;
 
-        QMap<WrapperStr, UmlItem *>::Iterator isrc = UmlItem::All.find(flow.source);
-        QMap<WrapperStr, UmlItem *>::Iterator itgt = UmlItem::All.find(flow.target);
+        QMap<QString, UmlItem *>::Iterator isrc = UmlItem::All.find(flow.source);
+        QMap<QString, UmlItem *>::Iterator itgt = UmlItem::All.find(flow.target);
 
         if ((isrc == UmlItem::All.end()) &&
             ((isrc = Outgoings.find(flow.id)) == Outgoings.end())) {
@@ -103,7 +103,7 @@ void UmlFlow::solveThem()
 
 void UmlFlow::importIt(FileIn & in, Token & token, UmlItem *)
 {
-    Flow & flow = *(All.append(Flow()));
+    Flow flow;
     WrapperStr s;
 
     flow.id = token.xmiId();
@@ -166,7 +166,8 @@ void UmlFlow::importIt(FileIn & in, Token & token, UmlItem *)
                 in.finish(s);
         }
     }
+    All.append(flow);
 }
 
-Q3ValueList<UmlFlow::Flow> UmlFlow::All;
+QList<UmlFlow::Flow> UmlFlow::All;
 

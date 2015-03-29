@@ -34,21 +34,16 @@
 
 
 #include <qmessagebox.h>
-#include <q3textbrowser.h>
-#include <q3textview.h>
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qdir.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
 
 #include "HelpDialog.h"
 #include "UmlDesktop.h"
 #include "DialogUtil.h"
 #include "translate.h"
-
+#include <QTextBrowser>
 static QString NavigatorPath;
 static QString ManualDir;
 static QSize Sz;
@@ -79,16 +74,16 @@ void set_navigator_path(QString p)
 HelpDialog * HelpDialog::the;
 
 HelpDialog::HelpDialog()
-    : QDialog(0, "BOUML Help", FALSE, Qt::WDestructiveClose)
+    : QDialog(0, Qt::Dialog)
 {
-    setCaption(TR("BOUML Help"));
+    setWindowTitle(TR("BOUML Help"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    br = new Q3TextBrowser(this);
+    br = new QTextBrowser(this);
     vbox->addWidget(br);
 
     //vbox->addWidget(new QLabel(this));
@@ -96,7 +91,8 @@ HelpDialog::HelpDialog()
     if (!DocDir.isEmpty()) {
         QDir d(DocDir);
 
-        hbox = new Q3HBoxLayout(vbox);
+        hbox = new QHBoxLayout();
+        vbox->addLayout(hbox);
         hbox->addWidget(new QLabel(this));
         hbox->addWidget(new QLabel(TR("To set the navigator by setting the environment through the menu"
                                       " Miscellaneous allows to see all the documentation in better conditions")
@@ -106,7 +102,8 @@ HelpDialog::HelpDialog()
     else
         vbox->addWidget(new QLabel(this));
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
 
     QPushButton * ok = new QPushButton(TR("Close"), this);
 
@@ -115,9 +112,7 @@ HelpDialog::HelpDialog()
     hbox->addWidget(new QLabel(this));
 
     QSize sz;
-
     UmlDesktop::setsize_center(this, Sz, 0.7, 0.7);
-
     connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
     open_dialog(this);
 }
@@ -150,30 +145,30 @@ void HelpDialog::show(QString topic)
         QDir dir(dirs[index]);
 
         if (dir.exists(topic + ".html")) {
-            DocDir = dir.absPath();
+            DocDir = dir.absolutePath();
 
             if (!NavigatorPath.isEmpty()) {
                 if (dir.exists("index_" + topic + ".html"))
-                    topic = dir.absFilePath("index_" + topic + ".html");
+                    topic = dir.absoluteFilePath("index_" + topic + ".html");
                 else
-                    topic = dir.absFilePath(topic + ".html");
+                    topic = dir.absoluteFilePath(topic + ".html");
 
                 int index = 0;
 
-                while ((index = topic.find(" ", index)) != -1)
+                while ((index = topic.indexOf(" ", index)) != -1)
                     topic.replace(index, 1, "%20");
 
 
                 QString s = NavigatorPath + " file://" + topic + "&";
 
                 errno = 0;
-                (void) system(s);
+                (void) system(s.toLatin1().constData());
 
                 if (errno != 0)
                     QMessageBox::critical(0, "Douml",
-                                          TR("HelpDialog : error while executing '%1'\n"
+                                          QObject::tr("HelpDialog : error while executing '%1'\n"
                                              "perhaps you must specify its absolute path"
-                                             "or set the environment variable PATH ?", NavigatorPath));
+                                             "or set the environment variable PATH ?").arg(NavigatorPath));
 
                 return;
             }
@@ -186,7 +181,9 @@ void HelpDialog::show(QString topic)
         the = new HelpDialog();
 
     if (!DocDir.isEmpty()) {
+#ifdef habip
         the->br->mimeSourceFactory()->setFilePath(DocDir);
+#endif
         the->br->setSource(topic + ".html");
     }
     else {
@@ -201,9 +198,9 @@ void HelpDialog::show(QString topic)
             }
         }
 
-        the->br->setText(QString((old) ? TR("The documentation is too old.<br><br>")
-                                 : TR("The documentation isn't installed.<br><br>")) +
-                         TR("The \".tar.gz\" or \".7z\" archives are available here:"
+        the->br->setText(QString((old) ? QObject::tr("The documentation is too old.<br><br>")
+                                 : QObject::tr("The documentation isn't installed.<br><br>")) +
+                         QObject::tr("The \".tar.gz\" or \".7z\" archives are available here:"
                             "<ul><li>http://bouml.sourceforge.net/documentation.html</li>"
                             "<li>http://sourceforge.net/projects/douml/documentation.html</li></ul>"
                             "<br>Extract an archive and set the environment through the Miscellaneous"

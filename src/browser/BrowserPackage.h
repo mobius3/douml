@@ -28,7 +28,7 @@
 #ifndef BROWSER_PACKAGE_H
 #define BROWSER_PACKAGE_H
 
-#include <q3intdict.h>
+//#include <q3intdict.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QDragMoveEvent>
@@ -42,22 +42,22 @@
 class PackageData;
 class BrowserClassDiagram;
 class StereotypesDialog;
-
 class BrowserPackage : public BrowserNode, public Labeled<BrowserPackage>
 {
     friend class StereotypesDialog;
 
 protected:
-    static Q3PtrList<BrowserPackage> removed;
+    static QList<BrowserPackage *> removed;
+
     static IdDict<BrowserPackage> all;
 
     static QStringList its_default_stereotypes;
     static QStringList relation_default_stereotypes;
-
     PackageData * def;
     BrowserNode * associated_diagram;
-    ClassDiagramSettings classdiagram_settings;
     ClassSettings class_settings;
+
+    ClassDiagramSettings classdiagram_settings;
     UseCaseDiagramSettings usecasediagram_settings;
     SequenceDiagramSettings sequencediagram_settings;
     CollaborationDiagramSettings collaborationdiagram_settings;
@@ -66,6 +66,7 @@ protected:
     DeploymentDiagramSettings deploymentdiagram_settings;
     StateDiagramSettings statediagram_settings;
     ActivityDiagramSettings activitydiagram_settings;
+
     UmlColor class_color;
     UmlColor package_color;
     UmlColor note_color;
@@ -84,6 +85,7 @@ protected:
     UmlColor activitypartition_color;
     UmlColor activityaction_color;
     UmlColor parameterpin_color;
+
     bool is_imported;
     unsigned revision;
     int owner;
@@ -115,7 +117,7 @@ public:
     virtual QString get_stype() const;
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
+    virtual bool may_contains_them(const QList<BrowserNode *> &,
                                    BooL & duplicable) const;
     virtual BasicData * get_data() const;
     virtual const QStringList & default_stereotypes(UmlCode, const BrowserNode *) const; // non class rel
@@ -134,7 +136,7 @@ public:
     virtual QString check_inherit(const BrowserNode * parent) const;
     QString may_connect(UmlCode & l, const BrowserNode * dest) const;
 
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
+    virtual void referenced_by(QList<BrowserNode *> & l, bool ondelete);
 
     virtual bool tool_cmd(ToolCom * com, const char * args);
     static bool tool_global_cmd(ToolCom * com, const char * args);
@@ -185,10 +187,11 @@ public:
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    virtual void support_file(Q3Dict<char> & files, bool add) const;
+    virtual void support_file(QHash<QString,char*> & files, bool add) const;
     void update_lib();
 
     static void prepare_for_sort();
+
 };
 
 #endif

@@ -3,7 +3,7 @@
 
 
 #include "UmlItem.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 //  Mother class of the all the class's items including the class themself
 class UmlBaseClassItem : public UmlItem
@@ -12,7 +12,7 @@ public:
 #ifdef WITHCPP
     //  return the C++ declaration
 
-    const Q3CString & cppDecl();
+    const QByteArray & cppDecl();
 
     //  to set the C++ declaration
     //
@@ -23,7 +23,7 @@ public:
 #ifdef WITHJAVA
     //  return the Java defininition
 
-    const Q3CString & javaDecl();
+    const QByteArray & javaDecl();
 
     //  to set the Java definition
     //
@@ -34,7 +34,7 @@ public:
 #ifdef WITHIDL
     //  return the IDL declaration
 
-    const Q3CString & idlDecl();
+    const QByteArray & idlDecl();
 
     //  set the IDL declaration
     //
@@ -50,20 +50,28 @@ public:
 
 private:
 #ifdef WITHCPP
-    Q3CString _cpp_decl;
+    QByteArray _cpp_decl;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_decl;
+    QByteArray _java_decl;
+#endif
+
+#ifdef WITHPHP
+    QByteArray _php_decl;
+#endif
+
+#ifdef WITHPYTHON
+    QByteArray _python_decl;
 #endif
 
 #ifdef WITHIDL
-    Q3CString _idl_decl;
+    QByteArray _idl_decl;
 #endif
 
 
 protected:
-    UmlBaseClassItem(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseClassItem(void * id, const QByteArray & n) : UmlItem(id, n) {};
 
 #ifdef WITHCPP
     virtual void read_cpp_();
@@ -71,6 +79,18 @@ protected:
 
 #ifdef WITHJAVA
     virtual void read_java_();
+#endif
+
+#ifdef WITHPHP
+    //internal, do NOT use it
+
+    virtual void read_php_();
+#endif
+
+#ifdef WITHPYTHON
+    //internal, do NOT use it
+
+    virtual void read_python_();
 #endif
 
 #ifdef WITHIDL

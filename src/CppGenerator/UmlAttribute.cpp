@@ -30,7 +30,7 @@
 #include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
+////
 
 #include "UmlAttribute.h"
 #include "UmlSettings.h"
@@ -40,7 +40,7 @@
 #include "util.h"
 #include "misc/codec.h"
 
-void UmlAttribute::compute_dependency(Q3PtrList<CppRefType> & dependency,
+void UmlAttribute::compute_dependency(QList<CppRefType *> & dependency,
                                       const WrapperStr & cl_stereotype,
                                       bool all_in_h)
 {
@@ -174,7 +174,7 @@ void UmlAttribute::generate_decl(aVisibility & current_visibility, QTextStream &
 
             p += (p[2] == 'h') ? 10 : 8;
 
-            if (!defaultValue().isEmpty()) {
+            if (!defaultValue().isEmpty() && !isClassMember()) {
                 if (need_equal(pb, defaultValue()))
                     f_h << " = ";
 

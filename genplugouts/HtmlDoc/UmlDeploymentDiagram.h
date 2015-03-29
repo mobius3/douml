@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseDeploymentDiagram.h"
-#include <q3cstring.h>
+
 #include "Vector.h"
 
 // This class manages 'deployment diagrams', notes that the class 'UmlDiagram'
@@ -14,10 +14,10 @@
 class UmlDeploymentDiagram : public UmlBaseDeploymentDiagram
 {
 public:
-    UmlDeploymentDiagram(void * id, const Q3CString & n) : UmlBaseDeploymentDiagram(id, n) {};
+    UmlDeploymentDiagram(void * id, const QByteArray & n) : UmlBaseDeploymentDiagram(id, n) {};
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     //set he html ref
     //set the diagrams list

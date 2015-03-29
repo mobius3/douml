@@ -3,9 +3,9 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #ifdef WITHCPP
-const Q3CString & UmlBaseClassItem::cppDecl()
+const QByteArray & UmlBaseClassItem::cppDecl()
 {
     read_if_needed_();
 
@@ -19,7 +19,7 @@ bool UmlBaseClassItem::set_CppDecl(const char * s)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseClassItem::javaDecl()
+const QByteArray & UmlBaseClassItem::javaDecl()
 {
     read_if_needed_();
 
@@ -33,7 +33,7 @@ bool UmlBaseClassItem::set_JavaDecl(const char * s)
 #endif
 
 #ifdef WITHIDL
-const Q3CString & UmlBaseClassItem::idlDecl()
+const QByteArray & UmlBaseClassItem::idlDecl()
 {
     read_if_needed_();
 
@@ -49,10 +49,16 @@ bool UmlBaseClassItem::set_IdlDecl(const char * s)
 void UmlBaseClassItem::unload(bool rec, bool del)
 {
 #ifdef WITHCPP
-    _cpp_decl = 0;
+  _cpp_decl = 0;
 #endif
 #ifdef WITHJAVA
-    _java_decl = 0;
+  _java_decl = 0;
+#endif
+#ifdef WITHPHP
+    _php_decl = 0;
+#endif
+#ifdef WITHPYTHON
+    _python_decl = 0;
 #endif
 #ifdef WITHIDL
     _idl_decl = 0;
@@ -71,6 +77,19 @@ void UmlBaseClassItem::read_cpp_()
 void UmlBaseClassItem::read_java_()
 {
     _java_decl = UmlCom::read_string();
+}
+#endif
+#ifdef WITHPHP
+void UmlBaseClassItem::read_php_()
+{
+    _php_decl = UmlCom::read_string();
+}
+#endif
+
+#ifdef WITHPYTHON
+void UmlBaseClassItem::read_python_()
+{
+    _python_decl = UmlCom::read_string();
 }
 #endif
 

@@ -30,11 +30,11 @@
 
 #include <q3listview.h>
 #include <qdir.h>
-#include <q3dict.h>
+
 //Added by qt3to4:
 #include <QLabel>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 class BrowserNode;
 class QLabel;
@@ -77,7 +77,7 @@ public:
 
     void synchronize();
 
-    static void update(const Q3PtrList<BrowserView> &);
+    static void update(const QList<BrowserView *> &);
 
 protected:
     void update_it();

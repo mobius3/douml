@@ -4,10 +4,10 @@
 #include "UmlTypeSpec.h"
 
 #include <qdir.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qmessagebox.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include "UmlClass.h"
 #include "UmlOperation.h"
@@ -34,7 +34,7 @@ UmlItem::~UmlItem()
 {
 }
 
-Q3CString UmlItem::sKind()
+QByteArray UmlItem::sKind()
 {
     return "???";
 }
@@ -45,7 +45,6 @@ void UmlItem::set_dir(int argc, char ** argv)
     bool ask;
     bool rem;
     bool replace_css;
-
     if ((argc != 0) && !strcmp(argv[0], "-flat")) {
         flat = TRUE;
         argc -= 1;
@@ -61,13 +60,12 @@ void UmlItem::set_dir(int argc, char ** argv)
     }
     else
         svg = FALSE;
-
     if (argc == 0) {
         if (!UmlBasePackage::getProject()->propertyValue("html dir", directory))
             directory = "/tmp/" + name() + "_html";
 
         d = directory;
-        d = Q3FileDialog::getExistingDirectory(d, 0, "", "Directory where the files will be produced", TRUE);
+        d = QFileDialog::getExistingDirectory(0,"Directory where the files will be produced",d);
 
         if (d.isEmpty())
             throw 0;
@@ -115,7 +113,7 @@ void UmlItem::set_dir(int argc, char ** argv)
     if ((d.at(d.length() - 1) != '/') && (d.at(d.length() - 1) != '\\'))
         d += '/';
 
-    directory = (const char *) d;
+    directory = d.toLatin1();
 
     QDir dir(d);
     unsigned i;
@@ -124,7 +122,7 @@ void UmlItem::set_dir(int argc, char ** argv)
         if (ask) {
             // remove old html files ?
             for (i = 0; i != dir.count(); i += 1) {
-                if (dir[i].right(5).lower() == ".html") {
+                if (dir[i].right(5).toLower() == ".html") {
                     if (!rem &&
                         (QMessageBox::critical(0, "Html generator",
                                                "Delete already existing html files ?",
@@ -154,7 +152,7 @@ void UmlItem::set_dir(int argc, char ** argv)
         else {
             if (rem) {
                 for (i = 0; i != dir.count(); i += 1) {
-                    if (dir[i].right(5).lower() == ".html")
+                    if (dir[i].right(5).toLower() == ".html")
                         dir.remove(dir[i]);
                 }
             }
@@ -228,7 +226,7 @@ void UmlItem::memo_ref()
     all.addElement(this);
     known = TRUE;
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     for (unsigned i = 0; i != ch.size(); i += 1)
         ch[i]->memo_ref();
@@ -243,9 +241,9 @@ void UmlItem::define()
     fw.write("\"></a>\n");
 }
 
-void UmlItem::start_file(Q3CString f, Q3CString s, bool withrefs)
+void UmlItem::start_file(QByteArray f, QByteArray s, bool withrefs)
 {
-    Q3CString filename = directory + f;
+    QByteArray filename = directory + f;
     bool is_frame = (f == "index-withframe");
 
     if (! fw.open(filename + ".html"))
@@ -366,7 +364,7 @@ void UmlItem::generate_indexes()
 
     for (i = 0; i != n; i += 1) {
         UmlItem * x = all.elementAt(i);
-        Q3CString s = x->pretty_name();
+        QByteArray s = x->pretty_name();
 
         if (! s.isEmpty()) {
             char c = *((const char *) s);
@@ -385,7 +383,7 @@ void UmlItem::generate_indexes()
 
     for (i = 0; i != n; i += 1) {
         UmlItem * x = all.elementAt(i);
-        Q3CString s = x->pretty_name();
+        QByteArray s = x->pretty_name();
 
         if (! s.isEmpty()) {
             char c = *((const char *) s);
@@ -401,11 +399,11 @@ void UmlItem::generate_indexes()
 
                 previous = c;
 
-                Q3CString sn;
+                QByteArray sn;
 
                 sn.setNum((int)(c & 255));
 
-                start_file(Q3CString("index_") + sn, Q3CString("") + c, TRUE);
+                start_file(QByteArray("index_") + sn, QByteArray("") + c, TRUE);
 
                 fw.write("<table>\n");
                 fw.write("<tr bgcolor=\"#f0f0f0\"><td align=\"center\"><b>Name</b></td><td align=\"center\"><b>Kind</b></td><td align=\"center\"><b>Description</b></td></tr>\n");
@@ -461,7 +459,7 @@ bool UmlItem::chapterp()
     return FALSE;
 }
 
-void UmlItem::html(Q3CString pfix, unsigned int rank, Q3CString what, unsigned int level, Q3CString kind)
+void UmlItem::html(QByteArray pfix, unsigned int rank, QByteArray what, unsigned int level, QByteArray kind)
 {
     define();
 
@@ -475,11 +473,11 @@ void UmlItem::html(Q3CString pfix, unsigned int rank, Q3CString what, unsigned i
 
     write_properties();
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     if (n != 0) {
-        Q3CString spfix;
+        QByteArray spfix;
 
         if (rank != 0) {
             spfix.setNum(rank);
@@ -511,7 +509,7 @@ void UmlItem::html(const char * what, UmlDiagram * diagram)
     writeq(name());
     fw.write("</b></div></td></tr></table>\n");
 
-    Q3CString d = description();
+    QByteArray d = description();
 
     if (!d.isEmpty()) {
         fw.write("<p>");
@@ -530,13 +528,13 @@ void UmlItem::html(const char * what, UmlDiagram * diagram)
     write_properties();
 }
 
-void UmlItem::write_children(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlItem::write_children(QByteArray pfix, unsigned int rank, unsigned int level)
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     if (n != 0) {
-        Q3CString spfix;
+        QByteArray spfix;
         unsigned srank = 1;
 
         if (rank != 0) {
@@ -561,7 +559,7 @@ void UmlItem::write_children(Q3CString pfix, unsigned int rank, unsigned int lev
 
 void UmlItem::write_dependencies()
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     for (unsigned i = 0; i != n; i += 1) {
@@ -582,27 +580,27 @@ void UmlItem::write_properties()
         fw.write("</p>\n");
     }
 
-    const Q3Dict<Q3CString> d = properties();
+    const QHash<QByteArray, QByteArray*> d = properties();
 
     if (! d.isEmpty()) {
         fw.write("<p>Properties:</p><ul>\n");
 
-        Q3DictIterator<Q3CString> it(d);
+        QHashIterator<QByteArray, QByteArray*> it(d);
 
-        while (it.current()) {
+        while (it.hasNext()) {
+            it.next();
             fw.write("<li>");
-            writeq(it.currentKey().latin1());
+            writeq(it.key());
             fw.write(":<br /><div class=\"sub\">");
-            writeq(*(it.current()));
+            writeq(*(it.value()));
             fw.write("</div></li>\n");
-            ++it;
         }
 
         fw.write("</ul>\n");
     }
 }
 
-void UmlItem::chapter(Q3CString k, Q3CString pfix, unsigned int rank, Q3CString kind, unsigned int level)
+void UmlItem::chapter(QByteArray k, QByteArray pfix, unsigned int rank, QByteArray kind, unsigned int level)
 {
     if (rank != 0) {
         if (level > 4)
@@ -676,8 +674,8 @@ void UmlItem::manage_alias(const char *& p)
     const char * pclosed;
 
     if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
-        Q3CString key(p + 2, pclosed - p - 1);
-        Q3CString value;
+        QByteArray key(p + 2, pclosed - p - 1);
+        QByteArray value;
         UmlItem * node = this;
 
         do {
@@ -732,7 +730,7 @@ void UmlItem::write()
         writeq(name());
 }
 
-void UmlItem::write(Q3CString target)
+void UmlItem::write(QByteArray target)
 {
     if (known) {
         fw.write("<a href=\"index.html#ref");
@@ -749,7 +747,7 @@ void UmlItem::write(Q3CString target)
         writeq(name());
 }
 
-void UmlItem::writeq(Q3CString s)
+void UmlItem::writeq(QByteArray s)
 {
     const char * p = s;
 
@@ -948,7 +946,7 @@ void UmlItem::write(anOrdering d)
     }
 }
 
-void UmlItem::generate_index(Vector & v, Q3CString k, Q3CString r)
+void UmlItem::generate_index(Vector & v, QByteArray k, QByteArray r)
 {
     int n = v.size();
 
@@ -1019,8 +1017,8 @@ void UmlItem::sort(Vector & v, int low, int high)
 
 bool UmlItem::gt(UmlItem * other)
 {
-    Q3CString s1 = pretty_name();
-    Q3CString s2 = other->pretty_name();
+    QByteArray s1 = pretty_name();
+    QByteArray s2 = other->pretty_name();
     int i = qstricmp((const char *) s1, (const char *) s2);
 
     if ((i == 0) && (parent() != 0) && (other->parent() != 0)) {
@@ -1033,7 +1031,7 @@ bool UmlItem::gt(UmlItem * other)
         return (i > 0);
 }
 
-Q3CString UmlItem::pretty_name()
+QByteArray UmlItem::pretty_name()
 {
     return name().isEmpty() ? sKind() : name();
 }
@@ -1042,11 +1040,11 @@ Vector UmlItem::all;
 
 FileWriter UmlItem::fw;
 
-Q3CString UmlItem::directory;
+QByteArray UmlItem::directory;
 
 unsigned int UmlItem::nrefs = 0;
 
-Q3CString UmlItem::letters;
+QByteArray UmlItem::letters;
 
 //true => use SVG picture rather than PNG
 bool UmlItem::flat;

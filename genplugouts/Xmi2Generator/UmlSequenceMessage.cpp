@@ -2,39 +2,41 @@
 #include "UmlSequenceMessage.h"
 #include "FileOut.h"
 #include "UmlItem.h"
-
-#include <q3ptrdict.h>
-#include <q3ptrstack.h>
 #include "UmlPackage.h"
 #include "UmlOperation.h"
 #include "UmlFragmentCompartment.h"
 #include "UmlClassInstanceReference.h"
+#include <QStack>
 
 UmlSequenceMessage::UmlSequenceMessage() : reverse(0), used(FALSE)
 {
 }
 
-void UmlSequenceMessage::write(FileOut & out, UmlItem * diagram, const Q3PtrVector< UmlSequenceMessage > & msgs)
+void UmlSequenceMessage::write(FileOut & out, UmlItem * diagram, const QVector< UmlSequenceMessage* > & msgs)
 {
     set_reverses(msgs);
 
-    Q3PtrList<UmlSequenceMessage> l;
+    QList<UmlSequenceMessage*> l;
 
-    msgs.toList(&l);
+    l = msgs.toList();
 
     UmlSequenceMessage * m;
 
-    while ((m = l.getFirst()) != 0) {
-        if (m->fragment() != 0)
-            m->fragment()->write(out, diagram, l);
-        else
-            m->write_fragment(out, diagram, l);
+    //while ((m = l.first()) != 0) {
+    foreach (m,l) {
+        if(m)
+        {
+            if (m->fragment() != 0)
+                m->fragment()->write(out, diagram, l);
+            else
+                m->write_fragment(out, diagram, l);
+        }
     }
 }
 
-void UmlSequenceMessage::write_fragment(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs)
+void UmlSequenceMessage::write_fragment(FileOut & out, UmlItem * diagram, QList< UmlSequenceMessage* > & msgs)
 {
-    msgs.removeRef(this);
+    msgs.removeOne(this);
 
 #define MSG  "MSG", itsrank
 #define SEND "MSGOCCSPECSEND", itsrank
@@ -151,7 +153,7 @@ void UmlSequenceMessage::write_fragment(FileOut & out, UmlItem * diagram, Q3PtrL
 #undef DEL
 }
 
-void UmlSequenceMessage::write_them(FileOut & out, UmlItem * diagram, const Q3PtrVector< UmlSequenceMessage > & msgs)
+void UmlSequenceMessage::write_them(FileOut & out, UmlItem * diagram, const QVector< UmlSequenceMessage* > & msgs)
 {
     int n = msgs.size();
 
@@ -241,14 +243,14 @@ void UmlSequenceMessage::write_them(FileOut & out, UmlItem * diagram, const Q3Pt
     }
 }
 
-void UmlSequenceMessage::set_reverses(const Q3PtrVector<UmlSequenceMessage> & msgs)
+void UmlSequenceMessage::set_reverses(const QVector<UmlSequenceMessage*> & msgs)
 {
-    Q3PtrDict<Q3PtrStack<UmlSequenceMessage> > sent;
+    QHash<UmlClassInstanceReference *, QStack<UmlSequenceMessage*>* > sent;
     int n = msgs.size();
 
     for (int i = 0; i != n; i += 1) {
         UmlSequenceMessage * m = msgs[i];
-        Q3PtrStack<UmlSequenceMessage> * stack =
+        QStack<UmlSequenceMessage*> * stack =
             (m->from() != 0) ? sent[m->from()] : 0;
 
         switch (m->kind()) {
@@ -262,7 +264,7 @@ void UmlSequenceMessage::set_reverses(const Q3PtrVector<UmlSequenceMessage> & ms
                 stack = sent[m->to()];
 
                 if (stack == 0) {
-                    stack = new Q3PtrStack<UmlSequenceMessage>();
+                    stack = new QStack<UmlSequenceMessage*>();
                     sent.insert(m->to(), stack);
                 }
 
@@ -285,6 +287,6 @@ void UmlSequenceMessage::set_reverses(const Q3PtrVector<UmlSequenceMessage> & ms
         }
     }
 
-    sent.setAutoDelete(TRUE);
+   // sent.setAutoDelete(TRUE);
 }
 

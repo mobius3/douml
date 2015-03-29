@@ -4,7 +4,7 @@
 #ifdef WITHPHP
 
 
-#include <q3cstring.h>
+#include <QByteArray>
 #include "aVisibility.h"
 #include "UmlSettings.h"
 
@@ -29,41 +29,41 @@ public:
 
     // returns the PHP stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString classStereotype(const Q3CString & s);
+    static QByteArray classStereotype(const QByteArray & s);
 
     // set the PHP stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassStereotype(Q3CString s, Q3CString v);
+    static bool set_ClassStereotype(QByteArray s, QByteArray v);
 
     // reverse of the ClassStereotype() operation, returns the 'UML'
     // stereotype corresponding to the PHP one given in argument
-    static Q3CString classUmlStereotype(const Q3CString & s);
+    static QByteArray classUmlStereotype(const QByteArray & s);
 
     //  return the 'root' directory
-    static const Q3CString & rootDir();
+    static const QByteArray & rootDir();
 
     //  set the 'root' directory
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RootDir(Q3CString v);
+    static bool set_RootDir(QByteArray v);
 
     // returns the default source file content
-    static const Q3CString & sourceContent();
+    static const QByteArray & sourceContent();
 
     // set the default source file content
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceContent(Q3CString v);
+    static bool set_SourceContent(QByteArray v);
 
     // returns the extension of the file produced by the PHP code generator
-    static const Q3CString & sourceExtension();
+    static const QByteArray & sourceExtension();
 
     // set the extension of the file produced by the PHP code generator
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceExtension(Q3CString v);
+    static bool set_SourceExtension(QByteArray v);
 
     // return if  generate Javadoc style comment
     static bool isGenerateJavadocStyleComment();
@@ -74,68 +74,68 @@ public:
     static bool set_IsGenerateJavadocStyleComment(bool v);
 
     // returns the default definition of a class
-    static const Q3CString & classDecl();
+    static const QByteArray & classDecl();
 
     // set the default definition of a class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassDecl(Q3CString v);
+    static bool set_ClassDecl(QByteArray v);
 
     // returns the default specification for an 'external' class
-    static const Q3CString & externalClassDecl();
+    static const QByteArray & externalClassDecl();
 
     // set the default specification for an 'external' class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ExternalClassDecl(Q3CString v);
+    static bool set_ExternalClassDecl(QByteArray v);
 
     // returns the default definition of an enumeration
-    static Q3CString enumDecl();
+    static QByteArray enumDecl();
 
     // set the default definition of an enumeration
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumDecl(Q3CString v);
+    static bool set_EnumDecl(QByteArray v);
 
     // returns the default definition of an interface
-    static const Q3CString & interfaceDecl();
+    static const QByteArray & interfaceDecl();
 
     // set the default definition of an interface
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_InterfaceDecl(Q3CString v);
+    static bool set_InterfaceDecl(QByteArray v);
 
     // returns the default definition of an attribute
-    static const Q3CString & attributeDecl();
+    static const QByteArray & attributeDecl();
 
     // set the default definition of an attribute
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_AttributeDecl(Q3CString v);
+    static bool set_AttributeDecl(QByteArray v);
 
     // returns the default definition of an enumeration item
-    static Q3CString enumItemDecl();
+    static QByteArray enumItemDecl();
 
     // set the default definition of an enumeration item
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumItemDecl(Q3CString v);
+    static bool set_EnumItemDecl(QByteArray v);
 
     // returns the default definition of an relation
-    static const Q3CString & relationDecl();
+    static const QByteArray & relationDecl();
 
     // set the default definition of an relation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationDecl(Q3CString v);
+    static bool set_RelationDecl(QByteArray v);
 
     // returns the default definition of an operation
-    static const Q3CString & operationDef();
+    static const QByteArray & operationDef();
 
     // set the default definition of an operation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDef(Q3CString v);
+    static bool set_OperationDef(QByteArray v);
 
     // returns the default visibility of a 'get' operation generated
     // through the attribute and relation 'add get operation'
@@ -153,23 +153,23 @@ public:
 
     // returns the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
-    static const Q3CString & getName();
+    static const QByteArray & getName();
 
     // set the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_GetName(Q3CString v);
+    static bool set_GetName(QByteArray v);
 
     // returns the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
-    static const Q3CString & setName();
+    static const QByteArray & setName();
 
     // set the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SetName(Q3CString v);
+    static bool set_SetName(QByteArray v);
 
     //  return if a 'get' operation generated through the attribute
     //  and relation 'add get operation' menu is final by default
@@ -212,29 +212,29 @@ private:
 
     static bool _defined;
 
-    static Q3CString _root;
+    static QByteArray _root;
 
-    static Q3CString _class_decl;
+    static QByteArray _class_decl;
 
-    static Q3CString _external_class_decl;
+    static QByteArray _external_class_decl;
 
-    static Q3CString _enum_decl;
+    static QByteArray _enum_decl;
 
-    static Q3CString _interface_decl;
+    static QByteArray _interface_decl;
 
-    static Q3CString _attr_decl;
+    static QByteArray _attr_decl;
 
-    static Q3CString _enum_item_decl;
+    static QByteArray _enum_item_decl;
 
-    static Q3CString _rel_decl;
+    static QByteArray _rel_decl;
 
-    static Q3CString _oper_def;
+    static QByteArray _oper_def;
 
 #ifndef WITHJAVA
     static aVisibility _get_visibility;
 #endif
 
-    static Q3CString _get_name;
+    static QByteArray _get_name;
 
     static bool _is_get_final;
 
@@ -242,15 +242,30 @@ private:
     static aVisibility _set_visibility;
 #endif
 
-    static Q3CString _set_name;
+    static QByteArray _set_name;
 
     static bool _is_set_final;
 
-    static Q3CString _src_content;
+    static QByteArray _src_content;
 
-    static Q3CString _ext;
+    static QByteArray _ext;
 
+    static QByteArray _dir_regexp;
+
+    static bool _dir_regexp_case_sensitive;
+
+    static QByteArray _file_regexp;
+
+    static bool _file_regexp_case_sensitive;
     static bool _is_generate_javadoc_comment;
+
+    static bool _req_with_path;
+
+    static bool _is_relative_path;
+
+    static bool _is_root_relative_path;
+
+    static bool _is_force_namespace_gen;
 
 
 protected:

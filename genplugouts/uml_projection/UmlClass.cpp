@@ -11,13 +11,13 @@
 #include "UmlDeploymentView.h"
 #include "UmlArtifact.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 void UmlClass::uml2cpp(bool rec)
 {
     if (isCppExternal())
         set_CppDecl(CppSettings::externalClassDecl());
     else {
-        Q3CString st = CppSettings::classStereotype(stereotype());
+        QByteArray st = CppSettings::classStereotype(stereotype());
         UmlItem * pack = parent()->parent();
 
         while (pack->kind() != aPackage)
@@ -46,7 +46,7 @@ void UmlClass::uml2cpp(bool rec)
             set_CppDecl(CppSettings::classDecl());
 
         if (rec) {
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
             unsigned n = ch.size();
 
             for (unsigned i = 0; i != n; i += 1)
@@ -68,7 +68,7 @@ void UmlClass::uml2java(bool rec)
     if (isJavaExternal())
         set_JavaDecl(JavaSettings::externalClassDecl());
     else {
-        Q3CString st = JavaSettings::classStereotype(stereotype());
+        QByteArray st = JavaSettings::classStereotype(stereotype());
         UmlItem * pack = parent()->parent();
 
         while (pack->kind() != aPackage)
@@ -88,8 +88,8 @@ void UmlClass::uml2java(bool rec)
         else if (st == "interface")
             set_JavaDecl(JavaSettings::interfaceDecl());
         else if (st == "@interface") {
-            Q3CString s = JavaSettings::interfaceDecl();
-            int index = s.find("interface");
+            QByteArray s = JavaSettings::interfaceDecl();
+            int index = s.indexOf("interface");
 
             if (index != -1)
                 s.insert(index, '@');
@@ -104,7 +104,7 @@ void UmlClass::uml2java(bool rec)
             set_JavaDecl(JavaSettings::classDecl());
 
         if (rec) {
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
             unsigned n = ch.size();
 
             for (unsigned i = 0; i != n; i += 1)
@@ -122,7 +122,7 @@ void UmlClass::uml2idl(bool rec)
     if (isIdlExternal())
         set_IdlDecl(IdlSettings::externalClassDecl());
     else {
-        Q3CString st = IdlSettings::classStereotype(stereotype());
+        QByteArray st = IdlSettings::classStereotype(stereotype());
         UmlItem * pack = parent()->parent();
 
         while (pack->kind() != aPackage)
@@ -155,7 +155,7 @@ void UmlClass::uml2idl(bool rec)
             set_IdlDecl(IdlSettings::valuetypeDecl());
 
         if (rec) {
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
             unsigned n = ch.size();
 
             for (unsigned i = 0; i != n; i += 1)
@@ -173,7 +173,7 @@ void UmlClass::uml2php(bool rec)
     if (isPhpExternal())
         set_PhpDecl(PhpSettings::externalClassDecl());
     else {
-        Q3CString st = PhpSettings::classStereotype(stereotype());
+        QByteArray st = PhpSettings::classStereotype(stereotype());
         UmlItem * pack = parent()->parent();
 
         while (pack->kind() != aPackage)
@@ -199,7 +199,7 @@ void UmlClass::uml2php(bool rec)
             set_PhpDecl(PhpSettings::classDecl());
 
         if (rec) {
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
             unsigned n = ch.size();
 
             for (unsigned i = 0; i != n; i += 1)
@@ -217,7 +217,7 @@ void UmlClass::uml2python(bool rec)
     if (isPythonExternal())
         set_PythonDecl(PythonSettings::externalClassDecl());
     else {
-        Q3CString st = PythonSettings::classStereotype(stereotype());
+        QByteArray st = PythonSettings::classStereotype(stereotype());
         UmlItem * pack = parent()->parent();
 
         while (pack->kind() != aPackage)
@@ -241,7 +241,7 @@ void UmlClass::uml2python(bool rec)
             set_PythonDecl(PythonSettings::classDecl());
 
         if (rec) {
-            const Q3PtrVector<UmlItem> ch = children();
+            const QVector<UmlItem*> ch = children();
             unsigned n = ch.size();
 
             for (unsigned i = 0; i != n; i += 1)

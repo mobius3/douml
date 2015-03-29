@@ -29,17 +29,15 @@
 
 
 
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
-#include <q3buttongroup.h>
+#include <qcombobox.h>
+#include <bbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
-#include <q3popupmenu.h>
 #include <qcursor.h>
-
 #include "ParameterDialog.h"
 #include "ParameterData.h"
 #include "BrowserView.h"
@@ -55,11 +53,14 @@
 #include "GenerationSettings.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
+#include "hhbox.h"
+#include "menufactory.h"
+
 
 QSize ParameterDialog::previous_size;
 
 ParameterDialog::ParameterDialog(ParameterData * pa)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), param(pa)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), param(pa)
 {
     pa->browser_node->edit_start();
 
@@ -73,21 +74,21 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
     }
 
     visit = !hasOkButton();
-    setCaption(TR("Parameter dialog"));
+    setWindowTitle(TR("Parameter dialog"));
 
-    Q3Grid * grid;
-    Q3HBox * htab;
+    GridBox * grid;
+    HHBox * htab;
     QString s;
 
     // general tab
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     umltab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name :"), grid);
-    edname = new LineEdit(pa->name(), grid);
+    grid->addWidget(new QLabel(TR("name :"), grid));
+    grid->addWidget(edname = new LineEdit(pa->name(), grid));
     edname->setReadOnly(visit);
 
     QFont font = edname->font();
@@ -97,162 +98,171 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
 
     font.setFixedPitch(TRUE);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(pa->stereotype));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(pa->stereotype));
 
     if (! visit) {
-        edstereotype->insertStringList(BrowserParameter::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlParameter));
+        edstereotype->addItems(BrowserParameter::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlParameter));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
 
     QSizePolicy sp = edstereotype->sizePolicy();
 
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    connect(new SmallPushButton(TR("type :"), grid), SIGNAL(clicked()),
+    SmallPushButton* sButton;
+    connect(sButton = new SmallPushButton(TR("type :"), grid), SIGNAL(clicked()),
             this, SLOT(menu_type()));
 
-    edtype = new Q3ComboBox(!visit, grid);
-    edtype->insertItem(pa->get_type().get_full_type());
+    grid->addWidget(sButton);
+    grid->addWidget(edtype = new QComboBox( grid));
+    edtype->setEditable(!visit);
+    edtype->addItem(pa->get_type().get_full_type());
 
     if (!visit) {
         BrowserClass::instances(nodes);
         nodes.full_names(list);
 
-        edtype->insertStringList(GenerationSettings::basic_types());
+        edtype->addItems(GenerationSettings::basic_types());
         offset = edtype->count();
-        edtype->insertStringList(list);
+        edtype->addItems(list);
         edtype->setAutoCompletion(completion());
         view = pa->browser_node->container(UmlClass);
     }
 
-    edtype->setCurrentItem(0);
+    edtype->setCurrentIndex(0);
     edtype->setSizePolicy(sp);
 
-    new QLabel(TR("direction :"), grid);
-    htab = new Q3HBox(grid);
-    eddir = new Q3ComboBox(FALSE, htab);
+    grid->addWidget(new QLabel(TR("direction :"), grid));
+    grid->addWidget(htab = new HHBox(grid));
+    htab->addWidget(eddir = new QComboBox(htab));
 
     UmlParamDirection dir = pa->get_dir();
 
-    eddir->insertItem(stringify(dir));
+    eddir->addItem(stringify(dir));
 
     if (! visit) {
         if (dir != UmlInOut)
-            eddir->insertItem(stringify(UmlInOut));
+            eddir->addItem(stringify(UmlInOut));
 
         if (dir != UmlIn)
-            eddir->insertItem(stringify(UmlIn));
+            eddir->addItem(stringify(UmlIn));
 
         if (dir != UmlOut)
-            eddir->insertItem(stringify(UmlOut));
+            eddir->addItem(stringify(UmlOut));
 
         if (dir != UmlReturn)
-            eddir->insertItem(stringify(UmlReturn));
+            eddir->addItem(stringify(UmlReturn));
     }
 
-    new QLabel(TR("   multiplicity : "), htab);
-    edmultiplicity = new Q3ComboBox(!visit, htab);
+    htab->addWidget(new QLabel(TR("   multiplicity : "), htab));
+    htab->addWidget( edmultiplicity = new QComboBox(htab));
+    edmultiplicity->setEditable(!visit);
     edmultiplicity->setSizePolicy(sp);
-    edmultiplicity->insertItem(pa->get_multiplicity());
+    edmultiplicity->addItem(pa->get_multiplicity());
 
     if (!visit) {
-        edmultiplicity->insertItem("1");
-        edmultiplicity->insertItem("0..1");
-        edmultiplicity->insertItem("*");
-        edmultiplicity->insertItem("1..*");
+        edmultiplicity->addItem("1");
+        edmultiplicity->addItem("0..1");
+        edmultiplicity->addItem("*");
+        edmultiplicity->addItem("1..*");
     }
 
-    new QLabel(TR("   ordering : "), htab);
-    edordering = new Q3ComboBox(FALSE, htab);
+    htab->addWidget(new QLabel(TR("   ordering : "), htab));
+    htab->addWidget(edordering = new QComboBox(htab));
 
     UmlOrderingKind o = pa->get_ordering();
 
-    edordering->insertItem(stringify(o));
+    edordering->addItem(stringify(o));
 
     if (!visit) {
         if (o != UmlUnordered)
-            edordering->insertItem(stringify(UmlUnordered));
+            edordering->addItem(stringify(UmlUnordered));
 
         if (o != UmlOrdered)
-            edordering->insertItem(stringify(UmlOrdered));
+            edordering->addItem(stringify(UmlOrdered));
 
         if (o != UmlLifo)
-            edordering->insertItem(stringify(UmlLifo));
+            edordering->addItem(stringify(UmlLifo));
 
         if (o != UmlFifo)
-            edordering->insertItem(stringify(UmlFifo));
+            edordering->addItem(stringify(UmlFifo));
     }
 
-    new QLabel(TR("   effect : "), htab);
-    edeffect = new Q3ComboBox(FALSE, htab);
+    htab->addWidget(new QLabel(TR("   effect : "), htab));
+    htab->addWidget(edeffect = new QComboBox(htab));
 
     UmlParamEffect e = pa->get_effect();
 
-    edeffect->insertItem(stringify(e));
+    edeffect->addItem(stringify(e));
 
     if (!visit) {
         if (e != UmlNoEffect)
-            edeffect->insertItem(stringify(UmlNoEffect));
+            edeffect->addItem(stringify(UmlNoEffect));
 
         if (e != UmlCreate)
-            edeffect->insertItem(stringify(UmlCreate));
+            edeffect->addItem(stringify(UmlCreate));
 
         if (e != UmlRead)
-            edeffect->insertItem(stringify(UmlRead));
+            edeffect->addItem(stringify(UmlRead));
 
         if (e != UmlUpdate)
-            edeffect->insertItem(stringify(UmlUpdate));
+            edeffect->addItem(stringify(UmlUpdate));
 
         if (e != UmlDelete)
-            edeffect->insertItem(stringify(UmlDelete));
+            edeffect->addItem(stringify(UmlDelete));
     }
 
-    new QLabel(TR("in state : "), grid);
-    edin_state = new LineEdit(pa->in_state, grid);
+    grid->addWidget(new QLabel(TR("in state : "), grid));
+    grid->addWidget(edin_state = new LineEdit(pa->in_state, grid));
     edin_state->setReadOnly(visit);
 
-    new QLabel(TR("default value :"), grid);
-    htab = new Q3HBox(grid);
-    edinit = new LineEdit(pa->get_default_value(), htab);
+    grid->addWidget(new QLabel(TR("default value :"), grid));
+    grid->addWidget(htab = new HHBox(grid));
+    htab->addWidget(edinit = new LineEdit(pa->get_default_value(), htab));
 
     if (visit)
+    {
         edinit->setReadOnly(TRUE);
+    }
     else
-        connect(new SmallPushButton(TR("Editor"), htab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), htab), SIGNAL(clicked()),
                 this, SLOT(edit_init()));
+        htab->addWidget(sButton);
+    }
 
-    new QLabel(grid);
-    htab = new Q3HBox(grid);
-    Q3ButtonGroup * bg =
-        new Q3ButtonGroup(2, Qt::Horizontal, QString(), htab);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(htab = new HHBox(grid));
+    BButtonGroup * bg ;
+    htab->addWidget( bg = new BButtonGroup(2, Qt::Horizontal, QString(), htab));
 
-    is_control_cb = new QCheckBox(TR("is_control"), bg);
+    bg->addWidget(is_control_cb = new QCheckBox(TR("is_control"), bg));
 
     if (pa->is_control)
         is_control_cb->setChecked(TRUE);
 
     is_control_cb->setDisabled(visit);
 
-    unique_cb = new QCheckBox(TR("unique"), bg);
+    bg->addWidget(unique_cb = new QCheckBox(TR("unique"), bg));
 
     if (pa->unique)
         unique_cb->setChecked(TRUE);
 
     unique_cb->setDisabled(visit);
 
-    bg =
-        new Q3ButtonGroup(3, Qt::Horizontal, QString(), htab);
+    htab->addWidget(bg = new BButtonGroup(3, Qt::Horizontal, QString(), htab));
     bg->setExclusive(TRUE);
 
-    standard_rb = new QRadioButton(TR("standard"), bg);
-    exception_rb = new QRadioButton(TR("exception"), bg);
-    stream_rb = new QRadioButton(TR("stream"), bg);
+    bg->addWidget(standard_rb = new QRadioButton(TR("standard"), bg));
+    bg->addWidget(exception_rb = new QRadioButton(TR("exception"), bg));
+    bg->addWidget(stream_rb = new QRadioButton(TR("stream"), bg));
 
     if (pa->exception)
         exception_rb->setChecked(TRUE);
@@ -261,15 +271,17 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
     else
         standard_rb->setChecked(TRUE);
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
     if (! visit) {
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
     }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(pa->browser_node->get_comment());
     comment->setFont(font);
@@ -291,11 +303,11 @@ ParameterDialog::ParameterDialog(ParameterData * pa)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(pa->browser_node, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(pa->browser_node, grid, visit));
     addTab(grid, TR("Properties"));
 
     //
@@ -311,8 +323,9 @@ ParameterDialog::~ParameterDialog()
     param->browser_node->edit_end();
     previous_size = size();
 
-    while (!edits.isEmpty())
-        edits.take(0)->close();
+    foreach (BodyDialog *dialog, edits)
+        dialog->close();
+    edits.clear();
 
     close_dialog(this);
 }
@@ -333,7 +346,7 @@ void ParameterDialog::change_tabs(QWidget * w)
 
 void ParameterDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -341,20 +354,25 @@ void ParameterDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char *
                                const char * lbl, const char * sl, bool enabled)
 {
     bool visit = !hasOkButton();
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
 
     tab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    Q3VBox * vtab = new Q3VBox(grid);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
 
-    new QLabel(TR("selection : "), vtab);
+    vtab->addWidget(new QLabel(TR("selection : "), vtab));
 
+    SmallPushButton* sButton;
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl);
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl);
+        vtab->addWidget(sButton);
+    }
 
-    ed = new MultiLineEdit(grid);
+    grid->addWidget(ed = new MultiLineEdit(grid));
 
     QFont font = ed->font();
 
@@ -376,15 +394,15 @@ void ParameterDialog::init_tab(QWidget *& tab, MultiLineEdit *& ed, const char *
 
 void ParameterDialog::menu_type()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = list.findIndex(edtype->currentText().stripWhiteSpace());
+    int index = list.indexOf(edtype->currentText().trimmed());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -392,67 +410,71 @@ void ParameterDialog::menu_type()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlClass) && !bn->deletedp())
-            m.insertItem(TR("Choose class selected in browser"), 1);
+            MenuFactory::addItem(m, TR("Choose class selected in browser"), 1);
         else
             bn = 0;
 
-        m.insertItem(TR("Create class and choose it"), 2);
+        MenuFactory::addItem(m, TR("Create class and choose it"), 2);
     }
 
     if (!visit || (index != -1) || (bn != 0)) {
-        switch (m.exec(QCursor::pos())) {
-        case 0:
-            nodes.at(index)->select_in_browser();
-            break;
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+            switch (retAction->data().toInt()) {
+            case 0:
+                nodes.at(index)->select_in_browser();
+                break;
 
-        case 2:
-            bn = BrowserClass::add_class(FALSE, view);
+            case 2:
+                bn = BrowserClass::add_class(FALSE, view);
 
-            if (bn == 0)
-                return;
+                if (bn == 0)
+                    return;
 
-            bn->select_in_browser();
+                bn->select_in_browser();
 
-            // no break
-        case 1: {
-            QString s = bn->full_name(TRUE);
+                // no break
+            case 1: {
+                QString s = bn->full_name(TRUE);
 
-            if ((index = list.findIndex(s)) == -1) {
-                // new class, may be created through an other dialog
-                index = 0;
-                QStringList::Iterator iter = list.begin();
-                QStringList::Iterator iter_end = list.end();
+                if ((index = list.indexOf(s)) == -1) {
+                    // new class, may be created through an other dialog
+                    index = 0;
+                    QStringList::Iterator iter = list.begin();
+                    QStringList::Iterator iter_end = list.end();
 
-                while ((iter != iter_end) && (*iter < s)) {
-                    ++iter;
-                    index += 1;
+                    while ((iter != iter_end) && (*iter < s)) {
+                        ++iter;
+                        index += 1;
+                    }
+
+                    nodes.insert((unsigned) index, bn);
+                    list.insert(iter, s);
+                    edtype->insertItem(index + offset,s);
                 }
-
-                nodes.insert((unsigned) index, bn);
-                list.insert(iter, s);
-                edtype->insertItem(s, index + offset);
             }
-        }
 
-        edtype->setCurrentItem(index + offset);
-        break;
+                edtype->setCurrentIndex(index + offset);
+                break;
 
-        default:
-            break;
+            default:
+                break;
+            }
         }
     }
 }
 
 #define DEF_EDIT(lang, Lang) \
-void ParameterDialog::edit_##lang##_selection() {	\
-  edit(ed##lang##_selection->text(), "object_"#lang"_selection", param, Lang,  \
-       this, (post_edit) post_edit_##lang##_##selection, edits);	\
-} \
-  \
-void ParameterDialog::post_edit_##lang##_selection(ParameterDialog * d, QString s) \
+    void ParameterDialog::edit_##lang##_selection() {	\
+    edit(ed##lang##_selection->text(), "object_"#lang"_selection", param, Lang,  \
+    this, (post_edit) post_edit_##lang##_##selection, edits);	\
+    } \
+    \
+    void ParameterDialog::post_edit_##lang##_selection(ParameterDialog * d, QString s) \
 { \
-  d->ed##lang##_selection->setText(s); \
-}
+    d->ed##lang##_selection->setText(s); \
+    }
 
 DEF_EDIT(uml, TxtEdit)
 DEF_EDIT(cpp, CppEdit)
@@ -466,18 +488,18 @@ void ParameterDialog::accept()
     BrowserNode * bn = param->browser_node;
     QString s;
 
-    s = edname->text().stripWhiteSpace();
+    s = edname->text().trimmed();
 
     if ((s != param->name()) &&
-        ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlParameter,
-                bn->allow_spaces(),
-                bn->allow_empty()))
+            ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlParameter,
+                                                             bn->allow_spaces(),
+                                                             bn->allow_empty()))
         msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
     else {
         // check consistency
-        UmlParamDirection dir = direction(eddir->currentText());
+        UmlParamDirection dir = direction(eddir->currentText().toLatin1().constData());
         bool exception = exception_rb->isChecked();
-        UmlParamEffect effect = ::effect(edeffect->currentText());
+        UmlParamEffect effect = ::effect(edeffect->currentText().toLatin1().constData());
         QString err;
 
         if ((dir == UmlIn) && exception)
@@ -505,13 +527,13 @@ void ParameterDialog::accept()
         else {
             bn->set_name(s);
 
-            bool newst = param->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+            bool newst = param->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
             AType t;
 
-            s = edtype->currentText().stripWhiteSpace();
+            s = edtype->currentText().trimmed();
 
             if (!s.isEmpty()) {
-                int index = list.findIndex(s);
+                int index = list.indexOf(s);
 
                 if (index >= 0)
                     t.type = (BrowserClass *) nodes.at(index);
@@ -522,18 +544,18 @@ void ParameterDialog::accept()
             param->set_type(t);
             param->dir = dir;
             param->multiplicity =
-                edmultiplicity->currentText().stripWhiteSpace();
-            param->ordering = ordering(edordering->currentText());
+                    edmultiplicity->currentText().trimmed();
+            param->ordering = ordering(edordering->currentText().toLatin1());
             param->effect = effect;
             param->is_control = is_control_cb->isChecked();
             param->unique = unique_cb->isChecked();
             param->exception = exception;
             param->stream = stream_rb->isChecked();
-            param->in_state = edin_state->text().stripWhiteSpace();
+            param->in_state = edin_state->text().trimmed();
             param->default_value = edinit->text();
-            param->uml_selection = eduml_selection->text().stripWhiteSpace();
-            param->cpp_selection = edcpp_selection->text().stripWhiteSpace();
-            param->java_selection = edjava_selection->text().stripWhiteSpace();
+            param->uml_selection = eduml_selection->text().trimmed();
+            param->cpp_selection = edcpp_selection->text().trimmed();
+            param->java_selection = edjava_selection->text().trimmed();
 
             bn->set_comment(comment->text());
             UmlWindow::update_comment_if_needed(bn);
@@ -546,14 +568,14 @@ void ParameterDialog::accept()
             bn->package_modified();
             param->modified();
 
-            Q3TabDialog::accept();
+            TabDialog::accept();
         }
     }
 }
 
 void ParameterDialog::edit_description()
 {
-    edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
+    edit(comment->text(), edname->text().trimmed() + "_description",
          param, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -564,7 +586,7 @@ void ParameterDialog::post_edit_description(ParameterDialog * d, QString s)
 
 void ParameterDialog::edit_init()
 {
-    edit(edinit->text(), edname->text().stripWhiteSpace() + "_initialization",
+    edit(edinit->text(), edname->text().trimmed() + "_initialization",
          param, TxtEdit, this, (post_edit) post_edit_init, edits);
 }
 

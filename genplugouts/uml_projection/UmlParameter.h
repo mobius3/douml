@@ -3,12 +3,12 @@
 
 
 #include "UmlBaseParameter.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 //  Represent an operation's parameter
 
 struct UmlParameter : public UmlBaseParameter {
-    Q3CString cpp(unsigned rank) const;
+    QByteArray cpp(unsigned rank) const;
 
 };
 

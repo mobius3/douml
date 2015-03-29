@@ -29,18 +29,13 @@
 
 
 
-#include <q3grid.h>
+#include <gridbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qcheckbox.h>
-#include <q3vbox.h>
-#include <q3popupmenu.h>
+#include <vvbox.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
-
 #include "ActivityPartitionDialog.h"
 #include "ActivityPartitionData.h"
 #include "BrowserActivityPartition.h"
@@ -53,11 +48,12 @@
 #include "ProfiledStereotypes.h"
 #include "BrowserView.h"
 #include "translate.h"
-
+#include "hhbox.h"
+#include "menufactory.h"
 QSize ActivityPartitionDialog::previous_size;
 
 ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(d)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(d)
 {
     d->browser_node->edit_start();
 
@@ -70,86 +66,93 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("Activity Partition dialog"));
+    setWindowTitle(TR("Activity Partition dialog"));
 
     bool visit = !hasOkButton();
 
     // general tab
 
     BrowserNode * bn = data->get_browser_node();
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
 
     umltab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(data->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(data->get_stereotype()));
 
     if (! visit) {
-        edstereotype->insertStringList(BrowserActivityPartition::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlActivityPartition));
+        edstereotype->addItems(BrowserActivityPartition::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlActivityPartition));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    connect(new SmallPushButton(TR("represents :"), grid), SIGNAL(clicked()),
+    SmallPushButton *sButton;
+    connect(sButton = new SmallPushButton(TR("represents :"), grid), SIGNAL(clicked()),
             this, SLOT(menu_represents()));
-    edrepresents = new Q3ComboBox(FALSE, grid);
+    grid->addWidget(sButton);
+    grid->addWidget(edrepresents = new QComboBox(grid));
 
     if ((data->represents != 0) && !data->represents->deletedp()) {
         represented = data->represents;
-        edrepresents->insertItem(*(data->represents->pixmap(0)),
-                                 data->represents->full_name(TRUE));
+        edrepresents->addItem(*(data->represents->pixmap(0)),
+                              data->represents->full_name(TRUE));
     }
     else {
         represented = 0;
-        edrepresents->insertItem("");
+        edrepresents->addItem("");
     }
 
     if (! visit)
-        edrepresents->insertItem("");
+        edrepresents->addItem("");
 
-    edrepresents->setCurrentItem(0);
+    edrepresents->setCurrentIndex(0);
     edrepresents->setSizePolicy(sp);
 
-    Q3HBox * htab;
+    HHBox * htab;
 
-    new QLabel(grid);
-    htab = new Q3HBox(grid);
-    new QLabel("  ", htab);
-    dimension_cb = new QCheckBox(TR("is dimension"), htab);
+    grid->addWidget(new QLabel(grid));
+    grid->addWidget(htab = new HHBox(grid));
+    htab->addWidget(new QLabel("  ", htab));
+    htab->addWidget(dimension_cb = new QCheckBox(TR("is dimension"), htab));
 
     if (data->is_dimension)
         dimension_cb->setChecked(TRUE);
 
     dimension_cb->setDisabled(visit);
-    new QLabel("", htab);
-    external_cb = new QCheckBox(TR("is external"), htab);
+    htab->addWidget(new QLabel("", htab));
+    htab->addWidget(external_cb = new QCheckBox(TR("is external"), htab));
 
     if (data->is_external)
         external_cb->setChecked(TRUE);
 
     external_cb->setDisabled(visit);
-    new QLabel("", htab);
+    htab->addWidget(new QLabel("", htab));
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton =  new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     QFont font = comment->font();
@@ -164,11 +167,11 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+   grid->addWidget( kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
     //
@@ -181,7 +184,7 @@ ActivityPartitionDialog::ActivityPartitionDialog(ActivityPartitionData * d)
 
 void ActivityPartitionDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -190,8 +193,9 @@ ActivityPartitionDialog::~ActivityPartitionDialog()
     data->browser_node->edit_end();
     previous_size = size();
 
-    while (!edits.isEmpty())
-        edits.take(0)->close();
+    foreach (BodyDialog *dialog, edits)
+        dialog->close();
+    edits.clear();
 
     close_dialog(this);
 }
@@ -206,7 +210,7 @@ void ActivityPartitionDialog::edit_description()
 {
     edit(comment->text(),
          (edname == 0) ? QString("description")
-         : edname->text().stripWhiteSpace() + "_description",
+                       : edname->text().trimmed() + "_description",
          data, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -244,44 +248,47 @@ void ActivityPartitionDialog::menu_represents()
     if (!hasOkButton() && (represented == 0))
         return;
 
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
     if (represented != 0)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = BrowserView::selected_item();
 
     if ((bn != 0) && allowed(bn))
-        m.insertItem(TR("Choose element selected in browser"), 1);
+        MenuFactory::addItem(m, TR("Choose element selected in browser"), 1);
 
-    const Q3PtrList<BrowserNode> & l = BrowserNode::marked_nodes();
+    const QList<BrowserNode *> & l = BrowserNode::marked_nodes();
 
-    if ((l.count() == 1) && allowed(l.getFirst()))
-        m.insertItem(TR("Choose element marked in browser"), 2);
+    if ((l.count() == 1) && allowed(l.first()))
+        MenuFactory::addItem(m, TR("Choose element marked in browser"), 2);
 
-    switch (m.exec(QCursor::pos())) {
-    case 0:
-        represented->select_in_browser();
-        return;
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        switch (retAction->data().toInt()) {
+        case 0:
+            represented->select_in_browser();
+            return;
 
-    case 1:
-        represented = bn;
-        break;
+        case 1:
+            represented = bn;
+            break;
 
-    case 2:
-        represented = l.getFirst();
-        break;
+        case 2:
+            represented = l.first();
+            break;
 
-    default:
-        return;
+        default:
+            return;
+        }
     }
 
-    edrepresents->changeItem(*(represented->pixmap(0)),
-                             represented->full_name(TRUE),
-                             0);
+    edrepresents->setItemText(0, represented->full_name(TRUE));
+    edrepresents->setItemIcon(0, *(represented->pixmap(0)));
 }
 
 void ActivityPartitionDialog::accept()
@@ -292,12 +299,12 @@ void ActivityPartitionDialog::accept()
     BrowserNode * bn = data->get_browser_node();
 
     if (edname != 0) {
-        QString s = edname->text().stripWhiteSpace();
+        QString s = edname->text().trimmed();
 
         if ((s != bn->get_name()) &&
-            ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
-                    bn->allow_spaces(),
-                    bn->allow_empty())) {
+                ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
+                                                                 bn->allow_spaces(),
+                                                                 bn->allow_empty())) {
             msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
             return;
         }
@@ -306,11 +313,11 @@ void ActivityPartitionDialog::accept()
     }
 
     data->represents = (edrepresents->currentText().isEmpty())
-                       ? 0 : represented;
+            ? 0 : represented;
     data->is_dimension = dimension_cb->isChecked();
     data->is_external = external_cb->isChecked();
 
-    bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+    bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
 
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
@@ -322,5 +329,5 @@ void ActivityPartitionDialog::accept()
     bn->package_modified();
     data->modified();
 
-    Q3TabDialog::accept();
+    TabDialog::accept();
 }

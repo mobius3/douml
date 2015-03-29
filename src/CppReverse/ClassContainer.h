@@ -30,10 +30,8 @@
 
 #include "UmlClass.h"
 #include "Namespace.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include <QList>
 
 class Class;
 class UmlTypeSpec;
@@ -55,13 +53,13 @@ public:
     virtual void declaration(const WrapperStr & name, const WrapperStr & stereotype,
                              const WrapperStr & decl
 #ifdef ROUNDTRIP
-                             , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                             , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                             ) = 0;
 
     void compute_type(WrapperStr type, UmlTypeSpec & typespec,
                       WrapperStr & typeform, bool get_first_template_actual = FALSE,
-                      const Q3ValueList<FormalParameterList> & tmplts = empty);
+                      const QList<FormalParameterList> & tmplts = empty);
     bool find_type(WrapperStr type, UmlTypeSpec & typespec,
                    NDict<Class> & defined);
 #ifdef ROUNDTRIP
@@ -79,7 +77,7 @@ protected:
     Class * define(const WrapperStr & name, const WrapperStr & stereotype,
                    NDict<Class> & declared, NDict<Class> & defined);
 
-    static Q3ValueList<FormalParameterList> empty;
+    static QList<FormalParameterList> empty;
 };
 
 #endif

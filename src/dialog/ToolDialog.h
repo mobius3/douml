@@ -28,7 +28,7 @@
 #ifndef TOOLDIALOG_H
 #define TOOLDIALOG_H
 
-#include <q3tabdialog.h>
+#include <tabdialog.h>
 //Added by qt3to4:
 #include <QPixmap>
 
@@ -42,7 +42,7 @@ struct ToolColumnDef {
     QPixmap ** pixmap;
 };
 
-class ToolDialog : public Q3TabDialog
+class ToolDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -74,7 +74,7 @@ public:
     unsigned update(unsigned rank);
 
 protected slots:
-    virtual void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    virtual void button_pressed(const QModelIndex &index);
 };
 
 #endif

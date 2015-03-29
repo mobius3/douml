@@ -6,8 +6,6 @@
 #include "UmlItem.h"
 #include "anItemKind.h"
 #include "misc/mystr.h"
-#include <q3ptrvector.h>
-
 class UmlActivityParameter;
 class UmlActivityAction;
 
@@ -33,10 +31,10 @@ protected:
 
 public:
     // return the pins part of the parameter set
-    const Q3PtrVector<UmlActivityPin> & pins();
+    const QHash<int,UmlActivityPin*> & pins();
 
     // set the pins
-    bool set_Pins(const Q3PtrVector<UmlActivityPin> & v);
+    bool set_Pins(const QHash<int,UmlActivityPin*> & v);
 
     // to unload the object to free memory, it will be reloaded automatically
     // if needed. Recursively done for the sub items if 'rec' is TRUE.
@@ -48,7 +46,7 @@ public:
 
 
 private:
-    Q3PtrVector<UmlActivityPin> _pins;
+    QHash<int,UmlActivityPin*> _pins;
 
 
 protected:

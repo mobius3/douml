@@ -32,7 +32,6 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
 
 // This class globaly manages class's operations, relations, attributes
 // and sub-classes
@@ -47,7 +46,7 @@ public:
     static void remove_comments(WrapperStr & s);
     static void remove_arrays(WrapperStr & s);
     static void remove_preprocessor(WrapperStr & s);
-    static bool compute_dependency(Q3PtrList<CppRefType> & dependency,
+    static bool compute_dependency(QList<CppRefType *> & dependency,
                                    WrapperStr decl, const UmlTypeSpec &,
                                    bool force_incl = FALSE);
 

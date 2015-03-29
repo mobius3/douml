@@ -34,7 +34,7 @@
 #include <QPixmap>
 #include <QDropEvent>
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QDragMoveEvent>
 
 class QPixmap;
@@ -63,14 +63,14 @@ public:
     BrowserExpansionRegion(const BrowserExpansionRegion * model, BrowserNode * p);
     virtual ~BrowserExpansionRegion();
 
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> & l,
+    virtual bool may_contains_them(const QList<BrowserNode *> & l,
                                    BooL & duplicable) const;
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent);
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent, const char * name);
     static BrowserExpansionRegion * get_expansionregion(BrowserNode * parent);
-    Q3ValueList<BrowserExpansionNode *> get_nodes() const;
+    QList<BrowserExpansionNode *> get_nodes() const;
     BrowserNode * add_expansionnode();
 
     virtual const QPixmap * pixmap(int) const;
@@ -101,7 +101,7 @@ public:
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
 
-    virtual void referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete);
+    virtual void referenced_by(QList<BrowserNode *> & l, bool ondelete);
 
     virtual bool tool_cmd(ToolCom * com, const char * args);
     virtual bool api_compatible(unsigned v) const;

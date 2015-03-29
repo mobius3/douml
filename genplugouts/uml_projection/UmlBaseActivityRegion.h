@@ -3,7 +3,7 @@
 
 
 #include "UmlItem.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlActivityDiagram;
 
@@ -11,7 +11,7 @@ class UmlBaseActivityRegion : public UmlItem
 {
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseActivityRegion(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseActivityRegion(void * id, const QByteArray & s) : UmlItem(id, s) {
     }
 
 

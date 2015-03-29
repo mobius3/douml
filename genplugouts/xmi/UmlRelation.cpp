@@ -4,7 +4,7 @@
 
 #include "UmlClass.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 bool UmlRelation::write_if_needed(FileOut & out)
 {
     // class already generated
@@ -178,16 +178,16 @@ void UmlRelation::write_relation(FileOut & out, aRelationKind k)
     out << "\">\n";
 
     if (!multiplicity().isEmpty()) {
-        Q3CString min;
-        Q3CString max;
-        int index = multiplicity().find("..");
+        QByteArray min;
+        QByteArray max;
+        int index = multiplicity().indexOf("..");
 
         if (index != -1) {
-            min = multiplicity().left(index).stripWhiteSpace();
-            max = multiplicity().mid(index + 2).stripWhiteSpace();
+            min = multiplicity().left(index).trimmed();
+            max = multiplicity().mid(index + 2).trimmed();
         }
         else
-            min = max = multiplicity().stripWhiteSpace();
+            min = max = multiplicity().trimmed();
 
         if (min == "*")
             min = "0";

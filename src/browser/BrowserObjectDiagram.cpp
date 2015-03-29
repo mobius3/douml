@@ -25,18 +25,11 @@
 //
 // *************************************************************************
 
-
-
-
-
-#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
-
 #include "BrowserObjectDiagram.h"
 #include "SimpleData.h"
 #include "RelationData.h"
@@ -54,8 +47,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserObjectDiagram> BrowserObjectDiagram::imported;
-Q3ValueList<int> BrowserObjectDiagram::imported_ids;
+QList<BrowserObjectDiagram *> BrowserObjectDiagram::imported;
+QList<int> BrowserObjectDiagram::imported_ids;
 QStringList BrowserObjectDiagram::its_default_stereotypes;	// unicode
 
 BrowserObjectDiagram::BrowserObjectDiagram(QString s, BrowserNode * p, int id)
@@ -88,7 +81,9 @@ BrowserObjectDiagram::BrowserObjectDiagram(BrowserObjectDiagram * model, Browser
     is_modified = TRUE;
 
     if (model->window != 0)
+    {
         model->window->duplicate(get_ident(), "diagram");
+    }
     else {
         char * diagram;
 
@@ -108,11 +103,11 @@ BrowserObjectDiagram::~BrowserObjectDiagram()
 
         QDir d = BrowserView::get_dir();
 
-        QFile::remove(d.absFilePath(fn));
+        QFile::remove(d.absoluteFilePath(fn));
     }
     on_close();
-//    if(window)
-//        window->set_browser_diagram(0);
+    //    if(window)
+    //        window->set_browser_diagram(0);
 
     all.remove(get_ident());
     delete def;
@@ -137,34 +132,33 @@ BrowserObjectDiagram * BrowserObjectDiagram::add_object_diagram(BrowserNode * fu
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, TR("enter object diagram's name : "),
+    if (future_parent->enter_child_name(name, QObject::TR("enter object diagram's name : "),
                                         UmlObjectDiagram, TRUE, FALSE))
         return new BrowserObjectDiagram(name, future_parent);
     else
         return 0;
 }
 
-void BrowserObjectDiagram::set_name(const char * s)
+void BrowserObjectDiagram::set_name(QString s)
 {
     BrowserDiagram::set_name(s);
 
     if (window != 0)
-        window->setCaption(s);
+    {
+        window->setWindowTitle(s);
+    }
 }
 
 void BrowserObjectDiagram::import()
 {
-    Q3ValueList<int>::Iterator it = imported_ids.begin();
-
-    while (!imported.isEmpty()) {
-        QString warning;
-        BrowserObjectDiagram * d = imported.take(0);
-
-        (new ObjectDiagramWindow(d->full_name(), d, *it))->close(TRUE);
+    QList<int>::Iterator it = imported_ids.begin();
+    foreach (BrowserObjectDiagram *d, imported) {
+        (new ObjectDiagramWindow(d->full_name(), d, *it))->close();
         d->set_diagram_window(nullptr);
-        it = imported_ids.remove(it);
+        it = imported_ids.erase(it);
         d->is_modified = TRUE;
     }
+    imported.clear();
 }
 
 void BrowserObjectDiagram::renumber(int phase)
@@ -182,7 +176,7 @@ void BrowserObjectDiagram::delete_it()
 {
     if (window)
         delete window;
-
+    window = 0;
     BrowserNode::delete_it();
 }
 
@@ -218,50 +212,53 @@ void BrowserObjectDiagram::draw_svg() const
 
 void BrowserObjectDiagram::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
-        m.setWhatsThis(m.insertItem(TR("Show"), 0),
-                       TR("to show and edit the <i>object diagram</i>"));
+        MenuFactory::addItem(m, QObject::tr("Show"), 0,
+                             QObject::TR("to show and edit the <i>object diagram</i>"));
 
         if (!is_edited) {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 1),
-                           TR("to edit the <i>object diagram</i>"));
+            MenuFactory::addItem(m, QObject::tr("Edit"), 1,
+                                 QObject::TR("to edit the <i>object diagram</i>"));
 
             if (!is_read_only) {
-                m.setWhatsThis(m.insertItem(TR("Edit drawing settings"), 2),
-                               TR("to set how the <i>object diagram</i>'s items must be drawn"));
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Duplicate"), 3),
-                               TR("to duplicate the <i>object diagram</i>"));
+                MenuFactory::addItem(m, QObject::tr("Edit drawing settings"), 2,
+                                     QObject::TR("to set how the <i>object diagram</i>'s items must be drawn"));
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::tr("Duplicate"), 3,
+                                     QObject::TR("to duplicate the <i>object diagram</i>"));
 
                 if (edition_number == 0) {
-                    m.insertSeparator();
-                    m.setWhatsThis(m.insertItem(TR("Delete"), 4),
-                                   TR("to delete the <i>object diagram</i>. \
-Note that you can undelete it after"));
+                    m.addSeparator();
+                    MenuFactory::addItem(m, QObject::tr("Delete"), 4,
+                                         QObject::TR("to delete the <i>object diagram</i>. \
+                                                     Note that you can undelete it after"));
                 }
             }
         }
 
-        mark_menu(m, TR("the object diagram"), 90);
+        mark_menu(m, QObject::tr("the object diagram").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
-            Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+                Tool::menu_insert(&toolm, get_type(), 100)) {
+            m.addSeparator();
+            toolm.setTitle( QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0))
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 5),
-                       TR("to undelete the <i>object diagram</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 5,
+                             QObject::TR("to undelete the <i>object diagram</i>"));
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserObjectDiagram::exec_menu_choice(int rank)
@@ -272,7 +269,7 @@ void BrowserObjectDiagram::exec_menu_choice(int rank)
         break;
 
     case 1:
-        edit(TR("Object diagram"), its_default_stereotypes);
+        edit( QObject::TR("Object diagram"), its_default_stereotypes);
         return;
 
     case 2:
@@ -282,13 +279,13 @@ void BrowserObjectDiagram::exec_menu_choice(int rank)
     case 3: {
         QString name;
 
-        if (((BrowserNode *)parent())->enter_child_name(name, TR("enter object diagram's name : "),
-                UmlObjectDiagram, TRUE, FALSE))
+        if (((BrowserNode *)parent())->enter_child_name(name, QObject::TR("enter object diagram's name : "),
+                                                        UmlObjectDiagram, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
         else
             return;
     }
-    break;
+        break;
 
     case 4:
         delete_it();
@@ -367,10 +364,10 @@ void BrowserObjectDiagram::edit_settings()
 
         settings.complete(st, TRUE);
 
-        co[0].set(TR("package color"), &package_color);
-        co[1].set(TR("fragment color"), &fragment_color);
-        co[2].set(TR("note color"), &note_color);
-        co[3].set(TR("class instance \ncolor"), &class_instance_color);
+        co[0].set( QObject::TR("package color"), &package_color);
+        co[1].set( QObject::TR("fragment color"), &fragment_color);
+        co[2].set( QObject::TR("note color"), &note_color);
+        co[3].set( QObject::TR("class instance \ncolor"), &class_instance_color);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -409,7 +406,7 @@ UmlCode BrowserObjectDiagram::get_type() const
 
 QString BrowserObjectDiagram::get_stype() const
 {
-    return TR("Object diagram");
+    return QObject::TR("Object diagram");
 }
 
 int BrowserObjectDiagram::get_identifier() const
@@ -437,7 +434,7 @@ void BrowserObjectDiagram::get_objectdiagramsettings(ObjectDiagramSettings & r) 
 }
 
 void BrowserObjectDiagram::package_settings(BooL & name_in_tab,
-        ShowContextMode & show_context) const
+                                            ShowContextMode & show_context) const
 {
     name_in_tab = used_settings->package_name_in_tab == UmlYes;
     show_context = used_settings->show_class_pack_context_mode;
@@ -465,8 +462,8 @@ UmlColor BrowserObjectDiagram::get_color(UmlCode who) const
     }
 
     return (c != UmlDefaultColor)
-           ? c
-           : ((BrowserNode *) parent())->get_color(who);
+            ? c
+            : ((BrowserNode *) parent())->get_color(who);
 }
 
 bool BrowserObjectDiagram::get_auto_label_position() const
@@ -487,7 +484,7 @@ bool BrowserObjectDiagram::get_draw_all_relations() const
 void BrowserObjectDiagram::dont_draw_all_relations()
 {
     settings.draw_all_relations =
-        used_settings->draw_all_relations = UmlNo;
+            used_settings->draw_all_relations = UmlNo;
 }
 
 bool BrowserObjectDiagram::get_show_stereotype_properties() const
@@ -520,11 +517,10 @@ bool BrowserObjectDiagram::tool_cmd(ToolCom * com, const char * args)
 
         QDir d = BrowserView::get_dir();
 
-        com->write_string(d.absFilePath(fn));
+        com->write_string(d.absoluteFilePath(fn));
     }
 
-    return TRUE;
-
+        return TRUE;
     case saveInCmd:
         if (window != 0)
             com->write_ack(window->get_view()->save_pict(args, TRUE, FALSE));
@@ -535,38 +531,38 @@ bool BrowserObjectDiagram::tool_cmd(ToolCom * com, const char * args)
                                                     !w->get_view()->has_preferred_size_zoom(),
                                                     TRUE));
             w->dont_save();
-            w->close(TRUE);
+            w->close();
         }
 
         return TRUE;
-
     default:
         return (def->tool_cmd(com, args, this, comment) ||
                 BrowserNode::tool_cmd(com, args));
     }
 }
 
-void BrowserObjectDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
-        BrowserNode * bn,
-        char const * kc,
-        char const * kr)
+void BrowserObjectDiagram::compute_referenced_by(QList<BrowserNode *> & l,
+                                                 BrowserNode * bn,
+                                                 char const * kc,
+                                                 char const * kr)
 {
     int id = (IsaRelation(bn->get_type()))
-             ? ((RelationData *) bn->get_data())->get_ident()
-             : bn->get_identifier();
+            ? ((RelationData *) bn->get_data())->get_ident()
+            : bn->get_identifier();
 
     IdIterator<BrowserDiagram> it(all);
     BrowserDiagram * d;
-
-    while ((d = it.current()) != 0) {
-        if (!d->deletedp() && (d->get_type() == UmlObjectDiagram)) {
-            if ((((BrowserObjectDiagram *) d)->window != 0)
-                ? ((BrowserObjectDiagram *) d)->window->get_view()->is_present(bn)
-                : is_referenced(read_definition(d->get_ident(), "diagram"), id, kc, kr))
-                l.append((BrowserObjectDiagram *) d);
+    while (it.hasNext()) {
+        it.next();
+        if((d = it.value()) != 0)
+        {
+            if (!d->deletedp() && (d->get_type() == UmlObjectDiagram)) {
+                if ((((BrowserObjectDiagram *) d)->window != 0)
+                        ? ((BrowserObjectDiagram *) d)->window->get_view()->is_present(bn)
+                        : is_referenced(read_definition(d->get_ident(), "diagram"), id, kc, kr))
+                    l.append((BrowserObjectDiagram *) d);
+            }
         }
-
-        ++it;
     }
 }
 
@@ -597,7 +593,7 @@ void BrowserObjectDiagram::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "objectdiagram " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         settings.save(st);
@@ -615,7 +611,9 @@ void BrowserObjectDiagram::save(QTextStream & st, bool ref, QString & warning)
             is_modified = FALSE;
 
             if (window)
+            {
                 window->save("diagram", warning, is_new);
+            }
             else
                 BrowserDiagram::save();
         }
@@ -640,15 +638,15 @@ BrowserObjectDiagram * BrowserObjectDiagram::read_ref(char *& st, char * k)
 
     int id = read_id(st);
     BrowserObjectDiagram * result =
-        (BrowserObjectDiagram *) all[id];
+            (BrowserObjectDiagram *) all[id];
 
     return (result == 0)
-           ? new BrowserObjectDiagram(id)
-           : result;
+            ? new BrowserObjectDiagram(id)
+            : result;
 }
 
 BrowserObjectDiagram * BrowserObjectDiagram::read(char *& st, char * k,
-        BrowserNode * parent)
+                                                  BrowserNode * parent)
 {
     BrowserObjectDiagram * r;
     int id;
@@ -682,7 +680,7 @@ BrowserObjectDiagram * BrowserObjectDiagram::read(char *& st, char * k,
         r->is_defined = TRUE;
 
         r->is_read_only = (!in_import() && read_only_file()) ||
-                          ((user_id() != 0) && r->is_api_base());
+                ((user_id() != 0) && r->is_api_base());
 
         QFileInfo fi(BrowserView::get_dir(), QString::number(id) + ".diagram");
 

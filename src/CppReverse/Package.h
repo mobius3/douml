@@ -28,14 +28,9 @@
 #ifndef PACKAGE_H
 #define PACKAGE_H
 
-#include <q3dict.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include "misc/mystr.h"
-#include <Q3ValueList>
-#include <Q3PtrList>
-
+#include <QList>
 #include "BrowserNode.h"
 #include "ClassContainer.h"
 
@@ -43,7 +38,7 @@ class QDir;
 class QFileInfo;
 class QRegExp;
 class UmlPackage;
-class QApplication;
+class QGuiApplication;
 
 /* lgfreitas: Represents a UML package */
 class Package : public BrowserNode, public ClassContainer
@@ -73,7 +68,7 @@ public:
     virtual void declaration(const WrapperStr & name, const WrapperStr & stereotype,
                              const WrapperStr & decl
 #ifdef ROUNDTRIP
-                             , bool roundtrip, Q3PtrList<UmlItem> & expected_order
+                             , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
                             );
 
@@ -129,15 +124,15 @@ private:
     WrapperStr src_path;	// empty or finish by a /
 
     static QApplication * app;
-    static Q3PtrList<Package> Choozen; /* List of chosen "packages" to reverse */
+    static QList<Package *> Choozen; /* List of chosen "packages" to reverse */
     static int Nfiles;
     static bool Scan;
     static Package * Root;
     static QRegExp * DirFilter;
     static QRegExp * FileFilter;
     //static Package * Unknown;
-    static Q3ValueList<FormalParameterList> Formals;
-    static Q3PtrList<UmlClass> UsedClasses;
+    static QList<FormalParameterList> Formals;
+    static QList<UmlClass *> UsedClasses;
 
     static NDict<Class> Declared;
     static NDict<Class> Defined;

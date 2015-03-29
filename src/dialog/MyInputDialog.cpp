@@ -32,44 +32,47 @@
 #include <qcursor.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qvalidator.h>
 #include <qapplication.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "MyInputDialog.h"
 #include "DialogUtil.h"
 #include "UmlDesktop.h"
 #include "translate.h"
-
+#include <QLineEdit>
 QSize MyInputDialog::previous_size;
 
 MyInputDialog::MyInputDialog(const char * title, const QString & msg,
                              const QString & init)
-    : QDialog(0, title, TRUE)
+    : QDialog(0/*, title, TRUE*/)
 {
-    setCaption(title);
+    setWindowTitle(title);
     move(QCursor::pos());
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(new QLabel(msg, this));
     le = new LineEdit(init, this);
+
     hbox->addWidget(le);
 
     QFontMetrics fm(QApplication::font());
 
     le->setMinimumWidth(fm.width("AZERTYUIOPQSDFGHJKLMWXCVBN"));
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * ok = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -91,28 +94,30 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
 MyInputDialog::MyInputDialog(const char * title, const QString & msg,
                              const QStringList & list, const QString & init,
                              bool existing)
-    : QDialog(0, title, TRUE), le(0)
+    : QDialog(0/*, title, TRUE*/), le(0)
 {
-    setCaption(title);
+    setWindowTitle(title);
     move(QCursor::pos());
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(new QLabel(msg, this));
-    cb = new Q3ComboBox(!existing, this);
+    cb = new QComboBox(this);
+    cb->setEditable(!existing);
 
     if (! existing)
-        cb->insertItem(init);
+        cb->addItem(init);
 
-    cb->insertStringList(list);
+    cb->addItems(list);
 
     if (! existing) {
-        cb->setCurrentItem(0);
+        cb->setCurrentIndex(0);
         cb->setAutoCompletion(completion());
     }
 
@@ -120,14 +125,15 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
 
     QSizePolicy sp = cb->sizePolicy();
 
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     cb->setSizePolicy(sp);
 
     QFontMetrics fm(QApplication::font());
 
     cb->setMinimumWidth(fm.width("azertyuiopqsdfghjklm"));
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * ok = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -148,7 +154,7 @@ MyInputDialog::MyInputDialog(const char * title, const QString & msg,
 
 void MyInputDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 

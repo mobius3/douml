@@ -31,7 +31,7 @@
 
 #include <qapplication.h>
 #include <qfont.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QDropEvent>
@@ -42,17 +42,18 @@
 #include "UseCaseDiagramView.h"
 #include "BrowserUseCaseDiagram.h"
 #include "DiagramCanvas.h"
-#include "UcUseCaseCanvas.h"
-#include "PackageCanvas.h"
 #include "FragmentCanvas.h"
-#include "SubjectCanvas.h"
-#include "UcClassCanvas.h"
 #include "IconCanvas.h"
 #include "RelationCanvas.h"
+#include "SubjectCanvas.h"
+#include "UcUseCaseCanvas.h"
 #include "SimpleRelationCanvas.h"
-#include "NoteCanvas.h"
 #include "TextCanvas.h"
 #include "ImageCanvas.h"
+#include "PackageCanvas.h"
+#include "UcClassCanvas.h"
+#include "ArrowCanvas.h"
+#include "NoteCanvas.h"
 #include "UmlPixmap.h"
 #include "UmlDrag.h"
 #include "BrowserClass.h"
@@ -62,7 +63,7 @@
 #include "BrowserView.h"
 #include "RelatedElementsDialog.h"
 #include "translate.h"
-
+#include <QList>
 UseCaseDiagramView::UseCaseDiagramView(QWidget * parent, UmlCanvas * canvas, int id)
     : DiagramView(parent, canvas, id)
 {
@@ -70,13 +71,10 @@ UseCaseDiagramView::UseCaseDiagramView(QWidget * parent, UmlCanvas * canvas, int
 }
 
 // have marked elements not yet drawn ?
-static bool marked_not_yet_drawn(Q3PtrDict<DiagramItem> & drawn)
+static bool marked_not_yet_drawn(QHash<BasicData*, DiagramItem*> & drawn)
 {
-    const Q3PtrList<BrowserNode> & l = BrowserNode::marked_nodes();
-    Q3PtrListIterator<BrowserNode> it(l);
-    BrowserNode * bn;
-
-    for (; (bn = it.current()) != 0; ++it) {
+    const QList<BrowserNode *> & l = BrowserNode::marked_nodes();
+    foreach (BrowserNode *bn, l) {
         UmlCode k = bn->get_type();
 
         switch (k) {
@@ -92,46 +90,44 @@ static bool marked_not_yet_drawn(Q3PtrDict<DiagramItem> & drawn)
                 return TRUE;
         }
     }
-
     return FALSE;
 }
 
-static void get_drawn(DiagramItemList & items,
-                      Q3PtrDict<DiagramItem> & drawn)
+static void get_drawn(QList<DiagramItem*> & items,
+                      QHash<BasicData*, DiagramItem *> & drawn)
 {
-    DiagramItem * di;
-
-    for (di = items.first(); di != 0; di = items.next()) {
-        UmlCode k = di->type();
+    foreach (DiagramItem *di, items) {
+        UmlCode k = di->typeUmlCode();
 
         switch (k) {
         case UmlClass:
         case UmlPackage:
         case UmlUseCase:
-            drawn.replace(di->get_bn()->get_data(), di);
+            drawn.insert(di->get_bn()->get_data(), di);
             break;
 
         default:
             if (IsaRelation(k) || IsaSimpleRelation(k))
-                drawn.replace(((ArrowCanvas *) di)->get_data(), di);
+                drawn.insert(((ArrowCanvas *) di)->get_data(), di);
         }
     }
 }
 
 void UseCaseDiagramView::menu(const QPoint & p)
 {
-    Q3PopupMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Use case diagram menu"));
+    QMenu m(0);
+
+    MenuFactory::createTitle(m, QObject::tr("Use case diagram menu"));
 
     if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
-        DiagramItemList items(canvas()->allItems());
-        Q3PtrDict<DiagramItem> drawn;
+        DiagramItemList items(canvas()->items());
+        QHash<BasicData*, DiagramItem*> drawn;
 
         get_drawn(items, drawn);
 
         if (marked_not_yet_drawn(drawn))
-            m.insertItem(TR("Add marked elements"), 28);
+            MenuFactory::addItem(m,  TR("Add marked elements"), 28);
 
         switch (default_menu(m, 30)) {
         case EDIT_DRAWING_SETTING_CMD:
@@ -158,9 +154,9 @@ void UseCaseDiagramView::menu(const QPoint & p)
 const int Diagram_Margin = 20;
 
 void UseCaseDiagramView::add_marked_elements(const QPoint & p,
-        Q3PtrDict<DiagramItem> & drawn)
+                                             QHash<BasicData*, DiagramItem*> & drawn)
 {
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     history_save();
     history_protected = TRUE;
@@ -170,15 +166,14 @@ void UseCaseDiagramView::add_marked_elements(const QPoint & p,
     int x = p.x();
     int y = p.y();
     int future_y = y;
-    const Q3PtrList<BrowserNode> & l = BrowserNode::marked_nodes();
-    Q3PtrListIterator<BrowserNode> it(l);
-    BrowserNode * bn;
+    const QList<BrowserNode *> & l = BrowserNode::marked_nodes();
 
-    for (; (bn = it.current()) != 0; ++it) {
+    foreach (BrowserNode *bn, l) {
         if (drawn[bn->get_data()] == 0) {
             DiagramCanvas * dc;
 
             switch (bn->get_type()) {
+
             case UmlClass:
                 dc = new UcClassCanvas(bn, the_canvas(), x, y, 0);
                 break;
@@ -186,22 +181,20 @@ void UseCaseDiagramView::add_marked_elements(const QPoint & p,
             case UmlPackage:
                 dc = new PackageCanvas(bn, the_canvas(), x, y, 0);
                 break;
-
             case UmlUseCase:
                 dc = new UcUseCaseCanvas(bn, the_canvas(), x, y, 0);
                 break;
-
             default:
                 continue;
             }
 
-            drawn.replace(dc->get_bn()->get_data(), dc);
+            drawn.insert(dc->get_bn()->get_data(), dc);
 
             if ((x + dc->width()) > xmax)
-                dc->move(x = Diagram_Margin, y = future_y);
+                dc->moveBy(x = Diagram_Margin, y = future_y);
 
             if (y + dc->height() > ymax) {
-                dc->move(x = Diagram_Margin, y = Diagram_Margin);
+                dc->moveBy(x = Diagram_Margin, y = Diagram_Margin);
                 future_y = y + dc->height() + Diagram_Margin;
             }
             else {
@@ -221,10 +214,9 @@ void UseCaseDiagramView::add_marked_elements(const QPoint & p,
     UmlCanvas * cnv = (UmlCanvas *) canvas();
 
     if (! cnv->must_draw_all_relations()) {
-        for (it.toFirst(); (bn = it.current()) != 0; ++it) {
+        foreach (BrowserNode *bn, l) {
             if (drawn[bn->get_data()] == 0) {
                 UmlCode k = bn->get_type();
-
                 if (IsaRelation(k))
                     RelationCanvas::drop(bn, cnv, drawn);
                 else if (IsaSimpleRelation(k))
@@ -236,23 +228,23 @@ void UseCaseDiagramView::add_marked_elements(const QPoint & p,
     canvas()->update();
     history_protected = FALSE;
     window()->package_modified();
-
     QApplication::restoreOverrideCursor();
+
 }
 
 void UseCaseDiagramView::add_related_elements(DiagramItem  * di, QString what,
-        bool inh, bool assoc)
+                                              bool inh, bool assoc)
 {
     BrowserNodeList l;
-    RelatedElementsDialog dialog(di->get_bn(), what, inh, assoc, l);
+    RelatedElementsDialog dialog(di->get_bn(), what.toLatin1().constData(), inh, assoc, l);
 
     dialog.raise();
 
     if (dialog.exec() == QDialog::Accepted) {
-        QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        DiagramItemList items(canvas()->allItems());
-        Q3PtrDict<DiagramItem> drawn;
+        DiagramItemList items(canvas()->items());
+        QHash<BasicData *,DiagramItem*> drawn;
 
         get_drawn(items, drawn);
         history_save();
@@ -264,10 +256,8 @@ void UseCaseDiagramView::add_related_elements(DiagramItem  * di, QString what,
         int x = re.x();
         int y = re.bottom() + Diagram_Margin;
         int future_y = y;
-        Q3PtrListIterator<BrowserNode> it(l);
-        BrowserNode * bn;
 
-        for (; (bn = it.current()) != 0; ++it) {
+        foreach (BrowserNode *bn, l) {
             if (drawn[bn->get_data()] == 0) {
                 DiagramCanvas * dc;
 
@@ -288,13 +278,13 @@ void UseCaseDiagramView::add_related_elements(DiagramItem  * di, QString what,
                     continue;
                 }
 
-                drawn.replace(dc->get_bn()->get_data(), dc);
+                drawn.insert(dc->get_bn()->get_data(), dc);
 
                 if ((x + dc->width()) > xmax)
-                    dc->move(x = Diagram_Margin, y = future_y);
+                    dc->moveBy(x = Diagram_Margin, y = future_y);
 
                 if (y + dc->height() > ymax) {
-                    dc->move(x = Diagram_Margin, y = Diagram_Margin);
+                    dc->moveBy(x = Diagram_Margin, y = Diagram_Margin);
                     future_y = y + dc->height() + Diagram_Margin;
                 }
                 else {
@@ -319,8 +309,11 @@ void UseCaseDiagramView::add_related_elements(DiagramItem  * di, QString what,
     }
 }
 
-void UseCaseDiagramView::contentsMousePressEvent(QMouseEvent * e)
+void UseCaseDiagramView::mousePressEvent(QMouseEvent * e)
 {
+
+    QPoint diagramPoint(e->x(), e->y());
+    QPointF scenePoint = mapToScene(diagramPoint);
     if (!window()->frozen()) {
         UmlCode action = window()->buttonOn();
 
@@ -332,19 +325,20 @@ void UseCaseDiagramView::contentsMousePressEvent(QMouseEvent * e)
             history_save();
 
             BrowserNode * b =
-                BrowserClass::get_class(((BrowserNode *) window()->browser_diagram()->parent()),
-                                        "actor");
+                    BrowserClass::get_class(((BrowserNode *) window()->browser_diagram()->parent()),
+                                            "actor");
 
             if (b != 0) {
                 UcClassCanvas * uc =
-                    new UcClassCanvas(b, the_canvas(), e->x(), e->y(), 0);
+                        new UcClassCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y(), 0);
 
                 uc->show();
                 uc->upper();
                 window()->package_modified();
+
             }
         }
-        break;
+            break;
 
         case UmlUseCase: {
             history_protected = TRUE;
@@ -353,78 +347,98 @@ void UseCaseDiagramView::contentsMousePressEvent(QMouseEvent * e)
             history_save();
 
             BrowserNode * b =
-                BrowserUseCase::get_use_case(((BrowserNode *) window()->browser_diagram()->parent()));
+                    BrowserUseCase::get_use_case(((BrowserNode *) window()->browser_diagram()->parent()));
 
             if (b != 0) {
                 UcUseCaseCanvas * uc =
-                    new UcUseCaseCanvas(b, the_canvas(), e->x(), e->y(), 0);
+                        new UcUseCaseCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y(), 0);
                 uc->show();
                 uc->upper();
                 window()->package_modified();
             }
         }
-        break;
+            break;
 
         case UmlSubject: {
             unselect_all();
             window()->selectOn();
             history_save();
-
             SubjectCanvas * f =
-                new SubjectCanvas(the_canvas(), e->x(), e->y(), 0);
-
+                    new SubjectCanvas(the_canvas(), scenePoint.x(), scenePoint.y(), 0);
             f->show();
             f->upper();
+
             window()->package_modified();
         }
-        break;
+            break;
 
         default:
-            DiagramView::contentsMousePressEvent(e);
+            DiagramView::mousePressEvent(e);
             return;
         }
-
         canvas()->update();
         history_protected = FALSE;
     }
     else
-        DiagramView::contentsMousePressEvent(e);
+        DiagramView::mousePressEvent(e);
 }
 
 void UseCaseDiagramView::dragEnterEvent(QDragEnterEvent * e)
 {
     abort_line_construction();
-
     if (!window()->frozen() &&
-        (UmlDrag::canDecode(e, UmlClass, TRUE, TRUE) ||
-         UmlDrag::canDecode(e, UmlUseCase, FALSE, TRUE) ||
-         UmlDrag::canDecode(e, UmlPackage, FALSE, TRUE) ||
-         UmlDrag::canDecode(e, UmlRelations, TRUE, TRUE) ||
-         UmlDrag::canDecode(e, UmlSimpleRelations, TRUE, TRUE) ||
-         UmlDrag::canDecode(e, UmlClassDiagram, FALSE, TRUE) ||
-         UmlDrag::canDecode(e, UmlUseCaseDiagram, FALSE, TRUE) ||
-         UmlDrag::canDecode(e, UmlSeqDiagram, FALSE, TRUE) ||
-         UmlDrag::canDecode(e, UmlColDiagram, FALSE, TRUE) ||
-         UmlDrag::canDecode(e, UmlObjectDiagram, FALSE, TRUE) ||
-         UmlDrag::canDecode(e, UmlComponentDiagram, FALSE, TRUE) ||
-         UmlDrag::canDecode(e, UmlDeploymentDiagram, FALSE, TRUE) ||
-         UmlDrag::canDecode(e, UmlActivityDiagram, TRUE, TRUE) ||
-         UmlDrag::canDecode(e, UmlStateDiagram, TRUE, TRUE)))
+            (UmlDrag::canDecode(e, UmlClass, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlUseCase, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlPackage, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlRelations, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlSimpleRelations, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlClassDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlUseCaseDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlSeqDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlColDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlObjectDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlComponentDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlDeploymentDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlActivityDiagram, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlStateDiagram, TRUE, TRUE)))
         e->accept();
     else
         e->ignore();
 }
 
+
+void UseCaseDiagramView::dragMoveEvent(QDragMoveEvent * e)
+{
+    abort_line_construction();
+    if (!window()->frozen() &&
+            (UmlDrag::canDecode(e, UmlClass, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlUseCase, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlPackage, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlRelations, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlSimpleRelations, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlClassDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlUseCaseDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlSeqDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlColDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlObjectDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlComponentDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlDeploymentDiagram, FALSE, TRUE) ||
+             UmlDrag::canDecode(e, UmlActivityDiagram, TRUE, TRUE) ||
+             UmlDrag::canDecode(e, UmlStateDiagram, TRUE, TRUE)))
+        e->accept();
+    else
+        e->ignore();
+}
 void UseCaseDiagramView::dropEvent(QDropEvent * e)
 {
     BrowserNode * bn;
-    QPoint p = viewportToContents(e->pos());
+
+    QPointF p = mapToScene(e->pos());
 
     if ((bn = UmlDrag::decode(e, UmlClass)) != 0) {
         history_save();
-
         UcClassCanvas * uc =
-            new UcClassCanvas(bn, the_canvas(), p.x(), p.y(), 0);
+                new UcClassCanvas(bn, the_canvas(), p.x(), p.y(), 0);
 
         history_protected = TRUE;
         uc->show();
@@ -435,9 +449,8 @@ void UseCaseDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlUseCase)) != 0) {
         history_save();
-
         UcUseCaseCanvas * uc =
-            new UcUseCaseCanvas(bn, the_canvas(), p.x(), p.y(), 0);
+                new UcUseCaseCanvas(bn, the_canvas(), p.x(), p.y(), 0);
 
         history_protected = TRUE;
         uc->show();
@@ -448,9 +461,8 @@ void UseCaseDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlPackage)) != 0) {
         history_save();
-
         PackageCanvas * pk =
-            new PackageCanvas(bn, the_canvas(), p.x(), p.y(), 0);
+                new PackageCanvas(bn, the_canvas(), p.x(), p.y(), 0);
 
         history_protected = TRUE;
         pk->show();
@@ -460,7 +472,6 @@ void UseCaseDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlRelations, TRUE)) != 0) {
         history_save();
-
         history_protected = TRUE;
         RelationCanvas::drop(bn, the_canvas());
         canvas()->update();
@@ -468,7 +479,6 @@ void UseCaseDiagramView::dropEvent(QDropEvent * e)
     }
     else if ((bn = UmlDrag::decode(e, UmlSimpleRelations, TRUE)) != 0) {
         history_save();
-
         history_protected = TRUE;
         SimpleRelationCanvas::drop(bn, the_canvas());
         canvas()->update();
@@ -484,7 +494,6 @@ void UseCaseDiagramView::dropEvent(QDropEvent * e)
              ((bn = UmlDrag::decode(e, UmlStateDiagram, TRUE)) != 0) ||
              ((bn = UmlDrag::decode(e, UmlActivityDiagram, TRUE)) != 0)) {
         history_save();
-
         IconCanvas * ic = new IconCanvas(bn, the_canvas(), p.x(), p.y(), 0);
 
         history_protected = TRUE;
@@ -499,49 +508,58 @@ void UseCaseDiagramView::dropEvent(QDropEvent * e)
 void UseCaseDiagramView::save(QTextStream & st, QString & warning,
                               bool copy) const
 {
-    DiagramItemList items(canvas()->allItems());
-    DiagramItem * di;
 
+    QList<QGraphicsItem *> items = canvas()->items();
     if (!copy)
         // sort is useless for a copy
-        items.sort();
-
+        qSort(items);
     st << "format " << api_format() << "\n";
 
     // save first class use_cases packages fragment subject notes and icons
 
-    for (di = items.first(); di != 0; di = items.next()) {
-        switch (di->type()) {
-        case UmlClass:
-        case UmlUseCase:
-        case UmlNote:
-        case UmlText:
-        case UmlImage:
-        case UmlPackage:
-        case UmlFragment:
-        case UmlSubject:
-        case UmlIcon:
-            if (!copy || di->copyable())
-                di->save(st, FALSE, warning);
+    for (int i = 0; i< items.count(); i++)
+    {
+        DiagramItem *di = QCanvasItemToDiagramItem(items.at(i));
+        if(di)
+        {
+            switch (di->typeUmlCode()) {
+            case UmlClass:
+            case UmlUseCase:
+            case UmlNote:
+            case UmlText:
+            case UmlImage:
+            case UmlPackage:
+            case UmlFragment:
+            case UmlSubject:
+            case UmlIcon:
+                if (!copy || di->copyable())
+                    di->save(st, FALSE, warning);
 
-            // no break
-        default:
-            break;
+                // no break
+            default:
+                break;
+            }
         }
     }
-
     // then saves relations
 
-    for (di = items.first(); di != 0; di = items.next())
-        if ((!copy || di->copyable()) &&
-            (IsaRelation(di->type()) || IsaSimpleRelation(di->type())))
+    for (int i = 0; i< items.count(); i++)
+    {
+        DiagramItem *di = QCanvasItemToDiagramItem(items.at(i));
+        if (di && (!copy || di->copyable()) &&
+                (IsaRelation(di->typeUmlCode()) || IsaSimpleRelation(di->typeUmlCode())))
             di->save(st, FALSE, warning);
+    }
 
     // then saves anchors
 
-    for (di = items.first(); di != 0; di = items.next())
-        if ((!copy || di->copyable()) && (di->type() == UmlAnchor))
+    for (int i = 0; i< items.count(); i++)
+    {
+        DiagramItem *di = QCanvasItemToDiagramItem(items.at(i));//(DiagramItem *)items.at(i);
+        if(di)
+        if ((!copy || di->copyable()) && (di->typeUmlCode() == UmlAnchor))
             di->save(st, FALSE, warning);
+    }
 
     if (!copy && (preferred_zoom != 0)) {
         nl_indent(st);
@@ -556,17 +574,16 @@ void UseCaseDiagramView::save(QTextStream & st, QString & warning,
 void UseCaseDiagramView::read(char * st, char * k)
 {
     UmlCanvas * canvas = the_canvas();
-
     // reads first the class use_cases package icons, notes text and image
     while (UcClassCanvas::read(st, canvas, k) ||
-           UcUseCaseCanvas::read(st, canvas, k) ||
            NoteCanvas::read(st, canvas, k) ||
-           TextCanvas::read(st, canvas, k) ||
-           IconCanvas::read(st, canvas, k) ||
            PackageCanvas::read(st, canvas, k) ||
+           UcUseCaseCanvas::read(st, canvas, k) ||
+           IconCanvas::read(st, canvas, k) ||
            FragmentCanvas::read(st, canvas, k) ||
            SubjectCanvas::read(st, canvas, k) ||
-           ImageCanvas::read(st, canvas, k))
+           ImageCanvas::read(st, canvas, k)||
+           TextCanvas::read(st, canvas, k))
         k = read_keyword(st);
 
     // then reads relations and anchors
@@ -590,12 +607,13 @@ void UseCaseDiagramView::read(char * st, char * k)
 
 void UseCaseDiagramView::send(ToolCom * com)
 {
-    Q3CanvasItemList l = canvas()->allItems();
-    Q3PtrList<FragmentCanvas> fragments;
-    Q3PtrList<FragmentCanvas> refs;
 
+    QList<QGraphicsItem*> l = canvas()->items();
+    QList<FragmentCanvas *> fragments;
+    QList<FragmentCanvas *> refs;
     FragmentCanvas::send(com, l, fragments, refs);
     SubjectCanvas::send(com, l);
     UcUseCaseCanvas::send(com, l);
+
 }
 

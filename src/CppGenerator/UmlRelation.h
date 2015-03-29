@@ -28,12 +28,10 @@
 #ifndef UMLRELATION_H
 #define UMLRELATION_H
 
-#include <q3valuelist.h>
+#include <QList>
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
-
 #include "UmlBaseRelation.h"
 
 class QTextStream;
@@ -46,11 +44,11 @@ public:
         : UmlBaseRelation(id, n) {
     };
 
-    virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
+    virtual void compute_dependency(QList<CppRefType *> & dependency,
                                     const WrapperStr & cl_stereotype,
                                     bool all_in_h);
     void generate_inherit(const char *& sep, QTextStream & f_h,
-                          const Q3ValueList<UmlActualParameter> & actuals,
+                          const QList<UmlActualParameter> & actuals,
                           const WrapperStr & cl_stereotype);
     virtual void generate_decl(aVisibility & current_visibility, QTextStream & f_h,
                                const WrapperStr & cl_stereotype, WrapperStr indent,

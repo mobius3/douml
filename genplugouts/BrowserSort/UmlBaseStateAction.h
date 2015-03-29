@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 
 class UmlStateAction;
 class UmlState;
@@ -25,13 +25,13 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseStateAction(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseStateAction(void * id, const QByteArray & s) : UmlItem(id, s) {
     }
 
 
 public:
     // return the expression in OCL
-    const Q3CString & expression();
+    const QByteArray & expression();
 
     // set the expression in OCL
     //
@@ -40,7 +40,7 @@ public:
 
 #ifdef WITHCPP
     // return the expression in C++
-    const Q3CString & cppExpression();
+    const QByteArray & cppExpression();
 
     // set the expression in C++
     //
@@ -50,7 +50,7 @@ public:
 
 #ifdef WITHJAVA
     // return the expression in Java
-    const Q3CString & javaExpression();
+    const QByteArray & javaExpression();
 
     // set the expression in Java
     //
@@ -68,14 +68,14 @@ public:
 
 
 private:
-    Q3CString _uml;
+    QByteArray _uml;
 
 #ifdef WITHCPP
-    Q3CString _cpp;
+    QByteArray _cpp;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java;
+    QByteArray _java;
 #endif
 
 

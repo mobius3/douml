@@ -29,7 +29,7 @@
 
 
 
-#include <Q3TextEdit>
+#include <QTextEdit>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qfile.h>
@@ -37,28 +37,29 @@
 #include <qapplication.h>
 #include <qdir.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include "misc/mystr.h"
 #include <QDesktopWidget>
-
+#include <QSettings>
 #include "ShowFileDialog.h"
 
 ShowFileDialog::ShowFileDialog(const WrapperStr & filename)
-    : QDialog(0, filename)
+    : QDialog(0)
 {
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    setWindowTitle(filename);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->addWidget(new QLabel("You can specify the editor through the environment dialog",
                                this));
 
-    e = new Q3TextEdit(this);
+    e = new QTextEdit(this);
 
     QFile f(filename);
 
     if (f.open(QIODevice::ReadOnly)) {
         QTextStream t(&f);
 
-        e->setText(t.read());
+        e->setText(t.readAll());
     }
 
     QFont font = e->font();
@@ -72,7 +73,7 @@ ShowFileDialog::ShowFileDialog(const WrapperStr & filename)
 
 void ShowFileDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
 
     int w = QApplication::desktop()->width();
     int h = QApplication::desktop()->height();
@@ -80,49 +81,26 @@ void ShowFileDialog::polish()
     int cy = h / 2;
     bool virtual_desktop = FALSE;
 
-    // try to read .doumlrc
-    // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
-    // if the path contains non latin1 characters, for instance cyrillic !
-    QString s = QDir::home().absFilePath(".doumlrc");
-    FILE * fp = fopen((const char *) s, "r");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec("UTF-8");
+    int l, t, r, b;
+    l = settings.value("Desktop/left", -1).toInt();
+    r = settings.value("Desktop/right", -1).toInt();
+    t = settings.value("Desktop/top", -1).toInt();
+    b = settings.value("Desktop/bottom", -1).toInt();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    if (fp != 0) {
-        char line[512];
-
-        while (fgets(line, sizeof(line) - 1, fp) != 0) {
-            if (!strncmp(line, "DESKTOP ", 8)) {
-                int l, t, r, b;
-
-                if (sscanf(line + 8, "%d %d %d %d", &l, &t, &r, &b) == 4) {
-                    if (!((r == 0) && (t == 0) && (r == 0) && (b == 0)) &&
-                        !((r < 0) || (t < 0) || (r < 0) || (b < 0)) &&
-                        !((r <= l) || (b <= t))) {
-                        w = r - l + 1;
-                        h = b - t + 1;
-                        cx = (r + l) / 2;
-                        cy = (t + b) / 2;
-                        virtual_desktop = TRUE;
-                    }
-                }
-
-                break;
-            }
-        }
-
-        fclose(fp);
+    if(l != -1 && r != -1 && t != -1 && b != -1)
+    {
+      if (!((r == 0) && (t == 0) && (r == 0) && (b == 0)) &&
+          !((r < 0) || (t < 0) || (r < 0) || (b < 0)) &&
+          !((r <= l) || (b <= t)))
+      {
+        w = r - l + 1;
+        h = b - t + 1;
+        cx = (r + l) / 2;
+        cy = (t + b) / 2;
+        virtual_desktop = TRUE;
+      }
     }
 
     resize(w / 2, h / 2);

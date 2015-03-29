@@ -50,6 +50,7 @@ class CodClassInstCanvas : public QObject, public CodObjCanvas, public ClassInst
 protected:
     QString iname;	// useless if browser_node is a class instance rather than a class
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     CodClassInstCanvas(BrowserNode * t, UmlCanvas * canvas,
                        int x, int y, int id);
@@ -60,7 +61,7 @@ public:
     virtual void draw(QPainter & p);
 
     void compute_size();
-    virtual UmlCode type() const;	// -> class or classinstance
+    virtual UmlCode typeUmlCode() const;	// -> class or classinstance
     virtual QString get_name() const;	// all cases
     virtual void set_name(const QString & s);	// out of model case
     virtual BrowserNode * get_type() const;	// return class, all cases
@@ -79,8 +80,8 @@ public:
     virtual void history_hide();
 
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
+    virtual void clone_drawing_settings(const DiagramItem *src);
     virtual bool get_show_stereotype_properties() const;
 
     virtual void apply_shortcut(QString s);
@@ -89,7 +90,7 @@ public:
     virtual void save(QTextStream &, bool ref, QString & warning) const;
     static CodClassInstCanvas * read(char *& , UmlCanvas * canvas, char *);
 
-    static void send(ToolCom * com, Q3CanvasItemList & all);
+    static void send(ToolCom * com, QList<QGraphicsItem*> & all);
 
 private slots:
     void modified();	// canvas must be updated

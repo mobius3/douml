@@ -1,0 +1,67 @@
+format 76
+
+activitynodecanvas 128170 activitynode_ref 128042 // initial_node
+  xyz 30 53 2000
+end
+activityactioncanvas 130090 activityaction_ref 128170 // activity action Initial Scale
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 215 228 2000 84 40
+end
+activityactioncanvas 130218 activityaction_ref 128298 // activity action Memory Limit
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 106 229 2005 70 40
+end
+activityactioncanvas 130346 activityaction_ref 128426 // activity action Scene Pointer
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 6 216 2000 79 40
+end
+activityactioncanvas 130474 activityaction_ref 128554 // activity action Background request Pointer
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 276 168 2000 89 40
+end
+activityactioncanvas 130602 activityaction_ref 128682 // activity action Initializing state
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 279 33 2000 100 60
+end
+activitynodecanvas 132010 activitynode_ref 128426 // decision
+  xyz 165 155 2010
+end
+textcanvas 132778 "Not initializing any member to read background maps
+because an external singleton will be used"
+  bg mediumgreen  xyzwh 449 46 2000 248 26
+flowcanvas 131754 flow_ref 129322 // <flow>
+  
+  from ref 128170 z 2001 to ref 130602
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 132138 flow_ref 129450 // <flow>
+  
+  from ref 130602 z 2011 to ref 132010
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 132266 flow_ref 129578 // <flow>
+  
+  from ref 132010 z 2011 to ref 130346
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 132394 flow_ref 129706 // <flow>
+  
+  from ref 132010 z 2011 to ref 130218
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 132522 flow_ref 129834 // <flow>
+  
+  from ref 132010 z 2011 to ref 130090
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 132650 flow_ref 129962 // <flow>
+  
+  from ref 132010 z 2011 to ref 130474
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+end

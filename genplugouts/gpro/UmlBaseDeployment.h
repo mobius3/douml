@@ -3,13 +3,12 @@
 
 
 #include "UmlItem.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 //  Manage the deployments
-class UmlBaseDeployment : public UmlItem
-{
-protected:
-    UmlBaseDeployment(void * id, Q3CString n) : UmlItem(id, n) {};
+class UmlBaseDeployment : public UmlItem {
+  protected:
+    UmlBaseDeployment(void * id, QByteArray n) : UmlItem(id, n){};
 
 };
 

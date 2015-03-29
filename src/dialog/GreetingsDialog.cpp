@@ -32,27 +32,28 @@
 #include <qapplication.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3textview.h>
+#include <QTextEdit>
 #include <qpushbutton.h>
 #include <qtimer.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QCloseEvent>
 
 #include "GreetingsDialog.h"
 #include "UmlDesktop.h"
 
-GreetingsDialog::GreetingsDialog() : QDialog(0, "", TRUE)
+GreetingsDialog::GreetingsDialog() : QDialog(0/*, "", TRUE*/)
 {
-    setCaption("Greetings");
+    setWindowTitle("Greetings");
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     const char * msg = "\
@@ -75,20 +76,21 @@ Thank you for using <i>DoUML!</i><br>\n\
 Visit us at <i>http://bouml-ng.sourceforge.net</i>\n\
 <br>\n<br>\n<br>\n";
 
-    Q3TextView * tx =
-        new Q3TextView(msg, QString(), this);
+    QTextEdit * tx =
+        new QTextEdit(msg, this);
     QFont fnt = tx->font();
 
     fnt.setItalic(TRUE);
 
     QFontMetrics fm(fnt);
 
-    tx->setVScrollBarMode(Q3ScrollView::AlwaysOff);
-    tx->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    tx->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    tx->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tx->setMinimumSize(fm.size(0, msg));
     hbox->addWidget(tx);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     ok = new QPushButton("&OK", this);
@@ -105,7 +107,7 @@ Visit us at <i>http://bouml-ng.sourceforge.net</i>\n\
     connect(ok, SIGNAL(clicked()), this, SLOT(reject()));
 
     QTimer::singleShot(5000, this, SLOT(valid_ok()));
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 }
 
 void GreetingsDialog::valid_ok()

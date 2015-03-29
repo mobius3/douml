@@ -1,0 +1,8 @@
+class FileDestination
+!!!258690.cpp!!!	FileDestination(in filePath : QString)
+    mFile.setFileName(filePath);
+    mFile.open(QFile::WriteOnly | QFile::Text);
+    mOutputStream.setDevice(&mFile);
+!!!258818.cpp!!!	write(in message : QString) : void
+    mOutputStream << message << endl;
+    mOutputStream.flush();

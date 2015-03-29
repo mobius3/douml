@@ -1,7 +1,6 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -42,7 +41,7 @@ public:
     UmlAttribute(void * id, const WrapperStr & n)
         :  UmlBaseAttribute(id, n) {};
 
-    virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
+    virtual void compute_dependency(QList<CppRefType *> & dependency,
                                     const WrapperStr & cl_stereotype,
                                     bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility, QTextStream & f_h,

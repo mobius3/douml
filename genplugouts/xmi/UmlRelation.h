@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseRelation.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "aRelationKind.h"
 
 class FileOut;
@@ -15,7 +15,7 @@ class FileOut;
 class UmlRelation : public UmlBaseRelation
 {
 public:
-    UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n) {};
+    UmlRelation(void * id, const QByteArray & n) : UmlBaseRelation(id, n) {};
 
     virtual bool write_if_needed(FileOut & out);
 

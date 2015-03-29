@@ -26,11 +26,7 @@
 // *************************************************************************
 
 #include <qapplication.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
-#include <Q3CString>
-//Added by qt3to4:
-#include <Q3PtrList>
+#include <qfiledialog.h>
 #include <stdlib.h>
 #include <qfile.h>
 #include <qdir.h>
@@ -64,7 +60,7 @@ int main(int argc, char ** argv)
     if (argc != 2)
         return 0;
 
-    if (UmlCom::connect(Q3CString(argv[1]).toUInt())) {
+    if (UmlCom::connect(QByteArray(argv[1]).toUInt())) {
         bool aborted = TRUE;
 
         try {
@@ -135,8 +131,8 @@ int main(int argc, char ** argv)
             QString path;
             // note : QFile fp(QDir::home().absFilePath(".doumlcat")) doesn't work
             // if the path contains non latin1 characters, for instance cyrillic !
-            QString s = QDir::home().absFilePath(".doumlcat");
-            FILE * fp = fopen((const char *) s, "r");
+            QString s = QDir::home().absoluteFilePath(".doumlcat");
+            FILE * fp = fopen((const char *) s.toLatin1().constData(), "r");
 
 
 
@@ -165,15 +161,13 @@ int main(int argc, char ** argv)
             }
 
             while (!(path =
-                         Q3FileDialog::getOpenFileName(path, "*.cat",
-                                 0, 0,
-                                 "select a java catalog file to read it, or cancel"))
-                   .isEmpty()) {
+                         QFileDialog::getOpenFileName(0, "select a java catalog file to read it, or cancel",path, "*.cat",
+                                 0)).isEmpty()) {
                 QFile f(path);
 
                 if (f.open(QIODevice::ReadOnly)) {
-                    if ((fp = fopen((const char *) s, "w")) != 0) {
-                        fwrite((const char *) path, 1, path.length(), fp);
+                    if ((fp = fopen((const char *) s.toLatin1().constData(), "w")) != 0) {
+                        fwrite((const char *) path.toLatin1().constData(), 1, path.length(), fp);
                         fputc('\n', fp);
                         fclose(fp);
                     }
@@ -193,7 +187,7 @@ int main(int argc, char ** argv)
 
             // umark all
             {
-                Q3PtrVector<UmlItem> marked = UmlItem::markedItems();
+                QVector<UmlItem*> marked = UmlItem::markedItems();
                 UmlItem ** v = marked.data();
                 UmlItem ** const vsup = v + marked.size();
 
@@ -201,7 +195,7 @@ int main(int argc, char ** argv)
                     (*v)->set_isMarked(FALSE);
             }
 
-            Q3PtrList<UmlItem> useless;
+            QList<UmlItem *> useless;
 
             item->mark_useless(useless);
 
@@ -212,13 +206,11 @@ int main(int argc, char ** argv)
                                       "Delete them ?",
                                       "Yes", "No", QString(), 1, 1)
                  == 0)) {
-                Q3PtrListIterator<UmlItem> iter(useless);
 
-                do {
-                    if (iter.current()->isMarked())
-                        iter.current()->deleteIt();
-                }
-                while (++iter, iter.current() != 0);
+                foreach (UmlItem *item, useless) {
+                    if (item->isMarked())
+                        item->deleteIt();
+                };
             }
 
             UmlPackage::getProject()->set_childrenVisible(TRUE);

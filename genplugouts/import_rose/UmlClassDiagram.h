@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClassDiagram.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class File;
 class UmlClassView;
@@ -16,11 +16,11 @@ class UmlClassView;
 class UmlClassDiagram : public UmlBaseClassDiagram
 {
 public:
-    UmlClassDiagram(void * id, const Q3CString & n) : UmlBaseClassDiagram(id, n) {
+    UmlClassDiagram(void * id, const QByteArray & n) : UmlBaseClassDiagram(id, n) {
         cpt[kind()] += 1;
     };
 
-    static void import(File & f, UmlClassView * p);
+    static void import(File & f, UmlItem *p);
 
 
 private:

@@ -10,7 +10,7 @@ UmlCollaborationDiagramDefinition::~UmlCollaborationDiagramDefinition()
 void UmlCollaborationDiagramDefinition::write(FileOut & out, UmlItem * diag)
 {
     UmlMessage::write_connectors(out, diag,
-                                 (const Q3PtrVector<UmlMessage> &) messages());
+                                 (const QVector<UmlMessage*> &) messages());
     UmlClassInstanceReference::write_lifelines(out, diag, instances());
 
     if (! messages().isEmpty()) {

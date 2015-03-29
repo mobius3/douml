@@ -9,21 +9,20 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3hbox.h>
-#include <q3vbox.h>
+#include <HHBox.h>
+#include <vvbox.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 //#include <qhbuttongroup.h> //[jasa] has compiler errors.
 //[jasa] including q3buttongroup.h instead seems to work.
-#include <q3buttongroup.h>
-#include <q3vgroupbox.h>
-#include <q3grid.h>
+#include <bbuttongroup.h>
+#include "vgridbox.h"
+#include "gridbox.h"
 #include <qmessagebox.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include <QKeyEvent>
-#include <Q3VBoxLayout>
-
+#include <QVBoxLayout>
+#include <QSettings>
 #include "UmlCom.h"
 #include "Context.h"
 #include "UmlItem.h"
@@ -58,171 +57,174 @@ void LineEdit::keyPressEvent(QKeyEvent * e)
     }
 }
 
-Dialog::Dialog() : QDialog(0, 0, TRUE)
+Dialog::Dialog() : QDialog(0)
 {
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3VGroupBox * gbox;
-    Q3HButtonGroup * bg;
-    Q3HBox * htab;
+    setModal(true);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    VGridBox * gbox;
+    BButtonGroup * bg;
+    HHBox * htab;
 
     vbox->setMargin(5);
 
-    gbox = new Q3VGroupBox("Filters" , this);
+    gbox = new VGridBox(10,this,"Filters");
     vbox->addWidget(gbox);
 
-    htab = new Q3HBox(gbox);
+    gbox->addWidget(htab = new HHBox(gbox));
     //htab->setMargin(5);
 
-    new QLabel("filter 1 : ", htab);
-    filter1_le = new LineEdit(htab);
+    htab->addWidget(new QLabel("filter 1 : ", htab));
+    htab->addWidget(filter1_le = new LineEdit(htab));
 
-    new QLabel("  ", htab);
+    htab->addWidget(new QLabel("  ", htab));
 
-    bg = new Q3HButtonGroup(htab);
-    bg->setRadioButtonExclusive(TRUE);
+    htab->addWidget(bg = new BButtonGroup(htab));
+    //bg->setRadioButtonExclusive(TRUE);
 
-    with1_rb = new QRadioButton("with", bg);
-    new QRadioButton("without", bg);
+    bg->addWidget(with1_rb = new QRadioButton("with", bg));
+    bg->addWidget(new QRadioButton("without", bg));
     with1_rb->setChecked(TRUE);
 
     //
 
-    htab = new Q3HBox(gbox);
+    gbox->addWidget(htab = new HHBox(gbox));
     //htab->setMargin(5);
 
-    new QLabel("", htab);
-    bg = new Q3HButtonGroup(htab);
-    bg->setRadioButtonExclusive(TRUE);
+    htab->addWidget(new QLabel("", htab));
+    htab->addWidget(bg = new BButtonGroup(htab));
+    //bg->setRadioButtonExclusive(TRUE);
 
-    and12_rb = new QRadioButton("and", bg);
-    new QRadioButton("or", bg);
+    bg->addWidget(and12_rb = new QRadioButton("and", bg));
+    bg->addWidget(new QRadioButton("or", bg));
     and12_rb->setChecked(TRUE);
 
-    new QLabel("", htab);
+    htab->addWidget(new QLabel("", htab));
 
     //
 
-    htab = new Q3HBox(gbox);
+    gbox->addWidget(htab = new HHBox(gbox));
     //htab->setMargin(5);
 
-    new QLabel("filter 2 : ", htab);
-    filter2_le = new LineEdit(htab);
+    htab->addWidget(new QLabel("filter 2 : ", htab));
+    htab->addWidget(filter2_le = new LineEdit(htab));
 
-    new QLabel("  ", htab);
+    htab->addWidget(new QLabel("  ", htab));
 
-    bg = new Q3HButtonGroup(htab);
-    bg->setRadioButtonExclusive(TRUE);
+    htab->addWidget(bg = new BButtonGroup(htab));
+    //bg->setRadioButtonExclusive(TRUE);
 
-    with2_rb = new QRadioButton("with", bg);
-    new QRadioButton("without", bg);
+    bg->addWidget(with2_rb = new QRadioButton("with", bg));
+    bg->addWidget(new QRadioButton("without", bg));
     with2_rb->setChecked(TRUE);
 
     //
 
-    htab = new Q3HBox(gbox);
+    gbox->addWidget(htab = new HHBox(gbox));
     //htab->setMargin(5);
 
-    new QLabel("", htab);
-    bg = new Q3HButtonGroup(htab);
-    bg->setRadioButtonExclusive(TRUE);
+    htab->addWidget(new QLabel("", htab));
+    htab->addWidget(bg = new BButtonGroup(htab));
+    //bg->setRadioButtonExclusive(TRUE);
 
-    and23_rb = new QRadioButton("and", bg);
-    new QRadioButton("or", bg);
+    bg->addWidget(and23_rb = new QRadioButton("and", bg));
+    bg->addWidget(new QRadioButton("or", bg));
     and23_rb->setChecked(TRUE);
 
-    new QLabel("", htab);
+    htab->addWidget(new QLabel("", htab));
 
     //
 
-    htab = new Q3HBox(gbox);
+    gbox->addWidget(htab = new HHBox(gbox));
     //htab->setMargin(5);
 
-    new QLabel("filter 3 : ", htab);
-    filter3_le = new LineEdit(htab);
+    htab->addWidget(new QLabel("filter 3 : ", htab));
+    htab->addWidget(filter3_le = new LineEdit(htab));
 
-    new QLabel("  ", htab);
+    htab->addWidget(new QLabel("  ", htab));
 
-    bg = new Q3HButtonGroup(htab);
-    bg->setRadioButtonExclusive(TRUE);
+    htab->addWidget(bg = new BButtonGroup(htab));
+    //bg->setRadioButtonExclusive(TRUE);
 
-    with3_rb = new QRadioButton("with", bg);
-    new QRadioButton("without", bg);
+    bg->addWidget(with3_rb = new QRadioButton("with", bg));
+    bg->addWidget(new QRadioButton("without", bg));
     with3_rb->setChecked(TRUE);
 
     //
     //
 
-    gbox = new Q3VGroupBox("Stereotype" , this);
+    gbox = new VGridBox(2,this,"Stereotype" );
     vbox->addWidget(gbox);
 
-    htab = new Q3HBox(gbox);
+    gbox->addWidget(htab = new HHBox(gbox));
     //htab->setMargin(5);
 
-    bg = new Q3HButtonGroup(htab);
-    bg->setRadioButtonExclusive(TRUE);
+    htab->addWidget(bg = new BButtonGroup(htab));
+    //bg->setRadioButtonExclusive(TRUE);
 
-    any_rb = new QRadioButton("any", bg);
-    is_rb = new QRadioButton("is", bg);
-    isnot_rb = new QRadioButton("is not", bg);
+    bg->addWidget(any_rb = new QRadioButton("any", bg));
+    bg->addWidget(is_rb = new QRadioButton("is", bg));
+    bg->addWidget(isnot_rb = new QRadioButton("is not", bg));
     any_rb->setChecked(TRUE);
-    stereotype_le = new QLineEdit(htab);
+    htab->addWidget(stereotype_le = new QLineEdit(htab));
 
     //
     //
 
-    gbox = new Q3VGroupBox("Targets" , this);
+    gbox = new VGridBox(2,this,"Targets" );
     vbox->addWidget(gbox);
 
-    htab = new Q3HBox(gbox);
+    gbox->addWidget(htab = new HHBox(gbox));
     //htab->setMargin(5);
 
-    artifact_cb = new QCheckBox("artifact", htab);
-    class_cb = new QCheckBox("class", htab);
-    operation_cb = new QCheckBox("operation", htab);
-    attribute_cb = new QCheckBox("attribute", htab);
-    relation_cb = new QCheckBox("relation", htab);
+    htab->addWidget(artifact_cb = new QCheckBox("artifact", htab));
+    htab->addWidget(class_cb = new QCheckBox("class", htab));
+    htab->addWidget(operation_cb = new QCheckBox("operation", htab));
+    htab->addWidget(attribute_cb = new QCheckBox("attribute", htab));
+    htab->addWidget(relation_cb = new QCheckBox("relation", htab));
 
     //
     //
 
-    gbox = new Q3VGroupBox("Languages" , this);
+    gbox = new VGridBox(2,this,"Languages");
     vbox->addWidget(gbox);
 
-    htab = new Q3HBox(gbox);
+    gbox->addWidget(htab = new HHBox(gbox));
     //htab->setMargin(5);
 
-    cpp_cb = new QCheckBox("C++", htab);
-    java_cb = new QCheckBox("Java", htab);
-    php_cb = new QCheckBox("Php", htab);
-    python_cb = new QCheckBox("Python", htab);
-    idl_cb = new QCheckBox("Idl", htab);
+    htab->addWidget(cpp_cb = new QCheckBox("C++", htab));
+    htab->addWidget(java_cb = new QCheckBox("Java", htab));
+    htab->addWidget(php_cb = new QCheckBox("Php", htab));
+    htab->addWidget(python_cb = new QCheckBox("Python", htab));
+    htab->addWidget(idl_cb = new QCheckBox("Idl", htab));
 
     //
     //
 
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
     vbox->addWidget(grid);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel("current : ", grid);
-    current_le  = new LineEdit(grid);
+    grid->addWidget(new QLabel("current : ", grid));
+    grid->addWidget(current_le  = new LineEdit(grid));
 
-    new QLabel("new : ", grid);
-    new_le  = new LineEdit(grid);
+    grid->addWidget(new QLabel("new : ", grid));
+    grid->addWidget(new_le  = new LineEdit(grid));
 
     //
     //
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    new QLabel(htab);
-    QPushButton * replace = new QPushButton("Replace", htab);
-    new QLabel(htab);
-    QPushButton * quit = new QPushButton("Quit", htab);
-    new QLabel(htab);
+    htab->addWidget(new QLabel(htab));
+    QPushButton * replace;
+    htab->addWidget(replace = new QPushButton("Replace", htab));
+    htab->addWidget(new QLabel(htab));
+    QPushButton * quit;
+    htab->addWidget(quit = new QPushButton("Quit", htab));
+    htab->addWidget(new QLabel(htab));
 
     QSize bs(replace->sizeHint());
 
@@ -245,7 +247,7 @@ void Dialog::do_replace()
     if (err != 0)
         QMessageBox::critical(this, "Global change", err);
     else {
-        ctx.set_stereotype(Q3CString(stereotype_le->text().toAscii()),//[jasa] change QString to QByteArray to const char* for Q3CString constructor.
+        ctx.set_stereotype(QByteArray(stereotype_le->text().toLatin1()),//[jasa] change QString to QByteArray to const char* for QByteArray constructor.
                            is_rb->isChecked(), isnot_rb->isChecked());
         ctx.set_targets(artifact_cb->isChecked(), class_cb->isChecked(),
                         operation_cb->isChecked(), attribute_cb->isChecked(), relation_cb->isChecked());
@@ -270,28 +272,28 @@ void Dialog::do_replace()
     }
 }
 
-Q3CString Dialog::digest(const QString s)
+QByteArray Dialog::digest(const QString s)
 {
-    Q3CString c = (const char *) s;
+    QByteArray c = s.toLatin1();
     int index;
 
     index = 0;
 
-    while ((index = c.find("\\n", index)) != -1) {
+    while ((index = c.indexOf("\\n", index)) != -1) {
         c.replace(index, 2, "\n");
         index += 1;
     }
 
     index = 0;
 
-    while ((index = c.find("\\t", index)) != -1) {
+    while ((index = c.indexOf("\\t", index)) != -1) {
         c.replace(index, 2, "\t");
         index += 1;
     }
 
     index = 0;
 
-    while ((index = c.find("\r", index)) != -1) {
+    while ((index = c.indexOf("\r", index)) != -1) {
         c.remove(index, 1);
     }
 
@@ -300,57 +302,31 @@ Q3CString Dialog::digest(const QString s)
 
 void Dialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     QSize sz = size();
 
     // width = height
     resize(sz.height(), sz.height());
 
-    // try to read .doumlrc
-    // note : QFile fp(QDir::home().absFilePath(".doumlrc")) doesn't work
-    // if the path contains non latin1 characters, for instance cyrillic !
-    QString s = QDir::home().absFilePath(".doumlrc");
-    FILE * fp = fopen((const char *) s, "r");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec("UTF-8");
+    int l, t, r, b;
+    l = settings.value("Desktop/left", -1).toInt();
+    r = settings.value("Desktop/right", -1).toInt();
+    t = settings.value("Desktop/top", -1).toInt();
+    b = settings.value("Desktop/bottom", -1).toInt();
 
-#ifdef WIN32
+    if(l != -1 && r != -1 && t != -1 && b != -1)
+    {
+      if (!((r == 0) && (t == 0) && (r == 0) && (b == 0)) &&
+          !((r < 0) || (t < 0) || (r < 0) || (b < 0)) &&
+          !((r <= l) || (b <= t)))
+      {
+        int cx = (r + l) / 2;
+        int cy = (t + b) / 2;
 
-    if (fp == 0) {
-        QString hd = getenv("USERPROFILE");
-
-        if (! hd.isEmpty()) {
-            QDir d(hd);
-            QString s2 = d.absFilePath(".doumlrc");
-
-            fp = fopen((const char *) s2, "r");
-        }
-    }
-
-#endif
-
-    if (fp != 0) {
-        char line[512];
-
-        while (fgets(line, sizeof(line) - 1, fp) != 0) {
-            if (!strncmp(line, "DESKTOP ", 8)) {
-                int l, t, r, b;
-
-                if (sscanf(line + 8, "%d %d %d %d", &l, &t, &r, &b) == 4) {
-                    if (!((r == 0) && (t == 0) && (r == 0) && (b == 0)) &&
-                        !((r < 0) || (t < 0) || (r < 0) || (b < 0)) &&
-                        !((r <= l) || (b <= t))) {
-                        int cx = (r + l) / 2;
-                        int cy = (t + b) / 2;
-
-                        move(x() + cx - (x() + width() / 2),
-                             y() + cy - (y() + height() / 2));
-                    }
-                }
-
-                break;
-            }
-        }
-
-        fclose(fp);
+        move(x() + cx - (x() + width() / 2), y() + cy - (y() + height() / 2));
+      }
     }
 }
 

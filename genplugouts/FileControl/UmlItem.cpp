@@ -12,14 +12,14 @@ void UmlItem::fileControl(bool)
     UmlCom::trace("Error : must be applied on a <i>Package</i>");
 }
 
-void UmlItem::getFiles(Q3Dict<void> & files, unsigned rec)
+void UmlItem::getFiles(QHash<QString, void *> &files, unsigned rec)
 {
     QFileInfo fi(supportFile());
 
     if (fi.exists())
-        files.replace(fi.fileName(), (void *) 1);
+        files.insert(fi.fileName(), (void *) 1);
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned index;
 
     for (index = 0; index != ch.size(); index += 1)

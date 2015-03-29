@@ -1,0 +1,87 @@
+format 76
+
+activityobjectcanvas 128170 activityobject_ref 128682 // activity object Requested Scale Initialization
+  show_infonote default drawing_language default show_stereotype_properties default
+  xyzwh 23 170 2000 155 31
+end
+activitynodecanvas 128298 activitynode_ref 128682 // fork
+  xyz 207 171 2000
+end
+activityactioncanvas 128554 activityaction_ref 128938 // activity action Set cursor position
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 164 284 2000 100 60
+end
+activitynodecanvas 128810 activitynode_ref 128810 // decision
+  xyz 284 166 2000
+end
+activityactioncanvas 129066 activityaction_ref 129066 // activity action Request Scale Pixel Size
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 405 77 2000 100 60
+end
+textcanvas 129578 "No precalculated size"
+  xyzwh 295 90 2008 102 13
+activitynodecanvas 130090 activitynode_ref 128938 // join
+  xyz 564 173 2000
+end
+textcanvas 130474 "Precalculated size found"
+  xyzwh 327 165 2006 116 13
+activityactioncanvas 130858 activityaction_ref 129322 // activity action Split region into smaller maps 
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 621 155 2000 100 60
+end
+activityactioncanvas 131242 activityaction_ref 129450 // activity action Load maps around the cursor depending on whether scale is active
+  show_infonote default drawing_language default show_stereotype_properties default
+  show_opaque_action_definition default
+  xyzwh 613 264 2000 113 84
+end
+flowcanvas 128426 flow_ref 130090 // <flow>
+  
+  from ref 128170 z 2001 to ref 128298
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 128682 flow_ref 130218 // <flow>
+  
+  from ref 128298 z 2001 to ref 128554
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 128938 flow_ref 130346 // <flow>
+  
+  from ref 128298 z 2001 to ref 128810
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 129194 flow_ref 130474 // <flow>
+  geometry VH
+  
+  from ref 128810 z 2001 to point 294 104
+  line 129450 z 2001 to ref 129066
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 130218 flow_ref 130602 // <flow>
+  
+  from ref 129066 z 2001 to ref 130090
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 130346 flow_ref 130730 // <flow>
+  
+  from ref 128810 z 2001 to ref 130090
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 130986 flow_ref 131114 // <flow>
+  
+  from ref 130090 z 2001 to ref 130858
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 131114 flow_ref 131242 // <flow>
+  
+  from ref 128554 z 2001 to ref 130090
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+flowcanvas 131370 flow_ref 131370 // <flow>
+  
+  from ref 130858 z 2001 to ref 131242
+  show_infonote default drawing_language default show_stereotype_properties default write_horizontally default
+end
+end

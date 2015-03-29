@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 
 #include "ObjectLinkCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -141,14 +141,14 @@ void ObjectLinkCanvas::set_relation(RelationData * d)
 
         ObjectLinkCanvas * a = this;
 
-        while (a->begin->type() == UmlArrowPoint) {
+        while (a->begin->typeUmlCode() == UmlArrowPoint) {
             a = (ObjectLinkCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
             a->internal_set_relation(d);
         }
 
         ObjectLinkCanvas * z = this;
 
-        while (z->end->type() == UmlArrowPoint) {
+        while (z->end->typeUmlCode() == UmlArrowPoint) {
             z = (ObjectLinkCanvas *)((ArrowPointCanvas *) z->end)->get_other(z);
             z->internal_set_relation(d);
         }
@@ -162,10 +162,10 @@ void ObjectLinkCanvas::update_pos()
     ArrowCanvas::update_pos();
 
     if (auto_pos) {
-        if ((role_a != 0) && !role_a->selected())
+        if ((role_a != 0) && !role_a->isSelected())
             role_a_default_position();
 
-        if ((role_b != 0) && !role_b->selected())
+        if ((role_b != 0) && !role_b->isSelected())
             role_b_default_position();
     }
 
@@ -187,10 +187,10 @@ void ObjectLinkCanvas::moveBy(double dx, double dy)
 {
     ArrowCanvas::moveBy(dx, dy);
 
-    if ((role_a != 0) && !role_a->selected())
+    if ((role_a != 0) && !role_a->isSelected())
         role_a->moveBy(dx, dy);
 
-    if ((role_b != 0) && !role_b->selected())
+    if ((role_b != 0) && !role_b->isSelected())
         role_b->moveBy(dx, dy);
 }
 
@@ -199,10 +199,10 @@ void ObjectLinkCanvas::set_z(double z)
     ArrowCanvas::set_z(z);
 
     if (role_a != 0)
-        role_a->setZ(z);
+        role_a->setZValue(z);
 
     if (role_b != 0)
-        role_b->setZ(z);
+        role_b->setZValue(z);
 }
 
 void ObjectLinkCanvas::select_associated()
@@ -214,27 +214,27 @@ void ObjectLinkCanvas::select_associated()
     ObjectLinkCanvas * rel = this;
 
     // goes to the beginning of the (broken) line
-    while (rel->begin->type() == UmlArrowPoint)
+    while (rel->begin->typeUmlCode() == UmlArrowPoint)
         rel = ((ObjectLinkCanvas *)((ArrowPointCanvas *) rel->begin)->get_other(rel));
 
     rel->begin->select_associated();
 
     for (;;) {
         // select labels
-        if ((rel->role_a != 0) && !rel->role_a->selected())
+        if ((rel->role_a != 0) && !rel->role_a->isSelected())
             the_canvas()->select(rel->role_a);
 
-        if ((rel->role_b != 0) && !rel->role_b->selected())
+        if ((rel->role_b != 0) && !rel->role_b->isSelected())
             the_canvas()->select(rel->role_b);
 
-        if (! rel->selected())
+        if (! rel->isSelected())
             the_canvas()->select(rel);
 
         // goes forward
-        if (rel->end->type() != UmlArrowPoint)
+        if (rel->end->typeUmlCode() != UmlArrowPoint)
             break;
 
-        if (!((ArrowPointCanvas *) rel->end)->selected())
+        if (!((ArrowPointCanvas *) rel->end)->isSelected())
             the_canvas()->select((ArrowPointCanvas *) rel->end);
 
         rel = (ObjectLinkCanvas *)((ArrowPointCanvas *) rel->end)->get_other(rel);
@@ -254,25 +254,25 @@ void ObjectLinkCanvas::open()
     ObjectLinkCanvas * first = this;
     ObjectLinkCanvas * last = this;
 
-    while (first->begin->type() == UmlArrowPoint)
+    while (first->begin->typeUmlCode() == UmlArrowPoint)
         first = ((ObjectLinkCanvas *)((ArrowPointCanvas *) first->begin)->get_other(first));
 
-    while (last->end->type() == UmlArrowPoint)
+    while (last->end->typeUmlCode() == UmlArrowPoint)
         last = (ObjectLinkCanvas *)((ArrowPointCanvas *) last->end)->get_other(last);
 
     // compute all compatible relations in the two directions
-    Q3PtrList<RelationData> l;
+    QList<RelationData *> l;
     int nfirstdir;
 
     ((BrowserClass *)((OdClassInstCanvas *) first->begin)->get_type())
-    ->get_rels((BrowserClass *)((OdClassInstCanvas *) last->end)->get_type(),
-               l, &nfirstdir);
+            ->get_rels((BrowserClass *)((OdClassInstCanvas *) last->end)->get_type(),
+                       l, &nfirstdir);
 
     // dialog
     BrowserClassInstance * a =
-        (BrowserClassInstance *) first->begin->get_bn();
+            (BrowserClassInstance *) first->begin->get_bn();
     BrowserClassInstance * b =
-        (BrowserClassInstance *) last->end->get_bn();
+            (BrowserClassInstance *) last->end->get_bn();
     ObjectLinkDialog dialog(a, b, l, data, nfirstdir);
 
     if (dialog.exec() == QDialog::Accepted) {
@@ -309,13 +309,12 @@ void ObjectLinkCanvas::open()
 
         // already drawn ?
         if ((choozen != 0) &&
-            ((OdClassInstCanvas *) first->begin)
-            ->is_duplicated(first, (OdClassInstCanvas *) last->end)) {
+                ((OdClassInstCanvas *) first->begin)
+                ->is_duplicated(first, (OdClassInstCanvas *) last->end)) {
             // already drawn
             msg_warning("Douml", TR("Relation already drawn"));
             set_relation(0);
         }
-
         first->modified();	// to update role label
 
         if (first != last)
@@ -339,15 +338,15 @@ void ObjectLinkCanvas::delete_available(BooL & in_model, BooL & out_model) const
         const ObjectLinkCanvas * first = this;
         const ObjectLinkCanvas * last = this;
 
-        while (first->begin->type() == UmlArrowPoint)
+        while (first->begin->typeUmlCode() == UmlArrowPoint)
             first = ((ObjectLinkCanvas *)((ArrowPointCanvas *) first->begin)->get_other(first));
 
-        while (last->end->type() == UmlArrowPoint)
+        while (last->end->typeUmlCode() == UmlArrowPoint)
             last = (ObjectLinkCanvas *)((ArrowPointCanvas *) last->end)->get_other(last);
 
         if (data->get_end())
             in_model |= first->begin->get_bn()->is_writable() &&
-                        last->end->get_bn()->is_writable();
+                    last->end->get_bn()->is_writable();
         else
             in_model |= first->begin->get_bn()->is_writable();
     }
@@ -360,7 +359,7 @@ void ObjectLinkCanvas::remove(bool from_model)
             if (the_canvas()->must_draw_all_relations()) {
                 const ObjectLinkCanvas * a = this;
 
-                while (a->begin->type() == UmlArrowPoint) {
+                while (a->begin->typeUmlCode() == UmlArrowPoint) {
                     a = (ObjectLinkCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
 
                     if (a == 0)
@@ -370,7 +369,7 @@ void ObjectLinkCanvas::remove(bool from_model)
                 if (a && !a->begin->isSelected() && !a->begin->get_bn()->deletedp()) {
                     a = this;
 
-                    while (a->end->type() == UmlArrowPoint) {
+                    while (a->end->typeUmlCode() == UmlArrowPoint) {
                         a = (ObjectLinkCanvas *)((ArrowPointCanvas *) a->end)->get_other(a);
 
                         if (a == 0)
@@ -388,14 +387,14 @@ void ObjectLinkCanvas::remove(bool from_model)
             ObjectLinkCanvas * first = this;
             ObjectLinkCanvas * last = this;
 
-            while (first->begin->type() == UmlArrowPoint)
+            while (first->begin->typeUmlCode() == UmlArrowPoint)
                 first = ((ObjectLinkCanvas *)((ArrowPointCanvas *) first->begin)->get_other(first));
 
-            while (last->end->type() == UmlArrowPoint)
+            while (last->end->typeUmlCode() == UmlArrowPoint)
                 last = (ObjectLinkCanvas *)((ArrowPointCanvas *) last->end)->get_other(last);
 
             ClassInstanceData * d = (ClassInstanceData *)
-                                    first->begin->get_bn()->get_data();
+                    first->begin->get_bn()->get_data();
 
             d->replace((BrowserClassInstance *) last->end->get_bn(),
                        data, 0, TRUE, TRUE);
@@ -428,45 +427,45 @@ void ObjectLinkCanvas::menu(const QPoint & lpos)
     const ObjectLinkCanvas * first = this;
     const ObjectLinkCanvas * last = this;
 
-    while (first->begin->type() == UmlArrowPoint)
+    while (first->begin->typeUmlCode() == UmlArrowPoint)
         first = ((ObjectLinkCanvas *)((ArrowPointCanvas *) first->begin)->get_other(first));
 
-    while (last->end->type() == UmlArrowPoint)
+    while (last->end->typeUmlCode() == UmlArrowPoint)
         last = (ObjectLinkCanvas *)((ArrowPointCanvas *) last->end)->get_other(last);
 
     bool prefer_start =
-        (lpos - first->beginp).manhattanLength() >
-        (lpos - last->endp).manhattanLength();
-    Q3PopupMenu m(0);
-    Q3PopupMenu geo(0);
+            (lpos - first->beginp).manhattanLength() >
+            (lpos - last->endp).manhattanLength();
+    QMenu m(0);
+    QMenu geo(0);
     //QPopupMenu toolm(0);
 
     MenuFactory::createTitle(m, TR("Object link"));
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 0);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 0);
+    m.addSeparator();
 
     if (data != 0)
-        m.insertItem(TR("Select relation in browser"), 2);
+        MenuFactory::addItem(m, TR("Select relation in browser"), 2);
 
     if (plabel || pstereotype || first->role_b || last->role_a) {
-        m.insertItem(TR("Select labels"), 3);
-        m.insertItem(TR("Labels default position"), 4);
+        MenuFactory::addItem(m, TR("Select labels"), 3);
+        MenuFactory::addItem(m, TR("Labels default position"), 4);
 
         if (plabel && (label == 0))
-            m.insertItem(TR("Attach relation's name to this segment"), 5);
+            MenuFactory::addItem(m, TR("Attach relation's name to this segment"), 5);
 
         if (pstereotype && (stereotype == 0))
-            m.insertItem(TR("Attach relation's stereotype to this segment"), 6);
+            MenuFactory::addItem(m, TR("Attach relation's stereotype to this segment"), 6);
     }
 
     if (get_start() != get_end()) {
         init_geometry_menu(geo, 10);
-        m.insertItem(TR("Geometry (Ctrl+l)"), &geo);
+        MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     BooL in_model = FALSE;
     BooL out_model = FALSE;
@@ -474,103 +473,107 @@ void ObjectLinkCanvas::menu(const QPoint & lpos)
     delete_available(in_model, out_model);
 
     if (in_model)
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
     /*
     if (Tool::menu_insert(&toolm, itstype, 20))
       m.insertItem("Tool", &toolm);
     */
 
-    int rank = m.exec(QCursor::pos());
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int rank = retAction->data().toInt();
 
-    switch (rank) {
-    case 0:
-        open();	// call package_modified
-        return;
+        switch (rank) {
+        case 0:
+            open();	// call package_modified
+            return;
 
-    case 2:
-        data->select_in_browser(prefer_start);
-        return;
+        case 2:
+            data->select_in_browser(prefer_start);
+            return;
 
-    case 3:
-        the_canvas()->unselect_all();
+        case 3:
+            the_canvas()->unselect_all();
 
-        if (plabel)
-            the_canvas()->select(plabel->label);
+            if (plabel)
+                the_canvas()->select(plabel->label);
 
-        if (pstereotype)
-            the_canvas()->select(pstereotype->stereotype);
+            if (pstereotype)
+                the_canvas()->select(pstereotype->stereotype);
 
-        if (last->role_a)
-            the_canvas()->select(last->role_a);
+            if (last->role_a)
+                the_canvas()->select(last->role_a);
 
-        if (first->role_b)
-            the_canvas()->select(first->role_b);
+            if (first->role_b)
+                the_canvas()->select(first->role_b);
 
-        return;
+            return;
 
-    case 4:
-        if (plabel)
-            plabel->default_label_position();
+        case 4:
+            if (plabel)
+                plabel->default_label_position();
 
-        if (pstereotype)
-            pstereotype->default_stereotype_position();
+            if (pstereotype)
+                pstereotype->default_stereotype_position();
 
-        if (last->role_a != 0)
-            last->role_a_default_position();
+            if (last->role_a != 0)
+                last->role_a_default_position();
 
-        if (first->role_b != 0)
-            first->role_b_default_position();
+            if (first->role_b != 0)
+                first->role_b_default_position();
 
-        break;
+            break;
 
-    case 5:
-        label = plabel->label;
-        plabel->label = 0;
-        default_label_position();
-        break;
+        case 5:
+            label = plabel->label;
+            plabel->label = 0;
+            default_label_position();
+            break;
 
-    case 6:
-        stereotype = pstereotype->stereotype;
-        pstereotype->stereotype = 0;
-        default_stereotype_position();
-        break;
+        case 6:
+            stereotype = pstereotype->stereotype;
+            pstereotype->stereotype = 0;
+            default_stereotype_position();
+            break;
 
-    case 7:
-        // not removed from the browser : just hide it
-        remove(FALSE);
-        break;
+        case 7:
+            // not removed from the browser : just hide it
+            remove(FALSE);
+            break;
 
-    case 8:
-        remove(TRUE);
-        break;
+        case 8:
+            remove(TRUE);
+            break;
 
-    default:
+        default:
 
-        /*
+            /*
         if (rank >= 20) {
           ToolCom::run(Tool::command(rank - 20),
-        	   ((prefer_start || RelationData::uni_directional(itstype))
-        	    ? data->get_start()
-        	    : data->get_end()));
+               ((prefer_start || RelationData::uni_directional(itstype))
+                ? data->get_start()
+                : data->get_end()));
           return;
         }
         else*/
-        if (rank >= 10) {
-            rank -= 10;
+            if (rank >= 10) {
+                rank -= 10;
 
-            if (rank == RecenterBegin)
-                set_decenter(-1.0, decenter_end);
-            else if (rank == RecenterEnd)
-                set_decenter(decenter_begin, -1.0);
-            else if (rank != (int) geometry)
-                set_geometry((LineGeometry) rank, TRUE);
+                if (rank == RecenterBegin)
+                    set_decenter(-1.0, decenter_end);
+                else if (rank == RecenterEnd)
+                    set_decenter(decenter_begin, -1.0);
+                else if (rank != (int) geometry)
+                    set_geometry((LineGeometry) rank, TRUE);
+                else
+                    return;
+            }
             else
                 return;
         }
-        else
-            return;
     }
 
     package_modified();
@@ -583,14 +586,14 @@ void ObjectLinkCanvas::menu(const QPoint & lpos)
 ArrowPointCanvas * ObjectLinkCanvas::brk(const QPoint & p)
 {
     ArrowPointCanvas * ap =
-        new ArrowPointCanvas(the_canvas(), p.x(), p.y());
+            new ArrowPointCanvas(the_canvas(), p.x(), p.y());
 
-    ap->setZ(z() + 1);
+    ap->setZValue(zValue() + 1);
 
     ObjectLinkCanvas * other =
-        // do not give data to not call update()
-        new ObjectLinkCanvas(the_canvas(), ap, end, UmlObjectLink, 0,
-                             decenter_begin, decenter_end, 0);
+            // do not give data to not call update()
+            new ObjectLinkCanvas(the_canvas(), ap, end, UmlObjectLink, 0,
+                                 decenter_begin, decenter_end, 0);
 
     if (data != 0) {
         other->data = data;
@@ -624,7 +627,7 @@ ArrowCanvas * ObjectLinkCanvas::join(ArrowCanvas * other, ArrowPointCanvas * ap)
 
 void ObjectLinkCanvas::modified()
 {
-    if (visible()) {
+    if (isVisible()) {
         hide();
         update(TRUE);
         show();
@@ -642,7 +645,7 @@ void ObjectLinkCanvas::update(bool updatepos)
 
         s = data->get_role_a();
 
-        if (s.isEmpty() || (end->type() == UmlArrowPoint)) {
+        if (s.isEmpty() || (end->typeUmlCode() == UmlArrowPoint)) {
             // relation does not have role_a name or it must be hidden
             if (role_a != 0) {
                 the_canvas()->del(role_a);
@@ -664,8 +667,8 @@ void ObjectLinkCanvas::update(bool updatepos)
         s = data->get_role_b();
 
         if (s.isEmpty() ||
-            RelationData::uni_directional(itstype) ||
-            (begin->type() == UmlArrowPoint)) {
+                RelationData::uni_directional(itstype) ||
+                (begin->typeUmlCode() == UmlArrowPoint)) {
             // relation does not have role_b name
             if (role_b != 0) {
                 the_canvas()->del(role_b);
@@ -710,11 +713,11 @@ void ObjectLinkCanvas::update(bool updatepos)
                 plabel->label = 0;
             }
         }
-        else if ((plabel == 0) && (begin->type() != UmlArrowPoint)) {
+        else if ((plabel == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
             // adds relation's name
             label =
-                new LabelCanvas(s, the_canvas(), c.x() - fm.width(s) / 2,
-                                c.y() - h, FALSE, TRUE, FALSE);
+                    new LabelCanvas(s, the_canvas(), c.x() - fm.width(s) / 2,
+                                    c.y() - h, FALSE, TRUE, FALSE);
             default_label_position();
         }
         else if ((plabel != 0) && (plabel->label->get_name() != s)) {
@@ -736,12 +739,12 @@ void ObjectLinkCanvas::update(bool updatepos)
             }
         }
         else {
-            s = toUnicode(s);
+            s = toUnicode(s.toLatin1().constData());
 
             if (s[0] != '{')
                 s = QString("<<") + s + ">>";
 
-            if ((pstereotype == 0) && (begin->type() != UmlArrowPoint)) {
+            if ((pstereotype == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
                 // adds relation's stereotype
                 stereotype = new LabelCanvas(s, the_canvas(), 0, 0);
                 default_stereotype_position();
@@ -786,7 +789,7 @@ void ObjectLinkCanvas::check()
         return;
 
     if (!((ClassInstanceData *) get_start()->get_bn()->get_data())
-        ->exist((BrowserClassInstance *) get_end()->get_bn(), data)) {
+            ->exist((BrowserClassInstance *) get_end()->get_bn(), data)) {
         set_relation(0);
         package_modified();
     }
@@ -799,18 +802,18 @@ void ObjectLinkCanvas::role_a_default_position() const
     int dx = endp.x() - beginp.x();
     int dy = endp.y() - beginp.y();
 
-    if (fabs(dx) >= fabs(dy)) {
+    if (fabs((double)dx) >= fabs((double)dy)) {
         // horizontal line
         if (dx == 0) dx = 1;
 
         if (dx > 0) {
             int w = fm.width(data->get_role_a());
 
-            role_a->move(endp.x() - w - ARROW_LENGTH,
+            role_a->moveBy(endp.x() - w - ARROW_LENGTH,
                          endp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
         }
         else
-            role_a->move(endp.x() + ARROW_LENGTH,
+            role_a->moveBy(endp.x() + ARROW_LENGTH,
                          endp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
     }
     else {
@@ -818,10 +821,10 @@ void ObjectLinkCanvas::role_a_default_position() const
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            role_a->move(endp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
+            role_a->moveBy(endp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
                          endp.y() - 4 * h / 3);
         else
-            role_a->move(endp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
+            role_a->moveBy(endp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
                          endp.y() + h / 2);
     }
 
@@ -835,17 +838,17 @@ void ObjectLinkCanvas::role_b_default_position() const
     int dx = endp.x() - beginp.x();
     int dy = endp.y() - beginp.y();
 
-    if (fabs(dx) >= fabs(dy)) {
+    if (fabs((double)dx) >= fabs((double)dy)) {
         // horizontal line
         if (dx == 0) dx = 1;
 
         if (dx > 0)
-            role_b->move(beginp.x() + ARROW_LENGTH,
+            role_b->moveBy(beginp.x() + ARROW_LENGTH,
                          beginp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
         else {
             int w = fm.width(data->get_role_b());
 
-            role_b->move(beginp.x() - w - ARROW_LENGTH,
+            role_b->moveBy(beginp.x() - w - ARROW_LENGTH,
                          beginp.y() - 4 * h / 3 + (dy * ARROW_LENGTH) / dx);
         }
     }
@@ -854,10 +857,10 @@ void ObjectLinkCanvas::role_b_default_position() const
         if (dy == 0) dy = 1;
 
         if (dy > 0)
-            role_b->move(beginp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
+            role_b->moveBy(beginp.x() + ARROW_LENGTH + (dx * h / 2) / dy,
                          beginp.y() + h / 2);
         else
-            role_b->move(beginp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
+            role_b->moveBy(beginp.x() + ARROW_LENGTH - (dx * h / 2) / dy,
                          beginp.y() - 4 * h / 3);
     }
 
@@ -879,7 +882,7 @@ void ObjectLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const
     if (ref)
         st << "objectlinkcanvas_ref " << get_ident()
            << " // " << data->get_name();
-    else if (begin->type() != UmlArrowPoint) {
+    else if (begin->typeUmlCode() != UmlArrowPoint) {
         // relation canvas start
         nl_indent(st);
         st << "objectlinkcanvas " << get_ident();
@@ -914,7 +917,7 @@ void ObjectLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const
         }
 
         const ObjectLinkCanvas * last =
-            (const ObjectLinkCanvas *) ArrowCanvas::save_lines(st, TRUE, TRUE, warning);
+                (const ObjectLinkCanvas *) ArrowCanvas::save_lines(st, TRUE, TRUE, warning);
 
         nl_indent(st);
 
@@ -1021,7 +1024,7 @@ ObjectLinkCanvas * ObjectLinkCanvas::read(char *& st, UmlCanvas * canvas, char *
                     label = 0;
                 }
                 else
-                    label->setZ(z);
+                    label->setZValue(z);
 
                 k = read_keyword(st);
             }
@@ -1044,7 +1047,7 @@ ObjectLinkCanvas * ObjectLinkCanvas::read(char *& st, UmlCanvas * canvas, char *
                         s = QString("<<") + s + ">>";
 
                     stereotype = new LabelCanvas(s, canvas, x, y);
-                    stereotype->setZ(read_double(st));
+                    stereotype->setZValue(read_double(st));
                 }
 
                 k = read_keyword(st);
@@ -1089,7 +1092,7 @@ ObjectLinkCanvas * ObjectLinkCanvas::read(char *& st, UmlCanvas * canvas, char *
 
             result->show();
 
-            if (di->type() != UmlArrowPoint)
+            if (di->typeUmlCode() != UmlArrowPoint)
                 break;
 
             bi = di;
@@ -1114,7 +1117,7 @@ ObjectLinkCanvas * ObjectLinkCanvas::read(char *& st, UmlCanvas * canvas, char *
 
                 if (!unamed && !s.isEmpty()) {
                     result->role_a = new LabelCanvas(s, canvas, x, y);
-                    result->role_a->setZ(z);
+                    result->role_a->setZValue(z);
                     result->role_a->show();
                 }
             }
@@ -1134,7 +1137,7 @@ ObjectLinkCanvas * ObjectLinkCanvas::read(char *& st, UmlCanvas * canvas, char *
 
                 if (!unamed && !s.isEmpty()) {
                     first->role_b = new LabelCanvas(s, canvas, x, y);
-                    first->role_b->setZ(z);
+                    first->role_b->setZValue(z);
                     first->role_b->show();
                 }
             }
@@ -1157,7 +1160,7 @@ ObjectLinkCanvas * ObjectLinkCanvas::read(char *& st, UmlCanvas * canvas, char *
             else
                 // add relation
                 ((ClassInstanceData *) first->begin->get_bn()->get_data())
-                ->add((BrowserClassInstance *) result->end->get_bn(), rd);
+                    ->add((BrowserClassInstance *) result->end->get_bn(), rd);
         }
 
         result->setVisible(TRUE);
@@ -1191,6 +1194,6 @@ void ObjectLinkCanvas::history_load(QBuffer & b)
 
 void ObjectLinkCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     unconnect();
 }

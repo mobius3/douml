@@ -35,12 +35,12 @@
 #include <QDropEvent>
 #include <QDragEnterEvent>
 
-template <class K> class Q3PtrDict;
+//template <class K> class Q3PtrDict;
 
 class DeploymentDiagramWindow;
 class DiagramItem;
 class UmlCanvas;
-
+class BasicData;
 class DeploymentDiagramView : public DiagramView
 {
     Q_OBJECT
@@ -59,12 +59,13 @@ private:
         return (DeploymentDiagramWindow *) parent();
     }
     void add_marked_elements(const QPoint & p,
-                             Q3PtrDict<DiagramItem> & drawn);
+                             QHash<BasicData*, DiagramItem*> & drawn);
 
 protected:
-    virtual void contentsMousePressEvent(QMouseEvent *);
+    virtual void mousePressEvent(QMouseEvent *);
     virtual void dragEnterEvent(QDragEnterEvent *);
     virtual void dropEvent(QDropEvent *);
+    virtual void dragMoveEvent(QDragMoveEvent *e);
 };
 
 #endif

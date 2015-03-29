@@ -4,7 +4,7 @@
 
 #include "UmlActivityAction.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "UmlOnSignalAction.h"
 #include "UmlAccessVariableValueAction.h"
 
@@ -41,7 +41,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseSendObjectAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseSendObjectAction(void * id, const QByteArray & s) : UmlActivityAction(id, s) {
     }
 
 };
@@ -62,7 +62,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseUnmarshallAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseUnmarshallAction(void * id, const QByteArray & s) : UmlActivityAction(id, s) {
     }
 
 };
@@ -83,7 +83,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseSendSignalAction(void * id, const Q3CString & s) : UmlOnSignalAction(id, s) {
+    UmlBaseSendSignalAction(void * id, const QByteArray & s) : UmlOnSignalAction(id, s) {
     }
 
 };
@@ -104,7 +104,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseBroadcastSignalAction(void * id, const Q3CString & s) : UmlOnSignalAction(id, s) {
+    UmlBaseBroadcastSignalAction(void * id, const QByteArray & s) : UmlOnSignalAction(id, s) {
     }
 
 };
@@ -125,13 +125,13 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseValueSpecificationAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseValueSpecificationAction(void * id, const QByteArray & s) : UmlActivityAction(id, s) {
     }
 
 
 public:
     // return the value
-    const Q3CString & value();
+    const QByteArray & value();
 
     // set the value
     //
@@ -140,7 +140,7 @@ public:
 
 #ifdef WITHCPP
     // return the value in C++
-    const Q3CString & cppValue();
+    const QByteArray & cppValue();
 
     // set the value in C++
     //
@@ -150,7 +150,7 @@ public:
 
 #ifdef WITHJAVA
     // return the value in Java
-    const Q3CString & javaValue();
+    const QByteArray & javaValue();
 
     // set the value in Java
     //
@@ -168,14 +168,14 @@ public:
 
 
 private:
-    Q3CString _value;
+    QByteArray _value;
 
 #ifdef WITHCPP
-    Q3CString _cpp_value;
+    QByteArray _cpp_value;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_value;
+    QByteArray _java_value;
 #endif
 
 
@@ -208,13 +208,13 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseOpaqueAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseOpaqueAction(void * id, const QByteArray & s) : UmlActivityAction(id, s) {
     }
 
 
 public:
     // return the behavior
-    const Q3CString & behavior();
+    const QByteArray & behavior();
 
     // set the behavior
     //
@@ -223,7 +223,7 @@ public:
 
 #ifdef WITHCPP
     // return the behavior in C++
-    const Q3CString & cppBehavior();
+    const QByteArray & cppBehavior();
 
     // set the behavior in C++
     //
@@ -233,7 +233,7 @@ public:
 
 #ifdef WITHJAVA
     // return the behavior in Java
-    const Q3CString & javaBehavior();
+    const QByteArray & javaBehavior();
 
     // set the behavior in Java
     //
@@ -251,14 +251,14 @@ public:
 
 
 private:
-    Q3CString _behavior;
+    QByteArray _behavior;
 
 #ifdef WITHCPP
-    Q3CString _cpp_behavior;
+    QByteArray _cpp_behavior;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_behavior;
+    QByteArray _java_behavior;
 #endif
 
 
@@ -291,7 +291,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseAcceptEventAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseAcceptEventAction(void * id, const QByteArray & s) : UmlActivityAction(id, s) {
     }
 
 
@@ -313,7 +313,7 @@ public:
     bool set_isTimeEvent(bool v);
 
     // return the trigger
-    const Q3CString & trigger();
+    const QByteArray & trigger();
 
     // set the trigger
     //
@@ -322,7 +322,7 @@ public:
 
 #ifdef WITHCPP
     // return the trigger in C++
-    const Q3CString & cppTrigger();
+    const QByteArray & cppTrigger();
 
     // set the trigger in C++
     //
@@ -332,7 +332,7 @@ public:
 
 #ifdef WITHJAVA
     // return the trigger in Java
-    const Q3CString & javaTrigger();
+    const QByteArray & javaTrigger();
 
     // set the trigger in Java
     //
@@ -354,14 +354,14 @@ private:
 
     bool _timeevent;
 
-    Q3CString _trigger;
+    QByteArray _trigger;
 
 #ifdef WITHCPP
-    Q3CString _cpp_trigger;
+    QByteArray _cpp_trigger;
 #endif
 
 #ifdef WITHJAVA
-    Q3CString _java_trigger;
+    QByteArray _java_trigger;
 #endif
 
 
@@ -394,7 +394,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseCallOperationAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseCallOperationAction(void * id, const QByteArray & s) : UmlActivityAction(id, s) {
     }
 
 
@@ -443,7 +443,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseCallBehaviorAction(void * id, const Q3CString & s) : UmlActivityAction(id, s) {
+    UmlBaseCallBehaviorAction(void * id, const QByteArray & s) : UmlActivityAction(id, s) {
     }
 
 
@@ -492,7 +492,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseClearVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseClearVariableValueAction(void * id, const QByteArray & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 };
@@ -513,7 +513,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseReadVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseReadVariableValueAction(void * id, const QByteArray & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 };
@@ -534,7 +534,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseWriteVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseWriteVariableValueAction(void * id, const QByteArray & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 };
@@ -555,7 +555,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseAddVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseAddVariableValueAction(void * id, const QByteArray & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 
@@ -594,7 +594,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseRemoveVariableValueAction(void * id, const Q3CString & s) : UmlAccessVariableValueAction(id, s) {
+    UmlBaseRemoveVariableValueAction(void * id, const QByteArray & s) : UmlAccessVariableValueAction(id, s) {
     }
 
 

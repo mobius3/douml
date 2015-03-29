@@ -28,7 +28,7 @@
 #include "Namespace.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 // namespace stack, namespaces.last() = current namespace full name + "::",
 // i.e. A::B...::Z:: in case it is embeded in other one(s)
@@ -41,7 +41,7 @@ QStringList Namespace::Usings;
 int Namespace::AnonymousLevel;
 
 // to lost usings defined under a namespace/class block
-Q3ValueList<QStringList> Namespace::UsingScope;
+QList<QStringList> Namespace::UsingScope;
 
 // namespace aliases
 QMap<QString, WrapperStr> Namespace::Aliases;
@@ -55,7 +55,7 @@ void Namespace::set(const WrapperStr & s)
 void Namespace::unset()
 {
     // for upload only
-    Stack.remove(Stack.last());
+    Stack.removeLast();
 }
 
 void Namespace::enter(const WrapperStr & s)
@@ -68,14 +68,14 @@ void Namespace::enter(const WrapperStr & s)
 
 void Namespace::exit()
 {
-    Stack.remove(Stack.last());
+    Stack.removeLast();
     restore_using_scope();
 }
 
 void Namespace::restore_using_scope()
 {
     Usings = UsingScope.first();
-    UsingScope.remove(UsingScope.begin());
+    UsingScope.removeFirst();
 }
 
 QString Namespace::namespacify(WrapperStr s, bool local)
@@ -111,7 +111,7 @@ WrapperStr Namespace::current()
 
     QString & s = Stack.last();
 
-    QByteArray temp = (s.left(s.length() - 2)).toAscii();
+    QByteArray temp = (s.left(s.length() - 2)).toLatin1();
     const char * c = temp.constData();
     return WrapperStr(c);
 }

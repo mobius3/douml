@@ -30,14 +30,12 @@
 
 
 #include <qsplitter.h>
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-
+#include <qcombobox.h>
+#include <QList>
 #include "ArtifactDialog.h"
 #include "UmlDesktop.h"
 #include "BrowserArtifact.h"
@@ -64,7 +62,7 @@ static QScopedPointer<ArtifactDialog> instance;
 ArtifactDialog::ArtifactDialog(ArtifactData * nd)
     : EdgeMenuDialog(0, 0, FALSE), data(nd)
 {
-    nd->browser_node->edit_start();
+    //nd->browser_node->edit_start();
 
     if (nd->browser_node->is_writable()) {
         setOkButton(TR("OK"));
@@ -75,7 +73,7 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("artifact dialog"));
+    setWindowTitle(TR("artifact dialog"));
 
     init_uml_tab();
     init_cpp_tab();
@@ -88,27 +86,27 @@ ArtifactDialog::ArtifactDialog(ArtifactData * nd)
 
     // USER : list key - value
 
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable((BrowserArtifact *) data->get_browser_node(),
-                                 grid, !hasOkButton());
+    grid->addWidget(kvtable = new KeyValuesTable((BrowserArtifact *) data->get_browser_node(),
+                                                 grid, !hasOkButton()));
     addTab(grid, TR("Properties"));
 
     //
 
     edStereotypeActivated(data->get_stereotype());
 
-    connect(this, SIGNAL(currentChanged(QWidget *)),
-            this, SLOT(update_tab(QWidget *)));
+    connect(m_tabWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(update_tab(int)));
 
     //open_dialog(this);
 }
 
 void ArtifactDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::setsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -117,14 +115,16 @@ ArtifactDialog::~ArtifactDialog()
     //data->browser_node->edit_end();
     previous_size = size();
 
-    while (!edits.isEmpty())
-        edits.take(0)->close();
-
+    foreach (BodyDialog *dialog, edits)
+        dialog->close();
+    edits.clear();
+#ifdef EDGETOOLENABLED
     if(toolbar)
     {
         toolbar->setParent(0);
         toolbar->hide();
     }
+#endif
     close_dialog(this);
 
 }
@@ -134,47 +134,51 @@ void ArtifactDialog::init_uml_tab()
     bool visit = !hasOkButton();
 
     BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
-    Q3VBox * vbox;
-    Q3Grid * grid = new Q3Grid(2, this);
+    VVBox * vbox;
+    GridBox * grid = new GridBox(2, this);
 
     uml_page = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(TRUE, grid);
-    edstereotype->insertItem(toUnicode(data->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(true);
+    edstereotype->addItem(toUnicode(data->get_stereotype()));
 
     if (! visit) {
-        edstereotype->insertStringList(BrowserArtifact::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlArtifact));
+        edstereotype->addItems(BrowserArtifact::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlArtifact));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
     if (! visit)
         connect(edstereotype, SIGNAL(activated(const QString &)),
                 this, SLOT(edStereotypeActivated(const QString &)));
 
-    vbox = new Q3VBox(grid);
-    new QLabel(TR("description :"), vbox);
+    grid->addWidget(vbox = new VVBox(grid));
+    vbox->addWidget(new QLabel(TR("description :"), vbox));
 
     if (! visit) {
-        connect(new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
+        SmallPushButton* sButton;
+        connect(sButton = new SmallPushButton(TR("Editor"), vbox), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
-        connect(new SmallPushButton(TR("Default"), vbox), SIGNAL(clicked()),
+        vbox->addWidget(sButton);
+        connect(sButton = new SmallPushButton(TR("Default"), vbox), SIGNAL(clicked()),
                 this, SLOT(default_description()));
+        vbox->addWidget(sButton);
     }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     QFont font = comment->font();
@@ -191,23 +195,24 @@ void ArtifactDialog::init_uml_tab()
 void ArtifactDialog::init_cpp_tab()
 {
     bool visit = !hasOkButton();
-    Q3HBox * hbox;
-    Q3VBox * vbox;
+    HHBox * hbox;
+    VVBox * vbox;
     QLabel * lbl1;
     QLabel * lbl2;
     QPushButton * edit = 0;
+    QPushButton * tempB = 0;
 
     // C++ h
 
     cpp_h_content_page = new QSplitter(Qt::Vertical, this);
     cpp_h_content_page->setOpaqueResize(TRUE);
 
-    vbox = new Q3VBox(cpp_h_content_page);
+    vbox = new VVBox(cpp_h_content_page);
 
-    hbox = new Q3HBox(vbox);
+    vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    lbl1 = new QLabel(TR("Header file \ndefinition : "), hbox);
-    edcpp_h_content = new MultiLineEdit(hbox);
+    hbox->addWidget( lbl1 = new QLabel(TR("Header file \ndefinition : "), hbox));
+    hbox->addWidget(edcpp_h_content = new MultiLineEdit(hbox));
     edcpp_h_content->setText(data->cpp_h);
     QFont font = comment->font();
 
@@ -222,19 +227,21 @@ void ArtifactDialog::init_cpp_tab()
     else {
         connect(edcpp_h_content, SIGNAL(textChanged()), this, SLOT(cpp_update_h()));
 
-        hbox = new Q3HBox(vbox);
-        edit = new SmallPushButton(TR("Editor"), hbox);
+        vbox->addWidget(hbox = new HHBox(vbox));
+        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(cpp_edit_h()));
-        connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(cpp_default_h()));
-        connect(new QPushButton(TR("Not generated in C++"), hbox), SIGNAL(clicked()),
+        hbox->addWidget(tempB);
+        connect(tempB = new QPushButton(TR("Not generated in C++"), hbox), SIGNAL(clicked()),
                 this, SLOT(cpp_unmapped_h()));
+        hbox->addWidget(tempB);
     }
 
-    hbox = new Q3HBox(cpp_h_content_page, "result");
+    hbox = new HHBox(cpp_h_content_page, "result");
     hbox->setMargin(5);
-    lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox);
-    showcpp_h_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(showcpp_h_content = new MultiLineEdit(hbox));
     showcpp_h_content->setReadOnly(TRUE);
     showcpp_h_content->setFont(font);
 
@@ -253,12 +260,12 @@ void ArtifactDialog::init_cpp_tab()
     cpp_src_content_page = new QSplitter(Qt::Vertical, this);
     cpp_src_content_page->setOpaqueResize(TRUE);
 
-    vbox = new Q3VBox(cpp_src_content_page);
+    vbox = new VVBox(cpp_src_content_page);
 
-    hbox = new Q3HBox(vbox);
+    vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    lbl1 = new QLabel(TR("Source file \ndefinition : "), hbox);
-    edcpp_src_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl1 = new QLabel(TR("Source file \ndefinition : "), hbox));
+    hbox->addWidget(edcpp_src_content = new MultiLineEdit(hbox));
     edcpp_src_content->setText(data->cpp_src);
     edcpp_src_content->setFont(font);
 
@@ -267,19 +274,21 @@ void ArtifactDialog::init_cpp_tab()
     else {
         connect(edcpp_src_content, SIGNAL(textChanged()), this, SLOT(cpp_update_src()));
 
-        hbox = new Q3HBox(vbox);
-        edit = new SmallPushButton(TR("Editor"), hbox);
+        vbox->addWidget(hbox = new HHBox(vbox));
+        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(cpp_edit_src()));
-        connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        connect(tempB =  new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(cpp_default_src()));
-        connect(new QPushButton(TR("Not generated in C++"), hbox), SIGNAL(clicked()),
+         hbox->addWidget(tempB);
+        connect(tempB = new QPushButton(TR("Not generated in C++"), hbox), SIGNAL(clicked()),
                 this, SLOT(cpp_unmapped_src()));
+         hbox->addWidget(tempB);
     }
 
-    hbox = new Q3HBox(cpp_src_content_page, "result");
+    hbox = new HHBox(cpp_src_content_page, "result");
     hbox->setMargin(5);
-    lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox);
-    showcpp_src_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(showcpp_src_content = new MultiLineEdit(hbox));
     showcpp_src_content->setReadOnly(TRUE);
     showcpp_src_content->setFont(font);
 
@@ -297,8 +306,8 @@ void ArtifactDialog::init_cpp_tab()
 void ArtifactDialog::init_java_tab()
 {
     bool visit = !hasOkButton();
-    Q3HBox * hbox;
-    Q3VBox * vbox;
+    HHBox * hbox;
+    VVBox * vbox;
     QLabel * lbl1;
     QLabel * lbl2;
     QPushButton * edit = 0;
@@ -306,12 +315,12 @@ void ArtifactDialog::init_java_tab()
     java_content_page = new QSplitter(Qt::Vertical, this);
     java_content_page->setOpaqueResize(TRUE);
 
-    vbox = new Q3VBox(java_content_page);
+    vbox = new VVBox(java_content_page);
 
-    hbox = new Q3HBox(vbox);
+    vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    lbl1 = new QLabel(TR("File \ndefinition : "), hbox);
-    edjava_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl1 = new QLabel(TR("File \ndefinition : "), hbox));
+    hbox->addWidget(edjava_content = new MultiLineEdit(hbox));
     edjava_content->setText(data->java_src);
     QFont font = comment->font();
 
@@ -326,19 +335,22 @@ void ArtifactDialog::init_java_tab()
     else {
         connect(edjava_content, SIGNAL(textChanged()), this, SLOT(java_update_src()));
 
-        hbox = new Q3HBox(vbox);
-        edit = new SmallPushButton(TR("Editor"), hbox);
+        vbox->addWidget(hbox = new HHBox(vbox));
+        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(java_edit()));
-        connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        QPushButton * tempB = 0;
+        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(java_default_src()));
-        connect(new QPushButton(TR("Not generated in Java"), hbox), SIGNAL(clicked()),
+        hbox->addWidget(tempB);
+        connect(tempB = new QPushButton(TR("Not generated in Java"), hbox), SIGNAL(clicked()),
                 this, SLOT(java_unmapped_src()));
+        hbox->addWidget(tempB);
     }
 
-    hbox = new Q3HBox(java_content_page, "result");
+    hbox = new HHBox(java_content_page, "result");
     hbox->setMargin(5);
-    lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox);
-    showjava_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(showjava_content = new MultiLineEdit(hbox));
     showjava_content->setReadOnly(TRUE);
     showjava_content->setFont(font);
 
@@ -356,8 +368,8 @@ void ArtifactDialog::init_java_tab()
 void ArtifactDialog::init_php_tab()
 {
     bool visit = !hasOkButton();
-    Q3HBox * hbox;
-    Q3VBox * vbox;
+    HHBox * hbox;
+    VVBox * vbox;
     QLabel * lbl1;
     QLabel * lbl2;
     QPushButton * edit = 0;
@@ -365,12 +377,12 @@ void ArtifactDialog::init_php_tab()
     php_content_page = new QSplitter(Qt::Vertical, this);
     php_content_page->setOpaqueResize(TRUE);
 
-    vbox = new Q3VBox(php_content_page);
+    vbox = new VVBox(php_content_page);
 
-    hbox = new Q3HBox(vbox);
+    vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    lbl1 = new QLabel(TR("File \ndefinition : "), hbox);
-    edphp_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl1 = new QLabel(TR("File \ndefinition : "), hbox));
+    hbox->addWidget(edphp_content = new MultiLineEdit(hbox));
     edphp_content->setText(data->php_src);
     QFont font = comment->font();
 
@@ -385,19 +397,22 @@ void ArtifactDialog::init_php_tab()
     else {
         connect(edphp_content, SIGNAL(textChanged()), this, SLOT(php_update_src()));
 
-        hbox = new Q3HBox(vbox);
-        edit = new SmallPushButton(TR("Editor"), hbox);
+        vbox->addWidget(hbox = new HHBox(vbox));
+        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(php_edit()));
-        connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        QPushButton * tempB = 0;
+        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(php_default_src()));
-        connect(new QPushButton(TR("Not generated in Php"), hbox), SIGNAL(clicked()),
+        hbox->addWidget(tempB);
+        connect(tempB = new QPushButton(TR("Not generated in Php"), hbox), SIGNAL(clicked()),
                 this, SLOT(php_unmapped_src()));
+        hbox->addWidget(tempB);
     }
 
-    hbox = new Q3HBox(php_content_page, "result");
+    hbox = new HHBox(php_content_page, "result");
     hbox->setMargin(5);
-    lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox);
-    showphp_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(showphp_content = new MultiLineEdit(hbox));
     showphp_content->setReadOnly(TRUE);
     showphp_content->setFont(font);
 
@@ -415,8 +430,8 @@ void ArtifactDialog::init_php_tab()
 void ArtifactDialog::init_python_tab()
 {
     bool visit = !hasOkButton();
-    Q3HBox * hbox;
-    Q3VBox * vbox;
+    HHBox * hbox;
+    VVBox * vbox;
     QLabel * lbl1;
     QLabel * lbl2;
     QPushButton * edit = 0;
@@ -424,12 +439,12 @@ void ArtifactDialog::init_python_tab()
     python_content_page = new QSplitter(Qt::Vertical, this);
     python_content_page->setOpaqueResize(TRUE);
 
-    vbox = new Q3VBox(python_content_page);
+    vbox = new VVBox(python_content_page);
 
-    hbox = new Q3HBox(vbox);
+    vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    lbl1 = new QLabel(TR("File \ndefinition : "), hbox);
-    edpython_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl1 = new QLabel(TR("File \ndefinition : "), hbox));
+    hbox->addWidget(edpython_content = new MultiLineEdit(hbox));
     edpython_content->setText(data->python_src);
     QFont font = comment->font();
 
@@ -444,19 +459,22 @@ void ArtifactDialog::init_python_tab()
     else {
         connect(edpython_content, SIGNAL(textChanged()), this, SLOT(python_update_src()));
 
-        hbox = new Q3HBox(vbox);
-        edit = new SmallPushButton(TR("Editor"), hbox);
+        vbox->addWidget(hbox = new HHBox(vbox));
+        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(python_edit()));
-        connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        QPushButton * tempB = 0;
+        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(python_default_src()));
-        connect(new QPushButton(TR("Not generated in Python"), hbox), SIGNAL(clicked()),
+        hbox->addWidget(tempB);
+        connect(tempB = new QPushButton(TR("Not generated in Python"), hbox), SIGNAL(clicked()),
                 this, SLOT(python_unmapped_src()));
+        hbox->addWidget(tempB);
     }
 
-    hbox = new Q3HBox(python_content_page, "result");
+    hbox = new HHBox(python_content_page, "result");
     hbox->setMargin(5);
-    lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox);
-    showpython_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(showpython_content = new MultiLineEdit(hbox));
     showpython_content->setReadOnly(TRUE);
     showpython_content->setFont(font);
 
@@ -474,8 +492,8 @@ void ArtifactDialog::init_python_tab()
 void ArtifactDialog::init_idl_tab()
 {
     bool visit = !hasOkButton();
-    Q3HBox * hbox;
-    Q3VBox * vbox;
+    HHBox * hbox;
+    VVBox * vbox;
     QLabel * lbl1;
     QLabel * lbl2;
     QPushButton * edit = 0;
@@ -483,12 +501,12 @@ void ArtifactDialog::init_idl_tab()
     idl_content_page = new QSplitter(Qt::Vertical, this);
     idl_content_page->setOpaqueResize(TRUE);
 
-    vbox = new Q3VBox(idl_content_page);
+    vbox = new VVBox(idl_content_page);
 
-    hbox = new Q3HBox(vbox);
+    vbox->addWidget(hbox = new HHBox(vbox));
     hbox->setMargin(5);
-    lbl1 = new QLabel(TR("File \ndefinition : "), hbox);
-    edidl_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl1 = new QLabel(TR("File \ndefinition : "), hbox));
+    hbox->addWidget(edidl_content = new MultiLineEdit(hbox));
     edidl_content->setText(data->idl_src);
     QFont font = comment->font();
 
@@ -503,19 +521,22 @@ void ArtifactDialog::init_idl_tab()
     else {
         connect(edidl_content, SIGNAL(textChanged()), this, SLOT(idl_update_src()));
 
-        hbox = new Q3HBox(vbox);
-        edit = new SmallPushButton(TR("Editor"), hbox);
+        vbox->addWidget(hbox = new HHBox(vbox));
+        hbox->addWidget(edit = new SmallPushButton(TR("Editor"), hbox));
         connect(edit, SIGNAL(clicked()), this, SLOT(idl_edit()));
-        connect(new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
+        QPushButton * tempB = 0;
+        connect(tempB = new QPushButton(TR("Default definition"), hbox), SIGNAL(clicked()),
                 this, SLOT(idl_default_src()));
-        connect(new QPushButton(TR("Not generated in Idl"), hbox), SIGNAL(clicked()),
+        hbox->addWidget(tempB);
+        connect(tempB = new QPushButton(TR("Not generated in Idl"), hbox), SIGNAL(clicked()),
                 this, SLOT(idl_unmapped_src()));
+        hbox->addWidget(tempB);
     }
 
-    hbox = new Q3HBox(idl_content_page, "result");
+    hbox = new HHBox(idl_content_page, "result");
     hbox->setMargin(5);
-    lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox);
-    showidl_content = new MultiLineEdit(hbox);
+    hbox->addWidget(lbl2 = new QLabel(TR("Result after\nsubstitution : "), hbox));
+    hbox->addWidget(showidl_content = new MultiLineEdit(hbox));
     showidl_content->setReadOnly(TRUE);
     showidl_content->setFont(font);
 
@@ -533,68 +554,73 @@ void ArtifactDialog::init_idl_tab()
 void ArtifactDialog::init_assoc_classes_tab()
 {
     bool visit = !hasOkButton();
-    Q3HBox * hbox;
-    Q3VBox * vbox;
+    HHBox * hbox;
+    VVBox * vbox;
     QPushButton * button;
     BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
-    const Q3ValueList<BrowserClass *> & l = bn->get_associated_classes();
-    Q3ValueList<BrowserClass *>::ConstIterator it;
-    Q3ValueList<BrowserClass *>::ConstIterator end = l.end();
+    const QList<BrowserClass *> & l = bn->get_associated_classes();
+    QList<BrowserClass *>::ConstIterator it;
+    QList<BrowserClass *>::ConstIterator end = l.end();
+    QLabel* lable;
 
-    cl_assoc_page = new Q3VBox(this);
+    cl_assoc_page = new VVBox(this);
 
     if (!visit) {
-        hbox = new Q3HBox(cl_assoc_page);
-        vbox = new Q3VBox(hbox);
+        cl_assoc_page->addWidget(hbox = new HHBox(cl_assoc_page));
+        hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (new QLabel(TR("Classes without artifact"), vbox))->setAlignment(Qt::AlignCenter);
-        lb_cl_available = new Q3ListBox(vbox);
-        lb_cl_available->setSelectionMode(Q3ListBox::Multi);
+        (lable = new QLabel(TR("Classes without artifact"), vbox))->setAlignment(Qt::AlignCenter);
+        vbox->addWidget(lable);
+        vbox->addWidget(lb_cl_available = new QListWidget (vbox));
+        lb_cl_available->setSelectionMode(QListWidget ::MultiSelection);
 
-        Q3PtrDict<BrowserNode> d(97);
+        QHash<BrowserNode*, BrowserNode*> d;
 
         for (it = l.begin(); it != end; ++it)
             d.insert(*it, *it);
 
-        BrowserNode * cl;
         BrowserNodeList classes;
 
         BrowserClass::instances(classes, 0, TRUE);
 
-        for (cl = classes.first(); cl != 0; cl = classes.next())
+        foreach (BrowserNode *cl, classes)
             if ((((BrowserClass *) cl)->get_associated_artifact() == 0) &&
-                (d.find(cl) == 0))
-                lb_cl_available->insertItem(new ListBoxBrowserNode(cl, cl->full_name(TRUE)));
+                    (d.find(cl) == d.end()))
+                lb_cl_available->addItem(new ListBoxBrowserNode(cl, cl->full_name(TRUE)));
 
-        lb_cl_available->sort();
+        lb_cl_available->sortItems();
 
-        vbox = new Q3VBox(hbox);
+        hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (new QLabel("", vbox))->setScaledContents(TRUE);
-        button = new QPushButton(vbox);
-        button->setPixmap(*rightPixmap);
+        (lable = new QLabel("", vbox))->setScaledContents(TRUE);
+        vbox->addWidget(lable);
+        vbox->addWidget(button = new QPushButton(vbox));
+        button->setIcon(*rightPixmap);
         connect(button, SIGNAL(clicked()), this, SLOT(associate_cls()));
-        (new QLabel("", vbox))->setScaledContents(TRUE);
-        button = new QPushButton(vbox);
-        button->setPixmap(*leftPixmap);
+        (lable = new QLabel("", vbox))->setScaledContents(TRUE);
+        vbox->addWidget(lable);
+        vbox->addWidget(button = new QPushButton(vbox));
+        button->setIcon(*leftPixmap);
         connect(button, SIGNAL(clicked()), this, SLOT(unassociate_cls()));
-        (new QLabel("", vbox))->setScaledContents(TRUE);
-        vbox = new Q3VBox(hbox);
+        (lable = new QLabel("", vbox))->setScaledContents(TRUE);
+        vbox->addWidget(lable);
+        hbox->addWidget(vbox = new VVBox(hbox));
     }
     else
         vbox = cl_assoc_page;
 
     vbox->setMargin(5);
-    (new QLabel(TR("Associated classes"), vbox))->setAlignment(Qt::AlignCenter);
-    lb_cl_associated = new Q3ListBox(vbox);
-    lb_cl_associated->setSelectionMode((visit) ? Q3ListBox::NoSelection
-                                       : Q3ListBox::Multi);
+    (lable = new QLabel(TR("Associated classes"), vbox))->setAlignment(Qt::AlignCenter);
+    vbox->addWidget(lable);
+    vbox->addWidget(lb_cl_associated = new QListWidget (vbox));
+    lb_cl_associated->setSelectionMode((visit) ? QListWidget ::NoSelection
+                                               : QListWidget ::MultiSelection);
 
     n_cpp = n_java = n_php = n_python = n_idl = 0;
 
     for (it = l.begin(); it != end; ++it) {
         if (!(*it)->deletedp() && !(*it)->nestedp()) {
-            lb_cl_associated->insertItem(new ListBoxBrowserNode(*it, (*it)->full_name(TRUE)));
+            lb_cl_associated->addItem(new ListBoxBrowserNode(*it, (*it)->full_name(TRUE)));
 
             ClassData * c = (ClassData *)(*it)->get_data();
 
@@ -616,15 +642,18 @@ void ArtifactDialog::init_assoc_classes_tab()
     }
 
     if (!visit) {
-        hbox = new Q3HBox(vbox);
+        vbox->addWidget(hbox = new HHBox(vbox));
         hbox->setMargin(5);
-        (new QLabel("", hbox))->setScaledContents(TRUE);
-        button = new QPushButton(TR("go up"), hbox);
+        (lable = new QLabel("", hbox))->setScaledContents(TRUE);
+        hbox->addWidget(lable);
+        hbox->addWidget(button = new QPushButton(TR("go up"), hbox));
         connect(button, SIGNAL(clicked()), this, SLOT(move_cls_up()));
-        (new QLabel("", hbox))->setScaledContents(TRUE);
-        button = new QPushButton(TR("go down"), hbox);
+        (lable = new QLabel("", hbox))->setScaledContents(TRUE);
+        hbox->addWidget(lable);
+        hbox->addWidget(button = new QPushButton(TR("go down"), hbox));
         connect(button, SIGNAL(clicked()), this, SLOT(move_cls_down()));
-        (new QLabel("", hbox))->setScaledContents(TRUE);
+        (lable = new QLabel("", hbox))->setScaledContents(TRUE);
+        hbox->addWidget(lable);
     }
 
     addTab(cl_assoc_page, TR("Associated classes"));
@@ -633,56 +662,63 @@ void ArtifactDialog::init_assoc_classes_tab()
 void ArtifactDialog::init_assoc_artifacts_tab()
 {
     bool visit = !hasOkButton();
-    Q3HBox * hbox;
-    Q3VBox * vbox;
+    HHBox * hbox;
+    VVBox * vbox;
     QPushButton * button;
+    QLabel* label;
 
-    art_assoc_page = new Q3VBox(this);
+    art_assoc_page = new VVBox(this);
 
     if (!visit) {
-        hbox = new Q3HBox(art_assoc_page);
+        art_assoc_page->addWidget(hbox = new HHBox(art_assoc_page));
         hbox->setMargin(5);
-        new QLabel(TR("Stereotype filtering  "), hbox);
-        stereotypefilter = new Q3ComboBox(TRUE, hbox);
+        hbox->addWidget(new QLabel(TR("Stereotype filtering  "), hbox));
+        hbox->addWidget(stereotypefilter = new QComboBox( hbox));
+        stereotypefilter->setEditable(true);
         stereotypefilter->setAutoCompletion(completion());
-        stereotypefilter->insertItem("");
-        stereotypefilter->insertStringList(BrowserArtifact::default_stereotypes());
-        stereotypefilter->insertStringList(ProfiledStereotypes::defaults(UmlArtifact));
-        stereotypefilter->setCurrentItem(0);
+        stereotypefilter->addItem("");
+        stereotypefilter->addItems(BrowserArtifact::default_stereotypes());
+        stereotypefilter->addItems(ProfiledStereotypes::defaults(UmlArtifact));
+        stereotypefilter->setCurrentIndex(0);
         QSizePolicy sp = stereotypefilter->sizePolicy();
-        sp.setHorData(QSizePolicy::Expanding);
+        sp.setHorizontalPolicy(QSizePolicy::Expanding);
         stereotypefilter->setSizePolicy(sp);
         connect(stereotypefilter, SIGNAL(activated(const QString &)),
                 this, SLOT(stereotypeFilterActivated(const QString &)));
 
-        hbox = new Q3HBox(art_assoc_page);
-        vbox = new Q3VBox(hbox);
+        art_assoc_page->addWidget(hbox = new HHBox(art_assoc_page));
+        hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (new QLabel(TR("Unassociated artifacts"), vbox))->setAlignment(Qt::AlignCenter);
-        lb_art_available = new Q3ListBox(vbox);
-        lb_art_available->setSelectionMode(Q3ListBox::Multi);
+        (label = new QLabel(TR("Unassociated artifacts"), vbox))->setAlignment(Qt::AlignCenter);
+        vbox->addWidget(label);
+        vbox->addWidget(lb_art_available = new QListWidget (vbox));
+        lb_art_available->setSelectionMode(QListWidget ::MultiSelection);
 
-        vbox = new Q3VBox(hbox);
+        hbox->addWidget(vbox = new VVBox(hbox));
         vbox->setMargin(5);
-        (new QLabel("", vbox))->setScaledContents(TRUE);
-        button = new QPushButton(vbox);
-        button->setPixmap(*rightPixmap);
+        (label = new QLabel("", vbox))->setScaledContents(TRUE);
+        vbox->addWidget(label);
+        vbox->addWidget(button = new QPushButton(vbox));
+        button->setIcon(*rightPixmap);
         connect(button, SIGNAL(clicked()), this, SLOT(associate_arts()));
-        (new QLabel("", vbox))->setScaledContents(TRUE);
-        button = new QPushButton(vbox);
-        button->setPixmap(*leftPixmap);
+        (label = new QLabel("", vbox))->setScaledContents(TRUE);
+        vbox->addWidget(label);
+        vbox->addWidget(button = new QPushButton(vbox));
+        button->setIcon(*leftPixmap);
         connect(button, SIGNAL(clicked()), this, SLOT(unassociate_arts()));
-        (new QLabel("", vbox))->setScaledContents(TRUE);
-        vbox = new Q3VBox(hbox);
+        (label = new QLabel("", vbox))->setScaledContents(TRUE);
+        vbox->addWidget(label);
+        hbox->addWidget(vbox = new VVBox(hbox));
     }
     else
         vbox = art_assoc_page;
 
     vbox->setMargin(5);
-    (new QLabel(TR("Associated artifacts"), vbox))->setAlignment(Qt::AlignCenter);
-    lb_art_associated = new Q3ListBox(vbox);
-    lb_art_associated->setSelectionMode((visit) ? Q3ListBox::NoSelection
-                                        : Q3ListBox::Multi);
+    (label = new QLabel(TR("Associated artifacts"), vbox))->setAlignment(Qt::AlignCenter);
+    vbox->addWidget(label);
+    vbox->addWidget(lb_art_associated = new QListWidget (vbox));
+    lb_art_associated->setSelectionMode((visit) ? QListWidget ::NoSelection
+                                                : QListWidget ::MultiSelection);
     lb_art_initialized = FALSE;
 
     addTab(art_assoc_page, TR("Associated artifacts"));
@@ -695,7 +731,7 @@ void ArtifactDialog::default_description()
 
 void ArtifactDialog::edit_description()
 {
-    edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
+    edit(comment->text(), edname->text().trimmed() + "_description",
          data, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -706,8 +742,8 @@ void ArtifactDialog::post_edit_description(ArtifactDialog * d, QString s)
 
 void ArtifactDialog::edStereotypeActivated(const QString & ste)
 {
-    bool a_source = (ste.stripWhiteSpace() == "source");
-    bool a_text = (ste.stripWhiteSpace() == "text");
+    bool a_source = (ste.trimmed() == "source");
+    bool a_text = (ste.trimmed() == "text");
 
     setTabEnabled(cpp_h_content_page, a_source && !a_text);
     setTabEnabled(cpp_src_content_page, a_source || a_text);
@@ -748,10 +784,11 @@ void ArtifactDialog::edStereotypeActivated(const QString & ste)
     }
 }
 
-void ArtifactDialog::update_tab(QWidget * w)
+void ArtifactDialog::update_tab(int index)
 {
     bool visit = !hasOkButton();
 
+    QWidget * w = m_tabWidget->widget(index);
     if (w == uml_page) {
         if (! visit)
             edname->setFocus();
@@ -798,7 +835,7 @@ void ArtifactDialog::update_tab(QWidget * w)
 void ArtifactDialog::cpp_edit_h()
 {
     edit(edcpp_h_content->text(),
-         edname->text().stripWhiteSpace() + "_header", data,
+         edname->text().trimmed() + "_header", data,
          CppEdit, this, (post_edit) post_cpp_edit_h, edits);
 }
 
@@ -810,8 +847,8 @@ void ArtifactDialog::post_cpp_edit_h(ArtifactDialog * d, QString s)
 void ArtifactDialog::cpp_edit_src()
 {
     edit(edcpp_src_content->text(),
-         edname->text().stripWhiteSpace() + "_source", data,
-         (edstereotype->currentText().stripWhiteSpace() == "text") ? TxtEdit : CppEdit,
+         edname->text().trimmed() + "_source", data,
+         (edstereotype->currentText().trimmed() == "text") ? TxtEdit : CppEdit,
          this, (post_edit) post_cpp_edit_src, edits);
 }
 
@@ -823,8 +860,8 @@ void ArtifactDialog::post_cpp_edit_src(ArtifactDialog * d, QString s)
 void ArtifactDialog::java_edit()
 {
     edit(edjava_content->text(),
-         edname->text().stripWhiteSpace() + "_source", data,
-         (edstereotype->currentText().stripWhiteSpace() == "text") ? TxtEdit : JavaEdit,
+         edname->text().trimmed() + "_source", data,
+         (edstereotype->currentText().trimmed() == "text") ? TxtEdit : JavaEdit,
          this, (post_edit) post_java_edit, edits);
 }
 
@@ -836,8 +873,8 @@ void ArtifactDialog::post_java_edit(ArtifactDialog * d, QString s)
 void ArtifactDialog::php_edit()
 {
     edit(edphp_content->text(),
-         edname->text().stripWhiteSpace() + "_source", data,
-         (edstereotype->currentText().stripWhiteSpace() == "text") ? TxtEdit : PhpEdit,
+         edname->text().trimmed() + "_source", data,
+         (edstereotype->currentText().trimmed() == "text") ? TxtEdit : PhpEdit,
          this, (post_edit) post_php_edit, edits);
 }
 
@@ -849,8 +886,8 @@ void ArtifactDialog::post_php_edit(ArtifactDialog * d, QString s)
 void ArtifactDialog::python_edit()
 {
     edit(edpython_content->text(),
-         edname->text().stripWhiteSpace() + "_source", data,
-         (edstereotype->currentText().stripWhiteSpace() == "text") ? TxtEdit : PythonEdit,
+         edname->text().trimmed() + "_source", data,
+         (edstereotype->currentText().trimmed() == "text") ? TxtEdit : PythonEdit,
          this, (post_edit) post_python_edit, edits);
 }
 
@@ -862,7 +899,7 @@ void ArtifactDialog::post_python_edit(ArtifactDialog * d, QString s)
 void ArtifactDialog::idl_edit()
 {
     edit(edidl_content->text(),
-         edname->text().stripWhiteSpace() + "_source",
+         edname->text().trimmed() + "_source",
          data, TxtEdit, this, (post_edit) post_idl_edit, edits);
 }
 
@@ -887,7 +924,7 @@ void ArtifactDialog::cpp_default_h()
 void ArtifactDialog::cpp_default_src()
 {
     edcpp_src_content->setText(((n_cpp != 0) &&
-                                (edstereotype->currentText().stripWhiteSpace() != "text"))
+                                (edstereotype->currentText().trimmed() != "text"))
                                ? GenerationSettings::cpp_default_source_content()
                                : "");
     cpp_update_src();
@@ -896,7 +933,7 @@ void ArtifactDialog::cpp_default_src()
 void ArtifactDialog::java_default_src()
 {
     edjava_content->setText(((n_java != 0) &&
-                             (edstereotype->currentText().stripWhiteSpace() != "text"))
+                             (edstereotype->currentText().trimmed() != "text"))
                             ? GenerationSettings::java_default_source_content()
                             : "");
     java_update_src();
@@ -905,7 +942,7 @@ void ArtifactDialog::java_default_src()
 void ArtifactDialog::php_default_src()
 {
     edphp_content->setText(((n_php != 0) &&
-                            (edstereotype->currentText().stripWhiteSpace() != "text"))
+                            (edstereotype->currentText().trimmed() != "text"))
                            ? GenerationSettings::php_default_source_content()
                            : "");
     php_update_src();
@@ -914,7 +951,7 @@ void ArtifactDialog::php_default_src()
 void ArtifactDialog::python_default_src()
 {
     edpython_content->setText(((n_python != 0) &&
-                               (edstereotype->currentText().stripWhiteSpace() != "text"))
+                               (edstereotype->currentText().trimmed() != "text"))
                               ? GenerationSettings::python_default_source_content()
                               : "");
     python_update_src();
@@ -923,7 +960,7 @@ void ArtifactDialog::python_default_src()
 void ArtifactDialog::idl_default_src()
 {
     edidl_content->setText(((n_idl != 0) &&
-                            (edstereotype->currentText().stripWhiteSpace() != "text"))
+                            (edstereotype->currentText().trimmed() != "text"))
                            ? GenerationSettings::idl_default_source_content()
                            : "");
     idl_update_src();
@@ -967,12 +1004,21 @@ void ArtifactDialog::idl_unmapped_src()
 
 static void hide_result(QSplitter * spl)
 {
-    Q3HBox * vb = (Q3HBox *) spl->child("result");
+    HHBox * vb = 0;
+    QList<QObject*> childList = spl->children();
+    foreach (QObject* obj, childList) {
+        if(obj->objectName() == "result")
+        {
+            vb = (HHBox *)obj;
+            break;
+        }
+    }
+
 
     if (vb->isVisible()) {
         vb->hide();
 
-        Q3ValueList<int> sz = spl->sizes();
+        QList<int> sz = spl->sizes();
 
         sz[0] = sz[0] + sz[1];
         sz[1] = 0;
@@ -982,10 +1028,18 @@ static void hide_result(QSplitter * spl)
 
 static void show_result(QSplitter * spl)
 {
-    Q3HBox * vb = (Q3HBox *) spl->child("result");
+    HHBox * vb = 0;
+    QList<QObject*> childList = spl->children();
+    foreach (QObject* obj, childList) {
+        if(obj->objectName() == "result")
+        {
+            vb = (HHBox *)obj;
+            break;
+        }
+    }
 
     if (vb->isHidden()) {
-        Q3ValueList<int> sz = spl->sizes();
+        QList<int> sz = spl->sizes();
 
         sz[1] = sz[0] = sz[0] / 2;
         spl->setSizes(sz);
@@ -995,24 +1049,24 @@ static void show_result(QSplitter * spl)
 }
 
 void ArtifactDialog::compute_cpp_namespace(QString & nasp,
-        QString & nasp_start,
-        QString & nasp_end)
+                                           QString & nasp_start,
+                                           QString & nasp_end)
 {
     const char * cnasp = (const char *)
-                         ((PackageData *)
-                          ((BrowserNode *) data->browser_node->parent()->parent())->get_data())
-                         ->get_cpp_namespace();
+            ((PackageData *)
+             ((BrowserNode *) data->browser_node->parent()->parent())->get_data())
+            ->get_cpp_namespace();
 
     nasp = ((cnasp[0] == ':') && (cnasp[1] == ':'))
-           ? cnasp + 2 : cnasp;
+            ? cnasp + 2 : cnasp;
 
     if (! nasp.isEmpty()) {
         int index = 0;
         int index2;
 
-        while ((index2 = nasp.find(':', index)) != -1) {
+        while ((index2 = nasp.indexOf(':', index)) != -1) {
             nasp_start += QString("namespace ") +
-                          nasp.mid(index, index2 - index) + " {\n\n";
+                    nasp.mid(index, index2 - index) + " {\n\n";
             nasp_end += "\n}\n";
             nasp.replace(index2, 2, "_");
             index = index2 + 1;
@@ -1026,25 +1080,25 @@ void ArtifactDialog::compute_cpp_namespace(QString & nasp,
 QString ArtifactDialog::compute_java_package()
 {
     const QString pack = (const char *)
-                         ((PackageData *)
-                          ((BrowserNode *) data->browser_node->parent()->parent())->get_data())
-                         ->get_java_package();
+            ((PackageData *)
+             ((BrowserNode *) data->browser_node->parent()->parent())->get_data())
+            ->get_java_package();
 
     return (pack.isEmpty())
-           ? pack
-           : QString("package ") + pack + ";\n";
+            ? pack
+            : QString("package ") + pack + ";\n";
 }
 
 QString ArtifactDialog::compute_php_namespace()
 {
     const QString nasp = (const char *)
-                         ((PackageData *)
-                          ((BrowserNode *) data->browser_node->parent()->parent())->get_data())
-                         ->get_php_namespace();
+            ((PackageData *)
+             ((BrowserNode *) data->browser_node->parent()->parent())->get_data())
+            ->get_php_namespace();
 
     return (nasp.isEmpty())
-           ? nasp
-           : QString("namespace ") + nasp + ";\n";
+            ? nasp
+            : QString("namespace ") + nasp + ";\n";
 }
 
 void ArtifactDialog::compute_idl_module(QString & mod,
@@ -1052,17 +1106,17 @@ void ArtifactDialog::compute_idl_module(QString & mod,
                                         QString & mod_end)
 {
     mod = (const char *)
-          ((PackageData *)
-           ((BrowserNode *) data->browser_node->parent()->parent())->get_data())
-          ->get_idl_module();
+            ((PackageData *)
+             ((BrowserNode *) data->browser_node->parent()->parent())->get_data())
+            ->get_idl_module();
 
     if (! mod.isEmpty()) {
         int index = 0;
         int index2;
 
-        while ((index2 = mod.find(':', index)) != -1) {
+        while ((index2 = mod.indexOf(':', index)) != -1) {
             mod_start += QString("module ") +
-                         mod.mid(index, index2 - index) + " {\n\n";
+                    mod.mid(index, index2 - index) + " {\n\n";
             mod_end += "\n};\n";
             mod.replace(index2, 2, "_");
             index = index2 + 1;
@@ -1081,7 +1135,8 @@ void ArtifactDialog::cpp_update_h()
         show_result(cpp_h_content_page);
 
         QString def = edcpp_h_content->text();
-        const char * p = def;
+        QByteArray byteArray = def.toLatin1();
+        const char * p = byteArray.constData();
         const char * pp = 0;
         QString s;
         QString nasp;
@@ -1090,7 +1145,7 @@ void ArtifactDialog::cpp_update_h()
 
         compute_cpp_namespace(nasp, nasp_start, nasp_end);
 
-        bool all_incl = (def.find("${all_includes}") != -1);
+        bool all_incl = (def.indexOf("${all_includes}") != -1);
 
         for (;;) {
             if (*p == 0) {
@@ -1117,19 +1172,19 @@ void ArtifactDialog::cpp_update_h()
                 manage_description(comment->text(), p, pp);
             else if (!strncmp(p, "${name}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace();
+                s += edname->text().trimmed();
             }
             else if (!strncmp(p, "${Name}", 7)) {
                 p += 7;
-                s += capitalize(edname->text().stripWhiteSpace());
+                s += capitalize(edname->text().trimmed());
             }
             else if (!strncmp(p, "${NAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().upper();
+                s += edname->text().trimmed().toUpper();
             }
             else if (!strncmp(p, "${nAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().lower();
+                s += edname->text().trimmed().toLower();
             }
             else if (!strncmp(p, "${namespace}", 12)) {
                 p += 12;
@@ -1137,13 +1192,13 @@ void ArtifactDialog::cpp_update_h()
             }
             else if (!strncmp(p, "${NAMESPACE}", 12)) {
                 p += 12;
-                s += nasp.upper();
+                s += nasp.toUpper();
             }
             else if (!strncmp(p, "${includes}", 11)) {
                 p += 11;
                 s += (all_incl)
-                     ? "ERROR : ${includes} exclusive with ${all_includes}\n"
-                     : "...#include \"a_needed_file.h\"   // produced by the C++ generator\n";
+                        ? "ERROR : ${includes} exclusive with ${all_includes}\n"
+                        : "...#include \"a_needed_file.h\"   // produced by the C++ generator\n";
             }
             else if (!strncmp(p, "${all_includes}", 15)) {
                 p += 15;
@@ -1152,8 +1207,8 @@ void ArtifactDialog::cpp_update_h()
             else if (!strncmp(p, "${declarations}", 15)) {
                 p += 15;
                 s += (all_incl)
-                     ? "WARNING : ${declarations} is useless because of ${all_includes}\n"
-                     : "...class a_referenced_class;    // produced by the C++ generator\n";
+                        ? "WARNING : ${declarations} is useless because of ${all_includes}\n"
+                        : "...class a_referenced_class;    // produced by the C++ generator\n";
             }
             else if (!strncmp(p, "${namespace_start}", 18)) {
                 p += 18;
@@ -1175,14 +1230,14 @@ void ArtifactDialog::cpp_update_h()
 
                 for (unsigned i = 0; i != n; i += 1) {
                     BrowserNode * bn =
-                        ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
+                            ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
                     ClassData * c = (ClassData *) bn->get_data();
 
                     if (c->get_cppdecl()[0]) {
                         FormalParamsTable * f = formals[(BrowserClass *) bn];
 
                         if (f == 0) {
-                            f = new FormalParamsTable(c, currentPage(), nodes, TRUE);
+                            f = new FormalParamsTable(c,m_tabWidget->currentWidget(), nodes, TRUE);
                             f->hide();
                             formals.insert((BrowserClass *) bn, f);
                         }
@@ -1192,7 +1247,7 @@ void ArtifactDialog::cpp_update_h()
                         if (c->get_n_actualparams() == 0)
                             a = 0;
                         else if ((a = actuals[(BrowserClass *) bn]) == 0) {
-                            a = new ActualParamsTable(c, currentPage(), nodes, TRUE);
+                            a = new ActualParamsTable(c, m_tabWidget->currentWidget(), nodes, TRUE);
                             a->hide();
                             actuals.insert((BrowserClass *) bn, a);
                         }
@@ -1202,10 +1257,10 @@ void ArtifactDialog::cpp_update_h()
 
                         ClassDialog::cpp_generate_decl(s, c, c->get_cppdecl(),
                                                        true_name(bn->get_name(),
-                                                               c->get_cppdecl()),
+                                                                 c->get_cppdecl()),
                                                        c->get_stereotype(),
                                                        (t.type != 0) ? t.type->full_name(TRUE)
-                                                       : QString((const char *) t.explicit_type),
+                                                                     : QString((const char *) t.explicit_type),
                                                        bn->get_comment(), a, f,
                                                        nds, node_names, 0);
                         s += '\n';
@@ -1229,7 +1284,8 @@ void ArtifactDialog::cpp_update_src()
         show_result(cpp_src_content_page);
 
         QString def = edcpp_src_content->text();
-        const char * p = def;
+        QByteArray byteArray = def.toLatin1();
+        const char * p = byteArray.constData();
         const char * pp = 0;
         QString s;
         QString nasp;
@@ -1266,19 +1322,19 @@ void ArtifactDialog::cpp_update_src()
             }
             else if (!strncmp(p, "${name}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace();
+                s += edname->text().trimmed();
             }
             else if (!strncmp(p, "${Name}", 7)) {
                 p += 7;
-                s += capitalize(edname->text().stripWhiteSpace());
+                s += capitalize(edname->text().trimmed());
             }
             else if (!strncmp(p, "${NAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().upper();
+                s += edname->text().trimmed().toUpper();
             }
             else if (!strncmp(p, "${nAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().lower();
+                s += edname->text().trimmed().toLower();
             }
             else if (!strncmp(p, "${namespace}", 12)) {
                 p += 12;
@@ -1286,7 +1342,7 @@ void ArtifactDialog::cpp_update_src()
             }
             else if (!strncmp(p, "${NAMESPACE}", 12)) {
                 p += 12;
-                s += nasp.upper();
+                s += nasp.toUpper();
             }
             else if (!strncmp(p, "${namespace_start}", 18)) {
                 p += 18;
@@ -1325,7 +1381,8 @@ void ArtifactDialog::java_update_src()
         show_result(java_content_page);
 
         QString def = edjava_content->text();
-        const char * p = def;
+        QByteArray byteArray = def.toLatin1();
+        const char * p = byteArray.constData();
         const char * pp = 0;
         QString s;
 
@@ -1353,7 +1410,7 @@ void ArtifactDialog::java_update_src()
                 manage_description(comment->text(), p, pp);
             else if (!strncmp(p, "${name}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace();
+                s += edname->text().trimmed();
             }
             else if (!strncmp(p, "${imports}", 10)) {
                 p += 10;
@@ -1361,15 +1418,15 @@ void ArtifactDialog::java_update_src()
             }
             else if (!strncmp(p, "${Name}", 7)) {
                 p += 7;
-                s += capitalize(edname->text().stripWhiteSpace());
+                s += capitalize(edname->text().trimmed());
             }
             else if (!strncmp(p, "${NAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().upper();
+                s += edname->text().trimmed().toUpper();
             }
             else if (!strncmp(p, "${nAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().lower();
+                s += edname->text().trimmed().toLower();
             }
             else if (!strncmp(p, "${package}", 10)) {
                 p += 10;
@@ -1387,12 +1444,12 @@ void ArtifactDialog::java_update_src()
 
                 for (unsigned i = 0; i != n; i += 1) {
                     BrowserNode * bn =
-                        ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
+                            ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
                     ClassData * c = (ClassData *) bn->get_data();
                     FormalParamsTable * f = formals[(BrowserClass *) bn];
 
                     if (f == 0) {
-                        f = new FormalParamsTable(c, currentPage(), nodes, TRUE);
+                        f = new FormalParamsTable(c, m_tabWidget->currentWidget(), nodes, TRUE);
                         f->hide();
                         formals.insert((BrowserClass *) bn, f);
                     }
@@ -1402,7 +1459,7 @@ void ArtifactDialog::java_update_src()
                     if (c->get_n_actualparams() == 0)
                         a = 0;
                     else if ((a = actuals[(BrowserClass *) bn]) == 0) {
-                        a = new ActualParamsTable(c, currentPage(), nodes, TRUE);
+                        a = new ActualParamsTable(c, m_tabWidget->currentWidget(), nodes, TRUE);
                         a->hide();
                         actuals.insert((BrowserClass *) bn, a);
                     }
@@ -1433,7 +1490,8 @@ void ArtifactDialog::php_update_src()
         show_result(php_content_page);
 
         QString def = edphp_content->text();
-        const char * p = def;
+        QByteArray byteArray = def.toLatin1();
+        const char * p = byteArray.constData();
         const char * pp = 0;
         QString s;
 
@@ -1461,19 +1519,19 @@ void ArtifactDialog::php_update_src()
                 manage_description(comment->text(), p, pp);
             else if (!strncmp(p, "${name}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace();
+                s += edname->text().trimmed();
             }
             else if (!strncmp(p, "${Name}", 7)) {
                 p += 7;
-                s += capitalize(edname->text().stripWhiteSpace());
+                s += capitalize(edname->text().trimmed());
             }
             else if (!strncmp(p, "${NAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().upper();
+                s += edname->text().trimmed().toUpper();
             }
             else if (!strncmp(p, "${nAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().lower();
+                s += edname->text().trimmed().toLower();
             }
             else if (!strncmp(p, "${namespace}", 12)) {
                 p += 12;
@@ -1495,7 +1553,7 @@ void ArtifactDialog::php_update_src()
 
                 for (unsigned i = 0; i != n; i += 1) {
                     BrowserNode * bn =
-                        ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
+                            ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
                     ClassData * c = (ClassData *) bn->get_data();
 
                     ClassDialog::php_generate_decl(s, c, c->get_phpdecl(), bn->get_name(),
@@ -1520,7 +1578,8 @@ void ArtifactDialog::python_update_src()
         show_result(python_content_page);
 
         QString def = edpython_content->text();
-        const char * p = def;
+        QByteArray byteArray = def.toLatin1();
+        const char * p = byteArray.constData();
         const char * pp = 0;
         QString s;
 
@@ -1547,19 +1606,19 @@ void ArtifactDialog::python_update_src()
                 manage_python_description(comment->text(), p, pp);
             else if (!strncmp(p, "${name}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace();
+                s += edname->text().trimmed();
             }
             else if (!strncmp(p, "${Name}", 7)) {
                 p += 7;
-                s += capitalize(edname->text().stripWhiteSpace());
+                s += capitalize(edname->text().trimmed());
             }
             else if (!strncmp(p, "${NAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().upper();
+                s += edname->text().trimmed().toUpper();
             }
             else if (!strncmp(p, "${nAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().lower();
+                s += edname->text().trimmed().toLower();
             }
             else if (!strncmp(p, "${definition}", 13)) {
                 p += 13;
@@ -1573,7 +1632,7 @@ void ArtifactDialog::python_update_src()
 
                 for (unsigned i = 0; i != n; i += 1) {
                     BrowserNode * bn =
-                        ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
+                            ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
                     ClassData * c = (ClassData *) bn->get_data();
 
                     ClassDialog::python_generate_decl(s, c, c->get_pythondecl(), bn->get_name(),
@@ -1602,7 +1661,8 @@ void ArtifactDialog::idl_update_src()
         show_result(idl_content_page);
 
         QString def = edidl_content->text();
-        const char * p = def;
+        QByteArray byteArray = def.toLatin1();
+        const char * p = byteArray.constData();
         const char * pp = 0;
         QString s;
         QString mod;
@@ -1635,19 +1695,19 @@ void ArtifactDialog::idl_update_src()
                 manage_description(comment->text(), p, pp);
             else if (!strncmp(p, "${name}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace();
+                s += edname->text().trimmed();
             }
             else if (!strncmp(p, "${Name}", 7)) {
                 p += 7;
-                s += capitalize(edname->text().stripWhiteSpace());
+                s += capitalize(edname->text().trimmed());
             }
             else if (!strncmp(p, "${NAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().upper();
+                s += edname->text().trimmed().toUpper();
             }
             else if (!strncmp(p, "${nAME}", 7)) {
                 p += 7;
-                s += edname->text().stripWhiteSpace().lower();
+                s += edname->text().trimmed().toLower();
             }
             else if (!strncmp(p, "${module}", 9)) {
                 p += 9;
@@ -1655,7 +1715,7 @@ void ArtifactDialog::idl_update_src()
             }
             else if (!strncmp(p, "${MODULE}", 9)) {
                 p += 9;
-                s += mod.upper();
+                s += mod.toUpper();
             }
             else if (!strncmp(p, "${includes}", 11)) {
                 p += 11;
@@ -1675,7 +1735,7 @@ void ArtifactDialog::idl_update_src()
 
                 for (unsigned i = 0; i != n; i += 1) {
                     BrowserNode * bn =
-                        ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
+                            ((ListBoxBrowserNode *) lb_cl_associated->item(i))->browser_node;
                     ClassData * c = (ClassData *) bn->get_data();
 
                     ClassDialog::idl_generate_decl(s, c, c->get_idldecl(), bn->get_name(),
@@ -1708,14 +1768,14 @@ void ArtifactDialog::associate_cls()
     unsigned int i = 0;
 
     while (i < lb_cl_available->count()) {
-        Q3ListBoxItem * item = lb_cl_available->item(i);
+        QListWidgetItem * item = lb_cl_available->item(i);
 
-        if (item->selected()) {
-            lb_cl_available->takeItem(item);
-            lb_cl_associated->insertItem(item);
+        if (item->isSelected()) {
+            lb_cl_available->takeItem(lb_cl_available->row(item));
+            lb_cl_associated->addItem(item);
 
             ClassData * c = (ClassData *)
-                            ((ListBoxBrowserNode *) item)->browser_node->get_data();
+                    ((ListBoxBrowserNode *) item)->browser_node->get_data();
 
             if (c->get_cppdecl()[0])
                 n_cpp += 1;
@@ -1742,14 +1802,14 @@ void ArtifactDialog::unassociate_cls()
     unsigned int i = 0;
 
     while (i < lb_cl_associated->count()) {
-        Q3ListBoxItem * item = lb_cl_associated->item(i);
+        QListWidgetItem * item = lb_cl_associated->item(i);
 
-        if (item->selected()) {
-            lb_cl_associated->takeItem(item);
-            lb_cl_available->insertItem(item);
+        if (item->isSelected()) {
+            lb_cl_associated->takeItem(lb_cl_associated->row(item));
+            lb_cl_available->addItem(item);
 
             ClassData * c = (ClassData *)
-                            ((ListBoxBrowserNode *) item)->browser_node->get_data();
+                    ((ListBoxBrowserNode *) item)->browser_node->get_data();
 
             if (c->get_cppdecl()[0])
                 n_cpp -= 1;
@@ -1770,20 +1830,20 @@ void ArtifactDialog::unassociate_cls()
             i += 1;
     }
 
-    lb_cl_available->sort();
+    lb_cl_available->sortItems();
 }
 
 void ArtifactDialog::move_cls_up()
 {
     unsigned n = lb_cl_associated->count();
 
-    if ((n > 1) && !lb_cl_associated->item(0)->selected()) {
+    if ((n > 1) && !lb_cl_associated->item(0)->isSelected()) {
         for (unsigned i = 1; i != n; i += 1) {
-            Q3ListBoxItem * item = lb_cl_associated->item(i);
+            QListWidgetItem * item = lb_cl_associated->item(i);
 
-            if (item->selected()) {
-                lb_cl_associated->takeItem(item);
-                lb_cl_associated->insertItem(item, i - 1);
+            if (item->isSelected()) {
+                lb_cl_associated->takeItem(lb_cl_associated->row(item));
+                lb_cl_associated->insertItem(i - 1, item);
             }
         }
     }
@@ -1793,13 +1853,13 @@ void ArtifactDialog::move_cls_down()
 {
     int n = (int) lb_cl_associated->count();
 
-    if ((n > 1) && !lb_cl_associated->item(n - 1)->selected()) {
+    if ((n > 1) && !lb_cl_associated->item(n - 1)->isSelected()) {
         for (int i = n - 2; i >= 0; i -= 1) {
-            if (lb_cl_associated->item(i)->selected()) {
-                Q3ListBoxItem * item = lb_cl_associated->item(i + 1);
+            if (lb_cl_associated->item(i)->isSelected()) {
+                QListWidgetItem * item = lb_cl_associated->item(i + 1);
 
-                lb_cl_associated->takeItem(item);
-                lb_cl_associated->insertItem(item, i);
+                lb_cl_associated->takeItem(lb_cl_associated->row(item));
+                lb_cl_associated->insertItem(i,item);
             }
         }
     }
@@ -1810,14 +1870,14 @@ void ArtifactDialog::associate_arts()
     unsigned int i = 0;
 
     while (i < lb_art_available->count()) {
-        Q3ListBoxItem * item = lb_art_available->item(i);
+        QListWidgetItem * item = lb_art_available->item(i);
 
-        if (item->selected()) {
-            lb_art_available->takeItem(item);
-            lb_art_associated->insertItem(item);
+        if (item->isSelected()) {
+            lb_art_available->takeItem(lb_art_available->row(item));
+            lb_art_associated->addItem(item);
 
             BrowserArtifact * c = (BrowserArtifact *)
-                                  ((ListBoxBrowserNode *) item)->browser_node;
+                    ((ListBoxBrowserNode *) item)->browser_node;
 
             art_associated.insert(c, c);
         }
@@ -1825,7 +1885,7 @@ void ArtifactDialog::associate_arts()
             i += 1;
     }
 
-    lb_art_associated->sort();
+    lb_art_associated->sortItems();
 }
 
 void ArtifactDialog::unassociate_arts()
@@ -1833,53 +1893,53 @@ void ArtifactDialog::unassociate_arts()
     unsigned int i = 0;
 
     while (i < lb_art_associated->count()) {
-        Q3ListBoxItem * item = lb_art_associated->item(i);
+        QListWidgetItem * item = lb_art_associated->item(i);
 
-        if (item->selected()) {
-            lb_art_associated->takeItem(item);
-            lb_art_available->insertItem(item);
+        if (item->isSelected()) {
+            lb_art_associated->takeItem(lb_art_associated->row(item));
+            lb_art_available->addItem(item);
             art_associated.remove(((ListBoxBrowserNode *) item)->browser_node);
         }
         else
             i += 1;
     }
 
-    lb_art_available->sort();
+    lb_art_available->sortItems();
 }
 
 void ArtifactDialog::stereotypeFilterActivated(const QString & st)
 {
     if (!hasOkButton()) {
-        Q3PtrDictIterator<BrowserArtifact> it(art_associated);
+        QHashIterator<void*,BrowserArtifact*> it(art_associated);
 
-        while (it.current()) {
-            lb_art_associated->insertItem(it.current()->full_name(TRUE));
-            ++it;
+        while (it.hasNext()) {
+            it.next();
+            if(it.value())
+                lb_art_associated->addItem(it.value()->full_name(TRUE));
         }
 
-        lb_art_associated->sort();
+        lb_art_associated->sortItems();
     }
     else {
-        QString s = st.stripWhiteSpace();
+        QString s = st.trimmed();
         BrowserNodeList artifacts;
         BrowserNode * itself = data->browser_node;
-        BrowserNode * cp;
 
-        BrowserArtifact::instances(artifacts, s);
+        BrowserArtifact::instances(artifacts, s.toLatin1().constData());
         lb_art_available->clear();
         lb_art_associated->clear();
 
-        for (cp = artifacts.first(); cp != 0; cp = artifacts.next()) {
+        foreach (BrowserNode *cp, artifacts) {
             if (cp != itself) {
-                if (art_associated.find(cp))
-                    lb_art_associated->insertItem(new ListBoxBrowserNode(cp, cp->full_name(TRUE)));
+                if (art_associated.find(cp) != art_associated.end())
+                    lb_art_associated->addItem(new ListBoxBrowserNode(cp, cp->full_name(TRUE)));
                 else
-                    lb_art_available->insertItem(new ListBoxBrowserNode(cp, cp->full_name(TRUE)));
+                    lb_art_available->addItem(new ListBoxBrowserNode(cp, cp->full_name(TRUE)));
             }
         }
 
-        lb_art_available->sort();
-        lb_art_associated->sort();
+        lb_art_available->sortItems();
+        lb_art_associated->sortItems();
     }
 }
 
@@ -1888,13 +1948,13 @@ void ArtifactDialog::accept()
     if (!check_edits(edits) || !kvtable->check_unique())
         return;
 
-    QString s = edname->text().stripWhiteSpace();
+    QString s = edname->text().trimmed();
     BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
 
     if ((s != bn->get_name()) &&
-        ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlArtifact,
-                bn->allow_spaces(),
-                bn->allow_empty()))
+            ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlArtifact,
+                                                             bn->allow_spaces(),
+                                                             bn->allow_empty()))
         msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
@@ -1902,12 +1962,12 @@ void ArtifactDialog::accept()
         UmlWindow::update_comment_if_needed(bn);
 
         QString stereotype =
-            fromUnicode(edstereotype->currentText().stripWhiteSpace());
+                fromUnicode(edstereotype->currentText().trimmed());
         bool a_text = (stereotype == "text");
         bool newst = data->set_stereotype(stereotype);
 
         if (a_text || (stereotype == "source")) {
-            Q3ValueList<BrowserClass *> l;
+            QList<BrowserClass *> l;
 
             if (! a_text) {
                 unsigned n = lb_cl_associated->count();
@@ -1920,37 +1980,37 @@ void ArtifactDialog::accept()
 
             bn->set_associated_classes(l);
 
-            if (isTabEnabled(cpp_h_content_page)) {
+            if (m_tabWidget->isTabEnabled(m_tabWidget->indexOf(cpp_h_content_page))) {
                 data->cpp_h = edcpp_h_content->text();
             }
             else
                 data->cpp_h = QString();
 
-            if (isTabEnabled(cpp_src_content_page)) {
+            if (m_tabWidget->isTabEnabled(m_tabWidget->indexOf(cpp_src_content_page))) {
                 data->cpp_src = edcpp_src_content->text();
             }
             else
                 data->cpp_src = QString();
 
-            if (isTabEnabled(java_content_page)) {
+            if (m_tabWidget->isTabEnabled(m_tabWidget->indexOf(java_content_page))) {
                 data->java_src = edjava_content->text();
             }
             else
                 data->java_src = QString();
 
-            if (isTabEnabled(php_content_page)) {
+            if (m_tabWidget->isTabEnabled(m_tabWidget->indexOf(php_content_page))) {
                 data->php_src = edphp_content->text();
             }
             else
                 data->php_src = QString();
 
-            if (isTabEnabled(python_content_page)) {
+            if (m_tabWidget->isTabEnabled(m_tabWidget->indexOf(python_content_page))) {
                 data->python_src = edpython_content->text();
             }
             else
                 data->python_src = QString();
 
-            if (isTabEnabled(idl_content_page)) {
+            if (m_tabWidget->isTabEnabled(m_tabWidget->indexOf(idl_content_page))) {
                 data->idl_src = edidl_content->text();
             }
             else
@@ -1968,20 +2028,24 @@ void ArtifactDialog::accept()
         data->modified();
 
         BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
-        bn->edit_end();
+       // bn->edit_end();
+#ifdef EDGETOOLENABLED
         toolbar->setParent(0);
         toolbar->hide();
-        Q3TabDialog::accept();
+#endif
+        TabDialog::accept();
     }
 }
 
 void ArtifactDialog::reject()
 {
     BrowserArtifact * bn = (BrowserArtifact *) data->get_browser_node();
-    bn->edit_end();
+    //bn->edit_end();
+#ifdef EDGETOOLENABLED
     toolbar->setParent(0);
     toolbar->hide();
-    Q3TabDialog::accept();
+#endif
+    TabDialog::accept();
 }
 ArtifactDialog* ArtifactDialog::Instance(ArtifactData * nd)
 {

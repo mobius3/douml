@@ -28,16 +28,16 @@
 #include "Statistic.h"
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 unsigned Statistic::n_updated;
 unsigned Statistic::n_created;
 
 void Statistic::produce()
 {
-    UmlCom::trace(Q3CString("<br><hr><br><font face=helvetica>Java roundtrip done</font><br><br>") +
-                  Q3CString("<font face=helvetica>	") +
-                  Q3CString().setNum(n_updated) + Q3CString(" classes updated </font><br>") +
-                  Q3CString("<font face=helvetica>	") +
-                  Q3CString().setNum(n_created) + Q3CString(" classes created</font><br><hr><br>"));
+    UmlCom::trace(QByteArray("<br><hr><br><font face=helvetica>Java roundtrip done</font><br><br>") +
+                  QByteArray("<font face=helvetica>	") +
+                  QByteArray().setNum(n_updated) + QByteArray(" classes updated </font><br>") +
+                  QByteArray("<font face=helvetica>	") +
+                  QByteArray().setNum(n_created) + QByteArray(" classes created</font><br><hr><br>"));
 }

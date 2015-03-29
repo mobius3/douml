@@ -1,14 +1,43 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on
-SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
-        UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
-        UmlExtraClassMember.cpp UmlArtifact.cpp \
-        UmlClassView.cpp UmlCollaborationDiagram.cpp UmlComponent.cpp \
-        UmlComponentDiagram.cpp UmlComponentView.cpp \
-        UmlDeploymentDiagram.cpp UmlDeploymentView.cpp UmlDiagram.cpp \
-        UmlItem.cpp UmlNode.cpp UmlOperation.cpp UmlPackage.cpp \
-        UmlRelation.cpp UmlNcRelation.cpp UmlSequenceDiagram.cpp UmlUseCase.cpp \
-        UmlUseCaseDiagram.cpp UmlUseCaseView.cpp main.cpp util.cpp \
+CONFIG(Debug, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt warn_on Debug
+    QMAKE_POST_LINK = " "
+}
+CONFIG(Release, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt Release
+    QMAKE_POST_LINK = " "
+}
+SOURCES          = \
+        UmlClassItem.cpp\
+        CppRefType.cpp\
+        UmlAttribute.cpp \
+        UmlClass.cpp\
+        UmlClassDiagram.cpp\
+        UmlClassMember.cpp \
+        UmlExtraClassMember.cpp\
+        UmlArtifact.cpp \
+        UmlClassView.cpp\
+        UmlCollaborationDiagram.cpp\
+        UmlComponent.cpp \
+        UmlComponentDiagram.cpp\
+        UmlComponentView.cpp \
+        UmlDeploymentDiagram.cpp\
+        UmlDeploymentView.cpp\
+        UmlDiagram.cpp \
+        UmlItem.cpp\
+        UmlNode.cpp\
+        UmlOperation.cpp\
+        UmlPackage.cpp \
+        UmlRelation.cpp\
+        UmlNcRelation.cpp\
+        UmlSequenceDiagram.cpp\
+        UmlUseCase.cpp \
+        UmlUseCaseDiagram.cpp\
+        UmlUseCaseView.cpp\
+        main.cpp\
+        util.cpp \
         UmlChoicePseudoState.cpp UmlDeepHistoryPseudoState.cpp \
         UmlEntryPointPseudoState.cpp UmlExitPointPseudoState.cpp \
         UmlFinalState.cpp UmlForkPseudoState.cpp \
@@ -39,22 +68,35 @@ SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
         UmlTypeSpec.cpp \
         UmlInterruptibleActivityRegion.cpp \
         UmlClassInstance.cpp \
-        ../Tools/UmlBaseClassItem.cpp ../Tools/CppSettings.cpp \
+        ../Tools/UmlBaseClassItem.cpp\
+        ../Tools/CppSettings.cpp \
         ../Tools/IdlSettings.cpp ../Tools/JavaSettings.cpp \
         ../Tools/UmlBaseArtifact.cpp \
-        ../Tools/UmlBaseAttribute.cpp ../Tools/UmlBaseClass.cpp \
-        ../Tools/UmlBaseClassDiagram.cpp ../Tools/UmlBaseClassMember.cpp \
-        ../Tools/UmlBaseExtraClassMember.cpp ../Tools/UmlBaseClassView.cpp \
-        ../Tools/UmlBaseCollaborationDiagram.cpp ../Tools/UmlBaseComponent.cpp \
-        ../Tools/UmlBaseComponentDiagram.cpp ../Tools/UmlBaseComponentView.cpp \
-        ../Tools/UmlBaseDeploymentDiagram.cpp ../Tools/UmlBaseDeploymentView.cpp \
-        ../Tools/UmlBaseDiagram.cpp ../Tools/UmlBaseItem.cpp \
-        ../Tools/UmlBaseNode.cpp ../Tools/UmlBaseOperation.cpp \
-        ../Tools/UmlBasePackage.cpp ../Tools/UmlBaseRelation.cpp \
+        ../Tools/UmlBaseAttribute.cpp\
+        ../Tools/UmlBaseClass.cpp \
+        ../Tools/UmlBaseClassDiagram.cpp\
+         ../Tools/UmlBaseClassMember.cpp \
+        ../Tools/UmlBaseExtraClassMember.cpp\
+        ../Tools/UmlBaseClassView.cpp \
+        ../Tools/UmlBaseCollaborationDiagram.cpp\
+        ../Tools/UmlBaseComponent.cpp \
+        ../Tools/UmlBaseComponentDiagram.cpp\
+        ../Tools/UmlBaseComponentView.cpp \
+        ../Tools/UmlBaseDeploymentDiagram.cpp\
+        ../Tools/UmlBaseDeploymentView.cpp \
+        ../Tools/UmlBaseDiagram.cpp\
+        ../Tools/UmlBaseItem.cpp \
+        ../Tools/UmlBaseNode.cpp\
+        ../Tools/UmlBaseOperation.cpp \
+        ../Tools/UmlBasePackage.cpp\
+        ../Tools/UmlBaseRelation.cpp \
         ../Tools/UmlBaseNcRelation.cpp \
-        ../Tools/UmlBaseSequenceDiagram.cpp ../Tools/UmlBaseUseCase.cpp \
-        ../Tools/UmlBaseUseCaseDiagram.cpp ../Tools/UmlBaseUseCaseView.cpp \
-        ../Tools/UmlCom.cpp ../Tools/UmlSettings.cpp \
+        ../Tools/UmlBaseSequenceDiagram.cpp\
+        ../Tools/UmlBaseUseCase.cpp \
+        ../Tools/UmlBaseUseCaseDiagram.cpp\
+        ../Tools/UmlBaseUseCaseView.cpp \
+        ../Tools/UmlCom.cpp\
+        ../Tools/UmlSettings.cpp \
         ../Tools/UmlBaseChoicePseudoState.cpp ../Tools/UmlBaseDeepHistoryPseudoState.cpp \
         ../Tools/UmlBaseEntryPointPseudoState.cpp ../Tools/UmlBaseExitPointPseudoState.cpp \
         ../Tools/UmlBaseFinalState.cpp ../Tools/UmlBaseForkPseudoState.cpp \
@@ -92,34 +134,36 @@ SOURCES          = UmlClassItem.cpp CppRefType.cpp UmlAttribute.cpp \
         ../Tools/UmlBaseClassInstance.cpp \
         ../misc/mystr.cpp \
         ../misc/codec.cpp \
-    Logging/QsLogDest.cpp \
-    Logging/QsLog.cpp \
-    Logging/QsDebugOutput.cpp
+        Logging/QsLogDest.cpp \
+        Logging/QsLog.cpp \
+        Logging/QsDebugOutput.cpp
 
         
 TARGET          = cpp_generator
-DEFINES          = WITHCPP BooL=bool TRACE
+DEFINES          = WITHCPP BooL=bool TRACE DEBUG TRUE=true FALSE=false
 INCLUDEPATH   = ../Tools ../CppGenerator ../
 
 
 #The following line was inserted by qt3to4
-QT += network  qt3support testlib console
+QT += network  testlib
+#QT += qt3support
 QMAKE_CXXFLAGS += -std=gnu++11
-Release{
-    MOC_DIR = ../../bin/MOC_release/gen/
-    OBJECTS_DIR = ../../bin/Obj_release/gen
+DESTDIR = ../../bin
+Release {
+    MOC_DIR = $${DESTDIR}/moc_release/cpp_generator
+    OBJECTS_DIR = $${DESTDIR}/obj_release/cpp_generator
 }
 
-Debug{
-    MOC_DIR = ../../bin/MOC_debug/gen/
-    OBJECTS_DIR = ../../bin/Obj_debug/gen
-
+Debug {
+    MOC_DIR = $${DESTDIR}/moc_debug/cpp_generator
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/cpp_generator
 }
 
-    DESTDIR = ../../bin
+
 
 HEADERS += \
     Logging/QsLogDest.h \
     Logging/QsLog.h \
     Logging/QsDebugOutput.h \
-    ../misc/codec.h
+    ../misc/codec.h\
+    UmlClassMember.h

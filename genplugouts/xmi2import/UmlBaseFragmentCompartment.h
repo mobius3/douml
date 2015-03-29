@@ -5,7 +5,7 @@
 // to avoid compiler warning
 #include "UmlFragment.h"
 
-#include <q3ptrvector.h>
+
 
 
 class UmlFragment;
@@ -27,13 +27,13 @@ public:
     }
 
     // the texts placed in the compartment
-    const Q3PtrVector<char> & texts() const {
+    const QVector<char*> & texts() const {
         return _texts;
     }
 
     // return the fragments contained in the compartment,
     // may be none
-    const Q3PtrVector<UmlFragment> & contained() const {
+    const QVector<UmlFragment*> & contained() const {
         return _contained;
     }
 
@@ -51,11 +51,11 @@ public:
 private:
     UmlFragment * _fragment;
 
-    Q3PtrVector<UmlFragment> _contained;
+    QVector<UmlFragment*> _contained;
 
     int _rank;
 
-    Q3PtrVector<char> _texts;
+    QVector<char*> _texts;
 
     int _y;
 

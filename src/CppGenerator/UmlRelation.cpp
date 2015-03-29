@@ -26,13 +26,9 @@
 // *************************************************************************
 
 #include <QTextStream>
-//Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3ValueList>
-//Added by qt3to4:
-#include <Q3PtrList>
-
+#include <QList>
 #include "UmlRelation.h"
 #include "UmlClass.h"
 #include "UmlSettings.h"
@@ -41,7 +37,7 @@
 #include "UmlCom.h"
 #include "util.h"
 
-void UmlRelation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
+void UmlRelation::compute_dependency(QList<CppRefType *> & dependencies,
                                      const WrapperStr & cl_stereotype,
                                      bool all_in_h)
 {
@@ -112,7 +108,7 @@ void UmlRelation::compute_dependency(Q3PtrList<CppRefType> & dependencies,
 }
 
 void UmlRelation::generate_inherit(const char *& sep, QTextStream & f_h,
-                                   const Q3ValueList<UmlActualParameter> & actuals,
+                                   const QList<UmlActualParameter> & actuals,
                                    const WrapperStr & cl_stereotype)
 {
     switch (relationKind()) {
@@ -192,11 +188,11 @@ void UmlRelation::generate_decl(aVisibility & current_visibility, QTextStream & 
     switch (relationKind()) {
     case aDependency:
         if (stereotype() == "friend") {
-            Q3ValueList<UmlFormalParameter> formals = roleType()->formals();
+            QList<UmlFormalParameter> formals = roleType()->formals();
 
             if (! formals.isEmpty()) {
                 const char * sep = "  template <";
-                Q3ValueList<UmlFormalParameter>::ConstIterator it;
+                QList<UmlFormalParameter>::ConstIterator it;
 
                 for (it = formals.begin(); it != formals.end(); ++it) {
                     f_h << sep << (*it).type() << ' ' << (*it).name();

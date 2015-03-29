@@ -5,10 +5,10 @@
 #include "UmlClassMember.h"
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
-#include <q3valuelist.h>
-#include <q3ptrvector.h>
+#include <QList.h>
+#include <QHash>
 
-#include <q3dict.h>
+
 
 #include "UmlFormalParameter.h"
 #include "UmlActualParameter.h"
@@ -62,7 +62,7 @@ public:
     bool set_BaseType(const UmlTypeSpec & t);
 
     // returns (a copy of) the formals list
-    Q3ValueList<UmlFormalParameter> formals();
+    QList<UmlFormalParameter> formals();
 
     // remove the formal of the given rank (0...), returns 0 on error
     //
@@ -85,7 +85,7 @@ public:
     bool replaceFormal(unsigned int rank, const UmlFormalParameter & formal);
 
     // returns (a copy of) the actuals list
-    Q3ValueList<UmlActualParameter> actuals();
+    QList<UmlActualParameter> actuals();
 
     // replace the actual value at the given rank (0...)
     //
@@ -108,7 +108,7 @@ public:
 
     // returns the components realizing or providing the class.
     // To set them refer to the UmlBaseComponent's operation setAssociatedClasses()
-    const Q3PtrVector<UmlComponent> associatedComponents();
+    const QVector<UmlComponent*> associatedComponents();
 
 #ifdef WITHCPP
     // returns TRUE if the class is external, its definition
@@ -253,7 +253,8 @@ public:
 
 
 private:
-    static Q3Dict<UmlClass> _classes;
+        static QHash<WrapperStr, UmlClass*> _classes;
+
 
     bool _abstract;
 

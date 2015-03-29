@@ -68,8 +68,8 @@ PackageData::~PackageData()
 void PackageData::edit()
 {
     setName(browser_node->get_name());
-
     (new PackageDialog(this))->show();
+
 }
 
 //

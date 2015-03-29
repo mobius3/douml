@@ -1,5 +1,14 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on
+CONFIG(Debug, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt warn_on Debug
+    QMAKE_POST_LINK = " "
+}
+CONFIG(Release, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt Release
+    QMAKE_POST_LINK = " "
+}
 SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
         UmlExtraClassMember.cpp UmlArtifact.cpp \
@@ -94,27 +103,25 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
 TARGET          = python_generator
-DEFINES          = WITHPYTHON BooL=bool
+DEFINES          = WITHPYTHON BooL=bool FALSE=false TRUE=true
 INCLUDEPATH   = ../Tools ../PythonGenerator ../
 DESTDIR = ../../bin
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+#qt3support
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
-Release{
-
-
-    MOC_DIR = bin/douml/py_gen/MOC_release
-    OBJECTS_DIR = bin/douml/py_gen/Obj_release
+QT += testlib
+DESTDIR = ../../bin
+Release {
+    MOC_DIR = $${DESTDIR}/moc_release/python_generator
+    OBJECTS_DIR = $${DESTDIR}/obj_release/python_generator
 }
 
-Debug{
-    MOC_DIR = bin/douml/py_gen/MOC_Debug
-    OBJECTS_DIR = bin/douml/py_gen/Obj_Debug
-
+Debug {
+    MOC_DIR = $${DESTDIR}/moc_debug/python_generator
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/python_generator
 }
-    UI_DIR = src/ui
-    DESTDIR = ../../bin
+UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11

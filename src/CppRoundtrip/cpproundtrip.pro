@@ -1,5 +1,14 @@
 TEMPLATE      = app
-CONFIG          += qt warn_on
+CONFIG(Debug, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt warn_on Debug
+    QMAKE_POST_LINK = " "
+}
+CONFIG(Release, Debug|Release) {
+    CONFIG -= Debug Release
+    CONFIG += qt Release
+    QMAKE_POST_LINK = " "
+}
 SOURCES          = main.cpp Statistic.cpp \
         ../CppReverse/UmlClassItem.cpp \
         ../CppReverse/UmlAttribute.cpp \
@@ -150,27 +159,25 @@ SOURCES          = main.cpp Statistic.cpp \
 
 
 TARGET          = cpp_roundtrip
-DEFINES          = WITHCPP REVERSE ROUNDTRIP BooL=bool
+DEFINES          = WITHCPP REVERSE ROUNDTRIP BooL=bool FALSE=false TRUE=true
 INCLUDEPATH   = ../Tools ../CppRoundtrip ../CppReverse
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+#qt3support
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
-Release{
-
-
-    MOC_DIR = bin/douml/roundtrip/MOC_release
-    OBJECTS_DIR = bin/douml/roundtrip/Obj_release
+QT += testlib
+DESTDIR = ../../bin
+Release {
+    MOC_DIR = $${DESTDIR}/moc_release/cpp_roundtrip
+    OBJECTS_DIR = $${DESTDIR}/obj_release/cpp_roundtrip
 }
 
-Debug{
-    MOC_DIR = bin/douml/roundtrip/MOC_Debug
-    OBJECTS_DIR = bin/douml/roundtrip/Obj_Debug
-
+Debug {
+    MOC_DIR = $${DESTDIR}/moc_debug/cpp_roundtrip
+    OBJECTS_DIR = $${DESTDIR}/obj_debug/cpp_roundtrip
 }
-    UI_DIR = src/ui
-    DESTDIR = ../../bin
+UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11

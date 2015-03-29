@@ -1,6 +1,6 @@
 #ifndef _SLOTATTRIBUTE_H
 #define _SLOTATTRIBUTE_H
-
+#include <QByteArray>
 
 
 

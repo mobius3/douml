@@ -3,11 +3,11 @@
 
 
 // Internal enum
-enum PackageGlobalCmd {
-    findNamespaceCmd,
-    findPackageCmd,
-    findModuleCmd,
+/*enum PackageGlobalCmd {
+    findCppNamespaceCmd,
+    findJavaPackageCmd,
+    findIdlModuleCmd,
     getProjectCmd
 
-};
+};*/
 #endif

@@ -54,7 +54,7 @@ WrapperStr UmlClass::python_stereotype()
 void UmlClass::generate_imports(QTextStream & f, WrapperStr & made)
 {
     if (! pythonDecl().isEmpty()) {
-        Q3PtrVector<UmlItem> ch = children();
+        QVector<UmlItem*> ch = children();
         unsigned index;
         const unsigned sup = ch.size();
 
@@ -143,7 +143,7 @@ void UmlClass::generate(QTextStream & f, WrapperStr indent,
     if ((p == 0) || (*p == 0))
         return;
 
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem*> ch = children();
     const unsigned sup = ch.size();
     int enum_item_rank = 0;
     unsigned index;
@@ -288,7 +288,7 @@ void UmlClass::generate_instance_att_rel(QTextStream & f, WrapperStr indent,
     const WrapperStr & stereotype = python_stereotype();
     int enum_item_rank = 0;
 
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem*> ch = children();
     const unsigned sup = ch.size();
     unsigned index;
 
@@ -338,9 +338,9 @@ void UmlClass::write(QTextStream & f)
         else if ((index = s.find("${Name}")) != -1)
             s.replace(index, 7, capitalize(name()));
         else if ((index = s.find("${NAME}")) != -1)
-            s.replace(index, 7, name().upper());
+            s.replace(index, 7, name().upper().toLatin1().constData());
         else if ((index = s.find("${nAME}")) != -1)
-            s.replace(index, 7, name().lower());
+            s.replace(index, 7, name().lower().toLatin1().constData());
 
         f << s;
     }

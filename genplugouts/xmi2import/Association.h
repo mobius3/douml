@@ -72,7 +72,7 @@ protected:
 
     Role roles[2];
 
-    static QMap<WrapperStr, Association> All;
+    static QMap<QString, Association> All;
 
     bool is_class_association;
 

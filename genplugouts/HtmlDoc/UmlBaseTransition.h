@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 #include "TransitionBehavior.h"
 
 class UmlTransition;
@@ -35,7 +35,7 @@ public:
     bool set_IsExternal(bool v);
 
     // return the trigger in OCL
-    const Q3CString & trigger();
+    const QByteArray & trigger();
 
     // set the trigger in OCL
     //
@@ -43,7 +43,7 @@ public:
     bool set_Trigger(const char * s);
 
     // return the guard in OCL
-    const Q3CString & guard();
+    const QByteArray & guard();
 
     // set the guard in OCL
     //
@@ -51,7 +51,7 @@ public:
     bool set_Guard(const char * s);
 
     // return the activity in OCL
-    const Q3CString & activity();
+    const QByteArray & activity();
 
     // set the activity in OCL
     //
@@ -60,7 +60,7 @@ public:
 
 #ifdef WITHCPP
     // return the trigger in C++
-    const Q3CString & cppTrigger();
+    const QByteArray & cppTrigger();
 
     // set the trigger in C++
     //
@@ -68,7 +68,7 @@ public:
     bool set_CppTrigger(const char * s);
 
     // return the guard in C++
-    const Q3CString & cppGuard();
+    const QByteArray & cppGuard();
 
     // set the guard in C++
     //
@@ -76,7 +76,7 @@ public:
     bool set_CppGuard(const char * s);
 
     // return the activity in C++
-    const Q3CString & cppActivity();
+    const QByteArray & cppActivity();
 
     // set the activity in C++
     //
@@ -86,7 +86,7 @@ public:
 
 #ifdef WITHJAVA
     // return the trigger in Java
-    const Q3CString & javaTrigger();
+    const QByteArray & javaTrigger();
 
     // set the trigger in Java
     //
@@ -94,7 +94,7 @@ public:
     bool set_JavaTrigger(const char * s);
 
     // return the guard in Java
-    const Q3CString & javaGuard();
+    const QByteArray & javaGuard();
 
     // set the guard in Java
     //
@@ -102,7 +102,7 @@ public:
     bool set_JavaGuard(const char * s);
 
     // return the activity in Java
-    const Q3CString & javaActivity();
+    const QByteArray & javaActivity();
 
     // set the activity in Java
     //
@@ -151,7 +151,7 @@ protected:
 #endif
 
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseTransition(void * id, const Q3CString & n) : UmlItem(id, n) {
+    UmlBaseTransition(void * id, const QByteArray & n) : UmlItem(id, n) {
     }
 
 };

@@ -3,10 +3,9 @@
 
 
 #include "UmlBaseItem.h"
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <QByteArray>
+
 #include "anItemKind.h"
-#include <q3asciidict.h>
 
 // This class is a mother class for all the other Uml* classes, this
 // allows to generalize their management, declare virtual operations etc ...
@@ -15,15 +14,15 @@
 class UmlItem : public UmlBaseItem
 {
 public:
-    UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n) {};
+    UmlItem(void * id, const QByteArray & n) : UmlBaseItem(id, n) {};
 
     virtual ~UmlItem();
 
     virtual void roseImport();
 
-    virtual Q3CString fullName();
+    virtual QByteArray fullName();
 
-    void setProperties(Q3Dict<Q3CString> & d);
+    void setProperties(QHash<QByteArray, QByteArray*> & d);
 
     static void newItem(UmlItem * x, const char * id);
 
@@ -35,7 +34,7 @@ public:
 
 
 protected:
-    static Q3AsciiDict<UmlItem> all_items[aPackage + 1];
+    static QHash<QString,UmlItem*> all_items[aPackage + 1];
 
     static int cpt[128];
 

@@ -46,6 +46,7 @@ protected:
     UmlColor itscolor;
     UmlColor used_color;
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ExpansionNodeCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y,
                         int id, ExpansionRegionCanvas * r);
@@ -58,7 +59,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual bool copyable() const;
     virtual void remove(bool from_model);
     virtual void open();
@@ -82,8 +83,8 @@ public:
     virtual void history_hide();
 
     virtual bool has_drawing_settings() const;
-    virtual void edit_drawing_settings(Q3PtrList<DiagramItem> &);
-    virtual void same_drawing_settings(Q3PtrList<DiagramItem> &);
+    virtual void edit_drawing_settings(QList<DiagramItem *> &);
+    virtual void clone_drawing_settings(const DiagramItem *src);
     void edit_drawing_settings();
 
     virtual void apply_shortcut(QString s);

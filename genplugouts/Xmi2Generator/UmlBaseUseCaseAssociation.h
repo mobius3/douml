@@ -1,9 +1,9 @@
 #ifndef _UMLBASEUSECASEASSOCIATION_H
 #define _UMLBASEUSECASEASSOCIATION_H
+#include <QByteArray>
+#include <QHash>
 
 
-
-#include <q3ptrdict.h>
 
 class UmlUseCaseReference;
 class UmlClass;
@@ -50,7 +50,7 @@ private:
     bool _primary;
 
     // internal, don't call it
-    void read_(const Q3PtrDict<UmlUseCaseReference> & useCases);
+    void read_(const QHash<void*,UmlUseCaseReference*> & useCases);
 
     friend class UmlBaseUseCaseDiagramDefinition;
 };

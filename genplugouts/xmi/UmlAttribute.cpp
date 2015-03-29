@@ -6,7 +6,7 @@
 #include "CppSettings.h"
 #include "JavaSettings.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 bool UmlAttribute::write_if_needed(FileOut & out)
 {
     switch (_lang) {
@@ -49,7 +49,7 @@ bool UmlAttribute::write_if_needed(FileOut & out)
         break;
 
     default: // Java
-        if (javaDecl().find("${visibility}") != -1)
+        if (javaDecl().indexOf("${visibility}") != -1)
             write_visibility(out, visibility());
 
         break;
@@ -105,29 +105,29 @@ bool UmlAttribute::write_if_needed(FileOut & out)
 void UmlAttribute::write_cpp_type(FileOut & out)
 {
     // note : doesn't manage function/operation pointer
-    Q3CString s = cppDecl();
+    QByteArray s = cppDecl();
     int index;
 
     remove_comments(s);
 
     // remove keywords not linked to the type
-    if ((index = s.find("${static}")) != -1)
+    if ((index = s.indexOf("${static}")) != -1)
         s.replace(index, 9, " ");
 
-    if ((index = s.find("${mutable}")) != -1)
+    if ((index = s.indexOf("${mutable}")) != -1)
         s.replace(index, 10, (isCppMutable()) ? "mutable " : "");
 
-    if ((index = s.find("${volatile}")) != -1)
+    if ((index = s.indexOf("${volatile}")) != -1)
         s.replace(index, 11, (isVolatile()) ? "volatile " : "");
 
-    if ((index = s.find("${value}")) != -1)
+    if ((index = s.indexOf("${value}")) != -1)
         s.replace(index, 8, " ");
 
-    if ((index = s.find("${h_value}")) != -1)
+    if ((index = s.indexOf("${h_value}")) != -1)
         s.replace(index, 10, " ");
 
     // replace keywords linked to the type
-    if ((index = s.find("${const}")) != -1)
+    if ((index = s.indexOf("${const}")) != -1)
         s.replace(index, 8, isReadOnly() ? "const" : "");
 
     UmlTypeSpec t = type();
@@ -140,31 +140,31 @@ void UmlAttribute::write_cpp_type(FileOut & out)
 
 void UmlAttribute::write_java_type(FileOut & out)
 {
-    Q3CString s = javaDecl();
+    QByteArray s = javaDecl();
     int index;
 
     remove_comments(s);
 
     // remove keywords not linked to the type
-    if ((index = s.find("${visibility}")) != -1)
+    if ((index = s.indexOf("${visibility}")) != -1)
         s.replace(index, 13, " ");
 
-    if ((index = s.find("${static}")) != -1)
+    if ((index = s.indexOf("${static}")) != -1)
         s.replace(index, 9, " ");
 
-    if ((index = s.find("${final}")) != -1)
+    if ((index = s.indexOf("${final}")) != -1)
         s.replace(index, 8, " ");
 
-    if ((index = s.find("${transient}")) != -1)
+    if ((index = s.indexOf("${transient}")) != -1)
         s.replace(index, 12, " ");
 
-    if ((index = s.find("${volatile}")) != -1)
+    if ((index = s.indexOf("${volatile}")) != -1)
         s.replace(index, 11, " ");
 
-    if ((index = s.find("${value}")) != -1)
+    if ((index = s.indexOf("${value}")) != -1)
         s.replace(index, 8, " ");
 
-    if ((index = s.find("${@}")) != -1)
+    if ((index = s.indexOf("${@}")) != -1)
         s.replace(index, 4, " ");
 
     UmlTypeSpec t = type();

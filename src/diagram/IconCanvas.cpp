@@ -31,7 +31,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QPixmap>
@@ -106,16 +106,19 @@ void IconCanvas::draw(QPainter & p)
         fputs("</g>\n", fp);
     }
 }
-
+void IconCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
 void IconCanvas::change_scale()
 {
     // defined to not change size
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
-UmlCode IconCanvas::type() const
+UmlCode IconCanvas::typeUmlCode() const
 {
     return UmlIcon;
 }
@@ -128,79 +131,83 @@ void IconCanvas::open()
 
 void IconCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, browser_node->get_name() + TR("\nshort cut"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 6);
-    m.insertItem(TR("Go down"), 7);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 6);
+    MenuFactory::addItem(m, TR("Go down"), 7);
+    m.addSeparator();
 
     if (! browser_node->deletedp()) {
-        m.insertItem(TR("Open"), 2);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("Open"), 2);
+        m.addSeparator();
     }
 
-    m.insertItem(TR("Select diagram in browser"), 3);
-    m.insertItem(TR("Select linked items"), 4);
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 5);
+    MenuFactory::addItem(m, TR("Select diagram in browser"), 3);
+    MenuFactory::addItem(m, TR("Select linked items"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
 
-    switch (m.exec(QCursor::pos())) {
-    case 0:
-        upper();
-        // force son reaffichage
-        hide();
-        show();
-        canvas()->update();
-        break;
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        switch (retAction->data().toInt()) {
+        case 0:
+            upper();
+            // force son reaffichage
+            hide();
+            show();
+            canvas()->update();
+            break;
 
-    case 1:
-        lower();
-        // force son reaffichage
-        hide();
-        show();
-        canvas()->update();
-        break;
+        case 1:
+            lower();
+            // force son reaffichage
+            hide();
+            show();
+            canvas()->update();
+            break;
 
-    case 6:
-        z_up();
-        // force son reaffichage
-        hide();
-        show();
-        canvas()->update();
-        break;
+        case 6:
+            z_up();
+            // force son reaffichage
+            hide();
+            show();
+            canvas()->update();
+            break;
 
-    case 7:
-        z_down();
-        // force son reaffichage
-        hide();
-        show();
-        canvas()->update();
-        break;
+        case 7:
+            z_down();
+            // force son reaffichage
+            hide();
+            show();
+            canvas()->update();
+            break;
 
-    case 2:
-        browser_node->open(FALSE);
-        return;
+        case 2:
+            browser_node->open(FALSE);
+            return;
 
-    case 3:
-        browser_node->select_in_browser();
-        return;
+        case 3:
+            browser_node->select_in_browser();
+            return;
 
-    case 4:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
+        case 4:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
 
-    case 5:
-        // delete
-        delete_it();
-        break;
+        case 5:
+            // delete
+            delete_it();
+            break;
 
-    default:
-        return;
+        default:
+            return;
+        }
     }
 
     package_modified();
@@ -287,7 +294,7 @@ IconCanvas * IconCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
 void IconCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
 }
 

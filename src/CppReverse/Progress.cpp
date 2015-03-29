@@ -36,8 +36,9 @@
 Progress * Progress::it = 0;
 
 Progress::Progress(int n, const char * lbl, QApplication * a)
-    : Q3ProgressDialog(0, 0, n, 0, 0, FALSE, Qt::WDestructiveClose), n(0), app(a)
+    : QProgressDialog(lbl, "Cancel", 0, n, 0), n(0), app(a)
 {
+    setAttribute(Qt::WA_DeleteOnClose, true);
     if (it != 0)
         delete it;
 
@@ -53,7 +54,7 @@ Progress::~Progress()
 
 void Progress::tic()
 {
-    setProgress(++n);
+    setValue(++n);
     raise();
     app->processEvents();
 }

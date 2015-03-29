@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 class QPixmap;
 class ComponentDiagramWindow;
@@ -44,8 +44,8 @@ class BrowserComponentDiagram : public BrowserDiagram
     friend class StereotypesDialog;
 
 protected:
-    static Q3PtrList<BrowserComponentDiagram> imported;
-    static Q3ValueList<int> imported_ids;
+    static QList<BrowserComponentDiagram *> imported;
+    static QList<int> imported_ids;
     static QStringList its_default_stereotypes;
 
     SimpleData * def;
@@ -83,7 +83,7 @@ public:
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
     virtual BasicData * get_data() const;
-    virtual void set_name(const char * s);
+    virtual void set_name(QString s);
     virtual UmlColor get_color(UmlCode) const;
     virtual bool get_shadow() const;
     virtual bool get_draw_all_relations() const;
@@ -112,7 +112,7 @@ public:
     static void open_all();
     static void import();
 
-    static void compute_referenced_by(Q3PtrList<BrowserNode> & l, BrowserNode *,
+    static void compute_referenced_by(QList<BrowserNode *> & l, BrowserNode *,
                                       const char * kc, char const * kr);
 };
 

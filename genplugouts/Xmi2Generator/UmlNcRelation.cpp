@@ -24,7 +24,7 @@ void UmlNcRelation::write(FileOut & out)
         }
 
         out.indent();
-        out << "<" << stereotype() << " xmi:type=\"uml:" << t << "\"";
+        out << "<" << stereotype().operator QString() << " xmi:type=\"uml:" << t << "\"";
         out.id(this);
         out.ref(target(), r);
         out << ">\n";
@@ -32,7 +32,7 @@ void UmlNcRelation::write(FileOut & out)
         write_description_properties(out);
         out.indent(-1);
         out.indent();
-        out << "</" << stereotype() << ">\n";
+        out << "</" << stereotype().operator QString() << ">\n";
     }
     else
         write(out, TRUE);

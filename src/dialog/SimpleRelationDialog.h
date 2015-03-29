@@ -27,29 +27,26 @@
 
 #ifndef SIMPLERELATIONDIALOG_H
 #define SIMPLERELATIONDIALOG_H
-
-#include <q3ptrlist.h>
-#include <q3tabdialog.h>
-#include <q3ptrlist.h>
-
+#include "tabdialog.h"
+#include <QDialog>
 #include "UmlEnum.h"
 
-class Q3ComboBox;
+class QComboBox;
 class MultiLineEdit;
 class SimpleRelationData;
 class KeyValuesTable;
 class BodyDialog;
 
-class SimpleRelationDialog : public Q3TabDialog
+class SimpleRelationDialog : public TabDialog
 {
     Q_OBJECT
 
 protected:
     SimpleRelationData * rel;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;
-    Q3PtrList<BodyDialog> edits;
+    QList<BodyDialog *> edits;
 
     static QSize previous_size;
 

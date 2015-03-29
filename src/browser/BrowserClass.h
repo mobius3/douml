@@ -2,7 +2,7 @@
 #include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 // *************************************************************************
 //
@@ -49,12 +49,15 @@ class BrowserClassDiagram;
 
 #include "BrowserNode.h"
 #include "Labeled.h"
+#include "UmlEnum.h"
 
 class BrowserClass : public BrowserNode, public Labeled<BrowserClass>
 {
     friend class StereotypesDialog;
+    friend class QuickEdit;
 
 protected:
+    BrowserClass(int id);
     static IdDict<BrowserClass> all;
 
     static QStringList its_default_stereotypes;
@@ -63,67 +66,73 @@ protected:
     ClassData * def;
     BrowserClassDiagram * associated_diagram;
     BrowserArtifact * associated_artifact;	// generate its def
-    Q3ValueList<BrowserComponent *> associated_components;	// realize or provide it
+    QList<BrowserComponent *> associated_components;	// realize or provide it
 
 protected:
-    BrowserClass(int id);
-    void exec_menu_choice(int index, Q3PtrList<BrowserOperation> & l);
+
+    void exec_menu_choice(int index, QList<BrowserOperation *> & l);
 
 public:
     BrowserClass(QString s, BrowserNode * p, ClassData * d, int id = 0);
     BrowserClass(const BrowserClass * model, BrowserNode * p);
     virtual ~BrowserClass();
 
-    BrowserNode * add_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE);
+    BrowserNode * add_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE, bool sameName = false);
+    BrowserNode * addAttribute();
+    BrowserNode * addEnumItem();
+    BrowserNode * duplicate_attribute(BrowserAttribute * attr = 0, bool enum_item = FALSE);
     BrowserNode * add_relation(BrowserRelation * rel);
-    BrowserNode * add_operation(BrowserOperation * oper = 0);
+    BrowserNode * add_operation(BrowserOperation * oper = 0, bool sameName = false);
+    BrowserNode * duplicate_operation(BrowserOperation * oper = 0);
+    BrowserNode * addOperation(BrowserOperation * oper = nullptr);
     BrowserNode * add_inherited_operation(BrowserOperation * model);
     BrowserNode * add_extra_member(BrowserExtraMember * em = 0);
-    Q3PtrList<BrowserOperation> inherited_operations(unsigned limit, QString parent_name = QString()) const;
+    QList<BrowserOperation *> inherited_operations(unsigned limit, QString parent_name = QString()) const;
     QString may_start(UmlCode l) const;
     QString may_connect(UmlCode l, BrowserClass * other);
     virtual BasicData * add_relation(UmlCode, BrowserNode *);
-    virtual Q3PtrList<BrowserNode> parents() const;
-    void get_all_parents(Q3PtrList<BrowserClass> &) const;
+    virtual QList<BrowserNode *> parents() const;
+    void get_all_parents(QList<BrowserClass *> &) const;
     // more modern interface to get all parents. Still a lot of qt3 compatibility inside
     QList<BrowserClass*> get_all_parents();
     QStringList get_parents_names();
-
+    using BrowserNode::get_visibility;
+    virtual UmlVisibility get_visibility() const override;
 
     virtual QString check_inherit(const BrowserNode * parent) const;
     bool have_abstract_operation();
-    void get_opers(Q3ValueList<const OperationData *> & opers,
+    void get_opers(QList<const OperationData *> & opers,
                    QStringList & list) const;
-    void get_own_opers(Q3ValueList<OperationData *> &opers,
+    void get_own_opers(QList<OperationData *> &opers,
                    QStringList & list) ;
-    void get_inherited_opers(Q3ValueList<OperationData *> & opers,
+    void get_inherited_opers(QList<OperationData *> & opers,
                    QStringList & list) ;
     void get_used_inherited_opers();
 
 
 
-    void get_attrs(BrowserNodeList &) const;
-    void get_rels(BrowserClass *, Q3PtrList<RelationData> &, int * rev = 0) const;
-    void get_rels(BrowserClass * target, Q3PtrList<BrowserRelation> & l) const;
+    void get_attrs(BrowserNodeList &);
+    void get_rels(BrowserClass *, QList<RelationData *> &, int * rev = 0) const;
+    void get_rels(BrowserClass * target, QList<BrowserRelation *> & l) const;
     void get_tree(BrowserNodeList &);
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserClassDiagram *, bool on_read = FALSE);
     BrowserArtifact * get_associated_artifact() const;
     void set_associated_artifact(BrowserArtifact *, bool on_read = FALSE);
-    const Q3ValueList<BrowserComponent *> & get_associated_components() const;
+    const QList<BrowserComponent *> & get_associated_components() const;
     void add_associated_component(BrowserComponent *);
     void remove_associated_component(BrowserComponent *);
 
     virtual void delete_it();
     virtual bool undelete(bool rec, QString & warning, QString & renamed);
-    virtual bool may_contains_them(const Q3PtrList<BrowserNode> &,
+    virtual bool may_contains_them(const QList<BrowserNode *> &,
                                    BooL & duplicable) const;
     virtual void move(BrowserNode *, BrowserNode * after);
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     QString contextual_name(ShowContextMode) const;
-    virtual void set_name(const char * s);
+    virtual void set_name(QString s);
     virtual void member_cpp_def(const QString &, const QString &, QString & s, bool) const;
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -145,6 +154,7 @@ public:
     static BrowserNode * read_any_ref(char *& , char *);
     static BrowserNode * get_it(const char * k, int id);
     static void post_load();
+    uint TypeID() override;
 
     static void plug_out_conversion();
     bool get_bodies_read();
@@ -169,20 +179,20 @@ public:
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    virtual void support_file(Q3Dict<char> & files, bool add) const;
+    virtual void support_file(QHash<QString,char*> & files, bool add) const;
 
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char *& , char *&);
     static void save_stereotypes(QTextStream &);
 
-    virtual void referenced_by(Q3PtrList<BrowserNode> &, bool ondelete = FALSE);
+    virtual void referenced_by(QList<BrowserNode *> &, bool ondelete = FALSE);
 
     static bool new_java_enums(QString new_st);
 
     virtual const QPixmap * pixmap(int) const;
     virtual void update_stereotype(bool rec = FALSE);
     virtual void iconChanged();
-    virtual void paintCell(QPainter * p, const QColorGroup & cg, int column,
+    virtual void paintCell(QPainter * p, const QPalette & cg, int column,
                            int width, int alignment);
 
     virtual void DragMoveEvent(QDragMoveEvent * e);
@@ -193,11 +203,12 @@ public:
     static BrowserClass * temporary();
 private:
     // some helpers
-    void InstallParentsMenuItems(Q3PopupMenu &inhopersubm);
+    void InstallParentsMenuItems(QMenu &inhopersubm);
     void AddInheritedOperations(int rank);
 
 public:
     QList<OperationData*>  CollectSameThroughInheritance(OperationData*,  QList<BrowserNode*>&, bool goBack = true);
+    virtual QVariant	data(int column, int role) const;
 
 };
 

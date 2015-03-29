@@ -26,7 +26,7 @@ UmlItem * UmlUseCase::container(anItemKind kind, Token & token, FileIn & in)
 
 void UmlUseCase::solve(int context, WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))
@@ -99,7 +99,7 @@ void UmlUseCase::importExtendInclude(FileIn & in, Token & token, UmlItem * where
         if (other.isEmpty())
             in.warning((extend) ? "extendedCase is missing" : "addition is missing");
         else {
-            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(other);
+            QMap<QString, UmlItem *>::Iterator it = All.find(other);
 
             if (it != All.end())
                 where->solve(extend, other);

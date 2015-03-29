@@ -1,0 +1,56 @@
+format 76
+
+classcanvas 128042 class_ref 390826 // AniLineSegment
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 220 266 2000
+end
+classcanvas 128170 class_ref 390698 // AniRoute
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 570 334 2006
+end
+classcanvas 128554 class_ref 437290 // AniRouteSegment
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 553 608 2000
+end
+classcanvas 129578 class_ref 172842 // AniRouteSegmentInfo
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 823 623 2000
+end
+classcanvas 130090 class_ref 404138 // AniScaleVector
+  draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+  xyz 348 819 2005
+end
+relationcanvas 129066 relation_ref 518570 // <directional composition>
+  from ref 128554 z 2001 stereotype "<<QSharedPointer>>" xyz 420 655.5 3000 to ref 128042
+  role_a_pos 398 596 3000 no_role_b
+  multiplicity_a_pos 398 619 3000 no_multiplicity_b
+end
+relationcanvas 129450 relation_ref 518826 // <directional aggregation>
+  decenter_begin 238
+  decenter_end 180
+  from ref 128554 z 2007 stereotype "<<QSharedPointer>>" xyz 535 550 3000 to ref 128170
+  role_a_pos 596 500 3000 no_role_b
+  multiplicity_a_pos 572 500 3000 no_multiplicity_b
+end
+relationcanvas 129706 relation_ref 518954 // <directional aggregation>
+  from ref 128554 z 2001 stereotype "<<QSharedPointer>>" xyz 702 743 3000 to ref 129578
+  role_a_pos 790 719 3000 no_role_b
+  multiplicity_a_pos 808 742 3000 no_multiplicity_b
+end
+relationcanvas 129834 relation_ref 519082 // <directional aggregation>
+  from ref 128170 z 2007 stereotype "<<:vector>>" xyz 588 550 3000 to ref 128554
+  role_a_pos 626 590 3000 no_role_b
+  multiplicity_a_pos 602 590 3000 no_multiplicity_b
+end
+relationcanvas 130218 relation_ref 519210 // <directional composition>
+  from ref 128554 z 2006 to ref 130090
+  role_a_pos 482 875 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 130346 relation_ref 572330 // <directional aggregation>
+  decenter_begin 67
+  from ref 128042 z 2001 stereotype "<<sharedpointer>>" xyz 426 475 3000 to ref 128554
+  role_a_pos 559 632 3000 no_role_b
+  multiplicity_a_pos 535 632 3000 no_multiplicity_b
+end
+end

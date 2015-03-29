@@ -3,9 +3,9 @@
 
 
 #include "UmlBaseClass.h"
-#include <q3cstring.h>
+
 #include "Vector.h"
-#include <q3valuelist.h>
+#include <QList.h>
 
 class UmlActualParameter;
 class UmlFormalParameter;
@@ -17,12 +17,12 @@ class UmlFormalParameter;
 class UmlClass : public UmlBaseClass
 {
 public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {
+    UmlClass(void * id, const QByteArray & n) : UmlBaseClass(id, n) {
         inherited_opers = 0;
     };
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     //set he html ref
     //set the classes list
@@ -32,7 +32,7 @@ public:
 
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
+    virtual void html(QByteArray pfix, unsigned int rank, unsigned int level);
 
     //generate the html definition in an own file
 
@@ -40,13 +40,13 @@ public:
 
     //generate the html definition except header/chapter in the current file
 
-    void gen_html(Q3CString pfix, unsigned int rank, unsigned int level);
+    void gen_html(QByteArray pfix, unsigned int rank, unsigned int level);
 
     //write a html ref to the class
     virtual void write();
 
     //write a html ref to the class going to an other html file
-    virtual void write(Q3CString target);
+    virtual void write(QByteArray target);
 
     static void ref_index();
 
@@ -65,20 +65,20 @@ protected:
 
 private:
     //produce the definition in C++
-    void gen_cpp_decl(Q3CString s, bool descr);
+    void gen_cpp_decl(QByteArray s, bool descr);
 
     //produce the definition in Java
-    void gen_java_decl(Q3CString s, bool descr);
+    void gen_java_decl(QByteArray s, bool descr);
 
     //produce the definition in Php
-    void gen_php_decl(Q3CString s, bool descr);
+    void gen_php_decl(QByteArray s, bool descr);
 
     //produce the definition in Python
-    void gen_python_decl(Q3CString s, bool descr);
+    void gen_python_decl(QByteArray s, bool descr);
 
-    void generate(const Q3ValueList<UmlActualParameter> a, UmlClass * mother, bool cpp);
+    void generate(const QList<UmlActualParameter> a, UmlClass * mother, bool cpp);
 
-    void generate(const Q3ValueList<UmlFormalParameter> f);
+    void generate(const QList<UmlFormalParameter> f);
 
     void generics();
 

@@ -37,7 +37,7 @@ bool UmlBaseArtifact::set_AssociatedDiagram(UmlDeploymentDiagram * d)
         return FALSE;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseArtifact::associatedClasses()
+const QVector<UmlClass *> &UmlBaseArtifact::associatedClasses()
 {
     read_if_needed_();
 
@@ -51,7 +51,7 @@ bool UmlBaseArtifact::addAssociatedClass(UmlClass * cl)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            _assoc_classes.resize(_assoc_classes.size() + 1);
+            _assoc_classes.reserve(_assoc_classes.size() + 1);
             _assoc_classes.insert(_assoc_classes.size() - 1, cl);
         }
 
@@ -68,7 +68,7 @@ bool UmlBaseArtifact::removeAssociatedClass(UmlClass * cl)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            unsigned index = (unsigned) _assoc_classes.findRef(cl);
+            unsigned index = (unsigned) _assoc_classes.indexOf(cl);
 
             if (((int) index) == -1)
                 // theo impossible
@@ -79,7 +79,7 @@ bool UmlBaseArtifact::removeAssociatedClass(UmlClass * cl)
             if (index != last)
                 _assoc_classes.insert(index, _assoc_classes[last]);
 
-            _assoc_classes.resize(last);
+            _assoc_classes.reserve(last);
         }
 
         return TRUE;
@@ -88,9 +88,9 @@ bool UmlBaseArtifact::removeAssociatedClass(UmlClass * cl)
         return FALSE;
 }
 
-bool UmlBaseArtifact::set_AssociatedClasses(const Q3PtrVector<UmlClass> & l)
+bool UmlBaseArtifact::set_AssociatedClasses(const QVector<UmlClass*> & l)
 {
-    UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const Q3PtrVector<UmlItem> &) l);
+    UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const QVector<UmlItem*> &) l);
 
     if (UmlCom::read_bool()) {
         if (_defined)
@@ -102,7 +102,7 @@ bool UmlBaseArtifact::set_AssociatedClasses(const Q3PtrVector<UmlClass> & l)
         return FALSE;
 }
 
-const Q3PtrVector<UmlArtifact> & UmlBaseArtifact::associatedArtifacts()
+const QHash<int, UmlArtifact*> & UmlBaseArtifact::associatedArtifacts()
 {
     read_if_needed_();
 
@@ -116,7 +116,7 @@ bool UmlBaseArtifact::addAssociatedArtifact(UmlArtifact * cp)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            _associated.resize(_associated.size() + 1);
+            _associated.reserve(_associated.size() + 1);
             _associated.insert(_associated.size() - 1, cp);
         }
 
@@ -133,7 +133,7 @@ bool UmlBaseArtifact::removeAssociatedArtifact(UmlArtifact * cp)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            unsigned index = (unsigned) _associated.findRef(cp);
+            unsigned index = (unsigned) _associated.key(cp, -1);
 
             if (((int) index) == -1)
                 // theo impossible
@@ -144,7 +144,7 @@ bool UmlBaseArtifact::removeAssociatedArtifact(UmlArtifact * cp)
             if (index != last)
                 _associated.insert(index, _associated[last]);
 
-            _associated.resize(last);
+            _associated.reserve(last);
         }
 
         return TRUE;
@@ -279,13 +279,13 @@ void UmlBaseArtifact::read_uml_()
     unsigned index;
 
     n = UmlCom::read_unsigned();
-    _assoc_classes.resize(n);
+    _assoc_classes.reserve(n);
 
     for (index = 0; index != n; index += 1)
         _assoc_classes.insert(index, (UmlClass *) UmlBaseItem::read_());
 
     n = UmlCom::read_unsigned();
-    _associated.resize(n);
+    _associated.reserve(n);
 
     for (index = 0; index != n; index += 1)
         _associated.insert(index, (UmlArtifact *) UmlBaseItem::read_());

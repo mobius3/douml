@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include "UmlClass.h"
 #include "UmlRelation.h"
@@ -70,7 +70,7 @@ void UmlClass::generate(QTextStream & f)
     if (idlDecl().isEmpty())
         return;
 
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem*> ch = children();
     WrapperStr stereotype = idl_stereotype();
     bool a_typedef = (stereotype == "typedef");
     bool an_enum = (stereotype == "enum");
@@ -148,10 +148,10 @@ void UmlClass::generate(QTextStream & f)
                 f << baseType().toString();
 
                 UmlClass * cl = baseType().type;
-                const Q3ValueList<UmlActualParameter> & actuals = this->actuals();
+                const QList<UmlActualParameter> & actuals = this->actuals();
 
                 if ((cl != 0) && !actuals.isEmpty()) {
-                    Q3ValueList<UmlActualParameter>::ConstIterator it;
+                    QList<UmlActualParameter>::ConstIterator it;
 
                     for (it = actuals.begin(); it != actuals.end(); ++it)
                         if ((*it).superClass() == cl)
@@ -274,9 +274,9 @@ void UmlClass::write(QTextStream & f)
         else if ((index = s.find("${Name}")) != -1)
             s.replace(index, 7, capitalize(name()));
         else if ((index = s.find("${NAME}")) != -1)
-            s.replace(index, 7, name().upper());
+            s.replace(index, 7, name().upper().toLatin1().constData());
         else if ((index = s.find("${nAME}")) != -1)
-            s.replace(index, 7, name().lower());
+            s.replace(index, 7, name().lower().toLatin1().constData());
 
         f << s;
     }

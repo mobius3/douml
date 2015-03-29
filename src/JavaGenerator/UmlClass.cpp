@@ -31,7 +31,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include "UmlClass.h"
 #include "UmlPackage.h"
@@ -73,8 +73,8 @@ void UmlClass::generate()
 
 void UmlClass::generate(QTextStream & f, WrapperStr indent)
 {
-    Q3PtrVector<UmlItem> ch = children();
-    const Q3ValueList<UmlActualParameter> actuals = this->actuals();
+    QVector<UmlItem*> ch = children();
+    const QList<UmlActualParameter> actuals = this->actuals();
     const unsigned sup = ch.size();
     const WrapperStr & stereotype = java_stereotype();
     bool an_enum_pattern = (stereotype == "enum_pattern");
@@ -301,9 +301,9 @@ void UmlClass::write(QTextStream & f)
         else if ((index = s.find("${Name}")) != -1)
             s.replace(index, 7, capitalize(name()));
         else if ((index = s.find("${NAME}")) != -1)
-            s.replace(index, 7, name().upper());
+            s.replace(index, 7, name().upper().toLatin1().constData());
         else if ((index = s.find("${nAME}")) != -1)
-            s.replace(index, 7, name().lower());
+            s.replace(index, 7, name().lower().toLatin1().constData());
 
         f << s;
     }
@@ -391,10 +391,10 @@ void UmlClass::generate_enum_member(QTextStream & f, WrapperStr indent)
 
 void UmlClass::generate_formals(QTextStream & f)
 {
-    Q3ValueList<UmlFormalParameter> fs = formals();
+    QList<UmlFormalParameter> fs = formals();
 
     if (! fs.isEmpty()) {
-        Q3ValueList<UmlFormalParameter>::Iterator it;
+        QList<UmlFormalParameter>::Iterator it;
         const char * sep = "<";
 
         for (it = fs.begin(); it != fs.end(); it++) {
@@ -420,7 +420,7 @@ void UmlClass::generate_formals(QTextStream & f)
 
 void UmlClass::generate_import(QTextStream & f, const WrapperStr & indent)
 {
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem*> ch = children();
     const unsigned sup = ch.size();
     unsigned index;
 

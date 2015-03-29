@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClassItem.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 // This class globaly manages class's children including UmlClassExtraMember
 //
@@ -11,7 +11,7 @@
 class UmlClassItem : public UmlBaseClassItem
 {
 public:
-    UmlClassItem(void * id, const Q3CString & n) : UmlBaseClassItem(id, n) {};
+    UmlClassItem(void * id, const QByteArray & n) : UmlBaseClassItem(id, n) {};
 
 };
 

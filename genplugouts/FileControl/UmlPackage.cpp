@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include "Dialog.h"
 #include "UmlCom.h"
@@ -12,10 +12,10 @@
 void UmlPackage::fileControl(bool ci)
 {
     UmlPackage * prj = getProject();
-    Q3CString prjfile = prj->supportFile();
+    QByteArray prjfile = prj->supportFile();
     BooL rec;
     BooL reload;
-    Q3CString cmd;
+    QByteArray cmd;
 
     if (! prj->propertyValue((ci) ? "check-in-cmd" : "check-out-cmd", cmd))
         cmd = "specify the command containing %file and %dir or %dironly";
@@ -30,7 +30,7 @@ void UmlPackage::fileControl(bool ci)
             saveProject();
 
         // get files list
-        Q3Dict<void> files;
+        QHash<QString,void*> files;
 
         getFiles(files, (rec) ? ~0u : 1);
 
@@ -38,31 +38,32 @@ void UmlPackage::fileControl(bool ci)
             getAuxFiles(files);
 
         // apply the command on each file
-        Q3DictIterator<void> it(files);
+        QHashIterator<QString,void*> it(files);
         QFileInfo prjpath(prjfile);
-        QString dir = prjpath.dirPath(TRUE);
+        QString dir = prjpath.path();
         QString dironly = dir;
         int index;
 
         if ((dironly.length() > 3) &&
-            (((const char *) dironly)[1] == ':') &&
-            (((const char *) dironly)[2] == '/'))
+            (dironly[1] == ':') &&
+            (dironly[2] == '/'))
             dironly = dironly.mid(2);
 
-        while ((index = cmd.find("%dironly")) != -1)
-            cmd.replace(index, 8, dironly);
+        while ((index = cmd.indexOf("%dironly")) != -1)
+            cmd.replace(index, 8, dironly.toLatin1());
 
-        while ((index = cmd.find("%dir")) != -1)
-            cmd.replace(index, 4, dir);
+        while ((index = cmd.indexOf("%dir")) != -1)
+            cmd.replace(index, 4, dir.toLatin1());
 
-        while (it.current()) {
+        while (it.hasNext()) {
+            it.next();
             QString s = cmd;
 
-            while ((index = s.find("%file")) != -1)
-                s.replace(index, 5, it.currentKey());
+            while ((index = s.indexOf("%file")) != -1)
+                s.replace(index, 5, it.key().toLatin1());
 
-            system((const char *) s);
-            ++it;
+            system((const char *) s.toLatin1().constData());
+            //++it;
         }
 
         UmlCom::trace("Done.");
@@ -72,13 +73,13 @@ void UmlPackage::fileControl(bool ci)
     }
 }
 
-void UmlPackage::getFiles(Q3Dict<void> & files, unsigned rec)
+void UmlPackage::getFiles(QHash<QString, void *> &files, unsigned rec)
 {
     if (rec != 0)
         UmlItem::getFiles(files, rec - 1);
 }
 
-void UmlPackage::getAuxFiles(Q3Dict<void> & files)
+void UmlPackage::getAuxFiles(QHash<QString,void*> & files)
 {
     static const char * aux[] = {
         "cpp_includes", "generation_settings", "idl_includes",
@@ -87,13 +88,13 @@ void UmlPackage::getAuxFiles(Q3Dict<void> & files)
 
     const char ** p = aux;
     QFileInfo prjpath(supportFile());
-    QString dir = prjpath.dirPath(TRUE) + "/";
+    QString dir = prjpath.path() + "/";
 
     while (*p != 0) {
         QFileInfo fi(dir + *p);
 
         if (fi.exists())
-            files.replace(*p, (void *) 1);
+            files.insert(*p, (void *) 1);
 
         p += 1;
     }

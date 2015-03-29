@@ -28,11 +28,11 @@
 #ifndef UMLCLASSITEM_H
 #define UMLCLASSITEM_H
 
-#include <q3ptrlist.h>
+//
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
+//
 
 #include "UmlBaseClassItem.h"
 
@@ -47,7 +47,7 @@ public:
         : UmlBaseClassItem(id, n) {
     };
 
-    virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
+    virtual void compute_dependency(QList<CppRefType *> & dependency,
                                     const WrapperStr & cl_stereotype,
                                     bool all_in_h) = 0;
 

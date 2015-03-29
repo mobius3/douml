@@ -32,7 +32,6 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
 
 // This class allows to manage extra class member, mainly defined for C++
 // it allows to insert C++ pre-processor directive (even they may be placed
@@ -46,7 +45,7 @@ public:
     UmlExtraClassMember(void * id, const WrapperStr & n)
         : UmlBaseExtraClassMember(id, n) {};
 
-    virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
+    virtual void compute_dependency(QList<CppRefType *> & dependency,
                                     const WrapperStr & cl_stereotype,
                                     bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility,

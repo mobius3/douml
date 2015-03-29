@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseItem.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "Language.h"
 
 class FileOut;
@@ -16,7 +16,7 @@ class FileOut;
 class UmlItem : public UmlBaseItem
 {
 public:
-    UmlItem(void * id, const Q3CString & n)
+    UmlItem(void * id, const QByteArray & n)
         : UmlBaseItem(id, n), _written(FALSE) {};
 
     virtual ~UmlItem();

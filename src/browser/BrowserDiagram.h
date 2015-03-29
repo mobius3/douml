@@ -86,7 +86,7 @@ public:
     static void update_idmax_for_root();
     static void import();
     virtual void prepare_update_lib() const;
-    virtual void support_file(Q3Dict<char> & files, bool add) const;
+    virtual void support_file(QHash<QString,char*> & files, bool add) const;
 
     static BrowserNode * read_diagram_ref(char *& st);
     static BrowserNode * read_any_ref(char *& st, char * k);

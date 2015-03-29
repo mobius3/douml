@@ -30,7 +30,7 @@
 
 
 #include <qfont.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QDropEvent>
@@ -66,7 +66,7 @@ ObjectDiagramView::ObjectDiagramView(QWidget * parent, UmlCanvas * canvas, int i
 
 void ObjectDiagramView::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("Object diagram menu"));
 
@@ -85,11 +85,13 @@ void ObjectDiagramView::menu(const QPoint &)
     }
 }
 
-void ObjectDiagramView::contentsMousePressEvent(QMouseEvent * e)
+void ObjectDiagramView::mousePressEvent(QMouseEvent * e)
 {
     if (!window()->frozen()) {
+        QPoint diagramPoint(e->x(), e->y());
+        QPointF scenePoint = mapToScene(diagramPoint);
         if (e->button() == ::Qt::RightButton)
-            DiagramView::contentsMousePressEvent(e);
+            DiagramView::mousePressEvent(e);
         else {
             UmlCode c = window()->buttonOn();
 
@@ -109,7 +111,7 @@ void ObjectDiagramView::contentsMousePressEvent(QMouseEvent * e)
                     BrowserClassInstance * i =
                         new BrowserClassInstance("", b, parent);
                     OdClassInstCanvas * cl =
-                        new OdClassInstCanvas(i, the_canvas(), e->x(), e->y(), 0);
+                        new OdClassInstCanvas(i, the_canvas(), scenePoint.x(), scenePoint.y(), 0);
 
                     cl->show();
                     cl->upper();
@@ -133,7 +135,7 @@ void ObjectDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
                 if (b != 0) {
                     OdClassInstCanvas * cl =
-                        new OdClassInstCanvas(b, the_canvas(), e->x(), e->y(), 0);
+                        new OdClassInstCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y(), 0);
 
                     cl->show();
                     cl->upper();
@@ -146,13 +148,13 @@ void ObjectDiagramView::contentsMousePressEvent(QMouseEvent * e)
             break;
 
             default:
-                DiagramView::contentsMousePressEvent(e);
+                DiagramView::mousePressEvent(e);
                 break;
             }
         }
     }
     else
-        DiagramView::contentsMousePressEvent(e);
+        DiagramView::mousePressEvent(e);
 }
 
 void ObjectDiagramView::dragEnterEvent(QDragEnterEvent * e)
@@ -174,10 +176,28 @@ void ObjectDiagramView::dragEnterEvent(QDragEnterEvent * e)
         e->ignore();
 }
 
+void ObjectDiagramView::dragMoveEvent(QDragMoveEvent * e)
+{
+    if (!window()->frozen() &&
+        (UmlDrag::canDecode(e, UmlClass, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlClassInstance, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlPackage, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlClassDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlUseCaseDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlSeqDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlObjectDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlComponentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlDeploymentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlActivityDiagram, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlStateDiagram, TRUE, TRUE)))
+        e->accept();
+    else
+        e->ignore();
+}
 void ObjectDiagramView::dropEvent(QDropEvent * e)
 {
     BrowserNode * bn;
-    QPoint p = viewportToContents(e->pos());
+   QPointF p = mapToScene(e->pos());
 
     if ((bn = UmlDrag::decode(e, UmlClassInstance)) != 0) {
         history_save();
@@ -246,8 +266,7 @@ void ObjectDiagramView::dropEvent(QDropEvent * e)
 void ObjectDiagramView::save(QTextStream & st, QString & warning,
                              bool copy) const
 {
-    DiagramItemList items(canvas()->allItems());
-    DiagramItem * di;
+    DiagramItemList items(canvas()->items());
 
     if (!copy)
         // sort is useless for a copy
@@ -257,8 +276,8 @@ void ObjectDiagramView::save(QTextStream & st, QString & warning,
 
     // save first the packages fragment, classes instances, notes, icons and text
 
-    for (di = items.first(); di != 0; di = items.next()) {
-        switch (di->type()) {
+    foreach (DiagramItem *di, items) {
+        switch (di->typeUmlCode()) {
         case UmlPackage:
         case UmlFragment:
         case UmlClassInstance:
@@ -277,8 +296,8 @@ void ObjectDiagramView::save(QTextStream & st, QString & warning,
 
     // then save links
 
-    for (di = items.first(); di != 0; di = items.next()) {
-        UmlCode k = di->type();
+    foreach (DiagramItem *di, items) {
+        UmlCode k = di->typeUmlCode();
 
         if (IsaRelation(k) || (k == UmlObjectLink)) {
             if (!copy || di->copyable())
@@ -288,8 +307,8 @@ void ObjectDiagramView::save(QTextStream & st, QString & warning,
 
     // then save anchors
 
-    for (di = items.first(); di != 0; di = items.next())
-        if ((!copy || di->copyable()) && (di->type() == UmlAnchor))
+    foreach (DiagramItem *di, items)
+        if ((!copy || di->copyable()) && (di->typeUmlCode() == UmlAnchor))
             di->save(st, FALSE, warning);
 
     if (!copy && (preferred_zoom != 0)) {

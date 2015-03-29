@@ -30,15 +30,18 @@
 
 
 #include <QTextStream>
-
 #include "AType.h"
 #include "BrowserClass.h"
 #include "ToolCom.h"
 #include "myio.h"
 
-const char * AType::get_type() const
+QString AType::get_type() const
 {
-    return (type != 0) ? type->get_name() : explicit_type.operator QString();
+    QString result;
+    if(type != 0)
+        result = type->get_name();
+    result = explicit_type.operator QString();
+    return result;
 }
 
 QString AType::get_type(ShowContextMode mode) const
@@ -77,7 +80,7 @@ void AType::save(QTextStream & st, QString & warning,
         if (type->deletedp()) {
             // theo not possible
             st << ex;
-            save_string(type->get_name(), st);
+            save_string(type->get_name().toLatin1().constData(), st);
         }
         else {
             st << t;
@@ -103,7 +106,7 @@ void AType::read(char *& st, const char * t, const char * ex)
         explicit_type = read_string(st);
     }
     else
-        wrong_keyword(k, QString(t) + '/' + ex);
+        wrong_keyword(k, QString("%1%2%3").arg(t).arg('/').arg(ex).toLatin1().constData());
 }
 
 void AType::read(char *& st, const char * t, const char * ex, const char * k)
@@ -117,7 +120,7 @@ void AType::read(char *& st, const char * t, const char * ex, const char * k)
         explicit_type = read_string(st);
     }
     else
-        wrong_keyword(k, QString(t) + '/' + ex);
+        wrong_keyword(k, QString("%1%2%3").arg(t).arg('/').arg(ex).toLatin1().constData());
 }
 bool operator==(const AType & s1, const AType & s2)
 {
@@ -130,7 +133,7 @@ bool operator==(const AType & s1, const AType & s2)
             return false;
         else if(s2.type == nullptr)
             return false;
-         typeResult = *s1.type->get_name() == *s2.type->get_name();
+         typeResult = s1.type->get_name() == s2.type->get_name();
     }
 
 

@@ -14,20 +14,20 @@
 #include "util.h"
 #include "Artifact.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-UmlClass * UmlClass::import(File & f, UmlItem * parent, const Q3CString & knd)
+UmlClass * UmlClass::import(File & f, UmlItem * parent, const QByteArray & knd)
 {
-    Q3CString s;
+    QByteArray s;
 
     if (f.read(s) != STRING)
         f.syntaxError(s, "class's name");
 
-    Q3CString id;
-    Q3CString ste;
-    Q3CString doc;
-    Q3Dict<Q3CString> prop;
-    Q3CString s2;
+    QByteArray id;
+    QByteArray ste;
+    QByteArray doc;
+    QHash<QByteArray, QByteArray*> prop;
+    QByteArray s2;
     int k;
 
     do {
@@ -65,11 +65,11 @@ UmlClass * UmlClass::import(File & f, UmlItem * parent, const Q3CString & knd)
         if (!ste.isEmpty()) {
             if (ste.left(5) == "CORBA") {
                 if (ste != "CORBAValue")
-                    cl->set_Stereotype(ste.mid(5).lower());
+                    cl->set_Stereotype(ste.mid(5).toLower());
             }
             else
                 cl->set_Stereotype(((ste == "Actor") || (ste == "Interface"))
-                                   ? ste.lower() : ste);
+                                   ? ste.toLower() : ste);
         }
 
         if (!doc.isEmpty())
@@ -83,7 +83,7 @@ UmlClass * UmlClass::import(File & f, UmlItem * parent, const Q3CString & knd)
         throw 0;
     }
 
-    Q3CString art_path;
+    QByteArray art_path;
 
     for (;;) {
         switch (k) {
@@ -164,18 +164,18 @@ UmlClass * UmlClass::import(File & f, UmlItem * parent, const Q3CString & knd)
     }
 }
 
-bool UmlClass::replaceType(UmlTypeSpec & t, Q3CString & target_id, const Q3CString & ts)
+bool UmlClass::replaceType(UmlTypeSpec & t, QByteArray & target_id, const QByteArray & ts)
 {
     UmlClass * cl = (UmlClass *) findItem(target_id, aClass);
     bool result = FALSE;
 
     if (cl != 0) {
         int index = 0;
-        const Q3CString & s = cl->name();
+        const QByteArray & s = cl->name();
         unsigned ln1 = s.length();
         unsigned ln2 = ts.length();
 
-        while ((index = t.explicit_type.find(s, index)) != -1) {
+        while ((index = t.explicit_type.indexOf(s, index)) != -1) {
             if (((index == 0) || isSep(((const char *) t.explicit_type)[index - 1])) &&
                 isSep(((const char *) t.explicit_type)[index + (int) ln1])) {
                 t.explicit_type.replace((unsigned) index, ln1, ts);
@@ -203,7 +203,7 @@ void UmlClass::importAttributes(File & f)
     f.read("class_attribute_list");
 
     for (;;) {
-        Q3CString s;
+        QByteArray s;
 
         switch (f.read(s)) {
         case -1:
@@ -232,7 +232,7 @@ void UmlClass::importOperations(File & f)
     f.read("Operations");
 
     for (;;) {
-        Q3CString s;
+        QByteArray s;
 
         switch (f.read(s)) {
         case -1:
@@ -256,7 +256,7 @@ void UmlClass::importOperations(File & f)
 
 void UmlClass::importRelations(File & f)
 {
-    Q3CString s;
+    QByteArray s;
 
     f.read("(");
     f.read("list");
@@ -282,7 +282,7 @@ void UmlClass::importRelations(File & f)
             f.syntaxError(s, "an atom");
 
         aRelationKind rk;
-        Q3CString sr;
+        QByteArray sr;
 
         if (s == "Uses_Relationship") {
             rk = aDependency;
@@ -302,11 +302,11 @@ void UmlClass::importRelations(File & f)
         }
 
         // dependency or generalisation
-        Q3CString id;
-        Q3CString ste;
-        Q3CString doc;
-        Q3Dict<Q3CString> prop;
-        Q3CString s2;
+        QByteArray id;
+        QByteArray ste;
+        QByteArray doc;
+        QHash<QByteArray, QByteArray*> prop;
+        QByteArray s2;
         int k;
 
         do {
@@ -314,7 +314,7 @@ void UmlClass::importRelations(File & f)
         }
         while (id.isEmpty());
 
-        Q3CString target_id;
+        QByteArray target_id;
         aVisibility visibility = PublicVisibility;
         bool virtual_inheritance = FALSE;
         bool a_friend = FALSE;
@@ -399,11 +399,11 @@ void UmlClass::importInstantiate(File & f)
     f.read("object");
     f.read("Instantiation_Relationship");
 
-    Q3CString id;
-    Q3CString ste;
-    Q3CString doc;
-    Q3Dict<Q3CString> prop;
-    Q3CString s2;
+    QByteArray id;
+    QByteArray ste;
+    QByteArray doc;
+    QHash<QByteArray, QByteArray*> prop;
+    QByteArray s2;
     int k;
 
     do {
@@ -461,7 +461,7 @@ void UmlClass::importActuals(File & f)
     f.read("list");
     f.read("Parameters");
 
-    Q3CString s;
+    QByteArray s;
     unsigned rank = 0;
 
     for (;;) {
@@ -489,7 +489,7 @@ void UmlClass::importFormals(File & f)
     f.read("list");
     f.read("Parameters");
 
-    Q3CString s;
+    QByteArray s;
     unsigned rank = 0;
 
     for (;;) {
@@ -521,7 +521,7 @@ void UmlClass::importClasses(File & f)
     f.read("list");
     f.read("nestedClasses");
 
-    Q3CString s;
+    QByteArray s;
 
     for (;;) {
         switch (f.read(s)) {
@@ -553,7 +553,7 @@ void UmlClass::importClasses(File & f)
     }
 }
 
-void UmlClass::importIdlConstant(UmlItem * parent, const Q3CString & id, const Q3CString & s, const Q3CString & doc, Q3Dict<Q3CString> & prop)
+void UmlClass::importIdlConstant(UmlItem * parent, const QByteArray & id, const QByteArray & s, const QByteArray & doc, QHash<QByteArray, QByteArray*> & prop)
 {
     // use a class to define the constant !
     UmlClass * x;
@@ -571,40 +571,40 @@ void UmlClass::importIdlConstant(UmlItem * parent, const Q3CString & id, const Q
     if (!doc.isEmpty())
         x->set_Description(doc);
 
-    Q3CString type;
-    Q3CString value;
-    Q3CString * v;
+    QByteArray type;
+    QByteArray value;
+    QByteArray * v;
 
-    if ((v = prop.find("CORBA/ImplementationType")) != 0) {
+    if ((v = prop.value("CORBA/ImplementationType")) != 0) {
         type = *v;
         prop.remove("CORBA/ImplementationType");
     }
 
-    if ((v = prop.find("CORBA/ConstValue")) != 0) {
+    if ((v = prop.value("CORBA/ConstValue")) != 0) {
         if (!v->isEmpty())
             value = " = " + *v;
 
         prop.remove("CORBA/ConstValue");
     }
 
-    Q3CString d = IdlSettings::constDecl();
+    QByteArray d = IdlSettings::constDecl();
     int index;
 
-    if ((index = d.find("${type}")) != -1)
+    if ((index = d.indexOf("${type}")) != -1)
         d.replace(index, 7, type);
 
-    if ((index = d.find("${value}")) != -1)
+    if ((index = d.indexOf("${value}")) != -1)
         d.replace(index, 8, value);
 
     x->setProperties(prop);
     x->set_IdlDecl(d);
 }
 
-void UmlClass::cplusplus(Q3Dict<Q3CString> & prop)
+void UmlClass::cplusplus(QHash<QByteArray, QByteArray*> & prop)
 {
     if (!scanning) {
         if (stereotype() == "typedef") {
-            Q3CString * bt = prop.find("Cplusplus/ImplementationType");
+            QByteArray * bt = prop.value("Cplusplus/ImplementationType");
 
             if (bt != 0) {
                 UmlTypeSpec t;
@@ -627,38 +627,38 @@ void UmlClass::cplusplus(Q3Dict<Q3CString> & prop)
         prop.remove("Cplusplus/ImplementationType");
     }
 
-    Q3CString * v;
+    QByteArray * v;
 
-    if ((v = prop.find("Cplusplus/BodySourceFile")) != 0) {
+    if ((v = prop.value("Cplusplus/BodySourceFile")) != 0) {
         _body_file = *v;
         prop.remove("Cplusplus/BodySourceFile");
     }
-    else if ((v = prop.find("Traversal/BodyFile")) != 0) {
+    else if ((v = prop.value("Traversal/BodyFile")) != 0) {
         _body_file = *v;
         prop.remove("Traversal/BodyFile");
     }
 
-    if ((v = prop.find("Cplusplus/HeaderSourceFile")) != 0) {
+    if ((v = prop.value("Cplusplus/HeaderSourceFile")) != 0) {
         _file = *v;
         prop.remove("Cplusplus/HeaderSourceFile");
     }
-    else if ((v = prop.find("Traversal/CodeFile")) != 0) {
+    else if ((v = prop.value("Traversal/CodeFile")) != 0) {
         _file = *v;
         prop.remove("Traversal/CodeFile");
     }
 }
 
-void UmlClass::oracle8(Q3Dict<Q3CString> &)
+void UmlClass::oracle8(QHash<QByteArray, QByteArray*> &)
 {
 }
 
-void UmlClass::corba(Q3Dict<Q3CString> & prop)
+void UmlClass::corba(QHash<QByteArray, QByteArray*> & prop)
 {
     if (!scanning) {
-        Q3CString * v;
+        QByteArray * v;
 
         if (stereotype() == "union") {
-            if ((v = prop.find("CORBA/ImplementationType")) != 0) {
+            if ((v = prop.value("CORBA/ImplementationType")) != 0) {
                 UmlTypeSpec t;
 
                 t.explicit_type = *v;	// !!!!!!!!!!!!
@@ -669,7 +669,7 @@ void UmlClass::corba(Q3Dict<Q3CString> & prop)
             set_IdlDecl(IdlSettings::unionDecl());
         }
         else if (stereotype() == "typedef") {
-            if ((v = prop.find("CORBA/ImplementationType")) != 0) {
+            if ((v = prop.value("CORBA/ImplementationType")) != 0) {
                 UmlTypeSpec t;
 
                 t.explicit_type = *v;	// no quidu
@@ -679,18 +679,18 @@ void UmlClass::corba(Q3Dict<Q3CString> & prop)
 
             QString d = IdlSettings::typedefDecl();
 
-            if ((v = prop.find("CORBA/ArrayDimensions")) != 0) {
+            if ((v = prop.value("CORBA/ArrayDimensions")) != 0) {
                 if (!v->isEmpty()) {
                     int index;
 
-                    if ((index = d.find("${name}")) != -1)
+                    if ((index = d.indexOf("${name}")) != -1)
                         d.insert(index + 7, "[" + *v + "]");
                 }
 
                 prop.remove("CORBA/ArrayDimensions");
             }
 
-            set_IdlDecl(d);
+            set_IdlDecl(d.toLatin1().constData());
         }
         else if (stereotype() == "struct")
             set_IdlDecl(IdlSettings::structDecl());
@@ -705,29 +705,29 @@ void UmlClass::corba(Q3Dict<Q3CString> & prop)
     }
 }
 
-void UmlClass::java(Q3Dict<Q3CString> & prop)
+void UmlClass::java(QHash<QByteArray, QByteArray*> & prop)
 {
     if (!scanning) {
-        Q3CString d = (stereotype() == "interface")
+        QByteArray d = (stereotype() == "interface")
                       ? JavaSettings::interfaceDecl()
                       : JavaSettings::classDecl();
 
-        Q3CString * v;
+        QByteArray * v;
 
-        if ((v = prop.find("Java/Final")) != 0) {
+        if ((v = prop.value("Java/Final")) != 0) {
             if (*v == "TRUE")
                 set_isJavaFinal(TRUE);
 
             prop.remove("Java/Final");
         }
 
-        if ((v = prop.find("Java/Strictfp")) != 0) {
+        if ((v = prop.value("Java/Strictfp")) != 0) {
             if (*v == "TRUE") {
                 int index;
 
-                if ((index = d.find("${public}")) != -1)
+                if ((index = d.indexOf("${public}")) != -1)
                     d.insert((unsigned) index + 9, "strictfp ");
-                else if ((index = d.find("${visibility}")) != -1)
+                else if ((index = d.indexOf("${visibility}")) != -1)
                     d.insert((unsigned) index + 13, "strictfp ");
             }
 
@@ -738,7 +738,7 @@ void UmlClass::java(Q3Dict<Q3CString> & prop)
     }
 }
 
-void UmlClass::assocArtifact(Artifact * c, Q3CString & art_path)
+void UmlClass::assocArtifact(Artifact * c, QByteArray & art_path)
 {
     if ((c != 0) && (parent()->kind() == aClassView))
         c->add((UmlPackage *) parent()->parent(), this, art_path);

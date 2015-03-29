@@ -156,15 +156,15 @@ WrapperStr UmlSettings::_attribute_default_description;
 
 WrapperStr UmlSettings::_relation_default_description;
 
-Q3Dict<UmlBuiltin> UmlSettings::_map_builtins;
+QHash<WrapperStr,UmlBuiltin*> UmlSettings::_map_builtins;
 
 UmlBuiltin * UmlSettings::_builtins;
 
-Q3Dict<UmlStereotype> UmlSettings::_map_relation_attribute_stereotypes;
+QHash<WrapperStr,UmlStereotype*> UmlSettings::_map_relation_attribute_stereotypes;
 
 UmlStereotype * UmlSettings::_relation_attribute_stereotypes;
 
-Q3Dict<UmlStereotype> UmlSettings::_map_class_stereotypes;
+QHash<WrapperStr,UmlStereotype*> UmlSettings::_map_class_stereotypes;
 
 UmlStereotype * UmlSettings::_class_stereotypes;
 
@@ -178,7 +178,7 @@ void UmlSettings::read_()
     _builtins = new UmlBuiltin[n];
 
     if (n / 2 > _map_builtins.size())
-        _map_builtins.resize(_map_builtins.size() * 2 - 1);
+        _map_builtins.reserve(_map_builtins.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1) {
         _builtins[index].uml = UmlCom::read_string();
@@ -190,7 +190,7 @@ void UmlSettings::read_()
     _relation_attribute_stereotypes = new UmlStereotype[n];
 
     if (n / 2 > _map_relation_attribute_stereotypes.size())
-        _map_relation_attribute_stereotypes.resize(_map_relation_attribute_stereotypes.size() * 2 - 1);
+        _map_relation_attribute_stereotypes.reserve(_map_relation_attribute_stereotypes.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1) {
         _relation_attribute_stereotypes[index].uml = UmlCom::read_string();
@@ -203,7 +203,7 @@ void UmlSettings::read_()
     _class_stereotypes = new UmlStereotype[n];
 
     if (n / 2 > _map_class_stereotypes.size())
-        _map_class_stereotypes.resize(_map_class_stereotypes.size() * 2 - 1);
+        _map_class_stereotypes.reserve(_map_class_stereotypes.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1) {
         _class_stereotypes[index].uml = UmlCom::read_string();
@@ -281,11 +281,11 @@ UmlBuiltin * UmlSettings::add_type(const WrapperStr & s)
     UmlBuiltin * builtins = new UmlBuiltin[n + 1];
 
     if (n / 2 > _map_builtins.size())
-        _map_builtins.resize(_map_builtins.size() * 2 - 1);
+        _map_builtins.reserve(_map_builtins.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1) {
         builtins[index] = _builtins[index];
-        _map_builtins.replace(builtins[index].uml, &builtins[index]);
+        _map_builtins.insert(builtins[index].uml, &builtins[index]);
     }
 
     builtins[index].uml = s;
@@ -318,11 +318,11 @@ UmlStereotype * UmlSettings::add_rel_attr_stereotype(const WrapperStr & s)
     UmlStereotype * relation_attribute_stereotypes = new UmlStereotype[n + 1];
 
     if (n / 2 > _map_relation_attribute_stereotypes.size())
-        _map_relation_attribute_stereotypes.resize(_map_relation_attribute_stereotypes.size() * 2 - 1);
+        _map_relation_attribute_stereotypes.reserve(_map_relation_attribute_stereotypes.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1) {
         relation_attribute_stereotypes[index] = _relation_attribute_stereotypes[index];
-        _map_relation_attribute_stereotypes.replace(relation_attribute_stereotypes[index].uml,
+        _map_relation_attribute_stereotypes.insert(relation_attribute_stereotypes[index].uml,
                 &relation_attribute_stereotypes[index]);
     }
 
@@ -353,11 +353,11 @@ UmlStereotype * UmlSettings::add_class_stereotype(const WrapperStr & s)
     UmlStereotype * class_stereotypes = new UmlStereotype[n + 1];
 
     if (n / 2 > _map_class_stereotypes.size())
-        _map_class_stereotypes.resize(_map_class_stereotypes.size() * 2 - 1);
+        _map_class_stereotypes.reserve(_map_class_stereotypes.size() * 2 - 1);
 
     for (index = 0; index != n; index += 1) {
         class_stereotypes[index] = _class_stereotypes[index];
-        _map_class_stereotypes.replace(class_stereotypes[index].uml, &class_stereotypes[index]);
+        _map_class_stereotypes.insert(class_stereotypes[index].uml, &class_stereotypes[index]);
     }
 
     class_stereotypes[index].uml = s;

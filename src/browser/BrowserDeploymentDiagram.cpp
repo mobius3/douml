@@ -29,12 +29,12 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 
 #include "BrowserDeploymentDiagram.h"
@@ -54,8 +54,8 @@
 #include "mu.h"
 #include "translate.h"
 
-Q3PtrList<BrowserDeploymentDiagram> BrowserDeploymentDiagram::imported;
-Q3ValueList<int> BrowserDeploymentDiagram::imported_ids;
+QList<BrowserDeploymentDiagram *> BrowserDeploymentDiagram::imported;
+QList<int> BrowserDeploymentDiagram::imported_ids;
 QStringList BrowserDeploymentDiagram::its_default_stereotypes;	// unicode
 
 BrowserDeploymentDiagram::BrowserDeploymentDiagram(QString s, BrowserNode * p, int id)
@@ -90,7 +90,9 @@ BrowserDeploymentDiagram::BrowserDeploymentDiagram(BrowserDeploymentDiagram * mo
     is_modified = TRUE;
 
     if (model->window != 0)
+    {
         model->window->duplicate(get_ident(), "diagram");
+    }
     else {
         char * diagram;
 
@@ -110,7 +112,7 @@ BrowserDeploymentDiagram::~BrowserDeploymentDiagram()
 
         QDir d = BrowserView::get_dir();
 
-        QFile::remove(d.absFilePath(fn));
+        QFile::remove(d.absoluteFilePath(fn));
     }
 
     all.remove(get_ident());
@@ -133,33 +135,32 @@ BrowserDeploymentDiagram * BrowserDeploymentDiagram::add_deployment_diagram(Brow
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, TR("enter deployment diagram's name : "),
+    if (future_parent->enter_child_name(name, QObject::TR("enter deployment diagram's name : "),
                                         UmlDeploymentDiagram, TRUE, FALSE))
         return new BrowserDeploymentDiagram(name, future_parent);
     else
         return 0;
 }
 
-void BrowserDeploymentDiagram::set_name(const char * s)
+void BrowserDeploymentDiagram::set_name(QString s)
 {
     BrowserDiagram::set_name(s);
 
     if (window != 0)
-        window->setCaption(s);
+    {
+        window->setWindowTitle(s);
+    }
 }
 
 void BrowserDeploymentDiagram::import()
 {
-    Q3ValueList<int>::Iterator it = imported_ids.begin();
-
-    while (!imported.isEmpty()) {
-        QString warning;
-        BrowserDeploymentDiagram * d = imported.take(0);
-
-        (new DeploymentDiagramWindow(d->full_name(), d, *it))->close(TRUE);
-        it = imported_ids.remove(it);
+    QList<int>::Iterator it = imported_ids.begin();
+    foreach (BrowserDeploymentDiagram *d, imported) {
+        (new DeploymentDiagramWindow(d->full_name(), d, *it))->close();
+        it = imported_ids.erase(it);
         d->is_modified = TRUE;
     }
+    imported.clear();
 }
 
 void BrowserDeploymentDiagram::renumber(int phase)
@@ -177,7 +178,7 @@ void BrowserDeploymentDiagram::delete_it()
 {
     if (window)
         delete window;
-
+    window = 0;
     BrowserNode::delete_it();
 }
 
@@ -216,50 +217,53 @@ void BrowserDeploymentDiagram::draw_svg() const
 
 void BrowserDeploymentDiagram::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
-        m.setWhatsThis(m.insertItem(TR("Show"), 0),
-                       TR("to show and edit the <i>deployment diagram</i>"));
+        MenuFactory::addItem(m, QObject::tr("Show"), 0,
+                             QObject::TR("to show and edit the <i>deployment diagram</i>"));
 
         if (!is_edited) {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 1),
-                           TR("to edit the <i>deployment diagram</i>"));
+            MenuFactory::addItem(m, QObject::tr("Edit"), 1,
+                                 QObject::TR("to edit the <i>deployment diagram</i>"));
 
             if (!is_read_only) {
-                m.setWhatsThis(m.insertItem(TR("Edit drawing settings"), 2),
-                               TR("to set how the <i>deployment diagram</i>'s items must be drawn"));
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Duplicate"), 3),
-                               TR("to duplicate the <i>deployment diagram</i>"));
+                MenuFactory::addItem(m, QObject::tr("Edit drawing settings"), 2,
+                                     QObject::TR("to set how the <i>deployment diagram</i>'s items must be drawn"));
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::tr("Duplicate"), 3,
+                                     QObject::TR("to duplicate the <i>deployment diagram</i>"));
 
                 if (edition_number == 0) {
-                    m.insertSeparator();
-                    m.setWhatsThis(m.insertItem(TR("Delete"), 4),
-                                   TR("to delete the <i>deployment diagram</i>. \
-Note that you can undelete it after"));
+                    m.addSeparator();
+                    MenuFactory::addItem(m, QObject::tr("Delete"), 4,
+                                         QObject::TR("to delete the <i>deployment diagram</i>. \
+                                                     Note that you can undelete it after"));
                 }
             }
         }
 
-        mark_menu(m, TR("the deployment diagram"), 90);
+        mark_menu(m, QObject::tr("the deployment diagram").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
-            Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+                Tool::menu_insert(&toolm, get_type(), 100)) {
+            m.addSeparator();
+            toolm.setTitle( QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0))
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 5),
-                       TR("to undelete the <i>deployment diagram</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 5,
+                             QObject::TR("to undelete the <i>deployment diagram</i>"));
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserDeploymentDiagram::exec_menu_choice(int rank)
@@ -270,7 +274,7 @@ void BrowserDeploymentDiagram::exec_menu_choice(int rank)
         return;
 
     case 1:
-        edit(TR("Deployment diagram"), its_default_stereotypes);
+        edit( QObject::TR("Deployment diagram"), its_default_stereotypes);
         return;
 
     case 2:
@@ -280,13 +284,13 @@ void BrowserDeploymentDiagram::exec_menu_choice(int rank)
     case 3: {
         QString name;
 
-        if (((BrowserNode *)parent())->enter_child_name(name, TR("enter deployment diagram's name : "),
-                UmlDeploymentDiagram, TRUE, FALSE))
+        if (((BrowserNode *)parent())->enter_child_name(name, QObject::TR("enter deployment diagram's name : "),
+                                                        UmlDeploymentDiagram, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
         else
             return;
     }
-    break;
+        break;
 
     case 4:
         delete_it();
@@ -365,12 +369,12 @@ void BrowserDeploymentDiagram::edit_settings()
 
         settings.complete(st, TRUE);
 
-        co[0].set(TR("note color"), &note_color);
-        co[1].set(TR("artifact color"), &artifact_color);
-        co[2].set(TR("node color"), &deploymentnode_color);
-        co[3].set(TR("component color"), &component_color);
-        co[4].set(TR("package color"), &package_color);
-        co[5].set(TR("fragment color"), &fragment_color);
+        co[0].set( QObject::TR("note color"), &note_color);
+        co[1].set( QObject::TR("artifact color"), &artifact_color);
+        co[2].set( QObject::TR("node color"), &deploymentnode_color);
+        co[3].set( QObject::TR("component color"), &component_color);
+        co[4].set( QObject::TR("package color"), &package_color);
+        co[5].set( QObject::TR("fragment color"), &fragment_color);
 
         SettingsDialog dialog(&st, &co, FALSE);
 
@@ -408,7 +412,7 @@ UmlCode BrowserDeploymentDiagram::get_type() const
 
 QString BrowserDeploymentDiagram::get_stype() const
 {
-    return TR("deployment diagram");
+    return QObject::TR("deployment diagram");
 }
 
 int BrowserDeploymentDiagram::get_identifier() const
@@ -441,7 +445,7 @@ void BrowserDeploymentDiagram::get_componentdrawingsettings(ComponentDrawingSett
 }
 
 void BrowserDeploymentDiagram::package_settings(BooL & name_in_tab,
-        ShowContextMode & show_context) const
+                                                ShowContextMode & show_context) const
 {
     name_in_tab = used_settings->package_name_in_tab == UmlYes;
     show_context = used_settings->show_context_mode;
@@ -477,8 +481,8 @@ UmlColor BrowserDeploymentDiagram::get_color(UmlCode who) const
     }
 
     return (c != UmlDefaultColor)
-           ? c
-           : ((BrowserNode *) parent())->get_color(who);
+            ? c
+            : ((BrowserNode *) parent())->get_color(who);
 }
 
 bool BrowserDeploymentDiagram::get_shadow() const
@@ -494,13 +498,13 @@ bool BrowserDeploymentDiagram::get_draw_all_relations() const
 void BrowserDeploymentDiagram::dont_draw_all_relations()
 {
     settings.draw_all_relations =
-        used_settings->draw_all_relations = UmlNo;
+            used_settings->draw_all_relations = UmlNo;
 }
 
 bool BrowserDeploymentDiagram::get_show_stereotype_properties() const
 {
     return used_settings->componentdrawingsettings.show_stereotype_properties
-           == UmlYes;
+            == UmlYes;
 }
 
 bool BrowserDeploymentDiagram::get_auto_label_position() const
@@ -523,11 +527,10 @@ bool BrowserDeploymentDiagram::tool_cmd(ToolCom * com, const char * args)
 
         QDir d = BrowserView::get_dir();
 
-        com->write_string(d.absFilePath(fn));
+        com->write_string(d.absoluteFilePath(fn));
     }
 
-    return TRUE;
-
+        return TRUE;
     case saveInCmd:
         if (window != 0)
             com->write_ack(window->get_view()->save_pict(args, TRUE, FALSE));
@@ -538,35 +541,36 @@ bool BrowserDeploymentDiagram::tool_cmd(ToolCom * com, const char * args)
                                                     !w->get_view()->has_preferred_size_zoom(),
                                                     TRUE));
             w->dont_save();
-            w->close(TRUE);
+            w->close();
         }
 
         return TRUE;
-
     default:
         return (def->tool_cmd(com, args, this, comment) ||
                 BrowserNode::tool_cmd(com, args));
     }
 }
 
-void BrowserDeploymentDiagram::compute_referenced_by(Q3PtrList<BrowserNode> & l,
-        BrowserNode * bn,
-        char const * kc,
-        char const * kr)
+void BrowserDeploymentDiagram::compute_referenced_by(QList<BrowserNode *> & l,
+                                                     BrowserNode * bn,
+                                                     char const * kc,
+                                                     char const * kr)
 {
     int id = bn->get_identifier();
     IdIterator<BrowserDiagram> it(all);
     BrowserDiagram * d;
 
-    while ((d = it.current()) != 0) {
-        if (!d->deletedp() && (d->get_type() == UmlDeploymentDiagram)) {
-            if ((((BrowserDeploymentDiagram *) d)->window != 0)
-                ? ((BrowserDeploymentDiagram *) d)->window->get_view()->is_present(bn)
-                : is_referenced(read_definition(d->get_ident(), "diagram"), id, kc, kr))
-                l.append((BrowserDeploymentDiagram *) d);
+    while (it.hasNext()) {
+        it.next();
+        if((d = it.value()) != 0)
+        {
+            if (!d->deletedp() && (d->get_type() == UmlDeploymentDiagram)) {
+                if ((((BrowserDeploymentDiagram *) d)->window != 0)
+                        ? ((BrowserDeploymentDiagram *) d)->window->get_view()->is_present(bn)
+                        : is_referenced(read_definition(d->get_ident(), "diagram"), id, kc, kr))
+                    l.append((BrowserDeploymentDiagram *) d);
+            }
         }
-
-        ++it;
     }
 }
 
@@ -592,7 +596,7 @@ void BrowserDeploymentDiagram::save(QTextStream & st, bool ref, QString & warnin
     else {
         nl_indent(st);
         st << "deploymentdiagram " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         settings.save(st);
@@ -612,7 +616,9 @@ void BrowserDeploymentDiagram::save(QTextStream & st, bool ref, QString & warnin
             is_modified = FALSE;
 
             if (window)
+            {
                 window->save("diagram", warning, is_new);
+            }
             else
                 BrowserDiagram::save();
         }
@@ -633,16 +639,16 @@ void BrowserDeploymentDiagram::save(QTextStream & st, bool ref, QString & warnin
 BrowserDeploymentDiagram * BrowserDeploymentDiagram::read_ref(char *& st, const char * k)
 {
     if (strcmp(k, "deploymentdiagram_ref") &&
-        ((read_file_format() >= 20) || strcmp(k, "componentdiagram_ref")))
+            ((read_file_format() >= 20) || strcmp(k, "componentdiagram_ref")))
         wrong_keyword(k, "deploymentdiagram_ref");
 
     int id = read_id(st);
     BrowserDeploymentDiagram * result =
-        (BrowserDeploymentDiagram *) all[id];
+            (BrowserDeploymentDiagram *) all[id];
 
     return (result == 0)
-           ? new BrowserDeploymentDiagram(id)
-           : result;
+            ? new BrowserDeploymentDiagram(id)
+            : result;
 }
 
 BrowserDeploymentDiagram *
@@ -653,7 +659,7 @@ BrowserDeploymentDiagram::read(char *& st, char * k,
     int id;
 
     if (!strcmp(k, "deploymentdiagram_ref") ||
-        ((read_file_format() < 20) && !strcmp(k, "componentdiagram_ref"))) {
+            ((read_file_format() < 20) && !strcmp(k, "componentdiagram_ref"))) {
         if ((r = (BrowserDeploymentDiagram *) all[id = read_id(st)]) == 0)
             r = new BrowserDeploymentDiagram(id);
 
@@ -661,8 +667,8 @@ BrowserDeploymentDiagram::read(char *& st, char * k,
     }
 
     bool from_component =
-        // component -> artifact
-        (read_file_format() < 20) && !strcmp(k, "componentdiagram");
+            // component -> artifact
+            (read_file_format() < 20) && !strcmp(k, "componentdiagram");
 
     if (!strcmp(k, "deploymentdiagram") || from_component) {
         id = read_id(st);
@@ -687,7 +693,7 @@ BrowserDeploymentDiagram::read(char *& st, char * k,
         r->is_defined = TRUE;
 
         r->is_read_only = (!in_import() && read_only_file()) ||
-                          ((user_id() != 0) && r->is_api_base());
+                ((user_id() != 0) && r->is_api_base());
 
         QFileInfo fi(BrowserView::get_dir(), QString::number(id) + ".diagram");
 

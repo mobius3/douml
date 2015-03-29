@@ -28,15 +28,15 @@
 #ifndef SELECTAREACANVAS_H
 #define SELECTAREACANVAS_H
 
-#include <q3canvas.h>
-
-class SelectAreaCanvas : public Q3CanvasRectangle
+#include <QGraphicsScene>
+#include <QGraphicsRectItem>
+class SelectAreaCanvas : public QGraphicsRectItem
 {
 public:
-    SelectAreaCanvas(int x, int y, int width, int height, Q3Canvas * canvas);
+    SelectAreaCanvas(int x, int y, int width, int height, QGraphicsScene * canvas);
 
 protected:
-    virtual void drawShape(QPainter & p);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 #endif

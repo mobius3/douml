@@ -41,7 +41,7 @@ class ClassDiagramWindow;
 class DiagramItem;
 class UmlCanvas;
 class BrowserNode;
-
+class BasicData;
 class ClassDiagramView : public DiagramView
 {
 public:
@@ -58,16 +58,17 @@ private:
         return (ClassDiagramWindow *) parent();
     };
     void add_classview_classes(BrowserNode *, const QPoint & p,
-                               Q3PtrDict<DiagramItem> & drawn);
-    void add_classview_classes(BrowserNode *, Q3PtrDict<DiagramItem> & drawn,
-                               int & x, int & y, int & future_y);
+                               QHash<BasicData *, DiagramItem *> &drawn);
+    void add_classview_classes(BrowserNode *, QHash<BasicData *,DiagramItem*> &drawn,
+                               int & x, int & y, int & future_yDiagramItem);
     void add_marked_elements(const QPoint & p,
-                             Q3PtrDict<DiagramItem> & drawn);
+                             QHash<BasicData *, DiagramItem *> &drawn);
 
 protected:
-    virtual void contentsMousePressEvent(QMouseEvent *);
+    virtual void mousePressEvent(QMouseEvent *);
     virtual void dragEnterEvent(QDragEnterEvent *);
     virtual void dropEvent(QDropEvent *);
+    virtual void dragMoveEvent(QDragMoveEvent *e);
 };
 
 #endif

@@ -38,8 +38,6 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
-
 BasicParent BasicParent::the;
 
 void BasicParent::insertChild(QObject *)
@@ -54,7 +52,7 @@ void BasicParent::removeChild(QObject *)
 
 //
 
-Q3PtrList<BasicData> BasicData::removed;
+QList<BasicData *> BasicData::removed;
 
 BasicData::BasicData(const BasicData * model)
     : QObject(&BasicParent::the), browser_node(0)
@@ -81,16 +79,14 @@ void BasicData::undelete(QString &, QString &)
     if (deletedp()) {
         set_deletedp(FALSE);
         emit changed();
-        removed.removeRef(this);
+        removed.removeOne(this);
     }
 }
 
 void BasicData::resignal_deleted()
 {
-    BasicData * d;
-
-    for (d = removed.last(); d != 0; d = removed.prev())
-        d->redelete_it();
+    for (int i = removed.size() - 1; i >= 0; --i)
+        removed[i]->redelete_it();
 }
 
 void BasicData::on_delete()

@@ -92,7 +92,7 @@ void UmlState::importActivity(FileIn & in, Token & token)
 
 void UmlState::solve(int context, WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it == All.end()) {
         if (!FileIn::isBypassedId(idref))
@@ -194,7 +194,7 @@ void UmlState::importIt(FileIn & in, Token & token, UmlItem * where)
             st->set_Stereotype("machine");
 
         if (! ref.isEmpty()) {
-            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(ref);
+            QMap<QString, UmlItem *>::Iterator it = All.find(ref);
 
             if (it == All.end())
                 UnresolvedWithContext::add(st, ref, 4);
@@ -203,7 +203,7 @@ void UmlState::importIt(FileIn & in, Token & token, UmlItem * where)
         }
 
         if (! spec.isEmpty()) {
-            QMap<WrapperStr, UmlItem *>::Iterator it = All.find(spec);
+            QMap<QString, UmlItem *>::Iterator it = All.find(spec);
 
             if (it == All.end())
                 UnresolvedWithContext::add(st, spec, 3);

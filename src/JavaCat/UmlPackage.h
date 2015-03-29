@@ -29,9 +29,7 @@
 #define UMLPACKAGE_H
 
 #include "UmlBasePackage.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
 
 class UmlClassView;
 #ifdef REVERSE
@@ -54,7 +52,7 @@ public:
     void init(Package *);
     virtual void upload(ClassContainer *);
     virtual bool set_roundtrip_expected();
-    virtual void mark_useless(Q3PtrList<UmlItem> & l);
+    virtual void mark_useless(QList<UmlItem *> & l);
     virtual void scan_it(int & n);
     virtual void send_it(int n);
     Package * get_package() const {

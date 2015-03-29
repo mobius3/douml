@@ -50,7 +50,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void open();
     virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;
@@ -68,7 +68,8 @@ public:
     virtual void save(QTextStream &, bool ref, QString & warning) const;
     static TextCanvas * read(char *& , UmlCanvas *, char *);
 
-    static void send(ToolCom * com, Q3CanvasItemList & all);
+    static void send(ToolCom * com, QList<QGraphicsItem*> & all);
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 #endif

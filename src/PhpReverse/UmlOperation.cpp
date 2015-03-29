@@ -29,7 +29,7 @@
 #include <iostream>
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 using namespace std;
 #endif
 
@@ -255,7 +255,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
             s.replace(index1, t.explicit_type.length(), "${type}");
         }
 
-        Q3ValueList<UmlParameter> l = op->params();
+        QList<UmlParameter> l = op->params();
         unsigned nparams = l.count();
 
         if (nparams != 0) {
@@ -279,7 +279,7 @@ bool UmlOperation::new_one(Class * container, aVisibility visibility,
                 else {
                     varname = varname.mid(1);
 
-                    Q3ValueList<UmlParameter>::Iterator it;
+                    QList<UmlParameter>::Iterator it;
 
                     for (it = l.begin(), rank = 0; it != l.end(); ++it, rank += 1) {
                         if ((*it).name == varname) {

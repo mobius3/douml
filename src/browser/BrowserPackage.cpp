@@ -24,26 +24,19 @@
 // home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
-
-
-
-
-
-#include <q3popupmenu.h>
 #include <qfile.h>
 #include <qcursor.h>
 #include <qapplication.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
+#include <qfiledialog.h>
 #include <QPixmap>
 #include <QTextStream>
 #include <QDropEvent>
+#include <QFileDialog>
 #include <QDragMoveEvent>
-
 #include "BrowserPackage.h"
 #include "PackageData.h"
-#include "BrowserClassView.h"
 #include "BrowserUseCaseView.h"
+#include "BrowserClassView.h"
 #include "BrowserClassDiagram.h"
 #include "BrowserActivityDiagram.h"
 #include "BrowserColDiagram.h"
@@ -58,50 +51,52 @@
 #include "BrowserView.h"
 #include "BrowserAttribute.h"
 #include "BrowserOperation.h"
-#include "BrowserComponent.h"
 #include "BrowserArtifact.h"
-#include "BrowserDeploymentNode.h"
 #include "BrowserComponentView.h"
+#include "BrowserComponent.h"
 #include "BrowserDeploymentView.h"
+#include "BrowserDeploymentNode.h"
 #include "BrowserSimpleRelation.h"
 #include "BrowserState.h"
 #include "BrowserPseudoState.h"
 #include "BrowserStateAction.h"
 #include "BrowserActivity.h"
+#include "BrowserActivityAction.h"
+#include "SettingsDialog.h"
 #include "BrowserFlow.h"
 #include "BrowserInterruptibleActivityRegion.h"
 #include "BrowserExpansionRegion.h"
 #include "BrowserActivityPartition.h"
 #include "BrowserParameter.h"
 #include "BrowserParameterSet.h"
-#include "BrowserActivityNode.h"
-#include "BrowserActivityAction.h"
 #include "BrowserActivityObject.h"
 #include "BrowserPin.h"
+#include "RevSettingsDialog.h"
+#include "UmlDrag.h"
+#include "BrowserActivityNode.h"
+#include "StereotypesDialog.h"
 #include "SimpleRelationData.h"
 #include "UmlPixmap.h"
-#include "UmlDrag.h"
-#include "SettingsDialog.h"
-#include "RevSettingsDialog.h"
-#include "StereotypesDialog.h"
 #include "GenerationSettings.h"
 #include "myio.h"
 #include "ToolCom.h"
 #include "Tool.h"
-#include "ui/menufactory.h"
-#include "UmlWindow.h"
-#include "ReferenceDialog.h"
-#include "UmlGlobal.h"
 #include "mu.h"
-#include "SaveProgress.h"
-#include "DialogUtil.h"
-#include "err.h"
+#include "UmlGlobal.h"
+#include "UmlWindow.h"
 #include "strutil.h"
+#include "ui/menufactory.h"
+#include "ReferenceDialog.h"
+#include "DialogUtil.h"
+#include "SaveProgress.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
-
+#include "err.h"
+#include <QMessageBox>
+#include "DialogUtil.h"
 IdDict<BrowserPackage> BrowserPackage::all(__FILE__);
-Q3PtrList<BrowserPackage> BrowserPackage::removed;
+
+QList<BrowserPackage *> BrowserPackage::removed;
 
 QStringList BrowserPackage::its_default_stereotypes;	// unicode
 QStringList BrowserPackage::relation_default_stereotypes;	// unicode
@@ -244,6 +239,7 @@ BrowserPackage::BrowserPackage(QString s, BrowserView * parent, int id)
     activitypartition_color = UmlTransparent;
     activityaction_color = UmlTransparent;
     parameterpin_color = UmlWhite;
+
 }
 
 BrowserPackage::BrowserPackage(QString s, BrowserNode * parent, int id)
@@ -254,12 +250,14 @@ BrowserPackage::BrowserPackage(QString s, BrowserNode * parent, int id)
     is_modified = (id == 0);
     revision = 1;
     owner = -1;
+    setIcon(0, QIcon(*pixmap(0)));
 }
 
 BrowserPackage::BrowserPackage(const BrowserPackage * model,
                                BrowserNode * p)
     : BrowserNode(model->name, p), Labeled<BrowserPackage>(all, 0)
 {
+
     def = new PackageData(model->def);
     def->set_browser_node(this);
     comment = model->comment;
@@ -322,10 +320,9 @@ BrowserPackage::~BrowserPackage()
 
             QDir d = BrowserView::get_dir();
 
-            QFile::remove(d.absFilePath(fn));
+            QFile::remove(d.absoluteFilePath(fn));
         }
-
-        removed.remove(this);
+        removed.removeOne(this);
         all.remove(get_ident());
     }
 
@@ -334,6 +331,7 @@ BrowserPackage::~BrowserPackage()
 
 void BrowserPackage::make()
 {
+
     def->set_browser_node(this);
 
     class_color = UmlDefaultColor;
@@ -368,16 +366,16 @@ BrowserNode * BrowserPackage::duplicate(BrowserNode * p, QString name)
 
 void BrowserPackage::clear(bool old)
 {
+
     if (! old)
         set_user_id(-1);
 
     all.clear(old);
-    BrowserClassView::clear(old);
     BrowserUseCaseView::clear(old);
+    BrowserClassView::clear(old);
     BrowserComponentView::clear(old);
     BrowserDeploymentView::clear(old);
     BrowserDiagram::clear(old);
-
     if (! old)
         check_ids_cleared();
 }
@@ -385,8 +383,9 @@ void BrowserPackage::clear(bool old)
 void BrowserPackage::update_idmax_for_root()
 {
     all.update_idmax_for_root();
-    BrowserClassView::update_idmax_for_root();
     BrowserUseCaseView::update_idmax_for_root();
+    BrowserClassView::update_idmax_for_root();
+
     BrowserComponentView::update_idmax_for_root();
     BrowserDeploymentView::update_idmax_for_root();
     BrowserDiagram::update_idmax_for_root();
@@ -395,14 +394,13 @@ void BrowserPackage::update_idmax_for_root()
 void BrowserPackage::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
-
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
 }
 
-void BrowserPackage::support_file(Q3Dict<char> & files, bool add) const
+void BrowserPackage::support_file(QHash<QString,char*>  & files, bool add) const
 {
     QString s;
 
@@ -413,17 +411,19 @@ void BrowserPackage::support_file(Q3Dict<char> & files, bool add) const
     else
         files.remove(s);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->support_file(files, add);
+
 }
 
-void BrowserPackage::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
+void BrowserPackage::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
     BrowserNode::referenced_by(l, ondelete);
 
     if (! ondelete) {
+
         BrowserActivityDiagram::compute_referenced_by(l, this, "packagecanvas", "package_ref");
         BrowserClassDiagram::compute_referenced_by(l, this, "packagecanvas", "package_ref");
         BrowserColDiagram::compute_referenced_by(l, this, "packagecanvas", "package_ref");
@@ -438,6 +438,7 @@ void BrowserPackage::referenced_by(Q3PtrList<BrowserNode> & l, bool ondelete)
 
 const QPixmap * BrowserPackage::pixmap(int) const
 {
+
     if (this == BrowserView::get_project())
         return 0;
 
@@ -456,12 +457,14 @@ const QPixmap * BrowserPackage::pixmap(int) const
 
 void BrowserPackage::iconChanged()
 {
+
     repaint();
     def->modified();
 }
 
 void BrowserPackage::update_stereotype(bool rec)
 {
+
     if (def != 0) {
         const char * stereotype = def->get_stereotype();
 
@@ -469,18 +472,19 @@ void BrowserPackage::update_stereotype(bool rec)
                 stereotype[0] &&
                 (strcmp(stereotype, "profile") != 0)) {
             QString s = QString(QLatin1String(stereotype));
-            int index = s.find(':');
-
+            int index = s.indexOf(':');
             setText(0,
                     "<<" + ((index == -1) ? s : s.mid(index + 1))
                     + ">> " + name);
         }
         else
+        {
             setText(0, name);
+        }
     }
 
     if (rec) {
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling())
             ((BrowserNode *) child)->update_stereotype(TRUE);
@@ -509,18 +513,18 @@ QString BrowserPackage::full_name(bool rev, bool) const
 
 void BrowserPackage::prepare_for_sort()
 {
-    IdIterator<BrowserPackage> it(all);
 
-    while (it.current() != 0) {
-        it.current()->full_path = QString();
-        ++it;
+    IdIterator<BrowserPackage> it(all);
+    while (it.hasNext()) {
+        it.next();
+        it.value()->full_path = QString();
     }
 }
 
 // just check if the inheritance already exist
 QString BrowserPackage::check_inherit(const BrowserNode * new_parent) const
 {
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
         BrowserNode * ch = ((BrowserNode *) child);
@@ -528,122 +532,137 @@ QString BrowserPackage::check_inherit(const BrowserNode * new_parent) const
         if ((ch->get_type() == UmlInherit) &&
                 ((((SimpleRelationData *) ch->get_data())->get_end_node())
                  == new_parent))
-            return TR("already exist");
+            return QObject::TR("already exist");
     }
 
-    return (new_parent != this) ? QString() : TR("circular inheritance");
+    return (new_parent != this) ? QString() : QObject::TR("circular inheritance");
 }
 
 static int phase_renumerotation = -1;
 
 void BrowserPackage::menu()
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu genm(0);
-    Q3PopupMenu revm(0);
-    Q3PopupMenu roundtripm(0);
-    Q3PopupMenu roundtripbodym(0);
-    Q3PopupMenu toolm(0);
-    Q3PopupMenu importm(0);
+
+    QMenu m(0);
+    QMenu genm(0);
+    QMenu revm(0);
+    QMenu roundtripm(0);
+    QMenu roundtripbodym(0);
+    QMenu toolm(0);
+    QMenu importm(0);
     bool isprofile = (strcmp(def->get_stereotype(), "profile") == 0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_read_only && (edition_number == 0)) {
-            m.setWhatsThis(m.insertItem(TR("New package"), 0),
-                           TR("to add a new sub <i>package</i>"));
-            m.setWhatsThis(m.insertItem(TR("New use case view"), 1),
-                           TR("to add a new <i>use case view</i>"));
+            QAction* action;
+            action = m.addAction(QObject::TR("New package"));
+            action->setWhatsThis(QObject::TR("to add a new sub <i>package</i>"));
+            action->setData(0);
+
+            action = m.addAction(QObject::TR("New use case view"));
+            action->setWhatsThis(QObject::TR("to add a new <i>use case view</i>"));
+            action->setData(1);
 
             if (isprofile)
-                m.setWhatsThis(m.insertItem(TR("New class/stereotype view"), 2),
-                               TR("to add a new <i>class/stereotype view</i>"));
-            else {
-                m.setWhatsThis(m.insertItem(TR("New class view"), 2),
-                               TR("to add a new <i>class view</i>"));
-                m.setWhatsThis(m.insertItem(TR("New component view"), 3),
-                               TR("to add a new <i>class view</i>"));
-                m.setWhatsThis(m.insertItem(TR("New deployment view"), 4),
-                               TR("to add a new <i>deployment view</i>"));
+            {
+                MenuFactory::addItem(m, ("New class/stereotype view"), 2,
+                                     ("to add a new <i>class/stereotype view</i>"));
             }
+            else {
+                MenuFactory::addItem(m, ("New class view"), 2,
+                                     ("to add a new <i>class view</i>"));
+                MenuFactory::addItem(m, ("New component view"), 3,
+                                     ("to add a new <i>class view</i>"));
+                MenuFactory::addItem(m, ("New deployment view"), 4,
+                                     ("to add a new <i>deployment view</i>"));
+            }
+            MenuFactory::addItem(m, ("New profile"), 15,
+                                 ("to add a new <i>profile</i>"));
+            m.addSeparator();
+            MenuFactory::addItem(m, ("Import project"), 14,
+                                 ("to import the contents of a <i>project</i> under \
+                                  the current <i>package</i>"));
+                                  MenuFactory::addItem(m, ("Import project as library"), 16,
+                                                       ("to import the contents of a <i>project</i> under \
+                                                        the current <i>package</i> and to be able later to reimport it to update it"));
 
-            m.setWhatsThis(m.insertItem(TR("New profile"), 15),
-                           TR("to add a new <i>profile</i>"));
-            m.insertSeparator();
-            m.setWhatsThis(m.insertItem(TR("Import project"), 14),
-                           TR("to import the contents of a <i>project</i> under \
-                              the current <i>package</i>"));
-                              m.setWhatsThis(m.insertItem(TR("Import project as library"), 16),
-                                             TR("to import the contents of a <i>project</i> under \
-                                                the current <i>package</i> and to be able later to reimport it to update it"));
         }
-
         if (!is_edited) {
             if ((edition_number == 0) &&
                     is_from_lib() &&
                     !((BrowserPackage *) parent())->is_from_lib()) {
-                m.setWhatsThis(m.insertItem(TR("Update imported library"), 17),
-                               TR("to update the previously imported <i>project</i>"));
-                m.insertSeparator();
+                MenuFactory::addItem(m, ("Update imported library"), 17,
+                                     ("to update the previously imported <i>project</i>"));
+                m.addSeparator();
             }
 
-            m.setWhatsThis(m.insertItem(TR("Edit"), 5),
-                           TR("to edit the package"));
+            MenuFactory::addItem(m, ("Edit"), 5,
+                                 ("to edit the package"));
 
             if (!is_read_only) {
-                m.insertSeparator();
+                m.addSeparator();
 
                 if (this == BrowserView::get_project()) {
-                    m.setWhatsThis(m.insertItem(TR("Edit generation settings"), 8),
-                                   TR("to set how an Uml type is compiled in C++ etc..., \
-                                      to set the default parameter passing, to set the default code \
-                                      produced for an attribute etc..., and to set the root directories"));
-                                      m.setWhatsThis(m.insertItem(TR("Edit reverse/roundtrip settings"), 18),
-                                                     TR("to specify directory/file to not reverse/roundtrip them"));
-                                   m.setWhatsThis(m.insertItem(TR("Edit default stereotypes"), 6),
-                                                  TR("to set the default stereotypes list"));
+                    MenuFactory::addItem(m, ("Edit generation settings"), 8,
+                                         QObject::tr("to set how an Uml type is compiled in C++ etc...,"
+                                          "to set the default parameter passing, to set the default code"
+                                          "produced for an attribute etc..., and to set the root directories"));
+                    MenuFactory::addItem(m, ("Edit reverse/roundtrip settings"), 18,
+                                                               ("to specify directory/file to not reverse/roundtrip them"));
+                    MenuFactory::addItem(m, ("Edit default stereotypes"), 6,
+                                                              ("to set the default stereotypes list"));
                 }
 
-                m.setWhatsThis(m.insertItem(TR("Edit class settings"), 7),
-                               TR("to set the sub classes's settings"));
-                m.setWhatsThis(m.insertItem(TR("Edit drawing settings"), 9),
-                               TR("to set how the sub <i>diagrams</i>'s items must be drawn"));
+                MenuFactory::addItem(m, ("Edit class settings"), 7,
+                                     ("to set the sub classes's settings"));
+                MenuFactory::addItem(m, ("Edit drawing settings"), 9,
+                                     ("to set how the sub <i>diagrams</i>'s items must be drawn"));
 
                 if (this == BrowserView::get_project()) {
-                    m.insertItem(TR("Import"), &importm);
-                    m.setWhatsThis(importm.insertItem(TR("Generation settings"), 28),
-                                   TR("to import the generation settings from an other project, \
-                                      note that the root directories are not imported"));
-                                      m.setWhatsThis(importm.insertItem(TR("Default stereotypes"), 29),
-                                                     TR("to import the default stereotypes from an other project"));
+                    importm.setTitle(("Import"));
+                    m.addMenu(&importm);
+                    //m.setWhatsThis(importm.insertItem(("Generation settings"), 28,
+                    //                                  ("to import the generation settings from an other project, \
+                    //                                 note that the root directories are not imported"));
+                    MenuFactory::addItem(importm, ("Generation settings"), 28,
+                                         ("to import the generation settings from an other project, \
+                                          note that the root directories are not imported"));
+                                          //m.setWhatsThis(importm.insertItem(("Default stereotypes"), 29,
+                                          //("to import the default stereotypes from an other project"));
+
+
+                                          MenuFactory::addItem(importm, ("Default stereotypes"), 29,
+                                                               ("to import the default stereotypes from an other project"));
                 }
 
                 if ((edition_number == 0) && (this != BrowserView::get_project())) {
-                    m.insertSeparator();
-                    m.setWhatsThis(m.insertItem(TR("Delete"), 10),
-                                   TR("to delete the <i>package</i> and its sub items. \
-                                      Note that you can undelete it after"));
+                    m.addSeparator();
+                    MenuFactory::addItem(m, ("Delete"), 10,
+                                         ("to delete the <i>package</i> and its sub items. \
+                                          Note that you can undelete it after"));
                 }
             }
             else if ((edition_number == 0) &&
                      is_from_lib() &&
                      !((BrowserPackage *) parent())->is_from_lib() &&
                      !((BrowserPackage *) parent())->is_read_only) {
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Delete"), 10),
-                               TR("to delete the <i>package</i> and its sub items. \
-                                  Note that you can undelete it after"));
+                m.addSeparator();
+                MenuFactory::addItem(m, ("Delete"), 10,
+                                     ("to delete the <i>package</i> and its sub items. \
+                                      Note that you can undelete it after"));
             }
         }
 
-        m.insertSeparator();
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 13),
-                       TR("to know who reference the <i>package</i> \
-                          through a relation"));
-                          mark_menu(m, TR("the package"), 90);
-                       ProfiledStereotypes::menu(m, this, 99990);
+        m.addSeparator();
+        MenuFactory::addItem(m, ("Referenced by"), 13,
+                             ("to know who reference the <i>package</i> \
+                              through a relation"));
+                              mark_menu(m, QString(QObject::TR("the package")).toLatin1().constData(), 90);
+                             ProfiledStereotypes::menu(m, this, 99990);
+
 
                 if (! isprofile) {
             bool cpp = GenerationSettings::cpp_get_default_defs();
@@ -653,65 +672,70 @@ void BrowserPackage::menu()
             bool idl = GenerationSettings::idl_get_default_defs();
 
             if (cpp || java || php || python || idl) {
-                m.insertSeparator();
-                m.insertItem(TR("Generate"), &genm);
+                m.addSeparator();
+                genm.setTitle(QObject::TR("Generate"));
+                m.addMenu(&genm);
 
                 if (cpp)
-                    genm.insertItem("C++", 20);
+                    MenuFactory::addItem(genm,"C++", 20);
 
                 if (java)
-                    genm.insertItem("Java", 21);
+                    MenuFactory::addItem(genm,"Java", 21);
 
                 if (php)
-                    genm.insertItem("Php", 22);
+                    MenuFactory::addItem(genm,"Php", 22);
 
                 if (python)
-                    genm.insertItem("Python", 34);
+                    MenuFactory::addItem(genm,"Python", 34);
 
                 if (idl)
-                    genm.insertItem("Idl", 23);
+                    MenuFactory::addItem(genm,"Idl", 23);
             }
 
             if (edition_number == 0) {
                 if (!is_read_only && (cpp || java || php || python)) {
-                    m.insertItem(TR("Reverse"), &revm);
+                    revm.setTitle(QObject::TR("Reverse"));
+                    m.addMenu(&revm);
 
                     if (cpp)
-                        revm.insertItem("C++", 24);
+                        MenuFactory::addItem(revm,"C++", 24);
 
                     if (java) {
-                        revm.insertItem("Java", 25);
-                        revm.insertItem("Java Catalog", 26);
+                        MenuFactory::addItem(revm,"Java", 25);
+                        MenuFactory::addItem(revm,"Java Catalog", 26);
                     }
 
                     if (php)
-                        revm.insertItem("Php", 32);
+                        MenuFactory::addItem(revm,"Php", 32);
 
-//#warning reverse python
+                    //#warning reverse python
 
 
                     if (java || cpp) {
-                        m.insertItem(TR("Roundtrip"), &roundtripm);
+                        roundtripm.setTitle(QObject::TR("Roundtrip"));
+                        m.addMenu(&roundtripm);
 
-                        if (cpp) roundtripm.insertItem("C++", 38);
+                        if (cpp) MenuFactory::addItem(roundtripm,"C++", 38);
 
-                        if (java) roundtripm.insertItem("Java", 37);
+                        if (java) MenuFactory::addItem(roundtripm,"Java", 37);
                     }
 
                     if (preserve_bodies()) {
-                        m.insertItem(TR("Roundtrip body"), &roundtripbodym);
+
+                        roundtripbodym.setTitle(QObject::TR("Roundtrip body"));
+                        m.addMenu( &roundtripbodym);
 
                         if (cpp)
-                            roundtripbodym.insertItem("C++", 30);
+                            MenuFactory::addItem(roundtripbodym,"C++", 30);
 
                         if (java)
-                            roundtripbodym.insertItem("Java", 31);
+                            MenuFactory::addItem(roundtripbodym,"Java", 31);
 
                         if (php)
-                            roundtripbodym.insertItem("Php", 33);
+                            MenuFactory::addItem(roundtripbodym,"Php", 33);
 
                         if (python)
-                            roundtripbodym.insertItem("Python", 36);
+                            MenuFactory::addItem(roundtripbodym,"Python", 36);
                     }
                 }
             }
@@ -720,47 +744,50 @@ void BrowserPackage::menu()
         if (Tool::menu_insert(&toolm,
                               (this == BrowserView::get_project()) ? UmlProject : UmlPackage,
                               100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle(QObject::TR("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 11),
-                       TR("undelete the <i>package</i>. Do not undelete its sub items"));
-        m.setWhatsThis(m.insertItem(TR("Undelete recursively"), 12),
-                       TR("undelete the <i>package</i> and its sub items"));
+        MenuFactory::addItem(m, ("Undelete"), 11,
+                             ("undelete the <i>package</i>. Do not undelete its sub items"));
+        MenuFactory::addItem(m, ("Undelete recursively"), 12,
+                             "undelete the <i>package</i> and its sub items");
     }
 
     if (user_id() == 0) {
-        m.insertSeparator();
-        m.insertSeparator();
-        m.insertSeparator();
-        m.insertSeparator();
-        m.insertSeparator();
+        m.addSeparator();
+        m.addSeparator();
+        m.addSeparator();
+        m.addSeparator();
+        m.addSeparator();
 
         switch (phase_renumerotation) {
         case -1:
             if (this == BrowserView::get_project())
-                m.insertItem("PREPARE la renumerotation", 27);
+                MenuFactory::addItem(m,"PREPARE la renumerotation", 27);
 
             break;
 
         case 0:
-            m.insertItem("Renumerotation BASE", 27);
+            MenuFactory::addItem(m,"Renumerotation BASE", 27);
             break;
 
         case 1:
-            m.insertItem("Renumerotation USER", 27);
+            MenuFactory::addItem(m,"Renumerotation USER", 27);
             break;
         }
     }
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 
-    exec_menu_choice(m.exec(QCursor::pos()));
 }
 
 static bool contain_profile(BrowserPackage * p)
 {
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = p->firstChild(); child != 0; child = child->nextSibling()) {
         if (!((BrowserNode *) child)->deletedp() &&
@@ -771,15 +798,14 @@ static bool contain_profile(BrowserPackage * p)
                 return TRUE;
         }
     }
-
     return FALSE;
 }
 
 void BrowserPackage::exec_menu_choice(int rank)
 {
+
     bool preserve = preserve_bodies();
     bool isprofile = (strcmp(def->get_stereotype(), "profile") == 0);
-
     switch (rank) {
     case 0:
         add_package(FALSE);
@@ -793,6 +819,7 @@ void BrowserPackage::exec_menu_choice(int rank)
             return;
 
         v->select_in_browser();
+
     }
         break;
 
@@ -819,6 +846,7 @@ void BrowserPackage::exec_menu_choice(int rank)
             return;
 
         v->select_in_browser();
+
     }
         break;
 
@@ -859,8 +887,8 @@ void BrowserPackage::exec_menu_choice(int rank)
 
     case 10:
         if (!strcmp(get_data()->get_stereotype(), "profile")) {
-            bool propag = (msg_warning(TR("Question"),
-                                       TR("Propagate the removal of the profile ?"),
+            bool propag = (msg_warning(QObject::TR("Question"),
+                                       QObject::TR("Propagate the removal of the profile ?"),
                                        1, 2)
                            == 1);
             ProfiledStereotypes::deleted(this, propag);
@@ -871,12 +899,12 @@ void BrowserPackage::exec_menu_choice(int rank)
                     contain_profile(this);
 
             delete_it();
-
             if (recomp)
                 ProfiledStereotypes::recompute(FALSE);
         }
 
         ((BrowserNode *) parent())->package_modified();
+
         break;
 
     case 11:
@@ -1053,10 +1081,11 @@ void BrowserPackage::exec_menu_choice(int rank)
     default:
         if (rank >= 99990)
             ProfiledStereotypes::choiceManagement(this, rank - 99990);
-        else if (rank >= 100)
-            ToolCom::run(Tool::command(rank - 100), this);
         else
-            mark_management(rank - 90);
+            if (rank >= 100)
+                ToolCom::run(Tool::command(rank - 100), this);
+            else
+                mark_management(rank - 90);
 
         return;
     }
@@ -1144,6 +1173,7 @@ void BrowserPackage::apply_shortcut(QString s)
             if ((choice == -1) && (edition_number == 0))
                 Tool::shortcut(s, choice, get_type(), 100);
         }
+
     }
     else if (!is_read_only && (edition_number == 0)) {
         if (s == "Undelete")
@@ -1190,6 +1220,7 @@ void BrowserPackage::edit_class_settings()
 
 void BrowserPackage::edit_drawing_settings()
 {
+
     for (;;) {
         StateSpecVector st;
         ColorSpecVector co(18);
@@ -1204,24 +1235,24 @@ void BrowserPackage::edit_drawing_settings()
         statediagram_settings.complete(st, FALSE);
         activitydiagram_settings.complete(st, FALSE);
 
-        co[0].set(TR("class color"), &class_color);
-        co[1].set(TR("note color"), &note_color);
-        co[2].set(TR("package color"), &package_color);
-        co[3].set(TR("fragment color"), &fragment_color);
-        co[4].set(TR("subject color"), &subject_color);
-        co[5].set(TR("use case color"), &usecase_color);
-        co[6].set(TR("duration color"), &duration_color);
-        co[7].set(TR("continuation color"), &continuation_color);
-        co[8].set(TR("component color"), &component_color);
-        co[9].set(TR("artifact color"), &artifact_color);
-        co[10].set(TR("node color"), &deploymentnode_color);
-        co[11].set(TR("state color"), &state_color);
-        co[12].set(TR("state action color"), &stateaction_color);
-        co[13].set(TR("activity color"), &activity_color);
-        co[14].set(TR("activity region color"), &activityregion_color);
-        co[15].set(TR("activity partition color"), &activitypartition_color);
-        co[16].set(TR("activity action color"), &activityaction_color);
-        co[17].set(TR("parameter and pin color"), &parameterpin_color);
+        co[0].set (QObject::TR("class color"), &class_color);
+        co[1].set (QObject::TR("note color"), &note_color);
+        co[2].set (QObject::TR("package color"), &package_color);
+        co[3].set (QObject::TR("fragment color"), &fragment_color);
+        co[4].set (QObject::TR("subject color"), &subject_color);
+        co[5].set (QObject::TR("use case color"), &usecase_color);
+        co[6].set (QObject::TR("duration color"), &duration_color);
+        co[7].set (QObject::TR("continuation color"), &continuation_color);
+        co[8].set (QObject::TR("component color"), &component_color);
+        co[9].set (QObject::TR("artifact color"), &artifact_color);
+        co[10].set (QObject::TR("node color"), &deploymentnode_color);
+        co[11].set (QObject::TR("state color"), &state_color);
+        co[12].set (QObject::TR("state action color"), &stateaction_color);
+        co[13].set (QObject::TR("activity color"), &activity_color);
+        co[14].set (QObject::TR("activity region color"), &activityregion_color);
+        co[15].set (QObject::TR("activity partition color"), &activitypartition_color);
+        co[16].set (QObject::TR("activity action color"), &activityaction_color);
+        co[17].set (QObject::TR("parameter and pin color"), &parameterpin_color);
 
         SettingsDialog dialog(&st, &co, this == BrowserView::get_project());
 
@@ -1235,24 +1266,25 @@ void BrowserPackage::edit_drawing_settings()
         if (!dialog.redo())
             break;
     }
+
 }
 
 
 BrowserNodeList & BrowserPackage::instances(BrowserNodeList & result)
 {
+
     IdIterator<BrowserPackage> it(all);
 
-    while (it.current() != 0) {
-        if (!it.current()->deletedp()) {
-            it.current()->full_path = QString();
-            result.append(it.current());
-        }
-
-        ++it;
+    while (it.hasNext()) {
+        it.next();
+        if(it.value() != 0)
+            if (!it.value()->deletedp()) {
+                it.value()->full_path = QString();
+                result.append(it.value());
+            }
     }
 
     result.sort_it();
-
     return result;
 }
 
@@ -1261,25 +1293,21 @@ BrowserPackage * BrowserPackage::get_package()
     if (BrowserView::get_project()->firstChild() == 0)
         // only the prj
         return 0;
-
     BrowserNode * old;
     QString dummy;
     BrowserNodeList nodes;
-
-    BrowserView::get_project()->enter_child_name(dummy, TR("choose existing package : "),
+    BrowserView::get_project()->enter_child_name(dummy, QObject::TR("choose existing package : "),
                                                  UmlPackage, instances(nodes), &old,
                                                  FALSE, TRUE, TRUE);
-
     return ((BrowserPackage *) old);
 }
 
 void BrowserPackage::add_package(bool profile)
 {
     QString name;
-
     if (enter_child_name(name,
-                         (profile) ? TR("enter profile's name : ")
-                         : TR("enter package's name : "),
+                         (profile) ? QObject::TR("enter profile's name : ")
+                         : QObject::TR("enter package's name : "),
                          UmlPackage, TRUE, FALSE)) {
         BrowserPackage * p = new BrowserPackage(name, this);
 
@@ -1290,8 +1318,8 @@ void BrowserPackage::add_package(bool profile)
 
         if ((owner != -1) &&
                 (msg_warning("Douml",
-                             TR("Do you want to be the owner of this new package ?\n"
-                                "(other users can't modify it while you are the owner)"),
+                             QObject::TR("Do you want to be the owner of this new package ?\n"
+                                         "(other users can't modify it while you are the owner)"),
                              QMessageBox::Yes, QMessageBox::No)
                  == QMessageBox::Yes))
             p->owner = owner;
@@ -1301,34 +1329,30 @@ void BrowserPackage::add_package(bool profile)
 BrowserPackage * BrowserPackage::import_project(QString fn, bool aslib, int id)
 {
     bool manual = fn.isEmpty();
-
     if (manual) {
-        fn = Q3FileDialog::getOpenFileName(last_used_directory(), "*.prj");
+        fn = QFileDialog::getOpenFileName(0, "import project", last_used_directory(), "*.prj");
 
         if (fn.isEmpty())
             return 0;
     }
 
     set_last_used_directory(fn);
-
     QFileInfo fi(fn);
 
     if (!fi.exists() ||
             !fi.isFile() ||
-            (fi.extension(FALSE).lower() != "prj"))
+            (/*fi.extension(FALSE).lower()*/!fi.fileName().endsWith("prj", Qt::CaseInsensitive)))
         return 0;
 
     QString bname = my_baseName(fi);
-
     if (wrong_child_name(bname, UmlPackage, TRUE, FALSE)) {
         if (manual)
-            msg_critical(TR("Error"), TR("illegal name or already used"));
+            msg_critical(QObject::TR("Error"), QObject::TR("illegal name or already used"));
 
         return 0;
     }
-
-    QApplication::setOverrideCursor(Qt::waitCursor);
-    QDir di(fi.dirPath(TRUE));
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    QDir di(fi.dir());
 
     BrowserPackage * p = new BrowserPackage(bname, this, id);
     bool err = FALSE;
@@ -1370,19 +1394,19 @@ BrowserPackage * BrowserPackage::import_project(QString fn, bool aslib, int id)
         package_modified();
 
     QApplication::restoreOverrideCursor();
-
     return p;
 }
 
 void BrowserPackage::update_lib()
 {
+
     if (must_be_saved()) {
         if (msg_warning("Douml",
-                        TR("The project is modified and need to be saved first.\n"
-                           "If you don't want to save your modifications reload\n"
-                           "the project then ask again for the update\n"
-                           "\n"
-                           "Save it to perform update ?\n"),
+                        QObject::TR("The project is modified and need to be saved first.\n"
+                                    "If you don't want to save your modifications reload\n"
+                                    "the project then ask again for the update\n"
+                                    "\n"
+                                    "Save it to perform update ?\n"),
                         QMessageBox::Yes, QMessageBox::Cancel)
                 != QMessageBox::Yes)
             return;
@@ -1390,28 +1414,27 @@ void BrowserPackage::update_lib()
         UmlWindow::save_it();
     }
 
-    Q3Dict<char> files;
+    QHash<QString, char*> files;
 
     support_file(files, TRUE);
 
-    Q3DictIterator<char> it(files);
+    QHashIterator<QString,char*> it(files);
     QDir d = BrowserView::get_dir();
 
-    while (it.current()) {
-        QFileInfo fi(d, it.currentKey());
+    while (it.hasNext()) {
+        it.next();
+        QFileInfo fi(d, it.key());
 
         if (!fi.exists())
-            files.remove(it.currentKey()); // update it
+            files.remove(it.key()); // update it
         else if (!fi.isWritable()) {
-            msg_critical(TR("Error"), TR("file '%1' is read only, update aborted", it.currentKey()));
+            msg_critical (QObject::TR("Error"), QObject::TR("file '%1' is read only, update aborted").arg(it.key()));
             files.clear();
             return;
         }
-        else
-            ++it;
     }
 
-    QString fn = Q3FileDialog::getOpenFileName(last_used_directory(), name + ".prj");
+    QString fn = QFileDialog::getOpenFileName(0, "", last_used_directory(), name + ".prj");
 
     if (fn.isEmpty())
         return;
@@ -1419,13 +1442,13 @@ void BrowserPackage::update_lib()
     QFileInfo fi(fn);
 
     if (my_baseName(fi) != name) {
-        msg_critical(TR("Error"), TR("you didn't select project '%1'", name));
+        msg_critical (QObject::TR("Error"), QObject::TR("you didn't select project '%1'").arg(name));
         return;
     }
 
     BrowserPackage * container = (BrowserPackage *) parent();
-    Q3ListViewItem * previous = 0;
-    Q3ListViewItem * child = container->firstChild();
+    BrowserNode * previous = 0;
+    BrowserNode * child = container->firstChild();
 
     while (this != child) {
         previous = child;
@@ -1433,26 +1456,39 @@ void BrowserPackage::update_lib()
     }
 
     prepare_update_lib();
-    container->takeItem(this);
+    container->removeChild(this);
 
     BrowserPackage * updated = container->import_project(fn, TRUE, get_ident());
 
     updated->original_id = original_id;
     updated->support_file(files, FALSE);
-    it.toFirst();
+    it.toFront();
 
-    for (; it.current(); ++it)
-        QFile::remove(d.absFilePath(it.currentKey()));
+    for (; it.value(); it.next())
+        QFile::remove(d.absoluteFilePath(it.key()));
 
     if (previous != 0)
-        updated->moveItem(previous);
+    {
+        //updated->moveItem(previous);
+        QTreeWidgetItem *parentOfUpdated = updated->parent();
+        parentOfUpdated->removeChild(updated);
+        parentOfUpdated->insertChild(parentOfUpdated->indexOfChild(previous), updated);
+        //updated->moveItem(previous);
+    }
     else
-        container->insertItem(updated);
+    {
+        QTreeWidgetItem *parentOfContainer = container->parent();
+        //container->insertItem(updated);
+        parentOfContainer->insertChild(parentOfContainer->indexOfChild(updated), container);
+    }
 
     updated->select_in_browser();
 
     UmlWindow::save_it();
-    container->insertItem(this);
+    //container->insertItem(this);
+    QTreeWidgetItem *parentOfContainer = container->parent();
+    parentOfContainer->insertChild(parentOfContainer->indexOfChild(updated), this);
+
     UmlWindow::reload_it();
 }
 
@@ -1463,7 +1499,7 @@ UmlCode BrowserPackage::get_type() const
 
 QString BrowserPackage::get_stype() const
 {
-    return TR("package");
+    return QObject::TR("package");
 }
 
 int BrowserPackage::get_identifier() const
@@ -1481,6 +1517,7 @@ const char * BrowserPackage::help_topic() const
 BasicData * BrowserPackage::get_data() const
 {
     return def;
+
 }
 
 void BrowserPackage::get_classdiagramsettings(ClassDiagramSettings & r) const
@@ -1497,48 +1534,63 @@ void BrowserPackage::get_sequencediagramsettings(SequenceDiagramSettings & r) co
 
 void BrowserPackage::get_collaborationdiagramsettings(CollaborationDiagramSettings & r) const
 {
+
     if (! collaborationdiagram_settings.complete(r))
         ((BrowserNode *) parent())->get_collaborationdiagramsettings(r);
+
 }
 
 void BrowserPackage::get_objectdiagramsettings(ObjectDiagramSettings & r) const
 {
+
     if (! objectdiagram_settings.complete(r))
         ((BrowserNode *) parent())->get_objectdiagramsettings(r);
+
 }
 
 void BrowserPackage::get_usecasediagramsettings(UseCaseDiagramSettings & r) const
 {
+
     if (! usecasediagram_settings.complete(r))
         ((BrowserNode *) parent())->get_usecasediagramsettings(r);
+
 }
 
 void BrowserPackage::get_componentdiagramsettings(ComponentDiagramSettings & r) const
 {
+
     if (! componentdiagram_settings.complete(r))
         ((BrowserNode *) parent())->get_componentdiagramsettings(r);
+
 }
 
 void BrowserPackage::get_deploymentdiagramsettings(DeploymentDiagramSettings & r) const
 {
+
     if (! deploymentdiagram_settings.complete(r))
         ((BrowserNode *) parent())->get_deploymentdiagramsettings(r);
+
 }
 
 void BrowserPackage::get_statediagramsettings(StateDiagramSettings & r) const
 {
+
     if (! statediagram_settings.complete(r))
         ((BrowserNode *) parent())->get_statediagramsettings(r);
+
 }
 
 void BrowserPackage::get_activitydiagramsettings(ActivityDiagramSettings & r) const
 {
+
     if (! activitydiagram_settings.complete(r))
         ((BrowserNode *) parent())->get_activitydiagramsettings(r);
+
 }
 
 UmlColor BrowserPackage::get_color(UmlCode who) const
 {
+
     UmlColor c;
 
     switch (who) {
@@ -1627,8 +1679,10 @@ UmlVisibility BrowserPackage::get_visibility(UmlCode who) const
 {
     UmlVisibility v;
 
+
     switch (who) {
     case UmlAttribute:
+
         v = class_settings.attribute_visibility;
         break;
 
@@ -1644,6 +1698,7 @@ UmlVisibility BrowserPackage::get_visibility(UmlCode who) const
     return (v != UmlDefaultVisibility)
             ? v
             : ((BrowserNode *) parent())->get_visibility(who);
+
 }
 
 void BrowserPackage::open(bool force_edit)
@@ -1668,6 +1723,7 @@ BrowserNode * BrowserPackage::get_associated() const
 void BrowserPackage::set_associated_diagram(BrowserNode * dg,
                                             bool on_read)
 {
+
     if (associated_diagram != dg) {
         if (associated_diagram != 0)
             QObject::disconnect(associated_diagram->get_data(), SIGNAL(deleted()),
@@ -1680,6 +1736,7 @@ void BrowserPackage::set_associated_diagram(BrowserNode * dg,
         if (! on_read)
             package_modified();
     }
+
 }
 
 void BrowserPackage::on_delete()
@@ -1691,7 +1748,7 @@ void BrowserPackage::on_delete()
 void BrowserPackage::write_id(ToolCom * com)
 {
     // to manage project case as any package
-    com->write_id(this, UmlPackage - UmlRelations, name);
+    com->write_id(this, UmlPackage - UmlRelations, name.toLatin1().constData());
 }
 
 // connexion by a flow or a dependency
@@ -1715,7 +1772,7 @@ QString BrowserPackage::may_connect(UmlCode & l, const BrowserNode * dest) const
             return check_inherit(dest);
 
         default:
-            return TR("illegal");
+            return QObject::TR("illegal");
         }
 
     case UmlActivity:
@@ -1733,11 +1790,11 @@ QString BrowserPackage::may_connect(UmlCode & l, const BrowserNode * dest) const
             return 0;
 
         default:
-            return TR("illegal");
+            return QObject::TR("illegal");
         }
 
     default:
-        return TR("illegal");
+        return QObject::TR("illegal");
     }
 }
 
@@ -1748,13 +1805,13 @@ bool BrowserPackage::tool_cmd(ToolCom * com, const char * args)
         QString fn;
 
         if (this == BrowserView::get_project())
-            fn = name +"s.prj" ;
+            fn = name +".prj" ;
         else
             fn.setNum(get_ident());
 
         QDir d = BrowserView::get_dir();
 
-        com->write_string(d.absFilePath(fn));
+        com->write_string(d.absoluteFilePath(fn));
     }
 
         return TRUE;
@@ -1970,7 +2027,6 @@ bool BrowserPackage::tool_global_cmd(ToolCom * com, const char * args)
 
     return TRUE;
 }
-
 BrowserPackage *
 BrowserPackage::find_it(const char * s,
                         const WrapperStr & (PackageData::* pf)() const)
@@ -1981,7 +2037,7 @@ BrowserPackage::find_it(const char * s,
             return this;
         }
         else {
-            for (Q3ListViewItem * child = firstChild();
+            for (BrowserNode * child = firstChild();
                  child != 0;
                  child = child->nextSibling()) {
                 if (((BrowserNode *) child)->get_type() == UmlPackage) {
@@ -1992,12 +2048,12 @@ BrowserPackage::find_it(const char * s,
                         return p;
                 }
             }
+
         }
     }
 
     return 0;
 }
-
 
 void BrowserPackage::DragMoveEvent(QDragMoveEvent * e)
 {
@@ -2035,13 +2091,11 @@ void BrowserPackage::DragMoveInsideEvent(QDragMoveEvent * e)
         e->ignore();
 }
 
-bool BrowserPackage::may_contains_them(const Q3PtrList<BrowserNode> & l,
+bool BrowserPackage::may_contains_them(const QList<BrowserNode *> & l,
                                        BooL & duplicable) const
 {
-    Q3PtrListIterator<BrowserNode> it(l);
-
-    for (; it.current(); ++it) {
-        switch (it.current()->get_type()) {
+    foreach (BrowserNode *node, l) {
+        switch (node->get_type()) {
         case UmlPackage:
         case UmlUseCaseView:
         case UmlClassView:
@@ -2050,14 +2104,14 @@ bool BrowserPackage::may_contains_them(const Q3PtrList<BrowserNode> & l,
             break;
 
         default:
-            if (!IsaSimpleRelation(it.current()->get_type()) ||
-                    (((const BrowserNode *) it.current()->parent()) != this))
+            if (!IsaSimpleRelation(node->get_type()) ||
+                    (((const BrowserNode *) node->parent()) != this))
                 return FALSE;
         }
 
         duplicable = FALSE;
 
-        if (! may_contains(it.current(), FALSE))
+        if (! may_contains(node, FALSE))
             return FALSE;
     }
 
@@ -2091,28 +2145,32 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after)
                     (parent() != 0) &&
                     ((BrowserNode *) parent())->may_contains(bn, what == UmlPackage)) {
                 // have choice
-                Q3PopupMenu m(0);
+                QMenu m(0);
 
-                MenuFactory::createTitle(m, TR("move ") + bn->get_name());
-                m.insertSeparator();
+                MenuFactory::createTitle(m, QObject::TR("move ") + bn->get_name());
+                m.addSeparator();
 
                 if (!is_read_only)
-                    m.insertItem(TR("In ") + QString(get_name()), 1);
+                    MenuFactory::addItem(m, QObject::TR("In ") + QString(get_name()), 1);
 
-                m.insertItem(TR("After ") + QString(get_name()), 2);
+                MenuFactory::addItem(m, QObject::TR("After ") + QString(get_name()), 2);
 
-                switch (m.exec(QCursor::pos())) {
-                case 1:
-                    break;
+                QAction *retAction = m.exec(QCursor::pos());
+                if(retAction)
+                {
+                    switch (retAction->data().toInt()) {
+                    case 1:
+                        break;
 
-                case 2:
-                    after = this;
-                    x = (BrowserNode *) parent();
-                    break;
+                    case 2:
+                        after = this;
+                        x = (BrowserNode *) parent();
+                        break;
 
-                default:
-                    e->ignore();
-                    return;
+                    default:
+                        e->ignore();
+                        return;
+                    }
                 }
             }
 
@@ -2127,8 +2185,8 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             if (after)
                 bn->moveItem(after);
             else {
-                old_parent->takeItem(bn);
-                x->insertItem(bn);
+                old_parent->removeChild(bn);
+                x->addChild(bn);
             }
 
             if (old_parent != x) {
@@ -2146,7 +2204,7 @@ void BrowserPackage::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         else if ((parent() != 0) && (after == 0))
             ((BrowserNode *) parent())->DropAfterEvent(e, this);
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical (QObject::TR("Error"), QObject::TR("Forbidden"));
             e->ignore();
         }
     }
@@ -2186,10 +2244,11 @@ void BrowserPackage::init()
 
 void BrowserPackage::save_stereotypes()
 {
+
     QSharedPointer<QByteArray> newdef(new QByteArray());
     QTextStream st(newdef.data(), QIODevice::WriteOnly);
     //  QLOG_INFO() << newdef->data();
-    st.setEncoding(QTextStream::Latin1);
+    st.setCodec("latin1");
     //  QLOG_INFO() << newdef->data();
     nl_indent(st);
     st << "package_stereotypes ";
@@ -2202,7 +2261,6 @@ void BrowserPackage::save_stereotypes()
     nl_indent(st);
     st << "end";
     nl_indent(st);
-
     BrowserClass::save_stereotypes(st);
     BrowserUseCase::save_stereotypes(st);
     BrowserArtifact::save_stereotypes(st);
@@ -2230,11 +2288,11 @@ void BrowserPackage::save_stereotypes()
     BrowserDeploymentView::save_stereotypes(st);
     BrowserDiagram::save_stereotypes(st);
     st << "\nend\n";
-
     st << '\000';
     st.flush();
     QLOG_INFO() << newdef->data();
     save_if_needed("stereotypes", newdef);
+
 }
 
 void BrowserPackage::read_stereotypes(char *& st, char *& k)
@@ -2247,8 +2305,9 @@ void BrowserPackage::read_stereotypes(char *& st, char *& k)
         k = read_keyword(st);
 
         // force profile
-        if (its_default_stereotypes.findIndex("profile") == -1)
+        if (its_default_stereotypes.indexOf("profile") == -1)
             its_default_stereotypes.append("profile");
+
     }
     else
         init();
@@ -2267,6 +2326,7 @@ bool BrowserPackage::read_stereotypes(const char * f)
 
             read_stereotypes(st, k);				// updates k
             BrowserClass::read_stereotypes(st, k);		// updates k
+
             BrowserUseCase::read_stereotypes(st, k);		// updates k
             BrowserArtifact::read_stereotypes(st, k);		// updates k
             BrowserAttribute::read_stereotypes(st, k);	// updates k
@@ -2292,6 +2352,7 @@ bool BrowserPackage::read_stereotypes(const char * f)
             BrowserComponentView::read_stereotypes(st, k);	// updates k
             BrowserDeploymentView::read_stereotypes(st, k);	// updates k
             BrowserDiagram::read_stereotypes(st, k);		// updates k
+
         }
         catch (int) {
             ;
@@ -2307,13 +2368,13 @@ bool BrowserPackage::read_stereotypes(const char * f)
 
 bool BrowserPackage::import_stereotypes()
 {
-    QString fn = Q3FileDialog::getOpenFileName(last_used_directory(), "stereotypes");
+    QString fn = QFileDialog::getOpenFileName(0, "stereotypes", last_used_directory() );
 
     if (fn.isEmpty())
         return FALSE;
 
     set_last_used_directory(fn);
-    return read_stereotypes((const char *) fn);
+    return read_stereotypes((const char *) fn.toLatin1().constData());
 }
 
 // save / restore
@@ -2336,39 +2397,43 @@ void BrowserPackage::save_all(bool modified_only)
 {
     IdIterator<BrowserPackage> itcpt(all);
 
+
     must_be_saved_counter = 0;
     already_saved = 0;
 
-    while (itcpt.current()) {
-        BrowserPackage * pack = itcpt.current();
+    while (itcpt.hasNext()) {
+        itcpt.next();
+        BrowserPackage * pack = itcpt.value();
 
-        if (!pack->deletedp() &&
+        if (pack&&
+                !pack->deletedp() &&
                 (!modified_only ||
                  (pack->is_modified &&
                   (pack->is_imported || !pack->is_read_only))))
             pack->BrowserNode::init_save_counter();
 
-        ++itcpt;
+        //++itcpt;
+
     }
 
     if (must_be_saved_counter == 0)
         return;
-
     save_progress = new SaveProgress(must_be_saved_counter);
-
+    save_progress->show();
     IdIterator<BrowserPackage> it(all);
     QDir d = BrowserView::get_dir();
     QString warning;
 
-    while (it.current()) {
-        BrowserPackage * pack = it.current();
+    while (it.hasNext()) {
+        it.next();
+        BrowserPackage * pack = it.value();
         bool prj = (pack == BrowserView::get_project());
         QString fn;
 
         if (prj)
-            fn = ((const char *) pack->name) + QString(".prj");
+            fn = ((const char *) pack->name.toLatin1()) + QString(".prj");
         else
-            fn.setNum(it.currentKey());
+            fn.setNum(it.key());
 
         if (pack->deletedp()) {
             pack->is_modified = FALSE;
@@ -2380,28 +2445,28 @@ void BrowserPackage::save_all(bool modified_only)
             backup(d, fn);
 
             for (;;) {
-                QFile fp(d.absFilePath(fn));
+                QFile fp(d.absoluteFilePath(fn));
 
                 while (!fp.open(QIODevice::WriteOnly))
-                    (void) msg_critical(TR("Error"), TR("Cannot create file\n") + fn,
+                    (void) msg_critical(QObject::TR("Error"), QObject::TR("Cannot create file\n") + fn,
                                         QMessageBox::Retry);
 
                 if (prj)
-                    UmlWindow::historic_add(fp.name());
+                    UmlWindow::historic_add(fp.fileName());
 
                 QTextStream st(&fp);
 
-                st.setEncoding(QTextStream::Latin1);
+                st.setCodec("latin1"/*QTextStream::Latin1*/);
 
                 // saves the package own data
 
                 indent0();
                 st << "format " << api_format() << "\n";
 
-                save_string(pack->name, st);
+                save_string(pack->name.toLatin1().constData(), st);
 
                 if (!prj)
-                    st << " // " << (const char *) pack->full_name();
+                    st << " // " << pack->full_name();
 
                 indent(+1);
 
@@ -2409,7 +2474,7 @@ void BrowserPackage::save_all(bool modified_only)
                 st << "revision " << pack->revision;
                 nl_indent(st);
                 st << "modified_by " << user_id()
-                   << " \"" << (const char *) user_name() << '"';
+                   << " \"" << QString::fromLatin1(user_name()) << '"';
 
                 if (pack->owner != -1) {
                     // owner specified, the save is done => owner is current user !
@@ -2509,7 +2574,7 @@ void BrowserPackage::save_all(bool modified_only)
 
                 // saves the package's sub elts
 
-                Q3ListViewItem * child = pack->firstChild();
+                BrowserNode * child = pack->firstChild();
 
                 if (child != 0) {
                     for (;;) {
@@ -2539,7 +2604,7 @@ void BrowserPackage::save_all(bool modified_only)
 
                 fp.close();
 
-                if (static_cast<uint>(fp.status()) == IO_Ok) {
+                if (fp.error() == QFile::NoError) {
                     pack->is_imported = pack->is_modified = FALSE;
 
                     // for saveAs
@@ -2549,14 +2614,13 @@ void BrowserPackage::save_all(bool modified_only)
                     // all done
                     break;
                 }
-
-                (void) msg_critical(TR("Error"),
-                                    TR("Error while writting in\n%1\nmay be your disk is full", fn),
+                (void) msg_critical(QObject::TR("Error"),
+                                    QObject::TR("Error while writting in\n%1\nmay be your disk is full").arg(fn),
                                     QMessageBox::Retry);
             }
         }
 
-        ++it;
+        //it.next();
     }
 
     if (save_progress != 0)
@@ -2572,15 +2636,16 @@ bool BrowserPackage::must_be_saved()
 {
     IdIterator<BrowserPackage> it(all);
 
-    while (it.current()) {
-        if (it.current()->is_modified &&
-                !it.current()->deletedp() &&
-                !it.current()->is_read_only)
+    while (it.hasNext()) {
+        it.next();
+        if (it.value()&&
+                it.value()->is_modified &&
+                !it.value()->deletedp() &&
+                !it.value()->is_read_only)
             return TRUE;
 
-        ++it;
+        // ++it;
     }
-
     return FALSE;
 }
 
@@ -2592,20 +2657,18 @@ void BrowserPackage::save_session(QTextStream & st)
     QString warning;
 
     if (! marked_list.isEmpty()) {
-        Q3PtrListIterator<BrowserNode> it(marked_list);
-
         st << "marked\n";
 
-        for (; it.current() != 0; ++it) {
+        foreach (BrowserNode *node, marked_list) {
             st << "  ";
-            it.current()->save(st, TRUE, warning);
+            node->save(st, TRUE, warning);
             st << '\n';
         }
 
         st << "end\n";
     }
 
-    BrowserNode * sel = (BrowserNode *) listView()->currentItem();
+    BrowserNode * sel = (BrowserNode *) treeWidget()->currentItem();
 
     if ((sel != 0) && !sel->deletedp()) {
         st << "selected ";
@@ -2613,8 +2676,8 @@ void BrowserPackage::save_session(QTextStream & st)
         st << '\n';
     }
 
-    if (isOpen()) {
-        Q3ListViewItem * child;
+    if (isExpanded()) {
+        BrowserNode * child;
 
         st << "open\n";
 
@@ -2634,11 +2697,11 @@ void BrowserPackage::save_session(QTextStream & st)
     st << "end\n";
 }
 
-static void open_it(Q3ListViewItem * bn)
+static void open_it(BrowserNode * bn)
 {
-    if (bn && !bn->isOpen()) {
-        open_it(bn->parent());
-        bn->setOpen(TRUE);
+    if (bn && !bn->isExpanded()) {
+        open_it((BrowserNode *)bn->parent());
+        bn->setExpanded(TRUE);
     }
 }
 
@@ -2697,7 +2760,7 @@ void BrowserPackage::read_session(char *& st, const char * k)
         k = read_keyword(st);
     }
 
-    BrowserNode * sel;
+    BrowserNode * sel = 0;
 
     if (! strcmp(k, "selected")) {
         k = read_keyword(st);
@@ -2724,10 +2787,11 @@ void BrowserPackage::read_session(char *& st, const char * k)
         set_completion(TRUE);
 
     if (sel != 0) {
-        listView()->setSelected(sel, TRUE);
-        listView()->ensureItemVisible(sel);
-    }
+        sel->setSelected(true);
+        //treeWidget()->setsel(sel, TRUE);
+        treeWidget()->scrollToItem(sel, QAbstractItemView::EnsureVisible);
 
+    }
     // don't check old 'scroll n> <n>' or new 'end'
 }
 
@@ -2737,38 +2801,44 @@ BrowserNode * BrowserPackage::get_it(const char * k, int id)
         return all[id];
 
     BrowserNode * r;
+    if (((r = BrowserUseCaseView::get_it(k, id)) == 0)
 
-    if (((r = BrowserUseCaseView::get_it(k, id)) == 0) &&
+            &&
             ((r = BrowserClassView::get_it(k, id)) == 0) &&
             ((r = BrowserComponentView::get_it(k, id)) == 0) &&
-            ((r = BrowserDeploymentView::get_it(k, id)) == 0))
+            ((r = BrowserDeploymentView::get_it(k, id)) == 0
+             )
+            )
         r = BrowserSimpleRelation::get_it(k, id);
-
     return r;
 }
 
 // id is the old package's ident in case of an import
 unsigned BrowserPackage::load(bool recursive, int id)
 {
-    unsigned result = ~0;
+
+    unsigned  result = ~0;
     QString fn;
+
     bool prj = (this == BrowserView::get_project()) ||
             (this == BrowserView::get_imported_project());
 
     if (prj) {
         //const char * tName = name.operator WrapperStr();
         ///QByteArray ba = QString("test").toLatin1();
-        const char * tName = this->name;
-        fn.sprintf("%s.prj", tName);
+        //const char * tName = this->name.toLatin1().constData();
+        //fn.sprintf("%s.prj", tName);
+        fn = this->name + ".prj";
         QLOG_INFO() << fn;
     }
     else
         fn.setNum((id == -1) ? get_ident() : id);
 
     QFile fp((in_import())
-             ? BrowserView::get_import_dir().absFilePath(fn)
-             : BrowserView::get_dir().absFilePath(fn));
+             ? BrowserView::get_import_dir().absoluteFilePath(fn)
+             : BrowserView::get_dir().absoluteFilePath(fn));
     int sz;
+    //QString filename = fp.fileName();
 
     ReadContext context = current_context();
 
@@ -2781,12 +2851,12 @@ unsigned BrowserPackage::load(bool recursive, int id)
                 ((user_id() != 0) && is_api_base());
 
         do {
-            if ((nread = fp.readBlock(s + offset, sz - offset)) == -1) {
-                msg_critical(TR("Error"),
-                             BrowserView::get_dir().absFilePath(fn)
-                             + TR("cannot be read"));
+            if ((nread = fp.read(s + offset, sz - offset)) == -1) {
+                msg_critical(QObject::TR("Error"),
+                             BrowserView::get_dir().absoluteFilePath(fn)
+                             + QObject::TR("cannot be read"));
                 delete [] s;
-                THROW_ERROR 0;
+                throw 0;
             }
 
             offset += nread;
@@ -2808,7 +2878,7 @@ unsigned BrowserPackage::load(bool recursive, int id)
 
             if (read_file_format() > api_format(true)) {
                 msg_critical("Error",
-                             TR("Your version of DOUML is too old to read this project"));
+                             QObject::TR("Your version of DOUML is too old to read this project"));
                 throw 0;
             }
 
@@ -2817,8 +2887,8 @@ unsigned BrowserPackage::load(bool recursive, int id)
                 result = read_file_format();
 
                 if (read_file_format() <= 21) {
-                    msg_critical(TR("Error"),
-                                 TR(
+                    msg_critical(QObject::TR("Error"),
+                                 QObject::TR(
                                      "Sorry, the imported project has a too old format.\n"
                                      "To change its format : load this project and save it."));
                     throw 0;
@@ -2867,6 +2937,7 @@ unsigned BrowserPackage::load(bool recursive, int id)
 
                     if (read_file_format() <= 7) {
                         read_stereotypes(st, k);			// updates k
+
                         BrowserClass::read_stereotypes(st, k);	// updates k
                         BrowserUseCase::read_stereotypes(st, k);	// updates k
                         BrowserAttribute::read_stereotypes(st, k);	// updates k
@@ -2881,19 +2952,19 @@ unsigned BrowserPackage::load(bool recursive, int id)
                         Tool::read(st, k);				// updates k
                     }
                 }
-
                 if (read_file_format() <= 9)
                     def->read(st, k);			// updates k
 
                 class_settings.read(st, k);		// updates k
+
                 classdiagram_settings.read(st, k);	// updates k
+
                 usecasediagram_settings.read(st, k);	// updates k
                 sequencediagram_settings.read(st, k);	// updates k
                 collaborationdiagram_settings.read(st, k); // updates k
 
                 if (read_file_format() >= 25)
                     objectdiagram_settings.read(st, k);	// updates k
-
                 componentdiagram_settings.read(st, k);	// updates k
                 deploymentdiagram_settings.read(st, k);	// updates k
 
@@ -2902,7 +2973,6 @@ unsigned BrowserPackage::load(bool recursive, int id)
 
                 if (read_file_format() >= 26)
                     activitydiagram_settings.read(st, k);	// updates k
-
                 if (this == BrowserView::get_project()) {
                     // old version
                     if (classdiagram_settings.auto_label_position == UmlDefaultState)
@@ -2969,7 +3039,6 @@ unsigned BrowserPackage::load(bool recursive, int id)
 
                     k = read_keyword(st);
                 }
-
                 def->read(st, k);			// updates k
             }
             else if (prj)
@@ -2992,13 +3061,14 @@ unsigned BrowserPackage::load(bool recursive, int id)
 
             if (strcmp(k, "end"))
             {
-                while (BrowserPackage::read(st, k, this, recursive) ||
+                while (BrowserPackage::read(st, k, this, recursive)||
                        BrowserUseCaseView::read(st, k, this, recursive) ||
                        BrowserClassView::read(st, k, this, recursive) ||
                        ((read_file_format() >= 20) &&
                         BrowserComponentView::read(st, k, this, recursive)) ||
                        BrowserDeploymentView::read(st, k, this, recursive) ||
-                       BrowserSimpleRelation::read(st, k, this))
+                       BrowserSimpleRelation::read(st, k, this)
+                       )
                     k = read_keyword(st);
 
                 if (!strcmp(k, "preserve_bodies"))
@@ -3069,20 +3139,22 @@ unsigned BrowserPackage::load(bool recursive, int id)
 bool BrowserPackage::load_version(QString fn)
 {
     QFileInfo any_fi(fn);
-    QDir d(any_fi.dirPath(TRUE));
-    const QFileInfoList l = d.entryInfoList("*.prj"); // [lgfreitas] entryInfoList does not return a pointer anymore
+    QDir d(any_fi.absoluteFilePath());
+    QStringList patternList;
+    patternList<<"*.prj";
+    const QFileInfoList l = d.entryInfoList(patternList); // [lgfreitas] entryInfoList does not return a pointer anymore
 
     if (!l.empty()) {
         QListIterator<QFileInfo> it(l);
         QFileInfo fi = it.next(); // [lgfreitas] there is no it.current anymore to QList. Java-style iterators
 
         if (fi.exists()) {
-            fn = fi.absFilePath();
+            fn = fi.absoluteFilePath();
 
             char * s = read_file(fn);
 
             if (s == 0) {
-                msg_critical(TR("Error"), TR("can't read project file"));
+                msg_critical (QObject::TR("Error"), QObject::TR("can't read project file"));
                 return FALSE;
             }
 
@@ -3097,8 +3169,8 @@ bool BrowserPackage::load_version(QString fn)
                 set_read_file_format(read_unsigned(st));
 
                 if (read_file_format() > api_format(true)) {
-                    msg_critical(TR("Error"),
-                                 TR("Your version of DOUML is too old to read this project"));
+                    msg_critical (QObject::TR("Error"),
+                                  QObject::TR("Your version of DOUML is too old to read this project"));
                     throw 0;
                 }
             }
@@ -3114,8 +3186,7 @@ bool BrowserPackage::load_version(QString fn)
         }
     }
 
-    msg_critical(TR("Error"), TR("can't find project file"));
-
+    msg_critical (QObject::TR("Error"), QObject::TR("can't find project file"));
     return FALSE;
 }
 
@@ -3208,7 +3279,8 @@ void BrowserPackage::renumber(int phase)
 
     case 2: {
         QDir dir = BrowserView::get_dir();
-        QString filter = "_*";
+        QStringList filter;
+        filter<<"_*";
         const QFileInfoList l = dir.entryInfoList(filter); //[lgfreitas] QList has changed...
 
         if (!l.empty()) {
@@ -3218,7 +3290,7 @@ void BrowserPackage::renumber(int phase)
             // [lgfreitas] QList has changed
             while (it.hasNext()) {
                 fi = it.next();
-                QFile::remove(fi.absFilePath());
+                QFile::remove(fi.absoluteFilePath());
                 //++it;
             }
         }

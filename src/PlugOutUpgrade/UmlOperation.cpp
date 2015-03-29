@@ -33,7 +33,7 @@
 #include "util.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 static WrapperStr remove_throw(WrapperStr d)
 {
@@ -351,13 +351,13 @@ UmlOperation * UmlOperation::java2Php(UmlClass * php, UmlClass * java,
     to->set_Visibility(from->visibility());
     to->set_CppVisibility(from->cppVisibility());
 
-    const Q3ValueList<UmlParameter> params = from->params();
+    const QList<UmlParameter> params = from->params();
     unsigned index;
 
     for (index = 0; index != params.count(); index += 1)
         to->addParameter(index, params[index]);
 
-    const Q3ValueList<UmlTypeSpec> exceptions = from->exceptions();
+    const QList<UmlTypeSpec> exceptions = from->exceptions();
 
     for (index = 0; index != exceptions.count(); index += 1)
         to->addException(index, exceptions[index]);
@@ -415,13 +415,13 @@ UmlOperation * UmlOperation::java2Python(UmlClass * python, UmlClass * java,
     to->set_Visibility(from->visibility());
     to->set_CppVisibility(from->cppVisibility());
 
-    const Q3ValueList<UmlParameter> params = from->params();
+    const QList<UmlParameter> params = from->params();
     unsigned index;
 
     for (index = 0; index != params.count(); index += 1)
         to->addParameter(index, params[index]);
 
-    const Q3ValueList<UmlTypeSpec> exceptions = from->exceptions();
+    const QList<UmlTypeSpec> exceptions = from->exceptions();
 
     for (index = 0; index != exceptions.count(); index += 1)
         to->addException(index, exceptions[index]);
@@ -479,13 +479,13 @@ UmlOperation * UmlOperation::cpp2Python(UmlClass * python, UmlClass * cpp,
     to->set_Visibility(from->visibility());
     to->set_CppVisibility(from->cppVisibility());
 
-    const Q3ValueList<UmlParameter> params = from->params();
+    const QList<UmlParameter> params = from->params();
     unsigned index;
 
     for (index = 0; index != params.count(); index += 1)
         to->addParameter(index, params[index]);
 
-    const Q3ValueList<UmlTypeSpec> exceptions = from->exceptions();
+    const QList<UmlTypeSpec> exceptions = from->exceptions();
 
     for (index = 0; index != exceptions.count(); index += 1)
         to->addException(index, exceptions[index]);

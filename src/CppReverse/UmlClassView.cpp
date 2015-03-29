@@ -34,15 +34,15 @@
 #include "Package.h"
 #include "Progress.h"
 //Added by qt3to4:
-#include <Q3PtrList>
 
-static Q3PtrDict<UmlArtifact> Artifacts;
+
+static QHash<UmlArtifact*,UmlArtifact*> Artifacts;
 
 void UmlClassView::upload(ClassContainer * cnt)
 {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
 
     for (; v != vsup; v += 1)
         (*v)->upload(cnt);
@@ -50,9 +50,9 @@ void UmlClassView::upload(ClassContainer * cnt)
 
 bool UmlClassView::set_roundtrip_expected()
 {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
     bool result = isWritable();
 
     for (; v != vsup; v += 1)
@@ -61,9 +61,9 @@ bool UmlClassView::set_roundtrip_expected()
     return result;
 }
 
-void UmlClassView::mark_useless(Q3PtrList<UmlItem> & l)
+void UmlClassView::mark_useless(QList<UmlItem *> & l)
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
     UmlClassItem ** v = (UmlClassItem **) ch.data();
     UmlClassItem ** const vsup = v + ch.size();
 
@@ -74,9 +74,9 @@ void UmlClassView::mark_useless(Q3PtrList<UmlItem> & l)
 void UmlClassView::scan_it(int & n)
 {
     // compute artifact list
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
 
     n = 0;
 
@@ -87,7 +87,7 @@ void UmlClassView::scan_it(int & n)
             if (cl->is_roundtrip_expected()) {
                 UmlArtifact * art = cl->associatedArtifact();
 
-                if ((art != 0) && (Artifacts.find(art) == 0)) {
+                if ((art != 0) && (Artifacts.find(art) == Artifacts.end())) {
                     Artifacts.insert(art, art);
                     n += 1;
                 }
@@ -98,14 +98,18 @@ void UmlClassView::scan_it(int & n)
     if (n != 0) {
         Package::set_step(1, n);
 
-        Q3PtrDictIterator<UmlArtifact> iter(Artifacts);
+        QHashIterator<UmlArtifact*,UmlArtifact*> iter(Artifacts);
 
-        do {
-            ((UmlPackage *) iter.current()->parent()->parent())
-            ->get_package()->reverse(iter.current());
+        while (iter.hasNext()){
+            iter.next();
+            if(iter.value() != 0)
+            {
+            ((UmlPackage *) iter.value()->parent()->parent())
+            ->get_package()->reverse(iter.value());
             Progress::tic_it();
+            }
         }
-        while (++iter, iter.current() != 0);
+
 
         Package::set_step(1, -1);
     }
@@ -116,14 +120,17 @@ void UmlClassView::send_it(int n)
     if (n != 0) {
         Package::set_step(2, n);
 
-        Q3PtrDictIterator<UmlArtifact> iter(Artifacts);
-
-        do {
-            ((UmlPackage *) iter.current()->parent()->parent())
-            ->get_package()->reverse(iter.current());
-            Progress::tic_it();
+        QHashIterator<UmlArtifact*,UmlArtifact*> iter(Artifacts);
+        while(iter.hasNext())
+        {
+            iter.next();
+            if(iter.value() != 0)
+            {
+                ((UmlPackage *) iter.value()->parent()->parent())
+                ->get_package()->reverse(iter.value());
+                Progress::tic_it();
         }
-        while (++iter, iter.current() != 0);
+        }
 
         Package::set_step(2, -1);
     }

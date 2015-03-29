@@ -1,6 +1,6 @@
 // *************************************************************************
 //
-// Copyright 2012-2013 Nikolai Marchenko  .
+// Copyright 2012-2013 Nikolai Marchenko.
 //
 // This file is part of the Douml Uml Toolkit.
 //
@@ -53,16 +53,17 @@ void EdgeMenuDialogBase::PickNextSibling()
 
     while (continueSearch)
     {
+
         nextNode = dynamic_cast<BrowserNode *>(currentNode->itemAbove());
         QLOG_INFO() << "CurrentNode is: "<< currentNode->get_name();
-
-        QLOG_INFO() << "NEXT: " << nextNode->get_name() << " " << nextNode->depth();
         if (!nextNode)
             break;
 
+        QLOG_INFO() << "NEXT: " << nextNode->get_name() << " " << nextNode->depth();
+
+
         QLOG_INFO() << "NextNode is: "<< nextNode->get_name();
         bool sameLevel = originalNode->depth() == nextNode->depth();
-
         bool sameType = originalNode->get_stype() == nextNode->get_stype();
 
         QLOG_INFO() << originalNode->get_stype();
@@ -111,7 +112,6 @@ void EdgeMenuDialogBase::PickPreviousSibling()
 
         currentNode = previousNode;
     }
-
     if (previousNode == 0)
         return;
 
@@ -121,7 +121,9 @@ void EdgeMenuDialogBase::PickPreviousSibling()
 
 void EdgeMenuDialogBase::SetToolBar(EdgeMenuToolBar * newToolbar)
 {
+#ifdef EDGETOOLENABLED
     toolbar = newToolbar;
+#endif
 }
 
 void EdgeMenuDialogBase::InitGui()

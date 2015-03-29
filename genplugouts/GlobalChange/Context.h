@@ -1,8 +1,8 @@
 #ifndef _CONTEXT_H
 #define _CONTEXT_H
+#include <QByteArray>
 
 
-#include <q3cstring.h>
 
 enum Equation {
     NoFilter,
@@ -18,23 +18,23 @@ enum Equation {
 class Context
 {
 public:
-    Context(const Q3CString & o, const Q3CString & f);
+    Context(const QByteArray & o, const QByteArray & f);
 
-    const char * set_filters(const Q3CString & f1, const Q3CString & f2, const Q3CString & f3, bool w1, bool w2, bool w3, bool and12, bool and23);
+    const char * set_filters(const QByteArray & f1, const QByteArray & f2, const QByteArray & f3, bool w1, bool w2, bool w3, bool and12, bool and23);
 
-    void set_stereotype(const Q3CString & s, bool eq, bool neq);
+    void set_stereotype(const QByteArray & s, bool eq, bool neq);
 
     void set_targets(bool art, bool cl, bool op, bool att, bool rel);
 
     void set_language(bool c, bool j, bool p, bool y, bool i);
 
-    bool match_stereotype(const Q3CString & s);
+    bool match_stereotype(const QByteArray & s);
 
-    bool match(Q3CString s);
+    bool match(QByteArray s);
 
     void err();
 
-    Q3CString replace(Q3CString s);
+    QByteArray replace(QByteArray s);
 
     bool onArtifact() const;
 
@@ -62,11 +62,11 @@ public:
 
 
 protected:
-    Q3CString _filter1;
+    QByteArray _filter1;
 
-    Q3CString _filter2;
+    QByteArray _filter2;
 
-    Q3CString _filter3;
+    QByteArray _filter3;
 
     bool _with1;
 
@@ -74,7 +74,7 @@ protected:
 
     bool _with3;
 
-    Q3CString _stereotype;
+    QByteArray _stereotype;
 
     bool _is;
 
@@ -100,9 +100,9 @@ protected:
 
     bool _idl;
 
-    Q3CString _old;
+    QByteArray _old;
 
-    Q3CString _future;
+    QByteArray _future;
 
     Equation _equation;
 
@@ -110,11 +110,11 @@ protected:
 
     int _n_err;
 
-    bool match(Q3CString s, const Q3CString & filter, bool with);
+    bool match(QByteArray s, const QByteArray & filter, bool with);
 
 };
 
-inline void Context::set_stereotype(const Q3CString & s, bool eq, bool neq)
+inline void Context::set_stereotype(const QByteArray & s, bool eq, bool neq)
 {
     _stereotype = s;
     _is = eq;

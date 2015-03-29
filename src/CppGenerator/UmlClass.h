@@ -28,14 +28,10 @@
 #ifndef UMLCLASS_H
 #define UMLCLASS_H
 
-#include <q3dict.h>
-#include <q3ptrlist.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3ValueList>
-#include <Q3PtrList>
-
+#include <QList>
 #include "UmlBaseClass.h"
 #include "UmlTypeSpec.h"
 #include "UmlFormalParameter.h"
@@ -52,9 +48,9 @@ class UmlClass : public UmlBaseClass
 private:
     bool managed;
 
-    static Q3PtrList<UmlClass> context;
+    static QList<UmlClass *> context;
 
-    static Q3ValueList<UmlActualParameter> noactuals;
+    static QList<UmlActualParameter> noactuals;
 
 public:
     UmlClass(void * id, const WrapperStr & n)
@@ -62,9 +58,9 @@ public:
 
     WrapperStr cpp_stereotype();
 
-    void compute_dependencies(Q3PtrList<CppRefType> &, bool all_in_h);
+    void compute_dependencies(QList<CppRefType *> &, bool all_in_h);
 
-    virtual void compute_dependency(Q3PtrList<CppRefType> & dependency,
+    virtual void compute_dependency(QList<CppRefType *> & dependency,
                                     const WrapperStr & cl_stereotype,
                                     bool all_in_h);
     virtual void generate_decl(aVisibility & current_visibility,
@@ -88,7 +84,7 @@ public:
 
     void write(QTextStream &, bool with_formals = TRUE,
                BooL * is_template = 0,
-               const Q3ValueList<UmlActualParameter> & actuals = noactuals);
+               const QList<UmlActualParameter> & actuals = noactuals);
     static void write(QTextStream &, const UmlTypeSpec &,
                       bool with_formals = TRUE,
                       BooL * is_template = 0);

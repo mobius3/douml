@@ -32,14 +32,14 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 
-class Q3TextEdit;
+class QTextEdit;
 
 class ShowFileDialog : public QDialog
 {
     Q_OBJECT
 
 protected:
-    Q3TextEdit * e;
+    QTextEdit * e;
 
 public:
     ShowFileDialog(const WrapperStr & fn);

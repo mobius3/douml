@@ -5,7 +5,7 @@
 #include "UmlBaseRegion.h"
 #include "UmlStateItem.h"
 
-#include <q3ptrlist.h>
+
 
 class UmlTransition;
 class FileOut;
@@ -32,7 +32,7 @@ public:
 protected:
 #if 0
     // To bypass Eclipse's bug
-    Q3PtrList<UmlTransition> _trans;
+    QList<UmlTransition*> _trans;
 #endif
 
 };

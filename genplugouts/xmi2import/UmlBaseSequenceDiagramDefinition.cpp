@@ -40,7 +40,7 @@ static void qsort(UmlSequenceMessage ** v, int low, int high)
 }
 void UmlBaseSequenceDiagramDefinition::read_()
 {
-    Q3PtrDict<UmlClassInstanceReference> instances;
+    QHash<void*,UmlClassInstanceReference*> instances;
     unsigned n;
     unsigned rank;
 
@@ -54,7 +54,7 @@ void UmlBaseSequenceDiagramDefinition::read_()
         f->read_();
     }
 
-    _fragments.setAutoDelete(TRUE);
+    //_fragments.setAutoDelete(TRUE);
     UmlBaseFragment::compute_container_(_fragments);
 
     n = UmlCom::read_unsigned();
@@ -68,7 +68,7 @@ void UmlBaseSequenceDiagramDefinition::read_()
         i->read_();
     }
 
-    _instances.setAutoDelete(TRUE);
+    //_instances.setAutoDelete(TRUE);
 
     n = UmlCom::read_unsigned();
     _messages.resize(n);
@@ -82,7 +82,7 @@ void UmlBaseSequenceDiagramDefinition::read_()
         }
 
         ::qsort(_messages.data(), 0, n - 1);
-        _messages.setAutoDelete(TRUE);
+        //_messages.setAutoDelete(TRUE);
     }
 
     n = _fragments.count();

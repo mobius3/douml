@@ -57,14 +57,14 @@ void UmlComponent::manageInterface(Token & token, FileIn & in)
 {
     WrapperStr idref = token.valueOf("supplier");
 
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
     int c = ((const char *) token.what())[0];
 
     if (it != All.end()) {
         if ((*it)->kind() == aClass) {
             if (c == 'i') {
                 // provided
-                Q3PtrVector<UmlClass> provided = providedClasses();
+                QVector<UmlClass*> provided = providedClasses();
                 unsigned sz = provided.size();
 
                 provided.resize(sz + 1);
@@ -73,7 +73,7 @@ void UmlComponent::manageInterface(Token & token, FileIn & in)
             }
             else {
                 // realization
-                Q3PtrVector<UmlClass> realizing = realizingClasses();
+                QVector<UmlClass*> realizing = realizingClasses();
                 unsigned sz = realizing.size();
 
                 realizing.resize(sz + 1);
@@ -102,13 +102,13 @@ UmlItem * UmlComponent::container(anItemKind kind, Token & token, FileIn & in)
 
 void UmlComponent::solve(int context, WrapperStr idref)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it = All.find(idref);
+    QMap<QString, UmlItem *>::Iterator it = All.find(idref);
 
     if (it != All.end()) {
         if ((*it)->kind() == aClass) {
             if (context == 'i') {
                 // provided
-                Q3PtrVector<UmlClass> provided = providedClasses();
+                QVector<UmlClass*> provided = providedClasses();
                 unsigned sz = provided.size();
 
                 provided.resize(sz + 1);
@@ -117,7 +117,7 @@ void UmlComponent::solve(int context, WrapperStr idref)
             }
             else {
                 // realization
-                Q3PtrVector<UmlClass> realizing = realizingClasses();
+                QVector<UmlClass*> realizing = realizingClasses();
                 unsigned sz = realizing.size();
 
                 realizing.resize(sz + 1);
@@ -134,7 +134,7 @@ void UmlComponent::generalizeDependRealize(UmlItem * target, FileIn & in, int co
 {
     if ((context == 3) && (target->kind() == aClass)) {
         // usage indicate a required interface
-        Q3PtrVector<UmlClass> required = requiredClasses();
+        QVector<UmlClass*> required = requiredClasses();
         unsigned sz = required.size();
 
         required.resize(sz + 1);
@@ -147,13 +147,13 @@ void UmlComponent::generalizeDependRealize(UmlItem * target, FileIn & in, int co
 
 void UmlComponent::solveGeneralizationDependencyRealization(int context, WrapperStr idref, WrapperStr label, WrapperStr constraint)
 {
-    QMap<WrapperStr, UmlItem *>::Iterator it;
+    QMap<QString, UmlItem *>::Iterator it;
 
     if ((context == 3) &&
         ((it = All.find(idref)) != All.end()) &&
         ((*it)->kind() == aClass)) {
         // usage indicate resuired interface
-        Q3PtrVector<UmlClass> required = requiredClasses();
+        QVector<UmlClass*> required = requiredClasses();
         unsigned sz = required.size();
 
         required.resize(sz + 1);

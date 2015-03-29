@@ -36,7 +36,6 @@
 #include "myio.h"
 #include "ToolCom.h"
 #include "mu.h"
-//Added by qt3to4:
 #include <QTextStream>
 
 ExtraMemberData::ExtraMemberData()
@@ -83,7 +82,7 @@ QString ExtraMemberData::definition(bool, bool with_kind) const
 
 void ExtraMemberData::edit()
 {
-    setName(browser_node->get_name());
+    setObjectName(browser_node->get_name());
 
     (new ExtraMemberDialog(this))->show();
 }

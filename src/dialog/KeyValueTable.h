@@ -28,26 +28,37 @@
 #ifndef KEYVALUETABLE_H
 #define KEYVALUETABLE_H
 
-#include <q3dict.h>
+////
 #include "StringTable.h"
 
 class HaveKeyValueData;
-
+class TableWidgetItemDelegate;
 class KeyValuesTable : public StringTable
 {
 public:
     KeyValuesTable(HaveKeyValueData * h, QWidget * parent, bool visit);
 
     virtual void init_row(int index);
-
+    bool eventFilter(QObject *o, QEvent *);
     bool check_unique();
     void updateNodeFromThis(HaveKeyValueData * h);
     void updateThisFromNode(HaveKeyValueData * h, bool visit = false);
     bool get_value(const char * key, QString & value);
     void remove(const char * key);
 
+    bool EqualData(HaveKeyValueData*);
+
 private:
-    Q3Dict<QStringList> props;
+    void Init(HaveKeyValueData * h, bool isReadOnly);
+    void SetupTableText(HaveKeyValueData * hv, bool isReadOnly);
+    void AdjustColumnCount(bool);
+    void AdjustRowCount(HaveKeyValueData *, bool);
+    void AdjustEditability(bool);
+    QHash<QString, QStringList> props;
+    QHash<int, QString> colNames;
+    TableWidgetItemDelegate* m_delegate;
+
+
 };
 
 #endif

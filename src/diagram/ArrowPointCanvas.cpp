@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -37,11 +37,12 @@
 
 #include "ArrowPointCanvas.h"
 #include "ArrowCanvas.h"
+
 #include "RelationCanvas.h"
 #include "SimpleRelationCanvas.h"
-#include "TransitionCanvas.h"
-#include "FlowCanvas.h"
 #include "CodLinkCanvas.h"
+#include "FlowCanvas.h"
+#include "TransitionCanvas.h"
 #include "ObjectLinkCanvas.h"
 #include "AssocContainCanvas.h"
 #include "UmlCanvas.h"
@@ -55,6 +56,7 @@ ArrowPointCanvas::ArrowPointCanvas(UmlCanvas * canvas, int x, int y)
     : DiagramCanvas(0, canvas, x, y, ARROW_POINT_SIZE, ARROW_POINT_SIZE, -1)
 {
     browser_node = canvas->browser_diagram();
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 ArrowPointCanvas::~ArrowPointCanvas()
@@ -72,7 +74,7 @@ void ArrowPointCanvas::delete_it()
 void ArrowPointCanvas::delete_available(BooL &,
                                         BooL & out_model) const
 {
-    out_model |= lines.getFirst()->may_join();
+    out_model |= lines.first()->may_join();
 }
 
 // not produced in SVG file
@@ -80,9 +82,9 @@ void ArrowPointCanvas::delete_available(BooL &,
 void ArrowPointCanvas::change_scale()
 {
     // the size is not modified
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void ArrowPointCanvas::draw(QPainter & p)
@@ -101,8 +103,12 @@ void ArrowPointCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
-
-UmlCode ArrowPointCanvas::type() const
+void ArrowPointCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    //DiagramCanvas::paint(painter, option, widget);
+    draw(*painter);
+}
+UmlCode ArrowPointCanvas::typeUmlCode() const
 {
     return UmlArrowPoint;
 }
@@ -140,7 +146,6 @@ void ArrowPointCanvas::connexion(UmlCode action, DiagramItem * dest,
             the_canvas()->select(a);
             return;
         }
-
         break;
 
     case UmlDeploymentDiagram:
@@ -167,11 +172,9 @@ void ArrowPointCanvas::connexion(UmlCode action, DiagramItem * dest,
             the_canvas()->select(a);
             return;
         }
-
     default:	// to avoid warning
         break;
     }
-
     if (IsaSimpleRelation(action))
         a = new SimpleRelationCanvas(the_canvas(), this, dest, 0, action, 0, -1.0, -1.0);
     else
@@ -197,34 +200,36 @@ void ArrowPointCanvas::open()
 
 void ArrowPointCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m;
+    QMenu m;
 
-    MenuFactory::createTitle(m, TR("Line break"));
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 0);
-    m.setItemEnabled(0, lines.at(0)->may_join());
+    MenuFactory::createTitle(m, QObject::tr("Line break"));
+    m.addSeparator();
+    MenuFactory::addItem(m,QObject::tr("Remove from diagram"), 0);
+    m.setEnabled(lines.at(0)->may_join());
+    // m.actions().at(0)->setItemEnabled(0, lines.at(0)->may_join());
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+        switch (retAction->data().toInt()) {
+        case 0:
+            // removes the point replacing the lines around it by a single line
+            lines.at(0)->join(lines.at(1), this);
+            break;
 
-    switch (m.exec(QCursor::pos())) {
-    case 0:
-        // removes the point replacing the lines around it by a single line
-        lines.at(0)->join(lines.at(1), this);
-        break;
-
-    default:
-        return;
-    }
+        default:
+            return;
+        }
 
     package_modified();
 }
 
 QString ArrowPointCanvas::may_start(UmlCode &) const
 {
-    return TR("illegal");
+    return QObject::tr("illegal");
 }
 
 QString ArrowPointCanvas::may_connect(UmlCode &, const DiagramItem *) const
 {
-    return TR("illegal");
+    return QObject::tr("illegal");
 }
 
 bool ArrowPointCanvas::alignable() const
@@ -241,7 +246,7 @@ void ArrowPointCanvas::prepare_for_move(bool)
 
 ArrowCanvas * ArrowPointCanvas::get_other(const ArrowCanvas * l) const
 {
-    return (lines.getFirst() == l) ? lines.getLast() : lines.getFirst();
+    return (lines.first() == l) ? lines.last() : lines.first();
 }
 
 void ArrowPointCanvas::save(QTextStream & st, bool, QString &) const
@@ -250,7 +255,7 @@ void ArrowPointCanvas::save(QTextStream & st, bool, QString &) const
 }
 
 ArrowPointCanvas * ArrowPointCanvas::read(char *& st, UmlCanvas * canvas,
-        char * k)
+                                          char * k)
 {
     if (strcmp(k, "point"))
         return 0;
@@ -258,7 +263,7 @@ ArrowPointCanvas * ArrowPointCanvas::read(char *& st, UmlCanvas * canvas,
     int x = (int) read_double(st);
 
     ArrowPointCanvas * result =
-        new ArrowPointCanvas(canvas, x, (int) read_double(st));
+            new ArrowPointCanvas(canvas, x, (int) read_double(st));
 
     result->show();
 

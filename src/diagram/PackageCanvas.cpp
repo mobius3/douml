@@ -31,13 +31,14 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QPixmap>
 
 #include "PackageCanvas.h"
 #include "SimpleRelationCanvas.h"
+
 #include "DiagramView.h"
 #include "PackageData.h"
 #include "BrowserPackage.h"
@@ -231,11 +232,11 @@ void PackageCanvas::change_scale()
 {
     double scale = the_canvas()->zoom();
 
-    Q3CanvasRectangle::setVisible(FALSE);
-    setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+    QGraphicsRectItem::setVisible(FALSE);
+    setRect(rect().x(), rect().y(),(int)(width_scale100 * scale), (int)(height_scale100 * scale));
     check_size();
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void PackageCanvas::draw(QPainter & p)
@@ -253,6 +254,7 @@ void PackageCanvas::draw(QPainter & p)
     if (fp != 0)
         fputs("<g>\n", fp);
 
+    QBrush backbrush = p.background();
     if (px != 0) {
         p.setBackgroundMode(::Qt::TransparentMode);
 
@@ -267,7 +269,7 @@ void PackageCanvas::draw(QPainter & p)
                     " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                     svg_color(UmlBlack), lft, r.y(), px->width() - 1, px->height() - 1);
 
-        r.moveBy(0, px->height());
+        r.moveTo(0, px->height());
         p.setFont(the_canvas()->get_font(UmlNormalBoldFont));
         p.drawText(r, ::Qt::AlignHCenter, browser_node->get_name());
 
@@ -279,11 +281,12 @@ void PackageCanvas::draw(QPainter & p)
         p.setFont(the_canvas()->get_font(UmlNormalFont));
     }
     else {
-        QColor bckgrnd = p.backgroundColor();
+        QColor bckgrnd = p.background().color();
         QColor co = color(used_color);
 
         p.setBackgroundMode((used_color == UmlTransparent) ? ::Qt::TransparentMode : ::Qt::OpaqueMode);
-        p.setBackgroundColor(co);
+        backbrush.setColor(co);
+        p.setBackground(backbrush);
         p.setFont(the_canvas()->get_font(UmlNormalFont));
 
         QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
@@ -322,7 +325,7 @@ void PackageCanvas::draw(QPainter & p)
                         r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - shadow - 1);
         }
 
-        const char * name = browser_node->get_name();
+        QString name = browser_node->get_name(); //.toLatin1().constData();
 
         if (in_tab) {
             p.drawText(r, ::Qt::AlignCenter, name);
@@ -410,7 +413,8 @@ void PackageCanvas::draw(QPainter & p)
             p.setFont(the_canvas()->get_font(UmlNormalFont));
         }
 
-        p.setBackgroundColor(bckgrnd);
+        backbrush.setColor(bckgrnd);
+        p.setBackground(backbrush);
     }
 
     if (fp != 0)
@@ -419,8 +423,11 @@ void PackageCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
-
-UmlCode PackageCanvas::type() const
+void PackageCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode PackageCanvas::typeUmlCode() const
 {
     return UmlPackage;
 }
@@ -472,50 +479,53 @@ void PackageCanvas::post_loaded()
 
 void PackageCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Add related elements"), 10);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Add related elements"), 10);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
             (BrowserNode *) the_canvas()->browser_diagram())
-            m.insertItem(TR("Set associated diagram"), 6);
+            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            m.insertItem(TR("Remove diagram association"), 9);
+            MenuFactory::addItem(m, TR("Remove diagram association"), 9);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlPackage, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    int rank = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    int rank = retAction->data().toInt();
 
     switch (rank) {
     case 0:
@@ -587,6 +597,7 @@ void PackageCanvas::menu(const QPoint &)
 
         return;
     }
+    }
 
     package_modified();
 }
@@ -651,7 +662,7 @@ bool PackageCanvas::has_drawing_settings() const
     return TRUE;
 }
 
-void PackageCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
+void PackageCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 {
     for (;;) {
         StateSpecVector st(3);
@@ -671,22 +682,21 @@ void PackageCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
-            Q3PtrListIterator<DiagramItem> it(l);
-
-            for (; it.current(); ++it) {
+            foreach (DiagramItem *item, l) {
+                PackageCanvas *canvas = (PackageCanvas *)item;
                 if (!st[0].name.isEmpty())
-                    ((PackageCanvas *) it.current())->name_in_tab = name_in_tab;
+                    canvas->name_in_tab = name_in_tab;
 
                 if (!st[1].name.isEmpty())
-                    ((PackageCanvas *) it.current())->show_context_mode = show_context_mode;
+                    canvas->show_context_mode = show_context_mode;
 
                 if (!st[2].name.isEmpty())
-                    ((PackageCanvas *) it.current())->show_stereotype_properties = show_stereotype_properties;
+                    canvas->show_stereotype_properties = show_stereotype_properties;
 
                 if (!co[0].name.isEmpty())
-                    ((PackageCanvas *) it.current())->itscolor = itscolor;
+                    canvas->itscolor = itscolor;
 
-                ((PackageCanvas *) it.current())->modified();	// call package_modified()
+                canvas->modified();
             }
         }
 
@@ -695,21 +705,14 @@ void PackageCanvas::edit_drawing_settings(Q3PtrList<DiagramItem> & l)
     }
 }
 
-void PackageCanvas::same_drawing_settings(Q3PtrList<DiagramItem> & l)
+void PackageCanvas::clone_drawing_settings(const DiagramItem *src)
 {
-    Q3PtrListIterator<DiagramItem> it(l);
-
-    PackageCanvas * x = (PackageCanvas *) it.current();
-
-    while (++it, it.current() != 0) {
-        PackageCanvas * o = (PackageCanvas *) it.current();
-
-        o->name_in_tab = x->name_in_tab;
-        o->show_context_mode = x->show_context_mode;
-        o->show_stereotype_properties = x->show_stereotype_properties;
-        o->itscolor = x->itscolor;
-        o->modified();	// call package_modified()
-    }
+    const PackageCanvas * x = (const PackageCanvas *) src;
+    name_in_tab = x->name_in_tab;
+    show_context_mode = x->show_context_mode;
+    show_stereotype_properties = x->show_stereotype_properties;
+    itscolor = x->itscolor;
+    modified();
 }
 
 bool PackageCanvas::get_show_stereotype_properties() const
@@ -795,15 +798,15 @@ void PackageCanvas::prepare_for_move(bool on_resize)
     if (! on_resize) {
         DiagramCanvas::prepare_for_move(on_resize);
 
-        Q3CanvasItemList l = collisions(TRUE);
-        Q3CanvasItemList::ConstIterator it;
-        Q3CanvasItemList::ConstIterator end = l.end();
+        QList<QGraphicsItem*> l = collidingItems();
+        QList<QGraphicsItem*>::ConstIterator it;
+        QList<QGraphicsItem*>::ConstIterator end = l.end();
         DiagramItem * di;
         BrowserNode * p = get_bn();
 
         for (it = l.begin(); it != end; ++it) {
-            if ((*it)->visible() && // at least not deleted
-                !(*it)->selected() &&
+            if ((*it)->isVisible() && // at least not deleted
+                !(*it)->isSelected() &&
                 ((di = QCanvasItemToDiagramItem(*it)) != 0) &&
                 di->move_with_its_package()) {
                 BrowserNode * bn = di->get_bn();
@@ -923,7 +926,7 @@ PackageCanvas * PackageCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
 void PackageCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
     disconnect(browser_node->get_data(), 0, this, 0);
 }
@@ -947,7 +950,7 @@ void PackageCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
