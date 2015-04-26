@@ -59,7 +59,7 @@ static char * read_file(const char * filename)
         int size = fi.size();
         char * s = new char[size + 1];
 
-        if (fp.readBlock(s, size) == -1) {
+        if (fp.read(s, size) == -1) {
             delete [] s;
             return 0;
         }

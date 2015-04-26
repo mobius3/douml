@@ -2,18 +2,15 @@
 #include "UmlMessage.h"
 #include "FileOut.h"
 #include "UmlItem.h"
-
-#include <q3asciidict.h>
-
 #include "UmlClassInstanceReference.h"
 
-void UmlMessage::write_connectors(FileOut & out, UmlItem * diagram, const Q3PtrVector<UmlMessage> & msgs)
+void UmlMessage::write_connectors(FileOut & out, UmlItem * diagram, const QVector<UmlMessage*> & msgs)
 {
     unsigned sup = msgs.size();
     unsigned index;
-    Q3AsciiDict<char> connectors;
+    QHash<char*, char*> connectors;
 
-    connectors.setAutoDelete(TRUE);
+    //connectors.setAutoDelete(TRUE);
 
     for (index = 0; index != sup; index += 1) {
         UmlMessage * msg = msgs.at(index);
@@ -24,7 +21,7 @@ void UmlMessage::write_connectors(FileOut & out, UmlItem * diagram, const Q3PtrV
 
         const char * k = msg->from()->connector(msg->to());
 
-        if (connectors.find(k) == 0) {
+        if (!connectors.contains(const_cast<char*>(k))) {
             char * kk = new char[strlen(k) + 1];
 
             strcpy(kk, k);

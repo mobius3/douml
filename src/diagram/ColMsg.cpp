@@ -42,9 +42,7 @@
 #include "CodDirsCanvas.h"
 #include "myio.h"
 #include "ToolCom.h"
-//Added by qt3to4:
 #include <QTextStream>
-#include <Q3PtrCollection>
 
 void ColMsgList::sort()
 {
@@ -153,7 +151,7 @@ QString ColMsg::def(bool hierarchical, bool full,
 
 QString ColMsg::next_hierarchical_rank() const
 {
-    int index = hierarchical_rank.findRev('.');
+    int index = hierarchical_rank.lastIndexOf('.');
 
     return (index == -1)
            ? QString::number(hierarchical_rank.toUInt() + 1)
@@ -205,11 +203,13 @@ ColMsg * ColMsg::new_one(const OperationData * d, const QString & e, bool f,
 
 void ColMsg::place_in_its_support()
 {
-    const char * hr = hierarchical_rank;
+
+    QByteArray byteArray = hierarchical_rank.toLatin1();
+    const char * hr = byteArray.constData();
 
     unsigned index = 0;
     foreach (ColMsg *msg, in->get_msgs()) {
-        if (!gt(hr, msg->hierarchical_rank)) {
+        if (!gt(hr, msg->hierarchical_rank.toLatin1().constData())) {
             in->get_msgs().insert(index, this);
             return;
         }
@@ -244,7 +244,7 @@ void ColMsg::place_in_internal(ColMsgList & l)
         it.toBack();
         while (it.hasPrevious()) {
             m = it.previous();
-            if (gt(hierarchical_rank, m->hierarchical_rank))
+            if (gt(hierarchical_rank.toLatin1().constData(), m->hierarchical_rank.toLatin1().constData()))
                 break;
             --index;
         }
@@ -269,7 +269,7 @@ void ColMsg::get_all_in_all_out(ColMsgList & all_in, ColMsgList & all_out,
 
         unsigned index = 0;
         foreach (ColMsg *nestedMsg, l) {
-            if (lt(hi, nestedMsg->hierarchical_rank))
+            if (lt(hi.toLatin1().constData(), nestedMsg->hierarchical_rank.toLatin1().constData()))
                 break;
             ++index;
         }
@@ -405,7 +405,7 @@ void ColMsg::save(QTextStream & st, const ColMsgList & l, bool copy,
                 }
                 else {
                     st << "explicitmsg ";
-                    save_string(br_op->get_name(), st);
+                    save_string(br_op->get_name().toLatin1().constData(), st);
                 }
             }
             else {
@@ -415,14 +415,14 @@ void ColMsg::save(QTextStream & st, const ColMsgList & l, bool copy,
         }
         else {
             st << "explicitmsg ";
-            save_string(msg->explicit_operation, st);
+            save_string(msg->explicit_operation.toLatin1().constData(), st);
         }
 
         indent(+1);
         nl_indent(st);
         st << ((msg->is_forward) ? "forward" : "backward")
            << " ranks " << msg->absolute_rank << " ";
-        save_string(msg->hierarchical_rank, st);
+        save_string(msg->hierarchical_rank.toLatin1().constData(), st);
 
         st << " ";
         msg->in->save(st, TRUE, warning);
@@ -535,6 +535,6 @@ void ColMsg::send(ToolCom * com, const ColMsgList & l)
         com->write_unsigned((unsigned) to->get_ident());
 
         com->write_unsigned(msg->absolute_rank);
-        com->write_string((const char *) msg->hierarchical_rank);
+        com->write_string((const char *) msg->hierarchical_rank.toLatin1().constData());
     }
 }

@@ -178,7 +178,7 @@ void BuiltinTable::TableSetup()
     types_table->setModel(sortModel);
 
     types_table->setAlternatingRowColors(true);
-    types_table->setSortingEnabled(true);
+    //types_table->setSortingEnabled(true);
     types_table->resizeColumnToContents(0);
     types_table->resizeColumnToContents(8);
     types_table->resizeRowsToContents();

@@ -34,7 +34,7 @@
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 #include "SynchroDialog.h"
 #include "BrowserView.h"

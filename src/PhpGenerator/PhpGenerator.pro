@@ -103,13 +103,15 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
 TARGET          = php_generator
-DEFINES          = WITHPHP
+DEFINES          = WITHPHP FALSE=false TRUE=true
 INCLUDEPATH   = ../Tools ../PhpGenerator ../
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network
+#qt3support
 
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/php_generator

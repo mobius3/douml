@@ -29,16 +29,16 @@
 #include <qdatastream.h>
 #ifndef REVERSE
 #include <qapplication.h>
-#include <q3popupmenu.h>
+#include <qmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 #include <qmessagebox.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include "misc/mystr.h"
 #include <QPixmap>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 #endif
 
 #include "Class.h"
@@ -163,15 +163,15 @@ UmlClass * Class::get_uml()
     UmlItem * p = (((BrowserNode *) parent())->isa_package())
                   ? (UmlItem *)((Package *) parent())->get_uml()->get_classview()
                   : (UmlItem *)((Class *) parent())->get_uml();
-    WrapperStr str = WrapperStr(text(0).toAscii().constData());
+    WrapperStr str = WrapperStr(text(0).toLatin1().constData());
 
     uml = UmlBaseClass::create(p, str);
 
     if (uml == 0) {
         // probably already exist
-        const Q3PtrVector<UmlItem> & ch = p->children();
-        UmlItem ** v = ch.data();
-        UmlItem ** const vsup = v + ch.size();
+        const QVector<UmlItem*> & ch = p->children();
+        UmlItem *const* v = ch.data();
+        UmlItem *const*  vsup = v + ch.size();
         UmlItem * x;
 
         for (; v != vsup; v += 1) {
@@ -184,9 +184,9 @@ UmlClass * Class::get_uml()
         if (uml == 0) {
 #ifdef REVERSE
             UmlCom::message("");
-            UmlCom::trace(QString("<font face=helvetica><b>cannot create class <i>")
+            UmlCom::trace(QString(QString("<font face=helvetica><b>cannot create class <i>")
                           + text(0) + "</i> under <i>"
-                          + parent()->text(0) + "</b></font><br>");
+                          + parent()->text(0) + "</b></font><br>").toLatin1().constData());
             throw 0;
 #else
             QMessageBox::critical(0, "Fatal Error",
@@ -329,8 +329,8 @@ FormalParameterList::ConstIterator it;
 #ifdef ROUNDTRIP
 
 if (roundtrip) {
-    Q3ValueList<UmlFormalParameter> fs = uml->formals();
-    Q3ValueList<UmlFormalParameter>::ConstIterator it2;
+    QList<UmlFormalParameter> fs = uml->formals();
+    QList<UmlFormalParameter>::ConstIterator it2;
 
     for (rank = 0, it = formals.begin(), it2 = fs.begin();
          (it != formals_end) && (it2 != fs.end());
@@ -380,9 +380,9 @@ return uml;
 #ifndef ROUNDTRIP
 bool Class::already_in_bouml()
 {
-    const Q3PtrVector<UmlItem> & ch = get_uml()->children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = get_uml()->children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
 
     for (; v != vsup; v += 1)
         if ((*v)->kind() != aClass)
@@ -398,7 +398,7 @@ bool Class::already_in_bouml()
 bool Class::reverse(ClassContainer * container, WrapperStr stereotype,
                     WrapperStr annotation, bool abstractp, bool finalp,
                     aVisibility visibility, WrapperStr & path,
-                    Q3ValueList<FormalParameterList> tmplts
+                    QList<FormalParameterList> tmplts
 #ifdef ROUNDTRIP
                     , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
@@ -704,9 +704,9 @@ bool Class::reverse(ClassContainer * container, WrapperStr stereotype,
             if (cl->updated) {
                 Statistic::one_class_updated_more();
 
-                UmlCom::trace(QString("<font face=helvetica>class <i>")
+                UmlCom::trace(QString(QString("<font face=helvetica>class <i>")
                               + cl->text(0) + "</i> updated from <i>"
-                              + Lex::filename() + "</i></font><br>");
+                              + Lex::filename() + "</i></font><br>").toLatin1().constData());
             }
         }
         else {
@@ -736,7 +736,7 @@ bool Class::reverse(ClassContainer * container, WrapperStr stereotype,
 }
 
 bool Class::manage_extends(ClassContainer * container,
-                           const Q3ValueList<FormalParameterList> & tmplts
+                           const QList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
                            , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
@@ -749,7 +749,7 @@ bool Class::manage_extends(ClassContainer * container,
 
     UmlTypeSpec typespec;
     Class * cl = 0;
-    Q3ValueList<UmlTypeSpec> actuals;
+    QList<UmlTypeSpec> actuals;
     WrapperStr str_actuals;
     WrapperStr dummy;
 
@@ -777,7 +777,7 @@ bool Class::manage_extends(ClassContainer * container,
 }
 
 bool Class::manage_implements(ClassContainer * container, aRelationKind k,
-                              const Q3ValueList<FormalParameterList> & tmplts
+                              const QList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
                               , bool roundtrip, QList<UmlItem *> & expected_order
 #endif
@@ -791,7 +791,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k,
     for (;;) {
         UmlTypeSpec typespec;
         Class * cl = 0;
-        Q3ValueList<UmlTypeSpec> actuals;
+        QList<UmlTypeSpec> actuals;
         WrapperStr str_actuals;
         WrapperStr dummy;
 
@@ -833,7 +833,7 @@ bool Class::manage_implements(ClassContainer * container, aRelationKind k,
 }
 
 bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec,
-                        Q3ValueList<UmlTypeSpec> & actuals,
+                        QList<UmlTypeSpec> & actuals,
                         WrapperStr & str_actuals
 #ifdef ROUNDTRIP
                         , bool roundtrip, QList<UmlItem *> & expected_order
@@ -848,9 +848,9 @@ bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec,
 #ifdef ROUNDTRIP
 
     if (roundtrip) {
-        const Q3PtrVector<UmlItem> & ch = uml->children();
-        UmlItem ** v = ch.data();
-        UmlItem ** const vsup = v + ch.size();
+        const QVector<UmlItem*> & ch = uml->children();
+        UmlItem *const* v = ch.data();
+        UmlItem *const*  vsup = v + ch.size();
         UmlItem * x;
 
         rel = 0;
@@ -879,8 +879,8 @@ bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec,
                             set_updated();
                         }
 
-                        Q3ValueList<UmlActualParameter> current_actuals = uml->actuals();
-                        Q3ValueList<UmlActualParameter>::ConstIterator iter_current;
+                        QList<UmlActualParameter> current_actuals = uml->actuals();
+                        QList<UmlActualParameter>::ConstIterator iter_current;
 
                         // search for first corresponding actual
                         for (iter_current = current_actuals.begin();
@@ -895,7 +895,7 @@ bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec,
                         else  {
                             expected_decl = "${type}";
 
-                            Q3ValueList<UmlTypeSpec>::ConstIterator iter = actuals.begin();
+                            QList<UmlTypeSpec>::ConstIterator iter = actuals.begin();
 
                             do {
                                 if (!(*iter).equal((*iter_current).value())) {
@@ -952,7 +952,7 @@ bool Class::add_inherit(aRelationKind k, UmlTypeSpec & typespec,
         rel->set_JavaDecl("${type}");
 
         if (! actuals.isEmpty()) {
-            Q3ValueList<UmlTypeSpec>::ConstIterator iter;
+            QList<UmlTypeSpec>::ConstIterator iter;
             unsigned actual_rank = (typespec.explicit_type.isEmpty())
                                    ? uml->actuals().count()
                                    : 0;
@@ -987,12 +987,12 @@ void Class::inherit(Class * cl)
 
             if ((cl->uml != 0) && !cl->uml->is_created()) {
                 if (cl->uml->is_roundtrip_expected())
-                    ((Package *) cl->parent())->reverse_file(WrapperStr(f.toAscii().constData()),
+                    ((Package *) cl->parent())->reverse_file(WrapperStr(f.toLatin1().constData()),
                             cl->uml->associatedArtifact());
             }
             else
 #endif
-                ((Package *) cl->parent())->reverse_file(WrapperStr(f.toAscii().constData()));
+                ((Package *) cl->parent())->reverse_file(WrapperStr(f.toLatin1().constData()));
 
             Lex::pop_context();
             Package::pop_context();
@@ -1002,25 +1002,29 @@ void Class::inherit(Class * cl)
         }
     }
 
-    Q3DictIterator<Class> it(cl->Defined);
+    QHashIterator<WrapperStr, Class*> it(cl->Defined);
 
-    while (it.current()) {
-        Defined.replace(it.currentKey(), it.current());
-        ++it;
+    while (it.hasNext()) {
+        it.next();
+        if(it.value())
+        {
+        Defined.insert(it.key(), it.value());
+        }
     }
 
-    Q3DictIterator<UmlClass> it_uml(cl->user_defined);
+    QHashIterator<WrapperStr,UmlClass*> it_uml(cl->user_defined);
 
-    while (it_uml.current()) {
-        user_defined.replace(it_uml.currentKey(), it_uml.current());
-        ++it_uml;
+    while (it_uml.hasNext()) {
+        it_uml.next();
+        if(it_uml.value())
+            user_defined.insert(it_uml.key(), it_uml.value());
     }
 }
 
 // this inherits uml_cl => it knowns uml_cl's sub-classes
 void Class::inherit(UmlClass * uml_cl, WrapperStr header)
 {
-    Q3PtrVector<UmlItem> ch = uml_cl->children();
+    QVector<UmlItem*> ch = uml_cl->children();
     UmlItem ** v = ch.data();
     UmlItem ** const vsup = v + ch.size();
     UmlItem * x;
@@ -1029,7 +1033,7 @@ void Class::inherit(UmlClass * uml_cl, WrapperStr header)
         if ((x = *v)->kind() == aClass) {
             WrapperStr s = (header.isEmpty()) ? x->name() : header + x->name();
 
-            user_defined.replace(s, (UmlClass *) x);
+            user_defined.insert(s, (UmlClass *) x);
             s += ".";
             inherit((UmlClass *) x, s);
         }
@@ -1037,7 +1041,7 @@ void Class::inherit(UmlClass * uml_cl, WrapperStr header)
 }
 
 bool Class::get_formals(FormalParameterList & tmplt, bool name_only,
-                        Q3ValueList<FormalParameterList> & tmplts)
+                        QList<FormalParameterList> & tmplts)
 {
     // '<' already read
     tmplt.clear();
@@ -1148,8 +1152,8 @@ bool Class::manage_member(WrapperStr s, WrapperStr & path
     WrapperStr array;
     UmlTypeSpec type;
     bool type_read = FALSE;
-    Q3ValueList<FormalParameterList> tmplts;
-    Q3ValueList<UmlTypeSpec> actuals;
+    QList<FormalParameterList> tmplts;
+    QList<UmlTypeSpec> actuals;
     WrapperStr str_actuals;
     WrapperStr name;
     WrapperStr value;
@@ -1268,7 +1272,7 @@ bool Class::manage_member(WrapperStr s, WrapperStr & path
                 return FALSE;
             }
             else if (name.isEmpty()) {
-                if (type.toString() == WrapperStr(text(0).toAscii().constData())) {
+                if (type.toString() == WrapperStr(text(0).toLatin1().constData())) {
                     // constructor
                     name = text(0);
                     type.type = 0;
@@ -1513,11 +1517,11 @@ Class * Class::localy_defined(QString name) const
 #endif
 
 void Class::compute_type(WrapperStr name, UmlTypeSpec & typespec,
-                         const Q3ValueList<FormalParameterList> & tmplts,
+                         const QList<FormalParameterList> & tmplts,
                          Class ** need_object)
 {
-    const Q3ValueList<UmlFormalParameter> formals = get_uml()->formals();
-    Q3ValueList<UmlFormalParameter>::ConstIterator it;
+    const QList<UmlFormalParameter> formals = get_uml()->formals();
+    QList<UmlFormalParameter>::ConstIterator it;
 
     for (it = formals.begin(); it != formals.end(); it++) {
         if ((*it).name() == name) {
@@ -1570,7 +1574,7 @@ void Class::compute_type(WrapperStr name, UmlTypeSpec & typespec,
 
         int index = s.find('.');
 
-        if ((index != -1) && (s.left(index) == (const char *) cl->text(0)))
+        if ((index != -1) && (s.left(index) == (const char *) cl->text(0).toLatin1().constData()))
             s = s.mid(index + 1);
         else
             break;
@@ -1589,7 +1593,7 @@ void Class::declare(const WrapperStr & name, Class * cl)
 {
     Defined.insert(name, cl);
 
-    WrapperStr s = WrapperStr(text(0).toAscii().constData()) + '.' + name;
+    WrapperStr s = WrapperStr(text(0).toLatin1().constData()) + '.' + name;
     ((BrowserNode *) parent())->declare(s, cl);
 }
 
@@ -1613,6 +1617,7 @@ const QPixmap * Class::pixmap(int) const
 void Class::paintCell(QPainter * p, const QColorGroup & cg, int column,
                       int width, int alignment)
 {
+    /*
     if (abstractp) {
         QFont fnt = p->font();
 
@@ -1624,6 +1629,7 @@ void Class::paintCell(QPainter * p, const QColorGroup & cg, int column,
     }
     else
         BrowserNode::paintCell(p, cg, column, width, alignment);
+        */
 }
 
 // called when the user click on the node
@@ -1675,7 +1681,7 @@ void Class::activated()
 
         int index = 0;
 
-        while ((index = s.find("\n@", index)) != -1) {
+        while ((index = s.indexOf("\n@", index)) != -1) {
             if (s[index + 2].isLetter()) {
                 int index2 = index;
 
@@ -1705,8 +1711,8 @@ void Class::activated()
 
         index = 0;
 
-        while ((index = s.find("{@link ", index)) != -1) {
-            int index2 = s.find("}", index + 7);
+        while ((index = s.indexOf("{@link ", index)) != -1) {
+            int index2 = s.indexOf("}", index + 7);
 
             if (index2 == -1)
                 index += 7;
@@ -1726,13 +1732,13 @@ void Class::activated()
                     else {
                         // {@link X} => <a href="X">X</a>
                         QString X = s.mid(index + 7, index2 - index - 7);
-                        int index4 = X.find('#');
+                        int index4 = X.indexOf('#');
 
                         if (index4 != -1) {
                             // does not have class sub artifacts
                             // {@link X#Y} => <a href="X">X</a>.Y
                             X.truncate(index4);
-                            s.replace(s.find('#', index), 1, "\">" + X + "</a>.");
+                            s.replace(s.indexOf('#', index), 1, "\">" + X + "</a>.");
                             s.replace(index, 7, "<a href=\"");
                         }
                         else {
@@ -1743,14 +1749,14 @@ void Class::activated()
                 }
                 else {
                     QString X = s.mid(index + 7, index3 - index - 7);
-                    int index4 = X.find('#');
+                    int index4 = X.indexOf('#');
 
                     if (index4 != -1) {
                         // does not have class sub artifacts
                         // {@link X#Y Y} => <a href="X">X</a>.Y
                         X.truncate(index4);
                         s.remove(index3, index2 - index3 + 1);
-                        s.replace(s.find('#', index), 1, "\">" + X + "</a>.");
+                        s.replace(s.indexOf('#', index), 1, "\">" + X + "</a>.");
                         s.replace(index, 7, "<a href=\"");
                     }
                     else {
@@ -1784,17 +1790,26 @@ void Class::historic_forward()
 
 void Class::menu()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
+    QAction *action;
 
-    m.insertItem(text(0), -1);
-    m.insertSeparator();
+    action = m.addAction(text(0));
+    action->setData(-1);
+
+    m.addSeparator();
 
     if (! reversed())
-        m.insertItem("Send it", 0);
+    {
+        m.addAction("Send it");
+        action->setData(0);
+    }
 
-    m.insertItem("Show file", 1);
+    m.addAction("Show file");
+    action->setData(1);
 
-    switch (m.exec(QCursor::pos())) {
+    action = m.exec(QCursor::pos());
+    if(action)
+    switch (action->data().toInt()) {
     case 0: {
         Class * cl = this;
         BrowserNode * b;
@@ -1831,59 +1846,59 @@ void Class::backup(QDataStream  & dt) const
 {
     switch (stereotype) {
     case 'i':
-        dt << ((Q_INT8)((abstractp) ? 'i' : 'I'));
+        dt << ((qint8)((abstractp) ? 'i' : 'I'));
         break;
 
     case 'e':
-        dt << ((Q_INT8) 'E');
+        dt << ((qint8) 'E');
         break;
 
     default:
         // class
-        dt << ((Q_INT8)((abstractp) ? 'c' : 'C'));
+        dt << ((qint8)((abstractp) ? 'c' : 'C'));
         break;
     }
 
-    Q_INT32 len;
+    qint32 len;
 
     len = text(0).length();
     dt << len;
-    dt.writeRawBytes(text(0), len);
+    dt.writeRawData(text(0).toLatin1().constData(), len);
 
     len = filename.length();
     dt << len;
-    dt.writeRawBytes(filename, len);
+    dt.writeRawData(filename, len);
 
     len = description.length();
     dt << len;
 
     if (!description.isEmpty())
-        dt.writeRawBytes(description, len);
+        dt.writeRawData(description, len);
 
     // sub classes
 
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         ((BrowserNode *) child)->backup(dt);
 
-    dt << ((Q_INT8) '@');
+    dt << ((qint8) '@');
 }
 
 #endif
 
 void Class::restore(QDataStream  & dt, char c, BrowserNode * parent)
 {
-    Q_INT32 len;
+    qint32 len;
 
     dt >> len;
     char * n = new char[len + 1];
-    dt.readRawBytes(n, len);
+    dt.readRawData(n, len);
     n[len] = 0;
 
     dt >> len;
     char * fn = new char[len + 1];
-    dt.readRawBytes(fn, len);
+    dt.readRawData(fn, len);
     fn[len] = 0;
 
     dt >> len;
@@ -1893,7 +1908,7 @@ void Class::restore(QDataStream  & dt, char c, BrowserNode * parent)
         d = 0;
     else {
         d = new char[len + 1];
-        dt.readRawBytes(d, len);
+        dt.readRawData(d, len);
         d[len] = 0;
     }
 
@@ -1935,7 +1950,7 @@ void Class::restore(QDataStream  & dt, char c, BrowserNode * parent)
 
     // sub classes
 
-    Q_INT8 k;
+    qint8 k;
 
     while (dt >> k, k != '@')
         restore(dt, (char) k, cl);

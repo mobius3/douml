@@ -30,19 +30,19 @@
 
 
 #include <qlayout.h>
-#include <q3hbox.h>
+#include <hhbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
-#include <q3groupbox.h>
-#include <q3buttongroup.h>
+#include <qgroupbox.h>
+#include <qbuttongroup.h>
 #include <qapplication.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3GridLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 #include "BrowserSearchDialog.h"
 #include "BrowserView.h"
@@ -112,24 +112,28 @@ static const struct {
 };
 
 BrowserSearchDialog::BrowserSearchDialog()
-    : QDialog(0, "Browser search", FALSE, Qt::WDestructiveClose)
+    : QDialog(0/*, "Browser search", FALSE, Qt::WDestructiveClose*/)
 {
     the = this;
-    setCaption(TR("Browser search"));
+    setWindowTitle(TR("Browser search"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->setMargin(5);
 
-    Q3GridLayout * gl = new Q3GridLayout(vbox, 4, 2, 5/*space*/);
+    //QGridLayout * gl = new QGridLayout(vbox, 4, 2, 5/*space*/);
+
+    QGridLayout * gl = new QGridLayout();
+    vbox->addLayout(gl);
 
     gl->addWidget(new QLabel(TR("Kind"), this), 0, 0, Qt::AlignLeft);
-    kind = new Q3ComboBox(FALSE, this);
+    kind = new QComboBox(this);
+    kind->setEditable(false);
 
     for (int index = 0; index != sizeof(Kinds) / sizeof(*Kinds); index += 1)
-        kind->insertItem(TR(Kinds[index].lbl));
+        kind->addItem(TR(Kinds[index].lbl));
 
-    kind->setCurrentItem(saved_kind);
+    kind->setCurrentIndex(saved_kind);
     gl->addWidget(kind, 0, 1);
 
     ed = new LineEdit(this);
@@ -138,34 +142,75 @@ BrowserSearchDialog::BrowserSearchDialog()
     gl->addWidget(ed, 1, 1);
     ed->setFocus();
 
-    Q3HBox * hb = new Q3HBox(this);
+    QHBoxLayout * hb = new QHBoxLayout();
+    QWidget *hbW = new QWidget(this);
+    hbW->setLayout(hb);
 
-    gl->addWidget(hb, 2, 1);
+    gl->addWidget(hbW, 2, 1,1,2);
 
-    Q3GroupBox * gb = new Q3GroupBox(2, Qt::Horizontal, hb);
+    //QGroupBox * gb = new QGroupBox(2, Qt::Horizontal, hb);
+    QGroupBox * gb = new QGroupBox(hbW);
+    gb->setLayoutDirection(Qt::LeftToRight);
+    hb->addWidget(gb);
 
     case_sensitive = new QCheckBox(TR("case sensitive"), gb);
     case_sensitive->setChecked(saved_case_sensitive);
     even_deleted = new QCheckBox(TR("even deleted"), gb);
     even_deleted->setChecked(saved_even_deleted);
 
-    Q3ButtonGroup * bg = new Q3ButtonGroup(4, Qt::Horizontal, hb);
+    QHBoxLayout * hb2 = new QHBoxLayout();
+    gb->setLayout(hb2);
+    gb->layout()->addWidget(case_sensitive);
+    gb->layout()->addWidget(even_deleted);
+    //QButtonGroup * bg = new QButtonGroup(4, Qt::Horizontal, hb);
+    QButtonGroup * bg = new QButtonGroup(hbW);
 
     bg->setExclusive(TRUE);
-    for_name = new QRadioButton(TR("name"), bg);
+
+    //for_name = new QRadioButton(TR("name"), bg);
+    for_name = new QRadioButton(TR("name"), hbW);
+    bg->addButton(for_name);
+
+
     for_name->setChecked(saved_name);
-    for_stereotype = new QRadioButton(TR("stereotype"), bg);
+
+    //for_stereotype = new QRadioButton(TR("stereotype"), bg);
+    for_stereotype = new QRadioButton(TR("stereotype"), hbW);
+    bg->addButton(for_stereotype);
+
     for_stereotype->setChecked(saved_stereotype);
-    for_comment = new QRadioButton(TR("description"), bg);
+
+
+    //for_comment = new QRadioButton(TR("description"), bg);
+    for_comment = new QRadioButton(TR("description"), hbW);
+    bg->addButton(for_comment);
+
     for_comment->setChecked(saved_comment);
-    for_decldefbody = new QRadioButton(TR("declaration/definition/body"), bg);
+
+    //for_decldefbody = new QRadioButton(TR("declaration/definition/body"), bg);
+    for_decldefbody = new QRadioButton(TR("declaration/definition/body"), hbW);
+    bg->addButton(for_decldefbody);
+
     for_decldefbody->setChecked(saved_decldefbody);
 
+
+    QHBoxLayout * hb3 = new QHBoxLayout();
+
+    QGroupBox * gb2 = new QGroupBox(hbW);
+    gb2->setLayout(hb3);
+    hb3->addWidget(for_name);
+    hb3->addWidget(for_stereotype);
+    hb3->addWidget(for_comment);
+    hb3->addWidget(for_decldefbody);
+    hb->addWidget(gb2);
+
     gl->addWidget(new QLabel(TR("Result"), this), 3, 0, Qt::AlignLeft);
-    results = new Q3ComboBox(FALSE, this);
+    results = new QComboBox(this);
+    results->setEditable(false);
     gl->addWidget(results, 3, 1);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     QPushButton * search_b = new QPushButton(TR("Search"), this);
     QPushButton * close_b = new QPushButton(TR("Close"), this);
 
@@ -197,7 +242,7 @@ BrowserSearchDialog::BrowserSearchDialog()
 
 void BrowserSearchDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     //setMaximumHeight(sizeHint().height());
     //setMaximumWidth(29*UmlDesktop::width()/30)
     UmlDesktop::limitsize_move(this, previous_size, 29.0 / 30, 0.9);
@@ -206,7 +251,7 @@ void BrowserSearchDialog::polish()
 BrowserSearchDialog::~BrowserSearchDialog()
 {
     the = 0;
-    saved_kind = kind->currentItem();
+    saved_kind = kind->currentIndex();
     saved_ed = ed->text();
     saved_case_sensitive = case_sensitive->isChecked();
     saved_even_deleted = even_deleted->isChecked();
@@ -221,26 +266,26 @@ BrowserSearchDialog::~BrowserSearchDialog()
 
 void BrowserSearchDialog::search()
 {
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     results->clear();
 
     nodes.clear();
 
     if (for_name->isChecked())
-        nodes.search(BrowserView::get_project(), Kinds[kind->currentItem()].k,
+        nodes.search(BrowserView::get_project(), Kinds[kind->currentIndex()].k,
                      ed->text(), case_sensitive->isChecked(),
                      even_deleted->isChecked(), TRUE, FALSE);
     else if (for_stereotype->isChecked())
-        nodes.search(BrowserView::get_project(), Kinds[kind->currentItem()].k,
+        nodes.search(BrowserView::get_project(), Kinds[kind->currentIndex()].k,
                      ed->text(), case_sensitive->isChecked(),
                      even_deleted->isChecked(), FALSE, TRUE);
     else if (for_comment->isChecked())
-        nodes.search(BrowserView::get_project(), Kinds[kind->currentItem()].k,
+        nodes.search(BrowserView::get_project(), Kinds[kind->currentIndex()].k,
                      ed->text(), case_sensitive->isChecked(),
                      even_deleted->isChecked(), FALSE, FALSE);
     else
-        nodes.search_ddb(BrowserView::get_project(), Kinds[kind->currentItem()].k,
+        nodes.search_ddb(BrowserView::get_project(), Kinds[kind->currentIndex()].k,
                          ed->text(), case_sensitive->isChecked(),
                          even_deleted->isChecked());
 
@@ -248,7 +293,7 @@ void BrowserSearchDialog::search()
         nodes.sort();
 
         foreach (BrowserNode *bn, nodes)
-            results->insertItem(*(bn->pixmap(0)), bn->full_name(TRUE));
+            results->addItem(*(bn->pixmap(0)), bn->full_name(TRUE));
 
         selected(0);
     }
@@ -269,7 +314,7 @@ void BrowserSearchDialog::selected(int index)
         select_b->setEnabled(TRUE);
         mark_unmark_b->setEnabled(TRUE);
         mark_unmark_b->setText((nodes.at(index)->markedp())
-                               ? TR("Unmark") : TR("Mark"));
+                               ? QObject::tr("Unmark") : QObject::tr("Mark"));
         mark_them_b->setEnabled(TRUE);
     }
 
@@ -278,7 +323,7 @@ void BrowserSearchDialog::selected(int index)
 
 void BrowserSearchDialog::mark_unmark()
 {
-    BrowserNode * bn = nodes.at(results->currentItem());
+    BrowserNode * bn = nodes.at(results->currentIndex());
 
     bn->toggle_mark();  	// call update
     BrowserView::force_visible(bn);
@@ -302,10 +347,10 @@ void BrowserSearchDialog::unmark_all()
 void BrowserSearchDialog::select()
 {
     if (results->count() != 0)
-        nodes.at(results->currentItem())->select_in_browser();
+        nodes.at(results->currentIndex())->select_in_browser();
 }
 
 void BrowserSearchDialog::update()
 {
-    selected((results->count() != 0) ? results->currentItem() : -1);
+    selected((results->count() != 0) ? results->currentIndex() : -1);
 }

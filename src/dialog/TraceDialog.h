@@ -30,7 +30,7 @@
 
 #include "qdialog.h"
 
-class Q3TextView;
+class QTextEdit;
 
 class TraceDialog : public QDialog
 {
@@ -38,7 +38,7 @@ class TraceDialog : public QDialog
 
 protected:
     static TraceDialog * the;
-    static Q3TextView * txt;
+    static QTextEdit * txt;
     static bool AutoRaise;
     static QString content;
 

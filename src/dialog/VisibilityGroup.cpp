@@ -29,26 +29,32 @@
 
 
 
-#include <q3buttongroup.h>
+#include <QGroupBox.h>
 #include <qradiobutton.h>
 
 #include "VisibilityGroup.h"
-
-Q3ButtonGroup * VisibilityGroup::init(QWidget * parent, UmlVisibility v, bool pack_allowed,
+#include "bbuttongroup.h"
+BButtonGroup * VisibilityGroup::init(QWidget * parent, UmlVisibility v, bool pack_allowed,
                                       const char * title,
-                                      const char * default_prefix)
+                                      QString default_prefix)
 {
     if (!bgroup) {
-        bgroup = new Q3ButtonGroup((default_prefix != 0) ? 5 : 4, Qt::Horizontal, title, parent);
+        bgroup = new BButtonGroup(/*(default_prefix != 0) ? 5 : 4, Qt::Horizontal,*/ title, parent);
         public_rb = new QRadioButton("public", bgroup);
+        bgroup->addWidget(public_rb);
         protected_rb = new QRadioButton("protected", bgroup);
+        bgroup->addWidget(protected_rb);
         private_rb = new QRadioButton("private", bgroup);
+        bgroup->addWidget(private_rb);
         package_rb = (pack_allowed) ? new QRadioButton("package", bgroup) : 0;
+        if(package_rb)
+            bgroup->addWidget(package_rb);
         default_visibility_rb =
             new QRadioButton(default_pfix + " (protected)", bgroup);
+        bgroup->addWidget(default_visibility_rb);
     }
 
-    bgroup->setExclusive(TRUE);
+    //bgroup->setExclusive(TRUE);
 
     if (default_prefix != 0) {
         default_pfix = default_prefix;

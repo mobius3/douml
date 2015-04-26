@@ -29,16 +29,14 @@
 
 
 
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qcheckbox.h>
-#include <q3buttongroup.h>
-#include <q3popupmenu.h>
+#include <bbuttongroup.h>
 #include <qcursor.h>
-
 #include "ActivityDialog.h"
 #include "ActivityData.h"
 #include "BrowserActivity.h"
@@ -53,11 +51,12 @@
 #include "GenerationSettings.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
+#include "menufactory.h"
 
 QSize ActivityDialog::previous_size;
 
 ActivityDialog::ActivityDialog(ActivityData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), activity(d)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), activity(d)
 {
     d->browser_node->edit_start();
 
@@ -70,107 +69,117 @@ ActivityDialog::ActivityDialog(ActivityData * d)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("Activity dialog"));
+    setWindowTitle(TR("Activity dialog"));
     visit = !hasOkButton();
 
     BrowserNode * bn = activity->browser_node;
-    Q3Grid * grid;
+    GridBox * grid;
 
     //
     // general tab
     //
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(activity->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(activity->get_stereotype()));
 
     if (!visit) {
-        edstereotype->insertStringList(BrowserActivity::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlActivity));
+        edstereotype->addItems(BrowserActivity::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlActivity));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    connect(new SmallPushButton(TR("specification :"), grid), SIGNAL(clicked()),
+    SmallPushButton* sButton;
+    connect(sButton = new SmallPushButton(TR("specification :"), grid), SIGNAL(clicked()),
             this, SLOT(menu_specification()));
-    edspecification = new Q3ComboBox(FALSE, grid);
+    grid->addWidget(sButton);
+    grid->addWidget(edspecification = new QComboBox(grid));
     edspecification->setSizePolicy(sp);
 
     if (visit) {
         if (activity->get_specification() == 0)
-            edspecification->insertItem("");
+            edspecification->addItem("");
         else
-            edspecification->insertItem(activity->get_specification()->full_name(TRUE));
+            edspecification->addItem(activity->get_specification()->full_name(TRUE));
     }
     else {
-        edspecification->insertItem("");
+        edspecification->addItem("");
         edspecification->setAutoCompletion(completion());
         BrowserOperation::instances(opers);
         opers.full_names(list);
-        edspecification->insertStringList(list);
-        edspecification->setCurrentItem((activity->get_specification() == 0)
-                                        ? 0
-                                        : opers.indexOf(activity->get_specification()) + 1);
+        edspecification->addItems(list);
+        edspecification->setCurrentIndex((activity->get_specification() == 0)
+                                         ? 0
+                                         : opers.indexOf(activity->get_specification()) + 1);
     }
 
-    new QLabel(grid);
-    Q3ButtonGroup * bg =
-        new Q3ButtonGroup(3, Qt::Horizontal, QString(), grid);
+    grid->addWidget(new QLabel(grid));
+    BButtonGroup * bg;
+    grid->addWidget(bg =
+            new BButtonGroup(3, Qt::Horizontal, QString(), grid));
 
-    readonly_cb = new QCheckBox(TR("read only"), bg);
+    bg->addWidget(readonly_cb = new QCheckBox(TR("read only"), bg));
 
     if (activity->read_only)
         readonly_cb->setChecked(TRUE);
 
     readonly_cb->setDisabled(visit);
 
-    singlexec_cb = new QCheckBox(TR("single execution"), bg);
+    bg->addWidget(singlexec_cb = new QCheckBox(TR("single execution"), bg));
 
     if (activity->single_execution)
         singlexec_cb->setChecked(TRUE);
 
     singlexec_cb->setDisabled(visit);
 
-    active_cb = new QCheckBox(TR("active"), bg);
+    bg->addWidget(active_cb = new QCheckBox(TR("active"), bg));
 
     if (activity->is_active)
         active_cb->setChecked(TRUE);
 
     active_cb->setDisabled(visit);
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+    vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     //comment->setFont(font);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("constraint :"), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("constraint :"), vtab));
 
     if (! visit) {
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_constraint()));
+        vtab->addWidget(sButton);
     }
 
-    constraint = new MultiLineEdit(grid);
+
+    grid->addWidget(constraint = new MultiLineEdit(grid));
     constraint->setReadOnly(visit);
     constraint->setText(activity->constraint);
     //constraint->setFont(font);
@@ -190,11 +199,11 @@ ActivityDialog::ActivityDialog(ActivityData * d)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
     //
@@ -207,21 +216,21 @@ ActivityDialog::ActivityDialog(ActivityData * d)
 
 void ActivityDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 void ActivityDialog::menu_specification()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = list.findIndex(edspecification->currentText().stripWhiteSpace());
+    int index = list.indexOf(edspecification->currentText().trimmed());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -229,42 +238,47 @@ void ActivityDialog::menu_specification()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlOperation) && !bn->deletedp())
-            m.insertItem(TR("Choose operation selected in browser"), 1);
+            MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
         else
             bn = 0;
     }
 
     if ((index != -1) || (bn != 0)) {
-        switch (m.exec(QCursor::pos())) {
-        case 0:
-            opers.at(index)->select_in_browser();
-            break;
+        QAction *retActon = m.exec(QCursor::pos());
+        if(retActon)
+        {
+            switch (retActon->data().toInt()) {
+            case 0:
+                opers.at(index)->select_in_browser();
+                break;
 
-        case 1: {
-            QString s = bn->full_name(TRUE);
+            case 1: {
+                QString s = bn->full_name(TRUE);
 
-            if ((index = list.findIndex(s)) == -1) {
-                // new operation, may be created through an other dialog
-                index = 0;
-                QStringList::Iterator iter = list.begin();
-                QStringList::Iterator iter_end = list.end();
+                if ((index = list.indexOf(s)) == -1) {
+                    // new operation, may be created through an other dialog
+                    index = 0;
+                    QStringList::Iterator iter = list.begin();
+                    QStringList::Iterator iter_end = list.end();
 
-                while ((iter != iter_end) && (*iter < s)) {
-                    ++iter;
-                    index += 1;
+                    while ((iter != iter_end) && (*iter < s)) {
+                        ++iter;
+                        index += 1;
+                    }
+
+                    opers.insert((unsigned) index, bn);
+                    list.insert(iter, s);
+                    edspecification->addItem(s, index + 1);
                 }
-
-                opers.insert((unsigned) index, bn);
-                list.insert(iter, s);
-                edspecification->insertItem(s, index + 1);
             }
-        }
 
-        edspecification->setCurrentItem(index + 1);
-        break;
 
-        default:
-            break;
+                edspecification->setCurrentIndex(index + 1);
+                break;
+
+            default:
+                break;
+            }
         }
     }
 }
@@ -290,19 +304,19 @@ void ActivityDialog::change_tabs(QWidget *)
 void ActivityDialog::init_tab(CondDialog & d, InfoData & cd,
                               const char * lbl, bool enabled)
 {
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("Pre\ncondition : "), grid);
-    d.edpre = new MultiLineEdit(grid);
+    grid->addWidget(new QLabel(TR("Pre\ncondition : "), grid));
+    grid->addWidget(d.edpre = new MultiLineEdit(grid));
     d.edpre->setText(cd.first);
 
     if (visit)
         d.edpre->setReadOnly(TRUE);
 
-    new QLabel(TR("Post\ncondition : "), grid);
-    d.edpost = new MultiLineEdit(grid);
+    grid->addWidget(new QLabel(TR("Post\ncondition : "), grid));
+    grid->addWidget(d.edpost = new MultiLineEdit(grid));
     d.edpost->setText(cd.second);
 
     if (visit)
@@ -327,7 +341,7 @@ void ActivityDialog::post_edit_description(ActivityDialog * d, QString s)
 
 void ActivityDialog::edit_constraint()
 {
-    edit(constraint->text(), edname->text().stripWhiteSpace() + "_constraint",
+    edit(constraint->text(), edname->text().trimmed() + "_constraint",
          activity, TxtEdit, this, (post_edit) post_edit_constraint, edits);
 }
 
@@ -344,18 +358,18 @@ void ActivityDialog::accept()
     BrowserNode * bn = activity->browser_node;
     QString s;
 
-    s = edname->text().stripWhiteSpace();
+    s = edname->text().trimmed();
 
     if ((s != bn->get_name()) &&
-        ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlActivity,
-                bn->allow_spaces(),
-                bn->allow_empty()))
+            ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlActivity,
+                                                             bn->allow_spaces(),
+                                                             bn->allow_empty()))
         msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
 
-        bool newst = activity->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
-        int index = list.findIndex(edspecification->currentText().stripWhiteSpace());
+        bool newst = activity->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
+        int index = list.indexOf(edspecification->currentText().trimmed());
 
         activity->set_specification((index != -1)
                                     ? (BrowserOperation *) opers.at(index)
@@ -372,7 +386,7 @@ void ActivityDialog::accept()
         bn->set_comment(comment->text());
         UmlWindow::update_comment_if_needed(bn);
 
-        activity->constraint = constraint->stripWhiteSpaceText();
+        activity->constraint = constraint->trimmedText();
 
         kvtable->updateNodeFromThis(bn);
 
@@ -382,12 +396,12 @@ void ActivityDialog::accept()
         bn->package_modified();
         activity->modified();
 
-        Q3TabDialog::accept();
+        TabDialog::accept();
     }
 }
 
 void CondDialog::accept(InfoData & cond)
 {
-    cond.first = edpre->text().stripWhiteSpace();
-    cond.second = edpost->text().stripWhiteSpace();
+    cond.first = edpre->text().trimmed();
+    cond.second = edpost->text().trimmed();
 }

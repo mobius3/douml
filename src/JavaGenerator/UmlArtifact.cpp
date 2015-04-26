@@ -76,7 +76,7 @@ void UmlArtifact::generate()
                              + name + "</i> in " + path + "</i></font><br>");
 
         // get bodies if preserve
-        const Q3PtrVector<UmlClass> & cls = associatedClasses();
+        const QVector<UmlClass*> & cls = associatedClasses();
 
         if (preserve())
             UmlOperation::read_bodies(path);
@@ -280,13 +280,13 @@ bool UmlArtifact::is_imported(const WrapperStr & s)
     if (imports == 0)
         Q_ASSERT_X(0, "Null Pointer Dereference", "Javagenerator/UmlArtifact.cpp");
 
-    return (imports->find(s) != 0);
+    return (imports->value(s) != 0);
 }
 
 bool UmlArtifact::is_imported(WrapperStr path, WrapperStr class_name)
 {
     if (imports == 0) {
-        imports = new Q3AsciiDict<UmlArtifact>(17);
+        imports = new QHash<WrapperStr, UmlArtifact*>;
 
         WrapperStr s = javaSource();
         int index = 0;
@@ -313,8 +313,8 @@ bool UmlArtifact::is_imported(WrapperStr path, WrapperStr class_name)
         }
     }
 
-    return ((imports->find(path + '.' + class_name) != 0) ||
-            (imports->find(path + ".*") != 0));
+    return ((imports->value(path + '.' + class_name) != 0) ||
+            (imports->value(path + ".*") != 0));
 }
 
 bool UmlArtifact::must_be_saved(const char * path, const char * new_contains)

@@ -35,7 +35,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include "misc/mystr.h"
-#include <Q3PtrList>
+
 
 class Package;
 class UmlArtifact;

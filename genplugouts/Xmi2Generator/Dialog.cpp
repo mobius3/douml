@@ -6,82 +6,85 @@
 #include <qlineedit.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
-#include <q3hbox.h>
+#include <HHBox.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
-#include <q3buttongroup.h>
+#include <bbuttongroup.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QSettings>
 #include "SmallPushButton.h"
 
 Dialog::Dialog(WrapperStr & path, WrapperStr & encoding, WrapperStr & nomodel, WrapperStr & genview, WrapperStr & uml20, WrapperStr & pk, WrapperStr & vis, WrapperStr & primitivetype, WrapperStr & genextension, WrapperStr & geneclipse, WrapperStr & commentexporter, WrapperStr & linefeed, Language & lang)
-    : QDialog(0, 0, TRUE), _path(path), _encoding(encoding), _nomodel(nomodel), _genview(genview), _uml20(uml20), _pk(pk), _vis(vis), _primitivetype(primitivetype), _genextension(genextension), _geneclipse(geneclipse), _commentexporter(commentexporter), _linefeed(linefeed), _lang(lang)
+    : QDialog(0), _path(path), _encoding(encoding), _nomodel(nomodel), _genview(genview), _uml20(uml20), _pk(pk), _vis(vis), _primitivetype(primitivetype), _genextension(genextension), _geneclipse(geneclipse), _commentexporter(commentexporter), _linefeed(linefeed), _lang(lang)
 {
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBox * htab;
+    setModal(true);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    HHBox * htab;
 
     vbox->setMargin(5);
 
     // get xmi pathname
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    new QLabel("generated \nXMI file : ", htab);
+    htab->addWidget(new QLabel("generated \nXMI file : ", htab));
 
-    ed = new QLineEdit(htab);
+    htab->addWidget(ed = new QLineEdit(htab));
     ed->setText(_path);
 
-    new QLabel(" ", htab);
+    htab->addWidget(new QLabel(" ", htab));
 
-    SmallPushButton * br = new SmallPushButton("browse", htab);
+    SmallPushButton * br;
+    htab->addWidget(br = new SmallPushButton("browse", htab));
 
     connect(br, SIGNAL(clicked()), this, SLOT(browse()));
 
     // to choose encoding
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    new QLabel("Encoding : ", htab);
+    htab->addWidget(new QLabel("Encoding : ", htab));
 
     QString charset = getenv("BOUML_CHARSET");
     int index = 0;
 
-    while ((index = charset.find('_')) != -1) {
+    while ((index = charset.indexOf('_')) != -1) {
         charset[index] = '-';
         index += 1;
     }
 
-    encoding_cb = new QComboBox(TRUE, htab);
+    htab->addWidget(encoding_cb = new QComboBox(htab));
+    encoding_cb->setEditable(true);
     htab->setStretchFactor(encoding_cb, 1000);
 
     if (_encoding.isEmpty())
         _encoding = "UTF-8";
 
-    encoding_cb->insertItem(_encoding);
+    encoding_cb->addItem(_encoding);
 
-    if (!charset.isEmpty() && (_encoding != (const char *) charset))
-        encoding_cb->insertItem(charset);
+    if (!charset.isEmpty() && (_encoding != charset))
+        encoding_cb->addItem(charset);
 
     if (_encoding != "UTF-8")
-        encoding_cb->insertItem("UTF-8");
+        encoding_cb->addItem("UTF-8");
 
 #ifdef WIN32
 
     if ((_encoding != "windows-1252") && (charset != "windows-1252"))
-        encoding_cb->insertItem("windows-1252");
+        encoding_cb->addItem("windows-1252");
 
     if ((_encoding != "ISO-8859-1") && (charset != "ISO-8859-1"))
-        encoding_cb->insertItem("ISO-8859-1");
+        encoding_cb->addItem("ISO-8859-1");
 
 #else
 
@@ -95,14 +98,15 @@ Dialog::Dialog(WrapperStr & path, WrapperStr & encoding, WrapperStr & nomodel, W
 
     // uml 2.0 or uml2.1
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    Q3ButtonGroup * bg = new Q3ButtonGroup(2, Qt::Horizontal, "Uml", htab);
+    BButtonGroup * bg;
+    htab->addWidget( bg = new BButtonGroup(2, Qt::Horizontal, "Uml", htab));
 
-    uml20_rb = new QRadioButton("uml 2.0", bg);
-    uml21_rb = new QRadioButton("uml 2.1", bg);
+    bg->addWidget(uml20_rb = new QRadioButton("uml 2.0", bg));
+    bg->addWidget(uml21_rb = new QRadioButton("uml 2.1", bg));
 
     if (uml20 == "yes")
         uml20_rb->setChecked(TRUE);
@@ -111,118 +115,122 @@ Dialog::Dialog(WrapperStr & path, WrapperStr & encoding, WrapperStr & nomodel, W
 
     // generate model
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    nomodel_cb = new QCheckBox("Don't generate model level", htab);
+    htab->addWidget(nomodel_cb = new QCheckBox("Don't generate model level", htab));
 
     if (_nomodel == "yes")
         nomodel_cb->setChecked(TRUE);
 
     // generate view checkbox
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    genview_cb = new QCheckBox("Generate views as package (not compatible with profile generation)", htab);
+    htab->addWidget(genview_cb = new QCheckBox("Generate views as package (not compatible with profile generation)", htab));
 
     if (_genview == "yes")
         genview_cb->setChecked(TRUE);
 
     // generate pk_ prefix
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    pk_cb = new QCheckBox("Generate 'pk_' prefix for parameter direction", htab);
+    htab->addWidget(pk_cb = new QCheckBox("Generate 'pk_' prefix for parameter direction", htab));
 
     if (_pk == "yes")
         pk_cb->setChecked(TRUE);
 
     // generate vis_ prefix
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    vis_cb = new QCheckBox("Generate 'vis_' prefix for visibility", htab);
+    htab->addWidget(vis_cb = new QCheckBox("Generate 'vis_' prefix for visibility", htab));
 
     if (_vis == "yes")
         vis_cb->setChecked(TRUE);
 
     // use PrimitiveType rather than DataType
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    primitivetype_cb = new QCheckBox("Use PrimitiveType rather than DataType", htab);
+    htab->addWidget(primitivetype_cb = new QCheckBox("Use PrimitiveType rather than DataType", htab));
 
     if (_primitivetype == "yes")
         primitivetype_cb->setChecked(TRUE);
 
     // generate extension
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    genextension_cb = new QCheckBox("Generate extensions", htab);
+    htab->addWidget(genextension_cb = new QCheckBox("Generate extensions", htab));
 
     if (_genextension == "yes")
         genextension_cb->setChecked(TRUE);
 
     // generate for Eclipse
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    geneclipse_cb = new QCheckBox("Generate for Eclipse (aggregation set on other relation side)", htab);
+    htab->addWidget(geneclipse_cb = new QCheckBox("Generate for Eclipse (aggregation set on other relation side)", htab));
 
     if (_geneclipse == "yes")
         geneclipse_cb->setChecked(TRUE);
 
     // comment exporter
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    commentexporter_cb = new QCheckBox("Comment exporter indication (needed to import in some tools like Rsa)", htab);
+    htab->addWidget(commentexporter_cb = new QCheckBox("Comment exporter indication (needed to import in some tools like Rsa)", htab));
 
     if (_commentexporter == "yes")
         commentexporter_cb->setChecked(TRUE);
 
     // generate &#10; rather than linefeed
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    linefeed_cb = new QCheckBox("Generate lf and cr characters in string rather than '&&#10;' and '&&#13;'", htab);
+    htab->addWidget(linefeed_cb = new QCheckBox("Generate lf and cr characters in string rather than '&&#10;' and '&&#13;'", htab));
 
     if (_linefeed == "yes")
         linefeed_cb->setChecked(TRUE);
 
     // uml , c++, java, cancel buttons
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    new QLabel(htab);
-    QPushButton * uml = new QPushButton("&Uml", htab);
-    new QLabel(htab);
-    QPushButton * cpp = new QPushButton("&C++", htab);
-    new QLabel(htab);
-    QPushButton * java = new QPushButton("&Java", htab);
-    new QLabel(htab);
-    QPushButton * cancel = new QPushButton("&Cancel", htab);
-    new QLabel(htab);
+    htab->addWidget(new QLabel(htab));
+    QPushButton * uml;
+    htab->addWidget(uml = new QPushButton("&Uml", htab));
+    htab->addWidget(new QLabel(htab));
+    QPushButton * cpp;
+    htab->addWidget(cpp = new QPushButton("&C++", htab));
+    htab->addWidget(new QLabel(htab));
+    QPushButton * java;
+    htab->addWidget(java = new QPushButton("&Java", htab));
+    htab->addWidget(new QLabel(htab));
+    QPushButton * cancel;
+    htab->addWidget(cancel = new QPushButton("&Cancel", htab));
+    htab->addWidget(new QLabel(htab));
     QSize bs(cancel->sizeHint());
 
     uml->setFixedSize(bs);
@@ -236,22 +244,22 @@ Dialog::Dialog(WrapperStr & path, WrapperStr & encoding, WrapperStr & nomodel, W
 
     // help
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    new QLabel(htab);
-    new QLabel("Remark : to help Eclipse to import the generated file,\n"
-               "choose Uml 2.1 and name the file with the extension '.xmi'", htab);
-    new QLabel(htab);
+    htab->addWidget(new QLabel(htab));
+    htab->addWidget(new QLabel("Remark : to help Eclipse to import the generated file,\n"
+               "choose Uml 2.1 and name the file with the extension '.xmi'", htab));
+    htab->addWidget(new QLabel(htab));
 }
 
 void Dialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
 
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
-    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    settings.setIniCodec("UTF-8");
     int l, t, r, b;
     l = settings.value("Desktop/left", -1).toInt();
     r = settings.value("Desktop/right", -1).toInt();
@@ -274,10 +282,10 @@ void Dialog::polish()
 
 void Dialog::browse()
 {
-    QString s = Q3FileDialog::getSaveFileName(_path, "*.xmi", 0);
+    QString s = QFileDialog::getSaveFileName(0, "",_path, "*.xmi");
 
     if (! s.isEmpty()) {
-        if (s.right(4).lower() != ".xmi")
+        if (s.right(4).toLower() != ".xmi")
             ed->setText(s + ".xmi");
         else
             ed->setText(s);

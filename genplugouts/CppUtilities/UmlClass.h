@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClass.h"
-#include <q3cstring.h>
+
 
 // This class manages 'classes', notes that the class 'ClassItem'
 // is a mother class of the class's children.
@@ -12,7 +12,7 @@
 class UmlClass : public UmlBaseClass
 {
 public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {};
+    UmlClass(void * id, const QByteArray & n) : UmlBaseClass(id, n) {};
 
     //virtual operation doing 'something'
     //

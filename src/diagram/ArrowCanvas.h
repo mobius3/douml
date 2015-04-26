@@ -28,11 +28,12 @@
 #ifndef ARROWCANVAS_H
 #define ARROWCANVAS_H
 
-#include "q3canvas.h"
+#include "QGraphicsScene"
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3PointArray>
-#include <Q3PopupMenu>
+#include <QPolygon>
+#include <QGraphicsPolygonItem>
+////#include <QMenu>
 
 #include "DiagramItem.h"
 
@@ -43,15 +44,15 @@ class ToolCom;
 //#define ARROW_Z 1000
 #define OLD_ARROW_Z 0
 
-#define isa_arrow(x) ((x)->rtti() == RTTI_ARROW)
+#define isa_arrow(x) ((x)->type() == RTTI_ARROW)
 
 class DiagramCanvas;
 class ArrowPointCanvas;
 class LabelCanvas;
 class UmlCanvas;
-class Q3PopupMenu;
+class QMenu;
 
-class ArrowCanvas : public QObject, public Q3CanvasPolygon, public DiagramItem
+class ArrowCanvas : public QObject, public QGraphicsPolygonItem , public DiagramItem
 {
     Q_OBJECT
 
@@ -77,9 +78,9 @@ protected:
     LabelCanvas * stereotype;
     QPoint beginp;
     QPoint endp;
-    Q3PointArray boundings;
+    QPolygon boundings;
     QPoint arrow[3];	// les 2 extremites et le point milieu pour inherit
-    Q3PointArray poly;   // aggregations
+    QPolygon poly;   // aggregations
     float decenter_begin;	// not taken into account if
     float decenter_end;		// fixed geometry. < 0 means don't care
 
@@ -88,6 +89,7 @@ protected:
 
     // to remove redondant relation made by release 2.22
     static QList<ArrowCanvas *> RelsToCheck;
+
 
 public:
     ArrowCanvas(UmlCanvas * canvas, DiagramItem * b, DiagramItem * e,
@@ -122,12 +124,13 @@ public:
     void reverse();
     virtual BasicData * get_data() const;
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual void remove(bool);
     virtual int rtti() const;
     virtual QPoint center() const;
     virtual QRect rect() const;
+    virtual QRect sceneRect() const;
     virtual bool contains(int, int) const;
     QPoint get_point(int i) {
         return arrow[i];
@@ -169,6 +172,11 @@ public:
     void write_uc_rel(ToolCom * com) const;
 
     virtual void check_stereotypeproperties();
+    virtual int type() const;
+    QGraphicsScene* canvas() const
+    {
+        return scene();
+    }
 
 protected:
     void search_supports(ArrowCanvas *& plabel,
@@ -177,10 +185,11 @@ protected:
     void propag_decenter(float db, float de);
     void set_decenter(float db, float de);
     ArrowCanvas * set_geometry(LineGeometry geo, bool fixed);
-    void init_geometry_menu(Q3PopupMenu & m, int first);
+    void init_geometry_menu(QMenu & m, int first);
 
     virtual void drawShape(QPainter & p);
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 protected slots:
     void modified();
     void drawing_settings_modified();

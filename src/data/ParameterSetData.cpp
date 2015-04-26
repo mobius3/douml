@@ -32,8 +32,7 @@
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
-
+#include <QList>
 #include "ParameterSetData.h"
 #include "ParameterSetDialog.h"
 #include "BrowserPin.h"
@@ -52,9 +51,9 @@ ParameterSetData::ParameterSetData(ParameterSetData * model, BrowserNode * bn)
     set_pins(model->pins);
 }
 
-void ParameterSetData::set_pins(const Q3ValueList<BrowserPin *> & l)
+void ParameterSetData::set_pins(const QList<BrowserPin *> & l)
 {
-    Q3ValueList<BrowserPin *>::Iterator iter;
+    QList<BrowserPin *>::Iterator iter;
 
     // disconnect old pins
     for (iter = pins.begin(); iter != pins.end(); iter++)
@@ -70,18 +69,18 @@ void ParameterSetData::set_pins(const Q3ValueList<BrowserPin *> & l)
 void ParameterSetData::check()
 {
     // remove deleted items, note : can't disconnect
-    Q3ValueList<BrowserPin *>::Iterator iter = pins.begin();
+    QList<BrowserPin *>::Iterator iter = pins.begin();
 
     while (iter != pins.end())
         if ((*iter)->deletedp())
-            iter = pins.remove(iter);
+            /*iter = */pins.removeOne(*iter);
         else
             iter++;
 }
 
 void ParameterSetData::edit()
 {
-    setName(browser_node->get_name());
+    setObjectName(browser_node->get_name());
 
     (new ParameterSetDialog(this))->show();
 }
@@ -92,7 +91,7 @@ void ParameterSetData::send_uml_def(ToolCom * com, BrowserNode * bn,
     SimpleData::send_uml_def(com, bn, comment);
     com->write_unsigned(pins.count());
 
-    Q3ValueList<BrowserPin *>::ConstIterator iter = pins.begin();
+    QList<BrowserPin *>::ConstIterator iter = pins.begin();
 
     for (iter = pins.begin(); iter != pins.end(); iter++)
         (*iter)->write_id(com);
@@ -111,7 +110,7 @@ bool ParameterSetData::tool_cmd(ToolCom * com, const char * args,
                 // replace all the pins
             {
                 unsigned n = com->get_unsigned(args);
-                Q3ValueList<BrowserPin *> l;
+                QList<BrowserPin *> l;
 
                 while (n--)
                     l.append((BrowserPin *) com->get_id(args));
@@ -144,7 +143,7 @@ void ParameterSetData::save(QTextStream & st, QString & warning) const
     st << "pins";
     indent(+1);
 
-    Q3ValueList<BrowserPin *>::ConstIterator iter = pins.begin();
+    QList<BrowserPin *>::ConstIterator iter = pins.begin();
 
     for (iter = pins.begin(); iter != pins.end(); iter++) {
         nl_indent(st);
@@ -163,7 +162,7 @@ void ParameterSetData::read(char *& st, char *& k)
     if (strcmp(k, "pins"))
         wrong_keyword(k, "pins");
 
-    Q3ValueList<BrowserPin *> l;
+    QList<BrowserPin *> l;
 
     while (strcmp((k = read_keyword(st)), "end")) {
         BrowserPin * pa = BrowserPin::read(st, k, 0);

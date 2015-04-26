@@ -53,6 +53,7 @@ void EdgeMenuDialogBase::PickNextSibling()
 
     while (continueSearch)
     {
+
         nextNode = dynamic_cast<BrowserNode *>(currentNode->itemAbove());
         QLOG_INFO() << "CurrentNode is: "<< currentNode->get_name();
         if (!nextNode)
@@ -63,7 +64,6 @@ void EdgeMenuDialogBase::PickNextSibling()
 
         QLOG_INFO() << "NextNode is: "<< nextNode->get_name();
         bool sameLevel = originalNode->depth() == nextNode->depth();
-
         bool sameType = originalNode->get_stype() == nextNode->get_stype();
 
         QLOG_INFO() << originalNode->get_stype();
@@ -112,7 +112,6 @@ void EdgeMenuDialogBase::PickPreviousSibling()
 
         currentNode = previousNode;
     }
-
     if (previousNode == 0)
         return;
 
@@ -122,7 +121,9 @@ void EdgeMenuDialogBase::PickPreviousSibling()
 
 void EdgeMenuDialogBase::SetToolBar(EdgeMenuToolBar * newToolbar)
 {
+#ifdef EDGETOOLENABLED
     toolbar = newToolbar;
+#endif
 }
 
 void EdgeMenuDialogBase::InitGui()

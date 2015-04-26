@@ -27,12 +27,12 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3textview.h>
+#include <QTextEdit>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include <QPixmap>
-#include <Q3HBoxLayout>
+#include <QHBoxLayout>
 #include <QPainter>
 #include <QTabWidget>
 #include "About.h"
@@ -40,16 +40,17 @@
 #include "translate.h"
 #include "version.h"
 
-AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
+AboutDialog::AboutDialog() : QDialog(0/*, "About DoUML", TRUE*/)
 {
-    setCaption(TR("About DoUML"));
+    setWindowTitle(TR("About DoUML"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     QPixmap pix(QPixmap(QString(":/douml.png")));
@@ -71,20 +72,22 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
     lbp->setPixmap(pix);
     hbox->addWidget(lbp);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     lbp = new QLabel(this);
     lbp->setText(QString("Build: " DOUML_BUILD_DATE " - Qt version " QT_VERSION_STR));
     hbox->addWidget(lbp);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     QTabWidget *tabs = new QTabWidget(this);
 
     // Description
 
     QWidget *page_description = new QWidget;
 
-    hbox = new Q3HBoxLayout;
+    hbox = new QHBoxLayout;
     hbox->setMargin(5);
 
     const char htmltext_description[] = "<p>DoUML</p>\n"
@@ -97,15 +100,16 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
                             "https://github.com/DoUML/douml<br>\n"
                             "#bdouml@irc.freenode.net</p>\n\n\n";
 
-    Q3TextView * tx_description = new Q3TextView(htmltext_description, QString(), this);
+    QTextEdit * tx_description = new QTextEdit(htmltext_description, this);
     QFont fnt_description = tx_description->font();
+    tx_description->setReadOnly(true);
 
     fnt_description.setItalic(TRUE);
 
     QFontMetrics fm_description(fnt_description);
 
-    tx_description->setVScrollBarMode(Q3ScrollView::AlwaysOff);
-    tx_description->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    tx_description->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    tx_description->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tx_description->setMinimumSize(fm_description.size(0, htmltext_description));
 
     hbox->addWidget(tx_description);
@@ -116,7 +120,7 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
 
     QWidget *page_license = new QWidget;
 
-    hbox = new Q3HBoxLayout;
+    hbox = new QHBoxLayout;
     hbox->setMargin(5);
 
     const char htmltext[] = "This program is licensed under the terms of the GNU General Public\n"
@@ -124,16 +128,17 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
                             "Available online under:\n"
                             "http://www.gnu.org/licenses/gpl-3.0.html";
 
-    Q3TextView * tx = new Q3TextView(htmltext, QString(), this);
+    QTextEdit * tx = new QTextEdit(htmltext, this);
     QFont fnt = tx->font();
 
     fnt.setItalic(TRUE);
 
     QFontMetrics fm(fnt);
 
-    tx->setVScrollBarMode(Q3ScrollView::AlwaysOff);
-    tx->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    tx->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+    tx->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     tx->setMinimumSize(fm.size(0, htmltext));
+    tx->setReadOnly(true);
 
     hbox->addWidget(tx);
 
@@ -147,7 +152,8 @@ AboutDialog::AboutDialog() : QDialog(0, "About DoUML", TRUE)
 
     // Build button
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout(this);
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * ok = new QPushButton(TR("&OK"), this);
 

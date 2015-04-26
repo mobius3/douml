@@ -29,13 +29,12 @@
 
 
 
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-
 #include "TransitionDialog.h"
 #include "TransitionData.h"
 #include "BrowserTransition.h"
@@ -52,7 +51,7 @@
 QSize TransitionDialog::previous_size;
 
 TransitionDialog::TransitionDialog(TransitionData * r)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), rel(r)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), rel(r)
 {
     r->browser_node->edit_start();
 
@@ -65,56 +64,62 @@ TransitionDialog::TransitionDialog(TransitionData * r)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("Transition dialog"));
+    setWindowTitle(TR("Transition dialog"));
     visit = !hasOkButton();
 
     BrowserNode * bn = rel->browser_node;
-    Q3Grid * grid;
+    GridBox * grid;
 
     //
     // general tab
     //
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     umltab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(rel->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(rel->get_stereotype()));
 
     if (!visit) {
-        //edstereotype->insertStringList(rel->get_start()->default_stereotypes(type));
+        //edstereotype->addItems(rel->get_start()->default_stereotypes(type));
         edstereotype->setAutoCompletion(completion());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlTransition));
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlTransition));
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
     if (r->get_start_node() != r->get_end_node())
         internal_cb = 0;
     else {
-        new QLabel(grid);
-        internal_cb = new QCheckBox(TR("internal"), grid);
+        grid->addWidget(new QLabel(grid));
+        grid->addWidget(internal_cb = new QCheckBox(TR("internal"), grid));
         internal_cb->setChecked(r->internal());
     }
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        SmallPushButton* sButton;
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     //comment->setFont(font);
@@ -137,11 +142,11 @@ TransitionDialog::TransitionDialog(TransitionData * r)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
     //
@@ -180,7 +185,7 @@ void TransitionDialog::change_tabs(QWidget * w)
 
 void TransitionDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -189,21 +194,24 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
                                 const char * sl_guard, const char * sl_expr,
                                 bool enabled)
 {
-    Q3Grid * grid = new Q3Grid(2, this);
-    Q3VBox * vtab;
-
+    GridBox * grid = new GridBox(2, this);
+    VVBox * vtab;
+    SmallPushButton* sButton;
     tab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("trigger : "), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("trigger : "), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, sl_trigger);
+        vtab->addWidget(sButton);
+    }
 
-    d.edtrigger = new MultiLineEdit(grid);
+    grid->addWidget(d.edtrigger = new MultiLineEdit(grid));
 
     QFont font = d.edtrigger->font();
 
@@ -217,28 +225,34 @@ void TransitionDialog::init_tab(QWidget *& tab, TransDialog & d, TransDef & td,
     if (visit)
         d.edtrigger->setReadOnly(TRUE);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("guard\nconstraint : "), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("guard\nconstraint : "), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, sl_guard);
+        vtab->addWidget(sButton);
+    }
 
-    d.edguard = new MultiLineEdit(grid);
+    grid->addWidget(d.edguard = new MultiLineEdit(grid));
     d.edguard->setFont(font);
     d.edguard->setText(td.guard);
 
     if (visit)
         d.edguard->setReadOnly(TRUE);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("activity\nexpression : "), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("activity\nexpression : "), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, sl_expr);
+        vtab->addWidget(sButton);
+    }
 
-    d.edexpr = new MultiLineEdit(grid);
+    grid->addWidget(d.edexpr = new MultiLineEdit(grid));
     d.edexpr->setFont(font);
     d.edexpr->setText(td.expr);
 
@@ -293,7 +307,7 @@ void TransitionDialog::accept()
     BrowserNode * bn = rel->browser_node;
     QString s;
 
-    s = edname->text().stripWhiteSpace();
+    s = edname->text().trimmed();
 
     if (s.isEmpty())
         s = "<transition>";
@@ -306,7 +320,7 @@ void TransitionDialog::accept()
     else {
         bn->set_name(s);
 
-        bool newst = rel->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+        bool newst = rel->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
 
         if (internal_cb != 0)
             rel->set_internal(internal_cb->isChecked());
@@ -326,7 +340,7 @@ void TransitionDialog::accept()
         bn->package_modified();
         rel->modified();
 
-        Q3TabDialog::accept();
+        TabDialog::accept();
     }
 }
 

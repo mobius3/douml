@@ -24,13 +24,12 @@
 // home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
-
 #include "UmlCom.h"
 #include "UmlItem.h"
 #include "util.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <QApplication>
+#include <QCoreApplication>
 #include <QDir>
 #include <QSettings>
 #include "Logging/QsLog.h"
@@ -53,7 +52,7 @@ int main(int argc, char ** argv)
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
     settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
     QString locale = settings.value("Main/encoding").toString();
-    QTextCodec* codec = QTextCodec::codecForName(locale);
+    QTextCodec* codec = QTextCodec::codecForName(locale.toLatin1().constData());
     QTextCodec::setCodecForLocale(codec);
 
     QLOG_INFO() << " STARTING CPP_GENERATOR";
@@ -69,7 +68,6 @@ int main(int argc, char ** argv)
     }
     else if (argc == 3) {
         QLOG_INFO() << "Got three arguments from Douml as argv";
-
         if (argv[1][1] == 'v') {
             QLOG_INFO() << "Using verbose mode";
             set_verbose();
@@ -78,7 +76,6 @@ int main(int argc, char ** argv)
             QLOG_INFO() << "Using preserve mode";
             set_preserve();
         }
-
         QLOG_INFO() << "Using second port index mode";
         port_index = 2;
     }
@@ -95,8 +92,8 @@ int main(int argc, char ** argv)
         QLOG_INFO() << "Got too little or too much arguments from Douml, exiting";
         return 0;
     }
-
     if (UmlCom::connect(QString(argv[port_index]).toUInt())) {
+
         try {
 
             UmlCom::trace("<b>C++ generator</b> release 2.18<br>");
@@ -108,7 +105,7 @@ int main(int argc, char ** argv)
             s = "<hr><font face=helvetica>Generation done : %1 warnings, %2 errors</font><br>";
             s=s.arg(QString::number(n_warnings())).arg(QString::number(n_errors()));
 
-            UmlCom::trace(s);
+            UmlCom::trace(s.toLatin1().constData());
 
             UmlCom::showTrace();
             UmlCom::message("");

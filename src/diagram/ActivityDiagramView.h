@@ -58,9 +58,10 @@ private:
     };
 
 protected:
-    virtual void contentsMousePressEvent(QMouseEvent *);
+    virtual void mousePressEvent(QMouseEvent *);
     virtual void dragEnterEvent(QDragEnterEvent *);
     virtual void dropEvent(QDropEvent *);
+    virtual void dragMoveEvent(QDragMoveEvent * e);
 };
 
 #endif

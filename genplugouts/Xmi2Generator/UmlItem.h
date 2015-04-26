@@ -6,7 +6,7 @@
 #include "UmlBaseItem.h"
 
 #include "Language.h"
-#include <q3ptrlist.h>
+
 
 class FileOut;
 class FileOut;
@@ -84,7 +84,7 @@ protected:
 
     static bool _gen_eclipse;
 
-    static QMap<QString, Q3PtrList<UmlItem> > _stereotypes;
+    static QMap<QString, QList<UmlItem*> > _stereotypes;
 
 };
 

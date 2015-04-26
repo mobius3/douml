@@ -8,7 +8,7 @@ enum IdlSettingsCmd {
     getIdlUseDefaultsCmd,
     setIdlUseDefaultsCmd,
     setIdlTypeCmd,
-    setIdlRelationStereotypeCmd,
+    setIdlRelationAttributeStereotypeCmd,
     setIdlClassStereotypeCmd,
     setIdlIncludeCmd,
     setIdlRootDirCmd,

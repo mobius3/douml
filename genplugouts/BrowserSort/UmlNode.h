@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseNode.h"
-#include <q3cstring.h>
+
 
 // This class manages 'nodes'
 //
@@ -11,7 +11,7 @@
 class UmlNode : public UmlBaseNode
 {
 public:
-    UmlNode(void * id, const Q3CString & n) : UmlBaseNode(id, n) {};
+    UmlNode(void * id, const QByteArray & n) : UmlBaseNode(id, n) {};
 
     virtual int orderWeight();
 

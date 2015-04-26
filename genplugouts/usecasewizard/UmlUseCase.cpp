@@ -16,7 +16,7 @@ void UmlUseCase::wizard()
     TabDialog tabdialog(this);
 
     tabdialog.resize(600, 300);
-    a.setMainWidget(&tabdialog);
+    //a.setMainWidget(&tabdialog);
     tabdialog.show();
 
     a.exec();

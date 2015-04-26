@@ -2,7 +2,7 @@
 #include <QPixmap>
 #include <QDropEvent>
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QDragMoveEvent>
 // *************************************************************************
 //
@@ -60,7 +60,7 @@ protected:
     BooL idl_edited;
     ArtifactData * def;
     BrowserDeploymentDiagram * associated_diagram;
-    Q3ValueList<BrowserClass *> associated_classes;
+    QList<BrowserClass *> associated_classes;
 
 protected:
     void exec_menu_choice(int rank,
@@ -78,8 +78,8 @@ public:
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserDeploymentDiagram *, bool on_read = FALSE);
 
-    const Q3ValueList<BrowserClass *> & get_associated_classes() const;
-    void set_associated_classes(const Q3ValueList<BrowserClass *> & l,
+    const QList<BrowserClass *> & get_associated_classes() const;
+    void set_associated_classes(const QList<BrowserClass *> & l,
                                 bool on_read = FALSE);
     bool add_associated_class(BrowserClass *, bool on_read = FALSE);
     bool remove_associated_class(BrowserClass *, bool on_read = FALSE);

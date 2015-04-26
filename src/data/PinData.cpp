@@ -56,7 +56,7 @@ PinData::PinData(PinData * model, BrowserNode * bn)
 
 void PinData::edit()
 {
-    setName(browser_node->get_name());
+    setObjectName(browser_node->get_name());
 
     (new PinDialog(this))->show();
 }

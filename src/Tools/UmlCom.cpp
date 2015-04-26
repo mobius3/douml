@@ -9,8 +9,7 @@ using namespace std;
 
 #include "UmlCom.h"
 
-#include <q3socketdevice.h>
-
+#include <QTcpSocket>
 #include "UmlCom.h"
 #include "UmlItem.h"
 #include "UmlTypeSpec.h"
@@ -18,12 +17,14 @@ using namespace std;
 #include "UmlSettings.h"
 #include "Tools/ApiCmd.h"
 #include "Logging/QsLog.h"
+#include <QHostAddress>
 
 bool UmlCom::connect(unsigned int port)
 {
-    sock = new Q3SocketDevice(Q3SocketDevice::Stream);
-    sock->setAddressReusable(TRUE);
-
+    sock = new QTcpSocket(/*QTcpSocket::Stream*/0);
+#ifdef habip
+    sock->setAddressReusable(true);
+#endif
     buffer_in_size = 1024;
     buffer_in = new char[buffer_in_size];
     buffer_in_end = p_buffer_in = 0;
@@ -36,15 +37,16 @@ bool UmlCom::connect(unsigned int port)
 
     ha.setAddress("127.0.0.1");
 
-    if (sock->connect(ha, port)) {
+    sock->connectToHost(ha, port);
+    if (sock->waitForConnected()) {
         // send API version
         QLOG_INFO() << "Sending API version";
         write_unsigned(APIVERSION);
         flush();
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 UmlItem * UmlCom::targetItem()
@@ -84,7 +86,7 @@ void UmlCom::close()
     sock = 0;
 }
 
-Q3SocketDevice * UmlCom::sock;
+QTcpSocket * UmlCom::sock;
 
 char * UmlCom::buffer_in;
 
@@ -153,7 +155,7 @@ void UmlCom::read_buffer(unsigned int len)
     char * p = buffer_in;
 
     for (;;) {
-        if ((nread = sock->readBlock(p, remainder)) == -1) {
+        if ((nread = sock->read(p, remainder)) == -1) {
             if (sock->error() != 0) {
 #ifdef TRACE
                 QLOG_INFO() << "UmlCom::read_buffer ERROR, already " << p - buffer_in
@@ -174,7 +176,7 @@ void UmlCom::read_buffer(unsigned int len)
             break;
 
         p += nread;
-        sock->waitForMore(100);
+        sock->waitForReadyRead(100);
     }
 
 #ifdef TRACE
@@ -570,65 +572,61 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, cha
     flush();
 }
 
-void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlItem> & l)
+void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlItem*> & l)
 {
 #ifdef TRACE
-    QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", const Q3PtrVector<UmlItem> & l)\n";
+    QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", const QVector<UmlItem*> & l)\n";
 #endif
 
     write_char(onInstanceCmd);
     write_id(id);
     write_char(cmd);
-
     unsigned n = l.count();
-    UmlItem ** v = l.data();
-    UmlItem ** vsup = v + n;
-
     write_unsigned(n);
-
-    for (; v != vsup; v += 1)
-        write_id((*v)->_identifier);
-
+    QVectorIterator<UmlItem*> it(l);
+    while(it.hasNext())
+    {
+        write_id(it.next()->_identifier);
+    }
     flush();
 }
 
-void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlClass> & l1, const Q3PtrVector<UmlClass> & l2, const Q3PtrVector<UmlClass> & l3)
+void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QHash<int,UmlClass*> & l1, const QHash<int,UmlClass*> & l2, const QHash<int,UmlClass*> & l3)
 {
 #ifdef TRACE
-    QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", const Q3PtrVector<UmlClass> & l1, const Q3PtrVector<UmlClass> & l2, const Q3PtrVector<UmlClass> & l3)\n";
+    QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", const QHash<int,UmlClass*> & l1, const QHash<int,UmlClass*> & l2, const QHash<int,UmlClass*> & l3)\n";
 #endif
 
     write_char(onInstanceCmd);
     write_id(id);
     write_char(cmd);
-
     unsigned n;
-    UmlClass ** v;
-    UmlClass ** vsup;
 
     n = l1.count();
     write_unsigned(n);
-    v = l1.data();
-    vsup = v + n;
-
-    for (; v != vsup; v += 1)
-        write_id(((UmlBaseItem *) *v)->_identifier);
-
+    QHashIterator<int, UmlClass*> it1(l1);
+    while(it1.hasNext())
+    {
+        it1.next();
+        write_id(((UmlBaseItem *) it1.value())->_identifier);
+    }
     n = l2.count();
     write_unsigned(n);
-    v = l2.data();
-    vsup = v + n;
-
-    for (; v != vsup; v += 1)
-        write_id(((UmlBaseItem *) *v)->_identifier);
+    QHashIterator<int, UmlClass*> it2(l2);
+    while(it2.hasNext())
+    {
+        it2.next();
+        write_id(((UmlBaseItem *) it2.value())->_identifier);
+    }
 
     n = l3.count();
     write_unsigned(n);
-    v = l3.data();
-    vsup = v + n;
-
-    for (; v != vsup; v += 1)
-        write_id(((UmlBaseItem *) *v)->_identifier);
+    QHashIterator<int, UmlClass*> it3(l3);
+    while(it3.hasNext())
+    {
+        it3.next();
+        write_id(((UmlBaseItem *) it3.value())->_identifier);
+    }
 
     flush();
 }
@@ -704,13 +702,12 @@ unsigned int UmlCom::read_unsigned()
            ((unsigned char *) p_buffer_in)[-1];
 }
 
-void UmlCom::read_item_list(Q3PtrVector<UmlItem> & v)
+void UmlCom::read_item_list(QVector<UmlItem*> & v)
 {
     QLOG_INFO() << "reading item list" ;
     unsigned n = read_unsigned();
     QLOG_INFO() << "item list seems to have a sice of " << n;
-    v.resize(n);
-
+    v.reserve(n);
 #ifdef TRACE
     QLOG_INFO() << "UmlCom::read_item_list " << n << " items\n";
 #endif
@@ -747,9 +744,8 @@ void UmlCom::flush()
 
         len += 4;
         p_buffer_out = buffer_out;
-
         for (;;) {
-            int sent = sock->writeBlock(p_buffer_out, len);
+            int sent = sock->write(p_buffer_out, len);
 
             if (sent == -1) {
                 close();	// to not try to send "bye" !
@@ -779,9 +775,10 @@ void UmlCom::set_user_id(unsigned uid)
 
 bool UmlCom::set_root_permission(bool y)
 {
+
     send_cmd(miscGlobalCmd, setRootPermissionCmd, (char) y);
     // read_char only valid if y is TRUE, else com closed
-    return (y) ? (bool) read_char() : (bool) FALSE;
+    return (y) ? (bool) read_char() : (bool) false;
 }
 
 void UmlCom::send_cmd(CmdFamily f, unsigned int cmd, unsigned int u, char c)

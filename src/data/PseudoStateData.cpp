@@ -61,7 +61,7 @@ PseudoStateData::~PseudoStateData()
 
 void PseudoStateData::edit()
 {
-    setName(browser_node->get_name());
+    setObjectName(browser_node->get_name());
 
     (new PseudoStateDialog(this))->show();
 }

@@ -29,9 +29,9 @@
 #include <QVariant>
 #include <QStringList>
 #include <QModelIndex>
+#include <functional>
 
 #include "l_tree_controller_global.h"
-#include <functional> // std::function
 
 
 

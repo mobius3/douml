@@ -118,8 +118,7 @@ void StateData::on_delete()
 
 void StateData::edit()
 {
-    setName(browser_node->get_name());
-
+    setObjectName(browser_node->get_name());
     (new StateDialog(this))->show();
 }
 

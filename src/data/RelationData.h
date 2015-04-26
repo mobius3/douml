@@ -31,11 +31,7 @@
 #include "ClassMemberData.h"
 #include "Labeled.h"
 #include "AType.h"
-//Added by qt3to4:
 #include <QTextStream>
-
-//Added by qt3to4:
-#include <Q3PtrList>
 #include <QHash>
 
 class QTextStream;

@@ -7,13 +7,16 @@
 #include "UmlTransition.h"
 #include "UmlOperation.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 void UmlJunctionPseudoState::generate(UmlClass * machine, UmlClass * anystate, UmlState * state)
 {
     // create an operation because a priori shared
     if (_oper.isEmpty())
-        _oper.sprintf("_junction%d", ++_rank);
+    {
+        //_oper.sprintf("_junction%d", ++_rank);
+        _oper.append(QString("_junction%1").arg(++_rank));
+    }
 
     UmlClass * cl = state->assocClass();
     UmlOperation * junction;
@@ -31,9 +34,9 @@ void UmlJunctionPseudoState::generate(UmlClass * machine, UmlClass * anystate, U
     junction->addParam(0, InputOutputDirection, "stm", machine);
     junction->setParams("${t0} & ${p0}");
 
-    Q3CString body;
-    const Q3PtrVector<UmlItem> ch = children();
-    Q3PtrList<UmlTransition> trs;
+    QByteArray body;
+    const QVector<UmlItem*> ch = children();
+    QList<UmlTransition*> trs;
     unsigned index;
 
     for (index = 0; index != ch.count(); index += 1)
@@ -46,10 +49,13 @@ void UmlJunctionPseudoState::generate(UmlClass * machine, UmlClass * anystate, U
     junction->set_CppBody(body);
 }
 
-void UmlJunctionPseudoState::generate(UmlClass *, UmlClass *, UmlState * state, Q3CString & body, Q3CString indent)
+void UmlJunctionPseudoState::generate(UmlClass *, UmlClass *, UmlState * state, QByteArray & body, QByteArray indent)
 {
     if (_oper.isEmpty())
-        _oper.sprintf("_junction%d", ++_rank);
+    {
+        //_oper.sprintf("_junction%d", ++_rank);
+        _oper.append(QString("_junction%1").arg(++_rank));
+    }
 
     body += indent + "stm" + state->path() + "." + _oper + "(stm);\n";
 }

@@ -26,7 +26,7 @@ WrapperStr JavaSettings::type(const WrapperStr & s)
 {
     read_if_needed_();
 
-    UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+    UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
     return (b) ? b->java : s;
 }
@@ -37,7 +37,7 @@ bool JavaSettings::set_Type(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(javaSettingsCmd, setJavaTypeCmd, (const char *)s, (const char *)v); //[jasa] ambiguous call
 
     if (UmlCom::read_bool()) {
-        UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+        UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
         if (b == 0)
             b = UmlSettings::add_type(s);
@@ -61,7 +61,7 @@ WrapperStr JavaSettings::relationAttributeStereotype(const WrapperStr & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.value(s);
 
     return (b) ? b->java : s;
 }
@@ -72,7 +72,7 @@ bool JavaSettings::set_RelationAttributeStereotype(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(javaSettingsCmd, setJavaRelationAttributeStereotypeCmd, (const char *)s, (const char *)v); //[jasa] ambiguous call
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_rel_attr_stereotype(s);
@@ -96,7 +96,7 @@ WrapperStr JavaSettings::classStereotype(const WrapperStr & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_class_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_class_stereotypes.value(s);
 
     return (b) ? b->java : s;
 }
@@ -107,7 +107,7 @@ bool JavaSettings::set_ClassStereotype(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(javaSettingsCmd, setJavaClassStereotypeCmd, (const char *)s, (const char *)v); //[jasa] ambiguous call
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_class_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_class_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_class_stereotype(s);
@@ -705,7 +705,7 @@ bool JavaSettings::_is_generate_javadoc_comment;
 
 bool JavaSettings::_is_force_package_gen;
 
-Q3Dict<WrapperStr> JavaSettings::_map_imports;
+QHash<WrapperStr,WrapperStr*> JavaSettings::_map_imports;
 
 void JavaSettings::read_()
 {
@@ -734,7 +734,7 @@ void JavaSettings::read_()
     _map_imports.clear();
 
     if (n > _map_imports.size())
-        _map_imports.resize(n);
+        _map_imports.reserve(n);
 
     for (index = 0; index != n; index += 1) {
         WrapperStr t = UmlCom::read_string();

@@ -29,8 +29,8 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+//#include <q3popupmenu.h>
+#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -149,43 +149,46 @@ const QPixmap * BrowserParameterSet::pixmap(int) const
 
 void BrowserParameterSet::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_edited)
-            m.setWhatsThis(m.insertItem(TR("Edit"), 0),
-                           TR("to edit the <i>parameter set</i>, \
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                           QObject::tr("to edit the <i>parameter set</i>, \
 a double click with the left mouse button does the same thing"));
 
         if (!is_read_only && (edition_number == 0)) {
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), 1),
-                           TR("to copy the <i>parameter set</i> in a new one"));
-            m.insertSeparator();
-            m.setWhatsThis(m.insertItem(TR("Delete"), 2),
-                           TR("to delete the <i>parameter set</i>. \
+            MenuFactory::addItem(m, QObject::tr("Duplicate"), 1,
+                           QObject::tr("to copy the <i>parameter set</i> in a new one"));
+            m.addSeparator();
+            MenuFactory::addItem(m, QObject::tr("Delete"), 2,
+                           QObject::tr("to delete the <i>parameter set</i>. \
 Note that you can undelete it after"));
         }
 
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 4),
-                       TR("to know who reference the <i>parameter set</i>"));
-        mark_menu(m, TR("the parameter set"), 90);
+        MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
+                       QObject::tr("to know who reference the <i>parameter set</i>"));
+        mark_menu(m, QObject::tr("the parameter set").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle(QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0))
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 3),
-                       TR("to undelete the <i>parameter set</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 3,
+                       QObject::tr("to undelete the <i>parameter set</i>"));
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserParameterSet::exec_menu_choice(int rank)
@@ -276,7 +279,7 @@ UmlCode BrowserParameterSet::get_type() const
 
 QString BrowserParameterSet::get_stype() const
 {
-    return TR("parameter set");
+    return QObject::tr("parameter set");
 }
 
 int BrowserParameterSet::get_identifier() const
@@ -368,7 +371,7 @@ void BrowserParameterSet::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "parameterset " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1(), st);
         indent(+1);
         def->save(st, warning);
         BrowserNode::save(st);

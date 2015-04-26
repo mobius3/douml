@@ -31,10 +31,11 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3PointArray>
+#include <QPolygon>
+
 
 #include "NoteCanvas.h"
 #include "MLEDialog.h"
@@ -52,8 +53,8 @@
 NoteCanvas::NoteCanvas(UmlCanvas * canvas, int x, int y, int id)
     : DiagramCanvas(0, canvas, x, y, NOTE_CANVAS_MIN_SIZE,
                     NOTE_CANVAS_MIN_SIZE, id),
-    itsfont(UmlNormalFont), itscolor(UmlDefaultColor),
-    used_color(UmlDefaultColor), fg_c(UmlBlack)
+      itsfont(UmlNormalFont), itscolor(UmlDefaultColor),
+      used_color(UmlDefaultColor), fg_c(UmlBlack)
 {
     browser_node = canvas->browser_diagram();
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
@@ -76,13 +77,14 @@ void NoteCanvas::draw(QPainter & p)
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
     QBrush brsh = p.brush();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
     QPen fgcolor = p.pen();
-    Q3PointArray a(7);
+    QPolygon a(7);
+    QBrush backB = p.background();
 
     used_color = (itscolor == UmlDefaultColor)
-                 ? the_canvas()->browser_diagram()->get_color(UmlNote)
-                 : itscolor;
+            ? the_canvas()->browser_diagram()->get_color(UmlNote)
+            : itscolor;
 
     QColor co = color(used_color);
 
@@ -103,7 +105,8 @@ void NoteCanvas::draw(QPainter & p)
 
     if (used_color == UmlTransparent) {
         p.setBackgroundMode(::Qt::TransparentMode);
-        p.setBackgroundColor(co);
+        backB.setColor(co);
+        p.setBackground(backB);
         p.drawPolyline(a);
 
         if (fp != 0)
@@ -112,9 +115,11 @@ void NoteCanvas::draw(QPainter & p)
     else {
         p.setBackgroundMode(::Qt::OpaqueMode);
         p.setBrush(co);
-        p.drawPolygon(a, TRUE, 0, 6);
+        p.drawPolygon(a, Qt::WindingFill /*TRUE, 0, 6*/);
         p.setBrush(brsh);
-        p.setBackgroundColor(co);
+        QBrush backB = p.background();
+        backB.setColor(co);
+        p.setBackground(backB);
 
         if (fp != 0)
             draw_poly(fp, a, used_color);
@@ -125,7 +130,7 @@ void NoteCanvas::draw(QPainter & p)
 
     if (fp != 0)
         fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
+                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
                 r.right() - corner_size, r.top(), r.right(), r.top() + corner_size);
 
     p.setFont(the_canvas()->get_font(itsfont));
@@ -147,14 +152,20 @@ void NoteCanvas::draw(QPainter & p)
     }
 
     p.setFont(the_canvas()->get_font(UmlNormalFont));
-    p.setBackgroundColor(bckgrnd);
+    backB.setColor(bckgrnd);
+    p.setBackground(backB);
     p.setPen(fgcolor);
 
     if (selected())
         show_mark(p, r);
 }
 
-UmlCode NoteCanvas::type() const
+void NoteCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+
+UmlCode NoteCanvas::typeUmlCode() const
 {
     return UmlNote;
 }
@@ -180,18 +191,16 @@ void NoteCanvas::open()
 
     // warning : 'note' is already unicode
     QString s = fromUnicode(note);
-
     MLEDialog::get(s, QCursor::pos(), sz);
-    note = toUnicode(s);
-
+    note = s.toLatin1().constData();
     modified();
 }
 
 void NoteCanvas::modified()
 {
     used_color = (itscolor == UmlDefaultColor)
-                 ? the_canvas()->browser_diagram()->get_color(UmlNote)
-                 : itscolor;
+            ? the_canvas()->browser_diagram()->get_color(UmlNote)
+            : itscolor;
     // force son reaffichage
     hide();
     show();
@@ -201,106 +210,110 @@ void NoteCanvas::modified()
 
 void NoteCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu fontsubm(0);
+    QMenu m(0);
+    QMenu fontsubm(0);
 
     MenuFactory::createTitle(m, TR("Note"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 7);
-    m.insertItem(TR("Go down"), 8);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Color of text"), 6);
-    m.insertItem(TR("Font"), &fontsubm);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 7);
+    MenuFactory::addItem(m, TR("Go down"), 8);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Color of text"), 6);
+    MenuFactory::insertItem(m, TR("Font"), &fontsubm);
     init_font_menu(fontsubm, the_canvas(), 10);
-    m.insertItem(TR("Edit drawing settings"), 3);
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
 
     if (linked()) {
-        m.insertSeparator();
-        m.insertItem(TR("Select linked items"), 4);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Select linked items"), 4);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 5);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
 
-    int index = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int index = retAction->data().toInt();
 
-    switch (index) {
-    case 0:
-        upper();
-        modified();	// call package_modified()
-        return;
+        switch (index) {
+        case 0:
+            upper();
+            modified();	// call package_modified()
+            return;
 
-    case 1:
-        lower();
-        modified();	// call package_modified()
-        return;
+        case 1:
+            lower();
+            modified();	// call package_modified()
+            return;
 
-    case 7:
-        z_up();
-        modified();	// call package_modified()
-        return;
+        case 7:
+            z_up();
+            modified();	// call package_modified()
+            return;
 
-    case 8:
-        z_down();
-        modified();	// call package_modified()
-        return;
+        case 8:
+            z_down();
+            modified();	// call package_modified()
+            return;
 
-    case 2:
-        open();
-        // modified then package_modified already called
-        return;
+        case 2:
+            open();
+            // modified then package_modified already called
+            return;
 
-    case 3:
-        edit_drawing_settings();
-        return;
+        case 3:
+            edit_drawing_settings();
+            return;
 
-    case 4:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
+        case 4:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
 
-    case 5:
-        delete_it();
-        break;
+        case 5:
+            delete_it();
+            break;
 
-    case 6:
-        for (;;) {
-            ColorSpecVector co(1);
+        case 6:
+            for (;;) {
+                ColorSpecVector co(1);
 
-            co[0].set(TR("color"), &fg_c);
+                co[0].set(TR("color"), &fg_c);
 
-            SettingsDialog dialog(0, &co, TRUE, FALSE,
-                                  TR("Text color dialog"));
+                SettingsDialog dialog(0, &co, TRUE, FALSE,
+                                      TR("Text color dialog"));
 
-            dialog.raise();
+                dialog.raise();
 
-            if (dialog.exec() != QDialog::Accepted)
-                return;
+                if (dialog.exec() != QDialog::Accepted)
+                    return;
 
-            // force son reaffichage
-            hide();
-            show();
-            canvas()->update();
+                // force son reaffichage
+                hide();
+                show();
+                canvas()->update();
 
-            if (!dialog.redo())
-                break;
-            else
-                package_modified();
+                if (!dialog.redo())
+                    break;
+                else
+                    package_modified();
+            }
+
+            break;
+
+        default:
+            if (index >= 10) {
+                itsfont = (UmlFont)(index - 10);
+                modified();
+            }
+
+            return;
         }
-
-        break;
-
-    default:
-        if (index >= 10) {
-            itsfont = (UmlFont)(index - 10);
-            modified();
-        }
-
-        return;
     }
 
     package_modified();
@@ -433,7 +446,6 @@ void NoteCanvas::save_internal(QTextStream & st) const
 
     if (fg_c != UmlBlack)
         st << "  fg " << stringify(fg_c);
-
     save_xyzwh(st, this, "  xyzwh");
 }
 
@@ -496,7 +508,7 @@ NoteCanvas * NoteCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
 void NoteCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }
 
@@ -519,7 +531,7 @@ void NoteCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 }

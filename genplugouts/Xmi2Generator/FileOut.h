@@ -2,7 +2,7 @@
 #define _FILEOUT_H
 
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qmap.h>
 
 
@@ -10,7 +10,7 @@ class QFile;
 class UmlItem;
 
 //QTextOStream + usefull operations
-class FileOut : public Q3TextStream
+class FileOut : public QTextStream
 {
 public:
     FileOut(QFile * fp, bool lf, bool utf8);

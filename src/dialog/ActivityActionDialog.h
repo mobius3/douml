@@ -30,17 +30,14 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
+#include <tabdialog.h>
 #include "BrowserNode.h"
 #include "BodyDialog.h"
 #include "ActivityActionData.h"
 
-class Q3ComboBox;
+class QComboBox;
 class Q3GroupBox;
-class Q3Grid;
+class GridBox;
 class QCheckBox;
 
 class ActivityActionData;
@@ -52,7 +49,7 @@ struct ActionCondDialog {
     MultiLineEdit * edpre;
     MultiLineEdit * edpost;
 
-    void init(Q3Grid *, ActivityActionData *, DrawingLanguage, bool visit);
+    void init(GridBox *, ActivityActionData *, DrawingLanguage, bool visit);
     void get(QString & pre, QString & post) const;
     void set(QString pre, QString post);
 };
@@ -60,19 +57,19 @@ struct ActionCondDialog {
 class AnyActionDialog
 {
 protected:
-    Q3TabDialog * td;
-    Q3Grid * ocl_grid;
-    Q3Grid * cpp_grid;
-    Q3Grid * java_grid;
+    TabDialog * td;
+    GridBox * ocl_grid;
+    GridBox * cpp_grid;
+    GridBox * java_grid;
     ActionCondDialog ocl_cond;
     ActionCondDialog cpp_cond;
     ActionCondDialog java_cond;
 
 public:
     AnyActionDialog();
-    void init(Q3TabDialog *, ActivityActionData *, void * d, bool visit);
-    void init_cpp(Q3TabDialog *, ActivityActionData *, void * d, bool visit);
-    void init_java(Q3TabDialog *, ActivityActionData *, void * d, bool visit);
+    void init(TabDialog *, ActivityActionData *, void * d, bool visit);
+    void init_cpp(TabDialog *, ActivityActionData *, void * d, bool visit);
+    void init_java(TabDialog *, ActivityActionData *, void * d, bool visit);
     bool update(void *);
     void goes(AnyActionDialog & previous);
     void get_cond(QString & ocl_pre, QString & ocl_post,
@@ -91,7 +88,7 @@ private:
     MultiLineEdit * java_beh;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, OpaqueAction *,
+    void init(TabDialog *, ActivityActionData *, OpaqueAction *,
               QList<BodyDialog *> & e, bool visit);
     bool update(OpaqueAction *);
 
@@ -115,7 +112,7 @@ private:
     LineEdit * java_trigger;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, AcceptEventAction *, bool visit);
+    void init(TabDialog *, ActivityActionData *, AcceptEventAction *, bool visit);
     bool update(AcceptEventAction *);
 };
 
@@ -129,15 +126,15 @@ private:
     BrowserNodeList vars;	// attribute or relation
     QStringList var_names;
     QCheckBox * flag_cb;
-    Q3ComboBox * class_co;
-    Q3ComboBox * var_co;
+    QComboBox * class_co;
+    QComboBox * var_co;
     bool visit;
 
     void insert_vars(BrowserClass * c);
     void set(BrowserNode * bn);
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *,
+    void init(TabDialog *, ActivityActionData *,
               AccessVariableValueAction *, BrowserNodeList & nodes,
               QStringList &, bool visit);
     bool update(AccessVariableValueAction *);
@@ -165,8 +162,8 @@ private:
     QCheckBox * flag_cb;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *,
-              ChangeVariableValueAction *, const char * flg_name,
+    void init(TabDialog *, ActivityActionData *,
+              ChangeVariableValueAction *, QString flg_name,
               BrowserNodeList & nodes, QStringList &, bool visit);
     bool update(ChangeVariableValueAction *);
 };
@@ -174,14 +171,14 @@ public:
 class AddVariableValueDialog : public ChangeVariableValueDialog
 {
 public:
-    void init(Q3TabDialog *, ActivityActionData *, AddVariableValueAction *,
+    void init(TabDialog *, ActivityActionData *, AddVariableValueAction *,
               BrowserNodeList & nodes, QStringList &, bool visit);
 };
 
 class RemoveVariableValueDialog : public ChangeVariableValueDialog
 {
 public:
-    void init(Q3TabDialog *, ActivityActionData *, RemoveVariableValueAction *,
+    void init(TabDialog *, ActivityActionData *, RemoveVariableValueAction *,
               BrowserNodeList & nodes, QStringList &, bool visit);
 };
 
@@ -190,7 +187,7 @@ class WithBehaviorDialog : public AnyActionDialog
 protected:
     BrowserNodeList * nodes;
     QStringList * node_names;
-    Q3ComboBox * behavior_co;
+    QComboBox * behavior_co;
     BrowserNode * view;
     bool visit;
 
@@ -208,7 +205,7 @@ private:
     QCheckBox * synchronous_cb;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, CallBehaviorAction *,
+    void init(TabDialog *, ActivityActionData *, CallBehaviorAction *,
               BrowserNodeList &, QStringList &, BrowserNode * v, bool visit);
     bool update(CallBehaviorAction *);
 
@@ -226,15 +223,15 @@ private:
     BrowserNodeList opers;	// attribute or relation
     QStringList oper_names;
     QCheckBox * synchronous_cb;
-    Q3ComboBox * class_co;
-    Q3ComboBox * oper_co;
+    QComboBox * class_co;
+    QComboBox * oper_co;
     bool visit;
 
     void insert_opers(BrowserClass * c);
     void set(BrowserNode * bn);
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, CallOperationAction *,
+    void init(TabDialog *, ActivityActionData *, CallOperationAction *,
               BrowserNodeList &, QStringList &, bool visit);
     bool update(CallOperationAction *);
 
@@ -255,7 +252,7 @@ private:
     LineEdit * java_signal;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, SendSignalAction *, bool visit);
+    void init(TabDialog *, ActivityActionData *, SendSignalAction *, bool visit);
     bool update(SendSignalAction *);
 };
 
@@ -278,7 +275,7 @@ private:
     MultiLineEdit * java_val;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *,
+    void init(TabDialog *, ActivityActionData *,
               ValueSpecificationAction *, QList<BodyDialog *> & e,
               bool visit);
     bool update(ValueSpecificationAction *);
@@ -301,7 +298,7 @@ private:
     LineEdit * java_trigger;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, AcceptCallAction *, bool visit);
+    void init(TabDialog *, ActivityActionData *, AcceptCallAction *, bool visit);
     bool update(AcceptCallAction *);
 };
 
@@ -313,7 +310,7 @@ private:
     LineEdit * java_trigger;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, ReplyAction *, bool visit);
+    void init(TabDialog *, ActivityActionData *, ReplyAction *, bool visit);
     bool update(ReplyAction *);
 };
 
@@ -323,7 +320,7 @@ private:
     LineEdit * classifier;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, CreateObjectAction *, bool visit);
+    void init(TabDialog *, ActivityActionData *, CreateObjectAction *, bool visit);
     bool update(CreateObjectAction *);
 };
 
@@ -334,21 +331,21 @@ private:
     QCheckBox * is_destroy_owned_objects_cb;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, DestroyObjectAction *, bool visit);
+    void init(TabDialog *, ActivityActionData *, DestroyObjectAction *, bool visit);
     bool update(DestroyObjectAction *);
 };
 
 class TestIdentityDialog : public AnyActionDialog
 {
 public:
-    void init(Q3TabDialog *, ActivityActionData *, TestIdentityAction *, bool visit);
+    void init(TabDialog *, ActivityActionData *, TestIdentityAction *, bool visit);
     bool update(TestIdentityAction *);
 };
 
 class RaiseExceptionDialog : public AnyActionDialog
 {
 public:
-    void init(Q3TabDialog *, ActivityActionData *, RaiseExceptionAction *, bool visit);
+    void init(TabDialog *, ActivityActionData *, RaiseExceptionAction *, bool visit);
     bool update(RaiseExceptionAction *);
 };
 
@@ -360,7 +357,7 @@ private:
     QCheckBox * is_ordered_cb;
 
 public:
-    void init(Q3TabDialog *, ActivityActionData *, ReduceAction *,
+    void init(TabDialog *, ActivityActionData *, ReduceAction *,
               BrowserNodeList &, QStringList &, BrowserNode * v, bool visit);
     bool update(ReduceAction *);
 
@@ -368,7 +365,7 @@ public slots:
     void menu_beh();
 };
 
-class ActivityActionDialog : public Q3TabDialog
+class ActivityActionDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -378,8 +375,8 @@ protected:
     QWidget * umltab;
     ActivityActionData * act;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * edtype;
+    QComboBox * edstereotype;
+    QComboBox * edtype;
     UmlActionKind current_type;
     MultiLineEdit * comment;
     MultiLineEdit * constraint;

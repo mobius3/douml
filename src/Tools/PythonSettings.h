@@ -7,7 +7,7 @@
 #include "misc/mystr.h"
 #include "aVisibility.h"
 #include "UmlSettings.h"
-#include <q3dict.h>
+
 
 // This class manages settings concerning PYTHON, configured through
 // the 'Generation settings' dialog.
@@ -228,7 +228,7 @@ private:
 
     static WrapperStr _ext;
 
-    static Q3Dict<QString> _map_imports;
+    static QHash<QString, QString*> _map_imports;
 
 protected:
     static void read_();

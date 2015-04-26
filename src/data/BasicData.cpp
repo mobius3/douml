@@ -38,8 +38,6 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
-
 BasicParent BasicParent::the;
 
 void BasicParent::insertChild(QObject *)
@@ -81,7 +79,7 @@ void BasicData::undelete(QString &, QString &)
     if (deletedp()) {
         set_deletedp(FALSE);
         emit changed();
-        removed.remove(this);
+        removed.removeOne(this);
     }
 }
 

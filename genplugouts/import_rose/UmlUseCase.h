@@ -4,7 +4,7 @@
 
 #include "UmlBaseUseCase.h"
 #include "Uc.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlItem;
 class File;
@@ -15,13 +15,13 @@ class File;
 class UmlUseCase : public UmlBaseUseCase, public Uc
 {
 public:
-    UmlUseCase(void * id, const Q3CString & n) : UmlBaseUseCase(id, n) {
+    UmlUseCase(void * id, const QByteArray & n) : UmlBaseUseCase(id, n) {
         cpt[kind()] += 1;
     };
 
     virtual UmlItem * item();
 
-    virtual void readObject(File & f, Q3CString s);
+    virtual void readObject(File & f, QByteArray s);
 
     static void import(File & f, UmlItem * parent);
 

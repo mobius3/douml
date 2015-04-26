@@ -1,13 +1,13 @@
 
 #include "UmlClassView.h"
-
+#include <QVector>
 #include "UmlDeploymentView.h"
 #include "UmlCom.h"
 void UmlClassView::deploy()
 {
     // deployment needed ?
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned i;
     bool need = FALSE;
 

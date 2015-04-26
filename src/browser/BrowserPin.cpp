@@ -29,8 +29,8 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+//#include <q3popupmenu.h>
+#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -112,7 +112,7 @@ void BrowserPin::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -151,16 +151,17 @@ void BrowserPin::compute_referenced_by(QList<BrowserNode *> & l,
                                        BrowserNode * target)
 {
     IdIterator<BrowserPin> it(all);
-
-    while (it.current()) {
-        if (!it.current()->deletedp()) {
-            const AType & t = it.current()->def->get_type();
+    while(it.hasNext()){
+        it.next();
+        if(it.value()) {
+        if (!it.value()->deletedp()) {
+            const AType & t = it.value()->def->get_type();
 
             if (t.type == target)
-                l.append(it.current());
+                l.append(it.value());
         }
 
-        ++it;
+}
     }
 }
 
@@ -187,7 +188,7 @@ BrowserPin * BrowserPin::add_pin(BrowserPin * pin, BrowserNode * future_parent)
 {
     QString name;
 
-    if (!future_parent->enter_child_name(name, TR("enter pin's name\n(may be empty) : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter pin's name\n(may be empty) : "),
                                          UmlActivityPin, TRUE, TRUE))
         return 0;
 
@@ -223,7 +224,7 @@ QString BrowserPin::may_start() const
         return 0;
 
     default:
-        return TR("can't have outgoing flow");
+        return QObject::tr("can't have outgoing flow");
     }
 }
 
@@ -233,76 +234,79 @@ QString BrowserPin::may_connect(const BrowserNode * dest) const
     BrowserNode * container = dest->get_container(UmlActivity);
 
     if (container == 0)
-        return TR("illegal");
+        return QObject::tr("illegal");
 
     if (get_container(UmlActivity) != container)
-        return TR("not in the same activity");
+        return QObject::tr("not in the same activity");
 
     const BrowserActivityElement * elt =
         dynamic_cast<const BrowserActivityElement *>(dest);
 
     return (elt == 0)
-           ? TR("illegal")
+           ? QObject::tr("illegal")
            : elt->connexion_from(def->get_is_control());
 }
 
 QString BrowserPin::connexion_from(bool control) const
 {
     if (def->get_dir() != UmlIn)
-        return TR("target pin can't have incoming flow");
+        return QObject::tr("target pin can't have incoming flow");
 
     if (def->get_is_control() != control)
         return (control)
-               ? TR("target pin can't accept control flow (not 'is_control')")
-               : TR("target pin can't accept data flow (is 'is_control')");
+               ? QObject::tr("target pin can't accept control flow (not 'is_control')")
+               : QObject::tr("target pin can't accept data flow (is 'is_control')");
     else
         return 0;
 }
 
 void BrowserPin::menu()
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_edited)
-            m.setWhatsThis(m.insertItem(TR("Edit"), 0),
-                           TR("to edit the <i>pin</i>, \
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                           QObject::tr("to edit the <i>pin</i>, \
 a double click with the left mouse button does the same thing"));
 
         if (!is_read_only && (edition_number == 0)) {
             if (((ActivityActionData *)((BrowserNode *) parent())->get_data())->may_add_pin()) {
-                m.setWhatsThis(m.insertItem(TR("Duplicate"), 1),
-                               TR("to copy the <i>pin</i> in a new one"));
-                m.insertSeparator();
+                MenuFactory::addItem(m, QObject::tr("Duplicate"), 1,
+                               QObject::tr("to copy the <i>pin</i> in a new one"));
+                m.addSeparator();
             }
 
-            m.setWhatsThis(m.insertItem(TR("Delete"), 2),
-                           TR("to delete the <i>pin</i>. \
+            MenuFactory::addItem(m, QObject::tr("Delete"), 2,
+                           QObject::tr("to delete the <i>pin</i>. \
 Note that you can undelete it after"));
         }
 
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 4),
-                       TR("to know who reference the <i>pin</i>"));
-        mark_menu(m, TR("the pin"), 90);
+        MenuFactory::addItem(m, QObject::tr("Referenced by"), 4,
+                       QObject::tr("to know who reference the <i>pin</i>"));
+        mark_menu(m, QObject::tr("the pin").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle(QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only &&
              (edition_number == 0) &&
              ((ActivityActionData *)((BrowserNode *) parent())->get_data())->may_add_pin())
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 3),
-                       TR("to undelete the <i>pin</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 3,
+                       QObject::tr("to undelete the <i>pin</i>"));
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserPin::exec_menu_choice(int rank)
@@ -398,7 +402,7 @@ UmlCode BrowserPin::get_type() const
 
 QString BrowserPin::get_stype() const
 {
-    return TR("pin");
+    return QObject::tr("pin");
 }
 
 int BrowserPin::get_identifier() const
@@ -530,14 +534,14 @@ void BrowserPin::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "pin " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         BrowserNode::save(st);
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {

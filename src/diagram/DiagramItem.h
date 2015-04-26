@@ -32,20 +32,19 @@
 #include <qstring.h>
 #include <qpoint.h>
 #include <QTextStream>
-#include <q3ptrdict.h>
+//#include <q3ptrdict.h>
 //Added by qt3to4:
-#include <Q3PtrCollection>
+//
 
 #include "Labeled.h"
 #include "UmlEnum.h"
 
 #define SELECT_SQUARE_SIZE 6
 
-class Q3CanvasItem;
-class Q3CanvasItemList;
+class QGraphicsItem;
+//class QList<QGraphicsItem*>;
 class QBuffer;
 class QPoint;
-
 class DiagramCanvas;
 class LabelCanvas;
 class ArrowCanvas;
@@ -53,7 +52,7 @@ class BrowserNode;
 class BrowserClass;
 class BasicData;
 class UmlCanvas;
-#include <q3ptrlist.h> // [lgfreitas] added for q3ptrlist
+// // [lgfreitas] added for q3ptrlist
 
 class DiagramItem : public Labeled<DiagramItem>
 {
@@ -78,13 +77,14 @@ public:
     virtual void check_line(ArrowCanvas * l);
     bool attached_to(const ArrowCanvas *) const;
 
-    virtual UmlCode type() const = 0;
+    virtual UmlCode typeUmlCode() const = 0;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual void remove(bool from_model);
     virtual BrowserNode * get_bn() const;
     virtual UmlCanvas * the_canvas() const = 0;
     virtual QPoint center() const = 0;
     virtual QRect rect() const = 0;
+    virtual QRect sceneRect() const = 0;
     virtual bool contains(int, int) const = 0;
     virtual void open() = 0;
     virtual void menu(const QPoint &) = 0;
@@ -144,12 +144,13 @@ public:
     void remove_if_already_present();
 
     virtual bool represents(BrowserNode *);
+    virtual void moveBy(double dx, double dy) = 0;
 };
 
 class DiagramItemList : public QList<DiagramItem *>
 {
 public:
-    DiagramItemList(Q3CanvasItemList);
+    DiagramItemList(QList<QGraphicsItem*>);
     virtual ~DiagramItemList();
 
     void sort();
@@ -162,10 +163,10 @@ extern aCorner on_resize_point(const QPoint & p, const QRect & r);
 
 // not a diagram item : a Qt object
 #define TOP_Z 1e101
-#define isa_alien(x) ((x)->z() == TOP_Z)
+#define isa_alien(x) ((x)->zValue() == TOP_Z)
 
-extern DiagramItem * QCanvasItemToDiagramItem(Q3CanvasItem * ci);
-extern DiagramCanvas * QCanvasItemToDiagramCanvas(Q3CanvasItem * ci);
+extern DiagramItem * QCanvasItemToDiagramItem(QGraphicsItem * ci);
+extern DiagramCanvas * QCanvasItemToDiagramCanvas(QGraphicsItem * ci);
 
 #endif
 

@@ -39,6 +39,7 @@ class SdMsgCanvas : public SdMsgBaseCanvas
 protected:
     SdMsgSupport * start;
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     SdMsgCanvas(UmlCanvas * canvas, SdMsgSupport * s,
                 SdMsgSupport * d, UmlCode l, int v, int id);

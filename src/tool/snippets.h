@@ -1,6 +1,6 @@
 #ifndef _SNIPPETS_H
 #define _SNIPPETS_H
-
+#include <array>
 // some really insane code from stackoverflow that allows to shorten lengthy ifs
 template <typename T0, typename T1, std::size_t N>
 bool operator *(const T0& lhs, const std::array<T1, N>& rhs) {

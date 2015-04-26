@@ -31,7 +31,7 @@
 #include "misc/mystr.h"
 #include <QPixmap>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 using namespace std;
 #endif
 
@@ -86,13 +86,13 @@ UmlClass * Class::get_uml()
 
     UmlItem * p = // no nested classe in php
         (UmlItem *)((Package *) parent())->get_uml()->get_classview(get_namespace());
-    WrapperStr str = WrapperStr(text(0).toAscii().constData());
+    WrapperStr str = WrapperStr(text(0).toLatin1().constData());
 
     uml = UmlBaseClass::create(p, str);
 
     if (uml == 0) {
         // probably already exist
-        Q3PtrVector<UmlItem> ch = p->children();
+        QVector<UmlItem*> ch = p->children();
         UmlItem * x;
 
         for (unsigned chindex = 0; chindex != ch.size(); chindex += 1) {
@@ -105,9 +105,9 @@ UmlClass * Class::get_uml()
         if (uml == 0) {
 #ifdef REVERSE
             UmlCom::message("");
-            UmlCom::trace(QString("<font face=helvetica><b>cannot create class <i>")
+            UmlCom::trace(QString(QString("<font face=helvetica><b>cannot create class <i>")
                           + text(0) + "</i> under <i>"
-                          + parent()->text(0) + "</b></font><br>");
+                          + parent()->text(0) + "</b></font><br>").toLatin1().constData());
             throw 0;
 #else
             QMessageBox::critical(0, "Fatal Error",
@@ -138,7 +138,7 @@ UmlClass * Class::get_uml()
 
 bool Class::already_in_bouml()
 {
-    Q3PtrVector<UmlItem> ch = get_uml()->children();
+    QVector<UmlItem*> ch = get_uml()->children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         if (ch[index]->kind() != aClass)
@@ -208,7 +208,7 @@ bool Class::reverse(Package * container, WrapperStr stereotype,
     }
 
     if (Package::scanning()) {
-        char c = s.operator QString().toAscii().at(0);
+        char c = s.operator QString().toLatin1().at(0);
 
         while (c != '{') {
             if ((c = Lex::read_word_bis()) == 0)

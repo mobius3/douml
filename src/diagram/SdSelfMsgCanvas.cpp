@@ -31,11 +31,8 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
 #include <QTextStream>
-#include <Q3PointArray>
-
+#include <QPolygon>
 #include "SdSelfMsgCanvas.h"
 #include "SdDurationCanvas.h"
 #include "OperationData.h"
@@ -57,8 +54,8 @@ SdSelfMsgCanvas::SdSelfMsgCanvas(UmlCanvas * canvas, SdMsgSupport * d,
 {
     dest->add(this);
     update_hpos();
-    setSize(SELF_MSG_WIDTH, SELF_MSG_HEIGHT);
-    check_vpos(d->rect());
+    setRect(0,0,SELF_MSG_WIDTH, SELF_MSG_HEIGHT);
+    check_vpos(d->sceneRect());
     set_center100();
     show();
 }
@@ -70,7 +67,7 @@ SdSelfMsgCanvas::~SdSelfMsgCanvas()
 void SdSelfMsgCanvas::change_scale()
 {
     if (!((BrowserSeqDiagram *) the_canvas()->browser_diagram())
-        ->is_overlapping_bars()) {
+            ->is_overlapping_bars()) {
         // else done by check_vpos called by SdDurationCanvas::change_scale()
         SdMsgBaseCanvas::change_scale();
     }
@@ -80,12 +77,12 @@ void SdSelfMsgCanvas::update_hpos()
 {
     LabelCanvas * lbl = label;
     int cy = center_y_scale100;
-    double dx = dest->rect().right() + 1 - x();
+    double dx = dest->sceneRect().right() + 1 - x();
 
     if (the_canvas()->do_zoom())
         // the label and stereotype are moved independently
         label = 0;
-    else if ((stereotype != 0) && !stereotype->selected())
+    else if ((stereotype != 0) && !stereotype->isSelected())
         stereotype->moveBy(dx, 0);
 
     DiagramCanvas::moveBy(dx, 0);
@@ -97,7 +94,7 @@ void SdSelfMsgCanvas::update_hpos()
 void SdSelfMsgCanvas::check_vpos(const QRect & r)
 {
     if (((BrowserSeqDiagram *) the_canvas()->browser_diagram())
-        ->is_overlapping_bars()) {
+            ->is_overlapping_bars()) {
         double v;
 
         switch (itsType) {
@@ -118,7 +115,7 @@ void SdSelfMsgCanvas::check_vpos(const QRect & r)
 
             DiagramCanvas::moveBy(0, dy);
 
-            if ((stereotype != 0) && !stereotype->selected())
+            if ((stereotype != 0) && !stereotype->isSelected())
                 stereotype->moveBy(0, dy);
         }
     }
@@ -162,7 +159,7 @@ void SdSelfMsgCanvas::draw(QPainter & p)
     }
 
     if (itsType == UmlSyncSelfMsg) {
-        Q3PointArray poly(3);
+        QPolygon poly(3);
         QBrush brsh = p.brush();
 
         p.setBrush(Qt::black);
@@ -187,25 +184,28 @@ void SdSelfMsgCanvas::draw(QPainter & p)
 
         if (fp != 0)
             fprintf(fp, "\t<path fill=\"none\" stroke=\"black\" stroke-opacity=\"1\""
-                    " d=\"M %d %d L %d %d L %d %d\" />\n"
-                    "</g>\n",
+                        " d=\"M %d %d L %d %d L %d %d\" />\n"
+                        "</g>\n",
                     r.left() + 1 + ah, he + ah,
                     r.left() + 1, he,
                     r.left() + 1 + ah, he - ah);
     }
 
-    if (selected())
+    if (isSelected())
         show_mark(p, r);
 }
-
+void SdSelfMsgCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
 void SdSelfMsgCanvas::update()
 {
     if (((BrowserSeqDiagram *) the_canvas()->browser_diagram())
-        ->is_overlapping_bars()) {
+            ->is_overlapping_bars()) {
         switch (itsType) {
         case UmlSelfReturnMsg:
         case UmlSyncSelfMsg:
-            check_vpos(dest->rect());
+            check_vpos(dest->sceneRect());
             return;
 
         default:
@@ -239,120 +239,124 @@ int SdSelfMsgCanvas::overlap_dir(SdDurationCanvas *) const
 
 void SdSelfMsgCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("Message"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertItem(TR("Edit drawing settings"), 3);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 2);
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
+    m.addSeparator();
 
     if (msg != 0)
-        m.insertItem(TR("Select operation in browser"), 8);
+        MenuFactory::addItem(m, TR("Select operation in browser"), 8);
 
-    m.insertItem(TR("Select linked items"), 4);
+    MenuFactory::addItem(m, TR("Select linked items"), 4);
 
     if (label || stereotype) {
-        m.insertSeparator();
-        m.insertItem(TR("Select stereotype and label"), 5);
-        m.insertItem(TR("Default stereotype and label position"), 6);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Select stereotype and label"), 5);
+        MenuFactory::addItem(m, TR("Default stereotype and label position"), 6);
     }
 
     if (((BrowserSeqDiagram *) the_canvas()->browser_diagram())
-        ->is_overlapping_bars()) {
-        m.insertSeparator();
-        m.insertItem(TR("Go to new overlapping bar"), 9);
+            ->is_overlapping_bars()) {
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Go to new overlapping bar"), 9);
 
         if (dest->isOverlappingDuration())
-            m.insertItem(TR("Go to parent bar"), 10);
+            MenuFactory::addItem(m, TR("Go to parent bar"), 10);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
-    switch (m.exec(QCursor::pos())) {
-    case 0:
-        upper();
-        // force son reaffichage
-        hide();
-        show();
-        break;
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        switch (retAction->data().toInt()) {
+        case 0:
+            upper();
+            // force son reaffichage
+            hide();
+            show();
+            break;
 
-    case 1:
-        lower();
-        // force son reaffichage
-        hide();
-        show();
-        break;
+        case 1:
+            lower();
+            // force son reaffichage
+            hide();
+            show();
+            break;
 
-    case 13:
-        z_up();
-        // force son reaffichage
-        hide();
-        show();
-        break;
+        case 13:
+            z_up();
+            // force son reaffichage
+            hide();
+            show();
+            break;
 
-    case 14:
-        z_down();
-        // force son reaffichage
-        hide();
-        show();
-        break;
+        case 14:
+            z_down();
+            // force son reaffichage
+            hide();
+            show();
+            break;
 
-    case 2:
-        open();
-        break;
+        case 2:
+            open();
+            break;
 
-    case 3:
-        edit_drawing_settings();
-        return;
+        case 3:
+            edit_drawing_settings();
+            return;
 
-    case 4:
-        select_associated();
-        break;
+        case 4:
+            select_associated();
+            break;
 
-    case 5:
-        the_canvas()->unselect_all();
+        case 5:
+            the_canvas()->unselect_all();
 
-        if (label)
-            the_canvas()->select(label);
+            if (label)
+                the_canvas()->select(label);
 
-        if (stereotype)
-            the_canvas()->select(stereotype);
+            if (stereotype)
+                the_canvas()->select(stereotype);
 
-        break;
+            break;
 
-    case 6:
-        if (label)
-            default_label_position();
+        case 6:
+            if (label)
+                default_label_position();
 
-        if (stereotype)
-            default_stereotype_position();
+            if (stereotype)
+                default_stereotype_position();
 
-        break;
+            break;
 
-    case 7:
-        delete_it();
-        return;
+        case 7:
+            delete_it();
+            return;
 
-    case 8:
-        msg->get_browser_node()->select_in_browser();
-        return;
+        case 8:
+            msg->get_browser_node()->select_in_browser();
+            return;
 
-    case 9:
-        ((SdDurationCanvas *) dest)->go_up(this, TRUE);
-        break;
+        case 9:
+            ((SdDurationCanvas *) dest)->go_up(this, TRUE);
+            break;
 
-    case 10:
-        ((SdDurationCanvas *) dest)->go_down(this);
+        case 10:
+            ((SdDurationCanvas *) dest)->go_down(this);
 
-    default:
-        return;
+        default:
+            return;
+        }
     }
 
     package_modified();
@@ -432,15 +436,15 @@ void SdSelfMsgCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
                 SdSelfMsgCanvas *canvas = (SdSelfMsgCanvas *)item;
                 if (!st[0].name.isEmpty())
                     canvas->drawing_language =
-                        drawing_language;
+                            drawing_language;
 
                 if (!st[1].name.isEmpty())
                     canvas->show_full_oper =
-                        show_full_oper;
+                            show_full_oper;
 
                 if (!st[2].name.isEmpty())
                     canvas->show_context_mode =
-                        show_context_mode;
+                            show_context_mode;
 
                 canvas->modified();
             }
@@ -464,7 +468,7 @@ void SdSelfMsgCanvas::select_associated()
 {
     the_canvas()->select(this);
 
-    if (!dest->selected())
+    if (!dest->isSelected())
         dest->select_associated();
 }
 
@@ -531,11 +535,11 @@ SdSelfMsgCanvas * SdSelfMsgCanvas::read(char *& st, UmlCanvas * canvas, char * k
         k = read_keyword(st);
 
         SdSelfMsgCanvas * result =
-            new SdSelfMsgCanvas(canvas, d, c, (int) read_double(st) - 1, id);
+                new SdSelfMsgCanvas(canvas, d, c, (int) read_double(st) - 1, id);
 
         if (!strcmp(k, "yz"))
             // new version
-            result->setZ(read_double(st));
+            result->setZValue(read_double(st));
         else if (strcmp(k, "y"))
             wrong_keyword(k, "y/yz");
 

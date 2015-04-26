@@ -4,7 +4,7 @@
 
 #include "UmlBaseClass.h"
 
-#include <q3valuelist.h>
+#include <QList.h>
 
 class FileOut;
 class UmlRelation;
@@ -35,7 +35,7 @@ public:
     UmlClass * set_assoc(UmlRelation * rel);
 
     //  the class is a stereotype, computes the list of extended meta classes
-    void get_extended(Q3ValueList<WrapperStr> & r);
+    void get_extended(QList<WrapperStr> & r);
 
 
 protected:

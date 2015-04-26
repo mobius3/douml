@@ -3,7 +3,7 @@
 #include "FileIn.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 void Token::read(FileIn & in, bool any)
 {
@@ -117,7 +117,7 @@ bool Token::close(const char * what) const
 
 const WrapperStr & Token::valueOf(WrapperStr key) const
 {
-    Q3ValueList<Couple>::ConstIterator iter;
+    QList<Couple>::ConstIterator iter;
 
     for (iter = _couples.begin(); iter != _couples.end(); ++iter)
         if ((*iter).key == key)
@@ -130,7 +130,7 @@ const WrapperStr & Token::valueOf(WrapperStr key) const
 
 bool Token::valueOf(WrapperStr key, WrapperStr & v) const
 {
-    Q3ValueList<Couple>::ConstIterator iter;
+    QList<Couple>::ConstIterator iter;
 
     for (iter = _couples.begin(); iter != _couples.end(); ++iter) {
         if ((*iter).key == key) {

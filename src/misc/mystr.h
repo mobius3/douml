@@ -28,9 +28,9 @@
 #ifndef MY_STR_H
 #define MY_STR_H
 
-#include <q3strlist.h>
+//#include <q3strlist.h>
 #include <QString>
-#include <Q3CString>
+#include <QTextStream>
 #include "Logging/QsLog.h"
 
 
@@ -49,16 +49,20 @@ public:
     }
     WrapperStr(const QString & other) {
         this->wrappedString = other;
+        this->byteArray = this->wrappedString.toLatin1();
     }
     WrapperStr(const QByteArray & other) {
         this->wrappedString = QString(other);
+        this->byteArray = this->wrappedString.toLatin1();
     }
     WrapperStr(const char* other) {
         this->wrappedString = QString(other);
+        this->byteArray = this->wrappedString.toLatin1();
     }
     //QString get(){return s;}
-    WrapperStr & operator=(const Q3CString & cstr) {
+    WrapperStr & operator=(const QByteArray & cstr) {
         this->wrappedString = QByteArray(cstr);
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     bool isEmpty() const {
@@ -76,6 +80,7 @@ public:
 
     WrapperStr & operator=(const WrapperStr & other) {
         this->wrappedString = other.wrappedString;
+       this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
 //    WrapperStr & operator=(const WrapperStr & other) {
@@ -84,18 +89,22 @@ public:
 //    }
     WrapperStr & operator=(const char * c) {
         this->wrappedString = QString(QLatin1String(c));
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     WrapperStr & operator+=(const char * c) {
         this->wrappedString += QString(QLatin1String(c));
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     WrapperStr & operator+=(const QString& str) {
         this->wrappedString += str;
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     WrapperStr & operator+=(const WrapperStr& str) {
         this->wrappedString += str.wrappedString;
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
 //    WrapperStr & operator+=(const char* str) {
@@ -104,21 +113,24 @@ public:
 //    }
     WrapperStr & operator+=(char c) {
         this->wrappedString += QString(c);
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     WrapperStr & operator=(const QString & other) {
         this->wrappedString = other;
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
 
     operator const char * () const
     {
-        return wrappedString;
+        return byteArray.constData();
     }
     operator WrapperStr() const {
          //QLOG_INFO()() << Q_FUNC_INFO;
          //QLOG_INFO()() << this->wrappedString.toLatin1();
-         return this->wrappedString.toLatin1();
+         return this->byteArray;
+         //return this->wrappedString.toLatin1();
      }
 
     operator QString() const {
@@ -154,16 +166,19 @@ public:
     void assign(const char * c, int len) {
         Q_UNUSED(len);
         this->wrappedString = QString(QLatin1String(c));
+        this->byteArray = this->wrappedString.toLatin1();
     }
 
     WrapperStr& replace(int pos, int len, const char* c)
     {
         wrappedString = wrappedString.replace(pos, len, c);
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     WrapperStr& insert(int pos, const char* c)
     {
         wrappedString  = wrappedString.insert(pos, c);
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     WrapperStr left(int len) const
@@ -190,6 +205,7 @@ public:
     WrapperStr& remove(int pos, int len)
     {
         wrappedString = wrappedString.remove(pos, len);
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     WrapperStr mid(int pos, int len = -1) const
@@ -199,11 +215,13 @@ public:
     WrapperStr& setNum(int num)
     {
         wrappedString = wrappedString.setNum(num);
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     void truncate(int pos)
     {
         wrappedString = wrappedString.left(pos);
+        this->byteArray = this->wrappedString.toLatin1();
     }
     QString upper() const
     {
@@ -224,21 +242,24 @@ public:
     }
     int find(QChar c, int from = 0) const
     {
-        return wrappedString.toAscii().find(c, from);
+        return wrappedString.toLatin1().indexOf(c, from);
     }
     WrapperStr & append ( const char * str )
     {
         wrappedString += QString(str);
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     WrapperStr & append (QString str )
     {
         wrappedString += str;
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     WrapperStr & append (const WrapperStr& str )
     {
         wrappedString += str.wrappedString;
+        this->byteArray = this->wrappedString.toLatin1();
         return *this;
     }
     bool isNull() const
@@ -259,6 +280,7 @@ protected:
     static char returnableNullPtr[1];
 
     QString wrappedString;
+    QByteArray byteArray;
 };
 
 bool operator==(const WrapperStr & s1, const char * s2);

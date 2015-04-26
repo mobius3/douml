@@ -29,7 +29,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include "UmlRelation.h"
 #include "UmlClass.h"
@@ -39,7 +39,7 @@
 #include "UmlCom.h"
 
 void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
-                                   const Q3ValueList<UmlActualParameter> & actuals,
+                                   const QList<UmlActualParameter> & actuals,
                                    const WrapperStr & cl_stereotype)
 {
     switch (relationKind()) {
@@ -102,7 +102,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
                 p += 7;
 
                 if (!actuals.isEmpty()) {
-                    Q3ValueList<UmlActualParameter>::ConstIterator ita;
+                    QList<UmlActualParameter>::ConstIterator ita;
                     bool used = FALSE;
 
                     for (ita = actuals.begin(); ita != actuals.end(); ++ita) {
@@ -126,7 +126,7 @@ void UmlRelation::generate_extends(const char *& sep, QTextStream & f,
 }
 
 void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
-                                      const Q3ValueList<UmlActualParameter> & actuals,
+                                      const QList<UmlActualParameter> & actuals,
                                       const WrapperStr & cl_stereotype)
 {
     switch (relationKind()) {
@@ -160,7 +160,7 @@ void UmlRelation::generate_implements(const char *& sep, QTextStream & f,
                         p += 7;
 
                         if (!actuals.isEmpty()) {
-                            Q3ValueList<UmlActualParameter>::ConstIterator ita;
+                            QList<UmlActualParameter>::ConstIterator ita;
                             bool used = FALSE;
 
                             for (ita = actuals.begin(); ita != actuals.end(); ++ita) {
@@ -303,7 +303,7 @@ void UmlRelation::generate(QTextStream & f, const WrapperStr & cl_stereotype,
                         f << "[]";
                     else {
                         for (unsigned index = 0; index != m.length(); index += 1) {
-                            switch (m.at(index).toAscii().at(0)) {
+                            switch (m.at(index).toLatin1().at(0)) {
                             case '[':
                                 f << '[';
                                 break;

@@ -85,15 +85,15 @@ void CodObjCanvas::moveBy(double dx, double dy)
 
 void CodObjCanvas::set_z(double z)
 {
-    setZ(z);
+    setZValue(z);
 
     if (self_link)
-        self_link->setZ(z - 0.5);
+        self_link->setZValue(z - 0.5);
 }
 
 QString CodObjCanvas::may_start(UmlCode & l) const
 {
-    return ((l != UmlSelfLink) || (self_link == 0)) ? QString() : TR("illegal");
+    return ((l != UmlSelfLink) || (self_link == 0)) ? QString() :  QObject::tr("illegal");
 }
 
 QString CodObjCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
@@ -101,13 +101,13 @@ QString CodObjCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
     if (l == UmlAnchor)
         return dest->may_start(l);
 
-    switch (dest->type()) {
+    switch (dest->typeUmlCode()) {
     case UmlClass:
     case UmlClassInstance:
-        return (l == UmlLink) ? QString() : TR("illegal");
+        return (l == UmlLink) ? QString() :  QObject::tr("illegal");
 
     default:
-        return TR("illegal");
+        return  QObject::tr("illegal");
     }
 }
 
@@ -147,7 +147,7 @@ void CodObjCanvas::get_all_in_all_out(ColMsgList & all_in, ColMsgList & all_out)
     foreach (ArrowCanvas *canvas, lines) {
         CodDirsCanvas * dirs;
 
-        if ((canvas->type() == UmlLink) &&
+        if ((canvas->typeUmlCode() == UmlLink) &&
             ((dirs = ((CodLinkCanvas *) canvas)->find_dirs()) != 0)) {
             CodObjCanvas * from;
             CodObjCanvas * to;

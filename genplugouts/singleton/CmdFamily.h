@@ -3,6 +3,7 @@
 
 
 // Internal enum
+/*
 enum CmdFamily {
     onInstanceCmd,
     classGlobalCmd,
@@ -14,4 +15,5 @@ enum CmdFamily {
     idlSettingsCmd
 
 };
+*/
 #endif

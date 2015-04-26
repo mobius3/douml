@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseDeploymentView.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class FileOut;
 
@@ -13,7 +13,7 @@ class FileOut;
 class UmlDeploymentView : public UmlBaseDeploymentView
 {
 public:
-    UmlDeploymentView(void * id, const Q3CString & n) : UmlBaseDeploymentView(id, n) {};
+    UmlDeploymentView(void * id, const QByteArray & n) : UmlBaseDeploymentView(id, n) {};
 
     virtual bool write_if_needed(FileOut & out);
 

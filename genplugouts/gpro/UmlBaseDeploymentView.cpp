@@ -5,11 +5,10 @@
 
 UmlDeploymentView * UmlBaseDeploymentView::create(UmlPackage * parent, const char * s)
 {
-    return (UmlDeploymentView *) parent->create_(aDeploymentView, s);
+  return (UmlDeploymentView *) parent->create_(aDeploymentView, s);
 }
 
-anItemKind UmlBaseDeploymentView::kind()
-{
-    return aDeploymentView;
+anItemKind UmlBaseDeploymentView::kind() {
+  return aDeploymentView;
 }
 

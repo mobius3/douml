@@ -1,9 +1,9 @@
 
 #include "UmlJoinPseudoState.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlJoinPseudoState::sKind()
+QByteArray UmlJoinPseudoState::sKind()
 {
     return "join pseudo state";
 }

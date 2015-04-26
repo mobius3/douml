@@ -31,7 +31,7 @@
 #include "Lex.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 ClassContainer::~ClassContainer()
 {
@@ -45,8 +45,8 @@ ClassContainer::~ClassContainer()
 // among actuals, def is genericname<...${type}...>
 
 bool ClassContainer::read_type(UmlTypeSpec & typespec, Class ** cl,
-                               const Q3ValueList<FormalParameterList> & tmplts,
-                               Q3ValueList<UmlTypeSpec> * actuals,
+                               const QList<FormalParameterList> & tmplts,
+                               QList<UmlTypeSpec> * actuals,
                                WrapperStr & str_actuals, WrapperStr s,
                                UmlClass ** first_actual_class, WrapperStr & def,
                                WrapperStr & genericname)

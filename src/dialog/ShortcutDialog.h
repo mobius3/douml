@@ -28,16 +28,16 @@
 #ifndef SHORTCUTDIALOG_H
 #define SHORTCUTDIALOG_H
 
-#include <q3tabdialog.h>
+#include <tabdialog.h>
 
 #include "MyTable.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QPushButton;
 
 class ShortcutTable;
 
-class ShortcutDialog : public Q3TabDialog
+class ShortcutDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -89,8 +89,10 @@ public:
     void accept();
 
 protected slots:
-    void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    void button_pressed(const QModelIndex &index);
     void value_changed(int row, int col);
+private:
+    TableWidgetItemDelegate* m_delegate;
 };
 
 #endif

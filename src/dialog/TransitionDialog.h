@@ -30,14 +30,11 @@
 
 #include <qwidget.h>
 #include <qstringlist.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
+#include <tabdialog.h>
 #include "BrowserNode.h"
 
 class QPushButton;
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 
 class LineEdit;
@@ -56,7 +53,7 @@ struct TransDialog {
     void accept(TransDef &);
 };
 
-class TransitionDialog : public Q3TabDialog
+class TransitionDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -66,7 +63,7 @@ protected:
     TransitionData * rel;
     LineEdit * edname;
     QCheckBox * internal_cb;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
     QList<BodyDialog *> edits;
 

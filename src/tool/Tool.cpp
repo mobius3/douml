@@ -29,9 +29,9 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <QTextStream>
-#include <q3filedialog.h>
+//#include <q3filedialog.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -39,7 +39,9 @@
 #include "myio.h"
 #include "BrowserView.h"
 #include "err.h"
-
+#include <QTextCodec>
+#include <QFileDialog>
+#include <menufactory.h>
 unsigned Tool::ntools;
 ATool * Tool::tools;
 bool Tool::already_read;
@@ -163,41 +165,56 @@ QList<QString> SetupFailingTools()
     return settings.value("Failing_Tools/Tools").toString().split(",");
 }
 
-bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target,
+bool Tool::menu_insert(QMenu * tool, UmlCode target,
                        const QObject * receiver, const char * member)
 {
     unsigned index;
     bool first = TRUE;
-
+    QAction *action;
     static QList<QString> failingTools = SetupFailingTools();
 
     for (index = 0; index != ntools; index += 1) {
-        if (tools[index].applicable[target] && !failingTools.contains(tools[index].display)) {
+        if (tools[index].applicable[target]
+        #ifdef habip
+                && !failingTools.contains(tools[index].display)
+        #endif
+                ) {
             if (first) {
-                tool->insertSeparator();
+                tool->addSeparator();
                 first = FALSE;
             }
-
-            tool->setItemParameter(tool->insertItem(tools[index].display,
-                                                    receiver, member),
-                                   index);
+            action = tool->addAction(tools[index].display);//new QAction(tools[index].display, tool);
+            action->setData(index);
+            QObject::connect(action, SIGNAL(triggered()), receiver, member);
+            action->setData(index);
+            //tool->addAction(action);
+            //tool->setItemParameter(tool->insertItem(tools[index].display,
+            //                                        receiver, member),
+            //                       index);
         }
     }
 
     return !first;
 }
 
-bool Tool::menu_insert(Q3PopupMenu * tool, UmlCode target, int first_id)
+bool Tool::menu_insert(QMenu * tool, UmlCode target, int first_id)
 {
     unsigned index;
     bool have = FALSE;
-
+    QAction *action;
     static QList<QString> failingTools = SetupFailingTools();
 
     for (index = 0; index != ntools; index += 1) {
-        if (tools[index].applicable[target] && !failingTools.contains(tools[index].display)) {
+        if (tools[index].applicable[target]
+        #ifdef habip
+                && !failingTools.contains(tools[index].display)
+        #endif
+                ) {
             have = TRUE;
-            tool->insertItem(tools[index].display, first_id + index);
+            action = new QAction(tools[index].display,tool);
+            action->setData(first_id + index);
+            tool->addAction(action);
+            //tool->insertItem(tools[index].display, first_id + index);
         }
     }
 
@@ -226,7 +243,7 @@ QStringList Tool::all_display()
     for (index = 0; index != ntools; index += 1) {
         QString s = tools[index].display;
 
-        if (r.findIndex(s) == -1)
+        if (r.indexOf(s) == -1)
             r.append(s);
     }
 
@@ -236,7 +253,9 @@ QStringList Tool::all_display()
 
 const char * Tool::command(int rank)
 {
-    return tools[rank].cmd;
+    static QByteArray command;
+    command = tools[rank].cmd.toLatin1();
+    return command.constData();
 }
 
 const char * Tool::command(const char * d)
@@ -244,8 +263,10 @@ const char * Tool::command(const char * d)
     unsigned index;
 
     for (index = 0; index != ntools; index += 1)
-        if (strcmp(d, tools[index].display) == 0)
-            return tools[index].cmd;
+        if (strcmp(d, tools[index].display.toLatin1().constData()) == 0)
+        {
+            return tools[index].cmd.toLatin1().constData();
+        }
 
     return 0;
 }
@@ -339,17 +360,17 @@ void Tool::save()
     QSharedPointer<QByteArray> newdef(new QByteArray());
     QTextStream st(newdef.data(), QIODevice::WriteOnly);
 
-    st.setEncoding(QTextStream::Latin1);
-
+    //st.setEncoding(QTextStream::Latin1);
+    st.setCodec(QTextCodec::codecForName("latin1"));
     st << "// 'tool' \"the executable\" \"displayed string\" {target}+";
 
     for (unsigned rank = 0; rank != ntools; rank += 1) {
         ATool & tool = tools[rank];
 
         st << "\ntool ";
-        save_string(tools[rank].display, st);
+        save_string(tools[rank].display.toLatin1().constData(), st);
         st << " ";
-        save_string(tools[rank].cmd, st);
+        save_string(tools[rank].cmd.toLatin1().constData(), st);
 
         for (int index = 0; index != sizeof(ToolCase) / sizeof(*ToolCase); index += 1) {
             if (tool.applicable[ToolCase[index].kind]) {
@@ -411,13 +432,13 @@ bool Tool::read(const char * f)
 
 bool Tool::import()
 {
-    QString fn = Q3FileDialog::getOpenFileName(last_used_directory(), "tools");
+    QString fn = QFileDialog::getOpenFileName(0,"tools",last_used_directory());
 
     if (!fn.isEmpty()) {
         set_last_used_directory(fn);
         already_read = FALSE;
         set_ntools(0);
-        return read((const char *) fn);
+        return read((const char *) fn.toLatin1().constData());
     }
 
     return FALSE;
@@ -545,7 +566,7 @@ void Tool::read(char *& st, char *& k, bool new_format)
         tool.cmd = read_string(st);
 
         // fixe ghtml default conf bug
-        int index = tool.cmd.find("ghtml - flat");
+        int index = tool.cmd.indexOf("ghtml - flat");
 
         if (index != -1)
             tool.cmd.remove(index + 7, 1);

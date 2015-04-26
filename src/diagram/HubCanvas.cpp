@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -71,9 +71,9 @@ bool HubCanvas::copyable() const
 void HubCanvas::change_scale()
 {
     // the size is not modified
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void HubCanvas::draw(QPainter & p)
@@ -98,7 +98,7 @@ void HubCanvas::draw(QPainter & p)
         show_mark(p, r);
 }
 
-UmlCode HubCanvas::type() const
+UmlCode HubCanvas::typeUmlCode() const
 {
     return UmlHub;
 }
@@ -109,13 +109,15 @@ void HubCanvas::open()
 
 void HubCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m;
+    QMenu m;
 
-    MenuFactory::createTitle(m, TR("Network connexion"));
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 0);
+    MenuFactory::createTitle(m, QObject::tr("Network connexion"));
+    m.addSeparator();
+    MenuFactory::addItem(m, QObject::tr("Remove from diagram"), 0);
 
-    switch (m.exec(QCursor::pos())) {
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+    switch (retAction->data().toInt()) {
     case 0:
         delete_it();
         break;
@@ -135,7 +137,7 @@ QString HubCanvas::may_start(UmlCode & l) const
         return 0;
 
     default:
-        return TR("illegal");
+        return QObject::tr("illegal");
     }
 }
 
@@ -144,13 +146,13 @@ QString HubCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
     if (l == UmlAnchor)
         return dest->may_start(l);
 
-    switch (dest->type()) {
+    switch (dest->typeUmlCode()) {
     case UmlDeploymentNode:
     case UmlHub:
-        return (l == UmlAssociation) ? QString() : TR("illegal");
+        return (l == UmlAssociation) ? QString() : QObject::tr("illegal");
 
     default:
-        return TR("illegal");
+        return QObject::tr("illegal");
     }
 }
 
@@ -183,7 +185,7 @@ HubCanvas * HubCanvas::read(char *& st, UmlCanvas * canvas,
     HubCanvas * result =
         new HubCanvas(canvas, x, (int) read_double(st), id);
 
-    result->setZ(read_double(st));
+    result->setZValue(read_double(st));
     result->show();
 
     return result;

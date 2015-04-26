@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseDeploymentDiagram.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class File;
 class UmlDeploymentView;
@@ -16,7 +16,7 @@ class UmlDeploymentView;
 class UmlDeploymentDiagram : public UmlBaseDeploymentDiagram
 {
 public:
-    UmlDeploymentDiagram(void * id, const Q3CString & n) : UmlBaseDeploymentDiagram(id, n) {
+    UmlDeploymentDiagram(void * id, const QByteArray & n) : UmlBaseDeploymentDiagram(id, n) {
         cpt[kind()] += 1;
     };
 

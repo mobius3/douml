@@ -31,11 +31,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h>
-#include <q3ptrdict.h>
-//Added by qt3to4:
 #include <QTextStream>
-
 #include "SdLifeLineCanvas.h"
 #include "SdObjCanvas.h"
 #include "SdDurationCanvas.h"
@@ -53,9 +49,10 @@ SdLifeLineCanvas::SdLifeLineCanvas(UmlCanvas * canvas, SdObjCanvas * o)
     : DiagramCanvas(0, canvas, 0, 0, LIFE_LINE_WIDTH, LIFE_LINE_HEIGHT, -1),
       obj(o), end(LIFE_LINE_HEIGHT)
 {
+    //setPos(o->pos().x(), o->pos().y());
     update_pos();
     set_center100();
-    setZ(DIAGRAMCANVAS_Z);
+    setZValue(DIAGRAMCANVAS_Z);
 
     if (obj->is_mortal())
         update_instance_dead();	// call show
@@ -81,8 +78,14 @@ void SdLifeLineCanvas::delete_it()
 
 void SdLifeLineCanvas::update_pos()
 {
-    move(obj->x() + (obj->width() - width()) / 2,
-         obj->y() + LIFE_LINE_TOPOFFSET * the_canvas()->zoom() + 100000);
+    //do not use setPos here. let moveby hangle other stuff
+    QPointF targetPos;
+    targetPos.setX((double)(obj->x() + (obj->sceneRect().width() - width()) / 2));
+    targetPos.setY((double)(obj->y() + LIFE_LINE_TOPOFFSET * the_canvas()->zoom()));
+    moveBy(targetPos.x()-x(),
+           targetPos.y()- y()+ 100000);
+    //setPos(targetPos.x(), targetPos.y());
+
 }
 
 bool SdLifeLineCanvas::is_decenter(const QPoint &, BooL &) const
@@ -95,7 +98,7 @@ void SdLifeLineCanvas::change_scale()
     double scale = the_canvas()->zoom();
     int w = (int)(width_scale100 * scale);
     // force odd width
-    setSize(((w & 1) == 0) ? w + 1 : w, LIFE_LINE_HEIGHT);
+    setRect(0,0,((w & 1) == 0) ? w + 1 : w, LIFE_LINE_HEIGHT);
     // don't move, the position is updated with its obj
 }
 
@@ -105,50 +108,56 @@ void SdLifeLineCanvas::drawShape(QPainter & p)
         // masked by user
         return;
 
+    //since points are in its own coordinate
+    int fakeX = 0;
+    int fakeY = 0;
     p.setBackgroundMode(::Qt::OpaqueMode);
     p.setRenderHint(QPainter::Antialiasing, true);
     p.setPen(::Qt::DashLine);
 
-    int m = (int)(x() + width() / 2);
+    int m = (int)(fakeX + width() / 2);
     FILE * fp = svg();
 
-    p.drawLine(m, (int) y(), m, end);
+    p.drawLine(m, (int) fakeY, m, end);
 
     p.setPen(::Qt::SolidLine);
 
     if (end != LIFE_LINE_HEIGHT) {
         int b = end + (int) width();
 
-        p.drawLine((int) x(), end,
-                   (int)(x() + width()) - 1, b);
-        p.drawLine((int)(x() + width() - 1), end,
-                   (int) x(), b);
+        p.drawLine((int) fakeX, end,
+                   (int)(fakeX + width()) - 1, b);
+        p.drawLine((int)(fakeX + width() - 1), end,
+                   (int) fakeX, b);
 
         if (fp != 0) {
             fprintf(fp, "<g>\n"
-                    "\t<line stroke=\"black\" stroke-dasharray=\"18,6\"  stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
-                    "</g>\n",
-                    m, (int) y(), m, end);
+                        "\t<line stroke=\"black\" stroke-dasharray=\"18,6\"  stroke-opacity=\"1\""
+                        " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
+                        "</g>\n",
+                    m, (int) fakeY, m, end);
 
             fprintf(fp, "<g>\n"
-                    "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
-                    (int) x(), end, (int)(x() + width()) - 1, b);
+                        "\t<line stroke=\"black\" stroke-opacity=\"1\""
+                        " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
+                    (int) fakeX, end, (int)(fakeX + width()) - 1, b);
             fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
-                    "</g>\n",
-                    (int)(x() + width() - 1), end, (int) x(), b);
+                        " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
+                        "</g>\n",
+                    (int)(fakeX + width() - 1), end, (int) fakeX, b);
         }
     }
     else if (fp != 0)
         fprintf(fp, "<g>\n"
-                "\t<line stroke=\"black\" stroke-dasharray=\"18,6\"  stroke-opacity=\"1\""
-                " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
-                "</g>\n",
-                m, (int) y(), m, svg_height());
+                    "\t<line stroke=\"black\" stroke-dasharray=\"18,6\"  stroke-opacity=\"1\""
+                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
+                    "</g>\n",
+                m, (int) fakeY, m, svg_height());
 }
-
+void SdLifeLineCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    drawShape(*painter);
+}
 void SdLifeLineCanvas::moveBy(double dx, double dy)
 {
     DiagramCanvas::moveBy(dx, (dy > 80000) ? dy - 100000 : /*dy*/0);
@@ -161,7 +170,7 @@ void SdLifeLineCanvas::moveBy(double dx, double dy)
         canvas->update_hpos();
 }
 
-UmlCode SdLifeLineCanvas::type() const
+UmlCode SdLifeLineCanvas::typeUmlCode() const
 {
     return UmlLifeLine;
 }
@@ -184,18 +193,18 @@ DiagramItem::LineDirection SdLifeLineCanvas::allowed_direction(UmlCode)
 
 QString SdLifeLineCanvas::may_start(UmlCode & l) const
 {
-    return (l != UmlAnchor) ? QString() : TR("illegal");
+    return (l != UmlAnchor) ? QString() :  QObject::tr("illegal");
 }
 
 QString SdLifeLineCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    switch (dest->type()) {
+    switch (dest->typeUmlCode()) {
     case UmlActivityDuration:
     case UmlLifeLine:
-        return (l != UmlAnchor) ? QString() : TR("illegal");
+        return (l != UmlAnchor) ? QString() :  QObject::tr("illegal");
 
     default:
-        return TR("illegal");
+        return  QObject::tr("illegal");
     }
 }
 
@@ -255,7 +264,7 @@ void SdLifeLineCanvas::add(SdDurationCanvas * d)
 
 void SdLifeLineCanvas::remove(SdDurationCanvas * d)
 {
-    durations.remove(d);
+    durations.removeOne(d);
     update_instance_dead();
 }
 
@@ -310,7 +319,7 @@ void SdLifeLineCanvas::update_v_to_contain(SdDurationCanvas *, bool)
 
 int SdLifeLineCanvas::sub_x(int sub_w) const
 {
-    QRect r = rect();
+    QRect r = sceneRect();
 
     return (r.left() + r.right() - sub_w) / 2 + 1;
 }
@@ -332,7 +341,7 @@ bool SdLifeLineCanvas::isaDuration() const
 
 double SdLifeLineCanvas::getZ() const
 {
-    return z();
+    return zValue();
 }
 
 void SdLifeLineCanvas::open()
@@ -341,7 +350,7 @@ void SdLifeLineCanvas::open()
 
 void SdLifeLineCanvas::exec_menu(int rank)
 {
-    double old_z = z();
+    double old_z = zValue();
 
     switch (rank) {
     case 0:
@@ -368,7 +377,7 @@ void SdLifeLineCanvas::exec_menu(int rank)
         return;
     }
 
-    double dz = z() - old_z;
+    double dz = zValue() - old_z;
 
     if (dz != 0) {
         SdDurationCanvas::propag_dz(durations, dz);
@@ -384,16 +393,20 @@ void SdLifeLineCanvas::exec_menu(int rank)
 void SdLifeLineCanvas::menu(const QPoint &)
 {
     // delete must call SdObjCanvas->delete_it() NOT the own delete_it !
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Life line"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 2);
-    m.insertItem(TR("Go down"), 3);
+    MenuFactory::createTitle(m,  QObject::tr("Life line"));
+    m.addSeparator();
+    MenuFactory::addItem(m,  QObject::tr("Upper"), 0);
+    MenuFactory::addItem(m,  QObject::tr("Lower"), 1);
+    MenuFactory::addItem(m,  QObject::tr("Go up"), 2);
+    MenuFactory::addItem(m,  QObject::tr("Go down"), 3);
 
-    exec_menu(m.exec(QCursor::pos()));
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        exec_menu(retAction->data().toInt());
+    }
 }
 
 void SdLifeLineCanvas::apply_shortcut(QString s)
@@ -448,14 +461,14 @@ void SdLifeLineCanvas::history_load(QBuffer & b)
         durations.append((SdDurationCanvas *) ::load_item(b));
 }
 
-void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
+void SdLifeLineCanvas::send(ToolCom * com, const QList<QGraphicsItem*> & l,
                             QList<FragmentCanvas *> & fragments,
                             QList<FragmentCanvas *> & refs)
 {
     int api_format = com->api_format();
-    Q3PtrDict<SdLifeLineCanvas> used_refs; // the key is the fragment ref
+    QHash<void*, SdLifeLineCanvas*> used_refs; // the key is the fragment ref
     QList<SdLifeLineCanvas *> lls;
-    Q3CanvasItemList::ConstIterator cit;
+    QList<QGraphicsItem*>::ConstIterator cit;
     unsigned n = 0;
 
     // count msgs
@@ -464,8 +477,8 @@ void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
         DiagramItem * it = QCanvasItemToDiagramItem(*cit);
 
         if ((it != 0) && // an uml canvas item
-            (*cit)->visible() &&
-            (it->type() == UmlLifeLine)) {
+                (*cit)->isVisible() &&
+                (it->typeUmlCode() == UmlLifeLine)) {
             SdLifeLineCanvas * ll = (SdLifeLineCanvas *) it;
 
             lls.append(ll);
@@ -480,9 +493,9 @@ void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
                     n += 1;
 
                 foreach (FragmentCanvas *f, refs) {
-                    if (f->collidesWith(ll)) {
+                    if (f->collidesWithItem(ll)) {
                         // interaction use message
-                        if (used_refs.find((void *) f) == 0) {
+                        if (used_refs.value((void *) f) == 0) {
                             n += 1;
                             used_refs.insert((void *) f, ll);
                         }
@@ -514,18 +527,21 @@ void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
 
     if (com->api_format() >= 41) {
         // interaction use messages
-        Q3PtrDictIterator<SdLifeLineCanvas>itref(used_refs);
+        QHashIterator<void*, SdLifeLineCanvas*> itref(used_refs);
         SdLifeLineCanvas *ll;
 
-        while ((ll = itref.current()) != 0) {
-            FragmentCanvas * f = (FragmentCanvas *) itref.currentKey();
-            int m = ll->width() / 2;
+        while (itref.hasNext()) {
+            itref.next();
+            if((ll = itref.value()) != 0)
+            {
+                FragmentCanvas * f = (FragmentCanvas *) itref.key();
+                int m = ll->width() / 2;
 
-            SdMsgBaseCanvas::send(com, ll->obj->get_ident(),
-                                  (unsigned) ll->x() + m, (unsigned) f->center().y(),
-                                  anInteractionUse, "", "", f->arguments());
+                SdMsgBaseCanvas::send(com, ll->obj->get_ident(),
+                                      (unsigned) ll->x() + m, (unsigned) f->center().y(),
+                                      anInteractionUse, "", "", f->arguments().toLatin1().constData());
+            }
 
-            ++itref;
         }
 
         // send life lines covered by fragment
@@ -533,7 +549,7 @@ void SdLifeLineCanvas::send(ToolCom * com, const Q3CanvasItemList & l,
             QList<SdLifeLineCanvas *> covered;
 
             foreach (SdLifeLineCanvas *ll, lls)
-                if (f->collidesWith(ll))
+                if (f->collidesWithItem(ll))
                     covered.append(ll);
 
             com->write_unsigned(covered.count());

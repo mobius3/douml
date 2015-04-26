@@ -31,7 +31,7 @@
 #include "DiagramCanvas.h"
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 class ActivityActionCanvas;
 class PinCanvas;
@@ -43,12 +43,13 @@ class ParameterSetCanvas : public QObject, public DiagramCanvas
 
 protected:
     ActivityActionCanvas * act;
-    Q3ValueList<PinCanvas *> params;
+    QList<PinCanvas *> params;
     UmlColor itscolor;
     UmlColor used_color;
 
     void disconnect_pins();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ParameterSetCanvas(BrowserNode * bn, UmlCanvas * canvas,
                        int id, ActivityActionCanvas * a);
@@ -62,7 +63,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual bool copyable() const;
     virtual void remove(bool from_model);
     virtual void open();

@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <QMenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -38,12 +38,13 @@
 #include <QDropEvent>
 
 #include "BrowserClassView.h"
-#include "ClassViewDialog.h"
 #include "BrowserClassDiagram.h"
 #include "BrowserColDiagram.h"
+#include "ClassViewDialog.h"
 #include "BrowserSeqDiagram.h"
 #include "BrowserObjectDiagram.h"
 #include "BrowserDeploymentView.h"
+
 #include "BrowserClass.h"
 #include "BrowserClassInstance.h"
 #include "BrowserState.h"
@@ -138,7 +139,7 @@ BrowserClassView * BrowserClassView::add_class_view(BrowserNode * future_parent)
 {
     QString name;
 
-    if (future_parent->enter_child_name(name, TR("enter class view's name : "),
+    if (future_parent->enter_child_name(name, QObject::TR("enter class view's name : "),
                                         UmlClassView, TRUE, FALSE))
         return new BrowserClassView(name, future_parent);
     else
@@ -158,6 +159,7 @@ void BrowserClassView::update_idmax_for_root()
 {
     all.update_idmax_for_root();
     BrowserClass::update_idmax_for_root();
+
     BrowserState::update_idmax_for_root();
     BrowserActivity::update_idmax_for_root();
     BrowserClassInstance::update_idmax_for_root();
@@ -167,7 +169,7 @@ void BrowserClassView::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -207,63 +209,65 @@ QString BrowserClassView::full_name(bool rev, bool itself) const
 
 void BrowserClassView::menu()
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu subm(0);
-    Q3PopupMenu roundtripm(0);
-    Q3PopupMenu toolm(0);
+
+    QMenu m(0);
+    QMenu subm(0);
+    QMenu roundtripm(0);
+    QMenu toolm(0);
     bool isprofile = (strcmp(((BrowserNode *) parent())->get_data()->get_stereotype(),
                              "profile")
                       == 0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_read_only && (edition_number == 0)) {
             if (isprofile)
-                m.setWhatsThis(m.insertItem(TR("New stereotype"), 18),
-                               TR("to add a <i>stereotype</i>"));
 
-            m.setWhatsThis(m.insertItem(TR("New class diagram"), 0),
-                           TR("to add a <i>class diagram</i>"));
-            m.setWhatsThis(m.insertItem(TR("New sequence diagram"), 1),
-                           TR("to add a <i>sequence diagram</i>"));
-            m.setWhatsThis(m.insertItem(TR("New communication diagram"), 2),
-                           TR("to add a <i>communication diagram</i>"));
-            m.setWhatsThis(m.insertItem(TR("New object diagram"), 15),
-                           TR("to add a <i>object diagram</i>"));
-            m.setWhatsThis(m.insertItem(TR("New class"), 3),
-                           TR("to add a <i>class</i>"));
-            m.setWhatsThis(m.insertItem(TR("New class instance"), 17),
-                           TR("to add a <i>class instance</i>"));
-            m.setWhatsThis(m.insertItem(TR("New state machine"), 4),
-                           TR("to add a <i>state machine</i>"));
-            m.setWhatsThis(m.insertItem(TR("New activity"), 16),
-                           TR("to add an <i>activity</i>"));
-            m.insertSeparator();
+               MenuFactory::addItem(m, QObject::TR("New stereotype"), 18,
+                               QObject::TR("to add a <i>stereotype</i>"));
+
+           MenuFactory::addItem(m, QObject::TR("New class diagram"), 0,
+                           QObject::TR("to add a <i>class diagram</i>"));
+           MenuFactory::addItem(m, QObject::TR("New sequence diagram"), 1,
+                           QObject::TR("to add a <i>sequence diagram</i>"));
+           MenuFactory::addItem(m, QObject::TR("New communication diagram"), 2,
+                           QObject::TR("to add a <i>communication diagram</i>"));
+           MenuFactory::addItem(m, QObject::TR("New object diagram"), 15,
+                           QObject::TR("to add a <i>object diagram</i>"));
+           MenuFactory::addItem(m, QObject::TR("New class"), 3,
+                           QObject::TR("to add a <i>class</i>"));
+           MenuFactory::addItem(m, QObject::TR("New class instance"), 17,
+                           QObject::TR("to add a <i>class instance</i>"));
+           MenuFactory::addItem(m, QObject::TR("New state machine"), 4,
+                           QObject::TR("to add a <i>state machine</i>"));
+           MenuFactory::addItem(m, QObject::TR("New activity"), 16,
+                           QObject::TR("to add an <i>activity</i>"));
+            m.addSeparator();
         }
 
         if (!is_edited) {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 5),
-                           TR("to edit the <i>class view</i>"));
+           MenuFactory::addItem(m, QObject::TR("Edit"), 5,
+                           QObject::TR("to edit the <i>class view</i>"));
 
             if (!is_read_only) {
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Edit class settings"), 6),
-                               TR("to set the sub classes's settings"));
-                m.setWhatsThis(m.insertItem(TR("Edit drawing settings"), 7),
-                               TR("to set how the sub <i>class diagrams</i>'s items must be drawn"));
+                m.addSeparator();
+               MenuFactory::addItem(m, QObject::TR("Edit class settings"), 6,
+                               QObject::TR("to set the sub classes's settings"));
+               MenuFactory::addItem(m, QObject::TR("Edit drawing settings"), 7,
+                               QObject::TR("to set how the sub <i>class diagrams</i>'s items must be drawn"));
 
                 if (edition_number == 0) {
-                    m.insertSeparator();
-                    m.setWhatsThis(m.insertItem(TR("Delete"), 8),
-                                   TR("to delete the <i>class view</i> and its sub items. \
+                    m.addSeparator();
+                   MenuFactory::addItem(m, QObject::TR("Delete"), 8,
+                                   QObject::TR("to delete the <i>class view</i> and its sub items. \
 Note that you can undelete them after"));
                 }
             }
         }
 
-        mark_menu(m, TR("the class view"), 90);
+        mark_menu(m, QObject::TR("the class view").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if (! isprofile) {
@@ -274,58 +278,63 @@ Note that you can undelete them after"));
             bool idl = GenerationSettings::idl_get_default_defs();
 
             if (cpp || java || php || python || idl) {
-                m.insertSeparator();
-                m.insertItem(TR("Generate"), &subm);
+                m.addSeparator();
+                subm.setTitle(QObject::TR("Generate"));
+                m.addMenu(&subm);
 
                 if (cpp) {
-                    subm.insertItem("C++", 11);
+                    MenuFactory::addItem(subm,"C++", 11);
 
                     if ((edition_number == 0) && !is_read_only)
-                        roundtripm.insertItem("C++", 31);
+                        MenuFactory::addItem(roundtripm,"C++", 31);
                 }
 
                 if (java) {
-                    subm.insertItem("Java", 12);
+                    MenuFactory::addItem(subm,"Java", 12);
 
                     if ((edition_number == 0) && !is_read_only)
-                        roundtripm.insertItem("Java", 32);
+                        MenuFactory::addItem(roundtripm,"Java", 32);
                 }
 
                 if (php)
-                    subm.insertItem("Php", 22);
+                    MenuFactory::addItem(subm,"Php", 22);
 
                 if (python)
-                    subm.insertItem("Python", 25);
+                    MenuFactory::addItem(subm,"Python", 25);
 
                 if (idl)
-                    subm.insertItem("Idl", 13);
+                    MenuFactory::addItem(subm,"Idl", 13);
 
-                if (roundtripm.count() != 0)
-                    m.insertItem(TR("Roundtrip"), &roundtripm);
+                if (roundtripm.actions().count() != 0)
+                    roundtripm.setTitle(QObject::TR("Roundtrip"));
+                    m.addMenu(&roundtripm);
             }
         }
 
         if ((edition_number == 0) &&
             (Tool::menu_insert(&toolm, get_type(), 100))) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle(QObject::TR("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 9),
-                       TR("undelete the <i>class view</i>. \
+       MenuFactory::addItem(m, QObject::TR("Undelete"), 9,
+                       QObject::TR("undelete the <i>class view</i>. \
 Do not undelete its sub items"));
-        m.setWhatsThis(m.insertItem(TR("Undelete recursively"), 10),
-                       TR("undelete the <i>class view</i> and its sub items"));
+       MenuFactory::addItem(m, QObject::TR("Undelete recursively"), 10,
+                       QObject::TR("undelete the <i>class view</i> and its sub items"));
     }
 
     if (!isprofile && (associated_deployment_view != 0)) {
-        m.insertSeparator();
-        m.setWhatsThis(m.insertItem(TR("Select associated deployment view"), 14),
-                       TR("to select the associated <i>deployment view</i>"));
+        m.addSeparator();
+       MenuFactory::addItem(m, QObject::TR("Select associated deployment view"), 14,
+                       QObject::TR("to select the associated <i>deployment view</i>"));
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+    exec_menu_choice(retAction->data().toInt());
 }
 
 void BrowserClassView::exec_menu_choice(int rank)
@@ -368,7 +377,6 @@ void BrowserClassView::exec_menu_choice(int rank)
         d->select_in_browser();
     }
     break;
-
     case 3: {
         BrowserClass * cl = BrowserClass::add_class(FALSE, this);
 
@@ -388,11 +396,9 @@ void BrowserClassView::exec_menu_choice(int rank)
         st->select_in_browser();
     }
     break;
-
     case 5:
         (new ClassViewDialog(get_data()))->show();
         return;
-
     case 6:
         if (! class_settings.edit(UmlClassView))
             return;
@@ -411,19 +417,19 @@ void BrowserClassView::exec_menu_choice(int rank)
             statediagram_settings.complete(st, FALSE);
             activitydiagram_settings.complete(st, FALSE);
 
-            co[0].set(TR("class color"), &class_color);
-            co[1].set(TR("note color"), &note_color);
-            co[2].set(TR("package color"), &package_color);
-            co[3].set(TR("fragment color"), &fragment_color);
-            co[4].set(TR("duration color"), &duration_color);
-            co[5].set(TR("continuation color"), &continuation_color);
-            co[6].set(TR("state color"), &state_color);
-            co[7].set(TR("state action color"), &stateaction_color);
-            co[8].set(TR("activity color"), &activity_color);
-            co[9].set(TR("activity region color"), &activityregion_color);
-            co[10].set(TR("activity partition color"), &activitypartition_color);
-            co[11].set(TR("activity action color"), &activityaction_color);
-            co[12].set(TR("parameter and pin color"), &parameterpin_color);
+            co[0].set(QObject::TR("class color"), &class_color);
+            co[1].set(QObject::TR("note color"), &note_color);
+            co[2].set(QObject::TR("package color"), &package_color);
+            co[3].set(QObject::TR("fragment color"), &fragment_color);
+            co[4].set(QObject::TR("duration color"), &duration_color);
+            co[5].set(QObject::TR("continuation color"), &continuation_color);
+            co[6].set(QObject::TR("state color"), &state_color);
+            co[7].set(QObject::TR("state action color"), &stateaction_color);
+            co[8].set(QObject::TR("activity color"), &activity_color);
+            co[9].set(QObject::TR("activity region color"), &activityregion_color);
+            co[10].set(QObject::TR("activity partition color"), &activitypartition_color);
+            co[11].set(QObject::TR("activity action color"), &activityaction_color);
+            co[12].set(QObject::TR("parameter and pin color"), &parameterpin_color);
 
             SettingsDialog dialog(&st, &co, FALSE);
 
@@ -525,7 +531,6 @@ void BrowserClassView::exec_menu_choice(int rank)
             ToolCom::run("java_roundtrip", this);
 
         return;
-
     case 14:
         if (! isprofile)
             associated_deployment_view->select_in_browser();
@@ -551,7 +556,6 @@ void BrowserClassView::exec_menu_choice(int rank)
     }
 
     return; // package_modified called
-
     case 17: {
         BrowserClassInstance * c =
             BrowserClassInstance::add_classinstance(this);
@@ -561,7 +565,6 @@ void BrowserClassView::exec_menu_choice(int rank)
     }
 
     return; // package_modified called
-
     case 18: {
         BrowserClass * cl = BrowserClass::add_class(TRUE, this);
 
@@ -584,6 +587,7 @@ void BrowserClassView::exec_menu_choice(int rank)
     }
 
     package_modified();
+
 }
 
 void BrowserClassView::apply_shortcut(QString s)
@@ -671,7 +675,7 @@ UmlCode BrowserClassView::get_type() const
 
 QString BrowserClassView::get_stype() const
 {
-    return TR("class view");
+    return QObject::TR("class view");
 }
 
 int BrowserClassView::get_identifier() const
@@ -1022,7 +1026,6 @@ void BrowserClassView::DropEvent(QDropEvent * e)
 void BrowserClassView::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 {
     BrowserNode * bn;
-
     if ((((bn = UmlDrag::decode(e, UmlClass)) != 0) ||
          ((bn = UmlDrag::decode(e, UmlClassInstance)) != 0) ||
          ((bn = UmlDrag::decode(e, UmlClassDiagram)) != 0) ||
@@ -1045,7 +1048,7 @@ void BrowserClassView::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             if (after)
                 bn->moveItem(after);
             else {
-                bn->parent()->takeItem(bn);
+                ((BrowserNode *)bn->parent())->takeItem(bn);
                 insertItem(bn);
             }
 
@@ -1061,7 +1064,7 @@ void BrowserClassView::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             package_modified();
         }
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
             e->ignore();
         }
     }
@@ -1073,7 +1076,7 @@ void BrowserClassView::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 
 bool BrowserClassView::extract_from_profile()
 {
-    Q3ListViewItem * bn = firstChild();
+    BrowserNode * bn = firstChild();
     bool has_stereotypes = FALSE;
 
     while (bn != 0) {
@@ -1092,7 +1095,7 @@ bool BrowserClassView::extract_from_profile()
 
 void BrowserClassView::insert_in_profile()
 {
-    Q3ListViewItem * bn = firstChild();
+    BrowserNode * bn = firstChild();
 
     while (bn != 0) {
         if (!((BrowserNode *) bn)->deletedp() &&
@@ -1132,7 +1135,7 @@ void BrowserClassView::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "classview " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
 
         def->save(st, warning);
@@ -1173,18 +1176,16 @@ void BrowserClassView::save(QTextStream & st, bool ref, QString & warning)
         save_color(st, "activitypartition_color", activitypartition_color, nl);
         save_color(st, "activityaction_color", activityaction_color, nl);
         save_color(st, "parameterpin_color", parameterpin_color, nl);
-
         if (associated_deployment_view != 0) {
             nl_indent(st);
             st << "associated_deployment_view ";
             associated_deployment_view->save(st, TRUE, warning);
         }
-
         BrowserNode::save(st);
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -1287,7 +1288,9 @@ BrowserClassView * BrowserClassView::read(char *& st, char * k,
         r->BrowserNode::read(st, k, id);				// updates k
 
         if (strcmp(k, "end")) {
-            while (BrowserClassDiagram::read(st, k, r) ||
+            while (
+
+                   BrowserClassDiagram::read(st, k, r) ||
                    BrowserColDiagram::read(st, k, r) ||
                    BrowserSeqDiagram::read(st, k, r) ||
                    BrowserObjectDiagram::read(st, k, r) ||
@@ -1296,7 +1299,6 @@ BrowserClassView * BrowserClassView::read(char *& st, char * k,
                    BrowserState::read(st, k, r) ||
                    BrowserActivity::read(st, k, r))
                 k = read_keyword(st);
-
             if (strcmp(k, "end"))
                 wrong_keyword(k, "end");
         }
@@ -1313,15 +1315,17 @@ BrowserNode * BrowserClassView::get_it(const char * k, int id)
         return all[id];
 
     BrowserNode * r;
+    if (
 
-    if (((r = BrowserClassDiagram::get_it(k, id)) == 0) &&
+            ((r = BrowserClassDiagram::get_it(k, id)) == 0) &&
         ((r = BrowserColDiagram::get_it(k, id)) == 0) &&
         ((r = BrowserSeqDiagram::get_it(k, id)) == 0) &&
         ((r = BrowserObjectDiagram::get_it(k, id)) == 0) &&
+
+
         ((r = BrowserClass::get_it(k, id)) == 0) &&
         ((r = BrowserState::get_it(k, id)) == 0))
         r = BrowserActivity::get_it(k, id);
-
     return r;
 }
 

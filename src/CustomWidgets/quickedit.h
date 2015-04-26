@@ -14,7 +14,7 @@ class TreeModel;
 class BrowserNode;
 class TreeItemInterface;
 class QTreeView;
-class Q3ListViewItem;
+class QListWidgetItem;
 class GenericEventFilter;
 class UmlWindow;
 class QMenu;
@@ -38,7 +38,6 @@ public:
     void Init(UmlWindow* window, BrowserView* view);
     void Show(BrowserNode*);
     bool ValidType(BrowserNode*);
-    
 protected:
     void closeEvent(QCloseEvent *) override;
 
@@ -50,9 +49,9 @@ private:
     QScopedPointer<QMenu> contextMenu;
     QMenu* collapseExpandMenu = nullptr;
     QList<UmlCode> validTypes;
+
     QList<QSharedPointer<BrowserNode> > localNodeHolder;
     QHash<UmlCode, std::function<void(QSharedPointer<TreeItemInterface>, BrowserNode*) > > itemCreators;
-
     TreeModel* treeModel = nullptr;
     bool isFiltered = false;
     QStringList expandedNodes;
@@ -97,7 +96,6 @@ private:
                         QSharedPointer<BrowserNode>&);
 
 
-
     void SetupClassController();
     void SetupOperationController();
     void SetupAttributeController();
@@ -127,10 +125,8 @@ private:
     void CollapseExpand(const QModelIndex& index );
 
 
-
     BrowserNode* GetCurrentNode();
     QSharedPointer<TreeItemInterface> GetSharedOfOperation(const QModelIndex& );
-
 
     QSharedPointer<TreeItemInterface > CreateInterfaceNode(QSharedPointer<TreeItemInterface> root, QSharedPointer<ItemController<BrowserNode> > controller, BrowserNode *node);
     void AssignItemsForOperation(QSharedPointer<TreeItemInterface> root,BrowserNode*);
@@ -140,7 +136,6 @@ private:
     void AssignItemsForExtraNode(QSharedPointer<TreeItemInterface> root,BrowserNode*);
     void AssignItemsForClassView(QSharedPointer<TreeItemInterface> root,BrowserNode*);
     void AssignItemsForPackage(QSharedPointer<TreeItemInterface> root,BrowserNode*);
-
     void MoveMarked(bool);
 
     public slots:

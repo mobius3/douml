@@ -32,7 +32,6 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
 
 // This class globaly manages class's operations, relations, attributes
 // and sub-classes

@@ -1,15 +1,15 @@
 
 #include "UmlOnSignalAction.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-void UmlOnSignalAction::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlOnSignalAction::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     UmlActivityAction::html();
 
-    Q3CString s = signal();
-    Q3CString scpp = cppSignal();
-    Q3CString sjava = javaSignal();
+    QByteArray s = signal();
+    QByteArray scpp = cppSignal();
+    QByteArray sjava = javaSignal();
 
     if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
         fw.write("<p>Signal :</p><ul>");

@@ -31,7 +31,7 @@
 
 #include "MyTable.h"
 #include "strutil.h"
-
+#include <QHeaderView>
 // TableItem is defined to redefine alignment() because the default
 // definition calls QString::to[U]Long which does not properly
 // manage the empty but not null QString (ie QString(""))
@@ -45,34 +45,104 @@ int TableItem::alignment() const
 
 void MyTable::setText(int row, int col, const QString & text)
 {
-    Q3TableItem * itm = item(row, col);
+    QTableWidgetItem * itm = item(row, col);
 
     if (itm != 0) {
         itm->setText(text);
-        updateCell(row, col);
+        //update(this->model()->index(row,col));
     }
     else
-        setItem(row, col, new TableItem(this, Q3TableItem::OnTyping, text));
+    {
+        setItem(row, col, new TableItem(this, TableItem::OnTyping, text, TableItem::TableItemType));
+    }
+}
+
+QString MyTable::text(int row, int colum) const
+{
+    if(item(row, colum))
+        return item(row, colum)->text();
+    else
+        return QString();
 }
 
 // force end of edition
 
 void MyTable::forceUpdateCells()
 {
-    for (int row = 0; row != numRows(); row += 1) {
-        for (int col = 0; col != numCols(); col += 1) {
-            QWidget * w = cellWidget(row, col);
+}
 
-            if (w != 0) {
-                QString s = item(row, col)->text();
-
-                item(row, col)->setContentFromEditor(w);
-
-                if (item(row, col)->text() != s)
-                    emit valueChanged(row, col);
-
-                // warning : may have other edited cells
-            }
-        }
+void MyTable::setVerticalHeaderLabel(int section, const QIcon &icon, const QString &s)
+{
+    QTableWidgetItem *item = verticalHeaderItem(section);
+    if(item)
+    {
+        item->setIcon(icon);
     }
+    else
+    {
+        item = new QTableWidgetItem(icon,s,0);
+        setVerticalHeaderItem(section, item);
+    }
+}
+
+void MyTable::setHorizontalHeaderLabel(int section, const QIcon &icon, const QString &s)
+{
+    QTableWidgetItem *item = horizontalHeaderItem(section);
+    if(item)
+    {
+        item->setIcon(icon);
+    }
+    else
+    {
+        item = new QTableWidgetItem(icon,s,0);
+        setHorizontalHeaderItem(section, item);
+    }
+}
+void MyTable::setVerticalHeaderLabel(int section, const QString &s)
+{
+    QTableWidgetItem *item = verticalHeaderItem(section);
+    if(item)
+    {
+        item->setText(s);
+    }
+    else
+    {
+        item = new QTableWidgetItem(s,0);
+        setVerticalHeaderItem(section, item);
+    }
+}
+
+void MyTable::setHorizontalHeaderLabel(int section,  const QString &s)
+{
+    QTableWidgetItem *item = horizontalHeaderItem(section);
+    if(item)
+    {
+        item->setText(s);
+    }
+    else
+    {
+        item = new QTableWidgetItem(s,0);
+        setHorizontalHeaderItem(section, item);
+    }
+}
+
+void MyTable::setColumnStretchable(int column, bool state)
+{
+    if(state)
+        horizontalHeader()->setSectionResizeMode(column, QHeaderView::Stretch);
+    else
+        horizontalHeader()->setSectionResizeMode(column, QHeaderView::Interactive);
+}
+
+void MyTable::setRowStretchable(int column, bool state)
+{
+    if(state)
+        verticalHeader()->setSectionResizeMode(column, QHeaderView::Stretch);
+    else
+        verticalHeader()->setSectionResizeMode(column, QHeaderView::Fixed);
+}
+
+void MyTable::adjustColumn(int col)
+{
+    horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
 }

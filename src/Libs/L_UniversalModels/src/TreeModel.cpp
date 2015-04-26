@@ -285,7 +285,9 @@ bool TreeModel::removeRows(int position, int rows, const QModelIndex & parent)
 
 void TreeModel::reset()
 {
-    QAbstractItemModel::reset();
+    //QAbstractItemModel::reset();
+    beginResetModel();
+    endResetModel();
 }
 
 

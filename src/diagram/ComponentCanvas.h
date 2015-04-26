@@ -61,6 +61,7 @@ protected:
     ComponentCanvas(UmlCanvas * canvas, int id);
     bool valid(ArrowCanvas * a) const;
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ComponentCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ComponentCanvas();
@@ -72,7 +73,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;

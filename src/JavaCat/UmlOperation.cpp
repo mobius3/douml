@@ -29,9 +29,9 @@
 #include <iostream>
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 using namespace std;
 #endif
@@ -56,7 +56,7 @@ using namespace std;
 #endif
 
 bool UmlOperation::new_one(Class * container, const WrapperStr & name,
-                           const Q3ValueList<FormalParameterList> & tmplts,
+                           const QList<FormalParameterList> & tmplts,
                            const WrapperStr & oper_templ,
                            UmlTypeSpec & type, WrapperStr str_actuals,
                            UmlClass * first_actual_class, WrapperStr type_def,
@@ -82,8 +82,8 @@ bool UmlOperation::new_one(Class * container, const WrapperStr & name,
     bool may_roundtrip = roundtrip &&
                          (!container->from_libp() ||	(visibility != PrivateVisibility));
     UmlTypeSpec return_type;
-    Q3ValueList<UmlParameter> params;
-    Q3ValueList<UmlTypeSpec> exceptions;
+    QList<UmlParameter> params;
+    QList<UmlTypeSpec> exceptions;
     WrapperStr body;
 
     if (may_roundtrip)
@@ -471,9 +471,9 @@ bool UmlOperation::new_one(Class * container, const WrapperStr & name,
                 op->set_ReturnType(return_type);
             }
 
-            Q3ValueList<UmlParameter>::Iterator itp1;
-            const Q3ValueList<UmlParameter> old_params = op->params();
-            Q3ValueList<UmlParameter>::ConstIterator itp2;
+            QList<UmlParameter>::Iterator itp1;
+            const QList<UmlParameter> old_params = op->params();
+            QList<UmlParameter>::ConstIterator itp2;
 
             for (rank = 0, itp1 = params.begin(), itp2 = old_params.begin();
                  (itp1 != params.end()) && (itp2 != old_params.end());
@@ -518,9 +518,9 @@ bool UmlOperation::new_one(Class * container, const WrapperStr & name,
                 while (itp2 != old_params.end());
             }
 
-            Q3ValueList<UmlTypeSpec>::ConstIterator ite1;
-            const Q3ValueList<UmlTypeSpec> old_exceptions = op->exceptions();
-            Q3ValueList<UmlTypeSpec>::ConstIterator ite2;
+            QList<UmlTypeSpec>::ConstIterator ite1;
+            const QList<UmlTypeSpec> old_exceptions = op->exceptions();
+            QList<UmlTypeSpec>::ConstIterator ite2;
 
             for (rank = 0, ite1 = exceptions.begin(), ite2 = old_exceptions.begin();
                  (ite1 != exceptions.end()) && (ite2 != old_exceptions.end());
@@ -592,12 +592,12 @@ bool UmlOperation::new_one(Class * container, const WrapperStr & name,
 
         expected_order.append(op);
 
-        Q3ValueList<UmlParameter>::ConstIterator itp;
+        QList<UmlParameter>::ConstIterator itp;
 
         for (rank = 0, itp = params.begin(); itp != params.end(); ++itp)
             op->addParameter(rank++, *itp);
 
-        Q3ValueList<UmlTypeSpec>::ConstIterator ite;
+        QList<UmlTypeSpec>::ConstIterator ite;
 
         for (rank = 0, ite = exceptions.begin(); ite != exceptions.end(); ++ite)
             op->addException(rank++, *ite);
@@ -643,7 +643,7 @@ bool UmlOperation::new_one(Class * container, const WrapperStr & name,
 }
 
 bool UmlOperation::read_param(Class * container, unsigned rank,
-                              const Q3ValueList<FormalParameterList> & tmplts,
+                              const QList<FormalParameterList> & tmplts,
                               UmlParameter & param, WrapperStr & def, bool bypass)
 {
 #ifdef TRACE
@@ -655,7 +655,7 @@ bool UmlOperation::read_param(Class * container, unsigned rank,
     bool ellipsis = FALSE;
     WrapperStr array;
     bool type_read = FALSE;
-    Q3ValueList<UmlTypeSpec> actuals;
+    QList<UmlTypeSpec> actuals;
     WrapperStr str_actuals;
     WrapperStr annotation;
 
@@ -894,7 +894,7 @@ UmlOperation  * UmlOperation::already_exist_from_id(Class * container, WrapperSt
                           " before line " + QString::number(Lex::line_number()) +
                           " : invalid preserve body identifier</font><br>";
 
-            UmlCom::trace(err);
+            UmlCom::trace(err.toLatin1().constData());
             throw 0;
         }
 
@@ -908,7 +908,7 @@ UmlOperation  * UmlOperation::already_exist_from_id(Class * container, WrapperSt
                           " before line " + QString::number(Lex::line_number()) +
                           " : invalid preserve body block, end of line expected</font><br>";
 
-            UmlCom::trace(err);
+            UmlCom::trace(err.toLatin1().constData());
             throw 0;
         }
 
@@ -920,7 +920,7 @@ UmlOperation  * UmlOperation::already_exist_from_id(Class * container, WrapperSt
                           " before line " + QString::number(Lex::line_number()) +
                           " : invalid preserve body block, wrong balanced</font><br>";
 
-            UmlCom::trace(err);
+            UmlCom::trace(err.toLatin1().constData());
             throw 0;
         }
 
@@ -937,7 +937,7 @@ UmlOperation  * UmlOperation::already_exist_from_id(Class * container, WrapperSt
                               " before line " + QString::number(Lex::line_number()) +
                               " : preserve body block identifier used twice</font><br>";
 
-                UmlCom::trace(err);
+                UmlCom::trace(err.toLatin1().constData());
                 throw 0;
             }
 
@@ -953,11 +953,11 @@ UmlOperation  * UmlOperation::already_exist_from_id(Class * container, WrapperSt
 }
 
 UmlOperation * UmlOperation::already_exist(Class * container, const WrapperStr & name,
-        Q3ValueList<UmlParameter> & params)
+        QList<UmlParameter> & params)
 {
-    const Q3PtrVector<UmlItem> & ch = container->get_uml()->UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = container->get_uml()->UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
     QList<UmlOperation *> opers;
 
     for (; v != vsup; v += 1)
@@ -983,9 +983,9 @@ UmlOperation * UmlOperation::already_exist(Class * container, const WrapperStr &
 
     // search for operation having the same params name and number
     foreach (UmlOperation *op, opers) {
-        Q3ValueList<UmlParameter> ps = op->params();
-        Q3ValueList<UmlParameter>::ConstIterator it1;
-        Q3ValueList<UmlParameter>::ConstIterator it2;
+        QList<UmlParameter> ps = op->params();
+        QList<UmlParameter>::ConstIterator it1;
+        QList<UmlParameter>::ConstIterator it2;
         bool same_type = TRUE;
         bool same_name = TRUE;
 

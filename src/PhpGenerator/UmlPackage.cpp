@@ -47,8 +47,8 @@ static WrapperStr RootDir;
 static WrapperStr relative_path(const QDir & destdir, WrapperStr relto)
 {
     QDir fromdir(relto);
-    WrapperStr from = WrapperStr(fromdir.absPath().toAscii().constData());
-    WrapperStr to = WrapperStr(destdir.absPath().toAscii().constData());
+    WrapperStr from = WrapperStr(fromdir.absolutePath().toLatin1().constData());
+    WrapperStr to = WrapperStr(destdir.absolutePath().toLatin1().constData());
     const char * cfrom = from;
     const char * cto = to;
     int lastsep = -1;
@@ -119,7 +119,7 @@ WrapperStr UmlPackage::rootDir()
         if (!RootDir.isEmpty() && // empty -> error
             QDir::isRelativePath(RootDir)) {
             QFileInfo f(getProject()->supportFile());
-            QDir d(f.dirPath());
+            QDir d(f.path());
 
             RootDir = d.filePath(RootDir);
         }
@@ -171,7 +171,7 @@ WrapperStr UmlPackage::file_path(const WrapperStr & f, WrapperStr relto)
                 s.replace(index++, 1, "/");
         }
 
-        s = QDir::cleanDirPath(s) + "/";
+        s = QDir::cleanPath(s) + "/";
         index = s.find("/");
 
         int index2;
@@ -194,7 +194,7 @@ WrapperStr UmlPackage::file_path(const WrapperStr & f, WrapperStr relto)
     }
 
     WrapperStr df = (dir.file_absolute || relto.isEmpty())
-                   ? WrapperStr(d.filePath(f).toAscii().constData())
+                   ? WrapperStr(d.filePath(f).toLatin1().constData())
                    : relative_path(d, relto) + f;
 
     if (PhpSettings::isRelativePath() && (df[0] != '/') && (df[0] != '.'))
@@ -212,7 +212,7 @@ WrapperStr UmlPackage::text_path(const WrapperStr & f)
 
 void UmlPackage::generate()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->generate();

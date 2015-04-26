@@ -30,33 +30,34 @@
 
 
 #include <qlayout.h>
-#include <q3hbox.h>
+#include <hhbox.h>
 #include <qlabel.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 
 #include "MLEDialog.h"
 #include "DialogUtil.h"
 #include "translate.h"
 
-MLEDialog::MLEDialog(QString t, bool buttons) : QDialog(0, "Uml", TRUE, 0)
+MLEDialog::MLEDialog(QString t, bool buttons) : QDialog(0/*, "Uml", TRUE, 0*/)
 {
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    setWindowTitle("Uml");
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     e = new MultiLineEdit(this);
     vbox->addWidget(e);
 
-    Q3HBox * hbox = new Q3HBox(this);
+    HHBox * hbox = new HHBox(this);
 
     vbox->addWidget(hbox);
     hbox->setMargin(5);
 
     if (buttons) {
-        new QLabel(hbox);
-        ok = new QPushButton(TR("OK"), hbox);
-        new QLabel(hbox);
-        cancel = new QPushButton(TR("Cancel"), hbox);
-        new QLabel(hbox);
+        hbox->addWidget(new QLabel(hbox));
+        hbox->addWidget(ok = new QPushButton(TR("OK"), hbox));
+        hbox->addWidget(new QLabel(hbox));
+        hbox->addWidget(cancel = new QPushButton(TR("Cancel"), hbox));
+        hbox->addWidget(new QLabel(hbox));
 
         connect(ok, SIGNAL(clicked()), this, SLOT(accept()));
         connect(cancel, SIGNAL(clicked()), this, SLOT(reject()));

@@ -103,14 +103,15 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
 TARGET          = python_generator
-DEFINES          = WITHPYTHON BooL=bool
+DEFINES          = WITHPYTHON BooL=bool FALSE=false TRUE=true
 INCLUDEPATH   = ../Tools ../PythonGenerator ../
 DESTDIR = ../../bin
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+#qt3support
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/python_generator

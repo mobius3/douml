@@ -30,11 +30,9 @@
 
 
 #include <qstring.h>
-//Added by qt3to4:
-#include <Q3StrList>
-
+#include <QStringList>
 #include "Logging/QsLog.h"
-
+#include <QTextCodec>
 #include "mystr.h"
 char WrapperStr::returnableNullPtr[1] = { 0 };
 QByteArray WrapperStr::ba[20];
@@ -141,7 +139,7 @@ bool neq(const WrapperStr & s1, const WrapperStr & s2)
             return (*p2 != 0);
 
         if (*p1 != *p2)
-            return TRUE;
+            return true;
 
         p1 += 1;
         p2 += 1;

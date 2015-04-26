@@ -111,15 +111,17 @@ SOURCES          = main.cpp BrowserNode.cpp Statistic.cpp \
     ../Logging/QsDebugOutput.cpp
 
 TARGET          = java_roundtrip
-DEFINES          = WITHJAVA REVERSE ROUNDTRIP
+DEFINES          = WITHJAVA REVERSE ROUNDTRIP TRUE=true FALSE=false
 INCLUDEPATH   = ../Tools ../JavaRoundtrip ../JavaCat ../ ../misc
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+#qt3support
 
 
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/java_roundtrip

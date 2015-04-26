@@ -159,14 +159,15 @@ SOURCES          = main.cpp Statistic.cpp \
 
 
 TARGET          = cpp_roundtrip
-DEFINES          = WITHCPP REVERSE ROUNDTRIP BooL=bool
+DEFINES          = WITHCPP REVERSE ROUNDTRIP BooL=bool FALSE=false TRUE=true
 INCLUDEPATH   = ../Tools ../CppRoundtrip ../CppReverse
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+#qt3support
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/cpp_roundtrip
@@ -181,3 +182,4 @@ UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+

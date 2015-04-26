@@ -4,7 +4,7 @@
 
 void UmlBaseCollaborationDiagramDefinition::read_()
 {
-    Q3PtrDict<UmlClassInstanceReference> instances;
+    QHash<void*,UmlClassInstanceReference*> instances;
     unsigned n;
     unsigned rank;
 
@@ -19,7 +19,7 @@ void UmlBaseCollaborationDiagramDefinition::read_()
         i->read_();
     }
 
-    _instances.setAutoDelete(TRUE);
+    //_instances.setAutoDelete(TRUE);
 
     n = UmlCom::read_unsigned();
     _messages.resize(n);
@@ -31,7 +31,7 @@ void UmlBaseCollaborationDiagramDefinition::read_()
         m->read_(instances);
     }
 
-    _messages.setAutoDelete(TRUE);
+   // _messages.setAutoDelete(TRUE);
 }
 
 UmlBaseCollaborationDiagramDefinition::~UmlBaseCollaborationDiagramDefinition()

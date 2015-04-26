@@ -256,7 +256,7 @@ void QuickEdit::SetupOperationController()
     operationController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     operationController->SetColumns(columns);
     ADD_GETSET(BrowserOperation, operationController, columns.indexOf("name"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
-               toString, get_name, set_name);
+               toString().toLatin1().constData, get_name, set_name);
 
     ADD_GETSET_DATA(BrowserOperation, OperationData, operationController, columns.indexOf("type"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                    toString, get_return_type().get_type, set_return_type);
@@ -651,7 +651,7 @@ void QuickEdit::SetupExtraNodeController()
     extraNodeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     extraNodeController->SetColumns(columns);
     ADD_GETSET(BrowserExtraMember, extraNodeController, columns.indexOf("name"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
-               toString, get_name, set_name);
+               toString().toLatin1().constData, get_name, set_name);
 
     ADD_GETSET(BrowserExtraMember, extraNodeController, columns.indexOf("deleted"), QVector<int>({Qt::DisplayRole,Qt::EditRole}),
                toBool, deletedp, set_deleted);

@@ -28,11 +28,11 @@
 #ifndef CPPREFTYPE_H
 #define CPPREFTYPE_H
 
-#include <q3ptrlist.h>
+//
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
+//
 
 #include "UmlTypeSpec.h"
 

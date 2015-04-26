@@ -28,7 +28,7 @@
 #ifndef UMLDRAG_H
 #define UMLGRAG_H
 
-#include <q3dragobject.h>
+//#include <q3dragobject.h>
 #include <qstring.h>
 //Added by qt3to4:
 #include <QDragMoveEvent>
@@ -36,10 +36,11 @@
 
 #include "UmlEnum.h"
 #include "browser/BrowserNode.h"
+#include <QMimeData>
 
 //class BrowserNode;
 
-class UmlDrag : public Q3StoredDrag
+class UmlDrag : public QMimeData
 {
 private:
     static QString postfix;

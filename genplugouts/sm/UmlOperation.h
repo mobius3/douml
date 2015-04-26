@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseOperation.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "aDirection.h"
 
 class UmlClass;
@@ -15,7 +15,7 @@ class UmlClass;
 class UmlOperation : public UmlBaseOperation
 {
 public:
-    UmlOperation(void * id, const Q3CString & n) : UmlBaseOperation(id, n), _managed(FALSE) {};
+    UmlOperation(void * id, const QByteArray & n) : UmlBaseOperation(id, n), _managed(FALSE) {};
 
     //  set the default C++/Java definition
     //  set it usefull

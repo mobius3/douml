@@ -29,7 +29,7 @@
 
 
 
-#include <Q3TextEdit>
+#include <QTextEdit>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qfile.h>
@@ -37,28 +37,29 @@
 #include <qapplication.h>
 #include <qdir.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
 #include "misc/mystr.h"
 #include <QDesktopWidget>
 #include <QSettings>
 #include "ShowFileDialog.h"
 
 ShowFileDialog::ShowFileDialog(const WrapperStr & filename)
-    : QDialog(0, filename)
+    : QDialog(0)
 {
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    setWindowTitle(filename);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->addWidget(new QLabel("You can specify the editor through the environment dialog",
                                this));
 
-    e = new Q3TextEdit(this);
+    e = new QTextEdit(this);
 
     QFile f(filename);
 
     if (f.open(QIODevice::ReadOnly)) {
         QTextStream t(&f);
 
-        e->setText(t.read());
+        e->setText(t.readAll());
     }
 
     QFont font = e->font();
@@ -72,7 +73,7 @@ ShowFileDialog::ShowFileDialog(const WrapperStr & filename)
 
 void ShowFileDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
 
     int w = QApplication::desktop()->width();
     int h = QApplication::desktop()->height();
@@ -81,7 +82,7 @@ void ShowFileDialog::polish()
     bool virtual_desktop = FALSE;
 
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
-    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    settings.setIniCodec("UTF-8");
     int l, t, r, b;
     l = settings.value("Desktop/left", -1).toInt();
     r = settings.value("Desktop/right", -1).toInt();

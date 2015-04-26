@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseDiagram.h"
-#include <q3cstring.h>
+
 
 // This class allows to manage diagram
 //
@@ -11,11 +11,11 @@
 class UmlDiagram : public UmlBaseDiagram
 {
 public:
-    UmlDiagram(void * id, const Q3CString & n) : UmlBaseDiagram(id, n) {};
+    UmlDiagram(void * id, const QByteArray & n) : UmlBaseDiagram(id, n) {};
 
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
+    virtual void html(QByteArray pfix, unsigned int rank, unsigned int level);
 
 };
 

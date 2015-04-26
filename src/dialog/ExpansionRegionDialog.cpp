@@ -29,13 +29,12 @@
 
 
 
-#include <q3grid.h>
+#include <gridbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qcheckbox.h>
-#include <q3vbox.h>
-
+#include <vvbox.h>
 #include "ExpansionRegionDialog.h"
 #include "ExpansionRegionData.h"
 #include "BrowserExpansionRegion.h"
@@ -47,11 +46,11 @@
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
-
+#include "hhbox.h"
 QSize ExpansionRegionDialog::previous_size;
 
 ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(nd)
 {
     nd->browser_node->edit_start();
 
@@ -64,76 +63,82 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("Expansion Region dialog"));
+    setWindowTitle(TR("Expansion Region dialog"));
 
     bool visit = !hasOkButton();
 
     // general tab
 
     BrowserNode * bn = data->get_browser_node();
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
 
     umltab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(data->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(data->get_stereotype()));
 
     if (! visit) {
-        edstereotype->insertStringList(BrowserExpansionRegion::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlExpansionRegion));
+        edstereotype->addItems(BrowserExpansionRegion::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlExpansionRegion));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    Q3HBox * htab;
+    HHBox * htab;
 
-    new QLabel(TR("mode :"), grid);
-    htab = new Q3HBox(grid);
-    edmode = new Q3ComboBox(FALSE, htab);
+    grid->addWidget(new QLabel(TR("mode :"), grid));
+    grid->addWidget(htab = new HHBox(grid));
+    htab->addWidget(edmode = new QComboBox(htab));
 
     UmlExpansionKind m = data->get_mode();
 
-    edmode->insertItem(stringify(m));
+    edmode->addItem(stringify(m));
 
     if (! visit) {
         if (m != UmlParallel)
-            edmode->insertItem(stringify(UmlParallel));
+            edmode->addItem(stringify(UmlParallel));
 
         if (m != UmlIterative)
-            edmode->insertItem(stringify(UmlIterative));
+            edmode->addItem(stringify(UmlIterative));
 
         if (m != UmlStream)
-            edmode->insertItem(stringify(UmlStream));
+            edmode->addItem(stringify(UmlStream));
     }
 
-    new QLabel("  ", htab);
-    must_isolate_cb = new QCheckBox(TR("must isolate"), htab);
+    htab->addWidget(new QLabel("  ", htab));
+    htab->addWidget(must_isolate_cb = new QCheckBox(TR("must isolate"), htab));
 
     if (data->must_isolate)
         must_isolate_cb->setChecked(TRUE);
 
     must_isolate_cb->setDisabled(visit);
-    new QLabel("", htab);
+    htab->addWidget(new QLabel("", htab));
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
+    SmallPushButton* b;
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(b);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     QFont font = comment->font();
@@ -148,11 +153,11 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
     //
@@ -165,7 +170,7 @@ ExpansionRegionDialog::ExpansionRegionDialog(ExpansionRegionData * nd)
 
 void ExpansionRegionDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -191,7 +196,7 @@ void ExpansionRegionDialog::edit_description()
 {
     edit(comment->text(),
          (edname == 0) ? QString(TR("description"))
-         : edname->text().stripWhiteSpace() + "_description",
+         : edname->text().trimmed() + "_description",
          data, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -208,7 +213,7 @@ void ExpansionRegionDialog::accept()
     BrowserNode * bn = data->get_browser_node();
 
     if (edname != 0) {
-        QString s = edname->text().stripWhiteSpace();
+        QString s = edname->text().trimmed();
 
         if ((s != bn->get_name()) &&
             ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
@@ -222,9 +227,9 @@ void ExpansionRegionDialog::accept()
     }
 
     data->must_isolate = must_isolate_cb->isChecked();
-    data->mode = expansion_mode_kind(edmode->currentText());
+    data->mode = expansion_mode_kind(edmode->currentText().toLatin1().constData());
 
-    bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+    bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
 
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
@@ -236,5 +241,5 @@ void ExpansionRegionDialog::accept()
     bn->package_modified();
     data->modified();
 
-    Q3TabDialog::accept();
+    TabDialog::accept();
 }

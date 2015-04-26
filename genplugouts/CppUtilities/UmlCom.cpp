@@ -1,10 +1,9 @@
 
 #include "UmlCom.h"
 
-#include <q3socketdevice.h>
-//Added by qt3to4:
-#include <Q3CString>
-
+#include <QHostAddress>
+#include <QByteArray>
+#include <QTcpSocket>
 #include "UmlCom.h"
 #include "UmlItem.h"
 #include "UmlTypeSpec.h"
@@ -14,9 +13,10 @@
 #include "Logging/QsLog.h"
 bool UmlCom::connect(unsigned int port)
 {
-    sock = new Q3SocketDevice(Q3SocketDevice::Stream);
-    sock->setAddressReusable(TRUE);
-
+    sock = new QTcpSocket(/*QTcpSocket::Stream*/0);
+#ifdef habip
+    //sock->setAddressReusable(TRUE);
+#endif
     buffer_in_size = 1024;
     buffer_in = new char[buffer_in_size];
     buffer_in_end = p_buffer_in = 0;
@@ -29,7 +29,8 @@ bool UmlCom::connect(unsigned int port)
 
     ha.setAddress("127.0.0.1");
 
-    if (sock->connect(ha, port)) {
+    sock->connectToHost(ha, port);
+    if (sock->waitForConnected()) {
         // send API version
         write_unsigned(46);
         flush();
@@ -72,6 +73,7 @@ void UmlCom::message(const char * s)
 void UmlCom::bye()
 {
     send_cmd(miscGlobalCmd, byeCmd);
+    sock->waitForBytesWritten();
 }
 
 void UmlCom::close()
@@ -80,7 +82,7 @@ void UmlCom::close()
     sock = 0;
 }
 
-Q3SocketDevice * UmlCom::sock;
+QTcpSocket * UmlCom::sock;
 
 char * UmlCom::buffer_in;
 
@@ -156,8 +158,9 @@ void UmlCom::read_size()
 
     for (;;)
     {
-        while(sock->bytesAvailable() < 4);
-        nread = sock->readBlock(p, 4);
+
+        while(sock->bytesAvailable() < 4)sock->waitForReadyRead();
+        nread = sock->read(p, 4);
 //        if(nread != 4)
 //            continue;
 
@@ -206,8 +209,9 @@ void UmlCom::read_buffer(unsigned int len)
     QLOG_INFO() << "Allocated address" << (size_t) buffer_in;
     for (;;)
     {
-        while(sock->bytesAvailable() != len);
-        nread = sock->readBlock(p, len);
+
+        while(sock->bytesAvailable() != len)sock->waitForReadyRead();
+        nread = sock->read(p, len);
         p += nread;
 
         QLOG_INFO() << "nread = " + QString::number(nread);
@@ -609,10 +613,10 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, cha
     flush();
 }
 
-void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlItem> & l)
+void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlItem*> & l)
 {
 #ifdef TRACE
-    QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", const Q3PtrVector<UmlItem> & l)\n";
+    QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", const QVector<UmlItem*> & l)\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -629,10 +633,10 @@ void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlI
     flush();
 }
 
-void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlClass> & l1, const Q3PtrVector<UmlClass> & l2, const Q3PtrVector<UmlClass> & l3)
+void UmlCom::send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass*> & l1, const QVector<UmlClass*> & l2, const QVector<UmlClass*> & l3)
 {
 #ifdef TRACE
-    QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", const Q3PtrVector<UmlClass> & l1, const Q3PtrVector<UmlClass> & l2, const Q3PtrVector<UmlClass> & l3)\n";
+    QLOG_INFO() << "UmlCom::send_cmd(id, " << cmd << ", const QVector<UmlClass*> & l1, const QVector<UmlClass*> & l2, const QVector<UmlClass*> & l3)\n";
 #endif
 
     write_char(onInstanceCmd);
@@ -735,7 +739,7 @@ unsigned int UmlCom::read_unsigned()
     return value;
 }
 
-void UmlCom::read_item_list(Q3PtrVector<UmlItem> & v)
+void UmlCom::read_item_list(QVector<UmlItem*> & v)
 {
     unsigned n = read_unsigned();
 
@@ -746,10 +750,10 @@ void UmlCom::read_item_list(Q3PtrVector<UmlItem> & v)
 #endif
 
     for (unsigned index = 0; index != n; index += 1)
-        v.insert(index, UmlBaseItem::read_());
+        v[index] = UmlBaseItem::read_();
 }
 
-void UmlCom::fatal_error(const Q3CString &
+void UmlCom::fatal_error(const QByteArray &
                          #ifdef DEBUG_BOUML
                          msg
                          #endif
@@ -778,7 +782,7 @@ void UmlCom::flush()
 
         for (;;)
         {
-            int sent = sock->writeBlock(p_buffer_out, len);
+            int sent = sock->write(p_buffer_out, len);
 
             if (sent == -1)
             {

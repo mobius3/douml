@@ -33,7 +33,7 @@ BrowserOperationAttribute::~BrowserOperationAttribute()
 
 void BrowserOperationAttribute::set_name(QString value)
 {
-    param->set_name(value);
+    param->set_name(value.toLatin1().constData());
 }
 
 QString BrowserOperationAttribute::get_name() const
@@ -62,12 +62,12 @@ void BrowserOperationAttribute::set_param_type(QString value)
 
 //    oper->set_param_dir(index, (UmlParamDirection) DirList.findIndex(text(index, 0)));
 
-//    oper->set_param_name(index, text(index, 1).stripWhiteSpace());
+//    oper->set_param_name(index, text(index, 1).trimmed());
 
     AType t;
     if (!value.isEmpty())
     {
-        int rank = list.findIndex(value);
+        int rank = list.indexOf(value);
 
         if (rank != -1)
             t.type = (BrowserClass *) nodes.at(rank);
@@ -127,7 +127,7 @@ void BrowserOperationReturnType::set_param_type(QString value)
     AType t;
     if (!value.isEmpty())
     {
-        int rank = list.findIndex(value);
+        int rank = list.indexOf(value);
 
         if (rank != -1)
             t.type = (BrowserClass *) nodes.at(rank);

@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/root">
+        <file>icons/accept.png</file>
+        <file>icons/accept_doc.png</file>
+        <file>icons/down.png</file>
+        <file>icons/dump.png</file>
+        <file>icons/left.png</file>
+        <file>icons/mouse_control.png</file>
+        <file>icons/next_folder.png</file>
+        <file>icons/previous folder.png</file>
+        <file>icons/reject.png</file>
+        <file>icons/right.png</file>
+        <file>icons/up.png</file>
+    </qresource>
+</RCC>

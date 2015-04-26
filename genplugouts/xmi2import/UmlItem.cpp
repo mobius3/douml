@@ -8,7 +8,7 @@
 #include "UmlNcRelation.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 void Unresolved::addGeneralization(UmlItem * e, WrapperStr & id, WrapperStr cstr)
 {
@@ -20,13 +20,13 @@ void Unresolved::addRef(UmlItem * e, WrapperStr & id)
     Refs.append(Unresolved(e, id, ""));
 }
 
-Q3ValueList<Unresolved> Unresolved::Generalizations;
+QList<Unresolved> Unresolved::Generalizations;
 
-Q3ValueList<Unresolved> Unresolved::Refs;
+QList<Unresolved> Unresolved::Refs;
 
 void Unresolved::solveThem()
 {
-    Q3ValueList<Unresolved>::Iterator it;
+    QList<Unresolved>::Iterator it;
 
     for (it = Refs.begin(); it != Refs.end(); ++it)
         (*it).element->solve((*it).idref);
@@ -46,7 +46,7 @@ void UnresolvedWithContext::add(UmlItem * e, WrapperStr id, int c)
 
 void UnresolvedWithContext::solveThem()
 {
-    Q3ValueList<UnresolvedWithContext>::Iterator it;
+    QList<UnresolvedWithContext>::Iterator it;
 
     for (it = All.begin(); it != All.end(); ++it)
         (*it).element->solve((*it).context, (*it).idref);
@@ -54,7 +54,7 @@ void UnresolvedWithContext::solveThem()
     All.clear();
 }
 
-Q3ValueList<UnresolvedWithContext> UnresolvedWithContext::All;
+QList<UnresolvedWithContext> UnresolvedWithContext::All;
 
 void UnresolvedRelation::add(int ctx, WrapperStr idFrom, WrapperStr idTo, WrapperStr label, WrapperStr constraint)
 {
@@ -65,11 +65,11 @@ UnresolvedRelation::UnresolvedRelation()
 {
 }
 
-Q3ValueList<UnresolvedRelation> UnresolvedRelation::All;
+QList<UnresolvedRelation> UnresolvedRelation::All;
 
 void UnresolvedRelation::solveThem()
 {
-    Q3ValueList<UnresolvedRelation>::Iterator it;
+    QList<UnresolvedRelation>::Iterator it;
 
     for (it = All.begin(); it != All.end(); ++it) {
         QMap<QString, UmlItem *>::Iterator from = UmlItem::All.find((*it).from);
@@ -252,7 +252,7 @@ void UmlItem::loadFromProfile()
     if (propertyValue("xmiId", id) && (All.find(id) == All.end()))
         All.insert(id, this);
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     for (unsigned u = 0; u != n; u += 1)

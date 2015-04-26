@@ -65,7 +65,7 @@ WrapperStr PythonSettings::relationAttributeStereotype(const WrapperStr & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.value(s);
 
     return (b) ? b->python : s;
 }
@@ -76,7 +76,7 @@ bool PythonSettings::set_RelationAttributeStereotype(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(pythonSettingsCmd, setPythonRelationAttributeStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_rel_attr_stereotype(s);
@@ -100,7 +100,7 @@ WrapperStr PythonSettings::classStereotype(const WrapperStr & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_class_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_class_stereotypes.value(s);
 
     return (b) ? b->python : s;
 }
@@ -111,7 +111,7 @@ bool PythonSettings::set_ClassStereotype(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(pythonSettingsCmd, setPythonClassStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_class_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_class_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_class_stereotype(s);
@@ -426,7 +426,7 @@ WrapperStr PythonSettings::_src_content;
 
 WrapperStr PythonSettings::_ext;
 
-Q3Dict<QString> PythonSettings::_map_imports;
+QHash<QString, QString*> PythonSettings::_map_imports;
 
 void PythonSettings::read_()
 {
@@ -453,7 +453,7 @@ void PythonSettings::read_()
     _map_imports.clear();
 
     if (n > _map_imports.size())
-        _map_imports.resize(n);
+        _map_imports.reserve(n);
 
     for (index = 0; index != n; index += 1) {
         WrapperStr t = UmlCom::read_string();

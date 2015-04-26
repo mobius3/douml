@@ -29,14 +29,12 @@
 
 
 
-#include <q3grid.h>
+#include <gridbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
-#include <q3popupmenu.h>
+#include <qcombobox.h>
 #include <qcursor.h>
-#include <q3vbox.h>
-
+#include <vvbox.h>
 #include "PseudoStateDialog.h"
 #include "BrowserPseudoState.h"
 #include "BrowserState.h"
@@ -51,14 +49,15 @@
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
-
+#include "menufactory.h"
 QSize PseudoStateDialog::previous_size;
 
 PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), pst(ps)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), pst(ps)
 {
     BrowserPseudoState * bn = (BrowserPseudoState *) pst->browser_node;
     BrowserState * refst;
+    SmallPushButton* sButton;
 
     switch (bn->get_type()) {
     case EntryPointPS:
@@ -85,44 +84,45 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
     }
 
     QString s = stringify(bn->get_type());
-    int index = s.find("_");
+    int index = s.indexOf("_");
 
     if (index != -1)
         s.replace(index, 1, " ");
 
-    setCaption(TR(s + " dialog"));
+    setCaption((s + " dialog"));
 
     visit = !hasOkButton();
 
     // general tab
 
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(pst->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(pst->get_stereotype()));
 
     if (! visit) {
-        edstereotype->insertStringList(BrowserPseudoState::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(bn->get_type()));
+        edstereotype->addItems(BrowserPseudoState::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(bn->get_type()));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
     if (refst != 0) {
         connect(new SmallPushButton(TR("reference :"), grid), SIGNAL(clicked()),
                 this, SLOT(menu_reference()));
-        edreference = new Q3ComboBox(FALSE, grid);
+        grid->addWidget(edreference = new QComboBox(grid));
         edreference->setSizePolicy(sp);
 
         BrowserNode * ref = ((pst->get_reference() == 0) ||
@@ -131,15 +131,15 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
 
         if (visit) {
             if (ref == 0)
-                edreference->insertItem("");
+                edreference->addItem("");
             else
-                edreference->insertItem(ref->full_name(TRUE));
+                edreference->addItem(ref->full_name(TRUE));
         }
         else {
-            edreference->insertItem("");
+            edreference->addItem("");
             edreference->setAutoCompletion(completion());
 
-            Q3ListViewItem * child;
+            BrowserNode * child;
             UmlCode k = bn->get_type();
 
             for (child = refst->firstChild();
@@ -151,7 +151,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
                     if (kk == k)
                         pseudostates.append((BrowserNode *) child);
                     else if (kk == UmlRegion) {
-                        for (Q3ListViewItem * schild = child->firstChild();
+                        for (BrowserNode * schild = child->firstChild();
                              schild != 0;
                              schild = schild->nextSibling()) {
                             if (!((BrowserNode *) schild)->deletedp() &&
@@ -164,8 +164,8 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
 
             pseudostates.sort();
             pseudostates.full_names(reflist);
-            edreference->insertStringList(reflist);
-            edreference->setCurrentItem((ref == 0)
+            edreference->addItems(reflist);
+            edreference->setCurrentIndex((ref == 0)
                                         ? 0
                                         : pseudostates.indexOf(ref) + 1);
         }
@@ -173,14 +173,18 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
     else
         edreference = 0;
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
 
@@ -196,11 +200,11 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
     open_dialog(this);
@@ -208,7 +212,7 @@ PseudoStateDialog::PseudoStateDialog(PseudoStateData * ps)
 
 void PseudoStateDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -226,15 +230,15 @@ PseudoStateDialog::~PseudoStateDialog()
 
 void PseudoStateDialog::menu_reference()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = reflist.findIndex(edreference->currentText());
+    int index = reflist.indexOf(edreference->currentText());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -244,13 +248,16 @@ void PseudoStateDialog::menu_reference()
         if ((bn != 0) &&
             !bn->deletedp() &&
             ((BrowserPseudoState *) pst->browser_node)->can_reference(bn))
-            m.insertItem(TR("Choose pseudo state selected in browser"), 1);
+            MenuFactory::addItem(m, TR("Choose pseudo state selected in browser"), 1);
         else
             bn = 0;
     }
 
     if ((index != -1) || (bn != 0)) {
-        switch (m.exec(QCursor::pos())) {
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        switch (retAction->data().toInt()) {
         case 0:
             pseudostates.at(index)->select_in_browser();
             break;
@@ -258,7 +265,7 @@ void PseudoStateDialog::menu_reference()
         case 1: {
             QString s = bn->full_name(TRUE);
 
-            if ((index = reflist.findIndex(s)) == -1) {
+            if ((index = reflist.indexOf(s)) == -1) {
                 // new state, may be created through an other dialog
                 index = 0;
                 QStringList::Iterator iter = reflist.begin();
@@ -271,15 +278,16 @@ void PseudoStateDialog::menu_reference()
 
                 pseudostates.insert((unsigned) index, bn);
                 reflist.insert(iter, s);
-                edreference->insertItem(s, index + 1);
+                edreference->insertItem(index + 1, s);
             }
         }
 
-        edreference->setCurrentItem(index + 1);
+        edreference->setCurrentIndex(index + 1);
         break;
 
         default:
             break;
+        }
         }
     }
 }
@@ -288,7 +296,7 @@ void PseudoStateDialog::edit_description()
 {
     edit(comment->text(),
          (edname == 0) ? QString("description")
-         : edname->text().stripWhiteSpace() + "_description",
+         : edname->text().trimmed() + "_description",
          pst, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -302,7 +310,7 @@ void PseudoStateDialog::accept()
     if (!check_edits(edits) || !kvtable->check_unique())
         return;
 
-    QString s = edname->text().stripWhiteSpace();
+    QString s = edname->text().trimmed();
     BrowserPseudoState * bn = (BrowserPseudoState *) pst->browser_node;
 
     if ((s != bn->get_name()) &&
@@ -315,7 +323,7 @@ void PseudoStateDialog::accept()
     else
         bn->set_name(s);
 
-    bool newst = pst->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+    bool newst = pst->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
 
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
@@ -323,7 +331,7 @@ void PseudoStateDialog::accept()
     kvtable->updateNodeFromThis(bn);
 
     if (edreference != 0) {
-        int index = reflist.findIndex(edreference->currentText());
+        int index = reflist.indexOf(edreference->currentText());
         BrowserPseudoState * ps;
 
         if (index != -1) {
@@ -344,5 +352,5 @@ void PseudoStateDialog::accept()
     bn->package_modified();
     pst->modified();
 
-    Q3TabDialog::accept();
+    TabDialog::accept();
 }

@@ -2,11 +2,9 @@
 #include "UmlBasePackage.h"
 #include "UmlPackage.h"
 #include "UmlDiagram.h"
-
 #include "UmlCom.h"
 #include "Tools/ApiCmd.h"
 #include "Tools/ApiCmd.h"
-//Added by qt3to4:
 
 UmlPackage * UmlBasePackage::create(UmlPackage * parent, const char * name)
 {

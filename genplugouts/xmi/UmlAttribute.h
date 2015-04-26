@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseAttribute.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class FileOut;
 
@@ -14,7 +14,7 @@ class FileOut;
 class UmlAttribute : public UmlBaseAttribute
 {
 public:
-    UmlAttribute(void * id, const Q3CString & n) :  UmlBaseAttribute(id, n) {};
+    UmlAttribute(void * id, const QByteArray & n) :  UmlBaseAttribute(id, n) {};
 
     virtual bool write_if_needed(FileOut & out);
 

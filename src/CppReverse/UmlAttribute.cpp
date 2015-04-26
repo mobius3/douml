@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 using namespace std;
 #endif

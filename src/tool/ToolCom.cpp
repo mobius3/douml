@@ -35,7 +35,7 @@
 #ifdef DEBUGCOM
 #include <iostream>
 //Added by qt3to4:
-#include <Q3PtrList>
+//
 using namespace std;
 #endif
 #include <QCoreApplication>
@@ -58,31 +58,34 @@ using namespace std;
 #include "mu.h"
 #include "err.h"
 #include "Logging/QsLog.h"
-
-Socket::Socket(ToolCom * c)
-    : Q3SocketDevice(Q3SocketDevice::Stream), com(c)
+#include <QHostAddress>
+Server::Server(ToolCom * c)
+    : QTcpServer(c), com(c)
 {
-    setAddressReusable(TRUE);
-    notifier = new QSocketNotifier(socket(), QSocketNotifier::Read);
-    QObject::connect(notifier, SIGNAL(activated(int)),
-                     this, SLOT(data_received()));
+    //setAddressReusable(TRUE);
+    //notifier = new QSocketNotifier(socketDescriptor(), QSocketNotifier::Read);
+    //QObject::connect(notifier, SIGNAL(activated(int)),
+      //               this, SLOT(data_received()));
+    connect(this, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 }
 
-Socket::Socket(ToolCom * c, int s)
-    : Q3SocketDevice(s, Q3SocketDevice::Stream), com(c)
+Server::Server(ToolCom * c, int s)
+    : QTcpServer(c), com(c)
 {
-    setAddressReusable(TRUE);
-    notifier = new QSocketNotifier(s, QSocketNotifier::Read);
-    QObject::connect(notifier, SIGNAL(activated(int)),
-                     this, SLOT(data_received()));
+
+        setSocketDescriptor(s);
+    //setAddressReusable(TRUE);
+    //notifier = new QSocketNotifier(s, QSocketNotifier::Read);
+    //QObject::connect(notifier, SIGNAL(activated(int)),
+       //              this, SLOT(data_received()));
+    connect(this, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 }
 
-Socket::~Socket()
+Server::~Server()
 {
-    delete notifier;
+    //delete notifier;
 }
-
-bool Socket::write_block(char * data, unsigned int len)
+bool Server::write_block(char * data, unsigned int len)
 {
     /* the four first bytes of data are free to contains the length
      these are taken into account by len */
@@ -94,28 +97,37 @@ bool Socket::write_block(char * data, unsigned int len)
 
 #ifdef DEBUGCOM
     QLOG_INFO() << "ToolCom write " << len << "bytes\n";
-#endif
-
     QLOG_INFO() << QByteArray(data, len);
+#endif
     len += 4;
 
     for (;;) {
-        int sent = writeBlock(data, len);
+        int sent = m_socket->write(data, len);
 
         if (sent == -1)
             return FALSE;
         else if ((len -= sent) == 0) {
-            flush();
+            m_socket->flush();
             return TRUE;
         }
         else {
-            waitForMore(100);
+            m_socket->waitForReadyRead(100);
             data += sent;
         }
     }
 }
 
-void Socket::data_received()
+qint64 Server::read(char *buff, qint64 len)
+{
+    return m_socket->read(buff, len);
+}
+
+void Server::data_received()
+{
+    com->data_received(this);
+}
+
+void Server::onNewConnection()
 {
     com->data_received(this);
 }
@@ -161,12 +173,10 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
 
     if (exit)
         exitvalue = -1;
-
     TraceDialog::trace_auto_raise(TRUE);
 
     if (clr)
         TraceDialog::clear();
-
     ToolCom * com = (unused.isEmpty())
             ? new ToolCom
             : unused.takeFirst();
@@ -187,7 +197,7 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     com->cmd = strdup(cmd);
     com->timer = new QTimer(com);
     connect(com->timer, SIGNAL(timeout()), com, SLOT(connexion_timeout()));
-    com->timer->start(30 * 10000, TRUE);
+    com->timer->start(30 * 10000);
 
     unsigned port = com->bind(1024);
 
@@ -211,7 +221,6 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
 #endif
     qDebug() << "error was:" << com->externalProcess->error();
     com->start = TRUE;
-
     return com->id;
 }
 
@@ -231,7 +240,7 @@ bool ToolCom::is_running(int id)
 
 unsigned ToolCom::bind(unsigned port)
 {
-    listen_sock = new Socket(this);
+    listen_sock = new Server(this);
 
     if (buffer_in_size == 0) {
         buffer_in_size = 1024;
@@ -249,14 +258,14 @@ unsigned ToolCom::bind(unsigned port)
 
     ha.setAddress("127.0.0.1");
 
-    if (listen_sock->bind(ha, 0))
-        port = listen_sock->port();
+    if (listen_sock->listen(ha, 5000))
+        port = listen_sock->serverPort();
     else
-        while (!listen_sock->bind(ha, port))
+        while (!listen_sock->listen(ha, port))
             port += 1;
-
+#ifdef habip
     listen_sock->listen(1);
-
+#endif
     return port;
 }
 
@@ -273,15 +282,15 @@ void ToolCom::close()
             cmd = 0;
         }
 
-        delete listen_sock;
-        listen_sock = 0;
-
         if (sock != 0) {
-            delete sock;
+            sock->deleteLater();
             sock = 0;
         }
+        listen_sock->deleteLater();
+        listen_sock = 0;
 
-        used.remove(this);
+
+        used.removeOne(this);
         unused.append(this);
     }
 }
@@ -298,7 +307,7 @@ const char * ToolCom::read_buffer()
     {
         char s[4];
 
-        while ((sock->readBlock(s, 4) != 4));
+        while ((sock->read(s, 4) != 4));
 
         const char * p = s;
 
@@ -314,7 +323,7 @@ const char * ToolCom::read_buffer()
         buffer_in = new char[buffer_in_size];
     }
 
-    int nread = sock->readBlock(buffer_in + already_read, wanted);
+    int nread = sock->read(buffer_in + already_read, wanted);
 
     if (nread == -1) {
         fatal_error("ToolCom read error");
@@ -579,7 +588,6 @@ void ToolCom::connexion_timeout()
     msg_critical("Douml",
                  QString("connexion timeout for '") + QString(cmd) + QString("'"));
     close();
-
     if (exit_bouml) {
         BrowserView::remove_temporary_files();
         set_user_id(-1);    // delete lock
@@ -588,26 +596,27 @@ void ToolCom::connexion_timeout()
     }
 }
 
-void ToolCom::data_received(Socket * who)
+void ToolCom::data_received(Server * who)
 {
     bool do_exit = FALSE;
     void (*pf)() = 0;
 
     if (who == listen_sock) {
         if (sock == 0) {
-            int s = listen_sock->accept();
+               // int s = listen_sock->socketDescriptor();
 
-#ifdef DEBUGCOM
-            QLOG_INFO() << "ToolCom::connexion() accept ok " << s << '\n';
-#endif
-
-            if (s != -1) {
+            if (who->hasPendingConnections()) {
                 if (timer != 0) {
                     delete timer;
                     timer = 0;
                 }
 
-                sock = new Socket(this, s);
+
+                sock = who->nextPendingConnection();//new Server(this, s);
+                connect(sock, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+#ifdef DEBUGCOM
+            QLOG_INFO() << "ToolCom::connexion() accept ok " << sock->socketDescriptor() << '\n';
+#endif
                 return;
             }
         }
@@ -629,7 +638,6 @@ void ToolCom::data_received(Socket * who)
             if (start) {
                 // plug-out start, get API version
                 start = FALSE;
-
                 api_version = get_unsigned(p);
                 if (api_version < 11) {
                     TraceDialog::add("<font color =\"red\"><b>the plug-out was written for a BDUML release less or equal to 1.5<b></font>");
@@ -945,8 +953,8 @@ void ToolCom::data_received(Socket * who)
                     throw 0;
                 }
 
-                if (sock && (p_buffer_out != buffer_out + 4)) {
-                    if (!sock->write_block(buffer_out, p_buffer_out - buffer_out))
+                    if (sock && (p_buffer_out != buffer_out + 4)) {
+                    if (!write_block(buffer_out, p_buffer_out - buffer_out))
                         fatal_error("write error");
                     else {
                         p_buffer_out = buffer_out + 4/*bytes for length*/;
@@ -960,14 +968,12 @@ void ToolCom::data_received(Socket * who)
 
         POST_TRY;
     }
-
     if (do_exit) {
         BrowserView::remove_temporary_files();
         set_user_id(-1);    // delete lock
 
         THROW_ERROR 0;
     }
-
     if (pf != 0)
         pf();
 }
@@ -995,6 +1001,12 @@ void ToolCom::processFinished()
 
 }
 
+void ToolCom::onReadyRead()
+{
+        while(sock&&sock->bytesAvailable())
+            data_received(NULL);
+}
+
 void ToolCom::DisconnectExternalProcess()
 {
     if (this->externalProcess) {
@@ -1005,3 +1017,35 @@ void ToolCom::DisconnectExternalProcess()
     }
 }
 
+bool ToolCom::write_block(char * data, unsigned int len)
+{
+    /* the four first bytes of data are free to contains the length
+     these are taken into account by len */
+    len -= 4;
+    data[0] = len >> 24;
+    data[1] = len >> 16;
+    data[2] = len >> 8;
+    data[3] = len;
+
+#ifdef DEBUGCOM
+    QLOG_INFO() << "ToolCom write " << len << "bytes\n";
+#endif
+
+    QLOG_INFO() << QByteArray(data, len).toHex();
+    len += 4;
+
+    for (;;) {
+        int sent = sock->write(data, len);
+
+        if (sent == -1)
+            return FALSE;
+        else if ((len -= sent) == 0) {
+            sock->flush();
+            return TRUE;
+        }
+        else {
+            sock->waitForBytesWritten(100);
+            data += sent;
+        }
+    }
+}

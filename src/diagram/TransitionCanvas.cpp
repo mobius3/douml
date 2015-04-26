@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 
 #include "TransitionCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -61,12 +61,12 @@ TransitionCanvas::TransitionCanvas(UmlCanvas * canvas,
     : ArrowCanvas(canvas, b, e, UmlTransition, id, TRUE, d_begin, d_end),
       br_begin(bb), data(d), stereotypeproperties(0)
 {
-    if ((e->type() != UmlArrowPoint) && (bb == 0)) {
+    if ((e->typeUmlCode() != UmlArrowPoint) && (bb == 0)) {
         // end of line construction
         update_begin(e);
     }
     else if (d != 0) {
-        if (e->type() != UmlArrowPoint)
+        if (e->typeUmlCode() != UmlArrowPoint)
             check_stereotypeproperties();
 
         connect(d, SIGNAL(changed()), this, SLOT(modified()));
@@ -128,7 +128,7 @@ void TransitionCanvas::remove(bool from_model)
         if (the_canvas()->must_draw_all_relations()) {
             const TransitionCanvas * a = this;
 
-            while (a->begin->type() == UmlArrowPoint) {
+            while (a->begin->typeUmlCode() == UmlArrowPoint) {
                 a = (TransitionCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
 
                 if (a == 0)
@@ -138,7 +138,7 @@ void TransitionCanvas::remove(bool from_model)
             if (a && !a->begin->isSelected() && !a->begin->get_bn()->deletedp()) {
                 a = this;
 
-                while (a->end->type() == UmlArrowPoint) {
+                while (a->end->typeUmlCode() == UmlArrowPoint) {
                     a = (TransitionCanvas *)((ArrowPointCanvas *) a->end)->get_other(a);
 
                     if (a == 0)
@@ -166,7 +166,7 @@ BrowserNode * TransitionCanvas::update_begin(DiagramItem * cnend)
     // static to be updated in all the cases
     static TransitionData * d = 0;
 
-    if (begin->type() == UmlArrowPoint) {
+    if (begin->typeUmlCode() == UmlArrowPoint) {
         TransitionCanvas * other =
             ((TransitionCanvas *)((ArrowPointCanvas *) begin)->get_other(this));
 
@@ -191,7 +191,7 @@ void TransitionCanvas::propagate_drawing_settings()
 
     t = this;
 
-    while (t->begin->type() == UmlArrowPoint) {
+    while (t->begin->typeUmlCode() == UmlArrowPoint) {
         t = ((TransitionCanvas *)((ArrowPointCanvas *) t->begin)->get_other(t));
         t->drawing_language = drawing_language;
         t->write_horizontally = write_horizontally;
@@ -200,7 +200,7 @@ void TransitionCanvas::propagate_drawing_settings()
 
     t = this;
 
-    while (t->end->type() == UmlArrowPoint) {
+    while (t->end->typeUmlCode() == UmlArrowPoint) {
         t = ((TransitionCanvas *)((ArrowPointCanvas *) t->end)->get_other(t));
         t->drawing_language = drawing_language;
         t->write_horizontally = write_horizontally;
@@ -230,48 +230,51 @@ void TransitionCanvas::menu(const QPoint &)
             pstereotype = (TransitionCanvas *) apstereotype;
         }
 
-        Q3PopupMenu m(0);
-        Q3PopupMenu geo(0);
-        Q3PopupMenu toolm(0);
+        QMenu m(0);
+        QMenu geo(0);
+        QMenu toolm(0);
 
         MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
-        m.insertSeparator();
-        m.insertItem("Edit", 0);
-        m.insertSeparator();
+        m.addSeparator();
+        MenuFactory::addItem(m, "Edit", 0);
+        m.addSeparator();
 
-        m.insertItem("Select in browser", 2);
+        MenuFactory::addItem(m, "Select in browser", 2);
 
         if (plabel || pstereotype) {
-            m.insertSeparator();
-            m.insertItem("Edit drawing settings", 1);
-            m.insertItem("Select labels", 3);
-            m.insertItem("Labels default position", 4);
+            m.addSeparator();
+            MenuFactory::addItem(m, "Edit drawing settings", 1);
+            MenuFactory::addItem(m, "Select labels", 3);
+            MenuFactory::addItem(m, "Labels default position", 4);
 
             if (plabel && (label == 0))
-                m.insertItem("Attach transition's name to this segment", 5);
+                MenuFactory::addItem(m, "Attach transition's name to this segment", 5);
 
             if (pstereotype && (stereotype == 0))
-                m.insertItem("Attach stereotype to this segment", 6);
+                MenuFactory::addItem(m, "Attach stereotype to this segment", 6);
         }
 
         if (get_start() != get_end()) {
-            m.insertSeparator();
+            m.addSeparator();
             init_geometry_menu(geo, 10);
-            m.insertItem("Geometry (Ctrl+l)", &geo);
+            MenuFactory::insertItem(m, "Geometry (Ctrl+l)", &geo);
         }
 
-        m.insertSeparator();
-        m.insertItem("Remove from diagram", 7);
+        m.addSeparator();
+        MenuFactory::addItem(m, "Remove from diagram", 7);
 
         if (data->get_start()->is_writable())
-            m.insertItem("Delete from model", 8);
+            MenuFactory::addItem(m, "Delete from model", 8);
 
-        m.insertSeparator();
+        m.addSeparator();
 
         if (Tool::menu_insert(&toolm, itstype, 20))
-            m.insertItem("Tool", &toolm);
+            MenuFactory::insertItem(m, "Tool", &toolm);
 
-        int rank = m.exec(QCursor::pos());
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        int rank = retAction->data().toInt();
 
         switch (rank) {
         case 0:
@@ -350,6 +353,7 @@ void TransitionCanvas::menu(const QPoint &)
             }
             else
                 return;
+        }
         }
 
         package_modified();
@@ -460,7 +464,7 @@ ArrowPointCanvas * TransitionCanvas::brk(const QPoint & p)
     ArrowPointCanvas * ap =
         new ArrowPointCanvas(the_canvas(), p.x(), p.y());
 
-    ap->setZ(z() + 1);
+    ap->setZValue(zValue() + 1);
 
     TransitionCanvas * other =
         // do not give data to not call update()
@@ -507,12 +511,12 @@ ArrowCanvas * TransitionCanvas::join(ArrowCanvas * other, ArrowPointCanvas * ap)
 
 void TransitionCanvas::modified()
 {
-    if (visible()) {
+    if (isVisible()) {
         hide();
         update(TRUE);
         show();
 
-        if (begin->type() != UmlArrowPoint)
+        if (begin->typeUmlCode() != UmlArrowPoint)
             check_stereotypeproperties();
 
         canvas()->update();
@@ -550,9 +554,9 @@ void TransitionCanvas::update(bool updatepos)
             }
         }
         else {
-            s = QString("<<") + toUnicode(s) + ">>";
+            s = QString("<<") + toUnicode(s.toLatin1().constData()) + ">>";
 
-            if ((pstereotype == 0) && (begin->type() != UmlArrowPoint)) {
+            if ((pstereotype == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
                 // adds relation's stereotype
                 stereotype = new LabelCanvas(s, the_canvas(), 0, 0);
                 update_label = (label != 0);
@@ -582,7 +586,7 @@ void TransitionCanvas::update(bool updatepos)
                           (drawing_language == DefaultDrawingLanguage)
                           ? diagram->get_language()
                           : drawing_language);
-            s = toUnicode(s);
+            s = toUnicode(s.toLatin1().constData());
         }
         else if ((s = data->get_start()->get_name()) == "<transition>")
             s = QString();
@@ -595,7 +599,7 @@ void TransitionCanvas::update(bool updatepos)
                 plabel->label = 0;
             }
         }
-        else if ((plabel == 0) && (begin->type() != UmlArrowPoint)) {
+        else if ((plabel == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
             // adds relation's name
             label = new LabelCanvas(s, the_canvas(), 0, 0);
             default_label_position();
@@ -622,7 +626,7 @@ void TransitionCanvas::default_label_position() const
     QString s = label->get_name();
     QSize sz = fm.size(0, s);
 
-    label->move(c.x() - sz.width() / 2,
+    label->moveBy(c.x() - sz.width() / 2,
                 c.y() - ((stereotype != 0) ? sz.height() : sz.height() / 2));
     package_modified();
 }
@@ -645,12 +649,12 @@ void TransitionCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
     BrowserNode * to = def->get_end_node();
     DiagramItem * difrom = 0;
     DiagramItem * dito = 0;
-    Q3CanvasItemList all = canvas->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = canvas->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     // the two extremities are drawn ?
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if (di != 0) {
@@ -704,7 +708,7 @@ void TransitionCanvas::moveBy(double dx, double dy)
 
 void TransitionCanvas::select_associated()
 {
-    if (!selected()) {
+    if (!isSelected()) {
         if ((stereotypeproperties != 0) && !stereotypeproperties->selected())
             the_canvas()->select(stereotypeproperties);
 
@@ -715,7 +719,7 @@ void TransitionCanvas::select_associated()
 void TransitionCanvas::check_stereotypeproperties()
 {
     // the note is memorized by the first segment
-    if (begin->type() == UmlArrowPoint)
+    if (begin->typeUmlCode() == UmlArrowPoint)
         ((TransitionCanvas *)((ArrowPointCanvas *) begin)->get_other(this))
         ->check_stereotypeproperties();
     else {
@@ -742,7 +746,7 @@ void TransitionCanvas::save(QTextStream & st, bool ref, QString & warning) const
 {
     if (ref)
         st << "transitioncanvas_ref " << get_ident();
-    else if (begin->type() != UmlArrowPoint) {
+    else if (begin->typeUmlCode() != UmlArrowPoint) {
         // relation canvas start
         nl_indent(st);
         st << "transitioncanvas " << get_ident() << " ";
@@ -848,7 +852,7 @@ TransitionCanvas * TransitionCanvas::read(char *& st, UmlCanvas * canvas, char *
 
             if ((label = LabelCanvas::read(st, canvas, k)) != 0) {
                 // the transition name can't be empty
-                label->setZ(z);
+                label->setZValue(z);
                 k = read_keyword(st);
             }
 
@@ -867,7 +871,7 @@ TransitionCanvas * TransitionCanvas::read(char *& st, UmlCanvas * canvas, char *
                     stereotype =
                         new LabelCanvas(QString("<<") + toUnicode(tr->get_short_stereotype()) + ">>",
                                         canvas, x, y);
-                    stereotype->setZ(read_double(st));
+                    stereotype->setZValue(read_double(st));
                 }
 
                 k = read_keyword(st);
@@ -914,7 +918,7 @@ TransitionCanvas * TransitionCanvas::read(char *& st, UmlCanvas * canvas, char *
 
             result->show();
 
-            if (di->type() != UmlArrowPoint)
+            if (di->typeUmlCode() != UmlArrowPoint)
                 break;
 
             bi = di;
@@ -977,7 +981,7 @@ TransitionCanvas * TransitionCanvas::read(char *& st, UmlCanvas * canvas, char *
 
 void TransitionCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     unconnect();
 }
 

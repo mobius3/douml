@@ -1,9 +1,9 @@
 
 #include "UmlSequenceDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlSequenceDiagram::sKind()
+QByteArray UmlSequenceDiagram::sKind()
 {
     return "sequence diagram";
 }

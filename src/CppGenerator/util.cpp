@@ -43,7 +43,7 @@ QString capitalize(const QString & s)
 {
     return (s.isEmpty())
            ? s
-           : s.left(1).upper() + s.mid(1);
+           : s.left(1).toUpper() + s.mid(1);
 }
 
 WrapperStr current_indent(const char * p, const char * begin)
@@ -52,7 +52,7 @@ WrapperStr current_indent(const char * p, const char * begin)
 
     while ((p != begin) && ((p[-1] == ' ') || (p[-1] == '\t')))
         indent.prepend(*--p);
-    QByteArray temp = indent.toAscii();
+    QByteArray temp = indent.toLatin1();
     return WrapperStr(temp.constData());
 }
 
@@ -85,7 +85,7 @@ bool need_equal(const char * p, const char * v)
         case 0:
         case '=':
         case '(':
-            return FALSE;
+            return false;
 
         case ' ':
         case '\t':
@@ -97,7 +97,7 @@ bool need_equal(const char * p, const char * v)
             for (;;) {
                 switch (*--p) {
                 case '=':
-                    return FALSE;
+                    return false;
 
                 case ' ':
                 case '\t':
@@ -106,7 +106,7 @@ bool need_equal(const char * p, const char * v)
                     break;
 
                 default:
-                    return TRUE;
+                    return true;
                 }
             }
         }
@@ -116,12 +116,12 @@ bool need_equal(const char * p, const char * v)
 //
 
 static WrapperStr TraceHeader;
-static bool Verbose = FALSE;
-static bool Preserve = FALSE;
+static bool Verbose = false;
+static bool Preserve = false;
 
 void set_verbose()
 {
-    Verbose = TRUE;
+    Verbose = true;
 }
 
 bool verbose()
@@ -131,7 +131,7 @@ bool verbose()
 
 void set_preserve()
 {
-    Preserve = TRUE;
+    Preserve = true;
 }
 
 bool preserve()

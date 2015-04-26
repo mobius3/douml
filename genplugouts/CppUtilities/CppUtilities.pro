@@ -1,3 +1,4 @@
+#ok
 TEMPLATE    = app
 TARGET        = cpp_util
 CONFIG(Debug, Debug|Release) {
@@ -10,7 +11,7 @@ CONFIG(Release, Debug|Release) {
     CONFIG += qt Release
     QMAKE_POST_LINK = " "
 }
-DEFINES        = WITHCPP TRACE
+DEFINES        += WITHCPP TRACE
 INCLUDEPATH += ../../src
 HEADERS        = ./UmlBasePackage.h \
           ./UmlFragmentCompartment.h \
@@ -213,7 +214,10 @@ HEADERS        = ./UmlBasePackage.h \
           ./UmlBaseTypeSpec.h \
     Logging/QsLogDest.h \
     Logging/QsLog.h \
-    Logging/QsDebugOutput.h
+    Logging/QsDebugOutput.h \
+    gridbox.h \
+    hhbox.h \
+    vvbox.h
 SOURCES        = ./UmlBasePackage.cpp \
           ./UmlFragmentCompartment.cpp \
           ./UmlBaseUseCase.cpp \
@@ -416,10 +420,13 @@ SOURCES        = ./UmlBasePackage.cpp \
           ./UmlBaseTypeSpec.cpp \
     Logging/QsLogDest.cpp \
     Logging/QsLog.cpp \
-    Logging/QsDebugOutput.cpp
+    Logging/QsDebugOutput.cpp \
+    gridbox.cpp \
+    hhbox.cpp \
+    vvbox.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+DEFINES += TRUE=true FALSE=false DEBUG
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/cpp_util
@@ -434,3 +441,4 @@ UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+

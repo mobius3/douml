@@ -29,9 +29,9 @@
 #define SYNCHROWINDOW_H
 
 #include <q3mainwindow.h>
-#include <q3ptrlist.h>
+
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 class Q3HBox;
 class BrowserView;

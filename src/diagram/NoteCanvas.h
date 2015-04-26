@@ -58,8 +58,9 @@ public:
     virtual void delete_it();
 
     virtual void draw(QPainter & p);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,QWidget *widget);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
@@ -83,7 +84,6 @@ public:
 
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static NoteCanvas * read(char *& , UmlCanvas *, char *);
-
 protected slots:
     void modified();
 };

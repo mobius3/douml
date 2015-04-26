@@ -4,7 +4,7 @@
 
 void UmlPseudoState::memo_incoming_trans()
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 
@@ -40,9 +40,9 @@ void UmlPseudoState::write(FileOut & out)
     write_description_properties(out);
 
     while (! _incoming_trans.isEmpty())
-        _incoming_trans.take(0)->write_in(out);
+        _incoming_trans.takeAt(0)->write_in(out);
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 

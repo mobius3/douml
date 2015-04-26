@@ -1,32 +1,31 @@
 
 #include "UmlBaseItem.h"
-#include "UmlItem.h"
-#include "UmlTypeSpec.h"
-
 #include "UmlCom.h"
-#include "UmlRelation.h"
-#include "UmlNcRelation.h"
-#include "UmlAttribute.h"
-#include "UmlOperation.h"
+#include "UmlPackage.h"
+#include "UmlClassView.h"
+#include "UmlDeploymentView.h"
+#include "UmlClassDiagram.h"
 #include "UmlClass.h"
+#include "UmlOperation.h"
+#include "UmlRelation.h"
+#include "UmlTypeSpec.h"
+#include "UmlItem.h"
+#include "UmlArtifact.h"
+#include "UmlObjectDiagram.h"
 #include "UmlClassInstance.h"
+#include "UmlAttribute.h"
+#include "UmlExtraClassMember.h"
+#include "UmlNcRelation.h"
 #include "UmlUseCase.h"
 #include "UmlNode.h"
-#include "UmlArtifact.h"
 #include "UmlComponent.h"
-#include "UmlClassDiagram.h"
 #include "UmlUseCaseDiagram.h"
 #include "UmlSequenceDiagram.h"
 #include "UmlCollaborationDiagram.h"
 #include "UmlComponentDiagram.h"
-#include "UmlObjectDiagram.h"
 #include "UmlDeploymentDiagram.h"
-#include "UmlClassView.h"
 #include "UmlUseCaseView.h"
 #include "UmlComponentView.h"
-#include "UmlDeploymentView.h"
-#include "UmlPackage.h"
-#include "UmlExtraClassMember.h"
 #include "UmlState.h"
 #include "UmlTransition.h"
 #include "UmlRegion.h"
@@ -120,7 +119,7 @@ UmlItem * UmlBaseItem::parent()
 }
 
 // & ONLY HERE, TOO GANGEROUS FUR USER USE
-const Q3PtrVector<UmlItem> & UmlBaseItem::children()
+const QVector<UmlItem*> &UmlBaseItem::children()
 {
     if (_children == 0)
         read_children_();
@@ -145,17 +144,17 @@ bool UmlBaseItem::propertyValue(const WrapperStr & k, WrapperStr & v)
     read_if_needed_();
 
 
-    QString * s = _dict[k];
+    QString s = _dict[k];
 
 
-    if (s == 0)
+    if (s.isEmpty())
     {
         QLOG_INFO() << "DICT READ FAILURE";
         QLOG_INFO() << "CLASS WAS: " << k.operator QString();
-        Q3DictIterator<QString> it( _dict );
-        for( ; it.current(); ++it )
+        QHash<QString,QString>::Iterator it = _dict.begin(); // _dict );
+        for( ; it != _dict.end(); ++it )
         {
-            QLOG_INFO() << it.currentKey();
+            QLOG_INFO() << it.key();
         }
         QLOG_INFO() << "END";
 
@@ -163,7 +162,7 @@ bool UmlBaseItem::propertyValue(const WrapperStr & k, WrapperStr & v)
     }
     QLOG_INFO() << "DICT READ SUCCESS";
 
-    v = *s;
+    v = s;
     return TRUE;
 
 }
@@ -176,12 +175,12 @@ bool UmlBaseItem::set_PropertyValue(const WrapperStr & k, const WrapperStr & v)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            QString * s = _dict[k];
+            QString s = _dict[k];
 
-            if (s == 0)
-                _dict.insert(k.operator QString(), new QString(v.operator QString()));
+            if (s.isEmpty())
+                _dict.insert(k.operator QString(), QString(v.operator QString()));
             else
-                *s = v.operator QString();
+                s = v.operator QString();
         }
 
         return TRUE;
@@ -190,7 +189,7 @@ bool UmlBaseItem::set_PropertyValue(const WrapperStr & k, const WrapperStr & v)
         return FALSE;
 }
 
-const Q3Dict<QString> UmlBaseItem::properties()
+const QHash<QString,QString> UmlBaseItem::properties()
 {
     read_if_needed_();
 
@@ -238,11 +237,11 @@ bool UmlBaseItem::set_isMarked(bool v)
     return set_it_(_marked, v, setMarkedCmd);
 }
 
-const Q3PtrVector<UmlItem> UmlBaseItem::referencedBy()
+const QVector<UmlItem*> UmlBaseItem::referencedBy()
 {
     UmlCom::send_cmd(_identifier, referencedByCmd);
 
-    Q3PtrVector<UmlItem> result;
+    QVector<UmlItem*> result;
 
     UmlCom::read_item_list(result);
     return result;
@@ -254,14 +253,13 @@ void UmlBaseItem::unload(bool rec, bool del)
     _stereotype = 0;
     _dict.clear();
     _description = 0;
-
     if (_children != 0) {
         if (rec) {
             for (unsigned chindex = 0; chindex != _children->size(); chindex += 1) {
-                _children->at(chindex)->unload(TRUE, del);
+                _children->value(chindex)->unload(TRUE, del);
 
                 if (del)
-                    delete _children->at(chindex);
+                    delete _children->value(chindex);
             }
         }
 
@@ -286,17 +284,17 @@ bool UmlBaseItem::isToolRunning(int id)
     return UmlCom::read_bool();
 }
 
-const Q3PtrVector<UmlItem> UmlBaseItem::markedItems()
+const QVector<UmlItem*> UmlBaseItem::markedItems()
 {
     UmlCom::send_cmd(miscGlobalCmd, allMarkedCmd);
 
-    Q3PtrVector<UmlItem> result;
+    QVector<UmlItem*> result;
 
     UmlCom::read_item_list(result);
     return result;
 }
 
-Q3PtrDict<UmlItem> UmlBaseItem::_all(997);
+QHash<void*, UmlItem*> UmlBaseItem::_all;
 
 void UmlBaseItem::read_if_needed_()
 {
@@ -363,7 +361,7 @@ UmlItem * UmlBaseItem::create_(anItemKind k, const char * s)
         if (_children != 0) {
             unsigned n = _children->count();
 
-            _children->resize(n + 1);
+            //_children->resize(n + 1);
             _children->insert(n, result);
         }
 
@@ -382,7 +380,7 @@ void UmlBaseItem::read_uml_()
     while (n--) {
         WrapperStr k = UmlCom::read_string();
 
-        _dict.insert(k, new QString(UmlCom::read_string()));
+        _dict.insert(k, QString(UmlCom::read_string()));
     }
 
     _description = UmlCom::read_string();
@@ -425,15 +423,15 @@ void UmlBaseItem::read_idl_()
 void UmlBaseItem::read_children_()
 {
     UmlCom::send_cmd(_identifier, childrenCmd);
-    _children = new Q3PtrVector<UmlItem>;
+    _children = new QVector<UmlItem*>;
 
     UmlCom::read_item_list(*_children);
 
-    UmlBaseItem ** v = (UmlBaseItem **) _children->data();
-    UmlBaseItem ** vsup = v + _children->size();
-
-    while (v != vsup)
-        (*v++)->_parent = (UmlItem *) this;
+    QVectorIterator<UmlItem*> it(*_children);
+    while(it.hasNext())
+    {
+        it.next()->_parent = (UmlItem *) this;
+    }
 }
 
 void UmlBaseItem::reread_children_if_needed_()
@@ -442,12 +440,11 @@ void UmlBaseItem::reread_children_if_needed_()
         UmlCom::send_cmd(_identifier, childrenCmd);
 
         UmlCom::read_item_list(*_children);
-
-        UmlBaseItem ** v = (UmlBaseItem **) _children->data();
-        UmlBaseItem ** vsup = v + _children->size();
-
-        while (v != vsup)
-            (*v++)->_parent = (UmlItem *) this;
+        QVectorIterator<UmlItem*> it(*_children);
+        while(it.hasNext())
+        {
+            it.next()->_parent = (UmlItem *) this;
+        }
     }
 }
 
@@ -529,22 +526,23 @@ UmlItem * UmlBaseItem::read_()
 
     UmlItem * result = _all[id];
 
-    if (result == 0) {
+   if (result == 0) {
         switch (kind) {
+        case aClassView:
+            return new UmlClassView(id, name);
+
         case aRelation:
             return new UmlRelation(id, name);
 
+        case anOperation:
+            return new UmlOperation(id, name);
+        case anArtifact:
+            return new UmlArtifact(id, name);
         case anAttribute:
             return new UmlAttribute(id, name);
 
-        case anOperation:
-            return new UmlOperation(id, name);
-
         case anExtraClassMember:
             return new UmlExtraClassMember(id, name);
-
-        case aClass:
-            return new UmlClass(id, name);
 
         case anUseCase:
             return new UmlUseCase(id, name);
@@ -552,17 +550,11 @@ UmlItem * UmlBaseItem::read_()
         case aComponent:
             return new UmlComponent(id, name);
 
-        case anArtifact:
-            return new UmlArtifact(id, name);
-
         case aNode:
             return new UmlNode(id, name);
 
         case aNcRelation:
             return new UmlNcRelation(id, name);
-
-        case aClassDiagram:
-            return new UmlClassDiagram(id, name);
 
         case anUseCaseDiagram:
             return new UmlUseCaseDiagram(id, name);
@@ -579,20 +571,28 @@ UmlItem * UmlBaseItem::read_()
         case aDeploymentDiagram:
             return new UmlDeploymentDiagram(id, name);
 
-        case aClassView:
-            return new UmlClassView(id, name);
-
         case anUseCaseView:
             return new UmlUseCaseView(id, name);
 
         case aComponentView:
             return new UmlComponentView(id, name);
 
+        case aClass:
+            return new UmlClass(id, name);
+
+        case aClassDiagram:
+            return new UmlClassDiagram(id, name);
+
         case aDeploymentView:
             return new UmlDeploymentView(id, name);
 
         case aPackage:
             return new UmlPackage(id, name);
+        case anObjectDiagram:
+            return new UmlObjectDiagram(id, name);
+
+        case aClassInstance:
+            return new UmlClassInstance(id, name);
 
         case aState:
             return new UmlState(id, name);
@@ -641,9 +641,6 @@ UmlItem * UmlBaseItem::read_()
 
         case aJoinPseudoState:
             return new UmlJoinPseudoState(id);
-
-        case anObjectDiagram:
-            return new UmlObjectDiagram(id, name);
 
         case anActivityDiagram:
             return new UmlActivityDiagram(id, name);
@@ -741,9 +738,6 @@ UmlItem * UmlBaseItem::read_()
         case aPartition:
             return new UmlActivityPartition(id, name);
 
-        case aClassInstance:
-            return new UmlClassInstance(id, name);
-
         case anAcceptCallAction:
             return new UmlAcceptCallAction(id, name);
 
@@ -779,8 +773,8 @@ UmlBaseItem::UmlBaseItem(void * id, const WrapperStr & n)
 {
     _all.insert(id, (UmlItem *) this);
 
-    if (_all.count() / _all.size() > 10)
-        _all.resize(_all.size() * 2 - 1);
+   // if (_all.count() / _all.size() > 10)
+      //  _all.resize(_all.size() * 2 - 1);
 }
 
 UmlBaseItem::~UmlBaseItem()

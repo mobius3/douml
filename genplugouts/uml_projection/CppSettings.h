@@ -4,10 +4,10 @@
 #ifdef WITHCPP
 
 
-#include <q3cstring.h>
+#include <QByteArray>
 #include "aVisibility.h"
 #include "UmlSettings.h"
-#include <q3dict.h>
+
 
 // This class manages settings concerning C++, configured through
 // the 'Generation settings' dialog.
@@ -31,100 +31,100 @@ public:
     // returns the C++ type corresponding to the 'UML' type given in
     // argument, as it is configured in the first 'Generation settings'
     // dialog's tab
-    static Q3CString type(Q3CString s);
+    static QByteArray type(QByteArray s);
 
     // set the C++ type corresponding to the 'UML' type given in
     // argument, as it is configured in the first 'Generation settings'
     // dialog's tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Type(Q3CString s, Q3CString v);
+    static bool set_Type(QByteArray s, QByteArray v);
 
     // reverse of the Type() operation, returns the 'UML' type corresponding
     // to the C++ type given in argument
-    static Q3CString umlType(Q3CString s);
+    static QByteArray umlType(QByteArray s);
 
     // returns the C++ stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString relationAttributeStereotype(Q3CString s);
+    static QByteArray relationAttributeStereotype(QByteArray s);
 
     // set the C++ stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationAttributeStereotype(Q3CString s, Q3CString v);
+    static bool set_RelationAttributeStereotype(QByteArray s, QByteArray v);
 
     // reverse of the RelationAttributeStereotype() operation, returns the 'UML'
     // stereotype corresponding to the C++ one given in argument
-    static Q3CString relationAttributeUmlStereotype(Q3CString s);
+    static QByteArray relationAttributeUmlStereotype(QByteArray s);
 
     // returns the C++ stereotype corresponding to the 'UML' stereotype given
     // in argument
-    static Q3CString classStereotype(Q3CString s);
+    static QByteArray classStereotype(QByteArray s);
 
     // set the C++ stereotype corresponding to the 'UML' stereotype given
     // in argument
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassStereotype(Q3CString s, Q3CString v);
+    static bool set_ClassStereotype(QByteArray s, QByteArray v);
 
     // reverse of the ClassStereotype() operation, returns the 'UML'
     // stereotype corresponding to the C++ one given in argument
-    static Q3CString classUmlStereotype(Q3CString s);
+    static QByteArray classUmlStereotype(QByteArray s);
 
     // returns the #include or other form specified in the last
     // 'Generation settings' tab for the C++ type given in argument.
-    static Q3CString include(Q3CString s);
+    static QByteArray include(QByteArray s);
 
     // set the #include or other form specified in the last
     // 'Generation settings' tab for the C++ type given in argument.
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Include(Q3CString s, Q3CString v);
+    static bool set_Include(QByteArray s, QByteArray v);
 
     // returns the 'root' directory
-    static Q3CString rootDir();
+    static QByteArray rootDir();
 
     // set the 'root' directory
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RootDir(Q3CString v);
+    static bool set_RootDir(QByteArray v);
 
     // returns the default header file content
-    static Q3CString headerContent();
+    static QByteArray headerContent();
 
     // set the default header file content
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_HeaderContent(Q3CString v);
+    static bool set_HeaderContent(QByteArray v);
 
     // returns the default source file content
-    static Q3CString sourceContent();
+    static QByteArray sourceContent();
 
     // set the default source file content
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceContent(Q3CString v);
+    static bool set_SourceContent(QByteArray v);
 
     // returns the extension of the header files produced by the
     // C++ code generator
-    static Q3CString headerExtension();
+    static QByteArray headerExtension();
 
     // set the extension of the header files produced by the
     // C++ code generator
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_HeaderExtension(Q3CString v);
+    static bool set_HeaderExtension(QByteArray v);
 
     // returns the extension of the source files produced by the
     // C++ code generator
-    static Q3CString sourceExtension();
+    static QByteArray sourceExtension();
 
     // set the extension of the source files produced by the
     // C++ code generator
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SourceExtension(Q3CString v);
+    static bool set_SourceExtension(QByteArray v);
 
     // indicates to the code generator if the #include may specify
     // the path of just the file's name
@@ -175,46 +175,46 @@ public:
 
     // returns the default operation 'in' parameter specification
     // in case its type is an enum
-    static const Q3CString & enumIn();
+    static const QByteArray & enumIn();
 
     // set the default operation 'in' parameter specification
     // in case its type is an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumIn(Q3CString v);
+    static bool set_EnumIn(QByteArray v);
 
     // returns the default operation 'out' parameter specification
     // in case its type is an enum
-    static const Q3CString & enumOut();
+    static const QByteArray & enumOut();
 
     // set the default operation 'out' parameter specification
     // in case its type is an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumOut(Q3CString v);
+    static bool set_EnumOut(QByteArray v);
 
     // returns the default operation 'inout' parameter specification
     // in case its type is an enum
-    static const Q3CString & enumInout();
+    static const QByteArray & enumInout();
 
     // set the default operation 'inout' parameter specification
     // in case its type is an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumInout(Q3CString v);
+    static bool set_EnumInout(QByteArray v);
 
     // return the default operation value type form
-    static Q3CString enumReturn();
+    static QByteArray enumReturn();
 
     // set the default operation value type form
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumReturn(Q3CString v);
+    static bool set_EnumReturn(QByteArray v);
 
     // returns the default operation 'in' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
-    static Q3CString builtinIn(Q3CString s);
+    static QByteArray builtinIn(QByteArray s);
 
     // set the default operation 'in' parameter specification
     // in case its type is specified in the first 'Generation
@@ -222,12 +222,12 @@ public:
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
 
-    static bool set_BuiltinIn(Q3CString type, Q3CString form);
+    static bool set_BuiltinIn(QByteArray type, QByteArray form);
 
     // returns the default operation 'out' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
-    static Q3CString builtinOut(Q3CString s);
+    static QByteArray builtinOut(QByteArray s);
 
     // set the default operation 'out' parameter specification
     // in case its type is specified in the first 'Generation
@@ -235,13 +235,13 @@ public:
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
 
-    static bool set_BuiltinOut(Q3CString type, Q3CString form);
+    static bool set_BuiltinOut(QByteArray type, QByteArray form);
 
     // returns the default operation 'inout' parameter specification
     // in case its type is specified in the first 'Generation
     // settings' tab, else an empty string/null
 
-    static Q3CString builtinInOut(Q3CString s);
+    static QByteArray builtinInOut(QByteArray s);
 
     // set the default operation 'inout' parameter specification
     // in case its type is specified in the first 'Generation
@@ -249,10 +249,10 @@ public:
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
 
-    static bool set_BuiltinInOut(Q3CString type, Q3CString form);
+    static bool set_BuiltinInOut(QByteArray type, QByteArray form);
 
     // return the default operation value type form
-    static Q3CString builtinReturn(Q3CString s);
+    static QByteArray builtinReturn(QByteArray s);
 
     // set the default operation 'return' parameter specification
     // in case its type is specified in the first 'Generation
@@ -260,36 +260,36 @@ public:
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
 
-    static bool set_BuiltinReturn(Q3CString type, Q3CString form);
+    static bool set_BuiltinReturn(QByteArray type, QByteArray form);
 
     // returns the default operation 'in' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
-    static const Q3CString & in();
+    static const QByteArray & in();
 
     // set the default operation 'in' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_In(Q3CString v);
+    static bool set_In(QByteArray v);
 
     // returns the default operation 'out' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
-    static const Q3CString & out();
+    static const QByteArray & out();
 
     // set the default operation 'out' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Out(Q3CString v);
+    static bool set_Out(QByteArray v);
 
     // returns the default operation 'inout' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
-    static const Q3CString & inout();
+    static const QByteArray & inout();
 
     // set the default operation 'inout' parameter specification
     // in case its type is not an enum or a type specified in the
@@ -297,83 +297,83 @@ public:
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
 
-    static bool set_Inout(Q3CString v);
+    static bool set_Inout(QByteArray v);
 
     // return the default operation value type form
-    static Q3CString Return();
+    static QByteArray Return();
 
     // set the default operation value type form
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_Return(Q3CString v);
+    static bool set_Return(QByteArray v);
 
     // returns the default definition of a class
-    static const Q3CString & classDecl();
+    static const QByteArray & classDecl();
 
     // set the default definition of a class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassDecl(Q3CString v);
+    static bool set_ClassDecl(QByteArray v);
 
     // returns the default specification for an 'external' class
-    static const Q3CString & externalClassDecl();
+    static const QByteArray & externalClassDecl();
 
     // set the default specification for an 'external' class
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ExternalClassDecl(Q3CString v);
+    static bool set_ExternalClassDecl(QByteArray v);
 
     // returns the default definition of a struct
-    static const Q3CString & structDecl();
+    static const QByteArray & structDecl();
 
     // set the default definition of a struct
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_StructDecl(Q3CString v);
+    static bool set_StructDecl(QByteArray v);
 
     // returns the default definition of an union
-    static const Q3CString & unionDecl();
+    static const QByteArray & unionDecl();
 
     // set the default definition of an union
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_UnionDecl(Q3CString v);
+    static bool set_UnionDecl(QByteArray v);
 
     // returns the default definition of an enum
-    static const Q3CString & enumDecl();
+    static const QByteArray & enumDecl();
 
     // set the default definition of an enum
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumDecl(Q3CString v);
+    static bool set_EnumDecl(QByteArray v);
 
     // returns the default definition of a typedef
-    static const Q3CString & typedefDecl();
+    static const QByteArray & typedefDecl();
 
     // set the default definition of a typedef
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_TypedefDecl(Q3CString v);
+    static bool set_TypedefDecl(QByteArray v);
 
     // returns the default definition of an attribute depending on the multiplicity
-    static const Q3CString & attributeDecl(const char * multiplicity);
+    static const QByteArray & attributeDecl(const char * multiplicity);
 
     // set the default definition of an attribute
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_AttributeDecl(const char * multiplicity, Q3CString v);
+    static bool set_AttributeDecl(const char * multiplicity, QByteArray v);
 
     // returns the default definition of an enumeration item
-    static const Q3CString & enumItemDecl();
+    static const QByteArray & enumItemDecl();
 
     // set the default definition of an enumeration item
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_EnumItemDecl(Q3CString v);
+    static bool set_EnumItemDecl(QByteArray v);
 
     // returns the default definition of a relation depending on it is an
     // aggregation by value or not and the multiplicity, given in argument.
-    static const Q3CString & relationDecl(bool by_value, const char * multiplicity);
+    static const QByteArray & relationDecl(bool by_value, const char * multiplicity);
 
     // set the default definition of a relation depending on it is an
     // aggregation by value or not and the multiplicity, given in argument.
@@ -382,20 +382,20 @@ public:
     static bool set_RelationDecl(bool by_value, const char * multiplicity, const char * v);
 
     // returns the default declaration of an operation
-    static const Q3CString & operationDecl();
+    static const QByteArray & operationDecl();
 
     // set the default declaration of an operation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDecl(Q3CString v);
+    static bool set_OperationDecl(QByteArray v);
 
     // returns the default definition of an operation
-    static const Q3CString & operationDef();
+    static const QByteArray & operationDef();
 
     // set the default definition of an operation
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDef(Q3CString v);
+    static bool set_OperationDef(QByteArray v);
 
     // return TRUE if the operations profile must contain 'throw()'
     // when the operations does not have exception
@@ -419,13 +419,13 @@ public:
 
     // returns the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
-    static const Q3CString & getName();
+    static const QByteArray & getName();
 
     // set the default name of a 'get' operation generated
     // through the attribute and relation 'add get operation' menu
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_GetName(Q3CString v);
+    static bool set_GetName(QByteArray v);
 
     // returns if a 'get' operation generated through the attribute
     // and relation 'add get operation' menu is inline by default
@@ -471,14 +471,14 @@ public:
 
     // returns the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
-    static const Q3CString & setName();
+    static const QByteArray & setName();
 
     // set the default name of a 'set' operation generated
     // through the attribute and relation 'add set operation' menu
     //
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_SetName(Q3CString v);
+    static bool set_SetName(QByteArray v);
 
     // returns if a 'set' operation generated through the attribute
     // and relation 'add set operation' menu is inline by default
@@ -519,51 +519,51 @@ private:
 
     static bool _defined;
 
-    static Q3CString _root;
+    static QByteArray _root;
 
-    static Q3CString _in;
+    static QByteArray _in;
 
-    static Q3CString _out;
+    static QByteArray _out;
 
-    static Q3CString _inout;
+    static QByteArray _inout;
 
-    static Q3CString _return;
+    static QByteArray _return;
 
-    static Q3CString _enum_in;
+    static QByteArray _enum_in;
 
-    static Q3CString _enum_out;
+    static QByteArray _enum_out;
 
-    static Q3CString _enum_inout;
+    static QByteArray _enum_inout;
 
-    static Q3CString _enum_return;
+    static QByteArray _enum_return;
 
-    static Q3CString _class_decl;
+    static QByteArray _class_decl;
 
-    static Q3CString _external_class_decl;
+    static QByteArray _external_class_decl;
 
-    static Q3CString _struct_decl;
+    static QByteArray _struct_decl;
 
-    static Q3CString _union_decl;
+    static QByteArray _union_decl;
 
-    static Q3CString _enum_decl;
+    static QByteArray _enum_decl;
 
-    static Q3CString _typedef_decl;
+    static QByteArray _typedef_decl;
 
-    static Q3CString _attr_decl[3/*multiplicity*/];
+    static QByteArray _attr_decl[3/*multiplicity*/];
 
-    static Q3CString _enum_item_decl;
+    static QByteArray _enum_item_decl;
 
-    static Q3CString _rel_decl[2/*relation kind*/][3/*multiplicity*/];
+    static QByteArray _rel_decl[2/*relation kind*/][3/*multiplicity*/];
 
-    static Q3CString _oper_decl;
+    static QByteArray _oper_decl;
 
-    static Q3CString _oper_def;
+    static QByteArray _oper_def;
 
     static bool _force_oper_throw;
 
     static aVisibility _get_visibility;
 
-    static Q3CString _get_name;
+    static QByteArray _get_name;
 
     static bool _is_get_inline;
 
@@ -573,7 +573,7 @@ private:
 
     static aVisibility _set_visibility;
 
-    static Q3CString _set_name;
+    static QByteArray _set_name;
 
     static bool _is_set_inline;
 
@@ -581,13 +581,13 @@ private:
 
     static bool _is_set_param_ref;
 
-    static Q3CString _h_content;
+    static QByteArray _h_content;
 
-    static Q3CString _src_content;
+    static QByteArray _src_content;
 
-    static Q3CString _h_ext;
+    static QByteArray _h_ext;
 
-    static Q3CString _src_ext;
+    static QByteArray _src_ext;
 
     static bool _incl_with_path;
 
@@ -599,7 +599,7 @@ private:
 
     static bool _is_generate_javadoc_comment;
 
-    static Q3Dict<Q3CString> _map_includes;
+    static QHash<QByteArray,QByteArray*> _map_includes;
 
 
 protected:
@@ -616,7 +616,7 @@ public:
     // returns the default operation 'inout' parameter specification
     // in case its type is not an enum or a type specified in the
     // first 'Generation settings' tab
-    static Q3CString builtinInout(Q3CString s);
+    static QByteArray builtinInout(QByteArray s);
 
 };
 

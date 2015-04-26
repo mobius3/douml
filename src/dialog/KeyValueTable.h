@@ -28,11 +28,11 @@
 #ifndef KEYVALUETABLE_H
 #define KEYVALUETABLE_H
 
-#include <q3dict.h>
+////
 #include "StringTable.h"
 
 class HaveKeyValueData;
-
+class TableWidgetItemDelegate;
 class KeyValuesTable : public StringTable
 {
 public:
@@ -56,6 +56,7 @@ private:
     void AdjustEditability(bool);
     QHash<QString, QStringList> props;
     QHash<int, QString> colNames;
+    TableWidgetItemDelegate* m_delegate;
 
 
 };

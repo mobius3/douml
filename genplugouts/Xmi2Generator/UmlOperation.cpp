@@ -10,7 +10,7 @@
 #include "UmlPackage.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 #include <array>
 void UmlOperation::write(FileOut & out)
 {
@@ -83,8 +83,8 @@ void UmlOperation::write(FileOut & out)
 
 void UmlOperation::write_exceptions(FileOut & out)
 {
-    const Q3ValueList<UmlTypeSpec> excpts = exceptions();
-    Q3ValueList<UmlTypeSpec>::ConstIterator iter;
+    const QList<UmlTypeSpec> excpts = exceptions();
+    QList<UmlTypeSpec>::ConstIterator iter;
 
     for (iter = excpts.begin(); iter != excpts.end(); ++iter) {
         const UmlTypeSpec & e = *iter;
@@ -212,8 +212,8 @@ void UmlOperation::write_java_returntype(FileOut & out, WrapperStr decl)
 
 void UmlOperation::write_uml_params(FileOut & out)
 {
-    const Q3ValueList<UmlParameter> p = params();
-    Q3ValueList<UmlParameter>::ConstIterator it;
+    const QList<UmlParameter> p = params();
+    QList<UmlParameter>::ConstIterator it;
 
     for (it = p.begin(); it != p.end(); ++it) {
         out.indent();
@@ -262,7 +262,7 @@ void UmlOperation::write_cpp_java_params(FileOut & out, WrapperStr decl)
 
     index1 = 0;
 
-    const Q3ValueList<UmlParameter> p = params();
+    const QList<UmlParameter> p = params();
     WrapperStr sparam;
     WrapperStr kname;
     WrapperStr ktype;
@@ -442,61 +442,61 @@ void UmlOperation::write_events(FileOut & out)
 {
     const char * k = (_uml_20) ? "ownedMember" : "packagedElement";
     UmlItem * prj = UmlPackage::getProject();
-    Q3PtrDictIterator<char> it_oper(SentReceived);
+   QHashIterator<UmlOperation*,char*> it_oper(SentReceived);
 
-    while (it_oper.current()) {
+    while (it_oper.hasNext()) {
+        it_oper.next();
         out.indent();
         out << "<" << k << " xmi:type=\"uml:SendOperationEvent\"";
-        out.id_prefix(prj, "SENDOPEREVT", (int)((long) it_oper.current()));
+        out.id_prefix(prj, "SENDOPEREVT", (int)((long) it_oper.value()));
         out << " name=\"";
-        out.quote((const char *)((UmlOperation *)it_oper.currentKey())->name()); //[jasa] ambiguous call
+        out.quote((const char *)((UmlOperation *)it_oper.key())->name()); //[jasa] ambiguous call
         out << '"';
-        out.ref((UmlOperation *)it_oper.currentKey(), "operation");
+        out.ref((UmlOperation *)it_oper.key(), "operation");
         out << "/>\n";
 
         out.indent();
         out << "<" << k << " xmi:type=\"uml:ReceiveOperationEvent\"";
-        out.id_prefix(prj, "RECOPEREVT", (int)((long) it_oper.current()));
+        out.id_prefix(prj, "RECOPEREVT", (int)((long) it_oper.value()));
         out << " name=\"";
-        out.quote((const char *)((UmlOperation *)it_oper.currentKey())->name()); //[jasa] ambiguous call
+        out.quote((const char *)((UmlOperation *)it_oper.key())->name()); //[jasa] ambiguous call
         out << '"';
-        out.ref((UmlOperation *)it_oper.currentKey(), "operation");
+        out.ref((UmlOperation *)it_oper.key(), "operation");
         out << "/>\n";
 
-        ++it_oper;
     }
 
-    Q3AsciiDictIterator<char> it_evt(Events);
+    QHashIterator<WrapperStr,char*> it_evt(Events);
 
-    while (it_evt.current()) {
+    while (it_evt.hasNext()) {
+        it_evt.next();
         out.indent();
 
-        if (it_evt.currentKey()[0] == 'D') {
+        if (it_evt.key()[0] == 'D') {
             out << "<" << k << " xmi:type=\"uml:DestructionEvent\"";
-            out.id_prefix(prj, it_evt.current());
+            out.id_prefix(prj, it_evt.value());
             out << "/>\n";
         }
         else {
             out << "<" << k << " xmi:type=\"uml:ExecutionEvent\"";
-            out.id_prefix(prj, it_evt.current());
+            out.id_prefix(prj, it_evt.value());
 
-            if (*it_evt.currentKey() != 0) {
+            if (*it_evt.key() != 0) {
                 out << " name=\"";
-                out.quote(it_evt.currentKey() + 1);
+                out.quote(it_evt.key() + 1);
                 out << "\"/>\n";
             }
             else
                 out << "/>\n";
         }
 
-        free(it_evt.current());
-        ++it_evt;
+        free(it_evt.value());
     }
 }
 
 int UmlOperation::param_id;
 
-Q3PtrDict<char> UmlOperation::SentReceived;
+QHash<UmlOperation*,char*> UmlOperation::SentReceived;
 
-Q3AsciiDict<char> UmlOperation::Events;
+QHash<WrapperStr,char*> UmlOperation::Events;
 

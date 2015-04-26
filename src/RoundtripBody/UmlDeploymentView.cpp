@@ -29,7 +29,7 @@
 
 void UmlDeploymentView::roundtrip_cpp()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_cpp();
@@ -37,7 +37,7 @@ void UmlDeploymentView::roundtrip_cpp()
 
 void UmlDeploymentView::roundtrip_java()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_java();
@@ -45,7 +45,7 @@ void UmlDeploymentView::roundtrip_java()
 
 void UmlDeploymentView::roundtrip_php()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_php();
@@ -53,7 +53,7 @@ void UmlDeploymentView::roundtrip_php()
 
 void UmlDeploymentView::roundtrip_python()
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         ch[index]->roundtrip_python();

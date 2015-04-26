@@ -111,14 +111,15 @@ SOURCES          = main.cpp \
     ../Logging/QsDebugOutput.cpp
 
 TARGET          = php_reverse
-DEFINES          = WITHPHP REVERSE
+DEFINES          = WITHPHP REVERSE TRUE=true FALSE=false
 INCLUDEPATH   = ../Tools ../PhpReverse
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+#qt3support
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/php_reverse

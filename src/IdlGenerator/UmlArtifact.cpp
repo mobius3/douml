@@ -31,7 +31,7 @@
 #include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 #include "UmlArtifact.h"
 #include "IdlSettings.h"
@@ -103,7 +103,7 @@ void UmlArtifact::generate()
 
         QList<CppRefType *> dependencies;
 #endif
-        const Q3PtrVector<UmlClass> & cls = associatedClasses();
+        const QVector<UmlClass*> & cls = associatedClasses();
         unsigned n = cls.count();
         unsigned index;
 

@@ -32,7 +32,7 @@
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include "BrowserActivityAction.h"
 #include "ActivityActionData.h"
@@ -145,7 +145,7 @@ QString ActivityActionData::str(DrawingLanguage lang) const
 
 void ActivityActionData::edit()
 {
-    setName(browser_node->get_name());
+    setObjectName(browser_node->get_name());
 
     (new ActivityActionDialog(this))->show();
 }
@@ -474,10 +474,10 @@ AnyAction::~AnyAction()
 {
 }
 
-Q3ValueList<PinDescr> AnyAction::pins() const
+QList<PinDescr> AnyAction::pins() const
 {
     // no pins by default
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
 
     return r;
 }
@@ -494,7 +494,7 @@ QString AnyAction::str(DrawingLanguage, QString name) const
 
         int index = 0;
 
-        while ((index = name.find('_', index)) != -1)
+        while ((index = name.indexOf('_', index)) != -1)
             name.replace(index, 1, " ");
     }
 
@@ -573,7 +573,7 @@ QString OpaqueAction::str(DrawingLanguage lang, QString name) const
 
     return (s.isEmpty())
            ? AnyAction::str(lang, name)
-           : toUnicode(s);
+           : toUnicode(s.toLatin1().constData());
 }
 
 void OpaqueAction::save(QTextStream & st, QString &) const
@@ -823,11 +823,11 @@ AnyAction * AccessVariableValueAction::duplicate(AccessVariableValueAction * r) 
     return r;
 }
 
-Q3ValueList<PinDescr> AccessVariableValueAction::pins(UmlParamDirection dir,
+QList<PinDescr> AccessVariableValueAction::pins(UmlParamDirection dir,
         const char * str) const
 {
     // [in/out] <str> : le type de la variable
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
 
     if (variable != 0) {
         PinDescr p;
@@ -959,11 +959,11 @@ AnyAction * ChangeVariableValueAction::duplicate(ChangeVariableValueAction * r) 
     return r;
 }
 
-Q3ValueList<PinDescr> ChangeVariableValueAction::pins(const char * str) const
+QList<PinDescr> ChangeVariableValueAction::pins(const char * str) const
 {
     // [in] "value" : le type de la variable
     // [in] <str> : UnlimitedNatural
-    Q3ValueList<PinDescr> r = AccessVariableValueAction::pins(UmlIn, "value");
+    QList<PinDescr> r = AccessVariableValueAction::pins(UmlIn, "value");
 
     if (! r.isEmpty()) {
         r.first().multiplicity = "";
@@ -1048,7 +1048,7 @@ UmlActionKind ReadVariableValueAction::kind() const
     return UmlReadVariableValueAction;
 }
 
-Q3ValueList<PinDescr> ReadVariableValueAction::pins() const
+QList<PinDescr> ReadVariableValueAction::pins() const
 {
     return AccessVariableValueAction::pins(UmlOut, "result");
 }
@@ -1093,7 +1093,7 @@ UmlActionKind WriteVariableValueAction::kind() const
     return UmlWriteVariableValueAction;
 }
 
-Q3ValueList<PinDescr> WriteVariableValueAction::pins() const
+QList<PinDescr> WriteVariableValueAction::pins() const
 {
     return AccessVariableValueAction::pins(UmlIn, "value");
 }
@@ -1118,7 +1118,7 @@ UmlActionKind AddVariableValueAction::kind() const
     return UmlAddVariableValueAction;
 }
 
-Q3ValueList<PinDescr> AddVariableValueAction::pins() const
+QList<PinDescr> AddVariableValueAction::pins() const
 {
     return ChangeVariableValueAction::pins("insertAt");
 }
@@ -1153,7 +1153,7 @@ UmlActionKind RemoveVariableValueAction::kind() const
     return UmlRemoveVariableValueAction;
 }
 
-Q3ValueList<PinDescr> RemoveVariableValueAction::pins() const
+QList<PinDescr> RemoveVariableValueAction::pins() const
 {
     return ChangeVariableValueAction::pins("removeAt");
 }
@@ -1194,21 +1194,21 @@ UmlActionKind CallBehaviorAction::kind() const
     return UmlCallBehaviorAction;
 }
 
-Q3ValueList<PinDescr> CallBehaviorAction::pins() const
+QList<PinDescr> CallBehaviorAction::pins() const
 {
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
 
     if ((behavior != 0) && (behavior->get_type() == UmlActivity)) {
         // [any]* : depend on activity's parameter
-        Q3ValueList<BrowserParameter *> l =
+        QList<BrowserParameter *> l =
             ((BrowserActivity *) behavior)->get_params();
-        Q3ValueList<BrowserParameter *>::ConstIterator iter;
+        QList<BrowserParameter *>::ConstIterator iter;
 
         for (iter = l.begin(); iter != l.end(); ++iter) {
             PinParamData * model = (ParameterData *)(*iter)->get_data();
             PinDescr p;
 
-            p.name = (*iter)->get_name();
+            p.name = (*iter)->get_name().toLatin1().constData();
             p.set_type(model->get_type());
             p.multiplicity = model->multiplicity;
             p.in_state = model->in_state;
@@ -1367,11 +1367,11 @@ UmlActionKind CallOperationAction::kind() const
     return UmlCallOperationAction;
 }
 
-Q3ValueList<PinDescr> CallOperationAction::pins() const
+QList<PinDescr> CallOperationAction::pins() const
 {
     // [in] "target" : instance,
     // [any]* : other depend on operation's params&result&exception
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
 
     if (operation != 0) {
         OperationData * d = (OperationData *) operation->get_data();
@@ -1436,7 +1436,7 @@ QString CallOperationAction::str(DrawingLanguage lang, QString name) const
     else if (name.isEmpty())
         return operation->get_name();
     else
-        return toUnicode(name);
+        return toUnicode(name.toLatin1().constData());
 }
 
 BasicData * CallOperationAction::depend_on()
@@ -1539,12 +1539,12 @@ UmlActionKind SendObjectAction::kind() const
     return UmlSendObjectAction;
 }
 
-Q3ValueList<PinDescr> SendObjectAction::pins() const
+QList<PinDescr> SendObjectAction::pins() const
 {
     // [in] "request" : the sent object
     // [in] "target" : target object,
     // [in]* : arguments (pin addable et removables)
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlIn;
@@ -1598,11 +1598,11 @@ UmlActionKind SendSignalAction::kind() const
     return UmlSendSignalAction;
 }
 
-Q3ValueList<PinDescr> SendSignalAction::pins() const
+QList<PinDescr> SendSignalAction::pins() const
 {
     // [in] "target"
     // [*] signal params
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlIn;
@@ -1722,10 +1722,10 @@ UmlActionKind BroadcastSignalAction::kind() const
     return UmlBroadcastSignalAction;
 }
 
-Q3ValueList<PinDescr> BroadcastSignalAction::pins() const
+QList<PinDescr> BroadcastSignalAction::pins() const
 {
     // [*] signal params
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
 
     return r;
 }
@@ -1750,11 +1750,11 @@ UmlActionKind UnmarshallAction::kind() const
     return UmlUnmarshallAction;
 }
 
-Q3ValueList<PinDescr> UnmarshallAction::pins() const
+QList<PinDescr> UnmarshallAction::pins() const
 {
     // [in] "object" : the unmashalled object
     // [out]* : the objects (pin addable et removables)
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlIn;
@@ -1805,10 +1805,10 @@ UmlActionKind ValueSpecificationAction::kind() const
     return UmlValueSpecificationAction;
 }
 
-Q3ValueList<PinDescr> ValueSpecificationAction::pins() const
+QList<PinDescr> ValueSpecificationAction::pins() const
 {
     // [out] : the value
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlOut;
@@ -1932,10 +1932,10 @@ UmlActionKind AcceptCallAction::kind() const
     return UmlAcceptCallAction;
 }
 
-Q3ValueList<PinDescr> AcceptCallAction::pins() const
+QList<PinDescr> AcceptCallAction::pins() const
 {
     // [out] : returnInformation
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlOut;
@@ -2055,10 +2055,10 @@ UmlActionKind ReplyAction::kind() const
     return UmlReplyAction;
 }
 
-Q3ValueList<PinDescr> ReplyAction::pins() const
+QList<PinDescr> ReplyAction::pins() const
 {
     // [in] : returnInformation
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlIn;
@@ -2176,10 +2176,10 @@ UmlActionKind CreateObjectAction::kind() const
     return UmlCreateObjectAction;
 }
 
-Q3ValueList<PinDescr> CreateObjectAction::pins() const
+QList<PinDescr> CreateObjectAction::pins() const
 {
     // [out] : return
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlOut;
@@ -2256,10 +2256,10 @@ UmlActionKind DestroyObjectAction::kind() const
     return UmlDestroyObjectAction;
 }
 
-Q3ValueList<PinDescr> DestroyObjectAction::pins() const
+QList<PinDescr> DestroyObjectAction::pins() const
 {
     // [in] : target
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlIn;
@@ -2351,12 +2351,12 @@ UmlActionKind TestIdentityAction::kind() const
     return UmlTestIdentityAction;
 }
 
-Q3ValueList<PinDescr> TestIdentityAction::pins() const
+QList<PinDescr> TestIdentityAction::pins() const
 {
     // [in] : first
     // [in] : second
     // [out] : result
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlIn;
@@ -2414,10 +2414,10 @@ UmlActionKind RaiseExceptionAction::kind() const
     return UmlRaiseExceptionAction;
 }
 
-Q3ValueList<PinDescr> RaiseExceptionAction::pins() const
+QList<PinDescr> RaiseExceptionAction::pins() const
 {
     // [in] : exception
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlIn;
@@ -2478,11 +2478,11 @@ bool ReduceAction::may_add_pin() const
     return FALSE;
 }
 
-Q3ValueList<PinDescr> ReduceAction::pins() const
+QList<PinDescr> ReduceAction::pins() const
 {
     // [in] : collection
     // [out] : result
-    Q3ValueList<PinDescr> r;
+    QList<PinDescr> r;
     PinDescr p;
 
     p.dir = UmlIn;

@@ -5,7 +5,7 @@
 #include "UmlClassMember.h"
 #include "aRelationKind.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "UmlTypeSpec.h"
 
 class UmlRelation;
@@ -71,7 +71,7 @@ public:
     bool set_isUnique(bool v);
 
     // returns the default relation value, may be an empty string
-    const Q3CString & defaultValue();
+    const QByteArray & defaultValue();
 
     // to set the default relation value ("" allowed)
     //
@@ -83,7 +83,7 @@ public:
     // On error return FALSE in C++, produce a RuntimeException in Java
     // redefined in case the relation is bidirectional to set the stereotype
     // of the relation corresponding to the other direction
-    virtual bool set_Stereotype(const Q3CString & s);
+    virtual bool set_Stereotype(const QByteArray & s);
 
     // returns the 'end' class (the 'start' class is the parent of the relation) no set !
     UmlClass * roleType();
@@ -97,7 +97,7 @@ public:
     bool set_Association(const UmlTypeSpec & t);
 
     // returns the name of the role
-    const Q3CString & roleName();
+    const QByteArray & roleName();
 
     // to set the name of the role
     //
@@ -105,7 +105,7 @@ public:
     bool set_RoleName(const char * s);
 
     // returns the multiplicity (may be an empty string)
-    const Q3CString & multiplicity();
+    const QByteArray & multiplicity();
 
     // to set the multiplicity
     //
@@ -168,7 +168,7 @@ public:
 
     // in case the relation is an IDL union's member returns the
     // corresponding 'case', an empty string in case it is not specified
-    Q3CString idlCase();
+    QByteArray idlCase();
 
     // to set the 'case' even the relation is not (already) known as
     // an IDL union's member
@@ -215,13 +215,13 @@ private:
     bool _idl_truncatable : 1;
 #endif
 
-    Q3CString _default_value;
+    QByteArray _default_value;
 
     UmlClass * _role_type;
 
-    Q3CString _role_name;
+    QByteArray _role_name;
 
-    Q3CString _multiplicity;
+    QByteArray _multiplicity;
 
     UmlTypeSpec _association;
 
@@ -233,7 +233,7 @@ private:
     UmlAttribute * _idl_case;
 
 #ifdef WITHIDL
-    Q3CString _idl_explicit_case;
+    QByteArray _idl_explicit_case;
 #endif
 
 
@@ -273,11 +273,11 @@ protected:
 #endif
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseRelation(void * id, const Q3CString & n);
+    UmlBaseRelation(void * id, const QByteArray & n);
 
 };
 
-inline UmlBaseRelation::UmlBaseRelation(void * id, const Q3CString & n) : UmlClassMember(id, n)
+inline UmlBaseRelation::UmlBaseRelation(void * id, const QByteArray & n) : UmlClassMember(id, n)
 {
     _role_type = 0;
     _get_oper = 0;

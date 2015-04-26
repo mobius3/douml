@@ -75,7 +75,7 @@ int main(int argc, char ** argv)
 
             QString s("<hr><font face=helvetica>Generation done : %1 errors</font><br>");
             s=s.arg(QString::number(n_errors()));
-            UmlCom::trace(s);
+            UmlCom::trace(s.toLatin1().constData());
 
             UmlCom::showTrace();
             UmlCom::message("");

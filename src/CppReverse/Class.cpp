@@ -28,10 +28,10 @@
 #ifdef DEBUG_DOUML
 #include <iostream>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 using namespace std;
 #endif
@@ -92,7 +92,7 @@ Class::~Class()
 }
 
 Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
-                       const Q3ValueList<FormalParameterList> & tmplts,
+                       const QList<FormalParameterList> & tmplts,
                        const WrapperStr & path, WrapperStr name
 #ifdef ROUNDTRIP
                        , bool rndtrp, QList<UmlItem *> & expectedorder
@@ -553,9 +553,9 @@ Class * Class::reverse(ClassContainer * container, WrapperStr stereotype,
             if (cl->updated) {
                 Statistic::one_class_updated_more();
 
-                UmlCom::trace(QString("<font face=helvetica>class <i>")
+                UmlCom::trace(QString(QString("<font face=helvetica>class <i>")
                               + cl->text(0) + "</i> updated from <i>"
-                              + Lex::filename() + "</i></font><br>");
+                              + Lex::filename() + "</i></font><br>").toLatin1().constData());
             }
         }
 
@@ -621,7 +621,7 @@ void Class::declaration(const WrapperStr & name, const WrapperStr & stereotype,
 
 
 ESwitchKeyword Class::manage_operation(WrapperStr& s, WrapperStr& type, WrapperStr& name,
-                                         const Q3ValueList<FormalParameterList> & tmplts, WrapperStr& modifier, WrapperStr& pretype,
+                                         const QList<FormalParameterList> & tmplts, WrapperStr& modifier, WrapperStr& pretype,
                                        bool& inlinep, bool& virtualp, bool& staticp, bool& constp,
                                        bool& volatilep, bool explicitp, bool friendp, bool typenamep, aVisibility& visibility,
                                        WrapperStr& friend_template, WrapperStr& comment, WrapperStr& description
@@ -641,7 +641,7 @@ ESwitchKeyword Class::manage_operation(WrapperStr& s, WrapperStr& type, WrapperS
     }
 
     BooL func = FALSE;
-    WrapperStr cl_name = WrapperStr(text(0).toAscii().constData());
+    WrapperStr cl_name = WrapperStr(text(0).toLatin1().constData());
     WrapperStr cl_full_name = cl_name;
     int index;
 
@@ -729,7 +729,7 @@ void Class::manage_member(WrapperStr s, aVisibility visibility,
     WrapperStr value;
     WrapperStr bitfield;
     WrapperStr pretype;	// struct/union/class/enum
-    Q3ValueList<FormalParameterList> tmplts;
+    QList<FormalParameterList> tmplts;
     WrapperStr friend_template;
 
 #ifdef DEBUG_DOUML
@@ -1506,9 +1506,9 @@ Class * Class::reverse_enum(ClassContainer * container,
             if (cl->updated) {
                 Statistic::one_class_updated_more();
 
-                UmlCom::trace(QString("<font face=helvetica>class <i>")
+                UmlCom::trace(QString(QString("<font face=helvetica>class <i>")
                               + cl->text(0) + "</i> updated from <i>"
-                              + Lex::filename() + "</i></font><br>");
+                              + Lex::filename() + "</i></font><br>").toLatin1().constData());
             }
         }
 
@@ -1525,7 +1525,7 @@ Class * Class::reverse_enum(ClassContainer * container,
     }
 
     bool Class::reverse_typedef(ClassContainer  * container, const WrapperStr & path,
-                                Q3ValueList<FormalParameterList> & tmplts
+                                QList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
                                 , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif
@@ -1846,9 +1846,9 @@ Class * Class::reverse_enum(ClassContainer * container,
 
             if (roundtrip) {
                 UmlRelation * dep = 0;
-                const Q3PtrVector<UmlItem> & ch = ty_uml->children();
-                UmlItem ** v = ch.data();
-                UmlItem ** const vsup = v + ch.size();
+                const QVector<UmlItem*> & ch = ty_uml->children();
+                UmlItem *const* v = ch.data();
+                UmlItem *const*  vsup = v + ch.size();
 
                 for (; v != vsup; v += 1) {
                     if (((*v)->kind() == aRelation) &&
@@ -1999,7 +1999,7 @@ Class * Class::reverse_enum(ClassContainer * container,
             if (stereotype_declared) {
                 if (st != ((stereotype.isEmpty()) ? WrapperStr("class") : stereotype)) {
                     UmlCom::trace(WrapperStr("<font face=helvetica><b><i>") +
-                                  WrapperStr(text(0).toAscii().constData()) +
+                                  WrapperStr(text(0).toLatin1().constData()) +
                                   "</i> have several stereotypes</b></font><br><hr><br>");
                     return FALSE;
                 }
@@ -2030,7 +2030,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 
         ((p->isa_package()) ? ((ClassContainer *)((Package *) p))
          : ((ClassContainer *)((Class *) p)))
-        ->declare_if_needed(WrapperStr(text(0).toAscii().constData()) + "::" + name, cl);
+        ->declare_if_needed(WrapperStr(text(0).toLatin1().constData()) + "::" + name, cl);
     }
 
     Class * Class::define(const WrapperStr & name, WrapperStr stereotype)
@@ -2051,7 +2051,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 
             ((p->isa_package()) ? ((ClassContainer *)((Package *) p))
              : ((ClassContainer *)((Class *) p)))
-            ->define(WrapperStr(text(0).toAscii().constData()) + "::" + name, cl);
+            ->define(WrapperStr(text(0).toLatin1().constData()) + "::" + name, cl);
         }
     }
 
@@ -2127,7 +2127,7 @@ Class * Class::reverse_enum(ClassContainer * container,
         UmlItem * p = (((BrowserNode *) parent())->isa_package())
                       ? (UmlItem *)((Package *) parent())->get_uml()->get_classview(get_namespace())
                       : (UmlItem *)((Class *) parent())->get_uml();
-        WrapperStr str = WrapperStr(text(0).toAscii().constData());
+        WrapperStr str = WrapperStr(text(0).toLatin1().constData());
         bool anonymous = str.isEmpty();
 
         for (;;) {
@@ -2143,7 +2143,7 @@ Class * Class::reverse_enum(ClassContainer * container,
 
             if (uml == 0) {
                 // probably already exist
-                Q3PtrVector<UmlItem> ch = p->children();
+                QVector<UmlItem*> ch = p->children();
                 UmlItem * x;
 
                 for (unsigned chindex = 0; chindex != ch.size(); chindex += 1) {
@@ -2184,9 +2184,9 @@ Class * Class::reverse_enum(ClassContainer * container,
                 if (uml == 0) {
 #ifdef REVERSE
                     UmlCom::message("");
-                    CppCatWindow::trace(QString("<font face=helvetica><b>cannot create class <i>")
+                    CppCatWindow::trace(QString(QString("<font face=helvetica><b>cannot create class <i>")
                                         + text(0) + "</i> under <i>"
-                                        + parent()->text(0) + "</b></font><br>");
+                                        + parent()->text(0) + "</b></font><br>").toLatin1().constData());
                     throw 0;
 #else
                     QMessageBox::critical(0, "Fatal Error",
@@ -2207,8 +2207,8 @@ Class * Class::reverse_enum(ClassContainer * container,
 #ifdef ROUNDTRIP
 
                 if (roundtrip) {
-                    Q3ValueList<UmlFormalParameter> fs = uml->formals();
-                    Q3ValueList<UmlFormalParameter>::ConstIterator it2;
+                    QList<UmlFormalParameter> fs = uml->formals();
+                    QList<UmlFormalParameter>::ConstIterator it2;
 
                     for (rank = 0, it = formals.begin(), it2 = fs.begin();
                          (it != formals_end) && (it2 != fs.end());
@@ -2297,7 +2297,7 @@ void Class::set_uml(UmlClass * c)
 #ifndef ROUNDTRIP
 bool Class::already_in_bouml()
 {
-    Q3PtrVector<UmlItem> ch = get_uml()->children();
+    QVector<UmlItem*> ch = get_uml()->children();
 
     for (unsigned index = 0; index != ch.size(); index += 1)
         if (ch[index]->kind() != aClass)

@@ -41,6 +41,7 @@ class ArrowJunctionCanvas : public QObject, public DiagramCanvas
 
 protected:
     BrowserClass * interface;
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ArrowJunctionCanvas(UmlCanvas * canvas, int x, int y,
                         BrowserClass * i, int id = -1);
@@ -51,7 +52,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void change_scale();
     virtual void open();
     virtual void menu(const QPoint &);

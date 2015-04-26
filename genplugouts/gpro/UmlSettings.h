@@ -1,9 +1,9 @@
 #ifndef _UMLSETTINGS_H
 #define _UMLSETTINGS_H
+#include <QHash>
 
 
-#include <q3dict.h>
-#include <q3cstring.h>
+#include <QByteArray>
 
 struct UmlBuiltin;
 struct UmlStereotype;
@@ -18,15 +18,15 @@ protected:
 
     static bool _defined;
 
-    static Q3Dict<UmlBuiltin> _map_builtins;
+    static QHash<QByteArray,UmlBuiltin*> _map_builtins;
 
     static UmlBuiltin * _builtins;
 
-    static Q3Dict<UmlStereotype> _map_relation_stereotypes;
+    static QHash<QByteArray,UmlStereotype*> _map_relation_stereotypes;
 
     static UmlStereotype * _relation_stereotypes;
 
-    static Q3Dict<UmlStereotype> _map_class_stereotypes;
+    static QHash<QByteArray,UmlStereotype*> _map_class_stereotypes;
 
     static UmlStereotype * _class_stereotypes;
 
@@ -34,19 +34,19 @@ protected:
 
     static void read_if_needed_();
 
-    static unsigned multiplicity_column(const Q3CString & mult);
+    static unsigned multiplicity_column(const QByteArray & mult);
 
-    static Q3CString uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f);
+    static QByteArray uml_type(const QByteArray & t, QByteArray UmlBuiltin::* f);
 
-    static Q3CString uml_rel_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QByteArray uml_rel_stereotype(const QByteArray & t, QByteArray UmlStereotype::* f);
 
-    static Q3CString uml_class_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QByteArray uml_class_stereotype(const QByteArray & t, QByteArray UmlStereotype::* f);
 
-    static UmlBuiltin * add_type(const Q3CString & s);
+    static UmlBuiltin * add_type(const QByteArray & s);
 
-    static UmlStereotype * add_rel_stereotype(const Q3CString & s);
+    static UmlStereotype * add_rel_stereotype(const QByteArray & s);
 
-    static UmlStereotype * add_class_stereotype(const Q3CString & s);
+    static UmlStereotype * add_class_stereotype(const QByteArray & s);
 
 };
 

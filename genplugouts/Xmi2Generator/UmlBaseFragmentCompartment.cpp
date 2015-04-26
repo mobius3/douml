@@ -7,14 +7,16 @@
 
 void UmlBaseFragmentCompartment::add_contained_(UmlFragment * x)
 {
-    _contained.resize(_contained.size() + 1);
-    _contained.insert(_contained.size() - 1, x);
+    //_contained.resize(_contained.size() + 1);
+    //_contained.insert(_contained.size() - 1, x);
+    _contained.append(x);
 }
 
 void UmlBaseFragmentCompartment::add_text_(WrapperStr x)
 {
-    _texts.resize(_texts.size() + 1);
-    _texts.insert(_texts.size() - 1, strdup(x));
+    //_texts.resize(_texts.size() + 1);
+    //_texts.insert(_texts.size() - 1, strdup(x));
+    _texts.append(strdup(x));
 }
 
 void UmlBaseFragmentCompartment::add_cont_(WrapperStr s, int cy)

@@ -31,7 +31,7 @@
 
 #include <qapplication.h>
 #include <qfont.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QDropEvent>
@@ -71,7 +71,7 @@ DeploymentDiagramView::DeploymentDiagramView(QWidget * parent, UmlCanvas * canva
 }
 
 // have marked elements not yet drawn ?
-static bool marked_not_yet_drawn(Q3PtrDict<DiagramItem> & drawn)
+static bool marked_not_yet_drawn(QHash<BasicData*, DiagramItem*> & drawn)
 {
     foreach (BrowserNode *bn, BrowserNode::marked_nodes()) {
         UmlCode k = bn->get_type();
@@ -95,40 +95,40 @@ static bool marked_not_yet_drawn(Q3PtrDict<DiagramItem> & drawn)
 }
 
 static void get_drawn(DiagramItemList & items,
-                      Q3PtrDict<DiagramItem> & drawn)
+                      QHash<BasicData*, DiagramItem*> & drawn)
 {
     foreach (DiagramItem *di, items) {
-        UmlCode k = di->type();
+        UmlCode k = di->typeUmlCode();
 
         switch (k) {
         case UmlComponent:
         case UmlDeploymentNode:
         case UmlArtifact:
         case UmlPackage:
-            drawn.replace(di->get_bn()->get_data(), di);
+            drawn.insert(di->get_bn()->get_data(), di);
             break;
 
         default:
             if (IsaSimpleRelation(k))
-                drawn.replace(((ArrowCanvas *) di)->get_data(), di);
+                drawn.insert(((ArrowCanvas *) di)->get_data(), di);
         }
     }
 }
 
 void DeploymentDiagramView::menu(const QPoint & p)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("Deployment diagram menu"));
 
     if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
-        DiagramItemList items(canvas()->allItems());
-        Q3PtrDict<DiagramItem> drawn;
+        DiagramItemList items(canvas()->items());
+        QHash<BasicData*, DiagramItem*> drawn;
 
         get_drawn(items, drawn);
 
         if (marked_not_yet_drawn(drawn))
-            m.insertItem(TR("Add marked elements"), 28);
+            MenuFactory::addItem(m, TR("Add marked elements"), 28);
 
         switch (default_menu(m, 30)) {
         case EDIT_DRAWING_SETTING_CMD:
@@ -155,9 +155,9 @@ void DeploymentDiagramView::menu(const QPoint & p)
 static const int Diagram_Margin = 20;
 
 void DeploymentDiagramView::add_marked_elements(const QPoint & p,
-        Q3PtrDict<DiagramItem> & drawn)
+        QHash<BasicData *, DiagramItem *> &drawn)
 {
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
     history_save();
     history_protected = TRUE;
@@ -193,13 +193,13 @@ void DeploymentDiagramView::add_marked_elements(const QPoint & p,
                 continue;
             }
 
-            drawn.replace(dc->get_bn()->get_data(), dc);
+            drawn.insert(dc->get_bn()->get_data(), dc);
 
             if ((x + dc->width()) > xmax)
-                dc->move(x = Diagram_Margin, y = future_y);
+                dc->moveBy(x = Diagram_Margin, y = future_y);
 
             if (y + dc->height() > ymax) {
-                dc->move(x = Diagram_Margin, y = Diagram_Margin);
+                dc->moveBy(x = Diagram_Margin, y = Diagram_Margin);
                 future_y = y + dc->height() + Diagram_Margin;
             }
             else {
@@ -237,15 +237,15 @@ void DeploymentDiagramView::add_related_elements(DiagramItem * di, QString what,
         bool inh, bool assoc)
 {
     BrowserNodeList l;
-    RelatedElementsDialog dialog(di->get_bn(), what, inh, assoc, l);
+    RelatedElementsDialog dialog(di->get_bn(), what.toLatin1().constData(), inh, assoc, l);
 
     dialog.raise();
 
     if (dialog.exec() == QDialog::Accepted) {
-        QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        DiagramItemList items(canvas()->allItems());
-        Q3PtrDict<DiagramItem> drawn;
+        DiagramItemList items(canvas()->items());
+        QHash<BasicData*, DiagramItem*> drawn;
 
         get_drawn(items, drawn);
         history_save();
@@ -283,13 +283,13 @@ void DeploymentDiagramView::add_related_elements(DiagramItem * di, QString what,
                     continue;
                 }
 
-                drawn.replace(dc->get_bn()->get_data(), dc);
+                drawn.insert(dc->get_bn()->get_data(), dc);
 
                 if ((x + dc->width()) > xmax)
-                    dc->move(x = Diagram_Margin, y = future_y);
+                    dc->moveBy(x = Diagram_Margin, y = future_y);
 
                 if (y + dc->height() > ymax) {
-                    dc->move(x = Diagram_Margin, y = Diagram_Margin);
+                    dc->moveBy(x = Diagram_Margin, y = Diagram_Margin);
                     future_y = y + dc->height() + Diagram_Margin;
                 }
                 else {
@@ -314,9 +314,11 @@ void DeploymentDiagramView::add_related_elements(DiagramItem * di, QString what,
     }
 }
 
-void DeploymentDiagramView::contentsMousePressEvent(QMouseEvent * e)
+void DeploymentDiagramView::mousePressEvent(QMouseEvent * e)
 {
     if (!window()->frozen()) {
+        QPoint diagramPoint(e->x(), e->y());
+        QPointF scenePoint = mapToScene(diagramPoint);
         UmlCode action = window()->buttonOn();
 
         switch (action) {
@@ -331,7 +333,7 @@ void DeploymentDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 DeploymentNodeCanvas * d =
-                    new DeploymentNodeCanvas(b, the_canvas(), e->x(), e->y(), 0);
+                    new DeploymentNodeCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y(), 0);
 
                 d->show();
                 d->upper();
@@ -352,7 +354,7 @@ void DeploymentDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 ComponentCanvas * c =
-                    new ComponentCanvas(b, the_canvas(), e->x(), e->y());
+                    new ComponentCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
 
                 c->show();
                 c->upper();
@@ -373,7 +375,7 @@ void DeploymentDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             if (b != 0) {
                 ArtifactCanvas * c =
-                    new ArtifactCanvas(b, the_canvas(), e->x(), e->y());
+                    new ArtifactCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
 
                 c->show();
                 c->upper();
@@ -388,7 +390,7 @@ void DeploymentDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            HubCanvas * h = new HubCanvas(the_canvas(), e->x(), e->y(), 0);
+            HubCanvas * h = new HubCanvas(the_canvas(), scenePoint.x(), scenePoint.y(), 0);
 
             h->show();
             h->upper();
@@ -397,7 +399,7 @@ void DeploymentDiagramView::contentsMousePressEvent(QMouseEvent * e)
         break;
 
         default:
-            DiagramView::contentsMousePressEvent(e);
+            DiagramView::mousePressEvent(e);
             return;
         }
 
@@ -405,7 +407,7 @@ void DeploymentDiagramView::contentsMousePressEvent(QMouseEvent * e)
         history_protected = FALSE;
     }
     else
-        DiagramView::contentsMousePressEvent(e);
+        DiagramView::mousePressEvent(e);
 }
 
 void DeploymentDiagramView::dragEnterEvent(QDragEnterEvent * e)
@@ -432,10 +434,33 @@ void DeploymentDiagramView::dragEnterEvent(QDragEnterEvent * e)
         e->ignore();
 }
 
+void DeploymentDiagramView::dragMoveEvent(QDragMoveEvent * e)
+{
+    abort_line_construction();
+
+    if (!window()->frozen() &&
+        (UmlDrag::canDecode(e, UmlDeploymentNode, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlComponent, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlArtifact, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlPackage, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlSimpleRelations, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlClassDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlUseCaseDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlSeqDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlColDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlObjectDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlComponentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlDeploymentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlActivityDiagram, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlStateDiagram, TRUE, TRUE)))
+        e->accept();
+    else
+        e->ignore();
+}
 void DeploymentDiagramView::dropEvent(QDropEvent * e)
 {
     BrowserNode * bn;
-    QPoint p = viewportToContents(e->pos());
+    QPointF p = mapToScene(e->pos());
 
     if ((bn = UmlDrag::decode(e, UmlDeploymentNode)) != 0) {
         history_save();
@@ -523,7 +548,7 @@ void DeploymentDiagramView::dropEvent(QDropEvent * e)
 void DeploymentDiagramView::save(QTextStream & st, QString & warning,
                                  bool copy) const
 {
-    DiagramItemList items(canvas()->allItems());
+    DiagramItemList items(canvas()->items());
 
     if (!copy)
         // sort is useless for a copy
@@ -534,7 +559,7 @@ void DeploymentDiagramView::save(QTextStream & st, QString & warning,
     // save first package fragment deploymentnode component hub notes text and icons
 
     foreach (DiagramItem *di, items) {
-        switch (di->type()) {
+        switch (di->typeUmlCode()) {
         case UmlDeploymentNode:
         case UmlArtifact:
         case UmlComponent:
@@ -557,7 +582,7 @@ void DeploymentDiagramView::save(QTextStream & st, QString & warning,
     // then saves relations
 
     foreach (DiagramItem *di, items) {
-        switch (di->type()) {
+        switch (di->typeUmlCode()) {
         case UmlInherit:
         case UmlDependency:
         case UmlDependOn:
@@ -574,7 +599,7 @@ void DeploymentDiagramView::save(QTextStream & st, QString & warning,
     // then saves anchors
 
     foreach (DiagramItem *di, items)
-        if ((!copy || di->copyable()) && (di->type() == UmlAnchor))
+        if ((!copy || di->copyable()) && (di->typeUmlCode() == UmlAnchor))
             di->save(st, FALSE, warning);
 
     if (!copy && (preferred_zoom != 0)) {

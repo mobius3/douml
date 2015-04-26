@@ -29,7 +29,7 @@
 #include "UmlCom.h"
 #include "UmlPackage.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 UmlItem::~UmlItem()
 {

@@ -3,8 +3,8 @@
 
 
 // Internal enum
-enum ClassGlobalCmd {
+/*enum ClassGlobalCmd {
     findClassCmd
 
-};
+};*/
 #endif

@@ -164,7 +164,9 @@ void AdaptingTableModel::OnReloadDataFromInterface()
 {
     // Bouml preserved body begin 0021702A
     Q_D(AdaptingTableModel);
-    reset();
+    //reset();
+        beginResetModel();
+        endResetModel();
 
     if(d->interface->PreviousRowCount() != 0)
     {

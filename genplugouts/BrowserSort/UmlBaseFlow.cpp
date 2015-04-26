@@ -4,7 +4,7 @@
 #include "UmlFlow.h"
 #include "UmlActivityNode.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 anItemKind UmlBaseFlow::kind()
 {
@@ -29,7 +29,7 @@ UmlActivityNode * UmlBaseFlow::target()
     return _target;
 }
 
-const Q3CString & UmlBaseFlow::weight()
+const QByteArray & UmlBaseFlow::weight()
 {
     read_if_needed_();
     return _uml.weight;
@@ -40,7 +40,7 @@ bool UmlBaseFlow::set_Weight(const char * v)
     return set_it_(_uml.weight, v, setUmlActivityCmd);
 }
 
-const Q3CString & UmlBaseFlow::guard()
+const QByteArray & UmlBaseFlow::guard()
 {
     read_if_needed_();
     return _uml.guard;
@@ -51,7 +51,7 @@ bool UmlBaseFlow::set_Guard(const char * v)
     return set_it_(_uml.guard, v, setUmlGuardCmd);
 }
 
-const Q3CString & UmlBaseFlow::selection()
+const QByteArray & UmlBaseFlow::selection()
 {
     read_if_needed_();
     return _uml.selection;
@@ -62,7 +62,7 @@ bool UmlBaseFlow::set_Selection(const char * v)
     return set_it_(_uml.selection, v, setUmlEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseFlow::transformation()
+const QByteArray & UmlBaseFlow::transformation()
 {
     read_if_needed_();
     return _uml.transformation;
@@ -74,7 +74,7 @@ bool UmlBaseFlow::set_Transformation(const char * v)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseFlow::cppWeight()
+const QByteArray & UmlBaseFlow::cppWeight()
 {
     read_if_needed_();
     return _cpp.weight;
@@ -85,7 +85,7 @@ bool UmlBaseFlow::set_CppWeight(const char * v)
     return set_it_(_cpp.weight, v, setCppActivityCmd);
 }
 
-const Q3CString & UmlBaseFlow::cppGuard()
+const QByteArray & UmlBaseFlow::cppGuard()
 {
     read_if_needed_();
     return _cpp.guard;
@@ -96,7 +96,7 @@ bool UmlBaseFlow::set_CppGuard(const char * v)
     return set_it_(_cpp.guard, v, setCppGuardCmd);
 }
 
-const Q3CString & UmlBaseFlow::cppSelection()
+const QByteArray & UmlBaseFlow::cppSelection()
 {
     read_if_needed_();
     return _cpp.selection;
@@ -107,7 +107,7 @@ bool UmlBaseFlow::set_CppSelection(const char * v)
     return set_it_(_cpp.selection, v, setCppEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseFlow::cppTransformation()
+const QByteArray & UmlBaseFlow::cppTransformation()
 {
     read_if_needed_();
     return _cpp.transformation;
@@ -120,7 +120,7 @@ bool UmlBaseFlow::set_CppTransformation(const char * v)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseFlow::javaWeight()
+const QByteArray & UmlBaseFlow::javaWeight()
 {
     read_if_needed_();
     return _java.weight;
@@ -131,7 +131,7 @@ bool UmlBaseFlow::set_JavaWeight(const char * v)
     return set_it_(_java.weight, v, setJavaActivityCmd);
 }
 
-const Q3CString & UmlBaseFlow::javaGuard()
+const QByteArray & UmlBaseFlow::javaGuard()
 {
     read_if_needed_();
     return _java.guard;
@@ -142,7 +142,7 @@ bool UmlBaseFlow::set_JavaGuard(const char * v)
     return set_it_(_java.guard, v, setJavaGuardCmd);
 }
 
-const Q3CString & UmlBaseFlow::javaSelection()
+const QByteArray & UmlBaseFlow::javaSelection()
 {
     read_if_needed_();
     return _java.selection;
@@ -153,7 +153,7 @@ bool UmlBaseFlow::set_JavaSelection(const char * v)
     return set_it_(_java.selection, v, setJavaEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseFlow::javaTransformation()
+const QByteArray & UmlBaseFlow::javaTransformation()
 {
     read_if_needed_();
     return _java.transformation;

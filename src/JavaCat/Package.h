@@ -28,13 +28,13 @@
 #ifndef PACKAGE_H
 #define PACKAGE_H
 
-#include <q3dict.h>
+
 #include <qstringlist.h>
 #include <qstack.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 #include "Class.h"
 #include "UmlClass.h"
@@ -95,7 +95,7 @@ public:
     void new_class(Class *);
 
     virtual void compute_type(WrapperStr type, UmlTypeSpec & typespec,
-                              const Q3ValueList<FormalParameterList> & tmplts,
+                              const QList<FormalParameterList> & tmplts,
                               Class ** need_object = 0);
     virtual Class * define(const WrapperStr & name, char st);
     virtual void declare(const WrapperStr &, Class *);
@@ -137,9 +137,9 @@ private:
     UmlPackage * uml;
     WrapperStr package;		// java package may be with '.'
     WrapperStr path;
-    Q3Dict<Class> Undefined;
+    QHash<WrapperStr,Class*> Undefined;
 #ifdef ROUNDTRIP
-    Q3Dict<UmlArtifact> roundtriped;
+    QHash<QString,UmlArtifact*> roundtriped;
 #endif
 
     static bool scan;
@@ -148,17 +148,17 @@ private:
     static QRegExp * DirFilter;
     static QRegExp * FileFilter;
     static QString Ext;
-    static Q3Dict<Class> classes;
-    static Q3Dict<Class> java_classes;
-    static Q3Dict<UmlClass> user_classes;
-    static Q3Dict<Package> known_packages;
-    static Q3Dict<UmlPackage> user_packages;
+    static QHash<WrapperStr,Class*> classes;
+    static QHash<WrapperStr,Class*> java_classes;
+    static QHash<WrapperStr,UmlClass*> user_classes;
+    static QHash<WrapperStr,Package*> known_packages;
+    static QHash<WrapperStr,UmlPackage*> user_packages;
     static QStringList unknown_packages;
     static QStringList imports;
     static bool java_lang_added;
     static QStringList static_imports;
     static QStack<QStringList> stack;
-    static Q3ValueList<FormalParameterList> Formals;
+    static QList<FormalParameterList> Formals;
     static QApplication * app;
 
     static int file_number(QDir & dir, bool rec);

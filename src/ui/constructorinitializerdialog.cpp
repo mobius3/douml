@@ -53,26 +53,30 @@ void ConstructorInitializerDialog::Init(OperationData * _oper)
         ui->edConstructorPrototype->setText(constructorPrototype.replace("${volatile}", "@{constructor-initializer}${volatile}"));
     initializerCopy = QString(oper->get_browser_node()->get_value("constructor-initializer"));
     definitionCopy = oper->get_cppdef();
-    oper->set_cppdef(ui->edConstructorPrototype->text());
+    oper->set_cppdef(ui->edConstructorPrototype->toPlainText());
     connect(ui->edInitializer,SIGNAL(textChanged()),this, SLOT(OnInitializerChanged()));
-    oper->get_browser_node()->set_value("constructor-initializer", ui->edInitializer->toPlainText());
+    oper->get_browser_node()->set_value("constructor-initializer", ui->edInitializer->toPlainText().toLatin1().constData());
     RegenerateConstructor();
 
 }
 
 void ConstructorInitializerDialog::reject()
 {
-   oper->get_browser_node()->set_value("constructor-initializer", initializerCopy);
+   oper->get_browser_node()->set_value("constructor-initializer", initializerCopy.toLatin1().constData());
    oper->set_cppdef(definitionCopy);
+#ifdef EDGETOOLENABLED
    toolbar->setParent(0);
    toolbar->hide();
+#endif
    QDialog::reject();
 }
 
 void ConstructorInitializerDialog::accept()
 {
+#ifdef EDGETOOLENABLED
     toolbar->setParent(0);
     toolbar->hide();
+#endif
     QDialog::accept();
 }
 
@@ -89,6 +93,6 @@ void ConstructorInitializerDialog::RegenerateConstructor()
 
 void ConstructorInitializerDialog::OnInitializerChanged()
 {
-    oper->get_browser_node()->set_value("constructor-initializer", ui->edInitializer->toPlainText());
+    oper->get_browser_node()->set_value("constructor-initializer", ui->edInitializer->toPlainText().toLatin1().constData());
     RegenerateConstructor();
 }

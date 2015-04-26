@@ -30,13 +30,10 @@
 
 
 #include <qfont.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
 #include <QTextStream>
 #include <QDropEvent>
 #include <QMouseEvent>
 #include <QDragEnterEvent>
-
 #include "StateDiagramWindow.h"
 #include "StateDiagramView.h"
 #include "StateCanvas.h"
@@ -70,7 +67,7 @@ StateDiagramView::StateDiagramView(QWidget * parent, UmlCanvas * canvas, int id)
 
 void StateDiagramView::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("State diagram menu"));
 
@@ -89,8 +86,10 @@ void StateDiagramView::menu(const QPoint &)
     }
 }
 
-void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
+void StateDiagramView::mousePressEvent(QMouseEvent * e)
 {
+    QPoint diagramPoint(e->x(), e->y());
+    QPointF scenePoint = mapToScene(diagramPoint);
     if (!window()->frozen()) {
         UmlCode action = window()->buttonOn();
 
@@ -101,16 +100,16 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+            QGraphicsItem * ci = the_canvas()->collision(scenePoint.toPoint());
             DiagramItem * di;
             bool specified = ((ci != 0) &&
                               ((di = QCanvasItemToDiagramItem(ci)) != 0) &&
-                              (di->type() == UmlState) &&
+                              (di->typeUmlCode() == UmlState) &&
                               ((BrowserState *)((StateCanvas *) di)->get_bn())->may_contains(action));
             BrowserNode * parent;
 
             if (specified) {
-                if ((parent = ((StateCanvas *) di)->pointed_region(e->pos())) == 0)
+                if ((parent = ((StateCanvas *) di)->pointed_region(scenePoint.toPoint())) == 0)
                     parent = ((StateCanvas *) di)->get_bn();
             }
             else
@@ -126,7 +125,7 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 }
 
                 // may be added in a the state's region rather than the state
-                StateCanvas * c = new StateCanvas(b, the_canvas(), e->x(), e->y());
+                StateCanvas * c = new StateCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
 
                 c->show();
                 c->upper();
@@ -146,12 +145,12 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+            QGraphicsItem * ci = the_canvas()->collision(scenePoint.toPoint());
             DiagramItem * di;
 
             if ((ci != 0) &&
                 ((di = QCanvasItemToDiagramItem(ci)) != 0) &&
-                (di->type() == UmlState) &&
+                (di->typeUmlCode() == UmlState) &&
                 ((BrowserState *)((StateCanvas *) di)->get_bn())->may_contains(action)) {
                 BrowserRegion::add_region(((StateCanvas *) di)->get_bn());
                 window()->package_modified();
@@ -175,16 +174,16 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+            QGraphicsItem * ci = the_canvas()->collision(scenePoint.toPoint());
             DiagramItem * di;
             bool specified = ((ci != 0) &&
                               ((di = QCanvasItemToDiagramItem(ci)) != 0) &&
-                              (di->type() == UmlState) &&
+                              (di->typeUmlCode() == UmlState) &&
                               ((BrowserState *)((StateCanvas *) di)->get_bn())->may_contains(action));
             BrowserNode * parent;
 
             if (specified) {
-                if ((parent = ((StateCanvas *) di)->pointed_region(e->pos())) == 0)
+                if ((parent = ((StateCanvas *) di)->pointed_region(scenePoint.toPoint())) == 0)
                     parent = ((StateCanvas *) di)->get_bn();
             }
             else
@@ -195,7 +194,7 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
             if (b != 0) {
                 PseudoStateCanvas * c =
                     // may be added in a the state's region rather than the state
-                    new PseudoStateCanvas(b, the_canvas(), e->x(), e->y());
+                    new PseudoStateCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
 
                 c->show();
                 c->upper();
@@ -213,16 +212,16 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
             window()->selectOn();
             history_save();
 
-            Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+            QGraphicsItem * ci = the_canvas()->collision(scenePoint.toPoint());
             DiagramItem * di;
             bool specified = ((ci != 0) &&
                               ((di = QCanvasItemToDiagramItem(ci)) != 0) &&
-                              (di->type() == UmlState) &&
+                              (di->typeUmlCode() == UmlState) &&
                               ((BrowserState *)((StateCanvas *) di)->get_bn())->may_contains(UmlStateAction));
             BrowserNode * parent;
 
             if (specified) {
-                if ((parent = ((StateCanvas *) di)->pointed_region(e->pos())) == 0)
+                if ((parent = ((StateCanvas *) di)->pointed_region(scenePoint.toPoint())) == 0)
                     parent = ((StateCanvas *) di)->get_bn();
             }
             else
@@ -245,7 +244,7 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             StateActionCanvas * c =
                 // may be added in a the state's region rather than the state
-                new StateActionCanvas(b, the_canvas(), e->x(), e->y());
+                new StateActionCanvas(b, the_canvas(), scenePoint.x(), scenePoint.y());
 
             c->show();
             c->upper();
@@ -255,7 +254,7 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
         break;
 
         default:
-            DiagramView::contentsMousePressEvent(e);
+            DiagramView::mousePressEvent(e);
             return;
         }
 
@@ -263,7 +262,7 @@ void StateDiagramView::contentsMousePressEvent(QMouseEvent * e)
         history_protected = FALSE;
     }
     else
-        DiagramView::contentsMousePressEvent(e);
+        DiagramView::mousePressEvent(e);
 }
 
 void StateDiagramView::dragEnterEvent(QDragEnterEvent * e)
@@ -288,12 +287,34 @@ void StateDiagramView::dragEnterEvent(QDragEnterEvent * e)
         e->ignore();
 }
 
+
+void StateDiagramView::dragMoveEvent(QDragMoveEvent * e)
+{
+    if (!window()->frozen() &&
+        (UmlDrag::canDecode(e, UmlState, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlPackage, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlTransition, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlClassDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlUseCaseDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlSeqDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlColDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlObjectDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlComponentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlStateDiagram, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlDeploymentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlPseudoState, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlStateAction, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlActivityDiagram, TRUE, TRUE)))
+        e->accept();
+    else
+        e->ignore();
+}
 void StateDiagramView::dropEvent(QDropEvent * e)
 {
     BrowserState * mach =
         BrowserState::get_machine(the_canvas()->browser_diagram());
     BrowserNode * bn;
-    QPoint p = viewportToContents(e->pos());
+    QPointF p = mapToScene(e->pos());
 
     if ((bn = UmlDrag::decode(e, UmlState, TRUE)) != 0) {
         if (the_canvas()->already_drawn(bn))
@@ -406,7 +427,7 @@ void StateDiagramView::dropEvent(QDropEvent * e)
 void StateDiagramView::save(QTextStream & st, QString & warning,
                             bool copy) const
 {
-    DiagramItemList items(canvas()->allItems());
+    DiagramItemList items(canvas()->items());
 
     if (!copy)
         // sort is useless for a copy
@@ -417,7 +438,7 @@ void StateDiagramView::save(QTextStream & st, QString & warning,
     // save first states pseudostates actions packages fragments notes and icons
 
     foreach (DiagramItem *di, items) {
-        switch (di->type()) {
+        switch (di->typeUmlCode()) {
         case UmlState:
         case UmlStateAction:
         case InitialPS:
@@ -449,7 +470,7 @@ void StateDiagramView::save(QTextStream & st, QString & warning,
     // then saves relations
 
     foreach (DiagramItem *di, items) {
-        if (di->type() == UmlTransition) {
+        if (di->typeUmlCode() == UmlTransition) {
             if (!copy || di->copyable())
                 di->save(st, FALSE, warning);
         }
@@ -458,7 +479,7 @@ void StateDiagramView::save(QTextStream & st, QString & warning,
     // then saves anchors
 
     foreach (DiagramItem *di, items)
-        if ((!copy || di->copyable()) && (di->type() == UmlAnchor))
+        if ((!copy || di->copyable()) && (di->typeUmlCode() == UmlAnchor))
             di->save(st, FALSE, warning);
 
     if (!copy && (preferred_zoom != 0)) {
@@ -476,7 +497,8 @@ void StateDiagramView::read(char * st, char * k)
     UmlCanvas * canvas = the_canvas();
 
     // reads first state package icons notes text and images
-    while (StateCanvas::read(st, canvas, k) ||
+    while (
+           StateCanvas::read(st, canvas, k) ||
            StateActionCanvas::read(st, canvas, k) ||
            PseudoStateCanvas::read(st, canvas, k) ||
            NoteCanvas::read(st, canvas, k) ||
@@ -486,16 +508,13 @@ void StateDiagramView::read(char * st, char * k)
            FragmentCanvas::read(st, canvas, k) ||
            ImageCanvas::read(st, canvas, k))
         k = read_keyword(st);
-
     // then reads relations and anchors
     ArrowCanvas * a;
-
     while (((a = ArrowCanvas::read(st, canvas, k)) != 0) ||
            ((a = TransitionCanvas::read(st, canvas, k)) != 0)) {
         a->get_start()->check_line(a);
         k = read_keyword(st);
     }
-
     if (!strcmp(k, "preferred_whz") || !strcmp(k, "prefered_whz")) {
         preferred_size.setWidth(read_unsigned(st));
         preferred_size.setHeight(read_unsigned(st));

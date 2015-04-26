@@ -30,8 +30,8 @@
 
 
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3popupmenu.h>
+#include <qpainter.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -45,8 +45,8 @@
 #include "translate.h"
 
 StereotypePropertiesCanvas::StereotypePropertiesCanvas(UmlCanvas * canvas,
-        DiagramItem * it,
-        int x, int y, int id)
+                                                       DiagramItem * it,
+                                                       int x, int y, int id)
     : NoteCanvas(canvas, x, y, id), di(it)
 {
     // for read
@@ -54,8 +54,8 @@ StereotypePropertiesCanvas::StereotypePropertiesCanvas(UmlCanvas * canvas,
 }
 
 StereotypePropertiesCanvas::StereotypePropertiesCanvas(UmlCanvas * canvas,
-        DiagramItem * it,
-        QString s)
+                                                       DiagramItem * it,
+                                                       QString s)
     : NoteCanvas(canvas, 0, 0, 0), di(it)
 {
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(update()));
@@ -75,7 +75,7 @@ StereotypePropertiesCanvas::StereotypePropertiesCanvas(UmlCanvas * canvas,
         h = height();
 
     DiagramCanvas::resize(w, h);
-    setZ(it->get_z());
+    setZValue(it->get_z());
 
     width_scale100 = w;
     height_scale100 = h;
@@ -93,13 +93,13 @@ void StereotypePropertiesCanvas::delete_it()
     NoteCanvas::delete_it();
 }
 
-UmlCode StereotypePropertiesCanvas::type() const
+UmlCode StereotypePropertiesCanvas::typeUmlCode() const
 {
     return UmlStereotypeProperties;
 }
 
 void StereotypePropertiesCanvas::delete_available(BooL & in_model,
-        BooL & out_model) const
+                                                  BooL & out_model) const
 {
     if (di->isSelected())
         di->delete_available(in_model, out_model);
@@ -117,91 +117,94 @@ void StereotypePropertiesCanvas::open()
 
 void StereotypePropertiesCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu fontsubm(0);
+    QMenu m(0);
+    QMenu fontsubm(0);
 
-    MenuFactory::createTitle(m, TR("Stereotype Properties"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 5);
-    m.insertItem(TR("Go down"), 6);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Font"), &fontsubm);
+    MenuFactory::createTitle(m,  QObject::tr("Stereotype Properties"));
+    m.addSeparator();
+    MenuFactory::addItem(m,  QObject::tr("Upper"), 0);
+    MenuFactory::addItem(m,  QObject::tr("Lower"), 1);
+    MenuFactory::addItem(m,  QObject::tr("Go up"), 5);
+    MenuFactory::addItem(m,  QObject::tr("Go down"), 6);
+    m.addSeparator();
+    MenuFactory::addItem(m,  QObject::tr("Edit"), 2);
+    m.addSeparator();
+    MenuFactory::insertItem(m,  QObject::tr("Font"), &fontsubm);
     init_font_menu(fontsubm, the_canvas(), 10);
-    m.insertItem(TR("Edit drawing settings"), 3);
+    MenuFactory::addItem(m,  QObject::tr("Edit drawing settings"), 3);
 
     if (linked()) {
-        m.insertSeparator();
-        m.insertItem(TR("Select linked items"), 4);
+        m.addSeparator();
+        MenuFactory::addItem(m,  QObject::tr("Select linked items"), 4);
     }
 
-    m.insertSeparator();
+    m.addSeparator();
 
-    int index = m.exec(QCursor::pos());
+    QAction *retAction =  m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int index = retAction->data().toInt();
 
-    switch (index) {
-    case 0:
-        upper();
-        modified();	// call package_modified()
-        return;
-
-    case 1:
-        lower();
-        modified();	// call package_modified()
-        return;
-
-    case 5:
-        z_up();
-        modified();	// call package_modified()
-        return;
-
-    case 6:
-        z_down();
-        modified();	// call package_modified()
-        return;
-
-    case 2:
-        open();
-        return;
-
-    case 3:
-        for (;;) {
-            ColorSpecVector co(1);
-
-            co[0].set(TR("note color"), &itscolor);
-
-            SettingsDialog dialog(0, &co, FALSE);
-
-            dialog.raise();
-
-            if (dialog.exec() == QDialog::Accepted)
-                modified();
-
-            if (!dialog.redo())
-                return;
-            else
-                package_modified();
-        }
-
-        break;
-
-    case 4:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
-
-    default:
-        if (index >= 10) {
-            itsfont = (UmlFont)(index - 10);
+        switch (index) {
+        case 0:
+            upper();
             modified();	// call package_modified()
+            return;
+
+        case 1:
+            lower();
+            modified();	// call package_modified()
+            return;
+
+        case 5:
+            z_up();
+            modified();	// call package_modified()
+            return;
+
+        case 6:
+            z_down();
+            modified();	// call package_modified()
+            return;
+
+        case 2:
+            open();
+            return;
+
+        case 3:
+            for (;;) {
+                ColorSpecVector co(1);
+
+                co[0].set( QObject::tr("note color"), &itscolor);
+
+                SettingsDialog dialog(0, &co, FALSE);
+
+                dialog.raise();
+
+                if (dialog.exec() == QDialog::Accepted)
+                    modified();
+
+                if (!dialog.redo())
+                    return;
+                else
+                    package_modified();
+            }
+
+            break;
+
+        case 4:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
+
+        default:
+            if (index >= 10) {
+                itsfont = (UmlFont)(index - 10);
+                modified();	// call package_modified()
+            }
+
+            return;
         }
-
-        return;
     }
-
     package_modified();
 }
 
@@ -233,7 +236,7 @@ void StereotypePropertiesCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
         ColorSpecVector co(1);
         UmlColor itscolor;
 
-        co[0].set(TR("note color"), &itscolor);
+        co[0].set( QObject::tr("note color"), &itscolor);
 
         SettingsDialog dialog(0, &co, FALSE, TRUE);
 
@@ -264,7 +267,7 @@ void StereotypePropertiesCanvas::needed(UmlCanvas * canvas, DiagramItem * di, QS
 {
     if (sp == 0) {
         sp = new StereotypePropertiesCanvas(canvas, di, s);
-        sp->move(pt.x(), pt.y());
+        sp->moveBy(pt.x(), pt.y());
         sp->show();
         sp->upper();
         (new ArrowCanvas(canvas, di, sp, UmlAnchor, 0, FALSE, -1.0, -1.0))->show();
@@ -312,7 +315,7 @@ StereotypePropertiesCanvas::read(char *& st, UmlCanvas * canvas,
     if (!strcmp(k, "stereotypeproperties")) {
         int id = read_id(st);
         StereotypePropertiesCanvas * result =
-            new StereotypePropertiesCanvas(canvas, it, 0, 0, id);
+                new StereotypePropertiesCanvas(canvas, it, 0, 0, id);
 
         result->read_internal(st);
         // update done by owner

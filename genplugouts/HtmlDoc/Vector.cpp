@@ -4,9 +4,9 @@
 
 void Vector::addElement(const UmlItem * x)
 {
-    if (v.count() == v.size())
-        v.resize(v.size() + 256);
+    if (v.capacity() == v.size())
+        v.reserve(v.size() + 256);
 
-    v.insert(v.count(), x);
+    v.append(const_cast<UmlItem*>(x));
 }
 

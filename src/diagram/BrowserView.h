@@ -28,7 +28,7 @@
 #ifndef BROWSERVIEW_H
 #define BROWSERVIEW_H
 
-#include <q3listview.h>
+//#include <q3listview.h>
 #include <qdir.h>
 //Added by qt3to4:
 #include <QMouseEvent>
@@ -37,7 +37,8 @@
 #include <QDragLeaveEvent>
 #include <QDropEvent>
 #include <QDragEnterEvent>
-
+#include <QTreeView>
+#include <QTreeWidgetItem>
 class QDragEnterEvent;
 class QDragMoveEvent;
 class QDragLeaveEvent;
@@ -47,9 +48,10 @@ class QKeyEvent;
 class BrowserNode;
 class BrowserPackage;
 
+
 // in fact it is a singleton => static members (except slots !)
 /* [lgfreitas] This class provides the tree view in the left side */
-class BrowserView : public Q3ListView
+class BrowserView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -85,10 +87,10 @@ public:
     static QDir get_import_dir() {
         return import_dir;
     }
-    static void select(Q3ListViewItem *);
-    static void deselect(Q3ListViewItem *);
+    static void select(QTreeWidgetItem *);
+    static void deselect(QTreeWidgetItem *);
     static BrowserNode * selected_item();
-    static void force_visible(Q3ListViewItem *);
+    static void force_visible(QTreeWidgetItem *);
     static void remove_temporary_files();
     void send_marked(QList<BrowserNode*>);
 
@@ -98,16 +100,26 @@ protected:
     void keyPressEvent(QKeyEvent * e);
 
 protected slots:
-    void selected(Q3ListViewItem *);
-    void rightPressed(Q3ListViewItem *);
-    void doubleClick(Q3ListViewItem *);
+    void onItemSelected();
+    void selected(BrowserNode *b);
+    void rightPressed(const QPoint &point);
+    void rightPressed(BrowserNode* node);
+    void doubleClick(QTreeWidgetItem *, int);
+
     void menu();
 
-    void contentsDragMoveEvent(QDragMoveEvent * e);
-    void contentsDropEvent(QDropEvent * e);
-    void contentsMouseMoveEvent(QMouseEvent * e);
-    void contentsMousePressEvent(QMouseEvent * e);
-    void contentsMouseReleaseEvent(QMouseEvent * e);
+    void dragMoveEvent(QDragMoveEvent * e);
+    void dropEvent(QDropEvent * e);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    virtual void startDrag(Qt::DropActions supportedActions);
+
+
+
+
+    void mouseMoveEvent(QMouseEvent * e);
+    void mousePressEvent(QMouseEvent * e);
+    void mouseReleaseEvent(QMouseEvent * e);
 
 public slots:
     void OnGenerateCpp();

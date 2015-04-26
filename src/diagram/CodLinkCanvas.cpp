@@ -30,7 +30,7 @@
 
 
 #include <qcursor.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -39,12 +39,12 @@
 #include "UmlCanvas.h"
 #include "LabelCanvas.h"
 #include "CodDirsCanvas.h"
-#include "CodObjCanvas.h"
-#include "ColDiagramView.h"
 #include "myio.h"
 #include "ToolCom.h"
 #include "CodAddMsgDialog.h"
 #include "CodEditMsgDialog.h"
+#include "CodObjCanvas.h"
+#include "ColDiagramView.h"
 #include "Tool.h"
 #include "ui/menufactory.h"
 #include "translate.h"
@@ -87,7 +87,7 @@ void CodLinkCanvas::setVisible(bool yes)
 
 void CodLinkCanvas::moveBy(double dx, double dy)
 {
-    if (selected())
+    if (isSelected())
         the_canvas()->unselect(this);
 
     ArrowCanvas::moveBy(dx, dy);
@@ -119,99 +119,101 @@ void CodLinkCanvas::menu(const QPoint &)
     else
         new_dirs = FALSE;
 
-    Q3PopupMenu m;
-    Q3PopupMenu geo;
+    QMenu m;
+    QMenu geo;
 
     MenuFactory::createTitle(m, TR("Link"));
-    m.insertSeparator();
-    m.insertItem(TR("add messages to ") + from->get_full_name(), 1);
-    m.insertItem(TR("add messages to ") + to->get_full_name(), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit its messages"), 3);
-    m.insertItem(TR("Edit all the messages"), 4);
-    m.insertSeparator();
-    m.insertItem(TR("Select linked items"), 7);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("add messages to ") + from->get_full_name(), 1);
+    MenuFactory::addItem(m, TR("add messages to ") + to->get_full_name(), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit its messages"), 3);
+    MenuFactory::addItem(m, TR("Edit all the messages"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select linked items"), 7);
+    m.addSeparator();
 
     if (!new_dirs) {
-        m.insertItem(TR("Edit drawing settings"), 5);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("Edit drawing settings"), 5);
+        m.addSeparator();
     }
 
     if (get_start() != get_end()) {
         init_geometry_menu(geo, 10);
-        m.insertItem(TR("Geometry (Ctrl+l)"), &geo);
-        m.insertSeparator();
+        MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
+        m.addSeparator();
     }
 
-    m.insertItem(TR("Remove from diagram"), 6);
+    MenuFactory::addItem(m, TR("Remove from diagram"), 6);
 
-    int rank = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int rank = retAction->data().toInt();
 
-    switch (rank) {
-    case 1: {
-        CodAddMsgDialog dialog(to, from, d,
-                               (ColDiagramView *) the_canvas()->get_view(),
-                               FALSE);
+        switch (rank) {
+        case 1: {
+            CodAddMsgDialog dialog(to, from, d,
+                                   (ColDiagramView *) the_canvas()->get_view(),
+                                   FALSE);
 
-        dialog.raise();
+            dialog.raise();
 
-        if (dialog.exec() != QDialog::Accepted)
+            if (dialog.exec() != QDialog::Accepted)
+                return;
+        }
+
+            break;
+
+        case 2: {
+            CodAddMsgDialog dialog(from, to, d,
+                                   (ColDiagramView *) the_canvas()->get_view(),
+                                   TRUE);
+
+            dialog.raise();
+
+            if (dialog.exec() != QDialog::Accepted)
+                return;
+        }
+            break;
+
+        case 3:
+            CodEditMsgDialog::exec((ColDiagramView *) the_canvas()->get_view(), d->get_msgs());
             return;
-    }
-    break;
-
-    case 2: {
-        CodAddMsgDialog dialog(from, to, d,
-                               (ColDiagramView *) the_canvas()->get_view(),
-                               TRUE);
-
-        dialog.raise();
-
-        if (dialog.exec() != QDialog::Accepted)
+        case 4:
+            CodEditMsgDialog::exec((ColDiagramView *) the_canvas()->get_view(),
+                                   ((ColDiagramView *) the_canvas()->get_view())->get_msgs());
             return;
-    }
-    break;
+        case 5:
+            if (d->edit_drawing_settings())
+                modified();
 
-    case 3:
-        CodEditMsgDialog::exec((ColDiagramView *) the_canvas()->get_view(), d->get_msgs());
-        return;
+            return;
 
-    case 4:
-        CodEditMsgDialog::exec((ColDiagramView *) the_canvas()->get_view(),
-                               ((ColDiagramView *) the_canvas()->get_view())->get_msgs());
-        return;
+        case 6:
+            delete_it();
+            ((ColDiagramView *) the_canvas()->get_view())->update_msgs();
+            break;
+        case 7:
+            select_associated();
+            return;
 
-    case 5:
-        if (d->edit_drawing_settings())
-            modified();
+        default:
+            if (rank >= 10) {
+                rank -= 10;
 
-        return;
-
-    case 6:
-        delete_it();
-        ((ColDiagramView *) the_canvas()->get_view())->update_msgs();
-        break;
-
-    case 7:
-        select_associated();
-        return;
-
-    default:
-        if (rank >= 10) {
-            rank -= 10;
-
-            if (rank == RecenterBegin)
-                set_decenter(-1.0, decenter_end);
-            else if (rank == RecenterEnd)
-                set_decenter(decenter_begin, -1.0);
-            else if (rank != (int) geometry)
-                set_geometry((LineGeometry) rank, TRUE);
+                if (rank == RecenterBegin)
+                    set_decenter(-1.0, decenter_end);
+                else if (rank == RecenterEnd)
+                    set_decenter(decenter_begin, -1.0);
+                else if (rank != (int) geometry)
+                    set_geometry((LineGeometry) rank, TRUE);
+                else
+                    return;
+            }
             else
                 return;
         }
-        else
-            return;
     }
 
     package_modified();
@@ -230,12 +232,12 @@ void CodLinkCanvas::menu(const QPoint &)
 ArrowPointCanvas * CodLinkCanvas::brk(const QPoint & p)
 {
     ArrowPointCanvas * ap =
-        new ArrowPointCanvas(the_canvas(), p.x(), p.y());
+            new ArrowPointCanvas(the_canvas(), p.x(), p.y());
 
-    ap->setZ(z() + 1);
+    ap->setZValue(zValue() + 1);
 
     CodLinkCanvas * other =
-        new CodLinkCanvas(the_canvas(), ap, end, 0, decenter_begin, decenter_end);
+            new CodLinkCanvas(the_canvas(), ap, end, 0, decenter_begin, decenter_end);
 
     ap->add_line(this);
     end->remove_line(this, TRUE);
@@ -247,7 +249,7 @@ ArrowPointCanvas * CodLinkCanvas::brk(const QPoint & p)
     other->show();
 
     if (dirs &&
-        ((p - beginp).manhattanLength() < (p - endp).manhattanLength())) {
+            ((p - beginp).manhattanLength() < (p - endp).manhattanLength())) {
         other->dirs = dirs;
         dirs = 0;
         other->dirs->set_link(other);
@@ -287,14 +289,14 @@ void CodLinkCanvas::get_start_end(CodObjCanvas *& from, CodObjCanvas *& to)
 
     a = this;
 
-    while (a->begin->type() == UmlArrowPoint)
+    while (a->begin->typeUmlCode() == UmlArrowPoint)
         a = (CodLinkCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
 
     from = (CodObjCanvas *) a->begin;
 
     a = this;
 
-    while (a->end->type() == UmlArrowPoint)
+    while (a->end->typeUmlCode() == UmlArrowPoint)
         a = (CodLinkCanvas *)((ArrowPointCanvas *) a->end)->get_other(a);
 
     to = (CodObjCanvas *) a->end;
@@ -309,7 +311,7 @@ CodDirsCanvas * CodLinkCanvas::find_dirs() const
 
     a = this;
 
-    while (a->begin->type() == UmlArrowPoint) {
+    while (a->begin->typeUmlCode() == UmlArrowPoint) {
         a = (CodLinkCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
 
         if (a->dirs != 0)
@@ -318,7 +320,7 @@ CodDirsCanvas * CodLinkCanvas::find_dirs() const
 
     a = this;
 
-    while (a->end->type() == UmlArrowPoint) {
+    while (a->end->typeUmlCode() == UmlArrowPoint) {
         a = (CodLinkCanvas *)((ArrowPointCanvas *) a->end)->get_other(a);
 
         if (a->dirs != 0)
@@ -332,7 +334,7 @@ void CodLinkCanvas::save(QTextStream & st, bool ref, QString & warning) const
 {
     if (ref)
         st << "linkcanvas_ref " << get_ident();
-    else if (begin->type() != UmlArrowPoint) {
+    else if (begin->typeUmlCode() != UmlArrowPoint) {
         nl_indent(st);
         st << "linkcanvas " << get_ident();
 
@@ -412,7 +414,7 @@ CodLinkCanvas * CodLinkCanvas::read(char *& st, UmlCanvas * canvas, char *& k)
             result = new CodLinkCanvas(canvas, bi, ap, id, dbegin, dend);
 
             if (read_file_format() >= 5)
-                result->setZ(z);
+                result->setZValue(z);
 
             result->show();
             bi = ap;
@@ -422,8 +424,8 @@ CodLinkCanvas * CodLinkCanvas::read(char *& st, UmlCanvas * canvas, char *& k)
         }
 
         result =
-            new CodLinkCanvas(canvas, bi, dict_get(read_id(st), "", canvas),
-                              id, dbegin, dend);
+                new CodLinkCanvas(canvas, bi, dict_get(read_id(st), "", canvas),
+                                  id, dbegin, dend);
         result->show();
 
         k = read_keyword(st);

@@ -29,9 +29,9 @@
 #define SYNCHRODIALOG_H
 
 #include <qdialog.h>
-#include <q3ptrlist.h>
+
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 class QCheckBox;
 class BrowserView;

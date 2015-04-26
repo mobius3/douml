@@ -6,13 +6,13 @@
 #include "UmlCom.h"
 #include "UmlTransition.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-void UmlStateAction::generate(UmlClass * machine, UmlClass * anystate, UmlState * state, Q3CString & body, Q3CString indent)
+void UmlStateAction::generate(UmlClass * machine, UmlClass * anystate, UmlState * state, QByteArray & body, QByteArray indent)
 {
     body += indent + cppExpression() + '\n';
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
 
     if (ch.count() != 1) {
         UmlCom::trace("Error : 'action' pseudo state must have one and only one transition<br>");

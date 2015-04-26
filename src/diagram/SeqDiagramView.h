@@ -60,11 +60,12 @@ private:
     void toOverlapping();
 
 protected:
-    virtual void contentsMousePressEvent(QMouseEvent *);
-    virtual void contentsMouseMoveEvent(QMouseEvent *);
+    virtual void mousePressEvent(QMouseEvent *);
+    virtual void mouseMoveEvent(QMouseEvent *);
     void keyPressEvent(QKeyEvent * e);
     virtual void dragEnterEvent(QDragEnterEvent *);
     virtual void dropEvent(QDropEvent *);
+    virtual void dragMoveEvent(QDragMoveEvent *e);
 };
 
 #endif

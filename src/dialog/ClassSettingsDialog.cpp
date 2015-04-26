@@ -31,11 +31,11 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
-#include <Q3HBoxLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 #include "ClassSettingsDialog.h"
 #include "Settings.h"
@@ -43,57 +43,62 @@
 #include "translate.h"
 
 
-class ComboVisibility : public Q3ComboBox
+class ComboVisibility : public QComboBox
 {
 public:
     ComboVisibility(QWidget * parent, UmlVisibility v, bool nodefault);
 };
 
 ComboVisibility::ComboVisibility(QWidget * parent, UmlVisibility v, bool nodefault)
-    : Q3ComboBox(FALSE, parent)
+    : QComboBox(parent)
 {
+    setEditable(false);
     // the last value MUST be default
     for (int i = 0; i != (int) UmlDefaultVisibility; i += 1)
-        insertItem(stringify((UmlVisibility) i));
+        addItem(stringify((UmlVisibility) i));
 
     if (!nodefault)
-        insertItem(stringify(UmlDefaultVisibility));
+        addItem(stringify(UmlDefaultVisibility));
 
-    setCurrentItem(v);
+    setCurrentIndex(v);
 }
 
 QSize ClassSettingsDialog::previous_size;
 
 ClassSettingsDialog::ClassSettingsDialog(ClassSettings * se, bool nodefault)
-    : QDialog(0, "Class Settings dialog", TRUE), settings(se)
+    : QDialog(0/*, "Class Settings dialog", TRUE*/), settings(se)
 {
-    setCaption(TR("Class Settings dialog"));
+    setWindowTitle(TR("Class Settings dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
     QString s;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(new QLabel(TR("default attributes visibility : "), this), 1000);
     cbattribute = new ComboVisibility(this, settings->attribute_visibility, nodefault);
     hbox->addWidget(cbattribute);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(new QLabel(TR("default relations visibility : "), this), 1000);
     cbrelation = new ComboVisibility(this, settings->relation_visibility, nodefault);
     hbox->addWidget(cbrelation);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(new QLabel(TR("default operations visibility : "), this), 1000);
     cboperation = new ComboVisibility(this, settings->operation_visibility, nodefault);
     hbox->addWidget(cboperation);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * accept = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -112,7 +117,7 @@ ClassSettingsDialog::ClassSettingsDialog(ClassSettings * se, bool nodefault)
 
 void ClassSettingsDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -123,9 +128,9 @@ ClassSettingsDialog::~ClassSettingsDialog()
 
 void ClassSettingsDialog::accept()
 {
-    settings->attribute_visibility = (UmlVisibility) cbattribute->currentItem();
-    settings->relation_visibility = (UmlVisibility) cbrelation->currentItem();
-    settings->operation_visibility = (UmlVisibility) cboperation->currentItem();
+    settings->attribute_visibility = (UmlVisibility) cbattribute->currentIndex();
+    settings->relation_visibility = (UmlVisibility) cbrelation->currentIndex();
+    settings->operation_visibility = (UmlVisibility) cboperation->currentIndex();
 
     QDialog::accept();
 }

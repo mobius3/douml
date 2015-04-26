@@ -1,7 +1,7 @@
 
 #include "UmlActivityDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 void UmlActivityDiagram::memo_ref()
 {
@@ -9,7 +9,7 @@ void UmlActivityDiagram::memo_ref()
     UmlDiagram::memo_ref();
 }
 
-Q3CString UmlActivityDiagram::sKind()
+QByteArray UmlActivityDiagram::sKind()
 {
     return "activity diagram";
 }

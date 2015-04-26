@@ -1,11 +1,8 @@
 #ifndef _FILEIN_H
 #define _FILEIN_H
-
-
+#include <QHash>
+#include "misc/mystr.h"
 #include <qstring.h>
-
-#include <q3dict.h>
-
 #include <stdio.h>
 #include <qmap.h>
 class Token;
@@ -74,7 +71,7 @@ protected:
 
     QMap<QString, char> _special_chars;
 
-    static Q3Dict<char> BypassedIds;
+    static QHash<WrapperStr,char*> BypassedIds;
 
 
 private:

@@ -3,8 +3,8 @@
 
 
 // Internal enum
-enum UmlSettingsCmd {
+/*enum UmlSettingsCmd {
     getUmlSettingsCmd
 
-};
+};*/
 #endif

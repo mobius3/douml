@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseRelation.h"
-#include <q3cstring.h>
+
 
 // This class manages 'relations', notes that the class 'UmlClassItem'
 // is a mother class of all the class's children.
@@ -12,28 +12,28 @@
 class UmlRelation : public UmlBaseRelation
 {
 public:
-    UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n) {};
+    UmlRelation(void * id, const QByteArray & n) : UmlBaseRelation(id, n) {};
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     virtual void memo_ref();
 
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
+    virtual void html(QByteArray pfix, unsigned int rank, unsigned int level);
 
     //produce the definition in C++
-    void gen_cpp_decl(Q3CString s, bool descr);
+    void gen_cpp_decl(QByteArray s, bool descr);
 
     //produce the definition in Java
-    void gen_java_decl(Q3CString s, bool descr);
+    void gen_java_decl(QByteArray s, bool descr);
 
     //produce the definition in Php
-    void gen_php_decl(Q3CString s, bool descr);
+    void gen_php_decl(QByteArray s, bool descr);
 
     //produce the definition in Python
-    void gen_python_decl(Q3CString s);
+    void gen_python_decl(QByteArray s);
 
 
 private:
@@ -42,7 +42,7 @@ private:
 
 
 public:
-    virtual Q3CString pretty_name();
+    virtual QByteArray pretty_name();
 
 };
 

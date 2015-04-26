@@ -29,19 +29,16 @@
 
 
 
-#include <q3vbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
-#include <q3buttongroup.h>
+#include <qcombobox.h>
+#include <bbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qsplitter.h>
-#include <q3popupmenu.h>
 #include <qcursor.h>
-//Added by qt3to4:
 #include <QPixmap>
-
 #include "RelationDialog.h"
 #include "RelationData.h"
 #include "BrowserRelation.h"
@@ -60,6 +57,8 @@
 #include "AnnotationDialog.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
+#include "gridbox.h"
+#include "menufactory.h"
 
 QSize RelationDialog::previous_size;
 
@@ -103,9 +102,9 @@ static const struct {
 };
 
 RelationDialog::RelationDialog(RelationData * r)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), rel(r)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), rel(r)
 {
-    setCaption(TR("Relation dialog"));
+    setWindowTitle(TR("Relation dialog"));
 
     visit = a.ro = !r->start->is_writable();
     b.ro = (r->end) ? !r->end->is_writable()
@@ -134,24 +133,26 @@ RelationDialog::RelationDialog(RelationData * r)
     // general tab
     //
 
-    Q3VBox * vtab = new Q3VBox(this);
-    Q3HBox * htab;
-    Q3GroupBox  * bg;
+    VVBox * vtab = new VVBox(this);
+    HHBox * htab;
+    GridBox  * bg;
 
     umltab = vtab;
     vtab->setMargin(3);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(3);
-    QLabel * lbl1 = new QLabel(TR("name : "), htab);
-    edname = new LineEdit(rel->get_name(), htab);
+    QLabel * lbl1;
+    htab->addWidget(lbl1 = new QLabel(TR("name : "), htab));
+    htab->addWidget(edname = new LineEdit(rel->get_name(), htab));
     edname->setReadOnly(visit);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(3);
-    QLabel * lbl2 = new QLabel(TR("type : "), htab);
+    QLabel * lbl2;
+    htab->addWidget(lbl2 = new QLabel(TR("type : "), htab));
 
-    edtype = new Q3ComboBox(FALSE, htab);
+    htab->addWidget(edtype = new QComboBox( htab));
 
     int index;
 
@@ -159,8 +160,8 @@ RelationDialog::RelationDialog(RelationData * r)
         // relation kind cannot be changed
         for (index = 0; index != sizeof(RelTypes) / sizeof(*RelTypes); index += 1) {
             if (RelTypes[index].type == type) {
-                edtype->insertItem(**RelTypes[index].pix, RelTypes[index].lbl);
-                edtype->setCurrentItem(0);
+                edtype->addItem(**RelTypes[index].pix, RelTypes[index].lbl);
+                edtype->setCurrentIndex(0);
                 break;
             }
         }
@@ -171,78 +172,82 @@ RelationDialog::RelationDialog(RelationData * r)
             if (r->end == 0) {
                 // unidir
                 for (index = 0; index != sizeof(UniRelTypes) / sizeof(*UniRelTypes); index += 1) {
-                    edtype->insertItem(**UniRelTypes[index].pix, UniRelTypes[index].lbl);
+                    edtype->addItem(**UniRelTypes[index].pix, UniRelTypes[index].lbl);
 
                     if (UniRelTypes[index].type == type)
-                        edtype->setCurrentItem(index);
+                        edtype->setCurrentIndex(index);
                 }
             }
             else {
                 // bidir
                 for (index = 0; index != sizeof(BiRelTypes) / sizeof(*BiRelTypes); index += 1) {
-                    edtype->insertItem(**BiRelTypes[index].pix, BiRelTypes[index].lbl);
+                    edtype->addItem(**BiRelTypes[index].pix, BiRelTypes[index].lbl);
 
                     if (BiRelTypes[index].type == type)
-                        edtype->setCurrentItem(index);
+                        edtype->setCurrentIndex(index);
                 }
             }
         }
         else {
             for (index = 0; index != sizeof(RelTypes) / sizeof(*RelTypes); index += 1) {
-                edtype->insertItem(**RelTypes[index].pix, RelTypes[index].lbl);
+                edtype->addItem(**RelTypes[index].pix, RelTypes[index].lbl);
 
                 if (RelTypes[index].type == type)
-                    edtype->setCurrentItem(index);
+                    edtype->setCurrentIndex(index);
             }
         }
 
         connect(edtype, SIGNAL(activated(int)), this, SLOT(edTypeActivated(int)));
     }
 
-    new QLabel(TR("    stereotype : "), htab);
-    edstereotype = new Q3ComboBox(!visit, htab);
-    edstereotype->insertItem(toUnicode(rel->get_stereotype()));
+    htab->addWidget(new QLabel(TR("    stereotype : "), htab));
+    htab->addWidget(edstereotype = new QComboBox(htab));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(rel->get_stereotype()));
 
     if (!visit) {
-        edstereotype->insertStringList(rel->get_start_class()
+        edstereotype->addItems(rel->get_start_class()
                                        ->default_stereotypes(type,
                                                rel->get_end_class()));
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlRelations));
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlRelations));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(3);
 
-    SmallPushButton * button_assoc =
-        new SmallPushButton(TR("association :"), htab);
+    SmallPushButton * button_assoc;
+    htab->addWidget(button_assoc =
+        new SmallPushButton(TR("association :"), htab));
 
     connect(button_assoc, SIGNAL(clicked()), this, SLOT(menu_assoc()));
 
-    edassociation = new Q3ComboBox(!visit, htab);
-    edassociation->insertItem(rel->association.get_full_type());
+    htab->addWidget(edassociation = new QComboBox(htab));
+    edassociation->setEditable(!visit);
+    edassociation->addItem(rel->association.get_full_type());
     BrowserClass::instances(nodes);
     nodes.full_names(list);
 
     if (!visit) {
-        edassociation->insertStringList(GenerationSettings::basic_types());
+        edassociation->addItems(GenerationSettings::basic_types());
         offset = edassociation->count();
-        edassociation->insertStringList(list);
+        edassociation->addItems(list);
         edassociation->setAutoCompletion(completion());
         view = rel->get_start_class()->container(UmlClass);
     }
 
-    edassociation->setCurrentItem(0);
+    edassociation->setCurrentIndex(0);
     edassociation->setSizePolicy(sp);
 
     same_width(lbl1, lbl2, button_assoc);
 
-    QSplitter * split = new QSplitter(Qt::Vertical, vtab);
+    QSplitter * split;
+    vtab->addWidget(split = new QSplitter(Qt::Vertical, vtab));
 
     split->setOpaqueResize(TRUE);
 
@@ -250,13 +255,13 @@ RelationDialog::RelationDialog(RelationData * r)
     QString inb = TR("in ") + rel->get_end_class()->full_name(TRUE);
 
     // role A
-    bg = new Q3GroupBox(2, Qt::Horizontal, ina, split);
+    split->addWidget(bg = new GridBox(2, split, ina));
     init_uml_role(a, rel->a, bg, rel->get_start_class());
     aOldText = rel->a.role.operator QString();
     bOldText = rel->b.role.operator QString();
 
     // role B
-    bg = new Q3GroupBox(2, Qt::Horizontal, inb, split);
+    split->addWidget(bg = new GridBox(2, split, inb));
     init_uml_role(b, rel->b, bg, rel->get_end_class());
 
     addTab(vtab, "Uml");
@@ -265,14 +270,14 @@ RelationDialog::RelationDialog(RelationData * r)
     // C++
     //
 
-    vtab = new Q3VBox(this);
+    vtab = new VVBox(this);
     cppTab = vtab;
     vtab->setMargin(5);
 
     // A
-    bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab);
-    new QLabel(bg);
-    a.cpp_virtual_inheritance_cb = new QCheckBox("virtual", bg);
+    vtab->addWidget(bg = new GridBox(2, vtab, ina));
+    bg->addWidget(new QLabel(bg));
+    bg->addWidget(a.cpp_virtual_inheritance_cb = new QCheckBox("virtual", bg));
 
     if (rel->a.cpp_virtual_inheritance)
         a.cpp_virtual_inheritance_cb->setChecked(TRUE);
@@ -287,10 +292,10 @@ RelationDialog::RelationDialog(RelationData * r)
                   SLOT(cpp_include_in_header()));
 
     // B
-    htab = new Q3HBox(vtab);	// to have a vertical margin
+    vtab->addWidget(htab = new HHBox(vtab));	// to have a vertical margin
     htab->setMargin(5);
 
-    cpp_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
+    vtab->addWidget(cpp_b = new GridBox(2, vtab, inb));
     b.cpp_virtual_inheritance_cb = 0;
     init_cpp_role(b, rel->b, cpp_b, SLOT(cpp_update_b()),
                   SLOT(cpp_default_b()), SLOT(cpp_unmapped_b()), 0);
@@ -304,20 +309,20 @@ RelationDialog::RelationDialog(RelationData * r)
     // Java
     //
 
-    vtab = new Q3VBox(this);
+    vtab = new VVBox(this);
     javatab = vtab;
     vtab->setMargin(5);
 
     // A
-    bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab);
+    vtab->addWidget(bg = new GridBox(2, vtab, ina));
     init_java_role(a, rel->a, bg, SLOT(java_update_a()), SLOT(java_default_a()),
                    SLOT(java_unmapped_a()), SLOT(java_edit_annotation_a()));
 
     // B
-    htab = new Q3HBox(vtab);	// to have a vertical margin
+    vtab->addWidget(htab = new HHBox(vtab));	// to have a vertical margin
     htab->setMargin(5);
 
-    java_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
+    vtab->addWidget(java_b = new GridBox(2, vtab, inb));
     init_java_role(b, rel->b, java_b, SLOT(java_update_b()), SLOT(java_default_b()),
                    SLOT(java_unmapped_b()), SLOT(java_edit_annotation_b()));
 
@@ -330,20 +335,20 @@ RelationDialog::RelationDialog(RelationData * r)
     // Php
     //
 
-    vtab = new Q3VBox(this);
+    vtab = new VVBox(this);
     phptab = vtab;
     vtab->setMargin(5);
 
     // A
-    bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab);
+    vtab->addWidget(bg = new GridBox(2, vtab, ina));
     init_php_role(a, rel->a, bg, SLOT(php_update_a()),
                   SLOT(php_default_a()), SLOT(php_unmapped_a()));
 
     // B
-    htab = new Q3HBox(vtab);	// to have a vertical margin
+    vtab->addWidget(htab = new HHBox(vtab));	// to have a vertical margin
     htab->setMargin(5);
 
-    php_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
+    vtab->addWidget(php_b = new GridBox(2, vtab, inb));
     init_php_role(b, rel->b, php_b, SLOT(php_update_b()),
                   SLOT(php_default_b()), SLOT(php_unmapped_b()));
 
@@ -356,20 +361,20 @@ RelationDialog::RelationDialog(RelationData * r)
     // Python
     //
 
-    vtab = new Q3VBox(this);
+    vtab = new VVBox(this);
     pythontab = vtab;
     vtab->setMargin(5);
 
     // A
-    bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab);
+    vtab->addWidget(bg = new GridBox(2, vtab, ina));
     init_python_role(a, rel->a, rel->get_start_class(), bg, SLOT(python_update_a()),
                      SLOT(python_default_a()), SLOT(python_unmapped_a()));
 
     // B
-    htab = new Q3HBox(vtab);	// to have a vertical margin
+    vtab->addWidget(htab = new HHBox(vtab));	// to have a vertical margin
     htab->setMargin(5);
 
-    python_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
+    vtab->addWidget(python_b = new GridBox(2, vtab, inb));
     init_python_role(b, rel->b, rel->get_end_class(),
                      python_b, SLOT(python_update_b()),
                      SLOT(python_default_b()), SLOT(python_unmapped_b()));
@@ -382,12 +387,12 @@ RelationDialog::RelationDialog(RelationData * r)
     //
     // IDL
     //
-    vtab = new Q3VBox(this);
+    vtab = new VVBox(this);
     idltab = vtab;
     vtab->setMargin(5);
 
     // A
-    bg = new Q3GroupBox(2, Qt::Horizontal, ina, vtab);
+    vtab->addWidget(bg = new GridBox(2, vtab, ina));
 
     ClassData * start_data = (ClassData *) rel->get_start_class()->get_data();
     ClassData * end_data = (ClassData *) rel->get_end_class()->get_data();
@@ -396,8 +401,8 @@ RelationDialog::RelationDialog(RelationData * r)
          == "valuetype") &&
         (ClassDialog::idl_stereotype(end_data->get_stereotype())
          == "valuetype")) {
-        new QLabel(bg);
-        a.idl_truncatable_inheritance_cb = new QCheckBox("truncatable", bg);
+        bg->addWidget(new QLabel(bg));
+        bg->addWidget(a.idl_truncatable_inheritance_cb = new QCheckBox("truncatable", bg));
 
         if (rel->a.idl_truncatable_inheritance)
             a.idl_truncatable_inheritance_cb->setChecked(TRUE);
@@ -415,10 +420,10 @@ RelationDialog::RelationDialog(RelationData * r)
                   SLOT(idl_default_a()), SLOT(idl_unmapped_a()));
 
     // B
-    htab = new Q3HBox(vtab);	// to have a vertical margin
+    vtab->addWidget(htab = new HHBox(vtab));	// to have a vertical margin
     htab->setMargin(5);
 
-    idl_b = new Q3GroupBox(2, Qt::Horizontal, inb, vtab);
+    vtab->addWidget(idl_b = new GridBox(2, vtab, inb));
     b.idl_truncatable_inheritance_cb = 0;
     init_idl_role(b, rel->b, end_data, idl_b, SLOT(idl_update_b()),
                   SLOT(idl_default_b()), SLOT(idl_unmapped_b()));
@@ -432,20 +437,20 @@ RelationDialog::RelationDialog(RelationData * r)
     // USER : list key - value
     //
 
-    vtab = new Q3VBox(this);
-    bg = new Q3GroupBox(1, Qt::Horizontal, ina, vtab);
-    a.kvtable = new KeyValuesTable(rel->get_start(), bg, a.ro);
-    new QLabel(vtab);
-    bg = new Q3GroupBox(1, Qt::Horizontal, inb, vtab);
+    vtab = new VVBox(this);
+    vtab->addWidget(bg = new GridBox(1, vtab, ina));
+    bg->addWidget(a.kvtable = new KeyValuesTable(rel->get_start(), bg, a.ro));
+    vtab->addWidget(new QLabel(vtab));
+    vtab->addWidget(bg = new GridBox(1, vtab, inb));
     b.opt.append(bg);
-    b.kvtable = new KeyValuesTable(rel->get_end(), bg, b.ro);
+    bg->addWidget(b.kvtable = new KeyValuesTable(rel->get_end(), bg, b.ro));
     addTab(vtab, TR("Properties"));
 
     //
 
-    edTypeActivated(edtype->currentItem());
+    edTypeActivated(edtype->currentIndex());
 
-    connect(this, SIGNAL(currentChanged(QWidget *)),
+    connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(update_all_tabs(QWidget *)));
 
     open_dialog(this);
@@ -465,12 +470,12 @@ RelationDialog::~RelationDialog()
 
 void RelationDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
-                                   Q3GroupBox * bg, BrowserClass * cl1)
+                                   GridBox * bg, BrowserClass * cl1)
 {
     bool roleb = (&role == &b);
     QString stereotype = ((ClassData *) cl1->get_data())->get_stereotype();
@@ -496,9 +501,9 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
     role.idl_in_union = (st == "union");
     role.idl_in_valuetype = (st == "valuetype");
 
-    lbl = new QLabel(TR("name : "), bg);
+    bg->addWidget(lbl = new QLabel(TR("name : "), bg));
     role.opt.append(lbl);
-    role.edrole = new LineEdit(rel.role, bg);
+    bg->addWidget(role.edrole = new LineEdit(rel.role, bg));
     role.edrole->setReadOnly(visit);
     role.opt.append(role.edrole);
 
@@ -507,31 +512,33 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
         groupb.append(lbl);
     }
 
-    Q3HBox * htab;
+    HHBox * htab;
     QSizePolicy sp;
 
-    role.opt.append(new QLabel(TR("multiplicity : "), bg));
-    htab = new Q3HBox(bg);
+    role.opt.append(lbl = new QLabel(TR("multiplicity : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(htab = new HHBox(bg));
     htab->setMargin(0);
-    role.multiplicity = new Q3ComboBox(!visit, htab);
+    htab->addWidget(role.multiplicity = new QComboBox(htab));
+    role.multiplicity->setEditable(!visit);
     sp = role.multiplicity->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     role.multiplicity->setSizePolicy(sp);
     role.previous_multiplicity = (const char *) rel.multiplicity;
-    role.multiplicity->insertItem(rel.multiplicity);
+    role.multiplicity->addItem(rel.multiplicity);
 
     if (!visit) {
-        role.multiplicity->insertItem("1");
-        role.multiplicity->insertItem("0..1");
-        role.multiplicity->insertItem("*");
-        role.multiplicity->insertItem("1..*");
+        role.multiplicity->addItem("1");
+        role.multiplicity->addItem("0..1");
+        role.multiplicity->addItem("*");
+        role.multiplicity->addItem("1..*");
     }
 
     role.opt.append(role.multiplicity);
 
-    lbl = new QLabel(TR("   initial value : "), htab);
+    htab->addWidget(lbl = new QLabel(TR("   initial value : "), htab));
     role.opt.append(lbl);
-    role.edinit = new LineEdit(rel.init_value, htab);
+    htab->addWidget(role.edinit = new LineEdit(rel.init_value, htab));
     role.opt.append(role.edinit);
 
     if (roleb) {
@@ -542,7 +549,8 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
     if (visit)
         role.edinit->setReadOnly(TRUE);
     else {
-        SmallPushButton * bt = new SmallPushButton(TR("Editor"), htab);
+        SmallPushButton * bt;
+        htab->addWidget(bt = new SmallPushButton(TR("Editor"), htab));
 
         connect(bt, SIGNAL(clicked()),
                 this, (roleb) ? SLOT(edit_init_b()) : SLOT(edit_init_a()));
@@ -551,46 +559,48 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
             groupb.append(bt);
     }
 
-    (void) new QLabel(bg);
-    htab = new Q3HBox(bg);
+    bg->addWidget( new QLabel(bg));
+    bg->addWidget(htab = new HHBox(bg));
     htab->setMargin(0);
 
-    Q3ButtonGroup * vg = role.uml_visibility.init(htab, rel.uml_visibility, TRUE);
+    BButtonGroup * vg;
+    htab->addWidget(vg = role.uml_visibility.init(htab, rel.uml_visibility, TRUE));
 
     if (visit)
         vg ->setEnabled(FALSE);
     else if (roleb)
         groupb.append(vg);
 
-    Q3ButtonGroup * bg2 = new Q3ButtonGroup(7, Qt::Horizontal, QString(), htab);
+    BButtonGroup * bg2;
+    htab->addWidget(bg2 = new BButtonGroup(7, Qt::Horizontal, QString(), htab));
 
     role.opt.append(bg2);
 
     if (roleb)
         groupb.append(bg2);
 
-    role.classrelation_cb = new QCheckBox("static", bg2);
+    bg2->addWidget(role.classrelation_cb = new QCheckBox("static", bg2));
 
     if (rel.isa_class_relation)
         role.classrelation_cb->setChecked(TRUE);
 
     role.classrelation_cb->setDisabled(visit);
 
-    role.volatile_cb = new QCheckBox("volatile", bg2);
+    bg2->addWidget(role.volatile_cb = new QCheckBox("volatile", bg2));
 
     if (rel.isa_volatile_relation)
         role.volatile_cb->setChecked(TRUE);
 
     role.volatile_cb->setDisabled(visit);
 
-    role.constrelation_cb = new QCheckBox(TR("read-only"), bg2);
+    bg2->addWidget(role.constrelation_cb = new QCheckBox(TR("read-only"), bg2));
 
     if (rel.isa_const_relation)
         role.constrelation_cb->setChecked(TRUE);
 
     role.constrelation_cb->setDisabled(visit);
 
-    role.derived_cb = new QCheckBox(TR("derived"), bg2);
+    bg2->addWidget(role.derived_cb = new QCheckBox(TR("derived"), bg2));
 
     if (rel.is_derived)
         role.derived_cb->setChecked(TRUE);
@@ -600,34 +610,34 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
             (roleb) ? SLOT(derived_changed_b(bool))
             : SLOT(derived_changed_a(bool)));
 
-    role.derivedunion_cb = new QCheckBox("union", bg2);
+    bg2->addWidget(role.derivedunion_cb = new QCheckBox("union", bg2));
 
     if (rel.is_derivedunion)
         role.derivedunion_cb->setChecked(TRUE);
 
     role.derivedunion_cb->setDisabled(visit || !role.derived_cb->isChecked());
 
-    role.ordered_cb = new QCheckBox(TR("ordered"), bg2);
+    bg2->addWidget(role.ordered_cb = new QCheckBox(TR("ordered"), bg2));
 
     if (rel.is_ordered)
         role.ordered_cb->setChecked(TRUE);
 
     role.ordered_cb->setDisabled(visit);
 
-    role.unique_cb = new QCheckBox("unique", bg2);
+    bg2->addWidget(role.unique_cb = new QCheckBox("unique", bg2));
 
     if (rel.is_unique)
         role.unique_cb->setChecked(TRUE);
 
     role.unique_cb->setDisabled(visit);
 
-    lbl = new QLabel(TR("description : "), bg);
+    bg->addWidget(lbl = new QLabel(TR("description : "), bg));
 
     if (roleb)
         groupb.append(lbl);
 
-    htab = new Q3HBox(bg);
-    role.comment = new MultiLineEdit(htab);
+    bg->addWidget(htab = new HHBox(bg));
+    htab->addWidget(role.comment = new MultiLineEdit(htab));
     role.comment->setText(rel.comment);
     QFont font = role.comment->font();
 
@@ -640,13 +650,16 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
     if (visit)
         role.comment->setReadOnly(TRUE);
     else {
-        Q3VBox * vtab = new Q3VBox(htab);
-        SmallPushButton * bt1 = new SmallPushButton(TR("Editor"), vtab);
+        VVBox * vtab;
+        htab->addWidget(vtab = new VVBox(htab));
+        SmallPushButton * bt1;
+        vtab->addWidget(bt1 = new SmallPushButton(TR("Editor"), vtab));
 
         connect(bt1, SIGNAL(clicked()), this,
                 (roleb) ? SLOT(edit_description_b()) : SLOT(edit_description_a()));
 
-        SmallPushButton * bt2 = new SmallPushButton(TR("Default"), vtab);
+        SmallPushButton * bt2;
+        vtab->addWidget(bt2 = new SmallPushButton(TR("Default"), vtab));
 
         connect(bt2, SIGNAL(clicked()), this,
                 (roleb) ? SLOT(default_description_b()) : SLOT(default_description_a()));
@@ -659,21 +672,23 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
         }
     }
 
-    lbl = new QLabel(TR("constraint : "), bg);
+    bg->addWidget(lbl = new QLabel(TR("constraint : "), bg));
 
     if (roleb)
         groupb.append(lbl);
 
-    htab = new Q3HBox(bg);
-    role.constraint = new MultiLineEdit(htab);
+    bg->addWidget(htab = new HHBox(bg));
+    htab->addWidget(role.constraint = new MultiLineEdit(htab));
     role.constraint->setText(rel.constraint);
     role.constraint->setFont(font);
 
     if (visit)
         role.constraint->setReadOnly(TRUE);
     else {
-        Q3VBox * vtab = new Q3VBox(htab);
-        SmallPushButton * bt1 = new SmallPushButton(TR("Editor"), vtab);
+        VVBox * vtab;
+        htab->addWidget(vtab = new VVBox(htab));
+        SmallPushButton * bt1;
+        vtab->addWidget(bt1 = new SmallPushButton(TR("Editor"), vtab));
 
         connect(bt1, SIGNAL(clicked()), this,
                 (roleb) ? SLOT(edit_constraint_b()) : SLOT(edit_constraint_a()));
@@ -687,8 +702,8 @@ void RelationDialog::init_uml_role(RoleDialog & role, const RoleData & rel,
 
 void RelationDialog::default_defs_if_needed(UmlCode prev_type)
 {
-    QString am = a.multiplicity->currentText().stripWhiteSpace();
-    QString bm = b.multiplicity->currentText().stripWhiteSpace();
+    QString am = a.multiplicity->currentText().trimmed();
+    QString bm = b.multiplicity->currentText().trimmed();
 
     if ((prev_type != current_type) || (am != a.previous_multiplicity)) {
         default_a_cpp_if_needed(prev_type, a.previous_multiplicity, am);
@@ -718,7 +733,7 @@ void RelationDialog::default_description_a()
 
 void RelationDialog::edit_description_a()
 {
-    edit(a.comment->text(), a.edrole->text().stripWhiteSpace() + "_description",
+    edit(a.comment->text(), a.edrole->text().trimmed() + "_description",
          &rel->a, TxtEdit, this, (post_edit) post_edit_description_a, edits);
 }
 
@@ -734,7 +749,7 @@ void RelationDialog::default_description_b()
 
 void RelationDialog::edit_description_b()
 {
-    edit(b.comment->text(), a.edrole->text().stripWhiteSpace() + "_description",
+    edit(b.comment->text(), a.edrole->text().trimmed() + "_description",
          &rel->b, TxtEdit, this, (post_edit) post_edit_description_b, edits);
 }
 
@@ -745,7 +760,7 @@ void RelationDialog::post_edit_description_b(RelationDialog * d, QString s)
 
 void RelationDialog::edit_constraint_a()
 {
-    edit(a.constraint->text(), a.edrole->text().stripWhiteSpace() + "_constraint",
+    edit(a.constraint->text(), a.edrole->text().trimmed() + "_constraint",
          &rel->a, TxtEdit, this, (post_edit) post_edit_constraint_a, edits);
 }
 
@@ -756,7 +771,7 @@ void RelationDialog::post_edit_constraint_a(RelationDialog * d, QString s)
 
 void RelationDialog::edit_constraint_b()
 {
-    edit(b.constraint->text(), a.edrole->text().stripWhiteSpace() + "_constraint",
+    edit(b.constraint->text(), a.edrole->text().trimmed() + "_constraint",
          &rel->b, TxtEdit, this, (post_edit) post_edit_constraint_b, edits);
 }
 
@@ -776,22 +791,23 @@ void RelationDialog::derived_changed_b(bool on)
 }
 
 void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
-                                   Q3GroupBox * bg,
+                                   GridBox * bg,
                                    const char * cpp_update_slot,
                                    const char * cpp_default_slot,
                                    const char * cpp_unmapped_slot,
                                    const char * cpp_include_in_header_slot)
 {
-    Q3HBox * htab;
+    HHBox * htab;
 
-    new QLabel(TR("Visibility : "), bg);
-    htab = new Q3HBox(bg);
-    role.cpp_visibility.init(htab, rel.cpp_visibility, FALSE, 0, TR("follow uml"))
-    ->setEnabled(!visit);
+    bg->addWidget(new QLabel(TR("Visibility : "), bg));
+    bg->addWidget(htab = new HHBox(bg));
+    BButtonGroup* bg2;
+    htab->addWidget(bg2 = role.cpp_visibility.init(htab, rel.cpp_visibility, FALSE, 0, TR("follow uml")));
+    bg2->setEnabled(!visit);
 
-    new QLabel(" ", htab);
+    htab->addWidget(new QLabel(" ", htab));
 
-    role.mutable_cb = new QCheckBox("mutable", htab);
+    htab->addWidget(role.mutable_cb = new QCheckBox("mutable", htab));
     role.opt.append(role.mutable_cb);
 
     if (rel.cpp_mutable)
@@ -802,8 +818,10 @@ void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
     else
         connect(role.mutable_cb, SIGNAL(toggled(bool)), this, cpp_update_slot);
 
-    role.opt.append(new QLabel(TR("Declaration : "), bg));
-    role.edcppdecl = new MultiLineEdit(bg);
+    QLabel* lbl;
+    role.opt.append(lbl = new QLabel(TR("Declaration : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(role.edcppdecl = new MultiLineEdit(bg));
     QFont font = role.edcppdecl->font();
 
     if (! hasCodec())
@@ -819,42 +837,42 @@ void RelationDialog::init_cpp_role(RoleDialog & role, const RoleData & rel,
     else
         connect(role.edcppdecl, SIGNAL(textChanged()), this, cpp_update_slot);
 
-    new QLabel(TR("Result after\nsubstitution : "), bg);
-    role.showcppdecl = new MultiLineEdit(bg);
+    bg->addWidget(new QLabel(TR("Result after\nsubstitution : "), bg));
+    bg->addWidget(role.showcppdecl = new MultiLineEdit(bg));
     role.showcppdecl->setReadOnly(TRUE);
     role.showcppdecl->setFont(font);
 
     if (! visit) {
-        new QLabel("", bg);
-        htab = new Q3HBox(bg);
+        bg->addWidget(new QLabel("", bg));
+        bg->addWidget(htab = new HHBox(bg));
         htab->setMargin(5);
 
-        role.cpp_default_decl_bt = new QPushButton(TR("Default declaration"), htab);
+        htab->addWidget(role.cpp_default_decl_bt = new QPushButton(TR("Default declaration"), htab));
         connect(role.cpp_default_decl_bt, SIGNAL(clicked()),
                 this, cpp_default_slot);
 
         if (cpp_include_in_header_slot != 0) {
-            role.cpp_include_in_header = new QPushButton(TR("#include in header"), htab);
+            htab->addWidget(role.cpp_include_in_header = new QPushButton(TR("#include in header"), htab));
             connect(role.cpp_include_in_header , SIGNAL(clicked()),
                     this, cpp_include_in_header_slot);
         }
 
-        role.cpp_unmapped_decl_bt = new QPushButton(TR("Not generated in C++"), htab);
+        htab->addWidget(role.cpp_unmapped_decl_bt = new QPushButton(TR("Not generated in C++"), htab));
         connect(role.cpp_unmapped_decl_bt, SIGNAL(clicked()),
                 this, cpp_unmapped_slot);
     }
 }
 
 void RelationDialog::init_java_role(RoleDialog & role, const RoleData & rel,
-                                    Q3GroupBox * bg,
+                                    GridBox * bg,
                                     const char * java_update_slot,
                                     const char * java_default_slot,
                                     const char * java_unmapped_slot,
                                     const char * java_edit_annotation)
 {
     if (! role.java_undef) {
-        new QLabel("", bg);
-        role.transient_cb = new QCheckBox("transient", bg);
+        bg->addWidget(new QLabel("", bg));
+        bg->addWidget(role.transient_cb = new QCheckBox("transient", bg));
         role.opt.append(role.transient_cb);
 
         if (rel.java_transient)
@@ -866,8 +884,10 @@ void RelationDialog::init_java_role(RoleDialog & role, const RoleData & rel,
             connect(role.transient_cb, SIGNAL(toggled(bool)), this, java_update_slot);
     }
 
-    role.opt.append(new QLabel(TR("Declaration : "), bg));
-    role.edjavadecl = new MultiLineEdit(bg);
+    QLabel* lbl;
+    role.opt.append(lbl = new QLabel(TR("Declaration : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(role.edjavadecl = new MultiLineEdit(bg));
     role.opt.append(role.edjavadecl);
     QFont font = role.edjavadecl->font();
 
@@ -883,41 +903,45 @@ void RelationDialog::init_java_role(RoleDialog & role, const RoleData & rel,
     else
         connect(role.edjavadecl, SIGNAL(textChanged()), this, java_update_slot);
 
-    role.opt.append(new QLabel(TR("Result after\nsubstitution : "), bg));
-    role.showjavadecl = new MultiLineEdit(bg);
+    role.opt.append(lbl = new QLabel(TR("Result after\nsubstitution : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(role.showjavadecl = new MultiLineEdit(bg));
     role.opt.append(role.showjavadecl);
     role.showjavadecl->setReadOnly(TRUE);
     role.showjavadecl->setFont(font);
 
-    new QLabel("", bg);
-    Q3HBox * htab = new Q3HBox(bg);
+    bg->addWidget(new QLabel("", bg));
+    HHBox * htab;
+    bg->addWidget(htab = new HHBox(bg));
     htab->setMargin(5);
 
     if (! visit) {
-        role.java_default_decl_bt = new QPushButton(TR("Default declaration"), htab);
+        htab->addWidget(role.java_default_decl_bt = new QPushButton(TR("Default declaration"), htab));
         connect(role.java_default_decl_bt, SIGNAL(clicked()),
                 this, java_default_slot);
-        role.java_unmapped_decl_bt = new QPushButton(TR("Not generated in Java"), htab);
+        htab->addWidget(role.java_unmapped_decl_bt = new QPushButton(TR("Not generated in Java"), htab));
         connect(role.java_unmapped_decl_bt, SIGNAL(clicked()),
                 this, java_unmapped_slot);
     }
 
     role.javaannotation = (const char *) rel.java_annotation;
-    role.editjavaannotation =
+    htab->addWidget(role.editjavaannotation =
         new QPushButton((visit) ? TR("Show annotation") : TR("Edit annotation"),
-                        htab);
+                        htab));
     connect(role.editjavaannotation, SIGNAL(clicked()),
             this, java_edit_annotation);
 }
 
 void RelationDialog::init_php_role(RoleDialog & role, const RoleData & rel,
-                                   Q3GroupBox * bg,
+                                   GridBox * bg,
                                    const char * php_update_slot,
                                    const char * php_default_slot,
                                    const char * php_unmapped_slot)
 {
-    role.opt.append(new QLabel(TR("Declaration : "), bg));
-    role.edphpdecl = new MultiLineEdit(bg);
+    QLabel* lbl;
+    role.opt.append(lbl = new QLabel(TR("Declaration : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(role.edphpdecl = new MultiLineEdit(bg));
     role.opt.append(role.edphpdecl);
     QFont font = role.edphpdecl->font();
 
@@ -933,28 +957,30 @@ void RelationDialog::init_php_role(RoleDialog & role, const RoleData & rel,
     else
         connect(role.edphpdecl, SIGNAL(textChanged()), this, php_update_slot);
 
-    role.opt.append(new QLabel(TR("Result after\nsubstitution : "), bg));
-    role.showphpdecl = new MultiLineEdit(bg);
+    role.opt.append(lbl = new QLabel(TR("Result after\nsubstitution : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(role.showphpdecl = new MultiLineEdit(bg));
     role.opt.append(role.showphpdecl);
     role.showphpdecl->setReadOnly(TRUE);
     role.showphpdecl->setFont(font);
 
-    new QLabel("", bg);
-    Q3HBox * htab = new Q3HBox(bg);
+    bg->addWidget(new QLabel("", bg));
+    HHBox * htab;
+    bg->addWidget(htab = new HHBox(bg));
     htab->setMargin(5);
 
     if (! visit) {
-        role.php_default_decl_bt = new QPushButton(TR("Default declaration"), htab);
+        htab->addWidget(role.php_default_decl_bt = new QPushButton(TR("Default declaration"), htab));
         connect(role.php_default_decl_bt, SIGNAL(clicked()),
                 this, php_default_slot);
-        role.php_unmapped_decl_bt = new QPushButton(TR("Not generated in Php"), htab);
+        htab->addWidget(role.php_unmapped_decl_bt = new QPushButton(TR("Not generated in Php"), htab));
         connect(role.php_unmapped_decl_bt, SIGNAL(clicked()),
                 this, php_unmapped_slot);
     }
 }
 
 void RelationDialog::init_python_role(RoleDialog & role, const RoleData & rel,
-                                      BrowserClass * cl, Q3GroupBox * bg,
+                                      BrowserClass * cl, GridBox * bg,
                                       const char * python_update_slot,
                                       const char * python_default_slot,
                                       const char * python_unmapped_slot)
@@ -962,8 +988,10 @@ void RelationDialog::init_python_role(RoleDialog & role, const RoleData & rel,
     role.python_self =
         BrowserOperation::python_init_self(cl) + ".";
 
-    role.opt.append(new QLabel(TR("Declaration : "), bg));
-    role.edpythondecl = new MultiLineEdit(bg);
+    QLabel* lbl;
+    role.opt.append(lbl = new QLabel(TR("Declaration : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(role.edpythondecl = new MultiLineEdit(bg));
     role.opt.append(role.edpythondecl);
     QFont font = role.edpythondecl->font();
 
@@ -979,36 +1007,41 @@ void RelationDialog::init_python_role(RoleDialog & role, const RoleData & rel,
     else
         connect(role.edpythondecl, SIGNAL(textChanged()), this, python_update_slot);
 
-    role.opt.append(new QLabel(TR("Result after\nsubstitution : "), bg));
-    role.showpythondecl = new MultiLineEdit(bg);
+    role.opt.append(lbl = new QLabel(TR("Result after\nsubstitution : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(role.showpythondecl = new MultiLineEdit(bg));
     role.opt.append(role.showpythondecl);
     role.showpythondecl->setReadOnly(TRUE);
     role.showpythondecl->setFont(font);
 
-    new QLabel("", bg);
-    Q3HBox * htab = new Q3HBox(bg);
+    bg->addWidget(new QLabel("", bg));
+    HHBox * htab;
+    bg->addWidget(htab = new HHBox(bg));
     htab->setMargin(5);
 
     if (! visit) {
-        role.python_default_decl_bt = new QPushButton(TR("Default declaration"), htab);
+        htab->addWidget(role.python_default_decl_bt = new QPushButton(TR("Default declaration"), htab));
         connect(role.python_default_decl_bt, SIGNAL(clicked()),
                 this, python_default_slot);
-        role.python_unmapped_decl_bt = new QPushButton(TR("Not generated in Python"), htab);
+        htab->addWidget(role.python_unmapped_decl_bt = new QPushButton(TR("Not generated in Python"), htab));
         connect(role.python_unmapped_decl_bt, SIGNAL(clicked()),
                 this, python_unmapped_slot);
     }
 }
 
 void RelationDialog::init_idl_role(RoleDialog & role, const RoleData & rel,
-                                   ClassData * cld, Q3GroupBox * bg,
+                                   ClassData * cld, GridBox * bg,
                                    const char * idl_update_slot,
                                    const char * idl_default_slot,
                                    const char * idl_unmapped_slot)
 {
+    QLabel* lbl;
     if (role.idl_in_union) {
-        role.opt.append(new QLabel("Case : ", bg));
-        role.edcase = new Q3ComboBox(!visit, bg);
-        role.edcase->insertItem(RelationData::get_idlcase(rel));
+        role.opt.append(lbl = new QLabel("Case : ", bg));
+        bg->addWidget(lbl);
+        bg->addWidget(role.edcase = new QComboBox( bg));
+        role.edcase->setEditable(!visit);
+        role.edcase->addItem(RelationData::get_idlcase(rel));
 
         if (!visit) {
             role.edcase->setAutoCompletion(completion());
@@ -1018,23 +1051,24 @@ void RelationDialog::init_idl_role(RoleDialog & role, const RoleData & rel,
             if (switch_type.type != 0) {
                 switch_type.type->children(role.enums, UmlAttribute);
                 role.enums.names(role.enum_names);
-                role.edcase->insertStringList(role.enum_names);
+                role.edcase->addItems(role.enum_names);
             }
         }
 
-        role.edcase->setCurrentItem(0);
+        role.edcase->setCurrentIndex(0);
 
         QSizePolicy sp = role.edcase->sizePolicy();
 
-        sp.setHorData(QSizePolicy::Expanding);
+        sp.setHorizontalPolicy(QSizePolicy::Expanding);
         role.edcase->setSizePolicy(sp);
 
         if (!visit)
             connect(role.edcase, SIGNAL(activated(int)), this, idl_update_slot);
     }
 
-    role.opt.append(new QLabel(TR("Declaration : "), bg));
-    role.edidldecl = new MultiLineEdit(bg);
+    role.opt.append(lbl = new QLabel(TR("Declaration : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(role.edidldecl = new MultiLineEdit(bg));
     role.opt.append(role.edidldecl);
     role.edidldecl->setText(rel.idl_decl);
     QFont font = role.edidldecl->font();
@@ -1050,20 +1084,22 @@ void RelationDialog::init_idl_role(RoleDialog & role, const RoleData & rel,
     else
         connect(role.edidldecl, SIGNAL(textChanged()), this, idl_update_slot);
 
-    role.opt.append(new QLabel(TR("Result after\nsubstitution : "), bg));
-    role.showidldecl = new MultiLineEdit(bg);
+    role.opt.append(lbl = new QLabel(TR("Result after\nsubstitution : "), bg));
+    bg->addWidget(lbl);
+    bg->addWidget(role.showidldecl = new MultiLineEdit(bg));
     role.opt.append(role.showidldecl);
     role.showidldecl->setReadOnly(TRUE);
     role.showidldecl->setFont(font);
 
     if (! visit) {
-        new QLabel("", bg);
-        Q3HBox * htab = new Q3HBox(bg);
+        bg->addWidget(new QLabel("", bg));
+        HHBox * htab;
+        bg->addWidget(htab = new HHBox(bg));
         htab->setMargin(5);
-        role.idl_default_decl_bt = new QPushButton(TR("Default declaration"), htab);
+        htab->addWidget(role.idl_default_decl_bt = new QPushButton(TR("Default declaration"), htab));
         connect(role.idl_default_decl_bt, SIGNAL(clicked()),
                 this, idl_default_slot);
-        role.idl_unmapped_decl_bt = new QPushButton(TR("Not generated in Idl"), htab);
+        htab->addWidget(role.idl_unmapped_decl_bt = new QPushButton(TR("Not generated in Idl"), htab));
         connect(role.idl_unmapped_decl_bt, SIGNAL(clicked()),
                 this, idl_unmapped_slot);
     }
@@ -1179,12 +1215,12 @@ void RelationDialog::edTypeActivated(int r)
 
         if (!visit) {
             edstereotype->clear();
-            edstereotype->insertItem("");
-            edstereotype->insertStringList(rel->get_start_class()
+            edstereotype->addItem("");
+            edstereotype->addItems(rel->get_start_class()
                                            ->default_stereotypes(type,
                                                    rel->get_end_class()));
-            edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlRelations));
-            edstereotype->setCurrentItem(0);
+            edstereotype->addItems(ProfiledStereotypes::defaults(UmlRelations));
+            edstereotype->setCurrentIndex(0);
 
             default_defs_if_needed(t);
         }
@@ -1197,15 +1233,15 @@ void RelationDialog::edTypeActivated(int r)
 
 void RelationDialog::menu_assoc()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = list.findIndex(edassociation->currentText().stripWhiteSpace());
+    int index = list.indexOf(edassociation->currentText().trimmed());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -1213,15 +1249,18 @@ void RelationDialog::menu_assoc()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlClass) && !bn->deletedp())
-            m.insertItem(TR("Choose class selected in browser"), 1);
+            MenuFactory::addItem(m, TR("Choose class selected in browser"), 1);
         else
             bn = 0;
 
-        m.insertItem(TR("Create class and choose it"), 2);
+        MenuFactory::addItem(m, TR("Create class and choose it"), 2);
     }
 
     if (!visit || (index != -1) || (bn != 0)) {
-        switch (m.exec(QCursor::pos())) {
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        switch (retAction->data().toInt()) {
         case 0:
             nodes.at(index)->select_in_browser();
             break;
@@ -1238,7 +1277,7 @@ void RelationDialog::menu_assoc()
         case 1: {
             QString s = bn->full_name(TRUE);
 
-            if ((index = list.findIndex(s)) == -1) {
+            if ((index = list.indexOf(s)) == -1) {
                 // new class, may be created through an other dialog
                 index = 0;
                 QStringList::Iterator iter = list.begin();
@@ -1251,28 +1290,30 @@ void RelationDialog::menu_assoc()
 
                 nodes.insert((unsigned) index, bn);
                 list.insert(iter, s);
-                edassociation->insertItem(s, index + offset);
+                edassociation->insertItem(index + offset,s);
             }
         }
 
-        edassociation->setCurrentItem(index + offset);
+        edassociation->setCurrentIndex(index + offset);
         break;
 
         default:
             break;
         }
+        }
     }
 }
 
-void RelationDialog::update_all_tabs(QWidget * w)
+void RelationDialog::update_all_tabs(int index)
 {
+    QWidget * w = m_tabWidget->widget(index);
     if (!visit)
         default_defs_if_needed(current_type);
 
     if (current_type == UmlDependency) {
-        QString s = a.edcppdecl->text().stripWhiteSpace();
+        QString s = a.edcppdecl->text().trimmed();
 
-        if (GenerationSettings::cpp_relationattribute_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()))
+        if (GenerationSettings::cpp_relationattribute_stereotype(fromUnicode(edstereotype->currentText().trimmed()))
             != "friend") {
             if (! visit) {
                 a.cpp_include_in_header->show();
@@ -1307,8 +1348,8 @@ void RelationDialog::update_all_tabs(QWidget * w)
         a.cpp_default_decl_bt->setEnabled(TRUE);
     }
 
-    a.edrole->setText(a.edrole->text().stripWhiteSpace());
-    b.edrole->setText(b.edrole->text().stripWhiteSpace());
+    a.edrole->setText(a.edrole->text().trimmed());
+    b.edrole->setText(b.edrole->text().trimmed());
 
     if (w == umltab) {
         if (! visit)
@@ -1353,7 +1394,7 @@ void RelationDialog::update_all_tabs(QWidget * w)
 
 void RelationDialog::edit_init_a()
 {
-    edit(a.edinit->text(), a.edrole->text().stripWhiteSpace() + "_initialization",
+    edit(a.edinit->text(), a.edrole->text().trimmed() + "_initialization",
          &rel->a, TxtEdit, this, (post_edit) post_edit_init_a, edits);
 }
 
@@ -1364,7 +1405,7 @@ void RelationDialog::post_edit_init_a(RelationDialog * d, QString s)
 
 void RelationDialog::edit_init_b()
 {
-    edit(b.edinit->text(), b.edrole->text().stripWhiteSpace() + "_initialization",
+    edit(b.edinit->text(), b.edrole->text().trimmed() + "_initialization",
          &rel->b, TxtEdit, this, (post_edit) post_edit_init_b, edits);
 }
 
@@ -1388,7 +1429,8 @@ void RelationDialog::cpp_update(RoleDialog & role, BrowserClass * cl, BrowserNod
         //	const char * p = role.edcppdecl->text();
         // because the QString is immediatly destroyed !
         QString def = role.edcppdecl->text();
-        const char * p = def;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
 
         while (*p) {
             if (!strncmp(p, "${type}", 7)) {
@@ -1418,7 +1460,8 @@ void RelationDialog::cpp_update(RoleDialog & role, BrowserClass * cl, BrowserNod
         //	const char * p = role.edcppdecl->text();
         // because the QString is immediatly destroyed !
         QString def = role.edcppdecl->text();
-        const char * p = def;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
         const char * pp = 0;
         QString indent = "";
 
@@ -1490,18 +1533,18 @@ void RelationDialog::cpp_update(RoleDialog & role, BrowserClass * cl, BrowserNod
             else if (!strncmp(p, "${multiplicity}", 15)) {
                 p += 15;
 
-                QString m = role.multiplicity->currentText().stripWhiteSpace();
+                QString m = role.multiplicity->currentText().trimmed();
 
-                s += (*m == '[') ? m : QString("[") + m + "]";
+                s += (m.at(0) == '[') ? m : QString("[") + m + "]";
             }
             else if (!strncmp(p, "${stereotype}", 13)) {
                 p += 13;
-                s += GenerationSettings::cpp_relationattribute_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+                s += GenerationSettings::cpp_relationattribute_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
             }
             else if (!strncmp(p, "${h_value}", 10)) {
                 p += 10;
 
-                if (!role.edinit->text().stripWhiteSpace().isEmpty() &&
+                if (!role.edinit->text().trimmed().isEmpty() &&
                     role.classrelation_cb->isChecked()) {
                     if (role.edinit->text().at(0) == QChar('='))
                         s += " ";
@@ -1513,7 +1556,7 @@ void RelationDialog::cpp_update(RoleDialog & role, BrowserClass * cl, BrowserNod
                 p += 8;
             else if (!strncmp(p, "${association}", 14)) {
                 p += 14;
-                s += GenerationSettings::cpp_type(type(edassociation->currentText().stripWhiteSpace(),
+                s += GenerationSettings::cpp_type(type(edassociation->currentText().trimmed(),
                                                        list, nodes));
             }
             else if (*p == '\n') {
@@ -1550,11 +1593,11 @@ void RelationDialog::cpp_default_a()
         a.edcppdecl->setText(QString());
     else if (RelationData::isa_association(current_type))
         a.edcppdecl->setText(GenerationSettings::cpp_default_rel_decl(current_type,
-                             a.multiplicity->currentText().stripWhiteSpace()));
+                             a.multiplicity->currentText().trimmed()));
     else {
         if (current_type != UmlDependency)
             a.edcppdecl->setText("${type}");
-        else if (GenerationSettings::cpp_relationattribute_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()))
+        else if (GenerationSettings::cpp_relationattribute_stereotype(fromUnicode(edstereotype->currentText().trimmed()))
                  != "friend")
             a.edcppdecl->setText(TR("#include in source"));
         else
@@ -1563,7 +1606,7 @@ void RelationDialog::cpp_default_a()
                                  " ${type};");
 
         if (! visit)
-            a.cpp_unmapped_decl_bt->setOn(FALSE);
+            a.cpp_unmapped_decl_bt->setChecked(FALSE);
     }
 
     cpp_update_a();
@@ -1593,7 +1636,7 @@ void RelationDialog::cpp_include_in_header()
     a.edcppdecl->setText(TR("#include in header"));
 
     if (! visit)
-        a.cpp_unmapped_decl_bt->setOn(FALSE);
+        a.cpp_unmapped_decl_bt->setChecked(FALSE);
 
     cpp_update_a();
 }
@@ -1604,7 +1647,7 @@ void RelationDialog::cpp_unmapped_a()
     a.showcppdecl->setText(QString());
 
     if (!RelationData::isa_association(current_type) && !visit)
-        a.cpp_default_decl_bt->setOn(FALSE);
+        a.cpp_default_decl_bt->setChecked(FALSE);
 }
 
 void RelationDialog::cpp_default_b()
@@ -1613,7 +1656,7 @@ void RelationDialog::cpp_default_b()
         b.edcppdecl->setText(QString());
     else
         b.edcppdecl->setText(GenerationSettings::cpp_default_rel_decl(UmlAssociation,
-                             b.multiplicity->currentText().stripWhiteSpace()));
+                             b.multiplicity->currentText().trimmed()));
 
     cpp_update_b();
 }
@@ -1651,7 +1694,8 @@ void RelationDialog::java_update(RoleDialog & role, BrowserClass * cl, BrowserNo
             //	const char * p = role.edjavadecl->text();
             // because the QString is immediatly destroyed !
             QString def = role.edjavadecl->text();
-            const char * p = def;
+            QByteArray defArray = def.toLatin1();
+            const char * p = defArray.constData();
 
             while (*p) {
                 if (!strncmp(p, "${type}", 7)) {
@@ -1676,7 +1720,9 @@ void RelationDialog::java_update(RoleDialog & role, BrowserClass * cl, BrowserNo
         //	const char * p = role.edjavadecl->text();
         // because the QString is immediatly destroyed !
         QString def = role.edjavadecl->text();
-        const char * p = def;
+        QByteArray javaAnnotationArray;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
         const char * pp = 0;
         QString indent = "";
 
@@ -1751,14 +1797,14 @@ void RelationDialog::java_update(RoleDialog & role, BrowserClass * cl, BrowserNo
             }
             else if (!strncmp(p, "${multiplicity}", 15)) {
                 p += 15;
-                s += java_multiplicity(role.multiplicity->currentText().stripWhiteSpace());
+                s += java_multiplicity(role.multiplicity->currentText().trimmed());
             }
             else if (!strncmp(p, "${stereotype}", 13)) {
                 p += 13;
-                s += GenerationSettings::java_relationattribute_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+                s += GenerationSettings::java_relationattribute_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
             }
             else if (!strncmp(p, "${value}", 8)) {
-                QString i = role.edinit->text().stripWhiteSpace();
+                QString i = role.edinit->text().trimmed();
 
                 if (!i.isEmpty()) {
                     if (need_equal(p, i, FALSE))
@@ -1771,7 +1817,7 @@ void RelationDialog::java_update(RoleDialog & role, BrowserClass * cl, BrowserNo
             }
             else if (!strncmp(p, "${association}", 14)) {
                 p += 14;
-                s += GenerationSettings::java_type(type(edassociation->currentText().stripWhiteSpace(),
+                s += GenerationSettings::java_type(type(edassociation->currentText().trimmed(),
                                                         list, nodes));
             }
             else if (!strncmp(p, "${@}", 4)) {
@@ -1781,7 +1827,8 @@ void RelationDialog::java_update(RoleDialog & role, BrowserClass * cl, BrowserNo
                     s += "${@}";
                 else if (!role.javaannotation.isEmpty()) {
                     pp = p;
-                    p = role.javaannotation;
+                    javaAnnotationArray = role.javaannotation.toLatin1();
+                    p = javaAnnotationArray.constData();
                 }
             }
             else if (*p == '\n') {
@@ -1796,7 +1843,7 @@ void RelationDialog::java_update(RoleDialog & role, BrowserClass * cl, BrowserNo
                 s += *p++;
         }
 
-        role.editjavaannotation->setEnabled(def.find("${@}") != -1);
+        role.editjavaannotation->setEnabled(def.indexOf("${@}") != -1);
     }
     }
 
@@ -1819,10 +1866,10 @@ void RelationDialog::java_default_a()
     if (a.java_undef)
         a.edjavadecl->setText(QString());
     else if (RelationData::isa_association(current_type))
-        a.edjavadecl->setText(GenerationSettings::java_default_rel_decl(a.multiplicity->currentText().stripWhiteSpace()));
+        a.edjavadecl->setText(GenerationSettings::java_default_rel_decl(a.multiplicity->currentText().trimmed()));
     else {
         a.edjavadecl->setText("${type}");
-        a.java_unmapped_decl_bt->setOn(FALSE);
+        a.java_unmapped_decl_bt->setChecked(FALSE);
     }
 
     java_update_a();
@@ -1853,7 +1900,7 @@ void RelationDialog::java_unmapped_a()
     a.showjavadecl->setText(QString());
 
     if (!RelationData::isa_association(current_type))
-        a.java_default_decl_bt->setOn(FALSE);
+        a.java_default_decl_bt->setChecked(FALSE);
 }
 
 void RelationDialog::java_default_b()
@@ -1861,7 +1908,7 @@ void RelationDialog::java_default_b()
     if (b.java_undef)
         b.edjavadecl->setText(QString());
     else
-        b.edjavadecl->setText(GenerationSettings::java_default_rel_decl(b.multiplicity->currentText().stripWhiteSpace()));
+        b.edjavadecl->setText(GenerationSettings::java_default_rel_decl(b.multiplicity->currentText().trimmed()));
 
     java_update_b();
 }
@@ -1913,7 +1960,8 @@ void RelationDialog::php_update(RoleDialog & role, BrowserClass * cl, BrowserNod
         //	const char * p = role.edphpdecl->text();
         // because the QString is immediatly destroyed !
         QString def = role.edphpdecl->text();
-        const char * p = def;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
 
         while (*p) {
             if (!strncmp(p, "${type}", 7)) {
@@ -1937,7 +1985,8 @@ void RelationDialog::php_update(RoleDialog & role, BrowserClass * cl, BrowserNod
         //	const char * p = role.edphpdecl->text();
         // because the QString is immediatly destroyed !
         QString def = role.edphpdecl->text();
-        const char * p = def;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
         const char * pp = 0;
         QString indent = "";
 
@@ -2007,7 +2056,7 @@ void RelationDialog::php_update(RoleDialog & role, BrowserClass * cl, BrowserNod
                     s += "var ";
             }
             else if (!strncmp(p, "${value}", 8)) {
-                QString i = role.edinit->text().stripWhiteSpace();
+                QString i = role.edinit->text().trimmed();
 
                 if (!i.isEmpty()) {
                     if (need_equal(p, i, FALSE))
@@ -2063,7 +2112,7 @@ void RelationDialog::php_default_a()
         a.edphpdecl->setText(GenerationSettings::php_default_rel_decl());
     else {
         a.edphpdecl->setText("${type}");
-        a.php_unmapped_decl_bt->setOn(FALSE);
+        a.php_unmapped_decl_bt->setChecked(FALSE);
     }
 
     php_update_a();
@@ -2090,7 +2139,7 @@ void RelationDialog::php_unmapped_a()
     a.showphpdecl->setText(QString());
 
     if (!RelationData::isa_association(current_type))
-        a.php_default_decl_bt->setOn(FALSE);
+        a.php_default_decl_bt->setChecked(FALSE);
 }
 
 void RelationDialog::php_default_b()
@@ -2129,7 +2178,8 @@ void RelationDialog::python_update(RoleDialog & role, BrowserClass * cl, Browser
         //	const char * p = role.edpythondecl->text();
         // because the QString is immediatly destroyed !
         QString def = role.edpythondecl->text();
-        const char * p = def;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
 
         while (*p) {
             if (!strncmp(p, "${type}", 7)) {
@@ -2156,7 +2206,8 @@ void RelationDialog::python_update(RoleDialog & role, BrowserClass * cl, Browser
         //	const char * p = role.edpythondecl->text();
         // because the QString is immediatly destroyed !
         QString def = role.edpythondecl->text();
-        const char * p = def;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
         const char * pp = 0;
 
         for (;;) {
@@ -2187,7 +2238,7 @@ void RelationDialog::python_update(RoleDialog & role, BrowserClass * cl, Browser
                     s += ((&role == &a) ? b : a).edrole->text();
             }
             else if (!strncmp(p, "${value}", 8)) {
-                QString i = role.edinit->text().stripWhiteSpace();
+                QString i = role.edinit->text().trimmed();
 
                 if (!i.isEmpty()) {
                     if (need_equal(p, i, FALSE))
@@ -2210,7 +2261,7 @@ void RelationDialog::python_update(RoleDialog & role, BrowserClass * cl, Browser
             }
             else if (!strncmp(p, "${stereotype}", 13)) {
                 p += 13;
-                s += GenerationSettings::python_relationattribute_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+                s += GenerationSettings::python_relationattribute_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
             }
             else if (!strncmp(p, "${type}", 7)) {
                 p += 7;
@@ -2218,7 +2269,7 @@ void RelationDialog::python_update(RoleDialog & role, BrowserClass * cl, Browser
             }
             else if (!strncmp(p, "${association}", 14)) {
                 p += 14;
-                s += type(edassociation->currentText().stripWhiteSpace(),
+                s += type(edassociation->currentText().trimmed(),
                           list, nodes);
             }
             else if (*p == '@')
@@ -2249,10 +2300,10 @@ void RelationDialog::python_default_a()
         a.edpythondecl->setText(QString());
     else if (RelationData::isa_association(current_type))
         a.edpythondecl->setText(GenerationSettings::python_default_rel_decl(current_type,
-                                a.multiplicity->currentText().stripWhiteSpace()));
+                                a.multiplicity->currentText().trimmed()));
     else {
         a.edpythondecl->setText("${type}");
-        a.python_unmapped_decl_bt->setOn(FALSE);
+        a.python_unmapped_decl_bt->setChecked(FALSE);
     }
 
     python_update_a();
@@ -2283,7 +2334,7 @@ void RelationDialog::python_unmapped_a()
     a.showpythondecl->setText(QString());
 
     if (!RelationData::isa_association(current_type))
-        a.python_default_decl_bt->setOn(FALSE);
+        a.python_default_decl_bt->setChecked(FALSE);
 }
 
 void RelationDialog::python_default_b()
@@ -2292,7 +2343,7 @@ void RelationDialog::python_default_b()
         b.edpythondecl->setText(QString());
     else
         b.edpythondecl->setText(GenerationSettings::python_default_rel_decl(UmlAssociation,
-                                b.multiplicity->currentText().stripWhiteSpace()));
+                                b.multiplicity->currentText().trimmed()));
 
     python_update_b();
 }
@@ -2328,7 +2379,8 @@ void RelationDialog::idl_update(RoleDialog & role, BrowserClass * cl, BrowserNod
         //	const char * p = role.edidldecl->text();
         // because the QString is immediatly destroyed !
         QString def = role.edidldecl->text();
-        const char * p = def;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
 
         while (*p) {
             if (!strncmp(p, "${type}", 7)) {
@@ -2356,7 +2408,8 @@ void RelationDialog::idl_update(RoleDialog & role, BrowserClass * cl, BrowserNod
         //	const char * p = role.edidldecl->text();
         // because the QString is immediatly destroyed !
         QString def = role.edidldecl->text();
-        const char * p = def;
+        QByteArray defArray = def.toLatin1();
+        const char * p = defArray.constData();
         const char * pp = 0;
         QString indent = "";
 
@@ -2393,7 +2446,7 @@ void RelationDialog::idl_update(RoleDialog & role, BrowserClass * cl, BrowserNod
             }
             else if (role.idl_in_union && !strncmp(p, "${case}", 7)) {
                 p += 7;
-                s += role.edcase->currentText().stripWhiteSpace();
+                s += role.edcase->currentText().trimmed();
             }
             else if (!strncmp(p, "${attribut}", 11)) {
                 // old version
@@ -2436,15 +2489,15 @@ void RelationDialog::idl_update(RoleDialog & role, BrowserClass * cl, BrowserNod
             }
             else if (!strncmp(p, "${stereotype}", 13)) {
                 p += 13;
-                s += GenerationSettings::idl_relationattribute_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+                s += GenerationSettings::idl_relationattribute_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
             }
             else if (!strncmp(p, "${multiplicity}", 15)) {
                 p += 15;
-                s += role.multiplicity->currentText().stripWhiteSpace();
+                s += role.multiplicity->currentText().trimmed();
             }
             else if (!strncmp(p, "${association}", 14)) {
                 p += 14;
-                s += GenerationSettings::idl_type(type(edassociation->currentText().stripWhiteSpace(),
+                s += GenerationSettings::idl_type(type(edassociation->currentText().trimmed(),
                                                        list, nodes));
             }
             else if (*p == '\n') {
@@ -2480,7 +2533,7 @@ void RelationDialog::idl_default_a()
     if (a.idl_undef)
         a.edidldecl->setText(QString());
     else if (RelationData::isa_association(current_type)) {
-        QString mult = a.multiplicity->currentText().stripWhiteSpace();
+        QString mult = a.multiplicity->currentText().trimmed();
 
         a.edidldecl->setText((a.idl_in_union)
                              ? GenerationSettings::idl_default_union_rel_decl(mult)
@@ -2490,7 +2543,7 @@ void RelationDialog::idl_default_a()
     }
     else {
         a.edidldecl->setText("${type}");
-        a.idl_unmapped_decl_bt->setOn(FALSE);
+        a.idl_unmapped_decl_bt->setChecked(FALSE);
     }
 
     idl_update_a();
@@ -2535,7 +2588,7 @@ void RelationDialog::idl_unmapped_a()
     a.showidldecl->setText(QString());
 
     if (!RelationData::isa_association(current_type))
-        a.idl_default_decl_bt->setOn(FALSE);
+        a.idl_default_decl_bt->setChecked(FALSE);
 }
 
 void RelationDialog::idl_default_b()
@@ -2543,7 +2596,7 @@ void RelationDialog::idl_default_b()
     if (b.idl_undef)
         b.edidldecl->setText(QString());
     else {
-        QString mult = b.multiplicity->currentText().stripWhiteSpace();
+        QString mult = b.multiplicity->currentText().trimmed();
 
         b.edidldecl->setText((b.idl_in_union)
                              ? GenerationSettings::idl_default_union_rel_decl(mult)
@@ -2617,22 +2670,22 @@ static void accept_role(RoleDialog & role, RoleData & rel,
         rel.java_transient = !role.java_undef && role.transient_cb->isChecked();
     }
 
-    rel.role = role.edrole->text().stripWhiteSpace();
-    rel.multiplicity = role.multiplicity->currentText().stripWhiteSpace();
+    rel.role = role.edrole->text().trimmed();
+    rel.multiplicity = role.multiplicity->currentText().trimmed();
     rel.init_value = role.edinit->text();
     rel.comment = role.comment->text();
-    rel.constraint = role.constraint->stripWhiteSpaceText();
+    rel.constraint = role.constraint->trimmedText();
 
     rel.cpp_visibility = role.cpp_visibility.value();
 
     if (role.idl_in_union) {
         int index;
-        QString s = role.edcase->currentText().stripWhiteSpace();
+        QString s = role.edcase->currentText().trimmed();
 
-        if (!s.isEmpty() && ((index = role.enum_names.findIndex(s)) != -1))
+        if (!s.isEmpty() && ((index = role.enum_names.indexOf(s)) != -1))
             r->set_idlcase(rel, ((BrowserAttribute *) role.enums.at(index)), "");
         else
-            r->set_idlcase(rel, 0, s);
+            r->set_idlcase(rel, 0, s.toLatin1().constData());
     }
 
     rel.cpp_decl = role.edcppdecl->text();
@@ -2650,8 +2703,8 @@ void RelationDialog::accept()
         !b.kvtable->check_unique())
         return;
 
-    QString ra = a.edrole->text().stripWhiteSpace();
-    QString rb = b.edrole->text().stripWhiteSpace();
+    QString ra = a.edrole->text().trimmed();
+    QString rb = b.edrole->text().trimmed();
     bool aTextSame = ra == aOldText;
     bool bTextSame = rb == bOldText;
     if (!aTextSame && rel->wrong_role_a_name(ra))
@@ -2659,7 +2712,7 @@ void RelationDialog::accept()
     else if (!bTextSame && rel->wrong_role_b_name(rb))
         msg_critical(TR("Error"), rb + TR("\n\nillegal name or already used"));
     else {
-        rel->name = edname->text().stripWhiteSpace();
+        rel->name = edname->text().trimmed();
 
         int index = 0;
         QString s = edtype->currentText();
@@ -2671,16 +2724,16 @@ void RelationDialog::accept()
         rel->type = RelTypes[index].type;
 
         bool isinherit = RelationData::isa_inherit(rel->type);
-        bool newst = !visit && rel->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+        bool newst = !visit && rel->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
         bool assoc = RelationData::isa_association(rel->get_type());
 
         if (!visit && assoc) {
             AType t;
 
-            s = edassociation->currentText().stripWhiteSpace();
+            s = edassociation->currentText().trimmed();
 
             if (!s.isEmpty()) {
-                index = list.findIndex(s);
+                index = list.indexOf(s);
 
                 if (index >= 0)
                     t.type = (BrowserClass *) nodes.at(index);
@@ -2734,6 +2787,6 @@ void RelationDialog::accept()
         if (!a.ro || !b.ro)
             rel->modified();
 
-        Q3TabDialog::accept();
+        TabDialog::accept();
     }
 }

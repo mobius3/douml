@@ -44,9 +44,9 @@ class ToolCom;
 
 class ColMsg;
 //[lgfreitas] replacing qcollection by q3ptrcollection
-#include <q3ptrcollection.h>
+//#include <q3ptrcollection.h>
 //[lgfreitas] q3ptrlist needed
-#include <q3ptrlist.h>
+//
 
 class ColMsgList : public QList<ColMsg *>
 {

@@ -30,16 +30,15 @@
 
 
 
-
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qpainter.h>
 #include <qcursor.h>
 #include <qapplication.h>
 #include <qfile.h>
-#include <q3dict.h>
+////
 //Added by qt3to4:
 #include <QPixmap>
-#include <Q3ValueList>
+#include <QList>
 #include <QTextStream>
 #include <QDropEvent>
 #include <QDragMoveEvent>
@@ -54,11 +53,12 @@
 #include "BrowserSimpleRelation.h"
 #include "BrowserArtifact.h"
 #include "BrowserComponent.h"
+
+#include "ClassData.h"
 #include "ArtifactData.h"
 #include "AttributeData.h"
 #include "OperationData.h"
 #include "RelationData.h"
-#include "ClassData.h"
 #include "PackageData.h"
 #include "BrowserClassView.h"
 #include "BrowserClassDiagram.h"
@@ -141,7 +141,7 @@ void BrowserClass::delete_it()
             associated_artifact->is_writable())
         associated_artifact->remove_associated_class(this);
 
-    Q3ValueList<BrowserComponent *>::Iterator it;
+    QList<BrowserComponent *>::Iterator it;
 
     for (it = associated_components.begin();
          it != associated_components.end();
@@ -161,7 +161,6 @@ bool BrowserClass::undelete(bool rec, QString & warning, QString & renamed)
         // undelete the node
         QString s = name;
         bool ren = FALSE;
-
         while (((BrowserNode *) parent())
                ->wrong_child_name(s, get_type(),
                                   allow_spaces(), allow_empty()) ||
@@ -169,7 +168,6 @@ bool BrowserClass::undelete(bool rec, QString & warning, QString & renamed)
             s = "_" + s;
             ren = TRUE;
         }
-
         is_deleted = FALSE;
         is_modified = TRUE;
         get_data()->undelete(warning, renamed);
@@ -184,10 +182,9 @@ bool BrowserClass::undelete(bool rec, QString & warning, QString & renamed)
     }
     else
         result = FALSE;
-
     if (rec) {
         // undelete the sub elts
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling())
             result |= ((BrowserNode *) child)->undelete(rec, warning, renamed);
@@ -221,13 +218,14 @@ void BrowserClass::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
+
 }
 
-void BrowserClass::support_file(Q3Dict<char> & files, bool add) const
+void BrowserClass::support_file(QHash<QString,char*> & files, bool add) const
 {
     QString s;
 
@@ -238,26 +236,27 @@ void BrowserClass::support_file(Q3Dict<char> & files, bool add) const
     else
         files.remove(s);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->support_file(files, add);
+
 }
 
 void BrowserClass::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
+
     IdIterator<BrowserClass> it(all);
     BrowserClass * c;
+    while(it.hasNext()){
+        it.next();
+        if((c = it.value()) != 0)
+            if (!c->deletedp() &&
+                    (c != this) &&
+                    c->def->reference(this))
+                l.append(c);
 
-    while ((c = it.current()) != 0) {
-        if (!c->deletedp() &&
-                (c != this) &&
-                c->def->reference(this))
-            l.append(c);
-
-        ++it;
     }
-
     BrowserRelation::compute_referenced_by(l, this);
     BrowserSimpleRelation::compute_referenced_by(l, this);
     BrowserArtifact::compute_referenced_by(l, this);
@@ -274,6 +273,7 @@ void BrowserClass::referenced_by(QList<BrowserNode *> & l, bool ondelete)
         BrowserClassDiagram::compute_referenced_by(l, this, "classcanvas", "class_ref");
         BrowserUseCaseDiagram::compute_referenced_by(l, this, "classcanvas", "class_ref");
     }
+
 }
 
 void BrowserClass::renumber(int phase)
@@ -286,41 +286,42 @@ void BrowserClass::renumber(int phase)
 
 bool BrowserClass::new_java_enums(QString new_st)
 {
+
     IdIterator<BrowserClass> it(all);
     bool result = FALSE;
+    while(it.hasNext()){
+        it.next();
+        if(it.value()) {
+            ClassData * d = it.value()->def;
+            const char * st = d->get_stereotype();
 
-    while (it.current()) {
-        ClassData * d = it.current()->def;
-        const char * st = d->get_stereotype();
+            if (*st != 0) {
+                if (strcmp(st, "enum_pattern") == 0) {
+                    d->set_stereotype(new_st);
 
-        if (*st != 0) {
-            if (strcmp(st, "enum_pattern") == 0) {
-                d->set_stereotype(new_st);
+                    if (it.value()->is_read_only)
+                        result = TRUE;
+                    else
+                        it.value()->package_modified();
+                }
+                else if ((strcmp(st, "enum") == 0) && (*(d->get_javadecl()) != 0)) {
+                    d->set_stereotype("enum_pattern");
 
-                if (it.current()->is_read_only)
-                    result = TRUE;
-                else
-                    it.current()->package_modified();
-            }
-            else if ((strcmp(st, "enum") == 0) && (*(d->get_javadecl()) != 0)) {
-                d->set_stereotype("enum_pattern");
-
-                if (it.current()->is_read_only)
-                    result = TRUE;
-                else
-                    it.current()->package_modified();
+                    if (it.value()->is_read_only)
+                        result = TRUE;
+                    else
+                        it.value()->package_modified();
+                }
             }
         }
-
-        ++it;
     }
-
     if (new_st.isEmpty())
         new_st = "enum_pattern";
 
     its_default_stereotypes.append(new_st);
 
     return result;
+
 }
 
 const QPixmap * BrowserClass::pixmap(int) const
@@ -345,32 +346,32 @@ const QPixmap * BrowserClass::pixmap(int) const
         return ActorIcon;
     else if (stereotype)
         return StereotypeIcon;
-
     const QPixmap * px = ProfiledStereotypes::browserPixmap(st);
 
     if (px != 0)
         return px;
-    else if (! nestedp())
-        return (tmplt) ? TemplateIcon : ClassIcon;
-    else {
-        switch (def->get_uml_visibility()) {
-        case UmlPublic:
-            return (tmplt) ? PublicEmbeddedTemplateIcon
-                           : PublicEmbeddedClassIcon;
+    else
+        if (! nestedp())
+            return (tmplt) ? TemplateIcon : ClassIcon;
+        else {
+            switch (def->get_uml_visibility()) {
+            case UmlPublic:
+                return (tmplt) ? PublicEmbeddedTemplateIcon
+                               : PublicEmbeddedClassIcon;
 
-        case UmlProtected:
-            return (tmplt) ? ProtectedEmbeddedTemplateIcon
-                           : ProtectedEmbeddedClassIcon;
+            case UmlProtected:
+                return (tmplt) ? ProtectedEmbeddedTemplateIcon
+                               : ProtectedEmbeddedClassIcon;
 
-        case UmlPrivate:
-            return (tmplt) ? PrivateEmbeddedTemplateIcon
-                           : PrivateEmbeddedClassIcon;
+            case UmlPrivate:
+                return (tmplt) ? PrivateEmbeddedTemplateIcon
+                               : PrivateEmbeddedClassIcon;
 
-        default:
-            return (tmplt) ? PackageEmbeddedTemplateIcon
-                           : PackageEmbeddedClassIcon;
+            default:
+                return (tmplt) ? PackageEmbeddedTemplateIcon
+                               : PackageEmbeddedClassIcon;
+            }
         }
-    }
 }
 
 void BrowserClass::iconChanged()
@@ -381,6 +382,7 @@ void BrowserClass::iconChanged()
 
 void BrowserClass::update_stereotype(bool rec)
 {
+
     if (def != 0) {
         const char * stereotype = def->get_stereotype();
 
@@ -388,7 +390,7 @@ void BrowserClass::update_stereotype(bool rec)
                 stereotype[0] &&
                 (strcmp(stereotype, "stereotype") != 0)) {
             QString s = toUnicode(stereotype);
-            int index = s.find(':');
+            int index = s.indexOf(':');
 
             setText(0,
                     "<<" + ((index == -1) ? s : s.mid(index + 1))
@@ -399,17 +401,19 @@ void BrowserClass::update_stereotype(bool rec)
     }
 
     if (rec) {
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling())
             ((BrowserNode *) child)->update_stereotype(TRUE);
     }
+
 }
 
-void BrowserClass::paintCell(QPainter * p, const QColorGroup & cg, int column,
+void BrowserClass::paintCell(QPainter * p, const QPalette & cg, int column,
                              int width, int alignment)
 {
-    const QColor & bg = p->backgroundColor();
+/*BrowserClass::data used instead
+    const QColor & bg = p->background().color();
 
     if (is_marked) {
         p->setBackgroundMode(::Qt::OpaqueMode);
@@ -419,14 +423,35 @@ void BrowserClass::paintCell(QPainter * p, const QColorGroup & cg, int column,
     p->setFont((def->get_is_abstract())
                ? ((is_writable()) ? BoldItalicFont : ItalicFont)
                : ((is_writable()) ? BoldFont : NormalFont));
-    Q3ListViewItem::paintCell(p, cg, column, width, alignment);
+    BrowserNode::paintCell(p, cg, column, width, alignment);
 
     if (is_marked) {
         p->setBackgroundMode(::Qt::TransparentMode);
         p->setBackgroundColor(bg);
     }
+    */
 }
-
+QVariant BrowserClass::data(int column, int role) const
+{
+    if(role == Qt::FontRole)
+    {
+        if(def->get_is_abstract())
+        {
+            if(is_writable())
+                return BoldItalicFont;
+            else
+                return ItalicFont;
+        }
+        else
+        {
+            if(is_writable())
+                return BoldFont;
+            else
+                return NormalFont;
+        }
+    }
+    return BrowserNode::data(column, role);
+}
 QString BrowserClass::full_name(bool rev, bool) const
 {
     return fullname(rev);
@@ -504,7 +529,9 @@ QString BrowserClass::contextual_name(ShowContextMode mode) const
 void BrowserClass::member_cpp_def(const QString &, const QString &,
                                   QString & s, bool) const
 {
+
     ClassDialog::cpp_generate_members_def(this, s);
+
 }
 
 
@@ -533,30 +560,34 @@ static const int too_much_inherited_functions_index = 9999;
 static const int sensible_amount_of_visible_entries = 25;
 
 
-void BrowserClass::InstallParentsMenuItems(Q3PopupMenu& inhopersubm)
+void BrowserClass::InstallParentsMenuItems(QMenu& inhopersubm)
 {
+
     QStringList parents = get_parents_names();
     for(QList<QString>::Iterator it = parents.begin(); it != parents.end(); it++)
     {
         int currentId = first_inherited_function_index + sensible_amount_of_visible_entries + (it - parents.begin());
-        inhopersubm.insertItem(TR("Implement whole " + *it), currentId);
-        inhopersubm.setWhatsThis(currentId, QString("to implement whole ") + *it);
+
+        MenuFactory::addItem(inhopersubm,QObject::TR("Implement whole ") + *it, currentId, QString("to implement whole "));
+        //inhopersubm.setWhatsThis(currentId, QString("to implement whole ") + *it);
     }
     if(!parents.isEmpty())
-        inhopersubm.insertSeparator();
+        inhopersubm.addSeparator();
+
 }
 
 void BrowserClass::menu()
 {
     QList<BrowserOperation *> inheritedOperations = inherited_operations(sensible_amount_of_visible_entries);
 
-    Q3PopupMenu gensubm(0);
-    Q3PopupMenu roundtripm(0);
-    Q3PopupMenu inhopersubm(0);
-    Q3PopupMenu compsubm(0);
-    Q3PopupMenu toolm(0);
+    QMenu gensubm(0);
+    QMenu roundtripm(0);
+    QMenu inhopersubm(0);
+    QMenu compsubm(0);
+    QMenu toolm(0);
+
     MenuFactory builder(WrapperStr("Menu"));
-    Q3PopupMenu& m = builder.menu();
+    QMenu& m = builder.menu();
     bool isstereotype = (strcmp(def->get_stereotype(), "stereotype") == 0);
     bool ismetaclass = (strcmp(def->get_stereotype(), "metaclass") == 0);
     QString what = (isstereotype) ? "<i>stereotype</i>"
@@ -572,21 +603,21 @@ void BrowserClass::menu()
         {
             if (edition_number == 0)
             {
-                m.insertSeparator();
+                m.addSeparator();
 
                 const char * stereotype = def->get_stereotype();
 
                 if (!strcmp(stereotype, "enum") || !strcmp(stereotype, "enum_pattern"))
-                    m.setWhatsThis(m.insertItem(TR("Add item"), add_item_index),
-                                   TR("to add an <i>item</i> to the <i>enum</i>"));
+                    MenuFactory::addItem(m, QObject::TR("Add item"), add_item_index,
+                                         QObject::TR("to add an <i>item</i> to the <i>enum</i>"));
 
                 if (strcmp(stereotype, "typedef") && strcmp(stereotype, "enum_pattern"))
                 {
-                    m.setWhatsThis(m.insertItem(TR("Add attribute"), add_attribute_index),
-                                   TR("to add an <i>attribute</i> to the ") + what);
+                    MenuFactory::addItem(m, QObject::TR("Add attribute"), add_attribute_index,
+                                         QObject::TR("to add an <i>attribute</i> to the ") + what);
 
-                    m.setWhatsThis(m.insertItem(TR("Add operation"), add_operation_index),
-                                   TR("to add an <i>operation</i> to the ") + what);
+                    MenuFactory::addItem(m, QObject::TR("Add operation"), add_operation_index,
+                                         QObject::TR("to add an <i>operation</i> to the ") + what);
 
                     bool isUnion = strcmp(stereotype, "union");
                     if (!inheritedOperations.isEmpty() && isUnion)
@@ -595,12 +626,12 @@ void BrowserClass::menu()
                         InstallParentsMenuItems(inhopersubm);
 
                         if (inheritedOperations.count() > sensible_amount_of_visible_entries)
-                            m.setWhatsThis(m.insertItem(TR("Add inherited operation"), too_much_inherited_functions_index),
-                                           TR("to redefine an inherited <i>operation</i> in the <i>class</i>"));
+                            MenuFactory::addItem(m, QObject::TR("Add inherited operation"), too_much_inherited_functions_index,
+                                                 QObject::TR("to redefine an inherited <i>operation</i> in the <i>class</i>"));
                         else
                         {
-                            MenuFactory::createTitle(inhopersubm, TR("Choose operation to add it"));
-                            inhopersubm.insertSeparator();
+                            MenuFactory::createTitle(inhopersubm,  QObject::TR("Choose operation to add it"));
+                            inhopersubm.addSeparator();
 
                             index = first_inherited_function_index;
                             foreach (BrowserOperation * oper, inheritedOperations)
@@ -612,17 +643,19 @@ void BrowserClass::menu()
                                 {
                                     QFont font = inhopersubm.font();
                                     font.setItalic(true);
-                                    inhopersubm.insertItem(menuItemText, index);
+                                    MenuFactory::addItem(inhopersubm,menuItemText, index);
                                     //somewhat hackish but seems to work
                                     inhopersubm.actions().last()->setFont(font);
                                 }
                                 else
-                                    inhopersubm.insertItem(menuItemText, index);
+                                    MenuFactory::addItem(inhopersubm,menuItemText, index);
                                 ++index;
                             }
 
-                            m.setWhatsThis(m.insertItem(TR("Add inherited operation"), &inhopersubm),
-                                           TR("to redefine an inherited <i>operation</i> in the <i>class</i>"));
+
+                            MenuFactory::insertItem(m, QObject::TR("Add inherited operation"), &inhopersubm,
+                                                    QObject::TR("to redefine an inherited <i>operation</i> in the <i>class</i>"));
+
                         }
                     }
                     if (!isstereotype &&
@@ -630,24 +663,24 @@ void BrowserClass::menu()
                             strcmp(stereotype, "enum") &&
                             strcmp(stereotype, "enum_pattern"))
                     {
-                        m.setWhatsThis(m.insertItem(TR("Add nested class"), add_nested_class_index),
-                                       TR("to add an <i>nested class</i> to the <i>class</i>"));
+                        MenuFactory::addItem(m, QObject::TR("Add nested class"), add_nested_class_index,
+                                             QObject::TR("to add an <i>nested class</i> to the <i>class</i>"));
                     }
 
-                    m.setWhatsThis(m.insertItem(TR("Add extra member"), add_extra_member_index),
-                                   TR("to add an <i>extra member</i> to the <i>class</i>"));
+                    MenuFactory::addItem(m, QObject::TR("Add extra member"), add_extra_member_index,
+                                         QObject::TR("to add an <i>extra member</i> to the <i>class</i>"));
                 }
 
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Edit"), edit_index),
-                               TR("to edit the " + what + ","
-                                  "a double click with the left mouse button does the same thing"));
-                m.setWhatsThis(m.insertItem(TR("Duplicate"), duplicate_index),
-                               TR("to duplicate the " + what));
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Delete"), delete_index),
-                               TR("to delete the " + what + "."
-                                  "Note that you can undelete it after"));
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::TR("Edit"), edit_index,
+                                     QObject::TR("to edit the ") + what + ","
+                                                                          "a double click with the left mouse button does the same thing");
+                MenuFactory::addItem(m, QObject::TR("Duplicate"), duplicate_index,
+                                     QObject::TR("to duplicate the ") + what);
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::TR("Delete"), delete_index,
+                                     QObject::TR("to delete the ") + what + "."
+                                                                            "Note that you can undelete it after");
 
                 if (!isstereotype &&
                         !ismetaclass &&
@@ -658,7 +691,7 @@ void BrowserClass::menu()
 
                     if ((bcv != 0) && !bcv->deletedp())
                     {
-                        Q3ListViewItem * child;
+                        BrowserNode * child;
 
                         for (child = bcv->firstChild(); child; child = child->nextSibling())
                             if (!((BrowserNode *) child)->deletedp() &&
@@ -669,10 +702,10 @@ void BrowserClass::menu()
                         if (child == 0)
                         {
                             // no artifact having the same name, propose to create it
-                            m.insertSeparator();
-                            m.setWhatsThis(m.insertItem(TR("Create source artifact"), 5),
-                                           TR("to add a <i>&lt;&lt;source&gt;&gt; artifact</i> in the <i>deployment view</i> associated to "
-                                              "the <i>class view</i>, this artifact will contain the generated code of the class"));
+                            m.addSeparator();
+                            MenuFactory::addItem(m, QObject::TR("Create source artifact"), 5,
+                                                 QObject::TR("to add a <i>&lt;&lt;source&gt;&gt; artifact</i> in the <i>deployment view</i> associated to "
+                                                             "the <i>class view</i>, this artifact will contain the generated code of the class"));
                         }
                     }
                 }
@@ -680,11 +713,11 @@ void BrowserClass::menu()
         }
         else
         {
-            m.setWhatsThis(m.insertItem(TR("Edit"), edit_index),
-                           TR("to edit the " + what + ", "
-                              "a double click with the left mouse button does the same thing"));
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), duplicate_index),
-                           TR("to duplicate the " + what));
+            MenuFactory::addItem(m, QObject::TR("Edit"), edit_index,
+                                 QObject::TR("to edit the ") + what + ", "
+                                                                      "a double click with the left mouse button does the same thing");
+            MenuFactory::addItem(m, QObject::TR("Duplicate"), duplicate_index,
+                                 QObject::TR("to duplicate the ") + what);
         }
 
         bool have_sep = FALSE;
@@ -693,10 +726,10 @@ void BrowserClass::menu()
                 (associated_artifact != 0) &&
                 !associated_artifact->deletedp())
         {
-            m.insertSeparator();
+            m.addSeparator();
             have_sep = TRUE;
-            m.setWhatsThis(m.insertItem(TR("Select associated artifact"), select_artifact_index),
-                           TR("to select the associated <i>&lt;&lt;source&gt;&gt; artifact</i>"));
+            MenuFactory::addItem(m, QObject::TR("Select associated artifact"), select_artifact_index,
+                                 QObject::TR("to select the associated <i>&lt;&lt;source&gt;&gt; artifact</i>"));
         }
 
         if (!isstereotype &&
@@ -704,35 +737,34 @@ void BrowserClass::menu()
                 !associated_components.isEmpty())
         {
             if (! have_sep)
-                m.insertSeparator();
+                m.addSeparator();
 
             if (associated_components.first() == associated_components.last())
                 // only one component
-                m.setWhatsThis(m.insertItem(TR("Select associated component"), select_component_index),
-                               TR("to select the <i>component</i> providing the <i>class</i>"));
+                MenuFactory::addItem(m, QObject::TR("Select associated component"), select_component_index,
+                                     QObject::TR("to select the <i>component</i> providing the <i>class</i>"));
             else
             {
-                MenuFactory::createTitle(compsubm, TR("Choose component"));
-                compsubm.insertSeparator();
-
-                m.setWhatsThis(m.insertItem(TR("Select an associated component"), &compsubm),
-                               TR("to select a <i>component</i> providing the <i>class</i>"));
+                MenuFactory::createTitle(compsubm,  QObject::TR("Choose component"));
+                compsubm.addSeparator();
+                MenuFactory::insertItem(m, QObject::TR("Select an associated component"), &compsubm,
+                                        QObject::TR("to select a <i>component</i> providing the <i>class</i>"));
 
                 index = select_component_index;
 
-                Q3ValueList<BrowserComponent *>::Iterator it;
+                QList<BrowserComponent *>::Iterator it;
 
                 for (it = associated_components.begin(), index = select_component_index;
                      it != associated_components.end();
                      it++, index += 1)
-                    compsubm.insertItem((*it)->full_name(TRUE), index);
+                    MenuFactory::addItem(compsubm,(*it)->full_name(TRUE), index);
             }
         }
 
-        m.insertSeparator();
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), see_references_index),
-                       TR("to know who reference the " + what));
-        mark_menu(m, TR("the class"), 90);
+        m.addSeparator();
+        MenuFactory::addItem(m, QObject::TR("Referenced by"), see_references_index,
+                             QObject::TR("to know who reference the ") + what);
+        mark_menu(m,  QObject::TR("the class").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if (!isstereotype && !ismetaclass)
@@ -745,68 +777,77 @@ void BrowserClass::menu()
 
             if (! nestedp() && (cpp || java || php || python || idl))
             {
-                m.insertSeparator();
-                m.insertItem(TR("Generate"), &gensubm);
+                m.addSeparator();
+                MenuFactory::insertItem(m, QObject::TR("Generate"), &gensubm);
 
                 if (cpp)
                 {
-                    gensubm.insertItem("C++", generate_cpp_index);
+                    MenuFactory::addItem(gensubm , "C++", generate_cpp_index);
 
                     if ((edition_number == 0) && !is_read_only)
-                        roundtripm.insertItem("C++", roundtrip_cpp_index);
+                        MenuFactory::addItem(roundtripm , "C++", roundtrip_cpp_index);
                 }
 
                 if (java)
                 {
-                    gensubm.insertItem("Java", generate_java_index);
+                    MenuFactory::addItem(gensubm , "Java", generate_java_index);
 
                     if ((edition_number == 0) && !is_read_only)
-                        roundtripm.insertItem("Java", roundtrip_java_index);
+                        MenuFactory::addItem(roundtripm , "Java", roundtrip_java_index);
                 }
 
                 if (php)
-                    gensubm.insertItem("Php", generate_php_index);
+                    MenuFactory::addItem(gensubm , "Php", generate_php_index);
 
                 if (python)
-                    gensubm.insertItem("Python", generate_python_index);
+                    MenuFactory::addItem(gensubm , "Python", generate_python_index);
 
                 if (idl)
-                    gensubm.insertItem("Idl", generate_idl_index);
+                    MenuFactory::addItem(gensubm , "Idl", generate_idl_index);
 
-                if (roundtripm.count() != 0)
-                    m.insertItem(TR("Roundtrip"), &roundtripm);
+                if (roundtripm.actions().count() != 0)
+                {
+
+                    MenuFactory::insertItem(m, QObject::TR("Roundtrip"), &roundtripm);
+
+                }
             }
         }
 
         if ((edition_number == 0) &&
                 Tool::menu_insert(&toolm, get_type(), 100))
         {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+
+            MenuFactory::insertItem(m, QObject::TR("Tool"), &toolm);
+
+            m.addMenu(&toolm);
+
         }
     }
     else if (!is_read_only && (edition_number == 0))
     {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), undelete_index),
-                       TR("undelete the " + what + ". "
-                          "Do not undelete its <i>attributes</i>, <i>operations</i> and <i>relations</i>"));
+        MenuFactory::addItem(m, QObject::TR("Undelete"), undelete_index,
+                             QObject::TR("undelete the ") + what + ". "
+                                                                   "Do not undelete its <i>attributes</i>, <i>operations</i> and <i>relations</i>");
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling())
         {
             if (((BrowserNode *) child)->deletedp())
             {
-                m.setWhatsThis(m.insertItem(TR("Undelete recursively"), undelete_recursive_index),
-                               TR("undelete the " + what + " and its "
-                                  "nested <i>classes</i>, <i>attributes</i>, <i>operations</i> and "
-                                  "<i>relations</i> (except if the class at the other side is also deleted)"));
+                MenuFactory::addItem(m, QObject::TR("Undelete recursively"), undelete_recursive_index,
+                                     QObject::TR("undelete the ") + what + " and its "
+                                                                           "nested <i>classes</i>, <i>attributes</i>, <i>operations</i> and "
+                                                                           "<i>relations</i> (except if the class at the other side is also deleted)");
                 break;
             }
         }
     }
-
-    exec_menu_choice(m.exec(QCursor::pos()), inheritedOperations);
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+        exec_menu_choice(retAction->data().toInt(), inheritedOperations);
 }
 
 void BrowserClass::AddInheritedOperations(int rank)
@@ -826,34 +867,37 @@ QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData 
     QList<OperationData*> result;
     if(passedNodes.contains(static_cast<BrowserNode*>(this)))
         return result;
+
     passedNodes.append(static_cast<BrowserNode*>(this));
     QList<BrowserNode*> listOfChildren;
     IdIterator<BrowserClass> it(all);
     BrowserClass* testedClass;
-
-    while ((testedClass = it.current()) != 0)
+    while (it.hasNext())
     {
-        BrowserNodeList listOfTested;
-        UmlCode kind1 = UmlGeneralisation;
-        UmlCode kind2 = UmlRealize;
-//        if(!goBack)
-//            kind1=kind2;
-        testedClass->children(listOfTested,kind1, kind2);
-        for(BrowserNode* node : listOfTested)
+        it.next();
+        if((testedClass = it.value()) != 0)
         {
-            BrowserRelation* generalization = static_cast<BrowserRelation*>(node);
-            RelationData* relData = static_cast<RelationData*>(generalization->get_data());
-            BrowserClass* startClass = relData->get_start_class();
-            BrowserClass* endClass = relData->get_end_class();
-            if(endClass != this && startClass != this)
-                continue;
-            //QLOG_INFO() << relData->get_start_class()->get_name() << stringify(generalization->get_type()) << relData->get_end_class()->get_name();
-            if(endClass == this)
-                listOfChildren.append(startClass);
-            else if (startClass == this  && goBack )
-                listOfChildren.append(endClass);
+            BrowserNodeList listOfTested;
+            UmlCode kind1 = UmlGeneralisation;
+            UmlCode kind2 = UmlRealize;
+            //        if(!goBack)
+            //            kind1=kind2;
+            testedClass->children(listOfTested,kind1, kind2);
+            for(BrowserNode* node : listOfTested)
+            {
+                BrowserRelation* generalization = static_cast<BrowserRelation*>(node);
+                RelationData* relData = static_cast<RelationData*>(generalization->get_data());
+                BrowserClass* startClass = relData->get_start_class();
+                BrowserClass* endClass = relData->get_end_class();
+                if(endClass != this && startClass != this)
+                    continue;
+                //QLOG_INFO() << relData->get_start_class()->get_name() << stringify(generalization->get_type()) << relData->get_end_class()->get_name();
+                if(endClass == this)
+                    listOfChildren.append(startClass);
+                else if (startClass == this  && goBack )
+                    listOfChildren.append(endClass);
+            }
         }
-        ++it;
     }
 
     QList<BrowserNode *>  passedCopy = passedNodes;
@@ -883,7 +927,7 @@ QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData 
     BrowserClass* operContainter = static_cast<BrowserClass*>(oper->get_browser_node()->get_container(UmlClass));
     if(operContainter == this)
         return result;
-    Q3ValueList<OperationData *> usedInheritedOpers;
+    QList<OperationData *> usedInheritedOpers;
     QStringList listUsedInheritedOpers;
     get_own_opers(usedInheritedOpers,listUsedInheritedOpers);
     //QLOG_INFO() << oper->definition(TRUE, FALSE);
@@ -892,7 +936,7 @@ QList<OperationData*> BrowserClass::CollectSameThroughInheritance(OperationData 
 
 
         if(oper->definition(TRUE, FALSE) == testedOper->definition(TRUE, FALSE))
-        //if(compare)
+            //if(compare)
         {
             bool compare = PropagationEquality(*oper,*testedOper);
             if(!compare)
@@ -956,13 +1000,13 @@ void BrowserClass::exec_menu_choice(int rank,
 
     case delete_index:
         ProfiledStereotypes::deleted(this);
+
         delete_it();
         break;
 
     case select_artifact_index:
         if (isstereotypemetaclass)
             return;
-
         if (associated_artifact == 0) {
             BrowserArtifact * ba =
                     new BrowserArtifact(name,
@@ -975,20 +1019,16 @@ void BrowserClass::exec_menu_choice(int rank,
             associated_artifact->select_in_browser();
             return;
         }
-
         break;
 
     case undelete_index:
         BrowserNode::undelete(FALSE);
-
         if (!strcmp(get_data()->get_stereotype(), "stereotype"))
             ProfiledStereotypes::recompute(FALSE);
-
         break;
 
     case undelete_recursive_index:
         BrowserNode::undelete(TRUE);
-
         if (!strcmp(get_data()->get_stereotype(), "stereotype"))
             ProfiledStereotypes::recompute(FALSE);
 
@@ -1063,7 +1103,7 @@ void BrowserClass::exec_menu_choice(int rank,
     case duplicate_index: {
         QString name = get_name();
 
-        if (((BrowserNode *) parent())->enter_child_name(name, TR("enter class's name : "),
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::TR("enter class's name : "),
                                                          UmlClass, FALSE, FALSE))
 
         {
@@ -1093,8 +1133,7 @@ void BrowserClass::exec_menu_choice(int rank,
     case too_much_inherited_functions_index:
     {
         l = inherited_operations(~0u);
-
-        OperationListDialog dialog(TR("Choose inherited operation"), l);
+        OperationListDialog dialog(QObject::tr("Choose inherited operation").toLatin1().constData(), l);
 
         dialog.raise();
 
@@ -1168,7 +1207,7 @@ void BrowserClass::apply_shortcut(QString s)
                     BrowserNode * bcv = ((BrowserClassView *) parent())->get_associated();
 
                     if ((bcv != 0) && !bcv->deletedp()) {
-                        Q3ListViewItem * child;
+                        BrowserNode * child;
 
                         for (child = bcv->firstChild(); child; child = child->nextSibling())
                             if (!((BrowserNode *) child)->deletedp() &&
@@ -1217,8 +1256,7 @@ void BrowserClass::apply_shortcut(QString s)
     else if (!is_read_only && (edition_number == 0)) {
         if (s == "Undelete")
             choice = 6;
-
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
@@ -1244,7 +1282,7 @@ BrowserNode * BrowserClass::duplicate(BrowserNode * p, QString name)
     // count the current sub elt to not take into account two time the
     // bi-dir self relations
     unsigned n = 0;
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         n += 1;
@@ -1281,23 +1319,21 @@ BrowserNode * BrowserClass::duplicate(BrowserNode * p, QString name)
             ((BrowserOperation *) child)->post_duplicate();
 
     result->update_stereotype(TRUE);
-
     return result;
 }
 
-void BrowserClass::set_name(const char * s)
+void BrowserClass::set_name(QString s)
 {
     if (name != s) {
         bool firsttime = name.isEmpty();
-
         if (! firsttime) {
             // rename constructors and destructors
-            Q3ListViewItem * child;
+            BrowserNode * child;
 
             for (child = firstChild(); child != 0; child = child->nextSibling()) {
                 if (!((BrowserNode *) child)->deletedp() &&
                         (((BrowserNode *) child)->get_type() == UmlOperation)) {
-                    const char * op_name = ((BrowserNode *) child)->get_name();
+                    const char * op_name = ((BrowserNode *) child)->get_name().toLatin1().constData();
 
                     if (op_name == name)
                         // renamed
@@ -1333,14 +1369,13 @@ BrowserNode * BrowserClass::add_attribute(BrowserAttribute * attr,
     QString name;
     if(attr && sameName)
         name = attr->get_name();
-    if (enter_child_name(name, (enum_item) ? TR("enter item's name : ")
-                         : TR("enter attribute's name : "),
+    if (enter_child_name(name, (enum_item) ? QObject::TR("enter item's name : ")
+                         : QObject::TR("enter attribute's name : "),
                          UmlAttribute, FALSE, FALSE)) {
         bool newone = (attr == nullptr);
 
         attr = (newone) ? BrowserAttribute::new_one(name, this, enum_item)
                         : (BrowserAttribute *) attr->duplicate(this, name);
-
         setOpen(TRUE);
         def->modified();
         package_modified();
@@ -1351,7 +1386,6 @@ BrowserNode * BrowserClass::add_attribute(BrowserAttribute * attr,
         else if (!newone && 	// ProfiledStereotypes::added called later
                  !strcmp(def->get_stereotype(), "stereotype"))
             ProfiledStereotypes::added(attr);
-
         return attr;
     }
 
@@ -1419,7 +1453,7 @@ BrowserNode * BrowserClass::add_operation(BrowserOperation * oper, bool sameName
     if(oper && sameName)
         name = oper->get_name();
 
-    if (enter_child_name(name, TR("enter operation's name : "),
+    if (enter_child_name(name, QObject::TR("enter operation's name : "),
                          UmlOperation, FALSE, FALSE))
     {
         oper = (oper == 0) ? BrowserOperation::new_one(name, this)
@@ -1487,25 +1521,25 @@ QString BrowserClass::may_start(UmlCode l) const
         case UmlGeneralisation:
         case UmlRealize:
             if (is_read_only && !root_permission())
-                return TR("read only");
+                return QObject::TR("read only");
             else {
                 BrowserNodeList inh;
                 children(inh, UmlGeneralisation, UmlRealize);
                 return (inh.count() <= 1)
                         ? QString()
-                        : TR("typedef can't generalize / realize several times");
+                        : QObject::TR("typedef can't generalize / realize several times");
             }
 
         case UmlDependency:
             if (is_read_only && !root_permission())
-                return TR("read only");
+                return QObject::TR("read only");
 
             // no break
         case UmlAnchor:
             return QString();
 
         default:
-            return TR("a typedef can't have relation");
+            return QObject::TR("a typedef can't have relation");
         }
     }
 
@@ -1513,7 +1547,7 @@ QString BrowserClass::may_start(UmlCode l) const
     case UmlGeneralisation:
     case UmlRealize:
         if (!strcmp(stereotype, "union"))
-            return TR("an union can't generalize / realize");
+            return QObject::TR("an union can't generalize / realize");
 
         // no break;
     case UmlAssociation:
@@ -1523,7 +1557,7 @@ QString BrowserClass::may_start(UmlCode l) const
     case UmlDirectionalAggregation:
     case UmlDirectionalAggregationByValue:
     case UmlDependency:
-        return (!is_read_only || root_permission()) ? QString() : TR("read only");
+        return (!is_read_only || root_permission()) ? QString() : QObject::TR("read only");
 
     default:
         return 0;
@@ -1540,10 +1574,10 @@ QString BrowserClass::may_connect(UmlCode l, BrowserClass * other)
     case UmlAssociation:
     case UmlAggregation:
     case UmlAggregationByValue:
-        return (!other->is_read_only || root_permission()) ? QString() : TR("read only");
+        return (!other->is_read_only || root_permission()) ? QString() : QObject::TR("read only");
 
     default:
-        return (l != UmlAnchor) ? QString() : TR("can't have anchor between classes");
+        return (l != UmlAnchor) ? QString() : QObject::TR("can't have anchor between classes");
     }
 }
 
@@ -1598,7 +1632,7 @@ UmlCode BrowserClass::get_type() const
 
 QString BrowserClass::get_stype() const
 {
-    return TR("class");
+    return QObject::TR("class");
 }
 
 int BrowserClass::get_identifier() const
@@ -1706,9 +1740,8 @@ void BrowserClass::get_attrs(BrowserNodeList & attributes)
 
     get_all_parents(lcl);
     lcl.append(this);
-
     foreach (BrowserClass *current, lcl) {
-        Q3ListViewItem * child;
+        BrowserNode * child;
         for (child = current->firstChild(); child; child = child->nextSibling())
             if (!((BrowserNode *) child)->deletedp() &&
                     (((BrowserNode *) child)->get_type() == UmlAttribute))
@@ -1719,16 +1752,15 @@ void BrowserClass::get_attrs(BrowserNodeList & attributes)
 // returns all operations included the inherited (except the redefined ones
 // and the contructor and destructor of parents)
 
-void BrowserClass::get_opers(Q3ValueList<const OperationData *> & opers,
+void BrowserClass::get_opers(QList<const OperationData *> & opers,
                              QStringList & list) const
 {
     QList<BrowserClass *> all_parents;
 
     get_all_parents(all_parents);
-
     // own operations
-    Q3ListViewItem * child;
-    Q3Dict<void> already(499);
+    BrowserNode * child;
+    QMap<QString, int> already;
 
     for (child = firstChild(); child; child = child->nextSibling()) {
         if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
@@ -1739,7 +1771,7 @@ void BrowserClass::get_opers(Q3ValueList<const OperationData *> & opers,
 
             opers.append(od);
             list.append(msg);
-            already.insert(msg, (void *) 1);
+            already.insert(msg,1);
         }
     }
 
@@ -1756,23 +1788,23 @@ void BrowserClass::get_opers(Q3ValueList<const OperationData *> & opers,
                         ((BrowserOperation *) child)->get_data();
                 QString profile = data->definition(TRUE, FALSE);
 
-                if (already.find(profile) == 0)
+                if (already.find(profile) == already.end())
                 {
                     // not yet added
                     opers.append(data);
                     list.append(profile);
-                    already.insert(profile, (void *) 1);
+                    already.insert(profile, 1);
                 }
             }
         }
     }
 }
 
-void BrowserClass::get_own_opers(Q3ValueList<OperationData *> &opers, QStringList &list)
+void BrowserClass::get_own_opers(QList<OperationData *> &opers, QStringList &list)
 {
     // own operations
-    Q3ListViewItem * child;
-    Q3Dict<void> already(499);
+    BrowserNode * child;
+    QMap<QString, int> already;
 
     for (child = firstChild(); child; child = child->nextSibling()) {
         if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
@@ -1783,19 +1815,18 @@ void BrowserClass::get_own_opers(Q3ValueList<OperationData *> &opers, QStringLis
 
             opers.append(od);
             list.append(msg);
-            already.insert(msg, (void *) 1);
+            already.insert(msg, 1);
         }
     }
 }
 
-void BrowserClass::get_inherited_opers(Q3ValueList< OperationData *> &opers, QStringList &list)
+void BrowserClass::get_inherited_opers(QList< OperationData *> &opers, QStringList &list)
 {
     QList<BrowserClass *> all_parents;
-
     get_all_parents(all_parents);
 
-    Q3ListViewItem * child;
-    Q3Dict<void> already(499);
+    BrowserNode * child;
+    QMap<QString, int> already;
 
     foreach (BrowserClass * cl, all_parents)
     {
@@ -1808,12 +1839,12 @@ void BrowserClass::get_inherited_opers(Q3ValueList< OperationData *> &opers, QSt
                         ((BrowserOperation *) child)->get_data();
                 QString profile = data->definition(TRUE, FALSE);
 
-                if (already.find(profile) == 0)
+                if (already.find(profile) == already.end())
                 {
                     // not yet added
                     opers.append(data);
                     list.append(profile);
-                    already.insert(profile, (void *) 1);
+                    already.insert(profile, 1);
                 }
             }
         }
@@ -1822,11 +1853,11 @@ void BrowserClass::get_inherited_opers(Q3ValueList< OperationData *> &opers, QSt
 
 void BrowserClass::get_used_inherited_opers()
 {
-    Q3ValueList<OperationData *> ownOpers;
+    QList<OperationData *> ownOpers;
     QStringList listOwnOpers;
-    Q3ValueList<OperationData *> inheritedOpers;
+    QList<OperationData *> inheritedOpers;
     QStringList listInheritedOpers;
-    Q3ValueList<OperationData *> usedInheritedOpers;
+    QList<OperationData *> usedInheritedOpers;
     QStringList listUsedInheritedOpers;
     get_own_opers(ownOpers,listOwnOpers);
     get_inherited_opers(inheritedOpers,listInheritedOpers);
@@ -1852,8 +1883,9 @@ static void get_assocs(QList<BrowserClass *> & from,
                        QList<BrowserClass *> & to,
                        QList<RelationData *> & rels)
 {
+
     foreach (BrowserClass *current, from) {
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = current->firstChild(); child; child = child->nextSibling()) {
             if (!((BrowserNode *) child)->deletedp()) {
@@ -1878,6 +1910,7 @@ static void get_assocs(QList<BrowserClass *> & from,
             }
         }
     }
+
 }
 
 // returns all relation to target included the inherited
@@ -1914,7 +1947,7 @@ static void get_assocs(QList<BrowserClass *> & from,
                        QList<BrowserRelation *> & rels)
 {
     foreach (BrowserClass *current, from) {
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = current->firstChild(); child; child = child->nextSibling()) {
             if (!((BrowserNode *) child)->deletedp()) {
@@ -1967,12 +2000,11 @@ void BrowserClass::get_tree(BrowserNodeList & l)
     all_parents.append(this);
     get_all_parents(all_parents);
     l.clear();
-
     foreach (BrowserClass *cl, all_parents) {
         if (! cl->deletedp()) {
             l.append(cl);
 
-            for (Q3ListViewItem * child = cl->firstChild(); child; child = child->nextSibling()) {
+            for (BrowserNode * child = cl->firstChild(); child; child = child->nextSibling()) {
                 if (!((BrowserNode *) child)->deletedp()) {
                     UmlCode k = ((BrowserNode *) child)->get_type();
 
@@ -2052,20 +2084,20 @@ bool BrowserClass::may_contains_them(const QList<BrowserNode *> & l,
         }
 
         case UmlAttribute: {
-//            BrowserAttribute* asAttribute = ((BrowserAttribute *) it.current());
-//            if (asAttribute->get_get_oper())
-//            {
-//                int numReferencesToGetOperations=l.containsRef(asAttribute->get_get_oper());
-//                if (numReferencesToGetOperations == 0)
-//                    return FALSE;
-//            }
+            //            BrowserAttribute* asAttribute = ((BrowserAttribute *) it.value());
+            //            if (asAttribute->get_get_oper())
+            //            {
+            //                int numReferencesToGetOperations=l.containsRef(asAttribute->get_get_oper());
+            //                if (numReferencesToGetOperations == 0)
+            //                    return FALSE;
+            //            }
 
-//            if (asAttribute->get_set_oper())
-//            {
-//                int numReferencesToSetOperations=l.containsRef(asAttribute->get_set_oper());
-//                if (numReferencesToSetOperations == 0)
-//                    return FALSE;
-//            }
+            //            if (asAttribute->get_set_oper())
+            //            {
+            //                int numReferencesToSetOperations=l.containsRef(asAttribute->get_set_oper());
+            //                if (numReferencesToSetOperations == 0)
+            //                    return FALSE;
+            //            }
 
             break;
         }
@@ -2083,7 +2115,7 @@ bool BrowserClass::may_contains_them(const QList<BrowserNode *> & l,
 
         default: {
             bool isNotRelation = !IsaRelation(current->get_type()) ;
-            //bool parentIsOtherNode =  (((const BrowserNode *) it.current()->parent()) != this);
+            //bool parentIsOtherNode =  (((const BrowserNode *) it.value()->parent()) != this);
             if (isNotRelation/* || parentIsOtherNode*/)
                 return FALSE;
 
@@ -2119,7 +2151,6 @@ void BrowserClass::move(BrowserNode * bn, BrowserNode * after)
 
     if ((old_parent != this) && (what == UmlOperation)) {
         OperationData * d = (OperationData *) bn->get_data();
-
         cpp = d->get_body('c');
         java = d->get_body('j');
         php = d->get_body('p');
@@ -2128,7 +2159,6 @@ void BrowserClass::move(BrowserNode * bn, BrowserNode * after)
     }
     else
         cpp = java = php = python = 0;
-
     if ((old_parent != this) &&
             (what == UmlAttribute) &&
             (old_parent->get_type() == UmlClass) &&
@@ -2139,10 +2169,9 @@ void BrowserClass::move(BrowserNode * bn, BrowserNode * after)
     if (after)
         bn->moveItem(after);
     else {
-        bn->parent()->takeItem(bn);
+        ((BrowserNode*)bn->parent())->takeItem(bn);
         insertItem(bn);
     }
-
     if (old_parent != this) {
         old_parent->modified();
         old_parent->package_modified();
@@ -2186,10 +2215,8 @@ void BrowserClass::move(BrowserNode * bn, BrowserNode * after)
                 if (((BrowserAttribute *) bn)->get_set_oper() != 0)
                     ((BrowserAttribute *) bn)->get_set_oper()->delete_it();
             }
-
             if (!strcmp(get_data()->get_stereotype(), "stereotype"))
                 ProfiledStereotypes::added((BrowserAttribute *) bn);
-
             break;
 
         default:
@@ -2228,25 +2255,26 @@ void BrowserClass::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             if ((after == 0) && a_class && ((BrowserNode *) parent())->may_contains(bn, TRUE))
             {
                 // have choice
-                Q3PopupMenu m(0);
+                QMenu m(0);
 
-                MenuFactory::createTitle(m, TR("move ") + bn->get_name());
-                m.insertSeparator();
-                m.insertItem(TR("In ") + QString(get_name()), 1);
-                m.insertItem(TR("After ") + QString(get_name()), 2);
+                MenuFactory::createTitle(m, QObject::tr("move ") + bn->get_name());
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::tr("In ") + QString(get_name()), 1);
+                MenuFactory::addItem(m, QObject::tr("After ") + QString(get_name()), 2);
+                QAction *retAction = m.exec(QCursor::pos());
+                if(retAction)
+                    switch (retAction->data().toInt()) {
+                    case 1:
+                        break;
 
-                switch (m.exec(QCursor::pos())) {
-                case 1:
-                    break;
+                    case 2:
+                        ((BrowserNode *) parent())->DropAfterEvent(e, this);
+                        return;
 
-                case 2:
-                    ((BrowserNode *) parent())->DropAfterEvent(e, this);
-                    return;
-
-                default:
-                    e->ignore();
-                    return;
-                }
+                    default:
+                        e->ignore();
+                        return;
+                    }
             }
 
             move(bn, after);
@@ -2254,7 +2282,7 @@ void BrowserClass::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         else if (after == 0)
             ((BrowserNode *) parent())->DropAfterEvent(e, this);
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }
@@ -2262,6 +2290,7 @@ void BrowserClass::DropAfterEvent(QDropEvent * e, BrowserNode * after)
         ((BrowserNode *) parent())->DropAfterEvent(e, this);
     else
         e->ignore();
+
 }
 
 BrowserClass * BrowserClass::get_class(BrowserNode * future_parent,
@@ -2271,7 +2300,7 @@ BrowserClass * BrowserClass::get_class(BrowserNode * future_parent,
     QString name;
     BrowserNodeList nodes;
 
-    if (!future_parent->enter_child_name(name, TR("enter class's name : "),
+    if (!future_parent->enter_child_name(name, QObject::TR("enter class's name : "),
                                          UmlClass, instances(nodes), &old,
                                          FALSE, FALSE))
         return 0;
@@ -2287,7 +2316,6 @@ BrowserClass * BrowserClass::get_class(BrowserNode * future_parent,
 
     if (stereotype != 0)
         cd->set_stereotype("actor");
-
     future_parent->setOpen(TRUE);
     future_parent->package_modified();
 
@@ -2300,17 +2328,18 @@ BrowserClass * BrowserClass::add_class(bool stereotypep,
 {
     if (name.isEmpty()) {
         if (!future_parent->enter_child_name(name,
-                                             (stereotypep) ? TR("enter stereotype's name : ")
-                                             : TR("enter class's name : "),
+                                             (stereotypep) ? QObject::TR("enter stereotype's name : ")
+                                             : QObject::TR("enter class's name : "),
                                              UmlClass, FALSE, FALSE))
             return 0;
 
         QString err;
-
         if (stereotypep &&
                 (!(err = ProfiledStereotypes::canAddStereotype((BrowserClassView *) future_parent,
                                                                name)).isEmpty())) {
-            msg_critical(TR("Error"), name + " " + err);
+            msg_critical(QObject::TR("Error"), name + " " + err);
+
+
             return 0;
         }
     }
@@ -2332,7 +2361,7 @@ BrowserClass * BrowserClass::add_class(bool stereotypep,
 QList<BrowserNode *> BrowserClass::parents() const
 {
     QList<BrowserNode *> l;
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
         BrowserNode * ch = ((BrowserNode *) child);
@@ -2347,7 +2376,6 @@ QList<BrowserNode *> BrowserClass::parents() const
             break;
         }
     }
-
     return l;
 }
 
@@ -2373,24 +2401,24 @@ QString BrowserClass::check_inherit(const BrowserNode * new_parent) const
     if ((!strcmp(parent_stereotype, "stereotype"))
             ? strcmp(def->get_stereotype(), "stereotype")
             : !strcmp(def->get_stereotype(), "stereotype"))
-        return TR("one of the two classes is not a stereotype");
+        return QObject::TR("one of the two classes is not a stereotype");
 
     return (!strcmp(parent_stereotype, "union"))
-            ? TR("an union can't generalize / realize")
+            ? QObject::TR("an union can't generalize / realize")
             : BrowserNode::check_inherit(new_parent);
 }
 
 QList<BrowserOperation *> BrowserClass::inherited_operations(unsigned limit, QString parent_name) const
 {
-    QApplication::setOverrideCursor(::Qt::waitCursor);
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     QList<BrowserClass *> all_parents;
 
     get_all_parents(all_parents);
-
+    QList<BrowserOperation *> l;
     // computes own operations profile list
-    Q3ListViewItem * child;
-    Q3Dict<BrowserOperation> already(499);
+    BrowserNode * child;
+    QMap<QString, BrowserOperation*> already;//(499);
 
     for (child = firstChild(); child; child = child->nextSibling()) {
         BrowserNode * childAsNode = dynamic_cast<BrowserNode*>(child);
@@ -2403,7 +2431,7 @@ QList<BrowserOperation *> BrowserClass::inherited_operations(unsigned limit, QSt
     }
 
     // computes undefined inherited operations list
-    QList<BrowserOperation *> l;
+
 
     foreach (BrowserClass *cl, all_parents) {
         if(!parent_name.isEmpty() && QString(cl->full_name()) != parent_name)
@@ -2425,7 +2453,7 @@ QList<BrowserOperation *> BrowserClass::inherited_operations(unsigned limit, QSt
                         !data->get_or_set()) {
                     // may be refined
                     QString profile = data->definition(TRUE, FALSE);
-                    BrowserOperation * other = already.find(profile);
+                    BrowserOperation * other = already.value(profile);
 
                     if (other == 0) {
                         l.append(childAsOperation);
@@ -2437,18 +2465,19 @@ QList<BrowserOperation *> BrowserClass::inherited_operations(unsigned limit, QSt
                             return l;
                         }
                     } else if (! data->get_is_abstract() &&
-                             ((OperationData *) other->get_data())
-                             ->get_is_abstract()) {
+                               ((OperationData *) other->get_data())
+                               ->get_is_abstract()) {
                         // to know later if the oper is abstract or not
-                        already.replace(profile, childAsOperation);
-                        l.remove(other);
+                        //already.replace(profile, childAsOperation);
+                        already.remove(profile);
+                        already.insert(profile, childAsOperation);
+                        l.removeOne(other);
                         l.append(childAsOperation);
                     }
                 }
             }
         }
     }
-
     QApplication::restoreOverrideCursor();
 
     return l;
@@ -2456,7 +2485,7 @@ QList<BrowserOperation *> BrowserClass::inherited_operations(unsigned limit, QSt
 
 bool BrowserClass::have_abstract_operation()
 {
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
         BrowserNode * ch = ((BrowserNode *) child);
@@ -2465,7 +2494,6 @@ bool BrowserClass::have_abstract_operation()
                 ((OperationData *) ch->get_data())->get_is_abstract())
             return TRUE;
     }
-
     return FALSE;
 }
 
@@ -2514,39 +2542,42 @@ BrowserNodeList & BrowserClass::instances(BrowserNodeList & result,
 
     if (non_nested) {
         if ((st == 0) || (*st == 0)) {
-            while ((cl = it.current()) != 0) {
-                if (!cl->deletedp() && !cl->nestedp())
-                    result.append(cl);
-
-                ++it;
+            while(it.hasNext())
+            {
+                it.next();
+                if ((cl = it.value()) != 0)
+                    if (!cl->deletedp() && !cl->nestedp())
+                        result.append(cl);
             }
         }
         else {
-            while ((cl = it.current()) != 0) {
-                if (!cl->deletedp() &&
-                        !cl->nestedp() &&
-                        !strcmp(cl->get_data()->get_stereotype(), st))
-                    result.append(cl);
-
-                ++it;
+            while(it.hasNext()){
+                it.next();
+                if ((cl = it.value()) != 0)
+                    if (!cl->deletedp() &&
+                            !cl->nestedp() &&
+                            !strcmp(cl->get_data()->get_stereotype(), st))
+                        result.append(cl);
             }
         }
     }
     else {
         if ((st == 0) || (*st == 0)) {
-            while ((cl = it.current()) != 0) {
-                if (!cl->deletedp())
-                    result.append(cl);
+            while(it.hasNext()){
+                it.next();
+                if((cl = it.value()) != 0)
+                    if (!cl->deletedp())
+                        result.append(cl);
 
-                ++it;
             }
         }
         else {
-            while ((cl = it.current()) != 0) {
-                if (!cl->deletedp() && !strcmp(cl->get_data()->get_stereotype(), st))
-                    result.append(cl);
+            while(it.hasNext()){
+                it.next();
+                if ((cl = it.value()) != 0)
+                    if (!cl->deletedp() && !strcmp(cl->get_data()->get_stereotype(), st))
+                        result.append(cl);
 
-                ++it;
             }
         }
     }
@@ -2558,7 +2589,7 @@ BrowserNodeList & BrowserClass::instances(BrowserNodeList & result,
 
 BrowserNode * BrowserClass::get_associated() const
 {
-    return associated_diagram;
+    return (BrowserNode *)associated_diagram;
 }
 
 void BrowserClass::set_associated_diagram(BrowserClassDiagram * dg,
@@ -2607,14 +2638,14 @@ void BrowserClass::set_associated_artifact(BrowserArtifact * a,
     }
 }
 
-const Q3ValueList<BrowserComponent *> & BrowserClass::get_associated_components() const
+const QList<BrowserComponent *> & BrowserClass::get_associated_components() const
 {
     return associated_components;
 }
 
 void BrowserClass::add_associated_component(BrowserComponent * c)
 {
-    if (associated_components.findIndex(c) == -1) {
+    if (associated_components.indexOf(c) == -1) {
         associated_components.append(c);
         QObject::connect(c->get_data(), SIGNAL(deleted()),
                          def, SLOT(on_delete()));
@@ -2623,10 +2654,10 @@ void BrowserClass::add_associated_component(BrowserComponent * c)
 
 void BrowserClass::remove_associated_component(BrowserComponent * c)
 {
-    Q3ValueList<BrowserComponent *>::Iterator it = associated_components.find(c);
+    //QList<BrowserComponent *>::Iterator it = associated_components.find(c);
 
-    if (it != associated_components.end()) {
-        associated_components.remove(it);
+    if (associated_components.contains(c)) {
+        associated_components.removeOne(c);
         QObject::disconnect(c->get_data(), SIGNAL(deleted()),
                             def, SLOT(on_delete()));
     }
@@ -2637,11 +2668,11 @@ void BrowserClass::on_delete()
     if (associated_diagram && associated_diagram->deletedp())
         associated_diagram = 0;
 
-    Q3ValueList<BrowserComponent *>::Iterator it = associated_components.begin();
+    QList<BrowserComponent *>::Iterator it = associated_components.begin();
 
     while (it != associated_components.end()) {
         if ((*it)->deletedp())
-            it = associated_components.remove(it);
+            it = associated_components.erase(it);
         else
             it++;
     }
@@ -2756,7 +2787,6 @@ bool BrowserClass::tool_cmd(ToolCom * com, const char * args)
                         default:
                             break;
                         }
-
                         ((RelationData *) add_relation(c, end))->get_start()->write_id(com);
                     }
                     else
@@ -2838,7 +2868,7 @@ bool BrowserClass::tool_cmd(ToolCom * com, const char * args)
                 com->write_id(0);
         }
         else {
-            Q3ValueList<BrowserComponent *>::Iterator it;
+            QList<BrowserComponent *>::Iterator it;
 
             com->write_unsigned(associated_components.count());
 
@@ -2882,13 +2912,14 @@ bool BrowserClass::tool_global_cmd(ToolCom * com, const char * args)
         BrowserNode * p = (BrowserNode *) com->get_id(args);	// package
 
         if (p != 0) {
-            Q3ListViewItem * child;
+
+            BrowserNode * child;
 
             for (child = p->firstChild(); child != 0; child = child->nextSibling()) {
                 // search a class view
                 if (!((BrowserNode *) child)->deletedp() &&
                         (((BrowserNode *) child)->get_type() == UmlClassView)) {
-                    Q3ListViewItem * ch;
+                    BrowserNode * ch;
 
                     for (ch = child->firstChild(); ch != 0; ch = ch->nextSibling()) {
                         // search the class
@@ -2901,18 +2932,20 @@ bool BrowserClass::tool_global_cmd(ToolCom * com, const char * args)
                     }
                 }
             }
+
         }
         else {
             IdIterator<BrowserClass> it(all);
             BrowserClass * cl;
 
-            while ((cl = it.current()) != 0) {
-                if (!cl->deletedp() && cl->name == args) {
-                    cl->write_id(com);
-                    return TRUE;
-                }
+            while(it.hasNext()){
+                it.next();
+                if((cl = it.value()) != 0)
+                    if (!cl->deletedp() && cl->name == args) {
+                        cl->write_id(com);
+                        return TRUE;
+                    }
 
-                ++it;
             }
         }
 
@@ -2941,7 +2974,7 @@ void BrowserClass::read_stereotypes(char *& st, char *& k)
         k = read_keyword(st);
 
         // force stereotype
-        if (its_default_stereotypes.findIndex("stereotype") == -1)
+        if (its_default_stereotypes.indexOf("stereotype") == -1)
             its_default_stereotypes.append("stereotype");
     }
     else
@@ -2955,7 +2988,7 @@ void BrowserClass::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "class " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constBegin(), st);
 
         indent(+1);
         def->save(st, warning);
@@ -2976,8 +3009,7 @@ void BrowserClass::save(QTextStream & st, bool ref, QString & warning)
                 : 0;
 
         // saves the sub elts & operations body
-
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -3018,11 +3050,11 @@ void BrowserClass::save(QTextStream & st, bool ref, QString & warning)
             if (!bodyfn.isEmpty()) {
                 qf.close();
 
-                if (static_cast<uint>(qf.status()) != IO_Ok) {
+                if (qf.error() != QFile::NoError) {
                     // error, redo
                     for (;;) {
-                        (void) msg_critical(TR("Error"),
-                                            TR("Error while writting in\n%1\nmay be your disk is full", bodyfn),
+                        (void) msg_critical(QObject::tr("Error"),
+                                            QObject::tr("Error while writting in\n%1\nmay be your disk is full").arg(bodyfn),
                                             QMessageBox::Retry);
 
                         QFile qf2;
@@ -3042,14 +3074,13 @@ void BrowserClass::save(QTextStream & st, bool ref, QString & warning)
 
                         qf2.close();
 
-                        if (static_cast<uint>(qf2.status()) == IO_Ok)
+                        if (qf2.error() == QFile::NoError)
                             // all is ok
                             break;
                     }
                 }
             }
         }
-
         delete [] modified_bodies;
 
         if (def->get_bodies_modified()) {
@@ -3095,7 +3126,7 @@ QString BrowserClass::bodies_file() const
 
     QDir d = BrowserView::get_dir();
 
-    return d.absFilePath(fn);
+    return d.absoluteFilePath(fn);
 }
 
 BrowserClass * BrowserClass::find(const char * s)
@@ -3103,13 +3134,13 @@ BrowserClass * BrowserClass::find(const char * s)
     IdIterator<BrowserClass> it(all);
     BrowserClass * cl;
 
-    while ((cl = it.current()) != 0) {
-        if (strcmp(cl->name, s) == 0)
-            return cl;
+    while(it.hasNext()){
+        it.next();
+        if((cl = it.value()) != 0)
+            if (strcmp(cl->name.toLatin1().constData(), s) == 0)
+                return cl;
 
-        ++it;
     }
-
     return 0;
 }
 
@@ -3179,7 +3210,7 @@ void BrowserClass::plug_out_conversion()
             ((comArtifact = BrowserArtifact::find("UmlCom")) != 0)) {
         // do conversion
         int uid = user_id();
-        Q3ListViewItem * child;
+        BrowserNode * child;
         WrapperStr s;
         int index;
         AType t_deplview;
@@ -3245,7 +3276,7 @@ void BrowserClass::plug_out_conversion()
 
         for (child = baseArtifact->firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->get_type() == UmlOperation) {
-                if (strcmp(((BrowserNode *) child)->get_name(), "UmlBaseComponent") == 0) {
+                if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "UmlBaseComponent") == 0) {
                     // UmlBaseComponent constructor
                     BrowserOperation * baseComponentCreation =
                             new BrowserOperation((BrowserOperation *) child, baseComponent);
@@ -3270,7 +3301,7 @@ void BrowserClass::plug_out_conversion()
                     // UmlBaseArtifact constructor
                     ((BrowserNode *) child)->set_name("UmlBaseArtifact");
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "create") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "create") == 0) {
                     // UmlBaseComponent create operation
                     BrowserOperation * baseComponentCreate =
                             new BrowserOperation((BrowserOperation *) child, baseComponent);
@@ -3296,7 +3327,7 @@ void BrowserClass::plug_out_conversion()
                     op2->set_param_type(0, t_deplview);
                     set_user_id(0);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "kind") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "kind") == 0) {
                     // UmlBaseComponent kind operation
                     BrowserOperation * baseComponentKind =
                             new BrowserOperation((BrowserOperation *) child, baseComponent);
@@ -3320,7 +3351,7 @@ void BrowserClass::plug_out_conversion()
                     baseComponentKind->set_comment(((BrowserNode *) child)->get_comment());
                     set_user_id(0);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "read_uml_") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "read_uml_") == 0) {
                     // UmlBaseComponent read_uml_ operation
                     BrowserOperation * baseComponentRead_uml_ =
                             new BrowserOperation((BrowserOperation *) child, baseComponent);
@@ -3348,7 +3379,7 @@ void BrowserClass::plug_out_conversion()
 
                     set_user_id(0);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "associatedDiagram") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "associatedDiagram") == 0) {
                     // UmlBaseComponent associatedDiagram operation
                     BrowserOperation * baseComponentAssociatedDiagram =
                             new BrowserOperation((BrowserOperation *) child, baseComponent);
@@ -3372,7 +3403,7 @@ void BrowserClass::plug_out_conversion()
                     op2->set_return_type(t_depldiag);
                     set_user_id(0);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "set_AssociatedDiagram") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "set_AssociatedDiagram") == 0) {
                     // UmlBaseComponent set_AssociatedDiagram operation
                     BrowserOperation * baseComponentSet_AssociatedDiagram =
                             new BrowserOperation((BrowserOperation *) child, baseComponent);
@@ -3396,7 +3427,7 @@ void BrowserClass::plug_out_conversion()
                     op2->set_param_type(0, t_depldiag);
                     set_user_id(0);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "associatedComponents") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "associatedComponents") == 0) {
                     ((BrowserNode *) child)->set_name("associatedArtifacts");
                     set_user_id(uid);	// to create saved  *_<n>.b file name
                     op1 = (OperationData *)((BrowserNode *) child)->get_data();
@@ -3413,7 +3444,7 @@ void BrowserClass::plug_out_conversion()
 
                     set_user_id(0);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "addAssociatedComponent") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "addAssociatedComponent") == 0) {
                     ((BrowserNode *) child)->set_name("addAssociatedArtifact");
                     set_user_id(uid);	// to create saved  *_<n>.b file name
                     op1 = (OperationData *)((BrowserNode *) child)->get_data();
@@ -3431,7 +3462,7 @@ void BrowserClass::plug_out_conversion()
 
                     set_user_id(0);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "removeAssociatedComponent") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "removeAssociatedComponent") == 0) {
                     ((BrowserNode *) child)->set_name("removeAssociatedArtifact");
                     set_user_id(uid);	// to create saved  *_<n>.b file name
                     op1 = (OperationData *)((BrowserNode *) child)->get_data();
@@ -3449,7 +3480,7 @@ void BrowserClass::plug_out_conversion()
 
                     set_user_id(0);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "removeAllAssociatedComponents") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "removeAllAssociatedComponents") == 0) {
                     ((BrowserNode *) child)->set_name("removeAllAssociatedArtifacts");
                     set_user_id(uid);	// to create saved  *_<n>.b file name
                     op1 = (OperationData *)((BrowserNode *) child)->get_data();
@@ -3513,7 +3544,7 @@ void BrowserClass::plug_out_conversion()
 
         for (child = baseClass->firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->get_type() == UmlOperation) {
-                if (strcmp(((BrowserNode *) child)->get_name(), "associatedComponent") == 0) {
+                if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "associatedComponent") == 0) {
                     ((BrowserNode *) child)->set_name("associatedArtifact");
                     ((BrowserNode *) child)->set_comment(" returns the optional associated artifact,\n\
                                                          to set it refer to the UmlBaseArtifact's operations\n\
@@ -3541,14 +3572,14 @@ void BrowserClass::plug_out_conversion()
 
         for (child = baseClassView->firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->get_type() == UmlOperation) {
-                if (strcmp(((BrowserNode *) child)->get_name(), "associatedComponentView") == 0) {
+                if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "associatedComponentView") == 0) {
                     ((BrowserNode *) child)->set_name("associatedDeploymentView");
                     ((BrowserNode *) child)->set_comment(" returns the optional associated deployment view");
 
                     op1 = (OperationData *)((BrowserNode *) child)->get_data();
                     op1->set_return_type(t_deplview);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "set_AssociatedComponentView") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "set_AssociatedComponentView") == 0) {
                     ((BrowserNode *) child)->set_name("set_AssociatedDeploymentView");
                     ((BrowserNode *) child)->set_comment(" sets the associated deployment view, arg may be null to unset it\n\
                                                          \n\
@@ -3557,7 +3588,7 @@ void BrowserClass::plug_out_conversion()
                                                          op1 = (OperationData *)((BrowserNode *) child)->get_data();
                             op1->set_param_type(0, t_deplview);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "read_uml_") == 0) {
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "read_uml_") == 0) {
                     set_user_id(uid);	// to create saved  *_<n>.b file name
                     op1 = (OperationData *)((BrowserNode *) child)->get_data();
 
@@ -3585,7 +3616,7 @@ void BrowserClass::plug_out_conversion()
 
         for (child = baseItem->firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->get_type() == UmlOperation) {
-                if (strcmp(((BrowserNode *) child)->get_name(), "read_") == 0) {
+                if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "read_") == 0) {
                     set_user_id(uid);	// to create saved  *_<n>.b file name
                     op1 = (OperationData *)((BrowserNode *) child)->get_data();
 
@@ -3631,17 +3662,17 @@ void BrowserClass::plug_out_conversion()
 
         for (child = onInstanceCmd->firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->get_type() == UmlAttribute) {
-                if (strcmp(((BrowserNode *) child)->get_name(), "assocComponentCmd") == 0) {
+                if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "assocComponentCmd") == 0) {
                     a = (BrowserAttribute *)
                             ((BrowserAttribute *) child)->duplicate(onInstanceCmd, "assocArtifactCmd");
                     ((AttributeData *) a->get_data())->set_visibility(UmlPublic);
                     a->moveItem(child);
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "addAssocComponentCmd") == 0)
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "addAssocComponentCmd") == 0)
                     ((BrowserNode *) child)->set_name("addAssocArtifactCmd");
-                else if (strcmp(((BrowserNode *) child)->get_name(), "removeAssocComponentCmd") == 0)
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "removeAssocComponentCmd") == 0)
                     ((BrowserNode *) child)->set_name("removeAssocArtifactCmd");
-                else if (strcmp(((BrowserNode *) child)->get_name(), "removeAllAssocComponentsCmd") == 0)
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "removeAllAssocComponentsCmd") == 0)
                     ((BrowserNode *) child)->set_name("removeAllAssocArtifactsCmd");
             }
         }
@@ -3652,7 +3683,7 @@ void BrowserClass::plug_out_conversion()
             ((AttributeData *) a->get_data())->set_visibility(UmlPublic);
 
             for (child = anItemKind->firstChild(); child != 0; child = child->nextSibling()) {
-                if (strcmp(((BrowserNode *) child)->get_name(), "aNode") == 0) {
+                if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "aNode") == 0) {
                     a->moveItem(child);
                     break;
                 }
@@ -3664,7 +3695,7 @@ void BrowserClass::plug_out_conversion()
 
         for (child = com->firstChild(); child != 0; child = child->nextSibling()) {
             if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
-                    (strcmp(((BrowserNode *) child)->get_name(), "connect") == 0)) {
+                    (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "connect") == 0)) {
                 set_user_id(uid);	// to create saved  *_<n>.b file name
                 op1 = (OperationData *)((BrowserNode *) child)->get_data();
 
@@ -3701,7 +3732,7 @@ void BrowserClass::plug_out_conversion()
 
         for (child = artifact->firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->get_type() == UmlOperation) {
-                if (strcmp(((BrowserNode *) child)->get_name(), "UmlComponent") == 0) {
+                if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "UmlComponent") == 0) {
                     BrowserOperation * componentCreate =
                             new BrowserOperation((BrowserOperation *) child, component);
 
@@ -3711,7 +3742,7 @@ void BrowserClass::plug_out_conversion()
                     OperationData::convert((OperationData *) componentCreate->get_data(),
                                            (OperationData *)((BrowserNode *) child)->get_data());
                 }
-                else if (strcmp(((BrowserNode *) child)->get_name(), "~UmlComponent") == 0)
+                else if (strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "~UmlComponent") == 0)
                     ((BrowserNode *) child)->set_name("~UmlArtifact");
             }
             else if (((BrowserNode *) child)->get_type() == UmlGeneralisation) {
@@ -3736,7 +3767,7 @@ void BrowserClass::plug_out_conversion()
 
         bn = (BrowserNode *) comArtifact->parent();
 
-        if (strcmp(bn->get_name(), "Com Component view") == 0) {
+        if (strcmp(bn->get_name().toLatin1().constData(), "Com Component view") == 0) {
             bn->set_name("Com Deployment view");
             bn->set_comment("The API system artifacts concerning the communication with DOUML\n\nDO NOT MODIFY THEM !!!\n");
         }
@@ -3746,7 +3777,7 @@ void BrowserClass::plug_out_conversion()
         if (settingsArtifact != 0) {
             bn = (BrowserNode *) settingsArtifact->parent();
 
-            if (strcmp(bn->get_name(), "Settings Component view") == 0) {
+            if (strcmp(bn->get_name().toLatin1().constData(), "Settings Component view") == 0) {
                 bn->set_name("Settings Deployment view");
                 bn->set_comment("The API system artifacts concerning the settings\n\nDO NOT MODIFY THEM !!!\n");
             }
@@ -3754,7 +3785,7 @@ void BrowserClass::plug_out_conversion()
 
         bn = (BrowserNode *) artifactArtifact->parent();
 
-        if (strcmp(bn->get_name(), "API USER component view") == 0) {
+        if (strcmp(bn->get_name().toLatin1().constData(), "API USER component view") == 0) {
             bn->set_name("API USER Deployment view");
             s = bn->get_comment();
             index = 0;
@@ -3767,6 +3798,7 @@ void BrowserClass::plug_out_conversion()
             bn->set_comment(s);
         }
     }
+
 }
 
 static BrowserClass * add_metaclass(BrowserClass * cl, const char * mclname,
@@ -3774,30 +3806,25 @@ static BrowserClass * add_metaclass(BrowserClass * cl, const char * mclname,
 {
     BrowserNode * p = 0;
     BrowserNode * pack = (BrowserNode *) cl->parent()->parent();
-
-    for (Q3ListViewItem * child = pack->firstChild(); child; child = child->nextSibling()) {
+    for (BrowserNode * child = pack->firstChild(); child; child = child->nextSibling()) {
         if ((((BrowserNode *) child)->get_type() == UmlClassView) &&
-                !strncmp(((BrowserNode *) child)->get_name(), "meta classes", 12) &&
+                !strncmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "meta classes", 12) &&
                 !((BrowserNode *) child)->wrong_child_name(mclname, UmlClass, FALSE, FALSE))
             p = (BrowserNode *) child;
     }
-
     if (p == 0) {
         QString s = "meta classes";
 
         while (pack->wrong_child_name(s, UmlClassView, TRUE, FALSE))
             s += "_";
-
         p = new BrowserClassView(s, pack);
     }
 
     BrowserClass * r = BrowserClass::add_class(FALSE, p, mclname);
 
     r->get_data()->set_stereotype("metaclass");
-
     if (mclpath != 0)
         r->set_value("metaclassPath", mclpath);
-
     return r;
 }
 
@@ -3817,7 +3844,7 @@ static void extend(BrowserClass * cl, WrapperStr mclpath,
         BrowserClass *metaclass = 0;
         if (dflt) {
             foreach (BrowserClass *mcl, metaclasses) {
-                if (!strcmp(mclname, mcl->get_name())) {
+                if (!strcmp(mclname, mcl->get_name().toLatin1().constData())) {
                     const char * s = mcl->get_value("metaclassPath");
 
                     if ((s == 0) || !strcmp(s, defltpath0) || !strcmp(s, defltpath1)) {
@@ -3829,7 +3856,7 @@ static void extend(BrowserClass * cl, WrapperStr mclpath,
         }
         else {
             foreach (BrowserClass *mcl, metaclasses) {
-                if (!strcmp(mclname, mcl->get_name())) {
+                if (!strcmp(mclname, mcl->get_name().toLatin1().constData())) {
                     const char * s = mcl->get_value("metaclassPath");
 
                     if ((s != 0) && (path == s)) {
@@ -3847,6 +3874,7 @@ static void extend(BrowserClass * cl, WrapperStr mclpath,
 
         cl->add_relation(UmlDirectionalAssociation, metaclass);
     }
+
 }
 
 void BrowserClass::post_load()
@@ -3863,23 +3891,21 @@ void BrowserClass::post_load()
 
         IdIterator<BrowserClass> it(all);
         BrowserClass * cl;
+        while(it.hasNext()){
+            it.next();
+            if((cl = it.value()) != 0)
+                if (!cl->is_undefined()) {
+                    const char * s = cl->def->get_stereotype();
 
-        while ((cl = it.current()) != 0) {
-            if (!cl->is_undefined()) {
-                const char * s = cl->def->get_stereotype();
+                    if (strcmp(s, "metaclass") == 0)
+                        metaclasses.append(cl);
 
-                if (strcmp(s, "metaclass") == 0)
-                    metaclasses.append(cl);
-
-                if ((strcmp(s, "stereotype") == 0) &&
-                        (((BrowserNode *) cl->parent()->parent())->get_type() == UmlPackage) &&
-                        !strcmp(((BrowserNode *) cl->parent()->parent())->get_stereotype(), "profile"))
-                    stereotypes.append(cl);
-            }
-
-            ++it;
+                    if ((strcmp(s, "stereotype") == 0) &&
+                            (((BrowserNode *) cl->parent()->parent())->get_type() == UmlPackage) &&
+                            !strcmp(((BrowserNode *) cl->parent()->parent())->get_stereotype(), "profile"))
+                        stereotypes.append(cl);
+                }
         }
-
         foreach (cl, stereotypes) {
             WrapperStr s = cl->get_value("stereotypeExtension"); // non empty
 
@@ -4000,12 +4026,14 @@ BrowserClass * BrowserClass::read(char *& st, char * k,
         result->BrowserNode::read(st, k, id);	// updates k
 
         if (strcmp(k, "end")) {
-            while (BrowserAttribute::read(st, k, result) ||
+            while (
+                   BrowserClass::read(st, k, result) ||
+                   BrowserAttribute::read(st, k, result) ||
                    BrowserOperation::read(st, k, result) ||
                    BrowserExtraMember::read(st, k, result) ||
                    BrowserRelation::read(st, k, result) ||
-                   BrowserSimpleRelation::read(st, k, result) ||
-                   BrowserClass::read(st, k, result))
+                   BrowserSimpleRelation::read(st, k, result))
+
                 k = read_keyword(st);
 
             if (in_import()) {
@@ -4023,7 +4051,6 @@ BrowserClass * BrowserClass::read(char *& st, char * k,
                  (read_file_format() < 63) &&
                  !strcmp(result->def->get_stereotype(), "stereotype"))
             NeedPostLoad = (result->get_value("stereotypeExtension") != 0);
-
         return result;
     }
     else

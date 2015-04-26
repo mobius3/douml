@@ -30,7 +30,7 @@
 
 
 #include <math.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -99,9 +99,9 @@ void ArrowJunctionCanvas::deleted()
 void ArrowJunctionCanvas::change_scale()
 {
     // the size is not modified
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void ArrowJunctionCanvas::draw(QPainter & p)
@@ -112,7 +112,7 @@ void ArrowJunctionCanvas::draw(QPainter & p)
     FILE * fp = svg();
 
     foreach (ArrowCanvas *a, lines) {
-        switch (a->type()) {
+        switch (a->typeUmlCode()) {
         case UmlRequired: {
             QRect r = rect();
             int wh = r.width() - 2;
@@ -139,7 +139,7 @@ void ArrowJunctionCanvas::draw(QPainter & p)
         break;
 
         case UmlProvided:
-            p.drawPixmap(QPoint((int) x(), (int) y()), *providedPixmap);
+            p.drawPixmap(QPoint((int) 0, (int) 0), *providedPixmap);
 
             if (fp != 0)
                 fprintf(fp, "<ellipse fill=\"none\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" cx=\"%d\" cy=\"%d\" rx=\"%d\" ry=\"%d\" />\n",
@@ -159,8 +159,11 @@ void ArrowJunctionCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
-
-UmlCode ArrowJunctionCanvas::type() const
+void ArrowJunctionCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode ArrowJunctionCanvas::typeUmlCode() const
 {
     return UmlArrowJunction;
 }
@@ -182,10 +185,10 @@ void ArrowJunctionCanvas::menu(const QPoint &)
 #if 0
 
     if (lines.at(0)->may_join()) {
-        Q3PopupMenu m;
+        QMenu m;
 
         MenuFactory::createTitle(m, TR("Line break");
-                                 m.insertSeparator();
+                                 m.addSeparator();
                                  m.insertItem(TR("Remove from diagram"), 0);
 
         switch (m.exec(QCursor::pos())) {

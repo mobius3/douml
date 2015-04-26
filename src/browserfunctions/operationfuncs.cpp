@@ -36,7 +36,7 @@ void replace_param( QString & form, int rank, QString s)
     if (index_start == -1)
         return;
 
-    const char * p = form;
+    const char * p = form.toLatin1().constData();
 
     switch (p[index_start]) {
     case '$':
@@ -97,7 +97,7 @@ void recompute_param(BrowserOperation* oper, int rank, bool recompute)
 
         QString cppDecl = data->get_cppdecl();
 
-        if ((cppDecl.find(t) == -1) && (cppDecl.find(p) == -1))
+        if ((cppDecl.indexOf(t) == -1) && (cppDecl.indexOf(p) == -1))
             add_param(oper, cppDecl, rank, theo + QString(v));
         else if (recompute)
             replace_param(cppDecl, rank, theo + QString(v));
@@ -105,7 +105,7 @@ void recompute_param(BrowserOperation* oper, int rank, bool recompute)
 
         QString cppDef =  data->get_cppdef();
 
-        if ((cppDef.find(t) == -1) && (cppDef.find(p) == -1))
+        if ((cppDef.indexOf(t) == -1) && (cppDef.indexOf(p) == -1))
             add_param(oper, cppDef, rank, theo);
         else if (recompute)
             replace_param(cppDef, rank, theo);
@@ -113,26 +113,26 @@ void recompute_param(BrowserOperation* oper, int rank, bool recompute)
 
 
         QString javaDef =  data->get_javadef();
-        if ((javaDef.find(t) == -1) && (javaDef.find(p) == -1))
+        if ((javaDef.indexOf(t) == -1) && (javaDef.indexOf(p) == -1))
         {
             add_param(oper, javaDef, rank, QString(t) + QString(" ") + QString(p));
             data->set_javadef(javaDef);
         }
         QString phpDef =  data->get_phpdef();
 
-        if (phpDef.find(p) == -1)
+        if (phpDef.indexOf(p) == -1)
         {
             add_param(oper, phpDef, rank, QString(p) + QString(v));
             data->set_phpdef(phpDef);
         }
         QString pythonDef =  data->get_pythondef();
 
-        if (pythonDef.find(p) == -1) {
+        if (pythonDef.indexOf(p) == -1) {
             add_param(oper, pythonDef, rank, QString(p) + QString(v));
             data->set_pythondef(pythonDef);
         }
         QString idlDecl =  data->get_idldecl();
-        if ((idlDecl.find(t) == -1) && (idlDecl.find(p) == -1)) {
+        if ((idlDecl.indexOf(t) == -1) && (idlDecl.indexOf(p) == -1)) {
             char d[16];
 
             sprintf(d, "${d%d}", rank);
@@ -293,7 +293,7 @@ int param_begin(QString s, int rank)
 {
     // return position of ',' or '}' (inside ${(}),
     // or '$' (inside ${)}) or -1 on error
-    const char * p = s;
+    const char * p = s.toLatin1().constData();
     const char * b = strstr(p, "${(}");
 
     if ((b == 0) || (strstr(b + 4, "${)}") == 0))
@@ -325,22 +325,22 @@ int param_begin(QString s, int rank)
 void renumber(QString & form, int rank,
                      int delta, bool equal )
 {
-    int index = form.find("${(}");
+    int index = form.indexOf("${(}");
 
     if (index == -1)
         return;
 
     index += 4;
 
-    int index_sup = form.find("${)}", index);
+    int index_sup = form.indexOf("${)}", index);
 
     while (index < index_sup) {
-        index = form.find("${", index);
+        index = form.indexOf("${", index);
 
         if (index == -1)
             break;
 
-        int index2 = form.find('}', index + 3);
+        int index2 = form.indexOf('}', index + 3);
         QString n = form.mid(index + 3, index2 - index - 3);
         bool ok = FALSE;
         int r = n.toInt(&ok);
@@ -352,7 +352,7 @@ void renumber(QString & form, int rank,
 
             sprintf(nn, "%d", r + delta);
             form.replace(index + 3, n.length(), nn);
-            index = form.find('}', index + 3) + 1;
+            index = form.indexOf('}', index + 3) + 1;
         }
     }
 }
@@ -379,7 +379,7 @@ QString delete_param(int rank, QString text)
     if (index == -1)
         return "";
 
-    const char * p = form;
+    const char * p = form.toLatin1().constData();
     int index_sup;
 
     switch (p[index]) {
@@ -453,7 +453,7 @@ QString extract_specifier(int position,  QString s)
         startIndex = rxStart.indexIn(s) + 4 ;
     else
         startIndex = rxPrev.indexIn(s) + 4 + QString::number(position).length();
-    if(s.at(startIndex) == ",")
+    if(s.at(startIndex) == ',')
         startIndex++;
 
     QRegExp rxType(QRegExp::escape("${t" + QString::number(position)));

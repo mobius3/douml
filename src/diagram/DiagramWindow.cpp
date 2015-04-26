@@ -31,14 +31,13 @@
 
 
 
-
-#include <qworkspace.h>
+#include <QMdiArea>
 #include <qnamespace.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
-#include <q3toolbar.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlabel.h>
 #include <qcursor.h>
 //Added by qt3to4:
@@ -51,47 +50,52 @@
 #include "BrowserDiagram.h"
 #include "DiagramWindow.h"
 #include "DiagramView.h"
-#include "UmlWindow.h"
 #include "UmlCanvas.h"
+#include "UmlWindow.h"
 #include "myio.h"
 #include "UmlPixmap.h"
 #include "translate.h"
+#include <QLayout>
+#include "toolbarfactory.h"
 
 static QString zoomText()
 {
-    return TR("Enter a new scale value or use the arrows to change the <i>scale</i>");
+    return QObject::TR("Enter a new scale value or use the arrows to change the <i>scale</i>");
 }
 static QString fitzoomText()
 {
-    return TR("Click this button to compute the <i>fit scale</i> allowing to try to show all the diagram");
+    return QObject::TR("Click this button to compute the <i>fit scale</i> allowing to try to show all the diagram");
 }
 static QString optwinsizeText()
 {
-    return TR("Click this button to compute the smallest window size allowing to show all the diagram");
+    return QObject::TR("Click this button to compute the smallest window size allowing to show all the diagram");
 }
 static QString editText()
 {
-    return TR("Click this button to call the diagram menu like on a right mouse click"
+    return QObject::TR("Click this button to call the diagram menu like on a right mouse click"
               " done out of any element");
 }
 
 DiagramWindow::DiagramWindow(BrowserDiagram * br, const QString & s)
-    : Q3MainWindow(0, (const char *) s, Qt::WDestructiveClose),
+    : QMainWindow(0 /*,(const char *) s, Qt::WA_DeleteOnClose*/),
       no_save(FALSE), browser_node(br)
 {
-    setCaption(s);
+    setWindowTitle(s);
+    setAttribute(Qt::WA_DeleteOnClose);
     canvas = new UmlCanvas(br->get_format(), br);
-
     setFocusPolicy(Qt::StrongFocus);
     /* [lgfreitas] Fixing bug 3153814 and 3153824 where MDI config was lost and artifact outline were lost */
-    UmlWindow::get_workspace()->addWindow(this); // workspace now needs to have windows added
+    m_containingSubWindow = UmlWindow::get_workspace()->addSubWindow(this); // workspace now needs to have windows added
+    if(UmlWindow::get_workspace()->currentSubWindow() && !UmlWindow::get_workspace()->currentSubWindow()->isMaximized())
+        UmlWindow::get_workspace()->cascadeSubWindows();
+    //sw->resize(300, 300);
 }
 
 DiagramWindow::~DiagramWindow()
 {
     browser_node->set_window_destroyed();
+    m_containingSubWindow->deleteLater();
     delete canvas;
-    this->setParent(0);
 }
 
 void DiagramWindow::call_menu()
@@ -108,7 +112,7 @@ void DiagramWindow::raise()
 
 void DiagramWindow::selectOn()
 {
-    select->setOn(TRUE);
+    select->setEnabled(TRUE);
     hit_select();
 }
 
@@ -117,36 +121,53 @@ void DiagramWindow::hit_select()
     hit_button(UmlSelect, select);
 }
 
-void DiagramWindow::add_edit_button(Q3ToolBar * toolbar)
+void DiagramWindow::add_edit_button(QToolBar * toolbar)
 {
-    edit = new QToolButton(*editButton, TR("edit"), QString(),
-                           this, SLOT(call_menu()), toolbar, "edit");
-    Q3WhatsThis::add(edit, editText());
+    //edit = new QToolButton(*editButton, QObject::tr("edit"), QString(),
+      //                     this, SLOT(call_menu()), toolbar, "edit");
+    edit = new QToolButton(toolbar);
+    edit->setIcon(QIcon(*editButton));
+    edit->setText(TR("edit"));
+    edit->setObjectName("edit");
+    connect(edit, SIGNAL(clicked()), this, SLOT(call_menu()));
+    edit->setWhatsThis(editText());
 
-    edit->setToggleButton(FALSE);
+    edit->setCheckable(FALSE);
+    toolbar->addWidget(edit);
 }
 
-void DiagramWindow::add_scale_cmd(Q3ToolBar * toolbar)
+void DiagramWindow::add_scale_cmd(QToolBar *toolbar)
 {
-    sb_zoom = new QSpinBox(SCALE_MIN, SCALE_MAX, 10, toolbar, TR("scale"));
+    sb_zoom = new QSpinBox( /*SCALE_MAX, 10, */toolbar/*, QObject::tr("scale")*/);
+    sb_zoom->setMinimum(SCALE_MIN);
+    sb_zoom->setMaximum(SCALE_MAX);
+    sb_zoom->setSingleStep(10);
+    sb_zoom->setObjectName(tr("scale"));
     //sb_zoom->setPrefix("scale ");
     sb_zoom->setSuffix("%");
     sb_zoom->setValue(100);
     connect(sb_zoom, SIGNAL(valueChanged(int)), this, SLOT(new_scale(int)));
-    Q3WhatsThis::add(sb_zoom, zoomText());
+    sb_zoom->setWhatsThis(zoomText());
+    toolbar->addWidget(sb_zoom);
+    //Q3WhatsThis::add(sb_zoom, zoomText());
 
     QToolButton * fitscale =
-        new QToolButton(*fitscaleButton, TR("optimal scale"), QString(),
+        ToolBarFactory::createToolButton(*fitscaleButton, QObject::tr("optimal scale"), QString(),
                         this, SLOT(fit_scale()), toolbar, "optimal scale");
-    Q3WhatsThis::add(fitscale, fitzoomText());
+
+    fitscale->setWhatsThis(fitzoomText());
+    //Q3WhatsThis::add(fitscale, fitzoomText());
 
     //
 
-    optwinsize = new QToolButton(*optwindowsizeButton, TR("optimal window size"), QString(),
+    optwinsize = ToolBarFactory::createToolButton(*optwindowsizeButton, QObject::tr("optimal window size"), QString(),
                                  this, SLOT(optimal_window_size()), toolbar, "optimal window size");
-    Q3WhatsThis::add(optwinsize, optwinsizeText());
 
-    optwinsize->setToggleButton(FALSE);
+
+    optwinsize->setWhatsThis(fitzoomText());
+    //Q3WhatsThis::add(optwinsize, optwinsizeText());
+
+    optwinsize->setCheckable(FALSE);
 }
 
 void DiagramWindow::new_scale(int percent)
@@ -194,11 +215,11 @@ void DiagramWindow::save_session(QTextStream & st)
 {
     // can't access to the window position, even through geometry
     QString warning;
-
     st << "  ";
     ((BrowserNode *) browser_node)->save(st, TRUE, warning);
     st << "\n    " << width() << " " << height() << " ";
     get_view()->save_session(st);
+
 }
 
 void DiagramWindow::read_session(char *& st)
@@ -233,13 +254,13 @@ void DiagramWindow::save(const char * ext, QString & warning,
         get_view()->set_zoom(1);
 
     QString diagram_def;
-    QTextStream st(&diagram_def, IO_WriteOnly);
+    QTextStream st(&diagram_def, QIODevice::WriteOnly);
     int current_indent = indent();
 
     indent0();
     get_view()->save(st, warning, FALSE);
     st.flush();
-    save_definition(browser_node->get_ident(), ext, diagram_def, is_new);
+    save_definition(browser_node->get_ident(), ext, diagram_def.toLatin1().constData(), is_new);
     indent(current_indent);
 
     if (zm != 1)
@@ -256,14 +277,14 @@ void DiagramWindow::duplicate(int dest_id, const char * ext) const
         get_view()->set_zoom(1);
 
     QString diagram_def;
-    QTextStream st(&diagram_def, IO_WriteOnly); //[lgfreitas] it was nothing but some inlines to do this
+    QTextStream st(&diagram_def, QIODevice::WriteOnly); //[lgfreitas] it was nothing but some inlines to do this
     int current_indent = indent();
     BooL is_new = TRUE;
 
     indent0();
     get_view()->save(st, warning, FALSE);
     st.flush();
-    save_definition(dest_id, ext, diagram_def, is_new);
+    save_definition(dest_id, ext, diagram_def.toLatin1().constData(), is_new);
     indent(current_indent);
 
     if (zm != 1)
@@ -273,14 +294,15 @@ void DiagramWindow::duplicate(int dest_id, const char * ext) const
 
 QString DiagramWindow::copy_selected() const
 {
+    QString diagram_def;
     QString warning;
     double zm  = canvas->zoom();
 
     if (zm != 1)
         get_view()->set_zoom(1);
 
-    QString diagram_def;
-    QTextStream st(&diagram_def, IO_WriteOnly);
+
+    QTextStream st(&diagram_def, QIODevice::WriteOnly);
 
     indent0();
     get_view()->save(st, warning, TRUE);
@@ -288,7 +310,6 @@ QString DiagramWindow::copy_selected() const
 
     if (zm != 1)
         get_view()->set_zoom(zm);
-
     return diagram_def;
 }
 

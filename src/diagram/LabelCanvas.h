@@ -30,7 +30,7 @@
 
 #include <qfont.h>
 
-#include "q3canvas.h"
+#include "QGraphicsScene"
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -40,9 +40,9 @@
 #define LABEL_Z 3000
 #define OLD_LABEL_Z 1e100
 
-#define isa_label(x) ((x)->rtti() == RTTI_LABEL)
+#define isa_label(x) ((x)->type() == RTTI_LABEL)
 
-class LabelCanvas : public Q3CanvasText, public DiagramItem
+class LabelCanvas : public QGraphicsSimpleTextItem, public DiagramItem
 {
 public:
     static const char * Triangle;
@@ -53,6 +53,7 @@ protected:
     int center_x_scale100;
     int center_y_scale100;
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     LabelCanvas(const QString & n, UmlCanvas * canvas, int x, int y,
                 bool bold = FALSE, bool italic = FALSE,
@@ -65,6 +66,8 @@ public:
         return text();
     };
     virtual QRect rect() const;
+    virtual QRect sceneRect() const;
+
     int width() const {
         return boundingRect().width();
     };
@@ -80,7 +83,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual int rtti() const;
     void moveBy(double dx, double dy);
     virtual QPoint center() const;
@@ -104,6 +107,8 @@ public:
     virtual void history_hide();
 
     virtual void check_stereotypeproperties();
+
+    virtual int type() const;
 };
 
 #endif

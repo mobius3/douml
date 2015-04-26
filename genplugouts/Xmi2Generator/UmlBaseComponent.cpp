@@ -35,28 +35,28 @@ bool UmlBaseComponent::set_AssociatedDiagram(UmlComponentDiagram * d)
         return FALSE;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseComponent::realizingClasses()
+const QVector<UmlClass*> & UmlBaseComponent::realizingClasses()
 {
     read_if_needed_();
 
     return _realizing;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseComponent::providedClasses()
+const QVector<UmlClass*> & UmlBaseComponent::providedClasses()
 {
     read_if_needed_();
 
     return _provided;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseComponent::requiredClasses()
+const QVector<UmlClass*> & UmlBaseComponent::requiredClasses()
 {
     read_if_needed_();
 
     return _required;
 }
 
-bool UmlBaseComponent::set_AssociatedClasses(const Q3PtrVector<UmlClass> & realizing, const Q3PtrVector<UmlClass> & provided, const Q3PtrVector<UmlClass> & required)
+bool UmlBaseComponent::set_AssociatedClasses(const QVector<UmlClass*> & realizing, const QVector<UmlClass*> & provided, const QVector<UmlClass*> & required)
 {
     UmlCom::send_cmd(_identifier, setAssocClassesCmd,
                      realizing, provided, required);
@@ -98,18 +98,18 @@ void UmlBaseComponent::read_uml_()
     _realizing.resize(n);
 
     for (index = 0; index != n; index += 1)
-        _realizing.insert(index, (UmlClass *) UmlBaseItem::read_());
+        _realizing[index] =  (UmlClass *) UmlBaseItem::read_();
 
     n = UmlCom::read_unsigned();
     _provided.resize(n);
 
     for (index = 0; index != n; index += 1)
-        _provided.insert(index, (UmlClass *) UmlBaseItem::read_());
+        _provided[index] = (UmlClass *) UmlBaseItem::read_();
 
     n = UmlCom::read_unsigned();
     _required.resize(n);
 
     for (index = 0; index != n; index += 1)
-        _required.insert(index, (UmlClass *) UmlBaseItem::read_());
+        _required[index] = (UmlClass *) UmlBaseItem::read_();
 }
 

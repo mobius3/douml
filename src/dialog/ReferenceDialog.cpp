@@ -31,14 +31,13 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qapplication.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 //Added by qt3to4:
-#include <Q3PtrList>
 
 #include "ReferenceDialog.h"
 #include "BrowserView.h"
@@ -50,27 +49,28 @@ ReferenceDialog * ReferenceDialog::the;
 QSize ReferenceDialog::previous_size;
 
 ReferenceDialog::ReferenceDialog(BrowserNode * bn)
-    : QDialog(0, "Referenced By dialog", FALSE, Qt::WDestructiveClose)
+    : QDialog(0/*, "Referenced By dialog", Qt::WA_DeleteOnClose*/)
 {
     the = this;
     target = bn;
 
-    setCaption(TR("Referenced By dialog"));
+    setWindowTitle(TR("Referenced By dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->setMargin(5);
 
     QString s = target->get_name();
 
-    s += TR(" is referenced by :");
+    s += QObject::tr(" is referenced by :");
 
     vbox->addWidget(new QLabel(s, this));
 
-    results = new Q3ComboBox(FALSE, this);
+    results = new QComboBox(this);
     vbox->addWidget(results);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     QPushButton * search_b = new QPushButton(TR("Recompute"), this);
     QPushButton * close_b = new QPushButton(TR("Close"), this);
 
@@ -107,13 +107,13 @@ ReferenceDialog::~ReferenceDialog()
 
 void ReferenceDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 void ReferenceDialog::compute()
 {
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     QList<BrowserNode *> l;
 
@@ -136,13 +136,11 @@ void ReferenceDialog::compute()
     QStringList names;
 
     nodes.full_names(names);
-
     QStringList::Iterator it = names.begin();
     foreach (BrowserNode * bn, nodes) {
-        results->insertItem(*(bn->pixmap(0)), *it);
+        results->addItem(*(bn->pixmap(0)), *it);
         ++it;
     }
-
     selected((nodes.isEmpty()) ? -1 : 0);
 
     QApplication::restoreOverrideCursor();
@@ -159,7 +157,7 @@ void ReferenceDialog::selected(int index)
         select_b->setEnabled(TRUE);
         mark_unmark_b->setEnabled(TRUE);
         mark_unmark_b->setText((nodes.at(index)->markedp())
-                               ? TR("Unmark") : TR("Mark"));
+                               ? QObject::tr("Unmark") : QObject::tr("Mark"));
         mark_them_b->setEnabled(TRUE);
     }
 
@@ -168,7 +166,7 @@ void ReferenceDialog::selected(int index)
 
 void ReferenceDialog::mark_unmark()
 {
-    BrowserNode * bn = nodes.at(results->currentItem());
+    BrowserNode * bn = nodes.at(results->currentIndex());
 
     bn->toggle_mark();  	// call update
     BrowserView::force_visible(bn);
@@ -182,6 +180,7 @@ void ReferenceDialog::mark_them()
             BrowserView::force_visible(bn);
         }
     }
+
 }
 
 void ReferenceDialog::unmark_all()
@@ -192,18 +191,18 @@ void ReferenceDialog::unmark_all()
 void ReferenceDialog::select()
 {
     if (!nodes.isEmpty())
-        nodes.at(results->currentItem())->select_in_browser();
+        nodes.at(results->currentIndex())->select_in_browser();
 }
 
 void ReferenceDialog::update()
 {
-    selected((results->count() != 0) ? results->currentItem() : -1);
+    selected((results->count() != 0) ? results->currentIndex() : -1);
 }
 
 void ReferenceDialog::show(BrowserNode * target)
 {
     if (the != 0)
-        the->close(TRUE);
+        the->close();
 
     (new ReferenceDialog(target))->QDialog::show();
 }

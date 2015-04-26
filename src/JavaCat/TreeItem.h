@@ -1,5 +1,5 @@
 //Added by qt3to4:
-#include <Q3PtrList>
+
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .
@@ -32,10 +32,10 @@
 
 #ifndef REVERSE
 
-#include <q3listview.h>
+#include <QTreeWidget>
 #include <qstring.h>
 
-#define TreeItem Q3ListViewItem
+#define TreeItem QTreeWidgetItem
 
 #else
 
@@ -56,6 +56,9 @@ public:
         return its_name;
     };
     void setText(int, QString s) {
+        its_name = s;
+    };
+    void setText(QString s) {
         its_name = s;
     };
     TreeItem * parent() {

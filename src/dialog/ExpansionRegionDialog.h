@@ -28,15 +28,9 @@
 #ifndef EXPANSIONREGIONDIALOG_H
 #define EXPANSIONREGIONDIALOG_H
 
+#include <tabdialog.h>
 
-
-
-
-#include <q3ptrlist.h>
-#include <q3tabdialog.h>
-#include <q3ptrlist.h>
-
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 
 class LineEdit;
@@ -45,7 +39,7 @@ class ExpansionRegionData;
 class KeyValuesTable;
 class BodyDialog;
 
-class ExpansionRegionDialog : public Q3TabDialog
+class ExpansionRegionDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -53,8 +47,8 @@ protected:
     QWidget * umltab;
     ExpansionRegionData * data;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * edmode;
+    QComboBox * edstereotype;
+    QComboBox * edmode;
     QCheckBox * must_isolate_cb;
     MultiLineEdit * comment;
     KeyValuesTable * kvtable;

@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseCollaborationMessage.h"
-#include <q3ptrvector.h>
+
 
 class FileOut;
 class UmlItem;
@@ -13,7 +13,7 @@ class UmlItem;
 class UmlCollaborationMessage : public UmlBaseCollaborationMessage
 {
 public:
-    static void write(FileOut & out, UmlItem * diagram, const Q3PtrVector< UmlCollaborationMessage > & msgs, unsigned & index);
+    static void write(FileOut & out, UmlItem * diagram, const QVector< UmlCollaborationMessage* > & msgs, unsigned & index);
 
 };
 

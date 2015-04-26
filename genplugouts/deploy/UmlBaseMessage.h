@@ -1,10 +1,7 @@
 #ifndef _UMLBASEMESSAGE_H
 #define _UMLBASEMESSAGE_H
-
-
-#include <q3cstring.h>
-#include <q3ptrdict.h>
-
+#include <QByteArray>
+#include <QHash>
 class UmlClassInstanceReference;
 class UmlOperation;
 
@@ -30,7 +27,7 @@ public:
 
     // return message as a string, may be empty/null,
     // exclusive with operation()
-    const Q3CString & form() const {
+    const QByteArray & form() const {
         return _form;
     }
 
@@ -42,10 +39,10 @@ private:
 
     UmlOperation * _operation;
 
-    Q3CString _form;
+    QByteArray _form;
 
     // internal, don't call it
-    void read_(const Q3PtrDict<UmlClassInstanceReference> & instances);
+    void read_(const QHash<void *, UmlClassInstanceReference *> &instances);
 
     friend class UmlBaseSequenceMessage;
     friend class UmlBaseCollaborationMessage;

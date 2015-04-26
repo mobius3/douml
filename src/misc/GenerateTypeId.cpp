@@ -11,10 +11,13 @@
 
 #include <string>
 #include <unordered_map>
+#ifdef habip
 #include <boost/crc.hpp>
+#endif
 #include <cassert>
 #include <cstring>
 #include <QtCore>
+#include <stdint.h>
 
 
 
@@ -88,22 +91,19 @@ int GenerateCrcChecksum
     if (checksumSize == 0)
         return 0;
 
+    int numberOfBytesToCopy;
+    #ifdef habip
     boost::crc_32_type crcGenerator;
     int dataSize = std::strlen(data) * sizeof(uint8_t) / sizeof(char);
     crcGenerator.process_bytes(data, dataSize);
-
     boost::crc_32_type::value_type crc = crcGenerator.checksum();
-
     int crcSize = sizeof(boost::crc_32_type::value_type) / sizeof(uint8_t);
-    int numberOfBytesToCopy
-        = (crcSize < checksumSize) ? crcSize : checksumSize;
-
+    numberOfBytesToCopy = (crcSize < checksumSize) ? crcSize : checksumSize;
     uint8_t * crcAsByteArray = reinterpret_cast<uint8_t *>(&crc);
-
     for (int i = 0; i < numberOfBytesToCopy; ++i) {
         (*checksum)[i] = crcAsByteArray[i];
     }
-
+#endif
     return numberOfBytesToCopy;
 }
 }

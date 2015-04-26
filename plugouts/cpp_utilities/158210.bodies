@@ -1,0 +1,4 @@
+class QsDebugOutput
+!!!256002.cpp!!!	output(in message : QString) : void
+    fprintf(stderr, "%s\n", qPrintable(message));
+    fflush(stderr);

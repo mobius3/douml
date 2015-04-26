@@ -5,9 +5,8 @@
 #include "UmlClassMember.h"
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
-#include <q3valuelist.h>
+#include <QList>
 #include "misc/mystr.h"
-
 #include "UmlParameter.h"
 class UmlOperation;
 class UmlClass;
@@ -52,7 +51,7 @@ public:
     bool set_ReturnType(const UmlTypeSpec & t);
 
     // returns (in java a copy of) the parameters list
-    const Q3ValueList<UmlParameter> params();
+    const QList<UmlParameter> params();
 
     // adds a parameter at the given rank (0...)
     //
@@ -70,7 +69,7 @@ public:
     bool replaceParameter(unsigned rank, const UmlParameter & p);
 
     // returns the exceptions
-    const Q3ValueList<UmlTypeSpec> exceptions();
+    const QList<UmlTypeSpec> exceptions();
 
     // adds the exception at the given rank (0...)
     //
@@ -515,9 +514,9 @@ private:
 
     UmlTypeSpec _return_type;
 
-    Q3ValueList<UmlParameter> _params;
+    QList<UmlParameter> _params;
 
-    Q3ValueList<UmlTypeSpec> _exceptions;
+    QList<UmlTypeSpec> _exceptions;
 
 #ifdef WITHCPP
     WrapperStr _cpp_def;

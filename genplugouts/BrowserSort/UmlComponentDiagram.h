@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseComponentDiagram.h"
-#include <q3cstring.h>
+
 
 // This class manages 'ccomponent diagrams', notes that the class 'UmlDiagram'
 // is a mother class of all the diagrams, allowing to generalize their
@@ -13,7 +13,7 @@
 class UmlComponentDiagram : public UmlBaseComponentDiagram
 {
 public:
-    UmlComponentDiagram(void * id, const Q3CString & n) : UmlBaseComponentDiagram(id, n) {};
+    UmlComponentDiagram(void * id, const QByteArray & n) : UmlBaseComponentDiagram(id, n) {};
 
     virtual int orderWeight();
 

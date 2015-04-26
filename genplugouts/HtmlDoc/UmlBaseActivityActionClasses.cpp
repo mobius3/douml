@@ -5,7 +5,7 @@
 #include "UmlItem.h"
 #include "UmlOperation.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 UmlSendObjectAction * UmlBaseSendObjectAction::create(UmlItem * parent, const char * s)
 {
@@ -57,7 +57,7 @@ anItemKind UmlBaseValueSpecificationAction::kind()
     return aValueSpecificationAction;
 }
 
-const Q3CString & UmlBaseValueSpecificationAction::value()
+const QByteArray & UmlBaseValueSpecificationAction::value()
 {
     read_if_needed_();
     return _value;
@@ -69,7 +69,7 @@ bool UmlBaseValueSpecificationAction::set_Value(const char * v)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseValueSpecificationAction::cppValue()
+const QByteArray & UmlBaseValueSpecificationAction::cppValue()
 {
     read_if_needed_();
     return _cpp_value;
@@ -82,7 +82,7 @@ bool UmlBaseValueSpecificationAction::set_CppValue(const char * v)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseValueSpecificationAction::javaValue()
+const QByteArray & UmlBaseValueSpecificationAction::javaValue()
 {
     read_if_needed_();
     return _java_value;
@@ -138,7 +138,7 @@ anItemKind UmlBaseOpaqueAction::kind()
     return anOpaqueAction;
 }
 
-const Q3CString & UmlBaseOpaqueAction::behavior()
+const QByteArray & UmlBaseOpaqueAction::behavior()
 {
     read_if_needed_();
     return _behavior;
@@ -150,7 +150,7 @@ bool UmlBaseOpaqueAction::set_Behavior(const char * v)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseOpaqueAction::cppBehavior()
+const QByteArray & UmlBaseOpaqueAction::cppBehavior()
 {
     read_if_needed_();
     return _cpp_behavior;
@@ -163,7 +163,7 @@ bool UmlBaseOpaqueAction::set_CppBehavior(const char * v)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseOpaqueAction::javaBehavior()
+const QByteArray & UmlBaseOpaqueAction::javaBehavior()
 {
     read_if_needed_();
     return _java_behavior;
@@ -241,7 +241,7 @@ bool UmlBaseAcceptEventAction::set_isTimeEvent(bool v)
     return set_it_(_timeevent, v, setTimeEventCmd);
 }
 
-const Q3CString & UmlBaseAcceptEventAction::trigger()
+const QByteArray & UmlBaseAcceptEventAction::trigger()
 {
     read_if_needed_();
     return _trigger;
@@ -253,7 +253,7 @@ bool UmlBaseAcceptEventAction::set_Trigger(const char * v)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseAcceptEventAction::cppTrigger()
+const QByteArray & UmlBaseAcceptEventAction::cppTrigger()
 {
     read_if_needed_();
     return _cpp_trigger;
@@ -266,7 +266,7 @@ bool UmlBaseAcceptEventAction::set_CppTrigger(const char * v)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseAcceptEventAction::javaTrigger()
+const QByteArray & UmlBaseAcceptEventAction::javaTrigger()
 {
     read_if_needed_();
     return _java_trigger;
@@ -498,7 +498,7 @@ anItemKind UmlBaseAcceptCallAction::kind()
     return anAcceptCallAction;
 }
 
-const Q3CString & UmlBaseAcceptCallAction::trigger()
+const QByteArray & UmlBaseAcceptCallAction::trigger()
 {
     read_if_needed_();
     return _trigger;
@@ -510,7 +510,7 @@ bool UmlBaseAcceptCallAction::set_Trigger(const char * v)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseAcceptCallAction::cppTrigger()
+const QByteArray & UmlBaseAcceptCallAction::cppTrigger()
 {
     read_if_needed_();
     return _cpp_trigger;
@@ -523,7 +523,7 @@ bool UmlBaseAcceptCallAction::set_CppTrigger(const char * v)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseAcceptCallAction::javaTrigger()
+const QByteArray & UmlBaseAcceptCallAction::javaTrigger()
 {
     read_if_needed_();
     return _java_trigger;
@@ -579,7 +579,7 @@ anItemKind UmlBaseReplyAction::kind()
     return aReplyAction;
 }
 
-const Q3CString & UmlBaseReplyAction::replyToCall()
+const QByteArray & UmlBaseReplyAction::replyToCall()
 {
     read_if_needed_();
     return _trigger;
@@ -591,7 +591,7 @@ bool UmlBaseReplyAction::set_ReplyToCall(const char * v)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseReplyAction::cppReplyToCall()
+const QByteArray & UmlBaseReplyAction::cppReplyToCall()
 {
     read_if_needed_();
     return _cpp_trigger;
@@ -604,7 +604,7 @@ bool UmlBaseReplyAction::set_CppReplyToCall(const char * v)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseReplyAction::javaReplyToCall()
+const QByteArray & UmlBaseReplyAction::javaReplyToCall()
 {
     read_if_needed_();
     return _java_trigger;
@@ -660,7 +660,7 @@ anItemKind UmlBaseCreateObjectAction::kind()
     return aCreateObjectAction;
 }
 
-const Q3CString & UmlBaseCreateObjectAction::classifier()
+const QByteArray & UmlBaseCreateObjectAction::classifier()
 {
     read_if_needed_();
     return _classifier;

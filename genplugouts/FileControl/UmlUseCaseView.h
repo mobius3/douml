@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseUseCaseView.h"
-#include <q3cstring.h>
+
 
 // This class manages 'use case view'
 //
@@ -11,7 +11,7 @@
 class UmlUseCaseView : public UmlBaseUseCaseView
 {
 public:
-    UmlUseCaseView(void * id, const Q3CString & n) : UmlBaseUseCaseView(id, n) {};
+    UmlUseCaseView(void * id, const QByteArray & n) : UmlBaseUseCaseView(id, n) {};
 
 };
 

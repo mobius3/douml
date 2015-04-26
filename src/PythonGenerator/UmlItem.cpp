@@ -143,7 +143,7 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts,
     const char * pclosed;
 
     if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
-        Q3CString key(p + 2, pclosed - p - 1);
+        QByteArray key(p + 2, pclosed - p - 1);
         WrapperStr value;
         UmlItem * node = this;
 

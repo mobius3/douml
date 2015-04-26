@@ -7,7 +7,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 UmlArtifact * UmlBaseArtifact::create(UmlDeploymentView * parent, const char * s)
 {
     return (UmlArtifact *) parent->create_(anArtifact, s);
@@ -37,7 +37,7 @@ bool UmlBaseArtifact::set_AssociatedDiagram(UmlDeploymentDiagram * d)
         return FALSE;
 }
 
-const Q3PtrVector<UmlClass> & UmlBaseArtifact::associatedClasses()
+const QVector<UmlClass*> & UmlBaseArtifact::associatedClasses()
 {
     read_if_needed_();
 
@@ -51,8 +51,9 @@ bool UmlBaseArtifact::addAssociatedClass(UmlClass * cl)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            _assoc_classes.resize(_assoc_classes.size() + 1);
-            _assoc_classes.insert(_assoc_classes.size() - 1, cl);
+            //_assoc_classes.reserve(_assoc_classes.size() + 1);
+            //_assoc_classes.insert(_assoc_classes.size() - 1, cl);
+            _assoc_classes.append(cl);
         }
 
         return TRUE;
@@ -68,7 +69,7 @@ bool UmlBaseArtifact::removeAssociatedClass(UmlClass * cl)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            unsigned index = (unsigned) _assoc_classes.findRef(cl);
+            unsigned index = (unsigned) _assoc_classes.indexOf(cl);
 
             if (((int) index) == -1)
                 // theo impossible
@@ -77,7 +78,7 @@ bool UmlBaseArtifact::removeAssociatedClass(UmlClass * cl)
             unsigned last = _assoc_classes.size() - 1;
 
             if (index != last)
-                _assoc_classes.insert(index, _assoc_classes[last]);
+                _assoc_classes[index] = _assoc_classes[last];
 
             _assoc_classes.resize(last);
         }
@@ -88,9 +89,9 @@ bool UmlBaseArtifact::removeAssociatedClass(UmlClass * cl)
         return FALSE;
 }
 
-bool UmlBaseArtifact::set_AssociatedClasses(const Q3PtrVector<UmlClass> & l)
+bool UmlBaseArtifact::set_AssociatedClasses(const QVector<UmlClass*> & l)
 {
-    UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const Q3PtrVector<UmlItem> &) l);
+    UmlCom::send_cmd(_identifier, setAssocClassesCmd, (const QVector<UmlItem*> &) l);
 
     if (UmlCom::read_bool()) {
         // tests != to bypass Qt 2.3 bug
@@ -103,7 +104,7 @@ bool UmlBaseArtifact::set_AssociatedClasses(const Q3PtrVector<UmlClass> & l)
         return FALSE;
 }
 
-const Q3PtrVector<UmlArtifact> & UmlBaseArtifact::associatedArtifacts()
+const QVector<UmlArtifact*> & UmlBaseArtifact::associatedArtifacts()
 {
     read_if_needed_();
 
@@ -117,8 +118,9 @@ bool UmlBaseArtifact::addAssociatedArtifact(UmlArtifact * cp)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            _associated.resize(_associated.size() + 1);
-            _associated.insert(_associated.size() - 1, cp);
+            //_associated.resize(_associated.size() + 1);
+            //_associated.insert(_associated.size() - 1, cp);
+            _associated.append(cp);
         }
 
         return TRUE;
@@ -134,7 +136,7 @@ bool UmlBaseArtifact::removeAssociatedArtifact(UmlArtifact * cp)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            unsigned index = (unsigned) _associated.findRef(cp);
+            unsigned index = (unsigned) _associated.indexOf(cp);
 
             if (((int) index) == -1)
                 // theo impossible
@@ -143,7 +145,7 @@ bool UmlBaseArtifact::removeAssociatedArtifact(UmlArtifact * cp)
             unsigned last = _associated.size() - 1;
 
             if (index != last)
-                _associated.insert(index, _associated[last]);
+                _associated[index] = _associated[last];
 
             _associated.resize(last);
         }
@@ -167,82 +169,82 @@ bool UmlBaseArtifact::removeAllAssociatedArtifacts()
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseArtifact::cppHeader()
+const QByteArray & UmlBaseArtifact::cppHeader()
 {
     read_if_needed_();
 
     return _cpp_h;
 }
 
-bool UmlBaseArtifact::set_CppHeader(const Q3CString & s)
+bool UmlBaseArtifact::set_CppHeader(const QByteArray & s)
 {
     return set_it_(_cpp_h, s, setCppHCmd);
 }
 
-const Q3CString & UmlBaseArtifact::cppSource()
+const QByteArray & UmlBaseArtifact::cppSource()
 {
     read_if_needed_();
 
     return _cpp_src;
 }
 
-bool UmlBaseArtifact::set_CppSource(const Q3CString & s)
+bool UmlBaseArtifact::set_CppSource(const QByteArray & s)
 {
     return set_it_(_cpp_src, s, setCppSrcCmd);
 }
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseArtifact::javaSource()
+const QByteArray & UmlBaseArtifact::javaSource()
 {
     read_if_needed_();
 
     return _java_src;
 }
 
-bool UmlBaseArtifact::set_JavaSource(const Q3CString & s)
+bool UmlBaseArtifact::set_JavaSource(const QByteArray & s)
 {
     return set_it_(_java_src, s, setJavaSrcCmd);
 }
 #endif
 
 #ifdef WITHPHP
-const Q3CString & UmlBaseArtifact::phpSource()
+const QByteArray & UmlBaseArtifact::phpSource()
 {
     read_if_needed_();
 
     return _php_src;
 }
 
-bool UmlBaseArtifact::set_PhpSource(const Q3CString & s)
+bool UmlBaseArtifact::set_PhpSource(const QByteArray & s)
 {
     return set_it_(_php_src, s, setPhpSrcCmd);
 }
 #endif
 
 #ifdef WITHPYTHON
-const Q3CString & UmlBaseArtifact::pythonSource()
+const QByteArray & UmlBaseArtifact::pythonSource()
 {
     read_if_needed_();
 
     return _python_src;
 }
 
-bool UmlBaseArtifact::set_PythonSource(const Q3CString & s)
+bool UmlBaseArtifact::set_PythonSource(const QByteArray & s)
 {
     return set_it_(_python_src, s, setPythonSrcCmd);
 }
 #endif
 
 #ifdef WITHIDL
-const Q3CString & UmlBaseArtifact::idlSource()
+const QByteArray & UmlBaseArtifact::idlSource()
 {
     read_if_needed_();
 
     return _idl_src;
 }
 
-bool UmlBaseArtifact::set_IdlSource(const Q3CString & s)
+bool UmlBaseArtifact::set_IdlSource(const QByteArray & s)
 {
     return set_it_(_idl_src, s, setIdlSrcCmd);
 }
@@ -283,13 +285,13 @@ void UmlBaseArtifact::read_uml_()
     _assoc_classes.resize(n);
 
     for (index = 0; index != n; index += 1)
-        _assoc_classes.insert(index, (UmlClass *) UmlBaseItem::read_());
+        _assoc_classes[index] = (UmlClass *) UmlBaseItem::read_();
 
     n = UmlCom::read_unsigned();
     _associated.resize(n);
 
     for (index = 0; index != n; index += 1)
-        _associated.insert(index, (UmlArtifact *) UmlBaseItem::read_());
+        _associated[index] = (UmlArtifact *) UmlBaseItem::read_();
 }
 
 #ifdef WITHCPP

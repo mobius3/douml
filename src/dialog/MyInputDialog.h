@@ -34,7 +34,7 @@
 // there is no way to place it near the mouse : it is always placed
 // on the screen center
 
-class Q3ComboBox;
+class QComboBox;
 class QValidator;
 
 class LineEdit;
@@ -45,7 +45,7 @@ class MyInputDialog : public QDialog
 
 protected:
     LineEdit * le;
-    Q3ComboBox * cb;
+    QComboBox * cb;
 
     static QSize previous_size;
 

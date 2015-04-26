@@ -27,7 +27,6 @@
 
 #include "UmlClassItem.h"
 //Added by qt3to4:
-#include <Q3PtrList>
 
 #ifdef ROUNDTRIP
 bool UmlClassItem::set_roundtrip_expected()

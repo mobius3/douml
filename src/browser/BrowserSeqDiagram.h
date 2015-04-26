@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 class QPixmap;
 class SeqDiagramWindow;
@@ -45,7 +45,7 @@ class BrowserSeqDiagram : public BrowserDiagram
 
 protected:
     static QList<BrowserSeqDiagram *> imported;
-    static Q3ValueList<int> imported_ids;
+    static QList<int> imported_ids;
     static QStringList its_default_stereotypes;
     static QStringList message_default_stereotypes;
 

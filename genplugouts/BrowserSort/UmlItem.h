@@ -1,13 +1,8 @@
 #ifndef _UMLITEM_H
 #define _UMLITEM_H
 
-
 #include "UmlBaseItem.h"
-#include <q3cstring.h>
-#include <q3ptrvector.h>
-//Added by qt3to4:
-#include <Q3PtrCollection>
-
+#include <QVector>
 
 // This class is a mother class for all the other Uml* classes, this
 // allows to generalize their management, declare virtual operations etc ...
@@ -16,7 +11,7 @@
 class UmlItem : public UmlBaseItem
 {
 public:
-    UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n) {};
+    UmlItem(void * id, const QByteArray & n) : UmlBaseItem(id, n) {};
 
     virtual ~UmlItem();
 
@@ -28,10 +23,10 @@ public:
 
 };
 
-class VectorOfUmlItem : public Q3PtrVector<UmlItem>
+class VectorOfUmlItem : public QVector<UmlItem*>
 {
 public:
-    int compareItems(Q3PtrCollection::Item d1, Q3PtrCollection::Item d2);
+    int compareItems(UmlItem *d1, UmlItem *d2);
 
 };
 

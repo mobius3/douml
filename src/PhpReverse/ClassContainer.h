@@ -28,7 +28,7 @@
 #ifndef _CLASS_CONTAINER_H
 #define _CLASS_CONTAINER_H
 
-#include <q3dict.h>
+
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include "UmlClass.h"
@@ -50,7 +50,7 @@ public:
     bool bypass_type(WrapperStr s);
 
 protected:
-    Q3Dict<Class> Defined;
+    QHash<WrapperStr,Class*> Defined;
 };
 
 #endif

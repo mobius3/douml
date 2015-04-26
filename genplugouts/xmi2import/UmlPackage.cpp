@@ -13,11 +13,11 @@
 #include <unistd.h>
 #endif
 
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qapplication.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 #include "UmlCom.h"
 #include "FileIn.h"
@@ -41,18 +41,18 @@ void UmlPackage::import(QString path)
     bool manual = path.isEmpty();
 
     if (manual)
-        path = Q3FileDialog::getOpenFileName(QString::null, QString::null, 0, 0, "open xmi/xml file");
+        path = QFileDialog::getOpenFileName(0,"open xmi/xml file",QString::null, QString::null);
 
     if (! path.isEmpty()) {
         // note : QTextStream(FILE *) bugged under windows
-        FILE * fp = fopen(path, "rb");
+        FILE * fp = fopen(path.toLatin1().constData(), "rb");
 
         if (fp == 0)
-            UmlCom::trace("cannot open " + path);
+            UmlCom::trace(QString("cannot open " + path).toLatin1().constData());
         else {
             QString s = "import " + path + "<br>";
 
-            UmlCom::trace(s);
+            UmlCom::trace(s.toLatin1().constData());
 
             FileIn in(path, fp);
 
@@ -122,7 +122,7 @@ void UmlPackage::importHeader(FileIn & in)
 
         // read all before stereotype use
         WrapperStr prof_st;
-        Q3ValueList<WrapperStr> base_v;
+        QList<WrapperStr> base_v;
 
         while ((void) in.read(), !tk.close("xmi:xmi")) {
             if (UmlClass::isAppliedStereotype(tk, prof_st, base_v))
@@ -338,12 +338,12 @@ void UmlPackage::init()
 void UmlPackage::applyStereotype(FileIn & in, Token & token)
 {
     WrapperStr prof_st;
-    Q3ValueList<WrapperStr> base_v;
+    QList<WrapperStr> base_v;
     WrapperStr s;
 
     if (UmlClass::isAppliedStereotype(token, prof_st, base_v)) {
         WrapperStr s;
-        Q3ValueList<WrapperStr>::Iterator it_ext;
+        QList<WrapperStr>::Iterator it_ext;
 
         for (it_ext = base_v.begin(); it_ext != base_v.end(); ++it_ext) {
             WrapperStr s2;
@@ -369,11 +369,11 @@ void UmlPackage::applyStereotype(FileIn & in, Token & token)
                 elt->set_Stereotype(prof_st);
                 elt->UmlItem::applyStereotype();	// set properties
 
-                Q3Dict<WrapperStr> props = elt->properties();
-                Q3DictIterator<WrapperStr> it(props);
+                QHash<WrapperStr,WrapperStr*> props = elt->properties();
+                QHash<WrapperStr,WrapperStr*>::Iterator it = props.begin();
 
-                while (it.current()) {
-                    WrapperStr k = it.currentKey().latin1();
+                while (it != props.end()) {
+                    WrapperStr k = *(*it);
 
                     if (token.valueOf(k.mid(k.operator QString().indexOf(':') + 1).lower(), s))
                         elt->set_PropertyValue(k, s);
@@ -405,11 +405,11 @@ UmlPackage * UmlPackage::importProfile(FileIn & in, WrapperStr href)
 
                 if (pf == 0) {
                     QFileInfo fi(in.path());
-                    QDir d(fi.dir(TRUE));
-                    QString fn = d.absFilePath(href.left(index));
+                    QDir d(fi.dir());
+                    QString fn = d.absoluteFilePath(href.left(index));
 
                     if (QFile::exists(fn)) {
-                        WrapperStr cmd = qApp->argv()[0] + WrapperStr(" ") + WrapperStr((const char *)fn); //[rageek] ambiguous, cast
+                        WrapperStr cmd = qApp->arguments()[0] + WrapperStr(" ") + WrapperStr(fn); //[rageek] ambiguous, cast
                         int pid = UmlCom::targetItem()->apply(cmd);
 
                         while (isToolRunning(pid)) {
@@ -531,7 +531,7 @@ UmlPackage * UmlPackage::findProfile(WrapperStr xmiId)
             return this;
     }
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     UmlPackage * r;
 

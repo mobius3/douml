@@ -32,7 +32,7 @@
 #include <qfileinfo.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 #include <QTextStream>
 
 #include "UmlOperation.h"
@@ -44,13 +44,13 @@
 #include "util.h"
 
 // to manage preserved bodies, the key is the id under bouml
-Q3IntDict<char> UmlOperation::bodies(127);
+QHash<int,char*> UmlOperation::bodies;
 const char * BodyPrefix = "// Bouml preserved body begin ";
 const char * BodyPostfix = "// Bouml preserved body end ";
 const int BodyPrefixLength = 30;
 const int BodyPostfixLength = 28;
 
-static bool generate_type(const Q3ValueList<UmlParameter> & params,
+static bool generate_type(const QList<UmlParameter> & params,
                           unsigned rank, QTextStream & f)
 {
     if (rank >= params.count())
@@ -60,7 +60,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
     return TRUE;
 }
 
-static bool generate_var(const Q3ValueList<UmlParameter> & params,
+static bool generate_var(const QList<UmlParameter> & params,
                          unsigned rank, QTextStream & f)
 {
     if (rank >= params.count())
@@ -70,7 +70,7 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
     return TRUE;
 }
 
-static bool generate_init(const Q3ValueList<UmlParameter> & params,
+static bool generate_init(const QList<UmlParameter> & params,
                           unsigned rank, QTextStream & f)
 {
     if (rank >= params.count())
@@ -111,9 +111,9 @@ WrapperStr UmlOperation::compute_name()
         else if ((index = get_set_spec.find("${Name}")) != -1)
             get_set_spec.replace(index, 7, capitalize(s));
         else if ((index = s.find("${NAME}")) != -1)
-            get_set_spec.replace(index, 7, s.upper());
+            get_set_spec.replace(index, 7, s.upper().toLatin1().constData());
         else if ((index = s.find("${nAME}")) != -1)
-            get_set_spec.replace(index, 7, s.lower());
+            get_set_spec.replace(index, 7, s.lower().toLatin1().constData());
 
         return get_set_spec;
     }
@@ -139,7 +139,7 @@ const char * UmlOperation::generate_body(QTextStream & f,
         unsigned id = get_id();
 
         sprintf(s_id, "%08X", id);
-        body = bodies.find((long) id);
+        body = bodies.value((long) id);
     }
 
     if (body == 0) {
@@ -200,7 +200,7 @@ void UmlOperation::generate(QTextStream & f, const WrapperStr & cl_stereotype,
         const char * p = phpDecl();
         const char * pp = 0;
         const char * afterparam = 0;
-        const Q3ValueList<UmlParameter> & params = this->params();
+        const QList<UmlParameter> & params = this->params();
         unsigned rank;
         const char * body_indent = strstr(p, "${body}");
 
@@ -364,8 +364,8 @@ void UmlOperation::generate_require_onces(QTextStream & f, WrapperStr & made)
 
         s = s.mid((unsigned) index1, (unsigned)(index2 - index1));
 
-        const Q3ValueList<UmlParameter> & params = this->params();
-        Q3ValueListConstIterator<UmlParameter> it;
+        const QList<UmlParameter> & params = this->params();
+        QList<UmlParameter>::ConstIterator it;
         unsigned rank;
         char ti[16];
 
@@ -393,7 +393,7 @@ static char * read_file(const char * filename)
         int size = fi.size();
         char * s = new char[size + 1];
 
-        if (fp.readBlock(s, size) == -1) {
+        if (fp.read(s, size) == -1) {
             delete [] s;
             return 0;
         }
@@ -407,7 +407,7 @@ static char * read_file(const char * filename)
         return 0;
 }
 
-static void read_bodies(const char * path, Q3IntDict<char> & bodies)
+static void read_bodies(const char * path, QHash<int,char*> & bodies)
 {
     char * s = read_file(path);
 
@@ -428,7 +428,7 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
                 UmlCom::fatal_error("read_bodies 1");
             }
 
-            if (bodies.find(id) != 0) {
+            if (bodies.value(id) != 0) {
                 UmlCom::trace(WrapperStr("<font  color =\"red\"> Error in ") + path +
                               " : preserve body identifier used twice</font><br>");
                 UmlCom::bye(n_errors() + 1);
@@ -477,7 +477,11 @@ static void read_bodies(const char * path, Q3IntDict<char> & bodies)
 
 void UmlOperation::read_bodies(const char * path)
 {
-    bodies.setAutoDelete(TRUE);
+    //bodies.setAutoDelete(TRUE);
+    QHashIterator<int,char*> it(bodies);
+    while(it.hasNext())
+        delete it.next().value();
+
     bodies.clear();
     ::read_bodies(path, bodies);
 }

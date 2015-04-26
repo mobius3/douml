@@ -3,24 +3,24 @@
 
 #include "UmlActivityDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 bool UmlActivityPartition::chapterp()
 {
     return TRUE;
 }
 
-Q3CString UmlActivityPartition::sKind()
+QByteArray UmlActivityPartition::sKind()
 {
     return "activity partition";
 }
 
-void UmlActivityPartition::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlActivityPartition::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     define();
 
     chapter("Activity partition", pfix, rank, "activitypartition", level);
 
-    Q3CString s = description();
+    QByteArray s = description();
 
     if (!s.isEmpty()) {
         fw.write("<p>");

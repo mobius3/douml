@@ -28,13 +28,8 @@
 
 
 
-
-#include <q3intdict.h>
 #include <qdatetime.h>
 #include <qmessagebox.h>
-#include <q3ptrlist.h>
-#include <q3ptrlist.h>
-
 #include "mu.h"
 #include "Labeled.h"
 #include "myio.h"
@@ -65,8 +60,8 @@ bool in_lib_import()
 
 int place(IdDict<void> & d, int id, void * x)
 {
-    const int uid = user_id();
 
+    const int uid = user_id();
     if (id != -1) {
         // id is relevant
         bool check = TRUE;
@@ -80,10 +75,14 @@ int place(IdDict<void> & d, int id, void * x)
         }
         else if (d.old_diagram) {
             // place id unchanged among the old ones
-            d.dict[1].replace(id, x);
+            //d.dict[1].replace(id, x);
+            d.dict[1].remove(id);
+            d.dict[1].insert(id, x);
 
             if ((d.dict[1].count() / 2) >= d.dict[1].size())
-                d.dict[1].resize(d.dict[1].size() * 2 - 1);
+            {
+                d.dict[1].reserve(d.dict[1].size() * 2 - 1);
+            }
 
             // id doesn't contains a user_id field
             // create new one for the current user_id
@@ -94,10 +93,13 @@ int place(IdDict<void> & d, int id, void * x)
         }
         else if (NeedRenumber) {
             // place id unchanged among the old ones
-            d.dict[1].replace(id, x);
+            //d.dict[1].replace(id, x);
+            d.dict[1].remove(id);
+            d.dict[1].insert(id, x);
+
 
             if ((d.dict[1].count() / 2) >= d.dict[1].size())
-                d.dict[1].resize(d.dict[1].size() * 2 - 1);
+                d.dict[1].reserve(d.dict[1].size() * 2 - 1);
 
             int nid;
 
@@ -158,9 +160,8 @@ int place(IdDict<void> & d, int id, void * x)
         d.dict[0].insert(id, x);
 
         if ((d.dict[0].count() / 2) >= d.dict[0].size())
-            d.dict[0].resize(d.dict[0].size() * 2 - 1);
+            d.dict[0].reserve(d.dict[0].size() * 2 - 1);
     }
-
     return id;
 }
 

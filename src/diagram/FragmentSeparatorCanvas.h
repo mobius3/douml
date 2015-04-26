@@ -40,6 +40,7 @@ protected:
     FragmentCanvas * fragment;
     double vpos;
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     FragmentSeparatorCanvas(UmlCanvas * canvas, FragmentCanvas * f, double vp = 0.5);
     virtual ~FragmentSeparatorCanvas();
@@ -52,7 +53,7 @@ public:
     virtual void drawShape(QPainter & p);
     virtual void moveBy(double dx, double dy);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual LineDirection allowed_direction(UmlCode);
     virtual void connexion(UmlCode, DiagramItem *, const QPoint &, const QPoint &);

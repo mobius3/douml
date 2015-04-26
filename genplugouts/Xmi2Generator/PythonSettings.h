@@ -6,7 +6,7 @@
 
 
 #include "UmlSettings.h"
-#include <q3dict.h>
+
 
 // This class manages settings concerning PYTHON, configured through
 // the 'Generation settings' dialog.
@@ -240,7 +240,7 @@ private:
 
     static WrapperStr _ext;
 
-    static Q3Dict<WrapperStr> _map_imports;
+    static QHash<WrapperStr,WrapperStr*> _map_imports;
 
 
 protected:

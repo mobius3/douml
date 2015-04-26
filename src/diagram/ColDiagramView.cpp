@@ -30,7 +30,7 @@
 
 
 #include <qfont.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QDropEvent>
@@ -78,15 +78,15 @@ void ColDiagramView::update_msgs()
 
 void ColDiagramView::update_msg_supports()
 {
-    Q3CanvasItemList l = canvas()->allItems();
-    Q3CanvasItemList::Iterator it;
+    QList<QGraphicsItem*> l = canvas()->items();
+    QList<QGraphicsItem*>::Iterator it;
 
     for (it = l.begin(); it != l.end(); ++it) {
-        if ((*it)->visible()) { // at least not deleted
+        if ((*it)->isVisible()) { // at least not deleted
             DiagramItem * di = QCanvasItemToDiagramItem(*it);
 
             if (di != 0) {
-                switch (di->type()) {
+                switch (di->typeUmlCode()) {
                 case UmlSelfLink:
                     ((CodSelfLinkCanvas *) di)->update_msgs();
                     break;
@@ -105,13 +105,13 @@ void ColDiagramView::update_msg_supports()
 
 void ColDiagramView::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("Communication diagram menu"));
 
     if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
-        m.insertSeparator();
-        m.insertItem(TR("Edit all the messages"), 29);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Edit all the messages"), 29);
     }
 
     switch (default_menu(m, 30)) {
@@ -134,11 +134,13 @@ void ColDiagramView::menu(const QPoint &)
     }
 }
 
-void ColDiagramView::contentsMousePressEvent(QMouseEvent * e)
+void ColDiagramView::mousePressEvent(QMouseEvent * e)
 {
     if (!window()->frozen()) {
+        QPoint diagramPoint(e->x(), e->y());
+        QPointF scenePoint = mapToScene(diagramPoint);
         if (e->button() == ::Qt::RightButton)
-            DiagramView::contentsMousePressEvent(e);
+            DiagramView::mousePressEvent(e);
         else {
             UmlCode c = window()->buttonOn();
 
@@ -157,7 +159,7 @@ void ColDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 if (b != 0) {
                     CodClassInstCanvas * cl =
                         new CodClassInstCanvas(b, the_canvas(),
-                                               e->x(), e->y(), 0);
+                                               scenePoint.x(), scenePoint.y(), 0);
 
                     cl->show();
                     cl->upper();
@@ -182,7 +184,7 @@ void ColDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 if (b != 0) {
                     CodClassInstCanvas * cl =
                         new CodClassInstCanvas(b, the_canvas(),
-                                               e->x(), e->y(), 0);
+                                               scenePoint.x(), scenePoint.y(), 0);
 
                     cl->show();
                     cl->upper();
@@ -199,7 +201,7 @@ void ColDiagramView::contentsMousePressEvent(QMouseEvent * e)
                 window()->selectOn();
                 history_save();
 
-                Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+                QGraphicsItem * ci = the_canvas()->collision(scenePoint.toPoint());
 
                 if (ci != 0) {
                     DiagramItem * i = QCanvasItemToDiagramItem(ci);
@@ -210,7 +212,7 @@ void ColDiagramView::contentsMousePressEvent(QMouseEvent * e)
                         if (!err.isEmpty())
                             msg_critical("Douml", err);
                         else {
-                            i->connexion(c, i, e->pos(), e->pos());
+                            i->connexion(c, i, scenePoint.toPoint(), scenePoint.toPoint());
                             window()->package_modified();
                         }
                     }
@@ -222,13 +224,13 @@ void ColDiagramView::contentsMousePressEvent(QMouseEvent * e)
             break;
 
             default:
-                DiagramView::contentsMousePressEvent(e);
+                DiagramView::mousePressEvent(e);
                 break;
             }
         }
     }
     else
-        DiagramView::contentsMousePressEvent(e);
+        DiagramView::mousePressEvent(e);
 }
 
 void ColDiagramView::dragEnterEvent(QDragEnterEvent * e)
@@ -251,11 +253,30 @@ void ColDiagramView::dragEnterEvent(QDragEnterEvent * e)
         e->ignore();
 }
 
+void ColDiagramView::dragMoveEvent(QDragMoveEvent * e)
+{
+    if (!window()->frozen() &&
+        (UmlDrag::canDecode(e, UmlClass, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlClassInstance, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlPackage, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlClassDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlUseCaseDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlSeqDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlColDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlObjectDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlComponentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlDeploymentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlActivityDiagram, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlStateDiagram, TRUE, TRUE)))
+        e->accept();
+    else
+        e->ignore();
+}
+
 void ColDiagramView::dropEvent(QDropEvent * e)
 {
     BrowserNode * bn;
-    QPoint p = viewportToContents(e->pos());
-
+    QPointF p = mapToScene(e->pos());
     if ((bn = UmlDrag::decode(e, UmlClassInstance)) != 0) {
         history_save();
 
@@ -320,7 +341,7 @@ void ColDiagramView::dropEvent(QDropEvent * e)
 void ColDiagramView::save(QTextStream & st, QString & warning,
                           bool copy) const
 {
-    DiagramItemList items(canvas()->allItems());
+    DiagramItemList items(canvas()->items());
 
     if (!copy)
         // sort is useless for a copy
@@ -331,7 +352,7 @@ void ColDiagramView::save(QTextStream & st, QString & warning,
     // save first the packages fragment, classes instances, notes, icons and text
 
     foreach (DiagramItem *di, items) {
-        switch (di->type()) {
+        switch (di->typeUmlCode()) {
         case UmlPackage:
         case UmlFragment:
         case UmlClass:
@@ -352,7 +373,7 @@ void ColDiagramView::save(QTextStream & st, QString & warning,
     // then save links selflink and dirs (without messages)
 
     foreach (DiagramItem *di, items) {
-        switch (di->type()) {
+        switch (di->typeUmlCode()) {
         case UmlLink:	// saves associated dirs
         case UmlSelfLink:
             if (!copy || di->copyable())
@@ -370,7 +391,7 @@ void ColDiagramView::save(QTextStream & st, QString & warning,
     // then save anchors
 
     foreach (DiagramItem *di, items)
-        if ((!copy || di->copyable()) && (di->type() == UmlAnchor))
+        if ((!copy || di->copyable()) && (di->typeUmlCode() == UmlAnchor))
             di->save(st, FALSE, warning);
 
     if (!copy && (preferred_zoom != 0)) {
@@ -412,14 +433,14 @@ void ColDiagramView::read(char * st, char * k)
     k = read_keyword(st);
 
     // then show/update msgs
-    Q3CanvasItemList items = canvas->allItems();
-    Q3CanvasItemList::Iterator it;
+    QList<QGraphicsItem*> items = canvas->items();
+    QList<QGraphicsItem*>::Iterator it;
 
     for (it = items.begin(); it != items.end(); ++it) {
         DiagramItem * di = QCanvasItemToDiagramItem(*it);
 
         if (di != 0) {
-            switch (di->type()) {
+            switch (di->typeUmlCode()) {
             case UmlSelfLink:
                 ((CodSelfLinkCanvas *) di)->update_msgs();
                 break;
@@ -453,7 +474,7 @@ void ColDiagramView::read(char * st, char * k)
 
 void ColDiagramView::send(ToolCom * com)
 {
-    Q3CanvasItemList l = canvas()->allItems();
+    QList<QGraphicsItem*> l = canvas()->items();
 
     //FragmentCanvas::send(com, l);
     CodClassInstCanvas::send(com, l);

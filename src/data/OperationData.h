@@ -28,7 +28,7 @@
 #ifndef OPERATIONDATA_H
 #define OPERATIONDATA_H
 
-#include <q3memarray.h>
+//#include <q3memarray.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include  <memory>
@@ -155,6 +155,7 @@ protected:
 
     void set_bodies_info();
     static char * set_bodies_info(BrowserClass * cl, int id);
+
 
 public:
     OperationData(int id = 0);

@@ -32,24 +32,20 @@
 
 
 
-#include <q3ptrdict.h>
 #include <qmap.h>
-#include <q3tabdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
+#include <tabdialog.h>
 #include "BrowserParameterSet.h"
 
-class Q3ComboBox;
-class Q3ListBox;
-class Q3VBox;
+class QComboBox;
+class QListWidget;
+class VVBox;
 class LineEdit;
 class MultiLineEdit;
 class ParameterSetData;
 class KeyValuesTable;
 class BodyDialog;
 
-class ParameterSetDialog : public Q3TabDialog
+class ParameterSetDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -57,13 +53,13 @@ protected:
     QWidget * umltab;
     ParameterSetData * data;
     LineEdit * edname;
-    Q3ComboBox * edstereotype;
+    QComboBox * edstereotype;
     MultiLineEdit * comment;
     QList<BodyDialog *> edits;
 
     // associated classes
-    Q3ListBox * lb_available;
-    Q3ListBox * lb_member;
+    QListWidget * lb_available;
+    QListWidget * lb_member;
 
     // user
     KeyValuesTable * kvtable;

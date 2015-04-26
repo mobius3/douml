@@ -28,12 +28,10 @@
 #ifndef DEFAULTSDIALOG_H
 #define DEFAULTSDIALOG_H
 
-#include <q3tabdialog.h>
-#include <q3memarray.h>
-#include <q3ptrvector.h>
-
+#include <tabdialog.h>
+#include <QDialog>
 #include "StateSpec.h"
-#include <q3ptrvector.h>
+
 
 class ComboStates;
 class ComboColor;
@@ -75,15 +73,15 @@ private:
     ColorSpec * _v;
 };
 
-class SettingsDialog : public Q3TabDialog
+class SettingsDialog : public TabDialog
 {
     Q_OBJECT
 
 protected:
     StateSpecVector * states;
     ColorSpecVector * colors;
-    Q3PtrVector<ComboStates> * cbstates;
-    Q3PtrVector<ComboColor> * cbcolors;
+    QHash<int, ComboStates*> * cbstates;
+    QHash<int, ComboColor*> * cbcolors;
     QWidget * first_visible_page;
     bool several;
     bool did_apply;

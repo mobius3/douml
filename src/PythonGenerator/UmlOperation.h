@@ -27,12 +27,8 @@
 
 #ifndef UMLOPERATION_H
 #define UMLOPERATION_H
-
-#include <q3intdict.h>
-//Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-
 #include "UmlBaseOperation.h"
 
 class QTextStream;
@@ -40,7 +36,7 @@ class QTextStream;
 class UmlOperation : public UmlBaseOperation
 {
 private:
-    static Q3IntDict<char> bodies;
+    static QHash<int, char*> bodies;
 
 public:
     UmlOperation(void * id, const WrapperStr & n)

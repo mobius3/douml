@@ -91,5 +91,5 @@ WrapperStr Namespace::current()
 
     QString & s = Stack.last();
 
-    return WrapperStr(s.left(s.length() - 1).toAscii().constData());
+    return WrapperStr(s.left(s.length() - 1).toLatin1().constData());
 }

@@ -6,7 +6,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 
-void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs)
+void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, QList<UmlSequenceMessage *> &msgs)
 {
     UmlFragment * fr = fragment();
 
@@ -16,9 +16,9 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
     fr->write(out, diagram, msgs);
 }
 
-void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs, WrapperStr oper)
+void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, QList<UmlSequenceMessage *> &msgs, WrapperStr oper)
 {
-    Q3PtrListIterator<UmlSequenceMessage> it(msgs);
+    QList<UmlSequenceMessage*>::Iterator it = msgs.begin();
     UmlSequenceMessage * m;
 
     if (!oper.isEmpty()) {
@@ -107,7 +107,8 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
         out << "\" setting=\"false\"/>\n";
     }
 
-    while ((m = it.current()) != 0) {
+    while (it != msgs.end()) {
+        m = *it;
         UmlFragmentCompartment * fc = m->fragment();
 
         if (fc == 0)
@@ -156,12 +157,13 @@ void UmlFragmentCompartment::write(FileOut & out, UmlItem * diagram, Q3PtrList< 
     }
 }
 
-void UmlFragmentCompartment::bypass(Q3PtrList< UmlSequenceMessage > & msgs)
+void UmlFragmentCompartment::bypass(QList<UmlSequenceMessage *> &msgs)
 {
-    Q3PtrListIterator<UmlSequenceMessage> it(msgs);
+    QList<UmlSequenceMessage*>::Iterator it = msgs.begin();
     UmlSequenceMessage * m;
 
-    while ((m = it.current()) != 0) {
+    while (it != msgs.end()) {
+        m = *it;
         UmlFragmentCompartment * fc = m->fragment();
 
         if (fc == 0)
@@ -186,7 +188,7 @@ void UmlFragmentCompartment::bypass(Q3PtrList< UmlSequenceMessage > & msgs)
                 // not included in compartment or under
                 ++it;
             else
-                msgs.removeRef(m);
+                msgs.removeOne(m);
         }
     }
 }

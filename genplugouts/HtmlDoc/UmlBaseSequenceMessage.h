@@ -3,9 +3,9 @@
 
 
 #include "aMessageKind.h"
-#include <q3cstring.h>
-#include <q3ptrdict.h>
-#include <q3ptrvector.h>
+
+
+
 #include "UmlMessage.h"
 
 class UmlFragmentCompartment;
@@ -22,7 +22,7 @@ public:
     }
 
     // return the stereotype of the message
-    Q3CString stereotype() const {
+    QByteArray stereotype() const {
         return _stereotype;
     }
 
@@ -42,7 +42,7 @@ public:
     }
 
     // return the arguments of the operation, may be empty
-    const Q3CString & arguments() const {
+    const QByteArray & arguments() const {
         return _args;
     }
 
@@ -58,12 +58,12 @@ private:
 
     int _received_at;
 
-    Q3CString _args;
+    QByteArray _args;
 
-    Q3CString _stereotype;
+    QByteArray _stereotype;
 
     // internal, don't call it
-    void read_(const Q3PtrDict<UmlClassInstanceReference> & instances, const Q3PtrVector<UmlFragment> & fragments);
+    void read_(const QHash<void *, UmlClassInstanceReference *> &instances, const QVector<UmlFragment *> &fragments);
 
     friend class UmlBaseSequenceDiagramDefinition;
 };

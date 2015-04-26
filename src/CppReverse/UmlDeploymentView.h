@@ -29,9 +29,7 @@
 #define UMLDEPLOYMENTVIEW_H
 
 #include "UmlBaseDeploymentView.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
 
 // This class manages 'deployment view'
 // You can modify it as you want (except the constructor)

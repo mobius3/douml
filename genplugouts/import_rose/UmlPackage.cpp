@@ -2,9 +2,9 @@
 #include "UmlPackage.h"
 #include "UmlArtifact.h"
 
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 #include "File.h"
 #include "UmlCom.h"
@@ -15,13 +15,13 @@
 
 void UmlPackage::roseImport()
 {
-    QString s = Q3FileDialog::getOpenFileName(QString::null, "*.mdl", 0);
+    QString s = QFileDialog::getOpenFileName(0, "" ,QString::null, "*.mdl");
 
     if (!s.isEmpty()) {
         File f(s, "");
 
         if (! f.open(QIODevice::ReadOnly)) {
-            UmlCom::trace("<br>cannot open " + s);
+            UmlCom::trace(QString("<br>cannot open " + s).toLatin1().constData());
             throw 0;
         }
 
@@ -55,18 +55,18 @@ void UmlPackage::roseImport()
     }
 }
 
-Q3CString UmlPackage::fullName()
+QByteArray UmlPackage::fullName()
 {
     return (this == getProject()) ? name() : UmlItem::fullName();
 }
 
-void UmlPackage::subArtifacts(Q3PtrList<UmlArtifact> & l, Q3CString name, Q3CString deplview_name)
+void UmlPackage::subArtifacts(QList<UmlArtifact *> &l, QByteArray name, QByteArray deplview_name)
 {
     UmlDeploymentView * deplview;
 
-    for (deplview = _deplviews.first(); deplview != 0; deplview = _deplviews.next()) {
+    foreach (deplview, _deplviews){
         if (deplview->baseName() == deplview_name) {
-            const Q3PtrVector<UmlItem> ch = deplview->children();
+            const QVector<UmlItem*> ch = deplview->children();
             unsigned i;
 
             for (i = 0; i != ch.size(); i += 1) {
@@ -80,16 +80,16 @@ void UmlPackage::subArtifacts(Q3PtrList<UmlArtifact> & l, Q3CString name, Q3CStr
 
 }
 
-void UmlPackage::subDeplViews(Q3PtrList<UmlDeploymentView> & l, Q3CString s)
+void UmlPackage::subDeplViews(QList<UmlDeploymentView *> &l, QByteArray s)
 {
     UmlDeploymentView * deplview;
 
-    for (deplview = _deplviews.first(); deplview != 0; deplview = _deplviews.next())
+    foreach (deplview, _deplviews)
         if (deplview->baseName() == s)
             l.append(deplview);
 }
 
-UmlPackage * UmlPackage::addPackage(Q3CString s)
+UmlPackage * UmlPackage::addPackage(QByteArray s)
 {
     UmlPackage * r;
 
@@ -99,10 +99,10 @@ UmlPackage * UmlPackage::addPackage(Q3CString s)
     return r;
 }
 
-UmlDeploymentView * UmlPackage::addDeplView(Q3CString s, UmlPackage * p)
+UmlDeploymentView * UmlPackage::addDeplView(QByteArray s, UmlPackage * p)
 {
     UmlDeploymentView * dpv;
-    Q3CString bn = s;
+    QByteArray bn = s;
 
     while ((dpv = UmlDeploymentView::create(p, s, bn)) == 0)
         s += '_';
@@ -114,7 +114,7 @@ UmlDeploymentView * UmlPackage::addDeplView(Q3CString s, UmlPackage * p)
 
 bool UmlPackage::import(File & f)
 {
-    Q3CString s;
+    QByteArray s;
 
     switch (f.read(s)) {
     case -1:

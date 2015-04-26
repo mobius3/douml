@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseSequenceDiagram.h"
-#include <q3cstring.h>
+
 #include "Vector.h"
 
 // This class manages 'sequence diagrams', notes that the class 'UmlDiagram'
@@ -14,10 +14,10 @@
 class UmlSequenceDiagram : public UmlBaseSequenceDiagram
 {
 public:
-    UmlSequenceDiagram(void * id, const Q3CString & n) : UmlBaseSequenceDiagram(id, n) {};
+    UmlSequenceDiagram(void * id, const QByteArray & n) : UmlBaseSequenceDiagram(id, n) {};
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     //set he html ref
     //set the diagrams list

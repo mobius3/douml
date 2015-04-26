@@ -4,8 +4,8 @@
 
 #include "aMessageKind.h"
 
-#include <q3ptrdict.h>
-#include <q3ptrvector.h>
+
+
 #include "UmlMessage.h"
 
 class UmlFragmentCompartment;
@@ -63,7 +63,7 @@ private:
     WrapperStr _stereotype;
 
     // internal, don't call it
-    void read_(const Q3PtrDict<UmlClassInstanceReference> & instances, const Q3PtrVector<UmlFragment> & fragments);
+    void read_(const QHash<void *, UmlClassInstanceReference *> &instances, const QVector<UmlFragment *> &fragments);
 
     friend class UmlBaseSequenceDiagramDefinition;
 };

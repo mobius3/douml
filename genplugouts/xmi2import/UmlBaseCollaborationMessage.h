@@ -3,7 +3,7 @@
 
 
 
-#include <q3ptrdict.h>
+
 #include "UmlMessage.h"
 
 class UmlClassInstanceReference;
@@ -29,7 +29,7 @@ private:
     WrapperStr _hrank;
 
     // internal, don't call it
-    void read_(const Q3PtrDict<UmlClassInstanceReference> & instances);
+    void read_(const QHash<void*, UmlClassInstanceReference*> & instances);
 
     friend class UmlBaseCollaborationDiagramDefinition;
 };

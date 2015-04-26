@@ -1,11 +1,6 @@
 #ifndef _CLASSINSTANCE_H
 #define _CLASSINSTANCE_H
-
-
-#include <q3ptrlist.h>
-
-#include <q3valuelist.h>
-
+#include <QList.h>
 class FileIn;
 class Token;
 class UmlItem;
@@ -22,7 +17,7 @@ public:
 
 
 protected:
-    static Q3PtrList<ClassInstance> All;
+    static QList<ClassInstance*> All;
 
     struct Slot {
         //import the activity node starting by 'tk' inside 'where'
@@ -37,7 +32,7 @@ protected:
     };
 
 
-    Q3ValueList<Slot> bindings;
+    QList<Slot> bindings;
 
     WrapperStr id;
 

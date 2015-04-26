@@ -22,6 +22,7 @@ protected:
     virtual int get_identifier() const {return -1;}
     virtual BasicData * get_data() const {return 0;}
     virtual void save(QTextStream &, bool , QString & ){}
+    virtual const QPixmap * pixmap(int) const {return NULL;}
 
 };
 

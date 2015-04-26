@@ -29,9 +29,7 @@
 #define UMLATTRIBUTE_H
 
 #include "UmlBaseAttribute.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
 
 class Class;
 

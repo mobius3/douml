@@ -104,16 +104,18 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
 TARGET          = java_generator
-DEFINES          = WITHJAVA BooL=bool
+DEFINES          = WITHJAVA BooL=bool TRUE=true FALSE=false
 INCLUDEPATH   = ../Tools ../JavaGenerator ../
 
 DESTDIR = ../../bin
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network
+#qt3support
 
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/java_generator

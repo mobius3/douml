@@ -32,7 +32,7 @@
 #include "Libs/L_UniversalModels/include/TreeItem.h"
 #include "Libs/L_UniversalModels/include/genericeventfilter.h"
 #include "diagram/BrowserView.h"
-//#include "browser/BrowserClassView.h"
+#include "browser/BrowserClassView.h"
 #include "browser/BrowserNodeDummy.h"
 #include "diagram/UmlWindow.h"
 #include "misc/UmlDrag.h"
@@ -47,6 +47,9 @@ CatalogWidget::CatalogWidget( QWidget *parent) :
     ui(new Ui::CatalogWidget)
 {
     ui->setupUi(this);
+#ifdef __sil__
+    this->setToolTip("CatalogWidget");
+#endif
     if(!dummyView)
         dummyView = new BrowserView();
 }
@@ -88,14 +91,12 @@ void CatalogWidget::Init(UmlWindow* window, BrowserView* view)
 {
     originalView = view;
     mainWindow = window;
-
-    connect(view, SIGNAL(selectionChanged(Q3ListViewItem *)),
-            this, SLOT(OnUpdateVisitedView(Q3ListViewItem *)));
+    connect(view, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+            this, SLOT(OnUpdateVisitedView(QTreeWidgetItem*,QTreeWidgetItem*)));
     connect(ui->leVisitedSearch, SIGNAL(textChanged(QString)), this, SLOT(OnPerformVisitedFiltering(QString)));
 
     qRegisterMetaType<QList<BrowserNode*>>("QList<BrowserNode*>");
     connect(view, SIGNAL(marked_list(QList<BrowserNode*>)), this, SLOT(OnUpdateMarkedView(QList<BrowserNode*>)));
-
     SetupTreeModel(tmodVisited, ui->tvVisitedNodes,rootVisitedInterface,controllerVisited,rootVisited,
                    this, SLOT(OnSelectedInVisited(const QModelIndex &, const QModelIndex &)));
     SetupTreeModel(tmodMarked, ui->tvMarkedNodes,rootMarkedInterface,controllerMarked,rootMarked,
@@ -148,9 +149,9 @@ bool CatalogWidget::UseSkipVisited()
 
 
 void CatalogWidget::SetupTreeModel(TreeModel*& model , QTreeView* view,
-                               QSharedPointer<TreeItemInterface> &interface,
-                               QSharedPointer<ItemController<BrowserNode> > &controller,
-                               QSharedPointer<BrowserNode> &data, QWidget* originalView ,const char* slotName)
+                                   QSharedPointer<TreeItemInterface> &interface,
+                                   QSharedPointer<ItemController<BrowserNode> > &controller,
+                                   QSharedPointer<BrowserNode> &data, QWidget* originalView ,const char* slotName)
 {
     model = new TreeModel();
     SetupTreeController(controller);
@@ -162,9 +163,11 @@ void CatalogWidget::SetupTreeModel(TreeModel*& model , QTreeView* view,
     pointer->addChildren(items);
 
     data = QSharedPointer<BrowserNode>(new BrowserNodeDummy(dummyView));
-
     pointer->SetInternalData(data.data());
+
     controller->SetColumns(QStringList() << "class");
+
+
     model->InsertRootItem(interface);
 
     view->setModel(model);
@@ -175,15 +178,15 @@ void CatalogWidget::SetupTreeModel(TreeModel*& model , QTreeView* view,
     view->setRootIsDecorated(true);
     if(originalView)
         connect(view->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            originalView, slotName);
+                originalView, slotName);
 }
 
 
 void CatalogWidget::SetupTreeController(QSharedPointer<ItemController<BrowserNode> >& treeController)
 {
+
     treeController = QSharedPointer<ItemController<BrowserNode> >( new ItemController<BrowserNode>());
     treeController->AddGetter(QPair<int,int>(0,0),
-
                               [] (const BrowserNode* data, QModelIndex )
     {
         if(data)
@@ -399,20 +402,23 @@ void CatalogWidget::PerformFiltering(QStringList expandedNodes, QTreeView* view,
 
     TreeFunctions::FilterTreeAndRestoreNodes<TreeItemInterface, TreeItem, BrowserNode>
             (dataAccessFunc, checksFunc,
-                     expandedNodes, view, model, interface);
+             expandedNodes, view, model, interface);
 }
 
 
 
-void CatalogWidget::OnUpdateVisitedView(Q3ListViewItem * item)
+void CatalogWidget::OnUpdateVisitedView(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
     if(UseSkipVisited())
         return;
     //this->ui->tabWidget->setCurrentWidget(this->ui->tabVisited);
-    BrowserNode* itemAsNode = static_cast<BrowserNode*>(item);
-    itemAsNode = itemAsNode->get_first_generatable_node();
+    BrowserNode* itemAsNode = static_cast<BrowserNode*>(current);
+    if(itemAsNode)
+    {
+        itemAsNode = itemAsNode->get_first_generatable_node();
 
-    PullNodeUpwardsInVisited(itemAsNode);
+        PullNodeUpwardsInVisited(itemAsNode);
+    }
 }
 
 void CatalogWidget::OnUpdateMarkedView(QList<BrowserNode *> markedItems)

@@ -27,14 +27,13 @@
 #define MENUFACTORY_H
 
 #include <QMenu>
-#include <QMenuItem>
-#include <Q3PopupMenu>
+//#include <QMenuItem>
 #include "mystr.h"
 
 class MenuFactory
 {
 private:
-    Q3PopupMenu m_menu;
+    QMenu m_menu;
 
 public:
     typedef struct _Item {
@@ -52,15 +51,20 @@ public:
         const QString & title);
 
     static void addItems(
-        Q3PopupMenu & menu,
+        QMenu & menu,
         const Item    items[],
         const int     nofItems);
 
     static void addItem(
-        Q3PopupMenu   &   menu,
+        QMenu   &   menu,
         const char * const name,
         const int         id,
         const char * const whatsThis = NULL);
+    static void addItem(
+        QMenu   &   menu,
+        QString const name,
+        const int         id,
+        QString const whatsThis = QString());
 
     virtual void createTitle(
         const QString title);
@@ -78,9 +82,11 @@ public:
         const char * const name,
         QMenu * const      subMenu);
 
-    virtual Q3PopupMenu & menu();
+    virtual QMenu & menu();
 
     virtual void insertSeparator();
+    static QAction* findAction(const QMenu &menu , int id);
+    static void insertItem(QMenu& parentMenu, QString name, QMenu* menu, QString what = QString());
 
 };
 

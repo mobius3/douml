@@ -28,7 +28,7 @@
 #ifndef MYIO_H
 #define MYIO_H
 
-#include <q3dict.h>
+
 
 class QDir;
 

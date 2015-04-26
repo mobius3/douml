@@ -3,7 +3,7 @@
 
 
 
-
+#include <QByteArray>
 //  Internal class used to know how what code is produced for a stereotype in each language
 
 struct UmlStereotype {

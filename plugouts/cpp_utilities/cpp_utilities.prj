@@ -1,7 +1,7 @@
-format 66
+format 75
 "cpp_utilities"
-  revision 1
-  modified_by 2 "bruno"
+  revision 2
+  modified_by 2 "C:/Users/habip"
   cpp_root_dir "/tmp/cpp_utilities/"
 
 
@@ -9,13 +9,13 @@ format 66
   // class settings
   default_attribute_visibility protected default_relation_visibility protected default_operation_visibility public
   //class diagram settings
-  draw_all_relations yes hide_attributes no hide_operations no show_members_full_definition no show_members_visibility no show_members_stereotype no show_members_multiplicity no show_members_initialization no show_attribute_modifiers no member_max_width 127 show_parameter_dir yes show_parameter_name yes package_name_in_tab no class_drawing_mode natural drawing_language uml show_context_mode no auto_label_position yes show_relation_modifiers no show_infonote no shadow yes show_stereotype_properties no
+  draw_all_relations yes hide_attributes no hide_operations no hide_getset_operations no show_members_full_definition no show_members_visibility no show_members_stereotype no show_members_context no show_members_multiplicity no show_members_initialization no show_attribute_modifiers no member_max_width 127 show_parameter_dir yes show_parameter_name yes package_name_in_tab no class_drawing_mode natural drawing_language uml show_context_mode no auto_label_position yes show_relation_modifiers no show_relation_visibility no show_infonote no shadow yes show_stereotype_properties no
   //use case diagram settings
   package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes class_drawing_mode actor shadow yes show_stereotype_properties no
   //sequence diagram settings
-  show_full_operations_definition no write_horizontally no class_drawing_mode natural drawing_language uml draw_all_relations yes shadow yes show_stereotype_properties no
+  show_full_operations_definition no write_horizontally no class_drawing_mode natural drawing_language uml draw_all_relations yes shadow yes show_stereotype_properties no show_class_context_mode no show_msg_context_mode no
   //collaboration diagram settings
-  show_full_operations_definition no show_hierarchical_rank no write_horizontally no drawing_language uml package_name_in_tab no show_context no draw_all_relations yes shadow yes show_stereotype_properties no
+  show_full_operations_definition no show_hierarchical_rank no write_horizontally no drawing_language uml package_name_in_tab no show_context no show_msg_context no draw_all_relations yes shadow yes show_stereotype_properties no
   //object diagram settings
    write_horizontally yes package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes show_stereotype_properties no
   //component diagram settings
@@ -35,6 +35,8 @@ format 66
   font_size 10
   diagram_format A4
 
+  image_root_dir ""
+
   mark_for_import
   
   ncouples 1
@@ -44,4 +46,680 @@ format 66
   package_ref 641 // API USER
 
   package_ref 128002 // IHM
+
+  classview 135682 "cpp_utilities"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default hide_getset_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_context default show_members_multiplicity default show_members_initialization default show_attribute_modifiers default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_relation_modifiers default show_relation_visibility default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default show_msg_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default show_class_context_mode default show_msg_context_mode default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 158082 "FunctionTracer"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 258306 "FunctionTracer"
+	cpp_inline public explicit_return_type ""
+	nparams 1
+	
+	  param in name "val" explicit_type "QString"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}${)}${volatile}${throw} :traceString(val){QLOG_INFO() << \"Entered function \" + traceString;};
+"
+	
+	
+	
+	
+	comment "    FunctionTracer(QString val):traceString(val){qxtLog->debug(QString(\"   \").repeated(logLevel) + \"Entered function \" + traceString); logLevel++;}
+    ~FunctionTracer(){qxtLog->debug(QString(\"   \").repeated(logLevel) + \"Left    function \" + traceString);logLevel--;}"
+      end
+
+      operation 258434 "~FunctionTracer"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	
+	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw} {QLOG_INFO() <<  \"Left    function \" + traceString;};
+"
+	
+	
+	
+	
+      end
+
+      attribute 138498 "traceString"
+	public explicit_type "QString"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 138626 "logLevel"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 159234 "GridBox"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 174722 // (<generalisation>)
+	relation 174722 ---|> name "<generalisation>"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 174722 // (<generalisation>)
+	  b parent class_ref 159362 // typedef2
+      end
+
+      extra_member 134914 "Q_OBJECT"
+	
+	cpp "  Q_OBJECT" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      operation 254210 "GridBox"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 3
+	
+	  param in name "n" explicit_type "int"
+	  param inout name "parent" explicit_type "QWidget"
+	    defaultvalue "0"
+	  param in name "name" explicit_type "QString"
+	    defaultvalue "QString()"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} ${p2}${v2}${)}${volatile}${throw};
+"
+	cpp_def "${inline}${class}::${name}${(}${t0} ${p0}, ${t1} * ${p1}, ${t2} ${p2}${)} :
+    QGroupBox(name, parent)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 254338 "setMargin"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "mar" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 254466 "setSpacing"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "spacing" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 254594 "addWidget"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param inout name "widget" explicit_type "QWidget"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} * ${p0}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 254722 "name"
+	preserve_cpp_body_indent public explicit_return_type "QString"
+	nparams 1
+	
+	  param in name "name" explicit_type "QString"
+	    defaultvalue "QString()"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      extra_member 135042 "signals"
+	
+	cpp "  signals:" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      extra_member 135170 "slots"
+	
+	cpp "  public slots:" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      attribute 136578 "m_layout"
+	private explicit_type "QGridLayout"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 136706 "m_numCols"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 136834 "currentIndex"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 159362 "typedef2"
+      visibility package stereotype "typedef" explicit_base_type "QGroupBox"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 159490 "HHBox"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 174850 // (<generalisation>)
+	relation 174850 ---|> name "<generalisation>"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 174850 // (<generalisation>)
+	  b parent class_ref 159618 // typedef3
+      end
+
+      extra_member 135298 "Q_OBJECT"
+	
+	cpp "  Q_OBJECT" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      operation 254850 "HHBox"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 2
+	
+	  param inout name "parent" explicit_type "QWidget"
+	    defaultvalue "0"
+	  param in name "name" explicit_type "QString"
+	    defaultvalue "QString()"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw};
+"
+	cpp_def "${inline}${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1}${)} :
+    QWidget(parent)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 254978 "addWidget"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param inout name "widget" explicit_type "QWidget"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} * ${p0}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 255106 "setStretchFactor"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 2
+	
+	  param inout name "w" explicit_type "QWidget"
+	  param in name "stretch" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 255234 "setMargin"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "margin" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      extra_member 135426 "signals"
+	
+	cpp "  signals:" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      extra_member 135554 "slots"
+	
+	cpp "  public slots:" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      attribute 136962 "m_layout"
+	private explicit_type "QHBoxLayout"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 159618 "typedef3"
+      visibility package stereotype "typedef" explicit_base_type "QWidget"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 159746 "VVBox"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 174978 // (<generalisation>)
+	relation 174978 ---|> name "<generalisation>"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 174978 // (<generalisation>)
+	  b parent class_ref 159618 // typedef3
+      end
+
+      extra_member 135682 "Q_OBJECT"
+	
+	cpp "  Q_OBJECT" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      operation 255490 "VVBox"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	
+	  param inout name "parent" explicit_type "QWidget"
+	    defaultvalue "0"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}${)}${volatile}${throw};
+"
+	cpp_def "${inline}${class}::${name}${(}${t0} * ${p0}${)} :
+    QWidget(parent)
+${throw}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 255618 "addWidget"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param inout name "widget" explicit_type "QWidget"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} * ${p0}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 255746 "setStretchFactor"
+	preserve_cpp_body_indent public explicit_return_type "bool"
+	nparams 2
+	
+	  param inout name "w" explicit_type "QWidget"
+	  param in name "stretch" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} * ${p0}, ${t1} ${p1}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 255874 "setMargin"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	
+	  param in name "margin" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${inline}${type} ${class}::${name}${(}${t0} ${p0}${)}${const}${volatile}${throw}${staticnl}{
+${body}}
+"
+	
+	
+	
+	
+      end
+
+      extra_member 135810 "signals"
+	
+	cpp "  signals:" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      extra_member 135938 "slots"
+	
+	cpp "  public slots:" ""
+	java ""
+	php ""
+	python ""
+	idl ""
+      end
+
+      attribute 137090 "m_layout"
+	private explicit_type "QVBoxLayout"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+  end
+
+  package_ref 135682 // Logging
+
+  deploymentview 135682 "cpp_utilities"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+    artifact 151426 "gridbox"
+      stereotype "source"
+      cpp_h "#ifndef _${NAME}_H
+#define _${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 159362 // typedef2
+	class_ref 159234 // GridBox
+      end
+    end
+
+    artifact 151554 "hhbox"
+      stereotype "source"
+      cpp_h "#ifndef _${NAME}_H
+#define _${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 159618 // typedef3
+	class_ref 159490 // HHBox
+      end
+    end
+
+    artifact 151682 "vvbox"
+      stereotype "source"
+      cpp_h "#ifndef _${NAME}_H
+#define _${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 159746 // VVBox
+      end
+    end
+
+    artifact 152194 "FunctionTracer"
+      stereotype "source"
+      cpp_h "#ifndef _${NAME}_H
+#define _${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 158082 // FunctionTracer
+      end
+    end
+
+    artifact 152322 "main"
+      stereotype "source"
+      cpp_src "// the program is called with the socket port number in argument
+
+int main(int argc, char ** argv)
+{
+#ifdef DEBUG
+    QsLogging::Logger & logger = QsLogging::Logger::instance();
+    logger.setLoggingLevel(QsLogging::TraceLevel);
+    QDir dir;
+    dir.setPath(qApp->applicationDirPath());
+    dir.remove(QString(\"cpp_uyils\") + QString(\".log\"));
+    const QString sLogPath(QDir(qApp->applicationDirPath()).filePath(QString(\"cpp_utils\") + QString(\".log\")));
+    QsLogging::DestinationPtr fileDestination(QsLogging::DestinationFactory::MakeFileDestination(sLogPath));
+    QsLogging::DestinationPtr debugDestination(QsLogging::DestinationFactory::MakeDebugOutputDestination());
+    logger.addDestination(debugDestination.get());
+    logger.addDestination(fileDestination.get());
+    QLOG_INFO() << \"Starting the log\";
+#endif
+    if (argc != 2)
+        return 0;
+    QApplication a(argc, argv);
+    QLOG_INFO()  << \"Attempting to connect\";
+    if (UmlCom::connect(QString(argv[1]).toUInt()))
+    {
+        QLOG_INFO() << \"<b>Class utilities</b> release 1.1.2<hr>\";
+        UmlCom::trace(\"<b>Class utilities</b> release 1.1.2<hr>\");
+
+        try {
+            QLOG_INFO() << 1;
+            UmlCom::targetItem()->utilities();
+            QLOG_INFO() << 2;
+        }
+        catch (...) {
+            QLOG_INFO() << 3;
+        }
+
+        // must be called to cleanly inform that all is done
+        UmlCom::bye();
+    }
+
+    UmlCom::close();
+    return 0;
+}
+"
+      associated_classes
+      end
+    end
+  end
+preserve_bodies
+
 end

@@ -117,9 +117,9 @@ void ActivityData::on_delete()
 
 void ActivityData::edit()
 {
-    setName(browser_node->get_name());
-
+    setObjectName(browser_node->get_name());
     (new ActivityDialog(this))->show();
+
 }
 
 //

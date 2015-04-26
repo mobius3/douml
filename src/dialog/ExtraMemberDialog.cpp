@@ -29,15 +29,14 @@
 
 
 
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
-#include <q3buttongroup.h>
+#include <qcombobox.h>
+#include <bbuttongroup.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>
 #include <qpushbutton.h>
-
 #include "ExtraMemberDialog.h"
 #include "ExtraMemberData.h"
 #include "BrowserExtraMember.h"
@@ -54,7 +53,7 @@
 QSize ExtraMemberDialog::previous_size;
 
 ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), emd(ex)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), emd(ex)
 {
     ex->browser_node->edit_start();
 
@@ -69,18 +68,18 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     bool visit = !hasOkButton();
 
-    setCaption(TR("Extra Class Member dialog"));
+    setWindowTitle(TR("Extra Class Member dialog"));
 
-    Q3Grid * grid;
+    GridBox * grid;
 
     // general tab
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name :"), grid);
-    edname = new LineEdit(ex->name(), grid);
+    grid->addWidget(new QLabel(TR("name :"), grid));
+    grid->addWidget(edname = new LineEdit(ex->name(), grid));
     edname->setReadOnly(visit);
 
     QFont font = edname->font();
@@ -90,13 +89,14 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     font.setFixedPitch(TRUE);
 
-    new QLabel(TR("stereotype :"), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(ex->get_stereotype()));
-    edstereotype->setCurrentItem(0);
+    grid->addWidget(new QLabel(TR("stereotype :"), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(ex->get_stereotype()));
+    edstereotype->setCurrentIndex(0);
 
     if (! visit) {
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlExtraMember));
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlExtraMember));
         edstereotype->setAutoCompletion(completion());
     }
 
@@ -104,14 +104,19 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     edstereotype->setSizePolicy(sp);
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
+    SmallPushButton *b;
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(b);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(ex->get_browser_node()->get_comment());
     comment->setFont(font);
@@ -120,39 +125,46 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     // C++
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(grid);
-    Q3ButtonGroup * gp =
-        new Q3ButtonGroup(1, Qt::Horizontal, QString(), grid);
-    inline_cb = new QCheckBox("inline", gp);
+    grid->addWidget(new QLabel(grid));
+    BButtonGroup * gp;
+    grid->addWidget(gp =
+        new BButtonGroup(1, Qt::Horizontal, QString(), grid));
+    gp->addWidget(inline_cb = new QCheckBox("inline", gp));
     inline_cb->setDisabled(visit);
 
     if (ex->cpp_inline)
         inline_cb->setChecked(TRUE);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("C++ \ndeclaration :"), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("C++ \ndeclaration :"), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_cpp_decl()));
+        vtab->addWidget(b);
+    }
 
-    edcpp_decl = new MultiLineEdit(grid);
+    grid->addWidget(edcpp_decl = new MultiLineEdit(grid));
     edcpp_decl->setReadOnly(visit);
     edcpp_decl->setText(ex->cpp_decl);
     edcpp_decl->setFont(font);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("C++ \ndefinition :"), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("C++ \ndefinition :"), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(b= new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_cpp_def()));
+        vtab->addWidget(b);
+    }
 
-    edcpp_def = new MultiLineEdit(grid);
+    grid->addWidget(edcpp_def = new MultiLineEdit(grid));
     edcpp_def->setReadOnly(visit);
     edcpp_def->setText(ex->cpp_def);
     edcpp_def->setFont(font);
@@ -164,18 +176,20 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     // Java
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    vtab = new Q3VBox(grid);
-    new QLabel("Java :", vtab);
-
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel("Java :", vtab));
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_java_decl()));
+        vtab->addWidget(b);
+    }
 
-    edjava_decl = new MultiLineEdit(grid);
+    grid->addWidget(edjava_decl = new MultiLineEdit(grid));
     edjava_decl->setReadOnly(visit);
     edjava_decl->setText(ex->java_decl);
     edjava_decl->setFont(font);
@@ -187,18 +201,21 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     // Php
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    vtab = new Q3VBox(grid);
-    new QLabel("Php :", vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel("Php :", vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_php_decl()));
+        vtab->addWidget(b);
+    }
 
-    edphp_decl = new MultiLineEdit(grid);
+    grid->addWidget(edphp_decl = new MultiLineEdit(grid));
     edphp_decl->setReadOnly(visit);
     edphp_decl->setText(ex->php_decl);
     edphp_decl->setFont(font);
@@ -210,18 +227,21 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     // Python
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    vtab = new Q3VBox(grid);
-    new QLabel("Python :", vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel("Python :", vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_python_decl()));
+        vtab->addWidget(b);
+    }
 
-    edpython_decl = new MultiLineEdit(grid);
+    grid->addWidget(edpython_decl = new MultiLineEdit(grid));
     edpython_decl->setReadOnly(visit);
     edpython_decl->setText(ex->python_decl);
     edpython_decl->setFont(font);
@@ -233,18 +253,21 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     // IDL
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    vtab = new Q3VBox(grid);
-    new QLabel("Idl :", vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel("Idl :", vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(b = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_idl_decl()));
+        vtab->addWidget(b);
+    }
 
-    edidl_decl = new MultiLineEdit(grid);
+    grid->addWidget(edidl_decl = new MultiLineEdit(grid));
     edidl_decl->setReadOnly(visit);
     edidl_decl->setText(ex->idl_decl);
     edidl_decl->setFont(font);
@@ -256,11 +279,11 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(ex->get_browser_node(), grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(ex->get_browser_node(), grid, visit));
     addTab(grid, TR("Properties"));
 
     open_dialog(this);
@@ -268,7 +291,7 @@ ExtraMemberDialog::ExtraMemberDialog(ExtraMemberData * ex)
 
 void ExtraMemberDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -292,10 +315,10 @@ void ExtraMemberDialog::accept()
     BrowserNode * bn = emd->browser_node;
     QString s;
 
-    s = edname->text().stripWhiteSpace();
+    s = edname->text().trimmed();
     bn->set_name(s);
 
-    bool newst = emd->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+    bool newst = emd->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
 
     emd->cpp_decl = edcpp_decl->text();
     emd->cpp_def = edcpp_def->text();
@@ -316,12 +339,12 @@ void ExtraMemberDialog::accept()
     bn->package_modified();
     emd->modified();
 
-    Q3TabDialog::accept();
+    TabDialog::accept();
 }
 
 void ExtraMemberDialog::edit_description()
 {
-    edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
+    edit(comment->text(), edname->text().trimmed() + "_description",
          emd, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -332,7 +355,7 @@ void ExtraMemberDialog::post_edit_description(ExtraMemberDialog * d, QString s)
 
 void ExtraMemberDialog::edit_cpp_decl()
 {
-    edit(edcpp_decl->text(), edname->text().stripWhiteSpace() + "_class_extra_member_decl",
+    edit(edcpp_decl->text(), edname->text().trimmed() + "_class_extra_member_decl",
          emd, CppEdit, this, (post_edit) post_edit_cpp_decl, edits);
 }
 
@@ -343,7 +366,7 @@ void ExtraMemberDialog::post_edit_cpp_decl(ExtraMemberDialog * d, QString s)
 
 void ExtraMemberDialog::edit_cpp_def()
 {
-    edit(edcpp_def->text(), edname->text().stripWhiteSpace() + "_class_extra_member_def",
+    edit(edcpp_def->text(), edname->text().trimmed() + "_class_extra_member_def",
          emd, CppEdit, this, (post_edit) post_edit_cpp_def, edits);
 }
 
@@ -354,7 +377,7 @@ void ExtraMemberDialog::post_edit_cpp_def(ExtraMemberDialog * d, QString s)
 
 void ExtraMemberDialog::edit_java_decl()
 {
-    edit(edjava_decl->text(), edname->text().stripWhiteSpace() + "_class_extra_member",
+    edit(edjava_decl->text(), edname->text().trimmed() + "_class_extra_member",
          emd, JavaEdit, this, (post_edit) post_edit_java_decl, edits);
 }
 
@@ -365,7 +388,7 @@ void ExtraMemberDialog::post_edit_java_decl(ExtraMemberDialog * d, QString s)
 
 void ExtraMemberDialog::edit_php_decl()
 {
-    edit(edphp_decl->text(), edname->text().stripWhiteSpace() + "_class_extra_member",
+    edit(edphp_decl->text(), edname->text().trimmed() + "_class_extra_member",
          emd, PhpEdit, this, (post_edit) post_edit_php_decl, edits);
 }
 
@@ -376,7 +399,7 @@ void ExtraMemberDialog::post_edit_php_decl(ExtraMemberDialog * d, QString s)
 
 void ExtraMemberDialog::edit_python_decl()
 {
-    edit(edpython_decl->text(), edname->text().stripWhiteSpace() + "_class_extra_member",
+    edit(edpython_decl->text(), edname->text().trimmed() + "_class_extra_member",
          emd, PythonEdit, this, (post_edit) post_edit_python_decl, edits);
 }
 
@@ -387,7 +410,7 @@ void ExtraMemberDialog::post_edit_python_decl(ExtraMemberDialog * d, QString s)
 
 void ExtraMemberDialog::edit_idl_decl()
 {
-    edit(edidl_decl->text(), edname->text().stripWhiteSpace() + "_class_extra_member",
+    edit(edidl_decl->text(), edname->text().trimmed() + "_class_extra_member",
          emd, TxtEdit, this, (post_edit) post_edit_idl_decl, edits);
 }
 

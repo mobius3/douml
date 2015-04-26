@@ -3,7 +3,7 @@
 
 
 // Internal enum
-enum OnInstanceCmd {
+/*enum OnInstanceCmd {
     parentCmd = 0,
     childrenCmd  = 1,
     getDefCmd = 2,
@@ -177,5 +177,5 @@ enum OnInstanceCmd {
     applyStereotypeCmd,
     setDerivedCmd
 
-};
+};*/
 #endif

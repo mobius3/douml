@@ -24,7 +24,6 @@
 
 #ifndef EDGEMENUDIALOG_H
 #define EDGEMENUDIALOG_H
-#include <Q3TabDialog>
 #include <QWidget>
 #include <QMouseEvent>
 #include <QList>
@@ -32,13 +31,13 @@
 #include <QMap>
 #include "CustomWidgets/MultiPurposeDragArea.h"
 #include "edgemenudialogbase.h"
-
+#include "tabdialog.h"
 unsigned int ClosestEdge(QWidget *, QPoint);
 class BrowserNode;
 
 //! class contains some methods that make it possible to change
 //! the behaviour of Bruno's dialogs as non-intrusively as possible
-class EdgeMenuDialog : public Q3TabDialog, public EdgeMenuDialogBase
+class EdgeMenuDialog : public TabDialog, public EdgeMenuDialogBase
 {
     Q_OBJECT
 public:
@@ -51,15 +50,15 @@ protected:
     void leaveEvent(QEvent * event);
 
     //! called when user enters the window
-    void enterEvent(QEvent * event) override;
+    void enterEvent(QEvent * event) ;
 
-    void closeEvent(QCloseEvent *) override;
+    void closeEvent(QCloseEvent *) ;
 
-    void hideEvent(QHideEvent *) override;
+    void hideEvent(QHideEvent *) ;
 
-    void moveEvent(QMoveEvent *) override;
+    void moveEvent(QMoveEvent *) ;
 
-    void focusOutEvent(QFocusEvent *) override;
+    void focusOutEvent(QFocusEvent *) ;
 
     //! called on window show()
     void showEvent(QShowEvent * event);
@@ -83,7 +82,7 @@ protected:
     void ChangeTab(int);
 
     virtual void IntitiateMove(QPoint);
-    virtual void InitiateResize(QPoint);
+    void InitiateResize(QPoint);
     virtual void ResizeThis(QPoint, QPoint);
 
     bool isWritable;

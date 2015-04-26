@@ -27,10 +27,7 @@
 
 #ifndef OBJECTLINKDIALOG_H
 #define OBJECTLINKDIALOG_H
-
-#include <q3ptrlist.h>
 #include <qdialog.h>
-#include <q3ptrlist.h>
 
 class MyTable;
 class RelationData;

@@ -1,9 +1,9 @@
 
 #include "UmlDeploymentDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlDeploymentDiagram::sKind()
+QByteArray UmlDeploymentDiagram::sKind()
 {
     return "deployment diagram";
 }

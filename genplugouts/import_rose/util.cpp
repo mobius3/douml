@@ -1,8 +1,8 @@
-#include "q3cstring.h"
+#include "QByteArray.h"
 
 #include "util.h"
 
-Q3CString legalName(Q3CString s)
+QByteArray legalName(QByteArray s)
 {
     for (unsigned index = 0; index != s.length(); index += 1) {
         char c = s.at(index);
@@ -19,9 +19,9 @@ Q3CString legalName(Q3CString s)
     return s;
 }
 
-Q3CString replace(Q3CString f, Q3CString k, Q3CString v)
+QByteArray replace(QByteArray f, QByteArray k, QByteArray v)
 {
-    int index = f.find(k);
+    int index = f.indexOf(k);
 
     return (index != -1)
            ? f.replace(index, k.length(), v)

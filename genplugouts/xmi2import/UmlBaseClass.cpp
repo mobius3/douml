@@ -12,7 +12,7 @@
 #include "Tools/ApiCmd.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 UmlClass * UmlBaseClass::create(UmlItem * parent, const char * s)
 {
     return (UmlClass *) parent->create_(aClass, s);
@@ -65,11 +65,11 @@ bool UmlBaseClass::set_BaseType(const UmlTypeSpec & t)
     return set_it_(_base_type, t, setBaseTypeCmd);
 }
 
-Q3ValueList<UmlFormalParameter> UmlBaseClass::formals()
+QList<UmlFormalParameter> UmlBaseClass::formals()
 {
     UmlCom::send_cmd(_identifier, formalsCmd);
 
-    Q3ValueList<UmlFormalParameter> formals;
+    QList<UmlFormalParameter> formals;
 
     for (unsigned n = UmlCom::read_unsigned(); n; n -= 1) {
         UmlFormalParameter f;
@@ -101,11 +101,11 @@ bool UmlBaseClass::replaceFormal(unsigned int rank, const UmlFormalParameter & f
     return UmlCom::read_bool();
 }
 
-Q3ValueList<UmlActualParameter> UmlBaseClass::actuals()
+QList<UmlActualParameter> UmlBaseClass::actuals()
 {
     UmlCom::send_cmd(_identifier, actualsCmd);
 
-    Q3ValueList<UmlActualParameter> actuals;
+    QList<UmlActualParameter> actuals;
 
     for (unsigned n = UmlCom::read_unsigned(); n; n -= 1) {
         UmlActualParameter a;
@@ -150,17 +150,17 @@ UmlArtifact * UmlBaseClass::associatedArtifact()
     return (UmlArtifact *) UmlBaseItem::read_();
 }
 
-const Q3PtrVector<UmlComponent> UmlBaseClass::associatedComponents()
+const QVector<UmlComponent*> UmlBaseClass::associatedComponents()
 {
     UmlCom::send_cmd(_identifier, assocComponentCmd);
 
-    Q3PtrVector<UmlComponent> result;
+    QVector<UmlComponent*> result;
     unsigned n = UmlCom::read_unsigned();
 
     result.resize(n);
 
     for (unsigned index = 0; index != n; index += 1)
-        result.insert(index, (UmlComponent *) UmlBaseItem::read_());
+        result[index] = (UmlComponent *) UmlBaseItem::read_();
 
     return result;
 }
@@ -391,7 +391,7 @@ bool UmlBaseClass::set_isIdlCustom(bool y)
 UmlClass * UmlBaseClass::get(const WrapperStr & n, const UmlPackage * p)
 {
     if (p == 0) {
-        UmlClass * x = _classes[n];
+        UmlClass * x = _classes.value(n);
 
         if (x != 0)
             return x;
@@ -426,7 +426,7 @@ bool UmlBaseClass::set_Name(const WrapperStr & s)
     if (!UmlBaseItem::set_Name(s))
         return FALSE;
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     WrapperStr destr = "~" + name();
 
     for (unsigned i = 0; i != ch.size(); i += 1) {
@@ -441,7 +441,7 @@ bool UmlBaseClass::set_Name(const WrapperStr & s)
     return TRUE;
 }
 
-Q3Dict<UmlClass> UmlBaseClass::_classes(1001);
+QHash<WrapperStr, UmlClass*> UmlBaseClass::_classes;
 
 UmlBaseClass::UmlBaseClass(void * id, const WrapperStr & n)
     : UmlClassMember(id, n)
@@ -451,7 +451,7 @@ UmlBaseClass::UmlBaseClass(void * id, const WrapperStr & n)
     _classes.insert(n, (UmlClass *) this);
 
     if ((_classes.count() / 2) >= _classes.size())
-        _classes.resize(_classes.size() * 2 - 1);
+        _classes.reserve(_classes.size() * 2 - 1);
 }
 
 void UmlBaseClass::read_uml_()

@@ -8,48 +8,56 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3hbox.h>
+#include <HHBox.h>
 #include <qcheckbox.h>
 #include <qdir.h>
 //Added by qt3to4:
-#include <Q3VBoxLayout>
+#include <QVBoxLayout>
+#include <QSettings>
 
-Dialog::Dialog(BooL & rec, char & lang) : QDialog(0, 0, TRUE), _rec(rec), _lang(lang)
+Dialog::Dialog(BooL & rec, char & lang) : QDialog(0), _rec(rec), _lang(lang)
 {
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBox * htab;
+    setModal(true);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    HHBox * htab;
 
     vbox->setMargin(5);
 
     // recursive checkbox
     if (rec) {
-        htab = new Q3HBox(this);
+        htab = new HHBox(this);
         htab->setMargin(5);
         vbox->addWidget(htab);
 
-        rec_cb = new QCheckBox("Do recursively", htab);
+        htab->addWidget(rec_cb = new QCheckBox("Do recursively", htab));
     }
     else
         rec_cb = 0;
 
     // langs + cancel buttons
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    QPushButton * cpp = new QPushButton("&C++", htab);
-    new QLabel(htab);
-    QPushButton * java = new QPushButton("&Java", htab);
-    new QLabel(htab);
-    QPushButton * idl = new QPushButton("&Idl", htab);
-    new QLabel(htab);
-    QPushButton * php = new QPushButton("P&hp", htab);
-    new QLabel(htab);
-    QPushButton * python = new QPushButton("P&ython", htab);
-    new QLabel(htab);
-    QPushButton * cancel = new QPushButton("&Cancel", htab);
-    new QLabel(htab);
+    QPushButton * cpp;
+    htab->addWidget(cpp = new QPushButton("&C++", htab));
+    htab->addWidget(new QLabel(htab));
+    QPushButton * java;
+    htab->addWidget(java = new QPushButton("&Java", htab));
+    htab->addWidget(new QLabel(htab));
+    QPushButton * idl;
+    htab->addWidget(idl = new QPushButton("&Idl", htab));
+    htab->addWidget(new QLabel(htab));
+    QPushButton * php;
+    htab->addWidget(php = new QPushButton("P&hp", htab));
+    htab->addWidget(new QLabel(htab));
+    QPushButton * python;
+    htab->addWidget(python = new QPushButton("P&ython", htab));
+    htab->addWidget(new QLabel(htab));
+    QPushButton * cancel;
+    htab->addWidget(cancel = new QPushButton("&Cancel", htab));
+    htab->addWidget(new QLabel(htab));
     QSize bs(cancel->sizeHint());
 
     cpp->setFixedSize(bs);
@@ -64,22 +72,22 @@ Dialog::Dialog(BooL & rec, char & lang) : QDialog(0, 0, TRUE), _rec(rec), _lang(
 
     // help
 
-    htab = new Q3HBox(this);
+    htab = new HHBox(this);
     htab->setMargin(5);
     vbox->addWidget(htab);
 
-    new QLabel(htab);
-    new QLabel("Warning : reset the declarations/definitions to\n"
-               "their default value from the 'generation settings'", htab);
-    new QLabel(htab);
+    htab->addWidget(new QLabel(htab));
+    htab->addWidget(new QLabel("Warning : reset the declarations/definitions to\n"
+               "their default value from the 'generation settings'", htab));
+    htab->addWidget(new QLabel(htab));
 }
 
 void Dialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
 
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
-    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    settings.setIniCodec("UTF-8");
     int l, t, r, b;
     l = settings.value("Desktop/left", -1).toInt();
     r = settings.value("Desktop/right", -1).toInt();

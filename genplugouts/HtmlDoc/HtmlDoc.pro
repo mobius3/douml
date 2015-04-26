@@ -10,7 +10,7 @@ CONFIG(Release, Debug|Release) {
     CONFIG += qt Release
     QMAKE_POST_LINK = " "
 }
-DEFINES		= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON
+DEFINES		+= WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON
 HEADERS		= ./UmlBaseRelation.h \
 		  ./UmlFormalParameter.h \
 		  ./UmlCollaborationMessage.h \
@@ -413,11 +413,11 @@ SOURCES		= ./UmlBaseRelation.cpp \
 		  ./UmlBaseActivityNode.cpp \
 		  ./UmlTransition.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+DEFINES += TRUE=true FALSE=false
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/ghtml
@@ -432,3 +432,4 @@ UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+

@@ -34,7 +34,7 @@
 #include <QPixmap>
 #include <QDropEvent>
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QDragMoveEvent>
 
 class QPixmap;
@@ -72,7 +72,7 @@ public:
     static BrowserActivity * add_activity(BrowserNode * future_parent);
     static BrowserActivity * add_activity(BrowserNode * future_parent, const char * name);
     static BrowserActivity * get_activity(BrowserNode * parent);
-    Q3ValueList<BrowserParameter *> get_params() const;
+    QList<BrowserParameter *> get_params() const;
     void add_activity_diagram();
     BrowserNode * add_parameter(BrowserParameter * p);
     QString may_connect(const BrowserNode * dest) const;

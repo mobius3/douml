@@ -4,15 +4,14 @@
 
 #include "UmlDiagram.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlCollaborationDiagram;
 class UmlItem;
 
 //  Manage the collaboration diagrams
-class UmlBaseCollaborationDiagram : public UmlDiagram
-{
-public:
+class UmlBaseCollaborationDiagram : public UmlDiagram {
+  public:
     // returns a new collaboration diagram named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,9 +23,9 @@ public:
     virtual anItemKind kind();
 
 
-protected:
+  protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseCollaborationDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n) {};
+    UmlBaseCollaborationDiagram(void * id, const QByteArray & n) : UmlDiagram(id, n) {};
 
 };
 

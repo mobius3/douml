@@ -30,13 +30,13 @@
 
 
 #include <qapplication.h>
-#include <qworkspace.h>
-#include <q3toolbar.h>
+#include <QMdiArea>.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qspinbox.h>
-
+#include "toolbarfactory.h"
 #include "UmlWindow.h"
 #include "UseCaseDiagramWindow.h"
 #include "UseCaseDiagramView.h"
@@ -44,144 +44,146 @@
 #include "UmlPixmap.h"
 #include "myio.h"
 #include "translate.h"
+#include <QHBoxLayout>
 
 QString addactorText()
 {
-    return TR("Click this button to add an <i>actor</i> in the diagram. <br><br>"
+    return QObject::TR("Click this button to add an <i>actor</i> in the diagram. <br><br>"
               "You can also drop the class from the <b>browser</b>.");
 }
 QString addusecaseText()
 {
-    return TR("Click this button to add an <i>use case</i> in the diagram. <br><br>"
+    return QObject::TR("Click this button to add an <i>use case</i> in the diagram. <br><br>"
               "You can also drop the use case from the <b>browser</b>.");
 }
 extern QString addpackageText();
 QString addfragmentText()
 {
-    return TR("Click this button to add a <i>fragment</i>.");
+    return QObject::TR("Click this button to add a <i>fragment</i>.");
 }
 QString addsubjectText()
 {
-    return TR("Click this button to add a <i>subject</i>.");
+    return QObject::TR("Click this button to add a <i>subject</i>.");
 }
 QString associationText()
 {
-    return TR("Click this button to create an <i>association</i>");
+    return QObject::TR("Click this button to create an <i>association</i>");
 }
 extern QString dependencyText();
 QString inheritText()
 {
-    return TR("Click this button to create a <i>generalisation</i>");
+    return QObject::TR("Click this button to create a <i>generalisation</i>");
 }
 QString noteText()
 {
-    return TR("Click this button to create a <i>note</i>");
+    return QObject::TR("Click this button to create a <i>note</i>");
 }
 QString anchorText()
 {
-    return TR("Click this button to create a connection between a "
+    return QObject::TR("Click this button to create a connection between a "
               "<i>note</i> and any other item, or between an <i>association</i> "
               "and a <i>class</i> in case of an <i>association class</i>.");
 }
 extern QString textText();
 QString imageText()
 {
-    return TR("Click this button to add an <i>image</i>");
+    return QObject::TR("Click this button to add an <i>image</i>");
 }
 
 // id is an old ident in case of an import
 UseCaseDiagramWindow::UseCaseDiagramWindow(const QString & s, BrowserUseCaseDiagram * b, int id)
     : DiagramWindow(b, s), view(0)
 {
-    Q3ToolBar * toolbar = new Q3ToolBar(this, "use case operations");
-    addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
-
+    QToolBar * toolbar = new QToolBar("use case operations",this);
+    toolbar->setMinimumHeight(50);
+    toolbar->setOrientation(Qt::Horizontal);
+    addToolBar(Qt::TopToolBarArea, toolbar);
     add_edit_button(toolbar);
-
     select =
-        new QToolButton(*selectButton, TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton, QObject::tr("Select"), QString(),
                         this, SLOT(hit_select()), toolbar, "select");
-    select->setToggleButton(TRUE);
-    select->setOn(TRUE);
-    current_button = UmlSelect;
+    select->setCheckable(TRUE);
 
+
+    current_button = UmlSelect;
     addClass =
-        new QToolButton(*actorButton, TR("Actor"), QString(),
+        ToolBarFactory::createToolButton(*actorButton, QObject::tr("Actor"), QString(),
                         this, SLOT(hit_class()), toolbar, "actor");
-    addClass->setToggleButton(TRUE);
-    Q3WhatsThis::add(addClass, addactorText());
+    addClass->setCheckable(TRUE);
+    addClass->setWhatsThis(addactorText());
 
     addUseCase =
-        new QToolButton(*usecaseButton, TR("Use Case"), QString(),
+        ToolBarFactory::createToolButton(*usecaseButton, QObject::tr("Use Case"), QString(),
                         this, SLOT(hit_usecase()), toolbar, "use case");
-    addUseCase->setToggleButton(TRUE);
-    Q3WhatsThis::add(addUseCase, addusecaseText());
+    addUseCase->setCheckable(TRUE);
+    addUseCase->setWhatsThis( addusecaseText());
 
     addSubject
-        = new QToolButton(*subjectButton, TR("Add Subject"), QString(),
+        = ToolBarFactory::createToolButton(*subjectButton, QObject::tr("Add Subject"), QString(),
                           this, SLOT(hit_subject()), toolbar, "add subject");
-    addSubject->setToggleButton(TRUE);
-    Q3WhatsThis::add(addSubject, addsubjectText());
+    addSubject->setCheckable(TRUE);
+    addSubject->setWhatsThis( addsubjectText());
 
     addPackage
-        = new QToolButton(*packageButton, TR("Add Package"), QString(),
+        = ToolBarFactory::createToolButton(*packageButton, QObject::tr("Add Package"), QString(),
                           this, SLOT(hit_package()), toolbar, "add package");
-    addPackage->setToggleButton(TRUE);
-    Q3WhatsThis::add(addPackage, addpackageText());
+    addPackage->setCheckable(TRUE);
+    addPackage->setWhatsThis( addpackageText());
 
     addFragment
-        = new QToolButton(*fragmentButton, TR("Add Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton, QObject::tr("Add Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar, "add fragment");
-    addFragment->setToggleButton(TRUE);
-    Q3WhatsThis::add(addFragment, addfragmentText());
+    addFragment->setCheckable(TRUE);
+    addFragment->setWhatsThis( addfragmentText());
 
     association =
-        new QToolButton(*associationButton, TR("Association"), QString(),
+        ToolBarFactory::createToolButton(*associationButton, QObject::tr("Association"), QString(),
                         this, SLOT(hit_association()), toolbar, "association");
-    association->setToggleButton(TRUE);
-    Q3WhatsThis::add(association, associationText());
+    association->setCheckable(TRUE);
+    association->setWhatsThis( associationText());
 
     directionalassociation =
-        new QToolButton(*directionalAssociationButton, TR("Association"), QString(),
+        ToolBarFactory::createToolButton(*directionalAssociationButton, QObject::tr("Association"), QString(),
                         this, SLOT(hit_directionalassociation()), toolbar, "association");
-    directionalassociation->setToggleButton(TRUE);
-    Q3WhatsThis::add(directionalassociation, associationText());
+    directionalassociation->setCheckable(TRUE);
+    directionalassociation->setWhatsThis( associationText());
 
     dependency =
-        new QToolButton(*dependencyButton, TR("Dependency"), QString(),
+        ToolBarFactory::createToolButton(*dependencyButton, QObject::tr("Dependency"), QString(),
                         this, SLOT(hit_dependency()), toolbar, "dependency");
-    dependency->setToggleButton(TRUE);
-    Q3WhatsThis::add(dependency, dependencyText());
+    dependency->setCheckable(TRUE);
+    dependency->setWhatsThis( dependencyText());
 
     inherit =
-        new QToolButton(*generalisationButton, TR("Generalisation"), QString(),
+        ToolBarFactory::createToolButton(*generalisationButton, QObject::tr("Generalisation"), QString(),
                         this, SLOT(hit_inherit()), toolbar, "generalisation");
-    inherit->setToggleButton(TRUE);
-    Q3WhatsThis::add(inherit, inheritText());
+    inherit->setCheckable(TRUE);
+    inherit->setWhatsThis( inheritText());
 
     note =
-        new QToolButton(*noteButton, TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton, QObject::tr("Note"), QString(),
                         this, SLOT(hit_note()), toolbar, "note");
-    note->setToggleButton(TRUE);
-    Q3WhatsThis::add(note, noteText());
+    note->setCheckable(TRUE);
+    note->setWhatsThis( noteText());
 
     anchor =
-        new QToolButton(*anchorButton, TR("Anchor"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton, QObject::tr("Anchor"), QString(),
                         this, SLOT(hit_anchor()), toolbar, "anchor");
-    anchor->setToggleButton(TRUE);
-    Q3WhatsThis::add(anchor, anchorText());
+    anchor->setCheckable(TRUE);
+    anchor->setWhatsThis( anchorText());
 
     text =
-        new QToolButton(*textButton, TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton, QObject::tr("Text"), QString(),
                         this, SLOT(hit_text()), toolbar, "text");
-    text->setToggleButton(TRUE);
-    Q3WhatsThis::add(text, textText());
+    text->setCheckable(TRUE);
+    text->setWhatsThis( textText());
 
     image =
-        new QToolButton(*imageButton, TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton, QObject::tr("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
-    image->setToggleButton(TRUE);
-    Q3WhatsThis::add(image, imageText());
+    image->setCheckable(TRUE);
+
+    image->setWhatsThis( imageText());
 
     toolbar->addSeparator();
 
@@ -195,9 +197,8 @@ UseCaseDiagramWindow::UseCaseDiagramWindow(const QString & s, BrowserUseCaseDiag
 
     //qApp->setMainWidget(this);
 
-    QWorkspace * w = UmlWindow::get_workspace();
-
-    resize((w->width() * 4) / 5, (w->height() * 4) / 5);
+    QMdiArea * w = UmlWindow::get_workspace();
+    m_containingSubWindow->resize((w->width() * 4) / 5, (w->height() * 4) / 5);
 
     /*if (w->windowList().isEmpty())
       showMaximized();
@@ -205,6 +206,7 @@ UseCaseDiagramWindow::UseCaseDiagramWindow(const QString & s, BrowserUseCaseDiag
     show();
 
     view->preferred_size_zoom();
+
 
     //qApp->setMainWidget(0);
 }
@@ -215,10 +217,17 @@ UseCaseDiagramWindow::~UseCaseDiagramWindow()
         QString warning = "!";
         BooL is_new = FALSE;
 
+        //habip hidden items means deleted. So delete them not to save
+        QList<QGraphicsItem*> itList = canvas->items();
+        for(int i= itList.size() -1; i>=0; i--)
+        {
+            DiagramItem *di = QCanvasItemToDiagramItem(itList.at(i));
+            if(di && !itList.at(i)->isVisible())
+                delete di;
+        }
         save("d", warning, is_new);
         warning.remove(0, 1);	// removes !
         view->hide();
-
         if (!warning.isEmpty())
             warn(warning);
     }
@@ -235,22 +244,22 @@ void UseCaseDiagramWindow::hit_button(UmlCode c, QToolButton * b)
 {
     view->abort_line_construction();
 
-    select->setOn(FALSE);
-    addClass->setOn(FALSE);
-    addPackage->setOn(FALSE);
-    addFragment->setOn(FALSE);
-    addSubject->setOn(FALSE);
-    addUseCase->setOn(FALSE);
-    association->setOn(FALSE);
-    directionalassociation->setOn(FALSE);
-    dependency->setOn(FALSE);
-    inherit->setOn(FALSE);
-    note->setOn(FALSE);
-    anchor->setOn(FALSE);
-    text->setOn(FALSE);
-    image->setOn(FALSE);
+    select->setChecked(FALSE);
+    addClass->setChecked(FALSE);
+    addPackage->setChecked(FALSE);
+    addFragment->setChecked(FALSE);
+    addSubject->setChecked(FALSE);
+    addUseCase->setChecked(FALSE);
+    association->setChecked(FALSE);
+    directionalassociation->setChecked(FALSE);
+    dependency->setChecked(FALSE);
+    inherit->setChecked(FALSE);
+    note->setChecked(FALSE);
+    anchor->setChecked(FALSE);
+    text->setChecked(FALSE);
+    image->setChecked(FALSE);
 
-    b->setOn(TRUE);
+    b->setChecked(TRUE);
     current_button = c;
 }
 

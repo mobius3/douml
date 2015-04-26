@@ -2,8 +2,8 @@
 #define _UMLRELATION_H
 
 
-#include <q3dict.h>
-#include <q3cstring.h>
+
+#include <QByteArray>
 #include "aVisibility.h"
 #include "aRelationKind.h"
 #include "UmlBaseRelation.h"
@@ -19,19 +19,19 @@ class UmlRelation : public UmlBaseRelation
 {
 public:
     struct Role {
-        Q3Dict<Q3CString> prop;
+        QHash<QByteArray, QByteArray*> prop;
 
-        Q3CString doc;
+        QByteArray doc;
 
-        Q3CString id;
+        QByteArray id;
 
-        Q3CString name;
+        QByteArray name;
 
         UmlClass * target;
 
-        Q3CString target_id;
+        QByteArray target_id;
 
-        Q3CString cardinality;
+        QByteArray cardinality;
 
         aVisibility visibility;
 
@@ -50,7 +50,7 @@ public:
     };
 
 
-    UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n) {
+    UmlRelation(void * id, const QByteArray & n) : UmlBaseRelation(id, n) {
         cpt[kind()] += 1;
     };
 

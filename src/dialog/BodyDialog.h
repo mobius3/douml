@@ -29,30 +29,27 @@
 #define BODYDIALOG_H
 
 #include <qdialog.h>
-//Added by qt3to4:
-#include <Q3PtrList>
-
 #include "DialogUtil.h"
-
-class Q3TabDialog;
+#include "tabdialog.h"
+class TabDialog;
 class MultiLineEdit;
 
 class BodyDialog : public QDialog
 {
-    Q_OBJECT
+    //Q_OBJECT
 
 protected:
     MultiLineEdit * e;
-    Q3TabDialog * dlg;
+    TabDialog * dlg;
     post_edit f;
     QList<BodyDialog *> & eds;
 
     static QSize previous_size;
 
 public:
-    BodyDialog(QString t, Q3TabDialog * d, post_edit pf,
+    BodyDialog(QString t, TabDialog *d, post_edit pf,
                EditType k, QString what, QList<BodyDialog *> & edits);
-    virtual ~BodyDialog();
+    ~BodyDialog();
 };
 
 #endif

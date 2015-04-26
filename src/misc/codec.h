@@ -29,6 +29,7 @@
 #define CODEC_H
 #include "qstring.h"
 #include "misc/mystr.h"
+#include <QTextCodec>
 //#include
 //#include "mystr.h"
 

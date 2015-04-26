@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseArtifact.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class FileOut;
 
@@ -13,7 +13,7 @@ class FileOut;
 class UmlArtifact : public UmlBaseArtifact
 {
 public:
-    UmlArtifact(void * id, const Q3CString & n) : UmlBaseArtifact(id, n) {};
+    UmlArtifact(void * id, const QByteArray & n) : UmlBaseArtifact(id, n) {};
 
     virtual bool write_if_needed(FileOut & out);
 

@@ -31,14 +31,14 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QPixmap>
-
 #include "UcClassCanvas.h"
 #include "TemplateCanvas.h"
 #include "RelationCanvas.h"
+#include "ArrowCanvas.h"
 #include "DiagramView.h"
 #include "RelationData.h"
 #include "BasicData.h"
@@ -102,10 +102,8 @@ void UcClassCanvas::delete_it()
 {
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
     disconnect(browser_node->get_data(), 0, this, 0);
-
     if (templ)
         templ->delete_it();
-
     DiagramCanvas::delete_it();
 }
 
@@ -127,7 +125,7 @@ void UcClassCanvas::compute_size()
 {
     used_settings = settings;
     ((BrowserUseCaseDiagram *) the_canvas()->browser_diagram())
-    ->get_simpleclassdiagramsettings(used_settings);
+            ->get_simpleclassdiagramsettings(used_settings);
 
     full_name = browser_node->get_name();
 
@@ -174,10 +172,10 @@ void UcClassCanvas::compute_size()
             BrowserArtifact * cp = cl->get_associated_artifact();
 
             QString context =
-                (((PackageData *)
-                  ((BrowserNode *)
-                   (((cp == 0) ? (BrowserNode *) cl : (BrowserNode *) cp)
-                    ->parent()->parent()))->get_data())->*f)();
+                    (((PackageData *)
+                      ((BrowserNode *)
+                       (((cp == 0) ? (BrowserNode *) cl : (BrowserNode *) cp)
+                        ->parent()->parent()))->get_data())->*f)();
 
             if (!context.isEmpty())
                 full_name = context + sep + full_name;
@@ -188,7 +186,7 @@ void UcClassCanvas::compute_size()
     QFontMetrics fim(the_canvas()->get_font(UmlNormalItalicFont));
     const ClassData * data = ((ClassData *) browser_node->get_data());
     int wi =
-        (data->get_is_abstract()) ? fim.width(full_name) : fm.width(full_name);
+            (data->get_is_abstract()) ? fim.width(full_name) : fm.width(full_name);
     double zoom = the_canvas()->zoom();
     const QPixmap * px = 0;
 
@@ -282,8 +280,8 @@ void UcClassCanvas::compute_size()
         wi = min_w;
 
     used_color = (itscolor == UmlDefaultColor)
-                 ? the_canvas()->browser_diagram()->get_color(UmlClass)
-                 : itscolor;
+            ? the_canvas()->browser_diagram()->get_color(UmlClass)
+            : itscolor;
 
     if ((used_view_mode == asClass) && (used_color != UmlTransparent)) {
         const int shadow = the_canvas()->shadow();
@@ -294,7 +292,6 @@ void UcClassCanvas::compute_size()
 
     // force odd width and height for line alignment
     DiagramCanvas::resize(wi | 1, he | 1);
-
     if (tmpl) {
         if (templ == 0) {
             templ = new TemplateCanvas(this);
@@ -311,15 +308,16 @@ void UcClassCanvas::compute_size()
 
 void UcClassCanvas::draw(QPainter & p)
 {
-    if (! visible()) return;
+    if (! isVisible()) return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
     QFontMetrics fim(the_canvas()->get_font(UmlNormalItalicFont));
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
     double zoom = the_canvas()->zoom();
     FILE * fp = svg();
+    QBrush backBrush = p.background();
 
     if (fp != 0)
         fputs("<g>\n", fp);
@@ -345,32 +343,33 @@ void UcClassCanvas::draw(QPainter & p)
 
                 if (fp != 0) {
                     fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
-                            " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                                " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                             QColor(::Qt::darkGray).rgb() & 0xffffff,
                             r.right(), r.top() + shadow, shadow - 1, r.height() - 1 - 1);
 
                     fprintf(fp, "\t<rect fill=\"#%06x\" stroke=\"none\" stroke-opacity=\"1\""
-                            " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                                " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                             QColor(::Qt::darkGray).rgb() & 0xffffff,
                             r.left() + shadow, r.bottom(), r.width() - 1 - 1, shadow - 1);
                 }
             }
         }
 
-        p.setBackgroundColor(co);
+        backBrush.setColor(co);
+        p.setBackground(backBrush);
 
         if (used_color != UmlTransparent) {
             p.fillRect(r, co);
 
             if (fp != 0)
                 fprintf(fp, "\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                            " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                         svg_color(used_color),
                         r.x(), r.y(), r.width() - 1, r.height() - 1);
         }
         else if (fp != 0)
             fprintf(fp, "\t<rect fill=\"none\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                     r.x(), r.y(), r.width() - 1, r.height() - 1);
 
         p.drawRect(r);
@@ -414,12 +413,12 @@ void UcClassCanvas::draw(QPainter & p)
         draw_actor(&p, ra);
     }
 
-    r.setTop(r.top() + (int)(ACTOR_SIZE * zoom) + two);
-    break;
+        r.setTop(r.top() + (int)(ACTOR_SIZE * zoom) + two);
+        break;
 
     case Natural: {
         const QPixmap * px =
-            ProfiledStereotypes::diagramPixmap(data->get_stereotype(), zoom);
+                ProfiledStereotypes::diagramPixmap(data->get_stereotype(), zoom);
         int lft = (px->width() < width()) ? r.x() + (width() - px->width()) / 2 : r.x();
 
         p.drawPixmap(lft, r.y(), *px);
@@ -427,12 +426,12 @@ void UcClassCanvas::draw(QPainter & p)
         if (fp != 0)
             // pixmap not really exported in SVG
             fprintf(fp, "\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                     svg_color(UmlBlack), lft, r.y(), px->width() - 1, px->height() - 1);
 
         r.setTop(r.top() + px->height());
     }
-    break;
+        break;
 
     default:	// class
         r.setTop(r.top() + two);
@@ -468,7 +467,7 @@ void UcClassCanvas::draw(QPainter & p)
 
         if (fp != 0)
             fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
+                        " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
                     r.left(), r.top(), r.right(), r.top());
 
         r.setTop(r.top() + (int)(8 * zoom));
@@ -476,22 +475,27 @@ void UcClassCanvas::draw(QPainter & p)
 
         if (fp != 0)
             fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
+                        " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
                     r.left(), r.top(), r.right(), r.top());
     }
 
     if (fp != 0)
         fputs("</g>\n", fp);
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
 
     if (selected())
         show_mark(p, rect());
 }
+void UcClassCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
 
 void UcClassCanvas::modified()
 {
-    if (visible()) {
+    if (isVisible()) {
         hide();
         hide_lines();
         compute_size();
@@ -527,28 +531,25 @@ bool UcClassCanvas::get_show_stereotype_properties() const
 
 void UcClassCanvas::change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     compute_size();
     recenter();
-
     if (templ != 0)
         templ->update();
 
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void UcClassCanvas::moveBy(double dx, double dy)
 {
     DiagramCanvas::moveBy(dx, dy);
-
     if (templ != 0)
         templ->update();
 }
 
 void UcClassCanvas::set_z(double z)
 {
-    setZ(z);
-
+    setZValue(z);
     if (templ)
         templ->update();
 }
@@ -563,7 +564,7 @@ void UcClassCanvas::post_loaded()
     }
 }
 
-UmlCode UcClassCanvas::type() const
+UmlCode UcClassCanvas::typeUmlCode() const
 {
     return UmlClass;
 }
@@ -591,106 +592,110 @@ void UcClassCanvas::open()
 
 void UcClassCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 8);
-    m.insertItem(TR("Go down"), 9);
-    m.insertSeparator();
-    m.insertItem(TR("Add related elements"), 10);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 4);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 8);
+    MenuFactory::addItem(m, TR("Go down"), 9);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Add related elements"), 10);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 4);
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
-        m.insertItem(TR("Edit"), 7);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("Edit"), 7);
+        m.addSeparator();
     }
 
-    m.insertItem(TR("Select in browser"), 2);
+    MenuFactory::addItem(m, TR("Select in browser"), 2);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 3);
+        MenuFactory::addItem(m, TR("Select linked items"), 3);
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 5);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 5);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 6);
+        MenuFactory::addItem(m, TR("Delete from model"), 6);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlClass, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    int rank = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int rank = retAction->data().toInt();
 
-    switch (rank) {
-    case 0:
-        upper();
-        hide();
-        show();
-        break;
+        switch (rank) {
+        case 0:
+            upper();
+            hide();
+            show();
+            break;
 
-    case 1:
-        lower();
-        hide();
-        show();
-        break;
+        case 1:
+            lower();
+            hide();
+            show();
+            break;
 
-    case 2:
-        browser_node->select_in_browser();
-        return;
+        case 2:
+            browser_node->select_in_browser();
+            return;
 
-    case 3:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
+        case 3:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
 
-    case 4:
-        edit_drawing_settings();
-        return;
+        case 4:
+            edit_drawing_settings();
+            return;
 
-    case 5:
-        // remove from diagram
-        delete_it();
-        break;
+        case 5:
+            // remove from diagram
+            delete_it();
+            break;
 
-    case 6:
-        // delete from model
-        browser_node->delete_it();	// will delete the canvas
-        break;
+        case 6:
+            // delete from model
+            browser_node->delete_it();	// will delete the canvas
+            break;
 
-    case 7:
-        browser_node->open(TRUE);
-        break;
+        case 7:
+            browser_node->open(TRUE);
+            break;
 
-    case 8:
-        z_up();
-        hide();
-        show();
-        break;
+        case 8:
+            z_up();
+            hide();
+            show();
+            break;
 
-    case 9:
-        z_down();
-        hide();
-        show();
-        break;
+        case 9:
+            z_down();
+            hide();
+            show();
+            break;
 
-    case 10:
-        ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("class/actor"), TRUE, FALSE);
-        return;
+        case 10:
+            ((UmlCanvas *) canvas())->get_view()
+                    ->add_related_elements(this, TR("class/actor"), TRUE, FALSE);
+            return;
 
-    default:
-        if (rank >= 20)
-            ToolCom::run(Tool::command(rank - 20), browser_node);
+        default:
+            if (rank >= 20)
+                ToolCom::run(Tool::command(rank - 20), browser_node);
 
-        return;
+            return;
+        }
     }
 
     package_modified();
@@ -716,7 +721,7 @@ void UcClassCanvas::apply_shortcut(QString s)
     }
     else if (s == "Add related elements") {
         ((UmlCanvas *) canvas())->get_view()
-        ->add_related_elements(this, TR("class/actor"), TRUE, FALSE);
+                ->add_related_elements(this, TR("class/actor"), TRUE, FALSE);
         return;
     }
     else {
@@ -822,16 +827,16 @@ QString UcClassCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
     if (l == UmlAnchor)
         return dest->may_start(l);
 
-    switch (dest->type()) {
+    switch (dest->typeUmlCode()) {
     case UmlUseCase:
         return ((l == UmlAssociation) || (l == UmlDirectionalAssociation))
-               ? QString() : TR("illegal");
+                ? QString() : TR("illegal");
 
     case UmlClass:
         return ((l == UmlGeneralisation) || (l == UmlDependency))
-               ? ((BrowserClass *) browser_node)
-               ->may_connect(l, (BrowserClass *)((const UcClassCanvas *) dest)->browser_node)
-               : TR("illegal");
+                ? ((BrowserClass *) browser_node)
+                  ->may_connect(l, (BrowserClass *)((const UcClassCanvas *) dest)->browser_node)
+                : TR("illegal");
 
     default:
         return TR("illegal");
@@ -841,11 +846,10 @@ QString UcClassCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 bool UcClassCanvas::has_relation(BasicData * def) const
 {
     foreach (ArrowCanvas *line, lines) {
-        if (IsaRelation(line->type()) &&
-            (((RelationCanvas *) line)->get_data() == def))
+        if (IsaRelation(line->typeUmlCode()) &&
+                (((RelationCanvas *) line)->get_data() == def))
             return TRUE;
     }
-
     return FALSE;
 }
 
@@ -864,22 +868,22 @@ static bool dependencyOrGeneralization(UmlCode t)
 
 void UcClassCanvas::draw_all_depend_gene(UcClassCanvas * end)
 {
-    Q3ListViewItem * child;
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    BrowserNode * child;
+    QList<QGraphicsItem*> all = canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (child = browser_node->firstChild(); child; child = child->nextSibling()) {
         if (dependencyOrGeneralization(((BrowserNode *) child)->get_type()) &&
-            !((BrowserNode *) child)->deletedp()) {
+                !((BrowserNode *) child)->deletedp()) {
             RelationData * def =
-                ((RelationData *)((BrowserNode *) child)->get_data());
+                    ((RelationData *)((BrowserNode *) child)->get_data());
 
             if ((def->get_start_class() == browser_node) && 	// rel begins by this
-                ((end == 0) || (def->get_end_class() == end->browser_node)) &&
-                !has_relation(def)) {
+                    ((end == 0) || (def->get_end_class() == end->browser_node)) &&
+                    !has_relation(def)) {
                 // adds it in case the other class is drawn
                 BrowserClass * end_class =
-                    ((BrowserClass *) def->get_end_class());
+                        ((BrowserClass *) def->get_end_class());
                 DiagramItem * di;
 
                 if (end_class == browser_node)
@@ -891,36 +895,35 @@ void UcClassCanvas::draw_all_depend_gene(UcClassCanvas * end)
                         DiagramItem * adi = QCanvasItemToDiagramItem(*cit);
 
                         if ((adi != 0) &&		// an uml canvas item
-                            (adi->type() == UmlClass) &&
-                            (((UcClassCanvas *) adi)->browser_node == end_class) &&
-                            ((((UcClassCanvas *) adi) == end) || (*cit)->visible())) {
+                                (adi->typeUmlCode() == UmlClass) &&
+                                (((UcClassCanvas *) adi)->browser_node == end_class) &&
+                                ((((UcClassCanvas *) adi) == end) || (*cit)->isVisible())) {
                             // other class canvas find
                             di = adi;
                             break;
                         }
                     }
                 }
-
                 if (di != 0)
                     (new RelationCanvas(the_canvas(), this, di,
                                         ((BrowserClass *) browser_node),
                                         def->get_type(), 0, -1.0, -1.0, def))
-                    ->show();
+                        ->show();
             }
         }
     }
 
     if ((end == 0) &&
-        !DrawingSettings::just_modified() &&
-        !on_load_diagram()) {
+            !DrawingSettings::just_modified() &&
+            !on_load_diagram()) {
         for (cit = all.begin(); cit != all.end(); ++cit) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if ((di != 0) &&	// an uml canvas item
-                (di->type() == UmlClass) &&
-                (((UcClassCanvas *) di) != this) &&
-                !((UcClassCanvas *) di)->browser_node->deletedp() &&
-                ((UcClassCanvas *) di)->visible())
+                    (di->typeUmlCode() == UmlClass) &&
+                    (((UcClassCanvas *) di) != this) &&
+                    !((UcClassCanvas *) di)->browser_node->deletedp() &&
+                    ((UcClassCanvas *) di)->isVisible())
                 ((UcClassCanvas *) di)->draw_all_depend_gene(this);
         }
     }
@@ -930,8 +933,7 @@ void UcClassCanvas::connexion(UmlCode action, DiagramItem * dest,
                               const QPoint &, const QPoint &)
 {
     ArrowCanvas * a;
-
-    if ((dest->type() == UmlClass) && IsaRelation(action))
+    if ((dest->typeUmlCode() == UmlClass) && IsaRelation(action))
         a = new RelationCanvas(the_canvas(), this, dest, 0, action, 0, -1.0, -1.0);
     else
         a = new ArrowCanvas(the_canvas(), this, dest, action, 0, FALSE, -1.0, -1.0);
@@ -983,14 +985,14 @@ UcClassCanvas * UcClassCanvas::read(char *& st, UmlCanvas * canvas, char * k)
             int x = (int) read_double(st);
 
             result =
-                new UcClassCanvas(br, canvas, x, (int) read_double(st), id);
-            result->setZ(read_double(st));
+                    new UcClassCanvas(br, canvas, x, (int) read_double(st), id);
+            result->setZValue(read_double(st));
 
             // move the actor in its initial position
             x = ACTOR_CANVAS_SIZE - result->width();
 
             if (x < 0)
-                result->Q3CanvasRectangle::moveBy(x / 2, 0);
+                result->QGraphicsRectItem::moveBy(x / 2, 0);
 
             k = read_keyword(st);
             read_double(st);
@@ -1020,7 +1022,7 @@ UcClassCanvas * UcClassCanvas::read(char *& st, UmlCanvas * canvas, char * k)
             result->compute_size();
 
             if ((read_file_format() < 72) &&
-                (result->used_view_mode == asInterface)) {
+                    (result->used_view_mode == asInterface)) {
                 result->settings.class_drawing_mode = asClass;
                 result->compute_size();
             }
@@ -1046,7 +1048,7 @@ UcClassCanvas * UcClassCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
 void UcClassCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
 
     disconnect(DrawingSettings::instance(), SIGNAL(changed()),
                this, SLOT(modified()));

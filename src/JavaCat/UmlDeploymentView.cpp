@@ -32,15 +32,15 @@
 #include "UmlPackage.h"
 #include "Package.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 static QList<UmlArtifact *> Artifacts;
 
 bool UmlDeploymentView::set_roundtrip_expected()
 {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
     bool result = isWritable();
 
     for (; v != vsup; v += 1)
@@ -51,7 +51,7 @@ bool UmlDeploymentView::set_roundtrip_expected()
 
 void UmlDeploymentView::mark_useless(QList<UmlItem *> & l)
 {
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
+    QVector<UmlItem*> ch = UmlItem::children();
     UmlClassItem ** v = (UmlClassItem **) ch.data();
     UmlClassItem ** const vsup = v + ch.size();
 
@@ -62,9 +62,9 @@ void UmlDeploymentView::mark_useless(QList<UmlItem *> & l)
 void UmlDeploymentView::scan_it(int & n)
 {
     // compute artifact list
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
 
     n = 0;
 

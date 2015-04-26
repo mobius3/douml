@@ -4,7 +4,7 @@
 #include "UmlCom.h"
 #include "util.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 UmlItem::~UmlItem()
 {
 }
@@ -13,18 +13,19 @@ void UmlItem::roseImport()
 {
 }
 
-Q3CString UmlItem::fullName()
+QByteArray UmlItem::fullName()
 {
     return parent()->fullName() + "::" + name();
 }
 
-void UmlItem::setProperties(Q3Dict<Q3CString> & d)
+void UmlItem::setProperties(QHash<QByteArray, QByteArray*> & d)
 {
-    Q3DictIterator<Q3CString> it(d);
+    QHashIterator<QByteArray, QByteArray*> it(d);
 
-    while (it.current()) {
-        set_PropertyValue(Q3CString(it.currentKey().toAscii()), *(it.current()));//[jasa] QString to Q3CString conversion
-        ++it;
+    while (it.hasNext()) {
+        it.next();
+        set_PropertyValue(QByteArray(it.key()), *(it.value()));//[jasa] QString to QByteArray conversion
+        //++it;
     }
 
     d.clear();
@@ -32,35 +33,35 @@ void UmlItem::setProperties(Q3Dict<Q3CString> & d)
 
 void UmlItem::newItem(UmlItem * x, const char * id)
 {
-    Q3AsciiDict<UmlItem> & d = all_items[x->kind()];
-
-    if (d[id] != 0) {
-        UmlCom::trace(Q3CString("<br>id '") + id + "' used for several objects");
+    QHash<QString,UmlItem*> & d = all_items[x->kind()];
+    if (d.value(id,0) != 0) {
+        UmlCom::trace(QByteArray("<br>id '") + id + "' used for several objects");
         throw 0;
     }
 
-    d.insert(strdup(id), x);
+    d.insert(id, x);
 
     if (d.size() < (d.count() >> 3))
-        d.resize(d.size() << 4);
+        d.reserve(d.size() << 4);
 
     x->set_PropertyValue("rose/quid", id);
 }
 
 UmlItem * UmlItem::findItem(const char * id, anItemKind k)
 {
-    return all_items[k][id];
+    UmlItem* it = all_items[k].value(id);
+    return it;
 }
 
 void UmlItem::statistic()
 {
-    Q3CString msg = "<br>";
+    QByteArray msg = "<br>";
 
 #define add_nbr(x, str) \
   if (cpt[x] != 0) { \
-    Q3CString s; \
+    QByteArray s; \
     \
-    s.sprintf("%d %s<br>", cpt[x], str); \
+    s= QString("%1 %2<br>").arg(cpt[x]).arg(str).toLatin1(); \
     msg += s; \
   }
 
@@ -90,7 +91,7 @@ void UmlItem::statistic()
 
 bool UmlItem::scanning;
 
-Q3AsciiDict<UmlItem> UmlItem::all_items[aPackage + 1];
+QHash<QString,UmlItem*> UmlItem::all_items[aPackage + 1];
 
 int UmlItem::cpt[128];
 

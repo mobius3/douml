@@ -3,7 +3,7 @@
 
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3PtrCollection>
+
 UmlItem::~UmlItem()
 {
 }
@@ -20,7 +20,7 @@ int UmlItem::orderWeight()
 
 void UmlItem::sortChildren()
 {
-    const Q3PtrVector<UmlItem> & qv = children();
+    const QVector<UmlItem*> & qv = children();
 
     if (!qv.isEmpty()) {
         unsigned sz = qv.size();
@@ -31,10 +31,14 @@ void UmlItem::sortChildren()
         v.resize(sz);
 
         for (u = 0; u != sz; u += 1)
-            v.insert(u, qv[u]);
+            v[u] = qv[u];
 
         // sort in memory
+#ifdef habip
         v.sort();
+#else
+        qSort(v);
+#endif
 
         // update browser
         UmlItem * previous = 0;
@@ -46,7 +50,7 @@ void UmlItem::sortChildren()
     }
 }
 
-int VectorOfUmlItem::compareItems(Q3PtrCollection::Item d1, Q3PtrCollection::Item d2)
+int VectorOfUmlItem::compareItems(UmlItem *d1, UmlItem* d2)
 {
     UmlItem * e1 = (UmlItem *) d1;
     UmlItem * e2 = (UmlItem *) d2;

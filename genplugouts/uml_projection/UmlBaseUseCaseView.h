@@ -4,7 +4,7 @@
 
 #include "UmlView.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlUseCaseView;
 class UmlItem;
@@ -26,7 +26,7 @@ public:
 
 protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseUseCaseView(void * id, const Q3CString & n) : UmlView(id, n) {};
+    UmlBaseUseCaseView(void * id, const QByteArray & n) : UmlView(id, n) {};
 
 };
 

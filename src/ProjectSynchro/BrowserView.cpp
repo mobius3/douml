@@ -33,7 +33,7 @@
 #include <q3popupmenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 #include "BrowserView.h"
 #include "BrowserNode.h"

@@ -185,7 +185,7 @@ public:
     static void loadProject(WrapperStr p);
 
     //returns all the Java packages
-    static void getAll(Q3PtrVector<UmlPackage> & v);
+    static void getAll(QHash<int,UmlPackage*> & v);
 
     // to unload the object to free memory, it will be reloaded automatically
     // if needed. Recursively done for the sub items if 'rec' is TRUE.

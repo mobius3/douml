@@ -9,7 +9,7 @@
 #include "UmlClassMember.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 UmlOperation * UmlBaseOperation::create(UmlClass * parent, const char * s)
 {
     return (UmlOperation *) parent->create_(anOperation, s);
@@ -73,7 +73,7 @@ bool UmlBaseOperation::set_ReturnType(const UmlTypeSpec & t)
     return set_it_(_return_type, t, setReturnTypeCmd);
 }
 
-const Q3ValueList<UmlParameter> UmlBaseOperation::params()
+const QList<UmlParameter> UmlBaseOperation::params()
 {
     read_if_needed_();
 
@@ -129,7 +129,7 @@ bool UmlBaseOperation::replaceParameter(unsigned rank, const UmlParameter & p)
         return FALSE;
 }
 
-const Q3ValueList<UmlTypeSpec> UmlBaseOperation::exceptions()
+const QList<UmlTypeSpec> UmlBaseOperation::exceptions()
 {
     read_if_needed_();
 
@@ -178,9 +178,9 @@ bool UmlBaseOperation::replaceException(unsigned rank, const UmlTypeSpec & t)
         return FALSE;
 }
 
-const Q3PtrVector<UmlItem> UmlBaseOperation::methods() const
+const QVector<UmlItem*> UmlBaseOperation::methods() const
 {
-    Q3PtrVector<UmlItem> l;
+    QVector<UmlItem*> l;
 
     UmlCom::send_cmd(_identifier, sideCmd);
     UmlCom::read_item_list(l);

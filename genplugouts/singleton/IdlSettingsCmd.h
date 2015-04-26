@@ -3,12 +3,12 @@
 
 
 // Internal enum
-enum IdlSettingsCmd {
+/*enum IdlSettingsCmd {
     getIdlSettingsCmd,
     getIdlUseDefaultsCmd,
     setIdlUseDefaultsCmd,
     setIdlTypeCmd,
-    setIdlRelationStereotypeCmd,
+    setIdlRelationAttributeStereotypeCmd,
     setIdlClassStereotypeCmd,
     setIdlIncludeCmd,
     setIdlRootDirCmd,
@@ -35,5 +35,5 @@ enum IdlSettingsCmd {
     setIdlSetNameCmd,
     setIdlIsSetOneWayCmd
 
-};
+};*/
 #endif

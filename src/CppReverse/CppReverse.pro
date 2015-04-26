@@ -107,14 +107,15 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
 
 
 TARGET          = cpp_reverse
-DEFINES          = WITHCPP REVERSE BooL=bool DEBUG_BOUML
+DEFINES          = WITHCPP REVERSE BooL=bool DEBUG_BOUML FALSE=false TRUE=true
 
 INCLUDEPATH   = ../Tools ../CppReverse ../
-CONFIG += qtestlib
+QT += testlib
 
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+#qt3support
 
 DESTDIR = ../../bin
 Release {
@@ -130,7 +131,6 @@ UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
-
 HEADERS += \
     ../Logging/QsLogDest.h \
     ../Logging/QsLog.h \

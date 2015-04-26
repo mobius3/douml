@@ -32,12 +32,8 @@
 #include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-//Added by qt3to4:
-#include <Q3PtrList>
-
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "ObjectLinkDialog.h"
 #include "MyTable.h"
 #include "BrowserClass.h"
@@ -53,15 +49,16 @@ QSize ObjectLinkDialog::previous_size;
 ObjectLinkDialog::ObjectLinkDialog(BrowserClassInstance * a, BrowserClassInstance * b,
                                    QList<RelationData *> & l, RelationData * current,
                                    int nfirstdir)
-    : QDialog(0, "object link dialog", TRUE),
+    : QDialog(0/*, "object link dialog", TRUE*/),
       rels(l), nforward(nfirstdir), clia(a), clib(b), choozen(0), reverse(FALSE)
 {
-    setCaption(TR("Object link dialog"));
+    setWindowTitle(TR("Object link dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     hbox->addWidget(new QLabel(TR("\n"
@@ -73,7 +70,8 @@ ObjectLinkDialog::ObjectLinkDialog(BrowserClassInstance * a, BrowserClassInstanc
 
     vbox->addWidget(table);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * newrel =
         (((ClassInstanceData *) clia->get_data())->get_class()->is_writable() ||
@@ -110,42 +108,44 @@ ObjectLinkDialog::~ObjectLinkDialog()
 
 void ObjectLinkDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 static void add_rel(MyTable * table, RelationData * d, int row,
                     QString a, QString b)
 {
-    table->setItem(row, 0, new TableItem(table, Q3TableItem::Never, a));
+    table->setItem(row, 0, new TableItem(table, TableItem::Never, a, TableItem::TableItemType));
 
     const char * s;
 
     s = d->get_role_b();
-    table->setItem(row, 1, new TableItem(table, Q3TableItem::Never, (s == 0) ? "" : s));
+    table->setItem(row, 1, new TableItem(table, TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
 
-    table->setItem(row, 2, new TableItem(table, Q3TableItem::Never, stringify(d->get_type())));
+    table->setItem(row, 2, new TableItem(table, TableItem::Never, stringify(d->get_type()), TableItem::TableItemType));
 
     s = d->get_role_a();
-    table->setItem(row, 3, new TableItem(table, Q3TableItem::Never, (s == 0) ? "" : s));
+    table->setItem(row, 3, new TableItem(table, TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
 
-    table->setItem(row, 4, new TableItem(table, Q3TableItem::Never, b));
+    table->setItem(row, 4, new TableItem(table, TableItem::Never, b, TableItem::TableItemType));
 }
 
 void ObjectLinkDialog::init(RelationData * current)
 {
     table = new MyTable(this);
+    table->setSelectionMode(QAbstractItemView::MultiSelection);
+    table->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    table->setNumRows(rels.count());
-    table->setNumCols(5);
-    table->setSelectionMode(Q3Table::Single);
-    table->setSorting(true);
+    table->setRowCount(rels.count());
+    table->setColumnCount(5);
+    table->setSelectionMode(QTableWidget::SingleSelection);
+    //table->setSortingEnabled(true);
 
-    table->horizontalHeader()->setLabel(0, TR("Class Inst."));
-    table->horizontalHeader()->setLabel(1, TR("Role"));
-    table->horizontalHeader()->setLabel(2, TR("kind"));
-    table->horizontalHeader()->setLabel(3, TR("Role"));
-    table->horizontalHeader()->setLabel(4, TR("Class Inst."));
+    table->setHorizontalHeaderLabel(0, TR("Class Inst."));
+    table->setHorizontalHeaderLabel(1, TR("Role"));
+    table->setHorizontalHeaderLabel(2, TR("kind"));
+    table->setHorizontalHeaderLabel(3, TR("Role"));
+    table->setHorizontalHeaderLabel(4, TR("Class Inst."));
 
     ra = clia->get_name() + QString(":") +
          ((ClassInstanceData *) clia->get_data())->get_class()->get_name();
@@ -169,21 +169,18 @@ void ObjectLinkDialog::init(RelationData * current)
     table->adjustColumn(4);
 
     if (current != 0) {
-        // select the current relation
-        Q3TableSelection sel;
         int row = rels.indexOf(current);
-
-        sel.init(row, 0);
-        sel.expandTo(row, 4);
-        table->addSelection(sel);
+        table->selectRow(row);
     }
 }
 
 void ObjectLinkDialog::unselect()
 {
     // multi selection possible even table->setSelectionMode(QTable::Single)
-    while (table->numSelections() != 0)
-        table->removeSelection(0);
+    QList<QTableWidgetSelectionRange> selectedRanges= table->selectedRanges();
+    foreach (QTableWidgetSelectionRange range, selectedRanges) {
+        table->setRangeSelected(range, false);
+    }
 }
 
 void ObjectLinkDialog::create()
@@ -199,31 +196,27 @@ void ObjectLinkDialog::create()
     d->get_start()->select_in_browser();
     d->edit();
 
-    int n = table->numRows();
+    int n = table->rowCount();
 
-    table->setNumRows(n + 1);
+    table->setRowCount(n + 1);
     add_rel(table, d, n, ra, rb);
     rels.append(d);
 
     // multi selection possible even table->setSelectionMode(QTable::Single)
-    while (table->numSelections() != 0)
-        table->removeSelection(0);
-
-    Q3TableSelection sel;
-
-    sel.init(n, 0);
-    sel.expandTo(n, 4);
-    table->addSelection(sel);
+    QList<QTableWidgetSelectionRange> selectedRanges= table->selectedRanges();
+    foreach (QTableWidgetSelectionRange range, selectedRanges) {
+        table->setRangeSelected(range, false);
+    }
+    table->selectRow(n);
 }
 
 void ObjectLinkDialog::accept()
 {
-    if (table->numSelections() != 0) {
-        Q3TableSelection sel = table->selection(0);
-
-        choozen = rels.at(sel.topRow());
-        reverse = (sel.topRow() >= nforward) && (sel.topRow() < ninputrels);
+    QList<QTableWidgetSelectionRange> selectedRanges= table->selectedRanges();
+    if(selectedRanges.count())
+    {
+        choozen = rels.at(selectedRanges.at(0).topRow());
+        reverse = (selectedRanges.at(0).topRow() >= nforward) && (selectedRanges.at(0).topRow() < ninputrels);
     }
-
     QDialog::accept();
 }
