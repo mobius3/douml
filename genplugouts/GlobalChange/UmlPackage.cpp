@@ -1,10 +1,10 @@
 
 #include "UmlPackage.h"
 #include "Context.h"
-
+#include <QVector>
 void UmlPackage::change(Context & ctx)
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned i;
 
     for (i = 0; i != ch.size(); i += 1)

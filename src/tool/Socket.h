@@ -28,29 +28,36 @@
 #ifndef SOCKET_H
 #define SOCKET_H
 
-#include <q3socketdevice.h>
+//#include <q3socketdevice.h>
 #include <qsocketnotifier.h>
-
+#include <QTcpSocket>
+#include <QTcpServer>
 class ToolCom;
 
-class Socket : /* public QObject, */ public Q3SocketDevice
+class Server : /* public QObject, */ public QTcpServer
 {
     Q_OBJECT
 
 protected:
     ToolCom * com;
-    QSocketNotifier * notifier;
+    //QSocketNotifier * notifier;
     bool on_error;
 
 public:
-    Socket(ToolCom * c);
-    Socket(ToolCom * c, int s);
-    virtual ~Socket();
+    Server(ToolCom * c);
+    Server(ToolCom * c, int s);
+    virtual ~Server();
 
     bool write_block(char * data, unsigned int len);
 
+    qint64 read(char* buff, qint64 len);
+
 protected slots:
     void data_received();
+private:
+    QTcpSocket *m_socket;
+public slots:
+    void onNewConnection();
 };
 
 #endif

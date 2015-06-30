@@ -18,7 +18,7 @@
 #include "UmlPackage.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 UmlItem * UmlClass::container(anItemKind kind, Token & token, FileIn & in)
 {
@@ -295,7 +295,7 @@ UmlClass * UmlClass::signature(WrapperStr id)
 
 int UmlClass::formalRank(WrapperStr id)
 {
-    int r = formalsId.findIndex(id);
+    int r = formalsId.indexOf(id);
 
     if ((r == -1) && !FileIn::isBypassedId(QString::number(r)))
         UmlCom::trace("unknown template formal reference '" + id + "'<br>");
@@ -305,7 +305,7 @@ int UmlClass::formalRank(WrapperStr id)
 
 bool UmlClass::bind(UmlClass * tmpl)
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned int n = ch.size();
     int i;
 
@@ -358,9 +358,9 @@ void UmlClass::extend(WrapperStr mcl)
 
     mcl = mcl.mid(index + 1);
 
-    static Q3PtrList<UmlClass> metaclasses;
+    static QList<UmlClass*> metaclasses;
 
-    Q3PtrListIterator<UmlClass> it(metaclasses);
+    QList<UmlClass*>::Iterator it = metaclasses.begin();
     UmlClass * metacl = UmlClass::get(mcl, 0);
     WrapperStr s;
 
@@ -374,7 +374,7 @@ void UmlClass::extend(WrapperStr mcl)
         metacl = 0;
 
         if (dflt) {
-            for (; (metacl = it.current()) != 0; ++it) {
+            for (; (metacl = *it) != 0; ++it) {
                 if (!strcmp(mcl, metacl->name()) &&
                     (!metacl->propertyValue("metaclassPath", s) ||
                      (s == defltpath0) ||
@@ -383,7 +383,7 @@ void UmlClass::extend(WrapperStr mcl)
             }
         }
         else {
-            for (; (metacl = it.current()) != 0; ++it) {
+            for (; (metacl = *it) != 0; ++it) {
                 if (!strcmp(mcl, metacl->name()) &&
                     metacl->propertyValue("metaclassPath", s) &&
                     (path == s))
@@ -400,10 +400,10 @@ void UmlClass::extend(WrapperStr mcl)
     UmlRelation::create(aDirectionalAssociation, this, metacl);
 }
 
-bool UmlClass::isAppliedStereotype(Token & tk, WrapperStr & prof_st, Q3ValueList<WrapperStr> & base_v)
+bool UmlClass::isAppliedStereotype(Token & tk, WrapperStr & prof_st, QList<WrapperStr> & base_v)
 {
-    static Q3Dict<WrapperStr> stereotypes;
-    static Q3Dict<Q3ValueList<WrapperStr> > bases;
+    static QHash<WrapperStr,WrapperStr*> stereotypes;
+    static QHash<WrapperStr,QList<WrapperStr>* > bases;
 
     WrapperStr s = tk.what();
     WrapperStr * st = stereotypes[s];
@@ -424,7 +424,7 @@ bool UmlClass::isAppliedStereotype(Token & tk, WrapperStr & prof_st, Q3ValueList
             UmlClass * cl = findStereotype(s, FALSE);
 
             if (cl != 0) {
-                const Q3PtrVector<UmlItem> ch = cl->children();
+                const QVector<UmlItem*> ch = cl->children();
                 unsigned n = ch.size();
 
                 for (unsigned i = 0; i != n; i += 1) {
@@ -441,7 +441,7 @@ bool UmlClass::isAppliedStereotype(Token & tk, WrapperStr & prof_st, Q3ValueList
 
                 prof_st = cl->parent()->parent()->name() + ":" + cl->name();
                 stereotypes.insert(s, new WrapperStr(prof_st));
-                bases.insert(s, new Q3ValueList<WrapperStr>(base_v));
+                bases.insert(s, new QList<WrapperStr>(base_v));
                 return TRUE;
             }
         }
@@ -539,7 +539,7 @@ void UmlClass::readFormal(FileIn & in, Token & token)
 UmlClass * UmlClass::addMetaclass(WrapperStr mclname, const char * mclpath)
 {
     UmlPackage * pack = (UmlPackage *) parent()->parent();	// is a package
-    const Q3PtrVector<UmlItem> ch = pack->children();
+    const QVector<UmlItem*> ch = pack->children();
     unsigned n = ch.size();
     UmlClass * r = 0;
 

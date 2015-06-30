@@ -10,8 +10,8 @@
 #include "MiscGlobalCmd.h"
 #include "ClassGlobalCmd.h"
 //Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
+#include <QByteArray>
+#include <QList>
 UmlClass * UmlBaseClass::create(UmlItem * parent, const char * s)
 {
     return (UmlClass *) parent->create_(aClass, s);
@@ -46,11 +46,11 @@ bool UmlBaseClass::set_BaseType(const UmlTypeSpec & t)
     return set_it_(_base_type, t, setBaseTypeCmd);
 }
 
-Q3ValueList<UmlFormalParameter> UmlBaseClass::formals()
+QList<UmlFormalParameter> UmlBaseClass::formals()
 {
     UmlCom::send_cmd(_identifier, formalsCmd);
 
-    Q3ValueList<UmlFormalParameter> formals;
+    QList<UmlFormalParameter> formals;
 
     for (unsigned n = UmlCom::read_unsigned(); n; n -= 1) {
         UmlFormalParameter f;
@@ -82,11 +82,11 @@ bool UmlBaseClass::replaceFormal(unsigned int rank, const UmlFormalParameter & f
     return UmlCom::read_bool();
 }
 
-Q3ValueList<UmlActualParameter> UmlBaseClass::actuals()
+QList<UmlActualParameter> UmlBaseClass::actuals()
 {
     UmlCom::send_cmd(_identifier, actualsCmd);
 
-    Q3ValueList<UmlActualParameter> actuals;
+    QList<UmlActualParameter> actuals;
 
     for (unsigned n = UmlCom::read_unsigned(); n; n -= 1) {
         UmlActualParameter a;
@@ -284,7 +284,7 @@ bool UmlBaseClass::set_isIdlCustom(bool y)
 }
 #endif
 
-UmlClass * UmlBaseClass::get(const Q3CString & n, const UmlPackage * p)
+UmlClass * UmlBaseClass::get(const QByteArray & n, const UmlPackage * p)
 {
     if (p == 0) {
         UmlClass * x = classes[n];
@@ -310,9 +310,9 @@ void UmlBaseClass::unload(bool rec, bool del)
     UmlBaseClassItem::unload(rec, del);
 }
 
-Q3Dict<UmlClass> UmlBaseClass::classes(1001);
+QHash<QByteArray,UmlClass*> UmlBaseClass::classes;
 
-UmlBaseClass::UmlBaseClass(void * id, const Q3CString & n)
+UmlBaseClass::UmlBaseClass(void * id, const QByteArray & n)
     : UmlClassMember(id, n)
 {
     _assoc_diagram = 0;
@@ -320,7 +320,7 @@ UmlBaseClass::UmlBaseClass(void * id, const Q3CString & n)
     classes.insert(n, (UmlClass *) this);
 
     if ((classes.count() / 2) >= classes.size())
-        classes.resize(classes.size() * 2 - 1);
+        classes.reserve(classes.size() * 2 - 1);
 }
 
 void UmlBaseClass::read_uml_()

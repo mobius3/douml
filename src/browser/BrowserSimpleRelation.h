@@ -96,7 +96,7 @@ public:
     virtual QString drag_postfix() const;
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
 
-    static void get_relating(BrowserNode *, Q3PtrDict<BrowserNode> & d,
+    static void get_relating(BrowserNode *, QHash<BrowserNode*,BrowserNode*> & d,
                              BrowserNodeList & newones, bool inh,
                              bool dep, bool sametype, UmlCode k);
 };

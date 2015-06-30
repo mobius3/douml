@@ -13,6 +13,7 @@ release
 object_script.*
 minimal.supp
 minimalraw.log
+
 *moc_*.cpp*
 *.~*
 *.pro.*

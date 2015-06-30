@@ -6,14 +6,14 @@
 #include "UmlNcRelation.h"
 #include "UmlCom.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 UmlItem * UmlUseCase::item()
 {
     return this;
 }
 
-void UmlUseCase::readObject(File & f, Q3CString s)
+void UmlUseCase::readObject(File & f, QByteArray s)
 {
     if (!UmlItem::scanning &&
         ((s == "superclasses") || (s == "visible_modules"))) {
@@ -52,11 +52,11 @@ void UmlUseCase::readObject(File & f, Q3CString s)
             }
 
             // dependency or generalisation
-            Q3CString id;
-            Q3CString ste;
-            Q3CString doc;
-            Q3Dict<Q3CString> prop;
-            Q3CString s2;
+            QByteArray id;
+            QByteArray ste;
+            QByteArray doc;
+            QHash<QByteArray, QByteArray*> prop;
+            QByteArray s2;
             int k;
 
             do {
@@ -109,16 +109,16 @@ void UmlUseCase::readObject(File & f, Q3CString s)
 
 void UmlUseCase::import(File & f, UmlItem * parent)
 {
-    Q3CString s;
+    QByteArray s;
 
     if (f.read(s) != STRING)
         f.syntaxError(s, "use case's name");
 
-    Q3CString id;
-    Q3CString ste;
-    Q3CString doc;
-    Q3Dict<Q3CString> prop;
-    Q3CString s2;
+    QByteArray id;
+    QByteArray ste;
+    QByteArray doc;
+    QHash<QByteArray, QByteArray*> prop;
+    QByteArray s2;
     int k;
 
     do {

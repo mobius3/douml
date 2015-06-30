@@ -27,14 +27,14 @@
 
 #ifndef USECASEDIAGRAMVIEW_H
 #define USECASEDIAGRAMVIEW_H
-
+#include <QList>
 #include "DiagramView.h"
 //Added by qt3to4:
 #include <QTextStream>
 #include <QMouseEvent>
 #include <QDropEvent>
 #include <QDragEnterEvent>
-
+#include "BasicData.h"
 template <class K> class Q3PtrDict;
 
 class UseCaseDiagramWindow;
@@ -62,12 +62,13 @@ private:
         return (UseCaseDiagramWindow *) parent();
     }
     void add_marked_elements(const QPoint & p,
-                             Q3PtrDict<DiagramItem> & drawn);
+                             QHash<BasicData *, DiagramItem *> &drawn);
 
 protected:
-    virtual void contentsMousePressEvent(QMouseEvent *);
+    virtual void mousePressEvent(QMouseEvent *);
     virtual void dragEnterEvent(QDragEnterEvent *);
     virtual void dropEvent(QDropEvent *);
+    virtual void dragMoveEvent(QDragMoveEvent *e);
 };
 
 #endif

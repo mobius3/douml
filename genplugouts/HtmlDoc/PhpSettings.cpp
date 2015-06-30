@@ -8,7 +8,7 @@
 #include "Tools/ApiCmd.h"
 #include "UmlStereotype.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #ifdef WITHJAVA
 #include "JavaSettings.h"
 #endif
@@ -24,22 +24,22 @@ bool PhpSettings::set_UseDefaults(bool y)
     return UmlCom::read_bool();
 }
 
-Q3CString PhpSettings::classStereotype(const Q3CString & s)
+QByteArray PhpSettings::classStereotype(const QByteArray & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_class_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_class_stereotypes.value(s);
 
     return (b) ? b->php : s;
 }
 
-bool PhpSettings::set_ClassStereotype(Q3CString s, Q3CString v)
+bool PhpSettings::set_ClassStereotype(QByteArray s, QByteArray v)
 {
     read_if_needed_();
     UmlCom::send_cmd(phpSettingsCmd, setPhpClassStereotypeCmd, (const char *)s, (const char *)v); //[rageek] Fix prototype
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_class_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_class_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_class_stereotype(s);
@@ -52,21 +52,21 @@ bool PhpSettings::set_ClassStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString PhpSettings::classUmlStereotype(const Q3CString & s)
+QByteArray PhpSettings::classUmlStereotype(const QByteArray & s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_class_stereotype(s, &UmlStereotype::php);
 }
 
-const Q3CString & PhpSettings::rootDir()
+const QByteArray & PhpSettings::rootDir()
 {
     read_if_needed_();
 
     return _root;
 }
 
-bool PhpSettings::set_RootDir(Q3CString v)
+bool PhpSettings::set_RootDir(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpRootdirCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -78,14 +78,14 @@ bool PhpSettings::set_RootDir(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::sourceContent()
+const QByteArray & PhpSettings::sourceContent()
 {
     read_if_needed_();
 
     return _src_content;
 }
 
-bool PhpSettings::set_SourceContent(Q3CString v)
+bool PhpSettings::set_SourceContent(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpSourceContentCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -97,14 +97,14 @@ bool PhpSettings::set_SourceContent(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::sourceExtension()
+const QByteArray & PhpSettings::sourceExtension()
 {
     read_if_needed_();
 
     return _ext;
 }
 
-bool PhpSettings::set_SourceExtension(Q3CString v)
+bool PhpSettings::set_SourceExtension(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpSourceExtensionCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -116,7 +116,7 @@ bool PhpSettings::set_SourceExtension(Q3CString v)
         return FALSE;
 }
 
-Q3CString PhpSettings::reverseRoundtripDirRegExp()
+QByteArray PhpSettings::reverseRoundtripDirRegExp()
 {
     read_if_needed_();
 
@@ -130,7 +130,7 @@ bool PhpSettings::isReverseRoundtripDirRegExpCaseSensitive()
     return _dir_regexp_case_sensitive;
 }
 
-bool PhpSettings::set_ReverseRoundtripDirRegExp(Q3CString s, bool cs)
+bool PhpSettings::set_ReverseRoundtripDirRegExp(QByteArray s, bool cs)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpDirRevFilterCmd, s, cs);
 
@@ -143,7 +143,7 @@ bool PhpSettings::set_ReverseRoundtripDirRegExp(Q3CString s, bool cs)
         return FALSE;
 }
 
-Q3CString PhpSettings::reverseRoundtripFileRegExp()
+QByteArray PhpSettings::reverseRoundtripFileRegExp()
 {
     read_if_needed_();
 
@@ -157,7 +157,7 @@ bool PhpSettings::isReverseRoundtripFileRegExpCaseSensitive()
     return _file_regexp_case_sensitive;
 }
 
-bool PhpSettings::set_ReverseRoundtripFileRegExp(Q3CString s, bool cs)
+bool PhpSettings::set_ReverseRoundtripFileRegExp(QByteArray s, bool cs)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpFileRevFilterCmd, s, cs);
 
@@ -271,14 +271,14 @@ bool PhpSettings::set_IsGenerateJavadocStyleComment(bool v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::classDecl()
+const QByteArray & PhpSettings::classDecl()
 {
     read_if_needed_();
 
     return _class_decl;
 }
 
-bool PhpSettings::set_ClassDecl(Q3CString v)
+bool PhpSettings::set_ClassDecl(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpClassDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -290,14 +290,14 @@ bool PhpSettings::set_ClassDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::externalClassDecl()
+const QByteArray & PhpSettings::externalClassDecl()
 {
     read_if_needed_();
 
     return _external_class_decl;
 }
 
-bool PhpSettings::set_ExternalClassDecl(Q3CString v)
+bool PhpSettings::set_ExternalClassDecl(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpExternalClassDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -309,14 +309,14 @@ bool PhpSettings::set_ExternalClassDecl(Q3CString v)
         return FALSE;
 }
 
-Q3CString PhpSettings::enumDecl()
+QByteArray PhpSettings::enumDecl()
 {
     read_if_needed_();
 
     return _enum_decl;
 }
 
-bool PhpSettings::set_EnumDecl(Q3CString v)
+bool PhpSettings::set_EnumDecl(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpEnumDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -328,14 +328,14 @@ bool PhpSettings::set_EnumDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::interfaceDecl()
+const QByteArray & PhpSettings::interfaceDecl()
 {
     read_if_needed_();
 
     return _interface_decl;
 }
 
-bool PhpSettings::set_InterfaceDecl(Q3CString v)
+bool PhpSettings::set_InterfaceDecl(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpInterfaceDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -347,14 +347,14 @@ bool PhpSettings::set_InterfaceDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::attributeDecl()
+const QByteArray & PhpSettings::attributeDecl()
 {
     read_if_needed_();
 
     return _attr_decl;
 }
 
-bool PhpSettings::set_AttributeDecl(Q3CString v)
+bool PhpSettings::set_AttributeDecl(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpAttributeDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -366,14 +366,14 @@ bool PhpSettings::set_AttributeDecl(Q3CString v)
         return FALSE;
 }
 
-Q3CString PhpSettings::enumItemDecl()
+QByteArray PhpSettings::enumItemDecl()
 {
     read_if_needed_();
 
     return _enum_item_decl;
 }
 
-bool PhpSettings::set_EnumItemDecl(Q3CString v)
+bool PhpSettings::set_EnumItemDecl(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpEnumItemDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -385,14 +385,14 @@ bool PhpSettings::set_EnumItemDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::relationDecl()
+const QByteArray & PhpSettings::relationDecl()
 {
     read_if_needed_();
 
     return _rel_decl;
 }
 
-bool PhpSettings::set_RelationDecl(Q3CString v)
+bool PhpSettings::set_RelationDecl(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpRelationDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -404,14 +404,14 @@ bool PhpSettings::set_RelationDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::operationDef()
+const QByteArray & PhpSettings::operationDef()
 {
     read_if_needed_();
 
     return _oper_def;
 }
 
-bool PhpSettings::set_OperationDef(Q3CString v)
+bool PhpSettings::set_OperationDef(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpOperationDefCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -451,14 +451,14 @@ bool PhpSettings::set_GetVisibility(aVisibility v)
 #endif
 }
 
-const Q3CString & PhpSettings::getName()
+const QByteArray & PhpSettings::getName()
 {
     read_if_needed_();
 
     return _get_name;
 }
 
-bool PhpSettings::set_GetName(Q3CString v)
+bool PhpSettings::set_GetName(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpGetNameCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -470,14 +470,14 @@ bool PhpSettings::set_GetName(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & PhpSettings::setName()
+const QByteArray & PhpSettings::setName()
 {
     read_if_needed_();
 
     return _set_name;
 }
 
-bool PhpSettings::set_SetName(Q3CString v)
+bool PhpSettings::set_SetName(QByteArray v)
 {
     UmlCom::send_cmd(phpSettingsCmd, setPhpSetNameCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -557,29 +557,29 @@ bool PhpSettings::set_SetVisibility(aVisibility v)
 
 bool PhpSettings::_defined;
 
-Q3CString PhpSettings::_root;
+QByteArray PhpSettings::_root;
 
-Q3CString PhpSettings::_class_decl;
+QByteArray PhpSettings::_class_decl;
 
-Q3CString PhpSettings::_external_class_decl;
+QByteArray PhpSettings::_external_class_decl;
 
-Q3CString PhpSettings::_enum_decl;
+QByteArray PhpSettings::_enum_decl;
 
-Q3CString PhpSettings::_interface_decl;
+QByteArray PhpSettings::_interface_decl;
 
-Q3CString PhpSettings::_attr_decl;
+QByteArray PhpSettings::_attr_decl;
 
-Q3CString PhpSettings::_enum_item_decl;
+QByteArray PhpSettings::_enum_item_decl;
 
-Q3CString PhpSettings::_rel_decl;
+QByteArray PhpSettings::_rel_decl;
 
-Q3CString PhpSettings::_oper_def;
+QByteArray PhpSettings::_oper_def;
 
 #ifndef WITHJAVA
 aVisibility PhpSettings::_get_visibility;
 #endif
 
-Q3CString PhpSettings::_get_name;
+QByteArray PhpSettings::_get_name;
 
 bool PhpSettings::_is_get_final;
 
@@ -587,19 +587,19 @@ bool PhpSettings::_is_get_final;
 aVisibility PhpSettings::_set_visibility;
 #endif
 
-Q3CString PhpSettings::_set_name;
+QByteArray PhpSettings::_set_name;
 
 bool PhpSettings::_is_set_final;
 
-Q3CString PhpSettings::_src_content;
+QByteArray PhpSettings::_src_content;
 
-Q3CString PhpSettings::_ext;
+QByteArray PhpSettings::_ext;
 
-Q3CString PhpSettings::_dir_regexp;
+QByteArray PhpSettings::_dir_regexp;
 
 bool PhpSettings::_dir_regexp_case_sensitive;
 
-Q3CString PhpSettings::_file_regexp;
+QByteArray PhpSettings::_file_regexp;
 
 bool PhpSettings::_file_regexp_case_sensitive;
 

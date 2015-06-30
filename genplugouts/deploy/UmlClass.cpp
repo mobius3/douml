@@ -11,7 +11,7 @@
 #include "PhpSettings.h"
 #include "PythonSettings.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 void UmlClass::deploy(UmlDeploymentView * view)
 {
     int flags = deployable();
@@ -35,9 +35,9 @@ void UmlClass::deploy(UmlDeploymentView * view)
         a->addAssociatedClass(this);
         a->set_CppHeader("");
         a->set_CppSource("");
+        a->set_PhpSource("");
         a->set_JavaSource("");
         a->set_IdlSource("");
-        a->set_PhpSource("");
         a->set_PythonSource("");
     }
 
@@ -46,22 +46,24 @@ void UmlClass::deploy(UmlDeploymentView * view)
         a->set_CppSource(CppSettings::sourceContent());
     }
 
+
     if ((flags & (1 << javaLanguage)) != 0)
         a->set_JavaSource(JavaSettings::sourceContent());
 
     if ((flags & (1 << idlLanguage)) != 0)
         a->set_IdlSource(IdlSettings::sourceContent());
 
-    if ((flags & (1 << phpLanguage)) != 0)
-        a->set_PhpSource(PhpSettings::sourceContent());
 
     if ((flags & (1 << pythonLanguage)) != 0)
         a->set_PythonSource(PythonSettings::sourceContent());
+    //there is an unknown bug with php content. get it after all other languages
+    if ((flags & (1 << phpLanguage)) != 0)
+        a->set_PhpSource(PhpSettings::sourceContent());
 }
 
 int UmlClass::deployable()
 {
-    Q3CString st = stereotype();
+    QByteArray st = stereotype();
 
     if ((st == "metaclass") || (st == "stereotype"))
         return 0;

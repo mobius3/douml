@@ -34,11 +34,9 @@
 #include <qprinter.h>
 #endif
 #include <qcursor.h>
-#include <q3popupmenu.h>
 #include <qapplication.h>
 #include <qclipboard.h>
-#include <q3paintdevicemetrics.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qbuffer.h>
 #if defined(WIN32) || (QT_VERSION != 230)
 #include <qtimer.h>
@@ -46,7 +44,7 @@
 #include <QWheelEvent>
 #include <QPixmap>
 #include <QMouseEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QTextStream>
 #include <QKeyEvent>
 
@@ -59,20 +57,21 @@
 #include "RelationData.h"
 #include "RelationCanvas.h"
 #include "SimpleRelationCanvas.h"
-#include "TransitionCanvas.h"
 #include "FlowCanvas.h"
-#include "CodLinkCanvas.h"
+#include "TransitionCanvas.h"
 #include "ObjectLinkCanvas.h"
+#include "CodLinkCanvas.h"
 #include "AssocContainCanvas.h"
+#include "FragmentCanvas.h"
+#include "PackageCanvas.h"
+#include "ImageCanvas.h"
+#include "TextCanvas.h"
+#include "SelectAreaCanvas.h"
+#include "ArrowCanvas.h"
 #include "ArrowPointCanvas.h"
 #include "LabelCanvas.h"
 #include "NoteCanvas.h"
-#include "TextCanvas.h"
-#include "ImageCanvas.h"
 #include "BrowserPackage.h"
-#include "PackageCanvas.h"
-#include "FragmentCanvas.h"
-#include "SelectAreaCanvas.h"
 #include "BrowserDiagram.h"
 #include "UmlWindow.h"
 #include "Shortcut.h"
@@ -81,7 +80,7 @@
 #include "myio.h"
 #include "err.h"
 #include "translate.h"
-
+#include <QScrollBar>
 #include "align_top.xpm"
 #include "align_bottom.xpm"
 #include "align_left.xpm"
@@ -89,12 +88,14 @@
 #include "align_center.xpm"
 #include "align_vcenter.xpm"
 #include "align_hcenter.xpm"
+#include <QGraphicsScene>
+#include <QImage>
 
 WrapperStr DiagramView::clipboard;
 UmlCode DiagramView::copied_from;
 
 DiagramView::DiagramView(QWidget * parent, UmlCanvas * canvas, int i)
-    : Q3CanvasView(canvas, parent), id(i), pressedButton(-1), selectArea(0), start(0),
+    : QGraphicsView(canvas, parent), id(i), pressedButton(-1), selectArea(0), start(0),
       line(0), arrowBeginning(0), preferred_zoom(0), draw_line(FALSE),
       do_resize(NoCorner), history_protected(FALSE), history_frozen(FALSE),
       first_move(FALSE), on_arrow_decenter(FALSE), history_index(~0u)
@@ -102,17 +103,18 @@ DiagramView::DiagramView(QWidget * parent, UmlCanvas * canvas, int i)
     // enableClipper(TRUE); => probleme d'affichage
     preferred_size.setWidth(0);
     preferred_size.setHeight(0);
-    setStaticBackground(TRUE);
     setAcceptDrops(TRUE);
-    setDragAutoScroll(TRUE);
-    setVScrollBarMode(Auto);
-    setHScrollBarMode(Auto);
+    setDragMode(QGraphicsView::ScrollHandDrag);
     setFocusPolicy(Qt::StrongFocus);
     //setFocusPolicy(QWidget::WheelFocus);
-    canvas->setBackgroundColor(::Qt::white);
-    canvas->setDoubleBuffering(TRUE);
-
+    QBrush backBrush = canvas->backgroundBrush();
+    backBrush.setColor(::Qt::white);
+    canvas->setBackgroundBrush(backBrush);
+    setCacheMode(QGraphicsView::CacheBackground);
     canvas->set_view(this);
+    ensureVisible(0,0,1,1);
+    //to set the default cursor
+    this->viewport()->unsetCursor();
 }
 
 void DiagramView::init()
@@ -122,18 +124,23 @@ void DiagramView::init()
 
 UmlCanvas * DiagramView::the_canvas() const
 {
-    return (UmlCanvas *) canvas();
+    return (UmlCanvas *) scene();
 }
 
-void DiagramView::contentsMouseDoubleClickEvent(QMouseEvent * e)
+QGraphicsScene* DiagramView::canvas() const
+{
+    return scene();
+}
+
+void DiagramView::mouseDoubleClickEvent(QMouseEvent * e)
 {
     setFocus();
     unselect_all();
-
+    QPointF scenePoint = mapToScene(e->pos());
     if (draw_line)
         abort_line_construction();
     else {
-        Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+        QGraphicsItem * ci = the_canvas()->collision(scenePoint.toPoint());
 
         if (ci != 0) {
             DiagramItem * di = QCanvasItemToDiagramItem(ci);
@@ -145,11 +152,11 @@ void DiagramView::contentsMouseDoubleClickEvent(QMouseEvent * e)
 }
 
 bool DiagramView::multiple_selection_for_menu(BooL & in_model, BooL & out_model,
-        BooL & alignable, int & n_resize,
-        QList<DiagramItem *> & l_drawing_settings,
-        const Q3CanvasItemList & selected)
+                                              BooL & alignable, int & n_resize,
+                                              QList<DiagramItem *> & l_drawing_settings,
+                                              const QList<QGraphicsItem*> & selected)
 {
-    Q3CanvasItemList::ConstIterator it;
+    QList<QGraphicsItem*>::ConstIterator it;
     int n_targets = 0;
     UmlCode k = UmlCodeSup;
 
@@ -173,7 +180,7 @@ bool DiagramView::multiple_selection_for_menu(BooL & in_model, BooL & out_model,
                 switch (k) {
                 case UmlCodeSup:
                     // first case
-                    k = item->type();
+                    k = item->typeUmlCode();
                     l_drawing_settings.append(item);
                     break;
 
@@ -182,7 +189,7 @@ bool DiagramView::multiple_selection_for_menu(BooL & in_model, BooL & out_model,
                     break;
 
                 default:
-                    if (item->type() == k)
+                    if (item->typeUmlCode() == k)
                         l_drawing_settings.append(item);
                     else {
                         // several types
@@ -196,28 +203,30 @@ bool DiagramView::multiple_selection_for_menu(BooL & in_model, BooL & out_model,
                 n_resize += 1;
         }
     }
-
     return (n_targets > 1);
 }
 
-void DiagramView::contentsMousePressEvent(QMouseEvent * e)
+void DiagramView::mousePressEvent(QMouseEvent * e)
 {
     first_move = TRUE;
     pressedButton = e->button();
     setFocus();
+    QPoint diagramPoint(e->x(), e->y());
+    QPointF scenePoint = mapToScene(diagramPoint);
+
 
     if (pressedButton == ::Qt::MidButton) {
-        mousePressPos = e->pos();
-        QApplication::setOverrideCursor(::Qt::sizeAllCursor);
+        mousePressPos = scenePoint.toPoint();
+        QApplication::setOverrideCursor(QCursor(::Qt::SizeAllCursor));
     }
     else if (!window()->frozen()) {
-        Q3CanvasItem * ci = the_canvas()->collision(e->pos());
+        QGraphicsItem * ci = the_canvas()->collision(scenePoint.toPoint());
 
         if (pressedButton == ::Qt::RightButton) {
             // menu on several objects (excluding labels)
 
             if (! draw_line) {
-                const Q3CanvasItemList selected = selection();
+                const QList<QGraphicsItem*> selected = selection();
                 BooL in_model;
                 BooL out_model;
                 BooL alignable;
@@ -243,12 +252,11 @@ void DiagramView::contentsMousePressEvent(QMouseEvent * e)
                     DiagramItem * di = QCanvasItemToDiagramItem(ci);
 
                     if (di != 0)
-                        di->menu(e->pos());
-
+                        di->menu(scenePoint.toPoint());
                     BrowserNode::setPopupMenuActive(FALSE);
                 }
                 else  {
-                    menu(e->pos());
+                    menu(scenePoint.toPoint());
                     BrowserNode::setPopupMenuActive(FALSE);
                     // here the window & view may be deleted
                     return;
@@ -264,18 +272,19 @@ void DiagramView::contentsMousePressEvent(QMouseEvent * e)
 
             switch (action) {
             case UmlSelect:
-                mousePressPos = e->pos();
+                mousePressPos = scenePoint.toPoint();
 
                 if (ci == 0) {
                     // ne designe pas d objet, vide la selection
                     unselect_all();
                 }
                 else {
-                    const Q3CanvasItemList selected = selection();
-                    Q3CanvasItemList::ConstIterator it = selected.find(ci);
+                    const QList<QGraphicsItem*> selected = selection();
+                    //QList<QGraphicsItem*>::ConstIterator it = selected.find(ci);
+                    bool isContaining = selected.contains(ci);
 
-                    if ((e->state() & ::Qt::ControlModifier) == 0) {
-                        if (it == selected.end()) {
+                    if ((e->modifiers() & ::Qt::ControlModifier) == 0) {
+                        if (/*it == selected.end()*/!isContaining) {
                             // ne designe pas un objet selectionne, vide la selection
                             unselect_all();
 
@@ -286,17 +295,19 @@ void DiagramView::contentsMousePressEvent(QMouseEvent * e)
                         // sinon on ne fait rien, l utilisateur veut probablement
                         // deplacer les objets selectionnes
                     }
-                    else if (it != selected.end())
+                    else if (/*it != selected.end()*/isContaining)
                         // l objet etait selectionne
                         unselect(ci);
                     else
                         // l objet n etait pas selectionne
                         select(ci);
-
                     DiagramItem * di = QCanvasItemToDiagramItem(ci);
 
                     if (di != 0)
-                        do_resize = di->on_resize_point(e->pos());
+                    {
+                        QPointF itemPoint = ci->mapFromScene(scenePoint.toPoint());
+                        do_resize = di->on_resize_point(itemPoint.toPoint());
+                    }
                 }
 
                 break;
@@ -305,39 +316,35 @@ void DiagramView::contentsMousePressEvent(QMouseEvent * e)
                 unselect_all();
                 window()->selectOn();
                 history_save();
-
                 NoteCanvas * note =
-                    new NoteCanvas(the_canvas(), e->x(), e->y(), 0);
+                        new NoteCanvas(the_canvas(), scenePoint.x(), scenePoint.y(), 0);
 
                 note->show();
                 note->upper();
                 note->open();
                 window()->package_modified();
             }
-            break;
+                break;
 
             case UmlText: {
                 unselect_all();
                 window()->selectOn();
                 history_save();
-
                 TextCanvas * text =
-                    new TextCanvas(the_canvas(), e->x(), e->y(), 0);
+                        new TextCanvas(the_canvas(), scenePoint.x(), scenePoint.y(), 0);
 
                 text->show();
                 text->upper();
                 text->open();
                 window()->package_modified();
             }
-            break;
+                break;
 
             case UmlImage: {
                 unselect_all();
                 window()->selectOn();
-
                 history_save();
-
-                ImageCanvas * image = ImageCanvas::add(the_canvas(), e->x(), e->y());
+                ImageCanvas * image = ImageCanvas::add(the_canvas(), scenePoint.x(), scenePoint.y());
 
                 if (image != 0) {
                     image->show();
@@ -345,59 +352,56 @@ void DiagramView::contentsMousePressEvent(QMouseEvent * e)
                     window()->package_modified();
                 }
             }
-            break;
+                break;
 
             case UmlPackage:
                 unselect_all();
                 window()->selectOn();
-                {
-                    BrowserPackage * p = BrowserPackage::get_package();
+            {
+                BrowserPackage * p = BrowserPackage::get_package();
 
-                    if (p != 0) {
-                        history_save();
+                if (p != 0) {
+                    history_save();
+                    PackageCanvas * pk =
+                            new PackageCanvas(p, the_canvas(), scenePoint.x(), scenePoint.y(), 0);
 
-                        PackageCanvas * pk =
-                            new PackageCanvas(p, the_canvas(), e->x(), e->y(), 0);
-
-                        pk->show();
-                        pk->upper();
-                        window()->package_modified();
-                    }
+                    pk->show();
+                    pk->upper();
+                    window()->package_modified();
                 }
+            }
                 break;
 
             case UmlFragment: {
                 unselect_all();
                 window()->selectOn();
                 history_save();
-
                 FragmentCanvas * f =
-                    new FragmentCanvas(the_canvas(), e->x(), e->y(), 0);
+                        new FragmentCanvas(the_canvas(), scenePoint.x(), scenePoint.y(), 0);
 
                 f->show();
                 f->upper();
                 window()->package_modified();
             }
-            break;
+                break;
 
             case UmlFoundSyncMsg:
             case UmlFoundAsyncMsg:
                 unselect_all();
                 history_save();
-                setCursor(::Qt::pointingHandCursor);
+                this->viewport()->setCursor(QCursor(::Qt::PointingHandCursor));
                 arrowBeginning = start = 0;
                 draw_line = TRUE;
-                mousePressPos = e->pos();
+                mousePressPos = scenePoint.toPoint();
                 break;
 
             default:
                 // lines
                 unselect_all();
-
                 if ((ci != 0) && isa_label(ci))
-                    ci = the_canvas()->collision(e->pos(), RTTI_LABEL);
-
+                    ci = the_canvas()->collision(scenePoint.toPoint(), RTTI_LABEL);
                 if (ci != 0) {
+
                     DiagramItem * i = QCanvasItemToDiagramItem(ci);
 
                     if (i != 0) {
@@ -409,11 +413,12 @@ void DiagramView::contentsMousePressEvent(QMouseEvent * e)
                         }
                         else {
                             history_save();
-                            setCursor(::Qt::pointingHandCursor);
+                            this->viewport()->setCursor(QCursor(::Qt::PointingHandCursor));
                             arrowBeginning = start = i;
                             draw_line = TRUE;
-                            mousePressPos = e->pos();
+                            mousePressPos = scenePoint.toPoint();
                         }
+
                     }
                     else
                         window()->selectOn();
@@ -430,16 +435,17 @@ void DiagramView::contentsMousePressEvent(QMouseEvent * e)
              ! BrowserNode::popupMenuActive()) {	// Qt bug
         BrowserNode::setPopupMenuActive(TRUE);
 
-        menu(e->pos());
+        menu(scenePoint.toPoint());
         BrowserNode::setPopupMenuActive(FALSE);
     }
 }
 
-void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e)
+void DiagramView::mouseReleaseEvent(QMouseEvent * e)
 {
     int button = pressedButton;
-
     pressedButton = -1;
+    QPoint diagramPoint(e->x(), e->y());
+    QPointF scenePoint = mapToScene(diagramPoint);
 
     if (button == ::Qt::MidButton)
         QApplication::restoreOverrideCursor();
@@ -455,7 +461,7 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e)
             the_canvas()->del(line);
             line = 0;
 
-            Q3CanvasItem * ci = the_canvas()->collision(e->pos(), RTTI_LABEL);
+            QGraphicsItem * ci = the_canvas()->collision(scenePoint.toPoint(), RTTI_LABEL);
             UmlCode action = window()->buttonOn();
 
             if (ci != 0) {
@@ -465,11 +471,11 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e)
                     if (start == 0) {
                         if (i->may_connect(action)) {
                             // sequence diagram found msg
-                            if (i->connexion(action, mousePressPos, e->pos())) {
+                            if (i->connexion(action, mousePressPos, scenePoint.toPoint())) {
                                 window()->package_modified();
                                 temp.clear();
                                 draw_line = FALSE;
-                                unsetCursor();
+                                this->viewport()->unsetCursor();
                             }
                             else
                                 abort_line_construction();
@@ -485,26 +491,26 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e)
                             if ((theo != action) && (start != arrowBeginning))
                                 relation_to_simplerelation(action);
 
-                            start->connexion(action, i, mousePressPos, e->pos());
+                            start->connexion(action, i, mousePressPos, scenePoint.toPoint());
                             window()->package_modified();
                             temp.clear();
                             draw_line = FALSE;
-                            unsetCursor();
+                            this->viewport()->unsetCursor();
                             arrowBeginning->post_connexion(action, i);
                         }
                         else if (start->may_connect(action)) {
                             // component required/provided interface
                             // sequence diagram lost msg
-                            if (start->connexion(action, mousePressPos, e->pos())) {
+                            if (start->connexion(action, mousePressPos, scenePoint.toPoint())) {
                                 window()->package_modified();
                                 temp.clear();
                                 draw_line = FALSE;
-                                unsetCursor();
+                                this->viewport()->unsetCursor();
                             }
                             else
                                 abort_line_construction();
                         }
-                        else if (err != TR("illegal")) {
+                        else if (err != QObject::tr("illegal")) {
                             msg_critical("Douml", err);
                             abort_line_construction();
                         }
@@ -515,6 +521,7 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e)
                         else
                             abort_line_construction();
                     }
+
                 }
                 else
                     abort_line_construction();
@@ -525,11 +532,11 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e)
             else if (start->may_connect(action)) {
                 // component required/provided interface
                 // sequence diagram lost msg
-                if (start->connexion(action, mousePressPos, e->pos())) {
+                if (start->connexion(action, mousePressPos, scenePoint.toPoint())) {
                     window()->package_modified();
                     temp.clear();
                     draw_line = FALSE;
-                    unsetCursor();
+                    this->viewport()->unsetCursor();
                 }
                 else
                     abort_line_construction();
@@ -548,20 +555,40 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e)
         }
         else if ((button == ::Qt::LeftButton) && (selectArea != 0)) {
             // selectionne les objets dans la zone de selection
-            QRect r = selectArea->boundingRect();
+            QRectF r = selectArea->sceneBoundingRect();
+            //possible Qt bug with negative width and heigth values
+            if(r.width()<0)
+            {
+                qreal w = r.width();
+                r.setX(r.x() + w);
+                r.setWidth(-w);
+            }
+            if(r.height()<0)
+            {
+                qreal h = r.height();
+                r.setY(r.y() + h);
+                r.setHeight(-h);
+            }
 
             the_canvas()->del(selectArea);
             selectArea = 0;
 
-            Q3CanvasItemList l = canvas()->collisions(r);
-            Q3CanvasItemList::Iterator it;
+            QList<QGraphicsItem*> l = canvas()->items(r);
+            QList<QGraphicsItem*>::Iterator it;
+            //habip
+            if(l.count()<3)
+                printf("not selected\r\n");
+
 
             for (it = l.begin(); it != l.end(); ++it)
-                if (r.contains((*it)->boundingRect(), TRUE) && // completement inclus
-                    !isa_alien(*it) &&		// DiagramItem
-                    (*it)->visible() &&		// pas en attente de destruction
-                    !(*it)->selected())   	// pas deja selectionne
+            {
+                QRectF bound = (*it)->sceneBoundingRect();
+                if (r.contains((*it)->sceneBoundingRect()/*, TRUE*/) && // completement inclus
+                        !isa_alien(*it) &&		// DiagramItem
+                        (*it)->isVisible() &&		// pas en attente de destruction
+                        !(*it)->isSelected())   	// pas deja selectionne
                     select(*it);
+            }
 
             history_protected = TRUE;
             canvas()->update();
@@ -570,13 +597,16 @@ void DiagramView::contentsMouseReleaseEvent(QMouseEvent * e)
     }
 }
 
-void DiagramView::contentsWheelEvent(QWheelEvent * e)
+void DiagramView::wheelEvent(QWheelEvent * e)
 {
-    switch (e->state()) {
+    int currentVal;
+    switch (e->modifiers()) {
     case ::Qt::ShiftModifier:
         // note : direction doesn't exist with Qt2.3 and to
         // force direction to horizontal doesn't work with Qt3
-        scrollBy(e->delta() / -10, 0);
+        currentVal = horizontalScrollBar()->value();
+        currentVal += e->delta() / -10;
+        horizontalScrollBar()->setValue(currentVal);
         e->accept();
         break;
 
@@ -588,7 +618,9 @@ void DiagramView::contentsWheelEvent(QWheelEvent * e)
     default:
         // not use QCanvasView::contentsWheelEvent(e)
         // to have the same speed in horiz and vert
-        scrollBy(0, e->delta() / -10);
+        currentVal = verticalScrollBar()->value();
+        currentVal += e->delta() / -10;
+        verticalScrollBar()->setValue(currentVal);
         e->accept();
         break;
     }
@@ -597,10 +629,11 @@ void DiagramView::contentsWheelEvent(QWheelEvent * e)
 void DiagramView::add_point(QMouseEvent * e)
 {
     // adds an ArrowPoint and the line to it
+    QPoint diagramPoint(e->x(), e->y());
+    QPointF scenePoint = mapToScene(diagramPoint);
     history_protected = TRUE;
-
     ArrowPointCanvas * ap =
-        new ArrowPointCanvas(the_canvas(), e->x(), e->y());
+            new ArrowPointCanvas(the_canvas(), scenePoint.x(), scenePoint.y());
     UmlCode action = window()->buttonOn();
     UmlCode t = window()->browser_diagram()->get_type();
     ArrowCanvas * a;
@@ -610,10 +643,10 @@ void DiagramView::add_point(QMouseEvent * e)
 
     if ((t == UmlClassDiagram) && IsaRelation(action))
         a = new RelationCanvas(the_canvas(), start, ap, 0, action, 0, -1.0, -1.0);
-    else if ((t == UmlColDiagram) && (action == UmlLink))
-        a = new CodLinkCanvas(the_canvas(), start, ap, 0, -1.0, -1.0);
     else if ((t == UmlObjectDiagram) && (action == UmlObjectLink))
         a = new ObjectLinkCanvas(the_canvas(), start, ap, UmlObjectLink, 0, -1.0, -1.0);
+    else if ((t == UmlColDiagram) && (action == UmlLink))
+        a = new CodLinkCanvas(the_canvas(), start, ap, 0, -1.0, -1.0);
     else if (((t == UmlComponentDiagram) || (t == UmlDeploymentDiagram))
              && (action == UmlContain))
         a = new AssocContainCanvas(the_canvas(), start, ap, 0, -1.0, -1.0);
@@ -625,7 +658,6 @@ void DiagramView::add_point(QMouseEvent * e)
         a = new SimpleRelationCanvas(the_canvas(), start, ap, 0, action, 0, -1.0, -1.0);
     else
         a = new ArrowCanvas(the_canvas(), start, ap, action, 0, FALSE, -1.0, -1.0);
-
     temp.append(a);		// before the point, see abort_line_construction()
     temp.append(ap);
 
@@ -635,10 +667,10 @@ void DiagramView::add_point(QMouseEvent * e)
     draw_line = TRUE;
     mousePressPos = e->pos();
     start = ap;
-    line = new Q3CanvasLine(canvas());
-    line->setZ(TOP_Z);
-    line->setPoints(e->pos().x(), e->pos().y(),
-                    e->pos().x(), e->pos().y());
+    canvas()->addItem(line = new QGraphicsLineItem());
+    line->setZValue(TOP_Z);
+    line->setLine(scenePoint.x(), scenePoint.y(),
+                    scenePoint.x(), scenePoint.y());
     line->setPen(::Qt::DotLine);
     line->show();
     line->setPen(::Qt::SolidLine);
@@ -648,26 +680,29 @@ void DiagramView::add_point(QMouseEvent * e)
     window()->package_modified();
 
     // remark : mouse tracking does not work (?)
-    setCursor(::Qt::pointingHandCursor);
+    this->viewport()->setCursor(::Qt::PointingHandCursor);
 }
 
-void DiagramView::contentsMouseMoveEvent(QMouseEvent * e)
+void DiagramView::mouseMoveEvent(QMouseEvent * e)
 {
+    QPoint diagramPoint(e->x(), e->y());
+    QPointF scenePoint = mapToScene(diagramPoint);
     if (pressedButton == ::Qt::MidButton) {
-        scrollBy(mousePressPos.x() - e->pos().x(),
-                 mousePressPos.y() - e->pos().y());
+        scroll(mousePressPos.x() - scenePoint.x(),
+               mousePressPos.y() - scenePoint.y());
 
-        mousePressPos = e->pos();
+
+        mousePressPos = scenePoint.toPoint();
     }
     else if (!window()->frozen()) {
         if (pressedButton == ::Qt::LeftButton) {
-            ensureVisible(e->x(), e->y(), 30, 30);
+            ensureVisible(scenePoint.x(),scenePoint.y(), 10, 10);
 
             history_protected = TRUE;
 
-            int dx = e->pos().x() - mousePressPos.x();
-            int dy = e->pos().y() - mousePressPos.y();
-            Q3CanvasItemList selected = selection();
+            int dx = scenePoint.x() - mousePressPos.x();
+            int dy = scenePoint.y() - mousePressPos.y();
+            QList<QGraphicsItem*> selected = selection();
 
             if (! selected.isEmpty()) {
                 // deplace/redimentionne les objets selectionnes
@@ -676,13 +711,13 @@ void DiagramView::contentsMouseMoveEvent(QMouseEvent * e)
                     ArrowPointCanvas * ap;
 
                     if (on_arrow_decenter) {
-                        a->decenter(e->pos(), decenter_start, decenter_horiz);
+                        a->decenter(scenePoint.toPoint(), decenter_start, decenter_horiz);
                         window()->package_modified();
                     }
                     else if (a->is_decenter(mousePressPos, decenter_start, decenter_horiz)) {
                         on_arrow_decenter = TRUE;
                         history_save();
-                        a->decenter(e->pos(), decenter_start, decenter_horiz);
+                        a->decenter(scenePoint.toPoint(), decenter_start, decenter_horiz);
                         window()->package_modified();
                     }
                     else if (a->cut_on_move(ap)) {
@@ -690,7 +725,7 @@ void DiagramView::contentsMouseMoveEvent(QMouseEvent * e)
                         // becomes the alone selected item allowing to move it
                         history_save();
                         unselect(a);
-                        select(a->brk(e->pos()));
+                        select(a->brk(scenePoint.toPoint()));
                         window()->package_modified();
                         first_move = FALSE;
                     }
@@ -720,26 +755,27 @@ void DiagramView::contentsMouseMoveEvent(QMouseEvent * e)
                         moveSelected(dx, dy, FALSE);
                 }
 
-                mousePressPos = e->pos();
+                mousePressPos = scenePoint.toPoint();
             }
             else if (draw_line) {
                 if (line == 0) {
                     // premier deplacement : cree la ligne
-                    line = new Q3CanvasLine(canvas());
-                    line->setZ(TOP_Z);
+                    canvas()->addItem(line = new QGraphicsLineItem());
+                    line->setZValue(TOP_Z);
 
                     switch ((arrowBeginning == 0)
                             ? DiagramItem::Horizontal
                             : arrowBeginning->allowed_direction(window()->buttonOn())) {
                     case DiagramItem::Horizontal:
                         // horizontal line
-                        line->setPoints(mousePressPos.x(), mousePressPos.y(),
-                                        e->pos().x(), mousePressPos.y());
+                        line->setLine(mousePressPos.x(), mousePressPos.y(),
+                                      scenePoint.x(), scenePoint.y());
                         break;
 
                     default:
-                        line->setPoints(mousePressPos.x(), mousePressPos.y(),
-                                        e->pos().x(), e->pos().y());
+                        line->setLine(mousePressPos.x(), mousePressPos.y(),
+                                      scenePoint.x(), scenePoint.y());
+                        break;
                     }
 
                     line->setPen(::Qt::DotLine);
@@ -747,18 +783,18 @@ void DiagramView::contentsMouseMoveEvent(QMouseEvent * e)
                     line->setPen(::Qt::SolidLine);
                 }
                 else {
-                    QPoint st = line->startPoint();
+                    QPoint st = line->line().p1().toPoint();
 
                     switch ((arrowBeginning == 0)
                             ? DiagramItem::Horizontal
                             : arrowBeginning->allowed_direction(window()->buttonOn())) {
                     case DiagramItem::Horizontal:
                         // horizontal line
-                        line->setPoints(st.x(), st.y(), e->pos().x(), st.y());
+                        line->setLine(st.x(), st.y(), scenePoint.x(), scenePoint.y());
                         break;
 
                     default:
-                        line->setPoints(st.x(), st.y(), e->pos().x(), e->pos().y());
+                        line->setLine(st.x(), st.y(), scenePoint.x(), scenePoint.y());
                     }
                 }
             }
@@ -768,14 +804,14 @@ void DiagramView::contentsMouseMoveEvent(QMouseEvent * e)
                 if (selectArea == 0) {
                     // premier deplacement : cree la zone
                     selectArea =
-                        new SelectAreaCanvas(mousePressPos.x(), mousePressPos.y(), dx, dy, canvas());
+                            new SelectAreaCanvas(mousePressPos.x(), mousePressPos.y(), dx, dy, canvas());
 
-                    selectArea->setZ(TOP_Z);
+                    selectArea->setZValue(TOP_Z);
                     selectArea->show();
                 }
                 else {
                     // redimensionne la zone
-                    selectArea->setSize(dx, dy);
+                    selectArea->setRect(scenePoint.x()-dx,scenePoint.y()-dy, dx, dy);
                 }
             }
 
@@ -790,7 +826,7 @@ void DiagramView::abort_line_construction()
     if (draw_line) {
         draw_line = FALSE;
         history_protected = TRUE;
-        unsetCursor();
+        this->viewport()->unsetCursor();
 
         if (line != 0) {
             the_canvas()->del(line);
@@ -798,16 +834,15 @@ void DiagramView::abort_line_construction()
         }
 
         if (! temp.isEmpty()) {
-            Q3CanvasItemList::Iterator it = temp.begin();
+            QList<QGraphicsItem*>::Iterator it = temp.begin();
 
             // remove the line in the start item
             arrowBeginning->remove_line(((ArrowCanvas *) *it));
-
-            do {
+           do{
                 the_canvas()->del(*it);
-                it = temp.remove(it);
+                /*it = */temp.removeOne(*it);
             }
-            while (it != temp.end());
+            while (++it != temp.end());
         }
 
         canvas()->update();
@@ -817,32 +852,31 @@ void DiagramView::abort_line_construction()
 
 void DiagramView::relation_to_simplerelation(UmlCode k)
 {
-    Q3CanvasItemList::Iterator it = temp.begin();
+    QList<QGraphicsItem*>::Iterator it = temp.begin();
 
     // remove the line in the start item
     arrowBeginning->remove_line(((ArrowCanvas *) *it));
 
     start = arrowBeginning;
-
     do {
         // *it = arrow, (*it+1) = arrowpoint
         the_canvas()->del(*it);
-        it = temp.remove(it);
+        it = temp.erase(it);
 
         ArrowPointCanvas * ap =
-            new ArrowPointCanvas(the_canvas(), (int)(*it)->x(), (int)(*it)->y());
+                new ArrowPointCanvas(the_canvas(), (int)(*it)->x(), (int)(*it)->y());
 
         ap->upper();
 
         ArrowCanvas * a =
-            new SimpleRelationCanvas(the_canvas(), start, ap, 0, k, 0, -1.0, -1.0);
+                new SimpleRelationCanvas(the_canvas(), start, ap, 0, k, 0, -1.0, -1.0);
 
         ap->show();
         a->show();
         start = ap;
 
         the_canvas()->del(*it);
-        it = temp.remove(it);
+        it = temp.erase(it);
     }
     while (it != temp.end());
 }
@@ -856,14 +890,13 @@ void DiagramView::delete_them(bool in_model)
 {
     if (!in_model)
         history_save();
-
     for (;;) {
-        const Q3CanvasItemList & selected = selection();
+        const QList<QGraphicsItem*> & selected = selection();
 
         if (selected.isEmpty())
             break;
 
-        Q3CanvasItemList::ConstIterator it = selected.begin();
+        QList<QGraphicsItem*>::ConstIterator it = selected.begin();
         DiagramItem * item = QCanvasItemToDiagramItem(*it);
         BooL in = FALSE;
         BooL out = FALSE;
@@ -884,59 +917,98 @@ void DiagramView::delete_them(bool in_model)
 
 void DiagramView::alignLeft()
 {
-    const Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it = selected.begin();
-    double ref = (*it)->x();
+    const QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it = selected.begin();
+    double ref = (*it)->sceneBoundingRect().left();
 
     while ((++it)  != selected.end())
-        (*it)->moveBy(ref - (*it)->x(), 0);
+    {
+        DiagramItem *dItem =  QCanvasItemToDiagramItem((*it));
+        if(dItem)
+        {
+            dItem->moveBy(ref - (*it)->sceneBoundingRect().left(), 0);
+        }
+        else
+            (*it)->moveBy(ref - (*it)->sceneBoundingRect().left(), 0);
+    }
 }
 
 void DiagramView::alignRight()
 {
-    const Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it = selected.begin();
-    double ref = (*it)->boundingRectAdvanced().right();
+    const QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it = selected.begin();
+    double ref = (*it)->sceneBoundingRect().right();
 
     while ((++it)  != selected.end())
-        (*it)->moveBy(ref - (*it)->boundingRectAdvanced().right(), 0);
+    {
+        DiagramItem *dItem =  QCanvasItemToDiagramItem((*it));
+        if(dItem)
+        {
+            dItem->moveBy(ref - (*it)->sceneBoundingRect().right(), 0);
+        }
+        else
+            (*it)->moveBy(ref - (*it)->sceneBoundingRect().right(), 0);
+    }
 
     window()->package_modified();
 }
 
 void DiagramView::alignTop()
 {
-    const Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it = selected.begin();
-    double ref = (*it)->y();
+    const QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it = selected.begin();
+    double ref = (*it)->sceneBoundingRect().top();
 
     while ((++it)  != selected.end())
-        (*it)->moveBy(0, ref - (*it)->y());
+    {
+        DiagramItem *dItem =  QCanvasItemToDiagramItem((*it));
+        if(dItem)
+        {
+            dItem->moveBy(0, ref - (*it)->sceneBoundingRect().top());
+        }
+        else
+            (*it)->moveBy(0, ref - (*it)->sceneBoundingRect().top());
+    }
 }
 
 void DiagramView::alignBottom()
 {
-    const Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it = selected.begin();
-    double ref = (*it)->boundingRectAdvanced().bottom();
 
+    const QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it = selected.begin();
+    double ref = (*it)->sceneBoundingRect().bottom();
     while ((++it)  != selected.end())
-        (*it)->moveBy(0, ref - (*it)->boundingRectAdvanced().bottom());
+    {
+        DiagramItem *dItem =  QCanvasItemToDiagramItem((*it));
+        if(dItem)
+        {
+            dItem->moveBy(0, ref - (*it)->sceneBoundingRect().bottom());
+        }
+        else
+            (*it)->moveBy(0, ref - (*it)->sceneBoundingRect().bottom());
+    }
 
     window()->package_modified();
+
 }
 
 void DiagramView::alignHorizontaly()
 {
-    const Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it = selected.begin();
-    QRect r = (*it)->boundingRectAdvanced();
+    const QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it = selected.begin();
+    QRectF r = (*it)->sceneBoundingRect();
     double ref = (r.top() + r.bottom()) / 2;
 
     while ((++it)  != selected.end()) {
-        r = (*it)->boundingRectAdvanced();
+        r = (*it)->sceneBoundingRect();
 
-        (*it)->moveBy(0, ref - (r.top() + r.bottom()) / 2);
+        DiagramItem *dItem =  QCanvasItemToDiagramItem((*it));
+        if(dItem)
+        {
+            dItem->moveBy(0, ref - (r.top() + r.bottom()) / 2);
+        }
+        else
+            (*it)->moveBy(0, ref - (r.top() + r.bottom()) / 2);
     }
 
     window()->package_modified();
@@ -944,15 +1016,21 @@ void DiagramView::alignHorizontaly()
 
 void DiagramView::alignVerticaly()
 {
-    const Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it = selected.begin();
-    QRect r = (*it)->boundingRectAdvanced();
+    const QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it = selected.begin();
+    QRectF r = (*it)->sceneBoundingRect();
     double ref = (r.left() + r.right()) / 2;
 
     while ((++it)  != selected.end()) {
-        r = (*it)->boundingRectAdvanced();
+        r = (*it)->sceneBoundingRect();
 
-        (*it)->moveBy(ref - (r.left() + r.right()) / 2, 0);
+        DiagramItem *dItem =  QCanvasItemToDiagramItem((*it));
+        if(dItem)
+        {
+            dItem->moveBy(ref - (r.left() + r.right()) / 2, 0);
+        }
+        else
+            (*it)->moveBy(ref - (r.left() + r.right()) / 2, 0);
     }
 
     window()->package_modified();
@@ -960,15 +1038,22 @@ void DiagramView::alignVerticaly()
 
 void DiagramView::alignCenter()
 {
-    const Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it = selected.begin();
-    QRect r = (*it)->boundingRectAdvanced();
+    const QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it = selected.begin();
+    QRectF r = (*it)->sceneBoundingRect();
     double refx = (r.left() + r.right()) / 2;
     double refy = (r.top() + r.bottom()) / 2;
 
     while ((++it)  != selected.end()) {
-        r = (*it)->boundingRectAdvanced();
+        r = (*it)->sceneBoundingRect();
 
+        DiagramItem *dItem =  QCanvasItemToDiagramItem((*it));
+        if(dItem)
+        {
+            dItem->moveBy(refx - (r.left() + r.right()) / 2,
+                          refy - (r.top() + r.bottom()) / 2);
+        }
+        else
         (*it)->moveBy(refx - (r.left() + r.right()) / 2,
                       refy - (r.top() + r.bottom()) / 2);
     }
@@ -979,11 +1064,10 @@ void DiagramView::alignCenter()
 
 void DiagramView::same_size(bool w, bool h)
 {
-    const Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it;
+    const QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it;
     bool first = TRUE;
     QSize sz;
-
     for (it = selected.begin(); it != selected.end(); ++it) {
         if (!isa_label(*it)) {
             DiagramItem * item = QCanvasItemToDiagramItem(*it);
@@ -1004,26 +1088,25 @@ void DiagramView::same_size(bool w, bool h)
 }
 
 void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
-        bool alignable, int n_resize,
-        QList<DiagramItem *> & l_drawing_settings)
+                                          bool alignable, int n_resize,
+                                          QList<DiagramItem *> & l_drawing_settings)
 {
-    const Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it;
-    Q3PopupMenu m(0);
-
-    MenuFactory::createTitle(m, TR("Multiple selection menu"));
-    m.insertSeparator();
+    const QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it;
+    QMenu m(0);
+    MenuFactory::createTitle(m, QObject::tr("Multiple selection menu"));
+    m.addSeparator();
 
     for (it = selected.begin(); it != selected.end(); ++it) {
         if (QCanvasItemToDiagramItem(*it)->linked()) {
-            m.insertItem(TR("Select linked items"), 1);
-            m.insertSeparator();
+            MenuFactory::addItem(m, TR("Select linked items"), 1);
+            m.addSeparator();
             break;
         }
     }
 
-    Q3PopupMenu al(0);
-    Q3PopupMenu sz(0);
+    QMenu al(0);
+    QMenu sz(0);
 
     if (alignable) {
         QPixmap top((const char **) align_top);
@@ -1033,48 +1116,50 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
         QPixmap center((const char **) align_center);
         QPixmap vcenter((const char **) align_vcenter);
         QPixmap hcenter((const char **) align_hcenter);
+        al.addAction(QIcon(top), QObject::tr("align top"))->setData(4);
+        al.addAction(QIcon(bottom), QObject::tr("align bottom"))->setData(5);
+        al.addAction(QIcon(left), QObject::tr("align left"))->setData(6);
+        al.addAction(QIcon(right), QObject::tr("align right"))->setData(7);
+        al.addAction(QIcon(center), QObject::tr("align center"))->setData(8);
+        al.addAction(QIcon(vcenter), QObject::tr("align center verticaly"))->setData(9);
+        al.addAction(QIcon(hcenter), QObject::tr("align center horizontaly"))->setData(10);
 
-        al.insertItem(QIcon(top), TR("align top"), 4);
-        al.insertItem(QIcon(bottom), TR("align bottom"), 5);
-        al.insertItem(QIcon(left), TR("align left"), 6);
-        al.insertItem(QIcon(right), TR("align right"), 7);
-        al.insertItem(QIcon(center), TR("align center"), 8);
-        al.insertItem(QIcon(vcenter), TR("align center verticaly"), 9);
-        al.insertItem(QIcon(hcenter), TR("align center horizontaly"), 10);
-
-        m.insertItem(TR("Align"), &al);
+        MenuFactory::insertItem(m, TR("Align"), &al);
     }
 
     if (n_resize > 1) {
-        sz.insertItem(TR("same width"), 14);
-        sz.insertItem(TR("same height"), 15);
-        sz.insertItem(TR("same width and height"), 16);
+        MenuFactory::addItem(sz, TR("same width"), 14);
+        MenuFactory::addItem(sz, TR("same height"), 15);
+        MenuFactory::addItem(sz, TR("same width and height"), 16);
 
-        m.insertItem(TR("Size"), &sz);
-        m.insertSeparator();
+        MenuFactory::insertItem(m, TR("Size"), &sz);
+        m.addSeparator();
     }
     else if (alignable)
-        m.insertSeparator();
+        m.addSeparator();
 
-    m.insertItem(TR("Copy selected (Ctrl+c)"), 11);
+    MenuFactory::addItem(m, TR("Copy selected (Ctrl+c)"), 11);
 
     if (out_model) {
-        m.insertItem(TR("Cut selected (Ctrl+x, remove from diagram)"), 12);
-        m.insertItem(TR("Remove selected from view (Suppr)"), 2);
+        MenuFactory::addItem(m, TR("Cut selected (Ctrl+x, remove from diagram)"), 12);
+        MenuFactory::addItem(m, TR("Remove selected from view (Suppr)"), 2);
     }
 
     if (in_model)
-        m.insertItem(TR("Delete selected (Ctrl+d)"), 3);
+        MenuFactory::addItem(m, TR("Delete selected (Ctrl+d)"), 3);
 
     if (l_drawing_settings.count() > 1) {
-        m.insertSeparator();
-        m.insertItem(TR("Edit drawing settings"), 13);
-        m.insertItem(TR("Same drawing settings"), 17);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Edit drawing settings"), 13);
+        MenuFactory::addItem(m, TR("Same drawing settings"), 17);
     }
 
     history_protected = TRUE;
 
-    switch (m.exec(QCursor::pos())) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    switch (retAction->data().toInt()) {
     case 1:
         unselect_all();
 
@@ -1167,6 +1252,7 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
     default:
         return;
     }
+    }
 
     canvas()->update();
     history_protected = FALSE;
@@ -1174,28 +1260,25 @@ void DiagramView::multiple_selection_menu(bool in_model, bool out_model,
 
 void DiagramView::moveSelected(int dx, int dy, bool first)
 {
-    Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it;
-
+    QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it;
     if (first) {
         for (it = selected.begin(); it != selected.end(); ++it)
             QCanvasItemToDiagramItem(*it)
-            ->prepare_for_move(do_resize != NoCorner);
+                    ->prepare_for_move(do_resize != NoCorner);
 
         selected = selection();
     }
 
     for (it = selected.begin(); it != selected.end(); ++it)
-        (*it)->moveBy(dx, dy);
-
+            QCanvasItemToDiagramItem(*it)->moveBy(dx, dy); //arrow canvas bagli item ile de move ediliyor
     window()->package_modified();
 }
 
 void DiagramView::resizeSelected(int dx, int dy)
 {
-    Q3CanvasItemList selected = selection();
-    Q3CanvasItemList::ConstIterator it;
-
+    QList<QGraphicsItem*> selected = selection();
+    QList<QGraphicsItem*>::ConstIterator it;
     if (previousResizeCorrection.isEmpty()) {
         QPoint p(0, 0);
 
@@ -1203,7 +1286,7 @@ void DiagramView::resizeSelected(int dx, int dy)
             previousResizeCorrection.append(p);
     }
 
-    Q3ValueList<QPoint>::Iterator it2;
+    QList<QPoint>::Iterator it2;
 
     for (it = selected.begin(), it2 = previousResizeCorrection.begin();
          it != selected.end();
@@ -1220,7 +1303,7 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
         e->ignore();
     }
     else if (!window()->frozen()) {
-        QString s = Shortcut::shortcut(e->key(), e->state());
+        QString s = Shortcut::shortcut(e->key(), e->modifiers());
 
         if (!s.isEmpty()) {
             e->accept();
@@ -1291,7 +1374,7 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
                 history_protected = TRUE;
 
                 if (!clipboard.isEmpty() &&
-                    (copied_from == window()->browser_diagram()->get_type()))
+                        (copied_from == window()->browser_diagram()->get_type()))
                     paste();
             }
             else if (s == "Cut") {
@@ -1353,10 +1436,9 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
             else if (s == "Arrow geometry") {
                 history_protected = TRUE;
 
-                const Q3CanvasItemList selected = selection();
-                Q3CanvasItemList::ConstIterator it;
-                Q3CanvasItemList l;
-
+                const QList<QGraphicsItem*> selected = selection();
+                QList<QGraphicsItem*>::ConstIterator it;
+                QList<QGraphicsItem*> l;
                 // search for arrow beginning
                 for (it = selected.begin(); it != selected.end(); ++it) {
                     if (isa_arrow(*it)) {
@@ -1364,15 +1446,14 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
                         DiagramItem * b;
                         DiagramItem * e;
 
-                        while (ar->extremities(b, e), b->type() == UmlArrowPoint)
+                        while (ar->extremities(b, e), b->typeUmlCode() == UmlArrowPoint)
                             ar = ((ArrowPointCanvas *) b)->get_other(ar);
 
                         if ((ar->get_start() != ((ArrowCanvas *) *it)->get_end()) &&
-                            (l.find(ar) == l.end()))
+                                (!l.contains(ar)))
                             l.append(ar);
                     }
                 }
-
                 unselect_all();
 
                 for (it = l.begin(); it != l.end(); ++it) {
@@ -1414,7 +1495,7 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
                 return;
             }
             else {
-                const Q3CanvasItemList selected = selection();
+                const QList<QGraphicsItem*> selected = selection();
                 int nselected = selected.count();
 
                 if (nselected > 1) {
@@ -1422,14 +1503,13 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
                         history_protected = TRUE;
                         unselect_all();
 
-                        Q3CanvasItemList::ConstIterator it;
-
+                        QList<QGraphicsItem*>::ConstIterator it;
                         for (it = selected.begin(); it != selected.end(); ++it)
                             QCanvasItemToDiagramItem(*it)->select_associated();
                     }
                     else if ((s == "Edit drawing settings") ||
                              (s == "Same drawing settings")) {
-                        Q3CanvasItemList::ConstIterator it;
+                        QList<QGraphicsItem*>::ConstIterator it;
                         UmlCode k = UmlCodeSup;
                         QList<DiagramItem *> l;
 
@@ -1442,7 +1522,7 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
                                     switch (k) {
                                     case UmlCodeSup:
                                         // first case
-                                        k = item->type();
+                                        k = item->typeUmlCode();
                                         l.append(item);
                                         break;
 
@@ -1451,7 +1531,7 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
                                         break;
 
                                     default:
-                                        if (item->type() == k)
+                                        if (item->typeUmlCode() == k)
                                             l.append(item);
                                         else {
                                             // several types
@@ -1553,8 +1633,9 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
                     }
                 }
                 else if (nselected == 1) {
+
                     DiagramItem * item =
-                        QCanvasItemToDiagramItem(selected.first());
+                            QCanvasItemToDiagramItem(selected.first());
 
                     if (item != 0) {
                         if (s == "Select linked items") {
@@ -1604,7 +1685,6 @@ void DiagramView::keyPressEvent(QKeyEvent * e)
                     return;
                 }
             }
-
             canvas()->update();
             history_protected = FALSE;
         }
@@ -1622,13 +1702,13 @@ void DiagramView::keyReleaseEvent(QKeyEvent *)
 
 void DiagramView::select_all()
 {
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
         if ((QCanvasItemToDiagramItem(*cit) != 0) && // an uml canvas item
-            !(*cit)->selected() &&
-            (*cit)->visible())
+                !(*cit)->isSelected() &&
+                (*cit)->isVisible())
             select(*cit);
     }
 
@@ -1645,29 +1725,29 @@ void DiagramView::set_zoom(double zoom)
     ((UmlCanvas *) canvas())->show_limits(FALSE);
     ((UmlCanvas *) canvas())->set_zoom(zoom);
 
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     // hack to freeze arrow's labels position : select all
-    Q3CanvasItemList selected = selection();
+    QList<QGraphicsItem*> selected = selection();
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
         if ((QCanvasItemToDiagramItem(*cit) != 0) && // an uml canvas item
-            !(*cit)->selected() &&
-            (*cit)->visible())
+                !(*cit)->isSelected() &&
+                (*cit)->isVisible())
             select(*cit);
     }
 
     DiagramItem * di;
 
     for (cit = all.begin(); cit != all.end(); ++cit)
-        if ((*cit)->visible() &&
-            !isa_arrow(*cit) &&
-            ((di = QCanvasItemToDiagramItem(*cit)) != 0))
+        if ((*cit)->isVisible() &&
+                !isa_arrow(*cit) &&
+                ((di = QCanvasItemToDiagramItem(*cit)) != 0))
             di->change_scale();
 
     for (cit = all.begin(); cit != all.end(); ++cit)
-        if ((*cit)->visible() && isa_arrow(*cit))
+        if ((*cit)->isVisible() && isa_arrow(*cit))
             ((ArrowCanvas *) *cit)->change_scale();
 
     // hack end
@@ -1680,30 +1760,38 @@ void DiagramView::set_zoom(double zoom)
     ((UmlCanvas *) canvas())->show_limits(TRUE);
 
     canvas()->update();
+
 }
 
-void DiagramView::needed_width_height(int & maxx, int & maxy) const
+void DiagramView::needed_width_height(int & maxx, int & maxy, int &minx, int &miny) const
 {
     // search the max used x and y
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     maxx = 0;
     maxy = 0;
+    minx = 10000;
+    miny = 10000;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
         DiagramItem * di;
 
-        if ((*cit)->visible() &&
-            ((di = QCanvasItemToDiagramItem(*cit)) != 0)) {
-            if (di->type() != UmlLifeLine) {
-                QRect r = (*cit)->boundingRect();
+        if ((*cit)->isVisible() &&
+                ((di = QCanvasItemToDiagramItem(*cit)) != 0)) {
+            if (di->typeUmlCode() != UmlLifeLine) {
+                QRect r = (*cit)->sceneBoundingRect().toRect();
 
                 if (r.right() > maxx)
                     maxx = r.right();
 
                 if (r.bottom() > maxy)
                     maxy = r.bottom();
+
+                if(r.left() < minx)
+                    minx = r.left();
+                if(r.top()<miny)
+                    miny = r.top();
             }
         }
     }
@@ -1716,11 +1804,12 @@ void DiagramView::fit_scale()
 
     int maxx;
     int maxy;
+    int miny;
+    int minx;
 
-    needed_width_height(maxx, maxy);
-
-    double scale = the_canvas()->zoom() * visibleWidth() / maxx;
-    double scale_y = the_canvas()->zoom() * visibleHeight() / maxy;
+    needed_width_height(maxx, maxy, minx, miny);
+    double scale = the_canvas()->zoom() * viewport()->width() / maxx;
+    double scale_y = the_canvas()->zoom() * viewport()->height() / maxy;
 
     if (scale > scale_y)
         scale = scale_y;
@@ -1736,7 +1825,6 @@ void DiagramView::do_optimal_window_size()
 {
     if (draw_line)
         abort_line_construction();
-
     history_protected = TRUE;
     optimal_window_size();
     canvas()->update();
@@ -1752,11 +1840,12 @@ void DiagramView::optimal_window_size()
 {
     int maxx;
     int maxy;
+    int minx;
+    int miny;
 
-    needed_width_height(maxx, maxy);
-
-    window()->resize(maxx + 10 + window()->width() - visibleWidth(),
-                     maxy + 10 + window()->height() - visibleHeight());
+    needed_width_height(maxx, maxy, minx, miny);
+    window()->resize(maxx + 10 + window()->width() - viewport()->width(),
+                     maxy + 10 + window()->height() - viewport()->height());
 }
 
 void DiagramView::preferred_size_zoom()
@@ -1777,7 +1866,7 @@ void DiagramView::set_format(int f)
     }
 }
 
-static bool find_browser_element(Q3Canvas * canvas, Q3CanvasItemList & r)
+static bool find_browser_element(QGraphicsScene * canvas, QList<QGraphicsItem*> & r)
 {
     BrowserNode * bn = BrowserView::selected_item();
 
@@ -1786,8 +1875,8 @@ static bool find_browser_element(Q3Canvas * canvas, Q3CanvasItemList & r)
 
     BasicData * d = bn->get_data();
     UmlCode k = bn->get_type();
-    Q3CanvasItemList l = canvas->allItems();
-    Q3CanvasItemList::Iterator it;
+    QList<QGraphicsItem*> l = canvas->items();
+    QList<QGraphicsItem*>::Iterator it;
 
     switch (k) {
     case UmlClassDiagram:
@@ -1806,10 +1895,10 @@ static bool find_browser_element(Q3Canvas * canvas, Q3CanvasItemList & r)
     }
 
     for (it = l.begin(); it != l.end(); ++it) {
-        if ((*it)->visible()) {
+        if ((*it)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*it);
 
-            if ((di != 0) && (di->type() == k)) {
+            if ((di != 0) && (di->typeUmlCode() == k)) {
                 if (di->get_bn() == bn)
                     r.append(*it);
                 else {
@@ -1821,239 +1910,247 @@ static bool find_browser_element(Q3Canvas * canvas, Q3CanvasItemList & r)
             }
         }
     }
-
     return !r.isEmpty();
 }
 
-int DiagramView::default_menu(Q3PopupMenu & m, int f)
+int DiagramView::default_menu(QMenu & m, int f)
 {
     bool wr = (((UmlCanvas *) canvas())->browser_diagram())->is_writable();
 
     if (draw_line)
         abort_line_construction();
 
-    Q3PopupMenu formatm(0);
-    Q3PopupMenu formatlandscapem(0);
-    Q3CanvasItemList l;
+    QMenu formatm(0);
+    QMenu formatlandscapem(0);
+    QList<QGraphicsItem*> l;
 
     if (wr) {
-        m.insertItem(TR("Edit drawing settings"), EDIT_DRAWING_SETTING_CMD);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("Edit drawing settings"), EDIT_DRAWING_SETTING_CMD);
+        m.addSeparator();
     }
 
-    m.insertItem(TR("Select diagram in browser"), 1);
+    MenuFactory::addItem(m, TR("Select diagram in browser"), 1);
 
     if (wr)
-        m.insertItem(TR("Select all (Ctrl+a)"), 2);
+        MenuFactory::addItem(m, TR("Select all (Ctrl+a)"), 2);
 
     if (find_browser_element(canvas(), l))
-        m.insertItem(TR("Find selected browser element"), 19);
+        MenuFactory::addItem(m, TR("Find selected browser element"), 19);
 
-    m.insertSeparator();
-    m.insertItem(TR("Copy optimal picture part"), 13);
-    m.insertItem(TR("Copy visible picture part"), 3);
-    m.insertItem(TR("Save optimal picture part (png)"), 14);
-    m.insertItem(TR("Save visible picture part (png)"), 10);
-    m.insertItem(TR("Save optimal picture part (svg)"), 15);
-    m.insertItem(TR("Save visible picture part (svg)"), 16);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Copy optimal picture part"), 13);
+    MenuFactory::addItem(m, TR("Copy visible picture part"), 3);
+    MenuFactory::addItem(m, TR("Save optimal picture part (png)"), 14);
+    MenuFactory::addItem(m, TR("Save visible picture part (png)"), 10);
+    MenuFactory::addItem(m, TR("Save optimal picture part (svg)"), 15);
+    MenuFactory::addItem(m, TR("Save visible picture part (svg)"), 16);
 
     if (wr && !clipboard.isEmpty() &&
-        (copied_from == window()->browser_diagram()->get_type()))
-        m.insertItem(TR("Paste copied items (Ctrl+v)"), 9);
+            (copied_from == window()->browser_diagram()->get_type()))
+        MenuFactory::addItem(m, TR("Paste copied items (Ctrl+v)"), 9);
 
-    m.insertSeparator();
-    m.insertItem(TR("Optimal scale"), 7);
-    m.insertItem(TR("Optimal window size"), 8);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Optimal scale"), 7);
+    MenuFactory::addItem(m, TR("Optimal window size"), 8);
 
     if (wr) {
-        m.insertItem(TR("Set preferred size and scale"), 4);
-        m.insertItem(TR("Set preferred scale (size unset)"), 17);
+        MenuFactory::addItem(m, TR("Set preferred size and scale"), 4);
+        MenuFactory::addItem(m, TR("Set preferred scale (size unset)"), 17);
 
         if (preferred_zoom != 0) {
             if (preferred_size.width() != 0) {
-                m.insertItem(TR("Restore preferred size and scale"), 5);
-                m.insertItem(TR("Unset preferred size and scale"), 18);
+                MenuFactory::addItem(m, TR("Restore preferred size and scale"), 5);
+                MenuFactory::addItem(m, TR("Unset preferred size and scale"), 18);
             }
             else {
-                m.insertItem(TR("Restore preferred scale"), 5);
-                m.insertItem(TR("Unset preferred scale"), 18);
+                MenuFactory::addItem(m, TR("Restore preferred scale"), 5);
+                MenuFactory::addItem(m, TR("Unset preferred scale"), 18);
             }
         }
 
         init_format_menu(formatm, formatlandscapem, f);
-        m.insertItem(TR("Format"), &formatm);
-        m.insertSeparator();
-        m.insertItem(TR("Undo all changes"), RELOAD_CMD);
+        MenuFactory::insertItem(m, TR("Format"), &formatm);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Undo all changes"), RELOAD_CMD);
 
         if (available_undo())
-            m.insertItem(TR("Undo (Ctrl+z or Ctrl+u)"), 11);
+            MenuFactory::addItem(m, TR("Undo (Ctrl+z or Ctrl+u)"), 11);
 
         if (available_redo())
-            m.insertItem(TR("Redo (Ctrl+y or Ctrl+r)"), 12);
+            MenuFactory::addItem(m, TR("Redo (Ctrl+y or Ctrl+r)"), 12);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Close"), 20);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Close"), 20);
 
-    int choice = m.exec(QCursor::pos());
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int choice = retAction->data().toInt();
 
-    switch (choice) {
-    case 1:
-        history_protected = TRUE;
-        the_canvas()->browser_diagram()->select_in_browser();
-        break;
+        switch (choice) {
+        case 1:
+            history_protected = TRUE;
+            the_canvas()->browser_diagram()->select_in_browser();
+            break;
 
-    case 2:
-        select_all();
-        break;
+        case 2:
+            select_all();
+            break;
 
-    case 19:
-        history_protected = TRUE;
-        unselect_all();
+        case 19:
+            history_protected = TRUE;
+            unselect_all();
 
         {
-            Q3CanvasItemList::Iterator it;
+            QList<QGraphicsItem*>::Iterator it;
 
             for (it = l.begin(); it != l.end(); ++it)
                 select(*it);
         }
 
-        ensureVisible((int) l.first()->x(), (int) l.first()->y());
-        canvas()->update();
-        break;
+            ensureVisible((int) l.first()->x(), (int) l.first()->y(),1,1);
+            canvas()->update();
+            break;
 
-    case 3:
-        copy_in_clipboard(FALSE, FALSE);
-        break;
+        case 3:
+            copy_in_clipboard(FALSE, FALSE);
+            break;
 
-    case 13:
-        copy_in_clipboard(TRUE, FALSE);
-        break;
+        case 13:
+            copy_in_clipboard(TRUE, FALSE);
+            break;
 
-    case 4:
-        history_protected = TRUE;
-        preferred_zoom = the_canvas()->zoom();
-        preferred_size.setWidth(window()->width());
-        preferred_size.setHeight(window()->height());
-        window()->package_modified();
-        break;
-
-    case 17:
-        history_protected = TRUE;
-        preferred_zoom = the_canvas()->zoom();
-        preferred_size.setWidth(0);
-        preferred_size.setHeight(0);
-        window()->package_modified();
-        break;
-
-    case 18:
-        history_protected = TRUE;
-        preferred_zoom = 0;
-        preferred_size.setWidth(0);
-        preferred_size.setHeight(0);
-        window()->package_modified();
-        break;
-
-    case 5:
-        preferred_size_zoom();
-        break;
-
-    case 7:
-        window()->fit_scale();
-        break;
-
-    case 8:
-        do_optimal_window_size();
-        break;
-
-    case 9:
-        history_protected = TRUE;
-        history_save();
-        paste();
-        break;
-
-    case 10:
-        history_protected = TRUE;
-        save_picture(FALSE, FALSE);
-        break;
-
-    case 14:
-        history_protected = TRUE;
-        save_picture(TRUE, FALSE);
-        break;
-
-    case 15:
-        history_protected = TRUE;
-        save_picture(TRUE, TRUE);
-        break;
-
-    case 16:
-        history_protected = TRUE;
-        save_picture(FALSE, TRUE);
-        break;
-
-    case 11:
-        undo();
-        break;
-
-    case 12:
-        redo();
-        break;
-
-    case 20:
-        window()->close(FALSE);
-        break;
-
-    case EDIT_DRAWING_SETTING_CMD:
-    case RELOAD_CMD:
-        // to be sure they are not reused
-        break;
-
-    default:
-        if (choice >= f) {
-            set_format(choice - f);
+        case 4:
+            history_protected = TRUE;
+            preferred_zoom = the_canvas()->zoom();
+            preferred_size.setWidth(window()->width());
+            preferred_size.setHeight(window()->height());
             window()->package_modified();
-        }
-    }
+            break;
 
-    return choice;
+        case 17:
+            history_protected = TRUE;
+            preferred_zoom = the_canvas()->zoom();
+            preferred_size.setWidth(0);
+            preferred_size.setHeight(0);
+            window()->package_modified();
+            break;
+
+        case 18:
+            history_protected = TRUE;
+            preferred_zoom = 0;
+            preferred_size.setWidth(0);
+            preferred_size.setHeight(0);
+            window()->package_modified();
+            break;
+
+        case 5:
+            preferred_size_zoom();
+            break;
+
+        case 7:
+            window()->fit_scale();
+            break;
+
+        case 8:
+            do_optimal_window_size();
+            break;
+
+        case 9:
+            history_protected = TRUE;
+            history_save();
+            paste();
+            break;
+
+        case 10:
+            history_protected = TRUE;
+            save_picture(FALSE, FALSE);
+            break;
+
+        case 14:
+            history_protected = TRUE;
+            save_picture(TRUE, FALSE);
+            break;
+
+        case 15:
+            history_protected = TRUE;
+            save_picture(TRUE, TRUE);
+            break;
+
+        case 16:
+            history_protected = TRUE;
+            save_picture(FALSE, TRUE);
+            break;
+
+        case 11:
+            undo();
+            break;
+
+        case 12:
+            redo();
+            break;
+
+        case 20:
+            window()->close();
+            break;
+
+        case EDIT_DRAWING_SETTING_CMD:
+        case RELOAD_CMD:
+            // to be sure they are not reused
+            break;
+
+        default:
+            if (choice >= f) {
+                set_format(choice - f);
+                window()->package_modified();
+            }
+        }
+
+
+        return choice;
+    }
+    return -1;
 }
 
-void DiagramView::init_format_menu(Q3PopupMenu & m, Q3PopupMenu & lm,
+void DiagramView::init_format_menu(QMenu & m, QMenu & lm,
                                    int f) const
 {
-    m.setCheckable(TRUE);
-    lm.setCheckable(TRUE);
-
     int i;
 
     for (i = 0; i <= IsoA5; i += 1)
-        m.insertItem(QString("Iso ") + stringify((CanvasFormat) i), f + i);
+        MenuFactory::addItem(m, QString("Iso ") + stringify((CanvasFormat) i), f + i);
 
     for (; i <= UsE; i += 1)
-        m.insertItem(QString("Ansi ") + stringify((CanvasFormat) i), f + i);
+        MenuFactory::addItem(m, QString("Ansi ") + stringify((CanvasFormat) i), f + i);
 
     for (; i != IsoA0Landscape; i += 1)
-        m.insertItem(stringify((CanvasFormat) i), f + i);
+        MenuFactory::addItem(m, stringify((CanvasFormat) i), f + i);
 
-    m.insertSeparator();
-    m.insertItem(TR("Landscape formats"), &lm);
+    m.addSeparator();
+    foreach (QAction* act, m.actions()) {
+        act->setCheckable(true);
+    }
+    MenuFactory::insertItem(m, TR("Landscape formats"), &lm);
 
     for (; i <= IsoA5Landscape; i += 1)
-        lm.insertItem(QString("Iso ") + stringify((CanvasFormat) i), f + i);
+        MenuFactory::addItem(lm, QString("Iso ") + stringify((CanvasFormat) i), f + i);
 
     for (; i <= UsELandscape; i += 1)
-        lm.insertItem(QString("Ansi ") + stringify((CanvasFormat) i), f + i);
+        MenuFactory::addItem(lm, QString("Ansi ") + stringify((CanvasFormat) i), f + i);
 
     for (; i != CanvasFormatSup; i += 1)
-        lm.insertItem(stringify((CanvasFormat) i), f + i);
+        MenuFactory::addItem(lm, stringify((CanvasFormat) i), f + i);
 
+    foreach (QAction* act, lm.actions()) {
+        act->setCheckable(true);
+    }
     int current = (int) window()->browser_diagram()->get_format();
 
     if (current < (int) IsoA0Landscape)
-        m.setItemChecked(f + current, TRUE);
+        MenuFactory::findAction(m,f + current)->setChecked( TRUE);
     else
-        lm.setItemChecked(f + current, TRUE);
+        MenuFactory::findAction(lm,f + current)->setChecked( TRUE);
 }
 
 void DiagramView::load(const char * pfix)
@@ -2062,28 +2159,27 @@ void DiagramView::load(const char * pfix)
     unselect_all();
     preferred_zoom = 0;
     set_on_load_diagram(TRUE);
-
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator it;
+    QList<QGraphicsItem*> all = canvas()->items();
+    QList<QGraphicsItem*>::Iterator it;
     DiagramItem * di;
 
     for (it = all.begin(); it != all.end(); ++it)
         if (((di = QCanvasItemToDiagramItem(*it)) != 0) && // an uml canvas item
-            (*it)->visible())
+                (*it)->isVisible())
             di->delete_it();
 
     ((UmlCanvas *) canvas())->set_zoom(1);
     ((UmlCanvas *) canvas())->zoom_end();
 
     // load
+//recreating  UndefinedNodePackage will cause crash
     BrowserNode::pre_load();
-
     PRE_TRY;
 
     try {
         QString t = pfix;
 
-        t += " diagram " + ((QWidget *) parent())->caption();
+        t += " diagram " + ((QWidget *) parent())->windowTitle();
 
         read_in(t);
         read();
@@ -2099,13 +2195,13 @@ void DiagramView::load(const char * pfix)
     DiagramItem::post_load();
 
     // to managed deleted items present in the browser
-    all = canvas()->allItems();
+    all = canvas()->items();
 
     for (it = all.begin(); it != all.end(); ++it) {
-        if ((*it)->visible() &&
-            ((di = QCanvasItemToDiagramItem(*it)) != 0) &&
-            (di->get_bn() != 0) && // do not manage relations here
-            di->get_bn()->deletedp())
+        if ((*it)->isVisible() &&
+                ((di = QCanvasItemToDiagramItem(*it)) != 0) &&
+                (di->get_bn() != 0) && // do not manage relations here
+                di->get_bn()->deletedp())
             di->delete_it();
     }
 
@@ -2118,11 +2214,11 @@ void DiagramView::load(const char * pfix)
 
     canvas()->update();
 
-    all = canvas()->allItems();
+    all = canvas()->items();
 
     for (it = all.begin(); it != all.end(); ++it)
-        if ((*it)->visible() &&
-            ((di = QCanvasItemToDiagramItem(*it)) != 0))
+        if ((*it)->isVisible() &&
+                ((di = QCanvasItemToDiagramItem(*it)) != 0))
             di->post_loaded();
 
     canvas()->update();
@@ -2179,7 +2275,6 @@ void DiagramView::paste()
 {
     history_protected = TRUE;
     set_on_load_diagram(TRUE);
-
     double old_zoom = ((UmlCanvas *) canvas())->zoom();
     char * s = new char[clipboard.length() + 1];
 
@@ -2222,8 +2317,8 @@ void DiagramView::paste()
 
     // to managed deleted items present in the browser
     // compute rect containing all the paste items
-    Q3CanvasItemList l = selection();
-    Q3CanvasItemList::Iterator it;
+    QList<QGraphicsItem*> l = selection();
+    QList<QGraphicsItem*>::Iterator it;
     DiagramItem * di;
     double minx = 1e10;
     double maxx = 0;
@@ -2231,31 +2326,31 @@ void DiagramView::paste()
     double maxy = 0;
 
     for (it = l.begin(); it != l.end(); ++it) {
-        if ((*it)->visible() &&
-            ((di = QCanvasItemToDiagramItem(*it)) != 0) &&
-            (di->get_bn() != 0) && // do not manage relations here
-            di->get_bn()->deletedp())
+        if ((*it)->isVisible() &&
+                ((di = QCanvasItemToDiagramItem(*it)) != 0) &&
+                (di->get_bn() != 0) && // do not manage relations here
+                di->get_bn()->deletedp())
             di->delete_it();
         else {
-            QRect r = (*it)->boundingRect();
+            QRectF r = (*it)->sceneBoundingRect();
 
-            if (r.x() < minx)
-                minx = r.x();
+            if (r.left() < minx)
+                minx = r.left();
 
-            if (r.y() < miny)
-                miny = r.y();
+            if (r.top() < miny)
+                miny = r.top();
 
-            if (r.x() > maxx)
+            if (r.left() > maxx)
                 maxx = r.right();
 
-            if (r.y() > maxy)
+            if (r.top() > maxy)
                 maxy = r.bottom();
         }
     }
 
     // place all paste items in the center of the viewport
-    double dx = contentsX() + width() / 2 - (minx + maxx) / 2;
-    double dy = contentsY() + height() / 2 - (miny + maxy) / 2;
+    double dx = /*contentsX() +*/ width() / 2 - (minx + maxx) / 2;
+    double dy = /*contentsY() + */height() / 2 - (miny + maxy) / 2;
 
     l = selection();
 
@@ -2270,11 +2365,11 @@ void DiagramView::paste()
     set_zoom(old_zoom);
     canvas()->update();
 
-    l = canvas()->allItems();
+    l = canvas()->items();
 
     for (it = l.begin(); it != l.end(); ++it)
-        if ((*it)->visible() &&
-            ((di = QCanvasItemToDiagramItem(*it)) != 0))
+        if ((*it)->isVisible() &&
+                ((di = QCanvasItemToDiagramItem(*it)) != 0))
             di->post_loaded();
 
     canvas()->update();
@@ -2286,18 +2381,17 @@ void DiagramView::paste()
 
 bool DiagramView::is_present(BrowserNode * bn)
 {
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator it;
+    QList<QGraphicsItem*> all = canvas()->items();
+    QList<QGraphicsItem*>::Iterator it;
 
     for (it = all.begin(); it != all.end(); ++it) {
-        if ((*it)->visible()) {
+        if ((*it)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*it);
 
             if ((di != 0) && di->represents(bn))
                 return TRUE;
         }
     }
-
     return FALSE;
 }
 
@@ -2310,9 +2404,9 @@ bool DiagramView::save_pict(const char * f, bool optimal, bool temporary)
 {
     QFileInfo fi(f);
 
-    return (fi.extension(FALSE).lower() == "svg")
-           ? svg_save_in(f, optimal, temporary)
-           : save_in(f, optimal, temporary);
+    return (fi.fileName().right(3).toLower() == "svg")
+            ? svg_save_in(f, optimal, temporary)
+            : save_in(f, optimal, temporary);
 }
 
 bool DiagramView::save_in(const char * f, bool optimal, bool temporary)
@@ -2321,7 +2415,7 @@ bool DiagramView::save_in(const char * f, bool optimal, bool temporary)
         // unselect element and redraw them to remove selection mark
         history_protected = TRUE;
         unselect_all();
-        the_canvas()->setAllChanged();
+        the_canvas()->update();
         canvas()->update();
         history_protected = TRUE;
     }
@@ -2329,24 +2423,23 @@ bool DiagramView::save_in(const char * f, bool optimal, bool temporary)
     the_canvas()->show_limits(FALSE);
 
     bool r;
-
     if (optimal) {
-        int x0 = contentsX();
-        int y0 = contentsY();
+        int x0 = 0;//center();
+        int y0 = 0; //contentsY();
 
-        setContentsPos(0, 0);
+        //setContentsPos(0, 0);
 
         int maxx;
         int maxy;
+        int minx;
+        int miny;
 
-        needed_width_height(maxx, maxy);
-        maxx += 10;
+        needed_width_height(maxx, maxy, minx, miny);
+        maxx += 30;
         maxy += 10;
-
         // add a large margin to be sure to see all in one shot contrarilly
         // to the optimal_window_size whose must have the pretty size
-
-        if ((visibleWidth() >= (maxx + 90)) && (visibleHeight() >= (maxy + 90)))
+        if ((viewport()->width() >= (maxx + 90)) && (viewport()->height() >= (maxy + 90)))
             r = QPixmap::grabWidget(viewport(), 0, 0, maxx, maxy).save(f, "PNG");
         else {
 
@@ -2361,51 +2454,50 @@ bool DiagramView::save_in(const char * f, bool optimal, bool temporary)
             r = QPixmap::grabWidget(viewport(), 0, 0, maxx, maxy).save(f, "PNG");
 
             if (! temporary) {
-
-
-
                 window()->resize(saved_w, saved_h);
-
             }
         }
 
         if (! temporary)
-            setContentsPos(x0, y0);
+        {
+           // setContentsPos(x0, y0);
+        }
     }
     else
         r = QPixmap::grabWidget(viewport()).save(f, "PNG");
 
     the_canvas()->show_limits(TRUE);
+
     return r;
 }
 
 bool DiagramView::svg_save_in(const char * f, bool optimal, bool temporary)
 {
     bool result = FALSE;
-
     the_canvas()->show_limits(FALSE);
-
     if (optimal) {
-        int x0 = contentsX();
-        int y0 = contentsY();
+        int x0 = 0; //contentsX();
+        int y0 = 0;//contentsY();
 
-        setContentsPos(0, 0);
+        //setContentsPos(0, 0);
 
         int maxx;
         int maxy;
+        int minx;
+        int miny;
 
-        needed_width_height(maxx, maxy);
-        maxx += 10;
+        needed_width_height(maxx, maxy, minx, miny);
+        maxx += 30;
         maxy += 10;
 
         // add a large margin to be sure to see all in one shot contrarilly
         // to the optimal_window_size whose must have the pretty size
 
-        if ((visibleWidth() >= (maxx + 90)) && (visibleHeight() >= (maxy + 90))) {
+        if ((viewport()->width() >= (maxx + 90)) && (viewport()->height() >= (maxy + 90))) {
             if (start_svg(f, maxx, maxy)) {
                 result = TRUE;
                 history_protected = TRUE;
-                the_canvas()->setAllChanged();
+                the_canvas()->update();
                 canvas()->update();
                 history_protected = FALSE;
                 end_svg();
@@ -2424,7 +2516,7 @@ bool DiagramView::svg_save_in(const char * f, bool optimal, bool temporary)
             if (start_svg(f, maxx, maxy)) {
                 result = TRUE;
                 history_protected = TRUE;
-                the_canvas()->setAllChanged();
+                the_canvas()->update();
                 canvas()->update();
                 history_protected = FALSE;
                 end_svg();
@@ -2440,19 +2532,19 @@ bool DiagramView::svg_save_in(const char * f, bool optimal, bool temporary)
         }
 
         if (! temporary)
-            setContentsPos(x0, y0);
+        {
+            //setContentsPos(x0, y0);
+        }
     }
-    else if (start_svg(f, visibleWidth(), visibleHeight())) {
+    else if (start_svg(f, viewport()->width(), viewport()->height())) {
         result = TRUE;
         history_protected = TRUE;
-        the_canvas()->setAllChanged();
+        the_canvas()->update();
         canvas()->update();
         history_protected = FALSE;
         end_svg();
     }
-
     the_canvas()->show_limits(TRUE);
-
     return result;
 }
 
@@ -2462,32 +2554,34 @@ void DiagramView::copy_in_clipboard(bool optimal, bool temporary)
         // unselect element and redraw them to remove selection mark
         history_protected = TRUE;
         unselect_all();
-        the_canvas()->setAllChanged();
+        the_canvas()->update();
         canvas()->update();
     }
-
     history_protected = TRUE;
     the_canvas()->show_limits(FALSE);
 
     if (optimal) {
-        int x0 = contentsX();
-        int y0 = contentsY();
+        int x0 = 0;// contentsX();
+        int y0 = 0; //contentsY();
 
-        setContentsPos(0, 0);
+        //setContentsPos(0, 0);
 
         int maxx;
         int maxy;
+        int minx;
+        int miny;
 
-        needed_width_height(maxx, maxy);
-        maxx += 10;
+        needed_width_height(maxx, maxy, minx, miny);
+        maxx += 30;
         maxy += 10;
 
         // add a large margin to be sure to see all in one shot contrarilly
         // to the optimal_window_size whose must have the pretty size
 
-        if ((visibleWidth() >= (maxx + 90)) && (visibleHeight() >= (maxy + 90)))
+        if ((viewport()->width() >= (maxx + 90)) && (viewport()->height() >= (maxy + 90))) {
             QApplication::clipboard()
-            ->setPixmap(QPixmap::grabWidget(viewport(), 0, 0, maxx, maxy));
+                    ->setPixmap(QPixmap::grabWidget(viewport(), 0, 0, maxx, maxy));
+        }
         else {
 
             int saved_w;
@@ -2500,7 +2594,7 @@ void DiagramView::copy_in_clipboard(bool optimal, bool temporary)
             history_protected = TRUE;
             canvas()->update();
             QApplication::clipboard()
-            ->setPixmap(QPixmap::grabWidget(viewport(), 0, 0, maxx, maxy));
+                    ->setPixmap(QPixmap::grabWidget(viewport(), 0, 0, maxx, maxy));
 
             if (! temporary) {
 
@@ -2512,7 +2606,9 @@ void DiagramView::copy_in_clipboard(bool optimal, bool temporary)
         }
 
         if (! temporary)
-            setContentsPos(x0, y0);
+        {
+            //setContentsPos(x0, y0);
+        }
     }
     else
         QApplication::clipboard()->setPixmap(QPixmap::grabWidget(viewport()));
@@ -2532,24 +2628,24 @@ void DiagramView::restore_window_size()
 void DiagramView::save_picture(bool optimal, bool svg)
 {
     QString filename =
-        Q3FileDialog::getSaveFileName(last_used_directory(),
-                                      (svg) ? TR("SVG file (*.svg)") : TR("PNG file (*.png)"),
-                                      this);
+            QFileDialog::getSaveFileName(this,
+                                          (svg) ? QObject::tr("SVG file (*.svg)") : QObject::tr("PNG file (*.png)"),
+                                         last_used_directory());
 
     if (!filename.isNull()) {
         set_last_used_directory(filename);
 
         if (svg) {
-            if (filename.right(4).lower() != ".svg")
+            if (filename.right(4).toLower() != ".svg")
                 filename += ".svg";
 
-            svg_save_in(filename, optimal, FALSE);
+            svg_save_in(filename.toLatin1().constData(), optimal, FALSE);
         }
         else {
-            if (filename.right(4).lower() != ".png")
+            if (filename.right(4).toLower() != ".png")
                 filename += ".png";
 
-            save_in(filename, optimal, FALSE);
+            save_in(filename.toLatin1().constData(), optimal, FALSE);
         }
     }
 }
@@ -2559,18 +2655,16 @@ void DiagramView::print(QPrinter & printer, int div)
 {
     if (the_canvas()->selection().count() != 0)
         unselect_all();
-
     double old_zoom = ((UmlCanvas *) canvas())->zoom();
 
     if (old_zoom < 1)
         set_zoom(1);
-
     QPainter paint(&printer);
-    Q3PaintDeviceMetrics m(paint.device());
-    int devw = m.width();
-    int devh = m.height();
-    double w = contentsWidth();
-    double h = contentsHeight();
+    //Q3PaintDeviceMetrics m(paint.device());
+    int devw = printer.width();
+    int devh = printer.height();
+    double w = viewport()->width();
+    double h = viewport()->height();
     double zoom = devh / h;
 
     if (devw / w < zoom)
@@ -2588,7 +2682,8 @@ void DiagramView::print(QPrinter & printer, int div)
         int j = 0;
 
         for (;;) {
-            drawContents(&paint, (int)(i * w), (int)(j * h), (int) w, (int) h);
+            //drawContents(&paint, (int)(i * w), (int)(j * h), (int) w, (int) h);
+            this->render(&paint, QRectF(i*w,j*h, w, h));
 
             if (++j == div)
                 break;
@@ -2603,7 +2698,6 @@ void DiagramView::print(QPrinter & printer, int div)
         printer.newPage();
         paint.translate(-w, h * (div - 1));
     }
-
     ((UmlCanvas *) canvas())->show_limits(TRUE);
 
     if (old_zoom < 1)
@@ -2668,8 +2762,7 @@ void DiagramView::history_save(bool on_undo)
 
     b.writeBlock((char *) &z, sizeof(z));
     */
-
-    DiagramItemList items(canvas()->allItems());
+    DiagramItemList items(canvas()->items());
 
     foreach (DiagramItem * di, items) {
         di->history_save(b);
@@ -2710,8 +2803,7 @@ void DiagramView::history_load()
 
     // unselect and hide all
     unselect_all();
-
-    DiagramItemList items(canvas()->allItems());
+    DiagramItemList items(canvas()->items());
     foreach (DiagramItem *di, items) {
         di->history_hide();
         di->post_history_hide();
@@ -2746,7 +2838,6 @@ void DiagramView::undo()
     history_index -= 1;
     history_load();
 }
-
 // want to be the state following the state indicated by history_index
 void DiagramView::redo()
 {

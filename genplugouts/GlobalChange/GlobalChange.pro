@@ -10,7 +10,7 @@ CONFIG(Release, Debug|Release) {
     CONFIG += qt Release
     QMAKE_POST_LINK = " "
 }
-DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON
+DEFINES        += WITHCPP WITHJAVA WITHIDL WITHPHP WITHPYTHON
 HEADERS        = ./UmlBaseUseCaseAssociation.h \
           ./UmlActivityDiagram.h \
           ./UmlForkPseudoState.h \
@@ -208,7 +208,12 @@ HEADERS        = ./UmlBaseUseCaseAssociation.h \
           ./UmlPackage.h \
           ./UmlBaseExpansionNode.h \
           ./UmlBaseArtifact.h \
-          ./UmlBaseChoicePseudoState.h
+          ./UmlBaseChoicePseudoState.h \
+    vgridbox.h \
+    vvbox.h \
+    gridbox.h \
+    hhbox.h \
+    bbuttongroup.h
 SOURCES        = ./UmlBaseUseCaseAssociation.cpp \
           ./UmlActivityDiagram.cpp \
           ./UmlForkPseudoState.cpp \
@@ -407,12 +412,17 @@ SOURCES        = ./UmlBaseUseCaseAssociation.cpp \
           ./UmlPackage.cpp \
           ./UmlBaseExpansionNode.cpp \
           ./UmlBaseArtifact.cpp \
-          ./UmlBaseChoicePseudoState.cpp
+          ./UmlBaseChoicePseudoState.cpp \
+    vgridbox.cpp \
+    vvbox.cpp \
+    gridbox.cpp \
+    hhbox.cpp \
+    bbuttongroup.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+DEFINES += TRUE=true FALSE=false
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/global_change

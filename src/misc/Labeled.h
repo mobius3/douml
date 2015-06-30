@@ -28,7 +28,7 @@
 #ifndef LABELED_H
 #define LABELED_H
 
-#include <q3intdict.h>
+//#include <q3intdict.h>
 #include "misc/mystr.h"
 // id 1 user 1
 #define PROJECT_ID (1*128 + 1)
@@ -46,7 +46,7 @@ template <class X> class Labeled;
 template <class X> class IdIterator;
 template <class X> class IdDict;
 
-extern void set_in_import(bool y, bool as_lib = FALSE);
+extern void set_in_import(bool y, bool as_lib = false);
 extern bool in_import();
 extern bool in_lib_import();
 
@@ -75,8 +75,8 @@ private:
 #else
 public:
 #endif
-    Q3IntDict<X> dict[2];
-    Q3IntDict<char> dictlib;
+    QHash<int,X*> dict[2];
+    QHash<int,char*> dictlib;
     int idmax;
     bool old_diagram;
 
@@ -89,7 +89,7 @@ public:
     IdDict(int sz, const char * who) {
         old_diagram = false;
         idmax = 0;
-        dict[0].resize(sz);
+        dict[0].reserve(sz);
         memo_idmax_loc(idmax, who);
     }
 
@@ -113,16 +113,18 @@ public:
     }
 
     void update_idmax_for_root() {
-        Q3IntDictIterator<X> it(dict[0]);
 
-        while (it.current()) {
-            int id = it.currentKey();
+        QHashIterator<int,X*> it(dict[0]);
+
+        while (it.hasNext()) {
+            it.next();
+            int id = it.key();
 
             if ((((unsigned)(id & ~127)) > ((unsigned) idmax)) &&
                 ((id & 127) == 0))
                 idmax = id & ~127;
 
-            ++it;
+            //++it;
         }
     }
 
@@ -131,21 +133,20 @@ public:
     }
 
     void memo_id_oid(intptr_t id, int oid) {
-        dict[0].remove(static_cast<long>(id));
-        dictlib.replace(static_cast<long>(oid), reinterpret_cast<char *>(id));
-
-        if ((dictlib.count() / 2) >= dictlib.size()) {
-            dictlib.resize(dictlib.size() * 2 - 1);
-        }
+        dict[0].remove(id);
+        dictlib.insert(oid, reinterpret_cast<char *>(id));
     }
 };
 
-template <class X> class IdIterator : public Q3IntDictIterator<X>
+template <class X> class IdIterator
+        : public QHashIterator<int,X*>
+
 {
 public:
-    IdIterator(IdDict<X> & ids) : Q3IntDictIterator<X>(ids.dict[0]) {}
+    IdIterator(IdDict<X> & ids)
+        : QHashIterator<int,X*>(ids.dict[0])
+    {}
 };
-
 template <class X> class Labeled
 {
 private:

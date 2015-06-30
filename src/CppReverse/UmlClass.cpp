@@ -29,9 +29,9 @@
 #include <iostream>
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 using namespace std;
 #endif
@@ -62,10 +62,10 @@ using namespace std;
 QList<UmlClass *> UmlClass::UnderConstruction;
 
 // used (by using) classes list
-Q3Dict<UmlClass> UmlClass::Usings;
+QHash<QString,UmlClass*> UmlClass::Usings;
 
 // to lost usings defined under a namespace/class block
-Q3ValueList<Q3Dict<UmlClass> > UmlClass::UsingScope;
+QList<QHash<QString,UmlClass*> > UmlClass::UsingScope;
 
 UmlClass::UmlClass(void * id, const WrapperStr & n)
     : UmlBaseClass(id, n)
@@ -75,7 +75,7 @@ UmlClass::UmlClass(void * id, const WrapperStr & n)
 {}
 
 bool UmlClass::manage_inherit(ClassContainer * container,
-                              const Q3ValueList<FormalParameterList> & tmplts
+                              const QList<FormalParameterList> & tmplts
 #ifdef REVERSE
                               , bool libp
 # ifdef ROUNDTRIP
@@ -297,7 +297,7 @@ UmlClass * UmlClass::auxilarily_typedef(const WrapperStr & base
                                        )
 {
     WrapperStr typedef_decl = CppSettings::typedefDecl();
-    const Q3PtrVector<UmlItem> & children = parent()->children();
+    const QVector<UmlItem*>& children = parent()->children();
     unsigned n = children.count();
     unsigned index;
 
@@ -334,7 +334,7 @@ UmlClass * UmlClass::auxilarily_typedef(const WrapperStr & base
                 break;
 
         if (index == n) {
-            UmlClass * cl = UmlClass::create(parent(), s);
+            UmlClass * cl = UmlClass::create(parent(), s.toLatin1().constData());
 
             if (cl == 0) {
 #ifdef REVERSE
@@ -377,15 +377,15 @@ UmlClass * UmlClass::auxilarily_typedef(const WrapperStr & base
 }
 
 bool UmlClass::get_actuals(UmlClass * mother, ClassContainer * container,
-                           const Q3ValueList<FormalParameterList> & tmplts
+                           const QList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
                            , bool roundtrip
 #endif
                           )
 {
     // < read
-    const Q3ValueList<UmlActualParameter> actuals = this->actuals();
-    Q3ValueList<UmlActualParameter>::ConstIterator it;
+    const QList<UmlActualParameter> actuals = this->actuals();
+    QList<UmlActualParameter>::ConstIterator it;
     unsigned rank;
 
     for (it = actuals.begin(), rank = 0; (*it).superClass() != mother; ++it, rank += 1)
@@ -484,8 +484,8 @@ bool UmlClass::is_itself(WrapperStr t)
 
     t = t.mid(index + 1, t.length() - index - 2);
 
-    Q3ValueList<UmlFormalParameter> l = formals();
-    Q3ValueList<UmlFormalParameter>::ConstIterator it = l.begin();
+    QList<UmlFormalParameter> l = formals();
+    QList<UmlFormalParameter>::ConstIterator it = l.begin();
     WrapperStr t2 = (*it).name();
 
     while ((++it) != l.end())
@@ -497,7 +497,7 @@ bool UmlClass::is_itself(WrapperStr t)
 void UmlClass::restore_using_scope()
 {
     Usings = UsingScope.first();
-    UsingScope.remove(UsingScope.begin());
+    UsingScope.removeFirst();
 }
 
 #ifdef REVERSE
@@ -532,7 +532,7 @@ void UmlClass::need_artifact(const WrapperStr & nmsp)
 
             UmlDeploymentView * cpv =
                 ((UmlPackage *) parent()->parent())->get_deploymentview(nmsp);
-            const Q3PtrVector<UmlItem> & children = cpv->children();
+            const QVector<UmlItem*> & children = cpv->children();
             int n = (int) children.count();
 
             for (index = 0; index != n; index += 1) {
@@ -582,7 +582,7 @@ bool UmlClass::need_source()
     const WrapperStr & stereotype = this->stereotype();
 
     if ((stereotype != "enum") && (stereotype != "typedef")) {
-        Q3PtrVector<UmlItem> children = this->children();
+        QVector<UmlItem*> children = this->children();
         unsigned u = children.size();
 
         while (u--)
@@ -610,12 +610,12 @@ void UmlClass::upload(ClassContainer * cnt)
 
     the_class = cnt->upload_define(this);
 
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
-
-    for (; v != vsup; v += 1)
-        (*v)->upload(the_class);
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    QVectorIterator<UmlItem*> it(ch);
+    while(it.hasNext())
+    {
+        it.next()->upload(the_class);;
+    }
 
     if (! na.isEmpty())
         Namespace::unset();
@@ -629,14 +629,15 @@ bool UmlClass::set_roundtrip_expected()
           !associatedArtifact()->set_roundtrip_expected_for_class())))
         return TRUE;
 
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlClassItem ** v = (UmlClassItem **) ch.data();
-    UmlClassItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
+
     bool result = UmlClassItem::set_roundtrip_expected();
 
-    for (; v != vsup; v += 1)
-        result &= (*v)->set_roundtrip_expected();
-
+    QVectorIterator<UmlItem*> it(ch);
+    while(it.hasNext())
+    {
+        result &= it.next()->set_roundtrip_expected();
+    }
     return result;
 
 }
@@ -645,12 +646,12 @@ void UmlClass::mark_useless(QList<UmlItem *> & l)
 {
     UmlClassItem::mark_useless(l);
 
-    Q3PtrVector<UmlItem> ch = UmlItem::children();
-    UmlClassItem ** v = (UmlClassItem **) ch.data();
-    UmlClassItem ** const vsup = v + ch.size();
-
-    for (; v != vsup; v += 1)
-        (*v)->mark_useless(l);
+    const QVector<UmlItem*>& ch = UmlItem::children();
+    QVectorIterator<UmlItem*> it(ch);
+    while(it.hasNext())
+    {
+        it.next()->mark_useless(l);
+    }
 }
 
 void UmlClass::scan_it(int & n)
@@ -667,21 +668,22 @@ void UmlClass::send_it(int n)
 
 UmlItem * UmlClass::search_for_att_rel(const WrapperStr & name)
 {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = UmlItem::children();
 
-    for (; v != vsup; v += 1) {
-        switch ((*v)->kind()) {
+    QVectorIterator<UmlItem*> it(ch);
+    while(it.hasNext())
+    {
+        UmlItem* item = it.next();
+        switch (item->kind()) {
         case anAttribute:
-            if ((*v)->name() == name)
-                return *v;
+            if (item->name() == name)
+                return item;
 
             break;
 
         case aRelation:
-            if (((UmlRelation *) *v)->roleName() == name)
-                return *v;
+            if (((UmlRelation *) item)->roleName() == name)
+                return item;
 
             break;
 
@@ -696,15 +698,15 @@ UmlItem * UmlClass::search_for_att_rel(const WrapperStr & name)
 UmlExtraClassMember *
 UmlClass::search_for_extra(const WrapperStr & name, const WrapperStr & decl)
 {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
-
-    for (; v != vsup; v += 1) {
-        if (((*v)->kind() == anExtraClassMember) &&
-            ((*v)->name() == name) &&
-            !neq(((UmlExtraClassMember *) *v)->cppDecl(), decl))
-            return (UmlExtraClassMember *) *v;
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    QVectorIterator<UmlItem*> it(ch);
+    while(it.hasNext())
+    {
+        UmlItem* item = it.next();
+        if ((item->kind() == anExtraClassMember) &&
+            (item->name() == name) &&
+            !neq(((UmlExtraClassMember *) item)->cppDecl(), decl))
+            return (UmlExtraClassMember *) item;
     }
 
     return 0;
@@ -712,17 +714,17 @@ UmlClass::search_for_extra(const WrapperStr & name, const WrapperStr & decl)
 
 UmlRelation * UmlClass::search_for_inherit(UmlClass * mother)
 {
-    const Q3PtrVector<UmlItem> & ch = UmlItem::children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
-
-    for (; v != vsup; v += 1) {
-        if (((*v)->kind() == aRelation) &&
-            (((UmlRelation *) *v)->roleType() == mother)) {
-            switch (((UmlRelation *) *v)->relationKind()) {
+    const QVector<UmlItem*> & ch = UmlItem::children();
+    QVectorIterator<UmlItem*> it(ch);
+    while(it.hasNext())
+    {
+        UmlItem* item = it.next();
+        if ((item->kind() == aRelation) &&
+            (((UmlRelation *) item)->roleType() == mother)) {
+            switch (((UmlRelation *) item)->relationKind()) {
             case aGeneralisation:
             case aRealization:
-                return (UmlRelation *) *v;
+                return (UmlRelation *) item;
 
             default:
                 break;
@@ -738,7 +740,7 @@ void UmlClass::reorder(QList<UmlItem *> & expected_order)
     if (expected_order.isEmpty())
         return;
 
-    Q3PtrVector<UmlItem> ch = UmlItem::children(); // copy
+    QVector<UmlItem*> ch = UmlItem::children(); // copy
     UmlItem ** v = ch.data();
 
     unload(); // to not reload children each time

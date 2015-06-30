@@ -27,13 +27,9 @@
 
 #ifndef UMLOPERATION_H
 #define UMLOPERATION_H
-
-#include <q3intdict.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
-
 #include "UmlBaseOperation.h"
 
 class QTextStream;

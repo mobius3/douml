@@ -5,7 +5,7 @@
 #include "UmlClassMember.h"
 #include "aRelationKind.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlRelation;
 class UmlClass;
@@ -13,9 +13,8 @@ class UmlOperation;
 class UmlAttribute;
 
 // Manage the relations between classes
-class UmlBaseRelation : public UmlClassMember
-{
-public:
+class UmlBaseRelation : public UmlClassMember {
+  public:
     // returns a new relation of the given 'kind' from 'start' to 'end'
     //
     // In case it cannot be created (the name is already used or
@@ -33,41 +32,41 @@ public:
     bool isReadOnly();
 
     // to set the 'read only' state of the relation
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isReadOnly(bool y);
 
     // returns the default relation value, may be an empty string
-    const Q3CString & defaultValue();
+    const QByteArray & defaultValue();
 
     // to set the default relation value ("" allowed)
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_DefaultValue(const char * s);
 
     // to set the stereotype
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     // redefined in case the relation is bidirectional to set the stereotype
     // of the relation corresponding to the other direction
-    virtual bool set_Stereotype(const Q3CString & s);
+    virtual bool set_Stereotype(const QByteArray & s);
 
     // returns the 'end' class (the 'start' class is the parent of the relation) no set !
     UmlClass * roleType();
 
     // returns the name of the role
-    const Q3CString & roleName();
+    const QByteArray & roleName();
 
     // to set the name of the role
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_RoleName(const char * s);
 
     // returns the multiplicity (may be an empty string)
-    const Q3CString & multiplicity();
+    const QByteArray & multiplicity();
 
     // to set the multiplicity
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_Multiplicity(const char * s);
 
@@ -75,7 +74,7 @@ public:
     UmlOperation * getOperation();
 
     // to generate an associated 'get' operation
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool addGetOperation();
 
@@ -83,7 +82,7 @@ public:
     UmlOperation * setOperation();
 
     // to generate an associated 'set' operation
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool addSetOperation();
 
@@ -110,7 +109,7 @@ public:
     bool isJavaTransient();
 
     // to set the 'transient' state of the relation
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaTransient(bool y);
 #endif
@@ -121,23 +120,23 @@ public:
     bool isIdlTruncatableInheritance();
 
     // to set if the inheritance is 'truncatable'
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isIdlTruncatableInheritance(bool y);
 
     // in case the relation is an IDL union's member returns the
     // corresponding 'case', an empty string in case it is not specified
-    Q3CString idlCase();
+    QByteArray idlCase();
 
     // to set the 'case' even the relation is not (already) known as
     // an IDL union's member
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_IdlCase(UmlAttribute * a);
 
     // to set the 'case' even the relation is not (already) known as
     // an IDL union's member
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_IdlCase(const char * s);
 #endif
@@ -147,7 +146,7 @@ public:
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-private:
+  private:
     bool _read_only;
 
 #ifdef WITHCPP
@@ -166,13 +165,13 @@ private:
 
     aRelationKind _rel_kind : 8;
 
-    Q3CString _default_value;
+    QByteArray _default_value;
 
     UmlClass * _role_type;
 
-    Q3CString _role_name;
+    QByteArray _role_name;
 
-    Q3CString _multiplicity;
+    QByteArray _multiplicity;
 
     UmlOperation * _get_oper;
 
@@ -182,11 +181,11 @@ private:
     UmlAttribute * _idl_case;
 
 #ifdef WITHIDL
-    Q3CString _idl_explicit_case;
+    QByteArray _idl_explicit_case;
 #endif
 
 
-protected:
+  protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -197,22 +196,32 @@ protected:
     virtual void read_java_();
 #endif
 
+#ifdef WITHPHP
+    //internal, do NOT use it
+
+    virtual void read_php_();
+#endif
+
+#ifdef WITHPYTHON
+    //internal, do NOT use it
+
+    virtual void read_python_();
+#endif
 #ifdef WITHIDL
     virtual void read_idl_();
 #endif
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseRelation(void * id, const Q3CString & n);
+    UmlBaseRelation(void * id, const QByteArray & n);
 
 };
 
-inline UmlBaseRelation::UmlBaseRelation(void * id, const Q3CString & n) : UmlClassMember(id, n)
-{
-    _role_type = 0;
-    _get_oper = 0;
-    _set_oper = 0;
+inline UmlBaseRelation::UmlBaseRelation(void * id, const QByteArray & n) : UmlClassMember(id, n) {
+  _role_type = 0;
+  _get_oper = 0;
+  _set_oper = 0;
 #ifdef WITHIDL
-    _idl_case = 0;
+  _idl_case = 0;
 #endif
 }
 

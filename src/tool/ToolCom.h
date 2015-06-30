@@ -29,20 +29,20 @@
 #define TOOLCOM_H
 
 #include <qobject.h>
-#include <q3ptrlist.h>
+//
 #include <QProcess>
 //Added by qt3to4:
-#include <Q3PtrList>
-
+//
 #include "BrowserNode.h"
 #include <QSettings>
 #include "../Tools/ApiCmd.h"
+#include <QTextCodec>
+#include <QTcpSocket>
 
-class Socket;
+class Server;
 class AType;
 class QRect;
 class QTimer;
-
 class ToolCom  : public QObject
 {
     Q_OBJECT
@@ -61,8 +61,8 @@ protected:
     bool exit_bouml;
     BrowserNode * target;
     void (*cont)();
-    Socket * listen_sock;
-    Socket * sock;
+    Server * listen_sock;
+    QTcpSocket * sock;
     QTimer * timer;
     char * cmd;
     unsigned api_version;
@@ -103,7 +103,7 @@ public:
                    void (*pf)() = 0);
     friend int exit_value();
 
-    void data_received(Socket * who);
+    void data_received(Server * who);
 
     unsigned get_unsigned(const char *& p);
     bool get_bool(const char *& p);
@@ -131,12 +131,14 @@ public:
 
     static void close_all();
 
+    bool write_block(char *data, unsigned int len);
 signals:
     void closed();
 
 public slots:
     void connexion_timeout();
     void processFinished();
+     void onReadyRead();
 };
 
 #endif

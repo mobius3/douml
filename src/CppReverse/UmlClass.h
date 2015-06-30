@@ -32,8 +32,7 @@
 #include "UmlFormalParameter.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include <QList>
 
 class ClassContainer;
 #ifdef ROUNDTRIP
@@ -42,7 +41,7 @@ class UmlRelation;
 class UmlExtraClassMember;
 #endif
 
-typedef Q3ValueList<UmlFormalParameter> FormalParameterList;
+typedef QList<UmlFormalParameter> FormalParameterList;
 
 class UmlClass : public UmlBaseClass
 {
@@ -56,7 +55,7 @@ public:
     UmlClass(void * id, const WrapperStr & n);
 
     bool manage_inherit(ClassContainer * pack,
-                        const Q3ValueList<FormalParameterList> & tmplt
+                        const QList<FormalParameterList> & tmplt
 #ifdef REVERSE
                         , bool libp
 # ifdef ROUNDTRIP
@@ -66,7 +65,7 @@ public:
 #endif
                        );
     bool get_actuals(UmlClass * mother, ClassContainer * container,
-                     const Q3ValueList<FormalParameterList> & formals
+                     const QList<FormalParameterList> & formals
 #ifdef ROUNDTRIP
                      , bool roundtrip
 #endif
@@ -80,7 +79,7 @@ public:
         Usings.clear();
     }
     void using_it() {
-        Usings.replace(name(), this);
+        Usings.insert(name(), this);
     }
     static UmlClass * used(const char * n) {
         return Usings[n];
@@ -128,8 +127,8 @@ private:
                                  );
 
     static QList<UmlClass *> UnderConstruction;
-    static Q3Dict<UmlClass> Usings;
-    static Q3ValueList<Q3Dict<UmlClass> > UsingScope;
+    static QHash<QString,UmlClass*> Usings;
+    static QList<QHash<QString,UmlClass*> > UsingScope;
 };
 
 #endif

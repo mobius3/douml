@@ -27,8 +27,9 @@
 
 #ifndef BROWSER_CLASSVIEW_H
 #define BROWSER_CLASSVIEW_H
-
+#ifdef habip
 #include <q3intdict.h>
+#endif
 //Added by qt3to4:
 #include <QPixmap>
 #include <QDropEvent>

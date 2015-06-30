@@ -32,11 +32,11 @@
 #include <math.h>
 
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include "ParameterCanvas.h"
 #include "BrowserParameter.h"
@@ -69,7 +69,7 @@ ParameterCanvas::ParameterCanvas(BrowserNode * bn, UmlCanvas * canvas,
     if (id == 0) {
         // not on read
         update();
-        setZ(a->z() + 2);	// 2 to have lines upper activity's z
+        setZValue(a->zValue() + 2);	// 2 to have lines upper activity's z
 
         if (canvas->must_draw_all_relations())
             draw_all_flows();
@@ -150,13 +150,13 @@ void ParameterCanvas::update()
 
 void ParameterCanvas::check_position()
 {
-    QRect act_rect = act->rect();
+    QRect act_rect = act->sceneRect();
     QPoint ce = center();
 
-    double dxl = fabs(act_rect.left() - ce.x());
-    double dxr = fabs(act_rect.right() - ce.x());
-    double dyt = fabs(act_rect.top() - ce.y());
-    double dyb = fabs(act_rect.bottom() - ce.y());
+    double dxl = fabs((double)act_rect.left() - ce.x());
+    double dxr = fabs((double)act_rect.right() - ce.x());
+    double dyt = fabs((double)act_rect.top() - ce.y());
+    double dyb = fabs((double)act_rect.bottom() - ce.y());
 
     if ((dxr == 0) || (dxl == 0)) {
         if (ce.y() < act_rect.top())
@@ -235,15 +235,15 @@ void ParameterCanvas::change_scale()
 
 void ParameterCanvas::do_change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     double scale = the_canvas()->zoom();
 
-    setSize((int)(width_scale100 * scale) | 1,
+    setRect(0,0,(int)(width_scale100 * scale) | 1,
             (int)(height_scale100 * scale) | 1);
     recenter();
     // activity already in position, can check
     check_position();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void ParameterCanvas::moveBy(double dx, double dy)
@@ -276,7 +276,8 @@ void ParameterCanvas::draw(QPainter & p)
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QBrush brsh = p.brush();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
+    QBrush backBrush = p.background();
 
     p.setBackgroundMode((used_color == UmlTransparent)
                         ? ::Qt::TransparentMode
@@ -289,7 +290,8 @@ void ParameterCanvas::draw(QPainter & p)
     if (fp != 0)
         fputs("<g>\n", fp);
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
 
     if (used_color != UmlTransparent)
         p.setBrush(co);
@@ -318,14 +320,18 @@ void ParameterCanvas::draw(QPainter & p)
     if (fp != 0)
         fputs("</g>\n", fp);
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
     p.setBrush(brsh);
 
     if (selected())
         show_mark(p, r);
 }
-
-UmlCode ParameterCanvas::type() const
+void ParameterCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode ParameterCanvas::typeUmlCode() const
 {
     return UmlParameter;
 }
@@ -347,47 +353,50 @@ void ParameterCanvas::open()
 
 void ParameterCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
     int index;
-    Q3ValueList<ParameterCanvas *> params = act->get_params();
+    QList<ParameterCanvas *> params = act->get_params();
     BrowserClass * cl =
         ((ParameterData *) browser_node->get_data())->get_type().type;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
 
     if (params.count() > 1)
-        m.insertItem(TR("Resize other like it"), 6);
+        MenuFactory::addItem(m, TR("Resize other like it"), 6);
 
-    m.insertSeparator();
-    m.insertItem(TR("Edit parameter"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit parameter"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (cl != 0)
-        m.insertItem(TR("Select class in browser"), 9);
+        MenuFactory::addItem(m, TR("Select class in browser"), 9);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlParameter, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    switch (index = m.exec(QCursor::pos())) {
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    switch (index = retAction->data().toInt()) {
     case 0:
         act->upper();
         modified();	// call package_modified()
@@ -428,11 +437,11 @@ void ParameterCanvas::menu(const QPoint &)
     case 6: {
         int w = width();
         int h = height();
-        Q3ValueList<ParameterCanvas *>::Iterator iter;
+        QList<ParameterCanvas *>::Iterator iter;
 
         for (iter = params.begin(); iter != params.end(); ++iter) {
             if (*iter != this) {
-                (*iter)->setSize(w, h);
+                (*iter)->setRect(0,0,w, h);
                 (*iter)->recenter();
                 (*iter)->width_scale100 = width_scale100;
                 (*iter)->height_scale100 = height_scale100;
@@ -455,6 +464,7 @@ void ParameterCanvas::menu(const QPoint &)
             ToolCom::run(Tool::command(index - 20), browser_node);
 
         return;
+    }
     }
 
     package_modified();
@@ -685,7 +695,7 @@ ParameterCanvas * ParameterCanvas::read(char *& st, UmlCanvas * canvas,
 
 void ParameterCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
     disconnect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
@@ -710,7 +720,7 @@ void ParameterCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
     connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));

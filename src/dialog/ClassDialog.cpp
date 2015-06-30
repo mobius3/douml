@@ -25,32 +25,23 @@
 //
 // *************************************************************************
 
-
-
-
-
 #include <stdio.h>
-
 #include <qcursor.h>
 #include <qsplitter.h>
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
+#include "ComboItem.h"
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qcheckbox.h>
-#include <q3popupmenu.h>
-#include <q3groupbox.h>
-#include <q3buttongroup.h>
+#include <qgroupbox.h>
+#include <qbuttongroup.h>
 #include <qpushbutton.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
-
-
+#include <qfiledialog.h>
 #include "ClassDialog.h"
 #include "ClassData.h"
 #include "BrowserClass.h"
 #include "KeyValueTable.h"
-#include "ComboItem.h"
 #include "UmlWindow.h"
 #include "UmlDesktop.h"
 #include "BrowserView.h"
@@ -72,15 +63,18 @@
 #include "Images.h"
 #include "translate.h"
 #include "misc/TypeIdentifier.h"
+#include "menufactory.h"
+#include "bbuttongroup.h"
+#include <QHeaderView>
 
 QSize ClassDialog::previous_size;
-
 static QString RelativeRoot;
 static QString RelativePrj;
 static QString Absolute;
 //QSharedPointer<ClassDialog> ClassDialog::instance;
 ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0, 0, FALSE), cl(c)
 {
+    //setAttribute(Qt::WA_DeleteOnClose);
     // take time in case of many classes and artifacts
     isWritable = c->browser_node->is_writable();
     NullPointers();
@@ -93,23 +87,25 @@ ClassDialog::ClassDialog(ClassData * c): EdgeMenuDialog(0, 0, FALSE), cl(c)
 
 void ClassDialog::polish()
 {
-    Q3TabDialog::polish();
+
+    ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 ClassDialog::~ClassDialog()
 {
-    previous_size = size();
 
+    previous_size = size();
     foreach (BodyDialog *dialog, edits)
         dialog->close();
     edits.clear();
-
+#ifdef EDGETOOLENABLED
     if(toolbar)
     {
         toolbar->setParent(0);
         toolbar->hide();
     }
+#endif
 }
 
 std::shared_ptr<ClassDialog> ClassDialog::Instance(ClassData * cl)
@@ -129,7 +125,7 @@ QString ClassDialog::cpp_stereotype(const QString & stereotype)
 
     return ((s == "struct") || (s == "union") || (s == "enum") ||
             (s == "typedef") || (s == "ignored") || (s == "metaclass"))
-           ? s : QString("class");
+            ? s : QString("class");
 }
 
 QString ClassDialog::java_stereotype(const QString & stereotype)
@@ -139,7 +135,7 @@ QString ClassDialog::java_stereotype(const QString & stereotype)
     return ((s == "interface") || (s == "@interface") ||
             (s == "enum") || (s == "enum_pattern") ||
             (s == "ignored") || (s == "metaclass"))
-           ? s : QString("class");
+            ? s : QString("class");
 }
 
 QString ClassDialog::php_stereotype(const QString & stereotype)
@@ -148,7 +144,7 @@ QString ClassDialog::php_stereotype(const QString & stereotype)
 
     return ((s == "interface") || (s == "enum") ||
             (s == "ignored") || (s == "metaclass"))
-           ? s : QString("class");
+            ? s : QString("class");
 }
 
 QString ClassDialog::python_stereotype(const QString & stereotype)
@@ -156,7 +152,7 @@ QString ClassDialog::python_stereotype(const QString & stereotype)
     QString s = GenerationSettings::python_class_stereotype(stereotype);
 
     return ((s == "enum") || (s == "ignored") || (s == "metaclass"))
-           ? s : QString("class");
+            ? s : QString("class");
 }
 
 QString ClassDialog::idl_stereotype(const QString & stereotype)
@@ -166,7 +162,7 @@ QString ClassDialog::idl_stereotype(const QString & stereotype)
     return ((s == "struct") || (s == "union") || (s == "enum") ||
             (s == "typedef") || (s == "exception") ||
             (s == "ignored") || (s == "interface") || (s == "metaclass"))
-           ? s : QString("valuetype");
+            ? s : QString("valuetype");
 }
 
 void ClassDialog::default_description()
@@ -176,7 +172,7 @@ void ClassDialog::default_description()
 
 void ClassDialog::edit_description()
 {
-    edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
+    edit(comment->text(), edname->text().trimmed() + "_description",
          cl, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -187,7 +183,7 @@ void ClassDialog::post_edit_description(ClassDialog * d, QString s)
 
 void ClassDialog::edit_constraint()
 {
-    edit(constraint->text(), edname->text().stripWhiteSpace() + "_constraint",
+    edit(constraint->text(), edname->text().trimmed() + "_constraint",
          cl, TxtEdit, this, (post_edit) post_edit_constraint, edits);
 }
 
@@ -198,7 +194,7 @@ void ClassDialog::post_edit_constraint(ClassDialog * d, QString s)
 
 void ClassDialog::edStereotypeActivated(const QString & s)
 {
-    QString stereotype = s.stripWhiteSpace();
+    QString stereotype = s.trimmed();
 
     if ((stereotype == "stereotype") || (stereotype == "metaclass")) {
         if (GenerationSettings::cpp_get_default_defs())
@@ -279,12 +275,13 @@ void ClassDialog::edStereotypeActivated(const QString & s)
         if (idl_st != current_idl_stereotype)
             idl_default_decl();
     }
+
 }
 
 void ClassDialog::icon_browse()
 {
-    QString s = ediconpath->text().simplifyWhiteSpace();
-    const QString ns = Q3FileDialog::getOpenFileName(s, "", this, 0, TR("Select image"));
+    QString s = ediconpath->text().simplified();
+    const QString ns = QFileDialog::getOpenFileName(0, QObject::TR("Select image"),s);//(s, "", this, 0, QObject::tr("Select image"));
 
     if (! ns.isEmpty()) {
         ediconpath->setText(ns);
@@ -314,9 +311,9 @@ void ClassDialog::icon_root_relative()
 
 
 
-            (s.find(root) == 0) &&
+                (s.indexOf(root) == 0) &&
 
-            (s.length() >= len)) {
+                (s.length() >= len)) {
             ediconpath->setText(s.mid(len));
             iconpathrootbutton->setText(Absolute);
             iconpathprjbutton->setText(Absolute);
@@ -331,7 +328,7 @@ void ClassDialog::icon_root_relative()
 
 void ClassDialog::icon_prj_relative()
 {
-    QString root = BrowserView::get_dir().absPath();
+    QString root = BrowserView::get_dir().absolutePath();
     const QString s = ediconpath->text();
 
     if (root.at(root.length() - 1) != QChar('/'))
@@ -344,9 +341,9 @@ void ClassDialog::icon_prj_relative()
 
 
 
-            (s.find(root) == 0) &&
+                (s.indexOf(root) == 0) &&
 
-            (s.length() >= len)) {
+                (s.length() >= len)) {
             ediconpath->setText(s.mid(len));
             iconpathrootbutton->setText(Absolute);
             iconpathprjbutton->setText(Absolute);
@@ -361,15 +358,15 @@ void ClassDialog::icon_prj_relative()
     iconpathrootbutton->setEnabled(!UmlWindow::images_root_dir().isEmpty());
 }
 
-void ClassDialog::update_all_tabs(QWidget * w)
+void ClassDialog::update_all_tabs(int current)
 {
+    QWidget* w = m_tabWidget->widget(current);
     formals_table->forceUpdateCells();
 
     if (cl->get_n_actualparams() != 0)
         actuals_table->forceUpdateCells();
 
     bool visit = !hasOkButton();
-
     if (w == 0) {
         cpp_update_decl();
         java_update_decl();
@@ -481,7 +478,6 @@ static void cpp_generate_typedef_type(QString & s, ClassData * cl,
             }
         }
     }
-
     s += GenerationSettings::cpp_type(type(basetype, node_names, nodes));
 }
 
@@ -499,8 +495,7 @@ static void generate_members(BrowserNode * cl, QString & s, QString indent,
                              bool except_instance_att_rel = FALSE,
                              bool only_instance_att_rel = FALSE)
 {
-    Q3ListViewItem * child;
-
+    BrowserNode * child;
     for (child = cl->firstChild(); child; child = child->nextSibling()) {
         if (((BrowserNode *) child)->deletedp())
             continue;
@@ -515,7 +510,7 @@ static void generate_members(BrowserNode * cl, QString & s, QString indent,
                 RelationData * rel = (RelationData *)((BrowserNode *) child)->get_data();
 
                 if (rel->is_a((BrowserRelation *) child)
-                    && (!strcmp(rel->get_stereotype(), "friend"))) {
+                        && (!strcmp(rel->get_stereotype(), "friend"))) {
                     ClassData * cld = (ClassData *) rel->get_end_class()->get_data();
                     QString st = cld->get_stereotype();
 
@@ -523,8 +518,8 @@ static void generate_members(BrowserNode * cl, QString & s, QString indent,
                         st = "class";
 
                     s += pre + "friend " + st + " " +
-                         true_name(rel->get_end_class()->get_name(), cld->get_cppdecl())
-                         + "\n";
+                            true_name(rel->get_end_class()->get_name(), cld->get_cppdecl())
+                            + "\n";
                 }
             }
 
@@ -539,8 +534,8 @@ static void generate_members(BrowserNode * cl, QString & s, QString indent,
             AttributeData * at = (AttributeData *)((BrowserNode *) child)->get_data();
 
             if ((at->get_isa_class_attribute())
-                ? only_instance_att_rel
-                : except_instance_att_rel)
+                    ? only_instance_att_rel
+                    : except_instance_att_rel)
                 continue;
 
             const char * st = at->get_stereotype();
@@ -561,7 +556,7 @@ static void generate_members(BrowserNode * cl, QString & s, QString indent,
 
             post = "\n";
         }
-        break;
+            break;
 
         case UmlOperation:
             if (!only_items && !only_instance_att_rel) {
@@ -607,16 +602,16 @@ static void generate_members(BrowserNode * cl, QString & s, QString indent,
 
                 if (re->is_a((BrowserRelation *) child)) {
                     if ((re->get_isa_class_relation_a())
-                        ? only_instance_att_rel
-                        : except_instance_att_rel)
+                            ? only_instance_att_rel
+                            : except_instance_att_rel)
                         continue;
 
                     decl = (re->*rel_a_f)();
                 }
                 else {
                     if ((re->get_isa_class_relation_b())
-                        ? only_instance_att_rel
-                        : except_instance_att_rel)
+                            ? only_instance_att_rel
+                            : except_instance_att_rel)
                         continue;
 
                     decl = (re->*rel_b_f)();
@@ -638,7 +633,7 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
                                  const QString & cl_decl, QString & s)
 {
     ClassData * cd = (ClassData *) cl->get_data();
-    bool templp = (cd->get_n_formalparams() != 0) || (cl_name.find('<') != -1);
+    bool templp = (cd->get_n_formalparams() != 0) || (cl_name.indexOf('<') != -1);
     QString templates;
     QString names;
     QString templates_tmplop;
@@ -646,7 +641,7 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
 
     if (((BrowserNode *) cl->parent())->get_type() == UmlClass) {
         ((ClassData *)((BrowserNode *) cl->parent())->get_data())
-        ->get_class_spec(templates, names, templates_tmplop, names_tmplop);
+                ->get_class_spec(templates, names, templates_tmplop, names_tmplop);
         names += "::";
     }
 
@@ -661,8 +656,7 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
 
     QString prefix = '\n' + templates + "..." + names + "::";
     QString prefix_tmplop = '\n' + templates_tmplop + "..." + names_tmplop + "<...>::";
-    Q3ListViewItem * child;
-
+    BrowserNode * child;
     for (child = cl->firstChild(); child; child = child->nextSibling()) {
         if (((BrowserNode *) child)->deletedp())
             continue;
@@ -673,14 +667,14 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
             const char * decl = d->get_cppdecl();
 
             if (templp &&
-                d->get_isa_class_attribute() &&
-                decl[0]) {
+                    d->get_isa_class_attribute() &&
+                    decl[0]) {
                 s += prefix;
                 s += true_name(((BrowserNode *) child)->get_name(), decl);
                 s += "\n\n";
             }
         }
-        break;
+            break;
 
         case UmlClass:
             cpp_generate_inlines((BrowserNode *) child,
@@ -699,8 +693,8 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
                 const char * decl = re->get_cppdecl_a();
 
                 if (templp &&
-                    re->get_isa_class_relation_a() &&
-                    decl[0]) {
+                        re->get_isa_class_relation_a() &&
+                        decl[0]) {
                     s += prefix;
                     s += true_name(re->get_role_a(), decl);
                     s += "\n\n";
@@ -710,15 +704,15 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
                 const char * decl = re->get_cppdecl_b();
 
                 if (templp &&
-                    re->get_isa_class_relation_b() &&
-                    decl[0]) {
+                        re->get_isa_class_relation_b() &&
+                        decl[0]) {
                     s += prefix;
                     s += true_name(re->get_role_b(), decl);
                     s += "\n";
                 }
             }
         }
-        break;
+            break;
 
         case UmlDependency:
         case UmlGeneralisation:
@@ -736,7 +730,7 @@ static void cpp_generate_inlines(BrowserNode * cl, const QString & cl_name,
                 s += "(...){...}\n";
             }
         }
-        break;
+            break;
 
         case UmlExtraMember: {
             ExtraMemberData * d = (ExtraMemberData *)((BrowserNode *) child)->get_data();
@@ -760,7 +754,8 @@ void ClassDialog::cpp_generate_decl(QString & s, ClassData * cl,
                                     QStringList & node_names,
                                     KeyValuesTable * kvt)
 {
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
 
     if (p == 0)
         return;
@@ -806,8 +801,8 @@ void ClassDialog::cpp_generate_decl(QString & s, ClassData * cl,
             s += *p++;
 
             if (*p && (*p != '#') &&
-                strncmp(p, "${members}", 10) &&
-                strncmp(p, "${items}", 8))
+                    strncmp(p, "${members}", 10) &&
+                    strncmp(p, "${items}", 8))
                 s += indent;
         }
         else if (a_typedef) {
@@ -866,7 +861,6 @@ void ClassDialog::cpp_generate_decl(QString & s, ClassData * cl,
 void ClassDialog::cpp_update_decl()
 {
     QString s;
-
     if (cl->browser_node->nestedp())
         cpp_visibility.update_default(uml_visibility);
 
@@ -876,12 +870,12 @@ void ClassDialog::cpp_update_decl()
         showcppdecl->setEnabled(TRUE);
 
         cpp_generate_decl(s, cl, edcppdecl->text(),
-                          edname->text().stripWhiteSpace(), current_cpp_stereotype,
-                          edbasetype->currentText().stripWhiteSpace(),
+                          edname->text().trimmed(), current_cpp_stereotype,
+                          edbasetype->currentText().trimmed(),
                           comment->text(), (instantiate_vtab != 0) ? actuals_table : 0,
                           formals_table, nodes, node_names, kvtable);
-    }
 
+    }
     showcppdecl->setText(s);
 }
 
@@ -891,7 +885,7 @@ void ClassDialog::cpp_default_decl()
         edcppdecl->setText(GenerationSettings::cpp_default_external_class_decl());
     else {
         current_cpp_stereotype =
-            cpp_stereotype(edstereotype->currentText().stripWhiteSpace());
+                cpp_stereotype(edstereotype->currentText().trimmed());
 
         if (current_cpp_stereotype == "struct")
             edcppdecl->setText(GenerationSettings::cpp_default_struct_decl());
@@ -929,9 +923,8 @@ void ClassDialog::cpp_generate_members_def(const BrowserNode * cl, QString & s)
 
     QString prefix = templates + "..." + names + "::";
     QString prefix_tmplop = templates_tmplop + "..." + names_tmplop + "<...>::";
-    bool templ = !templates.isEmpty() || (strchr(cl->get_name(), '<') != 0);
-    Q3ListViewItem * child;
-
+    bool templ = !templates.isEmpty() || (strchr(cl->get_name().toLatin1().constData(), '<') != 0);
+    BrowserNode * child;
     for (child = cl->firstChild(); child; child = child->nextSibling())
         if (!((BrowserNode *) child)->deletedp())
             ((BrowserNode *) child)->member_cpp_def(prefix, prefix_tmplop, s, templ);
@@ -948,21 +941,21 @@ static void java_generate_extends(QString & s, const QString & stereotype,
 
     foreach (BrowserNode *item, inh) {
         RelationData * r =
-            (RelationData *)((BrowserRelation *) item)->get_data();
+                (RelationData *)((BrowserRelation *) item)->get_data();
 
         if (r->get_javadecl_a()[0]) {
             bool gen = FALSE;
             BrowserClass * mother = r->get_end_class();
             QString other_stereotype =
-                ClassDialog::java_stereotype(((ClassData *) mother->get_data())->get_stereotype());
+                    ClassDialog::java_stereotype(((ClassData *) mother->get_data())->get_stereotype());
 
             if ((stereotype == "interface") ||
-                (stereotype == "@interface")) {
+                    (stereotype == "@interface")) {
                 gen = TRUE;
                 s += sep;
 
                 if ((other_stereotype != "interface") &&
-                    (other_stereotype != "@interface"))
+                        (other_stereotype != "@interface"))
                     s += "!!!!!";
             }
             else if ((other_stereotype != "interface") &&
@@ -971,8 +964,8 @@ static void java_generate_extends(QString & s, const QString & stereotype,
                 s += sep;
 
                 if ((*sep == ',') ||
-                    (stereotype == "union") || (stereotype == "enum") || (stereotype == "enum_pattern") ||
-                    (other_stereotype == "union") || (other_stereotype == "enum"))
+                        (stereotype == "union") || (stereotype == "enum") || (stereotype == "enum_pattern") ||
+                        (other_stereotype == "union") || (other_stereotype == "enum"))
                     s += "!!!!!";
             }
 
@@ -995,15 +988,15 @@ static void java_generate_implements(QString & s, const QString & stereotype,
 
     foreach (BrowserNode *item, inh) {
         RelationData * r =
-            (RelationData *)((BrowserRelation *) item)->get_data();
+                (RelationData *)((BrowserRelation *) item)->get_data();
 
         if (r->get_javadecl_a()[0]) {
             BrowserClass * mother = r->get_end_class();
             QString other_stereotype =
-                ClassDialog::java_stereotype(((ClassData *) mother->get_data())->get_stereotype());
+                    ClassDialog::java_stereotype(((ClassData *) mother->get_data())->get_stereotype());
 
             if ((other_stereotype == "interface") ||
-                (other_stereotype == "@interface")) {
+                    (other_stereotype == "@interface")) {
                 s += sep;
 
                 if ((stereotype == "union") || (stereotype == "enum_pattern"))
@@ -1027,7 +1020,8 @@ void ClassDialog::java_generate_decl(QString & s, ClassData * cl, QString def,
                                      QStringList & node_names,
                                      KeyValuesTable * kvt)
 {
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
 
     if (p == 0)
         return;
@@ -1135,16 +1129,16 @@ void ClassDialog::java_generate_decl(QString & s, ClassData * cl, QString def,
                 s += "${@}";
             else if (! annotation.isEmpty()) {
                 pp = p;
-                p = annotation;
+                p = annotation.toLatin1().constData();
             }
         }
         else if (*p == '\n') {
             s += *p++;
 
             if (*p &&
-                strncmp(p, "${members}", 10) &&
-                strncmp(p, "${items}", 8) &&
-                strncmp(p, "${cases}", 8))
+                    strncmp(p, "${members}", 10) &&
+                    strncmp(p, "${items}", 8) &&
+                    strncmp(p, "${cases}", 8))
                 s += indent;
         }
         else if (*p == '@')
@@ -1157,7 +1151,6 @@ void ClassDialog::java_generate_decl(QString & s, ClassData * cl, QString def,
 void ClassDialog::java_update_decl()
 {
     QString s;
-
     if (java_external_cb->isChecked())
         showjavadecl->setEnabled(FALSE);
     else {
@@ -1166,15 +1159,14 @@ void ClassDialog::java_update_decl()
         QString def = edjavadecl->text();
 
         java_generate_decl(s, cl, def, javaannotation,
-                           edname->text().stripWhiteSpace(),
+                           edname->text().trimmed(),
                            current_java_stereotype, comment->text(),
                            uml_visibility.value(), java_final_cb->isChecked(),
                            abstract_cb->isChecked(), actuals_table,
                            formals_table, nodes, node_names, kvtable);
 
-        pbJavaAnnotation->setEnabled(def.find("${@}") != -1);
+        pbJavaAnnotation->setEnabled(def.indexOf("${@}") != -1);
     }
-
     showjavadecl->setText(s);
 }
 
@@ -1184,7 +1176,7 @@ void ClassDialog::java_default_decl()
         edjavadecl->setText(GenerationSettings::java_default_external_class_decl());
     else {
         current_java_stereotype =
-            java_stereotype(edstereotype->currentText().stripWhiteSpace());
+                java_stereotype(edstereotype->currentText().trimmed());
 
         if (current_java_stereotype == "enum")
             edjavadecl->setText(GenerationSettings::java_default_enum_decl());
@@ -1194,7 +1186,7 @@ void ClassDialog::java_default_decl()
             edjavadecl->setText(GenerationSettings::java_default_interface_decl());
         else if (current_java_stereotype == "@interface") {
             QString s = GenerationSettings::java_default_interface_decl();
-            int index = s.find("interface");
+            int index = s.indexOf("interface");
 
             if (index != -1)
                 s.insert(index, '@');
@@ -1235,13 +1227,13 @@ static void php_generate_extends(QString & s, const QString & stereotype,
 
     foreach (BrowserNode *item, inh) {
         RelationData * r =
-            (RelationData *)((BrowserRelation *) item)->get_data();
+                (RelationData *)((BrowserRelation *) item)->get_data();
 
         if (r->get_phpdecl_a()[0]) {
             bool gen = FALSE;
             BrowserClass * mother = r->get_end_class();
             QString other_stereotype =
-                ClassDialog::php_stereotype(((ClassData *) mother->get_data())->get_stereotype());
+                    ClassDialog::php_stereotype(((ClassData *) mother->get_data())->get_stereotype());
 
             if (stereotype == "interface") {
                 gen = TRUE;
@@ -1255,8 +1247,8 @@ static void php_generate_extends(QString & s, const QString & stereotype,
                 s += sep;
 
                 if ((*sep == ',') ||
-                    (stereotype == "union") || (stereotype == "enum") ||
-                    (other_stereotype == "union") || (other_stereotype == "enum"))
+                        (stereotype == "union") || (stereotype == "enum") ||
+                        (other_stereotype == "union") || (other_stereotype == "enum"))
                     s += "!!!!!";
             }
 
@@ -1278,12 +1270,12 @@ static void php_generate_implements(QString & s, const QString & stereotype,
 
     foreach (BrowserNode *item, inh) {
         RelationData * r =
-            (RelationData *)((BrowserRelation *) item)->get_data();
+                (RelationData *)((BrowserRelation *) item)->get_data();
 
         if (r->get_phpdecl_a()[0]) {
             BrowserClass * mother = r->get_end_class();
             QString other_stereotype =
-                ClassDialog::php_stereotype(((ClassData *) mother->get_data())->get_stereotype());
+                    ClassDialog::php_stereotype(((ClassData *) mother->get_data())->get_stereotype());
 
             if (other_stereotype == "interface") {
                 s += sep;
@@ -1303,7 +1295,8 @@ void ClassDialog::php_generate_decl(QString & s, ClassData * cl, QString def,
                                     QString comment, bool is_final,
                                     bool is_abstract, KeyValuesTable * kvt)
 {
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
 
     if (p == 0)
         return;
@@ -1402,14 +1395,13 @@ void ClassDialog::php_generate_decl(QString & s, ClassData * cl, QString def,
 void ClassDialog::php_update_decl()
 {
     QString s;
-
     if (php_external_cb->isChecked())
         showphpdecl->setEnabled(FALSE);
     else {
         showphpdecl->setEnabled(TRUE);
 
         php_generate_decl(s, cl, edphpdecl->text(),
-                          edname->text().stripWhiteSpace(),
+                          edname->text().trimmed(),
                           current_php_stereotype, comment->text(),
                           php_final_cb->isChecked(),
                           abstract_cb->isChecked(), kvtable);
@@ -1424,7 +1416,7 @@ void ClassDialog::php_default_decl()
         edphpdecl->setText(GenerationSettings::php_default_external_class_decl());
     else {
         current_php_stereotype =
-            php_stereotype(edstereotype->currentText().stripWhiteSpace());
+                php_stereotype(edstereotype->currentText().trimmed());
 
         if (current_php_stereotype == "enum")
             edphpdecl->setText(GenerationSettings::php_default_enum_decl());
@@ -1479,7 +1471,8 @@ void ClassDialog::python_generate_decl(QString & s, ClassData * cl, QString def,
                                        QStringList & node_names,
                                        KeyValuesTable * kvt)
 {
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
 
     if (p == 0)
         return;
@@ -1489,7 +1482,7 @@ void ClassDialog::python_generate_decl(QString & s, ClassData * cl, QString def,
     QString indent;
     QString saved_indent = indent;
     QString indent_step =
-        GenerationSettings::python_get_indent_step();
+            GenerationSettings::python_get_indent_step();
 
     for (;;) {
         if (*p == 0) {
@@ -1532,13 +1525,12 @@ void ClassDialog::python_generate_decl(QString & s, ClassData * cl, QString def,
                              &RelationData::get_pythondecl_a, &RelationData::get_pythondecl_b,
                              &ExtraMemberData::get_python_decl, &ClassData::get_pythondecl,
                              python_stereotype, FALSE, FALSE, FALSE, TRUE);
-            Q3ListViewItem * child;
+            BrowserNode * child;
             bool has__init__ = FALSE;
-
             for (child = cl->browser_node->firstChild(); child; child = child->nextSibling()) {
                 if (!((BrowserNode *) child)->deletedp() &&
-                    (((BrowserNode *) child)->get_type() == UmlOperation) &&
-                    !strcmp(((BrowserNode *) child)->get_name(), "__init__")) {
+                        (((BrowserNode *) child)->get_type() == UmlOperation) &&
+                        !strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "__init__")) {
                     has__init__ = TRUE;
                     break;
                 }
@@ -1549,6 +1541,7 @@ void ClassDialog::python_generate_decl(QString & s, ClassData * cl, QString def,
 
             indent_needed = TRUE;
         }
+
         else if (*p == '@')
             manage_alias(cl->browser_node, p, s, kvt);
         else {
@@ -1585,9 +1578,8 @@ void ClassDialog::python_update_decl()
         showpythondecl->setEnabled(FALSE);
     else {
         showpythondecl->setEnabled(TRUE);
-
         python_generate_decl(s, cl, edpythondecl->text(),
-                             edname->text().stripWhiteSpace(),
+                             edname->text().trimmed(),
                              current_python_stereotype, comment->text(),
                              python_2_2_cb->isChecked(), nodes, node_names,
                              kvtable);
@@ -1602,7 +1594,7 @@ void ClassDialog::python_default_decl()
         edpythondecl->setText(GenerationSettings::python_default_external_class_decl());
     else {
         current_python_stereotype =
-            python_stereotype(edstereotype->currentText().stripWhiteSpace());
+                python_stereotype(edstereotype->currentText().trimmed());
 
         if (current_python_stereotype == "enum")
             edpythondecl->setText(GenerationSettings::python_default_enum_decl());
@@ -1654,14 +1646,14 @@ static void idl_generate_inherit(QString & s, QString st, ClassData * cl)
         if (r->get_idldecl_a()[0]) {
             BrowserClass * mother = r->get_end_class();
             QString other_st =
-                ClassDialog::idl_stereotype(mother->get_stereotype());
+                    ClassDialog::idl_stereotype(mother->get_stereotype());
 
             if ((other_st != "ignored") &&
-                (other_st != "metaclass") &&
-                (other_st != "union") &&
-                (other_st != "struct") &&
-                (other_st != "enum") &&
-                (other_st != "typedef")) {
+                    (other_st != "metaclass") &&
+                    (other_st != "union") &&
+                    (other_st != "struct") &&
+                    (other_st != "enum") &&
+                    (other_st != "typedef")) {
                 if (is_valuetype) {
                     if (other_st == "valuetype") {
                         s += sep;
@@ -1696,7 +1688,8 @@ void ClassDialog::idl_generate_decl(QString & s, ClassData * cl, QString def,
                                     bool is_custom, bool is_abstract,
                                     KeyValuesTable * kvt)
 {
-    const char * p = def;
+    QByteArray defArray = def.toLatin1();
+    const char * p = defArray.constData();
 
     if (p == 0)
         return;
@@ -1756,8 +1749,8 @@ void ClassDialog::idl_generate_decl(QString & s, ClassData * cl, QString def,
             s += *p++;
 
             if (*p && (*p != '#') &&
-                strncmp(p, "${members}", 10) &&
-                strncmp(p, "${items}", 8))
+                    strncmp(p, "${members}", 10) &&
+                    strncmp(p, "${items}", 8))
                 s += indent;
         }
         else if (stereotype == "typedef") {
@@ -1800,6 +1793,7 @@ void ClassDialog::idl_generate_decl(QString & s, ClassData * cl, QString def,
         }
         else if (*p == '@')
             manage_alias(cl->browser_node, p, s, kvt);
+
         else
             s += *p++;
     }
@@ -1813,13 +1807,12 @@ void ClassDialog::idl_update_decl()
         showidldecl->setEnabled(FALSE);
     else {
         showidldecl->setEnabled(TRUE);
-
         idl_generate_decl(s, cl, edidldecl->text(),
-                          edname->text().stripWhiteSpace(), current_idl_stereotype,
-                          type(edbasetype->currentText().stripWhiteSpace(),
+                          edname->text().trimmed(), current_idl_stereotype,
+                          type(edbasetype->currentText().trimmed(),
                                node_names, nodes),
                           comment->text(),
-                          edswitch_type->currentText().stripWhiteSpace(),
+                          edswitch_type->currentText().trimmed(),
                           idl_local_cb->isChecked(), idl_custom_cb->isChecked(),
                           abstract_cb->isChecked(), kvtable);
     }
@@ -1833,8 +1826,7 @@ void ClassDialog::idl_default_decl()
         edidldecl->setText(GenerationSettings::idl_default_external_class_decl());
     else {
         current_idl_stereotype =
-            idl_stereotype(edstereotype->currentText().stripWhiteSpace());
-
+                idl_stereotype(edstereotype->currentText().trimmed());
         if (current_idl_stereotype == "struct")
             edidldecl->setText(GenerationSettings::idl_default_struct_decl());
         else if (current_idl_stereotype == "union")
@@ -1866,7 +1858,7 @@ void ClassDialog::idl_unmapped_decl()
 void ClassDialog::accept()
 {
     SaveData();
-    Q3TabDialog::accept();
+    TabDialog::accept();
 }
 
 //
@@ -1884,28 +1876,30 @@ FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
     : MyTable(cl->get_n_formalparams() + 1, (visit) ? 4 : 5, parent),
       types(node_names)
 {
-    setSorting(true);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(TRUE);
-    horizontalHeader()->setLabel(0, TR("Type (C++)"));
-    horizontalHeader()->setLabel(1, TR("Name"));
-    horizontalHeader()->setLabel(2, TR("Default value (C++)"));
-    horizontalHeader()->setLabel(3, "Extends (Java)");
+    verticalHeader()->setSectionsMovable(true);
+    setHorizontalHeaderLabel(0, QObject::tr("Type (C++)"));
+    setHorizontalHeaderLabel(1, QObject::tr("Name"));
+    setHorizontalHeaderLabel(2, QObject::tr("Default value (C++)"));
+    setHorizontalHeaderLabel(3, "Extends (Java)");
 
     if (! visit)
-        horizontalHeader()->setLabel(4, TR("do"));
+        setHorizontalHeaderLabel(4, QObject::tr("do"));
 
     int index;
     int sup = cl->get_n_formalparams();
 
+    m_comboBoxDelegate = new TableWidgetItemDelegate(this);
+    setItemDelegateForColumn(2, m_comboBoxDelegate);
+    setItemDelegateForColumn(3, m_comboBoxDelegate);
     if (visit) {
         for (index = 0; index < sup; index += 1) {
-            setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_formalparam_type(index)));
-            setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_formalparam_name(index)));
-            setItem(index, 2, new TableItem(this, Q3TableItem::Never,
-                                            cl->get_formalparam_default_value(index, !node_names.isEmpty())));
-            setItem(index, 3, new TableItem(this, Q3TableItem::Never,
-                                            cl->get_formalparam_extends(index, !node_names.isEmpty())));
+            setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_formalparam_type(index), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_formalparam_name(index), TableItem::TableItemType));
+            setItem(index, 2, new TableItem(this, TableItem::Never,
+                                            cl->get_formalparam_default_value(index, !node_names.isEmpty()), TableItem::TableItemType));
+            setItem(index, 3, new TableItem(this, TableItem::Never,
+                                            cl->get_formalparam_extends(index, !node_names.isEmpty()), TableItem::TableItemType));
         }
     }
     else {
@@ -1916,7 +1910,6 @@ FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
             setItem(index, 3, new ComboItem(this, cl->get_formalparam_extends(index, TRUE), types));
             setText(index, 4, QString());
         }
-
         setText(index, 0, "class");
         setText(index, 1, QString());
         setItem(index, 2, new ComboItem(this, QString(), types));
@@ -1933,33 +1926,41 @@ FormalParamsTable::FormalParamsTable(ClassData * cl, QWidget * parent,
         adjustColumn(4);
         setColumnStretchable(4, FALSE);
 
-        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-                this, SLOT(button_pressed(int, int, int, const QPoint &)));
-        connect(this, SIGNAL(valueChanged(int, int)),
+        connect(this, SIGNAL(pressed(QModelIndex)),
+                this, SLOT(button_pressed(QModelIndex)));
+        connect(this, SIGNAL(cellChanged(int,int)),
                 this, SLOT(value_changed(int, int)));
     }
+    //setSortingEnabled(true);
 }
 
 void FormalParamsTable::Reinitiliaze(ClassData *cl, QStringList &node_names, bool isWritable)
 {
-    int oldRowCount = numRows()-1;
+    int oldRowCount = rowCount()-1;
+    blockSignals(true);
+    DISABLESORTINGMYTABLE
     for (int index =  oldRowCount; index > -1; index -= 1) {
         removeRow(index);
     }
     int sup = cl->get_n_formalparams();
     types = node_names;
-    setNumRows(sup + 1);
+    setRowCount(sup + 1);
 
+    //remove custom delegate if set
+    disconnect(this, SIGNAL(pressed(QModelIndex)),
+               this, SLOT(button_pressed(QModelIndex)));
+    disconnect(this, SIGNAL(cellChanged(int, int)),
+               this, SLOT(value_changed(int, int)));
     if (isWritable)
     {
-        setNumCols(5);
+        setColumnCount(5);
         adjustColumn(4);
         setColumnStretchable(4, FALSE);
-        horizontalHeader()->setLabel(4, TR("do"));
+        setHorizontalHeaderLabel(4, QObject::tr("do"));
 
-        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-                this, SLOT(button_pressed(int, int, int, const QPoint &)));
-        connect(this, SIGNAL(valueChanged(int, int)),
+        connect(this, SIGNAL(pressed(QModelIndex)),
+                this, SLOT(button_pressed(QModelIndex)));
+        connect(this, SIGNAL(cellChanged(int,int)),
                 this, SLOT(value_changed(int, int)));
 
         int index;
@@ -1970,7 +1971,6 @@ void FormalParamsTable::Reinitiliaze(ClassData *cl, QStringList &node_names, boo
             setItem(index, 3, new ComboItem(this, cl->get_formalparam_extends(index, TRUE), types));
             setText(index, 4, QString());
         }
-
         setText(index, 0, "class");
         setText(index, 1, QString());
         setItem(index, 2, new ComboItem(this, QString(), types));
@@ -1979,32 +1979,27 @@ void FormalParamsTable::Reinitiliaze(ClassData *cl, QStringList &node_names, boo
     }
     else
     {
-        setNumCols(4);
-        disconnect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-                   this, SLOT(button_pressed(int, int, int, const QPoint &)));
-        disconnect(this, SIGNAL(valueChanged(int, int)),
-                   this, SLOT(value_changed(int, int)));
-
+        setColumnCount(4);
         for (int index = 0; index < sup; index += 1) {
-            setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_formalparam_type(index)));
-            setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_formalparam_name(index)));
-            setItem(index, 2, new TableItem(this, Q3TableItem::Never,
-                                            cl->get_formalparam_default_value(index, !node_names.isEmpty())));
-            setItem(index, 3, new TableItem(this, Q3TableItem::Never,
-                                            cl->get_formalparam_extends(index, !node_names.isEmpty())));
+            setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_formalparam_type(index), TableItem::TableItemType));
+            setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_formalparam_name(index), TableItem::TableItemType));
+            setItem(index, 2, new TableItem(this, TableItem::Never, cl->get_formalparam_default_value(index, !node_names.isEmpty()), TableItem::TableItemType));
+            setItem(index, 3, new TableItem(this, TableItem::Never, cl->get_formalparam_extends(index, !node_names.isEmpty()), TableItem::TableItemType));
 
         }
 
 
         for (int index = 0; index < sup; index += 1) {
-            setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_name(index)));
+            setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_actualparam_name(index), TableItem::TableItemType));
 
             if (!isWritable)
-                setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_value(index)));
+                setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_actualparam_value(index), TableItem::TableItemType));
             else
                 setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
         }
     }
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void FormalParamsTable::activateNextCell()
@@ -2014,9 +2009,9 @@ void FormalParamsTable::activateNextCell()
 
     if (col == 3) {
         // goto next line
-        if (++row == numRows()) {
+        if (++row == rowCount()) {
             // adds a new line
-            setNumRows(row + 1);
+            setRowCount(row + 1);
             setText(row, 0, "class");
             setText(row, 1, QString());
             setItem(row, 2, new ComboItem(this, QString(), types));
@@ -2032,137 +2027,110 @@ void FormalParamsTable::activateNextCell()
 
 void FormalParamsTable::value_changed(int row, int col)
 {
-    if ((row == (numRows() - 1)) && !text(row, col).isEmpty())
+    if ((row == (rowCount() - 1)) && !text(row, col).isEmpty())
         insert_row_after(row);
 }
 
-void FormalParamsTable::button_pressed(int row, int col, int, const QPoint &)
+void FormalParamsTable::button_pressed(const QModelIndex &index)
 {
+    int row = index.row();
+    int col = index.column();
     if (col == 4) {
         char s[16];
-
         sprintf(s, "%d", row + 1);
-        Q3PopupMenu m;
-        m.insertItem(TR("formal param %1", s), -1);
-        m.insertSeparator();
-        m.insertItem(TR("Insert param before"), 0);
-        m.insertItem(TR("Insert param after"), 1);
-        m.insertSeparator();
-        m.insertItem(TR("Delete param"), 2);
-        m.insertSeparator();
-        m.insertItem(TR("Copy param"), 3);
-        m.insertItem(TR("Cut param"), 4);
-        m.insertItem(TR("Paste param"), 5);
-        m.insertSeparator();
+        QMenu m;
+        MenuFactory::addItem(m, tr("formal param %1").arg(s), -1);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Insert param before"), 0);
+        MenuFactory::addItem(m, TR("Insert param after"), 1);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Delete param"), 2);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Copy param"), 3);
+        MenuFactory::addItem(m, TR("Cut param"), 4);
+        MenuFactory::addItem(m, TR("Paste param"), 5);
+        m.addSeparator();
 
-        Q3PopupMenu mv;
+        QMenu mv;
         int rank;
 
-        for (rank = 0; rank != numRows(); rank += 1)
+        for (rank = 0; rank != rowCount(); rank += 1)
             if (rank != row)
-                mv.insertItem(QString::number(rank + 1), 10 + rank);
+                MenuFactory::addItem(mv, QString::number(rank + 1), 10 + rank);
 
-        m.insertItem(TR("Move param"), &mv);
+        MenuFactory::insertItem(m, TR("Move param"), &mv);
 
-        switch (rank = m.exec(QCursor::pos())) {
-        case 0:
-            insert_row_before(row);
-            break;
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+            switch (rank = retAction->data().toInt()) {
+            case 0:
+                insert_row_before(row);
+                break;
 
-        case 1:
-            insert_row_after(row);
-            break;
+            case 1:
+                insert_row_after(row);
+                break;
 
-        case 2:
-            delete_row(row);
-            break;
+            case 2:
+                delete_row(row);
+                break;
 
-        case 3:
-            copy_row(row);
-            break;
+            case 3:
+                copy_row(row);
+                break;
 
-        case 4:
-            cut_row(row);
-            break;
+            case 4:
+                cut_row(row);
+                break;
 
-        case 5:
-            paste_row(row);
-            break;
+            case 5:
+                paste_row(row);
+                break;
 
-        default:
-            if (rank >= 10)
-                move_row(row, rank - 10);
+            default:
+                if (rank >= 10)
+                    move_row(row, rank - 10);
 
-            break;
+                break;
+            }
         }
     }
+
 }
 
 void FormalParamsTable::insert_row_before(int row)
 {
-    int n = numRows();
-    int index;
-
-    setNumRows(n + 1);
-
-    for (index = n; index != row; index -= 1) {
-        setText(index, 0, text(index - 1, 0));
-        setText(index, 1, text(index - 1, 1));
-
-        Q3TableItem * it;
-
-        it = item(index - 1, 2);
-        takeItem(it);
-        setItem(index, 2, it);
-
-        it = item(index - 1, 3);
-        takeItem(it);
-        setItem(index, 3, it);
-    }
-
+    blockSignals(true);
+    DISABLESORTINGMYTABLE
+    insertRow(row);
     setText(row, 0, "class");
     setText(row, 1, QString());
     setItem(row, 2, new ComboItem(this, QString(), types));
     setItem(row, 3, new ComboItem(this, QString(), types));
     setText(row, 4, QString());
+    ENABLESORTINGMYTABLE
+    blockSignals(false);
 }
 
 void FormalParamsTable::insert_row_after(int row)
 {
-    int n = numRows();
-    int index;
-
-    setNumRows(n + 1);
-
-    for (index = n; index > row + 1; index -= 1) {
-        setText(index, 0, text(index - 1, 0));
-        setText(index, 1, text(index - 1, 1));
-
-        Q3TableItem * it;
-
-        it = item(index - 1, 2);
-        takeItem(it);
-        setItem(index, 2, it);
-
-        it = item(index - 1, 3);
-        takeItem(it);
-        setItem(index, 3, it);
-    }
-
+    blockSignals(true);
+    DISABLESORTINGMYTABLE
+    insertRow(row+1);
     setText(row + 1, 0, "class");
     setText(row + 1, 1, QString());
     setItem(row + 1, 2, new ComboItem(this, QString(), types));
     setItem(row + 1, 3, new ComboItem(this, QString(), types));
     setText(row + 1, 4, QString());
+    ENABLESORTINGMYTABLE
+    blockSignals(false);
 }
 
 void FormalParamsTable::delete_row(int row)
 {
-    int n = numRows();
+    int n = rowCount();
     int index;
-
-    clearCellWidget(row, 3);
-
     if (n == 1) {
         // the alone line : empty it
         setText(0, 0, "class");
@@ -2175,18 +2143,18 @@ void FormalParamsTable::delete_row(int row)
             setText(index, 0, text(index + 1, 0));
             setText(index, 1, text(index + 1, 1));
 
-            Q3TableItem * it;
+            QTableWidgetItem * it;
 
             it = item(index + 1, 2);
-            takeItem(it);
+            takeItem(it->row(), it->column());
             setItem(index, 2, it);
 
             it = item(index + 1, 3);
-            takeItem(it);
+            takeItem(it->row(), it->column());
             setItem(index, 3, it);
         }
 
-        setNumRows(n - 1);
+        setRowCount(n - 1);
     }
 }
 
@@ -2210,9 +2178,9 @@ void FormalParamsTable::paste_row(int row)
     setText(row, 1, name_copy);
     setText(row, 2, default_value_copy);
     setText(row, 3, extends_copy);
-
-    if ((row == (numRows() - 1)) && !name_copy.isEmpty())
+    if ((row == (rowCount() - 1)) && !name_copy.isEmpty())
         insert_row_after(row);
+
 }
 
 void FormalParamsTable::move_row(int from, int to)
@@ -2241,9 +2209,9 @@ void FormalParamsTable::generate_cpp(QString & s, BrowserNodeList & nodes,
                                      QStringList & node_names,
                                      const QString & cl_name)
 {
-    int n = numRows();
+    int n = rowCount();
 
-    if (text(n - 1, 1).stripWhiteSpace().isEmpty())
+    if (text(n - 1, 1).trimmed().isEmpty())
         n -= 1;
 
     if (n != 0) {
@@ -2251,12 +2219,12 @@ void FormalParamsTable::generate_cpp(QString & s, BrowserNodeList & nodes,
 
         for (int index = 0; index != n; index += 1) {
             s += sep;
-            s += text(index, 0).stripWhiteSpace();
+            s += text(index, 0).trimmed();
             s += " ";
-            s += text(index, 1).stripWhiteSpace();
+            s += text(index, 1).trimmed();
             sep = ", ";
 
-            QString v = type(text(index, 2).stripWhiteSpace(), node_names, nodes);
+            QString v = type(text(index, 2).trimmed(), node_names, nodes);
 
             if (! v.isEmpty()) {
                 s += " = ";
@@ -2267,16 +2235,16 @@ void FormalParamsTable::generate_cpp(QString & s, BrowserNodeList & nodes,
 
         s += "> ";
     }
-    else if (cl_name.find('<') != -1)
+    else if (cl_name.indexOf('<') != -1)
         s += "template<> ";
 }
 
 void FormalParamsTable::generate_java(QString & s, BrowserNodeList & nodes,
                                       QStringList & node_names)
 {
-    int n = numRows();
+    int n = rowCount();
 
-    if (text(n - 1, 1).stripWhiteSpace().isEmpty())
+    if (text(n - 1, 1).trimmed().isEmpty())
         n -= 1;
 
     if (n != 0) {
@@ -2284,9 +2252,9 @@ void FormalParamsTable::generate_java(QString & s, BrowserNodeList & nodes,
 
         for (int index = 0; index != n; index += 1) {
             s += sep;
-            s += text(index, 1).stripWhiteSpace();
+            s += text(index, 1).trimmed();
 
-            QString ex = type(text(index, 3).stripWhiteSpace(), node_names, nodes);
+            QString ex = type(text(index, 3).trimmed(), node_names, nodes);
 
             if (! ex.isEmpty()) {
                 s += " extends ";
@@ -2302,38 +2270,48 @@ void FormalParamsTable::generate_java(QString & s, BrowserNodeList & nodes,
 
 void FormalParamsTable::update(ClassData * cl, BrowserNodeList & nodes)
 {
+    if(!item(0,1))
+        printf("item lost: %d\r\n",__LINE__);
     forceUpdateCells();
+    if(!item(0,1))
+        printf("item lost: %d\r\n",__LINE__);
 
-    int n = numRows();
+    int n = rowCount();
     int index;
-
-    if (text(n - 1, 1).stripWhiteSpace().isEmpty())
+    if (text(n - 1, 1).trimmed().isEmpty())
         n -= 1;
-
+    if(!item(0,1))
+        printf("item lost: %d\r\n",__LINE__);
     cl->set_n_formalparams(n);
-
+    if(!item(0,1))
+        printf("item lost: %d\r\n",__LINE__);
     for (index = 0; index != n; index += 1) {
-        cl->set_formalparam_type(index, text(index, 0).stripWhiteSpace());
-        cl->set_formalparam_name(index, text(index, 1).stripWhiteSpace());
+        if(!item(0,1))
+            printf("item lost: %d\r\n",__LINE__);
+        cl->set_formalparam_type(index, text(index, 0).trimmed().toLatin1().constData());
+        if(!item(0,1))
+            printf("item lost: %d\r\n",__LINE__);
+        cl->set_formalparam_name(index, text(index, 1).trimmed().toLatin1().constData());
 
         int rank;
 
-        rank = types.findIndex(text(index, 2).stripWhiteSpace());
+        rank = types.indexOf(text(index, 2).trimmed());
 
         if (rank != -1)
             cl->set_formalparam_default_value(index, ((BrowserClass *) nodes.at(rank)),
                                               NULL); // [lgfreitas] expected const char *. QString() does not correspond to old null
         else
-            cl->set_formalparam_default_value(index, 0, text(index, 2).stripWhiteSpace());
+            cl->set_formalparam_default_value(index, 0, text(index, 2).trimmed().toLatin1().constData());
 
-        rank = types.findIndex(text(index, 3).stripWhiteSpace());
+        rank = types.indexOf(text(index, 3).trimmed().toLatin1().constData());
 
         if (rank != -1)
             cl->set_formalparam_extends(index, ((BrowserClass *) nodes.at(rank)),
                                         NULL);
         else
-            cl->set_formalparam_extends(index, 0, text(index, 3).stripWhiteSpace());
+            cl->set_formalparam_extends(index, 0, text(index, 3).trimmed().toLatin1().constData());
     }
+
 }
 
 //
@@ -2344,24 +2322,25 @@ ActualParamsTable::ActualParamsTable(ClassData * cl, QWidget * parent,
                                      QStringList & node_names, bool isWritable)
     : MyTable(cl->get_n_actualparams(), 2, parent), types(node_names)
 {
-    setSorting(true);
+    //setSortingEnabled(true);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(FALSE);
-    horizontalHeader()->setLabel(0, TR("inherited class formal"));
-    horizontalHeader()->setLabel(1, TR("actual"));
+    verticalHeader()->setSectionsMovable(false);
+    setHorizontalHeaderLabel(0, QObject::tr("inherited class formal"));
+    setHorizontalHeaderLabel(1, QObject::tr("actual"));
 
     int index;
     int sup = cl->get_n_actualparams();
+    m_comboBoxDelegate = new TableWidgetItemDelegate(this);
+    setItemDelegateForColumn(1, m_comboBoxDelegate);
 
     for (index = 0; index < sup; index += 1) {
-        setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_name(index)));
+        setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_actualparam_name(index), TableItem::TableItemType));
 
         if (!isWritable)
-            setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_value(index)));
+            setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_actualparam_value(index), TableItem::TableItemType));
         else
             setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
     }
-
     adjustColumn(0);
     setColumnStretchable(0, FALSE);
     setColumnStretchable(1, TRUE);
@@ -2369,24 +2348,25 @@ ActualParamsTable::ActualParamsTable(ClassData * cl, QWidget * parent,
 
 void ActualParamsTable::Reinitiliaze(ClassData * cl, QStringList & node_names, bool isWritable)
 {
-    int oldRowCount = numRows()-1;
+    blockSignals(true);
+    int oldRowCount = rowCount()-1;
     for (int index =  oldRowCount; index > -1; index -= 1) {
         removeRow(index);
     }
 
     int sup = cl->get_n_actualparams();
     types = node_names;
-    setNumRows(sup);
+    setRowCount(sup);
     for (int index = 0; index < sup; index += 1) {
-        setItem(index, 0, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_name(index)));
+        setItem(index, 0, new TableItem(this, TableItem::Never, cl->get_actualparam_name(index), TableItem::TableItemType));
 
         if (!isWritable)
-            setItem(index, 1, new TableItem(this, Q3TableItem::Never, cl->get_actualparam_value(index)));
+            setItem(index, 1, new TableItem(this, TableItem::Never, cl->get_actualparam_value(index), TableItem::TableItemType));
         else
             setItem(index, 1, new ComboItem(this, cl->get_actualparam_value(index), types));
     }
     types = node_names;
-
+    blockSignals(false);
 }
 
 #if 0
@@ -2394,7 +2374,7 @@ void ActualParamsTable::activateNextCell()
 {
     int row = currentRow();
 
-    if (row != numRows())
+    if (row != rowCount())
         // goto next line
         setCurrentCell(row + 1, 1);
 }
@@ -2404,12 +2384,12 @@ void ActualParamsTable::update(ClassData * cl, BrowserNodeList & nodes)
 {
     forceUpdateCells();
 
-    int n = numRows();
+    int n = rowCount();
     int index;
 
     for (index = 0; index != n; index += 1)
         cl->set_actualparam_value(index,
-                                  the_type(text(index, 1).stripWhiteSpace(),
+                                  the_type(text(index, 1).trimmed(),
                                            types, nodes));
 }
 
@@ -2432,10 +2412,9 @@ void ActualParamsTable::generate(QString & s, ClassData * cl,
     int nth = 0;
     const char * sep = "<";
     bool need_space = FALSE;
-
     // progress on still present formals
     while (it.hasNext() && (nth < n) && (it.next()->get_class() == parent)) {
-        AType t = the_type(text(index, 1).stripWhiteSpace(), node_names, nodes);
+        AType t = the_type(text(index, 1).trimmed(), node_names, nodes);
 
         if (t.type != 0) {
             s += sep;
@@ -2460,7 +2439,7 @@ void ActualParamsTable::generate(QString & s, ClassData * cl,
         else if (!t.explicit_type.isEmpty()) {
             s += sep;
             s += (cpp) ? GenerationSettings::cpp_type(t.explicit_type)
-                 : GenerationSettings::java_type(t.explicit_type);
+                       : GenerationSettings::java_type(t.explicit_type);
             need_space = FALSE;
         }
         else {
@@ -2491,58 +2470,58 @@ ApplicableOnTable::ApplicableOnTable(QWidget * parent, QString s, bool visit)
     : MyTable(ProfiledStereotypes::availableTargets().count(), 2, parent),
       ro(visit)
 {
-    setSorting(true);
+    //setSortingEnabled(true);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(FALSE);
-    horizontalHeader()->setLabel(0, TR("element kind"));
-    horizontalHeader()->setLabel(1, TR("applicable"));
+    verticalHeader()->setSectionsMovable(false);
+    setHorizontalHeaderLabel(0, QObject::tr("element kind"));
+    setHorizontalHeaderLabel(1, QObject::tr("applicable"));
 
     const QStringList & available = ProfiledStereotypes::availableTargets();
-    QStringList l = QStringList::split(" ", s);
+    QStringList l = s.split(" ");
     QStringList::ConstIterator it;
     int row = 0;
-    QString yes = TR("yes");
+    QString yes = QObject::tr("yes");
     QString empty;
 
     for (it = available.begin(); it != available.end(); ++it) {
         setItem(row, 0,
-                new TableItem(this, Q3TableItem::Never,
-                              TR(ProfiledStereotypes::pretty(*it))));
+                new TableItem(this, TableItem::Never,
+                              TR(ProfiledStereotypes::pretty(*it).toLatin1().constData()), TableItem::TableItemType));
         setItem(row, 1,
-                new TableItem(this, Q3TableItem::Never,
-                              (l.findIndex(*it) == -1) ? empty : yes));
+                new TableItem(this, TableItem::Never,
+                              (l.indexOf(*it) == -1) ? empty : yes, TableItem::TableItemType));
         row += 1;
     }
 
-    connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-            this, SLOT(button_pressed(int, int, int, const QPoint &)));
-
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            this, SLOT(button_pressed(QModelIndex)));
     adjustColumn(0);
     adjustColumn(1);
 }
 
-void ApplicableOnTable::button_pressed(int row, int col, int, const QPoint &)
+void ApplicableOnTable::button_pressed(const QModelIndex &index)
 {
-    if (!ro && (col == 1))
-        setText(row, col, (text(row, col).isEmpty()) ? TR("yes") : QString());
+    if (!ro && (index.column() == 1))
+        setText(index.row(), index.column(), (text(index.row(), index.column()).isEmpty()) ? QObject::tr("yes") : QString());
 }
 
 QString ApplicableOnTable::targets()
 {
+    QString s;
+
     forceUpdateCells();
+
 
     const QStringList & available = ProfiledStereotypes::availableTargets();
     QStringList::ConstIterator it;
-    QString s;
+
     int row;
 
     for (row = 0, it = available.begin(); it != available.end(); row += 1, ++it)
         if (!text(row, 1).isEmpty())
             s += (*it) + " ";
-
     if (! s.isEmpty())
         s.truncate(s.length() - 1);
-
     return s;
 }
 
@@ -2553,8 +2532,7 @@ uint ClassDialog::TypeID()
 
 void ClassDialog::InitGui()
 {
-
-    setCaption(TR("Class dialog"));
+    setWindowTitle(TR("Class dialog"));
 
     currentNode = (BrowserClass *) cl->get_browser_node();
     grandParent = (BrowserNode *) currentNode->parent()->parent();
@@ -2565,67 +2543,71 @@ void ClassDialog::InitGui()
         nodes.full_names(node_names);
     }
 
-    Q3HBox * htab;
-    Q3VBox * vtab;
-    Q3Grid * grid;
+    HHBox * htab;
+    VVBox * vtab;
+    GridBox * grid;
     QSplitter * split;
-    Q3GroupBox * bg;
-//    QLabel * lbl1;
-//    QLabel * lbl2;
-//    QLabel * lbl3;
-//    QLabel * lbl4;
+    QGroupBox * bg;
+    //    QLabel * lbl1;
+    //    QLabel * lbl2;
+    //    QLabel * lbl3;
+    //    QLabel * lbl4;
     currentNode = (BrowserClass *) cl->get_browser_node();
     grandParent = (BrowserNode *) currentNode->parent()->parent();
 
     //!!!!! general tab elements
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     umltab = grid;
     RegisterTab("Uml", umltab);
     grid->setSpacing(5);
     grid->setMargin(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(cl->name(), grid); //toadd
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(cl->name(), grid)); //toadd
 
-    new QLabel(TR("stereotype : "), grid);
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
 
-    edstereotype = new Q3ComboBox(isWritable, grid); // toadd
+    grid->addWidget(edstereotype = new QComboBox( grid)); // toadd
+    edstereotype->setEditable(isWritable);
 
     // setting up checkboxes for active and abstract
-    new QLabel(grid);
-    htabUml = new Q3HBox(grid);
-    opt_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htabUml);
-    abstract_cb = new QCheckBox("abstract", opt_bg);
-    active_cb = new QCheckBox("active", opt_bg);
+    grid->addWidget(new QLabel("",grid));
+    grid->addWidget(htabUml = new HHBox(grid));
 
+    QHBoxLayout *hLayout = new QHBoxLayout();
+    htabUml->addWidget(opt_bg = new QGroupBox(QString(), htabUml));
+    hLayout->addWidget(abstract_cb = new QCheckBox("abstract", opt_bg));
+    hLayout->addWidget(active_cb = new QCheckBox("active", opt_bg));
+    opt_bg->setLayout(hLayout);
     // setting up radiobutton group for accessibility
     // ASSUMING INSTANTIATE ON NULL
-    uml_visibility.init(htabUml, cl->get_uml_visibility(), TRUE); //toAdd
+    htabUml->addWidget(uml_visibility.init(htabUml, cl->get_uml_visibility(), TRUE)); //toAdd
 
-    basetypelbl = new QLabel(TR("base type : "), grid);
-    edbasetype = new Q3ComboBox(isWritable, grid);
+    grid->addWidget(basetypelbl = new QLabel(TR("base type : "), grid));
+    grid->addWidget(edbasetype = new QComboBox( grid));
+    edbasetype->setEditable( isWritable);
 
-    new QLabel(TR("artifact : "), grid);
+    grid->addWidget(new QLabel(TR("artifact : "), grid));
 
-    artifact = new Q3ComboBox(FALSE, grid);
+    grid->addWidget(artifact = new QComboBox(grid));
 
 
-    vtab = new Q3VBox(grid);
+    grid->addWidget(vtab = new VVBox(grid));
     new QLabel(TR("description :"), vtab);
 
-    pbEditorForDescription = new SmallPushButton(TR("Editor"), vtab);
-    pbDefaultForDescription = new SmallPushButton(TR("Default"), vtab);
+    vtab->addWidget(pbEditorForDescription = new SmallPushButton(TR("Editor"), vtab));
+    vtab->addWidget(pbDefaultForDescription = new SmallPushButton(TR("Default"), vtab));
 
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(!isWritable);
     comment->setFont(font);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("constraint :"), vtab);
-    pbEditorForConstrant = new SmallPushButton(TR("Editor"), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("constraint :"), vtab));
+    vtab->addWidget(pbEditorForConstrant = new SmallPushButton(TR("Editor"), vtab));
 
-    constraint = new MultiLineEdit(grid);
+    grid->addWidget(constraint = new MultiLineEdit(grid));
     constraint->setReadOnly(!isWritable);
     constraint->setFont(font);
 
@@ -2635,30 +2617,31 @@ void ClassDialog::InitGui()
     // parameterized tab
 
     RegisterTab("Parametrized", parametrized_vtab);
-    parametrized_vtab = new Q3VBox(this);
+    parametrized_vtab = new VVBox(this);
 
     parametrized_vtab->setMargin(5);
 
 
-    (new QLabel(TR("\nEnter formals in case the class is parameterized\n"),
-                parametrized_vtab))
-    ->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
+    QLabel *label;
+    parametrized_vtab->addWidget(label = new QLabel(TR("\nEnter formals in case the class is parameterized\n"),
+                                                    parametrized_vtab));
+    label->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
 
 
-    formals_table = new FormalParamsTable(cl, parametrized_vtab, node_names, isWritable); //todo VISIT NOT FIXED
-    addTab(parametrized_vtab, TR("Parameterized"));
+    parametrized_vtab->addWidget(formals_table = new FormalParamsTable(cl, parametrized_vtab, node_names, isWritable)); //todo VISIT NOT FIXED
+    addTab(parametrized_vtab, QObject::tr("Parameterized"));
 
 
     //!!! parameters for a class
 
-    instantiate_vtab = new Q3VBox(this);
+    instantiate_vtab = new VVBox(this);
     RegisterTab("Instantiate", instantiate_vtab);
     instantiate_vtab->setMargin(5);
-    instantiateNotice = new QLabel(TR("\nSpecify actuals else formals default value will be used\n"),
-                                   instantiate_vtab);
+    instantiate_vtab->addWidget(instantiateNotice = new QLabel(TR("\nSpecify actuals else formals default value will be used\n"),
+                                                               instantiate_vtab));
     instantiateNotice->setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-    actuals_table = new ActualParamsTable(cl, instantiate_vtab, node_names, isWritable); //todo VISIT NOT FIXED
-    addTab(instantiate_vtab, TR("Instantiate"));
+    instantiate_vtab->addWidget(actuals_table = new ActualParamsTable(cl, instantiate_vtab, node_names, isWritable)); //todo VISIT NOT FIXED
+    addTab(instantiate_vtab, QObject::tr("Instantiate"));
 
     //!!! C++
     split = new QSplitter(Qt::Vertical, this);
@@ -2666,38 +2649,41 @@ void ClassDialog::InitGui()
     RegisterTab("Cpp", cppTab);
     split->setOpaqueResize(TRUE);
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl1cpp = new QLabel(htab);
-    bg = new Q3GroupBox(1, Qt::Horizontal, QString(), htab);
+    htab->addWidget(lbl1cpp = new QLabel(htab));
+    hLayout = new QHBoxLayout();
+    htab->addWidget(bg = new QGroupBox(QString(), htab));
     cpp_external_cb = new QCheckBox("external", bg);
+    hLayout->addWidget(cpp_external_cb);
+    bg->setLayout(hLayout);
 
 
-    cpp_visibility.init(htab, cl->get_cpp_visibility(),
-                        FALSE, 0, TR("follow uml"));
+    htab->addWidget(cpp_visibility.init(htab, cl->get_cpp_visibility(),
+                                        FALSE, 0, QObject::tr("follow uml")));
 
 
 
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl2cpp = new QLabel(TR("Declaration : "), htab);
-    edcppdecl = new MultiLineEdit(htab);
+    htab->addWidget(lbl2cpp = new QLabel(TR("Declaration : "), htab));
+    htab->addWidget(edcppdecl = new MultiLineEdit(htab));
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl3cpp = new QLabel(TR("Result after\nsubstitution : "), htab);
-    showcppdecl = new MultiLineEdit(htab);
+    htab->addWidget(lbl3cpp = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(showcppdecl = new MultiLineEdit(htab));
 
-    htabcpp = new Q3HBox(vtab);
-    lbl4cpp = new QLabel(htabcpp);
+    vtab->addWidget(htabcpp = new HHBox(vtab));
+    htabcpp->addWidget(lbl4cpp = new QLabel("",htabcpp));
 
-    pbCppDefaultDeclaration = new QPushButton(TR("Default declaration"), htabcpp);
-    pbNotGeneratedInCPP = new QPushButton(TR("Not generated in C++"), htabcpp);
+    htabcpp->addWidget(pbCppDefaultDeclaration = new QPushButton(TR("Default declaration"), htabcpp));
+    htabcpp->addWidget(pbNotGeneratedInCPP = new QPushButton(TR("Not generated in C++"), htabcpp));
 
     addTab(cppTab, "Cpp");
 
@@ -2708,41 +2694,41 @@ void ClassDialog::InitGui()
     RegisterTab("Java", javatab);
     split->setOpaqueResize(TRUE);
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl1java = new QLabel(htab);
-    bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
-    java_final_cb = new QCheckBox("final", bg);
-    java_external_cb = new QCheckBox("external", bg);
+    htab->addWidget(lbl1java = new QLabel(htab));
+    hLayout = new QHBoxLayout();
+    htab->addWidget(bg = new QGroupBox( QString(), htab));
+    hLayout->addWidget(java_final_cb = new QCheckBox("final", bg));
+    hLayout->addWidget(java_external_cb = new QCheckBox("external", bg));
+    bg->setLayout(hLayout);
 
-
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl2java = new QLabel(TR("Definition : "), htab);
-    edjavadecl = new MultiLineEdit(htab);
+    htab->addWidget(lbl2java = new QLabel(TR("Definition : "), htab));
+    htab->addWidget(edjavadecl = new MultiLineEdit(htab));
 
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl3java = new QLabel(TR("Result after\nsubstitution : "), htab);
-    showjavadecl = new MultiLineEdit(htab);
+    htab->addWidget(lbl3java = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(showjavadecl = new MultiLineEdit(htab));
 
-    htab = new Q3HBox(vtab);
-    lbl4java = new QLabel(htab);
-    pbJavaDefaultDefinition = new QPushButton(TR("Default definition"), htab);
-    pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab);
+    vtab->addWidget(htab = new HHBox(vtab));
+    htab->addWidget(lbl4java = new QLabel("",htab));
+    htab->addWidget(pbJavaDefaultDefinition = new QPushButton(TR("Default definition"), htab));
+    htab->addWidget(pbNotGeneratedInJava = new QPushButton(TR("Not generated in Java"), htab));
 
-    pbJavaAnnotation = new QPushButton("", htab);
+    htab->addWidget(pbJavaAnnotation = new QPushButton("", htab));
 
     connect(pbJavaAnnotation, SIGNAL(clicked()),
             this, SLOT(java_edit_annotation()));
 
     addTab(split, "Java");
-
 
     //!!! PHP
     split = new QSplitter(Qt::Vertical, this);
@@ -2750,35 +2736,38 @@ void ClassDialog::InitGui()
     RegisterTab("Php", phptab);
     split->setOpaqueResize(TRUE);
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl1php = new QLabel(htab);
-    bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
-    php_final_cb = new QCheckBox("final", bg);
-    php_external_cb = new QCheckBox("external", bg);
+    htab->addWidget(lbl1php = new QLabel("",htab));
+    hLayout = new QHBoxLayout();
+    htab->addWidget(bg = new QGroupBox(QString(), htab));
+    hLayout->addWidget( php_final_cb = new QCheckBox("final", bg));
+    hLayout->addWidget( php_external_cb = new QCheckBox("external", bg));
+    bg->setLayout(hLayout);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl2php = new QLabel(TR("Definition : "), htab);
-    edphpdecl = new MultiLineEdit(htab);
+    htab->addWidget(lbl2php = new QLabel(TR("Definition : "), htab));
+    htab->addWidget(edphpdecl = new MultiLineEdit(htab));
     edphpdecl->setFont(font);
 
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    pbPhpDefaultDefinition =  new QPushButton(TR("Default definition"), htab);
-    pbNotGeneratedInPhp =  new QPushButton(TR("Not generated in Php"), htab);
-    lbl3php = new QLabel(TR("Result after\nsubstitution : "), htab);
-    showphpdecl = new MultiLineEdit(htab);
+
+    htab->addWidget(lbl3php = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(showphpdecl = new MultiLineEdit(htab));
     showphpdecl->setReadOnly(TRUE);
     showphpdecl->setFont(font);
 
-    htab = new Q3HBox(vtab);
-    lbl4php = new QLabel(htab);
+    vtab->addWidget(htab = new HHBox(vtab));
+    htab->addWidget(lbl4php = new QLabel("",htab));
+    htab->addWidget(pbPhpDefaultDefinition =  new QPushButton(TR("Default definition"), htab));
+    htab->addWidget(pbNotGeneratedInPhp =  new QPushButton(TR("Not generated in Php"), htab));
 
 
     addTab(phptab, "Php");
@@ -2792,38 +2781,40 @@ void ClassDialog::InitGui()
     RegisterTab("Python", pythontab);
     split->setOpaqueResize(TRUE);
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl1python = new QLabel(htab);
-    bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
-    python_2_2_cb = new QCheckBox("Python 2.2", bg);
-    python_external_cb = new QCheckBox("external", bg);
+    htab->addWidget(lbl1python = new QLabel(htab));
+
+    htab->addWidget(bg = new QGroupBox( QString(), htab));
+    hLayout = new QHBoxLayout(bg);
+    hLayout->addWidget( python_2_2_cb = new QCheckBox("Python 2.2", bg));
+    hLayout->addWidget( python_external_cb = new QCheckBox("external", bg));
+    bg->setLayout(hLayout);
 
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl2python = new QLabel(TR("Definition : "), htab);
-    edpythondecl = new MultiLineEdit(htab);
+    htab->addWidget(lbl2python = new QLabel(TR("Definition : "), htab));
+    htab->addWidget(edpythondecl = new MultiLineEdit(htab));
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl3python = new QLabel(TR("Result after\nsubstitution : "), htab);
-    showpythondecl = new MultiLineEdit(htab);
+    htab->addWidget(lbl3python = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(showpythondecl = new MultiLineEdit(htab));
     showpythondecl->setReadOnly(TRUE);
     showpythondecl->setFont(font);
 
-    htab = new Q3HBox(vtab);
-    lbl4python = new QLabel(htab);
+    vtab->addWidget(htab = new HHBox(vtab));
+    htab->addWidget(lbl4python = new QLabel("",htab));
 
-    pbPythonDefaultDefinition = new QPushButton(TR("Default definition"), htab);
-    pbNotGeneratedInPython = new QPushButton(TR("Not generated in Python"), htab);
+    htab->addWidget(pbPythonDefaultDefinition = new QPushButton(TR("Default definition"), htab));
+    htab->addWidget(pbNotGeneratedInPython = new QPushButton(TR("Not generated in Python"), htab));
 
     addTab(pythontab, "Python");
-
 
 
     //IDL
@@ -2834,102 +2825,106 @@ void ClassDialog::InitGui()
     RegisterTab("Idl", idltab);
     split->setOpaqueResize(TRUE);
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    switch_bg = new Q3GroupBox(2, Qt::Horizontal, QString(), htab);
-    new QLabel(TR("switch type : "), switch_bg);
-    edswitch_type = new Q3ComboBox(isWritable, switch_bg);
+    htab->addWidget(switch_bg = new QGroupBox(QString(), htab));
+    hLayout = new QHBoxLayout(switch_bg);
+    hLayout->addWidget(new QLabel(TR("switch type : "), switch_bg));
+    hLayout->addWidget(edswitch_type = new QComboBox(switch_bg));
+    switch_bg->setLayout(hLayout);
+    edswitch_type->setEditable(isWritable);
     // !!!
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
 
     edswitch_type->setSizePolicy(sp);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl1idl = new QLabel(htab);
-    bg = new Q3GroupBox(3, Qt::Horizontal, QString(), htab);
-    idl_external_cb = new QCheckBox("external", bg);
-    idl_local_cb = new QCheckBox("local", bg);
-    idl_custom_cb = new QCheckBox("custom", bg);
+    htab->addWidget(lbl1idl = new QLabel(htab));
+    htab->addWidget(bg = new QGroupBox( QString(), htab));
+    hLayout = new QHBoxLayout(bg);
+    hLayout->addWidget( idl_external_cb = new QCheckBox("external", bg));
+    hLayout->addWidget( idl_local_cb = new QCheckBox("local", bg));
+    hLayout->addWidget( idl_custom_cb = new QCheckBox("custom", bg));
+    bg->setLayout(hLayout);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl2idl = new QLabel(TR("Declaration : "), htab);
-    edidldecl = new MultiLineEdit(htab);
+    htab->addWidget(lbl2idl = new QLabel(TR("Declaration : "), htab));
+    htab->addWidget(edidldecl = new MultiLineEdit(htab));
     edidldecl->setFont(font);
 
 
 
-    vtab = new Q3VBox(split);
+    vtab = new VVBox(split);
 
-    htab = new Q3HBox(vtab);
+    vtab->addWidget(htab = new HHBox(vtab));
     htab->setMargin(5);
-    lbl3idl = new QLabel(TR("Result after\nsubstitution : "), htab);
-    showidldecl = new MultiLineEdit(htab);
+    htab->addWidget(lbl3idl = new QLabel(TR("Result after\nsubstitution : "), htab));
+    htab->addWidget(showidldecl = new MultiLineEdit(htab));
     showidldecl->setReadOnly(TRUE);
     showidldecl->setFont(font);
 
 
-    htabidl = new Q3HBox(vtab);
-    lbl4idl = new QLabel(htabidl);
-    pbIdlDefaultDeclaration = new QPushButton(TR("Default declaration"), htabidl);
-    pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htabidl);
+    vtab->addWidget(htabidl = new HHBox(vtab));
+    htabidl->addWidget(lbl4idl = new QLabel("",htabidl));
+    htabidl->addWidget(pbIdlDefaultDeclaration = new QPushButton(TR("Default declaration"), htabidl));
+    htabidl->addWidget(pbINotGeneratedInIdl = new QPushButton(TR("Not generated in IDL"), htabidl));
 
     addTab(idltab, "Idl");
 
     // Profiled stereotype
-    stereotypeGrid = new Q3Grid(2, this);
+    stereotypeGrid = new GridBox(2, this);
     stereotypetab = stereotypeGrid;
     RegisterTab("Stereotype", stereotypetab);
     stereotypeGrid->setSpacing(5);
     stereotypeGrid->setMargin(5);
 
-    new QLabel(TR("Initialization \nplug-out :"), stereotypeGrid);
-    htab = new Q3HBox(stereotypeGrid);
-    stereo_init_cb = new Q3ComboBox(FALSE, htab);
+    stereotypeGrid->addWidget(new QLabel(TR("Initialization \nplug-out :"), stereotypeGrid));
+    stereotypeGrid->addWidget(htab = new HHBox(stereotypeGrid));
+    htab->addWidget(stereo_init_cb = new QComboBox(htab));
 
-    new QLabel(TR("  parameter(s) : "), htab);
-    edinitparam = new LineEdit(currentNode->get_value("stereotypeSetParameters"), htab);
+    htab->addWidget(new QLabel(TR("  parameter(s) : "), htab));
+    htab->addWidget(edinitparam = new LineEdit(currentNode->get_value("stereotypeSetParameters"), htab));
 
-    new QLabel(TR("Check \nplug-out :"), stereotypeGrid);
-    htab = new Q3HBox(stereotypeGrid);
-    stereo_check_cb = new Q3ComboBox(FALSE, htab);
+    stereotypeGrid->addWidget(new QLabel(TR("Check \nplug-out :"), stereotypeGrid));
+    stereotypeGrid->addWidget(htab = new HHBox(stereotypeGrid));
+    htab->addWidget(stereo_check_cb = new QComboBox( htab));
 
-    new QLabel(TR("  parameter(s) : "), htab);
-    edcheckparam = new LineEdit(currentNode->get_value("stereotypeCheckParameters"), htab);
+    htab->addWidget(new QLabel(TR("  parameter(s) : "), htab));
+    htab->addWidget(edcheckparam = new LineEdit(currentNode->get_value("stereotypeCheckParameters"), htab));
 
-    new QLabel(TR("Icon path :"), stereotypeGrid);
-    htab = new Q3HBox(stereotypeGrid);
-    ediconpath = new LineEdit("", htab);
+    stereotypeGrid->addWidget(new QLabel(TR("Icon path :"), stereotypeGrid));
+    stereotypeGrid->addWidget(htab = new HHBox(stereotypeGrid));
+    htab->addWidget(ediconpath = new LineEdit("", htab));
 
-    lblProfiledEmpty = new QLabel("", htab);
-    pbProfiledSteretypeBrowse = new SmallPushButton(TR("Browse"), htab);
-    lblProfiledEmpty2 = new QLabel("", htab);
-    vtabProfiled = new Q3VBox(htab);
+    htab->addWidget(lblProfiledEmpty = new QLabel("", htab));
+    htab->addWidget(pbProfiledSteretypeBrowse = new SmallPushButton(TR("Browse"), htab));
+    htab->addWidget(lblProfiledEmpty2 = new QLabel("", htab));
+    htab->addWidget(vtabProfiled = new VVBox(htab));
     QString ip = currentNode->get_value("stereotypeIconPath");
-    iconpathrootbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
-            ? Absolute : RelativeRoot, vtab);
-    iconpathprjbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
-                                            ? Absolute : RelativePrj, vtab);
+    vtabProfiled->addWidget(iconpathrootbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
+                                                             ? Absolute : RelativeRoot, vtabProfiled));
+    vtabProfiled->addWidget(iconpathprjbutton = new SmallPushButton((ip.isEmpty() || QDir::isRelativePath(ip))
+                                                            ? Absolute : RelativePrj, vtabProfiled));
 
-    lblProfiledEmpty3 = new QLabel("", htab);
-    new QLabel(TR("Apply on : "), stereotypeGrid);
-    applicableon_table =
-        new ApplicableOnTable(stereotypeGrid, "", !isWritable); // todo!! important !!! turned off parameter
+    htab->addWidget(lblProfiledEmpty3 = new QLabel("", htab));
+    stereotypeGrid->addWidget(new QLabel(TR("Apply on : "), stereotypeGrid));
+    stereotypeGrid->addWidget(applicableon_table = new ApplicableOnTable(stereotypeGrid, "", !isWritable)); // todo!! important !!! turned off parameter
 
-    addTab(stereotypetab, TR("Stereotype"));
+    addTab(stereotypetab, QObject::tr("Stereotype"));
 
     // USER : list key - value
 
-    keyValueTab = new Q3VBox(this);
+    keyValueTab = new VVBox(this);
     RegisterTab("Properties", keyValueTab);
-    kvtable = new KeyValuesTable(currentNode, keyValueTab, !isWritable);
+    keyValueTab->addWidget(kvtable = new KeyValuesTable(currentNode, keyValueTab, !isWritable));
     kvtable->remove("stereotypeSet");
 
-    addTab(keyValueTab, TR("Properties"));
+    addTab(keyValueTab, QObject::tr("Properties"));
 
 }
 
@@ -2941,8 +2936,8 @@ void ClassDialog::FillGuiElements(BrowserNode * bn)
 
 void ClassDialog::FillGuiElements(ClassData * _cl)
 {
-    disconnect(this, SIGNAL(currentChanged(QWidget *)),
-               this, SLOT(update_all_tabs(QWidget *)));
+    disconnect(m_tabWidget, SIGNAL(currentChanged(int)),
+               this, SLOT(update_all_tabs(int)));
     cl = _cl;
     SetCurrentNode(cl->browser_node);
 
@@ -2962,11 +2957,13 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     grandParent = (BrowserNode *) currentNode->parent()->parent();
     edname->setText(cl->get_browser_node()->get_name());
     edname->setReadOnly(!isWritable);
-    edinitparam->setText(currentNode->get_value("stereotypeSetParameters"));
-    edcheckparam->setText(currentNode->get_value("stereotypeCheckParameters"));
+    if(currentNode->get_value("stereotypeSetParameters"))
+        edinitparam->setText(currentNode->get_value("stereotypeSetParameters"));
+    if(currentNode->get_value("stereotypeCheckParameters"))
+        edcheckparam->setText(currentNode->get_value("stereotypeCheckParameters"));
     // filling stereotypes edit element
     edstereotype->clear();
-    edstereotype->insertItem(toUnicode(cl->get_stereotype()));
+    edstereotype->addItem(toUnicode(cl->get_stereotype()));
 
     if (isWritable) {
 
@@ -2974,17 +2971,17 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
         bool grannyIsProfiled = !strcmp(grandParent->get_data()->get_stereotype(), "profile");
 
         if (grannyIsUmlPackage && grannyIsProfiled)
-            edstereotype->insertStringList(BrowserClass::default_stereotypes());
+            edstereotype->addItems(BrowserClass::default_stereotypes());
         else {
             QStringList stereotypesList = BrowserClass::default_stereotypes();
 
-            stereotypesList.remove("stereotype");
-            edstereotype->insertStringList(stereotypesList);
+            stereotypesList.removeOne("stereotype");
+            edstereotype->addItems(stereotypesList);
         }
 
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClass));
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlClass));
         edstereotype->setAutoCompletion(completion());
-        connect(edstereotype, SIGNAL(activated(const QString &)),
+        connect(edstereotype, SIGNAL(activated(QString)),
                 this, SLOT(edStereotypeActivated(const QString &)));
     }
     else {
@@ -2993,9 +2990,9 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
         edstereotype->clear();
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
     abstract_cb->setChecked(false);
@@ -3033,26 +3030,26 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     if (cl->browser_node->children(inh, UmlGeneralisation, UmlRealize), inh.count() != 0) {
         // first inheritance is taken in all cases
-        edbasetype->insertItem(((RelationData *) inh.at(0)->get_data())->get_end_class()->full_name(TRUE));
+        edbasetype->addItem(((RelationData *) inh.at(0)->get_data())->get_end_class()->full_name(TRUE));
         edbasetype->setEnabled(FALSE);
     }
     else {
         QString bt = cl->get_base_type().get_full_type();
 
         if (bt.isEmpty() &&		// no base_type, try with a dependency
-            (cl->browser_node->children(inh, UmlDependency), inh.count() != 0))
+                (cl->browser_node->children(inh, UmlDependency), inh.count() != 0))
             bt = ((RelationData *) inh.at(0)->get_data())->get_end_class()->full_name(TRUE);
 
-        edbasetype->insertItem(bt);
+        edbasetype->addItem(bt);
 
         if (isWritable) {
-            edbasetype->insertStringList(GenerationSettings::basic_types());
-            edbasetype->insertStringList(node_names);
+            edbasetype->addItems(GenerationSettings::basic_types());
+            edbasetype->addItems(node_names);
             edbasetype->setAutoCompletion(completion());
         }
     }
 
-    edbasetype->setCurrentItem(0);
+    edbasetype->setCurrentIndex(0);
     edbasetype->setSizePolicy(sp);
     artifact->clear();
     artifact->show();
@@ -3063,33 +3060,33 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
         if (!isWritable) {
             if ((bc != 0) && !bc->deletedp()) {
-                artifact->insertItem(bc->full_name(TRUE));
+                artifact->addItem(bc->full_name(TRUE));
             }
             else
                 artifact->hide();
         }
         else {
-            BrowserArtifact::instances(artifacts, TR("source"));
+            BrowserArtifact::instances(artifacts, QObject::tr("source").toLatin1().constData());
 
             if (!artifacts.isEmpty()) {
                 QStringList artifact_names;
                 artifacts.full_names(artifact_names);
-                artifact->insertItem("");
-                artifact->insertStringList(artifact_names);
+                artifact->addItem("");
+                artifact->addItems(artifact_names);
 
                 if (bc != 0) {
                     if (bc->deletedp()) {
                         QString fn = bc->full_name(TRUE);
 
-                        artifact->insertItem(fn);
+                        artifact->addItem(fn);
                         artifacts.append(bc);
-                        artifact->setCurrentItem(artifacts.count());
+                        artifact->setCurrentIndex(artifacts.count());
                     }
                     else
-                        artifact->setCurrentItem(artifacts.indexOf(bc) + 1);
+                        artifact->setCurrentIndex(artifacts.indexOf(bc) + 1);
                 }
                 else
-                    artifact->setCurrentItem(0);
+                    artifact->setCurrentIndex(0);
             }
             else
                 artifact->hide();
@@ -3155,7 +3152,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     if (currentNode->nestedp()) {
         bgvCpp = cpp_visibility.init(htabcpp, cl->get_cpp_visibility(),
-                                     FALSE, 0, TR("follow uml"));
+                                     FALSE, 0, QObject::tr("follow uml"));
 
         if (!isWritable)
             bgvCpp->setEnabled(FALSE);
@@ -3273,7 +3270,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     same_width(lbl1java, lbl2java, lbl3java, lbl4java);
     javaannotation = (const char *) cl->java_annotation;
-    pbJavaAnnotation->setText(!isWritable ? TR("Show annotation") : TR("Edit annotation"));
+    pbJavaAnnotation->setText(!isWritable ? QObject::tr("Show annotation") : QObject::tr("Edit annotation"));
 
     if (!GenerationSettings::java_get_default_defs())
         HideTab("Java");
@@ -3414,19 +3411,19 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     if (isWritable) {
         edswitch_type->setAutoCompletion(completion());
-        edswitch_type->insertItem(cl->get_switch_type().get_full_type());
-        edswitch_type->insertStringList(GenerationSettings::basic_types());
+        edswitch_type->addItem(cl->get_switch_type().get_full_type());
+        edswitch_type->addItems(GenerationSettings::basic_types());
 
         foreach (BrowserNode *item, nodes) {
             QString st =
-                idl_stereotype(((ClassData *)(item->get_data()))->get_stereotype());
+                    idl_stereotype(((ClassData *)(item->get_data()))->get_stereotype());
 
             if (st == "enum")
-                edswitch_type->insertItem(item->full_name(TRUE));
+                edswitch_type->addItem(item->full_name(TRUE));
         }
     }
 
-    edswitch_type->setCurrentItem(0);
+    edswitch_type->setCurrentIndex(0);
 
     if (cl->idl_is_external())
         idl_external_cb->setChecked(TRUE);
@@ -3516,41 +3513,41 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     {
 
         QString s;
-        s = currentNode->get_value("stereotypeSet");
-        stereo_init_cb->insertItem(s);
+        s = QString(currentNode->get_value("stereotypeSet"));
+        stereo_init_cb->addItem(s);
         QStringList tools = Tool::all_display();
 
         if (isWritable) {
             if (!s.isEmpty())
-                stereo_init_cb->insertItem("");
+                stereo_init_cb->addItem("");
 
-            stereo_init_cb->insertStringList(tools);
+            stereo_init_cb->addItems(tools);
         }
         else {
             stereo_init_cb->clear();
         }
 
-        stereo_init_cb->setCurrentItem(0);
+        stereo_init_cb->setCurrentIndex(0);
 
         edinitparam->setReadOnly(!isWritable);
 
-        s = currentNode->get_value("stereotypeCheck");
+        s = QString(currentNode->get_value("stereotypeCheck"));
 
         stereo_check_cb->clear();
-        stereo_check_cb->insertItem(s);
+        stereo_check_cb->addItem(s);
 
         if (isWritable) {
             if (! s.isEmpty())
-                stereo_check_cb->insertItem("");
+                stereo_check_cb->addItem("");
 
-            stereo_check_cb->insertStringList(tools);
+            stereo_check_cb->addItems(tools);
         }
 
-        stereo_check_cb->setCurrentItem(0);
+        stereo_check_cb->setCurrentIndex(0);
 
         edcheckparam->setReadOnly(!isWritable);
 
-        QString ip = currentNode->get_value("stereotypeIconPath");
+        QString ip = QString(currentNode->get_value("stereotypeIconPath"));
 
         ediconpath->setText(ip);
 
@@ -3562,9 +3559,9 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
             ediconpath->setReadOnly(TRUE);
             iconpathrootbutton = iconpathprjbutton = 0;
 
-            RelativeRoot = TR("");
-            RelativePrj = TR("");
-            Absolute = TR("");
+            RelativeRoot = QObject::tr("");
+            RelativePrj = QObject::tr("");
+            Absolute = QObject::tr("");
             lblProfiledEmpty->hide();
             lblProfiledEmpty2->hide();
             lblProfiledEmpty3->hide();
@@ -3576,9 +3573,9 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
             connect(iconpathrootbutton, SIGNAL(clicked()), this, SLOT(icon_root_relative()));
             connect(iconpathprjbutton, SIGNAL(clicked()), this, SLOT(icon_prj_relative()));
 
-            RelativeRoot = TR("Set it relative to image root");
-            RelativePrj = TR("Set it relative to project");
-            Absolute = TR("Set it absolute");
+            RelativeRoot = QObject::tr("Set it relative to image root");
+            RelativePrj = QObject::tr("Set it relative to project");
+            Absolute = QObject::tr("Set it absolute");
 
             lblProfiledEmpty->show();
             pbProfiledSteretypeBrowse->show();
@@ -3599,7 +3596,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
         if (applicableon_table)
             delete applicableon_table;
 
-        applicableon_table = new ApplicableOnTable(stereotypeGrid, currentNode->get_value("stereotypeApplyOn"), !isWritable);
+        stereotypeGrid->addWidget(applicableon_table = new ApplicableOnTable(stereotypeGrid, currentNode->get_value("stereotypeApplyOn"), !isWritable));
 
         ShowTab("Stereotype");
     }
@@ -3618,7 +3615,7 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
     kvtable->remove("stereotypeIconPath");
     //
 
-    QString stereotype = fromUnicode(edstereotype->currentText());
+    QString stereotype = edstereotype->currentText();//fromUnicode(edstereotype->currentText());
 
     current_cpp_stereotype = cpp_stereotype(stereotype);
     current_java_stereotype = java_stereotype(stereotype);
@@ -3628,8 +3625,8 @@ void ClassDialog::FillGuiElements(ClassData * _cl)
 
     edStereotypeActivated(stereotype);
 
-    connect(this, SIGNAL(currentChanged(QWidget *)),
-            this, SLOT(update_all_tabs(QWidget *)));
+    connect(m_tabWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(update_all_tabs(int)));
 
     update_all_tabs(0);
 }
@@ -3678,7 +3675,6 @@ void ClassDialog::NullPointers()
     stereotypeGrid = 0;
     htabUml = 0;
 
-
     currentNode = 0;
     grandParent = 0;
 
@@ -3701,22 +3697,22 @@ bool ClassDialog::SaveData()
     BrowserClass * bn = (BrowserClass *) cl->get_browser_node();
     QString oldname = cl->browser_node->get_name();
     bool was_st = !strcmp(cl->get_stereotype(), "stereotype");
-    QString st = fromUnicode(edstereotype->currentText().stripWhiteSpace());
+    QString st = edstereotype->currentText().trimmed();/*fromUnicode(edstereotype->currentText().trimmed())*/;
     QString err;
     QString s;
 
-    s = edname->text().stripWhiteSpace();
+    s = edname->text().trimmed();
 
     if (s != oldname) {
         if (((BrowserNode *) bn->parent())->wrong_child_name(s, UmlClass,
-                bn->allow_spaces(),
-                bn->allow_empty())) {
-            msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
+                                                             bn->allow_spaces(),
+                                                             bn->allow_empty())) {
+            msg_critical(TR("Error"), s + QObject::tr("\n\nillegal name or already used"));
             return true;
         }
 
         if ((st == "stereotype") &&
-            (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
+                (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
             msg_critical(TR("Error"), s + " " + err);
             return true;
         }
@@ -3725,17 +3721,17 @@ bool ClassDialog::SaveData()
     }
     else if (st == "stereotype") {
         if (!was_st &&
-            (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
+                (!(err = ProfiledStereotypes::canAddStereotype(bn, s)).isEmpty())) {
             msg_critical(TR("Error"), oldname + " " + err);
             return true;
         }
         else if (stereotypetab != 0) {
-            WrapperStr path = fromUnicode(ediconpath->text().simplifyWhiteSpace());
+            WrapperStr path = ediconpath->text().simplified().toLatin1().constData()/*fromUnicode(ediconpath->text().simplified())*/;
 
             if (!path.isEmpty() && (get_pixmap((const char *) path) == 0)) {
                 msg_critical(TR("Error"),
                              ((const char *) path) +
-                             TR("\ndoesn't exist or is not a know image format"));
+                             QObject::tr("\ndoesn't exist or is not a know image format"));
                 return true;
             }
         }
@@ -3744,7 +3740,7 @@ bool ClassDialog::SaveData()
     bool newst = cl->set_stereotype(st);
 
     if (st == "typedef")
-        cl->set_base_type(the_type(edbasetype->currentText().stripWhiteSpace(),
+        cl->set_base_type(the_type(edbasetype->currentText().trimmed(),
                                    node_names, nodes));
 
     cl->is_abstract = abstract_cb->isChecked();
@@ -3753,11 +3749,12 @@ bool ClassDialog::SaveData()
     cl->uml_visibility = uml_visibility.value();
 
     if (artifact != 0) {
-        int index = artifact->currentItem();
+        int index = artifact->currentIndex();
 
-        bn->set_associated_artifact((index == 0)
-                                    ? 0 // "" : no artifact
-                                    : ((BrowserArtifact *) artifacts.at(index - 1)));
+        if(index > 0)
+            bn->set_associated_artifact((index == 0)
+                                        ? 0 // "" : no artifact
+                                        : ((BrowserArtifact *) artifacts.at(index - 1)));
     }
 
     formals_table->update(cl, nodes);
@@ -3768,7 +3765,7 @@ bool ClassDialog::SaveData()
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
 
-    cl->constraint = constraint->stripWhiteSpaceText();
+    cl->constraint = constraint->trimmedText();
 
     cl->cpp_external = cpp_external_cb->isChecked();
     cl->cpp_decl = edcppdecl->text();
@@ -3797,10 +3794,10 @@ bool ClassDialog::SaveData()
     if (switch_bg->isEnabled()) {
         AType swt;
 
-        s = edswitch_type->currentText().stripWhiteSpace();
+        s = edswitch_type->currentText().trimmed();
 
         if (! s.isEmpty()) {
-            int index = node_names.findIndex(s);
+            int index = node_names.indexOf(s);
 
             if (index >= 0)
                 swt.type = (BrowserClass *) nodes.at(index);
@@ -3817,19 +3814,19 @@ bool ClassDialog::SaveData()
         if (st == "stereotype") {
             unsigned n = bn->get_n_keys();
             WrapperStr oldiconpath = bn->get_value("stereotypeIconPath");
-            WrapperStr newiconpath = fromUnicode(ediconpath->text().simplifyWhiteSpace());
+            WrapperStr newiconpath = fromUnicode(ediconpath->text().simplified());
 
             bn->set_n_keys(n + 6);
             bn->set_key(n, "stereotypeSet");
-            bn->set_value(n, stereo_init_cb->currentText());
+            bn->set_value(n, stereo_init_cb->currentText().toLatin1().constData());
             bn->set_key(++n, "stereotypeCheck");
-            bn->set_value(n, stereo_check_cb->currentText());
+            bn->set_value(n, stereo_check_cb->currentText().toLatin1().constData());
             bn->set_key(++n, "stereotypeSetParameters");
-            bn->set_value(n, fromUnicode(edinitparam->text().simplifyWhiteSpace()));
+            bn->set_value(n, fromUnicode(edinitparam->text().simplified().toLatin1().constData()));
             bn->set_key(++n, "stereotypeCheckParameters");
-            bn->set_value(n, fromUnicode(edcheckparam->text().simplifyWhiteSpace()));
+            bn->set_value(n, fromUnicode(edcheckparam->text().simplified().toLatin1().constData()));
             bn->set_key(++n, "stereotypeApplyOn");
-            bn->set_value(n, applicableon_table->targets());
+            bn->set_value(n, applicableon_table->targets().toLatin1().constData());
             bn->set_key(++n, "stereotypeIconPath");
             bn->set_value(n, newiconpath);
 

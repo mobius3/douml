@@ -33,7 +33,6 @@
 
 #include "UmlDrag.h"
 #include "BrowserNode.h"
-//Added by qt3to4:
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
@@ -43,14 +42,14 @@ bool UmlDrag::ro;
 BrowserNode* UmlDrag::node = nullptr;
 
 UmlDrag::UmlDrag(BrowserNode * bn, QWidget * parent, const char * name)
-    : Q3StoredDrag(UmlDrag::Key + bn->drag_key(), parent, name)
+    : QMimeData(/*UmlDrag::Key + bn->drag_key(), parent, name*/)
 {
     // stay in the same application : can use address directly
-    QByteArray a(sizeof(bn));
-    node = bn;
-    memcpy(a.data(), &bn, sizeof(bn));
-    setEncodedData(a);
 
+    QByteArray a((char *)&bn, sizeof(bn));
+    QString thisKey = UmlDrag::Key + bn->drag_key();
+    node = bn;
+    setData(thisKey, a);
     postfix = bn->drag_postfix();
     ro = ((bn->parent() != 0) &&
           !((BrowserNode *) bn->parent())->is_writable());
@@ -64,20 +63,20 @@ bool UmlDrag::canDecode(QDragMoveEvent * e, UmlCode type,
         return FALSE;
 
     return (e->source() != 0) &&
-           e->provides((withpostfix) ? UmlDrag::Key + QString::number(type) + postfix
+           e->mimeData()->hasFormat((withpostfix) ? UmlDrag::Key + QString::number(type) + postfix
                        : UmlDrag::Key + QString::number(type));
 }
 
 bool UmlDrag::canDecode(QDragMoveEvent * e, const QString & type)
 {
-    return !ro && (e->source() != 0) && e->provides(UmlDrag::Key + type);
+    return !ro && (e->source() != 0) && e->mimeData()->hasFormat(UmlDrag::Key + type);
 }
 
 BrowserNode * UmlDrag::decode(QDropEvent * e, UmlCode type,
                               bool withpostfix)
 {
     QByteArray payload =
-        e->data((withpostfix) ? UmlDrag::Key + QString::number(type) + postfix
+        e->mimeData()->data((withpostfix) ? UmlDrag::Key + QString::number(type) + postfix
                 : UmlDrag::Key + QString::number(type));
 
     if (payload.size()) {
@@ -93,7 +92,7 @@ BrowserNode * UmlDrag::decode(QDropEvent * e, UmlCode type,
 
 BrowserNode * UmlDrag::decode(QDropEvent * e, const QString & type)
 {
-    QByteArray payload = e->data(UmlDrag::Key + type);
+    QByteArray payload = e->mimeData()->data(UmlDrag::Key + type);
 
     if (payload.size()) {
         e->accept();

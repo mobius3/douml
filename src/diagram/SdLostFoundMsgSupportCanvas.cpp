@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -76,18 +76,18 @@ bool SdLostFoundMsgSupportCanvas::copyable() const
 void SdLostFoundMsgSupportCanvas::change_scale()
 {
     // the size is not modified
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     recenter();
 
     if (msg != 0)
         msg->update_hpos();
 
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void SdLostFoundMsgSupportCanvas::set_z(double newz)
 {
-    DiagramCanvas::set_z((msg != 0) ? msg->z() : newz);
+    DiagramCanvas::set_z((msg != 0) ? msg->zValue() : newz);
 }
 
 void SdLostFoundMsgSupportCanvas::draw(QPainter & p)
@@ -118,8 +118,11 @@ void SdLostFoundMsgSupportCanvas::draw(QPainter & p)
 
     // don't use show_mark is selected : too small
 }
-
-UmlCode SdLostFoundMsgSupportCanvas::type() const
+void SdLostFoundMsgSupportCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode SdLostFoundMsgSupportCanvas::typeUmlCode() const
 {
     return UmlLostFoundMsgSupport;
 }
@@ -134,14 +137,14 @@ void SdLostFoundMsgSupportCanvas::menu(const QPoint &)
 
 QString SdLostFoundMsgSupportCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("illegal");
+    return (l == UmlAnchor) ? QString() :  QObject::tr("illegal");
 }
 
 QString SdLostFoundMsgSupportCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
     return (l == UmlAnchor)
            ? dest->may_start(l)
-           : TR("illegal");
+           :  QObject::tr("illegal");
 }
 
 void SdLostFoundMsgSupportCanvas::add(SdMsgBaseCanvas * m)
@@ -226,7 +229,7 @@ SdLostFoundMsgSupportCanvas * SdLostFoundMsgSupportCanvas::read(char *& st,
     SdLostFoundMsgSupportCanvas * result =
         new SdLostFoundMsgSupportCanvas(canvas, x, (int) read_double(st), id);
 
-    result->setZ(read_double(st));
+    result->setZValue(read_double(st));
     result->show();
 
     return result;

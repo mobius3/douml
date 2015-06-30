@@ -60,6 +60,7 @@ protected:
     ActivityObjectCanvas(UmlCanvas * canvas, int id);
     void check_selection();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ActivityObjectCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityObjectCanvas();
@@ -72,7 +73,7 @@ public:
     void compute_size();
     bool force_inside();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void open();
     virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;

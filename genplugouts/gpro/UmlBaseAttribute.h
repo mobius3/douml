@@ -4,7 +4,7 @@
 
 #include "UmlClassMember.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "UmlTypeSpec.h"
 
 class UmlAttribute;
@@ -13,9 +13,8 @@ class UmlOperation;
 
 //  Manage the class's attributs
 
-class UmlBaseAttribute : public UmlClassMember
-{
-public:
+class UmlBaseAttribute : public UmlClassMember {
+  public:
     // returns a new attribute named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -30,15 +29,15 @@ public:
     bool isReadOnly();
 
     // to set the 'read only' state of the attribute
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isReadOnly(bool y);
 
     // returns the default attribute value, may be an empty string
-    const Q3CString & defaultValue();
+    const QByteArray & defaultValue();
 
     // to set the default attribute value ("" allowed)
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_DefaultValue(const char * s);
 
@@ -46,7 +45,7 @@ public:
     const UmlTypeSpec & type();
 
     // to set the attribute UML type
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_Type(const UmlTypeSpec & t);
 
@@ -54,16 +53,16 @@ public:
     UmlOperation * getOperation();
 
     // to generate an associated 'get' operation
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool addGetOperation();
 
     // returns the 'set' operation of the attribute, or 0 if it does not exist
-
+    
     UmlOperation * setOperation();
 
     // to generate an associated 'set' operation
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool addSetOperation();
 
@@ -81,7 +80,7 @@ public:
     bool isJavaTransient();
 
     // to set the 'transient' state of the attribute
-    //
+    // 
     // On error return FALSE in C++, produce a RuntimeException in Java
     bool set_isJavaTransient(bool y);
 #endif
@@ -89,7 +88,7 @@ public:
 #ifdef WITHIDL
     // in case the attribute is an IDL union's member returns the
     // corresponding 'case', an empty string in case it is not specified
-    Q3CString idlCase();
+    QByteArray idlCase();
 
     // to set the 'case' even the attribute is not (already) known as
     // an IDL union's member
@@ -109,7 +108,7 @@ public:
     virtual void unload(bool = FALSE, bool = FALSE);
 
 
-private:
+  private:
     bool _read_only;
 
 #ifdef WITHCPP
@@ -119,7 +118,7 @@ private:
     bool _java_transient;
 #endif
 
-    Q3CString _default_value;
+    QByteArray _default_value;
 
     UmlTypeSpec _type;
 
@@ -131,16 +130,16 @@ private:
     // exclusive with idl_explicit_case
     UmlAttribute * _idl_case;
 
-    Q3CString _idl_explicit_case;
+    QByteArray _idl_explicit_case;
 #endif
 
 
-public:
+  public:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseAttribute(void * id, const Q3CString & n);
+    UmlBaseAttribute(void * id, const QByteArray & n);
 
 
-protected:
+  protected:
     virtual void read_uml_();
 
 #ifdef WITHCPP
@@ -151,19 +150,32 @@ protected:
     virtual void read_java_();
 #endif
 
+#ifdef WITHPHP
+    //internal, do NOT use it
+
+    virtual void read_php_();
+#endif
+
+#ifdef WITHPYTHON
+    //internal, do NOT use it
+
+    virtual void read_python_();
+#endif
+
 #ifdef WITHIDL
+    //internal, do NOT use it
+
     virtual void read_idl_();
 #endif
 
 };
 
-inline UmlBaseAttribute::UmlBaseAttribute(void * id, const Q3CString & n) : UmlClassMember(id, n)
-{
-    _get_oper = 0;
-    _set_oper = 0;
-
+inline UmlBaseAttribute::UmlBaseAttribute(void * id, const QByteArray & n) : UmlClassMember(id, n) {
+  _get_oper = 0;
+  _set_oper = 0;
+  
 #ifdef WITHIDL
-    _idl_case = 0;
+  _idl_case = 0;
 #endif
 }
 

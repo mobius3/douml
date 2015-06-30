@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 #include "UmlClass.h"	// to avoid destructor problem
 class UmlComponent;
@@ -12,9 +12,8 @@ class UmlComponentView;
 class UmlComponentDiagram;
 
 //  Manage the components.
-class UmlBaseComponent : public UmlItem
-{
-public:
+class UmlBaseComponent : public UmlItem {
+  public:
     // returns a new component named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -34,21 +33,20 @@ public:
     bool set_AssociatedDiagram(UmlComponentDiagram * d);
 
 
-private:
+  private:
     UmlComponentDiagram * _assoc_diagram;
 
 
-protected:
+  protected:
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseComponent(void * id, const Q3CString & n);
+    UmlBaseComponent(void * id, const QByteArray & n);
 
 };
 
-inline UmlBaseComponent::UmlBaseComponent(void * id, const Q3CString & n) : UmlItem(id, n)
-{
-    _assoc_diagram = 0;
+inline UmlBaseComponent::UmlBaseComponent(void * id, const QByteArray & n) : UmlItem(id, n) {
+  _assoc_diagram = 0;
 }
 
 #endif

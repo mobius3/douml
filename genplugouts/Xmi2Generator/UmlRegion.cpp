@@ -5,7 +5,7 @@
 
 void UmlRegion::memo_incoming_trans()
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 
@@ -39,7 +39,7 @@ void UmlRegion::write(FileOut & out)
 
     write_description_properties(out);
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 

@@ -39,6 +39,7 @@ EdgeMenuToolBar::EdgeMenuToolBar(QWidget * _parent) : QToolBar(_parent)
 
 EdgeMenuToolBar::~EdgeMenuToolBar()
 {
+    printf("toolbar deleted\r\n");
 }
 
 void EdgeMenuToolBar::SetRelativeOrientation(int value)

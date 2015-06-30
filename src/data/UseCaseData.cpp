@@ -61,9 +61,10 @@ UseCaseData::~UseCaseData()
 
 void UseCaseData::edit()
 {
-    setName(browser_node->get_name());
+    setObjectName(browser_node->get_name());
 
     (new UseCaseDialog(this))->show();
+
 }
 
 void UseCaseData::set_extension_points(QString s)

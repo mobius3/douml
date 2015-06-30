@@ -80,7 +80,7 @@ QString ParamData::definition(bool withdir, bool withname,
 
         QString v = default_value;
 
-        v = v.simplifyWhiteSpace();
+        v = v.simplified();
 
         return ((dir == UmlOut) || v.isEmpty())
                ? r

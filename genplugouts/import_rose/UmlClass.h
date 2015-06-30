@@ -3,9 +3,9 @@
 
 
 #include "UmlBaseClass.h"
-#include <q3cstring.h>
+#include <QByteArray>
 #include "Language.h"
-#include <q3dict.h>
+
 
 class File;
 class UmlItem;
@@ -19,15 +19,15 @@ class Artifact;
 class UmlClass : public UmlBaseClass
 {
 public:
-    UmlClass(void * id, const Q3CString & n) : UmlBaseClass(id, n) {
+    UmlClass(void * id, const QByteArray & n) : UmlBaseClass(id, n) {
         cpt[kind()] += 1;
     };
 
     Language language() const;
 
-    static UmlClass * import(File & f, UmlItem * parent, const Q3CString & knd);
+    static UmlClass * import(File & f, UmlItem * parent, const QByteArray & knd);
 
-    static bool replaceType(UmlTypeSpec & t, Q3CString & target_id, const Q3CString & ts);
+    static bool replaceType(UmlTypeSpec & t, QByteArray & target_id, const QByteArray & ts);
 
 
 private:
@@ -45,31 +45,31 @@ private:
 
     void importClasses(File & f);
 
-    static void importIdlConstant(UmlItem * parent, const Q3CString & id, const Q3CString & s, const Q3CString & doc, Q3Dict<Q3CString> & prop);
+    static void importIdlConstant(UmlItem * parent, const QByteArray & id, const QByteArray & s, const QByteArray & doc, QHash<QByteArray, QByteArray*> & prop);
 
-    void cplusplus(Q3Dict<Q3CString> & prop);
+    void cplusplus(QHash<QByteArray, QByteArray*> & prop);
 
-    void oracle8(Q3Dict<Q3CString> & prop);
+    void oracle8(QHash<QByteArray, QByteArray*> & prop);
 
-    void corba(Q3Dict<Q3CString> & prop);
+    void corba(QHash<QByteArray, QByteArray*> & prop);
 
-    void java(Q3Dict<Q3CString> & prop);
+    void java(QHash<QByteArray, QByteArray*> & prop);
 
-    void assocArtifact(Artifact * c, Q3CString & art_path);
+    void assocArtifact(Artifact * c, QByteArray & art_path);
 
 
 public:
-    const Q3CString file() const;
+    const QByteArray file() const;
 
-    const Q3CString bodyFile() const;
+    const QByteArray bodyFile() const;
 
 
 protected:
     Language lang;
 
-    Q3CString _file;
+    QByteArray _file;
 
-    Q3CString _body_file;
+    QByteArray _body_file;
 
 };
 
@@ -78,12 +78,12 @@ inline Language UmlClass::language() const
     return lang;
 }
 
-inline const Q3CString UmlClass::file() const
+inline const QByteArray UmlClass::file() const
 {
     return _file;
 }
 
-inline const Q3CString UmlClass::bodyFile() const
+inline const QByteArray UmlClass::bodyFile() const
 {
     return _body_file;
 }

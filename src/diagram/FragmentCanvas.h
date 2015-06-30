@@ -53,6 +53,7 @@ protected:
 
     void check_size();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     FragmentCanvas(UmlCanvas * canvas, int x, int y, int id);
     virtual ~FragmentCanvas();
@@ -63,7 +64,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
@@ -96,7 +97,7 @@ public:
         return form;
     }
 
-    static void send(ToolCom * com, Q3CanvasItemList & all,
+    static void send(ToolCom * com, QList<QGraphicsItem*> & all,
                      QList<FragmentCanvas *> & fragments,
                      QList<FragmentCanvas *> & refs);
 

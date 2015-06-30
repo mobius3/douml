@@ -10,7 +10,7 @@ CONFIG(Release, Debug|Release) {
     CONFIG += qt Release
     QMAKE_POST_LINK = " "
 }
-DEFINES        = BooL=bool
+DEFINES        += BooL=bool
 HEADERS        = ./aVisibility.h \
           ./UmlBaseExtraClassMember.h \
           ./UmlBaseComponentDiagram.h \
@@ -122,7 +122,8 @@ HEADERS        = ./aVisibility.h \
           ./UmlBaseDeployment.h \
           ./UmlStereotype.h \
           ./UmlDeploymentDiagram.h \
-          ./UmlUseCase.h
+          ./UmlUseCase.h \
+    hhbox.h
 SOURCES        = ./aVisibility.cpp \
           ./UmlBaseExtraClassMember.cpp \
           ./UmlBaseComponentDiagram.cpp \
@@ -235,12 +236,13 @@ SOURCES        = ./aVisibility.cpp \
           ./UmlBaseDeployment.cpp \
           ./UmlStereotype.cpp \
           ./UmlDeploymentDiagram.cpp \
-          ./UmlUseCase.cpp
+          ./UmlUseCase.cpp \
+    hhbox.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+DEFINES += TRUE=true FALSE=false
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/file_control

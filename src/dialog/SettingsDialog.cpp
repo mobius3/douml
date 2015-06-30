@@ -29,11 +29,10 @@
 
 
 
-
-#include <q3hbox.h>
-#include <q3grid.h>
+#include <hhbox.h>
+#include <gridbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <QComboBox.h>
 #include <qpushbutton.h>
 
 #include "Settings.h"
@@ -41,7 +40,8 @@
 #include "UmlPixmap.h"
 #include "UmlDesktop.h"
 #include "translate.h"
-
+#include "widgetwithlayout.h"
+#include <QLayout>
 void ColorSpecVector::resize(int s)
 {
     ColorSpec * v = new ColorSpec[s];
@@ -54,7 +54,7 @@ void ColorSpecVector::resize(int s)
     _size = s;
 }
 
-class ComboStates : public Q3ComboBox
+class ComboStates : public QComboBox
 {
 public:
     ComboStates(QWidget * parent, Uml3States v, bool nodefault, bool unchanged);
@@ -68,128 +68,129 @@ public:
 
 ComboStates::ComboStates(QWidget * parent, Uml3States v,
                          bool nodefault, bool unchanged)
-    : Q3ComboBox(FALSE, parent)
+    : QComboBox(parent)
 {
-    insertItem(TR(stringify((Uml3States) 0)));
-    insertItem(TR(stringify((Uml3States) 1)));
+    this->setEditable(false);
+    addItem(TR(stringify((Uml3States) 0)));
+    addItem(TR(stringify((Uml3States) 1)));
 
     // the last value MUST be default
     if (!nodefault)
-        insertItem(TR(stringify((Uml3States) 2)));
+        addItem(TR(stringify((Uml3States) 2)));
 
     if (unchanged) {
-        insertItem(TR("<unchanged>"));
-        setCurrentItem(count() - 1);
+        addItem(TR("<unchanged>"));
+        setCurrentIndex(count() - 1);
     }
     else
-        setCurrentItem(v);
+        setCurrentIndex(v);
 }
 
 ComboStates::ComboStates(QWidget * parent, ClassDrawingMode v,
                          bool nodefault, bool unchanged)
-    : Q3ComboBox(FALSE, parent)
+    : QComboBox( parent)
 {
     int i;
-
+    this->setEditable(false);
     for (i = 0; i != (int) DefaultClassDrawingMode; i += 1)
-        insertItem(TR(stringify((ClassDrawingMode) i)));
+        addItem(TR(stringify((ClassDrawingMode) i)));
 
     // the last value MUST be default
     if (!nodefault)
-        insertItem(TR(stringify((ClassDrawingMode) i)));
+        addItem(TR(stringify((ClassDrawingMode) i)));
 
     if (unchanged) {
-        insertItem(TR("<unchanged>"));
-        setCurrentItem(count() - 1);
+        addItem(TR("<unchanged>"));
+        setCurrentIndex(count() - 1);
     }
     else
-        setCurrentItem(v);
+        setCurrentIndex(v);
 }
 
 ComboStates::ComboStates(QWidget * parent, DrawingLanguage v,
                          bool nodefault, bool unchanged)
-    : Q3ComboBox(FALSE, parent)
+    : QComboBox(parent)
 {
     int i;
-
+    this->setEditable(false);
     for (i = 0; i != (int) DefaultDrawingLanguage; i += 1)
-        insertItem(stringify((DrawingLanguage) i));
+        addItem(stringify((DrawingLanguage) i));
 
     // the last value MUST be default
     if (!nodefault)
-        insertItem(TR(stringify((DrawingLanguage) i)));
+        addItem(TR(stringify((DrawingLanguage) i)));
 
     if (unchanged) {
-        insertItem(TR("<unchanged>"));
-        setCurrentItem(count() - 1);
+        addItem(TR("<unchanged>"));
+        setCurrentIndex(count() - 1);
     }
     else
-        setCurrentItem(v);
+        setCurrentIndex(v);
 }
 
 static QString _2space(QString s)
 {
-    int index = s.find("_");
+    int index = s.indexOf("_");
 
     return (index == -1) ? s : s.replace(index, 1, " ");
 }
 
 ComboStates::ComboStates(QWidget * parent, ShowContextMode v,
                          bool nodefault, bool unchanged)
-    : Q3ComboBox(FALSE, parent)
+    : QComboBox(parent)
 {
     int i;
-
+    this->setEditable(false);
     for (i = 0; i != (int) DefaultShowContextMode; i += 1)
-        insertItem(_2space(TR(stringify((ShowContextMode) i))));
+        addItem(_2space(TR(stringify((ShowContextMode) i))));
 
     // the last value MUST be default
     if (!nodefault)
-        insertItem(_2space(TR(stringify((ShowContextMode) i))));
+        addItem(_2space(TR(stringify((ShowContextMode) i))));
 
     if (unchanged) {
-        insertItem(TR("<unchanged>"));
-        setCurrentItem(count() - 1);
+        addItem(TR("<unchanged>"));
+        setCurrentIndex(count() - 1);
     }
     else
-        setCurrentItem(v);
+        setCurrentIndex(v);
 }
 
 
 ComboStates::ComboStates(QWidget * parent, char v,
                          bool nodefault, bool unchanged)
-    : Q3ComboBox(FALSE, parent)
+    : QComboBox(parent)
 {
     int i;
-
+    this->setEditable(false);
     for (i = MinMemberWidthValue; i != SupMemberWidthValue; i += 1) {
         char s[4];
 
         sprintf(s, "%d", i);
-        insertItem(s);
+        addItem(s);
     }
 
-    insertItem(TR("unlimited"));
+    addItem(TR("unlimited"));
 
     if (!nodefault)
-        insertItem(TR("default"));
+        addItem(TR("default"));
 
     if (unchanged) {
-        insertItem(TR("<unchanged>"));
-        setCurrentItem(count() - 1);
+        addItem(TR("<unchanged>"));
+        setCurrentIndex(count() - 1);
     }
     else {
         switch (v) {
         case UmlDefaultMaxMemberWidth:
-            setCurrentItem(SupMemberWidthValue - MinMemberWidthValue + 1);
+            setCurrentIndex(SupMemberWidthValue - MinMemberWidthValue + 1);
             break;
 
         case UmlUnlimitedMemberWidth:
-            setCurrentItem(SupMemberWidthValue - MinMemberWidthValue);
+            setCurrentIndex(SupMemberWidthValue - MinMemberWidthValue);
             break;
 
         default:
-            setCurrentItem(v - MinMemberWidthValue);
+            setCurrentIndex(v - MinMemberWidthValue);
             break;
         }
     }
@@ -197,14 +198,14 @@ ComboStates::ComboStates(QWidget * parent, char v,
 
 QSize ComboStates::sizeHint() const
 {
-    QSize sz = Q3ComboBox::sizeHint();
+    QSize sz = QComboBox::sizeHint();
 
-    sz.setHeight(fontMetrics().height() + 4);
+    sz.setHeight(fontMetrics().height() + 1);
     return sz;
 }
 
 
-class ComboColor : public Q3ComboBox
+class ComboColor : public QComboBox
 {
 public:
     ComboColor(QWidget * parent, UmlColor v,
@@ -213,157 +214,157 @@ public:
 
 ComboColor::ComboColor(QWidget * parent, UmlColor v,
                        bool nodefault, bool unchanged)
-    : Q3ComboBox(FALSE, parent)
+    : QComboBox(parent)
 {
-    QString s_transparent = TR("Transparent");
-    QString s_unknown_color = TR("Unknown color");
-
+    QString s_transparent = QObject::tr("Transparent");
+    QString s_unknown_color = QObject::tr("Unknown color");
+    this->setEditable(false);
     // the last value MUST be default
     for (int i = 0; i != (int) UmlDefaultColor; i += 1) {
         // use switch to not be dependant on the colors items order and number
         switch (i) {
         case UmlTransparent:
-            insertItem(s_transparent);
+            addItem(s_transparent);
             break;
 
         case UmlWhite:
-            insertItem(* WhitePixmap);
+            addItem(QIcon(* WhitePixmap), "");
             break;
 
         case UmlLightYellow:
-            insertItem(* LightYellowPixmap);
+            addItem(QIcon(* LightYellowPixmap), "");
             break;
 
         case UmlYellow:
-            insertItem(* YellowPixmap);
+            addItem(QIcon(* YellowPixmap), "");
             break;
 
         case UmlMediumYellow:
-            insertItem(* MediumYellowPixmap);
+            addItem(QIcon(* MediumYellowPixmap), "");
             break;
 
         case UmlDarkYellow:
-            insertItem(* DarkYellowPixmap);
+            addItem(QIcon(* DarkYellowPixmap), "");
             break;
 
         case UmlLightBlue:
-            insertItem(* LightBluePixmap);
+            addItem(QIcon(* LightBluePixmap), "");
             break;
 
         case UmlBlue:
-            insertItem(* BluePixmap);
+            addItem(QIcon(* BluePixmap), "");
             break;
 
         case UmlLightMediumBlue:
-            insertItem(* LightMediumBluePixmap);
+            addItem(QIcon(* LightMediumBluePixmap), "");
             break;
 
         case UmlMediumBlue:
-            insertItem(* MediumBluePixmap);
+            addItem(QIcon(* MediumBluePixmap), "");
             break;
 
         case UmlDarkBlue:
-            insertItem(* DarkBluePixmap);
+            addItem(QIcon(* DarkBluePixmap), "");
             break;
 
         case UmlLightGreen:
-            insertItem(* LightGreenPixmap);
+            addItem(QIcon(* LightGreenPixmap), "");
             break;
 
         case UmlGreen:
-            insertItem(* GreenPixmap);
+            addItem(QIcon(* GreenPixmap), "");
             break;
 
         case UmlLightMediumGreen:
-            insertItem(* LightMediumGreenPixmap);
+            addItem(QIcon(* LightMediumGreenPixmap), "");
             break;
 
         case UmlMediumGreen:
-            insertItem(* MediumGreenPixmap);
+            addItem(QIcon(* MediumGreenPixmap), "");
             break;
 
         case UmlDarkGreen:
-            insertItem(* DarkGreenPixmap);
+            addItem(QIcon(* DarkGreenPixmap), "");
             break;
 
         case UmlLightRed:
-            insertItem(* LightRedPixmap);
+            addItem(QIcon(* LightRedPixmap), "");
             break;
 
         case UmlMidRed:
-            insertItem(* MidRedPixmap);
+            addItem(QIcon(* MidRedPixmap), "");
             break;
 
         case UmlRed:
-            insertItem(* RedPixmap);
+            addItem(QIcon(* RedPixmap), "");
             break;
 
         case UmlVeryLightOrange:
-            insertItem(* VeryLightOrangePixmap);
+            addItem(QIcon(* VeryLightOrangePixmap), "");
             break;
 
         case UmlLightOrange:
-            insertItem(* LightOrangePixmap);
+            addItem(QIcon(* LightOrangePixmap), "");
             break;
 
         case UmlOrange:
-            insertItem(* OrangePixmap);
+            addItem(QIcon(* OrangePixmap), "");
             break;
 
         case UmlDarkOrange:
-            insertItem(* DarkOrangePixmap);
+            addItem(QIcon(* DarkOrangePixmap), "");
             break;
 
         case UmlLightMagenta:
-            insertItem(* LightMagentaPixmap);
+            addItem(QIcon(* LightMagentaPixmap), "");
             break;
 
         case UmlMagenta:
-            insertItem(* MagentaPixmap);
+            addItem(QIcon(* MagentaPixmap), "");
             break;
 
         case UmlMidMagenta:
-            insertItem(* MidMagentaPixmap);
+            addItem(QIcon(* MidMagentaPixmap), "");
             break;
 
         case UmlDarkMagenta:
-            insertItem(* DarkMagentaPixmap);
+            addItem(QIcon(* DarkMagentaPixmap), "");
             break;
 
         case UmlVeryLightGray:
-            insertItem(* VeryLightGrayPixmap);
+            addItem(QIcon(* VeryLightGrayPixmap), "");
             break;
 
         case UmlLightGray:
-            insertItem(* LightGrayPixmap);
+            addItem(QIcon(* LightGrayPixmap), "");
             break;
 
         case UmlGray:
-            insertItem(* GrayPixmap);
+            addItem(QIcon(* GrayPixmap), "");
             break;
 
         case UmlDarkGray:
-            insertItem(* DarkGrayPixmap);
+            addItem(QIcon(* DarkGrayPixmap), "");
             break;
 
         case UmlBlack:
-            insertItem(* BlackPixmap);
+            addItem(QIcon(* BlackPixmap), "");
             break;
 
         default:
-            insertItem(s_unknown_color);
+            addItem(s_unknown_color);
         }
     }
 
     if (!nodefault)
-        insertItem(TR(stringify(UmlDefaultColor)));
+        addItem(TR(stringify(UmlDefaultColor)));
 
     if (unchanged) {
-        insertItem(TR("<unchanged>"));
-        setCurrentItem(count() - 1);
+        addItem(TR("<unchanged>"));
+        setCurrentIndex(count() - 1);
     }
     else
-        setCurrentItem(v);
+        setCurrentIndex(v);
 
 
 
@@ -378,26 +379,28 @@ QString SettingsDialog::previous_active_tab;
 
 SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
                                bool nodefault, bool unchanged, QString title)
-    : Q3TabDialog(0, title, TRUE),
+    : TabDialog(0, title.toLatin1().constData(), TRUE),
       states(st), colors(co), first_visible_page(0),
       several(unchanged), did_apply(FALSE)
 {
-    setCaption((title.isEmpty()) ? TR("Diagram Drawing Settings dialog") : title);
+    setWindowTitle((title.isEmpty()) ? QObject::tr("Diagram Drawing Settings dialog") : title);
 
-    QString s_diagram = TR("diagram");
-    Q3Grid * grid = 0;
+    QString s_diagram = QObject::tr("diagram");
+
+    QWidget * grid = 0;
+
     QString tabname;
     unsigned i;
     unsigned n;
 
     if (states != 0) {
         n = states->size();
-        cbstates = new Q3PtrVector<ComboStates>(n);
+        cbstates = new QHash<int,ComboStates*>;
 
         for (i = 0; i != n; i += 1) {
             StateSpec & st = states->at(i);
             QString s = st.name;
-            int index = s.find('#');
+            int index = s.indexOf('#');
             QString tbn;
 
             if (index != -1) {
@@ -410,116 +413,122 @@ SettingsDialog::SettingsDialog(StateSpecVector * st, ColorSpecVector * co,
             if ((grid == 0) || (tabname != tbn)) {
                 if (grid != 0) {
                     addTab(grid, tabname);
-                    grid->setName(tabname);
-
+                    grid->setObjectName(tabname);
                     if (tabname == previous_active_tab)
                         first_visible_page = grid;
                 }
 
-                grid = new Q3Grid(5, this);
-                grid->setMargin(2);
-                grid->setSpacing(2);
+                grid = WidgetWithLayout::gridBox(5, this);
+                grid->layout()->setMargin(0);
+                grid->layout()->setSpacing(0);
                 tabname = tbn;
             }
 
-            new QLabel("", grid);
-            new QLabel(s + " : ", grid);
-            Q3HBox * hb = new Q3HBox(grid);
+            QGridLayout *gridLayout = (QGridLayout *)grid->layout();
+            int currentRow = gridLayout->rowCount();
+            //gridLayout->addWidget(new QLabel("", grid), currentRow, 0);
+            gridLayout->addWidget(new QLabel(s + " : ", grid), currentRow, 1);
+            QWidget * hb = WidgetWithLayout::hBox( grid);
+            QHBoxLayout* hLayout;
+            hLayout = (QHBoxLayout*)hb->layout();
+            hLayout->setMargin(0);
+            gridLayout->addWidget(hb,  currentRow, 2);
 
+            ComboStates* widget;
             switch (st.who) {
             case StateSpec::is3states:
-                cbstates->insert(i, new ComboStates(hb, *((Uml3States *) st.state), nodefault, unchanged));
+                cbstates->insert(i, widget = new ComboStates(hb, *((Uml3States *) st.state), nodefault, unchanged));
                 break;
 
             case StateSpec::isClassDrawingMode:
-                cbstates->insert(i, new ComboStates(hb, *((ClassDrawingMode *) st.state),
+                cbstates->insert(i, widget = new ComboStates(hb, *((ClassDrawingMode *) st.state),
                                                     nodefault, unchanged));
                 break;
 
             case StateSpec::isDrawingLanguage:
-                cbstates->insert(i, new ComboStates(hb, *((DrawingLanguage *) st.state),
+                cbstates->insert(i, widget = new ComboStates(hb, *((DrawingLanguage *) st.state),
                                                     nodefault, unchanged));
                 break;
 
             case StateSpec::isShowContextMode:
-                cbstates->insert(i, new ComboStates(hb, *((ShowContextMode *) st.state),
+                cbstates->insert(i, widget = new ComboStates(hb, *((ShowContextMode *) st.state),
                                                     nodefault, unchanged));
                 break;
 
             default:
-                cbstates->insert(i, new ComboStates(hb, *((char *) st.state),
+                cbstates->insert(i, widget = new ComboStates(hb, *((char *) st.state),
                                                     nodefault, unchanged));
             }
-
-            new QLabel("", hb);
-            new QLabel("", grid);
-            new QLabel("", grid);
+            hLayout->addWidget(widget);
+            hLayout->addWidget(new QLabel("", hb));
+            gridLayout->addWidget(new QLabel("", grid),currentRow, 3);
+            gridLayout->addWidget(new QLabel("", grid),currentRow, 4);
         }
 
         addTab(grid, tabname);
-        grid->setName(tabname);
-
+        grid->setObjectName(tabname);
         if (tabname == previous_active_tab)
             first_visible_page = grid;
     }
 
     if (colors != 0) {
-        QString lbl = TR("color");
-        QString s_default = TR("default ");
+        QString lbl = QObject::tr("color");
+        QString s_default = QObject::tr("default ");
 
         n = colors->size();
-        cbcolors = new Q3PtrVector<ComboColor>(n);
-        grid = new Q3Grid(5, this);
-        grid->setMargin(2);
-        grid->setSpacing(2);
+        cbcolors = new QHash<int, ComboColor*>;
+        GridBox *gridBox = new GridBox( 5, this);
+        gridBox->setMargin(2);
+        gridBox->setSpacing(2);
 
         for (i = 0; i != n; i += 1) {
             if (i == 11) {
-                lbl = TR("color [1]");
-                addTab(grid, lbl);
-                grid->setName(lbl);
-
+                lbl = QObject::tr("color [1]");
+                addTab(gridBox, lbl);
+                gridBox->setObjectName(lbl);
                 if (previous_active_tab == lbl)
-                    first_visible_page = grid;
+                    first_visible_page = gridBox;
 
-                lbl = TR("color [2]");
-                grid = new Q3Grid(5, this);
-                grid->setMargin(2);
-                grid->setSpacing(2);
+                lbl = QObject::tr("color [2]");
+                gridBox = new GridBox(5, this);
+                gridBox->setMargin(2);
+                gridBox->setSpacing(2);
             }
 
-            new QLabel("", grid);
+            gridBox->addWidget(new QLabel("", grid));
 
             QString s = colors->at(i).name;
 
             s += " : ";
-            new QLabel(s, grid);
-            cbcolors->insert(i, new ComboColor(grid, *(colors->at(i).color),
-                                               nodefault, unchanged));
-            new QLabel("", grid);
-            new QLabel("", grid);
+            gridBox->addWidget(new QLabel(s, grid));
+            ComboColor *ccolor = new ComboColor(grid, *(colors->at(i).color),nodefault, unchanged);
+            gridBox->addWidget(ccolor);
+            cbcolors->insert(i, ccolor);
+            gridBox->addWidget(new QLabel("", grid));
+            gridBox->addWidget(new QLabel("", grid));
         }
 
-        addTab(grid, lbl);
-        grid->setName(lbl);
-
+        addTab(gridBox, lbl);
+        gridBox->setObjectName(lbl);
         if (previous_active_tab == lbl)
-            first_visible_page = grid;
+            first_visible_page = gridBox;
     }
-
+    setHelpButton(TR("Apply"));
     // use help rather than apply because when the OK button is clicked,
     // the applyButtonPressed() signal is emitted
     setOkButton(TR("OK"));
-    setHelpButton(TR("Apply"));
     setCancelButton(TR("Cancel"));
 
     connect(this, SIGNAL(helpButtonPressed()),
             this, SLOT(apply()));
+    polish();
+
 }
 
 void SettingsDialog::polish()
 {
-    Q3TabDialog::polish();
+
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 
     if (first_visible_page != 0) {
@@ -527,6 +536,7 @@ void SettingsDialog::polish()
         previous_active_tab = "";
         showPage(first_visible_page);
     }
+
 }
 
 SettingsDialog::~SettingsDialog()
@@ -542,17 +552,19 @@ SettingsDialog::~SettingsDialog()
 
 void SettingsDialog::apply()
 {
+
     did_apply = TRUE;
     previous_position = pos();
-    previous_active_tab = currentPage()->name();
+    previous_active_tab = m_tabWidget->currentWidget()->objectName();
     accept();
+
 }
 
 void SettingsDialog::accept()
 {
-    QString s_unchanged = TR("<unchanged>");
-    QString s_default = TR("default");
-    QString s_unlimited = TR("unlimited");
+    QString s_unchanged = QObject::tr("<unchanged>");
+    QString s_default = QObject::tr("default");
+    QString s_unlimited = QObject::tr("unlimited");
     unsigned i, n;
 
     if (states != 0) {
@@ -560,7 +572,7 @@ void SettingsDialog::accept()
 
         for (i = 0; i != n; i += 1) {
             StateSpec & st = states->at(i);
-            QString s = cbstates->at(i)->currentText();
+            QString s = cbstates->value(i)->currentText();
 
             if (s == s_unchanged)
                 st.name = QString();
@@ -570,10 +582,10 @@ void SettingsDialog::accept()
                 else if (s == s_unlimited)
                     st.set_state(UmlUnlimitedMemberWidth);
                 else
-                    st.set_state(cbstates->at(i)->currentItem() + MinMemberWidthValue);
+                    st.set_state(cbstates->value(i)->currentIndex() + MinMemberWidthValue);
             }
             else
-                st.set_state(cbstates->at(i)->currentItem());
+                st.set_state(cbstates->value(i)->currentIndex());
         }
     }
 
@@ -581,10 +593,10 @@ void SettingsDialog::accept()
         n = colors->size();
 
         for (i = 0; i != n; i += 1) {
-            if (cbcolors->at(i)->currentText() == s_unchanged)
+            if (cbcolors->value(i)->currentText() == s_unchanged)
                 colors->at(i).name = QString();
             else
-                *(colors->at(i).color) = (UmlColor) cbcolors->at(i)->currentItem();
+                *(colors->at(i).color) = (UmlColor) cbcolors->value(i)->currentIndex();
         }
     }
 

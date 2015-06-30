@@ -76,7 +76,7 @@ void UmlActivity::write(FileOut & out)
         break;
     }
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 
@@ -97,7 +97,7 @@ void UmlActivity::write(FileOut & out)
     for (ito = _opaque_behavior.begin(); ito != _opaque_behavior.end(); ++ito) {
         out.indent();
         out << "<ownedBehavior xmi:type=\"uml:OpaqueBehavior\"";
-        out.id_prefix(ito.data().item, ito.data().kind);
+        out.id_prefix((*ito).item, (*ito).kind);
         out << ">\n";
         out.indent();
         out << "\t<body>";
@@ -116,7 +116,7 @@ void UmlActivity::write(FileOut & out)
     for (ite = _opaque_expression.begin(); ite != _opaque_expression.end(); ++ite) {
         out.indent();
         out << '<' << k << " xmi:type=\"uml:OpaqueExpression\"";
-        out.id_prefix(ite.data(), "OPAQUE_EXPRESSION_");
+        out.id_prefix(*ite, "OPAQUE_EXPRESSION_");
         out << ">\n";
         out.indent();
         out << "\t<body>";
@@ -171,7 +171,7 @@ UmlItem * UmlActivity::add_opaque_behavior(WrapperStr beh, UmlItem * who, const 
         return who;
     }
     else
-        return iter.data().item;
+        return (*iter).item;
 }
 
 UmlItem * UmlActivity::add_opaque_expression(WrapperStr val, UmlItem * who)
@@ -183,6 +183,6 @@ UmlItem * UmlActivity::add_opaque_expression(WrapperStr val, UmlItem * who)
         return who;
     }
     else
-        return iter.data();
+        return (*iter);
 }
 

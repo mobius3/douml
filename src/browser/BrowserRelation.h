@@ -87,7 +87,7 @@ public:
     void add_set_oper();
 
     virtual const QPixmap * pixmap(int) const;
-    virtual void paintCell(QPainter *, const QColorGroup &, int, int, int);
+    virtual void paintCell(QPainter *, const QPalette &, int, int, int);
     BrowserNode * extract();
     static BrowserRelation * reinsert(BrowserNode * p, RelationData * d);
 
@@ -135,9 +135,10 @@ public:
     virtual QString drag_postfix() const;
     virtual void DropAfterEvent(QDropEvent * e, BrowserNode * after);
 
-    static void get_relating(BrowserNode *, Q3PtrDict<BrowserNode> & d,
+    static void get_relating(BrowserNode *, QHash<BrowserNode *, BrowserNode *> &d,
                              BrowserNodeList & newones,
                              bool inh, bool dep, bool assoc);
+    virtual QVariant	data(int column, int role) const;
 };
 
 #endif

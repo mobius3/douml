@@ -5,7 +5,7 @@
 #include "UmlClassView.h"
 #include "UmlActivityDiagram.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 UmlActivity * UmlBaseActivity::create(UmlClassView * parent, const char * s)
 {
@@ -17,7 +17,7 @@ anItemKind UmlBaseActivity::kind()
     return anActivity;
 }
 
-const Q3CString & UmlBaseActivity::preCondition()
+const QByteArray & UmlBaseActivity::preCondition()
 {
     read_if_needed_();
     return _pre_condition;
@@ -28,7 +28,7 @@ bool UmlBaseActivity::set_PreCondition(const char * v)
     return set_it_(_pre_condition, v, setUmlEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseActivity::postCondition()
+const QByteArray & UmlBaseActivity::postCondition()
 {
     read_if_needed_();
     return _post_condition;
@@ -40,7 +40,7 @@ bool UmlBaseActivity::set_PostCondition(const char * v)
 }
 
 #ifdef WITHCPP
-const Q3CString & UmlBaseActivity::cppPreCondition()
+const QByteArray & UmlBaseActivity::cppPreCondition()
 {
     read_if_needed_();
     return _cpp_pre_condition;
@@ -51,7 +51,7 @@ bool UmlBaseActivity::set_CppPreCondition(const char * v)
     return set_it_(_cpp_pre_condition, v, setCppEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseActivity::cppPostCondition()
+const QByteArray & UmlBaseActivity::cppPostCondition()
 {
     read_if_needed_();
     return _cpp_post_condition;
@@ -64,7 +64,7 @@ bool UmlBaseActivity::set_CppPostCondition(const char * v)
 #endif
 
 #ifdef WITHJAVA
-const Q3CString & UmlBaseActivity::javaPreCondition()
+const QByteArray & UmlBaseActivity::javaPreCondition()
 {
     read_if_needed_();
     return _java_pre_condition;
@@ -75,7 +75,7 @@ bool UmlBaseActivity::set_JavaPreCondition(const char * v)
     return set_it_(_java_pre_condition, v, setJavaEntryBehaviorCmd);
 }
 
-const Q3CString & UmlBaseActivity::javaPostCondition()
+const QByteArray & UmlBaseActivity::javaPostCondition()
 {
     read_if_needed_();
     return _java_post_condition;

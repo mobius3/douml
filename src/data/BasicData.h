@@ -33,7 +33,7 @@
 
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
+//
 
 #include "mystr.h"
 
@@ -71,10 +71,10 @@ protected:
 
     WrapperStr stereotype;
     BrowserNode * browser_node;
-
     void redelete_it() {
         emit deleted();
     };
+    QString m_name;
 
 public:
     BasicData() : QObject(&BasicParent::the), browser_node(0) {};
@@ -118,6 +118,16 @@ public:
     virtual void send_php_def(ToolCom * com);
     virtual void send_python_def(ToolCom * com);
     virtual void send_idl_def(ToolCom * com);
+
+    QString name() const
+    {
+        return m_name;
+    }
+
+    void setName(const QString &value)
+    {
+        m_name = value;
+    }
 
 protected slots:
     void on_delete();

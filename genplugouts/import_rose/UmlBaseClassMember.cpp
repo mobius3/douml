@@ -23,7 +23,7 @@ bool UmlBaseClassMember::isVolatile()
 
 bool UmlBaseClassMember::set_isVolatile(bool y)
 {
-    return set_it_(_volatile, y, setIsCppVolatileCmd);
+    return set_it_(_volatile, y, setIsVolatileCmd);
 }
 
 aVisibility UmlBaseClassMember::visibility()
@@ -82,3 +82,10 @@ void UmlBaseClassMember::read_cpp_()
 }
 #endif
 
+#ifdef WITHJAVA
+void UmlBaseClassMember::read_java_()
+{
+    UmlBaseClassItem::read_java_();
+    _java_annotation = UmlCom::read_string();
+}
+#endif

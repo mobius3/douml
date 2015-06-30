@@ -29,8 +29,8 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+//#include <q3popupmenu.h>
+#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -116,7 +116,7 @@ void BrowserInterruptibleActivityRegion::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -156,19 +156,19 @@ BrowserInterruptibleActivityRegion::add_interruptibleactivityregion(BrowserNode 
 {
     QString name;
 
-    return (!future_parent->enter_child_name(name, TR("enter interruptible activity \nregion's name (may be empty) : "),
-            UmlInterruptibleActivityRegion, TRUE, TRUE))
+    return (!future_parent->enter_child_name(name, QObject::TR("enter interruptible activity \nregion's name (may be empty) : "),
+                                             UmlInterruptibleActivityRegion, TRUE, TRUE))
 
-           ? 0
-           : add_interruptibleactivityregion(future_parent, name);
+            ? 0
+            : add_interruptibleactivityregion(future_parent, name.toLatin1().constData());
 }
 
 BrowserInterruptibleActivityRegion *
 BrowserInterruptibleActivityRegion::add_interruptibleactivityregion(BrowserNode * future_parent,
-        const char * name)
+                                                                    const char * name)
 {
     BrowserInterruptibleActivityRegion * r =
-        new BrowserInterruptibleActivityRegion(name, future_parent);
+            new BrowserInterruptibleActivityRegion(name, future_parent);
 
     future_parent->setOpen(TRUE);
     future_parent->package_modified();
@@ -180,17 +180,17 @@ BrowserInterruptibleActivityRegion *
 BrowserInterruptibleActivityRegion::get_interruptibleactivityregion(BrowserNode * parent)
 {
     BrowserNodeList l;
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = parent->firstChild(); child != 0; child = child->nextSibling())
         if (!((BrowserNode *) child)->deletedp() &&
-            (((BrowserNode *) child)->get_type() == UmlInterruptibleActivityRegion))
+                (((BrowserNode *) child)->get_type() == UmlInterruptibleActivityRegion))
             l.append((BrowserNode *) child);
 
     BrowserNode * old;
     QString name;
 
-    if (!parent->enter_child_name(name, TR(" enter interruptible activity \nregion's name (may be empty) : "),
+    if (!parent->enter_child_name(name, QObject::TR(" enter interruptible activity \nregion's name (may be empty) : "),
                                   UmlInterruptibleActivityRegion, l, &old,
                                   TRUE, TRUE))
         return 0;
@@ -199,7 +199,7 @@ BrowserInterruptibleActivityRegion::get_interruptibleactivityregion(BrowserNode 
         return ((BrowserInterruptibleActivityRegion *) old);
 
     BrowserInterruptibleActivityRegion * r =
-        new BrowserInterruptibleActivityRegion(name, parent);
+            new BrowserInterruptibleActivityRegion(name, parent);
 
     parent->setOpen(TRUE);
     parent->package_modified();
@@ -209,67 +209,70 @@ BrowserInterruptibleActivityRegion::get_interruptibleactivityregion(BrowserNode 
 
 void BrowserInterruptibleActivityRegion::menu()
 {
-    Q3PopupMenu m(0, "interruptible activity region");
-    Q3PopupMenu toolm(0);
+    QMenu m("interruptible activity region",0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_read_only) {
-            m.setWhatsThis(m.insertItem(TR("New nested interruptible activity region"), 0),
-                           TR("to add a nested <i>interruptible activity region</i>"));
-            m.setWhatsThis(m.insertItem(TR("New expansion region"), 1),
-                           TR("to add a nested <i>expansion region</i>"));
-            m.setWhatsThis(m.insertItem(TR("Add activity action"), 6),
-                           TR("to add an <i>activity action</i> to the <i>region</i>"));
-            m.setWhatsThis(m.insertItem(TR("Add object node"), 7),
-                           TR("to add an <i>activity object node</i> to the <i>region</i>"));
-            m.insertSeparator();
+            MenuFactory::addItem(m, QObject::TR("New nested interruptible activity region"), 0,
+                                 QObject::TR("to add a nested <i>interruptible activity region</i>"));
+            MenuFactory::addItem(m, QObject::TR("New expansion region"), 1,
+                                 QObject::TR("to add a nested <i>expansion region</i>"));
+            MenuFactory::addItem(m, QObject::TR("Add activity action"), 6,
+                                 QObject::TR("to add an <i>activity action</i> to the <i>region</i>"));
+            MenuFactory::addItem(m, QObject::TR("Add object node"), 7,
+                                 QObject::TR("to add an <i>activity object node</i> to the <i>region</i>"));
+            m.addSeparator();
         }
 
-        m.setWhatsThis(m.insertItem(TR("Edit"), 4),
-                       TR("to edit the <i>interruptible activity region</i>, \
-a double click with the left mouse button does the same thing"));
+        MenuFactory::addItem(m, QObject::TR("Edit"), 4,
+                             QObject::TR("to edit the <i>interruptible activity region</i>, \
+                                         a double click with the left mouse button does the same thing"));
 
-        if (!is_read_only) {
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), 5),
-                           TR("to copy the <i>interruptible activity region</i> in a new one"));
-            m.insertSeparator();
+                                         if (!is_read_only) {
+                                             MenuFactory::addItem(m, QObject::TR("Duplicate"), 5,
+                                             QObject::TR("to copy the <i>interruptible activity region</i> in a new one"));
+                                             m.addSeparator();
 
-            if (edition_number == 0)
-                m.setWhatsThis(m.insertItem(TR("Delete"), 8),
-                               TR("to delete the <i>interruptible activity region</i>. \
-Note that you can undelete it after"));
-        }
+                                             if (edition_number == 0)
+                                             MenuFactory::addItem(m, QObject::TR("Delete"), 8,
+                                             QObject::TR("to delete the <i>interruptible activity region</i>. \
+                                             Note that you can undelete it after"));
+                                         }
 
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 3),
-                       TR("to know who reference the <i>region</i>"));
-        mark_menu(m, TR("the interruptible activity region"), 90);
-        ProfiledStereotypes::menu(m, this, 99990);
+                                         MenuFactory::addItem(m, QObject::TR("Referenced by"), 3,
+                                                              QObject::TR("to know who reference the <i>region</i>"));
+                             mark_menu(m, QObject::tr("the interruptible activity region").toLatin1().constData(), 90);
+                ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
-            Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+                Tool::menu_insert(&toolm, get_type(), 100)) {
+            m.addSeparator();
+            toolm.setTitle(QObject::TR("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 9),
-                       TR("to undelete the <i>interruptible activity region</i>"));
+        MenuFactory::addItem(m, QObject::TR("Undelete"), 9,
+                             QObject::TR("to undelete the <i>interruptible activity region</i>"));
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
-                m.setWhatsThis(m.insertItem(TR("Undelete recursively"), 10),
-                               TR("undelete the interruptible activity region and its children"));
+                MenuFactory::addItem(m, QObject::TR("Undelete recursively"), 10,
+                                     QObject::TR("undelete the interruptible activity region and its children"));
                 break;
             }
         }
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+        exec_menu_choice(retAction->data().toInt());
 }
 
 void BrowserInterruptibleActivityRegion::exec_menu_choice(int rank)
@@ -294,31 +297,31 @@ void BrowserInterruptibleActivityRegion::exec_menu_choice(int rank)
     case 5: {
         QString name;
 
-        if (((BrowserNode *) parent())->enter_child_name(name, TR("enter interruptible activity \nregion's name (may be empty) : "),
-                UmlActivity, TRUE, TRUE))
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::TR("enter interruptible activity \nregion's name (may be empty) : "),
+                                                         UmlActivity, TRUE, TRUE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
     }
-    break;
+        break;
 
     case 6: {
         BrowserActivityAction * r =
-            BrowserActivityAction::add_activityaction(this, 0);
+                BrowserActivityAction::add_activityaction(this, 0);
 
         if (r != 0)
             r->select_in_browser();
     }
 
-    return;
+        return;
 
     case 7: {
         BrowserActivityObject * r =
-            BrowserActivityObject::add_activityobject(this, 0);
+                BrowserActivityObject::add_activityobject(this, 0);
 
         if (r != 0)
             r->select_in_browser();
     }
 
-    return;
+        return;
 
     case 8:
         delete_it();
@@ -385,7 +388,7 @@ void BrowserInterruptibleActivityRegion::apply_shortcut(QString s)
         if (s == "Undelete")
             choice = 9;
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
@@ -403,8 +406,8 @@ void BrowserInterruptibleActivityRegion::apply_shortcut(QString s)
 void BrowserInterruptibleActivityRegion::open(bool force_edit)
 {
     if (!force_edit &&
-        (associated_diagram != 0) &&
-        !associated_diagram->deletedp())
+            (associated_diagram != 0) &&
+            !associated_diagram->deletedp())
         associated_diagram->open(FALSE);
     else if (!is_edited) {
         static QSize previous_size;
@@ -430,7 +433,7 @@ UmlCode BrowserInterruptibleActivityRegion::get_type() const
 
 QString BrowserInterruptibleActivityRegion::get_stype() const
 {
-    return TR("interruptible activity region");
+    return QObject::TR("interruptible activity region");
 }
 
 int BrowserInterruptibleActivityRegion::get_identifier() const
@@ -469,7 +472,7 @@ BrowserNode * BrowserInterruptibleActivityRegion::get_associated() const
 }
 
 void BrowserInterruptibleActivityRegion::set_associated_diagram(BrowserActivityDiagram * dg,
-        bool on_read)
+                                                                bool on_read)
 {
     if (associated_diagram != dg) {
         if (associated_diagram != 0)
@@ -562,7 +565,7 @@ bool BrowserInterruptibleActivityRegion::tool_cmd(ToolCom * com, const char * ar
 }
 
 bool BrowserInterruptibleActivityRegion::may_contains_them(const QList<BrowserNode *> & l,
-        BooL & duplicable) const
+                                                           BooL & duplicable) const
 {
     BrowserNode * activity = get_container(UmlActivity);
 
@@ -605,9 +608,9 @@ bool BrowserInterruptibleActivityRegion::may_contains_them(const QList<BrowserNo
 void BrowserInterruptibleActivityRegion::DragMoveEvent(QDragMoveEvent * e)
 {
     if (UmlDrag::canDecode(e, BrowserActivityNode::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserActivityAction::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserExpansionRegion::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserInterruptibleActivityRegion::drag_key(this))) {
+            UmlDrag::canDecode(e, BrowserActivityAction::drag_key(this)) ||
+            UmlDrag::canDecode(e, BrowserExpansionRegion::drag_key(this)) ||
+            UmlDrag::canDecode(e, BrowserInterruptibleActivityRegion::drag_key(this))) {
         if (!is_read_only)
             e->accept();
         else
@@ -625,10 +628,10 @@ void BrowserInterruptibleActivityRegion::DropEvent(QDropEvent * e)
 void BrowserInterruptibleActivityRegion::DragMoveInsideEvent(QDragMoveEvent * e)
 {
     if (!is_read_only &&
-        (UmlDrag::canDecode(e, BrowserActivityNode::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserActivityAction::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserInterruptibleActivityRegion::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserExpansionRegion::drag_key(this))))
+            (UmlDrag::canDecode(e, BrowserActivityNode::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserActivityAction::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserInterruptibleActivityRegion::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserExpansionRegion::drag_key(this))))
         e->accept();
     else
         e->ignore();
@@ -642,36 +645,38 @@ void BrowserInterruptibleActivityRegion::DropAfterEvent(QDropEvent * e, BrowserN
          ((bn = UmlDrag::decode(e, BrowserActivityAction::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserExpansionRegion::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserInterruptibleActivityRegion::drag_key(this))) != 0)) &&
-        (bn != after) && (bn != this)) {
+            (bn != after) && (bn != this)) {
         if (may_contains(bn, TRUE)) {
             if ((after == 0) &&
-                ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
+                    ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
                 // have choice
-                Q3PopupMenu m(0);
+                QMenu m(0);
 
-                MenuFactory::createTitle(m, TR("move ") + bn->get_name());
-                m.insertSeparator();
-                m.insertItem(TR("In ") + QString(get_name()), 1);
-                m.insertItem(TR("After ") + QString(get_name()), 2);
+                MenuFactory::createTitle(m, QObject::TR("move ") + bn->get_name());
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::TR("In ") + QString(get_name()), 1);
+                MenuFactory::addItem(m, QObject::TR("After ") + QString(get_name()), 2);
 
-                switch (m.exec(QCursor::pos())) {
-                case 1:
-                    break;
+                QAction *retAction = m.exec(QCursor::pos());
+                if(retAction)
+                    switch (retAction->data().toInt()) {
+                    case 1:
+                        break;
 
-                case 2:
-                    ((BrowserNode *) parent())->DropAfterEvent(e, this);
-                    return;
+                    case 2:
+                        ((BrowserNode *) parent())->DropAfterEvent(e, this);
+                        return;
 
-                default:
-                    e->ignore();
-                    return;
-                }
+                    default:
+                        e->ignore();
+                        return;
+                    }
             }
 
             move(bn, after);
         }
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical( QObject::TR("Error"), QObject::TR("Forbidden"));
             e->ignore();
         }
     }
@@ -684,7 +689,7 @@ void BrowserInterruptibleActivityRegion::DropAfterEvent(QDropEvent * e, BrowserN
 QString BrowserInterruptibleActivityRegion::drag_key() const
 {
     return QString::number(UmlInterruptibleActivityRegion)
-           + "#" + QString::number((unsigned long) get_container(UmlActivity));
+            + "#" + QString::number((unsigned long) get_container(UmlActivity));
 }
 
 QString BrowserInterruptibleActivityRegion::drag_postfix() const
@@ -695,7 +700,7 @@ QString BrowserInterruptibleActivityRegion::drag_postfix() const
 QString BrowserInterruptibleActivityRegion::drag_key(BrowserNode * p)
 {
     return QString::number(UmlInterruptibleActivityRegion)
-           + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
+            + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
 }
 
 void BrowserInterruptibleActivityRegion::save_stereotypes(QTextStream & st)
@@ -722,7 +727,7 @@ void BrowserInterruptibleActivityRegion::save(QTextStream & st, bool ref, QStrin
     else {
         nl_indent(st);
         st << "interruptibleactivityregion " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
 
@@ -736,7 +741,7 @@ void BrowserInterruptibleActivityRegion::save(QTextStream & st, bool ref, QStrin
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -780,13 +785,13 @@ BrowserInterruptibleActivityRegion::read_ref(char *& st)
     BrowserInterruptibleActivityRegion * result = all[id];
 
     return (result == 0)
-           ? new BrowserInterruptibleActivityRegion(id)
-           : result;
+            ? new BrowserInterruptibleActivityRegion(id)
+            : result;
 }
 
 BrowserInterruptibleActivityRegion *
 BrowserInterruptibleActivityRegion::read(char *& st, char * k,
-        BrowserNode * parent)
+                                         BrowserNode * parent)
 {
     BrowserInterruptibleActivityRegion * result;
     int id;
@@ -796,8 +801,8 @@ BrowserInterruptibleActivityRegion::read(char *& st, char * k,
         result = all[id];
 
         return (result == 0)
-               ? new BrowserInterruptibleActivityRegion(id)
-               : result;
+                ? new BrowserInterruptibleActivityRegion(id)
+                : result;
     }
     else if (!strcmp(k, "interruptibleactivityregion")) {
         id = read_id(st);
@@ -831,7 +836,7 @@ BrowserInterruptibleActivityRegion::read(char *& st, char * k,
         result->BrowserNode::read(st, k, id);
 
         result->is_read_only = (!in_import() && read_only_file()) ||
-                               ((user_id() != 0) && result->is_api_base());
+                ((user_id() != 0) && result->is_api_base());
 
         if (strcmp(k, "end")) {
             while (BrowserActivityNode::read(st, k, result) ||
@@ -854,6 +859,6 @@ BrowserInterruptibleActivityRegion::read(char *& st, char * k,
 BrowserNode * BrowserInterruptibleActivityRegion::get_it(const char * k, int id)
 {
     return (!strcmp(k, "interruptibleactivityregion_ref"))
-           ? all[id]
-           : 0;
+            ? all[id]
+              : 0;
 }

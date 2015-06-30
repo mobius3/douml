@@ -67,6 +67,7 @@ protected:
 
     static SdDurationCanvas * read_internal(char *& st, UmlCanvas *, int id, SdDurationSupport *);
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     SdDurationCanvas(UmlCanvas * canvas, SdDurationSupport * sp,
                      int v, bool isdest);
@@ -97,7 +98,7 @@ public:
     virtual void moveBy(double dx, double dy);
     virtual void prepare_for_move(bool on_resize);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void open();
     virtual void menu(const QPoint &);
     virtual QString may_start(UmlCode &) const;

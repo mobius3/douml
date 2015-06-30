@@ -7,7 +7,6 @@
 #include "misc/mystr.h"
 #include "aVisibility.h"
 #include "UmlSettings.h"
-#include <q3dict.h>
 
 // This class manages settings concerning C++, configured through
 // the 'Generation settings' dialog.
@@ -660,7 +659,7 @@ private:
 
     static WrapperStr _visibility_indent;
 
-    static Q3Dict<QString> _map_includes;
+    static QHash<QString, QString> _map_includes;
 
 
 protected:

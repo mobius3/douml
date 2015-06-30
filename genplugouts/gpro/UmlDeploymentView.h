@@ -3,15 +3,14 @@
 
 
 #include "UmlBaseDeploymentView.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 // This class manages 'deployment view'
 //
 // You can modify it as you want (except the constructor)
-class UmlDeploymentView : public UmlBaseDeploymentView
-{
-public:
-    UmlDeploymentView(void * id, const Q3CString & n) : UmlBaseDeploymentView(id, n) {};
+class UmlDeploymentView : public UmlBaseDeploymentView {
+  public:
+    UmlDeploymentView(void * id, const QByteArray & n) : UmlBaseDeploymentView(id, n) {};
 
 };
 

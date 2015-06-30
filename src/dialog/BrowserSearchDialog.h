@@ -32,7 +32,7 @@
 
 #include "BrowserNode.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QRadioButton;
 class QPushButton;
@@ -44,8 +44,8 @@ class BrowserSearchDialog : public QDialog
 
 protected:
     BrowserNodeList nodes;
-    Q3ComboBox * kind;
-    Q3ComboBox * results;
+    QComboBox * kind;
+    QComboBox * results;
     LineEdit * ed;
     QCheckBox * case_sensitive;
     QCheckBox * even_deleted;

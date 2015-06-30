@@ -8,7 +8,7 @@
 #include "PhpSettings.h"
 #include "PythonSettings.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 void UmlRelation::uml2cpp(bool)
 {
     bool composition = FALSE;
@@ -35,10 +35,10 @@ void UmlRelation::uml2cpp(bool)
 
         // no break
     default: {
-        Q3CString st = CppSettings::classStereotype(parent()->stereotype());
+        QByteArray st = CppSettings::classStereotype(parent()->stereotype());
 
         set_CppDecl(((st == "enum") || (st == "typedef") || (st == "ignored"))
-                    ? Q3CString("")
+                    ? QByteArray("")
                     : CppSettings::relationDecl(composition, multiplicity()));
     }
     }
@@ -56,10 +56,10 @@ void UmlRelation::uml2java(bool)
         break;
 
     default: {
-        Q3CString st = JavaSettings::classStereotype(parent()->stereotype());
+        QByteArray st = JavaSettings::classStereotype(parent()->stereotype());
 
         set_JavaDecl(((st == "enum") || (st == "ignored"))
-                     ? Q3CString("")
+                     ? QByteArray("")
                      : JavaSettings::relationDecl(multiplicity()));
     }
     }
@@ -75,7 +75,7 @@ void UmlRelation::uml2idl(bool)
         break;
 
     default: {
-        Q3CString st = IdlSettings::classStereotype(parent()->stereotype());
+        QByteArray st = IdlSettings::classStereotype(parent()->stereotype());
 
         if ((st == "enum") || (st == "typedef") || (st == "ignored"))
             set_IdlDecl("");
@@ -99,7 +99,7 @@ void UmlRelation::uml2php(bool)
         break;
 
     default: {
-        Q3CString st = PhpSettings::classStereotype(parent()->stereotype());
+        QByteArray st = PhpSettings::classStereotype(parent()->stereotype());
 
         if ((st == "enum") || (st == "ignored"))
             set_PhpDecl("");
@@ -126,7 +126,7 @@ void UmlRelation::uml2Python(bool)
 
         // no break
     default: {
-        Q3CString st = PythonSettings::classStereotype(parent()->stereotype());
+        QByteArray st = PythonSettings::classStereotype(parent()->stereotype());
 
         if ((st == "enum") || (st == "ignored"))
             set_PythonDecl("");

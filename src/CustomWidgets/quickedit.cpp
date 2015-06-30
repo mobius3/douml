@@ -8,6 +8,7 @@
 #include "Libs/L_UniversalModels/include/TreeItem.h"
 #include "Libs/L_UniversalModels/include/genericeventfilter.h"
 #include "Libs/L_UniversalModels/include/ItemController.h"
+
 #include "browser/BrowserClass.h"
 #include "browser/BrowserOperationAttribute.h"
 #include "browser/BrowserNodeDummy.h"
@@ -23,6 +24,7 @@
 #include "AType.h"
 #include "UmlEnum.h"
 #include "data/ClassData.h"
+
 #include "data/OperationData.h"
 #include "data/RelationData.h"
 #include "GenericDelegate.h"
@@ -37,6 +39,8 @@
 #include <array>
 #include <functional>
 #include <QMenu>
+#include <QMouseEvent>
+#include <QTextCodec>
 static QRect CheckBoxRect(const QStyleOptionViewItem &view_item_style_options) {
     QStyleOptionButton check_box_style_option;
     QRect check_box_rect = QApplication::style()->subElementRect(
@@ -85,6 +89,9 @@ QuickEdit::QuickEdit(QWidget *parent) :
     ui(new Ui::QuickEdit)
 {
     ui->setupUi(this);
+#ifdef __sil__
+    this->setToolTip("QuickEdit");
+#endif
     this->setWindowTitle(QObject::tr("Quick Edit"));
     if(!dummyView)
         dummyView = new BrowserView();
@@ -360,6 +367,7 @@ void QuickEdit::AddParameter()
     newItemAsNode->SetInternalData(param.data());
     operationNode->modified();
     OperationFuncs::recompute_param(operationNode, newItemPosition-1, true);
+
 }
 
 void QuickEdit::AddOperation()
@@ -534,7 +542,9 @@ QList<std::function<bool (TreeItemInterface *)> > QuickEdit::CreateCheckList()
                 bool match = data->get_name().contains(value, Qt::CaseInsensitive);
                 return match;
             };
+
             result.append(addressFilterFunc);
+
         }
         return result;
 }
@@ -545,7 +555,6 @@ void QuickEdit::SetupTreeModel(TreeModel*& model , QTreeView* view,
                                QSharedPointer<BrowserNode> &data)
 {
     model = new TreeModel();
-
 
     TreeItem<BrowserNode>* pointer = new TreeItem<BrowserNode>(0);
     data = QSharedPointer<BrowserNode>(new BrowserNodeDummy(dummyView));
@@ -567,6 +576,7 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
 {
     originalView = view;
     mainWindow = window;
+
     nullController = QSharedPointer<ItemController<BrowserNode> > (new ItemController<BrowserNode>());
     validTypes << UmlAggregation << UmlAggregationByValue << UmlDirectionalAggregation << UmlClass
                << UmlDirectionalAggregationByValue << UmlAttribute << UmlOperation << UmlExtraMember << UmlClassView << UmlPackage;
@@ -594,6 +604,7 @@ void QuickEdit::Init(UmlWindow* window, BrowserView* view)
     connect(ui->chkCpp, SIGNAL(clicked()), this, SLOT(OnChangeColumnVisibility()));
 //    connect(ui->tvEditor->header(), SIGNAL(sectionResized(int,int,int)),
 //            this, SLOT(OnNewSectionSizes(int,int,int)));
+
 }
 
 void QuickEdit::Show(BrowserNode * node)
@@ -642,9 +653,7 @@ void QuickEdit::Show(BrowserNode * node)
         this->show();
     }
 
-
 }
-
 bool QuickEdit::ValidType(BrowserNode * node)
 {
     if(!node)
@@ -654,6 +663,7 @@ bool QuickEdit::ValidType(BrowserNode * node)
         return false;
     return true;
 }
+
 
 void QuickEdit::closeEvent(QCloseEvent *)
 {
@@ -692,7 +702,6 @@ void QuickEdit::AssignItemsForClass(QSharedPointer<TreeItemInterface> root,  Bro
 {
 
     QSharedPointer<TreeItemInterface > interfaceItem = CreateInterfaceNode(root, classController, classNode);
-
     QList<BrowserNode*> children = classNode->children(validTypes);
     std::reverse(children.begin(), children.end());
     for(BrowserNode* child : children)
@@ -727,7 +736,6 @@ void QuickEdit::AssignItemsForExtraNode(QSharedPointer<TreeItemInterface> root, 
 void QuickEdit::AssignItemsForClassView(QSharedPointer<TreeItemInterface> root, BrowserNode * classViewNode)
 {
     QSharedPointer<TreeItemInterface > interfaceItem = CreateInterfaceNode(root, classController, classViewNode);
-
     QList<BrowserNode*> children = classViewNode->children(validTypes);
     std::reverse(children.begin(), children.end());
     for(BrowserNode* child : children)
@@ -786,7 +794,7 @@ void QuickEdit::MoveMarked(bool before)
     // remove all marked from children
     for(QSharedPointer<TreeItemInterface> child : markedChildren)
     {
-        children.remove(child);
+        children.removeOne(child);
     }
     //get the new position of origin node
     int newPositionOfCurrent = -1;
@@ -853,7 +861,6 @@ void QuickEdit::MoveMarked(bool before)
     if(newItem.isValid())
         pos++;
     operationNode->modified();
-
 }
 
 void QuickEdit::AssignItemsForOperation(QSharedPointer<TreeItemInterface> root, BrowserNode * node)
@@ -931,7 +938,7 @@ void QuickEdit::VisibilityDelegateSetup()
     GenericDelegate* visibilityDelegate = new GenericDelegate(ui->tvEditor, false);
     visibilityDelegate->widgetCreator = [&](QWidget * parent)
     {
-        QStringList visibilities; 
+        QStringList visibilities;
         visibilities << "public" << "protected" << "private" << "package" << "default";
         QComboBox* box = new QComboBox(parent);
         QStringListModel* model = new QStringListModel;
@@ -994,6 +1001,7 @@ void QuickEdit::TypeDelegateSetup()
     };
     ui->tvEditor->setItemDelegateForColumn(columns.indexOf("type"), delegate);
 }
+
 
 
 void QuickEdit::PrefixDelegateSetup()

@@ -31,59 +31,58 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
-#include <q3popupmenu.h>
-#include <q3grid.h>
+#include <gridbox.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "InstanceDialog.h"
 #include "Instance.h"
 #include "DialogUtil.h"
 #include "UmlDesktop.h"
 #include "BrowserView.h"
 #include "translate.h"
+#include "menufactory.h"
 
 QSize InstanceDialog::previous_size;
 
 InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
-    : QDialog(0, w + " instance dialog", TRUE),
+    : QDialog(0/*, w + " instance dialog", TRUE*/),
       inst(i), what(w), kind(k)
 {
-    setCaption(TR(what + " instance dialog"));
+    setWindowTitle((what + " instance dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->setMargin(5);
 
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
 
     vbox->addWidget(grid);
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(inst->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(inst->get_name(), grid));
     edname->setFocus();
 
-    new QLabel("", grid);
-    new QLabel("", grid);
+    grid->addWidget(new QLabel("", grid));
+    grid->addWidget(new QLabel("", grid));
 
-    SmallPushButton * b =
-        new SmallPushButton(TR(what) + " :", grid);
+    SmallPushButton * b;
+    grid->addWidget(b = new SmallPushButton((what) + " :", grid));
 
     connect(b, SIGNAL(clicked()), this, SLOT(menu_type()));
 
-    edtype = new Q3ComboBox(FALSE, grid);
+    grid->addWidget(edtype = new QComboBox(grid));
     inst->get_types(nodes);
     nodes.full_names(list);
-    edtype->insertStringList(list);
-    edtype->setCurrentItem(nodes.indexOf(inst->get_type()));
+    edtype->addItems(list);
+    edtype->setCurrentIndex(nodes.indexOf(inst->get_type()));
 
-    new QLabel("", grid);
-    new QLabel("", grid);
+    grid->addWidget(new QLabel("", grid));
+    grid->addWidget(new QLabel("", grid));
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
 
     hbox->setMargin(5);
     QPushButton * accept = new QPushButton(TR("&OK"), this);
@@ -105,7 +104,7 @@ InstanceDialog::InstanceDialog(Instance * i, QString w, UmlCode k)
 
 void InstanceDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -117,31 +116,34 @@ InstanceDialog::~InstanceDialog()
 
 void InstanceDialog::menu_type()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = list.findIndex(edtype->currentText().stripWhiteSpace());
+    int index = list.indexOf(edtype->currentText().trimmed());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = BrowserView::selected_item();
 
     if ((bn != 0) &&
         (bn->get_type() == kind) && !bn->deletedp())
-        m.insertItem(TR("Choose " + what + " selected in browser"), 1);
+        MenuFactory::addItem(m, TR("Choose ") + what + tr(" selected in browser"), 1);
     else
         bn = 0;
 
     bool new_available = inst->new_type_available();
 
     if (new_available)
-        m.insertItem(TR("Create " + what + " and choose it"), 2);
+        MenuFactory::addItem(m, TR("Create ") + what + tr(" and choose it"), 2);
 
     if (new_available || (index != -1) || (bn != 0)) {
-        switch (m.exec(QCursor::pos())) {
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        switch (retAction->data().toInt()) {
         case 0:
             nodes.at(index)->select_in_browser();
             break;
@@ -160,7 +162,7 @@ void InstanceDialog::menu_type()
         {
             QString s = bn->full_name(TRUE);
 
-            if ((index = list.findIndex(s)) == -1) {
+            if ((index = list.indexOf(s)) == -1) {
                 // new class, may be created through an other dialog
                 index = 0;
                 QStringList::Iterator iter = list.begin();
@@ -173,19 +175,20 @@ void InstanceDialog::menu_type()
 
                 nodes.insert((unsigned) index, bn);
                 list.insert(iter, s);
-                edtype->insertItem(s, index);
+                edtype->addItem(s, index);
             }
         }
 
-        edtype->setCurrentItem(index);
+        edtype->setCurrentIndex(index);
+        }
         }
     }
 }
 
 void InstanceDialog::accept()
 {
-    inst->set_name(edname->text().stripWhiteSpace());
-    inst->set_type(nodes.at(edtype->currentItem()));
+    inst->set_name(edname->text().trimmed());
+    inst->set_type(nodes.at(edtype->currentIndex()));
 
     QDialog::accept();
 }

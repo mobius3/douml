@@ -3,11 +3,11 @@
 
 #include <stdlib.h>
 #include <qinputdialog.h>
-#include <q3dict.h>
+
 #include <qfileinfo.h>
 #include <qdir.h>
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 #include "UmlCom.h"
 
 File::File(QString s, QString here)
@@ -15,48 +15,48 @@ File::File(QString s, QString here)
     for (;;)  {
         int index = 0;
 
-        while ((index = s.find('\\', index)) != -1)
+        while ((index = s.indexOf('\\', index)) != -1)
             s.replace(index++, 1, "/");
 
         int index0;
 
-        if ((index0 = s.find('$')) == -1)
+        if ((index0 = s.indexOf('$')) == -1)
             break;
 
-        if ((index = s.find('/', index0 + 1)) == -1)
+        if ((index = s.indexOf('/', index0 + 1)) == -1)
             index = s.length();
 
-        static Q3Dict<char> alias;
+        static QHash<QString,char*> alias;
 
         QString var = s.left(index);
         const char * val = alias[var];
 
         if (val == 0) {
-            if ((val = getenv(var.mid(1))) == 0) {
-                QString v = QInputDialog::getText("Unknown environment variable",
+            if ((val = getenv(var.mid(1).toLatin1().constData())) == 0) {
+                QString v = QInputDialog::getText(0,"Unknown environment variable",
                                                   var.mid(1) + " : ");
 
                 if (v.isEmpty())
                     throw 0;
 
-                val = strdup((const char *) v);
+                val = strdup((const char *) v.toLatin1().constData());
             }
             else
                 val = strdup(val);
 
-            alias.insert(var, val);
+            alias.insert(QString(var), const_cast<char*>(val));
         }
 
         if (*val == '&') {
             QFileInfo fi(here);
 
-            s.replace(index0, index - index0, fi.dirPath(TRUE));
+            s.replace(index0, index - index0, fi.path());
         }
         else
             s.replace(index0, index - index0, val);
     }
 
-    setName(QDir::cleanDirPath(s));
+    setFileName(QDir::cleanPath(s));
 
     unread_k = -1;
 
@@ -71,7 +71,7 @@ bool File::open(int m)
     return QFile::open((QIODevice::OpenModeFlag)m);//[jasa] fix ambiguous enum/int call
 }
 
-int File::read(Q3CString & s)
+int File::read(QByteArray & s)
 {
     if (unread_k != -1) {
         s = unread_s;
@@ -85,7 +85,11 @@ int File::read(Q3CString & s)
     s = "";
 
     for (;;) {
-        int c = getch();
+        char ch;
+        bool retVal = getChar(&ch);
+        if(!retVal) //possibly end of file
+            ch = -1;
+        int c = ch;
 
         switch (c) {
         case '(':
@@ -121,7 +125,7 @@ int File::read(Q3CString & s)
 
 void File::read(const char * e)
 {
-    Q3CString s;
+    QByteArray s;
 
     if (read(s) == -1)
         eof();
@@ -130,39 +134,52 @@ void File::read(const char * e)
         syntaxError(s, e);
 }
 
-void File::unread(int k, const Q3CString & s)
+void File::unread(int k, const QByteArray & s)
 {
     unread_k = k;
     unread_s = s;
 }
 
-Q3CString File::context()
+QByteArray File::context()
 {
-    Q3CString s;
+    QByteArray s;
 
-    return Q3CString(name().toAscii()) + " line " + s.setNum(line_number);//[jasa] QString to Q3CString conversion
+    return QByteArray(fileName().toLatin1()) + " line " + s.setNum(line_number);//[jasa] QString to QByteArray conversion
 }
 
-int File::readString(Q3CString & s)
+int File::readString(QByteArray & s)
 {
     int c;
+    char ch;
 
-    while ((c = getch()) != '"') {
+    while (1) {
+        getChar(&ch);
+        c = ch;
+        if(c  == '"')
+            break;
         if (c == -1) {
             UmlCom::trace("<br>end of file reading a string in " + context());
             throw 0;
         }
 
-        s += ((c == '\\') ? getch() : c);
+        if(c == '\\')
+        {
+            getChar(&ch);
+            s += ch;
+        }
+        else
+            s += c;
     }
 
     return STRING;
 }
 
-int File::readMLString(Q3CString & s)
+int File::readMLString(QByteArray & s)
 {
     for (;;) {
-        int c = getch();
+        char ch;
+        getChar(&ch);
+        int c = ch;
 
         switch (c) {
         case -1:
@@ -170,10 +187,14 @@ int File::readMLString(Q3CString & s)
 
         case '\n':
             line_number += 1;
-            c = getch();
+            getChar(&ch);
+            c = ch;
 
             if (c == '\r')
-                c = getch();
+            {
+                getChar(&ch);
+                c = ch;
+            }
 
             switch (c) {
             case -1:
@@ -184,7 +205,7 @@ int File::readMLString(Q3CString & s)
                 break;
 
             default:
-                ungetch(c);
+                ungetChar(c);
                 return STRING;
             }
 
@@ -192,22 +213,33 @@ int File::readMLString(Q3CString & s)
             break;
 
         default:
-            s += ((c == '\\') ? getch() : c);
+        {
+            //s += ((c == '\\') ? getch() : c);
+            if(c == '\\')
+            {
+                getChar(&ch);
+                s += ch;
+            }
+            else
+                s += c;
+        }
         }
     }
 }
 
-int File::readAtom(Q3CString & s)
+int File::readAtom(QByteArray & s)
 {
     for (;;) {
-        int c = getch();
+        char ch;
+        getChar(&ch);
+        int c = ch;
 
         switch (c) {
         case '(':
         case ')':
         case '"':
         case '\n':
-            ungetch(c);
+            ungetChar(c);
 
             // no break !
         case -1:
@@ -222,15 +254,15 @@ int File::readAtom(Q3CString & s)
     }
 }
 
-void File::syntaxError(const Q3CString s)
+void File::syntaxError(const QByteArray s)
 {
     UmlCom::trace("<br>syntax error near '" + s + "' in " + context());
     throw 0;
 }
 
-void File::syntaxError(const Q3CString s, const Q3CString e)
+void File::syntaxError(const QByteArray s, const QByteArray e)
 {
-    Q3CString msg = "<br>'" + e + "' expected rather than '" + s + "' in " + context();
+    QByteArray msg = "<br>'" + e + "' expected rather than '" + s + "' in " + context();
 
     UmlCom::trace(msg);
     throw 0;
@@ -239,7 +271,7 @@ void File::syntaxError(const Q3CString s, const Q3CString e)
 void File::skipBlock()
 {
     int lvl = 1;
-    Q3CString s;
+    QByteArray s;
 
     for (;;) {
         switch (read(s)) {
@@ -263,11 +295,11 @@ void File::skipBlock()
 
 void File::skipNextForm()
 {
-    Q3CString s;
+    QByteArray s;
 
     switch (read(s)) {
     case ')':
-        ungetch(')');
+        ungetChar(')');
         break;
 
     case '(':
@@ -282,19 +314,19 @@ void File::skipNextForm()
 
 void File::eof()
 {
-    UmlCom::trace("<br>premature end of file in " + name());
+    UmlCom::trace(QString("<br>premature end of file in " + fileName()).toLatin1().constData());
 }
 
 void File::rewind()
 {
     line_number = 1;
-    at(0);
+    seek(0);
     unread_k = -1;
 }
 
 aVisibility File::readVisibility()
 {
-    Q3CString s;
+    QByteArray s;
 
     if (read(s) == STRING) {
         if (s == "Private")
@@ -313,7 +345,7 @@ aVisibility File::readVisibility()
 
 bool File::readBool()
 {
-    Q3CString s;
+    QByteArray s;
 
     if (read(s) == ATOM) {
         if (s == "TRUE")
@@ -329,7 +361,7 @@ bool File::readBool()
 
 Language File::readLanguage()
 {
-    Q3CString s;
+    QByteArray s;
 
     if (read(s) != STRING)
         syntaxError(s, "a language");
@@ -355,7 +387,7 @@ Language File::readLanguage()
     return None;
 }
 
-int File::readDefinitionBeginning(Q3CString & s, Q3CString & id, Q3CString & ste, Q3CString & doc, Q3Dict<Q3CString> & prop)
+int File::readDefinitionBeginning(QByteArray & s, QByteArray & id, QByteArray & ste, QByteArray & doc, QHash<QByteArray, QByteArray*> & prop)
 {
     for (;;) {
         int k = read(s);
@@ -399,16 +431,16 @@ int File::readDefinitionBeginning(Q3CString & s, Q3CString & id, Q3CString & ste
     }
 }
 
-void File::readProperties(Q3Dict<Q3CString> & d)
+void File::readProperties(QHash<QByteArray, QByteArray*> & d)
 {
-    d.setAutoDelete(TRUE);
+    //d.setAutoDelete(TRUE);
 
     read("(");
     read("list");
     read("Attribute_Set");
 
     for (;;) {
-        Q3CString s;
+        QByteArray s;
 
         switch (read(s)) {
         case ')':
@@ -424,7 +456,7 @@ void File::readProperties(Q3Dict<Q3CString> & d)
 
             read("name");
             {
-                Q3CString s2;
+                QByteArray s2;
 
                 if (read(s2) != STRING)
                     syntaxError(s2, "the name");
@@ -449,7 +481,7 @@ void File::readProperties(Q3Dict<Q3CString> & d)
                     // no break !
                 case STRING:
                 case ATOM:
-                    d.insert(s, new Q3CString(s2));
+                    d.insert(s, new QByteArray(s2));
                     break;
 
                 default:

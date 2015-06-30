@@ -29,12 +29,10 @@
 #include <QTextStream>
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
-#include <Q3CString>
-
+////
 #include "UmlClass.h"
 #include "UmlPackage.h"
 #include "UmlRelation.h"
@@ -52,7 +50,7 @@
 // parent classes and template in the class declaration of the class
 
 QList<UmlClass *> UmlClass::context;
-Q3ValueList<UmlActualParameter> UmlClass::noactuals;
+QList<UmlActualParameter> UmlClass::noactuals;
 
 WrapperStr UmlClass::cpp_stereotype()
 {
@@ -95,12 +93,12 @@ void UmlClass::compute_dependencies(QList<CppRefType *> & dependencies,
 void UmlClass::compute_dependency(QList<CppRefType *> & dependencies,
                                   const WrapperStr &, bool all_in_h)
 {
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem*> ch = children();
     const WrapperStr stereotype = cpp_stereotype();
     bool a_typedef = (stereotype == "typedef");
     bool an_enum = (stereotype == "enum");
-    const Q3ValueList<UmlFormalParameter> formals = this->formals();
-    const Q3ValueList<UmlActualParameter> actuals = this->actuals();
+    const QList<UmlFormalParameter> formals = this->formals();
+    const QList<UmlActualParameter> actuals = this->actuals();
 
     if (!formals.isEmpty())
         // template class, force depend in h
@@ -126,12 +124,12 @@ void UmlClass::compute_dependency(QList<CppRefType *> & dependencies,
         incr_warning();
     }
     else {
-        Q3ValueList<UmlFormalParameter>::ConstIterator itf;
+        QList<UmlFormalParameter>::ConstIterator itf;
 
         for (itf = formals.begin(); itf != formals.end(); ++itf)
             CppRefType::remove((*itf).name(), dependencies);
 
-        Q3ValueList<UmlActualParameter>::ConstIterator ita;
+        QList<UmlActualParameter>::ConstIterator ita;
 
         for (ita = actuals.begin(); ita != actuals.end(); ++ita)
             UmlClassMember::compute_dependency(dependencies, "${type}",
@@ -165,7 +163,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
     context.append(this);
 
     bool removed = FALSE;
-    Q3PtrVector<UmlItem> ch = children();
+    QVector<UmlItem*> ch = children();
     const unsigned sup = ch.size();
     QLOG_INFO() << "children.size() is: " << sup;
     const WrapperStr & stereotype = cpp_stereotype();
@@ -173,8 +171,8 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
 
     bool an_enum = (stereotype == "enum");
     QLOG_INFO() << "the class is an enum: " << an_enum;
-    const Q3ValueList<UmlFormalParameter> formals = this->formals();
-    const Q3ValueList<UmlActualParameter> actuals = this->actuals();
+    const QList<UmlFormalParameter> formals = this->formals();
+    const QList<UmlActualParameter> actuals = this->actuals();
     unsigned index;
     const char * p = cppDecl();
     const char * pp = 0;
@@ -236,7 +234,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
                 UmlClass * cl = baseType().type;
 
                 if ((cl != 0) && !actuals.isEmpty()) {
-                    Q3ValueList<UmlActualParameter>::ConstIterator ita;
+                    QList<UmlActualParameter>::ConstIterator ita;
                     BooL need_space = FALSE;
 
                     for (ita = actuals.begin(); ita != actuals.end(); ++ita)
@@ -301,7 +299,7 @@ void UmlClass::generate_decl(QTextStream & f_h, WrapperStr indent)
                 const char * sep2 = "<";
                 BooL need_space = FALSE;
 
-                Q3ValueList<UmlFormalParameter>::ConstIterator itf;
+                QList<UmlFormalParameter>::ConstIterator itf;
 
                 for (itf = formals.begin(); itf != formals.end(); ++itf)
                     (*itf).generate(f_h, sep, sep2, need_space);
@@ -409,7 +407,7 @@ void UmlClass::generate_decl(aVisibility & current_visibility, QTextStream & f_h
 void UmlClass::generate_def(QTextStream & f, WrapperStr indent, bool h)
 {
     if (! cppDecl().isEmpty()) {
-        Q3PtrVector<UmlItem> ch = children();
+        QVector<UmlItem*> ch = children();
         WrapperStr templates;
         WrapperStr cl_names;
         WrapperStr templates_tmplop;
@@ -444,7 +442,7 @@ void UmlClass::generate_def(QTextStream & f, WrapperStr indent, bool h,
         cl_names_tmplop = cl_names + "::" + name()/* true_name */;
         cl_names = cl_names_tmplop + template2;
 
-        Q3PtrVector<UmlItem> ch = children();
+        QVector<UmlItem*> ch = children();
 
         for (unsigned index = 0; index != ch.size(); index += 1)
             if (ch[index]->kind() != aNcRelation)
@@ -457,10 +455,10 @@ void UmlClass::generate_def(QTextStream & f, WrapperStr indent, bool h,
 void UmlClass::get_template_prefixes(WrapperStr & template1,
                                      WrapperStr & template2)
 {
-    Q3ValueList<UmlFormalParameter> formals = this->formals();
+    QList<UmlFormalParameter> formals = this->formals();
 
     if (!formals.isEmpty()) {
-        Q3ValueList<UmlFormalParameter>::ConstIterator it;
+        QList<UmlFormalParameter>::ConstIterator it;
         const char * sep1 = "template<";
         const char * sep2 = "<";
 
@@ -561,7 +559,7 @@ void UmlClass::write(QTextStream & f, const UmlTypeSpec & t,
 }
 
 void UmlClass::write(QTextStream & f, bool with_formals, BooL * is_template,
-                     const Q3ValueList<UmlActualParameter> & actuals)
+                     const QList<UmlActualParameter> & actuals)
 {
     if (! context.contains(this)) {
         if (parent()->kind() == aClass) {
@@ -598,9 +596,9 @@ void UmlClass::write(QTextStream & f, bool with_formals, BooL * is_template,
         else if ((index = s.find("${Name}")) != -1)
             s.replace(index, 7, capitalize(name()));
         else if ((index = s.find("${NAME}")) != -1)
-            s.replace(index, 7, name().upper());
+            s.replace(index, 7, name().upper().toLatin1().constData());
         else if ((index = s.find("${nAME}")) != -1)
-            s.replace(index, 7, name().lower());
+            s.replace(index, 7, name().lower().toLatin1().constData());
     }
     else
         s = name();	// true_name
@@ -615,11 +613,11 @@ void UmlClass::write(QTextStream & f, bool with_formals, BooL * is_template,
         *is_template = FALSE;
 
     if (with_formals) {
-        Q3ValueList<UmlFormalParameter> formals = this->formals();
+        QList<UmlFormalParameter> formals = this->formals();
 
         if (! formals.isEmpty()) {
             const char * sep = "<";
-            Q3ValueList<UmlFormalParameter>::ConstIterator it;
+            QList<UmlFormalParameter>::ConstIterator it;
 
             for (it = formals.begin(); it != formals.end(); ++it) {
                 f << sep << (*it).name();
@@ -633,7 +631,7 @@ void UmlClass::write(QTextStream & f, bool with_formals, BooL * is_template,
         }
     }
     else if (!actuals.isEmpty()) {
-        Q3ValueList<UmlActualParameter>::ConstIterator ita;
+        QList<UmlActualParameter>::ConstIterator ita;
         BooL need_space = FALSE;
         bool used = FALSE;
 

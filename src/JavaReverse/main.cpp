@@ -26,8 +26,7 @@
 // *************************************************************************
 
 #include <qapplication.h>
-#include <q3filedialog.h>
-//Added by qt3to4:
+#include <qfiledialog.h>
 #include "misc/mystr.h"
 #include <stdlib.h>
 #include <qfile.h>
@@ -80,28 +79,12 @@ int main(int argc, char ** argv)
 
                 Package::init((UmlPackage *) item, app);
 
-                QString here = QDir::currentDirPath();
+                QString here = QDir::currentPath();
                 QString path;
                 // note : QFile fp(QDir::home().absFilePath(".doumlcat")) doesn't work
                 // if the path contains non latin1 characters, for instance cyrillic !
-                QString s = QDir::home().absFilePath(".doumlcat");
-                FILE * fp = fopen((const char *) s, "r");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                QString s = QDir::home().absoluteFilePath(".doumlcat");
+                FILE * fp = fopen((const char *) s.toLatin1().constData(), "r");
                 if (fp != 0) {
                     char line[512];
 
@@ -114,15 +97,14 @@ int main(int argc, char ** argv)
                 }
 
                 while (!(path =
-                             Q3FileDialog::getOpenFileName(path, "*.cat",
-                                     0, 0,
-                                     "select a java catalog file to read it, or cancel"))
+                             QFileDialog::getOpenFileName(0,"select a java catalog file to read it, or cancel",path, "*.cat",
+                                     0, 0))
                        .isEmpty()) {
                     QFile f(path);
 
                     if (f.open(QIODevice::ReadOnly)) {
-                        if ((fp = fopen((const char *) s, "w")) != 0) {
-                            fwrite((const char *) path, 1, path.length(), fp);
+                        if ((fp = fopen((const char *) s.toLatin1().constData(), "w")) != 0) {
+                            fwrite((const char *) path.toLatin1().constData(), 1, path.length(), fp);
                             fputc('\n', fp);
                             fclose(fp);
                         }

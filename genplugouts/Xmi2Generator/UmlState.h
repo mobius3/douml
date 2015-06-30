@@ -5,7 +5,7 @@
 #include "UmlBaseState.h"
 #include "UmlStateItem.h"
 
-#include <q3ptrlist.h>
+
 #include <qmap.h>
 
 class FileOut;
@@ -16,7 +16,7 @@ class UmlState : public UmlBaseState, public UmlStateItem
 public:
         //  the constructor, do not call it yourself !!!!!!!!!!
     UmlState(void * id, const WrapperStr & s) : UmlBaseState(id, s) {
-        _all.replace(s.operator QString(), this);
+        _all[s.operator QString()] = this;
     }
 
     virtual void write(FileOut & out);
@@ -39,9 +39,9 @@ public:
 
 
 protected:
-    Q3PtrList<UmlTransition> _incoming_trans;
+    QList<UmlTransition*> _incoming_trans;
 
-    Q3PtrList<UmlTransition> _trans;
+    QList<UmlTransition*> _trans;
 
     static QMap<QString, UmlState *> _all;
 

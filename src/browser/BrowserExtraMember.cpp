@@ -29,8 +29,8 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+//#include <q3popupmenu.h>
+#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -125,57 +125,61 @@ const QPixmap * BrowserExtraMember::pixmap(int) const
 {
     if (deletedp())
         return DeletedExtraMemberIcon;
-
     const QPixmap * px = ProfiledStereotypes::browserPixmap(def->get_stereotype());
 
     if (px != 0)
         return px;
+
     else if (is_marked && text(0).isEmpty())
         return ExtraMemberMarkedIcon;
+
     else
         return ExtraMemberIcon;
 }
 
 void BrowserExtraMember::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_edited) {
-            m.setWhatsThis(m.insertItem(TR("Edit"), 0),
-                           TR("to edit the <i>extra member</i>, \
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                           QObject::tr("to edit the <i>extra member</i>, \
 a double click with the left mouse button does the same thing"));
 
             if (!is_read_only) {
-                m.setWhatsThis(m.insertItem(TR("Duplicate"), 3),
-                               TR("to copy the <i>extra member</i> in a new one"));
-                m.insertSeparator();
+                MenuFactory::addItem(m, QObject::tr("Duplicate"), 3,
+                               QObject::tr("to copy the <i>extra member</i> in a new one"));
+                m.addSeparator();
 
                 if (edition_number == 0)
-                    m.setWhatsThis(m.insertItem(TR("Delete"), 1),
-                                   TR("to delete the <i>extra member</i>. \
+                    MenuFactory::addItem(m, QObject::tr("Delete"), 1,
+                                   QObject::tr("to delete the <i>extra member</i>. \
 Note that you can undelete it after"));
             }
         }
 
-        mark_menu(m, TR("the extra member"), 90);
+        mark_menu(m, QObject::tr("the extra member").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle( QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0))
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 2),
-                       TR("to undelete the <i>extra member</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 2,
+                       QObject::tr("to undelete the <i>extra member</i>"));
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserExtraMember::exec_menu_choice(int rank)
@@ -204,7 +208,8 @@ void BrowserExtraMember::exec_menu_choice(int rank)
     default:
         if (rank >= 99990)
             ProfiledStereotypes::choiceManagement(this, rank - 99990);
-        else if (rank >= 100)
+        else
+            if (rank >= 100)
             ToolCom::run(Tool::command(rank - 100), this);
         else
             mark_management(rank - 90);
@@ -266,7 +271,7 @@ UmlCode BrowserExtraMember::get_type() const
 
 QString BrowserExtraMember::get_stype() const
 {
-    return TR("extra member");
+    return QObject::TR("extra member");
 }
 
 int BrowserExtraMember::get_identifier() const
@@ -346,7 +351,7 @@ void BrowserExtraMember::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "extra_member " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
         BrowserNode::save(st);

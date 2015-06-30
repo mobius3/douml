@@ -24,14 +24,10 @@
 // home   : http://sourceforge.net/projects/douml
 //
 // *************************************************************************
-
-#include <q3ptrdict.h>
-#include <q3dict.h>
+////
 #include <qdir.h>
 #include <qimage.h>
-//Added by qt3to4:
 #include <QPixmap>
-
 #include "Images.h"
 #include "UmlWindow.h"
 #include "BrowserView.h"
@@ -39,16 +35,16 @@
 #include "DialogUtil.h"
 
 // all the pixmap for diagram with scale 100, key = path,
-static Q3Dict<QPixmap> DiagramPixmap;
+static QMap<const char *, QPixmap*> DiagramPixmap;
 
 // all the pixmap for diagram, key = path,
 // value is QPtrDict with key = width
-static Q3Dict<Q3PtrDict<QPixmap> > DiagramScaledPixmap;
+static QMap<const char*, QMap<void*,QPixmap*> *> DiagramScaledPixmap;
 
 // return pixmap for zoom 100%
 QPixmap * get_pixmap(const char * path)
 {
-    QPixmap * px = DiagramPixmap.find(path);
+    QPixmap * px = DiagramPixmap.value(path);
 
     if (px == 0) {
         QString abspath;
@@ -56,21 +52,21 @@ QPixmap * get_pixmap(const char * path)
         if (!QDir::isRelativePath(path))
             abspath = path;
         else if ((UmlWindow::images_root_dir().isEmpty() ||
-                  !QFile::exists(abspath = QDir::cleanDirPath(UmlWindow::images_root_dir() + '/' + path))) &&
+                  !QFile::exists(abspath = QDir::cleanPath(UmlWindow::images_root_dir() + '/' + path))) &&
                  !QFile::exists(abspath = path))
-            abspath = BrowserView::get_dir().absFilePath(path);
+            abspath = BrowserView::get_dir().absoluteFilePath(path);
 
         px = new QPixmap(abspath);
 
         DiagramPixmap.insert(path, px);
 
         if (px->isNull()) {
-            msg_critical(TR("Error"),
-                         QString(path) + TR("\ndoesn't exist or is not a know image format"));
+            msg_critical(QObject::TR("Error"),
+                         QString(path) + QObject::TR("\ndoesn't exist or is not a know image format"));
             return 0;
         }
 
-        DiagramScaledPixmap.insert(path, new Q3PtrDict<QPixmap>());
+        DiagramScaledPixmap.insert(path, new QMap<void*,QPixmap*>());
     }
 
     return (px->isNull()) ? 0 : px;
@@ -87,14 +83,14 @@ QPixmap * get_pixmap(const char * path, double zoom)
     if (((int)(zoom * 100)) == 100)
         return px;
 
-    Q3PtrDict<QPixmap> * d = DiagramScaledPixmap[path]; // != 0
+    QMap<void*,QPixmap*> * d = DiagramScaledPixmap[path]; // != 0
     intptr_t scaled_w = static_cast<intptr_t>(px->width() * zoom);
     void * k = (void *) scaled_w;
-    QPixmap * scaled_px = d->find(k);
+    QPixmap * scaled_px = d->value(k);
 
     if (scaled_px == 0) {
         QImage img =
-            px->convertToImage().smoothScale(scaled_w, (int)(px->height() * zoom));
+            px->toImage().scaled(scaled_w, (int)(px->height() * zoom));
 
         scaled_px = new QPixmap();
         scaled_px->convertFromImage(img);
@@ -106,9 +102,20 @@ QPixmap * get_pixmap(const char * path, double zoom)
 
 void init_images()
 {
-    DiagramPixmap.setAutoDelete(TRUE);
+    //DiagramPixmap.setAutoDelete(TRUE);
+
+
+    QList<QPixmap*> pList = DiagramPixmap.values();
+    while(!pList.isEmpty())
+        delete pList.takeFirst();
     DiagramPixmap.clear();
 
-    DiagramScaledPixmap.setAutoDelete(TRUE);
+    //DiagramScaledPixmap.setAutoDelete(TRUE);
+
+
+    QList<QMap<void*,QPixmap*> *> pSList = DiagramScaledPixmap.values();
+    while(!pSList.isEmpty())
+        delete pSList.takeFirst();
+
     DiagramScaledPixmap.clear();
 }

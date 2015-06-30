@@ -3,15 +3,14 @@
 
 
 #include "UmlBaseNcRelation.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 //This class manages 'relations' between non class objects
 //
 // You can modify it as you want (except the constructor)
-class UmlNcRelation : public UmlBaseNcRelation
-{
-public:
-    UmlNcRelation(void * id, const Q3CString & n) : UmlBaseNcRelation(id, n) {};
+class UmlNcRelation : public UmlBaseNcRelation {
+  public:
+    UmlNcRelation(void * id, const QByteArray & n) : UmlBaseNcRelation(id, n) {};
 
 };
 

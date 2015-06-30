@@ -10,7 +10,8 @@ CONFIG(Release, Debug|Release) {
     QMAKE_POST_LINK = " "
 }
 HEADERS          = JavaCatWindow.h BrowserView.h BrowserSearchDialog.h ShowFileDialog.h \
-        CommentView.h
+        CommentView.h \
+    menufactory.h
 SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
         UmlClass.cpp UmlClassDiagram.cpp UmlClassMember.cpp \
         UmlExtraClassMember.cpp \
@@ -107,17 +108,19 @@ SOURCES          = UmlClassItem.cpp UmlAttribute.cpp UmlArtifact.cpp \
     ../misc/mystr.cpp \
     ../Logging/QsLogDest.cpp \
     ../Logging/QsLog.cpp \
-    ../Logging/QsDebugOutput.cpp
+    ../Logging/QsDebugOutput.cpp \
+    menufactory.cpp
 
 TARGET          = java_catalog
-DEFINES          = WITHJAVA
+DEFINES          = WITHJAVA TRUE=true FALSE=false
 INCLUDEPATH   = ../Tools ../JavaCat
 
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+#qt3support
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/java_catalog
@@ -132,3 +135,4 @@ UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+

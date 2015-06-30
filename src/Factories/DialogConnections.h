@@ -35,6 +35,7 @@ class EdgeMenuToolBar;
 template<typename DialogType>
 void ConnectToLimitedDialog(DialogType * dialog, EdgeMenuToolBar * toolbar)
 {
+#ifdef EDGETOOLENABLED
     QPushButton * pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("OkayElement"));
     QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(accept()));
     pageButton = qobject_cast<QPushButton *>(toolbar->findChild<QPushButton *>("CancelElement"));
@@ -65,10 +66,12 @@ void ConnectToLimitedDialog(DialogType * dialog, EdgeMenuToolBar * toolbar)
     dialog->ConnectionToToolBarEstablished();
     dialog->SetToolBar(toolbar);
     //toolbar->setParent(dialog);
+#endif
 }
 template<typename DialogType>
 void ConnectToClassDialog(DialogType * dialog, EdgeMenuToolBar * toolbar)
 {
+#ifdef EDGETOOLENABLED
     MultiPurposeDragArea * dragArea = qobject_cast<MultiPurposeDragArea *>(toolbar->findChild<MultiPurposeDragArea *>("DragArea"));
     QObject::connect(dragArea, SIGNAL(changeTab(int)), dialog, SLOT(OnChangeTab(int)));
 
@@ -79,6 +82,7 @@ void ConnectToClassDialog(DialogType * dialog, EdgeMenuToolBar * toolbar)
     QObject::connect(pageButton, SIGNAL(clicked()), dialog, SLOT(OnPickPreviousSibling()));
 
     ConnectToLimitedDialog<DialogType>(dialog, toolbar);
+#endif
 }
 
 

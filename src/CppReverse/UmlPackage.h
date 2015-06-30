@@ -31,7 +31,6 @@
 #include "UmlBasePackage.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
 
 class UmlClassView;
 #ifdef REVERSE

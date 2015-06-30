@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlUseCase;
 class UmlUseCaseDiagram;
@@ -32,7 +32,9 @@ public:
     bool set_AssociatedDiagram(UmlUseCaseDiagram * d);
 
 
+
 private:
+    QByteArray _extension_points;
     UmlUseCaseDiagram * _assoc_diagram;
 
 
@@ -40,7 +42,7 @@ protected:
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseUseCase(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseUseCase(void * id, const QByteArray & n) : UmlItem(id, n) {};
 
 };
 

@@ -35,12 +35,9 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qcheckbox.h>
-#include <q3buttongroup.h>
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-
+#include <bbuttongroup.h>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "RelatedElementsDialog.h"
 #include "DialogUtil.h"
 #include "UmlDesktop.h"
@@ -50,21 +47,22 @@
 #include "RelationData.h"
 #include "SimpleRelationData.h"
 #include "translate.h"
-
+#include <QHash>
 QSize RelatedElementsDialog::previous_size;
 
 RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
         bool inh, bool assoc, BrowserNodeList & l)
-    : QDialog(0, "Related elements dialog", TRUE), elt(e), elts(l)
+    : QDialog(0), elt(e), elts(l)
 {
-    setCaption(TR("Related elements dialog"));
+    setWindowTitle(TR("Related elements dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(new QLabel(TR("Search for : "), this));
     referenced_rb = new QCheckBox(TR("referenced elements  "), this);
@@ -73,7 +71,8 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
     referencing_rb = new QCheckBox(TR("referencing elements  "), this);
     hbox->addWidget(referencing_rb);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(new QLabel(TR("Through relations : "), this));
 
@@ -99,19 +98,26 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
 
     hbox->addWidget(new QLabel(this), 1000);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
-    sametype_rb = new QCheckBox(TR("Search only for %1", what), this);
+    sametype_rb = new QCheckBox(TR("Search only for %1").arg(what), this);
     sametype_rb->setChecked(TRUE);
     hbox->addWidget(sametype_rb);
     hbox->addWidget(new QLabel(this), 1000);
     hbox->addWidget(new QLabel(TR("     Search on "), this));
-    sb_level = new QSpinBox(1, 10, 1, this, TR("levels"));
+    //sb_level = new QSpinBox(1, 10, 1, this, TR("levels"));
+    sb_level = new QSpinBox(this);
+    sb_level->setMinimum(1);
+    sb_level->setMaximum(10);
+    sb_level->setSingleStep(1);
+    sb_level->setObjectName(TR("levels"));
     sb_level->setValue(1);
     hbox->addWidget(sb_level);
     hbox->addWidget(new QLabel(TR("levels"), this));
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * accept = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -130,7 +136,7 @@ RelatedElementsDialog::RelatedElementsDialog(BrowserNode * e, const char * what,
 
 void RelatedElementsDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -153,7 +159,7 @@ void RelatedElementsDialog::accept()
 
     elts.clear();
 
-    Q3PtrDict<BrowserNode> d(71);
+    QHash<BrowserNode*, BrowserNode*> d;
     BrowserNodeList added;
     int lvl = sb_level->value();
 
@@ -212,7 +218,7 @@ void RelatedElementsDialog::accept()
                         }
 
                         if ((sametype && (target->get_type() != k)) ||
-                            (d[target] != 0))
+                            (d.value(target) != 0))
                             continue;
 
                         d.insert(target, target);
@@ -235,11 +241,11 @@ void RelatedElementsDialog::accept()
 
     d.remove(elt);
 
-    Q3PtrDictIterator<BrowserNode> it(d);
+    QHashIterator<BrowserNode*, BrowserNode*> it(d);
 
-    while (it.current()) {
-        elts.append(it.current());
-        ++it;
+    while (it.hasNext()) {
+        it.next();
+        elts.append(it.value());
     }
 
     QDialog::accept();

@@ -71,7 +71,9 @@ public:
     void SetToolBar(EdgeMenuToolBar*);
 
     bool isConnectedToToolBar;
+#ifdef EDGETOOLENABLED
     EdgeMenuToolBar* toolbar = 0;
+#endif
     BrowserNode * currentNode;
     EWidgetModificationMode modificationMode;
     QPoint modificationOrigin;

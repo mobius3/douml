@@ -32,9 +32,10 @@
 #include "UmlCanvas.h"
 #include "UmlGlobal.h"
 #include "DiagramView.h"
-#include "CodDirsCanvas.h"
 #include "ArrowCanvas.h"
+#include "CodDirsCanvas.h"
 #include "ArrowPointCanvas.h"
+#include "DiagramCanvas.h"
 #include "BrowserDiagram.h"
 
 static QList<UmlCanvas *> All;
@@ -75,7 +76,9 @@ static const struct {
 };
 
 UmlCanvas::UmlCanvas(CanvasFormat f, BrowserDiagram * br_diag)
-    : Q3Canvas(formatSize[f].w, formatSize[f].h),
+    : QGraphicsScene(
+          0,0,formatSize[f].w, formatSize[f].h
+          ),
       br_diagram(br_diag), view(0), all_items((const char *) 0)
 {
     width100percent = width();
@@ -94,45 +97,52 @@ UmlCanvas::UmlCanvas(CanvasFormat f, BrowserDiagram * br_diag)
 
 UmlCanvas::~UmlCanvas()
 {
-    All.remove(this);
+    All.removeOne(this);
 }
 
 void UmlCanvas::set_view(DiagramView * v)
 {
     view = v;
-
     // add limits
-    vlimit = new Q3CanvasLine(this);
-    hlimit = new Q3CanvasLine(this);
-    vlimit->setZ(TOP_Z);	// alien
-    hlimit->setZ(TOP_Z);	// alien
+    vlimit = new QGraphicsLineItem(/*this*/);
+    hlimit = new QGraphicsLineItem(/*this*/);
+    vlimit->setZValue(TOP_Z);	// alien
+    hlimit->setZValue(TOP_Z);	// alien
     vlimit->setPen(::Qt::DotLine);
     hlimit->setPen(::Qt::DotLine);
     update_limits();
     vlimit->show();
     hlimit->show();
+    this->addItem(vlimit);
+    this->addItem(hlimit);
 }
 
 void UmlCanvas::update_limits()
 {
     if (vlimit) {
-        vlimit->setPoints(width() - 1, 0, width() - 1, height() - 1);
-        hlimit->setPoints(0, height() - 1, width() - 1, height() - 1);
+        vlimit->setLine(width() - 1, 0, width() - 1, height() - 1);
+        hlimit->setLine(0, height() - 1, width() - 1, height() - 1);
     }
 }
 
 void UmlCanvas::resize(CanvasFormat f)
 {
-    Q3Canvas::resize((int)(formatSize[f].w * zoom_value),
+
+    setSceneRect(0, 0,(int)(formatSize[f].w * zoom_value),
                      (int)(formatSize[f].h * zoom_value));
     width100percent = formatSize[f].w;
     height100percent = formatSize[f].h;
     update_limits();
 
     // force redisplay else phantoms may appears
-    setBackgroundColor(::Qt::lightGray);
+    QBrush bBrush = backgroundBrush();
+    bBrush.setColor(::Qt::lightGray);
+    setBackgroundBrush(bBrush);
+    //setBackgroundColor(::Qt::lightGray);
     update();
-    setBackgroundColor(::Qt::white);
+    bBrush.setColor(::Qt::white);
+    //setBackgroundColor(::Qt::white);
+    setBackgroundBrush(bBrush);
     update();
 }
 
@@ -144,51 +154,53 @@ static bool small_element(const QRect & r)
     return (r.width() < l) && (r.height() < l);
 }
 
-Q3CanvasItem * UmlCanvas::collision(const QPoint & p) const
+QGraphicsItem * UmlCanvas::collision(const QPoint & p) const
 {
-    Q3CanvasItemList l = collisions(p);
-    Q3CanvasItemList::ConstIterator it;
-    Q3CanvasItemList::ConstIterator end = l.end();
+    QList<QGraphicsItem*> l = items(p);
+    QList<QGraphicsItem*>::ConstIterator it;
+    QList<QGraphicsItem*>::ConstIterator end = l.end();
     ArrowCanvas * arrow = 0;
 
+
     for (it = l.begin(); it != end; ++it)
-        if (((*it)->visible()) && // at least not deleted
-            !isa_alien(*it) &&
-            !isa_col_msg_dirs(*it)) {
-            switch ((*it)->rtti()) {
+        if (((*it)->isVisible()) && // at least not deleted
+            !isa_alien(*it)&&
+            !isa_col_msg_dirs(*it)
+                ) {
+            switch ((*it)->type()) {
             case RTTI_ARROW:
                 if (arrow == 0)
                     arrow = (ArrowCanvas *) *it;
-
                 break;
-
             case RTTI_LABEL:
-                return (arrow == 0) ? *it : arrow;
-
+                return (arrow == NULL) ? *it : arrow;
             default:
                 // isa DiagramCanvas
                 return ((arrow == 0) ||
                         (small_element(((DiagramCanvas *) *it)->rect()) &&
                          ((DiagramCanvas *) *it)->attached_to(arrow)))
-                       ? *it : arrow;
+                       ? *it : (QGraphicsItem *)arrow;
+
             }
         }
-
     return arrow;
 }
 
-Q3CanvasItem * UmlCanvas::collision(const QPoint & p, int except) const
+QGraphicsItem * UmlCanvas::collision(const QPoint & p, int except) const
 {
-    Q3CanvasItemList l = collisions(p);
-    Q3CanvasItemList::ConstIterator it;
-    Q3CanvasItemList::ConstIterator end = l.end();
+
+    QList<QGraphicsItem*> l = items(p);
+    QList<QGraphicsItem*>::ConstIterator it;
+    QList<QGraphicsItem*>::ConstIterator end = l.end();
     ArrowCanvas * arrow = 0;
 
     for (it = l.begin(); it != end; ++it)
-        if (((*it)->visible()) && // at least not deleted
-            !isa_alien(*it) &&
-            !isa_col_msg_dirs(*it)) {
-            int k = (*it)->rtti();
+        if (((*it)->isVisible()) && // at least not deleted
+            !isa_alien(*it)
+                &&
+            !isa_col_msg_dirs(*it)
+                ) {
+            int k = (*it)->type();
 
             if (k != except) {
                 switch (k) {
@@ -197,10 +209,8 @@ Q3CanvasItem * UmlCanvas::collision(const QPoint & p, int except) const
                         arrow = (ArrowCanvas *) *it;
 
                     break;
-
                 case RTTI_LABEL:
                     return (arrow == 0) ? *it : arrow;
-
                 default:
                     // isa DiagramCanvas
                     return ((arrow == 0) ||
@@ -210,37 +220,35 @@ Q3CanvasItem * UmlCanvas::collision(const QPoint & p, int except) const
                 }
             }
         }
-
     return arrow;
 }
 
-void UmlCanvas::del(Q3CanvasItem * i)
+void UmlCanvas::del(QGraphicsItem * i)
 {
     // do not delete, just hide because of a Qt's bug (?)
     i->hide();
-    selected.remove(i);
-
+    selected.removeOne(i);
     DiagramItem * it = QCanvasItemToDiagramItem(i);
 
     if (it != 0)
         all_items.remove(it->get_ident());
 }
 
-void UmlCanvas::select(Q3CanvasItem * i)
+void UmlCanvas::select(QGraphicsItem * i)
 {
     i->setSelected(TRUE);
     selected.append(i);
 }
 
-void UmlCanvas::unselect(Q3CanvasItem * i)
+void UmlCanvas::unselect(QGraphicsItem * i)
 {
     i->setSelected(FALSE);
-    selected.remove(i);
+    selected.removeOne(i);
 }
 
 void UmlCanvas::unselect_all()
 {
-    Q3CanvasItemList::Iterator it;
+    QList<QGraphicsItem*>::Iterator it;
 
     for (it = selected.begin(); it != selected.end(); ++it)
         (*it)->setSelected(FALSE);
@@ -258,39 +266,37 @@ void UmlCanvas::set_zoom(double zm)
     float ps_large = 2 * ps;
 
     the_fonts[UmlNormalFont] = NormalFont;
-    the_fonts[UmlNormalFont].setPointSizeFloat(ps);
+    the_fonts[UmlNormalFont].setPointSizeF(ps);
     the_fonts[UmlNormalBoldFont] = BoldFont;
-    the_fonts[UmlNormalBoldFont].setPointSizeFloat(ps);
+    the_fonts[UmlNormalBoldFont].setPointSizeF(ps);
     the_fonts[UmlNormalItalicFont] = ItalicFont;
-    the_fonts[UmlNormalItalicFont].setPointSizeFloat(ps);
+    the_fonts[UmlNormalItalicFont].setPointSizeF(ps);
     the_fonts[UmlNormalBoldItalicFont] = BoldItalicFont;
-    the_fonts[UmlNormalBoldItalicFont].setPointSizeFloat(ps);
+    the_fonts[UmlNormalBoldItalicFont].setPointSizeF(ps);
     the_fonts[UmlNormalUnderlinedFont] = UnderlineFont;
-    the_fonts[UmlNormalUnderlinedFont].setPointSizeFloat(ps);
+    the_fonts[UmlNormalUnderlinedFont].setPointSizeF(ps);
     the_fonts[UmlNormalStrikeOutFont] = StrikeOutFont;
-    the_fonts[UmlNormalStrikeOutFont].setPointSizeFloat(ps);
+    the_fonts[UmlNormalStrikeOutFont].setPointSizeF(ps);
 
     the_fonts[UmlSmallFont] = NormalFont;
-    the_fonts[UmlSmallFont].setPointSizeFloat(ps_small);
+    the_fonts[UmlSmallFont].setPointSizeF(ps_small);
     the_fonts[UmlSmallBoldFont] = BoldFont;
-    the_fonts[UmlSmallBoldFont].setPointSizeFloat(ps_small);
+    the_fonts[UmlSmallBoldFont].setPointSizeF(ps_small);
     the_fonts[UmlSmallItalicFont] = ItalicFont;
-    the_fonts[UmlSmallItalicFont].setPointSizeFloat(ps_small);
+    the_fonts[UmlSmallItalicFont].setPointSizeF(ps_small);
     the_fonts[UmlSmallBoldItalicFont] = BoldItalicFont;
-    the_fonts[UmlSmallBoldItalicFont].setPointSizeFloat(ps_small);
+    the_fonts[UmlSmallBoldItalicFont].setPointSizeF(ps_small);
 
     the_fonts[UmlLargeFont] = NormalFont;
-    the_fonts[UmlLargeFont].setPointSizeFloat(ps_large);
+    the_fonts[UmlLargeFont].setPointSizeF(ps_large);
     the_fonts[UmlLargeBoldFont] = BoldFont;
-    the_fonts[UmlLargeBoldFont].setPointSizeFloat(ps_large);
+    the_fonts[UmlLargeBoldFont].setPointSizeF(ps_large);
     the_fonts[UmlLargeItalicFont] = ItalicFont;
-    the_fonts[UmlLargeItalicFont].setPointSizeFloat(ps_large);
+    the_fonts[UmlLargeItalicFont].setPointSizeF(ps_large);
     the_fonts[UmlLargeBoldItalicFont] = BoldItalicFont;
-    the_fonts[UmlLargeBoldItalicFont].setPointSizeFloat(ps_large);
-
-    Q3Canvas::resize((int)(width100percent * zm),
+    the_fonts[UmlLargeBoldItalicFont].setPointSizeF(ps_large);
+    setSceneRect(0,0,(int)(width100percent * zm),
                      (int)(height100percent * zm));
-
     update_limits();
 }
 
@@ -329,24 +335,23 @@ void UmlCanvas::update()
     if (view != 0)
         view->update_history();
 
-    Q3Canvas::update();
+    QGraphicsScene::update();
 }
 
 bool UmlCanvas::already_drawn(BrowserNode * bn)
 {
-    Q3CanvasItemList all = allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = items();
+    QList<QGraphicsItem*>::Iterator cit;
     UmlCode k = bn->get_type();
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
-            if ((di != 0) && (di->type() == k) && (di->get_bn() == bn))
+            if ((di != 0) && (di->typeUmlCode() == k) && (di->get_bn() == bn))
                 return TRUE;
         }
     }
-
     return FALSE;
 }
 

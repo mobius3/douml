@@ -51,7 +51,7 @@ public:
 
     virtual void delete_it();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool copyable() const;
     virtual void open();

@@ -110,12 +110,12 @@ ${items}
 " // multiplicity [..]
   cpp_get "get_${name}" inline const value_const public
   cpp_set "set_${name}" public
-  cpp_default_operation_declaration "    ${comment}${static}${virtual}${type} ${name}${(}${)}${const}${volatile}${abstract};
+  cpp_default_operation_declaration "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
 "
   cpp_default_operation_definition "${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${staticnl}{
 ${body}}
 "
-  java_default_src_content "${comment}
+  cpp_indent_visibility "  "java_default_src_content "${comment}
 ${package}
 ${definition}"
   java_default_class_decl "${comment}${public}${final}${abstract}class ${name}${extends}${implements} {

@@ -35,7 +35,7 @@
 #include <qobject.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3MemArray>
+//#include <Q3MemArray>
 #include "DiagramCanvas.h"
 #include "MultipleDependency.h"
 #include "Settings.h"
@@ -59,14 +59,15 @@ protected:
     WrapperStr activities;
     int min_width;
     int min_height;
-    Q3MemArray<QRect> regions_rect;	// from bottom to top / right to left
-    Q3MemArray<BrowserRegion *> regions;
+    QVector<QRect> regions_rect;	// from bottom to top / right to left
+    QVector<BrowserRegion *> regions;
 
 protected:
     StateCanvas(UmlCanvas * canvas, int id);
     void compute_regions();
     int resize_to_show_regions();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     StateCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~StateCanvas();
@@ -80,7 +81,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;

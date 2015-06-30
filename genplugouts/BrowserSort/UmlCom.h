@@ -1,25 +1,21 @@
 #ifndef _UMLCOM_H
 #define _UMLCOM_H
 
-
-#include <q3socketdevice.h>
-////#include "CmdFamily.h"
-////#include "OnInstanceCmd.h"
 #include "Tools/ApiCmd.h"
 #include "anItemKind.h"
 #include "aRelationKind.h"
-#include <q3ptrvector.h>
 
-#include <q3cstring.h>
 
-#include <q3ptrvector.h>
+
+
+
 #include <qstring.h>
 
 class UmlItem;
 class UmlTypeSpec;
 class UmlClass;
 
-class Q3SocketDevice;
+class QTcpSocket;
 class UmlItem;
 class UmlTypeSpec;
 class UmlClass;
@@ -66,7 +62,7 @@ public:
     static void close();
 
 private:
-    static Q3SocketDevice * sock;
+    static QTcpSocket * sock;
 
     static char * buffer_in;
 
@@ -174,8 +170,8 @@ public:
     static void send_cmd(const void * id, OnInstanceCmd cmd, unsigned int arg1, char arg2, const char * arg3, const char * arg4, const UmlTypeSpec & arg5);
     //internal, do NOT use it
 
-    static void send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlItem> & l);
-    static void send_cmd(const void * id, OnInstanceCmd cmd, const Q3PtrVector<UmlClass> & l1, const Q3PtrVector<UmlClass> & l2, const Q3PtrVector<UmlClass> & l3);
+    static void send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlItem*> & l);
+    static void send_cmd(const void * id, OnInstanceCmd cmd, const QVector<UmlClass*> & l1, const QVector<UmlClass*> & l2, const QVector<UmlClass*> & l3);
 
     //internal, do NOT use it
 
@@ -198,10 +194,10 @@ public:
     static unsigned int read_unsigned();
     // internal, do NOT use it
 
-    static void read_item_list(Q3PtrVector<UmlItem> & v);
+    static void read_item_list(QVector<UmlItem*> & v);
     //internal, do NOT use it
 
-    static void fatal_error(const Q3CString & msg);
+    static void fatal_error(const QByteArray & msg);
     //internal, do NOT use it
 
     static void flush();

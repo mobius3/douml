@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -52,7 +52,7 @@
 #include "translate.h"
 
 ActivityPartitionCanvas::ActivityPartitionCanvas(BrowserNode * bn, UmlCanvas * canvas,
-        int x, int y)
+                                                 int x, int y)
     : ActivityContainerCanvas(0, canvas, x, y,
                               ACTIVITY_PARTITION_CANVAS_MIN_SIZE,
                               ACTIVITY_PARTITION_CANVAS_MIN_SIZE, 0)
@@ -63,11 +63,11 @@ ActivityPartitionCanvas::ActivityPartitionCanvas(BrowserNode * bn, UmlCanvas * c
     BrowserNode * parent = (BrowserNode *) browser_node->parent();
 
     if (parent->get_type() == UmlActivityPartition) {
-        Q3CanvasItemList all = the_canvas()->allItems();
-        Q3CanvasItemList::Iterator cit;
+        QList<QGraphicsItem*> all = the_canvas()->items();
+        QList<QGraphicsItem*>::Iterator cit;
 
         for (cit = all.begin(); cit != all.end(); ++cit) {
-            if ((*cit)->visible()) {
+            if ((*cit)->isVisible()) {
                 DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
                 if ((di != 0) && (di->get_bn() == parent)) {
@@ -87,7 +87,7 @@ ActivityPartitionCanvas::ActivityPartitionCanvas(BrowserNode * bn, UmlCanvas * c
     check_stereotypeproperties();
 
     ActivityPartitionData * data =
-        (ActivityPartitionData *) browser_node->get_data();
+            (ActivityPartitionData *) browser_node->get_data();
 
     connect(data, SIGNAL(changed()), this, SLOT(modified()));
     connect(data, SIGNAL(deleted()), this, SLOT(deleted()));
@@ -134,7 +134,7 @@ void ActivityPartitionCanvas::remove(bool from_model)
 void ActivityPartitionCanvas::check_size()
 {
     ActivityPartitionData * data =
-        (ActivityPartitionData *) browser_node->get_data();
+            (ActivityPartitionData *) browser_node->get_data();
 
     if (data->get_represents() != 0) {
         BasicData * d = data->get_represents()->get_data();
@@ -157,9 +157,9 @@ void ActivityPartitionCanvas::check_size()
     QString s;
 
     if (!(s = browser_node->get_name()).isEmpty() ||
-        ((data->get_represents() != 0) &&
-         !data->get_represents()->deletedp() &&
-         !(s = data->get_represents()->get_name()).isEmpty())) {
+            ((data->get_represents() != 0) &&
+             !data->get_represents()->deletedp() &&
+             !(s = data->get_represents()->get_name()).isEmpty())) {
         w2 = fm.width(s);
 
         if (w2 > w1)
@@ -194,19 +194,19 @@ void ActivityPartitionCanvas::check_size()
                           (height() > min_height) ? height() : min_height);
 
     used_color = (itscolor == UmlDefaultColor)
-                 ? the_canvas()->browser_diagram()->get_color(UmlActivityPartition)
-                 : itscolor;
+            ? the_canvas()->browser_diagram()->get_color(UmlActivityPartition)
+            : itscolor;
 }
 
 void ActivityPartitionCanvas::change_scale()
 {
     double scale = the_canvas()->zoom();
 
-    Q3CanvasRectangle::setVisible(FALSE);
-    setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+    QGraphicsRectItem::setVisible(FALSE);
+    setRect(0,0,(int)(width_scale100 * scale), (int)(height_scale100 * scale));
     check_size();
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void ActivityPartitionCanvas::modified()
@@ -257,7 +257,7 @@ void ActivityPartitionCanvas::force_sub_inside(bool resize_it)
 {
     // update sub nodes position to be inside of the activity region
     // or resize it to contains sub elts if resize_it
-    Q3CanvasItemList all = canvas()->allItems();
+    QList<QGraphicsItem*> all = canvas()->items();
     BooL need_sub_upper = FALSE;
 
     if (resize_it)
@@ -271,21 +271,23 @@ void ActivityPartitionCanvas::force_sub_inside(bool resize_it)
 
 void ActivityPartitionCanvas::draw(QPainter & p)
 {
-    if (! visible()) return;
+    if (! isVisible()) return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
 
     QRect r = rect();
     FILE * fp = svg();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
     QColor co = color(used_color);
 
+    QBrush backBrush = p.background();
     p.setBackgroundMode((used_color == UmlTransparent)
                         ? ::Qt::TransparentMode
                         : ::Qt::OpaqueMode);
 
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
 
     if (used_color != UmlTransparent)
         p.fillRect(r, co);
@@ -297,7 +299,7 @@ void ActivityPartitionCanvas::draw(QPainter & p)
 
     if (fp != 0) {
         fprintf(fp, "<g>\n\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
                 svg_color(used_color),
                 r.x(), r.y(), r.width() - 1, r.height() - 1);
     }
@@ -313,7 +315,7 @@ void ActivityPartitionCanvas::draw(QPainter & p)
             p.restore();
 
             if (fp != 0) {
-                int index = str.find('\n');
+                int index = str.indexOf('\n');
 
                 if (index == -1)
                     draw_rotate_text(r.x() + h / 2, r.y() + r.height() / 2,
@@ -334,7 +336,7 @@ void ActivityPartitionCanvas::draw(QPainter & p)
 
         if (fp) {
             fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
+                        " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
                     r.left(), r.top(), r.left(), r.bottom());
             fputs("</g>\n", fp);
         }
@@ -354,19 +356,23 @@ void ActivityPartitionCanvas::draw(QPainter & p)
 
         if (fp) {
             fprintf(fp, "\t<line stroke=\"black\" stroke-opacity=\"1\""
-                    " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
+                        " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
                     r.left(), r.top(), r.right(), r.top());
             fputs("</g>\n", fp);
         }
     }
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
 
     if (selected())
         show_mark(p, rect());
 }
-
-UmlCode ActivityPartitionCanvas::type() const
+void ActivityPartitionCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode ActivityPartitionCanvas::typeUmlCode() const
 {
     return UmlActivityPartition;
 }
@@ -394,118 +400,122 @@ void ActivityPartitionCanvas::open()
 
 void ActivityPartitionCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
     int index;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem((horiz) ? TR("draw vertically") : TR("draw horizontally"), 10);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit activity partition"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, (horiz) ? TR("draw vertically") : TR("draw horizontally"), 10);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit activity partition"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
-            (BrowserNode *) the_canvas()->browser_diagram())
-            m.insertItem(TR("Set associated diagram"), 6);
+                (BrowserNode *) the_canvas()->browser_diagram())
+            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            m.insertItem(TR("Remove diagram association"), 9);
+            MenuFactory::addItem(m, TR("Remove diagram association"), 9);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlActivityPartition, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    switch (index = m.exec(QCursor::pos())) {
-    case 0:
-        upper();
-        modified();	// call package_modified()
-        return;
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        switch (index = retAction->data().toInt()) {
+        case 0:
+            upper();
+            modified();	// call package_modified()
+            return;
 
-    case 1:
-        lower();
-        modified();	// call package_modified()
-        return;
+        case 1:
+            lower();
+            modified();	// call package_modified()
+            return;
 
-    case 13:
-        z_up();
-        modified();	// call package_modified()
-        return;
+        case 13:
+            z_up();
+            modified();	// call package_modified()
+            return;
 
-    case 14:
-        z_down();
-        modified();	// call package_modified()
-        return;
+        case 14:
+            z_down();
+            modified();	// call package_modified()
+            return;
 
-    case 2:
-        edit_drawing_settings();
-        return;
+        case 2:
+            edit_drawing_settings();
+            return;
 
-    case 3:
-        browser_node->open(TRUE);
-        return;
+        case 3:
+            browser_node->open(TRUE);
+            return;
 
-    case 4:
-        browser_node->select_in_browser();
-        return;
+        case 4:
+            browser_node->select_in_browser();
+            return;
 
-    case 5:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
+        case 5:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
 
-    case 6:
-        ((BrowserActivityPartition *) browser_node)
-        ->set_associated_diagram((BrowserActivityDiagram *)
-                                 the_canvas()->browser_diagram());
-        return;
+        case 6:
+            ((BrowserActivityPartition *) browser_node)
+                    ->set_associated_diagram((BrowserActivityDiagram *)
+                                             the_canvas()->browser_diagram());
+            return;
 
-    case 7:
-        //remove from diagram
-        delete_it();
-        break;
+        case 7:
+            //remove from diagram
+            delete_it();
+            break;
 
-    case 8:
-        //delete from model
-        browser_node->delete_it();	// will delete the canvas
-        break;
+        case 8:
+            //delete from model
+            browser_node->delete_it();	// will delete the canvas
+            break;
 
-    case 9:
-        ((BrowserActivityPartition *) browser_node)
-        ->set_associated_diagram(0);
-        return;
+        case 9:
+            ((BrowserActivityPartition *) browser_node)
+                    ->set_associated_diagram(0);
+            return;
 
-    case 10:
-        turn(-1000, -1000);
-        break;
+        case 10:
+            turn(-1000, -1000);
+            break;
 
-    default:
-        if (index >= 20)
-            ToolCom::run(Tool::command(index - 20), browser_node);
+        default:
+            if (index >= 20)
+                ToolCom::run(Tool::command(index - 20), browser_node);
 
-        return;
+            return;
+        }
     }
 
     package_modified();
@@ -514,7 +524,7 @@ void ActivityPartitionCanvas::menu(const QPoint &)
 void ActivityPartitionCanvas::turn(int cx100, int cy100)
 {
     horiz ^= TRUE;
-    setSize(height(), width());
+    setRect(0,0,height(), width());
 
     if (cx100 == -1000) {
         // first turn partition
@@ -538,16 +548,16 @@ void ActivityPartitionCanvas::turn(int cx100, int cy100)
     recenter();
     DiagramCanvas::resize(width(), height());
 
-    Q3CanvasItemList all = the_canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = the_canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             ActivityPartitionCanvas * p = dynamic_cast<ActivityPartitionCanvas *>(*cit);
 
             if ((p != 0) &&
-                (p->get_bn()->parent() == browser_node) &&
-                (p->horiz != horiz)) {
+                    (p->get_bn()->parent() == browser_node) &&
+                    (p->horiz != horiz)) {
                 p->turn(cx100, cy100);
             }
         }
@@ -651,7 +661,7 @@ void ActivityPartitionCanvas::connexion(UmlCode action, DiagramItem * dest,
                                         const QPoint &, const QPoint &)
 {
     ArrowCanvas * a =
-        new ArrowCanvas(the_canvas(), this, dest, action, 0, FALSE, -1.0, -1.0);
+            new ArrowCanvas(the_canvas(), this, dest, action, 0, FALSE, -1.0, -1.0);
 
     a->show();
     the_canvas()->select(a);
@@ -700,9 +710,9 @@ ActivityPartitionCanvas::read(char *& st, UmlCanvas * canvas,
     else if (!strcmp(k, "activitypartitioncanvas")) {
         int id = read_id(st);
         BrowserActivityPartition * br =
-            BrowserActivityPartition::read_ref(st);
+                BrowserActivityPartition::read_ref(st);
         ActivityPartitionCanvas * result =
-            new ActivityPartitionCanvas(canvas, id);
+                new ActivityPartitionCanvas(canvas, id);
 
         result->browser_node = br;
         connect(br->get_data(), SIGNAL(changed()), result, SLOT(modified()));
@@ -764,13 +774,13 @@ void ActivityPartitionCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     ::load(h, b);
     horiz = (h != 0);
 
     ActivityPartitionData * data =
-        (ActivityPartitionData *) browser_node->get_data();
+            (ActivityPartitionData *) browser_node->get_data();
 
     connect(data, SIGNAL(changed()), this, SLOT(modified()));
     connect(data, SIGNAL(deleted()), this, SLOT(deleted()));
@@ -786,13 +796,13 @@ void ActivityPartitionCanvas::history_load(QBuffer & b)
 
 void ActivityPartitionCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
 
     disconnect(DrawingSettings::instance(), SIGNAL(changed()),
                this, SLOT(modified()));
 
     ActivityPartitionData * data =
-        (ActivityPartitionData *) browser_node->get_data();
+            (ActivityPartitionData *) browser_node->get_data();
 
     disconnect(data, 0, this, 0);
 

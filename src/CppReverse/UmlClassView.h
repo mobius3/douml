@@ -29,9 +29,7 @@
 #define UMLCLASSVIEW_H
 
 #include "UmlBaseClassView.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3PtrList>
 
 class UmlClassView : public UmlBaseClassView
 {

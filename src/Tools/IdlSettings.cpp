@@ -29,7 +29,7 @@ WrapperStr IdlSettings::type(WrapperStr s)
 
     read_if_needed_();
 
-    UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+    UmlBuiltin * b = UmlSettings::_map_builtins.value(s, 0);
 
     return (b) ? b->idl : s;
 }
@@ -40,7 +40,7 @@ bool IdlSettings::set_Type(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(idlSettingsCmd, setIdlTypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+        UmlBuiltin * b = UmlSettings::_map_builtins.value(s, 0);
 
         if (b == 0)
             b = UmlSettings::add_type(s);
@@ -64,7 +64,7 @@ WrapperStr IdlSettings::relationAttributeStereotype(const WrapperStr & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_relation_attribute_stereotypes.value(s, 0);
 
     return (b) ? b->idl : s;
 }
@@ -75,7 +75,7 @@ bool IdlSettings::set_RelationAttributeStereotype(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(idlSettingsCmd, setIdlRelationAttributeStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_relation_attribute_stereotypes.value(s, 0);
 
         if (st == 0)
             st = UmlSettings::add_rel_attr_stereotype(s);
@@ -99,7 +99,7 @@ WrapperStr IdlSettings::classStereotype(WrapperStr s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_class_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_class_stereotypes.value(s, 0);
 
     return (b) ? b->idl : "valuetype";
 }
@@ -110,7 +110,7 @@ bool IdlSettings::set_ClassStereotype(WrapperStr s, WrapperStr v)
     UmlCom::send_cmd(idlSettingsCmd, setIdlClassStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_class_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_class_stereotypes.value(s, 0);
 
         if (st == 0)
             st = UmlSettings::add_class_stereotype(s);
@@ -651,7 +651,7 @@ WrapperStr IdlSettings::_src_content;
 
 WrapperStr IdlSettings::_ext;
 
-Q3Dict<QString> IdlSettings::_map_includes;
+QHash<WrapperStr,QString*> IdlSettings::_map_includes;
 
 void IdlSettings::read_()
 {
@@ -680,7 +680,7 @@ void IdlSettings::read_()
     _map_includes.clear();
 
     if (n > _map_includes.size())
-        _map_includes.resize(n);
+        _map_includes.reserve(n);
 
     for (index = 0; index != n; index += 1) {
         WrapperStr t = UmlCom::read_string();

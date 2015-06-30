@@ -25,11 +25,11 @@
 //
 // *************************************************************************
 
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <qapplication.h>
 #ifndef REVERSE
 #include <qmessagebox.h>
-#include <q3popupmenu.h>
+#include <qmenu.h>
 #include <qcursor.h>
 #include <qinputdialog.h>
 #endif
@@ -39,11 +39,11 @@
 #ifdef ROUNDTRIP
 #include <qmessagebox.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include "misc/mystr.h"
 #include <QPixmap>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 #endif
 
 #include "Package.h"
@@ -81,22 +81,22 @@ bool Package::scan;
 
 // all the classes presents in the environment, the
 // key is the full name including package
-Q3Dict<Class> Package::classes(1001);
+QHash<WrapperStr,Class*> Package::classes;
 
 // the java classes, the key are just the name without package
-Q3Dict<Class> Package::java_classes(1001);
+QHash<WrapperStr,Class*> Package::java_classes;
 
 // all the classes defined in bouml, not known through a .cat
 // nor reversed, the key is the full name including package
-Q3Dict<UmlClass> Package::user_classes(1001);
+QHash<WrapperStr,UmlClass*> Package::user_classes;
 
 // packages known through a .cat or reversed, the key is the
 // Java package spec
-Q3Dict<Package> Package::known_packages(101);
+QHash<WrapperStr,Package*> Package::known_packages;
 
 // all the packages defined in bouml, not known through a .cat
 // nor reversed (except roundtrip), the key is the java package spec
-Q3Dict<UmlPackage> Package::user_packages(101);
+QHash<WrapperStr,UmlPackage*> Package::user_packages;
 
 // package which does not exist even in bouml
 QStringList Package::unknown_packages;
@@ -114,17 +114,17 @@ QStringList Package::static_imports;
 QStack<QStringList> Package::stack;
 
 // current template forms
-Q3ValueList<FormalParameterList> Package::Formals;
+QList<FormalParameterList> Package::Formals;
 
 QApplication * Package::app;
 
 static QString RootSDir;	// empty or finish by a /
 static WrapperStr RootCDir;	// empty or finish by a /
 
-static Q3Dict<bool> FileManaged;
+static QHash<WrapperStr,bool*> FileManaged;
 
 #ifdef ROUNDTRIP
-static Q3Dict<bool> DirManaged;
+static QHash<QString,bool*> DirManaged;
 #endif
 
 static WrapperStr force_final_slash(WrapperStr p)
@@ -141,7 +141,7 @@ static WrapperStr force_final_slash(WrapperStr p)
 
 static inline WrapperStr force_final_slash(QString p)
 {
-    return force_final_slash(WrapperStr(p.toAscii().constData()));
+    return force_final_slash(WrapperStr(p.toLatin1().constData()));
 }
 
 static WrapperStr root_relative_if_possible(WrapperStr p)
@@ -232,7 +232,7 @@ void Package::init(UmlPackage * r, QApplication * a)
 
     if (!RootSDir.isEmpty() && QDir::isRelativePath(RootSDir)) {
         QFileInfo f(UmlPackage::getProject()->supportFile());
-        QDir d(f.dirPath());
+        QDir d(f.path());
 
         RootSDir = force_final_slash(d.filePath(RootSDir)).operator QString();
         RootCDir = RootSDir;
@@ -241,11 +241,11 @@ void Package::init(UmlPackage * r, QApplication * a)
     QString s;
 
     DirFilter = (!(s = (const char *) JavaSettings::reverseRoundtripDirRegExp()).isEmpty())
-                ? new QRegExp(s, JavaSettings::isReverseRoundtripDirRegExpCaseSensitive(), TRUE)
+                ? new QRegExp(s, (Qt::CaseSensitivity)JavaSettings::isReverseRoundtripDirRegExpCaseSensitive())
                 : 0;
 
     FileFilter = (!(s = (const char *) JavaSettings::reverseRoundtripFileRegExp()).isEmpty())
-                 ? new QRegExp(s, JavaSettings::isReverseRoundtripFileRegExpCaseSensitive(), TRUE)
+                 ? new QRegExp(s, (Qt::CaseSensitivity)JavaSettings::isReverseRoundtripFileRegExpCaseSensitive())
                  : 0;
 
     Ext = JavaSettings::sourceExtension().operator QString();
@@ -288,7 +288,7 @@ void Package::set_step(int s, int n)
 
         case 1:
             scan = TRUE;
-            FileManaged.resize(101);
+            FileManaged.reserve(101);
 
             if (n > 1)
                 new Progress(n, "Scanning in progress, please wait ...", app);
@@ -299,7 +299,7 @@ void Package::set_step(int s, int n)
             // 2
             scan = FALSE;
             FileManaged.clear();
-            FileManaged.resize(101);
+            FileManaged.reserve(101);
 
             if (n > 1)
 #ifdef ROUNDTRIP
@@ -359,17 +359,16 @@ Package * Package::scan_dir(int & n)
     n = 0;
 
     // get input java source dir
-    QString path = Q3FileDialog::getExistingDirectory(QDir::currentDirPath(), 0, 0,
-                   "select the base directory to reverse");
+    QString path = QFileDialog::getExistingDirectory(0, "select the base directory to reverse",QDir::currentPath(), 0);
 
     if (! path.isEmpty()) {
         QDir d(path);
 
-        Package * p = new Package(root, path, d.dirName());
+        Package * p = new Package(root, path.toLatin1().constData(), d.dirName().toLatin1().constData());
 
         // scanning phase
 #ifndef REVERSE
-        QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
         JavaCatWindow::clear_trace();
 #endif
         UmlCom::message("count files ...");
@@ -380,7 +379,7 @@ Package * Package::scan_dir(int & n)
 #ifndef REVERSE
         QApplication::restoreOverrideCursor();
 
-        root->setOpen(TRUE);
+        root->setExpanded(TRUE);
 #endif
 
         return p;
@@ -432,9 +431,13 @@ int Package::file_number(QDir & d, bool rec)
 
     if (!list.isEmpty()) {
         QFileInfoList::iterator it = list.begin();
+        QString extension;
+        int dotIndex;
 
         while (it != list.end()) {
-            if ((*it).extension(FALSE) == Ext) result += 1;
+            dotIndex = (*it).fileName().lastIndexOf('.');
+            extension = extension.mid(dotIndex+1);
+            if (extension == Ext) result += 1;
 
             it++;
         }
@@ -618,7 +621,7 @@ void Package::reverse_directory(QDir & d, bool rec)
 {
 #ifdef ROUNDTRIP
 
-    if (d.path().isEmpty() || DirManaged.find(d.path()) != 0)
+    if (d.path().isEmpty() || DirManaged.value(d.path()) != 0)
         return;
 
     DirManaged.insert(d.path(), (bool *) 1);
@@ -632,13 +635,17 @@ void Package::reverse_directory(QDir & d, bool rec)
 
     if (!list.isEmpty()) {
         QFileInfoList::iterator it = list.begin();
+        QString extension;
+        int dotIndex;
 
         while (it != list.end()) {
-            if ((*it).extension() == Ext) {
+            dotIndex = (*it).fileName().lastIndexOf('.');
+            extension = extension.mid(dotIndex+1);
+            if (extension == Ext) {
                 if (allowed(FileFilter, (*it).fileName()))
-                    reverse_file(WrapperStr((*it).filePath().toAscii().constData())
+                    reverse_file(WrapperStr((*it).filePath().toLatin1().constData())
 #ifdef ROUNDTRIP
-                                 , roundtriped.find((*it).baseName())
+                                 , roundtriped.value((*it).baseName())
 #endif
                                 );
 
@@ -663,7 +670,7 @@ void Package::reverse_directory(QDir & d, bool rec)
 
                     if (allowed(DirFilter, sd.dirName())) {
 #endif
-                        Package * p = find(WrapperStr(sd.dirName().toAscii().constData()), TRUE);
+                        Package * p = find(WrapperStr(sd.dirName().toLatin1().constData()), TRUE);
 
                         if (p != 0)
                             p->reverse_directory(sd, TRUE);
@@ -684,7 +691,7 @@ void Package::reverse_directory(QDir & d, bool rec)
 void Package::reverse(UmlArtifact * art)
 {
     if (allowed(FileFilter, art->name() + "." + Ext))
-        reverse_file(path + "/" + art->name() + "." + WrapperStr(Ext.toAscii().constData()), art);
+        reverse_file(path + "/" + art->name() + "." + WrapperStr(Ext.toLatin1().constData()), art);
 }
 #endif
 
@@ -724,7 +731,7 @@ void Package::reverse_file(WrapperStr f
                 art->set_JavaSource(JavaSettings::sourceContent());
                 art->set_Description("");
 
-                Q3PtrVector<UmlClass> empty;
+                QVector<UmlClass*> empty;
 
                 art->set_AssociatedClasses(empty);
             }
@@ -789,7 +796,7 @@ void Package::reverse_file(WrapperStr f
                 s = Lex::read_word();
             }
 
-            if (imports.findIndex("java.lang.") == -1) {
+            if (imports.indexOf("java.lang.") == -1) {
                 imports.append("java.lang.");
                 java_lang_added = TRUE;
             }
@@ -946,7 +953,7 @@ void Package::update_package_list(WrapperStr name)
         (user_packages[name] == 0) &&
         (classes[name] == 0) &&
         (user_classes[name] == 0) &&
-        (unknown_packages.findIndex(name) == -1)) {
+        (unknown_packages.indexOf(name) == -1)) {
         // try to find the package in bouml
         UmlPackage * up = UmlPackage::getProject()->findJavaPackage(name);
 
@@ -957,7 +964,7 @@ void Package::update_package_list(WrapperStr name)
                 WrapperStr subname = name.left(index);
 
                 if ((user_packages[subname] != 0) ||
-                    (unknown_packages.findIndex(subname) != -1))
+                    (unknown_packages.indexOf(subname) != -1))
                     return;
 
                 if ((up = UmlPackage::getProject()->findJavaPackage(subname)) != 0)
@@ -982,9 +989,9 @@ void Package::update_package_list(WrapperStr name)
 
 void Package::update_class_list(WrapperStr pack, UmlItem * container)
 {
-    const Q3PtrVector<UmlItem> & ch = container->children();
-    UmlItem ** v = ch.data();
-    UmlItem ** const vsup = v + ch.size();
+    const QVector<UmlItem*> & ch = container->children();
+    UmlItem *const* v = ch.data();
+    UmlItem *const*  vsup = v + ch.size();
     UmlItem * it;
 
     for (; v != vsup; v += 1) {
@@ -992,7 +999,7 @@ void Package::update_class_list(WrapperStr pack, UmlItem * container)
 
         switch (it->kind()) {
         case aClass:
-            user_classes.replace(pack + it->name(), (UmlClass *) it);
+            user_classes.insert(pack + it->name(), (UmlClass *) it);
             update_class_list(pack + it->name() + ".", (UmlClass *) it);
             break;
 
@@ -1021,7 +1028,7 @@ Class * Package::define(const WrapperStr & name, char st)
         classes.insert(package + "." + name, cl);
 
         if (classes.count() / 2 >= classes.size())
-            classes.resize(classes.size() * 2 - 1);
+            classes.reserve(classes.size() * 2 - 1);
     }
     else {
         Defined.insert(name, cl);
@@ -1050,7 +1057,7 @@ Class * Package::localy_defined(QString name) const
 #endif
 
 void Package::compute_type(WrapperStr name, UmlTypeSpec & typespec,
-                           const Q3ValueList<FormalParameterList> & tmplts,
+                           const QList<FormalParameterList> & tmplts,
                            Class ** need_object)
 {
     typespec.type = 0;
@@ -1066,7 +1073,7 @@ void Package::compute_type(WrapperStr name, UmlTypeSpec & typespec,
         Class * cl;
 
         if (! tmplts.isEmpty()) {
-            Q3ValueList<FormalParameterList>::ConstIterator it1;
+            QList<FormalParameterList>::ConstIterator it1;
 
             for (it1 = tmplts.begin(); it1 != tmplts.end(); ++it1) {
                 FormalParameterList::ConstIterator it2;
@@ -1114,10 +1121,10 @@ void Package::compute_type(WrapperStr name, UmlTypeSpec & typespec,
             QString s;
             int index2;
 
-            if (((const char *) import)[import.length() - 1] == '.')
+            if (((const char *) import.toLatin1().constData())[import.length() - 1] == '.')
                 // import a.b.* ('*' removed)
                 s = import + name.operator QString();	// a.b.name
-            else if (((index2 = import.findRev('.')) != -1) &&
+            else if (((index2 = import.lastIndexOf('.')) != -1) &&
                      (import.mid(index2 + 1) == left))
                 // import a.b.c & name = c.d...
                 s = import.left(index2 + 1) + name.operator QString();	// a.b.name
@@ -1250,7 +1257,7 @@ Package * Package::find(WrapperStr s, bool nohack)
 #ifdef REVERSE
     foreach (TreeItem * child,  children()) {
 #else
-    for (TreeItem *child = firstChild(); child; child = child->nextSibling()) {
+    for (BrowserNode *child = firstChild(); child; child = child->nextSibling()) {
 #endif
         if (((BrowserNode *) child)->isa_package() &&
             (child->text(0) == (const char *) name)) {
@@ -1289,7 +1296,7 @@ void Package::set_package(WrapperStr s)
     Package * pack = this;
 
     while ((pack != 0) && pack->package.isEmpty()) {
-        known_packages.replace(s, pack);
+        known_packages.insert(s, pack);
         pack->package = s;
 
         if (pack->uml != 0)
@@ -1312,13 +1319,13 @@ UmlPackage * Package::get_uml(bool mandatory)
             ((uml = UmlPackage::getProject()->findJavaPackage(package)) != 0))
             return uml;
 
-        const char * name = text(0);
+        QString name = text(0);
         Package * pa = (Package *) parent();
         UmlPackage * uml_pa = pa->get_uml();	// will end on project
 
-        const Q3PtrVector<UmlItem> & ch = uml_pa->children();
-        UmlItem ** v = ch.data();
-        UmlItem ** const vsup = v + ch.size();
+        const QVector<UmlItem*> & ch = uml_pa->children();
+        UmlItem *const* v = ch.data();
+        UmlItem *const*  vsup = v + ch.size();
         UmlItem * it;
 
         for (; v != vsup; v += 1) {
@@ -1330,7 +1337,7 @@ UmlPackage * Package::get_uml(bool mandatory)
             }
         }
 
-        if ((uml = UmlBasePackage::create(uml_pa, name)) == 0) {
+        if ((uml = UmlBasePackage::create(uml_pa, name.toLatin1().constData())) == 0) {
             if (!mandatory)
                 return 0;
 
@@ -1397,26 +1404,30 @@ void Package::menu()
         // the project
         return;
 
-    Q3PopupMenu m(0);
+    QMenu m(0);
+    QAction* action;
 
-    m.insertItem(text(0), -1);
-    m.insertSeparator();
+    action = m.addAction(text(0));
+    action->setData(-1);
+    m.addSeparator();
 
     if (parent() == root) {
-        m.insertItem("Rename", 2);
-        m.insertSeparator();
+        action = m.addAction("Rename");
+        action->setData(2);
+        m.addSeparator();
     }
 
     bool have_classe = FALSE;
     bool have_package = FALSE;
 
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
         if (!((BrowserNode *) child)->isa_package()) {
             if (! have_classe) {
                 have_classe = TRUE;
-                m.insertItem("Send its classes", 0);
+                m.addAction("Send its classes");
+                action->setData(0);
 
                 if (have_package)
                     break;
@@ -1424,14 +1435,18 @@ void Package::menu()
         }
         else if (! have_package) {
             have_package = TRUE;
-            m.insertItem("Send its classes and classes of sub-packages", 1);
+            m.addAction("Send its classes and classes of sub-packages");
+            action->setData(1);
 
             if (have_classe)
                 break;
         }
     }
 
-    int choice = m.exec(QCursor::pos());
+    action = m.exec(QCursor::pos());
+    if(action)
+    {
+    int choice = action->data().toInt();
 
     switch (choice) {
     case 0:
@@ -1439,7 +1454,7 @@ void Package::menu()
         QDir d(path);
 
         if (d.exists()) {
-            QApplication::setOverrideCursor(Qt::waitCursor);
+            QApplication::setOverrideCursor(Qt::WaitCursor);
             new Progress(file_number(d, choice == 1), "Reverse in progress, please wait ...", app);
             JavaCatWindow::clear_trace();
             JavaSettings::set_UseDefaults(TRUE);
@@ -1457,11 +1472,12 @@ void Package::menu()
 
     case 2: {
         bool ok = FALSE;
-        QString s = QInputDialog::getText("Rename", "new name :",
+        QString s = QInputDialog::getText(0,"Rename", "new name :",
                                           QLineEdit::Normal, text(0), &ok);
 
         if (ok && !s.isEmpty() && (s != text(0)))
             setText(0, s);
+    }
     }
     }
 }
@@ -1470,35 +1486,35 @@ void Package::menu()
 
 void Package::backup(QDataStream  & dt) const
 {
-    dt << ((Q_INT8) '{');
+    dt << ((qint8) '{');
 
-    Q_INT32 len;
+    qint32 len;
 
     len = text(0).length();
     dt << len;
-    dt.writeRawBytes(text(0), len);
+    dt.writeRawData(text(0).toLatin1().constData(), len);
 
     len = path.length();
     dt << len;
-    dt.writeRawBytes(path, len);
+    dt.writeRawData(path, len);
 
     len = package.length();
     dt << len;
 
     if (!package.isEmpty())
-        dt.writeRawBytes(package, len);
+        dt.writeRawData(package, len);
 
     backup_children(dt);
 }
 
 void Package::backup_children(QDataStream  & dt) const
 {
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         ((BrowserNode *) child)->backup(dt);
 
-    dt << ((Q_INT8) '}');
+    dt << ((qint8) '}');
 }
 
 #endif // !REVERSE
@@ -1506,16 +1522,16 @@ void Package::backup_children(QDataStream  & dt) const
 void Package::restore(QDataStream  & dt, Package * parent)
 {
     // '{' already read
-    Q_INT32 len;
+    qint32 len;
 
     dt >> len;
     char * name = new char[len + 1];
-    dt.readRawBytes(name, len);
+    dt.readRawData(name, len);
     name[len] = 0;
 
     dt >> len;
     char * path = new char[len + 1];
-    dt.readRawBytes(path, len);
+    dt.readRawData(path, len);
     path[len] = 0;
 
     dt >> len;
@@ -1525,7 +1541,7 @@ void Package::restore(QDataStream  & dt, Package * parent)
         package = 0;
     else {
         package = new char[len + 1];
-        dt.readRawBytes(package, len);
+        dt.readRawData(package, len);
         package[len] = 0;
     }
 
@@ -1541,7 +1557,7 @@ void Package::restore(QDataStream  & dt, Package * parent)
         pack = new Package(parent, path, name);
 
         if (package != 0) {
-            known_packages.replace(package, pack);
+            known_packages.insert(package, pack);
             pack->package = package;
             delete [] package;
         }
@@ -1560,7 +1576,7 @@ void Package::restore(QDataStream  & dt, Package * parent)
 void Package::restore_children(QDataStream  & dt)
 {
     for (;;) {
-        Q_INT8 c;
+        qint8 c;
 
         dt >> c;
 

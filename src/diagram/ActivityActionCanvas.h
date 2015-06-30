@@ -33,10 +33,8 @@
 
 
 #include <qobject.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QTextStream>
-
 #include "DiagramCanvas.h"
 #include "Settings.h"
 
@@ -51,8 +49,8 @@ class ActivityActionCanvas : public QObject, public DiagramCanvas
     Q_OBJECT
 
 protected:
-    Q3ValueList<PinCanvas *> pins;
-    Q3ValueList<ParameterSetCanvas *> paramsets;
+    QList<PinCanvas *> pins;
+    QList<ParameterSetCanvas *> paramsets;
     InfoCanvas * pre;
     InfoCanvas * post;
     InfoCanvas * constraint;
@@ -71,11 +69,12 @@ protected:
     void check_parametersets();
     void check_conditions_constraint();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ActivityActionCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ActivityActionCanvas();
 
-    Q3ValueList<PinCanvas *> get_pins() {
+    QList<PinCanvas *> get_pins() {
         return pins;
     }
     void add(PinCanvas * p) {
@@ -97,7 +96,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;

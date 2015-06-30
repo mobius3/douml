@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseClassView.h"
-#include <q3cstring.h>
+
 
 class Context;
 
@@ -13,7 +13,7 @@ class Context;
 class UmlClassView : public UmlBaseClassView
 {
 public:
-    UmlClassView(void * id, const Q3CString & n) : UmlBaseClassView(id, n) {};
+    UmlClassView(void * id, const QByteArray & n) : UmlBaseClassView(id, n) {};
 
     virtual void change(Context & ctx);
 

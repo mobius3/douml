@@ -1,14 +1,14 @@
 
 #include "UmlActivityParameter.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlActivityParameter::sKind()
+QByteArray UmlActivityParameter::sKind()
 {
     return "activity parameter";
 }
 
-void UmlActivityParameter::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlActivityParameter::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     define();
 
@@ -16,7 +16,7 @@ void UmlActivityParameter::html(Q3CString pfix, unsigned int rank, unsigned int 
     writeq(name());
     fw.write("</b></div></td></tr></table>\n");
 
-    Q3CString s = defaultValue();
+    QByteArray s = defaultValue();
 
     if (! s.isEmpty()) {
         fw.write("<p>Default value :</p><ul>");

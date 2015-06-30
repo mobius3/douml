@@ -30,8 +30,8 @@
 
 
 #include <qcursor.h>
-#include <q3painter.h>
-#include <q3popupmenu.h>
+#include <qpainter.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -72,8 +72,9 @@ InfoCanvas::InfoCanvas(UmlCanvas * canvas, DiagramItem * a, QString s)
     if (h < height())
         h = height();
 
-    setSize(w, h);
-    setZ(a->get_z());
+    //setSize(w, h);
+    setRect(0,0,w, h);
+    setZValue(a->get_z());
 
     width_scale100 = w;
     height_scale100 = h;
@@ -84,7 +85,7 @@ InfoCanvas::~InfoCanvas()
 {
 }
 
-UmlCode InfoCanvas::type() const
+UmlCode InfoCanvas::typeUmlCode() const
 {
     return UmlInfo;
 }
@@ -107,7 +108,7 @@ void InfoCanvas::open()
 
 void InfoCanvas::set(QString s)
 {
-    s = toUnicode(s);
+    s = toUnicode(s.toLatin1().constData());
 
     if (s != note) {
         note = s;
@@ -117,30 +118,32 @@ void InfoCanvas::set(QString s)
 
 void InfoCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu fontsubm(0);
+    QMenu m(0);
+    QMenu fontsubm(0);
 
     MenuFactory::createTitle(m, TR("Information"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 5);
-    m.insertItem(TR("Go down"), 6);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Font"), &fontsubm);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 5);
+    MenuFactory::addItem(m, TR("Go down"), 6);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 2);
+    m.addSeparator();
+    MenuFactory::insertItem(m, TR("Font"), &fontsubm);
     init_font_menu(fontsubm, the_canvas(), 10);
-    m.insertItem(TR("Edit drawing settings"), 3);
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 3);
 
     if (linked()) {
-        m.insertSeparator();
-        m.insertItem(TR("Select linked items"), 4);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Select linked items"), 4);
     }
 
-    m.insertSeparator();
-
-    int index = m.exec(QCursor::pos());
+    m.addSeparator();
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    int index = retAction->data().toInt();
 
     switch (index) {
     case 0:
@@ -198,6 +201,7 @@ void InfoCanvas::menu(const QPoint &)
         }
 
         return;
+    }
     }
 
     package_modified();

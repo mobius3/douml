@@ -30,7 +30,7 @@
 
 
 #include <qcursor.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -141,8 +141,8 @@ void SdClassInstCanvas::compute_size()
         ClassInstCanvas::compute_size(w, h, the_canvas());
     else {
         used_color = (itscolor == UmlDefaultColor)
-                     ? the_canvas()->browser_diagram()->get_color(UmlClass)
-                     : itscolor;
+                ? the_canvas()->browser_diagram()->get_color(UmlClass)
+                : itscolor;
 
         int minw;
         QFontMetrics fm(the_canvas()->get_font(UmlNormalUnderlinedFont));
@@ -213,6 +213,7 @@ void SdClassInstCanvas::modified()
 void SdClassInstCanvas::draw(QPainter & p)
 {
     if (visible()) {
+        QBrush backBrush = p.background();
         QRect r = rect();
         p.setRenderHint(QPainter::Antialiasing, true);
 
@@ -261,7 +262,7 @@ void SdClassInstCanvas::draw(QPainter & p)
             }
             }
 
-            QColor bckgrnd = p.backgroundColor();
+            QColor bckgrnd = p.background().color();
 
             p.setBackgroundMode(::Qt::TransparentMode);
             p.setFont(the_canvas()->get_font(UmlNormalFont));
@@ -271,7 +272,8 @@ void SdClassInstCanvas::draw(QPainter & p)
                 draw_text(r, ::Qt::AlignCenter, full_name(),
                           p.font(), fp);
 
-            p.setBackgroundColor(bckgrnd);
+            backBrush.setColor(bckgrnd);
+            p.setBackground(backBrush);
 
             if (fp != 0)
                 fputs("</g>\n", fp);
@@ -281,13 +283,16 @@ void SdClassInstCanvas::draw(QPainter & p)
             show_mark(p, rect());
     }
 }
-
+void SdClassInstCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
 // all cases
 QString SdClassInstCanvas::get_name() const
 {
     return (browser_node->get_type() == UmlClass)
-           ? iname
-           : QString(browser_node->get_name());
+            ? iname
+            : QString(browser_node->get_name());
 }
 
 // out of model case
@@ -297,7 +302,7 @@ void SdClassInstCanvas::set_name(const QString & s)
 }
 
 // UmlClass or UmlClassInstance
-UmlCode SdClassInstCanvas::type() const
+UmlCode SdClassInstCanvas::typeUmlCode() const
 {
     return browser_node->get_type();
 }
@@ -306,9 +311,9 @@ UmlCode SdClassInstCanvas::type() const
 BrowserNode * SdClassInstCanvas::get_type() const
 {
     return (browser_node->get_type() == UmlClass)
-           ? browser_node
-           : ((BrowserNode *)
-              ((ClassInstanceData *) browser_node->get_data())->get_class());
+            ? browser_node
+            : ((BrowserNode *)
+               ((ClassInstanceData *) browser_node->get_data())->get_class());
 }
 
 // ut of model case
@@ -361,166 +366,170 @@ void SdClassInstCanvas::open()
 
 void SdClassInstCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
     bool modelized = (browser_node->get_type() == UmlClassInstance);
 
     MenuFactory::createTitle(m, full_name());
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit"), 2);
 
     if (is_mortal())
-        m.insertItem(TR("Become immortal"), 3);
+        MenuFactory::addItem(m, TR("Become immortal"), 3);
     else
-        m.insertItem(TR("Become mortal"), 4);
+        MenuFactory::addItem(m, TR("Become mortal"), 4);
 
     if (life_line) {
         if (life_line->is_masked())
-            m.insertItem(TR("Show life line"), 15);
+            MenuFactory::addItem(m, TR("Show life line"), 15);
         else if (life_line->can_be_masked())
-            m.insertItem(TR("Hide life line"), 15);
+            MenuFactory::addItem(m, TR("Hide life line"), 15);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 5);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 5);
+    m.addSeparator();
 
     if (browser_node->get_type() == UmlClassInstance)
-        m.insertItem(TR("Select in browser"), 6);
+        MenuFactory::addItem(m, TR("Select in browser"), 6);
 
-    m.insertItem(TR("Select class in browser"), 7);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Select class in browser"), 7);
+    m.addSeparator();
 
     if (modelized)
-        m.insertItem(TR("Exit from model"), 10);
+        MenuFactory::addItem(m, TR("Exit from model"), 10);
     else {
         if (container(UmlClass)->is_writable())
-            m.insertItem(TR("Insert in model"), 11);
+            MenuFactory::addItem(m, TR("Insert in model"), 11);
 
-        m.insertItem(TR("Replace it"), 12);
+        MenuFactory::addItem(m, TR("Replace it"), 12);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 8);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 8);
 
     if ((browser_node->get_type() == UmlClassInstance) &&
-        browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 9);
+            browser_node->is_writable())
+        MenuFactory::addItem(m, TR("Delete from model"), 9);
 
-    switch (m.exec(QCursor::pos())) {
-    case 0:
-        upper();
-        modified();	// call package_modified
-        return;
-
-    case 1:
-        lower();
-        modified();	// call package_modified
-        return;
-
-    case 13:
-        z_up();
-        modified();	// call package_modified()
-        return;
-
-    case 14:
-        z_down();
-        modified();	// call package_modified()
-        return;
-
-    case 2:
-        open();	// call modified()
-        return;
-
-    case 3:
-        set_mortal(FALSE);
-        break;
-
-    case 4:
-        set_mortal(TRUE);
-        break;
-
-    case 5:
-        edit_drawing_settings();
-        return;
-
-    case 6:
-        browser_node->select_in_browser();
-        return;
-
-    case 7:
-        get_type()->select_in_browser();
-        return;
-
-    case 8:
-        delete_it();
-        break;
-
-    case 9:
-        //delete from model
-        browser_node->delete_it();	// will delete the canvas
-        break;
-
-    case 10: {
-        BasicData * d = browser_node->get_data();
-
-        disconnect(d, SIGNAL(changed()), this, SLOT(modified()));
-        disconnect(d, SIGNAL(deleted()), this, SLOT(deleted()));
-
-        iname = browser_node->get_name();
-        browser_node = ((ClassInstanceData *) d)->get_class();
-        d = browser_node->get_data();
-        connect(d, SIGNAL(changed()), this, SLOT(modified()));
-        connect(d, SIGNAL(deleted()), this, SLOT(deleted()));
-    }
-    break;
-
-    case 11: {
-        BasicData * d = browser_node->get_data();
-
-        disconnect(d, SIGNAL(changed()), this, SLOT(modified()));
-        disconnect(d, SIGNAL(deleted()), this, SLOT(deleted()));
-
-        browser_node =
-            new BrowserClassInstance(iname, (BrowserClass *) browser_node,
-                                     container(UmlClass));
-        d = browser_node->get_data();
-        connect(d, SIGNAL(changed()), this, SLOT(modified()));
-        connect(d, SIGNAL(deleted()), this, SLOT(deleted()));
-    }
-    break;
-
-    case 12: {
-        BrowserNode * bn =
-            BrowserClassInstance::get_classinstance((BrowserClass *) browser_node);
-
-        if (bn == 0)
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        switch (retAction->data().toInt()) {
+        case 0:
+            upper();
+            modified();	// call package_modified
             return;
 
-        BasicData * d = browser_node->get_data();
+        case 1:
+            lower();
+            modified();	// call package_modified
+            return;
 
-        disconnect(d, SIGNAL(changed()), this, SLOT(modified()));
-        disconnect(d, SIGNAL(deleted()), this, SLOT(deleted()));
+        case 13:
+            z_up();
+            modified();	// call package_modified()
+            return;
 
-        browser_node = bn;
-        d = browser_node->get_data();
-        connect(d, SIGNAL(changed()), this, SLOT(modified()));
-        connect(d, SIGNAL(deleted()), this, SLOT(deleted()));
-        modified();	// call package_modified
-        return;
-    }
+        case 14:
+            z_down();
+            modified();	// call package_modified()
+            return;
 
-    case 15:
-        life_line->set_masked(!life_line->is_masked());
-        modified();	// call package_modified()
-        return;
+        case 2:
+            open();	// call modified()
+            return;
 
-    default:
-        return;
+        case 3:
+            set_mortal(FALSE);
+            break;
+
+        case 4:
+            set_mortal(TRUE);
+            break;
+
+        case 5:
+            edit_drawing_settings();
+            return;
+
+        case 6:
+            browser_node->select_in_browser();
+            return;
+
+        case 7:
+            get_type()->select_in_browser();
+            return;
+
+        case 8:
+            delete_it();
+            break;
+
+        case 9:
+            //delete from model
+            browser_node->delete_it();	// will delete the canvas
+            break;
+
+        case 10: {
+            BasicData * d = browser_node->get_data();
+
+            disconnect(d, SIGNAL(changed()), this, SLOT(modified()));
+            disconnect(d, SIGNAL(deleted()), this, SLOT(deleted()));
+
+            iname = browser_node->get_name();
+            browser_node = ((ClassInstanceData *) d)->get_class();
+            d = browser_node->get_data();
+            connect(d, SIGNAL(changed()), this, SLOT(modified()));
+            connect(d, SIGNAL(deleted()), this, SLOT(deleted()));
+        }
+            break;
+
+        case 11: {
+            BasicData * d = browser_node->get_data();
+
+            disconnect(d, SIGNAL(changed()), this, SLOT(modified()));
+            disconnect(d, SIGNAL(deleted()), this, SLOT(deleted()));
+
+            browser_node =
+                    new BrowserClassInstance(iname, (BrowserClass *) browser_node,
+                                             container(UmlClass));
+            d = browser_node->get_data();
+            connect(d, SIGNAL(changed()), this, SLOT(modified()));
+            connect(d, SIGNAL(deleted()), this, SLOT(deleted()));
+        }
+            break;
+
+        case 12: {
+            BrowserNode * bn =
+                    BrowserClassInstance::get_classinstance((BrowserClass *) browser_node);
+
+            if (bn == 0)
+                return;
+
+            BasicData * d = browser_node->get_data();
+
+            disconnect(d, SIGNAL(changed()), this, SLOT(modified()));
+            disconnect(d, SIGNAL(deleted()), this, SLOT(deleted()));
+
+            browser_node = bn;
+            d = browser_node->get_data();
+            connect(d, SIGNAL(changed()), this, SLOT(modified()));
+            connect(d, SIGNAL(deleted()), this, SLOT(deleted()));
+            modified();	// call package_modified
+            return;
+        }
+
+        case 15:
+            life_line->set_masked(!life_line->is_masked());
+            modified();	// call package_modified()
+            return;
+
+        default:
+            return;
+        }
     }
 
     package_modified();
@@ -610,15 +619,15 @@ void SdClassInstCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
                 SdClassInstCanvas *canvas = (SdClassInstCanvas *)item;
                 if (!st[0].name.isEmpty())
                     canvas->drawing_mode =
-                        drawing_mode;
+                            drawing_mode;
 
                 if (!st[1].name.isEmpty())
                     canvas->write_horizontally =
-                        write_horizontally;
+                            write_horizontally;
 
                 if (!st[2].name.isEmpty())
                     canvas->show_context_mode =
-                        show_context_mode;
+                            show_context_mode;
 
                 if (!co[0].name.isEmpty())
                     canvas->itscolor = itscolor;
@@ -663,7 +672,7 @@ void SdClassInstCanvas::save(QTextStream & st, bool ref, QString & warning) cons
             st << "  drawing_mode " << stringify(drawing_mode);
 
         st << "  name ";
-        save_string(iname, st);
+        save_string(iname.toLatin1().constData(), st);
         st << " ";
         SdObjCanvas::save(st);
     }
@@ -695,7 +704,7 @@ SdClassInstCanvas * SdClassInstCanvas::read(char *& st, UmlCanvas * canvas, char
         int id = read_id(st);
         BrowserClass * cl = BrowserClass::read_ref(st);
         SdClassInstCanvas * result =
-            new SdClassInstCanvas(cl, canvas, 0, id);
+                new SdClassInstCanvas(cl, canvas, 0, id);
 
         result->ClassInstCanvas::read(st, k);
 
@@ -713,21 +722,22 @@ SdClassInstCanvas * SdClassInstCanvas::read(char *& st, UmlCanvas * canvas, char
         result->compute_size();
 
         if ((read_file_format() < 72) &&
-            (result->used_drawing_mode == asInterface)) {
+                (result->used_drawing_mode == asInterface)) {
             result->drawing_mode = asClass;
             result->compute_size();
         }
 
         result->SdObjCanvas::read(st, read_keyword(st));
         result->show();
-
+        if (result->life_line)
+            result->life_line->update_pos();
         return result;
     }
     else if (!strcmp(k, "classinstancecanvas")) {
         int id = read_id(st);
         BrowserClassInstance * icl = BrowserClassInstance::read_ref(st);
         SdClassInstCanvas * result =
-            new SdClassInstCanvas(icl, canvas, 0, id);
+                new SdClassInstCanvas(icl, canvas, 0, id);
 
         result->ClassInstCanvas::read(st, k);
 
@@ -751,7 +761,7 @@ SdClassInstCanvas * SdClassInstCanvas::read(char *& st, UmlCanvas * canvas, char
             result->compute_size();
 
             if ((read_file_format() < 72) &&
-                (result->used_drawing_mode == asInterface)) {
+                    (result->used_drawing_mode == asInterface)) {
                 result->drawing_mode = asClass;
                 result->compute_size();
             }
@@ -773,7 +783,7 @@ SdClassInstCanvas * SdClassInstCanvas::read(char *& st, UmlCanvas * canvas, char
 
 void SdClassInstCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 
     BasicData * d = browser_node->get_data();
@@ -795,16 +805,16 @@ void SdClassInstCanvas::history_load(QBuffer & b)
 
 // for plug outs
 
-void SdClassInstCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void SdClassInstCanvas::send(ToolCom * com, QList<QGraphicsItem*> & all)
 {
     QList<SdClassInstCanvas *> l;
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
         DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
-        if ((di != 0) && (*cit)->visible()) {
-            switch (di->type()) {
+        if ((di != 0) && (*cit)->isVisible()) {
+            switch (di->typeUmlCode()) {
             case UmlClass:
             case UmlClassInstance:
                 l.append((SdClassInstCanvas *) di);

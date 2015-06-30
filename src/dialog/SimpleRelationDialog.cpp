@@ -29,11 +29,11 @@
 
 
 
-#include <q3grid.h>
+#include <gridbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
-#include <q3vbox.h>
+#include <qcombobox.h>
+#include <vvbox.h>
 
 #include "SimpleRelationDialog.h"
 #include "SimpleRelationData.h"
@@ -51,7 +51,7 @@
 QSize SimpleRelationDialog::previous_size;
 
 SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), rel(r)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), rel(r)
 {
     r->browser_node->edit_start();
 
@@ -69,54 +69,59 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
     // general tab
 
     BrowserNode * bn = rel->get_browser_node();
-    Q3Grid * grid = new Q3Grid(2, this);
+    GridBox * grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
     switch (rel->get_type()) {
     case UmlInherit:
-        setCaption(TR("Generalisation dialog"));
+        setWindowTitle(TR("Generalisation dialog"));
         break;
 
     case UmlDependOn:
-        setCaption(TR("Dependency dialog"));
+        setWindowTitle(TR("Dependency dialog"));
         break;
 
     default:
-        setCaption(TR("unknown relation dialog"));
+        setWindowTitle(TR("unknown relation dialog"));
         break;
     }
 
-    new QLabel(TR("from : "), grid);
-    new QLabel(rel->get_start_node()->full_name(TRUE), grid);
-    new QLabel(TR("to : "), grid);
-    new QLabel(rel->get_end_node()->full_name(TRUE), grid);
+    grid->addWidget(new QLabel(TR("from : "), grid));
+    grid->addWidget(new QLabel(rel->get_start_node()->full_name(TRUE), grid));
+    grid->addWidget(new QLabel(TR("to : "), grid));
+    grid->addWidget(new QLabel(rel->get_end_node()->full_name(TRUE), grid));
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(rel->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(rel->get_stereotype()));
 
     if (! visit) {
-        edstereotype->insertStringList(rel->get_start_node()
+        edstereotype->addItems(rel->get_start_node()
                                        ->default_stereotypes(rel->get_type(),
                                                rel->get_end_node()));
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlRelations));
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlRelations));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
-
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
+            SmallPushButton* sButton;
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     QFont font = comment->font();
@@ -131,11 +136,11 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
     open_dialog(this);
@@ -143,7 +148,7 @@ SimpleRelationDialog::SimpleRelationDialog(SimpleRelationData * r)
 
 void SimpleRelationDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -176,7 +181,7 @@ void SimpleRelationDialog::accept()
         return;
 
     BrowserNode * bn = rel->get_browser_node();
-    bool newst = rel->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+    bool newst = rel->set_stereotype(fromUnicode(edstereotype->currentText().trimmed().toLatin1().constData()));
 
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
@@ -188,5 +193,5 @@ void SimpleRelationDialog::accept()
     bn->package_modified();
     rel->modified();
 
-    Q3TabDialog::accept();
+    TabDialog::accept();
 }

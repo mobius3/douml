@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+
 #include "StateBehavior.h"
 
 class UmlState;
@@ -27,13 +27,13 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseState(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseState(void * id, const QByteArray & s) : UmlItem(id, s) {
     }
 
 
 public:
     // return the entry behavior in OCL
-    const Q3CString & entryBehavior();
+    const QByteArray & entryBehavior();
 
     // set the entry behavior in OCL
     //
@@ -41,7 +41,7 @@ public:
     bool set_EntryBehavior(const char * s);
 
     // return the exit behavior in OCL
-    const Q3CString & exitBehavior();
+    const QByteArray & exitBehavior();
 
     // set the exit behavior in OCL
     //
@@ -49,7 +49,7 @@ public:
     bool set_ExitBehavior(const char * s);
 
     // return the activity in OCL
-    const Q3CString & doActivity();
+    const QByteArray & doActivity();
 
     // set the activity in OCL
     //
@@ -58,7 +58,7 @@ public:
 
 #ifdef WITHCPP
     // return the entry behavior in C++
-    const Q3CString & cppEntryBehavior();
+    const QByteArray & cppEntryBehavior();
 
     // set the entry behavior in C++
     //
@@ -66,7 +66,7 @@ public:
     bool set_CppEntryBehavior(const char * s);
 
     // return the exit behavior in C++
-    const Q3CString & cppExitBehavior();
+    const QByteArray & cppExitBehavior();
 
     // set the exit behavior in C++
     //
@@ -74,7 +74,7 @@ public:
     bool set_CppExitBehavior(const char * s);
 
     // return the activity in C++
-    const Q3CString & cppDoActivity();
+    const QByteArray & cppDoActivity();
 
     // set the activity in C++
     //
@@ -84,7 +84,7 @@ public:
 
 #ifdef WITHJAVA
     // return the entry behavior in Java
-    const Q3CString & javaEntryBehavior();
+    const QByteArray & javaEntryBehavior();
 
     // set the entry behavior in Java
     //
@@ -92,7 +92,7 @@ public:
     bool set_JavaEntryBehavior(const char * s);
 
     // return the exit behavior in Java
-    const Q3CString & javaExitBehavior();
+    const QByteArray & javaExitBehavior();
 
     // set the exit behavior in Java
     //
@@ -100,7 +100,7 @@ public:
     bool set_JavaExitBehavior(const char * s);
 
     // return the activity in Java
-    const Q3CString & javaDoActivity();
+    const QByteArray & javaDoActivity();
 
     // set the activity in Java
     //

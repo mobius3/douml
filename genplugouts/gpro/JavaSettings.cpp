@@ -5,11 +5,10 @@
 
 #include "UmlCom.h"
 #include "UmlSettings.h"
-#include "Tools/ApiCmd.h"
+#include "JavaSettingsCmd.h"
 #include "UmlBuiltin.h"
 #include "UmlStereotype.h"
-//Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 bool JavaSettings::useDefaults()
 {
     UmlCom::send_cmd(javaSettingsCmd, getJavaUseDefaultsCmd);
@@ -22,21 +21,21 @@ bool JavaSettings::set_UseDefaults(bool y)
     return UmlCom::read_bool();
 }
 
-Q3CString JavaSettings::type(const Q3CString & s)
+QByteArray JavaSettings::type(const QByteArray & s)
 {
     read_if_needed_();
 
-    UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+    UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
     return (b) ? b->java : s;
 }
 
-bool JavaSettings::set_Type(Q3CString s, Q3CString v)
+bool JavaSettings::set_Type(QByteArray s, QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaTypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlBuiltin * b = UmlSettings::_map_builtins.find(s);
+        UmlBuiltin * b = UmlSettings::_map_builtins.value(s);
 
         if (b == 0)
             b = UmlSettings::add_type(s);
@@ -49,28 +48,28 @@ bool JavaSettings::set_Type(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString JavaSettings::umlType(const Q3CString & s)
+QByteArray JavaSettings::umlType(const QByteArray & s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_type(s, &UmlBuiltin::java);
 }
 
-Q3CString JavaSettings::relationStereotype(const Q3CString & s)
+QByteArray JavaSettings::relationStereotype(const QByteArray & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_relation_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_relation_stereotypes.value(s);
 
     return (b) ? b->java : s;
 }
 
-bool JavaSettings::set_RelationStereotype(Q3CString s, Q3CString v)
+bool JavaSettings::set_RelationStereotype(QByteArray s, QByteArray v)
 {
-    UmlCom::send_cmd(javaSettingsCmd, setJavaRelationStereotypeCmd, s, v);
+  UmlCom::send_cmd(javaSettingsCmd, setJavaRelationStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_relation_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_relation_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_rel_stereotype(s);
@@ -83,28 +82,28 @@ bool JavaSettings::set_RelationStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString JavaSettings::relationUmlStereotype(const Q3CString & s)
+QByteArray JavaSettings::relationUmlStereotype(const QByteArray & s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_rel_stereotype(s, &UmlStereotype::java);
 }
 
-Q3CString JavaSettings::classStereotype(const Q3CString & s)
+QByteArray JavaSettings::classStereotype(const QByteArray & s)
 {
     read_if_needed_();
 
-    UmlStereotype * b = UmlSettings::_map_class_stereotypes.find(s);
+    UmlStereotype * b = UmlSettings::_map_class_stereotypes.value(s);
 
     return (b) ? b->java : s;
 }
 
-bool JavaSettings::set_ClassStereotype(Q3CString s, Q3CString v)
+bool JavaSettings::set_ClassStereotype(QByteArray s, QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaClassStereotypeCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        UmlStereotype * st = UmlSettings::_map_class_stereotypes.find(s);
+        UmlStereotype * st = UmlSettings::_map_class_stereotypes.value(s);
 
         if (st == 0)
             st = UmlSettings::add_class_stereotype(s);
@@ -117,31 +116,31 @@ bool JavaSettings::set_ClassStereotype(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-Q3CString JavaSettings::classUmlStereotype(const Q3CString & s)
+QByteArray JavaSettings::classUmlStereotype(const QByteArray & s)
 {
     read_if_needed_();
 
     return UmlSettings::uml_class_stereotype(s, &UmlStereotype::java);
 }
 
-Q3CString JavaSettings::get_import(const Q3CString & s)
+QByteArray JavaSettings::get_import(const QByteArray & s)
 {
     read_if_needed_();
 
-    Q3CString * r = _map_imports[s];
+    QByteArray * r = _map_imports[s];
 
-    return (r) ? *r : Q3CString(0);
+    return (r) ? *r : QByteArray(0);
 }
 
-bool JavaSettings::set_Import(Q3CString s, Q3CString v)
+bool JavaSettings::set_Import(QByteArray s, QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaImportCmd, s, v);
 
     if (UmlCom::read_bool()) {
-        Q3CString * r = _map_imports.take(s);
+        QByteArray * r = _map_imports.take(s);
 
         if (!v.isEmpty())
-            _map_imports.insert(s, new Q3CString(v));
+            _map_imports.insert(s, new QByteArray(v));
 
         if (r)
             delete r;
@@ -152,14 +151,14 @@ bool JavaSettings::set_Import(Q3CString s, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::rootDir()
+const QByteArray & JavaSettings::rootDir()
 {
     read_if_needed_();
 
     return _root;
 }
 
-bool JavaSettings::set_RootDir(Q3CString v)
+bool JavaSettings::set_RootDir(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaRootdirCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -171,14 +170,14 @@ bool JavaSettings::set_RootDir(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::sourceContent()
+const QByteArray & JavaSettings::sourceContent()
 {
     read_if_needed_();
 
     return _src_content;
 }
 
-bool JavaSettings::set_SourceContent(Q3CString v)
+bool JavaSettings::set_SourceContent(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaSourceContentCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -190,14 +189,14 @@ bool JavaSettings::set_SourceContent(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::sourceExtension()
+const QByteArray & JavaSettings::sourceExtension()
 {
     read_if_needed_();
 
     return _ext;
 }
 
-bool JavaSettings::set_SourceExtension(Q3CString v)
+bool JavaSettings::set_SourceExtension(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaSourceExtensionCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -209,14 +208,14 @@ bool JavaSettings::set_SourceExtension(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::classDecl()
+const QByteArray & JavaSettings::classDecl()
 {
     read_if_needed_();
 
     return _class_decl;
 }
 
-bool JavaSettings::set_ClassDecl(Q3CString v)
+bool JavaSettings::set_ClassDecl(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaClassDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -228,14 +227,14 @@ bool JavaSettings::set_ClassDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::externalClassDecl()
+const QByteArray & JavaSettings::externalClassDecl()
 {
     read_if_needed_();
 
     return _external_class_decl;
 }
 
-bool JavaSettings::set_ExternalClassDecl(Q3CString v)
+bool JavaSettings::set_ExternalClassDecl(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaExternalClassDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -247,14 +246,14 @@ bool JavaSettings::set_ExternalClassDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::enumDecl()
+const QByteArray & JavaSettings::enumDecl()
 {
     read_if_needed_();
 
     return _enum_decl;
 }
 
-bool JavaSettings::set_EnumDecl(Q3CString v)
+bool JavaSettings::set_EnumDecl(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaEnumDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -266,14 +265,14 @@ bool JavaSettings::set_EnumDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::interfaceDecl()
+const QByteArray & JavaSettings::interfaceDecl()
 {
     read_if_needed_();
 
     return _interface_decl;
 }
 
-bool JavaSettings::set_InterfaceDecl(Q3CString v)
+bool JavaSettings::set_InterfaceDecl(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaInterfaceDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -285,14 +284,14 @@ bool JavaSettings::set_InterfaceDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::attributeDecl()
+const QByteArray & JavaSettings::attributeDecl()
 {
     read_if_needed_();
 
     return _attr_decl;
 }
 
-bool JavaSettings::set_AttributeDecl(Q3CString v)
+bool JavaSettings::set_AttributeDecl(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaAttributeDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -304,14 +303,14 @@ bool JavaSettings::set_AttributeDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::enumItemDecl()
+const QByteArray & JavaSettings::enumItemDecl()
 {
     read_if_needed_();
 
     return _enum_item_decl;
 }
 
-bool JavaSettings::set_EnumItemDecl(Q3CString v)
+bool JavaSettings::set_EnumItemDecl(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaEnumItemDeclCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -323,16 +322,16 @@ bool JavaSettings::set_EnumItemDecl(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::enumItemCase()
+const QByteArray & JavaSettings::enumItemCase()
 {
     read_if_needed_();
 
     return _enum_item_case;
 }
 
-bool JavaSettings::set_EnumItemCase(Q3CString v)
+bool JavaSettings::set_EnumItemCase(QByteArray v)
 {
-    UmlCom::send_cmd(javaSettingsCmd, setJavaEnumItemCaseCmd, (const char *)v); //[rageek] Fix prototype
+    UmlCom::send_cmd(javaSettingsCmd, setJavaEnumItemDeclCmd, (const char *)v); //[rageek] Fix prototype
 
     if (UmlCom::read_bool()) {
         _enum_item_case = v;
@@ -342,14 +341,14 @@ bool JavaSettings::set_EnumItemCase(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::relationDecl(const char * multiplicity)
+const QByteArray & JavaSettings::relationDecl(const char * multiplicity)
 {
     read_if_needed_();
 
     return _rel_decl[UmlSettings::multiplicity_column(multiplicity)];
 }
 
-bool JavaSettings::set_RelationDecl(const char * multiplicity, Q3CString v)
+bool JavaSettings::set_RelationDecl(const char * multiplicity, QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaRelationDeclCmd, multiplicity, v);
 
@@ -361,14 +360,14 @@ bool JavaSettings::set_RelationDecl(const char * multiplicity, Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::operationDef()
+const QByteArray & JavaSettings::operationDef()
 {
     read_if_needed_();
 
     return _oper_def;
 }
 
-bool JavaSettings::set_OperationDef(Q3CString v)
+bool JavaSettings::set_OperationDef(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaOperationDefCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -399,14 +398,14 @@ bool JavaSettings::set_GetVisibility(aVisibility v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::getName()
+const QByteArray & JavaSettings::getName()
 {
     read_if_needed_();
 
     return _get_name;
 }
 
-bool JavaSettings::set_GetName(Q3CString v)
+bool JavaSettings::set_GetName(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaGetNameCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -418,14 +417,14 @@ bool JavaSettings::set_GetName(Q3CString v)
         return FALSE;
 }
 
-const Q3CString & JavaSettings::setName()
+const QByteArray & JavaSettings::setName()
 {
     read_if_needed_();
 
     return _set_name;
 }
 
-bool JavaSettings::set_SetName(Q3CString v)
+bool JavaSettings::set_SetName(QByteArray v)
 {
     UmlCom::send_cmd(javaSettingsCmd, setJavaSetNameCmd, (const char *)v); //[rageek] Fix prototype
 
@@ -515,45 +514,45 @@ bool JavaSettings::set_IsSetParamFinal(bool v)
 
 bool JavaSettings::_defined;
 
-Q3CString JavaSettings::_root;
+QByteArray JavaSettings::_root;
 
-Q3CString JavaSettings::_class_decl;
+QByteArray JavaSettings::_class_decl;
 
-Q3CString JavaSettings::_external_class_decl;
+QByteArray JavaSettings::_external_class_decl;
 
-Q3CString JavaSettings::_enum_decl;
+QByteArray JavaSettings::_enum_decl;
 
-Q3CString JavaSettings::_interface_decl;
+QByteArray JavaSettings::_interface_decl;
 
-Q3CString JavaSettings::_attr_decl;
+QByteArray JavaSettings::_attr_decl;
 
-Q3CString JavaSettings::_enum_item_decl;
+QByteArray JavaSettings::_enum_item_decl;
 
-Q3CString JavaSettings::_enum_item_case;
+QByteArray JavaSettings::_enum_item_case;
 
-Q3CString JavaSettings::_rel_decl[3/*multiplicity*/];
+QByteArray JavaSettings::_rel_decl[3/*multiplicity*/];
 
-Q3CString JavaSettings::_oper_def;
+QByteArray JavaSettings::_oper_def;
 
 aVisibility JavaSettings::_get_visibility;
 
-Q3CString JavaSettings::_get_name;
+QByteArray JavaSettings::_get_name;
 
 bool JavaSettings::_is_get_final;
 
 aVisibility JavaSettings::_set_visibility;
 
-Q3CString JavaSettings::_set_name;
+QByteArray JavaSettings::_set_name;
 
 bool JavaSettings::_is_set_final;
 
 bool JavaSettings::_is_set_param_final;
 
-Q3CString JavaSettings::_src_content;
+QByteArray JavaSettings::_src_content;
 
-Q3CString JavaSettings::_ext;
+QByteArray JavaSettings::_ext;
 
-Q3Dict<Q3CString> JavaSettings::_map_imports;
+QHash<QByteArray, QByteArray*> JavaSettings::_map_imports;
 
 void JavaSettings::read_()
 {
@@ -581,13 +580,13 @@ void JavaSettings::read_()
     n = UmlCom::read_unsigned();
 
     if (n > _map_imports.size())
-        _map_imports.resize(n);
+        _map_imports.reserve(n);
 
     for (index = 0; index != n; index += 1) {
-        Q3CString t = UmlCom::read_string();
-        Q3CString i = UmlCom::read_string();
+        QByteArray t = UmlCom::read_string();
+        QByteArray i = UmlCom::read_string();
 
-        _map_imports.insert(t, new Q3CString(i));
+        _map_imports.insert(t, new QByteArray(i));
     }
 
     _src_content = UmlCom::read_string();

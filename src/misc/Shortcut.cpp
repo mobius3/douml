@@ -52,28 +52,28 @@ void Shortcut::init(bool conv)
 {
 #define MEMOKEY(name, code) \
 	NameToCode[#name] = code; \
-	CodeToName[code - 0x1000 + 128] = #name; \
+    CodeToName[code - Qt::Key_Escape + 128] = #name; \
 	ShortcutKeys.append(#name)
 
-    MEMOKEY(Escape, 0x1000);
-    MEMOKEY(Tab, 0x1001);
-    MEMOKEY(Backtab, 0x1002);
-    MEMOKEY(Backspace, 0x1003);
-    MEMOKEY(Return, 0x1004);
-    MEMOKEY(Enter, 0x1005);
-    MEMOKEY(Insert, 0x1006);
-    MEMOKEY(Delete, 0x1007);
-    MEMOKEY(Pause, 0x1008);
-    MEMOKEY(Print, 0x1009);
-    MEMOKEY(SysReq, 0x100a);
-    MEMOKEY(Home, 0x1010);
-    MEMOKEY(End, 0x1011);
-    MEMOKEY(Qt::DockLeft, 0x1012);
-    MEMOKEY(Up, 0x1013);
-    MEMOKEY(Qt::DockRight, 0x1014);
-    MEMOKEY(Down, 0x1015);
-    MEMOKEY(PageUp, 0x1016);
-    MEMOKEY(PageDown, 0x1017);
+    MEMOKEY(Escape, Qt::Key_Escape);
+    MEMOKEY(Tab, Qt::Key_Tab);
+    MEMOKEY(Backtab, Qt::Key_Backtab);
+    MEMOKEY(Backspace, Qt::Key_Backspace);
+    MEMOKEY(Return, Qt::Key_Return);
+    MEMOKEY(Enter, Qt::Key_Enter);
+    MEMOKEY(Insert, Qt::Key_Insert);
+    MEMOKEY(Delete, Qt::Key_Delete);
+    MEMOKEY(Pause, Qt::Key_Pause);
+    MEMOKEY(Print, Qt::Key_Print);
+    MEMOKEY(SysReq, Qt::Key_SysReq);
+    MEMOKEY(Home, Qt::Key_Home);
+    MEMOKEY(End, Qt::Key_End);
+    MEMOKEY(Qt::DockLeft, Qt::Key_Left);
+    MEMOKEY(Up, Qt::Key_Up);
+    MEMOKEY(Qt::DockRight, Qt::Key_Right);
+    MEMOKEY(Down, Qt::Key_Down);
+    MEMOKEY(PageUp, Qt::Key_PageUp);
+    MEMOKEY(PageDown, Qt::Key_PageDown);
 
 #undef MEMOKEY
 
@@ -81,10 +81,10 @@ void Shortcut::init(bool conv)
     int code;
     char name[4];
 
-    for (i = 1, code = 0x1030; i != 36; i += 1, code += 1) {
+    for (i = 1, code = Qt::Key_F1; i != 36; i += 1, code += 1) {
         sprintf(name, "F%d", i);
         NameToCode[name] = code;
-        CodeToName[code - 0x1000 + 128] = name;
+        CodeToName[code - Qt::Key_Escape + 128] = name;
         ShortcutKeys.append(name);
     }
 
@@ -240,12 +240,13 @@ void Shortcut::init(bool conv)
 
 int codeToIndex(int c)
 {
-    return (c >= 0x1000) ? c - 0x1000 + 128 : c;
+    return (c >= Qt::Key_Escape) ? c - Qt::Key_Escape + 128 : c;
 }
+
 
 int indexToCode(int i)
 {
-    return (i >= 128) ? i - 128 + 0x1000 : i;
+    return (i >= 128) ? i - 128 + Qt::Key_Escape : i;
 }
 
 QString codeToName(int c)
@@ -286,7 +287,8 @@ const QMap<QString, QString> & Shortcut::shortcuts()
 
 QString Shortcut::extract(QString k, BooL & shift, BooL & ctrl, BooL & alt)
 {
-    const char * p = k;
+    QByteArray kArray = k.toLatin1();
+    const char * p = kArray.constData();
 
     shift = ((p[0] & 1) != 0);
     ctrl = ((p[0] & 2) != 0);
@@ -295,7 +297,7 @@ QString Shortcut::extract(QString k, BooL & shift, BooL & ctrl, BooL & alt)
     return k.mid(1);
 }
 
-QString Shortcut::shortcut(int key, int buttons)
+QString Shortcut::shortcut(int key, Qt::KeyboardModifiers buttons)
 {
     char flags[2];
 
@@ -339,18 +341,19 @@ void Shortcut::add(QString k, bool shift, bool ctrl, bool alt, QString s)
 
 void Shortcut::save()
 {
-    // note : QFile fp(QDir::home().absFilePath(".douml_shortcuts")) doesn't work
+    // note : QFile fp(QDir::home().absoluteFilePath(".douml_shortcuts")) doesn't work
     // if the path contains non latin1 characters, for instance cyrillic !
-    QString s = homeDir().absFilePath(".douml_shortcuts");
-    FILE * fp = fopen((const char *) s, "w");
+    QString s = homeDir().absoluteFilePath(".douml_shortcuts");
+    FILE * fp = fopen((const char *) s.toLatin1().constData(), "w");
 
     if (fp != 0) {
         QMap<QString, QString>::ConstIterator it;
 
         for (it = Shortcuts.begin(); it != Shortcuts.end(); ++it) {
             QString k = it.key();
-            QString d = it.data();
-            const char * p = k;
+            QByteArray keyArray = k.toLatin1();
+            QString d = it.value();
+            const char * p = keyArray.constData();
 
             if (p[0] & 1)
                 fwrite("shift ", 1, 6, fp);
@@ -363,7 +366,7 @@ void Shortcut::save()
 
             fwrite(p + 1, 1, k.length() - 1, fp);
             fputc(' ', fp);
-            fwrite((const char *) d, 1, d.length(), fp);
+            fwrite((const char *) d.toLatin1().constData(), 1, d.length(), fp);
             fputc('\n', fp);
         }
 
@@ -418,10 +421,10 @@ void Shortcut::load(bool conv)
     QString f = shortcut_file_path(conv);
 
     if (!f.isEmpty())  {
-        // note : QFile fp(QDir::home().absFilePath(f)) doesn't work
+        // note : QFile fp(QDir::home().absoluteFilePath(f)) doesn't work
         // if the path contains non latin1 characters, for instance cyrillic !
-        QString s = homeDir().absFilePath(f);
-        FILE * fp = fopen((const char *) s, "r");
+        QString s = homeDir().absoluteFilePath(f);
+        FILE * fp = fopen((const char *) s.toLatin1().constData(), "r");
 
         if (fp != 0) {
             char line[512];
@@ -450,7 +453,7 @@ void Shortcut::load(bool conv)
                     index += 4;
                 }
 
-                int index2 = ln.find(" ", index);
+                int index2 = ln.indexOf(" ", index);
 
                 if (index2 != -1) {
                     QString s = ln.mid(index2 + 1);

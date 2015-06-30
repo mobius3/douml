@@ -6,7 +6,7 @@
 
 #include "UmlItem.h"
 #include "UmlStateItem.h"
-#include <q3ptrlist.h>
+
 
 class UmlTransition;
 class FileOut;
@@ -31,7 +31,7 @@ public:
 
 
 protected:
-    Q3PtrList<UmlTransition> _incoming_trans;
+    QList<UmlTransition*> _incoming_trans;
 
 };
 

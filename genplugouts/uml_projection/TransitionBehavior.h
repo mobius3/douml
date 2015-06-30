@@ -2,16 +2,16 @@
 #define _TRANSITIONBEHAVIOR_H
 
 
-#include <q3cstring.h>
+#include <QByteArray>
 
 class TransitionBehavior
 {
 public:
-    Q3CString trigger;
+    QByteArray trigger;
 
-    Q3CString guard;
+    QByteArray guard;
 
-    Q3CString activity;
+    QByteArray activity;
 
     void read();
 

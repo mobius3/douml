@@ -30,13 +30,12 @@
 
 
 #include <qapplication.h>
-#include <qworkspace.h>
-#include <q3toolbar.h>
+//#include <qworkspace.h>
+#include <qtoolbar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qspinbox.h>
-
 #include "UmlWindow.h"
 #include "SeqDiagramWindow.h"
 #include "SeqDiagramView.h"
@@ -44,15 +43,15 @@
 #include "UmlPixmap.h"
 #include "myio.h"
 #include "translate.h"
-
+#include "toolbarfactory.h"
 QString addmodeledclassinstanceText()
 {
-    return TR("Click this button to add a modeled <i>class instance</i> in the diagram. <br><br>"
+    return QObject::TR("Click this button to add a modeled <i>class instance</i> in the diagram. <br><br>"
               "You can also drop the class instance from the <b>browser</b>.");
 }
 QString addclassinstanceText()
 {
-    return TR("Click this button to add a <i>class instance</i> in the diagram. <br><br>"
+    return QObject::TR("Click this button to add a <i>class instance</i> in the diagram. <br><br>"
               "You can also drop the class from the <b>browser</b>.");
 }
 extern QString addfragmentText();
@@ -60,51 +59,51 @@ extern QString noteText();
 extern QString anchorText();
 QString syncmsgText()
 {
-    return TR("Click this button to send a <i>synchronous message</i>");
+    return QObject::TR("Click this button to send a <i>synchronous message</i>");
 }
 QString asyncmsgText()
 {
-    return TR("Click this button to send an <i>asynchronous message</i>");
+    return QObject::TR("Click this button to send an <i>asynchronous message</i>");
 }
 QString syncselfmsgText()
 {
-    return TR("Click this button to send a <i>reflexive synchronous message</i>");
+    return QObject::TR("Click this button to send a <i>reflexive synchronous message</i>");
 }
 QString asyncselfmsgText()
 {
-    return TR("Click this button to send a <i>reflexive asynchronous message</i>");
+    return QObject::TR("Click this button to send a <i>reflexive asynchronous message</i>");
 }
 QString lostsyncmsgText()
 {
-    return TR("Click this button to send a <i>synchronous lost message</i>");
+    return QObject::TR("Click this button to send a <i>synchronous lost message</i>");
 }
 QString lostasyncmsgText()
 {
-    return TR("Click this button to send a <i>asynchronous lost message</i>");
+    return QObject::TR("Click this button to send a <i>asynchronous lost message</i>");
 }
 QString foundsyncmsgText()
 {
-    return TR("Click this button to add a <i>synchronous found message</i>");
+    return QObject::TR("Click this button to add a <i>synchronous found message</i>");
 }
 QString foundasyncmsgText()
 {
-    return TR("Click this button to add a <i>asynchronous found message</i>");
+    return QObject::TR("Click this button to add a <i>asynchronous found message</i>");
 }
 QString returnmsgText()
 {
-    return TR("Click this button to add an <i>explicitly return</i>");
+    return QObject::TR("Click this button to add an <i>explicitly return</i>");
 }
 QString selfreturnmsgText()
 {
-    return TR("Click this button to add an <i>explicit reflexive return</i>");
+    return QObject::TR("Click this button to add an <i>explicit reflexive return</i>");
 }
 QString textText()
 {
-    return TR("Click this button to add a <i>text</i>");
+    return QObject::TR("Click this button to add a <i>text</i>");
 }
 QString addcontinuationText()
 {
-    return TR("Click this button to add a <i>continuation</i>");
+    return QObject::TR("Click this button to add a <i>continuation</i>");
 }
 extern QString imageText();
 
@@ -112,143 +111,143 @@ extern QString imageText();
 SeqDiagramWindow::SeqDiagramWindow(const QString & s, BrowserSeqDiagram * b, int id)
     : DiagramWindow(b, s), view(0)
 {
-    Q3ToolBar * toolbar = new Q3ToolBar(this, "sequence diagram operations");
-    addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
+    QToolBar * toolbar = new QToolBar("sequence diagram operations",this);
+    addToolBar(Qt::TopToolBarArea,toolbar);
 
     add_edit_button(toolbar);
 
     select =
-        new QToolButton(*selectButton, TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton, QObject::TR("Select"), QString(),
                         this, SLOT(hit_select()), toolbar,
                         "select");
-    select->setToggleButton(TRUE);
-    select->setOn(TRUE);
+    select->setCheckable(TRUE);
+    select->setChecked(TRUE);
     current_button = UmlSelect;
 
     addFragment
-        = new QToolButton(*fragmentButton, TR("Add Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton, QObject::TR("Add Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar,
                           "add fragment");
-    addFragment->setToggleButton(TRUE);
-    Q3WhatsThis::add(addFragment, addfragmentText());
+    addFragment->setCheckable(TRUE);
+    addFragment->setWhatsThis(addfragmentText());
 
     addClassInstance
-        = new QToolButton(*classinstanceButton, TR("Add modeled Class instance"), QString(),
+        = ToolBarFactory::createToolButton(*classinstanceButton, QObject::TR("Add modeled Class instance"), QString(),
                           this, SLOT(hit_classinstance()), toolbar,
                           "add modeled class instance");
-    addClassInstance->setToggleButton(TRUE);
-    Q3WhatsThis::add(addClassInstance, addmodeledclassinstanceText());
+    addClassInstance->setCheckable(TRUE);
+    addClassInstance->setWhatsThis( addmodeledclassinstanceText());
 
     addClass
-        = new QToolButton(*classButton, TR("Add Class instance"), QString(),
+        = ToolBarFactory::createToolButton(*classButton, QObject::TR("Add Class instance"), QString(),
                           this, SLOT(hit_class()), toolbar,
                           "add class");
-    addClass->setToggleButton(TRUE);
-    Q3WhatsThis::add(addClass, addclassinstanceText());
+    addClass->setCheckable(TRUE);
+    addClass->setWhatsThis( addclassinstanceText());
 
     addContinuation
-        = new QToolButton(*continuationButton, TR("Add Continuation"), QString(),
+        = ToolBarFactory::createToolButton(*continuationButton, QObject::TR("Add Continuation"), QString(),
                           this, SLOT(hit_continuation()), toolbar,
                           "add continuation");
-    addContinuation->setToggleButton(TRUE);
-    Q3WhatsThis::add(addContinuation, addcontinuationText());
+    addContinuation->setCheckable(TRUE);
+    addContinuation->setWhatsThis( addcontinuationText());
 
     syncMsg =
-        new QToolButton(*syncmsgButton, TR("Synchronous message"), QString(),
+        ToolBarFactory::createToolButton(*syncmsgButton, QObject::TR("Synchronous message"), QString(),
                         this, SLOT(hit_syncmsg()), toolbar,
                         "synchronous message");
-    syncMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(syncMsg, syncmsgText());
+    syncMsg->setCheckable(TRUE);
+    syncMsg->setWhatsThis( syncmsgText());
 
     asyncMsg =
-        new QToolButton(*directionalAssociationButton, TR("Asynchronous message"), QString(),
+        ToolBarFactory::createToolButton(*directionalAssociationButton, QObject::TR("Asynchronous message"), QString(),
                         this, SLOT(hit_asyncmsg()), toolbar,
                         "asynchronous message");
-    asyncMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(asyncMsg, asyncmsgText());
+    asyncMsg->setCheckable(TRUE);
+    asyncMsg->setWhatsThis( asyncmsgText());
 
     syncSelfMsg =
-        new QToolButton(*syncselfmsgButton, TR("Synchronous Reflexive message"), QString(),
+        ToolBarFactory::createToolButton(*syncselfmsgButton, QObject::TR("Synchronous Reflexive message"), QString(),
                         this, SLOT(hit_syncselfmsg()), toolbar,
                         "synchronous reflexive message");
-    syncSelfMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(syncSelfMsg, syncselfmsgText());
+    syncSelfMsg->setCheckable(TRUE);
+    syncSelfMsg->setWhatsThis( syncselfmsgText());
 
     asyncSelfMsg =
-        new QToolButton(*asyncselfmsgButton, TR("Asynchronous Reflexive message"), QString(),
+        ToolBarFactory::createToolButton(*asyncselfmsgButton, QObject::TR("Asynchronous Reflexive message"), QString(),
                         this, SLOT(hit_asyncselfmsg()), toolbar,
                         "asynchronous reflexive message");
-    asyncSelfMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(asyncSelfMsg, asyncselfmsgText());
+    asyncSelfMsg->setCheckable(TRUE);
+    asyncSelfMsg->setWhatsThis( asyncselfmsgText());
 
     foundsyncMsg =
-        new QToolButton(*foundsyncmsgButton, TR("Synchronous found message"), QString(),
+        ToolBarFactory::createToolButton(*foundsyncmsgButton, QObject::TR("Synchronous found message"), QString(),
                         this, SLOT(hit_foundsyncmsg()), toolbar,
                         "synchronous found message");
-    foundsyncMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(foundsyncMsg, foundsyncmsgText());
+    foundsyncMsg->setCheckable(TRUE);
+    foundsyncMsg->setWhatsThis( foundsyncmsgText());
 
     foundasyncMsg =
-        new QToolButton(*foundasyncmsgButton, TR("Asynchronous found message"), QString(),
+        ToolBarFactory::createToolButton(*foundasyncmsgButton, QObject::TR("Asynchronous found message"), QString(),
                         this, SLOT(hit_foundasyncmsg()), toolbar,
                         "asynchronous found message");
-    foundasyncMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(foundasyncMsg, foundasyncmsgText());
+    foundasyncMsg->setCheckable(TRUE);
+    foundasyncMsg->setWhatsThis( foundasyncmsgText());
 
     lostsyncMsg =
-        new QToolButton(*lostsyncmsgButton, TR("Synchronous lost message"), QString(),
+        ToolBarFactory::createToolButton(*lostsyncmsgButton, QObject::TR("Synchronous lost message"), QString(),
                         this, SLOT(hit_lostsyncmsg()), toolbar,
                         "synchronous lost message");
-    lostsyncMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(lostsyncMsg, lostsyncmsgText());
+    lostsyncMsg->setCheckable(TRUE);
+    lostsyncMsg->setWhatsThis( lostsyncmsgText());
 
     lostasyncMsg =
-        new QToolButton(*lostasyncmsgButton, TR("Asynchronous lost message"), QString(),
+        ToolBarFactory::createToolButton(*lostasyncmsgButton, QObject::TR("Asynchronous lost message"), QString(),
                         this, SLOT(hit_lostasyncmsg()), toolbar,
                         "asynchronous lost message");
-    lostasyncMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(lostasyncMsg, lostasyncmsgText());
+    lostasyncMsg->setCheckable(TRUE);
+    lostasyncMsg->setWhatsThis( lostasyncmsgText());
 
     returnMsg =
-        new QToolButton(*returnmsgButton, TR("Explicit return"), QString(),
+        ToolBarFactory::createToolButton(*returnmsgButton, QObject::TR("Explicit return"), QString(),
                         this, SLOT(hit_returnmsg()), toolbar,
                         "explicit return");
-    returnMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(returnMsg, returnmsgText());
+    returnMsg->setCheckable(TRUE);
+    returnMsg->setWhatsThis( returnmsgText());
 
     selfreturnMsg =
-        new QToolButton(*selfreturnmsgButton, TR("Explicit reflexive return"), QString(),
+        ToolBarFactory::createToolButton(*selfreturnmsgButton, QObject::TR("Explicit reflexive return"), QString(),
                         this, SLOT(hit_selfreturnmsg()), toolbar,
                         "explicit reflexive return");
-    selfreturnMsg->setToggleButton(TRUE);
-    Q3WhatsThis::add(selfreturnMsg,  selfreturnmsgText());
+    selfreturnMsg->setCheckable(TRUE);
+    selfreturnMsg->setWhatsThis( selfreturnmsgText());
 
     note =
-        new QToolButton(*noteButton, TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton, QObject::TR("Note"), QString(),
                         this, SLOT(hit_note()), toolbar,
                         "note");
-    note->setToggleButton(TRUE);
-    Q3WhatsThis::add(note, noteText());
+    note->setCheckable(TRUE);
+    note->setWhatsThis(noteText());
 
     anchor =
-        new QToolButton(*anchorButton, TR("Anchor"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton, QObject::TR("Anchor"), QString(),
                         this, SLOT(hit_anchor()), toolbar,
                         "anchor");
-    anchor->setToggleButton(TRUE);
-    Q3WhatsThis::add(anchor, anchorText());
+    anchor->setCheckable(TRUE);
+    anchor->setWhatsThis(anchorText());
 
     text =
-        new QToolButton(*textButton, TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton, QObject::TR("Text"), QString(),
                         this, SLOT(hit_text()), toolbar,
                         "text");
-    text->setToggleButton(TRUE);
-    Q3WhatsThis::add(text, textText());
+    text->setCheckable(TRUE);
+    text->setWhatsThis( textText());
 
     image =
-        new QToolButton(*imageButton, TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton, QObject::TR("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
-    image->setToggleButton(TRUE);
-    Q3WhatsThis::add(image, imageText());
+    image->setCheckable(TRUE);
+    image->setWhatsThis( imageText());
 
     toolbar->addSeparator();
 
@@ -262,9 +261,9 @@ SeqDiagramWindow::SeqDiagramWindow(const QString & s, BrowserSeqDiagram * b, int
 
     //qApp->setMainWidget(this);
 
-    QWorkspace * w = UmlWindow::get_workspace();
+    QMdiArea * w = UmlWindow::get_workspace();
 
-    resize((w->width() * 4) / 5, (w->height() * 4) / 5);
+    m_containingSubWindow->resize((w->width() * 4) / 5, (w->height() * 4) / 5);
 
     /*if (w->windowList().isEmpty())
       showMaximized();
@@ -301,28 +300,27 @@ DiagramView * SeqDiagramWindow::get_view() const
 void SeqDiagramWindow::hit_button(UmlCode c, QToolButton * b)
 {
     view->abort_line_construction();
+    select->setChecked(FALSE);
+    addFragment->setChecked(FALSE);
+    addClass->setChecked(FALSE);
+    addClassInstance->setChecked(FALSE);
+    addContinuation->setChecked(FALSE);
+    syncMsg->setChecked(FALSE);
+    asyncMsg->setChecked(FALSE);
+    foundsyncMsg->setChecked(FALSE);
+    foundasyncMsg->setChecked(FALSE);
+    lostsyncMsg->setChecked(FALSE);
+    lostasyncMsg->setChecked(FALSE);
+    syncSelfMsg->setChecked(FALSE);
+    asyncSelfMsg->setChecked(FALSE);
+    selfreturnMsg->setChecked(FALSE);
+    returnMsg->setChecked(FALSE);
+    note->setChecked(FALSE);
+    anchor->setChecked(FALSE);
+    text->setChecked(FALSE);
+    image->setChecked(FALSE);
 
-    select->setOn(FALSE);
-    addFragment->setOn(FALSE);
-    addClass->setOn(FALSE);
-    addClassInstance->setOn(FALSE);
-    addContinuation->setOn(FALSE);
-    syncMsg->setOn(FALSE);
-    asyncMsg->setOn(FALSE);
-    foundsyncMsg->setOn(FALSE);
-    foundasyncMsg->setOn(FALSE);
-    lostsyncMsg->setOn(FALSE);
-    lostasyncMsg->setOn(FALSE);
-    syncSelfMsg->setOn(FALSE);
-    asyncSelfMsg->setOn(FALSE);
-    selfreturnMsg->setOn(FALSE);
-    returnMsg->setOn(FALSE);
-    note->setOn(FALSE);
-    anchor->setOn(FALSE);
-    text->setOn(FALSE);
-    image->setOn(FALSE);
-
-    b->setOn(TRUE);
+    b->setChecked(TRUE);
     current_button = c;
 }
 

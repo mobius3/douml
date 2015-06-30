@@ -27,15 +27,15 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qlineedit.h>
 #include <qcheckbox.h>
-#include <q3groupbox.h>
+#include <qgroupbox.h>
 //Added by qt3to4:
-#include <Q3GridLayout>
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "BrowserSearchDialog.h"
 #include "BrowserView.h"
@@ -60,24 +60,25 @@ static const struct {
 };
 
 BrowserSearchDialog::BrowserSearchDialog(const QPoint & p)
-    : QDialog(0, "Browser search", TRUE)
+    : QDialog(0 )
 {
-    setCaption("Browser search");
+    setModal(true);
+    setWindowTitle("Browser search");
     move(p);
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
     vbox->setMargin(5);
-
-    Q3GridLayout * gl = new Q3GridLayout(vbox, 4, 2, 5/*space*/);
+    QGridLayout * gl = new QGridLayout(this/*4, 2, 5space*/);
+    vbox->addLayout(gl);
 
     gl->addWidget(new QLabel("Kind", this), 0, 0, Qt::AlignLeft);
-    kind = new Q3ComboBox(FALSE, this);
+    kind = new QComboBox(this);
 
     for (int index = 0; index != sizeof(Kinds) / sizeof(*Kinds); index += 1)
-        kind->insertItem(Kinds[index].lbl);
+        kind->addItem(Kinds[index].lbl);
 
-    kind->setCurrentItem(saved_kind);
+    kind->setCurrentIndex(saved_kind);
     gl->addWidget(kind, 0, 1);
 
     ed = new QLineEdit(this);
@@ -85,18 +86,22 @@ BrowserSearchDialog::BrowserSearchDialog(const QPoint & p)
     gl->addWidget(new QLabel("Containing", this), 1, 0, Qt::AlignLeft);
     gl->addWidget(ed, 1, 1);
 
-    Q3GroupBox * gb = new Q3GroupBox(2, Qt::Horizontal, this);
+    QGridLayout *gbLayout =new QGridLayout(this);
+    QGroupBox * gb = new QGroupBox(/*2, Qt::Horizontal,*/ this);
+    gb->setLayout(gbLayout);
 
     case_sensitive = new QCheckBox("case sensitive", gb);
+    gbLayout->addWidget(case_sensitive);
     case_sensitive->setChecked(saved_case_sensitive);
 
     gl->addWidget(gb, 2, 1);
 
     gl->addWidget(new QLabel("Result", this), 3, 0, Qt::AlignLeft);
-    results = new Q3ComboBox(FALSE, this);
+    results = new QComboBox(this);
     gl->addWidget(results, 3, 1);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout(this);
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * search_b = new QPushButton("Search", this);
     QPushButton * select_b = new QPushButton("Select", this);
@@ -117,7 +122,8 @@ BrowserSearchDialog::BrowserSearchDialog(const QPoint & p)
 
 BrowserSearchDialog::~BrowserSearchDialog()
 {
-    saved_kind = kind->currentItem();
+
+    saved_kind = kind->currentIndex();
     saved_ed = ed->text();
     saved_case_sensitive = case_sensitive->isChecked();
 }
@@ -127,14 +133,14 @@ void BrowserSearchDialog::search()
     nodes.clear();
     results->clear();
 
-    nodes.search(Package::get_root(), Kinds[kind->currentItem()].k,
-                 ed->text(), case_sensitive->isChecked());
+    nodes.search(Package::get_root(), Kinds[kind->currentIndex()].k,
+                 ed->text(), (Qt::CaseSensitivity)case_sensitive->isChecked());
     nodes.sort();
 
     foreach (BrowserNode *bn, nodes) {
         QString up = ((BrowserNode *) bn->parent())->get_path();
 
-        results->insertItem((up.isEmpty())
+        results->addItem((up.isEmpty())
                             ? QString(bn->text(0))
                             : bn->text(0) + QString("   [") + up + "]");
     }
@@ -143,6 +149,6 @@ void BrowserSearchDialog::search()
 void BrowserSearchDialog::select()
 {
     if (results->count() != 0)
-        BrowserView::select(nodes.at(results->currentItem()));
+        BrowserView::select(nodes.at(results->currentIndex()));
 }
 

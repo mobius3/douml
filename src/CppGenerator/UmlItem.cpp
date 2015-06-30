@@ -26,11 +26,8 @@
 // *************************************************************************
 
 #include <QTextStream>
-//Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3CString>
-
 #include "UmlItem.h"
 #include "misc/codec.h"
 
@@ -41,7 +38,7 @@ UmlItem::~UmlItem()
 bool UmlItem::manage_comment(const char *& p, const char *& pp,
                              bool javadoc)
 {
-    static QString the_comment;
+    static QByteArray the_comment;
 
     p += 10;
 
@@ -154,7 +151,7 @@ void UmlItem::manage_alias(const char *& p, QTextStream & ts)
     const char * pclosed;
 
     if ((p[1] == '{') && ((pclosed = strchr(p + 2, '}')) != 0)) {
-        Q3CString key_(p + 2, pclosed - p - 1);
+        QByteArray key_(p + 2, pclosed - p - 1);
         WrapperStr key = key_;
         WrapperStr value;
         UmlItem * node = this;

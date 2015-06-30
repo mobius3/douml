@@ -2,7 +2,7 @@
 #include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 // *************************************************************************
 //
@@ -66,7 +66,7 @@ protected:
     ClassData * def;
     BrowserClassDiagram * associated_diagram;
     BrowserArtifact * associated_artifact;	// generate its def
-    Q3ValueList<BrowserComponent *> associated_components;	// realize or provide it
+    QList<BrowserComponent *> associated_components;	// realize or provide it
 
 protected:
 
@@ -101,11 +101,11 @@ public:
 
     virtual QString check_inherit(const BrowserNode * parent) const;
     bool have_abstract_operation();
-    void get_opers(Q3ValueList<const OperationData *> & opers,
+    void get_opers(QList<const OperationData *> & opers,
                    QStringList & list) const;
-    void get_own_opers(Q3ValueList<OperationData *> &opers,
+    void get_own_opers(QList<OperationData *> &opers,
                    QStringList & list) ;
-    void get_inherited_opers(Q3ValueList<OperationData *> & opers,
+    void get_inherited_opers(QList<OperationData *> & opers,
                    QStringList & list) ;
     void get_used_inherited_opers();
 
@@ -119,7 +119,7 @@ public:
     void set_associated_diagram(BrowserClassDiagram *, bool on_read = FALSE);
     BrowserArtifact * get_associated_artifact() const;
     void set_associated_artifact(BrowserArtifact *, bool on_read = FALSE);
-    const Q3ValueList<BrowserComponent *> & get_associated_components() const;
+    const QList<BrowserComponent *> & get_associated_components() const;
     void add_associated_component(BrowserComponent *);
     void remove_associated_component(BrowserComponent *);
 
@@ -132,7 +132,7 @@ public:
                                     QString name = QString());
     virtual QString full_name(bool rev = FALSE, bool itself = TRUE) const;
     QString contextual_name(ShowContextMode) const;
-    virtual void set_name(const char * s);
+    virtual void set_name(QString s);
     virtual void member_cpp_def(const QString &, const QString &, QString & s, bool) const;
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -179,7 +179,7 @@ public:
     static void update_idmax_for_root();
     virtual void renumber(int phase);
     virtual void prepare_update_lib() const;
-    virtual void support_file(Q3Dict<char> & files, bool add) const;
+    virtual void support_file(QHash<QString,char*> & files, bool add) const;
 
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char *& , char *&);
@@ -192,7 +192,7 @@ public:
     virtual const QPixmap * pixmap(int) const;
     virtual void update_stereotype(bool rec = FALSE);
     virtual void iconChanged();
-    virtual void paintCell(QPainter * p, const QColorGroup & cg, int column,
+    virtual void paintCell(QPainter * p, const QPalette & cg, int column,
                            int width, int alignment);
 
     virtual void DragMoveEvent(QDragMoveEvent * e);
@@ -203,11 +203,12 @@ public:
     static BrowserClass * temporary();
 private:
     // some helpers
-    void InstallParentsMenuItems(Q3PopupMenu &inhopersubm);
+    void InstallParentsMenuItems(QMenu &inhopersubm);
     void AddInheritedOperations(int rank);
 
 public:
     QList<OperationData*>  CollectSameThroughInheritance(OperationData*,  QList<BrowserNode*>&, bool goBack = true);
+    virtual QVariant	data(int column, int role) const;
 
 };
 

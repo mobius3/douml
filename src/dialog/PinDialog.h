@@ -33,13 +33,13 @@
 
 
 #include <qstringlist.h>
-#include <q3tabdialog.h>
+#include <tabdialog.h>
 //Added by qt3to4:
-#include <Q3PtrList>
+//
 
 #include "BrowserNode.h"
 
-class Q3ComboBox;
+class QComboBox;
 class QCheckBox;
 class QRadioButton;
 
@@ -51,7 +51,7 @@ class MultiLineEdit;
 class KeyValuesTable;
 class BodyDialog;
 
-class PinDialog : public Q3TabDialog
+class PinDialog : public TabDialog
 {
     Q_OBJECT
 
@@ -67,12 +67,12 @@ protected:
     // uml tab
     QWidget * umltab;
     LineEdit * edname;
-    Q3ComboBox * edtype;
-    Q3ComboBox * edstereotype;
-    Q3ComboBox * eddir;
-    Q3ComboBox * edordering;
-    Q3ComboBox * edeffect;
-    Q3ComboBox * edmultiplicity;
+    QComboBox * edtype;
+    QComboBox * edstereotype;
+    QComboBox * eddir;
+    QComboBox * edordering;
+    QComboBox * edeffect;
+    QComboBox * edmultiplicity;
     LineEdit * edin_state;
     QCheckBox * is_control_cb;
     QCheckBox * unique_cb;

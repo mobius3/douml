@@ -93,7 +93,7 @@ public:
     QString compute_name(const char * name_spec) const;
 
     virtual const QPixmap * pixmap(int) const;
-    virtual void paintCell(QPainter *, const QColorGroup &, int, int, int);
+    virtual void paintCell(QPainter *, const QPalette &, int, int, int);
 
     virtual void menu();
     virtual void apply_shortcut(QString s);
@@ -143,6 +143,7 @@ public:
     static const QStringList & default_stereotypes();
     static void read_stereotypes(char *& , char *& k);
     static void save_stereotypes(QTextStream &);
+    virtual QVariant	data(int column, int role) const;
 
 protected:
     virtual bool delete_internal(QString & warning);

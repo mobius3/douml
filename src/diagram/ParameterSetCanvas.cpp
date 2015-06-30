@@ -32,11 +32,11 @@
 #include <math.h>
 
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include "ParameterSetCanvas.h"
 #include "BrowserParameterSet.h"
@@ -66,7 +66,7 @@ ParameterSetCanvas::ParameterSetCanvas(BrowserNode * bn, UmlCanvas * canvas,
     if (id == 0) {
         // not on read
         update();
-        setZ(a->z());  // note : pins have z+2 to be upper the parameter sets with their lines
+        setZValue(a->zValue());  // note : pins have z+2 to be upper the parameter sets with their lines
         check_stereotypeproperties();
     }
 
@@ -105,13 +105,13 @@ void ParameterSetCanvas::remove(bool from_model)
 
 void ParameterSetCanvas::disconnect_pins()
 {
-    Q3ValueList<PinCanvas *>::Iterator iter;
+    QList<PinCanvas *>::Iterator iter;
 
     iter = params.begin();
 
     while (! params.isEmpty()) {
         disconnect((*iter)->get_bn()->get_data(), SIGNAL(deleted()), this, SLOT(pin_deleted()));
-        iter = params.remove(iter);
+        iter = params.erase(iter);
     }
 }
 
@@ -124,17 +124,17 @@ void ParameterSetCanvas::delete_available(BooL & in_model, BooL & out_model) con
 void ParameterSetCanvas::update()
 {
     used_color = (itscolor == UmlDefaultColor)
-                 ? the_canvas()->browser_diagram()->get_color(UmlActivityPin)
-                 : itscolor;
+            ? the_canvas()->browser_diagram()->get_color(UmlActivityPin)
+            : itscolor;
 
     disconnect_pins();
 
-    Q3ValueList<PinCanvas *> pincanvas = act->get_pins();
-    Q3ValueList<PinCanvas *>::ConstIterator iter;
-    Q3ValueList<BrowserPin *> pins = ((ParameterSetData *) browser_node->get_data())->get_pins();
+    QList<PinCanvas *> pincanvas = act->get_pins();
+    QList<PinCanvas *>::ConstIterator iter;
+    QList<BrowserPin *> pins = ((ParameterSetData *) browser_node->get_data())->get_pins();
 
     for (iter = pincanvas.begin(); iter != pincanvas.end(); ++iter) {
-        if (pins.findIndex((BrowserPin *)(*iter)->get_bn()) != -1) {
+        if (pins.indexOf((BrowserPin *)(*iter)->get_bn()) != -1) {
             params.append(*iter);
             connect((*iter)->get_bn()->get_data(), SIGNAL(deleted()), this, SLOT(pin_deleted()));
         }
@@ -145,12 +145,12 @@ void ParameterSetCanvas::update()
 
 void ParameterSetCanvas::pin_deleted()
 {
-    Q3ValueList<PinCanvas *>::Iterator iter = params.begin();
+    QList<PinCanvas *>::Iterator iter = params.begin();
 
     while (iter != params.end()) {
         if (!(*iter)->visible()) {
             disconnect((*iter)->get_bn()->get_data(), SIGNAL(deleted()), this, SLOT(pin_deleted()));
-            iter = params.remove(iter);
+            iter = params.erase(iter);
         }
         else
             ++iter;
@@ -163,8 +163,8 @@ void ParameterSetCanvas::check_position()
 {
     if (params.isEmpty()) {
         // hide it but still visible
-        Q3CanvasRectangle::moveBy(-1 - x(), -1 - y());
-        Q3CanvasRectangle::setSize(0, 0);
+        QGraphicsRectItem::moveBy(-1 - x(), -1 - y());
+        QGraphicsRectItem::setRect(0,0,0, 0);
     }
     else {
         int x_min = the_canvas()->width();
@@ -172,7 +172,7 @@ void ParameterSetCanvas::check_position()
         int y_min = the_canvas()->height();
         int y_max = 0;
 
-        Q3ValueList<PinCanvas *>::Iterator iter;
+        QList<PinCanvas *>::Iterator iter;
 
         for (iter = params.begin(); iter != params.end(); ++iter) {
             int i;
@@ -213,8 +213,8 @@ void ParameterSetCanvas::check_position()
         if (y_max > r_act.y())
             y_max += margin;
 
-        Q3CanvasRectangle::moveBy(x_min - x(), y_min - y());
-        Q3CanvasRectangle::setSize(x_max - x_min + 1, y_max - y_min + 1);
+        QGraphicsRectItem::moveBy(x_min - x(), y_min - y());
+        QGraphicsRectItem::setRect(0,0,x_max - x_min + 1, y_max - y_min + 1);
     }
 }
 
@@ -253,7 +253,8 @@ void ParameterSetCanvas::draw(QPainter & p)
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QBrush brsh = p.brush();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
+    QBrush backBrush = p.background();
 
     p.setBackgroundMode((used_color == UmlTransparent)
                         ? ::Qt::TransparentMode
@@ -263,29 +264,34 @@ void ParameterSetCanvas::draw(QPainter & p)
     QRect r = rect();
     FILE * fp = svg();
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
 
     if (used_color != UmlTransparent)
         p.setBrush(co);
 
     if (fp != 0)
         fprintf(fp, "<g>\n"
-                "\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n"
-                "</g>\n",
+                    "\t<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
+                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n"
+                    "</g>\n",
                 svg_color(used_color),
                 r.x(), r.y(), r.width() - 1, r.height() - 1);
 
     p.drawRect(r);
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
     p.setBrush(brsh);
 
     if (selected())
         show_mark(p, r);
 }
-
-UmlCode ParameterSetCanvas::type() const
+void ParameterSetCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode ParameterSetCanvas::typeUmlCode() const
 {
     return UmlParameterSet;
 }
@@ -302,84 +308,88 @@ void ParameterSetCanvas::open()
 
 void ParameterSetCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
     int index;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit parameter set"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit parameter set"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
-        m.insertItem(TR("Delete from model"), 8);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
+        m.addSeparator();
     }
 
     if (Tool::menu_insert(&toolm, UmlParameterSet, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    switch (index = m.exec(QCursor::pos())) {
-    case 0:
-        act->upper();
-        modified();	// call package_modified()
-        return;
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        switch (index = retAction->data().toInt()) {
+        case 0:
+            act->upper();
+            modified();	// call package_modified()
+            return;
 
-    case 1:
-        act->lower();
-        modified();	// call package_modified()
-        return;
+        case 1:
+            act->lower();
+            modified();	// call package_modified()
+            return;
 
-    case 13:
-        act->z_up();
-        modified();	// call package_modified()
-        return;
+        case 13:
+            act->z_up();
+            modified();	// call package_modified()
+            return;
 
-    case 14:
-        act->z_down();
-        modified();	// call package_modified()
-        return;
+        case 14:
+            act->z_down();
+            modified();	// call package_modified()
+            return;
 
-    case 2:
-        edit_drawing_settings();
-        return;
+        case 2:
+            edit_drawing_settings();
+            return;
 
-    case 3:
-        browser_node->open(TRUE);
-        return;
+        case 3:
+            browser_node->open(TRUE);
+            return;
 
-    case 4:
-        browser_node->select_in_browser();
-        return;
+        case 4:
+            browser_node->select_in_browser();
+            return;
 
-    case 5:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
+        case 5:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
 
-    case 8:
-        //delete from model
-        browser_node->delete_it();	// will delete the canvas
-        break;
+        case 8:
+            //delete from model
+            browser_node->delete_it();	// will delete the canvas
+            break;
 
-    default:
-        if (index >= 20)
-            ToolCom::run(Tool::command(index - 20), browser_node);
+        default:
+            if (index >= 20)
+                ToolCom::run(Tool::command(index - 20), browser_node);
 
-        return;
+            return;
+        }
     }
 
     package_modified();
@@ -517,7 +527,7 @@ void ParameterSetCanvas::save(QTextStream & st, bool ref, QString & warning) con
 }
 
 ParameterSetCanvas * ParameterSetCanvas::read(char *& st, UmlCanvas * canvas,
-        char * k, ActivityActionCanvas * a)
+                                              char * k, ActivityActionCanvas * a)
 {
     if (!strcmp(k, "parametersetcanvas_ref"))
         return ((ParameterSetCanvas *) dict_get(read_id(st), "parametersetcanvas", canvas));
@@ -556,7 +566,7 @@ ParameterSetCanvas * ParameterSetCanvas::read(char *& st, UmlCanvas * canvas,
 
 void ParameterSetCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
     disconnect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
@@ -580,14 +590,14 @@ void ParameterSetCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
     connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
 
     // note : pin list unchanged because history raz on item deletion
-    Q3ValueList<PinCanvas *>::Iterator iter;
+    QList<PinCanvas *>::Iterator iter;
 
     for (iter = params.begin(); iter != params.end(); ++iter)
         connect((*iter)->get_bn()->get_data(), SIGNAL(deleted()), this, SLOT(pin_deleted()));

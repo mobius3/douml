@@ -2,7 +2,7 @@
 #define _UMLACTIVITYDIAGRAM_H
 
 
-#include <q3cstring.h>
+
 #include "Vector.h"
 #include "UmlBaseActivityDiagram.h"
 #include "UmlActivityItem.h"
@@ -20,7 +20,7 @@ public:
     virtual void memo_ref();
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     static void ref_index();
 
@@ -33,7 +33,7 @@ protected:
 
 public:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlActivityDiagram(void * id, const Q3CString & s) : UmlBaseActivityDiagram(id, s) {
+    UmlActivityDiagram(void * id, const QByteArray & s) : UmlBaseActivityDiagram(id, s) {
     }
 
 };

@@ -36,13 +36,8 @@ class QTextEdit;
 class MLinesItem : public TableItem
 {
 protected:
-    QTextEdit * mle;
-
 public:
-    MLinesItem(Q3Table * t, const QString & s, bool editable = true);
-
-    virtual QWidget * createEditor() const;
-    virtual void setContentFromEditor(QWidget * w);
+    MLinesItem(QTableWidget * t, const QString & s, bool editable = true);
 };
 
 #endif

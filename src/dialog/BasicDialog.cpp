@@ -29,12 +29,10 @@
 
 
 
-#include <q3grid.h>
+#include <gridbox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
-#include <q3combobox.h>
-#include <q3vbox.h>
-
+#include <qcombobox.h>
 #include "BasicDialog.h"
 #include "BasicData.h"
 #include "BrowserNode.h"
@@ -46,12 +44,14 @@
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
-
+#include "vvbox.h"
+#include "hhbox.h"
 BasicDialog::BasicDialog(BasicData * nd, QString s,
                          const QStringList & default_stereotypes,
                          QSize & sz, bool unnamed)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), data(nd), previous_size(sz)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), data(nd), previous_size(sz)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     nd->get_browser_node()->edit_start();
 
     if (nd->get_browser_node()->is_writable()) {
@@ -63,48 +63,53 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR(s + " dialog"));
-
+    setWindowTitle(s + tr(" dialog"));
     bool visit = !hasOkButton();
 
     // general tab
 
     BrowserNode * bn = data->get_browser_node();
-    Q3Grid * grid = new Q3Grid(2, this);
-    grid->setMargin(5);
-    grid->setSpacing(5);
+    GridBox * grid = new GridBox(2, this);
+    grid->setMargin(0);
+    grid->setSpacing(0);
 
     if (unnamed)
         edname = 0;
     else {
-        new QLabel(TR("name : "), grid);
-        edname = new LineEdit(bn->get_name(), grid);
+        grid->addWidget(new QLabel(TR("name : "), grid));
+        grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
         edname->setReadOnly(visit);
     }
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(data->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox(grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(data->get_stereotype()));
 
     if (! visit) {
-        edstereotype->insertStringList(default_stereotypes);
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(bn->get_type()));
+        edstereotype->addItems(default_stereotypes);
+        edstereotype->addItems(ProfiledStereotypes::defaults(bn->get_type()));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
+    VVBox * vtab = new VVBox(grid);
+    grid->addWidget(vtab);
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
+    SmallPushButton *sButton;
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
     QFont font = comment->font();
@@ -119,19 +124,19 @@ BasicDialog::BasicDialog(BasicData * nd, QString s,
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
     kvtable = new KeyValuesTable(bn, grid, visit);
-    addTab(grid, TR("Properties"));
-
+    grid->addWidget(kvtable);
+    addTab(grid, QObject::tr("Properties"));
     open_dialog(this);
 }
 
 void BasicDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -151,7 +156,7 @@ void BasicDialog::edit_description()
 {
     edit(comment->text(),
          (edname == 0) ? QString("description")
-         : edname->text().stripWhiteSpace() + "_description",
+         : edname->text().trimmed() + "_description",
          data, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -168,21 +173,19 @@ void BasicDialog::accept()
     BrowserNode * bn = data->get_browser_node();
 
     if (edname != 0) {
-        QString s = edname->text().stripWhiteSpace();
+        QString s = edname->text().trimmed();
 
         if ((s != bn->get_name()) &&
             ((BrowserNode *) bn->parent())->wrong_child_name(s, bn->get_type(),
                     bn->allow_spaces(),
                     bn->allow_empty())) {
-            msg_critical(TR("Error"), edname->text() + TR("\n\nillegal name or already used"));
+            msg_critical(TR("Error"), edname->text() + QObject::tr("\n\nillegal name or already used"));
             return;
         }
         else
             bn->set_name(s);
     }
-
-    bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
-
+    bool newst = data->set_stereotype(fromUnicode(edstereotype->currentText().trimmed().toLatin1().constData()));
     bn->set_comment(comment->text());
     UmlWindow::update_comment_if_needed(bn);
 
@@ -192,6 +195,5 @@ void BasicDialog::accept()
 
     bn->package_modified();
     data->modified();
-
-    Q3TabDialog::accept();
+    TabDialog::accept();
 }

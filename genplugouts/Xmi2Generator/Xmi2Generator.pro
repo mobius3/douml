@@ -11,9 +11,10 @@ CONFIG(Release, Debug|Release) {
     QMAKE_POST_LINK = " "
 }
 CONFIG += precompile_header
-DEFINES        = WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
-QMAKE_CXXFLAGS += -std=gnu++11
+DEFINES        += WITHCPP WITHJAVA WITHIDL WITHPYTHON WITHPHP
+QMAKE_CXXFLAGS += -std=c++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+
 PRECOMPILED_HEADER += ../../src/misc/mystr.h
 HEADERS        = ./UmlBaseClassDiagram.h \
           ./UmlBaseDeepHistoryPseudoState.h \
@@ -218,7 +219,9 @@ HEADERS        = ./UmlBaseClassDiagram.h \
           ./UmlStateDiagram.h \
           ./UmlBaseNcRelation.h \
           ./UmlBaseJunctionPseudoState.h \
-          ./UmlClassMember.h
+          ./UmlClassMember.h \
+    bbuttongroup.h \
+    hhbox.h
 SOURCES        = ./UmlBaseClassDiagram.cpp \
           ./UmlBaseDeepHistoryPseudoState.cpp \
           ./FlowContainer.cpp \
@@ -424,13 +427,15 @@ SOURCES        = ./UmlBaseClassDiagram.cpp \
           ./UmlBaseNcRelation.cpp \
           ./UmlBaseJunctionPseudoState.cpp \
           ./UmlClassMember.cpp \
-          ../../src/misc/mystr.cpp
+          ../../src/misc/mystr.cpp \
+    bbuttongroup.cpp \
+    hhbox.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network widgets
+DEFINES += TRUE=true FALSE=false
 
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 mac:LIBS += -lc++

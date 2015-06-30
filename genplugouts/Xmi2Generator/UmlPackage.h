@@ -4,7 +4,7 @@
 
 #include "UmlBasePackage.h"
 
-#include <q3ptrlist.h>
+
 
 class FileOut;
 class UmlItem;
@@ -24,7 +24,7 @@ public:
 
 
 private:
-    void search_profiles(Q3PtrList<UmlPackage> & l);
+    void search_profiles(QList<UmlPackage*> & l);
 
 
 public:
@@ -44,9 +44,9 @@ public:
 
 
 protected:
-    Q3PtrList<UmlItem> _relations;
+    QList<UmlItem*> _relations;
 
-    Q3PtrList<UmlUseCaseDiagram> _assocs;
+    QList<UmlUseCaseDiagram*> _assocs;
 
 };
 

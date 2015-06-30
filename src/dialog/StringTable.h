@@ -55,7 +55,7 @@ protected:
     void move_row(int from, int to);
 
 protected slots:
-    virtual void button_pressed(int row, int col, int button, const QPoint & mousePos);
+    virtual void button_pressed(const QModelIndex & index);
     void value_changed(int row, int col);
 };
 

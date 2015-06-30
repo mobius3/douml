@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseNode.h"
-#include <q3cstring.h>
+
 
 // This class manages 'nodes'
 //
@@ -11,14 +11,14 @@
 class UmlNode : public UmlBaseNode
 {
 public:
-    UmlNode(void * id, const Q3CString & n) : UmlBaseNode(id, n) {};
+    UmlNode(void * id, const QByteArray & n) : UmlBaseNode(id, n) {};
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level);
+    virtual void html(QByteArray pfix, unsigned int rank, unsigned int level);
 
 };
 

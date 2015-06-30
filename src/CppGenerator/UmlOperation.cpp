@@ -30,15 +30,11 @@
 #include <QTextStream>
 #include <qfile.h>
 #include <qfileinfo.h>
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 #include <QTextStream>
-//Added by qt3to4:
-#include <Q3PtrList>
 #include <functional>
 #include <QSettings>
-
 #include "UmlOperation.h"
 #include "UmlSettings.h"
 #include "CppSettings.h"
@@ -153,7 +149,7 @@ void UmlOperation::compute_dependency(QList<CppRefType *> & dependencies,
     int template_level = 0;
     const char * p = decl;
     const char * dontsubstituteuntil = 0;
-    const Q3ValueList<UmlParameter> & params = this->params();
+    const QList<UmlParameter> & params = this->params();
     UmlTypeSpec ts;
 
     for (;;) {
@@ -207,8 +203,8 @@ void UmlOperation::compute_dependency(QList<CppRefType *> & dependencies,
                 p = strchr(p, '}') + 1;
             else if (!strncmp(p, "${throw}", 8)) {
                 p += 8;
-                const Q3ValueList<UmlTypeSpec> exc = exceptions();
-                Q3ValueList<UmlTypeSpec>::ConstIterator it;
+                const QList<UmlTypeSpec> exc = exceptions();
+                QList<UmlTypeSpec>::ConstIterator it;
 
                 for (it = exc.begin(); it != exc.end(); ++it)
                     UmlClassMember::compute_dependency(dependencies, "${type}", *it, TRUE);
@@ -306,7 +302,7 @@ void UmlOperation::compute_dependency(QList<CppRefType *> & dependencies,
     }
 }
 
-static bool generate_type(const Q3ValueList<UmlParameter> & params,
+static bool generate_type(const QList<UmlParameter> & params,
                           unsigned rank, QTextStream & f_h)
 {
     if ((int)rank >= params.count())
@@ -317,7 +313,7 @@ static bool generate_type(const Q3ValueList<UmlParameter> & params,
     return TRUE;
 }
 
-static bool generate_var(const Q3ValueList<UmlParameter> & params,
+static bool generate_var(const QList<UmlParameter> & params,
                          unsigned rank, QTextStream & f_h)
 {
     if ((int)rank >= params.count())
@@ -327,7 +323,7 @@ static bool generate_var(const Q3ValueList<UmlParameter> & params,
     return TRUE;
 }
 
-static bool generate_init(const Q3ValueList<UmlParameter> & params,
+static bool generate_init(const QList<UmlParameter> & params,
                           unsigned rank, QTextStream & f_h)
 {
     if ((int)rank >= params.count())
@@ -370,9 +366,9 @@ WrapperStr UmlOperation::compute_name()
         else if ((index = get_set_spec.find("${Name}")) != -1)
             get_set_spec.replace(index, 7, capitalize(s));
         else if ((index = s.find("${NAME}")) != -1)
-            get_set_spec.replace(index, 7, s.upper());
+            get_set_spec.replace(index, 7, s.upper().toLatin1().constData());
         else if ((index = s.find("${nAME}")) != -1)
-            get_set_spec.replace(index, 7, s.lower());
+            get_set_spec.replace(index, 7, s.lower().toLatin1().constData());
 
         return get_set_spec;
     }
@@ -386,7 +382,7 @@ bool CompareAgainstTag(QString & currentTag, QString tagToCompare, const char * 
     currentTag = tagToCompare;
     tagToCompare = "${" + tagToCompare + "}";
 
-    if (!strncmp(p, tagToCompare, tagToCompare.length()))
+    if (!strncmp(p, tagToCompare.toLatin1().constData(), tagToCompare.length()))
         return true;
 
     return false;
@@ -416,7 +412,7 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
 
         const char * p = cppDecl();
         const char * pp = 0;
-        const Q3ValueList<UmlParameter> & params = this->params();
+        const QList<UmlParameter> & params = this->params();
         unsigned rank;
 
         while ((*p == ' ') || (*p == '\t'))
@@ -598,12 +594,12 @@ void UmlOperation::generate_decl(aVisibility & current_visibility, QTextStream &
 
 void UmlOperation::generate_throw(QTextStream & f)
 {
-    const Q3ValueList<UmlTypeSpec> exc = exceptions();
+    const QList<UmlTypeSpec> exc = exceptions();
     if(exc.count() == 0)
         return;
 
     if (!exc.isEmpty()) {
-        Q3ValueList<UmlTypeSpec>::ConstIterator it;
+        QList<UmlTypeSpec>::ConstIterator it;
         const char * sep = " throw(";
 
         for (it = exc.begin(); it != exc.end(); ++it) {
@@ -760,7 +756,7 @@ void UmlOperation::generate_def(QTextStream & fs, WrapperStr indent, bool h,
             ? h : !h) {
             const char * p = cppDef();
             const char * pp = 0;
-            const Q3ValueList<UmlParameter> & params = this->params();
+            const QList<UmlParameter> & params = this->params();
             unsigned rank;
             const char * body_indent = strstr(p, "${body}");
             bool template_oper = is_template_operation();
@@ -937,7 +933,7 @@ static char * read_file(const char * filename)
         int size = fi.size();
         char * s = new char[size + 1];
 
-        if (fp.readBlock(s, size) == -1) {
+        if (fp.read(s, size) == -1) {
             delete [] s;
             return 0;
         }

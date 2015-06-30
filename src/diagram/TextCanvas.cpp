@@ -31,7 +31,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -52,7 +52,7 @@
 TextCanvas::TextCanvas(UmlCanvas * canvas, int x, int y, int id)
     : DiagramCanvas(0, canvas, x, y, TEXT_CANVAS_MIN_SIZE,
                     TEXT_CANVAS_MIN_SIZE, id),
-    itsfont(UmlNormalFont), fg_c(UmlBlack), bg_c(UmlTransparent)
+      itsfont(UmlNormalFont), fg_c(UmlBlack), bg_c(UmlTransparent)
 {
     browser_node = canvas->browser_diagram();
 }
@@ -66,14 +66,17 @@ void TextCanvas::draw(QPainter & p)
     if (! visible()) return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
-    QColor bgcolor = p.backgroundColor();
+    QColor bgcolor = p.background().color();
     QPen fgcolor = p.pen();
+    QBrush backgroundColor = p.background();
 
     if (bg_c == UmlTransparent)
         p.setBackgroundMode(::Qt::TransparentMode);
     else {
         p.setBackgroundMode(::Qt::OpaqueMode);
-        p.setBackgroundColor(color(bg_c));
+        //p.setBackgroundColor(color(bg_c));
+        backgroundColor.setColor(bg_c);
+        p.setBackground(backgroundColor);
     }
 
     if (fg_c != UmlTransparent)
@@ -93,14 +96,20 @@ void TextCanvas::draw(QPainter & p)
                   text, p.font(), fp, fg_c, bg_c);
 
     p.setFont(the_canvas()->get_font(UmlNormalFont));
-    p.setBackgroundColor(bgcolor);
+    backgroundColor.setColor(bgcolor);
+    //p.setBackgroundColor(bgcolor);
+    p.setBackground(backgroundColor);
     p.setPen(fgcolor);
 
     if (selected())
         show_mark(p, r);
 }
+void TextCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
 
-UmlCode TextCanvas::type() const
+UmlCode TextCanvas::typeUmlCode() const
 {
     return UmlText;
 }
@@ -118,7 +127,7 @@ void TextCanvas::open()
     if (s.isEmpty())
         delete_it();
     else {
-        text = toUnicode(s);
+        text = toUnicode(s.toLatin1().constData());
 
         if (created) {
             QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
@@ -144,118 +153,122 @@ void TextCanvas::delete_available(BooL &, BooL & out_model) const
 
 void TextCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu fontsubm(0);
+    QMenu m(0);
+    QMenu fontsubm(0);
 
-    MenuFactory::createTitle(m, TR("Text"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 6);
-    m.insertItem(TR("Go down"), 7);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Color"), 5);
-    m.insertItem(TR("Font"), &fontsubm);
+    MenuFactory::createTitle(m,  QObject::tr("Text"));
+    m.addSeparator();
+    MenuFactory::addItem(m,  QObject::tr("Upper"), 0);
+    MenuFactory::addItem(m,  QObject::tr("Lower"), 1);
+    MenuFactory::addItem(m,  QObject::tr("Go up"), 6);
+    MenuFactory::addItem(m,  QObject::tr("Go down"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m,  QObject::tr("Edit"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m,  QObject::tr("Color"), 5);
+    MenuFactory::insertItem(m,  QObject::tr("Font"), &fontsubm);
     init_font_menu(fontsubm, the_canvas(), 10);
 
     if (linked()) {
-        m.insertSeparator();
-        m.insertItem(TR("Select linked items"), 3);
+        m.addSeparator();
+        MenuFactory::addItem(m,  QObject::tr("Select linked items"), 3);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m,  QObject::tr("Remove from diagram"), 4);
 
-    int index = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int index = retAction->data().toInt();
 
-    switch (index) {
-    case 0:
-        upper();
-        // force son reaffichage
-        hide();
-        show();
-        canvas()->update();
-        break;
-
-    case 1:
-        lower();
-        // force son reaffichage
-        hide();
-        show();
-        canvas()->update();
-        break;
-
-    case 6:
-        z_up();
-        // force son reaffichage
-        hide();
-        show();
-        canvas()->update();
-        break;
-
-    case 7:
-        z_down();
-        // force son reaffichage
-        hide();
-        show();
-        canvas()->update();
-        break;
-
-    case 2:
-        open();
-        return;	// call package_modified
-
-    case 3:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
-
-    case 4:
-        // delete
-        the_canvas()->del(this);
-        break;
-
-    case 5:
-        for (;;) {
-            ColorSpecVector co(2);
-
-            co[0].set(TR("foreground"), &fg_c);
-            co[1].set(TR("background"), &bg_c);
-
-            SettingsDialog dialog(0, &co, TRUE, FALSE,
-                                  TR("Text color dialog"));
-
-            dialog.raise();
-
-            if (dialog.exec() != QDialog::Accepted)
-                return;
-
-            // force son reaffichage
-            hide();
-            show();
-            canvas()->update();
-
-            if (!dialog.redo())
-                break;
-            else
-                package_modified();
-        }
-
-        break;
-
-    default:
-        if (index >= 10) {
-            itsfont = (UmlFont)(index - 10);
+        switch (index) {
+        case 0:
+            upper();
             // force son reaffichage
             hide();
             show();
             canvas()->update();
             break;
-        }
-        else
+
+        case 1:
+            lower();
+            // force son reaffichage
+            hide();
+            show();
+            canvas()->update();
+            break;
+
+        case 6:
+            z_up();
+            // force son reaffichage
+            hide();
+            show();
+            canvas()->update();
+            break;
+
+        case 7:
+            z_down();
+            // force son reaffichage
+            hide();
+            show();
+            canvas()->update();
+            break;
+
+        case 2:
+            open();
+            return;	// call package_modified
+
+        case 3:
+            the_canvas()->unselect_all();
+            select_associated();
             return;
+
+        case 4:
+            // delete
+            the_canvas()->del(this);
+            break;
+
+        case 5:
+            for (;;) {
+                ColorSpecVector co(2);
+
+                co[0].set( QObject::tr("foreground"), &fg_c);
+                co[1].set( QObject::tr("background"), &bg_c);
+
+                SettingsDialog dialog(0, &co, TRUE, FALSE,
+                                      QObject::tr("Text color dialog"));
+
+                dialog.raise();
+
+                if (dialog.exec() != QDialog::Accepted)
+                    return;
+
+                // force son reaffichage
+                hide();
+                show();
+                canvas()->update();
+
+                if (!dialog.redo())
+                    break;
+                else
+                    package_modified();
+            }
+
+            break;
+
+        default:
+            if (index >= 10) {
+                itsfont = (UmlFont)(index - 10);
+                // force son reaffichage
+                hide();
+                show();
+                canvas()->update();
+                break;
+            }
+            else
+                return;
+        }
     }
 
     package_modified();
@@ -288,12 +301,12 @@ void TextCanvas::apply_shortcut(QString s)
 
 QString TextCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("illegal");
+    return (l == UmlAnchor) ? QString() :  QObject::tr("illegal");
 }
 
 QString TextCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
+    return (l == UmlAnchor) ? dest->may_start(l) :  QObject::tr("illegal");
 }
 
 bool TextCanvas::alignable() const
@@ -375,7 +388,7 @@ TextCanvas * TextCanvas::read(char *& st, UmlCanvas * canvas, char * k)
         int x = (int) read_double(st);
 
         TextCanvas * result =
-            new TextCanvas(canvas, x, (int) read_double(st), id);
+                new TextCanvas(canvas, x, (int) read_double(st), id);
 
         read_zwh(st, result);
         result->width_scale100 = result->width();
@@ -412,21 +425,21 @@ void TextCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 }
 
 // for plug outs
 
-void TextCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void TextCanvas::send(ToolCom * com, QList<QGraphicsItem*> & all)
 {
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
         DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
         if ((di != 0) &&
-            (*cit)->visible() &&
-            (di->type() == UmlText)) {
+                (*cit)->isVisible() &&
+                (di->typeUmlCode() == UmlText)) {
             TextCanvas * tx = (TextCanvas *) di;
             WrapperStr s = fromUnicode(tx->text);
 

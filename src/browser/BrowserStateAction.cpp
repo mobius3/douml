@@ -29,8 +29,8 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+//#include <q3popupmenu.h>
+#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -113,7 +113,7 @@ void BrowserStateAction::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -123,7 +123,6 @@ void BrowserStateAction::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 {
     BrowserNode::referenced_by(l, ondelete);
     BrowserTransition::compute_referenced_by(l, this);
-
     if (! ondelete)
         BrowserStateDiagram::compute_referenced_by(l, this, "stateactioncanvas", "stateaction_ref");
 }
@@ -212,47 +211,49 @@ void BrowserStateAction::menu()
         s = "send-signal action";
     else
         s = "action";
-
-    Q3PopupMenu m(0, "action");
-    Q3PopupMenu toolm(0);
+    QMenu m("action", 0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
-        m.setWhatsThis(m.insertItem(TR("Edit"), 1),
-                       TR("to edit the <i>" + s + "</i>, \
-a double click with the left mouse button does the same thing"));
+        MenuFactory::addItem(m, QObject::tr("Edit"), 1,
+                       QObject::TR("to edit the <i>%1</i>, \
+a double click with the left mouse button does the same thing").arg(s));
 
         if (!is_read_only) {
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), 2),
-                           TR("to copy the <i>" + s + "</i> in a new one"));
-            m.insertSeparator();
+            MenuFactory::addItem(m, QObject::tr("Duplicate"), 2,
+                           QObject::TR("to copy the <i>%1</i> in a new one").arg(s));
+            m.addSeparator();
 
             if (edition_number == 0)
-                m.setWhatsThis(m.insertItem(TR("Delete"), 3),
-                               TR("to delete the <i>" + s + "</i>. \
-Note that you can undelete it after"));
+                MenuFactory::addItem(m, QObject::tr("Delete"), 3,
+                               QObject::TR("to delete the <i>%1</i>. \
+Note that you can undelete it after").arg(s));
         }
 
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 5),
-                       TR("to know who reference the <i>" + s + "</i> \
-through a transition"));
-        mark_menu(m, TR("the " + s), 90);
+        MenuFactory::addItem(m, QObject::tr("Referenced by"), 5,
+                       QObject::TR("to know who reference the <i>%1</i> \
+through a transition").arg(s));
+        mark_menu(m, QObject::tr("the %1").arg(s).toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle(QObject::TR("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 4),
-                       TR("to undelete the <i>" + s + "</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 4,
+                       QObject::TR("to undelete the <i>%1</i>").arg(s));
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserStateAction::exec_menu_choice(int rank)
@@ -351,11 +352,11 @@ QString BrowserStateAction::get_stype() const
     const char * st = def->get_stereotype();
 
     if (!strcmp(st, "receive-signal"))
-        return TR("receive-signal action");
+        return QObject::TR("receive-signal action");
     else if (!strcmp(st, "send-signal"))
-        return TR("send-signal action");
+        return QObject::TR("send-signal action");
     else
-        return TR("state action");
+        return QObject::TR("state action");
 }
 
 int BrowserStateAction::get_identifier() const
@@ -388,7 +389,7 @@ QString BrowserStateAction::full_name(bool rev, bool) const
         if (s.isEmpty())
             s = "<anonymous state action>";
         else
-            s = "<anonymous " + s + ">";
+            s = "<anonymous %1>";
     }
 
     return fullname(s, rev);
@@ -480,13 +481,12 @@ void BrowserStateAction::DragMoveInsideEvent(QDragMoveEvent * e)
 void BrowserStateAction::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 {
     BrowserNode * bn;
-
     if ((((bn = UmlDrag::decode(e, BrowserTransition::drag_key(this))) != 0)) &&
         (bn != after) && (bn != this)) {
         if (may_contains(bn, FALSE))
             move(bn, after);
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
             e->ignore();
         }
     }
@@ -543,7 +543,7 @@ void BrowserStateAction::save(QTextStream & st, bool ref, QString & warning)
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -603,7 +603,6 @@ BrowserStateAction * BrowserStateAction::read(char *& st, char * k,
         result = all[id];
 
         BrowserStateAction * already_exist = 0;
-
         if (result == 0)
             result = new BrowserStateAction(parent, new StateActionData, id);
         else if (result->is_defined) {
@@ -615,7 +614,6 @@ BrowserStateAction * BrowserStateAction::read(char *& st, char * k,
 
         k = read_keyword(st);
         result->def->read(st, k);
-
         if (already_exist != 0) {
             already_exist->must_change_id(all);
             already_exist->unconsistent_fixed("state action", result);

@@ -29,12 +29,12 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+//#include <q3popupmenu.h>
+#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -110,13 +110,15 @@ void BrowserActivity::clear(bool old)
 {
     all.clear(old);
     BrowserActivityNode::clear(old);
-    BrowserParameter::clear(old);
     BrowserActivityAction::clear(old);
+
+    BrowserParameter::clear(old);
     BrowserInterruptibleActivityRegion::clear(old);
     BrowserExpansionRegion::clear(old);
     BrowserActivityObject::clear(old);
     BrowserActivityPartition::clear(old);
     BrowserFlow::clear(old);
+
 }
 
 void BrowserActivity::update_idmax_for_root()
@@ -136,7 +138,7 @@ void BrowserActivity::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -154,16 +156,16 @@ void BrowserActivity::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 
 // callers suppose this only take specification into acount
 void BrowserActivity::compute_referenced_by(QList<BrowserNode *> & l,
-        BrowserOperation * op)
+                                            BrowserOperation * op)
 {
     IdIterator<BrowserActivity> it(all);
+    while(it.hasNext()){
+        it.next();
+        if (it.value())
+            if (!it.value()->deletedp() &&
+                    (it.value()->def->get_specification() == op))
+                l.append(it.value());
 
-    while (it.current()) {
-        if (!it.current()->deletedp() &&
-            (it.current()->def->get_specification() == op))
-            l.append(it.current());
-
-        ++it;
     }
 }
 
@@ -187,15 +189,15 @@ BrowserActivity * BrowserActivity::add_activity(BrowserNode * future_parent)
 {
     QString name;
 
-    return (!future_parent->enter_child_name(name, TR("enter activity's name : "),
-            UmlActivity, TRUE, FALSE))
+    return (!future_parent->enter_child_name(name, QObject::TR("enter activity's name : "),
+                                             UmlActivity, TRUE, FALSE))
 
-           ? 0
-           : add_activity(future_parent, name);
+            ? 0
+            : add_activity(future_parent, name.toLatin1().constData());
 }
 
 BrowserActivity * BrowserActivity::add_activity(BrowserNode * future_parent,
-        const char * name)
+                                                const char * name)
 {
     BrowserActivity * r = new BrowserActivity(name, future_parent);
 
@@ -208,17 +210,17 @@ BrowserActivity * BrowserActivity::add_activity(BrowserNode * future_parent,
 BrowserActivity * BrowserActivity::get_activity(BrowserNode * parent)
 {
     BrowserNodeList l;
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = parent->firstChild(); child != 0; child = child->nextSibling())
         if (!((BrowserNode *) child)->deletedp() &&
-            (((BrowserNode *) child)->get_type() == UmlActivity))
+                (((BrowserNode *) child)->get_type() == UmlActivity))
             l.append((BrowserNode *) child);
 
     BrowserNode * old;
     QString name;
 
-    if (!parent->enter_child_name(name, TR("enter activity's name : "),
+    if (!parent->enter_child_name(name, QObject::TR("enter activity's name : "),
                                   UmlActivity, l, &old,
                                   TRUE, FALSE))
         return 0;
@@ -237,11 +239,10 @@ BrowserActivity * BrowserActivity::get_activity(BrowserNode * parent)
 BrowserNode * BrowserActivity::add_parameter(BrowserParameter * param)
 {
     QString name;
-
-    if (enter_child_name(name, TR("enter parameter's name : "),
+    if (enter_child_name(name, QObject::TR("enter parameter's name : "),
                          UmlParameter, TRUE, FALSE)) {
         param = (param == 0) ? new BrowserParameter(name, this)
-                : (BrowserParameter *) param->duplicate(this, name);
+                             : (BrowserParameter *) param->duplicate(this, name);
 
         setOpen(TRUE);
         def->modified();
@@ -250,14 +251,13 @@ BrowserNode * BrowserActivity::add_parameter(BrowserParameter * param)
 
         return param;
     }
-
     return 0;
 }
 
 void BrowserActivity::menu()
 {
     MenuFactory builder(name);
-    Q3PopupMenu toolm(0);
+    QMenu toolm(0);
 
     builder.createTitle(def->definition(FALSE, TRUE));
     builder.insertSeparator();
@@ -306,61 +306,63 @@ void BrowserActivity::menu()
         }
 
         builder.addItem(
-            "Edit",
-            5,
-            "to edit the <i>artivity</i>, \
-a double click with the left mouse button does the same thing");
+                    "Edit",
+                    5,
+                    "to edit the <i>artivity</i>, \
+                    a double click with the left mouse button does the same thing");
 
-        if (!is_read_only) {
-            builder.addItem(
-                "Duplicate",
-                6,
-                "to copy the <i>activity</i> in a new one");
-            builder.insertSeparator();
+                    if (!is_read_only) {
+                        builder.addItem(
+                        "Duplicate",
+                        6,
+                        "to copy the <i>activity</i> in a new one");
+                        builder.insertSeparator();
 
-            if (edition_number == 0) {
+                        if (edition_number == 0) {
+                            builder.addItem(
+                            "Delete",
+                            9,
+                            "to delete the <i>activity</i>. \
+                            Note that you can undelete it after");
+                        }
+                    }
+
+                    builder.insertSeparator();
                 builder.addItem(
-                    "Delete",
-                    9,
-                    "to delete the <i>activity</i>. \
-Note that you can undelete it after");
-            }
-        }
-
-        builder.insertSeparator();
-        builder.addItem(
-            "Referenced by",
-            12,
-            "to know who reference the <i>activity</i>");
-        mark_menu(builder.menu(), TR("the activity"), 90);
+                    "Referenced by",
+                    12,
+                    "to know who reference the <i>activity</i>");
+        mark_menu(builder.menu(), QObject::TR("the activity").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(builder.menu(), this, 99990);
 
         if ((edition_number == 0) &&
-            Tool::menu_insert(&toolm, get_type(), 100)) {
+                Tool::menu_insert(&toolm, get_type(), 100)) {
             builder.insertSeparator();
             builder.addItem("Tools", &toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
         builder.addItem(
-            "Undelete",
-            10,
-            "to undelete the <i>activity</i>");
+                    "Undelete",
+                    10,
+                    "to undelete the <i>activity</i>");
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
                 builder.addItem(
-                    "Undelete recursively",
-                    11,
-                    "undelete the activity and its children");
+                            "Undelete recursively",
+                            11,
+                            "undelete the activity and its children");
                 break;
             }
         }
     }
 
-    exec_menu_choice(builder.menu().exec(QCursor::pos()));
+    QAction * retAction = builder.menu().exec(QCursor::pos());
+    if(retAction)
+        exec_menu_choice(retAction->data().toInt());
 }
 
 void BrowserActivity::exec_menu_choice(int rank)
@@ -368,14 +370,14 @@ void BrowserActivity::exec_menu_choice(int rank)
     switch (rank) {
     case 0: {
         BrowserActivityDiagram * d =
-            BrowserActivityDiagram::add_activity_diagram(this);
+                BrowserActivityDiagram::add_activity_diagram(this);
 
         if (d == 0)
             return;
 
         d->select_in_browser();
     }
-    break;
+        break;
 
     case 1:
         add_parameter(0);
@@ -400,31 +402,31 @@ void BrowserActivity::exec_menu_choice(int rank)
     case 6: {
         QString name;
 
-        if (((BrowserNode *) parent())->enter_child_name(name, TR("enter activity's name : "),
-                UmlActivity, TRUE, FALSE))
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::TR("enter activity's name : "),
+                                                         UmlActivity, TRUE, FALSE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
     }
-    break;
+        break;
 
     case 7: {
         BrowserActivityAction * r =
-            BrowserActivityAction::add_activityaction(this, 0);
+                BrowserActivityAction::add_activityaction(this, 0);
 
         if (r != 0)
             r->select_in_browser();
     }
 
-    return;
+        return;
 
     case 8: {
         BrowserActivityObject * r =
-            BrowserActivityObject::add_activityobject(this, 0);
+                BrowserActivityObject::add_activityobject(this, 0);
 
         if (r != 0)
             r->select_in_browser();
     }
 
-    return;
+        return;
 
     case 9:
         delete_it();
@@ -452,7 +454,6 @@ void BrowserActivity::exec_menu_choice(int rank)
 
         return;
     }
-
     ((BrowserNode *) parent())->modified();
     package_modified();
 }
@@ -503,7 +504,7 @@ void BrowserActivity::apply_shortcut(QString s)
         if (s == "Undelete")
             choice = 10;
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
@@ -521,8 +522,8 @@ void BrowserActivity::apply_shortcut(QString s)
 void BrowserActivity::open(bool force_edit)
 {
     if (!force_edit &&
-        (associated_diagram != 0) &&
-        !associated_diagram->deletedp())
+            (associated_diagram != 0) &&
+            !associated_diagram->deletedp())
         associated_diagram->open(FALSE);
     else if (!is_edited)
         def->edit();
@@ -543,7 +544,7 @@ UmlCode BrowserActivity::get_type() const
 
 QString BrowserActivity::get_stype() const
 {
-    return TR("activity");
+    return QObject::TR("activity");
 }
 
 int BrowserActivity::get_identifier() const
@@ -570,14 +571,14 @@ BrowserNodeList & BrowserActivity::instances(BrowserNodeList & result, bool sort
 {
     IdIterator<BrowserActivity> it(all);
     BrowserActivity * a;
-
-    while ((a = it.current()) != 0) {
-        if (!a->deletedp())
-            result.append(a);
-
-        ++it;
+    while (it.hasNext()) {
+        it.next();
+        if(it.value() != NULL){
+            a = it.value();
+            if (!a->deletedp())
+                result.append(a);
+        }
     }
-
     if (sort)
         result.sort_it();
 
@@ -590,7 +591,7 @@ BrowserNode * BrowserActivity::get_associated() const
 }
 
 void BrowserActivity::set_associated_diagram(BrowserActivityDiagram * dg,
-        bool on_read)
+                                             bool on_read)
 {
     if (associated_diagram != dg) {
         if (associated_diagram != 0)
@@ -615,7 +616,6 @@ void BrowserActivity::on_delete()
 void BrowserActivity::init()
 {
     its_default_stereotypes.clear();
-
     BrowserParameter::init();
     BrowserActivityAction::init();
     BrowserActivityObject::init();
@@ -624,6 +624,7 @@ void BrowserActivity::init()
     BrowserExpansionRegion::init();
     BrowserActivityPartition::init();
     BrowserFlow::init();
+
 }
 
 // unicode
@@ -637,14 +638,14 @@ bool BrowserActivity::api_compatible(unsigned v) const
     return (v > 24);
 }
 
-Q3ValueList<BrowserParameter *> BrowserActivity::get_params() const
+QList<BrowserParameter *> BrowserActivity::get_params() const
 {
-    Q3ValueList<BrowserParameter *> l;
-    Q3ListViewItem * child = firstChild();
+    QList<BrowserParameter *> l;
+    BrowserNode * child = firstChild();
 
     while (child != 0) {
         if (!((BrowserNode *) child)->deletedp() &&
-            (((BrowserNode *) child)->get_type() == UmlParameter))
+                (((BrowserNode *) child)->get_type() == UmlParameter))
             l.append((BrowserParameter *) child);
 
         child = child->nextSibling();
@@ -711,7 +712,7 @@ bool BrowserActivity::tool_cmd(ToolCom * com, const char * args)
                         ok = FALSE;
                 }
             }
-            break;
+                break;
 
             default:
                 if (IsaActivityNode(k))
@@ -795,21 +796,21 @@ QString BrowserActivity::may_connect(const BrowserNode * dest) const
         return 0;
 
     default:
-        return TR("illegal");
+        return QObject::TR("illegal");
     }
 }
 
 void BrowserActivity::DragMoveEvent(QDragMoveEvent * e)
 {
     if (UmlDrag::canDecode(e, BrowserParameter::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserActivityNode::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserActivityAction::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserActivityObject::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserInterruptibleActivityRegion::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserExpansionRegion::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserSimpleRelation::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserActivityPartition::drag_key(this)) ||
-        UmlDrag::canDecode(e, BrowserActivityDiagram::drag_key(this))) {
+            UmlDrag::canDecode(e, BrowserActivityNode::drag_key(this)) ||
+            UmlDrag::canDecode(e, BrowserActivityAction::drag_key(this)) ||
+            UmlDrag::canDecode(e, BrowserActivityObject::drag_key(this)) ||
+            UmlDrag::canDecode(e, BrowserInterruptibleActivityRegion::drag_key(this)) ||
+            UmlDrag::canDecode(e, BrowserExpansionRegion::drag_key(this)) ||
+            UmlDrag::canDecode(e, BrowserSimpleRelation::drag_key(this)) ||
+            UmlDrag::canDecode(e, BrowserActivityPartition::drag_key(this)) ||
+            UmlDrag::canDecode(e, BrowserActivityDiagram::drag_key(this))) {
         if (!is_read_only)
             e->accept();
         else
@@ -827,15 +828,15 @@ void BrowserActivity::DropEvent(QDropEvent * e)
 void BrowserActivity::DragMoveInsideEvent(QDragMoveEvent * e)
 {
     if (!is_read_only &&
-        (UmlDrag::canDecode(e, BrowserParameter::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserActivityNode::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserActivityAction::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserActivityObject::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserInterruptibleActivityRegion::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserExpansionRegion::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserSimpleRelation::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserActivityPartition::drag_key(this)) ||
-         UmlDrag::canDecode(e, BrowserActivityDiagram::drag_key(this))))
+            (UmlDrag::canDecode(e, BrowserParameter::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserActivityNode::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserActivityAction::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserActivityObject::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserInterruptibleActivityRegion::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserExpansionRegion::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserSimpleRelation::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserActivityPartition::drag_key(this)) ||
+             UmlDrag::canDecode(e, BrowserActivityDiagram::drag_key(this))))
         e->accept();
     else
         e->ignore();
@@ -844,7 +845,6 @@ void BrowserActivity::DragMoveInsideEvent(QDragMoveEvent * e)
 void BrowserActivity::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 {
     BrowserNode * bn;
-
     if ((((bn = UmlDrag::decode(e, BrowserParameter::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserActivityNode::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserActivityAction::drag_key(this))) != 0) ||
@@ -854,11 +854,11 @@ void BrowserActivity::DropAfterEvent(QDropEvent * e, BrowserNode * after)
          ((bn = UmlDrag::decode(e, BrowserSimpleRelation::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserActivityPartition::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserActivityDiagram::drag_key(this))) != 0)) &&
-        (bn != after) && (bn != this)) {
+            (bn != after) && (bn != this)) {
         if (may_contains(bn, FALSE))
             move(bn, after);
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical(QObject::TR("Error"), QObject::TR("Forbidden"));
             e->ignore();
         }
     }
@@ -892,7 +892,7 @@ void BrowserActivity::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "activity " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
 
@@ -906,7 +906,7 @@ void BrowserActivity::save(QTextStream & st, bool ref, QString & warning)
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -943,8 +943,8 @@ BrowserActivity * BrowserActivity::read_ref(char *& st)
     BrowserActivity * result = all[id];
 
     return (result == 0)
-           ? new BrowserActivity(id)
-           : result;
+            ? new BrowserActivity(id)
+            : result;
 }
 
 BrowserActivity * BrowserActivity::read(char *& st, char * k,
@@ -958,8 +958,8 @@ BrowserActivity * BrowserActivity::read(char *& st, char * k,
         result = all[id];
 
         return (result == 0)
-               ? new BrowserActivity(id)
-               : result;
+                ? new BrowserActivity(id)
+                : result;
     }
     else if (!strcmp(k, "activity")) {
         id = read_id(st);
@@ -993,7 +993,7 @@ BrowserActivity * BrowserActivity::read(char *& st, char * k,
         result->BrowserNode::read(st, k, id);
 
         result->is_read_only = (!in_import() && read_only_file()) ||
-                               ((user_id() != 0) && result->is_api_base());
+                ((user_id() != 0) && result->is_api_base());
 
         if (strcmp(k, "end")) {
             while (BrowserParameter::read(st, k, result) ||
@@ -1006,7 +1006,6 @@ BrowserActivity * BrowserActivity::read(char *& st, char * k,
                    BrowserActivityDiagram::read(st, k, result) ||
                    BrowserSimpleRelation::read(st, k, result))
                 k = read_keyword(st);
-
             if (strcmp(k, "end"))
                 wrong_keyword(k, "end");
         }
@@ -1020,17 +1019,15 @@ BrowserActivity * BrowserActivity::read(char *& st, char * k,
 BrowserNode * BrowserActivity::read_any_ref(char *& st, char * k)
 {
     BrowserNode * r;
-
     if (((r = BrowserActivity::read(st, k, 0)) == 0) &&
-        ((r = BrowserParameter::read(st, k, 0)) == 0) &&
-        ((r = BrowserActivityNode::read(st, k, 0)) == 0) &&
-        ((r = BrowserActivityAction::read(st, k, 0)) == 0) &&
-        ((r = BrowserActivityObject::read(st, k, 0)) == 0) &&
-        ((r = BrowserInterruptibleActivityRegion::read(st, k, 0)) == 0) &&
-        ((r = BrowserExpansionRegion::read(st, k, 0)) == 0) &&
-        ((r = BrowserFlow::read(st, k, 0)) == 0))
+            ((r = BrowserParameter::read(st, k, 0)) == 0) &&
+            ((r = BrowserActivityNode::read(st, k, 0)) == 0) &&
+            ((r = BrowserActivityAction::read(st, k, 0)) == 0) &&
+            ((r = BrowserActivityObject::read(st, k, 0)) == 0) &&
+            ((r = BrowserInterruptibleActivityRegion::read(st, k, 0)) == 0) &&
+            ((r = BrowserExpansionRegion::read(st, k, 0)) == 0) &&
+            ((r = BrowserFlow::read(st, k, 0)) == 0))
         r = BrowserActivityPartition::read(st, k, 0);
-
     return r;
 }
 
@@ -1040,18 +1037,16 @@ BrowserNode * BrowserActivity::get_it(const char * k, int id)
         return all[id];
 
     BrowserNode * r;
-
     if (((r = BrowserParameter::get_it(k, id)) == 0) &&
-        ((r = BrowserActivityNode::get_it(k, id)) == 0) &&
-        ((r = BrowserActivityAction::get_it(k, id)) == 0) &&
-        ((r = BrowserActivityObject::get_it(k, id)) == 0) &&
-        ((r = BrowserInterruptibleActivityRegion::get_it(k, id)) == 0) &&
-        ((r = BrowserExpansionRegion::get_it(k, id)) == 0) &&
-        ((r = BrowserFlow::get_it(k, id)) == 0) &&
-        ((r = BrowserSimpleRelation::get_it(k, id)) == 0) &&
-        ((r = BrowserActivityPartition::get_it(k, id)) == 0)
-       )
+            ((r = BrowserActivityNode::get_it(k, id)) == 0) &&
+            ((r = BrowserActivityAction::get_it(k, id)) == 0) &&
+            ((r = BrowserActivityObject::get_it(k, id)) == 0) &&
+            ((r = BrowserInterruptibleActivityRegion::get_it(k, id)) == 0) &&
+            ((r = BrowserExpansionRegion::get_it(k, id)) == 0) &&
+            ((r = BrowserFlow::get_it(k, id)) == 0) &&
+            ((r = BrowserSimpleRelation::get_it(k, id)) == 0) &&
+            ((r = BrowserActivityPartition::get_it(k, id)) == 0)
+            )
         r = BrowserActivityDiagram::get_it(k, id);
-
     return r;
 }

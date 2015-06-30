@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 class QPixmap;
 class ObjectDiagramWindow;
@@ -45,7 +45,7 @@ class BrowserObjectDiagram : public BrowserDiagram
 
 protected:
     static QList<BrowserObjectDiagram *> imported;
-    static Q3ValueList<int> imported_ids;
+    static QList<int> imported_ids;
     static QStringList its_default_stereotypes;
 
     SimpleData * def;
@@ -84,7 +84,7 @@ public:
     virtual int get_identifier() const;
     virtual const char * help_topic() const;
     virtual BasicData * get_data() const;
-    virtual void set_name(const char * s);
+    virtual void set_name(QString s);
     virtual void update_drawing_settings();
     virtual void get_objectdiagramsettings(ObjectDiagramSettings &) const;
     virtual bool get_auto_label_position() const;

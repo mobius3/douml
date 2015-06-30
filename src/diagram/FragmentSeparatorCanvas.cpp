@@ -31,10 +31,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h>
-//Added by qt3to4:
 #include <QTextStream>
-
 #include "FragmentSeparatorCanvas.h"
 #include "FragmentCanvas.h"
 #include "ui/menufactory.h"
@@ -81,9 +78,9 @@ void FragmentSeparatorCanvas::compute_position()
     else if (new_y >= fy + fh - 1)
         new_y = fy + fh - 2;
 
-    setZ(fragment->z() + 1);
-    setSize(fragment->width(), (int)(LIFE_LINE_HEIGHT * zoom));
-    Q3CanvasRectangle::moveBy(new_x - x(), new_y - offset - y());
+    setZValue(fragment->zValue() + 1);
+    setRect(0,0,fragment->width(), (int)(LIFE_LINE_HEIGHT * zoom));
+    QGraphicsRectItem::moveBy(new_x - x(), new_y - offset - y());
 }
 
 void FragmentSeparatorCanvas::update()
@@ -103,12 +100,12 @@ void FragmentSeparatorCanvas::drawShape(QPainter & p)
 {
     p.setBackgroundMode(::Qt::TransparentMode);
     p.setRenderHint(QPainter::Antialiasing, true);
-    p.setPen(::Qt::DashLine);
+    p.setPen(::Qt::DashDotLine/*DashLine*/);
 
-    int m = (int)(fragment->y() + fragment->height() * vpos);
+    int m = 0;//(int)(/*fragment->y() + */fragment->height() * vpos);
 
-    p.drawLine((int) fragment->x(), m,
-               (int) fragment->x() + fragment->width() - 1, m);
+    p.drawLine((int) /*fragment->x()*/0, m,
+               (int) /*fragment->x() + */fragment->width() - 1, m);
 
     p.setPen(::Qt::SolidLine);
 
@@ -124,7 +121,10 @@ void FragmentSeparatorCanvas::drawShape(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
-
+void FragmentSeparatorCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    drawShape(*painter);
+}
 void FragmentSeparatorCanvas::moveBy(double, double dy)
 {
     // moved by user
@@ -141,11 +141,11 @@ void FragmentSeparatorCanvas::moveBy(double, double dy)
             new_y = fy + fh - 2;
 
         vpos = (new_y - fy) / fh;
-        Q3CanvasRectangle::moveBy(0, new_y - offset - y());
+        QGraphicsRectItem::moveBy(0, new_y - offset - y());
     }
 }
 
-UmlCode FragmentSeparatorCanvas::type() const
+UmlCode FragmentSeparatorCanvas::typeUmlCode() const
 {
     return UmlFragmentSeparator;
 }
@@ -162,12 +162,12 @@ DiagramItem::LineDirection FragmentSeparatorCanvas::allowed_direction(UmlCode)
 
 QString FragmentSeparatorCanvas::may_start(UmlCode &) const
 {
-    return TR("illegal");
+    return QObject::tr("illegal");
 }
 
 QString FragmentSeparatorCanvas::may_connect(UmlCode &, const DiagramItem *) const
 {
-    return TR("illegal");
+    return  QObject::tr("illegal");
 }
 
 void FragmentSeparatorCanvas::connexion(UmlCode, DiagramItem *,
@@ -182,15 +182,20 @@ void FragmentSeparatorCanvas::open()
 
 void FragmentSeparatorCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    MenuFactory::createTitle(m, TR("Separator"));
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 1);
+    MenuFactory::createTitle(m,  QObject::tr("Separator"));
+    m.addSeparator();
+    MenuFactory::addItem(m,  QObject::tr("Remove from diagram"), 1);
 
-    if (m.exec(QCursor::pos()) == 1) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    int index = retAction->data().toInt();
+    if (index== 1) {
         delete_it();
         package_modified();
+    }
     }
 }
 

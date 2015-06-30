@@ -30,7 +30,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 #include "Logging/QsLog.h"
 
 using namespace std;
@@ -364,9 +364,9 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
         QLOG_INFO() << "FRIEND from '" << from->name() << "' to '" << to->name() << "'\n";
 #endif
 
-        const Q3PtrVector<UmlItem> & ch = from->children();
-        UmlItem ** v = ch.data();
-        UmlItem ** const vsup = v + ch.size();
+        const QVector<UmlItem*> & ch = from->children();
+        UmlItem *const* v = ch.data();
+        UmlItem *const*  vsup = v + ch.size();
 
         for (; v != vsup; v += 1) {
             if (((*v)->kind() == aRelation) &&
@@ -422,7 +422,7 @@ bool UmlRelation::new_one(Class * container, const WrapperStr & name,
         UmlRelation * r2 = (r1 != this) ? this : side(FALSE);
 
         if (r1->isReadOnly() || r2->isReadOnly()) {
-            UmlCom::trace(WrapperStr("<font face=helvetica>in <i>") + WrapperStr(Lex::filename().toAscii().constData())
+            UmlCom::trace(WrapperStr("<font face=helvetica>in <i>") + WrapperStr(Lex::filename().toLatin1().constData())
                           + "</i> line " + WrapperStr().setNum(Lex::line_number())
                           + " <b>cannot remove relation between classes <i>"
                           + roleType()->name() + "</i> and <i>" + parent()->name()

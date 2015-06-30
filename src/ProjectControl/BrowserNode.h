@@ -31,10 +31,10 @@
 #include <q3listview.h>
 //Added by qt3to4:
 #include <QKeyEvent>
-#include <Q3PtrCollection>
+
 #include <QPixmap>
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 class QDir;
 class QKeyEvent;
@@ -75,7 +75,7 @@ private:
 
 // a sortable list of BrowserNode
 
-#include <q3ptrlist.h>
+
 
 class BrowserNodeList : public QList<BrowserNode *>
 {

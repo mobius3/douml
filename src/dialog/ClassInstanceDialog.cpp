@@ -29,16 +29,13 @@
 
 
 
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
-#include <q3popupmenu.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-
+#include <QList>
 #include "ClassInstanceDialog.h"
 #include "BrowserClassInstance.h"
 #include "ClassInstanceData.h"
@@ -54,28 +51,29 @@
 #include "strutil.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
-
+#include "menufactory.h"
+#include <QHeaderView>
 RelTable::RelTable(QWidget * parent, ClassInstanceData * inst, bool visit)
     : MyTable(parent)
 {
-    const Q3ValueList<SlotRel> & rels = inst->get_relations();
+    const QList<SlotRel> & rels = inst->get_relations();
 
-    setNumRows(rels.count());
-    setNumCols((visit) ? 5 : 6);
-    setSelectionMode(Q3Table::Single);
-    setSorting(true);
+    setRowCount(rels.count());
+    setColumnCount((visit) ? 5 : 6);
+    setSelectionMode(QTableWidget::SingleSelection);
+    //setSortingEnabled(true);
 
-    horizontalHeader()->setLabel(0, TR("Class Inst."));
-    horizontalHeader()->setLabel(1, TR("Role"));
-    horizontalHeader()->setLabel(2, TR("kind"));
-    horizontalHeader()->setLabel(3, TR("Role"));
-    horizontalHeader()->setLabel(4, TR("Class Inst."));
-    horizontalHeader()->setLabel(5, TR("Delete"));
+    setHorizontalHeaderLabel(0, TR("Class Inst."));
+    setHorizontalHeaderLabel(1, TR("Role"));
+    setHorizontalHeaderLabel(2, TR("kind"));
+    setHorizontalHeaderLabel(3, TR("Role"));
+    setHorizontalHeaderLabel(4, TR("Class Inst."));
+    setHorizontalHeaderLabel(5, TR("Delete"));
 
     QString role = inst->get_browser_node()->get_name() + QString(":") +
-                   inst->get_class()->get_name();
+            inst->get_class()->get_name();
     int row = 0;
-    Q3ValueList<SlotRel>::ConstIterator it;
+    QList<SlotRel>::ConstIterator it;
 
     for (it = rels.begin(); it != rels.end(); ++it)
         init_row(*it, row++, role, visit);
@@ -96,24 +94,24 @@ RelTable::RelTable(QWidget * parent, ClassInstanceData * inst, bool visit)
 void RelTable::init_row(const SlotRel & sr, int row, QString a, bool visit)
 {
     QString b = sr.value->get_name() + QString(":") +
-                ((ClassInstanceData *) sr.value->get_data())->get_class()->get_name();
+            ((ClassInstanceData *) sr.value->get_data())->get_class()->get_name();
 
-    setItem(row, 0, new TableItem(this, Q3TableItem::Never,
-                                  (sr.is_a) ? a : b));
+    setItem(row, 0, new TableItem(this, TableItem::Never,
+                                  (sr.is_a) ? a : b, TableItem::TableItemType));
 
     RelationData * d = sr.rel;
     const char * s;
 
     s = d->get_role_b();
-    setItem(row, 1, new TableItem(this, Q3TableItem::Never, (s == 0) ? "" : s));
+    setItem(row, 1, new TableItem(this, TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
 
-    setItem(row, 2, new TableItem(this, Q3TableItem::Never, stringify(d->get_type())));
+    setItem(row, 2, new TableItem(this, TableItem::Never, stringify(d->get_type()), TableItem::TableItemType));
 
     s = d->get_role_a();
-    setItem(row, 3, new TableItem(this, Q3TableItem::Never, (s == 0) ? "" : s));
+    setItem(row, 3, new TableItem(this, TableItem::Never, (s == 0) ? "" : s, TableItem::TableItemType));
 
-    setItem(row, 4, new TableItem(this, Q3TableItem::Never,
-                                  (sr.is_a) ? b : a));
+    setItem(row, 4, new TableItem(this, TableItem::Never,
+                                  (sr.is_a) ? b : a, TableItem::TableItemType));
 
     if (! visit)
         setText(row, 5, "");
@@ -130,10 +128,10 @@ void RelTable::button_pressed(int row, int col, int, const QPoint &)
 QSize ClassInstanceDialog::previous_size;
 
 ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
-    : Q3TabDialog(0, "class instance dialog", FALSE, Qt::WDestructiveClose),
+    : TabDialog(0, "class instance dialog", FALSE, Qt::WA_DeleteOnClose),
       inst(i), atbl(0), rtbl(0)
 {
-    setCaption(TR("Class instance dialog"));
+    setWindowTitle(TR("Class instance dialog"));
 
     BrowserNode * bn = inst->get_browser_node();
 
@@ -150,44 +148,46 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
 
     visit = !hasOkButton();
 
-    Q3Grid * grid;
+    GridBox * grid;
 
     // general tab
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
 
     if (visit)
         edname->setReadOnly(TRUE);
 
-    new QLabel(TR("stereotype :"), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(bn->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype :"), grid));
+    grid->addWidget(edstereotype = new QComboBox( grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(bn->get_stereotype()));
 
     if (! visit) {
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlClassInstance));
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlClassInstance));
         edstereotype->setAutoCompletion(completion());
     }
 
-    SmallPushButton  * b = new SmallPushButton(TR("class :"), grid);
+    SmallPushButton  * b;
+    grid->addWidget(b = new SmallPushButton(TR("class :"), grid));
 
     connect(b, SIGNAL(clicked()), this, SLOT(menu_class()));
 
-    edtype = new Q3ComboBox(FALSE, grid);
+    grid->addWidget(edtype = new QComboBox(grid));
 
     if (visit) {
-        edtype->insertItem(inst->get_class()->full_name());
+        edtype->addItem(inst->get_class()->full_name());
         nodes.append(inst->get_class());
     }
     else {
         BrowserClass::instances(nodes);
         nodes.full_names(list);
-        edtype->insertStringList(list);
-        edtype->setCurrentItem(nodes.indexOf(inst->get_class()));
+        edtype->addItems(list);
+        edtype->setCurrentIndex(nodes.indexOf(inst->get_class()));
         connect(edtype, SIGNAL(activated(int)), this, SLOT(type_changed(int)));
     }
 
@@ -200,16 +200,18 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
             cl_container = 0;
     }
 
-    Q3VBox * vtab = new Q3VBox(grid);
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
 
-    new QLabel(TR("description :"), vtab);
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
 
     if (! visit) {
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+        connect(b =new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(b);
     }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
 
@@ -227,13 +229,14 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
     // attributes tab
 
     atbl = new MyTable(this);
-    atbl->setNumCols(3);
-    atbl->setSorting(true);
-    atbl->setSelectionMode(Q3Table::NoSelection);	// single does not work
-    atbl->setRowMovingEnabled(TRUE);
-    atbl->horizontalHeader()->setLabel(0, TR(" Attribute "));
-    atbl->horizontalHeader()->setLabel(1, TR(" Class "));
-    atbl->horizontalHeader()->setLabel(2, TR(" Value "));
+    atbl->setColumnCount(3);
+    //atbl->setSortingEnabled(true);
+    atbl->setSelectionMode(QTableWidget::NoSelection);	// single does not work
+    atbl->verticalHeader()->setSectionsMovable(true);
+    atbl->verticalHeader()->setSectionsMovable(true);
+    atbl->setHorizontalHeaderLabel(0, TR(" Attribute "));
+    atbl->setHorizontalHeaderLabel(1, TR(" Class "));
+    atbl->setHorizontalHeaderLabel(2, TR(" Value "));
 
     addTab(atbl, TR("Attributes"));
 
@@ -246,24 +249,24 @@ ClassInstanceDialog::ClassInstanceDialog(ClassInstanceData * i)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
-    type_changed(edtype->currentItem());
+    type_changed(edtype->currentIndex());
 
-    connect(this, SIGNAL(currentChanged(QWidget *)),
-            this, SLOT(update_all_tabs(QWidget *)));
+    connect(m_tabWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(update_all_tabs(int)));
 
     open_dialog(this);
 }
 
 void ClassInstanceDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -279,8 +282,9 @@ ClassInstanceDialog::~ClassInstanceDialog()
     close_dialog(this);
 }
 
-void ClassInstanceDialog::update_all_tabs(QWidget * w)
+void ClassInstanceDialog::update_all_tabs(int index)
 {
+    QWidget * w = m_tabWidget->widget(index);
     if (w == atbl) {
         if (! visit)
             edname->setFocus();
@@ -289,7 +293,7 @@ void ClassInstanceDialog::update_all_tabs(QWidget * w)
 
 void ClassInstanceDialog::edit_description()
 {
-    edit(comment->text(), edname->text().stripWhiteSpace() + "_description",
+    edit(comment->text(), edname->text().trimmed() + "_description",
          inst, TxtEdit, this, (post_edit) post_edit_description, edits);
 }
 
@@ -300,15 +304,15 @@ void ClassInstanceDialog::post_edit_description(ClassInstanceDialog * d, QString
 
 void ClassInstanceDialog::menu_class()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = list.findIndex(edtype->currentText().stripWhiteSpace());
+    int index = list.indexOf(edtype->currentText().trimmed());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -316,55 +320,59 @@ void ClassInstanceDialog::menu_class()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlClass) && !bn->deletedp())
-            m.insertItem(TR("Choose class selected in browser"), 1);
+            MenuFactory::addItem(m, TR("Choose class selected in browser"), 1);
         else
             bn = 0;
 
         if (cl_container != 0)
-            m.insertItem(TR("Create class and choose it"), 2);
+            MenuFactory::addItem(m, TR("Create class and choose it"), 2);
     }
 
     if ((index != -1) || (bn != 0) || (cl_container != 0)) {
-        switch (m.exec(QCursor::pos())) {
-        case 0:
-            nodes.at(index)->select_in_browser();
-            break;
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+            switch (retAction->data().toInt()) {
+            case 0:
+                nodes.at(index)->select_in_browser();
+                break;
 
-        case 2:
-            bn = BrowserClass::add_class(FALSE, cl_container);
+            case 2:
+                bn = BrowserClass::add_class(FALSE, cl_container);
 
-            if (bn == 0)
-                return;
+                if (bn == 0)
+                    return;
 
-            bn->select_in_browser();
+                bn->select_in_browser();
 
-            // no break
-        case 1: {
-            if ((index = nodes.indexOf(bn)) == -1) {
-                // new class, may be created through an other dialog
-                QStringList::Iterator iter = list.begin();
-                QStringList::Iterator iter_end = list.end();
-                QString s = bn->full_name(TRUE);
+                // no break
+            case 1: {
+                if ((index = nodes.indexOf(bn)) == -1) {
+                    // new class, may be created through an other dialog
+                    QStringList::Iterator iter = list.begin();
+                    QStringList::Iterator iter_end = list.end();
+                    QString s = bn->full_name(TRUE);
 
-                index = 0;
+                    index = 0;
 
-                while ((iter != iter_end) && (*iter < s)) {
-                    ++iter;
-                    index += 1;
+                    while ((iter != iter_end) && (*iter < s)) {
+                        ++iter;
+                        index += 1;
+                    }
+
+                    nodes.insert((unsigned) index, bn);
+                    list.insert(iter, s);
+                    edtype->insertItem(index,s);
                 }
-
-                nodes.insert((unsigned) index, bn);
-                list.insert(iter, s);
-                edtype->insertItem(s, index);
             }
-        }
 
-        edtype->setCurrentItem(index);
-        type_changed(index);
-        break;
+                edtype->setCurrentIndex(index);
+                type_changed(index);
+                break;
 
-        default:
-            break;
+            default:
+                break;
+            }
         }
     }
 }
@@ -378,17 +386,17 @@ void ClassInstanceDialog::type_changed(int i)
     attributes.sort();
 
     // fill table
-    atbl->setNumRows(0);
-    atbl->setNumRows(attributes.count());
+    atbl->setRowCount(0);
+    atbl->setRowCount(attributes.count());
 
-    Q3ValueList<SlotAttr> attrs = inst->attributes;
+    QList<SlotAttr> attrs = inst->attributes;
 
     int index = 0;
     foreach (BrowserNode * at, attributes) {
-        atbl->setItem(index, 0, new TableItem(atbl, Q3TableItem::Never, at->get_name()));
-        atbl->setItem(index, 1, new TableItem(atbl, Q3TableItem::Never, ((BrowserNode *) at->parent())->get_name()));
+        atbl->setItem(index, 0, new TableItem(atbl, TableItem::Never, at->get_name(), TableItem::TableItemType));
+        atbl->setItem(index, 1, new TableItem(atbl, TableItem::Never, ((BrowserNode *) at->parent())->get_name(), TableItem::TableItemType));
 
-        Q3ValueList<SlotAttr>::Iterator it_attr;
+        QList<SlotAttr>::Iterator it_attr;
 
         for (it_attr = attrs.begin(); it_attr != attrs.end(); ++it_attr) {
             if ((*it_attr).att == at) {
@@ -419,21 +427,21 @@ void ClassInstanceDialog::accept()
 
     BrowserClassInstance * bn = (BrowserClassInstance *) inst->get_browser_node();
 
-    bn->set_name(edname->text().stripWhiteSpace());
+    bn->set_name(edname->text().trimmed());
 
-    bool newst = bn->get_data()->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
-    BrowserClass * new_cl = (BrowserClass *) nodes.at(edtype->currentItem());
+    bool newst = bn->get_data()->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
+    BrowserClass * new_cl = (BrowserClass *) nodes.at(edtype->currentIndex());
 
     if (new_cl != inst->cl)
         inst->set_class(new_cl);
     else if (rtbl) {
-        Q3ValueList<SlotRel> rels = inst->get_relations(); // copy !
-        Q3ValueList<SlotRel>::Iterator it;
+        QList<SlotRel> rels = inst->get_relations(); // copy !
+        QList<SlotRel>::Iterator it;
         int row = 0;
         QString yes = TR("Yes");
 
         for (row = 0, it = rels.begin(); it != rels.end(); ++it, row += 1) {
-            if (rtbl->text(row, 5).stripWhiteSpace() == yes) {
+            if (rtbl->text(row, 5).trimmed() == yes) {
                 SlotRel & sr = *it;
 
                 inst->replace(sr.value, sr.rel, 0, sr.is_a, FALSE);
@@ -446,11 +454,11 @@ void ClassInstanceDialog::accept()
 
     inst->attributes.clear();
 
-    int n = atbl->numRows();
+    int n = atbl->rowCount();
     int index;
 
     for (index = 0; index != n; index += 1) {
-        QString s = atbl->text(index, 2).stripWhiteSpace();
+        QString s = atbl->text(index, 2).trimmed();
 
         if (! s.isEmpty())
             inst->attributes.append(SlotAttr((BrowserAttribute *) attributes.at(index),

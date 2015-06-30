@@ -2,21 +2,21 @@
 #include "FileOut.h"
 #include "UmlItem.h"
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 #include <qfile.h>
 #include <unordered_map>
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <functional> // std::function
-FileOut::FileOut(QFile * fp, bool lf, bool utf8) : Q3TextStream(fp), _lf(lf), _indent(0)
+FileOut::FileOut(QFile * fp, bool lf, bool utf8) : QTextStream(fp), _lf(lf), _indent(0)
 {
     if (utf8)
-        setEncoding(Q3TextStream::UnicodeUTF8);
+        setCodec("UTF8");
 }
 
 void FileOut::indent()
 {
-    Q3TextStream & ts = *this;
+    QTextStream & ts = *this;
 
     for (int n = _indent; n > 0; n -= 1)
         ts << '\t';
@@ -24,23 +24,23 @@ void FileOut::indent()
 
 void FileOut::id(UmlItem * x)
 {
-    ((Q3TextStream &) *this) << " xmi:id=\"BOUML_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+    ((QTextStream &) *this) << " xmi:id=\"BOUML_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 
 }
 
 void FileOut::id_prefix(UmlItem * x, const char * pfix)
 {
-    ((Q3TextStream &) *this) << " xmi:id=\"BOUML_" << pfix << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+    ((QTextStream &) *this) << " xmi:id=\"BOUML_" << pfix << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 }
 
 void FileOut::id_prefix(UmlItem * x, const char * pfix, int n)
 {
-    ((Q3TextStream &) *this) << " xmi:id=\"BOUML_" << pfix << n << "_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+    ((QTextStream &) *this) << " xmi:id=\"BOUML_" << pfix << n << "_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 }
 
 void FileOut::idref(UmlItem * x)
 {
-    ((Q3TextStream &) *this) << " xmi:idref=\"BOUML_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
+    ((QTextStream &) *this) << " xmi:idref=\"BOUML_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 
 }
 
@@ -48,32 +48,32 @@ void FileOut::idref(WrapperStr s, UmlItem * x)
 {
     QString keys;
     {
-        Q3TextStream keyst(&keys, QIODevice::WriteOnly);
+        QTextStream keyst(&keys, QIODevice::WriteOnly);
 
         keyst << ((void *) x) << "_" << s.operator QString();
     }
 
     QMap<QString, int>::ConstIterator it =
-            _modifiedtypes.find((const char *) keys);
+            _modifiedtypes.find( keys);
 
     if (it == _modifiedtypes.end())
-        it = _modifiedtypes.insert((const char *) keys, _modifiedtypes.count());
+        it = _modifiedtypes.insert(keys, _modifiedtypes.count());
 
-    ((Q3TextStream &) *this) << " xmi:idref=\"BOUML_basedontype_"
-                             << it.data() << '"';
+    ((QTextStream &) *this) << " xmi:idref=\"BOUML_basedontype_"
+                             << it.value() << '"';
 
 }
 
 void FileOut::idref_prefix(UmlItem * x, const char * pfix)
 {
-    ((Q3TextStream &) *this) << " xmi:idref=\"BOUML_"
+    ((QTextStream &) *this) << " xmi:idref=\"BOUML_"
                              << pfix << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 
 }
 
 void FileOut::idref_prefix(UmlItem * x, const char * pfix, int n)
 {
-    ((Q3TextStream &) *this) << " xmi:idref=\"BOUML_"
+    ((QTextStream &) *this) << " xmi:idref=\"BOUML_"
                              << pfix << n << "_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 
 }
@@ -88,26 +88,26 @@ void FileOut::idref_datatype(const WrapperStr & t)
     if (it == _datatypes.end())
         it = _datatypes.insert(t, _datatypes.count());
 
-    ((Q3TextStream &) *this) << " xmi:idref=\"BOUML_datatype_"
-                             << it.data() << '"';
+    ((QTextStream &) *this) << " xmi:idref=\"BOUML_datatype_"
+                             << it.value() << '"';
 
 }
 
 void FileOut::ref(UmlItem * x, const char * pfix1, const char * pfix2)
 {
-    ((Q3TextStream &) *this) << " " << pfix1 << "=\"BOUML_"
+    ((QTextStream &) *this) << " " << pfix1 << "=\"BOUML_"
                              << pfix2 << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 }
 
 void FileOut::ref(UmlItem * x, const char * pfix1, const char * pfix2, int n)
 {
-    ((Q3TextStream &) *this) << " " << pfix1 << "=\"BOUML_"
+    ((QTextStream &) *this) << " " << pfix1 << "=\"BOUML_"
                              << pfix2 << n << "_" << ((void *) x->getIdentifier()) << "_" << x->kind() << '"';
 }
 
 void FileOut::ref_only(UmlItem * x, const char * pfix)
 {
-    ((Q3TextStream &) *this) << "BOUML_" << pfix << ((void *) x->getIdentifier())
+    ((QTextStream &) *this) << "BOUML_" << pfix << ((void *) x->getIdentifier())
                              << "_" << x->kind();
 }
 
@@ -126,8 +126,8 @@ void FileOut::define_datatypes(bool uml_20, bool primitive_type, bool gen_extens
          ++it) {
         indent();
         (*this) << pfix << " xmi:id=\"BOUML_datatype_"
-                        << it.data() << "\" name=\"";
-        quote((const char *)it.key()); //[jasa] ambiguous call
+                        << it.value() << "\" name=\"";
+        quote(it.key()); //[jasa] ambiguous call
         (*this) << "\"/>\n";
     }
 
@@ -142,7 +142,7 @@ void FileOut::define_datatypes(bool uml_20, bool primitive_type, bool gen_extens
 
         indent();
         (*this) << pfix << " xmi:id=\"BOUML_basedontype_"
-                        << it.data() << "\" name = \"";
+                        << it.value() << "\" name = \"";
         quote((const char *)k.mid(index + 1));
         (*this) << '"';
 

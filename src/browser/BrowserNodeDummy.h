@@ -4,7 +4,7 @@
 class BrowserNodeDummy : public BrowserNode
 {
 public:
-    BrowserNodeDummy(Q3ListView* view): BrowserNode(view){}
+    BrowserNodeDummy(BrowserView* view): BrowserNode(view){}
     virtual ~BrowserNodeDummy();
     virtual BrowserNode * duplicate(BrowserNode * ,
                                     QString ){return 0;}
@@ -15,7 +15,8 @@ public:
     virtual int get_identifier() const{return 0;}
     virtual void save(QTextStream &, bool , QString & ){}
     virtual BasicData * get_data() const {return 0;}
-    virtual void prepare_update_lib() const{};
+    virtual void prepare_update_lib() const{}
+    virtual const QPixmap * pixmap(int) const {return 0;}
 
 };
 

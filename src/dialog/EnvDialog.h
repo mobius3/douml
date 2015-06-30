@@ -28,10 +28,10 @@
 #ifndef ENVDIALOG_H
 #define ENVDIALOG_H
 
-#include <qdialog.h>
+#include <QDialog>
 
 class QLineEdit;
-class Q3ComboBox;
+class QComboBox;
 
 // singleton
 
@@ -52,7 +52,7 @@ private:
     QLineEdit * ed_template;
     QLineEdit * ed_editor;
     QLineEdit * ed_lang;
-    Q3ComboBox * cb_charset;
+    QComboBox * cb_charset;
     QLineEdit * ed_xmin;
     QLineEdit * ed_xmax;
     QLineEdit * ed_ymin;

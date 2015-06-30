@@ -32,10 +32,10 @@
 #include "UmlEnum.h"
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3PointArray>
+//#include <QPolygon>
 #include <QSettings>
 #include <QSharedPointer>
-
+#include <QGraphicsItem>
 
 #define FILEFORMAT 77
 
@@ -43,12 +43,9 @@ class QDir;
 class QFile;
 class QFileInfo;
 class QStringList;
-class Q3CanvasItem;
 class QTextStream;
-class Q3CanvasRectangle;
 class QBuffer;
 class QPoint;
-class Q3PointArray;
 class QColor;
 class QRect;
 class QFont;
@@ -131,13 +128,13 @@ extern void unknown_ref(const char * kind, int id);
 
 // ifdef save as int to bypass bug in << float in qt 3.3.3
 #undef FORCE_INT_COORD
-extern void save_xy(QTextStream & st, const Q3CanvasItem * c, const char * s);
-extern void save_xyz(QTextStream & st, const Q3CanvasItem * c, const char * s);
-extern void save_xyzwh(QTextStream & st, const Q3CanvasRectangle * c, const char * s);
-extern void read_xy(char *& st, Q3CanvasItem * c);
-extern void read_xyz(char *& st, Q3CanvasItem * c);
-extern void read_xyzwh(char *& st, Q3CanvasRectangle * c);
-extern void read_zwh(char *& st, Q3CanvasRectangle * c);
+extern void save_xy(QTextStream & st, const QGraphicsItem * c, const char * s);
+extern void save_xyz(QTextStream & st, const QGraphicsItem * c, const char * s);
+extern void save_xyzwh(QTextStream & st, const QGraphicsRectItem *c, const char * s);
+extern void read_xy(char *& st, QGraphicsItem * c);
+extern void read_xyz(char *& st, QGraphicsItem * c);
+extern void read_xyzwh(char *& st, QGraphicsRectItem * c);
+extern void read_zwh(char *& st, QGraphicsRectItem * c);
 extern void bypass_xy(char *& st);
 extern void save_color(QTextStream & st, const char *, UmlColor, BooL &);
 extern void read_color(char *& st, const char *, UmlColor &, char *&);
@@ -157,8 +154,8 @@ extern void * load_ptr(QBuffer &);
 extern void save(const QPoint & p, QBuffer &);
 extern void load(QPoint & p, QBuffer &);
 
-extern void save(const Q3PointArray & a, QBuffer &);
-extern void load(Q3PointArray & a, QBuffer &);
+extern void save(const QPolygon & a, QBuffer &);
+extern void load(QPolygon & a, QBuffer &);
 
 extern void save(double, QBuffer &);
 extern void load(double &, QBuffer &);
@@ -179,8 +176,8 @@ extern void end_svg();
 extern FILE * svg();
 extern int svg_height();
 extern const char * svg_color(UmlColor);
-extern void draw_shadow(FILE * fp, Q3PointArray & poly);
-extern void draw_poly(FILE * fp, Q3PointArray & poly,
+extern void draw_shadow(FILE * fp, QPolygon & poly);
+extern void draw_poly(FILE * fp, QPolygon & poly,
                       UmlColor color, bool stroke = TRUE);
 extern void draw_text(const QRect & r, int align, QString s, const QFont &, FILE *);
 extern void draw_text(int x, int y, int w, int h, int align, QString s,

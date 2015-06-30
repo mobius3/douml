@@ -32,7 +32,7 @@
 #include "misc/mystr.h"
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3PtrList>
+////
 
 #include "UmlArtifact.h"
 #include "UmlPackage.h"
@@ -128,7 +128,7 @@ void UmlArtifact::generate()
         }
 
         // get bodies if preserve
-        const Q3PtrVector<UmlClass> & cls = associatedClasses();
+        const QVector<UmlClass*> & cls = associatedClasses();
 
         if (preserve())
             UmlOperation::read_bodies(h_path, src_path);
@@ -283,7 +283,7 @@ void UmlArtifact::generate()
                     p += 13;
 
                     for (index = 0; index != n; index += 1)
-                        cls[index]->generate_decl(f_h, current_indent(p, hdef.operator QString()));
+                        cls[index]->generate_decl(f_h, current_indent(p, hdef.operator QString().toLatin1().constData()));
 
                     if (*p == '\n')
                         p += 1;
@@ -317,7 +317,7 @@ void UmlArtifact::generate()
                     QTextStream out(&file);
                     out.setCodec(QTextCodec::codecForLocale());
                     QString temp(*headerFile.data());
-                    out << codec->toUnicode(temp);
+                    out << codec->toUnicode(temp.toLatin1().constData());
                     //out << *headerFile.data();
                     out.flush();
                 }

@@ -22,7 +22,7 @@
 //
 // *************************************************************************
 
-#include <q3ptrdict.h>
+//#include <q3ptrdict.h>
 //Added by qt3to4:
 #include <functional>
 #include <QRegExp>
@@ -174,7 +174,7 @@ void CppParamInit(TagTempStructure& updateData, QStringList values)
     int rank = rx.cap().toInt();
     if (rank < values.size())
     {
-        QString v = values[rank].stripWhiteSpace();
+        QString v = values[rank].trimmed();
 
         if (! v.isEmpty())
             updateData.s += " = " + v;
@@ -275,7 +275,7 @@ void SetupManagerStruct(TagManagers::TagTempStructure& tempStruct, OperationData
     QStringList list;
     BrowserClass::instances(nodes);
     nodes.full_names(list);
-    QString name = static_cast<BrowserOperation*>(oper->get_browser_node())->compute_name(oper->get_cpp_name_spec());
+    QString name = static_cast<BrowserOperation*>(oper->get_browser_node())->compute_name(oper->get_cpp_name_spec().toLatin1().constData());
     // got all necessary data
 
     using namespace TagManagers::Cpp;
@@ -312,7 +312,8 @@ QString updated_def(OperationData* oper)
 
 
         tempStruct.def = oper->get_cppdef();
-        tempStruct.p = tempStruct.def;
+        QByteArray defArray = tempStruct.def.toLatin1();
+        tempStruct.p = defArray.constData();
         tempStruct.pp = 0;
 
         tempStruct.indent = "";

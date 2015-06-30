@@ -29,7 +29,7 @@
 #define BROWSERNODE_H
 
 #include <q3listview.h>
-#include <q3dict.h>
+
 //Added by qt3to4:
 #include <QKeyEvent>
 #include <QPixmap>

@@ -27,11 +27,7 @@
 
 #ifndef COLMSGTABLE_H
 #define COLMSGTABLE_H
-
-#include <q3ptrdict.h>
-//Added by qt3to4:
-#include <Q3ValueList>
-
+#include <QList>
 #include "MyTable.h"
 
 class ColMsg;
@@ -47,7 +43,7 @@ protected:
     bool rec;
     ColDiagramView * view;
     ColMsgList & msgs;
-    Q3ValueList<ColMsg *> flat_msg_list;
+    QList<ColMsg *> flat_msg_list;
 
     void refresh();
     void refresh(ColMsgList & m);

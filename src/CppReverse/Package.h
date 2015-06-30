@@ -28,14 +28,9 @@
 #ifndef PACKAGE_H
 #define PACKAGE_H
 
-#include <q3dict.h>
-#include <q3ptrlist.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include "misc/mystr.h"
-#include <Q3ValueList>
-#include <Q3PtrList>
-
+#include <QList>
 #include "BrowserNode.h"
 #include "ClassContainer.h"
 
@@ -43,7 +38,7 @@ class QDir;
 class QFileInfo;
 class QRegExp;
 class UmlPackage;
-class QApplication;
+class QGuiApplication;
 
 /* lgfreitas: Represents a UML package */
 class Package : public BrowserNode, public ClassContainer
@@ -136,7 +131,7 @@ private:
     static QRegExp * DirFilter;
     static QRegExp * FileFilter;
     //static Package * Unknown;
-    static Q3ValueList<FormalParameterList> Formals;
+    static QList<FormalParameterList> Formals;
     static QList<UmlClass *> UsedClasses;
 
     static NDict<Class> Declared;

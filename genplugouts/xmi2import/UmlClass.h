@@ -5,7 +5,7 @@
 #include "UmlBaseClass.h"
 
 #include "anItemKind.h"
-#include <q3valuelist.h>
+#include <QList.h>
 #include <qmap.h>
 
 class UmlItem;
@@ -73,7 +73,7 @@ public:
 
     //if the token is a stereotype application give prof:st and the names of the attribute
     //specifying the element on which the stereotype is applied and return TRUE
-    static bool isAppliedStereotype(Token & tk, WrapperStr & prof_st, Q3ValueList<WrapperStr> & base_v);
+    static bool isAppliedStereotype(Token & tk, WrapperStr & prof_st, QList<WrapperStr> & base_v);
 
     static bool isPrimitiveType(Token & token, UmlTypeSpec & ts);
 
@@ -90,7 +90,7 @@ protected:
     static int NumberOfStereotype;
 
     //xmiId of the formals following formals order
-    Q3ValueList<WrapperStr> formalsId;
+    QList<WrapperStr> formalsId;
 
     //associate the class owning the template signature with the signature id
     static QMap<QString, UmlClass *> signatures;

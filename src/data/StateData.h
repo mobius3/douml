@@ -52,7 +52,7 @@ struct StateBehavior {
 
 class StateData : public SimpleData
 {
-    Q_OBJECT
+    //Q_OBJECT
 
     friend class StateDialog;
 

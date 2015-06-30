@@ -1,11 +1,8 @@
 #ifndef _UMLBASEFRAGMENT_H
 #define _UMLBASEFRAGMENT_H
-
-
-#include <q3cstring.h>
-#include <q3ptrvector.h>
-#include <q3ptrdict.h>
-
+#include <QByteArray>
+#include <QVector>
+#include <QHash>
 class UmlFragmentCompartment;
 class UmlDiagram;
 class UmlClassInstanceReference;
@@ -16,12 +13,12 @@ class UmlBaseFragment
 {
 public:
     // return the name
-    const Q3CString & name() const {
+    const QByteArray & name() const {
         return _name;
     }
 
     // return the compartments, at least one compartment exists
-    const Q3PtrVector<UmlFragmentCompartment> & compartments() const {
+    const QVector<UmlFragmentCompartment*> & compartments() const {
         return _compartments;
     }
 
@@ -39,12 +36,12 @@ public:
 
     // return the form corresponding to the arguments
     // and return value of the interaction use
-    Q3CString arguments() const {
+    QByteArray arguments() const {
         return _arguments;
     }
 
     // return the the list of covered instances (life lines)
-    const Q3PtrVector<UmlClassInstanceReference> & covered() const {
+    const QVector<UmlClassInstanceReference*> & covered() const {
         return _covered;
     }
 
@@ -52,9 +49,9 @@ public:
 private:
     UmlFragmentCompartment * _container;
 
-    Q3PtrVector<UmlFragmentCompartment> _compartments;
+    QVector<UmlFragmentCompartment*> _compartments;
 
-    Q3CString _name;
+    QByteArray _name;
 
     int _x;
 
@@ -66,9 +63,9 @@ private:
 
     UmlDiagram * _refer;
 
-    Q3CString _arguments;
+    QByteArray _arguments;
 
-    Q3PtrVector<UmlClassInstanceReference> _covered;
+    QVector<UmlClassInstanceReference*> _covered;
 
     // internal, don't call it
     void read_();
@@ -81,15 +78,15 @@ public:
 
     //internal, do NOT use it
 
-    void read_covered_(Q3PtrDict<UmlClassInstanceReference> & instances);
+    void read_covered_(QHash<void *, UmlClassInstanceReference *> &instances);
 
     // internal
-    static UmlFragmentCompartment * get_container_(int x, int y, int w, int h, const Q3PtrVector<UmlFragment> & fragments);
+    static UmlFragmentCompartment * get_container_(int x, int y, int w, int h, const QVector<UmlFragment*> & fragments);
 
 
 private:
     // internal
-    static void compute_container_(Q3PtrVector<UmlFragment> & fragments);
+    static void compute_container_(QVector<UmlFragment*> & fragments);
 
 
 public:

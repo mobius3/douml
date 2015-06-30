@@ -2,7 +2,7 @@
 #include <QPixmap>
 #include <QDropEvent>
 #include <QTextStream>
-#include <Q3ValueList>
+//#include <QList>
 #include <QDragMoveEvent>
 // *************************************************************************
 //
@@ -53,15 +53,15 @@ protected:
 
     SimpleData * def;
     BrowserNode * associated_diagram;
-    Q3ValueList<BrowserClass *> realizing_classes;
-    Q3ValueList<BrowserClass *> provided_classes;
-    Q3ValueList<BrowserClass *> required_classes;
+    QList<BrowserClass *> realizing_classes;
+    QList<BrowserClass *> provided_classes;
+    QList<BrowserClass *> required_classes;
 
     void associate_class(BrowserClass * c);
     void exec_menu_choice(int rank);
 
-    void get_all_provided_classes(Q3ValueList<BrowserClass *> &) const;
-    void get_all_required_classes(Q3ValueList<BrowserClass *> &) const;
+    void get_all_provided_classes(QList<BrowserClass *> &) const;
+    void get_all_required_classes(QList<BrowserClass *> &) const;
 
 public:
     BrowserComponent(QString s, BrowserNode * p, int id = 0);
@@ -73,22 +73,22 @@ public:
     virtual BrowserNode * get_associated() const;
     void set_associated_diagram(BrowserNode *, bool on_read = FALSE);
 
-    void set_associated_classes(const Q3ValueList<BrowserClass *> & rz,
-                                const Q3ValueList<BrowserClass *> & pr,
-                                const Q3ValueList<BrowserClass *> & rq,
+    void set_associated_classes(const QList<BrowserClass *> & rz,
+                                const QList<BrowserClass *> & pr,
+                                const QList<BrowserClass *> & rq,
                                 bool on_read = FALSE);
     void remove_associated_class(BrowserClass *);
-    const Q3ValueList<BrowserClass *> & get_provided_classes() const {
+    const QList<BrowserClass *> & get_provided_classes() const {
         return provided_classes;
     }
-    const Q3ValueList<BrowserClass *> & get_required_classes() const {
+    const QList<BrowserClass *> & get_required_classes() const {
         return required_classes;
     }
-    const Q3ValueList<BrowserClass *> & get_realizing_classes() const {
+    const QList<BrowserClass *> & get_realizing_classes() const {
         return realizing_classes;
     }
-    void get_all_provided_classes(Q3ValueList<BrowserClass *> &, bool sorted) const;
-    void get_all_required_classes(Q3ValueList<BrowserClass *> &, bool sorted) const;
+    void get_all_provided_classes(QList<BrowserClass *> &, bool sorted) const;
+    void get_all_required_classes(QList<BrowserClass *> &, bool sorted) const;
 
     virtual BrowserNode * duplicate(BrowserNode * p,
                                     QString name = QString());

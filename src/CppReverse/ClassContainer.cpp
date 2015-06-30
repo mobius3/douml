@@ -29,7 +29,7 @@
 #include <iostream>
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 #include "Logging/QsLog.h"
 using namespace std;
 #endif
@@ -45,7 +45,7 @@ using namespace std;
 #include "UmlArtifact.h"
 #endif
 
-Q3ValueList<FormalParameterList> ClassContainer::empty;
+QList<FormalParameterList> ClassContainer::empty;
 
 // to not have warning
 ClassContainer::~ClassContainer()
@@ -143,7 +143,7 @@ Class * ClassContainer::define(const WrapperStr & name,
 void ClassContainer::compute_type(WrapperStr type, UmlTypeSpec & typespec,
                                   WrapperStr & typeform,
                                   bool get_first_template_actual,
-                                  const Q3ValueList<FormalParameterList> & tmplts)
+                                  const QList<FormalParameterList> & tmplts)
 {
     typespec.type = 0;
     typespec.explicit_type = 0;
@@ -232,7 +232,7 @@ void ClassContainer::compute_type(WrapperStr type, UmlTypeSpec & typespec,
     }
 
     if (! tmplts.isEmpty()) {
-        Q3ValueList<FormalParameterList>::ConstIterator it1;
+        QList<FormalParameterList>::ConstIterator it1;
 
         for (it1 = tmplts.begin(); it1 != tmplts.end(); ++it1) {
             FormalParameterList::ConstIterator it2;
@@ -340,7 +340,7 @@ bool ClassContainer::find_type(WrapperStr type, UmlTypeSpec & typespec,
             unsigned level = 1;
 
             for (;;) {
-                int c = type[index2++].toAscii();
+                int c = type[index2++].toLatin1();
 
                 if (c == '<')
                     level += 1;

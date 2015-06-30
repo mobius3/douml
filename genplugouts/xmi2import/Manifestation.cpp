@@ -5,7 +5,7 @@
 #include "Token.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 
 void Manifestation::import(FileIn & in, Token & token, UmlArtifact * artifact)
 {
@@ -45,7 +45,7 @@ void Manifestation::import(FileIn & in, Token & token, UmlArtifact * artifact)
 
 void Manifestation::solveThem()
 {
-    Q3ValueList<Manifestation>::Iterator it;
+    QList<Manifestation>::Iterator it;
 
     for (it = All.begin(); it != All.end(); ++it)
         (*it).artifact->solveManifestation((*it).name, (*it).utilized);
@@ -53,5 +53,5 @@ void Manifestation::solveThem()
     All.clear();
 }
 
-Q3ValueList<Manifestation> Manifestation::All;
+QList<Manifestation> Manifestation::All;
 

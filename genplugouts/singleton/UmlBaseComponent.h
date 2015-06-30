@@ -1,10 +1,10 @@
 #ifndef _UMLBASECOMPONENT_H
 #define _UMLBASECOMPONENT_H
-
+#include <QVector>
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 #include "UmlClass.h"	// to avoid destructor problem
 class UmlComponent;
@@ -42,11 +42,11 @@ protected:
     virtual void read_uml_();
 
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseComponent(void * id, const Q3CString & n);
+    UmlBaseComponent(void * id, const QByteArray & n);
 
 };
 
-inline UmlBaseComponent::UmlBaseComponent(void * id, const Q3CString & n) : UmlItem(id, n)
+inline UmlBaseComponent::UmlBaseComponent(void * id, const QByteArray & n) : UmlItem(id, n)
 {
     _assoc_diagram = 0;
 }

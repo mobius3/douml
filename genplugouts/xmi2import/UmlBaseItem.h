@@ -1,12 +1,12 @@
 #ifndef _UMLBASEITEM_H
 #define _UMLBASEITEM_H
-
+#include <QByteArray>
 
 #include "anItemKind.h"
 
-#include <q3ptrvector.h>
-#include <q3dict.h>
-#include <q3ptrdict.h>
+
+
+
 //#include "OnInstanceCmd.h"
 #include "aVisibility.h"
 #include "aDirection.h"
@@ -71,7 +71,7 @@ public:
     UmlItem * parent();
 
     // returns (in Java : a copy of) the children list, to go all over the browser tree
-    const Q3PtrVector<UmlItem> children();
+    const QVector<UmlItem*> children();
 
     // return TRUE if the children exist and are visible (independently
     // of the scroll bar) in the browser, else FALSE
@@ -105,7 +105,7 @@ public:
 
     // returns all the properties of the object through (in Java a copy of) a dictionnary
 
-    const Q3Dict<WrapperStr> properties();
+    const QHash<WrapperStr,WrapperStr*> properties();
 
     // If the parameter is null, move the current item to be
     // the first child of its parent. Else the current item and
@@ -161,7 +161,7 @@ public:
     //  The result may contains UmlAttribute, UmlRelations, UmlNcRelations,
     //  UmlOperation (their bodies are not taken into account) , UmlClass
     //  and UmlComponents.
-    const Q3PtrVector<UmlItem> referencedBy();
+    const QVector<UmlItem*> referencedBy();
 
     // return a constant identifier, it is unique within a given
     // kind of element (two classes can't have the same identifiers, but
@@ -187,7 +187,7 @@ public:
     //  'id' is an identifier returned by apply(), indicates if the tool is still running
     static bool isToolRunning(int id);
 
-    static const Q3PtrVector<UmlItem> markedItems();
+    static const QVector<UmlItem*> markedItems();
 
 
 private:
@@ -213,11 +213,12 @@ private:
 
     UmlItem * _parent;
 
-    Q3PtrVector<UmlItem> * _children;
+    QVector<UmlItem*> * _children;
 
-    Q3Dict<WrapperStr> _dict;
+    QHash<WrapperStr,WrapperStr*> _dict;
 
-    static Q3PtrDict<UmlItem> _all;
+        static QHash<void*,UmlItem*> _all;
+
 
 
 protected:

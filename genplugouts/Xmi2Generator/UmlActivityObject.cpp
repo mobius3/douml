@@ -42,7 +42,7 @@ void UmlActivityObject::write(FileOut & out)
     write_multiplicity(out, multiplicity(), this);
     UmlItem::write_type(out, type());
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     for (unsigned i = 0; i != n; i += 1)
@@ -61,7 +61,7 @@ void UmlActivityObject::write(FileOut & out)
 void UmlActivityObject::solve_output_flows()
 {
     ControlOrData v = (isControlType()) ? IsControl : IsData;
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     for (unsigned i = 0; i != n; i += 1) {
@@ -71,11 +71,11 @@ void UmlActivityObject::solve_output_flows()
             f->set_control_or_data(v);
     }
 
-    Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+    QList<UmlFlow*>::Iterator it = _incoming_flows.begin();
 
-    while (it.current() != 0) {
-        if (it.current()->control_or_data() == Unset)
-            it.current()->set_control_or_data(v);
+    while (it != _incoming_flows.end()) {
+        if ((*it)->control_or_data() == Unset)
+            (*it)->set_control_or_data(v);
 
         ++it;
     }

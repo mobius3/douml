@@ -4,7 +4,7 @@
 #include "UmlClassInstanceReference.h"
 #include "UmlOperation.h"
 
-void UmlBaseMessage::read_(const Q3PtrDict<UmlClassInstanceReference> & instances)
+void UmlBaseMessage::read_(const QHash<void*, UmlClassInstanceReference*> & instances)
 {
     _operation = (UmlOperation *) UmlBaseItem::read_();
 

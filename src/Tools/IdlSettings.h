@@ -6,8 +6,6 @@
 
 #include "misc/mystr.h"
 #include "UmlSettings.h"
-#include <q3dict.h>
-
 // This class manages settings concerning IDL, configured through
 // the 'Generation settings' dialog.
 //
@@ -333,7 +331,7 @@ private:
 
     static WrapperStr _ext;
 
-    static Q3Dict<QString> _map_includes;
+    static QHash<WrapperStr,QString*> _map_includes;
 
 
 protected:

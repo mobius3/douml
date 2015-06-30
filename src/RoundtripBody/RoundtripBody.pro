@@ -106,12 +106,13 @@ SOURCES          = main.cpp util.cpp \
     ../Logging/QsLog.cpp \
     ../Logging/QsDebugOutput.cpp
 TARGET          = roundtrip_body
-DEFINES          = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON
+DEFINES          = WITHCPP WITHJAVA WITHPHP WITHIDL WITHPYTHON FALSE=false TRUE=true
 INCLUDEPATH   = ../Tools ../RoundtripBody
 #The following line was inserted by qt3to4
-QT += network  qt3support 
+QT += network
+#qt3support
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/roundtrip_body

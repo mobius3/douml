@@ -4,15 +4,14 @@
 
 #include "UmlDiagram.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlUseCaseDiagram;
 class UmlItem;
 
 //  Manage the use case diagrams
-class UmlBaseUseCaseDiagram : public UmlDiagram
-{
-public:
+class UmlBaseUseCaseDiagram : public UmlDiagram {
+  public:
     // returns a new use case diagram named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,9 +23,9 @@ public:
     virtual anItemKind kind();
 
 
-protected:
+  protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseUseCaseDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n) {};
+    UmlBaseUseCaseDiagram(void * id, const QByteArray & n) : UmlDiagram(id, n) {};
 
 };
 

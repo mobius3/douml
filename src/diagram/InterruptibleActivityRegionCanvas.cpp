@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -159,7 +159,7 @@ void InterruptibleActivityRegionCanvas::force_sub_inside(bool resize_it)
 {
     // update sub nodes position to be inside of the activity region
     // or resize it to contains sub elts if resize_it
-    Q3CanvasItemList all = canvas()->allItems();
+    QList<QGraphicsItem*> all = canvas()->items();
     BooL need_sub_upper = FALSE;
 
     if (resize_it)
@@ -178,7 +178,8 @@ void InterruptibleActivityRegionCanvas::draw(QPainter & p)
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
     QBrush brsh = p.brush();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
+    QBrush backBrush = p.background();
 
     p.setBackgroundMode((used_color == UmlTransparent)
                         ? ::Qt::TransparentMode
@@ -186,7 +187,8 @@ void InterruptibleActivityRegionCanvas::draw(QPainter & p)
 
     QColor co = color(used_color);
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
 
     if (used_color != UmlTransparent)
         p.setBrush(co);
@@ -204,14 +206,18 @@ void InterruptibleActivityRegionCanvas::draw(QPainter & p)
                 r.left(), r.top(), r.width() - 1, r.height() - 1);
 
     p.setPen(::Qt::SolidLine);
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
     p.setBrush(brsh);
 
     if (selected())
         show_mark(p, r);
 }
-
-UmlCode InterruptibleActivityRegionCanvas::type() const
+void InterruptibleActivityRegionCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode InterruptibleActivityRegionCanvas::typeUmlCode() const
 {
     return UmlInterruptibleActivityRegion;
 }
@@ -239,49 +245,52 @@ void InterruptibleActivityRegionCanvas::open()
 
 void InterruptibleActivityRegionCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
     int index;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit interruptible activity region"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit interruptible activity region"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
             (BrowserNode *) the_canvas()->browser_diagram())
-            m.insertItem(TR("Set associated diagram"), 6);
+            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            m.insertItem(TR("Remove diagram association"), 9);
+            MenuFactory::addItem(m, TR("Remove diagram association"), 9);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlInterruptibleActivityRegion, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    switch (index = m.exec(QCursor::pos())) {
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    switch (index = retAction->data().toInt()) {
     case 0:
         upper();
         modified();	// call package_modified()
@@ -345,6 +354,7 @@ void InterruptibleActivityRegionCanvas::menu(const QPoint &)
             ToolCom::run(Tool::command(index - 20), browser_node);
 
         return;
+    }
     }
 
     package_modified();
@@ -547,7 +557,7 @@ void InterruptibleActivityRegionCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
     connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
@@ -556,7 +566,7 @@ void InterruptibleActivityRegionCanvas::history_load(QBuffer & b)
 
 void InterruptibleActivityRegionCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
 
     disconnect(DrawingSettings::instance(), SIGNAL(changed()),
                this, SLOT(modified()));

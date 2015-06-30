@@ -28,11 +28,11 @@ public:
 };
 
 template<class T>
-class QSignalBlocker
+class QSignalBlockerW
 {
     T * const o;
 public:
-    explicit QSignalBlocker( T * oo )
+    explicit QSignalBlockerW( T * oo )
       : o(oo)
     {
     }
@@ -42,13 +42,13 @@ public:
              o->blockSignals( true );
          return QSignalBlockerCallProxy<T>(o);
     }
-    ~QSignalBlocker() {}
+    ~QSignalBlockerW() {}
 };
 
 template<class T>
-QSignalBlocker<T> SilentCall(T* o)
+QSignalBlockerW<T> SilentCall(T* o)
 {
-    return QSignalBlocker<T>(o);
+    return QSignalBlockerW<T>(o);
 }
 
 #endif // SIGNALBLOCKERWRAPPER_H

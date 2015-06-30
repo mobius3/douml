@@ -32,26 +32,24 @@
 
 
 
-#include <q3canvas.h>
+#include <QGraphicsScene>
 #include <qfont.h>
-#include <q3intdict.h>
-
 #include "UmlEnum.h"
 #include "Labeled.h"
-
-class Q3CanvasLine;
+#include <QGraphicsItem>
+class QGraphicsLineItem;
 class QPainter;
 class BrowserNode;
 class BrowserDiagram;
 class DiagramView;
 class DiagramItem;
 
-class UmlCanvas : public Q3Canvas
+class UmlCanvas : public QGraphicsScene
 {
     Q_OBJECT
 
 protected:
-    Q3CanvasItemList selected;
+    QList<QGraphicsItem*>  selected;
     BrowserDiagram * br_diagram;
     DiagramView * view;
     bool do_scale;
@@ -64,8 +62,8 @@ protected:
     int height100percent;
     QFont the_fonts[UmlFontNumber];
     IdDict<DiagramItem> all_items;	// to re-use the same id for the DiagramItems
-    Q3CanvasLine * hlimit;
-    Q3CanvasLine * vlimit;
+    QGraphicsLineItem * hlimit;
+    QGraphicsLineItem * vlimit;
 
     void update_limits();
 
@@ -73,16 +71,16 @@ public:
     UmlCanvas(CanvasFormat f, BrowserDiagram * br_diag);
     virtual ~UmlCanvas();
 
-    Q3CanvasItem * collision(const QPoint &) const;
-    Q3CanvasItem * collision(const QPoint &, int except) const;
-    const Q3CanvasItemList & selection() const {
+    QGraphicsItem * collision(const QPoint &) const;
+    QGraphicsItem * collision(const QPoint &, int except) const;
+    const QList<QGraphicsItem*>  & selection() const {
         return selected;
     };
-    void select(Q3CanvasItem * i);
-    void unselect(Q3CanvasItem * i);
+    void select(QGraphicsItem * i);
+    void unselect(QGraphicsItem * i);
     void unselect_all();
 
-    void del(Q3CanvasItem * i);
+    void del(QGraphicsItem * i);
 
     void set_zoom(double zm);
     void zoom_end() {

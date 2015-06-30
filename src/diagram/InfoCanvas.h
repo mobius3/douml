@@ -44,7 +44,7 @@ public:
     InfoCanvas(UmlCanvas * canvas, DiagramItem *, QString);
     virtual ~InfoCanvas();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool copyable() const;
     virtual void open();

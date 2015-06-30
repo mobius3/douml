@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseUseCaseDiagram.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class File;
 class UmlItem;
@@ -16,7 +16,7 @@ class UmlItem;
 class UmlUseCaseDiagram : public UmlBaseUseCaseDiagram
 {
 public:
-    UmlUseCaseDiagram(void * id, const Q3CString & n) : UmlBaseUseCaseDiagram(id, n) {
+    UmlUseCaseDiagram(void * id, const QByteArray & n) : UmlBaseUseCaseDiagram(id, n) {
         cpt[kind()] += 1;
     };
 

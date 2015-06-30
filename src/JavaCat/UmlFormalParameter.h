@@ -28,10 +28,7 @@
 #ifndef _UMLFORMALPARAMETER_H
 #define _UMLFORMALPARAMETER_H
 
-#include <q3valuelist.h>
-//Added by qt3to4:
 #include "misc/mystr.h"
-
 #include "UmlBaseFormalParameter.h"
 
 // This class manages 'formal parameters' of a template class. For instance 'T' in
@@ -47,6 +44,6 @@ public:
     UmlFormalParameter(WrapperStr n, const UmlTypeSpec & e);
 };
 
-typedef Q3ValueList<UmlFormalParameter> FormalParameterList;
+typedef QList<UmlFormalParameter> FormalParameterList;
 
 #endif

@@ -212,5 +212,3 @@ void HaveKeyValueData::read(char *& st, char *& k)
     else
         set_n_keys(0);
 }
-
-

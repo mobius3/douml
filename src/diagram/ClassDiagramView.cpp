@@ -31,7 +31,7 @@
 
 #include <qapplication.h>
 #include <qfont.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QDropEvent>
@@ -69,23 +69,22 @@ ClassDiagramView::ClassDiagramView(QWidget * parent, UmlCanvas * canvas, int id)
 
 // class view contains class not already drawn ?
 static bool not_yet_drawn(BrowserNode * container,
-                          Q3PtrDict<DiagramItem> & drawn)
+                          QHash<BasicData *,DiagramItem*> & drawn)
 {
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = container->firstChild(); child != 0; child = child->nextSibling()) {
         if (!((BrowserNode *) child)->deletedp() &&
             (((BrowserNode *) child)->get_type() == UmlClass))
-            if ((drawn[((BrowserNode *) child)->get_data()] == 0) ||
+            if ((drawn.value(((BrowserNode *) child)->get_data()) == 0) ||
                 not_yet_drawn((BrowserNode *) child, drawn))
                 return TRUE;
     }
-
     return FALSE;
 }
 
 // have marked elements not yet drawn ?
-static bool marked_not_yet_drawn(Q3PtrDict<DiagramItem> & drawn)
+static bool marked_not_yet_drawn(QHash<BasicData *,DiagramItem*> & drawn)
 {
     foreach (BrowserNode * bn, BrowserNode::marked_nodes()) {
         UmlCode k = bn->get_type();
@@ -98,7 +97,7 @@ static bool marked_not_yet_drawn(Q3PtrDict<DiagramItem> & drawn)
             // no break
         case UmlClass:
         case UmlPackage:
-            if (drawn[bn->get_data()] == 0)
+            if (drawn.value( bn->get_data()) == 0)
                 return TRUE;
         }
     }
@@ -107,50 +106,50 @@ static bool marked_not_yet_drawn(Q3PtrDict<DiagramItem> & drawn)
 }
 
 static void get_drawn(DiagramItemList & items,
-                      Q3PtrDict<DiagramItem> & drawn)
+                      QHash<BasicData *,DiagramItem*>  & drawn)
 {
     foreach (DiagramItem * di, items) {
-        UmlCode k = di->type();
+        UmlCode k = di->typeUmlCode();
 
         switch (k) {
         case UmlClass:
         case UmlPackage:
-            drawn.replace(di->get_bn()->get_data(), di);
+            drawn.insert(di->get_bn()->get_data(), di);
             break;
 
         default:
             if (IsaRelation(k) || IsaSimpleRelation(k))
-                drawn.replace(((ArrowCanvas *) di)->get_data(), di);
+                drawn.insert(((ArrowCanvas *) di)->get_data(), di);
         }
     }
 }
 
 void ClassDiagramView::menu(const QPoint & p)
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
     MenuFactory::createTitle(m, TR("Class diagram menu"));
 
     if ((((UmlCanvas *) canvas())->browser_diagram())->is_writable()) {
         BrowserNode * bn = BrowserView::selected_item();
-        DiagramItemList items(canvas()->allItems());
-        Q3PtrDict<DiagramItem> drawn;
+        DiagramItemList items(canvas()->items());
+        QHash<BasicData *,DiagramItem*> drawn;
 
         get_drawn(items, drawn);
 
         if ((bn != 0) && (bn->get_type() == UmlClassView)) {
             if (not_yet_drawn(bn, drawn)) {
-                m.insertItem(TR("Add classes of the selected class view"), 29);
+                MenuFactory::addItem(m, TR("Add classes of the selected class view"), 29);
 
                 if (marked_not_yet_drawn(drawn))
-                    m.insertItem(TR("Add marked elements"), 28);
+                    MenuFactory::addItem(m, TR("Add marked elements"), 28);
 
-                m.insertSeparator();
+                m.addSeparator();
             }
         }
         else if (marked_not_yet_drawn(drawn)) {
-            m.insertItem(TR("Add marked elements"), 28);
-            m.insertSeparator();
+            MenuFactory::addItem(m, TR("Add marked elements"), 28);
+            m.addSeparator();
         }
 
         switch (default_menu(m, 30)) {
@@ -182,9 +181,9 @@ void ClassDiagramView::menu(const QPoint & p)
 static const int Diagram_Margin = 20;
 
 void ClassDiagramView::add_classview_classes(BrowserNode * container, const QPoint & p,
-        Q3PtrDict<DiagramItem> & drawn)
+        QHash<BasicData *,DiagramItem*> & drawn)
 {
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     history_save();
     history_protected = TRUE;
@@ -203,13 +202,12 @@ void ClassDiagramView::add_classview_classes(BrowserNode * container, const QPoi
 }
 
 void ClassDiagramView::add_classview_classes(BrowserNode * container,
-        Q3PtrDict<DiagramItem> & drawn,
+        QHash<BasicData *,DiagramItem*> & drawn,
         int & x, int & y, int & future_y)
 {
-    Q3ListViewItem * child;
+    BrowserNode * child;
     int xmax = canvas()->width() - Diagram_Margin;
     int ymax = canvas()->height() - Diagram_Margin;
-
     for (child = container->firstChild(); child != 0; child = child->nextSibling()) {
         if (!((BrowserNode *) child)->deletedp() &&
             (((BrowserNode *) child)->get_type() == UmlClass)) {
@@ -218,10 +216,10 @@ void ClassDiagramView::add_classview_classes(BrowserNode * container,
                     new CdClassCanvas((BrowserNode *) child, the_canvas(), x, y);
 
                 if ((x + cl->width()) > xmax)
-                    cl->move(x = Diagram_Margin, y = future_y);
+                    cl->moveBy(x = Diagram_Margin, y = future_y);
 
                 if (y + cl->height() > ymax) {
-                    cl->move(x = Diagram_Margin, y = Diagram_Margin);
+                    cl->moveBy(x = Diagram_Margin, y = Diagram_Margin);
                     future_y = y + cl->height() + Diagram_Margin;
                 }
                 else {
@@ -243,9 +241,9 @@ void ClassDiagramView::add_classview_classes(BrowserNode * container,
 }
 
 void ClassDiagramView::add_marked_elements(const QPoint & p,
-        Q3PtrDict<DiagramItem> & drawn)
+        QHash<BasicData *,DiagramItem*> & drawn)
 {
-    QApplication::setOverrideCursor(Qt::waitCursor);
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     history_save();
     history_protected = TRUE;
@@ -273,13 +271,13 @@ void ClassDiagramView::add_marked_elements(const QPoint & p,
                 continue;
             }
 
-            drawn.replace(dc->get_bn()->get_data(), dc);
+            drawn.insert(dc->get_bn()->get_data(), dc);
 
             if ((x + dc->width()) > xmax)
-                dc->move(x = Diagram_Margin, y = future_y);
+                dc->moveBy(x = Diagram_Margin, y = future_y);
 
             if (y + dc->height() > ymax) {
-                dc->move(x = Diagram_Margin, y = Diagram_Margin);
+                dc->moveBy(x = Diagram_Margin, y = Diagram_Margin);
                 future_y = y + dc->height() + Diagram_Margin;
             }
             else {
@@ -322,15 +320,15 @@ void ClassDiagramView::add_related_elements(DiagramItem  * di, QString what,
         bool inh, bool assoc)
 {
     BrowserNodeList l;
-    RelatedElementsDialog dialog(di->get_bn(), what, inh, assoc, l);
+    RelatedElementsDialog dialog(di->get_bn(), what.toLatin1().constData(), inh, assoc, l);
 
     dialog.raise();
 
     if ((dialog.exec() == QDialog::Accepted) && !l.isEmpty()) {
-        QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
 
-        DiagramItemList items(canvas()->allItems());
-        Q3PtrDict<DiagramItem> drawn;
+        DiagramItemList items(canvas()->items());
+        QHash<BasicData *,DiagramItem*> drawn;
 
         get_drawn(items, drawn);
 
@@ -361,13 +359,13 @@ void ClassDiagramView::add_related_elements(DiagramItem  * di, QString what,
                     continue;
                 }
 
-                drawn.replace(dc->get_bn()->get_data(), dc);
+                drawn.insert(dc->get_bn()->get_data(), dc);
 
                 if ((x + dc->width()) > xmax)
-                    dc->move(x = Diagram_Margin, y = future_y);
+                    dc->moveBy(x = Diagram_Margin, y = future_y);
 
                 if (y + dc->height() > ymax) {
-                    dc->move(x = Diagram_Margin, y = Diagram_Margin);
+                    dc->moveBy(x = Diagram_Margin, y = Diagram_Margin);
                     future_y = y + dc->height() + Diagram_Margin;
                 }
                 else {
@@ -392,7 +390,7 @@ void ClassDiagramView::add_related_elements(DiagramItem  * di, QString what,
     }
 }
 
-void ClassDiagramView::contentsMousePressEvent(QMouseEvent * e)
+void ClassDiagramView::mousePressEvent(QMouseEvent * e)
 {
     if (!window()->frozen()) {
         switch (window()->buttonOn()) {
@@ -421,12 +419,12 @@ void ClassDiagramView::contentsMousePressEvent(QMouseEvent * e)
         break;
 
         default:
-            DiagramView::contentsMousePressEvent(e);
+            DiagramView::mousePressEvent(e);
             break;
         }
     }
     else
-        DiagramView::contentsMousePressEvent(e);
+        DiagramView::mousePressEvent(e);
 }
 
 void ClassDiagramView::dragEnterEvent(QDragEnterEvent * e)
@@ -449,11 +447,32 @@ void ClassDiagramView::dragEnterEvent(QDragEnterEvent * e)
     else
         e->ignore();
 }
+void ClassDiagramView::dragMoveEvent(QDragMoveEvent * e)
+{
+
+    if (!window()->frozen() &&
+        (UmlDrag::canDecode(e, UmlClass, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlRelations, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlSimpleRelations, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlPackage, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlClassDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlUseCaseDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlSeqDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlColDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlObjectDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlComponentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlDeploymentDiagram, FALSE, TRUE) ||
+         UmlDrag::canDecode(e, UmlStateDiagram, TRUE, TRUE) ||
+         UmlDrag::canDecode(e, UmlActivityDiagram, TRUE, TRUE)))
+        e->accept();
+    else
+        e->ignore();
+}
 
 void ClassDiagramView::dropEvent(QDropEvent * e)
 {
     BrowserNode * bn;
-    QPoint p = viewportToContents(e->pos());
+    QPointF p = mapToScene(e->pos());
 
     if ((bn = UmlDrag::decode(e, UmlClass)) != 0) {
         history_save();
@@ -522,7 +541,7 @@ void ClassDiagramView::dropEvent(QDropEvent * e)
 void ClassDiagramView::save(QTextStream & st, QString & warning,
                             bool copy) const
 {
-    DiagramItemList items(canvas()->allItems());
+    DiagramItemList items(canvas()->items());
 
     if (!copy)
         // sort is useless for a copy
@@ -533,7 +552,7 @@ void ClassDiagramView::save(QTextStream & st, QString & warning,
     // save first the classes packages fragment notes and icons
 
     foreach (DiagramItem * di, items) {
-        switch (di->type()) {
+        switch (di->typeUmlCode()) {
         case UmlClass:
         case UmlNote:
         case UmlText:
@@ -554,7 +573,7 @@ void ClassDiagramView::save(QTextStream & st, QString & warning,
 
     foreach (DiagramItem * di, items) {
         if (!copy || di->copyable()) {
-            UmlCode k = di->type();
+            UmlCode k = di->typeUmlCode();
 
             if (IsaRelation(k) || IsaSimpleRelation(k) || (k == UmlInner))
                 di->save(st, FALSE, warning);
@@ -564,7 +583,7 @@ void ClassDiagramView::save(QTextStream & st, QString & warning,
     // then saves anchors
 
     foreach (DiagramItem * di, items)
-        if ((!copy || di->copyable()) && (di->type() == UmlAnchor))
+        if ((!copy || di->copyable()) && (di->typeUmlCode() == UmlAnchor))
             di->save(st, FALSE, warning);
 
     if (!copy && (preferred_zoom != 0)) {
@@ -582,9 +601,9 @@ void ClassDiagramView::read(char * st, char * k)
     UmlCanvas * canvas = the_canvas();
 
     // reads first the classes package icons text notes and images
-    while (CdClassCanvas::read(st, canvas, k) ||
-           NoteCanvas::read(st, canvas, k) ||
+    while (NoteCanvas::read(st, canvas, k) ||
            TextCanvas::read(st, canvas, k) ||
+           CdClassCanvas::read(st, canvas, k) ||
            IconCanvas::read(st, canvas, k) ||
            PackageCanvas::read(st, canvas, k) ||
            FragmentCanvas::read(st, canvas, k) ||

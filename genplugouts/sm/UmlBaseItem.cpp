@@ -58,9 +58,9 @@
 #include "UmlActivityControlNodeClasses.h"
 //#include "Tools/ApiCmd.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-bool UmlBaseItem::set_Name(const Q3CString & s)
+bool UmlBaseItem::set_Name(const QByteArray & s)
 {
     UmlCom::send_cmd(_identifier, setNameCmd, (const char *)s); //[rageek] Fix prototype
 
@@ -72,26 +72,26 @@ bool UmlBaseItem::set_Name(const Q3CString & s)
         return FALSE;
 }
 
-const Q3CString & UmlBaseItem::stereotype()
+const QByteArray & UmlBaseItem::stereotype()
 {
     read_if_needed_();
 
     return _stereotype;
 }
 
-bool UmlBaseItem::set_Stereotype(const Q3CString & s)
+bool UmlBaseItem::set_Stereotype(const QByteArray & s)
 {
     return set_it_(_stereotype, s, setStereotypeCmd);
 }
 
-const Q3CString & UmlBaseItem::description()
+const QByteArray & UmlBaseItem::description()
 {
     read_if_needed_();
 
     return _description;
 }
 
-bool UmlBaseItem::set_Description(const Q3CString & s)
+bool UmlBaseItem::set_Description(const QByteArray & s)
 {
     return set_it_(_description, s, setDescriptionCmd);
 }
@@ -107,7 +107,7 @@ UmlItem * UmlBaseItem::parent()
     return _parent;
 }
 
-const Q3PtrVector<UmlItem> UmlBaseItem::children()
+const QVector<UmlItem*> UmlBaseItem::children()
 {
     if (_children == 0)
         read_children_();
@@ -127,11 +127,11 @@ bool UmlBaseItem::set_childrenVisible(bool y)
     return UmlCom::read_bool();
 }
 
-bool UmlBaseItem::propertyValue(const Q3CString & k, Q3CString & v)
+bool UmlBaseItem::propertyValue(const QByteArray & k, QByteArray & v)
 {
     read_if_needed_();
 
-    Q3CString * s = _dict[k];
+    QByteArray * s = _dict[k];
 
     if (s == 0)
         return FALSE;
@@ -141,7 +141,7 @@ bool UmlBaseItem::propertyValue(const Q3CString & k, Q3CString & v)
 
 }
 
-bool UmlBaseItem::set_PropertyValue(const Q3CString & k, const Q3CString & v)
+bool UmlBaseItem::set_PropertyValue(const QByteArray & k, const QByteArray & v)
 {
     read_if_needed_();
 
@@ -149,10 +149,10 @@ bool UmlBaseItem::set_PropertyValue(const Q3CString & k, const Q3CString & v)
 
     if (UmlCom::read_bool()) {
         if (_defined) {
-            Q3CString * s = _dict[k];
+            QByteArray * s = _dict[k];
 
             if (s == 0)
-                _dict.insert(k, new Q3CString(v));
+                _dict.insert(k, new QByteArray(v));
             else
                 *s = v;
         }
@@ -163,7 +163,7 @@ bool UmlBaseItem::set_PropertyValue(const Q3CString & k, const Q3CString & v)
         return FALSE;
 }
 
-const Q3Dict<Q3CString> UmlBaseItem::properties()
+const QHash<QByteArray, QByteArray*> UmlBaseItem::properties()
 {
     read_if_needed_();
 
@@ -182,7 +182,7 @@ bool UmlBaseItem::moveAfter(const UmlItem * x)
         return FALSE;
 }
 
-Q3CString UmlBaseItem::supportFile()
+QByteArray UmlBaseItem::supportFile()
 {
     UmlCom::send_cmd(_identifier, supportFileCmd);
     return UmlCom::read_string();
@@ -194,7 +194,7 @@ bool UmlBaseItem::isWritable()
     return UmlCom::read_bool();
 }
 
-int UmlBaseItem::apply(Q3CString cmd)
+int UmlBaseItem::apply(QByteArray cmd)
 {
     UmlCom::send_cmd(_identifier, applyCmd, (const char *)cmd); //[rageek] Fix prototype
     return (int) UmlCom::read_unsigned();
@@ -212,11 +212,11 @@ bool UmlBaseItem::set_isMarked(bool y)
     return set_it_(_marked, y, setMarkedCmd);
 }
 
-const Q3PtrVector<UmlItem> UmlBaseItem::referencedBy()
+const QVector<UmlItem*> UmlBaseItem::referencedBy()
 {
     UmlCom::send_cmd(_identifier, referencedByCmd);
 
-    Q3PtrVector<UmlItem> result;
+    QVector<UmlItem*> result;
 
     UmlCom::read_item_list(result);
     return result;
@@ -267,17 +267,17 @@ bool UmlBaseItem::isToolRunning(int id)
     return UmlCom::read_bool();
 }
 
-const Q3PtrVector<UmlItem> UmlBaseItem::markedItems()
+const QVector<UmlItem*> UmlBaseItem::markedItems()
 {
     UmlCom::send_cmd(miscGlobalCmd, allMarkedCmd);
 
-    Q3PtrVector<UmlItem> result;
+    QVector<UmlItem*> result;
 
     UmlCom::read_item_list(result);
     return result;
 }
 
-Q3PtrDict<UmlItem> UmlBaseItem::_all(997);
+QHash<void*,UmlItem*> UmlBaseItem::_all;
 
 void UmlBaseItem::read_if_needed_()
 {
@@ -329,6 +329,13 @@ void UmlBaseItem::read_if_needed_()
 
 UmlItem * UmlBaseItem::create_(anItemKind k, const char * s)
 {
+    //habip read all data if there is
+    QByteArray garbageData = UmlCom::read_all();
+    if(!garbageData.isEmpty())
+    {
+        int garbageCount = garbageData.count();
+        printf("!!!!garbage data\r\n");
+    }
     UmlCom::send_cmd(_identifier, createCmd, k, s);
 
     UmlItem * result = UmlBaseItem::read_();
@@ -337,8 +344,9 @@ UmlItem * UmlBaseItem::create_(anItemKind k, const char * s)
         if (_children != 0) {
             unsigned n = _children->count();
 
-            _children->resize(n + 1);
-            _children->insert(n, result);
+            //_children->resize(n + 1);
+            //_children->insert(n, result);
+            _children->append(result);
         }
 
         ((UmlBaseItem *) result)->_parent = (UmlItem *) this;
@@ -354,9 +362,9 @@ void UmlBaseItem::read_uml_()
     unsigned n = UmlCom::read_unsigned();
 
     while (n--) {
-        Q3CString k = UmlCom::read_string();
+        QByteArray k = UmlCom::read_string();
 
-        _dict.insert(k, new Q3CString(UmlCom::read_string()));
+        _dict.insert(k, new QByteArray(UmlCom::read_string()));
     }
 
     _description = UmlCom::read_string();
@@ -392,7 +400,7 @@ void UmlBaseItem::read_idl_()
 void UmlBaseItem::read_children_()
 {
     UmlCom::send_cmd(_identifier, childrenCmd);
-    _children = new Q3PtrVector<UmlItem>;
+    _children = new QVector<UmlItem*>;
 
     UmlCom::read_item_list(*_children);
 
@@ -446,7 +454,7 @@ bool UmlBaseItem::set_it_(aDirection & r, aDirection v, OnInstanceCmd cmd)
         return FALSE;
 }
 
-bool UmlBaseItem::set_it_(Q3CString & r, const char * v, OnInstanceCmd cmd)
+bool UmlBaseItem::set_it_(QByteArray & r, const char * v, OnInstanceCmd cmd)
 {
     UmlCom::send_cmd(_identifier, cmd, v);
 
@@ -705,20 +713,20 @@ UmlItem * UmlBaseItem::read_()
 
         default:
             UmlCom::bye();
-            UmlCom::fatal_error(Q3CString("unknown item type ") + Q3CString().setNum(kind));
+            UmlCom::fatal_error(QByteArray("unknown item type ") + QByteArray().setNum(kind));
         }
     }
 
     return result;
 }
 
-UmlBaseItem::UmlBaseItem(void * id, const Q3CString & n)
+UmlBaseItem::UmlBaseItem(void * id, const QByteArray & n)
     : _defined(FALSE), _identifier(id), _name(n), _parent(0), _children(0)
 {
     _all.insert(id, (UmlItem *) this);
 
     if (_all.count() / _all.size() > 10)
-        _all.resize(_all.size() * 2 - 1);
+        _all.reserve(_all.size() * 2 - 1);
 }
 
 UmlBaseItem::~UmlBaseItem()

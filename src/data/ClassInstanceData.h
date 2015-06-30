@@ -28,12 +28,12 @@
 #ifndef CLASSINSTANCEDATA_H
 #define CLASSINSTANCEDATA_H
 
-#include <q3ptrdict.h>
+//#include <q3ptrdict.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 //Added by qt3to4:
-#include <Q3PtrList>
+//
 
 #include "SimpleData.h"
 
@@ -73,8 +73,8 @@ class ClassInstanceData : public SimpleData
 
 private:
     BrowserClass * cl;	// type of instance
-    Q3ValueList<SlotAttr> attributes;
-    Q3ValueList<SlotRel> relations;
+    QList<SlotAttr> attributes;
+    QList<SlotRel> relations;
     QList<BasicData *> connect_list;	// ClassData and ClassInstanceData
 
 protected:
@@ -107,10 +107,10 @@ public:
     }
     void set_class(BrowserClass * t);
 
-    const Q3ValueList<SlotAttr> & get_attributes() const {
+    const QList<SlotAttr> & get_attributes() const {
         return attributes;
     }
-    const Q3ValueList<SlotRel> & get_relations() const {
+    const QList<SlotRel> & get_relations() const {
         return relations;
     }
 

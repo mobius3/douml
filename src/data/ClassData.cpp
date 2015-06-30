@@ -32,10 +32,6 @@
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
-
-//Added by qt3to4:
-#include <Q3PtrList>
-
 #include "BrowserClass.h"
 #include "ClassData.h"
 #include "ClassDialog.h"
@@ -44,6 +40,7 @@
 #include "ActualParamData.h"
 #include "FormalParamData.h"
 #include "RelationData.h"
+
 #include "GenerationSettings.h"
 #include "myio.h"
 #include "ToolCom.h"
@@ -153,7 +150,7 @@ ClassData::~ClassData()
     {
         delete actuals.at(0);
         actuals[0] = nullptr;
-        actuals.remove(0u);
+        actuals.removeAt(0u);
     }
 }
 
@@ -426,7 +423,7 @@ void ClassData::addFormals(QStringList & l)
     for (int index = 0; index != nformals; index += 1) {
         const char * s = formals[index].get_name();
 
-        if (l.findIndex(s) == -1)
+        if (l.indexOf(s) == -1)
             l.prepend(s);
     }
 
@@ -523,11 +520,11 @@ bool ClassData::reference(BrowserClass * target) const
 bool ClassData::decldefbody_contain(const QString & s, bool cs,
                                     BrowserNode *)
 {
-    return ((QString(get_cppdecl()).find(s, 0, cs) != -1) ||
-            (QString(get_javadecl()).find(s, 0, cs) != -1) ||
-            (QString(get_phpdecl()).find(s, 0, cs) != -1) ||
-            (QString(get_pythondecl()).find(s, 0, cs) != -1) ||
-            (QString(get_idldecl()).find(s, 0, cs) != -1));
+    return ((QString(get_cppdecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_javadecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_phpdecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_pythondecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_idldecl()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1));
 }
 
 //
@@ -840,9 +837,10 @@ bool ClassData::tool_cmd(ToolCom * com, const char * args,
 
 void ClassData::edit()
 {
-    setName(browser_node->get_name());
+    setObjectName(browser_node->get_name());
     ClassDialog::Instance(this)->show();
     ClassDialog::Instance(this)->raise();
+
 }
 
 //

@@ -34,7 +34,7 @@
 #include <QPixmap>
 #include <QDropEvent>
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QDragMoveEvent>
 
 class QPixmap;
@@ -70,7 +70,7 @@ public:
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent);
     static BrowserExpansionRegion * add_expansionregion(BrowserNode * future_parent, const char * name);
     static BrowserExpansionRegion * get_expansionregion(BrowserNode * parent);
-    Q3ValueList<BrowserExpansionNode *> get_nodes() const;
+    QList<BrowserExpansionNode *> get_nodes() const;
     BrowserNode * add_expansionnode();
 
     virtual const QPixmap * pixmap(int) const;

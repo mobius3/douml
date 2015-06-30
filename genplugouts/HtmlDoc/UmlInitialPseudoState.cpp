@@ -1,9 +1,9 @@
 
 #include "UmlInitialPseudoState.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlInitialPseudoState::sKind()
+QByteArray UmlInitialPseudoState::sKind()
 {
     return "initial pseudo state";
 }

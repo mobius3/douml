@@ -25,7 +25,7 @@
 //
 // *************************************************************************
 #include <stdio.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <QEvent>
 #include <QKeyEvent>
 
@@ -38,15 +38,18 @@
 #include "strutil.h"
 #include "DialogUtil.h"
 #include "translate.h"
-
+#include <QHeaderView>
 KeyValuesTable::KeyValuesTable(HaveKeyValueData * kvData, QWidget * parent, bool isReadOnly)
     : StringTable(((kvData == 0) ? 0 : kvData->get_n_keys()) + ((isReadOnly) ? 0 : 1),
                   (isReadOnly) ? 2 : 3, parent, isReadOnly)
 {
-    colNames.insert(0, TR("Key"));
-    colNames.insert(1, TR("Value"));
-    colNames.insert(2, TR("Do"));
+    colNames.insert(0, QObject::tr("Key"));
+    colNames.insert(1, QObject::tr("Value"));
+    colNames.insert(2, QObject::tr("Do"));
     Init(kvData, isReadOnly);
+    m_delegate = new TableWidgetItemDelegate(this);
+    setItemDelegateForColumn(0,m_delegate);
+    setItemDelegateForColumn(1,m_delegate);
 }
 
 void KeyValuesTable::init_row(int index)
@@ -63,14 +66,14 @@ bool KeyValuesTable::eventFilter(QObject *o, QEvent * e)
     {
         return false;
     }
-   return  Q3Table::eventFilter(o,e);
+   return  QTableWidget::eventFilter(o,e);
 }
 
 bool KeyValuesTable::check_unique()
 {
     forceUpdateCells();
 
-    unsigned n = numRows();
+    unsigned n = rowCount();
 
     if (n != 0) {
         unsigned index;
@@ -83,8 +86,8 @@ bool KeyValuesTable::check_unique()
         for (index = 0; index != n; index += 1) {
             const QString & s = text(index, 0);
 
-            if (l.findIndex(s) != -1) {
-                msg_critical(TR("Error"), TR("key '%1' used several times", s));
+            if (l.indexOf(s) != -1) {
+                msg_critical(TR("Error"), QObject::tr("key '%1' used several times").arg(s));
                 return FALSE;
             }
             else
@@ -99,7 +102,7 @@ void KeyValuesTable::updateNodeFromThis(HaveKeyValueData * oper)
 {
     forceUpdateCells();
 
-    unsigned n = numRows();
+    unsigned n = rowCount();
     unsigned index;
 
     if (text(n - 1, 0).isEmpty())
@@ -123,7 +126,7 @@ bool KeyValuesTable::get_value(const char * key, QString & value)
     QString ks = toUnicode(key);
     int index;
 
-    for (index = 0; index != numRows(); index += 1) {
+    for (index = 0; index != rowCount(); index += 1) {
         if (text(index, 0) == ks) {
             value = text(index, 1);
             return TRUE;
@@ -138,7 +141,7 @@ void KeyValuesTable::remove(const char * key)
     QString ks = toUnicode(key);
     int index;
 
-    for (index = 0; index != numRows(); index += 1) {
+    for (index = 0; index != rowCount(); index += 1) {
         if (text(index, 0) == ks) {
             delete_row(index);
             break;
@@ -150,7 +153,7 @@ bool KeyValuesTable::EqualData(HaveKeyValueData * kvData)
 {
     if(!kvData)
         return false;
-    unsigned n = numRows();
+    unsigned n = rowCount();
 
     if (text(n - 1, 0).isEmpty())
         n -= 1;
@@ -183,7 +186,7 @@ void KeyValuesTable::Init(HaveKeyValueData *kvData, bool isReadOnly)
     AdjustColumnCount(isReadOnly);
     AdjustRowCount(kvData, isReadOnly);
     SetupTableText(kvData, isReadOnly);
-    //AdjustEditability(isReadOnly);
+    AdjustEditability(isReadOnly);
 }
 
 void KeyValuesTable::SetupTableText(HaveKeyValueData *kvData,  bool isReadOnly)
@@ -203,7 +206,7 @@ void KeyValuesTable::SetupTableText(HaveKeyValueData *kvData,  bool isReadOnly)
         if (props.contains(k))
             setItem(index, 1, new ComboItem(this, v, props[k], FALSE));
 
-        if ((k.contains(':') == 2) &&
+        if ((k.count(':') == 2) &&
                 ProfiledStereotypes::enumerated(k, items))
         {
             props.insert(k, items);
@@ -212,9 +215,8 @@ void KeyValuesTable::SetupTableText(HaveKeyValueData *kvData,  bool isReadOnly)
         else
             setItem(index, 1, new MLinesItem(this, v, !isReadOnly));
 
-        setItem(index, 2, new TableItem(this, Q3TableItem::Never,""));
+        setItem(index, 2, new TableItem(this, TableItem::Never,"", TableItem::TableItemType));
         setRowStretchable(index, true);
-
         int crCount = v.count('\n');
         if (crCount != 0)
             setRowHeight(index, rowHeight(index) * (crCount + 1));
@@ -225,57 +227,80 @@ void KeyValuesTable::SetupTableText(HaveKeyValueData *kvData,  bool isReadOnly)
     setItem(index, 0, new MLinesItem(this, QString()));
     setItem(index, 1, new MLinesItem(this, QString()));
     if(!isReadOnly)
-        setItem(index, 2, new TableItem(this, Q3TableItem::Never,""));
+        setItem(index, 2, new TableItem(this, TableItem::Never,"", TableItem::TableItemType));
     setRowStretchable(index, TRUE);
 }
 
 void KeyValuesTable::AdjustColumnCount(bool isReadOnly)
 {
-    int columnCount = isReadOnly ? 2 : 3;
-    int currentCount = numCols();
+    int colCount = isReadOnly ? 2 : 3;
+    int currentCount = columnCount();
 
     for(int current = currentCount - 1; current  > -1; current--)
         removeColumn(0);
 
-    for(int current(0); current < columnCount ; current++)
+    for(int current(0); current < colCount ; current++)
     {
-        insertColumns(current);
-        horizontalHeader()->setLabel(current, colNames[current]);
+        insertColumn(current);
+        //horizontalHeader()-> setLabel(current, colNames[current]);
+        QTableWidgetItem * item = horizontalHeaderItem(current);
+        if(!item)
+         {
+            item = new QTableWidgetItem();
+            setHorizontalHeaderItem(current, item);
+        }
+         horizontalHeaderItem(current)->setText(colNames[current]);
     }
+
     setColumnStretchable(1, true);
+
     if(!isReadOnly)
     {
+
         setColumnStretchable(2, false);
-        adjustColumn(2);
+        resizeColumnToContents(2);
     }
-    horizontalHeader()->setResizeEnabled(true, 0);
-    horizontalHeader()->setResizeEnabled(true, 1);
+    horizontalHeader()->setSectionResizeMode(0, QHeaderView::Interactive);
+    horizontalHeader()->setSectionResizeMode(1, QHeaderView::Interactive);
 
 }
 
 void KeyValuesTable::AdjustRowCount(HaveKeyValueData * kvData, bool)
 {
-    int rowCount = numRows();
+    int rCount = rowCount();
     int index ;
-    for (index = rowCount - 1; index > -1; index --)
+    for (index = rCount - 1; index > -1; index --)
         removeRow(0);
     for(unsigned i(0); i < kvData->get_n_keys() + 1; i++)
     {
-        insertRows(i);
+        insertRow(i);
         setRowStretchable(i, true);
     }
 }
 
 void KeyValuesTable::AdjustEditability(bool isReadOnly)
 {
-    int rowCount = numRows();
-    for (int i(0); i < rowCount; i++)
+    int rCount = rowCount();
+    for (int i(0); i < rCount; i++)
     {
+/*
         item(i, 0)->setReplaceable(!isReadOnly);
         item(i, 1)->setReplaceable(!isReadOnly);
         if(!isReadOnly)
             item(i, 2)->setReplaceable(false);
         setRowReadOnly(i, isReadOnly);
-
+*/
+        if(isReadOnly)
+        {
+            item(i, 0)->setFlags(item(i, 0)->flags() & (~Qt::ItemIsEditable));
+            item(i, 1)->setFlags(item(i, 1)->flags() & (~Qt::ItemIsEditable));
+        }
+        else
+        {
+            item(i, 0)->setFlags(item(i, 0)->flags() | (Qt::ItemIsEditable));
+            item(i, 1)->setFlags(item(i, 1)->flags() | (Qt::ItemIsEditable));
+        }
+        if(!isReadOnly)
+            item(i, 2)->setFlags(item(i, 2)->flags() & (~Qt::ItemIsEditable));
     }
 }

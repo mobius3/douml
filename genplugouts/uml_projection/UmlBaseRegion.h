@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlRegion;
 class UmlState;
@@ -25,7 +25,7 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseRegion(void * id, const Q3CString & s) : UmlItem(id, s) {
+    UmlBaseRegion(void * id, const QByteArray & s) : UmlItem(id, s) {
     }
 
 };

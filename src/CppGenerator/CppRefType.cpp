@@ -36,7 +36,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+////
 
 // not in case of a dependency => external class in h
 bool CppRefType::add(const UmlTypeSpec & t, QList<CppRefType *> & l,
@@ -89,7 +89,7 @@ bool CppRefType::add(const WrapperStr & t, QList<CppRefType *> & l, bool incl)
     if (t.isEmpty())
         return FALSE;
 
-    static Q3Dict<char> cpp_builtin_types;
+    static QHash<QString,char*> cpp_builtin_types;
 
     if (cpp_builtin_types.count() == 0) {
         cpp_builtin_types.insert("unsigned", " ");
@@ -235,9 +235,9 @@ void CppRefType::compute(QList<CppRefType *> & dependencies,
                 else if ((index = hform.find("${Name}")) != -1)
                     hform.replace(index, 7, capitalize(cl->name()));
                 else if ((index = hform.find("${NAME}")) != -1)
-                    hform.replace(index, 7, cl->name().upper());
+                    hform.replace(index, 7, cl->name().upper().toLatin1().constData());
                 else if ((index = hform.find("${nAME}")) != -1)
-                    hform.replace(index, 7, cl->name().lower());
+                    hform.replace(index, 7, cl->name().lower().toLatin1().constData());
                 else
                     break;
             }

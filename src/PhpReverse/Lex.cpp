@@ -112,7 +112,7 @@ bool Lex::open(const QString & f)
 
     unsigned offset = 0;
 
-    do offset += in.readBlock(context.buffer + offset, sz - offset);
+    do offset += in.read(context.buffer + offset, sz - offset);
 
     while (offset != sz);
 
@@ -295,7 +295,7 @@ WrapperStr Lex::manage_operator(QString & result, int c)
 #ifdef TRACE
     QLOG_INFO() << "retourne '" << result << "'\n";
 #endif
-    return WrapperStr(result.toAscii().constData());
+    return WrapperStr(result.toLatin1().constData());
 }
 
 char Lex::bypass_operator(int c)
@@ -365,7 +365,7 @@ WrapperStr Lex::read_string()
             break;
 
         case '"':
-            return WrapperStr((result += c).toAscii().constData());
+            return WrapperStr((result += c).toLatin1().constData());
 
         default:
             result += c;
@@ -572,13 +572,13 @@ WrapperStr Lex::read_word()
         QLOG_INFO() << "retourne '" << result << "'\n";
 
 #endif
-    return WrapperStr(result.toAscii().constData());
+    return WrapperStr(result.toLatin1().constData());
 }
 
 char Lex::read_word_bis()
 {
     if (!context.reread.isEmpty()) {
-        char result = context.reread[0].latin1();
+        char result = context.reread[0].toLatin1();
 
         context.reread = QString();
         return result;
@@ -699,7 +699,7 @@ void Lex::finish_line()
 
 WrapperStr Lex::get_comments()
 {
-    WrapperStr result = WrapperStr(context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(context.comments.toLatin1().constData());
 
     context.comments = QString();
     return result;
@@ -707,7 +707,7 @@ WrapperStr Lex::get_comments()
 
 WrapperStr Lex::get_comments(WrapperStr & co)
 {
-    WrapperStr result = WrapperStr(context.comments.toAscii().constData());
+    WrapperStr result = WrapperStr(context.comments.toLatin1().constData());
 
     context.comments = QString();
 
@@ -718,7 +718,7 @@ WrapperStr Lex::get_comments(WrapperStr & co)
 
 WrapperStr Lex::get_description()
 {
-    WrapperStr result = WrapperStr(context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(context.description.toLatin1().constData());
 
     context.description = QString();
     return result;
@@ -726,7 +726,7 @@ WrapperStr Lex::get_description()
 
 WrapperStr Lex::get_description(WrapperStr & co)
 {
-    WrapperStr result = WrapperStr(context.description.toAscii().constData());
+    WrapperStr result = WrapperStr(context.description.toLatin1().constData());
 
     context.description = QString();
 
@@ -768,7 +768,7 @@ WrapperStr Lex::region()
 void Lex::syntax_error(WrapperStr s)
 {
     PhpCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
-                        + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                        + WrapperStr(context.filename.toLatin1().constData()) + "</i> line " +
                         WrapperStr().setNum(context.line_number) + " <b>"
                         + s + "</b></font><br>");
 
@@ -781,7 +781,7 @@ void Lex::syntax_error(WrapperStr s)
 void Lex::premature_eof()
 {
     PhpCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
-                        + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                        + WrapperStr(context.filename.toLatin1().constData()) + "</i> line " +
                         WrapperStr().setNum(context.line_number) +
                         " <b>premature eof</b></font><br>");
 
@@ -794,7 +794,7 @@ void Lex::premature_eof()
 void Lex::error_near(WrapperStr s)
 {
     PhpCatWindow::trace(WrapperStr("<font face=helvetica>syntax error in <i> ")
-                        + WrapperStr(context.filename.toAscii().constData()) + "</i> line " +
+                        + WrapperStr(context.filename.toLatin1().constData()) + "</i> line " +
                         WrapperStr().setNum(context.line_number) + " <b>near <font color =\"red\">"
                         + quote(s) + "</font></b></font><br>");
 

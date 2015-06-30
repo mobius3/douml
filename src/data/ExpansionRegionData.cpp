@@ -59,7 +59,7 @@ ExpansionRegionData::~ExpansionRegionData()
 
 void ExpansionRegionData::edit()
 {
-    setName(browser_node->get_name());
+    setObjectName(browser_node->get_name());
 
     (new ExpansionRegionDialog(this))->show();
 }

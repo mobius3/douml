@@ -31,7 +31,7 @@
 
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -100,6 +100,7 @@ void UcUseCaseCanvas::draw(QPainter & p)
     if (! visible()) return;
 
     QRect r = rect();
+    QBrush  backbrush = p.background();
     UseCaseData * data = (UseCaseData *) browser_node->get_data();
     p.setRenderHint(QPainter::Antialiasing, true);
     used_color = (itscolor == UmlDefaultColor)
@@ -183,10 +184,11 @@ void UcUseCaseCanvas::draw(QPainter & p)
 
         int h = (height() * 3) / 4 - two;
         int w = width() - dx - dx;
-        QColor bckgrnd = p.backgroundColor();
+        QColor bckgrnd = p.background().color();
 
         py += two;
-        p.setBackgroundColor(col);
+        backbrush.setColor(col);
+        p.setBackground(backbrush);
         p.setFont(the_canvas()->get_font(UmlNormalBoldFont));
 
         p.drawText(px, py, w, h, ::Qt::AlignHCenter + ::Qt::AlignTop,
@@ -203,7 +205,8 @@ void UcUseCaseCanvas::draw(QPainter & p)
             py += he;
             p.setFont(the_canvas()->get_font(UmlNormalFont));
             p.drawText(px, py, w, h, ::Qt::AlignCenter, ep);
-            p.setBackgroundColor(bckgrnd);
+            backbrush.setColor(bckgrnd);
+            p.setBackground(backbrush);
 
             if (fp != 0)
                 draw_text(px, py, w, h, ::Qt::AlignCenter, ep, p.font(), fp);
@@ -218,8 +221,11 @@ void UcUseCaseCanvas::draw(QPainter & p)
     if (selected())
         show_mark(p, rect());
 }
-
-UmlCode UcUseCaseCanvas::type() const
+void UcUseCaseCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode UcUseCaseCanvas::typeUmlCode() const
 {
     return UmlUseCase;
 }
@@ -293,50 +299,53 @@ void UcUseCaseCanvas::post_loaded()
 
 void UcUseCaseCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem("Upper", 0);
-    m.insertItem("Lower", 1);
-    m.insertItem("Go up", 13);
-    m.insertItem("Go down", 14);
-    m.insertSeparator();
-    m.insertItem("Add related elements", 10);
-    m.insertSeparator();
-    m.insertItem("Edit", 2);
-    m.insertSeparator();
-    m.insertItem("Edit drawing settings", 3);
-    m.insertSeparator();
-    m.insertItem("Select in browser", 4);
+    m.addSeparator();
+    MenuFactory::addItem(m, "Upper", 0);
+    MenuFactory::addItem(m, "Lower", 1);
+    MenuFactory::addItem(m, "Go up", 13);
+    MenuFactory::addItem(m, "Go down", 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, "Add related elements", 10);
+    m.addSeparator();
+    MenuFactory::addItem(m, "Edit", 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, "Edit drawing settings", 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, "Select in browser", 4);
 
     if (linked())
-        m.insertItem("Select linked items", 5);
+        MenuFactory::addItem(m, "Select linked items", 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
             (BrowserNode *) the_canvas()->browser_diagram())
-            m.insertItem("Set associated diagram", 6);
+            MenuFactory::addItem(m, "Set associated diagram", 6);
 
         if (browser_node->get_associated())
-            m.insertItem("Remove diagram association", 9);
+            MenuFactory::addItem(m, "Remove diagram association", 9);
     }
 
-    m.insertSeparator();
-    m.insertItem("Remove from diagram", 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, "Remove from diagram", 7);
 
     if (browser_node->is_writable())
-        m.insertItem("Delete from model", 8);
+        MenuFactory::addItem(m, "Delete from model", 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlUseCase, 20))
-        m.insertItem("Tool", &toolm);
+        MenuFactory::insertItem(m, "Tool", &toolm);
 
-    int rank = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int rank = retAction->data().toInt();
 
     switch (rank) {
     case 0:
@@ -406,6 +415,7 @@ void UcUseCaseCanvas::menu(const QPoint &)
             ToolCom::run(Tool::command(rank - 20), browser_node);
 
         return;
+    }
     }
 
     package_modified();
@@ -525,7 +535,7 @@ QString UcUseCaseCanvas::may_connect(UmlCode & l, const DiagramItem * dest) cons
     if (l == UmlAnchor)
         return dest->may_start(l);
 
-    switch (dest->type()) {
+    switch (dest->typeUmlCode()) {
     case UmlUseCase:
         switch (l) {
         case UmlInherit:
@@ -642,7 +652,7 @@ UcUseCaseCanvas * UcUseCaseCanvas::read(char *& st, UmlCanvas * canvas, char * k
         k = read_keyword(st);
         result->update_name();
         read_xy(st, result->label);
-        result->label->setZ(result->z() + 0.5);
+        result->label->setZValue(result->zValue() + 0.5);
         result->label->set_center100();
 
         if (!strcmp(k, "label_xyz"))
@@ -669,7 +679,7 @@ UcUseCaseCanvas * UcUseCaseCanvas::read(char *& st, UmlCanvas * canvas, char * k
 
 void UcUseCaseCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
     disconnect(browser_node->get_data(), 0, this, 0);
 }
@@ -693,7 +703,7 @@ void UcUseCaseCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(DrawingSettings::instance(), SIGNAL(changed()), this, SLOT(modified()));
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
@@ -702,17 +712,17 @@ void UcUseCaseCanvas::history_load(QBuffer & b)
 
 // for plug outs
 
-void UcUseCaseCanvas::send(ToolCom * com, Q3CanvasItemList & all)
+void UcUseCaseCanvas::send(ToolCom * com, QList<QGraphicsItem*> & all)
 {
     QList<UcUseCaseCanvas *> lu;
     QList<UcClassCanvas *> la;
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*>::Iterator cit;
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
         DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
-        if ((di != 0) && (*cit)->visible()) {
-            switch (di->type()) {
+        if ((di != 0) && (*cit)->isVisible()) {
+            switch (di->typeUmlCode()) {
             case UmlUseCase:
                 lu.append((UcUseCaseCanvas *) di);
                 break;
@@ -753,9 +763,9 @@ void UcUseCaseCanvas::send(ToolCom * com, Q3CanvasItemList & all)
             DiagramItem * from = r->get_start();
             DiagramItem * to = r->get_end();
 
-            if ((from->type() == UmlUseCase)
-                ? (to->type() == UmlClass)
-                : (from->type() == UmlClass))
+            if ((from->typeUmlCode() == UmlUseCase)
+                ? (to->typeUmlCode() == UmlClass)
+                : (from->typeUmlCode() == UmlClass))
                 lr.append(r);
         }
     }

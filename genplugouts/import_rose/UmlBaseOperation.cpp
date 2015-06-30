@@ -7,8 +7,8 @@
 #include "UmlBaseClass.h"
 #include "UmlClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
-#include <Q3ValueList>
+#include <QByteArray>
+#include <QList>
 UmlOperation * UmlBaseOperation::create(UmlClass * parent, const char * s)
 {
     return (UmlOperation *) parent->create_(anOperation, s);
@@ -54,7 +54,7 @@ bool UmlBaseOperation::set_ReturnType(const UmlTypeSpec & t)
     return set_it_(_return_type, t, setReturnTypeCmd);
 }
 
-const Q3ValueList<UmlParameter> UmlBaseOperation::params()
+const QList<UmlParameter> UmlBaseOperation::params()
 {
     read_if_needed_();
 
@@ -68,7 +68,7 @@ bool UmlBaseOperation::addParameter(unsigned rank, const UmlParameter & p)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _params.insert(_params.at(rank), p);
+            _params.insert(rank, p);
 
         return TRUE;
     }
@@ -82,7 +82,7 @@ bool UmlBaseOperation::removeParameter(unsigned rank)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _params.remove(_params.at(rank));
+            _params.removeAt(rank);
 
         return TRUE;
     }
@@ -105,7 +105,7 @@ bool UmlBaseOperation::replaceParameter(unsigned rank, const UmlParameter & p)
         return FALSE;
 }
 
-const Q3ValueList<UmlTypeSpec> UmlBaseOperation::exceptions()
+const QList<UmlTypeSpec> UmlBaseOperation::exceptions()
 {
     read_if_needed_();
 
@@ -118,7 +118,7 @@ bool UmlBaseOperation::addException(unsigned rank, const UmlTypeSpec & t)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _exceptions.insert(_exceptions.at(rank), t);
+            _exceptions.insert(rank, t);
 
         return TRUE;
     }
@@ -132,7 +132,7 @@ bool UmlBaseOperation::removeException(unsigned rank)
 
     if (UmlCom::read_bool()) {
         if (_defined)
-            _exceptions.remove(_exceptions.at(rank));
+            _exceptions.removeAt(rank);
 
         return TRUE;
     }
@@ -245,7 +245,7 @@ bool UmlBaseOperation::set_isCppInline(bool y)
         return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::cppDef()
+const QByteArray & UmlBaseOperation::cppDef()
 {
     read_if_needed_();
 
@@ -257,7 +257,7 @@ bool UmlBaseOperation::set_CppDef(const char * s)
     return set_it_(_cpp_def, s, setCppDefCmd);
 }
 
-Q3CString UmlBaseOperation::cppBody()
+QByteArray UmlBaseOperation::cppBody()
 {
     // not memorized in the instance for memory size reason
     UmlCom::send_cmd(_identifier, cppBodyCmd);
@@ -271,7 +271,7 @@ bool UmlBaseOperation::set_CppBody(const char * s)
     return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::cppNameSpec()
+const QByteArray & UmlBaseOperation::cppNameSpec()
 {
     read_if_needed_();
 
@@ -323,7 +323,7 @@ bool UmlBaseOperation::set_isJavaSynchronized(bool y)
         return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::javaDef()
+const QByteArray & UmlBaseOperation::javaDef()
 {
     return javaDecl();
 }
@@ -333,7 +333,7 @@ bool UmlBaseOperation::set_JavaDef(const char * s)
     return set_JavaDecl(s);
 }
 
-Q3CString UmlBaseOperation::javaBody()
+QByteArray UmlBaseOperation::javaBody()
 {
     // not memorized in the instance for memory size reason
     UmlCom::send_cmd(_identifier, javaBodyCmd);
@@ -347,7 +347,7 @@ bool UmlBaseOperation::set_JavaBody(const char * s)
     return UmlCom::read_bool();
 }
 
-const Q3CString & UmlBaseOperation::javaNameSpec()
+const QByteArray & UmlBaseOperation::javaNameSpec()
 {
     read_if_needed_();
 
@@ -380,7 +380,7 @@ bool UmlBaseOperation::set_isIdlOneway(bool y)
         return FALSE;
 }
 
-const Q3CString & UmlBaseOperation::idlNameSpec()
+const QByteArray & UmlBaseOperation::idlNameSpec()
 {
     read_if_needed_();
 
@@ -404,6 +404,9 @@ void UmlBaseOperation::unload(bool rec, bool del)
 #endif
 #ifdef WITHJAVA
     _java_name_spec = 0;
+#endif
+#ifdef WITHPHP
+    _php_name_spec = 0;
 #endif
 #ifdef WITHIDL
     _idl_name_spec = 0;
@@ -459,13 +462,15 @@ void UmlBaseOperation::read_cpp_()
     _cpp_const = UmlCom::read_bool();
     _cpp_friend = UmlCom::read_bool();
     _cpp_virtual = UmlCom::read_bool();
-  _cpp_inline = UmlCom::read_bool();
-  _cpp_default = UmlCom::read_bool();
-  _cpp_delete = UmlCom::read_bool();
-  _cpp_override = UmlCom::read_bool();
-  _cpp_final = UmlCom::read_bool();
-  _cpp_def = UmlCom::read_string();
+    _cpp_inline = UmlCom::read_bool();
+    _cpp_default = UmlCom::read_bool();
+    _cpp_delete = UmlCom::read_bool();
+    _cpp_override = UmlCom::read_bool();
+    _cpp_final = UmlCom::read_bool();
+    _cpp_def = UmlCom::read_string();
     _cpp_name_spec = UmlCom::read_string();
+    _cpp_get_set_frozen = UmlCom::read_bool();
+    _cpp_contextual_body_indent = UmlCom::read_bool();
 }
 #endif
 
@@ -476,6 +481,29 @@ void UmlBaseOperation::read_java_()
     _java_final = UmlCom::read_bool();
     _java_synchronized = UmlCom::read_bool();
     _java_name_spec = UmlCom::read_string();
+    _java_get_set_frozen = UmlCom::read_bool();
+    _java_contextual_body_indent = UmlCom::read_bool();
+}
+#endif
+#ifdef WITHPHP
+void UmlBaseOperation::read_php_()
+{
+    UmlBaseClassMember::read_php_();
+    _php_final = UmlCom::read_bool();
+    _php_name_spec = UmlCom::read_string();
+    _php_get_set_frozen = UmlCom::read_bool();
+    _php_contextual_body_indent = UmlCom::read_bool();
+}
+#endif
+
+#ifdef WITHPYTHON
+void UmlBaseOperation::read_python_()
+{
+    UmlBaseClassMember::read_python_();
+    _python_decorators = UmlCom::read_string();
+    _python_name_spec = UmlCom::read_string();
+    _python_get_set_frozen = UmlCom::read_bool();
+    _python_contextual_body_indent = UmlCom::read_bool();
 }
 #endif
 
@@ -485,6 +513,7 @@ void UmlBaseOperation::read_idl_()
     UmlBaseClassMember::read_idl_();
     _idl_oneway = UmlCom::read_bool();
     _idl_name_spec = UmlCom::read_string();
+    _idl_get_set_frozen = UmlCom::read_bool();
 }
 #endif
 

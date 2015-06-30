@@ -5,7 +5,7 @@
 
 void UmlStateAction::memo_incoming_trans()
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 

@@ -29,7 +29,7 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -108,17 +108,17 @@ bool ActivityNodeCanvas::force_inside()
 {
     // if its activity is present, force inside it
 
-    Q3CanvasItemList all = the_canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = the_canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
     BrowserNode * parent = (BrowserNode *) browser_node->parent();
 
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if ((di != 0) &&
-                IsaActivityContainer(di->type()) &&
-                (((ActivityContainerCanvas *) di)->get_bn() == parent)) {
+                    IsaActivityContainer(di->typeUmlCode()) &&
+                    (((ActivityContainerCanvas *) di)->get_bn() == parent)) {
                 ((ActivityContainerCanvas *) di)->force_inside(this, this);
                 return TRUE;
             }
@@ -148,16 +148,16 @@ void ActivityNodeCanvas::set_xpm()
     case DecisionAN:
     case MergeAN:
         xpm = (the_canvas()->shadow() == 0)
-              ? ((big) ? choiceBigPixmap : choicePixmap)
-                  : ((big) ? choiceShadowBigPixmap : choiceShadowPixmap);
+                ? ((big) ? choiceBigPixmap : choicePixmap)
+                : ((big) ? choiceShadowBigPixmap : choiceShadowPixmap);
         break;
 
     case ForkAN:
     case JoinAN:
         if (!manual_size) {
             xpm = (horiz)
-                  ? ((big) ? joinForkHorizBigPixmap : joinForkHorizPixmap)
-                      : ((big) ? joinForkBigPixmap : joinForkPixmap);
+                    ? ((big) ? joinForkHorizBigPixmap : joinForkHorizPixmap)
+                    : ((big) ? joinForkBigPixmap : joinForkPixmap);
             break;
         }
 
@@ -167,12 +167,12 @@ void ActivityNodeCanvas::set_xpm()
         return;
     }
 
-    setSize(xpm->width(), xpm->height());
+    setRect(0,0,xpm->width(), xpm->height());
 }
 
 void ActivityNodeCanvas::change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
 
     if (manual_size) {
         double scale = the_canvas()->zoom();
@@ -183,7 +183,7 @@ void ActivityNodeCanvas::change_scale()
             if (w < MIN_FORK_JOIN_LARGESIDE)
                 w = MIN_FORK_JOIN_LARGESIDE;
 
-            setSize(w | 1, FORK_JOIN_SMALLSIDE);
+            setRect(0,0,w | 1, FORK_JOIN_SMALLSIDE);
         }
         else {
             int h = (int)(height_scale100 * scale);
@@ -191,7 +191,7 @@ void ActivityNodeCanvas::change_scale()
             if (h < MIN_FORK_JOIN_LARGESIDE)
                 h = MIN_FORK_JOIN_LARGESIDE;
 
-            setSize(FORK_JOIN_SMALLSIDE, h | 1);
+            setRect(0,0,FORK_JOIN_SMALLSIDE, h | 1);
         }
 
         DiagramCanvas::resize(width(), height());
@@ -201,7 +201,7 @@ void ActivityNodeCanvas::change_scale()
         set_xpm();
 
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 aCorner ActivityNodeCanvas::on_resize_point(const QPoint & p)
@@ -297,7 +297,7 @@ void ActivityNodeCanvas::post_loaded()
 
 void ActivityNodeCanvas::draw(QPainter & p)
 {
-    if (!visible() || ((xpm == 0) && !manual_size)) return;
+    if (!isVisible() || ((xpm == 0) && !manual_size)) return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
@@ -349,18 +349,18 @@ void ActivityNodeCanvas::draw(QPainter & p)
         case ActivityFinalAN:
             if (big) {
                 fprintf(fp, "<g>\n"
-                        "\t<ellipse fill=\"white\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" cx=\"%d\" cy=\"%d\" rx=\"11.5\" ry=\"11.5\" />\n",
+                            "\t<ellipse fill=\"white\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" cx=\"%d\" cy=\"%d\" rx=\"11.5\" ry=\"11.5\" />\n",
                         px + 12, py + 12);
                 fprintf(fp, "\t<ellipse fill=\"black\" cx=\"%d\" cy=\"%d\" rx=\"8.5\" ry=\"8.5\" />\n"
-                        "</g>\n",
+                            "</g>\n",
                         px + 12, py + 12);
             }
             else {
                 fprintf(fp, "<g>\n"
-                        "\t<ellipse fill=\"white\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" cx=\"%d\" cy=\"%d\" rx=\"7.5\" ry=\"7.5\" />\n",
+                            "\t<ellipse fill=\"white\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" cx=\"%d\" cy=\"%d\" rx=\"7.5\" ry=\"7.5\" />\n",
                         px + 8, py + 8);
                 fprintf(fp, "\t<ellipse fill=\"black\" cx=\"%d\" cy=\"%d\" rx=\"4.5\" ry=\"4.5\" />\n"
-                        "</g>\n",
+                            "</g>\n",
                         px + 8, py + 8);
             }
 
@@ -369,22 +369,22 @@ void ActivityNodeCanvas::draw(QPainter & p)
         case FlowFinalAN:
             if (big) {
                 fprintf(fp, "<g>\n"
-                        "\t<ellipse fill=\"white\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" cx=\"%d\" cy=\"%d\" rx=\"8.5\" ry=\"8.5\" />\n",
+                            "\t<ellipse fill=\"white\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" cx=\"%d\" cy=\"%d\" rx=\"8.5\" ry=\"8.5\" />\n",
                         px + 9, py + 9);
                 fprintf(fp, "\t<line stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
                         px + 4, py + 4, px + 14, py + 14);
                 fprintf(fp, "\t<line stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
-                        "</g>\n",
+                            "</g>\n",
                         px + 14, py + 4, px + 4, py + 14);
             }
             else {
                 fprintf(fp, "<g>\n"
-                        "\t<ellipse fill=\"white\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" cx=\"%d\" cy=\"%d\" rx=\"5.5\" ry=\"5.5\" />\n",
+                            "\t<ellipse fill=\"white\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" cx=\"%d\" cy=\"%d\" rx=\"5.5\" ry=\"5.5\" />\n",
                         px + 7, py + 7);
                 fprintf(fp, "\t<line stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
                         px + 4, py + 4, px + 10, py + 10);
                 fprintf(fp, "\t<line stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\" x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n"
-                        "</g>\n",
+                            "</g>\n",
                         px + 10, py + 4, px + 4, py + 10);
             }
 
@@ -435,8 +435,11 @@ void ActivityNodeCanvas::draw(QPainter & p)
         }
     }
 }
-
-UmlCode ActivityNodeCanvas::type() const
+void ActivityNodeCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode ActivityNodeCanvas::typeUmlCode() const
 {
     return browser_node->get_type();
 }
@@ -464,116 +467,120 @@ void ActivityNodeCanvas::open()
 
 void ActivityNodeCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
     int index;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
 
     switch (browser_node->get_type()) {
     case ForkAN:
     case JoinAN:
-        m.insertItem((horiz) ? TR("draw vertically") : TR("draw horizontally"), 2);
-        m.insertSeparator();
+        MenuFactory::addItem(m, (horiz) ? TR("draw vertically") : TR("draw horizontally"), 2);
+        m.addSeparator();
         break;
 
     default:
         break;
     }
 
-    /*m.insertItem("Edit drawing settings", 2);
-    m.insertSeparator();*/
-    m.insertItem(TR("Edit activity node"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    /*MenuFactory::addItem(m, "Edit drawing settings", 2);
+    m.addSeparator();*/
+    MenuFactory::addItem(m, TR("Edit activity node"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
     /*if (browser_node->is_writable())
       if (browser_node->get_associated() !=
     (BrowserNode *) the_canvas()->browser_diagram())
-        m.insertItem("Set associated diagram",6);
-    m.insertSeparator();*/
-    m.insertItem(TR("Remove from diagram"), 7);
+        MenuFactory::addItem(m, "Set associated diagram",6);
+    m.addSeparator();*/
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, browser_node->get_type(), 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    switch (index = m.exec(QCursor::pos())) {
-    case 0:
-        upper();
-        modified();	// call package_modified()
-        return;
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        switch (index = retAction->data().toInt()) {
+        case 0:
+            upper();
+            modified();	// call package_modified()
+            return;
 
-    case 1:
-        lower();
-        modified();	// call package_modified()
-        return;
+        case 1:
+            lower();
+            modified();	// call package_modified()
+            return;
 
-    case 13:
-        z_up();
-        modified();	// call package_modified()
-        return;
+        case 13:
+            z_up();
+            modified();	// call package_modified()
+            return;
 
-    case 14:
-        z_down();
-        modified();	// call package_modified()
-        return;
+        case 14:
+            z_down();
+            modified();	// call package_modified()
+            return;
 
-    case 2:
-        horiz ^= TRUE;
+        case 2:
+            horiz ^= TRUE;
 
-        if (!manual_size)
-            set_xpm();
-        else {
-            setSize(height(), width());
-            DiagramCanvas::resize(width(), height());
+            if (!manual_size)
+                set_xpm();
+            else {
+                setRect(0,0,height(), width());
+                DiagramCanvas::resize(width(), height());
+            }
+
+            modified();	// call package_modified()
+            return;
+
+        case 3:
+            browser_node->open(TRUE);
+            return;
+
+        case 4:
+            browser_node->select_in_browser();
+            return;
+
+        case 5:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
+
+        case 7:
+            //remove from diagram
+            delete_it();
+            break;
+
+        case 8:
+            //delete from model
+            browser_node->delete_it();	// will delete the canvas
+            break;
+
+        default:
+            if (index >= 20)
+                ToolCom::run(Tool::command(index - 20), browser_node);
+
+            return;
         }
-
-        modified();	// call package_modified()
-        return;
-
-    case 3:
-        browser_node->open(TRUE);
-        return;
-
-    case 4:
-        browser_node->select_in_browser();
-        return;
-
-    case 5:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
-
-    case 7:
-        //remove from diagram
-        delete_it();
-        break;
-
-    case 8:
-        //delete from model
-        browser_node->delete_it();	// will delete the canvas
-        break;
-
-    default:
-        if (index >= 20)
-            ToolCom::run(Tool::command(index - 20), browser_node);
-
-        return;
     }
 
     package_modified();
@@ -669,7 +676,7 @@ void ActivityNodeCanvas::save(QTextStream & st, bool ref, QString & warning) con
 }
 
 ActivityNodeCanvas * ActivityNodeCanvas::read(char *& st, UmlCanvas * canvas,
-        char * k)
+                                              char * k)
 {
     if (!strcmp(k, "activitynodecanvas_ref"))
         return ((ActivityNodeCanvas *) dict_get(read_id(st), "ActivityNodeCanvas", canvas));
@@ -738,7 +745,7 @@ ActivityNodeCanvas * ActivityNodeCanvas::read(char *& st, UmlCanvas * canvas,
 
 void ActivityNodeCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     disconnect(browser_node->get_data(), 0, this, 0);
 }
 
@@ -772,7 +779,7 @@ void ActivityNodeCanvas::history_load(QBuffer & b)
 
         ::load(w, b);
         ::load(h, b);
-        Q3CanvasRectangle::setSize(w, h);
+        QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
     }
 
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));

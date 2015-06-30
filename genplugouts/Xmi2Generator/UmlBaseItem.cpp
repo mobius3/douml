@@ -117,7 +117,7 @@ UmlItem * UmlBaseItem::parent()
     return _parent;
 }
 
-const Q3PtrVector<UmlItem> UmlBaseItem::children()
+const QVector<UmlItem*> UmlBaseItem::children()
 {
     if (_children == 0)
         read_children_();
@@ -173,7 +173,7 @@ bool UmlBaseItem::set_PropertyValue(const WrapperStr & k, const WrapperStr & v)
         return FALSE;
 }
 
-const Q3Dict<WrapperStr> UmlBaseItem::properties()
+const QHash<WrapperStr, WrapperStr *> UmlBaseItem::properties()
 {
     read_if_needed_();
 
@@ -222,11 +222,11 @@ bool UmlBaseItem::set_isMarked(bool y)
     return set_it_(_marked, y, setMarkedCmd);
 }
 
-const Q3PtrVector<UmlItem> UmlBaseItem::referencedBy()
+const QVector<UmlItem*> UmlBaseItem::referencedBy()
 {
     UmlCom::send_cmd(_identifier, referencedByCmd);
 
-    Q3PtrVector<UmlItem> result;
+    QVector<UmlItem*> result;
 
     UmlCom::read_item_list(result);
     return result;
@@ -277,17 +277,17 @@ bool UmlBaseItem::isToolRunning(int id)
     return UmlCom::read_bool();
 }
 
-const Q3PtrVector<UmlItem> UmlBaseItem::markedItems()
+const QVector<UmlItem*> UmlBaseItem::markedItems()
 {
     UmlCom::send_cmd(miscGlobalCmd, allMarkedCmd);
 
-    Q3PtrVector<UmlItem> result;
+    QVector<UmlItem*> result;
 
     UmlCom::read_item_list(result);
     return result;
 }
 
-Q3PtrDict<UmlItem> UmlBaseItem::_all(997);
+QHash<void*,UmlItem*> UmlBaseItem::_all;
 
 void UmlBaseItem::read_if_needed_()
 {
@@ -415,7 +415,7 @@ void UmlBaseItem::read_idl_()
 void UmlBaseItem::read_children_()
 {
     UmlCom::send_cmd(_identifier, childrenCmd);
-    _children = new Q3PtrVector<UmlItem>;
+    _children = new QVector<UmlItem*>;
 
     UmlCom::read_item_list(*_children);
 
@@ -509,7 +509,7 @@ UmlItem * UmlBaseItem::read_()
     //cout << "UmlBaseItem::read id " << id << " kind " << kind << " name " << name << '\n';
 #endif
 
-    UmlItem * result = _all[id];
+    UmlItem * result = _all.value(id, 0);
 
     if (result == 0) {
         switch (kind) {
@@ -762,7 +762,7 @@ UmlBaseItem::UmlBaseItem(void * id, const WrapperStr & n)
     _all.insert(id, (UmlItem *) this);
 
     if (_all.count() / _all.size() > 10)
-        _all.resize(_all.size() * 2 - 1);
+        _all.reserve(_all.size() * 2 - 1);
 }
 
 UmlBaseItem::~UmlBaseItem()

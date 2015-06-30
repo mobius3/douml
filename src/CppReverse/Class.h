@@ -32,11 +32,9 @@
 #include "ClassContainer.h"
 #include "UmlClass.h"
 #include "Namespace.h"
-//Added by qt3to4:
 #include <QPixmap>
 #include "misc/mystr.h"
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include <QList>
 
 enum class ESwitchKeyword
 {
@@ -68,7 +66,7 @@ protected:
     NDict<Class> defined;
 
     ESwitchKeyword manage_operation(WrapperStr& s,WrapperStr& type, WrapperStr& name,
-                                             const Q3ValueList<FormalParameterList> &tmplts, WrapperStr& modifier, WrapperStr& pretype,
+                                             const QList<FormalParameterList> &tmplts, WrapperStr& modifier, WrapperStr& pretype,
                                            bool& inlinep,bool& virtualp,bool& staticp,bool& constp,
                                            bool& volatilep, bool explicitp, bool friendp,bool typenamep, aVisibility& visibility,
                                            WrapperStr& friend_template, WrapperStr& comment, WrapperStr& description
@@ -151,7 +149,7 @@ public:
 
     static Class * reverse(ClassContainer * container,
                            WrapperStr stereotype,
-                           const Q3ValueList<FormalParameterList> & tmplt,
+                           const QList<FormalParameterList> & tmplt,
                            const WrapperStr & path, WrapperStr name
 #ifdef ROUNDTRIP
                            , bool rndtrp, QList<UmlItem *> & expectedorder
@@ -165,7 +163,7 @@ public:
 #endif
                                );
     static bool reverse_typedef(ClassContainer * container, const WrapperStr & path,
-                                Q3ValueList<FormalParameterList> & tmplts
+                                QList<FormalParameterList> & tmplts
 #ifdef ROUNDTRIP
                                 , bool rndtrp, QList<UmlItem *> & expectedorder
 #endif

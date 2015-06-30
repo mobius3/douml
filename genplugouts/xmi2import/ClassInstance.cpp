@@ -10,7 +10,7 @@
 #include "UmlCom.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
+#include <QList>
 void ClassInstance::init()
 {
     UmlItem::declareFct("ownedmember", "uml:InstanceSpecification", &importIt);
@@ -62,9 +62,9 @@ void ClassInstance::solveThem()
     // an other to set the value of a relation
 
     ClassInstance * cli;
-    Q3PtrList<UmlClassInstance> insts;
+    QList<UmlClassInstance*> insts;
 
-    for (cli = All.first(); cli != 0; cli = All.next()) {
+    foreach (cli, All) {
         QMap<QString, UmlItem *>::Iterator it;
 
         it = UmlItem::All.find(cli->classifierId);
@@ -94,15 +94,15 @@ void ClassInstance::solveThem()
     while (! All.isEmpty()) {
         QMap<QString, UmlItem *>::Iterator it;
 
-        cli = All.take(0);
+        cli = All.takeAt(0);
 
         it = UmlItem::All.find(cli->id);
 
         if (it != UmlItem::All.end()) {
             // class instance ok
             UmlClassInstance * inst = (UmlClassInstance *) *it;
-            Q3ValueList<Slot> & l = cli->bindings;
-            Q3ValueList<Slot>::Iterator itsl;
+            QList<Slot> & l = cli->bindings;
+            QList<Slot>::Iterator itsl;
 
             for (itsl = l.begin(); itsl != l.end(); ++itsl) {
                 Slot & slot = *itsl;
@@ -151,7 +151,7 @@ void ClassInstance::solveThem()
     }
 }
 
-Q3PtrList<ClassInstance> ClassInstance::All;
+QList<ClassInstance*> ClassInstance::All;
 
 void ClassInstance::Slot::importIt(FileIn & in, Token & token)
 {

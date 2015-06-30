@@ -30,13 +30,12 @@
 
 
 #include <qapplication.h>
-#include <qworkspace.h>
-#include <q3toolbar.h>
+#include <QMdiArea>
+#include <QToolBar.h>
 #include <qtoolbutton.h>
-#include <q3whatsthis.h>
+#include <qwhatsthis.h>
 #include <qlayout.h>
 #include <qspinbox.h>
-
 #include "UmlWindow.h"
 #include "DeploymentDiagramWindow.h"
 #include "DeploymentDiagramView.h"
@@ -44,25 +43,26 @@
 #include "UmlPixmap.h"
 #include "myio.h"
 #include "translate.h"
+#include "toolbarfactory.h"
 
 QString adddeploymentnodeText()
 {
-    return TR("Click this button to add a <i>node</i> in the diagram. <br><br>"
+    return  QObject::tr("Click this button to add a <i>node</i> in the diagram. <br><br>"
               "You can also drop the node from the <b>browser</b>.");
 }
 extern QString addpackageText();
 extern QString addfragmentText();
 QString networkText()
 {
-    return TR("Click this button to add a <i>network</i> in the diagram.");
+    return  QObject::tr("Click this button to add a <i>network</i> in the diagram.");
 }
 QString hubText()
 {
-    return TR("Click this button to add a <i>network connexion/ending</i> in the diagram.");
+    return  QObject::tr("Click this button to add a <i>network connexion/ending</i> in the diagram.");
 }
 QString addartifactText()
 {
-    return TR("Click this button to add an <i>artifact</i> in the diagram.");
+    return  QObject::tr("Click this button to add an <i>artifact</i> in the diagram.");
 }
 extern QString addcomponentText();
 extern QString dependencyText();
@@ -77,101 +77,103 @@ extern QString imageText();
 DeploymentDiagramWindow::DeploymentDiagramWindow(const QString & s, BrowserDeploymentDiagram * b, int id)
     : DiagramWindow(b, s), view(0)
 {
-    Q3ToolBar * toolbar = new Q3ToolBar(this, "deployment operations");
-    addToolBar(toolbar, TR("Toolbar"), Qt::DockTop, TRUE);
+    QToolBar * toolbar = new QToolBar("deployment operations", this);
+    toolbar->setMinimumHeight(50);
+    toolbar->setOrientation(Qt::Horizontal);
+    addToolBar(Qt::TopToolBarArea, toolbar);
 
     add_edit_button(toolbar);
 
     select =
-        new QToolButton(*selectButton, TR("Select"), QString(),
+        ToolBarFactory::createToolButton(*selectButton, TR("Select"), QString(),
                         this, SLOT(hit_select()), toolbar, "select");
-    select->setToggleButton(TRUE);
-    select->setOn(TRUE);
+    select->setCheckable(TRUE);
+    select->setChecked(TRUE);
     current_button = UmlSelect;
 
     addPackage
-        = new QToolButton(*packageButton, TR("Add Package"), QString(),
+        = ToolBarFactory::createToolButton(*packageButton, TR("Add Package"), QString(),
                           this, SLOT(hit_package()), toolbar, "add package");
-    addPackage->setToggleButton(TRUE);
-    Q3WhatsThis::add(addPackage, addpackageText());
+    addPackage->setCheckable(TRUE);
+    addPackage->setWhatsThis(addpackageText());
 
     addFragment
-        = new QToolButton(*fragmentButton, TR("Add Fragment"), QString(),
+        = ToolBarFactory::createToolButton(*fragmentButton, TR("Add Fragment"), QString(),
                           this, SLOT(hit_fragment()), toolbar, "add fragment");
-    addFragment->setToggleButton(TRUE);
-    Q3WhatsThis::add(addFragment, addfragmentText());
+    addFragment->setCheckable(TRUE);
+    addFragment->setWhatsThis(addfragmentText());
 
     addDeploymentNode =
-        new QToolButton(*deploymentNodeButton, TR("Add Deployment Node"), QString(),
+        ToolBarFactory::createToolButton(*deploymentNodeButton, TR("Add Deployment Node"), QString(),
                         this, SLOT(hit_deploymentnode()), toolbar, "add deployment node");
-    addDeploymentNode->setToggleButton(TRUE);
-    Q3WhatsThis::add(addDeploymentNode, adddeploymentnodeText());
+    addDeploymentNode->setCheckable(TRUE);
+    addDeploymentNode->setWhatsThis(adddeploymentnodeText());
 
     addArtifact =
-        new QToolButton(*artifactButton, TR("Add Artifact"), QString(),
+        ToolBarFactory::createToolButton(*artifactButton, TR("Add Artifact"), QString(),
                         this, SLOT(hit_artifact()), toolbar, "add artifact");
-    addArtifact->setToggleButton(TRUE);
-    Q3WhatsThis::add(addArtifact, addartifactText());
+    addArtifact->setCheckable(TRUE);
+    addArtifact->setWhatsThis(addartifactText());
 
     addComponent =
-        new QToolButton(*componentButton, TR("Add Component"), QString(),
+        ToolBarFactory::createToolButton(*componentButton, TR("Add Component"), QString(),
                         this, SLOT(hit_component()), toolbar, "add component");
-    addComponent->setToggleButton(TRUE);
-    Q3WhatsThis::add(addComponent, addcomponentText());
+    addComponent->setCheckable(TRUE);
+    addComponent->setWhatsThis(addcomponentText());
 
     hub =
-        new QToolButton(*hubButton, TR("Network connexion/ending"), QString(),
+        ToolBarFactory::createToolButton(*hubButton, TR("Network connexion/ending"), QString(),
                         this, SLOT(hit_hub()), toolbar, "network connexion/ending");
-    hub->setToggleButton(TRUE);
-    Q3WhatsThis::add(hub, hubText());
+    hub->setCheckable(TRUE);
+    hub->setWhatsThis(hubText());
 
     network =
-        new QToolButton(*associationButton, TR("Network"), QString(),
+        ToolBarFactory::createToolButton(*associationButton, TR("Network"), QString(),
                         this, SLOT(hit_network()), toolbar, "network");
-    network->setToggleButton(TRUE);
-    Q3WhatsThis::add(network, networkText());
+    network->setCheckable(TRUE);
+    network->setWhatsThis(networkText());
 
     inherit =
-        new QToolButton(*generalisationButton, TR("Inheritance"), QString(),
+        ToolBarFactory::createToolButton(*generalisationButton, TR("Inheritance"), QString(),
                         this, SLOT(hit_inherit()), toolbar, "inheritance");
-    inherit->setToggleButton(TRUE);
-    Q3WhatsThis::add(inherit, inheritText());
+    inherit->setCheckable(TRUE);
+    inherit->setWhatsThis(inheritText());
 
     association =
-        new QToolButton(*directionalAssociationButton, TR("Association"), QString(),
+        ToolBarFactory::createToolButton(*directionalAssociationButton, TR("Association"), QString(),
                         this, SLOT(hit_association()), toolbar, "association");
-    association->setToggleButton(TRUE);
-    Q3WhatsThis::add(association, associationText());
+    association->setCheckable(TRUE);
+    association->setWhatsThis(associationText());
 
     dependency =
-        new QToolButton(*dependencyButton, TR("Dependency"), QString(),
+        ToolBarFactory::createToolButton(*dependencyButton, TR("Dependency"), QString(),
                         this, SLOT(hit_dependency()), toolbar, "dependency");
-    dependency->setToggleButton(TRUE);
-    Q3WhatsThis::add(dependency, dependencyText());
+    dependency->setCheckable(TRUE);
+    dependency->setWhatsThis(dependencyText());
 
     note =
-        new QToolButton(*noteButton, TR("Note"), QString(),
+        ToolBarFactory::createToolButton(*noteButton, TR("Note"), QString(),
                         this, SLOT(hit_note()), toolbar, "note");
-    note->setToggleButton(TRUE);
-    Q3WhatsThis::add(note, noteText());
+    note->setCheckable(TRUE);
+    note->setWhatsThis(noteText());
 
     anchor =
-        new QToolButton(*anchorButton, TR("Anchor"), QString(),
+        ToolBarFactory::createToolButton(*anchorButton, TR("Anchor"), QString(),
                         this, SLOT(hit_anchor()), toolbar, "anchor");
-    anchor->setToggleButton(TRUE);
-    Q3WhatsThis::add(anchor, anchorText());
+    anchor->setCheckable(TRUE);
+    anchor->setWhatsThis(anchorText());
 
     text =
-        new QToolButton(*textButton, TR("Text"), QString(),
+        ToolBarFactory::createToolButton(*textButton, TR("Text"), QString(),
                         this, SLOT(hit_text()), toolbar, "text");
-    text->setToggleButton(TRUE);
-    Q3WhatsThis::add(text, textText());
+    text->setCheckable(TRUE);
+    text->setWhatsThis(textText());
 
     image =
-        new QToolButton(*imageButton, TR("Image"), QString(),
+        ToolBarFactory::createToolButton(*imageButton, TR("Image"), QString(),
                         this, SLOT(hit_image()), toolbar, "image");
-    image->setToggleButton(TRUE);
-    Q3WhatsThis::add(image, imageText());
+    image->setCheckable(TRUE);
+    image->setWhatsThis(imageText());
 
     toolbar->addSeparator();
 
@@ -185,9 +187,9 @@ DeploymentDiagramWindow::DeploymentDiagramWindow(const QString & s, BrowserDeplo
 
     //qApp->setMainWidget(this);
 
-    QWorkspace * w = UmlWindow::get_workspace();
+    QMdiArea * w = UmlWindow::get_workspace();
 
-    resize((w->width() * 4) / 5, (w->height() * 4) / 5);
+    m_containingSubWindow->resize((w->width() * 4) / 5, (w->height() * 4) / 5);
 
     /*if (w->windowList().isEmpty())
       showMaximized();
@@ -225,23 +227,23 @@ void DeploymentDiagramWindow::hit_button(UmlCode c, QToolButton * b)
 {
     view->abort_line_construction();
 
-    select->setOn(FALSE);
-    addPackage->setOn(FALSE);
-    addFragment->setOn(FALSE);
-    addDeploymentNode->setOn(FALSE);
-    addArtifact->setOn(FALSE);
-    addComponent->setOn(FALSE);
-    hub->setOn(FALSE);
-    network->setOn(FALSE);
-    inherit->setOn(FALSE);
-    association->setOn(FALSE);
-    dependency->setOn(FALSE);
-    note->setOn(FALSE);
-    anchor->setOn(FALSE);
-    text->setOn(FALSE);
-    image->setOn(FALSE);
+    select->setChecked(FALSE);
+    addPackage->setChecked(FALSE);
+    addFragment->setChecked(FALSE);
+    addDeploymentNode->setChecked(FALSE);
+    addArtifact->setChecked(FALSE);
+    addComponent->setChecked(FALSE);
+    hub->setChecked(FALSE);
+    network->setChecked(FALSE);
+    inherit->setChecked(FALSE);
+    association->setChecked(FALSE);
+    dependency->setChecked(FALSE);
+    note->setChecked(FALSE);
+    anchor->setChecked(FALSE);
+    text->setChecked(FALSE);
+    image->setChecked(FALSE);
 
-    b->setOn(TRUE);
+    b->setChecked(TRUE);
     current_button = c;
 }
 

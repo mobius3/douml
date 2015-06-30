@@ -29,8 +29,8 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+//#include <q3popupmenu.h>
+#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -119,7 +119,7 @@ void BrowserRegion::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -157,55 +157,58 @@ BrowserRegion * BrowserRegion::add_region(BrowserNode * future_parent,
 
 void BrowserRegion::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu toolm(0);
+    QMenu m(name, 0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_read_only) {
-            m.setWhatsThis(m.insertItem(TR("New state"), 1),
-                           TR("to add a <i>state</i> to the <i>region</i>"));
+            MenuFactory::addItem(m, QObject::tr("New state"), 1,
+                           QObject::tr("to add a <i>state</i> to the <i>region</i>"));
         }
 
-        m.insertSeparator();
-        m.setWhatsThis(m.insertItem(TR("Edit"), 3),
-                       TR("to edit the <i>region</i>, \
+        m.addSeparator();
+        MenuFactory::addItem(m, QObject::tr("Edit"), 3,
+                       QObject::tr("to edit the <i>region</i>, \
 a double click with the left mouse button does the same thing"));
 
         if (!is_read_only && (edition_number == 0)) {
-            m.insertSeparator();
-            m.setWhatsThis(m.insertItem(TR("Delete"), 7),
-                           TR("to delete the <i>region</i>. \
+            m.addSeparator();
+            MenuFactory::addItem(m, QObject::tr("Delete"), 7,
+                           QObject::tr("to delete the <i>region</i>. \
 Note that you can undelete it after"));
         }
 
-        mark_menu(m, TR("the region"), 90);
+        mark_menu(m, QObject::tr("the region").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle(QObject::tr(("Tool")));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 8),
-                       TR("to undelete the <i>region</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 8,
+                       QObject::tr("to undelete the <i>region</i>"));
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
-                m.setWhatsThis(m.insertItem(TR("Undelete recursively"), 9),
-                               TR("undelete the region and its children"));
+                MenuFactory::addItem(m, QObject::tr("Undelete recursively"), 9,
+                               QObject::tr("undelete the region and its children"));
                 break;
             }
         }
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserRegion::exec_menu_choice(int rank)
@@ -275,7 +278,7 @@ void BrowserRegion::apply_shortcut(QString s)
         if (s == "Undelete")
             choice = 8;
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
@@ -293,7 +296,7 @@ void BrowserRegion::apply_shortcut(QString s)
 void BrowserRegion::open(bool)
 {
     if (!is_edited)
-        edit(TR("Region"), its_default_stereotypes);
+        edit(QObject::TR("Region").toLatin1().constData(), its_default_stereotypes);
 }
 
 void BrowserRegion::modified()
@@ -309,7 +312,7 @@ UmlCode BrowserRegion::get_type() const
 
 QString BrowserRegion::get_stype() const
 {
-    return TR("Region");
+    return QObject::TR("Region");
 }
 
 int BrowserRegion::get_identifier() const
@@ -483,7 +486,6 @@ void BrowserRegion::DragMoveInsideEvent(QDragMoveEvent * e)
 void BrowserRegion::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 {
     BrowserNode * bn;
-
     if ((((bn = UmlDrag::decode(e, BrowserPseudoState::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserStateAction::drag_key(this))) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserState::drag_key(this))) != 0)) &&
@@ -492,14 +494,15 @@ void BrowserRegion::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             if ((after == 0) &&
                 ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
                 // have choice
-                Q3PopupMenu m(0);
+                QMenu m(0);
 
-                MenuFactory::createTitle(m, TR("move ") + bn->get_name());
-                m.insertSeparator();
-                m.insertItem(TR("In ") + QString(get_name()), 1);
-                m.insertItem(TR("After ") + QString(get_name()), 2);
-
-                switch (m.exec(QCursor::pos())) {
+                MenuFactory::createTitle(m, QObject::tr("move ") + bn->get_name());
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::tr("In %1").arg(QString(get_name())), 1);
+                MenuFactory::addItem(m, QObject::tr("After %1").arg(QString(get_name())), 2);
+                        QAction *retAction = m.exec(QCursor::pos());
+                if(retAction)
+                switch (retAction->data().toInt()) {
                 case 1:
                     break;
 
@@ -516,7 +519,7 @@ void BrowserRegion::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             move(bn, after);
         }
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical(QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }
@@ -567,7 +570,7 @@ void BrowserRegion::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "region " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
 
@@ -575,7 +578,7 @@ void BrowserRegion::save(QTextStream & st, bool ref, QString & warning)
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {

@@ -29,25 +29,28 @@
 
 
 
-#include <q3popupmenu.h>
+#include <qmenu.h>
 #include <qcursor.h>
 
 #include "StringTable.h"
 #include "translate.h"
+#include "ui/menufactory.h"
+#include <QHeaderView>
 
-StringTable::StringTable(int numRows, int numCols, QWidget * parent, bool visit)
-    : MyTable(numRows, numCols, parent)
+StringTable::StringTable(int rowCount, int columnCount, QWidget * parent, bool visit)
+    : MyTable(rowCount, columnCount, parent)
 {
-    setSorting(-1);
-    setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(TRUE);
 
-    copy = new QString[numCols];
+    //setSortingEnabled(-1);
+    setSelectionMode(NoSelection);	// single does not work
+    verticalHeader()->setSectionsMovable(true);
+
+    copy = new QString[columnCount];
 
     if (! visit) {
-        connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-                this, SLOT(button_pressed(int, int, int, const QPoint &)));
-        connect(this, SIGNAL(valueChanged(int, int)),
+        connect(this, SIGNAL(pressed(QModelIndex)),
+                this, SLOT(button_pressed(QModelIndex)));
+        connect(this, SIGNAL(cellChanged(int,int)),
                 this, SLOT(value_changed(int, int)));
     }
 }
@@ -62,15 +65,14 @@ void StringTable::activateNextCell()
     int row = currentRow();
     int col = currentColumn();
 
-    if (col == (numCols() - 2)) {
+    if (col == (columnCount() - 2)) {
         // goto next line
-        if (++row == numRows()) {
+        if (++row == rowCount()) {
             // adds a new line
-            setNumRows(row + 1);
+            setRowCount(row + 1);
             init_row(row);
-            setText(row, numCols() - 1, QString());
+            setText(row, columnCount() - 1, QString());
         }
-
         setCurrentCell(row, 0);
     }
     else
@@ -79,129 +81,154 @@ void StringTable::activateNextCell()
 
 void StringTable::value_changed(int row, int col)
 {
-    if ((row == (numRows() - 1)) && (col != 0) && !text(row, col).isEmpty())
+    if ((row == (rowCount() - 1)) && (col != 0) && !text(row, col).isEmpty())
         insert_row_after(row);
 }
 
-void StringTable::button_pressed(int row, int col, int, const QPoint &)
+void StringTable::button_pressed(const QModelIndex &modelindex)
 {
-    if (col == numCols() - 1) {
+    int col = modelindex.column();
+    int index = modelindex.row();
+    if (col == columnCount() - 1) {
         QString s;
-        Q3PopupMenu m;
+        QMenu m;
 
-        s.sprintf("%d", row + 1);
-        m.insertItem(TR("row %1", s), -1);
-        m.insertSeparator();
-        m.insertItem(TR("Insert row before"), 0);
-        m.insertItem(TR("Insert row after"), 1);
-        m.insertSeparator();
-        m.insertItem(TR("Delete row"), 2);
-        m.insertSeparator();
-        m.insertItem(TR("Copy row"), 3);
-        m.insertItem(TR("Cut row"), 4);
-        m.insertItem(TR("Paste row"), 5);
-        m.insertSeparator();
+        s.sprintf("%d", index + 1);
+        MenuFactory::addItem(m,TR("row %1").arg(s).toLatin1().constData(), -1);
+        m.addSeparator();
+        MenuFactory::addItem(m,TR("Insert row before").toLatin1().constData(), 0);
+        MenuFactory::addItem(m,TR("Insert row after").toLatin1().constData(), 1);
+        m.addSeparator();
+        MenuFactory::addItem(m,TR("Delete row").toLatin1().constData(), 2);
+        m.addSeparator();
+        MenuFactory::addItem(m,TR("Copy row").toLatin1().constData(), 3);
+        MenuFactory::addItem(m,TR("Cut row").toLatin1().constData(), 4);
+        MenuFactory::addItem(m,TR("Paste row").toLatin1().constData(), 5);
+        m.addSeparator();
 
-        Q3PopupMenu mv;
+        QMenu mv;
         int rank;
 
-        for (rank = 0; rank != numRows(); rank += 1)
-            if (rank != row)
-                mv.insertItem(QString::number(rank + 1), 10 + rank);
+        for (rank = 0; rank != rowCount(); rank += 1)
+            if (rank != index)
+                MenuFactory::addItem(mv, QString::number(rank + 1).toLatin1().constData(), 10 + rank);
 
-        m.insertItem(TR("Move row"), &mv);
+        mv.setTitle(TR("Move row"));
+        //MenuFactory::addItem(m,TR("Move row"), &mv);
+        m.addMenu(&mv);
 
-        switch (rank = m.exec(QCursor::pos())) {
-        case 0:
-            insert_row_before(row);
-            break;
+        QAction * action = m.exec(QCursor::pos());
+        if(action)
+        {
+            rank = action->data().toInt();
+            switch (rank) {
+            case 0:
+                insert_row_before(index);
+                break;
 
-        case 1:
-            insert_row_after(row);
-            break;
+            case 1:
+                insert_row_after(index);
+                break;
 
-        case 2:
-            delete_row(row);
-            break;
+            case 2:
+                delete_row(index);
+                break;
 
-        case 3:
-            copy_row(row);
-            break;
+            case 3:
+                copy_row(index);
+                break;
 
-        case 4:
-            cut_row(row);
-            break;
+            case 4:
+                cut_row(index);
+                break;
 
-        case 5:
-            paste_row(row);
-            break;
+            case 5:
+                paste_row(index);
+                break;
 
-        default:
-            if (rank >= 10)
-                move_row(row, rank - 10);
+            default:
+                if (rank >= 10)
+                    move_row(index, rank - 10);
 
-            break;
+                break;
+            }
         }
     }
 }
 
 void StringTable::insert_row_before(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index != row; index -= 1) {
         int col;
 
-        for (col = 0; col <= numCols() - 1; col += 1)
-            setText(index, col, text(index - 1, col));
-    }
-
+        for (col = 0; col <= columnCount() - 1; col += 1)
+        {
+            QTableWidgetItem * it;
+            it = item(index, col);
+            if(it)
+            {
+                it->setText( itemAt(index - 1, col)->text());
+            }
+        }
+    }*/
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row);
     init_row(row);
-    setText(row, numCols() - 1, QString());
+    setText(row, columnCount() - 1, QString());
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void StringTable::insert_row_after(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index > row + 1; index -= 1) {
         int col;
 
-        for (col = 0; col <= numCols() - 1; col += 1)
-            setText(index, col, text(index - 1, col));
+        for (col = 0; col <= columnCount() - 1; col += 1)
+            itemAt(index, col)->setText(itemAt(index - 1, col)->text());
     }
-
+    */
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row+1);
     init_row(row + 1);
-    setText(row + 1, numCols() - 1, QString());
+    setText(row + 1, columnCount() - 1, QString());
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void StringTable::delete_row(int row)
 {
-    int n = numRows();
+    int n = rowCount();
     int index;
 
-    clearCellWidget(row, 1);
+    removeCellWidget(row, 1);
 
     if (n == 1) {
         // the alone line : empty it
         init_row(0);
-        setText(0, numCols() - 1, QString());
+        setText(0, columnCount() - 1, QString());
     }
     else {
         for (index = row; index != n - 1; index += 1) {
             int col;
 
-            for (col = 0; col <= numCols() - 1; col += 1)
-                setText(index, col, text(index + 1, col));
+            for (col = 0; col <= columnCount() - 1; col += 1)
+                item(index, col)->setText( text(index + 1, col));
         }
 
-        setNumRows(n - 1);
+        setRowCount(n - 1);
     }
 }
 
@@ -209,7 +236,7 @@ void StringTable::copy_row(int row)
 {
     int col;
 
-    for (col = 0; col <= numCols() - 1; col += 1)
+    for (col = 0; col <= columnCount() - 1; col += 1)
         copy[col] = text(row, col);
 }
 
@@ -223,19 +250,19 @@ void StringTable::paste_row(int row)
 {
     int col;
 
-    for (col = 0; col <= numCols() - 1; col += 1)
+    for (col = 0; col <= columnCount() - 1; col += 1)
         setText(row, col, copy[col]);
 
-    if (row == (numRows() - 1))
+    if (row == (rowCount() - 1))
         insert_row_after(row);
 }
 
 void StringTable::move_row(int from, int to)
 {
-    QString * save = new QString[numCols()];
+    QString * save = new QString[columnCount()];
     int col;
 
-    for (col = 0; col <= numCols() - 1; col += 1)
+    for (col = 0; col <= columnCount() - 1; col += 1)
         save[col] = copy[col];
 
     cut_row(from);
@@ -247,7 +274,7 @@ void StringTable::move_row(int from, int to)
 
     paste_row(to);
 
-    for (col = 0; col <= numCols() - 1; col += 1)
+    for (col = 0; col <= columnCount() - 1; col += 1)
         copy[col] = save[col];
 
     delete [] save;

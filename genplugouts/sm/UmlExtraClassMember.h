@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseExtraClassMember.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 // This class allows to manage extra class member, It allows to insert
 // C++ pre-processor directive (even they may be placed in the other member
@@ -14,7 +14,7 @@
 class UmlExtraClassMember : public UmlBaseExtraClassMember
 {
 public:
-    UmlExtraClassMember(void * id, const Q3CString & n) : UmlBaseExtraClassMember(id, n) {};
+    UmlExtraClassMember(void * id, const QByteArray & n) : UmlBaseExtraClassMember(id, n) {};
 
 };
 

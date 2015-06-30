@@ -3,7 +3,7 @@
 
 
 
-#include <q3valuelist.h>
+#include <QList.h>
 
 class UmlArtifact;
 class FileIn;
@@ -29,7 +29,7 @@ protected:
 
     WrapperStr utilized;
 
-    static Q3ValueList<Manifestation> All;
+    static QList<Manifestation> All;
 
 };
 

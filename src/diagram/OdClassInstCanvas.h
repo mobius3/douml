@@ -63,7 +63,7 @@ public:
 
     void compute_size();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual QString get_name() const;	// all cases
     virtual void set_name(const QString & s);	// out of model case
     virtual BrowserNode * get_type() const;	// return class, all cases
@@ -102,6 +102,8 @@ public:
     static OdClassInstCanvas * read(char *& , UmlCanvas * canvas, char *);
     virtual void post_loaded();
 
+protected:
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 private slots:
     void modified();	// canvas must be updated
     void deleted();	// the class is deleted

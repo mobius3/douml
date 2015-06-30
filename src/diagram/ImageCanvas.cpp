@@ -31,7 +31,7 @@
 
 #include <qcursor.h>
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QPixmap>
@@ -47,12 +47,12 @@
 ImageCanvas::ImageCanvas(UmlCanvas * canvas, int x, int y, QString pa, int id)
     : DiagramCanvas(0, canvas, x, y, 30, 30, id), path(pa)
 {
-    if ((px = get_pixmap(path)) != 0) {
+    if ((px = get_pixmap(path.toLatin1().constData())) != 0) {
         width_scale100 = px->width();
         height_scale100 = px->height();
 
-        px = get_pixmap(path, canvas->zoom());
-        setSize(px->width(), px->height());
+        px = get_pixmap(path.toLatin1().constData(), canvas->zoom());
+        setRect(rect().x(), rect().y(), px->width(), px->height());
         set_center100();
     }
 }
@@ -70,21 +70,25 @@ void ImageCanvas::draw(QPainter & p)
     if (px == 0)
         p.fillRect(rect(), ::Qt::darkGray);
     else
-        p.drawPixmap((int) x(), (int) y(), *px);
+        p.drawPixmap((int) /*x()*/0, (int) /*y()*/0, *px);
 
     FILE * fp = svg();
 
     if (fp != 0)
         // pixmap not really exported in SVG
         fprintf(fp, "<rect fill=\"%s\" stroke=\"black\" stroke-width=\"1\" stroke-opacity=\"1\""
-                " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
-                svg_color(UmlBlack), (int) x(), (int) y(), width() - 1, height() - 1);
+                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n",
+                svg_color(UmlBlack), (int) /*x()*/0, (int) /*y()*/0, width() - 1, height() - 1);
 
     if (selected())
         show_mark(p, rect());
 }
+void ImageCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
 
-UmlCode ImageCanvas::type() const
+UmlCode ImageCanvas::typeUmlCode() const
 {
     return UmlImage;
 }
@@ -110,19 +114,20 @@ void ImageCanvas::open()
     ImageDialog d(s);
 
     if ((d.exec() == QDialog::Accepted) &&
-        !s.isEmpty() &&
-        (s != path)) {
-        QPixmap * p = get_pixmap(s);
+            !s.isEmpty() &&
+            (s != path)) {
+        QPixmap * p = get_pixmap(s.toLatin1().constData());
 
         if (p != 0) {
             path = s;
             width_scale100 = p->width();
             height_scale100 = p->height();
-            px = get_pixmap(path, the_canvas()->zoom());
+            px = get_pixmap(path.toLatin1().constData(), the_canvas()->zoom());
 
             hide();
             hide_lines();
-            setSize(px->width(), px->height());
+            setRect(rect().x(), rect().y(), px->width(), px->height());
+
             recenter();
             show();
             update_show_lines();
@@ -138,7 +143,7 @@ ImageCanvas * ImageCanvas::add(UmlCanvas * canvas, int x, int y)
     ImageDialog d(s);
 
     if ((d.exec() == QDialog::Accepted) && !s.isEmpty()) {
-        QPixmap * p = get_pixmap(s, canvas->zoom());
+        QPixmap * p = get_pixmap(s.toLatin1().constData(), canvas->zoom());
 
         if (p != 0)
             return new ImageCanvas(canvas, x, y, s, 0);
@@ -158,71 +163,75 @@ void ImageCanvas::modified()
 
 void ImageCanvas::change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
-    px = get_pixmap(path, the_canvas()->zoom());
-    setSize(px->width(), px->height());
+    QGraphicsRectItem::setVisible(FALSE);
+    px = get_pixmap(path.toLatin1().constData(), the_canvas()->zoom());
+    setRect(rect().x(), rect().y(), px->width(), px->height());
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 }
 
 void ImageCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu fontsubm(0);
+    QMenu m(0);
+    QMenu fontsubm(0);
 
-    MenuFactory::createTitle(m, TR("Image"));
-    m.insertSeparator();
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 2);
-    m.insertItem(TR("Go down"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Edit"), 4);
+    MenuFactory::createTitle(m,  QObject::tr("Image"));
+    m.addSeparator();
+    MenuFactory::addItem(m, QObject::tr("Upper"), 0);
+    MenuFactory::addItem(m, QObject::tr("Lower"), 1);
+    MenuFactory::addItem(m, QObject::tr("Go up"), 2);
+    MenuFactory::addItem(m, QObject::tr("Go down"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, QObject::tr("Edit"), 4);
 
     if (linked()) {
-        m.insertSeparator();
-        m.insertItem(TR("Select linked items"), 5);
+        m.addSeparator();
+        MenuFactory::addItem(m, QObject::tr("Select linked items"), 5);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 6);
+    m.addSeparator();
+    MenuFactory::addItem(m, QObject::tr("Remove from diagram"), 6);
 
-    int index = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        int index = retAction->data().toInt();
 
-    switch (index) {
-    case 0:
-        upper();
-        modified();	// call package_modified()
-        return;
+        switch (index) {
+        case 0:
+            upper();
+            modified();	// call package_modified()
+            return;
 
-    case 1:
-        lower();
-        modified();	// call package_modified()
-        return;
+        case 1:
+            lower();
+            modified();	// call package_modified()
+            return;
 
-    case 2:
-        z_up();
-        modified();	// call package_modified()
-        return;
+        case 2:
+            z_up();
+            modified();	// call package_modified()
+            return;
 
-    case 3:
-        z_down();
-        modified();	// call package_modified()
-        return;
+        case 3:
+            z_down();
+            modified();	// call package_modified()
+            return;
 
-    case 4:
-        open();
-        // all done by open
-        return;
+        case 4:
+            open();
+            // all done by open
+            return;
 
-    case 5:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
+        case 5:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
 
-    case 6:
-        delete_it();
-        break;
+        case 6:
+            delete_it();
+            break;
+        }
     }
 
     package_modified();
@@ -250,12 +259,12 @@ void ImageCanvas::apply_shortcut(QString s)
 
 QString ImageCanvas::may_start(UmlCode & l) const
 {
-    return (l == UmlAnchor) ? QString() : TR("illegal");
+    return (l == UmlAnchor) ? QString() :  QObject::tr("illegal");
 }
 
 QString ImageCanvas::may_connect(UmlCode & l, const DiagramItem * dest) const
 {
-    return (l == UmlAnchor) ? dest->may_start(l) : TR("illegal");
+    return (l == UmlAnchor) ? dest->may_start(l) :  QObject::tr("illegal");
 }
 
 void ImageCanvas::save(QTextStream & st, bool ref, QString &) const
@@ -297,7 +306,7 @@ ImageCanvas * ImageCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
 void ImageCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
 }
 
 void ImageCanvas::history_save(QBuffer & b) const
@@ -319,5 +328,5 @@ void ImageCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 }

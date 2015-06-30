@@ -289,7 +289,7 @@ template<class T>
 void TableDataListHolder<T>::RemoveRow(int index) 
 {
     // Bouml preserved body begin 0022DA2A
-    m_data.remove(m_data.begin()+index);
+    m_data.removeOne(*(m_data.begin()+index));
     // Bouml preserved body end 0022DA2A
 }
 

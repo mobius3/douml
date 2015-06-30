@@ -4,7 +4,7 @@
 
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlNode;
 class UmlDeploymentDiagram;
@@ -38,7 +38,7 @@ private:
 
 protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseNode(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseNode(void * id, const QByteArray & n) : UmlItem(id, n) {};
 
     virtual void read_uml_();
 

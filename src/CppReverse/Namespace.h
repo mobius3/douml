@@ -28,10 +28,9 @@
 #ifndef NAMESPACE_H
 #define NAMESPACE_H
 
-#include <q3valuelist.h>
+#include <QList>
 #include <qstringlist.h>
 #include "misc/mystr.h"
-#include <q3dict.h>
 #include <qmap.h>
 
 #include "Lex.h"
@@ -75,7 +74,7 @@ public:
     }
 
     static void add_alias(const WrapperStr & a, const WrapperStr & s) {
-        Aliases.replace(a, s);
+        Aliases[a] = s;
     }
     static void clear_aliases() {
         Aliases.clear();
@@ -88,7 +87,7 @@ private:
     static QStringList Stack;
     static int AnonymousLevel;
     static QStringList Usings;
-    static Q3ValueList<QStringList> UsingScope;
+    static QList<QStringList> UsingScope;
     static QMap<QString, WrapperStr> Aliases;
 };
 
@@ -102,7 +101,7 @@ class NDict
 public:
     NDict() : hasAnonymous(FALSE) {}
     NDict(unsigned n) : hasAnonymous(FALSE) {
-        d.resize(n);
+        d.reserve(n);
     }
 
     void insert(const WrapperStr & key, const T * item);
@@ -112,21 +111,23 @@ public:
 
 private:
     bool hasAnonymous;
-    Q3Dict<T> d;
+    QHash<QString, T*> d;
 };
 
 template<class T>
 void NDict<T>::insert(const WrapperStr & key, const T * item)
 {
     hasAnonymous |= Namespace::underAnonymous();
-    d.insert(Namespace::namespacify(key, Namespace::underAnonymous()), item);
+    T * item2 = const_cast<T *>(item);
+    d.insert(Namespace::namespacify(key, Namespace::underAnonymous()), item2);
 }
 
 template<class T>
 void NDict<T>::replace(const WrapperStr & key, const T * item)
 {
     hasAnonymous |= Namespace::underAnonymous();
-    d.replace(Namespace::namespacify(key, Namespace::underAnonymous()), item);
+    T * item2 = const_cast<T *>(item);
+    d.insert(Namespace::namespacify(key, Namespace::underAnonymous()), item2);
 }
 
 template<class T>

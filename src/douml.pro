@@ -12,6 +12,8 @@ CONFIG(Release, Debug|Release) {
     CONFIG += qt Release
     QMAKE_POST_LINK = " "
 }
+
+
 HEADERS        = \
         data/ActualParamData.h \
         data/BasicData.h \
@@ -147,9 +149,10 @@ HEADERS        = \
         dialog/ContinuationDialog.h \
         dialog/ComboItem.h \
         dialog/MyTable.h \
+        dialog/GenerationSettingsDialog.h \
+        dialog/StringTable.h \
         dialog/ComponentDialog.h \
         dialog/ArtifactDialog.h \
-        dialog/GenerationSettingsDialog.h \
         dialog/SettingsDialog.h \
         dialog/KeyValueTable.h \
         dialog/MLEDialog.h \
@@ -172,13 +175,12 @@ HEADERS        = \
         dialog/SdMsgDialog.h \
         dialog/StereotypeDialog.h \
         dialog/StereotypesDialog.h \
-        dialog/StringTable.h \
         dialog/ToolDialog.h \
         dialog/TraceDialog.h \
         dialog/VisibilityGroup.h \
         dialog/CodAddMsgDialog.h \
         dialog/CodEditMsgDialog.h \
-        dialog/MenuFont.h \
+#       dialog/MenuFont.h \
         dialog/ColMsgTable.h \
         dialog/CodChangeMsgDialog.h \
         dialog/HideShowDialog.h \
@@ -201,11 +203,11 @@ HEADERS        = \
         dialog/ConstraintDialog.h \
         dialog/DecoratorDialog.h \
         dialog/HelpDialog.h \
-        dialog/EnvDialog.h \
+        dialog/EnvDialog.h\
         dialog/GreetingsDialog.h \
         dialog/RelatedElementsDialog.h \
         dialog/ImageDialog.h \
-        dialog/DialogUtil.h \
+        dialog/DialogUtil.h\
         misc/Settings.h \
         misc/UmlDrag.h \
         misc/UmlEnum.h \
@@ -226,19 +228,27 @@ HEADERS        = \
         Factories/DialogConnections.h \
         Factories/EdgeToolBarCreation.h \
         CustomWidgets/MultiPurposeDragArea.h \
-        misc/ClipboardManager.h \
+        misc/ClipboardManager.h\
         ui/operationwidgetcpp.h \
     ui/constructorinitializerdialog.h \
     tagmanagement/cpptagmanagement.h \
     dialog/edgemenudialogqt4.h \
     dialog/edgemenudialogbase.h \
-    ui/catalogwidget.h \
+    ui/catalogwidget.h\
     browser/BrowserNodeDummy.h \
     dialog/GenerationSettingsBuiltinTable.h \
     CustomWidgets/quickedit.h \
+    dialog/tabdialog.h \
+    ui/widgetwithlayout.h \
+    ui/toolbarfactory.h\
     browser/BrowserOperationAttribute.h \
     CustomWidgets/GenericDelegate.h \
-    browserfunctions/operationfuncs.h
+    browserfunctions/operationfuncs.h \
+    ui/gridbox.h \
+    ui/hhbox.h \
+    ui/vvbox.h \
+    ui/bbuttongroup.h \
+    dialog/tablewidgetitemdelegate.h
 
 
 SOURCES = \
@@ -411,35 +421,45 @@ SOURCES = \
         diagram/FragmentSeparatorCanvas.cpp \
         diagram/ConstraintCanvas.cpp \
         diagram/StereotypePropertiesCanvas.cpp \
-        dialog/AttributeDialog.cpp \
         dialog/ExtraMemberDialog.cpp \
-        dialog/BasicDialog.cpp \
-        dialog/ClassDialog.cpp \
         dialog/ClassListDialog.cpp \
         dialog/ClassViewDialog.cpp \
-        dialog/ClassSettingsDialog.cpp \
         dialog/RevSettingsDialog.cpp \
-        dialog/ComboItem.cpp \
         dialog/FragmentDialog.cpp \
         dialog/ContinuationDialog.cpp \
-        dialog/MyTable.cpp \
         dialog/ComponentDialog.cpp \
         dialog/ArtifactDialog.cpp \
+        dialog/MLEDialog.cpp \
+        dialog/OperationDialog.cpp \
+        dialog/OperationListDialog.cpp \
+        dialog/AttributeDialog.cpp \
+        dialog/BasicDialog.cpp \
+        dialog/ClassDialog.cpp \
+        dialog/ClassSettingsDialog.cpp \
+        dialog/ComboItem.cpp \
+        dialog/MyTable.cpp \
         dialog/DialogUtil.cpp \
         dialog/GenerationSettingsDialog.cpp \
         dialog/SettingsDialog.cpp \
         dialog/StateSpec.cpp \
         dialog/KeyValueTable.cpp \
-        dialog/MLEDialog.cpp \
         dialog/SourceDialog.cpp \
         dialog/BodyDialog.cpp \
         dialog/MLinesItem.cpp \
         dialog/MyInputDialog.cpp \
-        dialog/OperationDialog.cpp \
-        dialog/OperationListDialog.cpp \
         dialog/PackageDialog.cpp \
-        dialog/RelationDialog.cpp \
         dialog/ReferenceDialog.cpp \
+        dialog/BrowserSearchDialog.cpp \
+        dialog/StereotypesDialog.cpp \
+        dialog/ShortcutDialog.cpp \
+        dialog/TraceDialog.cpp \
+        dialog/ToolDialog.cpp \
+        dialog/HelpDialog.cpp \
+        dialog/EnvDialog.cpp \
+        dialog/About.cpp \
+        dialog/VisibilityGroup.cpp \
+        dialog/StringTable.cpp \
+        dialog/RelationDialog.cpp \
         dialog/SimpleRelationDialog.cpp \
         dialog/StateDialog.cpp \
         dialog/PseudoStateDialog.cpp \
@@ -449,23 +469,16 @@ SOURCES = \
         dialog/ClassInstanceDialog.cpp \
         dialog/SdMsgDialog.cpp \
         dialog/StereotypeDialog.cpp \
-        dialog/StereotypesDialog.cpp \
-        dialog/StringTable.cpp \
-        dialog/ToolDialog.cpp \
-        dialog/TraceDialog.cpp \
-        dialog/VisibilityGroup.cpp \
         dialog/CodAddMsgDialog.cpp \
         dialog/CodEditMsgDialog.cpp \
-        dialog/MenuFont.cpp \
+#        dialog/MenuFont.cpp \
         dialog/ColMsgTable.cpp \
         dialog/CodChangeMsgDialog.cpp \
         dialog/HideShowDialog.cpp \
-        dialog/BrowserSearchDialog.cpp \
         dialog/DialogTimer.cpp \
-        dialog/About.cpp \
         dialog/SaveProgress.cpp \
         dialog/AnnotationDialog.cpp \
-        dialog/ObjectLinkDialog.cpp \
+       dialog/ObjectLinkDialog.cpp \
         dialog/ActivityDialog.cpp \
         dialog/ParameterDialog.cpp \
         dialog/ParameterSetDialog.cpp \
@@ -475,12 +488,9 @@ SOURCES = \
         dialog/ActivityObjectDialog.cpp \
         dialog/ActivityPartitionDialog.cpp \
         dialog/FlowDialog.cpp \
-        dialog/ShortcutDialog.cpp \
         dialog/UseCaseDialog.cpp \
         dialog/ConstraintDialog.cpp \
         dialog/DecoratorDialog.cpp \
-        dialog/HelpDialog.cpp \
-        dialog/EnvDialog.cpp \
         dialog/GreetingsDialog.cpp \
         dialog/RelatedElementsDialog.cpp \
         dialog/ImageDialog.cpp \
@@ -504,7 +514,7 @@ SOURCES = \
         Logging/QsLogDest.cpp \
         Logging/QsLog.cpp \
         Logging/QsDebugOutput.cpp \
-        main.cpp \
+        main.cpp\
         Factories/EdgeMenuFactory.cpp \
         dialog/EdgeMenuDialog.cpp \
         misc/GenerateTypeId.cpp \
@@ -517,21 +527,33 @@ SOURCES = \
     tagmanagement/cpptagmanagement.cpp \
     dialog/edgemenudialogqt4.cpp \
     dialog/edgemenudialogbase.cpp \
-    misc/codec.cpp \
-    ui/catalogwidget.cpp \
+    misc/codec.cpp\
+    ui/catalogwidget.cpp\
     browser/BrowserNodeDummy.cpp \
     dialog/GenerationSettingsBuiltinTable.cpp \
     CustomWidgets/quickedit.cpp \
+    dialog/tabdialog.cpp \
+    ui/widgetwithlayout.cpp \
+    ui/toolbarfactory.cpp \
+    ui/gridbox.cpp \
+    ui/hhbox.cpp \
+    ui/vvbox.cpp \
+    ui/bbuttongroup.cpp\
     browser/BrowserOperationAttribute.cpp \
     CustomWidgets/GenericDelegate.cpp \
     CustomWidgets/quickeditcontrollersetup.cpp \
-    browserfunctions/operationfuncs.cpp
+    browserfunctions/operationfuncs.cpp \
+    dialog/tablewidgetitemdelegate.cpp
 
 TARGET = douml
-DEFINES = BooL=bool DEBUGCOM
+DEFINES = BooL=bool  FALSE=false TRUE=true TR=tr
+#DEBUGCOM
+
+DEFINES += __sil__
 
 #The following line was inserted by qt3to4
-QT += core gui network  qt3support
+QT += core gui network  widgets printsupport
+#qt3support
 
 UI_DIR = ui
 DESTDIR = ../bin

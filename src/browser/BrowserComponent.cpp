@@ -29,12 +29,12 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <QMenu.h>
 #include <qcursor.h>
 #include <qdir.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 #include <QPixmap>
 #include <QDragMoveEvent>
 #include <QDropEvent>
@@ -53,11 +53,13 @@
 #include "Tool.h"
 #include "ui/menufactory.h"
 #include "ClassListDialog.h"
+#include "ComponentDialog.h"
+#include "UmlDrag.h"
 #include "GenerationSettings.h"
 #include "ReferenceDialog.h"
-#include "UmlDrag.h"
+
 #include "mu.h"
-#include "ComponentDialog.h"
+
 #include "DialogUtil.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
@@ -123,8 +125,7 @@ void BrowserComponent::update_idmax_for_root()
 void BrowserComponent::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
-
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -145,14 +146,15 @@ void BrowserComponent::compute_referenced_by(QList<BrowserNode *> & l,
 {
     IdIterator<BrowserComponent> it(all);
 
-    while (it.current()) {
-        if (!it.current()->deletedp() &&
-            ((it.current()->realizing_classes.findIndex(target) != -1) ||
-             (it.current()->provided_classes.findIndex(target) != -1) ||
-             (it.current()->required_classes.findIndex(target) != -1)))
-            l.append(it.current());
-
-        ++it;
+    while(it.hasNext()){
+        it.next();
+        if(it.value()) {
+        if (!it.value()->deletedp() &&
+            ((it.value()->realizing_classes.indexOf(target) != -1) ||
+             (it.value()->provided_classes.indexOf(target) != -1) ||
+             (it.value()->required_classes.indexOf(target) != -1)))
+            l.append(it.value());
+}
     }
 }
 
@@ -166,7 +168,6 @@ const QPixmap * BrowserComponent::pixmap(int) const
 {
     if (deletedp())
         return DeletedComponentIcon;
-
     const QPixmap * px = ProfiledStereotypes::browserPixmap(def->get_stereotype());
 
     return (px != 0) ? px : ComponentIcon;
@@ -186,7 +187,7 @@ QString BrowserComponent::full_name(bool rev, bool) const
 // just check if the inheritance already exist
 QString BrowserComponent::check_inherit(const BrowserNode * new_parent) const
 {
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling()) {
         BrowserNode * ch = ((BrowserNode *) child);
@@ -194,18 +195,17 @@ QString BrowserComponent::check_inherit(const BrowserNode * new_parent) const
         if ((ch->get_type() == UmlInherit) &&
             ((((SimpleRelationData *) ch->get_data())->get_end_node())
              == new_parent))
-            return TR("already exist");
+            return QObject::tr("already exist");
     }
-
-    return (new_parent != this) ? QString() : TR("circular inheritance");
+    return (new_parent != this) ? QString() : QObject::TR("circular inheritance");
 }
 
-static void make_clsubm(Q3PopupMenu & m, Q3PopupMenu & sm,
-                        Q3ValueList<BrowserClass *> & l, int bias,
+static void make_clsubm(QMenu & m, QMenu & sm,
+                        QList<BrowserClass *> & l, int bias,
                         BooL & need_sep, QString s)
 {
     int n = 0;
-    Q3ValueList<BrowserClass *>::ConstIterator it;
+    QList<BrowserClass *>::ConstIterator it;
 
     for (it = l.begin(); it != l.end(); ++it)
         if (!(*it)->deletedp())
@@ -213,48 +213,48 @@ static void make_clsubm(Q3PopupMenu & m, Q3PopupMenu & sm,
 
     if (n == 1) {
         if (need_sep) {
-            m.insertSeparator();
+            m.addSeparator();
             need_sep = FALSE;
         }
 
-        m.setWhatsThis(m.insertItem(TR("Select the " + s + " class"), bias + 1),
-                       TR("to select the " + s + " <i>class</i>"));
+        MenuFactory::addItem(m, QObject::tr("Select the %1 class").arg(s), bias + 1,
+                       QObject::tr("to select the %1 <i>class</i>").arg(s));
     }
     else if (n > 20) {
         if (need_sep) {
-            m.insertSeparator();
+            m.addSeparator();
             need_sep = FALSE;
         }
 
-        m.setWhatsThis(m.insertItem(TR("Select a " + s + " class"), bias),
-                       TR("to select a " + s + " <i>class</i>"));
+        MenuFactory::addItem(m, QObject::tr("Select a %1 class").arg(s), bias,
+                       QObject::tr("to select a %1 <i>class</i>").arg(s));
     }
     else if (n != 0) {
         if (need_sep) {
-            m.insertSeparator();
+            m.addSeparator();
             need_sep = FALSE;
         }
 
-        MenuFactory::createTitle(sm, TR("Choose class"));
-        sm.insertSeparator();
+        MenuFactory::createTitle(sm, QObject::tr("Choose class"));
+        sm.addSeparator();
 
         for (it = l.begin(), n = bias + 1; it != l.end(); ++it)
             if (!(*it)->deletedp())
-                sm.insertItem((*it)->full_name(TRUE), n++);
+                MenuFactory::addItem(sm, (*it)->full_name(TRUE), n++);
 
-        m.setWhatsThis(m.insertItem(TR("Select a " + s + " class"), &sm),
-                       TR("to select a " + s + " <i>class</i>"));
+        MenuFactory::insertItem(m, QObject::tr("Select a %1 class").arg(s), &sm,
+                       QObject::tr("to select a %1 <i>class</i>").arg(s));
     }
 }
 
 static bool select_associated(int rank, int bias,
-                              Q3ValueList<BrowserClass *> & l)
+                              QList<BrowserClass *> & l)
 {
     if (rank < bias)
         return FALSE;
 
     if (rank == bias) {
-        ClassListDialog dialog(TR("Choose class"), l);
+        ClassListDialog dialog( QObject::tr("Choose class").toLatin1().constData(), l);
 
         dialog.raise();
 
@@ -264,7 +264,7 @@ static bool select_associated(int rank, int bias,
         rank = dialog.choosen() + bias + 1;
     }
 
-    Q3ValueList<BrowserClass *>::ConstIterator it;
+    QList<BrowserClass *>::ConstIterator it;
     int n;
 
     for (it = l.begin(), n = bias + 1;
@@ -273,62 +273,62 @@ static bool select_associated(int rank, int bias,
         ;
 
     (*it)->select_in_browser();
-
     return TRUE;
 }
 
 
 void BrowserComponent::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu rqsubm(0);
-    Q3PopupMenu prsubm(0);
-    Q3PopupMenu rzsubm(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu rqsubm(0);
+    QMenu prsubm(0);
+    QMenu rzsubm(0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_edited) {
-            m.setWhatsThis(m.insertItem(TR("New nested component"), 4),
-                           TR("to add an <i>nested component</i> to the <i>component</i>"));
-            m.insertSeparator();
-            m.setWhatsThis(m.insertItem(TR("Edit"), 0),
-                           TR("to edit the <i>component</i>, \
+            MenuFactory::addItem(m, QObject::tr("New nested component"), 4,
+                           QObject::tr("to add an <i>nested component</i> to the <i>component</i>"));
+            m.addSeparator();
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                           QObject::tr("to edit the <i>component</i>, \
 a double click with the left mouse button does the same thing"));
 
             if (!is_read_only && (edition_number == 0)) {
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Delete"), 1),
-                               TR("to delete the <i>component</i>. \
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::tr("Delete"), 1,
+                               QObject::tr("to delete the <i>component</i>. \
 Note that you can undelete it after"));
             }
         }
 
-        m.insertSeparator();
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 3),
-                       TR("to know who reference the <i>component</i> \
+        m.addSeparator();
+        MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
+                       QObject::tr("to know who reference the <i>component</i> \
 through a relation"));
-        mark_menu(m, TR("the component"), 90);
+        mark_menu(m, QObject::tr("the component").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
             Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle(QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 2),
-                       TR("to undelete the <i>component</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 2,
+                       QObject::tr("to undelete the <i>component</i>"));
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
-                m.setWhatsThis(m.insertItem(TR("Undelete recursively"), 22),
-                               TR("undelete the <i>component</i> and its \
+                MenuFactory::addItem(m, QObject::tr("Undelete recursively"), 22,
+                               QObject::tr("undelete the <i>component</i> and its \
 nested <i>components</i> and <i>relations</i> \
 (except if the component at the other side is also deleted)"));
                 break;
@@ -342,7 +342,9 @@ nested <i>components</i> and <i>relations</i> \
     make_clsubm(m, prsubm, provided_classes, 19999, need_sep, "provided");
     make_clsubm(m, rzsubm, realizing_classes, 29999, need_sep, "realization");
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserComponent::exec_menu_choice(int rank)
@@ -381,14 +383,12 @@ void BrowserComponent::exec_menu_choice(int rank)
             select_associated(rank, 19999, provided_classes) ||
             select_associated(rank, 9999, required_classes))
             return;
-
         if (rank >= 99990)
             ProfiledStereotypes::choiceManagement(this, rank - 99990);
         else if (rank >= 100)
             ToolCom::run(Tool::command(rank - 100), this);
         else
             mark_management(rank - 90);
-
         return;
     }
 
@@ -423,8 +423,7 @@ void BrowserComponent::apply_shortcut(QString s)
     else if (!is_read_only && (edition_number == 0)) {
         if (s == "Undelete")
             choice = 2;
-
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
@@ -466,7 +465,7 @@ UmlCode BrowserComponent::get_type() const
 
 QString BrowserComponent::get_stype() const
 {
-    return TR("component");
+    return QObject::TR("component");
 }
 
 int BrowserComponent::get_identifier() const
@@ -510,7 +509,6 @@ void BrowserComponent::DropEvent(QDropEvent * e)
 void BrowserComponent::DropAfterEvent(QDropEvent * e, BrowserNode * after)
 {
     BrowserNode * bn;
-
     if ((((bn = UmlDrag::decode(e, UmlComponent)) != 0) ||
          ((bn = UmlDrag::decode(e, BrowserSimpleRelation::drag_key(this))) != 0)) &&
         (bn != after) && (bn != this)) {
@@ -523,14 +521,16 @@ void BrowserComponent::DropAfterEvent(QDropEvent * e, BrowserNode * after)
                 a_comp &&
                 old->may_contains(bn, TRUE)) {
                 // have choice
-                Q3PopupMenu m(0);
+                QMenu m(0);
 
-                MenuFactory::createTitle(m, TR("move ") + bn->get_name());
-                m.insertSeparator();
-                m.insertItem(TR("In ") + QString(get_name()), 1);
-                m.insertItem(TR("After ") + QString(get_name()), 2);
+                MenuFactory::createTitle(m, QObject::tr("move ") + bn->get_name());
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::tr("In ") + QString(get_name()), 1);
+                 MenuFactory::addItem(m, QObject::tr("After ") + QString(get_name()), 2);
 
-                switch (m.exec(QCursor::pos())) {
+                QAction* act = m.exec(QCursor::pos());
+                if(act)
+                switch (act->data().toInt()) {
                 case 1:
                     break;
 
@@ -547,7 +547,7 @@ void BrowserComponent::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             if (after)
                 bn->moveItem(after);
             else {
-                bn->parent()->takeItem(bn);
+                ((BrowserNode *)bn->parent())->takeItem(bn);
                 insertItem(bn);
             }
 
@@ -561,7 +561,7 @@ void BrowserComponent::DropAfterEvent(QDropEvent * e, BrowserNode * after)
             package_modified();
         }
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical( QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }
@@ -577,10 +577,9 @@ BrowserComponent * BrowserComponent::get_component(BrowserNode * future_parent,
     BrowserNode * old;
     QString name;
     BrowserNodeList nodes;
-
     if (!future_parent->enter_child_name(name,
-                                         (existing) ? TR("choose existing component")
-                                         : TR("enter component's name : "),
+                                         (existing) ? QObject::tr("choose existing component")
+                                         : QObject::tr("enter component's name : "),
                                          UmlComponent, instances(nodes), &old,
                                          TRUE, FALSE, existing))
         return 0;
@@ -590,15 +589,13 @@ BrowserComponent * BrowserComponent::get_component(BrowserNode * future_parent,
 
     future_parent->setOpen(TRUE);
     future_parent->package_modified();
-
     return new BrowserComponent(name, future_parent);
 }
 
 BrowserComponent * BrowserComponent::add_component(BrowserNode * future_parent)
 {
     QString name;
-
-    if (!future_parent->enter_child_name(name, TR("enter component's name : "),
+    if (!future_parent->enter_child_name(name, QObject::tr("enter component's name : "),
                                          UmlComponent, TRUE, FALSE))
         return 0;
 
@@ -618,27 +615,28 @@ BrowserNodeList & BrowserComponent::instances(BrowserNodeList & result,
     IdIterator<BrowserComponent> it(all);
 
     if ((st == 0) || (*st == 0)) {
-        while (it.current() != 0) {
-            if (!it.current()->deletedp() &&
-                (!non_nested || !it.current()->nestedp()))
-                result.append(it.current());
+        while(it.hasNext()){
+            it.next();
+        if (it.value() != 0)
+            if (!it.value()->deletedp() &&
+                (!non_nested || !it.value()->nestedp()))
+                result.append(it.value());
 
-            ++it;
         }
     }
     else {
-        while (it.current() != 0) {
-            if (!it.current()->deletedp() &&
-                (!non_nested || !it.current()->nestedp()) &&
-                !strcmp(it.current()->get_data()->get_stereotype(), st))
-                result.append(it.current());
+        while(it.hasNext()){
+            it.next();
+        if (it.value() != 0)
+            if (!it.value()->deletedp() &&
+                (!non_nested || !it.value()->nestedp()) &&
+                !strcmp(it.value()->get_data()->get_stereotype(), st))
+                result.append(it.value());
 
-            ++it;
         }
     }
 
     result.sort_it();
-
     return result;
 }
 
@@ -667,19 +665,18 @@ void BrowserComponent::set_associated_diagram(BrowserNode * dg,
 void BrowserComponent::on_delete()
 {
     bool modif = FALSE;
-
     if (associated_diagram && associated_diagram->deletedp()) {
         associated_diagram = 0;
         modif = TRUE;
     }
 
-    Q3ValueList<BrowserClass *>::Iterator it;
+    QList<BrowserClass *>::Iterator it;
 
     it = realizing_classes.begin();
 
     while (it != realizing_classes.end()) {
         if ((*it)->deletedp()) {
-            it = realizing_classes.remove(it);
+            it = realizing_classes.erase(it);
             modif = TRUE;
         }
         else
@@ -690,7 +687,7 @@ void BrowserComponent::on_delete()
 
     while (it != provided_classes.end()) {
         if ((*it)->deletedp()) {
-            it = provided_classes.remove(it);
+            it = provided_classes.erase(it);
             modif = TRUE;
         }
         else
@@ -701,13 +698,12 @@ void BrowserComponent::on_delete()
 
     while (it != required_classes.end()) {
         if ((*it)->deletedp()) {
-            it = required_classes.remove(it);
+            it = required_classes.erase(it);
             modif = TRUE;
         }
         else
             ++it;
     }
-
     if (modif)
         package_modified();
 }
@@ -715,18 +711,17 @@ void BrowserComponent::on_delete()
 void BrowserComponent::remove_associated_class(BrowserClass * c)
 {
     bool done = FALSE;
-    Q3ValueList<BrowserClass *>::Iterator it;
-
-    if ((it = realizing_classes.find(c)) != realizing_classes.end()) {
-        realizing_classes.remove(it);
+    QList<BrowserClass *>::Iterator it;
+    if (realizing_classes.contains(c)) {
+        realizing_classes.removeOne(c);
         QObject::disconnect(c->get_data(), SIGNAL(deleted()),
                             def, SLOT(on_delete()));
         package_modified();
         done = TRUE;
     }
 
-    if ((it = provided_classes.find(c)) != provided_classes.end()) {
-        provided_classes.remove(it);
+    if (provided_classes.contains(c)) {
+        provided_classes.removeOne(c);
 
         if (! done) {
             QObject::disconnect(c->get_data(), SIGNAL(deleted()),
@@ -736,8 +731,8 @@ void BrowserComponent::remove_associated_class(BrowserClass * c)
         }
     }
 
-    if ((it = required_classes.find(c)) != required_classes.end()) {
-        required_classes.remove(it);
+    if (required_classes.contains(c)) {
+        required_classes.removeOne(c);
 
         if (! done) {
             QObject::disconnect(c->get_data(), SIGNAL(deleted()),
@@ -747,27 +742,25 @@ void BrowserComponent::remove_associated_class(BrowserClass * c)
     }
 }
 
-void BrowserComponent::get_all_provided_classes(Q3ValueList<BrowserClass *> & r) const
+void BrowserComponent::get_all_provided_classes(QList<BrowserClass *> & r) const
 {
-    Q3ValueList<BrowserClass *>::ConstIterator it;
-
+    QList<BrowserClass *>::ConstIterator it;
     for (it = provided_classes.begin() ; it != provided_classes.end(); it++)
-        if (r.findIndex(*it) == -1)
+        if (r.indexOf(*it) == -1)
             r.append(*it);
 
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         if (((BrowserNode *) child)->get_type() == UmlComponent)
             ((BrowserComponent *) child)->get_all_provided_classes(r);
 }
 
-void BrowserComponent::get_all_provided_classes(Q3ValueList<BrowserClass *> & r,
+void BrowserComponent::get_all_provided_classes(QList<BrowserClass *> & r,
         bool sorted) const
 {
     r = provided_classes;
-
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         if (((BrowserNode *) child)->get_type() == UmlComponent)
@@ -775,7 +768,7 @@ void BrowserComponent::get_all_provided_classes(Q3ValueList<BrowserClass *> & r,
 
     if (sorted) {
         BrowserNodeList nl;
-        Q3ValueList<BrowserClass *>::Iterator it;
+        QList<BrowserClass *>::Iterator it;
 
         for (it = r.begin() ; it != r.end(); it++)
             nl.append(*it);
@@ -788,35 +781,32 @@ void BrowserComponent::get_all_provided_classes(Q3ValueList<BrowserClass *> & r,
     }
 }
 
-void BrowserComponent::get_all_required_classes(Q3ValueList<BrowserClass *> & r) const
+void BrowserComponent::get_all_required_classes(QList<BrowserClass *> & r) const
 {
-    Q3ValueList<BrowserClass *>::ConstIterator it;
-
+    QList<BrowserClass *>::ConstIterator it;
     for (it = required_classes.begin() ; it != required_classes.end(); it++)
-        if (r.findIndex(*it) == -1)
+        if (!r.contains(*it))
             r.append(*it);
 
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         if (((BrowserNode *) child)->get_type() == UmlComponent)
             ((BrowserComponent *) child)->get_all_required_classes(r);
 }
 
-void BrowserComponent::get_all_required_classes(Q3ValueList<BrowserClass *> & r,
+void BrowserComponent::get_all_required_classes(QList<BrowserClass *> & r,
         bool sorted) const
 {
     r = required_classes;
-
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = firstChild(); child != 0; child = child->nextSibling())
         if (((BrowserNode *) child)->get_type() == UmlComponent)
             ((BrowserComponent *) child)->get_all_required_classes(r);
-
     if (sorted) {
         BrowserNodeList nl;
-        Q3ValueList<BrowserClass *>::Iterator it;
+        QList<BrowserClass *>::Iterator it;
 
         for (it = r.begin() ; it != r.end(); it++)
             nl.append(*it);
@@ -829,12 +819,12 @@ void BrowserComponent::get_all_required_classes(Q3ValueList<BrowserClass *> & r,
     }
 }
 
-void BrowserComponent::set_associated_classes(const Q3ValueList<BrowserClass *> & rz,
-        const Q3ValueList<BrowserClass *> & pr,
-        const Q3ValueList<BrowserClass *> & rq,
+void BrowserComponent::set_associated_classes(const QList<BrowserClass *> & rz,
+        const QList<BrowserClass *> & pr,
+        const QList<BrowserClass *> & rq,
         bool on_read)
 {
-    Q3ValueList<BrowserClass *>::Iterator it;
+    QList<BrowserClass *>::Iterator it;
 
     if (! on_read) {
         // manage removed classes
@@ -843,13 +833,13 @@ void BrowserComponent::set_associated_classes(const Q3ValueList<BrowserClass *> 
         while (it != realizing_classes.end()) {
             QObject::disconnect((*it)->get_data(), SIGNAL(deleted()),
                                 def, SLOT(on_delete()));
-
-            if (rz.findIndex(*it) == -1) {
+            if (rz.indexOf(*it) == -1) {
                 // stop to be realizing
-                it = realizing_classes.remove(it);
+                realizing_classes.removeOne(*it);
             }
             else
                 ++it;
+
         }
 
         it = provided_classes.begin();
@@ -857,10 +847,9 @@ void BrowserComponent::set_associated_classes(const Q3ValueList<BrowserClass *> 
         while (it != provided_classes.end()) {
             QObject::disconnect((*it)->get_data(), SIGNAL(deleted()),
                                 def, SLOT(on_delete()));
-
-            if (pr.findIndex(*it) == -1) {
+            if (pr.indexOf(*it) == -1) {
                 // stop to be provided
-                it = provided_classes.remove(it);
+                provided_classes.removeOne(*it);
             }
             else
                 ++it;
@@ -871,10 +860,9 @@ void BrowserComponent::set_associated_classes(const Q3ValueList<BrowserClass *> 
         while (it != required_classes.end()) {
             QObject::disconnect((*it)->get_data(), SIGNAL(deleted()),
                                 def, SLOT(on_delete()));
-
-            if (rq.findIndex(*it) == -1) {
+            if (rq.indexOf(*it) == -1) {
                 // stop to be required
-                it = required_classes.remove(it);
+                required_classes.removeOne(*it);
             }
             else
                 ++it;
@@ -892,14 +880,13 @@ void BrowserComponent::set_associated_classes(const Q3ValueList<BrowserClass *> 
     }
 
     provided_classes = pr;
-
     for (it = provided_classes.begin(); it != provided_classes.end(); ++it) {
         BrowserClass * cl = *it;
 
-        if (cl->get_associated_components().findIndex(this) == -1)
+        if (cl->get_associated_components().indexOf(this) == -1)
             cl->add_associated_component(this);
 
-        if (rz.findIndex(cl) == -1) {
+        if (rz.indexOf(cl) == -1) {
             QObject::connect(cl->get_data(), SIGNAL(deleted()),
                              def, SLOT(on_delete()));
         }
@@ -910,12 +897,11 @@ void BrowserComponent::set_associated_classes(const Q3ValueList<BrowserClass *> 
     for (it = required_classes.begin(); it != required_classes.end(); ++it) {
         BrowserClass * cl = *it;
 
-        if ((rz.findIndex(cl) == -1) && (pr.findIndex(cl) == -1)) {
+        if ((rz.indexOf(cl) == -1) && (pr.indexOf(cl) == -1)) {
             QObject::connect(cl->get_data(), SIGNAL(deleted()),
                              def, SLOT(on_delete()));
         }
     }
-
     if (!on_read)
         package_modified();
 }
@@ -950,7 +936,7 @@ bool BrowserComponent::tool_cmd(ToolCom * com, const char * args)
         BrowserNode::tool_cmd(com, args);
 
         if (com->api_format() > 13) {
-            Q3ValueList<BrowserClass *>::Iterator it;
+            QList<BrowserClass *>::Iterator it;
 
             com->write_unsigned(realizing_classes.count());
 
@@ -1044,10 +1030,10 @@ bool BrowserComponent::tool_cmd(ToolCom * com, const char * args)
 
                 case setAssocClassesCmd: {
                     // check redondency
-                    Q3ValueList<BrowserClass *> rz;
-                    Q3ValueList<BrowserClass *> pr;
-                    Q3ValueList<BrowserClass *> rq;
-                    Q3ValueList<BrowserClass *>::ConstIterator it;
+                    QList<BrowserClass *> rz;
+                    QList<BrowserClass *> pr;
+                    QList<BrowserClass *> rq;
+                    QList<BrowserClass *>::ConstIterator it;
                     unsigned n;
 
                     n = com->get_unsigned(args);
@@ -1069,39 +1055,39 @@ bool BrowserComponent::tool_cmd(ToolCom * com, const char * args)
 
                     while (it != rz.end()) {
                         BrowserClass * cl = *it;
-
-                        if ((pr.find(cl) != pr.end()) ||
-                            (rq.find(cl) != rq.end()) ||
-                            (rz.find(++it, cl) != rz.end())) {
+                        if ((pr.contains(cl)) ||
+                            (rq.contains(cl)) ||
+                            (rz.contains(cl))) {
                             com->write_ack(FALSE);
                             return TRUE;
                         }
+                        ++it;
                     }
 
                     it = pr.begin();
 
                     while (it != pr.end()) {
                         BrowserClass * cl = *it;
-
-                        if ((rz.find(cl) != rz.end()) ||
-                            (rq.find(cl) != rq.end()) ||
-                            (pr.find(++it, cl) != pr.end())) {
+                        if ((rz.contains(cl)) ||
+                            (rq.contains(cl)) ||
+                            (pr.contains( cl))) {
                             com->write_ack(FALSE);
                             return TRUE;
                         }
+                        ++it;
                     }
 
                     it = rq.begin();
 
                     while (it != rq.end()) {
                         BrowserClass * cl = *it;
-
-                        if ((rz.find(cl) != rz.end()) ||
-                            (pr.find(cl) != pr.end()) ||
-                            (rq.find(++it, cl) != rq.end())) {
+                        if ((rz.contains(cl)) ||
+                            (pr.contains(cl)) ||
+                            (rq.contains( cl))) {
                             com->write_ack(FALSE);
                             return TRUE;
                         }
+                        ++it;
                     }
 
                     set_associated_classes(rz, pr, rq);
@@ -1148,7 +1134,7 @@ void BrowserComponent::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "component " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
 
@@ -1158,7 +1144,7 @@ void BrowserComponent::save(QTextStream & st, bool ref, QString & warning)
             associated_diagram->save(st, TRUE, warning);
         }
 
-        Q3ValueList<BrowserClass *>::ConstIterator it;
+        QList<BrowserClass *>::ConstIterator it;
 
         if (! realizing_classes.isEmpty()) {
             nl_indent(st);
@@ -1209,7 +1195,7 @@ void BrowserComponent::save(QTextStream & st, bool ref, QString & warning)
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -1297,18 +1283,16 @@ BrowserComponent * BrowserComponent::read(char *& st, char * k,
             k = read_keyword(st);
 
             BrowserNode * diag;
-
             if (((diag = BrowserComponentDiagram::read(st, k, 0)) == 0) &&
                 ((diag = BrowserDeploymentDiagram::read(st, k, 0)) == 0))
                 wrong_keyword(k, "component/deployment diagram ref");
-
             result->set_associated_diagram(diag, TRUE);
             k = read_keyword(st);
         }
 
-        Q3ValueList<BrowserClass *> rz;
-        Q3ValueList<BrowserClass *> pr;
-        Q3ValueList<BrowserClass *> rq;
+        QList<BrowserClass *> rz;
+        QList<BrowserClass *> pr;
+        QList<BrowserClass *> rq;
 
         if (!strcmp(k, "realized_classes") || !strcmp(k, "realizing_classes")) {
             while (strcmp((k = read_keyword(st)), "end"))

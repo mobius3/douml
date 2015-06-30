@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseRelation.h"
-#include <q3cstring.h>
+
 
 // This class manages 'relations' between classes, notes that the class 'UmlClassItem'
 // is a mother class of all the class's children.
@@ -12,7 +12,7 @@
 class UmlRelation : public UmlBaseRelation
 {
 public:
-    UmlRelation(void * id, const Q3CString & n) : UmlBaseRelation(id, n) {};
+    UmlRelation(void * id, const QByteArray & n) : UmlBaseRelation(id, n) {};
 
     virtual int orderWeight();
 

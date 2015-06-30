@@ -11,7 +11,7 @@ CONFIG(Release, Debug|Release) {
     QMAKE_POST_LINK = " "
 }
 QXT += core
-DEFINES		= WITHCPP WITHJAVA WITHPHP WITHPYTHON WITHIDL TRACE BooL=bool
+DEFINES		+= WITHCPP WITHJAVA WITHPHP WITHPYTHON WITHIDL TRACE BooL=bool
 HEADERS		= ./UmlBaseExpansionRegion.h \
 		  ./UmlBaseUseCaseDiagramDefinition.h \
 		  ./UmlBaseView.h \
@@ -412,10 +412,10 @@ SOURCES		= ./UmlBaseExpansionRegion.cpp \
     ../../src/Logging/QsLog.cpp \
     ../../src/Logging/QsDebugOutput.cpp
 
-#The following line was inserted by qt3to4
-QT += network  qt3support
+QT += network widgets
+DEFINES += TRUE=true FALSE=false
 INCLUDEPATH += ../../src
-CONFIG += qtestlib
+QT += testlib
 DESTDIR = ../../bin
 Release {
     MOC_DIR = $${DESTDIR}/moc_release/deplcl
@@ -430,3 +430,4 @@ UI_DIR = src/ui
 
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
+

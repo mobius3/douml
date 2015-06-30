@@ -133,7 +133,7 @@ void UmlAttribute::generate(QTextStream & f, const WrapperStr & cl_stereotype,
                     f << "[]";
                 else {
                     for (unsigned index = 0; index != m.length(); index += 1) {
-                        switch (m.at(index).toAscii().at(0)) {
+                        switch (m.at(index).toLatin1().at(0)) {
                         case '[':
                             f << '[';
                             break;

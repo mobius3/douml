@@ -31,11 +31,11 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 #include "StereotypeDialog.h"
 #include "DialogUtil.h"
@@ -47,45 +47,46 @@ QSize StereotypeDialog::previous_size;
 StereotypeDialog::StereotypeDialog(const QStringList & defaults,
                                    QString & st, QString & la,
                                    QString cap, QString lbl)
-    : QDialog(0, cap, TRUE), ste(st), lab(la)
+    : QDialog(0/*, cap, TRUE*/), ste(st), lab(la)
 {
-    setCaption(cap);
+    setWindowTitle(cap);
 
     if (! ste.isEmpty())
         // removes << and >>
         ste = ste.mid(2, ste.length() - 4);
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
     QLabel * label1;
     QLabel * label2;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    vbox->addLayout(hbox = new QHBoxLayout());
     hbox->setMargin(5);
     hbox->addWidget(label1 = new QLabel(lbl, this));
     ed = new LineEdit(la, this);
     hbox->addWidget(ed);
 
-    hbox = new Q3HBoxLayout(vbox);
+    vbox->addLayout(hbox = new QHBoxLayout());
     hbox->setMargin(5);
     hbox->addWidget(label2 = new QLabel(TR("stereotype : "), this));
-    cb = new Q3ComboBox(TRUE, this);
-    cb->insertItem(ste);
-    cb->setCurrentItem(0);
-    cb->insertStringList(defaults);
+    cb = new QComboBox(this);
+    cb->setEditable(true);
+    cb->addItem(ste);
+    cb->setCurrentIndex(0);
+    cb->addItems(defaults);
     cb->setAutoCompletion(completion());
     hbox->addWidget(cb);
 
     QSizePolicy sp = cb->sizePolicy();
 
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     cb->setSizePolicy(sp);
 
     same_width(label1, label2);
 
-    hbox = new Q3HBoxLayout(vbox);
+    vbox->addLayout(hbox = new QHBoxLayout());
     hbox->setMargin(5);
     QPushButton * accept = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -109,13 +110,13 @@ StereotypeDialog::~StereotypeDialog()
 
 void StereotypeDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
 void StereotypeDialog::accept()
 {
-    ste = cb->currentText().stripWhiteSpace();
+    ste = cb->currentText().trimmed();
 
     if (!ste.isEmpty())
         ste = QString("<<") + ste + ">>";

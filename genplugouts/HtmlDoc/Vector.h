@@ -1,8 +1,8 @@
 #ifndef _VECTOR_H
 #define _VECTOR_H
+#include <QVector>
 
 
-#include <q3ptrvector.h>
 
 class UmlItem;
 
@@ -27,16 +27,16 @@ public:
     }
 
     void setElementAt(const UmlItem * x, unsigned int i) {
-        v.insert(i, x);
+        v[i] = const_cast<UmlItem *>(x);
     }
 
     bool contains(const UmlItem * x) {
-        return (!v.isEmpty() && (v.findRef(x) != -1));
+        return (!v.isEmpty() && (v.indexOf(const_cast<UmlItem *>(x)) != -1));
     }
 
 
 protected:
-    Q3PtrVector<UmlItem> v;
+    QVector<UmlItem*> v;
 
 };
 

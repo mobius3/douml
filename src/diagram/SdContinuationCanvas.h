@@ -49,6 +49,7 @@ protected:
 
     void check_size();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     SdContinuationCanvas(UmlCanvas * canvas, int x, int y, int id);
     virtual ~SdContinuationCanvas();
@@ -57,7 +58,7 @@ public:
 
     virtual void draw(QPainter & p);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;
@@ -77,7 +78,7 @@ public:
 
     virtual void apply_shortcut(QString s);
 
-    static void send(ToolCom * com, Q3CanvasItemList & all);
+    static void send(ToolCom * com, QList<QGraphicsItem*> & all);
 
     virtual void save(QTextStream  & st, bool ref, QString & warning) const;
     static SdContinuationCanvas * read(char *& , UmlCanvas *, char *);

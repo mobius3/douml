@@ -2,18 +2,18 @@
 #include "UmlCom.h"
 #include "UmlStateAction.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlStateAction::sKind()
+QByteArray UmlStateAction::sKind()
 {
     return "state action";
 }
 
-void UmlStateAction::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlStateAction::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     UmlCom::message(name());
 
-    Q3CString s = stereotype();
+    QByteArray s = stereotype();
 
     if (s.isEmpty())
         s = "State action";
@@ -33,8 +33,8 @@ void UmlStateAction::html(Q3CString pfix, unsigned int rank, unsigned int level)
 
     s = expression();
 
-    Q3CString scpp = cppExpression();
-    Q3CString sjava = javaExpression();
+    QByteArray scpp = cppExpression();
+    QByteArray sjava = javaExpression();
 
     if ((!s.isEmpty()) || (!scpp.isEmpty()) || (!sjava.isEmpty())) {
         fw.write("<p>Expression :</p><ul>");

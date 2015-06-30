@@ -1,6 +1,6 @@
 #ifndef _UMLBASETYPESPEC_H
 #define _UMLBASETYPESPEC_H
-
+#include <QByteArray>
 
 #include "../src/misc/mystr.h"
 

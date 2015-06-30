@@ -30,14 +30,14 @@
 
 
 #include <stdio.h>
-#include <q3textview.h>
+#include <QTextEdit>
 #include <qlayout.h>
 #include <qpushbutton.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 #include <QTextStream>
 //Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <myio.h>
 
 #include "TraceDialog.h"
@@ -46,23 +46,25 @@
 #include "translate.h"
 
 TraceDialog * TraceDialog::the;
-Q3TextView * TraceDialog::txt;
+QTextEdit * TraceDialog::txt;
 bool TraceDialog::AutoRaise;
 QString TraceDialog::content;
 
 QSize TraceDialog::previous_size;
 
-TraceDialog::TraceDialog() : QDialog(0, "", FALSE, Qt::WDestructiveClose)
+TraceDialog::TraceDialog() : QDialog(0/*, "", FALSE, Qt::WDestructiveClose*/)
 {
-    setCaption(TR("Trace"));
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowTitle(TR("Trace"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
+    QVBoxLayout * vbox = new QVBoxLayout(this);
 
-    txt = new Q3TextView(this);
+    txt = new QTextEdit(this);
     txt->setText(content);
-    vbox->add(txt);
+    vbox->addWidget(txt);
 
-    Q3HBoxLayout * hbox = new Q3HBoxLayout(vbox);
+    QHBoxLayout * hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * cl = new QPushButton(TR("Clear"), this);
     QPushButton * save = new QPushButton(TR("Save"), this);
@@ -105,10 +107,10 @@ void TraceDialog::clr()
 void TraceDialog::save()
 {
     QString filename =
-        Q3FileDialog::getSaveFileName(last_used_directory(), "*.html", this);
+        QFileDialog::getSaveFileName(this,"",last_used_directory(), "*.html");
 
     if (!filename.isNull()) {
-        if (filename.right(5).lower() != ".html")
+        if (filename.right(5).toLower() != ".html")
             filename += ".html";
 
         set_last_used_directory(filename);
@@ -118,7 +120,7 @@ void TraceDialog::save()
         if (file.open(QIODevice::WriteOnly)) {
             QTextStream stream(&file);
 
-            stream << "<html>\n" << txt->text() << "\n</html>\n";
+            stream << "<html>\n" << txt->toHtml() << "\n</html>\n";
             stream.flush();
             file.close();
         }

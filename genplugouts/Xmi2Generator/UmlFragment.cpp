@@ -9,7 +9,7 @@
 #include "UmlDiagram.h"
 //Added by qt3to4:
 #include "misc/mystr.h"
-void UmlFragment::write(FileOut & out, UmlItem * diagram, Q3PtrList<UmlSequenceMessage> & msgs)
+void UmlFragment::write(FileOut & out, UmlItem * diagram, QList<UmlSequenceMessage *> &msgs)
 {
     WrapperStr oper = name();
 
@@ -39,13 +39,14 @@ void UmlFragment::write(FileOut & out, UmlItem * diagram, Q3PtrList<UmlSequenceM
             if (! covered.isEmpty()) {
                 out << " covered=\"";
 
-                UmlClassInstanceReference * lifeline = covered.first();
+                //UmlClassInstanceReference * lifeline = covered.first();
 
-                for (;;) {
-                    out.ref_only(diagram, lifeline->lifeline());
-                    lifeline = covered.next();
+                for (int i = 0;;) {
+                    out.ref_only(diagram, covered[i]->lifeline());
+                    //lifeline = covered.next();
+                    i++;
 
-                    if (lifeline == 0)
+                    if(!(i < covered.count()))
                         break;
 
                     out << " ";
@@ -58,7 +59,7 @@ void UmlFragment::write(FileOut & out, UmlItem * diagram, Q3PtrList<UmlSequenceM
             out.indent(+1);
         }
 
-        const Q3PtrVector<UmlFragmentCompartment> & subs = compartments();
+        const QVector<UmlFragmentCompartment*> & subs = compartments();
         unsigned n = subs.size();
 
         for (unsigned i = 0; i != n; i += 1)
@@ -74,17 +75,17 @@ void UmlFragment::write(FileOut & out, UmlItem * diagram, Q3PtrList<UmlSequenceM
 
 void UmlFragment::cover(UmlSequenceMessage * msg)
 {
-    if (covered.findRef(msg->from()) == -1)
+    if (covered.indexOf(msg->from()) == -1)
         covered.append(msg->from());
 
-    if (covered.findRef(msg->to()) == -1)
+    if (covered.indexOf(msg->to()) == -1)
         covered.append(msg->to());
 
     if (container() != 0)
         container()->fragment()->cover(msg);
 }
 
-void UmlFragment::write_ref(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequenceMessage > & msgs)
+void UmlFragment::write_ref(FileOut & out, UmlItem * diagram, QList<UmlSequenceMessage *> &msgs)
 {
     static int rank = 0;
 
@@ -92,7 +93,7 @@ void UmlFragment::write_ref(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequ
     out << "<fragment xmi:type=\"uml:InteractionUse\"";
     out.id_prefix(diagram, "INTERACTIONUSE", ++rank);
 
-    const Q3PtrVector<UmlClassInstanceReference> & v = UmlBaseFragment::covered();
+    const QVector<UmlClassInstanceReference*> & v = UmlBaseFragment::covered();
     unsigned n;
     unsigned index;
 
@@ -155,7 +156,7 @@ void UmlFragment::write_ref(FileOut & out, UmlItem * diagram, Q3PtrList< UmlSequ
 
     // remove internal messages and compartment
 
-    const Q3PtrVector<UmlFragmentCompartment> & subs = compartments();
+    const QVector<UmlFragmentCompartment*> & subs = compartments();
 
     n = subs.size();
 

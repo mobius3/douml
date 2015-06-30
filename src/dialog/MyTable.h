@@ -30,38 +30,98 @@
 
 
 
-
-
-#include <q3table.h>
+#include "DialogUtil.h"
+#include <QTableWidget>
 //Added by qt3to4:
 #include <QPixmap>
-
-class TableItem : public Q3TableItem
+#include "tablewidgetitemdelegate.h"
+class TableItem : public QTableWidgetItem
 {
 public:
-    TableItem(Q3Table * table, EditType et, const QString & text)
-        : Q3TableItem(table, et, text) {};
-    TableItem(Q3Table * table, EditType et, const QString & text, const QPixmap & p)
-        : Q3TableItem(table, et, text, p) {};
+    enum{
+        TableItemType= UserType,
+        ComboType,
+        MLinesType,
+        MsgTableItemType
+    };
+    enum	EditType { Always, WhenCurrent, OnTyping, Never };
+    TableItem(QTableWidget * table, EditType et, const QString & text, int type)
+        : QTableWidgetItem(/*table,*/  text, type) {
+        switch(et)
+        {
+        case Always:
+            setFlags(flags()| Qt::ItemIsEditable);
+            break;
+        case WhenCurrent:
+            setFlags(flags()| Qt::ItemIsEditable);
+            break;
+        case OnTyping:
+            setFlags(flags()| Qt::ItemIsEditable);
+            break;
+        case Never:
+            setFlags(flags()& ~Qt::ItemIsEditable);
+            break;
+        }
+    }
+    TableItem(QTableWidget * table, EditType et, const QString & text, const QPixmap & p, int type)
+        : QTableWidgetItem(/*table,*/ QIcon(p),text,type) {
+        switch(et)
+        {
+        case Always:
+            setFlags(flags()| Qt::ItemIsEditable);
+            break;
+        case WhenCurrent:
+            setFlags(flags()| Qt::ItemIsEditable);
+            break;
+        case OnTyping:
+            setFlags(flags()| Qt::ItemIsEditable);
+            break;
+        case Never:
+            setFlags(flags()& ~Qt::ItemIsEditable);
+            break;
+        }
+    }
 
     virtual int alignment() const;
 };
+#define DISABLESORTINGMYTABLE bool sortingEnabled = false;\
+if(isSortingEnabled())\
+{\
+    sortingEnabled =true;\
+    setSortingEnabled(false);\
+}
 
-class MyTable : public Q3Table
+#define ENABLESORTINGMYTABLE if(sortingEnabled)\
+{\
+    setSortingEnabled(true);\
+}
+
+class MyTable : public QTableWidget
 {
     Q_OBJECT
 
 public:
     MyTable(QWidget * parent = 0, const char * name = 0)
-        : Q3Table(parent, name) {
-        setSorting(-1);
-    };
+        : QTableWidget(parent/*, name*/){
+        //setSortingEnabled(-1);
+    }
     MyTable(int numRows, int numCols, QWidget * parent = 0, const char * name = 0)
-        : Q3Table(numRows, numCols, parent, name) {};
+    :QTableWidget(numRows, numCols, parent/*, name*/){}
+
+    ~MyTable(){}
 
     virtual void setText(int row, int col, const QString & text);
+    QString text(int row, int colum) const;
 
     void forceUpdateCells();
+
+    void setVerticalHeaderLabel(int section, const QIcon & icon, const QString & s);
+    void setHorizontalHeaderLabel(int section, const QIcon & icon, const QString & s);
+    void setVerticalHeaderLabel(int section,  const QString & s);
+    void setHorizontalHeaderLabel(int section,  const QString & s);
+    void setColumnStretchable(int column, bool state);
+    void setRowStretchable(int column, bool state);
+    void adjustColumn(int col);
 };
 
 #endif

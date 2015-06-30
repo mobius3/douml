@@ -31,10 +31,8 @@
 #include "UmlBaseOperation.h"
 #include "UmlClass.h"
 #include "Namespace.h"
-//Added by qt3to4:
 #include "misc/mystr.h"
-#include <Q3ValueList>
-#include <Q3PtrList>
+#include <QList>
 
 class ClassContainer;
 class Package;
@@ -47,7 +45,7 @@ public:
     virtual ~UmlOperation();
 
     static bool new_one(Class * cl, const WrapperStr & name,
-                        const Q3ValueList<FormalParameterList> & tmplt,
+                        const QList<FormalParameterList> & tmplt,
                         WrapperStr type, const WrapperStr & modifier,
                         const WrapperStr & pretype, aVisibility visibility,
                         bool inlinep, bool virtualp, bool staticp, bool constp,
@@ -59,7 +57,7 @@ public:
 #endif
                        );
     static void reverse_definition(Package * pack, WrapperStr name, WrapperStr type,
-                                   Q3ValueList<FormalParameterList> & tmplt,
+                                   QList<FormalParameterList> & tmplt,
                                    bool inlinep, const WrapperStr & comment,
                                    const WrapperStr & description);
 
@@ -76,7 +74,7 @@ public:
                       const char * namespec);
 private:
 #ifdef ROUNDTRIP
-    static Q3PtrDict<WrapperStr> DefNotYetSet;
+    static QHash<UmlOperation *,WrapperStr*> DefNotYetSet;
 #endif
     static NDict< QList<UmlOperation *> > friends;
     FormalParameterList * formals;
@@ -84,33 +82,33 @@ private:
 
     static bool read_param(ClassContainer * container, unsigned rank,
                            UmlParameter & param, WrapperStr & decl,
-                           const Q3ValueList<FormalParameterList> & tmplt,
+                           const QList<FormalParameterList> & tmplt,
                            BooL & on_error, bool add_defaultvalue);
     static void friend_operations(QList<UmlOperation *> & candidates,
-                                  const Q3ValueList<FormalParameterList> & tmplt,
+                                  const QList<FormalParameterList> & tmplt,
                                   const WrapperStr & name);
     static bool operations(QList<UmlOperation *> & candidates, UmlClass * cl,
-                           const Q3ValueList<FormalParameterList> & tmplt,
+                           const QList<FormalParameterList> & tmplt,
                            const FormalParameterList *& oper_tmplt,
                            const WrapperStr & name);
     static bool read_throw_elt(ClassContainer * container,
                                UmlTypeSpec & typespec,
-                               const Q3ValueList<FormalParameterList> & tmplts);
+                               const QList<FormalParameterList> & tmplts);
     bool reverse_if_def(Package * pack,
-                        Q3ValueList<FormalParameterList> & tmplts,
+                        QList<FormalParameterList> & tmplts,
                         const FormalParameterList * oper_tmplt,
                         bool inlinep, bool pfct, const WrapperStr & comment,
                         const WrapperStr & description, BooL & on_error,
                         unsigned & nargs, WrapperStr oper_name);
 
-    void update_param_names(Q3ValueList<UmlParameter> & params);
+    void update_param_names(QList<UmlParameter> & params);
 #ifdef ROUNDTRIP
-    void update_params(Class * cl, Q3ValueList<UmlParameter> & params);
-    void update_exceptions(Class * cl, const Q3ValueList<UmlTypeSpec> & exceptions);
+    void update_params(Class * cl, QList<UmlParameter> & params);
+    void update_exceptions(Class * cl, const QList<UmlTypeSpec> & exceptions);
 
     static void clean_body(WrapperStr & body);
     static UmlOperation * already_exist(Class * container, const WrapperStr & name,
-                                        Q3ValueList<UmlParameter> & params,
+                                        QList<UmlParameter> & params,
                                         bool empty_decl);
 #endif
 };

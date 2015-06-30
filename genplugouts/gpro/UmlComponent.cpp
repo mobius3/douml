@@ -3,7 +3,7 @@
 
 #include <qdir.h>
 #include <qmessagebox.h>
-#include <q3textstream.h>
+#include <qtextstream.h>
 
 #include "CppSettings.h"
 #include "UmlPackage.h"

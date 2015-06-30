@@ -30,7 +30,7 @@
 
 
 #include <math.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
@@ -60,20 +60,22 @@
 #include "geometry_vh.xpm"
 #include "geometry_hvh.xpm"
 #include "geometry_vhv.xpm"
-
+#include <QPolygon>
 ArrowCanvas::ArrowCanvas(UmlCanvas * canvas, DiagramItem * b,
                          DiagramItem * e, UmlCode t,
                          int id, bool own_brk, float dbegin, float dend)
-    : Q3CanvasPolygon(canvas), DiagramItem(id, canvas), begin(b), end(e),
+    : QGraphicsPolygonItem(/*canvas*/), DiagramItem(id, canvas), begin(b), end(e),
       itstype(t), geometry(NoGeometry), fixed_geometry(FALSE),
       label(0), stereotype(0), decenter_begin(dbegin), decenter_end(dend)
 {
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+    canvas->addItem(this);
     boundings.resize(4);
 
     double bz = begin->get_z();
     double ez = end->get_z();
 
-    setZ(((bz > ez) ? bz : ez) + 1);
+    setZValue(((bz > ez) ? bz : ez) + 1);
     b->add_line(this);
     e->add_line(this);
 
@@ -96,7 +98,7 @@ ArrowCanvas::~ArrowCanvas()
 void ArrowCanvas::cut_self()
 {
     // cut the line adding two points
-    QRect r = ((DiagramCanvas *) begin)->rect();
+    QRect r = ((DiagramCanvas *) begin)->sceneRect();
     QPoint pt(r.left() - ARROW_LENGTH * 3, r.top());
 
     ArrowPointCanvas * ap = brk(pt);
@@ -113,14 +115,14 @@ void ArrowCanvas::delete_it()
     if (begin != 0) {
         begin->remove_line(this);
 
-        if (begin->type() == UmlArrowPoint)
+        if (begin->typeUmlCode() == UmlArrowPoint)
             begin->delete_it();
     }
 
     if (end != 0) {
         end->remove_line(this);
 
-        if (end->type() == UmlArrowPoint)
+        if (end->typeUmlCode() == UmlArrowPoint)
             end->delete_it();
     }
 
@@ -144,7 +146,7 @@ void ArrowCanvas::unconnect()
 
 UmlCanvas * ArrowCanvas::the_canvas() const
 {
-    return ((UmlCanvas *) canvas());
+    return ((UmlCanvas *) scene());
 }
 
 static int iabs(int v)
@@ -163,22 +165,22 @@ void ArrowCanvas::update_pos()
 
     // calcul beginp & endp pour ne plus etre dans b_rct & e_rct
 
-    if (begin->type() == UmlArrowPoint)
-        beginp = begin->center();
+    if (begin->typeUmlCode() == UmlArrowPoint)
+        beginp = begin->sceneRect().center();
     else {
-        QRect r = begin->rect();
+        QRect r = begin->sceneRect();
 
-        if (r.contains(end->rect()))
-            begin->shift(beginp, end->center(), TRUE);
+        if (r.contains(end->sceneRect()))
+            begin->shift(beginp, end->sceneRect().center(), TRUE);
         else {
-            switch (end->type()) {
+            switch (end->typeUmlCode()) {
             case UmlArrowPoint:
             case UmlArrowJunction:
-                begin->shift(beginp, end->center(), FALSE);
+                begin->shift(beginp, end->sceneRect().center(), FALSE);
                 break;
 
             default: {
-                QRect endr = end->rect();
+                QRect endr = end->sceneRect();
 
                 if (endr.contains(r)) {
                     end->shift(end_computed, r.center(), TRUE);
@@ -208,17 +210,17 @@ void ArrowCanvas::update_pos()
         }
     }
 
-    switch (end->type()) {
+    switch (end->typeUmlCode()) {
     case UmlArrowPoint:
     case UmlArrowJunction:
-        endp = end->center();
+        endp = end->sceneRect().center();
         break;
 
     default: {
-        QRect r = end->rect();
+        QRect r = end->sceneRect();
 
         if (end_computed.isNull())
-            end->shift(endp, beginp, r.contains(begin->rect()));
+            end->shift(endp, beginp, r.contains(begin->sceneRect()));
         else
             endp = end_computed;
 
@@ -251,7 +253,7 @@ void ArrowCanvas::update_pos()
         boundings.setPoint(1, beginp.x() + 1, beginp.y());
         boundings.setPoint(2, beginp.x() + 1, beginp.y() + 1);
         boundings.setPoint(3, beginp.x(), beginp.y() + 1);
-        setPoints(boundings);
+        setPolygon(boundings);
         return;
     }
 
@@ -269,15 +271,13 @@ void ArrowCanvas::update_pos()
                        (int)(endp.y() + deltay - deltax / 1));
     boundings.setPoint(3, (int)(endp.x() - deltax + deltay / 1),
                        (int)(endp.y() - deltay - deltax / 1));
-
-    setPoints(boundings);
-
+    setPolygon(boundings);
     // points de la fleche
     // *3/5 pour diminuer la fleche et ne pas risquer de sortir de boundings
     deltax *= 3.0 / 5.0;
     deltay *= 3.0 / 5.0;
 
-    switch (end->type()) {
+    switch (end->typeUmlCode()) {
     case UmlArrowPoint:
         break;
 
@@ -334,7 +334,7 @@ void ArrowCanvas::update_pos()
         }
     }
 
-    if (begin->type() != UmlArrowPoint) {
+    if (begin->typeUmlCode() != UmlArrowPoint) {
         // aggregation's polygone
         switch (itstype) {
         case UmlAggregation:
@@ -356,19 +356,17 @@ void ArrowCanvas::update_pos()
             break;
         }
     }
-
     if (auto_pos) {
         // moves label dependent on old position
-        if ((label != 0) && !label->selected())
+        if ((label != 0) && !label->isSelected())
             label->moveBy((beginp.x() - old_beginp.x() + endp.x() - old_endp.x()) / 2.0,
                           (beginp.y() - old_beginp.y() + endp.y() - old_endp.y()) / 2.0);
 
         // moves stereotype dependent on old position
-        if ((stereotype != 0) && !stereotype->selected())
+        if ((stereotype != 0) && !stereotype->isSelected())
             stereotype->moveBy((beginp.x() - old_beginp.x() + endp.x() - old_endp.x()) / 2.0,
                                (beginp.y() - old_beginp.y() + endp.y() - old_endp.y()) / 2.0);
     }
-
     update_show_lines();
 
     if (need_update_geometry)
@@ -379,11 +377,11 @@ void ArrowCanvas::update_pos()
 void ArrowCanvas::move_outside(QRect r)
 {
     // check it is the first segment
-    if ((begin != 0) && (begin->type() != UmlArrowPoint)) {
+    if ((begin != 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
         QPoint c = r.center();
         ArrowCanvas * ar = this;
 
-        while ((ar->end != 0) && (ar->end->type() == UmlArrowPoint)) {
+        while ((ar->end != 0) && (ar->end->typeUmlCode() == UmlArrowPoint)) {
             ArrowPointCanvas * p = (ArrowPointCanvas *) ar->end;
             double px = p->x();
             double py = p->y();
@@ -395,9 +393,7 @@ void ArrowCanvas::move_outside(QRect r)
                 px += dx;
                 py += dy;
             }
-
-            p->move(px, py);
-
+            p->moveBy(px, py);
             ar = p->get_other(ar);
 
             if (ar == 0)
@@ -410,10 +406,10 @@ void ArrowCanvas::move_outside(QRect r)
 void ArrowCanvas::move_self_points(double dx, double dy)
 {
     // check it is the first segment
-    if ((begin != 0) && (begin->type() != UmlArrowPoint)) {
+    if ((begin != 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
         ArrowCanvas * a = this;
 
-        while ((a->end != 0) && (a->end->type() == UmlArrowPoint)) {
+        while ((a->end != 0) && (a->end->typeUmlCode() == UmlArrowPoint)) {
             ((ArrowPointCanvas *) a->end)->moveBy(dx, dy);
             a = ((ArrowPointCanvas *) a->end)->get_other(a);
 
@@ -432,16 +428,16 @@ void ArrowCanvas::change_scale()
 
     label = 0;
     stereotype = 0;
-    Q3CanvasPolygon::setVisible(FALSE);
+    QGraphicsPolygonItem::setVisible(FALSE);
     update_pos();
-    Q3CanvasPolygon::setVisible(TRUE);
+    QGraphicsPolygonItem::setVisible(TRUE);
     label = lab;
     stereotype = ste;
 }
 
 void ArrowCanvas::setVisible(bool yes)
 {
-    Q3CanvasPolygon::setVisible(yes);
+    QGraphicsPolygonItem::setVisible(yes);
 
     if (label != 0)
         label->setVisible(yes);
@@ -452,44 +448,44 @@ void ArrowCanvas::setVisible(bool yes)
 
 void ArrowCanvas::moveBy(double dx, double dy)
 {
-    if ((label != 0) && !label->selected())
+    if ((label != 0) && !label->isSelected())
         label->moveBy(dx, dy);
 
-    if ((stereotype != 0) && !stereotype->selected())
+    if ((stereotype != 0) && !stereotype->isSelected())
         stereotype->moveBy(dx, dy);
 }
 
 double ArrowCanvas::get_z() const
 {
-    return z();
+    return zValue();
 }
 
 void ArrowCanvas::set_z(double z)
 {
-    setZ(z);
+    setZValue(z);
 
     if (stereotype != 0)
-        stereotype->setZ(z);
+        stereotype->setZValue(z);
 
     if (label != 0)
-        label->setZ(z);
+        label->setZValue(z);
 
     if ((begin != 0) &&
-        (begin->type() == UmlArrowPoint) &&
-        (((ArrowPointCanvas *) begin)->z() < (z + 1)))
-        ((ArrowPointCanvas *) begin)->setZ(z + 1);
+        (begin->typeUmlCode() == UmlArrowPoint) &&
+        (((ArrowPointCanvas *) begin)->zValue() < (z + 1)))
+        ((ArrowPointCanvas *) begin)->setZValue(z + 1);
 
     if ((end != 0) &&
-        (end->type() == UmlArrowPoint) &&
-        (((ArrowPointCanvas *) end)->z() < (z + 1)))
-        ((ArrowPointCanvas *) end)->setZ(z + 1);
+        (end->typeUmlCode() == UmlArrowPoint) &&
+        (((ArrowPointCanvas *) end)->zValue() < (z + 1)))
+        ((ArrowPointCanvas *) end)->setZValue(z + 1);
 }
 
 void ArrowCanvas::go_up(double nz)
 {
     ArrowCanvas * a = this;
 
-    while ((a->begin != 0) && (a->begin->type() == UmlArrowPoint)) {
+    while ((a->begin != 0) && (a->begin->typeUmlCode() == UmlArrowPoint)) {
         a = ((ArrowPointCanvas *) a->begin)->get_other(a);
 
         if (a == 0)
@@ -498,21 +494,21 @@ void ArrowCanvas::go_up(double nz)
     }
 
     for (;;) {
-        if (a->z() < nz) {
-            a->setZ(nz);
+        if (a->zValue() < nz) {
+            a->setZValue(nz);
 
             if (a->stereotype != 0)
-                a->stereotype->setZ(nz);
+                a->stereotype->setZValue(nz);
 
             if (a->label != 0)
-                a->label->setZ(nz);
+                a->label->setZValue(nz);
         }
 
         foreach (ArrowCanvas *canvas, a->lines)
             canvas->go_up(nz);
 
-        if ((a->end != 0) && (a->end->type() == UmlArrowPoint)) {
-            if (((ArrowPointCanvas *) a->end)->z() < (nz + 1))
+        if ((a->end != 0) && (a->end->typeUmlCode() == UmlArrowPoint)) {
+            if (((ArrowPointCanvas *) a->end)->zValue() < (nz + 1))
                 ((ArrowPointCanvas *) a->end)->set_z(nz + 1);
 
             a = ((ArrowPointCanvas *) a->end)->get_other(a);
@@ -528,12 +524,12 @@ void ArrowCanvas::go_up(double nz)
 
 bool ArrowCanvas::copyable() const
 {
-    return selected() && get_start()->copyable() && get_end()->copyable();
+    return isSelected() && get_start()->copyable() && get_end()->copyable();
 }
 
 void ArrowCanvas::drawShape(QPainter & p)
 {
-    if (! visible() || (beginp == endp))
+    if (! isVisible() || (beginp == endp))
         return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
@@ -550,7 +546,7 @@ void ArrowCanvas::drawShape(QPainter & p)
              ((TransitionData *) get_data())->internal())
             ? UmlDependency : itstype) {
     case UmlDirectionalAssociation:
-        if (end->type() != UmlArrowPoint) {
+        if (end->typeUmlCode() != UmlArrowPoint) {
             if (!strcmp(end->get_bn()->get_stereotype(), "metaclass") &&
                 !strcmp(get_start()->get_bn()->get_stereotype(), "stereotype")) {
                 // extend
@@ -592,7 +588,7 @@ void ArrowCanvas::drawShape(QPainter & p)
     case UmlContain:
     case UmlTransition:
     case UmlFlow:
-        if (end->type() != UmlArrowPoint) {
+        if (end->typeUmlCode() != UmlArrowPoint) {
             p.drawLine(endp, arrow[0]);
             p.drawLine(endp, arrow[1]);
 
@@ -619,7 +615,7 @@ void ArrowCanvas::drawShape(QPainter & p)
                     " x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" />\n",
                     beginp.x(), beginp.y(), endp.x(), endp.y());
 
-        if (begin->type() != UmlArrowPoint) {
+        if (begin->typeUmlCode() != UmlArrowPoint) {
             switch (itstype) {
             case UmlAggregation:
             case UmlDirectionalAggregation: {
@@ -656,7 +652,7 @@ void ArrowCanvas::drawShape(QPainter & p)
 
     case UmlDependency:
     case UmlDependOn:
-        if (end->type() != UmlArrowPoint) {
+        if (end->typeUmlCode() != UmlArrowPoint) {
             p.drawLine(endp, arrow[0]);
             p.drawLine(endp, arrow[1]);
 
@@ -688,7 +684,7 @@ void ArrowCanvas::drawShape(QPainter & p)
         // no break
     case UmlGeneralisation:
     case UmlInherit:
-        if (end->type() != UmlArrowPoint) {
+        if (end->typeUmlCode() != UmlArrowPoint) {
             p.drawLine(beginp, arrow[2]);
             p.setPen(::Qt::SolidLine);
             p.drawLine(endp, arrow[0]);
@@ -736,7 +732,7 @@ void ArrowCanvas::drawShape(QPainter & p)
 
     case UmlRequired:
     case UmlProvided:
-        if (end->type() != UmlArrowPoint) {
+        if (end->typeUmlCode() != UmlArrowPoint) {
             p.drawLine(beginp, arrow[0]);
 
             if (fp != 0)
@@ -756,7 +752,7 @@ void ArrowCanvas::drawShape(QPainter & p)
         break;
 
     case UmlInner:
-        if (end->type() != UmlArrowPoint) {
+        if (end->typeUmlCode() != UmlArrowPoint) {
             p.drawLine(beginp, arrow[1]);
             p.drawPixmap(QPoint(arrow[0].x() - ARROW_LENGTH / 2,
                                 arrow[0].y() - ARROW_LENGTH / 2),
@@ -795,7 +791,7 @@ void ArrowCanvas::drawShape(QPainter & p)
     if (fp != 0)
         fputs("</g>\n", fp);
 
-    if (selected()) {
+    if (isSelected()) {
         p.fillRect(beginp.x() - SELECT_SQUARE_SIZE / 2,
                    beginp.y() - SELECT_SQUARE_SIZE / 2,
                    SELECT_SQUARE_SIZE, SELECT_SQUARE_SIZE, ::Qt::black);
@@ -804,8 +800,12 @@ void ArrowCanvas::drawShape(QPainter & p)
                    SELECT_SQUARE_SIZE, SELECT_SQUARE_SIZE, ::Qt::black);
     }
 }
-
-UmlCode ArrowCanvas::type() const
+void ArrowCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    //QGraphicsPolygonItem::paint(painter, option, widget);
+    drawShape(*painter);
+}
+UmlCode ArrowCanvas::typeUmlCode() const
 {
     return itstype;
 }
@@ -832,7 +832,7 @@ void ArrowCanvas::remove(bool)
         if (the_canvas()->must_draw_all_relations()) {
             const ArrowCanvas * a = this;
 
-            while (a->begin->type() == UmlArrowPoint) {
+            while (a->begin->typeUmlCode() == UmlArrowPoint) {
                 a = ((ArrowPointCanvas *) a->begin)->get_other(a);
 
                 if (a == 0)
@@ -842,7 +842,7 @@ void ArrowCanvas::remove(bool)
             if (a && !a->begin->isSelected() && !a->begin->get_bn()->deletedp()) {
                 a = this;
 
-                while (a->end->type() == UmlArrowPoint) {
+                while (a->end->typeUmlCode() == UmlArrowPoint) {
                     a = ((ArrowPointCanvas *) a->end)->get_other(a);
 
                     if (a == 0)
@@ -864,9 +864,12 @@ QRect ArrowCanvas::rect() const
 {
     QRect r(beginp, endp);
 
-    return r.normalize();
+    return r.normalized();
 }
-
+QRect ArrowCanvas::sceneRect() const
+{
+    return rect();
+}
 QPoint ArrowCanvas::center() const
 {
     return QPoint((beginp.x() + endp.x()) / 2,
@@ -875,7 +878,7 @@ QPoint ArrowCanvas::center() const
 
 bool ArrowCanvas::isSelected() const
 {
-    return selected();
+    return QGraphicsPolygonItem::isSelected();
 }
 
 bool ArrowCanvas::contains(int, int) const
@@ -994,7 +997,7 @@ void ArrowCanvas::open()
         if ((bn != 0) &&
             edit(bn->default_stereotypes(itstype, get_end()->get_bn()),
                  plabel, pstereotype)) {
-            canvas()->update();
+            scene()->update();
             package_modified();
         }
     }
@@ -1004,22 +1007,20 @@ void ArrowCanvas::default_label_position() const
 {
     QPoint c = center();
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
-
-    label->move(c.x() - fm.width(label->get_name()) / 2, c.y() - fm.height());
+    label->moveBy(c.x() - fm.width(label->get_name()) / 2, c.y() - fm.height());
 }
 
 void ArrowCanvas::default_stereotype_position() const
 {
     QPoint c = center();
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
-
-    stereotype->move(c.x() - fm.width(stereotype->get_name()) / 2, c.y());
+    stereotype->moveBy(c.x() - fm.width(stereotype->get_name()) / 2, c.y());
 }
 
 void ArrowCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu geo(0);
+    QMenu m(0);
+    QMenu geo(0);
     ArrowCanvas * plabel;
     ArrowCanvas * pstereotype;
 
@@ -1030,32 +1031,35 @@ void ArrowCanvas::menu(const QPoint &)
                              ? QString(TR("line")) : plabel->label->get_name());
 
     if (IsaRelation(itstype)) {
-        m.insertSeparator();
-        m.insertItem(TR("Edit"), 1);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Edit"), 1);
     }
 
     if (pstereotype || plabel) {
-        m.insertSeparator();
-        m.insertItem(TR("Select stereotype and label"), 2);
-        m.insertItem(TR("Default stereotype and label position"), 3);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Select stereotype and label"), 2);
+        MenuFactory::addItem(m, TR("Default stereotype and label position"), 3);
 
         if (plabel && (label == 0))
-            m.insertItem(TR("Attach label to this segment"), 4);
+            MenuFactory::addItem(m, TR("Attach label to this segment"), 4);
 
         if (pstereotype && (stereotype == 0))
-            m.insertItem(TR("Attach stereotype to this segment"), 5);
+            MenuFactory::addItem(m, TR("Attach stereotype to this segment"), 5);
     }
 
     if (get_start() != get_end()) {
-        m.insertSeparator();
+        m.addSeparator();
         init_geometry_menu(geo, 10);
-        m.insertItem(TR("Geometry (Ctrl+l)"), &geo);
+        MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 6);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 6);
 
-    int choice = m.exec(QCursor::pos());
+    QAction* retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+    int choice = retAction->data().toInt();
 
     switch (choice) {
     case 1:
@@ -1116,61 +1120,58 @@ void ArrowCanvas::menu(const QPoint &)
 
         break;
     }
+    }
 
     package_modified();
 }
 
-void ArrowCanvas::init_geometry_menu(Q3PopupMenu & m, int first)
+void ArrowCanvas::init_geometry_menu(QMenu & m, int first)
 {
+    QAction *currentAction;
     QPixmap hv((const char **) geometry_hv);
     QPixmap vh((const char **) geometry_vh);
     QPixmap hvh((const char **) geometry_hvh);
     QPixmap vhv((const char **) geometry_vhv);
-
-    m.setCheckable(TRUE);
-
-    m.insertItem(TR("None"), first);
-    m.insertItem(hv, first + HVGeometry);
-    m.insertItem(vh, first + VHGeometry);
-    m.insertItem(hvh, first + HVHGeometry);
-    m.insertItem(vhv, first + VHVGeometry);
-
+    MenuFactory::addItem(m, TR("None"), first);
+    m.addAction(hv,"")->setData( first + HVGeometry);
+    m.addAction(vh,"")->setData(VHGeometry);
+    m.addAction(hvh,"")->setData( HVHGeometry);
+    m.addAction(vhv,"")->setData( VHVGeometry);
     switch (geometry) {
     case NoGeometry:
-        m.setItemChecked(first, TRUE);
+        MenuFactory::findAction(m ,first)->setChecked( TRUE);
         break;
 
     case HVGeometry:
     case HVrGeometry:
-        m.setItemChecked(first + HVGeometry, TRUE);
+        MenuFactory::findAction(m ,first + HVGeometry)->setChecked( TRUE);
         break;
 
     case VHGeometry:
     case VHrGeometry:
-        m.setItemChecked(first + VHGeometry, TRUE);
+        MenuFactory::findAction(m ,first + VHGeometry)->setChecked( TRUE);
         break;
 
     case HVHGeometry:
-        m.setItemChecked(first + HVHGeometry, TRUE);
+        MenuFactory::findAction(m ,first + HVHGeometry)->setChecked( TRUE);
         break;
 
     default:
         // VHVGeometry
-        m.setItemChecked(first + VHVGeometry, TRUE);
+        MenuFactory::findAction(m ,first + VHVGeometry)->setChecked( TRUE);
     }
-
     if (decenter_begin >= 0)
-        m.insertItem(TR("Recenter begin"), first + RecenterBegin);
+        MenuFactory::addItem(m, TR("Recenter begin"), first + RecenterBegin);
 
     if (decenter_end >= 0)
-        m.insertItem(TR("Recenter end"), first + RecenterEnd);
+        MenuFactory::addItem(m, TR("Recenter end"), first + RecenterEnd);
 }
 
 DiagramItem * ArrowCanvas::get_start() const
 {
     const ArrowCanvas * a = this;
 
-    while (a->begin->type() == UmlArrowPoint)
+    while (a->begin->typeUmlCode() == UmlArrowPoint)
         a = ((ArrowPointCanvas *) a->begin)->get_other(a);
 
     return a->begin;
@@ -1180,7 +1181,7 @@ DiagramItem * ArrowCanvas::get_end() const
 {
     const ArrowCanvas * a = this;
 
-    while (a->end->type() == UmlArrowPoint)
+    while (a->end->typeUmlCode() == UmlArrowPoint)
         a = ((ArrowPointCanvas *) a->end)->get_other(a);
 
     return a->end;
@@ -1203,7 +1204,7 @@ void ArrowCanvas::search_supports(ArrowCanvas *& plabel,
 
     p = this;
 
-    while (p->end->type() == UmlArrowPoint) {
+    while (p->end->typeUmlCode() == UmlArrowPoint) {
         if (p->label != 0) plabel = (ArrowCanvas *) p;
 
         if (p->stereotype != 0) pstereotype = (ArrowCanvas *) p;
@@ -1217,7 +1218,7 @@ void ArrowCanvas::search_supports(ArrowCanvas *& plabel,
 
     p = this;
 
-    while (p->begin->type() == UmlArrowPoint) {
+    while (p->begin->typeUmlCode() == UmlArrowPoint) {
         if (p->label != 0) plabel = (ArrowCanvas *) p;
 
         if (p->stereotype != 0) pstereotype = (ArrowCanvas *) p;
@@ -1235,7 +1236,7 @@ void ArrowCanvas::reverse()
 {
     ArrowCanvas * a = this;
 
-    while (a->begin->type() == UmlArrowPoint)
+    while (a->begin->typeUmlCode() == UmlArrowPoint)
         a = (ArrowCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
 
     for (;;) {
@@ -1249,7 +1250,7 @@ void ArrowCanvas::reverse()
         a->decenter_begin = a->decenter_end;
         a->decenter_end = decenter;
 
-        if (a->begin->type() != UmlArrowPoint)
+        if (a->begin->typeUmlCode() != UmlArrowPoint)
             break;
 
         a = (ArrowCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
@@ -1261,7 +1262,7 @@ ArrowPointCanvas * ArrowCanvas::brk(const QPoint & p)
     ArrowPointCanvas * ap =
         new ArrowPointCanvas(the_canvas(), p.x(), p.y());
 
-    ap->setZ(z() + 1);
+    ap->setZValue(zValue() + 1);
 
     DiagramItem * e = end;
 
@@ -1308,14 +1309,14 @@ bool ArrowCanvas::may_join() const
 
         a = this;
 
-        while (a->begin->type() == UmlArrowPoint) {
+        while (a->begin->typeUmlCode() == UmlArrowPoint) {
             npoint += 1;
             a = ((ArrowCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a));
         }
 
         a = this;
 
-        while (a->end->type() == UmlArrowPoint) {
+        while (a->end->typeUmlCode() == UmlArrowPoint) {
             npoint += 1;
             a = ((ArrowCanvas *)((ArrowPointCanvas *) a->end)->get_other(a));
         }
@@ -1375,7 +1376,6 @@ ArrowCanvas * ArrowCanvas::join(ArrowCanvas * other, ArrowPointCanvas * ap)
         QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
         int h = fm.height();
         QPoint c = center();
-
         if (olabel) {
             ///tant que gere pas label sur n'importe qu el segment
             if (label != 0)
@@ -1384,14 +1384,13 @@ ArrowCanvas * ArrowCanvas::join(ArrowCanvas * other, ArrowPointCanvas * ap)
             //tq
 
             label = olabel;
-            label->move(c.x() - fm.width(label->get_name()) / 2, c.y() - h);
+            label->moveBy(c.x() - fm.width(label->get_name()) / 2, c.y() - h);
         }
 
         if (ostereotype) {
             stereotype = ostereotype;
-            stereotype->move(c.x() - fm.width(stereotype->get_name()) / 2, c.y());
+            stereotype->moveBy(c.x() - fm.width(stereotype->get_name()) / 2, c.y());
         }
-
         return this;
     }
     else
@@ -1420,7 +1419,7 @@ bool ArrowCanvas::cut_on_move(ArrowPointCanvas *& ap) const
     default:
         // get any point, this will be moved
         ap = (ArrowPointCanvas *)
-             ((begin->type() == UmlArrowPoint) ? begin : end);
+             ((begin->typeUmlCode() == UmlArrowPoint) ? begin : end);
         return FALSE;
     }
 }
@@ -1428,7 +1427,7 @@ bool ArrowCanvas::cut_on_move(ArrowPointCanvas *& ap) const
 bool ArrowCanvas::is_decenter(QPoint mousePressPos,
                               BooL & start, BooL & horiz) const
 {
-    switch (end->type()) {
+    switch (end->typeUmlCode()) {
     case UmlArrowPoint:
     case UmlArrowJunction:
         break;
@@ -1439,10 +1438,10 @@ bool ArrowCanvas::is_decenter(QPoint mousePressPos,
             // near end of line
             start = FALSE;
 
-            QRect r = end->rect();
+            QRect r = end->sceneRect();
             QPoint p = endp;
 
-            end->shift(p, beginp, r.contains(begin->rect()));
+            end->shift(p, beginp, r.contains(begin->sceneRect()));
             horiz = (iabs(endp.y() - r.top()) < 2) ||
                     (iabs(endp.y() - r.bottom()) < 2);
 
@@ -1450,16 +1449,16 @@ bool ArrowCanvas::is_decenter(QPoint mousePressPos,
         }
     }
 
-    if ((begin->type() != UmlArrowPoint) &&
+    if ((begin->typeUmlCode() != UmlArrowPoint) &&
         (iabs(beginp.x() - mousePressPos.x()) < 10) &&
         (iabs(beginp.y() - mousePressPos.y()) < 10)) {
         // near start of line
         start = TRUE;
 
-        QRect r = begin->rect();
+        QRect r = begin->sceneRect();
         QPoint p = beginp;
 
-        begin->shift(p, end->center(), r.contains(end->rect()));
+        begin->shift(p, end->center(), r.contains(end->sceneRect()));
 
         horiz = (iabs(beginp.y() - r.top()) < 2) ||
                 (iabs(beginp.y() - r.bottom()) < 2);
@@ -1473,7 +1472,7 @@ bool ArrowCanvas::is_decenter(QPoint mousePressPos,
 void ArrowCanvas::decenter(QPoint p, bool start, bool horiz)
 {
     float & decenter_it = (start) ? decenter_begin : decenter_end;
-    QRect r = (start) ? begin->rect() : end->rect();
+    QRect r = (start) ? begin->sceneRect() : end->sceneRect();
     int margin =
         // force the position to have more than 3 point to the edge
         // to not be < 2 and change the edge
@@ -1508,9 +1507,9 @@ void ArrowCanvas::decenter(QPoint p, bool start, bool horiz)
 
     propag_decenter(decenter_begin, decenter_end);
 
-    Q3CanvasPolygon::setVisible(FALSE);
+    QGraphicsPolygonItem::setVisible(FALSE);
     update_pos();
-    Q3CanvasPolygon::setVisible(TRUE);
+    QGraphicsPolygonItem::setVisible(TRUE);
 }
 
 void ArrowCanvas::propag_decenter(float db, float de)
@@ -1520,7 +1519,7 @@ void ArrowCanvas::propag_decenter(float db, float de)
 
     ArrowCanvas * a = this;
 
-    while (a->begin->type() == UmlArrowPoint) {
+    while (a->begin->typeUmlCode() == UmlArrowPoint) {
         a = ((ArrowPointCanvas *) a->begin)->get_other(a);
         a->decenter_begin = db;
         a->decenter_end = de;
@@ -1528,7 +1527,7 @@ void ArrowCanvas::propag_decenter(float db, float de)
 
     a = this;
 
-    while (a->end->type() == UmlArrowPoint) {
+    while (a->end->typeUmlCode() == UmlArrowPoint) {
         a = ((ArrowPointCanvas *) a->end)->get_other(a);
         a->decenter_begin = db;
         a->decenter_end = de;
@@ -1539,18 +1538,18 @@ void ArrowCanvas::set_decenter(float db, float de)
 {
     propag_decenter(db, de);
 
-    Q3CanvasPolygon::setVisible(FALSE);
+    QGraphicsPolygonItem::setVisible(FALSE);
 
     ArrowCanvas * a = this;
 
-    while (a->begin->type() == UmlArrowPoint) {
+    while (a->begin->typeUmlCode() == UmlArrowPoint) {
         a = ((ArrowPointCanvas *) a->begin)->get_other(a);
         a->update_pos();
     }
 
     a = this;
 
-    while (a->end->type() == UmlArrowPoint) {
+    while (a->end->typeUmlCode() == UmlArrowPoint) {
         a = ((ArrowPointCanvas *) a->end)->get_other(a);
         a->update_pos();
     }
@@ -1558,9 +1557,9 @@ void ArrowCanvas::set_decenter(float db, float de)
     update_pos();
     update_geometry();
 
-    Q3CanvasPolygon::setVisible(TRUE);
+    QGraphicsPolygonItem::setVisible(TRUE);
 
-    canvas()->update();
+    scene()->update();
 }
 
 void ArrowCanvas::propag_geometry(LineGeometry geo, bool fixed)
@@ -1570,7 +1569,7 @@ void ArrowCanvas::propag_geometry(LineGeometry geo, bool fixed)
 
     ArrowCanvas * a = this;
 
-    while (a->begin->type() == UmlArrowPoint) {
+    while (a->begin->typeUmlCode() == UmlArrowPoint) {
         a = ((ArrowPointCanvas *) a->begin)->get_other(a);
         a->geometry = geo;
         a->fixed_geometry = fixed;
@@ -1578,7 +1577,7 @@ void ArrowCanvas::propag_geometry(LineGeometry geo, bool fixed)
 
     a = this;
 
-    while (a->end->type() == UmlArrowPoint) {
+    while (a->end->typeUmlCode() == UmlArrowPoint) {
         a = ((ArrowPointCanvas *) a->end)->get_other(a);
         a->geometry = geo;
         a->fixed_geometry = fixed;
@@ -1598,11 +1597,11 @@ ArrowCanvas * ArrowCanvas::set_geometry(LineGeometry geo, bool fixed)
     // warning : after join() 'this' can't be used
     ArrowCanvas * ar = this;
 
-    while (ar->begin->type() == UmlArrowPoint)
+    while (ar->begin->typeUmlCode() == UmlArrowPoint)
         ar = ar->join(((ArrowPointCanvas *) ar->begin)->get_other(ar),
                       (ArrowPointCanvas *) ar->begin);
 
-    while (ar->end->type() == UmlArrowPoint)
+    while (ar->end->typeUmlCode() == UmlArrowPoint)
         ar = ar->join(((ArrowPointCanvas *) ar->end)->get_other(ar),
                       (ArrowPointCanvas *) ar->end);
 
@@ -1651,8 +1650,8 @@ ArrowCanvas * ArrowCanvas::set_geometry(LineGeometry geo, bool fixed)
     break;
 
     case HVHGeometry: {
-        QRect arect = a->rect();
-        QRect brect = b->rect();
+        QRect arect = a->sceneRect();
+        QRect brect = b->sceneRect();
         QPoint p(((ca.x() < cb.x()) ? (arect.right() + brect.left())
                   : (arect.left() + brect.right())) / 2
                  - ARROW_POINT_SIZE / 2,
@@ -1667,8 +1666,8 @@ ArrowCanvas * ArrowCanvas::set_geometry(LineGeometry geo, bool fixed)
     default:
         // VHVGeometry
     {
-        QRect arect = a->rect();
-        QRect brect = b->rect();
+        QRect arect = a->sceneRect();
+        QRect brect = b->sceneRect();
         QPoint p(ca.x() - ARROW_POINT_SIZE / 2,
                  ((ca.y() < cb.y()) ? (arect.bottom() + brect.top())
                   : (arect.top() + brect.bottom())) / 2
@@ -1720,10 +1719,10 @@ void ArrowCanvas::update_geometry()
     ArrowCanvas * first_segment = this;
     ArrowCanvas * last_segment = this;
 
-    while (first_segment->begin->type() == UmlArrowPoint)
+    while (first_segment->begin->typeUmlCode() == UmlArrowPoint)
         first_segment = ((ArrowPointCanvas *) first_segment->begin)->get_other(first_segment);
 
-    while (last_segment->end->type() == UmlArrowPoint)
+    while (last_segment->end->typeUmlCode() == UmlArrowPoint)
         last_segment = ((ArrowPointCanvas *) last_segment->end)->get_other(last_segment);
 
     DiagramItem * a = first_segment->begin;
@@ -1761,8 +1760,8 @@ void ArrowCanvas::update_geometry()
             // user moves just the middle line for the first time
             propag_geometry(geometry, FALSE);
 
-        QRect arect = a->rect();
-        QRect brect = b->rect();
+        QRect arect = a->sceneRect();
+        QRect brect = b->sceneRect();
         double nx;
 
         if (fixed_geometry)
@@ -1795,8 +1794,8 @@ void ArrowCanvas::update_geometry()
             // user moves just the middle line for the first time
             propag_geometry(geometry, FALSE);
 
-        QRect arect = a->rect();
-        QRect brect = b->rect();
+        QRect arect = a->sceneRect();
+        QRect brect = b->sceneRect();
         double ny;
 
         if (fixed_geometry)
@@ -1844,13 +1843,13 @@ ArrowCanvas * ArrowCanvas::next_geometry()
 
 void ArrowCanvas::select_associated()
 {
-    if (! selected()) {
+    if (! isSelected()) {
         the_canvas()->select(this);
 
-        if ((label != 0) && !label->selected())
+        if ((label != 0) && !label->isSelected())
             the_canvas()->select(label);
 
-        if ((stereotype != 0) && !stereotype->selected())
+        if ((stereotype != 0) && !stereotype->isSelected())
             the_canvas()->select(stereotype);
 
         DiagramItem::select_associated();
@@ -1863,20 +1862,20 @@ void ArrowCanvas::prepare_for_move(bool)
 {
     // the arrow is selected, select its labels to not
     // move them twice
-    if ((label != 0) && !label->selected())
+    if ((label != 0) && !label->isSelected())
         the_canvas()->select(label);
 
-    if ((stereotype != 0) && !stereotype->selected())
+    if ((stereotype != 0) && !stereotype->isSelected())
         the_canvas()->select(stereotype);
 }
 
 void ArrowCanvas::modified()
 {
-    if (visible()) {
+    if (isVisible()) {
         hide();
         update_pos();
         show();
-        canvas()->update();
+        scene()->update();
         package_modified();
     }
 }
@@ -1890,7 +1889,7 @@ void ArrowCanvas::save(QTextStream & st, bool ref, QString & warning) const
 {
     if (ref)
         st << "line_ref " << get_ident();
-    else if (begin->type() != UmlArrowPoint) {
+    else if (begin->typeUmlCode() != UmlArrowPoint) {
         nl_indent(st);
         st << "line " << get_ident() << " " << stringify(itstype);
 
@@ -1927,8 +1926,8 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
     const ArrowCanvas * ar = this;
     QString zs;
 
-    while (ar->end->type() == UmlArrowPoint) {
-        st << " z " << zs.setNum(z());
+    while (ar->end->typeUmlCode() == UmlArrowPoint) {
+        st << " z " << zs.setNum(zValue());
 
         if (with_label && ar->label) {
             st << " ";
@@ -1937,7 +1936,7 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
 
         if (with_stereotype && ar->stereotype) {
             st << " stereotype ";
-            save_string(ar->stereotype->get_name(), st);
+            save_string(ar->stereotype->get_name().toLatin1(), st);
             save_xyz(st, ar->stereotype, " xyz");
         }
 
@@ -1948,7 +1947,7 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
         st << "line " << ar->get_ident();
     }
 
-    st << " z " << zs.setNum(z());
+    st << " z " << zs.setNum(zValue());
 
     if (with_label && ar->label) {
         st << " ";
@@ -1957,7 +1956,7 @@ const ArrowCanvas * ArrowCanvas::save_lines(QTextStream & st, bool with_label,
 
     if (with_stereotype && ar->stereotype) {
         st << " stereotype ";
-        save_string(ar->stereotype->get_name(), st);
+        save_string(ar->stereotype->get_name().toLatin1(), st);
         save_xyz(st, ar->stereotype, " xyz");
     }
 
@@ -2002,7 +2001,7 @@ ArrowCanvas * ArrowCanvas::read_list(char *& st, UmlCanvas * canvas,
         k = read_keyword(st);
 
         if ((label = LabelCanvas::read(st, canvas, k)) != 0) {
-            label->setZ(z);
+            label->setZValue(z);
             k = read_keyword(st);
         }
 
@@ -2019,7 +2018,7 @@ ArrowCanvas * ArrowCanvas::read_list(char *& st, UmlCanvas * canvas,
             stereotype =
                 new LabelCanvas(k, canvas, x, (int) read_double(st));
 
-            stereotype->setZ((read_file_format() < 5) ? OLD_ARROW_Z
+            stereotype->setZValue((read_file_format() < 5) ? OLD_ARROW_Z
                              : read_double(st));
             k = read_keyword(st);
         }
@@ -2052,7 +2051,7 @@ ArrowCanvas * ArrowCanvas::read_list(char *& st, UmlCanvas * canvas,
         if (stereotype != 0)
             (result->stereotype = stereotype)->show();
 
-        if (di->type() != UmlArrowPoint)
+        if (di->typeUmlCode() != UmlArrowPoint)
             return result;
 
         bi = di;
@@ -2145,7 +2144,7 @@ void ArrowCanvas::history_save(QBuffer & b) const
     ::save(arrow[1], b);
     ::save(arrow[2], b);
     ::save(poly, b);
-    ::save(z(), b);
+    ::save(zValue(), b);
 }
 
 void ArrowCanvas::history_load(QBuffer & b)
@@ -2178,10 +2177,9 @@ void ArrowCanvas::history_load(QBuffer & b)
     ::load(arrow[1], b);
     ::load(arrow[2], b);
     ::load(poly, b);
-    setPoints(boundings);
-    Q3CanvasPolygon::setZ(load_double(b));
-    Q3CanvasItem::setSelected(FALSE);
-    Q3CanvasItem::setVisible(TRUE);
+    QGraphicsPolygonItem::setZValue(load_double(b));
+    QGraphicsItem::setSelected(FALSE);
+    QGraphicsItem::setVisible(TRUE);
 
     begin->add_line(this);
     end->add_line(this);
@@ -2191,7 +2189,7 @@ void ArrowCanvas::history_load(QBuffer & b)
 
 void ArrowCanvas::history_hide()
 {
-    Q3CanvasPolygon::setVisible(FALSE);
+    QGraphicsPolygonItem::setVisible(FALSE);
     unconnect();
 }
 
@@ -2202,7 +2200,7 @@ QList<ArrowCanvas *> ArrowCanvas::RelsToDel;
 void ArrowCanvas::post_load()
 {
     foreach (ArrowCanvas *ar, RelsToDel)
-        if (ar->visible())
+        if (ar->isVisible())
             ar->delete_it();
     RelsToDel.clear();
 }
@@ -2217,7 +2215,7 @@ void ArrowCanvas::remove_redondant_rels()
     char s[128];
 
     foreach (ArrowCanvas *r, RelsToCheck) {
-        if (r->visible()) {
+        if (r->isVisible()) {
             sprintf(s, "%lx_%lx_%lx",
                     (long) r->get_start(),
                     (long) r->get_bn(),
@@ -2240,19 +2238,19 @@ void ArrowCanvas::write_uc_rel(ToolCom * com) const
     DiagramItem * from = get_start();
     DiagramItem * to = get_end();
 
-    if (from->type() == UmlUseCase) {
+    if (from->typeUmlCode() == UmlUseCase) {
         com->write_unsigned((unsigned) from->get_ident());
         to->get_bn()->write_id(com);
         com->write_bool((itstype == UmlDirectionalAssociation)
                         ? FALSE
-                        : (to->rect().center().x() < from->rect().center().x()));
+                        : (to->sceneRect().center().x() < from->sceneRect().center().x()));
     }
     else {
         com->write_unsigned((unsigned) to->get_ident());
         from->get_bn()->write_id(com);
         com->write_bool((itstype == UmlDirectionalAssociation)
                         ? TRUE
-                        : (to->rect().center().x() > from->rect().center().x()));
+                        : (to->sceneRect().center().x() > from->sceneRect().center().x()));
     }
 
     ArrowCanvas * plabel;
@@ -2282,4 +2280,9 @@ void ArrowCanvas::write_uc_rel(ToolCom * com) const
 void ArrowCanvas::check_stereotypeproperties()
 {
     // does nothing
+}
+
+int ArrowCanvas::type() const
+{
+    return RTTI_ARROW;
 }

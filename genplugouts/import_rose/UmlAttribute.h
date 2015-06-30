@@ -3,8 +3,8 @@
 
 
 #include "UmlBaseAttribute.h"
-#include <q3cstring.h>
-#include <q3dict.h>
+#include <QByteArray>
+
 
 class File;
 class UmlClass;
@@ -16,7 +16,7 @@ class UmlClass;
 class UmlAttribute : public UmlBaseAttribute
 {
 public:
-    UmlAttribute(void * id, const Q3CString & n) :  UmlBaseAttribute(id, n) {
+    UmlAttribute(void * id, const QByteArray & n) :  UmlBaseAttribute(id, n) {
         cpt[kind()] += 1;
     };
 
@@ -28,17 +28,17 @@ private:
 public:
     static void import(File & f, UmlClass * parent);
 
-    static void importIdlConstant(UmlClass * parent, const Q3CString & id, const Q3CString & s, const Q3CString & doc, Q3Dict<Q3CString> & prop);
+    static void importIdlConstant(UmlClass * parent, const QByteArray & id, const QByteArray & s, const QByteArray & doc, QHash<QByteArray, QByteArray*> & prop);
 
 
 private:
-    void cplusplus(Q3Dict<Q3CString> & prop);
+    void cplusplus(QHash<QByteArray, QByteArray*> & prop);
 
-    void oracle8(Q3Dict<Q3CString> & prop);
+    void oracle8(QHash<QByteArray, QByteArray*> & prop);
 
-    void corba(Q3Dict<Q3CString> & prop);
+    void corba(QHash<QByteArray, QByteArray*> & prop);
 
-    void java(Q3Dict<Q3CString> & prop);
+    void java(QHash<QByteArray, QByteArray*> & prop);
 
 };
 

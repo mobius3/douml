@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseCollaborationDiagram.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class File;
 class UmlItem;
@@ -16,7 +16,7 @@ class UmlItem;
 class UmlCollaborationDiagram : public UmlBaseCollaborationDiagram
 {
 public:
-    UmlCollaborationDiagram(void * id, const Q3CString & n) : UmlBaseCollaborationDiagram(id, n) {
+    UmlCollaborationDiagram(void * id, const QByteArray & n) : UmlBaseCollaborationDiagram(id, n) {
         cpt[kind()] += 1;
     };
 

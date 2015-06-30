@@ -26,7 +26,7 @@
 // *************************************************************************
 
 #include <qapplication.h>
-#include <q3filedialog.h>
+#include <qfiledialog.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <stdlib.h>
@@ -68,7 +68,7 @@ int main(int argc, char ** argv)
 
                 Package::init((UmlPackage *) item, app);
 
-                QString here = QDir::currentDirPath();
+                QString here = QDir::currentPath();
 
                 /*
 

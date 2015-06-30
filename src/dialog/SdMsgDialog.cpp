@@ -33,17 +33,14 @@
 
 #include <qlayout.h>
 #include <qlabel.h>
-#include <q3combobox.h>
-#include <q3hbox.h>
+#include <qcombobox.h>
+#include <hhbox.h>
 #include <qpushbutton.h>
-#include <q3buttongroup.h>
+#include <bbuttongroup.h>
 #include <qradiobutton.h>
-#include <q3popupmenu.h>
 #include <qcursor.h>
-//Added by qt3to4:
-#include <Q3HBoxLayout>
-#include <Q3VBoxLayout>
-
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 #include "SdMsgDialog.h"
 #include "SdMsgBaseCanvas.h"
 #include "BrowserClass.h"
@@ -56,20 +53,22 @@
 #include "UmlDesktop.h"
 #include "BrowserView.h"
 #include "translate.h"
+#include "menufactory.h"
 
 QSize SdMsgDialog::previous_size;
 
 SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
-    : QDialog(0, "Message editor", TRUE), mc(a)
+    : QDialog(0/*, "Message editor", TRUE*/), mc(a)
 {
-    setCaption(TR("Message dialog"));
+    setWindowTitle(TR("Message dialog"));
 
-    Q3VBoxLayout * vbox = new Q3VBoxLayout(this);
-    Q3HBoxLayout * hbox;
+    QVBoxLayout * vbox = new QVBoxLayout(this);
+    QHBoxLayout * hbox;
 
     vbox->setMargin(5);
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
     SmallPushButton * b = new SmallPushButton(TR("message :"), this);
@@ -77,12 +76,13 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
     hbox->addWidget(b);
     connect(b, SIGNAL(clicked()), this, SLOT(menu_op()));
 
-    edoper = new Q3ComboBox(TRUE, this);
+    edoper = new QComboBox(this);
+    edoper->setEditable(true);
 
     if (a->msg == 0)
-        edoper->insertItem(a->explicit_msg);
+        edoper->addItem(a->explicit_msg);
     else
-        edoper->insertItem(a->msg->definition(TRUE, FALSE));
+        edoper->addItem(a->msg->definition(TRUE, FALSE));
 
     edoper->setAutoCompletion(completion());
 
@@ -92,53 +92,56 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
     else if ((cl = ((SdDurationCanvas *) a->get_dest())->get_line()->get_obj()->get_class())
              != 0) {
         cl->get_opers(opers, list);
-        edoper->insertStringList(list);
+        edoper->addItems(list);
 
         if (!cl->is_writable())
             cl = 0;
     }
 
-    edoper->setCurrentItem(0);
+    edoper->setCurrentIndex(0);
 
     QSizePolicy sp = edoper->sizePolicy();
 
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edoper->setSizePolicy(sp);
 
     hbox->addWidget(edoper);
 
     //
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(new QLabel(TR("stereotype : "), this));
-    edst = new Q3ComboBox(TRUE, this);
+    edst = new QComboBox(this);
+    edst->setEditable(true);
 
     if (a->stereotype != 0) {
         QString s = a->stereotype->get_name();
 
         s = s.mid(2, s.length() - 4);
-        edst->insertItem(s);
+        edst->addItem(s);
     }
     else
-        edst->insertItem("");
+        edst->addItem("");
 
-    edst->setCurrentItem(0);
-    edst->insertStringList(defaults);
+    edst->setCurrentIndex(0);
+    edst->addItems(defaults);
     edst->setAutoCompletion(completion());
     hbox->addWidget(edst);
     edst->setSizePolicy(sp);
 
     //
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
 
-    Q3HBox * htab = new Q3HBox(this);
+    HHBox * htab = new HHBox(this);
 
     htab->setMargin(5);
 
-    Q3ButtonGroup * bg = new Q3ButtonGroup(2, Qt::Horizontal, TR("Message type"), htab);
+    BButtonGroup * bg = new BButtonGroup(2, Qt::Horizontal, TR("Message type"), htab);
 
     bg->setExclusive(TRUE);
     synchronous_rb = new QRadioButton(TR("synchronous"), bg);
@@ -155,7 +158,8 @@ SdMsgDialog::SdMsgDialog(SdMsgBaseCanvas * a, const QStringList & defaults)
 operation's parameter(s) without any check"),
                                this));
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     hbox->addWidget(new QLabel(TR("arguments : "), this));
     edargs = new MultiLineEdit(this);
@@ -163,7 +167,8 @@ operation's parameter(s) without any check"),
     hbox->addWidget(edargs);
     edargs->setFocus();
 
-    hbox = new Q3HBoxLayout(vbox);
+    hbox = new QHBoxLayout();
+    vbox->addLayout(hbox);
     hbox->setMargin(5);
     QPushButton * ok = new QPushButton(TR("&OK"), this);
     QPushButton * cancel = new QPushButton(TR("&Cancel"), this);
@@ -182,7 +187,7 @@ operation's parameter(s) without any check"),
 
 void SdMsgDialog::polish()
 {
-    QDialog::polish();
+    QDialog::ensurePolished();
     UmlDesktop::limitsize_move(this, previous_size, 0.8, 0.8);
 }
 
@@ -193,31 +198,34 @@ SdMsgDialog::~SdMsgDialog()
 
 void SdMsgDialog::menu_op()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = list.findIndex(edoper->currentText().stripWhiteSpace());
+    int index = list.indexOf(edoper->currentText().trimmed());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = BrowserView::selected_item();
 
     if ((bn != 0) &&
         (bn->get_type() == UmlOperation) &&
         !bn->deletedp() &&
-        (opers.findIndex((OperationData *) bn->get_data()) != -1))
-        m.insertItem(TR("Choose operation selected in browser"), 1);
+        (opers.indexOf((OperationData *) bn->get_data()) != -1))
+        MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
     else
         bn = 0;
 
     if (cl != 0)
-        m.insertItem(TR("Create operation and choose it"), 2);
+        MenuFactory::addItem(m, TR("Create operation and choose it"), 2);
 
     if ((index != -1) || (bn != 0) || (cl != 0)) {
-        switch (m.exec(QCursor::pos())) {
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        switch (retAction->data().toInt()) {
         case 0:
             opers[index]->get_browser_node()->select_in_browser();
             break;
@@ -234,40 +242,41 @@ void SdMsgDialog::menu_op()
         case 1: {
             OperationData * od = (OperationData *) bn->get_data();
 
-            if ((index = opers.findIndex(od)) == -1) {
+            if ((index = opers.indexOf(od)) == -1) {
                 index = opers.count();
                 opers.append(od);
 
                 QString s = od->definition(TRUE, FALSE);
 
                 list.append(s);
-                edoper->insertItem(s);
+                edoper->addItem(s);
             }
         }
 
-        edoper->setCurrentItem(index + 1);
+        edoper->setCurrentIndex(index + 1);
+        }
         }
     }
 }
 
 void SdMsgDialog::accept()
 {
-    QString s = edoper->currentText().stripWhiteSpace();
+    QString s = edoper->currentText().trimmed();
 
     if (!s.isEmpty()) {
-        int index = list.findIndex(s);
+        int index = list.indexOf(s);
 
         if (index >= 0)
-            mc->set_msg(opers[index], QString(), edargs->text().stripWhiteSpace());
+            mc->set_msg(opers[index], QString(), edargs->text().trimmed());
         else
-            mc->set_msg(0, s, edargs->text().stripWhiteSpace());
+            mc->set_msg(0, s, edargs->text().trimmed());
     }
     else
         mc->set_msg(0, QString(), QString());
 
     mc->set_synchronous(synchronous_rb->isChecked());
 
-    s = edst->currentText().stripWhiteSpace();
+    s = edst->currentText().trimmed();
 
     if (!s.isEmpty())
         s = "<<" + s + ">>";

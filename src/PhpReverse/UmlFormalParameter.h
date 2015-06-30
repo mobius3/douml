@@ -28,7 +28,7 @@
 #ifndef _UMLFORMALPARAMETER_H
 #define _UMLFORMALPARAMETER_H
 
-#include <q3valuelist.h>
+#include <QList.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
 
@@ -47,6 +47,6 @@ public:
     UmlFormalParameter(WrapperStr n, const UmlTypeSpec & e);
 };
 
-typedef Q3ValueList<UmlFormalParameter> FormalParameterList;
+typedef QList<UmlFormalParameter> FormalParameterList;
 
 #endif

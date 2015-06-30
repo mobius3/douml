@@ -32,12 +32,12 @@
 #include <stdio.h>
 
 #include <qcursor.h>
-#include <q3vbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qlayout.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QPixmap>
 
@@ -48,14 +48,17 @@
 #include "UmlDesktop.h"
 #include "ComboItem.h"
 #include "translate.h"
+#include "widgetwithlayout.h"
+#include "menufactory.h"
+#include <QHeaderView>
 
 QSize ShortcutDialog::previous_size;
 
-ShortcutDialog::ShortcutDialog() : Q3TabDialog(0, 0, TRUE)
+ShortcutDialog::ShortcutDialog() : TabDialog(0, 0, TRUE)
 {
     setOkButton(TR("OK"));
     setCancelButton(TR("Cancel"));
-    setCaption(TR("Shortcut dialog"));
+    setWindowTitle(TR("Shortcut dialog"));
 
     // count number of entries
 
@@ -66,7 +69,7 @@ ShortcutDialog::ShortcutDialog() : Q3TabDialog(0, 0, TRUE)
     int ncmds = 0;
 
     for (iter = shortcuts.begin(); iter != shortcuts.end(); ++iter) {
-        if (tools.findIndex(iter.data()) != -1)
+        if (tools.indexOf(iter.value()) != -1)
             ntools += 1;
         else
             ncmds += 1;
@@ -74,41 +77,41 @@ ShortcutDialog::ShortcutDialog() : Q3TabDialog(0, 0, TRUE)
 
     // tab for command
 
-    Q3VBox * vtab;
+    VVBox * vtab;
 
-    vtab = new Q3VBox(this);
-    vtab->setSpacing(5);
+    vtab = new VVBox(this);
+    //vtab->setSpacing(5);
     vtab->setMargin(5);
 
-    (new QLabel(TR("Here are the shortcuts to do a command (menu entry)"), vtab))
-    ->setAlignment(::Qt::AlignHCenter);
+    vtab->addWidget((new QLabel(TR("Here are the shortcuts to do a command (menu entry)"), vtab)));
 
 #ifdef __APPLE__
     (new QLabel(TR("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
-    ->setAlignment(::Qt::AlignHCenter);
+            ->setAlignment(::Qt::AlignHCenter);
 #endif
 
-    cmd_table = new ShortcutTable(vtab, FALSE, ncmds);
+    vtab->addWidget(cmd_table = new ShortcutTable(vtab, FALSE, ncmds));
 
-    addTab(vtab, TR("Command"));
+    addTab(vtab, QObject::tr("Command"));
 
     // tab for tool
 
-    vtab = new Q3VBox(this);
-    vtab->setSpacing(5);
-    vtab->setMargin(5);
+    vtab = new VVBox(this);
+    //vtab->setSpacing(5);
+    //vtab->setMargin(5);
 
-    (new QLabel(TR("Here are the shortcuts to call a tool (plug-out)"), vtab))
-    ->setAlignment(::Qt::AlignHCenter);
+    QLabel *label;
+    vtab->addWidget((label = new QLabel(TR("Here are the shortcuts to call a tool (plug-out)"), vtab)));
+    label->setAlignment(::Qt::AlignHCenter);
 
 #ifdef __APPLE__
     (new QLabel(TR("Note : sometimes the key 'Alt' is named 'Option'"), vtab))
-    ->setAlignment(::Qt::AlignHCenter);
+            ->setAlignment(::Qt::AlignHCenter);
 
 #endif
-    tool_table = new ShortcutTable(vtab, TRUE, ntools);
+    vtab->addWidget(tool_table = new ShortcutTable(vtab, TRUE, ntools));
 
-    addTab(vtab, TR("Tool"));
+    addTab(vtab, QObject::tr("Tool"));
 }
 
 ShortcutDialog::~ShortcutDialog()
@@ -118,7 +121,7 @@ ShortcutDialog::~ShortcutDialog()
 
 void ShortcutDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
@@ -131,7 +134,7 @@ void ShortcutDialog::accept()
         cmd_table->accept();
         tool_table->accept();
         Shortcut::save();
-        Q3TabDialog::accept();
+        TabDialog::accept();
     }
 }
 
@@ -144,22 +147,27 @@ void ShortcutDialog::accept()
 ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
     : MyTable(n + 1, 6, parent), for_tool(tool)
 {
-    setSorting(true);
+    //setSortingEnabled(true);
+    m_delegate = new TableWidgetItemDelegate(this);
+    setItemDelegateForColumn(3,m_delegate);
+    setItemDelegateForColumn(4,m_delegate);
+    verticalHeader()->setSectionsMovable(true);
     setSelectionMode(NoSelection);	// single does not work
-    setRowMovingEnabled(TRUE);
-    horizontalHeader()->setLabel(0, TR("Shift"));
+    QStringList headerLabels;
+    headerLabels.append(TR("Shift"));
 #ifdef __APPLE__
 #include "../xpm/pomme_xpm.xpm"
     QPixmap pomme_xpm((const char **) pomme);
     QIcon ic(pomme_xpm);
-    horizontalHeader()->setLabel(1, ic, "");
+    headerLabels.append(ic, "");
 #else
-    horizontalHeader()->setLabel(1, TR("Ctrl"));
+    headerLabels.append(TR("Ctrl"));
 #endif
-    horizontalHeader()->setLabel(2, TR("Alt"));
-    horizontalHeader()->setLabel(3, TR("Key"));
-    horizontalHeader()->setLabel(4, (tool) ? TR("tool display") : TR("command"));
-    horizontalHeader()->setLabel(5, TR("do"));
+    headerLabels.append(TR("Alt"));
+    headerLabels.append( QObject::tr("Key"));
+    headerLabels.append((tool) ? QObject::tr("tool display") : QObject::tr("command"));
+    headerLabels.append(TR("do"));
+    setHorizontalHeaderLabels(headerLabels);
 
     QStringList tools = Tool::all_display();
 
@@ -172,7 +180,9 @@ ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
         const QStringList & cmds = Shortcut::cmds();
 
         for (QStringList::ConstIterator it = cmds.begin(); it != cmds.end(); ++it)
-            values.append(TR(*it));
+            values.append(
+                        *it
+                        );
     }
 
     keys += Shortcut::keys();
@@ -182,7 +192,7 @@ ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
     int row = 0;
 
     for (iter = shortcuts.begin(); iter != shortcuts.end(); ++iter) {
-        int tool_index = tools.findIndex(iter.data());
+        int tool_index = tools.indexOf(iter.value());
 
         if ((tool) ? (tool_index != -1) : (tool_index == -1)) {
             BooL shift;
@@ -190,48 +200,46 @@ ShortcutTable::ShortcutTable(QWidget * parent, bool tool, int n)
             BooL alt;
             QString key = Shortcut::extract(iter.key(), shift, ctrl, alt);
 
-            if (shift) setText(row, 0, TR("yes"));
+            if (shift) setText(row, 0, QObject::tr("yes"));
 
-            if (ctrl) setText(row, 1, TR("yes"));
+            if (ctrl) setText(row, 1, QObject::tr("yes"));
 
-            if (alt) setText(row, 2, TR("yes"));
+            if (alt) setText(row, 2, QObject::tr("yes"));
 
             setItem(row, 3, new ComboItem(this, key, keys, FALSE));
-            setItem(row, 4, new ComboItem(this, (tool) ? iter.data() : TR(iter.data()), values, FALSE));
+            setItem(row, 4, new ComboItem(this, (tool) ? iter.value() : iter.value(), values, FALSE));
             row += 1;
         }
     }
-
-    sortColumn(3, TRUE, TRUE);
-
+    sortByColumn(3);
     setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
     setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
-
     adjustColumn(0);
     adjustColumn(1);
     adjustColumn(2);
-
-    setColumnStretchable(4, TRUE);
-
     adjustColumn(5);
+    setColumnStretchable(4, TRUE);
     setColumnStretchable(5, FALSE);
 
-    connect(this, SIGNAL(pressed(int, int, int, const QPoint &)),
-            this, SLOT(button_pressed(int, int, int, const QPoint &)));
-    connect(this, SIGNAL(valueChanged(int, int)),
+    connect(this, SIGNAL(pressed(QModelIndex)),
+            this, SLOT(button_pressed(QModelIndex)));
+    connect(this, SIGNAL(cellChanged(int, int)),
             this, SLOT(value_changed(int, int)));
 }
 
 void ShortcutTable::value_changed(int row, int col)
 {
-    if ((row == (numRows() - 1)) && (col == 3) && !text(row, 3).isEmpty())
+    if ((row == (rowCount() - 1)) && (col == 3) && !text(row, 3).isEmpty())
         insert_row_after(row);
 }
 
-void ShortcutTable::button_pressed(int row, int col, int, const QPoint &)
+void ShortcutTable::button_pressed(const QModelIndex &index)
 {
+    int row = index.row();
+    int col = index.column();
     if (col < 3) {
-        setText(row, col, (text(row, col).isEmpty()) ? TR("yes") : QString());
+        setText(row, col, text(row, col).isEmpty() ? QObject::tr("yes") : QString());
+        //item(row, col)->setText(text(row, col).isEmpty() ? QObject::tr("yes") : QString());
     }
 
     if (col == 5) {
@@ -239,112 +247,133 @@ void ShortcutTable::button_pressed(int row, int col, int, const QPoint &)
 
         sprintf(s, "%d", row + 1);
 
-        Q3PopupMenu m;
-        m.insertItem(TR("shortcut ") + QString(s), -1);
-        m.insertSeparator();
-        m.insertItem(TR("Insert shortcut before"), 0);
-        m.insertItem(TR("Insert shortcut after"), 1);
-        m.insertSeparator();
-        m.insertItem(TR("Delete shortcut"), 2);
-        m.insertSeparator();
-        m.insertItem(TR("Copy shortcut"), 3);
-        m.insertItem(TR("Cut shortcut"), 4);
-        m.insertItem(TR("Paste shortcut"), 5);
-        m.insertSeparator();
+        QMenu m;
+        MenuFactory::addItem(m, QObject::tr("shortcut ") + QString(s), -1);
+        m.addSeparator();
+        MenuFactory::addItem(m,TR("Insert shortcut before"), 0);
+        MenuFactory::addItem(m,TR("Insert shortcut after"), 1);
+        m.addSeparator();
+        MenuFactory::addItem(m,TR("Delete shortcut"), 2);
+        m.addSeparator();
+        MenuFactory::addItem(m,TR("Copy shortcut"), 3);
+        MenuFactory::addItem(m,TR("Cut shortcut"), 4);
+        MenuFactory::addItem(m,TR("Paste shortcut"), 5);
+        m.addSeparator();
+        QAction *retAction = m.exec(QCursor::pos());
+        if(retAction)
+            switch (retAction->data().toInt()) {
+            case 0:
+                insert_row_before(row);
+                break;
 
-        switch (m.exec(QCursor::pos())) {
-        case 0:
-            insert_row_before(row);
-            break;
+            case 1:
+                insert_row_after(row);
+                break;
 
-        case 1:
-            insert_row_after(row);
-            break;
+            case 2:
+                delete_row(row);
+                break;
 
-        case 2:
-            delete_row(row);
-            break;
+            case 3:
+                copy_row(row);
+                break;
 
-        case 3:
-            copy_row(row);
-            break;
+            case 4:
+                cut_row(row);
+                break;
 
-        case 4:
-            cut_row(row);
-            break;
+            case 5:
+                paste_row(row);
+                break;
 
-        case 5:
-            paste_row(row);
-            break;
-
-        default:
-            break;
-        }
+            default:
+                break;
+            }
     }
 }
 
 void ShortcutTable::insert_row_before(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index != row; index -= 1) {
-        Q3TableItem * it;
+        QTableWidgetItem * it;
 
-        setText(index, 0, text(index - 1, 0));
-        setText(index, 1, text(index - 1, 1));
-        setText(index, 2, text(index - 1, 2));
+        item(index, 0)->setText( item(index - 1, 0)->text());
+        item(index, 1)->setText( item(index - 1, 1)->text());
+        item(index, 2)->setText(item(index - 1, 2)->text());
         it = item(index - 1, 3);
-        takeItem(it);
-        setItem(index, 3, it);
-        it = item(index - 1, 4);
-        takeItem(it);
-        setItem(index, 4, it);
-    }
 
+        if(it)
+        {
+            takeItem(it->row(), it->column());
+            setItem(index, 3, it);
+        }
+        it = item(index - 1, 4);
+        if(it)
+        {
+            takeItem(it->row(), it->column());
+            setItem(index, 4, it);
+        }
+    }
+    */
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row);
     setText(row, 0, QString());
     setText(row, 1, QString());
     setText(row, 2, QString());
     setItem(row, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
     setItem(row, 4, new ComboItem(this, QString(), values, FALSE));
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void ShortcutTable::insert_row_after(int row)
 {
-    int n = numRows();
+    /*int n = rowCount();
     int index;
 
-    setNumRows(n + 1);
+    setRowCount(n + 1);
 
     for (index = n; index > row + 1; index -= 1) {
-        Q3TableItem * it;
+        QTableWidgetItem * it;
 
-        setText(index, 0, text(index - 1, 0));
-        setText(index, 1, text(index - 1, 1));
-        setText(index, 2, text(index - 1, 2));
+        item(index, 0)->setText( item(index - 1, 0)->text());;
+        item(index, 1)->setText( item(index - 1, 1)->text());;
+        item(index, 2)->setText( item(index - 1, 2)->text());;
         it = item(index - 1, 3);
-        takeItem(it);
+        takeItem(it->row(), it->column());
         setItem(index, 3, it);
         it = item(index - 1, 4);
-        takeItem(it);
+        takeItem(it->row(), it->column());
         setItem(index, 4, it);
     }
-
+    */
+    blockSignals(true);
+    DISABLESORTINGMYTABLE;
+    insertRow(row+1);
     setText(row + 1, 0, QString());
     setText(row + 1, 1, QString());
     setText(row + 1, 2, QString());
     setItem(row + 1, 3, new ComboItem(this, QString(), Shortcut::keys(), FALSE));
     setItem(row + 1, 4, new ComboItem(this, QString(), values, FALSE));
+    ENABLESORTINGMYTABLE;
+    blockSignals(false);
 }
 
 void ShortcutTable::delete_row(int row)
 {
-    int n = numRows();
+    int n = rowCount();
     int index;
 
-    clearCellWidget(row, 1);
+
+    removeCellWidget(row, 1);
+    removeRow(row);
+    return;
 
     if (row == (n - 1)) {
         // the last line : empty it
@@ -356,20 +385,20 @@ void ShortcutTable::delete_row(int row)
     }
     else {
         for (index = row; index != n - 1; index += 1) {
-            Q3TableItem * it;
+            QTableWidgetItem * it;
 
-            setText(index, 0, text(index + 1, 0));
-            setText(index, 1, text(index + 1, 1));
-            setText(index, 2, text(index + 1, 2));
+            setText(index, 0, text(index + 1, 0));;
+            setText(index, 1, text(index + 1, 1));;
+            setText(index, 2, text(index + 1, 2));;
             it = item(index + 1, 3);
-            takeItem(it);
+            takeItem(it->row(), it->column());
             setItem(index, 3, it);
             it = item(index + 1, 4);
-            takeItem(it);
+            takeItem(it->row(), it->column());
             setItem(index, 4, it);
         }
 
-        setNumRows(n - 1);
+        setRowCount(n - 1);
     }
 }
 
@@ -396,9 +425,9 @@ void ShortcutTable::paste_row(int row)
     setText(row, 3, key_copy);
     setText(row, 4, val_copy);
 
-    if ((row == (numRows() - 1)) &&
-        (!key_copy.isEmpty() ||
-         !val_copy.isEmpty()))
+    if ((row == (rowCount() - 1)) &&
+            (!key_copy.isEmpty() ||
+             !val_copy.isEmpty()))
         insert_row_after(row);
 }
 
@@ -406,7 +435,7 @@ bool ShortcutTable::check(QStringList & bindings)
 {
     forceUpdateCells();
 
-    int n = numRows();
+    int n = rowCount();
     int row;
 
     for (row = 0; row != n; row += 1) {
@@ -414,25 +443,25 @@ bool ShortcutTable::check(QStringList & bindings)
             QString s;
 
             if (!text(row, 0).isEmpty())
-                s = TR("Shift ");
+                s = QObject::tr("Shift ");
 
             if (!text(row, 1).isEmpty())
 #ifdef __APPLE__
                 s += "Apple ";
 
 #else
-                s += TR("Ctrl ");
+                s += QObject::tr("Ctrl ");
 #endif
 
             if (!text(row, 2).isEmpty())
-                s += TR("Alt ");
+                s += QObject::tr("Alt ");
 
             s += text(row, 3);
 
-            if (bindings.findIndex(s) == -1)
+            if (bindings.indexOf(s) == -1)
                 bindings.append(s);
             else {
-                msg_warning(TR("Shortcut"), TR("Several use of the shortcut '%1'", s));
+                msg_warning(TR("Shortcut"), tr("Several use of the shortcut '%1'").arg(s));
                 return FALSE;
             }
         }
@@ -444,12 +473,12 @@ bool ShortcutTable::check(QStringList & bindings)
 void ShortcutTable::accept()
 {
     const QStringList & cmds = Shortcut::cmds();
-    int n = numRows();
+    int n = rowCount();
     int row;
 
     for (row = 0; row != n; row += 1)
         if (!text(row, 3).isEmpty() && !text(row, 4).isEmpty())
             Shortcut::add(text(row, 3), !text(row, 0).isEmpty(),
                           !text(row, 1).isEmpty(), !text(row, 2).isEmpty(),
-                          (for_tool) ? text(row, 4) : cmds[values.findIndex(text(row, 4)) - 1]);
+                          (for_tool) ? text(row, 4) : cmds[values.indexOf(text(row, 4)) - 1]);
 }

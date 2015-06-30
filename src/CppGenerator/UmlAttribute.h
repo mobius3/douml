@@ -1,7 +1,6 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 #include <QTextStream>
-#include <Q3PtrList>
 // *************************************************************************
 //
 // Copyright 2004-2010 Bruno PAGES  .

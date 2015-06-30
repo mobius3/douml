@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseSequenceDiagram.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class File;
 class UmlItem;
@@ -16,7 +16,7 @@ class UmlItem;
 class UmlSequenceDiagram : public UmlBaseSequenceDiagram
 {
 public:
-    UmlSequenceDiagram(void * id, const Q3CString & n) : UmlBaseSequenceDiagram(id, n) {
+    UmlSequenceDiagram(void * id, const QByteArray & n) : UmlBaseSequenceDiagram(id, n) {
         cpt[kind()] += 1;
     };
 

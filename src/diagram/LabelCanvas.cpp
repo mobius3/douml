@@ -38,14 +38,17 @@
 #include "DiagramCanvas.h"
 #include "myio.h"
 #include "translate.h"
+#include <QStyleOptionGraphicsItem>
 
 const char * LabelCanvas::Triangle = "^^^";
 const char * LabelCanvas::Zigzag = "~~~";
 
 LabelCanvas::LabelCanvas(const QString & n, UmlCanvas * canvas, int x, int y,
                          bool bold, bool italic, bool underlined, bool mlcentered)
-    : Q3CanvasText(n, canvas), DiagramItem(-1, canvas)
+    : QGraphicsSimpleTextItem(n/*, canvas*/), DiagramItem(-1, canvas)
 {
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
+    canvas->addItem(this);
     if (bold)
         setFont((italic) ? ((UmlCanvas *) canvas)->get_font(UmlNormalBoldItalicFont)
                 : ((UmlCanvas *) canvas)->get_font(UmlNormalBoldFont));
@@ -58,7 +61,7 @@ LabelCanvas::LabelCanvas(const QString & n, UmlCanvas * canvas, int x, int y,
     multi_lines_centered = mlcentered;
     setX(x);
     setY(y);
-    setZ(LABEL_Z);
+    setZValue(LABEL_Z);
     set_center100();
 
     if (canvas->paste())
@@ -71,12 +74,12 @@ LabelCanvas::~LabelCanvas()
 
 void LabelCanvas::delete_it()
 {
-    ((UmlCanvas *) canvas())->del(this);
+    ((UmlCanvas *) scene())->del(this);
 }
 
 UmlCanvas * LabelCanvas::the_canvas() const
 {
-    return ((UmlCanvas *) canvas());
+    return ((UmlCanvas *) scene());
 }
 
 void LabelCanvas::set_name(const QString & s)
@@ -86,30 +89,30 @@ void LabelCanvas::set_name(const QString & s)
     setText(s);
 
     if (font().strikeOut())
-        setFont(((UmlCanvas *) canvas())->get_font(UmlNormalFont));
+        setFont(((UmlCanvas *) scene())->get_font(UmlNormalFont));
 
     show();
-    canvas()->update();
+    scene()->update();
 }
 
 void LabelCanvas::set_strikeout(bool yes)
 {
     if (yes) {
         if (!font().strikeOut())
-            setFont(((UmlCanvas *) canvas())->get_font(UmlNormalStrikeOutFont));
+            setFont(((UmlCanvas *) scene())->get_font(UmlNormalStrikeOutFont));
     }
     else if (font().strikeOut())
-        setFont(((UmlCanvas *) canvas())->get_font(UmlNormalFont));
+        setFont(((UmlCanvas *) scene())->get_font(UmlNormalFont));
 }
 
 void LabelCanvas::set_underlined(bool yes)
 {
     if (yes) {
         if (!font().underline())
-            setFont(((UmlCanvas *) canvas())->get_font(UmlNormalUnderlinedFont));
+            setFont(((UmlCanvas *) scene())->get_font(UmlNormalUnderlinedFont));
     }
     else if (font().underline())
-        setFont(((UmlCanvas *) canvas())->get_font(UmlNormalFont));
+        setFont(((UmlCanvas *) scene())->get_font(UmlNormalFont));
 }
 
 void LabelCanvas::change_scale()
@@ -117,15 +120,15 @@ void LabelCanvas::change_scale()
     hide();
 
     if (font().bold())
-        setFont((font().italic()) ? ((UmlCanvas *) canvas())->get_font(UmlNormalBoldItalicFont)
-                : ((UmlCanvas *) canvas())->get_font(UmlNormalBoldFont));
+        setFont((font().italic()) ? ((UmlCanvas *) scene())->get_font(UmlNormalBoldItalicFont)
+                : ((UmlCanvas *) scene())->get_font(UmlNormalBoldFont));
     else if (font().italic())
-        setFont(((UmlCanvas *) canvas())->get_font(UmlNormalItalicFont));
+        setFont(((UmlCanvas *) scene())->get_font(UmlNormalItalicFont));
     else if (font().underline())
-        setFont(((UmlCanvas *) canvas())->get_font(UmlNormalUnderlinedFont));
+        setFont(((UmlCanvas *) scene())->get_font(UmlNormalUnderlinedFont));
     else
-        setFont((font().strikeOut()) ? ((UmlCanvas *) canvas())->get_font(UmlNormalStrikeOutFont)
-                : ((UmlCanvas *) canvas())->get_font(UmlNormalFont));
+        setFont((font().strikeOut()) ? ((UmlCanvas *) scene())->get_font(UmlNormalStrikeOutFont)
+                : ((UmlCanvas *) scene())->get_font(UmlNormalFont));
 
     recenter();
 
@@ -137,7 +140,7 @@ void LabelCanvas::recenter()
     double scale = the_canvas()->zoom();
     QPoint c = center();
 
-    Q3CanvasText::moveBy(((int)(center_x_scale100 * scale + 0.5)) - c.x(),
+    QGraphicsSimpleTextItem::moveBy(((int)(center_x_scale100 * scale + 0.5)) - c.x(),
                          ((int)(center_y_scale100 * scale + 0.5)) - c.y());
 }
 
@@ -152,7 +155,7 @@ void LabelCanvas::set_center100()
 
 void LabelCanvas::moveBy(double dx, double dy)
 {
-    Q3CanvasText::moveBy(dx, dy);
+    QGraphicsSimpleTextItem::moveBy(dx, dy);
 
     if (! the_canvas()->do_zoom())
         set_center100();
@@ -182,20 +185,19 @@ void LabelCanvas::move_outside(QRect r, double angle)
         lbl_r.moveCenter(p);
     }
     while (lbl_r.intersects(r));
-
-    move(lbl_r.x(), lbl_r.y());
+    moveBy(lbl_r.x(), lbl_r.y());
 }
 
 void LabelCanvas::draw(QPainter & p)
 {
-    if (! visible()) return;
+    if (! isVisible()) return;
 
     p.setRenderHint(QPainter::Antialiasing, true);
     p.setBackgroundMode(::Qt::TransparentMode);
 
-    QRect r = boundingRect();
+    QRectF r = boundingRect();
     FILE * fp = svg();
-    int index = text().find(Triangle);
+    int index = text().indexOf(Triangle);
 
     if (fp != 0)
         fputs("<g>\n", fp);
@@ -245,7 +247,7 @@ void LabelCanvas::draw(QPainter & p)
     }
     else if (text() != Zigzag) {
         // no triangle nor zigzag
-        if (text().find('\n') != -1) {
+        if (text().indexOf('\n') != -1) {
             p.setFont(font());
 
             int flg = (multi_lines_centered) ? ::Qt::AlignHCenter : 0;
@@ -257,7 +259,8 @@ void LabelCanvas::draw(QPainter & p)
                           p.font(), fp);
         }
         else {
-            Q3CanvasText::draw(p);
+            QStyleOptionGraphicsItem option;
+            QGraphicsSimpleTextItem::paint(&p,&option,0);
 
             if (fp != 0)
                 draw_text(rect(), 0, text(), p.font(), fp);
@@ -292,11 +295,14 @@ void LabelCanvas::draw(QPainter & p)
     if (fp != 0)
         fputs("</g>\n", fp);
 
-    if (selected())
-        show_mark(p, r);
+    if (isSelected())
+        show_mark(p, r.toRect());
 }
-
-UmlCode LabelCanvas::type() const
+void LabelCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode LabelCanvas::typeUmlCode() const
 {
     return UmlLabel;
 }
@@ -308,17 +314,22 @@ int LabelCanvas::rtti() const
 
 QPoint LabelCanvas::center() const
 {
-    return boundingRect().center();
+    return boundingRect().center().toPoint();
 }
 
 QRect LabelCanvas::rect() const
 {
-    return boundingRect();
+    return boundingRect().toRect();
+}
+
+QRect LabelCanvas::sceneRect() const
+{
+    return rect();
 }
 
 bool LabelCanvas::isSelected() const
 {
-    return selected();
+    return QGraphicsSimpleTextItem::isSelected();
 }
 
 bool LabelCanvas::contains(int, int) const
@@ -328,12 +339,12 @@ bool LabelCanvas::contains(int, int) const
 
 QString LabelCanvas::may_start(UmlCode &) const
 {
-    return TR("illegal");
+    return QObject::tr("illegal");
 }
 
 QString LabelCanvas::may_connect(UmlCode &, const DiagramItem *) const
 {
-    return TR("illegal");
+    return QObject::tr("illegal");
 }
 
 void LabelCanvas::connexion(UmlCode, DiagramItem *,
@@ -352,12 +363,12 @@ void LabelCanvas::menu(const QPoint &)
 
 double LabelCanvas::get_z() const
 {
-    return z();
+    return zValue();
 }
 
 void LabelCanvas::set_z(double z)
 {
-    setZ(z);
+    setZValue(z);
 }
 
 //
@@ -365,7 +376,7 @@ void LabelCanvas::set_z(double z)
 void LabelCanvas::save(QTextStream  & st, bool, QString &) const
 {
     st << "label ";
-    save_string(text(), st);
+    save_string(text().toLatin1().constData(), st);
 
     if (font().bold())
         st << " bold";
@@ -409,10 +420,10 @@ LabelCanvas * LabelCanvas::read(char *& st, UmlCanvas * canvas, char * k)
                         bold, italic, underlined);
 
     if (!strcmp(k, "xyz"))
-        result->setZ(read_double(st));
+        result->setZValue(read_double(st));
     else if (!strcmp(k, "xy"))
         // old version
-        ;//result->setZ(OLD_LABEL_Z);
+        ;//result->setZValue(OLD_LABEL_Z);
     else
         wrong_keyword(k, "xyz");
 
@@ -426,7 +437,7 @@ void LabelCanvas::history_save(QBuffer & b) const
     ::save(center_y_scale100, b);
     ::save(x(), b);
     ::save(y(), b);
-    ::save(z(), b);
+    ::save(zValue(), b);
 }
 
 void LabelCanvas::history_load(QBuffer & b)
@@ -435,18 +446,23 @@ void LabelCanvas::history_load(QBuffer & b)
     ::load(center_y_scale100, b);
     double dx = load_double(b) - x();
 
-    Q3CanvasText::moveBy(dx, load_double(b) - y());
-    Q3CanvasText::setZ(load_double(b));
-    Q3CanvasItem::setSelected(FALSE);
-    Q3CanvasItem::setVisible(TRUE);
+    QGraphicsSimpleTextItem::moveBy(dx, load_double(b) - y());
+    QGraphicsSimpleTextItem::setZValue(load_double(b));
+    QGraphicsItem::setSelected(FALSE);
+    QGraphicsItem::setVisible(TRUE);
 }
 
 void LabelCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
 }
 
 void LabelCanvas::check_stereotypeproperties()
 {
     // do nothing
+}
+
+int LabelCanvas::type() const
+{
+    return RTTI_LABEL;
 }

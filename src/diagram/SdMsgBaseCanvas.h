@@ -94,7 +94,7 @@ public:
     virtual bool is_decenter(const QPoint &, BooL &) const;
     virtual void setVisible(bool yes);
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual QString may_start(UmlCode &) const;
     virtual QString may_connect(UmlCode & l, const DiagramItem * dest) const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;

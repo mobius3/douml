@@ -1,0 +1,26 @@
+class GridBox
+!!!254210.cpp!!!	GridBox(in n : int, inout parent : QWidget = 0, in name : QString = QString())
+
+    m_layout = new QGridLayout(this);
+    setLayout(m_layout);
+    m_numCols = n;
+    currentIndex = 0;
+    setSpacing(0);
+    setMargin(0);
+    if(!name.isEmpty())
+        this->setObjectName(name);
+!!!254338.cpp!!!	setMargin(in mar : int) : void
+
+    m_layout->setMargin(mar);
+!!!254466.cpp!!!	setSpacing(in spacing : int) : void
+
+    m_layout->setSpacing(spacing);
+!!!254594.cpp!!!	addWidget(inout widget : QWidget) : void
+
+    m_layout->addWidget(widget, currentIndex/m_numCols, currentIndex%m_numCols);
+    currentIndex ++;
+!!!254722.cpp!!!	name(in name : QString = QString()) : QString
+
+    if(objectName().isEmpty())
+        setObjectName(name);
+    return objectName();

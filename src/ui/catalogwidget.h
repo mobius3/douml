@@ -39,7 +39,7 @@ class TreeModel;
 class BrowserNode;
 class TreeItemInterface;
 class QTreeView;
-class Q3ListViewItem;
+class QTreeWidgetItem;
 class GenericEventFilter;
 class UmlWindow;
 class CatalogWidget : public QWidget
@@ -110,7 +110,7 @@ public slots:
     void OnPerformVisitedFiltering(QString);
     void OnPerformMarkedFiltering();
     void OnPerformFavouritesFiltering();
-    void OnUpdateVisitedView(Q3ListViewItem * item);
+    void OnUpdateVisitedView(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void OnUpdateMarkedView(QList<BrowserNode*>);
     void OnUpdateFavoutitesView();
     void OnSelectedInVisited(const QModelIndex &, const QModelIndex &);

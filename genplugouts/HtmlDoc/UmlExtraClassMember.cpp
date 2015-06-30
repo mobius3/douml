@@ -1,14 +1,14 @@
 
 #include "UmlExtraClassMember.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlExtraClassMember::sKind()
+QByteArray UmlExtraClassMember::sKind()
 {
     return "extra class member";
 }
 
-void UmlExtraClassMember::html(Q3CString, unsigned int, unsigned int)
+void UmlExtraClassMember::html(QByteArray, unsigned int, unsigned int)
 {
     define();
 
@@ -16,7 +16,7 @@ void UmlExtraClassMember::html(Q3CString, unsigned int, unsigned int)
     writeq(name());
     fw.write("</b></div></td></tr></table>");
 
-    Q3CString s;
+    QByteArray s;
 
     if (! cppDecl().isEmpty() || !javaDecl().isEmpty()) {
         fw.write("<p>Definition :</p><ul>");

@@ -31,7 +31,7 @@
 #include "UmlPackage.h"
 #include "Package.h"
 //Added by qt3to4:
-#include <Q3PtrList>
+
 
 bool UmlArtifact::has_roundtrip_expected;
 UmlArtifact * UmlArtifact::main_art;
@@ -41,7 +41,7 @@ bool UmlArtifact::set_roundtrip_expected()
     if ((stereotype() != "source") || cppSource().isEmpty())
         return TRUE;
 
-    const Q3PtrVector<UmlClass> & cls = associatedClasses();
+    const QVector<UmlClass*> & cls = associatedClasses();
 
     if (cls.isEmpty()) {
         if ((name() == "main") && cppHeader().isEmpty())
@@ -55,9 +55,8 @@ bool UmlArtifact::set_roundtrip_expected()
     useless = TRUE;
     fully_updated = TRUE;
     ((UmlPackage *) parent()->parent())->get_package()->own(this);
-
-    UmlClass ** v = cls.data();
-    UmlClass ** vsup = v + cls.size();
+    UmlClass *const* v = cls.data();
+    UmlClass *const* vsup = v + cls.size();
     bool result = isWritable();
 
     for (; v != vsup; v += 1)

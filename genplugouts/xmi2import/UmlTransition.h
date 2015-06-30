@@ -5,7 +5,7 @@
 #include "UmlBaseTransition.h"
 #include "UmlStateItem.h"
 
-#include <q3valuelist.h>
+#include <QList.h>
 
 class FileIn;
 class Token;
@@ -48,7 +48,7 @@ public:
 
 
 protected:
-    static Q3ValueList<Transition> All;
+    static QList<Transition> All;
 
 };
 

@@ -28,7 +28,7 @@
 #ifndef UMLRELATION_H
 #define UMLRELATION_H
 
-#include <q3valuelist.h>
+#include <QList.h>
 //Added by qt3to4:
 #include "misc/mystr.h"
 

@@ -1,39 +1,39 @@
 
 #include "UmlActivityControlNodeClasses.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlInitialActivityNode::sKind()
+QByteArray UmlInitialActivityNode::sKind()
 {
     return "initial activity node";
 }
 
-Q3CString UmlFlowFinalActivityNode::sKind()
+QByteArray UmlFlowFinalActivityNode::sKind()
 {
     return "flow final";
 }
 
-Q3CString UmlActivityFinalActivityNode::sKind()
+QByteArray UmlActivityFinalActivityNode::sKind()
 {
     return "activity final";
 }
 
-Q3CString UmlDecisionActivityNode::sKind()
+QByteArray UmlDecisionActivityNode::sKind()
 {
     return "decision activity node";
 }
 
-Q3CString UmlMergeActivityNode::sKind()
+QByteArray UmlMergeActivityNode::sKind()
 {
     return "merge activity node";
 }
 
-Q3CString UmlForkActivityNode::sKind()
+QByteArray UmlForkActivityNode::sKind()
 {
     return "fork activity node";
 }
 
-Q3CString UmlJoinActivityNode::sKind()
+QByteArray UmlJoinActivityNode::sKind()
 {
     return "join activity node";
 }

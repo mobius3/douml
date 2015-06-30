@@ -34,7 +34,7 @@
 #include "UmlEnum.h"
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 class QTextStream;
 
@@ -57,7 +57,7 @@ struct AnyAction {
     virtual ~AnyAction();
     virtual AnyAction * duplicate() const = 0;
     virtual UmlActionKind kind() const = 0;
-    virtual Q3ValueList<PinDescr> pins() const;	// no pins by default
+    virtual QList<PinDescr> pins() const;	// no pins by default
     virtual bool may_add_pin() const; // true by default
     virtual QString str(DrawingLanguage lang, QString name) const;
     virtual BasicData * depend_on();
@@ -117,7 +117,7 @@ struct AccessVariableValueAction : public AnyAction {
     AccessVariableValueAction();
     virtual ~AccessVariableValueAction();
     AnyAction * duplicate(AccessVariableValueAction * r) const;
-    Q3ValueList<PinDescr> pins(UmlParamDirection, const char * str) const;
+    QList<PinDescr> pins(UmlParamDirection, const char * str) const;
     // [in/out] <str> : le type de la variable
     virtual BasicData * depend_on();
     virtual void on_delete();
@@ -149,7 +149,7 @@ struct ReadVariableValueAction : public AccessVariableValueAction {
     virtual ~ReadVariableValueAction();
     AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    Q3ValueList<PinDescr> pins() const;
+    QList<PinDescr> pins() const;
     // [out] "result" : le type de la variable
 };
 
@@ -160,7 +160,7 @@ struct WriteVariableValueAction : public AccessVariableValueAction {
     virtual ~WriteVariableValueAction();
     AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    Q3ValueList<PinDescr> pins() const;
+    QList<PinDescr> pins() const;
     // [in] "value" : le type de la variable
 };
 
@@ -172,7 +172,7 @@ struct ChangeVariableValueAction : public AccessVariableValueAction {
     ChangeVariableValueAction();
     virtual ~ChangeVariableValueAction();
     AnyAction * duplicate(ChangeVariableValueAction * r) const;
-    Q3ValueList<PinDescr> pins(const char * str) const;
+    QList<PinDescr> pins(const char * str) const;
     // [in] "value" : le type de la variable
     // [in] <str>: UnlimitedNatural / uint
 
@@ -189,7 +189,7 @@ struct AddVariableValueAction : public ChangeVariableValueAction {
     virtual ~AddVariableValueAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] "value" : le type de la variable
     // [in] "insertAt" : UnlimitedNatural / uint
 
@@ -204,7 +204,7 @@ struct RemoveVariableValueAction : public ChangeVariableValueAction {
     virtual ~RemoveVariableValueAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] "value" : le type de la variable
     // [in] "removeAt" : UnlimitedNatural / uint
 
@@ -222,7 +222,7 @@ struct CallBehaviorAction : public AnyAction {
     virtual ~CallBehaviorAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [any]* : depend on activity's parameter
     virtual BasicData * depend_on();
     virtual void on_delete();
@@ -248,7 +248,7 @@ struct CallOperationAction : public AnyAction {
     virtual ~CallOperationAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] "target" : instance,
     // [any]* : other depend on operation's params&result&exception
     virtual QString str(DrawingLanguage lang, QString name) const;
@@ -273,7 +273,7 @@ struct SendObjectAction : public AnyAction {
     virtual ~SendObjectAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] "request" : the sent object
     // [in] "target" : target object,
     // [in]* : arguments (pin addable et removables)
@@ -294,7 +294,7 @@ struct SendSignalAction : public AnyAction {
     virtual ~SendSignalAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] "target"
     // [*] depend on signal parameters
 
@@ -311,7 +311,7 @@ struct BroadcastSignalAction : public SendSignalAction {
     virtual ~BroadcastSignalAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
 };
 
 struct UnmarshallAction : public AnyAction {
@@ -321,7 +321,7 @@ struct UnmarshallAction : public AnyAction {
     virtual ~UnmarshallAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] "object" : the unmashalled object
     // [out]* : the objects (pin addable et removables)
 
@@ -341,7 +341,7 @@ struct ValueSpecificationAction : public AnyAction {
     virtual ~ValueSpecificationAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [out] : the value
     virtual bool may_add_pin() const;
 
@@ -362,7 +362,7 @@ struct AcceptCallAction : public AnyAction {
     virtual ~AcceptCallAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [out] : returnInformation
 
     void save(QTextStream & st, QString & warning) const;
@@ -382,7 +382,7 @@ struct ReplyAction : public AnyAction {
     virtual ~ReplyAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] : returnInformation
 
     void save(QTextStream & st, QString & warning) const;
@@ -400,7 +400,7 @@ struct CreateObjectAction : public AnyAction {
     virtual ~CreateObjectAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [out] : result
 
     void save(QTextStream & st, QString & warning) const;
@@ -419,7 +419,7 @@ struct DestroyObjectAction : public AnyAction {
     virtual ~DestroyObjectAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] : result
     virtual bool may_add_pin() const;
 
@@ -436,7 +436,7 @@ struct TestIdentityAction : public AnyAction {
     virtual ~TestIdentityAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] : first
     // [in] : second
     // [out] : result
@@ -454,7 +454,7 @@ struct RaiseExceptionAction : public AnyAction {
     virtual ~RaiseExceptionAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] : exception
     virtual bool may_add_pin() const;
 
@@ -473,7 +473,7 @@ struct ReduceAction : public AnyAction {
     virtual ~ReduceAction();
     virtual AnyAction * duplicate() const;
     virtual UmlActionKind kind() const;
-    virtual Q3ValueList<PinDescr> pins() const;
+    virtual QList<PinDescr> pins() const;
     // [in] : collection
     // [out] : result
     virtual bool may_add_pin() const;

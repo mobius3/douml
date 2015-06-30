@@ -29,11 +29,11 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qfileinfo.h>
 #include <qpainter.h>
 #include <qcursor.h>
-#include <q3ptrdict.h>
+#include <qhash.h>
 //Added by qt3to4:
 #include <QTextStream>
 #include <QPixmap>
@@ -169,13 +169,14 @@ void BrowserOperation::post_duplicate()
         return;
 
     // search for attribute/relation
-    const char * s = x_of->get_name();
-    UmlCode k = x_of->get_type();
-    Q3ListViewItem * child;
 
-    for (child = parent()->firstChild(); child != 0; child = child->nextSibling()) {
+    QString s = x_of->get_name();
+    UmlCode k = x_of->get_type();
+    BrowserNode * child;
+
+    for (child = ((BrowserNode *)parent())->firstChild(); child != 0; child = child->nextSibling()) {
         if ((((BrowserNode *) child)->get_type() == k) &&
-                !strcmp(((BrowserNode *) child)->get_name(), s)) {
+                ((BrowserNode *) child)->get_name() == s) {
             // this one
             (this->*set_x_of)((BrowserNode *) child);
             break;
@@ -219,7 +220,7 @@ bool BrowserOperation::delete_internal(QString &)
     is_deleted = TRUE;
 
     if (is_marked) {
-        marked_list.remove(this);
+        marked_list.removeOne(this);
         is_marked = FALSE;
     }
 
@@ -246,6 +247,7 @@ void BrowserOperation::AddConstructorInitalizer()
     QString constructorPrototype = static_cast<OperationData*>(this->get_data())->get_cppdef();
 
     QString constructorActual = TagManagers::Cpp::updated_def(static_cast<OperationData*>(this->get_data()));
+
     QString initializer(this->get_value("constructor-initializer"));
     if(initializer.trimmed().isEmpty())
         ciDialog.ui->edInitializer->setText(initializerDummy);
@@ -257,7 +259,7 @@ void BrowserOperation::AddConstructorInitalizer()
     ciDialog.resize(800, 400);
     if(ciDialog.exec() == QDialog::Accepted)
     {
-        this->set_value("constructor-initializer", ciDialog.ui->edInitializer->toPlainText());
+        this->set_value("constructor-initializer", ciDialog.ui->edInitializer->toPlainText().toLatin1().constData());
         this->modified();
         this->get_data()->get_browser_node()->modified();
         this->get_data()->get_browser_node()->package_modified();
@@ -269,11 +271,10 @@ void BrowserOperation::AddConstructorInitalizer()
 
 void BrowserOperation::renumber(int phase)
 {
-    static Q3PtrDict<char> cpp;
-    static Q3PtrDict<char> java;
-    static Q3PtrDict<char> php;
-    static Q3PtrDict<char> python;
-
+    static QHash<void*,char*> cpp;
+    static QHash<void*,char*> java;
+    static QHash<void*,char*> php;
+    static QHash<void*,char*> python;
     char * b;
 
     if (phase == -1) {
@@ -345,11 +346,12 @@ void BrowserOperation::instances(BrowserNodeList & result)
     IdIterator<BrowserOperation> it(all);
     BrowserOperation * op;
 
-    while ((op = it.current()) != 0) {
-        if (!op->deletedp())
-            result.append(op);
+    while(it.hasNext()){
+        it.next();
+        if ((op = it.value()) != 0)
+            if (!op->deletedp())
+                result.append(op);
 
-        ++it;
     }
 
     result.sort_it();
@@ -382,16 +384,14 @@ void BrowserOperation::set_set_of(BrowserNode * o)
 static QString substr_name(QString s, const QString & a)
 {
     int index;
-
-    if ((index = s.find("${name}")) != -1)
+    if ((index = s.indexOf("${name}")) != -1)
         s.replace(index, 7, a);
-    else if ((index = s.find("${Name}")) != -1)
+    else if ((index = s.indexOf("${Name}")) != -1)
         s.replace(index, 7, capitalize(a));
-    else if ((index = s.find("${NAME}")) != -1)
-        s.replace(index, 7, a.upper());
-    else if ((index = s.find("${nAME}")) != -1)
-        s.replace(index, 7, a.lower());
-
+    else if ((index = s.indexOf("${NAME}")) != -1)
+        s.replace(index, 7, a.toUpper());
+    else if ((index = s.indexOf("${nAME}")) != -1)
+        s.replace(index, 7, a.toLower());
     return s;
 }
 
@@ -496,7 +496,7 @@ QString BrowserOperation::get_of_name() const
 
     int index;
 
-    return ((index = result.find(" ")) != -1)
+    return ((index = result.indexOf(" ")) != -1)
             ? result.left(index)
             : result;
 }
@@ -520,9 +520,9 @@ QString BrowserOperation::compute_name(const char * name_spec) const
         QString s = name_spec;
         int index;
 
-        if ((index = s.find("${name}")) != -1)
+        if ((index = s.indexOf("${name}")) != -1)
             s.replace(index, 7, get_of_name());
-        else if ((index = s.find("${Name}")) != -1)
+        else if ((index = s.indexOf("${Name}")) != -1)
             s.replace(index, 7, capitalize(get_of_name()));
 
         return s;
@@ -540,7 +540,6 @@ const QPixmap * BrowserOperation::pixmap(int) const
 {
     if (deletedp())
         return DeletedOperationIcon;
-
     const QPixmap * px = ProfiledStereotypes::browserPixmap(def->get_stereotype());
 
     if (px != 0)
@@ -561,14 +560,18 @@ const QPixmap * BrowserOperation::pixmap(int) const
     }
 }
 
-void BrowserOperation::paintCell(QPainter * p, const QColorGroup & cg, int column,
+void BrowserOperation::paintCell(QPainter * p, const QPalette & cg, int column,
                                  int width, int alignment)
 {
-    const QColor & bg = p->backgroundColor();
 
+    /* BrowserOperation::data is used instead
+    const QColor & bg = p->background().color();
+
+    QBrush backColor = p->background();
     if (is_marked) {
         p->setBackgroundMode(Qt::OpaqueMode);
-        p->setBackgroundColor(UmlRedColor);
+        backColor.setColor(UmlRedColor);
+        p->setBackground(backColor);
     }
 
     if (def->get_isa_class_operation())
@@ -577,123 +580,154 @@ void BrowserOperation::paintCell(QPainter * p, const QColorGroup & cg, int colum
         p->setFont((is_writable()) ? BoldItalicFont : ItalicFont);
     else
         p->setFont((is_writable()) ? BoldFont : NormalFont);
-
-    Q3ListViewItem::paintCell(p, cg, column, width, alignment);
+    BrowserNode::paintCell(p, cg, column, width, alignment);
 
     if (is_marked) {
         p->setBackgroundMode(Qt::TransparentMode);
-        p->setBackgroundColor(bg);
+        backColor.setColor(bg);
+        p->setBackground(backColor);
     }
+    */
 }
-
+QVariant BrowserOperation::data(int column, int role) const
+{
+    if(role == Qt::FontRole)
+    {
+        if(def->get_isa_class_operation())
+        {
+            if(is_writable())
+                return BoldUnderlineFont;
+            else
+                return UnderlineFont;
+        }
+        else if(def->get_is_abstract())
+        {
+            if(is_writable())
+                return BoldItalicFont;
+            else
+                return ItalicFont;
+        }
+        else
+        {
+            if(is_writable())
+                return BoldFont;
+            else
+                return NormalFont;
+        }
+    }
+    return BrowserNode::data(column, role);
+}
 static QList<BrowserNode *> ImplBy;
 static const int add_constructor_initializer = 35;
 static const int go_up = 36;
 
 void BrowserOperation::menu()
 {
-    Q3PopupMenu m(0, name);
-    Q3PopupMenu implbym(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(name,0);
+    QMenu implbym(0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_edited) {
             if (get_container(UmlClass) != 0)
-                m.setWhatsThis(m.insertItem(TR("Up"), go_up),
-                               TR("to return to parent node"));
+                MenuFactory::addItem(m, QObject::tr("Up"), go_up,
+                                     QObject::tr("to return to parent node"));
 
             QString nameOfNode = ((BrowserNode *) parent())->get_name();
             if(name == nameOfNode)
-                MenuFactory::addItem(m, TR("Add constructor initializer"),
+                MenuFactory::addItem(m, QObject::tr("Add constructor initializer"),
                                      add_constructor_initializer,
-                                     TR("to edit the <i>operation</i>,"
-                                        "a double click with the left mouse button does the same thing"));
+                                     QObject::tr("to edit the <i>operation</i>,"
+                                                 "a double click with the left mouse button does the same thing"));
 
 
 
-            m.setWhatsThis(m.insertItem(TR("Edit"), 0),
-                           TR("to edit the <i>operation</i>,"
-                              "a double click with the left mouse button does the same thing"));
+            MenuFactory::addItem(m, QObject::tr("Edit"), 0,
+                                 QObject::tr("to edit the <i>operation</i>,"
+                                             "a double click with the left mouse button does the same thing"));
 
             if (GenerationSettings::cpp_get_default_defs() &&
                     (strstr(def->get_cppdef(), "${body}") != 0))
-                m.setWhatsThis(m.insertItem(TR("Edit C++ body"), 4),
-                               TR("to edit the <i>operation</i> and its C++ body"));
+                MenuFactory::addItem(m, QObject::tr("Edit C++ body"), 4,
+                                     QObject::tr("to edit the <i>operation</i> and its C++ body"));
 
             if (GenerationSettings::java_get_default_defs() &&
                     (strstr(def->get_javadef(), "${body}") != 0))
-                m.setWhatsThis(m.insertItem(TR("Edit Java body"), 5),
-                               TR("to edit the <i>operation</i> and its Java body"));
+                MenuFactory::addItem(m, QObject::tr("Edit Java body"), 5,
+                                     QObject::tr("to edit the <i>operation</i> and its Java body"));
 
             if (GenerationSettings::php_get_default_defs() &&
                     (strstr(def->get_phpdef(), "${body}") != 0))
-                m.setWhatsThis(m.insertItem(TR("Edit Php body"), 6),
-                               TR("to edit the <i>operation</i> and its Php body"));
+                MenuFactory::addItem(m, QObject::tr("Edit Php body"), 6,
+                                     QObject::tr("to edit the <i>operation</i> and its Php body"));
 
             if (GenerationSettings::python_get_default_defs() &&
                     (strstr(def->get_pythondef(), "${body}") != 0))
-                m.setWhatsThis(m.insertItem(TR("Edit Python body"), 7),
-                               TR("to edit the <i>operation</i> and its Python body"));
+                MenuFactory::addItem(m, QObject::tr("Edit Python body"), 7,
+                                     QObject::tr("to edit the <i>operation</i> and its Python body"));
 
             if (((BrowserClass *) parent())->is_writable()) {
                 if ((get_of == 0) && (set_of == 0))
-                    m.setWhatsThis(m.insertItem(TR("Duplicate"), 1),
-                                   TR("to copy the <i>operation</i> in a new one"));
+                    MenuFactory::addItem(m, QObject::tr("Duplicate"), 1,
+                                         QObject::tr("to copy the <i>operation</i> in a new one"));
 
-                m.setWhatsThis(m.insertItem(TR("Add implementing activity"), 9),
-                               TR("to add a new <i>activity</i> implementing the <i>operation</i>"));
-                m.setWhatsThis(m.insertItem(TR("Add implementing state"), 10),
-                               TR("to add a new <i>state</i> implementing the <i>operation</i>"));
+                MenuFactory::addItem(m, QObject::tr("Add implementing activity"), 9,
+                                     QObject::tr("to add a new <i>activity</i> implementing the <i>operation</i>"));
+                MenuFactory::addItem(m, QObject::tr("Add implementing state"), 10,
+                                     QObject::tr("to add a new <i>state</i> implementing the <i>operation</i>"));
             }
 
-            m.insertSeparator();
-            m.setWhatsThis(m.insertItem(TR("Referenced by"), 8),
-                           TR("to know who reference the <i>operation</i>"));
+            m.addSeparator();
+            MenuFactory::addItem(m, QObject::tr("Referenced by"), 8,
+                                 QObject::tr("to know who reference the <i>operation</i>"));
 
             ImplBy.clear();
             BrowserActivity::compute_referenced_by(ImplBy, this);
             BrowserState::compute_referenced_by(ImplBy, this);
 
             if (! ImplBy.isEmpty()) {
-                m.setWhatsThis(m.insertItem(TR("Select implementing behavior"), &implbym),
-                               TR("to select a <i>state</i> or <i>activity</i> implementing the <i>operation</i>"));
+                MenuFactory::insertItem(m, QObject::tr("Select implementing behavior"), &implbym,
+                                        QObject::tr("to select a <i>state</i> or <i>activity</i> implementing the <i>operation</i>"));
 
-                MenuFactory::createTitle(implbym, TR("Choose behavior"));
-                implbym.insertSeparator();
+                MenuFactory::createTitle(implbym, QObject::tr("Choose behavior"));
+                implbym.addSeparator();
 
                 int rank = 10000;
 
                 foreach (BrowserNode * beh, ImplBy)
-                    implbym.insertItem(beh->full_name(TRUE), rank);
+                    MenuFactory::addItem(implbym, beh->full_name(TRUE), rank);
             }
 
             if (!is_read_only && (edition_number == 0)) {
-                m.insertSeparator();
-                m.setWhatsThis(m.insertItem(TR("Delete"), 2),
-                               TR("to delete the <i>operation</i>. \
-                                  Note that you can undelete it after"));
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::tr("Delete"), 2,
+                                     QObject::tr("to delete the <i>operation</i>. \
+                                                 Note that you can undelete it after"));
             }
         }
 
-        mark_menu(m, TR("the operation"), 90);
+        mark_menu(m, QObject::tr("the operation").toLatin1().constData(), 90);
         ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
                 Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+            m.addSeparator();
+            toolm.setTitle( QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0) &&
              ((get_of == 0) || !get_of->deletedp()) &&
              ((set_of == 0) || !set_of->deletedp()))
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 3),
-                       TR("to undelete the <i>operation</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 3,
+                             QObject::tr("to undelete the <i>operation</i>"));
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserOperation::exec_menu_choice(int rank)
@@ -750,7 +784,6 @@ void BrowserOperation::exec_menu_choice(int rank)
 
     case 9: {
         BrowserNode * bn = this;
-
         do {
             bn = (BrowserNode *) bn->parent();
         }
@@ -774,7 +807,6 @@ void BrowserOperation::exec_menu_choice(int rank)
             bn = (BrowserNode *) bn->parent();
         }
         while (bn->get_type() == UmlClass);
-
         BrowserState * st = BrowserState::add_state(bn, TRUE);
 
         if (st != 0) {
@@ -802,12 +834,13 @@ void BrowserOperation::exec_menu_choice(int rank)
     default:
         if (rank >= 99990)
             ProfiledStereotypes::choiceManagement(this, rank - 99990);
-        else if (rank >= 10000)
-            ImplBy.at(rank - 10000)->select_in_browser();
-        else if (rank >= 100)
-            ToolCom::run(Tool::command(rank - 100), this);
-        else if (rank >= 90)
-            mark_management(rank - 90);
+        else
+            if (rank >= 10000)
+                ImplBy.at(rank - 10000)->select_in_browser();
+            else if (rank >= 100)
+                ToolCom::run(Tool::command(rank - 100), this);
+            else if (rank >= 90)
+                mark_management(rank - 90);
 
         ImplBy.clear();
         return;
@@ -893,7 +926,7 @@ uint BrowserOperation::TypeID()
 
 QString BrowserOperation::get_stype() const
 {
-    return TR("operation");
+    return QObject::TR("operation");
 }
 
 int BrowserOperation::get_identifier() const
@@ -954,11 +987,13 @@ void BrowserOperation::compute_referenced_by(QList<BrowserNode *> & l,
 {
     IdIterator<BrowserOperation> it(all);
 
-    while (it.current()) {
-        if (!it.current()->deletedp() && it.current()->def->reference(target))
-            l.append(it.current());
+    while(it.hasNext()){
+        it.next();
+        if (it.value()) {
+        if (!it.value()->deletedp() && it.value()->def->reference(target))
+            l.append(it.value());
 
-        ++it;
+}
     }
 }
 
@@ -977,17 +1012,16 @@ void BrowserOperation::referenced_by(QList<BrowserNode *> & l, bool ondelete)
 
 QString BrowserOperation::python_init_self(BrowserNode * cl)
 {
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = cl->firstChild(); child; child = child->nextSibling()) {
         if ((((BrowserNode *) child)->get_type() == UmlOperation) &&
-                !strcmp(((BrowserNode *) child)->get_name(), "__init__")) {
+                !strcmp(((BrowserNode *) child)->get_name().toLatin1().constData(), "__init__")) {
             return (((BrowserOperation *) child)->def->get_n_params() != 0)
                     ? ((BrowserOperation *) child)->def->get_param_name(0)
                     : "self";
         }
     }
-
     // not find
     return "self";
 }
@@ -1003,10 +1037,8 @@ bool BrowserOperation::tool_cmd(ToolCom * com, const char * args)
 
     case sideCmd: {
         QList<BrowserNode *> l;
-
         BrowserActivity::compute_referenced_by(l, this);
         BrowserState::compute_referenced_by(l, this);
-
         com->write_unsigned(l.count());
 
         foreach (BrowserNode * bn, l)
@@ -1077,7 +1109,9 @@ void BrowserOperation::post_load()
     IdIterator<BrowserOperation> it(all);
     BrowserOperation * op;
 
-    while ((op = it.current()) != 0) {
+    while(it.hasNext()){
+        it.next();
+        if((op = it.value()) != 0) {
         if (op->def->get_or_set()) {
             if (op->get_of != 0) {
                 if (op->get_of->deletedp() || op->get_of->is_undefined())
@@ -1090,8 +1124,7 @@ void BrowserOperation::post_load()
             else
                 op->delete_it();
         }
-
-        ++it;
+}
     }
 }
 
@@ -1102,7 +1135,7 @@ void BrowserOperation::save(QTextStream & st, bool ref, QString & warning)
     else {
         nl_indent(st);
         st << "operation " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, FALSE, warning);
 

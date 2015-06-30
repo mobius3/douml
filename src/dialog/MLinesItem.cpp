@@ -32,33 +32,13 @@
 #include <qwidget.h>
 
 #include "MLinesItem.h"
-#include <Q3TextEdit>
+#include <QTextEdit>
 #include <QTextEdit>
 #include "DialogUtil.h"
 
 
-MLinesItem::MLinesItem(Q3Table * ta, const QString & s, bool editable)
-    : TableItem(ta, editable ? Q3TableItem::WhenCurrent : Q3TableItem::Never, s)
+MLinesItem::MLinesItem(QTableWidget * ta, const QString & s, bool editable)
+    : TableItem(ta, editable ? TableItem::WhenCurrent : TableItem::Never, s, TableItem::MLinesType)
 {
-    mle = 0;
-}
-
-QWidget * MLinesItem::createEditor() const
-{
-
-    ((MLinesItem *) this)->mle = new QTextEdit(table()->viewport());
-    mle->setText(text());
-    return mle;
-}
-
-void MLinesItem::setContentFromEditor(QWidget * w)
-{
-
-    QTextEdit * editor = qobject_cast<QTextEdit *>(w);
-
-    if (editor)
-        setText(editor->text());
-    else
-        Q3TableItem::setContentFromEditor(w);
 }
 

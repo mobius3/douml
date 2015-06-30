@@ -2,14 +2,14 @@
 #include "UmlActivityDiagram.h"
 #include "UmlActivityObject.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
-Q3CString UmlActivityObject::sKind()
+QByteArray UmlActivityObject::sKind()
 {
     return "activity object";
 }
 
-void UmlActivityObject::html(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlActivityObject::html(QByteArray pfix, unsigned int rank, unsigned int level)
 {
     define();
 
@@ -22,9 +22,9 @@ void UmlActivityObject::html(Q3CString pfix, unsigned int rank, unsigned int lev
     unload(FALSE, FALSE);
 }
 
-void UmlActivityObject::html_internal(Q3CString pfix, unsigned int rank, unsigned int level)
+void UmlActivityObject::html_internal(QByteArray pfix, unsigned int rank, unsigned int level)
 {
-    Q3CString s = description();
+    QByteArray s = description();
 
     s = description();
 
@@ -52,8 +52,8 @@ void UmlActivityObject::html_internal(Q3CString pfix, unsigned int rank, unsigne
 
     s = selection();
 
-    Q3CString scpp = cppSelection();
-    Q3CString sjava = javaSelection();
+    QByteArray scpp = cppSelection();
+    QByteArray sjava = javaSelection();
 
     if (!s.isEmpty() || !scpp.isEmpty() || !sjava.isEmpty()) {
         fw.write("<p>Selection :</p><ul>");

@@ -1,10 +1,10 @@
 #ifndef _UMLSETTINGS_H
 #define _UMLSETTINGS_H
+#include <QByteArray>
+#include <QHash>
 
-
-#include <q3cstring.h>
 #include "aLanguage.h"
-#include <q3dict.h>
+
 
 struct UmlBuiltin;
 struct UmlStereotype;
@@ -20,44 +20,44 @@ class UmlSettings
 {
 public:
     // return the default description
-    static Q3CString artifactDescription();
+    static QByteArray artifactDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ArtifactDescription(Q3CString v);
+    static bool set_ArtifactDescription(QByteArray v);
 
     // return the default description
-    static Q3CString classDescription();
+    static QByteArray classDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_ClassDescription(Q3CString v);
+    static bool set_ClassDescription(QByteArray v);
 
     // return the default description
-    static Q3CString operationDescription();
+    static QByteArray operationDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_OperationDescription(Q3CString v);
+    static bool set_OperationDescription(QByteArray v);
 
     // return the default description
-    static Q3CString attributeDescription();
+    static QByteArray attributeDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_AttributeDescription(Q3CString v);
+    static bool set_AttributeDescription(QByteArray v);
 
     // return the default description
-    static Q3CString relationDescription();
+    static QByteArray relationDescription();
 
     // set the default description
     //
     // On error : return FALSE in C++, produce a RuntimeException in Java
-    static bool set_RelationDescription(Q3CString v);
+    static bool set_RelationDescription(QByteArray v);
 
     // return the language from which the getter's name rule must be followed at Uml level
     static aLanguage umlGetName();
@@ -90,25 +90,25 @@ private:
 
 
 protected:
-    static Q3CString _artifact_default_description;
+    static QByteArray _artifact_default_description;
 
-    static Q3CString _class_default_description;
+    static QByteArray _class_default_description;
 
-    static Q3CString _operation_default_description;
+    static QByteArray _operation_default_description;
 
-    static Q3CString _attribute_default_description;
+    static QByteArray _attribute_default_description;
 
-    static Q3CString _relation_default_description;
+    static QByteArray _relation_default_description;
 
-    static Q3Dict<UmlBuiltin> _map_builtins;
+    static QHash<QByteArray,UmlBuiltin*> _map_builtins;
 
     static UmlBuiltin * _builtins;
 
-    static Q3Dict<UmlStereotype> _map_relation_attribute_stereotypes;
+    static QHash<QByteArray,UmlStereotype*> _map_relation_attribute_stereotypes;
 
     static UmlStereotype * _relation_attribute_stereotypes;
 
-    static Q3Dict<UmlStereotype> _map_class_stereotypes;
+    static QHash<QByteArray,UmlStereotype*> _map_class_stereotypes;
 
     static UmlStereotype * _class_stereotypes;
 
@@ -116,19 +116,19 @@ protected:
 
     static void read_if_needed_();
 
-    static unsigned multiplicity_column(const Q3CString & mult);
+    static unsigned multiplicity_column(const QByteArray & mult);
 
-    static Q3CString uml_type(const Q3CString & t, Q3CString UmlBuiltin::* f);
+    static QByteArray uml_type(const QByteArray & t, QByteArray UmlBuiltin::* f);
 
-    static Q3CString uml_rel_attr_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QByteArray uml_rel_attr_stereotype(const QByteArray & t, QByteArray UmlStereotype::* f);
 
-    static Q3CString uml_class_stereotype(const Q3CString & t, Q3CString UmlStereotype::* f);
+    static QByteArray uml_class_stereotype(const QByteArray & t, QByteArray UmlStereotype::* f);
 
-    static UmlBuiltin * add_type(const Q3CString & s);
+    static UmlBuiltin * add_type(const QByteArray & s);
 
-    static UmlStereotype * add_rel_attr_stereotype(const Q3CString & s);
+    static UmlStereotype * add_rel_attr_stereotype(const QByteArray & s);
 
-    static UmlStereotype * add_class_stereotype(const Q3CString & s);
+    static UmlStereotype * add_class_stereotype(const QByteArray & s);
 
 };
 

@@ -30,7 +30,7 @@
 
 
 #include <qpainter.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 //Added by qt3to4:
 #include <QTextStream>
 
@@ -53,7 +53,7 @@ TemplateCanvas::~TemplateCanvas()
 
 void TemplateCanvas::update()
 {
-    setZ(cl->z() + 0.5);
+    setZValue(cl->zValue() + 0.5);
 
     const ClassData * d = (ClassData *) cl->get_bn()->get_data();
     int i, n;
@@ -63,7 +63,7 @@ void TemplateCanvas::update()
     for (i = 1, n = d->get_n_formalparams(); i != n; i += 1)
         text += QString(", ") + d->get_formalparam_name(i);
 
-    QRect r = cl->rect();
+    QRectF r = cl->sceneBoundingRect();
     QFontMetrics fm(the_canvas()->get_font(UmlNormalFont));
     int eight = (int)(8 * the_canvas()->zoom());
     int wi = fm.width(text) + eight;
@@ -72,7 +72,16 @@ void TemplateCanvas::update()
         wi = r.width() / 2;
 
     resize(wi, fm.height() + eight);
-    move(r.right() -  r.width() / 3 + 100000, r.top() - height() / 2);
+
+
+    //do not use setPos here. let moveby hangle other stuff
+    QPointF targetPos;
+    targetPos.setX((double)(cl->x() + (cl->sceneRect().width()) / 3));
+    targetPos.setY((double)(cl->y() - height() / 2));
+    moveBy(targetPos.x()-x() + 100000,
+           targetPos.y()- y());
+
+    //moveBy(r.right() -  r.width() / 3 + 100000, r.top() - height() / 2);
 }
 
 void TemplateCanvas::change_scale()
@@ -90,7 +99,7 @@ void TemplateCanvas::moveBy(double dx, double dy)
     }
     else {
         // from update_pos
-        Q3CanvasRectangle::moveBy(dx - 100000, dy);
+        QGraphicsRectItem::moveBy(dx - 100000, dy);
 
         if (!the_canvas()->do_zoom() && !cl->selected())
             set_center100();
@@ -157,8 +166,11 @@ void TemplateCanvas::draw(QPainter & p)
     }
 
 }
-
-UmlCode TemplateCanvas::type() const
+void TemplateCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode TemplateCanvas::typeUmlCode() const
 {
     return UmlTemplate;
 }
@@ -175,12 +187,12 @@ void TemplateCanvas::menu(const QPoint & p)
 
 QString TemplateCanvas::may_start(UmlCode &) const
 {
-    return TR("illegal");
+    return  QObject::tr("illegal");
 }
 
 QString TemplateCanvas::may_connect(UmlCode &, const DiagramItem *) const
 {
-    return TR("illegal");
+    return  QObject::tr("illegal");
 }
 
 void TemplateCanvas::save(QTextStream &, bool, QString &) const

@@ -29,16 +29,14 @@
 
 
 
-#include <q3grid.h>
-#include <q3vbox.h>
+#include <gridbox.h>
+#include <vvbox.h>
 #include <qlabel.h>
-#include <q3combobox.h>
+#include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <q3buttongroup.h>
-#include <q3popupmenu.h>
+#include <bbuttongroup.h>
 #include <qcursor.h>
-
 #include "StateDialog.h"
 #include "StateData.h"
 #include "BrowserState.h"
@@ -53,11 +51,11 @@
 #include "GenerationSettings.h"
 #include "ProfiledStereotypes.h"
 #include "translate.h"
-
+#include "menufactory.h"
 QSize StateDialog::previous_size;
 
 StateDialog::StateDialog(StateData * d)
-    : Q3TabDialog(0, 0, FALSE, Qt::WDestructiveClose), state(d)
+    : TabDialog(0, 0, FALSE, Qt::WA_DeleteOnClose), state(d)
 {
     d->browser_node->edit_start();
 
@@ -70,79 +68,82 @@ StateDialog::StateDialog(StateData * d)
         setCancelButton(TR("Close"));
     }
 
-    setCaption(TR("State dialog"));
+    setWindowTitle(TR("State dialog"));
     visit = !hasOkButton();
 
     BrowserNode * bn = state->browser_node;
-    Q3Grid * grid;
+    GridBox * grid;
 
     //
     // general tab
     //
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     umltab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    new QLabel(TR("name : "), grid);
-    edname = new LineEdit(bn->get_name(), grid);
+    grid->addWidget(new QLabel(TR("name : "), grid));
+    grid->addWidget(edname = new LineEdit(bn->get_name(), grid));
     edname->setReadOnly(visit);
 
-    new QLabel(TR("stereotype : "), grid);
-    edstereotype = new Q3ComboBox(!visit, grid);
-    edstereotype->insertItem(toUnicode(state->get_stereotype()));
+    grid->addWidget(new QLabel(TR("stereotype : "), grid));
+    grid->addWidget(edstereotype = new QComboBox( grid));
+    edstereotype->setEditable(!visit);
+    edstereotype->addItem(toUnicode(state->get_stereotype()));
 
     if (!visit) {
-        edstereotype->insertStringList(BrowserState::default_stereotypes());
-        edstereotype->insertStringList(ProfiledStereotypes::defaults(UmlState));
+        edstereotype->addItems(BrowserState::default_stereotypes());
+        edstereotype->addItems(ProfiledStereotypes::defaults(UmlState));
         edstereotype->setAutoCompletion(completion());
     }
 
-    edstereotype->setCurrentItem(0);
+    edstereotype->setCurrentIndex(0);
     QSizePolicy sp = edstereotype->sizePolicy();
-    sp.setHorData(QSizePolicy::Expanding);
+    sp.setHorizontalPolicy(QSizePolicy::Expanding);
     edstereotype->setSizePolicy(sp);
-
-    connect(new SmallPushButton(TR("specification :"), grid), SIGNAL(clicked()),
+    SmallPushButton* sButton;
+    connect(sButton = new SmallPushButton(TR("specification :"), grid), SIGNAL(clicked()),
             this, SLOT(menu_specification()));
-    edspecification = new Q3ComboBox(FALSE, grid);
+    grid->addWidget(sButton);
+    grid->addWidget(edspecification = new QComboBox(grid));
     edspecification->setSizePolicy(sp);
 
     if (visit) {
         if (state->get_specification() == 0)
-            edspecification->insertItem("");
+            edspecification->addItem("");
         else
-            edspecification->insertItem(state->get_specification()->full_name(TRUE));
+            edspecification->addItem(state->get_specification()->full_name(TRUE));
     }
     else {
-        edspecification->insertItem("");
+        edspecification->addItem("");
         edspecification->setAutoCompletion(completion());
         BrowserOperation::instances(opers);
         opers.full_names(speclist);
-        edspecification->insertStringList(speclist);
-        edspecification->setCurrentItem((state->get_specification() == 0)
-                                        ? 0
-                                        : opers.indexOf(state->get_specification()) + 1);
+        edspecification->addItems(speclist);
+        edspecification->setCurrentIndex((state->get_specification() == 0)
+                                         ? 0
+                                         : opers.indexOf(state->get_specification()) + 1);
     }
 
     switch (((BrowserNode *) bn->parent())->get_type()) {
     case UmlState:
     case UmlRegion:
         if ((state->get_reference() != 0) || (bn->firstChild() == 0)) {
-            connect(new SmallPushButton(TR("reference :"), grid), SIGNAL(clicked()),
+            connect(sButton = new SmallPushButton(TR("reference :"), grid), SIGNAL(clicked()),
                     this, SLOT(menu_reference()));
-            edreference = new Q3ComboBox(FALSE, grid);
+            grid->addWidget(sButton);
+            grid->addWidget(edreference = new QComboBox(grid));
             edreference->setSizePolicy(sp);
 
             if (visit) {
                 if (state->get_reference() == 0)
-                    edreference->insertItem("");
+                    edreference->addItem("");
                 else
-                    edreference->insertItem(state->get_reference()->full_name(TRUE));
+                    edreference->addItem(state->get_reference()->full_name(TRUE));
             }
             else {
-                edreference->insertItem("");
+                edreference->addItem("");
                 edreference->setAutoCompletion(completion());
 
                 if (((BrowserState *) bn)->can_reference()) {
@@ -153,7 +154,7 @@ StateDialog::StateDialog(StateData * d)
                     while (it.hasNext()) {
                         BrowserState *state = (BrowserState *)it.next();
                         if (!((BrowserState *) bn)->can_reference(state) ||
-                            state->is_ref()) {
+                                state->is_ref()) {
                             it.remove();
                         }
                     }
@@ -162,10 +163,10 @@ StateDialog::StateDialog(StateData * d)
                     states.append(state->get_reference());
 
                 states.full_names(reflist);
-                edreference->insertStringList(reflist);
-                edreference->setCurrentItem((state->get_reference() == 0)
-                                            ? 0
-                                            : states.indexOf(state->get_reference()) + 1);
+                edreference->addItems(reflist);
+                edreference->setCurrentIndex((state->get_reference() == 0)
+                                             ? 0
+                                             : states.indexOf(state->get_reference()) + 1);
 
                 connect(edreference, SIGNAL(activated(int)), this, SLOT(ed_ref_activated(int)));
             }
@@ -178,25 +179,29 @@ StateDialog::StateDialog(StateData * d)
         edreference = 0;
     }
 
-    new QLabel(grid);
-    Q3ButtonGroup * bg =
-        new Q3ButtonGroup(1, Qt::Horizontal, QString(), grid);
+    grid->addWidget(new QLabel(grid));
+    BButtonGroup * bg;
 
-    active_cb = new QCheckBox(TR("active"), bg);
+    grid->addWidget(bg = new BButtonGroup(1, Qt::Horizontal, QString(), grid));
+
+    bg->addWidget( active_cb = new QCheckBox(TR("active"), bg));
 
     if (state->is_active)
         active_cb->setChecked(TRUE);
 
     active_cb->setDisabled(visit);
 
-    Q3VBox * vtab = new Q3VBox(grid);
-    new QLabel(TR("description :"), vtab);
-
+    VVBox * vtab;
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("description :"), vtab));
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()),
                 this, SLOT(edit_description()));
+        vtab->addWidget(sButton);
+    }
 
-    comment = new MultiLineEdit(grid);
+    grid->addWidget(comment = new MultiLineEdit(grid));
     comment->setReadOnly(visit);
     comment->setText(bn->get_comment());
 
@@ -218,17 +223,17 @@ StateDialog::StateDialog(StateData * d)
 
     // USER : list key - value
 
-    grid = new Q3Grid(2, this);
+    grid = new GridBox(2, this);
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    kvtable = new KeyValuesTable(bn, grid, visit);
+    grid->addWidget(kvtable = new KeyValuesTable(bn, grid, visit));
     addTab(grid, TR("Properties"));
 
     //
 
     if (edreference != 0)
-        ed_ref_activated(edreference->currentItem());
+        ed_ref_activated(edreference->currentIndex());
 
     connect(this, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(change_tabs(QWidget *)));
@@ -264,13 +269,13 @@ void StateDialog::change_tabs(QWidget * w)
 
 void StateDialog::polish()
 {
-    Q3TabDialog::polish();
+    TabDialog::ensurePolished();
     UmlDesktop::limitsize_center(this, previous_size, 0.8, 0.8);
 }
 
 void StateDialog::ed_ref_activated(int r)
 {
-    bool enabled = edreference->text(r).isEmpty();
+    bool enabled = edreference->itemText(r).isEmpty();
 
     edspecification->setEnabled(enabled);
     active_cb->setEnabled(enabled);
@@ -287,15 +292,15 @@ void StateDialog::ed_ref_activated(int r)
 
 void StateDialog::menu_specification()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = speclist.findIndex(edspecification->currentText());
+    int index = speclist.indexOf(edspecification->currentText());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -303,57 +308,61 @@ void StateDialog::menu_specification()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) && (bn->get_type() == UmlOperation) && !bn->deletedp())
-            m.insertItem(TR("Choose operation selected in browser"), 1);
+            MenuFactory::addItem(m, TR("Choose operation selected in browser"), 1);
         else
             bn = 0;
     }
 
     if ((index != -1) || (bn != 0)) {
-        switch (m.exec(QCursor::pos())) {
-        case 0:
-            opers.at(index)->select_in_browser();
-            break;
+        QAction *retActon = m.exec(QCursor::pos());
+        if(retActon)
+        {
+            switch (retActon->data().toInt()) {
+            case 0:
+                opers.at(index)->select_in_browser();
+                break;
 
-        case 1: {
-            QString s = bn->full_name(TRUE);
+            case 1: {
+                QString s = bn->full_name(TRUE);
 
-            if ((index = speclist.findIndex(s)) == -1) {
-                // new operation, may be created through an other dialog
-                index = 0;
-                QStringList::Iterator iter = speclist.begin();
-                QStringList::Iterator iter_end = speclist.end();
+                if ((index = speclist.indexOf(s)) == -1) {
+                    // new operation, may be created through an other dialog
+                    index = 0;
+                    QStringList::Iterator iter = speclist.begin();
+                    QStringList::Iterator iter_end = speclist.end();
 
-                while ((iter != iter_end) && (*iter < s)) {
-                    ++iter;
-                    index += 1;
+                    while ((iter != iter_end) && (*iter < s)) {
+                        ++iter;
+                        index += 1;
+                    }
+
+                    opers.insert((unsigned) index, bn);
+                    speclist.insert(iter, s);
+                    edspecification->insertItem(index + 1, s);
                 }
-
-                opers.insert((unsigned) index, bn);
-                speclist.insert(iter, s);
-                edspecification->insertItem(s, index + 1);
             }
-        }
 
-        edspecification->setCurrentItem(index + 1);
-        break;
+                edspecification->setCurrentIndex(index + 1);
+                break;
 
-        default:
-            break;
+            default:
+                break;
+            }
         }
     }
 }
 
 void StateDialog::menu_reference()
 {
-    Q3PopupMenu m(0);
+    QMenu m(0);
 
-    m.insertItem(TR("Choose"), -1);
-    m.insertSeparator();
+    MenuFactory::addItem(m, TR("Choose"), -1);
+    m.addSeparator();
 
-    int index = reflist.findIndex(edreference->currentText());
+    int index = reflist.indexOf(edreference->currentText());
 
     if (index != -1)
-        m.insertItem(TR("Select in browser"), 0);
+        MenuFactory::addItem(m, TR("Select in browser"), 0);
 
     BrowserNode * bn = 0;
 
@@ -361,45 +370,49 @@ void StateDialog::menu_reference()
         bn = BrowserView::selected_item();
 
         if ((bn != 0) &&
-            (bn->get_type() == UmlState) &&
-            !bn->deletedp() &&
-            ((BrowserState *)state->browser_node)->can_reference((BrowserState *) bn))
-            m.insertItem(TR("Choose state selected in browser"), 1);
+                (bn->get_type() == UmlState) &&
+                !bn->deletedp() &&
+                ((BrowserState *)state->browser_node)->can_reference((BrowserState *) bn))
+            MenuFactory::addItem(m, TR("Choose state selected in browser"), 1);
         else
             bn = 0;
     }
 
     if ((index != -1) || (bn != 0)) {
-        switch (m.exec(QCursor::pos())) {
-        case 0:
-            states.at(index)->select_in_browser();
-            break;
+        QAction *retActon = m.exec(QCursor::pos());
+        if(retActon)
+        {
+            switch (retActon->data().toInt()) {
+            case 0:
+                states.at(index)->select_in_browser();
+                break;
 
-        case 1: {
-            QString s = bn->full_name(TRUE);
+            case 1: {
+                QString s = bn->full_name(TRUE);
 
-            if ((index = reflist.findIndex(s)) == -1) {
-                // new state, may be created through an other dialog
-                index = 0;
-                QStringList::Iterator iter = reflist.begin();
-                QStringList::Iterator iter_end = reflist.end();
+                if ((index = reflist.indexOf(s)) == -1) {
+                    // new state, may be created through an other dialog
+                    index = 0;
+                    QStringList::Iterator iter = reflist.begin();
+                    QStringList::Iterator iter_end = reflist.end();
 
-                while ((iter != iter_end) && (*iter < s)) {
-                    ++iter;
-                    index += 1;
+                    while ((iter != iter_end) && (*iter < s)) {
+                        ++iter;
+                        index += 1;
+                    }
+
+                    states.insert((unsigned) index, bn);
+                    reflist.insert(iter, s);
+                    edreference->insertItem(index + 1, s);
                 }
-
-                states.insert((unsigned) index, bn);
-                reflist.insert(iter, s);
-                edreference->insertItem(s, index + 1);
             }
-        }
 
-        edreference->setCurrentItem(index + 1);
-        break;
+                edreference->setCurrentIndex(index + 1);
+                break;
 
-        default:
-            break;
+            default:
+                break;
+            }
         }
     }
 }
@@ -409,20 +422,23 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
                            const char * sl_exbeh, const char * sl_beh,
                            bool enabled)
 {
-    Q3Grid * grid = new Q3Grid(2, this);
-    Q3VBox * vtab;
+    GridBox * grid = new GridBox(2, this);
+    VVBox * vtab;
 
     tab = grid;
     grid->setMargin(5);
     grid->setSpacing(5);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("Entry\nbehavior : "), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("Entry\nbehavior : "), vtab));
 
+    SmallPushButton* sButton;
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_enbeh);
-
-    d.edentry = new MultiLineEdit(grid);
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_enbeh);
+        vtab->addWidget(sButton);
+    }
+    grid->addWidget(d.edentry = new MultiLineEdit(grid));
 
     QFont font = d.edentry->font();
 
@@ -436,26 +452,30 @@ void StateDialog::init_tab(QWidget *& tab, StDialog & d, StateBehavior & st,
     if (visit)
         d.edentry->setReadOnly(TRUE);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("Exit\nbehavior : "), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("Exit\nbehavior : "), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_exbeh);
-
-    d.edexit = new MultiLineEdit(grid);
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_exbeh);
+        vtab->addWidget(sButton);
+    }
+    grid->addWidget(d.edexit = new MultiLineEdit(grid));
     d.edexit->setFont(font);
     d.edexit->setText(st.on_exit);
 
     if (visit)
         d.edexit->setReadOnly(TRUE);
 
-    vtab = new Q3VBox(grid);
-    new QLabel(TR("Do\nbehavior : "), vtab);
+    grid->addWidget(vtab = new VVBox(grid));
+    vtab->addWidget(new QLabel(TR("Do\nbehavior : "), vtab));
 
     if (! visit)
-        connect(new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_beh);
-
-    d.edactivity = new MultiLineEdit(grid);
+    {
+        connect(sButton = new SmallPushButton(TR("Editor"), vtab), SIGNAL(clicked()), this, sl_beh);
+        vtab->addWidget(sButton);
+    }
+    grid->addWidget(d.edactivity = new MultiLineEdit(grid));
     d.edactivity->setFont(font);
     d.edactivity->setText(st.do_activity);
 
@@ -482,15 +502,15 @@ void StateDialog::post_edit_description(StateDialog * d, QString s)
 }
 
 #define DEF_EDIT(attr, lang, Lang) \
-void StateDialog::edit_##lang##_##attr() {	\
-  edit(lang.ed##attr->text(), "state_"#lang"_"#attr, state, Lang,  \
-       this, (post_edit) post_edit_##lang##_##attr, edits);	\
-} \
-  \
-void StateDialog::post_edit_##lang##_##attr(StateDialog * d, QString s) \
+    void StateDialog::edit_##lang##_##attr() {	\
+    edit(lang.ed##attr->text(), "state_"#lang"_"#attr, state, Lang,  \
+    this, (post_edit) post_edit_##lang##_##attr, edits);	\
+    } \
+    \
+    void StateDialog::post_edit_##lang##_##attr(StateDialog * d, QString s) \
 { \
-  d->lang.ed##attr->setText(s); \
-}
+    d->lang.ed##attr->setText(s); \
+    }
 
 DEF_EDIT(entry, uml, TxtEdit)
 DEF_EDIT(entry, cpp, CppEdit)
@@ -512,26 +532,26 @@ void StateDialog::accept()
     BrowserNode * bn = state->browser_node;
     QString s;
 
-    s = edname->text().stripWhiteSpace();
+    s = edname->text().trimmed();
 
     if ((s != bn->get_name()) &&
-        ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlState,
-                bn->allow_spaces(),
-                bn->allow_empty()))
+            ((BrowserNode *) bn->parent())->wrong_child_name(s, UmlState,
+                                                             bn->allow_spaces(),
+                                                             bn->allow_empty()))
         msg_critical(TR("Error"), s + TR("\n\nillegal name or already used"));
     else {
         bn->set_name(s);
 
-        bool newst = state->set_stereotype(fromUnicode(edstereotype->currentText().stripWhiteSpace()));
+        bool newst = state->set_stereotype(fromUnicode(edstereotype->currentText().trimmed()));
         int index;
 
-        index = speclist.findIndex(edspecification->currentText());
+        index = speclist.indexOf(edspecification->currentText());
         state->set_specification((index != -1)
                                  ? (BrowserOperation *) opers.at(index)
                                  : 0);
 
         if (edreference != 0) {
-            index = reflist.findIndex(edreference->currentText());
+            index = reflist.indexOf(edreference->currentText());
             state->set_reference((index != -1)
                                  ? (BrowserState *) states.at(index)
                                  : 0);
@@ -554,7 +574,7 @@ void StateDialog::accept()
         bn->package_modified();
         state->modified();
 
-        Q3TabDialog::accept();
+        TabDialog::accept();
     }
 }
 

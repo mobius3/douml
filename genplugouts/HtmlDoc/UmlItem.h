@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseItem.h"
-#include <q3cstring.h>
+
 #include "aLanguage.h"
 #include "aVisibility.h"
 #include "aDirection.h"
@@ -12,7 +12,7 @@
 #include "Vector.h"
 #include "FileWriter.h"
 
-#include <q3textstream.h>
+#include <QTextStream.h>
 class UmlDiagram;
 class UmlTypeSpec;
 
@@ -23,12 +23,12 @@ class UmlTypeSpec;
 class UmlItem : public UmlBaseItem
 {
 public:
-    UmlItem(void * id, const Q3CString & n) : UmlBaseItem(id, n), known(FALSE) { };
+    UmlItem(void * id, const QByteArray & n) : UmlBaseItem(id, n), known(FALSE) { };
 
     virtual ~UmlItem();
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     //  Set the directory where the files will be generated
     //  initializing 'directory'.
@@ -41,7 +41,7 @@ public:
 
     void define();
 
-    static void start_file(Q3CString f, Q3CString s, bool withrefs);
+    static void start_file(QByteArray f, QByteArray s, bool withrefs);
 
     static void end_file();
 
@@ -53,21 +53,21 @@ public:
 
     //entry to produce the html code receiving chapter number
     //path, rank in the mother and level in the browser tree
-    virtual void html(Q3CString pfix, unsigned int rank, unsigned int level) = 0;
+    virtual void html(QByteArray pfix, unsigned int rank, unsigned int level) = 0;
 
     virtual bool chapterp();
 
-    void html(Q3CString pfix, unsigned int rank, Q3CString what, unsigned int level, Q3CString kind);
+    void html(QByteArray pfix, unsigned int rank, QByteArray what, unsigned int level, QByteArray kind);
 
     void html(const char * what, UmlDiagram * diagram);
 
-    void write_children(Q3CString pfix, unsigned int rank, unsigned int level);
+    void write_children(QByteArray pfix, unsigned int rank, unsigned int level);
 
     void write_dependencies();
 
     void write_properties();
 
-    void chapter(Q3CString k, Q3CString pfix, unsigned int rank, Q3CString kind, unsigned int level);
+    void chapter(QByteArray k, QByteArray pfix, unsigned int rank, QByteArray kind, unsigned int level);
 
     //bypass the comments at the beginning of the form
 
@@ -77,9 +77,9 @@ public:
 
     virtual void write();
 
-    virtual void write(Q3CString target);
+    virtual void write(QByteArray target);
 
-    static void writeq(Q3CString s);
+    static void writeq(QByteArray s);
 
     static void writeq(char c);
 
@@ -97,7 +97,7 @@ public:
 
     static void write(anOrdering d);
 
-    static void generate_index(Vector & v, Q3CString k, Q3CString r);
+    static void generate_index(Vector & v, QByteArray k, QByteArray r);
 
     static void sort(Vector & v);
 
@@ -109,7 +109,7 @@ private:
 
 
 public:
-    virtual Q3CString pretty_name();
+    virtual QByteArray pretty_name();
 
 
 protected:
@@ -119,11 +119,11 @@ protected:
 
     static FileWriter fw;
 
-    static Q3CString directory;
+    static QByteArray directory;
 
     static unsigned int nrefs;
 
-    static Q3CString letters;
+    static QByteArray letters;
 
     //true => use SVG picture rather than PNG
     static bool flat;

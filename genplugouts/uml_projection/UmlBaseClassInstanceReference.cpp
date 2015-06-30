@@ -4,14 +4,14 @@
 #include "UmlClass.h"
 #include "UmlClassInstance.h"
 //Added by qt3to4:
-#include <Q3CString>
+#include <QByteArray>
 
 UmlClass * UmlBaseClassInstanceReference::type() const
 {
     return (_instance) ? _instance->type() : _class;
 }
 
-const Q3CString & UmlBaseClassInstanceReference::name() const
+const QByteArray & UmlBaseClassInstanceReference::name() const
 {
     return (_instance) ? _instance->name() : _name;
 }

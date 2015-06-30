@@ -1,8 +1,8 @@
 #ifndef _UMLBASETYPESPEC_H
 #define _UMLBASETYPESPEC_H
+#include <QByteArray>
 
 
-#include <q3cstring.h>
 
 class UmlClass;
 
@@ -17,10 +17,10 @@ public:
     UmlBaseTypeSpec() : type(0) {};
 
     // returns the type as a string in all cases
-    const Q3CString & toString() const;
+    const QByteArray & toString() const;
 
     // significant in case type == 0
-    Q3CString explicit_type;
+    QByteArray explicit_type;
 
     UmlClass * type;
 

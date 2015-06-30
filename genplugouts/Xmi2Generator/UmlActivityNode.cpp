@@ -4,7 +4,7 @@
 
 void UmlActivityNode::memo_incoming_flow()
 {
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
     unsigned i;
 
@@ -23,12 +23,12 @@ void UmlActivityNode::add_incoming_flow(UmlFlow * flow)
 
 void UmlActivityNode::write_incoming_flows(FileOut & out)
 {
-    Q3PtrListIterator<UmlFlow> it(_incoming_flows);
+    QList<UmlFlow*>::Iterator it = _incoming_flows.begin();
 
-    while (it.current() != 0) {
+    while (it != _incoming_flows.end()) {
         out.indent();
         out << "<incoming";
-        out.idref(it.current());
+        out.idref(*it);
         out << "/>\n";
         ++it;
     }

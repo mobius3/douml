@@ -29,12 +29,12 @@
 
 
 
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 #include <qcursor.h>
 #include <qpainter.h>
 //Added by qt3to4:
 #include <QTextStream>
-#include <Q3ValueList>
+#include <QList>
 
 #include "ActivityCanvas.h"
 #include "ActivityData.h"
@@ -98,7 +98,7 @@ void ActivityCanvas::delete_it()
 
     DiagramCanvas::delete_it();
 
-    Q3ValueList<ParameterCanvas *>::Iterator iter;
+    QList<ParameterCanvas *>::Iterator iter;
 
     for (iter = params.begin();  iter != params.end(); ++iter)
         // don't empty params to manage undo
@@ -116,7 +116,7 @@ void ActivityCanvas::deleted()
 
 void ActivityCanvas::deleted(ParameterCanvas * pa)
 {
-    params.remove(pa);
+    params.removeOne(pa);
 }
 
 void ActivityCanvas::remove(bool from_model)
@@ -172,7 +172,7 @@ void ActivityCanvas::compute_size()
         pre = data->get_precond(st.drawing_language);
 
         if (! pre.isEmpty()) {
-            pre = toUnicode(pre);
+            pre = toUnicode(pre.toLatin1());
             pre_offset.setX(x0);
             pre_offset.setY(y0);
 
@@ -189,7 +189,7 @@ void ActivityCanvas::compute_size()
         post = data->get_postcond(st.drawing_language);
 
         if (! post.isEmpty()) {
-            post = toUnicode(post);
+            post = toUnicode(post.toLatin1().constData());
             post_offset.setX(x0);
             post_offset.setY(y0);
 
@@ -212,16 +212,15 @@ void ActivityCanvas::compute_size()
     min_height = y0 + margin + fm.height();
 
     used_color = (itscolor == UmlDefaultColor)
-                 ? the_canvas()->browser_diagram()->get_color(UmlActivity)
-                 : itscolor;
+            ? the_canvas()->browser_diagram()->get_color(UmlActivity)
+            : itscolor;
 
     DiagramCanvas::resize((width() > min_width) ? width() : min_width,
                           (height() > min_height) ? height() : min_height);
 
     if (! the_canvas()->do_zoom()) {
         // update parameters position
-        Q3ValueList<ParameterCanvas *>::Iterator iter;
-
+        QList<ParameterCanvas *>::Iterator iter;
         for (iter = params.begin(); iter != params.end(); ++iter)
             (*iter)->check_position();
     }
@@ -232,7 +231,7 @@ void ActivityCanvas::moveBy(double dx, double dy)
     DiagramCanvas::moveBy(dx, dy);
 
     // update parameters position
-    Q3ValueList<ParameterCanvas *>::Iterator iter;
+    QList<ParameterCanvas *>::Iterator iter;
 
     for (iter = params.begin(); iter != params.end(); ++iter)
         (*iter)->do_moveBy(dx, dy);
@@ -243,16 +242,16 @@ void ActivityCanvas::moveBy(double dx, double dy)
 
 void ActivityCanvas::change_scale()
 {
-    Q3CanvasRectangle::setVisible(FALSE);
+    QGraphicsRectItem::setVisible(FALSE);
     double scale = the_canvas()->zoom();
 
-    setSize((int)(width_scale100 * scale), (int)(height_scale100 * scale));
+    setRect(0,0,(int)(width_scale100 * scale), (int)(height_scale100 * scale));
     compute_size();
     recenter();
-    Q3CanvasRectangle::setVisible(TRUE);
+    QGraphicsRectItem::setVisible(TRUE);
 
     // update parameters position
-    Q3ValueList<ParameterCanvas *>::Iterator iter;
+    QList<ParameterCanvas *>::Iterator iter;
 
     for (iter = params.begin(); iter != params.end(); ++iter)
         (*iter)->do_change_scale();
@@ -298,11 +297,11 @@ bool ActivityCanvas::move_with_its_package() const
 
 void ActivityCanvas::set_z(double z)
 {
-    setZ(z);
+    setZValue(z);
 
     z += 1;
 
-    Q3ValueList<ParameterCanvas *>::Iterator iter;
+    QList<ParameterCanvas *>::Iterator iter;
 
     for (iter = params.begin(); iter != params.end(); ++iter)
         (*iter)->set_z(z);
@@ -314,21 +313,21 @@ void ActivityCanvas::force_sub_inside(bool resize_it)
     // except the parameters whose are in the border
     // and the diagram icon
     // or resize it to contains sub elts if resize_it
-    Q3CanvasItemList all = canvas()->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = canvas()->items();
+    QList<QGraphicsItem*>::Iterator cit;
     BooL need_sub_upper = FALSE;
 
     if (resize_it) {
         resize_to_contain(all, need_sub_upper);
 
         for (cit = all.begin(); cit != all.end(); ++cit) {
-            if ((*cit)->visible()/* && !(*cit)->selected()*/) {
+            if ((*cit)->isVisible()/* && !(*cit)->selected()*/) {
                 DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
                 if ((di != 0) &&
-                    (di->type() == UmlParameter) &&
-                    (di->get_bn() != 0) &&
-                    (((BrowserNode *) di->get_bn())->parent() == browser_node)) {
+                        (di->typeUmlCode() == UmlParameter) &&
+                        (di->get_bn() != 0) &&
+                        (((BrowserNode *) di->get_bn())->parent() == browser_node)) {
                     ((ParameterCanvas *) di)->check_position();
                 }
             }
@@ -344,14 +343,14 @@ void ActivityCanvas::force_sub_inside(bool resize_it)
 void ActivityCanvas::check_params()
 {
     // add missing params
-    const Q3ValueList<BrowserParameter *> brparams =
-        ((BrowserActivity *) browser_node)->get_params();
-    Q3ValueList<BrowserParameter *>::ConstIterator iter;
+    const QList<BrowserParameter *> brparams =
+            ((BrowserActivity *) browser_node)->get_params();
+    QList<BrowserParameter *>::ConstIterator iter;
     int dy = (int)(the_canvas()->zoom() * PARAMETER_CANVAS_MIN_HEIGHT);
     int rank;
 
     for (iter = brparams.begin(), rank = 0; iter != brparams.end(); ++iter, rank += 1) {
-        Q3ValueList<ParameterCanvas *>::ConstIterator itershown;
+        QList<ParameterCanvas *>::ConstIterator itershown;
 
         for (itershown = params.begin(); itershown != params.end(); ++itershown)
             if ((*itershown)->get_bn() == *iter)
@@ -405,7 +404,7 @@ void ActivityCanvas::check_params()
             }
 
             ParameterCanvas * pc =
-                new ParameterCanvas(*iter, the_canvas(), px, py, 0, this);
+                    new ParameterCanvas(*iter, the_canvas(), px, py, 0, this);
 
             params.append(pc);
             pc->show();
@@ -431,10 +430,10 @@ void ActivityCanvas::check_constraint()
             if (constraint == 0) {
                 constraint = new InfoCanvas(the_canvas(), this, s);
                 constraint->upper();
-                constraint->move(x() + width() + margin, y());
+                constraint->moveBy(x() + width() + margin, y());
                 constraint->show();
                 (new ArrowCanvas(the_canvas(), this, constraint, UmlAnchor, 0, FALSE, -1.0, -1.0))
-                ->show();
+                        ->show();
             }
             else
                 constraint->set(s);
@@ -449,12 +448,13 @@ void ActivityCanvas::check_constraint()
 }
 void ActivityCanvas::draw(QPainter & p)
 {
-    if (! visible()) return;
+    if (! isVisible()) return;
 
+    QBrush backBrush = p.background();
     p.setRenderHint(QPainter::Antialiasing, true);
     QRect r = rect();
     QBrush brsh = p.brush();
-    QColor bckgrnd = p.backgroundColor();
+    QColor bckgrnd = p.background().color();
     int margin = (int)(24 * the_canvas()->zoom());
     FILE * fp = svg();
 
@@ -467,7 +467,8 @@ void ActivityCanvas::draw(QPainter & p)
 
     QColor co = color(used_color);
 
-    p.setBackgroundColor(co);
+    backBrush.setColor(co);
+    p.setBackground(backBrush);
 
     if (used_color != UmlTransparent)
         p.setBrush(co);
@@ -478,12 +479,12 @@ void ActivityCanvas::draw(QPainter & p)
     if (fp != 0) {
         if (used_color != UmlTransparent)
             fprintf(fp, "\t<rect fill=\"%s\" stroke=\"black\" stroke-opacity=\"1\""
-                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"10\" />\n",
+                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"10\" />\n",
                     svg_color(used_color),
                     r.left(), r.top(), r.width() - 1, r.height() - 1);
         else
             fprintf(fp, "\t<rect fill=\"none\" stroke=\"black\" stroke-opacity=\"1\""
-                    " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"10\" />\n",
+                        " x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" rx=\"10\" />\n",
                     r.left(), r.top(), r.width() - 1, r.height() - 1);
     }
 
@@ -572,14 +573,18 @@ void ActivityCanvas::draw(QPainter & p)
     if (fp != 0)
         fputs("</g>\n", fp);
 
-    p.setBackgroundColor(bckgrnd);
+    backBrush.setColor(bckgrnd);
+    p.setBackground(backBrush);
     p.setBrush(brsh);
 
     if (selected())
         show_mark(p, r);
 }
-
-UmlCode ActivityCanvas::type() const
+void ActivityCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    draw(*painter);
+}
+UmlCode ActivityCanvas::typeUmlCode() const
 {
     return UmlActivity;
 }
@@ -607,122 +612,126 @@ void ActivityCanvas::open()
 
 void ActivityCanvas::menu(const QPoint &)
 {
-    Q3PopupMenu m(0);
-    Q3PopupMenu toolm(0);
+    QMenu m(0);
+    QMenu toolm(0);
     int index;
 
     MenuFactory::createTitle(m, browser_node->get_data()->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
-        m.insertItem(TR("Add parameter"), 9);
-        m.insertSeparator();
+        MenuFactory::addItem(m, TR("Add parameter"), 9);
+        m.addSeparator();
     }
 
-    m.insertItem(TR("Upper"), 0);
-    m.insertItem(TR("Lower"), 1);
-    m.insertItem(TR("Go up"), 13);
-    m.insertItem(TR("Go down"), 14);
-    m.insertSeparator();
-    m.insertItem(TR("Edit drawing settings"), 2);
-    m.insertSeparator();
-    m.insertItem(TR("Edit activity"), 3);
-    m.insertSeparator();
-    m.insertItem(TR("Select in browser"), 4);
+    MenuFactory::addItem(m, TR("Upper"), 0);
+    MenuFactory::addItem(m, TR("Lower"), 1);
+    MenuFactory::addItem(m, TR("Go up"), 13);
+    MenuFactory::addItem(m, TR("Go down"), 14);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit drawing settings"), 2);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Edit activity"), 3);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Select in browser"), 4);
 
     if (linked())
-        m.insertItem(TR("Select linked items"), 5);
+        MenuFactory::addItem(m, TR("Select linked items"), 5);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (browser_node->is_writable()) {
         if (browser_node->get_associated() !=
-            (BrowserNode *) the_canvas()->browser_diagram())
-            m.insertItem(TR("Set associated diagram"), 6);
+                (BrowserNode *) the_canvas()->browser_diagram())
+            MenuFactory::addItem(m, TR("Set associated diagram"), 6);
 
         if (browser_node->get_associated())
-            m.insertItem(TR("Remove diagram association"), 10);
+            MenuFactory::addItem(m, TR("Remove diagram association"), 10);
     }
 
-    m.insertSeparator();
-    m.insertItem(TR("Remove from diagram"), 7);
+    m.addSeparator();
+    MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
     if (browser_node->is_writable())
-        m.insertItem(TR("Delete from model"), 8);
+        MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-    m.insertSeparator();
+    m.addSeparator();
 
     if (Tool::menu_insert(&toolm, UmlActivity, 20))
-        m.insertItem(TR("Tool"), &toolm);
+        MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-    switch (index = m.exec(QCursor::pos())) {
-    case 0:
-        upper();
-        modified();	// call package_modified()
-        return;
+    QAction *retAction = m.exec(QCursor::pos());
+    if(retAction)
+    {
+        switch (index = retAction->data().toInt()) {
+        case 0:
+            upper();
+            modified();	// call package_modified()
+            return;
 
-    case 1:
-        lower();
-        modified();	// call package_modified()
-        return;
+        case 1:
+            lower();
+            modified();	// call package_modified()
+            return;
 
-    case 13:
-        z_up();
-        modified();	// call package_modified()
-        return;
+        case 13:
+            z_up();
+            modified();	// call package_modified()
+            return;
 
-    case 14:
-        z_down();
-        modified();	// call package_modified()
-        return;
+        case 14:
+            z_down();
+            modified();	// call package_modified()
+            return;
 
-    case 2:
-        edit_drawing_settings();
-        return;
+        case 2:
+            edit_drawing_settings();
+            return;
 
-    case 3:
-        browser_node->open(TRUE);
-        return;
+        case 3:
+            browser_node->open(TRUE);
+            return;
 
-    case 4:
-        browser_node->select_in_browser();
-        return;
+        case 4:
+            browser_node->select_in_browser();
+            return;
 
-    case 5:
-        the_canvas()->unselect_all();
-        select_associated();
-        return;
+        case 5:
+            the_canvas()->unselect_all();
+            select_associated();
+            return;
 
-    case 6:
-        ((BrowserActivity *) browser_node)
-        ->set_associated_diagram((BrowserActivityDiagram *)
-                                 the_canvas()->browser_diagram());
-        return;
+        case 6:
+            ((BrowserActivity *) browser_node)
+                    ->set_associated_diagram((BrowserActivityDiagram *)
+                                             the_canvas()->browser_diagram());
+            return;
 
-    case 10:
-        ((BrowserActivity *) browser_node)
-        ->set_associated_diagram(0);
-        return;
+        case 10:
+            ((BrowserActivity *) browser_node)
+                    ->set_associated_diagram(0);
+            return;
 
-    case 7:
-        //remove from diagram
-        delete_it();
-        break;
+        case 7:
+            //remove from diagram
+            delete_it();
+            break;
 
-    case 8:
-        //delete from model
-        browser_node->delete_it();	// will delete the canvas
-        break;
+        case 8:
+            //delete from model
+            browser_node->delete_it();	// will delete the canvas
+            break;
 
-    case 9:
-        ((BrowserActivity *) browser_node)->add_parameter(0);
-        modified();
+        case 9:
+            ((BrowserActivity *) browser_node)->add_parameter(0);
+            modified();
 
-    default:
-        if (index >= 20)
-            ToolCom::run(Tool::command(index - 20), browser_node);
+        default:
+            if (index >= 20)
+                ToolCom::run(Tool::command(index - 20), browser_node);
 
-        return;
+            return;
+        }
     }
 
     package_modified();
@@ -899,7 +908,7 @@ void ActivityCanvas::save(QTextStream & st, bool ref, QString & warning) const
             st << "params";
             indent(+1);
 
-            Q3ValueList<ParameterCanvas *>::ConstIterator iter;
+            QList<ParameterCanvas *>::ConstIterator iter;
 
             for (iter = params.begin(); iter != params.end(); ++iter)
                 (*iter)->save(st, FALSE, warning);
@@ -1009,7 +1018,7 @@ void ActivityCanvas::history_load(QBuffer & b)
 
     ::load(w, b);
     ::load(h, b);
-    Q3CanvasRectangle::setSize(w, h);
+    QGraphicsRectItem::setRect(rect().x(), rect().y(), w, h);
 
     connect(browser_node->get_data(), SIGNAL(changed()), this, SLOT(modified()));
     connect(browser_node->get_data(), SIGNAL(deleted()), this, SLOT(deleted()));
@@ -1018,7 +1027,7 @@ void ActivityCanvas::history_load(QBuffer & b)
 
 void ActivityCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
 
     disconnect(DrawingSettings::instance(), SIGNAL(changed()),
                this, SLOT(modified()));

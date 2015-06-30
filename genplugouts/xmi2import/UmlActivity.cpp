@@ -211,7 +211,7 @@ void UmlActivity::readParameter(FileIn & in, Token & token)
     // ActivityParameterNode definition, search for it
     UmlActivityParameter * param = 0;
     WrapperStr s = token.valueOf("name");
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned int n = ch.size();
     int i;
 
@@ -243,7 +243,7 @@ void UmlActivity::readParameterNode(FileIn & in, Token & token)
     // ActivityParameter definition, search for it
     UmlActivityParameter * param = 0;
     WrapperStr s = token.valueOf("name");
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned int n = ch.size();
     int i;
 

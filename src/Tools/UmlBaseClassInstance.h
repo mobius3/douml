@@ -6,8 +6,7 @@
 #include "SlotRelation.h"
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <q3valuelist.h>
-#include <q3ptrvector.h>
+#include <QList>
 #include "misc/mystr.h"
 
 class UmlClassInstance;
@@ -40,17 +39,17 @@ public:
     bool set_Type(UmlClass * v);
 
     // Returns the attributes having a value
-    void attributesValue(Q3ValueList<SlotAttribute> & result);
+    void attributesValue(QList<SlotAttribute> & result);
 
     // Returns the attributes having a value
-    void relationsValue(Q3ValueList<SlotRelation> & result);
+    void relationsValue(QList<SlotRelation> & result);
 
     // Returns all the attributes of the class instance,
     // including the inherited
-    void availableAttributes(Q3PtrVector<UmlAttribute> & result);
+    void availableAttributes(QHash<int, UmlAttribute *> &result);
 
     // Returns all the possible relations from the current instance to 'other', including the inherited
-    void availableRelations(UmlClassInstance * other, Q3PtrVector<UmlRelation> & result);
+    void availableRelations(UmlClassInstance * other, QHash<int,UmlRelation*> & result);
 
     // Remove the slot if the value is null.
     // Else set the value for the given attribute, replacing it

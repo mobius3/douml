@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseTerminatePseudoState.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlClass;
 class UmlState;
@@ -15,7 +15,7 @@ public:
     UmlTerminatePseudoState(void * id) : UmlBaseTerminatePseudoState(id, "") {
     }
 
-    virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state, Q3CString & body, Q3CString indent);
+    virtual void generate(UmlClass * machine, UmlClass * anystate, UmlState * state, QByteArray & body, QByteArray indent);
 
 };
 

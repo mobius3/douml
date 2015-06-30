@@ -4,7 +4,7 @@
 
 #include "UmlPinParameter.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlActivityParameter;
 class UmlActivity;
@@ -25,13 +25,13 @@ public:
 
 protected:
     //  the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseActivityParameter(void * id, const Q3CString & s) : UmlPinParameter(id, s) {
+    UmlBaseActivityParameter(void * id, const QByteArray & s) : UmlPinParameter(id, s) {
     }
 
 
 public:
     // return the default value
-    const Q3CString & defaultValue();
+    const QByteArray & defaultValue();
 
     // set the default value
     //
@@ -48,7 +48,7 @@ public:
 
 
 private:
-    Q3CString _default_value;
+    QByteArray _default_value;
 
 
 protected:

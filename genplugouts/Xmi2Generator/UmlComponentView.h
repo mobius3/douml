@@ -4,7 +4,7 @@
 
 #include "UmlBaseComponentView.h"
 
-#include <q3ptrlist.h>
+
 
 class FileOut;
 class UmlItem;
@@ -27,7 +27,7 @@ public:
 
 
 protected:
-    Q3PtrList<UmlItem> _relations;
+    QList<UmlItem*> _relations;
 
 };
 

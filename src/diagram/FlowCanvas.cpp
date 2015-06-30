@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 #include <math.h>
-#include <q3popupmenu.h>
+//#include <q3popupmenu.h>
 
 #include "FlowCanvas.h"
 #include "ArrowPointCanvas.h"
@@ -63,12 +63,12 @@ FlowCanvas::FlowCanvas(UmlCanvas * canvas, DiagramItem * b,
       transformation(0), stereotypeproperties(0),
       write_horizontally(UmlDefaultState)
 {
-    if ((e->type() != UmlArrowPoint) && (bb == 0)) {
+    if ((e->typeUmlCode() != UmlArrowPoint) && (bb == 0)) {
         // end of line construction
         update_begin(e);
     }
     else if (d != 0) {
-        if (e->type() != UmlArrowPoint)
+        if (e->typeUmlCode() != UmlArrowPoint)
             check_stereotypeproperties();
 
         connect(d, SIGNAL(changed()), this, SLOT(modified()));
@@ -134,7 +134,7 @@ void FlowCanvas::remove(bool from_model)
         if (the_canvas()->must_draw_all_relations()) {
             const FlowCanvas * a = this;
 
-            while (a->begin->type() == UmlArrowPoint) {
+            while (a->begin->typeUmlCode() == UmlArrowPoint) {
                 a = (FlowCanvas *)((ArrowPointCanvas *) a->begin)->get_other(a);
 
                 if (a == 0)
@@ -144,7 +144,7 @@ void FlowCanvas::remove(bool from_model)
             if (a && !a->begin->isSelected() && !a->begin->get_bn()->deletedp()) {
                 a = this;
 
-                while (a->end->type() == UmlArrowPoint) {
+                while (a->end->typeUmlCode() == UmlArrowPoint) {
                     a = (FlowCanvas *)((ArrowPointCanvas *) a->end)->get_other(a);
 
                     if (a == 0)
@@ -172,7 +172,7 @@ BrowserNode * FlowCanvas::update_begin(DiagramItem * cnend)
     // static to be updated in all the cases
     static FlowData * d = 0;
 
-    if (begin->type() == UmlArrowPoint) {
+    if (begin->typeUmlCode() == UmlArrowPoint) {
         FlowCanvas * other =
             ((FlowCanvas *)((ArrowPointCanvas *) begin)->get_other(this));
 
@@ -197,7 +197,7 @@ void FlowCanvas::propagate_drawing_settings()
 
     t = this;
 
-    while (t->begin->type() == UmlArrowPoint) {
+    while (t->begin->typeUmlCode() == UmlArrowPoint) {
         t = ((FlowCanvas *)((ArrowPointCanvas *) t->begin)->get_other(t));
         t->settings = settings;
         t->used_settings = used_settings;
@@ -206,7 +206,7 @@ void FlowCanvas::propagate_drawing_settings()
 
     t = this;
 
-    while (t->end->type() == UmlArrowPoint) {
+    while (t->end->typeUmlCode() == UmlArrowPoint) {
         t = ((FlowCanvas *)((ArrowPointCanvas *) t->end)->get_other(t));
         t->settings = settings;
         t->used_settings = used_settings;
@@ -236,48 +236,51 @@ void FlowCanvas::menu(const QPoint &)
             pstereotype = (FlowCanvas *) apstereotype;
         }
 
-        Q3PopupMenu m(0);
-        Q3PopupMenu geo(0);
-        Q3PopupMenu toolm(0);
+        QMenu m(0);
+        QMenu geo(0);
+        QMenu toolm(0);
 
         MenuFactory::createTitle(m, data->definition(FALSE, TRUE));
-        m.insertSeparator();
-        m.insertItem(TR("Edit"), 0);
-        m.insertSeparator();
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Edit"), 0);
+        m.addSeparator();
 
-        m.insertItem(TR("Select in browser"), 2);
+        MenuFactory::addItem(m, TR("Select in browser"), 2);
 
         if (plabel || pstereotype) {
-            m.insertSeparator();
-            m.insertItem(TR("Edit drawing settings"), 1);
-            m.insertItem(TR("Select labels"), 3);
-            m.insertItem(TR("Labels default position"), 4);
+            m.addSeparator();
+            MenuFactory::addItem(m, TR("Edit drawing settings"), 1);
+            MenuFactory::addItem(m, TR("Select labels"), 3);
+            MenuFactory::addItem(m, TR("Labels default position"), 4);
 
             if (plabel && (label == 0))
-                m.insertItem(TR("Attach flow label to this segment"), 5);
+                MenuFactory::addItem(m, TR("Attach flow label to this segment"), 5);
 
             if (pstereotype && (stereotype == 0))
-                m.insertItem(TR("Attach stereotype to this segment"), 6);
+                MenuFactory::addItem(m, TR("Attach stereotype to this segment"), 6);
         }
 
         if (get_start() != get_end()) {
-            m.insertSeparator();
+            m.addSeparator();
             init_geometry_menu(geo, 10);
-            m.insertItem(TR("Geometry (Ctrl+l)"), &geo);
+            MenuFactory::insertItem(m, TR("Geometry (Ctrl+l)"), &geo);
         }
 
-        m.insertSeparator();
-        m.insertItem(TR("Remove from diagram"), 7);
+        m.addSeparator();
+        MenuFactory::addItem(m, TR("Remove from diagram"), 7);
 
         if (data->get_start()->is_writable())
-            m.insertItem(TR("Delete from model"), 8);
+            MenuFactory::addItem(m, TR("Delete from model"), 8);
 
-        m.insertSeparator();
+        m.addSeparator();
 
         if (Tool::menu_insert(&toolm, itstype, 20))
-            m.insertItem(TR("Tool"), &toolm);
+            MenuFactory::insertItem(m, TR("Tool"), &toolm);
 
-        int rank = m.exec(QCursor::pos());
+        QAction* retAction = m.exec(QCursor::pos());
+        if(retAction)
+        {
+        int rank = retAction->data().toInt();
 
         switch (rank) {
         case 0:
@@ -357,6 +360,7 @@ void FlowCanvas::menu(const QPoint &)
             else
                 return;
         }
+        }
 
         package_modified();
     }
@@ -398,7 +402,7 @@ void FlowCanvas::edit_drawing_settings()
 
         SettingsDialog dialog(&st, 0, FALSE);
 
-        dialog.setCaption(TR("Flow Drawing Settings dialog"));
+        dialog.setWindowTitle(TR("Flow Drawing Settings dialog"));
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
@@ -432,7 +436,7 @@ void FlowCanvas::edit_drawing_settings(QList<DiagramItem *> & l)
 
         SettingsDialog dialog(&st, 0, FALSE, TRUE);
 
-        dialog.setCaption(TR("Flow Drawing Settings dialog"));
+        dialog.setWindowTitle(TR("Flow Drawing Settings dialog"));
         dialog.raise();
 
         if (dialog.exec() == QDialog::Accepted) {
@@ -467,7 +471,7 @@ ArrowPointCanvas * FlowCanvas::brk(const QPoint & p)
     ArrowPointCanvas * ap =
         new ArrowPointCanvas(the_canvas(), p.x(), p.y());
 
-    ap->setZ(z() + 1);
+    ap->setZValue(zValue() + 1);
 
     FlowCanvas * other =
         // do not give data to not call update()
@@ -514,13 +518,13 @@ ArrowCanvas * FlowCanvas::join(ArrowCanvas * other, ArrowPointCanvas * ap)
 
 void FlowCanvas::modified()
 {
-    if (visible()) {
+    if (isVisible()) {
         hide();
         update(TRUE);
         show();
         check_sel_trans();
 
-        if (begin->type() != UmlArrowPoint)
+        if (begin->typeUmlCode() != UmlArrowPoint)
             check_stereotypeproperties();
 
         canvas()->update();
@@ -562,9 +566,9 @@ void FlowCanvas::update(bool updatepos)
             if (s == "interrupt")
                 s = LabelCanvas::Zigzag;
             else if (s != LabelCanvas::Zigzag)
-                s = QString("<<") + toUnicode(s) + ">>";
+                s = QString("<<") + toUnicode(s.toLatin1().constData()) + ">>";
 
-            if ((pstereotype == 0) && (begin->type() != UmlArrowPoint)) {
+            if ((pstereotype == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
                 // adds relation's stereotype
                 stereotype = new LabelCanvas(s, the_canvas(), 0, 0);
                 update_label = (label != 0);
@@ -597,9 +601,9 @@ void FlowCanvas::update(bool updatepos)
 
         if (! s.isEmpty()) {
             if (n != "<flow>")
-                s = n + ((horiz) ? " " : "\n") + toUnicode(s);
+                s = n + ((horiz) ? " " : "\n") + toUnicode(s.toLatin1().constData());
             else
-                s = toUnicode(s);
+                s = toUnicode(s.toLatin1().constData());
         }
         else if (n != "<flow>")
             s = n;
@@ -611,7 +615,7 @@ void FlowCanvas::update(bool updatepos)
                 plabel->label = 0;
             }
         }
-        else if ((plabel == 0) && (begin->type() != UmlArrowPoint)) {
+        else if ((plabel == 0) && (begin->typeUmlCode() != UmlArrowPoint)) {
             // adds relation's name
             label = new LabelCanvas(s, the_canvas(), 0, 0);
             default_label_position();
@@ -636,7 +640,7 @@ void FlowCanvas::check_sel_trans()
     // update must be called before
     if (used_settings.show_infonote == UmlYes) {
         // selection and transformation are placed on the first segment
-        if (begin->type() != UmlArrowPoint) {
+        if (begin->typeUmlCode() != UmlArrowPoint) {
             int margin = (int)(the_canvas()->zoom() * 15);
             QString s;
 
@@ -657,7 +661,7 @@ void FlowCanvas::check_sel_trans()
 
                     int cdy = beginp.y() - selection->height() - margin;
 
-                    selection->move(beginp.x(), (cdy < 0) ? 0 : cdy);
+                    selection->moveBy(beginp.x(), (cdy < 0) ? 0 : cdy);
                     selection->show();
                     (new ArrowCanvas(the_canvas(), this, selection,
                                      UmlAnchor, 0, FALSE, -1.0, -1.0))
@@ -684,14 +688,14 @@ void FlowCanvas::check_sel_trans()
 
                     int cdy = beginp.y() + margin;
 
-                    transformation->move(beginp.x(), (cdy < 0) ? 0 : cdy);
+                    transformation->moveBy(beginp.x(), (cdy < 0) ? 0 : cdy);
                     transformation->show();
                     (new ArrowCanvas(the_canvas(), this, transformation,
                                      UmlAnchor, 0, FALSE, -1.0, -1.0))
                     ->show();
                 }
                 else
-                    transformation->set(s);
+                    transformation->set(s.toLatin1());
             }
         }
     }
@@ -715,7 +719,7 @@ void FlowCanvas::default_label_position() const
     QString s = label->get_name();
     QSize sz = fm.size(0, s);
 
-    label->move(c.x() - sz.width() / 2,
+    label->moveBy(c.x() - sz.width() / 2,
                 c.y() - ((stereotype != 0) ? sz.height() : sz.height() / 2));
     package_modified();
 }
@@ -738,12 +742,12 @@ void FlowCanvas::drop(BrowserNode * bn, UmlCanvas * canvas)
     BrowserNode * to = def->get_end_node();
     DiagramItem * difrom = 0;
     DiagramItem * dito = 0;
-    Q3CanvasItemList all = canvas->allItems();
-    Q3CanvasItemList::Iterator cit;
+    QList<QGraphicsItem*> all = canvas->items();
+    QList<QGraphicsItem*>::Iterator cit;
 
     // the two extremities are drawn ?
     for (cit = all.begin(); cit != all.end(); ++cit) {
-        if ((*cit)->visible()) {
+        if ((*cit)->isVisible()) {
             DiagramItem * di = QCanvasItemToDiagramItem(*cit);
 
             if (di != 0) {
@@ -791,14 +795,14 @@ void FlowCanvas::moveBy(double dx, double dy)
 {
     ArrowCanvas::moveBy(dx, dy);
 
-    if ((stereotypeproperties != 0) && !stereotypeproperties->selected())
+    if ((stereotypeproperties != 0) && !stereotypeproperties->isSelected())
         stereotypeproperties->moveBy(dx, dy);
 }
 
 void FlowCanvas::select_associated()
 {
-    if (!selected()) {
-        if ((stereotypeproperties != 0) && !stereotypeproperties->selected())
+    if (!isSelected()) {
+        if ((stereotypeproperties != 0) && !stereotypeproperties->isSelected())
             the_canvas()->select(stereotypeproperties);
 
         ArrowCanvas::select_associated();
@@ -808,7 +812,7 @@ void FlowCanvas::select_associated()
 void FlowCanvas::check_stereotypeproperties()
 {
     // the note is memorized by the first segment
-    if (begin->type() == UmlArrowPoint)
+    if (begin->typeUmlCode() == UmlArrowPoint)
         ((FlowCanvas *)((ArrowPointCanvas *) begin)->get_other(this))
         ->check_stereotypeproperties();
     else {
@@ -836,7 +840,7 @@ void FlowCanvas::save(QTextStream & st, bool ref, QString & warning) const
 {
     if (ref)
         st << "flowcanvas_ref " << get_ident();
-    else if (begin->type() != UmlArrowPoint) {
+    else if (begin->typeUmlCode() != UmlArrowPoint) {
         // relation canvas start
         nl_indent(st);
         st << "flowcanvas " << get_ident() << " ";
@@ -953,7 +957,7 @@ FlowCanvas * FlowCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
             if ((label = LabelCanvas::read(st, canvas, k)) != 0) {
                 // the flow name can't be empty
-                label->setZ(z);
+                label->setZValue(z);
                 k = read_keyword(st);
             }
 
@@ -974,10 +978,10 @@ FlowCanvas * FlowCanvas::read(char *& st, UmlCanvas * canvas, char * k)
                     if (s == "interrupt")
                         s = LabelCanvas::Zigzag;
                     else
-                        s = QString("<<") + toUnicode(s) + ">>";
+                        s = QString("<<") + toUnicode(s.toLatin1().constData()) + ">>";
 
                     stereotype = new LabelCanvas(s, canvas, x, y);
-                    stereotype->setZ(read_double(st));
+                    stereotype->setZValue(read_double(st));
                 }
 
                 k = read_keyword(st);
@@ -1024,7 +1028,7 @@ FlowCanvas * FlowCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
             result->show();
 
-            if (di->type() != UmlArrowPoint)
+            if (di->typeUmlCode() != UmlArrowPoint)
                 break;
 
             bi = di;
@@ -1087,7 +1091,7 @@ FlowCanvas * FlowCanvas::read(char *& st, UmlCanvas * canvas, char * k)
 
 void FlowCanvas::history_hide()
 {
-    Q3CanvasItem::setVisible(FALSE);
+    QGraphicsItem::setVisible(FALSE);
     unconnect();
 }
 

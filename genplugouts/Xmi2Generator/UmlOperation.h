@@ -4,9 +4,6 @@
 
 #include "UmlBaseOperation.h"
 
-#include <q3ptrdict.h>
-#include <q3asciidict.h>
-
 class FileOut;
 
 // This class manages 'operations', notes that the class 'UmlClassItem'
@@ -47,9 +44,9 @@ public:
 protected:
     static int param_id;
 
-    static Q3PtrDict<char> SentReceived;
+    static QHash<UmlOperation*,char*> SentReceived;
 
-    static Q3AsciiDict<char> Events;
+    static QHash<WrapperStr,char*> Events;
 
 };
 

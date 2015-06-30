@@ -103,18 +103,18 @@ void init_font()
 
 void resize_font(int i)
 {
-    NormalFont.setPointSizeFloat(i);
-    BoldFont.setPointSizeFloat(i);
-    ItalicFont.setPointSizeFloat(i);
-    BoldItalicFont.setPointSizeFloat(i);
-    UnderlineFont.setPointSizeFloat(i);
-    BoldUnderlineFont.setPointSizeFloat(i);
-    StrikeOutFont.setPointSizeFloat(i);
+    NormalFont.setPointSizeF(i);
+    BoldFont.setPointSizeF(i);
+    ItalicFont.setPointSizeF(i);
+    BoldItalicFont.setPointSizeF(i);
+    UnderlineFont.setPointSizeF(i);
+    BoldUnderlineFont.setPointSizeF(i);
+    StrikeOutFont.setPointSizeF(i);
 
     QFont fn = QApplication::font();
 
-    fn.setPointSizeFloat(i);
-    QApplication::setFont(fn, TRUE);
+    fn.setPointSizeF(i);
+    QApplication::setFont(fn);
 }
 
 const QColor & color(UmlColor c)

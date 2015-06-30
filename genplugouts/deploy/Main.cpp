@@ -13,7 +13,7 @@
 
 int main(int argc, char ** argv)
 {
-    #ifdef DEBUG
+#ifdef DEBUG
     if (argc != 2)
         return 0;
     QsLogging::Logger & logger = QsLogging::Logger::instance();

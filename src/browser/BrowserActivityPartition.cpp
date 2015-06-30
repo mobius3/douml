@@ -29,8 +29,8 @@
 
 
 
-#include <q3popupmenu.h>
-#include <q3painter.h>
+//#include <q3popupmenu.h>
+#include <qpainter.h>
 #include <qcursor.h>
 //Added by qt3to4:
 #include <QTextStream>
@@ -117,7 +117,7 @@ void BrowserActivityPartition::prepare_update_lib() const
 {
     all.memo_id_oid(get_ident(), original_id);
 
-    for (Q3ListViewItem * child = firstChild();
+    for (BrowserNode * child = firstChild();
          child != 0;
          child = child->nextSibling())
         ((BrowserNode *) child)->prepare_update_lib();
@@ -157,19 +157,19 @@ BrowserActivityPartition::add_activitypartition(BrowserNode * future_parent)
 {
     QString name;
 
-    return (!future_parent->enter_child_name(name, TR("enter activity partition's \nname (may be empty) : "),
-            UmlActivityPartition, TRUE, TRUE))
+    return (!future_parent->enter_child_name(name, QObject::tr("enter activity partition's \nname (may be empty) : "),
+                                             UmlActivityPartition, TRUE, TRUE))
 
-           ? 0
-           : add_activitypartition(future_parent, name);
+            ? 0
+            : add_activitypartition(future_parent, name.toLatin1().constData());
 }
 
 BrowserActivityPartition *
 BrowserActivityPartition::add_activitypartition(BrowserNode * future_parent,
-        const char * name)
+                                                const char * name)
 {
     BrowserActivityPartition * r =
-        new BrowserActivityPartition(name, future_parent);
+            new BrowserActivityPartition(name, future_parent);
 
     future_parent->setOpen(TRUE);
     future_parent->package_modified();
@@ -181,17 +181,17 @@ BrowserActivityPartition *
 BrowserActivityPartition::get_activitypartition(BrowserNode * parent)
 {
     BrowserNodeList l;
-    Q3ListViewItem * child;
+    BrowserNode * child;
 
     for (child = parent->firstChild(); child != 0; child = child->nextSibling())
         if (!((BrowserNode *) child)->deletedp() &&
-            (((BrowserNode *) child)->get_type() == UmlActivityPartition))
+                (((BrowserNode *) child)->get_type() == UmlActivityPartition))
             l.append((BrowserNode *) child);
 
     BrowserNode * old;
     QString name;
 
-    if (!parent->enter_child_name(name, TR("enter activity partition's \nname (may be empty) : "),
+    if (!parent->enter_child_name(name, QObject::tr("enter activity partition's \nname (may be empty) : "),
                                   UmlActivityPartition, l, &old,
                                   TRUE, TRUE))
         return 0;
@@ -200,7 +200,7 @@ BrowserActivityPartition::get_activitypartition(BrowserNode * parent)
         return ((BrowserActivityPartition *) old);
 
     BrowserActivityPartition * r =
-        new BrowserActivityPartition(name, parent);
+            new BrowserActivityPartition(name, parent);
 
     parent->setOpen(TRUE);
     parent->package_modified();
@@ -210,61 +210,64 @@ BrowserActivityPartition::get_activitypartition(BrowserNode * parent)
 
 void BrowserActivityPartition::menu()
 {
-    Q3PopupMenu m(0, "activity partition");
-    Q3PopupMenu toolm(0);
+    QMenu m("activity partition", 0);
+    QMenu toolm(0);
 
     MenuFactory::createTitle(m, def->definition(FALSE, TRUE));
-    m.insertSeparator();
+    m.addSeparator();
 
     if (!deletedp()) {
         if (!is_read_only) {
-            m.setWhatsThis(m.insertItem(TR("New sub activity partition"), 0),
-                           TR("to add a sub <i>activity partition</i>"));
-            m.insertSeparator();
+            MenuFactory::addItem(m, QObject::tr("New sub activity partition"), 0,
+                                 QObject::tr("to add a sub <i>activity partition</i>"));
+            m.addSeparator();
         }
 
-        m.setWhatsThis(m.insertItem(TR("Edit"), 4),
-                       TR("to edit the <i>activity partition</i>, \
-a double click with the left mouse button does the same thing"));
+        MenuFactory::addItem(m, QObject::tr("Edit"), 4,
+                             QObject::tr("to edit the <i>activity partition</i>, \
+                                         a double click with the left mouse button does the same thing"));
 
-        if (!is_read_only) {
-            m.setWhatsThis(m.insertItem(TR("Duplicate"), 5),
-                           TR("to copy the <i>activity partition</i> in a new one"));
-            m.insertSeparator();
+                                         if (!is_read_only) {
+                                             MenuFactory::addItem(m, QObject::tr("Duplicate"), 5,
+                                             QObject::tr("to copy the <i>activity partition</i> in a new one"));
+                                             m.addSeparator();
 
-            if (edition_number == 0)
-                m.setWhatsThis(m.insertItem(TR("Delete"), 8),
-                               TR("to delete the <i>activity partition</i>. \
-Note that you can undelete it after"));
-        }
+                                             if (edition_number == 0)
+                                             MenuFactory::addItem(m, QObject::tr("Delete"), 8,
+                                             QObject::tr("to delete the <i>activity partition</i>. \
+                                             Note that you can undelete it after"));
+                                         }
 
-        m.setWhatsThis(m.insertItem(TR("Referenced by"), 3),
-                       TR("to know who reference the <i>partition</i>"));
-        mark_menu(m, TR("the activity partition"), 90);
-        ProfiledStereotypes::menu(m, this, 99990);
+                                         MenuFactory::addItem(m, QObject::tr("Referenced by"), 3,
+                                                              QObject::tr("to know who reference the <i>partition</i>"));
+                             mark_menu(m, QObject::tr("the activity partition").toLatin1().constData(), 90);
+                ProfiledStereotypes::menu(m, this, 99990);
 
         if ((edition_number == 0) &&
-            Tool::menu_insert(&toolm, get_type(), 100)) {
-            m.insertSeparator();
-            m.insertItem(TR("Tool"), &toolm);
+                Tool::menu_insert(&toolm, get_type(), 100)) {
+            m.addSeparator();
+            toolm.setTitle(QObject::tr("Tool"));
+            m.addMenu(&toolm);
         }
     }
     else if (!is_read_only && (edition_number == 0)) {
-        m.setWhatsThis(m.insertItem(TR("Undelete"), 9),
-                       TR("to undelete the <i>activity partition</i>"));
+        MenuFactory::addItem(m, QObject::tr("Undelete"), 9,
+                             QObject::tr("to undelete the <i>activity partition</i>"));
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
-                m.setWhatsThis(m.insertItem(TR("Undelete recursively"), 10),
-                               TR("undelete the activity partition and its children"));
+                MenuFactory::addItem(m, QObject::tr("Undelete recursively"), 10,
+                                     QObject::tr("undelete the activity partition and its children"));
                 break;
             }
         }
     }
 
-    exec_menu_choice(m.exec(QCursor::pos()));
+    QAction *resultAction = m.exec(QCursor::pos());
+    if(resultAction)
+        exec_menu_choice(resultAction->data().toInt());
 }
 
 void BrowserActivityPartition::exec_menu_choice(int rank)
@@ -285,11 +288,11 @@ void BrowserActivityPartition::exec_menu_choice(int rank)
     case 5: {
         QString name;
 
-        if (((BrowserNode *) parent())->enter_child_name(name, TR("enter activity partition's \nname (may be empty) : "),
-                UmlActivityPartition, TRUE, TRUE))
+        if (((BrowserNode *) parent())->enter_child_name(name, QObject::tr("enter activity partition's \nname (may be empty) : "),
+                                                         UmlActivityPartition, TRUE, TRUE))
             duplicate((BrowserNode *) parent(), name)->select_in_browser();
     }
-    break;
+        break;
 
     case 8:
         delete_it();
@@ -352,7 +355,7 @@ void BrowserActivityPartition::apply_shortcut(QString s)
         if (s == "Undelete")
             choice = 9;
 
-        Q3ListViewItem * child;
+        BrowserNode * child;
 
         for (child = firstChild(); child != 0; child = child->nextSibling()) {
             if (((BrowserNode *) child)->deletedp()) {
@@ -370,8 +373,8 @@ void BrowserActivityPartition::apply_shortcut(QString s)
 void BrowserActivityPartition::open(bool force_edit)
 {
     if (!force_edit &&
-        (associated_diagram != 0) &&
-        !associated_diagram->deletedp())
+            (associated_diagram != 0) &&
+            !associated_diagram->deletedp())
         associated_diagram->open(FALSE);
     else if (!is_edited) {
         (new ActivityPartitionDialog(def))->show();
@@ -393,7 +396,7 @@ UmlCode BrowserActivityPartition::get_type() const
 
 QString BrowserActivityPartition::get_stype() const
 {
-    return TR("activity partition");
+    return QObject::tr("activity partition");
 }
 
 int BrowserActivityPartition::get_identifier() const
@@ -432,7 +435,7 @@ BrowserNode * BrowserActivityPartition::get_associated() const
 }
 
 void BrowserActivityPartition::set_associated_diagram(BrowserActivityDiagram * dg,
-        bool on_read)
+                                                      bool on_read)
 {
     if (associated_diagram != dg) {
         if (associated_diagram != 0)
@@ -511,7 +514,7 @@ bool BrowserActivityPartition::tool_cmd(ToolCom * com, const char * args)
 }
 
 bool BrowserActivityPartition::may_contains_them(const QList<BrowserNode *> & l,
-        BooL & duplicable) const
+                                                 BooL & duplicable) const
 {
     BrowserNode * activity = get_container(UmlActivity);
     foreach (BrowserNode *node, l) {
@@ -552,7 +555,7 @@ void BrowserActivityPartition::DropEvent(QDropEvent * e)
 void BrowserActivityPartition::DragMoveInsideEvent(QDragMoveEvent * e)
 {
     if (!is_read_only &&
-        (UmlDrag::canDecode(e, BrowserActivityPartition::drag_key(this))))
+            (UmlDrag::canDecode(e, BrowserActivityPartition::drag_key(this))))
         e->accept();
     else
         e->ignore();
@@ -563,36 +566,37 @@ void BrowserActivityPartition::DropAfterEvent(QDropEvent * e, BrowserNode * afte
     BrowserNode * bn;
 
     if ((((bn = UmlDrag::decode(e, BrowserActivityPartition::drag_key(this))) != 0)) &&
-        (bn != after) && (bn != this)) {
+            (bn != after) && (bn != this)) {
         if (may_contains(bn, TRUE))  {
             if ((after == 0) &&
-                ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
+                    ((BrowserNode *) parent())->may_contains(bn, TRUE)) {
                 // have choice
-                Q3PopupMenu m(0);
+                QMenu m(0);
 
-                MenuFactory::createTitle(m, TR("move ") + bn->get_name());
-                m.insertSeparator();
-                m.insertItem(TR("In ") + QString(get_name()), 1);
-                m.insertItem(TR("After ") + QString(get_name()), 2);
+                MenuFactory::createTitle(m, QObject::tr("move ") + bn->get_name());
+                m.addSeparator();
+                MenuFactory::addItem(m, QObject::tr("In ") + QString(get_name()), 1);
+                MenuFactory::addItem(m, QObject::tr("After ") + QString(get_name()), 2);
+                QAction *retAction = m.exec(QCursor::pos());
+                if(retAction)
+                    switch (retAction->data().toInt()) {
+                    case 1:
+                        break;
 
-                switch (m.exec(QCursor::pos())) {
-                case 1:
-                    break;
+                    case 2:
+                        ((BrowserNode *) parent())->DropAfterEvent(e, this);
+                        return;
 
-                case 2:
-                    ((BrowserNode *) parent())->DropAfterEvent(e, this);
-                    return;
-
-                default:
-                    e->ignore();
-                    return;
-                }
+                    default:
+                        e->ignore();
+                        return;
+                    }
             }
 
             move(bn, after);
         }
         else {
-            msg_critical(TR("Error"), TR("Forbidden"));
+            msg_critical( QObject::tr("Error"), QObject::tr("Forbidden"));
             e->ignore();
         }
     }
@@ -605,7 +609,7 @@ void BrowserActivityPartition::DropAfterEvent(QDropEvent * e, BrowserNode * afte
 QString BrowserActivityPartition::drag_key() const
 {
     return QString::number(UmlActivityPartition)
-           + "#" + QString::number((unsigned long) get_container(UmlActivity));
+            + "#" + QString::number((unsigned long) get_container(UmlActivity));
 }
 
 QString BrowserActivityPartition::drag_postfix() const
@@ -616,18 +620,18 @@ QString BrowserActivityPartition::drag_postfix() const
 QString BrowserActivityPartition::drag_key(BrowserNode * p)
 {
     return QString::number(UmlActivityPartition)
-           + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
+            + "#" + QString::number((unsigned long) p->get_container(UmlActivity));
 }
 
 void BrowserActivityPartition::post_load()
 {
     // to manage deleted represented elts
     IdIterator<BrowserActivityPartition> it(all);
+    while(it.hasNext()){
+        it.next();
+        if (it.value())
+            it.value()->def->post_load();
 
-    while (it.current()) {
-        it.current()->def->post_load();
-
-        ++it;
     }
 }
 
@@ -655,7 +659,7 @@ void BrowserActivityPartition::save(QTextStream & st, bool ref, QString & warnin
     else {
         nl_indent(st);
         st << "activitypartition " << get_ident() << " ";
-        save_string(name, st);
+        save_string(name.toLatin1().constData(), st);
         indent(+1);
         def->save(st, warning);
 
@@ -669,7 +673,7 @@ void BrowserActivityPartition::save(QTextStream & st, bool ref, QString & warnin
 
         // saves the sub elts
 
-        Q3ListViewItem * child = firstChild();
+        BrowserNode * child = firstChild();
 
         if (child != 0) {
             for (;;) {
@@ -713,8 +717,8 @@ BrowserActivityPartition::read_ref(char *& st)
     BrowserActivityPartition * result = all[id];
 
     return (result == 0)
-           ? new BrowserActivityPartition(id)
-           : result;
+            ? new BrowserActivityPartition(id)
+            : result;
 }
 
 BrowserActivityPartition *
@@ -729,8 +733,8 @@ BrowserActivityPartition::read(char *& st, char * k,
         result = all[id];
 
         return (result == 0)
-               ? new BrowserActivityPartition(id)
-               : result;
+                ? new BrowserActivityPartition(id)
+                : result;
     }
     else if (!strcmp(k, "activitypartition")) {
         id = read_id(st);
@@ -764,7 +768,7 @@ BrowserActivityPartition::read(char *& st, char * k,
         result->BrowserNode::read(st, k, id);
 
         result->is_read_only = (!in_import() && read_only_file()) ||
-                               ((user_id() != 0) && result->is_api_base());
+                ((user_id() != 0) && result->is_api_base());
 
         BrowserNode * act = parent;
 
@@ -794,6 +798,6 @@ BrowserActivityPartition::read(char *& st, char * k,
 BrowserNode * BrowserActivityPartition::get_it(const char * k, int id)
 {
     return (!strcmp(k, "activitypartition_ref"))
-           ? all[id]
-           : 0;
+            ? all[id]
+              : 0;
 }

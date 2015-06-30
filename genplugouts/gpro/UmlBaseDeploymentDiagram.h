@@ -4,15 +4,14 @@
 
 #include "UmlDiagram.h"
 #include "anItemKind.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 class UmlDeploymentDiagram;
 class UmlDeploymentView;
 
 //  Manage the deployment diagrams
-class UmlBaseDeploymentDiagram : public UmlDiagram
-{
-public:
+class UmlBaseDeploymentDiagram : public UmlDiagram {
+  public:
     // returns a new deployment diagram named 'name' created under 'parent'
     //
     // In case it cannot be created (the name is already used or
@@ -24,9 +23,9 @@ public:
     virtual anItemKind kind();
 
 
-protected:
+  protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseDeploymentDiagram(void * id, const Q3CString & n) : UmlDiagram(id, n) {};
+    UmlBaseDeploymentDiagram(void * id, const QByteArray & n) : UmlDiagram(id, n) {};
 
 };
 

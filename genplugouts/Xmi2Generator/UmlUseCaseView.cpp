@@ -18,7 +18,7 @@ void UmlUseCaseView::write(FileOut & out)
         write_description_properties(out);
     }
 
-    const Q3PtrVector<UmlItem> ch = children();
+    const QVector<UmlItem*> ch = children();
     unsigned n = ch.size();
 
     for (unsigned i = 0; i != n; i += 1)
@@ -26,10 +26,10 @@ void UmlUseCaseView::write(FileOut & out)
 
     if (_gen_views) {
         while (! _relations.isEmpty())
-            _relations.take(0)->write(out, FALSE);
+            _relations.takeAt(0)->write(out, FALSE);
 
         while (! _assocs.isEmpty())
-            _assocs.take(0)->write_it(out);
+            _assocs.takeAt(0)->write_it(out);
 
         out.indent(-1);
         out.indent();

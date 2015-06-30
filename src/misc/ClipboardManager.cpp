@@ -24,7 +24,7 @@
 #include "misc/ClipboardManager.h"
 #include <QClipboard>
 #include <QApplication>
-#include <QMimeSource>
+//#include <QMimeSource>
 #include <QMimeData>
 
 

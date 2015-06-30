@@ -61,6 +61,8 @@ public:
 
     virtual void save(QTextStream &, bool ref, QString & warning) const;
     static SdSelfMsgCanvas * read(char *& , UmlCanvas *, char *);
+protected:
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 };
 
 #endif

@@ -34,17 +34,19 @@
 #include "SelectAreaCanvas.h"
 
 SelectAreaCanvas::SelectAreaCanvas(int x, int y, int width, int height,
-                                   Q3Canvas * canvas)
-    : Q3CanvasRectangle(x, y, width, height, canvas)
+                                   QGraphicsScene *canvas)
+    : QGraphicsRectItem(x, y, width, height)
 {
+    canvas->addItem(this);
 }
 
-void SelectAreaCanvas::drawShape(QPainter & p)
+void SelectAreaCanvas::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if (! visible()) return;
+    if (! isVisible()) return;
 
-    p.setRenderHint(QPainter::Antialiasing, true);
-    p.setPen(::Qt::DotLine);
-    Q3CanvasRectangle::drawShape(p);
-    p.setPen(::Qt::SolidLine);
+    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->setPen(::Qt::DotLine);
+    painter->drawRect(this->rect());
+    //QGraphicsRectItem::paint(painter, option, widget);
+    painter->setPen(::Qt::SolidLine);
 }

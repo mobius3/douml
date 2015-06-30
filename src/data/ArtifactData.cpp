@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QTextStream>
 
-#include <Q3ValueList>
+#include <QList>
 
 #include "ArtifactData.h"
 #include "BrowserClass.h"
@@ -69,9 +69,9 @@ ArtifactData::ArtifactData(ArtifactData * model, BrowserNode * bn)
 
         Q3PtrDictIterator<BrowserArtifact> it(*(model->associated));
 
-        while (it.current()) {
-            associated->insert(it.current(), it.current());
-            connect(it.current()->get_data(), SIGNAL(deleted()),
+        while (it.value()) {
+            associated->insert(it.value(), it.value());
+            connect(it.value()->get_data(), SIGNAL(deleted()),
                     this, SLOT(on_delete()));
             ++it;
         }
@@ -88,7 +88,7 @@ ArtifactData::~ArtifactData()
 
 void ArtifactData::edit()
 {
-    setName(browser_node->get_name());
+    setObjectName(browser_node->get_name());
     static  ArtifactDialog* dialog = nullptr;
     QSize size;
     if(dialog != nullptr)
@@ -137,11 +137,10 @@ void ArtifactData::send_uml_def(ToolCom * com, BrowserNode * bn,
                                 const QString & comment)
 {
     BasicData::send_uml_def(com, bn, comment);
-
-    const Q3ValueList<BrowserClass *> & l =
+    const QList<BrowserClass *> & l =
         ((BrowserArtifact *) browser_node)->get_associated_classes();
-    Q3ValueList<BrowserClass *>::ConstIterator itl;
-    Q3ValueList<BrowserClass *>::ConstIterator end = l.end();
+    QList<BrowserClass *>::ConstIterator itl;
+    QList<BrowserClass *>::ConstIterator end = l.end();
     unsigned n;
 
     n = 0;
@@ -161,28 +160,29 @@ void ArtifactData::send_uml_def(ToolCom * com, BrowserNode * bn,
     if (associated == 0)
         com->write_unsigned(0);
     else {
-        Q3PtrDictIterator<BrowserArtifact> itd(*associated);
+        QHashIterator<void*, BrowserArtifact*> itd(*associated);
 
         n = 0;
 
-        while (itd.current()) {
-            if (! itd.current()->deletedp())
+        while (itd.hasNext()) {
+            itd.next();
+            if(itd.value())
+            if (! itd.value()->deletedp())
                 n += 1;
-
-            ++itd;
         }
 
         com->write_unsigned(n);
 
-        itd.toFirst();
+        itd.toFront();
 
-        while (itd.current()) {
-            if (! itd.current()->deletedp())
-                itd.current()->write_id(com);
-
-            ++itd;
+        while (itd.hasNext()) {
+            itd.next();
+            if(itd.value())
+            if (! itd.value()->deletedp())
+                itd.value()->write_id(com);
         }
     }
+
 }
 
 void ArtifactData::send_cpp_def(ToolCom * com)
@@ -259,19 +259,21 @@ bool ArtifactData::tool_cmd(ToolCom * com, const char * args,
             break;
 
             case removeAllAssocArtifactsCmd:
-                if (associated != 0) {
-                    Q3PtrDictIterator<BrowserArtifact> it(*associated);
 
-                    while (it.current()) {
-                        disconnect(it.current()->get_data(), SIGNAL(deleted()),
+                if (associated != 0) {
+                    QHashIterator<void*, BrowserArtifact*> it(*associated);
+
+                    while (it.hasNext()) {
+                        it.next();
+                        if(it.value())
+                        disconnect(it.value()->get_data(), SIGNAL(deleted()),
                                    this, SLOT(on_delete()));
-                        ++it;
+                        //++it;
                     }
 
                     delete associated;
                     associated = 0;
                 }
-
                 break;
 
             default:
@@ -295,17 +297,19 @@ void ArtifactData::on_delete()
 {
     if (associated != 0) {
         bool modp = FALSE;
-        Q3PtrDictIterator<BrowserArtifact> it(*associated);
+        QHashIterator<void*, BrowserArtifact*> it(*associated);
 
-        while (it.current()) {
-            if (it.current()->deletedp()) {
+        while (it.hasNext()) {
+            it.next();
+            if(it.value())
+            if (it.value()->deletedp()) {
                 modp = TRUE;
-                associated->remove(it.current()); // update it
+                associated->remove(it.value()); // update it
             }
+            /*
             else
-                ++it;
+                ++it;*/
         }
-
         if (modp)
             modified();
     }
@@ -316,21 +320,21 @@ void ArtifactData::on_delete()
 bool ArtifactData::decldefbody_contain(const QString & s, bool cs,
                                        BrowserNode *)
 {
-    return ((QString(get_cpp_h()).find(s, 0, cs) != -1) ||
-            (QString(get_cpp_src()).find(s, 0, cs) != -1) ||
-            (QString(get_java_src()).find(s, 0, cs) != -1) ||
-            (QString(get_php_src()).find(s, 0, cs) != -1) ||
-            (QString(get_python_src()).find(s, 0, cs) != -1) ||
-            (QString(get_idl_src()).find(s, 0, cs) != -1));
+    return ((QString(get_cpp_h()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_cpp_src()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_java_src()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_php_src()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_python_src()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1) ||
+            (QString(get_idl_src()).indexOf(s, 0, (Qt::CaseSensitivity)cs) != -1));
 }
 
 void ArtifactData::associate(BrowserArtifact * other)
 {
-    if ((associated == 0) || (associated->find(other) == 0)) {
+    if ((associated == 0) || (associated->find(other) == associated->end())) {
         connect(other->get_data(), SIGNAL(deleted()), this, SLOT(on_delete()));
 
         if (associated == 0)
-            associated = new Q3PtrDict<BrowserArtifact>;
+            associated = new QHash<void*, BrowserArtifact*>;
 
         associated->insert(other, other);
         browser_node->modified();
@@ -348,38 +352,43 @@ void ArtifactData::unassociate(BrowserArtifact * other)
     modified();
 }
 
-void ArtifactData::update_associated(Q3PtrDict<BrowserArtifact> & d)
+void ArtifactData::update_associated(QHash<void*,BrowserArtifact*> & d)
 {
     if (associated != 0) {
-        Q3PtrDictIterator<BrowserArtifact> it(*associated);
+        QHashIterator<void*, BrowserArtifact*> it(*associated);
 
-        while (it.current()) {
-            if (d.find(it.current()) == 0) {
-                disconnect(it.current()->get_data(), SIGNAL(deleted()),
+        while (it.hasNext()) {
+            it.next();
+            if(it.value())
+            if (d.find(it.value()) == d.end()) {
+                disconnect(it.value()->get_data(), SIGNAL(deleted()),
                            this, SLOT(on_delete()));
-                associated->remove(it.current());
+                associated->remove(it.value());
             }
+            /*
             else
-                ++it;
+                ++it;*/
         }
     }
     else
-        associated = new Q3PtrDict<BrowserArtifact>((d.count() >> 4) + 1);
+        associated = new QHash<void*, BrowserArtifact*>(); //((d.count() >> 4) + 1);
 
-    Q3PtrDictIterator<BrowserArtifact> it(d);
+    QHashIterator<void*, BrowserArtifact*> it(d);
 
-    while (it.current()) {
-        if (associated->find(it.current()) == 0) {
-            associated->insert(it.current(), it.current());
+    while (it.hasNext()) {
+        it.next();
+        if(it.value())
+        if (associated->find(it.value()) == associated->end()) {
+            associated->insert(it.value(), it.value());
 
             if (associated->size() < (associated->count() >> 4))
-                associated->resize((associated->count() >> 4) + 1);
+                associated->reserve((associated->count() >> 4) + 1);
 
-            connect(it.current()->get_data(), SIGNAL(deleted()),
+            connect(it.value()->get_data(), SIGNAL(deleted()),
                     this, SLOT(on_delete()));
         }
 
-        ++it;
+        //++it;
     }
 }
 
@@ -449,15 +458,17 @@ void ArtifactData::save(QTextStream & st, QString & warning) const
         nl_indent(st);
         st << "associated_artifacts";
         indent(+1);
+        QHashIterator<void*, BrowserArtifact*>it(*associated);
 
-        Q3PtrDictIterator<BrowserArtifact> it(*associated);
-
-        while (it.current()) {
+        while (it.hasNext()) {
+            it.next();
+            if(it.value())
+            {
             nl_indent(st);
-            it.current()->save(st, TRUE, warning);
-            ++it;
+            it.value()->save(st, TRUE, warning);
+            }
+            //++it;
         }
-
         indent(-1);
         nl_indent(st);
         st << "end";
@@ -520,7 +531,8 @@ void ArtifactData::read(char *& st, char *& k)
     }
     else if (!strcmp(k, "associated_artifacts") ||
              ((read_file_format() < 20) && !strcmp(k, "associated_components"))) {
-        associated = new Q3PtrDict<BrowserArtifact>();
+
+        associated = new QHash<void*,BrowserArtifact*>();
 
         while (strcmp(k = read_keyword(st), "end")) {
             BrowserArtifact * c =
@@ -532,7 +544,7 @@ void ArtifactData::read(char *& st, char *& k)
         }
 
         if (associated->size() < (associated->count() >> 4))
-            associated->resize((associated->count() >> 4) + 1);
+            associated->reserve((associated->count() >> 4) + 1);
 
         k = read_keyword(st);
     }

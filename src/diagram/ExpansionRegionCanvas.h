@@ -33,8 +33,7 @@
 
 
 #include <qobject.h>
-#include <q3valuelist.h>
-//Added by qt3to4:
+#include <QList>
 #include <QTextStream>
 
 #include "ActivityContainerCanvas.h"
@@ -52,18 +51,19 @@ protected:
     UmlColor used_color;
     int min_width;
     int min_height;
-    Q3ValueList<ExpansionNodeCanvas *> nodes;
+    QList<ExpansionNodeCanvas *> nodes;
 
 protected:
     ExpansionRegionCanvas(UmlCanvas * canvas, int id);
 
     void check_nodes();
 
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 public:
     ExpansionRegionCanvas(BrowserNode * bn, UmlCanvas * canvas, int x, int y);
     virtual ~ExpansionRegionCanvas();
 
-    Q3ValueList<ExpansionNodeCanvas *> get_nodes() {
+    QList<ExpansionNodeCanvas *> get_nodes() {
         return nodes;
     }
     void add(ExpansionNodeCanvas * p) {
@@ -81,7 +81,7 @@ public:
     virtual void draw(QPainter & p);
     virtual void change_scale();
 
-    virtual UmlCode type() const;
+    virtual UmlCode typeUmlCode() const;
     virtual void delete_available(BooL & in_model, BooL & out_model) const;
     virtual bool alignable() const;
     virtual bool copyable() const;

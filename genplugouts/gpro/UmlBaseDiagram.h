@@ -3,12 +3,11 @@
 
 
 #include "UmlItem.h"
-#include <q3cstring.h>
+#include <QByteArray>
 
 //  Mother class of all the classes managing the diagrams
-class UmlBaseDiagram : public UmlItem
-{
-public:
+class UmlBaseDiagram : public UmlItem {
+  public:
     // saves the diagram picture in the file whose pathname is given
     // in argument, the produced file is a PNG file.
     // The aspect of the diagram is :
@@ -18,12 +17,12 @@ public:
     // - else the default diagram aspect, which is probably not as you want
     //
     // On error return FALSE in C++, produce a RuntimeException in Java
-    bool saveIn(const Q3CString & s) const;
+    bool saveIn(const QByteArray & s) const;
 
 
-protected:
+  protected:
     // the constructor, do not call it yourself !!!!!!!!!!
-    UmlBaseDiagram(void * id, const Q3CString & n) : UmlItem(id, n) {};
+    UmlBaseDiagram(void * id, const QByteArray & n) : UmlItem(id, n) {};
 
 };
 

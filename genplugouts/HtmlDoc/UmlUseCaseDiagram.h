@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseUseCaseDiagram.h"
-#include <q3cstring.h>
+
 #include "Vector.h"
 
 // This class manages 'use case diagrams', notes that the class 'UmlDiagram'
@@ -14,10 +14,10 @@
 class UmlUseCaseDiagram : public UmlBaseUseCaseDiagram
 {
 public:
-    UmlUseCaseDiagram(void * id, const Q3CString & n) : UmlBaseUseCaseDiagram(id, n) {};
+    UmlUseCaseDiagram(void * id, const QByteArray & n) : UmlBaseUseCaseDiagram(id, n) {};
 
     //returns a string indicating the king of the element
-    virtual Q3CString sKind();
+    virtual QByteArray sKind();
 
     //set he html ref
     //set the diagrams list

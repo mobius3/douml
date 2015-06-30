@@ -27,7 +27,7 @@
 
 #include <qmessagebox.h>
 //Added by qt3to4:
-#include <Q3ValueList>
+#include <QList>
 #include "misc/mystr.h"
 
 #include "UmlPackage.h"
@@ -948,7 +948,7 @@ void upgrade_jdk5(UmlClass * javasettings)
             (ch[i]->name() == "send_cmd")) {
             op1 = (UmlOperation *) ch[i];
 
-            Q3ValueList<UmlParameter> params = op1->params();
+            QList<UmlParameter> params = op1->params();
 
             if (params.count() == 6) {
                 UmlParameter p = params.last();
@@ -3891,7 +3891,7 @@ UmlOperation * wrong_umlcom_send_cmd(UmlClass * uml_com)
     for (unsigned i = 0; i != ch.size(); i += 1) {
         if ((ch[i]->kind() == anOperation)  && (ch[i]->name() == "send_cmd")) {
             UmlOperation * op = (UmlOperation *) ch[i];
-            const Q3ValueList<UmlParameter> p = op->params();
+            const QList<UmlParameter> p = op->params();
 
             if ((p.count() == 3) &&
                 ((p[0].type.type == UmlClass::get("CmdFamily", 0)) ||
@@ -5644,7 +5644,7 @@ bool UmlPackage::upgrade()
 
         UmlClass * bci = UmlClass::get("UmlBaseClassInstance", 0);
         UmlOperation * op = bci->get_operation("add_Relation");
-        const Q3ValueList<UmlParameter> params = op->params();
+        const QList<UmlParameter> params = op->params();
 
         if (params.first().type.type->name() == "UmlAttribute") {
             if (!work && !ask_for_upgrade())

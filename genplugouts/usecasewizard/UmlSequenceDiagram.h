@@ -3,7 +3,7 @@
 
 
 #include "UmlBaseSequenceDiagram.h"
-#include <q3cstring.h>
+
 
 // This class manages 'sequence diagrams', notes that the class 'UmlDiagram'
 // is a mother class of all the diagrams, allowing to generalize their
@@ -13,7 +13,7 @@
 class UmlSequenceDiagram : public UmlBaseSequenceDiagram
 {
 public:
-    UmlSequenceDiagram(void * id, const Q3CString & n) : UmlBaseSequenceDiagram(id, n) {};
+    UmlSequenceDiagram(void * id, const QByteArray & n) : UmlBaseSequenceDiagram(id, n) {};
 
 };
 

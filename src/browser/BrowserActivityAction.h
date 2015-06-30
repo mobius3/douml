@@ -2,7 +2,7 @@
 #include <QTextStream>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <Q3ValueList>
+//#include <QList>
 #include <QPixmap>
 // *************************************************************************
 //
@@ -91,8 +91,8 @@ public:
             BrowserNode * var);
 
     void set_pins();
-    Q3ValueList<BrowserPin *> get_pins() const;
-    Q3ValueList<BrowserParameterSet *> get_parametersets() const;
+    QList<BrowserPin *> get_pins() const;
+    QList<BrowserParameterSet *> get_parametersets() const;
     void remove_pins();
     void update_pins();
     BrowserNode * add_parameter_set(BrowserParameterSet *, const char *);

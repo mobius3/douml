@@ -28,7 +28,7 @@
 #ifndef UMLCLASS_H
 #define UMLCLASS_H
 
-#include <q3dict.h>
+
 //Added by qt3to4:
 #include "misc/mystr.h"
 

@@ -4,7 +4,7 @@
 
 void UmlBaseUseCaseDiagramDefinition::read_()
 {
-    Q3PtrDict<UmlUseCaseReference> ucrefs;
+    QHash<void*,UmlUseCaseReference*> ucrefs;
     unsigned n;
     unsigned rank;
 
@@ -18,7 +18,7 @@ void UmlBaseUseCaseDiagramDefinition::read_()
         f->read_();
     }
 
-    _fragments.setAutoDelete(TRUE);
+    //_fragments.setAutoDelete(TRUE);
     UmlBaseFragment::compute_container_(_fragments);
 
     n = UmlCom::read_unsigned();
@@ -31,7 +31,7 @@ void UmlBaseUseCaseDiagramDefinition::read_()
         sb->read_();
     }
 
-    _subjects.setAutoDelete(TRUE);
+    //_subjects.setAutoDelete(TRUE);
 
     n = UmlCom::read_unsigned();
     _use_cases.resize(n);
@@ -44,7 +44,7 @@ void UmlBaseUseCaseDiagramDefinition::read_()
         uc->read_(_fragments, _subjects);
     }
 
-    _use_cases.setAutoDelete(TRUE);
+    //_use_cases.setAutoDelete(TRUE);
 
     n = UmlCom::read_unsigned();
     _actors.resize(n);
@@ -62,7 +62,7 @@ void UmlBaseUseCaseDiagramDefinition::read_()
         r->read_(ucrefs);
     }
 
-    _rels.setAutoDelete(TRUE);
+    //_rels.setAutoDelete(TRUE);
 }
 
 UmlBaseUseCaseDiagramDefinition::~UmlBaseUseCaseDiagramDefinition()

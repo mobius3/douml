@@ -6,7 +6,7 @@
 //Added by qt3to4:
 #include "misc/mystr.h"
 FileIn::FileIn(const QString & path, FILE * fp)
-    : _path((const char *)path), _fp(fp), _utf8(false), _linenum(1), _length(1024)  //[rageek] ambiguous, cast *
+    : _path(path), _fp(fp), _utf8(false), _linenum(1), _length(1024)  //[rageek] ambiguous, cast *
 {
     _buffer = new char[_length];
 
@@ -239,14 +239,14 @@ void FileIn::finish(WrapperStr what)
 
 void FileIn::bypass(Token & tk)
 {
-    static Q3Dict<char> bypassed;
+    static QHash<QString, char*> bypassed;
 
     WrapperStr s = tk.xmiType();
 
     if (s.isEmpty()) {
         QString k = tk.what();
 
-        if (bypassed[k] == 0) {
+        if (!bypassed.contains(k)) {
             warning("bypass &lt;" + tk.what() + "...&gt; (other cases not signaled)");
             bypassed.insert(k, "");
         }
@@ -254,7 +254,7 @@ void FileIn::bypass(Token & tk)
     else {
         QString k = tk.what() + " " + s;
 
-        if (bypassed[k] == 0) {
+        if (!bypassed.contains(k)) {
             warning("bypass &lt;" + tk.what() +
                     " xmi:type=\"" + s + "\"...&gt; (other cases not signaled)");
             bypassed.insert(k, "");
@@ -300,7 +300,7 @@ void FileIn::warning(WrapperStr s)
 
 }
 
-Q3Dict<char> FileIn::BypassedIds;
+QHash<WrapperStr,char*> FileIn::BypassedIds;
 
 const char * FileIn::read_word(int c, bool any)
 {
@@ -482,7 +482,7 @@ char FileIn::read_special_char()
             // doesn't return
             error("not a valid special character");
 
-        return iter.data();
+        return iter.value();
     }
 }
 
