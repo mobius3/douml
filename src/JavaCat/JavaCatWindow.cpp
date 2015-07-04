@@ -30,7 +30,7 @@
 #include <qmessagebox.h>
 #include <qmenu.h>
 #include <qmenubar.h>
-#include <qtoolbar.h>
+#include <QToolBar>
 #include <qtoolbutton.h>
 #include <qsplitter.h>
 //#include <qwindowsstyle.h>

@@ -9,7 +9,7 @@
 #include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
-#include <HHBox.h>
+#include <hhbox.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>

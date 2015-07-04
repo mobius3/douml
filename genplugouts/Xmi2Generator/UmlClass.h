@@ -4,7 +4,7 @@
 
 #include "UmlBaseClass.h"
 
-#include <QList.h>
+#include <QList>
 
 class FileOut;
 class UmlRelation;

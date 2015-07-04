@@ -6240,7 +6240,7 @@ ${namespace_end}
 "
       cpp_src "${comment}
 ${includes}
-#include <qlist.h>
+#include <QList>
 
 #include \"UmlCom.h\"
 #include \"UmlState.h\"

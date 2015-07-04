@@ -1,7 +1,7 @@
 // "a type" "needed cpp_includes"
 "QVector" "#include <qvector.h>"
 
-"QList" "#include <qlist.h>"
+"QList" "#include <QList>"
 
 "QValueList" "#include <qvaluelist.h>"
 

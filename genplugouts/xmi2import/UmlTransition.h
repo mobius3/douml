@@ -5,7 +5,7 @@
 #include "UmlBaseTransition.h"
 #include "UmlStateItem.h"
 
-#include <QList.h>
+#include <QList>
 
 class FileIn;
 class Token;

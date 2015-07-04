@@ -63,7 +63,7 @@ Hello!<br>\n\
 Thank you for using <i>DoUML!</i><br>\n\
 <br>\n\
 <br>DoUML is a fork of the original BoUML project,\n\
-<br>with the focus of porting the UI to Qt4 and to\n\
+<br>with the focus of porting the UI to Qt5 and to\n\
 <br>continue development of the best UML 2.x tool!\n\
 <br>\n\
 <br>Please be aware that this is a testing version\n\

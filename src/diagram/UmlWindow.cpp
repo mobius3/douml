@@ -37,7 +37,7 @@
 //#include <Q3TextEdit>
 #include <qstatusbar.h>
 #include <qpixmap.h>
-#include <qtoolbar.h>
+#include <QToolBar>
 #include <qtoolbutton.h>
 //#include <q3popupmenu.h>
 #include <qmenubar.h>

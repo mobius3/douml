@@ -483,7 +483,7 @@ void UmlOperation::write_events(FileOut & out)
 
             if (*it_evt.key() != 0) {
                 out << " name=\"";
-                out.quote(it_evt.key() + 1);
+                out.quote(it_evt.key() +  QString::number(1));
                 out << "\"/>\n";
             }
             else

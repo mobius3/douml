@@ -6,7 +6,7 @@
 #include "SlotRelation.h"
 #include "UmlItem.h"
 #include "anItemKind.h"
-#include <QList.h>
+#include <QList>
 
 
 

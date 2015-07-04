@@ -5,7 +5,7 @@
 #include "UmlClassMember.h"
 #include "anItemKind.h"
 #include "UmlTypeSpec.h"
-#include <QList.h>
+#include <QList>
 #include <QByteArray>
 
 #include "UmlParameter.h"

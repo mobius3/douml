@@ -3,7 +3,7 @@
 
 #include <qdir.h>
 #include <qmessagebox.h>
-#include <QTextStream.h>
+#include <qtextstream.h>
 #include <QByteArray>
 
 #include "CppSettings.h"

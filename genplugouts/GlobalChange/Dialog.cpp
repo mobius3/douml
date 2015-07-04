@@ -9,7 +9,7 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <HHBox.h>
+#include <hhbox.h>
 #include <vvbox.h>
 #include <qcheckbox.h>
 #include <qradiobutton.h>

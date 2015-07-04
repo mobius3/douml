@@ -51,11 +51,13 @@
 #include <QSettings>
 #include <QComboBox>
 #include <QFileDialog>
+#if defined (WIN32) && defined (_MSC_VER)
 #ifndef popen
 #define popen _popen
 #endif
 #ifndef pclose
 #define pclose _pclose
+#endif
 #endif
 void EnvDialog::edit(bool conv, bool noid)
 {

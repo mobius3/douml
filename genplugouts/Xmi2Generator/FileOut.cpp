@@ -2,7 +2,7 @@
 #include "FileOut.h"
 #include "UmlItem.h"
 
-#include <QTextStream.h>
+#include <qtextstream.h>
 #include <qfile.h>
 #include <unordered_map>
 //Added by qt3to4:

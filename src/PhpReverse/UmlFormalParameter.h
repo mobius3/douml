@@ -28,7 +28,7 @@
 #ifndef _UMLFORMALPARAMETER_H
 #define _UMLFORMALPARAMETER_H
 
-#include <QList.h>
+#include <QList>
 //Added by qt3to4:
 #include "misc/mystr.h"
 

@@ -29,7 +29,7 @@
 #define BROWSER_NODE_H
 #include <QMenu>
 #include <QTextStream>
-#include <qlist.h>
+#include <QList>
 //#include <q3listview.h>
 #include <qstringlist.h>
 //

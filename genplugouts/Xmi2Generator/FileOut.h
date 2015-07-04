@@ -2,7 +2,7 @@
 #define _FILEOUT_H
 
 
-#include <QTextStream.h>
+#include <qtextstream.h>
 #include <qmap.h>
 
 

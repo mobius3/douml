@@ -35,7 +35,7 @@
 #include <qnamespace.h>
 #include <qspinbox.h>
 #include <qcombobox.h>
-#include <qtoolbar.h>
+#include <QToolBar>
 #include <qtoolbutton.h>
 #include <qwhatsthis.h>
 #include <qlabel.h>

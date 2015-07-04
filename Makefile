@@ -37,7 +37,7 @@ ifndef DESTDIR
   DESTDIR = ${LOCAL_DESTDIR}
 endif
 
-QMAKE=qmake
+QMAKE=~/.local/opt/Qt/5.4/gcc_64/bin/qmake
 
 MAKE=make
 

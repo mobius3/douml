@@ -3,7 +3,7 @@
 
 
 
-#include <QList.h>
+#include <QList>
 
 class UmlArtifact;
 class FileIn;

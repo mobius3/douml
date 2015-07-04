@@ -20,7 +20,7 @@ About
  abruptly came to  a stop due to author's conflict with wikipedia administration.
  
  Not wanting to lose (possibly) best free UML modelling software an effort was made to port the
- original to Qt4 and continue developing it as a community.
+ original to Qt5 and continue developing it as a community.
  
  DoUML is based on a source code of Bouml 4.22 but can read projects saved with versions up to 4.23
  patch 7. Support for later, commercial versions, of Bouml is possible but sample projects will be
@@ -130,7 +130,7 @@ Compiling
 
 #### Under Linux:
   
- * dependencies: libqt4-dev, libqt4-qt3support, libboost-dev, libfile-fcntllock-perl, vim-common, g++ (>=4.7)
+ * dependencies: libqt5-dev, libboost-dev, g++ (>=4.7)
  * `make`
  * `make install` default directory is ${PWD}/install or `make install LOCAL_DESTDIR=[path]`
     
@@ -142,7 +142,7 @@ Compiling
   ```
 
  * Mingw based on gcc 4.7+
- * Qt 4.7+ built with aforementioned mingw.
+ * Qt 5.4+ built with aforementioned mingw.
  * Boost's headers of version 1.5+ must be visible in scope.
 
 	

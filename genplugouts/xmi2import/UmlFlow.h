@@ -5,7 +5,7 @@
 #include "UmlBaseFlow.h"
 #include "UmlActivityItem.h"
 
-#include <QList.h>
+#include <QList>
 
 class FileIn;
 class Token;

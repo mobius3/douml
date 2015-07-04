@@ -1,6 +1,6 @@
 #ifndef _CLASSINSTANCE_H
 #define _CLASSINSTANCE_H
-#include <QList.h>
+#include <QList>
 class FileIn;
 class Token;
 class UmlItem;

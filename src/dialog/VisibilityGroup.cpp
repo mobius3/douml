@@ -29,7 +29,7 @@
 
 
 
-#include <QGroupBox.h>
+#include <qgroupbox.h>
 #include <qradiobutton.h>
 
 #include "VisibilityGroup.h"

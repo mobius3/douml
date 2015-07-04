@@ -29,7 +29,7 @@
 #define HIDESHOWDIALOG_H
 
 #include <qdialog.h>
-#include <QList.h>
+#include <QList>
 
 class QListWidget;
 class QCheckBox;

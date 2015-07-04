@@ -49,7 +49,7 @@ ${namespace_end}
 #include <stdlib.h>
 #endif
 ${includes}
-#include <qlist.h>
+#include <QList>
 #include <qhgroupbox.h> 
 #include <qpushbutton.h>
 #include <qlayout.h>

@@ -3,7 +3,7 @@
 
 
 
-#include <QList.h>
+#include <QList>
 
 class FileIn;
 

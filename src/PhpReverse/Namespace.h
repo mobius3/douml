@@ -28,7 +28,7 @@
 #ifndef NAMESPACE_H
 #define NAMESPACE_H
 
-#include <QList.h>
+#include <QList>
 #include <qstringlist.h>
 #include "misc/mystr.h"
 

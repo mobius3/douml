@@ -28,7 +28,7 @@
 #ifndef CODMSGSUPPORT_H
 #define CODMSGSUPPORT_H
 
-#include <qlist.h>
+#include <QList>
 
 #include "Settings.h"
 #include "ColMsg.h"

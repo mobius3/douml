@@ -12,7 +12,7 @@
 #include "Vector.h"
 #include "FileWriter.h"
 
-#include <QTextStream.h>
+#include <qtextstream.h>
 class UmlDiagram;
 class UmlTypeSpec;
 

@@ -5,7 +5,7 @@
 #include "ConstrDestrCopyDialog.h"
 #include "UmlClass.h"
 
-#include <qlist.h>
+#include <QList>
 
 #include <gridbox.h>
 #include <qpushbutton.h>

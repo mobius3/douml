@@ -5,7 +5,7 @@
 #include "UmlBaseClass.h"
 
 #include "Vector.h"
-#include <QList.h>
+#include <QList>
 
 class UmlActualParameter;
 class UmlFormalParameter;

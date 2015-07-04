@@ -9,7 +9,7 @@
 #include <qfiledialog.h>
 #include <qfileinfo.h>
 #include <qlabel.h>
-#include <HHBox.h>
+#include <hhbox.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
@@ -89,10 +89,10 @@ Dialog::Dialog(WrapperStr & path, WrapperStr & encoding, WrapperStr & nomodel, W
 #else
 
     if ((_encoding != "ISO-8859-1") && (charset != "ISO-8859-1"))
-        encoding_cb->insertItem("ISO-8859-1");
+        encoding_cb->addItem("ISO-8859-1");
 
     if ((_encoding != "windows-1252") && (charset != "windows-1252"))
-        encoding_cb->insertItem("windows-1252");
+        encoding_cb->addItem("windows-1252");
 
 #endif
 

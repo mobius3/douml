@@ -94,7 +94,7 @@ AboutDialog::AboutDialog() : QDialog(0/*, "About DoUML", TRUE*/)
                             "<p>This project is a fork of\n"
                             "Bruno Pages's work, BoUML:\n"
                             "<i>http://sourceforge.net/projects/bouml/</i></p>\n"
-                            "<p>DoUML focus is to port BoUML to Qt4\n"
+                            "<p>DoUML focus is to port BoUML to Qt5\n"
                             "and to maintain it as a community</p>\n"
                             "<p>Join us at:<br>\n"
                             "https://github.com/DoUML/douml<br>\n"

@@ -5,7 +5,7 @@
 #include "UmlBaseClass.h"
 
 #include "anItemKind.h"
-#include <QList.h>
+#include <QList>
 #include <qmap.h>
 
 class UmlItem;

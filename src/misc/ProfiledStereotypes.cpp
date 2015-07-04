@@ -49,7 +49,7 @@
 #include "DialogUtil.h"
 #include "Images.h"
 #include "translate.h"
-#include <QStack.h>
+#include <qstack.h>
 
 struct ProfiledStereotype {
     ProfiledStereotype() : cl(0), properties_set(FALSE), browser_icon(0) {}

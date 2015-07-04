@@ -32,7 +32,7 @@
 #include <hhbox.h>
 #include <gridbox.h>
 #include <qlabel.h>
-#include <QComboBox.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 
 #include "Settings.h"

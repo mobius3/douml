@@ -8,7 +8,7 @@
 #include <qpushbutton.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <HHBox.h>
+#include <hhbox.h>
 #include <qcheckbox.h>
 #include <qdir.h>
 //Added by qt3to4:

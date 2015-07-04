@@ -31,7 +31,7 @@
 
 #include <qapplication.h>
 #include <QMdiArea>
-#include <qtoolbar.h>
+#include <QToolBar>
 #include <qtoolbutton.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>

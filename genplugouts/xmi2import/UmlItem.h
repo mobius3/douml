@@ -3,7 +3,7 @@
 
 
 
-#include <QList.h>
+#include <QList>
 #include "UmlBaseItem.h"
 #include <qstring.h>
 #include "anItemKind.h"
