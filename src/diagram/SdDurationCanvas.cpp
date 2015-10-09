@@ -114,7 +114,7 @@ void SdDurationCanvas::change_scale()
 
 void SdDurationCanvas::update_hpos()
 {
-    moveBy(support->sub_x(width()), 100000);
+    moveBy(support->sub_x(width()) - x(), 100000);
 
     foreach (SdDurationCanvas *canvas, durations)
         canvas->update_hpos();
