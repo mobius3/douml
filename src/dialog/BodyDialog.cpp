@@ -49,6 +49,7 @@ BodyDialog::BodyDialog(QString t, TabDialog * d, post_edit pf,
                        EditType k, QString what, QList<BodyDialog *> & edits)
     : QDialog(d/*, what, d->isModal(), Qt::WDestructiveClose*/), dlg(d), f(pf), eds(edits)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     setModal(d->isModal());
     setWindowTitle(what);
     eds.append(this);
