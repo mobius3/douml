@@ -87,9 +87,10 @@
 #include "menufactory.h"
 #include "vvbox.h"
 QSize OperationDialog::previous_size;
-OperationDialog::OperationDialog(OperationData * o, DrawingLanguage )
+OperationDialog::OperationDialog(OperationData * o, DrawingLanguage l)
     : EdgeMenuDialog(0, 0, FALSE), oper(o),
-      cl((ClassData *)((BrowserClass *) o->browser_node->parent())->get_data())
+      cl((ClassData *)((BrowserClass *) o->browser_node->parent())->get_data()),
+      drawingLanguage(l)
 {
     //o->browser_node->edit_start();
 
