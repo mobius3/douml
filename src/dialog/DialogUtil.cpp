@@ -61,6 +61,7 @@
 #include "UmlDesktop.h"
 #include "translate.h"
 #include "menufactory.h"
+#include <QProcess>
 static QString DoumlEditor;
 
 SmallPushButton::SmallPushButton(const QString & text, QWidget * parent)
@@ -251,32 +252,32 @@ void edit(const QString & s, QString name, void * id, EditType k,
     if (!ed.isEmpty() && (pf != 0)) {
         // try to use it
         QString f;
-        QString firstProto = "%s_%lx_%d.%s";
-        QString secondProto = "%s_%lx_%d.txt";
+        QString firstProto = "%1_%2_%3.";
+        QString secondProto = "%1_%2_%3.txt";
         firstProto = firstProto.arg(name)
-                .arg(QString::number((unsigned long) id))
+                .arg(QString::number((unsigned long) id, 16))
                 .arg(QString::number((unsigned long) user_id()));
        secondProto=secondProto.arg(name)
-                .arg(QString::number((unsigned long) id))
+                .arg(QString::number((unsigned long) id, 16))
                 .arg(QString::number((unsigned long) user_id()));
         switch (k) {
         case CppEdit:
-            firstProto=firstProto.arg(GenerationSettings::get_cpp_src_extension());
+            firstProto=firstProto.append(GenerationSettings::get_cpp_src_extension());
             f=firstProto;
             break;
 
         case JavaEdit:
-            firstProto=firstProto.arg(GenerationSettings::get_java_extension());
+            firstProto=firstProto.append(GenerationSettings::get_java_extension());
             f=firstProto;
             break;
 
         case PhpEdit:
-            firstProto=firstProto.arg(GenerationSettings::get_php_extension());
+            firstProto=firstProto.append(GenerationSettings::get_php_extension());
             f=firstProto;
             break;
 
         case PythonEdit:
-            firstProto=firstProto.arg(GenerationSettings::get_python_extension());
+            firstProto=firstProto.append(GenerationSettings::get_python_extension());
             f=firstProto;
             break;
 
@@ -297,9 +298,13 @@ void edit(const QString & s, QString name, void * id, EditType k,
                 fputs((const char *) s.toLatin1().constData(), fp);
 
             fclose(fp);
+            ed.prepend("\"");
+            ed.append("\"");
 
-            ed += " \"" + path + "\"&";
-            (void) system(ed.toLatin1().constData());
+            ed += " \"" + path + "\"";
+            //(void) system(ed.toLatin1().constData());
+            QProcess::startDetached(ed);
+
 
             if (d->hasOkButton() && (pf != 0))
                 (new DialogTimer(s, path, d, pf))->start(1000);
