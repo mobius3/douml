@@ -470,10 +470,10 @@ void NoteCanvas::read_internal(char *& st)
     stream.setCodec(codec);
     QByteArray ba;
     stream   >> ba;
-    QString temp = QString::fromLocal8Bit(ba);
+    //QString temp = QString::fromLocal8Bit(ba);
     char* test = read_string(st);
-    Q_UNUSED(test);
-    note = temp;
+    //Q_UNUSED(test);
+    note = test;
 
 
     char * k = read_keyword(st);
