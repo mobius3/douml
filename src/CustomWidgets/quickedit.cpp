@@ -401,7 +401,7 @@ void QuickEdit::AddOperation()
     if(!classNode)
         return;
     BrowserOperation* newOperation = static_cast<BrowserOperation*>(classNode->addOperation());
-    classNode->move(newOperation, currentNode);
+    //classNode->move(newOperation, currentNode);
     classNode->select_in_browser();
     QModelIndex parentIndex;
     TreeItemInterface* parent;
@@ -467,7 +467,7 @@ void QuickEdit::AddAttribute()
         newAttribute = static_cast<BrowserAttribute*>(classNode->addEnumItem());
     else
         newAttribute = static_cast<BrowserAttribute*>(classNode->addAttribute());
-    classNode->move(newAttribute, currentNode);
+    //classNode->move(newAttribute, currentNode);
     classNode->select_in_browser();
     QModelIndex parentIndex;
     TreeItemInterface* parent;

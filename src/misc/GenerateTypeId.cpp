@@ -11,8 +11,10 @@
 
 #include <string>
 #include <unordered_map>
-#ifdef habip
+#ifdef _USE_BOOST_
 #include <boost/crc.hpp>
+#else
+#include <zlib.h>
 #endif
 #include <cassert>
 #include <cstring>
@@ -91,8 +93,8 @@ int GenerateCrcChecksum
     if (checksumSize == 0)
         return 0;
 
-    int numberOfBytesToCopy;
-    #ifdef habip
+    int numberOfBytesToCopy = checksumSize;
+    #ifdef _USE_BOOST_
     boost::crc_32_type crcGenerator;
     int dataSize = std::strlen(data) * sizeof(uint8_t) / sizeof(char);
     crcGenerator.process_bytes(data, dataSize);
@@ -103,7 +105,14 @@ int GenerateCrcChecksum
     for (int i = 0; i < numberOfBytesToCopy; ++i) {
         (*checksum)[i] = crcAsByteArray[i];
     }
-#endif
+    #else
+    unsigned long  crc = crc32(0L, Z_NULL, 0);
+    crc = crc32(crc, (const unsigned char*)data, strlen(data));
+    uint8_t * crcAsByteArray = reinterpret_cast<uint8_t *>(&crc);
+    for (int i = 0; i < numberOfBytesToCopy; ++i) {
+        (*checksum)[i] = crcAsByteArray[i];
+    }
+    #endif
     return numberOfBytesToCopy;
 }
 }
