@@ -44,6 +44,7 @@
 #include "DialogUtil.h"
 #include "translate.h"
 #include <QTextBrowser>
+#include <QDesktopServices>
 static QString NavigatorPath;
 static QString ManualDir;
 static QSize Sz;
@@ -130,6 +131,7 @@ void HelpDialog::show(QString topic)
 
 
 
+    QString topicUnchanged = topic;
     QString dirs[3];
 
     dirs[1] = "/usr/share/doc/packages/bouml";
@@ -138,10 +140,6 @@ void HelpDialog::show(QString topic)
 
     dirs[0] = ManualDir;
     DocDir = "";
-    if (NavigatorPath.isEmpty())
-         NavigatorPath = "/usr/bin/xdg-open";
-
-
     for (index = (ManualDir.isEmpty()) ? 1 : 0;
          index != sizeof(dirs) / sizeof(*dirs);
          index += 1) {
@@ -150,7 +148,10 @@ void HelpDialog::show(QString topic)
         if (dir.exists(topic + ".html")) {
             DocDir = dir.absolutePath();
 
+
+
             if (!NavigatorPath.isEmpty()) {
+
                 if (dir.exists("index_" + topic + ".html"))
                     topic = dir.absoluteFilePath("index_" + topic + ".html");
                 else
@@ -158,11 +159,11 @@ void HelpDialog::show(QString topic)
 
                 int index = 0;
 
-                while ((index = topic.indexOf(" ", index)) != -1)
-                    topic.replace(index, 1, "%20");
+                QString navPath = QDir::toNativeSeparators(NavigatorPath);
+                navPath.prepend("\"");
+                navPath.append("\"");
+                QString s = navPath +" " + QString(QUrl::fromLocalFile(topic).toEncoded()) +"&";
 
-
-                QString s = NavigatorPath + " file://" + topic + "&";
 
                 errno = 0;
                 (void) system(s.toLatin1().constData());
@@ -170,10 +171,20 @@ void HelpDialog::show(QString topic)
                 if (errno != 0)
                     QMessageBox::critical(0, "Douml",
                                           QObject::tr("HelpDialog : error while executing '%1'\n"
-                                             "perhaps you must specify its absolute path"
-                                             "or set the environment variable PATH ?").arg(NavigatorPath));
+                                                      "perhaps you must specify its absolute path"
+                                                      "or set the environment variable PATH ?").arg(NavigatorPath));
 
                 return;
+            }
+            else
+            {
+
+                if (dir.exists("index_" + topic + ".html"))
+                    topic = dir.absoluteFilePath("index_" + topic + ".html");
+                else
+                    topic = dir.absoluteFilePath(topic + ".html");
+                if(QDesktopServices::openUrl(QUrl::fromLocalFile(topic)))
+                    return;
             }
 
             break;
@@ -184,10 +195,9 @@ void HelpDialog::show(QString topic)
         the = new HelpDialog();
 
     if (!DocDir.isEmpty()) {
-#ifdef habip
-        the->br->mimeSourceFactory()->setFilePath(DocDir);
-#endif
-        the->br->setSource(topic + ".html");
+        the->br->setSearchPaths(QStringList()<<DocDir);
+        topicUnchanged = topicUnchanged + ".html";
+        the->br->setSource(topicUnchanged);
     }
     else {
         bool old = FALSE;
@@ -202,12 +212,12 @@ void HelpDialog::show(QString topic)
         }
 
         the->br->setText(QString((old) ? QObject::tr("The documentation is too old.<br><br>")
-                                 : QObject::tr("The documentation isn't installed.<br><br>")) +
+                                       : QObject::tr("The documentation isn't installed.<br><br>")) +
                          QObject::tr("The \".tar.gz\" or \".7z\" archives are available here:"
-                            "<ul><li>http://bouml.sourceforge.net/documentation.html</li>"
-                            "<li>http://sourceforge.net/projects/douml/documentation.html</li></ul>"
-                            "<br>Extract an archive and set the environment through the Miscellaneous"
-                            "menu to indicate where the directory \"doc\" is then close this dialog and redo"));
+                                     "<ul><li>http://bouml.sourceforge.net/documentation.html</li>"
+                                     "<li>http://sourceforge.net/projects/douml/documentation.html</li></ul>"
+                                     "<br>Extract an archive and set the environment through the Miscellaneous"
+                                     "menu to indicate where the directory \"doc\" is then close this dialog and redo"));
         the->setMinimumSize(QSize(600, 300));
     }
 
