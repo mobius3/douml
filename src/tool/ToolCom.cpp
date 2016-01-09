@@ -265,9 +265,6 @@ unsigned ToolCom::bind(unsigned port)
     else
         while (!listen_sock->listen(ha, port))
             port += 1;
-#ifdef habip
-    listen_sock->listen(1);
-#endif
     return port;
 }
 
