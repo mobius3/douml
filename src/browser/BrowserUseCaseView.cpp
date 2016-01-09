@@ -264,6 +264,8 @@ void BrowserUseCaseView::exec_menu_choice(int rank)
         if (d == 0)
             return;
 
+        removeChild(d);
+        insertChild(0,d);
         d->select_in_browser();
     }
         break;
@@ -275,6 +277,8 @@ void BrowserUseCaseView::exec_menu_choice(int rank)
         if (d == 0)
             return;
 
+        removeChild(d);
+        insertChild(0,d);
         d->select_in_browser();
     }
         break;
@@ -286,6 +290,8 @@ void BrowserUseCaseView::exec_menu_choice(int rank)
         if (d == 0)
             return;
 
+        removeChild(d);
+        insertChild(0,d);
         d->select_in_browser();
     }
         break;
@@ -399,6 +405,8 @@ void BrowserUseCaseView::exec_menu_choice(int rank)
         if (d == 0)
             return;
 
+        removeChild(d);
+        insertChild(0,d);
         d->select_in_browser();
     }
         break;
@@ -441,6 +449,8 @@ void BrowserUseCaseView::exec_menu_choice(int rank)
         if (d == 0)
             return;
 
+        removeChild(d);
+        insertChild(0,d);
         d->select_in_browser();
     }
         break;
