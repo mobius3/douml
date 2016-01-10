@@ -582,3 +582,4 @@ FORMS += \
     ui/constructorinitializerdialog.ui \
     ui/catalogwidget.ui \
     ui/quickedit.ui
+win32:RC_ICONS += ../douml.ico
