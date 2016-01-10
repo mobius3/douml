@@ -217,7 +217,9 @@ int ToolCom::run(const char * cmd, BrowserNode * bn,
     com->externalProcess->start(QCoreApplication::applicationDirPath() + "/" + command, arguments);
 #endif
 #ifdef Q_OS_WIN
+#if 1
     com->externalProcess->start(command, arguments);
+#endif
 #endif
     qDebug() << "error was:" << com->externalProcess->error();
     com->start = TRUE;
@@ -263,9 +265,6 @@ unsigned ToolCom::bind(unsigned port)
     else
         while (!listen_sock->listen(ha, port))
             port += 1;
-#ifdef habip
-    listen_sock->listen(1);
-#endif
     return port;
 }
 

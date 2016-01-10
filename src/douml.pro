@@ -571,7 +571,7 @@ Debug {
 QMAKE_CXXFLAGS += -std=gnu++11
 mac:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -stdlib=libc++
 mac:LIBS += -lc++
-LIBS += -L../bin -lUniversalModels
+LIBS += -L../bin -lUniversalModels -lz
 RESOURCES += icons.qrc ../douml.qrc
 
 INCLUDEPATH += $${PWD}

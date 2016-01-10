@@ -54,9 +54,8 @@ bool NumberedMultiLineEdit::event(QEvent * e)
     bool r = MultiLineEdit::event(e);
     int l;
     int c;
-#ifdef habip
-    getCursorPosition(&l, &c);
-#endif
+    l = textCursor().blockNumber();
+    c = textCursor().columnNumber();
 
     if ((c != old_c) || (l != old_l)) {
         old_c = c;
@@ -73,6 +72,7 @@ SourceDialog::SourceDialog(QString p, BooL & flg, unsigned & edn)
     : QDialog(0),
       path(p), edited(flg), edition_number(edn)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     QFileInfo fi(p);
 
     setWindowTitle(fi.fileName());

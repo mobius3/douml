@@ -42,8 +42,10 @@
 
 int main(int argc, char ** argv)
 {
+#if 1
     if (argc != 2)
         return 0;
+#endif
     //QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
     //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #ifdef DEBUG
@@ -60,7 +62,11 @@ int main(int argc, char ** argv)
     QLOG_INFO() << "Starting the log";
 #endif
     //QTest::qSleep(7000);
+#if 1
     if (UmlCom::connect(WrapperStr(argv[1]).operator QString().toUInt())) {
+#else
+    if (UmlCom::connect(5000)) {
+#endif
         try {
             //UmlCom::with_ack(FALSE);
             UmlCom::trace("<b>C++ reverse</b> release 2.15<br>");

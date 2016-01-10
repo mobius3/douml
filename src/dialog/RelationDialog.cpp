@@ -450,8 +450,8 @@ RelationDialog::RelationDialog(RelationData * r)
 
     edTypeActivated(edtype->currentIndex());
 
-    connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)),
-            this, SLOT(update_all_tabs(QWidget *)));
+    connect(m_tabWidget, SIGNAL(currentChanged(int)),
+            this, SLOT(update_all_tabs(int)));
 
     open_dialog(this);
 }

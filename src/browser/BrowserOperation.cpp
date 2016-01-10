@@ -338,6 +338,34 @@ BrowserOperation * BrowserOperation::new_one(QString s, BrowserNode * p)
 
     d->set_browser_node(result, TRUE);
 
+
+    QString nameOfClassNode = p->get_name();
+
+    //if constructor
+    int lastIndexOfConstructor = 0;
+    while(BrowserNode *node = (BrowserNode *)p->child(lastIndexOfConstructor))
+    {
+        if(nameOfClassNode == node->get_name())
+        {
+            lastIndexOfConstructor++;
+        }
+        else
+            break;
+    }
+    if(nameOfClassNode == s)
+    {
+        p->removeChild(result);
+        p->insertChild(lastIndexOfConstructor,result);
+    }
+    //destructor
+    else if(("~" + nameOfClassNode) == s)
+    {
+
+        p->removeChild(result);
+        p->insertChild(lastIndexOfConstructor,result);
+    }
+
+
     return result;
 }
 
