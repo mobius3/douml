@@ -28,14 +28,13 @@
 #ifndef BROWSERVIEW_H
 #define BROWSERVIEW_H
 
-#include <q3listview.h>
-#include <qdir.h>
-//Added by qt3to4:
+#include <QDir>
 #include <QKeyEvent>
+#include <QTreeWidget>
 
 class BrowserNode;
 
-class BrowserView : public Q3ListView
+class BrowserView : public QTreeWidget
 {
     Q_OBJECT
 
@@ -50,7 +49,7 @@ public:
     void set_project(QDir dir);
     void close();
 
-    static void select(Q3ListViewItem * b);
+    static void select(QTreeWidgetItem * b);
     static BrowserNode * get_project();
     static QDir & get_dir() {
         return dir;
@@ -60,7 +59,7 @@ protected:
     virtual void keyPressEvent(QKeyEvent *);
 
 protected slots:
-    void rightPressed(Q3ListViewItem *);
+    void rightPressed(const QPoint &pos);
 };
 
 #endif

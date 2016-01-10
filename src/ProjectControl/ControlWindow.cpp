@@ -31,20 +31,14 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <q3popupmenu.h>
+#include <QMenu>
 #include <qmenubar.h>
-#include <q3toolbar.h>
+#include <QToolBar>
 #include <qtoolbutton.h>
 #include <qstatusbar.h>
-#include <qwindowsstyle.h>
-#include <qmotifstyle.h>
-//#include <qmotifplusstyle.h>
-#include <q3whatsthis.h>
-#include <q3filedialog.h>
 #include <qfile.h>
 #include <qdir.h>
 #include <QTextStream>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include "ControlWindow.h"
@@ -56,117 +50,155 @@
 #include "fileopen.xpm"
 #include "browsersearch.xpm"
 #include "actor.xpm"
-
+#include <QFileDialog>
+#include <QWhatsThis>
+#include <QSettings>
+#include <QTextCodec>
 ControlWindow * ControlWindow::the;
 
 const char * OpenText = "To load a project";
 const char * SearchText = "To search a <i>package</i> in the <i>browser</i>.";
 const char * ChangeUserText = "To be an other user.";
-
-ControlWindow::ControlWindow(QDir & homeDir) : Q3MainWindow(0, "Project control", Qt::WDestructiveClose)
+QToolButton *
+CreateToolButton(
+        QPixmap icon,
+        QWidget * receiver,
+        const char * boundslot,
+        QToolBar * parent,
+        QString shown,
+        QString whatsThis)
 {
+    QToolButton * newButton = new QToolButton();
+    QObject::connect(newButton, SIGNAL(clicked()), receiver, boundslot);
+    newButton->setIcon(icon);
+    newButton->setText(shown);
+    newButton->setToolTip(shown);
+    newButton->setMinimumSize(30, 30);
+    newButton->setWhatsThis(whatsThis);
+    parent->addWidget(newButton);
+    return newButton;
+}
+
+ControlWindow::ControlWindow(QDir & homeDir) : QMainWindow(0)
+{
+    setAttribute(Qt::WA_DeleteOnClose);
     the = this;
-    setCaption("Project control");
+    setWindowTitle("Project control");
 
-    Q3PopupMenu * menu;
+    QMenu * menu;
     QPixmap pixmap;
+    QAction *action;
 
-    Q3ToolBar * tools = new Q3ToolBar(this, "operations");
+    QToolBar * tools = new QToolBar("operations", this);
 
-    addToolBar(tools, "Operations", Qt::DockTop, TRUE);
+    addToolBar(Qt::TopToolBarArea, tools);
 
-    menu = new Q3PopupMenu(this);
-    menuBar()->insertItem("P&roject", menu);
+    menu = new QMenu(this);
+    menu->setTitle("P&roject");
+    menuBar()->addMenu(menu);
 
     // open
 
     pixmap = QPixmap(fileopen);
-    Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString(),
-                                     this, SLOT(load()), tools, "open"),
-                     OpenText);
-    menu->setWhatsThis(menu->insertItem(pixmap, "&Open", this,
-                                        SLOT(load()), Qt::CTRL + Qt::Key_O),
-                       OpenText);
+    QToolButton *button = CreateToolButton(pixmap,this, SLOT(load()), tools, "Open", OpenText);
+    //Q3WhatsThis::add(new QToolButton(pixmap, "Open", QString(),
+    //                               this, SLOT(load()), tools, "open"),
+    //             OpenText);
+
+    action = menu->addAction(pixmap, "&Open", this,
+                             SLOT(load()), Qt::CTRL + Qt::Key_O);
+    action->setWhatsThis(OpenText);
+    //    menu->setWhatsThis(menu->insertItem(pixmap, "&Open", this,
+    //                                        SLOT(load()), Qt::CTRL + Qt::Key_O),
+    //                       OpenText);
+
 
     // change user
-
     pixmap = QPixmap(actor);
-    Q3WhatsThis::add(new QToolButton(pixmap, "Who", QString(),
-                                     this, SLOT(change_user()), tools, "Change user"),
-                     ChangeUserText);
-    menu->setWhatsThis(menu->insertItem(pixmap, "Change &user", this,
-                                        SLOT(change_user()), Qt::CTRL + Qt::Key_C),
-                       ChangeUserText);
+
+
+    button = CreateToolButton(pixmap,this, SLOT(change_user()), tools, "Who", ChangeUserText);
+
+    //    Q3WhatsThis::add(new QToolButton(pixmap, "Who", QString(),
+    //                                     this, SLOT(change_user()), tools, "Change user"),
+    //                     ChangeUserText);
+    action  = menu->addAction(pixmap, "Change &user", this,
+                              SLOT(change_user()), Qt::CTRL + Qt::Key_C);
+    action->setWhatsThis(ChangeUserText);
 
     // search
 
     pixmap = QPixmap(browsersearch);
-    Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString(),
-                                     this, SLOT(browser_search()), tools, "search"),
-                     SearchText);
-    menu->setWhatsThis(menu->insertItem(pixmap, "&Search", this,
-                                        SLOT(browser_search()), Qt::CTRL + Qt::Key_S),
-                       SearchText);
+    button = CreateToolButton(pixmap,this, SLOT(browser_search()), tools, "Search", SearchText);
+    //    Q3WhatsThis::add(new QToolButton(pixmap, "Search", QString(),
+    //                                     this, SLOT(browser_search()), tools, "search"),
+    //                     SearchText);
+    action = menu->addAction(pixmap, "&Search", this,
+                             SLOT(browser_search()), Qt::CTRL + Qt::Key_S);
+    action->setWhatsThis(SearchText);
 
     // quit & what
 
-    menu->insertItem("&Quit", this, SLOT(quit()), Qt::CTRL + Qt::Key_Q);
-
-    (void)Q3WhatsThis::whatsThisButton(tools);
+    action = menu->addAction("&Quit", this, SLOT(quit()), Qt::CTRL + Qt::Key_Q);
+    QAction *whatsThisAction = QWhatsThis::createAction();
+    tools->addAction(whatsThisAction);
+    //(void)Q3WhatsThis::whatsThisButton(tools);
 
     // historic
 
     // note : QFile fp(QDir::home().absFilePath(".douml")) doesn't work
     // if the path contains non latin1 characters, for instance cyrillic !
-    QString s = homeDir.absFilePath(".douml");
-    FILE * fp = fopen((const char *) s, "r");
-
-    if (fp != 0) {
-        char line[512];
-
-        while (fgets(line, sizeof(line) - 1, fp) != 0) {
-            remove_crlf(line);
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "DoUML", "settings");
+    settings.setIniCodec(QTextCodec::codecForName("UTF-8"));
+    settings.beginGroup("Recent_Files");
+    for(int i = 1; i <= 10; ++i)
+    {
+        const QString line = settings.value(tr("File%1").arg(i)).toString();
+        if(!line.isEmpty())
+        {
             historic.append(line);
         }
-
-        fclose(fp);
+        else
+        {
+            break;
+        }
     }
-
-    menu->insertSeparator();
+    menu->addSeparator();
     QString whats = QString("to open this project.<br><br>The historic is saved in <i>")
-                    + homeDir.absFilePath(".douml") + "</i>";
+            + homeDir.absoluteFilePath(".douml") + "</i>";
 
     for (int i = 0; i < int(historic.count()); i += 1) {
-        int id = menu->insertItem(*historic.at(i),
-                                  this, SLOT(historicActivated(int)));
-        menu->setItemParameter(id, i);
-        menu->setWhatsThis(id, whats);
+        action = menu->addAction(historic.at(i),
+                                 this, SLOT(historicActivated()));
+        action->setData(i);
+        action->setWhatsThis(whats);
+        //menu->setItemParameter(id, i);
+        //menu->setWhatsThis(id, whats);
     }
 
     // style
 
-    menu = new Q3PopupMenu(this);
-    menuBar()->insertItem("&Style", menu);
+
+    menu = menuBar()->addMenu("&Style");
 
 #if !defined(QT_NO_STYLE_MOTIF)
-    menu->insertItem("Motif", this, SLOT(motif_style()));
+    menu->addAction("Motif", this, SLOT(motif_style()));
 #endif
 #if !defined(QT_NO_STYLE_MOTIFPLUS)
-    menu->insertItem("MotifPlus", this, SLOT(motifplus_style()));
+    menu->addAction("MotifPlus", this, SLOT(motifplus_style()));
 #endif
-    menu->insertItem("Windows", this, SLOT(windows_style()));
+    menu->addAction("Windows", this, SLOT(windows_style()));
 
     // help & about
 
-    menuBar()->insertSeparator();
-    menu = new Q3PopupMenu(this);
-    menuBar()->insertItem("&Help", menu);
+    menuBar()->addSeparator();
+    menu = menuBar()->addMenu("&Help");
 
-    menu->insertItem("&About", this, SLOT(about()), Qt::Key_F1);
-    menu->insertItem("About&Qt", this, SLOT(aboutQt()));
-    menu->insertSeparator();
-    menu->insertItem("What's This", this, SLOT(whatsThis()), Qt::SHIFT + Qt::Key_F1);
-
+    menu->addAction("&About", this, SLOT(about()), Qt::Key_F1);
+    menu->addAction("About&Qt", this, SLOT(aboutQt()));
+    menu->addSeparator();
+    //menu->addAction("What's This", whatsThisAction, SIGNAL(triggered(bool)), Qt::SHIFT + Qt::Key_F1);
+    menu->addAction(whatsThisAction);
     //
 
     browser = new BrowserView(this);
@@ -182,18 +214,19 @@ ControlWindow::~ControlWindow()
     browser->close();
 }
 
-void ControlWindow::historicActivated(int id)
+void ControlWindow::historicActivated()
 {
-    QStringList::Iterator it = historic.at(id);
-
-    if (it != historic.end())
-        load(*it);
+    QAction* s = static_cast<QAction* >(sender());
+    if(s)
+    {
+        load(s->text());
+    }
 }
 
 void ControlWindow::show_identity()
 {
-    statusBar()->message("User is " + user_name(user_id()) +
-                         " [id " + QString::number(user_id()) + "]");
+    statusBar()->showMessage("User is " + user_name(user_id()) +
+                             " [id " + QString::number(user_id()) + "]");
 }
 
 void ControlWindow::change_user()
@@ -211,11 +244,11 @@ void ControlWindow::change_user()
 QString my_baseName(QFileInfo & fi)
 {
     QString fn = fi.fileName();
-    int index = fn.findRev('.');
+    int index = fn.lastIndexOf('.');
 
     return (index == -1)
-           ? fn
-           : fn.left(index);
+            ? fn
+            : fn.left(index);
 }
 
 void ControlWindow::load(QString path)
@@ -227,28 +260,33 @@ void ControlWindow::load(QString path)
     if (!fi.exists())
         return;
 
-    QDir dir(fi.dirPath(TRUE));
+    QDir dir(fi.path());
 
     if (! dir.mkdir("all.lock"))
         QMessageBox::critical(0, "Control project",
                               (dir.exists("all.lock"))
                               ? "\
-The project is already locked by 'Project control' or 'Project syncho'\n\
-(the directory 'all.lock' exists)"
+                                The project is already locked by 'Project control' or 'Project syncho'\n\
+                                (the directory 'all.lock' exists)"
                               : "Can't create directory 'all.lock'");
     else {
-        const QFileInfoList * l = dir.entryInfoList("*.lock");
+        const QFileInfoList l = dir.entryInfoList(QStringList()<<"*.lock");
 
-        if (l != 0)  {
-            Q3PtrListIterator<QFileInfo> it(*l);
-            QFileInfo * fi;
+        if (!l.isEmpty())  {
+            //QFileInfoList::iterator it= l.begin();
+            //Q3PtrListIterator<QFileInfo> it(*l);
+            //QFileInfo * fi;
             QString ids;
 
-            while ((fi = it.current()) != 0) {
+            /*while ((fi = it.current()) != 0) {
                 if (fi->isDir() && (my_baseName(*fi) != "all"))
                     ids += " " + my_baseName(*fi);
 
                 ++it;
+            }*/
+            foreach (QFileInfo fi, l) {
+                if (fi.isDir() && (my_baseName(fi) != "all"))
+                    ids += " " + my_baseName(fi);
             }
 
             if (! ids.isEmpty()) {
@@ -259,11 +297,16 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
             }
         }
 
-        QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
         browser->set_project(dir);
-        browser->get_project()->setOpen(TRUE);
+        browser->get_project()->setExpanded(TRUE);
 
         bool r = browser->get_project()->load(dir);
+        browser->resizeColumnToContents(0);
+        browser->resizeColumnToContents(1);
+        browser->resizeColumnToContents(2);
+        browser->resizeColumnToContents(3);
+        browser->resizeColumnToContents(4);
 
         QApplication::restoreOverrideCursor();
 
@@ -276,7 +319,7 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
 
 void ControlWindow::load()
 {
-    QString path = Q3FileDialog::getOpenFileName(QString(), "*.prj", this);
+    QString path = QFileDialog::getOpenFileName(this, QString(), "*.prj");
 
     if (! path.isEmpty())
         load(path);
@@ -298,21 +341,21 @@ void ControlWindow::browser_search()
 void ControlWindow::motif_style()
 {
 #if !defined(QT_NO_STYLE_MOTIF)
-    QApplication::setStyle(new QMotifStyle);
+    QApplication::setStyle("motif");
 #endif
 }
 
 void ControlWindow::motifplus_style()
 {
 #if !defined(QT_NO_STYLE_MOTIFPLUS)
-    QApplication::setStyle(new QMotifPlusStyle);
+    QApplication::setStyle("motifPlus");
 #endif
 }
 
 void ControlWindow::windows_style()
 {
 #ifndef QT_NO_STYLE_WINDOWS
-    QApplication::setStyle(new QWindowsStyle);
+    QApplication::setStyle("windows");
 #endif
 }
 

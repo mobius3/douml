@@ -145,7 +145,7 @@ char * read_token(char *& st)
 
 static int open_file(QFile & fp, BooL & ro)
 {
-    QString filename = fp.name();
+    QString filename = fp.fileName();
 
     while (! fp.open(QIODevice::ReadOnly)) {
         if (QMessageBox::critical(0, "Uml",
@@ -163,14 +163,14 @@ static int open_file(QFile & fp, BooL & ro)
 
 char * read_file(QDir & dir, QString fn, BooL & ro)
 {
-    QString filename = dir.absFilePath(fn);
+    QString filename = dir.absoluteFilePath(fn);
     QFile fp(filename);
     int size;
 
     if ((size = open_file(fp, ro)) != -1) {
         char * s = new char[size + 1];
 
-        if (fp.readBlock(s, size) == -1) {
+        if (fp.read(s, size) == -1) {
             QMessageBox::critical(0, "Error", filename + "cannot be read");
             delete [] s;
             return 0;
@@ -192,16 +192,16 @@ char * read_file(QDir & dir, QString fn, BooL & ro)
 
 bool is_readonly(QDir & dir, QString fn)
 {
-    QFileInfo fi(dir.absFilePath(fn));
+    QFileInfo fi(dir.absoluteFilePath(fn));
 
     return fi.exists() && !fi.isWritable();
 }
 
 bool has_backup_files(QDir & dir)
 {
-    const QFileInfoList * l = dir.entryInfoList("*.bak");
+    const QFileInfoList l = dir.entryInfoList(QStringList()<<"*.bak");
 
-    return (l != 0) && !l->isEmpty();
+    return !l.isEmpty();
 }
 
 void abort(QString s)
@@ -219,17 +219,17 @@ present, resynchronize after renaming the bak files";
 
 void copy(QDir & fromdir, QDir & todir, QString fn)
 {
-    QString to = todir.absFilePath(fn);
+    QString to = todir.absoluteFilePath(fn);
     QFileInfo fi(to);
 
     if (fi.exists() && !todir.rename(to, to + ".bak"))
         abort(to + " can't be renamed " + to + ".bak");
 
-    QString from = fromdir.absFilePath(fn);
-    FILE * fpin = fopen((const char *) from, "rb");
+    QString from = fromdir.absoluteFilePath(fn);
+    FILE * fpin = fopen((const char *) from.toLatin1().constData(), "rb");
 
     if (fpin != 0) {
-        FILE * fpout = fopen((const char *) to, "wb");
+        FILE * fpout = fopen((const char *) to.toLatin1().constData(), "wb");
 
         static char buff[256];
         unsigned n;
@@ -245,21 +245,21 @@ void copy(QDir & fromdir, QDir & todir, QString fn)
 
 void copy_if_needed(QDir & fromdir, QDir & todir, QString fn)
 {
-    QString to = todir.absFilePath(fn);
+    QString to = todir.absoluteFilePath(fn);
     QFileInfo ti(to);
 
     if (!ti.exists())
         // to rename from
         copy(fromdir, todir, fn);
     else {
-        QString from = fromdir.absFilePath(fn);
-        FILE * fpfrom = fopen((const char *) from, "rb");
+        QString from = fromdir.absoluteFilePath(fn);
+        FILE * fpfrom = fopen((const char *) from.toLatin1().constData(), "rb");
 
         if (fpfrom == 0)
             // to create from
             copy(fromdir, todir, fn);
         else {
-            FILE * fpto = fopen((const char *) to, "rb");
+            FILE * fpto = fopen((const char *) to.toLatin1().constData(), "rb");
 
             if (fpto == 0) {
                 // supose copy needed
@@ -290,46 +290,42 @@ void copy_if_needed(QDir & fromdir, QDir & todir, QString fn)
     }
 }
 
-void purge(QDir & dir, Q3Dict<void> & useful)
+void purge(QDir & dir, QHash<QString, void *> &useful)
 {
-    const QFileInfoList * l;
+    QFileInfoList  l = dir.entryInfoList(QStringList()<<"*.diagram"<<"*.bodies"<<"*.bak");
 
     // remove bak and useless diagrams and bodies
-    if ((l = dir.entryInfoList("*.diagram *.bodies *.bak")) != 0) {
-        Q3PtrListIterator<QFileInfo> it(*l);
-        QFileInfo * fi;
+    if (!l.isEmpty()) {
 
-        while ((fi = it.current()) != 0) {
-            if ((useful.find(fi->fileName()) == 0) &&
-                ! QFile::remove(fi->absFilePath()))
+        foreach (QFileInfo fi, l) {
+            if ((useful.find(fi.fileName()).value() == 0) &&
+                ! QFile::remove(fi.absoluteFilePath()))
                 QMessageBox::critical(0, "Project synchro",
-                                      "can't remove " + fi->absFilePath() +
+                                      "can't remove " + fi.absoluteFilePath() +
                                       ", do it yourself");
-
-            ++it;
         }
     }
 
     // remove deleted packages
-    if ((l = dir.entryInfoList("*")) != 0) {
-        Q3PtrListIterator<QFileInfo> it(*l);
-        QFileInfo * fi;
+    l = dir.entryInfoList(QStringList()<<"*");
+    if (!l.isEmpty()) {
+        foreach (QFileInfo fi, l) {
+            QString s = fi.fileName();
+            //const char * p = s;
+            int i;
+            for(i = 0; i < s.count(); i++)
+            {
+                if(!(s.at(i) >= '0' && s.at(i) <= '9'))
+                    break;
+            }
 
-        while ((fi = it.current()) != 0) {
-            QString s = fi->fileName();
-            const char * p = s;
-
-            while ((*p >= '0') && (*p <= '9'))
-                p += 1;
-
-            if ((*p == 0) &&
-                (useful.find(s) == 0) &&
-                ! QFile::remove(fi->absFilePath()))
+            if ((i == s.count()) &&
+                (useful.find(s).value() == 0) &&
+                ! QFile::remove(fi.absoluteFilePath()))
                 QMessageBox::critical(0, "Project synchro",
-                                      "can't remove " + fi->absFilePath() +
+                                      "can't remove " + fi.absoluteFilePath() +
                                       ", do it yourself");
 
-            ++it;
         }
     }
 }

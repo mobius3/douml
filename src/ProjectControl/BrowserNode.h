@@ -27,20 +27,16 @@
 
 #ifndef BROWSERNODE_H
 #define BROWSERNODE_H
-
-#include <q3listview.h>
-//Added by qt3to4:
 #include <QKeyEvent>
-
 #include <QPixmap>
-//Added by qt3to4:
+#include <QTreeWidgetItem>
 
 
 class QDir;
 class QKeyEvent;
 class BrowserView;
 
-class BrowserNode : public Q3ListViewItem
+class BrowserNode : public QTreeWidgetItem
 {
 public:
     BrowserNode(BrowserView * parent, QString fn);
@@ -55,7 +51,12 @@ public:
     }
     bool load(QDir & dir);
     void key_event(QKeyEvent *);
+    BrowserNode* firstChild() const {return (BrowserNode*)this->child(0);}
 
+    BrowserNode *nextSibling();
+    void repaint(){ /*doldurulacak*/}
+    void moveItem(BrowserNode *after);
+    QVariant data(int column, int role) const;
 private:
     void assign(int);
     void assign_mine(int);
@@ -81,7 +82,7 @@ class BrowserNodeList : public QList<BrowserNode *>
 {
 public:
     void search(BrowserNode * bn, const QString & s, bool cs);
-    virtual int compareItems(Q3PtrCollection::Item item1, Q3PtrCollection::Item item2);
+    static int compareItems(void *item1, void *item2);
 };
 
 #endif

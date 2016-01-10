@@ -30,11 +30,8 @@
 
 
 #include <qlabel.h>
-#include <q3popupmenu.h>
+#include <QMenu>
 #include <qcursor.h>
-//Added by qt3to4:
-
-
 #include "BrowserView.h"
 #include "BrowserNode.h"
 #include "SynchroWindow.h"
@@ -42,23 +39,22 @@
 #define DICT_SIZE 101
 
 BrowserView::BrowserView(QWidget * parent)
-    : Q3ListView(parent), lbl(0), need_update(FALSE), cant_update(FALSE)
+    : QTreeWidget(parent), lbl(0), need_update(FALSE), cant_update(FALSE)
 {
-    nodes.resize(DICT_SIZE);
+    nodes.reserve(DICT_SIZE);
 
-    setSorting(-1);		// manual sorting
-    addColumn("browser          ");	// will be changed
-    addColumn("Rev.");
-    addColumn("Modified by");
-    setColumnWidthMode(0, Maximum);
-    setColumnWidthMode(1, Maximum);
-    setColumnWidthMode(2, Maximum);
-    setColumnAlignment(1, ::Qt::AlignHCenter);
-    setColumnAlignment(2, ::Qt::AlignHCenter);
-    setTreeStepSize(18);
+    setSortingEnabled(false);		// manual sorting
 
-    connect(this, SIGNAL(selectionChanged(Q3ListViewItem *)),
-            this, SLOT(select(Q3ListViewItem *)));
+
+    setColumnCount(3);
+    QStringList headers;
+
+     headers<<("browser          ");
+     headers<<("Rev.");
+     headers<<("Modified by");
+    setHeaderLabels(headers);
+    connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+            this, SLOT(select(QTreeWidgetItem*,QTreeWidgetItem*)));
 }
 
 BrowserView::~BrowserView()
@@ -67,7 +63,7 @@ BrowserView::~BrowserView()
 
 void BrowserView::close()
 {
-    if (firstChild() != 0) {
+    if (itemAt(0,0)) {
         dir.rmdir("all.lock");
         clear();
     }
@@ -75,7 +71,7 @@ void BrowserView::close()
 
 BrowserNode * BrowserView::get_project() const
 {
-    return (BrowserNode *) firstChild();
+    return (BrowserNode *) itemAt(0,0);
 }
 
 void BrowserView::set_project(QDir di)
@@ -85,28 +81,33 @@ void BrowserView::set_project(QDir di)
     setRootIsDecorated(TRUE/*FALSE*/);
 
     di.cdUp();
+#if 0
     setColumnText(0, di.path());
+#endif
 }
 
-void BrowserView::select(Q3ListViewItem * b)
+void BrowserView::select(QTreeWidgetItem *b, QTreeWidgetItem *previous)
 {
     static bool ongoing = FALSE;
 
+    if(!b)
+        return;
     if (!ongoing) {
         ongoing = TRUE;
 
         const QList<BrowserView *> & l = SynchroWindow::get_browsers();
-        Q3PtrListIterator<BrowserView> it(l);
+        QList<BrowserView*>::const_iterator it = l.begin();
         QString fn = ((BrowserNode *) b)->file_name();
 
-        for (; it.current(); ++it) {
-            it.current()->clearSelection();
+        for (; it!= l.end(); ++it) {
+            (*it)->clearSelection();
 
-            BrowserNode * bn = it.current()->nodes.find(fn);
+            BrowserNode * bn = (*it)->nodes.find(fn).value();
 
             if (bn != 0) {
-                it.current()->ensureItemVisible(bn);
-                it.current()->Q3ListView::setSelected(bn, TRUE);
+                (*it)->scrollToItem(bn);
+                setCurrentItem(bn);
+                //(*it)->Q3ListView::setSelected(bn, TRUE);
             }
         }
 
@@ -123,7 +124,7 @@ void BrowserView::add_node(BrowserNode * bn)
 
 BrowserNode * BrowserView::get_node(QString f) const
 {
-    return nodes.find(f);
+    return nodes.find(f).value();
 }
 
 //
@@ -138,23 +139,23 @@ struct Use {
 
 void BrowserView::update(const QList<BrowserView *> & lv)
 {
-    Q3Dict<Use> all_nodes(DICT_SIZE);
-    Q3PtrListIterator<BrowserView> itv(lv);
+    QHash<QString, Use*> all_nodes;//(DICT_SIZE);
+    QList<BrowserView*>::const_iterator itv = lv.begin();
 
-    all_nodes.setAutoDelete(TRUE);
+    //all_nodes.setAutoDelete(TRUE);
 
     // look at the revision in each view
 
-    for (; itv.current(); ++itv) {
-        Q3DictIterator<BrowserNode> itd(itv.current()->nodes);
+    for (; itv != lv.end(); ++itv) {
+        QHash<QString, BrowserNode*>::iterator itd = (*itv)->nodes.begin();
 
-        for (; itd.current(); ++itd) {
-            BrowserNode * bn = itd.current();
+        for (; itd != (*itv)->nodes.end() ; ++itd) {
+            BrowserNode * bn = *itd;
             int rev = bn->get_rev();
-            Use * use = all_nodes.find(itd.currentKey());
+            Use * use = all_nodes.find(itd.key()).value();
 
             if (use == 0)
-                all_nodes.insert(itd.currentKey(), new Use(rev));
+                all_nodes.insert(itd.key(), new Use(rev));
             else {
                 if (rev < use->rev_min)
                     use->rev_min = rev;
@@ -173,24 +174,26 @@ void BrowserView::update(const QList<BrowserView *> & lv)
     int nviews = lv.count();
     QStringList deleted_or_new;
 
-    Q3DictIterator<Use> itu(all_nodes);
+    QHash<QString, Use*>::iterator itu = all_nodes.begin();
 
-    for (; itu.current(); ++itu) {
-        QString who = itu.currentKey();
-        Use * use = itu.current();
+    for (; itu!=all_nodes.end(); ++itu) {
+        QString who = itu.key();
+        Use * use = itu.value();
 
         if (use->count == nviews) {
             // exist in all views : solve the state
             if (use->rev_min == use->rev_max) {
                 // up to date in all views
-                for (itv.toFirst(); itv.current(); ++itv)
-                    itv.current()->nodes.find(who)->set_state(UpToDate);
+                itv = lv.begin();
+                for (; itv != lv.end(); ++itv)
+                    (*itv)->nodes.find(who).value()->set_state(UpToDate);
             }
             else {
                 int max = use->rev_max;
 
-                for (itv.toFirst(); itv.current(); ++itv) {
-                    BrowserNode * pack = itv.current()->nodes.find(who);
+                itv = lv.begin();
+                for (; itv != lv.end(); ++itv) {
+                    BrowserNode * pack = (*itv)->nodes.find(who).value();
 
                     pack->set_state((pack->get_rev() == max) ? Young : Old);
                 }
@@ -200,15 +203,20 @@ void BrowserView::update(const QList<BrowserView *> & lv)
             // deleted or new, mark it unknown for this step
             deleted_or_new.append(who);
 
-            for (itv.toFirst(); itv.current(); ++itv) {
-                BrowserNode * pack = itv.current()->nodes.find(who);
+            itv = lv.begin();
+            for (; itv != lv.end(); ++itv) {
+                BrowserNode * pack = (*itv)->nodes.find(who).value();
 
                 if (pack != 0)
                     pack->set_state(Unknown);
             }
         }
     }
-
+    itu = all_nodes.begin();
+    for (; itu!=all_nodes.end(); ++itu)
+    {
+        delete itu.value();
+    }
     all_nodes.clear();
 
     // solve packages marked unknown
@@ -222,8 +230,9 @@ void BrowserView::update(const QList<BrowserView *> & lv)
         bool young = FALSE;
 
         // set the state in each view without looking at the others
-        for (itv.toFirst(); itv.current(); ++itv) {
-            BrowserNode * pack = itv.current()->nodes.find(who);
+        itv = lv.begin();
+        for (; itv != lv.end(); ++itv) {
+            BrowserNode * pack = (*itv)->nodes.find(who).value();
 
             if (pack != 0) {
                 images.append(pack);
@@ -235,16 +244,18 @@ void BrowserView::update(const QList<BrowserView *> & lv)
 
         // set the final state if young, else all already marked deleted
         if (young) {
-            BrowserNode * pack;
+            ;
 
-            for (pack = images.first(); pack != 0; pack = images.next())
+            foreach (BrowserNode * pack, images) {
                 pack->set_state(Young);
+            }
         }
     }
 
     // force update on views
-    for (itv.toFirst(); itv.current(); ++itv)
-        itv.current()->update_it();
+    itv = lv.begin();
+    for (; itv != lv.end(); ++itv)
+        (*itv)->update_it();
 }
 
 void BrowserView::update_it()
@@ -255,10 +266,10 @@ void BrowserView::update_it()
     int nold = 0;
     int ndel = 0;
 
-    Q3DictIterator<BrowserNode> itd(nodes);
+    QHash<QString, BrowserNode*>::iterator itd = nodes.begin();
 
-    for (; itd.current(); ++itd) {
-        BrowserNode * bn = itd.current();
+    for (; itd != nodes.end(); ++itd) {
+        BrowserNode * bn = itd.value();
 
         switch (bn->get_state()) {
         case Old:
@@ -293,8 +304,9 @@ void BrowserView::update_it()
         lbl->setText("Up to date");
 
     lbl->show();
-
+#if 0
     triggerUpdate();
+#endif
 }
 
 //

@@ -37,29 +37,23 @@
 BrowserView * BrowserView::the;
 QDir BrowserView::dir;
 
-BrowserView::BrowserView(QWidget * parent) : Q3ListView(parent)
+BrowserView::BrowserView(QWidget * parent) : QTreeWidget(parent)
 {
     the = this;
 
-    setSorting(-1);		// manual sorting
-    addColumn("browser          ");
-    addColumn("Owner id");
-    addColumn("Owner name");
-    addColumn("Revision");
-    addColumn("Modified by");
-    setColumnWidthMode(0, Maximum);
-    setColumnWidthMode(1, Maximum);
-    setColumnWidthMode(2, Maximum);
-    setColumnWidthMode(3, Maximum);
-    setColumnWidthMode(4, Maximum);
-    setColumnAlignment(1, ::Qt::AlignHCenter);
-    setColumnAlignment(2, ::Qt::AlignHCenter);
-    setColumnAlignment(3, ::Qt::AlignHCenter);
-    setColumnAlignment(4, ::Qt::AlignHCenter);
-    setTreeStepSize(18);
+    //setSorting(-1);		// manual sorting
+    setColumnCount(5);
+    QStringList headers;
 
-    connect(this, SIGNAL(rightButtonPressed(Q3ListViewItem *, const QPoint &, int)),
-            this, SLOT(rightPressed(Q3ListViewItem *)));
+     headers<<("browser          ");
+     headers<<("Owner id");
+     headers<<("Owner name");
+     headers<<("Revision");
+     headers<<("Modified by");
+    setHeaderLabels(headers);
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(rightPressed(const QPoint&)));
 }
 
 BrowserView::~BrowserView()
@@ -68,7 +62,7 @@ BrowserView::~BrowserView()
 
 void BrowserView::close()
 {
-    if (firstChild() != 0) {
+    if (itemAt(0,0) != 0) {
         dir.rmdir("all.lock");
         clear();
     }
@@ -76,7 +70,7 @@ void BrowserView::close()
 
 BrowserNode * BrowserView::get_project()
 {
-    return (BrowserNode *) the->firstChild();
+    return (BrowserNode *) the->itemAt(0,0);
 }
 
 void BrowserView::set_project(QDir di)
@@ -86,22 +80,24 @@ void BrowserView::set_project(QDir di)
     setRootIsDecorated(TRUE/*FALSE*/);
 }
 
-void BrowserView::rightPressed(Q3ListViewItem * item)
+void BrowserView::rightPressed(const QPoint &pos)
 {
-    if (item != 0)
-        ((BrowserNode *) item)->menu();
+    BrowserNode *node = static_cast<BrowserNode *>(itemAt(pos));
+
+    if (node != 0)
+        ((BrowserNode *) node)->menu();
 }
 
 void BrowserView::keyPressEvent(QKeyEvent * e)
 {
-    switch (e->state()) {
+    switch (e->modifiers()) {
     case ::Qt::ControlModifier:
     case ::Qt::AltModifier:
         switch (e->key()) {
         case ::Qt::Key_A:
         case ::Qt::Key_P:
         case ::Qt::Key_U: {
-            Q3ListViewItem * t = selectedItem();
+            QTreeWidgetItem * t = currentItem();
 
             if (t != 0) {
                 ((BrowserNode *) t)->key_event(e);
@@ -116,11 +112,11 @@ void BrowserView::keyPressEvent(QKeyEvent * e)
         break;
     }
 
-    Q3ListView::keyPressEvent(e);
+    QTreeWidget::keyPressEvent(e);
 }
 
-void BrowserView::select(Q3ListViewItem * b)
+void BrowserView::select(QTreeWidgetItem *b)
 {
-    the->ensureItemVisible(b);
-    the->setSelected(b, TRUE);
+    the->scrollToItem(b);
+    the->setCurrentItem(b);
 }

@@ -44,27 +44,27 @@
 #define REVISION_COL 1
 #define MODIFIEDBY_COL 2
 
-#ifdef __APPLE__
-#define Qt::CTRL "Apple"
-#else
-#define Qt::CTRL "Ctrl"
-#endif
+//#ifdef __APPLE__
+//#define Qt::CTRL "Apple"
+//#else
+//#define Qt::CTRL "Ctrl"
+//#endif
 
-Q3Dict<BrowserNode> BrowserNode::Youngs;
+QHash<QString, BrowserNode*> BrowserNode::Youngs;
 
 BrowserNode::BrowserNode(BrowserView * parent, QString fn)
-    : Q3ListViewItem(parent), filename(fn), view(parent), state(Unknown)
+    : QTreeWidgetItem(parent), filename(fn), view(parent), state(Unknown)
 {
     parent->add_node(this);
 }
 
 BrowserNode::BrowserNode(BrowserNode * parent, QString fn, BrowserView * v)
-    : Q3ListViewItem(parent), filename(fn), view(v), state(Unknown)
+    : QTreeWidgetItem(parent), filename(fn), view(v), state(Unknown)
 {
     v->add_node(this);
 
     // move it at end
-    Q3ListViewItem * child = parent->firstChild();
+    BrowserNode * child = (BrowserNode *)parent->child(0);
 
     while (child->nextSibling())
         child = child->nextSibling();
@@ -72,7 +72,7 @@ BrowserNode::BrowserNode(BrowserNode * parent, QString fn, BrowserView * v)
     if (child != this)
         moveItem(child);
 
-    parent->setOpen(TRUE);
+    parent->setExpanded(true);
 }
 
 void BrowserNode::set_state(State st)
@@ -80,12 +80,12 @@ void BrowserNode::set_state(State st)
     state = st;
 
     if (state == Young)
-        Youngs.replace(filename, this);
+        Youngs.insert(filename, this);
 }
 
 int BrowserNode::get_rev() const
 {
-    return atoi(text(REVISION_COL));
+    return text(REVISION_COL).toInt();
 }
 
 // solve state and return TRUE if Young
@@ -226,23 +226,24 @@ bool BrowserNode::load(QDir & dir)
 }
 
 // synchronize all in todir, current packages are 'nodes'
-void BrowserNode::synchronize(QDir & todir, Q3Dict<BrowserNode> & nodes)
+void BrowserNode::synchronize(QDir & todir, QHash<QString, BrowserNode*> & nodes)
 {
-    static Q3Dict<void> useful(9973);	// all useful files
+    static QHash<QString, void*> useful;//(9973);	// all useful files
     static bool made_useful = TRUE;	// set at the first call
 
     // compare nodes with young packages
 
-    Q3DictIterator<BrowserNode> ity(Youngs);
+    //Q3DictIterator<BrowserNode> ity(Youngs);
+    QHash<QString, BrowserNode*>::iterator ity = Youngs.begin();//ity(Youngs);
 
-    for (; ity.current(); ++ity) {
-        BrowserNode * from = ity.current();
-        BrowserNode * curr_bn = nodes.find(ity.currentKey());
+    for (; ity != Youngs.end(); ++ity) {
+        BrowserNode * from = *ity;
+        BrowserNode * curr_bn = *nodes.find(ity.key());
 
         if ((curr_bn == 0) || (curr_bn->state == Old)) {
             // don't exist or must be updated
             if (made_useful)
-                useful.insert(ity.currentKey(), (void *) 1);
+                useful.insert(ity.key(), (void *) 1);
 
             QDir & fromdir = from->view->get_dir();
 
@@ -295,11 +296,12 @@ void BrowserNode::synchronize(QDir & todir, Q3Dict<BrowserNode> & nodes)
 
     if (made_useful) {
         // memorize up to date packages, diagrams and classes body file
-        Q3DictIterator<BrowserNode> itn(nodes);
+        //Q3DictIterator<BrowserNode> itn(nodes);
+        QHash<QString, BrowserNode*>::iterator itn = nodes.begin();//ity(Youngs);
 
-        for (; itn.current(); ++itn)
-            if (itn.current()->state == UpToDate)
-                itn.current()->memo(useful);
+        for (; itn != nodes.end(); ++itn)
+            if (itn.value()->state == UpToDate)
+                itn.value()->memo(useful);
 
         made_useful = FALSE;
     }
@@ -309,7 +311,7 @@ void BrowserNode::synchronize(QDir & todir, Q3Dict<BrowserNode> & nodes)
 }
 
 // this is useful, memorize it and its diagrams and classes body file
-void BrowserNode::memo(Q3Dict<void> & useful)
+void BrowserNode::memo(QHash<QString, void *> &useful)
 {
     useful.insert(filename, (void *) 1);
 
@@ -322,3 +324,40 @@ void BrowserNode::memo(Q3Dict<void> & useful)
         useful.insert(*its, (void *) 1);
 }
 
+
+BrowserNode *BrowserNode::nextSibling()
+{
+    for(int i = 0; i < parent()->childCount(); i++)
+    {
+        if(parent()->child(i) == this)
+        {
+            if((i+1)<parent()->childCount())
+                return (BrowserNode *)parent()->child(i+1);
+            break;
+        }
+    }
+    return NULL;
+}
+
+
+void BrowserNode::moveItem(BrowserNode *after)
+{
+    if(this->parent())
+    {
+        this->parent()->removeChild(this);
+        if(after->parent())
+        {
+            after->parent()->insertChild(after->parent()->indexOfChild(after)+1, this);
+        }
+    }
+}
+QVariant	BrowserNode::data(int column, int role) const
+{
+    if(role == Qt::DecorationRole)
+    {
+        const QPixmap *pix = pixmap(column);
+        if(pix)
+            return QIcon(*pix);
+    }
+    return QTreeWidgetItem::data(column, role);
+}

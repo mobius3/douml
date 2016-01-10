@@ -41,7 +41,8 @@
 #include "myio.h"
 
 #include <QDesktopWidget>
-
+#include <QSettings>
+#include <QTextCodec>
 int main(int argc, char ** argv)
 {
     QApplication * app = new QApplication(argc, argv);
@@ -72,16 +73,15 @@ int main(int argc, char ** argv)
         h = b - t;
       }
     }
-
     if (uid == -1)
         QMessageBox::critical(0, "Control project", "Own identifier not defined");
     else if ((uid < 2) || (uid > 127))
         QMessageBox::critical(0, "Control project", "invalid Identifier");
     else {
-        set_user_id(uid, homeDir.dirName());
+        set_user_id(uid, QDir::homePath());
         app->connect(app, SIGNAL(lastWindowClosed()), SLOT(quit()));
         init_pixmaps();
-
+        QDir homeDir = QDir::home();
         ControlWindow * ww = new ControlWindow(homeDir);
 
         ww->resize((w * 3) / 5, (h * 3) / 5);

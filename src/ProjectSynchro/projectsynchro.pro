@@ -6,8 +6,7 @@ SOURCES          = main.cpp BrowserNode.cpp SynchroWindow.cpp \
 
 
 TARGET          = projectSynchro
-DEFINES          = BooL=bool
+DEFINES          = BooL=bool FALSE=false TRUE=true TR=tr
 INCLUDEPATH   = 
-#The following line was inserted by qt3to4
 QT += network  widgets
-#qt3support
+

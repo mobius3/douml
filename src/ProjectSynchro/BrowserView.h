@@ -28,24 +28,21 @@
 #ifndef BROWSERVIEW_H
 #define BROWSERVIEW_H
 
-#include <q3listview.h>
 #include <qdir.h>
-
-//Added by qt3to4:
 #include <QLabel>
-//Added by qt3to4:
+#include <QTreeWidget>
 
 
 class BrowserNode;
 class QLabel;
 
-class BrowserView : public Q3ListView
+class BrowserView : public QTreeWidget
 {
     Q_OBJECT
 
 protected:
     QDir dir;
-    Q3Dict<BrowserNode> nodes;
+    QHash<QString, BrowserNode*> nodes;
     QLabel * lbl;
     bool need_update;
     bool cant_update;
@@ -83,7 +80,7 @@ protected:
     void update_it();
 
 protected slots:
-    void select(Q3ListViewItem * b);
+    void select(QTreeWidgetItem * b, QTreeWidgetItem *previous);
 };
 
 #endif

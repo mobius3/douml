@@ -31,20 +31,13 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
-#include <q3popupmenu.h>
+#include <QMenu>
 #include <qmenubar.h>
-#include <qwindowsstyle.h>
-#include <qmotifstyle.h>
-#include <qmotifplusstyle.h>
-#include <q3filedialog.h>
+#include <QFileDialog>
 #include <qfile.h>
 #include <qdir.h>
 #include <QTextStream>
-#include <q3hbox.h>
-#include <q3vbox.h>
-//Added by qt3to4:
 #include <QPixmap>
-
 #include "SynchroWindow.h"
 #include "BrowserView.h"
 #include "BrowserNode.h"
@@ -53,73 +46,75 @@
 
 SynchroWindow * SynchroWindow::the;
 
-SynchroWindow::SynchroWindow() : Q3MainWindow(0, "Project synchro", Qt::WDestructiveClose)
+SynchroWindow::SynchroWindow() : QMainWindow(0)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
     the = this;
-    setCaption("Project synchro");
+    setWindowTitle("Project synchro");
 
-    Q3PopupMenu * menu;
+    QMenu * menu;
     QPixmap pixmap;
 
-    menu = new Q3PopupMenu(this);
-    menuBar()->insertItem("&Project", menu);
+    //menu = new QMenu(this);
+    menu = menuBar()->addMenu("&Project");
 
     // open
 
 #include "fileopen.xpm"
     pixmap = QPixmap(fileopen);
-    menu->insertItem(pixmap, "&Open", this,
+    menu->addAction(pixmap, "&Open", this,
                      SLOT(load()), Qt::CTRL + Qt::Key_O);
 
     // quit
 
-    menu->insertItem("&Quit", this, SLOT(quit()), Qt::CTRL + Qt::Key_Q);
+    menu->addAction("&Quit", this, SLOT(quit()), Qt::CTRL + Qt::Key_Q);
 
     // synchronize
 
-    menu->insertSeparator();
-    menu->insertItem("&Synchonize", this, SLOT(synchronize()), Qt::CTRL + Qt::Key_S);
+    menu->addSeparator();
+    menu->addAction("&Synchonize", this, SLOT(synchronize()), Qt::CTRL + Qt::Key_S);
 
     // style
 
-    menu = new Q3PopupMenu(this);
-    menuBar()->insertItem("&Style", menu);
+    //menu = new Q3PopupMenu(this);
+    menu = menuBar()->addMenu("&Style");
 
 #if !defined(QT_NO_STYLE_MOTIF)
-    menu->insertItem("Motif", this, SLOT(motif_style()));
+    menu->addAction("Motif", this, SLOT(motif_style()));
 #endif
 #if !defined(QT_NO_STYLE_MOTIFPLUS)
-    menu->insertItem("MotifPlus", this, SLOT(motifplus_style()));
+    menu->addAction("MotifPlus", this, SLOT(motifplus_style()));
 #endif
-    menu->insertItem("Windows", this, SLOT(windows_style()));
+    menu->addAction("Windows", this, SLOT(windows_style()));
 
     // help & about
 
-    menuBar()->insertSeparator();
-    menu = new Q3PopupMenu(this);
-    menuBar()->insertItem("&Help", menu);
+    menuBar()->addSeparator();
+    //menu = new Q3PopupMenu(this);
+    menu = menuBar()->addMenu("&Help");
 
-    menu->insertItem("&About", this, SLOT(about()), Qt::Key_F1);
-    menu->insertItem("About&Qt", this, SLOT(aboutQt()));
+    menu->addAction("&About", this, SLOT(about()), Qt::Key_F1);
+    menu->addAction("About&Qt", this, SLOT(aboutQt()));
 
     //
-
-    hbox = new Q3HBox(this);
-    setCentralWidget(hbox);
+    QWidget *central = new QWidget(this);
+    setCentralWidget(central);
+    hbox = new QHBoxLayout(central);
+    //setCentralWidget(hbox);
 }
 
 SynchroWindow::~SynchroWindow()
 {
-    BrowserView * browser;
-
-    for (browser = browsers.first(); browser != 0; browser = browsers.next())
+    foreach (BrowserView * browser, browsers) {
         browser->close();
+    }
+
 }
 
 QString my_baseName(QFileInfo & fi)
 {
     QString fn = fi.fileName();
-    int index = fn.findRev('.');
+    int index = fn.lastIndexOf('.');
 
     return (index == -1)
            ? fn
@@ -136,12 +131,12 @@ void SynchroWindow::load(QString path)
         return;
     }
 
-    QDir dir(fi.dirPath(TRUE));
+    QDir dir(fi.path());
     BrowserView * browser;
 
     path = dir.canonicalPath();
+    foreach (BrowserView * browser, browsers) {
 
-    for (browser = browsers.first(); browser != 0; browser = browsers.next()) {
         if (browser->get_dir().canonicalPath() == path) {
             QMessageBox::critical(0, "Project synchro",
                                   "Project instance already read");
@@ -159,18 +154,22 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
 (the directory '" + path + "/all.lock' exists)"
                               : "Can't create directory '" + path + "/all.lock'");
     else {
-        const QFileInfoList * l = dir.entryInfoList("*.lock");
+        const QFileInfoList l = dir.entryInfoList(QStringList()<<"*.lock");
 
-        if (l != 0) {
-            Q3PtrListIterator<QFileInfo> it(*l);
-            QFileInfo * pfi;
+        if (!l.isEmpty()) {
+            //Q3PtrListIterator<QFileInfo> it(*l);
+            //QFileInfo * pfi;
             QString ids;
-
+            /*
             while ((pfi = it.current()) != 0) {
                 if (pfi->isDir() && (my_baseName(*pfi) != "all"))
                     ids += " " + my_baseName(*pfi);
 
                 ++it;
+            }*/
+            foreach (QFileInfo fi, l) {
+                if (fi.isDir() && (my_baseName(fi) != "all"))
+                    ids += " " + my_baseName(fi);
             }
 
             if (! ids.isEmpty()) {
@@ -181,10 +180,12 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
             }
         }
 
-        Q3VBox * vbox = new Q3VBox(hbox);
-        BrowserView * browser = new BrowserView(vbox);
+        QVBoxLayout * vbox = new QVBoxLayout();
+        hbox->addLayout(vbox);
+        BrowserView * browser = new BrowserView(this);
+        vbox->addWidget(browser);
 
-        QApplication::setOverrideCursor(Qt::waitCursor);
+        QApplication::setOverrideCursor(Qt::WaitCursor);
         browser->set_project(dir);
 
         bool r = browser->get_project()->load(dir);
@@ -200,20 +201,20 @@ The project is already locked by 'Project control' or 'Project syncho'\n\
             if (browsers.isEmpty())
                 project_name = fi.fileName();
 
+#if 0
             vbox->show();
+#endif
             browsers.append(browser);
         }
     }
 }
 
 void SynchroWindow::load()
-{
-    QString path =
-        Q3FileDialog::getOpenFileName(QString(),
-                                      (project_name.isEmpty())
-                                      ? "*.prj"
-                                      : project_name,
-                                      this);
+{   
+    QString path = QFileDialog::getOpenFileName(this, QString(), (project_name.isEmpty())
+                                                ? "*.prj"
+                                                : project_name);
+
 
     if (! path.isEmpty()) {
         load(path);
@@ -239,7 +240,7 @@ void SynchroWindow::load(int argc, char ** argv)
             return;
         }
 
-        if (fi.extension(FALSE) != "prj") {
+        if (!fi.fileName().endsWith(".prj")) {
             QMessageBox::critical(0, "Project synchro",
                                   argv[index] + QString(" is not a project"));
             return;
@@ -263,10 +264,10 @@ void SynchroWindow::load(int argc, char ** argv)
 
 void SynchroWindow::quit()
 {
-    BrowserView * browser;
 
-    for (browser = browsers.first(); browser != 0; browser = browsers.next())
+    foreach (BrowserView * browser, browsers) {
         browser->close();
+    }
 
     QApplication::exit(0);
 }
@@ -291,21 +292,21 @@ void SynchroWindow::synchronize()
 void SynchroWindow::motif_style()
 {
 #if !defined(QT_NO_STYLE_MOTIF)
-    QApplication::setStyle(new QMotifStyle);
+    QApplication::setStyle("motif");
 #endif
 }
 
 void SynchroWindow::motifplus_style()
 {
 #if !defined(QT_NO_STYLE_MOTIFPLUS)
-    QApplication::setStyle(new QMotifPlusStyle);
+    QApplication::setStyle("motifPlus");
 #endif
 }
 
 void SynchroWindow::windows_style()
 {
 #ifndef QT_NO_STYLE_WINDOWS
-    QApplication::setStyle(new QWindowsStyle);
+    QApplication::setStyle("windows");
 #endif
 }
 
